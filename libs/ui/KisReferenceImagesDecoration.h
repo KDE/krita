@@ -42,7 +42,7 @@ class KisReferenceImagesDecoration : public KisCanvasDecoration
 {
     Q_OBJECT
 public:
-    KisReferenceImagesDecoration(QPointer<KisView> parent, KisDocument *document);
+    KisReferenceImagesDecoration(QPointer<KisView> parent, KisDocument *document, bool viewReady = true);
     ~KisReferenceImagesDecoration() override;
 
     void addReferenceImage(KisReferenceImage *referenceImage);
@@ -60,7 +60,7 @@ private:
     struct Private;
     const QScopedPointer<Private> d;
 
-    void setReferenceImageLayer(KisSharedPtr<KisReferenceImagesLayer> layer);
+    void setReferenceImageLayer(KisSharedPtr<KisReferenceImagesLayer> layer, bool updateCanvas);
 };
 
 #endif // KISREFERENCEIMAGESDECORATION_H

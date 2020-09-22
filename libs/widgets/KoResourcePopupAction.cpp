@@ -53,12 +53,15 @@ public:
     QSharedPointer<KoShapeBackground> background;
     KoImageCollection *imageCollection = 0;
     KoCheckerBoardPainter checkerPainter {4};
+    KoCanvasResourcesInterfaceSP canvasResourcesInterface;
 };
 
-KoResourcePopupAction::KoResourcePopupAction(const QString &resourceType, QObject *parent)
+KoResourcePopupAction::KoResourcePopupAction(const QString &resourceType, KoCanvasResourcesInterfaceSP canvasResourcesInterface, QObject *parent)
     : QAction(parent)
     , d(new Private())
 {
+    d->canvasResourcesInterface = canvasResourcesInterface;
+
     d->menu = new QMenu();
     QWidget *widget = new QWidget();
     QWidgetAction *wdgAction = new QWidgetAction(this);
@@ -75,7 +78,6 @@ KoResourcePopupAction::KoResourcePopupAction(const QString &resourceType, QObjec
     indexChanged(d->resourceList->currentIndex());
     QHBoxLayout *layout = new QHBoxLayout(widget);
     layout->addWidget(d->resourceList);
-    widget->setLayout(layout);
 
     wdgAction->setDefaultWidget(widget);
     d->menu->addAction(wdgAction);
@@ -135,6 +137,11 @@ KoResourceSP KoResourcePopupAction::currentResource() const
     return resource;
 }
 
+void KoResourcePopupAction::setCanvasResourcesInterface(KoCanvasResourcesInterfaceSP canvasResourcesInterface)
+{
+    d->canvasResourcesInterface = canvasResourcesInterface;
+}
+
 void KoResourcePopupAction::indexChanged(const QModelIndex &modelIndex)
 {
     if (! modelIndex.isValid()) {
@@ -149,7 +156,7 @@ void KoResourcePopupAction::indexChanged(const QModelIndex &modelIndex)
         KoAbstractGradientSP gradient = resource.dynamicCast<KoAbstractGradient>();
         KoPatternSP pattern = resource.dynamicCast<KoPattern>();
         if (gradient) {
-            QGradient *qg = gradient->toQGradient();
+            QGradient *qg = gradient->cloneAndBakeVariableColors(d->canvasResourcesInterface)->toQGradient();
             qg->setCoordinateMode(QGradient::ObjectBoundingMode);
             d->background = QSharedPointer<KoShapeBackground>(new KoGradientBackground(qg));
         } else if (pattern) {

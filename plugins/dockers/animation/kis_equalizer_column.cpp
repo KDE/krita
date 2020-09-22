@@ -65,8 +65,6 @@ KisEqualizerColumn::KisEqualizerColumn(QWidget *parent, int id, const QString &t
     vbox->addWidget(m_d->stateButton, 0);
     vbox->addWidget(m_d->mainSlider, 1);
 
-    setLayout(vbox);
-
     connect(m_d->stateButton, SIGNAL(toggled(bool)),
             SLOT(slotButtonChanged(bool)));
 

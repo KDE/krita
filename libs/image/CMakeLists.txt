@@ -114,6 +114,7 @@ set(kritaimage_LIB_SRCS
    commands_new/KisChangeChannelFlagsCommand.cpp
    commands_new/KisChangeChannelLockFlagsCommand.cpp
    commands_new/KisMergeLabeledLayersCommand.cpp
+   commands_new/KisAsynchronouslyMergeableCommandInterface.cpp
    processing/kis_do_nothing_processing_visitor.cpp
    processing/kis_simple_processing_visitor.cpp
    processing/kis_convert_color_space_processing_visitor.cpp
@@ -132,6 +133,7 @@ set(kritaimage_LIB_SRCS
    generator/kis_generator.cpp
    generator/kis_generator_layer.cpp
    generator/kis_generator_registry.cpp
+   generator/kis_generator_stroke_strategy.cpp
    floodfill/kis_fill_interval_map.cpp
    floodfill/kis_scanline_fill.cpp
    lazybrush/kis_min_cut_worker.cpp
@@ -208,7 +210,7 @@ set(kritaimage_LIB_SRCS
    kis_histogram.cc
    kis_image_interfaces.cpp
    kis_image_animation_interface.cpp
-   kis_time_range.cpp
+   kis_time_span.cpp
    kis_node_graph_listener.cpp
    kis_image.cc
    kis_image_signal_router.cpp

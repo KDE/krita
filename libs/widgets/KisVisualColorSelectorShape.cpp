@@ -271,7 +271,7 @@ QImage KisVisualColorSelectorShape::renderAlphaMask() const
 
 QPointF KisVisualColorSelectorShape::mousePositionToShapeCoordinate(const QPointF &pos, const QPointF &dragStart) const
 {
-    Q_UNUSED(dragStart)
+    Q_UNUSED(dragStart);
     return convertWidgetCoordinateToShapeCoordinate(pos);
 }
 

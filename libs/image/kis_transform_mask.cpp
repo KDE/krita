@@ -98,8 +98,8 @@ struct Q_DECL_HIDDEN KisTransformMask::Private
 };
 
 
-KisTransformMask::KisTransformMask(const QString &name)
-    : KisEffectMask(name),
+KisTransformMask::KisTransformMask(KisImageWSP image, const QString &name)
+    : KisEffectMask(image, name),
       m_d(new Private())
 {
     setTransformParams(
@@ -494,5 +494,26 @@ KisKeyframeChannel *KisTransformMask::requestKeyframeChannel(const QString &id)
     }
 
     return KisEffectMask::requestKeyframeChannel(id);
+}
+
+bool KisTransformMask::supportsKeyframeChannel(const QString &id)
+{
+    if (id == KisKeyframeChannel::TransformArguments.id() ||
+        id == KisKeyframeChannel::TransformPositionX.id() ||
+        id == KisKeyframeChannel::TransformPositionY.id() ||
+        id == KisKeyframeChannel::TransformScaleX.id() ||
+        id == KisKeyframeChannel::TransformScaleY.id() ||
+        id == KisKeyframeChannel::TransformShearX.id() ||
+        id == KisKeyframeChannel::TransformShearY.id() ||
+        id == KisKeyframeChannel::TransformRotationX.id() ||
+        id == KisKeyframeChannel::TransformRotationY.id() ||
+            id == KisKeyframeChannel::TransformRotationZ.id()) {
+        return true;
+    }
+    else if (id == KisKeyframeChannel::Opacity.id()) {
+        return false;
+    }
+
+    return KisEffectMask::supportsKeyframeChannel(id);
 }
 

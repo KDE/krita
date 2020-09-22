@@ -83,8 +83,9 @@ KisSpacingInformation KisRoundMarkerOp::paintAt(const KisPaintInformation& info)
     if (KisPaintOpUtils::checkSizeTooSmall(scale, diameter, diameter)) return KisSpacingInformation();
     KisDabShape shape(scale, 1.0, rotation);
 
-
-    QPointF pos = info.pos();
+    // Subtracting .5 from both dimensions, because the final dab tends to exagerate towards the lower right.
+    // This aligns it with the brush cursor.
+    QPointF pos = info.pos() - QPointF(0.5, 0.5);
 
     KisMarkerPainter gc(painter()->device(), painter()->paintColor());
 

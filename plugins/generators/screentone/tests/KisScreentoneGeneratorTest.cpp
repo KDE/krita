@@ -28,7 +28,7 @@
 #include <KoUpdater.h>
 #include <KisGlobalResourcesInterface.h>
 #include <QTest>
-#include <sdk/tests/kistest.h>
+#include <sdk/tests/testimage.h>
 #include <testutil.h>
 
 #include "KisScreentoneGeneratorTest.h"

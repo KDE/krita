@@ -60,10 +60,6 @@ public:
         return !m_brushes.isEmpty() ? m_brushes.at(currentBrushIndex()) : 0;
     }
 
-    int brushIndex(const KisPaintInformation& info) {
-        return chooseNextBrush(info);
-    }
-
     qint32 maskWidth(KisDabShape const& shape, double subPixelX, double subPixelY, const KisPaintInformation& info) {
         QSharedPointer<BrushType> brush = currentBrush(info);
         return brush ? brush->maskWidth(shape, subPixelX, subPixelY, info) : 0;
@@ -99,17 +95,20 @@ public:
         return false;
     }
 
-    void setPreserveLightness(bool preserveLightness) const {
+    void setBrushApplication(enumBrushApplication brushApplication) const {
         Q_FOREACH(QSharedPointer<BrushType> brush, m_brushes) {
-            brush->setPreserveLightness(preserveLightness);
+            brush->setBrushApplication(brushApplication);
         }
     }
 
-    void notifyCachedDabPainted(const KisPaintInformation& info) {
-        updateBrushIndexes(info, -1);
+    void setGradient(KoAbstractGradientSP gradient) const {
+        Q_FOREACH(QSharedPointer<BrushType> brush, m_brushes) {
+            brush->setGradient(gradient);
+        }
     }
 
     void prepareForSeqNo(const KisPaintInformation& info, int seqNo) {
+        chooseNextBrush(info);
         updateBrushIndexes(info, seqNo);
     }
 
@@ -124,7 +123,6 @@ public:
 
 
         brush->generateMaskAndApplyMaskOrCreateDab(dst, coloringInformation, shape, info, subPixelX, subPixelY, softnessFactor, lightnessStrength);
-        notifyCachedDabPainted(info);
     }
 
     KisFixedPaintDeviceSP paintDevice(const KoColorSpace * colorSpace,
@@ -136,7 +134,6 @@ public:
         if (!brush) return 0;
 
         KisFixedPaintDeviceSP device = brush->paintDevice(colorSpace, shape, info, subPixelX, subPixelY);
-        notifyCachedDabPainted(info);
         return device;
     }
 
@@ -146,7 +143,7 @@ public:
 
     void testingSelectNextBrush(const KisPaintInformation& info) {
         (void) chooseNextBrush(info);
-        notifyCachedDabPainted(info);
+        updateBrushIndexes(info, -1);
     }
 
     /**

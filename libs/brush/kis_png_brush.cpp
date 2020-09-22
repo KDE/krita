@@ -32,7 +32,6 @@ KisPngBrush::KisPngBrush(const QString& filename)
 {
     setBrushType(INVALID);
     setSpacing(0.25);
-    setHasColor(false);
 }
 
 KisPngBrush::KisPngBrush(const KisPngBrush &rhs)
@@ -84,8 +83,21 @@ bool KisPngBrush::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourc
 
     setValid(true);
 
-    if (image.allGray()) {
+    bool hasAlpha = false;
+    for (int y = 0; y < image.height(); y++) {
+        for (int x = 0; x < image.width(); x++) {
+            if (qAlpha(image.pixel(x, y)) != 255) {
+                hasAlpha = true;
+                break;
+            }
+        }
+    }
+
+    if (image.allGray() && !hasAlpha) {
         // Make sure brush tips all have a white background
+        // NOTE: drawing it over white background can probably be skipped now...
+        //       Any images with an Alpha channel should be loaded as RGBA so
+        //       they can have the lightness and gradient options available
         QImage base(image.size(), image.format());
         if ((int)base.format() < (int)QImage::Format_RGB32) {
             base = base.convertToFormat(QImage::Format_ARGB32);
@@ -97,12 +109,15 @@ bool KisPngBrush::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourc
         QImage converted = base.convertToFormat(QImage::Format_Grayscale8);
         setBrushTipImage(converted);
         setBrushType(MASK);
-        setHasColor(false);
+        setBrushApplication(ALPHAMASK);
     }
     else {
+        if ((int)image.format() < (int)QImage::Format_RGB32) {
+            image = image.convertToFormat(QImage::Format_ARGB32);
+        }
         setBrushTipImage(image);
         setBrushType(IMAGE);
-        setHasColor(true);
+        setBrushApplication(image.allGray() ? ALPHAMASK : IMAGESTAMP);
     }
 
     setWidth(brushTipImage().width());
@@ -119,11 +134,6 @@ bool KisPngBrush::saveToDevice(QIODevice *dev) const
     }
 
     return false;
-}
-
-enumBrushType KisPngBrush::brushType() const
-{
-    return !hasColor() || useColorAsMask() ? MASK : IMAGE;
 }
 
 QString KisPngBrush::defaultFileExtension() const

@@ -23,7 +23,7 @@
 #define USE_DOCUMENT 1
 #endif /* USE_DOCUMENT */
 
-#include "testutil.h"
+#include <testutil.h>
 
 
 #include <KoColorSpace.h>
@@ -91,6 +91,14 @@ protected:
         KisFilterConfigurationSP configuration = filter->defaultConfiguration(KisGlobalResourcesInterface::instance());
         Q_ASSERT(configuration);
 
+        /**
+         * HACK ALERT: before this commit a07ef143f6 the meaning of
+         * 'strength' was different. After that, to make the tests
+         * run correctly we should manually set the old value (it is
+         * not available via GUI anymore).
+         */
+        configuration->setProperty("strength", 500);
+
         KisAdjustmentLayerSP blur1 = new KisAdjustmentLayer(image, "blur1", configuration->cloneWithResourcesSnapshot(), 0);
         blur1->internalSelection()->clear();
         blur1->internalSelection()->pixelSelection()->select(blurRect);
@@ -109,8 +117,7 @@ protected:
         image->addNode(blur1);
         image->addNode(paintLayer1);
 
-        KisTransparencyMaskSP transparencyMask1 = new KisTransparencyMask();
-        transparencyMask1->setName("tmask1");
+        KisTransparencyMaskSP transparencyMask1 = new KisTransparencyMask(image, "tmask1");
         transparencyMask1->testingInitSelection(transpRect, paintLayer1);
 
         image->addNode(transparencyMask1, paintLayer1);

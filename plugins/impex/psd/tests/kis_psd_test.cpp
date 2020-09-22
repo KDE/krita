@@ -22,7 +22,7 @@
 #include <QTest>
 #include <QCoreApplication>
 
-#include  <sdk/tests/kistest.h>
+#include  <sdk/tests/testui.h>
 
 #include "filestest.h"
 
@@ -256,6 +256,11 @@ void KisPSDTest::testOpeningAllFormats()
     QString path = TestUtil::fetchExternalDataFileName("psd_format_test_files");
     QDir dirSources(path);
 
+    if (path.isEmpty()) {
+        qWarning() << "External folder is not present, skipping...";
+        return;
+    }
+
     bool shouldFailTheTest = false;
 
     Q_FOREACH (QFileInfo sourceFileInfo, dirSources.entryInfoList()) {
@@ -296,6 +301,11 @@ void KisPSDTest::testSavingAllFormats()
 {
     QString path = TestUtil::fetchExternalDataFileName("psd_format_test_files");
     QDir dirSources(path);
+
+    if (path.isEmpty()) {
+        qWarning() << "External folder is not present, skipping...";
+        return;
+    }
 
     Q_FOREACH (QFileInfo sourceFileInfo, dirSources.entryInfoList()) {
         Q_ASSERT(sourceFileInfo.exists());

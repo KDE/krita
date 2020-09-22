@@ -26,14 +26,14 @@
 #include "flake/kis_shape_controller.h"
 
 #include <sdk/tests/testutil.h>
+#include <sdk/tests/testui.h>
 
 KisDummiesFacadeBase* KisShapeControllerTest::dummiesFacadeFactory()
 {
-
     m_doc = KisPart::instance()->createDocument();
 
     m_nameServer = new KisNameServer();
-    return new KisShapeController(m_doc, m_nameServer);
+    return new KisShapeController(m_nameServer, m_doc->undoStack());
 }
 
 void KisShapeControllerTest::destroyDummiesFacade(KisDummiesFacadeBase *dummiesFacade)

@@ -94,19 +94,11 @@ public:
         {
         }
 
-        virtual void forcedRedo() {
+        void redo() override {
+            KUndo2Command::redo();
+
             m_data->m_colorSpace = m_newCs;
             m_data->m_cache.setupCache();
-        }
-
-        void redo() override {
-            if (m_firstRun) {
-                m_firstRun = false;
-                return;
-            }
-
-            KUndo2Command::redo();
-            forcedRedo();
         }
 
         void undo() override {
@@ -138,9 +130,9 @@ public:
         {
         }
 
-        void forcedRedo() override {
+        void redo() override {
+            ChangeProfileCommand::redo();
             m_data->m_dataManager = m_newDm;
-            ChangeProfileCommand::forcedRedo();
         }
 
         void undo() override {
@@ -162,7 +154,11 @@ public:
             new ChangeProfileCommand(this,
                                      m_colorSpace, dstColorSpace,
                                      parentCommand);
-        cmd->forcedRedo();
+
+        // NOTE: first redo is skipped on a higher level,
+        //       at DeviceChangeColorSpaceCommand
+        cmd->redo();
+
         if (!parentCommand) {
             delete cmd;
         }
@@ -216,7 +212,11 @@ public:
                                         m_dataManager, dstDataManager,
                                         m_colorSpace, dstColorSpace,
                                         parentCommand);
-        cmd->forcedRedo();
+
+        // NOTE: first redo is skipped on a higher level,
+        //       at DeviceChangeColorSpaceCommand
+        cmd->redo();
+
         if (!parentCommand) {
             delete cmd;
         }

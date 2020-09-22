@@ -33,7 +33,7 @@
 #include <kis_image.h>
 #include <kis_fill_painter.h>
 #include <kis_paint_layer.h>
-#include "sdk/tests/kistest.h"
+#include "sdk/tests/testui.h"
 
 
 void TestChannel::testPixelDataU8()

@@ -32,7 +32,7 @@
 
 #include <kis_image.h>
 #include <kis_image_animation_interface.h>
-#include <kis_time_range.h>
+#include <kis_time_span.h>
 
 #include "kis_config.h"
 
@@ -215,8 +215,8 @@ KisImportExportErrorCode KisVideoSaver::encode(const QString &savedFilesMask, co
     KisImageAnimationInterface *animation = m_image->animationInterface();
 
     const int sequenceNumberingOffset = options.sequenceStart;
-    const KisTimeRange clipRange(sequenceNumberingOffset + options.firstFrame,
-                                 sequenceNumberingOffset + options.lastFrame);
+    const KisTimeSpan clipRange = KisTimeSpan::fromTimeToTime(sequenceNumberingOffset + options.firstFrame,
+                                                        sequenceNumberingOffset + options.lastFrame);
 
      // export dimensions could be off a little bit, so the last force option tweaks the pixels for the export to work
     const QString exportDimensions =

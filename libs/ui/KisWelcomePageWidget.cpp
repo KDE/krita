@@ -145,7 +145,7 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
 
 #ifdef ENABLE_UPDATERS
 #ifndef Q_OS_ANDROID
-    // Setup version updater, but do not check for them, unless the user explicitely
+    // Setup version updater, but do not check for them, unless the user explicitly
     // wants to check for updates.
     // * No updater is created for Linux/Steam, Windows/Steam and Windows/Store distributions,
     // as those stores have their own updating mechanism.
@@ -205,10 +205,12 @@ void KisWelcomePageWidget::setMainWindow(KisMainWindow* mainWin)
 
         // set the shortcut links from actions (only if a shortcut exists)
         if ( mainWin->viewManager()->actionManager()->actionByName("file_new")->shortcut().toString() != "") {
-            newFileLinkShortcut->setText(QString("(") + mainWin->viewManager()->actionManager()->actionByName("file_new")->shortcut().toString() + QString(")"));
+            newFileLinkShortcut->setText(
+                QString("(") + mainWin->viewManager()->actionManager()->actionByName("file_new")->shortcut().toString(QKeySequence::NativeText) + QString(")"));
         }
         if (mainWin->viewManager()->actionManager()->actionByName("file_open")->shortcut().toString()  != "") {
-            openFileShortcut->setText(QString("(") + mainWin->viewManager()->actionManager()->actionByName("file_open")->shortcut().toString() + QString(")"));
+            openFileShortcut->setText(
+                QString("(") + mainWin->viewManager()->actionManager()->actionByName("file_open")->shortcut().toString(QKeySequence::NativeText) + QString(")"));
         }
         connect(recentDocumentsListView, SIGNAL(clicked(QModelIndex)), this, SLOT(recentDocumentClicked(QModelIndex)));
         // we need the view manager to actually call actions, so don't create the connections
@@ -289,7 +291,7 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
     kdeIcon->setIcon(KisIconUtils::loadIcon(QStringLiteral("kde")).pixmap(20));
 
     // HTML links seem to be a bit more stubborn with theme changes... setting inline styles to help with color change
-    userCommunityLink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://forum.kde.org/viewforum.php?f=136&" + analyticsString + "user-community" + "\">")
+    userCommunityLink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://krita-artists.org" + analyticsString + "user-community" + "\">")
                                .append(i18n("User Community")).append("</a>"));
 
     gettingStartedLink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://docs.krita.org/en/user_manual/getting_started.html?" + analyticsString + "getting-started" + "\">")

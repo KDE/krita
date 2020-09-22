@@ -27,7 +27,7 @@
 
 struct Canvas::Private {
     Private() {}
-    KisCanvas2 *canvas;
+    KisCanvas2 *canvas {0};
 };
 
 Canvas::Canvas(KoCanvasBase *canvas, QObject *parent)

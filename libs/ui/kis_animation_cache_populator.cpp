@@ -31,7 +31,7 @@
 #include "kis_image.h"
 #include "kis_image_animation_interface.h"
 #include "kis_canvas2.h"
-#include "kis_time_range.h"
+#include "kis_time_span.h"
 #include "kis_animation_frame_cache.h"
 #include "kis_update_info.h"
 #include "kis_signal_auto_connection.h"
@@ -135,7 +135,7 @@ struct KisAnimationCachePopulator::Private
             KisAnimationFrameCacheSP cache = KisAnimationFrameCache::cacheForImage(image);
             KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(cache, false);
 
-            bool requested = tryRequestGeneration(cache, KisTimeRange(), priorityFrame);
+            bool requested = tryRequestGeneration(cache, KisTimeSpan(), priorityFrame);
             if (requested) return true;
         }
 
@@ -152,7 +152,7 @@ struct KisAnimationCachePopulator::Private
                 // Let's skip frames affected by changes to the active node (on the active document)
                 // This avoids constant invalidation and regeneration while drawing
                 KisNodeSP activeNode = activeCanvas->viewManager()->nodeManager()->activeNode();
-                KisTimeRange skipRange;
+                KisTimeSpan skipRange;
                 if (activeNode) {
                     const int currentTime = activeCanvas->currentImage()->animationInterface()->currentUITime();
 
@@ -161,7 +161,7 @@ struct KisAnimationCachePopulator::Private
                             skipRange |= channel->affectedFrames(currentTime);
                         }
                     } else {
-                        skipRange = KisTimeRange::infinite(0);
+                        skipRange = KisTimeSpan::infinite(0);
                     }
                 }
 
@@ -178,20 +178,20 @@ struct KisAnimationCachePopulator::Private
                 continue;
             }
 
-            bool requested = tryRequestGeneration(cache, KisTimeRange(), -1);
+            bool requested = tryRequestGeneration(cache, KisTimeSpan(), -1);
             if (requested) return true;
         }
 
         return false;
     }
 
-    bool tryRequestGeneration(KisAnimationFrameCacheSP cache, KisTimeRange skipRange, int priorityFrame)
+    bool tryRequestGeneration(KisAnimationFrameCacheSP cache, KisTimeSpan skipRange, int priorityFrame)
     {
         KisImageSP image = cache->image();
         if (!image) return false;
 
         KisImageAnimationInterface *animation = image->animationInterface();
-        KisTimeRange currentRange = animation->fullClipRange();
+        KisTimeSpan currentRange = animation->fullClipRange();
 
         const int frame = priorityFrame >= 0 ? priorityFrame : KisAsyncAnimationCacheRenderDialog::calcFirstDirtyFrame(cache, currentRange, skipRange);
 
@@ -292,7 +292,9 @@ KisAnimationCachePopulator::KisAnimationCachePopulator(KisPart *part)
 }
 
 KisAnimationCachePopulator::~KisAnimationCachePopulator()
-{}
+{
+    m_d->priorityFrames.clear();
+}
 
 bool KisAnimationCachePopulator::regenerate(KisAnimationFrameCacheSP cache, int frame)
 {
@@ -301,6 +303,8 @@ bool KisAnimationCachePopulator::regenerate(KisAnimationFrameCacheSP cache, int 
 
 void KisAnimationCachePopulator::requestRegenerationWithPriorityFrame(KisImageSP image, int frameIndex)
 {
+    if (!m_d->calculateAnimationCacheInBackground) return;
+
     m_d->priorityFrames.append(qMakePair(image, frameIndex));
 
     if (m_d->state == Private::NotWaitingForAnything) {

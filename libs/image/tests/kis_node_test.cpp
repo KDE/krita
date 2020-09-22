@@ -23,7 +23,7 @@
 #include "kis_global.h"
 #include "kis_node_graph_listener.h"
 #include <KoProperties.h>
-#include "testutil.h"
+#include <testutil.h>
 
 
 void KisNodeTest::testCreation()

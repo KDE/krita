@@ -20,7 +20,7 @@
 
 #include "kis_image.h"
 #include "kis_image_animation_interface.h"
-
+#include "kis_command_ids.h"
 
 
 KisSwitchCurrentTimeCommand::KisSwitchCurrentTimeCommand(KisImageAnimationInterface *animation, int oldTime, int newTime, KUndo2Command *parent)
@@ -37,9 +37,7 @@ KisSwitchCurrentTimeCommand::~KisSwitchCurrentTimeCommand()
 
 int KisSwitchCurrentTimeCommand::id() const
 {
-    // we don't have a common commands id source in Krita yet, so
-    // just use a random one ;)
-    return 4 + 8 + 15 + 16 + 23 + 42;
+    return KisCommandUtils::ChangeCurrentTimeId;
 }
 
 bool KisSwitchCurrentTimeCommand::mergeWith(const KUndo2Command* command)

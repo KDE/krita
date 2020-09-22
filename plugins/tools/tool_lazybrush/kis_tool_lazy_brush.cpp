@@ -73,7 +73,7 @@ void KisToolLazyBrush::tryDisableKeyStrokesOnMask()
     KisNodeSP manuallyActivatedNode = m_d->manuallyActivatedNode;
 
     if (manuallyActivatedNode) {
-        KisLayerPropertiesIcons::setNodeProperty(manuallyActivatedNode, KisLayerPropertiesIcons::colorizeEditKeyStrokes, false, image());
+        KisLayerPropertiesIcons::setNodePropertyAutoUndo(manuallyActivatedNode, KisLayerPropertiesIcons::colorizeEditKeyStrokes, false, image());
         manuallyActivatedNode = 0;
     }
 
@@ -214,9 +214,9 @@ void KisToolLazyBrush::beginPrimaryAction(KoPointerEvent *event)
             KIS_SAFE_ASSERT_RECOVER_NOOP(!manuallyActivatedNode ||
                                          manuallyActivatedNode == node);
 
-            KisLayerPropertiesIcons::setNodeProperty(node,
-                                                     KisLayerPropertiesIcons::colorizeEditKeyStrokes,
-                                                     true, image());
+            KisLayerPropertiesIcons::setNodePropertyAutoUndo(node,
+                                                             KisLayerPropertiesIcons::colorizeEditKeyStrokes,
+                                                             true, image());
             m_d->manuallyActivatedNode = node;
         }
     } else {
@@ -247,9 +247,9 @@ void KisToolLazyBrush::activateAlternateAction(KisTool::AlternateAction action)
                                                   KisLayerPropertiesIcons::colorizeEditKeyStrokes,
                                                   true).toBool();
 
-        KisLayerPropertiesIcons::setNodeProperty(node,
-                                                 KisLayerPropertiesIcons::colorizeEditKeyStrokes,
-                                                 !m_d->oldShowKeyStrokesValue, image());
+        KisLayerPropertiesIcons::setNodePropertyAutoUndo(node,
+                                                         KisLayerPropertiesIcons::colorizeEditKeyStrokes,
+                                                         !m_d->oldShowKeyStrokesValue, image());
 
         KisToolFreehand::activatePrimaryAction();
 
@@ -262,9 +262,9 @@ void KisToolLazyBrush::activateAlternateAction(KisTool::AlternateAction action)
                                                       KisLayerPropertiesIcons::colorizeShowColoring,
                                                       true).toBool();
 
-        KisLayerPropertiesIcons::setNodeProperty(node,
-                                                 KisLayerPropertiesIcons::colorizeShowColoring,
-                                                 !m_d->oldShowColoringValue, image());
+        KisLayerPropertiesIcons::setNodePropertyAutoUndo(node,
+                                                         KisLayerPropertiesIcons::colorizeShowColoring,
+                                                         !m_d->oldShowColoringValue, image());
 
         KisToolFreehand::activatePrimaryAction();
 
@@ -279,9 +279,9 @@ void KisToolLazyBrush::deactivateAlternateAction(KisTool::AlternateAction action
         KisNodeSP node = currentNode();
         if (!node) return;
 
-        KisLayerPropertiesIcons::setNodeProperty(node,
-                                                 KisLayerPropertiesIcons::colorizeEditKeyStrokes,
-                                                 m_d->oldShowKeyStrokesValue, image());
+        KisLayerPropertiesIcons::setNodePropertyAutoUndo(node,
+                                                         KisLayerPropertiesIcons::colorizeEditKeyStrokes,
+                                                         m_d->oldShowKeyStrokesValue, image());
 
         KisToolFreehand::deactivatePrimaryAction();
 
@@ -289,9 +289,9 @@ void KisToolLazyBrush::deactivateAlternateAction(KisTool::AlternateAction action
         KisNodeSP node = currentNode();
         if (!node) return;
 
-        KisLayerPropertiesIcons::setNodeProperty(node,
-                                                 KisLayerPropertiesIcons::colorizeShowColoring,
-                                                 m_d->oldShowColoringValue, image());
+        KisLayerPropertiesIcons::setNodePropertyAutoUndo(node,
+                                                         KisLayerPropertiesIcons::colorizeShowColoring,
+                                                         m_d->oldShowColoringValue, image());
 
         KisToolFreehand::deactivatePrimaryAction();
 
@@ -335,7 +335,7 @@ void KisToolLazyBrush::explicitUserStrokeEndRequest()
         KisNodeSP node = currentNode();
         if (!node) return;
 
-        KisLayerPropertiesIcons::setNodeProperty(node, KisLayerPropertiesIcons::colorizeNeedsUpdate, false, image());
+        KisLayerPropertiesIcons::setNodePropertyAutoUndo(node, KisLayerPropertiesIcons::colorizeNeedsUpdate, false, image());
     }
 }
 

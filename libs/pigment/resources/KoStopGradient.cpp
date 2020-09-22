@@ -40,6 +40,10 @@
 #include <KoColorModelStandardIds.h>
 #include <KoXmlNS.h>
 
+#include <KoCanvasResourcesIds.h>
+#include <KoCanvasResourcesInterface.h>
+
+
 KoStopGradient::KoStopGradient(const QString& filename)
     : KoAbstractGradient(filename)
 {
@@ -272,22 +276,49 @@ QList<KoGradientStop> KoStopGradient::stops() const
     return m_stops;
 }
 
-bool KoStopGradient::hasVariableColors() const {
-    return m_hasVariableStops;
+QList<int> KoStopGradient::requiredCanvasResources() const
+{
+    QList<int> result;
+
+    if (std::find_if(m_stops.begin(), m_stops.end(),
+                     [] (const KoGradientStop &stop) {
+                         return stop.type != COLORSTOP;
+                     }) != m_stops.end()) {
+
+        result << KoCanvasResource::ForegroundColor << KoCanvasResource::BackgroundColor;
+    }
+
+    return result;
 }
 
-void KoStopGradient::setVariableColors(const KoColor& foreground, const KoColor& background) {
-    KoColor color;
-    for (int i = 0; i < m_stops.count(); i++){
-        if (m_stops[i].type == FOREGROUNDSTOP) {
-            color = foreground;
-        } else if (m_stops[i].type == BACKGROUNDSTOP) {
-            color = background;
-        } else continue;
-        color.convertTo(colorSpace());
-        m_stops[i].color = color;
+void KoStopGradient::bakeVariableColors(KoCanvasResourcesInterfaceSP canvasResourcesInterface)
+{
+    const KoColor fgColor = canvasResourcesInterface->resource(KoCanvasResource::ForegroundColor).value<KoColor>().convertedTo(colorSpace());
+    const KoColor bgColor = canvasResourcesInterface->resource(KoCanvasResource::BackgroundColor).value<KoColor>().convertedTo(colorSpace());
+
+    for (auto it = m_stops.begin(); it != m_stops.end(); ++it) {
+        if (it->type == FOREGROUNDSTOP) {
+            it->color = fgColor;
+            it->type = COLORSTOP;
+        } else if (it->type == BACKGROUNDSTOP) {
+            it->color = bgColor;
+            it->type = COLORSTOP;
+        }
     }
-    updatePreview();
+}
+
+void KoStopGradient::updateVariableColors(KoCanvasResourcesInterfaceSP canvasResourcesInterface)
+{
+    const KoColor fgColor = canvasResourcesInterface->resource(KoCanvasResource::ForegroundColor).value<KoColor>().convertedTo(colorSpace());
+    const KoColor bgColor = canvasResourcesInterface->resource(KoCanvasResource::BackgroundColor).value<KoColor>().convertedTo(colorSpace());
+
+    for (auto it = m_stops.begin(); it != m_stops.end(); ++it) {
+        if (it->type == FOREGROUNDSTOP) {
+            it->color = fgColor;
+        } else if (it->type == BACKGROUNDSTOP) {
+            it->color = bgColor;
+        }
+    }
 }
 
 void KoStopGradient::loadSvgGradient(QIODevice* file)

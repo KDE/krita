@@ -10,9 +10,6 @@
     <height>154</height>
    </rect>
   </property>
-  <property name="windowTitle">
-   <string>KisDitherWidget</string>
-  </property>
   <layout class="QFormLayout" name="formLayout">
    <property name="leftMargin">
     <number>0</number>
@@ -120,12 +117,12 @@
          </item>
          <item>
           <property name="text">
-           <string>Lightness</string>
+           <string comment="Name of Dither pattern value mode - Lightness">Lightness</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>Alpha</string>
+           <string comment="Name of Dither pattern value mode - Alpha">Alpha</string>
           </property>
          </item>
         </widget>

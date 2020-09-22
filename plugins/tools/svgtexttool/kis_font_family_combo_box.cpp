@@ -194,8 +194,7 @@ void KisFontFamilyComboBox::setInitialized()
 KisFontComboBoxes::KisFontComboBoxes(QWidget *parent)
     : QWidget(parent)
 {
-    QHBoxLayout *layout = new QHBoxLayout();
-    this->setLayout(layout);
+    QHBoxLayout *layout = new QHBoxLayout(this);
 
     m_family = new KisFontFamilyComboBox();
     m_family->setMinimumWidth(100);
@@ -207,8 +206,8 @@ KisFontComboBoxes::KisFontComboBoxes(QWidget *parent)
     fontFamilyChanged();
     m_family->setToolTip(i18n("Font Family"));
     m_styles->setToolTip(i18n("Font Style"));
-    connect(m_family, SIGNAL(currentTextChanged(QString)), this, SLOT(fontFamilyChanged()));
-    connect(m_family, SIGNAL(currentTextChanged(QString)), this, SLOT(fontChange()));
+    connect(m_family, SIGNAL(activated(int)), this, SLOT(fontFamilyChanged()));
+    connect(m_family, SIGNAL(activated(int)), this, SLOT(fontChange()));
     connect(m_styles, SIGNAL(activated(int)), this, SLOT(fontChange()));
 }
 

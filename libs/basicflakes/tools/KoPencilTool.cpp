@@ -105,10 +105,6 @@ void KoPencilTool::paint(QPainter &painter, const KoViewConverter &converter)
     }
 }
 
-void KoPencilTool::repaintDecorations()
-{
-}
-
 void KoPencilTool::mousePressEvent(KoPointerEvent *event)
 {
     KoShapeStrokeSP stroke = createStroke();

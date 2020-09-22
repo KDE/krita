@@ -44,6 +44,9 @@ public:
      */
     void setItemSize(QSize size);
 
+    void setFixedToolTipThumbnailSize(const QSize &size);
+    void setToolTipShouldRenderCheckers(bool value);
+
 public Q_SLOTS:
     void slotScrollerStateChange(QScroller::State state){ KisKineticScroller::updateCursor(this, state); }
 

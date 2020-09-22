@@ -153,7 +153,7 @@ void KisAbstractSliderSpinBox::hideEdit()
 void KisAbstractSliderSpinBox::paintEvent(QPaintEvent* e)
 {
     Q_D(KisAbstractSliderSpinBox);
-    Q_UNUSED(e)
+    Q_UNUSED(e);
 
     QPainter painter(this);
 

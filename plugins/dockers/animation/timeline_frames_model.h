@@ -35,6 +35,21 @@ class KisAnimationPlayer;
 class KisNodeDisplayModeAdapter;
 
 
+struct TimelineSelectionEntry {
+    KisRasterKeyframeChannel* channel;
+    int time;
+    KisRasterKeyframeSP keyframe;
+};
+
+inline bool operator==(const TimelineSelectionEntry& lhs, const TimelineSelectionEntry& rhs){
+    return (lhs.time == rhs.time) && (lhs.channel == rhs.channel) && (lhs.keyframe == rhs.keyframe);
+}
+
+inline uint qHash(const TimelineSelectionEntry &key)
+{
+    return reinterpret_cast<quint64>(key.channel) * reinterpret_cast<quint64>(key.keyframe.data()) * key.time;
+}
+
 class KRITAANIMATIONDOCKER_EXPORT TimelineFramesModel : public TimelineNodeListKeeper::ModelWithExternalNotifications
 {
     Q_OBJECT
@@ -43,7 +58,8 @@ public:
     enum MimeCopyPolicy {
         UndefinedPolicy = 0,
         MoveFramesPolicy,
-        CopyFramesPolicy
+        CopyFramesPolicy,
+        CloneFramesPolicy
     };
 
 public:
@@ -62,10 +78,11 @@ public:
 
     bool createFrame(const QModelIndex &dstIndex);
     bool copyFrame(const QModelIndex &dstIndex);
+    void makeClonesUnique(const QModelIndexList &indices);
 
     bool insertFrames(int dstColumn, const QList<int> &dstRows, int count, int timing = 1);
 
-    bool insertHoldFrames(QModelIndexList selectedIndexes, int count);
+    bool insertHoldFrames(const QModelIndexList &selectedIndexes, int count);
 
     QString audioChannelFileName() const;
     void setAudioChannelFileName(const QString &fileName);
@@ -134,6 +151,7 @@ public:
 
 protected:
     QMap<QString, KisKeyframeChannel *> channelsAt(QModelIndex index) const override;
+    KisKeyframeChannel* channelByID(QModelIndex index, const QString &id) const;
 
 private Q_SLOTS:
     void slotDummyChanged(KisNodeDummy *dummy);

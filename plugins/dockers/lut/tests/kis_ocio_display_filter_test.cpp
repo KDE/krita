@@ -91,7 +91,7 @@ void KisOcioDisplayFilterTest::test()
 
     QVariant v;
     v.setValue(KisNodeWSP(image->root()->firstChild()));
-    resourceManager->setResource(KisCanvasResourceProvider::CurrentKritaNode, v);
+    resourceManager->setResource(KoCanvasResource::CurrentKritaNode, v);
 
     converter.setDisplayFilter(filter);
     dbgKrita << ppVar(converter.paintingColorSpace());

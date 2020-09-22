@@ -30,7 +30,7 @@ class KisAutogradientEditor : public QWidget, public Ui::KisWdgAutogradient
     Q_OBJECT
 
 public:
-    KisAutogradientEditor(KoSegmentGradientSP gradient, QWidget *parent, const char* name, const QString& caption, KoColor fgColor, KoColor bgColor);
+    KisAutogradientEditor(KoSegmentGradientSP gradient, QWidget *parent, const char* name, const QString& caption, KoCanvasResourcesInterfaceSP canvasResourcesInterface);
     void activate();
 
 private:
@@ -38,8 +38,7 @@ private:
 
 private:
     KoSegmentGradientSP m_autogradientResource;
-    KoColor m_fgColor;
-    KoColor m_bgColor;
+    KoCanvasResourcesInterfaceSP m_canvasResourcesInterface;
 
 private Q_SLOTS:
     void slotSelectedSegment(KoGradientSegment* segment);

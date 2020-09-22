@@ -223,25 +223,7 @@
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_3">
           <item>
-           <widget class="QRadioButton" name="btnMaskMode">
-            <property name="text">
-             <string>Mask</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QRadioButton" name="btnColorMode">
-            <property name="text">
-             <string>Color</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QRadioButton" name="btnLightnessMode">
-            <property name="text">
-             <string>Lightness</string>
-            </property>
-           </widget>
+           <widget class="QComboBox" name="cmbBrushMode"/>
           </item>
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -305,8 +287,8 @@
        </property>
        <property name="sizeHint" stdset="0">
         <size>
-         <width>20</width>
-         <height>40</height>
+         <width>0</width>
+         <height>0</height>
         </size>
        </property>
       </spacer>
@@ -319,13 +301,13 @@
   <customwidget>
    <class>KisSliderSpinBox</class>
    <extends>QWidget</extends>
-   <header>kis_slider_spin_box.h</header>
+   <header location="global">kis_slider_spin_box.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>KisDoubleSliderSpinBox</class>
    <extends>QWidget</extends>
-   <header>kis_slider_spin_box.h</header>
+   <header location="global">kis_slider_spin_box.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

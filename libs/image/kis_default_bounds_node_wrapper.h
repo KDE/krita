@@ -20,11 +20,12 @@
 
 #include "kis_default_bounds_base.h"
 #include "kis_node.h"
+#include "kritaimage_export.h"
 
 class KisDefaultBoundsNodeWrapper;
 typedef KisSharedPtr<KisDefaultBoundsNodeWrapper> KisDefaultBoundsNodeWrapperSP;
 
-class KisDefaultBoundsNodeWrapper : public KisDefaultBoundsBase {
+class KRITAIMAGE_EXPORT KisDefaultBoundsNodeWrapper : public KisDefaultBoundsBase {
 public:
     KisDefaultBoundsNodeWrapper(KisNodeWSP node = 0);
     KisDefaultBoundsNodeWrapper(KisDefaultBoundsNodeWrapper& rhs);
@@ -36,7 +37,7 @@ public:
     int currentLevelOfDetail() const override;
     int currentTime() const override;
     bool externalFrameActive() const override;
-    void * sourceCookie() const override;
+    void *sourceCookie() const override;
 
     static const QRect infiniteRect;
 

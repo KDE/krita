@@ -70,7 +70,7 @@ public:
         QString name;
 
         /** Whether the property is a boolean (e.g. locked, visible) which can be toggled directly from the widget itself. */
-        bool isMutable;
+        bool isMutable {false};
 
         /** Provide these if the property isMutable. */
         QIcon onIcon;
@@ -82,14 +82,14 @@ public:
         /** If the property is mutable, specifies whether it can be put into stasis. When a property
         is in stasis, a new state is created, and the old one is stored in stateInStasis. When
         stasis ends, the old value is restored and the new one discarded */
-        bool canHaveStasis;
+        bool canHaveStasis {false};
 
         /** If the property isMutable and canHaveStasis, indicate whether it is in stasis or not */
-        bool isInStasis;
+        bool isInStasis {false};
 
         /** If the property isMutable and canHaveStasis, provide this value to store the property's
         state while in stasis */
-        bool stateInStasis;
+        bool stateInStasis {false};
 
         bool operator==(const Property &rhs) const {
             return rhs.name == name && rhs.state == state && isInStasis == rhs.isInStasis;
@@ -589,6 +589,18 @@ protected:
      * @return newly created channel or null
      */
     virtual KisKeyframeChannel * requestKeyframeChannel(const QString &id);
+
+public:
+    /**
+     * Ideally, this function would be used to query for keyframe support
+     * before trying to create channels. The ability to query would help
+     * in cases such as animation curves where you might want to ask
+     * which channels it supports before allowing the user to add.
+     *
+     * @param id querried channel
+     * @return bool whether it supports said channel or not.
+     */
+    virtual bool supportsKeyframeChannel(const QString &id);
 
 Q_SIGNALS:
     void keyframeChannelAdded(KisKeyframeChannel *channel);

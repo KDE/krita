@@ -788,11 +788,11 @@ KoRTree<T>::Node::Node(int capacity, int level, Node * parent)
         : m_parent(parent)
         , m_childBoundingBox(capacity)
         , m_counter(0)
+        , m_place(0)
 #ifdef CALLIGRA_RTREE_DEBUG
         , m_nodeId(nodeIdCnt++)
 #endif
         , m_level(level)
-        , m_place(0)
 {
 }
 

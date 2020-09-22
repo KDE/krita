@@ -8,6 +8,7 @@
 
 #include <klocalizedstring.h>
 
+
 KisUtilityTitleBar::KisUtilityTitleBar(QWidget *parent)
     : KisUtilityTitleBar(new QLabel(i18n("Title"), parent), parent)
 {
@@ -23,7 +24,6 @@ KisUtilityTitleBar::KisUtilityTitleBar(QLabel *title, QWidget *parent)
     margins.setBottom(0);
     mainLayout->setContentsMargins(margins);
     mainLayout->setSpacing(0);
-    setLayout(mainLayout);
 
     // Set up title..
     mainLayout->addWidget(title);
@@ -31,17 +31,18 @@ KisUtilityTitleBar::KisUtilityTitleBar(QLabel *title, QWidget *parent)
     mainLayout->addSpacing(SPACING_UNIT * 2);
 
     // Set up widget area..
-    widgetArea = new QHBoxLayout(this);
-    widgetArea->setSpacing(0);
-    widgetArea->setContentsMargins(0,0,0,0);
-    QWidget *widgetAreaWidget = new QWidget(this);
-    widgetAreaWidget->setLayout(widgetArea);
-    mainLayout->addWidget(widgetAreaWidget);
+    QWidget *widgetArea = new QWidget(this);
+    widgetAreaLayout = new QHBoxLayout(widgetArea);
+    widgetAreaLayout->setSpacing(0);
+    widgetAreaLayout->setContentsMargins(0,0,0,0);
+    mainLayout->addWidget(widgetArea);
 
     mainLayout->addSpacing(SPACING_UNIT * 2);
 
     {   // Controls/Decorations..
-        QHBoxLayout *sublayout = new QHBoxLayout(this);
+        QWidget *widget = new QWidget(this);
+
+        QHBoxLayout *sublayout = new QHBoxLayout(widget);
         sublayout->setSpacing(0);
         sublayout->setContentsMargins(0,0,0,0);
 
@@ -50,7 +51,7 @@ KisUtilityTitleBar::KisUtilityTitleBar(QLabel *title, QWidget *parent)
         {   // Float button...
             QPushButton *button = new QPushButton(style()->standardIcon(QStyle::SP_TitleBarNormalButton), "", this);
             button->setFlat(true);
-            connect(button, &QPushButton::clicked, [this, dockWidget](){
+            connect(button, &QPushButton::clicked, [dockWidget](){
                 dockWidget->setFloating(!dockWidget->isFloating());
             } );
             sublayout->addWidget(button);
@@ -63,8 +64,6 @@ KisUtilityTitleBar::KisUtilityTitleBar(QLabel *title, QWidget *parent)
             sublayout->addWidget(button);
         }
 
-        QWidget *widget = new QWidget();
-        widget->setLayout(sublayout);
         mainLayout->addWidget(widget);
     }
 }

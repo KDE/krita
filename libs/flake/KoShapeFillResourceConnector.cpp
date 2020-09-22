@@ -76,9 +76,9 @@ void KoShapeFillResourceConnector::slotCanvasResourceChanged(int key, const QVar
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->canvas);
 
-    if (key == KoCanvasResourceProvider::ForegroundColor) {
+    if (key == KoCanvasResource::ForegroundColor) {
         m_d->applyShapeColoring(KoFlake::Fill, value.value<KoColor>());
-    } else if (key == KoCanvasResourceProvider::BackgroundColor) {
+    } else if (key == KoCanvasResource::BackgroundColor) {
         m_d->applyShapeColoring(KoFlake::StrokeFill, value.value<KoColor>());
     }
 }

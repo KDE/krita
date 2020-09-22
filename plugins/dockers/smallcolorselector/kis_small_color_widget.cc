@@ -159,7 +159,6 @@ KisSmallColorWidget::KisSmallColorWidget(QWidget* parent)
         layout->addSpacing(16);
         layout->addWidget(d->dynamicRange, 0);
     }
-    setLayout(layout);
 
     slotUpdatePalettes();
 }

@@ -41,9 +41,6 @@ public:
 public:
     QString replacementWarningText() override;
     QString captionText() override;
-
-private:
-    WdgBugInfo *m_page;
 };
 
 #endif // DLG_SYSINFO

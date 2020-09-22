@@ -72,6 +72,7 @@ KisControlFrame::KisControlFrame(KisViewManager *view, QWidget *parent, const ch
     , m_patternChooserPopup(0)
     , m_gradientChooserPopup(0)
     , m_paintopBox(0)
+    , m_checkersPainter(4)
 {
     setObjectName(name);
     m_font = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
@@ -114,8 +115,8 @@ void KisControlFrame::setup(QWidget *parent)
     action->setDefaultWidget(m_dual);
     connect(m_dual, SIGNAL(foregroundColorChanged(KoColor)), m_viewManager->canvasResourceProvider(), SLOT(slotSetFGColor(KoColor)));
     connect(m_dual, SIGNAL(backgroundColorChanged(KoColor)), m_viewManager->canvasResourceProvider(), SLOT(slotSetBGColor(KoColor)));
-    connect(m_viewManager->canvasResourceProvider(), SIGNAL(sigFGColorChanged(KoColor)), m_dual, SLOT(setForegroundColor(KoColor)));
     connect(m_viewManager->canvasResourceProvider(), SIGNAL(sigBGColorChanged(KoColor)), m_dual, SLOT(setBackgroundColor(KoColor)));
+    connect(m_viewManager->canvasResourceProvider(), SIGNAL(sigFGColorChanged(KoColor)), m_dual, SLOT(setForegroundColor(KoColor)));
     connect(m_viewManager->canvasResourceProvider(), SIGNAL(sigFGColorChanged(KoColor)), m_gradientWidget, SLOT(update()));
     connect(m_viewManager->canvasResourceProvider(), SIGNAL(sigBGColorChanged(KoColor)), m_gradientWidget, SLOT(update()));
     m_dual->setFixedSize(28, 28);
@@ -149,7 +150,21 @@ void KisControlFrame::slotSetPattern(KoPatternSP pattern)
 
 void KisControlFrame::slotSetGradient(KoAbstractGradientSP gradient)
 {
-    m_gradientWidget->setThumbnail(gradient->image());
+    const QSize iconSize = m_gradientWidget->preferredIconSize();
+
+    QImage icon(iconSize, QImage::Format_ARGB32);
+
+    {
+        QPainter gc(&icon);
+        m_checkersPainter.paint(gc, QRect(QPoint(), iconSize));
+        gc.drawImage(QPoint(),
+                     gradient->generatePreview(iconSize.width(), iconSize.height(),
+                                               m_viewManager->canvasResourceProvider()->
+                                               resourceManager()->canvasResourcesInterface()));
+    }
+
+
+    m_gradientWidget->setThumbnail(icon);
 }
 
 void KisControlFrame::createPatternsChooser(KisViewManager * view)
@@ -216,11 +231,12 @@ void KisControlFrame::createGradientsChooser(KisViewManager * view)
     l2->addWidget(m_gradientTab);
 
     m_gradientChooser = new KisGradientChooser(m_gradientChooserPopup);
+    m_gradientChooser->setCanvasResourcesInterface(view->canvasResourceProvider()->resourceManager()->canvasResourcesInterface());
     m_gradientChooser->setFont(m_font);
     m_gradientTab->addTab(m_gradientChooser, i18n("Gradients"));
 
-    connect(m_gradientChooser, SIGNAL(resourceSelected(KoResourceSP )),
-            view->canvasResourceProvider(), SLOT(slotGradientActivated(KoResourceSP )));
+    connect(m_gradientChooser, SIGNAL(resourceSelected(KoResourceSP)),
+            view->canvasResourceProvider(), SLOT(slotGradientActivated(KoResourceSP)));
 
     connect (view->mainWindow(), SIGNAL(themeChanged()), m_gradientChooser, SLOT(slotUpdateIcons()));
 
@@ -234,9 +250,6 @@ void KisControlFrame::createGradientsChooser(KisViewManager * view)
 
     connect(view->canvasResourceProvider(), SIGNAL(sigGradientChanged(KoAbstractGradientSP)),
             this, SLOT(slotSetGradient(KoAbstractGradientSP)));
-
-    connect(view->canvasResourceProvider(), SIGNAL(sigFGColorChanged(KoColor)), m_gradientChooser, SLOT(setForegroundColor(KoColor)));
-    connect(view->canvasResourceProvider(), SIGNAL(sigBGColorChanged(KoColor)), m_gradientChooser, SLOT(setBackgroundColor(KoColor)));
 
     m_gradientChooser->setCurrentItem(0);
 

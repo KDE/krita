@@ -25,6 +25,7 @@
 #include <KoShapeKeepAspectRatioCommand.h>
 #include <kis_config.h>
 #include <kis_signals_blocker.h>
+#include <kis_signal_compressor.h>
 #include <KisReferenceImage.h>
 
 #include <QClipboard>
@@ -94,8 +95,12 @@ ToolReferenceImagesWidget::ToolReferenceImagesWidget(ToolReferenceImages *tool, 
     connect(d->ui->bnLoad, SIGNAL(clicked()), tool, SLOT(loadReferenceImages()));
 
     connect(d->ui->chkKeepAspectRatio, SIGNAL(stateChanged(int)), this, SLOT(slotKeepAspectChanged()));
-    connect(d->ui->opacitySlider, SIGNAL(valueChanged(qreal)), this, SLOT(slotOpacitySliderChanged(qreal)));
-    connect(d->ui->saturationSlider, SIGNAL(valueChanged(qreal)), this, SLOT(slotSaturationSliderChanged(qreal)));
+
+    KisSignalCompressor *compressor = new KisSignalCompressor(100 /* ms */, KisSignalCompressor::POSTPONE, this);
+    connect(compressor, SIGNAL(timeout()), this, SLOT(slotImageValuesChanged()));
+
+    connect(d->ui->saturationSlider, SIGNAL(valueChanged(qreal)), compressor, SLOT(start()));
+    connect(d->ui->opacitySlider, SIGNAL(valueChanged(qreal)), compressor, SLOT(start()));
 
     d->ui->referenceImageLocationCombobox->addItem(i18n("Embed to .KRA"));
     d->ui->referenceImageLocationCombobox->addItem(i18n("Link to Image"));
@@ -208,6 +213,12 @@ void ToolReferenceImagesWidget::slotSaveLocationChanged(int index)
             }
         }
     }
+}
+
+void ToolReferenceImagesWidget::slotImageValuesChanged()
+{
+    slotSaturationSliderChanged(d->ui->saturationSlider->value());
+    slotOpacitySliderChanged(d->ui->opacitySlider->value());
 }
 
 void ToolReferenceImagesWidget::updateVisibility(bool hasSelection)

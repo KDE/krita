@@ -283,7 +283,7 @@ KisImportExportErrorCode KisXCFImport::convert(KisDocument *document, QIODevice 
         }
         // Create the mask
         if (xcflayer.hasMask) {
-            KisTransparencyMaskSP mask = new KisTransparencyMask();
+            KisTransparencyMaskSP mask = new KisTransparencyMask(image, i18n("Transparency Mask"));
             layer.mask = mask;
 
             mask->initSelection(kisLayer);
@@ -308,7 +308,7 @@ KisImportExportErrorCode KisXCFImport::convert(KisDocument *document, QIODevice 
                         } while (it->nextPixel());
                         it->nextRow();
                     }
-                    free(tile);
+                    freeTile(tile);
                 }
             }
             mask->paintDevice()->setX(left);

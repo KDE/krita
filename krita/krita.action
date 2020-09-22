@@ -489,7 +489,7 @@
     </Action>
    <Action name="mirrorX-lock">
       <icon></icon>
-      <text>Lock</text>
+      <text>Lock X Line</text>
       <whatsThis></whatsThis>
       <toolTip>Lock X Line</toolTip>
       <iconText>Lock X Line</iconText>
@@ -1576,7 +1576,6 @@
   <Actions category="Blending Modes">
     <text>Blending Modes</text>
 
-<!-- commented out in the code right now
     <Action name="Next Blending Mode">
       <icon></icon>
       <text>Next Blending Mode</text>
@@ -1587,6 +1586,7 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+
     <Action name="Previous Blending Mode">
       <icon></icon>
       <text>Previous Blending Mode</text>
@@ -1597,7 +1597,7 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
--->
+
     <Action name="Select Normal Blending Mode">
       <icon></icon>
       <text>Select Normal Blending Mode</text>
@@ -2046,26 +2046,6 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
-    <Action name="previous_keyframe">
-      <icon></icon>
-      <text>Previous Keyframe</text>
-      <whatsThis></whatsThis>
-      <toolTip></toolTip>
-      <iconText></iconText>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="next_keyframe">
-      <icon></icon>
-      <text>Next Keyframe</text>
-      <whatsThis></whatsThis>
-      <toolTip></toolTip>
-      <iconText></iconText>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
     <Action name="first_frame">
       <icon></icon>
       <text>First Frame</text>
@@ -2407,9 +2387,9 @@ Enable to preserve playback timing.</text>
       <statusTip></statusTip>
     </Action>
 
-    <Action name="copy_frames_to_clipboard">
+    <Action name="copy_frames">
       <icon></icon>
-      <text>Copy to Clipboard</text>
+      <text>Copy Keyframes</text>
       <whatsThis></whatsThis>
       <toolTip>Copy frames to clipboard</toolTip>
       <iconText></iconText>
@@ -2420,9 +2400,35 @@ Enable to preserve playback timing.</text>
       <statusTip></statusTip>
     </Action>
 
-    <Action name="cut_frames_to_clipboard">
+    <Action name="copy_frames_as_clones">
       <icon></icon>
-      <text>Cut to Clipboard</text>
+      <text>Clone Keyframes</text>
+      <whatsThis></whatsThis>
+      <toolTip>Clone frames to clipboard</toolTip>
+      <iconText></iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+    <Action name="make_clones_unique">
+      <icon></icon>
+      <text>Make Unique</text>
+      <whatsThis></whatsThis>
+      <toolTip>Convert clones to unique keyframe instances.</toolTip>
+      <iconText></iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+    <Action name="cut_frames">
+      <icon></icon>
+      <text>Cut Keyframes</text>
       <whatsThis></whatsThis>
       <toolTip>Cut frames to clipboard</toolTip>
       <iconText></iconText>
@@ -2433,9 +2439,9 @@ Enable to preserve playback timing.</text>
       <statusTip></statusTip>
     </Action>
 
-    <Action name="paste_frames_from_clipboard">
+    <Action name="paste_frames">
       <icon></icon>
-      <text>Paste from Clipboard</text>
+      <text>Paste Keyframes</text>
       <whatsThis></whatsThis>
       <toolTip>Paste frames from clipboard</toolTip>
       <iconText></iconText>
@@ -2446,9 +2452,9 @@ Enable to preserve playback timing.</text>
       <statusTip></statusTip>
     </Action>
 
-    <Action name="copy_columns_to_clipboard">
+    <Action name="copy_columns">
       <icon></icon>
-      <text>Copy Columns to Clipboard</text>
+      <text>Copy Columns</text>
       <whatsThis></whatsThis>
       <toolTip>Copy columns to clipboard</toolTip>
       <iconText></iconText>
@@ -2459,9 +2465,9 @@ Enable to preserve playback timing.</text>
       <statusTip></statusTip>
     </Action>
 
-    <Action name="cut_columns_to_clipboard">
+    <Action name="cut_columns">
       <icon></icon>
-      <text>Cut Columns to Clipboard</text>
+      <text>Cut Columns</text>
       <whatsThis></whatsThis>
       <toolTip>Cut columns to clipboard</toolTip>
       <iconText></iconText>
@@ -2474,7 +2480,7 @@ Enable to preserve playback timing.</text>
 
     <Action name="paste_columns_from_clipboard">
       <icon></icon>
-      <text>Paste Columns from Clipboard</text>
+      <text>Paste Columns</text>
       <whatsThis></whatsThis>
       <toolTip>Paste columns from clipboard</toolTip>
       <iconText></iconText>
@@ -2704,7 +2710,7 @@ Enable to preserve playback timing.</text>
     </Action>
     <Action name="add_new_transform_mask">
       <icon>transformMask</icon>
-      <text>&amp;Transform Mask...</text>
+      <text>&amp;Transform Mask</text>
       <whatsThis></whatsThis>
       <toolTip>Transform Mask</toolTip>
       <iconText>Transform Mask</iconText>
@@ -3064,7 +3070,7 @@ Enable to preserve playback timing.</text>
     </Action>
     <Action name="convert_to_file_layer">
       <icon>fileLayer</icon>
-      <text>to &amp;File Layer</text>
+      <text>to &amp;File Layer...</text>
       <whatsThis></whatsThis>
       <toolTip>Saves out the layers into a new image and then references that image.</toolTip>
       <iconText>Convert to File Layer</iconText>
@@ -3624,10 +3630,10 @@ Enable to preserve playback timing.</text>
     </Action>
     <Action name="layer_properties">
       <icon>properties</icon>
-      <text>&amp;Properties...</text>
+      <text comment="Layer Properties">&amp;Properties...</text>
       <whatsThis></whatsThis>
-      <toolTip>Properties</toolTip>
-      <iconText>Properties</iconText>
+      <toolTip comment="Layer Properties">Properties</toolTip>
+      <iconText comment="Layer Properties">Properties</iconText>
       <activationFlags>1000</activationFlags>
       <activationConditions>1</activationConditions>
       <shortcut>F3</shortcut>

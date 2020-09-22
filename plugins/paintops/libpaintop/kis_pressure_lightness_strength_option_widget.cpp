@@ -32,18 +32,17 @@ KisPressureLightnessStrengthOptionWidget::KisPressureLightnessStrengthOptionWidg
 {
     setObjectName("KisPressureLightnessStrengthOptionWidget");
 
-    QWidget* w = new QWidget;
     m_enabledLabel = new QLabel(i18n("Disabled: brush must be in Lightness mode for this option to apply"));
     m_enabledLabel->setEnabled(true);
     m_enabledLabel->setAlignment(Qt::AlignHCenter);
 
-    QVBoxLayout* vl = new QVBoxLayout;
-    vl->setMargin(0);
-    vl->addWidget(m_enabledLabel);
-    vl->addWidget(curveWidget());
+    QWidget* page = new QWidget;
+    QVBoxLayout* pageLayout = new QVBoxLayout(page);
+    pageLayout->setMargin(0);
+    pageLayout->addWidget(m_enabledLabel);
+    pageLayout->addWidget(curveWidget());
 
-    w->setLayout(vl);
-    setConfigurationPage(w);
+    setConfigurationPage(page);
 }
 
 void KisPressureLightnessStrengthOptionWidget::setEnabled(bool enabled)

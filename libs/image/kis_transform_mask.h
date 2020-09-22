@@ -37,7 +37,7 @@ public:
     /**
      * Create an empty transform mask.
      */
-    KisTransformMask(const QString &name = QString());
+    KisTransformMask(KisImageWSP image, const QString &name);
 
     ~KisTransformMask() override;
 
@@ -82,6 +82,7 @@ public:
 
 protected:
     KisKeyframeChannel *requestKeyframeChannel(const QString &id) override;
+    bool supportsKeyframeChannel(const QString &id) override;
 
 Q_SIGNALS:
     void sigInternalForceStaticImageUpdate();

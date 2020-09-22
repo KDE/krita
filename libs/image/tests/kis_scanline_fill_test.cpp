@@ -18,7 +18,7 @@
 
 #include "kis_scanline_fill_test.h"
 
-#include "testutil.h"
+#include <testutil.h>
 
 #include <QTest>
 #include <floodfill/kis_scanline_fill.h>

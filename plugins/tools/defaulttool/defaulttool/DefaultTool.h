@@ -67,7 +67,7 @@ public:
     bool wantsAutoScroll() const override;
     void paint(QPainter &painter, const KoViewConverter &converter) override;
 
-    void repaintDecorations() override;
+    QRectF decorationsRect() const override;
 
     ///reimplemented
     void copy() const override;

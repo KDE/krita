@@ -93,7 +93,7 @@ Qt::ItemFlags KisPaletteModel::flags(const QModelIndex& index) const
 
 QModelIndex KisPaletteModel::index(int row, int column, const QModelIndex& parent) const
 {
-    Q_UNUSED(parent)
+    Q_UNUSED(parent);
     Q_ASSERT(m_colorSet);
     if (m_rowGroupNameMap.isEmpty()) {
         return {};

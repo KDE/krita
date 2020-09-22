@@ -27,6 +27,8 @@
 #include "kis_composite_ops_model.h"
 #include "kis_categorized_item_delegate.h"
 #include <kis_action.h>
+#include <QWheelEvent>
+#include "kis_action_manager.h"
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // ---- KisCompositeOpListWidget ------------------------------------------------------ //
@@ -90,206 +92,93 @@ KisCompositeOpComboBox::~KisCompositeOpComboBox()
     delete m_view;
 }
 
-QList<KisAction *> KisCompositeOpComboBox::createBlendmodeActions()
+void KisCompositeOpComboBox::connectBlendmodeActions(KisActionManager *manager)
 {
-    QList<KisAction *> actions;
-
     KisAction *action = 0;
-//    //    Cycle through blending modes
-//    //    Shift + + (plus) or – (minus)
-//    KisAction *action = new KisAction(i18n("Next Blending Mode"), this);
-//    action->setDefaultShortcut(QKeySequence(Qt::SHIFT + Qt::ALT + Qt::Key_Plus));
-//    connect(action, SIGNAL(triggered()), SLOT(slotNextBlendingMode()));
-//    m_actions << action;
 
-//    action = new KisAction(i18n("Previous Blending Mode"), this);
-//    action->setDefaultShortcut(QKeySequence(Qt::SHIFT + Qt::ALT +  Qt::Key_Minus));
-//    connect(action, SIGNAL(triggered()), SLOT(slotPreviousBlendingMode()));
-//    m_actions << action;
+    action = manager->createAction("Next Blending Mode");
+    connect(action, SIGNAL(triggered()), SLOT(slotNextBlendingMode()));
 
-    //    Normal
-    //    Shift + Alt + N
-    action = new KisAction(i18n("Select Normal Blending Mode"), this);
-    action->setDefaultShortcut(QKeySequence(Qt::SHIFT + Qt::ALT + Qt::Key_N));
+    action = manager->createAction("Previous Blending Mode");
+    connect(action, SIGNAL(triggered()), SLOT(slotPreviousBlendingMode()));
+
+    action = manager->createAction("Select Normal Blending Mode");
     connect(action, SIGNAL(triggered()), SLOT(slotNormal()));
-    actions << action;
 
-    //    Dissolve
-    //    Shift + Alt + I
-    action = new KisAction(i18n("Select Dissolve Blending Mode"), this);
-    action->setDefaultShortcut(QKeySequence(Qt::SHIFT + Qt::ALT + Qt::Key_I));
+    action = manager->createAction("Select Dissolve Blending Mode");
     connect(action, SIGNAL(triggered()), SLOT(slotDissolve()));
-    actions << action;
 
-    //    Behind (Brush tool only)
-    //    Shift + Alt + Q
-    action = new KisAction(i18n("Select Behind Blending Mode"), this);
-    action->setDefaultShortcut(QKeySequence(Qt::SHIFT + Qt::ALT + Qt::Key_Q));
+    action = manager->createAction("Select Behind Blending Mode");
     connect(action, SIGNAL(triggered()), SLOT(slotBehind()));
-    actions << action;
 
-    //    Clear (Brush tool only)
-    //    Shift + Alt + R
-    action = new KisAction(i18n("Select Clear Blending Mode"), this);
-    action->setDefaultShortcut(QKeySequence(Qt::SHIFT + Qt::ALT + Qt::Key_R));
+    action = manager->createAction("Select Clear Blending Mode");
     connect(action, SIGNAL(triggered()), SLOT(slotClear()));
-    actions << action;
 
-    //    Darken
-    //    Shift + Alt + K
-    action = new KisAction(i18n("Select Darken Blending Mode"), this);
-    action->setDefaultShortcut(QKeySequence(Qt::SHIFT + Qt::ALT + Qt::Key_K));
+    action = manager->createAction("Select Darken Blending Mode");
     connect(action, SIGNAL(triggered()), SLOT(slotDarken()));
-    actions << action;
 
-    //    Multiply
-    //    Shift + Alt + M
-    action = new KisAction(i18n("Select Multiply Blending Mode"), this);
-    action->setDefaultShortcut(QKeySequence(Qt::SHIFT + Qt::ALT + Qt::Key_M));
+    action = manager->createAction("Select Multiply Blending Mode");
     connect(action, SIGNAL(triggered()), SLOT(slotMultiply()));
-    actions << action;
 
-    //    Color Burn
-    //    Shift + Alt + B
-    action = new KisAction(i18n("Select Color Burn Blending Mode"), this);
-    action->setDefaultShortcut(QKeySequence(Qt::SHIFT + Qt::ALT + Qt::Key_B));
+    action = manager->createAction("Select Color Burn Blending Mode");
     connect(action, SIGNAL(triggered()), SLOT(slotColorBurn()));
-    actions << action;
 
-    //    Linear Burn
-    //    Shift + Alt + A
-    action = new KisAction(i18n("Select Linear Burn Blending Mode"), this);
-    action->setDefaultShortcut(QKeySequence(Qt::SHIFT + Qt::ALT + Qt::Key_A));
+    action = manager->createAction("Select Linear Burn Blending Mode");
     connect(action, SIGNAL(triggered()), SLOT(slotLinearBurn()));
-    actions << action;
 
-    //    Lighten
-    //    Shift + Alt + G
-    action = new KisAction(i18n("Select Lighten Blending Mode"), this);
-    action->setDefaultShortcut(QKeySequence(Qt::SHIFT + Qt::ALT + Qt::Key_G));
+    action = manager->createAction("Select Lighten Blending Mode");
     connect(action, SIGNAL(triggered()), SLOT(slotLighten()));
-    actions << action;
 
-    //    Screen
-    //    Shift + Alt + S
-    action = new KisAction(i18n("Select Screen Blending Mode"), this);
-    action->setDefaultShortcut(QKeySequence(Qt::SHIFT + Qt::ALT + Qt::Key_S));
+    action = manager->createAction("Select Screen Blending Mode");
     connect(action, SIGNAL(triggered()), SLOT(slotScreen()));
-    actions << action;
 
-    //    Color Dodge
-    //    Shift + Alt + D
-    action = new KisAction(i18n("Select Color Dodge Blending Mode"), this);
-    action->setDefaultShortcut(QKeySequence(Qt::SHIFT + Qt::ALT + Qt::Key_D));
+    action = manager->createAction("Select Color Dodge Blending Mode");
     connect(action, SIGNAL(triggered()), SLOT(slotColorDodge()));
-    actions << action;
 
-    //    Linear Dodge
-    //    Shift + Alt + W
-    action = new KisAction(i18n("Select Linear Dodge Blending Mode"), this);
-    action->setDefaultShortcut(QKeySequence(Qt::SHIFT + Qt::ALT + Qt::Key_W));
+    action = manager->createAction("Select Linear Dodge Blending Mode");
     connect(action, SIGNAL(triggered()), SLOT(slotLinearDodge()));
-    actions << action;
 
-    //    Overlay
-    //    Shift + Alt + O
-    action = new KisAction(i18n("Select Overlay Blending Mode"), this);
-    action->setDefaultShortcut(QKeySequence(Qt::SHIFT + Qt::ALT + Qt::Key_O));
+    action = manager->createAction("Select Overlay Blending Mode");
     connect(action, SIGNAL(triggered()), SLOT(slotOverlay()));
-    actions << action;
 
-    //    Hard Overlay
-    //    Shift + Alt + P
-    action = new KisAction(i18n("Select Hard Overlay Blending Mode"), this);
-    action->setDefaultShortcut(QKeySequence(Qt::SHIFT + Qt::ALT + Qt::Key_P));
+    action = manager->createAction("Select Hard Overlay Blending Mode");
     connect(action, SIGNAL(triggered()), SLOT(slotHardOverlay()));
-    actions << action;
 
-    //    Soft Light
-    //    Shift + Alt + F
-    action = new KisAction(i18n("Select Soft Light Blending Mode"), this);
-    action->setDefaultShortcut(QKeySequence(Qt::SHIFT + Qt::ALT + Qt::Key_F));
+    action = manager->createAction("Select Soft Light Blending Mode");
     connect(action, SIGNAL(triggered()), SLOT(slotSoftLight()));
-    actions << action;
 
-    //    Hard Light
-    //    Shift + Alt + H
-    action = new KisAction(i18n("Select Hard Light Blending Mode"), this);
-    action->setDefaultShortcut(QKeySequence(Qt::SHIFT + Qt::ALT + Qt::Key_H));
+    action = manager->createAction("Select Hard Light Blending Mode");
     connect(action, SIGNAL(triggered()), SLOT(slotHardLight()));
-    actions << action;
 
-    //    Vivid Light
-    //    Shift + Alt + V
-    action = new KisAction(i18n("Select Vivid Light Blending Mode"), this);
-    action->setDefaultShortcut(QKeySequence(Qt::SHIFT + Qt::ALT + Qt::Key_V));
+    action = manager->createAction("Select Vivid Light Blending Mode");
     connect(action, SIGNAL(triggered()), SLOT(slotVividLight()));
-    actions << action;
 
-    //    Linear Light
-    //    Shift + Alt + J
-    action = new KisAction(i18n("Select Linear Light Blending Mode"), this);
-    action->setDefaultShortcut(QKeySequence(Qt::SHIFT + Qt::ALT + Qt::Key_J));
+    action = manager->createAction("Select Linear Light Blending Mode");
     connect(action, SIGNAL(triggered()), SLOT(slotLinearLight()));
-    actions << action;
 
-    //    Pin Light
-    //    Shift + Alt + Z
-    action = new KisAction(i18n("Select Pin Light Blending Mode"), this);
-    action->setDefaultShortcut(QKeySequence(Qt::SHIFT + Qt::ALT + Qt::Key_Z));
+    action = manager->createAction("Select Pin Light Blending Mode");
     connect(action, SIGNAL(triggered()), SLOT(slotPinLight()));
-    actions << action;
 
-    //    Hard Mix
-    //    Shift + Alt + L
-    action = new KisAction(i18n("Select Hard Mix Blending Mode"), this);
-    action->setDefaultShortcut(QKeySequence(Qt::SHIFT + Qt::ALT + Qt::Key_L));
+    action = manager->createAction("Select Hard Mix Blending Mode");
     connect(action, SIGNAL(triggered()), SLOT(slotHardMix()));
-    actions << action;
 
-    //    Difference
-    //    Shift + Alt + E
-    action = new KisAction(i18n("Select Difference Blending Mode"), this);
-    action->setDefaultShortcut(QKeySequence(Qt::SHIFT + Qt::ALT + Qt::Key_E));
+    action = manager->createAction("Select Difference Blending Mode");
     connect(action, SIGNAL(triggered()), SLOT(slotDifference()));
-    actions << action;
 
-    //    Exclusion
-    //    Shift + Alt + X
-    action = new KisAction(i18n("Select Exclusion Blending Mode"), this);
-    action->setDefaultShortcut(QKeySequence(Qt::SHIFT + Qt::ALT + Qt::Key_X));
+    action = manager->createAction("Select Exclusion Blending Mode");
     connect(action, SIGNAL(triggered()), SLOT(slotExclusion()));
-    actions << action;
 
-    //    Hue
-    //    Shift + Alt + U
-    action = new KisAction(i18n("Select Hue Blending Mode"), this);
-    action->setDefaultShortcut(QKeySequence(Qt::SHIFT + Qt::ALT + Qt::Key_U));
+    action = manager->createAction("Select Hue Blending Mode");
     connect(action, SIGNAL(triggered()), SLOT(slotHue()));
-    actions << action;
 
-    //    Saturation
-    //    Shift + Alt + T
-    action = new KisAction(i18n("Select Saturation Blending Mode"), this);
-    action->setDefaultShortcut(QKeySequence(Qt::SHIFT + Qt::ALT + Qt::Key_T));
+    action = manager->createAction("Select Saturation Blending Mode");
     connect(action, SIGNAL(triggered()), SLOT(slotSaturation()));
-    actions << action;
 
-    //    Color
-    //    Shift + Alt + C
-    action = new KisAction(i18n("Select Color Blending Mode"), this);
-    action->setDefaultShortcut(QKeySequence(Qt::SHIFT + Qt::ALT + Qt::Key_C));
+    action = manager->createAction("Select Color Blending Mode");
     connect(action, SIGNAL(triggered()), SLOT(slotColor()));
-    actions << action;
 
-    //    Luminosity
-    //    Shift + Alt + Y
-    action = new KisAction(i18n("Select Luminosity Blending Mode"), this);
-    action->setDefaultShortcut(QKeySequence(Qt::SHIFT + Qt::ALT + Qt::Key_Y));
+    action = manager->createAction("Select Luminosity Blending Mode");
     connect(action, SIGNAL(triggered()), SLOT(slotLuminosity()));
-    actions << action;
-
-    return actions;
 }
 
 void KisCompositeOpComboBox::validate(const KoColorSpace *cs) {
@@ -297,8 +186,18 @@ void KisCompositeOpComboBox::validate(const KoColorSpace *cs) {
 }
 
 void KisCompositeOpComboBox::selectCompositeOp(const KoID &op) {
+    KoID currentOp;
+    if (m_model->entryAt(currentOp, m_model->index(currentIndex(), 0)) &&
+            currentOp == op) {
+
+        return;
+    }
+
     QModelIndex index = m_model->indexOf(op);
+
     setCurrentIndex(index.row());
+    emit activated(index.row());
+    emit activated(op.name());
 }
 
 KoID KisCompositeOpComboBox::selectedCompositeOp() const {
@@ -343,16 +242,12 @@ void KisCompositeOpComboBox::hidePopup()
 
 void KisCompositeOpComboBox::slotNextBlendingMode()
 {
-    if (currentIndex() < count()) {
-        setCurrentIndex(currentIndex() + 1);
-    }
+    selectNeighbouringBlendMode(true);
 }
 
 void KisCompositeOpComboBox::slotPreviousBlendingMode()
 {
-    if (currentIndex() > 0) {
-        setCurrentIndex(currentIndex() - 1);
-    }
+    selectNeighbouringBlendMode(false);
 }
 
 void KisCompositeOpComboBox::slotNormal()
@@ -483,6 +378,161 @@ void KisCompositeOpComboBox::slotColor()
 void KisCompositeOpComboBox::slotLuminosity()
 {
     selectCompositeOp(KoCompositeOpRegistry::instance().getKoID(COMPOSITE_LUMINIZE));
+}
+
+void KisCompositeOpComboBox::selectNeighbouringBlendMode(bool down)
+{
+    const int rowCount = count();
+    int newIndex = currentIndex();
+
+    QAbstractItemModel *model = this->model();
+    KoID op;
+
+    if (!down) {
+        newIndex--;
+        while ((newIndex >= 0) &&
+               (!(model->flags(model->index(newIndex, modelColumn(), rootModelIndex())) & Qt::ItemIsEnabled) ||
+                !m_model->entryAt(op, m_model->index(newIndex, modelColumn()))))
+
+            newIndex--;
+    } else {
+        newIndex++;
+        while (newIndex < rowCount &&
+               (!(model->index(newIndex, modelColumn(), rootModelIndex()).flags() & Qt::ItemIsEnabled) ||
+                !m_model->entryAt(op, m_model->index(newIndex, modelColumn()))))
+
+            newIndex++;
+    }
+
+    if (newIndex >= 0 && newIndex < rowCount && newIndex != currentIndex()) {
+        setCurrentIndex(newIndex);
+
+        emit activated(newIndex);
+        if (m_model->entryAt(op, m_model->index(newIndex, 0))) {
+            emit activated(op.name());
+        }
+    }
+}
+
+void KisCompositeOpComboBox::wheelEvent(QWheelEvent *e)
+{
+    /**
+     * This code is a copy of QComboBox::wheelEvent. It does the same thing,
+     * except that it skips "Category" items, by checking m_model->entryAt()
+     * on each step.
+     */
+
+    QStyleOptionComboBox opt;
+    initStyleOption(&opt);
+
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
+    if (style()->styleHint(QStyle::SH_ComboBox_AllowWheelScrolling, &opt, this)) {
+#else
+    if (1) {
+#endif
+
+        if (e->delta() != 0) {
+            selectNeighbouringBlendMode(e->delta() < 0);
+        }
+
+        e->accept();
+    } else {
+        KisSqueezedComboBox::wheelEvent(e);
+    }
+}
+
+void KisCompositeOpComboBox::keyPressEvent(QKeyEvent *e)
+{
+    /**
+     * This code is a copy of QComboBox::keyPressEvent. It does the same thing,
+     * except that it skips "Category" items, by checking m_model->entryAt()
+     * on each step.
+     */
+
+    enum Move { NoMove=0 , MoveUp , MoveDown , MoveFirst , MoveLast};
+
+    Move move = NoMove;
+    int newIndex = currentIndex();
+    switch (e->key()) {
+    case Qt::Key_Up:
+        if (e->modifiers() & Qt::ControlModifier)
+            break; // pass to line edit for auto completion
+        Q_FALLTHROUGH();
+    case Qt::Key_PageUp:
+        move = MoveUp;
+        break;
+    case Qt::Key_Down:
+        if (e->modifiers() & Qt::AltModifier) {
+            showPopup();
+            return;
+        } else if (e->modifiers() & Qt::ControlModifier)
+            break; // pass to line edit for auto completion
+        Q_FALLTHROUGH();
+    case Qt::Key_PageDown:
+        move = MoveDown;
+        break;
+    case Qt::Key_Home:
+        move = MoveFirst;
+        break;
+    case Qt::Key_End:
+        move = MoveLast;
+        break;
+    case Qt::Key_F4:
+        if (!e->modifiers()) {
+            showPopup();
+            return;
+        }
+        break;
+    case Qt::Key_Space:
+        showPopup();
+        return;
+    default:
+        break;
+    }
+
+    const int rowCount = count();
+
+    if (move != NoMove) {
+        KoID op;
+
+        e->accept();
+        switch (move) {
+        case MoveFirst:
+            newIndex = -1;
+            Q_FALLTHROUGH();
+        case MoveDown:
+            newIndex++;
+            while (newIndex < rowCount &&
+                   (!(model()->index(newIndex, modelColumn(), rootModelIndex()).flags() & Qt::ItemIsEnabled) ||
+                    !m_model->entryAt(op, m_model->index(newIndex, modelColumn()))))
+                newIndex++;
+            break;
+        case MoveLast:
+            newIndex = rowCount;
+            Q_FALLTHROUGH();
+        case MoveUp:
+            newIndex--;
+            while ((newIndex >= 0) &&
+                   (!(model()->flags(model()->index(newIndex, modelColumn(), rootModelIndex())) & Qt::ItemIsEnabled) ||
+                    !m_model->entryAt(op, m_model->index(newIndex, modelColumn()))))
+                newIndex--;
+            break;
+        default:
+            e->ignore();
+            break;
+        }
+
+        if (newIndex >= 0 && newIndex < rowCount && newIndex != currentIndex()) {
+            setCurrentIndex(newIndex);
+            emit activated(newIndex);
+
+            if (m_model->entryAt(op, m_model->index(newIndex, 0))) {
+                emit activated(op.name());
+            }
+        }
+    } else {
+        KisSqueezedComboBox::keyPressEvent(e);
+    }
 }
 
 KisLayerStyleCompositeOpComboBox::KisLayerStyleCompositeOpComboBox(QWidget* parent)

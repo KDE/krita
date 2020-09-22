@@ -82,7 +82,7 @@
 #include "kis_kra_load_visitor.h"
 #include "kis_dom_utils.h"
 #include "kis_image_animation_interface.h"
-#include "kis_time_range.h"
+#include "kis_time_span.h"
 #include "kis_grid_config.h"
 #include "kis_guides_config.h"
 #include "kis_image_config.h"
@@ -603,7 +603,7 @@ void KisKraLoader::loadAnimationMetadata(const KoXmlElement &element, KisImageSP
     QDomElement qElement = qDom.firstChildElement();
 
     float framerate;
-    KisTimeRange range;
+    KisTimeSpan range;
     int currentTime;
 
     KisImageAnimationInterface *animation = image->animationInterface();
@@ -644,7 +644,6 @@ KisNodeSP KisKraLoader::loadNodes(const KoXmlElement& element, KisImageSP image,
                     }
 
                     if (node ) {
-                        image->nextLayerName(); // Make sure the nameserver is current with the number of nodes.
                         image->addNode(node, parent);
                         if (node->inherits("KisLayer") && KoXml::childNodesCount(child) > 0) {
                             loadNodes(child.toElement(), image, node);
@@ -745,11 +744,11 @@ KisNodeSP KisKraLoader::loadNode(const KoXmlElement& element, KisImageSP image)
     else if (nodeType == CLONE_LAYER)
         node = loadCloneLayer(element, image, name, colorSpace, opacity);
     else if (nodeType == FILTER_MASK)
-        node = loadFilterMask(element);
+        node = loadFilterMask(image, element);
     else if (nodeType == TRANSFORM_MASK)
-        node = loadTransformMask(element);
+        node = loadTransformMask(image, element);
     else if (nodeType == TRANSPARENCY_MASK)
-        node = loadTransparencyMask(element);
+        node = loadTransparencyMask(image, element);
     else if (nodeType == SELECTION_MASK)
         node = loadSelectionMask(image, element);
     else if (nodeType == COLORIZE_MASK)
@@ -1065,7 +1064,7 @@ KisNodeSP KisKraLoader::loadCloneLayer(const KoXmlElement& element, KisImageSP i
 }
 
 
-KisNodeSP KisKraLoader::loadFilterMask(const KoXmlElement& element)
+KisNodeSP KisKraLoader::loadFilterMask(KisImageSP image, const KoXmlElement& element)
 {
     QString attr;
     KisFilterMask* mask;
@@ -1089,14 +1088,14 @@ KisNodeSP KisKraLoader::loadFilterMask(const KoXmlElement& element)
     kfc->createLocalResourcesSnapshot();
 
     // We'll load the configuration and the selection later.
-    mask = new KisFilterMask();
+    mask = new KisFilterMask(image);
     mask->setFilter(kfc);
     Q_CHECK_PTR(mask);
 
     return mask;
 }
 
-KisNodeSP KisKraLoader::loadTransformMask(const KoXmlElement& element)
+KisNodeSP KisKraLoader::loadTransformMask(KisImageSP image, const KoXmlElement& element)
 {
     Q_UNUSED(element);
 
@@ -1106,16 +1105,16 @@ KisNodeSP KisKraLoader::loadTransformMask(const KoXmlElement& element)
      * We'll load the transform configuration later on a stage
      * of binary data loading
      */
-    mask = new KisTransformMask();
+    mask = new KisTransformMask(image, "");
     Q_CHECK_PTR(mask);
 
     return mask;
 }
 
-KisNodeSP KisKraLoader::loadTransparencyMask(const KoXmlElement& element)
+KisNodeSP KisKraLoader::loadTransparencyMask(KisImageSP image, const KoXmlElement& element)
 {
     Q_UNUSED(element);
-    KisTransparencyMask* mask = new KisTransparencyMask();
+    KisTransparencyMask* mask = new KisTransparencyMask(image, "");
     Q_CHECK_PTR(mask);
 
     return mask;
@@ -1133,12 +1132,14 @@ KisNodeSP KisKraLoader::loadSelectionMask(KisImageSP image, const KoXmlElement& 
 
 KisNodeSP KisKraLoader::loadColorizeMask(KisImageSP image, const KoXmlElement& element, const KoColorSpace *colorSpace)
 {
-    KisColorizeMaskSP mask = new KisColorizeMask();
+    KisColorizeMaskSP mask = new KisColorizeMask(image, "");
     const bool editKeystrokes = element.attribute(COLORIZE_EDIT_KEYSTROKES, "1") == "0" ? false : true;
     const bool showColoring = element.attribute(COLORIZE_SHOW_COLORING, "1") == "0" ? false : true;
 
-    KisLayerPropertiesIcons::setNodeProperty(mask, KisLayerPropertiesIcons::colorizeEditKeyStrokes, editKeystrokes, image);
-    KisLayerPropertiesIcons::setNodeProperty(mask, KisLayerPropertiesIcons::colorizeShowColoring, showColoring, image);
+    KisBaseNode::PropertyList props = mask->sectionModelProperties();
+    KisLayerPropertiesIcons::setNodeProperty(&props, KisLayerPropertiesIcons::colorizeEditKeyStrokes, editKeystrokes);
+    KisLayerPropertiesIcons::setNodeProperty(&props, KisLayerPropertiesIcons::colorizeShowColoring, showColoring);
+    mask->setSectionModelProperties(props);
 
     const bool useEdgeDetection = KisDomUtils::toInt(element.attribute(COLORIZE_USE_EDGE_DETECTION, "0"));
     const qreal edgeDetectionSize = KisDomUtils::toDouble(element.attribute(COLORIZE_EDGE_DETECTION_SIZE, "4"));
@@ -1244,7 +1245,7 @@ void KisKraLoader::loadAudio(const KoXmlElement& elem, KisImageSP image)
         fileName = QDir::toNativeSeparators(fileName);
 
         QDir baseDirectory = QFileInfo(m_d->document->localFilePath()).absoluteDir();
-        fileName = baseDirectory.absoluteFilePath(fileName);
+        fileName = QDir::cleanPath( baseDirectory.filePath(fileName) );
 
         QFileInfo info(fileName);
 
@@ -1292,6 +1293,7 @@ KisNodeSP KisKraLoader::loadReferenceImagesLayer(const KoXmlElement &elem, KisIm
     for (QDomElement child = elem.firstChildElement(); !child.isNull(); child = child.nextSiblingElement()) {
         if (child.nodeName().toLower() == "referenceimage") {
             auto* reference = KisReferenceImage::fromXml(child);
+            reference->setZIndex(layer->shapes().size());
             layer->addShape(reference);
         }
     }

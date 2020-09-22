@@ -110,7 +110,7 @@ public:
         , zoomManager(_q, &this->viewConverter, &this->canvasController)
         , viewManager(viewManager)
         , paintingAssistantsDecoration(new KisPaintingAssistantsDecoration(_q))
-        , referenceImagesDecoration(new KisReferenceImagesDecoration(_q, document))
+        , referenceImagesDecoration(new KisReferenceImagesDecoration(_q, document, /* viewReady = */ false))
         , floatingMessageCompressor(100, KisSignalCompressor::POSTPONE)
     {
     }
@@ -577,7 +577,7 @@ void KisView::dropEvent(QDropEvent *event)
                         else if (action == insertAsNewFileLayer || action == insertManyFileLayers) {
                             KisNodeCommandsAdapter adapter(viewManager());
                             KisFileLayer *fileLayer = new KisFileLayer(image(), "", url.toLocalFile(),
-                                                                       KisFileLayer::None, image()->nextLayerName(), OPACITY_OPAQUE_U8);
+                                                                       KisFileLayer::None, image()->nextLayerName(i18n("File Layer")), OPACITY_OPAQUE_U8);
                             adapter.addNode(fileLayer, viewManager()->activeNode()->parent(), viewManager()->activeNode());
                         }
                         else if (action == openInNewDocument || action == openManyDocuments) {
@@ -705,11 +705,7 @@ bool KisView::queryClose()
 
     if (document()->isModified()) {
         QString name;
-        if (document()->documentInfo()) {
-            name = document()->documentInfo()->aboutInfo("title");
-        }
-        if (name.isEmpty())
-            name = document()->url().fileName();
+        name = document()->url().fileName();
 
         if (name.isEmpty())
             name = i18n("Untitled");
@@ -1012,7 +1008,7 @@ void KisView::slotImageResolutionChanged()
     // update KoUnit value for the document
     if (resourceProvider()) {
         resourceProvider()->resourceManager()->
-                setResource(KoCanvasResourceProvider::Unit, d->canvas.unit());
+                setResource(KoCanvasResource::Unit, d->canvas.unit());
     }
 }
 

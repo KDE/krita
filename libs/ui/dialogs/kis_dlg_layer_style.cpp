@@ -246,6 +246,7 @@ void KisDlgLayerStyle::slotNotifyOnReject()
 
 bool checkCustomNameAvailable(const QString &name)
 {
+    Q_UNUSED(name);
     const QString customName = "CustomStyles.asl";
 
     KoResourceServer<KisPSDLayerStyle> *server = KisResourceServerProvider::instance()->layerStyleServer();
@@ -504,6 +505,7 @@ void StylesSelector::LocationProxyModel::setLocationToFilterBy(QString location)
 
 bool StylesSelector::LocationProxyModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
 {
+    Q_UNUSED(source_parent);
     if (!m_enableFiltering) {
         return true;
     }
@@ -574,6 +576,8 @@ void StylesSelector::refillCollections()
 
 void StylesSelector::notifyExternalStyleChanged(const QString &name, const QUuid &uuid)
 {
+    Q_UNUSED(name);
+    Q_UNUSED(uuid);
     /*
     int currentIndex = -1;
 
@@ -626,6 +630,7 @@ void StylesSelector::selectStyle(QModelIndex current)
 
 void StylesSelector::loadCollection(const QString &fileName)
 {
+    Q_UNUSED(fileName);
     // TODO: RESOURCES: implement or remove
     warnKrita << "Collection cannot be loaded, because we do not use collections now; please use KisAslStorage instead.";
 
@@ -1087,11 +1092,13 @@ GradientOverlay::GradientOverlay(KisCanvasResourceProvider *resourceProvider, QW
     ui.intScale->setRange(0, 100);
     ui.intScale->setSuffix(i18n(" %"));
 
+    ui.cmbGradient->setCanvasResourcesInterface(resourceProvider->resourceManager()->canvasResourcesInterface());
+
     connect(ui.angleSelector, SIGNAL(configChanged()), SIGNAL(configChanged()));
 
     connect(ui.cmbCompositeOp, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
     connect(ui.intOpacity, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
-    connect(ui.cmbGradient, SIGNAL(gradientChanged(KoAbstractGradient*)), SIGNAL(configChanged()));
+    connect(ui.cmbGradient, SIGNAL(gradientChanged(KoAbstractGradientSP)), SIGNAL(configChanged()));
     connect(ui.chkReverse, SIGNAL(toggled(bool)), SIGNAL(configChanged()));
     connect(ui.cmbStyle, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
     connect(ui.chkAlignWithLayer, SIGNAL(toggled(bool)), SIGNAL(configChanged()));
@@ -1159,6 +1166,8 @@ InnerGlow::InnerGlow(Mode mode, KisCanvasResourceProvider *resourceProvider, QWi
     ui.intJitter->setRange(0, 100);
     ui.intJitter->setSuffix(i18n(" %"));
 
+    ui.cmbGradient->setCanvasResourcesInterface(resourceProvider->resourceManager()->canvasResourcesInterface());
+
     connect(ui.cmbCompositeOp, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
     connect(ui.intOpacity, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
     connect(ui.intNoise, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
@@ -1166,7 +1175,7 @@ InnerGlow::InnerGlow(Mode mode, KisCanvasResourceProvider *resourceProvider, QWi
     connect(ui.radioColor, SIGNAL(toggled(bool)), SIGNAL(configChanged()));
     connect(ui.bnColor, SIGNAL(changed(KoColor)), SIGNAL(configChanged()));
     connect(ui.radioGradient, SIGNAL(toggled(bool)), SIGNAL(configChanged()));
-    connect(ui.cmbGradient, SIGNAL(gradientChanged(KoAbstractGradient*)), SIGNAL(configChanged()));
+    connect(ui.cmbGradient, SIGNAL(gradientChanged(KoAbstractGradientSP)), SIGNAL(configChanged()));
 
     connect(ui.cmbTechnique, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
     connect(ui.cmbSource, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
@@ -1396,6 +1405,8 @@ Stroke::Stroke(KisCanvasResourceProvider *resourceProvider, QWidget *parent)
     ui.intScale_2->setRange(0, 100);
     ui.intScale_2->setSuffix(i18n(" %"));
 
+    ui.cmbGradient->setCanvasResourcesInterface(resourceProvider->resourceManager()->canvasResourcesInterface());
+
     connect(ui.cmbFillType, SIGNAL(currentIndexChanged(int)), ui.fillStack, SLOT(setCurrentIndex(int)));
 
     connect(ui.intSize, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
@@ -1407,7 +1418,7 @@ Stroke::Stroke(KisCanvasResourceProvider *resourceProvider, QWidget *parent)
 
     connect(ui.bnColor, SIGNAL(changed(KoColor)), SIGNAL(configChanged()));
 
-    connect(ui.cmbGradient, SIGNAL(gradientChanged(KoAbstractGradient*)), SIGNAL(configChanged()));
+    connect(ui.cmbGradient, SIGNAL(gradientChanged(KoAbstractGradientSP)), SIGNAL(configChanged()));
     connect(ui.chkReverse, SIGNAL(toggled(bool)), SIGNAL(configChanged()));
     connect(ui.cmbStyle, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
     connect(ui.chkAlignWithLayer, SIGNAL(toggled(bool)), SIGNAL(configChanged()));

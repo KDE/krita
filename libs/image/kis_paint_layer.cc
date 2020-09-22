@@ -331,14 +331,23 @@ void KisPaintLayer::slotExternalUpdateOnionSkins()
 
 KisKeyframeChannel *KisPaintLayer::requestKeyframeChannel(const QString &id)
 {
-    if (id == KisKeyframeChannel::Content.id()) {
-        m_d->contentChannel = m_d->paintDevice->createKeyframeChannel(KisKeyframeChannel::Content);
+    if (id == KisKeyframeChannel::Raster.id()) {
+        m_d->contentChannel = m_d->paintDevice->createKeyframeChannel(KisKeyframeChannel::Raster);
         m_d->contentChannel->setOnionSkinsEnabled(onionSkinEnabled());
         enableAnimation();
         return m_d->contentChannel;
     }
 
     return KisLayer::requestKeyframeChannel(id);
+}
+
+bool KisPaintLayer::supportsKeyframeChannel(const QString &id)
+{
+     if (id == KisKeyframeChannel::Raster.id()) {
+         return true;
+     }
+
+     return KisLayer::supportsKeyframeChannel(id);
 }
 
 KisPaintDeviceList KisPaintLayer::getLodCapableDevices() const

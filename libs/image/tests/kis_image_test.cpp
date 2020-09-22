@@ -44,6 +44,7 @@
 
 #include "kis_undo_stores.h"
 
+#include <testimage.h>
 
 #define IMAGE_WIDTH 128
 #define IMAGE_HEIGHT 128
@@ -81,7 +82,7 @@ void KisImageTest::benchmarkCreation()
     }
 }
 
-#include "testutil.h"
+#include <testutil.h>
 #include "kis_stroke_strategy.h"
 #include <functional>
 
@@ -457,7 +458,7 @@ struct FlattenTestImage
         layer5->disableAlphaChannel(true);
 
         layer2 = new KisPaintLayer(p.image, "paint2", OPACITY_OPAQUE_U8);
-        tmask = new KisTransparencyMask();
+        tmask = new KisTransparencyMask(p.image, "tmask");
 
         // check channel flags
         // make addition composite op
@@ -814,7 +815,7 @@ void KisImageTest::testMergeDownMultipleFrames()
     {
         KisLayerSP l = p.layer5;
         l->enableAnimation();
-        KisKeyframeChannel *channel = l->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
+        KisKeyframeChannel *channel = l->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true);
         channel->addKeyframe(10);
         channel->addKeyframe(20);
         channel->addKeyframe(30);

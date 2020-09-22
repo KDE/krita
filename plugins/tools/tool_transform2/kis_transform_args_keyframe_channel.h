@@ -24,26 +24,23 @@
 #include "tool_transform_args.h"
 #include "kundo2command.h"
 
+
 class KisTransformArgsKeyframeChannel : public KisKeyframeChannel
 {
 public:
-    struct AddKeyframeCommand : public KisReplaceKeyframeCommand
-    {
-        AddKeyframeCommand(KisTransformArgsKeyframeChannel *channel, int time, const ToolTransformArgs &args, KUndo2Command *parentCommand);
-    };
-
     KisTransformArgsKeyframeChannel(const KoID &id, KisNodeWSP parent, const ToolTransformArgs &initialValue);
 
     ToolTransformArgs &transformArgs(KisKeyframeSP keyframe) const;
-    bool hasScalarValue() const override;
+    bool hasScalarValue() const;
 
-protected:
-    KisKeyframeSP createKeyframe(int time, const KisKeyframeSP copySrc, KUndo2Command *parentCommand) override;
-    void destroyKeyframe(KisKeyframeSP key, KUndo2Command *parentCommand) override;
-    void uploadExternalKeyframe(KisKeyframeChannel *srcChannel, int srcTime, KisKeyframeSP dstFrame) override;
-    QRect affectedRect(KisKeyframeSP key) override;
-    KisKeyframeSP loadKeyframe(const QDomElement &keyframeNode) override;
-    void saveKeyframe(KisKeyframeSP keyframe, QDomElement keyframeElement, const QString &layerFilename) override;
+private:
+    friend class KisAnimatedTransformMaskParameters; // TODO: Ugly...
+
+    KisKeyframeSP createKeyframe() override;
+    QPair<int, KisKeyframeSP> loadKeyframe(const QDomElement &keyframeNode);
+    void saveKeyframe(KisKeyframeSP keyframe, QDomElement keyframeElement, const QString &layerFilename);
+
+    QRect affectedRect(int time) const override;
 };
 
 #endif

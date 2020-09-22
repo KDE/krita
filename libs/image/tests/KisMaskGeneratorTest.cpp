@@ -30,7 +30,7 @@
 #include "kis_cubic_curve.h"
 #include "krita_utils.h"
 
-#include "testutil.h"
+#include <testutil.h>
 
 class KisMaskGeneratorTestTester
 {

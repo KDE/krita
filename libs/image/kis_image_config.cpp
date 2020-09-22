@@ -386,6 +386,16 @@ void KisImageConfig::setAutoKeyEnabled(bool value)
     m_config.writeEntry("lazyFrameCreationEnabled", value);
 }
 
+bool KisImageConfig::autoKeyModeDuplicate(bool requestDefault) const
+{
+    return !requestDefault ?
+        m_config.readEntry("lazyFrameModeDuplicate", true) : true;
+}
+
+void KisImageConfig::setAutoKeyModeDuplicate(bool value)
+{
+    m_config.writeEntry("lazyFrameModeDuplicate", value);
+}
 
 #if defined Q_OS_LINUX
 #include <sys/sysinfo.h>

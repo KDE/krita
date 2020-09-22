@@ -51,7 +51,7 @@
 #include <kis_filter_strategy.h>
 #include <kis_guides_config.h>
 #include <kis_coordinates_converter.h>
-#include <kis_time_range.h>
+#include <kis_time_span.h>
 #include <KisImportExportErrorCode.h>
 
 #include <KoColor.h>
@@ -619,13 +619,13 @@ Node* Document::createNode(const QString &name, const QString &nodeType)
         node = new Node(image, new KisShapeLayer(d->document->shapeController(), image, name, OPACITY_OPAQUE_U8));
     }
     else if (nodeType.toLower()  == "transparencymask") {
-        node = new Node(image, new KisTransparencyMask(name));
+        node = new Node(image, new KisTransparencyMask(image, name));
     }
     else if (nodeType.toLower()  == "filtermask") {
-        node = new Node(image, new KisFilterMask(name));
+        node = new Node(image, new KisFilterMask(image, name));
     }
     else if (nodeType.toLower()  == "transformmask") {
-        node = new Node(image, new KisTransformMask(name));
+        node = new Node(image, new KisTransformMask(image, name));
     }
     else if (nodeType.toLower()  == "selectionmask") {
         node = new Node(image, new KisSelectionMask(image, name));
@@ -988,7 +988,7 @@ void Document::setPlayBackRange(int start, int stop)
     if (!d->document) return;
     if (!d->document->image()) return;
 
-    const KisTimeRange newTimeRange = KisTimeRange(start, (stop-start));
+    const KisTimeSpan newTimeRange = KisTimeSpan::fromTimeWithDuration(start, (stop-start));
     d->document->image()->animationInterface()->setPlaybackRange(newTimeRange);
 }
 

@@ -28,13 +28,14 @@
 #include "kis_brush_option.h"
 #include <KisPaintopSettingsIds.h>
 #include <kis_paintop_preset.h>
-#include <KisGlobalResourcesInterface.h>
+#include "KoCanvasResourcesIds.h"
+#include "kis_texture_option.h"
 
 struct BrushReader {
     BrushReader(const KisBrushBasedPaintOpSettings *parent)
         : m_parent(parent)
     {
-        m_option.readOptionSetting(m_parent, parent->resourcesInterface());
+        m_option.readOptionSetting(m_parent, parent->resourcesInterface(), parent->canvasResourcesInterface());
     }
 
     KisBrushSP brush() {
@@ -49,7 +50,7 @@ struct BrushWriter {
     BrushWriter(KisBrushBasedPaintOpSettings *parent)
         : m_parent(parent)
     {
-        m_option.readOptionSetting(m_parent, parent->resourcesInterface());
+        m_option.readOptionSetting(m_parent, parent->resourcesInterface(), parent->canvasResourcesInterface());
     }
 
     ~BrushWriter() {
@@ -88,6 +89,7 @@ KisPaintOpSettingsSP KisBrushBasedPaintOpSettings::clone() const
     KisPaintOpSettingsSP _settings = KisOutlineGenerationPolicy<KisPaintOpSettings>::clone();
     KisBrushBasedPaintOpSettingsSP settings = dynamic_cast<KisBrushBasedPaintOpSettings*>(_settings.data());
     settings->m_savedBrush = 0;
+
     return settings;
 }
 
@@ -340,4 +342,15 @@ void KisBrushBasedPaintOpSettings::onPropertyChanged()
 bool KisBrushBasedPaintOpSettings::hasPatternSettings() const
 {
     return true;
+}
+
+QList<int> KisBrushBasedPaintOpSettings::requiredCanvasResources() const
+{
+    QList<int> result;
+
+    if (brush()->applyingGradient() || KisTextureProperties::applyingGradient(this)) {
+        result << KoCanvasResource::CurrentGradient;
+    }
+
+    return result;
 }

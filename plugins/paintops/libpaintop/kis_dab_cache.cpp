@@ -34,6 +34,8 @@ struct KisDabCache::Private {
         : brush(brush)
     {}
 
+    int seqNo = 0;
+
     KisFixedPaintDeviceSP dab;
     KisFixedPaintDeviceSP dabOriginal;
 
@@ -81,6 +83,8 @@ KisFixedPaintDeviceSP KisDabCache::fetchDab(const KoColorSpace *cs,
         QRect *dstDabRect,
         qreal lightnessStrength)
 {
+    Q_UNUSED(lightnessStrength);
+
     return fetchDabCommon(cs, colorSource, KoColor(),
                           cursorPoint,
                           shape,
@@ -121,7 +125,6 @@ KisFixedPaintDeviceSP KisDabCache::fetchFromCache(KisDabCacheUtils::DabRendering
         *dstDabRect = KisDabCacheUtils::correctDabRectWhenFetchedFromCache(*dstDabRect, m_d->dab->bounds().size());
     }
 
-    resources->brush->notifyCachedDabPainted(info);
     return m_d->dab;
 }
 
@@ -152,6 +155,7 @@ KisFixedPaintDeviceSP KisDabCache::fetchDabCommon(const KoColorSpace *cs,
         qreal lightnessStrength)
 {
     Q_ASSERT(dstDabRect);
+    Q_UNUSED(lightnessStrength);
 
     bool hasDabInCache = true;
 
@@ -161,6 +165,11 @@ KisFixedPaintDeviceSP KisDabCache::fetchDabCommon(const KoColorSpace *cs,
     }
 
     using namespace KisDabCacheUtils;
+
+    // 0. Notify brush that we ar going to paint a new dab
+
+    m_d->brush->prepareForSeqNo(info, m_d->seqNo);
+    m_d->seqNo++;
 
     // 1. Calculate new dab parameters and whether we can reuse the cache
 
@@ -185,7 +194,8 @@ KisFixedPaintDeviceSP KisDabCache::fetchDabCommon(const KoColorSpace *cs,
                                cursorPoint,
                                shape,
                                info,
-                               softnessFactor),
+                               softnessFactor,
+                               lightnessStrength),
                            &di,
                            &shouldUseCache);
 

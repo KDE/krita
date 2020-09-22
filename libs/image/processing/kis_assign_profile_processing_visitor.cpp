@@ -29,7 +29,7 @@
 #include <KoColorConversionTransformation.h>
 #include "kis_projection_leaf.h"
 #include "kis_paint_layer.h"
-#include "kis_time_range.h"
+#include "kis_time_span.h"
 #include <QSet>
 
 
@@ -66,7 +66,7 @@ void KisAssignProfileProcessingVisitor::visitNodeWithPaintDevice(KisNode *node, 
     }
 
     undoAdapter->addCommand(parentConversionCommand);
-    node->invalidateFrames(KisTimeRange::infinite(0), node->extent());
+    node->invalidateFrames(KisTimeSpan::infinite(0), node->extent());
 }
 
 void KisAssignProfileProcessingVisitor::visit(KisTransformMask *mask, KisUndoAdapter *undoAdapter)
@@ -82,6 +82,6 @@ void KisAssignProfileProcessingVisitor::visitColorizeMask(KisColorizeMask *mask,
         mask->setProfile(m_dstColorSpace->profile(), parentConversionCommand);
         undoAdapter->addCommand(parentConversionCommand);
 
-        mask->invalidateFrames(KisTimeRange::infinite(0), mask->extent());
+        mask->invalidateFrames(KisTimeSpan::infinite(0), mask->extent());
     }
 }

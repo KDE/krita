@@ -132,7 +132,7 @@ void KisToolPaint::canvasResourceChanged(int key, const QVariant& v)
     KisTool::canvasResourceChanged(key, v);
 
     switch(key) {
-    case(KisCanvasResourceProvider::Opacity):
+    case(KoCanvasResource::Opacity):
         setOpacity(v.toDouble());
         break;
     default: //nothing
@@ -431,7 +431,7 @@ int KisToolPaint::colorPreviewResourceId(AlternateAction action)
 {
     bool toForegroundColor = action == PickFgNode || action == PickFgImage;
     int resource = toForegroundColor ?
-        KoCanvasResourceProvider::ForegroundColor : KoCanvasResourceProvider::BackgroundColor;
+        KoCanvasResource::ForegroundColor : KoCanvasResource::BackgroundColor;
 
     return resource;
 }
@@ -586,7 +586,7 @@ const KoCompositeOp* KisToolPaint::compositeOp()
     if (currentNode()) {
         KisPaintDeviceSP device = currentNode()->paintDevice();
         if (device) {
-            QString op = canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentCompositeOp).toString();
+            QString op = canvas()->resourceManager()->resource(KoCanvasResource::CurrentCompositeOp).toString();
             return device->colorSpace()->compositeOp(op);
         }
     }
@@ -724,7 +724,7 @@ void KisToolPaint::requestUpdateOutline(const QPointF &outlineDocPoint, const Ko
 
     KisCanvas2 * kiscanvas = dynamic_cast<KisCanvas2*>(canvas());
     KisPaintingAssistantsDecorationSP decoration = kiscanvas->paintingAssistantsDecoration();
-    if (decoration && decoration->visible()) {
+    if (decoration && decoration->visible() && decoration->hasPaintableAssistants()) {
         kiscanvas->updateCanvas();
     } else {
         // TODO: only this branch should be present!

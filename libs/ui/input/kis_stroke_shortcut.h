@@ -39,7 +39,6 @@ class QPointF;
  * user the cursor of the upcoming action and the Running state shows
  * that the action linked to the shortcut should be activated.
  */
-
 class KRITAUI_EXPORT KisStrokeShortcut : public KisAbstractShortcut
 {
 public:
@@ -65,9 +64,9 @@ public:
      * can show the user that pressing the mouse button will start some
      * action. This can be done with, e.g. changing the cursor.
      */
-
     bool matchReady(const QSet<Qt::Key> &modifiers,
                     const QSet<Qt::MouseButton> &buttons);
+
     /**
      * Reports whether the shortcut can transit form the "Ready"
      * to "Running" state. It means that the last button of the shortcut

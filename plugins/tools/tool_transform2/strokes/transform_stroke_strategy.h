@@ -99,6 +99,10 @@ public:
 
     ~TransformStrokeStrategy() override;
 
+    static bool shouldRestartStrokeOnModeChange(ToolTransformArgs::TransformMode oldMode,
+                                                ToolTransformArgs::TransformMode newMode,
+                                                KisNodeList processedNodes);
+
     void initStrokeCallback() override;
     void finishStrokeCallback() override;
     void cancelStrokeCallback() override;

@@ -335,6 +335,8 @@ KisViewManager::~KisViewManager()
     delete d;
 }
 
+#include <KoActiveCanvasResourceDependencyKoResource.h>
+
 void KisViewManager::initializeResourceManager(KoCanvasResourceProvider *resourceManager)
 {
     resourceManager->addDerivedResourceConverter(toQShared(new KisCompositeOpResourceConverter));
@@ -348,6 +350,21 @@ void KisViewManager::initializeResourceManager(KoCanvasResourceProvider *resourc
     resourceManager->addDerivedResourceConverter(toQShared(new KisEraserModeResourceConverter));
     resourceManager->addDerivedResourceConverter(toQShared(new KisPatternSizeResourceConverter));
     resourceManager->addResourceUpdateMediator(toQShared(new KisPresetUpdateMediator));
+
+    resourceManager->addActiveCanvasResourceDependency(
+        toQShared(new KoActiveCanvasResourceDependencyKoResource<KisPaintOpPreset>(
+                      KoCanvasResource::CurrentPaintOpPreset,
+                      KoCanvasResource::CurrentGradient)));
+
+    resourceManager->addActiveCanvasResourceDependency(
+        toQShared(new KoActiveCanvasResourceDependencyKoResource<KoAbstractGradient>(
+                      KoCanvasResource::CurrentGradient,
+                      KoCanvasResource::ForegroundColor)));
+
+    resourceManager->addActiveCanvasResourceDependency(
+        toQShared(new KoActiveCanvasResourceDependencyKoResource<KoAbstractGradient>(
+                      KoCanvasResource::CurrentGradient,
+                      KoCanvasResource::BackgroundColor)));
 }
 
 KActionCollection *KisViewManager::actionCollection() const
@@ -1242,7 +1259,7 @@ void KisViewManager::switchCanvasOnly(bool toggled)
         // show a fading heads-up display about the shortcut to go back
 
         showFloatingMessage(i18n("Going into Canvas-Only mode.\nPress %1 to go back.",
-                                 actionCollection()->action("view_show_canvas_only")->shortcut().toString()), QIcon());
+                                 actionCollection()->action("view_show_canvas_only")->shortcut().toString(QKeySequence::NativeText)), QIcon());
     }
     else {
         main->restoreState(d->canvasState);

@@ -166,6 +166,9 @@ private:
     BasicXMLSyntaxHighlighter *m_syntaxHighlighter;
 
     QString m_searchKey;
+
+    class Private;
+    QScopedPointer<Private> d;
 };
 
 #endif //TEXTNGSHAPECONFIGWIDGET_H

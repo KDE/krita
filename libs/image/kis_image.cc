@@ -47,7 +47,6 @@
 #include "commands/kis_image_commands.h"
 #include "kis_layer.h"
 #include "kis_meta_data_merge_strategy_registry.h"
-#include "kis_name_server.h"
 #include "kis_paint_layer.h"
 #include "kis_projection_leaf.h"
 #include "kis_painter.h"
@@ -104,7 +103,7 @@
 
 #include <functional>
 
-#include "kis_time_range.h"
+#include "kis_time_span.h"
 
 #include "KisRunnableBasedStrokeStrategy.h"
 #include "KisRunnableStrokeJobData.h"
@@ -147,7 +146,6 @@ public:
         , colorSpace(c ? c : KoColorSpaceRegistry::instance()->rgb8())
         , isolateLayer(false)
         , isolateGroup(false)
-        , nserver(1)
         , undoStore(undo ? undo : new KisDumbUndoStore())
         , legacyUndoAdapter(undoStore.data(), _q)
         , postExecutionUndoAdapter(undoStore.data(), _q)
@@ -224,8 +222,6 @@ public:
     bool isolateGroup;
 
     bool wrapAroundModePermitted = false;
-
-    KisNameServer nserver;
 
     QScopedPointer<KisUndoStore> undoStore;
     KisLegacyUndoAdapter legacyUndoAdapter;
@@ -459,8 +455,6 @@ void KisImage::copyFromImageImpl(const KisImage &rhs, int policy)
 
     EMIT_IF_NEEDED sigLayersChangedAsync();
 
-    m_d->nserver = rhs.m_d->nserver;
-
     vKisAnnotationSP newAnnotations;
     Q_FOREACH (KisAnnotationSP annotation, rhs.m_d->annotations) {
         newAnnotations << annotation->clone();
@@ -531,7 +525,7 @@ void KisImage::nodeChanged(KisNode* node)
 
 void KisImage::invalidateAllFrames()
 {
-    invalidateFrames(KisTimeRange::infinite(0), QRect());
+    invalidateFrames(KisTimeSpan::infinite(0), QRect());
 }
 
 void KisImage::setOverlaySelectionMask(KisSelectionMaskSP mask)
@@ -655,21 +649,31 @@ QString KisImage::nextLayerName(const QString &_baseName) const
 {
     QString baseName = _baseName;
 
-    if (m_d->nserver.currentSeed() == 0) {
-        m_d->nserver.number();
+    int numLayers = 0;
+    int maxLayerIndex = 0;
+    QRegularExpression numberedLayerRegexp(".* (\\d+)$");
+    KisLayerUtils::recursiveApplyNodes(root(),
+        [&numLayers, &maxLayerIndex, &numberedLayerRegexp] (KisNodeSP node) {
+            if (node->inherits("KisLayer")) {
+                QRegularExpressionMatch match = numberedLayerRegexp.match(node->name());
+
+                if (match.hasMatch()) {
+                    maxLayerIndex = qMax(maxLayerIndex, match.captured(1).toInt());
+                }
+                numLayers++;
+            }
+        });
+
+    // special case if there is only root node
+    if (numLayers == 1) {
         return i18n("background");
     }
 
     if (baseName.isEmpty()) {
-        baseName = i18n("Layer");
+        baseName = i18n("Paint Layer");
     }
 
-    return QString("%1 %2").arg(baseName).arg(m_d->nserver.number());
-}
-
-void KisImage::rollBackLayerName()
-{
-    m_d->nserver.rollback();
+    return QString("%1 %2").arg(baseName).arg(maxLayerIndex + 1);
 }
 
 KisCompositeProgressProxy* KisImage::compositeProgressProxy()
@@ -1856,7 +1860,7 @@ void KisImage::stopIsolatedMode()
             setClearsRedoOnStart(false);
         }
 
-        void initStrokeCallback() {
+        void initStrokeCallback() override {
             if (!m_image->m_d->isolationRootNode)  return;
 
             m_oldRootNode = m_image->m_d->isolationRootNode;
@@ -2230,7 +2234,7 @@ void KisImage::requestProjectionUpdate(KisNode *node, const QVector<QRect> &rect
     KisNodeGraphListener::requestProjectionUpdate(node, rects, resetAnimationCache);
 }
 
-void KisImage::invalidateFrames(const KisTimeRange &range, const QRect &rect)
+void KisImage::invalidateFrames(const KisTimeSpan &range, const QRect &rect)
 {
     m_d->animationInterface->invalidateFrames(range, rect);
 }
@@ -2258,6 +2262,24 @@ void KisImage::addComposition(KisLayerCompositionSP composition)
 void KisImage::removeComposition(KisLayerCompositionSP composition)
 {
     m_d->compositions.removeAll(composition);
+}
+
+void KisImage::moveCompositionUp(KisLayerCompositionSP composition)
+{
+    int index = m_d->compositions.indexOf(composition);
+    if (index <= 0) {
+        return;
+    }
+    m_d->compositions.move(index, index - 1);
+}
+
+void KisImage::moveCompositionDown(KisLayerCompositionSP composition)
+{
+    int index = m_d->compositions.indexOf(composition);
+    if (index >= m_d->compositions.size() -1) {
+        return;
+    }
+    m_d->compositions.move(index, index + 1);
 }
 
 bool checkMasksNeedConversion(KisNodeSP root, const QRect &bounds)

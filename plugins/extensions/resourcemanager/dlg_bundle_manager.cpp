@@ -57,6 +57,9 @@ DlgBundleManager::ItemDelegate::ItemDelegate(QObject *parent, KisStorageFilterPr
 
 QSize DlgBundleManager::ItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
+    Q_UNUSED(option);
+    Q_UNUSED(index);
+
     return QSize(100, 30);
 }
 
@@ -224,6 +227,8 @@ void DlgBundleManager::slotModelReset()
 
 void DlgBundleManager::currentCellSelectedChanged(QModelIndex current, QModelIndex previous)
 {
+    Q_UNUSED(previous);
+
     ENTER_FUNCTION() << "Current cell changed!";
     QModelIndex idx = m_ui->listView->currentIndex();
     KIS_ASSERT(m_proxyModel);

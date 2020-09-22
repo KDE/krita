@@ -345,13 +345,10 @@ void KisBorderSelectionFilter::process(KisPixelSelectionSP pixelSelection, const
         const qreal minRadius = maxRadius - 1.0;
 
         for (qint32 x = 0; x < (m_xRadius + 1); x++) {
-            double tmpx, tmpy, dist;
+            double dist;
             quint8 a;
 
-            tmpx = x > 0.0 ? x - 0.5 : 0.0;
-
             for (qint32 y = 0; y < (m_yRadius + 1); y++) {
-                tmpy = y > 0.0 ? y - 0.5 : 0.0;
 
                 dist = sqrt(pow2(x) + pow2(y));
 

@@ -63,7 +63,6 @@
 #include <QAction>
 #include <QWindow>
 #include <QScrollArea>
-
 #include <kactioncollection.h>
 #include <kactionmenu.h>
 #include <kis_debug.h>
@@ -214,6 +213,7 @@ public:
         widgetStack->addWidget(mdiArea);
         mdiArea->setTabsMovable(true);
         mdiArea->setActivationOrder(QMdiArea::ActivationHistoryOrder);
+        mdiArea->setDocumentMode(true);
     }
 
     ~Private() {
@@ -373,6 +373,7 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     }
 
     QMap<QString, QAction*> dockwidgetActions;
+
     dockwidgetActions[toolbox->toggleViewAction()->text()] = toolbox->toggleViewAction();
     Q_FOREACH (const QString & docker, KoDockRegistry::instance()->keys()) {
         KoDockFactoryBase *factory = KoDockRegistry::instance()->value(docker);
@@ -467,14 +468,12 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     updateWindowMenu();
 
     if (isHelpMenuEnabled() && !d->helpMenu) {
-        // workaround for KHelpMenu (or rather KAboutData::applicationData()) internally
-        // not using the Q*Application metadata ATM, which results e.g. in the bugreport wizard
-        // not having the app version preset
-        // fixed hopefully in KF5 5.22.0, patch pending
         QGuiApplication *app = qApp;
-        KAboutData aboutData(app->applicationName(), app->applicationDisplayName(), app->applicationVersion());
+        KAboutData aboutData(KAboutData::applicationData());
         aboutData.setOrganizationDomain(app->organizationDomain().toUtf8());
+
         d->helpMenu = new KHelpMenu(this, aboutData, false);
+
         // workaround-less version:
         // d->helpMenu = new KHelpMenu(this, QString()/*unused*/, false);
 
@@ -596,7 +595,6 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     this->winId(); // Ensures the native window has been created.
     QWindow *window = this->windowHandle();
     connect(window, SIGNAL(screenChanged(QScreen *)), this, SLOT(windowScreenChanged(QScreen *)));
-
 }
 
 KisMainWindow::~KisMainWindow()
@@ -922,32 +920,44 @@ void KisMainWindow::reloadRecentFileList()
 void KisMainWindow::updateCaption()
 {
     if (!d->mdiArea->activeSubWindow()) {
-        updateCaption(QString(), false);
-    }
+        setWindowTitle("");
+   }
     else if (d->activeView && d->activeView->document() && d->activeView->image()){
         KisDocument *doc = d->activeView->document();
 
-        QString caption(doc->caption());
+        QString caption = doc->caption();
 
-        caption = "RESOURCES REWRITE GOING ON " + caption;
-
+        if (d->mdiArea->activeSubWindow() && d->mdiArea->activeSubWindow()->isMaximized() && d->mdiArea->viewMode() == QMdiArea::SubWindowView) {
+            caption = "";
+        }
 
         if (d->readOnly) {
-            caption += " [" + i18n("Write Protected") + "] ";
+            caption += " " + i18n("Write Protected") + " ";
         }
 
         if (doc->isRecovered()) {
-            caption += " [" + i18n("Recovered") + "] ";
+            caption += " " + i18n("Recovered") + " ";
         }
 
         // show the file size for the document
         KisMemoryStatisticsServer::Statistics m_fileSizeStats = KisMemoryStatisticsServer::instance()->fetchMemoryStatistics(d->activeView ? d->activeView->image() : 0);
 
         if (m_fileSizeStats.imageSize) {
-            caption += QString(" (").append( KFormat().formatByteSize(m_fileSizeStats.imageSize)).append( ")");
+            caption += QString(" (").append( KFormat().formatByteSize(m_fileSizeStats.imageSize)).append( ") ");
         }
 
-        updateCaption(caption, doc->isModified());
+        if (doc->isModified()) {
+            caption += " *";
+        }
+
+        if (doc->isModified()) {
+            d->mdiArea->activeSubWindow()->setWindowTitle(doc->caption() + " *");
+        }
+        else {
+            d->mdiArea->activeSubWindow()->setWindowTitle(doc->caption());
+        }
+
+        setWindowTitle(caption);
 
         if (!doc->url().fileName().isEmpty()) {
             d->saveAction->setToolTip(i18n("Save as %1", doc->url().fileName()));
@@ -955,39 +965,7 @@ void KisMainWindow::updateCaption()
         else {
             d->saveAction->setToolTip(i18n("Save"));
         }
-
-
     }
-
-}
-
-void KisMainWindow::updateCaption(const QString &caption, bool modified)
-{
-    QString versionString = KritaVersionWrapper::versionString(true);
-
-    QString title = caption;
-    if (!title.contains(QStringLiteral("[*]"))) { // append the placeholder so that the modified mechanism works
-        title.append(QStringLiteral(" [*]"));
-    }
-
-    if (d->mdiArea->activeSubWindow()) {
-#if defined(KRITA_ALPHA) || defined (KRITA_BETA) || defined (KRITA_RC)
-        d->mdiArea->activeSubWindow()->setWindowTitle(QString("%1: %2").arg(versionString).arg(title));
-#else
-        d->mdiArea->activeSubWindow()->setWindowTitle(title);
-#endif
-        d->mdiArea->activeSubWindow()->setWindowModified(modified);
-    }
-    else {
-#if defined(KRITA_ALPHA) || defined (KRITA_BETA) || defined (KRITA_RC)
-    setWindowTitle(QString("%1: %2").arg(versionString).arg(title));
-#else
-    setWindowTitle(title);
-#endif
-    }
-    setWindowModified(modified);
-
-
 }
 
 
@@ -1537,6 +1515,8 @@ void KisMainWindow::setActiveView(KisView* view)
     d->viewManager->setCurrentView(view);
 
     KisWindowLayoutManager::instance()->activeDocumentChanged(view->document());
+
+    emit activeViewChanged();
 }
 
 void KisMainWindow::dragMove(QDragMoveEvent * event)
@@ -1672,7 +1652,7 @@ void KisMainWindow::slotFileOpen(bool isImporting)
         }
     }
 #else
-    Q_UNUSED(isImporting)
+    Q_UNUSED(isImporting);
 
     d->fileManager->openImportFile();
     connect(d->fileManager, SIGNAL(sigFileSelected(QString)), this, SLOT(slotFileSelected(QString)));
@@ -2525,6 +2505,12 @@ void KisMainWindow::checkSanity()
         QTimer::singleShot(0, this, SLOT(showErrorAndDie()));
         return;
     }
+
+
+    // window is created signal (used in Python)
+    // there must be some asynchronous things happening in the constructor, because the window cannot
+    // be referenced until after this timeout is done
+    emit KisPart::instance()->sigMainWindowCreated();
 }
 
 void KisMainWindow::showErrorAndDie()

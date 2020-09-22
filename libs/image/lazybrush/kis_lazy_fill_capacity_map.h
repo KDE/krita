@@ -64,9 +64,6 @@ public:
         KIS_ASSERT_RECOVER_NOOP(m_aLabelImage->colorSpace()->pixelSize() == 1);
         KIS_ASSERT_RECOVER_NOOP(m_bLabelImage->colorSpace()->pixelSize() == 1);
 
-
-        const QPoint pt = m_mainRect.topLeft();
-
         m_mainAccessor = m_mainImage->createRandomConstAccessorNG();
         m_aAccessor = m_aLabelImage->createRandomConstAccessorNG();
         m_bAccessor = m_bLabelImage->createRandomConstAccessorNG();

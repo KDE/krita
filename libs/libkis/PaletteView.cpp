@@ -29,11 +29,12 @@ struct PaletteView::Private
 PaletteView::PaletteView(QWidget *parent)
     : QWidget(parent), d(new Private)
 {
-    d->widget = new KisPaletteView(this);
+    d->widget = new KisPaletteView();
     d->model = new KisPaletteModel();
     d->widget->setPaletteModel(d->model);
-    this->setLayout(new QVBoxLayout());
-    this->layout()->addWidget(d->widget);
+
+    QVBoxLayout *layout = new QVBoxLayout(this);
+    layout->addWidget(d->widget);
 
     //forward signals.
     connect(d->widget, SIGNAL(entrySelected(KisSwatch)),

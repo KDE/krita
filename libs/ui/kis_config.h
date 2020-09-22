@@ -566,6 +566,9 @@ public:
     bool autoPinLayersToTimeline(bool defaultValue = false) const;
     void setAutoPinLayersToTimeline(bool value);
 
+    qreal timelineZoom(bool defaultValue = false) const;
+    void setTimelineZoom(qreal value);
+
     int scrubbingUpdatesDelay(bool defaultValue = false) const;
     void setScrubbingUpdatesDelay(int value);
 

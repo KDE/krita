@@ -154,7 +154,7 @@ KisDlgInternalColorSelector::KisDlgInternalColorSelector(QWidget *parent, KoColo
     }
 
     // KisScreenColorPicker is in the kritaui module, so dependency inversion is used to access it.
-    m_ui->screenColorPickerWidget->setLayout(new QHBoxLayout(m_ui->screenColorPickerWidget));
+    m_ui->screenColorPickerWidget->setLayout(new QHBoxLayout());
     if (s_screenColorPickerFactory) {
         m_d->screenColorPicker = s_screenColorPickerFactory(m_ui->screenColorPickerWidget);
         m_ui->screenColorPickerWidget->layout()->addWidget(m_d->screenColorPicker);

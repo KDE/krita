@@ -30,7 +30,7 @@
 #include <KisResourceServerProvider.h>
 #include <KisGlobalResourcesInterface.h>
 
-#include "sdk/tests/kistest.h"
+#include "sdk/tests/testresources.h"
 
 KoPatternSP KisEmbeddedPatternManagerTest::createPattern()
 {

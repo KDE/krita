@@ -88,7 +88,7 @@ public:
 CapNJoinMenu::CapNJoinMenu(QWidget *parent)
     : QMenu(parent)
 {
-    QGridLayout *mainLayout = new QGridLayout();
+    QGridLayout *mainLayout = new QGridLayout(this);
     mainLayout->setMargin(2);
 
     // The cap group
@@ -153,7 +153,6 @@ CapNJoinMenu::CapNJoinMenu(QWidget *parent)
     mainLayout->addWidget(miterLimit, 4, 0, 1, 3);
 
     mainLayout->setSizeConstraint(QLayout::SetMinAndMaxSize);
-    setLayout(mainLayout);
 }
 
 QSize CapNJoinMenu::sizeHint() const
@@ -778,12 +777,12 @@ void KoStrokeConfigWidget::selectionChanged()
 void KoStrokeConfigWidget::canvasResourceChanged(int key, const QVariant &value)
 {
     switch (key) {
-    case KoCanvasResourceProvider::Unit:
+    case KoCanvasResource::Unit:
         // we request the whole selection to reload because the
         // unit of the stroke width depends on the selected shape
         d->selectionChangedCompressor.start();
         break;
-    case KisCanvasResourceProvider::Size:
+    case KoCanvasResource::Size:
         if (d->noSelectionTrackingMode) {
             d->ui->lineWidth->changeValue(d->canvas->unit().fromUserValue(value.toReal()));
         }
@@ -794,8 +793,8 @@ void KoStrokeConfigWidget::canvasResourceChanged(int key, const QVariant &value)
 void KoStrokeConfigWidget::loadCurrentStrokeFillFromResourceServer()
 {
     if (d->canvas) {
-        const QVariant value = d->canvas->resourceManager()->resource(KisCanvasResourceProvider::Size);
-        canvasResourceChanged(KisCanvasResourceProvider::Size, value);
+        const QVariant value = d->canvas->resourceManager()->resource(KoCanvasResource::Size);
+        canvasResourceChanged(KoCanvasResource::Size, value);
 
         updateStyleControlsAvailability(true);
 

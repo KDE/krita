@@ -109,11 +109,11 @@ KisBaseNode::Property KisLayerPropertiesIcons::getProperty(const KoID &id, bool 
                                  isInStasis, stateInStasis);
 }
 
-void KisLayerPropertiesIcons::setNodeProperty(KisNodeSP node, const KoID &id, const QVariant &value, KisImageSP image)
+void KisLayerPropertiesIcons::setNodePropertyAutoUndo(KisNodeSP node, const KoID &id, const QVariant &value, KisImageSP image)
 {
     KisBaseNode::PropertyList props = node->sectionModelProperties();
     setNodeProperty(&props, id, value);
-    KisNodePropertyListCommand::setNodePropertiesNoUndo(node, image, props);
+    KisNodePropertyListCommand::setNodePropertiesAutoUndo(node, image, props);
 }
 
 void KisLayerPropertiesIcons::setNodeProperty(KisBaseNode::PropertyList *props, const KoID &id, const QVariant &value)

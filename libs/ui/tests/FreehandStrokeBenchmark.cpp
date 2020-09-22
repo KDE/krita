@@ -19,7 +19,7 @@
 #include "FreehandStrokeBenchmark.h"
 
 #include <QTest>
-#include <sdk/tests/kistest.h>
+#include <sdk/tests/testui.h>
 #include <KoCompositeOpRegistry.h>
 #include <KoColor.h>
 #include "stroke_testing_utils.h"

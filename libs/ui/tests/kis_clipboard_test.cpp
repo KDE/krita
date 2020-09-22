@@ -27,7 +27,7 @@
 #include "kis_paint_device.h"
 #include "kis_clipboard.h"
 
-#include "testutil.h"
+#include <testutil.h>
 
 
 void KisClipboardTest::testRoundTrip()

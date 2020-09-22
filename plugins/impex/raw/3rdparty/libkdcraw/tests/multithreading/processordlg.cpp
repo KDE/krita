@@ -98,7 +98,6 @@ ProcessorDlg::ProcessorDlg(const QList<QUrl>& list)
     QVBoxLayout* const vbx   = new QVBoxLayout(this);
     vbx->addWidget(d->page);
     vbx->addWidget(d->buttons);
-    setLayout(vbx);
 
     int cpu                  = d->thread->maximumNumberOfThreads();
     QGridLayout* const grid  = new QGridLayout(d->page);

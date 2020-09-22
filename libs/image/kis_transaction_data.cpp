@@ -93,11 +93,17 @@ void KisTransactionData::Private::tryCreateNewFrame(KisPaintDeviceSP device, int
     KIS_ASSERT_RECOVER(channel) { return; }
 
     KisKeyframeSP keyframe = channel->keyframeAt(time);
-
     if (!keyframe) {
-        keyframe = channel->activeKeyframeAt(time);
-        KisKeyframeSP newKeyframe = channel->copyKeyframe(keyframe, time, &newFrameCommand);
-        newKeyframe->setColorLabel(KisImageConfig(true).defaultFrameColorLabel());
+        if (cfg.autoKeyModeDuplicate()) {
+            int activeKeyTime = channel->activeKeyframeTime(time);
+            channel->copyKeyframe(activeKeyTime, time, &newFrameCommand);
+        } else {
+            channel->addKeyframe(time, &newFrameCommand);
+        }
+
+        keyframe = channel->keyframeAt(time);
+        KIS_SAFE_ASSERT_RECOVER_RETURN(keyframe);
+        keyframe->setColorLabel(KisImageConfig(true).defaultFrameColorLabel());
     }
 }
 
@@ -317,6 +323,7 @@ void KisTransactionData::saveSelectionOutlineCache()
 
 void KisTransactionData::restoreSelectionOutlineCache(bool undo)
 {
+    Q_UNUSED(undo);
     KisPixelSelectionSP pixelSelection =
         dynamic_cast<KisPixelSelection*>(m_d->device.data());
 

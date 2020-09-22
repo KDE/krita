@@ -29,8 +29,6 @@ KisSvgBrush::KisSvgBrush(const QString& filename)
 {
     setBrushType(INVALID);
     setSpacing(0.25);
-    setHasColor(false);
-
 }
 
 KisSvgBrush::KisSvgBrush(const KisSvgBrush& rhs)
@@ -73,11 +71,9 @@ bool KisSvgBrush::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourc
     // Well for now, always true
     if (brushTipImage().isGrayscale()) {
         setBrushType(MASK);
-        setHasColor(false);
     }
     else {
         setBrushType(IMAGE);
-        setHasColor(true);
     }
     setWidth(brushTipImage().width());
     setHeight(brushTipImage().height());

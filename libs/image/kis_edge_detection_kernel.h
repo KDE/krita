@@ -23,6 +23,7 @@
 #include "kis_types.h"
 
 #include <Eigen/Core>
+#include <boost/optional.hpp>
 
 class QRect;
 
@@ -125,7 +126,8 @@ public:
                                   QVector<int> channelOrder,
                                   QVector<bool> channelFlip,
                                   const QBitArray &channelFlags,
-                                  KoUpdater *progressUpdater);
+                                  KoUpdater *progressUpdater,
+                                  boost::optional<bool> useFftw = boost::none);
 };
 
 #endif // KIS_EDGE_DETECTION_KERNEL_H

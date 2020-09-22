@@ -28,6 +28,7 @@
 #include <kis_shared.h>
 #include <kis_dab_shape.h>
 #include <kritabrush_export.h>
+#include <resources/KoAbstractGradient.h>
 
 class KisQImagemask;
 typedef KisSharedPtr<KisQImagemask> KisQImagemaskSP;
@@ -46,6 +47,13 @@ enum enumBrushType {
     IMAGE,
     PIPE_MASK,
     PIPE_IMAGE
+};
+
+enum enumBrushApplication {
+    ALPHAMASK,
+    IMAGESTAMP,
+    LIGHTNESSMAP,
+    GRADIENTMAP
 };
 
 static const qreal DEFAULT_SOFTNESS_FACTOR = 1.0;
@@ -190,10 +198,12 @@ public:
     double maskAngle(double angle = 0) const;
 
     /**
-     * @return the index of the brush
+     * @return the currently selected index of the brush
      *         if the brush consists of multiple images
+     *
+     * @see prepareForSeqNo()
      */
-    virtual quint32 brushIndex(const KisPaintInformation& info) const;
+    virtual quint32 brushIndex() const;
 
     /**
      * The brush type defines how the brush is used.
@@ -218,22 +228,10 @@ public:
     virtual void notifyStrokeStarted();
 
     /**
-     * Is called by the cache, when cache hit has happened.
-     * Having got this notification the brush can update the counters
-     * of dabs, generate some new random values if needed.
-     *
-     * * NOTE: one should use **either** notifyCachedDabPainted() or prepareForSeqNo()
-     *
-     * Currently, this is used by pipe'd brushes to implement
-     * incremental and random parasites
-     */
-    virtual void notifyCachedDabPainted(const KisPaintInformation& info);
-
-    /**
      * Is called by the multithreaded queue to prepare a specific brush
      * tip for the particular seqNo.
      *
-     * NOTE: one should use **either** notifyCachedDabPainted() or prepareForSeqNo()
+     * NOTE: one should use always call prepareForSeqNo() before using the brush
      *
      * Currently, this is used by pipe'd brushes to implement
      * incremental and random parasites
@@ -281,15 +279,15 @@ public:
               qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR, qreal lightnessStrength = DEFAULT_LIGHTNESS_STRENGTH) const;
 
 
-    virtual bool hasColor() const;
+    virtual enumBrushApplication brushApplication() const;
+
+    virtual void setBrushApplication(enumBrushApplication brushApplication);
 
     virtual bool preserveLightness() const;
 
-    /**
-    * If the brush image data are colorful (e.g. you created the brush from the canvas with custom brush)
-    * and you want to paint with it as with masks, but preserve Lightness (Value), set to true.
-    */
-    virtual void setPreserveLightness(bool preserveLightness);
+    virtual bool applyingGradient() const;
+
+    virtual void setGradient(KoAbstractGradientSP gradient);
 
 
     /**
@@ -319,7 +317,7 @@ public:
             double subPixelX, double subPixelY,
             qreal softnessFactor, qreal lightnessStrength) const;
 
-    virtual void generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
+    void generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
         ColoringInformation* coloringInfo,
         KisDabShape const&,
         const KisPaintInformation& info,
@@ -358,8 +356,6 @@ protected:
      * XXX
      */
     virtual void setBrushType(enumBrushType type);
-
-    virtual void setHasColor(bool hasColor);
 
 public:
 

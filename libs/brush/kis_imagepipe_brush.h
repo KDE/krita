@@ -80,14 +80,9 @@ public:
             const KisPaintInformation& info,
             double subPixelX = 0, double subPixelY = 0) const override;
 
-    void setUseColorAsMask(bool useColorAsMask) override;
-    bool hasColor() const override;
-
     void setAdjustmentMidPoint(quint8 value) override;
     void setBrightnessAdjustment(qreal value) override;
     void setContrastAdjustment(qreal value) override;
-
-    enumBrushType brushType() const override;
 
     QString parasiteSelection(); // returns random, constant, etc
 
@@ -103,12 +98,11 @@ public:
     void setScale(qreal _scale) override;
     void setSpacing(double _spacing) override;
 
-    quint32 brushIndex(const KisPaintInformation& info) const override;
+    quint32 brushIndex() const override;
     qint32 maskWidth(KisDabShape const&, double subPixelX, double subPixelY, const KisPaintInformation& info) const override;
     qint32 maskHeight(KisDabShape const&, double subPixelX, double subPixelY, const KisPaintInformation& info) const override;
 
     void notifyStrokeStarted() override;
-    void notifyCachedDabPainted(const KisPaintInformation& info) override;
     void prepareForSeqNo(const KisPaintInformation& info, int seqNo) override;
 
     void generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst, KisBrush::ColoringInformation* coloringInformation,
@@ -126,9 +120,8 @@ public:
     void setDevices(QVector< QVector<KisPaintDevice*> > devices, int w, int h);
 
 protected:
-    void setBrushType(enumBrushType type) override;
-    void setHasColor(bool hasColor) override;
-    void setPreserveLightness(bool preserveLightness) override;
+    virtual void setBrushApplication(enumBrushApplication brushApplication) override;
+    virtual void setGradient(KoAbstractGradientSP gradient) override;
     /// Will call KisBrush's saveToDevice as well
 
 private:

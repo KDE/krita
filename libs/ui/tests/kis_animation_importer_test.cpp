@@ -21,17 +21,17 @@
 #include "KisPart.h"
 #include "kis_animation_importer.h"
 #include "KisDocument.h"
-#include "testutil.h"
+#include <testutil.h>
 #include "kis_keyframe_channel.h"
 #include "kis_image_animation_interface.h"
 #include "kis_group_layer.h"
 #include <KoUpdater.h>
 
-#include "kistest.h"
+#include "testui.h"
 
 void KisAnimationImporterTest::testImport()
 {
-    KisDocument *document = KisPart::instance()->createDocument();
+    QScopedPointer<KisDocument> document(KisPart::instance()->createDocument());
     TestUtil::MaskParent mp(QRect(0,0,512,512));
     document->setCurrentImage(mp.image);
 
@@ -47,7 +47,7 @@ void KisAnimationImporterTest::testImport()
     KisGroupLayerSP root = mp.image->rootLayer();
     KisNodeSP importedLayer = root->lastChild();
 
-    KisKeyframeChannel* contentChannel = importedLayer->getKeyframeChannel(KisKeyframeChannel::Content.id());
+    KisKeyframeChannel* contentChannel = importedLayer->getKeyframeChannel(KisKeyframeChannel::Raster.id());
 
     QVERIFY(contentChannel != 0);
     QCOMPARE(contentChannel->keyframeCount(), 4); // Three imported ones + blank at time 0
@@ -76,7 +76,7 @@ void KisAnimationImporterTest::testImport()
     QVERIFY(TestUtil::compareQImages(pt, source2, imported2));
     QVERIFY(TestUtil::compareQImages(pt, source3, imported3));
 
-    delete document;
+    KisPart::instance()->removeDocument(document.data(), false);
 }
 
 KISTEST_MAIN(KisAnimationImporterTest)

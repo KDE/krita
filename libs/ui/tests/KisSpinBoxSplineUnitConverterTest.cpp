@@ -18,7 +18,7 @@
 
 #include <QTest>
 #include <testutil.h>
-#include <kistest.h>
+#include <testui.h>
 
 
 #include <KisSpinBoxSplineUnitConverterTest.h>

@@ -39,7 +39,7 @@ private Q_SLOTS:
     void delayedLoadStart();
 
 Q_SIGNALS:
-    void loadingFinished(KisPaintDeviceSP paintDevice, int xRes, int yRes);
+    void loadingFinished(KisPaintDeviceSP paintDevice, qreal xRes, qreal yRes, const QSize &size);
 
 private:
     struct Private;

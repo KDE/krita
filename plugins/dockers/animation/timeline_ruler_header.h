@@ -82,6 +82,7 @@ Q_SIGNALS:
     void sigCopyColumns();
     void sigPasteColumns();
 
+    void sigZoomChanged(qreal zoom);
 
 private:
     struct Private;

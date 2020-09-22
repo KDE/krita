@@ -30,6 +30,7 @@
 #include "KisRunnableStrokeJobUtils.h"
 #include "KisRunnableStrokeJobsInterface.h"
 #include "kis_abstract_projection_plane.h"
+#include "kis_image.h"
 
 
 MoveStrokeStrategy::MoveStrokeStrategy(KisNodeSelectionRecipe nodeSelection,
@@ -147,7 +148,7 @@ void MoveStrokeStrategy::initStrokeCallback()
         KisStrokeStrategyUndoCommandBased::initStrokeCallback();
 
         if (m_updatesEnabled) {
-            KisLodTransform t(m_nodes.first()->projection());
+            KisLodTransform t(m_nodes.first()->image()->currentLevelOfDetail());
             handlesRect = t.mapInverted(handlesRect);
 
             emit this->sigHandlesRectCalculated(handlesRect);

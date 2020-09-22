@@ -33,7 +33,7 @@
 #include "kis_types.h"
 #include "kis_datamanager.h"
 #include "kis_pixel_selection.h"
-#include "testutil.h"
+#include <testutil.h>
 #include <KisGlobalResourcesInterface.h>
 
 void KisAdjustmentLayerTest::testCreation()

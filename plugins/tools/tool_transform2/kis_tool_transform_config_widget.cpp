@@ -71,8 +71,9 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     cmbFilter->setToolTip(i18nc("@info:tooltip",
                                 "<p>Select filtering mode:\n"
                                 "<ul>"
-                                "<li><b>Bilinear</b> for areas with uniform color to avoid artifacts</li>"
-                                "<li><b>Bicubic</b> for smoother results</li>"
+                                "<li><b>Nearest neighbor</b> for pixel art. Does not produce new color.</li>"
+                                "<li><b>Bilinear</b> for areas with uniform color to avoid artifacts.</li>"
+                                "<li><b>Bicubic</b> for smoother results.</li>"
                                 "<li><b>Lanczos3</b> for sharp results. May produce aerials.</li>"
                                 "</ul></p>"));
     connect(cmbFilter, SIGNAL(activated(KoID)),
@@ -338,31 +339,6 @@ void KisToolTransformConfigWidget::slotUpdateIcons()
     liquifyAmountPressureBox->setIcon(KisIconUtils::loadIcon("transform_icons_penPressure"));
 }
 
-double KisToolTransformConfigWidget::radianToDegree(double rad)
-{
-    double piX2 = 2 * M_PI;
-
-    if (rad < 0 || rad >= piX2) {
-        rad = fmod(rad, piX2);
-        if (rad < 0) {
-            rad += piX2;
-        }
-    }
-
-    return (rad * 360. / piX2);
-}
-
-double KisToolTransformConfigWidget::degreeToRadian(double degree)
-{
-    if (degree < 0. || degree >= 360.) {
-        degree = fmod(degree, 360.);
-        if (degree < 0)
-            degree += 360.;
-    }
-
-    return (degree * M_PI / 180.);
-}
-
 void KisToolTransformConfigWidget::updateLiquifyControls()
 {
     blockUiSlots();
@@ -563,9 +539,9 @@ void KisToolTransformConfigWidget::updateConfig(const ToolTransformArgs &config)
         translateXBox->setValue(anchorPointView.x());
         translateYBox->setValue(anchorPointView.y());
 
-        aXBox->setValue(radianToDegree(config.aX()));
-        aYBox->setValue(radianToDegree(config.aY()));
-        aZBox->setValue(radianToDegree(config.aZ()));
+        aXBox->setValue(normalizeAngleDegrees(kisRadiansToDegrees(config.aX())));
+        aYBox->setValue(normalizeAngleDegrees(kisRadiansToDegrees(config.aY())));
+        aZBox->setValue(normalizeAngleDegrees(kisRadiansToDegrees(config.aZ())));
         aspectButton->setKeepAspectRatio(config.keepAspectRatio());
         cmbFilter->setCurrent(config.filterId());
 
@@ -768,7 +744,7 @@ void KisToolTransformConfigWidget::slotButtonBoxClicked(QAbstractButton *button)
         emit sigApplyTransform();
     }
     else if (button == resetButton) {
-        emit sigResetTransform();
+        emit sigCancelTransform();
     }
 
 }
@@ -779,9 +755,7 @@ void KisToolTransformConfigWidget::slotSetFreeTransformModeButtonClicked(bool va
 
     lblTransformType->setText(freeTransformButton->toolTip());
 
-    ToolTransformArgs *config = m_transaction->currentConfig();
-    config->setMode(ToolTransformArgs::FREE_TRANSFORM);
-    emit sigResetTransform();
+    emit sigResetTransform(ToolTransformArgs::FREE_TRANSFORM);
 }
 
 void KisToolTransformConfigWidget::slotSetWarpModeButtonClicked(bool value)
@@ -790,10 +764,7 @@ void KisToolTransformConfigWidget::slotSetWarpModeButtonClicked(bool value)
 
     lblTransformType->setText(warpButton->toolTip());
 
-    ToolTransformArgs *config = m_transaction->currentConfig();
-    config->setMode(ToolTransformArgs::WARP);
-    config->setWarpCalculation(KisWarpTransformWorker::WarpCalculation::GRID);
-    emit sigResetTransform();
+    emit sigResetTransform(ToolTransformArgs::WARP);
 }
 
 void KisToolTransformConfigWidget::slotSetCageModeButtonClicked(bool value)
@@ -802,9 +773,7 @@ void KisToolTransformConfigWidget::slotSetCageModeButtonClicked(bool value)
 
     lblTransformType->setText(cageButton->toolTip());
 
-    ToolTransformArgs *config = m_transaction->currentConfig();
-    config->setMode(ToolTransformArgs::CAGE);
-    emit sigResetTransform();
+    emit sigResetTransform(ToolTransformArgs::CAGE);
 }
 
 void KisToolTransformConfigWidget::slotSetLiquifyModeButtonClicked(bool value)
@@ -813,9 +782,7 @@ void KisToolTransformConfigWidget::slotSetLiquifyModeButtonClicked(bool value)
 
     lblTransformType->setText(liquifyButton->toolTip());
 
-    ToolTransformArgs *config = m_transaction->currentConfig();
-    config->setMode(ToolTransformArgs::LIQUIFY);
-    emit sigResetTransform();
+    emit sigResetTransform(ToolTransformArgs::LIQUIFY);
 }
 
 void KisToolTransformConfigWidget::slotSetPerspectiveModeButtonClicked(bool value)
@@ -824,9 +791,7 @@ void KisToolTransformConfigWidget::slotSetPerspectiveModeButtonClicked(bool valu
 
     lblTransformType->setText(perspectiveTransformButton->toolTip());
 
-    ToolTransformArgs *config = m_transaction->currentConfig();
-    config->setMode(ToolTransformArgs::PERSPECTIVE_4POINT);
-    emit sigResetTransform();
+    emit sigResetTransform(ToolTransformArgs::PERSPECTIVE_4POINT);
 }
 
 void KisToolTransformConfigWidget::slotFilterChanged(const KoID &filterId)
@@ -993,7 +958,7 @@ void KisToolTransformConfigWidget::slotSetAX(qreal value)
     ToolTransformArgs *config = m_transaction->currentConfig();
     {
         KisTransformUtils::AnchorHolder keeper(config->transformAroundRotationCenter(), config);
-        config->setAX(degreeToRadian((double)value));
+        config->setAX(normalizeAngle(kisDegreesToRadians(value)));
     }
     notifyConfigChanged();
     notifyEditingFinished();
@@ -1007,7 +972,7 @@ void KisToolTransformConfigWidget::slotSetAY(qreal value)
 
     {
         KisTransformUtils::AnchorHolder keeper(config->transformAroundRotationCenter(), config);
-        config->setAY(degreeToRadian((double)value));
+        config->setAY(normalizeAngle(kisDegreesToRadians(value)));
     }
 
     notifyConfigChanged();
@@ -1022,7 +987,7 @@ void KisToolTransformConfigWidget::slotSetAZ(qreal value)
 
     {
         KisTransformUtils::AnchorHolder keeper(config->transformAroundRotationCenter(), config);
-        config->setAZ(degreeToRadian((double)value));
+        config->setAZ(normalizeAngle(kisDegreesToRadians(value)));
     }
 
     notifyConfigChanged();

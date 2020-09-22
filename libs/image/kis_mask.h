@@ -74,7 +74,7 @@ public:
     /**
      * Create a new KisMask.
      */
-    KisMask(const QString & name);
+    KisMask(KisImageWSP image, const QString &name);
 
     /**
      * Copy the mask
@@ -218,6 +218,7 @@ protected:
     virtual bool paintsOutsideSelection() const;
 
     KisKeyframeChannel *requestKeyframeChannel(const QString &id) override;
+    bool supportsKeyframeChannel(const QString &id) override;
 
     void baseNodeChangedCallback() override;
 

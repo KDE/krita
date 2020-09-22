@@ -954,10 +954,10 @@
     <text>Image</text>
     <Action name="image_properties">
       <icon>document-properties</icon>
-      <text>&amp;Properties...</text>
+      <text context="Image Properties">&amp;Properties...</text>
       <whatsThis></whatsThis>
-      <toolTip>Properties</toolTip>
-      <iconText>Properties</iconText>
+      <toolTip context="Image Properties">Properties</toolTip>
+      <iconText context="Image Properties">Properties</iconText>
       <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
@@ -1415,6 +1415,18 @@
       <shortcut>Ctrl+F</shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
+    </Action>
+    <Action name="filter_apply_reprompt">
+        <icon></icon>
+        <text>Apply Filter Again (Reprompt)</text>
+        <whatsThis></whatsThis>
+        <toolTip>Reapply Last Used Filter with Prompt for Configuration</toolTip>
+        <iconText>Reapply Last Used Filter with Prompt for Configuration</iconText>
+        <activationFlags>0</activationFlags>
+        <activationConditions>0</activationConditions>
+        <shortcut></shortcut>
+        <isCheckable>false</isCheckable>
+        <statusTip></statusTip>
     </Action>
     <Action name="adjust_filters">
       <icon></icon>

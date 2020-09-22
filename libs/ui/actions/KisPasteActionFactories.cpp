@@ -35,6 +35,7 @@
 #include "commands/kis_image_layer_add_command.h"
 #include "KisTransformToolActivationCommand.h"
 #include "kis_processing_applicator.h"
+#include "kis_node_manager.h"
 
 #include <KoDocumentInfo.h>
 #include <KoSvgPaste.h>
@@ -45,7 +46,7 @@
 #include "kis_algebra_2d.h"
 #include <KoShapeMoveCommand.h>
 #include <KoShapeReorderCommand.h>
-#include "kis_time_range.h"
+#include "kis_time_span.h"
 #include "kis_keyframe_channel.h"
 #include "kis_raster_keyframe_channel.h"
 #include "kis_painter.h"
@@ -203,11 +204,16 @@ void KisPasteActionFactory::run(bool pasteAtCursorPosition, KisViewManager *view
     KisImageSP image = view->image();
     if (!image) return;
 
+    if (KisClipboard::instance()->hasLayers()) {
+        view->nodeManager()->pasteLayersFromClipboard();
+        return;
+    }
+
     if (tryPasteShapes(pasteAtCursorPosition, view)) {
         return;
     }
 
-    KisTimeRange range;
+    KisTimeSpan range;
     const QRect fittingBounds = pasteAtCursorPosition ? QRect() : image->bounds();
     KisPaintDeviceSP clip = KisClipboard::instance()->clip(fittingBounds, true, &range);
 
@@ -231,7 +237,7 @@ void KisPasteActionFactory::run(bool pasteAtCursorPosition, KisViewManager *view
 
         if (range.isValid()) {
             newLayer->enableAnimation();
-            KisKeyframeChannel *channel = newLayer->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
+            KisKeyframeChannel *channel = newLayer->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true);
             KisRasterKeyframeChannel *rasterChannel = dynamic_cast<KisRasterKeyframeChannel*>(channel);
             rasterChannel->importFrame(range.start(), clip, 0);
 

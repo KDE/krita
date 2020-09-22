@@ -99,5 +99,44 @@ inline Container<R> implicitCastList(const Container<T> &list)
     return result;
 }
 
+
+template<class T>
+class KisWeakSharedPtr;
+template<class T>
+class KisSharedPtr;
+template<class T>
+class KisPinnedSharedPtr;
+
+/**
+ * \fn removeSharedPointer
+ *
+ * A template function for converting any kind of a shared pointer into a
+ * raw pointer.
+ */
+
+template <typename T>
+T* removeSharedPointer(T* value)
+{
+    return value;
+}
+
+template <typename T>
+T* removeSharedPointer(KisPinnedSharedPtr<T> value)
+{
+    return value.data();
+}
+
+template <typename T>
+T* removeSharedPointer(KisSharedPtr<T> value)
+{
+    return value.data();
+}
+
+template <typename T>
+T* removeSharedPointer(QSharedPointer<T> value)
+{
+    return value.data();
+}
+
 #endif // KIS_POINTER_UTILS_H
 

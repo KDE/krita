@@ -29,18 +29,13 @@ public:
     KisColorfulBrush(const QString& filename);
     KisColorfulBrush(const KisColorfulBrush &rhs) = default;
 
-    /**
-     * If the brush image data are colorful (e.g. you created the brush from the canvas with custom brush)
-     * and you want to paint with it as with masks, set to true.
-     */
-    virtual void setUseColorAsMask(bool useColorAsMask);
-    bool useColorAsMask() const;
-
     QImage brushTipImage() const override;
 
     virtual void setAdjustmentMidPoint(quint8 value);
     virtual void setBrightnessAdjustment(qreal value);
     virtual void setContrastAdjustment(qreal value);
+
+    virtual bool hasColor() const;
 
     quint8 adjustmentMidPoint() const;
     qreal brightnessAdjustment() const;
@@ -49,7 +44,6 @@ public:
     void toXML(QDomDocument& d, QDomElement& e) const override;
 
 private:
-    bool m_useColorAsMask = false;
     quint8 m_adjustmentMidPoint = 127;
     qreal m_brightnessAdjustment = 0.0;
     qreal m_contrastAdjustment = 0.0;

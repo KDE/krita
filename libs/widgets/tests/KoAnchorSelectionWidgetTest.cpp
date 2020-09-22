@@ -37,7 +37,6 @@ void KoAnchorSelectionWidgetTest::test()
 
     QVBoxLayout *layout = new QVBoxLayout(&dlg);
     layout->addWidget(widget);
-    dlg.setLayout(layout);
     dlg.setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 
     //dlg.exec();

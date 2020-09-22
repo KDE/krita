@@ -49,7 +49,7 @@ KisHairyPaintOp::KisHairyPaintOp(const KisPaintOpSettingsSP settings, KisPainter
     m_dev = node ? node->paintDevice() : 0;
 
     KisBrushOptionProperties brushOption;
-    brushOption.readOptionSetting(settings, settings->resourcesInterface());
+    brushOption.readOptionSetting(settings, settings->resourcesInterface(), settings->canvasResourcesInterface());
     KisBrushSP brush = brushOption.brush();
     KisFixedPaintDeviceSP dab = cachedDab(painter->device()->compositionSourceColorSpace());
 
@@ -58,7 +58,7 @@ KisHairyPaintOp::KisHairyPaintOp(const KisPaintOpSettingsSP settings, KisPainter
     fakePaintInformation.setRandomSource(new KisRandomSource());
     fakePaintInformation.setPerStrokeRandomSource(new KisPerStrokeRandomSource());
 
-    if (brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {
+    if (brush->brushApplication() == IMAGESTAMP) {
         dab = brush->paintDevice(source()->colorSpace(), KisDabShape(), fakePaintInformation);
     } else {
         brush->mask(dab, painter->paintColor(), KisDabShape(), fakePaintInformation);

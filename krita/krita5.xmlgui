@@ -320,6 +320,7 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
     <Menu name="Filter">
       <text>Filte&amp;r</text>
       <Action name="filter_apply_again"/>
+      <Action name="filter_apply_reprompt"/>
       <Action name="filter_gallery"/>
       <Separator/>
       <Action name="adjust_filters"/>

@@ -55,21 +55,27 @@ void KisRandomSubAccessor::sampledOldRawData(quint8* dst)
     if (vsub < 0.0) {
         vsub = 1.0 + vsub;
     }
+    
+    int sumOfWeights = 0;
 
     weights[0] = qRound((1.0 - hsub) * (1.0 - vsub) * 255);
+    sumOfWeights += weights[0];
     m_randomAccessor->moveTo(x, y);
     pixels[0] = m_randomAccessor->oldRawData();
     weights[1] = qRound((1.0 - vsub) * hsub * 255);
+    sumOfWeights += weights[1];
     m_randomAccessor->moveTo(x + 1, y);
     pixels[1] = m_randomAccessor->oldRawData();
     weights[2] = qRound(vsub * (1.0 - hsub) * 255);
+    sumOfWeights += weights[2];
     m_randomAccessor->moveTo(x, y + 1);
     pixels[2] = m_randomAccessor->oldRawData();
     weights[3] = qRound(hsub * vsub * 255);
+    sumOfWeights += weights[3];
     m_randomAccessor->moveTo(x + 1, y + 1);
     pixels[3] = m_randomAccessor->oldRawData();
 
-    m_device->colorSpace()->mixColorsOp()->mixColors(pixels, weights, 4, dst);
+    m_device->colorSpace()->mixColorsOp()->mixColors(pixels, weights, 4, dst, sumOfWeights);
 }
 
 
@@ -88,18 +94,24 @@ void KisRandomSubAccessor::sampledRawData(quint8* dst)
     if (vsub < 0.0) {
         vsub = 1.0 + vsub;
     }
+    
+    int sumOfWeights = 0;
 
     weights[0] = qRound((1.0 - hsub) * (1.0 - vsub) * 255);
+    sumOfWeights += weights[0];
     m_randomAccessor->moveTo(x, y);
     pixels[0] = m_randomAccessor->rawDataConst();
     weights[1] = qRound((1.0 - vsub) * hsub * 255);
+    sumOfWeights += weights[1];
     m_randomAccessor->moveTo(x + 1, y);
     pixels[1] = m_randomAccessor->rawDataConst();
     weights[2] = qRound(vsub * (1.0 - hsub) * 255);
+    sumOfWeights += weights[2];
     m_randomAccessor->moveTo(x, y + 1);
     pixels[2] = m_randomAccessor->rawDataConst();
     weights[3] = qRound(hsub * vsub * 255);
+    sumOfWeights += weights[3];
     m_randomAccessor->moveTo(x + 1, y + 1);
     pixels[3] = m_randomAccessor->rawDataConst();
-    m_device->colorSpace()->mixColorsOp()->mixColors(pixels, weights, 4, dst);
+    m_device->colorSpace()->mixColorsOp()->mixColors(pixels, weights, 4, dst, sumOfWeights);
 }

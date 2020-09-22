@@ -50,7 +50,6 @@ public:
         , maskColor(Qt::green, KoColorSpaceRegistry::instance()->rgb8())
     {}
     KisSelectionMask *q;
-    KisImageWSP image;
     KisCachedPaintDevice paintDeviceCache;
     KisCachedSelection cachedSelection;
     KisThreadSafeSignalCompressor *updatesCompressor;
@@ -62,14 +61,11 @@ public:
 };
 
 KisSelectionMask::KisSelectionMask(KisImageWSP image, const QString &name)
-    : KisEffectMask(name)
+    : KisEffectMask(image, name)
     , m_d(new Private(this))
 {
-    setName("selection");
     setActive(false);
     setSupportsLodMoves(false);
-
-    m_d->image = image;
 
     m_d->updatesCompressor =
             new KisThreadSafeSignalCompressor(50, KisSignalCompressor::FIRST_ACTIVE);
@@ -85,12 +81,11 @@ KisSelectionMask::KisSelectionMask(const KisSelectionMask& rhs)
     : KisEffectMask(rhs)
     , m_d(new Private(this))
 {
-    m_d->image = rhs.image();
     m_d->updatesCompressor =
             new KisThreadSafeSignalCompressor(300, KisSignalCompressor::POSTPONE);
 
     connect(m_d->updatesCompressor, SIGNAL(timeout()), SLOT(slotSelectionChangedCompressed()));
-    this->moveToThread(m_d->image->thread());
+    this->moveToThread(rhs.image()->thread());
 
     connect(KisImageConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
     m_d->slotConfigChangedImpl(false);
@@ -169,11 +164,6 @@ void KisSelectionMask::setSelection(KisSelectionSP selection)
     setDirty();
 }
 
-KisImageWSP KisSelectionMask::image() const
-{
-    return m_d->image;
-}
-
 bool KisSelectionMask::accept(KisNodeVisitor &v)
 {
     return v.visit(this);
@@ -215,7 +205,7 @@ bool KisSelectionMask::active() const
 
 void KisSelectionMask::setActive(bool active)
 {
-    KisImageWSP image = this->image();
+    KisImageSP image = this->image();
     KisLayerSP parentLayer = qobject_cast<KisLayer*>(parent().data());
 
     if (active && parentLayer) {
@@ -310,7 +300,9 @@ void KisSelectionMask::setDecorationsVisible(bool value, bool update)
 
 void KisSelectionMask::setDirty(const QVector<QRect> &rects)
 {
-    if (m_d->image && m_d->image->overlaySelectionMask() == this) {
+    KisImageSP image = this->image();
+
+    if (image && image->overlaySelectionMask() == this) {
         KisEffectMask::setDirty(rects);
     }
 }
@@ -331,6 +323,8 @@ void KisSelectionMask::Private::slotSelectionChangedCompressed()
 
 void KisSelectionMask::Private::slotConfigChangedImpl(bool doUpdates)
 {
+    KisImageSP image = q->image();
+
     const KoColorSpace *cs = image ?
         image->colorSpace() :
         KoColorSpaceRegistry::instance()->rgb8();

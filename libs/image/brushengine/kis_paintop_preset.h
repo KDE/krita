@@ -32,6 +32,9 @@
 
 class KisPaintOpConfigWidget;
 
+class KoCanvasResourcesInterface;
+using KoCanvasResourcesInterfaceSP = QSharedPointer<KoCanvasResourcesInterface>;
+
 
 class ProxyParent : public QObject
 {
@@ -151,9 +154,31 @@ public:
     void setResourcesInterface(KisResourcesInterfaceSP resourcesInterface);
 
     /**
+     * Returns canvas resources interface associated with the current preset.
+     *
+     * In contrast to resourcesInterface() the canvas resources interface may
+     * be null, becuase the preset is created without any canvas resources.
+     * The resources are assigned to the preset only when the ser starts to
+     * paint with it.
+     *
+     * The preset has no default canvas resources interface, because canvas
+     * resources are unique per-canvas, but the presets are unique per-
+     * application. Therefore association between the preset and canvas
+     * resources interface would be ambiguous.
+     */
+    KoCanvasResourcesInterfaceSP canvasResourcesInterface() const;
+
+    /**
+     * Sets canvas resources interface used for initializing the preset
+     *
+     * @see canvasResourcesInterface()
+     */
+    void setCanvasResourcesInterface(KoCanvasResourcesInterfaceSP canvasResourcesInterface);
+
+    /**
      * \see KisRequiredResourcesOperators::createLocalResourcesSnapshot
      */
-    void createLocalResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface = nullptr);
+    void createLocalResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface, KoCanvasResourcesInterfaceSP canvasResourcesInterface);
 
     /**
      * \see KisRequiredResourcesOperators::hasLocalResourcesSnapshot
@@ -163,12 +188,14 @@ public:
     /**
      * \see KisRequiredResourcesOperators::cloneWithResourcesSnapshot
      */
-    KisPaintOpPresetSP cloneWithResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface = nullptr) const;
+    KisPaintOpPresetSP cloneWithResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface, KoCanvasResourcesInterfaceSP canvasResourcesInterface) const;
 
 
     QList<KoResourceSP> linkedResources(KisResourcesInterfaceSP globalResourcesInterface) const override;
 
     QList<KoResourceSP> embeddedResources(KisResourcesInterfaceSP globalResourcesInterface) const override;
+
+    QList<int> requiredCanvasResources() const override;
 
 private:
 

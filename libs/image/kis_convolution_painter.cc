@@ -127,10 +127,15 @@ KisConvolutionPainter::KisConvolutionPainter(KisPaintDeviceSP device, KisSelecti
 {
 }
 
-KisConvolutionPainter::KisConvolutionPainter(KisPaintDeviceSP device, TestingEnginePreference enginePreference)
+KisConvolutionPainter::KisConvolutionPainter(KisPaintDeviceSP device, EnginePreference enginePreference)
     : KisPainter(device),
       m_enginePreference(enginePreference)
 {
+}
+
+void KisConvolutionPainter::setEnginePreference(EnginePreference value)
+{
+    m_enginePreference = value;
 }
 
 void KisConvolutionPainter::applyMatrix(const KisConvolutionKernelSP kernel, const KisPaintDeviceSP src, QPoint srcPos, QPoint dstPos, QSize areaSize, KisConvolutionBorderOp borderOp)

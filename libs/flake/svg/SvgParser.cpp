@@ -1052,7 +1052,11 @@ void SvgParser::applyStrokeStyle(KoShape *shape)
         return;
 
     if (gc->strokeType == SvgGraphicsContext::None) {
-        shape->setStroke(KoShapeStrokeModelSP());
+        KoShapeStrokeSP stroke(new KoShapeStroke());
+        stroke->setLineWidth(0.0);
+        const QColor color = Qt::transparent;
+        stroke->setColor(color);
+        shape->setStroke(stroke);
     } else if (gc->strokeType == SvgGraphicsContext::Solid) {
         KoShapeStrokeSP stroke(new KoShapeStroke(*gc->stroke));
         applyDashes(gc->stroke, stroke);

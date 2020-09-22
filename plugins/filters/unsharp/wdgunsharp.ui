@@ -65,7 +65,7 @@
       </sizepolicy>
      </property>
      <property name="text">
-      <string>Amount:</string>
+      <string comment="Amount in Unsharp mask filter">Amount:</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>

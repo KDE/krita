@@ -67,9 +67,12 @@ public:
     void removeAll();
     void setAssistants(const QList<KisPaintingAssistantSP> &assistants);
     QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin);
+    void setAdjustedBrushPosition(const QPointF position);
     void endStroke();
     QList<KisPaintingAssistantHandleSP> handles();
     QList<KisPaintingAssistantSP> assistants() const;
+
+    bool hasPaintableAssistants() const;
 
 
     /// getter and setter functions for what assistant is currently selected
@@ -130,6 +133,8 @@ public Q_SLOTS:
     void toggleOutlineVisible();
     QPointF snapToGuide(KoPointerEvent *e, const QPointF &offset, bool useModifiers);
     QPointF snapToGuide(const QPointF& pt, const QPointF &offset);
+
+    void slotUpdateDecorationVisibility();
 
 protected:
     void drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter,KisCanvas2* canvas) override;

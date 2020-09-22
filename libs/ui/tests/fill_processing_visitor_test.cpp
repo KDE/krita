@@ -23,7 +23,7 @@
 #include "kis_undo_stores.h"
 #include "kis_processing_applicator.h"
 
-#include "testutil.h"
+#include <testutil.h>
 #include "qimage_based_test.h"
 #include "stroke_testing_utils.h"
 #include <resources/KoPattern.h>
@@ -62,7 +62,7 @@ public:
 
         QVariant v;
         v.setValue<KoPatternSP>(newPattern);
-        manager->setResource(KisCanvasResourceProvider::CurrentPattern, v);
+        manager->setResource(KoCanvasResource::CurrentPattern, v);
 
         KisResourcesSnapshotSP resources =
             new KisResourcesSnapshot(image,

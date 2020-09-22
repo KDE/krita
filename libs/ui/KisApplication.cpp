@@ -122,6 +122,8 @@
 
 #include <kis_psd_layer_style.h>
 
+#include <config-seexpr.h>
+
 namespace {
 const QTime appStartTime(QTime::currentTime());
 }
@@ -247,7 +249,6 @@ void KisApplication::initializeGlobals(const KisApplicationArguments &args)
 
 void KisApplication::addResourceTypes()
 {
-    //    qDebug() << "addResourceTypes();";
     // All Krita's resource types
     KoResourcePaths::addResourceType("markers", "data", "/styles/");
     KoResourcePaths::addResourceType("kis_pics", "data", "/pics/");
@@ -280,6 +281,9 @@ void KisApplication::addResourceTypes()
     KoResourcePaths::addResourceType(ResourceType::Symbols, "data", "/symbols");
     KoResourcePaths::addResourceType("preset_icons", "data", "/preset_icons");
     KoResourcePaths::addResourceType(ResourceType::GamutMasks, "data", "/gamutmasks/", true);
+#if defined HAVE_SEEXPR
+    KoResourcePaths::addResourceType(ResourceType::SeExprScripts, "data", "/seexpr_scripts/", true);
+#endif
 
     //    // Extra directories to look for create resources. (Does anyone actually use that anymore?)
     //    KoResourcePaths::addResourceDir(ResourceType::Gradients, "/usr/share/create/gradients/gimp");
@@ -318,6 +322,9 @@ void KisApplication::addResourceTypes()
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/preset_icons/tool_icons/");
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/preset_icons/emblem_icons/");
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/gamutmasks/");
+#if defined HAVE_SEEXPR
+    d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/seexpr_scripts/");
+#endif
 }
 
 bool KisApplication::registerResources()
@@ -360,6 +367,9 @@ bool KisApplication::registerResources()
     reg->add(new KisResourceLoader<KisWindowLayoutResource>(ResourceType::WindowLayouts, ResourceType::WindowLayouts, i18n("Window layouts"), QStringList() << "application/x-krita-windowlayout"));
     reg->add(new KisResourceLoader<KisSessionResource>(ResourceType::Sessions, ResourceType::Sessions, i18n("Sessions"), QStringList() << "application/x-krita-session"));
     reg->add(new KisResourceLoader<KoGamutMask>(ResourceType::GamutMasks, ResourceType::GamutMasks, i18n("Gamut masks"), QStringList() << "application/x-krita-gamutmasks"));
+#if defined HAVE_SEEXPR
+    reg->add(new KisResourceLoader<KisSeExprScript>(ResourceType::SeExprScripts, ResourceType::SeExprScripts, i18n("SeExpr Scripts"), QStringList() << "application/x-krita-seexpr-script"));
+#endif
 
     reg->add(new KisResourceLoader<KisPSDLayerStyle>(ResourceType::LayerStyles,
                                                      ResourceType::LayerStyles,
@@ -373,7 +383,7 @@ bool KisApplication::registerResources()
 
     KisResourceLocator::LocatorError r = KisResourceLocator::instance()->initialize(KoResourcePaths::getApplicationRoot() + "/share/krita");
     connect(KisResourceLocator::instance(), SIGNAL(progressMessage(const QString&)), this, SLOT(setSplashScreenLoadingText(const QString&)));
-    if (r != KisResourceLocator::LocatorError::Ok ) {
+    if (r != KisResourceLocator::LocatorError::Ok && qApp->inherits("KisApplication")) {
         QMessageBox::critical(0, i18nc("@title:window", "Krita: Fatal error"), KisResourceLocator::instance()->errorMessages().join('\n') + i18n("\n\nKrita will quit now."));
         //return false;
     }
@@ -432,7 +442,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
         cfg.setCanvasState("OPENGL_FAILED");
     }
 
-    setSplashScreenLoadingText(i18n("Initializing Globals"));
+    setSplashScreenLoadingText(i18n("Initializing Globals..."));
     processEvents();
     initializeGlobals(args);
 
@@ -462,7 +472,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
     Q_UNUSED(resetStarting);
 
     // Make sure we can save resources and tags
-    setSplashScreenLoadingText(i18n("Adding resource types"));
+    setSplashScreenLoadingText(i18n("Adding resource types..."));
     processEvents();
     addResourceTypes();
 
@@ -660,7 +670,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
         if (d->mainWindow->viewManager()->image()){
             KisFileLayer *fileLayer = new KisFileLayer(d->mainWindow->viewManager()->image(), "",
                                                     args.fileLayer(), KisFileLayer::None,
-                                                    d->mainWindow->viewManager()->image()->nextLayerName(), OPACITY_OPAQUE_U8);
+                                                    d->mainWindow->viewManager()->image()->nextLayerName(i18n("File layer")), OPACITY_OPAQUE_U8);
             QFileInfo fi(fileLayer->path());
             if (fi.exists()){
                 KisNodeCommandsAdapter adapter(d->mainWindow->viewManager());
@@ -786,7 +796,7 @@ void KisApplication::executeRemoteArguments(QByteArray message, KisMainWindow *m
         else if (mainWindow->viewManager()->image()){
             KisFileLayer *fileLayer = new KisFileLayer(mainWindow->viewManager()->image(), "",
                                                     args.fileLayer(), KisFileLayer::None,
-                                                    mainWindow->viewManager()->image()->nextLayerName(), OPACITY_OPAQUE_U8);
+                                                    mainWindow->viewManager()->image()->nextLayerName(i18n("File layer")), OPACITY_OPAQUE_U8);
             QFileInfo fi(fileLayer->path());
             if (fi.exists()){
                 KisNodeCommandsAdapter adapter(d->mainWindow->viewManager());

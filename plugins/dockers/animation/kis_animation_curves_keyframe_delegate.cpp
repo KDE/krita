@@ -23,6 +23,7 @@
 #include <QVector2D>
 
 #include "kis_animation_curves_model.h"
+#include "kis_scalar_keyframe_channel.h"
 #include "kis_keyframe.h"
 
 const int NODE_RENDER_RADIUS = 4;
@@ -123,7 +124,7 @@ bool KisAnimationCurvesKeyframeDelegate::hasHandle(const QModelIndex index, int 
         interpolatedIndex = index;
     }
 
-    return (interpolatedIndex.data(KisAnimationCurvesModel::InterpolationModeRole).toInt() == KisKeyframe::Bezier);
+    return (interpolatedIndex.data(KisAnimationCurvesModel::InterpolationModeRole).toInt() == KisScalarKeyframe::Bezier);
 }
 
 QPointF KisAnimationCurvesKeyframeDelegate::leftHandle(const QModelIndex index, bool active) const
@@ -152,7 +153,7 @@ QPointF KisAnimationCurvesKeyframeDelegate::handlePosition(const QModelIndex ind
                 (handle == 1 && handlePos.x() < 0)) {
                 handlePos.setX(0);
             }
-        } else if (index.data(KisAnimationCurvesModel::TangentsModeRole).toInt() == KisKeyframe::Smooth) {
+        } else if (index.data(KisAnimationCurvesModel::TangentsModeRole).toInt() == KisScalarKeyframe::Smooth) {
             qreal length = QVector2D(handlePos).length();
             QVector2D opposite(handlePosition(index, active, 1-handle));
             handlePos = (-length * opposite.normalized()).toPointF();

@@ -216,6 +216,7 @@ Q_SIGNALS:
     void sigDocumentSaved(const QString &url);
     void sigDocumentRemoved(const QString &filename);
     void sigMainWindowIsBeingCreated(KisMainWindow *window);
+    void sigMainWindowCreated();
 
 public:
 

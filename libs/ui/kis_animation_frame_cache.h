@@ -28,7 +28,7 @@
 
 class KisImage;
 class KisImageAnimationInterface;
-class KisTimeRange;
+class KisTimeSpan;
 class KisRegion;
 
 class KisOpenGLImageTextures;
@@ -71,9 +71,9 @@ public:
      * Drops all the frames with worse level of detail values than the current
      * desired level of detail.
      */
-    void dropLowQualityFrames(const KisTimeRange &range, const QRect &regionOfInterest, const QRect &minimalRect);
+    void dropLowQualityFrames(const KisTimeSpan &range, const QRect &regionOfInterest, const QRect &minimalRect);
 
-    bool framesHaveValidRoi(const KisTimeRange &range, const QRect &regionOfInterest);
+    bool framesHaveValidRoi(const KisTimeSpan &range, const QRect &regionOfInterest);
 
 Q_SIGNALS:
     void changed();
@@ -84,7 +84,7 @@ private:
     QScopedPointer<Private> m_d;
 
 private Q_SLOTS:
-    void framesChanged(const KisTimeRange &range, const QRect &rect);
+    void framesChanged(const KisTimeSpan &range, const QRect &rect);
     void slotConfigChanged();
 };
 

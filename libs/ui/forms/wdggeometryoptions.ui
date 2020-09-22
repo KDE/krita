@@ -89,7 +89,7 @@
      </property>
      <item>
       <property name="text">
-       <string>No Outline</string>
+       <string comment="Label of the option to not draw outline in Geometry Options">No Outline</string>
       </property>
      </item>
      <item>

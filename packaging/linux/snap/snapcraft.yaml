@@ -9,6 +9,8 @@ apps:
   krita:
     common-id: org.kde.krita
     command: usr/bin/krita
+    command-chain:
+      - snap/command-chain/add-qt-shortcuts
     extensions:
       - kde-neon
     plugs:
@@ -17,33 +19,55 @@ apps:
       - network
       - network-bind
       - removable-media
+      - audio-playback
+    environment:
+      QT_QPA_PLATFORMTHEME: gtk3
 
 layout:
   /usr/bin/ffmpeg:
     bind-file: $SNAP/usr/bin/ffmpeg
 
 parts:
+  libheif:
+    plugin: autotools
+    source: https://github.com/strukturag/libheif.git
+    source-tag: v1.7.0
+    build-packages:
+      - libde265-dev
+      - pkg-config
+      - g++
+      - libx265-dev
+      - libjpeg8-dev
+      - libpng-dev
+    stage-packages:
+      - libde265-0
+      - libx265-146
+      - libjpeg8
+      - libpng16-16
+
   krita:
-    plugin: cmake
-    configflags:
-    - "-DCMAKE_INSTALL_PREFIX=/usr"
-    - "-DCMAKE_BUILD_TYPE=Release"
-    - "-DENABLE_TESTING=OFF"
-    - "-DBUILD_TESTING=OFF"
-    - "-DHIDE_SAFE_ASSERTS=OFF"
-    - "-DKDE_SKIP_TEST_SETTINGS=ON"
+    after:
+      - libheif
     source: https://download.kde.org/stable/krita/4.3.0/krita-4.3.0.tar.xz
     # # Use these instead to build from the git source
     # source: https://anongit.kde.org/krita.git
     # source-type: git
-    # source-branch: master
-    parse-info: ["usr/share/metainfo/org.kde.krita.appdata.xml"]
+    # source-branch: master  
+    plugin: cmake
+    configflags:
+      - "-DCMAKE_INSTALL_PREFIX=/usr"
+      - "-DCMAKE_BUILD_TYPE=Release"
+      - "-DENABLE_TESTING=OFF"
+      - "-DBUILD_TESTING=OFF"
+      - "-DHIDE_SAFE_ASSERTS=OFF"
+      - "-DKDE_SKIP_TEST_SETTINGS=ON"
     build-snaps: [kde-frameworks-5-core18-sdk]
     build-packages:
       - libboost-dev
       - libboost-system-dev
       - libeigen3-dev
       - libfftw3-dev
+      - libgif-dev
       - libglew-dev
       - libgsf-1-dev
       - libgsl-dev
@@ -51,24 +75,31 @@ parts:
       - libopencolorio-dev
       - libopenexr-dev
       - libopenimageio-dev
+      - libopenjp2-7-dev
       - libquazip5-dev
+      - libraw-dev
+      - libtiff-dev
       - libvc-dev
       - libx11-dev
       - libxi-dev
       - vc-dev
     parse-info: [usr/share/metainfo/org.kde.krita.appdata.xml]
 
+
   runtime:
     plugin: nil
     stage-packages:
+      - freeglut3 
       - libboost-system1.65.1
       - libfftw3-double3
+      - libgif7
       - libgsl23
       - libgslcblas0
       - libilmbase12
       - libopencolorio1v5
       - libopenexr22
       - libquazip5-1
+      - libraw16
       - libtinyxml2.6.2v5
       - libxi6
       - libyaml-cpp0.5v5
@@ -84,6 +115,19 @@ parts:
       # kde-kf5 platform snap.
       - "-usr/lib/x86_64-linux-gnu/libQt5*"
       - "-usr/lib/x86_64-linux-gnu/libqt5*"
+
+  launcher:
+    source: scripts
+    plugin: dump
+    organize:
+      add-qt-shortcuts: snap/command-chain/add-qt-shortcuts
+    stage-packages:
+      - xdg-user-dirs
+
+  qtctl:
+    source: https://github.com/snapcrafters/qtctl.git
+    plugin: cmake
+    build-snaps: [kde-frameworks-5-core18-sdk]
 
   # This part removes all the files in this snap which already exist in
   # connected content and base snaps. Since these files will be available
@@ -105,3 +149,9 @@ parts:
       for snap in "core18" "kde-frameworks-5-core18"; do  # List all content-snaps and base snaps you're using here
         cd "/snap/$snap/current" && find . -type f,l -exec rm -f "$SNAPCRAFT_PRIME/{}" \;
       done
+
+plugs:
+  gtk-3-themes:
+    interface: content
+    target: $SNAP/data-dir/themes
+    default-provider: gtk-common-themes

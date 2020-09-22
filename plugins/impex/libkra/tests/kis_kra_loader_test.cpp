@@ -27,7 +27,7 @@
 #include <KoColor.h>
 
 #include "kis_image.h"
-#include "testutil.h"
+#include <testutil.h>
 #include "KisPart.h"
 
 #include <filter/kis_filter_registry.h>
@@ -35,11 +35,11 @@
 
 #include "kis_image_animation_interface.h"
 #include "kis_keyframe_channel.h"
-#include "kis_time_range.h"
+#include "kis_time_span.h"
 
 #include <filestest.h>
 
-#include  <sdk/tests/kistest.h>
+#include  <sdk/tests/testui.h>
 
 
 const QString KraMimetype = "application/x-krita";
@@ -134,12 +134,12 @@ void KisKraLoaderTest::testLoadAnimated()
     QVERIFY(layer1->isAnimated());
     QVERIFY(!layer2->isAnimated());
 
-    KisKeyframeChannel *channel1 = layer1->getKeyframeChannel(KisKeyframeChannel::Content.id());
+    KisKeyframeChannel *channel1 = layer1->getKeyframeChannel(KisKeyframeChannel::Raster.id());
     QVERIFY(channel1);
     QCOMPARE(channel1->keyframeCount(), 3);
 
     QCOMPARE(image->animationInterface()->framerate(), 17);
-    QCOMPARE(image->animationInterface()->fullClipRange(), KisTimeRange::fromTime(15, 45));
+    QCOMPARE(image->animationInterface()->fullClipRange(), KisTimeSpan::fromTimeToTime(15, 45));
     QCOMPARE(image->animationInterface()->currentTime(), 19);
 
     KisPaintDeviceSP dev = layer1->paintDevice();

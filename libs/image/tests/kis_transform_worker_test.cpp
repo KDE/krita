@@ -31,7 +31,8 @@
 #include "kis_filter_strategy.h"
 #include "kis_paint_device.h"
 #include "kis_transform_worker.h"
-#include "testutil.h"
+#include <testutil.h>
+#include "kistest.h"
 #include "kis_transaction.h"
 #include "kis_random_accessor_ng.h"
 
@@ -669,8 +670,8 @@ void testRotationImpl(qreal angle, QString filePrefix, bool useUniformColor = fa
     QString refFileName = QString("%1_expected.png").arg(filePrefix);
 
     image = QImage();
-    image.load(QString(FILES_DATA_DIR) + '/' + resFileName);
-    if (!TestUtil::compareQImages(errpoint, image, result)) {
+    image.load(QString(FILES_DATA_DIR) + QDir::separator() + resFileName);
+    if (!TestUtil::compareQImagesPremultiplied(errpoint, image, result, 2, 1)) {
         dbgKrita << filePrefix;
         image.save(refFileName);
         result.save(resFileName);
@@ -990,4 +991,4 @@ void KisTransformWorkerTest::testPartialProcessing()
     TestUtil::checkQImage(result, "transform_test", "partial", "single");
 }
 
-QTEST_MAIN(KisTransformWorkerTest)
+KISTEST_MAIN(KisTransformWorkerTest)

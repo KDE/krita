@@ -33,8 +33,6 @@ public:
     bool loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface) override;
     bool saveToDevice(QIODevice *dev) const override;
 
-    enumBrushType brushType() const override;
-
     QString defaultFileExtension() const override;
     void toXML(QDomDocument& d, QDomElement& e) const override;
 

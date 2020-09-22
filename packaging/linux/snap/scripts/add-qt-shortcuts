@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# Add a link to the real home directory of the user
+REALHOME=$(getent passwd $UID | cut -d ':' -f 6)
+home_dirname=$(basename "$REALHOME")
+SNAP_USER_DATA="$REALHOME/snap/krita/current"
+[[ -e  "$SNAP_USER_DATA/.shortcut-links" ]] || mkdir -p "$SNAP_USER_DATA/.shortcut-links"
+
+# Add a link to removable media
+if [[ ! -e "$SNAP_USER_DATA/.shortcut-links/removable-media" ]]; then
+  if [[ -e "/media/$USER" ]]; then
+    ln -s "/media/$USER" "$SNAP_USER_DATA/.shortcut-links/removable-media"
+  elif [[ -e "/run/media/$USER" ]]; then
+    ln -s "/run/media/$USER" "$SNAP_USER_DATA/.shortcut-links/removable-media"
+  fi
+fi
+
+# Add a link to mtp devices such as smartphones
+[[ -e  "$SNAP_USER_DATA/.shortcut-links/removable-devices" ]] || ln -s "/run/user/$UID/gvfs/" "$SNAP_USER_DATA/.shortcut-links/removable-devices"
+
+qtctl ensure-shortcuts "$REALHOME" "$(xdg-user-dir PICTURES)" "$SNAP_USER_DATA/.shortcut-links/removable-media" "$SNAP_USER_DATA/.shortcut-links/removable-devices" "/mnt"
+
+exec "$@"

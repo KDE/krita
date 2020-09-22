@@ -239,6 +239,10 @@ Q_SIGNALS:
     /// emitted when the window is migrated among different screens
     void screenChanged();
 
+    /// emitted when the current view has changed
+    void activeViewChanged();
+
+
 public Q_SLOTS:
 
 
@@ -477,12 +481,6 @@ private:
     QDockWidget* createDockWidget(KoDockFactoryBase* factory);
 
     bool openDocumentInternal(const QUrl &url, KisMainWindow::OpenFlags flags = 0);
-
-
-    /**
-     * Updates the window caption based on the document info and path.
-     */
-    void updateCaption(const QString & caption, bool modified);
 
     void saveWindowSettings();
 

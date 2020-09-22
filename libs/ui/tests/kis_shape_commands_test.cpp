@@ -25,7 +25,7 @@
 #include "kis_shape_layer.h"
 #include <KoPathShape.h>
 #include <KoColorBackground.h>
-#include "testutil.h"
+#include <testutil.h>
 
 #include <KisPart.h>
 #include <KisDocument.h>
@@ -34,6 +34,7 @@
 #include <KoShapeGroup.h>
 #include <KoShapeGroupCommand.h>
 #include <sdk/tests/testutil.h>
+#include <sdk/tests/testui.h>
 
 void KisShapeCommandsTest::testGrouping()
 {

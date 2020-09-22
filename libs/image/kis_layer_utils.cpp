@@ -125,8 +125,8 @@ namespace KisLayerUtils {
 
         KisNodeList allSrcNodes() override {
             KisNodeList mergedNodes;
-            mergedNodes << currLayer;
             mergedNodes << prevLayer;
+            mergedNodes << currLayer;
             return mergedNodes;
         }
     };
@@ -377,10 +377,11 @@ namespace KisLayerUtils {
 
             if (m_info->frames.size() > 0) {
                 m_info->dstNode->enableAnimation();
-                m_info->dstNode->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
+                m_info->dstNode->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true);
             }
 
             m_info->dstNode->setPinnedToTimeline(m_info->pinnedToTimeline);
+            m_info->dstNode->setColorLabelIndex(m_info->allSrcNodes().first()->colorLabelIndex());
 
             KisPaintLayer *dstPaintLayer = qobject_cast<KisPaintLayer*>(m_info->dstNode.data());
             if (dstPaintLayer) {
@@ -416,7 +417,7 @@ namespace KisLayerUtils {
 
             if (m_info->frames.size() > 0) {
                 m_info->dstNode->enableAnimation();
-                m_info->dstNode->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
+                m_info->dstNode->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true);
             }
 
 
@@ -460,6 +461,8 @@ namespace KisLayerUtils {
             m_info->nodesCompositingVaries = compositionVaries;
 
             m_info->dstNode->setPinnedToTimeline(m_info->pinnedToTimeline);
+            m_info->dstNode->setColorLabelIndex(m_info->allSrcNodes().first()->colorLabelIndex());
+
             dstPaintLayer->setOnionSkinEnabled(m_info->enableOnionSkins);
         }
 
@@ -689,6 +692,52 @@ namespace KisLayerUtils {
     };
 
 
+    void splitNonRemovableNodes(KisNodeList &nodesToRemove, KisNodeList &_nodesToHide)
+    {
+        QSet<KisNodeSP> nodesToHide;
+        QSet<KisNodeSP> extraNodesToRemove;
+
+        for (auto it = nodesToRemove.begin(); it != nodesToRemove.end(); ++it) {
+            KisNodeSP root = *it;
+            KIS_SAFE_ASSERT_RECOVER_NOOP(root->visible());
+
+            if (!root->isEditable(false)) {
+                nodesToHide.insert(root);
+            } else {
+                bool rootNeedsCarefulRemoval = false;
+
+                recursiveApplyNodes(root,
+                                    [root, &nodesToHide, &rootNeedsCarefulRemoval] (KisNodeSP node) {
+                                        if (!node->isEditable(false)) {
+                                            while (node != root) {
+                                                nodesToHide.insert(node);
+                                                node = node->parent();
+                                                KIS_SAFE_ASSERT_RECOVER_BREAK(node);
+                                            }
+                                            nodesToHide.insert(root);
+                                            rootNeedsCarefulRemoval = true;
+                                        }
+                                    });
+
+                if (rootNeedsCarefulRemoval) {
+                    recursiveApplyNodes(root,
+                                        [&extraNodesToRemove] (KisNodeSP node) {
+                                            extraNodesToRemove.insert(node);
+                                        });
+                }
+            }
+        }
+
+        nodesToRemove += extraNodesToRemove.toList();
+
+        KritaUtils::filterContainer<KisNodeList>(nodesToRemove,
+                                                 [nodesToHide](KisNodeSP node) {
+                                                     return !nodesToHide.contains(node);
+                                                 });
+
+        _nodesToHide = nodesToHide.toList();
+    }
+
     struct CleanUpNodes : private RemoveNodeHelper, public KisCommandUtils::AggregateCommand {
         CleanUpNodes(MergeDownInfoBaseSP info, KisNodeSP putAfter)
             : m_info(info), m_putAfter(putAfter) {}
@@ -789,16 +838,14 @@ namespace KisLayerUtils {
                 }
 
                 KisNodeList safeNodesToDelete = m_info->allSrcNodes();
-                for (KisNodeList::iterator it = safeNodesToDelete.begin(); it != safeNodesToDelete.end(); ++it) {
-                    KisNodeSP node = *it;
-                    if (node->userLocked() && node->visible()) {
-                        addCommand(new KisImageChangeVisibilityCommand(false, node));
-                    }
+                KisNodeList safeNodesToHide;
+
+                splitNonRemovableNodes(safeNodesToDelete, safeNodesToHide);
+
+                Q_FOREACH(KisNodeSP node, safeNodesToHide) {
+                    addCommand(new KisImageChangeVisibilityCommand(false, node));
                 }
 
-                KritaUtils::filterContainer<KisNodeList>(safeNodesToDelete, [](KisNodeSP node) {
-                  return !node->userLocked();
-                });
                 safeRemoveMultipleNodes(safeNodesToDelete, m_info->image);
             }
 
@@ -865,10 +912,10 @@ namespace KisLayerUtils {
 
         void populateChildCommands() override {
             KUndo2Command *cmd = new KisCommandUtils::SkipFirstRedoWrapper();
-            KisKeyframeChannel *channel = m_info->dstNode->getKeyframeChannel(KisKeyframeChannel::Content.id());
-            KisKeyframeSP keyframe = channel->addKeyframe(m_frame, cmd);
+            KisKeyframeChannel *channel = m_info->dstNode->getKeyframeChannel(KisKeyframeChannel::Raster.id());
+            channel->addKeyframe(m_frame, cmd);
 
-            applyKeyframeColorLabel(keyframe);
+            applyKeyframeColorLabel(channel->keyframeAt(m_frame));
 
             addCommand(cmd);
         }
@@ -893,13 +940,15 @@ namespace KisLayerUtils {
     };
 
     QSet<int> fetchLayerFrames(KisNodeSP node) {
-        KisKeyframeChannel *channel = node->getKeyframeChannel(KisKeyframeChannel::Content.id());
+        KisKeyframeChannel *channel = node->getKeyframeChannel(KisKeyframeChannel::Raster.id());
         if (!channel) return QSet<int>();
 
-        return channel->allKeyframeIds();
+        return channel->allKeyframeTimes();
     }
 
     QSet<int> fetchLayerFramesRecursive(KisNodeSP rootNode) {
+        if (!rootNode->visible()) return QSet<int>();
+
         QSet<int> frames = fetchLayerFrames(rootNode);
 
         KisNodeSP node = rootNode->firstChild();
@@ -1307,25 +1356,46 @@ namespace KisLayerUtils {
         emitSignals << ModifiedSignal;
         emitSignals << ComplexNodeReselectionSignal(KisNodeSP(), KisNodeList(), KisNodeSP(), mergedNodes);
 
-        KisProcessingApplicator applicator(image, 0,
-                                           KisProcessingApplicator::NONE,
-                                           emitSignals,
-                                           actionName);
 
 
         KisNodeList originalNodes = mergedNodes;
         KisNodeList invisibleNodes;
         mergedNodes = filterInvisibleNodes(originalNodes, &invisibleNodes, &putAfter);
 
-        if (!invisibleNodes.isEmpty() && !mergedNodes.isEmpty()) {
-            /* If the putAfter node is invisible,
-             * we should instead pick one of the nodes
-             * to be merged to avoid a null putAfter.
-             */
-            if (!putAfter->visible()){
-                putAfter = mergedNodes.first();
-            }
+        if (mergedNodes.isEmpty()) return;
 
+        /* If the putAfter node is invisible,
+         * we should instead pick one of the nodes
+         * to be merged to avoid a null putAfter.
+         */
+        if (!putAfter->visible()){
+            putAfter = mergedNodes.first();
+        }
+
+        // make sure we don't add the new layer into a locked group
+        KIS_SAFE_ASSERT_RECOVER_RETURN(putAfter->parent());
+        while (putAfter->parent() && !putAfter->parent()->isEditable()) {
+            putAfter = putAfter->parent();
+        }
+
+        /**
+         * We have reached the root of the layer hierarchy and didn't manage
+         * to find a node that was editable enough for putting our merged
+         * result into it. That whouldn't happen in normal circumstances,
+         * unless the user chose to make the root layer visible and lock
+         * it manually.
+         */
+        if (!putAfter->parent()) {
+            return;
+        }
+
+        KisProcessingApplicator applicator(image, 0,
+                                           KisProcessingApplicator::NONE,
+                                           emitSignals,
+                                           actionName);
+
+
+        if (!invisibleNodes.isEmpty()) {
             applicator.applyCommand(
                 new SimpleRemoveLayers(invisibleNodes,
                                        image),
@@ -1656,4 +1726,35 @@ namespace KisLayerUtils {
         return node;
     }
 
+    bool canChangeImageProfileInvisibly(KisImageSP image)
+    {
+        int numLayers = 0;
+        bool hasNonNormalLayers = false;
+        bool hasTransparentLayer = false;
+
+
+        recursiveApplyNodes(image->root(),
+            [&numLayers, &hasNonNormalLayers, &hasTransparentLayer, image] (KisNodeSP node) {
+                if (!node->inherits("KisLayer")) return;
+
+                numLayers++;
+
+                if (node->exactBounds().isEmpty()) return;
+
+                // this is only an approximation! it is not exact!
+                if (!hasTransparentLayer &&
+                    node->exactBounds() != image->bounds()) {
+
+                    hasTransparentLayer = true;
+                }
+
+                if (!hasNonNormalLayers &&
+                    node->compositeOpId() != COMPOSITE_OVER) {
+
+                    hasNonNormalLayers = true;
+                }
+            });
+
+        return numLayers == 1 || (!hasNonNormalLayers && !hasTransparentLayer);
+    }
 }

@@ -43,8 +43,7 @@ class KisCanvas2;
 class KisAction;
 
 
-/*
- * A customized titlebar for the Animation Timeline Docker that's
+/** @brief A customized titlebar for the Animation Timeline Docker that's
  * packed with useful widgets and menus.
  *
  * To avoid cluttering the UI, elements that are important to the
@@ -74,16 +73,19 @@ public:
     KisIntParseSpinBox *sbEndFrame;
     KisIntParseSpinBox *sbFrameRate;
     KisSliderSpinBox *sbSpeed;
-    QToolButton *btnAutoFrame;
+
     QToolButton *btnDropFrames;
+
+    QToolButton *btnAutoKey;
+    QAction *autoKeyBlank;
+    QAction *autoKeyDuplicate;
 
 private:
     const int MAX_FRAMES = 9999;
 };
 
 
-/*
- * Krita's Animation Timeline Docker.
+/** @brief Krita's Animation Timeline Docker.
  * This is the GUI heart of Krita's traditional animation workflow,
  * and is where artists can configure, edit, scrub and play their animation.
  *
@@ -98,7 +100,7 @@ public:
     TimelineDocker();
     ~TimelineDocker() override;
 
-    QString observerName() override { return "AnimationTimelineDocker"; }
+    QString observerName() override { return "TimelineDocker"; }
     void setCanvas(KoCanvasBase *canvas) override;
     void unsetCanvas() override;
     void setViewManager(KisViewManager *kisview) override;
@@ -119,7 +121,7 @@ public Q_SLOTS:
     void setFrameRate(int frmaerate);
     void setPlaybackSpeed(int playbackSpeed);
     void setDropFrames(bool dropFrames);
-    void setAutoKey(bool autoKey);
+    void setAutoKey(bool value);
 
     void handleClipRangeChange();
     void handleFrameRateChange();

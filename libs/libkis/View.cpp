@@ -128,12 +128,12 @@ void View::activateResource(Resource *resource)
     if (r.dynamicCast<KoPattern>()) {
         QVariant v;
         v.setValue<KoResourceSP>(r);
-        d->view->canvasBase()->resourceManager()->setResource(KisCanvasResourceProvider::CurrentPattern, v);
+        d->view->canvasBase()->resourceManager()->setResource(KoCanvasResource::CurrentPattern, v);
     }
     else if (r.dynamicCast<KoAbstractGradient>()) {
         QVariant v;
         v.setValue<KoResourceSP>(r);
-        d->view->canvasBase()->resourceManager()->setResource(KisCanvasResourceProvider::CurrentGradient, v);
+        d->view->canvasBase()->resourceManager()->setResource(KoCanvasResource::CurrentGradient, v);
     }
     else if (r.dynamicCast<KisPaintOpPreset>()) {
         d->view->viewManager()->paintOpBox()->resourceSelected(r);

@@ -318,7 +318,6 @@ void DefaultToolGeometryWidget::slotUpdateSizeBoxes(bool updateAspect)
     const QRectF bounds = calculateSelectionBounds(selection, anchor, useGlobalSize);
 
     const bool hasSizeConfiguration = !bounds.isNull();
-    const bool hasNullDimensions = bounds.isEmpty();
 
     widthSpinBox->setEnabled(hasSizeConfiguration && bounds.width() > 0);
     heightSpinBox->setEnabled(hasSizeConfiguration && bounds.height() > 0);
@@ -464,7 +463,7 @@ void DefaultToolGeometryWidget::showEvent(QShowEvent *event)
 
 void DefaultToolGeometryWidget::resourceChanged(int key, const QVariant &res)
 {
-    if (key == KoCanvasResourceProvider::Unit) {
+    if (key == KoCanvasResource::Unit) {
         setUnit(res.value<KoUnit>());
     } else if (key == DefaultTool::HotPosition) {
         positionSelector->setValue(KoFlake::AnchorPosition(res.toInt()));

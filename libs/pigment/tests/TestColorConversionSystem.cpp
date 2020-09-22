@@ -26,7 +26,7 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoColorConversionSystem.h>
 #include <KoColorModelStandardIds.h>
-#include <sdk/tests/kistest.h>
+#include <sdk/tests/testpigment.h>
 
 TestColorConversionSystem::TestColorConversionSystem()
 {

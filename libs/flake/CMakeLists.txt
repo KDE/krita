@@ -18,6 +18,7 @@ set(kritaflake_SRCS
     KoCanvasBase.cpp
     KoResourceManager_p.cpp
     KoDerivedResourceConverter.cpp
+    KoActiveCanvasResourceDependency.cpp
     KoResourceUpdateMediator.cpp
     KoCanvasResourceProvider.cpp
     KoDocumentResourceManager.cpp
@@ -209,6 +210,12 @@ set(kritaflake_SRCS
     FlakeDebug.cpp
     tests/MockShapes.cpp
 )
+
+if (SeExpr2_FOUND)
+    set(kritaflake_SRCS ${kritaflake_SRCS}
+        resources/KisSeExprScript.cpp
+    )
+endif()
 
 ki18n_wrap_ui(kritaflake_SRCS
     tools/PathToolOptionWidgetBase.ui

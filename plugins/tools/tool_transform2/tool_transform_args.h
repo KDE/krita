@@ -215,16 +215,26 @@ public:
         m_rotationCenterOffset = rotationCenterOffset;
     }
     void setTransformAroundRotationCenter(bool value);
+
     inline void setAX(double aX) {
-        KIS_ASSERT_RECOVER_NOOP(aX == normalizeAngle(aX));
+        KIS_SAFE_ASSERT_RECOVER(qFuzzyCompare(aX, normalizeAngle(aX))) {
+            aX = normalizeAngle(aX);
+        }
+
         m_aX = aX;
     }
     inline void setAY(double aY) {
-        KIS_ASSERT_RECOVER_NOOP(aY == normalizeAngle(aY));
+        KIS_SAFE_ASSERT_RECOVER(qFuzzyCompare(aY, normalizeAngle(aY))) {
+            aY = normalizeAngle(aY);
+        }
+
         m_aY = aY;
     }
     inline void setAZ(double aZ) {
-        KIS_ASSERT_RECOVER_NOOP(aZ == normalizeAngle(aZ));
+        KIS_SAFE_ASSERT_RECOVER(qFuzzyCompare(aZ, normalizeAngle(aZ))) {
+            aZ = normalizeAngle(aZ);
+        }
+
         m_aZ = aZ;
     }
     inline void setCameraPos(const QVector3D &pos) {

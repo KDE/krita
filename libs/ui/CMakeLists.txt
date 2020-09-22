@@ -49,8 +49,8 @@ set(kritaui_LIB_SRCS
     canvas/kis_snap_line_strategy.cpp
     canvas/KisSnapPointStrategy.cpp
     canvas/KisSnapPixelStrategy.cpp
-	canvas/KisMirrorAxisConfig.cpp
-	dialogs/kis_about_application.cpp
+    canvas/KisMirrorAxisConfig.cpp
+    dialogs/kis_about_application.cpp
     dialogs/kis_dlg_adj_layer_props.cc
     dialogs/kis_dlg_adjustment_layer.cc
     dialogs/kis_dlg_filter.cpp
@@ -278,6 +278,7 @@ set(kritaui_LIB_SRCS
     widgets/KisLayerStyleAngleSelector.cpp
     widgets/KisMemoryReportButton.cpp
     widgets/KisDitherWidget.cpp
+    widgets/KisWarningWidget.cpp
 
     KisPaletteEditor.cpp
     dialogs/KisDlgPaletteEditor.cpp
@@ -414,6 +415,12 @@ set(kritaui_LIB_SRCS
     KoDocumentInfoDlg.cpp
     KoDocumentInfo.cpp
 )
+
+if (SeExpr2_FOUND)
+    set(kritaui_LIB_SRCS ${kritaui_LIB_SRCS}
+        widgets/kis_seexpr_script_chooser.cpp
+    )
+endif()
 
 if(WIN32)
     # Private headers are needed for:

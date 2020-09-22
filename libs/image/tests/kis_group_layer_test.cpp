@@ -19,7 +19,7 @@
 #include "kis_group_layer_test.h"
 #include <QTest>
 
-#include "testutil.h"
+#include <testutil.h>
 
 #include <KoColor.h>
 

@@ -253,7 +253,7 @@ void KoToolBase::setStatusText(const QString &statusText)
     emit statusTextChanged(statusText);
 }
 
-uint KoToolBase::handleRadius() const
+int KoToolBase::handleRadius() const
 {
     Q_D(const KoToolBase);
     if (d->canvas
@@ -268,7 +268,15 @@ uint KoToolBase::handleRadius() const
     }
 }
 
-uint KoToolBase::grabSensitivity() const
+qreal KoToolBase::handleDocRadius() const
+{
+    Q_D(const KoToolBase);
+    const KoViewConverter * converter = d->canvas->viewConverter();
+    const QPointF doc = converter->viewToDocument(QPointF(handleRadius(), handleRadius()));
+    return qMax(doc.x(), doc.y());
+}
+
+int KoToolBase::grabSensitivity() const
 {
     Q_D(const KoToolBase);
     if(d->canvas->shapeController()->resourceManager())
@@ -344,6 +352,20 @@ KoToolSelection *KoToolBase::selection()
 
 void KoToolBase::repaintDecorations()
 {
+    Q_D(KoToolBase);
+
+    QRectF dirtyRect = d->lastDecorationsRect;
+    d->lastDecorationsRect = decorationsRect();
+    dirtyRect |= d->lastDecorationsRect;
+
+    if (!dirtyRect.isEmpty()) {
+        canvas()->updateCanvas(dirtyRect);
+    }
+}
+
+QRectF KoToolBase::decorationsRect() const
+{
+    return QRectF();
 }
 
 bool KoToolBase::isInTextMode() const

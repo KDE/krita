@@ -136,7 +136,7 @@ void KisVisualColorSelector::slotSetHSX(const QVector3D &hsx)
 
 void KisVisualColorSelector::setConfig(bool forceCircular, bool forceSelfUpdate)
 {
-    Q_UNUSED(forceSelfUpdate)
+    Q_UNUSED(forceSelfUpdate);
     m_d->circular = forceCircular;
 }
 
@@ -369,7 +369,7 @@ void KisVisualColorSelector::slotRebuildSelectors()
     qDeleteAll(children());
     m_d->widgetlist.clear();
     // TODO: Layout only used for monochrome selector currently, but always present
-    QLayout *layout = new QHBoxLayout;
+    QLayout *layout = new QHBoxLayout(this);
     //recreate all the widgets.
     m_d->model = KisVisualColorSelector::Channel;
 
@@ -558,7 +558,6 @@ void KisVisualColorSelector::slotRebuildSelectors()
         m_d->widgetlist.append(block2);
     }
 
-    this->setLayout(layout);
     // make sure we call "our" resize function
     KisVisualColorSelector::resizeEvent(0);
 

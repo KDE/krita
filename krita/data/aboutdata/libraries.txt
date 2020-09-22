@@ -28,6 +28,7 @@ PyQt,https://www.riverbankcomputing.com/software/pyqt/download5,GPLv3
 Python,http://www.python.org,Python Software Foundation License v2
 Qt,https://www.qt.io,GPLv2 + GPLv3 + LGPLv2.1 + LGPLv3
 Quazip,https://github.com/stachenov/quazip,LGPLv2.1
+SeExpr,https://wdas.github.io/SeExpr,Apache License Version 2.0
 SIP,https://www.riverbankcomputing.com/software/sip/download,GPLv3
 Vc,https://github.com/VcDevel/Vc,BSD
 zlib,http://www.zlib.net/,BSD

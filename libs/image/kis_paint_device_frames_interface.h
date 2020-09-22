@@ -57,7 +57,7 @@ public:
      * @param frameId ID of the frame to be copied
      * @param targetDevice paint device to copy to
      */
-    void fetchFrame(int frameId, KisPaintDeviceSP targetDevice);
+    void writeFrameToDevice(int frameId, KisPaintDeviceSP targetDevice);
 
     /**
      * Copy the given paint device contents into the specified frame

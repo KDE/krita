@@ -20,7 +20,10 @@
 
 #include <QTest>
 #include <kis_filter_configuration.h>
+
 #include <sdk/tests/testutil.h>
+#include <sdk/tests/testui.h>
+
 #include "ui_manager_test.h"
 
 class NodeManagerTester : public TestUtil::UiManagerTest

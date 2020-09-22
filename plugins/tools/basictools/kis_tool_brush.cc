@@ -192,7 +192,7 @@ void KisToolBrush::updateSmoothnessDistanceLabel()
         }
 
     } else {
-        m_lblSmoothnessDistance->setText(i18n("Distance:"));
+        m_lblSmoothnessDistance->setText(i18nc("Label of Distance value in Freehand brush tool's Weighted Smoothing mode", "Distance:"));
         m_sliderSmoothnessDistance->setRange(3.0, MAXIMUM_SMOOTHNESS_DISTANCE, 1);
         m_sliderSmoothnessDistance->setExponentRatio(3.0); // help pick smaller values
 

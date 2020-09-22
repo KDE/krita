@@ -32,6 +32,8 @@
 #include <kis_fill_painter.h>
 #include <kis_paint_layer.h>
 
+#include <sdk/tests/testui.h>
+
 void TestNode::testSetColorSpace()
 {
     KisImageSP image = new KisImage(0, 100, 100, KoColorSpaceRegistry::instance()->rgb8(), "test");
@@ -159,5 +161,5 @@ void TestNode::testMergeDown()
     delete n2;
 }
 
-QTEST_MAIN(TestNode)
+KISTEST_MAIN(TestNode)
 

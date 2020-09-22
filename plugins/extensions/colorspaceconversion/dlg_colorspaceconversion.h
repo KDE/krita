@@ -25,6 +25,7 @@
 #include <KoDialog.h>
 
 #include <KoID.h>
+#include "kis_types.h"
 
 #include "ui_wdgconvertcolorspace.h"
 
@@ -53,7 +54,7 @@ public:
     DlgColorSpaceConversion(QWidget * parent = 0, const char* name = 0);
     ~DlgColorSpaceConversion() override;
 
-    void setInitialColorSpace(const KoColorSpace *cs);
+    void setInitialColorSpace(const KoColorSpace *cs, KisImageSP entireImage);
 
     WdgConvertColorSpace * m_page;
 
@@ -62,6 +63,10 @@ public:
 public Q_SLOTS:
     void selectionChanged(bool);
     void okClicked();
+    void slotColorSpaceChanged(const KoColorSpace *cs);
+
+private:
+    KisImageSP m_image;
 };
 
 #endif // DLG_COLORSPACECONVERSION

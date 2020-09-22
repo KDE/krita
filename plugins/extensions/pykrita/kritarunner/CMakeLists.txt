@@ -14,7 +14,10 @@ set(kritarunner_SRCS main.cpp
 )
 
 add_executable(kritarunner ${kritarunner_SRCS})
-target_link_libraries(kritarunner 
+
+target_include_directories(kritarunner SYSTEM PUBLIC "${PYTHON_INCLUDE_DIRS}")
+
+target_link_libraries(kritarunner
                     PRIVATE
                       ${PYTHON_LIBRARY}
                       kritaui

@@ -44,6 +44,17 @@ void KisIconWidget::setResource(KoResourceSP resource)
     update();
 }
 
+QSize KisIconWidget::preferredIconSize() const
+{
+    const qint32 cw = width();
+    const qint32 ch = height();
+    const qint32 border = 3;
+    const qint32 iconWidth = cw - (border*2);
+    const qint32 iconHeight = ch - (border*2);
+
+    return QSize(iconWidth, iconHeight);
+}
+
 void KisIconWidget::paintEvent(QPaintEvent *event)
 {
     QPushButton::paintEvent(event);

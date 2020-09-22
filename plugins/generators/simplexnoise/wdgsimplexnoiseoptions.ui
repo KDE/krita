@@ -108,7 +108,7 @@
       </sizepolicy>
      </property>
      <property name="title">
-      <string>Ratio:</string>
+      <string comment="Ratio as in fill layer options">Ratio:</string>
      </property>
      <layout class="QHBoxLayout" name="ratio_layout">
       <item>

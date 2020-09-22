@@ -76,6 +76,8 @@ void KoTosContainer::paintComponent(QPainter &, KoShapePaintingContext &) const
 
 bool KoTosContainer::loadText(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
+    Q_UNUSED(element);
+    Q_UNUSED(context);
     return false;
 }
 

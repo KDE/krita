@@ -334,7 +334,6 @@ public:
 
     QColor globalAssistantsColor;
 
-    KisSharedPtr<KisReferenceImagesLayer> referenceImagesLayer;
     KisGridConfig gridConfig;
 
     StdLockableWrapper<QMutex> savingLock;
@@ -344,10 +343,12 @@ public:
     QPointer<KoUpdater> savingUpdater;
     QFuture<KisImportExportErrorCode> childSavingFuture;
     KritaUtils::ExportFileJob backgroundSaveJob;
+    KisSignalAutoConnectionsStore referenceLayerConnections;
 
     bool isRecovered = false;
 
     bool batchMode { false };
+    bool decorationsSyncingDisabled = false;
 
     QString documentStorageID {QUuid::createUuid().toString()};
     KisResourceStorageSP documentResourceStorage;
@@ -371,7 +372,7 @@ public:
 
 void KisDocument::Private::syncDecorationsWrapperLayerState()
 {
-    if (!this->image) return;
+    if (!this->image || this->decorationsSyncingDisabled) return;
 
     KisImageSP image = this->image;
     KisDecorationsWrapperLayerSP decorationsLayer =
@@ -537,7 +538,7 @@ KisDocument::KisDocument(bool addStorage)
     // preload the krita resources
     KisResourceServerProvider::instance();
 
-    d->shapeController = new KisShapeController(this, d->nserver);
+    d->shapeController = new KisShapeController(d->nserver, d->undoStack, this);
     d->koShapeController = new KoShapeController(0, d->shapeController);
     d->shapeController->resourceManager()->setGlobalShapeController(d->koShapeController);
 
@@ -555,6 +556,7 @@ KisDocument::~KisDocument()
 {
     // wait until all the pending operations are in progress
     waitForSavingToComplete();
+    d->imageIdleWatcher.setTrackedImage(0);
 
     /**
      * Push a timebomb, which will try to release the memory after
@@ -888,7 +890,9 @@ void KisDocument::copyFromDocument(const KisDocument &rhs)
 void KisDocument::copyFromDocumentImpl(const KisDocument &rhs, CopyPolicy policy)
 {
     if (policy == REPLACE) {
+        d->decorationsSyncingDisabled = true;
         d->copyFrom(*(rhs.d), this);
+        d->decorationsSyncingDisabled = false;
 
         d->undoStack->clear();
     } else {
@@ -897,7 +901,7 @@ void KisDocument::copyFromDocumentImpl(const KisDocument &rhs, CopyPolicy policy
         connect(d->undoStack, SIGNAL(cleanChanged(bool)), this, SLOT(slotUndoStackCleanChanged(bool)));
         connect(d->autoSaveTimer, SIGNAL(timeout()), this, SLOT(slotAutoSave()));
 
-        d->shapeController = new KisShapeController(this, d->nserver);
+        d->shapeController = new KisShapeController(d->nserver, d->undoStack, this);
         d->koShapeController = new KoShapeController(0, d->shapeController);
         d->shapeController->resourceManager()->setGlobalShapeController(d->koShapeController);
     }
@@ -913,12 +917,17 @@ void KisDocument::copyFromDocumentImpl(const KisDocument &rhs, CopyPolicy policy
             d->image->copyFromImage(*(rhs.d->image));
             d->image->unlock();
             rhs.d->image->unlock();
+
             setCurrentImage(d->image, /* forceInitialUpdate = */ true);
         } else {
             // clone the image with keeping the GUIDs of the layers intact
             // NOTE: we expect the image to be locked!
             setCurrentImage(rhs.image()->clone(/* exactCopy = */ true), /* forceInitialUpdate = */ false);
         }
+    }
+
+    if (policy == REPLACE) {
+        d->syncDecorationsWrapperLayerState();
     }
 
     if (rhs.d->preActivatedNode) {
@@ -938,7 +947,14 @@ void KisDocument::copyFromDocumentImpl(const KisDocument &rhs, CopyPolicy policy
 
     // reinitialize references' signal connection
     KisReferenceImagesLayerSP referencesLayer = this->referenceImagesLayer();
-    setReferenceImagesLayer(referencesLayer, false);
+    if (referencesLayer) {
+        d->referenceLayerConnections.clear();
+        d->referenceLayerConnections.addConnection(
+            referencesLayer, SIGNAL(sigUpdateCanvas(QRectF)),
+            this, SIGNAL(sigReferenceImagesChanged()));
+
+        emit sigReferenceImagesLayerChanged(referencesLayer);
+    }
 
     KisDecorationsWrapperLayerSP decorationsLayer =
         KisLayerUtils::findNodeByType<KisDecorationsWrapperLayer>(d->image->root());
@@ -2213,13 +2229,13 @@ void KisDocument::setReferenceImagesLayer(KisSharedPtr<KisReferenceImagesLayer> 
 {
     KisReferenceImagesLayerSP currentReferenceLayer = referenceImagesLayer();
 
-    if (currentReferenceLayer == layer) {
+    // updateImage=false inherently means we are not changing the
+    // reference images layer, but just would like to update its signals.
+    if (currentReferenceLayer == layer && updateImage) {
         return;
     }
 
-    if (currentReferenceLayer) {
-        currentReferenceLayer->disconnect(this);
-    }
+    d->referenceLayerConnections.clear();
 
     if (updateImage) {
         if (currentReferenceLayer) {
@@ -2234,8 +2250,9 @@ void KisDocument::setReferenceImagesLayer(KisSharedPtr<KisReferenceImagesLayer> 
     currentReferenceLayer = layer;
 
     if (currentReferenceLayer) {
-        connect(currentReferenceLayer, SIGNAL(sigUpdateCanvas(QRectF)),
-                this, SIGNAL(sigReferenceImagesChanged()));
+        d->referenceLayerConnections.addConnection(
+            currentReferenceLayer, SIGNAL(sigUpdateCanvas(QRectF)),
+            this, SIGNAL(sigReferenceImagesChanged()));
     }
 
     emit sigReferenceImagesLayerChanged(layer);

@@ -35,7 +35,7 @@
 
 #include <FlakeDebug.h>
 #include "kis_debug.h"
-#include <sdk/tests/kistest.h>
+#include <sdk/tests/testflake.h>
 
 void TestKoShapeRegistry::testGetKoShapeRegistryInstance()
 {

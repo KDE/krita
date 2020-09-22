@@ -21,12 +21,16 @@
 
 #include <kis_types.h>
 #include <kritaui_export.h>
+#include "kis_pointer_utils.h"
 
 class KoResource;
 using KoResourceSP = QSharedPointer<KoResource>;
 
 class KisResourcesInterface;
 using KisResourcesInterfaceSP = QSharedPointer<KisResourcesInterface>;
+
+class KoCanvasResourcesInterface;
+using KoCanvasResourcesInterfaceSP = QSharedPointer<KoCanvasResourcesInterface>;
 
 /**
  * This is a special base class for all the options that load/save
@@ -45,23 +49,70 @@ using KisResourcesInterfaceSP = QSharedPointer<KisResourcesInterface>;
  * it atm, but we still can create a special interface for accepting raw pointers,
  * which will be used automatically, when 'this' is passed.
  */
+class KRITAUI_EXPORT KisPaintopPropertiesCanvasResourcesBase
+{
+public:
+    virtual ~KisPaintopPropertiesCanvasResourcesBase();
+
+    template <typename KisPropertiesConfigurationPointer>
+    void readOptionSetting(KisPropertiesConfigurationPointer settings, KisResourcesInterfaceSP resourcesInterface, KoCanvasResourcesInterfaceSP canvasResourcesInterface)
+    {
+        readOptionSettingResourceImpl(removeSharedPointer(settings), resourcesInterface, canvasResourcesInterface);
+    }
+
+    template <typename KisPropertiesConfigurationPointer>
+    void writeOptionSetting(KisPropertiesConfigurationPointer settings) const
+    {
+        writeOptionSettingImpl(removeSharedPointer(settings));
+    }
+
+    template <typename KisPropertiesConfigurationPointer>
+    QList<KoResourceSP> prepareLinkedResources(const KisPropertiesConfigurationPointer settings, KisResourcesInterfaceSP resourcesInterface) const
+    {
+        return prepareLinkedResourcesImpl(removeSharedPointer(settings), resourcesInterface);
+    }
+
+    template <typename KisPropertiesConfigurationPointer>
+    QList<KoResourceSP> prepareEmbeddedResources(const KisPropertiesConfigurationPointer settings, KisResourcesInterfaceSP resourcesInterface) const
+    {
+        return prepareEmbeddedResourcesImpl(removeSharedPointer(settings), resourcesInterface);
+    }
+
+protected:
+    virtual void readOptionSettingResourceImpl(const KisPropertiesConfiguration *settings, KisResourcesInterfaceSP resourcesInterface, KoCanvasResourcesInterfaceSP canvasResourcesInterface) = 0;
+    virtual void writeOptionSettingImpl(KisPropertiesConfiguration *settings) const = 0;
+    virtual QList<KoResourceSP> prepareLinkedResourcesImpl(const KisPropertiesConfiguration *settings, KisResourcesInterfaceSP resourcesInterface) const = 0;
+    virtual QList<KoResourceSP> prepareEmbeddedResourcesImpl(const KisPropertiesConfiguration *settings, KisResourcesInterfaceSP resourcesInterface) const = 0;
+};
 
 class KRITAUI_EXPORT KisPaintopPropertiesResourcesBase
 {
 public:
     virtual ~KisPaintopPropertiesResourcesBase();
 
-    void readOptionSetting(KisPropertiesConfigurationSP settings, KisResourcesInterfaceSP resourcesInterface);
-    void writeOptionSetting(KisPropertiesConfigurationSP setting) const;
+    template <typename KisPropertiesConfigurationPointer>
+    void readOptionSetting(KisPropertiesConfigurationPointer settings, KisResourcesInterfaceSP resourcesInterface)
+    {
+        readOptionSettingResourceImpl(removeSharedPointer(settings), resourcesInterface);
+    }
 
-    void readOptionSetting(const KisPropertiesConfiguration *settings, KisResourcesInterfaceSP resourcesInterface);
-    void writeOptionSetting(KisPropertiesConfiguration *settings) const;
+    template <typename KisPropertiesConfigurationPointer>
+    void writeOptionSetting(KisPropertiesConfigurationPointer settings) const
+    {
+        writeOptionSettingImpl(removeSharedPointer(settings));
+    }
 
-    QList<KoResourceSP> prepareLinkedResources(const KisPropertiesConfigurationSP settings, KisResourcesInterfaceSP resourcesInterface) const;
-    QList<KoResourceSP> prepareLinkedResources(const KisPropertiesConfiguration *settings, KisResourcesInterfaceSP resourcesInterface) const;
+    template <typename KisPropertiesConfigurationPointer>
+    QList<KoResourceSP> prepareLinkedResources(const KisPropertiesConfigurationPointer settings, KisResourcesInterfaceSP resourcesInterface) const
+    {
+        return prepareLinkedResourcesImpl(removeSharedPointer(settings), resourcesInterface);
+    }
 
-    QList<KoResourceSP> prepareEmbeddedResources(const KisPropertiesConfigurationSP settings, KisResourcesInterfaceSP resourcesInterface) const;
-    QList<KoResourceSP> prepareEmbeddedResources(const KisPropertiesConfiguration *settings, KisResourcesInterfaceSP resourcesInterface) const;
+    template <typename KisPropertiesConfigurationPointer>
+    QList<KoResourceSP> prepareEmbeddedResources(const KisPropertiesConfigurationPointer settings, KisResourcesInterfaceSP resourcesInterface) const
+    {
+        return prepareEmbeddedResourcesImpl(removeSharedPointer(settings), resourcesInterface);
+    }
 
 
 protected:
@@ -71,19 +122,27 @@ protected:
     virtual QList<KoResourceSP> prepareEmbeddedResourcesImpl(const KisPropertiesConfiguration *settings, KisResourcesInterfaceSP resourcesInterface) const = 0;
 };
 
-class KRITAUI_EXPORT KisPaintopPropertiesBase : public KisPaintopPropertiesResourcesBase
+class KRITAUI_EXPORT KisPaintopPropertiesBase /*: public KisPaintopPropertiesResourcesBase*/
 {
 public:
-    void readOptionSetting(KisPropertiesConfigurationSP settings);
-    void readOptionSetting(const KisPropertiesConfiguration *settings);
+    virtual ~KisPaintopPropertiesBase();
 
-private:
-    void readOptionSettingResourceImpl(const KisPropertiesConfiguration *settings, KisResourcesInterfaceSP resourcesInterface) override final;
-    QList<KoResourceSP> prepareLinkedResourcesImpl(const KisPropertiesConfiguration *settings, KisResourcesInterfaceSP resourcesInterface) const override final;
-    QList<KoResourceSP> prepareEmbeddedResourcesImpl(const KisPropertiesConfiguration *settings, KisResourcesInterfaceSP resourcesInterface) const override final;
+    template <typename KisPropertiesConfigurationPointer>
+    void readOptionSetting(KisPropertiesConfigurationPointer settings)
+    {
+        readOptionSettingImpl(removeSharedPointer(settings));
+    }
+
+    template <typename KisPropertiesConfigurationPointer>
+    void writeOptionSetting(KisPropertiesConfigurationPointer settings) const
+    {
+        writeOptionSettingImpl(removeSharedPointer(settings));
+
+    }
 
 protected:
     virtual void readOptionSettingImpl(const KisPropertiesConfiguration *settings) = 0;
+    virtual void writeOptionSettingImpl(KisPropertiesConfiguration *settings) const = 0;
 };
 
 #endif // KISBASEOPTION_H

@@ -539,7 +539,12 @@ void KisAnimCurvesDocker::slotNodeActivated(KisNodeSP node)
             node->supportsKeyframeChannel(KisKeyframeChannel::PositionX.id()) |
             node->supportsKeyframeChannel(KisKeyframeChannel::PositionY.id()) |
             node->supportsKeyframeChannel(KisKeyframeChannel::ScaleX.id()) |
-            node->supportsKeyframeChannel(KisKeyframeChannel::ScaleY.id());
+            node->supportsKeyframeChannel(KisKeyframeChannel::ScaleY.id()) |
+            node->supportsKeyframeChannel(KisKeyframeChannel::ShearX.id()) |
+            node->supportsKeyframeChannel(KisKeyframeChannel::ShearY.id()) |
+            node->supportsKeyframeChannel(KisKeyframeChannel::RotationX.id()) |
+            node->supportsKeyframeChannel(KisKeyframeChannel::RotationY.id()) |
+            node->supportsKeyframeChannel(KisKeyframeChannel::RotationZ.id());
     m_d->titlebar->btnAddKey->setEnabled(supported);
 }
 
@@ -611,6 +616,26 @@ void KisAnimCurvesDocker::slotAddAllEnabledKeys()
 
     if (node->supportsKeyframeChannel(KisKeyframeChannel::ScaleY.id())) {
         addKeyframe(KisKeyframeChannel::ScaleY.id());
+    }
+
+    if (node->supportsKeyframeChannel(KisKeyframeChannel::ShearX.id())) {
+        addKeyframe(KisKeyframeChannel::ShearX.id());
+    }
+
+    if (node->supportsKeyframeChannel(KisKeyframeChannel::ShearY.id())) {
+        addKeyframe(KisKeyframeChannel::ShearY.id());
+    }
+
+    if (node->supportsKeyframeChannel(KisKeyframeChannel::RotationX.id())) {
+        addKeyframe(KisKeyframeChannel::RotationX.id());
+    }
+
+    if (node->supportsKeyframeChannel(KisKeyframeChannel::RotationY.id())) {
+        addKeyframe(KisKeyframeChannel::RotationY.id());
+    }
+
+    if (node->supportsKeyframeChannel(KisKeyframeChannel::RotationZ.id())) {
+        addKeyframe(KisKeyframeChannel::RotationZ.id());
     }
 }
 

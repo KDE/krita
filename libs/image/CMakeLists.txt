@@ -206,6 +206,7 @@ set(kritaimage_LIB_SRCS
    kis_update_time_monitor.cpp
    KisImageConfigNotifier.cpp
    kis_group_layer.cc
+   kis_external_layer_iface.cc
    kis_count_visitor.cpp
    kis_histogram.cc
    kis_image_interfaces.cpp

@@ -34,7 +34,7 @@ class KUndo2Command;
    A base interface for layers that are implemented outside the Krita
    core.
  */
-class KisExternalLayer : public KisLayer
+class KRITAIMAGE_EXPORT KisExternalLayer : public KisLayer
 {
 
 public:
@@ -45,8 +45,7 @@ public:
         return KisIconUtils::loadIcon("view-refresh");
     }
 
-    virtual void resetCache() {
-    }
+    virtual void resetCache();
 
     virtual KUndo2Command* crop(const QRect & rect) {
         Q_UNUSED(rect);

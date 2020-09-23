@@ -89,11 +89,7 @@ private:
     KisAirbrushOptionProperties m_airbrushOption;
     QRect                     m_dstDabRect;
     KisFixedPaintDeviceSP     m_maskDab;
-    KisFixedPaintDeviceSP     m_canvasDab;
-    KisFixedPaintDeviceSP     m_canvasSrc;
-    KisFixedPaintDeviceSP     m_mixedDab;
     KisFixedPaintDeviceSP     m_origDab;
-    KisFixedPaintDeviceSP     m_origDabCopy;
     QPointF                   m_lastPaintPos;
 
     KoColorTransformation *m_hsvTransform {0};

@@ -47,10 +47,6 @@ KisColorSmudgeOp::KisColorSmudgeOp(const KisPaintOpSettingsSP settings, KisPaint
     , m_smudgeRadiusOption()
     , m_maskDab (new KisFixedPaintDevice(KoColorSpaceRegistry::instance()->alpha8()))
     , m_origDab(new KisFixedPaintDevice(m_tempDev->colorSpace()))
-    , m_origDabCopy(new KisFixedPaintDevice(m_tempDev->colorSpace()))
-    , m_canvasDab(new KisFixedPaintDevice(m_tempDev->colorSpace()))
-    , m_canvasSrc(new KisFixedPaintDevice(m_tempDev->colorSpace()))
-    , m_mixedDab(new KisFixedPaintDevice(m_tempDev->colorSpace()))
 {
     Q_UNUSED(node);
 
@@ -95,12 +91,14 @@ KisColorSmudgeOp::KisColorSmudgeOp(const KisPaintOpSettingsSP settings, KisPaint
         m_useNewEngine = m_smudgeRateOption.getUseNewEngine();
     }
 
-
-    QString finalCompositeOpId = m_smudgeRateOption.getSmearAlpha() ? COMPOSITE_COPY : COMPOSITE_OVER;
     if (m_useNewEngine){
-        finalCompositeOpId = COMPOSITE_COPY;
+        m_finalPainter->setCompositeOp(COMPOSITE_COPY);
+        m_smudgePainter->setCompositeOp(m_smudgeRateOption.getSmearAlpha() ? COMPOSITE_COPY : COMPOSITE_OVER);
+    } else {
+        m_finalPainter->setCompositeOp(m_smudgeRateOption.getSmearAlpha() ? COMPOSITE_COPY : COMPOSITE_OVER);
+        m_smudgePainter->setCompositeOp(COMPOSITE_OVER);
     }
-    m_finalPainter->setCompositeOp(finalCompositeOpId);
+
     m_finalPainter->setSelection(painter->selection());
     m_finalPainter->setChannelFlags(painter->channelFlags());
     m_finalPainter->copyMirrorInformationFrom(painter);
@@ -168,7 +166,6 @@ void KisColorSmudgeOp::updateMask(const KisPaintInformation& info, const KisDabS
             &m_dstDabRect,
             lightnessStrength);
 
-        *m_origDabCopy.data() = *m_origDab.data();
         m_maskDab->setRect(m_origDab->bounds());
         m_maskDab->initialize();
         int numPixels = m_maskDab->bounds().width() * m_maskDab->bounds().height();
@@ -222,68 +219,40 @@ void KisColorSmudgeOp::mixSmudgePaintAt(const KisPaintInformation& info, KisPrec
     qint32 width = dabBounds.width();
     qint32 height = dabBounds.height();
 
-    bool smearAlpha = m_smudgeRateOption.getSmearAlpha();
-
     const KoColorSpace* preciseCS = m_tempDev->colorSpace();
 
-    m_canvasDab->setRect(dabBounds);
-    m_canvasDab->initialize();
-    quint8* canvasDabPtr = m_canvasDab->data();
-
-    m_canvasSrc->setRect(dabBounds);
-    m_canvasSrc->initialize();
-
-    m_mixedDab->setRect(dabBounds);
-    m_mixedDab->initialize();
-
-    qreal colorRate = m_colorRateOption.isChecked() ? m_colorRateOption.computeSizeLikeValue(info) : 0.0;
-    qreal smudgeLength = m_smudgeRateOption.isChecked() ? m_smudgeRateOption.computeSizeLikeValue(info) : 1.0;
+    const qreal colorRate = m_colorRateOption.isChecked() ? m_colorRateOption.computeSizeLikeValue(info) : 0.0;
+    const qreal smudgeLength = m_smudgeRateOption.isChecked() ? m_smudgeRateOption.computeSizeLikeValue(info) : 1.0;
     const qreal fpOpacity = m_opacityOption.getOpacityf(info);
 
-    qreal dullingFactor = smudgeLength * 0.8 * fpOpacity;
-
-    int colorAlpha = qRound(colorRate * colorRate * fpOpacity * 255.0);
-    int smudgeAlpha = qRound(smudgeLength * fpOpacity * 255.0);
-    int numPixels = width * height;
+    const int colorAlpha = qRound(colorRate * colorRate * fpOpacity * 255.0);
+    const int smudgeAlpha = qRound(smudgeLength * fpOpacity * 255.0);
+    const int dullingAlpha = qRound(smudgeLength * 0.8 * fpOpacity * 255.0);
 
     activeWrapper.readRect(m_dstDabRect); //copy the current data in the destination
-    activeWrapper.preciseDevice()->readBytes(m_canvasSrc->data(), m_dstDabRect); //to m_canvasSrc
 
     if (useDullingMode) {
         KoColor dullingFillColor = getDullingFillColor(info, activeWrapper, canvasLocalSamplePoint);
-        if (smearAlpha) {
-            dullingFillColor.convertTo(preciseCS); //convert to mix with background
-            preciseCS->mixColorsOp()->mixArrayWithColor(m_canvasSrc->data(), dullingFillColor.data(), numPixels, dullingFactor, canvasDabPtr);
-            m_backgroundPainter->bltFixed(0, 0, m_canvasDab, 0, 0, width, height);//composite_copy mixed bg/dullingfillcolor to m_tempDev
-        } else {
-            dullingFillColor.setOpacity(dullingFactor * dullingFillColor.opacityF());
-            m_backgroundPainter->bltFixed(0, 0, m_canvasSrc, 0, 0, width, height); //draw background on tempDev
-            m_smudgePainter->fill(0, 0, m_dstDabRect.width(), m_dstDabRect.height(), dullingFillColor);//composite_over dullingfillcolor on bg in tempDev
-        }
+        dullingFillColor.convertTo(preciseCS); //convert to mix with background
+        m_smudgePainter->setOpacity(dullingAlpha);
+        m_smudgePainter->fill(0, 0, m_dstDabRect.width(), m_dstDabRect.height(), dullingFillColor);//composite_over dullingfillcolor on bg in tempDev
     }
     else {
-        //if overlay mode is checked, copy all layers at source to m_canvasDab 
+        m_smudgePainter->setOpacity(smudgeAlpha);
+
         if (m_image && m_overlayModeOption.isChecked()) {
             m_image->blockUpdates();
-            m_image->projection()->readBytes(canvasDabPtr, srcDabRect);
+            m_smudgePainter->bitBlt(QPoint(), m_image->projection(), srcDabRect);
             m_image->unblockUpdates();
         }
         else { //else copy just the layer at source to m_canvasDab
             activeWrapper.readRect(srcDabRect);
-            activeWrapper.preciseDevice()->readBytes(canvasDabPtr, srcDabRect);
-        }
-        if (smearAlpha) {//always use COMPOSITE_COPY for finalPainter, so we do smearAlpha here
-            preciseCS->mixColorsOp()->mixTwoColorArrays(m_canvasSrc->data(), canvasDabPtr, numPixels, smudgeLength * fpOpacity, canvasDabPtr);
-            m_backgroundPainter->bltFixed(0, 0, m_canvasDab, 0, 0, width, height);
-        }
-        else {//else composite_over canvasDabPtr on m_canvasSrc
-            m_backgroundPainter->bltFixed(0, 0, m_canvasSrc.data(), 0, 0, width, height);
-            preciseCS->multiplyAlpha(canvasDabPtr, smudgeAlpha, numPixels);
-            m_smudgePainter->bltFixed(0, 0, m_canvasDab, 0, 0, width, height);
+            m_smudgePainter->bitBlt(QPoint(), activeWrapper.preciseDevice(), srcDabRect);
         }
     }
-    preciseCS->multiplyAlpha(m_origDabCopy->data(), colorAlpha, numPixels);
-    m_colorRatePainter->bltFixed(0, 0, m_origDabCopy, 0, 0, width, height);
+
+    m_colorRatePainter->setOpacity(colorAlpha);
+    m_colorRatePainter->bltFixed(0, 0, m_origDab, 0, 0, width, height);
 
     m_precisePainterWrapper.readRects(m_finalPainter->calculateAllMirroredRects(m_dstDabRect));
 

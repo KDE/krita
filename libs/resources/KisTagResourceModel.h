@@ -60,7 +60,7 @@ public:
         ResourceName
     };
 
-// QAbstractItemModel API
+    // QAbstractItemModel API
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
@@ -68,7 +68,7 @@ public:
     /// Note: only role is significant, column is not.
     QVariant data(const QModelIndex &index, int role) const override;
 
-// Abstract Tag API
+    // Abstract Tag API
     bool tagResource(const KisTagSP tag, const KoResourceSP resource) override;
     bool untagResource(const KisTagSP tag, const KoResourceSP resource) override;
 
@@ -133,7 +133,7 @@ public:
     void setTagsFilter(const QVector<KisTagSP> tags);
     void setResourcesFilter(const QVector<KoResourceSP> resources);
 
-// KisAbstractTagResourceModel API
+    // KisAbstractTagResourceModel API
 
     bool tagResource(const KisTagSP tag, const KoResourceSP resource) override;
     bool untagResource(const KisTagSP tag, const KoResourceSP resource) override;

@@ -231,6 +231,8 @@ void KisColorSmudgeOp::mixSmudgePaintAt(const KisPaintInformation& info, KisPrec
 
     activeWrapper.readRect(m_dstDabRect); //copy the current data in the destination
 
+    m_backgroundPainter->bitBlt(QPoint(), activeWrapper.preciseDevice(), m_dstDabRect);
+
     if (useDullingMode) {
         KoColor dullingFillColor = getDullingFillColor(info, activeWrapper, canvasLocalSamplePoint);
         dullingFillColor.convertTo(preciseCS); //convert to mix with background

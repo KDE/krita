@@ -932,6 +932,8 @@ if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/po OR EXISTS ${CMAKE_CURRENT_BINARY_DIR}/p
   ki18n_install(po)
 endif()
 
+# ECM passes this to Qt, which was already capable of detecting it..
+set (ANDROID_SDK_COMPILE_API "android-28")
 
 if(DEFINED QTANDROID_EXPORTED_TARGET AND NOT TARGET "create-apk")
     set (_CMAKE_ANDROID_DIR "${ECM_DIR}/../toolchain")

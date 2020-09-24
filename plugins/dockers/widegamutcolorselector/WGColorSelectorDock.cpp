@@ -65,6 +65,8 @@ WGColorSelectorDock::WGColorSelectorDock()
     // Quick settings menu
     QMenu *configureMenu = new QMenu();
     WGQuickSettingsWidget *qsw = new WGQuickSettingsWidget(this, m_selector);
+    // prevents hover indicator being stuck on other menu entries
+    qsw->setMouseTracking(true);
     QWidgetAction *quickSettingAction = new QWidgetAction(configBtn);
     quickSettingAction->setDefaultWidget(qsw);
     configureMenu->addAction(quickSettingAction);

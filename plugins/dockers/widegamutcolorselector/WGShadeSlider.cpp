@@ -74,6 +74,8 @@ void WGShadeSlider::mousePressEvent(QMouseEvent *event)
             emit sigChannelValuesChanged(channelValues());
             update();
         }
+    } else {
+        event->ignore();
     }
 }
 
@@ -86,6 +88,8 @@ void WGShadeSlider::mouseMoveEvent(QMouseEvent *event)
             emit sigChannelValuesChanged(channelValues());
             update();
         }
+    } else {
+        event->ignore();
     }
 }
 
@@ -93,6 +97,8 @@ void WGShadeSlider::mouseReleaseEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton) {
         emit sigInteraction(false);
+    } else {
+        event->ignore();
     }
 }
 

@@ -29,6 +29,9 @@ public:
 
     static QVector<LineConfig> loadConfiguration();
     void updateSettings();
+protected:
+    void mousePressEvent(QMouseEvent *event) override;
+
 public Q_SLOTS:
     void slotChannelValuesChanged(const QVector4D &values);
 private Q_SLOTS:
@@ -43,6 +46,7 @@ private:
     KisVisualColorModel *m_model;
     QVector<WGShadeSlider *> m_sliders;
     int m_lineHeight {10};
+    bool m_resetOnRightClick {true};
     bool m_allowUpdates {true};
 };
 

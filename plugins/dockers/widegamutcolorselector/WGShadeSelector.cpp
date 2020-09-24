@@ -6,9 +6,12 @@
 
 #include "WGShadeSelector.h"
 
-#include <WGShadeSlider.h>
+#include "WGShadeSlider.h"
+
+#include <KisVisualColorModel.h>
 
 #include <QVBoxLayout>
+#include <QMouseEvent>
 
 WGShadeSelector::WGShadeSelector(KisVisualColorModel *selector, QWidget *parent)
     : QWidget(parent)
@@ -52,6 +55,15 @@ void WGShadeSelector::updateSettings()
     for (int i=0; i < config.size(); i++) {
         m_sliders[i]->setGradient(config[i].gradient);
         m_sliders[i]->setFixedHeight(m_lineHeight);
+    }
+}
+
+void WGShadeSelector::mousePressEvent(QMouseEvent *event)
+{
+    if (m_resetOnRightClick && event->button() == Qt::RightButton) {
+        for (int i = 0; i < m_sliders.size(); i++) {
+            m_sliders[i]->slotSetChannelValues(m_model->channelValues());
+        }
     }
 }
 

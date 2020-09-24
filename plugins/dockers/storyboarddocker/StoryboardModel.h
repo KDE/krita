@@ -223,7 +223,7 @@ private Q_SLOTS:
 
     void slotKeyframeAdded(const KisKeyframeChannel *channel, int time);
     void slotKeyframeRemoved(const KisKeyframeChannel *channel, int time);
-    void slotKeyframeMoved(KisKeyframeSP, int);
+    void slotKeyframeMoved(const KisKeyframeChannel* channel, int from, int to);
     void slotNodeRemoved(KisNodeSP node);
 
     /**

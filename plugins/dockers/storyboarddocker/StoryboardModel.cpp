@@ -554,8 +554,8 @@ void StoryboardModel::setImage(KisImageWSP image)
             this, SLOT(slotKeyframeAdded(const KisKeyframeChannel*,int)), Qt::UniqueConnection);
     connect(m_image->animationInterface(), SIGNAL(sigKeyframeRemoved(const KisKeyframeChannel*,int)),
             this, SLOT(slotKeyframeRemoved(const KisKeyframeChannel*,int)), Qt::UniqueConnection);
-    //connect(m_image->animationInterface(), SIGNAL(sigKeyframeMoved(KisKeyframeSP, int)),
-    //        this, SLOT(slotKeyframeMoved(KisKeyframeSP, int)), Qt::UniqueConnection);
+    connect(m_image->animationInterface(), SIGNAL(sigKeyframeMoved(const KisKeyframeChannel*, int, int)),
+            this, SLOT(slotKeyframeMoved(const KisKeyframeChannel*, int, int)), Qt::UniqueConnection);
 
     //for selection sync with timeline
     slotCurrentFrameChanged(m_image->animationInterface()->currentUITime());
@@ -846,6 +846,7 @@ void StoryboardModel::slotKeyframeAdded(const KisKeyframeChannel* channel, int t
     if (!indexFromFrame(time).isValid() && !isLocked()) {
         int frame = time;
         int prevItemRow = lastIndexBeforeFrame(frame).row();
+        ENTER_FUNCTION() << ppVar(prevItemRow) << ppVar(frame);
         insertRows(prevItemRow + 1, 1);
         setData (index (StoryboardItem::FrameNumber, 0, index(prevItemRow + 1, 0)), frame);
 
@@ -874,47 +875,50 @@ void StoryboardModel::slotKeyframeRemoved(const KisKeyframeChannel *channel, int
     }
 }
 
-void StoryboardModel::slotKeyframeMoved(KisKeyframeSP keyframe, int from)
+void StoryboardModel::slotKeyframeMoved(const KisKeyframeChannel* channel, int from, int to)
 {
-//    QModelIndex fromIndex = indexFromFrame(from);
-//    if (fromIndex.isValid()) {
-//        //check whether there are keyframes at the "from" time in other nodes
-//        bool onlyKeyframe = isOnlyKeyframe(keyframe->channel()->node().toStrongRef(), from);
+    KisKeyframeSP keyframe = channel->keyframeAt(to);
+    KIS_ASSERT(keyframe);
 
-//        int toItemRow = lastIndexBeforeFrame(keyframe->time()).row();
-//        QModelIndex destinationIndex = indexFromFrame(keyframe->time());
+    QModelIndex fromIndex = indexFromFrame(from);
+    if (fromIndex.isValid()) {
+        //check whether there are keyframes at the "from" time in other nodes
+        bool onlyKeyframe = isOnlyKeyframe(channel->node().toStrongRef(), from);
 
-//        if (onlyKeyframe && !destinationIndex.isValid()) {
-//            setData(index(StoryboardItem::FrameNumber, 0, fromIndex), keyframe->time());
-//            moveRows(QModelIndex(), fromIndex.row(), 1, QModelIndex(), toItemRow + 1);
+        int toItemRow = lastIndexBeforeFrame(to).row();
+        QModelIndex destinationIndex = indexFromFrame(to);
 
-//            updateDurationData(indexFromFrame(keyframe->time()));
-//            updateDurationData(lastIndexBeforeFrame(keyframe->time()));
+        if (onlyKeyframe && !destinationIndex.isValid()) {
+            setData(index(StoryboardItem::FrameNumber, 0, fromIndex), to);
+            moveRows(QModelIndex(), fromIndex.row(), 1, QModelIndex(), toItemRow + 1);
 
-//            QModelIndex newFromIndex = lastIndexBeforeFrame(from);
-//            updateDurationData(newFromIndex);
-//        }
-//        else if (onlyKeyframe && destinationIndex.isValid()) {
-//            removeRows(fromIndex.row(), 1);
+            updateDurationData(indexFromFrame(to));
+            updateDurationData(lastIndexBeforeFrame(to));
 
-//            QModelIndex beforeFromIndex = lastIndexBeforeFrame(from);
-//            updateDurationData(beforeFromIndex);
-//        }
-//        else if (!destinationIndex.isValid()) {
-//            insertRows(toItemRow + 1, 1);
-//            destinationIndex = index(toItemRow + 1, 0);
-//            setData(index(StoryboardItem::FrameNumber, 0, destinationIndex), keyframe->time());
+            QModelIndex newFromIndex = lastIndexBeforeFrame(from);
+            updateDurationData(newFromIndex);
+        }
+        else if (onlyKeyframe && destinationIndex.isValid()) {
+            removeRows(fromIndex.row(), 1);
 
-//            QModelIndex fromIndex = indexFromFrame(from);
-//            for (int i=1; i < rowCount(destinationIndex); i++) {
-//                setData(index(i, 0, destinationIndex), index(i, 0, fromIndex).data());
-//            }
+            QModelIndex beforeFromIndex = lastIndexBeforeFrame(from);
+            updateDurationData(beforeFromIndex);
+        }
+        else if (!destinationIndex.isValid()) {
+            insertRows(toItemRow + 1, 1);
+            destinationIndex = index(toItemRow + 1, 0);
+            setData(index(StoryboardItem::FrameNumber, 0, destinationIndex), to);
 
-//            updateDurationData(indexFromFrame(keyframe->time()));
-//            updateDurationData(lastIndexBeforeFrame(keyframe->time()));
-//        }
-//        slotUpdateThumbnailForFrame(keyframe->time());
-//    }
+            QModelIndex fromIndex = indexFromFrame(from);
+            for (int i=1; i < rowCount(destinationIndex); i++) {
+                setData(index(i, 0, destinationIndex), index(i, 0, fromIndex).data());
+            }
+
+            updateDurationData(indexFromFrame(to));
+            updateDurationData(lastIndexBeforeFrame(to));
+        }
+        slotUpdateThumbnailForFrame(to);
+    }
 }
 
 void StoryboardModel::slotNodeRemoved(KisNodeSP node)

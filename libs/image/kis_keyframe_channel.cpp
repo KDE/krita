@@ -491,6 +491,8 @@ void KisKeyframeChannel::bindChannelToAnimationInterface(KisImageWSP image)
     if (image && image->animationInterface()) {
         connect(this, SIGNAL(sigAddedKeyframe(const KisKeyframeChannel*, int)), image->animationInterface(), SIGNAL(sigKeyframeAdded(const KisKeyframeChannel*, int)), Qt::UniqueConnection);
         connect(this, SIGNAL(sigRemovingKeyframe(const KisKeyframeChannel*,int)), image->animationInterface(), SIGNAL(sigKeyframeRemoved(const KisKeyframeChannel*, int)), Qt::UniqueConnection);
+        connect(this, SIGNAL(sigMovedKeyframe(const KisKeyframeChannel*,int,int)), image->animationInterface(), SIGNAL(sigKeyframeMoved(const KisKeyframeChannel*, int, int)), Qt::UniqueConnection);
+
     }
 }
 
@@ -499,5 +501,6 @@ void KisKeyframeChannel::unbindChannelToAnimationInterface(KisImageWSP image)
     if (image && image->animationInterface()) {
         disconnect(this, SIGNAL(sigAddedKeyframe(const KisKeyframeChannel*, int)), image->animationInterface(), SIGNAL(sigKeyframeAdded(const KisKeyframeChannel*, int)));
         disconnect(this, SIGNAL(sigRemovingKeyframe(const KisKeyframeChannel*,int)), image->animationInterface(), SIGNAL(sigKeyframeRemoved(const KisKeyframeChannel*, int)));
+        disconnect(this, SIGNAL(sigMovedKeyframe(const KisKeyframeChannel*,int,int)), image->animationInterface(), SIGNAL(sigKeyframeMoved(const KisKeyframeChannel*,int,int)));
     }
 }

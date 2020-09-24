@@ -160,7 +160,7 @@ Q_SIGNALS:
     /** @brief This signal is emitted just BEFORE a keyframe is removed from the channel. */
     void sigRemovingKeyframe(const KisKeyframeChannel *channel, int time);
 
-    /** @brief Tracks channel's internal movement of keyframes. */
+    /** @brief This signal is emitted just AFTER a keyframe was moved within the channel. */
     void sigMovedKeyframe(const KisKeyframeChannel *channel, int from, int to);
 
 protected:

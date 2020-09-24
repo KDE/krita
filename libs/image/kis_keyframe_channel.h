@@ -73,7 +73,6 @@ public:
     /** @brief Remove a keyframe from the channel at the specified time. */
     virtual void removeKeyframe(int time, KUndo2Command *parentUndoCmd = nullptr);
 
-    // Inter-channel operations..
     /** @brief Move a keyframe across channel(s) at the specified times. */
     static void moveKeyframe(KisKeyframeChannel *sourceChannel, int sourceTime, KisKeyframeChannel *targetChannel, int targetTime, KUndo2Command* parentUndoCmd = nullptr);
 
@@ -160,6 +159,9 @@ Q_SIGNALS:
 
     /** @brief This signal is emitted just BEFORE a keyframe is removed from the channel. */
     void sigRemovingKeyframe(const KisKeyframeChannel *channel, int time);
+
+    /** @brief Tracks channel's internal movement of keyframes. */
+    void sigMovedKeyframe(const KisKeyframeChannel *channel, int from, int to);
 
 protected:
     typedef QMap<int, KisKeyframeSP> TimeKeyframeMap;

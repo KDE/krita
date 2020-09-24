@@ -73,10 +73,12 @@ void KisKeyframingTest::testChannelSignals()
     QSignalSpy spyUpdated(channel, SIGNAL(sigChannelUpdated(KisTimeSpan, QRect)));
     QSignalSpy spyAdded(channel, SIGNAL(sigAddedKeyframe(const KisKeyframeChannel*,int)));
     QSignalSpy spyRemoving(channel, SIGNAL(sigRemovingKeyframe(const KisKeyframeChannel*,int)));
+    QSignalSpy spyMoved(channel, SIGNAL(sigMovedKeyframe(const KisKeyframeChannel*,int,int)));
 
     QVERIFY(spyUpdated.isValid());
     QVERIFY(spyAdded.isValid());
     QVERIFY(spyRemoving.isValid());
+    QVERIFY(spyMoved.isValid());
 
     int updateSignalCount = spyUpdated.count();
 
@@ -91,11 +93,11 @@ void KisKeyframingTest::testChannelSignals()
     updateSignalCount = spyUpdated.count();
 
     {    // Moving a keyframe (7->11)..
+        int originalMoveSignalCount = spyMoved.count();
         channel->moveKeyframe(7, 11);
 
         QVERIFY(spyUpdated.count() > updateSignalCount);
-
-        // No-op move (no signals) ...why?
+        QVERIFY(spyMoved.count() == originalMoveSignalCount + 1);
     }
 
     updateSignalCount = spyUpdated.count();

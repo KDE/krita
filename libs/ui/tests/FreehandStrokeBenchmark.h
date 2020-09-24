@@ -26,6 +26,7 @@ private Q_SLOTS:
     void testStampTip();
 
     void testColorsmudgeDefaultTip();
+    void testColorsmudgeDefaultTipNew();
 };
 
 #endif // FREEHANDSTROKEBENCHMARK_H

@@ -143,4 +143,9 @@ void FreehandStrokeBenchmark::testColorsmudgeDefaultTip()
     benchmarkBrush("testing_200px_colorsmudge_default.kpp");
 }
 
+void FreehandStrokeBenchmark::testColorsmudgeDefaultTipNew()
+{
+    benchmarkBrush("testing_200px_colorsmudge_default_new.kpp");
+}
+
 KISTEST_MAIN(FreehandStrokeBenchmark)

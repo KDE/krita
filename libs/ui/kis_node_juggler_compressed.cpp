@@ -832,6 +832,11 @@ void KisNodeJugglerCompressed::startTimers()
 
 void KisNodeJugglerCompressed::slotUpdateTimeout()
 {
+    // The juggler could have been already finished explicitly
+    // by slotEndStrokeRequested(). In such a case the final updates
+    // will be issued by the last command of the stroke.
+
+    if (!m_d->updateData) return;
     m_d->updateData->processUnhandledUpdates();
 }
 

@@ -150,6 +150,7 @@ void KisWdgSeExpr::slotResourceSelected(KoResource *r)
     KisSeExprScript *g = static_cast<KisSeExprScript *>(r);
     if (g) {
         // ALWAYS have a manageable copy of the preset
+        // this is required for detecting dirty presets and reloading
         m_currentPreset = g->clone();
 
         m_isCreatingPresetFromScratch = false;
@@ -290,7 +291,7 @@ void KisWdgSeExpr::slotReloadPresetClicked()
     if (preset) {
         preset->load();
 
-        KIS_ASSERT(!m_currentPreset->isDirty());
+        KIS_ASSERT(!preset->isDirty());
 
         slotResourceSelected(preset);
     }

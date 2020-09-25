@@ -218,6 +218,12 @@ void KisMyPaintShadeSelector::paintEvent(QPaintEvent *) {
 void KisMyPaintShadeSelector::mousePressEvent(QMouseEvent* e)
 {
     e->setAccepted(false);
+
+    if(rect().contains(e->pos())) {
+        KoColor color(Acs::pickColor(m_realPixelCache, e->pos()));
+        this->updateColorPreview(color);
+    }
+
     KisColorSelectorBase::mousePressEvent(e);
 }
 

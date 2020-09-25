@@ -860,7 +860,11 @@ KisNodeSP KisKraLoader::loadFileLayer(const KoXmlElement& element, KisImageSP im
     QFileInfo info(documentPath);
     QString basePath = info.absolutePath();
 
+#ifndef Q_OS_ANDROID
     QString fullPath = QDir(basePath).filePath(QDir::cleanPath(filename));
+#else
+    QString fullPath = filename;
+#endif
     if (!QFileInfo(fullPath).exists()) {
 
         qApp->setOverrideCursor(Qt::ArrowCursor);

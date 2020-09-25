@@ -1,4 +1,4 @@
-From d327fc5ac59fb55f5d21d7353c806301b117583e Mon Sep 17 00:00:00 2001
+From 84d69dcf7fd488be462efd88b81c560bc9eb2964 Mon Sep 17 00:00:00 2001
 From: Sharaf Zaman <sharafzaz121@gmail.com>
 Date: Mon, 21 Sep 2020 12:05:19 +0000
 Subject: [PATCH] Android: Workarounds to explicitly handle content URIs
@@ -7,18 +7,30 @@ On Android we can't reliably get fileName, suffix etc
 from the Uri of the path, so we need to use ContentResolver
 to handle them explicitly for such Uris
 ---
- src/corelib/io/qfileinfo.cpp                  | 20 ++++++++++++++++---
- src/corelib/io/qurl.cpp                       | 18 +++++++++++++++++
- .../android/androidcontentfileengine.cpp      | 10 ++++++++++
+ src/corelib/io/qfileinfo.cpp                  | 25 ++++++++++++++++---
+ src/corelib/io/qurl.cpp                       | 18 +++++++++++++
+ .../android/androidcontentfileengine.cpp      | 10 ++++++++
  .../android/androidcontentfileengine.h        |  1 +
- .../qandroidplatformfiledialoghelper.cpp      |  6 ++----
- 5 files changed, 48 insertions(+), 7 deletions(-)
+ .../qandroidplatformfiledialoghelper.cpp      |  6 ++---
+ 5 files changed, 53 insertions(+), 7 deletions(-)
 
 diff --git a/src/corelib/io/qfileinfo.cpp b/src/corelib/io/qfileinfo.cpp
-index 189b704b51..f14c0591d4 100644
+index 189b704b51..2c427b5d0d 100644
 --- a/src/corelib/io/qfileinfo.cpp
 +++ b/src/corelib/io/qfileinfo.cpp
-@@ -758,7 +758,7 @@ QString QFileInfo::fileName() const
+@@ -592,6 +592,11 @@ QString QFileInfo::absolutePath() const
+     if (d->isDefaultConstructed) {
+         return QLatin1String("");
+     }
++#ifdef Q_OS_ANDROID
++    if (d->fileEntry.filePath().startsWith(QLatin1String("content://")) && d->fileEngine) {
++        return QLatin1String("");
++    }
++#endif
+     return d->getFileName(QAbstractFileEngine::AbsolutePathName);
+ }
+ 
+@@ -758,7 +763,7 @@ QString QFileInfo::fileName() const
      if (d->isDefaultConstructed)
          return QLatin1String("");
  #ifdef Q_OS_ANDROID
@@ -27,7 +39,7 @@ index 189b704b51..f14c0591d4 100644
          QString fname = d->fileEngine->fileName();
          return fname;
      }
-@@ -807,6 +807,12 @@ QString QFileInfo::baseName() const
+@@ -807,6 +812,12 @@ QString QFileInfo::baseName() const
      Q_D(const QFileInfo);
      if (d->isDefaultConstructed)
          return QLatin1String("");
@@ -40,7 +52,7 @@ index 189b704b51..f14c0591d4 100644
      return d->fileEntry.baseName();
  }
  
-@@ -845,6 +851,12 @@ QString QFileInfo::completeSuffix() const
+@@ -845,6 +856,12 @@ QString QFileInfo::completeSuffix() const
      Q_D(const QFileInfo);
      if (d->isDefaultConstructed)
          return QLatin1String("");
@@ -53,7 +65,7 @@ index 189b704b51..f14c0591d4 100644
      return d->fileEntry.completeSuffix();
  }
  
-@@ -870,8 +882,10 @@ QString QFileInfo::suffix() const
+@@ -870,8 +887,10 @@ QString QFileInfo::suffix() const
          return QLatin1String("");
  
  #ifdef Q_OS_ANDROID

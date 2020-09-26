@@ -22,17 +22,18 @@ class WGSelectorConfigGrid : public QWidget
 {
     Q_OBJECT
 public:
-    explicit WGSelectorConfigGrid(QWidget *parent = nullptr);
+    explicit WGSelectorConfigGrid(QWidget *parent = nullptr, bool multiSelect = false);
 
     void clear();
     QIcon currentIcon() const;
     KisColorSelectorConfiguration currentConfiguration() const;
+    QVector<KisColorSelectorConfiguration> selectedConfigurations() const;
     void setColorModel(KisVisualColorModel::ColorModel model);
     void setConfigurations(const QVector<KisColorSelectorConfiguration> &configurations);
     void setChecked(const KisColorSelectorConfiguration &configuration);
     QIcon generateIcon(const KisColorSelectorConfiguration &configuration, qreal pixelRatio = 1.0) const;
 
-    static QVector<KisColorSelectorConfiguration> hueBasedconfigurations();
+    static QVector<KisColorSelectorConfiguration> hueBasedConfigurations();
 private Q_SLOTS:
     void slotActionTriggered(QAction *action);
 Q_SIGNALS:

@@ -42,6 +42,7 @@ private Q_SLOTS:
 private:
     QScopedPointer<Ui::WGConfigWidget> m_ui;
     WGSelectorConfigGrid *m_selectorConfigGrid;
+    WGSelectorConfigGrid *m_favoriteConfigGrid;
 };
 
 

@@ -19,6 +19,7 @@ class KisSignalCompressor;
 class KisVisualColorSelector;
 class WGColorPatches;
 class WGColorPreviewPopup;
+class WGQuickSettingsWidget;
 class WGShadeSelector;
 class QVariant;
 
@@ -52,6 +53,7 @@ private:
     WGColorPreviewPopup *m_previewPopup {0};
     WGShadeSelector *m_shadeSelector {0};
     WGColorPatches *m_history {0};
+    WGQuickSettingsWidget *m_quickSettings {0};
     bool m_pendingFgUpdate {false};
     bool m_pendingBgUpdate {false};
     KoColor m_fgColor;

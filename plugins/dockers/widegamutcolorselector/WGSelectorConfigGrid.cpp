@@ -32,13 +32,13 @@ private:
     KisColorSelectorConfiguration m_config;
 };
 
-WGSelectorConfigGrid::WGSelectorConfigGrid(QWidget *parent)
+WGSelectorConfigGrid::WGSelectorConfigGrid(QWidget *parent, bool multiSelect)
     : QWidget(parent)
     , m_layout(new QGridLayout(this))
     , m_actionGroup(new QActionGroup(this))
     , m_selector(new KisVisualColorSelector(this))
 {
-    m_actionGroup->setExclusive(true);
+    m_actionGroup->setExclusive(!multiSelect);
     connect(m_actionGroup, SIGNAL(triggered(QAction*)), SLOT(slotActionTriggered(QAction*)));
 
     m_selector->setGeometry(0, 0, m_iconSize, m_iconSize);
@@ -71,6 +71,19 @@ KisColorSelectorConfiguration WGSelectorConfigGrid::currentConfiguration() const
         }
     }
     return KisColorSelectorConfiguration();
+}
+
+QVector<KisColorSelectorConfiguration> WGSelectorConfigGrid::selectedConfigurations() const
+{
+    QVector<KisColorSelectorConfiguration> configurations;
+    const QList<QAction*> actions = m_actionGroup->actions();
+    for (QAction *action: actions) {
+        SelectorConfigAction *sa = dynamic_cast<SelectorConfigAction *>(action);
+        if (sa && sa->isChecked()) {
+            configurations.append(sa->configuration());
+        }
+    }
+    return configurations;
 }
 
 void WGSelectorConfigGrid::setColorModel(KisVisualColorModel::ColorModel model)
@@ -131,7 +144,7 @@ QIcon WGSelectorConfigGrid::generateIcon(const KisColorSelectorConfiguration &co
     return QIcon(pixmap);
 }
 
-QVector<KisColorSelectorConfiguration> WGSelectorConfigGrid::hueBasedconfigurations()
+QVector<KisColorSelectorConfiguration> WGSelectorConfigGrid::hueBasedConfigurations()
 {
     using KCSC = KisColorSelectorConfiguration;
     QVector<KCSC> configs;

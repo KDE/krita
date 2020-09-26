@@ -64,11 +64,11 @@ WGColorSelectorDock::WGColorSelectorDock()
 
     // Quick settings menu
     QMenu *configureMenu = new QMenu();
-    WGQuickSettingsWidget *qsw = new WGQuickSettingsWidget(this, m_selector);
+    m_quickSettings = new WGQuickSettingsWidget(this, m_selector);
     // prevents hover indicator being stuck on other menu entries
-    qsw->setMouseTracking(true);
+    m_quickSettings->setMouseTracking(true);
     QWidgetAction *quickSettingAction = new QWidgetAction(configBtn);
-    quickSettingAction->setDefaultWidget(qsw);
+    quickSettingAction->setDefaultWidget(m_quickSettings);
     configureMenu->addAction(quickSettingAction);
     QAction *cfgAction = configureMenu->addAction("Configure...");
     connect(cfgAction, SIGNAL(triggered(bool)), SLOT(slotOpenSettings()));
@@ -155,6 +155,7 @@ void WGColorSelectorDock::slotConfigurationChanged()
     m_selector->selectorModel()->setColorModel(static_cast<KisVisualColorModel::ColorModel>(cfg.readEntry("rgbColorModel", 0)));
     KisColorSelectorConfiguration selectorCfg(cfg.readEntry("colorSelectorConfiguration", "3|0|6|0")); // triangle selector
     m_selector->setConfiguration(&selectorCfg);
+    m_quickSettings->loadConfiguration();
 }
 
 void WGColorSelectorDock::slotDisplayConfigurationChanged()

@@ -7,6 +7,7 @@
 #include "WGQuickSettingsWidget.h"
 
 #include "ui_WdgQuickSettings.h"
+#include "WGConfig.h"
 #include "WGSelectorConfigGrid.h"
 
 #include <KisVisualColorSelector.h>
@@ -29,15 +30,7 @@ WGQuickSettingsWidget::WGQuickSettingsWidget(QWidget *parent, KisVisualColorSele
     connect(m_modelGroup, SIGNAL(idToggled(int,bool)), SLOT(slotColorGroupToggled(int,bool)));
 
     m_selectorConf = new WGSelectorConfigGrid(this);
-    // test configuration
-    QVector<KisColorSelectorConfiguration> confs;
-    confs.append(KisColorSelectorConfiguration(KisColorSelectorConfiguration::Triangle, KisColorSelectorConfiguration::Ring, KisColorSelectorConfiguration::SV, KisColorSelectorConfiguration::H));
-    confs.append(KisColorSelectorConfiguration(KisColorSelectorConfiguration::Square, KisColorSelectorConfiguration::Ring, KisColorSelectorConfiguration::SV, KisColorSelectorConfiguration::H));
-    confs.append(KisColorSelectorConfiguration(KisColorSelectorConfiguration::Wheel, KisColorSelectorConfiguration::Slider, KisColorSelectorConfiguration::VH, KisColorSelectorConfiguration::hsvS));
-    m_selectorConf->setConfigurations(confs);
-    if (layout()) {
-        layout()->addWidget(m_selectorConf);
-    }
+    m_ui->verticalLayout->addWidget(m_selectorConf);
     connect(m_selectorConf, SIGNAL(sigConfigSelected(KisColorSelectorConfiguration)),
             SLOT(slotConfigSelected(KisColorSelectorConfiguration)));
 }
@@ -45,6 +38,12 @@ WGQuickSettingsWidget::WGQuickSettingsWidget(QWidget *parent, KisVisualColorSele
 WGQuickSettingsWidget::~WGQuickSettingsWidget()
 {
     delete m_ui;
+}
+
+void WGQuickSettingsWidget::loadConfiguration()
+{
+    WGConfig cfg;
+    m_selectorConf->setConfigurations(cfg.favoriteConfigurations());
 }
 
 void WGQuickSettingsWidget::showEvent(QShowEvent *event)

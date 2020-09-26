@@ -23,6 +23,7 @@ class WGQuickSettingsWidget : public QWidget
 public:
     explicit WGQuickSettingsWidget(QWidget *parent = 0, KisVisualColorSelector *selector = 0);
     ~WGQuickSettingsWidget() override;
+    void loadConfiguration();
 
 protected:
     void showEvent(QShowEvent *event) override;

@@ -7,12 +7,14 @@
 #include "WGColorSelectorSettings.h"
 #include "ui_WdgWGSelectorSettings.h"
 
+#include "WGConfig.h"
 #include "WGSelectorConfigGrid.h"
 
 #include "kis_config.h"
 
 #include <QVBoxLayout>
 #include <QDialogButtonBox>
+#include <QStringList>
 #include <QPushButton>
 
 WGColorSelectorSettings::WGColorSelectorSettings(QWidget *parent)
@@ -21,13 +23,16 @@ WGColorSelectorSettings::WGColorSelectorSettings(QWidget *parent)
 {
     m_ui->setupUi(this);
     m_selectorConfigGrid = new WGSelectorConfigGrid;
-    m_selectorConfigGrid->setConfigurations(WGSelectorConfigGrid::hueBasedconfigurations());
+    m_selectorConfigGrid->setConfigurations(WGSelectorConfigGrid::hueBasedConfigurations());
     m_ui->btnSelectorShape->setPopupWidget(m_selectorConfigGrid);
     connect(m_selectorConfigGrid, SIGNAL(sigConfigSelected(KisColorSelectorConfiguration)),
             SLOT(slotSetSelectorConfiguration(KisColorSelectorConfiguration)));
     connect(m_selectorConfigGrid, SIGNAL(sigConfigSelected(KisColorSelectorConfiguration)),
             m_ui->btnSelectorShape, SLOT(hidePopupWidget()));
     connect(m_ui->cmbColorModel, SIGNAL(currentIndexChanged(int)), SLOT(slotSetColorModel(int)));
+    m_favoriteConfigGrid = new WGSelectorConfigGrid(0, true);
+    m_favoriteConfigGrid->setConfigurations(WGSelectorConfigGrid::hueBasedConfigurations());
+    m_ui->btnFavoriteSelectors->setPopupWidget(m_favoriteConfigGrid);
 }
 
 WGColorSelectorSettings::~WGColorSelectorSettings()
@@ -61,20 +66,25 @@ QString WGColorSelectorSettings::stringID()
 
 void WGColorSelectorSettings::savePreferences() const
 {
-    KConfigGroup cfg = KSharedConfig::openConfig()->group(stringID());
+    WGConfig cfg(false);
     cfg.writeEntry("renderMode", m_ui->cmbSelectorRenderingMode->currentIndex());
     cfg.writeEntry("rgbColorModel", m_ui->cmbColorModel->currentIndex() +  KisVisualColorModel::HSV);
     cfg.writeEntry("colorSelectorConfiguration", m_selectorConfigGrid->currentConfiguration().toString());
+    cfg.setFavoriteConfigurations(m_favoriteConfigGrid->selectedConfigurations());
 }
 
 void WGColorSelectorSettings::loadPreferences()
 {
-    KConfigGroup cfg = KSharedConfig::openConfig()->group(stringID());
+    WGConfig cfg;
     m_ui->cmbSelectorRenderingMode->setCurrentIndex(cfg.readEntry("renderMode", 1));
     m_ui->cmbColorModel->setCurrentIndex(cfg.readEntry("rgbColorModel", 2) - KisVisualColorModel::HSV);
-    KisColorSelectorConfiguration selectorCfg(cfg.readEntry("colorSelectorConfiguration", "3|0|6|0")); // triangle selector
+    KisColorSelectorConfiguration selectorCfg(cfg.readEntry<QString>("colorSelectorConfiguration", "3|0|6|0")); // triangle selector
     m_selectorConfigGrid->setChecked(selectorCfg);
     m_ui->btnSelectorShape->setIcon(m_selectorConfigGrid->generateIcon(selectorCfg));
+    QVector<KisColorSelectorConfiguration> favoriteConfigs = cfg.favoriteConfigurations();
+    for (const KisColorSelectorConfiguration &fav: favoriteConfigs) {
+        m_favoriteConfigGrid->setChecked(fav);
+    }
 }
 
 void WGColorSelectorSettings::loadDefaultPreferences()

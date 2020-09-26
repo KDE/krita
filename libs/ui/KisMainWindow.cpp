@@ -1281,11 +1281,13 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExpo
         QUrl newURL = QUrl::fromUserInput(dialog.filename());
 
         if (newURL.isLocalFile()) {
+#ifndef Q_OS_ANDROID
             QString fn = newURL.toLocalFile();
             if (QFileInfo(fn).completeSuffix().isEmpty()) {
                 fn.append(KisMimeDatabase::suffixesForMimeType(nativeFormat).first());
                 newURL = QUrl::fromLocalFile(fn);
             }
+#endif
         }
 
         if (document->documentInfo()->aboutInfo("title") == i18n("Unnamed")) {

@@ -182,7 +182,8 @@ void KoFileDialog::createFileDialog()
         d->fileDialog->setFileMode(QFileDialog::AnyFile);
 
 #ifdef Q_OS_ANDROID
-        d->fileDialog->setWindowTitle(d->proposedFileName);
+        // HACK: discovered by looking into the code
+        d->fileDialog->setWindowTitle(d->proposedFileName.isEmpty() ? "Untitled.kra" : d->proposedFileName);
 #endif
     }
     else { // open / import

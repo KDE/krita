@@ -291,6 +291,7 @@ set(kritaimage_LIB_SRCS
    kis_selection_filters.cpp
    KisProofingConfiguration.h
    KisRecycleProjectionsJob.cpp
+   kis_selection_component.cc
 
    kis_keyframe.cpp
    kis_keyframe_channel.cpp

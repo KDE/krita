@@ -50,6 +50,7 @@
 #include "kis_layer_projection_plane.h"
 #include "kis_node_graph_listener.h"
 #include "kis_transaction.h"
+#include "kis_group_layer.h"
 
 class KisScratchPadNodeListener : public KisNodeGraphListener
 {
@@ -63,7 +64,6 @@ public:
         KisNodeGraphListener::requestProjectionUpdate(node, rects, resetAnimationCache);
 
         QMutexLocker locker(&m_lock);
-
         Q_FOREACH (const QRect &rc, rects) {
             m_scratchPad->imageUpdated(rc);
         }
@@ -146,7 +146,7 @@ KisScratchPad::~KisScratchPad()
     delete m_infoBuilder;
 
     delete m_undoAdapter;
-    delete m_undoStore;
+   // delete m_undoStore;
     delete m_updateScheduler;
     delete m_nodeListener;
 }
@@ -262,7 +262,7 @@ void KisScratchPad::beginStroke(KoPointerEvent *event)
 
     m_helper->initPaint(event,
                         documentToWidget().map(event->point),
-                        0,
+                        m_paintLayer->image(),
                         0,
                         m_updateScheduler,
                         m_paintLayer,
@@ -431,9 +431,16 @@ void KisScratchPad::setupScratchPad(KisCanvasResourceProvider* resourceProvider,
     KisPaintDeviceSP paintDevice =
         new KisPaintDevice(m_defaultColor.colorSpace(), "scratchpad");
 
-    m_paintLayer = new KisPaintLayer(0, "ScratchPad", OPACITY_OPAQUE_U8, paintDevice);
+    m_image = new KisImage(m_undoStore, paintDevice->exactBounds().width(), paintDevice->exactBounds().height(), paintDevice->colorSpace(), "Scratch Pad Image");
+
+    m_paintLayer = new KisPaintLayer(m_image, "ScratchPad", OPACITY_OPAQUE_U8, paintDevice);
+    m_image->addNode(m_paintLayer, m_image->root());
+
     m_paintLayer->setGraphListener(m_nodeListener);
+    m_image->rootLayer()->setGraphListener(m_nodeListener);
+
     m_paintLayer->paintDevice()->setDefaultBounds(new KisScratchPadDefaultBounds(this));
+    m_image->refreshGraph();
 
     fillDefault();
 }

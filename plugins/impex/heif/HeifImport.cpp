@@ -94,43 +94,137 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
         // decode primary image
 
         heif::ImageHandle handle = ctx.get_primary_image_handle();
-        heif::Image heifimage = handle.decode_image(heif_colorspace_RGB, heif_chroma_444);
 
-        int width =handle.get_width();
-        int height=handle.get_height();
+
+        // Get the colorprofile. Default to sRGB if no profile is available.
+        const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+        KoID colorModel = colorSpace->colorModelId();
+        KoID colorDepth = colorSpace->colorDepthId();
+
+        heif::Image heifimage = handle.decode_image(heif_colorspace_undefined, heif_chroma_undefined);
+        heif_colorspace heifModel = heifimage.get_colorspace();
+        heif_chroma heifChroma = heifimage.get_chroma_format();
+        qDebug() << "loading heif" << heifModel << heifChroma << handle.get_luma_bits_per_pixel();
+
+        if (heifModel == heif_colorspace_monochrome) {
+            // Grayscale image.
+            colorModel = GrayAColorModelID;
+            if (heifChroma == heif_chroma_monochrome) {
+                colorSpace = KoColorSpaceRegistry::instance()->graya8();
+            }
+        } else if (heifModel == heif_colorspace_RGB) {
+            // RGB
+            colorModel = RGBAColorModelID;
+            if (handle.get_luma_bits_per_pixel() == 8) {
+                colorDepth = Integer8BitsColorDepthID;
+            } else {
+                colorDepth = Integer16BitsColorDepthID;
+            }
+        } else {
+            // YCrCb, we default back to the old code.
+            qDebug() << "YCrCb image, loading as planar RGB";
+            heifimage = handle.decode_image(heif_colorspace_RGB, heif_chroma_444);
+            heifModel = heifimage.get_colorspace();
+            heifChroma = heifimage.get_chroma_format();
+        }
+
+
+        heif_color_profile_type profileType = heifimage.get_color_profile_type();
+        const QString colorSpaceId = KoColorSpaceRegistry::instance()->colorSpaceId(colorModel, colorDepth);
+        QString profileName = KoColorSpaceRegistry::instance()->defaultProfileForColorSpace(colorSpaceId);
+
+        if (profileType == heif_color_profile_type_prof || profileType == heif_color_profile_type_rICC) {
+            // rICC are 'restricted' icc profiles, and are matrix shaper profiles
+            // that are either RGB or Grayscale, and are of the input or display types.
+            // They are from the JPEG2000 spec.
+
+            std::vector<uint8_t> rawProfile = heifimage.get_raw_color_profile();
+            qDebug() << "icc profile found";
+        } else if (profileType == heif_color_profile_type_nclx) {
+            // NCLX parameters is a colorspace description used for videofiles.
+            // We will need to generate a profile based on nclx parameters. We can use lcms for this, but code doesn't exist yet.
+            qDebug() << "nclx profile found";
+        }
+
+
+        colorSpace = KoColorSpaceRegistry::instance()->colorSpace(colorModel.id(), colorDepth.id(), profileName);
+
+        int width  = handle.get_width();
+        int height = handle.get_height();
         bool hasAlpha = handle.has_alpha_channel();
 
 
         // convert HEIF image to Krita KisDocument
-
-        int strideR, strideG, strideB, strideA;
-        const uint8_t* imgR = heifimage.get_plane(heif_channel_R, &strideR);
-        const uint8_t* imgG = heifimage.get_plane(heif_channel_G, &strideG);
-        const uint8_t* imgB = heifimage.get_plane(heif_channel_B, &strideB);
-        const uint8_t* imgA = heifimage.get_plane(heif_channel_Alpha, &strideA);
-
-        const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->rgb8();
         KisImageSP image = new KisImage(document->createUndoStore(), width, height, colorSpace,
                                         "HEIF image");
 
-        KisPaintLayerSP layer = new KisPaintLayer(image, image->nextLayerName(), 255);
+        KisPaintLayerSP layer = new KisPaintLayer(image, image->nextLayerName(), OPACITY_OPAQUE_U8);
 
-        for (int y=0;y<height;y++) {
-            KisHLineIteratorSP it = layer->paintDevice()->createHLineIteratorNG(0, y, width);
+        if (heifChroma == heif_chroma_monochrome) {
+            qDebug() << "monochrome heif file, 8bit";
+            int strideG, strideA;
+            const uint8_t* imgG = heifimage.get_plane(heif_channel_Y, &strideG);
+            const uint8_t* imgA = heifimage.get_plane(heif_channel_Alpha, &strideA);
 
-            for (int x=0;x<width;x++) {
-                KoBgrTraits<quint8>::setRed(it->rawData(), imgR[y*strideR+x]);
-                KoBgrTraits<quint8>::setGreen(it->rawData(), imgG[y*strideG+x]);
-                KoBgrTraits<quint8>::setBlue(it->rawData(), imgB[y*strideB+x]);
+            for (int y=0;y<height;y++) {
+                KisHLineIteratorSP it = layer->paintDevice()->createHLineIteratorNG(0, y, width);
 
-                if (hasAlpha) {
-                    colorSpace->setOpacity(it->rawData(), quint8(imgA[y*strideA+x]), 1);
+                for (int x=0;x<width;x++) {
+                    KoGrayTraits<quint8>::setGray(it->rawData(), imgG[ y * strideG + x ]);
+
+                    if (hasAlpha) {
+                        colorSpace->setOpacity(it->rawData(), quint8(imgA[y*strideA+x]), 1);
+                    }
+                    else {
+                        colorSpace->setOpacity(it->rawData(), OPACITY_OPAQUE_U8, 1);
+                    }
+
+                    it->nextPixel();
                 }
-                else {
-                    colorSpace->setOpacity(it->rawData(), OPACITY_OPAQUE_U8, 1);
-                }
+            }
 
-                it->nextPixel();
+        } else if (heifChroma == heif_chroma_444) {
+            qDebug() << "planar heif file, 8bit";
+
+            int strideR, strideG, strideB, strideA;
+            const uint8_t* imgR = heifimage.get_plane(heif_channel_R, &strideR);
+            const uint8_t* imgG = heifimage.get_plane(heif_channel_G, &strideG);
+            const uint8_t* imgB = heifimage.get_plane(heif_channel_B, &strideB);
+            const uint8_t* imgA = heifimage.get_plane(heif_channel_Alpha, &strideA);
+
+            for (int y=0; y < height; y++) {
+                KisHLineIteratorSP it = layer->paintDevice()->createHLineIteratorNG(0, y, width);
+
+                for (int x=0; x < width; x++) {
+
+                    if (handle.get_luma_bits_per_pixel() == 8) {
+                        KoBgrTraits<quint8>::setRed(  it->rawData(), imgR[ y * strideR + x]);
+                        KoBgrTraits<quint8>::setGreen(it->rawData(), imgG[ y * strideG + x]);
+                        KoBgrTraits<quint8>::setBlue( it->rawData(), imgB[ y * strideB + x]);
+
+                        if (hasAlpha) {
+                            colorSpace->setOpacity(it->rawData(), quint8(imgA[y*strideA+x]), 1);
+                        }
+                        else {
+                            colorSpace->setOpacity(it->rawData(), OPACITY_OPAQUE_U8, 1);
+                        }
+                    } else {
+                        // two things need to happen: the strides need to be updated
+                        // and proper scaling of the values needs to be done.
+                        KoBgrTraits<quint16>::setRed(  it->rawData(), imgR[ y * strideR + (x*2)]);
+                        KoBgrTraits<quint16>::setGreen(it->rawData(), imgG[ y * strideG + (x*2)]);
+                        KoBgrTraits<quint16>::setBlue( it->rawData(), imgB[ y * strideB + (x*2)]);
+
+                        if (hasAlpha) {
+                            colorSpace->setOpacity(it->rawData(), quint8(imgA[y*strideA+(x*2)]), 1);
+                        }
+                        else {
+                            colorSpace->setOpacity(it->rawData(), OPACITY_OPAQUE_U8, 1);
+                        }
+                    }
+
+                    it->nextPixel();
+                }
             }
         }
 

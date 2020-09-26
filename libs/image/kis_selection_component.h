@@ -39,7 +39,7 @@ public:
     virtual void renderToProjection(KisPaintDeviceSP projection) = 0;
     virtual void renderToProjection(KisPaintDeviceSP projection, const QRect& r) = 0;
 
-    virtual void moveX(qint32 x) { Q_UNUSED(x); }
+    virtual void moveX(qint32 x);
     virtual void moveY(qint32 y) { Q_UNUSED(y); }
 
     virtual KUndo2Command* transform(const QTransform &transform) {

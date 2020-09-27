@@ -21,7 +21,9 @@ class WGColorPatches;
 class WGColorPreviewPopup;
 class WGQuickSettingsWidget;
 class WGShadeSelector;
+class QToolButton;
 class QVariant;
+class QWidgetAction;
 
 class WGColorSelectorDock : public QDockWidget, public KoCanvasObserverBase // public KisMainwindowObserver ?
 {
@@ -53,7 +55,9 @@ private:
     WGColorPreviewPopup *m_previewPopup {0};
     WGShadeSelector *m_shadeSelector {0};
     WGColorPatches *m_history {0};
+    QWidgetAction *m_quickSettingAction {0};
     WGQuickSettingsWidget *m_quickSettings {0};
+    QToolButton *m_configButton {0};
     bool m_pendingFgUpdate {false};
     bool m_pendingBgUpdate {false};
     KoColor m_fgColor;

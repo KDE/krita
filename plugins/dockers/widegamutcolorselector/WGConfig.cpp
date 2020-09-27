@@ -38,6 +38,16 @@ QString WGConfig::configGroupName()
     return QString("WideGamutColorSelector");
 }
 
+bool WGConfig::quickSettingsEnabled() const
+{
+    return m_cfg.readEntry("quickSettingsMenuEnabled", defaultQuickSettingsEnabled);
+}
+
+void WGConfig::setQuickSettingsEnabled(bool enabled)
+{
+    m_cfg.writeEntry("quickSettingsMenuEnabled", enabled);
+}
+
 QVector<KisColorSelectorConfiguration> WGConfig::favoriteConfigurations() const
 {
     QVector<KisColorSelectorConfiguration> favoriteConfigs;
@@ -70,3 +80,5 @@ void WGConfig::setFavoriteConfigurations(const QVector<KisColorSelectorConfigura
     }
     m_cfg.writeEntry("favoriteSelectorConfigurations", favoriteList.join(';'));
 }
+
+const bool WGConfig::defaultQuickSettingsEnabled = true;

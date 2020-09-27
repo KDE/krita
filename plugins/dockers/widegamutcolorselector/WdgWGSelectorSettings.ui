@@ -102,53 +102,68 @@
       <attribute name="title">
        <string>General</string>
       </attribute>
-      <layout class="QFormLayout" name="formLayout_2">
-       <item row="0" column="1">
-        <widget class="QCheckBox" name="chkShowQuickMenu">
-         <property name="text">
-          <string>Show Quick Setting Menu</string>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="QGroupBox" name="grpQuickSettingsMenu">
+         <property name="title">
+          <string>Show &amp;Quick Settings Menu</string>
          </property>
+         <property name="alignment">
+          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+         </property>
+         <property name="flat">
+          <bool>false</bool>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+         <layout class="QFormLayout" name="formLayout_4">
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_3">
+            <property name="text">
+             <string>Favorite Selector Layouts:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="KisPopupButton" name="btnFavoriteSelectors">
+            <property name="text">
+             <string>Select...</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
        </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="label_2">
-         <property name="text">
-          <string>Selection Color Space:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="1">
-        <widget class="QComboBox" name="cmbSelectionColorSpace">
-         <item>
-          <property name="text">
-           <string>Layer/Mask</string>
-          </property>
+       <item>
+        <layout class="QFormLayout" name="formLayout_2">
+         <item row="0" column="0">
+          <widget class="QLabel" name="label_2">
+           <property name="text">
+            <string>Selection Color Space:</string>
+           </property>
+          </widget>
          </item>
-         <item>
-          <property name="text">
-           <string>Image</string>
-          </property>
+         <item row="0" column="1">
+          <widget class="QComboBox" name="cmbSelectionColorSpace">
+           <item>
+            <property name="text">
+             <string>Layer/Mask</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Image</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Custom</string>
+            </property>
+           </item>
+          </widget>
          </item>
-         <item>
-          <property name="text">
-           <string>Custom</string>
-          </property>
-         </item>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="KisPopupButton" name="btnFavoriteSelectors">
-         <property name="text">
-          <string>Select...</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="label_3">
-         <property name="text">
-          <string>Favorite Selector Layouts:</string>
-         </property>
-        </widget>
+        </layout>
        </item>
       </layout>
      </widget>

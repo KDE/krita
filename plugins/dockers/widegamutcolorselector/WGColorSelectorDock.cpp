@@ -8,6 +8,7 @@
 #include "WGColorSelectorDock.h"
 #include "WGColorSelectorSettings.h"
 #include "WGColorPatches.h"
+#include "WGConfig.h"
 #include "WGQuickSettingsWidget.h"
 #include "WGShadeSelector.h"
 #include "KisVisualColorSelector.h"
@@ -57,23 +58,10 @@ WGColorSelectorDock::WGColorSelectorDock()
     headerLayout->addStretch();
     headerLayout->setMargin(0);
 
-    QToolButton *configBtn = new QToolButton(this);
-    configBtn->setIcon(KisIconUtils::loadIcon("configure"));
-    configBtn->setPopupMode(QToolButton::InstantPopup);
-    headerLayout->addWidget(configBtn);
-
-    // Quick settings menu
-    QMenu *configureMenu = new QMenu();
-    m_quickSettings = new WGQuickSettingsWidget(this, m_selector);
-    // prevents hover indicator being stuck on other menu entries
-    m_quickSettings->setMouseTracking(true);
-    QWidgetAction *quickSettingAction = new QWidgetAction(configBtn);
-    quickSettingAction->setDefaultWidget(m_quickSettings);
-    configureMenu->addAction(quickSettingAction);
-    QAction *cfgAction = configureMenu->addAction("Configure...");
-    connect(cfgAction, SIGNAL(triggered(bool)), SLOT(slotOpenSettings()));
-
-    configBtn->setMenu(configureMenu);
+    m_configButton = new QToolButton(this);
+    m_configButton->setIcon(KisIconUtils::loadIcon("configure"));
+    m_configButton->setPopupMode(QToolButton::InstantPopup);
+    headerLayout->addWidget(m_configButton);
 
     mainWidget->layout()->addWidget(headerWidget);
     mainWidget->layout()->addWidget(m_selector);
@@ -148,14 +136,45 @@ void WGColorSelectorDock::disconnectFromCanvas()
 
 void WGColorSelectorDock::slotConfigurationChanged()
 {
-    KConfigGroup cfg = KSharedConfig::openConfig()->group(WGColorSelectorSettings::stringID());
+    WGConfig cfg;
     int renderMode = qBound(int(KisVisualColorSelector::StaticBackground), cfg.readEntry("renderMode", 1),
                             int(KisVisualColorSelector::CompositeBackground));
     m_selector->setRenderMode(static_cast<KisVisualColorSelector::RenderMode>(renderMode));
     m_selector->selectorModel()->setColorModel(static_cast<KisVisualColorModel::ColorModel>(cfg.readEntry("rgbColorModel", 0)));
-    KisColorSelectorConfiguration selectorCfg(cfg.readEntry("colorSelectorConfiguration", "3|0|6|0")); // triangle selector
+    KisColorSelectorConfiguration selectorCfg(cfg.readEntry<QString>("colorSelectorConfiguration", "3|0|6|0")); // triangle selector
     m_selector->setConfiguration(&selectorCfg);
-    m_quickSettings->loadConfiguration();
+    // Quick settings menu
+    if (cfg.quickSettingsEnabled()) {
+        if (!m_configButton->menu()) {
+            m_configButton->disconnect(this);
+            QMenu *configureMenu = new QMenu(this);
+            m_quickSettings = new WGQuickSettingsWidget(this, m_selector);
+            // prevents hover indicator being stuck on other menu entries
+            m_quickSettings->setMouseTracking(true);
+            m_quickSettingAction = new QWidgetAction(this);
+            m_quickSettingAction->setDefaultWidget(m_quickSettings);
+
+            configureMenu->addAction(m_quickSettingAction);
+            QAction *cfgAction = configureMenu->addAction("Configure...");
+            connect(cfgAction, SIGNAL(triggered(bool)), SLOT(slotOpenSettings()));
+            m_configButton->setMenu(configureMenu);
+        } else {
+            // WORKAROUND: force geometry update by re-adding action, all other attempts failed...
+            QMenu *menu = m_configButton->menu();
+            menu->removeAction(m_quickSettingAction);
+            menu->insertAction(menu->actions().first(), m_quickSettingAction);
+        }
+        m_quickSettings->loadConfiguration();
+    } else {
+        if (m_configButton->menu()) {
+            m_configButton->menu()->deleteLater();
+            m_configButton->setMenu(0);
+            delete m_quickSettingAction;
+            m_quickSettingAction = 0;
+            m_quickSettings = 0;
+        }
+        connect(m_configButton, SIGNAL(clicked(bool)), SLOT(slotOpenSettings()), Qt::UniqueConnection);
+    }
 }
 
 void WGColorSelectorDock::slotDisplayConfigurationChanged()

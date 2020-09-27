@@ -70,6 +70,7 @@ void WGColorSelectorSettings::savePreferences() const
     cfg.writeEntry("renderMode", m_ui->cmbSelectorRenderingMode->currentIndex());
     cfg.writeEntry("rgbColorModel", m_ui->cmbColorModel->currentIndex() +  KisVisualColorModel::HSV);
     cfg.writeEntry("colorSelectorConfiguration", m_selectorConfigGrid->currentConfiguration().toString());
+    cfg.setQuickSettingsEnabled(m_ui->grpQuickSettingsMenu->isChecked());
     cfg.setFavoriteConfigurations(m_favoriteConfigGrid->selectedConfigurations());
 }
 
@@ -81,6 +82,7 @@ void WGColorSelectorSettings::loadPreferences()
     KisColorSelectorConfiguration selectorCfg(cfg.readEntry<QString>("colorSelectorConfiguration", "3|0|6|0")); // triangle selector
     m_selectorConfigGrid->setChecked(selectorCfg);
     m_ui->btnSelectorShape->setIcon(m_selectorConfigGrid->generateIcon(selectorCfg));
+    m_ui->grpQuickSettingsMenu->setChecked(cfg.quickSettingsEnabled());
     QVector<KisColorSelectorConfiguration> favoriteConfigs = cfg.favoriteConfigurations();
     for (const KisColorSelectorConfiguration &fav: favoriteConfigs) {
         m_favoriteConfigGrid->setChecked(fav);

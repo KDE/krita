@@ -20,6 +20,9 @@ public:
 
     static QString configGroupName();
 
+    bool quickSettingsEnabled() const;
+    void setQuickSettingsEnabled(bool enabled);
+
     QVector<KisColorSelectorConfiguration> favoriteConfigurations() const;
     static QVector<KisColorSelectorConfiguration> defaultFavoriteConfigurations();
     void setFavoriteConfigurations(const QVector<KisColorSelectorConfiguration> &favoriteConfigs);
@@ -34,6 +37,7 @@ public:
         return m_cfg.readEntry(name, defaultValue);
     }
 
+    static const bool defaultQuickSettingsEnabled;
 private:
     /*mutable*/ KConfigGroup m_cfg;
     bool m_readOnly;

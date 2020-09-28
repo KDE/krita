@@ -141,7 +141,7 @@ void KisColor::fromKoColor(const KoColor& color)
         m_colorConverter->getHsiF(color, &m_hue, &m_saturation, &m_value);
         break;
     case HSL:
-        m_colorConverter->getHsvF(color, &m_hue, &m_saturation, &m_value);
+        m_colorConverter->getHslF(color, &m_hue, &m_saturation, &m_value);
         break;
     case HSY:
         m_colorConverter->getHsyF(color, &m_hue, &m_saturation, &m_value, m_lumaR, m_lumaG, m_lumaB, m_lumaGamma);

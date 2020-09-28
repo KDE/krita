@@ -694,10 +694,6 @@ struct KisNodeJugglerCompressed::Private
 KisNodeJugglerCompressed::KisNodeJugglerCompressed(const KUndo2MagicString &actionName, KisImageSP image, KisNodeManager *nodeManager, int timeout)
     : m_d(new Private(this, actionName, image, nodeManager, timeout))
 {
-    connect(m_d->image, SIGNAL(sigStrokeCancellationRequested()), SLOT(slotEndStrokeRequested()));
-    connect(m_d->image, SIGNAL(sigUndoDuringStrokeRequested()), SLOT(slotCancelStrokeRequested()));
-    connect(m_d->image, SIGNAL(sigStrokeEndRequestedActiveNodeFiltered()), SLOT(slotEndStrokeRequested()));
-    connect(m_d->image, SIGNAL(sigAboutToBeDeleted()), SLOT(slotImageAboutToBeDeleted()));
 
     KisImageSignalVector emitSignals;
     emitSignals << ModifiedSignal;
@@ -709,6 +705,11 @@ KisNodeJugglerCompressed::KisNodeJugglerCompressed(const KUndo2MagicString &acti
                                     actionName));
     connect(this, SIGNAL(requestUpdateAsyncFromCommand()), SLOT(startTimers()));
     connect(&m_d->compressor, SIGNAL(timeout()), SLOT(slotUpdateTimeout()));
+
+    connect(m_d->image, SIGNAL(sigStrokeCancellationRequested()), SLOT(slotEndStrokeRequested()));
+    connect(m_d->image, SIGNAL(sigUndoDuringStrokeRequested()), SLOT(slotCancelStrokeRequested()));
+    connect(m_d->image, SIGNAL(sigStrokeEndRequestedActiveNodeFiltered()), SLOT(slotEndStrokeRequested()));
+    connect(m_d->image, SIGNAL(sigAboutToBeDeleted()), SLOT(slotImageAboutToBeDeleted()));
 
     m_d->applicator->applyCommand(
         new UpdateMovedNodesCommand(m_d->updateData, false));
@@ -831,6 +832,11 @@ void KisNodeJugglerCompressed::startTimers()
 
 void KisNodeJugglerCompressed::slotUpdateTimeout()
 {
+    // The juggler could have been already finished explicitly
+    // by slotEndStrokeRequested(). In such a case the final updates
+    // will be issued by the last command of the stroke.
+
+    if (!m_d->updateData) return;
     m_d->updateData->processUnhandledUpdates();
 }
 
@@ -849,6 +855,8 @@ void KisNodeJugglerCompressed::cleanup()
 {
     m_d->applicator.reset();
     m_d->compressor.stop();
+    m_d->image.clear();
+    m_d->updateData.clear();
     m_d->isStarted = false;
 
     if (m_d->autoDelete) {

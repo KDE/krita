@@ -198,10 +198,12 @@ public:
     double maskAngle(double angle = 0) const;
 
     /**
-     * @return the index of the brush
+     * @return the currently selected index of the brush
      *         if the brush consists of multiple images
+     *
+     * @see prepareForSeqNo()
      */
-    virtual quint32 brushIndex(const KisPaintInformation& info) const;
+    virtual quint32 brushIndex() const;
 
     /**
      * The brush type defines how the brush is used.
@@ -226,22 +228,10 @@ public:
     virtual void notifyStrokeStarted();
 
     /**
-     * Is called by the cache, when cache hit has happened.
-     * Having got this notification the brush can update the counters
-     * of dabs, generate some new random values if needed.
-     *
-     * * NOTE: one should use **either** notifyCachedDabPainted() or prepareForSeqNo()
-     *
-     * Currently, this is used by pipe'd brushes to implement
-     * incremental and random parasites
-     */
-    virtual void notifyCachedDabPainted(const KisPaintInformation& info);
-
-    /**
      * Is called by the multithreaded queue to prepare a specific brush
      * tip for the particular seqNo.
      *
-     * NOTE: one should use **either** notifyCachedDabPainted() or prepareForSeqNo()
+     * NOTE: one should use always call prepareForSeqNo() before using the brush
      *
      * Currently, this is used by pipe'd brushes to implement
      * incremental and random parasites

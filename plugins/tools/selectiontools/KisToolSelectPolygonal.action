@@ -2,7 +2,7 @@
 <ActionCollection version="2" name="Tools">
   <Actions category="tool-shortcuts">
 <text>Tool Shortcuts</text>
-<Action name="Polygonal Selection Tool">
+<Action name="KisToolSelectPolygonal">
       <whatsThis></whatsThis>
       <toolTip>Polygonal Selection Tool</toolTip>
       <iconText>Polygonal Selection Tool</iconText>

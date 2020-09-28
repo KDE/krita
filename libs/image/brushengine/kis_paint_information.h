@@ -190,6 +190,14 @@ public:
      */
     qreal drawingDistance() const;
 
+    /**
+     * Maximum pressure that has been known during the stroke
+     *
+     * WARNING: this method is available *only* inside paintAt() call,
+     * that is when the distance information is registered.
+     */
+    qreal maxPressure() const;
+
     /// rotation as given by the tablet event
     qreal rotation() const;
 

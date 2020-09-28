@@ -96,7 +96,11 @@ bool KisSaveXmlVisitor::visit(KisExternalLayer * layer)
 
         QDir d(QFileInfo(m_url).absolutePath());
 
+#ifndef Q_OS_ANDROID
         layerElement.setAttribute("source", d.relativeFilePath(path));
+#else
+        layerElement.setAttribute("source", path);
+#endif
 
         if (fileLayer->scalingMethod() == KisFileLayer::ToImagePPI) {
             layerElement.setAttribute("scale", "true");

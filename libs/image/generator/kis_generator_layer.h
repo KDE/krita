@@ -20,6 +20,7 @@
 
 #include "kis_selection_based_layer.h"
 #include <kritaimage_export.h>
+#include <KisDelayedUpdateNodeInterface.h>
 
 #include <QScopedPointer>
 
@@ -35,7 +36,9 @@ class KisFilterConfiguration;
  *
  * XXX: what about threadedness?
  */
-class KRITAIMAGE_EXPORT KisGeneratorLayer : public KisSelectionBasedLayer
+class KRITAIMAGE_EXPORT KisGeneratorLayer
+        : public KisSelectionBasedLayer,
+          public KisDelayedUpdateNodeInterface
 {
     Q_OBJECT
 
@@ -86,6 +89,9 @@ public:
     void setY(qint32 y) override;
 
     void resetCache() override;
+
+    void forceUpdateTimedNode() override;
+    bool hasPendingTimedUpdates() const override;
 
 private Q_SLOTS:
     void slotDelayedStaticUpdate();

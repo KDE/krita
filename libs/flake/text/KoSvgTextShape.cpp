@@ -549,9 +549,12 @@ void KoSvgTextShape::relayout() const
                      *
                      * BUG: 389528
                      * BUG: 392068
+                     * BUG: 420408 (vertically)
                      */
                     rect.setLeft(qMin(rect.left(), lastGlyphRect.left()) - 0.5 * firstGlyphRect.width());
                     rect.setRight(qMax(rect.right(), lastGlyphRect.right()) + 0.5 * lastGlyphRect.width());
+
+                    rect.adjust(0, -0.5*rect.height(), 0, 0.5*rect.height()); // add some vertical margin too
 
                     wrapper.addCharacterRect(rect.translated(layoutOffset));
                 }

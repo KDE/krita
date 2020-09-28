@@ -44,12 +44,10 @@ ShapeMoveStrategy::ShapeMoveStrategy(KoToolBase *tool, KoSelection *selection, c
 {
     QList<KoShape *> selectedShapes = selection->selectedEditableShapes();
 
-    QRectF boundingRect;
     Q_FOREACH (KoShape *shape, selectedShapes) {
         m_selectedShapes << shape;
         m_previousPositions << shape->absolutePosition(KoFlake::Center);
         m_newPositions << shape->absolutePosition(KoFlake::Center);
-        boundingRect = boundingRect.united(shape->boundingRect());
     }
 
     KoFlake::AnchorPosition anchor =
@@ -74,9 +72,7 @@ void ShapeMoveStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModifi
         diff = snapToClosestAxis(diff);
     } else {
         QPointF positionToSnap = point + m_initialOffset;
-        tool()->canvas()->updateCanvas(tool()->canvas()->snapGuide()->boundingRect());
         QPointF snappedPosition = tool()->canvas()->snapGuide()->snap(positionToSnap, modifiers);
-        tool()->canvas()->updateCanvas(tool()->canvas()->snapGuide()->boundingRect());
         diff = snappedPosition - m_initialOffset - m_start;
     }
 
@@ -117,7 +113,6 @@ KUndo2Command *ShapeMoveStrategy::createCommand()
 void ShapeMoveStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
 {
     Q_UNUSED(modifiers);
-    tool()->canvas()->updateCanvas(tool()->canvas()->snapGuide()->boundingRect());
 }
 
 void ShapeMoveStrategy::paint(QPainter &painter, const KoViewConverter &converter)

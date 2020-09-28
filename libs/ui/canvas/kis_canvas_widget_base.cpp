@@ -104,11 +104,8 @@ void KisCanvasWidgetBase::drawDecorations(QPainter & gc, const QRect &updateWidg
 
     gc.setRenderHint(QPainter::SmoothPixmapTransform);
 
-
     {
         KisQPainterStateSaver paintShapesState(&gc);
-
-        gc.setClipRect(updateWidgetRect);
         gc.setTransform(m_d->coordinatesConverter->documentToWidgetTransform());
 
         // Paint the shapes (other than the layers)
@@ -119,7 +116,9 @@ void KisCanvasWidgetBase::drawDecorations(QPainter & gc, const QRect &updateWidg
     // ask the decorations to paint themselves
     // decorations are painted in "widget" coordinate system
     Q_FOREACH (KisCanvasDecorationSP deco, m_d->decorations) {
-        deco->paint(gc, m_d->coordinatesConverter->widgetToDocument(updateWidgetRect), m_d->coordinatesConverter,m_d->canvas);
+        if (deco->visible()) {
+            deco->paint(gc, m_d->coordinatesConverter->widgetToDocument(updateWidgetRect), m_d->coordinatesConverter,m_d->canvas);
+        }
     }
 
     {
@@ -127,8 +126,6 @@ void KisCanvasWidgetBase::drawDecorations(QPainter & gc, const QRect &updateWidg
         gc.setTransform(m_d->coordinatesConverter->flakeToWidgetTransform());
 
         // - some tools do not restore gc, but that is not important here
-        // - we need to disable clipping to draw handles properly
-        gc.setClipping(false);
         toolProxy()->paint(gc, *m_d->viewConverter);
     }
 

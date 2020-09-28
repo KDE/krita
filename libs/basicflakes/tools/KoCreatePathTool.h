@@ -49,6 +49,8 @@ public:
     explicit KoCreatePathTool(KoCanvasBase * canvas);
     ~KoCreatePathTool() override;
 
+    QRectF decorationsRect() const;
+
     /// reimplemented
     void paint(QPainter &painter, const KoViewConverter &converter) override;
 
@@ -66,7 +68,7 @@ public:
     /**
     * Returns true if path has been started
     */
-    bool pathStarted();
+    bool pathStarted() const;
 
     bool tryMergeInPathShape(KoPathShape *pathShape);
 

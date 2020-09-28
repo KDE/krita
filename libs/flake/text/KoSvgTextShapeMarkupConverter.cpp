@@ -917,6 +917,49 @@ QStringList KoSvgTextShapeMarkupConverter::warnings() const
     return d->warnings;
 }
 
+bool compareFormatUnderlineWithMostCommon(QTextCharFormat format, QTextCharFormat mostCommon)
+{
+    // color and style is not supported in rich text editor yet
+    // TODO: support color and style
+    return format.fontUnderline() == mostCommon.fontUnderline()
+            && format.fontOverline() == mostCommon.fontOverline()
+            && format.fontStrikeOut() == mostCommon.fontStrikeOut();
+}
+
+QString convertFormatUnderlineToSvg(QTextCharFormat format)
+{
+    // color and style is not supported in rich text editor yet
+    // and text-decoration-line and -style and -color are not supported in svg render either
+    // hence we just use text-decoration
+    // TODO: support color and style
+    QStringList line;
+
+    if (format.fontUnderline()) {
+        line.append("underline");
+        if (format.underlineStyle() != QTextCharFormat::SingleUnderline) {
+            warnFile << "Krita only supports solid underline style";
+        }
+    }
+
+    if (format.fontOverline()) {
+        line.append("overline");
+    }
+
+    if (format.fontStrikeOut()) {
+        line.append("line-through");
+    }
+
+    if (line.isEmpty())
+    {
+        line.append("none");
+    }
+
+    QString c = QString("text-decoration").append(":")
+            .append(line.join(" "));
+
+    return c;
+}
+
 QString KoSvgTextShapeMarkupConverter::style(QTextCharFormat format,
                                              QTextBlockFormat blockFormat,
                                              QTextCharFormat mostCommon)
@@ -1076,29 +1119,11 @@ QString KoSvgTextShapeMarkupConverter::style(QTextCharFormat format,
         }
     }
 
-    if (format.underlineStyle() != QTextCharFormat::SpellCheckUnderline) {
-        if(format.underlineStyle() != mostCommon.underlineStyle()){
-            QStringList values;
-            QString c;
+    if (!compareFormatUnderlineWithMostCommon(format, mostCommon)) {
 
-            if (format.fontUnderline()) {
-                values.append("underline");
-            }
-            if (format.fontOverline()) {
-                values.append("overline");
-            }
-            if (format.fontStrikeOut()) {
-                values.append("line-through");
-            }
-            if (values.isEmpty()) {
-                values.append("none");
-            }
-            c.append("text-decoration").append(":")
-                    .append(values.join(" "));
-
-            if (!values.isEmpty()) {
-                style.append(c);
-            }
+        QString c = convertFormatUnderlineToSvg(format);
+        if (!c.isEmpty()) {
+            style.append(c);
         }
     }
 

@@ -144,10 +144,6 @@ protected:
         return brushIndex;
     }
 
-    int currentBrushIndex() override {
-        return m_currentBrushIndex;
-    }
-
     void updateBrushIndexes(const KisPaintInformation& info, int seqNo) override {
         for (int i = 0; i < m_parasite.dim; i++) {
             m_parasite.index[i] = selectPost(m_parasite.selection[i],
@@ -161,6 +157,10 @@ protected:
 public:
     using KisBrushesPipe<KisGbrBrush>::addBrush;
     using KisBrushesPipe<KisGbrBrush>::sizeBrush;
+
+    int currentBrushIndex() override {
+        return m_currentBrushIndex;
+    }
 
     void setParasite(const KisPipeBrushParasite& parasite) {
         m_parasite = parasite;
@@ -383,11 +383,6 @@ void KisImagePipeBrush::notifyStrokeStarted()
     d->brushesPipe.notifyStrokeStarted();
 }
 
-void KisImagePipeBrush::notifyCachedDabPainted(const KisPaintInformation& info)
-{
-    d->brushesPipe.notifyCachedDabPainted(info);
-}
-
 void KisImagePipeBrush::prepareForSeqNo(const KisPaintInformation &info, int seqNo)
 {
     d->brushesPipe.prepareForSeqNo(info, seqNo);
@@ -463,9 +458,9 @@ QString KisImagePipeBrush::defaultFileExtension() const
     return QString(".gih");
 }
 
-quint32 KisImagePipeBrush::brushIndex(const KisPaintInformation& info) const
+quint32 KisImagePipeBrush::brushIndex() const
 {
-    return d->brushesPipe.brushIndex(info);
+    return d->brushesPipe.currentBrushIndex();
 }
 
 qint32 KisImagePipeBrush::maskWidth(KisDabShape const& shape, double subPixelX, double subPixelY, const KisPaintInformation& info) const

@@ -123,6 +123,7 @@ public:
     QColor cursorColor;
 
     bool lodSwitchInProgress = false;
+    boost::optional<QRect> updateRect;
 
     int xToColWithWrapCompensation(int x, const QRect &imageRect) {
         int firstImageColumn = openGLImageTextures->xToCol(imageRect.left());
@@ -182,6 +183,7 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas,
 #endif
     setAttribute(Qt::WA_InputMethodEnabled, false);
     setAttribute(Qt::WA_DontCreateNativeAncestors, true);
+    setUpdateBehavior(PartialUpdate);
 
 #if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
     // we should make sure the texture doesn't have alpha channel,
@@ -423,7 +425,7 @@ void KisOpenGLCanvas2::resizeGL(int width, int height)
 {
     // The given size is the widget size but here we actually want to give
     // KisCoordinatesConverter the viewport size aligned to device pixels.
-    if (KisOpenGL::supportsRenderToFBO()) {
+    if (KisOpenGL::useFBOForToolOutlineRendering()) {
         d->canvasFBO.reset(new QOpenGLFramebufferObject(QSize(width * devicePixelRatioF(), height * devicePixelRatioF())));
     }
     coordinatesConverter()->setCanvasWidgetSize(widgetSizeAlignedToDevicePixel());
@@ -432,6 +434,8 @@ void KisOpenGLCanvas2::resizeGL(int width, int height)
 
 void KisOpenGLCanvas2::paintGL()
 {
+    const QRect updateRect = d->updateRect ? *d->updateRect : QRect();
+
     if (!OPENGL_SUCCESS) {
         KisConfig cfg(false);
         cfg.writeEntry("canvasState", "OPENGL_PAINT_STARTED");
@@ -443,28 +447,39 @@ void KisOpenGLCanvas2::paintGL()
         d->canvasFBO->bind();
     }
 
-    renderCanvasGL();
+    renderCanvasGL(updateRect);
 
     if (d->canvasFBO) {
+        const QTransform scale = QTransform::fromScale(1.0, -1.0) * QTransform::fromTranslate(0, height()) * QTransform::fromScale(devicePixelRatioF(), devicePixelRatioF());
+
+        const QRect blitRect = scale.mapRect(QRectF(updateRect)).toAlignedRect();
+
         d->canvasFBO->release();
-        QOpenGLFramebufferObject::blitFramebuffer(nullptr, d->canvasFBO.data(), GL_COLOR_BUFFER_BIT, GL_NEAREST);
+        QOpenGLFramebufferObject::blitFramebuffer(nullptr, blitRect, d->canvasFBO.data(), blitRect, GL_COLOR_BUFFER_BIT, GL_NEAREST);
         QOpenGLFramebufferObject::bindDefault();
     }
+
+    renderDecorations(updateRect);
 
     if (d->glSyncObject) {
         Sync::deleteSync(d->glSyncObject);
     }
     d->glSyncObject = Sync::getSync();
 
-    QPainter gc(this);
-    renderDecorations(&gc);
-    gc.end();
-
     if (!OPENGL_SUCCESS) {
         KisConfig cfg(false);
         cfg.writeEntry("canvasState", "OPENGL_SUCCESS");
         OPENGL_SUCCESS = true;
     }
+}
+
+void KisOpenGLCanvas2::paintEvent(QPaintEvent *e)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(!d->updateRect);
+
+    d->updateRect = e->rect();
+    QOpenGLWidget::paintEvent(e);
+    d->updateRect = boost::none;
 }
 
 void KisOpenGLCanvas2::paintToolOutline(const QPainterPath &path)
@@ -500,9 +515,11 @@ void KisOpenGLCanvas2::paintToolOutline(const QPainterPath &path)
 
     d->overlayInvertedShader->setUniformValue(d->overlayInvertedShader->location(Uniform::TextureMatrix), textureMatrix);
 
+    bool shouldRestoreLogicOp = false;
+
     // For the legacy shader, we should use old fixed function
     // blending operations if available.
-    if (!KisOpenGL::hasOpenGL3() && !KisOpenGL::hasOpenGLES()) {
+    if (!d->canvasFBO && !KisOpenGL::supportsLoD() && !KisOpenGL::hasOpenGLES()) {
         #ifndef HAS_ONLY_OPENGL_ES
         glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
         glEnable(GL_COLOR_LOGIC_OP);
@@ -514,6 +531,8 @@ void KisOpenGLCanvas2::paintToolOutline(const QPainterPath &path)
         #else   // Q_OS_MACOS
         glLogicOp(GL_XOR);
         #endif  // Q_OS_MACOS
+
+        shouldRestoreLogicOp = true;
 
         #else   // HAS_ONLY_OPENGL_ES
         KIS_ASSERT_X(false, "KisOpenGLCanvas2::paintToolOutline",
@@ -557,16 +576,15 @@ void KisOpenGLCanvas2::paintToolOutline(const QPainterPath &path)
             d->overlayInvertedShader->setAttributeArray(PROGRAM_TEXCOORD_ATTRIBUTE, texCoords.constData());
         }
 
-        const bool usingLegacyShader = !((KisOpenGL::hasOpenGL3() || KisOpenGL::hasOpenGLES()) && KisOpenGL::supportsRenderToFBO());
-        if (usingLegacyShader){
-            glDrawArrays(GL_LINE_STRIP, 0, vertices.size());
-        } else {
+        if (d->canvasFBO){
             glActiveTexture(GL_TEXTURE0);
             glBindTexture(GL_TEXTURE_2D, d->canvasFBO->texture());
 
             glDrawArrays(GL_LINE_STRIP, 0, vertices.size());
 
             glBindTexture(GL_TEXTURE_2D, 0);
+        } else {
+            glDrawArrays(GL_LINE_STRIP, 0, vertices.size());
         }
     }
 
@@ -575,15 +593,13 @@ void KisOpenGLCanvas2::paintToolOutline(const QPainterPath &path)
         d->outlineVAO.release();
     }
 
-    if (!KisOpenGL::hasOpenGLES()) {
+    if (shouldRestoreLogicOp) {
 #ifndef HAS_ONLY_OPENGL_ES
         glDisable(GL_COLOR_LOGIC_OP);
 #else
         KIS_ASSERT_X(false, "KisOpenGLCanvas2::paintToolOutline",
                 "Unexpected KisOpenGL::hasOpenGLES returned false");
 #endif
-    } else {
-        glDisable(GL_BLEND);
     }
 
     d->overlayInvertedShader->release();
@@ -593,7 +609,6 @@ bool KisOpenGLCanvas2::isBusy() const
 {
     const bool isBusyStatus = Sync::syncStatus(d->glSyncObject) == Sync::Unsignaled;
     KisOpenglCanvasDebugger::instance()->nofitySyncStatus(isBusyStatus);
-
     return isBusyStatus;
 }
 
@@ -602,8 +617,34 @@ void KisOpenGLCanvas2::setLodResetInProgress(bool value)
     d->lodSwitchInProgress = value;
 }
 
-void KisOpenGLCanvas2::drawCheckers()
+void KisOpenGLCanvas2::drawBackground(const QRect &updateRect)
 {
+    Q_UNUSED(updateRect);
+
+    // Draw the border (that is, clear the whole widget to the border color)
+    QColor widgetBackgroundColor = borderColor();
+
+    const KoColorSpace *finalColorSpace =
+            KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(),
+                                                         d->openGLImageTextures->updateInfoBuilder().destinationColorSpace()->colorDepthId().id(),
+                                                         d->openGLImageTextures->monitorProfile());
+
+    KoColor convertedBackgroudColor = KoColor(widgetBackgroundColor, KoColorSpaceRegistry::instance()->rgb8());
+    convertedBackgroudColor.convertTo(finalColorSpace);
+
+    QVector<float> channels = QVector<float>(4);
+    convertedBackgroudColor.colorSpace()->normalisedChannelsValue(convertedBackgroudColor.data(), channels);
+
+
+    // Data returned by KoRgbU8ColorSpace comes in the order: blue, green, red.
+    glClearColor(channels[2], channels[1], channels[0], 1.0);
+    glClear(GL_COLOR_BUFFER_BIT);
+}
+
+void KisOpenGLCanvas2::drawCheckers(const QRect &updateRect)
+{
+    Q_UNUSED(updateRect);
+
     if (!d->checkerShader) {
         return;
     }
@@ -619,6 +660,7 @@ void KisOpenGLCanvas2::drawCheckers()
                 converter->imageRectInViewportPixels() :
                 converter->widgetToViewport(QRectF(0, 0, widgetSize.width(), widgetSize.height()));
 
+    // TODO: check if it works correctly
     if (!canvas()->renderingLimit().isEmpty()) {
         const QRect vrect = converter->imageToViewport(canvas()->renderingLimit()).toAlignedRect();
         viewportRect &= vrect;
@@ -681,7 +723,7 @@ void KisOpenGLCanvas2::drawCheckers()
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void KisOpenGLCanvas2::drawGrid()
+void KisOpenGLCanvas2::drawGrid(const QRect &updateRect)
 {
     if (!d->solidColorShader->bind()) {
         return;
@@ -721,6 +763,11 @@ void KisOpenGLCanvas2::drawGrid()
         wr &= d->openGLImageTextures->storedImageBounds();
     }
 
+    if (!updateRect.isEmpty()) {
+        const QRect updateRectInImagePixels = coordinatesConverter()->widgetToImage(updateRect).toAlignedRect();
+        wr &= updateRectInImagePixels;
+    }
+
     QPoint topLeftCorner = wr.topLeft();
     QPoint bottomRightCorner = wr.bottomRight() + QPoint(1, 1);
     QVector<QVector3D> grid;
@@ -753,7 +800,7 @@ void KisOpenGLCanvas2::drawGrid()
     glDisable(GL_BLEND);
 }
 
-void KisOpenGLCanvas2::drawImage()
+void KisOpenGLCanvas2::drawImage(const QRect &updateRect)
 {
     if (!d->displayShader) {
         return;
@@ -785,6 +832,11 @@ void KisOpenGLCanvas2::drawImage()
     d->displayShader->setUniformValue(d->displayShader->location(Uniform::TextureMatrix), textureMatrix);
 
     QRectF widgetRect(0,0, widgetSize.width(), widgetSize.height());
+
+    if (!updateRect.isEmpty()) {
+        widgetRect &= updateRect;
+    }
+
     QRectF widgetRectInImagePixels = converter->documentToImage(converter->widgetToDocument(widgetRect));
 
     const QRect renderingLimit = canvas()->renderingLimit();
@@ -1000,28 +1052,8 @@ void KisOpenGLCanvas2::inputMethodEvent(QInputMethodEvent *event)
     processInputMethodEvent(event);
 }
 
-void KisOpenGLCanvas2::renderCanvasGL()
+void KisOpenGLCanvas2::renderCanvasGL(const QRect &updateRect)
 {
-    {
-        // Draw the border (that is, clear the whole widget to the border color)
-        QColor widgetBackgroundColor = borderColor();
-
-        const KoColorSpace *finalColorSpace =
-               KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(),
-                                                            d->openGLImageTextures->updateInfoBuilder().destinationColorSpace()->colorDepthId().id(),
-                                                            d->openGLImageTextures->monitorProfile());
-
-        KoColor convertedBackgroudColor = KoColor(widgetBackgroundColor, KoColorSpaceRegistry::instance()->rgb8());
-        convertedBackgroudColor.convertTo(finalColorSpace);
-
-        QVector<float> channels = QVector<float>(4);
-        convertedBackgroudColor.colorSpace()->normalisedChannelsValue(convertedBackgroudColor.data(), channels);
-        // Data returned by KoRgbU8ColorSpace comes in the order: blue, green, red.
-        glClearColor(channels[2], channels[1], channels[0], 1.0);
-    }
-
-    glClear(GL_COLOR_BUFFER_BIT);
-
     if ((d->displayFilter && d->displayFilter->updateShader()) ||
         (bool(d->displayFilter) != d->displayShaderCompiledWithDisplayFilterSupport)) {
 
@@ -1036,20 +1068,48 @@ void KisOpenGLCanvas2::renderCanvasGL()
         d->quadVAO.bind();
     }
 
-    drawCheckers();
-    drawImage();
-    if ((coordinatesConverter()->effectiveZoom() > d->pixelGridDrawingThreshold - 0.00001) && d->pixelGridEnabled) {
-        drawGrid();
+    if (!updateRect.isEmpty()) {
+        const qreal ratio = devicePixelRatioF();
+        const QRect deviceUpdateRect = QRectF(updateRect.x() * ratio,
+                                              (height() - updateRect.y() - updateRect.height()) * ratio,
+                                              updateRect.width() * ratio,
+                                              updateRect.height() * ratio).toAlignedRect();
+
+        glScissor(deviceUpdateRect.x(), deviceUpdateRect.y(), deviceUpdateRect.width(), deviceUpdateRect.height());
+        glEnable(GL_SCISSOR_TEST);
     }
+
+    drawBackground(updateRect);
+    drawCheckers(updateRect);
+    drawImage(updateRect);
+
+    if ((coordinatesConverter()->effectiveZoom() > d->pixelGridDrawingThreshold - 0.00001) && d->pixelGridEnabled) {
+        drawGrid(updateRect);
+    }
+
+    if (!updateRect.isEmpty()) {
+        glDisable(GL_SCISSOR_TEST);
+    }
+
     if (KisOpenGL::hasOpenGL3()) {
         d->quadVAO.release();
     }
 }
 
-void KisOpenGLCanvas2::renderDecorations(QPainter *painter)
+void KisOpenGLCanvas2::renderDecorations(const QRect &updateRect)
 {
-    QRect boundingRect = coordinatesConverter()->imageRectInWidgetPixels().toAlignedRect();
-    drawDecorations(*painter, boundingRect);
+    QPainter gc(this);
+    gc.setClipRect(updateRect);
+
+    QRect decorationsBoundingRect = coordinatesConverter()->imageRectInWidgetPixels().toAlignedRect();
+
+    if (!updateRect.isEmpty()) {
+        decorationsBoundingRect &= updateRect;
+    }
+
+    drawDecorations(gc, decorationsBoundingRect);
+
+    gc.end();
 }
 
 
@@ -1091,6 +1151,10 @@ QRect KisOpenGLCanvas2::updateCanvasProjection(KisUpdateInfoSP info)
     if (isOpenGLUpdateInfo) {
         d->openGLImageTextures->recalculateCache(info, d->lodSwitchInProgress);
     }
+
+    const QRect dirty = kisGrowRect(coordinatesConverter()->imageToWidget(info->dirtyImageRect()).toAlignedRect(), 2);
+    return dirty;
+
     return QRect(); // FIXME: Implement dirty rect for OpenGL
 }
 

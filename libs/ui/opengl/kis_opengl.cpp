@@ -299,7 +299,7 @@ bool KisOpenGL::supportsFenceSync()
     return openGLCheckResult && openGLCheckResult->supportsFenceSync();
 }
 
-bool KisOpenGL::supportsRenderToFBO()
+bool KisOpenGL::useFBOForToolOutlineRendering()
 {
     initialize();
     return openGLCheckResult && openGLCheckResult->supportsFBO();

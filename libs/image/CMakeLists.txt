@@ -206,6 +206,7 @@ set(kritaimage_LIB_SRCS
    kis_update_time_monitor.cpp
    KisImageConfigNotifier.cpp
    kis_group_layer.cc
+   kis_external_layer_iface.cc
    kis_count_visitor.cpp
    kis_histogram.cc
    kis_image_interfaces.cpp
@@ -290,6 +291,7 @@ set(kritaimage_LIB_SRCS
    kis_selection_filters.cpp
    KisProofingConfiguration.h
    KisRecycleProjectionsJob.cpp
+   kis_selection_component.cc
 
    kis_keyframe.cpp
    kis_keyframe_channel.cpp

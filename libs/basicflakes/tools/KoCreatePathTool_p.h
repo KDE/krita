@@ -411,6 +411,7 @@ public:
         existingStartPoint = 0;
         existingEndPoint = 0;
         hoveredPoint = 0;
+        activePoint = 0;
     }
 
     void angleDeltaChanged(int value) {

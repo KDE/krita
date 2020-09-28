@@ -85,8 +85,6 @@ void ShapeGradientEditStrategy::handleMouseMove(const QPointF &mouseLocation, Qt
     const QPointF diff = snappedPosition- m_d->start;
     m_d->intermediateCommand.reset(m_d->gradientHandles.moveGradientHandle(m_d->handleType, diff));
     m_d->intermediateCommand->redo();
-
-    tool()->canvas()->updateCanvas(tool()->canvas()->snapGuide()->boundingRect());
 }
 
 KUndo2Command *ShapeGradientEditStrategy::createCommand()
@@ -97,10 +95,7 @@ KUndo2Command *ShapeGradientEditStrategy::createCommand()
 void ShapeGradientEditStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
 {
     Q_UNUSED(modifiers);
-
-    const QRectF dirtyRect = tool()->canvas()->snapGuide()->boundingRect();
     tool()->canvas()->snapGuide()->reset();
-    tool()->canvas()->updateCanvas(dirtyRect);
 }
 
 void ShapeGradientEditStrategy::paint(QPainter &painter, const KoViewConverter &converter)

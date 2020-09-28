@@ -30,7 +30,9 @@ public:
     KisSpeedSmoother();
     ~KisSpeedSmoother();
 
+    qreal lastSpeed() const;
     qreal getNextSpeed(const QPointF &pt);
+    void clear();
 
 private:
     struct Private;

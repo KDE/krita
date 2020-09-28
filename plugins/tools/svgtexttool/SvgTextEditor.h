@@ -56,7 +56,7 @@ public:
         Both
     };
 
-    void setShape(KoSvgTextShape *shape);
+    void setInitialShape(KoSvgTextShape *shape);
 
 private Q_SLOTS:
     /**
@@ -166,6 +166,9 @@ private:
     BasicXMLSyntaxHighlighter *m_syntaxHighlighter;
 
     QString m_searchKey;
+
+    class Private;
+    QScopedPointer<Private> d;
 };
 
 #endif //TEXTNGSHAPECONFIGWIDGET_H

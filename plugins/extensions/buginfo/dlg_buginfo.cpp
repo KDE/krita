@@ -96,22 +96,23 @@ void DlgBugInfo::saveToFile()
         return;
     } else {
 
-        QString originalLogFileName = originalFileName();
-        if (!originalLogFileName.isEmpty() && QFileInfo(originalLogFileName).exists())
-        {
-            QFile::copy(originalLogFileName, filename);
-        } else {
-
-            QFile file(filename);
-            if (!file.open(QIODevice::WriteOnly)) {
-                QMessageBox::information(this, i18n("Unable to open file"),
-                    file.errorString());
-                return;
-            }
-            QTextStream out(&file);
-            out << m_page->txtBugInfo->toPlainText();
-            file.close();
+        QFile file(filename);
+        if (!file.open(QIODevice::WriteOnly)) {
+            QMessageBox::information(this, i18n("Unable to open file"),
+                file.errorString());
+            return;
         }
+
+        QTextStream out(&file);
+        QString originalLogFileName = originalFileName();
+        if (originalLogFileName.isEmpty() && QFileInfo(originalLogFileName).exists()) {
+            QFile src(originalLogFileName);
+            out << src.readAll();
+            src.close();
+        } else {
+            out << m_page->txtBugInfo->toPlainText();
+        }
+        file.close();
     }
 }
 

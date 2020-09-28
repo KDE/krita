@@ -40,6 +40,9 @@
 #include <QFileInfo>
 #include "KisSyncedAudioPlayback.h"
 #include "kis_signal_compressor_with_param.h"
+#include "kis_image_barrier_locker.h"
+#include "kis_layer_utils.h"
+#include "KisDecoratedNodeInterface.h"
 
 #include "kis_image_config.h"
 #include <limits>
@@ -114,6 +117,7 @@ public:
     KisSignalCompressor stopAudioOnScrubbingCompressor;
 
     int audioOffsetTolerance;
+    QVector<KisNodeWSP> disabledDecoratedNodes;
 
     void stopImpl(bool doUpdates);
 
@@ -397,6 +401,16 @@ void KisAnimationPlayer::play()
             }
 
             m_d->canvas->setRenderingLimit(regionOfInterest);
+        } else {
+            KisImageBarrierLocker locker(m_d->canvas->image());
+            KisLayerUtils::recursiveApplyNodes(m_d->canvas->image()->root(),
+                [this] (KisNodeSP node) {
+                    KisDecoratedNodeInterface *decoratedNode = dynamic_cast<KisDecoratedNodeInterface*>(node.data());
+                    if (decoratedNode && decoratedNode->decorationsVisible()) {
+                        decoratedNode->setDecorationsVisible(false, false);
+                        m_d->disabledDecoratedNodes.append(node);
+                    }
+                });
         }
     }
 
@@ -429,6 +443,20 @@ void KisAnimationPlayer::Private::stopImpl(bool doUpdates)
     timer->stop();
     playing = false;
     canvas->setRenderingLimit(QRect());
+
+    if (!canvas->frameCache()) {
+        KisImageBarrierLocker locker(canvas->image());
+
+        Q_FOREACH (KisNodeSP node, disabledDecoratedNodes) {
+            // we have just upgraded from a weak shared pointer
+            KIS_SAFE_ASSERT_RECOVER(node) { continue; }
+
+            KisDecoratedNodeInterface *decoratedNode = dynamic_cast<KisDecoratedNodeInterface*>(node.data());
+            KIS_SAFE_ASSERT_RECOVER(decoratedNode) { continue; }
+
+            decoratedNode->setDecorationsVisible(true, doUpdates);
+        }
+    }
 
     if (doUpdates) {
         KisImageAnimationInterface *animation = canvas->image()->animationInterface();

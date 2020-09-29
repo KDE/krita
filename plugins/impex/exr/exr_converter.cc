@@ -896,7 +896,7 @@ KisImportExportErrorCode EXRConverter::decode(const QString &filename)
                           "<br/><br/>"
                           "This will hardly make any visual difference just keep it in mind.");
             if (d->showNotifications) {
-                QMessageBox::information(0, i18nc("@title:window", "EXR image has been modified"), msg);
+                QMessageBox::information(qApp->activeWindow(), i18nc("@title:window", "EXR image has been modified"), msg);
             } else {
                 warnKrita << "WARNING:" << msg;
             }

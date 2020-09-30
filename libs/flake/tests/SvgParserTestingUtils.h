@@ -116,8 +116,15 @@ struct SvgRenderTester : public SvgTester
         m_checkQImagePremiltiplied = value;
     }
 
-    static void testRender(KoShape *shape, const QString &prefix, const QString &testName, const QSize canvasSize, int fuzzyThreshold = 0, bool checkQImagePremultiplied = false) {
+    static void testRender(KoShape *shape, const QString &prefix, const QString &testName, const QSize canvasSize, qreal dpi, int fuzzyThreshold = 0, bool checkQImagePremultiplied = false) {
         QImage canvas(canvasSize, QImage::Format_ARGB32);
+        // 72 dpi => ~2834 dpm
+        qreal inchesInMeter = 39.37007874;
+        qreal dpm = dpi*inchesInMeter;
+
+        canvas.setDotsPerMeterX((int)dpm);
+        canvas.setDotsPerMeterY((int)dpm);
+
         canvas.fill(0);
         QPainter painter(&canvas);
 
@@ -204,7 +211,7 @@ struct SvgRenderTester : public SvgTester
             }
         }
 
-        testRender(shape, "load", testName, canvasSize, m_fuzzyThreshold, m_checkQImagePremiltiplied);
+        testRender(shape, "load", testName, canvasSize, pixelsPerInch, m_fuzzyThreshold, m_checkQImagePremiltiplied);
     }
 
 private:

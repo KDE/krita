@@ -2843,7 +2843,7 @@ void TestSvgParser::testKoClipPathRendering()
     koClipPath2->setClipRule(Qt::WindingFill);
     group->setClipPath(koClipPath2);
 
-    SvgRenderTester::testRender(group.take(), "load", "clip_render_test", QSize(30,30));
+    SvgRenderTester::testRender(group.take(), "load", "clip_render_test", QSize(30,30), 72.0);
 }
 
 void TestSvgParser::testKoClipPathRelativeRendering()
@@ -2887,7 +2887,7 @@ void TestSvgParser::testKoClipPathRelativeRendering()
     koClipPath2->setClipRule(Qt::WindingFill);
     group->setClipPath(koClipPath2);
 
-    SvgRenderTester::testRender(group.take(), "load", "relative_clip_render_test", QSize(30,30));
+    SvgRenderTester::testRender(group.take(), "load", "relative_clip_render_test", QSize(30,30), 72.0);
 }
 
 void TestSvgParser::testRenderClipPath_User()

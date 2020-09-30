@@ -47,9 +47,6 @@ class KToolBar;
     inline const classname ## Private *k_func() const { return reinterpret_cast<classname ## Private *>(k_ptr); } \
     friend class classname ## Private;
 
-// This is mostly from KDE3. TODO KDE5: remove the constructor parameter.
-#define KDE_DEFAULT_WINDOWFLAGS 0
-
 /**
  * @short %KDE top level main window
  *
@@ -143,7 +140,7 @@ public:
      * for the composer windows "composer#".
      *
      */
-    explicit KMainWindow(QWidget *parent = 0, Qt::WindowFlags f = KDE_DEFAULT_WINDOWFLAGS);
+    explicit KMainWindow(QWidget *parent = 0, Qt::WindowFlags f = Qt::WindowFlags());
 
     /**
      * \brief Destructor.

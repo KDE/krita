@@ -35,7 +35,7 @@ class KisInputConfigurationPage : public QWidget
 {
     Q_OBJECT
 public:
-    KisInputConfigurationPage(QWidget *parent = 0, Qt::WindowFlags f = 0);
+    KisInputConfigurationPage(QWidget *parent = 0, Qt::WindowFlags f = Qt::WindowFlags());
 
 public Q_SLOTS:
     void saveChanges();

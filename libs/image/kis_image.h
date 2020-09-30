@@ -274,12 +274,13 @@ public:
      *
      * @param node node to crop
      * @param newRect the rectangle of the layer which will be cut-out
+     * @param activeFrameOnly whether to crop every animation frame or just the current one.
      *
      * Please note that the actual operation starts asynchronously in
      * a background, so you cannot expect the image having new size
      * right after this call.
      */
-    void cropNode(KisNodeSP node, const QRect& newRect);
+    void cropNode(KisNodeSP node, const QRect& newRect, const bool activeFrameOnly = false);
 
     /**
      * @brief start asynchronous operation on scaling the image

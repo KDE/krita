@@ -32,6 +32,11 @@
 #include "kis_abstract_projection_plane.h"
 #include "kis_image.h"
 
+// To create a strong symbol
+KisStrokeJobData* MoveStrokeStrategy::Data::createLodClone(int levelOfDetail)
+{
+    return new Data(*this, levelOfDetail);
+}
 
 MoveStrokeStrategy::MoveStrokeStrategy(KisNodeSelectionRecipe nodeSelection,
                                        KisUpdatesFacade *updatesFacade,

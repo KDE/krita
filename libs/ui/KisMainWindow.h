@@ -495,7 +495,7 @@ private:
      */
     QDockWidget* createDockWidget(KoDockFactoryBase* factory);
 
-    bool openDocumentInternal(const QUrl &url, KisMainWindow::OpenFlags flags = 0);
+    bool openDocumentInternal(const QUrl &url, KisMainWindow::OpenFlags f = KisMainWindow::OpenFlags());
 
     void updateReloadFileAction(KisDocument *doc);
 

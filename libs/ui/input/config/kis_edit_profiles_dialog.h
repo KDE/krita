@@ -30,7 +30,7 @@ class KisEditProfilesDialog : public KoDialog
 {
     Q_OBJECT
 public:
-    KisEditProfilesDialog(QWidget *parent = 0, Qt::WindowFlags flags = 0);
+    KisEditProfilesDialog(QWidget *parent = 0, Qt::WindowFlags f = Qt::WindowFlags());
     ~KisEditProfilesDialog() override;
 
 private Q_SLOTS:

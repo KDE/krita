@@ -39,7 +39,7 @@ class KRITAWIDGETS_EXPORT KisGradientSliderWidget : public QWidget
     Q_OBJECT
 
 public:
-    KisGradientSliderWidget(QWidget *parent = 0, const char* name = 0, Qt::WindowFlags f = 0);
+    KisGradientSliderWidget(QWidget *parent = 0, const char* name = 0, Qt::WindowFlags f = Qt::WindowFlags());
 
 public:
     void paintEvent(QPaintEvent *) override;

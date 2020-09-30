@@ -323,7 +323,7 @@ KRITAWIDGETUTILS_EXPORT QAction *paste(QObject *parent);
  * class MyListView : public K3ListView {
  *   Q_OBJECT
  * public:
- *   MyListView( QWidget * parent = 0, const char * name = 0, WFlags f = 0 ) : K3ListView( parent, name, f ) {}
+ *   MyListView( QWidget * parent = 0, const char * name = 0, WFlags f = Qt::WindowFlags() ) : K3ListView( parent, name, f ) {}
  *   virtual ~MyListView() {}
  * public Q_SLOTS:
  *   virtual void clear() {}

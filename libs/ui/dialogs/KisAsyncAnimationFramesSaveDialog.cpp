@@ -29,6 +29,7 @@
 #include <QFileInfo>
 #include <QDir>
 #include <QMessageBox>
+#include <QApplication>
 
 struct KisAsyncAnimationFramesSaveDialog::Private {
     Private(KisImageSP _image,
@@ -126,7 +127,7 @@ KisAsyncAnimationRenderDialogBase::Result KisAsyncAnimationFramesSaveDialog::reg
         }
 
         QMessageBox::StandardButton result =
-                QMessageBox::warning(0,
+                QMessageBox::warning(qApp->activeWindow(),
                                      i18n("Delete old frames?"),
                                      i18n("Frames with the same naming "
                                           "scheme exist in the destination "
@@ -141,7 +142,7 @@ KisAsyncAnimationRenderDialogBase::Result KisAsyncAnimationFramesSaveDialog::reg
         if (result == QMessageBox::Yes) {
             Q_FOREACH (const QString &file, filesList) {
                 if (!dir.remove(file)) {
-                    QMessageBox::critical(0,
+                    QMessageBox::critical(qApp->activeWindow(),
                                           i18n("Failed to delete"),
                                           i18n("Failed to delete an old frame file:\n\n"
                                                "%1\n\n"

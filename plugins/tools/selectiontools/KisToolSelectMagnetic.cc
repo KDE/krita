@@ -19,11 +19,12 @@
 #include "KisToolSelectMagnetic.h"
 
 #include <QApplication>
-#include <QPainter>
-#include <QWidget>
-#include <QPainterPath>
 #include <QLayout>
+#include <QPainter>
+#include <QPainterPath>
+#include <QPushButton>
 #include <QVBoxLayout>
+#include <QWidget>
 
 #include <kis_debug.h>
 #include <klocalizedstring.h>
@@ -221,6 +222,7 @@ void KisToolSelectMagnetic::beginPrimaryAction(KoPointerEvent *event)
         m_pointCollection.push_back(edge);
     } else {
         updateInitialAnchorBounds(temp.toPoint());
+        emit setButtonsEnabled(true);
     }
 
     m_lastAnchor = temp.toPoint();
@@ -635,6 +637,7 @@ void KisToolSelectMagnetic::requestStrokeEnd()
 {
     if (m_finished || m_anchorPoints.count() < 2) return;
 
+    setButtonsEnabled(false);
     finishSelectionAction();
     m_finished = false;
 }
@@ -643,6 +646,7 @@ void KisToolSelectMagnetic::requestStrokeCancellation()
 {
     m_complete = false;
     m_finished = false;
+    setButtonsEnabled(false);
     resetVariables();
 }
 
@@ -699,14 +703,36 @@ QWidget * KisToolSelectMagnetic::createOptionWidget()
     anchorGapInput->setSuffix(" px");
     f4->addWidget(anchorGapInput);
 
-    connect(anchorGapInput, SIGNAL(valueChanged(int)), this, SLOT(slotSetAnchorGap(int)));
+    connect(anchorGapInput, SIGNAL(valueChanged(int)), this,
+            SLOT(slotSetAnchorGap(int)));
+
+    QHBoxLayout *f5 = new QHBoxLayout();
+    QPushButton *completeSelection =
+        new QPushButton("Complete", selectionWidget);
+    QPushButton *discardSelection = new QPushButton("Discard", selectionWidget);
+
+    f5->addWidget(completeSelection);
+    f5->addWidget(discardSelection);
+
+    completeSelection->setEnabled(false);
+    completeSelection->setToolTip("Complete Selection");
+    connect(completeSelection, SIGNAL(clicked()), this,
+            SLOT(requestStrokeEnd()));
+    connect(this, SIGNAL(setButtonsEnabled(bool)), completeSelection, SLOT(setEnabled(bool)));
+
+    discardSelection->setEnabled(false);
+    discardSelection->setToolTip("Discard Selection");
+    connect(discardSelection, SIGNAL(clicked()), this,
+            SLOT(requestStrokeCancellation()));
+    connect(this, SIGNAL(setButtonsEnabled(bool)), discardSelection, SLOT(setEnabled(bool)));
 
     QVBoxLayout *l = dynamic_cast<QVBoxLayout *>(selectionWidget->layout());
 
     l->insertLayout(1, f1);
     l->insertLayout(2, f2);
     l->insertLayout(3, f3);
-    l->insertLayout(5, f4);
+    l->insertLayout(4, f4);
+    l->insertLayout(5, f5);
 
     filterRadiusInput->setValue(m_configGroup.readEntry("filterradius", 3.0));
     thresholdInput->setValue(m_configGroup.readEntry("threshold", 100));
@@ -714,6 +740,7 @@ QWidget * KisToolSelectMagnetic::createOptionWidget()
     anchorGapInput->setValue(m_configGroup.readEntry("anchorgap", 20));
 
     return selectionWidget;
+
 } // KisToolSelectMagnetic::createOptionWidget
 
 void KisToolSelectMagnetic::slotSetFilterRadius(qreal r)

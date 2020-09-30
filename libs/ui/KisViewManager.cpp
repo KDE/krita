@@ -521,7 +521,6 @@ void KisViewManager::setCurrentView(KisView *view)
         d->currentImageView->notifyCurrentStateChanged(true);
         d->currentImageView->canvasController()->activate();
         d->currentImageView->canvasController()->setFocus();
-        d->currentImageView->zoomManager()->updateCurrentZoomResource();
 
         d->viewConnections.addUniqueConnection(
                     image(), SIGNAL(sigSizeChanged(QPointF,QPointF)),

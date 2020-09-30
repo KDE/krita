@@ -527,7 +527,7 @@ extern "C" int main(int argc, char **argv)
         else {
             supportedWindowsVersion  = false;
             if (cfg.readEntry("WarnedAboutUnsupportedWindows", false)) {
-                QMessageBox::information(0,
+                QMessageBox::information(qApp->activeWindow(),
                                          i18nc("@title:window", "Krita: Warning"),
                                          i18n("You are running an unsupported version of Windows: %1.\n"
                                               "This is not recommended. Do not report any bugs.\n"
@@ -550,12 +550,12 @@ extern "C" int main(int argc, char **argv)
                     cfg.setUseWin8PointerInput(true);
                 } else if (!cfg.readEntry("WarnedAboutMissingWinTab", false)) {
                     if (KisTabletSupportWin8::isAvailable()) {
-                        QMessageBox::information(nullptr,
+                        QMessageBox::information(qApp->activeWindow(),
                                                  i18n("Krita Tablet Support"),
                                                  i18n("Cannot load WinTab driver and no Windows Ink pen devices are found. If you have a drawing tablet, please make sure the tablet driver is properly installed."),
                                                  QMessageBox::Ok, QMessageBox::Ok);
                     } else {
-                        QMessageBox::information(nullptr,
+                        QMessageBox::information(qApp->activeWindow(),
                                                  i18n("Krita Tablet Support"),
                                                  i18n("Cannot load WinTab driver. If you have a drawing tablet, please make sure the tablet driver is properly installed."),
                                                  QMessageBox::Ok, QMessageBox::Ok);

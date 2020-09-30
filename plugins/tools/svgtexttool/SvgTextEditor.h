@@ -40,7 +40,7 @@ class SvgTextEditor : public KXmlGuiWindow
 {
     Q_OBJECT
 public:
-    SvgTextEditor(QWidget *parent = 0, Qt::WindowFlags flags = 0);
+    SvgTextEditor(QWidget *parent = 0, Qt::WindowFlags f = Qt::WindowFlags());
     ~SvgTextEditor();
 
     //tiny enum to keep track of the tab on which editor something happens while keeping the code readable.

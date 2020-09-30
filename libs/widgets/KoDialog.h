@@ -167,7 +167,7 @@ public:
      * @param parent The parent of the dialog.
      * @param flags  The widget flags passed to the QDialog constructor
      */
-    explicit KoDialog(QWidget *parent = 0, Qt::WindowFlags flags = 0);
+    explicit KoDialog(QWidget *parent = 0, Qt::WindowFlags f = Qt::WindowFlags());
 
     /**
      * Destroys the dialog.
@@ -800,7 +800,7 @@ protected Q_SLOTS:
     void updateGeometry();
 
 private:
-    KoDialog(KoDialogPrivate &dd, QWidget *parent, Qt::WindowFlags flags = 0);
+    KoDialog(KoDialogPrivate &dd, QWidget *parent, Qt::WindowFlags f = Qt::WindowFlags());
     KoDialogPrivate *const d_ptr;
 
 private:

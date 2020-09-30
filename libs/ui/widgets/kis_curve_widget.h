@@ -59,7 +59,7 @@ public:
      * Create a new curve widget with a default curve, that is a straight
      * line from bottom-left to top-right.
      */
-    KisCurveWidget(QWidget *parent = 0, Qt::WindowFlags f = 0);
+    KisCurveWidget(QWidget *parent = 0, Qt::WindowFlags f = Qt::WindowFlags());
 
     ~KisCurveWidget() override;
 

@@ -35,6 +35,7 @@ Comment=Plugin to change color space to selected documents
 Comment[ca]=Un connector per a canviar l'espai de color dels documents seleccionats
 Comment[ca@valencia]=Un connector per a canviar l'espai de color dels documents seleccionats
 Comment[cs]=Modul pro změnu rozsahu barvy pro vybrané dokumenty
+Comment[de]=Modul zum Ändern des Farbraums ausgewählter Dokumente
 Comment[en_GB]=Plugin to change colour space to selected documents
 Comment[es]=Complemento para cambiar el espacio de color de los documentos seleccionados
 Comment[et]=Plugin valitud dokumentide värviruumi muutmiseks

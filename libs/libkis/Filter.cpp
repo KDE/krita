@@ -14,6 +14,8 @@
 #include <kis_filter_manager.h>
 #include <kis_filter_registry.h>
 #include <KisDocument.h>
+#include <kis_paint_device.h>
+#include <kis_paint_device_frames_interface.h>
 #include <KisPart.h>
 #include <KisView.h>
 
@@ -138,15 +140,10 @@ bool Filter::startFilter(Node *node, int x, int y, int w, int h)
     QRect processRect = filter->changedRect(applyRect, filterConfig.data(), 0);
     processRect &= image->bounds();
 
-    if (filter->supportsThreading()) {
-        QSize size = KritaUtils::optimalPatchSize();
-        QVector<QRect> rects = KritaUtils::splitRectIntoPatches(processRect, size);
-        Q_FOREACH (const QRect &rc, rects) {
-            image->addJob(currentStrokeId, new KisFilterStrokeStrategy::Data(rc, true));
-        }
-    } else {
-        image->addJob(currentStrokeId, new KisFilterStrokeStrategy::Data(processRect, false));
-    }
+    const int frameID = paintDevice ? paintDevice->framesInterface()->currentFrameId() : -1;
+
+    image->addJob(currentStrokeId, new KisFilterStrokeStrategy::Data(frameID));
+
 
     image->endStroke(currentStrokeId);
     image->waitForDone();

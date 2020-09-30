@@ -23,6 +23,9 @@
 #include <filter/kis_filter_registry.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_paint_device.h>
+#include <kis_paint_device_frames_interface.h>
+#include <kis_image_animation_interface.h>
+#include <kis_raster_keyframe_channel.h>
 
 // krita/ui
 #include "KisViewManager.h"
@@ -316,21 +319,12 @@ void KisFilterManager::apply(KisFilterConfigurationSP _filterConfig)
     d->currentStrokeId =
         image->startStroke(strategy);
 
-    QRect processRect = filter->changedRect(applyRect, filterConfig.data(), 0);
-    processRect &= image->bounds();
+    const int NULL_FRAME = -1;
+    const int frameID = paintDevice && paintDevice->framesInterface() ? paintDevice->framesInterface()->currentFrameId() : NULL_FRAME;
+    ENTER_FUNCTION();
 
-    if (filter->supportsThreading()) {
-        QSize size = KritaUtils::optimalPatchSize();
-        QVector<QRect> rects = KritaUtils::splitRectIntoPatches(processRect, size);
-
-        Q_FOREACH (const QRect &rc, rects) {
-            image->addJob(d->currentStrokeId,
-                          new KisFilterStrokeStrategy::Data(rc, true));
-        }
-    } else {
-        image->addJob(d->currentStrokeId,
-                      new KisFilterStrokeStrategy::Data(processRect, false));
-    }
+    image->addJob(d->currentStrokeId,
+                  new KisFilterStrokeStrategy::Data(frameID));
 
     {
         KisFilterStrokeStrategy::IdleBarrierData *data =
@@ -357,7 +351,23 @@ void KisFilterManager::apply(KisFilterConfigurationSP _filterConfig)
 
 void KisFilterManager::finish()
 {
+    ENTER_FUNCTION();
     Q_ASSERT(d->currentStrokeId);
+
+    {// Do other frames...
+
+        KisImageWSP image = d->view->image();
+        KisPaintDeviceSP paintDevice = d->view->activeNode()->paintDevice();
+        const int NULL_FRAME = -1;
+        const int frameID = paintDevice && paintDevice->framesInterface() ? paintDevice->framesInterface()->currentFrameId() : NULL_FRAME;
+        QList<int> frames = paintDevice && paintDevice->framesInterface() ? paintDevice->framesInterface()->frames() : QList<int>();
+
+        frames.removeAll(frameID);
+        Q_FOREACH(const int& frame, frames) {
+            image->addJob(d->currentStrokeId,
+                          new KisFilterStrokeStrategy::Data(frame));
+        }
+    }
 
     d->view->image()->endStroke(d->currentStrokeId);
 

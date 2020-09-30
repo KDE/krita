@@ -53,7 +53,7 @@ protected:
 
         Q_UNUSED(resources);
 
-        image->addJob(strokeId(),
+        /*image->addJob(strokeId(),
                       new KisFilterStrokeStrategy::
                       Data(QRect(100,100,100,100), true));
 
@@ -63,7 +63,7 @@ protected:
 
         image->addJob(strokeId(),
                       new KisFilterStrokeStrategy::
-                      Data(QRect(100,200,100,100), true));
+                      Data(QRect(100,200,100,100), true));*/
     }
 
 private:

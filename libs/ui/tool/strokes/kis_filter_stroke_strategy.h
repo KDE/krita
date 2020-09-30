@@ -15,24 +15,33 @@
 class KRITAUI_EXPORT KisFilterStrokeStrategy : public KisPainterBasedStrokeStrategy
 {
 public:
+    /*
+     *
+     * TEMP NOTE DELETE LATER:
+     * "KisFilterStrokeStrategy::Data should only have a "frameId" paramenter. No `concurrent` or `_processRect`.
+     * The latter two variables should be calculated internally in doStrokeCallback,
+     * and after that a set of "mutated jobs" should be generated" - Dmitry
+     *
+     */
     class Data : public KisStrokeJobData {
     public:
-        Data(const QRect &_processRect, bool concurrent)
-            : KisStrokeJobData(concurrent ? CONCURRENT : SEQUENTIAL),
-              processRect(_processRect) {}
+        Data(int frameID)
+            : KisStrokeJobData(CONCURRENT),
+              m_frameID(frameID)
+        {}
 
         KisStrokeJobData* createLodClone(int levelOfDetail) override {
             return new Data(*this, levelOfDetail);
         }
 
-        QRect processRect;
+        int m_frameID;
 
     private:
         Data(const Data &rhs, int levelOfDetail)
             : KisStrokeJobData(rhs)
+            , m_frameID(rhs.m_frameID)
          {
              KisLodTransform t(levelOfDetail);
-             processRect = t.map(rhs.processRect);
          }
 
     };

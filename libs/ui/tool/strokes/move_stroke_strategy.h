@@ -46,9 +46,7 @@ public:
         {
         }
 
-        KisStrokeJobData* createLodClone(int levelOfDetail) override {
-            return new Data(*this, levelOfDetail);
-        }
+        KisStrokeJobData* createLodClone(int levelOfDetail) override;
 
         QPoint offset;
 

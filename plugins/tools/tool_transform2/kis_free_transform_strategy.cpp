@@ -517,6 +517,10 @@ void KisFreeTransformStrategy::continuePrimaryAction(const QPointF &mousePos,
                                  movingPoint,
                                  dist);
 
+        if (!result.isValid) {
+            break;
+        }
+
         if (shiftModifierActive ||  m_d->currentArgs.keepAspectRatio()) {
             qreal aspectRatio = m_d->clickArgs.scaleX() / m_d->clickArgs.scaleY();
             m_d->currentArgs.setScaleX(aspectRatio * result.scale);
@@ -566,6 +570,10 @@ void KisFreeTransformStrategy::continuePrimaryAction(const QPointF &mousePos,
                                  staticPointInView,
                                  movingPoint,
                                  dist);
+
+        if (!result.isValid) {
+            break;
+        }
 
         if (shiftModifierActive  ||  m_d->currentArgs.keepAspectRatio()) {
             qreal aspectRatio = m_d->clickArgs.scaleY() / m_d->clickArgs.scaleX();

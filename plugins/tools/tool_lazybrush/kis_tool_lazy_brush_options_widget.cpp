@@ -328,7 +328,7 @@ void KisToolLazyBrushOptionsWidget::slotRemove()
 void KisToolLazyBrushOptionsWidget::slotUpdate()
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->activeMask);
-    KisLayerPropertiesIcons::setNodeProperty(m_d->activeMask, KisLayerPropertiesIcons::colorizeNeedsUpdate, false, m_d->provider->currentImage());
+    KisLayerPropertiesIcons::setNodePropertyAutoUndo(m_d->activeMask, KisLayerPropertiesIcons::colorizeNeedsUpdate, false, m_d->provider->currentImage());
 }
 
 void KisToolLazyBrushOptionsWidget::slotSetAutoUpdates(bool value)
@@ -340,13 +340,13 @@ void KisToolLazyBrushOptionsWidget::slotSetAutoUpdates(bool value)
 void KisToolLazyBrushOptionsWidget::slotSetShowKeyStrokes(bool value)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->activeMask);
-    KisLayerPropertiesIcons::setNodeProperty(m_d->activeMask, KisLayerPropertiesIcons::colorizeEditKeyStrokes, value, m_d->provider->currentImage());
+    KisLayerPropertiesIcons::setNodePropertyAutoUndo(m_d->activeMask, KisLayerPropertiesIcons::colorizeEditKeyStrokes, value, m_d->provider->currentImage());
 }
 
 void KisToolLazyBrushOptionsWidget::slotSetShowOutput(bool value)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->activeMask);
-    KisLayerPropertiesIcons::setNodeProperty(m_d->activeMask, KisLayerPropertiesIcons::colorizeShowColoring, value, m_d->provider->currentImage());
+    KisLayerPropertiesIcons::setNodePropertyAutoUndo(m_d->activeMask, KisLayerPropertiesIcons::colorizeShowColoring, value, m_d->provider->currentImage());
 }
 
 void KisToolLazyBrushOptionsWidget::slotUseEdgeDetectionChanged(bool value)

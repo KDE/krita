@@ -212,8 +212,11 @@ void KisSelectionBasedLayer::resetCache()
         return;
     }
 
-    if (!m_d->paintDevice || *m_d->paintDevice->colorSpace() != *imageSP->colorSpace()) {
+    if (!m_d->paintDevice) {
         m_d->paintDevice = KisPaintDeviceSP(new KisPaintDevice(KisNodeWSP(this), imageSP->colorSpace(), new KisDefaultBounds(image())));
+    } else if (*m_d->paintDevice->colorSpace() != *imageSP->colorSpace()) {
+        m_d->paintDevice->clear();
+        m_d->paintDevice->convertTo(imageSP->colorSpace());
     } else {
         m_d->paintDevice->clear();
     }
@@ -279,8 +282,8 @@ void KisSelectionBasedLayer::setY(qint32 y)
 
 KisKeyframeChannel *KisSelectionBasedLayer::requestKeyframeChannel(const QString &id)
 {
-    if (id == KisKeyframeChannel::Content.id()) {
-        KisRasterKeyframeChannel *contentChannel = m_d->selection->pixelSelection()->createKeyframeChannel(KisKeyframeChannel::Content);
+    if (id == KisKeyframeChannel::Raster.id()) {
+        KisRasterKeyframeChannel *contentChannel = m_d->selection->pixelSelection()->createKeyframeChannel(KisKeyframeChannel::Raster);
         contentChannel->setFilenameSuffix(".pixelselection");
         return contentChannel;
     }
@@ -290,7 +293,7 @@ KisKeyframeChannel *KisSelectionBasedLayer::requestKeyframeChannel(const QString
 
 bool KisSelectionBasedLayer::supportsKeyframeChannel(const QString &id)
 {
-    if (id == KisKeyframeChannel::Content.id()) {
+    if (id == KisKeyframeChannel::Raster.id()) {
         return true;
     }
 

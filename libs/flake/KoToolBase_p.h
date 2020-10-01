@@ -84,6 +84,7 @@ public:
     bool isInTextMode;
     bool maskSyntheticEvents{false}; ///< Whether this tool masks synthetic events
     bool isActivated;
+    QRectF lastDecorationsRect;
 };
 
 #endif

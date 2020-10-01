@@ -726,7 +726,7 @@ void DcrawSettingsWidget::setup(int advSettings)
 
     d->outIccUrlEdit = new RFileSelector(d->colormanSettings);
     d->outIccUrlEdit->setFileDlgMode(QFileDialog::ExistingFile);
-    d->outIccUrlEdit->setFileDlgFilter(i18n("ICC Files (*.icc; *.icm)"));
+    d->outIccUrlEdit->setFileDlgFilter(i18n("ICC Files (*.icc *.icm)"));
 
     colormanLayout->addWidget(d->inputColorSpaceLabel,     0, 0, 1, 1);
     colormanLayout->addWidget(d->inputColorSpaceComboBox,  0, 1, 1, 2);

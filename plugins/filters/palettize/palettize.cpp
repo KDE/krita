@@ -132,7 +132,7 @@ KisPalettizeWidget::KisPalettizeWidget(QWidget* parent)
     alphaClipSpinBox->setSingleStep(0.125);
     QObject::connect(alphaClipSpinBox, &KisDoubleSliderSpinBox::valueChanged, this, &KisConfigWidget::sigConfigurationItemChanged);
 
-    alphaIndexSpinBox->setPrefix(QString("%1  ").arg(i18n("Index:")));
+    alphaIndexSpinBox->setPrefix(QString("%1  ").arg(i18nc("Index as in Index Color", "Index:")));
     alphaIndexSpinBox->setRange(0, 255);
     QObject::connect(alphaIndexSpinBox, &KisSliderSpinBox::valueChanged, this, &KisConfigWidget::sigConfigurationItemChanged);
     QObject::connect(m_paletteWidget, &KisResourceItemChooser::resourceSelected, [this](){

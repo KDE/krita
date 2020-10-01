@@ -140,6 +140,7 @@ protected:
     QRectF m_oldColorPreviewUpdateRect;
     QColor m_colorPreviewCurrentColor;
     bool m_colorPreviewShowComparePlate;
+    QRectF m_oldColorPreviewBaseColorRect;
     QColor m_colorPreviewBaseColor;
 
 private:
@@ -151,7 +152,7 @@ private:
     void pickColorWasOverridden();
 
     int colorPreviewResourceId(AlternateAction action);
-    QRectF colorPreviewDocRect(const QPointF &outlineDocPoint);
+    std::pair<QRectF, QRectF> colorPreviewDocRect(const QPointF &outlineDocPoint);
 
     bool isPickingAction(AlternateAction action);
 

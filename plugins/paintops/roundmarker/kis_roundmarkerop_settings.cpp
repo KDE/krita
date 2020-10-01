@@ -65,7 +65,8 @@ QPainterPath KisRoundMarkerOpSettings::brushOutline(const KisPaintInformation &i
 
         RoundMarkerOption op;
         op.readOptionSetting(*this);
-        const qreal radius = 0.5 * op.diameter;
+        // Adding 1 for the antialiasing/fade.
+        const qreal radius = (0.5 * op.diameter) + 1;
 
         QPainterPath realOutline;
         realOutline.addEllipse(QPointF(), radius, radius);

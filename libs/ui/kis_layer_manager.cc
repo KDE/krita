@@ -1,5 +1,6 @@
 /*
  *  Copyright (C) 2006 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2020 L. E. Segovia <amy@amyspark.me>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -235,6 +236,8 @@ void KisLayerManager::layerProperties()
     QList<KisNodeSP> selectedNodes = m_view->nodeManager()->selectedNodes();
     const bool multipleLayersSelected = selectedNodes.size() > 1;
 
+    if (!m_view->nodeManager()->canModifyLayers(selectedNodes)) return;
+
     KisAdjustmentLayerSP adjustmentLayer = KisAdjustmentLayerSP(dynamic_cast<KisAdjustmentLayer*>(layer.data()));
     KisGeneratorLayerSP generatorLayer = KisGeneratorLayerSP(dynamic_cast<KisGeneratorLayer*>(layer.data()));
     KisFileLayerSP fileLayer = KisFileLayerSP(dynamic_cast<KisFileLayer*>(layer.data()));
@@ -286,7 +289,7 @@ void KisLayerManager::layerProperties()
         KisFilterConfigurationSP configBefore(generatorLayer->filter());
         Q_ASSERT(configBefore);
 
-        KisDlgGeneratorLayer *dlg = new KisDlgGeneratorLayer(generatorLayer->name(), m_view, m_view->mainWindow(), generatorLayer, configBefore);
+        KisDlgGeneratorLayer *dlg = new KisDlgGeneratorLayer(generatorLayer->name(), m_view, m_view->mainWindow(), generatorLayer, configBefore, KisStrokeId());
         dlg->setCaption(i18n("Fill Layer Properties"));
         dlg->setAttribute(Qt::WA_DeleteOnClose);
 
@@ -362,6 +365,8 @@ void KisLayerManager::changeCloneSource()
         return;
     }
 
+    if (!m_view->nodeManager()->canModifyLayers(implicitCastList<KisNodeSP>(cloneLayers))) return;
+
     KisDlgChangeCloneSource *dialog = new KisDlgChangeCloneSource(cloneLayers, m_view);
     dialog->setCaption(i18n("Change Clone Layer"));
     dialog->resize(dialog->minimumSizeHint());
@@ -375,6 +380,9 @@ void KisLayerManager::convertNodeToPaintLayer(KisNodeSP source)
 {
     KisImageWSP image = m_view->image();
     if (!image) return;
+
+    // this precondition must be checked at higher level
+    KIS_SAFE_ASSERT_RECOVER_RETURN(source->isEditable(false));
 
     KisLayer *srcLayer = qobject_cast<KisLayer*>(source.data());
     if (srcLayer && (srcLayer->inherits("KisGroupLayer") || srcLayer->layerStyle() || srcLayer->childCount() > 0)) {
@@ -424,12 +432,12 @@ void KisLayerManager::convertNodeToPaintLayer(KisNodeSP source)
                                          clone);
 
     if (srcDevice->framesInterface()) {
-        KisKeyframeChannel *cloneKeyChannel = layer->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
+        KisKeyframeChannel *cloneKeyChannel = layer->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true);
         layer->enableAnimation();
         KisKeyframeChannel *sourceKeyChannel = srcDevice->keyframeChannel();
 
-        foreach (const int &index, sourceKeyChannel->allKeyframeIds()) {
-            cloneKeyChannel->copyExternalKeyframe(sourceKeyChannel, index, index);
+        foreach (const int &index, sourceKeyChannel->allKeyframeTimes()) {
+            KisKeyframeChannel::copyKeyframe(sourceKeyChannel, index, cloneKeyChannel, index);
         }
     }
 
@@ -458,10 +466,12 @@ void KisLayerManager::convertGroupToAnimated()
     KisGroupLayerSP group = dynamic_cast<KisGroupLayer*>(activeLayer().data());
     if (group.isNull()) return;
 
+    if (!m_view->nodeManager()->canModifyLayer(group)) return;
+
     KisPaintLayerSP animatedLayer = new KisPaintLayer(m_view->image(), group->name(), OPACITY_OPAQUE_U8);
     animatedLayer->enableAnimation();
     KisRasterKeyframeChannel *contentChannel = dynamic_cast<KisRasterKeyframeChannel*>(
-                animatedLayer->getKeyframeChannel(KisKeyframeChannel::Content.id(), true));
+                animatedLayer->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true));
     KIS_ASSERT_RECOVER_RETURN(contentChannel);
 
     KisNodeSP child = group->firstChild();
@@ -483,6 +493,9 @@ void KisLayerManager::convertLayerToFileLayer(KisNodeSP source)
 {
     KisImageSP image = m_view->image();
     if (!image) return;
+
+    // this precondition must be checked at higher level
+    KIS_SAFE_ASSERT_RECOVER_RETURN(source->isEditable(false));
 
     QStringList listMimeFilter = KisImportExportManager::supportedMimeTypes(KisImportExportManager::Export);
 
@@ -576,7 +589,7 @@ void KisLayerManager::adjustLayerPosition(KisNodeSP node, KisNodeSP activeNode, 
     }
 
     while (parent &&
-           (!parent->allowAsChild(node) || parent->userLocked())) {
+           (!parent->allowAsChild(node) || !parent->isEditable(false))) {
 
         above = parent;
         parent = parent->parent();
@@ -701,30 +714,40 @@ KisAdjustmentLayerSP KisLayerManager::addAdjustmentLayer(KisNodeSP activeNode, c
     return layer;
 }
 
+KisGeneratorLayerSP KisLayerManager::addGeneratorLayer(KisNodeSP activeNode, const QString &name, KisFilterConfigurationSP filter, KisSelectionSP selection, KisProcessingApplicator *applicator)
+{
+    KisImageWSP image = m_view->image();
+    auto layer = new KisGeneratorLayer(image, name, filter, selection);
+    addLayerCommon(activeNode, layer, true, applicator);
+
+    return layer;
+}
+
 KisNodeSP KisLayerManager::addGeneratorLayer(KisNodeSP activeNode)
 {
     KisImageWSP image = m_view->image();
+    KisSelectionSP selection = m_view->selection();
     QColor currentForeground = m_view->canvasResourceProvider()->fgColor().toQColor();
 
+    KisProcessingApplicator applicator(image, 0, KisProcessingApplicator::NONE, KisImageSignalVector() << ModifiedSignal, kundo2_i18n("Add Layer"));
 
-    KisDlgGeneratorLayer dlg(image->nextLayerName(i18n("Fill Layer")), m_view, m_view->mainWindow(), 0, 0);
+    KisGeneratorLayerSP node = addGeneratorLayer(activeNode, QString(), nullptr, selection, &applicator);
+
+    KisDlgGeneratorLayer dlg(image->nextLayerName(i18n("Fill Layer")), m_view, m_view->mainWindow(), node, nullptr, applicator.getStroke());
     KisFilterConfigurationSP defaultConfig = dlg.configuration();
     defaultConfig->setProperty("color", currentForeground);
     dlg.setConfiguration(defaultConfig);
-
     dlg.resize(dlg.minimumSizeHint());
+
     if (dlg.exec() == QDialog::Accepted) {
-        KisSelectionSP selection = m_view->selection();
-        KisFilterConfigurationSP  generator = dlg.configuration();
-        QString name = dlg.layerName();
-
-        KisNodeSP node = new KisGeneratorLayer(image, name, generator ? generator->cloneWithResourcesSnapshot() : 0, selection);
-
-        addLayerCommon(activeNode, node, true, 0);
-
+        node->setName(dlg.layerName());
+        applicator.end();
         return node;
     }
-    return 0;
+    else {
+        applicator.cancel();
+        return nullptr;
+    }
 }
 
 void KisLayerManager::flattenImage()
@@ -804,6 +827,24 @@ void KisLayerManager::mergeLayer()
     if (!m_view->blockUntilOperationsFinished(image)) return;
 
     QList<KisNodeSP> selectedNodes = m_view->nodeManager()->selectedNodes();
+
+    // check if all the layers are a part of a locked group
+    bool hasEditableLayer = false;
+    Q_FOREACH (KisNodeSP node, selectedNodes) {
+        if (node->isEditable(false)) {
+            hasEditableLayer = true;
+            break;
+        }
+    }
+
+    if (!hasEditableLayer) {
+        m_view->showFloatingMessage(
+                    i18ncp("floating message in layer manager",
+                          "Layer is locked ", "Layers are locked", selectedNodes.size()),
+                    QIcon(), 2000, KisFloatingMessage::Low);
+        return;
+    }
+
     if (selectedNodes.size() > 1) {
         image->mergeMultipleLayers(selectedNodes, m_view->activeNode());
     }
@@ -846,6 +887,7 @@ void KisLayerManager::flattenLayer()
     if (!layer) return;
 
     if (!m_view->blockUntilOperationsFinished(image)) return;
+    if (!m_view->nodeManager()->canModifyLayer(layer)) return;
 
     convertNodeToPaintLayer(layer);
     m_view->updateGUI();
@@ -860,6 +902,7 @@ void KisLayerManager::rasterizeLayer()
     if (!layer) return;
 
     if (!m_view->blockUntilOperationsFinished(image)) return;
+    if (!m_view->nodeManager()->canModifyLayer(layer)) return;
 
     KisPaintLayerSP paintLayer = new KisPaintLayer(image, layer->name(), layer->opacity());
     KisPainter gc(paintLayer->paintDevice());
@@ -983,6 +1026,7 @@ void KisLayerManager::layerStyle()
     if (!layer) return;
 
     if (!m_view->blockUntilOperationsFinished(image)) return;
+    if (!m_view->nodeManager()->canModifyLayer(layer)) return;
 
     KisPSDLayerStyleSP oldStyle;
     if (layer->layerStyle()) {

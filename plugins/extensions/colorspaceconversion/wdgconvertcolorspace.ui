@@ -15,7 +15,7 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="KisColorSpaceSelector" name="colorSpaceSelector"/>
+    <widget class="KisColorSpaceSelector" name="colorSpaceSelector" native="true"/>
    </item>
    <item>
     <widget class="QGroupBox" name="grpIntent">
@@ -136,6 +136,22 @@ colors (Pantone, TruMatch, logo colors, ...)</string>
     </widget>
    </item>
    <item>
+    <spacer name="verticalSpacer_2">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>10</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item>
+    <widget class="KisWarningWidget" name="wdgWarningNotice" native="true"/>
+   </item>
+   <item>
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -143,7 +159,7 @@ colors (Pantone, TruMatch, logo colors, ...)</string>
      <property name="sizeHint" stdset="0">
       <size>
        <width>20</width>
-       <height>40</height>
+       <height>20</height>
       </size>
      </property>
     </spacer>
@@ -155,6 +171,12 @@ colors (Pantone, TruMatch, logo colors, ...)</string>
    <class>KisColorSpaceSelector</class>
    <extends>QWidget</extends>
    <header>widgets/kis_color_space_selector.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisWarningWidget</class>
+   <extends>QWidget</extends>
+   <header>widgets/KisWarningWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

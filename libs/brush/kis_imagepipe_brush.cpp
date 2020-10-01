@@ -144,10 +144,6 @@ protected:
         return brushIndex;
     }
 
-    int currentBrushIndex() override {
-        return m_currentBrushIndex;
-    }
-
     void updateBrushIndexes(const KisPaintInformation& info, int seqNo) override {
         for (int i = 0; i < m_parasite.dim; i++) {
             m_parasite.index[i] = selectPost(m_parasite.selection[i],
@@ -162,18 +158,16 @@ public:
     using KisBrushesPipe<KisGbrBrush>::addBrush;
     using KisBrushesPipe<KisGbrBrush>::sizeBrush;
 
+    int currentBrushIndex() override {
+        return m_currentBrushIndex;
+    }
+
     void setParasite(const KisPipeBrushParasite& parasite) {
         m_parasite = parasite;
     }
 
     const KisPipeBrushParasite& parasite() const {
         return m_parasite;
-    }
-
-    void setUseColorAsMask(bool useColorAsMask) {
-        Q_FOREACH (KisGbrBrushSP brush, m_brushes) {
-            brush->setUseColorAsMask(useColorAsMask);
-        }
     }
 
     void setAdjustmentMidPoint(quint8 value) {
@@ -341,6 +335,8 @@ bool KisImagePipeBrush::initFromData(const QByteArray &data)
         setWidth(d->brushesPipe.firstBrush()->width());
         setHeight(d->brushesPipe.firstBrush()->height());
         setBrushTipImage(d->brushesPipe.firstBrush()->brushTipImage());
+        setBrushApplication(d->brushesPipe.firstBrush()->brushApplication());
+        setBrushType(d->brushesPipe.hasColor() ? PIPE_IMAGE : PIPE_MASK);
     }
 
     return true;
@@ -387,11 +383,6 @@ void KisImagePipeBrush::notifyStrokeStarted()
     d->brushesPipe.notifyStrokeStarted();
 }
 
-void KisImagePipeBrush::notifyCachedDabPainted(const KisPaintInformation& info)
-{
-    d->brushesPipe.notifyCachedDabPainted(info);
-}
-
 void KisImagePipeBrush::prepareForSeqNo(const KisPaintInformation &info, int seqNo)
 {
     d->brushesPipe.prepareForSeqNo(info, seqNo);
@@ -419,31 +410,16 @@ KisFixedPaintDeviceSP KisImagePipeBrush::paintDevice(
     return d->brushesPipe.paintDevice(colorSpace, shape, info, subPixelX, subPixelY);
 }
 
-enumBrushType KisImagePipeBrush::brushType() const
-{
-    return !hasColor() ? PIPE_MASK : PIPE_IMAGE;
-}
-
 QString KisImagePipeBrush::parasiteSelection()
 {
     return parasiteSelectionString;
 }
 
-bool KisImagePipeBrush::hasColor() const
-{
-    return d->brushesPipe.hasColor();
-}
-
 void KisImagePipeBrush::makeMaskImage(bool preserveAlpha)
 {
+    KisGbrBrush::makeMaskImage(preserveAlpha);
     d->brushesPipe.makeMaskImage(preserveAlpha);
-    setUseColorAsMask(true);
-}
-
-void KisImagePipeBrush::setUseColorAsMask(bool useColorAsMask)
-{
-    KisGbrBrush::setUseColorAsMask(useColorAsMask);
-    d->brushesPipe.setUseColorAsMask(useColorAsMask);
+    setBrushType(PIPE_MASK);
 }
 
 void KisImagePipeBrush::setAdjustmentMidPoint(quint8 value)
@@ -482,9 +458,9 @@ QString KisImagePipeBrush::defaultFileExtension() const
     return QString(".gih");
 }
 
-quint32 KisImagePipeBrush::brushIndex(const KisPaintInformation& info) const
+quint32 KisImagePipeBrush::brushIndex() const
 {
-    return d->brushesPipe.brushIndex(info);
+    return d->brushesPipe.currentBrushIndex();
 }
 
 qint32 KisImagePipeBrush::maskWidth(KisDabShape const& shape, double subPixelX, double subPixelY, const KisPaintInformation& info) const
@@ -513,20 +489,6 @@ void KisImagePipeBrush::setSpacing(double _spacing)
 {
     KisGbrBrush::setSpacing(_spacing);
     d->brushesPipe.setSpacing(_spacing);
-}
-
-void KisImagePipeBrush::setBrushType(enumBrushType type)
-{
-    Q_UNUSED(type);
-    qFatal("FATAL: protected member setBrushType has no meaning for KisImagePipeBrush");
-    // brushType() is a function of hasColor() and useColorAsMask()
-}
-
-void KisImagePipeBrush::setHasColor(bool hasColor)
-{
-    Q_UNUSED(hasColor);
-    qFatal("FATAL: protected member setHasColor has no meaning for KisImagePipeBrush");
-    // hasColor() is a function of the underlying brushes
 }
 
 void KisImagePipeBrush::setBrushApplication(enumBrushApplication brushApplication)

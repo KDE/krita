@@ -506,7 +506,8 @@ inline bool KisPainter::Private::tryReduceSourceRect(const KisPaintDevice *srcDe
 
         // check if we have alpha channel locked
         if ((paramInfo.channelFlags & onlyColor) == paramInfo.channelFlags) {
-            *srcRect &= device->extent();
+            *srcRect &= device->extent().translated(*srcX - *dstX,
+                                                    *srcY - *dstY);
 
             if (srcRect->isEmpty()) return true;
             needsReadjustParams = true;
@@ -623,16 +624,20 @@ void KisPainter::bitBltWithFixedSelection(qint32 dstX, qint32 dstY,
 
         d->selection->projection()->readBytes(mergedSelectionBytes, dstX, dstY, srcWidth, srcHeight);
 
+        KoCompositeOp::ParameterInfo multiplyParamInfo;
+        multiplyParamInfo.opacity = 1.0f;
+        multiplyParamInfo.flow = 1.0f;
+
         // Merge selections here by multiplying them - compositeOP(COMPOSITE_MULT)
-        d->paramInfo.dstRowStart   = mergedSelectionBytes;
-        d->paramInfo.dstRowStride  = srcWidth * selection->pixelSize();
-        d->paramInfo.srcRowStart   = selRowStart;
-        d->paramInfo.srcRowStride  = selBounds.width() * selection->pixelSize();
-        d->paramInfo.maskRowStart  = 0;
-        d->paramInfo.maskRowStride = 0;
-        d->paramInfo.rows          = srcHeight;
-        d->paramInfo.cols          = srcWidth;
-        KoColorSpaceRegistry::instance()->alpha8()->compositeOp(COMPOSITE_MULT)->composite(d->paramInfo);
+        multiplyParamInfo.dstRowStart   = mergedSelectionBytes;
+        multiplyParamInfo.dstRowStride  = srcWidth * selection->pixelSize();
+        multiplyParamInfo.srcRowStart   = selRowStart;
+        multiplyParamInfo.srcRowStride  = selBounds.width() * selection->pixelSize();
+        multiplyParamInfo.maskRowStart  = 0;
+        multiplyParamInfo.maskRowStride = 0;
+        multiplyParamInfo.rows          = srcHeight;
+        multiplyParamInfo.cols          = srcWidth;
+        KoColorSpaceRegistry::instance()->alpha8()->compositeOp(COMPOSITE_MULT)->composite(multiplyParamInfo);
 
         // Blit to dstBytes (intermediary bit array)
         d->paramInfo.dstRowStart   = dstBytes;
@@ -641,6 +646,8 @@ void KisPainter::bitBltWithFixedSelection(qint32 dstX, qint32 dstY,
         d->paramInfo.srcRowStride  = srcWidth * srcDev->pixelSize();
         d->paramInfo.maskRowStart  = mergedSelectionBytes;
         d->paramInfo.maskRowStride = srcWidth * selection->pixelSize();
+        d->paramInfo.rows          = srcHeight;
+        d->paramInfo.cols          = srcWidth;
         d->colorSpace->bitBlt(srcDev->colorSpace(), d->paramInfo, d->compositeOp, d->renderingIntent, d->conversionFlags);
         delete[] mergedSelectionBytes;
     }
@@ -679,7 +686,9 @@ void KisPainter::bitBltImpl(qint32 dstX, qint32 dstY,
     if (d->compositeOp->id() == COMPOSITE_COPY) {
         if(!d->selection && d->isOpacityUnit &&
            srcX == dstX && srcY == dstY &&
-           d->device->fastBitBltPossible(srcDev)) {
+           d->device->fastBitBltPossible(srcDev) &&
+           (!srcDev->defaultBounds()->wrapAroundMode() ||
+            srcDev->defaultBounds()->imageBorderRect().contains(srcRect))) {
 
             if(useOldSrcData) {
                 d->device->fastBitBltOldData(srcDev, srcRect);
@@ -1098,16 +1107,20 @@ void KisPainter::bltFixedWithFixedSelection(qint32 dstX, qint32 dstY,
         }
         d->selection->projection()->readBytes(mergedSelectionBytes, dstX, dstY, srcWidth, srcHeight);
 
+        KoCompositeOp::ParameterInfo multiplyParamInfo;
+        multiplyParamInfo.opacity = 1.0f;
+        multiplyParamInfo.flow = 1.0f;
+
         // Merge selections here by multiplying them - compositeOp(COMPOSITE_MULT)
-        d->paramInfo.dstRowStart   = mergedSelectionBytes;
-        d->paramInfo.dstRowStride  = srcWidth * selection->pixelSize();
-        d->paramInfo.srcRowStart   = selRowStart;
-        d->paramInfo.srcRowStride  = selBounds.width() * selection->pixelSize();
-        d->paramInfo.maskRowStart  = 0;
-        d->paramInfo.maskRowStride = 0;
-        d->paramInfo.rows          = srcHeight;
-        d->paramInfo.cols          = srcWidth;
-        KoColorSpaceRegistry::instance()->alpha8()->compositeOp(COMPOSITE_MULT)->composite(d->paramInfo);
+        multiplyParamInfo.dstRowStart   = mergedSelectionBytes;
+        multiplyParamInfo.dstRowStride  = srcWidth * selection->pixelSize();
+        multiplyParamInfo.srcRowStart   = selRowStart;
+        multiplyParamInfo.srcRowStride  = selBounds.width() * selection->pixelSize();
+        multiplyParamInfo.maskRowStart  = 0;
+        multiplyParamInfo.maskRowStride = 0;
+        multiplyParamInfo.rows          = srcHeight;
+        multiplyParamInfo.cols          = srcWidth;
+        KoColorSpaceRegistry::instance()->alpha8()->compositeOp(COMPOSITE_MULT)->composite(multiplyParamInfo);
 
         // Blit to dstBytes (intermediary bit array)
         d->paramInfo.dstRowStart   = dstBytes;
@@ -1116,6 +1129,8 @@ void KisPainter::bltFixedWithFixedSelection(qint32 dstX, qint32 dstY,
         d->paramInfo.srcRowStride  = srcBounds.width() * srcDev->pixelSize();
         d->paramInfo.maskRowStart  = mergedSelectionBytes;
         d->paramInfo.maskRowStride = srcWidth * selection->pixelSize();
+        d->paramInfo.rows          = srcHeight;
+        d->paramInfo.cols          = srcWidth;
         d->colorSpace->bitBlt(srcDev->colorSpace(), d->paramInfo, d->compositeOp, d->renderingIntent, d->conversionFlags);
 
         delete[] mergedSelectionBytes;
@@ -1466,7 +1481,7 @@ void KisPainter::Private::fillPainterPathImpl(const QPainterPath& path, const QR
         break;
     case FillStylePattern:
         if (pattern) { // if the user hasn't got any patterns installed, we shouldn't crash...
-            fillPainter->fillRect(fillRect, pattern, patternTransform);
+            fillPainter->fillRectNoCompose(fillRect, pattern, patternTransform);
         }
         break;
     case FillStyleGenerator:

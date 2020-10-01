@@ -117,6 +117,8 @@ public:
 
     void updateConfig(bool useBuffer, int NumMipmapLevels);
 
+    void testingForceInitialized();
+
 public:
     inline QRect storedImageBounds() {
         return m_storedImageBounds;
@@ -191,7 +193,7 @@ private:
      */
     bool m_internalColorManagementActive;
 
-    GLuint m_checkerTexture;
+    boost::optional<GLuint> m_checkerTexture;
 
     KisGLTexturesInfo m_texturesInfo;
     int m_numCols;

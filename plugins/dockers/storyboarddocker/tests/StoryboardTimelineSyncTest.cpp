@@ -39,13 +39,13 @@ void StoryboardTimelineSyncTest::initTestCase()
     m_image->addNode(m_layer1, m_image->rootLayer());
 
     m_layer1->enableAnimation();
-    m_channel1 = m_layer1->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
+    m_channel1 = m_layer1->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true);
 
     m_layer2 = new KisPaintLayer(m_image, "layer2", OPACITY_OPAQUE_U8);
     m_image->addNode(m_layer2, m_image->rootLayer());
 
     m_layer2->enableAnimation();
-    m_channel2 = m_layer2->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
+    m_channel2 = m_layer2->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true);
 
     m_channel1->addKeyframe(0);
     m_channel2->addKeyframe(0);
@@ -64,11 +64,11 @@ void StoryboardTimelineSyncTest::cleanup()
     testStoryboardItemSortedUniquePositive();
 
     //delete all keyframes
-    foreach(int id,  m_channel1->allKeyframeIds()) {
-        m_channel1->deleteKeyframe(m_channel1->keyframeAt(id));
+    foreach(int time,  m_channel1->allKeyframeTimes()) {
+        m_channel1->removeKeyframe(time);
     }
-    foreach(int id,  m_channel2->allKeyframeIds()) {
-        m_channel2->deleteKeyframe(m_channel2->keyframeAt(id));
+    foreach(int time,  m_channel2->allKeyframeTimes()) {
+        m_channel2->removeKeyframe(time);
     }
 
     QCOMPARE(m_channel1->keyframeCount(), 1);
@@ -119,10 +119,10 @@ void StoryboardTimelineSyncTest::testStoryboardItemMoveFromTimeline()
 
     QCOMPARE(m_storyboardModel->rowCount(), 3);
 
-    m_channel1->moveKeyframe(m_channel1->keyframeAt(2), 3);
+    m_channel1->moveKeyframe(2, 3);
     QCOMPARE(m_storyboardModel->rowCount(), 4);
 
-    m_channel1->moveKeyframe(m_channel1->keyframeAt(3), 4);
+    m_channel1->moveKeyframe(3, 4);
     QCOMPARE(m_storyboardModel->rowCount(), 3);
 }
 
@@ -135,10 +135,10 @@ void StoryboardTimelineSyncTest::testStoryboardItemRemoveFromTimeline()
       channel2  | . | . | . . . . .
     */
 
-    m_channel2->deleteKeyframe(m_channel2->keyframeAt(2));
+    m_channel2->removeKeyframe(2);
     QCOMPARE(m_storyboardModel->rowCount(), 3);
 
-    m_channel1->deleteKeyframe(m_channel1->keyframeAt(2));
+    m_channel1->removeKeyframe(2);
     QCOMPARE(m_storyboardModel->rowCount(), 2);
 }
 

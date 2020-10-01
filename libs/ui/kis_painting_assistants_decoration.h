@@ -72,6 +72,8 @@ public:
     QList<KisPaintingAssistantHandleSP> handles();
     QList<KisPaintingAssistantSP> assistants() const;
 
+    bool hasPaintableAssistants() const;
+
 
     /// getter and setter functions for what assistant is currently selected
     /// this is used to control some tool options that are specific to a assistant
@@ -131,6 +133,8 @@ public Q_SLOTS:
     void toggleOutlineVisible();
     QPointF snapToGuide(KoPointerEvent *e, const QPointF &offset, bool useModifiers);
     QPointF snapToGuide(const QPointF& pt, const QPointF &offset);
+
+    void slotUpdateDecorationVisibility();
 
 protected:
     void drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter,KisCanvas2* canvas) override;

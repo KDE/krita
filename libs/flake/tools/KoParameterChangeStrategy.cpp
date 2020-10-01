@@ -47,9 +47,7 @@ void KoParameterChangeStrategy::handleMouseMove(const QPointF &mouseLocation, Qt
 {
     Q_D(KoParameterChangeStrategy);
 
-    d->tool->canvas()->updateCanvas(d->tool->canvas()->snapGuide()->boundingRect());
-    QPointF snappedPosition = d->tool->canvas()->snapGuide()->snap(mouseLocation, modifiers);
-    d->tool->canvas()->updateCanvas(d->tool->canvas()->snapGuide()->boundingRect());
+    const QPointF snappedPosition = d->tool->canvas()->snapGuide()->snap(mouseLocation, modifiers);
 
     d->parameterShape->moveHandle(d->handleId, snappedPosition, modifiers);
     d->lastModifierUsed = modifiers;

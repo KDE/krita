@@ -35,6 +35,8 @@ private:
     void testGaussian(bool useFftw);
     void testGaussianSmall(bool useFftw);
     void testGaussianDetails(bool useFftw);
+    void testNormalMap(KisPaintDeviceSP dev, bool useFftw, const QString &prefix);
+    void testNormalMap(bool useFftw);
 
 private Q_SLOTS:
 
@@ -59,6 +61,9 @@ private Q_SLOTS:
 
     void testDilate();
     void testErode();
+
+    void testNormalMapSpatial();
+    void testNormalMapFFTW();
 };
 
 #endif

@@ -222,11 +222,11 @@ void KisToolPaint::paint(QPainter &gc, const KoViewConverter &converter)
     paintToolOutline(&gc, path);
 
     if (m_showColorPreview) {
-        QRectF viewRect = converter.documentToView(m_oldColorPreviewRect);
+        const QRectF viewRect = converter.documentToView(m_oldColorPreviewRect);
         gc.fillRect(viewRect, m_colorPreviewCurrentColor);
 
         if (m_colorPreviewShowComparePlate) {
-            QRectF baseColorRect = viewRect.translated(viewRect.width(), 0);
+            const QRectF baseColorRect = converter.documentToView(m_oldColorPreviewBaseColorRect);
             gc.fillRect(baseColorRect, m_colorPreviewBaseColor);
         }
     }
@@ -269,7 +269,6 @@ void KisToolPaint::deactivatePickColor(AlternateAction action)
 
     m_showColorPreview = false;
     m_oldColorPreviewRect = QRect();
-    m_oldColorPreviewUpdateRect = QRect();
     m_colorPreviewCurrentColor = QColor();
 }
 
@@ -653,16 +652,25 @@ void KisToolPaint::decreaseBrushSize()
     requestUpdateOutline(m_outlineDocPoint, 0);
 }
 
-QRectF KisToolPaint::colorPreviewDocRect(const QPointF &outlineDocPoint)
+std::pair<QRectF,QRectF> KisToolPaint::colorPreviewDocRect(const QPointF &outlineDocPoint)
 {
-    if (!m_showColorPreview) return QRect();
+    if (!m_showColorPreview) return std::make_pair(QRectF(), QRectF());
 
     KisConfig cfg(true);
 
     const QRectF colorPreviewViewRect = cfg.colorPreviewRect();
-    const QRectF colorPreviewDocumentRect = canvas()->viewConverter()->viewToDocument(colorPreviewViewRect);
 
-    return colorPreviewDocumentRect.translated(outlineDocPoint);
+    const QRectF colorPreviewBaseColorViewRect =
+        m_colorPreviewShowComparePlate ?
+            colorPreviewViewRect.translated(colorPreviewViewRect.width(), 0) :
+            QRectF();
+
+    const QRectF colorPreviewDocumentRect = canvas()->viewConverter()->viewToDocument(colorPreviewViewRect);
+    const QRectF colorPreviewBaseColorDocumentRect =
+        canvas()->viewConverter()->viewToDocument(colorPreviewBaseColorViewRect);
+
+    return std::make_pair(colorPreviewDocumentRect.translated(outlineDocPoint),
+                          colorPreviewBaseColorDocumentRect.translated(outlineDocPoint));
 }
 
 void KisToolPaint::requestUpdateOutline(const QPointF &outlineDocPoint, const KoPointerEvent *event)
@@ -713,10 +721,16 @@ void KisToolPaint::requestUpdateOutline(const QPointF &outlineDocPoint, const Ko
         outlineDocRect.adjust(-xoffset,-yoffset,xoffset,yoffset);
     }
 
-    QRectF colorPreviewDocRect = this->colorPreviewDocRect(m_outlineDocPoint);
-    QRectF colorPreviewDocUpdateRect;
-    if (!colorPreviewDocRect.isEmpty()) {
-        colorPreviewDocUpdateRect.adjust(-xoffset,-yoffset,xoffset,yoffset);
+    QRectF colorPreviewDocRect;
+    QRectF colorPreviewBaseColorDocRect;
+
+    std::tie(colorPreviewDocRect, colorPreviewBaseColorDocRect) =
+        this->colorPreviewDocRect(m_outlineDocPoint);
+
+    QRectF colorPreviewDocUpdateRect = colorPreviewDocRect | colorPreviewBaseColorDocRect;
+
+    if (!colorPreviewDocUpdateRect.isEmpty()) {
+        colorPreviewDocUpdateRect = colorPreviewDocUpdateRect.adjusted(-xoffset,-yoffset,xoffset,yoffset);
     }
 
     // DIRTY HACK ALERT: we should fetch the assistant's dirty rect when requesting
@@ -724,7 +738,7 @@ void KisToolPaint::requestUpdateOutline(const QPointF &outlineDocPoint, const Ko
 
     KisCanvas2 * kiscanvas = dynamic_cast<KisCanvas2*>(canvas());
     KisPaintingAssistantsDecorationSP decoration = kiscanvas->paintingAssistantsDecoration();
-    if (decoration && decoration->visible()) {
+    if (decoration && decoration->visible() && decoration->hasPaintableAssistants()) {
         kiscanvas->updateCanvas();
     } else {
         // TODO: only this branch should be present!
@@ -747,6 +761,7 @@ void KisToolPaint::requestUpdateOutline(const QPointF &outlineDocPoint, const Ko
 
     m_oldOutlineRect = outlineDocRect;
     m_oldColorPreviewRect = colorPreviewDocRect;
+    m_oldColorPreviewBaseColorRect = colorPreviewBaseColorDocRect;
     m_oldColorPreviewUpdateRect = colorPreviewDocUpdateRect;
 }
 

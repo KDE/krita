@@ -78,11 +78,7 @@ public:
     explicit KoToolBase(KoCanvasBase *canvas);
     ~KoToolBase() override;
 
-    /**
-     * request a repaint of the decorations to be made. This triggers
-     * an update call on the canvas, but does not paint directly.
-     */
-    virtual void repaintDecorations();
+    virtual QRectF decorationsRect() const;
 
     /**
      * Return if dragging (moving with the mouse down) to the edge of a canvas should scroll the
@@ -395,6 +391,12 @@ public Q_SLOTS:
      */
     void setStatusText(const QString &statusText);
 
+    /**
+     * request a repaint of the decorations to be made. This triggers
+     * an update call on the canvas, but does not paint directly.
+     */
+    virtual void repaintDecorations();
+
 Q_SIGNALS:
 
     /**
@@ -455,10 +457,14 @@ protected:
     virtual QList<QPointer<QWidget> > createOptionWidgets();
 
     /// Convenience function to get the current handle radius
-    uint handleRadius() const;
+    int handleRadius() const;
+
+    /// Convenience function to get the current handle radius measured in document
+    /// coordinates (points)
+    qreal handleDocRadius() const;
 
     /// Convencience function to get the current grab sensitivity
-    uint grabSensitivity() const;
+    int grabSensitivity() const;
 
     /**
     * Returns a handle grab rect at the given position.

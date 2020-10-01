@@ -34,12 +34,15 @@
 #include "kis_animation_frame_cache.h"
 #include "kis_signal_auto_connection.h"
 #include "kis_image_animation_interface.h"
-#include "kis_time_range.h"
+#include "kis_time_span.h"
 #include "kis_signal_compressor.h"
 #include <KisDocument.h>
 #include <QFileInfo>
 #include "KisSyncedAudioPlayback.h"
 #include "kis_signal_compressor_with_param.h"
+#include "kis_image_barrier_locker.h"
+#include "kis_layer_utils.h"
+#include "KisDecoratedNodeInterface.h"
 
 #include "kis_image_config.h"
 #include <limits>
@@ -112,6 +115,7 @@ public:
     KisSignalCompressor stopAudioOnScrubbingCompressor;
 
     int audioOffsetTolerance;
+    QVector<KisNodeWSP> disabledDecoratedNodes;
 
     void stopImpl();
 
@@ -318,7 +322,7 @@ void KisAnimationPlayer::slotUpdatePlaybackTimer()
      m_d->timer->stop();
 
     const KisImageAnimationInterface *animation = m_d->canvas->image()->animationInterface();
-    const KisTimeRange &playBackRange = animation->playbackRange();
+    const KisTimeSpan &playBackRange = animation->playbackRange();
     if (!playBackRange.isValid()) return;
 
     const int fps = animation->framerate();
@@ -355,7 +359,7 @@ void KisAnimationPlayer::play()
     const KisImageAnimationInterface *animation = m_d->canvas->image()->animationInterface();
 
     {
-        const KisTimeRange &range = animation->playbackRange();
+        const KisTimeSpan &range = animation->playbackRange();
         if (!range.isValid()) return;
 
         // when openGL is disabled, there is no animation cache
@@ -394,6 +398,16 @@ void KisAnimationPlayer::play()
             }
 
             m_d->canvas->setRenderingLimit(regionOfInterest);
+        } else {
+            KisImageBarrierLocker locker(m_d->canvas->image());
+            KisLayerUtils::recursiveApplyNodes(m_d->canvas->image()->root(),
+                [this] (KisNodeSP node) {
+                    KisDecoratedNodeInterface *decoratedNode = dynamic_cast<KisDecoratedNodeInterface*>(node.data());
+                    if (decoratedNode && decoratedNode->decorationsVisible()) {
+                        decoratedNode->setDecorationsVisible(false, false);
+                        m_d->disabledDecoratedNodes.append(node);
+                    }
+                });
         }
     }
 
@@ -477,6 +491,20 @@ void KisAnimationPlayer::Private::stopImpl()
     q->disconnectCancelSignals();
     timer->stop();
     canvas->setRenderingLimit(QRect());
+
+    if (!canvas->frameCache()) {
+        KisImageBarrierLocker locker(canvas->image());
+
+        Q_FOREACH (KisNodeSP node, disabledDecoratedNodes) {
+            // we have just upgraded from a weak shared pointer
+            KIS_SAFE_ASSERT_RECOVER(node) { continue; }
+
+            KisDecoratedNodeInterface *decoratedNode = dynamic_cast<KisDecoratedNodeInterface*>(node.data());
+            KIS_SAFE_ASSERT_RECOVER(decoratedNode) { continue; }
+
+            decoratedNode->setDecorationsVisible(true);
+        }
+    }
 }
 
 bool KisAnimationPlayer::isPlaying()

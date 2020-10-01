@@ -46,7 +46,8 @@ public:
                                        int timeElapsed);
 
     KisPaintInformation hover(const QPointF &imagePoint,
-                              const KoPointerEvent *event);
+                              const KoPointerEvent *event,
+                              bool isStrokeStarted);
 
     qreal pressureToCurve(qreal pressure);
 

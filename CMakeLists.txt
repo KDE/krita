@@ -171,11 +171,15 @@ if (WIN32)
 endif ()
 
 option(HIDE_SAFE_ASSERTS "Don't show message box for \"safe\" asserts, just ignore them automatically and dump a message to the terminal." ON)
-configure_file(config-hide-safe-asserts.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-hide-safe-asserts.h)
-add_feature_info("Hide Safe Asserts" HIDE_SAFE_ASSERTS "Don't show message box for \"safe\" asserts, just ignore them automatically and dump a message to the terminal.")
+add_feature_info("Hide safe asserts" HIDE_SAFE_ASSERTS "Don't show message box for \"safe\" asserts, just ignore them automatically and dump a message to the terminal.")
+
+option(CRASH_ON_SAFE_ASSERTS "Crash unconditionally whenever a \"safe\" assert happens. Useful for running unittests" OFF)
+add_feature_info("Crash on safe asserts" CRASH_ON_SAFE_ASSERTS "Crash unconditionally whenever a \"safe\" assert happens. Useful for running unittests")
+
+configure_file(config-safe-asserts.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-safe-asserts.h)
 
 option(USE_LOCK_FREE_HASH_TABLE "Use lock free hash table instead of blocking." ON)
-configure_file(config-hash-table-implementaion.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-hash-table-implementaion.h)
+configure_file(config-hash-table-implementation.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-hash-table-implementation.h)
 add_feature_info("Lock free hash table" USE_LOCK_FREE_HASH_TABLE "Use lock free hash table instead of blocking.")
 
 option(FOUNDATION_BUILD "A Foundation build is a binary release build that can package some extra things like color themes. Linux distributions that build and install Krita into a default system location should not define this option to true." OFF)
@@ -647,6 +651,7 @@ set_package_properties(JPEG PROPERTIES
     PURPOSE "Required by the Krita JPEG filter")
 if (JPEG_FOUND)
     list (APPEND ANDROID_EXTRA_LIBS ${JPEG_LIBRARY})
+    macro_bool_to_01(JPEG_FOUND HAVE_JPEG)
 endif()
 
 find_package(GIF)
@@ -723,6 +728,13 @@ set_package_properties(PyQt5 PROPERTIES
     PURPOSE "Required by the Krita PyQt plugin")
 macro_bool_to_01(PYQT5_FOUND HAVE_PYQT5)
 
+find_package(FFmpeg)
+set_package_properties(FFmpeg PROPERTIES
+    DESCRIPTION "FFmpeg video encoder."
+    URL "http://ffmpeg.org/"
+    TYPE OPTIONAL
+    PURPOSE "Required by the Krita recorder plugin")
+macro_bool_to_01(FFMPEG_FOUND HAVE_FFMPEG)
 
 ##
 ## Look for OpenGL
@@ -920,6 +932,8 @@ if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/po OR EXISTS ${CMAKE_CURRENT_BINARY_DIR}/p
   ki18n_install(po)
 endif()
 
+# ECM passes this to Qt, which was already capable of detecting it..
+set (ANDROID_SDK_COMPILE_API "android-28")
 
 if(DEFINED QTANDROID_EXPORTED_TARGET AND NOT TARGET "create-apk")
     set (_CMAKE_ANDROID_DIR "${ECM_DIR}/../toolchain")

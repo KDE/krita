@@ -22,7 +22,7 @@
 #include <QList>
 
 #include "kis_memento_item.h"
-#include "config-hash-table-implementaion.h"
+#include "config-hash-table-implementation.h"
 
 typedef QList<KisMementoItemSP> KisMementoItemList;
 typedef QListIterator<KisMementoItemSP> KisMementoItemListIterator;

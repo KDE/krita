@@ -83,9 +83,9 @@ bool Imagesplit::saveAsImage(const QRect &imgSize, const QString &mimeType, cons
     document->setFileBatchMode(true);
     if (!document->exportDocumentSync(QUrl::fromLocalFile(url), mimeType.toLatin1())) {
         if (document->errorMessage().isEmpty()) {
-            QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not save\n%1", document->localFilePath()));
+            QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Could not save\n%1", document->localFilePath()));
         } else {
-            QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not save %1\nReason: %2", document->localFilePath(), document->errorMessage()));
+            QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Could not save %1\nReason: %2", document->localFilePath(), document->errorMessage()));
         }
         return false;
     }

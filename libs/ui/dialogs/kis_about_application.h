@@ -19,6 +19,9 @@
 #define KIS_ABOUT_APPLICATION_H
 
 #include <QDialog>
+#include <QList>
+
+#include <kaboutdata.h>
 
 class KisAboutApplication : public QDialog
 {
@@ -26,6 +29,12 @@ class KisAboutApplication : public QDialog
 public:
     explicit KisAboutApplication(QWidget *parent = 0);
 
+
+private:
+    QWidget *createTranslatorsWidget(const QList<KAboutPerson> &translators,
+                                     const QString &ocsProviderUrl);
 };
+
+
 
 #endif // KIS_ABOUT_APPLICATION_H

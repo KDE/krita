@@ -90,15 +90,13 @@ void PointHandle::paint(QPainter &painter, const KoViewConverter &converter, qre
     m_activePoint->paint(helper, m_activePointType);
 }
 
-void PointHandle::repaint() const
+QRectF PointHandle::boundingRect() const
 {
-    m_tool->repaint(m_oldRepaintedRect);
     bool active = false;
     KoPathToolSelection * selection = dynamic_cast<KoPathToolSelection*>(m_tool->selection());
     if (selection && selection->contains(m_activePoint))
         active = true;
-    m_oldRepaintedRect = m_activePoint->boundingRect(!active);
-    m_tool->repaint(m_oldRepaintedRect);
+    return m_activePoint->boundingRect(!active);
 }
 
 KoInteractionStrategy * PointHandle::handleMousePress(KoPointerEvent *event)
@@ -115,12 +113,10 @@ KoInteractionStrategy * PointHandle::handleMousePress(KoPointerEvent *event)
             } else {
                 selection->add(m_activePoint, false);
             }
-            m_tool->repaint(m_activePoint->boundingRect(false));
         } else {
             // no control modifier, so clear selection and select active point
             if (!selection->contains(m_activePoint)) {
                 selection->add(m_activePoint, true);
-                m_tool->repaint(m_activePoint->boundingRect(false));
             }
         }
         // TODO remove canvas from call ?
@@ -193,9 +189,9 @@ void ParameterHandle::paint(QPainter &painter, const KoViewConverter &converter,
     m_parameterShape->paintHandle(helper, m_handleId);
 }
 
-void ParameterHandle::repaint() const
+QRectF ParameterHandle::boundingRect() const
 {
-    m_tool->repaint(m_parameterShape->shapeToDocument(QRectF(m_parameterShape->handlePosition(m_handleId), QSize(1, 1))));
+    return m_parameterShape->shapeToDocument(QRectF(m_parameterShape->handlePosition(m_handleId), QSize(1, 1)));
 }
 
 KoInteractionStrategy * ParameterHandle::handleMousePress(KoPointerEvent *event)

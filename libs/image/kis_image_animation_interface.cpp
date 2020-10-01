@@ -25,7 +25,8 @@
 #include "kis_regenerate_frame_stroke_strategy.h"
 #include "kis_switch_time_stroke_strategy.h"
 #include "kis_keyframe_channel.h"
-#include "kis_time_range.h"
+#include "kis_raster_keyframe_channel.h"
+#include "kis_time_span.h"
 
 #include "kis_post_execution_undo_adapter.h"
 #include "commands_new/kis_switch_current_time_command.h"
@@ -66,8 +67,8 @@ struct KisImageAnimationInterface::Private
     bool externalFrameActive;
     bool frameInvalidationBlocked;
 
-    KisTimeRange fullClipRange;
-    KisTimeRange playbackRange;
+    KisTimeSpan fullClipRange;
+    KisTimeSpan playbackRange;
     int framerate;
     int cachedLastFrameValue;
     QString audioChannelFileName;
@@ -103,7 +104,7 @@ KisImageAnimationInterface::KisImageAnimationInterface(KisImage *image)
     m_d->image = image;
 
     m_d->framerate = 24;
-    m_d->fullClipRange = KisTimeRange::fromTime(0, 100);
+    m_d->fullClipRange = KisTimeSpan::fromTimeToTime(0, 100);
 
     connect(this, SIGNAL(sigInternalRequestTimeSwitch(int,bool)), SLOT(switchCurrentTimeAsync(int,bool)));
 }
@@ -141,12 +142,12 @@ int KisImageAnimationInterface::currentUITime() const
     return m_d->currentUITime();
 }
 
-const KisTimeRange& KisImageAnimationInterface::fullClipRange() const
+const KisTimeSpan& KisImageAnimationInterface::fullClipRange() const
 {
     return m_d->fullClipRange;
 }
 
-void KisImageAnimationInterface::setFullClipRange(const KisTimeRange range)
+void KisImageAnimationInterface::setFullClipRange(const KisTimeSpan range)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(!range.isInfinite());
     m_d->fullClipRange = range;
@@ -155,22 +156,22 @@ void KisImageAnimationInterface::setFullClipRange(const KisTimeRange range)
 
 void KisImageAnimationInterface::setFullClipRangeStartTime(int column)
 {
-    KisTimeRange newRange(column,  m_d->fullClipRange.end(), false);
+    KisTimeSpan newRange = KisTimeSpan::fromTimeToTime(column,  m_d->fullClipRange.end());
     setFullClipRange(newRange);
 }
 
 void KisImageAnimationInterface::setFullClipRangeEndTime(int column)
 {
-    KisTimeRange newRange(m_d->fullClipRange.start(), column, false);
+    KisTimeSpan newRange = KisTimeSpan::fromTimeToTime(m_d->fullClipRange.start(), column);
     setFullClipRange(newRange);
 }
 
-const KisTimeRange& KisImageAnimationInterface::playbackRange() const
+const KisTimeSpan& KisImageAnimationInterface::playbackRange() const
 {
     return m_d->playbackRange.isValid() ? m_d->playbackRange : m_d->fullClipRange;
 }
 
-void KisImageAnimationInterface::setPlaybackRange(const KisTimeRange range)
+void KisImageAnimationInterface::setPlaybackRange(const KisTimeSpan range)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(!range.isInfinite());
     m_d->playbackRange = range;
@@ -267,7 +268,7 @@ void KisImageAnimationInterface::switchCurrentTimeAsync(int frameId, bool useUnd
 {
     if (currentUITime() == frameId) return;
 
-    const KisTimeRange range = KisTimeRange::calculateIdenticalFramesRecursive(m_d->image->root(), currentUITime());
+    const KisTimeSpan range = KisTimeSpan::calculateIdenticalFramesRecursive(m_d->image->root(), currentUITime());
     const bool needsRegeneration = !range.contains(frameId);
 
     KisSwitchTimeStrokeStrategy::SharedTokenSP token =
@@ -363,25 +364,42 @@ void KisImageAnimationInterface::notifyNodeChanged(const KisNode *node,
     // even overlay selection masks are not rendered in the cache
     if (node->inherits("KisSelectionMask")) return;
 
-    const int currentTime = m_d->currentTime();
-    KisTimeRange invalidateRange;
+    QSet<int> affectedTimes;
+    affectedTimes << m_d->currentTime();
 
+    // We need to also invalidate ranges that contain cloned keyframe data.
     if (recursive) {
-        invalidateRange = KisTimeRange::calculateAffectedFramesRecursive(node, currentTime);
+        QSet<int> clonedTimes;
+        const int time = m_d->currentTime();
+        KisLayerUtils::recursiveApplyNodes(node, [&clonedTimes, time](const KisNode* node){
+            clonedTimes += KisRasterKeyframeChannel::clonesOf(node, time);
+        });
+
+        affectedTimes += clonedTimes;
     } else {
-        invalidateRange = KisTimeRange::calculateNodeAffectedFrames(node, currentTime);
+        affectedTimes += KisRasterKeyframeChannel::clonesOf(node, m_d->currentTime());
     }
 
-    // we compress the updated rect (atm, no one uses it anyway)
-    QRect unitedRect;
-    Q_FOREACH (const QRect &rc, rects) {
-        unitedRect |= rc;
-    }
+    foreach (const int& time, affectedTimes ){
+        KisTimeSpan invalidateRange;
 
-    invalidateFrames(invalidateRange, unitedRect);
+        if (recursive) {
+            invalidateRange = KisTimeSpan::calculateAffectedFramesRecursive(node, time);
+        } else {
+            invalidateRange = KisTimeSpan::calculateNodeAffectedFrames(node, time);
+        }
+
+        // we compress the updated rect (atm, no one uses it anyway)
+        QRect unitedRect;
+        Q_FOREACH (const QRect &rc, rects) {
+            unitedRect |= rc;
+        }
+
+        invalidateFrames(invalidateRange, unitedRect);
+    }
 }
 
-void KisImageAnimationInterface::invalidateFrames(const KisTimeRange &range, const QRect &rect)
+void KisImageAnimationInterface::invalidateFrames(const KisTimeSpan &range, const QRect &rect)
 {
     m_d->cachedLastFrameValue = -1;
     emit sigFramesChanged(range, rect);
@@ -398,10 +416,7 @@ int findLastKeyframeTimeRecursive(KisNodeSP node)
 
     KisKeyframeChannel *channel;
     Q_FOREACH (channel, node->keyframeChannels()) {
-        KisKeyframeSP keyframe = channel->lastKeyframe();
-        if (keyframe) {
-            time = std::max(time, keyframe->time());
-        }
+        time = std::max(time, channel->lastKeyframeTime());
     }
 
     KisNodeSP child = node->firstChild();

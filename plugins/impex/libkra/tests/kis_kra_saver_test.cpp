@@ -283,7 +283,7 @@ void KisKraSaverTest::testRoundTripAnimation()
     KUndo2Command parentCommand;
 
     layer1->enableAnimation();
-    KisKeyframeChannel *rasterChannel = layer1->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
+    KisKeyframeChannel *rasterChannel = layer1->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true);
     QVERIFY(rasterChannel);
 
     rasterChannel->addKeyframe(10, &parentCommand);
@@ -316,7 +316,7 @@ void KisKraSaverTest::testRoundTripAnimation()
     cs = layer2->paintDevice()->colorSpace();
 
     QCOMPARE(image2->animationInterface()->currentTime(), 20);
-    KisKeyframeChannel *channel = layer2->getKeyframeChannel(KisKeyframeChannel::Content.id());
+    KisKeyframeChannel *channel = layer2->getKeyframeChannel(KisKeyframeChannel::Raster.id());
     QVERIFY(channel);
     QCOMPARE(channel->keyframeCount(), 3);
 
@@ -389,8 +389,9 @@ void KisKraSaverTest::testRoundTripColorizeMask()
         // KIS_DUMP_DEVICE_2(key3, refRect, "key3", "dd");
     }
 
-    KisLayerPropertiesIcons::setNodeProperty(mask, KisLayerPropertiesIcons::colorizeEditKeyStrokes, false, image);
-    KisLayerPropertiesIcons::setNodeProperty(mask, KisLayerPropertiesIcons::colorizeShowColoring, false, image);
+    KisLayerPropertiesIcons::setNodePropertyAutoUndo(mask, KisLayerPropertiesIcons::colorizeEditKeyStrokes, false, image);
+    KisLayerPropertiesIcons::setNodePropertyAutoUndo(mask, KisLayerPropertiesIcons::colorizeShowColoring, false, image);
+    image->waitForDone();
 
 
 
@@ -405,7 +406,7 @@ void KisKraSaverTest::testRoundTripColorizeMask()
     QVERIFY(mask2);
 
     QCOMPARE(mask2->compositeOpId(), mask->compositeOpId());
-    QCOMPARE(mask2->colorSpace(), mask->colorSpace());
+    QCOMPARE(*mask2->colorSpace(), *mask->colorSpace());
     QCOMPARE(KisLayerPropertiesIcons::nodeProperty(mask, KisLayerPropertiesIcons::colorizeEditKeyStrokes, true).toBool(), false);
     QCOMPARE(KisLayerPropertiesIcons::nodeProperty(mask, KisLayerPropertiesIcons::colorizeShowColoring, true).toBool(), false);
 

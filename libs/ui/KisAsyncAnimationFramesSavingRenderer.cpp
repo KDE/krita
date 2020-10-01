@@ -23,13 +23,13 @@
 #include "KisImportExportFilter.h"
 #include "KisPart.h"
 #include "KisDocument.h"
-#include "kis_time_range.h"
+#include "kis_time_span.h"
 #include "kis_paint_layer.h"
 
 
 struct KisAsyncAnimationFramesSavingRenderer::Private
 {
-    Private(KisImageSP image, const KisTimeRange &_range, int _sequenceNumberingOffset, bool _onlyNeedsUniqueFrames, KisPropertiesConfigurationSP _exportConfiguration)
+    Private(KisImageSP image, const KisTimeSpan &_range, int _sequenceNumberingOffset, bool _onlyNeedsUniqueFrames, KisPropertiesConfigurationSP _exportConfiguration)
         : savingDoc(KisPart::instance()->createDocument()),
           range(_range),
           sequenceNumberingOffset(_sequenceNumberingOffset),
@@ -58,7 +58,7 @@ struct KisAsyncAnimationFramesSavingRenderer::Private
     QScopedPointer<KisDocument> savingDoc;
     KisPaintDeviceSP savingDevice;
 
-    KisTimeRange range;
+    KisTimeSpan range;
     int sequenceNumberingOffset = 0;
 
     bool onlyNeedsUniqueFrames;
@@ -74,7 +74,7 @@ KisAsyncAnimationFramesSavingRenderer::KisAsyncAnimationFramesSavingRenderer(Kis
                                                                              const QString &fileNamePrefix,
                                                                              const QString &fileNameSuffix,
                                                                              const QByteArray &outputMimeType,
-                                                                             const KisTimeRange &range,
+                                                                             const KisTimeSpan &range,
                                                                              const int sequenceNumberingOffset,
                                                                              const bool onlyNeedsUniqueFrames,
                                                                              KisPropertiesConfigurationSP exportConfiguration)
@@ -117,7 +117,7 @@ void KisAsyncAnimationFramesSavingRenderer::frameCompletedCallback(int frame, co
     }
 
     //Get all identical frames to this one and either copy or symlink based on settings.
-    KisTimeRange identicals = KisTimeRange::calculateIdenticalFramesRecursive(image->root(), frame);
+    KisTimeSpan identicals = KisTimeSpan::calculateIdenticalFramesRecursive(image->root(), frame);
     identicals &= m_d->range;
     if( !m_d->onlyNeedsUniqueFrames && identicals.start() < identicals.end() ) {
         for (int identicalFrame = (identicals.start() + 1); identicalFrame <= identicals.end(); identicalFrame++) {

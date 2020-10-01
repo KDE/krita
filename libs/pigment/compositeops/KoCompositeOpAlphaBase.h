@@ -95,8 +95,11 @@ public:
 
                     channels_type srcBlend;
 
-                    if (dstAlpha == NATIVE_OPACITY_OPAQUE) {
+                    if (alphaLocked || _alphaLocked ||
+                        dstAlpha == NATIVE_OPACITY_OPAQUE) {
+
                         srcBlend = srcAlpha;
+
                     } else if (dstAlpha == NATIVE_OPACITY_TRANSPARENT) {
                         if (!allChannelFlags) {
                             for (int i = 0; i < (int)_CSTraits::channels_nb; i++) {

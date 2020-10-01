@@ -286,6 +286,9 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
 
     KConfigGroup group = KSharedConfig::openConfig()->group("File Dialogs");
     bool dontUseNative = true;
+#ifdef Q_OS_ANDROID
+    dontUseNative = false;
+#endif
 #ifdef Q_OS_UNIX
     if (qgetenv("XDG_CURRENT_DESKTOP") == "KDE") {
         dontUseNative = false;
@@ -919,6 +922,10 @@ PerformanceTab::PerformanceTab(QWidget *parent, const char *name)
     intMemoryLimit->setMinimumWidth(80);
     intPoolLimit->setMinimumWidth(80);
     intUndoLimit->setMinimumWidth(80);
+
+    label_5->setVisible(false);
+    sliderPoolLimit->setVisible(false);
+    intPoolLimit->setVisible(false);
 
 
     SliderAndSpinBoxSync *sync1 =

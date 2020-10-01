@@ -21,7 +21,7 @@
 #include <QTest>
 
 #include <testutil.h>
-#include "kis_time_range.h"
+#include "kis_time_span.h"
 #include "dialogs/KisAsyncAnimationFramesSaveDialog.h"
 #include "kis_image_animation_interface.h"
 #include "KisPart.h"
@@ -52,7 +52,7 @@ void runRenderingTest(KisImageSP image, int numCores, int numClones)
         cfg.setFrameRenderingClones(numClones);
     }
 
-    const KisTimeRange range = image->animationInterface()->fullClipRange();
+    const KisTimeSpan range = image->animationInterface()->fullClipRange();
 
     KisAsyncAnimationFramesSaveDialog dlg(image, range, "temp_frames.png", 0, false, 0);
     dlg.setBatchMode(true);

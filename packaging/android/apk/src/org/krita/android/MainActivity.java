@@ -20,9 +20,12 @@
 package org.krita.android;
 
  import android.os.Bundle;
+ import android.view.InputDevice;
  import android.view.KeyEvent;
+ import android.view.MotionEvent;
  import android.view.WindowManager;
 
+ import org.qtproject.qt5.android.QtNative;
  import org.qtproject.qt5.android.bindings.QtActivity;
 
 public class MainActivity extends QtActivity {
@@ -36,6 +39,8 @@ public class MainActivity extends QtActivity {
 		super.onCreate(savedInstanceState);
 
 		new ConfigsManager().handleAssets(this);
+
+        DonationHelper.getInstance();
 	}
 
 	@Override
@@ -60,5 +65,17 @@ public class MainActivity extends QtActivity {
 		}
 
 		return super.onKeyUp(keyCode, event);
+	}
+
+	@Override
+	public boolean onGenericMotionEvent(MotionEvent event) {
+        // We manually pass these events to the QPA Android because,
+        // android doesn't send events of type other than SOURCE_CLASS_POINTER
+        // to the view which was just tapped. So, this view will never get to
+        // QtSurface, because it doesn't claim focus.
+		if (event.isFromSource(InputDevice.SOURCE_TOUCHPAD)) {
+			return QtNative.sendGenericMotionEvent(event, event.getDeviceId());
+		}
+		return super.onGenericMotionEvent(event);
 	}
 }

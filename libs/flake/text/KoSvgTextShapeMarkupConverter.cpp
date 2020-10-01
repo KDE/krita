@@ -30,6 +30,7 @@
 #include <QTextBlock>
 #include <QTextLayout>
 #include <QTextLine>
+#include <QFont>
 
 #include <QStack>
 
@@ -916,6 +917,49 @@ QStringList KoSvgTextShapeMarkupConverter::warnings() const
     return d->warnings;
 }
 
+bool compareFormatUnderlineWithMostCommon(QTextCharFormat format, QTextCharFormat mostCommon)
+{
+    // color and style is not supported in rich text editor yet
+    // TODO: support color and style
+    return format.fontUnderline() == mostCommon.fontUnderline()
+            && format.fontOverline() == mostCommon.fontOverline()
+            && format.fontStrikeOut() == mostCommon.fontStrikeOut();
+}
+
+QString convertFormatUnderlineToSvg(QTextCharFormat format)
+{
+    // color and style is not supported in rich text editor yet
+    // and text-decoration-line and -style and -color are not supported in svg render either
+    // hence we just use text-decoration
+    // TODO: support color and style
+    QStringList line;
+
+    if (format.fontUnderline()) {
+        line.append("underline");
+        if (format.underlineStyle() != QTextCharFormat::SingleUnderline) {
+            warnFile << "Krita only supports solid underline style";
+        }
+    }
+
+    if (format.fontOverline()) {
+        line.append("overline");
+    }
+
+    if (format.fontStrikeOut()) {
+        line.append("line-through");
+    }
+
+    if (line.isEmpty())
+    {
+        line.append("none");
+    }
+
+    QString c = QString("text-decoration").append(":")
+            .append(line.join(" "));
+
+    return c;
+}
+
 QString KoSvgTextShapeMarkupConverter::style(QTextCharFormat format,
                                              QTextBlockFormat blockFormat,
                                              QTextCharFormat mostCommon)
@@ -943,9 +987,45 @@ QString KoSvgTextShapeMarkupConverter::style(QTextCharFormat format,
                     .append(format.properties()[propertyId].toString()+"px");
         }
         if (propertyId == QTextCharFormat::FontWeight) {
-            //8 comes from QTextDocument...
+            // Convert from QFont::Weight range to SVG range,
+            // as defined in qt's qfont.h
+            int convertedWeight = 400; // Defaulting to Weight::Normal in svg scale
+
+            switch (format.properties()[propertyId].toInt()) {
+                case QFont::Weight::Thin:
+                    convertedWeight = 100;
+                    break;
+                case QFont::Weight::ExtraLight:
+                    convertedWeight = 200;
+                    break;
+                case QFont::Weight::Light:
+                    convertedWeight = 300;
+                    break;
+                case QFont::Weight::Normal:
+                    convertedWeight = 400;
+                    break;
+                case QFont::Weight::Medium:
+                    convertedWeight = 500;
+                    break;
+                case QFont::Weight::DemiBold:
+                    convertedWeight = 600;
+                    break;
+                case QFont::Weight::Bold:
+                    convertedWeight = 700;
+                    break;
+                case QFont::Weight::ExtraBold:
+                    convertedWeight = 800;
+                    break;
+                case QFont::Weight::Black:
+                    convertedWeight = 900;
+                    break;
+                default:
+                    warnFile << "WARNING: Invalid QFont::Weight value supplied to KoSvgTextShapeMarkupConverter::style.";
+                    break;
+            }
+
             c.append("font-weight").append(":")
-                    .append(QString::number(format.properties()[propertyId].toInt()*8));
+                    .append(QString::number(convertedWeight));
         }
         if (propertyId == QTextCharFormat::FontItalic) {
             QString val = "italic";
@@ -1039,29 +1119,11 @@ QString KoSvgTextShapeMarkupConverter::style(QTextCharFormat format,
         }
     }
 
-    if (format.underlineStyle() != QTextCharFormat::SpellCheckUnderline) {
-        if(format.underlineStyle() != mostCommon.underlineStyle()){
-            QStringList values;
-            QString c;
+    if (!compareFormatUnderlineWithMostCommon(format, mostCommon)) {
 
-            if (format.fontUnderline()) {
-                values.append("underline");
-            }
-            if (format.fontOverline()) {
-                values.append("overline");
-            }
-            if (format.fontStrikeOut()) {
-                values.append("line-through");
-            }
-            if (values.isEmpty()) {
-                values.append("none");
-            }
-            c.append("text-decoration").append(":")
-                    .append(values.join(" "));
-
-            if (!values.isEmpty()) {
-                style.append(c);
-            }
+        QString c = convertFormatUnderlineToSvg(format);
+        if (!c.isEmpty()) {
+            style.append(c);
         }
     }
 
@@ -1134,7 +1196,44 @@ QVector<QTextFormat> KoSvgTextShapeMarkupConverter::stylesFromString(QStringList
             }
 
             if (property == "font-weight") {
-                charFormat.setFontWeight(value.toInt()/8);
+                // Convert from SVG range to QFont::Weight range,
+                // as defined in qt's qfont.h
+                int convertedWeight = QFont::Weight::Normal; // Defaulting to Weight::Normal
+
+                switch (value.toInt()) {
+                    case 100:
+                        convertedWeight = QFont::Weight::Thin;
+                        break;
+                    case 200:
+                        convertedWeight = QFont::Weight::ExtraLight;
+                        break;
+                    case 300:
+                        convertedWeight = QFont::Weight::Light;
+                        break;
+                    case 400:
+                        convertedWeight = QFont::Weight::Normal;
+                        break;
+                    case 500:
+                        convertedWeight = QFont::Weight::Medium;
+                        break;
+                    case 600:
+                        convertedWeight = QFont::Weight::DemiBold;
+                        break;
+                    case 700:
+                        convertedWeight = QFont::Weight::Bold;
+                        break;
+                    case 800:
+                        convertedWeight = QFont::Weight::ExtraBold;
+                        break;
+                    case 900:
+                        convertedWeight = QFont::Weight::Black;
+                        break;
+                    default:
+                        warnFile << "WARNING: Invalid weight value supplied to KoSvgTextShapeMarkupConverter::stylesFromString.";
+                        break;
+                }
+
+                charFormat.setFontWeight(convertedWeight);
             }
 
             if (property == "text-decoration") {

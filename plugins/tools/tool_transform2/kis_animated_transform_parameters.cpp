@@ -20,7 +20,7 @@
 #include "kis_scalar_keyframe_channel.h"
 #include "kis_transform_args_keyframe_channel.h"
 #include "tool_transform_args.h"
-#include "kis_time_range.h"
+#include "kis_time_span.h"
 #include "kis_transform_mask.h"
 
 struct KisAnimatedTransformMaskParameters::Private
@@ -43,7 +43,7 @@ struct KisAnimatedTransformMaskParameters::Private
     KisScalarKeyframeChannel *rotationZchannel{0};
 
     bool hidden;
-    KisTimeRange validRange;
+    KisTimeSpan validRange;
 
     ToolTransformArgs argsCache;
 
@@ -51,7 +51,7 @@ struct KisAnimatedTransformMaskParameters::Private
     {
         if (!rawArgsChannel) return argsCache;
 
-        KisKeyframeSP keyframe = rawArgsChannel->currentlyActiveKeyframe();
+        KisKeyframeSP keyframe = rawArgsChannel->keyframeAt(rawArgsChannel->activeKeyframeTime());
         if (keyframe.isNull()) return argsCache;
 
         return rawArgsChannel->transformArgs(keyframe);
@@ -62,7 +62,9 @@ struct KisAnimatedTransformMaskParameters::Private
         KisScalarKeyframeChannel *channel = this->*field;
 
         if (!channel) {
-            channel = this->*field = new KisScalarKeyframeChannel(channelId, -qInf(), qInf(), parent, KisKeyframe::Linear);
+            channel = this->*field = new KisScalarKeyframeChannel(channelId, new KisDefaultBoundsNodeWrapper(parent));
+            channel->setDefaultValue(0);
+            channel->setDefaultInterpolationMode(KisScalarKeyframe::Linear);
         }
 
         return channel;
@@ -226,7 +228,7 @@ void KisAnimatedTransformMaskParameters::clearChangedFlag()
 {
     int currentTime = (m_d->rawArgsChannel) ? m_d->rawArgsChannel->currentTime() : 0;
 
-    KisTimeRange validRange = KisTimeRange::infinite(0);
+    KisTimeSpan validRange = KisTimeSpan::infinite(0);
 
     if (m_d->rawArgsChannel) validRange &= m_d->rawArgsChannel->identicalFrames(currentTime);
     if (m_d->positionXchannel) validRange &= m_d->positionXchannel->identicalFrames(currentTime);
@@ -251,7 +253,7 @@ void setScalarChannelValue(KisTransformMaskSP mask, const KoID &channelId, int t
 {
     KisScalarKeyframeChannel *channel = dynamic_cast<KisScalarKeyframeChannel*>(mask->getKeyframeChannel(channelId.id(), true));
     KIS_ASSERT_RECOVER_RETURN(channel);
-    new KisScalarKeyframeChannel::AddKeyframeCommand(channel, time, value, parentCommand);
+    channel->addScalarKeyframe(time, value, parentCommand);
 }
 
 void KisAnimatedTransformMaskParameters::addKeyframes(KisTransformMaskSP mask, int time, KisTransformMaskParamsInterfaceSP params, KUndo2Command *parentCommand)
@@ -278,7 +280,7 @@ void KisAnimatedTransformMaskParameters::addKeyframes(KisTransformMaskSP mask, i
 
     KisTransformArgsKeyframeChannel *rawArgsChannel = dynamic_cast<KisTransformArgsKeyframeChannel*>(mask->getKeyframeChannel(KisKeyframeChannel::TransformArguments.id(), true));
     if (rawArgsChannel) {
-        new KisTransformArgsKeyframeChannel::AddKeyframeCommand(rawArgsChannel, time, args, parentCommand);
+        //new KisTransformArgsKeyframeChannel::AddKeyframeCommand(rawArgsChannel, time, args, parentCommand);
     }
 
     setScalarChannelValue(mask, KisKeyframeChannel::TransformPositionX, time, args.transformedCenter().x(), parentCommand);

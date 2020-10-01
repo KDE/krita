@@ -20,6 +20,8 @@ if(HAVE_SEEXPR)
 add_subdirectory( seexpr_scripts )
 endif()
 add_subdirectory( windowlayouts )
+add_subdirectory( donation )
+
 
 ########### install files ###############
 

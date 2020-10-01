@@ -33,7 +33,7 @@ class OverviewThumbnailStrokeStrategy : public QObject, public KisSimpleStrokeSt
 {
     Q_OBJECT
 public:
-    OverviewThumbnailStrokeStrategy(KisPaintDeviceSP device, const QRect& rect, const QSize& thumbnailSize);
+    OverviewThumbnailStrokeStrategy(KisPaintDeviceSP device, const QRect& rect, const QSize& thumbnailSize, bool isPixelArt = false);
     ~OverviewThumbnailStrokeStrategy() override;
 
     KisStrokeStrategy* createLodClone(int levelOfDetail) override;
@@ -56,6 +56,7 @@ private:
     QRect m_rect;
     QSize m_thumbnailSize;
     QSize m_thumbnailOversampledSize;
+    bool m_isPixelArt {false};
     KisPaintDeviceSP m_thumbnailDevice;
 };
 

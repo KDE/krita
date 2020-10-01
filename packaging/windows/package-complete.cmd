@@ -626,6 +626,8 @@ xcopy /Y /S /I %DEPS_INSTALL_DIR%\share\locale %pkg_root%\bin\locale
 
 :: Copy shortcut link from source (can't create it dynamically)
 copy %KRITA_SRC_DIR%\packaging\windows\krita.lnk %pkg_root%
+copy %KRITA_SRC_DIR%\packaging\windows\krita-minimal.lnk %pkg_root%
+copy %KRITA_SRC_DIR%\packaging\windows\krita-animation.lnk %pkg_root%
 
 set "QMLDIR_ARGS=--qmldir %DEPS_INSTALL_DIR%\qml"
 if exist "%KRITA_INSTALL_DIR%\lib\qml" (

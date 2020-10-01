@@ -49,7 +49,17 @@ void KoPathPointRubberSelectStrategy::finishInteraction(Qt::KeyboardModifiers mo
         return;
     }
 
+    const QRectF oldDirtyRect = d->selectedRect().normalized() | m_tool->decorationsRect();
     selection->selectPoints(d->selectedRect(), !(modifiers & Qt::ShiftModifier));
-    m_tool->canvas()->updateCanvas(d->selectedRect().normalized());
-    selection->repaint();
+    m_tool->canvas()->updateCanvas(oldDirtyRect |
+                                   d->selectedRect().normalized() |
+                                   m_tool->decorationsRect());
+}
+
+void KoPathPointRubberSelectStrategy::cancelInteraction()
+{
+    Q_D(KoShapeRubberSelectStrategy);
+
+    m_tool->canvas()->updateCanvas(d->selectedRect().normalized() |
+                                   m_tool->decorationsRect());
 }

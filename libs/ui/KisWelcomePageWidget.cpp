@@ -66,6 +66,20 @@
 #include <KritaVersionWrapper.h>
 
 #include <KisUsageLogger.h>
+#include <kritaversion.h>
+#include <QSysInfo>
+#include <kis_config.h>
+#include <kis_image_config.h>
+#include "opengl/kis_opengl.h"
+
+#ifdef Q_OS_ANDROID
+#include <QtAndroid>
+
+
+QPushButton* KisWelcomePageWidget::donationLink;
+QLabel* KisWelcomePageWidget::donationBannerImage;
+#endif
+
 
 KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
     : QWidget(parent)
@@ -132,10 +146,40 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
 #endif
 
 #ifdef Q_OS_ANDROID
-    // checking this widgets crashes the app, so it is better for it to be hidden for now
+    // enabling this widgets crashes the app, so it is better for it to be hidden for now
     newsWidget->hide();
     helpTitleLabel_2->hide();
     chkShowNews->hide();
+
+    donationLink = new QPushButton(dropFrameBorder);
+    donationLink->setFlat(true);
+    QFont f = font();
+    f.setPointSize(15);
+    f.setUnderline(true);
+    donationLink->setFont(f);
+
+    connect(donationLink, SIGNAL(clicked(bool)), this, SLOT(slotStartDonationFlow()));
+
+    verticalLayout_3->addWidget(donationLink);
+    verticalLayout_3->setAlignment(donationLink, Qt::AlignTop);
+    verticalLayout_3->setSpacing(20);
+
+    donationBannerImage = new QLabel(dropFrameBorder);
+    QString bannerPath = QStandardPaths::locate(QStandardPaths::AppDataLocation, "share/krita/donation/banner.png");
+    donationBannerImage->setPixmap(QPixmap(bannerPath));
+
+    verticalLayout_3->addWidget(donationBannerImage);
+
+    jboolean bannerPurchased = QAndroidJniObject::callStaticMethod<jboolean>("org/krita/android/DonationHelper", "isBadgePurchased", "()Z");
+    if (bannerPurchased) {
+        donationLink->hide();
+        donationBannerImage->show();
+        QAndroidJniObject::callStaticMethod<void>("org/krita/android/DonationHelper", "endConnection", "()V");
+    } else {
+        donationLink->show();
+        donationBannerImage->hide();
+    }
+
 #endif
 
     // configure the News area
@@ -205,10 +249,12 @@ void KisWelcomePageWidget::setMainWindow(KisMainWindow* mainWin)
 
         // set the shortcut links from actions (only if a shortcut exists)
         if ( mainWin->viewManager()->actionManager()->actionByName("file_new")->shortcut().toString() != "") {
-            newFileLinkShortcut->setText(QString("(") + mainWin->viewManager()->actionManager()->actionByName("file_new")->shortcut().toString() + QString(")"));
+            newFileLinkShortcut->setText(
+                QString("(") + mainWin->viewManager()->actionManager()->actionByName("file_new")->shortcut().toString(QKeySequence::NativeText) + QString(")"));
         }
         if (mainWin->viewManager()->actionManager()->actionByName("file_open")->shortcut().toString()  != "") {
-            openFileShortcut->setText(QString("(") + mainWin->viewManager()->actionManager()->actionByName("file_open")->shortcut().toString() + QString(")"));
+            openFileShortcut->setText(
+                QString("(") + mainWin->viewManager()->actionManager()->actionByName("file_open")->shortcut().toString(QKeySequence::NativeText) + QString(")"));
         }
         connect(recentDocumentsListView, SIGNAL(clicked(QModelIndex)), this, SLOT(recentDocumentClicked(QModelIndex)));
         // we need the view manager to actually call actions, so don't create the connections
@@ -289,7 +335,7 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
     kdeIcon->setIcon(KisIconUtils::loadIcon(QStringLiteral("kde")).pixmap(20));
 
     // HTML links seem to be a bit more stubborn with theme changes... setting inline styles to help with color change
-    userCommunityLink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://forum.kde.org/viewforum.php?f=136&" + analyticsString + "user-community" + "\">")
+    userCommunityLink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://krita-artists.org" + analyticsString + "user-community" + "\">")
                                .append(i18n("User Community")).append("</a>"));
 
     gettingStartedLink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://docs.krita.org/en/user_manual/getting_started.html?" + analyticsString + "getting-started" + "\">")
@@ -318,6 +364,11 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
     updateVersionUpdaterFrame(); // updater frame
 #endif
 
+
+#ifdef Q_OS_ANDROID
+    donationLink->setStyleSheet(blendedStyle);
+    donationLink->setText(QString(i18n("Get your Krita Supporter Badge here!")));
+#endif
     // re-populate recent files since they might have themed icons
     populateRecentDocuments();
 
@@ -379,6 +430,13 @@ void KisWelcomePageWidget::populateRecentDocuments()
 }
 
 
+
+#ifdef Q_OS_ANDROID
+void KisWelcomePageWidget::slotStartDonationFlow()
+{
+    QAndroidJniObject::callStaticMethod<void>("org/krita/android/DonationHelper", "startBillingFlow", "()V");
+}
+#endif
 
 void KisWelcomePageWidget::dragEnterEvent(QDragEnterEvent *event)
 {
@@ -515,7 +573,7 @@ void KisWelcomePageWidget::slotSetUpdateStatus(KisUpdaterStatus updateStatus)
 
 void KisWelcomePageWidget::slotShowUpdaterErrorDetails()
 {
-    QMessageBox::warning(0, i18nc("@title:window", "Krita"), m_updaterStatus.updaterOutput());
+    QMessageBox::warning(qApp->activeWindow(), i18nc("@title:window", "Krita"), m_updaterStatus.updaterOutput());
 }
 
 void KisWelcomePageWidget::updateVersionUpdaterFrame()
@@ -582,5 +640,15 @@ void KisWelcomePageWidget::updateVersionUpdaterFrame()
     if (!blendedStyle.isNull()) {
         versionNotificationLabel->setStyleSheet(blendedStyle);
     }
+}
+#endif
+#ifdef Q_OS_ANDROID
+extern "C" JNIEXPORT void JNICALL
+Java_org_krita_android_JNIWrappers_donationSuccessful(JNIEnv* /*env*/,
+                                                      jobject /*obj*/,
+                                                      jint    /*n*/)
+{
+    KisWelcomePageWidget::donationLink->hide();
+    KisWelcomePageWidget::donationBannerImage->show();
 }
 #endif

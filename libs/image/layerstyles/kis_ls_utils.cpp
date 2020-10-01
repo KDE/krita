@@ -411,7 +411,7 @@ namespace KisLsUtils
         transform.translate(-patternOffset.x(), -patternOffset.y());
         qreal scaleNorm = qreal(scale*0.01);
         transform.scale(scaleNorm, scaleNorm);
-        gc.fillRect(fillRect, pattern, transform);
+        gc.fillRectNoCompose(fillRect, pattern, transform);
         gc.end();
     }
 

@@ -306,6 +306,7 @@ bool KisKraSaveVisitor::visit(KisColorizeMask *mask)
     }
 
     savePaintDevice(mask->coloringProjection(), COLORIZE_COLORING_DEVICE);
+    saveIccProfile(mask, mask->colorSpace()->profile());
 
     m_store->popDirectory();
 
@@ -407,7 +408,15 @@ bool KisKraSaveVisitor::saveAnnotations(KisLayer* layer)
     if (!layer->paintDevice()->colorSpace()) return false;
 
     if (layer->paintDevice()->colorSpace()->profile()) {
-        const KoColorProfile *profile = layer->paintDevice()->colorSpace()->profile();
+        return saveIccProfile(layer, layer->paintDevice()->colorSpace()->profile());
+    }
+    return true;
+
+}
+
+bool KisKraSaveVisitor::saveIccProfile(KisNode *node, const KoColorProfile *profile)
+{
+    if (profile) {
         KisAnnotationSP annotation;
         if (profile) {
             QByteArray profileRawData = profile->rawData();
@@ -422,7 +431,7 @@ bool KisKraSaveVisitor::saveAnnotations(KisLayer* layer)
 
         if (annotation) {
             // save layer profile
-            if (m_store->open(getLocation(layer, DOT_ICC))) {
+            if (m_store->open(getLocation(node, DOT_ICC))) {
                 m_store->write(annotation->annotation());
                 m_store->close();
             } else {
@@ -431,8 +440,8 @@ bool KisKraSaveVisitor::saveAnnotations(KisLayer* layer)
         }
     }
     return true;
-
 }
+
 bool KisKraSaveVisitor::saveSelection(KisNode* node)
 {
     KisSelectionSP selection;

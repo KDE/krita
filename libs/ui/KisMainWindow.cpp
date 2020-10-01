@@ -213,6 +213,7 @@ public:
         widgetStack->addWidget(mdiArea);
         mdiArea->setTabsMovable(true);
         mdiArea->setActivationOrder(QMdiArea::ActivationHistoryOrder);
+        mdiArea->setDocumentMode(true);
     }
 
     ~Private() {
@@ -467,14 +468,12 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     updateWindowMenu();
 
     if (isHelpMenuEnabled() && !d->helpMenu) {
-        // workaround for KHelpMenu (or rather KAboutData::applicationData()) internally
-        // not using the Q*Application metadata ATM, which results e.g. in the bugreport wizard
-        // not having the app version preset
-        // fixed hopefully in KF5 5.22.0, patch pending
         QGuiApplication *app = qApp;
-        KAboutData aboutData(app->applicationName(), app->applicationDisplayName(), app->applicationVersion());
+        KAboutData aboutData(KAboutData::applicationData());
         aboutData.setOrganizationDomain(app->organizationDomain().toUtf8());
+
         d->helpMenu = new KHelpMenu(this, aboutData, false);
+
         // workaround-less version:
         // d->helpMenu = new KHelpMenu(this, QString()/*unused*/, false);
 
@@ -596,6 +595,21 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     this->winId(); // Ensures the native window has been created.
     QWindow *window = this->windowHandle();
     connect(window, SIGNAL(screenChanged(QScreen *)), this, SLOT(windowScreenChanged(QScreen *)));
+
+#ifdef Q_OS_ANDROID
+    connect(d->fileManager, SIGNAL(sigFileSelected(QUrl)), this, SLOT(slotFileSelected(QUrl)));
+    connect(d->fileManager, SIGNAL(sigEmptyFilePath()), this, SLOT(slotEmptyFilePath()));
+
+    QScreen *s = QGuiApplication::primaryScreen();
+    s->setOrientationUpdateMask(Qt::LandscapeOrientation|Qt::InvertedLandscapeOrientation|Qt::PortraitOrientation|Qt::InvertedPortraitOrientation);
+    connect(s, SIGNAL(orientationChanged(Qt::ScreenOrientation)), this, SLOT(orientationChanged()));
+
+    // When Krita starts, Java side sends an event to set applicationState() to active. But, before
+    // the event could reach KisApplication's platform integration, it is cleared by KisOpenGLModeProber::probeFomat.
+    // So, we send it manually when MainWindow shows up.
+    QAndroidJniObject::callStaticMethod<void>("org/qtproject/qt5/android/QtNative", "setApplicationState", "(I)V", Qt::ApplicationActive);
+#endif
+
 }
 
 KisMainWindow::~KisMainWindow()
@@ -733,6 +747,15 @@ void KisMainWindow::showView(KisView *imageView, QMdiSubWindow *subwin)
 
         updateWindowMenu();
         updateCaption();
+
+#ifdef Q_OS_ANDROID
+        // HACK! When loading a new document, Krita wouldn't refresh the screen,
+        // even though it has been successfully created in background. So, When
+        // appliction is hidden and made active QPA Android force-requests a
+        // redraw call. So, this workaround fixes that.
+        QAndroidJniObject::callStaticMethod<void>("org/qtproject/qt5/android/QtNative", "setApplicationState", "(I)V", Qt::ApplicationHidden);
+        QAndroidJniObject::callStaticMethod<void>("org/qtproject/qt5/android/QtNative", "setApplicationState", "(I)V", Qt::ApplicationActive);
+#endif
     }
 }
 
@@ -815,20 +838,14 @@ void KisMainWindow::setCanvasDetached(bool detach)
     }
 }
 
-void KisMainWindow::slotFileSelected(QString path)
+void KisMainWindow::slotFileSelected(QUrl url)
 {
-    QString url = path;
-    if (!url.isEmpty()) {
-        bool res = openDocument(QUrl::fromLocalFile(url), Import);
-        if (!res) {
-            warnKrita << "Loading" << url << "failed";
-        }
-    }
+    openDocumentInternal(url);
 }
 
 void KisMainWindow::slotEmptyFilePath()
 {
-    QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("The chosen file's location could not be found. Does it exist?"));
+    QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("The chosen file's location could not be found. Does it exist?"));
 }
 
 QWidget * KisMainWindow::canvasWindow() const
@@ -921,32 +938,44 @@ void KisMainWindow::reloadRecentFileList()
 void KisMainWindow::updateCaption()
 {
     if (!d->mdiArea->activeSubWindow()) {
-        updateCaption(QString(), false);
-    }
+        setWindowTitle("");
+   }
     else if (d->activeView && d->activeView->document() && d->activeView->image()){
         KisDocument *doc = d->activeView->document();
 
-        QString caption(doc->caption());
+        QString caption = doc->caption();
 
-        caption = "RESOURCES REWRITE GOING ON " + caption;
-
+        if (d->mdiArea->activeSubWindow() && d->mdiArea->activeSubWindow()->isMaximized() && d->mdiArea->viewMode() == QMdiArea::SubWindowView) {
+            caption = "";
+        }
 
         if (d->readOnly) {
-            caption += " [" + i18n("Write Protected") + "] ";
+            caption += " " + i18n("Write Protected") + " ";
         }
 
         if (doc->isRecovered()) {
-            caption += " [" + i18n("Recovered") + "] ";
+            caption += " " + i18n("Recovered") + " ";
         }
 
         // show the file size for the document
         KisMemoryStatisticsServer::Statistics m_fileSizeStats = KisMemoryStatisticsServer::instance()->fetchMemoryStatistics(d->activeView ? d->activeView->image() : 0);
 
         if (m_fileSizeStats.imageSize) {
-            caption += QString(" (").append( KFormat().formatByteSize(m_fileSizeStats.imageSize)).append( ")");
+            caption += QString(" (").append( KFormat().formatByteSize(m_fileSizeStats.imageSize)).append( ") ");
         }
 
-        updateCaption(caption, doc->isModified());
+        if (doc->isModified()) {
+            caption += " *";
+        }
+
+        if (doc->isModified()) {
+            d->mdiArea->activeSubWindow()->setWindowTitle(doc->caption() + " *");
+        }
+        else {
+            d->mdiArea->activeSubWindow()->setWindowTitle(doc->caption());
+        }
+
+        setWindowTitle(caption);
 
         if (!doc->url().fileName().isEmpty()) {
             d->saveAction->setToolTip(i18n("Save as %1", doc->url().fileName()));
@@ -954,39 +983,7 @@ void KisMainWindow::updateCaption()
         else {
             d->saveAction->setToolTip(i18n("Save"));
         }
-
-
     }
-
-}
-
-void KisMainWindow::updateCaption(const QString &caption, bool modified)
-{
-    QString versionString = KritaVersionWrapper::versionString(true);
-
-    QString title = caption;
-    if (!title.contains(QStringLiteral("[*]"))) { // append the placeholder so that the modified mechanism works
-        title.append(QStringLiteral(" [*]"));
-    }
-
-    if (d->mdiArea->activeSubWindow()) {
-#if defined(KRITA_ALPHA) || defined (KRITA_BETA) || defined (KRITA_RC)
-        d->mdiArea->activeSubWindow()->setWindowTitle(QString("%1: %2").arg(versionString).arg(title));
-#else
-        d->mdiArea->activeSubWindow()->setWindowTitle(title);
-#endif
-        d->mdiArea->activeSubWindow()->setWindowModified(modified);
-    }
-    else {
-#if defined(KRITA_ALPHA) || defined (KRITA_BETA) || defined (KRITA_RC)
-    setWindowTitle(QString("%1: %2").arg(versionString).arg(title));
-#else
-    setWindowTitle(title);
-#endif
-    }
-    setWindowModified(modified);
-
-
 }
 
 
@@ -1002,7 +999,7 @@ bool KisMainWindow::openDocument(const QUrl &url, OpenFlags flags)
 {
     if (!QFile(url.toLocalFile()).exists()) {
         if (!(flags & BatchMode)) {
-            QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("The file %1 does not exist.", url.url()));
+            QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("The file %1 does not exist.", url.url()));
         }
         d->recentFiles->removeUrl(url); //remove the file from the recent-opened-file-list
         saveRecentFiles();
@@ -1013,10 +1010,17 @@ bool KisMainWindow::openDocument(const QUrl &url, OpenFlags flags)
 
 bool KisMainWindow::openDocumentInternal(const QUrl &url, OpenFlags flags)
 {
+#ifndef Q_OS_ANDROID
     if (!url.isLocalFile()) {
         qWarning() << "KisMainWindow::openDocumentInternal. Not a local file:" << url;
         return false;
     }
+#else
+    if (!QFile(url.toString()).exists() && !url.isLocalFile()) {
+        qWarning() << "KisMainWindow::openDocumentInternal. Could not open:" << url;
+        return false;
+    }
+#endif
 
     KisDocument *newdoc = KisPart::instance()->createDocument();
 
@@ -1042,10 +1046,6 @@ bool KisMainWindow::openDocumentInternal(const QUrl &url, OpenFlags flags)
     }
 
     KisPart::instance()->addDocument(newdoc);
-
-    if (!QFileInfo(url.toLocalFile()).isWritable()) {
-        setReadWrite(false);
-    }
 
     // Try to determine whether this was an unnamed autosave
     if (flags & RecoveryFile &&
@@ -1231,7 +1231,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExpo
         return false;
     }
     else if (dlg.result() == KisDelayedSaveDialog::Ignored) {
-        QMessageBox::critical(0,
+        QMessageBox::critical(qApp->activeWindow(),
                               i18nc("@title:window", "Krita"),
                               i18n("You are saving a file while the image is "
                                    "still rendering. The saved file may be "
@@ -1335,11 +1335,13 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExpo
         QUrl newURL = QUrl::fromUserInput(dialog.filename());
 
         if (newURL.isLocalFile()) {
+#ifndef Q_OS_ANDROID
             QString fn = newURL.toLocalFile();
             if (QFileInfo(fn).completeSuffix().isEmpty()) {
                 fn.append(KisMimeDatabase::suffixesForMimeType(nativeFormat).first());
                 newURL = QUrl::fromLocalFile(fn);
             }
+#endif
         }
 
         if (document->documentInfo()->aboutInfo("title") == i18n("Unnamed")) {
@@ -1656,7 +1658,6 @@ void KisMainWindow::slotImportFile()
 
 void KisMainWindow::slotFileOpen(bool isImporting)
 {
-#ifndef Q_OS_ANDROID
     QStringList urls = showOpenFileDialog(isImporting);
 
     if (urls.isEmpty())
@@ -1672,13 +1673,6 @@ void KisMainWindow::slotFileOpen(bool isImporting)
             }
         }
     }
-#else
-    Q_UNUSED(isImporting);
-
-    d->fileManager->openImportFile();
-    connect(d->fileManager, SIGNAL(sigFileSelected(QString)), this, SLOT(slotFileSelected(QString)));
-    connect(d->fileManager, SIGNAL(sigEmptyFilePath()), this, SLOT(slotEmptyFilePath()));
-#endif
 }
 
 void KisMainWindow::slotFileOpenRecent(const QUrl &url)
@@ -1899,7 +1893,7 @@ void KisMainWindow::importAnimation()
         if (!status.isOk() && !status.isInternalError()) {
             QString msg = status.errorMessage();
             if (!msg.isEmpty())
-                QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not finish import animation:\n%1", msg));
+                QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Could not finish import animation:\n%1", msg));
         }
         activeView()->canvasBase()->refetchDataFromImage();
     }
@@ -2536,7 +2530,7 @@ void KisMainWindow::checkSanity()
 
 void KisMainWindow::showErrorAndDie()
 {
-    QMessageBox::critical(0, i18nc("@title:window", "Installation error"), m_errorMessage);
+    QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Installation error"), m_errorMessage);
     if (m_dieOnError) {
         exit(10);
     }
@@ -2772,6 +2766,42 @@ void KisMainWindow::slotXmlGuiMakingChanges(bool finished)
 {
     if (finished) {
         subWindowActivated();
+    }
+}
+
+void KisMainWindow::orientationChanged()
+{
+    QScreen *screen = QGuiApplication::primaryScreen();
+
+    for (QWindow* window: QGuiApplication::topLevelWindows()) {
+        if (window->geometry().topLeft() != QPoint(0, 0)) {
+            // We are using reversed values. Because geometry returned is not the updated one,
+            // but the previous one.
+            int screenHeight = screen->geometry().width();
+            int screenWidth = screen->geometry().height();
+
+            // scaling
+            int new_x = (window->position().x() * screenWidth) / screenHeight;
+            int new_y = (window->position().y() * screenHeight) / screenWidth;
+
+            // window width or height shouldn't change
+            int winWidth = window->geometry().width();
+            int winHeight = window->geometry().height();
+
+            // Try best to not let the window go beyond screen.
+            if (new_x > screenWidth - winWidth) {
+                new_x = screenWidth - winWidth;
+                if (new_x < 0)
+                    new_x = 0;
+            }
+            if (new_y > screenHeight - winHeight) {
+                new_y = screenHeight - winHeight;
+                if (new_y < 0)
+                    new_y = 0;
+            }
+
+            window->setPosition(QPoint(new_x, new_y));
+        }
     }
 }
 

@@ -92,7 +92,7 @@ public: // KisNodeGraphListener implementation
     void invalidateAllFrames() override;
     void notifySelectionChanged() override;
     void requestProjectionUpdate(KisNode *node, const QVector<QRect> &rects, bool resetAnimationCache) override;
-    void invalidateFrames(const KisTimeRange &range, const QRect &rect) override;
+    void invalidateFrames(const KisTimeSpan &range, const QRect &rect) override;
     void requestTimeSwitch(int time) override;
     KisNode* graphOverlayNode() const override;
 
@@ -274,12 +274,13 @@ public:
      *
      * @param node node to crop
      * @param newRect the rectangle of the layer which will be cut-out
+     * @param activeFrameOnly whether to crop every animation frame or just the current one.
      *
      * Please note that the actual operation starts asynchronously in
      * a background, so you cannot expect the image having new size
      * right after this call.
      */
-    void cropNode(KisNodeSP node, const QRect& newRect);
+    void cropNode(KisNodeSP node, const QRect& newRect, const bool activeFrameOnly = false);
 
     /**
      * @brief start asynchronous operation on scaling the image
@@ -658,6 +659,16 @@ public:
      * Remove the layer compostion
      */
     void removeComposition(KisLayerCompositionSP composition);
+
+    /**
+     * Move a composition up in the composition list
+     */
+    void moveCompositionUp(KisLayerCompositionSP composition);
+
+    /**
+     * Move a composition down in the composition list
+     */
+    void moveCompositionDown(KisLayerCompositionSP composition);
 
     /**
      * Permit or deny the wrap-around mode for all the paint devices

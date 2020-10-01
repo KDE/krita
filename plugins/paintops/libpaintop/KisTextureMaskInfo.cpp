@@ -197,14 +197,6 @@ void KisTextureMaskInfo::recalculateMask()
                 maskValue = 1 - maskValue;
             }
 
-            if (m_cutoffPolicy == 1 && (maskValue < (m_cutoffLeft / 255.0) || maskValue > (m_cutoffRight / 255.0))) {
-                // mask out the dab if it's outside the pattern's cuttoff points
-                alpha = OPACITY_TRANSPARENT_F;
-            }
-            else if (m_cutoffPolicy == 2 && (maskValue < (m_cutoffLeft / 255.0) || maskValue > (m_cutoffRight / 255.0))) {
-                alpha = OPACITY_OPAQUE_F;
-            }
-
             maskValue = qBound(0.0f, maskValue, 1.0f);
 
             float neutralAdjustedValue;
@@ -213,13 +205,25 @@ void KisTextureMaskInfo::recalculateMask()
             //to prevent loss of detail (clipping).
             if (m_neutralPoint == 1 || (m_neutralPoint != 0 && maskValue <= m_neutralPoint)) {
                 neutralAdjustedValue = maskValue / (2 * m_neutralPoint);
-            }
-            else {
+            } else {
                 neutralAdjustedValue = 0.5 +  (maskValue - m_neutralPoint) / (2 - 2 * m_neutralPoint);
             }
 
-            int finalValue = neutralAdjustedValue * 255;
-            pixel[row * width + col] = QColor(finalValue, finalValue, finalValue, alpha * 255).rgba();
+            if (m_cutoffPolicy == 1 && (neutralAdjustedValue < (m_cutoffLeft / 255.0) || neutralAdjustedValue >(m_cutoffRight / 255.0))) {
+                // mask out the dab if it's outside the pattern's cuttoff points
+                alpha = OPACITY_TRANSPARENT_F;
+                if (!hasAlpha) {
+                    neutralAdjustedValue = alpha;
+                }
+            } else if (m_cutoffPolicy == 2 && (neutralAdjustedValue < (m_cutoffLeft / 255.0) || neutralAdjustedValue >(m_cutoffRight / 255.0))) {
+                alpha = OPACITY_OPAQUE_F;
+                if (!hasAlpha) {
+                    neutralAdjustedValue = alpha;
+                }
+            }
+
+            int finalValue = qRound(neutralAdjustedValue * 255.0);
+            pixel[row * width + col] = QColor(finalValue, finalValue, finalValue, qRound(alpha * 255.0)).rgba();
 
         }
     }

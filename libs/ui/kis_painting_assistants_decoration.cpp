@@ -86,6 +86,15 @@ KisPaintingAssistantsDecoration::~KisPaintingAssistantsDecoration()
     delete d;
 }
 
+void KisPaintingAssistantsDecoration::slotUpdateDecorationVisibility()
+{
+    const bool shouldBeVisible = !assistants().isEmpty();
+
+    if (visible() != shouldBeVisible) {
+        setVisible(shouldBeVisible);
+    }
+}
+
 void KisPaintingAssistantsDecoration::addAssistant(KisPaintingAssistantSP assistant)
 {
     QList<KisPaintingAssistantSP> assistants = view()->document()->assistants();
@@ -241,7 +250,7 @@ void KisPaintingAssistantsDecoration::endStroke()
 
 void KisPaintingAssistantsDecoration::drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter,KisCanvas2* canvas)
 {
-    if(assistants().length() == 0) {
+    if(assistants().isEmpty()) {
         return; // no assistants to worry about, ok to exit
     }
 
@@ -350,6 +359,11 @@ QList<KisPaintingAssistantSP> KisPaintingAssistantsDecoration::assistants() cons
         }
     }
     return assistants;
+}
+
+bool KisPaintingAssistantsDecoration::hasPaintableAssistants() const
+{
+    return !assistants().isEmpty();
 }
 
 KisPaintingAssistantSP KisPaintingAssistantsDecoration::selectedAssistant()

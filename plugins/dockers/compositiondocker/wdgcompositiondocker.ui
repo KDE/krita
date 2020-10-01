@@ -14,20 +14,10 @@
    <property name="spacing">
     <number>2</number>
    </property>
-   <item row="0" column="0" colspan="5">
+   <item row="0" column="0" colspan="6">
     <widget class="QListView" name="compositionView">
      <property name="toolTip">
       <string>Checked compositions will be exported, unchecked won't.</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="2">
-    <widget class="QPushButton" name="deleteButton">
-     <property name="text">
-      <string/>
-     </property>
-     <property name="flat">
-      <bool>true</bool>
      </property>
     </widget>
    </item>
@@ -44,7 +34,37 @@
      </property>
     </widget>
    </item>
+   <item row="1" column="2">
+    <widget class="QPushButton" name="moveUpButton">
+     <property name="text">
+      <string/>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
    <item row="1" column="3">
+    <widget class="QPushButton" name="moveDownButton">
+     <property name="text">
+      <string/>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="4">
+    <widget class="QPushButton" name="deleteButton">
+     <property name="text">
+      <string/>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="5">
     <widget class="QToolButton" name="exportCompositions">
      <property name="toolTip">
       <string>Export checked compositions.</string>

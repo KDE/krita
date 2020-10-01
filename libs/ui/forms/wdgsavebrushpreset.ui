@@ -150,7 +150,7 @@
          <item>
           <widget class="QPushButton" name="loadImageIntoThumbnailButton">
            <property name="text">
-            <string>Load Image</string>
+            <string comment="Load Image as Thumbnail button">Load Image</string>
            </property>
           </widget>
          </item>

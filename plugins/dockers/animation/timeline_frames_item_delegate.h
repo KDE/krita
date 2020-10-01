@@ -37,11 +37,13 @@ public:
     void drawFocus(QPainter *painter,
                    const QStyleOptionViewItem &option,
                    const QRect &rect) const override;
+    void drawCloneGraphics(QPainter *painter, const QRect &rect) const;
 
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
 
 private:
     QVector<QColor> labelColors;
+    QPixmap stripes;
 };
 
 #endif /* __TIMELINE_FRAMES_ITEM_DELEGATE_H */

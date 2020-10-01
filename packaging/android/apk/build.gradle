@@ -60,10 +60,23 @@ task copyLibs(type: Copy) {
     rename ('^krita(.*).so$', 'lib_krita$1.so')
 }
 
+/*
+ * androiddeployqt doesn't fully copy the directories. Hidden directories
+ * to be specific. That's why we copy manually and then delete the partial
+ * one it creates
+ */
 task copyAssets(type: Copy) {
     from "$installPrefix/share/"
     into 'assets/'
     include '**'
+}
+
+/*
+ * Remove "share" folder in assets. It is copied both manually and by
+ * androiddeployqt(reason in copyAssets task).
+ */
+task removeDuplicateAssets(type: Delete) {
+    delete "assets/share"
 }
 
 copyLibs.dependsOn configure
@@ -106,11 +119,32 @@ android {
     lintOptions {
         abortOnError false
     }
+
+    project.ext.versionCodes = ['armeabi-v7a': 1, 'arm64-v8a': 2, 'x86': 3, 'x86_64': 4]
+
+    def versionMajor    = 4
+    def versionMinor    = 3
+
+    /**
+     * This version does **not** correspond to the patch version
+     * of Krita. Instead, it is just incremented for every public
+     * (including alpha and beta) release of versionMajor.versionMinor
+     * branch
+     */
+    def versionRelease  = 0
+
 	defaultConfig {
-        targetSdkVersion 26
-        minSdkVersion 21
+        targetSdkVersion 28
+        minSdkVersion 23
+        versionCode project.ext.versionCodes[abi] * 1000000 + versionMajor * 10000 + versionMinor * 100 + versionRelease
     }
 
     preBuild.dependsOn(copyLibs)
     preBuild.dependsOn(copyAssets)
+    preBuild.dependsOn(removeDuplicateAssets)
 }
+
+dependencies {
+    implementation 'com.android.billingclient:billing:2.2.0'
+}
+

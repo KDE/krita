@@ -51,7 +51,7 @@ bool KisRemoteFileFetcher::fetchFile(const QUrl &remote, QIODevice *io)
     m_loop.exec();
 
     if (m_reply->error() != QNetworkReply::NoError) {
-        QMessageBox::critical(0, i18nc("@title:window", "Krita"), QString("Could not download %1: %2").arg(remote.toDisplayString()).arg(m_reply->errorString()), QMessageBox::Ok);
+        QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"), QString("Could not download %1: %2").arg(remote.toDisplayString()).arg(m_reply->errorString()), QMessageBox::Ok);
         return false;
     }
 

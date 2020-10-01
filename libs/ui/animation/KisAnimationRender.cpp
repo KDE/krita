@@ -22,13 +22,14 @@
 #include <QFileInfo>
 #include <QDir>
 #include <QMessageBox>
+#include <QApplication>
 
 #include "KisDocument.h"
 #include "KisViewManager.h"
 #include "KisAnimationRenderingOptions.h"
 #include "KisMimeDatabase.h"
 #include "dialogs/KisAsyncAnimationFramesSaveDialog.h"
-#include "kis_time_range.h"
+#include "kis_time_span.h"
 
 #include "krita_container_utils.h"
 
@@ -56,14 +57,14 @@ void KisAnimationRender::render(KisDocument *doc, KisViewManager *viewManager, K
             QString type = encoderOptions.videoMimeType == "video/mp4" ? "Mpeg4 (.mp4) " : "Mastroska (.mkv) ";
             qWarning() << type <<"requires width and height to be even, resize and try again!";
             doc->setErrorMessage(i18n("%1 requires width and height to be even numbers.  Please resize or crop the image before exporting.", type));
-            QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not render animation:\n%1", doc->errorMessage()));
+            QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Could not render animation:\n%1", doc->errorMessage()));
             return;
         }
     }
 
     const bool batchMode = false; // TODO: fetch correctly!
     KisAsyncAnimationFramesSaveDialog exporter(doc->image(),
-                                               KisTimeRange::fromTime(encoderOptions.firstFrame,
+                                               KisTimeSpan::fromTimeToTime(encoderOptions.firstFrame,
                                                                       encoderOptions.lastFrame),
                                                baseFileName,
                                                encoderOptions.sequenceStart,
@@ -108,7 +109,7 @@ void KisAnimationRender::render(KisDocument *doc, KisViewManager *viewManager, K
             res = encoder->convert(doc, savedFilesMask, encoderOptions, batchMode);
 
             if (!res.isOk()) {
-                QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not render animation:\n%1", res.errorMessage()));
+                QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Could not render animation:\n%1", res.errorMessage()));
             }
         }
 

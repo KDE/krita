@@ -37,7 +37,7 @@
 #include <krita_container_utils.h>
 #include <kis_image.h>
 #include <kis_image_animation_interface.h>
-#include <kis_time_range.h>
+#include <kis_time_span.h>
 #include <KisImportExportManager.h>
 #include <kis_config_widget.h>
 #include <KisDocument.h>

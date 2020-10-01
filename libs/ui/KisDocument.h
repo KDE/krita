@@ -676,6 +676,13 @@ public:
      * @brief Start saving when android activity is pushed to the background
      */
     void autoSaveOnPause();
+
+    /**
+      * @brief Helper method to convert a URI to path. Specifically for handling Android's
+      * "content://" URIs
+      */
+    QString toPath(const QUrl& url) const;
+
 Q_SIGNALS:
 
     void completed();

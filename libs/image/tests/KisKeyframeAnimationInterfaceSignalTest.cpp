@@ -26,7 +26,7 @@ void KisKeyframeAnimationInterfaceSignalTest::initTestCase()
 {
     m_image1 = new KisImage(0, 100, 100, nullptr, "image1");
     m_layer1 = new KisPaintLayer(m_image1, "layer1", OPACITY_OPAQUE_U8);
-    m_channel = m_layer1->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
+    m_channel = m_layer1->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true);
 
     m_image2 = new KisImage(0, 100, 100, nullptr, "image2");
     m_layer2 = new KisPaintLayer(m_image1, "layer2", OPACITY_OPAQUE_U8);
@@ -37,8 +37,8 @@ void KisKeyframeAnimationInterfaceSignalTest::init()
     m_channel->addKeyframe(0);
 
     //delete all  keyframes other than 1st
-    while (m_channel->firstKeyframe() != m_channel->lastKeyframe()) {
-        m_channel->deleteKeyframe(m_channel->lastKeyframe());
+    while (m_channel->keyframeAt(m_channel->firstKeyframeTime()) != m_channel->keyframeAt(m_channel->lastKeyframeTime())) {
+        m_channel->removeKeyframe(m_channel->lastKeyframeTime());
     }
     QCOMPARE(m_channel->keyframeCount(), 1);
 }
@@ -59,14 +59,14 @@ void KisKeyframeAnimationInterfaceSignalTest::testSignalFromKeyframeChannelToInt
     QSignalSpy spyFrameMoved(m_image1->animationInterface() , SIGNAL(sigKeyframeMoved(KisKeyframeSP, int)));
     QVERIFY(spyFrameMoved.isValid());
 
-    m_channel->moveKeyframe(m_channel->keyframeAt(2), 5);
+    m_channel->moveKeyframe(2, 5);
     QCOMPARE(spyFrameMoved.count(), 1);
 
     //remove keyframe
     QSignalSpy spyFrameRemoved(m_image1->animationInterface() , SIGNAL(sigKeyframeRemoved(KisKeyframeSP)));
     QVERIFY(spyFrameRemoved.isValid());
 
-    m_channel->deleteKeyframe(m_channel->keyframeAt(5));
+    m_channel->removeKeyframe(5);
     QCOMPARE(spyFrameRemoved.count(), 1);
 }
 
@@ -106,8 +106,8 @@ void KisKeyframeAnimationInterfaceSignalTest::testSignalOnImageReset()
     QVERIFY(newSpyFrameRemoved.isValid());
 
     m_channel->addKeyframe(2);
-    m_channel->moveKeyframe(m_channel->keyframeAt(2), 3);
-    m_channel->deleteKeyframe(m_channel->keyframeAt(3));
+    m_channel->moveKeyframe(2, 3);
+    m_channel->removeKeyframe(3);
 
     QCOMPARE(spyFrameAdded.count(), 0);
     QCOMPARE(spyFrameRemoved.count(), 0);

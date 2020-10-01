@@ -26,6 +26,7 @@
 #include <KoCompositeOpRegistry.h>
 #include "kis_paint_device.h"
 #include "kis_layer_properties_icons.h"
+#include "kis_default_bounds_node_wrapper.h"
 
 #include "kis_scalar_keyframe_channel.h"
 
@@ -143,10 +144,11 @@ quint8 KisBaseNode::opacity() const
 void KisBaseNode::setOpacity(quint8 val)
 {
     if (m_d->opacityChannel) {
-        KisKeyframeSP activeKeyframe = m_d->opacityChannel->currentlyActiveKeyframe();
+        int activeKeyframeTime = m_d->opacityChannel->activeKeyframeTime();
+        KisScalarKeyframeSP scalarKey = m_d->opacityChannel->keyframeAt<KisScalarKeyframe>(activeKeyframeTime);
 
-        if (activeKeyframe) {
-            m_d->opacityChannel->setScalarValue(activeKeyframe, val);
+        if (scalarKey) {
+            scalarKey->setValue(val);
         }
     }
 
@@ -468,7 +470,6 @@ void KisBaseNode::enableAnimation()
 void KisBaseNode::addKeyframeChannel(KisKeyframeChannel *channel)
 {
     m_d->keyframeChannels.insert(channel->id(), channel);
-    channel->bindChannelToAnimationInterface(image());
     emit keyframeChannelAdded(channel);
 }
 
@@ -483,10 +484,12 @@ KisKeyframeChannel *KisBaseNode::requestKeyframeChannel(const QString &id)
             KisNode* node = dynamic_cast<KisNode*>(this);
             KisScalarKeyframeChannel * channel = new KisScalarKeyframeChannel(
                 KisKeyframeChannel::Opacity,
-                0, 255,
-                KisNodeWSP( node ),
-                KisKeyframe::Linear
+                node
             );
+
+            channel->setLimits(0, 255);
+            channel->setDefaultInterpolationMode(KisScalarKeyframe::Linear);
+            channel->setDefaultValue(255);
 
             m_d->opacityChannel.reset(channel);
 

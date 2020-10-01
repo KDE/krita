@@ -288,6 +288,14 @@ class KisKeyframe;
 typedef QSharedPointer<KisKeyframe> KisKeyframeSP;
 typedef QWeakPointer<KisKeyframe> KisKeyframeWSP;
 
+class KisScalarKeyframe;
+typedef QSharedPointer<KisScalarKeyframe> KisScalarKeyframeSP;
+typedef QWeakPointer<KisScalarKeyframe> KisScalarKeyframeWSP;
+
+class KisRasterKeyframe;
+typedef QSharedPointer<KisRasterKeyframe> KisRasterKeyframeSP;
+typedef QWeakPointer<KisRasterKeyframe> KisRasterKeyframeWSP;
+
 class KisFilterChain;
 typedef KisSharedPtr<KisFilterChain> KisFilterChainSP;
 

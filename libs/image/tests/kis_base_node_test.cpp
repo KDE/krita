@@ -115,67 +115,84 @@ void KisBaseNodeTest::testProperties()
 
 void KisBaseNodeTest::testOpacityKeyframing()
 {
-    TestUtil::MaskParent p;
+    TestUtil::MaskParent context;
 
-    KisPaintLayerSP layer2 = new KisPaintLayer(p.image, "paint2", OPACITY_OPAQUE_U8);
-    p.image->addNode(layer2);
-
-    KisPaintDeviceSP dev1 = p.layer->paintDevice();
-    dev1->fill(QRect(0,0,32,32), KoColor(Qt::red, dev1->colorSpace()));
-
-    KisPaintDeviceSP dev2 = layer2->paintDevice();
-    dev2->fill(QRect(0,0,32,32), KoColor(Qt::green, dev2->colorSpace()));
-
-    layer2->setOpacity(192);
-
-    KisKeyframeChannel *channel = layer2->getKeyframeChannel(KisKeyframeChannel::Opacity.id(), true);
-    KisScalarKeyframeChannel *opacityChannel = dynamic_cast<KisScalarKeyframeChannel*>(channel);
+    // Get/create channel..
+    KisScalarKeyframeChannel *opacityChannel = dynamic_cast<KisScalarKeyframeChannel*>(
+                context.layer->getKeyframeChannel(KisKeyframeChannel::Opacity.id(), true));
     QVERIFY(opacityChannel);
+    QVERIFY(opacityChannel->limits());
 
-    KisKeyframeSP key1 = opacityChannel->addKeyframe(7);
-    opacityChannel->setScalarValue(key1, 128);
+    const int timeA = 7;
+    const int timeB = 15;
+    const int half_offset = (timeB - timeA) / 2;
 
-    KisKeyframeSP key2 = opacityChannel->addKeyframe(20);
-    opacityChannel->setScalarValue(key2, 64);
+    const qreal valueA = 128;
+    const qreal valueB = 64;
+    // Interpolated value lands on frame edge, so value isn't quite in the middle..
+    const qreal valueDeltaPerFrame = (valueA - valueB) / qreal(timeB - timeA);
+    const qreal interpolatedValueAB = valueB + valueDeltaPerFrame * half_offset;
 
-    p.image->refreshGraph();
+    // Add frames..
+    opacityChannel->addScalarKeyframe(timeA, 128);
+    opacityChannel->addScalarKeyframe(timeB, 64);
 
-    // No interpolation
+    // Paint starting color..
+    const KoColorSpace *colorSpace = context.layer->paintDevice()->colorSpace();
+    const KoColor originalColor = KoColor(Qt::red, colorSpace);
+    context.layer->paintDevice()->fill(context.imageRect, originalColor);
 
-    key1->setInterpolationMode(KisKeyframe::Constant);
+    // Regenerate projection..
+    context.image->refreshGraph();
 
-    QColor sample;
-    p.image->projection()->pixel(16, 16, &sample);
-    QCOMPARE(sample, QColor(63, 192, 0, 255));
+    {   // Before A (Opacity should be the same as A!)
+        context.image->animationInterface()->switchCurrentTimeAsync(0);
+        context.image->waitForDone();
 
-    p.image->animationInterface()->switchCurrentTimeAsync(10);
-    p.image->waitForDone();
+        KoColor sample(colorSpace);
+        context.image->projection()->pixel(16, 16, &sample);
+        QCOMPARE(sample.opacityU8(), valueA);
+    }
 
-    p.image->projection()->pixel(16, 16, &sample);
-    QCOMPARE(sample, QColor(127, 128, 0, 255));
+    {   // A
+        context.image->animationInterface()->switchCurrentTimeAsync(timeA);
+        context.image->waitForDone();
 
-    p.image->animationInterface()->switchCurrentTimeAsync(30);
-    p.image->waitForDone();
+        KoColor sample;
+        context.image->projection()->pixel(16, 16, &sample);
+        QCOMPARE(sample.opacityU8(), valueA);
+    }
 
-    layer2->setOpacity(32);
-    QCOMPARE(opacityChannel->scalarValue(key2), 32.0);
+    {   // Between A-B (Opacity interpolated)
+        context.image->animationInterface()->switchCurrentTimeAsync(timeA + half_offset);
+        context.image->waitForDone();
 
-    p.image->waitForDone();
-    p.image->projection()->pixel(16, 16, &sample);
-    QCOMPARE(sample, QColor(223, 32, 0, 255));
+        KoColor sample;
+        context.image->projection()->pixel(16, 16, &sample);
+        QCOMPARE(sample.opacityU8(), interpolatedValueAB);
 
-    // With interpolation
+        // Restore opacity and double check color continuity..
+        sample.setOpacity(originalColor.opacityU8());
+        QCOMPARE(sample, originalColor);
+    }
 
-    key1->setInterpolationMode(KisKeyframe::Linear);
-    key1->setInterpolationTangents(QPointF(), QPointF(0,0));
-    key2->setInterpolationTangents(QPointF(0,0), QPointF());
+    {   // B
+        context.image->animationInterface()->switchCurrentTimeAsync(timeB);
+        context.image->waitForDone();
 
-    p.image->animationInterface()->switchCurrentTimeAsync(10);
-    p.image->waitForDone();
-    p.image->projection()->pixel(16, 16, &sample);
+        KoColor sample;
+        context.image->projection()->pixel(16, 16, &sample);
+        QCOMPARE(sample.opacityU8(), valueB);
+    }
 
-    QCOMPARE(sample, QColor(150, 105, 0, 255));
+    {   // After B (Opacity should be the same as B!)
+        context.image->animationInterface()->switchCurrentTimeAsync(timeB + half_offset);
+        context.image->waitForDone();
 
+        KoColor sample;
+        context.image->projection()->pixel(16, 16, &sample);
+        QCOMPARE(sample.opacityU8(), valueB);
+    }
 }
 
 QTEST_MAIN(KisBaseNodeTest)

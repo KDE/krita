@@ -44,13 +44,12 @@ public:
 
 
     void notifyStrokeStarted() override;
-    void notifyCachedDabPainted(const KisPaintInformation& info) override;
     void prepareForSeqNo(const KisPaintInformation& info, int seqNo) override;
 
     void generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst, KisBrush::ColoringInformation* coloringInformation,
             KisDabShape const&,
             const KisPaintInformation& info,
-            double subPixelX = 0, double subPixelY = 0, qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const override;
+            double subPixelX = 0, double subPixelY = 0, qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR, qreal lightnessStrength = 1.0) const override;
 
     KisFixedPaintDeviceSP paintDevice(const KoColorSpace * colorSpace,
         KisDabShape const&, const KisPaintInformation& info, double subPixelX, double subPixelY) const override;
@@ -67,7 +66,7 @@ public:
     void updateBrush();
     void toXML(QDomDocument& , QDomElement&) const override;
 
-    quint32 brushIndex(const KisPaintInformation& info) const override;
+    quint32 brushIndex() const override;
     qint32 maskWidth(KisDabShape const&, double subPixelX, double subPixelY, const KisPaintInformation& info) const override;
     qint32 maskHeight(KisDabShape const&, double subPixelX, double subPixelY, const KisPaintInformation& info) const override;
     void setAngle(qreal _angle) override;

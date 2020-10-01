@@ -63,6 +63,7 @@ private:
     QTransform m_backwardTransform;
     QTransform m_forwardTransform;
     bool m_isIdentity;
+    bool m_isTranslating;
 };
 
 #endif

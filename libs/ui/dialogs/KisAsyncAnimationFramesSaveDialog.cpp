@@ -19,7 +19,7 @@
 #include "KisAsyncAnimationFramesSaveDialog.h"
 
 #include <kis_image.h>
-#include <kis_time_range.h>
+#include <kis_time_span.h>
 
 #include <KisAsyncAnimationFramesSavingRenderer.h>
 #include "kis_properties_configuration.h"
@@ -29,10 +29,11 @@
 #include <QFileInfo>
 #include <QDir>
 #include <QMessageBox>
+#include <QApplication>
 
 struct KisAsyncAnimationFramesSaveDialog::Private {
     Private(KisImageSP _image,
-            const KisTimeRange &_range,
+            const KisTimeSpan &_range,
             const QString &baseFilename,
             int _sequenceNumberingOffset,
             bool _onlyNeedsUniqueFrames,
@@ -55,7 +56,7 @@ struct KisAsyncAnimationFramesSaveDialog::Private {
     }
 
     KisImageSP originalImage;
-    KisTimeRange range;
+    KisTimeSpan range;
 
     QString filenamePrefix;
     QString filenameSuffix;
@@ -67,7 +68,7 @@ struct KisAsyncAnimationFramesSaveDialog::Private {
 };
 
 KisAsyncAnimationFramesSaveDialog::KisAsyncAnimationFramesSaveDialog(KisImageSP originalImage,
-                                                                     const KisTimeRange &range,
+                                                                     const KisTimeSpan &range,
                                                                      const QString &baseFilename,
                                                                      int sequenceNumberingOffset,
                                                                      bool onlyNeedsUniqeFrames,
@@ -126,7 +127,7 @@ KisAsyncAnimationRenderDialogBase::Result KisAsyncAnimationFramesSaveDialog::reg
         }
 
         QMessageBox::StandardButton result =
-                QMessageBox::warning(0,
+                QMessageBox::warning(qApp->activeWindow(),
                                      i18n("Delete old frames?"),
                                      i18n("Frames with the same naming "
                                           "scheme exist in the destination "
@@ -141,7 +142,7 @@ KisAsyncAnimationRenderDialogBase::Result KisAsyncAnimationFramesSaveDialog::reg
         if (result == QMessageBox::Yes) {
             Q_FOREACH (const QString &file, filesList) {
                 if (!dir.remove(file)) {
-                    QMessageBox::critical(0,
+                    QMessageBox::critical(qApp->activeWindow(),
                                           i18n("Failed to delete"),
                                           i18n("Failed to delete an old frame file:\n\n"
                                                "%1\n\n"
@@ -162,7 +163,7 @@ QList<int> KisAsyncAnimationFramesSaveDialog::calcDirtyFrames() const
 {
     QList<int> result;
     for (int frame = m_d->range.start(); frame <= m_d->range.end(); frame++) {
-        KisTimeRange heldFrameTimeRange = KisTimeRange::calculateIdenticalFramesRecursive(m_d->originalImage->root(), frame);
+        KisTimeSpan heldFrameTimeRange = KisTimeSpan::calculateIdenticalFramesRecursive(m_d->originalImage->root(), frame);
 
         if (!m_d->onlyNeedsUniqueFrames) {
             // Clamp holds that begin before the rendered range onto it

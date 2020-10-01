@@ -64,7 +64,6 @@ KisSelectionMask::KisSelectionMask(KisImageWSP image, const QString &name)
     : KisEffectMask(image, name)
     , m_d(new Private(this))
 {
-    setName("selection");
     setActive(false);
     setSupportsLodMoves(false);
 

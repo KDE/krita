@@ -64,7 +64,7 @@ KisWdgSeExpr::KisWdgSeExpr(QWidget *parent)
     m_widget->txtEditor->exprTe->setFont(QFontDatabase().systemFont(QFontDatabase::FixedFont));
 
     connect(m_widget->scriptSelectorWidget, SIGNAL(resourceSelected(KoResourceSP)), this, SLOT(slotResourceSelected(KoResourceSP)));
-    connect(m_saveDialog, SIGNAL(resourceSelected(KoResourceSP)), this, SLOT(slotResourceSelected(KoResourceSP)));
+    connect(m_saveDialog, SIGNAL(resourceSelected(KoResourceSP)), this, SLOT(slotResourceSaved(KoResourceSP)));
 
     connect(m_widget->renameBrushPresetButton, SIGNAL(clicked(bool)),
             this, SLOT(slotRenamePresetActivated()));
@@ -136,10 +136,20 @@ KisPropertiesConfigurationSP KisWdgSeExpr::configuration() const
     return config;
 }
 
+void KisWdgSeExpr::slotResourceSaved(KoResourceSP resource)
+{
+    if (resource) {
+        m_widget->scriptSelectorWidget->setCurrentScript(resource);
+        slotResourceSelected(resource);
+    }
+}
+
 void KisWdgSeExpr::slotResourceSelected(KoResourceSP resource)
 {
     if (resource) {
-        m_currentPreset = resource.staticCast<KisSeExprScript>();
+        // ALWAYS have a manageable copy of the preset
+        // this is required for detecting dirty presets and reloading
+        m_currentPreset = resource->clone().staticCast<KisSeExprScript>();
 
         m_isCreatingPresetFromScratch = false;
 
@@ -223,6 +233,7 @@ void KisWdgSeExpr::slotUpdatePresetSettings()
         m_widget->dirtyPresetIndicatorButton->setVisible(false);
         m_widget->reloadPresetButton->setVisible(false);
         m_widget->saveBrushPresetButton->setVisible(false);
+        m_widget->saveNewBrushPresetButton->setEnabled(false);
         m_widget->renameBrushPresetButton->setVisible(false);
     } else {
         // In SeExpr's case, there is never a default preset -- amyspark
@@ -237,6 +248,7 @@ void KisWdgSeExpr::slotUpdatePresetSettings()
         m_widget->dirtyPresetIndicatorButton->setVisible(isPresetDirty);
         m_widget->reloadPresetButton->setVisible(isPresetDirty);
         m_widget->saveBrushPresetButton->setEnabled(isPresetDirty);
+        m_widget->saveNewBrushPresetButton->setEnabled(true);
         m_widget->renameBrushPresetButton->setVisible(true);
     }
 }
@@ -272,7 +284,7 @@ void KisWdgSeExpr::slotReloadPresetClicked()
     if (preset) {
         preset->load(KisGlobalResourcesInterface::instance());
 
-        KIS_ASSERT(!m_currentPreset->isDirty());
+        KIS_ASSERT(!preset->isDirty());
 
         slotResourceSelected(preset);
     }
@@ -302,11 +314,17 @@ void KisWdgSeExpr::isValid()
             }
             m_widget->txtEditor->addError(occurrence.startPos, occurrence.endPos, message);
         }
+
+        m_widget->saveBrushPresetButton->setEnabled(false);
+        m_widget->saveNewBrushPresetButton->setEnabled(false);
     }
     // Should not happen now, but I've left it for completeness's sake
     else if (!expression.returnType().isFP(3)) {
         QString type = QString::fromStdString(expression.returnType().toString());
         m_widget->txtEditor->addError(1, 1, tr2i18n("Expected this script to output color, got '%1'").arg(type));
+
+        m_widget->saveBrushPresetButton->setEnabled(false);
+        m_widget->saveNewBrushPresetButton->setEnabled(false);
     } else {
         m_widget->txtEditor->clearErrors();
         emit sigConfigurationUpdated();

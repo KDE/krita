@@ -27,6 +27,9 @@ ecm_add_tests(
     KisSpinBoxSplineUnitConverterTest.cpp
     KisDocumentReplaceTest.cpp
     KisRssReaderTest.cpp
+    kis_derived_resources_test.cpp
+    kis_animation_frame_cache_test.cpp
+    kis_shape_layer_test.cpp
 
     LINK_LIBRARIES kritaui Qt5::Test
     NAME_PREFIX "libs-ui-"
@@ -96,6 +99,18 @@ ecm_add_test(
     LINK_LIBRARIES kritaui Qt5::Test
     NAME_PREFIX "libs-ui-")
 
+ecm_add_test( kis_shape_controller_test.cpp kis_dummies_facade_base_test.cpp
+    TEST_NAME kis_shape_controller_test
+    LINK_LIBRARIES kritaui Qt5::Test
+    NAME_PREFIX "libs-ui-")
+
+ecm_add_test( kis_dummies_facade_test.cpp kis_dummies_facade_base_test.cpp ../../../sdk/tests/testutil.cpp
+    TEST_NAME kis_dummies_facade_test
+    LINK_LIBRARIES kritaui Qt5::Test
+    NAME_PREFIX "libs-ui-")
+
+
+
 ##### Tests that currently fail and should be fixed #####
 
 include(KritaAddBrokenUnitTest)
@@ -107,10 +122,6 @@ krita_add_broken_unit_test(
     LINK_LIBRARIES kritaui Qt5::Test
     NAME_PREFIX "libs-ui-")
 
-krita_add_broken_unit_test( kis_shape_controller_test.cpp kis_dummies_facade_base_test.cpp
-    TEST_NAME kis_shape_controller_test
-    LINK_LIBRARIES kritaui Qt5::Test
-    NAME_PREFIX "libs-ui-")
 
 krita_add_broken_unit_test( kis_exiv2_test.cpp
     TEST_NAME KisExiv2Test
@@ -159,11 +170,6 @@ krita_add_broken_unit_test( kis_node_manager_test.cpp
     LINK_LIBRARIES kritaui Qt5::Test
     NAME_PREFIX "libs-ui-")
 
-krita_add_broken_unit_test( kis_dummies_facade_test.cpp kis_dummies_facade_base_test.cpp ../../../sdk/tests/testutil.cpp
-    TEST_NAME KisDummiesFacadeTest
-    LINK_LIBRARIES kritaui Qt5::Test
-    NAME_PREFIX "libs-ui-")
-
 krita_add_broken_unit_test( kis_zoom_and_pan_test.cpp ../../../sdk/tests/testutil.cpp
     TEST_NAME KisZoomAndPanTest
     LINK_LIBRARIES kritaui Qt5::Test
@@ -180,19 +186,3 @@ krita_add_broken_unit_test( kis_categories_mapper_test.cpp testing_categories_ma
     LINK_LIBRARIES kritaui Qt5::Test
     NAME_PREFIX "libs-ui-")
 
-
-krita_add_broken_unit_test( kis_animation_frame_cache_test.cpp
-    TEST_NAME kis_animation_frame_cache_test
-    LINK_LIBRARIES kritaui Qt5::Test
-    NAME_PREFIX "libs-ui-")
-
-
-krita_add_broken_unit_test( kis_derived_resources_test.cpp
-    TEST_NAME kis_derived_resources_test
-    LINK_LIBRARIES kritaui Qt5::Test
-    NAME_PREFIX "libs-ui-")
-
-krita_add_broken_unit_test( kis_shape_layer_test.cpp
-    TEST_NAME KisShapeLayerTest
-    LINK_LIBRARIES kritaui Qt5::Test
-    NAME_PREFIX "libs-ui-")

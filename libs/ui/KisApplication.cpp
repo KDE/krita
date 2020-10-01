@@ -377,14 +377,14 @@ bool KisApplication::registerResources()
                                                      QStringList() << "application/x-photoshop-style"));
 
     if (!KisResourceCacheDb::initialize(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation))) {
-        QMessageBox::critical(0, i18nc("@title:window", "Krita: Fatal error"), i18n("%1\n\nKrita will quit now.", KisResourceCacheDb::lastError()));
+        QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita: Fatal error"), i18n("%1\n\nKrita will quit now.", KisResourceCacheDb::lastError()));
         //return false;
     }
 
     KisResourceLocator::LocatorError r = KisResourceLocator::instance()->initialize(KoResourcePaths::getApplicationRoot() + "/share/krita");
     connect(KisResourceLocator::instance(), SIGNAL(progressMessage(const QString&)), this, SLOT(setSplashScreenLoadingText(const QString&)));
     if (r != KisResourceLocator::LocatorError::Ok && qApp->inherits("KisApplication")) {
-        QMessageBox::critical(0, i18nc("@title:window", "Krita: Fatal error"), KisResourceLocator::instance()->errorMessages().join('\n') + i18n("\n\nKrita will quit now."));
+        QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita: Fatal error"), KisResourceLocator::instance()->errorMessages().join('\n') + i18n("\n\nKrita will quit now."));
         //return false;
     }
 
@@ -423,7 +423,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
 #ifdef ENV32BIT
 
     if (isWow64() && !cfg.readEntry("WarnedAbout32Bits", false)) {
-        QMessageBox::information(0,
+        QMessageBox::information(qApp->activeWindow(),
                                  i18nc("@title:window", "Krita: Warning"),
                                  i18n("You are running a 32 bits build on a 64 bits Windows.\n"
                                       "This is not recommended.\n"
@@ -442,7 +442,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
         cfg.setCanvasState("OPENGL_FAILED");
     }
 
-    setSplashScreenLoadingText(i18n("Initializing Globals"));
+    setSplashScreenLoadingText(i18n("Initializing Globals..."));
     processEvents();
     initializeGlobals(args);
 
@@ -472,7 +472,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
     Q_UNUSED(resetStarting);
 
     // Make sure we can save resources and tags
-    setSplashScreenLoadingText(i18n("Adding resource types"));
+    setSplashScreenLoadingText(i18n("Adding resource types..."));
     processEvents();
     addResourceTypes();
 
@@ -678,18 +678,18 @@ bool KisApplication::start(const KisApplicationArguments &args)
                                     d->mainWindow->viewManager()->activeNode());
             }
             else{
-                QMessageBox::warning(nullptr, i18nc("@title:window", "Krita:Warning"),
+                QMessageBox::warning(qApp->activeWindow(), i18nc("@title:window", "Krita:Warning"),
                                             i18n("Cannot add %1 as a file layer: the file does not exist.", fileLayer->path()));
             }
         }
         else if (this->isRunning()){
-            QMessageBox::warning(nullptr, i18nc("@title:window", "Krita:Warning"),
+            QMessageBox::warning(qApp->activeWindow(), i18nc("@title:window", "Krita:Warning"),
                                 i18n("Cannot add the file layer: no document is open.\n\n"
 "You can create a new document using the --new-image option, or you can open an existing file.\n\n"
 "If you instead want to add the file layer to a document in an already running instance of Krita, check the \"Allow only one instance of Krita\" checkbox in the settings (Settings -> General -> Window)."));
         }
         else {
-            QMessageBox::warning(nullptr, i18nc("@title:window", "Krita: Warning"),
+            QMessageBox::warning(qApp->activeWindow(), i18nc("@title:window", "Krita: Warning"),
                                 i18n("Cannot add the file layer: no document is open.\n"
                                      "You can either create a new file using the --new-image option, or you can open an existing file."));
         }
@@ -927,10 +927,10 @@ bool KisApplication::createNewDocFromTemplate(const QString &fileName, KisMainWi
         }
 
         if (paths.isEmpty()) {
-            QMessageBox::critical(0, i18nc("@title:window", "Krita"),
+            QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"),
                                   i18n("No template found for: %1", desktopName));
         } else if (paths.count() > 1) {
-            QMessageBox::critical(0, i18nc("@title:window", "Krita"),
+            QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"),
                                   i18n("Too many templates found for: %1", desktopName));
         } else {
             templatePath = paths.at(0);
@@ -955,7 +955,7 @@ bool KisApplication::createNewDocFromTemplate(const QString &fileName, KisMainWi
             return true;
         }
         else {
-            QMessageBox::critical(0, i18nc("@title:window", "Krita"),
+            QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"),
                                   i18n("Template %1 failed to load.", templateURL.toDisplayString()));
         }
     }
@@ -986,7 +986,7 @@ void KisApplication::resetConfig()
                 backupKritarcFile.remove();
             }
 
-            QMessageBox::information(0,
+            QMessageBox::information(qApp->activeWindow(),
                                  i18nc("@title:window", "Krita"),
                                  i18n("Krita configurations reset!\n\n"
                                       "Backup file was created at: %1\n\n"
@@ -1000,7 +1000,7 @@ void KisApplication::resetConfig()
             kritarcFile.close();
         }
         else {
-            QMessageBox::warning(0,
+            QMessageBox::warning(qApp->activeWindow(),
                                  i18nc("@title:window", "Krita"),
                                  i18n("Failed to clear %1\n\n"
                                       "Please make sure no other program is using the file and try again.",
@@ -1028,7 +1028,7 @@ void KisApplication::resetConfig()
 
 void KisApplication::askresetConfig()
 {
-    bool ok = QMessageBox::question(0,
+    bool ok = QMessageBox::question(qApp->activeWindow(),
                                     i18nc("@title:window", "Krita"),
                                     i18n("Do you want to clear the settings file?"),
                                     QMessageBox::Yes | QMessageBox::No, QMessageBox::No) == QMessageBox::Yes;

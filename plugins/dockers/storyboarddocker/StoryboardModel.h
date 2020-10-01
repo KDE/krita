@@ -30,7 +30,7 @@
 #include <kis_image.h>
 
 class StoryboardView;
-class KisTimeRange;
+class KisTimeSpan;
 class KisStoryboardThumbnailRenderScheduler;
 
 /**
@@ -159,7 +159,7 @@ public:
      * @param range The range of frames
      * @return The list of index corresponding to the range.
      */
-    QModelIndexList affectedIndexes(KisTimeRange range) const;
+    QModelIndexList affectedIndexes(KisTimeSpan range) const;
 
     /**
      * @brief whether there are keyframes at @c time in layers other than @c keyframeNode
@@ -221,8 +221,8 @@ private Q_SLOTS:
      */
     void slotChangeFrameGlobal(QItemSelection selected, QItemSelection deselected);
 
-    void slotKeyframeAdded(KisKeyframeSP keyframe);
-    void slotKeyframeRemoved(KisKeyframeSP);
+    void slotKeyframeAdded(const KisKeyframeChannel *channel, int time);
+    void slotKeyframeRemoved(const KisKeyframeChannel *channel, int time);
     void slotKeyframeMoved(KisKeyframeSP, int);
     void slotNodeRemoved(KisNodeSP node);
 
@@ -233,7 +233,7 @@ private Q_SLOTS:
     void slotUpdateThumbnailForFrame(int frame);
 
     /**
-     * @brief calls regeneration of the currentUiTime() and all frames in @c affectedIndexes(KisTimeRange)
+     * @brief calls regeneration of the currentUiTime() and all frames in @c affectedIndexes(KisTimeSpan)
      */
     void slotUpdateThumbnails();
 

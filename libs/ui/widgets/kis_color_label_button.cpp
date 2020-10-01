@@ -259,8 +259,15 @@ void KisColorLabelFilterGroup::setViableLabels(const QSet<int> &labels) {
     }
 }
 
-void KisColorLabelFilterGroup::setViableLabels(const QList<int> &viableLabels) {
-    setViableLabels(QSet<int>::fromList(viableLabels));
+void KisColorLabelFilterGroup::setViableLabels(const QList<int> &viableLabels)
+{
+    QSet<int> uniqueViableLabels;
+#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
+    uniqueViableLabels = QSet<int>(viableLabels.cbegin(), viableLabels.cend());
+#else
+    uniqueViableLabels = QSet<int>::fromList(viableLabels);
+#endif
+    setViableLabels(uniqueViableLabels);
 }
 
 QSet<int> KisColorLabelFilterGroup::getActiveLabels() const {

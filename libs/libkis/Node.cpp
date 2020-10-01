@@ -45,6 +45,9 @@
 #include <kis_meta_data_merge_strategy.h>
 #include <kis_meta_data_merge_strategy_registry.h>
 #include <kis_filter_strategy.h>
+#include <commands/kis_node_compositeop_command.h>
+#include <commands/kis_image_layer_add_command.h>
+#include <kis_processing_applicator.h>
 
 #include <kis_raster_keyframe_channel.h>
 #include <kis_keyframe.h>
@@ -170,7 +173,13 @@ QString Node::blendingMode() const
 void Node::setBlendingMode(QString value)
 {
     if (!d->node) return;
-    d->node->setCompositeOpId(value);
+
+    KUndo2Command *cmd = new KisNodeCompositeOpCommand(d->node,
+                                                       d->node->compositeOpId(),
+                                                       value);
+
+    KisProcessingApplicator::runSingleCommandStroke(d->image, cmd);
+    d->image->waitForDone();
 }
 
 
@@ -206,12 +215,19 @@ QList<Node*> Node::childNodes() const
 bool Node::addChildNode(Node *child, Node *above)
 {
     if (!d->node) return false;
+
+    KUndo2Command *cmd = 0;
+
     if (above) {
-        return d->image->addNode(child->node(), d->node, above->node());
+        cmd = new KisImageLayerAddCommand(d->image, child->node(), d->node, above->node());
+    } else {
+        cmd = new KisImageLayerAddCommand(d->image, child->node(), d->node, d->node->childCount());
     }
-    else {
-        return d->image->addNode(child->node(), d->node, d->node->childCount());
-    }
+
+    KisProcessingApplicator::runSingleCommandStroke(d->image, cmd);
+    d->image->waitForDone();
+
+    return true;
 }
 
 bool Node::removeChildNode(Node *child)
@@ -457,17 +473,15 @@ bool Node::hasKeyframeAtTime(int frameNumber)
 {
     if (!d->node || !d->node->isAnimated()) return false;
 
-    KisRasterKeyframeChannel *rkc = dynamic_cast<KisRasterKeyframeChannel*>(d->node->getKeyframeChannel(KisKeyframeChannel::Content.id()));
+    KisRasterKeyframeChannel *rkc = dynamic_cast<KisRasterKeyframeChannel*>(d->node->getKeyframeChannel(KisKeyframeChannel::Raster.id()));
     if (!rkc) return false;
 
-    KisKeyframeSP timeOfCurrentKeyframe = rkc->keyframeAt(frameNumber);
+    KisKeyframeSP currentKeyframe = rkc->keyframeAt(frameNumber);
 
-    if (!timeOfCurrentKeyframe) {
+    if (!currentKeyframe) {
         return false;
     }
 
-    // do an assert just to be careful
-    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(timeOfCurrentKeyframe->time() == frameNumber, false);
     return true;
 }
 
@@ -499,14 +513,14 @@ QByteArray Node::pixelDataAtTime(int x, int y, int w, int h, int time) const
     if (!d->node || !d->node->isAnimated()) return ba;
 
     //
-    KisRasterKeyframeChannel *rkc = dynamic_cast<KisRasterKeyframeChannel*>(d->node->getKeyframeChannel(KisKeyframeChannel::Content.id()));
+    KisRasterKeyframeChannel *rkc = dynamic_cast<KisRasterKeyframeChannel*>(d->node->getKeyframeChannel(KisKeyframeChannel::Raster.id()));
     if (!rkc) return ba;
-    KisKeyframeSP frame = rkc->keyframeAt(time);
+    KisRasterKeyframeSP frame = rkc->keyframeAt<KisRasterKeyframe>(time);
     if (!frame) return ba;
-    KisPaintDeviceSP dev = d->node->paintDevice();
+    KisPaintDeviceSP dev = new KisPaintDevice(*d->node->paintDevice(), KritaUtils::DeviceCopyMode::CopySnapshot);
     if (!dev) return ba;
 
-    rkc->fetchFrame(frame, dev);
+    frame->writeFrameToDevice(dev);
 
     ba.resize(w * h * dev->pixelSize());
     dev->readBytes(reinterpret_cast<quint8*>(ba.data()), x, y, w, h);

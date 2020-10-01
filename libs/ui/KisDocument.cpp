@@ -337,7 +337,6 @@ public:
 
     QColor globalAssistantsColor;
 
-    KisSharedPtr<KisReferenceImagesLayer> referenceImagesLayer;
     KisGridConfig gridConfig;
 
     StdLockableWrapper<QMutex> savingLock;
@@ -347,10 +346,12 @@ public:
     QPointer<KoUpdater> savingUpdater;
     QFuture<KisImportExportErrorCode> childSavingFuture;
     KritaUtils::ExportFileJob backgroundSaveJob;
+    KisSignalAutoConnectionsStore referenceLayerConnections;
 
     bool isRecovered = false;
 
     bool batchMode { false };
+    bool decorationsSyncingDisabled = false;
 
     QString documentStorageID {QUuid::createUuid().toString()};
     KisResourceStorageSP documentResourceStorage;
@@ -374,7 +375,7 @@ public:
 
 void KisDocument::Private::syncDecorationsWrapperLayerState()
 {
-    if (!this->image) return;
+    if (!this->image || this->decorationsSyncingDisabled) return;
 
     KisImageSP image = this->image;
     KisDecorationsWrapperLayerSP decorationsLayer =
@@ -544,7 +545,7 @@ KisDocument::KisDocument(bool addStorage)
     // preload the krita resources
     KisResourceServerProvider::instance();
 
-    d->shapeController = new KisShapeController(this, d->nserver);
+    d->shapeController = new KisShapeController(d->nserver, d->undoStack, this);
     d->koShapeController = new KoShapeController(0, d->shapeController);
     d->shapeController->resourceManager()->setGlobalShapeController(d->koShapeController);
 
@@ -562,6 +563,7 @@ KisDocument::~KisDocument()
 {
     // wait until all the pending operations are in progress
     waitForSavingToComplete();
+    d->imageIdleWatcher.setTrackedImage(0);
 
     /**
      * Push a timebomb, which will try to release the memory after
@@ -651,6 +653,12 @@ bool KisDocument::exportDocumentImpl(const KritaUtils::ExportFileJob &job, KisPr
             backupDir = QStandardPaths::writableLocation(QStandardPaths::TempLocation);
             break;
         default:
+#ifdef Q_OS_ANDROID
+            // We deal with URIs, there may or may not be a "directory"
+            backupDir = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation).append("/krita-backup");
+            QDir().mkpath(backupDir);
+#endif
+
             // Do nothing: the empty string is user file location
             break;
         }
@@ -724,11 +732,11 @@ bool KisDocument::exportDocument(const QUrl &url, const QByteArray &mimeType, bo
                         .arg(d->image->animationInterface()->framerate())
                         .arg(exportConfiguration ? exportConfiguration->toXML() : "No configuration"));
 
-    return exportDocumentImpl(KritaUtils::ExportFileJob(url.toLocalFile(),
+
+    return exportDocumentImpl(KritaUtils::ExportFileJob(toPath(url),
                                                         mimeType,
                                                         flags),
                               exportConfiguration);
-
 }
 
 bool KisDocument::saveAs(const QUrl &_url, const QByteArray &mimeType, bool showWarnings, KisPropertiesConfigurationSP exportConfiguration)
@@ -747,7 +755,7 @@ bool KisDocument::saveAs(const QUrl &_url, const QByteArray &mimeType, bool show
                         .arg(url().toLocalFile()));
 
 
-    return exportDocumentImpl(ExportFileJob(_url.toLocalFile(),
+    return exportDocumentImpl(ExportFileJob(toPath(_url),
                                             mimeType,
                                             showWarnings ? SaveShowWarnings : SaveNone),
                               exportConfiguration);
@@ -796,7 +804,7 @@ void KisDocument::slotCompleteSavingDocument(const KritaUtils::ExportFileJob &jo
 
         if (!fileBatchMode()) {
             const QString filePath = job.filePath;
-            QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not save %1\nReason: %2", filePath, exportErrorToUserMessage(status, errorMessage)));
+            QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Could not save %1\nReason: %2", filePath, exportErrorToUserMessage(status, errorMessage)));
         }
     } else {
         if (!(job.flags & KritaUtils::SaveIsExporting)) {
@@ -895,7 +903,9 @@ void KisDocument::copyFromDocument(const KisDocument &rhs)
 void KisDocument::copyFromDocumentImpl(const KisDocument &rhs, CopyPolicy policy)
 {
     if (policy == REPLACE) {
+        d->decorationsSyncingDisabled = true;
         d->copyFrom(*(rhs.d), this);
+        d->decorationsSyncingDisabled = false;
 
         d->undoStack->clear();
     } else {
@@ -904,7 +914,7 @@ void KisDocument::copyFromDocumentImpl(const KisDocument &rhs, CopyPolicy policy
         connect(d->undoStack, SIGNAL(cleanChanged(bool)), this, SLOT(slotUndoStackCleanChanged(bool)));
         connect(d->autoSaveTimer, SIGNAL(timeout()), this, SLOT(slotAutoSave()));
 
-        d->shapeController = new KisShapeController(this, d->nserver);
+        d->shapeController = new KisShapeController(d->nserver, d->undoStack, this);
         d->koShapeController = new KoShapeController(0, d->shapeController);
         d->shapeController->resourceManager()->setGlobalShapeController(d->koShapeController);
     }
@@ -920,12 +930,17 @@ void KisDocument::copyFromDocumentImpl(const KisDocument &rhs, CopyPolicy policy
             d->image->copyFromImage(*(rhs.d->image));
             d->image->unlock();
             rhs.d->image->unlock();
+
             setCurrentImage(d->image, /* forceInitialUpdate = */ true);
         } else {
             // clone the image with keeping the GUIDs of the layers intact
             // NOTE: we expect the image to be locked!
             setCurrentImage(rhs.image()->clone(/* exactCopy = */ true), /* forceInitialUpdate = */ false);
         }
+    }
+
+    if (policy == REPLACE) {
+        d->syncDecorationsWrapperLayerState();
     }
 
     if (rhs.d->preActivatedNode) {
@@ -945,7 +960,14 @@ void KisDocument::copyFromDocumentImpl(const KisDocument &rhs, CopyPolicy policy
 
     // reinitialize references' signal connection
     KisReferenceImagesLayerSP referencesLayer = this->referenceImagesLayer();
-    setReferenceImagesLayer(referencesLayer, false);
+    if (referencesLayer) {
+        d->referenceLayerConnections.clear();
+        d->referenceLayerConnections.addConnection(
+            referencesLayer, SIGNAL(sigUpdateCanvas(QRectF)),
+            this, SIGNAL(sigReferenceImagesChanged()));
+
+        emit sigReferenceImagesLayerChanged(referencesLayer);
+    }
 
     KisDecorationsWrapperLayerSP decorationsLayer =
         KisLayerUtils::findNodeByType<KisDecorationsWrapperLayer>(d->image->root());
@@ -1368,6 +1390,15 @@ QString KisDocument::generateAutoSaveFileName(const QString & path) const
 
     QFileInfo fi(path);
     QString dir = fi.absolutePath();
+
+#ifdef Q_OS_ANDROID
+    // URIs may or may not have a directory backing them, so we save to our default autosave location
+    if (path.startsWith("content://")) {
+        dir = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation).append("/krita-backup");
+        QDir().mkpath(dir);
+    }
+#endif
+
     QString filename = fi.fileName();
 
     if (path.isEmpty() || autosavePattern1.match(filename).hasMatch() || autosavePattern2.match(filename).hasMatch() || !fi.isWritable()) {
@@ -1410,9 +1441,11 @@ bool KisDocument::importDocument(const QUrl &_url)
 
 bool KisDocument::openUrl(const QUrl &_url, OpenFlags flags)
 {
+#ifndef Q_OS_ANDROID
     if (!_url.isLocalFile()) {
         return false;
     }
+#endif
     dbgUI << "url=" << _url.url();
     d->lastErrorMessage.clear();
 
@@ -1470,8 +1503,7 @@ bool KisDocument::openUrl(const QUrl &_url, OpenFlags flags)
                 KisPart::instance()->addRecentURLToAllMainWindows(_url);
             }
 
-            // Detect readonly local-files; remote files are assumed to be writable
-            QFileInfo fi(url.toLocalFile());
+            QFileInfo fi(toPath(url));
             setReadWrite(fi.isWritable());
         }
 
@@ -1521,10 +1553,12 @@ public:
 bool KisDocument::openFile()
 {
     //dbgUI <<"for" << localFilePath();
+#ifndef Q_OS_ANDROID
     if (!QFile::exists(localFilePath()) && !fileBatchMode()) {
-        QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("File %1 does not exist.", localFilePath()));
+        QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("File %1 does not exist.", localFilePath()));
         return false;
     }
+#endif
 
     QString filename = localFilePath();
     QString typeName = mimeType();
@@ -1532,8 +1566,6 @@ bool KisDocument::openFile()
     if (typeName.isEmpty()) {
         typeName = KisMimeDatabase::mimeTypeForFile(filename);
     }
-
-    //qDebug() << "mimetypes 4:" << typeName;
 
     // Allow to open backup files, don't keep the mimetype application/x-trash.
     if (typeName == "application/x-trash") {
@@ -1608,6 +1640,11 @@ void KisDocument::autoSaveOnPause()
     {
         qWarning() << "Could not auto-save when paused";
     }
+}
+
+QString KisDocument::toPath(const QUrl &url) const
+{
+    return url.toLocalFile();
 }
 
 // shared between openFile and koMainWindow's "create new empty document" code
@@ -2073,8 +2110,13 @@ bool KisDocument::openUrlInternal(const QUrl &url)
 
     d->m_file.clear();
 
+#ifndef Q_OS_ANDROID
     if (d->m_url.isLocalFile()) {
         d->m_file = d->m_url.toLocalFile();
+#else
+        d->m_file = toPath(d->m_url);
+#endif
+
         bool ret;
         // set the mimetype only if it was not already set (for example, by the host application)
         if (d->mimeType.isEmpty()) {
@@ -2094,8 +2136,10 @@ bool KisDocument::openUrlInternal(const QUrl &url)
             emit canceled(QString());
         }
         return ret;
+#ifndef Q_OS_ANDROID
     }
     return false;
+#endif
 }
 
 bool KisDocument::newImage(const QString& name,
@@ -2246,13 +2290,13 @@ void KisDocument::setReferenceImagesLayer(KisSharedPtr<KisReferenceImagesLayer> 
 {
     KisReferenceImagesLayerSP currentReferenceLayer = referenceImagesLayer();
 
-    if (currentReferenceLayer == layer) {
+    // updateImage=false inherently means we are not changing the
+    // reference images layer, but just would like to update its signals.
+    if (currentReferenceLayer == layer && updateImage) {
         return;
     }
 
-    if (currentReferenceLayer) {
-        currentReferenceLayer->disconnect(this);
-    }
+    d->referenceLayerConnections.clear();
 
     if (updateImage) {
         if (currentReferenceLayer) {
@@ -2267,8 +2311,9 @@ void KisDocument::setReferenceImagesLayer(KisSharedPtr<KisReferenceImagesLayer> 
     currentReferenceLayer = layer;
 
     if (currentReferenceLayer) {
-        connect(currentReferenceLayer, SIGNAL(sigUpdateCanvas(QRectF)),
-                this, SIGNAL(sigReferenceImagesChanged()));
+        d->referenceLayerConnections.addConnection(
+            currentReferenceLayer, SIGNAL(sigUpdateCanvas(QRectF)),
+            this, SIGNAL(sigReferenceImagesChanged()));
     }
 
     emit sigReferenceImagesLayerChanged(layer);

@@ -1,6 +1,4 @@
-if (NOT WIN32 AND NOT APPLE)
-    add_subdirectory(tests)
-endif()
+add_subdirectory(tests)
 
 set(KRITA_ANIMATIONDOCKER_SOURCES
     animation_dockers.cpp

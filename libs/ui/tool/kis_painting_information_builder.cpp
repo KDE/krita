@@ -142,10 +142,13 @@ KisPaintInformation KisPaintingInformationBuilder::createPaintingInformation(KoP
 }
 
 KisPaintInformation KisPaintingInformationBuilder::hover(const QPointF &imagePoint,
-                                                         const KoPointerEvent *event)
+                                                         const KoPointerEvent *event,
+                                                         bool isStrokeStarted)
 {
     qreal perspective = calculatePerspective(imagePoint);
-    qreal speed = m_speedSmoother->getNextSpeed(imageToView(imagePoint));
+    qreal speed = !isStrokeStarted ?
+                m_speedSmoother->getNextSpeed(imageToView(imagePoint)) :
+                m_speedSmoother->lastSpeed();
 
     if (event) {
         return KisPaintInformation::createHoveringModeInfo(imagePoint,

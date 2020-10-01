@@ -39,7 +39,7 @@
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
-       <string>Script</string>
+       <string comment="Script list label">Script</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
@@ -56,7 +56,7 @@
      </widget>
      <widget class="QWidget" name="tab_2">
       <attribute name="title">
-       <string>Options</string>
+       <string comment="SeExpr script option">Options</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>

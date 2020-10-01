@@ -1356,19 +1356,19 @@ namespace KisLayerUtils {
 
             // in two-layer mode we disable pass through only when the destination layer
             // is not a group layer
-            applicator.applyCommand(new DisablePassThroughForHeadsOnly(info, true));
+            applicator.applyCommand(new DisablePassThroughForHeadsOnly(info, true), KisStrokeJobData::BARRIER);
             applicator.applyCommand(new KUndo2Command(), KisStrokeJobData::BARRIER);
 
             if (info->frames.size() > 0) {
                 foreach (int frame, info->frames) {
-                    applicator.applyCommand(new SwitchFrameCommand(info->image, frame, false, info->storage));
+                    applicator.applyCommand(new SwitchFrameCommand(info->image, frame, false, info->storage), KisStrokeJobData::BARRIER);
 
-                    applicator.applyCommand(new AddNewFrame(info, frame));
-                    applicator.applyCommand(new RefreshHiddenAreas(info));
+                    applicator.applyCommand(new AddNewFrame(info, frame), KisStrokeJobData::BARRIER);
+                    applicator.applyCommand(new RefreshHiddenAreas(info), KisStrokeJobData::BARRIER);
                     applicator.applyCommand(new RefreshDelayedUpdateLayers(info), KisStrokeJobData::BARRIER);
                     applicator.applyCommand(new MergeLayers(info), KisStrokeJobData::BARRIER);
 
-                    applicator.applyCommand(new SwitchFrameCommand(info->image, frame, true, info->storage));
+                    applicator.applyCommand(new SwitchFrameCommand(info->image, frame, true, info->storage), KisStrokeJobData::BARRIER);
                 }
             } else {
                 applicator.applyCommand(new RefreshHiddenAreas(info));

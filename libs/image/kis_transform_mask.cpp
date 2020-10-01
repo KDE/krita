@@ -32,6 +32,7 @@
 #include "kis_algebra_2d.h"
 #include "kis_safe_transform.h"
 #include "kis_keyframe_channel.h"
+#include "kis_raster_keyframe_channel.h"
 #include "kis_scalar_keyframe_channel.h"
 
 #include "kis_image_config.h"
@@ -473,6 +474,18 @@ QRect KisTransformMask::exactBounds() const
     KisLayerSP parentLayer = qobject_cast<KisLayer*>(parent().data());
     if (parentLayer) {
         existentProjection = parentLayer->projection()->exactBounds();
+
+        /* Take into account multiple keyframes... */
+        if (parentLayer->original() && parentLayer->original()->defaultBounds() && parentLayer->original()->keyframeChannel()) {
+            Q_FOREACH( const int& time, parentLayer->original()->keyframeChannel()->allKeyframeTimes() ) {
+                KisRasterKeyframeSP keyframe = parentLayer->original()->keyframeChannel()->keyframeAt<KisRasterKeyframe>(time);
+                existentProjection |= keyframe->contentBounds();
+            }
+        }
+    }
+
+    if (isAnimated()) {
+        existentProjection |= changeRect(image()->bounds());
     }
 
     return changeRect(sourceDataBounds()) | existentProjection;

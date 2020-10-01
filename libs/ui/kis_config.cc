@@ -1870,7 +1870,7 @@ void KisConfig::setKineticScrollingEnabled(bool value)
 int KisConfig::kineticScrollingGesture(bool defaultValue) const
 {
 #ifdef Q_OS_ANDROID
-    int defaultGesture = 0; // TouchGesture
+    int defaultGesture = 1; // LeftMouseButtonGesture
 #else
     int defaultGesture = 2; // MiddleMouseButtonGesture
 #endif

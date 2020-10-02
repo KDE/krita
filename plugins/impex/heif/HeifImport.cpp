@@ -214,9 +214,33 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
                     } else {
                         // two things need to happen: the strides need to be updated
                         // and proper scaling of the values needs to be done.
-                        KoBgrTraits<quint16>::setRed(  it->rawData(), imgR[ y * strideR + (x*2)]);
-                        KoBgrTraits<quint16>::setGreen(it->rawData(), imgG[ y * strideG + (x*2)]);
-                        KoBgrTraits<quint16>::setBlue( it->rawData(), imgB[ y * strideB + (x*2)]);
+                        // TODO: Ugly code is ugly but works, please refactor me to be pretty!
+
+                        int scaledUpRed, scaledUpGreen, scaledUpBlue;
+                        if (handle.get_luma_bits_per_pixel() == 10) {
+                            uint16_t source = reinterpret_cast<const uint16_t*>(imgR)[ y * strideR/2 + x];
+                            scaledUpRed = int( ( float(0x03ff & (source)) / 1023.0 ) * 65535.0 + 0.5);
+                            source = reinterpret_cast<const uint16_t*>(imgG)[ y * strideG/2 + x];
+                            scaledUpGreen = int( ( float(0x03ff & (source)) / 1023.0 ) * 65535.0 + 0.5);
+                            source = reinterpret_cast<const uint16_t*>(imgB)[ y * strideB/2 + x];
+                            scaledUpBlue = int( ( float(0x03ff & (source)) / 1023.0 ) * 65535.0 + 0.5);
+                        } else if (handle.get_luma_bits_per_pixel() == 12) {
+                            uint16_t source = reinterpret_cast<const uint16_t*>(imgR)[ y * strideR/2 + x];
+                            scaledUpRed = int( ( float(0x0fff & (source)) / 4095.0 ) * 65535.0 + 0.5);
+                            source = reinterpret_cast<const uint16_t*>(imgG)[ y * strideG/2 + x];
+                            scaledUpGreen = int( ( float(0x0fff & (source)) / 4095.0 ) * 65535.0 + 0.5);
+                            source = reinterpret_cast<const uint16_t*>(imgB)[ y * strideB/2 + x];
+                            scaledUpBlue = int( ( float(0x0fff & (source)) / 4095.0 ) * 65535.0 + 0.5);
+                        } else {
+                            qDebug() << "unknown bitdepth" << handle.get_luma_bits_per_pixel();
+                            scaledUpRed = int (reinterpret_cast<const uint16_t*>(imgR)[ y * strideR/2 + x]);
+                            scaledUpGreen = int (reinterpret_cast<const uint16_t*>(imgG)[ y * strideG/2 + x]);
+                            scaledUpBlue = int (reinterpret_cast<const uint16_t*>(imgB)[ y * strideB/2 + x]);
+                        }
+
+                        KoBgrTraits<quint16>::setRed(  it->rawData(), qBound(0, scaledUpRed, 65535));
+                        KoBgrTraits<quint16>::setGreen(it->rawData(), qBound(0, scaledUpGreen, 65535));
+                        KoBgrTraits<quint16>::setBlue( it->rawData(), qBound(0, scaledUpBlue, 65535));
 
                         if (hasAlpha) {
                             colorSpace->setOpacity(it->rawData(), quint8(imgA[y*strideA+(x*2)]), 1);

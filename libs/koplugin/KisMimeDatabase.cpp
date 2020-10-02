@@ -322,6 +322,11 @@ void KisMimeDatabase::fillMimeData()
         mimeType.description = i18nc("description of a file type", "HEIC/HEIF Image");
         mimeType.suffixes = QStringList() << "heic" << "heif";
         s_mimeDatabase << mimeType;
+
+        mimeType.mimeType = "image/avif";
+        mimeType.description = i18nc("description of a file type", "AVIF Image");
+        mimeType.suffixes = QStringList() << "avif";
+        s_mimeDatabase << mimeType;
         
         mimeType.mimeType = "image/jp2";
         mimeType.description = i18nc("description of a file type", "JP2 Image");

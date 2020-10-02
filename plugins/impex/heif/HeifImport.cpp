@@ -28,6 +28,7 @@
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
+#include <KoColorProfile.h>
 
 #include <kis_transaction.h>
 #include <kis_paint_device.h>
@@ -112,20 +113,15 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
             if (heifChroma == heif_chroma_monochrome) {
                 colorSpace = KoColorSpaceRegistry::instance()->graya8();
             }
-        } else if (heifModel == heif_colorspace_RGB) {
+        } else {
             // RGB
+            heifimage = handle.decode_image(heif_colorspace_RGB, heif_chroma_444);
             colorModel = RGBAColorModelID;
             if (handle.get_luma_bits_per_pixel() == 8) {
                 colorDepth = Integer8BitsColorDepthID;
             } else {
                 colorDepth = Integer16BitsColorDepthID;
             }
-        } else {
-            // YCrCb, we default back to the old code.
-            qDebug() << "YCrCb image, loading as planar RGB";
-            heifimage = handle.decode_image(heif_colorspace_RGB, heif_chroma_444);
-            heifModel = heifimage.get_colorspace();
-            heifChroma = heifimage.get_chroma_format();
         }
 
 
@@ -133,17 +129,24 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
         const QString colorSpaceId = KoColorSpaceRegistry::instance()->colorSpaceId(colorModel, colorDepth);
         QString profileName = KoColorSpaceRegistry::instance()->defaultProfileForColorSpace(colorSpaceId);
 
+        std::vector<uint8_t> rawProfile = heifimage.get_raw_color_profile();
+        qDebug() << "profile" << profileType << rawProfile.empty();
         if (profileType == heif_color_profile_type_prof || profileType == heif_color_profile_type_rICC) {
             // rICC are 'restricted' icc profiles, and are matrix shaper profiles
             // that are either RGB or Grayscale, and are of the input or display types.
             // They are from the JPEG2000 spec.
 
-            std::vector<uint8_t> rawProfile = heifimage.get_raw_color_profile();
-            qDebug() << "icc profile found";
+            QByteArray ba = QByteArray(*rawProfile.data(), rawProfile.size());
+            const KoColorProfile *profile = KoColorSpaceRegistry::instance()->createColorProfile(colorModel.id(), colorDepth.id(), ba);
+            KoColorSpaceRegistry::instance()->addProfile(profile);
+            profileName = profile->name();
+            qDebug() << "icc profile found" << profileName;
         } else if (profileType == heif_color_profile_type_nclx) {
             // NCLX parameters is a colorspace description used for videofiles.
             // We will need to generate a profile based on nclx parameters. We can use lcms for this, but code doesn't exist yet.
             qDebug() << "nclx profile found";
+        } else {
+            qDebug() << "no profile found";
         }
 
 
@@ -161,7 +164,7 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
         KisPaintLayerSP layer = new KisPaintLayer(image, image->nextLayerName(), OPACITY_OPAQUE_U8);
 
         if (heifChroma == heif_chroma_monochrome) {
-            qDebug() << "monochrome heif file, 8bit";
+            qDebug() << "monochrome heif file, bits:" << handle.get_luma_bits_per_pixel();
             int strideG, strideA;
             const uint8_t* imgG = heifimage.get_plane(heif_channel_Y, &strideG);
             const uint8_t* imgA = heifimage.get_plane(heif_channel_Alpha, &strideA);
@@ -184,7 +187,7 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
             }
 
         } else if (heifChroma == heif_chroma_444) {
-            qDebug() << "planar heif file, 8bit";
+            qDebug() << "planar heif file, bits:" << handle.get_luma_bits_per_pixel();
 
             int strideR, strideG, strideB, strideA;
             const uint8_t* imgR = heifimage.get_plane(heif_channel_R, &strideR);

@@ -846,7 +846,7 @@ void StoryboardModel::slotKeyframeAdded(const KisKeyframeChannel* channel, int t
     if (!indexFromFrame(time).isValid() && !isLocked()) {
         int frame = time;
         int prevItemRow = lastIndexBeforeFrame(frame).row();
-        ENTER_FUNCTION() << ppVar(prevItemRow) << ppVar(frame);
+
         insertRows(prevItemRow + 1, 1);
         setData (index (StoryboardItem::FrameNumber, 0, index(prevItemRow + 1, 0)), frame);
 
@@ -946,9 +946,9 @@ void StoryboardModel::slotUpdateThumbnailForFrame(int frame)
         if (frame == m_image->animationInterface()->currentUITime()) {
             setThumbnailPixmapData(index, m_image->projection());
             affected = false;
+        } else {
+            m_renderScheduler->scheduleFrameForRegeneration(frame, affected);
         }
-
-        m_renderScheduler->scheduleFrameForRegeneration(frame, affected);
     }
 }
 

@@ -1455,7 +1455,7 @@ bool KisDocument::openUrl(const QUrl &_url, OpenFlags flags)
             switch (res) {
             case KisRecoverNamedAutosaveDialog::OpenAutosave :
                 original = file;
-                url.setPath(asf);
+                url = QUrl::fromLocalFile(asf);
                 autosaveOpened = true;
                 break;
             case KisRecoverNamedAutosaveDialog::OpenMainFile :

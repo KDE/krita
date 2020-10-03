@@ -19,15 +19,9 @@ class WGShadeSelector : public QWidget
 {
     Q_OBJECT
 
-    struct LineConfig {
-        QVector4D gradient;
-        QVector4D offset;
-    };
-
 public:
     explicit WGShadeSelector(KisVisualColorModel *selector, QWidget *parent = nullptr);
 
-    static QVector<LineConfig> loadConfiguration();
     void updateSettings();
 protected:
     void mousePressEvent(QMouseEvent *event) override;
@@ -37,6 +31,7 @@ public Q_SLOTS:
 private Q_SLOTS:
     void slotSliderValuesChanged(const QVector4D &values);
     void slotSliderInteraction(bool active);
+    void slotReset();
 
 Q_SIGNALS:
     void sigChannelValuesChanged(const QVector4D &values);
@@ -46,8 +41,11 @@ private:
     KisVisualColorModel *m_model;
     QVector<WGShadeSlider *> m_sliders;
     int m_lineHeight {10};
+    bool m_resetOnExternalUpdate {true};
+    bool m_resetOnInteractions {false};
     bool m_resetOnRightClick {true};
     bool m_allowUpdates {true};
+    bool m_initialized {false};
 };
 
 #endif // WGSHADESELECTOR_H

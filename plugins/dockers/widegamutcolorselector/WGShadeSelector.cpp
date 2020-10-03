@@ -6,6 +6,7 @@
 
 #include "WGShadeSelector.h"
 
+#include "WGConfig.h"
 #include "WGShadeSlider.h"
 
 #include <KisVisualColorModel.h>
@@ -21,24 +22,16 @@ WGShadeSelector::WGShadeSelector(KisVisualColorModel *selector, QWidget *parent)
     l->setSpacing(1);
     l->setMargin(0);
 
+    connect(m_model, SIGNAL(sigColorModelChanged()), SLOT(slotReset()));
+    connect(m_model, SIGNAL(sigColorSpaceChanged()), SLOT(slotReset()));
     updateSettings();
-}
-
-QVector<WGShadeSelector::LineConfig> WGShadeSelector::loadConfiguration()
-{
-    QVector<WGShadeSelector::LineConfig> config;
-    // TODO: just a placeholder for testing
-    WGShadeSelector::LineConfig test;
-    test.gradient = QVector4D(0.5, 0, 0, 0);
-    config.append(test);
-    test.gradient = QVector4D(0, -0.2, 0.2, 0);
-    config.append(test);
-    return config;
 }
 
 void WGShadeSelector::updateSettings()
 {
-    QVector<LineConfig> config = loadConfiguration();
+    WGConfig cfg;
+    //QVector<LineConfig> config = loadConfiguration();
+    QVector<WGConfig::ShadeLine> config = cfg.shadeSelectorLines();
 
     while (config.size() > m_sliders.size()) {
         WGShadeSlider *line = new WGShadeSlider(this, m_model);
@@ -56,6 +49,9 @@ void WGShadeSelector::updateSettings()
         m_sliders[i]->setGradient(config[i].gradient);
         m_sliders[i]->setFixedHeight(m_lineHeight);
     }
+    m_resetOnExternalUpdate = cfg.shadeSelectorUpdateOnExternalChanges();
+    m_resetOnInteractions = cfg.shadeSelectorUpdateOnInteractionEnd();
+    m_resetOnRightClick = cfg.shadeSelectorUpdateOnRightClick();
 }
 
 void WGShadeSelector::mousePressEvent(QMouseEvent *event)
@@ -69,10 +65,11 @@ void WGShadeSelector::mousePressEvent(QMouseEvent *event)
 
 void WGShadeSelector::slotChannelValuesChanged(const QVector4D &values)
 {
-    if (m_allowUpdates) {
+    if (m_allowUpdates && (m_resetOnExternalUpdate || !m_initialized)) {
         for (int i = 0; i < m_sliders.size(); i++) {
             m_sliders[i]->slotSetChannelValues(values);
         }
+        m_initialized = true;
     }
 }
 
@@ -101,7 +98,17 @@ void WGShadeSelector::slotSliderInteraction(bool active)
         }
     }
     else {
-        // TODO: else, reset slider base values if configured for automatic reset
+        // reset slider base values if configured for automatic reset
+        if (m_resetOnInteractions) {
+            for (int i = 0; i < m_sliders.size(); i++) {
+                m_sliders[i]->slotSetChannelValues(m_model->channelValues());
+            }
+        }
         emit sigColorInteraction(active);
     }
+}
+
+void WGShadeSelector::slotReset()
+{
+    m_initialized = false;
 }

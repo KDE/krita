@@ -10,6 +10,8 @@
 #include <kis_debug.h>
 
 #include <QApplication>
+#include <QStringList>
+#include <QTextStream>
 #include <QThread>
 
 WGConfig::WGConfig(bool readOnly)
@@ -81,4 +83,91 @@ void WGConfig::setFavoriteConfigurations(const QVector<KisColorSelectorConfigura
     m_cfg.writeEntry("favoriteSelectorConfigurations", favoriteList.join(';'));
 }
 
+QVector<WGConfig::ShadeLine> WGConfig::defaultShadeSelectorLines()
+{
+    QVector<ShadeLine> defaultLines;
+    defaultLines.append(ShadeLine(QVector4D(0.3, 0, 0, 0)));
+    defaultLines.append(ShadeLine(QVector4D(0, -0.5, 0, 0)));
+    defaultLines.append(ShadeLine(QVector4D(0, 0, 0.5, 0)));
+    defaultLines.append(ShadeLine(QVector4D(0, -0.2, 0.2, 0)));
+    return defaultLines;
+}
+
+QVector<WGConfig::ShadeLine> WGConfig::shadeSelectorLines() const
+{
+    QString configString = m_cfg.readEntry("minimalShadeSelectorLines", QString());
+    if (configString.isEmpty()) {
+        return defaultShadeSelectorLines();
+    }
+    QVector<ShadeLine> shadeLines;
+    QStringList shadeLineList(configString.split('|'));
+    for (QString &line: shadeLineList) {
+        QVector4D gradient, offset;
+        QStringList values = line.split(';');
+        if (values.size() >= 4) {
+            for (int i = 0; i < 4; i++) {
+                gradient[i] = qBound(-1.0f, values.at(i).toFloat(), 1.0f);
+            }
+        }
+        if (values.size() >= 8) {
+            for (int i = 0; i < 4; i++) {
+                offset[i] = qBound(-1.0f, values.at(i + 4).toFloat(), 1.0f);
+            }
+        }
+        shadeLines.append(ShadeLine(gradient, offset));
+    }
+    return shadeLines;
+}
+
+void WGConfig::setShadeSelectorLines(const QVector<WGConfig::ShadeLine> &shadeLines)
+{
+    QStringList shadeLineList;
+    for (const ShadeLine &line: shadeLines) {
+        QString lineString;
+        QTextStream stream(&lineString);
+        for (int i = 0; i < 4; i++) {
+            stream << line.gradient[i] << ';';
+        }
+        for (int i = 0; i < 3; i++) {
+            stream << line.offset[i] << ';';
+        }
+        stream << line.offset[3];
+        shadeLineList.append(lineString);
+    }
+    m_cfg.writeEntry("minimalShadeSelectorLines", shadeLineList.join('|'));
+}
+
+bool WGConfig::shadeSelectorUpdateOnExternalChanges() const
+{
+    return m_cfg.readEntry("shadeSelectorUpdateOnExternalChanges", defaultShadeSelectorUpdateOnExternalChanges);
+}
+
+void WGConfig::setShadeSelectorUpdateOnExternalChanges(bool enabled)
+{
+    m_cfg.writeEntry("shadeSelectorUpdateOnExternalChanges", enabled);
+}
+
+bool WGConfig::shadeSelectorUpdateOnInteractionEnd() const
+{
+    return m_cfg.readEntry("shadeSelectorUpdateOnInteractionEnd", defaultShadeSelectorUpdateOnInteractionEnd);
+}
+
+void WGConfig::setShadeSelectorUpdateOnInteractionEnd(bool enabled)
+{
+    m_cfg.writeEntry("shadeSelectorUpdateOnInteractionEnd", enabled);
+}
+
+bool WGConfig::shadeSelectorUpdateOnRightClick() const
+{
+    return m_cfg.readEntry("shadeSelectorUpdateOnRightClick", defaultShadeSelectorUpdateOnRightClick);
+}
+
+void WGConfig::setShadeSelectorUpdateOnRightClick(bool enabled)
+{
+    m_cfg.writeEntry("shadeSelectorUpdateOnRightClick", enabled);
+}
+
 const bool WGConfig::defaultQuickSettingsEnabled = true;
+const bool WGConfig::defaultShadeSelectorUpdateOnExternalChanges = true;
+const bool WGConfig::defaultShadeSelectorUpdateOnInteractionEnd = false;
+const bool WGConfig::defaultShadeSelectorUpdateOnRightClick = true;

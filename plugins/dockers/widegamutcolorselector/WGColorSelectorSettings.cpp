@@ -72,6 +72,10 @@ void WGColorSelectorSettings::savePreferences() const
     cfg.writeEntry("colorSelectorConfiguration", m_selectorConfigGrid->currentConfiguration().toString());
     cfg.setQuickSettingsEnabled(m_ui->grpQuickSettingsMenu->isChecked());
     cfg.setFavoriteConfigurations(m_favoriteConfigGrid->selectedConfigurations());
+    // Shade Selector
+    cfg.setShadeSelectorUpdateOnExternalChanges(m_ui->chkShadeSelUpdateExternal->isChecked());
+    cfg.setShadeSelectorUpdateOnInteractionEnd(m_ui->chkShadeSelUpdateInteraction->isChecked());
+    cfg.setShadeSelectorUpdateOnRightClick(m_ui->chkShadeSelUpdateOnRightClick->isChecked());
 }
 
 void WGColorSelectorSettings::loadPreferences()
@@ -87,6 +91,10 @@ void WGColorSelectorSettings::loadPreferences()
     for (const KisColorSelectorConfiguration &fav: favoriteConfigs) {
         m_favoriteConfigGrid->setChecked(fav);
     }
+    // Shade Selector
+    m_ui->chkShadeSelUpdateExternal->setChecked(cfg.shadeSelectorUpdateOnExternalChanges());
+    m_ui->chkShadeSelUpdateInteraction->setChecked(cfg.shadeSelectorUpdateOnInteractionEnd());
+    m_ui->chkShadeSelUpdateOnRightClick->setChecked(cfg.shadeSelectorUpdateOnRightClick());
 }
 
 void WGColorSelectorSettings::loadDefaultPreferences()

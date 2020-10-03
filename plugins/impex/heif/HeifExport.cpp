@@ -270,6 +270,11 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
             }
         }
 
+        // --- save the color profile.
+        QByteArray rawProfileBA = image->colorSpace()->profile()->rawData();
+        std::vector<uint8_t> rawProfile(rawProfileBA.begin(), rawProfileBA.end());
+        img.set_raw_color_profile(heif_color_profile_type_prof, rawProfile);
+
 
         // --- encode and write image
 

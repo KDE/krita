@@ -120,6 +120,7 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
     KisImageSP image = document->savingImage();
     const KoColorSpace *cs = image->colorSpace();
 
+
     // Convert to 8 bits rgba on saving
     if (cs->colorModelId() != RGBAColorModelID || cs->colorDepthId() != Integer8BitsColorDepthID) {
         cs = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), Integer8BitsColorDepthID.id());
@@ -137,7 +138,12 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
     try {
         // --- use standard HEVC encoder
 
+
         heif::Encoder encoder(heif_compression_HEVC);
+
+        if (mimeType() == "image/avif") {
+            encoder = heif::Encoder(heif_compression_AV1);
+        }
 
         encoder.set_lossy_quality(quality);
         encoder.set_lossless(lossless);

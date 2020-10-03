@@ -32,6 +32,7 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpaceConstants.h>
 #include <KoColorModelStandardIds.h>
+#include <KoColorProfile.h>
 
 #include <KisImportExportManager.h>
 #include <KisExportCheckRegistry.h>
@@ -121,15 +122,16 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
     const KoColorSpace *cs = image->colorSpace();
 
 
-    // Convert to 8 bits rgba on saving
-    if (cs->colorModelId() != RGBAColorModelID || cs->colorDepthId() != Integer8BitsColorDepthID) {
-        cs = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), Integer8BitsColorDepthID.id());
+    // Convert to 8 bits rgba on saving if not rgba+8bit, rgba+16bit or graya+8bit.
+
+    if ((cs->colorModelId() != RGBAColorModelID || cs->colorModelId() == GrayAColorModelID)
+        && (cs->colorDepthId() != Integer8BitsColorDepthID || cs->colorDepthId() != Integer16BitsColorDepthID)) {
         image->convertImageColorSpace(cs, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
     }
 
     int quality = configuration->getInt("quality", 50);
     bool lossless = configuration->getBool("lossless", false);
-    bool has_alpha = configuration->getBool(KisImportExportFilter::ImageContainsTransparencyTag, false);
+    bool hasAlpha = configuration->getBool(KisImportExportFilter::ImageContainsTransparencyTag, false);
 
 
     // If we want to add information from the document to the metadata,
@@ -156,48 +158,122 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
         heif::Context ctx;
 
         heif::Image img;
-        img.create(width,height, heif_colorspace_RGB, heif_chroma_444);
-        img.add_plane(heif_channel_R, width,height, 8);
-        img.add_plane(heif_channel_G, width,height, 8);
-        img.add_plane(heif_channel_B, width,height, 8);
 
-        uint8_t* ptrR {0};
-        uint8_t* ptrG {0};
-        uint8_t* ptrB {0};
-        uint8_t* ptrA {0};
-        int strideR,strideG,strideB,strideA;
+        if (cs->colorModelId() == RGBAColorModelID) {
+            if (cs->colorDepthId() == Integer8BitsColorDepthID) {
+                qDebug() << "saving as 8bit rgba";
+                img.create(width,height, heif_colorspace_RGB, heif_chroma_444);
+                img.add_plane(heif_channel_R, width,height, 8);
+                img.add_plane(heif_channel_G, width,height, 8);
+                img.add_plane(heif_channel_B, width,height, 8);
 
-        ptrR = img.get_plane(heif_channel_R, &strideR);
-        ptrG = img.get_plane(heif_channel_G, &strideG);
-        ptrB = img.get_plane(heif_channel_B, &strideB);
+                uint8_t* ptrR {0};
+                uint8_t* ptrG {0};
+                uint8_t* ptrB {0};
+                uint8_t* ptrA {0};
+                int strideR, strideG, strideB, strideA;
 
-        if (has_alpha) {
-            img.add_plane(heif_channel_Alpha, width,height, 8);
-            ptrA = img.get_plane(heif_channel_Alpha, &strideA);
-        }
+                ptrR = img.get_plane(heif_channel_R, &strideR);
+                ptrG = img.get_plane(heif_channel_G, &strideG);
+                ptrB = img.get_plane(heif_channel_B, &strideB);
 
-        KisPaintDeviceSP pd = image->projection();
-
-        for (int y=0; y<height; y++) {
-            KisHLineIteratorSP it = pd->createHLineIteratorNG(0, y, width);
-
-            for (int x=0; x<width; x++) {
-                ptrR[y*strideR+x] = KoBgrTraits<quint8>::red(it->rawData());
-                ptrG[y*strideG+x] = KoBgrTraits<quint8>::green(it->rawData());
-                ptrB[y*strideB+x] = KoBgrTraits<quint8>::blue(it->rawData());
-
-                if (has_alpha) {
-                    ptrA[y*strideA+x] = cs->opacityU8(it->rawData());
+                if (hasAlpha) {
+                    img.add_plane(heif_channel_Alpha, width,height, 8);
+                    ptrA = img.get_plane(heif_channel_Alpha, &strideA);
                 }
 
-                it->nextPixel();
+                KisPaintDeviceSP pd = image->projection();
+
+                for (int y=0; y<height; y++) {
+                    KisHLineIteratorSP it = pd->createHLineIteratorNG(0, y, width);
+
+                    for (int x=0; x<width; x++) {
+                        ptrR[y*strideR+x] = KoBgrTraits<quint8>::red(it->rawData());
+                        ptrG[y*strideG+x] = KoBgrTraits<quint8>::green(it->rawData());
+                        ptrB[y*strideB+x] = KoBgrTraits<quint8>::blue(it->rawData());
+
+                        if (hasAlpha) {
+                            ptrA[y * strideA + x] = cs->opacityU8(it->rawData());
+                        }
+
+                        it->nextPixel();
+                    }
+                }
+            } else {
+                qDebug() << "saving as 12bit rgba";
+                img.create(width,height, heif_colorspace_RGB,
+                           hasAlpha? heif_chroma_interleaved_RRGGBBAA_BE: heif_chroma_interleaved_RRGGBB_BE);
+                img.add_plane(heif_channel_interleaved, width, height, 12);
+
+                uint8_t* ptr {0};
+                int stride;
+
+                ptr = img.get_plane(heif_channel_interleaved, &stride);
+
+
+                KisPaintDeviceSP pd = image->projection();
+
+                for (int y=0; y < height; y++) {
+                    KisHLineIteratorSP it = pd->createHLineIteratorNG(0, y, width);
+
+                    for (int x=0; x < width; x++) {
+
+                        QVector<quint16> pixelValues(4);
+                        pixelValues[0] = KoBgrTraits<quint16>::red(it->rawData());
+                        pixelValues[1] = KoBgrTraits<quint16>::green(it->rawData());
+                        pixelValues[2] = KoBgrTraits<quint16>::blue(it->rawData());
+                        pixelValues[3] = quint16(KoBgrTraits<quint16>::opacityF(it->rawData()) * 65535);
+
+                        int channels = hasAlpha? 4: 3;
+                        for (int ch = 0; ch < channels; ch++) {
+                            uint16_t v = qBound(0, int((float(pixelValues[ch]) / 65535) * 4095), 4095);
+                            ptr[2 * (x * channels) + y * stride + 0 + (ch*2)] = (uint8_t) (v >> 8);
+                            ptr[2 * (x * channels) + y * stride + 1 + (ch*2)] = (uint8_t) (v & 0xFF);
+                        }
+
+                        it->nextPixel();
+                    }
+                }
+            }
+
+        } else {
+            qDebug() << "saving as 8bit grayscale";
+            img.create(width, height, heif_colorspace_monochrome, heif_chroma_monochrome);
+            qDebug() << img.get_chroma_format();
+            img.add_plane(heif_channel_Y, width, height, 8);
+
+            uint8_t* ptrG {0};
+            uint8_t* ptrA {0};
+            int strideG, strideA;
+
+            ptrG = img.get_plane(heif_channel_Y, &strideG);
+
+            if (hasAlpha) {
+                img.add_plane(heif_channel_Alpha, width, height, 8);
+                ptrA = img.get_plane(heif_channel_Alpha, &strideA);
+            }
+
+            KisPaintDeviceSP pd = image->projection();
+
+            for (int y = 0; y < height; y++) {
+                KisHLineIteratorSP it = pd->createHLineIteratorNG(0, y, width);
+
+                for (int x = 0; x < width; x++) {
+                    ptrG[y * strideG + x] = KoGrayTraits<quint8>::gray(it->rawData());
+
+                    if (hasAlpha) {
+                        ptrA[y * strideA + x] = cs->opacityU8(it->rawData());
+                    }
+
+                    it->nextPixel();
+                }
             }
         }
+
 
         // --- encode and write image
 
         heif::ImageHandle handle = ctx.encode_image(img, encoder);
-
 
 
         // --- add Exif / XMP metadata
@@ -255,8 +331,8 @@ void HeifExport::initializeCapabilities()
     QList<QPair<KoID, KoID> > supportedColorModels;
     supportedColorModels << QPair<KoID, KoID>()
             << QPair<KoID, KoID>(RGBAColorModelID, Integer8BitsColorDepthID)
-            /*<< QPair<KoID, KoID>(GrayAColorModelID, Integer8BitsColorDepthID)
-                    << QPair<KoID, KoID>(RGBAColorModelID, Integer16BitsColorDepthID)
+            << QPair<KoID, KoID>(GrayAColorModelID, Integer8BitsColorDepthID)
+            << QPair<KoID, KoID>(RGBAColorModelID, Integer16BitsColorDepthID)/*
                     << QPair<KoID, KoID>(GrayAColorModelID, Integer16BitsColorDepthID)*/
             ;
     addSupportedColorModels(supportedColorModels, "HEIF");

@@ -92,15 +92,15 @@ public:
         return (selfMax >= otherMin) && (selfMin <= otherMax );
     }
 
-    static inline KRITAIMAGE_EXPORT KisTimeSpan fromTimeToTime(int start, int end) {
+    static inline KisTimeSpan fromTimeToTime(int start, int end) {
         return KisTimeSpan(start, end);
     }
 
-    static inline KRITAIMAGE_EXPORT KisTimeSpan fromTimeWithDuration(int start, int duration) {
+    static inline KisTimeSpan fromTimeWithDuration(int start, int duration) {
         return KisTimeSpan( start, start + duration - 1);
     }
 
-    static inline KRITAIMAGE_EXPORT KisTimeSpan infinite(int start) {
+    static inline KisTimeSpan infinite(int start) {
         return KisTimeSpan(start, std::numeric_limits<int>::min());
     }
 

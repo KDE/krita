@@ -703,6 +703,12 @@ bool StoryboardModel::insertHoldFramesAfter(int newDuration, int oldDuration, QM
         }
     }
 
+    //if the current keyframe is last keyframe globally, only set data in model
+    if (nextKeyframeGlobal(frame) == INT_MAX) {
+        setData(index, newDuration);
+        return true;
+    }
+
     if (index.row() == StoryboardItem::DurationSecond) {
         newDuration *= fps;
         oldDuration *= fps;
@@ -717,11 +723,6 @@ bool StoryboardModel::insertHoldFramesAfter(int newDuration, int oldDuration, QM
         return false;
     }
 
-    //if the current keyframe is last keyframe globally, only set data in model
-    if (nextKeyframeGlobal(frame) == INT_MAX) {
-        setData(index, newDuration);
-        return true;
-    }
     KisNodeSP node = m_image->rootLayer();
     if (node) {
     KisLayerUtils::recursiveApplyNodes (node, [frame, durationChange] (KisNodeSP node)

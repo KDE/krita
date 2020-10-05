@@ -32,11 +32,6 @@
 #include "kis_abstract_projection_plane.h"
 #include "kis_image.h"
 
-// To create a strong symbol
-KisStrokeJobData* MoveStrokeStrategy::Data::createLodClone(int levelOfDetail)
-{
-    return new Data(*this, levelOfDetail);
-}
 
 MoveStrokeStrategy::MoveStrokeStrategy(KisNodeSelectionRecipe nodeSelection,
                                        KisUpdatesFacade *updatesFacade,
@@ -364,3 +359,42 @@ KisStrokeStrategy* MoveStrokeStrategy::createLodClone(int levelOfDetail)
     clone->m_sharedNodes = m_sharedNodes;
     return clone;
 }
+
+MoveStrokeStrategy::Data::Data(QPoint _offset)
+    : KisStrokeJobData(SEQUENTIAL, NORMAL),
+      offset(_offset)
+{
+}
+
+KisStrokeJobData *MoveStrokeStrategy::Data::createLodClone(int levelOfDetail)
+{
+    return new Data(*this, levelOfDetail);
+}
+
+MoveStrokeStrategy::Data::Data(const MoveStrokeStrategy::Data &rhs, int levelOfDetail)
+    : KisStrokeJobData(rhs)
+{
+    KisLodTransform t(levelOfDetail);
+    offset = t.map(rhs.offset);
+}
+
+MoveStrokeStrategy::PickLayerData::PickLayerData(QPoint _pos)
+    : KisStrokeJobData(SEQUENTIAL, NORMAL),
+      pos(_pos)
+{
+}
+
+KisStrokeJobData *MoveStrokeStrategy::PickLayerData::createLodClone(int levelOfDetail) {
+    return new PickLayerData(*this, levelOfDetail);
+}
+
+MoveStrokeStrategy::PickLayerData::PickLayerData(const MoveStrokeStrategy::PickLayerData &rhs, int levelOfDetail)
+    : KisStrokeJobData(rhs)
+{
+    KisLodTransform t(levelOfDetail);
+    pos = t.map(rhs.pos);
+}
+
+MoveStrokeStrategy::BarrierUpdateData::BarrierUpdateData(bool _forceUpdate)
+    : KisAsyncronousStrokeUpdateHelper::UpdateData(_forceUpdate, BARRIER, EXCLUSIVE)
+{}

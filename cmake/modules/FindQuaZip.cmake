@@ -25,15 +25,15 @@ ELSE (QUAZIP_INCLUDE_DIRS AND QUAZIP_LIBRARIES)
 	ELSE(WIN32)
 		FIND_PACKAGE(PkgConfig)
 #     pkg_check_modules(PC_QCA2 QUIET qca2)
-		pkg_check_modules(PC_QUAZIP quazip)
+		pkg_check_modules(PC_QUAZIP quazip quazip1-qt5)
 		FIND_LIBRARY(QUAZIP_LIBRARIES
 			WIN32_DEBUG_POSTFIX d
-            NAMES quazip${QUAZIP_LIB_VERSION_SUFFIX}
+            NAMES quazip${QUAZIP_LIB_VERSION_SUFFIX} quazip1-qt5
 			HINTS /usr/lib /usr/lib64
 		)
 		FIND_PATH(QUAZIP_INCLUDE_DIR quazip.h
 			HINTS /usr/include /usr/local/include
-			PATH_SUFFIXES quazip${QUAZIP_LIB_VERSION_SUFFIX}
+			PATH_SUFFIXES quazip${QUAZIP_LIB_VERSION_SUFFIX} QuaZip-Qt5-1.0/quazip
 		)
 		FIND_PATH(QUAZIP_ZLIB_INCLUDE_DIR zlib.h HINTS /usr/include /usr/local/include)
 	ENDIF (WIN32)

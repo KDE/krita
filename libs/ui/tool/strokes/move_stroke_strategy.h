@@ -38,56 +38,33 @@ class KRITAUI_EXPORT MoveStrokeStrategy : public QObject, public KisStrokeStrate
 {
     Q_OBJECT
 public:
-    class Data : public KisStrokeJobData {
+    class KRITAUI_EXPORT Data : public KisStrokeJobData {
     public:
-        Data(QPoint _offset)
-            : KisStrokeJobData(SEQUENTIAL, NORMAL),
-              offset(_offset)
-        {
-        }
-
+        Data(QPoint _offset);
         KisStrokeJobData* createLodClone(int levelOfDetail) override;
 
         QPoint offset;
 
     private:
-        Data(const Data &rhs, int levelOfDetail)
-            : KisStrokeJobData(rhs)
-        {
-            KisLodTransform t(levelOfDetail);
-            offset = t.map(rhs.offset);
-        }
+        Data(const Data &rhs, int levelOfDetail);
     };
 
-    class PickLayerData : public KisStrokeJobData {
+    class KRITAUI_EXPORT PickLayerData : public KisStrokeJobData {
     public:
-        PickLayerData(QPoint _pos)
-            : KisStrokeJobData(SEQUENTIAL, NORMAL),
-              pos(_pos)
-        {
-        }
+        PickLayerData(QPoint _pos);
 
-        KisStrokeJobData* createLodClone(int levelOfDetail) override {
-            return new PickLayerData(*this, levelOfDetail);
-        }
+        KisStrokeJobData* createLodClone(int levelOfDetail) override;
 
         QPoint pos;
 
     private:
-        PickLayerData(const PickLayerData &rhs, int levelOfDetail)
-            : KisStrokeJobData(rhs)
-        {
-            KisLodTransform t(levelOfDetail);
-            pos = t.map(rhs.pos);
-        }
+        PickLayerData(const PickLayerData &rhs, int levelOfDetail);
     };
 
 
-    struct BarrierUpdateData : public KisAsyncronousStrokeUpdateHelper::UpdateData
+    struct KRITAUI_EXPORT BarrierUpdateData : public KisAsyncronousStrokeUpdateHelper::UpdateData
     {
-        BarrierUpdateData(bool forceUpdate)
-            : KisAsyncronousStrokeUpdateHelper::UpdateData(forceUpdate, BARRIER, EXCLUSIVE)
-        {}
+        BarrierUpdateData(bool forceUpdate);
     };
 
 public:

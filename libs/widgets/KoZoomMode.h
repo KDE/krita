@@ -36,6 +36,7 @@ public:
         ZOOM_CONSTANT = 0,  ///< zoom x %
         ZOOM_WIDTH    = 1,  ///< zoom pagewidth
         ZOOM_PAGE     = 2,  ///< zoom to pagesize
+        ZOOM_HEIGHT   = 16,  ///< zoom pageheight
         ZOOM_PIXELS   = 4   ///< zoom to actual pixels
     };
 

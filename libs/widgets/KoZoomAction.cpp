@@ -195,6 +195,9 @@ void KoZoomAction::regenerateItems(const qreal zoom)
     if(d->zoomModes & KoZoomMode::ZOOM_PAGE) {
         values << KoZoomMode::toString(KoZoomMode::ZOOM_PAGE);
     }
+    if(d->zoomModes & KoZoomMode::ZOOM_HEIGHT) {
+        values << KoZoomMode::toString(KoZoomMode::ZOOM_HEIGHT);
+    }
 
     Q_FOREACH (qreal value, zoomLevels) {
         const qreal valueInPercent = value * 100;

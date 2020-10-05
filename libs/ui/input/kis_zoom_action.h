@@ -40,6 +40,7 @@ public:
         ZoomResetShortcut, ///< Reset zoom to 100%.
         ZoomToPageShortcut, ///< Zoom fit to page.
         ZoomToWidthShortcut, ///< Zoom fit to width.
+        ZoomToHeightShortcut, ///< Zoom fit to height.
         RelativeZoomModeShortcut, ///< Toggle zoom mode relative to cursor
         RelativeDiscreteZoomModeShortcut ///< Toggle discrete zoom mode relative to cursor
     };

@@ -87,8 +87,6 @@ QVariant KisAllTagResourceModel::data(const QModelIndex &index, int role) const
     bool pos = const_cast<KisAllTagResourceModel*>(this)->d->query.seek(index.row());
     if (!pos) { abort(); return v;}
 
-
-
     if (role < Qt::UserRole + TagId) {
 
         int id = d-> query.value("resource_id").toInt();
@@ -273,6 +271,7 @@ bool KisAllTagResourceModel::resetQuery()
 
 
 struct KisTagResourceModel::Private {
+    QString resourceType;
     KisAllTagResourceModel *sourceModel {0};
     QVector<int> tagIds;
     QVector<int> resourceIds;
@@ -286,6 +285,7 @@ KisTagResourceModel::KisTagResourceModel(const QString &resourceType, QObject *p
     : QSortFilterProxyModel(parent)
     , d(new Private())
 {
+    d->resourceType = resourceType;
     d->sourceModel = new KisAllTagResourceModel(resourceType, parent);
     setSourceModel(d->sourceModel);
 }
@@ -401,40 +401,75 @@ bool KisTagResourceModel::lessThan(const QModelIndex &source_left, const QModelI
 
 KoResourceSP KisTagResourceModel::resourceForIndex(QModelIndex index) const
 {
-    return 0;
+    return KisResourceLocator::instance()->resourceForId(
+                data(index, Qt::UserRole + KisAllTagResourceModel::ResourceId).toInt());
 }
 
 QModelIndex KisTagResourceModel::indexForResource(KoResourceSP resource) const
 {
-    return createIndex(-1, -1);
+    if (!resource || !resource->valid() || resource->resourceId() < 0) return QModelIndex();
+
+    for (int i = 0; i < rowCount(); ++i)  {
+        QModelIndex idx = createIndex(i, Qt::UserRole + KisAllTagResourceModel::ResourceId);
+        Q_ASSERT(idx.isValid());
+        if (idx.data(Qt::UserRole + KisAllTagResourceModel::ResourceId).toInt() == resource->resourceId()) {
+            return idx;
+        }
+    }
+    return QModelIndex();
 }
 
 bool KisTagResourceModel::setResourceInactive(const QModelIndex &index)
 {
-    return false;
+    KisResourceModel *resourceModel = KisResourceModelProvider::resourceModel(d->resourceType);
+    QModelIndex idx = resourceModel->indexForResource(resourceForIndex(index));
+    return resourceModel->setResourceInactive(idx);
 }
 
 bool KisTagResourceModel::importResourceFile(const QString &filename)
 {
-    return false;
+    // Since we're importing the resource, there's no reason to add rows to the tags::resources table,
+    // because the resource is untagged.
+    KisResourceModel *resourceModel = KisResourceModelProvider::resourceModel(d->resourceType);
+    return resourceModel->importResourceFile(filename);
 }
 
 bool KisTagResourceModel::addResource(KoResourceSP resource, const QString &storageId)
 {
-    return false;
+    // Since we're importing the resource, there's no reason to add rows to the tags::resources table,
+    // because the resource is untagged.
+    KisResourceModel *resourceModel = KisResourceModelProvider::resourceModel(d->resourceType);
+    return resourceModel->addResource(resource, storageId);
 }
 
 bool KisTagResourceModel::updateResource(KoResourceSP resource)
 {
-    return false;
+    KisResourceModel *resourceModel = KisResourceModelProvider::resourceModel(d->resourceType);
+    bool r = resourceModel->updateResource(resource);
+    if (r) {
+        QModelIndex index = indexForResource(resource);
+        if (index.isValid()) {
+            emit dataChanged(index, index, {Qt::EditRole});
+        }
+    }
+    return r;
 }
 
 bool KisTagResourceModel::renameResource(KoResourceSP resource, const QString &name)
 {
-    return false;
+    KisResourceModel *resourceModel = KisResourceModelProvider::resourceModel(d->resourceType);
+    bool r = resourceModel->renameResource(resource, name);
+    if (r) {
+        QModelIndex index = indexForResource(resource);
+        if (index.isValid()) {
+            emit dataChanged(index, index, {Qt::EditRole});
+        }
+    }
+    return r;
 }
 
 bool KisTagResourceModel::setResourceMetaData(KoResourceSP resource, QMap<QString, QVariant> metadata)
 {
-    return false;
+    KisResourceModel *resourceModel = KisResourceModelProvider::resourceModel(d->resourceType);
+    return resourceModel->setResourceMetaData(resource, metadata);
 }

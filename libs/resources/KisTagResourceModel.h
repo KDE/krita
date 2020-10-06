@@ -86,8 +86,8 @@ private:
  * tags or resources that match for the active/inactive/all filters will match.
  */
 class KRITARESOURCES_EXPORT KisTagResourceModel : public QSortFilterProxyModel
-        , KisAbstractTagResourceModel
-        , KisAbstractResourceModel
+    , KisAbstractTagResourceModel
+    , KisAbstractResourceModel
 {
     Q_OBJECT
 

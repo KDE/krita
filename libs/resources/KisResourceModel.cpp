@@ -285,7 +285,7 @@ KoResourceSP KisAllResourcesModel::resourceForMD5(const QByteArray md5sum) const
 
 QModelIndex KisAllResourcesModel::indexForResource(KoResourceSP resource) const
 {
-    if (!resource || !resource->valid()) return QModelIndex();
+    if (!resource || !resource->valid() || resource->resourceId() < 0) return QModelIndex();
 
     // For now a linear seek to find the first resource with the right id
     d->resourcesQuery.first();

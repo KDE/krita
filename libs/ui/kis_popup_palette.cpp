@@ -795,7 +795,7 @@ void KisPopupPalette::slotShowTagsPopup()
 
         QAction *action = menu.exec(QCursor::pos());
         if (action) {
-            m_resourceManager->setCurrentTag(action->text());
+            m_resourceManager->setCurrentTag(KLocalizedString::removeAcceleratorMarker(action->text()));
         }
     } else {
         QWhatsThis::showText(QCursor::pos(),

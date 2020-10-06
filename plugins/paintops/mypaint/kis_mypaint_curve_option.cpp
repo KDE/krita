@@ -171,7 +171,6 @@ void KisMyPaintCurveOption::readNamedOptionSetting(const QString& prefix, const 
 
         replaceSensor(option);
         option->setActive(points.size()>0);
-
     }    
 
     m_useSameCurve = setting->getBool(m_name + "UseSameCurve", false);
@@ -195,7 +194,8 @@ void KisMyPaintCurveOption::readNamedOptionSetting(const QString& prefix, const 
 
     firstRead = false;
     m_value = setting->getDouble(m_name + "Value", m_maxValue);        
-    m_curveMode = setting->getInt(m_name + "curveMode");    
+    m_curveMode = setting->getInt(m_name + "curveMode");
+    mypaint_brush_unref(brush);
 }
 
 void KisMyPaintCurveOption::lodLimitations(KisPaintopLodLimitations *l) const {

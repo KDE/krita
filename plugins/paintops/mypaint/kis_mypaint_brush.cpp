@@ -48,7 +48,7 @@ KisMyPaintBrush::KisMyPaintBrush(const QString &fileName)
 
 KisMyPaintBrush::~KisMyPaintBrush() {
 
-    delete m_d->m_brush;
+    mypaint_brush_unref(m_d->m_brush);
     delete m_d;
 }
 
@@ -154,6 +154,7 @@ bool KisMyPaintBrush::loadFromDevice(QIODevice *dev) {
     m_d->opacity = mypaint_brush_get_base_value(m_d->m_brush, MYPAINT_BRUSH_SETTING_OPAQUE);
     m_d->offset = mypaint_brush_get_base_value(m_d->m_brush, MYPAINT_BRUSH_SETTING_OFFSET_BY_RANDOM);
     m_d->isEraser = mypaint_brush_get_base_value(m_d->m_brush, MYPAINT_BRUSH_SETTING_ERASER);
+
 
     return true;
 }

@@ -20,6 +20,8 @@
 package org.krita.android;
 
  import android.os.Bundle;
+ import android.content.Intent;
+ import android.net.Uri;
  import android.view.InputDevice;
  import android.view.KeyEvent;
  import android.view.MotionEvent;
@@ -36,8 +38,24 @@ public class MainActivity extends QtActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 		                     WindowManager.LayoutParams.FLAG_FULLSCREEN);
-		super.onCreate(savedInstanceState);
 
+        // we have to do this before loading main()
+        Intent i = getIntent();
+        if (i != null) {
+            Uri fileUri = i.getData();
+            if (fileUri != null) {
+                // this will be passed as a command line argument to main()
+                i.putExtra("applicationArguments", fileUri.toString());
+
+                int modeFlags = Intent.FLAG_GRANT_READ_URI_PERMISSION;
+                if ((i.getFlags() & Intent.FLAG_GRANT_WRITE_URI_PERMISSION) != 0) {
+                    modeFlags |= Intent.FLAG_GRANT_WRITE_URI_PERMISSION;
+                }
+                QtNative.addToKnownUri(fileUri, modeFlags);
+            }
+        }
+
+		super.onCreate(savedInstanceState);
 		new ConfigsManager().handleAssets(this);
 
         DonationHelper.getInstance();

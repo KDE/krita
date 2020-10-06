@@ -249,12 +249,23 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
     connect(zoomCanvasSlider, SIGNAL(sliderPressed()), this, SLOT(slotZoomSliderPressed()));
     connect(zoomCanvasSlider, SIGNAL(sliderReleased()), this, SLOT(slotZoomSliderReleased()));
 
+    clearHistoryButton = new QPushButton(this);
+    clearHistoryButton->setFixedHeight(35);
+
+    clearHistoryButton->setText(i18n("Clear colors"));
+    clearHistoryButton->setToolTip(i18n("Clear the colors of the popup palette"));
+
+    connect(clearHistoryButton, SIGNAL(clicked(bool)), m_resourceManager, SLOT(slotClearHistory()));
+    //Otherwise the colors won't disappear until the cursor moves away from the button:
+    connect(clearHistoryButton, SIGNAL(released()), this, SLOT(slotUpdate()));
+
     slotUpdateIcons();
 
     hLayout->addWidget(mirrorMode);
     hLayout->addWidget(canvasOnlyButton);
     hLayout->addWidget(zoomToOneHundredPercentButton);
     hLayout->addWidget(zoomCanvasSlider);
+    hLayout->addWidget(clearHistoryButton);
 
     setVisible(true);
     setVisible(false);
@@ -587,7 +598,6 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
             painter.drawPath(recentColorsPath);
             painter.rotate(rotationAngle);
         }
-
     }
 
     // painting hovered color

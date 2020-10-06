@@ -37,7 +37,6 @@
 #include <kis_paintop_preset.h>
 
 
-
 class KisFavoriteResourceManager::ColorDataList
 {
 public:
@@ -94,6 +93,14 @@ public:
         int pos = findPos(m_priorityList.valueAt(0));
         m_guiList.removeAt(pos);
         m_priorityList.remove(0);
+    }
+
+    void clearHistory() {
+        Q_ASSERT_X(size() >= 0, "ColorDataList::clearHistory", "index out of bound");
+        if (size() <= 0 ) return;
+        while (size() > 0){
+            removeLeastUsed();
+        }
     }
 
     void updateKey(int guiPos) {
@@ -301,6 +308,11 @@ void KisFavoriteResourceManager::syncTagRemoval(const QString& /*tag*/) {}
 int KisFavoriteResourceManager::recentColorsTotal()
 {
     return m_colorList->size();
+}
+
+void KisFavoriteResourceManager::slotClearHistory()
+{
+    m_colorList->clearHistory();
 }
 
 const KoColor& KisFavoriteResourceManager::recentColorAt(int pos)

@@ -140,6 +140,7 @@ private:
     QSlider *zoomCanvasSlider {0};
     int zoomSliderMinValue {10};
     int zoomSliderMaxValue {200};
+    QPushButton *clearHistoryButton {0};
     KisAcyclicSignalConnector *m_acyclicConnector = 0;
 
     int m_cachedNumSlots {0};

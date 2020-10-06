@@ -69,6 +69,7 @@ public:
     //BgColor;
     KoColor bgColor() const;
 
+
 Q_SIGNALS:
 
     void sigSetFGColor(const KoColor& c);
@@ -95,6 +96,9 @@ public Q_SLOTS:
     void slotChangeFGColorSelector(KoColor c);
 
     void slotSetBGColor(const KoColor c);
+
+    /** Clears the color history shown in the popup palette. */
+    void slotClearHistory();
 
 private Q_SLOTS:
 

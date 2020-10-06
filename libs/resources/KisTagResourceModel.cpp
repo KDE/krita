@@ -76,8 +76,6 @@ int KisAllTagResourceModel::columnCount(const QModelIndex &/*parent*/) const
 
 QVariant KisAllTagResourceModel::data(const QModelIndex &index, int role) const
 {
-    qDebug() << index.isValid() << index.row() << index.column() << "role" << role << "local role" << Qt::UserRole + TagId;
-
     QVariant v;
 
     if (!index.isValid()) { return v; }

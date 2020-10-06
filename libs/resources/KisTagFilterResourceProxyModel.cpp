@@ -140,7 +140,7 @@ bool KisTagFilterResourceProxyModel::setResourceMetaData(KoResourceSP resource, 
 
 void KisTagFilterResourceProxyModel::setTagFilter(const KisTagSP tag)
 {
-    if (tag) {
+    if (tag && tag->url() != "All") {
         if (tag->url() != "All Untagged") {
             setSourceModel(d->tagResourceModel);
             d->tagResourceModel->setTagsFilter(QVector<KisTagSP>() << tag);

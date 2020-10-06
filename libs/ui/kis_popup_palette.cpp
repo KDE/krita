@@ -807,7 +807,7 @@ void KisPopupPalette::slotShowTagsPopup()
 
             for (int i = 0; i < model->rowCount(); ++i) {
                 QModelIndex idx = model->index(i, 0);
-                if (model->data(idx, Qt::DisplayRole).toString() == action->text()) {
+                if (model->data(idx, Qt::DisplayRole).toString() == KLocalizedString::removeAcceleratorMarker(action->text())) {
                     m_resourceManager->setCurrentTag(model->tagForIndex(idx));
                     break;
                 }

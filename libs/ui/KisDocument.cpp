@@ -797,7 +797,7 @@ void KisDocument::slotCompleteSavingDocument(const KritaUtils::ExportFileJob &jo
 
         if (!fileBatchMode()) {
             const QString filePath = job.filePath;
-            QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not save %1\nReason: %2", filePath, exportErrorToUserMessage(status, errorMessage)));
+            QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Could not save %1\nReason: %2", filePath, exportErrorToUserMessage(status, errorMessage)));
         }
     } else {
         if (!(job.flags & KritaUtils::SaveIsExporting)) {
@@ -1466,7 +1466,7 @@ bool KisDocument::openUrl(const QUrl &_url, OpenFlags flags)
             switch (res) {
             case KisRecoverNamedAutosaveDialog::OpenAutosave :
                 original = file;
-                url.setPath(asf);
+                url = QUrl::fromLocalFile(asf);
                 autosaveOpened = true;
                 break;
             case KisRecoverNamedAutosaveDialog::OpenMainFile :
@@ -1548,7 +1548,7 @@ bool KisDocument::openFile()
     //dbgUI <<"for" << localFilePath();
 #ifndef Q_OS_ANDROID
     if (!QFile::exists(localFilePath()) && !fileBatchMode()) {
-        QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("File %1 does not exist.", localFilePath()));
+        QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("File %1 does not exist.", localFilePath()));
         return false;
     }
 #endif

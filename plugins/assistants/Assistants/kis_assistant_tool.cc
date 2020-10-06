@@ -895,10 +895,10 @@ void KisAssistantTool::loadAssistants()
         assistant.clear();
     }
     if (xml.hasError()) {
-        QMessageBox::warning(0, i18nc("@title:window", "Krita"), xml.errorString());
+        QMessageBox::warning(qApp->activeWindow(), i18nc("@title:window", "Krita"), xml.errorString());
     }
     if (errors) {
-        QMessageBox::warning(0, i18nc("@title:window", "Krita"), i18n("Errors were encountered. Not all assistants were successfully loaded."));
+        QMessageBox::warning(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Errors were encountered. Not all assistants were successfully loaded."));
     }
     m_handles = m_canvas->paintingAssistantsDecoration()->handles();
     m_canvas->updateCanvas();

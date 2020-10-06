@@ -604,7 +604,7 @@ endif()
 ##
 find_package(SeExpr2)
 set_package_properties(SeExpr2 PROPERTIES
-    URL "https://wdas.github.io/SeExpr/"
+    URL "https://invent.kde.org/graphics/seexpr"
     TYPE OPTIONAL
     PURPOSE "Required by the SeExpr generator layer"
 )

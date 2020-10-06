@@ -845,7 +845,7 @@ void KisMainWindow::slotFileSelected(QUrl url)
 
 void KisMainWindow::slotEmptyFilePath()
 {
-    QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("The chosen file's location could not be found. Does it exist?"));
+    QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("The chosen file's location could not be found. Does it exist?"));
 }
 
 QWidget * KisMainWindow::canvasWindow() const
@@ -999,7 +999,7 @@ bool KisMainWindow::openDocument(const QUrl &url, OpenFlags flags)
 {
     if (!QFile(url.toLocalFile()).exists()) {
         if (!(flags & BatchMode)) {
-            QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("The file %1 does not exist.", url.url()));
+            QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("The file %1 does not exist.", url.url()));
         }
         d->recentFiles->removeUrl(url); //remove the file from the recent-opened-file-list
         saveRecentFiles();
@@ -1231,7 +1231,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExpo
         return false;
     }
     else if (dlg.result() == KisDelayedSaveDialog::Ignored) {
-        QMessageBox::critical(0,
+        QMessageBox::critical(qApp->activeWindow(),
                               i18nc("@title:window", "Krita"),
                               i18n("You are saving a file while the image is "
                                    "still rendering. The saved file may be "
@@ -1893,7 +1893,7 @@ void KisMainWindow::importAnimation()
         if (!status.isOk() && !status.isInternalError()) {
             QString msg = status.errorMessage();
             if (!msg.isEmpty())
-                QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not finish import animation:\n%1", msg));
+                QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Could not finish import animation:\n%1", msg));
         }
         activeView()->canvasBase()->refetchDataFromImage();
     }
@@ -2530,7 +2530,7 @@ void KisMainWindow::checkSanity()
 
 void KisMainWindow::showErrorAndDie()
 {
-    QMessageBox::critical(0, i18nc("@title:window", "Installation error"), m_errorMessage);
+    QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Installation error"), m_errorMessage);
     if (m_dieOnError) {
         exit(10);
     }

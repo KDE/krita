@@ -65,6 +65,7 @@ public:
     }
 
     void updateImageBoundsSnapping();
+    void updateCurrentZoomResource();
 
     QWidget *zoomActionWidget() const;
 

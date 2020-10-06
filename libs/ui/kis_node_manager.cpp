@@ -1222,7 +1222,7 @@ void KisNodeManager::Private::saveDeviceAsImage(KisPaintDeviceSP device,
     dst->initialRefreshGraph();
 
     if (!doc->exportDocumentSync(url, mimefilter.toLatin1())) {
-        QMessageBox::warning(0,
+        QMessageBox::warning(qApp->activeWindow(),
                              i18nc("@title:window", "Krita"),
                              i18n("Could not save the layer. %1", doc->errorMessage().toUtf8().data()),
                              QMessageBox::Ok);

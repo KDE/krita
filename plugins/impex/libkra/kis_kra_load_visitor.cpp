@@ -28,6 +28,7 @@
 #include <QBuffer>
 #include <QByteArray>
 #include <QMessageBox>
+#include <QApplication>
 
 #include <KoMD5Generator.h>
 #include <KoColorSpaceRegistry.h>
@@ -157,7 +158,8 @@ bool KisKraLoadVisitor::visit(KisExternalLayer * layer)
                         "Path: %1\n\n"
                         "Do you want to select another location?", reference->filename());
 
-                    int locateManually = QMessageBox::warning(0, i18nc("@title:window", "File not found"), msg, QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+                    // qApp->activeWindow() doesn't work here
+                    int locateManually = QMessageBox::warning(qApp->activeWindow(), i18nc("@title:window", "File not found"), msg, QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
 
                     QString url;
                     if (locateManually == QMessageBox::Yes) {

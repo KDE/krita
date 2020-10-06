@@ -223,6 +223,14 @@ void KisZoomManager::updateImageBoundsSnapping()
     }
 }
 
+void KisZoomManager::updateCurrentZoomResource()
+{
+    const qreal effectiveZoom =
+        m_view->canvasBase()->coordinatesConverter()->effectiveZoom();
+
+    m_view->canvasBase()->resourceManager()->setResource(KoCanvasResource::EffectiveZoom, effectiveZoom);
+}
+
 void KisZoomManager::updateMouseTrackingConnections()
 {
     bool value = m_horizontalRuler->isVisible() &&
@@ -329,7 +337,7 @@ void KisZoomManager::slotUpdateGuiAfterZoomChange()
                     QIcon(), 500, KisFloatingMessage::Low, Qt::AlignCenter);
     }
 
-
+    updateCurrentZoomResource();
 
     m_view->canvasBase()->resourceManager()->setResource(KoCanvasResource::EffectiveZoom, effectiveZoom);
 }

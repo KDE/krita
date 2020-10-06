@@ -30,19 +30,20 @@ namespace GSL
 
         QPointF transformedCenter;
         qreal scale;
+        bool isValid = false;
     };
 
     ScaleResult1D calculateScaleX(const ToolTransformArgs &args,
                                   const QPointF &staticPointSrc,
                                   const QPointF &staticPointDst,
                                   const QPointF &movingPointSrc,
-                                  qreal viewDistance);
+                                  const QPointF &movingPointDst);
 
     ScaleResult1D calculateScaleY(const ToolTransformArgs &args,
                                   const QPointF &staticPointSrc,
                                   const QPointF &staticPointDst,
                                   const QPointF &movingPointSrc,
-                                  qreal viewDistance);
+                                  const QPointF &movingPointDst);
 
     struct ScaleResult2D {
         ScaleResult2D() : scaleX(1.0), scaleY(1.0) {}

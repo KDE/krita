@@ -155,12 +155,12 @@ void KisToolColorPicker::beginPrimaryAction(KoPointerEvent *event)
     bool sampleMerged = m_optionsWidget->cmbSources->currentIndex() == SAMPLE_MERGED;
     if (!sampleMerged) {
         if (!currentNode()) {
-            QMessageBox::information(0, i18nc("@title:window", "Krita"), i18n("Cannot pick a color as no layer is active."));
+            QMessageBox::information(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Cannot pick a color as no layer is active."));
             event->ignore();
             return;
         }
         if (!currentNode()->visible()) {
-            QMessageBox::information(0, i18nc("@title:window", "Krita"), i18n("Cannot pick a color as the active layer is not visible."));
+            QMessageBox::information(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Cannot pick a color as the active layer is not visible."));
             event->ignore();
             return;
         }
@@ -208,7 +208,7 @@ void KisToolColorPicker::endPrimaryAction(KoPointerEvent *event)
             palette->add(swatch);
             KoResourceServerProvider::instance()->paletteServer()->updateResource(palette);
             if (!palette->save()) {
-                QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Cannot write to palette file %1. Maybe it is read-only.", palette->filename()));
+                QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Cannot write to palette file %1. Maybe it is read-only.", palette->filename()));
             }
         }
     }

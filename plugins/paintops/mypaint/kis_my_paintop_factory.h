@@ -25,7 +25,7 @@ public:
 private:
 
     class Private;
-    const QScopedPointer<Private> m_d;
+    Private* const m_d;
 };
 
 #endif // KIS_MY_PAINTOP_FACTORY_H

@@ -147,7 +147,8 @@ float KisMyPaintCurveOptionWidget::getBaseValue(KisPropertiesConfigurationSP set
     mypaint_brush_from_string(brush, setting->getProperty(MYPAINT_JSON).toByteArray());
 
     float ret = mypaint_brush_get_base_value(brush, curveOpt->currentSetting());
-    delete brush;
+
+    mypaint_brush_unref(brush);
     return ret;
 }
 

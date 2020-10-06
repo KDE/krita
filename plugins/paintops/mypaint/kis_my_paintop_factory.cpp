@@ -49,6 +49,9 @@ KisMyPaintOpFactory::KisMyPaintOpFactory()
 }
 
 KisMyPaintOpFactory::~KisMyPaintOpFactory() {
+
+    delete m_d->brushServer;
+    delete m_d;
 }
 
 KisPaintOp* KisMyPaintOpFactory::createOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP node, KisImageSP image) {
@@ -123,6 +126,7 @@ void KisMyPaintOpFactory::processAfterLoading() {
 
         paintOpServer->addResource(preset, false);
     }
+
 }
 
 #include "kis_my_paintop_factory.moc"

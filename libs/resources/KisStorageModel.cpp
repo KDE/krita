@@ -299,13 +299,9 @@ QVariant KisStorageModel::headerData(int section, Qt::Orientation orientation, i
 
 void KisStorageModel::addStorage(const QString &location)
 {
-    qDebug() << "before" << d->storages << rowCount();
-
     beginInsertRows(QModelIndex(), rowCount(), rowCount());
     d->storages.append(location);
     endInsertRows();
-
-    qDebug() << "after" << d->storages << rowCount();
 }
 
 void KisStorageModel::removeStorage(const QString &location)

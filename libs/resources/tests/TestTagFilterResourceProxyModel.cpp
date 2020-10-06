@@ -188,10 +188,41 @@ void TestTagFilterResourceProxyModel::testFilterByString()
     QCOMPARE(proxyModel.rowCount(), 1);
 }
 
-void TestTagFilterResourceProxyModel::testDataWhenSwitchingBetweenTagAllAllUntagged()
+void TestTagFilterResourceProxyModel::testResourceForIndex()
 {
     KisResourceModel *resourceModel = KisResourceModelProvider::resourceModel(ResourceType::PaintOpPresets);
     KisTagModel *tagModel = KisResourceModelProvider::tagModel(ResourceType::PaintOpPresets);
+    KisTagFilterResourceProxyModel proxyModel(resourceType);
+
+    KoResourceSP resource = resourceModel->resourceForName("test2.kpp");
+    QVERIFY(resource);
+
+    QModelIndex idx = proxyModel.indexForResource(resource);
+    QVERIFY(idx.isValid());
+
+    resource = proxyModel.resourceForIndex(idx);
+    QVERIFY(resource);
+
+    KisTagSP tag = tagModel->tagForIndex(tagModel->index(2, 0));
+    QVERIFY(tag);
+
+    int rowCount = proxyModel.rowCount();
+
+    proxyModel.setTagFilter(tag);
+
+    QVERIFY(rowCount > proxyModel.rowCount());
+    QVERIFY(proxyModel.rowCount() > 0);
+
+    idx = proxyModel.index(0, 0);
+    KoResourceSP resource2 = proxyModel.resourceForIndex(idx);
+
+    QVERIFY(resource2);
+
+}
+
+void TestTagFilterResourceProxyModel::testDataWhenSwitchingBetweenTagAllAllUntagged()
+{
+    KisResourceModel *resourceModel = KisResourceModelProvider::resourceModel(ResourceType::PaintOpPresets);
     KisTagFilterResourceProxyModel proxyModel(resourceType);
 
     KoResourceSP resource = resourceModel->resourceForName("test2.kpp");

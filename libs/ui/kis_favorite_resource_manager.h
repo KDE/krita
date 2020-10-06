@@ -97,6 +97,9 @@ public Q_SLOTS:
 
     void slotSetBGColor(const KoColor c);
 
+    /** Clears the color history shown in the popup palette. */
+    void slotClearHistory();
+
 private Q_SLOTS:
     void updateFavoritePresets();
     void configChanged();

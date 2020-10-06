@@ -660,6 +660,5 @@ bool KisTagModel::lessThan(const QModelIndex &source_left, const QModelIndex &so
     QString nameLeft = sourceModel()->data(source_left, Qt::UserRole + KisAllTagsModel::Name).toString();
     QString nameRight = sourceModel()->data(source_right, Qt::UserRole + KisAllTagsModel::Name).toString();
     return nameLeft < nameRight;
-
 }
 

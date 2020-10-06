@@ -50,7 +50,9 @@ public:
 };
 
 
-class KRITARESOURCES_EXPORT KisAllTagsModel : public QAbstractTableModel, public KisAbstractTagModel
+class KRITARESOURCES_EXPORT KisAllTagsModel
+        : public QAbstractTableModel
+        , public KisAbstractTagModel
 {
     Q_OBJECT
 
@@ -114,7 +116,9 @@ private:
 
 };
 
-class KRITARESOURCES_EXPORT KisTagModel : public QSortFilterProxyModel, KisAbstractTagModel
+class KRITARESOURCES_EXPORT KisTagModel
+        : public QSortFilterProxyModel
+        , public KisAbstractTagModel
 {
 
     Q_OBJECT

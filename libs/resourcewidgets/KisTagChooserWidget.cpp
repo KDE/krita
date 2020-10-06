@@ -57,7 +57,10 @@ KisTagChooserWidget::KisTagChooserWidget(KisTagModel *model, QWidget* parent)
 
     d->comboBox->setToolTip(i18n("Tag"));
     d->comboBox->setSizePolicy(QSizePolicy::MinimumExpanding , QSizePolicy::Fixed);
+    d->comboBox->setInsertPolicy(QComboBox::InsertAlphabetically);
+    model->sort(KisAllTagsModel::Name);
     d->comboBox->setModel(model);
+
 
     d->model = model;
 

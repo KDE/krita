@@ -218,7 +218,11 @@ void KisTextureProperties::fillProperties(const KisPropertiesConfigurationSP set
         return;
     }
 
-    m_maskInfo = toQShared(new KisTextureMaskInfo(m_levelOfDetail));
+    m_texturingMode = (TexturingMode)setting->getInt("Texture/Pattern/TexturingMode", MULTIPLY);
+
+    bool preserveAlpha = m_texturingMode == LIGHTNESS || m_texturingMode == GRADIENT;
+
+    m_maskInfo = toQShared(new KisTextureMaskInfo(m_levelOfDetail, preserveAlpha));
     if (!m_maskInfo->fillProperties(setting)) {
         warnKrita << "WARNING: Couldn't load the pattern for a stroke";
         m_enabled = false;
@@ -230,7 +234,6 @@ void KisTextureProperties::fillProperties(const KisPropertiesConfigurationSP set
     m_enabled = setting->getBool("Texture/Pattern/Enabled", false);
     m_offsetX = setting->getInt("Texture/Pattern/OffsetX");
     m_offsetY = setting->getInt("Texture/Pattern/OffsetY");
-    m_texturingMode = (TexturingMode) setting->getInt("Texture/Pattern/TexturingMode", MULTIPLY);
 
     m_strengthOption.readOptionSetting(setting);
     m_strengthOption.resetAllSensors();
@@ -282,7 +285,7 @@ void KisTextureProperties::applyGradient(KisFixedPaintDeviceSP dab, const QPoint
 
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_gradient && m_gradient->valid());
 
-    KisPaintDeviceSP fillDevice = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
+    KisPaintDeviceSP fillDevice = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
     QRect rect = dab->bounds();
 
     KisPaintDeviceSP mask = m_maskInfo->mask();
@@ -313,10 +316,12 @@ void KisTextureProperties::applyGradient(KisFixedPaintDeviceSP dab, const QPoint
     for (int row = 0; row < rect.height(); ++row) {
         for (int col = 0; col < rect.width(); ++col) {
 
-            qreal gradientvalue = qreal(*iter->oldRawData()) / 255.0;
+            const QRgb* maskQRgb = reinterpret_cast<const QRgb*>(iter->oldRawData());
+            qreal gradientvalue = qreal(qGray(*maskQRgb))/255.0;//qreal(*iter->oldRawData()) / 255.0;
             KoColor paintcolor;
             paintcolor.setColor(m_cachedGradient.cachedAt(gradientvalue), dab->colorSpace());
-            paintcolor.setOpacity(qMin(paintcolor.opacityF(), dab->colorSpace()->opacityF(dabData)));
+            qreal paintOpacity = paintcolor.opacityF() * (qreal(qAlpha(*maskQRgb)) / 255.0);
+            paintcolor.setOpacity(qMin(paintOpacity, dab->colorSpace()->opacityF(dabData)));
             colors[0] = paintcolor.data();
             KoColor dabColor(dabData, dab->colorSpace());
             colors[1] = dabColor.data();

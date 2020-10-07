@@ -36,8 +36,9 @@
 /**********************************************************************/
 
 
-KisTextureMaskInfo::KisTextureMaskInfo(int levelOfDetail)
-    : m_levelOfDetail(levelOfDetail)
+KisTextureMaskInfo::KisTextureMaskInfo(int levelOfDetail, bool preserveAlpha)
+    : m_levelOfDetail(levelOfDetail),
+      m_preserveAlpha(preserveAlpha)
 {
 }
 
@@ -51,7 +52,8 @@ KisTextureMaskInfo::KisTextureMaskInfo(const KisTextureMaskInfo &rhs)
       m_invert(rhs.m_invert),
       m_cutoffLeft(rhs.m_cutoffLeft),
       m_cutoffRight(rhs.m_cutoffRight),
-      m_cutoffPolicy(rhs.m_cutoffPolicy)
+      m_cutoffPolicy(rhs.m_cutoffPolicy),
+      m_preserveAlpha(rhs.m_preserveAlpha)
 {
 }
 
@@ -73,7 +75,8 @@ bool operator==(const KisTextureMaskInfo &lhs, const KisTextureMaskInfo &rhs) {
             lhs.m_invert == rhs.m_invert &&
             lhs.m_cutoffLeft == rhs.m_cutoffLeft &&
             lhs.m_cutoffRight == rhs.m_cutoffRight &&
-            lhs.m_cutoffPolicy == rhs.m_cutoffPolicy;
+            lhs.m_cutoffPolicy == rhs.m_cutoffPolicy &&
+            lhs.m_preserveAlpha == rhs.m_preserveAlpha;
 }
 
 KisTextureMaskInfo &KisTextureMaskInfo::operator=(const KisTextureMaskInfo &rhs)
@@ -88,6 +91,7 @@ KisTextureMaskInfo &KisTextureMaskInfo::operator=(const KisTextureMaskInfo &rhs)
     m_cutoffLeft = rhs.m_cutoffLeft;
     m_cutoffRight = rhs.m_cutoffRight;
     m_cutoffPolicy = rhs.m_cutoffPolicy;
+    m_preserveAlpha = rhs.m_preserveAlpha;
 
     return *this;
 }
@@ -139,9 +143,9 @@ void KisTextureMaskInfo::recalculateMask()
     if (!m_pattern) return;
 
     const KoColorSpace* cs;
-    bool hasAlpha = m_pattern->hasAlpha();
+    const bool useAlpha = m_pattern->hasAlpha() && m_preserveAlpha;
 
-    if (hasAlpha) {
+    if (useAlpha) {
         cs = KoColorSpaceRegistry::instance()->rgb8();
     } else {
         cs = KoColorSpaceRegistry::instance()->alpha8();
@@ -173,6 +177,8 @@ void KisTextureMaskInfo::recalculateMask()
     QRgb* pixel = reinterpret_cast<QRgb*>(mask.bits());
     const int width = mask.width();
     const int height = mask.height();
+
+    KisHLineIteratorSP iter = m_mask->createHLineIteratorNG(0, 0, width);
 
     for (int row = 0; row < height; ++row) {
         for (int col = 0; col < width; ++col) {
@@ -212,23 +218,31 @@ void KisTextureMaskInfo::recalculateMask()
             if (m_cutoffPolicy == 1 && (neutralAdjustedValue < (m_cutoffLeft / 255.0) || neutralAdjustedValue >(m_cutoffRight / 255.0))) {
                 // mask out the dab if it's outside the pattern's cuttoff points
                 alpha = OPACITY_TRANSPARENT_F;
-                if (!hasAlpha) {
+                if (!useAlpha) {
                     neutralAdjustedValue = alpha;
                 }
             } else if (m_cutoffPolicy == 2 && (neutralAdjustedValue < (m_cutoffLeft / 255.0) || neutralAdjustedValue >(m_cutoffRight / 255.0))) {
                 alpha = OPACITY_OPAQUE_F;
-                if (!hasAlpha) {
+                if (!useAlpha) {
                     neutralAdjustedValue = alpha;
                 }
             }
 
-            int finalValue = qRound(neutralAdjustedValue * 255.0);
-            pixel[row * width + col] = QColor(finalValue, finalValue, finalValue, qRound(alpha * 255.0)).rgba();
-
+            if (useAlpha) {
+                int finalValue = qRound(neutralAdjustedValue * 255.0);
+                pixel[row * width + col] = QColor(finalValue, finalValue, finalValue, qRound(alpha * 255.0)).rgba();
+            } else {
+                cs->setOpacity(iter->rawData(), neutralAdjustedValue, 1);
+                iter->nextPixel();
+            }
+        }
+        if (!useAlpha) {
+            iter->nextRow();
         }
     }
-
-    m_mask->convertFromQImage(mask, 0);
+    if (useAlpha) {
+        m_mask->convertFromQImage(mask, 0);
+    }
     m_maskBounds = QRect(0, 0, width, height);
 }
 

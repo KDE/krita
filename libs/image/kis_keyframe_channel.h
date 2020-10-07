@@ -191,8 +191,6 @@ private:
     virtual QRect affectedRect(int time) const = 0;
     virtual QPair<int, KisKeyframeSP> loadKeyframe(const QDomElement &keyframeNode) = 0;
     virtual void saveKeyframe(KisKeyframeSP keyframe, QDomElement keyframeElement, const QString &layerFilename) = 0;
-    void bindChannelToAnimationInterface(KisImageWSP image);
-    void unbindChannelToAnimationInterface(KisImageWSP image);
 };
 
 #endif // KIS_KEYFRAME_CHANNEL_H

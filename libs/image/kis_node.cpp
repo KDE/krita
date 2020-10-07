@@ -374,6 +374,10 @@ void KisNode::addKeyframeChannel(KisKeyframeChannel *channel)
 {
     channel->setNode(this);
     KisBaseNode::addKeyframeChannel(channel);
+
+    if (m_d->graphListener) {
+        m_d->graphListener->keyframeChannelHasBeenAdded(this, channel);
+    }
 }
 
 KisNodeSP KisNode::firstChild() const

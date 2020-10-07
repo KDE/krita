@@ -61,6 +61,7 @@
 #include "kis_update_scheduler.h"
 #include "kis_image_signal_router.h"
 #include "kis_image_animation_interface.h"
+#include "kis_keyframe_channel.h"
 #include "kis_stroke_strategy.h"
 #include "kis_simple_stroke_strategy.h"
 #include "kis_image_barrier_locker.h"
@@ -503,6 +504,13 @@ void KisImage::nodeHasBeenAdded(KisNode *parent, int index)
 {
     KisNodeGraphListener::nodeHasBeenAdded(parent, index);
 
+    KisLayerUtils::recursiveApplyNodes(KisSharedPtr<KisNode>(parent), [this](KisNodeSP node){
+       QMap<QString, KisKeyframeChannel*> chans = node->keyframeChannels();
+       Q_FOREACH(KisKeyframeChannel* chan, chans.values()) {
+           this->keyframeChannelHasBeenAdded(node.data(), chan);
+       }
+    });
+
     SANITY_CHECK_LOCKED("nodeHasBeenAdded");
     m_d->signalRouter.emitNodeHasBeenAdded(parent, index);
 }
@@ -515,6 +523,13 @@ void KisImage::aboutToRemoveANode(KisNode *parent, int index)
 
         emit sigInternalStopIsolatedModeRequested();
     }
+
+    KisLayerUtils::recursiveApplyNodes(KisSharedPtr<KisNode>(parent), [this](KisNodeSP node){
+       QMap<QString, KisKeyframeChannel*> chans = node->keyframeChannels();
+       Q_FOREACH(KisKeyframeChannel* chan, chans.values()) {
+           this->keyframeChannelAboutToBeRemoved(node.data(), chan);
+       }
+    });
 
     KisNodeGraphListener::aboutToRemoveANode(parent, index);
 
@@ -2260,6 +2275,28 @@ void KisImage::requestTimeSwitch(int time)
 KisNode *KisImage::graphOverlayNode() const
 {
     return m_d->overlaySelectionMask.data();
+}
+
+void KisImage::keyframeChannelHasBeenAdded(KisNode *node, KisKeyframeChannel *channel)
+{
+    Q_UNUSED(node);
+
+    channel->connect(channel, SIGNAL(sigAddedKeyframe(const KisKeyframeChannel*, int)), m_d->animationInterface, SIGNAL(sigKeyframeAdded(const KisKeyframeChannel*, int)), Qt::UniqueConnection);
+    channel->connect(channel, SIGNAL(sigRemovingKeyframe(const KisKeyframeChannel*,int)), m_d->animationInterface, SIGNAL(sigKeyframeRemoved(const KisKeyframeChannel*, int)), Qt::UniqueConnection);
+    channel->connect(channel, SIGNAL(sigMovedKeyframe(const KisKeyframeChannel*,int,int)), m_d->animationInterface, SIGNAL(sigKeyframeMoved(const KisKeyframeChannel*, int, int)), Qt::UniqueConnection);
+
+    Q_FOREACH( const int& keyTime, channel->allKeyframeTimes() ) {
+        m_d->animationInterface->sigKeyframeAdded(channel, keyTime);
+    }
+}
+
+void KisImage::keyframeChannelAboutToBeRemoved(KisNode *node, KisKeyframeChannel *channel)
+{
+    Q_UNUSED(node);
+
+    channel->disconnect(channel, SIGNAL(sigAddedKeyframe(const KisKeyframeChannel*, int)), m_d->animationInterface, SIGNAL(sigKeyframeAdded(const KisKeyframeChannel*, int)));
+    channel->disconnect(channel, SIGNAL(sigRemovingKeyframe(const KisKeyframeChannel*, int)), m_d->animationInterface, SIGNAL(sigKeyframeRemoved(const KisKeyframeChannel*, int)));
+    channel->disconnect(channel, SIGNAL(sigMovedKeyframe(const KisKeyframeChannel*, int, int)), m_d->animationInterface, SIGNAL(sigKeyframeMoved(const KisKeyframeChannel*,int,int)));
 }
 
 QList<KisLayerCompositionSP> KisImage::compositions()

@@ -107,7 +107,7 @@ KisBaseNode::KisBaseNode(const KisBaseNode & rhs)
 
                 KisScalarKeyframeChannel* channelNew = new KisScalarKeyframeChannel(*pchannel, nullptr);
                 KIS_ASSERT(channelNew);
-                m_d->keyframeChannels.insert(channelNew->id(), channelNew);
+                addKeyframeChannel(channelNew);
 
                 if (KoID(key) == KisKeyframeChannel::Opacity) {
                     m_d->opacityChannel.reset(channelNew);

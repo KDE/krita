@@ -106,7 +106,7 @@ KisPaintLayer::KisPaintLayer(const KisPaintLayer& rhs)
     } else {
         init(new KisPaintDevice(*rhs.m_d->paintDevice.data(), KritaUtils::CopyAllFrames), rhs.m_d->paintChannelFlags);
 
-        m_d->contentChannel = m_d->paintDevice->keyframeChannel();
+        m_d->contentChannel = new KisRasterKeyframeChannel( *m_d->paintDevice->keyframeChannel(), this, m_d->paintDevice );
         addKeyframeChannel(m_d->contentChannel);
 
         m_d->contentChannel->setOnionSkinsEnabled(rhs.onionSkinEnabled());

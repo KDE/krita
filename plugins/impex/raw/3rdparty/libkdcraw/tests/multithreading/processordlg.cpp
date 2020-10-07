@@ -83,7 +83,7 @@ public:
 };
 
 ProcessorDlg::ProcessorDlg(const QList<QUrl>& list)
-    : QDialog(0), d(new Private)
+    : QDialog(qApp->activeWindow()), d(new Private)
 {
     setModal(false);
     setWindowTitle(i18n("Convert RAW files To PNG"));

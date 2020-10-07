@@ -97,7 +97,7 @@ KisImportExportErrorCode KisHeightMapImport::convert(KisDocument *document, QIOD
     if (!batchMode()) {
         QApplication::restoreOverrideCursor();
 
-        KoDialog* kdb = new KoDialog(0);
+        KoDialog* kdb = new KoDialog(qApp->activeWindow());
         kdb->setWindowTitle(i18n("Heightmap Import Options"));
         kdb->setButtons(KoDialog::Ok | KoDialog::Cancel);
 

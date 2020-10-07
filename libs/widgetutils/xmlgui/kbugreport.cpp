@@ -37,6 +37,9 @@
 #include <QDebug>
 #include <QTextEdit>
 #include <QDesktopServices>
+#include <QStandardPaths>
+#include <QClipboard>
+#include <QGuiApplication>
 
 #include <kaboutdata.h>
 #include <kconfig.h>
@@ -162,12 +165,6 @@ KBugReport::KBugReport(const KAboutData &aboutData, QWidget *_parent)
     tmpLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);
     glay->addWidget(tmpLabel, row, 1, 1, 2);
 
-    tmpLabel = new QLabel(i18n("Compiler:"), this);
-    glay->addWidget(tmpLabel, ++row, 0);
-    tmpLabel = new QLabel(QString::fromLatin1(XMLGUI_COMPILER_VERSION), this);
-    tmpLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);
-    glay->addWidget(tmpLabel, row, 1, 1, 2);
-
     // Point to the web form
 
     lay->addSpacing(10);
@@ -175,13 +172,51 @@ KBugReport::KBugReport(const KAboutData &aboutData, QWidget *_parent)
                         "<p>Please read <b><a href=\"https://docs.krita.org/en/untranslatable_pages/reporting_bugs.html\">this guide</a></b> for reporting bugs first!</p>"
                         "<p>To submit a bug report, click on the button below. This will open a web browser "
                         "window on <a href=\"https://bugs.kde.org\">https://bugs.kde.org</a> where you will find "
-                        "a form to fill in. The information displayed above will be transferred to that server.</p></qt>");
+                        "a form to fill in. </p>"
+                        "<p><b>Please paste the Additional Information contents into the bug report!</b></p>"
+                        "</qt>");
     QLabel *label = new QLabel(text, this);
     label->setOpenExternalLinks(true);
     label->setTextInteractionFlags(Qt::LinksAccessibleByMouse | Qt::LinksAccessibleByKeyboard);
     label->setWordWrap(true);
     lay->addWidget(label);
     lay->addSpacing(10);
+
+    tmpLabel = new QLabel(i18n("Additional Information. Please add this to the bug report!"), this);
+    lay->addWidget(label);
+
+    QByteArray additionalInformation;
+    QFile sysinfo(QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/krita-sysinfo.log");
+    if (sysinfo.exists()) {
+        sysinfo.open(QFile::ReadOnly);
+        additionalInformation += sysinfo.readAll();
+        sysinfo.close();
+    }
+
+    additionalInformation += "\n---------------------\n";
+
+    QFile log(QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/krita.log");
+    if (log.exists()) {
+        log.open(QFile::ReadOnly);
+        additionalInformation += log.readAll();
+        log.close();
+    }
+
+    additionalInformation += "\n---------------------\n";
+
+    QFile crashes(QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/krita-crash.log");
+    if (crashes.exists()) {
+        crashes.open(QFile::ReadOnly);
+        additionalInformation += crashes.readAll();
+        crashes.close();
+    }
+
+    QTextEdit *buginfo = new QTextEdit(this);
+    buginfo->setText(QString::fromUtf8(additionalInformation));
+    lay->addWidget(buginfo);
+
+    QClipboard *clipboard = QGuiApplication::clipboard();
+    clipboard->setText(QString::fromUtf8(additionalInformation));
 
     d->appcombo->setFocus();
 

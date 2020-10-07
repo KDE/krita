@@ -23,6 +23,7 @@
 #ifndef KOLCMSCOLORSPACE_H_
 #define KOLCMSCOLORSPACE_H_
 
+#include <array>
 #include <kis_lockless_stack.h>
 #include <KoColorSpaceAbstract.h>
 

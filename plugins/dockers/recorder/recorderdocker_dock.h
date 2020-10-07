@@ -19,57 +19,40 @@
 #ifndef _RECORDER_DOCK_H_
 #define _RECORDER_DOCK_H_
 
-#include "kis_idle_watcher.h"
-#include <KoCanvasObserverBase.h>
-#include <kis_canvas2.h>
 #include <QDockWidget>
-#include <QGridLayout>
-#include <QLabel>
-#include <QLineEdit>
-#include <QPointer>
-#include <QPushButton>
-#include <QSpacerItem>
-#include <QHash>
-
-class QVBoxLayout;
-class RecorderWidget;
-class EncoderQueue;
+#include <KoCanvasObserverBase.h>
 
 class RecorderDockerDock : public QDockWidget, public KoCanvasObserverBase
 {
     Q_OBJECT
 public:
     RecorderDockerDock();
+    ~RecorderDockerDock();
     QString observerName() override
     {
         return "RecorderDockerDock";
     }
-    void setCanvas(KoCanvasBase* canvas) override;
+    void setCanvas(KoCanvasBase *canvas) override;
     void unsetCanvas() override;
 
 private:
-    QGridLayout* m_layout;
-
-    QPointer<KisCanvas2> m_canvas;
-    QLabel* m_recordDirectoryLabel;
-    QLineEdit* m_recordDirectoryLineEdit;
-    QPushButton* m_recordDirectoryPushButton;
-    QLabel* m_imageNameLabel;
-    QLineEdit* m_imageNameLineEdit;
-    QPushButton* m_recordToggleButton;
-    QSpacerItem* m_spacer;
-    KisIdleWatcher m_imageIdleWatcher;
-    QMutex m_saveMutex;
-    QMutex m_eventMutex;
-    EncoderQueue* m_encoderQueue;
-
-    void enableRecord(bool& enabled, const QString& path);
+    Q_DISABLE_COPY(RecorderDockerDock)
+    class Private;
+    Private *const d;
 
 private Q_SLOTS:
-    void onRecordButtonToggled(bool enabled);
+    void onUseDocNameToggled(bool checked);
+    void onAutoRecordToggled(bool checked);
+    void onEditPrefixChanged();
+    void onCaptureIntervalChanged(int interval);
+    void onQualityChanged(int quality);
+    void onResolutionChanged(int resolution);
+    void onRecordButtonToggled(bool checked);
     void onSelectRecordFolderButtonClicked();
-    void startUpdateCanvasProjection();
-    void generateThumbnail();
+
+    void onWriterStarted();
+    void onWriterFinished();
+    void onWriterPausedChanged(bool paused);
 };
 
 #endif

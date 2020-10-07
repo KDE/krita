@@ -16,127 +16,189 @@
  */
 
 #include "recorderdocker_dock.h"
+#include "recorder_config.h"
+#include "recorder_writer.h"
+#include "ui_recorderdocker.h"
 
 #include <klocalizedstring.h>
-#include <QLabel>
-#include <QStatusBar>
-#include <QVBoxLayout>
-
-#include "encoder_queue.h"
-#include "kis_canvas2.h"
-#include "kis_image.h"
-#include "kis_paint_device.h"
-#include "kis_signal_compressor.h"
-#include <KisViewManager.h>
-#include <KoColorSpaceRegistry.h>
-#include <kactioncollection.h>
+#include <kis_canvas2.h>
 #include <kis_icon_utils.h>
-#include <kis_zoom_manager.h>
-#include <klocalizedstring.h>
-#include <QDir>
+#include <kis_statusbar.h>
+#include <KisDocument.h>
+#include <KisViewManager.h>
+
+#include <QFileInfo>
+#include <QPointer>
 #include <QFileDialog>
-#include <QRegExp>
-#include <QRegExpValidator>
-#include <QRegularExpression>
-#include <QRegularExpressionMatch>
-#include <QStringBuilder>
-#include <QtConcurrent>
+
+
+class RecorderDockerDock::Private {
+public:
+    RecorderDockerDock *const q;
+    Ui::RecorderDocker *const ui;
+    QPointer<KisCanvas2> canvas;
+    RecorderWriter writer;
+    QString defaultPrefix;
+    QLabel* statusBarLabel;
+
+    Private(RecorderDockerDock *q_ptr)
+        : q(q_ptr)
+        , ui(new Ui::RecorderDocker())
+        , statusBarLabel(new QLabel())
+    {
+        updateRecIndicator(false);
+    }
+
+    void loadSettings()
+    {
+        RecorderConfig config(true);
+        ui->editDirectory->setText(config.snapshotDirectory());
+        defaultPrefix = config.defaultPrefix();
+        ui->checkBoxUseDocName->setChecked(config.useDocumentName());
+        ui->spinCaptureInterval->setValue(config.captureInterval());
+        ui->spinQuality->setValue(config.quality());
+        ui->comboResolution->setCurrentIndex(config.resolution());
+        ui->checkBoxAutoRecord->setChecked(config.recordAutomatically());
+    }
+
+    void updatePrefix()
+    {
+        bool useDocumentPrefix = ui->checkBoxUseDocName->isChecked();
+
+        const QString &prefix = (useDocumentPrefix && canvas)
+            ? canvas->imageView()->document()->uniqueID()
+            : defaultPrefix;
+
+        ui->editPrefix->setText(prefix);
+        ui->editPrefix->setEnabled(!useDocumentPrefix);
+    }
+
+    void updateComboResolution(quint32 width, quint32 height)
+    {
+        const QList<QPair<QString, int>> resolutions = {
+            { i18n("Original"), 1 },
+            { i18n("Half"), 2 }
+        };
+
+        QStringList items;
+        for (const QPair<QString, int> &item : resolutions) {
+            items += item.first % QString(" (%1x%2)").arg(width / item.second).arg(height / item.second);
+        }
+        QSignalBlocker blocker(ui->comboResolution);
+        const int currentIndex = ui->comboResolution->currentIndex();
+        ui->comboResolution->clear();
+        ui->comboResolution->addItems(items);
+        ui->comboResolution->setCurrentIndex(currentIndex);
+    }
+
+    void updateRecordStatus(bool isRecording)
+    {
+        QSignalBlocker blocker(ui->buttonRecordToggle);
+        ui->buttonRecordToggle->setChecked(isRecording);
+        ui->buttonRecordToggle->setIcon(KisIconUtils::loadIcon(isRecording ? "media-playback-stop" : "media-record"));
+        ui->buttonRecordToggle->setText(i18n(isRecording ? "Stop" : "Record"));
+        ui->buttonRecordToggle->setEnabled(true);
+
+        ui->widgetSettings->setEnabled(!isRecording);
+
+        statusBarLabel->setVisible(isRecording);
+
+        if (!canvas)
+            return;
+
+        KisStatusBar *statusBar = canvas->viewManager()->statusBar();
+        if (isRecording) {
+            statusBar->addExtraWidget(statusBarLabel);
+        } else {
+            statusBar->removeExtraWidget(statusBarLabel);
+        }
+    }
+
+    void updateRecIndicator(bool paused)
+    {
+        // don't remove empty <font></font> tag else label will jump a few pixels around
+        statusBarLabel->setText(paused ? "<font>● REC</font>" : "<font color='#da4453'>●</font><font> REC</font>");
+        statusBarLabel->setToolTip(i18n(paused ? "Recorder is paused" : "Recorder is active"));
+    }
+};
 
 RecorderDockerDock::RecorderDockerDock()
     : QDockWidget(i18n("Recorder"))
-    , m_canvas(nullptr)
-    , m_imageIdleWatcher(1000)
-    , m_encoderQueue(nullptr)
+    , d(new Private(this))
 {
     QWidget* page = new QWidget(this);
-    m_layout = new QGridLayout(page);
-    m_recordDirectoryLabel = new QLabel(this);
-    m_recordDirectoryLabel->setText("Directory:");
+    d->ui->setupUi(page);
 
-    m_layout->addWidget(m_recordDirectoryLabel, 0, 0, 1, 2);
+    QValidator* validator = new QRegExpValidator(QRegExp("[0-9a-zA-z_]+"), this);
+    d->ui->editPrefix->setValidator(validator);
+    d->ui->buttonBrowse->setIcon(KisIconUtils::loadIcon("folder"));
+    d->ui->buttonRecordToggle->setIcon(KisIconUtils::loadIcon("media-record"));
+    d->ui->spinQuality->setSuffix("%");
 
-    m_recordDirectoryLineEdit = new QLineEdit(this);
-    m_recordDirectoryLineEdit->setText(QDir::homePath());
-    m_recordDirectoryLineEdit->setReadOnly(true);
-    m_layout->addWidget(m_recordDirectoryLineEdit, 1, 0);
+    d->loadSettings();
 
-    m_recordDirectoryPushButton = new QPushButton(this);
-    m_recordDirectoryPushButton->setIcon(KisIconUtils::loadIcon("folder"));
-    m_recordDirectoryPushButton->setToolTip(i18n("Record Video"));
+    connect(d->ui->buttonBrowse, SIGNAL(clicked()), this, SLOT(onSelectRecordFolderButtonClicked()));
+    connect(d->ui->checkBoxUseDocName, SIGNAL(toggled(bool)), this, SLOT(onUseDocNameToggled(bool)));
+    connect(d->ui->editPrefix, SIGNAL(editingFinished()), this, SLOT(onEditPrefixChanged()));
+    connect(d->ui->spinCaptureInterval, SIGNAL(valueChanged(int)), this, SLOT(onCaptureIntervalChanged(int)));
+    connect(d->ui->spinQuality, SIGNAL(valueChanged(int)), this, SLOT(onQualityChanged(int)));
+    connect(d->ui->comboResolution, SIGNAL(currentIndexChanged(int)), this, SLOT(onResolutionChanged(int)));
+    connect(d->ui->checkBoxAutoRecord, SIGNAL(toggled(bool)), this, SLOT(onAutoRecordToggled(bool)));
+    connect(d->ui->buttonRecordToggle, SIGNAL(toggled(bool)), this, SLOT(onRecordButtonToggled(bool)));
 
-    m_layout->addWidget(m_recordDirectoryPushButton, 1, 1);
+    connect(&d->writer, SIGNAL(started()), this, SLOT(onWriterStarted()));
+    connect(&d->writer, SIGNAL(finished()), this, SLOT(onWriterFinished()));
+    connect(&d->writer, SIGNAL(pausedChanged(bool)), this, SLOT(onWriterPausedChanged(bool)));
 
-    m_imageNameLabel = new QLabel(this);
-    m_imageNameLabel->setText("Video Name:");
-
-    m_layout->addWidget(m_imageNameLabel, 2, 0, 1, 2);
-
-    m_imageNameLineEdit = new QLineEdit(this);
-    m_imageNameLineEdit->setText("image");
-
-    QRegExp rx("[0-9a-zA-z_]+");
-    QValidator* validator = new QRegExpValidator(rx, this);
-    m_imageNameLineEdit->setValidator(validator);
-
-    m_layout->addWidget(m_imageNameLineEdit, 3, 0);
-
-    m_recordToggleButton = new QPushButton(this);
-    m_recordToggleButton->setCheckable(true);
-    m_recordToggleButton->setIcon(KisIconUtils::loadIcon("media-record"));
-    m_recordToggleButton->setToolTip(i18n("Record Video"));
-    m_layout->addWidget(m_recordToggleButton, 3, 1);
-
-
-    m_spacer = new QSpacerItem(1, 1, QSizePolicy::Minimum, QSizePolicy::Expanding);
-    m_layout->addItem(m_spacer, 6, 0, 1, 2);
-    connect(m_recordDirectoryPushButton, SIGNAL(clicked()), this, SLOT(onSelectRecordFolderButtonClicked()));
-    connect(m_recordToggleButton, SIGNAL(toggled(bool)), this, SLOT(onRecordButtonToggled(bool)));
     setWidget(page);
+}
+
+RecorderDockerDock::~RecorderDockerDock()
+{
+    delete d;
 }
 
 void RecorderDockerDock::setCanvas(KoCanvasBase* canvas)
 {
-    if (m_canvas == canvas)
-        return;
-
     setEnabled(canvas != nullptr);
 
-    if (m_canvas) {
-        m_canvas->disconnectCanvasObserver(this);
-        m_canvas->image()->disconnect(this);
+    if (d->canvas == canvas)
+        return;
+
+    d->canvas = dynamic_cast<KisCanvas2*>(canvas);
+    d->writer.setCanvas(d->canvas);
+
+    if (d->canvas) {
+        KisDocument *document = d->canvas->imageView()->document();
+        d->updatePrefix();
+        if (d->ui->checkBoxAutoRecord->isChecked()) {
+            d->ui->buttonRecordToggle->setChecked(true);
+        }
+        d->updateComboResolution(document->image()->width(), document->image()->height());
+
+qDebug() << "RecorderDockerDock setCanvas " << document->caption();
+        //    TODO: void titleModified(const QString &caption, bool isModified);
     }
-
-    m_canvas = dynamic_cast<KisCanvas2*>(canvas);
-
-    if (m_canvas) {
-        m_imageIdleWatcher.setTrackedImage(m_canvas->image());
-
-        connect(&m_imageIdleWatcher, &KisIdleWatcher::startedIdleMode, this, &RecorderDockerDock::generateThumbnail);
-        connect(m_canvas->image(), SIGNAL(sigSizeChanged(QPointF, QPointF)), SLOT(startUpdateCanvasProjection()));
-    }
-}
-
-void RecorderDockerDock::startUpdateCanvasProjection()
-{
-    m_imageIdleWatcher.startCountdown();
 }
 
 void RecorderDockerDock::unsetCanvas()
 {
+    d->updateRecordStatus(false);
+    d->updatePrefix();
     setEnabled(false);
-    m_canvas = nullptr;
+    d->writer.stop();
+    d->writer.setCanvas(nullptr);
+    d->canvas = nullptr;
 }
 
-void RecorderDockerDock::onRecordButtonToggled(bool enabled)
+void RecorderDockerDock::onRecordButtonToggled(bool checked)
 {
-    bool enabled2 = enabled;
-    enableRecord(enabled2, m_recordDirectoryLineEdit->text() % "/" % m_imageNameLineEdit->text());
+    d->ui->buttonRecordToggle->setEnabled(false);
 
-    if (enabled && !enabled2) {
-        disconnect(m_recordToggleButton, SIGNAL(toggle(bool)), this, SLOT(onRecordButtonToggled(bool)));
-        m_recordToggleButton->setChecked(false);
-
-        connect(m_recordToggleButton, SIGNAL(toggle(bool)), this, SLOT(onRecordButtonToggled(bool)));
+    if (checked) {
+        d->writer.start();
+    } else {
+        d->writer.stop();
     }
 }
 
@@ -144,47 +206,57 @@ void RecorderDockerDock::onSelectRecordFolderButtonClicked()
 {
     QFileDialog dialog(this);
     dialog.setFileMode(QFileDialog::DirectoryOnly);
-    QString folder = dialog.getExistingDirectory(this, tr("Select Output Folder"), m_recordDirectoryLineEdit->text(),
+    const QString &directory = dialog.getExistingDirectory(this, i18n("Select Output Folder"),
+                                                 d->ui->editDirectory->text(),
                                                  QFileDialog::ShowDirsOnly);
-    m_recordDirectoryLineEdit->setText(folder);
-}
-
-void RecorderDockerDock::enableRecord(bool& enabled, const QString& path)
-{
-    if (!m_encoderQueue)
-    {
-        m_encoderQueue = new EncoderQueue();
-    }
-
-    m_encoderQueue->setEnable(enabled,path,m_canvas);
-
-    if (enabled)
-    {
-        startUpdateCanvasProjection();
-    }
-    else
-    {
-        delete m_encoderQueue;
-        m_encoderQueue = nullptr;
+    if (!directory.isEmpty()) {
+        d->ui->editDirectory->setText(directory);
+        RecorderConfig(false).setSnapshotDirectory(directory);
     }
 }
 
-void RecorderDockerDock::generateThumbnail()
+void RecorderDockerDock::onUseDocNameToggled(bool checked)
 {
-    if (m_encoderQueue && m_encoderQueue->isRecording()) {
-        if (m_canvas && (m_encoderQueue->recordingCanvas() == m_canvas)) {
-            disconnect(&m_imageIdleWatcher, &KisIdleWatcher::startedIdleMode, this,
-                       &RecorderDockerDock::generateThumbnail);
-            if (m_encoderQueue) {
-                KisImageSP image = m_canvas->image();
-                image->barrierLock();
-                KisPaintDeviceSP dev = image->projection();
-                m_encoderQueue->pushFrame(dev, image->width(), image->height());
-                image->unlock();
-            }
+    d->updatePrefix();
+    RecorderConfig(false).setUseDocumentName(checked);
+}
 
-            connect(&m_imageIdleWatcher, &KisIdleWatcher::startedIdleMode, this,
-                    &RecorderDockerDock::generateThumbnail);
-        }
-    }
+void RecorderDockerDock::onAutoRecordToggled(bool checked)
+{
+    RecorderConfig(false).setRecordAutomatically(checked);
+}
+
+void RecorderDockerDock::onEditPrefixChanged()
+{
+    RecorderConfig(false).setDefaultPrefix(d->ui->editPrefix->text());
+}
+
+void RecorderDockerDock::onCaptureIntervalChanged(int interval)
+{
+    RecorderConfig(false).setCaptureInterval(interval);
+}
+
+void RecorderDockerDock::onQualityChanged(int quality)
+{
+    RecorderConfig(false).setQuality(quality);
+}
+
+void RecorderDockerDock::onResolutionChanged(int resolution)
+{
+    RecorderConfig(false).setResolution(resolution);
+}
+
+void RecorderDockerDock::onWriterStarted()
+{
+    d->updateRecordStatus(true);
+}
+
+void RecorderDockerDock::onWriterFinished()
+{
+    d->updateRecordStatus(false);
+}
+
+void RecorderDockerDock::onWriterPausedChanged(bool paused)
+{
+    d->updateRecIndicator(paused);
 }

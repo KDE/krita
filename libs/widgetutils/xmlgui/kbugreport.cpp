@@ -73,7 +73,7 @@ public:
     QString m_strVersion;
     QGroupBox *m_bgSeverity;
 
-    QComboBox *appcombo;
+    QLabel *lblApplicationName;
     QString lastError;
     QString appname;
     QString os;
@@ -122,24 +122,13 @@ KBugReport::KBugReport(const KAboutData &aboutData, QWidget *_parent)
     tmpLabel = new QLabel(i18n("Application: "), this);
     glay->addWidget(tmpLabel, row, 0);
     tmpLabel->setWhatsThis(qwtstr);
-    d->appcombo = new QComboBox(this);
-    d->appcombo->setWhatsThis(qwtstr);
+    d->lblApplicationName = new QLabel(this);
+    d->lblApplicationName->setWhatsThis(qwtstr);
 
-    QStringList packageList = QStringList() << "krita";
-    d->appcombo->addItems(packageList);
-    connect(d->appcombo, SIGNAL(activated(int)), SLOT(_k_appChanged(int)));
     d->appname = d->m_aboutData.productName();
-    glay->addWidget(d->appcombo, row, 1);
-    int index = 0;
-    for (; index < d->appcombo->count(); index++) {
-        if (d->appcombo->itemText(index) == d->appname) {
-            break;
-        }
-    }
-    if (index == d->appcombo->count()) { // not present
-        d->appcombo->addItem(d->appname);
-    }
-    d->appcombo->setCurrentIndex(index);
+    d->lblApplicationName->setText(d->appname);
+
+    glay->addWidget(d->lblApplicationName, row, 1);
 
     tmpLabel->setWhatsThis(qwtstr);
 
@@ -174,7 +163,7 @@ KBugReport::KBugReport(const KAboutData &aboutData, QWidget *_parent)
                         "<p>To submit a bug report, click on the button below. This will open a web browser "
                         "window on <a href=\"https://bugs.kde.org\">https://bugs.kde.org</a> where you will find "
                         "a form to fill in. </p>"
-                        "<p><b>Please paste the Additional Information contents into the bug report!</b></p>"
+                        "<p><b>Please paste the following information into the bug report!</b></p>"
                         "</qt>");
     QLabel *label = new QLabel(text, this);
     label->setOpenExternalLinks(true);
@@ -182,9 +171,6 @@ KBugReport::KBugReport(const KAboutData &aboutData, QWidget *_parent)
     label->setWordWrap(true);
     lay->addWidget(label);
     lay->addSpacing(10);
-
-    tmpLabel = new QLabel(i18n("Additional Information. Please add this to the bug report!"), this);
-    lay->addWidget(label);
 
     QByteArray additionalInformation;
     QFile sysinfo(QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/krita-sysinfo.log");
@@ -219,8 +205,6 @@ KBugReport::KBugReport(const KAboutData &aboutData, QWidget *_parent)
     QClipboard *clipboard = QGuiApplication::clipboard();
     clipboard->setText(QString::fromUtf8(additionalInformation));
 
-    d->appcombo->setFocus();
-
     d->_k_updateUrl();
 
     QPushButton *okButton = buttonBox->button(QDialogButtonBox::Ok);
@@ -242,7 +226,7 @@ void KBugReportPrivate::_k_updateUrl()
     query.addQueryItem(QStringLiteral("format"), QLatin1String("guided"));    // use the guided form
 
     // the string format is product/component, where component is optional
-    QStringList list = appcombo->currentText().split(QLatin1Char('/'));
+    QStringList list = QStringList() << appname;
     query.addQueryItem(QStringLiteral("product"), list[0]);
     if (list.size() == 2) {
         query.addQueryItem(QStringLiteral("component"), list[1]);

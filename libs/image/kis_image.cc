@@ -97,7 +97,7 @@
 #include "kis_layer_projection_plane.h"
 
 #include "kis_update_time_monitor.h"
-#include "tiles3/kis_lockless_stack.h"
+#include "kis_lockless_stack.h"
 
 #include <QtCore>
 

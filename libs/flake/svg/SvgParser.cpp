@@ -1562,6 +1562,15 @@ QList<KoShape*> SvgParser::parseSvg(const QDomElement &e, QSizeF *fragmentSize)
         gc->matrix = move * gc->matrix;
     }
 
+    /**
+     * In internal SVG coordinate systems pixles are linked to absolute
+     * values with a fixed ratio.
+     *
+     * See CSS specification:
+     * https://www.w3.org/TR/css-values-3/#absolute-lengths
+     */
+    gc->pixelsPerInch = 96.0;
+
     applyViewBoxTransform(e);
 
     QList<KoShape*> shapes;

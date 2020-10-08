@@ -141,7 +141,7 @@ void WGColorSelectorDock::slotConfigurationChanged()
                             int(KisVisualColorSelector::CompositeBackground));
     m_selector->setRenderMode(static_cast<KisVisualColorSelector::RenderMode>(renderMode));
     m_selector->selectorModel()->setRGBColorModel(static_cast<KisVisualColorModel::ColorModel>(cfg.readEntry("rgbColorModel", 0)));
-    KisColorSelectorConfiguration selectorCfg(cfg.readEntry<QString>("colorSelectorConfiguration", "3|0|6|0")); // triangle selector
+    KisColorSelectorConfiguration selectorCfg = cfg.colorSelectorConfiguration();
     m_selector->setConfiguration(&selectorCfg);
     m_shadeSelector->updateSettings();
     // Quick settings menu

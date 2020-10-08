@@ -31,6 +31,9 @@ public:
     bool quickSettingsEnabled() const;
     void setQuickSettingsEnabled(bool enabled);
 
+    KisColorSelectorConfiguration colorSelectorConfiguration() const;
+    void setColorSelectorConfiguration(const KisColorSelectorConfiguration &config);
+
     QVector<KisColorSelectorConfiguration> favoriteConfigurations() const;
     static QVector<KisColorSelectorConfiguration> defaultFavoriteConfigurations();
     void setFavoriteConfigurations(const QVector<KisColorSelectorConfiguration> &favoriteConfigs);
@@ -58,6 +61,7 @@ public:
         return m_cfg.readEntry(name, defaultValue);
     }
 
+    static const KisColorSelectorConfiguration defaultColorSelectorConfiguration;
     static const bool defaultQuickSettingsEnabled;
     static const bool defaultShadeSelectorUpdateOnExternalChanges;
     static const bool defaultShadeSelectorUpdateOnInteractionEnd;

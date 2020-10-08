@@ -50,6 +50,17 @@ void WGConfig::setQuickSettingsEnabled(bool enabled)
     m_cfg.writeEntry("quickSettingsMenuEnabled", enabled);
 }
 
+KisColorSelectorConfiguration WGConfig::colorSelectorConfiguration() const
+{
+    QString config = m_cfg.readEntry("colorSelectorConfiguration", QString());
+    return config.isEmpty() ? defaultColorSelectorConfiguration : KisColorSelectorConfiguration(config);
+}
+
+void WGConfig::setColorSelectorConfiguration(const KisColorSelectorConfiguration &config)
+{
+    m_cfg.writeEntry("colorSelectorConfiguration", config.toString());
+}
+
 QVector<KisColorSelectorConfiguration> WGConfig::favoriteConfigurations() const
 {
     QVector<KisColorSelectorConfiguration> favoriteConfigs;
@@ -167,6 +178,11 @@ void WGConfig::setShadeSelectorUpdateOnRightClick(bool enabled)
     m_cfg.writeEntry("shadeSelectorUpdateOnRightClick", enabled);
 }
 
+const KisColorSelectorConfiguration WGConfig::defaultColorSelectorConfiguration =
+        KisColorSelectorConfiguration(KisColorSelectorConfiguration::Triangle,
+                                      KisColorSelectorConfiguration::Ring,
+                                      KisColorSelectorConfiguration::SV,
+                                      KisColorSelectorConfiguration::H);
 const bool WGConfig::defaultQuickSettingsEnabled = true;
 const bool WGConfig::defaultShadeSelectorUpdateOnExternalChanges = true;
 const bool WGConfig::defaultShadeSelectorUpdateOnInteractionEnd = false;

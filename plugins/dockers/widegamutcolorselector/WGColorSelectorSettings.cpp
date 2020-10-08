@@ -69,7 +69,7 @@ void WGColorSelectorSettings::savePreferences() const
     WGConfig cfg(false);
     cfg.writeEntry("renderMode", m_ui->cmbSelectorRenderingMode->currentIndex());
     cfg.writeEntry("rgbColorModel", m_ui->cmbColorModel->currentIndex() +  KisVisualColorModel::HSV);
-    cfg.writeEntry("colorSelectorConfiguration", m_selectorConfigGrid->currentConfiguration().toString());
+    cfg.setColorSelectorConfiguration(m_selectorConfigGrid->currentConfiguration());
     cfg.setQuickSettingsEnabled(m_ui->grpQuickSettingsMenu->isChecked());
     cfg.setFavoriteConfigurations(m_favoriteConfigGrid->selectedConfigurations());
     // Shade Selector
@@ -83,7 +83,7 @@ void WGColorSelectorSettings::loadPreferences()
     WGConfig cfg;
     m_ui->cmbSelectorRenderingMode->setCurrentIndex(cfg.readEntry("renderMode", 1));
     m_ui->cmbColorModel->setCurrentIndex(cfg.readEntry("rgbColorModel", 2) - KisVisualColorModel::HSV);
-    KisColorSelectorConfiguration selectorCfg(cfg.readEntry<QString>("colorSelectorConfiguration", "3|0|6|0")); // triangle selector
+    KisColorSelectorConfiguration selectorCfg = cfg.colorSelectorConfiguration();
     m_selectorConfigGrid->setChecked(selectorCfg);
     m_ui->btnSelectorShape->setIcon(m_selectorConfigGrid->generateIcon(selectorCfg));
     m_ui->grpQuickSettingsMenu->setChecked(cfg.quickSettingsEnabled());

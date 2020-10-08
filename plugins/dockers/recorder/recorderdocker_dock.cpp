@@ -32,7 +32,8 @@
 #include <QFileDialog>
 
 
-class RecorderDockerDock::Private {
+class RecorderDockerDock::Private
+{
 public:
     RecorderDockerDock *const q;
     Ui::RecorderDocker *const ui;
@@ -40,11 +41,13 @@ public:
     RecorderWriter writer;
     QString defaultPrefix;
     QLabel* statusBarLabel;
+    bool isColorSpaceSupported;
 
     Private(RecorderDockerDock *q_ptr)
         : q(q_ptr)
         , ui(new Ui::RecorderDocker())
         , statusBarLabel(new QLabel())
+        , isColorSpaceSupported(false)
     {
         updateRecIndicator(false);
     }
@@ -66,8 +69,8 @@ public:
         bool useDocumentPrefix = ui->checkBoxUseDocName->isChecked();
 
         const QString &prefix = (useDocumentPrefix && canvas)
-            ? canvas->imageView()->document()->uniqueID()
-            : defaultPrefix;
+                                ? canvas->imageView()->document()->uniqueID()
+                                : defaultPrefix;
 
         ui->editPrefix->setText(prefix);
         ui->editPrefix->setEnabled(!useDocumentPrefix);
@@ -75,20 +78,26 @@ public:
 
     void updateComboResolution(quint32 width, quint32 height)
     {
-        const QList<QPair<QString, int>> resolutions = {
-            { i18n("Original"), 1 },
-            { i18n("Half"), 2 }
-        };
+        const QStringList titles = { i18n("Original"), i18n("Half"), i18n("Quarter") };
 
         QStringList items;
-        for (const QPair<QString, int> &item : resolutions) {
-            items += item.first % QString(" (%1x%2)").arg(width / item.second).arg(height / item.second);
+        for (int index = 0, len = titles.length(); index < len; ++index) {
+            int divider = 1 << index;
+            items += QString("%1 (%2x%3)").arg(titles[index]).arg(width / divider).arg(height / divider);
         }
         QSignalBlocker blocker(ui->comboResolution);
         const int currentIndex = ui->comboResolution->currentIndex();
         ui->comboResolution->clear();
         ui->comboResolution->addItems(items);
         ui->comboResolution->setCurrentIndex(currentIndex);
+    }
+
+    void validateColorSpace(const KoColorSpace *colorSpace)
+    {
+        isColorSpaceSupported = colorSpace->colorModelId().id() == "RGBA" &&
+                                colorSpace->colorDepthId().id() == "U8";
+        ui->labelUnsupportedColorSpace->setVisible(!isColorSpaceSupported);
+        ui->buttonRecordToggle->setEnabled(isColorSpaceSupported);
     }
 
     void updateRecordStatus(bool isRecording)
@@ -128,6 +137,7 @@ RecorderDockerDock::RecorderDockerDock()
 {
     QWidget* page = new QWidget(this);
     d->ui->setupUi(page);
+    d->ui->labelUnsupportedColorSpace->setVisible(false);
 
     QValidator* validator = new QRegExpValidator(QRegExp("[0-9a-zA-z_]+"), this);
     d->ui->editPrefix->setValidator(validator);
@@ -175,9 +185,7 @@ void RecorderDockerDock::setCanvas(KoCanvasBase* canvas)
             d->ui->buttonRecordToggle->setChecked(true);
         }
         d->updateComboResolution(document->image()->width(), document->image()->height());
-
-qDebug() << "RecorderDockerDock setCanvas " << document->caption();
-        //    TODO: void titleModified(const QString &caption, bool isModified);
+        d->validateColorSpace(d->canvas->image()->projection()->colorSpace());
     }
 }
 
@@ -207,8 +215,8 @@ void RecorderDockerDock::onSelectRecordFolderButtonClicked()
     QFileDialog dialog(this);
     dialog.setFileMode(QFileDialog::DirectoryOnly);
     const QString &directory = dialog.getExistingDirectory(this, i18n("Select Output Folder"),
-                                                 d->ui->editDirectory->text(),
-                                                 QFileDialog::ShowDirsOnly);
+                               d->ui->editDirectory->text(),
+                               QFileDialog::ShowDirsOnly);
     if (!directory.isEmpty()) {
         d->ui->editDirectory->setText(directory);
         RecorderConfig(false).setSnapshotDirectory(directory);

@@ -35,11 +35,6 @@ public:
     void setCanvas(KoCanvasBase *canvas) override;
     void unsetCanvas() override;
 
-private:
-    Q_DISABLE_COPY(RecorderDockerDock)
-    class Private;
-    Private *const d;
-
 private Q_SLOTS:
     void onUseDocNameToggled(bool checked);
     void onAutoRecordToggled(bool checked);
@@ -53,6 +48,11 @@ private Q_SLOTS:
     void onWriterStarted();
     void onWriterFinished();
     void onWriterPausedChanged(bool paused);
+
+private:
+    Q_DISABLE_COPY(RecorderDockerDock)
+    class Private;
+    Private *const d;
 };
 
 #endif

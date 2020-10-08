@@ -12,30 +12,35 @@
 #include <QImage>
 #include <QRegularExpression>
 
-namespace {
-
+namespace
+{
 constexpr int waitThreadTimeoutMs = 5000;
-
 }
 
-class RecorderWriter::Private {
+class RecorderWriter::Private
+{
 public:
     QPointer<KisCanvas2> canvas;
-    QByteArray buffer;
+    QByteArray imageBuffer;
+    int imageBufferWidth = 0;
+    int imageBufferHeight = 0;
     QImage frame;
+    int frameResolution = -1;
 
     int partIndex = 0;
     QString outputDirectory;
     int quality = 100;
     int resolution = 0;
+
     bool paused = false;
     volatile bool imageModified = false;
 
 
-    void updateOutputDirectory(const RecorderConfig &config) {
+    void updateOutputDirectory(const RecorderConfig &config)
+    {
         const QString &prefix = config.useDocumentName()
-                                    ? canvas->imageView()->document()->uniqueID()
-                                    : config.defaultPrefix();
+                                ? canvas->imageView()->document()->uniqueID()
+                                : config.defaultPrefix();
         const QString &outputDirectory = config.snapshotDirectory() % "/" % prefix % "/";
 
         QDir dir(outputDirectory);
@@ -49,6 +54,8 @@ public:
     int findLastIndex(const QString &directory)
     {
         QElapsedTimer timer;
+        timer.start();
+
         QDirIterator dirIterator(directory);
 
         int recordIndex = -1;
@@ -83,34 +90,66 @@ public:
         const int height = image->height();
         const int bufferSize = device->pixelSize() * width * height;
 
-        if (buffer.size() != bufferSize) {
-            buffer.resize(bufferSize);
+        bool resize = imageBuffer.size() != bufferSize;
+        if (resize)
+            imageBuffer.resize(bufferSize);
 
-            const int divider = resolution ? (resolution << 2) : 1;
+        if (resize || frameResolution != resolution) {
+            const int divider = 1 << resolution;
             const int outWidth = width / divider;
             const int outHeight = height / divider;
-            uchar *outData = reinterpret_cast<uchar *>(buffer.data());
+            uchar *outData = reinterpret_cast<uchar *>(imageBuffer.data());
 
-            // TODO: add second buffer for downscaled version and use it in image
-            // downscaledBuffer.resize(bufferSize / (divider * divider));
-            // outData = reinterpret_cast<uchar *>(downscaledBuffer.data());
-
-            // FIXME: image format??
             frame = QImage(outData, outWidth, outHeight, QImage::Format_ARGB32);
         }
 
         // we don't want image->barrierLock() because it will wait until the full stroke is finished
         image->lock();
-        device->readBytes(reinterpret_cast<quint8 *>(buffer.data()), frame.rect());
+        device->readBytes(reinterpret_cast<quint8 *>(imageBuffer.data()), 0, 0, width, height);
         image->unlock();
+
+        imageBufferWidth = width;
+        imageBufferHeight = height;
+    }
+
+    // Calculate ARGB average value using carry save adder:
+    //   https://www.qt.io/blog/2009/01/20/50-scaling-of-argb32-image
+    inline quint32 avg(quint32 c1, quint32 c2) {
+        return (((c1 ^ c2) & 0xfefefefeUL) >> 1) + (c1 & c2);
+    }
+
+    void halfSizeImageBuffer()
+    {
+        // fix even width and height
+        const int width = imageBufferWidth & ~1;
+        const int height = imageBufferHeight & ~1;
+
+        quint32 *buffer = reinterpret_cast<quint32 *>(imageBuffer.data());
+        quint32 *out = buffer;
+
+        for (int y = 0; y < height; y += 2) {
+            const quint32 *in1 = buffer + y * imageBufferWidth;
+            const quint32 *in2 = in1 + imageBufferWidth;
+
+            for (int x = 0; x < width; x += 2) {
+                *out = avg(
+                    avg(in1[x], in1[x + 1]),
+                    avg(in2[x], in2[x + 1])
+                );
+
+                ++out;
+            }
+        }
+
+        imageBufferWidth /= 2;
+        imageBufferHeight /= 2;
     }
 
     bool writeFrame()
     {
         const QString &fileName = QString("%1%2.jpg")
-                                      .arg(outputDirectory)
-                                      .arg(partIndex, 7, 10, QLatin1Char('0'));
-qDebug() << "WRITE FRAME" << fileName;
+                                  .arg(outputDirectory)
+                                  .arg(partIndex, 7, 10, QLatin1Char('0'));
         return frame.save(fileName, "JPEG", quality);
     }
 
@@ -141,7 +180,7 @@ void RecorderWriter::setCanvas(QPointer<KisCanvas2> canvas)
         d->updateOutputDirectory(RecorderConfig(true));
 
         connect(d->canvas->image(), SIGNAL(sigImageUpdated(QRect)), this, SLOT(onImageModified()),
-            Qt::DirectConnection); // because it spams
+                Qt::DirectConnection); // because it spams
     }
 }
 
@@ -176,10 +215,9 @@ void RecorderWriter::timerEvent(QTimerEvent */*event*/)
 
     d->readImage();
 
-    // TODO: downscale buffer using fast algorightm
-    //   https://www.qt.io/blog/2009/01/20/50-scaling-of-argb32-image
-    //quint32 avg = (((c1 ^ c2) & 0xfefefefeUL) >> 1) + (c1 & c2);
-
+    // downscale image buffer
+    for (int res = 0; res < d->resolution; ++res)
+        d->halfSizeImageBuffer();
 
     ++d->partIndex;
     bool isFrameWritten = d->writeFrame();

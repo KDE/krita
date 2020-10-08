@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>277</width>
-    <height>380</height>
+    <height>383</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="layoutMain">
@@ -44,9 +44,9 @@
       <property name="geometry">
        <rect>
         <x>0</x>
-        <y>0</y>
-        <width>277</width>
-        <height>380</height>
+        <y>-9</y>
+        <width>263</width>
+        <height>392</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -287,6 +287,16 @@
           </widget>
          </item>
         </layout>
+       </item>
+       <item>
+        <widget class="QLabel" name="labelUnsupportedColorSpace">
+         <property name="text">
+          <string>⚠ Unsupported color space. &quot;RGB/Alpha 8-bit&quot; is only supported ATM.</string>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+        </widget>
        </item>
        <item>
         <spacer name="verticalSpacer">

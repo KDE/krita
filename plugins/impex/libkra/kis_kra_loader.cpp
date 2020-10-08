@@ -892,7 +892,7 @@ KisNodeSP KisKraLoader::loadFileLayer(const KoXmlElement& element, KisImageSP im
             "%2\n\n"
             "Do you want to locate it manually?", name, fullPath);
 
-        int result = QMessageBox::warning(0, i18nc("@title:window", "File not found"), msg, QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+        int result = QMessageBox::warning(qApp->activeWindow(), i18nc("@title:window", "File not found"), msg, QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
 
         if (result == QMessageBox::Yes) {
 
@@ -1262,7 +1262,7 @@ void KisKraLoader::loadAudio(const KoXmlElement& elem, KisImageSP image)
                 "%2\n\n"
                 "Do you want to locate it manually?", info.fileName(), info.absoluteFilePath());
 
-            int result = QMessageBox::warning(0, i18nc("@title:window", "File not found"), msg, QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+            int result = QMessageBox::warning(qApp->activeWindow(), i18nc("@title:window", "File not found"), msg, QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
 
             if (result == QMessageBox::Yes) {
                 info.setFile(KisImportExportManager::askForAudioFileName(info.absolutePath(), 0));

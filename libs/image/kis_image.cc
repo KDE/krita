@@ -97,7 +97,7 @@
 #include "kis_layer_projection_plane.h"
 
 #include "kis_update_time_monitor.h"
-#include "tiles3/kis_lockless_stack.h"
+#include "kis_lockless_stack.h"
 
 #include <QtCore>
 
@@ -857,9 +857,9 @@ void KisImage::purgeUnusedData(bool isCancellable)
     endStroke(id);
 }
 
-void KisImage::cropNode(KisNodeSP node, const QRect& newRect)
+void KisImage::cropNode(KisNodeSP node, const QRect& newRect, const bool activeFrameOnly)
 {
-    bool isLayer = qobject_cast<KisLayer*>(node.data());
+    const bool isLayer = qobject_cast<KisLayer*>(node.data());
     KUndo2MagicString actionName = isLayer ?
         kundo2_i18n("Crop Layer") :
         kundo2_i18n("Crop Mask");
@@ -877,7 +877,14 @@ void KisImage::cropNode(KisNodeSP node, const QRect& newRect)
 
     KisProcessingVisitorSP visitor =
         new KisCropProcessingVisitor(newRect, true, false);
-    applicator.applyVisitorAllFrames(visitor, KisStrokeJobData::CONCURRENT);
+
+    if (node->isAnimated() && activeFrameOnly) {
+        // Crop active frame..
+        applicator.applyVisitor(visitor, KisStrokeJobData::CONCURRENT);
+    } else {
+        // Crop all frames..
+        applicator.applyVisitorAllFrames(visitor, KisStrokeJobData::CONCURRENT);
+    }
     applicator.end();
 }
 

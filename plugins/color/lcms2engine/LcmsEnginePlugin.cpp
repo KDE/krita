@@ -129,9 +129,18 @@ LcmsEnginePlugin::LcmsEnginePlugin(QObject *parent, const QVariantList &)
             profileFilenames << iccProfiledir + "/" + entry;
         }
     }
+
+    QStringList blackList = QStringList() << "panhexro.icm"
+                                          << "ctpctdmed.icc";
+
     // Load the profiles
     if (!profileFilenames.empty()) {
         for (QStringList::Iterator it = profileFilenames.begin(); it != profileFilenames.end(); ++it) {
+
+            if (blackList.contains((*it).toLower())) {
+                continue;
+            }
+
             KoColorProfile *profile = new IccColorProfile(*it);
             Q_CHECK_PTR(profile);
 

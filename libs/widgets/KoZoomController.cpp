@@ -92,6 +92,8 @@ void KoZoomController::setPageSize(const QSizeF &pageSize)
         setZoom(KoZoomMode::ZOOM_WIDTH, 0);
     if(d->zoomHandler->zoomMode() == KoZoomMode::ZOOM_PAGE)
         setZoom(KoZoomMode::ZOOM_PAGE, 0);
+    if(d->zoomHandler->zoomMode() == KoZoomMode::ZOOM_HEIGHT)
+        setZoom(KoZoomMode::ZOOM_HEIGHT, 0);
 }
 
 QSizeF KoZoomController::pageSize() const
@@ -165,6 +167,13 @@ void KoZoomController::setZoom(KoZoomMode::Mode mode, qreal zoom, qreal resoluti
         d->action->setSelectedZoomMode(mode);
         d->action->setEffectiveZoom(zoom);
     }
+    else if(mode == KoZoomMode::ZOOM_HEIGHT) {
+        zoom = (d->canvasController->viewportSize().height() - 2 * d->fitMargin)
+                / (oldPageViewportSize.height() / d->zoomHandler->zoom());
+
+        d->action->setSelectedZoomMode(mode);
+        d->action->setEffectiveZoom(zoom);
+    }
 
     d->zoomHandler->setZoomMode(mode);
     d->zoomHandler->setZoom(d->action->effectiveZoom());
@@ -190,7 +199,7 @@ void KoZoomController::setZoom(KoZoomMode::Mode mode, qreal zoom, qreal resoluti
 
     // Finally ask the canvasController to recenter
     QPointF documentCenter;
-    if (mode == KoZoomMode::ZOOM_WIDTH || mode == KoZoomMode::ZOOM_PAGE) {
+    if (mode == KoZoomMode::ZOOM_WIDTH || mode == KoZoomMode::ZOOM_PAGE || mode == KoZoomMode::ZOOM_HEIGHT) {
         documentCenter = QRectF(QPointF(), documentViewportSize).center();
     }
     else {

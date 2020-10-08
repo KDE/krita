@@ -25,6 +25,7 @@
 #include <QMessageBox>
 #include <QVector>
 #include <QAction>
+#include <QApplication>
 
 #include <KoSelection.h>
 #include <KoShapeRegistry.h>
@@ -107,11 +108,9 @@ void ToolReferenceImages::addReferenceImage()
     if (!QFileInfo(filename).exists()) return;
 
     auto *reference = KisReferenceImage::fromFile(filename, *kisCanvas->coordinatesConverter(), canvas()->canvasWidget());
-    if (document()->referenceImagesLayer()) {
+    if (document()->referenceImagesLayer() && reference) {
         reference->setZIndex(document()->referenceImagesLayer()->shapes().size());
-    }
 
-    if (reference) {
         KisDocument *doc = document();
         doc->addCommand(KisReferenceImagesLayer::addReferenceImages(doc, {reference}));
     }
@@ -123,13 +122,15 @@ void ToolReferenceImages::pasteReferenceImage()
     KIS_ASSERT_RECOVER_RETURN(kisCanvas);
 
     KisReferenceImage* reference = KisReferenceImage::fromClipboard(*kisCanvas->coordinatesConverter());
-    if (document()->referenceImagesLayer()) {
+    if (document()->referenceImagesLayer() && reference) {
         reference->setZIndex(document()->referenceImagesLayer()->shapes().size());
-    }
 
-    if(reference) {
         KisDocument *doc = document();
         doc->addCommand(KisReferenceImagesLayer::addReferenceImages(doc, {reference}));
+    } else {
+        if (canvas()->canvasWidget()) {
+            QMessageBox::critical(canvas()->canvasWidget(), i18nc("@title:window", "Krita"), i18n("Could not load reference image from clipboard"));
+        }
     }
 }
 
@@ -163,7 +164,7 @@ void ToolReferenceImages::loadReferenceImages()
 
     QFile file(filename);
     if (!file.open(QIODevice::ReadOnly)) {
-        QMessageBox::critical(nullptr, i18nc("@title:window", "Krita"), i18n("Could not open '%1'.", filename));
+        QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Could not open '%1'.", filename));
         return;
     }
 
@@ -185,7 +186,7 @@ void ToolReferenceImages::loadReferenceImages()
         KisDocument *doc = document();
         doc->addCommand(KisReferenceImagesLayer::addReferenceImages(doc, shapes));
     } else {
-        QMessageBox::critical(nullptr, i18nc("@title:window", "Krita"), i18n("Could not load reference images from '%1'.", filename));
+        QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Could not load reference images from '%1'.", filename));
     }
     file.close();
 }
@@ -212,7 +213,7 @@ void ToolReferenceImages::saveReferenceImages()
 
     QFile file(filename);
     if (!file.open(QIODevice::WriteOnly)) {
-        QMessageBox::critical(nullptr, i18nc("@title:window", "Krita"), i18n("Could not open '%1' for saving.", filename));
+        QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Could not open '%1' for saving.", filename));
         return;
     }
 
@@ -221,7 +222,7 @@ void ToolReferenceImages::saveReferenceImages()
     file.close();
 
     if (!ok) {
-        QMessageBox::critical(nullptr, i18nc("@title:window", "Krita"), i18n("Failed to save reference images."));
+        QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Failed to save reference images."));
     }
 }
 

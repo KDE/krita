@@ -527,7 +527,7 @@ extern "C" int main(int argc, char **argv)
         else {
             supportedWindowsVersion  = false;
             if (cfg.readEntry("WarnedAboutUnsupportedWindows", false)) {
-                QMessageBox::information(0,
+                QMessageBox::information(nullptr,
                                          i18nc("@title:window", "Krita: Warning"),
                                          i18n("You are running an unsupported version of Windows: %1.\n"
                                               "This is not recommended. Do not report any bugs.\n"

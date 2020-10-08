@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>288</width>
-    <height>242</height>
+    <width>306</width>
+    <height>304</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -389,8 +389,13 @@
      <item row="2" column="1">
       <widget class="QComboBox" name="cmbType">
        <property name="currentIndex">
-        <number>1</number>
+        <number>0</number>
        </property>
+       <item>
+        <property name="text">
+         <string>Image</string>
+        </property>
+       </item>
        <item>
         <property name="text">
          <string>Layer</string>
@@ -398,7 +403,7 @@
        </item>
        <item>
         <property name="text">
-         <string>Image</string>
+         <string>Frame</string>
         </property>
        </item>
       </widget>

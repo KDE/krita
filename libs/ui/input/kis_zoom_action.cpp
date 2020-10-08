@@ -127,6 +127,7 @@ KisZoomAction::KisZoomAction()
     shortcuts.insert(i18n("Reset Zoom to 100%"), ZoomResetShortcut);
     shortcuts.insert(i18n("Fit to Page"), ZoomToPageShortcut);
     shortcuts.insert(i18n("Fit to Width"), ZoomToWidthShortcut);
+    shortcuts.insert(i18n("Fit to Height"), ZoomToHeightShortcut);
     setShortcutIndexes(shortcuts);
 }
 
@@ -190,6 +191,9 @@ void KisZoomAction::begin(int shortcut, QEvent *event)
             break;
         case ZoomToWidthShortcut:
             inputManager()->canvas()->viewManager()->zoomController()->setZoom(KoZoomMode::ZOOM_WIDTH, 1.0);
+            break;
+        case ZoomToHeightShortcut:
+            inputManager()->canvas()->viewManager()->zoomController()->setZoom(KoZoomMode::ZOOM_HEIGHT, 1.0);
             break;
     }
 }

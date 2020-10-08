@@ -57,7 +57,7 @@ class HistogramDockerWidget : public QLabel
     Q_OBJECT
 
 public:
-    HistogramDockerWidget(QWidget *parent = 0, const char *name = 0, Qt::WindowFlags f = 0);
+    HistogramDockerWidget(QWidget *parent = 0, const char *name = 0, Qt::WindowFlags f = Qt::WindowFlags());
     ~HistogramDockerWidget() override;
     void paintEvent(QPaintEvent *event) override;
 

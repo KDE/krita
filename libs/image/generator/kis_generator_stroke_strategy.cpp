@@ -53,6 +53,8 @@ QVector<KisStrokeJobData *>KisGeneratorStrokeStrategy::createJobsData(const KisG
 
             QVector<QRect> tiles = splitRectIntoPatches(rc, optimalPatchSize());
 
+            addJobSequential(jobsData, (QRunnable*)nullptr);
+
             for(const auto& tile: tiles) {
                 KisProcessingInformation dstCfg(dev, tile.topLeft(), KisSelectionSP());
                 addJobConcurrent(jobsData, [=]() {
@@ -68,7 +70,7 @@ QVector<KisStrokeJobData *>KisGeneratorStrokeStrategy::createJobsData(const KisG
         } else {
             KisProcessingInformation dstCfg(dev, rc.topLeft(), KisSelectionSP());
 
-            addJobConcurrent(jobsData, [=]() {
+            addJobSequential(jobsData, [=]() {
                 const_cast<QSharedPointer<bool>&>(cookie).clear();
 
                 f->generate(dstCfg, rc.size(), filterConfig, helper->updater());

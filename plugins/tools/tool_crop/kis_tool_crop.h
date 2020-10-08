@@ -68,9 +68,11 @@ class KisToolCrop : public KisTool
 
 public:
     enum CropToolType {
+        ImageCropType,
         LayerCropType,
-        ImageCropType
+        FrameCropType
     };
+
     KisToolCrop(KoCanvasBase * canvas);
     ~KisToolCrop() override;
 

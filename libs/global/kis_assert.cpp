@@ -23,6 +23,8 @@
 #include <QThread>
 #include <QProcessEnvironment>
 #include <QCoreApplication>
+#include <QApplication>
+
 #include <klocalizedstring.h>
 #include <kis_assert_exception.h>
 #include <KisUsageLogger.h>
@@ -89,7 +91,7 @@ void kis_assert_common(const char *assertion, const char *file, int line, bool t
 
     if (!disableAssertMsg) {
         button =
-            QMessageBox::critical(0, i18nc("@title:window", "Krita: Internal Error"),
+            QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita: Internal Error"),
                                   longMessage,
                                   QMessageBox::Ignore | QMessageBox::Abort,
                                   QMessageBox::Ignore);

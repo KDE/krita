@@ -50,6 +50,7 @@
 #include <QStatusBar>
 #include <QMoveEvent>
 #include <QMdiSubWindow>
+#include <QFileInfo>
 
 #include <kis_image.h>
 #include <kis_node.h>
@@ -576,8 +577,9 @@ void KisView::dropEvent(QDropEvent *event)
                         }
                         else if (action == insertAsNewFileLayer || action == insertManyFileLayers) {
                             KisNodeCommandsAdapter adapter(viewManager());
+                            QFileInfo fileInfo(url.toLocalFile());
                             KisFileLayer *fileLayer = new KisFileLayer(image(), "", url.toLocalFile(),
-                                                                       KisFileLayer::None, image()->nextLayerName(i18n("File Layer")), OPACITY_OPAQUE_U8);
+                                                                       KisFileLayer::None, fileInfo.fileName(), OPACITY_OPAQUE_U8);
                             adapter.addNode(fileLayer, viewManager()->activeNode()->parent(), viewManager()->activeNode());
                         }
                         else if (action == openInNewDocument || action == openManyDocuments) {

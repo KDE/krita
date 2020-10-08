@@ -252,7 +252,7 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
     clearHistoryButton = new QPushButton(this);
     clearHistoryButton->setFixedHeight(35);
 
-    clearHistoryButton->setText(i18n("Clear colors"));
+    clearHistoryButton->setText(i18nc("verb, to clear", "Clear colors"));
     clearHistoryButton->setToolTip(i18n("Clear the colors of the popup palette"));
 
     connect(clearHistoryButton, SIGNAL(clicked(bool)), m_resourceManager, SLOT(slotClearHistory()));

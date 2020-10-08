@@ -273,6 +273,12 @@ void KisOpenGLCanvas2::setWrapAroundViewingMode(bool value)
     update();
 }
 
+bool KisOpenGLCanvas2::wrapAroundViewingMode() const
+{
+    return d->wrapAroundMode;
+}
+
+
 inline void rectToVertices(QVector3D* vertices, const QRectF &rc)
 {
     vertices[0] = QVector3D(rc.left(),  rc.bottom(), 0.f);

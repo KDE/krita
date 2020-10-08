@@ -58,8 +58,14 @@ KisResourceItemChooserContextMenu::KisResourceItemChooserContextMenu(KoResourceS
 
     m_tagModel = KisResourceModelProvider::tagModel(resource->resourceType().first);
     KisResourceModel *resourceModel = KisResourceModelProvider::resourceModel(resource->resourceType().first);
-    QList<KisTagSP> removables = resourceModel->data(resourceModel->indexForResource(resource)
-                                                     , Qt::UserRole + KisAbstractResourceModel::Tags).value<QList<KisTagSP>>();
+    KisTagResourceModel *tagResourceModel = KisResourceModelProvider::tagResourceModel(resource->resourceType().first);
+
+    tagResourceModel->setResourcesFilter(QVector<KoResourceSP>() << resource);
+    QList<KisTagSP> removables;
+    for (int i = 0; i < tagResourceModel->rowCount(); ++i) {
+        removables << tagResourceModel->data(tagResourceModel->index(i, 0), Qt::UserRole + KisAllTagResourceModel::Tag).value<KisTagSP>();
+    }
+
 
     QList<KisTagSP> list;
     for (int i = 0; i < m_tagModel->rowCount(); i++) {

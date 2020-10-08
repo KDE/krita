@@ -1,11 +1,13 @@
 #include "recorder_config.h"
-#include <QDir>
+
 #include <kis_config.h>
 
-namespace {
+#include <QString>
+#include <QDir>
+
+namespace
+{
 constexpr const char *keySnapshotDirectory = "recorder/snapshotdirectory";
-constexpr const char *keyDefaultPrefix = "recorder/defaultprefix";
-constexpr const char *keyUseDocumentName = "recorder/usedocumentname";
 constexpr const char *keyCaptureInterval = "recorder/captureinterval";
 constexpr const char *keyQuality = "recorder/quality";
 constexpr const char *keyResolution = "recorder/resolution";
@@ -31,28 +33,6 @@ QString RecorderConfig::snapshotDirectory() const
 void RecorderConfig::setSnapshotDirectory(const QString &value)
 {
     config->writeEntry(keySnapshotDirectory, value);
-}
-
-
-QString RecorderConfig::defaultPrefix() const
-{
-    return config->readEntry(keyDefaultPrefix, QString("timelapse"));
-}
-
-void RecorderConfig::setDefaultPrefix(const QString &value)
-{
-    config->writeEntry(keyDefaultPrefix, value);
-}
-
-
-bool RecorderConfig::useDocumentName() const
-{
-    return config->readEntry(keyUseDocumentName, true);
-}
-
-void RecorderConfig::setUseDocumentName(bool value)
-{
-    config->writeEntry(keyUseDocumentName, value);
 }
 
 

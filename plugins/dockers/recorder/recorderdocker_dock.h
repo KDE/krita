@@ -36,14 +36,13 @@ public:
     void unsetCanvas() override;
 
 private Q_SLOTS:
-    void onUseDocNameToggled(bool checked);
     void onAutoRecordToggled(bool checked);
-    void onEditPrefixChanged();
     void onCaptureIntervalChanged(int interval);
     void onQualityChanged(int quality);
     void onResolutionChanged(int resolution);
-    void onRecordButtonToggled(bool checked);
     void onSelectRecordFolderButtonClicked();
+    void onRecordButtonToggled(bool checked);
+    void onExportButtonClicked();
 
     void onWriterStarted();
     void onWriterFinished();

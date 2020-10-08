@@ -1,7 +1,7 @@
 #ifndef RECORDER_CONFIG_H
 #define RECORDER_CONFIG_H
 
-#include <QString>
+#include <QtGlobal>
 
 class KisConfig;
 
@@ -13,12 +13,6 @@ public:
 
     QString snapshotDirectory() const;
     void setSnapshotDirectory(const QString &value);
-
-    QString defaultPrefix() const;
-    void setDefaultPrefix(const QString &value);
-
-    bool useDocumentName() const;
-    void setUseDocumentName(bool value);
 
     int captureInterval() const;
     void setCaptureInterval(int value);

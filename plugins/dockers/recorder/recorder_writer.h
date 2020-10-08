@@ -39,6 +39,7 @@ private Q_SLOTS:
     void onImageModified();
 
 private:
+    Q_DISABLE_COPY(RecorderWriter)
     class Private;
     Private *const d;
 };

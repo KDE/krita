@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>277</width>
-    <height>383</height>
+    <height>332</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="layoutMain">
@@ -44,9 +44,9 @@
       <property name="geometry">
        <rect>
         <x>0</x>
-        <y>-9</y>
-        <width>263</width>
-        <height>392</height>
+        <y>0</y>
+        <width>277</width>
+        <height>332</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -108,37 +108,6 @@
              </widget>
             </item>
            </layout>
-          </item>
-          <item>
-           <layout class="QHBoxLayout" name="layoutPrefix">
-            <item>
-             <widget class="QLabel" name="labelVideoName">
-              <property name="text">
-               <string>Subdir:</string>
-              </property>
-              <property name="buddy">
-               <cstring>editPrefix</cstring>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="checkBoxUseDocName">
-              <property name="text">
-               <string>Use document id</string>
-              </property>
-              <property name="checked">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="editPrefix">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-           </widget>
           </item>
           <item>
            <widget class="Line" name="line1">
@@ -278,9 +247,6 @@
          </item>
          <item>
           <widget class="QPushButton" name="buttonExport">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
            <property name="text">
             <string>Export...</string>
            </property>
@@ -291,7 +257,8 @@
        <item>
         <widget class="QLabel" name="labelUnsupportedColorSpace">
          <property name="text">
-          <string>⚠ Unsupported color space. &quot;RGB/Alpha 8-bit&quot; is only supported ATM.</string>
+          <string>⚠ Unsupported color space.
+&quot;RGB/Alpha 8-bit&quot; is only supported.</string>
          </property>
          <property name="wordWrap">
           <bool>true</bool>

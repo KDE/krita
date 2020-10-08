@@ -31,6 +31,7 @@
 #include <QFileInfo>
 #include <QPointer>
 #include <QFileDialog>
+#include <QDesktopServices>
 
 
 class RecorderDockerDock::Private
@@ -41,15 +42,14 @@ public:
     QPointer<KisCanvas2> canvas;
     RecorderWriter writer;
 
-    bool useDocumentPrefix = true;
     QString snapshotDirectory;
-    QString defaultPrefix;
+    QString prefix;
+    QString outputDirectory;
     int captureInterval = 0;
     int quality = 0;
     int resolution = 0;
     bool recordAutomatically = false;
 
-    QString prefix;
     QLabel* statusBarLabel;
     bool isColorSpaceSupported;
 
@@ -66,8 +66,6 @@ public:
     {
         RecorderConfig config(true);
         snapshotDirectory = config.snapshotDirectory();
-        defaultPrefix = config.defaultPrefix();
-        useDocumentPrefix = config.useDocumentName();
         captureInterval = config.captureInterval();
         quality = config.quality();
         resolution = config.resolution();
@@ -77,19 +75,14 @@ public:
 
     void updateWriterSettings()
     {
-        const QString &outputDirectory = snapshotDirectory % "/" % prefix % "/";
+        outputDirectory = snapshotDirectory % "/" % prefix % "/";
         writer.setup({ outputDirectory, quality, resolution, captureInterval });
     }
 
     QString getPrefix()
     {
-        if (!useDocumentPrefix)
-            return defaultPrefix;
-
-        if (!canvas)
-            return "";
-
-        return canvas->imageView()->document()->documentInfo()->aboutInfo("creation-date").remove(QRegExp("[^0-9]"));
+        return !canvas ? ""
+               : canvas->imageView()->document()->documentInfo()->aboutInfo("creation-date").remove(QRegExp("[^0-9]"));
     }
 
     void updateComboResolution(quint32 width, quint32 height)
@@ -155,8 +148,6 @@ RecorderDockerDock::RecorderDockerDock()
     d->ui->setupUi(page);
     d->ui->labelUnsupportedColorSpace->setVisible(false);
 
-    QValidator* validator = new QRegExpValidator(QRegExp("[0-9a-zA-z_]+"), this);
-    d->ui->editPrefix->setValidator(validator);
     d->ui->buttonBrowse->setIcon(KisIconUtils::loadIcon("folder"));
     d->ui->buttonRecordToggle->setIcon(KisIconUtils::loadIcon("media-record"));
     d->ui->spinQuality->setSuffix("%");
@@ -164,22 +155,18 @@ RecorderDockerDock::RecorderDockerDock()
     d->loadSettings();
 
     d->ui->editDirectory->setText(d->snapshotDirectory);
-    d->ui->checkBoxUseDocName->setChecked(d->useDocumentPrefix);
     d->ui->spinCaptureInterval->setValue(d->captureInterval);
     d->ui->spinQuality->setValue(d->quality);
     d->ui->comboResolution->setCurrentIndex(d->resolution);
     d->ui->checkBoxAutoRecord->setChecked(d->recordAutomatically);
-    d->ui->editPrefix->setText(d->prefix);
-    d->ui->editPrefix->setEnabled(!d->useDocumentPrefix);
 
     connect(d->ui->buttonBrowse, SIGNAL(clicked()), this, SLOT(onSelectRecordFolderButtonClicked()));
-    connect(d->ui->checkBoxUseDocName, SIGNAL(toggled(bool)), this, SLOT(onUseDocNameToggled(bool)));
-    connect(d->ui->editPrefix, SIGNAL(editingFinished()), this, SLOT(onEditPrefixChanged()));
     connect(d->ui->spinCaptureInterval, SIGNAL(valueChanged(int)), this, SLOT(onCaptureIntervalChanged(int)));
     connect(d->ui->spinQuality, SIGNAL(valueChanged(int)), this, SLOT(onQualityChanged(int)));
     connect(d->ui->comboResolution, SIGNAL(currentIndexChanged(int)), this, SLOT(onResolutionChanged(int)));
     connect(d->ui->checkBoxAutoRecord, SIGNAL(toggled(bool)), this, SLOT(onAutoRecordToggled(bool)));
     connect(d->ui->buttonRecordToggle, SIGNAL(toggled(bool)), this, SLOT(onRecordButtonToggled(bool)));
+    connect(d->ui->buttonExport, SIGNAL(clicked()), this, SLOT(onExportButtonClicked()));
 
     connect(&d->writer, SIGNAL(started()), this, SLOT(onWriterStarted()));
     connect(&d->writer, SIGNAL(finished()), this, SLOT(onWriterFinished()));
@@ -215,13 +202,11 @@ void RecorderDockerDock::setCanvas(KoCanvasBase* canvas)
 
     d->prefix = d->getPrefix();
     d->updateWriterSettings();
-    d->ui->editPrefix->setText(d->prefix);
- }
+}
 
 void RecorderDockerDock::unsetCanvas()
 {
     d->updateRecordStatus(false);
-    d->ui->editPrefix->clear();
     setEnabled(false);
     d->writer.stop();
     d->writer.setCanvas(nullptr);
@@ -239,6 +224,12 @@ void RecorderDockerDock::onRecordButtonToggled(bool checked)
     }
 }
 
+void RecorderDockerDock::onExportButtonClicked()
+{
+    // TODO: show dialog to export the video
+    QDesktopServices::openUrl(QUrl(d->outputDirectory));
+}
+
 void RecorderDockerDock::onSelectRecordFolderButtonClicked()
 {
     QFileDialog dialog(this);
@@ -252,25 +243,10 @@ void RecorderDockerDock::onSelectRecordFolderButtonClicked()
     }
 }
 
-void RecorderDockerDock::onUseDocNameToggled(bool checked)
-{
-    d->useDocumentPrefix = checked;
-    d->prefix = d->getPrefix();
-    d->ui->editPrefix->setText(d->prefix);
-    d->ui->editPrefix->setEnabled(!d->useDocumentPrefix);
-    RecorderConfig(false).setUseDocumentName(checked);
-}
-
 void RecorderDockerDock::onAutoRecordToggled(bool checked)
 {
     d->recordAutomatically = checked;
     RecorderConfig(false).setRecordAutomatically(checked);
-}
-
-void RecorderDockerDock::onEditPrefixChanged()
-{
-    d->defaultPrefix = d->ui->editPrefix->text();
-    RecorderConfig(false).setDefaultPrefix(d->defaultPrefix);
 }
 
 void RecorderDockerDock::onCaptureIntervalChanged(int interval)

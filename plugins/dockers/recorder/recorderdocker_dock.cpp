@@ -26,6 +26,7 @@
 #include <kis_statusbar.h>
 #include <KisDocument.h>
 #include <KisViewManager.h>
+#include <KoDocumentInfo.h>
 
 #include <QFileInfo>
 #include <QPointer>
@@ -39,7 +40,16 @@ public:
     Ui::RecorderDocker *const ui;
     QPointer<KisCanvas2> canvas;
     RecorderWriter writer;
+
+    bool useDocumentPrefix = true;
+    QString snapshotDirectory;
     QString defaultPrefix;
+    int captureInterval = 0;
+    int quality = 0;
+    int resolution = 0;
+    bool recordAutomatically = false;
+
+    QString prefix;
     QLabel* statusBarLabel;
     bool isColorSpaceSupported;
 
@@ -55,25 +65,31 @@ public:
     void loadSettings()
     {
         RecorderConfig config(true);
-        ui->editDirectory->setText(config.snapshotDirectory());
+        snapshotDirectory = config.snapshotDirectory();
         defaultPrefix = config.defaultPrefix();
-        ui->checkBoxUseDocName->setChecked(config.useDocumentName());
-        ui->spinCaptureInterval->setValue(config.captureInterval());
-        ui->spinQuality->setValue(config.quality());
-        ui->comboResolution->setCurrentIndex(config.resolution());
-        ui->checkBoxAutoRecord->setChecked(config.recordAutomatically());
+        useDocumentPrefix = config.useDocumentName();
+        captureInterval = config.captureInterval();
+        quality = config.quality();
+        resolution = config.resolution();
+        recordAutomatically = config.recordAutomatically();
     }
 
-    void updatePrefix()
+
+    void updateWriterSettings()
     {
-        bool useDocumentPrefix = ui->checkBoxUseDocName->isChecked();
+        const QString &outputDirectory = snapshotDirectory % "/" % prefix % "/";
+        writer.setup({ outputDirectory, quality, resolution, captureInterval });
+    }
 
-        const QString &prefix = (useDocumentPrefix && canvas)
-                                ? canvas->imageView()->document()->uniqueID()
-                                : defaultPrefix;
+    QString getPrefix()
+    {
+        if (!useDocumentPrefix)
+            return defaultPrefix;
 
-        ui->editPrefix->setText(prefix);
-        ui->editPrefix->setEnabled(!useDocumentPrefix);
+        if (!canvas)
+            return "";
+
+        return canvas->imageView()->document()->documentInfo()->aboutInfo("creation-date").remove(QRegExp("[^0-9]"));
     }
 
     void updateComboResolution(quint32 width, quint32 height)
@@ -147,6 +163,15 @@ RecorderDockerDock::RecorderDockerDock()
 
     d->loadSettings();
 
+    d->ui->editDirectory->setText(d->snapshotDirectory);
+    d->ui->checkBoxUseDocName->setChecked(d->useDocumentPrefix);
+    d->ui->spinCaptureInterval->setValue(d->captureInterval);
+    d->ui->spinQuality->setValue(d->quality);
+    d->ui->comboResolution->setCurrentIndex(d->resolution);
+    d->ui->checkBoxAutoRecord->setChecked(d->recordAutomatically);
+    d->ui->editPrefix->setText(d->prefix);
+    d->ui->editPrefix->setEnabled(!d->useDocumentPrefix);
+
     connect(d->ui->buttonBrowse, SIGNAL(clicked()), this, SLOT(onSelectRecordFolderButtonClicked()));
     connect(d->ui->checkBoxUseDocName, SIGNAL(toggled(bool)), this, SLOT(onUseDocNameToggled(bool)));
     connect(d->ui->editPrefix, SIGNAL(editingFinished()), this, SLOT(onEditPrefixChanged()));
@@ -178,21 +203,25 @@ void RecorderDockerDock::setCanvas(KoCanvasBase* canvas)
     d->canvas = dynamic_cast<KisCanvas2*>(canvas);
     d->writer.setCanvas(d->canvas);
 
-    if (d->canvas) {
-        KisDocument *document = d->canvas->imageView()->document();
-        d->updatePrefix();
-        if (d->ui->checkBoxAutoRecord->isChecked()) {
-            d->ui->buttonRecordToggle->setChecked(true);
-        }
-        d->updateComboResolution(document->image()->width(), document->image()->height());
-        d->validateColorSpace(d->canvas->image()->projection()->colorSpace());
+    if (!d->canvas)
+        return;
+
+    KisDocument *document = d->canvas->imageView()->document();
+    if (d->ui->checkBoxAutoRecord->isChecked()) {
+        d->ui->buttonRecordToggle->setChecked(true);
     }
-}
+    d->updateComboResolution(document->image()->width(), document->image()->height());
+    d->validateColorSpace(document->image()->projection()->colorSpace());
+
+    d->prefix = d->getPrefix();
+    d->updateWriterSettings();
+    d->ui->editPrefix->setText(d->prefix);
+ }
 
 void RecorderDockerDock::unsetCanvas()
 {
     d->updateRecordStatus(false);
-    d->updatePrefix();
+    d->ui->editPrefix->clear();
     setEnabled(false);
     d->writer.stop();
     d->writer.setCanvas(nullptr);
@@ -225,32 +254,40 @@ void RecorderDockerDock::onSelectRecordFolderButtonClicked()
 
 void RecorderDockerDock::onUseDocNameToggled(bool checked)
 {
-    d->updatePrefix();
+    d->useDocumentPrefix = checked;
+    d->prefix = d->getPrefix();
+    d->ui->editPrefix->setText(d->prefix);
+    d->ui->editPrefix->setEnabled(!d->useDocumentPrefix);
     RecorderConfig(false).setUseDocumentName(checked);
 }
 
 void RecorderDockerDock::onAutoRecordToggled(bool checked)
 {
+    d->recordAutomatically = checked;
     RecorderConfig(false).setRecordAutomatically(checked);
 }
 
 void RecorderDockerDock::onEditPrefixChanged()
 {
-    RecorderConfig(false).setDefaultPrefix(d->ui->editPrefix->text());
+    d->defaultPrefix = d->ui->editPrefix->text();
+    RecorderConfig(false).setDefaultPrefix(d->defaultPrefix);
 }
 
 void RecorderDockerDock::onCaptureIntervalChanged(int interval)
 {
+    d->captureInterval = interval;
     RecorderConfig(false).setCaptureInterval(interval);
 }
 
 void RecorderDockerDock::onQualityChanged(int quality)
 {
+    d->quality = quality;
     RecorderConfig(false).setQuality(quality);
 }
 
 void RecorderDockerDock::onResolutionChanged(int resolution)
 {
+    d->resolution = resolution;
     RecorderConfig(false).setResolution(resolution);
 }
 

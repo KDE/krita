@@ -7,6 +7,14 @@
 class RecorderConfig;
 class KisCanvas2;
 
+struct RecorderWriterSettings
+{
+    QString outputDirectory;
+    int quality;
+    int resolution;
+    int captureInterval;
+};
+
 class RecorderWriter: public QThread
 {
     Q_OBJECT
@@ -15,11 +23,13 @@ public:
     ~RecorderWriter();
 
     void setCanvas(QPointer<KisCanvas2> canvas);
+    void setup(const RecorderWriterSettings &settings);
 
     bool stop();
 
 Q_SIGNALS:
     void pausedChanged(bool paused);
+    void prefixChanged(QString prefix);
 
 protected:
     void run() override;

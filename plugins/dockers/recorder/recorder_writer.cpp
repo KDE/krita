@@ -1,5 +1,4 @@
 #include "recorder_writer.h"
-#include "recorder_config.h"
 
 #include <QFileInfo>
 #include <kis_canvas2.h>
@@ -26,30 +25,11 @@ public:
     int imageBufferHeight = 0;
     QImage frame;
     int frameResolution = -1;
-
     int partIndex = 0;
-    QString outputDirectory;
-    int quality = 100;
-    int resolution = 0;
-
+    RecorderWriterSettings settings;
     bool paused = false;
     volatile bool imageModified = false;
 
-
-    void updateOutputDirectory(const RecorderConfig &config)
-    {
-        const QString &prefix = config.useDocumentName()
-                                ? canvas->imageView()->document()->uniqueID()
-                                : config.defaultPrefix();
-        const QString &outputDirectory = config.snapshotDirectory() % "/" % prefix % "/";
-
-        QDir dir(outputDirectory);
-        if (!dir.exists() && !dir.mkpath(outputDirectory))
-            return;
-
-        this->outputDirectory = outputDirectory;
-        partIndex = findLastIndex(outputDirectory);
-    }
 
     int findLastIndex(const QString &directory)
     {
@@ -94,8 +74,8 @@ public:
         if (resize)
             imageBuffer.resize(bufferSize);
 
-        if (resize || frameResolution != resolution) {
-            const int divider = 1 << resolution;
+        if (resize || frameResolution != settings.resolution) {
+            const int divider = 1 << settings.resolution;
             const int outWidth = width / divider;
             const int outHeight = height / divider;
             uchar *outData = reinterpret_cast<uchar *>(imageBuffer.data());
@@ -120,7 +100,7 @@ public:
 
     void halfSizeImageBuffer()
     {
-        // fix even width and height
+        // make width and height even
         const int width = imageBufferWidth & ~1;
         const int height = imageBufferHeight & ~1;
 
@@ -148,9 +128,9 @@ public:
     bool writeFrame()
     {
         const QString &fileName = QString("%1%2.jpg")
-                                  .arg(outputDirectory)
+                                  .arg(settings.outputDirectory)
                                   .arg(partIndex, 7, 10, QLatin1Char('0'));
-        return frame.save(fileName, "JPEG", quality);
+        return frame.save(fileName, "JPEG", settings.quality);
     }
 
 };
@@ -168,20 +148,25 @@ RecorderWriter::~RecorderWriter()
 
 void RecorderWriter::setCanvas(QPointer<KisCanvas2> canvas)
 {
-    if (d->canvas == canvas)
-        return;
-
     if (d->canvas)
         disconnect(d->canvas->image(), SIGNAL(sigImageUpdated(QRect)), this, SLOT(onImageModified()));
 
     d->canvas = canvas;
 
-    if (d->canvas) {
-        d->updateOutputDirectory(RecorderConfig(true));
-
+    if (d->canvas)
         connect(d->canvas->image(), SIGNAL(sigImageUpdated(QRect)), this, SLOT(onImageModified()),
                 Qt::DirectConnection); // because it spams
-    }
+}
+
+void RecorderWriter::setup(const RecorderWriterSettings &settings)
+{
+    d->settings = settings;
+
+    QDir dir(d->settings.outputDirectory);
+    if (!dir.exists() && !dir.mkpath(d->settings.outputDirectory))
+        return;
+
+    d->partIndex = d->findLastIndex(d->settings.outputDirectory);
 }
 
 bool RecorderWriter::stop()
@@ -216,7 +201,7 @@ void RecorderWriter::timerEvent(QTimerEvent */*event*/)
     d->readImage();
 
     // downscale image buffer
-    for (int res = 0; res < d->resolution; ++res)
+    for (int res = 0; res < d->settings.resolution; ++res)
         d->halfSizeImageBuffer();
 
     ++d->partIndex;
@@ -227,6 +212,8 @@ void RecorderWriter::timerEvent(QTimerEvent */*event*/)
 
 void RecorderWriter::onImageModified()
 {
+    if (!d->imageModified)
+        emit pausedChanged(false);
     d->imageModified = true;
 }
 
@@ -239,15 +226,8 @@ void RecorderWriter::run()
     d->imageModified = false;
     emit pausedChanged(d->paused);
 
-    RecorderConfig config(true);
-
-    d->updateOutputDirectory(config);
-
-    d->quality = config.quality();
-    d->resolution = config.resolution();
-
-    const int intervalSeconds = qMax(config.captureInterval(), 1);
-    const int timerId = startTimer(intervalSeconds * 1000);
+    const int interval = qMax(d->settings.captureInterval, 1);
+    const int timerId = startTimer(interval * 1000);
 
     QThread::run();
 

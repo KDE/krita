@@ -67,7 +67,7 @@ void WGQuickSettingsWidget::slotColorGroupToggled(int id, bool checked)
         return;
     }
     KisVisualColorModel::ColorModel model = static_cast<KisVisualColorModel::ColorModel>(id);
-    m_selector->selectorModel()->setColorModel(model);
+    m_selector->selectorModel()->setRGBColorModel(model);
     m_selectorConf->setColorModel(model);
     // TODO: write to config once there is one...
 }

@@ -31,7 +31,10 @@ public:
     QVector4D channelValues() const;
     int colorChannelCount() const;
     ColorModel colorModel() const;
-    void setColorModel(ColorModel model);
+    /**
+     * @brief Set the HSX color model used for RGB color spaces.
+     */
+    void setRGBColorModel(ColorModel model);
     const KoColorSpace* colorSpace() const;
     const KoColorDisplayRendererInterface* displayRenderer() const;
     bool isHSXModel() const;

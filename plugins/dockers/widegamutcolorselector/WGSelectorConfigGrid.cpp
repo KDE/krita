@@ -89,7 +89,7 @@ QVector<KisColorSelectorConfiguration> WGSelectorConfigGrid::selectedConfigurati
 void WGSelectorConfigGrid::setColorModel(KisVisualColorModel::ColorModel model)
 {
     if (model != m_selector->selectorModel()->colorModel()) {
-        m_selector->selectorModel()->setColorModel(model);
+        m_selector->selectorModel()->setRGBColorModel(model);
         updateIcons();
     }
 }

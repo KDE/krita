@@ -144,13 +144,14 @@ KisVisualColorModel::ColorModel KisVisualColorModel::colorModel() const
     return m_d->model;
 }
 
-void KisVisualColorModel::setColorModel(KisVisualColorModel::ColorModel model)
+void KisVisualColorModel::setRGBColorModel(KisVisualColorModel::ColorModel model)
 {
-    if (model == m_d->model) {
+    if (model == m_d->modelRGB) {
         return;
     }
-    if (m_d->isRGBA) {
-        if (model >= ColorModel::HSV && model <= ColorModel::HSY) {
+    if (model >= ColorModel::HSV && model <= ColorModel::HSY) {
+        m_d->modelRGB = model;
+        if (m_d->isRGBA) {
             m_d->model = model;
             m_d->allowUpdates = false;
             emit sigColorModelChanged();

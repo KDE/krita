@@ -276,13 +276,13 @@ void TestTagModel::testChangeTagActive()
 void TestTagModel::testAddEmptyTagWithResources()
 {
     KisTagModel tagModel(resourceType);
-    KisResourceModel *resourceModel = KisResourceModelProvider::resourceModel("paintoppresets");
+    KisResourceModel resourceModel("paintoppresets");
 
     QString tagName("A Brand New Tag");
     QVector<KoResourceSP> resources;
-    for (int i = 0; i < resourceModel->rowCount(); ++i)
+    for (int i = 0; i < resourceModel.rowCount(); ++i)
     {
-        resources << resourceModel->resourceForIndex(resourceModel->index(i, 0));
+        resources << resourceModel.resourceForIndex(resourceModel.index(i, 0));
     }
 
     tagModel.addNewTag(tagName, resources);
@@ -293,11 +293,11 @@ void TestTagModel::testAddEmptyTagWithResources()
 void TestTagModel::testAddTagWithResources()
 {
     KisTagModel tagModel(resourceType);
-    KisResourceModel *resourceModel = KisResourceModelProvider::resourceModel("paintoppresets");
+    KisResourceModel resourceModel("paintoppresets");
 
     QString tagName("test1");
 
-    KoResourceSP resource = resourceModel->resourceForIndex(resourceModel->index(0, 0));
+    KoResourceSP resource = resourceModel.resourceForIndex(resourceModel.index(0, 0));
 
     KisTagSP tag(new KisTag);
     tag->setUrl(tagName);

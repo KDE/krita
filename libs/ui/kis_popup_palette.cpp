@@ -787,11 +787,11 @@ void KisPopupPalette::mousePressEvent(QMouseEvent *event)
 
 void KisPopupPalette::slotShowTagsPopup()
 {
-    KisTagModel *model = KisResourceModelProvider::tagModel(ResourceType::PaintOpPresets);
+    KisTagModel model (ResourceType::PaintOpPresets);
     QVector<QString> tags;
-    for (int i = 0; i < model->rowCount(); ++i) {
-        QModelIndex idx = model->index(i, 0);
-        tags << model->data(idx, Qt::DisplayRole).toString();
+    for (int i = 0; i < model.rowCount(); ++i) {
+        QModelIndex idx = model.index(i, 0);
+        tags << model.data(idx, Qt::DisplayRole).toString();
     }
 
     //std::sort(tags.begin(), tags.end());
@@ -805,10 +805,10 @@ void KisPopupPalette::slotShowTagsPopup()
         QAction *action = menu.exec(QCursor::pos());
         if (action) {
 
-            for (int i = 0; i < model->rowCount(); ++i) {
-                QModelIndex idx = model->index(i, 0);
-                if (model->data(idx, Qt::DisplayRole).toString() == KLocalizedString::removeAcceleratorMarker(action->text())) {
-                    m_resourceManager->setCurrentTag(model->tagForIndex(idx));
+            for (int i = 0; i < model.rowCount(); ++i) {
+                QModelIndex idx = model.index(i, 0);
+                if (model.data(idx, Qt::DisplayRole).toString() == KLocalizedString::removeAcceleratorMarker(action->text())) {
+                    m_resourceManager->setCurrentTag(model.tagForIndex(idx));
                     break;
                 }
             }

@@ -20,26 +20,24 @@
 
 #include <qglobal.h>
 
-#include "kritaresources_export.h"
-
-class KisResourceModel;
-class KisTagModel;
-class KisTagResourceModel;
+class KisAllResourcesModel;
+class KisAllTagsModel;
+class KisAllTagResourceModel;
 
 /**
  * KisResourceModelProvider should be used to retrieve resource models.
  * For every resource type, there is only one instance of the resource model,
  * so all views on these models show the same state.
  */ 
-class KRITARESOURCES_EXPORT KisResourceModelProvider
+class KisResourceModelProvider
 {
 public:
     KisResourceModelProvider();
     ~KisResourceModelProvider();
 
-    static KisResourceModel *resourceModel(const QString &resourceType);
-    static KisTagModel *tagModel(const QString& resourceType);
-    static KisTagResourceModel *tagResourceModel(const QString& resourceType);
+    static KisAllResourcesModel *resourceModel(const QString &resourceType);
+    static KisAllTagsModel *tagModel(const QString& resourceType);
+    static KisAllTagResourceModel *tagResourceModel(const QString& resourceType);
 
 private:
 

@@ -56,12 +56,6 @@ class KRITARESOURCES_EXPORT KisAllTagsModel
 {
     Q_OBJECT
 
-private:
-
-    friend class KisTagModel;
-
-    KisAllTagsModel(const QString &resourceType, QObject *parent = 0);
-
 public:
 
     enum Columns {
@@ -78,7 +72,6 @@ public:
         All = -2, // so it gets on top in the combobox
         AllUntagged = -1,
     };
-
 
     ~KisAllTagsModel() override;
 
@@ -104,6 +97,12 @@ public:
 
 private:
 
+    friend class KisResourceModelProvider;
+    friend class TestTagResourceModel;
+    friend class KisTagModel;
+
+    KisAllTagsModel(const QString &resourceType, QObject *parent = 0);
+
     bool tagResourceByUrl(const QString& tagUrl, const int resourceId);
     bool tagResourceById(const int tagId, const int resource);
 
@@ -123,15 +122,8 @@ class KRITARESOURCES_EXPORT KisTagModel
 
     Q_OBJECT
 
-private:
-
-    friend class KisResourceModelProvider;
-    friend class TestTagModel;
-
-    KisTagModel(const QString &type, QObject *parent = 0);
-
 public:
-
+    KisTagModel(const QString &type, QObject *parent = 0);
     ~KisTagModel() override;
 
     enum TagFilter {
@@ -161,9 +153,6 @@ public:
     bool setTagActive(const KisTagSP tag) override;
     bool renameTag(const KisTagSP tag) override;
     bool changeTagActive(const KisTagSP tag, bool active) override;
-
-    QVector<KisTagSP> tagsForResource(int resourceId) const;
-
 
 protected:
 

@@ -50,14 +50,16 @@ KisTagFilterResourceProxyModel::KisTagFilterResourceProxyModel(const QString &re
     , d(new Private)
 {
     d->resourceType = resourceType;
-    d->resourceModel = KisResourceModelProvider::resourceModel(resourceType);
-    d->tagResourceModel = KisResourceModelProvider::tagResourceModel(resourceType);
+    d->resourceModel = new KisResourceModel(resourceType);
+    d->tagResourceModel = new KisTagResourceModel(resourceType);
 
     setSourceModel(d->resourceModel);
 }
 
 KisTagFilterResourceProxyModel::~KisTagFilterResourceProxyModel()
 {
+    delete d->resourceModel;
+    delete d->tagResourceModel;
     delete d;
 }
 
@@ -140,20 +142,23 @@ bool KisTagFilterResourceProxyModel::setResourceMetaData(KoResourceSP resource, 
 
 void KisTagFilterResourceProxyModel::setTagFilter(const KisTagSP tag)
 {
-    if (tag && tag->url() != "All") {
-        if (tag->url() != "All Untagged") {
-            setSourceModel(d->tagResourceModel);
-            d->tagResourceModel->setTagsFilter(QVector<KisTagSP>() << tag);
-        }
-        else {
-            setSourceModel(d->resourceModel);
-            d->resourceModel->showOnlyUntaggedResources(true);
-        }
-    }
-    else {
+    if (!tag || tag->url() == "All") {
+        qDebug() << 1;
         d->tagResourceModel->setTagsFilter(QVector<KisTagSP>());
         setSourceModel(d->resourceModel);
         d->resourceModel->showOnlyUntaggedResources(false);
+    }
+    else {
+        if (tag->url() == "All Untagged") {
+            qDebug() << 2;
+            setSourceModel(d->resourceModel);
+            d->resourceModel->showOnlyUntaggedResources(true);
+        }
+        else {
+            qDebug() << 3;
+            setSourceModel(d->tagResourceModel);
+            d->tagResourceModel->setTagsFilter(QVector<KisTagSP>() << tag);
+        }
     }
     invalidateFilter();
 }

@@ -56,14 +56,14 @@ KisResourceItemChooserContextMenu::KisResourceItemChooserContextMenu(KoResourceS
     QMenu *removableTagsMenu;
     QMenu *assignableTagsMenu;
 
-    m_tagModel = KisResourceModelProvider::tagModel(resource->resourceType().first);
-    KisResourceModel *resourceModel = KisResourceModelProvider::resourceModel(resource->resourceType().first);
-    KisTagResourceModel *tagResourceModel = KisResourceModelProvider::tagResourceModel(resource->resourceType().first);
+    m_tagModel = new KisTagModel(resource->resourceType().first);
+    KisResourceModel resourceModel(resource->resourceType().first);
+    KisTagResourceModel tagResourceModel(resource->resourceType().first);
 
-    tagResourceModel->setResourcesFilter(QVector<KoResourceSP>() << resource);
+    tagResourceModel.setResourcesFilter(QVector<KoResourceSP>() << resource);
     QList<KisTagSP> removables;
-    for (int i = 0; i < tagResourceModel->rowCount(); ++i) {
-        removables << tagResourceModel->data(tagResourceModel->index(i, 0), Qt::UserRole + KisAllTagResourceModel::Tag).value<KisTagSP>();
+    for (int i = 0; i < tagResourceModel.rowCount(); ++i) {
+        removables << tagResourceModel.data(tagResourceModel.index(i, 0), Qt::UserRole + KisAllTagResourceModel::Tag).value<KisTagSP>();
     }
 
 
@@ -177,6 +177,7 @@ KisResourceItemChooserContextMenu::KisResourceItemChooserContextMenu(KoResourceS
 
 KisResourceItemChooserContextMenu::~KisResourceItemChooserContextMenu()
 {
+    delete m_tagModel;
 }
 
 void KisResourceItemChooserContextMenu::addResourceExistingTag(KoResourceSP resource, const KisTagSP tag)
@@ -186,8 +187,8 @@ void KisResourceItemChooserContextMenu::addResourceExistingTag(KoResourceSP reso
 
 void KisResourceItemChooserContextMenu::removeResourceExistingTag(KoResourceSP resource, const KisTagSP tag)
 {
-    KisTagResourceModel *tagResourceModel = KisResourceModelProvider::tagResourceModel(resource->resourceType().first);
-    tagResourceModel->untagResource(tag, resource);
+    KisTagResourceModel tagResourceModel(resource->resourceType().first);
+    tagResourceModel.untagResource(tag, resource);
 }
 
 void KisResourceItemChooserContextMenu::addResourceNewTag(KoResourceSP resource, const QString tag)

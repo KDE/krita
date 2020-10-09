@@ -43,8 +43,15 @@ class KRITARESOURCES_EXPORT KisAllTagResourceModel
         , public KisAbstractTagResourceModel
 {
     Q_OBJECT
-public:
+private:
+
+    friend class KisResourceModelProvider;
+    friend class TestTagResourceModel;
+    friend class KisTagResourceModel;
+
     KisAllTagResourceModel(const QString &resourceType, QObject *parent = 0);
+
+public:
     ~KisAllTagResourceModel() override;
 
 public:
@@ -91,15 +98,9 @@ class KRITARESOURCES_EXPORT KisTagResourceModel : public QSortFilterProxyModel
 {
     Q_OBJECT
 
-private:
-
-    friend class KisResourceModelProvider;
-    friend class TestTagResourceModel;
-
-    KisTagResourceModel(const QString &resourceType, QObject *parent = 0);
-
 public:
 
+    KisTagResourceModel(const QString &resourceType, QObject *parent = 0);
     ~KisTagResourceModel() override;
 
 public:
@@ -138,16 +139,8 @@ public:
     bool tagResource(const KisTagSP tag, const KoResourceSP resource) override;
     bool untagResource(const KisTagSP tag, const KoResourceSP resource) override;
 
-protected:
-
-    bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const override;
-    bool lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const override;
-private:
-    struct Private;
-    Private* const d;
-
     // KisAbstractResourceModel interface
-public:
+
     KoResourceSP resourceForIndex(QModelIndex index) const override;
     QModelIndex indexForResource(KoResourceSP resource) const override;
     bool setResourceInactive(const QModelIndex &index) override;
@@ -156,6 +149,16 @@ public:
     bool updateResource(KoResourceSP resource) override;
     bool renameResource(KoResourceSP resource, const QString &name) override;
     bool setResourceMetaData(KoResourceSP resource, QMap<QString, QVariant> metadata) override;
+
+
+protected:
+
+    bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const override;
+    bool lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const override;
+
+private:
+    struct Private;
+    Private* const d;
 };
 
 #endif // KISTAGRESOURCEMODEL_H

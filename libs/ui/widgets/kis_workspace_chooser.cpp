@@ -155,7 +155,7 @@ void KisWorkspaceChooser::slotSaveWorkspace()
     workspace->setName(name);
     workspace->setFilename(name.split(" ").join("_")+workspace->defaultFileExtension());
 
-    KisResourceModelProvider::resourceModel(ResourceType::Workspaces)->addResource(workspace);
+    KisResourceModel(ResourceType::Workspaces).addResource(workspace);
 }
 
 void KisWorkspaceChooser::slotUpdateWorkspaceSaveButton()
@@ -210,7 +210,7 @@ void KisWorkspaceChooser::slotSaveWindowLayout()
 
     layout->setName(name);
     layout->setFilename(name.split(" ").join("_") + layout->defaultFileExtension());
-    KisResourceModelProvider::resourceModel(ResourceType::WindowLayouts)->addResource(layout);
+    KisResourceModel(ResourceType::WindowLayouts).addResource(layout);
 }
 
 void KisWorkspaceChooser::slotUpdateWindowLayoutSaveButton()

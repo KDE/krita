@@ -141,6 +141,7 @@ class KRITARESOURCES_EXPORT KisAllResourcesModel : public QAbstractTableModel, p
     Q_OBJECT
 
 private:
+    friend class KisResourceModelProvider;
     friend class KisResourceModel;
     KisAllResourcesModel(const QString &resourceType, QObject *parent = 0);
 
@@ -215,13 +216,9 @@ class KRITARESOURCES_EXPORT KisResourceModel : public QSortFilterProxyModel, pub
 {
     Q_OBJECT
 
-private:
-
-    friend class TestResourceModel;
-    friend class KisResourceModelProvider;
-    KisResourceModel(const QString &type, QObject *parent = 0);
-
 public:
+
+    KisResourceModel(const QString &type, QObject *parent = 0);
     ~KisResourceModel() override;
 
     enum ResourceFilter {

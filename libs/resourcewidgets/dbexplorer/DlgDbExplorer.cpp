@@ -61,7 +61,7 @@ DlgDbExplorer::DlgDbExplorer(QWidget *parent)
     }
 
     {
-        KisResourceModel *resourcesModel = KisResourceModelProvider::resourceModel(ResourceType::Brushes);
+        KisResourceModel *resourcesModel = new KisResourceModel(ResourceType::Brushes, this);
         m_page->tableResources->setModel(resourcesModel);
         m_page->tableResources->hideColumn(0);
         m_page->tableResources->setSelectionMode(QAbstractItemView::SingleSelection);
@@ -138,7 +138,7 @@ DlgDbExplorer::~DlgDbExplorer()
 
 void DlgDbExplorer::updateTagModel(const QString& resourceType)
 {
-    m_tagModel = KisResourceModelProvider::tagModel(resourceType);
+    m_tagModel = new KisTagModel(resourceType, this);
     m_page->cmbRvTags->setModelColumn(KisAllTagsModel::Name);
     m_page->cmbRvTags->setModel(m_tagModel);
     m_page->cmbRvTags->update();
@@ -149,11 +149,8 @@ void DlgDbExplorer::slotRvResourceTypeSelected(int index)
 {
     QModelIndex idx = m_page->cmbResourceTypes->model()->index(index, KisResourceTypeModel::ResourceType);
     QString resourceType = idx.data(Qt::DisplayRole).toString();
-    qDebug() << resourceType;
 
     updateTagModel(resourceType);
-
-    KisResourceModel *resourceModel = KisResourceModelProvider::resourceModel(resourceType);
 
     KisTagFilterResourceProxyModel *tagFilterModel = new KisTagFilterResourceProxyModel(resourceType, this);
 
@@ -168,9 +165,9 @@ void DlgDbExplorer::slotTbResourceTypeSelected(int index)
     QString resourceType = idx.data(Qt::DisplayRole).toString();
     qDebug() << resourceType;
 
-    m_tagModel = KisResourceModelProvider::tagModel(resourceType);
+    m_tagModel = new KisTagModel(resourceType, this);
 
-    KisResourceModel *resourceModel = KisResourceModelProvider::resourceModel(resourceType);
+    KisResourceModel *resourceModel = new KisResourceModel(resourceType, this);
     m_page->tableResources->setModel(resourceModel);
     m_page->tableResources->setCurrentIndex(m_page->tableResources->model()->index(0, 0));
     slotTbResourceItemSelected();

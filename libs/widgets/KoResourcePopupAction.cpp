@@ -68,7 +68,7 @@ KoResourcePopupAction::KoResourcePopupAction(const QString &resourceType, KoCanv
 
     d->resourceList = new KisResourceItemListView(widget);
 
-    d->model = KisResourceModelProvider::resourceModel(resourceType);
+    d->model = new KisResourceModel(resourceType, this);
     d->resourceList->setModel(d->model);
     d->resourceList->setItemDelegate(new KisResourceItemDelegate(widget));
     d->resourceList->setCurrentIndex(d->model->index(0, 0));

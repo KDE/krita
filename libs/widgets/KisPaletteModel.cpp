@@ -467,8 +467,8 @@ void KisPaletteModel::setDisplayRenderer(const KoColorDisplayRendererInterface *
 void KisPaletteModel::saveModification()
 {
     qDebug() << "saving modification in palette model" << m_colorSet->filename() << m_colorSet->storageLocation();
-    KisResourceModel *model = KisResourceModelProvider::resourceModel(m_colorSet->resourceType().first);
-    model->updateResource(m_colorSet);
+    KisResourceModel model(m_colorSet->resourceType().first);
+    model.updateResource(m_colorSet);
 }
 
 void KisPaletteModel::slotDisplayConfigurationChanged()

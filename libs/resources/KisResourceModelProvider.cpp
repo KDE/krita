@@ -31,9 +31,9 @@ Q_GLOBAL_STATIC(KisResourceModelProvider, s_instance)
 
 struct KisResourceModelProvider::Private
 {
-    QMap<QString, KisResourceModel*> resourceModels;
-    QMap<QString, KisTagModel*> tagModels;
-    QMap<QString, KisTagResourceModel*> tagResourceModels;
+    QMap<QString, KisAllResourcesModel*> resourceModels;
+    QMap<QString, KisAllTagsModel*> tagModels;
+    QMap<QString, KisAllTagResourceModel*> tagResourceModels;
 };
 
 KisResourceModelProvider::KisResourceModelProvider()
@@ -49,27 +49,27 @@ KisResourceModelProvider::~KisResourceModelProvider()
     delete d;
 }
 
-KisResourceModel *KisResourceModelProvider::resourceModel(const QString &resourceType)
+KisAllResourcesModel *KisResourceModelProvider::resourceModel(const QString &resourceType)
 {
     if (!s_instance->d->resourceModels.contains(resourceType)) {
-       s_instance->d->resourceModels[resourceType] = new KisResourceModel(resourceType);
+       s_instance->d->resourceModels[resourceType] = new KisAllResourcesModel(resourceType);
     }
     return s_instance->d->resourceModels[resourceType];
 }
 
-KisTagModel *KisResourceModelProvider::tagModel(const QString &resourceType)
+KisAllTagsModel *KisResourceModelProvider::tagModel(const QString &resourceType)
 {
     if (!s_instance->d->tagModels.contains(resourceType)) {
-       s_instance->d->tagModels[resourceType] = new KisTagModel(resourceType);
+       s_instance->d->tagModels[resourceType] = new KisAllTagsModel(resourceType);
     }
     return s_instance->d->tagModels[resourceType];
 }
 
 
-KisTagResourceModel *KisResourceModelProvider::tagResourceModel(const QString &resourceType)
+KisAllTagResourceModel *KisResourceModelProvider::tagResourceModel(const QString &resourceType)
 {
     if (!s_instance->d->tagResourceModels.contains(resourceType)) {
-       s_instance->d->tagResourceModels[resourceType] = new KisTagResourceModel(resourceType);
+       s_instance->d->tagResourceModels[resourceType] = new KisAllTagResourceModel(resourceType);
     }
     return s_instance->d->tagResourceModels[resourceType];
 }

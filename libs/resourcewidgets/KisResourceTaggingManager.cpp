@@ -62,7 +62,7 @@ public:
 
 
     /// \brief tagModel main tag model for tags in the tags combobox
-    KisTagModel* tagModel;
+    KisTagModel *tagModel;
 };
 
 
@@ -73,7 +73,7 @@ KisResourceTaggingManager::KisResourceTaggingManager(QString resourceType, KisTa
 {
     d->model = model;
 
-    d->tagModel = KisResourceModelProvider::tagModel(resourceType);
+    d->tagModel = new KisTagModel(resourceType);
     d->tagChooser = new KisTagChooserWidget(d->tagModel, parent);
     d->tagFilter = new KisTagFilterWidget(d->tagModel, parent);
 
@@ -85,6 +85,7 @@ KisResourceTaggingManager::KisResourceTaggingManager(QString resourceType, KisTa
 
 KisResourceTaggingManager::~KisResourceTaggingManager()
 {
+    delete d->tagModel;
     delete d;
 }
 

@@ -30,7 +30,15 @@ namespace {
 class GlobalResourcesSource : public KisResourcesInterface::ResourceSourceAdapter
 {
 public:
-    GlobalResourcesSource(KisResourceModel *model) : m_model(model) {}
+    GlobalResourcesSource(KisResourceModel *model)
+        : m_model(model)
+    {}
+
+    ~GlobalResourcesSource() override
+    {
+        delete m_model;
+    }
+
 
     KoResourceSP resourceForFilename(const QString& filename) const override {
         return m_model->resourceForFilename(filename);
@@ -78,7 +86,7 @@ KisResourcesInterfaceSP KisGlobalResourcesInterface::instance()
 KisResourcesInterface::ResourceSourceAdapter *KisGlobalResourcesInterface::createSourceImpl(const QString &type) const
 {
     KisResourcesInterface::ResourceSourceAdapter *source =
-        new GlobalResourcesSource(KisResourceModelProvider::resourceModel(type));
+        new GlobalResourcesSource(new KisResourceModel(type));
 
     KIS_ASSERT(source);
     return source;

@@ -90,75 +90,70 @@ void TestTagResourceModel::testRowCount()
     int rowCount = q.value(0).toInt();
     QCOMPARE(rowCount, 2);
 
-    KisAllTagResourceModel *tagResourceModel = new KisAllTagResourceModel(ResourceType::PaintOpPresets);
-    QCOMPARE(tagResourceModel->rowCount(), rowCount);
-    delete tagResourceModel;
+    KisAllTagResourceModel tagResourceModel(ResourceType::PaintOpPresets);
+    QCOMPARE(tagResourceModel.rowCount(), rowCount);
 }
 
 void TestTagResourceModel::testData()
 {
-     KisAllTagResourceModel *tagResourceModel = new KisAllTagResourceModel(ResourceType::PaintOpPresets);
-     QModelIndex idx = tagResourceModel->index(0, 0);
+     KisAllTagResourceModel tagResourceModel(ResourceType::PaintOpPresets);
+     QModelIndex idx = tagResourceModel.index(0, 0);
      QVERIFY(idx.isValid());
 
-     int tagId = tagResourceModel->data(idx, Qt::UserRole + KisAllTagResourceModel::TagId).toInt();
+     int tagId = tagResourceModel.data(idx, Qt::UserRole + KisAllTagResourceModel::TagId).toInt();
      QCOMPARE(tagId, 1);
 
-     int resourceId = tagResourceModel->data(idx, Qt::UserRole + KisAllTagResourceModel::ResourceId).toInt();
+     int resourceId = tagResourceModel.data(idx, Qt::UserRole + KisAllTagResourceModel::ResourceId).toInt();
      QCOMPARE(resourceId, 4);
 
-     KisTagSP tag = tagResourceModel->data(idx, Qt::UserRole + KisAllTagResourceModel::Tag).value<KisTagSP>();
+     KisTagSP tag = tagResourceModel.data(idx, Qt::UserRole + KisAllTagResourceModel::Tag).value<KisTagSP>();
      QVERIFY(tag);
      QVERIFY(tag->valid());
      QCOMPARE(tag->name(), "* Favorites");
      QCOMPARE(tag->id(), 1);
 
-     KoResourceSP resource = tagResourceModel->data(idx, Qt::UserRole + KisAllTagResourceModel::Resource).value<KoResourceSP>();
+     KoResourceSP resource = tagResourceModel.data(idx, Qt::UserRole + KisAllTagResourceModel::Resource).value<KoResourceSP>();
      QVERIFY(resource);
      QVERIFY(resource->valid());
      QCOMPARE(resource->name(), "test0.kpp");
      QCOMPARE(resource->resourceId(), 4);
 
-     bool tagActive = tagResourceModel->data(idx, Qt::UserRole + KisAllTagResourceModel::TagActive).toBool();
+     bool tagActive = tagResourceModel.data(idx, Qt::UserRole + KisAllTagResourceModel::TagActive).toBool();
      QVERIFY(tagActive);
 
-     bool resourceActive = tagResourceModel->data(idx, Qt::UserRole + KisAllTagResourceModel::ResourceActive).toBool();
+     bool resourceActive = tagResourceModel.data(idx, Qt::UserRole + KisAllTagResourceModel::ResourceActive).toBool();
      QVERIFY(resourceActive);
 
-     bool resourceStorageActive = tagResourceModel->data(idx, Qt::UserRole + KisAllTagResourceModel::ResourceStorageActive).toBool();
+     bool resourceStorageActive = tagResourceModel.data(idx, Qt::UserRole + KisAllTagResourceModel::ResourceStorageActive).toBool();
      QVERIFY(resourceStorageActive);
-
-     delete tagResourceModel;
 }
 
 void TestTagResourceModel::testTagResource()
 {
-    KisResourceModel *resourceModel = KisResourceModelProvider::resourceModel(ResourceType::PaintOpPresets);
-    KoResourceSP resource = resourceModel->resourceForName("test2.kpp");
+    KisResourceModel resourceModel(ResourceType::PaintOpPresets);
+    KoResourceSP resource = resourceModel.resourceForName("test2.kpp");
     Q_ASSERT(resource);
 
-    KisTagModel *tagModel = KisResourceModelProvider::tagModel(ResourceType::PaintOpPresets);
-    KisTagSP tag = tagModel->tagForIndex(tagModel->index(2, 0));
+    KisTagModel tagModel(ResourceType::PaintOpPresets);
+    KisTagSP tag = tagModel.tagForIndex(tagModel.index(2, 0));
     Q_ASSERT(tag);
 
-    KisAllTagResourceModel *tagResourceModel = new KisAllTagResourceModel(ResourceType::PaintOpPresets);
-    int rowCount = tagResourceModel->rowCount();
+    KisAllTagResourceModel tagResourceModel(ResourceType::PaintOpPresets);
+    int rowCount = tagResourceModel.rowCount();
 
-    QVERIFY(tagResourceModel->tagResource(tag, resource));
+    QVERIFY(tagResourceModel.tagResource(tag, resource));
 
-    QCOMPARE(tagResourceModel->rowCount(), rowCount + 1);
-
-    delete tagResourceModel;
+    QCOMPARE(tagResourceModel.rowCount(), rowCount + 1);
 }
 
 void TestTagResourceModel::testUntagResource()
 {
-    KisResourceModel *resourceModel = KisResourceModelProvider::resourceModel(ResourceType::PaintOpPresets);
-    KoResourceSP resource = resourceModel->resourceForName("test1.kpp");
+    KisResourceModel resourceModel(ResourceType::PaintOpPresets);
+    KoResourceSP resource = resourceModel.resourceForName("test1.kpp");
     Q_ASSERT(resource);
 
-    KisTagModel *tagModel = KisResourceModelProvider::tagModel(ResourceType::PaintOpPresets);
-    KisTagSP tag = tagModel->tagForIndex(tagModel->index(2, 0));
+    KisTagModel tagModel(ResourceType::PaintOpPresets);
+    KisTagSP tag = tagModel.tagForIndex(tagModel.index(2, 0));
     Q_ASSERT(tag);
 
     KisAllTagResourceModel tagResourceModel(ResourceType::PaintOpPresets);
@@ -170,28 +165,26 @@ void TestTagResourceModel::testUntagResource()
 
 void TestTagResourceModel::testFilterTagResource()
 {
-    KisResourceModel *resourceModel = KisResourceModelProvider::resourceModel(ResourceType::PaintOpPresets);
-    KoResourceSP resource = resourceModel->resourceForName("test2.kpp");
+    KisResourceModel resourceModel(ResourceType::PaintOpPresets);
+    KoResourceSP resource = resourceModel.resourceForName("test2.kpp");
     Q_ASSERT(resource);
 
-    KisTagModel *tagModel = KisResourceModelProvider::tagModel(ResourceType::PaintOpPresets);
-    KisTagSP tag = tagModel->tagForIndex(tagModel->index(2, 0));
+    KisTagModel tagModel(ResourceType::PaintOpPresets);
+    KisTagSP tag = tagModel.tagForIndex(tagModel.index(2, 0));
     Q_ASSERT(tag);
 
-    KisTagResourceModel *tagResourceModel = new KisTagResourceModel(ResourceType::PaintOpPresets);
-    QCOMPARE(tagResourceModel->rowCount(), 2);
+    KisTagResourceModel tagResourceModel(ResourceType::PaintOpPresets);
+    QCOMPARE(tagResourceModel.rowCount(), 2);
 
     QVector<int> tagIds;
     tagIds << tag->id();
-    tagResourceModel->setTagsFilter(tagIds);
+    tagResourceModel.setTagsFilter(tagIds);
 
     QVector<int> resourceIds;
     resourceIds << resource->resourceId();
-    tagResourceModel->setResourcesFilter(resourceIds);
+    tagResourceModel.setResourcesFilter(resourceIds);
 
-    QCOMPARE(tagResourceModel->rowCount(), 1);
-
-    delete tagResourceModel;
+    QCOMPARE(tagResourceModel.rowCount(), 1);
 }
 
 void TestTagResourceModel::cleanupTestCase()

@@ -43,8 +43,7 @@
 #include "ksharedconfig.h"
 
 #include <KisResourceModel.h>
-#include <KisResourceModelProvider.h>
-#include <KisResourceModelProvider.h>
+#include <KisTagModel.h>
 #include <kis_assert.h>
 #include <kis_debug.h>
 
@@ -65,8 +64,8 @@ public:
     typedef KoResourceServerObserver<T> ObserverType;
 
     KoResourceServer(const QString& type)
-        : m_resourceModel(KisResourceModelProvider::resourceModel(type))
-        , m_tagModel(KisResourceModelProvider::tagModel(type))
+        : m_resourceModel(new KisResourceModel(type))
+        , m_tagModel(new KisTagModel(type))
         , m_type(type)
     {
         KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == qApp->thread());
@@ -80,6 +79,8 @@ public:
 
     virtual ~KoResourceServer()
     {
+        delete m_resourceModel;
+        delete m_tagModel;
         Q_FOREACH (ObserverType* observer, m_observers) {
             observer->unsetResourceServer();
         }

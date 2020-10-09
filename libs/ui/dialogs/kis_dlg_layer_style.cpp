@@ -539,7 +539,7 @@ StylesSelector::StylesSelector(QWidget *parent)
     ui.setupUi(this);
 
     //ui.cmbStyleCollections->setModel();
-    m_resourceModel = KisResourceModelProvider::resourceModel(ResourceType::LayerStyles);
+    m_resourceModel = new KisResourceModel(ResourceType::LayerStyles, this);
     m_locationsProxyModel = new LocationProxyModel(this);
     m_locationsProxyModel->setSourceModel(m_resourceModel);
     m_locationsProxyModel->setEnableFiltering(false);

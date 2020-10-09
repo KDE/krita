@@ -20,7 +20,7 @@
 
 #include <QtSql>
 #include <KisResourceLocator.h>
-#include <KisResourceModelProvider.h>
+#include <KisResourceModel.h>
 #include <KisResourceQueryMapper.h>
 
 struct KisAllTagResourceModel::Private {
@@ -419,31 +419,31 @@ QModelIndex KisTagResourceModel::indexForResource(KoResourceSP resource) const
 
 bool KisTagResourceModel::setResourceInactive(const QModelIndex &index)
 {
-    KisResourceModel *resourceModel = KisResourceModelProvider::resourceModel(d->resourceType);
-    QModelIndex idx = resourceModel->indexForResource(resourceForIndex(index));
-    return resourceModel->setResourceInactive(idx);
+    KisResourceModel resourceModel(d->resourceType);
+    QModelIndex idx = resourceModel.indexForResource(resourceForIndex(index));
+    return resourceModel.setResourceInactive(idx);
 }
 
 bool KisTagResourceModel::importResourceFile(const QString &filename)
 {
     // Since we're importing the resource, there's no reason to add rows to the tags::resources table,
     // because the resource is untagged.
-    KisResourceModel *resourceModel = KisResourceModelProvider::resourceModel(d->resourceType);
-    return resourceModel->importResourceFile(filename);
+    KisResourceModel resourceModel(d->resourceType);
+    return resourceModel.importResourceFile(filename);
 }
 
 bool KisTagResourceModel::addResource(KoResourceSP resource, const QString &storageId)
 {
     // Since we're importing the resource, there's no reason to add rows to the tags::resources table,
     // because the resource is untagged.
-    KisResourceModel *resourceModel = KisResourceModelProvider::resourceModel(d->resourceType);
-    return resourceModel->addResource(resource, storageId);
+    KisResourceModel resourceModel(d->resourceType);
+    return resourceModel.addResource(resource, storageId);
 }
 
 bool KisTagResourceModel::updateResource(KoResourceSP resource)
 {
-    KisResourceModel *resourceModel = KisResourceModelProvider::resourceModel(d->resourceType);
-    bool r = resourceModel->updateResource(resource);
+    KisResourceModel resourceModel(d->resourceType);
+    bool r = resourceModel.updateResource(resource);
     if (r) {
         QModelIndex index = indexForResource(resource);
         if (index.isValid()) {
@@ -455,8 +455,8 @@ bool KisTagResourceModel::updateResource(KoResourceSP resource)
 
 bool KisTagResourceModel::renameResource(KoResourceSP resource, const QString &name)
 {
-    KisResourceModel *resourceModel = KisResourceModelProvider::resourceModel(d->resourceType);
-    bool r = resourceModel->renameResource(resource, name);
+    KisResourceModel resourceModel(d->resourceType);
+    bool r = resourceModel.renameResource(resource, name);
     if (r) {
         QModelIndex index = indexForResource(resource);
         if (index.isValid()) {
@@ -468,6 +468,6 @@ bool KisTagResourceModel::renameResource(KoResourceSP resource, const QString &n
 
 bool KisTagResourceModel::setResourceMetaData(KoResourceSP resource, QMap<QString, QVariant> metadata)
 {
-    KisResourceModel *resourceModel = KisResourceModelProvider::resourceModel(d->resourceType);
-    return resourceModel->setResourceMetaData(resource, metadata);
+    KisResourceModel resourceModel(d->resourceType);
+    return resourceModel.setResourceMetaData(resource, metadata);
 }

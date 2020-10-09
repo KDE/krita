@@ -491,7 +491,7 @@ KisResourceModel::KisResourceModel(const QString &type, QObject *parent)
     : QSortFilterProxyModel(parent)
     , d(new Private)
 {
-    setSourceModel(new KisAllResourcesModel(type));
+    setSourceModel(KisResourceModelProvider::resourceModel(type));
     setDynamicSortFilter(true);
 }
 

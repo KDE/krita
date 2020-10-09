@@ -40,7 +40,7 @@ KisSessionManagerDialog::KisSessionManagerDialog(QWidget *parent)
     connect(btnDelete, SIGNAL(clicked()), this, SLOT(slotDeleteSession()));
     connect(btnClose, SIGNAL(clicked()), this, SLOT(slotClose()));
 
-    m_model = KisResourceModelProvider::resourceModel(ResourceType::Sessions);
+    m_model = new KisResourceModel(ResourceType::Sessions, this);
     lstSessions->setModel(m_model);
     lstSessions->setModelColumn(KisAbstractResourceModel::Name);
 

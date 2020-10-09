@@ -173,7 +173,7 @@ SvgSymbolCollectionDocker::SvgSymbolCollectionDocker(QWidget *parent)
 
     connect(m_wdgSvgCollection->cmbCollections, SIGNAL(activated(int)), SLOT(collectionActivated(int)));
 
-    m_resourceModel = KisResourceModelProvider::resourceModel(ResourceType::Symbols);
+    m_resourceModel = new KisResourceModel(ResourceType::Symbols, this);
 
     m_wdgSvgCollection->cmbCollections->setModel(m_resourceModel);
     m_wdgSvgCollection->cmbCollections->setModelColumn(KisAbstractResourceModel::Name);

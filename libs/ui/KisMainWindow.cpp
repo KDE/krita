@@ -330,7 +330,7 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     : KXmlGuiWindow()
     , d(new Private(this, uuid))
 {
-    d->workspacemodel = KisResourceModelProvider::resourceModel(ResourceType::Workspaces);
+    d->workspacemodel = new KisResourceModel(ResourceType::Workspaces, this);
     connect(d->workspacemodel, SIGNAL(modelReset()), this, SLOT(updateWindowMenu()));
 
     d->viewManager = new KisViewManager(this, actionCollection());
@@ -1771,8 +1771,9 @@ bool KisMainWindow::restoreWorkspace(int workspaceId)
 {
 
     KisWorkspaceResourceSP workspace =
-            KisResourceModelProvider::resourceModel(ResourceType::Workspaces)
-            ->resourceForId(workspaceId).dynamicCast<KisWorkspaceResource>();
+            KisResourceModel(ResourceType::Workspaces)
+                .resourceForId(workspaceId)
+                .dynamicCast<KisWorkspaceResource>();
 
     bool success = restoreWorkspaceState(workspace->dockerState());
 
@@ -2268,8 +2269,8 @@ void KisMainWindow::updateWindowMenu()
     menu->addAction(d->workspaceMenu);
     QMenu *workspaceMenu = d->workspaceMenu->menu();
     workspaceMenu->clear();
-
-    KisResourceIterator resourceIterator(KisResourceModelProvider::resourceModel(ResourceType::Workspaces));
+    KisResourceModel resourceModel(ResourceType::Workspaces);
+    KisResourceIterator resourceIterator(&resourceModel);
     KisMainWindow *m_this = this;
 
     while (resourceIterator.hasNext()) {

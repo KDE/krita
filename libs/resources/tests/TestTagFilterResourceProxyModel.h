@@ -35,15 +35,13 @@ private Q_SLOTS:
     void testFilterByResource();
     void testFilterByTag();
     void testFilterByString();
+    void testDataWhenSwitchingBetweenTagAllAllUntagged();
 
     void testResourceForIndex();
-
-    void testDataWhenSwitchingBetweenTagAllAllUntagged();
 
     void cleanupTestCase();
 
 private:
-
 
     QString m_srcLocation;
     QString m_dstLocation;

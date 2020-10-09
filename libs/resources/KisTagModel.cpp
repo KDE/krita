@@ -334,7 +334,7 @@ bool KisAllTagsModel::addTag(const KisTagSP tag, QVector<KoResourceSP> taggedRes
             if (!resource->valid()) continue;
             if (resource->resourceId() < 0) continue;
 
-            KisResourceModelProvider::tagResourceModel(d->resourceType)->tagResource(tag, resource);
+            KisTagResourceModel(d->resourceType).tagResource(tag, resource);
         }
     }
 

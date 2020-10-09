@@ -111,7 +111,7 @@ KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool
 {
     d->splitter = new QSplitter(this);
 
-    d->resourceModel = KisResourceModelProvider::resourceModel(resourceType);
+    d->resourceModel = new KisResourceModel(resourceType);
 
     d->tagFilterProxyModel = new KisTagFilterResourceProxyModel(resourceType, this);
 
@@ -221,6 +221,7 @@ KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool
 KisResourceItemChooser::~KisResourceItemChooser()
 {
     disconnect();
+    delete d->resourceModel;
     delete d;
 }
 

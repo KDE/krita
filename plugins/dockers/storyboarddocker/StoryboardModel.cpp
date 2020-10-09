@@ -718,7 +718,7 @@ bool StoryboardModel::insertHoldFramesAfter(int newDuration, int oldDuration, QM
         return false;
     }
     //minimum duration is 0s 1f
-    if (index.row() ==StoryboardItem::DurationFrame && newDuration < 1 
+    if (index.row() == StoryboardItem::DurationFrame && newDuration < 1
         && index.siblingAtRow(StoryboardItem::DurationSecond).data().toInt() == 0) {
         return false;
     }
@@ -923,7 +923,7 @@ void StoryboardModel::slotKeyframeMoved(const KisKeyframeChannel* channel, int f
 }
 
 void StoryboardModel::slotNodeRemoved(KisNodeSP node)
-{ 
+{
     if (node->isAnimated() && node->paintDevice()) {
         KisKeyframeChannel *channel = node->paintDevice()->keyframeChannel();
         int keyframeTime = channel->firstKeyframeTime();

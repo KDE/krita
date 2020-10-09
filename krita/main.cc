@@ -169,6 +169,19 @@ Java_org_krita_android_JNIWrappers_exitFullScreen(JNIEnv* /*env*/,
     mainWindow->viewFullscreen(false);
 }
 
+extern "C" JNIEXPORT void JNICALL
+Java_org_krita_android_JNIWrappers_openFileFromIntent(JNIEnv* /*env*/,
+                                                      jobject /*obj*/,
+                                                      jstring str)
+{
+    QAndroidJniObject jUri(str);
+    if (jUri.isValid()) {
+        QString uri = jUri.toString();
+        QMetaObject::invokeMethod(KisApplication::instance(), "fileOpenRequested",
+                                  Qt::QueuedConnection, Q_ARG(QString, uri));
+    }
+}
+
 __attribute__ ((visibility ("default")))
 #endif
 extern "C" int main(int argc, char **argv)

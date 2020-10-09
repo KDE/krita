@@ -41,18 +41,10 @@ public class MainActivity extends QtActivity {
 
         // we have to do this before loading main()
         Intent i = getIntent();
-        if (i != null) {
-            Uri fileUri = i.getData();
-            if (fileUri != null) {
-                // this will be passed as a command line argument to main()
-                i.putExtra("applicationArguments", fileUri.toString());
-
-                int modeFlags = Intent.FLAG_GRANT_READ_URI_PERMISSION;
-                if ((i.getFlags() & Intent.FLAG_GRANT_WRITE_URI_PERMISSION) != 0) {
-                    modeFlags |= Intent.FLAG_GRANT_WRITE_URI_PERMISSION;
-                }
-                QtNative.addToKnownUri(fileUri, modeFlags);
-            }
+        String uri = addToKnownUris(i);
+        if (uri != null) {
+            // this will be passed as a command line argument to main()
+            i.putExtra("applicationArguments", uri);
         }
 
 		super.onCreate(savedInstanceState);
@@ -60,6 +52,31 @@ public class MainActivity extends QtActivity {
 
         DonationHelper.getInstance();
 	}
+
+    @Override
+    protected void onNewIntent (Intent intent) {
+        String uri = addToKnownUris(intent);
+        if (uri != null) {
+            JNIWrappers.openFileFromIntent(uri);
+        }
+
+        super.onNewIntent(intent);
+    }
+
+    private String addToKnownUris(Intent intent) {
+        if (intent != null) {
+            Uri fileUri = intent.getData();
+            if (fileUri != null) {
+                int modeFlags = Intent.FLAG_GRANT_READ_URI_PERMISSION;
+                if ((intent.getFlags() & Intent.FLAG_GRANT_WRITE_URI_PERMISSION) != 0) {
+                    modeFlags |= Intent.FLAG_GRANT_WRITE_URI_PERMISSION;
+                }
+                QtNative.addToKnownUri(fileUri, modeFlags);
+                return fileUri.toString();
+            }
+        }
+        return null;
+    }
 
 	@Override
 	public void onPause() {

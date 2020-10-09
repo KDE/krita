@@ -107,9 +107,10 @@ void ToolReferenceImages::addReferenceImage()
     if (!QFileInfo(filename).exists()) return;
 
     auto *reference = KisReferenceImage::fromFile(filename, *kisCanvas->coordinatesConverter(), canvas()->canvasWidget());
-    if (document()->referenceImagesLayer() && reference) {
-        reference->setZIndex(document()->referenceImagesLayer()->shapes().size());
-
+    if (reference) {
+        if (document()->referenceImagesLayer()) {
+            reference->setZIndex(document()->referenceImagesLayer()->shapes().size());
+        }
         KisDocument *doc = document();
         doc->addCommand(KisReferenceImagesLayer::addReferenceImages(doc, {reference}));
     }
@@ -121,9 +122,10 @@ void ToolReferenceImages::pasteReferenceImage()
     KIS_ASSERT_RECOVER_RETURN(kisCanvas);
 
     KisReferenceImage* reference = KisReferenceImage::fromClipboard(*kisCanvas->coordinatesConverter());
-    if (document()->referenceImagesLayer() && reference) {
-        reference->setZIndex(document()->referenceImagesLayer()->shapes().size());
-
+    if (reference) {
+        if (document()->referenceImagesLayer()) {
+            reference->setZIndex(document()->referenceImagesLayer()->shapes().size());
+        }
         KisDocument *doc = document();
         doc->addCommand(KisReferenceImagesLayer::addReferenceImages(doc, {reference}));
     } else {

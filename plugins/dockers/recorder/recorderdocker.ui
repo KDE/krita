@@ -80,7 +80,7 @@
           <item>
            <widget class="QLabel" name="labelDirectory">
             <property name="text">
-             <string>Snapshots directory:</string>
+             <string comment="A folder where recordings are stored">Snapshots directory:</string>
             </property>
             <property name="buddy">
              <cstring>buttonBrowse</cstring>
@@ -147,7 +147,7 @@
             <item row="1" column="0">
              <widget class="QLabel" name="labelQuality">
               <property name="text">
-               <string>Quality:</string>
+               <string comment="Compression quality">Quality:</string>
               </property>
               <property name="buddy">
                <cstring>spinQuality</cstring>
@@ -160,7 +160,7 @@
             <item row="2" column="0">
              <widget class="QLabel" name="labelResolution">
               <property name="text">
-               <string>Resolution:</string>
+               <string comment="Resolution for recorded frames">Resolution:</string>
               </property>
               <property name="buddy">
                <cstring>comboResolution</cstring>

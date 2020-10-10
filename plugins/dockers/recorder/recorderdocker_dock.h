@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2019 Shi Yan <billconan@gmail.net>
+ *  Copyright (c) 2020 Dmitrii Utkin <loentar@gmail.com>
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by

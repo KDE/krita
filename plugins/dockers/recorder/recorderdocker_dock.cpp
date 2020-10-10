@@ -1,5 +1,6 @@
 /*
- *  Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2019 Shi Yan <billconan@gmail.net>
+ *  Copyright (c) 2020 Dmitrii Utkin <loentar@gmail.com>
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -87,7 +88,11 @@ public:
 
     void updateComboResolution(quint32 width, quint32 height)
     {
-        const QStringList titles = { i18n("Original"), i18n("Half"), i18n("Quarter") };
+        const QStringList titles = {
+            i18nc("Use original resolution for the frames when recording the canvas", "Original"),
+            i18nc("Use the resolution two times smaller than the original resolution for the frames when recording the canvas", "Half"),
+            i18nc("Use the resolution four times smaller than the original resolution for the frames when recording the canvas", "Quarter")
+        };
 
         QStringList items;
         for (int index = 0, len = titles.length(); index < len; ++index) {
@@ -114,7 +119,8 @@ public:
         QSignalBlocker blocker(ui->buttonRecordToggle);
         ui->buttonRecordToggle->setChecked(isRecording);
         ui->buttonRecordToggle->setIcon(KisIconUtils::loadIcon(isRecording ? "media-playback-stop" : "media-record"));
-        ui->buttonRecordToggle->setText(i18n(isRecording ? "Stop" : "Record"));
+        ui->buttonRecordToggle->setText(isRecording ? i18nc("Stop recording the canvas", "Stop")
+                                        : i18nc("Start recording the canvas", "Record"));
         ui->buttonRecordToggle->setEnabled(true);
 
         ui->widgetSettings->setEnabled(!isRecording);
@@ -135,13 +141,14 @@ public:
     void updateRecIndicator(bool paused)
     {
         // don't remove empty <font></font> tag else label will jump a few pixels around
-        statusBarLabel->setText(paused ? "<font>● REC</font>" : "<font color='#da4453'>●</font><font> REC</font>");
-        statusBarLabel->setToolTip(i18n(paused ? "Recorder is paused" : "Recorder is active"));
+        statusBarLabel->setText(QString("<font%1>●</font><font> %2</font>")
+                                .arg(paused ? "" : " color='#da4453'").arg(i18nc("Recording symbol", "REC")));
+        statusBarLabel->setToolTip(paused ? i18n("Recorder is paused") : i18n("Recorder is active"));
     }
 };
 
 RecorderDockerDock::RecorderDockerDock()
-    : QDockWidget(i18n("Recorder"))
+    : QDockWidget(i18nc("Title of the docker", "Recorder"))
     , d(new Private(this))
 {
     QWidget* page = new QWidget(this);
@@ -234,7 +241,8 @@ void RecorderDockerDock::onSelectRecordFolderButtonClicked()
 {
     QFileDialog dialog(this);
     dialog.setFileMode(QFileDialog::DirectoryOnly);
-    const QString &directory = dialog.getExistingDirectory(this, i18n("Select Output Folder"),
+    const QString &directory = dialog.getExistingDirectory(this,
+                               i18n("Select a Folder for Recordings"),
                                d->ui->editDirectory->text(),
                                QFileDialog::ShowDirsOnly);
     if (!directory.isEmpty()) {

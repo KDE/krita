@@ -49,6 +49,7 @@ public:
 Q_SIGNALS:
     void sigSwitchModeEditFillGradient(bool value);
     void sigSwitchModeEditStrokeGradient(bool value);
+    void sigMeshGradientResetted();
 
 public Q_SLOTS:
     void slotMeshGradientHandleSelected(KoShapeMeshGradientHandles::Handle h);

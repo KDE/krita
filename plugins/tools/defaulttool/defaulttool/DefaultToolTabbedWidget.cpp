@@ -55,6 +55,8 @@ DefaultToolTabbedWidget::DefaultToolTabbedWidget(KoInteractionTool *tool, QWidge
 
     connect(this, SIGNAL(currentChanged(int)), SLOT(slotCurrentIndexChanged(int)));
     m_oldTabIndex = currentIndex();
+
+    connect(m_fillWidget, SIGNAL(sigMeshGradientResetted()), SIGNAL(sigMeshGradientResetted()));
 }
 
 DefaultToolTabbedWidget::~DefaultToolTabbedWidget()

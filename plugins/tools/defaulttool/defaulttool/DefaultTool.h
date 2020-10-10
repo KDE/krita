@@ -121,6 +121,7 @@ private Q_SLOTS:
     void slotActivateEditStrokeGradient(bool value);
 
     void slotActivateEditFillMeshGradient(bool value);
+    void slotResetMeshGradientState();
 
 protected Q_SLOTS:
     /// Update actions on selection change

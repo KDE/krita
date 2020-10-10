@@ -267,9 +267,13 @@ KoFillConfigWidget::KoFillConfigWidget(KoCanvasBase *canvas, KoFlake::FillVarian
     d->group->addButton(d->ui->btnPatternFill, Pattern);
     d->ui->btnPatternFill->setVisible(false);
 
-    // FIXME: different button
-    d->ui->btnMeshFill->setIcon(QPixmap((const char**) buttonpattern));
-    d->group->addButton(d->ui->btnMeshFill, MeshGradient);
+    if (fillVariant == KoFlake::Fill) {
+        // FIXME: different button
+        d->ui->btnMeshFill->setIcon(QPixmap((const char**) buttonpattern));
+        d->group->addButton(d->ui->btnMeshFill, MeshGradient);
+    } else {
+        d->ui->btnMeshFill->setVisible(false);
+    }
 
     d->colorAction = new KoColorPopupAction(d->ui->btnChooseSolidColor);
     d->colorAction->setToolTip(i18n("Change the filling color"));

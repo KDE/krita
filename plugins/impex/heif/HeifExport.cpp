@@ -124,10 +124,21 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
 
     // Convert to 8 bits rgba on saving if not rgba+8bit, rgba+16bit or graya+8bit.
 
-    if ((cs->colorModelId() != RGBAColorModelID || cs->colorModelId() == GrayAColorModelID)
-        && (cs->colorDepthId() != Integer8BitsColorDepthID || cs->colorDepthId() != Integer16BitsColorDepthID)) {
-        image->convertImageColorSpace(cs, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
+    if ( (cs->colorModelId() != RGBAColorModelID || cs->colorModelId() != GrayAColorModelID)
+         || (cs->colorDepthId() != Integer8BitsColorDepthID || cs->colorDepthId() != Integer16BitsColorDepthID)) {
+        const KoColorSpace *sRgb = KoColorSpaceRegistry::instance()->rgb8();
+        image->convertImageColorSpace(sRgb, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
     }
+
+
+    if (cs->colorModelId() == GrayAColorModelID && cs->colorDepthId() != Integer8BitsColorDepthID) {
+        const KoColorSpace *gray = KoColorSpaceRegistry::instance()->graya8(cs->profile()->name());
+        image->convertImageColorSpace(gray, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
+    }
+
+    image->waitForDone();
+    cs = image->colorSpace();
+
 
     int quality = configuration->getInt("quality", 50);
     bool lossless = configuration->getBool("lossless", false);
@@ -239,7 +250,7 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
         } else {
             qDebug() << "saving as 8bit grayscale";
             img.create(width, height, heif_colorspace_monochrome, heif_chroma_monochrome);
-            qDebug() << img.get_chroma_format();
+
             img.add_plane(heif_channel_Y, width, height, 8);
 
             uint8_t* ptrG {0};
@@ -270,6 +281,8 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
             }
         }
 
+
+
         // --- save the color profile.
         QByteArray rawProfileBA = image->colorSpace()->profile()->rawData();
         std::vector<uint8_t> rawProfile(rawProfileBA.begin(), rawProfileBA.end());
@@ -288,31 +301,31 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
 
         QScopedPointer<KisMetaData::Store> metaDataStore;
         if (exivInfoVisitor.metaDataCount() == 1) {
-          metaDataStore.reset(new KisMetaData::Store(*exivInfoVisitor.exifInfo()));
+            metaDataStore.reset(new KisMetaData::Store(*exivInfoVisitor.exifInfo()));
         }
         else {
-          metaDataStore.reset(new KisMetaData::Store());
+            metaDataStore.reset(new KisMetaData::Store());
         }
 
         if (!metaDataStore->empty()) {
-          {
-            KisMetaData::IOBackend* exifIO = KisMetaData::IOBackendRegistry::instance()->value("exif");
-            QBuffer buffer;
-            exifIO->saveTo(metaDataStore.data(), &buffer, KisMetaData::IOBackend::NoHeader); // Or JpegHeader? Or something else?
-            QByteArray data = buffer.data();
+            {
+                KisMetaData::IOBackend* exifIO = KisMetaData::IOBackendRegistry::instance()->value("exif");
+                QBuffer buffer;
+                exifIO->saveTo(metaDataStore.data(), &buffer, KisMetaData::IOBackend::NoHeader); // Or JpegHeader? Or something else?
+                QByteArray data = buffer.data();
 
-            // Write the data to the file
-            ctx.add_exif_metadata(handle, data.constData(), data.size());
-          }
-          {
-            KisMetaData::IOBackend* xmpIO = KisMetaData::IOBackendRegistry::instance()->value("xmp");
-            QBuffer buffer;
-            xmpIO->saveTo(metaDataStore.data(), &buffer, KisMetaData::IOBackend::NoHeader); // Or JpegHeader? Or something else?
-            QByteArray data = buffer.data();
+                // Write the data to the file
+                ctx.add_exif_metadata(handle, data.constData(), data.size());
+            }
+            {
+                KisMetaData::IOBackend* xmpIO = KisMetaData::IOBackendRegistry::instance()->value("xmp");
+                QBuffer buffer;
+                xmpIO->saveTo(metaDataStore.data(), &buffer, KisMetaData::IOBackend::NoHeader); // Or JpegHeader? Or something else?
+                QByteArray data = buffer.data();
 
-            // Write the data to the file
-            ctx.add_XMP_metadata(handle, data.constData(), data.size());
-          }
+                // Write the data to the file
+                ctx.add_XMP_metadata(handle, data.constData(), data.size());
+            }
         }
 
 
@@ -334,11 +347,12 @@ void HeifExport::initializeCapabilities()
     // This checks before saving for what the file format supports: anything that is supported needs to be mentioned here
 
     QList<QPair<KoID, KoID> > supportedColorModels;
+    addCapability(KisExportCheckRegistry::instance()->get("sRGBProfileCheck")->create(KisExportCheckBase::SUPPORTED));
     supportedColorModels << QPair<KoID, KoID>()
             << QPair<KoID, KoID>(RGBAColorModelID, Integer8BitsColorDepthID)
             << QPair<KoID, KoID>(GrayAColorModelID, Integer8BitsColorDepthID)
             << QPair<KoID, KoID>(RGBAColorModelID, Integer16BitsColorDepthID)/*
-                    << QPair<KoID, KoID>(GrayAColorModelID, Integer16BitsColorDepthID)*/
+                                    << QPair<KoID, KoID>(GrayAColorModelID, Integer16BitsColorDepthID)*/
             ;
     addSupportedColorModels(supportedColorModels, "HEIF");
 }

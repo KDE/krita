@@ -120,6 +120,12 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
             if (handle.get_luma_bits_per_pixel() == 8) {
                 colorDepth = Integer8BitsColorDepthID;
             } else {
+                if (handle.has_alpha_channel()) {
+                    heifimage = handle.decode_image(heif_colorspace_RGB, heif_chroma_interleaved_RRGGBBAA_LE);
+                } else {
+                    heifimage = handle.decode_image(heif_colorspace_RGB, heif_chroma_interleaved_RRGGBB_LE);
+                }
+                heifChroma = heifimage.get_chroma_format();
                 colorDepth = Integer16BitsColorDepthID;
             }
         }
@@ -200,58 +206,57 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
 
                 for (int x=0; x < width; x++) {
 
-                    if (handle.get_luma_bits_per_pixel() == 8) {
-                        KoBgrTraits<quint8>::setRed(  it->rawData(), imgR[ y * strideR + x]);
-                        KoBgrTraits<quint8>::setGreen(it->rawData(), imgG[ y * strideG + x]);
-                        KoBgrTraits<quint8>::setBlue( it->rawData(), imgB[ y * strideB + x]);
+                    KoBgrTraits<quint8>::setRed(  it->rawData(), imgR[ y * strideR + x]);
+                    KoBgrTraits<quint8>::setGreen(it->rawData(), imgG[ y * strideG + x]);
+                    KoBgrTraits<quint8>::setBlue( it->rawData(), imgB[ y * strideB + x]);
 
-                        if (hasAlpha) {
-                            colorSpace->setOpacity(it->rawData(), quint8(imgA[y*strideA+x]), 1);
-                        }
-                        else {
-                            colorSpace->setOpacity(it->rawData(), OPACITY_OPAQUE_U8, 1);
-                        }
-                    } else {
-                        // two things need to happen: the strides need to be updated
-                        // and proper scaling of the values needs to be done.
-                        // TODO: Ugly code is ugly but works, please refactor me to be pretty!
-
-                        int scaledUpRed, scaledUpGreen, scaledUpBlue;
-                        if (handle.get_luma_bits_per_pixel() == 10) {
-                            uint16_t source = reinterpret_cast<const uint16_t*>(imgR)[ y * strideR/2 + x];
-                            scaledUpRed = int( ( float(0x03ff & (source)) / 1023.0 ) * 65535.0 + 0.5);
-                            source = reinterpret_cast<const uint16_t*>(imgG)[ y * strideG/2 + x];
-                            scaledUpGreen = int( ( float(0x03ff & (source)) / 1023.0 ) * 65535.0 + 0.5);
-                            source = reinterpret_cast<const uint16_t*>(imgB)[ y * strideB/2 + x];
-                            scaledUpBlue = int( ( float(0x03ff & (source)) / 1023.0 ) * 65535.0 + 0.5);
-                        } else if (handle.get_luma_bits_per_pixel() == 12) {
-                            uint16_t source = reinterpret_cast<const uint16_t*>(imgR)[ y * strideR/2 + x];
-                            scaledUpRed = int( ( float(0x0fff & (source)) / 4095.0 ) * 65535.0 + 0.5);
-                            source = reinterpret_cast<const uint16_t*>(imgG)[ y * strideG/2 + x];
-                            scaledUpGreen = int( ( float(0x0fff & (source)) / 4095.0 ) * 65535.0 + 0.5);
-                            source = reinterpret_cast<const uint16_t*>(imgB)[ y * strideB/2 + x];
-                            scaledUpBlue = int( ( float(0x0fff & (source)) / 4095.0 ) * 65535.0 + 0.5);
-                        } else {
-                            qDebug() << "unknown bitdepth" << handle.get_luma_bits_per_pixel();
-                            scaledUpRed = int (reinterpret_cast<const uint16_t*>(imgR)[ y * strideR/2 + x]);
-                            scaledUpGreen = int (reinterpret_cast<const uint16_t*>(imgG)[ y * strideG/2 + x]);
-                            scaledUpBlue = int (reinterpret_cast<const uint16_t*>(imgB)[ y * strideB/2 + x]);
-                        }
-
-                        KoBgrTraits<quint16>::setRed(  it->rawData(), qBound(0, scaledUpRed, 65535));
-                        KoBgrTraits<quint16>::setGreen(it->rawData(), qBound(0, scaledUpGreen, 65535));
-                        KoBgrTraits<quint16>::setBlue( it->rawData(), qBound(0, scaledUpBlue, 65535));
-
-                        if (hasAlpha) {
-                            colorSpace->setOpacity(it->rawData(), quint8(imgA[y*strideA+(x*2)]), 1);
-                        }
-                        else {
-                            colorSpace->setOpacity(it->rawData(), OPACITY_OPAQUE_U8, 1);
-                        }
+                    if (hasAlpha) {
+                        colorSpace->setOpacity(it->rawData(), quint8(imgA[y*strideA+x]), 1);
+                    }
+                    else {
+                        colorSpace->setOpacity(it->rawData(), OPACITY_OPAQUE_U8, 1);
                     }
 
                     it->nextPixel();
                 }
+            }
+        } else if (heifChroma == heif_chroma_interleaved_RRGGBB_LE || heifChroma == heif_chroma_interleaved_RRGGBBAA_LE)  {
+            qDebug() << "interleaved heif file, bits:" << handle.get_luma_bits_per_pixel();
+            int stride;
+
+            const uint8_t* img = heifimage.get_plane(heif_channel_interleaved, &stride);
+
+            for (int y=0; y < height; y++) {
+                KisHLineIteratorSP it = layer->paintDevice()->createHLineIteratorNG(0, y, width);
+
+                for (int x=0; x < width; x++) {
+
+                    QVector<float> pixelValues(4);
+                    pixelValues.fill(1.0);
+
+                    int channels = hasAlpha? 4: 3;
+                    for (int ch = 0; ch < channels; ch++) {
+                        uint16_t source = reinterpret_cast<const uint16_t*>(img)[y * (stride/2) + (x*channels) + ch];
+                        if (handle.get_luma_bits_per_pixel() == 10) {
+
+                            pixelValues[ch] = float(0x03ff & (source)) / 1023.0;
+
+                        } else if (handle.get_luma_bits_per_pixel() == 12) {
+                            pixelValues[ch] = float(0x0fff & (source)) / 4095.0;
+
+                        } else {
+                            qDebug() << "unknown bitdepth" << handle.get_luma_bits_per_pixel();
+                            pixelValues[ch] = float(source)/65535.0;
+                        }
+
+
+                    }
+                    colorSpace->fromNormalisedChannelsValue(it->rawData(), pixelValues);
+
+                    it->nextPixel();
+                }
+
+
             }
         }
 

@@ -806,6 +806,8 @@ void KoFillConfigWidget::slotMeshGradientChanged()
 {
     createNewDefaultMeshGradientBackground();
     setNewMeshGradientBackgroundToShape();
+    d->meshposition = SvgMeshPosition();
+    emit sigMeshGradientResetted();
 }
 
 void KoFillConfigWidget::slotMeshGradientShadingChanged(int index)

@@ -516,6 +516,11 @@ void DefaultTool::slotActivateEditFillMeshGradient(bool value)
     }
 }
 
+void DefaultTool::slotResetMeshGradientState()
+{
+    m_selectedMeshHandle = KoShapeMeshGradientHandles::Handle();
+}
+
 bool DefaultTool::wantsAutoScroll() const
 {
     return true;
@@ -1594,6 +1599,10 @@ QList<QPointer<QWidget> > DefaultTool::createOptionWidgets()
             SIGNAL(sigSwitchModeEditFillGradient(bool)),
             SLOT(slotActivateEditFillMeshGradient(bool)));
     // TODO: strokes!!
+
+    connect(m_tabbedOptionWidget,
+            SIGNAL(sigMeshGradientResetted()),
+            SLOT(slotResetMeshGradientState()));
 
     return widgets;
 }

@@ -115,6 +115,7 @@ Q_SIGNALS:
 
     void sigInternalRequestColorToResourceManager();
     void sigInternalRecoverColorInResourceManager();
+    void sigMeshGradientResetted();
 
 private:
     void uploadNewGradientBackground(const QGradient *gradient);

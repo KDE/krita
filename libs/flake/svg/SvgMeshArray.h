@@ -26,6 +26,7 @@ struct SvgMeshPosition {
     int row;
     int col;
     SvgMeshPatch::Type segmentType;
+
     SvgMeshPosition()
         : row(-1)
         , col(-1)

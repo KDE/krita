@@ -150,6 +150,16 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
         } else if (profileType == heif_color_profile_type_nclx) {
             // NCLX parameters is a colorspace description used for videofiles.
             // We will need to generate a profile based on nclx parameters. We can use lcms for this, but code doesn't exist yet.
+
+            //For now, we can try to get the profile we always have on hand...
+
+            heif::ColorProfile_nclx nclx = heifimage.get_nclx_color_profile();
+
+            if (nclx.get_color_primaries() == heif_color_primaries_ITU_R_BT_2020_2_and_2100_0 &&
+                    nclx.get_transfer_characteristics() == heif_transfer_characteristic_ITU_R_BT_2100_0_PQ) {
+                profileName = KoColorSpaceRegistry::instance()->p2020PQProfile()->name();
+            }
+
             qDebug() << "nclx profile found";
         } else {
             qDebug() << "no profile found";
@@ -251,6 +261,7 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
 
 
                     }
+                    pixelValues.swapItemsAt(0, 2);
                     colorSpace->fromNormalisedChannelsValue(it->rawData(), pixelValues);
 
                     it->nextPixel();

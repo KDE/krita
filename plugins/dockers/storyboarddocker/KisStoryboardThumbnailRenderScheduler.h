@@ -65,6 +65,9 @@ public:
      */
     void cancelFrameRendering(int frame);
 
+public Q_SLOTS:
+    void slotStartFrameRendering();
+
 private Q_SLOTS:
     /**
      * @brief Emits @c sigFrameCompleted(int,KisPaintDeviceSP) if the regeneration was complete

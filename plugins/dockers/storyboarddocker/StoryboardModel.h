@@ -28,6 +28,7 @@
 #include "kis_idle_watcher.h"
 #include <kritastoryboarddocker_export.h>
 #include <kis_image.h>
+#include <kis_signal_compressor.h>
 
 class StoryboardView;
 class KisTimeSpan;
@@ -86,14 +87,14 @@ public:
     Qt::ItemFlags flags(const QModelIndex &index) const override;
     
     //for removing and inserting rows
-    bool insertRows(int position, int rows, const QModelIndex &index = QModelIndex());
-    bool removeRows(int position, int rows, const QModelIndex &index = QModelIndex());
+    bool insertRows(int position, int rows, const QModelIndex &index = QModelIndex()) override;
+    bool removeRows(int position, int rows, const QModelIndex &index = QModelIndex())override;
     bool moveRows(const QModelIndex &sourceParent, int sourceRow, int count,
-                    const QModelIndex &destinationParent, int destinationChild);
+                    const QModelIndex &destinationParent, int destinationChild) override;
 
     //for drag and drop
-    QMimeData *mimeData(const QModelIndexList &indexes) const;
-    bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent);
+    QMimeData *mimeData(const QModelIndexList &indexes) const override;
+    bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent) override;
     Qt::DropActions supportedDropActions() const override;
     Qt::DropActions supportedDragActions() const override;
 
@@ -229,8 +230,9 @@ private Q_SLOTS:
     /**
      * @brief calls regeneration of @c frame in the background i.e. in another thread.
      * @param frame The frame to be regenrated.
+     * @param delay Update thumbnail with delay if true
      */
-    void slotUpdateThumbnailForFrame(int frame);
+    void slotUpdateThumbnailForFrame(int frame, bool delay = true);
 
     /**
      * @brief calls regeneration of the currentUiTime() and all frames in @c affectedIndexes(KisTimeSpan)
@@ -286,6 +288,7 @@ private:
     StoryboardView *m_view;
     KisNodeSP m_activeNode;
     KisStoryboardThumbnailRenderScheduler *m_renderScheduler;
+    KisSignalCompressor m_renderSchedulingCompressor;
     KisImageSP cloneImage;
 };
 

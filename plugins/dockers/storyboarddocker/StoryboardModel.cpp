@@ -36,13 +36,14 @@ StoryboardModel::StoryboardModel(QObject *parent)
         , m_locked(false)
         , m_imageIdleWatcher(10)
         , m_renderScheduler(new KisStoryboardThumbnailRenderScheduler(this))
+        , m_renderSchedulingCompressor(1000,KisSignalCompressor::FIRST_ACTIVE)
 {
     connect(this, SIGNAL(rowsInserted(const QModelIndex, int, int)),
                 this, SLOT(slotInsertChildRows(const QModelIndex, int, int)));
 
     connect(m_renderScheduler, SIGNAL(sigFrameCompleted(int, KisPaintDeviceSP)), this, SLOT(slotFrameRenderCompleted(int, KisPaintDeviceSP)));
     connect(m_renderScheduler, SIGNAL(sigFrameCancelled(int)), this, SLOT(slotFrameRenderCancelled(int)));
-    //TODO: populate model with already existing item's thumbnails
+    connect(&m_renderSchedulingCompressor, SIGNAL(timeout()), this, SLOT(slotUpdateThumbnails()));
 }
 
 StoryboardModel::~StoryboardModel()
@@ -545,7 +546,9 @@ void StoryboardModel::setImage(KisImageWSP image)
     }
 
     m_imageIdleWatcher.startCountdown();
-    connect(&m_imageIdleWatcher, SIGNAL(startedIdleMode()), this, SLOT(slotUpdateThumbnails()));
+    connect(&m_imageIdleWatcher, SIGNAL(startedIdleMode()), m_renderScheduler, SLOT(slotStartFrameRendering()));
+
+    connect(m_image, SIGNAL(sigImageUpdated(const QRect &)), &m_renderSchedulingCompressor, SLOT(start()));
 
     connect(m_image, SIGNAL(sigRemoveNodeAsync(KisNodeSP)), this, SLOT(slotNodeRemoved(KisNodeSP)));
 
@@ -861,7 +864,7 @@ void StoryboardModel::slotKeyframeAdded(const KisKeyframeChannel* channel, int t
         m_view->setCurrentItem(frame);
     }
 
-    slotUpdateThumbnailForFrame(time);
+    slotUpdateThumbnailForFrame(time, false);
 }
 
 void StoryboardModel::slotKeyframeRemoved(const KisKeyframeChannel *channel, int time)
@@ -935,7 +938,7 @@ void StoryboardModel::slotNodeRemoved(KisNodeSP node)
     }
 }
 
-void StoryboardModel::slotUpdateThumbnailForFrame(int frame)
+void StoryboardModel::slotUpdateThumbnailForFrame(int frame, bool delay)
 {
     if (!m_image) {
         return;
@@ -945,11 +948,15 @@ void StoryboardModel::slotUpdateThumbnailForFrame(int frame)
     bool affected = true;
     if (index.isValid()) {
         if (frame == m_image->animationInterface()->currentUITime()) {
-            setThumbnailPixmapData(index, m_image->projection());
-            affected = false;
-        } else {
-            m_renderScheduler->scheduleFrameForRegeneration(frame, affected);
+            if(!delay) {
+                setThumbnailPixmapData(index, m_image->projection());
+                return;
+            }
+            else {
+                affected = false;
+            }
         }
+        m_renderScheduler->scheduleFrameForRegeneration(frame, affected);
     }
 }
 

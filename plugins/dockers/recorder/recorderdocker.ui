@@ -134,7 +134,7 @@
                <bool>false</bool>
               </property>
               <property name="suffix">
-               <string> sec.</string>
+               <string comment="Contraction of &quot;second&quot; for interval"> sec.</string>
               </property>
               <property name="minimum">
                <number>1</number>

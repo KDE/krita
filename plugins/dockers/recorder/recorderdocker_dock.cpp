@@ -20,6 +20,7 @@
 #include "recorder_config.h"
 #include "recorder_writer.h"
 #include "ui_recorderdocker.h"
+#include "recorder_export.h"
 
 #include <klocalizedstring.h>
 #include <kis_canvas2.h>
@@ -32,7 +33,6 @@
 #include <QFileInfo>
 #include <QPointer>
 #include <QFileDialog>
-#include <QDesktopServices>
 
 
 class RecorderDockerDock::Private
@@ -76,7 +76,7 @@ public:
 
     void updateWriterSettings()
     {
-        outputDirectory = snapshotDirectory % "/" % prefix % "/";
+        outputDirectory = snapshotDirectory % QDir::separator() % prefix % QDir::separator();
         writer.setup({ outputDirectory, quality, resolution, captureInterval });
     }
 
@@ -157,6 +157,7 @@ RecorderDockerDock::RecorderDockerDock()
 
     d->ui->buttonBrowse->setIcon(KisIconUtils::loadIcon("folder"));
     d->ui->buttonRecordToggle->setIcon(KisIconUtils::loadIcon("media-record"));
+    d->ui->buttonExport->setIcon(KisIconUtils::loadIcon("document-export"));
     d->ui->spinQuality->setSuffix("%");
 
     d->loadSettings();
@@ -233,8 +234,17 @@ void RecorderDockerDock::onRecordButtonToggled(bool checked)
 
 void RecorderDockerDock::onExportButtonClicked()
 {
-    // TODO: show dialog to export the video
-    QDesktopServices::openUrl(QUrl(d->outputDirectory));
+    if (!d->canvas)
+        return;
+
+    KisDocument *document = d->canvas->imageView()->document();
+
+    RecorderExport exportDialog(this);
+    exportDialog.setup({
+        QFileInfo(document->caption().trimmed()).completeBaseName(),
+        d->outputDirectory
+    });
+    exportDialog.exec();
 }
 
 void RecorderDockerDock::onSelectRecordFolderButtonClicked()

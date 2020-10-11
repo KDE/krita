@@ -79,6 +79,9 @@ public:
         if (!canvas)
             return;
 
+        // FIXME: return if tools like Transform or Move are active
+        // FIXME: return if isolate layer is active
+
         KisImageSP image = canvas->image();
 
         KisPaintDeviceSP device = image->projection();

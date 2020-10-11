@@ -970,7 +970,7 @@ void StoryboardModel::slotUpdateThumbnails()
     slotUpdateThumbnailForFrame(currentTime);
 
     KisTimeSpan affectedRange;
-    if (m_activeNode) {
+    if (m_activeNode && m_activeNode->paintDevice()) {
         KisRasterKeyframeChannel *currentChannel = m_activeNode->paintDevice()->keyframeChannel();
         if (currentChannel) {
             affectedRange = currentChannel->affectedFrames(currentTime);

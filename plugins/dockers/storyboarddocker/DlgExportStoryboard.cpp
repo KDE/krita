@@ -18,13 +18,14 @@
 #include "DlgExportStoryboard.h"
 
 #include "KoFileDialog.h"
-#include <KisDialogStateSaver.h>
+#include <kis_config.h>
 #include <kis_file_name_requester.h>
+#include <kis_time_span.h>
 
 #include <QSpinBox>
 #include <QMessageBox>
 
-DlgExportStoryboard::DlgExportStoryboard(ExportFormat format)
+DlgExportStoryboard::DlgExportStoryboard(ExportFormat format, KisTimeSpan span)
         : KoDialog()
         , m_format(format)
 {
@@ -41,14 +42,16 @@ DlgExportStoryboard::DlgExportStoryboard(ExportFormat format)
     m_page->spinboxRow->setMinimum(1);
     m_page->spinboxColumn->setMinimum(1);
 
-    QMap<QString, QVariant> defaults;
-    defaults[ m_page->spinboxFirstItem->objectName() ] = QVariant::fromValue<int>(0);
-    defaults[ m_page->spinboxLastItem->objectName() ] = QVariant::fromValue<int>(0);
-    defaults[ m_page->spinboxRow->objectName() ] = QVariant::fromValue<int>(3);
-    defaults[ m_page->spinboxColumn->objectName() ] = QVariant::fromValue<int>(3);
-    defaults[ m_page->spinboxFontSize->objectName() ] = QVariant::fromValue<int>(15);
-
-    KisDialogStateSaver::restoreState(m_page, "krita/storyboard_export", defaults);
+    KisConfig cfg(true);
+    m_page->spinboxFirstItem->setValue(cfg.readEntry<int>("storyboard/firstItem", 0));
+    m_page->spinboxLastItem->setValue(cfg.readEntry<int>("storyboard/lastItem", span.end()));
+    m_page->spinboxRow->setValue(cfg.readEntry<int>("storyboard/rows", 3));
+    m_page->spinboxColumn->setValue(cfg.readEntry<int>("storyboard/columns", 3));
+    m_page->spinboxFontSize->setValue(cfg.readEntry<int>("storyboard/fontSize", 15));
+    m_page->svgLayoutFileName->setFileName(cfg.readEntry<QString>("storyboard/svgLayoutFileName", ""));
+    m_page->svgFileBaseName->setText(cfg.readEntry<QString>("storyboard/svgFileBaseName", ""));
+    m_page->chkUseSVGLayout->setChecked(cfg.readEntry<bool>("storyboard/chkUseSVGLayout", false));
+    m_page->exportFileName->setFileName(cfg.readEntry<QString>("storyboard/exportFileName", ""));
 
     if (format == ExportFormat::PDF) {
         m_page->svgFileBaseName->hide();
@@ -209,7 +212,17 @@ void DlgExportStoryboard::slotExportClicked()
         return;
     }
 
-    KisDialogStateSaver::saveState(m_page, "krita/storyboard_export");
+    KisConfig cfg(false);
+    cfg.writeEntry("storyboard/firstItem", m_page->spinboxFirstItem->value());
+    cfg.writeEntry("storyboard/lastItem", m_page->spinboxLastItem->value());
+    cfg.writeEntry("storyboard/rows", m_page->spinboxRow->value());
+    cfg.writeEntry("storyboard/columns", m_page->spinboxColumn->value());
+    cfg.writeEntry("storyboard/fontSize", m_page->spinboxFontSize->value());
+    cfg.writeEntry("storyboard/svgLayoutFileName", m_page->svgLayoutFileName->fileName());
+    cfg.writeEntry("storyboard/svgFileBaseName", m_page->svgFileBaseName->text());
+    cfg.writeEntry("storyboard/chkUseSVGLayout", m_page->chkUseSVGLayout->isChecked());
+    cfg.writeEntry("storyboard/exportFileName", m_page->exportFileName->fileName());
+
     accept();
 }
 

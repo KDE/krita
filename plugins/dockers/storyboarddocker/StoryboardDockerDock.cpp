@@ -45,6 +45,7 @@
 #include <KisDocument.h>
 #include <kis_icon.h>
 #include <kis_image_animation_interface.h>
+#include <kis_time_span.h>
 
 #include "ui_wdgstoryboarddock.h"
 #include "ui_wdgcommentmenu.h"
@@ -311,7 +312,8 @@ void StoryboardDockerDock::slotExportAsSvg()
 
 void StoryboardDockerDock::slotExport(ExportFormat format)
 {
-    DlgExportStoryboard dlg(format);
+    KisTimeSpan span = m_canvas->image()->animationInterface()->fullClipRange();
+    DlgExportStoryboard dlg(format, span);
 
     if (dlg.exec() == QDialog::Accepted) {
         dlg.hide();

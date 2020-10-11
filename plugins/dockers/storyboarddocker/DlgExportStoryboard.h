@@ -27,6 +27,7 @@
 #include "ui_wdgexportstoryboard.h"
 
 class QPageSize;
+class KisTimeSpan;
 enum ExportFormat : unsigned int
 {
     PDF,
@@ -50,7 +51,7 @@ class DlgExportStoryboard: public KoDialog
 {
     Q_OBJECT
 public:
-    DlgExportStoryboard(ExportFormat format);
+    DlgExportStoryboard(ExportFormat format, KisTimeSpan span);
     ~DlgExportStoryboard() override;
     int firstItem() const;
     int lastItem() const;

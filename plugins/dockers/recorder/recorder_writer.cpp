@@ -17,10 +17,10 @@
 
 #include "recorder_writer.h"
 
-#include <QFileInfo>
 #include <kis_canvas2.h>
 #include <kis_image.h>
 #include <KisDocument.h>
+#include <KoToolProxy.h>
 
 #include <QDir>
 #include <QDirIterator>
@@ -31,6 +31,7 @@
 namespace
 {
 constexpr int waitThreadTimeoutMs = 5000;
+const QStringList blacklistedTools = { "KritaTransform/KisToolMove", "KisToolTransform" };
 }
 
 class RecorderWriter::Private
@@ -46,6 +47,7 @@ public:
     RecorderWriterSettings settings;
     bool paused = false;
     volatile bool imageModified = false;
+    volatile bool skipCapturing = false;
 
 
     int findLastIndex(const QString &directory)
@@ -74,13 +76,10 @@ public:
     }
 
 
-    void readImage()
+    void captureImage()
     {
         if (!canvas)
             return;
-
-        // FIXME: return if tools like Transform or Move are active
-        // FIXME: return if isolate layer is active
 
         KisImageSP image = canvas->image();
 
@@ -168,14 +167,19 @@ RecorderWriter::~RecorderWriter()
 
 void RecorderWriter::setCanvas(QPointer<KisCanvas2> canvas)
 {
-    if (d->canvas)
+    if (d->canvas) {
+        disconnect(d->canvas->toolProxy(), SIGNAL(toolChanged(QString)), this, SLOT(onToolChanged(QString)));
         disconnect(d->canvas->image(), SIGNAL(sigImageUpdated(QRect)), this, SLOT(onImageModified()));
+    }
 
     d->canvas = canvas;
 
-    if (d->canvas)
+    if (d->canvas) {
+        connect(d->canvas->toolProxy(), SIGNAL(toolChanged(QString)), this, SLOT(onToolChanged(QString)),
+                Qt::DirectConnection); // need to handle it even if our event loop is not running
         connect(d->canvas->image(), SIGNAL(sigImageUpdated(QRect)), this, SLOT(onImageModified()),
                 Qt::DirectConnection); // because it spams
+    }
 }
 
 void RecorderWriter::setup(const RecorderWriterSettings &settings)
@@ -218,7 +222,10 @@ void RecorderWriter::timerEvent(QTimerEvent */*event*/)
 
     d->imageModified = false;
 
-    d->readImage();
+    if (d->skipCapturing)
+        return;
+
+    d->captureImage();
 
     // downscale image buffer
     for (int res = 0; res < d->settings.resolution; ++res)
@@ -232,9 +239,17 @@ void RecorderWriter::timerEvent(QTimerEvent */*event*/)
 
 void RecorderWriter::onImageModified()
 {
+    if (d->skipCapturing)
+        return;
+
     if (!d->imageModified)
         emit pausedChanged(false);
     d->imageModified = true;
+}
+
+void RecorderWriter::onToolChanged(const QString &toolId)
+{
+    d->skipCapturing = blacklistedTools.contains(toolId);
 }
 
 void RecorderWriter::run()

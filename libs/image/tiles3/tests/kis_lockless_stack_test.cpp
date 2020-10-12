@@ -21,7 +21,7 @@
 
 #include "kis_debug.h"
 
-#include "tiles3/kis_lockless_stack.h"
+#include "kis_lockless_stack.h"
 #include "config-limit-long-tests.h"
 
 void KisLocklessStackTest::testOperations()

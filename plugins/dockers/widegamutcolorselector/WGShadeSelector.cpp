@@ -86,7 +86,7 @@ void WGShadeSelector::slotSliderInteraction(bool active)
         const WGShadeSlider* activeLine = qobject_cast<WGShadeSlider*>(sender());
         for (WGShadeSlider* line: m_sliders) {
             if (line != activeLine) {
-                line->setSliderValue(0.0);
+                line->resetHandle();
             }
         }
         emit sigColorInteraction(active);

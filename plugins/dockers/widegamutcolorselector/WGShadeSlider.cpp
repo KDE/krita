@@ -21,13 +21,15 @@ struct WGShadeSlider::Private
     QImage background;
     QVector4D gradient;
     QVector4D baseValues;
-    qreal sliderValue {0};
+    qreal handleValue {0};
     qreal leftStart;
     qreal leftEnd;
     qreal rightStart;
     qreal rightEnd;
     KisVisualColorModel *selectorModel {0};
     int cursorWidth {11};
+    int numPatches {9};
+    bool sliderMode {true};
     bool imageNeedsUpdate {true};
 };
 
@@ -47,16 +49,25 @@ WGShadeSlider::~WGShadeSlider()
 void WGShadeSlider::setGradient(const QVector4D &gradient)
 {
     m_d->gradient = gradient;
-    if (m_d->sliderValue != 0) {
-        emit sigChannelValuesChanged(channelValues());
-    }
     m_d->imageNeedsUpdate = true;
-    update();
+    resetHandle();
+}
+
+void WGShadeSlider::setDisplayMode(bool slider, int numPatches)
+{
+    if (slider != m_d->sliderMode) {
+        m_d->sliderMode = slider;
+        if (!slider && numPatches > 2) {
+            m_d->numPatches = numPatches;
+        }
+        m_d->imageNeedsUpdate = true;
+        resetHandle();
+    }
 }
 
 QVector4D WGShadeSlider::channelValues() const
 {
-    return calculateChannelValues(m_d->sliderValue);
+    return calculateChannelValues(m_d->handleValue);
 }
 
 QSize WGShadeSlider::minimumSizeHint() const
@@ -68,9 +79,7 @@ void WGShadeSlider::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton) {
         emit sigInteraction(true);
-        qreal sliderPos = convertWidgetCoordinateToSliderValue(event->localPos());
-        if (!qFuzzyIsNull(m_d->sliderValue - sliderPos)) {
-            m_d->sliderValue = sliderPos;
+        if (adjustHandleValue(event->localPos())) {
             emit sigChannelValuesChanged(channelValues());
             update();
         }
@@ -82,9 +91,7 @@ void WGShadeSlider::mousePressEvent(QMouseEvent *event)
 void WGShadeSlider::mouseMoveEvent(QMouseEvent *event)
 {
     if (event->buttons() & Qt::LeftButton) {
-        qreal sliderPos = convertWidgetCoordinateToSliderValue(event->localPos());
-        if (!qFuzzyIsNull(m_d->sliderValue - sliderPos)) {
-            m_d->sliderValue = sliderPos;
+        if (adjustHandleValue(event->localPos())) {
             emit sigChannelValuesChanged(channelValues());
             update();
         }
@@ -110,19 +117,29 @@ void WGShadeSlider::paintEvent(QPaintEvent*)
     }
     QPainter painter(this);
     painter.drawImage(0, 0, m_d->background);
-    // TODO: proper handle
-    QPointF sliderPos = convertSliderValueToWidgetCoordinate(m_d->sliderValue);
-    int sliderX = qRound(sliderPos.x());
-    //painter.drawLine(sliderPos, QPointF(sliderPos.x(), height()));
-    painter.translate(0.5, 0.5);
-    painter.setPen(QColor(175,175,175));
-    painter.drawRect(m_d->leftStart, 0, m_d->cursorWidth - 1, height() - 1);
-    painter.setPen(QColor(75,75,75));
-    painter.drawRect(m_d->leftStart + 1, 0, m_d->cursorWidth - 3, height() - 1);
-    painter.setPen(QColor(175,175,175));
-    painter.drawRect(sliderX - m_d->cursorWidth/2, 0, m_d->cursorWidth - 1, height() - 1);
-    painter.setPen(QColor(75,75,75));
-    painter.drawRect(sliderX - m_d->cursorWidth/2 + 1, 0, m_d->cursorWidth - 3, height() - 1);
+    if (m_d->sliderMode) {
+        QPointF sliderPos = convertSliderValueToWidgetCoordinate(m_d->handleValue);
+        int sliderX = qRound(sliderPos.x());
+        //painter.drawLine(sliderPos, QPointF(sliderPos.x(), height()));
+        painter.translate(0.5, 0.5);
+        painter.setPen(QColor(175,175,175));
+        painter.drawRect(m_d->leftStart, 0, m_d->cursorWidth - 1, height() - 1);
+        painter.setPen(QColor(75,75,75));
+        painter.drawRect(m_d->leftStart + 1, 0, m_d->cursorWidth - 3, height() - 1);
+        painter.setPen(QColor(175,175,175));
+        painter.drawRect(sliderX - m_d->cursorWidth/2, 0, m_d->cursorWidth - 1, height() - 1);
+        painter.setPen(QColor(75,75,75));
+        painter.drawRect(sliderX - m_d->cursorWidth/2 + 1, 0, m_d->cursorWidth - 3, height() - 1);
+    } else {
+        if (m_d->handleValue >= 0) {
+            painter.translate(0.5, 0.5);
+            QRectF handle = patchRect(m_d->handleValue).adjusted(0, 0, -1, -1);
+            painter.setPen(QColor(175,175,175));
+            painter.drawRect(handle.adjusted(-1, 0, 1, 0));
+            painter.setPen(QColor(75,75,75));
+            painter.drawRect(handle);
+        }
+    }
 }
 
 void WGShadeSlider::resizeEvent(QResizeEvent *)
@@ -141,15 +158,32 @@ void WGShadeSlider::resizeEvent(QResizeEvent *)
 void WGShadeSlider::slotSetChannelValues(const QVector4D &values)
 {
     m_d->baseValues = values;
-    m_d->sliderValue = 0.0;
     m_d->imageNeedsUpdate = true;
+    resetHandle();
+}
+
+void WGShadeSlider::resetHandle()
+{
+    m_d->handleValue = m_d->sliderMode ? 0 : -1;
     update();
 }
 
-void WGShadeSlider::setSliderValue(qreal value)
+bool WGShadeSlider::adjustHandleValue(const QPointF &widgetPos)
 {
-    m_d->sliderValue = qBound(-1.0, value, 1.0);
-    update();
+    if (m_d->sliderMode) {
+        qreal sliderPos = convertWidgetCoordinateToSliderValue(widgetPos);
+        if (!qFuzzyIsNull(m_d->handleValue - sliderPos)) {
+            m_d->handleValue = sliderPos;
+            return true;
+        }
+    } else {
+        int patchNum = getPatch(widgetPos);
+        if (patchNum >= 0 && patchNum != (int)m_d->handleValue) {
+            m_d->handleValue = patchNum;
+            return true;
+        }
+    }
+    return false;
 }
 
 QPointF WGShadeSlider::convertSliderValueToWidgetCoordinate(qreal value)
@@ -187,7 +221,14 @@ qreal WGShadeSlider::convertWidgetCoordinateToSliderValue(QPointF coordinate)
 
 QVector4D WGShadeSlider::calculateChannelValues(qreal sliderPos) const
 {
-    QVector4D coordinates = m_d->baseValues + sliderPos * m_d->gradient;
+    float delta = 0.0f;
+    if (m_d->sliderMode) {
+        delta = (float)sliderPos;
+    } else if (sliderPos >= 0 || m_d->numPatches > 1) {
+        delta = 2.0f * float(sliderPos)/(m_d->numPatches - 1.0f) - 1.0f;
+    }
+
+    QVector4D coordinates = m_d->baseValues + delta * m_d->gradient;
     // Hue wraps around
     coordinates[0] = (float)fmod(coordinates[0], 1.0);
     if (coordinates[0] < 0) {
@@ -197,6 +238,24 @@ QVector4D WGShadeSlider::calculateChannelValues(qreal sliderPos) const
         coordinates[i] = qBound(0.f, coordinates[i], 1.f);
     }
     return coordinates;
+}
+
+int WGShadeSlider::getPatch(const QPointF pos) const
+{
+    int patch = m_d->numPatches * pos.x() / width();
+    if (patch >= 0 && patch < m_d->numPatches) {
+        return patch;
+    }
+    return -1;
+}
+
+QRectF WGShadeSlider::patchRect(int index) const
+{
+    qreal patchWidth = width() / qreal(m_d->numPatches);
+    qreal margin = 1.5;
+    QPointF topLeft(index * patchWidth + margin, 0);
+    QPointF bottomRight((index+1) * patchWidth - margin, height());
+    return QRectF(topLeft, bottomRight);
 }
 
 QImage WGShadeSlider::renderBackground()
@@ -210,22 +269,39 @@ QImage WGShadeSlider::renderBackground()
     const qreal deviceDivider = 1.0 / devicePixelRatioF();
     const int deviceWidth = qCeil(width() * devicePixelRatioF());
     const int deviceHeight = qCeil(height() * devicePixelRatioF());
-    const KoColorSpace *currentCS = m_d->selectorModel->colorSpace();
-    const quint32 pixelSize = currentCS->pixelSize();
-    quint32 imageSize = deviceWidth * pixelSize;
-    QScopedArrayPointer<quint8> raw(new quint8[imageSize] {});
-    quint8 *dataPtr = raw.data();
+    if (m_d->sliderMode) {
+        const KoColorSpace *currentCS = m_d->selectorModel->colorSpace();
+        const quint32 pixelSize = currentCS->pixelSize();
+        quint32 imageSize = deviceWidth * pixelSize;
+        QScopedArrayPointer<quint8> raw(new quint8[imageSize] {});
+        quint8 *dataPtr = raw.data();
 
-    for (int x = 0; x < deviceWidth; x++, dataPtr += pixelSize) {
-        qreal sliderVal = convertWidgetCoordinateToSliderValue(QPointF(x, 0) * deviceDivider);
-        QVector4D coordinates = calculateChannelValues(sliderVal);
-        KoColor c = m_d->selectorModel->convertChannelValuesToKoColor(coordinates);
-        memcpy(dataPtr, c.data(), pixelSize);
+        for (int x = 0; x < deviceWidth; x++, dataPtr += pixelSize) {
+            qreal sliderVal = convertWidgetCoordinateToSliderValue(QPointF(x, 0) * deviceDivider);
+            QVector4D coordinates = calculateChannelValues(sliderVal);
+            KoColor c = m_d->selectorModel->convertChannelValuesToKoColor(coordinates);
+            memcpy(dataPtr, c.data(), pixelSize);
+        }
+
+        QImage image = m_d->selectorModel->displayRenderer()->convertToQImage(currentCS, raw.data(), deviceWidth, 1);
+        image = image.scaled(QSize(deviceWidth, deviceHeight));
+        image.setDevicePixelRatio(devicePixelRatioF());
+
+        return image;
+    } else {
+        QImage image(deviceWidth, deviceHeight, QImage::Format_ARGB32);
+        image.fill(Qt::transparent);
+        image.setDevicePixelRatio(devicePixelRatioF());
+        QPainter painter(&image);
+        painter.setPen(Qt::NoPen);
+
+        for (int i = 0; i < m_d->numPatches; i++) {
+            QVector4D values = calculateChannelValues(i);
+            KoColor col = m_d->selectorModel->convertChannelValuesToKoColor(values);
+            QColor qCol = m_d->selectorModel->displayRenderer()->toQColor(col);
+            painter.setBrush(qCol);
+            painter.drawRect(patchRect(i));
+        }
+        return image;
     }
-
-    QImage image = m_d->selectorModel->displayRenderer()->convertToQImage(currentCS, raw.data(), deviceWidth, 1);
-    image = image.scaled(QSize(deviceWidth, deviceHeight));
-    image.setDevicePixelRatio(devicePixelRatioF());
-
-    return image;
 }

@@ -21,8 +21,14 @@ public:
     ~WGShadeSlider() override;
 
     void setGradient(const QVector4D &gradient);
+    void setDisplayMode(bool slider, int numPatches = -1);
     QVector4D channelValues() const;
 
+public Q_SLOTS:
+    void slotSetChannelValues(const QVector4D &values);
+    void resetHandle();
+
+protected:
     QSize minimumSizeHint() const override;
     void mousePressEvent(QMouseEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;
@@ -30,20 +36,18 @@ public:
     //void tabletEvent(QTabletEvent *event) override;
     void paintEvent(QPaintEvent*) override;
     void resizeEvent(QResizeEvent *) override;
-Q_SIGNALS:
-    void sigChannelValuesChanged(const QVector4D &values);
-    void sigInteraction(bool active);
 
-public Q_SLOTS:
-    void slotSetChannelValues(const QVector4D &values);
-    void setSliderValue(qreal value);
-
-protected:
+    bool adjustHandleValue(const QPointF &widgetPos);
     QPointF convertSliderValueToWidgetCoordinate(qreal value);
     qreal convertWidgetCoordinateToSliderValue(QPointF coordinate);
     QVector4D calculateChannelValues(qreal sliderPos) const;
+    int getPatch(const QPointF pos) const;
+    QRectF patchRect(int index) const;
     QImage renderBackground();
 
+Q_SIGNALS:
+    void sigChannelValuesChanged(const QVector4D &values);
+    void sigInteraction(bool active);
 private:
     struct Private;
     const QScopedPointer<Private> m_d;

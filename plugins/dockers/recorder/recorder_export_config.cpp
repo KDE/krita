@@ -26,6 +26,7 @@ namespace
 {
 constexpr const char *keyVideoDirectory = "recorder_export/videodirectory";
 constexpr const char *keyFfmpegPath = "recorder_export/ffmpegpath";
+constexpr const char *keyInputFps = "recorder_export/inputfps";
 constexpr const char *keyFps = "recorder_export/fps";
 constexpr const char *keyResize = "recorder_export/resize";
 constexpr const char *keySize = "recorder_export/size";
@@ -34,13 +35,13 @@ constexpr const char *keyProfileIndex = "recorder_export/profileIndex";
 constexpr const char *keyProfiles = "recorder_export/profiles";
 
 const QList<RecorderProfile> defaultProfiles = {
-    { "MP4 x264",   "mp4",  "-vf 'scale=$WIDTH:$HEIGHT' -framerate $FPS -c:v libx264 -r $FPS -pix_fmt yuv420p" },
-    { "GIF",        "gif",  "-vf 'fps=$FPS,scale=$WIDTH:$HEIGHT:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse' -loop -1" },
-    { "Matroska",   "mkv",  "-vf 'scale=$WIDTH:$HEIGHT' -framerate $FPS -r $FPS" },
-    { "WebM",       "webm", "-vf 'scale=$WIDTH:$HEIGHT' -framerate $FPS -r $FPS" },
-    { "Custom1",  "editme", "-vf 'scale=$WIDTH:$HEIGHT' -framerate $FPS -r $FPS" },
-    { "Custom2",  "editme", "-vf 'scale=$WIDTH:$HEIGHT' -framerate $FPS -r $FPS" },
-    { "Custom3",  "editme", "-vf 'scale=$WIDTH:$HEIGHT' -framerate $FPS -r $FPS" }
+    { "MP4 x264",   "mp4",  "-vf \"scale=$WIDTH:$HEIGHT\" -c:v libx264 -r $FPS -pix_fmt yuv420p" },
+    { "GIF",        "gif",  "-vf \"fps=$FPS,scale=$WIDTH:$HEIGHT:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse\" -loop -1" },
+    { "Matroska",   "mkv",  "-vf \"scale=$WIDTH:$HEIGHT\" -r $FPS" },
+    { "WebM",       "webm", "-vf \"scale=$WIDTH:$HEIGHT\" -r $FPS" },
+    { "Custom1",  "editme", "-vf \"scale=$WIDTH:$HEIGHT\" -r $FPS" },
+    { "Custom2",  "editme", "-vf \"scale=$WIDTH:$HEIGHT\" -r $FPS" },
+    { "Custom3",  "editme", "-vf \"scale=$WIDTH:$HEIGHT\" -r $FPS" }
 };
 }
 
@@ -52,6 +53,17 @@ RecorderExportConfig::RecorderExportConfig(bool readOnly)
 RecorderExportConfig::~RecorderExportConfig()
 {
     delete config;
+}
+
+
+int RecorderExportConfig::inputFps() const
+{
+    return config->readEntry(keyInputFps, 30);
+}
+
+void RecorderExportConfig::setInputFps(int value)
+{
+    config->writeEntry(keyInputFps, value);
 }
 
 

@@ -36,8 +36,15 @@ public:
 
     void setup(const RecorderExportSettings &settings);
 
+protected:
+    void closeEvent(QCloseEvent *event) override;
+
 private Q_SLOTS:
+    void reject() override;
+
+    // first page
     void onButtonBrowseDirectoryClicked();
+    void onSpinInputFpsValueChanged(int value);
     void onSpinFpsValueChanged(int value);
     void onCheckResizeToggled(bool checked);
     void onSpinScaleWidthValueChanged(int value);
@@ -48,6 +55,17 @@ private Q_SLOTS:
     void onButtonEditProfileClicked();
     void onButtonBrowseExportClicked();
     void onButtonExportClicked();
+    // second page
+    void onButtonCancelExportClicked();
+    // ffmpeg
+    void onFFMpegStarted();
+    void onFFMpegFinished();
+    void onFFMpegFinishedWithError(QString error);
+    void onFFMpegProgressUpdated(int frameNo);
+    // third page
+    void onButtonWatchItClicked();
+    void onButtonShowInFolderClicked();
+    void onButtonRestartClicked();
 
 private:
     Q_DISABLE_COPY(RecorderExport)

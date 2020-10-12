@@ -10,6 +10,7 @@ set(KRITA_RECORDERDOCKER_SOURCES
     recorder_writer.cpp
     recorder_export.cpp
     recorder_profile_settings.cpp
+    recorder_ffmpeg_wrapper.cpp
     recorderdocker.cpp
     recorderdocker_dock.cpp
 )

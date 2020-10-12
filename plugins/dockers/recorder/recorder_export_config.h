@@ -37,6 +37,9 @@ public:
     RecorderExportConfig(bool readOnly);
     ~RecorderExportConfig();
 
+    int inputFps() const;
+    void setInputFps(int value);
+
     int fps() const;
     void setFps(int value);
 

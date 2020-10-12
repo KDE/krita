@@ -17,6 +17,7 @@
 
 #include "recorder_export.h"
 #include "recorder_export_config.h"
+#include "recorder_ffmpeg_wrapper.h"
 #include "recorder_profile_settings.h"
 #include "ui_recorder_export.h"
 
@@ -31,6 +32,19 @@
 #include <QProcess>
 #include <QUrl>
 #include <QDebug>
+#include <QCloseEvent>
+#include <QMessageBox>
+
+namespace
+{
+enum ExportPageIndex
+{
+    pageSettingsIndex = 0,
+    pageProgressIndex = 1,
+    pageDoneIndex = 2
+};
+}
+
 
 class RecorderExport::Private
 {
@@ -40,6 +54,7 @@ public:
     RecorderExportSettings settings;
     QSize imageSize;
 
+    int inputFps = 30;
     int fps = 30;
     bool resize = false;
     QSize size;
@@ -49,8 +64,10 @@ public:
     QList<RecorderProfile> defaultProfiles;
     int profileIndex = 0;
     QString videoDirectory;
+    QString videoFilePath;
+    int framesCount = 0;
 
-    QProcess *ffmpegProcess = nullptr;
+    RecorderFFMpegWrapper *ffmpeg = nullptr;
 
     Private(RecorderExport *q_ptr)
         : q(q_ptr)
@@ -90,22 +107,103 @@ public:
 
     void updateVideoFilePath()
     {
-        ui->editVideoFilePath->setText(videoDirectory % QDir::separator()
-                                       % settings.name % "." % profiles[profileIndex].extension);
+        videoFilePath = videoDirectory % QDir::separator() % settings.name % "." % profiles[profileIndex].extension;
+        ui->editVideoFilePath->setText(videoFilePath);
     }
 
     void updateRatio(bool widthToHeight)
     {
         const float ratio = static_cast<float>(imageSize.width()) / static_cast<float>(imageSize.height());
         if (widthToHeight) {
-            QSignalBlocker blocker(ui->spinScaleHeight);
             size.setHeight(static_cast<int>(size.width() / ratio));
-            ui->spinScaleHeight->setValue(size.height());
         } else {
-            QSignalBlocker blocker(ui->spinScaleWidth);
             size.setWidth(static_cast<int>(size.height() * ratio));
-            ui->spinScaleWidth->setValue(size.width());
         }
+        // make width and height even
+        size.rwidth() &= ~1;
+        size.rheight() &= ~1;
+        QSignalBlocker blockerWidth(ui->spinScaleHeight);
+        QSignalBlocker blockerHeight(ui->spinScaleWidth);
+        ui->spinScaleHeight->setValue(size.height());
+        ui->spinScaleWidth->setValue(size.width());
+    }
+
+    bool tryAbortExport()
+    {
+        if (ffmpeg == nullptr)
+            return true;
+
+        if (QMessageBox::question(q, q->windowTitle(), i18n("Abort encoding the timelapse video?"))
+                    == QMessageBox::Yes) {
+            ffmpeg->kill();
+            cleanupFFMpeg();
+            return true;
+        }
+
+        return false;
+    }
+
+    void startExport()
+    {
+        Q_ASSERT(ffmpeg == nullptr);
+
+        const QString &arguments = applyVariables(profiles[profileIndex].arguments);
+
+        ffmpeg = new RecorderFFMpegWrapper(q);
+        QObject::connect(ffmpeg, SIGNAL(started()), q, SLOT(onFFMpegStarted()));
+        QObject::connect(ffmpeg, SIGNAL(finished()), q, SLOT(onFFMpegFinished()));
+        QObject::connect(ffmpeg, SIGNAL(finishedWithError(QString)), q, SLOT(onFFMpegFinishedWithError(QString)));
+        QObject::connect(ffmpeg, SIGNAL(progressUpdated(int)), q, SLOT(onFFMpegProgressUpdated(int)));
+        ffmpeg->start({ffmpegPath, inputFps, settings.inputDirectory, arguments, videoFilePath});
+        ui->labelStatus->setText(i18nc("Status for the export of the video record", "Starting FFMpeg..."));
+        ui->buttonCancelExport->setEnabled(false);
+        ui->progressExport->setValue(0);
+    }
+
+    void cleanupFFMpeg()
+    {
+        if (ffmpeg != nullptr) {
+            ffmpeg->deleteLater();
+            ffmpeg = nullptr;
+        }
+    }
+
+    QString applyVariables(const QString &templateArguments)
+    {
+        const QSize &outSize = resize ? size : imageSize;
+        return QString(templateArguments)
+            .replace("$FPS", QString::number(fps))
+            .replace("$WIDTH", QString::number(outSize.width()))
+            .replace("$HEIGHT", QString::number(outSize.height()));
+    }
+
+    void updateVideoDuration()
+    {
+        long ms = framesCount * 1000L / inputFps;
+        ui->labelVideoDuration->setText(formatDuration(ms));
+    }
+
+    QString formatDuration(long durationMs)
+    {
+        QString result;
+        const long ms = (durationMs % 1000) / 100;
+        if (ms != 0)
+            result += "." % QString::number(ms);
+        long duration = durationMs / 1000;
+        const long seconds = duration % 60;
+        result = QString("%1%2").arg(seconds, 2, 10, QLatin1Char('0')).arg(result);
+
+        duration = duration / 60;
+        const long minutes = duration % 60;
+        if (minutes != 0) {
+            result = QString("%1:%2").arg(minutes, 2, 10, QLatin1Char('0')).arg(result);
+
+            duration = duration / 60;
+            if (duration != 0)
+                result = QString("%1:%2").arg(duration, 2, 10, QLatin1Char('0')).arg(result);
+        }
+
+        return result;
     }
 };
 
@@ -120,8 +218,12 @@ RecorderExport::RecorderExport(QWidget *parent)
     d->ui->buttonEditProfile->setIcon(KisIconUtils::loadIcon("document-edit"));
     d->ui->buttonBrowseExport->setIcon(KisIconUtils::loadIcon("folder"));
     d->ui->buttonLockRatio->setIcon(KisIconUtils::loadIcon("locked"));
+    d->ui->buttonWatchIt->setIcon(KisIconUtils::loadIcon("media-playback-start"));
+    d->ui->buttonShowInFolder->setIcon(KisIconUtils::loadIcon("folder"));
+    d->ui->stackedWidget->setCurrentIndex(ExportPageIndex::pageSettingsIndex);
 
     connect(d->ui->buttonBrowseDirectory, SIGNAL(clicked()), SLOT(onButtonBrowseDirectoryClicked()));
+    connect(d->ui->spinInputFps, SIGNAL(valueChanged(int)), SLOT(onSpinInputFpsValueChanged(int)));
     connect(d->ui->spinFps, SIGNAL(valueChanged(int)), SLOT(onSpinFpsValueChanged(int)));
     connect(d->ui->checkResize, SIGNAL(toggled(bool)), SLOT(onCheckResizeToggled(bool)));
     connect(d->ui->spinScaleWidth, SIGNAL(valueChanged(int)), SLOT(onSpinScaleWidthValueChanged(int)));
@@ -132,6 +234,10 @@ RecorderExport::RecorderExport(QWidget *parent)
     connect(d->ui->buttonEditProfile, SIGNAL(clicked()), SLOT(onButtonEditProfileClicked()));
     connect(d->ui->buttonBrowseExport, SIGNAL(clicked()), SLOT(onButtonBrowseExportClicked()));
     connect(d->ui->buttonExport, SIGNAL(clicked()), SLOT(onButtonExportClicked()));
+    connect(d->ui->buttonCancelExport, SIGNAL(clicked()), SLOT(onButtonCancelExportClicked()));
+    connect(d->ui->buttonWatchIt, SIGNAL(clicked()), SLOT(onButtonWatchItClicked()));
+    connect(d->ui->buttonShowInFolder, SIGNAL(clicked()), SLOT(onButtonShowInFolderClicked()));
+    connect(d->ui->buttonRestart, SIGNAL(clicked()), SLOT(onButtonRestartClicked()));
 }
 
 RecorderExport::~RecorderExport()
@@ -144,11 +250,11 @@ void RecorderExport::setup(const RecorderExportSettings &settings)
     d->settings = settings;
 
     QDir dir(settings.inputDirectory, "*.jpg", QDir::Name | QDir::Reversed, QDir::Files | QDir::NoDotAndDotDot);
+    d->framesCount = dir.count();
 
-    if (dir.isEmpty()) {
+    if (d->framesCount == 0) {
         d->ui->labelRecordInfo->setText(i18n("No files to export"));
         d->ui->buttonExport->setEnabled(false);
-        return;
     }
 
     d->imageSize = QImage(QDirIterator(dir).next()).size();
@@ -158,12 +264,13 @@ void RecorderExport::setup(const RecorderExportSettings &settings)
                                     .arg(d->imageSize.width())
                                     .arg(d->imageSize.height())
                                     .arg(i18nc("Pixel dimension suffix", "px"))
-                                    .arg(dir.count())
+                                    .arg(d->framesCount)
                                     .arg(i18nc("The suffix after number of frames", "frame(s)"))
                                    );
 
     RecorderExportConfig config(true);
 
+    d->inputFps = config.inputFps();
     d->fps = config.fps();
     d->resize = config.resize();
     d->size = config.size();
@@ -174,6 +281,7 @@ void RecorderExport::setup(const RecorderExportSettings &settings)
     d->profileIndex = config.profileIndex();
     d->videoDirectory = config.videoDirectory();
 
+    d->ui->spinInputFps->setValue(d->inputFps);
     d->ui->spinFps->setValue(d->fps);
     d->ui->checkResize->setChecked(d->resize);
     d->ui->spinScaleWidth->setValue(d->size.width());
@@ -183,11 +291,31 @@ void RecorderExport::setup(const RecorderExportSettings &settings)
     d->fillComboProfiles();
     d->checkFfmpeg();
     d->updateVideoFilePath();
+    d->updateVideoDuration();
+}
+
+void RecorderExport::closeEvent(QCloseEvent *event)
+{
+    if (!d->tryAbortExport())
+        event->ignore();
+}
+
+void RecorderExport::reject()
+{
+    if (d->tryAbortExport())
+        QDialog::reject();
 }
 
 void RecorderExport::onButtonBrowseDirectoryClicked()
 {
     QDesktopServices::openUrl(QUrl(d->settings.inputDirectory));
+}
+
+void RecorderExport::onSpinInputFpsValueChanged(int value)
+{
+    d->inputFps = value;
+    RecorderExportConfig(false).setInputFps(value);
+    d->updateVideoDuration();
 }
 
 void RecorderExport::onSpinFpsValueChanged(int value)
@@ -280,5 +408,61 @@ void RecorderExport::onButtonBrowseExportClicked()
 
 void RecorderExport::onButtonExportClicked()
 {
-    // TODO
+    if (QFile::exists(d->videoFilePath)) {
+        if (QMessageBox::question(this, windowTitle(),
+                                  i18n("The video file is already exists. Do you wish to overwrite?"))
+            != QMessageBox::Yes) {
+            return;
+        }
+    }
+
+    d->ui->stackedWidget->setCurrentIndex(ExportPageIndex::pageProgressIndex);
+    d->startExport();
+}
+
+void RecorderExport::onButtonCancelExportClicked()
+{
+    if (d->tryAbortExport())
+        d->ui->stackedWidget->setCurrentIndex(ExportPageIndex::pageSettingsIndex);
+}
+
+
+void RecorderExport::onFFMpegStarted()
+{
+    d->ui->buttonCancelExport->setEnabled(true);
+    d->ui->labelStatus->setText(i18n("The timelapse video is being encoded..."));
+}
+
+void RecorderExport::onFFMpegFinished()
+{
+    d->ui->stackedWidget->setCurrentIndex(ExportPageIndex::pageDoneIndex);
+    d->ui->labelVideoPathDone->setText(d->videoFilePath);
+    d->cleanupFFMpeg();
+}
+
+void RecorderExport::onFFMpegFinishedWithError(QString error)
+{
+    d->ui->stackedWidget->setCurrentIndex(ExportPageIndex::pageSettingsIndex);
+    QMessageBox::critical(this, windowTitle(), i18n("Export failed. FFMpeg message:") % "\n\n" % error);
+    d->cleanupFFMpeg();
+}
+
+void RecorderExport::onFFMpegProgressUpdated(int frameNo)
+{
+    d->ui->progressExport->setValue(frameNo * 100 / (d->framesCount * d->fps / static_cast<float>(d->inputFps)));
+}
+
+void RecorderExport::onButtonWatchItClicked()
+{
+    QDesktopServices::openUrl(QUrl(d->videoFilePath));
+}
+
+void RecorderExport::onButtonShowInFolderClicked()
+{
+    QDesktopServices::openUrl(QUrl(d->videoDirectory));
+}
+
+void RecorderExport::onButtonRestartClicked()
+{
+    d->ui->stackedWidget->setCurrentIndex(ExportPageIndex::pageSettingsIndex);
 }

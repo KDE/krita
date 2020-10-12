@@ -443,7 +443,30 @@ bool KisTimeBasedItemModel::mirrorFrames(QModelIndexList indexes)
 
             while (srcIt < dstIt) {
                 Q_FOREACH (KisKeyframeChannel *channel, channels) {
-                    channel->swapKeyframes(srcIt->column(), dstIt->column(), parentCommand.data());
+                    if (channel->keyframeAt(srcIt->column()) && channel->keyframeAt(dstIt->column())) {
+
+                        channel->swapKeyframes(srcIt->column(),
+                                               dstIt->column(),
+                                               parentCommand.data());
+                    }
+                    else if (channel->keyframeAt(srcIt->column())) {
+
+                        channel->insertKeyframe(dstIt->column(),
+                                                channel->keyframeAt(srcIt->column()),
+                                                parentCommand.data());
+
+                        channel->removeKeyframe(srcIt->column(),
+                                                parentCommand.data());
+                    }
+                    else if (channel->keyframeAt(dstIt->column())) {
+
+                        channel->insertKeyframe(srcIt->column(),
+                                                channel->keyframeAt(dstIt->column()),
+                                                parentCommand.data());
+
+                        channel->removeKeyframe(dstIt->column(),
+                                                parentCommand.data());
+                    }
                 }
 
                 srcIt++;

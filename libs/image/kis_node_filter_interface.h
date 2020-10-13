@@ -52,7 +52,7 @@ public:
 private:
     KisNodeFilterInterface& operator=(const KisNodeFilterInterface &other);
 
-    KisFilterConfigurationSP m_filter;
+    KisFilterConfigurationSP m_filterConfiguration;
 };
 
 #endif

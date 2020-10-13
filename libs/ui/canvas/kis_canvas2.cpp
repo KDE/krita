@@ -898,7 +898,32 @@ void KisCanvas2::slotDoCanvasUpdate()
 
     if (!m_d->savedUpdateRect.isEmpty()) {
         emit updateCanvasRequested(m_d->savedUpdateRect);
-        m_d->canvasWidget->widget()->update(m_d->savedUpdateRect);
+
+        if (wrapAroundViewingMode()) {
+            const QRectF rc = m_d->savedUpdateRect;
+            const QRectF widgetRect = m_d->canvasWidget->widget()->rect();
+            const QRectF imageRect = m_d->coordinatesConverter->imageRectInWidgetPixels();
+
+            const qreal relX = KisAlgebra2D::wrapValue(rc.x() - imageRect.x(), imageRect.width());
+            const qreal relY = KisAlgebra2D::wrapValue(rc.y() - imageRect.y(), imageRect.height());
+
+            const qreal baseX = std::fmod(imageRect.right(), imageRect.width()) - imageRect.width();
+            const qreal baseY = std::fmod(imageRect.bottom(), imageRect.height()) - imageRect.height();
+
+            for (qreal y = baseY; y < widgetRect.bottom(); y += imageRect.height()) {
+                for (qreal x = baseX; x < widgetRect.right(); x += imageRect.width()) {
+                    const QRectF proposedUpdateRect(x + relX, y + relY,
+                                                    rc.width(), rc.height());
+
+                    const QRect updateRect = (proposedUpdateRect & widgetRect).toAlignedRect();
+                    if (!updateRect.isEmpty()) {
+                        m_d->canvasWidget->widget()->update(updateRect);
+                    }
+                }
+            }
+        } else {
+            m_d->canvasWidget->widget()->update(m_d->savedUpdateRect);
+        }
     }
 
     m_d->savedUpdateRect = QRect();
@@ -1202,13 +1227,7 @@ void KisCanvas2::setWrapAroundViewingMode(bool value)
 
 bool KisCanvas2::wrapAroundViewingMode() const
 {
-    KisCanvasDecorationSP infinityDecoration =
-        m_d->canvasWidget->decoration(INFINITY_DECORATION_ID);
-
-    if (infinityDecoration) {
-        return !(infinityDecoration->visible());
-    }
-    return false;
+    return m_d->canvasWidget->wrapAroundViewingMode();
 }
 
 void KisCanvas2::bootstrapFinished()

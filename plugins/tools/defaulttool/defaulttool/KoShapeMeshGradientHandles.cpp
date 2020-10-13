@@ -89,7 +89,7 @@ KUndo2Command* KoShapeMeshGradientHandles::moveGradientHandle(const Handle &hand
                                                               const QPointF &newPos)
 {
     KoShapeFillWrapper wrapper(m_shape, m_fillVariant);
-    SvgMeshGradient *newGradient = new SvgMeshGradient(*wrapper.meshgradient());
+    QScopedPointer<SvgMeshGradient> newGradient(new SvgMeshGradient(*wrapper.meshgradient()));
     SvgMeshArray *mesharray = newGradient->getMeshArray().data();
     SvgMeshPatch *patch = newGradient->getMeshArray()->getPatch(handle.row, handle.col);
     std::array<QPointF, 4> path = patch->getSegment(handle.segmentType);
@@ -104,7 +104,7 @@ KUndo2Command* KoShapeMeshGradientHandles::moveGradientHandle(const Handle &hand
         mesharray->modifyCorner(SvgMeshPosition {handle.row, handle.col, handle.segmentType}, t.map(newPos));
     }
 
-    return wrapper.setMeshGradient(newGradient, QTransform());
+    return wrapper.setMeshGradient(newGradient.data(), QTransform());
 }
 
 QPainterPath KoShapeMeshGradientHandles::path() const

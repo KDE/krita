@@ -36,11 +36,10 @@ SvgGradientHelper::SvgGradientHelper()
 
 SvgGradientHelper::~SvgGradientHelper()
 {
-    delete m_gradient;
 }
 
 SvgGradientHelper::SvgGradientHelper(const SvgGradientHelper &other)
-    : m_gradient(KoFlake::cloneGradient(other.m_gradient))
+    : m_gradient(KoFlake::cloneGradient(other.m_gradient.data()))
     , m_meshgradient(new SvgMeshGradient(*other.m_meshgradient))
     , m_gradientUnits(other.m_gradientUnits)
     , m_gradientTransform(other.m_gradientTransform)
@@ -54,7 +53,7 @@ SvgGradientHelper & SvgGradientHelper::operator = (const SvgGradientHelper & rhs
 
     m_gradientUnits = rhs.m_gradientUnits;
     m_gradientTransform = rhs.m_gradientTransform;
-    m_gradient = KoFlake::cloneGradient(rhs.m_gradient);
+    m_gradient.reset(KoFlake::cloneGradient(rhs.m_gradient.data()));
     m_meshgradient.reset(new SvgMeshGradient(*rhs.m_meshgradient));
 
     return *this;
@@ -72,13 +71,12 @@ KoFlake::CoordinateSystem SvgGradientHelper::gradientUnits() const
 
 QGradient * SvgGradientHelper::gradient() const
 {
-    return m_gradient;
+    return m_gradient.data();
 }
 
 void SvgGradientHelper::setGradient(QGradient * g)
 {
-    delete m_gradient;
-    m_gradient = g;
+    m_gradient.reset(g);
 }
 
 void SvgGradientHelper::setMeshGradient(SvgMeshGradient *g)

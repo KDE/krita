@@ -146,6 +146,10 @@ SvgParser::SvgParser(KoDocumentResourceManager *documentResourceManager)
 
 SvgParser::~SvgParser()
 {
+    for (auto it = m_symbols.begin(); it != m_symbols.end(); ++it) {
+        delete it.value();
+    }
+    qDeleteAll(m_defsShapes);
 }
 
 KoXmlDocument SvgParser::createDocumentFromSvg(QIODevice *device, QString *errorMsg, int *errorLine, int *errorColumn)
@@ -844,6 +848,13 @@ bool SvgParser::parseSymbol(const KoXmlElement &e)
     if (svgSymbol->shape->boundingRect() == QRectF(0.0, 0.0, 0.0, 0.0)) {
         debugFlake << "Symbol" << id << "seems to be empty, discarding";
         return false;
+    }
+
+    // TODO: out default set of symbols had duplicated ids! We should
+    //       make sure they are unique!
+    if (m_symbols.contains(id)) {
+        delete m_symbols[id];
+        m_symbols.remove(id);
     }
 
     m_symbols.insert(id, svgSymbol.take());
@@ -1895,6 +1906,7 @@ QList<KoShape*> SvgParser::parseSingleElement(const KoXmlElement &b, DeferredUse
                     stream << b;
                     debugFlake << "    " << string;
                 }
+                delete shape;
             }
         }
     } else if (b.tagName() == "use") {

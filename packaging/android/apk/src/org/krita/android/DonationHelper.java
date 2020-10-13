@@ -95,8 +95,6 @@ public class DonationHelper implements PurchasesUpdatedListener, BillingClientSt
             if (list != null) {
                 mSkuDetails = list;
             }
-        } else {
-            showToast(R.string.something_wrong);
         }
     }
 

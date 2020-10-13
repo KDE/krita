@@ -134,14 +134,14 @@ public:
         updateBrushIndexesImpl();
     }
 
+    int currentBrushIndex() override {
+        return m_currentBrushIndex;
+    }
+
 protected:
 
     int chooseNextBrush(const KisPaintInformation& info) override {
         Q_UNUSED(info);
-        return m_currentBrushIndex;
-    }
-
-    int currentBrushIndex() override {
         return m_currentBrushIndex;
     }
 
@@ -233,11 +233,6 @@ void KisTextBrush::notifyStrokeStarted()
     m_brushesPipe->notifyStrokeStarted();
 }
 
-void KisTextBrush::notifyCachedDabPainted(const KisPaintInformation& info)
-{
-    m_brushesPipe->notifyCachedDabPainted(info);
-}
-
 void KisTextBrush::prepareForSeqNo(const KisPaintInformation &info, int seqNo)
 {
     m_brushesPipe->prepareForSeqNo(info, seqNo);
@@ -297,9 +292,9 @@ void KisTextBrush::updateBrush()
     setValid(true);
 }
 
-quint32 KisTextBrush::brushIndex(const KisPaintInformation& info) const
+quint32 KisTextBrush::brushIndex() const
 {
-    return brushType() == MASK ? 0 : 1 + m_brushesPipe->brushIndex(info);
+    return brushType() == MASK ? 0 : 1 + m_brushesPipe->currentBrushIndex();
 }
 
 qint32 KisTextBrush::maskWidth(KisDabShape const& shape, double subPixelX, double subPixelY, const KisPaintInformation& info) const

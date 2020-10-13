@@ -33,7 +33,7 @@ class KisTextureMaskInfo;
 class KisTextureMaskInfo : public boost::equality_comparable<KisTextureMaskInfo>
 {
 public:
-    KisTextureMaskInfo(int levelOfDetail);
+    KisTextureMaskInfo(int levelOfDetail, bool preserveAlpha);
     KisTextureMaskInfo(const KisTextureMaskInfo &rhs);
 
     ~KisTextureMaskInfo();
@@ -58,6 +58,7 @@ public:
 
 private:
     int m_levelOfDetail = 0;
+    bool m_preserveAlpha = false;
 
     KoPattern *m_pattern = 0;
 

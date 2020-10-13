@@ -54,8 +54,8 @@ inline T maskingLinearBurn(T src, T dst) {
  * A special Linear Dodge variant for alpha channel.
  *
  * The meaning of alpha channel is a bit different from the one in color. If
- * alpha channel of the destination is totally null, we should try to resurrect
- * its contents from ashes :)
+ * alpha channel of the destination is totally null, we should not try
+ * to resurrect its contents from ashes :)
  */
 template<class T>
 inline T maskingAddition(T src, T dst) {
@@ -70,6 +70,25 @@ inline T maskingAddition(T src, T dst) {
                   composite_type(src) + dst,
                   composite_type(KoColorSpaceMathsTraits<T>::unitValue));
 }
+
+/**
+ * A special Subtract variant for alpha channel.
+ *
+ * The meaning of alpha channel is a bit different from the one in color.
+ * If the result of the subtraction becomes negative, we should clamp it
+ * to the unit range. Otherwise, the layer may have negative alpha channel,
+ * which generates funny artifacts :) See bug 424210.
+ */
+template<class T>
+inline T maskingSubtract(T src, T dst) {
+    typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
+    using namespace Arithmetic;
+
+    return qBound(composite_type(KoColorSpaceMathsTraits<T>::zeroValue),
+                  composite_type(dst) - src,
+                  composite_type(KoColorSpaceMathsTraits<T>::unitValue));
+}
+
 
 
 
@@ -96,7 +115,7 @@ KisMaskingBrushCompositeOpBase *createTypedOp(const QString &id, int pixelSize, 
         // NOTE: we call it "Hard Mix", but it is actually "Hard Mix (Photoshop)"
         result = new KisMaskingBrushCompositeOp<channel_type, cfHardMixPhotoshop>(pixelSize, alphaOffset);
     } else if (id == COMPOSITE_SUBTRACT) {
-        result = new KisMaskingBrushCompositeOp<channel_type, cfSubtract>(pixelSize, alphaOffset);
+        result = new KisMaskingBrushCompositeOp<channel_type, maskingSubtract>(pixelSize, alphaOffset);
     }
 
     KIS_SAFE_ASSERT_RECOVER (result && "Unknown composite op for masked brush!") {

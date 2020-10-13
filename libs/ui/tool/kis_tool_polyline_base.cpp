@@ -125,7 +125,7 @@ void KisToolPolylineBase::beginPrimaryDoubleClickAction(KoPointerEvent *event)
 
 void KisToolPolylineBase::beginAlternateAction(KoPointerEvent *event, AlternateAction action)
 {
-    if (action != ChangeSize || !m_dragging) {
+    if ((action != ChangeSize && action != ChangeSizeSnap) || !m_dragging) {
         KisToolPaint::beginAlternateAction(event, action);
     }
 

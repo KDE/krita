@@ -29,8 +29,7 @@ class KoColorSpace;
 class KRITAIMAGE_EXPORT  KisConvertColorSpaceProcessingVisitor : public KisSimpleProcessingVisitor
 {
 public:
-    KisConvertColorSpaceProcessingVisitor(const KoColorSpace *srcColorSpace,
-                                          const KoColorSpace *dstColorSpace,
+    KisConvertColorSpaceProcessingVisitor(const KoColorSpace *dstColorSpace,
                                           KoColorConversionTransformation::Intent renderingIntent,
                                           KoColorConversionTransformation::ConversionFlags conversionFlags);
 
@@ -45,7 +44,6 @@ public:
     using KisSimpleProcessingVisitor::visit;
 
 private:
-    const KoColorSpace *m_srcColorSpace;
     const KoColorSpace *m_dstColorSpace;
     KoColorConversionTransformation::Intent m_renderingIntent;
     KoColorConversionTransformation::ConversionFlags m_conversionFlags;

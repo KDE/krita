@@ -210,13 +210,9 @@ void KisGroupLayer::resetCache(const KoColorSpace *colorSpace)
     }
     else if(*m_d->paintDevice->colorSpace() != *colorSpace) {
 
-        KisPaintDeviceSP dev = new KisPaintDevice(this, colorSpace, new KisDefaultBounds(image()));
-        dev->setX(this->x());
-        dev->setY(this->y());
-        dev->setDefaultPixel(m_d->paintDevice->defaultPixel());
+        m_d->paintDevice->clear();
+        m_d->paintDevice->convertTo(colorSpace);
 
-        m_d->paintDevice = dev;
-        m_d->paintDevice->setProjectionDevice(true);
     } else {
 
         m_d->paintDevice->clear();

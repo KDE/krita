@@ -81,7 +81,7 @@ class KisCrossChannelConfigWidget : public KisMultiChannelConfigWidget
     Q_OBJECT
 
 public:
-    KisCrossChannelConfigWidget(QWidget * parent, KisPaintDeviceSP dev, Qt::WindowFlags f = 0);
+    KisCrossChannelConfigWidget(QWidget * parent, KisPaintDeviceSP dev, Qt::WindowFlags f = Qt::WindowFlags());
     ~KisCrossChannelConfigWidget() override;
 
     void setConfiguration(const KisPropertiesConfigurationSP config) override;

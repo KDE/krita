@@ -141,7 +141,7 @@ build_kf5() {
 
     if [[ ! -d extragear/kdesrc-build ]]; then 
         mkdir -p extragear/kdesrc-build
-        git clone git://anongit.kde.org/kdesrc-build extragear/kdesrc-build
+        git clone http://invent.kde.org/sdk/kdesrc-build extragear/kdesrc-build
     fi
     if [[ ! -e  $BUILD_ROOT/kf5/kdesrc-build ]]; then 
         ln -s extragear/kdesrc-build/kdesrc-build kdesrc-build
@@ -288,6 +288,8 @@ check_exists CMAKE_ANDROID_NDK
 check_exists ANDROID_SDK_ROOT
 check_exists KRITA_ROOT
 
+# this helps SDK find the NDK, where ever it may be
+export ANDROID_NDK_HOME=$CMAKE_ANDROID_NDK
 export ANDROID_NATIVE_API_LEVEL=android-$ANDROID_API_LEVEL
 export INSTALL_PREFIX=$BUILD_ROOT/krita-android-build
 if [[ -z $QT_ANDROID ]]; then

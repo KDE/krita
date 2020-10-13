@@ -48,7 +48,7 @@ constexpr int foregroundOpacity() { return 100; }
 constexpr int backgroundOpacity() { return 100; }
 constexpr bool invert() { return false; }
 constexpr qreal brightness() { return 50.0; }
-constexpr qreal contrast() { return 50.0; }
+constexpr qreal contrast() { return 95.0; }
 
 constexpr qreal positionX() { return 0.0; }
 constexpr qreal positionY() { return 0.0; }
@@ -57,7 +57,7 @@ constexpr qreal sizeY() { return 10.0; }
 constexpr bool keepSizeSquare() { return true; }
 constexpr qreal shearX() { return 0.0; }
 constexpr qreal shearY() { return 0.0; }
-constexpr qreal rotation() { return 0.0; }
+constexpr qreal rotation() { return 45.0; }
 
 }
 

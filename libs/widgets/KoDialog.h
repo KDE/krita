@@ -1,4 +1,4 @@
-/*  This file is part of the KDE Librariesfsignals
+/*  This file is part of the KDE Libraries
  *  Copyright (C) 1998 Thomas Tanghus (tanghus@earthling.net)
  *  Additions 1999-2000 by Espen Sand (espen@kde.org)
  *                      and Holger Freyther <freyther@kde.org>
@@ -167,7 +167,7 @@ public:
      * @param parent The parent of the dialog.
      * @param flags  The widget flags passed to the QDialog constructor
      */
-    explicit KoDialog(QWidget *parent = 0, Qt::WindowFlags flags = 0);
+    explicit KoDialog(QWidget *parent = 0, Qt::WindowFlags f = Qt::WindowFlags());
 
     /**
      * Destroys the dialog.
@@ -791,16 +791,8 @@ protected Q_SLOTS:
      */
     virtual void slotButtonClicked(int button);
 
-    /**
-     * Updates the margins and spacings.
-     *
-     * @deprecated KoDialog respects the style's margins and spacings automatically. Calling
-     * this function has no effect.
-     */
-    void updateGeometry();
-
 private:
-    KoDialog(KoDialogPrivate &dd, QWidget *parent, Qt::WindowFlags flags = 0);
+    KoDialog(KoDialogPrivate &dd, QWidget *parent, Qt::WindowFlags f = Qt::WindowFlags());
     KoDialogPrivate *const d_ptr;
 
 private:

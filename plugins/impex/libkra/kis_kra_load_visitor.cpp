@@ -217,7 +217,7 @@ bool KisKraLoadVisitor::visit(KisPaintLayer *layer)
             if (!pixelSelection->read(m_store->device())) {
                 pixelSelection->disconnect();
             } else {
-                KisTransparencyMask* mask = new KisTransparencyMask(m_image, i18n("Transpareny Mask"));
+                KisTransparencyMask* mask = new KisTransparencyMask(m_image, i18n("Transparency Mask"));
                 mask->setSelection(selection);
                 m_image->addNode(mask, layer, layer->firstChild());
             }
@@ -261,6 +261,13 @@ bool KisKraLoadVisitor::visit(KisAdjustmentLayer* layer)
 
     } else {
         // We use the default, empty selection
+    }
+
+    if (!result) {
+        m_warningMessages.append(i18nc("Warning during loading a kra file with a filter layer",
+                                       "Selection on layer %s couldn't be loaded. It will be replaced by an empty selection.", layer->name()));
+        // otherwise ignore and just use what is there already
+        // (most probably an empty selection)
     }
 
     if (!loadMetaData(layer)) {
@@ -433,8 +440,13 @@ bool KisKraLoadVisitor::visit(KisColorizeMask *mask)
         return false;
 
     QVector<KisLazyFillTools::KeyStroke> strokes;
-    if (!KisDomUtils::loadValue(doc.documentElement(), COLORIZE_KEYSTROKES_SECTION, &strokes, mask->colorSpace()))
+    if (!KisDomUtils::loadValue(doc.documentElement(),
+                                COLORIZE_KEYSTROKES_SECTION,
+                                &strokes,
+                                mask->colorSpace(),
+                                QPoint(mask->x(), mask->y()))) {
         return false;
+    }
 
     int i = 0;
     Q_FOREACH (const KisLazyFillTools::KeyStroke &stroke, strokes) {

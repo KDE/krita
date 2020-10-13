@@ -140,6 +140,8 @@ public:
 
     int currentDabSeqNo() const;
 
+    qreal maxPressure() const;
+
     /**
      * @param spacing The new effective spacing after the dab. (Painting a dab is always supposed to
      *                cause a spacing update.)

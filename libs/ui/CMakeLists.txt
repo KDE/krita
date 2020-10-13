@@ -276,6 +276,7 @@ set(kritaui_LIB_SRCS
     widgets/KisLayerStyleAngleSelector.cpp
     widgets/KisMemoryReportButton.cpp
     widgets/KisDitherWidget.cpp
+    widgets/KisWarningWidget.cpp
 
     KisPaletteEditor.cpp
     dialogs/KisDlgPaletteEditor.cpp

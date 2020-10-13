@@ -22,7 +22,6 @@
  */
 
 #include "kis_tool_freehand.h"
-
 #include <QPainter>
 #include <QRect>
 #include <QThreadPool>
@@ -290,7 +289,7 @@ bool KisToolFreehand::tryPickByPaintOp(KoPointerEvent *event, AlternateAction ac
 
 void KisToolFreehand::activateAlternateAction(AlternateAction action)
 {
-    if (action != ChangeSize) {
+    if (action != ChangeSize && action != ChangeSizeSnap) {
         KisToolPaint::activateAlternateAction(action);
         return;
     }
@@ -301,7 +300,7 @@ void KisToolFreehand::activateAlternateAction(AlternateAction action)
 
 void KisToolFreehand::deactivateAlternateAction(AlternateAction action)
 {
-    if (action != ChangeSize) {
+    if (action != ChangeSize && action != ChangeSizeSnap) {
         KisToolPaint::deactivateAlternateAction(action);
         return;
     }
@@ -317,7 +316,7 @@ void KisToolFreehand::beginAlternateAction(KoPointerEvent *event, AlternateActio
         return;
     }
 
-    if (action != ChangeSize) {
+    if (action != ChangeSize && action != ChangeSizeSnap) {
         KisToolPaint::beginAlternateAction(event, action);
         return;
     }
@@ -334,7 +333,7 @@ void KisToolFreehand::continueAlternateAction(KoPointerEvent *event, AlternateAc
 {
     if (tryPickByPaintOp(event, action) || m_paintopBasedPickingInAction) return;
 
-    if (action != ChangeSize) {
+    if (action != ChangeSize && action != ChangeSizeSnap) {
         KisToolPaint::continueAlternateAction(event, action);
         return;
     }
@@ -360,9 +359,17 @@ void KisToolFreehand::continueAlternateAction(KoPointerEvent *event, AlternateAc
 
     if (qAbs(sizeDiff) > 0.01) {
         KisPaintOpSettingsSP settings = currentPaintOpPreset()->settings();
-        const qreal newSize = qBound(0.01, m_lastPaintOpSize + sizeDiff, maxBrushSize);
+
+        qreal newSize = m_lastPaintOpSize + sizeDiff;
+
+        if (action == ChangeSizeSnap) {
+            newSize = qRound(newSize);
+        }
+
+        newSize = qBound(0.01, newSize, maxBrushSize);
 
         settings->setPaintOpSize(newSize);
+
         requestUpdateOutline(m_initialGestureDocPoint, 0);
         //m_brushResizeCompressor.start(newSize);
 
@@ -378,7 +385,7 @@ void KisToolFreehand::endAlternateAction(KoPointerEvent *event, AlternateAction 
         return;
     }
 
-    if (action != ChangeSize) {
+    if (action != ChangeSize && action != ChangeSizeSnap) {
         KisToolPaint::endAlternateAction(event, action);
         return;
     }

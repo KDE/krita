@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) Boudewijn Rempt <boud@valdyas.org>, (C) 2008
+ *  Copyright (c) 2020 L. E. Segovia <amy@amyspark.me>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -35,10 +36,14 @@
 #include <KisViewManager.h>
 #include <KisDocument.h>
 
-KisDlgGeneratorLayer::KisDlgGeneratorLayer(const QString & defaultName, KisViewManager *view, QWidget *parent, KisGeneratorLayerSP glayer = 0, const KisFilterConfigurationSP previousConfig = 0)
+#define UPDATE_DELAY 100 /*ms */
+
+KisDlgGeneratorLayer::KisDlgGeneratorLayer(const QString & defaultName, KisViewManager *view, QWidget *parent, KisGeneratorLayerSP glayer = 0, const KisFilterConfigurationSP previousConfig = 0, const KisStrokeId stroke = KisStrokeId())
         : KoDialog(parent)
         , m_customName(false)
         , m_freezeName(false)
+        , m_stroke(stroke)
+        , m_compressor(UPDATE_DELAY, KisSignalCompressor::FIRST_INACTIVE)
 {
 
     setButtons(Ok | Cancel);
@@ -47,9 +52,10 @@ KisDlgGeneratorLayer::KisDlgGeneratorLayer(const QString & defaultName, KisViewM
 
     if(isEditing){
         setModal(false);
-        layer = glayer;
         configBefore = previousConfig;
     }
+
+    layer = glayer;
 
     QWidget *page = new QWidget(this);
 
@@ -62,6 +68,11 @@ KisDlgGeneratorLayer::KisDlgGeneratorLayer(const QString & defaultName, KisViewM
     connect(dlgWidget.txtLayerName, SIGNAL(textChanged(QString)),
             this, SLOT(slotNameChanged(QString)));
     connect(dlgWidget.wdgGenerator, SIGNAL(previewConfiguration()), this, SLOT(previewGenerator()));
+    connect(&m_compressor, SIGNAL(timeout()), this, SLOT(slotDelayedPreviewGenerator()));
+
+    if (layer && !isEditing) {
+        slotDelayedPreviewGenerator();
+    }
 }
 
 KisDlgGeneratorLayer::~KisDlgGeneratorLayer()
@@ -96,6 +107,10 @@ KisDlgGeneratorLayer::~KisDlgGeneratorLayer()
     else if (isEditing && result() == QDialog::Rejected){
         layer->setFilter(configBefore);
     }
+    else if (result() == QDialog::Accepted) {
+        KIS_ASSERT_RECOVER_RETURN(layer);
+        layer->setFilter(configuration());
+    }
 }
 
 void KisDlgGeneratorLayer::slotNameChanged(const QString & text)
@@ -107,10 +122,23 @@ void KisDlgGeneratorLayer::slotNameChanged(const QString & text)
     enableButtonOk(m_customName);
 }
 
+void KisDlgGeneratorLayer::slotDelayedPreviewGenerator()
+{
+    if (!m_stroke.isNull()) {
+        layer->setFilterWithoutUpdate(configuration());
+        layer->previewWithStroke(m_stroke);
+    }
+}
+
 void KisDlgGeneratorLayer::previewGenerator()
 {
-    if (isEditing && layer)
+    if (!m_stroke.isNull()) {
+        m_compressor.start();
+    }
+    else {
+        KIS_ASSERT_RECOVER_RETURN(layer);
         layer->setFilter(configuration());
+    }
 }
 
 void KisDlgGeneratorLayer::setConfiguration(const KisFilterConfigurationSP  config)

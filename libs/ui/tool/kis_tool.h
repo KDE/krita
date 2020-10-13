@@ -135,6 +135,7 @@ public:
     enum ToolAction {
         Primary,
         AlternateChangeSize,
+        AlternateChangeSizeSnap,
         AlternatePickFgNode,
         AlternatePickBgNode,
         AlternatePickFgImage,
@@ -150,6 +151,7 @@ public:
     // So these can basically be thought of as aliases to ctrl+click, etc.
     enum AlternateAction {
         ChangeSize = AlternateChangeSize, // Default: Shift+Left click
+        ChangeSizeSnap = AlternateChangeSizeSnap, // Default: Shift+Z+Left click
         PickFgNode = AlternatePickFgNode, // Default: Ctrl+Alt+Left click
         PickBgNode = AlternatePickBgNode, // Default: Ctrl+Alt+Right click
         PickFgImage = AlternatePickFgImage, // Default: Ctrl+Left click

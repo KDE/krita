@@ -79,7 +79,6 @@ void KoPathToolSelection::add(KoPathPoint * point, bool clear)
             it = m_shapePointMap.insert(pathShape, QSet<KoPathPoint *>());
         }
         it.value().insert(point);
-        m_tool->repaint(point->boundingRect());
         emit selectionChanged();
     }
 }
@@ -94,12 +93,10 @@ void KoPathToolSelection::remove(KoPathPoint * point)
         }
         emit selectionChanged();
     }
-    m_tool->repaint(point->boundingRect());
 }
 
 void KoPathToolSelection::clear()
 {
-    repaint();
     m_selectedPoints.clear();
     m_shapePointMap.clear();
     emit selectionChanged();
@@ -204,14 +201,6 @@ void KoPathToolSelection::setSelectedShapes(const QList<KoPathShape*> shapes)
     }
 }
 
-void KoPathToolSelection::repaint()
-{
-    update();
-    Q_FOREACH (KoPathPoint *p, m_selectedPoints) {
-        m_tool->repaint(p->boundingRect(false));
-    }
-}
-
 void KoPathToolSelection::update()
 {
     bool selectionHasChanged = false;
@@ -266,7 +255,6 @@ void KoPathToolSelection::recommendPointSelectionChange(KoPathShape *shape, cons
         add(point, false);
     }
 
-    repaint();
     emit selectionChanged();
 }
 
@@ -281,7 +269,6 @@ void KoPathToolSelection::notifyPathPointsChanged(KoPathShape *shape)
 
     m_tool->notifyPathPointsChanged(shape);
 
-    repaint();
     emit selectionChanged();
 }
 

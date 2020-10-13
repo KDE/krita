@@ -75,11 +75,11 @@ endif()
 
 # define common versions of Krita applications, used to generate kritaversion.h
 # update these version for every release:
-set(KRITA_VERSION_STRING "4.3.1-alpha")
+set(KRITA_VERSION_STRING "4.4.1-alpha")
 # Major version: 3 for 3.x, 4 for 4.x, etc.
 set(KRITA_STABLE_VERSION_MAJOR 4)
 # Minor version: 0 for 4.0, 1 for 4.1, etc.
-set(KRITA_STABLE_VERSION_MINOR 3)
+set(KRITA_STABLE_VERSION_MINOR 4)
 # Bugfix release version, or 0 for before the first stable release
 set(KRITA_VERSION_RELEASE 1)
 # the 4th digit, really only used for the Windows installer:
@@ -171,8 +171,12 @@ if (WIN32)
 endif ()
 
 option(HIDE_SAFE_ASSERTS "Don't show message box for \"safe\" asserts, just ignore them automatically and dump a message to the terminal." ON)
-configure_file(config-hide-safe-asserts.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-hide-safe-asserts.h)
-add_feature_info("Hide Safe Asserts" HIDE_SAFE_ASSERTS "Don't show message box for \"safe\" asserts, just ignore them automatically and dump a message to the terminal.")
+add_feature_info("Hide safe asserts" HIDE_SAFE_ASSERTS "Don't show message box for \"safe\" asserts, just ignore them automatically and dump a message to the terminal.")
+
+option(CRASH_ON_SAFE_ASSERTS "Crash unconditionally whenever a \"safe\" assert happens. Useful for running unittests" OFF)
+add_feature_info("Crash on safe asserts" CRASH_ON_SAFE_ASSERTS "Crash unconditionally whenever a \"safe\" assert happens. Useful for running unittests")
+
+configure_file(config-safe-asserts.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-safe-asserts.h)
 
 option(USE_LOCK_FREE_HASH_TABLE "Use lock free hash table instead of blocking." ON)
 configure_file(config-hash-table-implementaion.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-hash-table-implementaion.h)
@@ -909,6 +913,8 @@ if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/po OR EXISTS ${CMAKE_CURRENT_BINARY_DIR}/p
   ki18n_install(po)
 endif()
 
+# ECM passes this to Qt, which was already capable of detecting it..
+set (ANDROID_SDK_COMPILE_API "android-28")
 
 if(DEFINED QTANDROID_EXPORTED_TARGET AND NOT TARGET "create-apk")
     set (_CMAKE_ANDROID_DIR "${ECM_DIR}/../toolchain")

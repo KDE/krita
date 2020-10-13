@@ -57,7 +57,7 @@ class KisDesaturateConfigWidget : public KisConfigWidget
     Q_OBJECT
 
 public:
-    KisDesaturateConfigWidget(QWidget * parent, Qt::WindowFlags f = 0);
+    KisDesaturateConfigWidget(QWidget * parent, Qt::WindowFlags f = Qt::WindowFlags());
     ~KisDesaturateConfigWidget() override;
 
     KisPropertiesConfigurationSP  configuration() const override;

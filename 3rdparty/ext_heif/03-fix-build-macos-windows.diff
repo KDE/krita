@@ -1,8 +1,8 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 4463476..f460d48 100644
+index ce7a01b..b473cee 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -51,12 +51,10 @@ if (has_potentially_evaluated_expression)
+@@ -51,11 +51,9 @@ if (has_potentially_evaluated_expression)
    add_definitions(-Wno-error=potentially-evaluated-expression)
  endif()
  
@@ -10,16 +10,14 @@ index 4463476..f460d48 100644
 -  find_package(PkgConfig)
 -  pkg_check_modules(LIBDE265 libde265)
 -  pkg_check_modules(X265 x265)
--  pkg_check_modules(AOM aom)
 -endif()
 +LIST (APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
-+find_package(Libde265)
-+find_package(X265)
-+find_package(AOM)
++find_package(Libde265 REQUIRED)
++find_package(X265 REQUIRED)
  
  # Create libheif pkgconfig file
  set(prefix ${CMAKE_INSTALL_PREFIX})
-@@ -80,6 +78,10 @@ configure_file(libheif.pc.in ${CMAKE_CURRENT_BINARY_DIR}/libheif.pc @ONLY)
+@@ -79,6 +77,10 @@ configure_file(libheif.pc.in ${CMAKE_CURRENT_BINARY_DIR}/libheif.pc @ONLY)
  install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libheif.pc
          DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
  

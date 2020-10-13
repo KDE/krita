@@ -61,10 +61,6 @@ public:
         return !m_brushes.isEmpty() ? m_brushes.at(currentBrushIndex()) : 0;
     }
 
-    int brushIndex(const KisPaintInformation& info) {
-        return chooseNextBrush(info);
-    }
-
     qint32 maskWidth(KisDabShape const& shape, double subPixelX, double subPixelY, const KisPaintInformation& info) {
         BrushType *brush = currentBrush(info);
         return brush ? brush->maskWidth(shape, subPixelX, subPixelY, info) : 0;
@@ -113,11 +109,8 @@ public:
         }
     }
 
-    void notifyCachedDabPainted(const KisPaintInformation& info) {
-        updateBrushIndexes(info, -1);
-    }
-
     void prepareForSeqNo(const KisPaintInformation& info, int seqNo) {
+        chooseNextBrush(info);
         updateBrushIndexes(info, seqNo);
     }
 
@@ -132,7 +125,6 @@ public:
 
 
         brush->generateMaskAndApplyMaskOrCreateDab(dst, coloringInformation, shape, info, subPixelX, subPixelY, softnessFactor, lightnessStrength);
-        notifyCachedDabPainted(info);
     }
 
     KisFixedPaintDeviceSP paintDevice(const KoColorSpace * colorSpace,
@@ -144,7 +136,6 @@ public:
         if (!brush) return 0;
 
         KisFixedPaintDeviceSP device = brush->paintDevice(colorSpace, shape, info, subPixelX, subPixelY);
-        notifyCachedDabPainted(info);
         return device;
     }
 
@@ -154,7 +145,7 @@ public:
 
     void testingSelectNextBrush(const KisPaintInformation& info) {
         (void) chooseNextBrush(info);
-        notifyCachedDabPainted(info);
+        updateBrushIndexes(info, -1);
     }
 
     /**

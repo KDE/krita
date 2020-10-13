@@ -52,19 +52,16 @@
 
 struct KisFilterManager::Private {
     Private()
-        : reapplyAction(0)
-        , actionCollection(0)
-        , actionManager(0)
-        , view(0)
     {
     }
-    KisAction* reapplyAction;
-    KisAction* reapplyActionReprompt;
+
+    KisAction* reapplyAction {0};
+    KisAction* reapplyActionReprompt {0};
     QHash<QString, KActionMenu*> filterActionMenus;
     QHash<KisFilter*, QAction *> filters2Action;
-    KActionCollection *actionCollection;
-    KisActionManager *actionManager;
-    KisViewManager *view;
+    KActionCollection *actionCollection {0};
+    KisActionManager *actionManager {0};
+    KisViewManager *view {0};
 
     KisFilterConfigurationSP lastConfiguration;
     KisFilterConfigurationSP currentlyAppliedConfiguration;

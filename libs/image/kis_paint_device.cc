@@ -426,7 +426,7 @@ public:
 private:
     qint64 estimateDataSize(Data *data) const {
         const QRect &rc = data->dataManager()->extent();
-        return rc.width() * rc.height() * data->colorSpace()->pixelSize();
+        return qint64(rc.width()) * rc.height() * data->colorSpace()->pixelSize();
     }
 
 public:
@@ -899,6 +899,18 @@ void KisPaintDevice::Private::uploadFrameData(DataSP srcData, DataSP dstData)
                                        KoColorConversionTransformation::internalRenderingIntent(),
                                        KoColorConversionTransformation::internalConversionFlags(),
                                        &tempCommand);
+    }
+
+    /* If the destination data doesn't share a default pixel value
+     * with src, we should make sure that the default pixel is set
+     * properly before clearing and writing contents.
+     */
+    const int defaultPixelcmp =
+            memcmp(srcData->dataManager()->defaultPixel(),
+                   dstData->dataManager()->defaultPixel(),
+                   dstData->dataManager()->pixelSize());
+    if (defaultPixelcmp != 0) {
+        dstData->dataManager()->setDefaultPixel(srcData->dataManager()->defaultPixel());
     }
 
     dstData->dataManager()->clear();

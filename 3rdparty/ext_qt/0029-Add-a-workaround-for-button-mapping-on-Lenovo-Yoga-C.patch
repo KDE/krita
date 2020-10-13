@@ -1,0 +1,47 @@
+From bf03bafa3cfaf3751dddc72ea685f783109f32dc Mon Sep 17 00:00:00 2001
+From: Dmitry Kazakov <dimula73@gmail.com>
+Date: Tue, 1 Sep 2020 11:11:50 +0300
+Subject: [PATCH 2/3] Add a workaround for button mapping on Lenovo Yoga C940
+
+Its wintab driver fails to report button mapping and assings nothing
+to all the stylus' buttons. In such a case, force-map the stylus press to
+the left mouse button.
+---
+ .../windows/qwindowstabletsupport.cpp         | 21 +++++++++++++++----
+ 1 file changed, 17 insertions(+), 4 deletions(-)
+
+diff --git a/src/plugins/platforms/windows/qwindowstabletsupport.cpp b/src/plugins/platforms/windows/qwindowstabletsupport.cpp
+index e9d10a2b..3091a0f1 100644
+--- a/src/plugins/platforms/windows/qwindowstabletsupport.cpp
++++ b/src/plugins/platforms/windows/qwindowstabletsupport.cpp
+@@ -544,10 +544,23 @@ bool QWindowsTabletSupport::translateTabletProximityEvent(WPARAM /* wParam */, L
+      */
+     BYTE logicalButtons[32];
+     memset(logicalButtons, 0, 32);
+-    m_winTab32DLL.wTInfo(WTI_CURSORS + currentCursor, CSR_SYSBTNMAP, &logicalButtons);
+-    m_devices[m_currentDevice].buttonsMap[0x1] = logicalButtons[0];
+-    m_devices[m_currentDevice].buttonsMap[0x2] = logicalButtons[1];
+-    m_devices[m_currentDevice].buttonsMap[0x4] = logicalButtons[2];
++    const int numMappedButtons = m_winTab32DLL.wTInfo(WTI_CURSORS + currentCursor, CSR_SYSBTNMAP, &logicalButtons);
++
++    if (numMappedButtons <= 0 || !logicalButtons[0]) {
++        /**
++         * Some WinTab drivers (e.g. Lenovo Yoga C940) fail to report tablet
++         * button mapping and return zeros in the entire mapping array. If that
++         * is the case, map stylus press to the left mouse button as a fallback.
++         */
++        qCWarning(lcQpaTablet) << "WARNING: driver reports that stylus press is not mapped to any mouse button. Force-map it to left button";
++        m_devices[m_currentDevice].buttonsMap[0x1] = 0x1;
++        m_devices[m_currentDevice].buttonsMap[0x2] = 0x2;
++        m_devices[m_currentDevice].buttonsMap[0x4] = 0x4;
++    } else {
++        m_devices[m_currentDevice].buttonsMap[0x1] = logicalButtons[0];
++        m_devices[m_currentDevice].buttonsMap[0x2] = logicalButtons[1];
++        m_devices[m_currentDevice].buttonsMap[0x4] = logicalButtons[2];
++    }
+ 
+     m_devices[m_currentDevice].currentPointerType = pointerType(currentCursor);
+     m_state = PenProximity;
+-- 
+2.20.1.windows.1
+

@@ -48,11 +48,15 @@ public:
 
     void unsetDummiesFacade();
 
+Q_SIGNALS:
+    void sigBeforeBeginRemoveRows(const QModelIndex &parent, int start, int end);
+
 public Q_SLOTS:
     void setActiveNode(KisNodeSP node);
 
 private Q_SLOTS:
     void slotUpdateCurrentNodeFilter();
+    void slotBeforeBeginRemoveRows(const QModelIndex &parent, int start, int end);
 
 private:
     struct Private;

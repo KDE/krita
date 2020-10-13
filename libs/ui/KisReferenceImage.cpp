@@ -86,8 +86,10 @@ struct KisReferenceImage::Private : public QSharedData
 
         if (image.isNull()) {
             KisDocument * doc = KisPart::instance()->createDocument();
-            doc->openUrl(QUrl::fromLocalFile(externalFilename), KisDocument::DontAddToRecent);
-            image = doc->image()->convertToQImage(doc->image()->bounds(), 0);
+            if (doc->openUrl(QUrl::fromLocalFile(externalFilename), KisDocument::DontAddToRecent)) {
+                image = doc->image()->convertToQImage(doc->image()->bounds(), 0);
+            }
+            KisPart::instance()->removeDocument(doc);
         }
 
         // See https://bugs.kde.org/show_bug.cgi?id=416515 -- a jpeg image

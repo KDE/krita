@@ -270,7 +270,7 @@ public:
 
         qreal channelPixelValue;
         if (additionalMultiplierActive) {
-            channelPixelValue = (interimConvoResult * m_kernelFactor) * additionalMultiplier + m_absoluteOffset[channel];
+            channelPixelValue = interimConvoResult * m_kernelFactor * additionalMultiplier + m_absoluteOffset[channel];
         } else {
             channelPixelValue = interimConvoResult * m_kernelFactor + m_absoluteOffset[channel];
         }

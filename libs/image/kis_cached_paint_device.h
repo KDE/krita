@@ -19,9 +19,11 @@
 #ifndef __KIS_CACHED_PAINT_DEVICE_H
 #define __KIS_CACHED_PAINT_DEVICE_H
 
-#include "tiles3/kis_lockless_stack.h"
+#include "kis_lockless_stack.h"
 #include "kis_paint_device.h"
 #include "kis_selection.h"
+#include "KoColorSpace.h"
+#include "KoColor.h"
 
 class KisCachedPaintDevice
 {
@@ -34,6 +36,23 @@ public:
         }
 
         device->prepareClone(prototype);
+        return device;
+    }
+
+    KisPaintDeviceSP getDevice(KisPaintDeviceSP prototype, const KoColorSpace *colorSpace) {
+        KisPaintDeviceSP device;
+
+        if(!m_stack.pop(device)) {
+            device = new KisPaintDevice(colorSpace);
+        } else {
+            device->convertTo(colorSpace);
+        }
+
+        device->setDefaultPixel(KoColor(colorSpace));
+        device->setDefaultBounds(prototype->defaultBounds());
+        device->setX(prototype->x());
+        device->setY(prototype->y());
+
         return device;
     }
 

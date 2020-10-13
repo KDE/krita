@@ -82,6 +82,8 @@ struct Q_DECL_HIDDEN KisDistanceInformation::Private {
 
     int currentDabSeqNo;
     int levelOfDetail;
+
+    qreal lastMaxPressure = 0.0;
 };
 
 struct Q_DECL_HIDDEN KisDistanceInitInfo::Private {
@@ -383,6 +385,11 @@ int KisDistanceInformation::currentDabSeqNo() const
     return m_d->currentDabSeqNo;
 }
 
+qreal KisDistanceInformation::maxPressure() const
+{
+    return m_d->lastMaxPressure;
+}
+
 bool KisDistanceInformation::isStarted() const
 {
     return m_d->lastPaintInfoValid;
@@ -407,6 +414,8 @@ void KisDistanceInformation::registerPaintedDab(const KisPaintInformation &info,
     m_d->timing = timing;
 
     m_d->currentDabSeqNo++;
+
+    m_d->lastMaxPressure = qMax(info.pressure(), m_d->lastMaxPressure);
 }
 
 qreal KisDistanceInformation::getNextPointPosition(const QPointF &start,

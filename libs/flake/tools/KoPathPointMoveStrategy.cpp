@@ -28,6 +28,7 @@
 #include "KoSnapGuide.h"
 #include "KoCanvasBase.h"
 #include "kis_global.h"
+#include "kis_command_utils.h"
 
 KoPathPointMoveStrategy::KoPathPointMoveStrategy(KoPathTool *tool, const QPointF &pos)
     : KoInteractionStrategy(*(new KoInteractionStrategyPrivate(tool))),
@@ -42,9 +43,7 @@ KoPathPointMoveStrategy::~KoPathPointMoveStrategy()
 
 void KoPathPointMoveStrategy::handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers)
 {
-    m_tool->canvas()->updateCanvas(m_tool->canvas()->snapGuide()->boundingRect());
     QPointF newPosition = m_tool->canvas()->snapGuide()->snap(mouseLocation, modifiers);
-    m_tool->canvas()->updateCanvas(m_tool->canvas()->snapGuide()->boundingRect());
     QPointF move = newPosition - m_originalPosition;
 
     if (modifiers & Qt::ShiftModifier) {
@@ -68,18 +67,13 @@ void KoPathPointMoveStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
 
 KUndo2Command* KoPathPointMoveStrategy::createCommand()
 {
-    m_tool->canvas()->updateCanvas(m_tool->canvas()->snapGuide()->boundingRect());
-
     KoPathToolSelection * selection = dynamic_cast<KoPathToolSelection*>(m_tool->selection());
     if (! selection)
         return 0;
 
     KUndo2Command *cmd = 0;
     if (!m_move.isNull()) {
-        // as the point is already at the new position we need to undo the change
-        KoPathPointMoveCommand revert(selection->selectedPointsData(), -m_move);
-        revert.redo();
-        cmd = new KoPathPointMoveCommand(selection->selectedPointsData(), m_move);
+        cmd = new KisCommandUtils::SkipFirstRedoWrapper(new KoPathPointMoveCommand(selection->selectedPointsData(), m_move));
     }
     return cmd;
 }

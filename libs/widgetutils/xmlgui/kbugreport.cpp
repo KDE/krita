@@ -37,6 +37,9 @@
 #include <QDebug>
 #include <QTextEdit>
 #include <QDesktopServices>
+#include <QStandardPaths>
+#include <QClipboard>
+#include <QGuiApplication>
 
 #include <kaboutdata.h>
 #include <kconfig.h>
@@ -70,7 +73,7 @@ public:
     QString m_strVersion;
     QGroupBox *m_bgSeverity;
 
-    QComboBox *appcombo;
+    QLabel *lblApplicationName;
     QString lastError;
     QString appname;
     QString os;
@@ -119,24 +122,13 @@ KBugReport::KBugReport(const KAboutData &aboutData, QWidget *_parent)
     tmpLabel = new QLabel(i18n("Application: "), this);
     glay->addWidget(tmpLabel, row, 0);
     tmpLabel->setWhatsThis(qwtstr);
-    d->appcombo = new QComboBox(this);
-    d->appcombo->setWhatsThis(qwtstr);
+    d->lblApplicationName = new QLabel(this);
+    d->lblApplicationName->setWhatsThis(qwtstr);
 
-    QStringList packageList = QStringList() << "krita";
-    d->appcombo->addItems(packageList);
-    connect(d->appcombo, SIGNAL(activated(int)), SLOT(_k_appChanged(int)));
     d->appname = d->m_aboutData.productName();
-    glay->addWidget(d->appcombo, row, 1);
-    int index = 0;
-    for (; index < d->appcombo->count(); index++) {
-        if (d->appcombo->itemText(index) == d->appname) {
-            break;
-        }
-    }
-    if (index == d->appcombo->count()) { // not present
-        d->appcombo->addItem(d->appname);
-    }
-    d->appcombo->setCurrentIndex(index);
+    d->lblApplicationName->setText(d->appname);
+
+    glay->addWidget(d->lblApplicationName, row, 1);
 
     tmpLabel->setWhatsThis(qwtstr);
 
@@ -163,12 +155,6 @@ KBugReport::KBugReport(const KAboutData &aboutData, QWidget *_parent)
     tmpLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);
     glay->addWidget(tmpLabel, row, 1, 1, 2);
 
-    tmpLabel = new QLabel(i18n("Compiler:"), this);
-    glay->addWidget(tmpLabel, ++row, 0);
-    tmpLabel = new QLabel(QString::fromLatin1(XMLGUI_COMPILER_VERSION), this);
-    tmpLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);
-    glay->addWidget(tmpLabel, row, 1, 1, 2);
-
     // Point to the web form
 
     lay->addSpacing(10);
@@ -176,7 +162,9 @@ KBugReport::KBugReport(const KAboutData &aboutData, QWidget *_parent)
                         "<p>Please read <b><a href=\"https://docs.krita.org/en/untranslatable_pages/reporting_bugs.html\">this guide</a></b> for reporting bugs first!</p>"
                         "<p>To submit a bug report, click on the button below. This will open a web browser "
                         "window on <a href=\"https://bugs.kde.org\">https://bugs.kde.org</a> where you will find "
-                        "a form to fill in. The information displayed above will be transferred to that server.</p></qt>");
+                        "a form to fill in. </p>"
+                        "<p><b>Please paste the following information into the bug report!</b></p>"
+                        "</qt>");
     QLabel *label = new QLabel(text, this);
     label->setOpenExternalLinks(true);
     label->setTextInteractionFlags(Qt::LinksAccessibleByMouse | Qt::LinksAccessibleByKeyboard);
@@ -184,7 +172,38 @@ KBugReport::KBugReport(const KAboutData &aboutData, QWidget *_parent)
     lay->addWidget(label);
     lay->addSpacing(10);
 
-    d->appcombo->setFocus();
+    QByteArray additionalInformation;
+    QFile sysinfo(QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/krita-sysinfo.log");
+    if (sysinfo.exists()) {
+        sysinfo.open(QFile::ReadOnly);
+        additionalInformation += sysinfo.readAll();
+        sysinfo.close();
+    }
+
+    additionalInformation += "\n---------------------\n";
+
+    QFile log(QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/krita.log");
+    if (log.exists()) {
+        log.open(QFile::ReadOnly);
+        additionalInformation += log.readAll();
+        log.close();
+    }
+
+    additionalInformation += "\n---------------------\n";
+
+    QFile crashes(QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/krita-crash.log");
+    if (crashes.exists()) {
+        crashes.open(QFile::ReadOnly);
+        additionalInformation += crashes.readAll();
+        crashes.close();
+    }
+
+    QTextEdit *buginfo = new QTextEdit(this);
+    buginfo->setText(QString::fromUtf8(additionalInformation));
+    lay->addWidget(buginfo);
+
+    QClipboard *clipboard = QGuiApplication::clipboard();
+    clipboard->setText(QString::fromUtf8(additionalInformation));
 
     d->_k_updateUrl();
 
@@ -207,7 +226,7 @@ void KBugReportPrivate::_k_updateUrl()
     query.addQueryItem(QStringLiteral("format"), QLatin1String("guided"));    // use the guided form
 
     // the string format is product/component, where component is optional
-    QStringList list = appcombo->currentText().split(QLatin1Char('/'));
+    QStringList list = QStringList() << appname;
     query.addQueryItem(QStringLiteral("product"), list[0]);
     if (list.size() == 2) {
         query.addQueryItem(QStringLiteral("component"), list[1]);

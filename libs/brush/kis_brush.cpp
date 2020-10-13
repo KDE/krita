@@ -433,9 +433,8 @@ double KisBrush::maskAngle(double angle) const
     return normalizeAngle(angle + d->angle);
 }
 
-quint32 KisBrush::brushIndex(const KisPaintInformation& info) const
+quint32 KisBrush::brushIndex() const
 {
-    Q_UNUSED(info);
     return 0;
 }
 
@@ -468,11 +467,6 @@ qreal KisBrush::autoSpacingCoeff() const
 
 void KisBrush::notifyStrokeStarted()
 {
-}
-
-void KisBrush::notifyCachedDabPainted(const KisPaintInformation& info)
-{
-    Q_UNUSED(info);
 }
 
 void KisBrush::prepareForSeqNo(const KisPaintInformation &info, int seqNo)

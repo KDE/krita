@@ -65,7 +65,7 @@ void KisSimplexNoiseGenerator::generate(KisProcessingInformation dst, const QSiz
 
     const KoColorSpace *cs = device->colorSpace();
     const KoColorSpace *src = KoColorSpaceRegistry::instance()->colorSpace(GrayAColorModelID.id(), Float32BitsColorDepthID.id(), "Gray-D50-elle-V2-srgbtrc.icc");
-    auto conv = KoColorSpaceRegistry::instance()->createColorConverter(src, cs, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
+    KoColorConversionTransformation *conv = KoColorSpaceRegistry::instance()->createColorConverter(src, cs, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
 
     KisSequentialIteratorProgress it(device, bounds, progressUpdater);
 
@@ -117,7 +117,7 @@ void KisSimplexNoiseGenerator::generate(KisProcessingInformation dst, const QSiz
             conv->transform(c.data(), it.rawData(), 1);
         }
     }
-
+    delete conv;
     open_simplex_noise_free(noise_context);
 }
 

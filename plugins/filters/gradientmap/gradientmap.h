@@ -58,7 +58,7 @@ class KritaGradientMapConfigWidget : public KisConfigWidget
 {
     Q_OBJECT
 public:
-    KritaGradientMapConfigWidget(QWidget *parent, KisPaintDeviceSP dev, Qt::WindowFlags f = 0);
+    KritaGradientMapConfigWidget(QWidget *parent, KisPaintDeviceSP dev, Qt::WindowFlags f = Qt::WindowFlags());
     ~KritaGradientMapConfigWidget() override;
 
     KisPropertiesConfigurationSP configuration() const override;

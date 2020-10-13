@@ -59,6 +59,8 @@ private Q_SLOTS:
     void customContextMenuRequested(QPoint pos);
     void updateComposition();
     void renameComposition();
+    void moveCompositionUp();
+    void moveCompositionDown();
 
 private:
     QPointer<KisCanvas2> m_canvas;

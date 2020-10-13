@@ -120,11 +120,13 @@ struct KisPaintInformation::Private {
                              int _currentDabSeqNo,
                              qreal _lastAngle,
                              QPointF _lastPosition,
+                             qreal _lastMaxPressure,
                              boost::optional<qreal> _lockedDrawingAngle)
             : totalStrokeLength(_totalDistance),
               currentDabSeqNo(_currentDabSeqNo),
               lastAngle(_lastAngle),
               lastPosition(_lastPosition),
+              lastMaxPressure(_lastMaxPressure),
               lockedDrawingAngle(_lockedDrawingAngle)
         {
         }
@@ -133,6 +135,7 @@ struct KisPaintInformation::Private {
         int currentDabSeqNo = 0;
         qreal lastAngle = 0.0;
         QPointF lastPosition;
+        qreal lastMaxPressure = 0.0;
         boost::optional<qreal> lockedDrawingAngle;
     };
     boost::optional<DirectionHistoryInfo> directionHistoryInfo;
@@ -144,6 +147,7 @@ struct KisPaintInformation::Private {
                                                     di->currentDabSeqNo(),
                                                     di->lastDrawingAngle(),
                                                     di->lastPosition(),
+                                                    di->maxPressure(),
                                                     di->lockedDrawingAngleOptional());
 
 
@@ -436,6 +440,16 @@ qreal KisPaintInformation::drawingDistance() const
     }
 
     return length;
+}
+
+qreal KisPaintInformation::maxPressure() const
+{
+    if (!d->directionHistoryInfo) {
+        warnKrita << "KisPaintInformation::maxPressure()" << "DirectionHistoryInfo object is not available";
+        return d->pressure;
+    }
+
+    return qMax(d->directionHistoryInfo->lastMaxPressure, d->pressure);
 }
 
 qreal KisPaintInformation::drawingSpeed() const

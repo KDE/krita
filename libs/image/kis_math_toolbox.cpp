@@ -54,6 +54,23 @@ void fromDoubleF(quint8* data, int channelpos, double v)
     *((T*)(data + channelpos)) = (T)v;
 }
 
+template<typename T>
+void fromDoubleCheckNull(quint8* data, int channelpos, double v, bool *isNull)
+{
+    T value = qRound(v);
+    *((T*)(data + channelpos)) = value;
+    *isNull = value == T(0);
+}
+
+template<typename T>
+void fromDoubleCheckNullF(quint8* data, int channelpos, double v, bool *isNull)
+{
+    T value = v;
+    *((T*)(data + channelpos)) = (T)v;
+    *isNull = value < std::numeric_limits<T>::epsilon();
+}
+
+
 void KisMathToolbox::transformToFR(KisPaintDeviceSP src, KisFloatRepresentation* fr, const QRect& rect)
 {
     qint32 depth = src->colorSpace()->colorChannelCount();
@@ -170,6 +187,41 @@ bool KisMathToolbox::getFromDoubleChannelPtr(QList<KoChannelInfo *> cis, QVector
             break;
         case KoChannelInfo::INT16:
             f[k] = fromDouble<qint16>;
+            break;
+        default:
+            warnKrita << "Unsupported value type in KisMathToolbox";
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool KisMathToolbox::getFromDoubleCheckNullChannelPtr(QList<KoChannelInfo *> cis, QVector<PtrFromDoubleCheckNull>& f)
+{
+    qint32 channels = cis.count();
+
+    for (qint32 k = 0; k < channels; k++) {
+        switch (cis[k]->channelValueType()) {
+        case KoChannelInfo::UINT8:
+            f[k] = fromDoubleCheckNull<quint8>;
+            break;
+        case KoChannelInfo::UINT16:
+            f[k] = fromDoubleCheckNull<quint16>;
+            break;
+#ifdef HAVE_OPENEXR
+        case KoChannelInfo::FLOAT16:
+            f[k] = fromDoubleCheckNullF<half>;
+            break;
+#endif
+        case KoChannelInfo::FLOAT32:
+            f[k] = fromDoubleCheckNullF<float>;
+            break;
+        case KoChannelInfo::INT8:
+            f[k] = fromDoubleCheckNull<qint8>;
+            break;
+        case KoChannelInfo::INT16:
+            f[k] = fromDoubleCheckNull<qint16>;
             break;
         default:
             warnKrita << "Unsupported value type in KisMathToolbox";

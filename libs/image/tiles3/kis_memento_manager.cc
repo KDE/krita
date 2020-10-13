@@ -154,7 +154,11 @@ void KisMementoManager::registerTileDeleted(KisTile *tile)
 
     if(!mi) {
         mi = new KisMementoItem();
-        mi->deleteTile(tile, m_headsHashTable.defaultTileData());
+
+        KisTileData *defaultTileData = m_headsHashTable.refAndFetchDefaultTileData();
+        mi->deleteTile(tile, defaultTileData);
+        defaultTileData->deref();
+
         m_index.addTile(mi);
 
         if(namedTransactionInProgress())
@@ -162,7 +166,10 @@ void KisMementoManager::registerTileDeleted(KisTile *tile)
     }
     else {
         mi->reset();
-        mi->deleteTile(tile, m_headsHashTable.defaultTileData());
+
+        KisTileData *defaultTileData = m_headsHashTable.refAndFetchDefaultTileData();
+        mi->deleteTile(tile, defaultTileData);
+        defaultTileData->deref();
     }
 }
 

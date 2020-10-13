@@ -208,6 +208,12 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     m_vMirrorButton->setMenu(toolbarMenuYMirror);
     m_vMirrorButton->setPopupMode(QToolButton::MenuButtonPopup);
 
+    QAction *wrapAroundAction = m_viewManager->actionManager()->createAction("wrap_around_mode");
+
+    m_wrapAroundButton = new QToolButton(this);
+    m_wrapAroundButton->setFixedSize(iconsize, iconsize);
+    m_wrapAroundButton->setDefaultAction(wrapAroundAction);
+    m_wrapAroundButton->setCheckable(true);
 
     // add connections for horizontal and mirrror buttons
     connect(lockActionX, SIGNAL(toggled(bool)), this, SLOT(slotLockXMirrorToggle(bool)));
@@ -298,9 +304,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
 
     m_cmbCompositeOp = new KisCompositeOpComboBox();
     m_cmbCompositeOp->setFixedHeight(iconsize);
-    Q_FOREACH (KisAction * a, m_cmbCompositeOp->createBlendmodeActions()) {
-        m_viewManager->actionManager()->addAction(a->text(), a);
-    }
+    m_cmbCompositeOp->connectBlendmodeActions(m_viewManager->actionManager());
 
     m_workspaceWidget = new KisPopupButton(this);
     m_workspaceWidget->setIcon(KisIconUtils::loadIcon("view-choose"));
@@ -405,6 +409,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     QHBoxLayout* mirrorLayout = new QHBoxLayout(mirrorActions);
     mirrorLayout->addWidget(m_hMirrorButton);
     mirrorLayout->addWidget(m_vMirrorButton);
+    mirrorLayout->addWidget(m_wrapAroundButton);
     mirrorLayout->setSpacing(4);
     mirrorLayout->setContentsMargins(0, 0, 0, 0);
 

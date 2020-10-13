@@ -41,6 +41,7 @@
 
 typedef double(*PtrToDouble)(const quint8*, int);
 typedef void (*PtrFromDouble)(quint8*, int, double);
+typedef void (*PtrFromDoubleCheckNull)(quint8*, int, double, bool*);
 
 class KRITAIMAGE_EXPORT KisMathToolbox
 {
@@ -104,6 +105,7 @@ public:
 
     bool getToDoubleChannelPtr(QList<KoChannelInfo *> cis, QVector<PtrToDouble>& f);
     bool getFromDoubleChannelPtr(QList<KoChannelInfo *> cis, QVector<PtrFromDouble>& f);
+    bool getFromDoubleCheckNullChannelPtr(QList<KoChannelInfo *> cis, QVector<PtrFromDoubleCheckNull>& f);
 
     double minChannelValue(KoChannelInfo *);
     double maxChannelValue(KoChannelInfo *);

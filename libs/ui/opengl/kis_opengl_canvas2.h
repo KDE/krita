@@ -72,13 +72,14 @@ public: // QOpenGLWidget
     void resizeGL(int width, int height) override;
     void initializeGL() override;
     void paintGL() override;
+    void paintEvent(QPaintEvent *e) override;
 
     QVariant inputMethodQuery(Qt::InputMethodQuery query) const override;
     void inputMethodEvent(QInputMethodEvent *event) override;
 
 public:
-    void renderCanvasGL();
-    void renderDecorations(QPainter *painter);
+    void renderCanvasGL(const QRect &updateRect);
+    void renderDecorations(const QRect &updateRect);
     void paintToolOutline(const QPainterPath &path);
 
 
@@ -87,6 +88,8 @@ public: // Implement kis_abstract_canvas_widget interface
     void notifyImageColorSpaceChanged(const KoColorSpace *cs) override;
 
     void setWrapAroundViewingMode(bool value) override;
+    bool wrapAroundViewingMode() const override;
+
     void channelSelectionChanged(const QBitArray &channelFlags) override;
     void setDisplayColorConverter(KisDisplayColorConverter *colorConverter) override;
     void finishResizingImage(qint32 w, qint32 h) override;
@@ -120,9 +123,10 @@ private:
     void initializeDisplayShader();
 
     void reportFailedShaderCompilation(const QString &context);
-    void drawImage();
-    void drawCheckers();
-    void drawGrid();
+    void drawBackground(const QRect &updateRect);
+    void drawImage(const QRect &updateRect);
+    void drawCheckers(const QRect &updateRect);
+    void drawGrid(const QRect &updateRect);
     QSize viewportDevicePixelSize() const;
     QSizeF widgetSizeAlignedToDevicePixel() const;
 

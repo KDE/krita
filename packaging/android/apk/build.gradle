@@ -123,7 +123,14 @@ android {
     project.ext.versionCodes = ['armeabi-v7a': 1, 'arm64-v8a': 2, 'x86': 3, 'x86_64': 4]
 
     def versionMajor    = 4
-    def versionMinor    = 3
+    def versionMinor    = 4
+
+    /**
+     * This version does **not** correspond to the patch version
+     * of Krita. Instead, it is just incremented for every public
+     * (including alpha and beta) release of versionMajor.versionMinor
+     * branch
+     */
     def versionRelease  = 0
 
 	defaultConfig {

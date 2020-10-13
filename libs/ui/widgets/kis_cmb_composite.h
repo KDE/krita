@@ -31,6 +31,7 @@ class KoID;
 class KoColorSpace;
 class KisSortedCompositeOpListModel;
 class KisAction;
+class KisActionManager;
 
 class KRITAUI_EXPORT KisCompositeOpListWidget: public KisCategorizedListView
 {
@@ -59,7 +60,10 @@ public:
     void selectCompositeOp(const KoID &op);
     KoID selectedCompositeOp() const;
 
-    QList<KisAction *> createBlendmodeActions();
+    void connectBlendmodeActions(KisActionManager *manager);
+
+    void wheelEvent(QWheelEvent *e);
+    void keyPressEvent(QKeyEvent *e);
 
 private Q_SLOTS:
     void slotCategoryToggled(const QModelIndex& index, bool toggled);
@@ -94,7 +98,8 @@ private Q_SLOTS:
     void slotColor();
     void slotLuminosity();
 
-
+private:
+    void selectNeighbouringBlendMode(bool down);
 
 private:
     KisSortedCompositeOpListModel *m_model;

@@ -788,12 +788,12 @@ void KisCanvas2::updateCanvasProjection()
         if (!m_d->isBatchUpdateActive) {
             // TODO: Implement info->dirtyViewportRect() for KisOpenGLCanvas2 to avoid updating whole canvas
             if (m_d->currentCanvasIsOpenGL) {
-                m_d->savedUpdateRect = QRect();
+                m_d->savedUpdateRect |= vRect;
 
                 // we already had a compression in frameRenderStartCompressor, so force the update directly
                 slotDoCanvasUpdate();
             } else if (/* !m_d->currentCanvasIsOpenGL && */ !vRect.isEmpty()) {
-                m_d->savedUpdateRect = m_d->coordinatesConverter->viewportToWidget(vRect).toAlignedRect();
+                m_d->savedUpdateRect |= m_d->coordinatesConverter->viewportToWidget(vRect).toAlignedRect();
 
                 // we already had a compression in frameRenderStartCompressor, so force the update directly
                 slotDoCanvasUpdate();
@@ -896,12 +896,34 @@ void KisCanvas2::slotDoCanvasUpdate()
         return;
     }
 
-    if (m_d->savedUpdateRect.isEmpty()) {
-        m_d->canvasWidget->widget()->update();
-        emit updateCanvasRequested(m_d->canvasWidget->widget()->rect());
-    } else {
+    if (!m_d->savedUpdateRect.isEmpty()) {
         emit updateCanvasRequested(m_d->savedUpdateRect);
-        m_d->canvasWidget->widget()->update(m_d->savedUpdateRect);
+
+        if (wrapAroundViewingMode()) {
+            const QRectF rc = m_d->savedUpdateRect;
+            const QRectF widgetRect = m_d->canvasWidget->widget()->rect();
+            const QRectF imageRect = m_d->coordinatesConverter->imageRectInWidgetPixels();
+
+            const qreal relX = KisAlgebra2D::wrapValue(rc.x() - imageRect.x(), imageRect.width());
+            const qreal relY = KisAlgebra2D::wrapValue(rc.y() - imageRect.y(), imageRect.height());
+
+            const qreal baseX = std::fmod(imageRect.right(), imageRect.width()) - imageRect.width();
+            const qreal baseY = std::fmod(imageRect.bottom(), imageRect.height()) - imageRect.height();
+
+            for (qreal y = baseY; y < widgetRect.bottom(); y += imageRect.height()) {
+                for (qreal x = baseX; x < widgetRect.right(); x += imageRect.width()) {
+                    const QRectF proposedUpdateRect(x + relX, y + relY,
+                                                    rc.width(), rc.height());
+
+                    const QRect updateRect = (proposedUpdateRect & widgetRect).toAlignedRect();
+                    if (!updateRect.isEmpty()) {
+                        m_d->canvasWidget->widget()->update(updateRect);
+                    }
+                }
+            }
+        } else {
+            m_d->canvasWidget->widget()->update(m_d->savedUpdateRect);
+        }
     }
 
     m_d->savedUpdateRect = QRect();
@@ -909,10 +931,7 @@ void KisCanvas2::slotDoCanvasUpdate()
 
 void KisCanvas2::updateCanvasWidgetImpl(const QRect &rc)
 {
-    if (!m_d->canvasUpdateCompressor.isActive() ||
-        !m_d->savedUpdateRect.isEmpty()) {
-        m_d->savedUpdateRect |= rc;
-    }
+    m_d->savedUpdateRect |= !rc.isEmpty() ? rc : m_d->canvasWidget->widget()->rect();
     m_d->canvasUpdateCompressor.start();
 }
 
@@ -923,17 +942,12 @@ void KisCanvas2::updateCanvas()
 
 void KisCanvas2::updateCanvas(const QRectF& documentRect)
 {
-    if (m_d->currentCanvasIsOpenGL && m_d->canvasWidget->decorations().size() > 0) {
-        updateCanvasWidgetImpl();
-    }
-    else {
-        // updateCanvas is called from tools, never from the projection
-        // updates, so no need to prescale!
-        QRect widgetRect = m_d->coordinatesConverter->documentToWidget(documentRect).toAlignedRect();
-        widgetRect.adjust(-2, -2, 2, 2);
-        if (!widgetRect.isEmpty()) {
-            updateCanvasWidgetImpl(widgetRect);
-        }
+    // updateCanvas is called from tools, never from the projection
+    // updates, so no need to prescale!
+    QRect widgetRect = m_d->coordinatesConverter->documentToWidget(documentRect).toAlignedRect();
+    widgetRect.adjust(-2, -2, 2, 2);
+    if (!widgetRect.isEmpty()) {
+        updateCanvasWidgetImpl(widgetRect);
     }
 }
 
@@ -1213,13 +1227,7 @@ void KisCanvas2::setWrapAroundViewingMode(bool value)
 
 bool KisCanvas2::wrapAroundViewingMode() const
 {
-    KisCanvasDecorationSP infinityDecoration =
-        m_d->canvasWidget->decoration(INFINITY_DECORATION_ID);
-
-    if (infinityDecoration) {
-        return !(infinityDecoration->visible());
-    }
-    return false;
+    return m_d->canvasWidget->wrapAroundViewingMode();
 }
 
 void KisCanvas2::bootstrapFinished()

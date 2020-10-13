@@ -107,5 +107,5 @@ void KisSeExprScriptChooser::update(KoResource * resource)
 {
     m_lblName->setFixedWidth(m_itemChooser->width());
     KisSeExprScript *pattern = static_cast<KisSeExprScript *>(resource);
-    m_lblName->setText(QString("%1").arg(i18n(pattern->name().toUtf8())));
+    m_lblName->setText(QString("%1").arg(i18n(pattern->name().toUtf8().replace("_", " "))));
 }

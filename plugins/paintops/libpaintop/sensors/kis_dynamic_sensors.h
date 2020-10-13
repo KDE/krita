@@ -31,11 +31,6 @@ public:
     KisDynamicSensorSpeed();
     ~KisDynamicSensorSpeed() override { }
     qreal value(const KisPaintInformation& info) override;
-    void reset() override {
-        m_speed = -1.0;
-    }
-private:
-    double m_speed;
 };
 
 class KisDynamicSensorRotation : public KisDynamicSensor
@@ -64,18 +59,8 @@ public:
     KisDynamicSensorPressureIn();
     ~KisDynamicSensorPressureIn() override { }
     qreal value(const KisPaintInformation& info) override {
-        if(!info.isHoveringMode()) {
-            if(info.pressure() > lastPressure) {
-                lastPressure = info.pressure();
-            }
-            return lastPressure;
-        }
-
-        lastPressure = 0.0;
-        return 0.0;
+        return !info.isHoveringMode() ? info.maxPressure() : 0.0;
     }
-private:
-    qreal lastPressure;
 };
 
 class KisDynamicSensorXTilt : public KisDynamicSensor

@@ -22,6 +22,7 @@
 
 #include "kis_image_interfaces.h"
 #include "kis_stroke_strategy_undo_command_based.h"
+#include <KisAsynchronouslyMergeableCommandInterface.h>
 
 
 KisSavedCommandBase::KisSavedCommandBase(const KUndo2MagicString &name,
@@ -221,8 +222,11 @@ bool KisSavedMacroCommand::mergeWith(const KUndo2Command* command)
 
     bool sameCommands = true;
     while (it != end && otherIt != otherEnd) {
-        if (it->command->id() < 0 ||
-            otherIt->command->id() < 0 ||
+        KisAsynchronouslyMergeableCommandInterface *iface1 =
+            dynamic_cast<KisAsynchronouslyMergeableCommandInterface*>(it->command.data());
+
+        if (!iface1 || !iface1->canMergeWith(otherIt->command.data()) ||
+            it->command->id() < 0 || otherIt->command->id() < 0 ||
             it->command->id() != otherIt->command->id() ||
             it->sequentiality != otherIt->sequentiality ||
             it->exclusivity != otherIt->exclusivity) {

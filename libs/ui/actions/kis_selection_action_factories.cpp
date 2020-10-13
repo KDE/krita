@@ -63,7 +63,7 @@
 #include "kis_image_animation_interface.h"
 #include "kis_time_range.h"
 #include "kis_keyframe_channel.h"
-
+#include "kis_node_manager.h"
 
 #include <processing/fill_processing_visitor.h>
 #include <kis_selection_tool_helper.h>
@@ -269,9 +269,12 @@ void KisCutCopyActionFactory::run(bool willCut, bool makeSharpClip, KisViewManag
     KisImageSP image = view->image();
     if (!image) return;
 
-    bool haveShapesSelected = view->selectionManager()->haveShapesSelected();
+    const bool haveShapesSelected = view->selectionManager()->haveShapesSelected();
 
-    if (haveShapesSelected) {
+    KisNodeSP node = view->activeNode();
+    KisSelectionSP selection = view->selection();
+
+    if (!makeSharpClip && haveShapesSelected) {
         // XXX: "Add saving of XML data for Cut/Copy of shapes"
 
         KisImageBarrierLocker locker(image);
@@ -280,13 +283,7 @@ void KisCutCopyActionFactory::run(bool willCut, bool makeSharpClip, KisViewManag
         } else {
             view->canvasBase()->toolProxy()->copy();
         }
-    } else {
-        KisNodeSP node = view->activeNode();
-        if (!node) return;
-
-        KisSelectionSP selection = view->selection();
-        if (selection.isNull()) return;
-
+    } else if (node && selection) {
         {
             KisImageBarrierLocker locker(image);
             KisPaintDeviceSP dev = node->paintDevice();
@@ -375,6 +372,12 @@ void KisCutCopyActionFactory::run(bool willCut, bool makeSharpClip, KisViewManag
         KisOperationConfiguration config(id());
         config.setProperty("will-cut", willCut);
         endAction(ap, config.toXML());
+    } else if (!makeSharpClip) {
+        if (willCut) {
+            view->nodeManager()->cutLayersToClipboard();
+        } else {
+            view->nodeManager()->copyLayersToClipboard();
+        }
     }
 }
 

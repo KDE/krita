@@ -25,10 +25,46 @@
 #include "commands/kis_node_property_list_command.h"
 #include "kis_undo_adapter.h"
 #include "kis_layer_properties_icons.h"
+#include "kis_command_ids.h"
 
 // HACK! please refactor out!
 #include "kis_simple_stroke_strategy.h"
 #include "kis_abstract_projection_plane.h"
+
+namespace {
+
+QSet<QString> changedProperties(const KisBaseNode::PropertyList &before,
+                                const KisBaseNode::PropertyList &after)
+{
+    QSet<QString> changedIds;
+
+    auto valueForId = [] (const QString &id, const KisBaseNode::PropertyList &list) {
+        QVariant value;
+        Q_FOREACH (const KisBaseNode::Property &prop, list) {
+            if (prop.id == id) {
+                value = prop.state;
+                break;
+            }
+
+        }
+        return value;
+    };
+
+    /// we expect that neither of the lists has duplicated values,
+    /// therefore we can just iterate over teh bigger list
+    const KisBaseNode::PropertyList &list1 = before.size() >= after.size() ? before : after;
+    const KisBaseNode::PropertyList &list2 = before.size() >= after.size() ? after : before;
+
+    Q_FOREACH (const KisBaseNode::Property &prop, list1) {
+        if (prop.state != valueForId(prop.id, list2)) {
+            changedIds.insert(prop.id);
+        }
+    }
+
+    return changedIds;
+}
+
+}
 
 
 KisNodePropertyListCommand::KisNodePropertyListCommand(KisNodeSP node, KisBaseNode::PropertyList newPropertyList)
@@ -59,27 +95,44 @@ void KisNodePropertyListCommand::undo()
     doUpdate(propsBefore, m_node->sectionModelProperties(), oldExtent | m_node->projectionPlane()->tightUserVisibleBounds());
 }
 
+int KisNodePropertyListCommand::id() const
+{
+    return KisCommandUtils::NodePropertyListCommandId;
+}
+
+bool KisNodePropertyListCommand::mergeWith(const KUndo2Command *command)
+{
+    const KisNodePropertyListCommand *other =
+        dynamic_cast<const KisNodePropertyListCommand*>(command);
+
+    if (other && other->m_node == m_node &&
+        (changedProperties(m_oldPropertyList, m_newPropertyList).isEmpty() ||
+         changedProperties(m_oldPropertyList, m_newPropertyList) ==
+             changedProperties(other->m_oldPropertyList, other->m_newPropertyList))) {
+
+        KIS_SAFE_ASSERT_RECOVER_NOOP(m_newPropertyList == other->m_oldPropertyList);
+        m_newPropertyList = other->m_newPropertyList;
+        return true;
+    }
+
+    return false;
+}
+
+bool KisNodePropertyListCommand::canMergeWith(const KUndo2Command *command) const
+{
+    const KisNodePropertyListCommand *other =
+        dynamic_cast<const KisNodePropertyListCommand*>(command);
+
+    return other && other->m_node == m_node &&
+        (changedProperties(m_oldPropertyList, m_newPropertyList).isEmpty() ||
+         changedProperties(m_oldPropertyList, m_newPropertyList) ==
+             changedProperties(other->m_oldPropertyList, other->m_newPropertyList));
+}
+
 bool checkOnionSkinChanged(const KisBaseNode::PropertyList &oldPropertyList,
                            const KisBaseNode::PropertyList &newPropertyList)
 {
-    if (oldPropertyList.size() != newPropertyList.size()) return false;
-
-    bool oldOnionSkinsValue = false;
-    bool newOnionSkinsValue = false;
-
-    Q_FOREACH (const KisBaseNode::Property &prop, oldPropertyList) {
-        if (prop.id == KisLayerPropertiesIcons::onionSkins.id()) {
-            oldOnionSkinsValue = prop.state.toBool();
-        }
-    }
-
-    Q_FOREACH (const KisBaseNode::Property &prop, newPropertyList) {
-        if (prop.id == KisLayerPropertiesIcons::onionSkins.id()) {
-            newOnionSkinsValue = prop.state.toBool();
-        }
-    }
-
-    return oldOnionSkinsValue != newOnionSkinsValue;
+    return changedProperties(oldPropertyList, newPropertyList).contains(KisLayerPropertiesIcons::onionSkins.id());
 }
 
 
@@ -141,56 +194,23 @@ void KisNodePropertyListCommand::doUpdate(const KisBaseNode::PropertyList &oldPr
     }
 }
 
-void KisNodePropertyListCommand::setNodePropertiesNoUndo(KisNodeSP node, KisImageSP image, PropertyList proplist)
+void KisNodePropertyListCommand::setNodePropertiesAutoUndo(KisNodeSP node, KisImageSP image, PropertyList proplist)
 {
-    QVector<bool> undo;
+    QSet<QString> changedProps = changedProperties(node->sectionModelProperties(),
+                                                         proplist);
 
-    Q_FOREACH (const KisBaseNode::Property &prop, proplist) {
-
-        if (prop.isInStasis) undo << false;
-
-        if (prop.name == i18n("Visible") && node->visible() != prop.state.toBool()) {
-            undo << false;
-            continue;
-        }
-        else if (prop.name == i18n("Locked") && node->userLocked() != prop.state.toBool()) {
-            undo << false;
-            continue;
-        }
-        else if (prop.name == i18n("Active")) {
-            if (KisSelectionMask *m = dynamic_cast<KisSelectionMask*>(node.data())) {
-                if (m->active() != prop.state.toBool()) {
-                    undo << false;
-                    continue;
-                }
-            }
-        }
-        else if (prop.name == i18n("Alpha Locked")) {
-            if (KisPaintLayer* l = dynamic_cast<KisPaintLayer*>(node.data())) {
-                if (l->alphaLocked() != prop.state.toBool()) {
-                    undo << false;
-                    continue;
-                }
-            }
-        }
-
-        // This property is known, but it hasn't got the same value, and it isn't one of
-        // the previous properties, so we need to add the command to the undo list.
-        Q_FOREACH(const KisBaseNode::Property &p2, node->sectionModelProperties()) {
-            if (p2.name == prop.name && p2.state != prop.state) {
-                undo << true;
-                break;
-            }
-        }
-
-
-    }
+    changedProps.remove(KisLayerPropertiesIcons::visible.id());
+    changedProps.remove(KisLayerPropertiesIcons::locked.id());
+    changedProps.remove(KisLayerPropertiesIcons::selectionActive.id());
+    changedProps.remove(KisLayerPropertiesIcons::alphaLocked.id());
+    changedProps.remove(KisLayerPropertiesIcons::colorizeNeedsUpdate.id());
+    const bool undo = !changedProps.isEmpty();
 
     QScopedPointer<KUndo2Command> cmd(new KisNodePropertyListCommand(node, proplist));
 
     image->setModified();
 
-    if (undo.contains(true)) {
+    if (undo) {
         image->undoAdapter()->addCommand(cmd.take());
     }
     else {

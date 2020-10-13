@@ -47,14 +47,16 @@ public:
     KisConvolutionPainter(KisPaintDeviceSP device);
     KisConvolutionPainter(KisPaintDeviceSP device, KisSelectionSP selection);
 
-    enum TestingEnginePreference {
+    enum EnginePreference {
         NONE,
         SPATIAL,
         FFTW
     };
 
 
-    KisConvolutionPainter(KisPaintDeviceSP device, TestingEnginePreference enginePreference);
+    KisConvolutionPainter(KisPaintDeviceSP device, EnginePreference enginePreference);
+
+    void setEnginePreference(EnginePreference value);
 
     /**
      * Convolve all channels in src using the specified kernel; there is only one kernel for all
@@ -104,6 +106,6 @@ private:
      bool useFFTImplementation(const KisConvolutionKernelSP kernel) const;
 
 private:
-    TestingEnginePreference m_enginePreference;
+    EnginePreference m_enginePreference;
 };
 #endif //KIS_CONVOLUTION_PAINTER_H_

@@ -31,7 +31,15 @@ const char* const KoZoomMode::modes[] =
     0,
     0,
     0,
-    I18N_NOOP("Fit Text Width")
+    I18N_NOOP("Fit Text Width"),
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    I18N_NOOP("Fit Page Height")
 };
 
 qreal KoZoomMode::minimumZoomValue = 0.2;
@@ -53,7 +61,10 @@ KoZoomMode::Mode KoZoomMode::toMode(const QString& mode)
             if (mode == i18n(modes[ZOOM_PIXELS]))
                 return ZOOM_PIXELS;
             else
-                return ZOOM_CONSTANT;
+                if (mode == i18n(modes[ZOOM_HEIGHT]))
+                    return ZOOM_HEIGHT;
+                else
+                    return ZOOM_CONSTANT;
     // we return ZOOM_CONSTANT else because then we can pass '10%' or '15%'
     // or whatever, it's automatically converted. ZOOM_CONSTANT is
     // changeable, whereas all other zoom modes (non-constants) are normal

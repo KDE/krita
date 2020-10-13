@@ -35,13 +35,17 @@ public:
 
     void openImportFile();
 
+    static void takePersistableUriPermission(const QUrl &url);
+
+    static QString mimeType(const QString& uri);
+
 Q_SIGNALS:
     void sigFileSelected(QUrl path);
     void sigEmptyFilePath();
     void cancelled();
 
 private:
-    void takePersistableUriPermission(const QAndroidJniObject &uri);
+    static void takePersistableUriPermission(const QAndroidJniObject &uri);
 
     // Request codes
     const static int FILE_PICK_RC = 1;   /// to import a file

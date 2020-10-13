@@ -67,7 +67,14 @@ bool FillLayer::setGenerator(const QString &generatorName, InfoObject *config)
         Q_FOREACH(const QString property, config->properties().keys()) {
             cfg->setProperty(property, config->property(property));
         }
+
         layer->setFilter(cfg);
+
+        if (layer->hasPendingTimedUpdates()) {
+            layer->forceUpdateTimedNode();
+        }
+
+        image()->waitForDone();
         return true;
     }
     return false;

@@ -610,14 +610,14 @@
       <statusTip></statusTip>
     </Action>
     <Action name="wrap_around_mode">
-      <icon></icon>
+      <icon>wraparound</icon>
       <text>&amp;Wrap Around Mode</text>
       <whatsThis></whatsThis>
       <toolTip>Wrap Around Mode</toolTip>
       <iconText>Wrap Around Mode</iconText>
       <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
+      <shortcut>Shift+W</shortcut>
       <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -992,10 +992,10 @@
     <text>Image</text>
     <Action name="image_properties">
       <icon>document-properties</icon>
-      <text context="Menu text of Image Properties">&amp;Properties...</text>
+      <text context="Image Properties">&amp;Properties...</text>
       <whatsThis></whatsThis>
-      <toolTip>Properties</toolTip>
-      <iconText>Properties</iconText>
+      <toolTip context="Image Properties">Properties</toolTip>
+      <iconText context="Image Properties">Properties</iconText>
       <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>

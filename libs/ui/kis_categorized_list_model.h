@@ -220,8 +220,23 @@ public:
     }
 
     QModelIndex indexOf(const Entry_Type& entry) const {
-        QModelIndex srcIndex = m_model->indexOf(entry);
-        return mapFromSource(srcIndex);
+        /**
+         * We don't use the source model's indexOf(), because
+         * the items might be duplicated and we need to return the
+         * topmost one in the sorted order.
+         */
+
+        Entry_Type e;
+
+        for (int i = 0; i < rowCount(); i++) {
+            QModelIndex index = this->index(i, 0);
+
+            if (entryAt(e, index) && e == entry) {
+                return index;
+            }
+        }
+
+        return QModelIndex();
     }
 
     bool entryAt(Entry_Type &entry, QModelIndex index) const {

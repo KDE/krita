@@ -170,11 +170,18 @@ void KisReferenceImagesDecoration::setReferenceImageLayer(KisSharedPtr<KisRefere
         if (d->layer) {
             d->layer->disconnect(this);
         }
+
         d->layer = layer;
-        connect(layer.data(), SIGNAL(sigUpdateCanvas(QRectF)),
-                this, SLOT(slotReferenceImagesChanged(QRectF)));
-        if (layer->extent() != QRectF()) { // in case the reference layer is just being loaded from the .kra file
-            slotReferenceImagesChanged(layer->extent());
+
+        if (layer) {
+            connect(layer.data(), SIGNAL(sigUpdateCanvas(QRectF)),
+                    this, SLOT(slotReferenceImagesChanged(QRectF)));
+
+            const QRectF dirtyRect = layer->boundingImageRect();
+
+            if (!dirtyRect.isEmpty()) { // in case the reference layer is just being loaded from the .kra file
+                slotReferenceImagesChanged(dirtyRect);
+            }
         }
     }
 }

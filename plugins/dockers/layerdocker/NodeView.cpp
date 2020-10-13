@@ -207,10 +207,35 @@ QItemSelectionModel::SelectionFlags NodeView::selectionCommand(const QModelIndex
 QRect NodeView::visualRect(const QModelIndex &index) const
 {
     QRect rc = QTreeView::visualRect(index);
-    if (layoutDirection() == Qt::RightToLeft)
+
+    /**
+     * Adjust visual rect to include the thumbnail. This visual
+     * rect is used for rendering the drop indicator. NodeDelegate
+     * uses `originalVisualRect()` instead. See bug 410970.
+     */
+
+    KisNodeViewColorScheme scm;
+    const int thumbnailOffset = scm.relThumbnailRect().width();
+
+    if (layoutDirection() == Qt::RightToLeft) {
+        rc.setRight(width() + thumbnailOffset);
+    } else {
+        rc.setLeft(rc.left() - thumbnailOffset);
+    }
+
+    return rc;
+}
+
+QRect NodeView::fullLineVisualRect(const QModelIndex &index) const
+{
+    QRect rc = QTreeView::visualRect(index);
+
+    if (layoutDirection() == Qt::RightToLeft) {
         rc.setRight(width());
-    else
+    } else {
         rc.setLeft(0);
+    }
+
     return rc;
 }
 
@@ -330,15 +355,49 @@ void NodeView::currentChanged(const QModelIndex &current, const QModelIndex &pre
 void NodeView::dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &/*roles*/)
 {
     QTreeView::dataChanged(topLeft, bottomRight);
-    for (int x = topLeft.row(); x <= bottomRight.row(); ++x) {
-        for (int y = topLeft.column(); y <= bottomRight.column(); ++y) {
+
+    /// a flag for jumping out of both loops instead of
+    /// using 'goto' statement
+    bool activeFound = false;
+
+    for (int x = topLeft.row(); !activeFound && x <= bottomRight.row(); ++x) {
+        for (int y = topLeft.column(); !activeFound &&  y <= bottomRight.column(); ++y) {
             QModelIndex index = topLeft.sibling(x, y);
             if (index.data(KisNodeModel::ActiveRole).toBool()) {
                 if (currentIndex() != index) {
                     setCurrentIndex(index);
                 }
-                return;
+
+                // jump out of both loops
+                activeFound = true;
             }
+        }
+    }
+
+    /**
+     * This is basically an override of
+     * void QAbstractItemView::update(const QModelIndex &index)
+     * which is not virtual, so we cannot change the call to
+     * visualRect() properly.
+     *
+     * The correct solution would be to keep visualRect() as Qt expects
+     * it to be (cover full line) and fix the entire hierarchy of
+     * QAbstractItemView::dragMoveEvent() overrides, so that they prepared
+     * 'dropIndicatorRect' in alternative way. It would make
+     * QAbstractItemView::Private::paintDropIndicator() paint a correct
+     * indicator. But this approach doesn't look feasible enough.
+     *
+     * Another approach would be to patch Qt and add
+     * virtual QRect visualRectForDropIndicator(const QModelIndex &index) const,
+     * which looks even more scary.
+     */
+    if (topLeft == bottomRight) {
+        const QRect rect = fullLineVisualRect(topLeft);
+        //this test is important for peformance reason
+        //For example in dataChanged we simply update all the cells without checking
+        //it can be a major bottleneck to update rects that aren't even part of the viewport
+        if (viewport()->rect().intersects(rect)) {
+            viewport()->update(rect);
         }
     }
 }

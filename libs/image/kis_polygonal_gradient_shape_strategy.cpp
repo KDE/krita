@@ -51,6 +51,9 @@ namespace Private {
             center += element;
             numPoints++;
         }
+        if (numPoints == 0) { // can only happen if the path is empty
+            return center;
+        }
         center /= numPoints;
 
         return center;

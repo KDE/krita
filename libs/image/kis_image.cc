@@ -97,7 +97,7 @@
 #include "kis_layer_projection_plane.h"
 
 #include "kis_update_time_monitor.h"
-#include "tiles3/kis_lockless_stack.h"
+#include "kis_lockless_stack.h"
 
 #include <QtCore>
 
@@ -1172,9 +1172,15 @@ void KisImage::convertLayerColorSpace(KisNodeSP node,
 {
     if (!node->projectionLeaf()->isLayer()) return;
 
-    const KoColorSpace *srcColorSpace = node->colorSpace();
+    if (!dstColorSpace) return;
 
-    if (!dstColorSpace || *srcColorSpace == *dstColorSpace) return;
+    const bool hasNodesToConvert =
+        KisLayerUtils::recursiveFindNode(node,
+            [dstColorSpace](KisNodeSP node) {
+                return *node->colorSpace() != *dstColorSpace;
+            });
+
+    if (!hasNodesToConvert) return;
 
     KUndo2MagicString actionName =
         kundo2_i18n("Convert Layer Color Space");
@@ -1188,7 +1194,7 @@ void KisImage::convertLayerColorSpace(KisNodeSP node,
 
     applicator.applyVisitor(
         new KisConvertColorSpaceProcessingVisitor(
-            srcColorSpace, dstColorSpace,
+            dstColorSpace,
             renderingIntent, conversionFlags),
         KisStrokeJobData::CONCURRENT);
 
@@ -1225,7 +1231,19 @@ void KisImage::KisImagePrivate::convertImageColorSpaceImpl(const KoColorSpace *d
 {
     const KoColorSpace *srcColorSpace = this->colorSpace;
 
-    if (!dstColorSpace || *srcColorSpace == *dstColorSpace) return;
+    if (!dstColorSpace) return;
+
+    if (convertLayers) {
+        const bool hasNodesToConvert =
+            KisLayerUtils::recursiveFindNode(this->rootLayer,
+                [dstColorSpace](KisNodeSP node) {
+                    return *node->colorSpace() != *dstColorSpace;
+                });
+
+        if (!hasNodesToConvert && *this->colorSpace == *dstColorSpace) return;
+    } else {
+        if (*this->colorSpace == *dstColorSpace) return;
+    }
 
     const KUndo2MagicString actionName =
         convertLayers ?
@@ -1250,7 +1268,7 @@ void KisImage::KisImagePrivate::convertImageColorSpaceImpl(const KoColorSpace *d
     if (convertLayers) {
         applicator.applyVisitor(
                     new KisConvertColorSpaceProcessingVisitor(
-                        srcColorSpace, dstColorSpace,
+                        dstColorSpace,
                         renderingIntent, conversionFlags),
                     KisStrokeJobData::CONCURRENT);
     } else {
@@ -2231,6 +2249,24 @@ void KisImage::addComposition(KisLayerCompositionSP composition)
 void KisImage::removeComposition(KisLayerCompositionSP composition)
 {
     m_d->compositions.removeAll(composition);
+}
+
+void KisImage::moveCompositionUp(KisLayerCompositionSP composition)
+{
+    int index = m_d->compositions.indexOf(composition);
+    if (index <= 0) {
+        return;
+    }
+    m_d->compositions.move(index, index - 1);
+}
+
+void KisImage::moveCompositionDown(KisLayerCompositionSP composition)
+{
+    int index = m_d->compositions.indexOf(composition);
+    if (index >= m_d->compositions.size() -1) {
+        return;
+    }
+    m_d->compositions.move(index, index + 1);
 }
 
 bool checkMasksNeedConversion(KisNodeSP root, const QRect &bounds)

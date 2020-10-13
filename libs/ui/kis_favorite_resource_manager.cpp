@@ -34,6 +34,8 @@
 #include "kis_min_heap.h"
 #include "kis_config.h"
 #include "kis_config_notifier.h"
+#include <kis_paintop_preset.h>
+
 
 class KisFavoriteResourceManager::ColorDataList
 {
@@ -57,7 +59,7 @@ public:
     }
 
     const KoColor& guiColor(int pos) {
-        Q_ASSERT_X(pos < size(), "ColorDataList::guiColor", "index out of bound");
+        Q_ASSERT_X(pos < size(), "ColorDataList::guiColor", "index out of bounds");
         Q_ASSERT_X(pos >= 0, "ColorDataList::guiColor", "negative index");
 
         return m_guiList.at(pos)->data;
@@ -85,12 +87,20 @@ public:
     }
 
     void removeLeastUsed() {
-        Q_ASSERT_X(size() >= 0, "ColorDataList::removeLeastUsed", "index out of bound");
+        Q_ASSERT_X(size() >= 0, "ColorDataList::removeLeastUsed", "index out of bounds");
         if (size() <= 0) return;
 
         int pos = findPos(m_priorityList.valueAt(0));
         m_guiList.removeAt(pos);
         m_priorityList.remove(0);
+    }
+
+    void clearHistory() {
+        Q_ASSERT_X(size() >= 0, "ColorDataList::clearHistory", "index out of bounds");
+        if (size() <= 0 ) return;
+        while (size() > 0){
+            removeLeastUsed();
+        }
     }
 
     void updateKey(int guiPos) {
@@ -297,6 +307,11 @@ void KisFavoriteResourceManager::syncTagRemoval(const QString& /*tag*/) {}
 int KisFavoriteResourceManager::recentColorsTotal()
 {
     return m_colorList->size();
+}
+
+void KisFavoriteResourceManager::slotClearHistory()
+{
+    m_colorList->clearHistory();
 }
 
 const KoColor& KisFavoriteResourceManager::recentColorAt(int pos)

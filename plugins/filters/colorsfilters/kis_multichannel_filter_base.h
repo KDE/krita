@@ -105,7 +105,7 @@ class KisMultiChannelConfigWidget : public KisConfigWidget
     Q_OBJECT
 
 public:
-    KisMultiChannelConfigWidget(QWidget * parent, KisPaintDeviceSP dev, Qt::WindowFlags f = 0);
+    KisMultiChannelConfigWidget(QWidget * parent, KisPaintDeviceSP dev, Qt::WindowFlags f = Qt::WindowFlags());
     ~KisMultiChannelConfigWidget() override;
 
     void setConfiguration(const KisPropertiesConfigurationSP config) override;

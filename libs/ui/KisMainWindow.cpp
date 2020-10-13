@@ -210,6 +210,7 @@ public:
         widgetStack->addWidget(mdiArea);
         mdiArea->setTabsMovable(true);
         mdiArea->setActivationOrder(QMdiArea::ActivationHistoryOrder);
+        mdiArea->setDocumentMode(true);
     }
 
     ~Private() {
@@ -439,14 +440,12 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     updateWindowMenu();
 
     if (isHelpMenuEnabled() && !d->helpMenu) {
-        // workaround for KHelpMenu (or rather KAboutData::applicationData()) internally
-        // not using the Q*Application metadata ATM, which results e.g. in the bugreport wizard
-        // not having the app version preset
-        // fixed hopefully in KF5 5.22.0, patch pending
         QGuiApplication *app = qApp;
-        KAboutData aboutData(app->applicationName(), app->applicationDisplayName(), app->applicationVersion());
+        KAboutData aboutData(KAboutData::applicationData());
         aboutData.setOrganizationDomain(app->organizationDomain().toUtf8());
+
         d->helpMenu = new KHelpMenu(this, aboutData, false);
+
         // workaround-less version:
         // d->helpMenu = new KHelpMenu(this, QString()/*unused*/, false);
 
@@ -917,29 +916,44 @@ void KisMainWindow::reloadRecentFileList()
 void KisMainWindow::updateCaption()
 {
     if (!d->mdiArea->activeSubWindow()) {
-        updateCaption(QString(), false);
-    }
+        setWindowTitle("");
+   }
     else if (d->activeView && d->activeView->document() && d->activeView->image()){
         KisDocument *doc = d->activeView->document();
 
-        QString caption(doc->caption());
+        QString caption = doc->caption();
+
+        if (d->mdiArea->activeSubWindow() && d->mdiArea->activeSubWindow()->isMaximized() && d->mdiArea->viewMode() == QMdiArea::SubWindowView) {
+            caption = "";
+        }
 
         if (d->readOnly) {
-            caption += " [" + i18n("Write Protected") + "] ";
+            caption += " " + i18n("Write Protected") + " ";
         }
 
         if (doc->isRecovered()) {
-            caption += " [" + i18n("Recovered") + "] ";
+            caption += " " + i18n("Recovered") + " ";
         }
 
         // show the file size for the document
         KisMemoryStatisticsServer::Statistics m_fileSizeStats = KisMemoryStatisticsServer::instance()->fetchMemoryStatistics(d->activeView ? d->activeView->image() : 0);
 
         if (m_fileSizeStats.imageSize) {
-            caption += QString(" (").append( KFormat().formatByteSize(m_fileSizeStats.imageSize)).append( ")");
+            caption += QString(" (").append( KFormat().formatByteSize(m_fileSizeStats.imageSize)).append( ") ");
         }
 
-        updateCaption(caption, doc->isModified());
+        if (doc->isModified()) {
+            caption += " *";
+        }
+
+        if (doc->isModified()) {
+            d->mdiArea->activeSubWindow()->setWindowTitle(doc->caption() + " *");
+        }
+        else {
+            d->mdiArea->activeSubWindow()->setWindowTitle(doc->caption());
+        }
+
+        setWindowTitle(caption);
 
         if (!doc->url().fileName().isEmpty()) {
             d->saveAction->setToolTip(i18n("Save as %1", doc->url().fileName()));
@@ -950,19 +964,6 @@ void KisMainWindow::updateCaption()
     }
 }
 
-void KisMainWindow::updateCaption(const QString &caption, bool modified)
-{
-    QString title = caption;
-    if (!title.contains(QStringLiteral("[*]"))) { // append the placeholder so that the modified mechanism works
-        title.append(QStringLiteral(" [*]"));
-    }
-
-    if (d->mdiArea->activeSubWindow()) {
-        d->mdiArea->activeSubWindow()->setWindowTitle(title);
-    }
-    setWindowTitle(title);
-    setWindowModified(modified);
-}
 
 
 KisView *KisMainWindow::activeView() const
@@ -1280,11 +1281,13 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExpo
         QUrl newURL = QUrl::fromUserInput(dialog.filename());
 
         if (newURL.isLocalFile()) {
+#ifndef Q_OS_ANDROID
             QString fn = newURL.toLocalFile();
             if (QFileInfo(fn).completeSuffix().isEmpty()) {
                 fn.append(KisMimeDatabase::suffixesForMimeType(nativeFormat).first());
                 newURL = QUrl::fromLocalFile(fn);
             }
+#endif
         }
 
         if (document->documentInfo()->aboutInfo("title") == i18n("Unnamed")) {
@@ -1602,7 +1605,6 @@ void KisMainWindow::slotImportFile()
 
 void KisMainWindow::slotFileOpen(bool isImporting)
 {
-#ifndef Q_OS_ANDROID
     QStringList urls = showOpenFileDialog(isImporting);
 
     if (urls.isEmpty())
@@ -1618,11 +1620,6 @@ void KisMainWindow::slotFileOpen(bool isImporting)
             }
         }
     }
-#else
-    Q_UNUSED(isImporting)
-
-    d->fileManager->openImportFile();
-#endif
 }
 
 void KisMainWindow::slotFileOpenRecent(const QUrl &url)

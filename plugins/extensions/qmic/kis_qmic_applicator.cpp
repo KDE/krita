@@ -117,7 +117,7 @@ float KisQmicApplicator::getProgress() const
     dbgPlugins << "KisQmicApplicator::getProgress";
 
     if (m_gmicData) {
-        m_gmicData->progress();
+        return m_gmicData->progress();
     }
     return KisQmicData::INVALID_PROGRESS_VALUE;
 }

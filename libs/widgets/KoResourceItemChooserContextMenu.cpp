@@ -165,6 +165,7 @@ KoResourceItemChooserContextMenu::KoResourceItemChooserContextMenu(KoResource* r
 
     removables.sort();
     assignables.sort();
+    assignables.removeDuplicates(); //Fix for BUG 425845 
 
     assignableTagsMenu = addMenu(koIcon("list-add"),i18n("Assign to tag"));
 

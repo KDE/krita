@@ -157,11 +157,6 @@ void KisInputManager::setupAsEventFilter(QObject *receiver)
     }
 }
 
-void KisInputManager::stopIgnoringEvents()
-{
-    d->allowMouseEvents();
-}
-
 #if defined (__clang__)
 #pragma GCC diagnostic ignored "-Wswitch"
 #endif

@@ -342,10 +342,12 @@ public:
     QPointer<KoUpdater> savingUpdater;
     QFuture<KisImportExportErrorCode> childSavingFuture;
     KritaUtils::ExportFileJob backgroundSaveJob;
+    KisSignalAutoConnectionsStore referenceLayerConnections;
 
     bool isRecovered = false;
 
     bool batchMode { false };
+    bool decorationsSyncingDisabled = false;
 
     void syncDecorationsWrapperLayerState();
 
@@ -368,7 +370,7 @@ public:
 
 void KisDocument::Private::syncDecorationsWrapperLayerState()
 {
-    if (!this->image) return;
+    if (!this->image || this->decorationsSyncingDisabled) return;
 
     KisImageSP image = this->image;
     KisDecorationsWrapperLayerSP decorationsLayer =
@@ -543,6 +545,7 @@ KisDocument::~KisDocument()
 {
     // wait until all the pending operations are in progress
     waitForSavingToComplete();
+    d->imageIdleWatcher.setTrackedImage(0);
 
     /**
      * Push a timebomb, which will try to release the memory after
@@ -883,7 +886,9 @@ void KisDocument::copyFromDocument(const KisDocument &rhs)
 void KisDocument::copyFromDocumentImpl(const KisDocument &rhs, CopyPolicy policy)
 {
     if (policy == REPLACE) {
+        d->decorationsSyncingDisabled = true;
         d->copyFrom(*(rhs.d), this);
+        d->decorationsSyncingDisabled = false;
 
         d->undoStack->clear();
     } else {
@@ -916,6 +921,10 @@ void KisDocument::copyFromDocumentImpl(const KisDocument &rhs, CopyPolicy policy
         }
     }
 
+    if (policy == REPLACE) {
+        d->syncDecorationsWrapperLayerState();
+    }
+
     if (rhs.d->preActivatedNode) {
         QQueue<KisNodeSP> linearizedNodes;
         KisLayerUtils::recursiveApplyNodes(rhs.d->image->root(),
@@ -933,7 +942,14 @@ void KisDocument::copyFromDocumentImpl(const KisDocument &rhs, CopyPolicy policy
 
     // reinitialize references' signal connection
     KisReferenceImagesLayerSP referencesLayer = this->referenceImagesLayer();
-    setReferenceImagesLayer(referencesLayer, false);
+    if (referencesLayer) {
+        d->referenceLayerConnections.clear();
+        d->referenceLayerConnections.addConnection(
+            referencesLayer, SIGNAL(sigUpdateCanvas(QRectF)),
+            this, SIGNAL(sigReferenceImagesChanged()));
+
+        emit sigReferenceImagesLayerChanged(referencesLayer);
+    }
 
     KisDecorationsWrapperLayerSP decorationsLayer =
         KisLayerUtils::findNodeByType<KisDecorationsWrapperLayer>(d->image->root());
@@ -1439,7 +1455,7 @@ bool KisDocument::openUrl(const QUrl &_url, OpenFlags flags)
             switch (res) {
             case KisRecoverNamedAutosaveDialog::OpenAutosave :
                 original = file;
-                url.setPath(asf);
+                url = QUrl::fromLocalFile(asf);
                 autosaveOpened = true;
                 break;
             case KisRecoverNamedAutosaveDialog::OpenMainFile :
@@ -1610,11 +1626,7 @@ void KisDocument::autoSaveOnPause()
 
 QString KisDocument::toPath(const QUrl &url) const
 {
-#ifdef Q_OS_ANDROID
-    return (url.toLocalFile().isEmpty()) ? url.toString() : url.toLocalFile();
-#else
     return url.toLocalFile();
-#endif
 }
 
 // shared between openFile and koMainWindow's "create new empty document" code
@@ -2198,9 +2210,7 @@ void KisDocument::setReferenceImagesLayer(KisSharedPtr<KisReferenceImagesLayer> 
         return;
     }
 
-    if (currentReferenceLayer) {
-        currentReferenceLayer->disconnect(this);
-    }
+    d->referenceLayerConnections.clear();
 
     if (updateImage) {
         if (currentReferenceLayer) {
@@ -2215,8 +2225,9 @@ void KisDocument::setReferenceImagesLayer(KisSharedPtr<KisReferenceImagesLayer> 
     currentReferenceLayer = layer;
 
     if (currentReferenceLayer) {
-        connect(currentReferenceLayer, SIGNAL(sigUpdateCanvas(QRectF)),
-                this, SIGNAL(sigReferenceImagesChanged()));
+        d->referenceLayerConnections.addConnection(
+            currentReferenceLayer, SIGNAL(sigUpdateCanvas(QRectF)),
+            this, SIGNAL(sigReferenceImagesChanged()));
     }
 
     emit sigReferenceImagesLayerChanged(layer);

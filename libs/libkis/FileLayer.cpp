@@ -25,6 +25,7 @@ FileLayer::FileLayer(KisImageSP image, const QString name, const QString baseNam
     : Node(image, new KisFileLayer(image, name, OPACITY_OPAQUE_U8), parent)
 {
     KisFileLayer *file = dynamic_cast<KisFileLayer*>(this->node().data());
+    KIS_ASSERT(file);
     KisFileLayer::ScalingMethod sm = KisFileLayer::None;
     if (scalingMethod=="ToImageSize") {
         sm= KisFileLayer::ToImageSize;
@@ -57,6 +58,7 @@ QString FileLayer::type() const
 void FileLayer::setProperties(QString fileName, QString scalingMethod)
 {
     KisFileLayer *file = dynamic_cast<KisFileLayer*>(this->node().data());
+    KIS_ASSERT(file);
     KisFileLayer::ScalingMethod sm = KisFileLayer::None;
     if (scalingMethod.toLower() == "toimagesize") {
         sm= KisFileLayer::ToImageSize;
@@ -73,18 +75,21 @@ void FileLayer::setProperties(QString fileName, QString scalingMethod)
 void FileLayer::resetCache()
 {
     KisFileLayer *file = dynamic_cast<KisFileLayer*>(this->node().data());
+    KIS_ASSERT_RECOVER_RETURN(file);
     file->resetCache();
 }
 
 QString FileLayer::path() const
 {
     const KisFileLayer *file = qobject_cast<const KisFileLayer*>(this->node());
+    KIS_ASSERT(file);
     return file->path();
 }
 
 QString FileLayer::scalingMethod() const
 {
     const KisFileLayer *file = qobject_cast<const KisFileLayer*>(this->node());
+    KIS_ASSERT_RECOVER_RETURN_VALUE(file, "None");
     KisFileLayer::ScalingMethod sm = file->scalingMethod();
     QString method = "None";
 

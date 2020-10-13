@@ -61,7 +61,7 @@ private:
 
 private:
     QSize m_originalSize;
-    qreal m_baseScale;
+    qreal m_baseScale {0.0};
 
     struct PyramidLevel {
         PyramidLevel() {}

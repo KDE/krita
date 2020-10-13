@@ -421,7 +421,6 @@ DefaultTool::DefaultTool(KoCanvasBase *canvas, bool connectToSelectedShapesProxy
     , m_lastHandle(KoFlake::NoHandle)
     , m_hotPosition(KoFlake::TopLeft)
     , m_mouseWasInsideHandles(false)
-    , m_decorator(0)
     , m_selectionHandler(new SelectionHandler(this))
     , m_tabbedOptionWidget(0)
 {
@@ -815,7 +814,7 @@ void DefaultTool::paint(QPainter &painter, const KoViewConverter &converter)
 {
     KoSelection *selection = koSelection();
     if (selection) {
-        this->m_decorator = new SelectionDecorator(canvas()->resourceManager());
+        m_decorator.reset(new SelectionDecorator(canvas()->resourceManager()));
 
         {
             /**

@@ -93,12 +93,17 @@ KoSvgSymbolCollectionResource::KoSvgSymbolCollectionResource(const KoSvgSymbolCo
     , d(new Private())
 {
     setFilename(rhs.filename());
-    d->symbols = rhs.d->symbols;
+
+    Q_FOREACH(KoSvgSymbol *symbol, rhs.d->symbols) {
+        d->symbols << new KoSvgSymbol(*symbol);
+    }
+
     setValid(true);
 }
 
 KoSvgSymbolCollectionResource::~KoSvgSymbolCollectionResource()
 {
+    qDeleteAll(d->symbols);
 }
 
 bool KoSvgSymbolCollectionResource::load()

@@ -40,6 +40,13 @@ struct KRITAFLAKE_EXPORT KoSvgSymbol {
     KoSvgSymbol(const QString &_title)
         : title(_title) {}
 
+    KoSvgSymbol(const KoSvgSymbol &rhs)
+        : id(rhs.id),
+          title(rhs.title),
+          shape(rhs.shape->cloneShape())
+    {
+    }
+
     ~KoSvgSymbol()
     {
         delete shape;

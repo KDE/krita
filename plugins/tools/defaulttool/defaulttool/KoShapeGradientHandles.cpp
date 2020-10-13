@@ -99,15 +99,15 @@ KUndo2Command *KoShapeGradientHandles::moveGradientHandle(KoShapeGradientHandles
     QTransform originalTransform = wrapper.gradientTransform();
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(originalGradient, 0);
 
-    QGradient *newGradient = 0;
+    QScopedPointer<QGradient> newGradient;
 
     switch (originalGradient->type()) {
     case QGradient::LinearGradient: {
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(handleType == Handle::LinearStart ||
                                              handleType == Handle::LinearEnd, 0);
 
-        newGradient = KoFlake::cloneGradient(originalGradient);
-        QLinearGradient *lgradient = static_cast<QLinearGradient*>(newGradient);
+        newGradient.reset(KoFlake::cloneGradient(originalGradient));
+        QLinearGradient *lgradient = static_cast<QLinearGradient*>(newGradient.data());
 
         if (handleType == Handle::LinearStart) {
             lgradient->setStart(getNewHandlePos(lgradient->start(), absoluteOffset, newGradient->coordinateMode()));
@@ -118,8 +118,8 @@ KUndo2Command *KoShapeGradientHandles::moveGradientHandle(KoShapeGradientHandles
         break;
     }
     case QGradient::RadialGradient: {
-        newGradient = KoFlake::cloneGradient(originalGradient);
-        QRadialGradient *rgradient = static_cast<QRadialGradient*>(newGradient);
+        newGradient.reset(KoFlake::cloneGradient(originalGradient));
+        QRadialGradient *rgradient = static_cast<QRadialGradient*>(newGradient.data());
 
         if (handleType == Handle::RadialCenter) {
             rgradient->setCenter(getNewHandlePos(rgradient->center(), absoluteOffset, newGradient->coordinateMode()));
@@ -140,7 +140,7 @@ KUndo2Command *KoShapeGradientHandles::moveGradientHandle(KoShapeGradientHandles
         break;
     }
 
-    return wrapper.setGradient(newGradient, originalTransform);
+    return wrapper.setGradient(newGradient.data(), originalTransform);
 }
 
 KoShapeGradientHandles::Handle KoShapeGradientHandles::getHandle(KoShapeGradientHandles::Handle::Type handleType)

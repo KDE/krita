@@ -468,7 +468,7 @@ bool KisResourceBundle::install()
                 if (resourceStore->isOpen()) resourceStore->close();
 
                 dbgResources << "\tInstalling" << ref.resourcePath;
-                KoAbstractGradient *res = gradientServer->createResource(QString("bundle://%1:%2").arg(filename()).arg(ref.resourcePath));
+                QScopedPointer<KoAbstractGradient> res(gradientServer->createResource(QString("bundle://%1:%2").arg(filename()).arg(ref.resourcePath)));
                 if (!res) {
                     warnKrita << "Could not create resource for" << ref.resourcePath;
                     continue;
@@ -485,7 +485,7 @@ bool KisResourceBundle::install()
 
                 KoAbstractGradient *res2 = gradientServer->resourceByName(res->name());
                 if (!res2)  {//if it doesn't exist...
-                    gradientServer->addResource(res, false);//add it!
+                    gradientServer->addResource(res.data(), false);//add it!
 
                     if (!m_gradientsMd5Installed.contains(res->md5())) {
                         m_gradientsMd5Installed.append(res->md5());
@@ -495,9 +495,11 @@ bool KisResourceBundle::install()
                     }
 
                     Q_FOREACH (const QString &tag, ref.tagList) {
-                        gradientServer->addTag(res, tag);
+                        gradientServer->addTag(res.data(), tag);
                     }
-                    //gradientServer->addTag(res, name());
+
+                    // release resource from the scoped pointera
+                    res.take();
                 }
                 else {
                     //warnKrita << "Didn't install" << res->name()<<"It already exists on the server";
@@ -512,7 +514,7 @@ bool KisResourceBundle::install()
                 if (resourceStore->isOpen()) resourceStore->close();
 
                 dbgResources << "\tInstalling" << ref.resourcePath;
-                KoPattern *res = patternServer->createResource(QString("bundle://%1:%2").arg(filename()).arg(ref.resourcePath));
+                QScopedPointer<KoPattern> res(patternServer->createResource(QString("bundle://%1:%2").arg(filename()).arg(ref.resourcePath)));
                 if (!res) {
                     warnKrita << "Could not create resource for" << ref.resourcePath;
                     continue;
@@ -529,7 +531,7 @@ bool KisResourceBundle::install()
 
                 KoPattern *res2 = patternServer->resourceByName(res->name());
                 if (!res2)  {//if it doesn't exist...
-                    patternServer->addResource(res, false);//add it!
+                    patternServer->addResource(res.data(), false);//add it!
 
                     if (!m_patternsMd5Installed.contains(res->md5())) {
                         m_patternsMd5Installed.append(res->md5());
@@ -539,9 +541,11 @@ bool KisResourceBundle::install()
                     }
 
                     Q_FOREACH (const QString &tag, ref.tagList) {
-                        patternServer->addTag(res, tag);
+                        patternServer->addTag(res.data(), tag);
                     }
-                    //patternServer->addTag(res, name());
+
+                    // release resource from the scoped pointera
+                    res.take();
                 }
 
             }
@@ -605,7 +609,7 @@ bool KisResourceBundle::install()
                 if (resourceStore->isOpen()) resourceStore->close();
 
                 dbgResources << "\tInstalling" << ref.resourcePath;
-                KoColorSet *res = paletteServer->createResource(QString("bundle://%1:%2").arg(filename()).arg(ref.resourcePath));
+                QScopedPointer<KoColorSet> res(paletteServer->createResource(QString("bundle://%1:%2").arg(filename()).arg(ref.resourcePath)));
 
                 if (!res) {
                     warnKrita << "Could not create resource for" << ref.resourcePath;
@@ -624,7 +628,7 @@ bool KisResourceBundle::install()
                 //find the resource on the server
                 KoColorSet *res2 = paletteServer->resourceByName(res->name());
                 if (!res2)  {//if it doesn't exist...
-                    paletteServer->addResource(res, false);//add it!
+                    paletteServer->addResource(res.data(), false);//add it!
 
                     if (!m_palettesMd5Installed.contains(res->md5())) {
                         m_palettesMd5Installed.append(res->md5());
@@ -634,9 +638,11 @@ bool KisResourceBundle::install()
                     }
 
                     Q_FOREACH (const QString &tag, ref.tagList) {
-                        paletteServer->addTag(res, tag);
+                        paletteServer->addTag(res.data(), tag);
                     }
-                    //paletteServer->addTag(res, name());
+
+                    // release resource from the scoped pointera
+                    res.take();
                 }
                 else {
                     //warnKrita << "Didn't install" << res->name()<<"It already exists on the server";
@@ -650,7 +656,7 @@ bool KisResourceBundle::install()
                 if (resourceStore->isOpen()) resourceStore->close();
 
                 dbgResources << "\tInstalling" << ref.resourcePath;
-                KisWorkspaceResource *res = workspaceServer->createResource(QString("bundle://%1:%2").arg(filename()).arg(ref.resourcePath));
+                QScopedPointer<KisWorkspaceResource> res(workspaceServer->createResource(QString("bundle://%1:%2").arg(filename()).arg(ref.resourcePath)));
                 if (!res) {
                     warnKrita << "Could not create resource for" << ref.resourcePath;
                     continue;
@@ -668,7 +674,7 @@ bool KisResourceBundle::install()
                 //the following tries to find the resource by name.
                 KisWorkspaceResource *res2 = workspaceServer->resourceByName(res->name());
                 if (!res2)  {//if it doesn't exist...
-                    workspaceServer->addResource(res, false);//add it!
+                    workspaceServer->addResource(res.data(), false);//add it!
 
                     if (!m_workspacesMd5Installed.contains(res->md5())) {
                         m_workspacesMd5Installed.append(res->md5());
@@ -678,9 +684,11 @@ bool KisResourceBundle::install()
                     }
 
                     Q_FOREACH (const QString &tag, ref.tagList) {
-                        workspaceServer->addTag(res, tag);
+                        workspaceServer->addTag(res.data(), tag);
                     }
-                    //workspaceServer->addTag(res, name());
+
+                    // release resource from the scoped pointera
+                    res.take();
                 }
                 else {
                     //warnKrita << "Didn't install" << res->name()<<"It already exists on the server";
@@ -744,7 +752,7 @@ bool KisResourceBundle::install()
                 if (resourceStore->isOpen()) resourceStore->close();
 
                 dbgResources << "\tInstalling" << ref.resourcePath;
-                KoGamutMask *res = gamutMaskServer->createResource(QString("bundle://%1:%2").arg(filename()).arg(ref.resourcePath));
+                QScopedPointer<KoGamutMask> res(gamutMaskServer->createResource(QString("bundle://%1:%2").arg(filename()).arg(ref.resourcePath)));
 
                 if (!res) {
                     warnKrita << "Could not create resource for" << ref.resourcePath;
@@ -763,7 +771,7 @@ bool KisResourceBundle::install()
                 //find the resource on the server
                 KoGamutMask *res2 = gamutMaskServer->resourceByName(res->name());
                 if (!res2)  {//if it doesn't exist...
-                    gamutMaskServer->addResource(res, false);//add it!
+                    gamutMaskServer->addResource(res.data(), false);//add it!
 
                     if (!m_gamutMasksMd5Installed.contains(res->md5())) {
                         m_gamutMasksMd5Installed.append(res->md5());
@@ -773,9 +781,11 @@ bool KisResourceBundle::install()
                     }
 
                     Q_FOREACH (const QString &tag, ref.tagList) {
-                        gamutMaskServer->addTag(res, tag);
+                        gamutMaskServer->addTag(res.data(), tag);
                     }
-                    //gamutMaskServer->addTag(res, name());
+
+                    // release resource from the scoped pointera
+                    res.take();
                 }
                 else {
                     //warnKrita << "Didn't install" << res->name()<<"It already exists on the server";
@@ -793,7 +803,7 @@ bool KisResourceBundle::install()
                     resourceStore->close();
 
                 dbgResources << "\tInstalling" << ref.resourcePath;
-                KisSeExprScript *res = seExprScriptServer->createResource(QString("bundle://%1:%2").arg(filename()).arg(ref.resourcePath));
+                QScopedPointer<KisSeExprScript> res(seExprScriptServer->createResource(QString("bundle://%1:%2").arg(filename()).arg(ref.resourcePath)));
 
                 if (!res)
                 {
@@ -817,7 +827,7 @@ bool KisResourceBundle::install()
                 if (!res2)
                 {
                     //if it doesn't exist...
-                    seExprScriptServer->addResource(res, false); //add it!
+                    seExprScriptServer->addResource(res.data(), false); //add it!
 
                     if (!m_seExprScriptsMd5Installed.contains(res->md5()))
                     {
@@ -830,9 +840,11 @@ bool KisResourceBundle::install()
 
                     Q_FOREACH (const QString &tag, ref.tagList)
                     {
-                        seExprScriptServer->addTag(res, tag);
+                        seExprScriptServer->addTag(res.data(), tag);
                     }
-                    //seExprScriptServer->addTag(res, name());
+
+                    // release resource from the scoped pointera
+                    res.take();
                 }
                 else
                 {

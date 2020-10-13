@@ -76,6 +76,7 @@ KisPropertiesConfigurationSP HeifExport::defaultConfiguration(const QByteArray &
     KisPropertiesConfigurationSP cfg = new KisPropertiesConfiguration();
     cfg->setProperty("quality", 50);
     cfg->setProperty("lossless", true);
+    cfg->setProperty("chroma", "444");
     return cfg;
 }
 
@@ -154,12 +155,14 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
 
         heif::Encoder encoder(heif_compression_HEVC);
 
+
         if (mimeType() == "image/avif") {
             encoder = heif::Encoder(heif_compression_AV1);
         }
 
         encoder.set_lossy_quality(quality);
         encoder.set_lossless(lossless);
+        encoder.set_parameter("chroma", configuration->getString("chroma", "444").toStdString());
 
 
         // --- convert KisImage to HEIF image ---
@@ -360,8 +363,15 @@ void HeifExport::initializeCapabilities()
 
 void KisWdgOptionsHeif::setConfiguration(const KisPropertiesConfigurationSP cfg)
 {
+    QStringList chromaOptions;
+    chromaOptions << "420" << "422" << "444";
+    cmbChroma->addItems(chromaOptions);
+    cmbChroma->setItemData(0, i18nc("@tooltip", "The brightness of the image will be at full resolution, while the colorfulness will be halved in both dimensions."), Qt::ToolTipRole);
+    cmbChroma->setItemData(1, i18nc("@tooltip", "The brightness of the image will be at full resolution, while the colorfulness will be halved horizontally."), Qt::ToolTipRole);
+    cmbChroma->setItemData(2, i18nc("@tooltip", "Both brightness and colorfulness of the image will be at full resolution."), Qt::ToolTipRole);
     chkLossless->setChecked(cfg->getBool("lossless", true));
     sliderQuality->setValue(qreal(cfg->getInt("quality", 50)));
+    cmbChroma->setCurrentIndex(chromaOptions.indexOf(cfg->getString("chroma", "444")));
     m_hasAlpha = cfg->getBool(KisImportExportFilter::ImageContainsTransparencyTag, false);
 }
 
@@ -370,6 +380,7 @@ KisPropertiesConfigurationSP KisWdgOptionsHeif::configuration() const
     KisPropertiesConfigurationSP cfg = new KisPropertiesConfiguration();
     cfg->setProperty("lossless", chkLossless->isChecked());
     cfg->setProperty("quality", int(sliderQuality->value()));
+    cfg->setProperty("chroma", cmbChroma->currentText());
     cfg->setProperty(KisImportExportFilter::ImageContainsTransparencyTag, m_hasAlpha);
     return cfg;
 }

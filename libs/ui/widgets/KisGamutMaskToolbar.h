@@ -50,7 +50,7 @@ private Q_SLOTS:
     void slotGamutMaskRotate(int angle);
 
 private:
-    Ui_wdgGamutMaskToolbar* m_ui;
+    QScopedPointer<Ui_wdgGamutMaskToolbar> m_ui;
     KoGamutMask* m_selectedMask;
 
     QIcon m_iconMaskOff;

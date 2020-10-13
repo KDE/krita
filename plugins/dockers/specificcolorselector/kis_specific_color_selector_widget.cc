@@ -53,7 +53,7 @@ KisSpecificColorSelectorWidget::KisSpecificColorSelectorWidget(QWidget* parent)
     , m_displayConverter(0)
 {
 
-    m_ui = new Ui_wdgSpecificColorSelectorWidget();
+    m_ui.reset(new Ui_wdgSpecificColorSelectorWidget());
     m_ui->setupUi(this);
 
     m_updateAllowed = true;

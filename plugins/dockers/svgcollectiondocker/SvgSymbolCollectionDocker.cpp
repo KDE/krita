@@ -228,6 +228,10 @@ SvgSymbolCollectionDocker::SvgSymbolCollectionDocker(QWidget *parent)
     collectionActivated(i);
 }
 
+SvgSymbolCollectionDocker::~SvgSymbolCollectionDocker()
+{
+}
+
 void SvgSymbolCollectionDocker::slotSetIconSize()
 {
     m_wdgSvgCollection->listCollection->setIconSize(QSize(m_iconSizeSlider->value(),m_iconSizeSlider->value()));

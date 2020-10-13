@@ -70,6 +70,7 @@ class SvgSymbolCollectionDocker : public QDockWidget, public KoCanvasObserverBas
 public:
 
     explicit SvgSymbolCollectionDocker(QWidget *parent = 0);
+    ~SvgSymbolCollectionDocker();
 
     /// reimplemented
     void setCanvas(KoCanvasBase *canvas) override;
@@ -84,7 +85,7 @@ private Q_SLOTS:
     void slotSetIconSize();
 private:
 
-    Ui_WdgSvgCollection *m_wdgSvgCollection;
+    QScopedPointer<Ui_WdgSvgCollection> m_wdgSvgCollection;
     QVector<SvgCollectionModel*> m_models;
     QSlider* m_iconSizeSlider;
 };

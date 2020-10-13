@@ -114,7 +114,7 @@ QPainterPath KoShapeMeshGradientHandles::path() const
     if (!gradient())
         return painterPath;
 
-    SvgMeshGradient *g = new SvgMeshGradient(*gradient());
+    QScopedPointer<SvgMeshGradient> g(new SvgMeshGradient(*gradient()));
     if (g->gradientUnits() == KoFlake::ObjectBoundingBox) {
         const QTransform gradientToUser = KisAlgebra2D::mapToRect(m_shape->outlineRect());
         g->setTransform(gradientToUser);

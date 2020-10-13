@@ -42,7 +42,7 @@ public:
 
 private:
     struct Private;
-    Private *m_d;
+    QScopedPointer<Private> m_d;
 };
 
 #endif // __SHAPEMESHGRADIENTEDITSTRATEGY_H_

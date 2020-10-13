@@ -36,7 +36,7 @@ public:
     KoMeshPatchesRenderer *renderer;
 };
 
-KoMeshGradientBackground::KoMeshGradientBackground(SvgMeshGradient *gradient, const QTransform &matrix)
+KoMeshGradientBackground::KoMeshGradientBackground(const SvgMeshGradient *gradient, const QTransform &matrix)
     : KoShapeBackground()
     , d(new Private)
 {

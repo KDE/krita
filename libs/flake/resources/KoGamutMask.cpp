@@ -49,8 +49,14 @@ KoGamutMaskShape::KoGamutMaskShape(KoShape* shape)
 {
 }
 
-KoGamutMaskShape::KoGamutMaskShape() {};
-KoGamutMaskShape::~KoGamutMaskShape() {};
+KoGamutMaskShape::KoGamutMaskShape()
+{
+};
+
+KoGamutMaskShape::~KoGamutMaskShape()
+{
+    delete m_maskShape;
+};
 
 KoShape* KoGamutMaskShape::koShape()
 {
@@ -130,6 +136,8 @@ KoGamutMask::KoGamutMask(KoGamutMask* rhs)
 
 KoGamutMask::~KoGamutMask()
 {
+    qDeleteAll(d->maskShapes);
+    qDeleteAll(d->previewShapes);
     delete d;
 }
 

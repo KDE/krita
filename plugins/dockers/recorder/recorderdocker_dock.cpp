@@ -158,6 +158,8 @@ RecorderDockerDock::RecorderDockerDock()
     d->ui->buttonBrowse->setIcon(KisIconUtils::loadIcon("folder"));
     d->ui->buttonRecordToggle->setIcon(KisIconUtils::loadIcon("media-record"));
     d->ui->buttonExport->setIcon(KisIconUtils::loadIcon("document-export"));
+    d->ui->spinQuality->setMinimum(1);
+    d->ui->spinQuality->setMaximum(100);
     d->ui->spinQuality->setSuffix("%");
 
     d->loadSettings();

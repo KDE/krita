@@ -144,6 +144,40 @@ public:
         imageBufferHeight /= 2;
     }
 
+    inline quint32 blendSourceOver(const int alpha, const quint32 source, const quint32 destination)
+    {
+        // co = αs x Cs + αb x Cb x (1 – αs)
+        // αo = 1, αb = 1
+
+        const int inverseAlpha = 255 - alpha;
+        return qRgb(
+            (alpha * qRed(source) + inverseAlpha * qRed(destination)) >> 8,
+            (alpha * qGreen(source) + inverseAlpha * qGreen(destination)) >> 8,
+            (alpha * qBlue(source) + inverseAlpha * qBlue(destination)) >> 8
+        );
+    }
+
+    void removeFrameTransparency()
+    {
+        const quint32 background = 0xFFFFFFFF;
+        quint32 *buffer = reinterpret_cast<quint32 *>(imageBuffer.data());
+        const quint32 *end = buffer + imageBufferWidth * imageBufferHeight;
+        while (buffer != end) {
+            const int alpha = qAlpha(*buffer);
+            switch (alpha) {
+            case 0xFF: // fully opaque
+                break;
+            case 0x00: // fully transparent - just replace to background
+                *buffer = background;
+                break;
+            default: // partly transparent - do color blending
+                *buffer = blendSourceOver(alpha, *buffer, background);
+                break;
+            }
+            ++buffer;
+        }
+    }
+
     bool writeFrame()
     {
         const QString &fileName = QString("%1%2.jpg")
@@ -230,6 +264,8 @@ void RecorderWriter::timerEvent(QTimerEvent */*event*/)
     // downscale image buffer
     for (int res = 0; res < d->settings.resolution; ++res)
         d->halfSizeImageBuffer();
+
+    d->removeFrameTransparency();
 
     ++d->partIndex;
     bool isFrameWritten = d->writeFrame();

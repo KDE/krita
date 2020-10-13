@@ -920,6 +920,8 @@ void KoFillConfigWidget::setNewMeshGradientBackgroundToShape()
 
 void KoFillConfigWidget::updateMeshGradientUI()
 {
+    if (!d->activeMeshGradient) return;
+
     KisSignalsBlocker b(d->ui->spinbRows,
                         d->ui->spinbColumns,
                         d->ui->cmbSmoothingType,

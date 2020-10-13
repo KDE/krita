@@ -185,7 +185,7 @@ private:
     QPolygonF m_selectionOutline;
     QPointF m_lastPoint;
 
-    SelectionDecorator *m_decorator;
+    QScopedPointer<SelectionDecorator> m_decorator;
 
     KoShapeMeshGradientHandles::Handle m_selectedMeshHandle;
     KoShapeMeshGradientHandles::Handle m_hoveredMeshHandle;

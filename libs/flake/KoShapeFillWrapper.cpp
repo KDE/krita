@@ -467,7 +467,7 @@ KUndo2Command* KoShapeFillWrapper::setMeshGradient(const SvgMeshGradient *gradie
         for (const auto &shape: m_d->shapes) {
             Q_UNUSED(shape);
             KoMeshGradientBackground *newBackground =
-                new KoMeshGradientBackground(new SvgMeshGradient(*gradient), transform);
+                new KoMeshGradientBackground(gradient, transform);
 
             newBackgrounds << toQShared(newBackground);
         }

@@ -8,7 +8,7 @@
 class KRITAFLAKE_EXPORT KoMeshGradientBackground : public KoShapeBackground
 {
 public:
-    KoMeshGradientBackground(SvgMeshGradient *gradient, const QTransform &matrix = QTransform());
+    KoMeshGradientBackground(const SvgMeshGradient *gradient, const QTransform &matrix = QTransform());
     ~KoMeshGradientBackground();
 
     void paint(QPainter &painter, KoShapePaintingContext &context, const QPainterPath &fillPath) const override;

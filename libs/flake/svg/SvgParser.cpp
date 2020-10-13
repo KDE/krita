@@ -1156,9 +1156,9 @@ void SvgParser::applyFillStyle(KoShape *shape)
             if (gradient->isMeshGradient()) {
                 QSharedPointer<KoMeshGradientBackground> bg;
 
-                SvgMeshGradient *result = prepareMeshGradientForShape(gradient, shape, gc);
+                QScopedPointer<SvgMeshGradient> result(prepareMeshGradientForShape(gradient, shape, gc));
 
-                bg = toQShared(new KoMeshGradientBackground(result, transform));
+                bg = toQShared(new KoMeshGradientBackground(result.data(), transform));
                 shape->setBackground(bg);
             } else if (gradient->gradient()) {
                 QGradient *result = prepareGradientForShape(gradient, shape, gc, &transform);

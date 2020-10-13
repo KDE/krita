@@ -70,7 +70,7 @@ public:
 
 private:
 
-    QGradient * m_gradient;
+    QScopedPointer<QGradient> m_gradient;
     QScopedPointer<SvgMeshGradient> m_meshgradient;
     KoFlake::CoordinateSystem m_gradientUnits;
     QTransform m_gradientTransform;

@@ -206,7 +206,7 @@ public:
     SvgMeshPosition meshposition;
     QScopedPointer<SvgMeshGradient> activeMeshGradient;
 
-    Ui_KoFillConfigWidget *ui;
+    QScopedPointer<Ui_KoFillConfigWidget> ui;
 
     std::vector<KisAcyclicSignalConnector::Blocker> deactivationLocks;
 
@@ -248,7 +248,7 @@ KoFillConfigWidget::KoFillConfigWidget(KoCanvasBase *canvas, KoFlake::FillVarian
 
     // configure GUI
 
-    d->ui = new Ui_KoFillConfigWidget();
+    d->ui.reset(new Ui_KoFillConfigWidget());
     d->ui->setupUi(this);
 
     d->group = new QButtonGroup(this);

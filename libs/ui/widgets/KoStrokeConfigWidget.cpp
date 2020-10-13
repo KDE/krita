@@ -193,7 +193,7 @@ public:
 
     std::vector<KisAcyclicSignalConnector::Blocker> deactivationLocks;
 
-    Ui_KoStrokeConfigWidget *ui;
+    QScopedPointer<Ui_KoStrokeConfigWidget> ui;
 };
 
 
@@ -202,7 +202,7 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(KoCanvasBase *canvas, QWidget * paren
     , d(new Private())
 {
     // configure GUI
-    d->ui = new Ui_KoStrokeConfigWidget();
+    d->ui.reset(new Ui_KoStrokeConfigWidget());
     d->ui->setupUi(this);
 
     setObjectName("Stroke widget");

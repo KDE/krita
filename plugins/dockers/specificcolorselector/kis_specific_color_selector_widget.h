@@ -71,7 +71,7 @@ private:
     KisSignalCompressor *m_updateCompressor;
     KisColorSpaceSelector *m_colorspaceSelector;
     bool m_customColorSpaceSelected;
-    Ui_wdgSpecificColorSelectorWidget* m_ui;
+    QScopedPointer<Ui_wdgSpecificColorSelectorWidget> m_ui;
 
 
     KisDisplayColorConverter *m_displayConverter;

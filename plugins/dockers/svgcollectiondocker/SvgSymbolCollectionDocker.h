@@ -93,7 +93,7 @@ private:
 
     void clearModels();
 
-    Ui_WdgSvgCollection *m_wdgSvgCollection;
+    QScopedPointer<Ui_WdgSvgCollection> m_wdgSvgCollection;
     QMap<int, SvgCollectionModel*> m_collectionsModelsCache;
     QSlider* m_iconSizeSlider;
 

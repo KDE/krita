@@ -15,10 +15,6 @@ public:
 
     bool compareTo(const KoShapeBackground *other) const override;
 
-    void fillStyle(KoGenStyle &style, KoShapeSavingContext &context) override;
-
-    bool loadStyle(KoOdfLoadingContext &context, const QSizeF &shapeSize) override;
-
     SvgMeshGradient* gradient();
     QTransform transform();
 

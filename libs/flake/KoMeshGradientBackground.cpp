@@ -94,16 +94,6 @@ bool KoMeshGradientBackground::compareTo(const KoShapeBackground*) const
     return false;
 }
 
-void KoMeshGradientBackground::fillStyle(KoGenStyle&, KoShapeSavingContext&)
-{
-
-}
-
-bool KoMeshGradientBackground::loadStyle(KoOdfLoadingContext&, const QSizeF&)
-{
-    return false;
-}
-
 SvgMeshGradient* KoMeshGradientBackground::gradient()
 {
     return d->gradient.data();

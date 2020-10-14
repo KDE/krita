@@ -1707,6 +1707,9 @@ void TestSvgParser::testRenderMeshGradient_bicubic_2by2_UserCoord()
 
 void TestSvgParser::testRenderMeshGradient_bilinear_1by1_Obb()
 {
+    // inkscape adds 1px border (unreliably) when the bbox doesn't the meshpatch's curves
+    qWarning() << "WARNING: skipped, the edge couldn't be reliably verified";
+    return;
     // inkscape is _very_ weird with meshgradients in OBB coordinate system
     QString data =
         "<svg width=\"100px\" height=\"100px\""

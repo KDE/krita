@@ -24,6 +24,7 @@
 #include <KoColorBackground.h>
 #include <KoGradientBackground.h>
 #include <KoPatternBackground.h>
+#include <KoMeshGradientBackground.h>
 #include <KoShapeStroke.h>
 #include <KoShapeBackgroundCommand.h>
 #include <KoShapeStrokeCommand.h>
@@ -48,6 +49,8 @@ struct ShapeBackgroundFetchPolicy
         QSharedPointer<KoColorBackground> colorBackground = qSharedPointerDynamicCast<KoColorBackground>(background);
         QSharedPointer<KoGradientBackground> gradientBackground = qSharedPointerDynamicCast<KoGradientBackground>(background);
         QSharedPointer<KoPatternBackground> patternBackground = qSharedPointerDynamicCast<KoPatternBackground>(background);
+        QSharedPointer<KoMeshGradientBackground> meshgradientBackground = qSharedPointerDynamicCast<KoMeshGradientBackground>(background);
+
 
         if(gradientBackground) {
             return Type::Gradient;
@@ -59,6 +62,10 @@ struct ShapeBackgroundFetchPolicy
 
         if (colorBackground) {
             return Type::Solid;
+        }
+
+        if (meshgradientBackground) {
+            return Type::MeshGradient;
         }
 
         return Type::None;
@@ -77,6 +84,16 @@ struct ShapeBackgroundFetchPolicy
     static QTransform gradientTransform(KoShape *shape) {
         QSharedPointer<KoGradientBackground> gradientBackground = qSharedPointerDynamicCast<KoGradientBackground>(shape->background());
         return gradientBackground ? gradientBackground->transform() : QTransform();
+    }
+
+    static const SvgMeshGradient* meshgradient(KoShape *shape) {
+        QSharedPointer<KoMeshGradientBackground> meshgradientBackground = qSharedPointerDynamicCast<KoMeshGradientBackground>(shape->background());
+        return meshgradientBackground ? meshgradientBackground->gradient() : nullptr;
+    }
+
+    static QTransform meshgradientTransform(KoShape *shape) {
+        QSharedPointer<KoMeshGradientBackground> meshgradientBackground = qSharedPointerDynamicCast<KoMeshGradientBackground>(shape->background());
+        return meshgradientBackground ? meshgradientBackground->transform() : QTransform();
     }
 
     static bool compareTo(PointerType p1, PointerType p2) {
@@ -312,7 +329,17 @@ QTransform KoShapeFillWrapper::gradientTransform() const
                 ShapeStrokeFillFetchPolicy::gradientTransform(shape);
 }
 
+const SvgMeshGradient* KoShapeFillWrapper::meshgradient() const
+{
+    if (type() != KoFlake::MeshGradient) return nullptr;
 
+    KoShape *shape = m_d->shapes.first();
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(shape, 0);
+
+    return m_d->fillVariant == KoFlake::Fill ?
+        ShapeBackgroundFetchPolicy::meshgradient(shape) :
+        nullptr;
+}
 
 KUndo2Command *KoShapeFillWrapper::setColor(const QColor &color)
 {
@@ -427,5 +454,25 @@ KUndo2Command* KoShapeFillWrapper::applyGradientStopsOnly(const QGradient *gradi
             });
     }
 
+    return command;
+}
+
+KUndo2Command* KoShapeFillWrapper::setMeshGradient(const SvgMeshGradient *gradient,
+                                                   const QTransform &transform)
+{
+    KUndo2Command *command = nullptr;
+    if (m_d->fillVariant == KoFlake::Fill) {
+        QList<QSharedPointer<KoShapeBackground>> newBackgrounds;
+
+        for (const auto &shape: m_d->shapes) {
+            Q_UNUSED(shape);
+            KoMeshGradientBackground *newBackground =
+                new KoMeshGradientBackground(gradient, transform);
+
+            newBackgrounds << toQShared(newBackground);
+        }
+        command = new KoShapeBackgroundCommand(m_d->shapes, newBackgrounds);
+    }
+    // TODO: for strokes!!
     return command;
 }

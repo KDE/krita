@@ -114,6 +114,12 @@ protected:
     /// Parses a gradient element
     SvgGradientHelper *parseGradient(const KoXmlElement &);
 
+    /// Parses mesh gradient element
+    SvgGradientHelper* parseMeshGradient(const KoXmlElement&);
+    
+    /// Parses a single meshpatch and returns the pointer
+    QList<QPair<QString, QColor>> parseMeshPatch(const KoXmlNode& meshpatch);
+
     /// Parses a pattern element
     QSharedPointer<KoVectorPatternBackground> parsePattern(const KoXmlElement &e, const KoShape *__shape);
 

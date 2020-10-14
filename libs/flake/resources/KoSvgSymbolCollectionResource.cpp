@@ -92,6 +92,13 @@ KoSvgSymbolCollectionResource::KoSvgSymbolCollectionResource(const KoSvgSymbolCo
     : KoResource(QString())
     , d(new Private(*rhs.d))
 {
+    setFilename(rhs.filename());
+
+    Q_FOREACH(KoSvgSymbol *symbol, rhs.d->symbols) {
+        d->symbols << new KoSvgSymbol(*symbol);
+    }
+
+    setValid(true);
 }
 
 KoResourceSP KoSvgSymbolCollectionResource::clone() const
@@ -101,6 +108,7 @@ KoResourceSP KoSvgSymbolCollectionResource::clone() const
 
 KoSvgSymbolCollectionResource::~KoSvgSymbolCollectionResource()
 {
+    qDeleteAll(d->symbols);
 }
 
 bool KoSvgSymbolCollectionResource::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface)

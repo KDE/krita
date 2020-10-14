@@ -24,6 +24,7 @@
 #include <KoFlakeCoordinateSystem.h>
 #include <QTransform>
 #include <QGradient>
+#include <SvgMeshGradient.h>
 
 class SvgGradientHelper
 {
@@ -43,6 +44,14 @@ public:
     /// Retrurns the gradient
     QGradient * gradient() const;
 
+    /// Sets the meshgradient
+    void setMeshGradient(SvgMeshGradient* g);
+    /// Returns the meshgradient
+    QScopedPointer<SvgMeshGradient>& meshgradient();
+
+    // To distinguish between SvgMeshGradient and QGradient
+    bool isMeshGradient() const;
+
     /// Returns the gradient transformation
     QTransform transform() const;
     /// Sets the gradient transformation
@@ -61,7 +70,8 @@ public:
 
 private:
 
-    QGradient * m_gradient;
+    QScopedPointer<QGradient> m_gradient;
+    QScopedPointer<SvgMeshGradient> m_meshgradient;
     KoFlake::CoordinateSystem m_gradientUnits;
     QTransform m_gradientTransform;
 };

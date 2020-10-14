@@ -55,6 +55,8 @@ DefaultToolTabbedWidget::DefaultToolTabbedWidget(KoInteractionTool *tool, QWidge
 
     connect(this, SIGNAL(currentChanged(int)), SLOT(slotCurrentIndexChanged(int)));
     m_oldTabIndex = currentIndex();
+
+    connect(m_fillWidget, SIGNAL(sigMeshGradientResetted()), SIGNAL(sigMeshGradientResetted()));
 }
 
 DefaultToolTabbedWidget::~DefaultToolTabbedWidget()
@@ -76,6 +78,15 @@ void DefaultToolTabbedWidget::deactivate()
 bool DefaultToolTabbedWidget::useUniformScaling() const
 {
     return m_geometryWidget->useUniformScaling();
+}
+
+void DefaultToolTabbedWidget::slotMeshGradientHandleSelected(KoShapeMeshGradientHandles::Handle h)
+{
+    if (h.type == KoShapeMeshGradientHandles::Handle::Corner) {
+        m_fillWidget->setSelectedMeshGradientHandle(SvgMeshPosition {h.row, h.col, h.segmentType});
+    } else {
+        m_fillWidget->setSelectedMeshGradientHandle(SvgMeshPosition());
+    }
 }
 
 void DefaultToolTabbedWidget::slotCurrentIndexChanged(int current)

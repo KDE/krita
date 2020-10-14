@@ -169,6 +169,7 @@ void KisSnapshotModel::setCanvas(QPointer<KisCanvas2> canvas)
         m_d->curDocList = docList;
         endInsertRows();
 
+        // TODO: memory leak!
         KisNameServer *nameServer = m_d->nameServers.take(curDoc);
         if (!nameServer) {
             nameServer = new KisNameServer;

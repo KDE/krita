@@ -26,7 +26,7 @@ KisGamutMaskToolbar::KisGamutMaskToolbar(QWidget* parent) : QWidget(parent)
   , m_selectedMask(nullptr)
   , m_selfUpdate(false)
 {
-    m_ui = new Ui_wdgGamutMaskToolbar();
+    m_ui.reset(new Ui_wdgGamutMaskToolbar());
     m_ui->setupUi(this);
 
     m_iconMaskOff = KisIconUtils::loadIcon("gamut-mask-off");

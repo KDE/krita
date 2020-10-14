@@ -76,6 +76,7 @@ set(kritaflake_SRCS
     KoShapeBackground.cpp
     KoColorBackground.cpp
     KoGradientBackground.cpp
+    KoMeshGradientBackground.cpp
     KoHatchBackground.cpp
     KoPatternBackground.cpp
     KoVectorPatternBackground.cpp
@@ -197,6 +198,9 @@ set(kritaflake_SRCS
     svg/SvgLoadingContext.cpp
     svg/SvgShapeFactory.cpp
     svg/parsers/SvgTransformParser.cpp
+    svg/SvgMeshGradient.cpp
+    svg/SvgMeshPatch.cpp
+    svg/SvgMeshArray.cpp
 
     text/KoSvgText.cpp
     text/KoSvgTextProperties.cpp

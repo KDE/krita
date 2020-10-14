@@ -172,9 +172,9 @@ public:
     {
         const QSize &outSize = resize ? size : imageSize;
         return QString(templateArguments)
-            .replace("$FPS", QString::number(fps))
-            .replace("$WIDTH", QString::number(outSize.width()))
-            .replace("$HEIGHT", QString::number(outSize.height()));
+               .replace("$FPS", QString::number(fps))
+               .replace("$WIDTH", QString::number(outSize.width()))
+               .replace("$HEIGHT", QString::number(outSize.height()));
     }
 
     void updateVideoDuration()
@@ -255,18 +255,17 @@ void RecorderExport::setup(const RecorderExportSettings &settings)
     if (d->framesCount == 0) {
         d->ui->labelRecordInfo->setText(i18n("No files to export"));
         d->ui->buttonExport->setEnabled(false);
+    } else {
+        d->imageSize = QImage(QDirIterator(dir).next()).size();
+        d->ui->labelRecordInfo->setText(QString("%1: %2x%3 %4, %5 %6")
+                                        .arg(i18nc("General information about recording", "Recording info"))
+                                        .arg(d->imageSize.width())
+                                        .arg(d->imageSize.height())
+                                        .arg(i18nc("Pixel dimension suffix", "px"))
+                                        .arg(d->framesCount)
+                                        .arg(i18nc("The suffix after number of frames", "frame(s)"))
+                                       );
     }
-
-    d->imageSize = QImage(QDirIterator(dir).next()).size();
-
-    d->ui->labelRecordInfo->setText(QString("%1: %2x%3 %4, %5 %6")
-                                    .arg(i18nc("General information about recording", "Recording info"))
-                                    .arg(d->imageSize.width())
-                                    .arg(d->imageSize.height())
-                                    .arg(i18nc("Pixel dimension suffix", "px"))
-                                    .arg(d->framesCount)
-                                    .arg(i18nc("The suffix after number of frames", "frame(s)"))
-                                   );
 
     RecorderExportConfig config(true);
 

@@ -54,6 +54,8 @@ public:
     QLabel* statusBarLabel;
     bool isColorSpaceSupported;
 
+    QSet<QString> enabledIds;
+
     Private(RecorderDockerDock *q_ptr)
         : q(q_ptr)
         , ui(new Ui::RecorderDocker())
@@ -212,6 +214,10 @@ void RecorderDockerDock::setCanvas(KoCanvasBase* canvas)
 
     d->prefix = d->getPrefix();
     d->updateWriterSettings();
+
+    bool enabled = d->enabledIds.contains(document->uniqueID());
+    d->writer.setEnabled(enabled);
+    d->updateRecordStatus(enabled);
 }
 
 void RecorderDockerDock::unsetCanvas()
@@ -221,10 +227,32 @@ void RecorderDockerDock::unsetCanvas()
     d->writer.stop();
     d->writer.setCanvas(nullptr);
     d->canvas = nullptr;
+    d->enabledIds.clear();
 }
 
 void RecorderDockerDock::onRecordButtonToggled(bool checked)
 {
+    if (!d->canvas)
+        return;
+
+    const QString &id = d->canvas->imageView()->document()->uniqueID();
+
+    bool wasEmpty = d->enabledIds.isEmpty();
+
+    if (checked) {
+        d->enabledIds.insert(id);
+    } else {
+        d->enabledIds.remove(id);
+    }
+
+    d->writer.setEnabled(checked);
+
+    if (d->enabledIds.isEmpty() == wasEmpty) {
+        d->updateRecordStatus(checked);
+        return;
+    }
+
+
     d->ui->buttonRecordToggle->setEnabled(false);
 
     if (checked) {

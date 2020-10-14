@@ -44,6 +44,8 @@ public:
 
     bool stop();
 
+    void setEnabled(bool enabled);
+
 Q_SIGNALS:
     void pausedChanged(bool paused);
     void prefixChanged(QString prefix);

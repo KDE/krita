@@ -46,8 +46,9 @@ public:
     int partIndex = 0;
     RecorderWriterSettings settings;
     bool paused = false;
+    volatile bool enabled = false;  // enable recording only for active documents
     volatile bool imageModified = false;
-    volatile bool skipCapturing = false;
+    volatile bool skipCapturing = false; // set true on move or transform enabled to prevent tool deactivation
 
 
     int findLastIndex(const QString &directory)
@@ -244,8 +245,17 @@ bool RecorderWriter::stop()
     return true;
 }
 
+void RecorderWriter::setEnabled(bool enabled)
+{
+    d->enabled = enabled;
+}
+
+
 void RecorderWriter::timerEvent(QTimerEvent */*event*/)
 {
+    if (!d->enabled)
+        return;
+
     if (d->imageModified == d->paused) {
         d->paused = !d->imageModified;
         emit pausedChanged(d->paused);
@@ -275,7 +285,7 @@ void RecorderWriter::timerEvent(QTimerEvent */*event*/)
 
 void RecorderWriter::onImageModified()
 {
-    if (d->skipCapturing)
+    if (d->skipCapturing || !d->enabled)
         return;
 
     if (!d->imageModified)
@@ -293,6 +303,7 @@ void RecorderWriter::run()
     if (!d->canvas)
         return;
 
+    d->enabled = true;
     d->paused = true;
     d->imageModified = false;
     emit pausedChanged(d->paused);

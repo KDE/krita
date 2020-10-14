@@ -18,6 +18,8 @@
 #ifndef SVGMESHPATCH_H
 #define SVGMESHPATCH_H
 
+#include <array>
+
 #include <QColor>
 #include <QPointF>
 #include <QVector>

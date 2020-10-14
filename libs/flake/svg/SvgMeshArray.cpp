@@ -197,6 +197,7 @@ SvgMeshStop SvgMeshArray::getStop(const SvgMeshPatch::Type edge, const int row, 
             return getStop(SvgMeshPatch::Bottom, row, col - 1);
     }
     assert(false);
+    return SvgMeshStop();
 }
 
 SvgMeshStop SvgMeshArray::getStop(const SvgMeshPosition &pos) const

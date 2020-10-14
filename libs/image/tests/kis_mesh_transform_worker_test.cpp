@@ -27,6 +27,8 @@
 #include "testutil.h"
 #include <kis_algebra_2d.h>
 
+#include <tuple>
+
 template <typename Point>
 Point lerp(const Point &pt1, const Point &pt2, qreal t)
 {
@@ -59,6 +61,36 @@ QPointF bezierCurve(const QPointF p0,
         t_3 * p3;
 
 }
+
+QPointF bezierCurveDeriv(const QPointF p0,
+                         const QPointF p1,
+                         const QPointF p2,
+                         const QPointF p3,
+                         qreal t)
+{
+    const qreal t_2 = pow2(t);
+    const qreal t_inv = 1.0 - t;
+    const qreal t_inv_2 = pow2(t_inv);
+
+    return
+        3 * t_inv_2 * (p1 - p0) +
+        6 * t_inv * t * (p2 - p1) +
+        3 * t_2 * (p3 - p2);
+}
+
+QPointF bezierCurveDeriv2(const QPointF p0,
+                          const QPointF p1,
+                          const QPointF p2,
+                          const QPointF p3,
+                          qreal t)
+{
+    const qreal t_inv = 1.0 - t;
+
+    return
+        6 * t_inv * (p2 - 2 * p1 + p0) +
+        6 * t * (p3 - 2 * p2 + p1);
+}
+
 
 struct BezierPatch
 {
@@ -93,6 +125,138 @@ struct BezierPatch
 
     QRectF srcBoundingRect() const {
         return originalRect;
+    }
+
+    bool isLinearSegment(const QPointF &p0, const QPointF &d0,
+                         const QPointF &p1, const QPointF &d1)
+    {
+        const QPointF diff = p1 - p0;
+        const qreal dist = KisAlgebra2D::norm(diff);
+
+        const qreal normCoeff = 1.0 / 3.0 / dist;
+
+        // TODO: handle negative projection case
+
+        const qreal offset1 =
+            normCoeff * KisAlgebra2D::crossProduct(diff, d0);
+        if (offset1 > 1.0) return false;
+
+        const qreal offset2 =
+            normCoeff * KisAlgebra2D::crossProduct(diff, d1);
+        if (offset2 > 1.0) return false;
+
+        return true;
+    }
+
+    QVector<qreal> linearizeCurve(const QPointF p0,
+                                  const QPointF p1,
+                                  const QPointF p2,
+                                  const QPointF p3)
+    {
+        const qreal minStepSize = 2.0 / kisDistance(p0, p3);
+
+        QVector<qreal> steps;
+        steps << 0.0;
+
+
+        QStack<std::tuple<QPointF, QPointF, qreal>> stackedPoints;
+        stackedPoints.push(std::make_tuple(p3, 3 * (p3 - p2), 1.0));
+
+        QPointF lastP = p0;
+        QPointF lastD = 3 * (p1 - p0);
+        qreal lastT = 0.0;
+
+        while (!stackedPoints.isEmpty()) {
+            QPointF p = std::get<0>(stackedPoints.top());
+            QPointF d = std::get<1>(stackedPoints.top());
+            qreal t = std::get<2>(stackedPoints.top());
+
+            if (t - lastT < minStepSize ||
+                isLinearSegment(lastP, lastD, p, d)) {
+                lastP = p;
+                lastD = d;
+                lastT = t;
+                steps << t;
+                stackedPoints.pop();
+            } else {
+                t = 0.5 * (lastT + t);
+                p = bezierCurve(p0, p1, p2, p3, t);
+                d = bezierCurveDeriv(p0, p1, p2, p3, t);
+
+                stackedPoints.push(std::make_tuple(p, d, t));
+            }
+        }
+
+//        qDebug() << ppVar(kisDistance(p0, p3)) << ppVar(steps.size());
+//        Q_FOREACH(const qreal t, steps) {
+//            qDebug() << ppVar(t);
+//        }
+
+        return steps;
+    }
+
+    QVector<qreal> mergeSteps(const QVector<qreal> &a, const QVector<qreal> &b) {
+        QVector<qreal> result;
+
+        std::merge(a.constBegin(), a.constEnd(),
+                   b.constBegin(), b.constEnd(),
+                   std::back_inserter(result));
+        result.erase(
+            std::unique(result.begin(), result.end(),
+                        [] (qreal x, qreal y) { return qFuzzyCompare(x, y); }),
+            result.end());
+
+        return result;
+    }
+
+    void sampleIrregularGrid(QSize &gridSize,
+                           QVector<QPointF> &origPoints,
+                           QVector<QPointF> &transfPoints) {
+
+        const QVector<qreal> topSteps = linearizeCurve(points[TL], points[TL_HC], points[TR_HC], points[TR]);
+        const QVector<qreal> bottomSteps = linearizeCurve(points[BL], points[BL_HC], points[BR_HC], points[BR]);
+        const QVector<qreal> horizontalSteps = mergeSteps(topSteps, bottomSteps);
+
+        const QVector<qreal> leftSteps = linearizeCurve(points[TL], points[TL_VC], points[BL_VC], points[BL]);
+        const QVector<qreal> rightSteps = linearizeCurve(points[TR], points[TR_VC], points[BR_VC], points[BR]);
+        const QVector<qreal> verticalSteps = mergeSteps(leftSteps, rightSteps);
+
+        gridSize.rwidth() = horizontalSteps.size();
+        gridSize.rheight() = verticalSteps.size();
+
+        ENTER_FUNCTION() << ppVar(gridSize);
+
+        for (int y = 0; y < gridSize.height(); y++) {
+            const qreal yProportion = verticalSteps[y];
+
+            for (int x = 0; x < gridSize.width(); x++) {
+                const qreal xProportion = horizontalSteps[x];
+
+                const QPointF orig = KisAlgebra2D::relativeToAbsolute(
+                            QPointF(xProportion, yProportion), originalRect);
+
+                const QPointF Sc =
+                    lerp(bezierCurve(points[TL], points[TL_HC], points[TR_HC], points[TR], xProportion),
+                         bezierCurve(points[BL], points[BL_HC], points[BR_HC], points[BR], xProportion),
+                         yProportion);
+
+                const QPointF Sd =
+                    lerp(bezierCurve(points[TL], points[TL_VC], points[BL_VC], points[BL], yProportion),
+                         bezierCurve(points[TR], points[TR_VC], points[BR_VC], points[BR], yProportion),
+                         xProportion);
+
+                const QPointF Sb =
+                     lerp(lerp(points[TL], points[TR], xProportion),
+                          lerp(points[BL], points[BR], xProportion),
+                          yProportion);
+
+                const QPointF transf = Sc + Sd - Sb;
+
+                origPoints.append(orig);
+                transfPoints.append(transf);
+            }
+        }
+
     }
 
     void sampleRegularGrid(QSize &gridSize,
@@ -272,15 +436,24 @@ void KisMeshTransformWorkerTest::testPointsQImage()
     QVector<QPointF> transformedPointsLocal;
     QSize gridSize;
 
-    patch.sampleRegularGrid(gridSize, originalPointsLocal, transformedPointsLocal, QPointF(16,16));
+    QElapsedTimer t; t.start();
+
+
+    //patch.sampleRegularGrid(gridSize, originalPointsLocal, transformedPointsLocal, QPointF(8,8));
+
+
+    patch.sampleIrregularGrid(gridSize, originalPointsLocal, transformedPointsLocal);
+
+    ENTER_FUNCTION() << "sample time" << t.restart();
+
 
     const QRect dstBoundsI = patch.dstBoundingRect().toAlignedRect();
 
     {
-
-
         QImage dstImage(dstBoundsI.size(), srcImage.format());
         dstImage.fill(0);
+
+        t.start();
 
         const QPoint srcImageOffset;
         const QPoint dstQImageOffset;
@@ -295,12 +468,17 @@ void KisMeshTransformWorkerTest::testPointsQImage()
                                                                   originalPointsLocal,
                                                                   transformedPointsLocal);
 
+        ENTER_FUNCTION() << "process qimage time" << t.restart();
+
+
         dstImage.save("dd_mesh_result.png");
     }
 
     {
         KisPaintDeviceSP dstDev = new KisPaintDevice(srcDev->colorSpace());
         dstDev->prepareClone(srcDev);
+
+        t.start();
 
         GridIterationTools::PaintDevicePolygonOp polygonOp(srcDev, dstDev);
         GridIterationTools::RegularGridIndexesOp indexesOp(gridSize);
@@ -309,6 +487,9 @@ void KisMeshTransformWorkerTest::testPointsQImage()
                                                                   gridSize,
                                                                   originalPointsLocal,
                                                                   transformedPointsLocal);
+        ENTER_FUNCTION() << "process device time" << t.restart();
+
+
         dstDev->convertToQImage(0, dstBoundsI).save("dd_mesh_result_dev.png");
     }
 }
@@ -353,13 +534,16 @@ void KisMeshTransformWorkerTest::testGradient()
     QVector<QPointF> transformedPointsLocal;
     QSize gridSize;
 
-    patch.sampleRegularGrid(gridSize, originalPointsLocal, transformedPointsLocal, QPointF(16,16));
+    //patch.sampleRegularGrid(gridSize, originalPointsLocal, transformedPointsLocal, QPointF(16,16));
+    patch.sampleIrregularGrid(gridSize, originalPointsLocal, transformedPointsLocal);
 
     const QRect dstBoundsI = patch.dstBoundingRect().toAlignedRect();
 
     {
         QImage dstImage(dstBoundsI.size(), QImage::Format_ARGB32);
         dstImage.fill(255);
+
+        QElapsedTimer t; t.start();
 
         const QPoint srcImageOffset;
         const QPoint dstQImageOffset;
@@ -374,6 +558,7 @@ void KisMeshTransformWorkerTest::testGradient()
                                                                   originalPointsLocal,
                                                                   transformedPointsLocal);
 
+        ENTER_FUNCTION() << "gradient fill" << t.elapsed();
         dstImage.save("dd_mesh_result_grad.png");
     }
 

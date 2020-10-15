@@ -27,6 +27,7 @@ class KisMeshTransformWorkerTest : public QObject
 private Q_SLOTS:
     void testPointsQImage();
     void testGradient();
+    void testMesh();
 };
 
 #endif /* __KIS_MESH_TRANSFORM_WORKER_TEST_H */

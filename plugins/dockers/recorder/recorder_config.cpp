@@ -29,6 +29,7 @@ constexpr const char *keyCaptureInterval = "recorder/captureinterval";
 constexpr const char *keyQuality = "recorder/quality";
 constexpr const char *keyResolution = "recorder/resolution";
 constexpr const char *keyRecordAutomatically = "recorder/recordautomatically";
+const QString defaultSnapshotDirectory = QDir::homePath() % QDir::separator() % "KritaRecorder";
 }
 
 RecorderConfig::RecorderConfig(bool readOnly)
@@ -44,7 +45,7 @@ RecorderConfig::~RecorderConfig()
 
 QString RecorderConfig::snapshotDirectory() const
 {
-    return config->readEntry(keySnapshotDirectory, QDir::homePath());
+    return config->readEntry(keySnapshotDirectory, defaultSnapshotDirectory);
 }
 
 void RecorderConfig::setSnapshotDirectory(const QString &value)

@@ -39,9 +39,21 @@ const QList<RecorderProfile> defaultProfiles = {
     { "GIF",        "gif",  "-vf \"fps=$FPS,scale=$WIDTH:$HEIGHT:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse\" -loop -1" },
     { "Matroska",   "mkv",  "-vf \"scale=$WIDTH:$HEIGHT\" -r $FPS" },
     { "WebM",       "webm", "-vf \"scale=$WIDTH:$HEIGHT\" -r $FPS" },
+    { "MP4 x264 (+4s Flash effect)",  "mp4", "-filter_complex \""
+                                            "[0]scale=$WIDTH:$HEIGHT[p0];"
+                                            "[p0]reverse[p1];"
+                                            "[p1]trim=start_frame=0:end_frame=1[p3];"
+                                            "[p3]reverse[p4];"
+                                            "[p4]fps=$FPS[p5];"
+                                            "[p5]tpad=stop_mode=clone:stop_duration=3[p6];"
+                                            "[p6]fade=type=in:color=white:start_time=0.8:duration=0.2[v1];"
+                                            "[0]scale=$WIDTH:$HEIGHT[v2];"
+                                            "[v2][v1]concat=n=2:v=1"
+                                            "\" -c:v libx264 -r $FPS -pix_fmt yuv420p" },
     { "Custom1",  "editme", "-vf \"scale=$WIDTH:$HEIGHT\" -r $FPS" },
     { "Custom2",  "editme", "-vf \"scale=$WIDTH:$HEIGHT\" -r $FPS" },
-    { "Custom3",  "editme", "-vf \"scale=$WIDTH:$HEIGHT\" -r $FPS" }
+    { "Custom3",  "editme", "-vf \"scale=$WIDTH:$HEIGHT\" -r $FPS" },
+    { "Custom4",  "editme", "-vf \"scale=$WIDTH:$HEIGHT\" -r $FPS" }
 };
 }
 
@@ -124,9 +136,8 @@ void RecorderExportConfig::setProfileIndex(int value)
 QList<RecorderProfile> RecorderExportConfig::profiles() const
 {
     const QString &profilesStr = config->readEntry(keyProfiles, QString());
-    if (profilesStr.isEmpty()) {
+    if (profilesStr.isEmpty())
         return ::defaultProfiles;
-    }
 
     QList<RecorderProfile> profiles;
     const QStringList &profilesList = profilesStr.split("\n");

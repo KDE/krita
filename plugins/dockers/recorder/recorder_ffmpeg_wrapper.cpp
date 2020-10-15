@@ -104,9 +104,10 @@ void RecorderFFMpegWrapper::start(const RecorderFFMpegWrapperSettings &settings)
                                % " -pattern_type glob -i \"" % settings.inputDirectory % "*.jpg\" "
                                % settings.arguments % " " % settings.outputFilePath;
 
-    QStringList args = splitCommand(arguments);
+    qDebug() << "starting ffmpeg: " << qUtf8Printable(settings.ffmpeg) << qUtf8Printable(arguments);
 
-    qDebug() << "starting ffmpeg: " << settings.ffmpeg << args;
+    const QStringList &args = splitCommand(arguments);
+
     process->start(settings.ffmpeg, args);
 }
 

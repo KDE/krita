@@ -92,6 +92,51 @@ QPointF bezierCurveDeriv2(const QPointF p0,
 }
 
 
+void deCasteljau(const QPointF &q0,
+                 const QPointF &q1,
+                 const QPointF &q2,
+                 const QPointF &q3,
+                 qreal t,
+                 QPointF *p0,
+                 QPointF *p1,
+                 QPointF *p2,
+                 QPointF *p3,
+                 QPointF *p4)
+{
+    QPointF q[4];
+
+    q[0] = q0;
+    q[1] = q1;
+    q[2] = q2;
+    q[3] = q3;
+
+    // points of the new segment after the split point
+    QPointF p[3];
+
+    // the De Casteljau algorithm
+    for (unsigned short j = 1; j <= 3; ++j) {
+        for (unsigned short i = 0; i <= 3 - j; ++i) {
+            q[i] = (1.0 - t) * q[i] + t * q[i + 1];
+        }
+        p[j - 1] = q[0];
+    }
+
+    *p0 = p[0];
+    *p1 = p[1];
+    *p2 = p[2];
+    *p3 = q[1];
+    *p4 = q[2];
+}
+
+//QPair<std::array<QPointF, 4>, std::array<QPointF, 4>> splitAt(const std::array<QPointF, 4>& points, qreal t)
+//{
+//    QPointF newCP2, newCP1, splitP, splitCP1, splitCP2;
+//    deCasteljau(points, t, &newCP2, &splitCP1, &splitP, &splitCP2, &newCP1);
+//    return {{points[0], newCP2, splitCP1, splitP},
+//            {splitP, splitCP2, newCP1, points[3]}};
+//}
+
+
 struct BezierPatch
 {
     enum ControlPointType {
@@ -301,6 +346,178 @@ struct BezierPatch
 
     }
 };
+
+struct BezierMesh
+{
+    struct Node {
+        Node() {}
+        Node(const QPointF &_node)
+            : leftControl(_node),
+              topControl(_node),
+              node(_node),
+              rightControl(_node),
+              bottomControl(_node)
+        {
+        }
+
+        QPointF leftControl;
+        QPointF topControl;
+        QPointF node;
+        QPointF rightControl;
+        QPointF bottomControl;
+    };
+
+    friend QDebug operator<<(QDebug dbg, const BezierMesh::Node &n);
+
+    void lerpNodeData(const Node &left, const Node &right, qreal t, Node &dst)
+    {
+        Q_UNUSED(left);
+        Q_UNUSED(right);
+        Q_UNUSED(t);
+        Q_UNUSED(dst);
+    }
+
+    BezierMesh(const QRectF &mapRect, const QSize &size = QSize(2,2))
+    {
+        m_size = size;
+
+        for (int row = 0; row < m_size.height(); row++) {
+            const qreal yPos = qreal(row) / (size.height() - 1) * mapRect.height() + mapRect.y();
+
+            for (int col = 0; col < m_size.width(); col++) {
+                const qreal xPos = qreal(col) / (size.width() - 1) * mapRect.width() + mapRect.x();
+
+                m_nodes.push_back(Node(QPointF(xPos, yPos)));
+            }
+        }
+
+        for (int col = 0; col < m_size.width(); col++) {
+            m_columns.push_back(qreal(col) / (size.width() - 1));
+        }
+
+        for (int row = 0; row < m_size.height(); row++) {
+            m_rows.push_back(qreal(row) / (size.height() - 1));
+        }
+    }
+
+    void splitCurveHorizontally(Node &left, Node &right, qreal t, Node &newNode) {
+        QPointF p1, p2, p3, q1, q2;
+
+        deCasteljau(left.node, left.rightControl, right.leftControl, right.node, t,
+                    &p1, &p2, &p3, &q1, &q2);
+
+        left.rightControl = p1;
+        newNode.leftControl = p2;
+        newNode.node = p3;
+        newNode.rightControl = q1;
+        right.leftControl = q2;
+
+        newNode.topControl = newNode.node + lerp(left.topControl - left.node, right.topControl - right.node, t);
+        newNode.bottomControl = newNode.node + lerp(left.bottomControl - left.node, right.bottomControl - right.node, t);
+
+        lerpNodeData(left, right, t, newNode);
+    }
+
+    Node& node(int col, int row) {
+        return m_nodes[row * m_size.width() + col];
+    }
+
+    void splitCurveVertically(Node &top, Node &bottom, qreal t, Node &newNode) {
+        QPointF p1, p2, p3, q1, q2;
+
+        deCasteljau(top.node, top.bottomControl, bottom.topControl, bottom.node, t,
+                    &p1, &p2, &p3, &q1, &q2);
+
+        top.bottomControl = p1;
+        newNode.topControl = p2;
+        newNode.node = p3;
+        newNode.bottomControl = q1;
+        bottom.topControl = q2;
+
+        newNode.leftControl = newNode.node + lerp(top.leftControl - top.node, bottom.leftControl - bottom.node, t);
+        newNode.rightControl = newNode.node + lerp(top.rightControl - top.node, bottom.rightControl - bottom.node, t);
+
+        lerpNodeData(top, bottom, t, newNode);
+    }
+
+    void subdivideRow(qreal t) {
+        if (qFuzzyCompare(t, 0.0) || qFuzzyCompare(t, 1.0)) return;
+
+        KIS_SAFE_ASSERT_RECOVER_RETURN(t > 0.0 && t < 1.0);
+
+        const auto it = prev(upper_bound(m_rows.begin(), m_rows.end(), t));
+        const int topRow = distance(m_rows.begin(), it);
+        const int bottomRow = topRow + 1;
+
+
+        const qreal relT = (t - *it) / (*next(it) - *it);
+
+        std::vector<Node> newRow;
+        newRow.resize(m_size.width());
+        for (int col = 0; col < m_size.width(); col++) {
+            splitCurveVertically(node(col, topRow), node(col, bottomRow), relT, newRow[col]);
+        }
+
+        m_nodes.insert(m_nodes.begin() + bottomRow * m_size.width(),
+                       newRow.begin(), newRow.end());
+
+        m_size.rheight()++;
+        m_rows.insert(next(it), t);
+    }
+
+    void subdivideColumn(qreal t) {
+        if (qFuzzyCompare(t, 0.0) || qFuzzyCompare(t, 1.0)) return;
+
+        KIS_SAFE_ASSERT_RECOVER_RETURN(t > 0.0 && t < 1.0);
+
+        const auto it = prev(upper_bound(m_columns.begin(), m_columns.end(), t));
+        const int leftColumn = distance(m_columns.begin(), it);
+        const int rightColumn = leftColumn + 1;
+
+        const qreal relT = (t - *it) / (*next(it) - *it);
+
+        std::vector<Node> newColumn;
+        newColumn.resize(m_size.height());
+        for (int row = 0; row < m_size.height(); row++) {
+            splitCurveHorizontally(node(leftColumn, row), node(rightColumn, row), relT, newColumn[row]);
+        }
+
+        auto dstIt = m_nodes.begin() + rightColumn;
+        for (auto columnIt = newColumn.begin(); columnIt != newColumn.end(); ++columnIt) {
+            dstIt = m_nodes.insert(dstIt, *columnIt);
+            dstIt += m_size.width() + 1;
+        }
+
+        m_size.rwidth()++;
+        m_columns.insert(next(it), t);
+    }
+
+    std::vector<Node> m_nodes;
+    std::vector<qreal> m_rows;
+    std::vector<qreal> m_columns;
+
+    QSize m_size;
+};
+
+QDebug operator<<(QDebug dbg, const BezierMesh::Node &n) {
+    dbg.nospace() << "Node " << n.node << " "
+                  << "(lC: " << n.leftControl << " "
+                  << "tC: " << n.topControl << " "
+                  << "rC: " << n.rightControl << " "
+                  << "bC: " << n.bottomControl << ") ";
+    return dbg.nospace();
+}
+
+QDebug operator<<(QDebug dbg, const BezierMesh &mesh) {
+    dbg.nospace() << "Mesh: \n";
+
+    int i = 0;
+    for (auto it = mesh.m_nodes.begin(); it != mesh.m_nodes.end(); ++it, ++i) {
+        dbg.nospace() << "  " << *it << "\n";
+    }
+
+    return dbg.nospace();
+}
 
 #include "kis_grid_interpolation_tools.h"
 
@@ -578,6 +795,36 @@ void KisMeshTransformWorkerTest::testGradient()
         dstDev->convertToQImage(0, dstBoundsI).save("dd_mesh_result_dev.png");
     }
 #endif
+}
+
+void KisMeshTransformWorkerTest::testMesh()
+{
+
+    {
+        BezierMesh mesh(QRectF(0,0,100,100));
+
+        mesh.subdivideRow(0.5);
+
+        qDebug() << mesh;
+
+        mesh.subdivideColumn(0.5);
+
+        qDebug() << mesh;
+    }
+
+    {
+        BezierMesh mesh(QRectF(0,0,100,100), QSize(5,5));
+
+        qDebug() << mesh;
+
+        mesh.subdivideRow(0.125);
+
+        qDebug() << mesh;
+
+        mesh.subdivideColumn(0.125);
+
+        qDebug() << mesh;
+    }
 }
 
 

@@ -23,6 +23,8 @@
 #include <QDockWidget>
 #include <KoCanvasObserverBase.h>
 
+class KisMainWindow;
+
 class RecorderDockerDock : public QDockWidget, public KoCanvasObserverBase
 {
     Q_OBJECT
@@ -37,6 +39,8 @@ public:
     void unsetCanvas() override;
 
 private Q_SLOTS:
+    void onMainWindowIsBeingCreated(KisMainWindow *window);
+
     void onAutoRecordToggled(bool checked);
     void onCaptureIntervalChanged(int interval);
     void onQualityChanged(int quality);

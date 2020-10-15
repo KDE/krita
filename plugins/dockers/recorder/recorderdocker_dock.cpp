@@ -23,16 +23,25 @@
 #include "recorder_export.h"
 
 #include <klocalizedstring.h>
+#include <kis_action_registry.h>
 #include <kis_canvas2.h>
 #include <kis_icon_utils.h>
 #include <kis_statusbar.h>
 #include <KisDocument.h>
 #include <KisViewManager.h>
 #include <KoDocumentInfo.h>
+#include <kactioncollection.h>
+#include <KisPart.h>
 
 #include <QFileInfo>
 #include <QPointer>
 #include <QFileDialog>
+
+namespace
+{
+constexpr const char *const keyActionRecordToggle = "recorder_record_toggle";
+constexpr const char *const keyActionExport = "recorder_export";
+}
 
 
 class RecorderDockerDock::Private
@@ -42,6 +51,9 @@ public:
     Ui::RecorderDocker *const ui;
     QPointer<KisCanvas2> canvas;
     RecorderWriter writer;
+
+    QAction *recordToggleAction = nullptr;
+    QAction *exportAction = nullptr;
 
     QString snapshotDirectory;
     QString prefix;
@@ -172,6 +184,18 @@ RecorderDockerDock::RecorderDockerDock()
     d->ui->comboResolution->setCurrentIndex(d->resolution);
     d->ui->checkBoxAutoRecord->setChecked(d->recordAutomatically);
 
+    KisActionRegistry *actionRegistry = KisActionRegistry::instance();
+    d->recordToggleAction = actionRegistry->makeQAction(keyActionRecordToggle, this);
+    d->exportAction = actionRegistry->makeQAction(keyActionExport, this);
+
+    connect(d->recordToggleAction, SIGNAL(toggled(bool)), d->ui->buttonRecordToggle, SLOT(setChecked(bool)));
+    connect(d->exportAction, SIGNAL(triggered()), d->ui->buttonExport, SIGNAL(clicked()));
+
+    // Need to register toolbar actions before attaching canvas else it wont appear after restart.
+    // Is there any better way to do this?
+    connect(KisPart::instance(), SIGNAL(sigMainWindowIsBeingCreated(KisMainWindow *)),
+            this, SLOT(onMainWindowIsBeingCreated(KisMainWindow *)));
+
     connect(d->ui->buttonBrowse, SIGNAL(clicked()), this, SLOT(onSelectRecordFolderButtonClicked()));
     connect(d->ui->spinCaptureInterval, SIGNAL(valueChanged(int)), this, SLOT(onCaptureIntervalChanged(int)));
     connect(d->ui->spinQuality, SIGNAL(valueChanged(int)), this, SLOT(onQualityChanged(int)));
@@ -223,6 +247,7 @@ void RecorderDockerDock::setCanvas(KoCanvasBase* canvas)
 void RecorderDockerDock::unsetCanvas()
 {
     d->updateRecordStatus(false);
+    d->recordToggleAction->setChecked(false);
     setEnabled(false);
     d->writer.stop();
     d->writer.setCanvas(nullptr);
@@ -230,8 +255,17 @@ void RecorderDockerDock::unsetCanvas()
     d->enabledIds.clear();
 }
 
+void RecorderDockerDock::onMainWindowIsBeingCreated(KisMainWindow *window)
+{
+    KActionCollection *actionCollection = window->viewManager()->actionCollection();
+    actionCollection->addAction(keyActionRecordToggle, d->recordToggleAction);
+    actionCollection->addAction(keyActionExport, d->exportAction);
+}
+
 void RecorderDockerDock::onRecordButtonToggled(bool checked)
 {
+    d->recordToggleAction->setChecked(checked);
+
     if (!d->canvas)
         return;
 

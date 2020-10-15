@@ -24,6 +24,12 @@ ki18n_wrap_ui(KRITA_RECORDERDOCKER_SOURCES
     recorder_profile_settings.ui
 )
 
+install(FILES
+    recorder.action
+
+    DESTINATION ${DATA_INSTALL_DIR}/krita/actions
+)
+
 add_library(kritarecorderdocker MODULE ${KRITA_RECORDERDOCKER_SOURCES})
 target_link_libraries(kritarecorderdocker kritaui ${AVCODEC_LIBRARIES} ${AVFORMAT_LIBRARIES} ${AVUTIL_LIBRARIES} ${SWSCALE_LIBRARIES} Threads::Threads)
 

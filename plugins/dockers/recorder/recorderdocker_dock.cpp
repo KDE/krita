@@ -130,12 +130,15 @@ public:
 
     void updateRecordStatus(bool isRecording)
     {
+        recordToggleAction->setChecked(isRecording);
+        recordToggleAction->setEnabled(isColorSpaceSupported);
+
         QSignalBlocker blocker(ui->buttonRecordToggle);
         ui->buttonRecordToggle->setChecked(isRecording);
         ui->buttonRecordToggle->setIcon(KisIconUtils::loadIcon(isRecording ? "media-playback-stop" : "media-record"));
         ui->buttonRecordToggle->setText(isRecording ? i18nc("Stop recording the canvas", "Stop")
                                         : i18nc("Start recording the canvas", "Record"));
-        ui->buttonRecordToggle->setEnabled(true);
+        ui->buttonRecordToggle->setEnabled(isColorSpaceSupported);
 
         ui->widgetSettings->setEnabled(!isRecording);
 
@@ -240,8 +243,8 @@ void RecorderDockerDock::setCanvas(KoCanvasBase* canvas)
     d->updateWriterSettings();
 
     bool enabled = d->enabledIds.value(document->uniqueID(), false);
-    d->writer.setEnabled(enabled);
-    d->updateRecordStatus(enabled);
+    d->writer.setEnabled(enabled && d->isColorSpaceSupported);
+    d->updateRecordStatus(enabled && d->isColorSpaceSupported);
 }
 
 void RecorderDockerDock::unsetCanvas()

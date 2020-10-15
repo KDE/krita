@@ -1398,13 +1398,15 @@ QString KisDocument::generateAutoSaveFileName(const QString & path) const
         // Never saved?
 #ifdef Q_OS_WIN
         // On Windows, use the temp location (https://bugs.kde.org/show_bug.cgi?id=314921)
-        retval = QString("%1%2%7%3-%4-%5-autosave%6").arg(QDir::tempPath()).arg('/').arg("krita").arg(qApp->applicationPid()).arg(objectName()).arg(extension).arg(prefix);
+        retval = QString("%1%2%3%4-%5-%6-autosave%7").arg(QDir::tempPath()).arg('/').arg(prefix).arg("krita").arg(qApp->applicationPid()).arg(objectName()).arg(extension);
 #else
         // On Linux, use a temp file in $HOME then. Mark it with the pid so two instances don't overwrite each other's autosave file
-        retval = QString("%1%2%7%3-%4-%5-autosave%6").arg(QDir::homePath()).arg('/').arg("krita").arg(qApp->applicationPid()).arg(objectName()).arg(extension).arg(prefix);
+        retval = QString("%1%2%3%4-%5-%6-autosave%7").arg(QDir::homePath()).arg('/').arg(prefix).arg("krita").arg(qApp->applicationPid()).arg(objectName()).arg(extension);
 #endif
     } else {
-        retval = QString("%1%2%5%3-autosave%4").arg(dir).arg('/').arg(filename).arg(extension).arg(prefix);
+        // Beware: don't reorder arguments
+        //   otherwise in case of filename = '1-file.kra' it will become '.-file.kra-autosave.kra' instead of '.1-file.kra-autosave.kra'
+        retval = QString("%1%2%3%4-autosave%5").arg(dir).arg('/').arg(prefix).arg(filename).arg(extension);
     }
 
     //qDebug() << "generateAutoSaveFileName() for path" << path << ":" << retval;

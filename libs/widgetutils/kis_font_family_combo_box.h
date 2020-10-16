@@ -27,6 +27,8 @@
 #include <QFontDatabase>
 #include <QStyledItemDelegate>
 
+#include "kritawidgetutils_export.h"
+
 /**
  * @brief The KisFontComboBoxes class
  * This is a little widget with two comboboxes.
@@ -34,7 +36,7 @@
  * This allows us to limit the amount of fonts visible in the fonts drop down,
  * as that can be a quite intense number when you have several 'style complete' fonts.
  */
-class KisFontComboBoxes : public QWidget
+class KRITAWIDGETUTILS_EXPORT KisFontComboBoxes : public QWidget
 {
     Q_OBJECT
 public:
@@ -75,7 +77,7 @@ private:
     QComboBox *m_styles;
 };
 
-class PinnedFontsSeparator : public QStyledItemDelegate {
+class KRITAWIDGETUTILS_EXPORT PinnedFontsSeparator : public QStyledItemDelegate {
 public:
     PinnedFontsSeparator(QAbstractItemDelegate *_default, QWidget *parent = nullptr);
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
@@ -96,7 +98,7 @@ private:
  * out 'style' fonts, like those used for Bold and Italic,
  * and it allows you to limit the amount of fonts to certain writing systems
  */
-class KisFontFamilyComboBox : public QComboBox
+class KRITAWIDGETUTILS_EXPORT KisFontFamilyComboBox : public QComboBox
 {
     Q_OBJECT
 public:
@@ -108,8 +110,10 @@ public:
     void setInitialized();
 
 private:
-    QStringList m_pinnedFonts, m_blacklistedFonts;
-    bool m_initilized, m_initializeFromConfig;
+    QStringList m_pinnedFonts;
+    QStringList m_blacklistedFonts;
+    bool m_initilized {false};
+    bool m_initializeFromConfig;
     int m_separatorIndex;
     PinnedFontsSeparator *m_fontSeparator;
 };

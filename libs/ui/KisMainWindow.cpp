@@ -2476,6 +2476,17 @@ void KisMainWindow::configChanged()
     }
 
     d->mdiArea->update();
+
+    if (KisConfig(false).readEntry<bool>("use_custom_system_font", false)) {
+        QString fontName = KisConfig(false).readEntry<QString>("custom_system_font", "");
+        if (!fontName.isEmpty()) {
+            QFont f(fontName, qApp->font().pointSize());
+            qApp->setFont(f);
+        }
+    }
+    else {
+        qApp->setFont(QFontDatabase::systemFont(QFontDatabase::GeneralFont));
+    }
 }
 
 KisView* KisMainWindow::newView(QObject *document, QMdiSubWindow *subWindow)

@@ -28,10 +28,14 @@
 #include <klocalizedstring.h>
 #include <kis_debug.h>
 #include <QPainter>
-#include <kis_config.h>
+#include <kconfiggroup.h>
+#include <ksharedconfig.h>
 
-PinnedFontsSeparator::PinnedFontsSeparator(QAbstractItemDelegate *_default, QWidget *parent) :
-    QStyledItemDelegate(parent), m_separatorIndex(0), m_separatorAdded(false), m_defaultDelegate(_default)
+PinnedFontsSeparator::PinnedFontsSeparator(QAbstractItemDelegate *_default, QWidget *parent)
+    : QStyledItemDelegate(parent)
+    , m_separatorIndex(0)
+    , m_separatorAdded(false)
+    , m_defaultDelegate(_default)
 {
 }
 
@@ -63,7 +67,9 @@ void PinnedFontsSeparator::setSeparatorAdded()
 }
 
 KisFontFamilyComboBox::KisFontFamilyComboBox(QWidget *parent)
-    : QComboBox(parent), m_initilized(false), m_initializeFromConfig(false)
+    : QComboBox(parent)
+    , m_initilized(false)
+    , m_initializeFromConfig(false)
 {
     setEditable(true);
     completer()->setCompletionMode(QCompleter::InlineCompletion);
@@ -84,7 +90,10 @@ KisFontFamilyComboBox::KisFontFamilyComboBox(QWidget *parent)
     temp->setEnabled(true);
     temp->hide();
     m_separatorIndex = 0;
-    m_pinnedFonts = KisConfig(true).readList("PinnedFonts", QStringList{});
+
+    KConfigGroup cfg(KSharedConfig::openConfig(), "");
+    m_pinnedFonts = cfg.readEntry<QStringList>("PinnedFonts", QStringList());
+
 }
 
 void KisFontFamilyComboBox::refillComboBox(QVector<QFontDatabase::WritingSystem> writingSystems)
@@ -167,7 +176,9 @@ void KisFontFamilyComboBox::setTopFont(const QString &family)
     this->insertItem(0, family);
     m_separatorIndex++;
     m_fontSeparator->setSeparatorIndex(m_separatorIndex);
-    KisConfig(false).writeList("PinnedFonts", m_pinnedFonts);
+    KConfigGroup cfg(KSharedConfig::openConfig(), "");
+
+    cfg.writeEntry("PinnedFonts", m_pinnedFonts);
 }
 
 void KisFontFamilyComboBox::setInitialized()
@@ -202,6 +213,7 @@ KisFontComboBoxes::KisFontComboBoxes(QWidget *parent)
     layout->addWidget(m_family);
 
     m_styles = new QComboBox();
+    m_styles->setObjectName("stylesComboBox");
     layout->addWidget(m_styles);
     fontFamilyChanged();
     m_family->setToolTip(i18n("Font Family"));

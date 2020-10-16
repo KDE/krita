@@ -24,15 +24,16 @@
 
 namespace
 {
-constexpr const char *keyVideoDirectory = "recorder_export/videodirectory";
-constexpr const char *keyFfmpegPath = "recorder_export/ffmpegpath";
-constexpr const char *keyInputFps = "recorder_export/inputfps";
-constexpr const char *keyFps = "recorder_export/fps";
-constexpr const char *keyResize = "recorder_export/resize";
-constexpr const char *keySize = "recorder_export/size";
-constexpr const char *keyLockRatio = "recorder_export/lockratio";
-constexpr const char *keyProfileIndex = "recorder_export/profileIndex";
-constexpr const char *keyProfiles = "recorder_export/profiles";
+const QString keyAnimationExport = "ANIMATION_EXPORT";
+const QString keyFfmpegPath = "ffmpeg_path";
+const QString keyVideoDirectory = "recorder_export/videodirectory";
+const QString keyInputFps = "recorder_export/inputfps";
+const QString keyFps = "recorder_export/fps";
+const QString keyResize = "recorder_export/resize";
+const QString keySize = "recorder_export/size";
+const QString keyLockRatio = "recorder_export/lockratio";
+const QString keyProfileIndex = "recorder_export/profileIndex";
+const QString keyProfiles = "recorder_export/profiles";
 
 const QList<RecorderProfile> defaultProfiles = {
     { "MP4 x264",   "mp4",  "-vf \"scale=$WIDTH:$HEIGHT\" -c:v libx264 -r $FPS -pix_fmt yuv420p" },
@@ -169,12 +170,14 @@ QList<RecorderProfile> RecorderExportConfig::defaultProfiles() const
 
 QString RecorderExportConfig::ffmpegPath() const
 {
-    return config->readEntry(keyFfmpegPath, QString("ffmpeg"));
+    return config->exportConfiguration(keyAnimationExport)->getPropertyLazy(keyFfmpegPath, "ffmpeg");
 }
 
 void RecorderExportConfig::setFfmpegPath(const QString &value)
 {
-    config->writeEntry(keyFfmpegPath, value);
+    KisPropertiesConfigurationSP exportConfig = config->exportConfiguration(keyAnimationExport);
+    exportConfig->setProperty(keyFfmpegPath, value);
+    config->setExportConfiguration(keyAnimationExport, exportConfig);
 }
 
 

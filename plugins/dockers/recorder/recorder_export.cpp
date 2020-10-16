@@ -79,8 +79,11 @@ public:
     {
         QProcess process;
         process.start(ffmpegPath, {"-version"});
-        bool success = process.waitForFinished();
+        bool success = process.waitForStarted(1000) && process.waitForFinished(1000);
+        if (!success)
+            process.kill();
         const QByteArray &out = process.readAllStandardOutput();
+        success &= out.contains("ffmpeg");
 
         const QIcon &icon = KisIconUtils::loadIcon(success ? "dialog-ok" : "window-close");
         const QList<QAction *> &actions = ui->editFfmpegPath->actions();
@@ -92,6 +95,7 @@ public:
             action = ui->editFfmpegPath->addAction(icon, QLineEdit::TrailingPosition);
         }
         action->setToolTip(out);
+        ui->editFfmpegPath->setText(ffmpegPath);
     }
 
     void fillComboProfiles()

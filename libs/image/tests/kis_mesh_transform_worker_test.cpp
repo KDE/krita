@@ -971,5 +971,228 @@ void KisMeshTransformWorkerTest::testMesh()
 
 }
 
+#include <config-gsl.h>
+
+#ifdef HAVE_GSL
+#include <gsl/gsl_multimin.h>
+#endif
+
+namespace {
+
+struct Params2D {
+    QPointF p0, p1, p2, p3;
+    QPointF q0, q1, q2, q3;
+    QPointF r0, r1, r2, r3;
+    QPointF s0, s1, s2, s3;
+
+    QPointF dstPoint;
+};
+
+template<typename T>
+inline T pow3(const T& x) {
+    return x * x * x;
+}
+
+QPointF meshForwardMapping(qreal u, qreal v, const Params2D &p) {
+    return p.r0 + pow3(u)*v*(p.p0 - 3*p.p1 + 3*p.p2 - p.p3 - p.q0 + 3*p.q1 - 3*p.q2 + p.q3) + pow3(u)*(-p.p0 + 3*p.p1 - 3*p.p2 + p.p3) + pow2(u)*v*(-3*p.p0 + 6*p.p1 - 3*p.p2 + 3*p.q0 - 6*p.q1 + 3*p.q2) + pow2(u)*(3*p.p0 - 6*p.p1 + 3*p.p2) + u*pow3(v)*(p.r0 - 3*p.r1 + 3*p.r2 - p.r3 - p.s0 + 3*p.s1 - 3*p.s2 + p.s3) + u*pow2(v)*(-3*p.r0 + 6*p.r1 - 3*p.r2 + 3*p.s0 - 6*p.s1+ 3*p.s2) + u*v*(2*p.p0 - 3*p.p1 + p.p3 - 2*p.q0 + 3*p.q1 - p.q3 + 3*p.r0 - 3*p.r1 - 3*p.s0 + 3*p.s1) + u*(-2*p.p0 + 3*p.p1 - p.p3 - p.r0 + p.s0) + pow3(v)*(-p.r0 + 3*p.r1 - 3*p.r2 + p.r3) + pow2(v)*(3*p.r0 - 6*p.r1 + 3*p.r2) + v*(-3*p.r0 + 3*p.r1);
+}
+
+QPointF meshForwardMappingDiffU(qreal u, qreal v, const Params2D &p) {
+    return -2*p.p0 + 3*p.p1 - p.p3 - p.r0 + p.s0 + pow2(u)*v*(3*p.p0 - 9*p.p1 + 9*p.p2 - 3*p.p3 - 3*p.q0 + 9*p.q1 - 9*p.q2 + 3*p.q3) + pow2(u)*(-3*p.p0 + 9*p.p1 - 9*p.p2 + 3*p.p3) + u*v*(-6*p.p0 + 12*p.p1 - 6*p.p2 + 6*p.q0 - 12*p.q1 + 6*p.q2) + u*(6*p.p0 - 12*p.p1 + 6*p.p2) + pow3(v)*(p.r0 - 3*p.r1 + 3*p.r2 - p.r3 - p.s0 + 3*p.s1 - 3*p.s2 + p.s3) + pow2(v)*(-3*p.r0 + 6*p.r1 - 3*p.r2 + 3*p.s0 - 6*p.s1 + 3*p.s2) + v*(2*p.p0 - 3*p.p1 + p.p3 - 2*p.q0 + 3*p.q1 - p.q3 + 3*p.r0 - 3*p.r1 - 3*p.s0 + 3*p.s1);
+}
+
+QPointF meshForwardMappingDiffV(qreal u, qreal v, const Params2D &p) {
+    return -3*p.r0 + 3*p.r1 + pow3(u)*(p.p0 - 3*p.p1 + 3*p.p2 - p.p3 - p.q0 + 3*p.q1 - 3*p.q2 + p.q3) + pow2(u)*(-3*p.p0 + 6*p.p1 - 3*p.p2 + 3*p.q0 - 6*p.q1 + 3*p.q2) + u*pow2(v)*(3*p.r0 - 9*p.r1 + 9*p.r2 - 3*p.r3 - 3*p.s0 + 9*p.s1 - 9*p.s2 + 3*p.s3) + u*v*(-6*p.r0 + 12*p.r1 - 6*p.r2 + 6*p.s0 - 12*p.s1 + 6*p.s2) + u*(2*p.p0 - 3*p.p1 + p.p3 - 2*p.q0 + 3*p.q1 - p.q3 + 3*p.r0 - 3*p.r1 - 3*p.s0 + 3*p.s1) + pow2(v)*(-3*p.r0 + 9*p.r1 - 9*p.r2 + 3*p.r3) + v*(6*p.r0 - 12*p.r1 + 6*p.r2);
+}
+
+double my_f(const gsl_vector * x, void *paramsPtr)
+{
+    const Params2D *params = static_cast<const Params2D*>(paramsPtr);
+    const QPointF pos(gsl_vector_get(x, 0), gsl_vector_get(x, 1));
+
+    const QPointF S = meshForwardMapping(pos.x(), pos.y(), *params);
+
+    return kisSquareDistance(S, params->dstPoint);
+}
+
+void my_fdf (const gsl_vector *x, void *paramsPtr, double *f, gsl_vector *df)
+{
+    const Params2D *params = static_cast<const Params2D*>(paramsPtr);
+    const QPointF pos(gsl_vector_get(x, 0), gsl_vector_get(x, 1));
+
+    const QPointF S = meshForwardMapping(pos.x(), pos.y(), *params);
+    const QPointF dU = meshForwardMappingDiffU(pos.x(), pos.y(), *params);
+    const QPointF dV = meshForwardMappingDiffV(pos.x(), pos.y(), *params);
+
+    *f = kisSquareDistance(S, params->dstPoint);
+
+    gsl_vector_set(df, 0,
+                   2 * (S.x() - params->dstPoint.x()) * dU.x() +
+                   2 * (S.y() - params->dstPoint.y()) * dU.y());
+    gsl_vector_set(df, 1,
+                   2 * (S.x() - params->dstPoint.x()) * dV.x() +
+                   2 * (S.y() - params->dstPoint.y()) * dV.y());
+}
+
+void my_df (const gsl_vector *x, void *paramsPtr,
+            gsl_vector *df)
+{
+    const Params2D *params = static_cast<const Params2D*>(paramsPtr);
+    const QPointF pos(gsl_vector_get(x, 0), gsl_vector_get(x, 1));
+
+    const QPointF S = meshForwardMapping(pos.x(), pos.y(), *params);
+    const QPointF dU = meshForwardMappingDiffU(pos.x(), pos.y(), *params);
+    const QPointF dV = meshForwardMappingDiffV(pos.x(), pos.y(), *params);
+
+    gsl_vector_set(df, 0,
+                   2 * (S.x() - params->dstPoint.x()) * dU.x() +
+                   2 * (S.y() - params->dstPoint.y()) * dU.y());
+    gsl_vector_set(df, 1,
+                   2 * (S.x() - params->dstPoint.x()) * dV.x() +
+                   2 * (S.y() - params->dstPoint.y()) * dV.y());
+}
+
+QPointF calculateLocalPos(const BezierPatch &patch, const QPointF &dstPoint)
+{
+    const gsl_multimin_fdfminimizer_type *T =
+        gsl_multimin_fdfminimizer_vector_bfgs2;
+    gsl_multimin_fdfminimizer *s = 0;
+    gsl_vector *x;
+    gsl_multimin_function_fdf minex_func;
+
+    size_t iter = 0;
+    int status;
+
+    /* Starting point */
+    x = gsl_vector_alloc (2);
+    gsl_vector_set (x, 0, 0.5);
+    gsl_vector_set (x, 1, 0.5);
+
+    Params2D p;
+
+    p.p0 = patch.points[BezierPatch::TL];
+    p.p1 = patch.points[BezierPatch::TL_HC];
+    p.p2 = patch.points[BezierPatch::TR_HC];
+    p.p3 = patch.points[BezierPatch::TR];
+
+    p.q0 = patch.points[BezierPatch::BL];
+    p.q1 = patch.points[BezierPatch::BL_HC];
+    p.q2 = patch.points[BezierPatch::BR_HC];
+    p.q3 = patch.points[BezierPatch::BR];
+
+    p.r0 = patch.points[BezierPatch::TL];
+    p.r1 = patch.points[BezierPatch::TL_VC];
+    p.r2 = patch.points[BezierPatch::BL_VC];
+    p.r3 = patch.points[BezierPatch::BL];
+
+    p.s0 = patch.points[BezierPatch::TR];
+    p.s1 = patch.points[BezierPatch::TR_VC];
+    p.s2 = patch.points[BezierPatch::BR_VC];
+    p.s3 = patch.points[BezierPatch::BR];
+
+    p.dstPoint = dstPoint;
+
+    /* Initialize method and iterate */
+    minex_func.n = 2;
+    minex_func.f = my_f;
+    minex_func.params = (void*)&p;
+    minex_func.df = my_df;
+    minex_func.fdf = my_fdf;
+
+    s = gsl_multimin_fdfminimizer_alloc (T, 2);
+    gsl_multimin_fdfminimizer_set (s, &minex_func, x, 0.01, 0.1);
+
+    QPointF result;
+
+
+    result.rx() = gsl_vector_get (s->x, 0);
+    result.rx() = gsl_vector_get (s->x, 1);
+
+    do
+    {
+        iter++;
+        status = gsl_multimin_fdfminimizer_iterate(s);
+
+        if (status)
+            break;
+
+        status = gsl_multimin_test_gradient (s->gradient, 1e-4);
+
+        result.rx() = gsl_vector_get (s->x, 0);
+        result.ry() = gsl_vector_get (s->x, 1);
+
+        qDebug() << result << gsl_vector_get (s->gradient, 0) << gsl_vector_get (s->gradient, 1) << s->f;
+
+        if (status == GSL_SUCCESS)
+        {
+            result.rx() = gsl_vector_get (s->x, 0);
+            result.ry() = gsl_vector_get (s->x, 1);
+            qDebug() << "******* Converged to minimum" << ppVar(result);
+
+        }
+    }
+    while (status == GSL_CONTINUE && iter < 10000);
+
+    ENTER_FUNCTION()<< ppVar(iter) << ppVar(dstPoint) << ppVar(result);
+    ENTER_FUNCTION() << ppVar(meshForwardMapping(result.x(), result.y(), p));
+
+    gsl_vector_free(x);
+    gsl_multimin_fdfminimizer_free (s);
+
+    return result;
+}
+}
+
+void KisMeshTransformWorkerTest::testGlobalToLocal()
+{
+    const QRect initialRect(0,0,1000,1000);
+
+    BezierPatch patch;
+    patch.originalRect = initialRect;
+
+#if 0
+
+    patch.points[0] = initialRect.topLeft();
+    patch.points[1] = initialRect.topLeft();
+    patch.points[2] = initialRect.topLeft();
+    patch.points[3] = initialRect.topRight();
+    patch.points[4] = initialRect.topRight();
+    patch.points[5] = initialRect.topRight();
+    patch.points[6] = initialRect.bottomLeft();
+    patch.points[7] = initialRect.bottomLeft();
+    patch.points[8] = initialRect.bottomLeft();
+    patch.points[9] = initialRect.bottomRight();
+    patch.points[10] = initialRect.bottomRight();
+    patch.points[11] = initialRect.bottomRight();
+
+#else
+    patch.points[0] = initialRect.topLeft();
+    patch.points[1] = initialRect.topLeft() + QPointF(300, 30);
+    patch.points[2] = initialRect.topLeft() + QPointF(20, 300);
+    patch.points[3] = initialRect.topRight();
+    patch.points[4] = initialRect.topRight() + QPointF(-300, 30);
+    patch.points[5] = initialRect.topRight() + QPointF(-20, 300);
+    patch.points[6] = initialRect.bottomLeft();
+    patch.points[7] = initialRect.bottomLeft() + QPointF(300, 30);
+    patch.points[8] = initialRect.bottomLeft() + QPointF(20, -300);
+    patch.points[9] = initialRect.bottomRight();
+    patch.points[10] = initialRect.bottomRight() + QPointF(-300, 30);
+    patch.points[11] = initialRect.bottomRight() + QPointF(-20, -300);
+#endif
+
+    QPointF local;
+
+    local = calculateLocalPos(patch, QPointF(500,500));
+    qDebug() << ppVar(local);
+
+    local = calculateLocalPos(patch, QPointF(0,500));
+    qDebug() << ppVar(local);
+
+    local = calculateLocalPos(patch, QPointF(0,1000));
+    qDebug() << ppVar(local);
+
+    local = calculateLocalPos(patch, QPointF(1000,1000));
+    qDebug() << ppVar(local);
+}
 
 QTEST_MAIN(KisMeshTransformWorkerTest)

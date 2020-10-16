@@ -24,11 +24,11 @@
 
 namespace
 {
-constexpr const char *keySnapshotDirectory = "recorder/snapshotdirectory";
-constexpr const char *keyCaptureInterval = "recorder/captureinterval";
-constexpr const char *keyQuality = "recorder/quality";
-constexpr const char *keyResolution = "recorder/resolution";
-constexpr const char *keyRecordAutomatically = "recorder/recordautomatically";
+const QString keySnapshotDirectory = "recorder/snapshotdirectory";
+const QString keyCaptureInterval = "recorder/captureinterval";
+const QString keyQuality = "recorder/quality";
+const QString keyResolution = "recorder/resolution";
+const QString keyRecordAutomatically = "recorder/recordautomatically";
 const QString defaultSnapshotDirectory = QDir::homePath() % QDir::separator() % "KritaRecorder";
 }
 

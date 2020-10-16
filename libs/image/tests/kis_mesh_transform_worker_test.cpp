@@ -27,6 +27,8 @@
 #include "testutil.h"
 #include <kis_algebra_2d.h>
 
+#include <boost/iterator/iterator_facade.hpp>
+
 #include <tuple>
 
 template <typename Point>
@@ -128,13 +130,40 @@ void deCasteljau(const QPointF &q0,
     *p4 = q[2];
 }
 
-//QPair<std::array<QPointF, 4>, std::array<QPointF, 4>> splitAt(const std::array<QPointF, 4>& points, qreal t)
-//{
-//    QPointF newCP2, newCP1, splitP, splitCP1, splitCP2;
-//    deCasteljau(points, t, &newCP2, &splitCP1, &splitP, &splitCP2, &newCP1);
-//    return {{points[0], newCP2, splitCP1, splitP},
-//            {splitP, splitCP2, newCP1, points[3]}};
-//}
+struct Node {
+    Node() {}
+    Node(const QPointF &_node)
+        : leftControl(_node),
+          topControl(_node),
+          node(_node),
+          rightControl(_node),
+          bottomControl(_node)
+    {
+    }
+
+    QPointF leftControl;
+    QPointF topControl;
+    QPointF node;
+    QPointF rightControl;
+    QPointF bottomControl;
+};
+
+void lerpNodeData(const Node &left, const Node &right, qreal t, Node &dst)
+{
+    Q_UNUSED(left);
+    Q_UNUSED(right);
+    Q_UNUSED(t);
+    Q_UNUSED(dst);
+}
+
+QDebug operator<<(QDebug dbg, const Node &n) {
+    dbg.nospace() << "Node " << n.node << " "
+                  << "(lC: " << n.leftControl << " "
+                  << "tC: " << n.topControl << " "
+                  << "rC: " << n.rightControl << " "
+                  << "bC: " << n.bottomControl << ") ";
+    return dbg.nospace();
+}
 
 
 struct BezierPatch
@@ -154,7 +183,6 @@ struct BezierPatch
         BR_VC
     };
 
-
     QRectF originalRect;
     std::array<QPointF, 12> points;
 
@@ -172,7 +200,7 @@ struct BezierPatch
         return originalRect;
     }
 
-    bool isLinearSegment(const QPointF &p0, const QPointF &d0,
+    static bool isLinearSegment(const QPointF &p0, const QPointF &d0,
                          const QPointF &p1, const QPointF &d1)
     {
         const QPointF diff = p1 - p0;
@@ -193,10 +221,10 @@ struct BezierPatch
         return true;
     }
 
-    QVector<qreal> linearizeCurve(const QPointF p0,
-                                  const QPointF p1,
-                                  const QPointF p2,
-                                  const QPointF p3)
+    static QVector<qreal> linearizeCurve(const QPointF p0,
+                                         const QPointF p1,
+                                         const QPointF p2,
+                                         const QPointF p3)
     {
         const qreal minStepSize = 2.0 / kisDistance(p0, p3);
 
@@ -240,7 +268,7 @@ struct BezierPatch
         return steps;
     }
 
-    QVector<qreal> mergeSteps(const QVector<qreal> &a, const QVector<qreal> &b) {
+    static QVector<qreal> mergeSteps(const QVector<qreal> &a, const QVector<qreal> &b) {
         QVector<qreal> result;
 
         std::merge(a.constBegin(), a.constEnd(),
@@ -256,7 +284,7 @@ struct BezierPatch
 
     void sampleIrregularGrid(QSize &gridSize,
                            QVector<QPointF> &origPoints,
-                           QVector<QPointF> &transfPoints) {
+                           QVector<QPointF> &transfPoints) const {
 
         const QVector<qreal> topSteps = linearizeCurve(points[TL], points[TL_HC], points[TR_HC], points[TR]);
         const QVector<qreal> bottomSteps = linearizeCurve(points[BL], points[BL_HC], points[BR_HC], points[BR]);
@@ -307,7 +335,7 @@ struct BezierPatch
     void sampleRegularGrid(QSize &gridSize,
                            QVector<QPointF> &origPoints,
                            QVector<QPointF> &transfPoints,
-                           const QPointF &dstStep) {
+                           const QPointF &dstStep) const {
 
         const QRectF bounds = dstBoundingRect();
         gridSize.rwidth() = qCeil(bounds.width() / dstStep.x());
@@ -347,40 +375,25 @@ struct BezierPatch
     }
 };
 
+QDebug operator<<(QDebug dbg, const BezierPatch &p) {
+    dbg.nospace() << "Patch " << p.srcBoundingRect() << " -> " << p.dstBoundingRect() << "\n";
+    dbg.nospace() << "  ( " << p.points[BezierPatch::TL] << " "<< p.points[BezierPatch::TR] << " " << p.points[BezierPatch::BL] << " " << p.points[BezierPatch::BR] << ") ";
+    return dbg.nospace();
+}
+
+namespace KisAlgebra2D
+{
+inline QRectF relativeToAbsolute(const QRectF &rel, const QRectF &rc) {
+    return QRectF(relativeToAbsolute(rel.topLeft(), rc), relativeToAbsolute(rel.bottomRight(), rc));
+}
+}
+
 struct BezierMesh
 {
-    struct Node {
-        Node() {}
-        Node(const QPointF &_node)
-            : leftControl(_node),
-              topControl(_node),
-              node(_node),
-              rightControl(_node),
-              bottomControl(_node)
-        {
-        }
-
-        QPointF leftControl;
-        QPointF topControl;
-        QPointF node;
-        QPointF rightControl;
-        QPointF bottomControl;
-    };
-
-    friend QDebug operator<<(QDebug dbg, const BezierMesh::Node &n);
-
-    void lerpNodeData(const Node &left, const Node &right, qreal t, Node &dst)
-    {
-        Q_UNUSED(left);
-        Q_UNUSED(right);
-        Q_UNUSED(t);
-        Q_UNUSED(dst);
-    }
-
     BezierMesh(const QRectF &mapRect, const QSize &size = QSize(2,2))
+        : m_size(size),
+          m_originalRect(mapRect)
     {
-        m_size = size;
-
         for (int row = 0; row < m_size.height(); row++) {
             const qreal yPos = qreal(row) / (size.height() - 1) * mapRect.height() + mapRect.y();
 
@@ -421,6 +434,11 @@ struct BezierMesh
     Node& node(int col, int row) {
         return m_nodes[row * m_size.width() + col];
     }
+
+    const Node& node(int col, int row) const {
+        return m_nodes[row * m_size.width() + col];
+    }
+
 
     void splitCurveVertically(Node &top, Node &bottom, qreal t, Node &newNode) {
         QPointF p1, p2, p3, q1, q2;
@@ -492,21 +510,128 @@ struct BezierMesh
         m_columns.insert(next(it), t);
     }
 
+    BezierPatch makePatch(int col, int row) const
+    {
+        const Node &tl = node(col, row);
+        const Node &tr = node(col + 1, row);
+        const Node &bl = node(col, row + 1);
+        const Node &br = node(col + 1, row + 1);
+
+        BezierPatch patch;
+
+        patch.points[BezierPatch::TL] = tl.node;
+        patch.points[BezierPatch::TL_HC] = tl.rightControl;
+        patch.points[BezierPatch::TL_VC] = tl.bottomControl;
+
+        patch.points[BezierPatch::TR] = tr.node;
+        patch.points[BezierPatch::TR_HC] = tr.leftControl;
+        patch.points[BezierPatch::TR_VC] = tr.bottomControl;
+
+        patch.points[BezierPatch::BL] = bl.node;
+        patch.points[BezierPatch::BL_HC] = bl.rightControl;
+        patch.points[BezierPatch::BL_VC] = bl.topControl;
+
+        patch.points[BezierPatch::BR] = br.node;
+        patch.points[BezierPatch::BR_HC] = br.leftControl;
+        patch.points[BezierPatch::BR_VC] = br.topControl;
+
+        const QRectF relRect(m_columns[col],
+                             m_rows[row],
+                             m_columns[col + 1] - m_columns[col],
+                             m_rows[row + 1] - m_rows[row]);
+
+        patch.originalRect = KisAlgebra2D::relativeToAbsolute(relRect, m_originalRect);
+
+        return patch;
+    }
+
+    class iterator :
+        public boost::iterator_facade <iterator,
+                                       BezierPatch,
+                                       boost::random_access_traversal_tag,
+                                       BezierPatch>
+    {
+    public:
+        iterator()
+            : m_mesh(0),
+              m_col(0),
+              m_row(0) {}
+
+        iterator(const BezierMesh* mesh, int col, int row)
+            : m_mesh(mesh),
+              m_col(col),
+              m_row(row)
+        {
+        }
+
+    private:
+        friend class boost::iterator_core_access;
+
+        void increment() {
+            m_col++;
+            if (m_col >= m_mesh->m_size.width() - 1) {
+                m_col = 0;
+                m_row++;
+            }
+        }
+
+        void decrement() {
+            m_col--;
+            if (m_col < 0) {
+                m_col = m_mesh->m_size.width() - 2;
+                m_row--;
+            }
+        }
+
+        void advance(int n) {
+            const int index = m_row * (m_mesh->m_size.width() - 1) + m_col + n;
+
+            m_row = index / (m_mesh->m_size.width() - 1);
+            m_col = index % (m_mesh->m_size.width() - 1);
+
+            KIS_SAFE_ASSERT_RECOVER_NOOP(m_row < m_mesh->m_size.height() - 1);
+        }
+
+        int distance_to(const iterator &z) const {
+            const int index = m_row * (m_mesh->m_size.width() - 1) + m_col;
+            const int otherIndex = z.m_row * (m_mesh->m_size.width() - 1) + z.m_col;
+
+            return otherIndex - index;
+        }
+
+        bool equal(iterator const& other) const {
+            return m_row == other.m_row &&
+                    m_col == other.m_col &&
+                m_mesh == other.m_mesh;
+        }
+
+        BezierPatch dereference() const {
+            return m_mesh->makePatch(m_col, m_row);
+        }
+
+    private:
+
+        const BezierMesh* m_mesh;
+        int m_col;
+        int m_row;
+    };
+
+
+    iterator begin() const {
+        return iterator(this, 0, 0);
+    }
+
+    iterator end() const {
+        return iterator(this, 0, m_size.height() - 1);
+    }
+
     std::vector<Node> m_nodes;
     std::vector<qreal> m_rows;
     std::vector<qreal> m_columns;
 
     QSize m_size;
+    QRectF m_originalRect;
 };
-
-QDebug operator<<(QDebug dbg, const BezierMesh::Node &n) {
-    dbg.nospace() << "Node " << n.node << " "
-                  << "(lC: " << n.leftControl << " "
-                  << "tC: " << n.topControl << " "
-                  << "rC: " << n.rightControl << " "
-                  << "bC: " << n.bottomControl << ") ";
-    return dbg.nospace();
-}
 
 QDebug operator<<(QDebug dbg, const BezierMesh &mesh) {
     dbg.nospace() << "Mesh: \n";
@@ -797,6 +922,8 @@ void KisMeshTransformWorkerTest::testGradient()
 #endif
 }
 
+#include "KisCppQuirks.h"
+
 void KisMeshTransformWorkerTest::testMesh()
 {
 
@@ -825,6 +952,23 @@ void KisMeshTransformWorkerTest::testMesh()
 
         qDebug() << mesh;
     }
+
+    {
+        BezierMesh mesh(QRectF(0,0,100,100), QSize(3,3));
+
+
+        for (auto it = mesh.begin(); it != mesh.end(); ++it) {
+            qDebug() << *it;
+        }
+
+        qDebug() << ppVar(std::distance(mesh.begin(), mesh.end()));
+        qDebug() << ppVar(std::distance(mesh.begin()+2, mesh.end()));
+
+        for (auto it = std::make_reverse_iterator(mesh.end()); it != std::make_reverse_iterator(mesh.begin()); ++it) {
+            qDebug() << *it;
+        }
+    }
+
 }
 
 

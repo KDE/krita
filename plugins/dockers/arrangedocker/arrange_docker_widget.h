@@ -41,7 +41,7 @@ public:
     void switchState(bool enabled);
 
 private:
-    Ui::ArrangeDockerWidget *ui;
+    QScopedPointer<Ui::ArrangeDockerWidget> ui;
 
     struct Private;
     const QScopedPointer<Private> m_d;

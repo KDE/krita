@@ -198,7 +198,7 @@ class comics_project_manager_docker(DockWidget):
     stringName = i18n("Comics Manager")
     projecturl = None
     pagesWatcher = None
-    updateurl = str()
+    updateurls = []
 
     def __init__(self):
         super().__init__()
@@ -835,40 +835,45 @@ class comics_project_manager_docker(DockWidget):
     """
 
     def slot_start_delayed_check_page_update(self, url):
-        self.updateurl = url
+        # It can happen that there are multiple signals from QFileSystemWatcher at once.
+        # Since QTimer cannot take any arguments, we need to keep a list of files to update.
+        # Otherwise only the last file would be updated and all subsequent calls
+        #   of `slot_check_for_page_update` would not know which files to update now.
+        # https://bugs.kde.org/show_bug.cgi?id=426701
+        self.updateurls.append(url)
         QTimer.singleShot(200, Qt.PreciseTimer, self.slot_check_for_page_update)
          
 
     def slot_check_for_page_update(self):
-        url = self.updateurl
-        if "pages" in self.setupDictionary.keys():
-            relUrl = os.path.relpath(url, self.projecturl)
-            if relUrl in self.setupDictionary["pages"]:
-                index = self.pagesModel.index(self.setupDictionary["pages"].index(relUrl), 0)
-                if index.isValid():
-                    if os.path.exists(url) is False:
-                        # we cannot check from here whether the file in question has been renamed or deleted.
-                        self.pagesModel.removeRow(index.row())
-                        return
-                    else:
-                        # Krita will trigger the filesystemwatcher when doing backupfiles,
-                        # so ensure the file is still watched if it exists.
-                        self.pagesWatcher.addPath(url)
-                    pageItem = self.pagesModel.itemFromIndex(index)
-                    page = zipfile.ZipFile(url, "r")
-                    dataList = self.get_description_and_title(page.read("documentinfo.xml"))
-                    if (dataList[0].isspace() or len(dataList[0]) < 1):
-                        dataList[0] = os.path.basename(url)
-                    thumbnail = QImage.fromData(page.read("preview.png"))
-                    pageItem.setIcon(QIcon(QPixmap.fromImage(thumbnail)))
-                    pageItem.setText(dataList[0])
-                    pageItem.setData(dataList[1], role = CPE.DESCRIPTION)
-                    pageItem.setData(relUrl, role = CPE.URL)
-                    pageItem.setData(dataList[2], role = CPE.KEYWORDS)
-                    pageItem.setData(dataList[3], role = CPE.LASTEDIT)
-                    pageItem.setData(dataList[4], role = CPE.EDITOR)
-                    self.pagesModel.setItem(index.row(), index.column(), pageItem)
-        self.updateurl = str()
+        url = self.updateurls.pop(0)
+        if url:
+            if "pages" in self.setupDictionary.keys():
+                relUrl = os.path.relpath(url, self.projecturl)
+                if relUrl in self.setupDictionary["pages"]:
+                    index = self.pagesModel.index(self.setupDictionary["pages"].index(relUrl), 0)
+                    if index.isValid():
+                        if os.path.exists(url) is False:
+                            # we cannot check from here whether the file in question has been renamed or deleted.
+                            self.pagesModel.removeRow(index.row())
+                            return
+                        else:
+                            # Krita will trigger the filesystemwatcher when doing backupfiles,
+                            # so ensure the file is still watched if it exists.
+                            self.pagesWatcher.addPath(url)
+                        pageItem = self.pagesModel.itemFromIndex(index)
+                        page = zipfile.ZipFile(url, "r")
+                        dataList = self.get_description_and_title(page.read("documentinfo.xml"))
+                        if (dataList[0].isspace() or len(dataList[0]) < 1):
+                            dataList[0] = os.path.basename(url)
+                        thumbnail = QImage.fromData(page.read("preview.png"))
+                        pageItem.setIcon(QIcon(QPixmap.fromImage(thumbnail)))
+                        pageItem.setText(dataList[0])
+                        pageItem.setData(dataList[1], role = CPE.DESCRIPTION)
+                        pageItem.setData(relUrl, role = CPE.URL)
+                        pageItem.setData(dataList[2], role = CPE.KEYWORDS)
+                        pageItem.setData(dataList[3], role = CPE.LASTEDIT)
+                        pageItem.setData(dataList[4], role = CPE.EDITOR)
+                        self.pagesModel.setItem(index.row(), index.column(), pageItem)
 
     """
     Resize all the pages in the pages list.

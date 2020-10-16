@@ -364,6 +364,55 @@ bool SvgStyleParser::parseColor(QColor &color, const QString &s)
     return true;
 }
 
+QPair<qreal, QColor> SvgStyleParser::parseColorStop(const KoXmlElement& stop,
+                                    SvgGraphicsContext *context,
+                                    qreal& previousOffset)
+{
+    qreal offset = 0.0;
+    QString offsetStr = stop.attribute("offset").trimmed();
+    if (offsetStr.endsWith('%')) {
+        offsetStr = offsetStr.left(offsetStr.length() - 1);
+        offset = offsetStr.toFloat() / 100.0;
+    } else {
+        offset = offsetStr.toFloat();
+    }
+
+    // according to SVG the value must be within [0; 1] interval
+    offset = qBound(0.0, offset, 1.0);
+
+    // according to SVG the stops' offset must be non-decreasing
+    offset = qMax(offset, previousOffset);
+    previousOffset = offset;
+
+    QColor color;
+
+    QString stopColorStr = stop.attribute("stop-color");
+    QString stopOpacityStr = stop.attribute("stop-opacity");
+
+    const QStringList attributes({"stop-color", "stop-opacity"});
+    SvgStyles styles = parseOneCssStyle(stop.attribute("style"), attributes);
+
+    // SVG: CSS values have precedence over presentation attributes!
+    if (styles.contains("stop-color")) {
+        stopColorStr = styles.value("stop-color");
+    }
+
+    if (styles.contains("stop-opacity")) {
+        stopOpacityStr = styles.value("stop-opacity");
+    }
+
+    if (stopColorStr.isEmpty() && stopColorStr == "inherit") {
+        color = context->currentColor;
+    } else {
+        parseColor(color, stopColorStr);
+    }
+
+    if (!stopOpacityStr.isEmpty() && stopOpacityStr != "inherit") {
+        color.setAlphaF(qBound(0.0, KisDomUtils::toDouble(stopOpacityStr), 1.0));
+    }
+    return QPair<qreal, QColor>(offset, color);
+}
+
 void SvgStyleParser::parseColorStops(QGradient *gradient,
                                      const KoXmlElement &e,
                                      SvgGraphicsContext *context,
@@ -376,50 +425,7 @@ void SvgStyleParser::parseColorStops(QGradient *gradient,
     KoXmlElement stop;
     forEachElement(stop, e) {
         if (stop.tagName() == "stop") {
-            qreal offset = 0.0;
-            QString offsetStr = stop.attribute("offset").trimmed();
-            if (offsetStr.endsWith('%')) {
-                offsetStr = offsetStr.left(offsetStr.length() - 1);
-                offset = offsetStr.toFloat() / 100.0;
-            } else {
-                offset = offsetStr.toFloat();
-            }
-
-            // according to SVG the value must be within [0; 1] interval
-            offset = qBound(0.0, offset, 1.0);
-
-            // according to SVG the stops' offset must be non-decreasing
-            offset = qMax(offset, previousOffset);
-            previousOffset = offset;
-
-            QColor color;
-
-            QString stopColorStr = stop.attribute("stop-color");
-            QString stopOpacityStr = stop.attribute("stop-opacity");
-
-            const QStringList attributes({"stop-color", "stop-opacity"});
-            SvgStyles styles = parseOneCssStyle(stop.attribute("style"), attributes);
-
-            // SVG: CSS values have precedence over presentation attributes!
-            if (styles.contains("stop-color")) {
-                stopColorStr = styles.value("stop-color");
-            }
-
-            if (styles.contains("stop-opacity")) {
-                stopOpacityStr = styles.value("stop-opacity");
-            }
-
-            if (stopColorStr.isEmpty() && stopColorStr == "inherit") {
-                color = context->currentColor;
-            } else {
-                parseColor(color, stopColorStr);
-            }
-
-            if (!stopOpacityStr.isEmpty() && stopOpacityStr != "inherit") {
-                color.setAlphaF(qBound(0.0, KisDomUtils::toDouble(stopOpacityStr), 1.0));
-            }
-
-            stops.append(QPair<qreal, QColor>(offset, color));
+            stops.append(parseColorStop(stop, context, previousOffset));
         }
     }
 

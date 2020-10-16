@@ -39,8 +39,8 @@
 
 namespace
 {
-constexpr const char *const keyActionRecordToggle = "recorder_record_toggle";
-constexpr const char *const keyActionExport = "recorder_export";
+const QString keyActionRecordToggle = "recorder_record_toggle";
+const QString keyActionExport = "recorder_export";
 }
 
 

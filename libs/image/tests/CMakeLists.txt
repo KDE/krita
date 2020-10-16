@@ -95,7 +95,6 @@ ecm_add_tests(
     kis_bsplines_test.cpp
     kis_warp_transform_worker_test.cpp
     kis_liquify_transform_worker_test.cpp
-    kis_mesh_transform_worker_test.cpp
     kis_transparency_mask_test.cpp
     kis_types_test.cpp
     kis_vec_test.cpp
@@ -143,6 +142,12 @@ ecm_add_tests(
     kis_layer_styles_test.cpp
 
     LINK_LIBRARIES kritaimage Qt5::Test
+    NAME_PREFIX "libs-image-"
+)
+
+ecm_add_test( kis_mesh_transform_worker_test.cpp
+    TEST_NAME     kis_mesh_transform_worker_test
+    LINK_LIBRARIES kritaimage Qt5::Test ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES}
     NAME_PREFIX "libs-image-"
 )
 

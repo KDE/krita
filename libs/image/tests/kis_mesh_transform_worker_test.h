@@ -30,6 +30,8 @@ private Q_SLOTS:
     void testMesh();
 
     void testGlobalToLocal();
+
+    void testDistanceToCurve();
 };
 
 #endif /* __KIS_MESH_TRANSFORM_WORKER_TEST_H */

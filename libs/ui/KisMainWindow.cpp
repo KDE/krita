@@ -89,6 +89,7 @@
 #include <KoToolFactoryBase.h>
 #include <KoToolRegistry.h>
 #include "KoDockFactoryBase.h"
+#include "KoDockWidgetTitleBar.h"
 #include "KoDocumentInfoDlg.h"
 #include "KoDocumentInfo.h"
 #include "KoFileDialog.h"
@@ -1750,20 +1751,27 @@ void KisMainWindow::saveWindowState(bool restoreNormalState)
 bool KisMainWindow::restoreWorkspaceState(const QByteArray &state)
 {
     QByteArray oldState = saveState();
+    const bool showTitlebars = KisConfig(false).showDockerTitleBars();
 
     // needed because otherwise the layout isn't correctly restored in some situations
     Q_FOREACH (QDockWidget *dock, dockWidgets()) {
+        dock->setProperty("Locked", false); // Unlock invisible dockers
         dock->toggleViewAction()->setEnabled(true);
         dock->hide();
+        dock->titleBarWidget()->setVisible(showTitlebars);
     }
 
     bool success = KXmlGuiWindow::restoreState(state);
 
     if (!success) {
         KXmlGuiWindow::restoreState(oldState);
+        Q_FOREACH (QDockWidget *dock, dockWidgets()) {
+            if (dock->titleBarWidget()) {
+                dock->titleBarWidget()->setVisible(showTitlebars || dock->isFloating());
+            }
+        }
         return false;
     }
-
     return success;
 }
 
@@ -1775,6 +1783,14 @@ bool KisMainWindow::restoreWorkspace(int workspaceId)
             ->resourceForId(workspaceId).dynamicCast<KisWorkspaceResource>();
 
     bool success = restoreWorkspaceState(workspace->dockerState());
+
+    const bool showTitlebars = KisConfig(false).showDockerTitleBars();
+    Q_FOREACH (QDockWidget *dock, dockWidgets()) {
+        if (dock->titleBarWidget()) {
+            const bool isCollapsed = (dock->widget() && dock->widget()->isHidden()) || !dock->widget();
+            dock->titleBarWidget()->setVisible(showTitlebars || (dock->isFloating() && isCollapsed));
+        }
+    }
 
     if (activeKisView()) {
         activeKisView()->resourceProvider()->notifyLoadingWorkspace(workspace);
@@ -2020,10 +2036,23 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
             return 0;
         }
 
-        dockWidget->setFont(KoDockRegistry::dockFont());
+        KoDockWidgetTitleBar *titleBar = dynamic_cast<KoDockWidgetTitleBar*>(dockWidget->titleBarWidget());
+
+        // Check if the dock widget is supposed to be collapsible
+        if (!dockWidget->titleBarWidget() && factory->id() != "TimelineDocker") {
+            titleBar = new KoDockWidgetTitleBar(dockWidget);
+            dockWidget->setTitleBarWidget(titleBar);
+            titleBar->setCollapsable(factory->isCollapsable());
+        }
+        qDebug() << titleBar << factory->id();
+        if (titleBar) {
+            titleBar->setFont(KoDockRegistry::dockFont());
+        }
+
+
         dockWidget->setObjectName(factory->id());
         dockWidget->setParent(this);
-        if (lockAllDockers) {
+        if (lockAllDockers && factory->id() != "TimelineDocker") {
             if (dockWidget->titleBarWidget()) {
                 dockWidget->titleBarWidget()->setVisible(false);
             }
@@ -2061,6 +2090,20 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
         if (!visible) {
             dockWidget->hide();
         }
+        bool collapsed = factory->defaultCollapsed();
+
+        bool locked = false;
+        group =  KSharedConfig::openConfig()->group("krita").group("DockWidget " + factory->id());
+        collapsed = group.readEntry("Collapsed", collapsed);
+        locked = group.readEntry("Locked", locked);
+
+        //dbgKrita << "docker" << factory->id() << dockWidget << "collapsed" << collapsed << "locked" << locked << "titlebar" << titleBar;
+
+        if (titleBar && collapsed)
+            titleBar->setCollapsed(true);
+
+        if (titleBar && locked)
+            titleBar->setLocked(true);
 
         d->dockWidgetsMap.insert(factory->id(), dockWidget);
     }
@@ -2636,15 +2679,12 @@ void KisMainWindow::createActions()
     d->showDocumentInfo  = actionManager->createAction("file_documentinfo");
     connect(d->showDocumentInfo, SIGNAL(triggered(bool)), this, SLOT(slotDocumentInfo()));
 
-
     d->themeManager->setThemeMenuAction(new KActionMenu(i18nc("@action:inmenu", "&Themes"), this));
     d->themeManager->registerThemeActions(actionCollection());
     connect(d->themeManager, SIGNAL(signalThemeChanged()), this, SLOT(slotThemeChanged()));
-
-
     connect(d->themeManager, SIGNAL(signalThemeChanged()), d->welcomePage, SLOT(slotUpdateThemeColors()));
-
     d->toggleDockers = actionManager->createAction("view_toggledockers");
+
     KisConfig(true).showDockers(true);
     d->toggleDockers->setChecked(true);
     connect(d->toggleDockers, SIGNAL(toggled(bool)), SLOT(toggleDockersVisibility(bool)));
@@ -2656,6 +2696,10 @@ void KisMainWindow::createActions()
     d->toggleDetachCanvas->setChecked(false);
     connect(d->toggleDetachCanvas, SIGNAL(toggled(bool)), SLOT(setCanvasDetached(bool)));
     setCanvasDetached(false);
+
+    d->toggleDockerTitleBars = actionManager->createAction("view_toggledockertitlebars");
+    d->toggleDockerTitleBars->setChecked(KisConfig(false).showDockerTitleBars());
+    connect(d->toggleDockerTitleBars, SIGNAL(toggled(bool)), SLOT(showDockerTitleBars(bool)));
 
     actionCollection()->addAction("settings_dockers_menu", d->dockWidgetMenu);
     actionCollection()->addAction("window", d->windowMenu);
@@ -2760,6 +2804,19 @@ void KisMainWindow::windowScreenChanged(QScreen *screen)
     d->screenConnectionsStore.clear();
     d->screenConnectionsStore.addConnection(screen, SIGNAL(physicalDotsPerInchChanged(qreal)),
                                             this, SIGNAL(screenChanged()));
+}
+
+void KisMainWindow::showDockerTitleBars(bool show)
+{
+    Q_FOREACH (QDockWidget *dock, dockWidgets()) {
+        if (dock->titleBarWidget()) {
+            const bool isCollapsed = (dock->widget() && dock->widget()->isHidden()) || !dock->widget();
+            dock->titleBarWidget()->setVisible(show || (dock->isFloating() && isCollapsed));
+        }
+    }
+
+    KisConfig cfg(true);
+    cfg.setShowDockerTitleBars(show);
 }
 
 void KisMainWindow::slotXmlGuiMakingChanges(bool finished)

@@ -700,7 +700,7 @@ QWidget * KisToolSelectMagnetic::createOptionWidget()
     anchorGapInput->setObjectName("anchorgap");
     anchorGapInput->setRange(20, 200);
     anchorGapInput->setSingleStep(10);
-    anchorGapInput->setToolTip(i18nc("@info:tooltip", "Gap between 2 anchors in interative mode"));
+    anchorGapInput->setToolTip(i18nc("@info:tooltip", "Gap between 2 anchors in interactive mode"));
     anchorGapInput->setSuffix(" px");
     f4->addWidget(anchorGapInput);
 

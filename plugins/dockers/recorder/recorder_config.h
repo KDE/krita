@@ -40,6 +40,9 @@ public:
     int resolution() const;
     void setResolution(int value);
 
+    bool recordIsolateLayerMode() const;
+    void setRecordIsolateLayerMode(bool value);
+
     bool recordAutomatically() const;
     void setRecordAutomatically(bool value);
 

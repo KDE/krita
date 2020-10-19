@@ -254,8 +254,17 @@ void RecorderWriter::setEnabled(bool enabled)
 
 void RecorderWriter::timerEvent(QTimerEvent */*event*/)
 {
-    if (!d->enabled)
+    if (!d->enabled || !d->canvas)
         return;
+
+    if ((!d->settings.recordIsolateLayerMode) &&
+            (d->canvas->image()->isIsolatingLayer() || d->canvas->image()->isIsolatingGroup())) {
+        if (!d->paused) {
+            d->paused = true;
+            emit pausedChanged(d->paused);
+        }
+        return;
+    }
 
     if (d->imageModified == d->paused) {
         d->paused = !d->imageModified;
@@ -287,6 +296,10 @@ void RecorderWriter::timerEvent(QTimerEvent */*event*/)
 void RecorderWriter::onImageModified()
 {
     if (d->skipCapturing || !d->enabled)
+        return;
+
+    if ((!d->settings.recordIsolateLayerMode) &&
+            (d->canvas->image()->isIsolatingLayer() || d->canvas->image()->isIsolatingGroup()))
         return;
 
     if (!d->imageModified)

@@ -28,6 +28,7 @@ const QString keySnapshotDirectory = "recorder/snapshotdirectory";
 const QString keyCaptureInterval = "recorder/captureinterval";
 const QString keyQuality = "recorder/quality";
 const QString keyResolution = "recorder/resolution";
+const QString keyRecordIsolateLayerMode = "recorder/recordisolatelayermode";
 const QString keyRecordAutomatically = "recorder/recordautomatically";
 const QString defaultSnapshotDirectory = QDir::homePath() % QDir::separator() % "KritaRecorder";
 }
@@ -86,6 +87,16 @@ void RecorderConfig::setResolution(int value)
     config->writeEntry(keyResolution, value);
 }
 
+
+bool RecorderConfig::recordIsolateLayerMode() const
+{
+    return config->readEntry(keyRecordIsolateLayerMode, false);
+}
+
+void RecorderConfig::setRecordIsolateLayerMode(bool value)
+{
+    config->writeEntry(keyRecordIsolateLayerMode, value);
+}
 
 bool RecorderConfig::recordAutomatically() const
 {

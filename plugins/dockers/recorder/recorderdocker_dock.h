@@ -41,6 +41,7 @@ public:
 private Q_SLOTS:
     void onMainWindowIsBeingCreated(KisMainWindow *window);
 
+    void onRecordIsolateLayerModeToggled(bool checked);
     void onAutoRecordToggled(bool checked);
     void onCaptureIntervalChanged(int interval);
     void onQualityChanged(int quality);

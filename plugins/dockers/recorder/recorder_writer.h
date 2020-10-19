@@ -30,6 +30,7 @@ struct RecorderWriterSettings
     int quality;
     int resolution;
     int captureInterval;
+    bool recordIsolateLayerMode;
 };
 
 class RecorderWriter: public QThread

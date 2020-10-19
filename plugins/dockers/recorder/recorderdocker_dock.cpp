@@ -61,6 +61,7 @@ public:
     int captureInterval = 0;
     int quality = 0;
     int resolution = 0;
+    bool recordIsolateLayerMode = false;
     bool recordAutomatically = false;
 
     QLabel* statusBarLabel;
@@ -84,6 +85,7 @@ public:
         captureInterval = config.captureInterval();
         quality = config.quality();
         resolution = config.resolution();
+        recordIsolateLayerMode = config.recordIsolateLayerMode();
         recordAutomatically = config.recordAutomatically();
     }
 
@@ -91,7 +93,7 @@ public:
     void updateWriterSettings()
     {
         outputDirectory = snapshotDirectory % QDir::separator() % prefix % QDir::separator();
-        writer.setup({ outputDirectory, quality, resolution, captureInterval });
+        writer.setup({ outputDirectory, quality, resolution, captureInterval, recordIsolateLayerMode });
     }
 
     QString getPrefix()
@@ -185,6 +187,7 @@ RecorderDockerDock::RecorderDockerDock()
     d->ui->spinCaptureInterval->setValue(d->captureInterval);
     d->ui->spinQuality->setValue(d->quality);
     d->ui->comboResolution->setCurrentIndex(d->resolution);
+    d->ui->checkBoxRecordIsolateMode->setChecked(d->recordIsolateLayerMode);
     d->ui->checkBoxAutoRecord->setChecked(d->recordAutomatically);
 
     KisActionRegistry *actionRegistry = KisActionRegistry::instance();
@@ -203,6 +206,7 @@ RecorderDockerDock::RecorderDockerDock()
     connect(d->ui->spinCaptureInterval, SIGNAL(valueChanged(int)), this, SLOT(onCaptureIntervalChanged(int)));
     connect(d->ui->spinQuality, SIGNAL(valueChanged(int)), this, SLOT(onQualityChanged(int)));
     connect(d->ui->comboResolution, SIGNAL(currentIndexChanged(int)), this, SLOT(onResolutionChanged(int)));
+    connect(d->ui->checkBoxRecordIsolateMode, SIGNAL(toggled(bool)), this, SLOT(onRecordIsolateLayerModeToggled(bool)));
     connect(d->ui->checkBoxAutoRecord, SIGNAL(toggled(bool)), this, SLOT(onAutoRecordToggled(bool)));
     connect(d->ui->buttonRecordToggle, SIGNAL(toggled(bool)), this, SLOT(onRecordButtonToggled(bool)));
     connect(d->ui->buttonExport, SIGNAL(clicked()), this, SLOT(onExportButtonClicked()));
@@ -274,13 +278,15 @@ void RecorderDockerDock::onRecordButtonToggled(bool checked)
 
     const QString &id = d->canvas->imageView()->document()->uniqueID();
 
-    bool wasEmpty = d->enabledIds.isEmpty();
+    bool wasEmpty = !d->enabledIds.values().contains(true);
 
     d->enabledIds[id] = checked;
 
+    bool isEmpty = !d->enabledIds.values().contains(true);
+
     d->writer.setEnabled(checked);
 
-    if (d->enabledIds.isEmpty() == wasEmpty) {
+    if (isEmpty == wasEmpty) {
         d->updateRecordStatus(checked);
         return;
     }
@@ -289,6 +295,7 @@ void RecorderDockerDock::onRecordButtonToggled(bool checked)
     d->ui->buttonRecordToggle->setEnabled(false);
 
     if (checked) {
+        d->updateWriterSettings();
         d->writer.start();
     } else {
         d->writer.stop();
@@ -322,6 +329,12 @@ void RecorderDockerDock::onSelectRecordFolderButtonClicked()
         d->ui->editDirectory->setText(directory);
         RecorderConfig(false).setSnapshotDirectory(directory);
     }
+}
+
+void RecorderDockerDock::onRecordIsolateLayerModeToggled(bool checked)
+{
+    d->recordIsolateLayerMode = checked;
+    RecorderConfig(false).setRecordIsolateLayerMode(checked);
 }
 
 void RecorderDockerDock::onAutoRecordToggled(bool checked)

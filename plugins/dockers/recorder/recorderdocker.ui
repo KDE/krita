@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>277</width>
-    <height>332</height>
+    <height>368</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="layoutMain">
@@ -46,7 +46,7 @@
         <x>0</x>
         <y>0</y>
         <width>277</width>
-        <height>332</height>
+        <height>368</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -224,6 +224,16 @@
              </widget>
             </item>
            </layout>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="checkBoxRecordIsolateMode">
+            <property name="toolTip">
+             <string>Record frames when Isolate Layer or Isolate Group mode is active. Depending on timelapse speed this may cause flickering in resulting video.</string>
+            </property>
+            <property name="text">
+             <string comment="Record when Isolate Layer mode is active">Record in isolate mode</string>
+            </property>
+           </widget>
           </item>
           <item>
            <widget class="QCheckBox" name="checkBoxAutoRecord">

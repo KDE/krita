@@ -22,6 +22,16 @@
 #include <klocalizedstring.h>
 #include <kis_icon_utils.h>
 
+namespace
+{
+enum ArgumentsPageIndex
+{
+    pageEdit,
+    pagePreview
+};
+}
+
+
 RecorderProfileSettings::RecorderProfileSettings(QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::RecorderProfileSettings)
@@ -29,6 +39,10 @@ RecorderProfileSettings::RecorderProfileSettings(QWidget *parent)
     ui->setupUi(this);
 
     ui->buttonPresetRevert->setIcon(KisIconUtils::loadIcon("edit-undo"));
+    ui->stackedWidget->setCurrentIndex(ArgumentsPageIndex::pageEdit);
+
+    connect(ui->labelSupportedVariables, SIGNAL(linkActivated(QString)), this, SLOT(onLinkActivated(QString)));
+    connect(ui->checkPreview, SIGNAL(toggled(bool)), this, SLOT(onPreviewToggled(bool)));
 }
 
 RecorderProfileSettings::~RecorderProfileSettings()
@@ -53,6 +67,11 @@ bool RecorderProfileSettings::editProfile(RecorderProfile *profile, const Record
     return true;
 }
 
+void RecorderProfileSettings::setPreview(const QString &preview)
+{
+    ui->editPreview->setPlainText(preview);
+}
+
 void RecorderProfileSettings::onInputChanged()
 {
     const QString &name = ui->editProfileName->text();
@@ -61,6 +80,20 @@ void RecorderProfileSettings::onInputChanged()
 
     bool isValid = (!name.isEmpty()) && (!extension.isEmpty()) && (!arguments.isEmpty());
     ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(isValid);
+}
+
+void RecorderProfileSettings::onLinkActivated(const QString &link)
+{
+    ui->editFfmpegArguments->insertPlainText(link);
+    ui->editFfmpegArguments->setFocus();
+}
+
+void RecorderProfileSettings::onPreviewToggled(bool checked)
+{
+    if (checked)
+        emit requestPreview(ui->editFfmpegArguments->toPlainText());
+
+    ui->stackedWidget->setCurrentIndex(checked ? ArgumentsPageIndex::pagePreview : ArgumentsPageIndex::pageEdit);
 }
 
 void RecorderProfileSettings::fillProfile(const RecorderProfile &profile)

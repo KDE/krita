@@ -35,26 +35,29 @@ const QString keyLockRatio = "recorder_export/lockratio";
 const QString keyProfileIndex = "recorder_export/profileIndex";
 const QString keyProfiles = "recorder_export/profiles";
 
+const QString profilePrefix = "-framerate $IN_FPS\n-pattern_type glob -i \"$INPUT_DIR*.jpg\"\n";
+
 const QList<RecorderProfile> defaultProfiles = {
-    { "MP4 x264",   "mp4",  "-vf \"scale=$WIDTH:$HEIGHT\" -c:v libx264 -r $FPS -pix_fmt yuv420p" },
-    { "GIF",        "gif",  "-vf \"fps=$FPS,scale=$WIDTH:$HEIGHT:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse\" -loop -1" },
-    { "Matroska",   "mkv",  "-vf \"scale=$WIDTH:$HEIGHT\" -r $FPS" },
-    { "WebM",       "webm", "-vf \"scale=$WIDTH:$HEIGHT\" -r $FPS" },
-    { "MP4 x264 (+4s Flash effect)",  "mp4", "-filter_complex \""
-                                            "[0]scale=$WIDTH:$HEIGHT[p0];"
-                                            "[p0]reverse[p1];"
-                                            "[p1]trim=start_frame=0:end_frame=1[p3];"
-                                            "[p3]reverse[p4];"
-                                            "[p4]fps=$FPS[p5];"
-                                            "[p5]tpad=stop_mode=clone:stop_duration=3[p6];"
-                                            "[p6]fade=type=in:color=white:start_time=0.8:duration=0.2[v1];"
-                                            "[0]scale=$WIDTH:$HEIGHT[v2];"
-                                            "[v2][v1]concat=n=2:v=1"
-                                            "\" -c:v libx264 -r $FPS -pix_fmt yuv420p" },
-    { "Custom1",  "editme", "-vf \"scale=$WIDTH:$HEIGHT\" -r $FPS" },
-    { "Custom2",  "editme", "-vf \"scale=$WIDTH:$HEIGHT\" -r $FPS" },
-    { "Custom3",  "editme", "-vf \"scale=$WIDTH:$HEIGHT\" -r $FPS" },
-    { "Custom4",  "editme", "-vf \"scale=$WIDTH:$HEIGHT\" -r $FPS" }
+    { "MP4 x264",   "mp4",  profilePrefix % "-vf \"scale=$WIDTH:$HEIGHT\"\n-c:v libx264\n-r $OUT_FPS\n-pix_fmt yuv420p" },
+    { "GIF",        "gif",  profilePrefix % "-vf \"fps=$OUT_FPS,scale=$WIDTH:$HEIGHT:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse\"\n-loop -1" },
+    { "Matroska",   "mkv",  profilePrefix % "-vf \"scale=$WIDTH:$HEIGHT\"\n-r $OUT_FPS" },
+    { "WebM",       "webm", profilePrefix % "-vf \"scale=$WIDTH:$HEIGHT\"\n-r $OUT_FPS" },
+    { "MP4 x264 (+5s Flash Effect)",  "mp4", profilePrefix % "-filter_complex \"\n"
+                                            " [0]scale=$WIDTH:$HEIGHT[q1];\n"
+                                            " [q1]tpad=stop_mode=clone:stop_duration=1[v1];\n"
+                                            " [0]trim=start_frame=$FRAMES-1[p1];\n"
+                                            " [p1]setpts=PTS-STARTPTS[p2];\n"
+                                            " [p2]fps=$OUT_FPS[p3];\n"
+                                            " [p3]trim=start_frame=0:end_frame=1[p4];\n"
+                                            " [p4]scale=$WIDTH:$HEIGHT[p5];\n"
+                                            " [p5]tpad=stop_mode=clone:stop_duration=4[p6];\n"
+                                            " [p6]fade=type=in:color=white:start_time=0.7:duration=0.7[v2];\n"
+                                            " [v1][v2]concat=n=2:v=1\n"
+                                            "\"\n-c:v libx264\n-r $OUT_FPS\n-pix_fmt yuv420p" },
+    { "Custom1",  "editme", profilePrefix % "-vf \"scale=$WIDTH:$HEIGHT\"\n-r $OUT_FPS" },
+    { "Custom2",  "editme", profilePrefix % "-vf \"scale=$WIDTH:$HEIGHT\"\n-r $OUT_FPS" },
+    { "Custom3",  "editme", profilePrefix % "-vf \"scale=$WIDTH:$HEIGHT\"\n-r $OUT_FPS" },
+    { "Custom4",  "editme", profilePrefix % "-vf \"scale=$WIDTH:$HEIGHT\"\n-r $OUT_FPS" }
 };
 }
 
@@ -147,7 +150,7 @@ QList<RecorderProfile> RecorderExportConfig::profiles() const
         if (profileList.size() != 3)
             continue;
 
-        profiles.append({profileList[0], profileList[1], profileList[2]});
+        profiles.append({profileList[0], profileList[1], QString(profileList[2]).replace("\\n", "\n")});
     }
     return profiles;
 }
@@ -155,8 +158,11 @@ QList<RecorderProfile> RecorderExportConfig::profiles() const
 void RecorderExportConfig::setProfiles(const QList<RecorderProfile> &value)
 {
     QString outValue;
+    const QRegExp cleanUp("[\n|]");
     for (const RecorderProfile &profile : value) {
-        outValue += profile.name % "|" % profile.extension % "|" % profile.arguments % "\n";
+        outValue += QString(profile.name).replace(cleanUp, " ") % "|"
+                % QString(profile.extension).replace(cleanUp, " ") % "|"
+                % QString(profile.arguments).replace("\n", "\\n").replace("|", " ") % "\n";
     }
     config->writeEntry(keyProfiles, outValue);
 }

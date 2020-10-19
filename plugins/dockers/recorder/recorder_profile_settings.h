@@ -38,8 +38,15 @@ public:
     // returns true if profile changed
     bool editProfile(RecorderProfile *profile, const RecorderProfile &defaultProfile);
 
+    void setPreview(const QString &preview);
+
+Q_SIGNALS:
+    void requestPreview(QString arguments);
+
 private Q_SLOTS:
     void onInputChanged();
+    void onLinkActivated(const QString &link);
+    void onPreviewToggled(bool checked);
 
 private:
     void fillProfile(const RecorderProfile &profile);

@@ -27,8 +27,6 @@ class QProcess;
 struct RecorderFFMpegWrapperSettings
 {
     QString ffmpeg;
-    int inputFps;
-    QString inputDirectory;
     QString arguments;
     QString outputFilePath;
 };

@@ -158,7 +158,7 @@ public:
         QObject::connect(ffmpeg, SIGNAL(finished()), q, SLOT(onFFMpegFinished()));
         QObject::connect(ffmpeg, SIGNAL(finishedWithError(QString)), q, SLOT(onFFMpegFinishedWithError(QString)));
         QObject::connect(ffmpeg, SIGNAL(progressUpdated(int)), q, SLOT(onFFMpegProgressUpdated(int)));
-        ffmpeg->start({ffmpegPath, inputFps, settings.inputDirectory, arguments, videoFilePath});
+        ffmpeg->start({ffmpegPath, arguments, videoFilePath});
         ui->labelStatus->setText(i18nc("Status for the export of the video record", "Starting FFMpeg..."));
         ui->buttonCancelExport->setEnabled(false);
         ui->progressExport->setValue(0);
@@ -176,9 +176,12 @@ public:
     {
         const QSize &outSize = resize ? size : imageSize;
         return QString(templateArguments)
-               .replace("$FPS", QString::number(fps))
-               .replace("$WIDTH", QString::number(outSize.width()))
-               .replace("$HEIGHT", QString::number(outSize.height()));
+                .replace("$IN_FPS", QString::number(inputFps))
+                .replace("$OUT_FPS", QString::number(fps))
+                .replace("$WIDTH", QString::number(outSize.width()))
+                .replace("$HEIGHT", QString::number(outSize.height()))
+                .replace("$FRAMES", QString::number(framesCount))
+                .replace("$INPUT_DIR", settings.inputDirectory);
     }
 
     void updateVideoDuration()
@@ -257,7 +260,7 @@ void RecorderExport::setup(const RecorderExportSettings &settings)
     d->framesCount = dir.count();
 
     if (d->framesCount == 0) {
-        d->ui->labelRecordInfo->setText(i18n("No files to export"));
+        d->ui->labelRecordInfo->setText(i18nc("Can't export recording because nothing to export", "No frames to export"));
         d->ui->buttonExport->setEnabled(false);
     } else {
         d->imageSize = QImage(QDirIterator(dir).next()).size();
@@ -387,6 +390,12 @@ void RecorderExport::onComboProfileIndexChanged(int index)
 void RecorderExport::onButtonEditProfileClicked()
 {
     RecorderProfileSettings settingsDialog(this);
+
+    connect(&settingsDialog, &RecorderProfileSettings::requestPreview, [&](const QString &arguments) {
+        settingsDialog.setPreview(d->ffmpegPath % " -y " % d->applyVariables(arguments).replace("\n", " ")
+                % " " % d->videoFilePath);
+    });
+
     if (settingsDialog.editProfile(&d->profiles[d->profileIndex], d->defaultProfiles[d->profileIndex])) {
         d->fillComboProfiles();
         d->updateVideoFilePath();

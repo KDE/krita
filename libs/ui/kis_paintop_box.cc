@@ -1290,10 +1290,7 @@ void KisPaintopBox::slotReloadPreset()
     KisPaintOpPresetSP preset = rserver->resourceByName(m_resourceProvider->currentPreset()->name());
     if (preset) {
 
-        if(preset->paintOp().id() == "mypaintbrush")
-            preset->loadInitialState();
-        else
-            preset->load();
+         preset->load();
     }
 
     if (m_resourceProvider->currentPreset() != preset) {

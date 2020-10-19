@@ -25,6 +25,7 @@
 #include <KisResourceServerProvider.h>
 
 #include "kis_mypaint_brush.h"
+#include "kis_my_paintop_settings.h"
 
 class KisMyPaintBrush::Private {
 
@@ -40,7 +41,7 @@ public:
 };
 
 KisMyPaintBrush::KisMyPaintBrush(const QString &fileName)
-    : KoResource (fileName), m_d(new Private) {
+    : KisPaintOpPreset (fileName), m_d(new Private) {
 
     m_d->m_brush = mypaint_brush_new();
     mypaint_brush_from_defaults(m_d->m_brush);
@@ -135,7 +136,12 @@ bool KisMyPaintBrush::load() {
 
     delete dev;
     setValid(res);
+    setDirty(false);
 
+    if (!firstLoad)
+        reloadSettings();
+
+    firstLoad = false;
     return res;
 }
 
@@ -162,6 +168,24 @@ bool KisMyPaintBrush::loadFromDevice(QIODevice *dev) {
 bool KisMyPaintBrush::save() {
 
     return false;
+}
+
+void KisMyPaintBrush::reloadSettings() {
+
+    QFileInfo fileInfo(this->filename());
+
+    KisPaintOpSettingsSP s = new KisMyPaintOpSettings();
+    s->setProperty("paintop", "mypaintbrush");
+    s->setProperty("filename", this->filename());
+    s->setProperty(MYPAINT_JSON, this->getJsonData());
+    s->setProperty(MYPAINT_DIAMETER, this->getSize());
+    s->setProperty(MYPAINT_HARDNESS, this->getHardness());
+    s->setProperty(MYPAINT_OPACITY, this->getOpacity());
+    s->setProperty(MYPAINT_OFFSET_BY_RANDOM, this->getOffset());
+    s->setProperty(MYPAINT_ERASER, this->isEraser());
+    s->setProperty("EraserMode", qRound(this->isEraser()));
+
+    this->setSettings(s);
 }
 
 QByteArray KisMyPaintBrush::getJsonData() {

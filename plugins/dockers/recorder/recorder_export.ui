@@ -29,7 +29,7 @@
    <item row="0" column="0">
     <widget class="QStackedWidget" name="stackedWidget">
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="pageSettings">
       <layout class="QGridLayout" name="gridLayout_3">
@@ -85,7 +85,7 @@
          <item row="7" column="2">
           <widget class="QPushButton" name="buttonBrowseExport">
            <property name="toolTip">
-            <string>Setup directory to export timelapse video</string>
+            <string>Select a file to export timelapse video</string>
            </property>
            <property name="text">
             <string/>
@@ -112,6 +112,12 @@
          </item>
          <item row="5" column="1">
           <widget class="QLineEdit" name="editFfmpegPath">
+           <property name="minimumSize">
+            <size>
+             <width>120</width>
+             <height>0</height>
+            </size>
+           </property>
            <property name="text">
             <string>ffmpeg</string>
            </property>
@@ -296,8 +302,14 @@
          </item>
          <item row="7" column="1">
           <widget class="QLineEdit" name="editVideoFilePath">
+           <property name="minimumSize">
+            <size>
+             <width>120</width>
+             <height>0</height>
+            </size>
+           </property>
            <property name="readOnly">
-            <bool>true</bool>
+            <bool>false</bool>
            </property>
           </widget>
          </item>

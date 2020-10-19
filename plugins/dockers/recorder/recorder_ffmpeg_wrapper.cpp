@@ -17,6 +17,8 @@
 
 #include "recorder_ffmpeg_wrapper.h"
 
+#include <klocalizedstring.h>
+
 #include <QDir>
 #include <QProcess>
 #include <QDebug>
@@ -100,11 +102,12 @@ void RecorderFFMpegWrapper::start(const RecorderFFMpegWrapperSettings &settings)
     connect(process, SIGNAL(started()), SLOT(onStarted()));
     connect(process, SIGNAL(finished(int, QProcess::ExitStatus)), SLOT(onFinished(int)));
 
-    const QString &arguments = "-y " % settings.arguments % " " % settings.outputFilePath;
+    qDebug() << "starting ffmpeg: " << qUtf8Printable(settings.ffmpeg) << qUtf8Printable(settings.arguments);
 
-    qDebug() << "starting ffmpeg: " << qUtf8Printable(settings.ffmpeg) << qUtf8Printable(arguments);
+    QStringList args = splitCommand(settings.arguments);
 
-    const QStringList &args = splitCommand(arguments);
+    args.prepend("-y");
+    args.append(settings.outputFilePath);
 
     process->start(settings.ffmpeg, args);
 }
@@ -166,6 +169,9 @@ void RecorderFFMpegWrapper::onFinished(int exitCode)
     qDebug() << "FFMpeg finished with code" << exitCode;
     if (exitCode != 0) {
         errorMessage.remove(junkRegex);
+        if (process->exitStatus() == QProcess::CrashExit) {
+            errorMessage = i18n("FFMpeg Crashed") % "\n" % errorMessage;
+        }
         emit finishedWithError(errorMessage);
     } else {
         emit finished();

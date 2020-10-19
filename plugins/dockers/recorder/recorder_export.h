@@ -53,6 +53,7 @@ private Q_SLOTS:
     void onButtonBrowseFfmpegClicked();
     void onComboProfileIndexChanged(int index);
     void onButtonEditProfileClicked();
+    void onEditVideoPathChanged(const QString &videoFilePath);
     void onButtonBrowseExportClicked();
     void onButtonExportClicked();
     // second page
@@ -66,6 +67,9 @@ private Q_SLOTS:
     void onButtonWatchItClicked();
     void onButtonShowInFolderClicked();
     void onButtonRestartClicked();
+
+private:
+     bool eventFilter(QObject *obj, QEvent *event) override;
 
 private:
     Q_DISABLE_COPY(RecorderExport)

@@ -12,6 +12,7 @@
 #include <QVector4D>
 
 class KisVisualColorModel;
+class QImage;
 
 class WGShadeSlider : public QWidget
 {
@@ -20,9 +21,11 @@ public:
     explicit WGShadeSlider(QWidget *parent = nullptr, KisVisualColorModel *model = nullptr);
     ~WGShadeSlider() override;
 
-    void setGradient(const QVector4D &gradient);
+    void setGradient(const QVector4D &range, const QVector4D &offset = QVector4D());
     void setDisplayMode(bool slider, int numPatches = -1);
+    void setModel(KisVisualColorModel *model);
     QVector4D channelValues() const;
+    const QImage* background();
 
 public Q_SLOTS:
     void slotSetChannelValues(const QVector4D &values);
@@ -44,6 +47,14 @@ protected:
     int getPatch(const QPointF pos) const;
     QRectF patchRect(int index) const;
     QImage renderBackground();
+    /*!
+     * \brief strokeRect
+     * \param painter shall already be scaled so that 1 unit == 1 real Pixel
+     * \param rect the rectangle to stroke in (logical) widget coordinates
+     * \param pixelSize devicePixelRatioF() that was used to determine the real dimensions
+     * \param shrinkX shrinks the rect by a multiple of the line width used to stroke
+     */
+    void strokeRect(QPainter &painter, const QRectF &rect, qreal pixelSize, qreal shrinkX);
 
 Q_SIGNALS:
     void sigChannelValuesChanged(const QVector4D &values);

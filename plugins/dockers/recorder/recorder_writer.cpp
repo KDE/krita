@@ -45,6 +45,7 @@ public:
     int frameResolution = -1;
     int partIndex = 0;
     RecorderWriterSettings settings;
+    QDir outputDir;
     bool paused = false;
     volatile bool enabled = false;  // enable recording only for active documents
     volatile bool imageModified = false;
@@ -181,6 +182,9 @@ public:
 
     bool writeFrame()
     {
+        if (!outputDir.exists() && !outputDir.mkpath(settings.outputDirectory))
+            return false;
+
         const QString &fileName = QString("%1%2.jpg")
                                   .arg(settings.outputDirectory)
                                   .arg(partIndex, 7, 10, QLatin1Char('0'));
@@ -220,10 +224,7 @@ void RecorderWriter::setCanvas(QPointer<KisCanvas2> canvas)
 void RecorderWriter::setup(const RecorderWriterSettings &settings)
 {
     d->settings = settings;
-
-    QDir dir(d->settings.outputDirectory);
-    if (!dir.exists() && !dir.mkpath(d->settings.outputDirectory))
-        return;
+    d->outputDir.setPath(settings.outputDirectory);
 
     d->partIndex = d->findLastIndex(d->settings.outputDirectory);
 }

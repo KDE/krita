@@ -136,8 +136,12 @@ void KisColorSelector::setConfiguration(KisColorSelectorConfiguration conf)
     connect(m_subComponent,  SIGNAL(update()), m_signalCompressor, SLOT(start()), Qt::UniqueConnection);
 
     m_mainComponent->setConfiguration(m_configuration.mainTypeParameter, m_configuration.mainType);
-    m_subComponent->setConfiguration(m_configuration.subTypeParameter, m_configuration.subType);
 
+    // Use Hluma as subType when the main type uses hsy'.
+    KisColorSelectorConfiguration::Parameters subTypeParameter = m_configuration.mainTypeParameter == KisColorSelectorConfiguration::SY ?
+            KisColorSelectorConfiguration::Hluma : m_configuration.subTypeParameter;
+
+    m_subComponent->setConfiguration(subTypeParameter, m_configuration.subType);
     QResizeEvent event(QSize(width(), height()), QSize());
     resizeEvent(&event);
 }

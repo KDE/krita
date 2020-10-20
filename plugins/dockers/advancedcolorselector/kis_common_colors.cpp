@@ -121,7 +121,7 @@ void KisCommonColors::recalculate()
     if (!m_canvas) {
         return;
     }
-    if(m_reloadButton->isEnabled()==false) {
+    if(!m_reloadButton->isEnabled()) {
         // on old computation is still running
         // try later to recalculate
         m_recalculationTimer.start();

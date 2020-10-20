@@ -2568,8 +2568,13 @@ void KisMainWindow::configChanged()
 
     if (KisConfig(false).readEntry<bool>("use_custom_system_font", false)) {
         QString fontName = KisConfig(false).readEntry<QString>("custom_system_font", "");
+        int fontSize = KisConfig(false).readEntry<int>("custom_font_size", -1);
+
+        if (fontSize <= 6) {
+            fontSize = qApp->font().pointSize();
+        }
         if (!fontName.isEmpty()) {
-            QFont f(fontName, qApp->font().pointSize());
+            QFont f(fontName, fontSize);
             qApp->setFont(f);
         }
     }

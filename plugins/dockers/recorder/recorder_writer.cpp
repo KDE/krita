@@ -21,12 +21,14 @@
 #include <kis_image.h>
 #include <KisDocument.h>
 #include <KoToolProxy.h>
+#include <KisMainWindow.h>
 
 #include <QDir>
 #include <QDirIterator>
 #include <QElapsedTimer>
 #include <QImage>
 #include <QRegularExpression>
+#include <QApplication>
 
 namespace
 {
@@ -255,6 +257,11 @@ void RecorderWriter::setEnabled(bool enabled)
 void RecorderWriter::timerEvent(QTimerEvent */*event*/)
 {
     if (!d->enabled || !d->canvas)
+        return;
+
+    // take snapshots only if main window is active
+    // else some dialogs like filters may disappear when canvas->image()->lock() is called
+    if (qobject_cast<KisMainWindow*>(QApplication::activeWindow()) == nullptr)
         return;
 
     if ((!d->settings.recordIsolateLayerMode) &&

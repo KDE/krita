@@ -67,6 +67,7 @@ private:
         KisCoordinatesConverter *viewConverter = q->view()->viewConverter();
         QTransform transform = viewConverter->imageToWidgetTransform();
 
+        qreal devicePixelRatioF = q->view()->devicePixelRatioF();
         if (buffer.image.isNull() || !buffer.bounds().contains(widgetRect)) {
             const QRectF boundingImageRect = layer->boundingImageRect();
             const QRectF boundingWidgetRect = q->view()->viewConverter()->imageToWidget(boundingImageRect);
@@ -75,10 +76,13 @@ private:
             if (widgetRect.isNull()) return;
 
             buffer.position = widgetRect.topLeft();
-            buffer.image = QImage(widgetRect.size().toSize(), QImage::Format_ARGB32);
-            buffer.image.fill(Qt::transparent);
+            // to ensure that buffor is big enough for all the pixels on high dpi displays
+            // BUG 411118
+            buffer.image = QImage((widgetRect.size()*devicePixelRatioF).toSize(), QImage::Format_ARGB32);
+            buffer.image.setDevicePixelRatio(devicePixelRatioF);
 
             imageRect = q->view()->viewConverter()->widgetToImage(widgetRect);
+
         }
 
         QPainter gc(&buffer.image);
@@ -91,7 +95,9 @@ private:
         gc.fillRect(imageRect, Qt::transparent);
         gc.restore();
 
-        gc.setClipRect(imageRect);
+        // to ensure that clipping rect is also big enough for all the pixels
+        // BUG 411118
+        gc.setClipRect(QRectF(imageRect.topLeft(), imageRect.size()*devicePixelRatioF));
         layer->paintReferences(gc);
     }
 };

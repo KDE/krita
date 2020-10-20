@@ -31,7 +31,10 @@ DlgExportStoryboard::DlgExportStoryboard(ExportFormat format, KisTimeSpan span)
 {
     m_page = new WdgExportStoryboard(this);
 
-    setCaption(i18n("Export Storyboard as ") + (format == ExportFormat::PDF ? "PDF":"SVG"));
+    setCaption(format == ExportFormat::PDF
+               ? i18nc("Export storyboard dialog caption", "Export Storyboard as PDF")
+               : i18nc("Export storyboard dialog caption", "Export Storyboard as SVG"));
+
     setButtons(Apply | Cancel);
     setButtonText(Apply, i18n("Export"));
     setDefaultButton(Apply);

@@ -366,6 +366,23 @@ extern "C" int main(int argc, char **argv)
 
         // And if there isn't one, check the one set by the system.
         QLocale locale = QLocale::system();
+
+#ifdef Q_OS_ANDROID
+        // QLocale::uiLanguages() fails on Android, so if the fallback locale is being
+        // used we, try to fetch the device's default locale.
+        if (locale.name() == QLocale::c().name()) {
+            QAndroidJniObject localeJniObj = QAndroidJniObject::callStaticObjectMethod(
+                "java/util/Locale", "getDefault", "()Ljava/util/Locale;");
+
+            if (localeJniObj.isValid()) {
+                QAndroidJniObject tag = localeJniObj.callObjectMethod("toLanguageTag",
+                                                                      "()Ljava/lang/String;");
+                if (tag.isValid()) {
+                    locale = QLocale(tag.toString());
+                }
+            }
+        }
+#endif
         if (locale.name() != QStringLiteral("en")) {
             QStringList uiLanguages = locale.uiLanguages();
             for (QString &uiLanguage : uiLanguages) {

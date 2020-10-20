@@ -446,6 +446,12 @@ extern "C" int main(int argc, char **argv)
             app.setLayoutDirection(Qt::LeftToRight);
         }
     }
+#ifdef Q_OS_ANDROID
+    // TODO: remove "share" - sh_zam
+    // points to /data/data/org.krita/files/share/locale
+    KLocalizedString::addDomainLocaleDir("krita", QStandardPaths::writableLocation(QStandardPaths::HomeLocation) + "/share/locale");
+#endif
+
     KLocalizedString::setApplicationDomain("krita");
 
     dbgKrita << "Available translations" << KLocalizedString::availableApplicationTranslations();

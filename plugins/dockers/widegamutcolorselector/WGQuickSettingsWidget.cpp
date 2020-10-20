@@ -27,7 +27,11 @@ WGQuickSettingsWidget::WGQuickSettingsWidget(QWidget *parent, KisVisualColorSele
     m_modelGroup->addButton(m_ui->btnHSL, KisVisualColorModel::HSL);
     m_modelGroup->addButton(m_ui->btnHSI, KisVisualColorModel::HSI);
     m_modelGroup->addButton(m_ui->btnHSY, KisVisualColorModel::HSY);
+#if QT_VERSION >= QT_VERSION_CHECK(5,15,0)
     connect(m_modelGroup, SIGNAL(idToggled(int,bool)), SLOT(slotColorGroupToggled(int,bool)));
+#else
+    connect(m_modelGroup, SIGNAL(buttonToggled(int,bool)), SLOT(slotColorGroupToggled(int,bool)));
+#endif
 
     m_selectorConf = new WGSelectorConfigGrid(this);
     m_ui->verticalLayout->addWidget(m_selectorConf);

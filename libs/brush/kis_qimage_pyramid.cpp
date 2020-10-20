@@ -28,7 +28,7 @@
 #define QPAINTER_WORKAROUND_BORDER 1
 
 
-KisQImagePyramid::KisQImagePyramid(const QImage &baseImage)
+KisQImagePyramid::KisQImagePyramid(const QImage &baseImage, bool useSmoothingForEnlarging)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(!baseImage.isNull());
 
@@ -47,7 +47,11 @@ KisQImagePyramid::KisQImagePyramid(const QImage &baseImage)
                 m_baseScale = scale;
             }
 
-            appendPyramidLevel(baseImage.scaled(scaledSize,  Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+            if (useSmoothingForEnlarging) {
+                appendPyramidLevel(baseImage.scaled(scaledSize,  Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+            } else {
+                appendPyramidLevel(baseImage.scaled(scaledSize,  Qt::IgnoreAspectRatio, Qt::FastTransformation));
+            }
         }
 
         scale *= 0.5;

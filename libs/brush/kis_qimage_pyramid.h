@@ -29,7 +29,7 @@ class BRUSH_EXPORT KisQImagePyramid
 {
 public:
     KisQImagePyramid() = default;
-    KisQImagePyramid(const QImage &baseImage);
+    KisQImagePyramid(const QImage &baseImage, bool useSmoothingForEnlarging = true);
     ~KisQImagePyramid();
 
     static QSize imageSize(const QSize &originalSize,

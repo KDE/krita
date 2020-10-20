@@ -7,6 +7,7 @@ set(KRITA_WGCOLORSELECTOR_SOURCES
     WGConfig.cpp
     WGQuickSettingsWidget.cpp
     WGSelectorConfigGrid.cpp
+    WGShadeLineEditor.cpp
     WGShadeSelector.cpp
     WGShadeSlider.cpp
     KisColorSourceToggle.cpp
@@ -16,6 +17,7 @@ set(KRITA_WGCOLORSELECTOR_SOURCES
 ki18n_wrap_ui(KRITA_WGCOLORSELECTOR_SOURCES
     WdgQuickSettings.ui
     WdgWGSelectorSettings.ui
+    WdgWGShadeLineEditor.ui
 )
 
 add_library(kritawgcolorselector MODULE ${KRITA_WGCOLORSELECTOR_SOURCES})

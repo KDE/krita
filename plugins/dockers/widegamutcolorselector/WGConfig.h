@@ -18,6 +18,7 @@ class WGConfig
 {
 public:
     struct ShadeLine {
+        ShadeLine() = default;
         ShadeLine(QVector4D grad, QVector4D offs=QVector4D()): gradient(grad), offset(offs) {}
         QVector4D gradient;
         QVector4D offset;

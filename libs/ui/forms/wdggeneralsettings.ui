@@ -1007,5 +1007,21 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>chkUseCustomFont</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>intFontSize</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>83</x>
+     <y>160</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>569</x>
+     <y>161</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
 </ui>

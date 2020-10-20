@@ -2576,6 +2576,14 @@ void KisMainWindow::configChanged()
         if (!fontName.isEmpty()) {
             QFont f(fontName, fontSize);
             qApp->setFont(f);
+
+            Q_FOREACH (QObject* widget, children()) {
+                if (widget->inherits("QDockWidget")) {
+                    QDockWidget* dw = static_cast<QDockWidget*>(widget);
+                    dw->setFont(KoDockRegistry::dockFont());
+                }
+            }
+
         }
     }
     else {

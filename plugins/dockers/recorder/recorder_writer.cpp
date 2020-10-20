@@ -89,8 +89,10 @@ public:
 
         KisPaintDeviceSP device = image->projection();
 
-        const int width = image->width();
-        const int height = image->height();
+        // truncate uneven image width/height making it even for subdivided size too
+        const quint32 bitmask = ~(0xFFFFFFFFu >> (31 - settings.resolution));
+        const quint32 width = image->width() & bitmask;
+        const quint32 height = image->height() & bitmask;
         const int bufferSize = device->pixelSize() * width * height;
 
         bool resize = imageBuffer.size() != bufferSize;
@@ -123,18 +125,14 @@ public:
 
     void halfSizeImageBuffer()
     {
-        // make width and height even
-        const int width = imageBufferWidth & ~1;
-        const int height = imageBufferHeight & ~1;
-
         quint32 *buffer = reinterpret_cast<quint32 *>(imageBuffer.data());
         quint32 *out = buffer;
 
-        for (int y = 0; y < height; y += 2) {
+        for (int y = 0; y < imageBufferHeight; y += 2) {
             const quint32 *in1 = buffer + y * imageBufferWidth;
             const quint32 *in2 = in1 + imageBufferWidth;
 
-            for (int x = 0; x < width; x += 2) {
+            for (int x = 0; x < imageBufferWidth; x += 2) {
                 *out = avg(
                     avg(in1[x], in1[x + 1]),
                     avg(in2[x], in2[x + 1])

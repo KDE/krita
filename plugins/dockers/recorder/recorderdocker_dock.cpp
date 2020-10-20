@@ -113,7 +113,9 @@ public:
         QStringList items;
         for (int index = 0, len = titles.length(); index < len; ++index) {
             int divider = 1 << index;
-            items += QString("%1 (%2x%3)").arg(titles[index]).arg(width / divider).arg(height / divider);
+            items += QString("%1 (%2x%3)").arg(titles[index])
+                    .arg((width / divider) & ~1)
+                    .arg((height / divider) & ~1);
         }
         QSignalBlocker blocker(ui->comboResolution);
         const int currentIndex = ui->comboResolution->currentIndex();

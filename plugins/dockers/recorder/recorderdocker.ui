@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>277</width>
-    <height>368</height>
+    <height>323</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="layoutMain">
@@ -46,7 +46,7 @@
         <x>0</x>
         <y>0</y>
         <width>277</width>
-        <height>368</height>
+        <height>323</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -228,7 +228,8 @@
           <item>
            <widget class="QCheckBox" name="checkBoxRecordIsolateMode">
             <property name="toolTip">
-             <string>Record frames when Isolate Layer or Isolate Group mode is active. Depending on timelapse speed this may cause flickering in resulting video.</string>
+             <string>Record frames when Isolate Layer or Isolate Group mode is active.
+Depending on timelapse speed this may cause flickering in resulting video.</string>
             </property>
             <property name="text">
              <string comment="Record when Isolate Layer mode is active">Record in isolate mode</string>
@@ -237,18 +238,11 @@
           </item>
           <item>
            <widget class="QCheckBox" name="checkBoxAutoRecord">
+            <property name="toolTip">
+             <string extracomment="Tooltip for check box">Start recording after creating a new image or opening an existing one.</string>
+            </property>
             <property name="text">
              <string>Record automatically</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="labelHint">
-            <property name="text">
-             <string>&lt;small&gt;Start recording after creating a new image or opening an existing one.&lt;/small&gt;</string>
-            </property>
-            <property name="wordWrap">
-             <bool>true</bool>
             </property>
            </widget>
           </item>

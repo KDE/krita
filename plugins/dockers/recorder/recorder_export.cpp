@@ -116,6 +116,8 @@ public:
         framesCount = dir.count();
         if (framesCount != 0) {
             imageSize = QImage(QDirIterator(dir).next()).size();
+            imageSize.rwidth() &= ~1;
+            imageSize.rheight() &= ~1;
         }
     }
 

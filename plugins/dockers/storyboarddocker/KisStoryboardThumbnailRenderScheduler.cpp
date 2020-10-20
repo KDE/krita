@@ -45,7 +45,6 @@ void KisStoryboardThumbnailRenderScheduler::setImage(KisImageSP image)
 
 void KisStoryboardThumbnailRenderScheduler::scheduleFrameForRegeneration(int frame, bool affected)
 {
-    ENTER_FUNCTION() << ppVar(frame) << ppVar(affected);
     if (affected && m_affectedFramesQueue.contains(frame)) {
         return;
     }

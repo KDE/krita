@@ -202,6 +202,7 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     chkUseCustomFont->setChecked(cfg.readEntry<bool>("use_custom_system_font", false));
     cmbCustomFont->setEnabled(cfg.readEntry<bool>("use_custom_system_font", false));
     cmbCustomFont->findChild <QComboBox*>("stylesComboBox")->setVisible(false);
+    intFontSize->setEnabled(cmbCustomFont->isEnabled());
 
     QString fontName = cfg.readEntry<QString>("custom_system_font", "");
     if (fontName.isEmpty()) {

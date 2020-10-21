@@ -234,7 +234,7 @@ void KisReferenceImage::paint(QPainter &gc, KoShapePaintingContext &/*paintconte
     QTransform devicePixelRatioFTransform = QTransform::fromScale(gc.device()->devicePixelRatioF(), gc.device()->devicePixelRatioF());
     // all three transformations: scale and rotation done by the user, scale from highDPI display, and zoom + rotation of the view
     // order: zoom/rotation of the view; scale to high res; scale and rotation done by the user
-    QImage prescaled = d->mipmap.getClosest(transform * devicePixelRatioFTransform * gc.transform(), &scale);
+    QImage prescaled = d->mipmap.getClosestWithoutWorkaroundBorder(transform * devicePixelRatioFTransform * gc.transform(), &scale);
     transform.scale(1.0 / scale, 1.0 / scale);
 
     if (scale > 1.0) {

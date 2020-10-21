@@ -43,6 +43,8 @@ public:
 
     QImage getClosest(QTransform transform, qreal *scale) const;
 
+    QImage getClosestWithoutWorkaroundBorder(QTransform transform, qreal *scale) const;
+
 private:
     friend class KisGbrBrushTest;
     int findNearestLevel(qreal scale, qreal *baseScale) const;

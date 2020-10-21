@@ -335,3 +335,12 @@ QImage KisQImagePyramid::getClosest(QTransform transform, qreal *scale) const
     int level = findNearestLevel(estimatedScale, scale);
     return m_levels[level].image;
 }
+
+QImage KisQImagePyramid::getClosestWithoutWorkaroundBorder(QTransform transform, qreal *scale) const
+{
+    QImage image = getClosest(transform, scale);
+    return image.copy(QPAINTER_WORKAROUND_BORDER,
+               QPAINTER_WORKAROUND_BORDER,
+               image.width() - 2 * QPAINTER_WORKAROUND_BORDER,
+               image.height() - 2 * QPAINTER_WORKAROUND_BORDER);
+}

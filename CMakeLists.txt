@@ -563,7 +563,7 @@ endif()
 
 # FIXME: Still hardcoded
 if (ANDROID)
-    set (Boost_INCLUDE_DIR          ${CMAKE_CURRENT_BINARY_DIR}/i/${ANDROID_ABI}/include/boost-1_69)
+    set (Boost_INCLUDE_DIR          ${CMAKE_CURRENT_BINARY_DIR}/i/${ANDROID_ABI}/include/boost-1_70)
     set (Boost_LIBRARY_DIR          ${CMAKE_CURRENT_BINARY_DIR}/i/${ANDROID_ABI}/lib)
     set (KF5_LIBRARIES              ${CMAKE_CURRENT_BINARY_DIR}/kf5/kde/install/lib)
 endif()
@@ -932,8 +932,25 @@ if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/po OR EXISTS ${CMAKE_CURRENT_BINARY_DIR}/p
   ki18n_install(po)
 endif()
 
-# ECM passes this to Qt, which was already capable of detecting it..
-set (ANDROID_SDK_COMPILE_API "android-28")
+if (ANDROID)
+  # ECM passes this to Qt, which was already capable of detecting it..
+  set (ANDROID_SDK_COMPILE_API "android-28")
+  if ((${NDK_VERSION} GREATER_EQUAL 20))
+    set (USE_LLVM ON)
+  endif()
+
+  if (NOT (CMAKE_CXX_STANDARD_LIBRARIES MATCHES "[^ ]*c\\+\\+[^ ]*\\.so"))
+    # copied regex from ECM's toolchain
+    string(REGEX REPLACE "-(clang)?([0-9].[0-9])?$" "" ECM_ANDROID_STL_ARCH ${ANDROID_TOOLCHAIN_NAME})
+
+    set (KRITA_ANDROID_STL_PATH "${ANDROID_TOOLCHAIN_ROOT}/sysroot/usr/lib/${ECM_ANDROID_STL_ARCH}/lib${ANDROID_STL}.so")
+    if (NOT EXISTS ${KRITA_ANDROID_STL_PATH})
+      message(FATAL_ERROR "STL does not exist at the right location, please use NDK r20+")
+    endif()
+
+    set (CMAKE_CXX_STANDARD_LIBRARIES "${CMAKE_CXX_STANDARD_LIBRARIES} \"${KRITA_ANDROID_STL_PATH}\"" CACHE STRING "" FORCE)
+  endif()
+endif()
 
 if(DEFINED QTANDROID_EXPORTED_TARGET AND NOT TARGET "create-apk")
     set (_CMAKE_ANDROID_DIR "${ECM_DIR}/../toolchain")

@@ -433,6 +433,19 @@ QStringList KisPropertiesConfiguration::getPropertyLazy(const QString &name, con
     return getStringList(name, defaultValue);
 }
 
+bool KisPropertiesConfiguration::compareTo(const KisPropertiesConfiguration* rhs) const
+{
+    if (rhs == nullptr)
+        return false;
+
+    for(const auto& propertyName: getPropertiesKeys()) {
+        if (getProperty(propertyName) != rhs->getProperty(propertyName))
+            return false;
+    }
+
+    return true;
+}
+
 // --- factory ---
 
 struct Q_DECL_HIDDEN KisPropertiesConfigurationFactory::Private {

@@ -86,10 +86,12 @@ void KisGeneratorLayer::setFilter(KisFilterConfigurationSP filterConfig)
 
 void KisGeneratorLayer::setFilterWithoutUpdate(KisFilterConfigurationSP filterConfig)
 {
-    KisSelectionBasedLayer::setFilter(filterConfig);
-    {
-        QMutexLocker(&m_d->mutex);
-        m_d->preparedRect = QRect();
+    if (filter().isNull() || !filter()->compareTo(filterConfig.constData())) {
+        KisSelectionBasedLayer::setFilter(filterConfig);
+        {
+            QMutexLocker(&m_d->mutex);
+            m_d->preparedRect = QRect();
+        }
     }
 }
 

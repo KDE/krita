@@ -183,6 +183,7 @@ public:
      */
     virtual QList<KoResourceSP> embeddedResources(KisResourcesInterfaceSP globalResourcesInterface) const;
 
+    virtual bool compareTo(const KisPropertiesConfiguration *rhs) const override;
 
 #ifdef SANITY_CHECK_FILTER_CONFIGURATION_OWNER
 private:

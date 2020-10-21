@@ -199,6 +199,11 @@ public:
     QStringList getStringList(const QString &name, const QStringList &defaultValue = QStringList()) const;
     QStringList getPropertyLazy(const QString &name, const QStringList &defaultValue) const;
 
+    /**
+     * Structural comparison between two instances.
+     */
+    virtual bool compareTo(const KisPropertiesConfiguration* rhs) const;
+
 public:
 
     void dump() const;

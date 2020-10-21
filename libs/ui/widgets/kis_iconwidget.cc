@@ -65,23 +65,28 @@ void KisIconWidget::paintEvent(QPaintEvent *event)
     p.setBrush(this->palette().window());
     p.drawRect(QRect(0, 0, cw, ch));
     if (m_resource && !m_resource->image().isNull()) {
-        QImage img = QImage(iconWidth, iconHeight, QImage::Format_ARGB32);
+        QImage img = QImage(iconWidth*devicePixelRatioF(), iconHeight*devicePixelRatioF(), QImage::Format_ARGB32);
+        img.setDevicePixelRatio(devicePixelRatioF());
         img.fill(Qt::transparent);
-        if (m_resource->image().width() < iconWidth ||  m_resource->image().height() < iconHeight) {
+        if (m_resource->image().width() < iconWidth*devicePixelRatioF() ||  m_resource->image().height() < iconHeight*devicePixelRatioF()) {
             QPainter paint2;
             paint2.begin(&img);
-            for (int x = 0; x < iconWidth; x += m_resource->image().width()) {
-                for (int y = 0; y < iconHeight; y += m_resource->image().height()) {
+            for (int x = 0; x < iconWidth; x += m_resource->image().width()/devicePixelRatioF()) {
+                for (int y = 0; y < iconHeight; y += m_resource->image().height()/devicePixelRatioF()) {
                     paint2.drawImage(x, y, m_resource->image());
                 }
             }
         } else {
-            img = m_resource->image().scaled(iconWidth, iconHeight, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+            img = m_resource->image().scaled(iconWidth*devicePixelRatioF(), iconHeight*devicePixelRatioF(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+            img.setDevicePixelRatio(devicePixelRatioF());
         }
         p.drawImage(QRect(border, border, iconWidth, iconHeight), img);
     } else if (!icon().isNull()) {
         int border2 = qRound((cw - 16) * 0.5);
-        p.drawImage(QRect(border2, border2, 16, 16), icon().pixmap(16, 16).toImage());
+        QSize size = QSize(16, 16);
+        QImage image = icon().pixmap(size*devicePixelRatioF()).toImage();
+        image.setDevicePixelRatio(devicePixelRatioF());
+        p.drawImage(QRect(border2, border2, 16, 16), image);
     }
     p.setClipping(false);
 }

@@ -63,8 +63,8 @@ QTextDocument *KisIconToolTip::createDocument(const QModelIndex &index)
         thumb = index.data(Qt::UserRole + KisAbstractResourceModel::Thumbnail).value<QImage>();
     }
 
-    if (!m_fixedToolTipThumbnailSize.isNull() && !thumb.isNull()) {
         thumb = thumb.scaled(m_fixedToolTipThumbnailSize, Qt::IgnoreAspectRatio);
+    if (!m_fixedToolTipThumbnailSize.isEmpty() && !thumb.isNull()) {
     }
 
     if (m_checkersPainter) {

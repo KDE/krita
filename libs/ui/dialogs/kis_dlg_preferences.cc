@@ -47,6 +47,8 @@
 #include <QToolButton>
 #include <QStyleFactory>
 #include <QScreen>
+#include <QFontComboBox>
+#include <QFont>
 
 #include <KisApplication.h>
 #include <KisDocument.h>
@@ -197,6 +199,28 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     //
     // Window Tab
     //
+    chkUseCustomFont->setChecked(cfg.readEntry<bool>("use_custom_system_font", false));
+    cmbCustomFont->setEnabled(cfg.readEntry<bool>("use_custom_system_font", false));
+    cmbCustomFont->findChild <QComboBox*>("stylesComboBox")->setVisible(false);
+    intFontSize->setEnabled(cmbCustomFont->isEnabled());
+
+    QString fontName = cfg.readEntry<QString>("custom_system_font", "");
+    if (fontName.isEmpty()) {
+        cmbCustomFont->setCurrentFont(qApp->font());
+
+    }
+    else {
+        int pointSize = qApp->font().pointSize();
+        cmbCustomFont->setCurrentFont(QFont(fontName, pointSize));
+    }
+    int fontSize = cfg.readEntry<int>("custom_font_size", -1);
+    if (fontSize < 0) {
+        intFontSize->setValue(qApp->font().pointSize());
+    }
+    else {
+        intFontSize->setValue(fontSize);
+    }
+
     m_cmbMDIType->setCurrentIndex(cfg.readEntry<int>("mdi_viewmode", (int)QMdiArea::TabbedView));
 
     m_backgroundimage->setText(cfg.getMDIBackgroundImage());
@@ -338,6 +362,11 @@ void GeneralTab::setDefault()
     m_chkNativeFileDialog->setChecked(false);
     intMaxBrushSize->setValue(1000);
 
+    chkUseCustomFont->setChecked(false);
+    cmbCustomFont->setCurrentFont(qApp->font());
+    intFontSize->setValue(qApp->font().pointSize());
+
+        
     m_cmbMDIType->setCurrentIndex((int)QMdiArea::TabbedView);
     m_chkRubberBand->setChecked(cfg.useOpenGL(true));
     m_favoritePresetsSpinBox->setValue(cfg.favoritePresets(true));
@@ -1707,6 +1736,16 @@ bool KisDlgPreferences::editPreferences()
         group.writeEntry("DontUseNativeFileDialog", !m_general->m_chkNativeFileDialog->isChecked());
 
         cfg.writeEntry<int>("maximumBrushSize", m_general->intMaxBrushSize->value());
+
+        cfg.writeEntry<bool>("use_custom_system_font", m_general->chkUseCustomFont->isChecked());
+        if (m_general->chkUseCustomFont->isChecked()) {
+            cfg.writeEntry<QString>("custom_system_font", m_general->cmbCustomFont->currentFont().family());
+            cfg.writeEntry<int>("custom_font_size", m_general->intFontSize->value());
+        }
+        else {
+            cfg.writeEntry<QString>("custom_system_font", "");
+            cfg.writeEntry<int>("custom_font_size", -1);
+        }
 
         cfg.writeEntry<int>("mdi_viewmode", m_general->mdiMode());
         cfg.setMDIBackgroundColor(m_general->m_mdiColor->color().toXML());

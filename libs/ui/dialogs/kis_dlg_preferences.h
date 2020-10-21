@@ -99,7 +99,6 @@ public:
 private Q_SLOTS:
     void getBackgroundImage();
     void clearBackgroundImage();
-
 };
 
 

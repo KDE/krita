@@ -190,10 +190,6 @@
     </spacer>
    </item>
   </layout>
-  <zorder>horizontalLayoutWidget</zorder>
-  <zorder>horizontalLayoutWidget</zorder>
-  <zorder>spacer2</zorder>
-  <zorder>gridLayoutWidget</zorder>
  </widget>
  <customwidgets>
   <customwidget>

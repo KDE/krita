@@ -2477,6 +2477,30 @@ void KisMainWindow::configChanged()
     }
 
     d->mdiArea->update();
+
+    if (KisConfig(false).readEntry<bool>("use_custom_system_font", false)) {
+        QString fontName = KisConfig(false).readEntry<QString>("custom_system_font", "");
+        int fontSize = KisConfig(false).readEntry<int>("custom_font_size", -1);
+
+        if (fontSize <= 6) {
+            fontSize = qApp->font().pointSize();
+        }
+        if (!fontName.isEmpty()) {
+            QFont f(fontName, fontSize);
+            qApp->setFont(f);
+
+            Q_FOREACH (QObject* widget, children()) {
+                if (widget->inherits("QDockWidget")) {
+                    QDockWidget* dw = static_cast<QDockWidget*>(widget);
+                    dw->setFont(KoDockRegistry::dockFont());
+                }
+            }
+
+        }
+    }
+    else {
+        qApp->setFont(QFontDatabase::systemFont(QFontDatabase::GeneralFont));
+    }
 }
 
 KisView* KisMainWindow::newView(QObject *document, QMdiSubWindow *subWindow)

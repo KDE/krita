@@ -79,6 +79,8 @@ void KisResourceItemDelegate::paint(QPainter *painter, const QStyleOptionViewIte
         painter->fillRect(innerRect, Qt::white); // no checkers, they are confusing with patterns.
         if (imageSize.height() > innerRect.height()*devicePixelRatioF || imageSize.width() > innerRect.width()*devicePixelRatioF) {
             thumbnail = thumbnail.scaled(innerRect.size()*devicePixelRatioF, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        } else if(imageSize.height() < innerRect.height()*devicePixelRatioF || imageSize.width() < innerRect.width()*devicePixelRatioF) {
+            thumbnail = thumbnail.scaled(innerRect.size()*devicePixelRatioF, Qt::KeepAspectRatio, Qt::FastTransformation);
         }
         QPoint topleft(innerRect.topLeft());
 

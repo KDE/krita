@@ -63,8 +63,8 @@ QTextDocument *KisIconToolTip::createDocument(const QModelIndex &index)
         thumb = index.data(Qt::UserRole + KisAbstractResourceModel::Thumbnail).value<QImage>();
     }
 
-        thumb = thumb.scaled(m_fixedToolTipThumbnailSize, Qt::IgnoreAspectRatio);
     if (!m_fixedToolTipThumbnailSize.isEmpty() && !thumb.isNull()) {
+        thumb = thumb.scaled(m_fixedToolTipThumbnailSize*devicePixelRatioF(), Qt::IgnoreAspectRatio);
     }
 
     if (m_checkersPainter) {
@@ -79,6 +79,7 @@ QTextDocument *KisIconToolTip::createDocument(const QModelIndex &index)
         thumb = image;
     }
 
+    thumb.setDevicePixelRatio(devicePixelRatioF());
     doc->addResource(QTextDocument::ImageResource, QUrl("data:thumbnail"), thumb);
 
     QString name = index.data(Qt::DisplayRole).toString();

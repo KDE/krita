@@ -284,6 +284,17 @@ void KisMultiChannelFilterConfiguration::toXML(QDomDocument& doc, QDomElement& r
     }
 }
 
+bool KisMultiChannelFilterConfiguration::compareTo(const KisPropertiesConfiguration *rhs) const
+{
+    const KisMultiChannelFilterConfiguration *otherConfig = dynamic_cast<const KisMultiChannelFilterConfiguration *>(rhs);
+
+    return otherConfig
+        && KisFilterConfiguration::compareTo(rhs)
+        && m_channelCount == otherConfig->m_channelCount
+        && m_curves == otherConfig->m_curves
+        && m_transfers == otherConfig->m_transfers;
+}
+
 KisMultiChannelConfigWidget::KisMultiChannelConfigWidget(QWidget * parent, KisPaintDeviceSP dev, Qt::WindowFlags f)
         : KisConfigWidget(parent, f)
         , m_dev(dev)

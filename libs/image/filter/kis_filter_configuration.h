@@ -118,6 +118,8 @@ public:
     virtual void setCurves(QList<KisCubicCurve> &curves);
     virtual const QList<KisCubicCurve>& curves() const;
 
+    virtual bool compareTo(const KisPropertiesConfiguration *rhs) const override;
+
 #ifdef SANITY_CHECK_FILTER_CONFIGURATION_OWNER
 private:
     friend class KisNodeFilterInterface;

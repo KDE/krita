@@ -2,6 +2,7 @@
  * This file is part of Krita
  *
  * Copyright (c) 2018 Jouni Pentikainen <joupent@gmail.com>
+ * Copyright (c) 2020 L. E. Segovia <amy@amyspark.me>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -75,6 +76,8 @@ public:
 
     const QVector<QVector<quint16> >& transfers() const;
     const QList<KisCubicCurve>& curves() const override;
+
+    virtual bool compareTo(const KisPropertiesConfiguration* rhs) const override;
 
 protected:
     int m_channelCount;

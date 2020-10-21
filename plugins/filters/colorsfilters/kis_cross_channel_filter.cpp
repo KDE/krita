@@ -127,6 +127,15 @@ KisCubicCurve KisCrossChannelFilterConfiguration::getDefaultCurve()
     return KisCubicCurve(points);
 }
 
+bool KisCrossChannelFilterConfiguration::compareTo(const KisPropertiesConfiguration *rhs) const
+{
+    const KisCrossChannelFilterConfiguration *otherConfig = dynamic_cast<const KisCrossChannelFilterConfiguration *>(rhs);
+
+    return otherConfig
+        && KisMultiChannelFilterConfiguration::compareTo(rhs)
+        && m_driverChannels == otherConfig->m_driverChannels;
+}
+
 KisCrossChannelConfigWidget::KisCrossChannelConfigWidget(QWidget * parent, KisPaintDeviceSP dev, Qt::WindowFlags f)
         : KisMultiChannelConfigWidget(parent, dev, f)
 {

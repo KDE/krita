@@ -46,7 +46,7 @@ void WGShadeSelector::updateSettings()
     }
 
     for (int i=0; i < config.size(); i++) {
-        m_sliders[i]->setGradient(config[i].gradient);
+        m_sliders[i]->setGradient(config[i].gradient, config[i].offset);
         m_sliders[i]->setFixedHeight(m_lineHeight);
     }
     m_resetOnExternalUpdate = cfg.shadeSelectorUpdateOnExternalChanges();

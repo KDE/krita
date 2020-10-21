@@ -9,17 +9,23 @@
 
 #include "WGConfig.h"
 #include "WGSelectorConfigGrid.h"
+#include "WGShadeLineEditor.h"
 
 #include "kis_config.h"
 
+#include <QApplication>
+#include <QButtonGroup>
 #include <QVBoxLayout>
+#include <QDesktopWidget>
 #include <QDialogButtonBox>
 #include <QStringList>
+#include <QToolButton>
 #include <QPushButton>
 
 WGColorSelectorSettings::WGColorSelectorSettings(QWidget *parent)
     : KisPreferenceSet(parent)
     , m_ui(new Ui::WGConfigWidget)
+    , m_shadeLineGroup(new QButtonGroup(this))
 {
     m_ui->setupUi(this);
     m_selectorConfigGrid = new WGSelectorConfigGrid;
@@ -30,9 +36,21 @@ WGColorSelectorSettings::WGColorSelectorSettings(QWidget *parent)
     connect(m_selectorConfigGrid, SIGNAL(sigConfigSelected(KisColorSelectorConfiguration)),
             m_ui->btnSelectorShape, SLOT(hidePopupWidget()));
     connect(m_ui->cmbColorModel, SIGNAL(currentIndexChanged(int)), SLOT(slotSetColorModel(int)));
+    connect(m_ui->sbShadeLineCount, SIGNAL(valueChanged(int)), SLOT(slotSetShadeLineCount(int)));
     m_favoriteConfigGrid = new WGSelectorConfigGrid(0, true);
     m_favoriteConfigGrid->setConfigurations(WGSelectorConfigGrid::hueBasedConfigurations());
     m_ui->btnFavoriteSelectors->setPopupWidget(m_favoriteConfigGrid);
+
+    m_shadeLineEditor = new WGShadeLineEditor(this);
+    m_shadeLineEditor->hide();
+    connect(m_shadeLineEditor, SIGNAL(sigEditorClosed(int)), SLOT(slotLineEdited(int)));
+
+    m_shadeLineGroup->setExclusive(false);
+#if QT_VERSION >= QT_VERSION_CHECK(5,15,0)
+    connect(m_shadeLineGroup, SIGNAL(idClicked(int)), SLOT(slotShowLineEditor(int)));
+#else
+    connect(m_shadeLineGroup, SIGNAL(buttonClicked(int)), SLOT(slotShowLineEditor(int)));
+#endif
 }
 
 WGColorSelectorSettings::~WGColorSelectorSettings()
@@ -76,6 +94,10 @@ void WGColorSelectorSettings::savePreferences() const
     cfg.setShadeSelectorUpdateOnExternalChanges(m_ui->chkShadeSelUpdateExternal->isChecked());
     cfg.setShadeSelectorUpdateOnInteractionEnd(m_ui->chkShadeSelUpdateInteraction->isChecked());
     cfg.setShadeSelectorUpdateOnRightClick(m_ui->chkShadeSelUpdateOnRightClick->isChecked());
+    // we don't discard shade line configurations right away so we need to trim here
+    QVector<WGConfig::ShadeLine> lineConfig = m_shadeLineConfig;
+    lineConfig.resize(m_ui->sbShadeLineCount->value());
+    cfg.setShadeSelectorLines(lineConfig);
 }
 
 void WGColorSelectorSettings::loadPreferences()
@@ -85,7 +107,7 @@ void WGColorSelectorSettings::loadPreferences()
     m_ui->cmbColorModel->setCurrentIndex(cfg.readEntry("rgbColorModel", 2) - KisVisualColorModel::HSV);
     KisColorSelectorConfiguration selectorCfg = cfg.colorSelectorConfiguration();
     m_selectorConfigGrid->setChecked(selectorCfg);
-    m_ui->btnSelectorShape->setIcon(m_selectorConfigGrid->generateIcon(selectorCfg));
+    m_ui->btnSelectorShape->setIcon(m_selectorConfigGrid->generateIcon(selectorCfg, devicePixelRatioF()));
     m_ui->grpQuickSettingsMenu->setChecked(cfg.quickSettingsEnabled());
     QVector<KisColorSelectorConfiguration> favoriteConfigs = cfg.favoriteConfigurations();
     for (const KisColorSelectorConfiguration &fav: favoriteConfigs) {
@@ -95,6 +117,8 @@ void WGColorSelectorSettings::loadPreferences()
     m_ui->chkShadeSelUpdateExternal->setChecked(cfg.shadeSelectorUpdateOnExternalChanges());
     m_ui->chkShadeSelUpdateInteraction->setChecked(cfg.shadeSelectorUpdateOnInteractionEnd());
     m_ui->chkShadeSelUpdateOnRightClick->setChecked(cfg.shadeSelectorUpdateOnRightClick());
+    m_shadeLineConfig = cfg.shadeSelectorLines();
+    m_ui->sbShadeLineCount->setValue(m_shadeLineConfig.size());
 }
 
 void WGColorSelectorSettings::loadDefaultPreferences()
@@ -127,6 +151,51 @@ void WGColorSelectorSettings::slotSetColorModel(int index)
     }
     m_selectorConfigGrid->setColorModel(model);
     m_ui->btnSelectorShape->setIcon(m_selectorConfigGrid->currentIcon());
+}
+
+void WGColorSelectorSettings::slotSetShadeLineCount(int count)
+{
+    if (m_shadeLineConfig.size() < count) {
+        m_shadeLineConfig.resize(count);
+    }
+    while (m_shadeLineButtons.size() < count) {
+        QToolButton *lineButton = new QToolButton(this);
+        lineButton->setIconSize(QSize(128, 10));
+        // TODO: update icon
+        lineButton->setIcon(m_shadeLineEditor->generateIcon(m_shadeLineConfig.at(m_shadeLineButtons.size())));
+        m_shadeLineGroup->addButton(lineButton, m_shadeLineButtons.size());
+        m_shadeLineButtons.append(lineButton);
+        m_ui->shadeLineLayout->addWidget(lineButton);
+    }
+    while (m_shadeLineButtons.size() > count)
+    {
+        m_ui->shadeLineLayout->removeWidget(m_shadeLineButtons.last());
+        delete m_shadeLineButtons.last();
+        m_shadeLineButtons.removeLast();
+    }
+}
+
+void WGColorSelectorSettings::slotShowLineEditor(int lineNum)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(lineNum >= 0 && lineNum < m_shadeLineConfig.size());
+
+    m_shadeLineEditor->setConfiguration(m_shadeLineConfig[lineNum], lineNum);
+    m_shadeLineEditor->show();
+
+    QWidget *btn = m_shadeLineButtons.at(lineNum);
+    QRect fitRect = kisGrowRect(QApplication::desktop()->availableGeometry(btn), -10);
+    QRect popupRect = m_shadeLineEditor->rect();
+    popupRect.moveTo(btn->mapToGlobal(QPoint()));
+    popupRect = kisEnsureInRect(popupRect, fitRect);
+    m_shadeLineEditor->move(popupRect.topLeft());
+}
+
+void WGColorSelectorSettings::slotLineEdited(int lineNum)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(lineNum >= 0 && lineNum < m_shadeLineConfig.size());
+
+    m_shadeLineConfig[lineNum] = m_shadeLineEditor->configuration();
+    m_shadeLineButtons[lineNum]->setIcon(m_shadeLineEditor->generateIcon(m_shadeLineConfig.at(lineNum)));
 }
 
 

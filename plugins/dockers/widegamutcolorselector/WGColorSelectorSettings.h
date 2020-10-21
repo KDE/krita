@@ -7,6 +7,8 @@
 #ifndef WGCOLORSELECTORSETTINGS_H
 #define WGCOLORSELECTORSETTINGS_H
 
+#include "WGConfig.h"
+
 #include <QDialog>
 #include <QScopedPointer>
 
@@ -17,6 +19,9 @@ namespace Ui {
     class WGConfigWidget;
 }
 class WGSelectorConfigGrid;
+class WGShadeLineEditor;
+class QButtonGroup;
+class QToolButton;
 
 class WGColorSelectorSettings : public KisPreferenceSet
 {
@@ -39,10 +44,17 @@ public Q_SLOTS:
 private Q_SLOTS:
     void slotSetSelectorConfiguration(const KisColorSelectorConfiguration &cfg);
     void slotSetColorModel(int index);
+    void slotSetShadeLineCount(int count);
+    void slotShowLineEditor(int lineNum);
+    void slotLineEdited(int lineNum);
 private:
     QScopedPointer<Ui::WGConfigWidget> m_ui;
     WGSelectorConfigGrid *m_selectorConfigGrid;
     WGSelectorConfigGrid *m_favoriteConfigGrid;
+    WGShadeLineEditor *m_shadeLineEditor;
+    QButtonGroup *m_shadeLineGroup;
+    QVector<WGConfig::ShadeLine> m_shadeLineConfig;
+    QVector<QToolButton*> m_shadeLineButtons;
 };
 
 

@@ -326,9 +326,13 @@ void NodeDelegate::drawThumbnail(QPainter *p, const QStyleOptionViewItem &option
     KisNodeViewColorScheme scm;
 
     const int thumbSize = scm.thumbnailSize();
+    const qreal devicePixelRatio = p->device()->devicePixelRatioF();
+    const int thumbSizeHighRes = thumbSize*devicePixelRatio;
+
     const qreal oldOpacity = p->opacity(); // remember previous opacity
 
-    QImage img = index.data(int(KisNodeModel::BeginThumbnailRole) + thumbSize).value<QImage>();
+    QImage img = index.data(int(KisNodeModel::BeginThumbnailRole) + thumbSizeHighRes).value<QImage>();
+    img.setDevicePixelRatio(devicePixelRatio);
     if (!(option.state & QStyle::State_Enabled)) {
         p->setOpacity(0.35);
     }
@@ -348,18 +352,19 @@ void NodeDelegate::drawThumbnail(QPainter *p, const QStyleOptionViewItem &option
     fitRect = kisGrowRect(fitRect, -(scm.thumbnailMargin()+scm.border()));
 
     QPoint offset;
-    offset.setX((fitRect.width() - img.width()) / 2);
-    offset.setY((fitRect.height() - img.height()) / 2);
+    offset.setX((fitRect.width() - img.width()/devicePixelRatio) / 2);
+    offset.setY((fitRect.height() - img.height()/devicePixelRatio) / 2);
     offset += fitRect.topLeft();
 
     QBrush brush(checkers);
     p->setBrushOrigin(offset);
-    p->fillRect(img.rect().translated(offset), brush);
+    QRect imageRectLowRes = QRect(img.rect().topLeft(), img.rect().size()/devicePixelRatio);
+    p->fillRect(imageRectLowRes.translated(offset), brush);
 
     p->drawImage(offset, img);
     p->setOpacity(oldOpacity); // restore old opacity
 
-    QRect borderRect = kisGrowRect(img.rect(), 1).translated(offset);
+    QRect borderRect = kisGrowRect(imageRectLowRes, 1).translated(offset);
     KritaUtils::renderExactRect(p, borderRect, scm.gridColor(option, d->view));
 }
 

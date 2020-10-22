@@ -48,6 +48,8 @@ void KisStorageChooserDelegate::paint(QPainter *painter, const QStyleOptionViewI
 
     QImage thumbnail = index.data(Qt::UserRole +  + KisStorageModel::Thumbnail).value<QImage>();
 
+    qreal devicePixelRatioF = painter->device()->devicePixelRatioF();
+
     if (thumbnail.isNull()) {
         //fallback on cute icons.
         thumbnail = koIcon("warning").pixmap(option.decorationSize).toImage();
@@ -74,7 +76,8 @@ void KisStorageChooserDelegate::paint(QPainter *painter, const QStyleOptionViewI
         }
 
     } else {
-        thumbnail = thumbnail.scaled(option.decorationSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        thumbnail = thumbnail.scaled(option.decorationSize*devicePixelRatioF, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        thumbnail.setDevicePixelRatio(devicePixelRatioF);
     }
 
     QColor penColor(option.palette.text().color());

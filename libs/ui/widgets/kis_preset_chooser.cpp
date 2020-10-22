@@ -96,15 +96,19 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
 
     QMap<QString, QVariant> metaData = index.data(Qt::UserRole + KisAbstractResourceModel::MetaData).value<QMap<QString, QVariant>>();
 
+    qreal devicePixelRatioF = painter->device()->devicePixelRatioF();
+
     QRect paintRect = option.rect.adjusted(1, 1, -1, -1);
     if (!m_showText) {
-        painter->drawImage(paintRect.x(), paintRect.y(),
-                           preview.scaled(paintRect.size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+        QImage previewHighDpi = preview.scaled(paintRect.size()*devicePixelRatioF, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+        previewHighDpi.setDevicePixelRatio(devicePixelRatioF);
+        painter->drawImage(paintRect.x(), paintRect.y(), previewHighDpi);
     }
     else {
         QSize pixSize(paintRect.height(), paintRect.height());
-        painter->drawImage(paintRect.x(), paintRect.y(),
-                           preview.scaled(pixSize, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        QImage previewHighDpi = preview.scaled(pixSize*devicePixelRatioF, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        previewHighDpi.setDevicePixelRatio(devicePixelRatioF);
+        painter->drawImage(paintRect.x(), paintRect.y(), previewHighDpi);
 
         // Put an asterisk after the preset if it is dirty. This will help in case the pixmap icon is too small
 

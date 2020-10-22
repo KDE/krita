@@ -557,7 +557,7 @@ void KisKraSaverTest::testRoundTripStoryboard()
     doc->setCurrentImage(image);
 
     StoryboardItemList list;
-    list.append(new StoryboardItem());
+    list.append(toQShared(new StoryboardItem()));
 
     doc->setStoryboardItemList(list);
     bool result = doc->exportDocumentSync(QUrl::fromLocalFile("storyboardroundtriptest.kra"), doc->mimeType());

@@ -217,7 +217,7 @@ void KisKraSaver:: saveStoryboard(QDomDocument& doc, QDomElement &element)
 
     //saving storyboard items
     QDomElement eItemList = doc.createElement("StoryboardItemList");
-    for (StoryboardItem *item : m_d->doc->getStoryboardItemList()) {
+    for (StoryboardItemSP item : m_d->doc->getStoryboardItemList()) {
         QDomElement eItem =  item->toXML(doc);
         eItemList.appendChild(eItem);
     }

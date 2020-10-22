@@ -21,6 +21,8 @@
 #include <QDomElement>
 #include <QDomDocument>
 
+#include "kis_pointer_utils.h"
+
 StoryboardItem::StoryboardItem()
 {}
 
@@ -33,25 +35,25 @@ StoryboardItem::StoryboardItem(const StoryboardItem& other)
 
 StoryboardItem::~StoryboardItem()
 {
-    qDeleteAll(m_childData);
     m_childData.clear();
 }
 
 void StoryboardItem::appendChild(QVariant data)
 {
-    StoryboardChild* child = new StoryboardChild(data, this);
+    QSharedPointer<StoryboardChild> child = toQShared( new StoryboardChild(data) );
+    child->setParent(sharedFromThis());
     m_childData.append(child);
 }
 
 void StoryboardItem::insertChild(int row, QVariant data)
 {
-    StoryboardChild* child = new StoryboardChild(data, this);
+    QSharedPointer<StoryboardChild> child = toQShared( new StoryboardChild(data) );
+    child->setParent(sharedFromThis());
     m_childData.insert(row, child);
 }
 
 void StoryboardItem::removeChild(int row)
 {
-    delete m_childData.at(row);
     m_childData.removeAt(row);
 }
 
@@ -65,7 +67,7 @@ int StoryboardItem::childCount() const
     return m_childData.count();
 }
 
-StoryboardChild* StoryboardItem::child(int row) const
+QSharedPointer<StoryboardChild> StoryboardItem::child(int row) const
 {
     if (row < 0 || row >= m_childData.size()) {
         return nullptr;
@@ -123,7 +125,7 @@ StoryboardItemList StoryboardItem::cloneStoryboardItemList(const StoryboardItemL
 {
     StoryboardItemList clonedList;
     for (auto i = 0; i < list.count(); i++) {
-        StoryboardItem *item = new StoryboardItem(*list.at(i));
+        StoryboardItemSP item = toQShared( new StoryboardItem(*list.at(i)) );
         clonedList.append(item);
     }
     return clonedList;

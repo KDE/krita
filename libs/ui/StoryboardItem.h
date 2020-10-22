@@ -118,14 +118,24 @@ Q_DECLARE_METATYPE(ThumbnailData)
 class StoryboardChild
 {
 public:
-    StoryboardChild(QVariant data, StoryboardItem *parent)
+    StoryboardChild(QVariant data)
         : m_data(data)
-        , m_parentItem(parent)
     {}
-    StoryboardItem *parent()
+
+    StoryboardChild(const StoryboardChild &rhs)
+        : m_data(rhs.m_data)
+    {}
+
+    StoryboardItemSP parent()
     {
-        return m_parentItem;
+        return m_parentItem.toStrongRef();
     }
+
+    void setParent(StoryboardItemSP parent)
+    {
+        m_parentItem = parent;
+    }
+
     QVariant data()
     { 
         return m_data;
@@ -137,7 +147,7 @@ public:
 
 private:
     QVariant m_data;
-    StoryboardItem *m_parentItem;
+    QWeakPointer<StoryboardItem> m_parentItem;
 };
 
 /**
@@ -147,19 +157,19 @@ private:
  * item type must be stored at specific indices
  * @param childType enum for the indices and corresponding data type to be stored.
  */
-class KRITAUI_EXPORT StoryboardItem
+class KRITAUI_EXPORT StoryboardItem : public QEnableSharedFromThis<StoryboardItem>
 {
 public:
     explicit StoryboardItem();
     StoryboardItem(const StoryboardItem& other);
     ~StoryboardItem();
 
-    void appendChild(QVariant data = QVariant());
+    void appendChild(QVariant data);
     void insertChild(int row, QVariant data = QVariant());
     void removeChild(int row);
     void moveChild(int from, int to);
     int childCount() const;
-    StoryboardChild *child(int row) const;
+    QSharedPointer<StoryboardChild> child(int row) const;
 
     QDomElement toXML(QDomDocument doc);
     void loadXML(const QDomElement &itemNode);
@@ -201,7 +211,7 @@ public:
     };
 
 private:
-    QVector<StoryboardChild*> m_childData;
+    QVector<QSharedPointer<StoryboardChild>> m_childData;
 };
 
 #endif

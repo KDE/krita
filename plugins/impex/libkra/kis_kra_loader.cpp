@@ -1309,7 +1309,7 @@ void KisKraLoader::loadStoryboardItemList(const KoXmlElement& elem)
     for (child = elem.firstChild(); !child.isNull(); child = child.nextSibling()) {
         KoXmlElement e = child.toElement();
         if (e.tagName() == "storyboarditem") {
-            StoryboardItem *item = new StoryboardItem();
+            StoryboardItemSP item = toQShared( new StoryboardItem() );
             item->loadXML(e);
             count++;
             m_d->storyboardItemList.append(item);

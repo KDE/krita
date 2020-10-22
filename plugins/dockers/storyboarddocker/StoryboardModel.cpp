@@ -23,9 +23,11 @@
 #include <QDebug>
 #include <QMimeData>
 
+
 #include <kis_icon.h>
 #include <KoColorSpaceRegistry.h>
 #include <kis_layer_utils.h>
+#include <kis_pointer_utils.h>
 #include <kis_group_layer.h>
 #include "kis_time_span.h"
 #include "kis_raster_keyframe_channel.h"
@@ -64,13 +66,13 @@ QModelIndex StoryboardModel::index(int row, int column, const QModelIndex &paren
     }
     //1st level node has invalid parent
     if (!parent.isValid()) {
-        return createIndex(row, column, m_items.at(row));
+        return createIndex(row, column, m_items.at(row).data());
     }
     else if (!parent.parent().isValid()) {
-        StoryboardItem *parentItem = m_items.at(parent.row());
-        StoryboardChild *childItem = parentItem->child(row);
+        StoryboardItemSP parentItem = m_items.at(parent.row());
+        QSharedPointer<StoryboardChild> childItem = parentItem->child(row);
         if (childItem) {
-            return createIndex(row, column, childItem);
+            return createIndex(row, column, childItem.data());
         }
     }
     return QModelIndex();
@@ -84,15 +86,18 @@ QModelIndex StoryboardModel::parent(const QModelIndex &index) const
 
     //no parent for 1st level node
     StoryboardItem *childItemFirstLevel = static_cast<StoryboardItem*>(index.internalPointer());
-    if (m_items.contains(childItemFirstLevel)) {
-        return QModelIndex();
+
+    Q_FOREACH( StoryboardItemSP item, m_items) {
+        if (item.data() == childItemFirstLevel) {
+            return QModelIndex();
+        }
     }
 
     //return parent only for 2nd level nodes
     StoryboardChild *childItem = static_cast<StoryboardChild*>(index.internalPointer());
-    StoryboardItem *parentItem = childItem->parent();
-    int indexOfParent = m_items.indexOf(const_cast<StoryboardItem*>(parentItem));
-    return createIndex(indexOfParent, 0, parentItem);
+    QSharedPointer<StoryboardItem> parentItem = childItem->parent();
+    int indexOfParent = m_items.indexOf(parentItem);
+    return createIndex(indexOfParent, 0, parentItem.data());
 }
 
 int StoryboardModel::rowCount(const QModelIndex &parent) const
@@ -101,7 +106,7 @@ int StoryboardModel::rowCount(const QModelIndex &parent) const
         return m_items.count();
     }
     else if (!parent.parent().isValid()) {
-        StoryboardItem *parentItem = m_items.at(parent.row());
+        QSharedPointer<StoryboardItem> parentItem = m_items.at(parent.row());
         return parentItem->childCount();
     }
     return 0;   //2nd level nodes have no child
@@ -132,7 +137,7 @@ QVariant StoryboardModel::data(const QModelIndex &index, int role) const
     }
 
     if (role == Qt::DisplayRole || role == Qt::EditRole || role == Qt::UserRole) {
-        StoryboardChild *child = m_items.at(index.parent().row())->child(index.row());
+        QSharedPointer<StoryboardChild> child = m_items.at(index.parent().row())->child(index.row());
         if (index.row() == StoryboardItem::FrameNumber) {
             ThumbnailData thumbnailData = qvariant_cast<ThumbnailData>(child->data());
             if (role == Qt::UserRole) {
@@ -163,7 +168,7 @@ bool StoryboardModel::setData(const QModelIndex & index, const QVariant & value,
             return false;
         }
 
-        StoryboardChild *child = m_items.at(index.parent().row())->child(index.row());
+        QSharedPointer<StoryboardChild> child = m_items.at(index.parent().row())->child(index.row());
         if (child) {
             int fps = m_image.isValid() ? m_image->animationInterface()->framerate() : 24;      //TODO: update all items on framerate change
 
@@ -211,7 +216,7 @@ bool StoryboardModel::setData(const QModelIndex & index, const QVariant & value,
 
 bool StoryboardModel::setCommentScrollData(const QModelIndex & index, const QVariant & value)
 {
-    StoryboardChild *child = m_items.at(index.parent().row())->child(index.row());
+    QSharedPointer<StoryboardChild> child = m_items.at(index.parent().row())->child(index.row());
     if (child) {
         CommentBox commentBox = qvariant_cast<CommentBox>(child->data());
         commentBox.scrollValue = value.toInt();
@@ -233,7 +238,10 @@ bool StoryboardModel::setThumbnailPixmapData(const QModelIndex & parentIndex, co
     QPixmap pxmap = QPixmap::fromImage(image);
     pxmap = pxmap.scaled((1.5)*scale*m_image->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
-    StoryboardChild *child = m_items.at(index.parent().row())->child(index.row());
+    if (!index.parent().isValid())
+        return false;
+
+    QSharedPointer<StoryboardChild> child = m_items.at(index.parent().row())->child(index.row());
     if (child) {
         ThumbnailData thumbnailData = qvariant_cast<ThumbnailData>(child->data());
         thumbnailData.pixmap = pxmap;
@@ -292,7 +300,7 @@ bool StoryboardModel::insertRows(int position, int rows, const QModelIndex &pare
         }
         beginInsertRows(QModelIndex(), position, position+rows-1);
         for (int row = 0; row < rows; ++row) {
-            StoryboardItem *newItem = new StoryboardItem();
+            StoryboardItemSP newItem = toQShared(new StoryboardItem());
             m_items.insert(position, newItem);
         }
         endInsertRows();
@@ -300,7 +308,7 @@ bool StoryboardModel::insertRows(int position, int rows, const QModelIndex &pare
         return true;
     }
     else if (!parent.parent().isValid()) {              //insert 2nd level nodes
-        StoryboardItem *item = m_items.at(parent.row());
+        StoryboardItemSP item = m_items.at(parent.row());
 
         if (position < 0 || position > item->childCount()) {
             return false;
@@ -327,7 +335,6 @@ bool StoryboardModel::removeRows(int position, int rows, const QModelIndex &pare
         }
         beginRemoveRows(QModelIndex(), position, position+rows-1);
         for (int row = position + rows - 1; row >= position; row--) {
-            delete m_items.at(row);
             m_items.removeAt(row);
         }
         endRemoveRows();
@@ -335,7 +342,7 @@ bool StoryboardModel::removeRows(int position, int rows, const QModelIndex &pare
         return true;
     }
     else if (!parent.parent().isValid()) {                     //remove 2nd level nodes
-        StoryboardItem *item = m_items.at(parent.row());
+        StoryboardItemSP item = m_items.at(parent.row());
 
         if (position < 0 || position >= item->childCount()) {
             return false;
@@ -382,7 +389,7 @@ bool StoryboardModel::moveRows(const QModelIndex &sourceParent, int sourceRow, i
                 return false;
             }
 
-            StoryboardItem *item = m_items.at(parent.row());
+            StoryboardItemSP item = m_items.at(parent.row());
             item->moveChild(sourceRow, destinationChild + row);
         }
         endMoveRows();
@@ -540,7 +547,7 @@ void StoryboardModel::setImage(KisImageWSP image)
 
     //setting image to a different image stops rendering of all frames previously scheduled.
     //resetData() must be called before setImage(KisImageWSP) so that we can schedule rendering for the items in the new KisDocument
-    foreach (StoryboardItem *item, m_items) {
+    foreach (StoryboardItemSP item, m_items) {
         int frame = qvariant_cast<ThumbnailData>(item->child(StoryboardItem::FrameNumber)->data()).frameNum.toInt();
         m_renderScheduler->scheduleFrameForRegeneration(frame,true);
     }

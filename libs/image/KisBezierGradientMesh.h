@@ -1,0 +1,66 @@
+#ifndef KISBEZIERGRADIENTMESH_H
+#define KISBEZIERGRADIENTMESH_H
+
+#include "kritaimage_export.h"
+#include <KisBezierMesh.h>
+
+#include <QColor>
+
+namespace KisBezierGradientMeshDetail {
+
+inline QColor lerp(const QColor &c1, const QColor &c2, qreal t) {
+    using KisAlgebra2D::lerp;
+
+    return QColor::fromRgbF(lerp(c1.redF(), c2.redF(), t),
+                            lerp(c1.greenF(), c2.greenF(), t),
+                            lerp(c1.blueF(), c2.blueF(), t),
+                            lerp(c1.alphaF(), c2.alphaF(), t));
+}
+
+struct GradientMeshPatch : public KisBezierPatch {
+    std::array<QColor, 4> colors;
+};
+
+struct GradientMeshNode : public KisBezierMeshDetails::BaseMeshNode
+{
+    QColor color;
+};
+
+inline void lerpNodeData(const GradientMeshNode &left, const GradientMeshNode &right, qreal t, GradientMeshNode &dst)
+{
+    dst.color = lerp(left.color, right.color, t);
+}
+
+inline void assignPatchData(GradientMeshPatch *patch,
+                     const QRectF &srcRect,
+                     const GradientMeshNode &tl,
+                     const GradientMeshNode &tr,
+                     const GradientMeshNode &bl,
+                     const GradientMeshNode &br)
+{
+    Q_UNUSED(srcRect);
+
+    patch->originalRect = QRectF(0.0, 0.0, 1.0, 1.0);
+    patch->colors[0] = tl.color;
+    patch->colors[1] = tr.color;
+    patch->colors[2] = bl.color;
+    patch->colors[3] = br.color;
+}
+
+class KRITAIMAGE_EXPORT KisBezierGradientMesh : public KisBezierMeshBase<GradientMeshNode, GradientMeshPatch>
+{
+public:
+
+    static void renderPatch(const GradientMeshPatch &patch,
+                     const QPoint &dstQImageOffset,
+                     QImage *dstImage);
+
+    void renderMesh(const QPoint &dstQImageOffset,
+                    QImage *dstImage) const;
+};
+
+}
+
+using KisBezierGradientMeshDetail::KisBezierGradientMesh;
+
+#endif // KISBEZIERGRADIENTMESH_H

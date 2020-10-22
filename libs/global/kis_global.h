@@ -158,6 +158,11 @@ inline T pow2(const T& x) {
 }
 
 template<typename T>
+inline T pow3(const T& x) {
+    return x * x * x;
+}
+
+template<typename T>
 inline T kisDegreesToRadians(T degrees) {
     return degrees * M_PI / 180.0;
 }

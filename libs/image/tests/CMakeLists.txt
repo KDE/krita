@@ -143,14 +143,9 @@ ecm_add_tests(
     kis_processings_test.cpp
     kis_paint_device_test.cpp
     kis_layer_styles_test.cpp
+    kis_mesh_transform_worker_test.cpp
 
     LINK_LIBRARIES kritaimage Qt5::Test
-    NAME_PREFIX "libs-image-"
-)
-
-ecm_add_test( kis_mesh_transform_worker_test.cpp
-    TEST_NAME     kis_mesh_transform_worker_test
-    LINK_LIBRARIES kritaimage Qt5::Test ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES}
     NAME_PREFIX "libs-image-"
 )
 

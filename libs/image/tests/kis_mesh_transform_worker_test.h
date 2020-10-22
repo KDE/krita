@@ -30,7 +30,7 @@ private Q_SLOTS:
     void testPointsQImage();
     void testGradient();
 
-    void testMesh();
+    void testMeshSubdivision();
 
     void testGlobalToLocal();
 

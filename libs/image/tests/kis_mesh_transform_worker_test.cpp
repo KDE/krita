@@ -149,6 +149,75 @@ void deCasteljau(const QPointF &q0,
     *p4 = q[2];
 }
 
+bool isLinearSegmentByDerivatives(const QPointF &p0, const QPointF &d0,
+                          const QPointF &p1, const QPointF &d1,
+                          const qreal eps = 1e-4)
+{
+    const QPointF diff = p1 - p0;
+    const qreal dist = KisAlgebra2D::norm(diff);
+
+    const qreal normCoeff = 1.0 / 3.0 / dist;
+
+    const qreal offset1 =
+        normCoeff * qAbs(KisAlgebra2D::crossProduct(diff, d0));
+    if (offset1 > eps) return false;
+
+    const qreal offset2 =
+        normCoeff * qAbs(KisAlgebra2D::crossProduct(diff, d1));
+    if (offset2 > eps) return false;
+
+    return true;
+}
+
+bool isLinearSegmentByControlPoints(const QPointF &p0, const QPointF &p1,
+                                  const QPointF &p2, const QPointF &p3,
+                                  const qreal eps = 1e-4)
+{
+    return isLinearSegmentByDerivatives(p0, (p1 - p0) * 3.0, p3, (p3 - p2) * 3.0, eps);
+}
+
+int bezierDegree(const QPointF p0,
+                 const QPointF p1,
+                 const QPointF p2,
+                 const QPointF p3)
+{
+    const qreal eps = 1e-4;
+
+    int degree = 3;
+
+    if (isLinearSegmentByControlPoints(p0, p1, p2, p3, eps)) {
+        degree = 1;
+    } else if (KisAlgebra2D::fuzzyPointCompare(p1, p2, eps)) {
+        degree = 2;
+    }
+
+    return degree;
+}
+
+void splitBezierCurve(const QPointF &q0,
+                      const QPointF &q1,
+                      const QPointF &q2,
+                      const QPointF &q3,
+                      qreal t,
+                      QPointF *p0,
+                      QPointF *p1,
+                      QPointF *p2,
+                      QPointF *p3,
+                      QPointF *p4)
+{
+    const qreal eps = 1e-4;
+
+    if (isLinearSegmentByControlPoints(q0, q1, q2, q3, eps)) {
+        *p2 = lerp(q0, q3, t);
+        *p0 = lerp(q0, *p2, 0.1);
+        *p1 = lerp(q0, *p2, 0.9);
+        *p3 = lerp(*p2, q3, 0.1);
+        *p4 = lerp(*p2, q3, 0.9);
+    } else {
+        deCasteljau(q0, q1, q2, q3, t, p0, p1, p2, p3, p4);
+    }
+}
+
 struct Node {
     Node() {}
     Node(const QPointF &_node)
@@ -219,27 +288,6 @@ struct BezierPatch
         return originalRect;
     }
 
-    static bool isLinearSegment(const QPointF &p0, const QPointF &d0,
-                         const QPointF &p1, const QPointF &d1)
-    {
-        const QPointF diff = p1 - p0;
-        const qreal dist = KisAlgebra2D::norm(diff);
-
-        const qreal normCoeff = 1.0 / 3.0 / dist;
-
-        // TODO: handle negative projection case
-
-        const qreal offset1 =
-            normCoeff * KisAlgebra2D::crossProduct(diff, d0);
-        if (offset1 > 1.0) return false;
-
-        const qreal offset2 =
-            normCoeff * KisAlgebra2D::crossProduct(diff, d1);
-        if (offset2 > 1.0) return false;
-
-        return true;
-    }
-
     static QVector<qreal> linearizeCurve(const QPointF p0,
                                          const QPointF p1,
                                          const QPointF p2,
@@ -264,7 +312,8 @@ struct BezierPatch
             qreal t = std::get<2>(stackedPoints.top());
 
             if (t - lastT < minStepSize ||
-                isLinearSegment(lastP, lastD, p, d)) {
+                isLinearSegmentByDerivatives(lastP, lastD, p, d, 1.0)) {
+
                 lastP = p;
                 lastD = d;
                 lastT = t;
@@ -435,8 +484,8 @@ struct BezierMesh
     void splitCurveHorizontally(Node &left, Node &right, qreal t, Node &newNode) {
         QPointF p1, p2, p3, q1, q2;
 
-        deCasteljau(left.node, left.rightControl, right.leftControl, right.node, t,
-                    &p1, &p2, &p3, &q1, &q2);
+        splitBezierCurve(left.node, left.rightControl, right.leftControl, right.node, t,
+                         &p1, &p2, &p3, &q1, &q2);
 
         left.rightControl = p1;
         newNode.leftControl = p2;
@@ -462,8 +511,8 @@ struct BezierMesh
     void splitCurveVertically(Node &top, Node &bottom, qreal t, Node &newNode) {
         QPointF p1, p2, p3, q1, q2;
 
-        deCasteljau(top.node, top.bottomControl, bottom.topControl, bottom.node, t,
-                    &p1, &p2, &p3, &q1, &q2);
+        splitBezierCurve(top.node, top.bottomControl, bottom.topControl, bottom.node, t,
+                         &p1, &p2, &p3, &q1, &q2);
 
         top.bottomControl = p1;
         newNode.topControl = p2;
@@ -757,6 +806,55 @@ struct QImageGradientOp
     QPointF m_dstImageOffset;
     QRect m_dstImageRect;
 };
+
+}
+
+
+bool testCurveLinear(const QPointF &p0,
+                     const QPointF &p1,
+                     const QPointF &p2,
+                     const QPointF &p3,
+                     qreal threshold,
+                     bool expectedValue)
+{
+    qDebug() << "== Testing curve:" << p0 << p1 << p2 << p3 << ppVar(threshold);
+
+    const bool isLinear = isLinearSegmentByControlPoints(p0, p1, p2, p3, threshold);
+
+    qDebug() << ppVar(isLinear);
+
+    bool distanceCorrect = true;
+
+    for (qreal t = 0.0; t < 1.0; t += 0.05) {
+        const QPointF pt = bezierCurve(p0, p1, p2, p3, t);
+
+        //qDebug() << ppVar(t) << pt;
+
+        const qreal distance = kisDistanceToLine(pt, QLineF(p0, p3));
+
+        if (distance > threshold) {
+            distanceCorrect = false;
+            qDebug() << "Non-linear point" << ppVar(t) << ppVar(pt) << ppVar(distance);
+        }
+    }
+
+
+    qDebug() << "==";
+
+    return isLinear == expectedValue && (!expectedValue || distanceCorrect);
+}
+
+void KisMeshTransformWorkerTest::testIsCurveLinear()
+{
+    QVERIFY(testCurveLinear(QPointF(10,10), QPointF(10.5, 10.5),
+                            QPointF(19.5, 9.5), QPointF(20, 10), 1.0, true));
+    QVERIFY(testCurveLinear(QPointF(10,10), QPointF(12, 12),
+                            QPointF(18, 8), QPointF(20, 10), 0.5, false));
+
+    QVERIFY(testCurveLinear(QPointF(10,10), QPointF(9.5, 9.5),
+                            QPointF(19.5, 9.5), QPointF(20, 10), 1.0, true));
+    QVERIFY(testCurveLinear(QPointF(10,10), QPointF(12, 12),
+                            QPointF(18, 8), QPointF(20, 10), 1.0, false));
 
 }
 

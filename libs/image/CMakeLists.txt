@@ -322,6 +322,8 @@ set(kritaimage_LIB_SRCS
    KisProofingConfiguration.cpp
 
    kis_node_query_path.cc
+   KisBezierGradientMesh.cpp
+   KisBezierTransformMesh.cpp
 )
 
 set(einspline_SRCS

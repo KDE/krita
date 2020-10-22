@@ -1,0 +1,67 @@
+/*
+ *  Copyright (c) 2020 Dmitry Kazakov <dimula73@gmail.com>
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+#ifndef KISBEZIERPATCH_H
+#define KISBEZIERPATCH_H
+
+#include "kritaglobal_export.h"
+
+#include <QRectF>
+#include <array>
+
+class QDebug;
+
+class KRITAGLOBAL_EXPORT KisBezierPatch
+{
+public:
+    enum ControlPointType {
+        TL = 0,
+        TL_HC,
+        TL_VC,
+        TR,
+        TR_HC,
+        TR_VC,
+        BL,
+        BL_HC,
+        BL_VC,
+        BR,
+        BR_HC,
+        BR_VC
+    };
+
+    QRectF originalRect;
+    std::array<QPointF, 12> points;
+
+    QRectF dstBoundingRect() const;
+
+    QRectF srcBoundingRect() const;
+
+    void sampleIrregularGrid(QSize &gridSize,
+                             QVector<QPointF> &origPoints,
+                             QVector<QPointF> &transfPoints) const;
+
+    void sampleRegularGrid(QSize &gridSize,
+                           QVector<QPointF> &origPoints,
+                           QVector<QPointF> &transfPoints,
+                           const QPointF &dstStep) const;
+};
+
+KRITAGLOBAL_EXPORT
+QDebug operator<<(QDebug dbg, const KisBezierPatch &p);
+
+#endif // KISBEZIERPATCH_H

@@ -531,6 +531,45 @@ struct AlwaysCompletePolygonPolicy {
     }
 };
 
+struct RegularGridIndexesOp {
+
+    RegularGridIndexesOp(const QSize &gridSize)
+        : m_gridSize(gridSize)
+    {
+    }
+
+    inline QVector<int> calculateMappedIndexes(int col, int row,
+                                               int *numExistingPoints) const {
+
+        *numExistingPoints = 4;
+        QVector<int> cellIndexes =
+            GridIterationTools::calculateCellIndexes(col, row, m_gridSize);
+
+        return cellIndexes;
+    }
+
+    inline int tryGetValidIndex(const QPoint &cellPt) const {
+        Q_UNUSED(cellPt);
+
+        KIS_ASSERT_RECOVER_NOOP(0 && "Not applicable");
+        return -1;
+    }
+
+    inline QPointF getSrcPointForce(const QPoint &cellPt) const {
+        Q_UNUSED(cellPt);
+
+        KIS_ASSERT_RECOVER_NOOP(0 && "Not applicable");
+        return QPointF();
+    }
+
+    inline const QPolygonF srcCropPolygon() const {
+        KIS_ASSERT_RECOVER_NOOP(0 && "Not applicable");
+        return QPolygonF();
+    }
+
+    QSize m_gridSize;
+};
+
 /**
  * There is a weird problem in fetching correct bounds of the polygon.
  * If the rightmost (bottommost) point of the polygon is integral, then

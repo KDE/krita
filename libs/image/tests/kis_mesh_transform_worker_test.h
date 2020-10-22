@@ -25,8 +25,11 @@ class KisMeshTransformWorkerTest : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:
+    void testIsCurveLinear();
+
     void testPointsQImage();
     void testGradient();
+
     void testMesh();
 
     void testGlobalToLocal();

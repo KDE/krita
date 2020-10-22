@@ -159,7 +159,10 @@ void KisWdgSeExpr::slotResourceSelected(KoResourceSP resource)
         m_widget->currentBrushNameLabel->setText(formattedBrushName);
         m_widget->renameBrushNameTextField->setText(m_currentPreset->name());
         // get the preset image and pop it into the thumbnail area on the top of the brush editor
-        m_widget->presetThumbnailicon->setPixmap(QPixmap::fromImage(m_currentPreset->image().scaled(55, 55, Qt::KeepAspectRatio, Qt::SmoothTransformation)));
+        QSize thumbSize = QSize(55, 55)*devicePixelRatioF();
+        QPixmap thumbnail = QPixmap::fromImage(m_currentPreset->image().scaled(thumbSize, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        thumbnail.setDevicePixelRatio(devicePixelRatioF());
+        m_widget->presetThumbnailicon->setPixmap(thumbnail);
 
         togglePresetRenameUIActive(false); // reset the UI state of renaming a brush if we are changing brush presets
         slotUpdatePresetSettings();        // check to see if the dirty preset icon needs to be shown

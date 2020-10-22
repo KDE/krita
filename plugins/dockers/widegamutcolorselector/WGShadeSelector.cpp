@@ -30,7 +30,7 @@ WGShadeSelector::WGShadeSelector(KisVisualColorModel *selector, QWidget *parent)
 void WGShadeSelector::updateSettings()
 {
     WGConfig cfg;
-    //QVector<LineConfig> config = loadConfiguration();
+    m_lineHeight = cfg.shadeSelectorLineHeight();
     QVector<WGConfig::ShadeLine> config = cfg.shadeSelectorLines();
 
     while (config.size() > m_sliders.size()) {

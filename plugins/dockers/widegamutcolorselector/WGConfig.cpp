@@ -148,6 +148,16 @@ void WGConfig::setShadeSelectorLines(const QVector<WGConfig::ShadeLine> &shadeLi
     m_cfg.writeEntry("minimalShadeSelectorLines", shadeLineList.join('|'));
 }
 
+int WGConfig::shadeSelectorLineHeight() const
+{
+    return m_cfg.readEntry("shadeSelectorLineHeight", defaultShadeSelectorLineHeight);
+}
+
+void WGConfig::setShadeSelectorLineHeight(int height)
+{
+    m_cfg.writeEntry("shadeSelectorLineHeight", height);
+}
+
 bool WGConfig::shadeSelectorUpdateOnExternalChanges() const
 {
     return m_cfg.readEntry("shadeSelectorUpdateOnExternalChanges", defaultShadeSelectorUpdateOnExternalChanges);
@@ -184,6 +194,7 @@ const KisColorSelectorConfiguration WGConfig::defaultColorSelectorConfiguration 
                                       KisColorSelectorConfiguration::SV,
                                       KisColorSelectorConfiguration::H);
 const bool WGConfig::defaultQuickSettingsEnabled = true;
+const int WGConfig::defaultShadeSelectorLineHeight = 10;
 const bool WGConfig::defaultShadeSelectorUpdateOnExternalChanges = true;
 const bool WGConfig::defaultShadeSelectorUpdateOnInteractionEnd = false;
 const bool WGConfig::defaultShadeSelectorUpdateOnRightClick = true;

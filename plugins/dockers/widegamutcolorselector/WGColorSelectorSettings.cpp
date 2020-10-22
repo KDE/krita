@@ -98,6 +98,7 @@ void WGColorSelectorSettings::savePreferences() const
     QVector<WGConfig::ShadeLine> lineConfig = m_shadeLineConfig;
     lineConfig.resize(m_ui->sbShadeLineCount->value());
     cfg.setShadeSelectorLines(lineConfig);
+    cfg.setShadeSelectorLineHeight(m_ui->sbShadeLineHeight->value());
 }
 
 void WGColorSelectorSettings::loadPreferences()
@@ -119,6 +120,7 @@ void WGColorSelectorSettings::loadPreferences()
     m_ui->chkShadeSelUpdateOnRightClick->setChecked(cfg.shadeSelectorUpdateOnRightClick());
     m_shadeLineConfig = cfg.shadeSelectorLines();
     m_ui->sbShadeLineCount->setValue(m_shadeLineConfig.size());
+    m_ui->sbShadeLineHeight->setValue(cfg.shadeSelectorLineHeight());
 }
 
 void WGColorSelectorSettings::loadDefaultPreferences()

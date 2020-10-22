@@ -43,6 +43,9 @@ public:
     QVector<ShadeLine> shadeSelectorLines() const;
     void setShadeSelectorLines(const QVector<ShadeLine> &shadeLines);
 
+    int shadeSelectorLineHeight() const;
+    void setShadeSelectorLineHeight(int height);
+
     bool shadeSelectorUpdateOnExternalChanges() const;
     void setShadeSelectorUpdateOnExternalChanges(bool enabled);
 
@@ -64,6 +67,7 @@ public:
 
     static const KisColorSelectorConfiguration defaultColorSelectorConfiguration;
     static const bool defaultQuickSettingsEnabled;
+    static const int defaultShadeSelectorLineHeight;
     static const bool defaultShadeSelectorUpdateOnExternalChanges;
     static const bool defaultShadeSelectorUpdateOnInteractionEnd;
     static const bool defaultShadeSelectorUpdateOnRightClick;

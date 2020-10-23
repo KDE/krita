@@ -46,7 +46,7 @@ bool KisColorSelectorTriangle::containsPointInComponentCoords(int x, int y) cons
 void KisColorSelectorTriangle::paint(QPainter* painter)
 {
     if(isDirty()) {
-        updatePixelCache();
+        updatePixelCache(painter->device()->devicePixelRatioF());
     }
 
 
@@ -63,7 +63,7 @@ void KisColorSelectorTriangle::paint(QPainter* painter)
     }
 }
 
-void KisColorSelectorTriangle::updatePixelCache()
+void KisColorSelectorTriangle::updatePixelCache(qreal devicePixelRatioF)
 {
     int width = triangleWidth() + 1;
     int height = triangleHeight();
@@ -79,7 +79,8 @@ void KisColorSelectorTriangle::updatePixelCache()
                                     QRect(0, 0, width, height),
                                     m_realPixelCache,
                                     m_renderedPixelCache,
-                                    pixelCacheOffset);
+                                    pixelCacheOffset,
+                                    devicePixelRatioF);
 
 //    if (!pixelCacheOffset.isNull()) {
 //        warnKrita << "WARNING: offset of the triangle selector is not null!";
@@ -149,9 +150,9 @@ int KisColorSelectorTriangle::triangleHeight() const
     return height()*3./4.;
 }
 
-KoColor KisColorSelectorTriangle::colorAt(int x, int y) const
+KoColor KisColorSelectorTriangle::colorAt(float x, float y) const
 {
-    Q_ASSERT(x>=0 && x<=triangleWidth());
+    Q_ASSERT(x>=0 && x<=(triangleWidth() + 1));
     Q_ASSERT(y>=0 && y<=triangleHeight());
 
     int triangleHeight = this->triangleHeight();

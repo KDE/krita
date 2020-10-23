@@ -86,26 +86,29 @@ void KisMyPaintShadeSelector::paintEvent(QPaintEvent *) {
 	KConfigGroup cfg =  KSharedConfig::openConfig()->group("advancedColorSelector");
 	QString shadeMyPaintType=cfg.readEntry("shadeMyPaintType", "HSV");
 
-    int size = qMin(width(), height());
-    int s_radius = size/2.6;
+    int sizeHD = qMin(width(), height())*devicePixelRatioF();
+    int s_radiusHD = sizeHD/2.6;
 
-    for (int x=0; x<width(); x++) {
-        for (int y=0; y<height(); y++) {
+    int widthHD = width()*devicePixelRatioF();
+    int heightHD = height()*devicePixelRatioF();
+
+    for (int x = 0; x < widthHD; x++) {
+        for (int y = 0; y < heightHD; y++) {
 
             float v_factor = 0.6f;
             float s_factor = 0.6f;
             float v_factor2 = 0.013f;
             float s_factor2 = 0.013f;
 
-            int stripe_width = 15*size/255.;
+            int stripe_width = 15*sizeHD/255.;
 
             float h = 0;
             float s = 0;
             float v = 0;
 
-            int dx = x-width()/2;
-            int dy = y-height()/2;
-            int diag = sqrt(2.0)*size/2;
+            int dx = x-widthHD/2;
+            int dy = y-heightHD/2;
+            int diag = sqrt(2.0)*sizeHD/2;
 
             int dxs, dys;
             if (dx > 0)
@@ -121,14 +124,8 @@ void KisMyPaintShadeSelector::paintEvent(QPaintEvent *) {
 
             if (qMin(abs(dx), abs(dy)) < stripe_width) {
                 // horizontal and vertical lines
-                dx = (dx/qreal(size))*255;
-                dy = (dy/qreal(size))*255;
-
-                if (dx > size) {
-                    dx = 255;
-                } else if (dy > size) {
-                    dy = 255;
-                }
+                dx = (dx/qreal(sizeHD))*255;
+                dy = (dy/qreal(sizeHD))*255;
 
                 h = 0;
                 // x-axis = value, y-axis = saturation
@@ -145,8 +142,8 @@ void KisMyPaintShadeSelector::paintEvent(QPaintEvent *) {
             }
             else if (std::min(std::abs(dx - dy), std::abs(dx + dy)) < stripe_width) {
 
-                dx = (dx/qreal(size))*255;
-                dy = (dy/qreal(size))*255;
+                dx = (dx/qreal(sizeHD))*255;
+                dy = (dy/qreal(sizeHD))*255;
 
                 h = 0;
                 // x-axis = value, y-axis = saturation
@@ -154,15 +151,15 @@ void KisMyPaintShadeSelector::paintEvent(QPaintEvent *) {
                 s = - (dy*s_factor + signedSqr(dy)*s_factor2);
                 // both at once
             }
-            else if (r < s_radius+1) {
+            else if (r < s_radiusHD+1) {
                 // hue
                 if (dx > 0)
-                    h = 90*sqr2(r/s_radius);
+                    h = 90*sqr2(r/s_radiusHD);
                 else
-                    h = 360 - 90*sqr2(r/s_radius);
+                    h = 360 - 90*sqr2(r/s_radiusHD);
                 s = 256*(atan2f(std::abs(dxs),dys)/M_PI) - 128;
 
-                if (r > s_radius) {
+                if (r > s_radiusHD) {
                     // antialiasing boarder
                     qreal aaFactor = r-floor(r); // part after the decimal point
                     aaFactor = 1-aaFactor;
@@ -187,13 +184,13 @@ void KisMyPaintShadeSelector::paintEvent(QPaintEvent *) {
                     Acs::setColor(m_realCircleBorder, QPoint(x, y), color);
 
                     h = 180 + 180*atan2f(dys,-dxs)/M_PI;
-                    v = 255*(r-s_radius)/(diag-s_radius) - 128;
+                    v = 255*(r-s_radiusHD)/(diag-s_radiusHD) - 128;
                 }
             }
             else {
                 // background (hue+darkness gradient)
                 h = 180 + 180*atan2f(dys,-dxs)/M_PI;
-                v = 255*(r-s_radius)/(diag-s_radius) - 128;
+                v = 255*(r-s_radiusHD)/(diag-s_radiusHD) - 128;
             }
 
             qreal fh = m_colorH + h/360.0;
@@ -217,10 +214,11 @@ void KisMyPaintShadeSelector::paintEvent(QPaintEvent *) {
     }
 
     KisPainter gc(m_realPixelCache);
-    gc.bitBlt(QPoint(0,0), m_realCircleBorder, rect());
+    gc.bitBlt(QPoint(0,0), m_realCircleBorder, QRect(rect().topLeft(), rect().size()*devicePixelRatioF()));
 
     QPainter painter(this);
     QImage renderedImage = converter()->toQImage(m_realPixelCache);
+    renderedImage.setDevicePixelRatio(devicePixelRatioF());
 
     painter.drawImage(0, 0, renderedImage);
 }
@@ -233,7 +231,7 @@ void KisMyPaintShadeSelector::mousePressEvent(QMouseEvent* e)
 
     if (!e->isAccepted()) {
         if(rect().contains(e->pos())) {
-            KoColor color(Acs::pickColor(m_realPixelCache, e->pos()));
+            KoColor color(Acs::pickColor(m_realPixelCache, e->pos()*devicePixelRatioF()));
             this->updateColorPreview(color);
             updatePreviousColorPreview();
         }
@@ -243,7 +241,7 @@ void KisMyPaintShadeSelector::mousePressEvent(QMouseEvent* e)
 void KisMyPaintShadeSelector::mouseMoveEvent(QMouseEvent *e)
 {
     if(rect().contains(e->pos())) {
-        KoColor color(Acs::pickColor(m_realPixelCache, e->pos()));
+        KoColor color(Acs::pickColor(m_realPixelCache, e->pos()*devicePixelRatioF()));
         this->updateColorPreview(color);
     }
     KisColorSelectorBase::mouseMoveEvent(e);
@@ -255,7 +253,7 @@ void KisMyPaintShadeSelector::mouseReleaseEvent(QMouseEvent *e)
     KisColorSelectorBase::mouseReleaseEvent(e);
 
     if(!e->isAccepted()) {
-        KoColor color(Acs::pickColor(m_realPixelCache, e->pos()));
+        KoColor color(Acs::pickColor(m_realPixelCache, e->pos()*devicePixelRatioF()));
 
         Acs::ColorRole role = Acs::buttonToRole(e->button());
 

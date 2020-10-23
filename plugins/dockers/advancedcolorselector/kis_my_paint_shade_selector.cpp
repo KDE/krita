@@ -121,8 +121,15 @@ void KisMyPaintShadeSelector::paintEvent(QPaintEvent *) {
 
             if (qMin(abs(dx), abs(dy)) < stripe_width) {
                 // horizontal and vertical lines
-                dx = (dx/qreal(width()))*255;
-                dy = (dy/qreal(height()))*255;
+                dx = (dx/qreal(size))*255;
+                dy = (dy/qreal(size))*255;
+
+                if (dx > size) {
+                    dx = 255;
+                } else if (dy > size) {
+                    dy = 255;
+                }
+
                 h = 0;
                 // x-axis = value, y-axis = saturation
                 v =    dx*v_factor + signedSqr(dx)*v_factor2;
@@ -137,6 +144,10 @@ void KisMyPaintShadeSelector::paintEvent(QPaintEvent *) {
                 }
             }
             else if (std::min(std::abs(dx - dy), std::abs(dx + dy)) < stripe_width) {
+
+                dx = (dx/qreal(size))*255;
+                dy = (dy/qreal(size))*255;
+
                 h = 0;
                 // x-axis = value, y-axis = saturation
                 v =    dx*v_factor + signedSqr(dx)*v_factor2;

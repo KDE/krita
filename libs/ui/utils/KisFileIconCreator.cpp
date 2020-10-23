@@ -44,7 +44,11 @@ bool KisFileIconCreator::createFileIcon(QString recentFileUrlPath, QIcon &icon, 
                 QString thumbnailpath;
                 if (store->hasFile(QString("Thumbnails/thumbnail.png"))){
                     thumbnailpath = QString("Thumbnails/thumbnail.png");
-                } else if (store->hasFile(QString("preview.png"))) {
+                }
+                else if (store->hasFile(QString("mergedimage.png"))) {
+                    thumbnailpath = QString("mergedimage.png");
+                }
+                else if (store->hasFile(QString("preview.png"))) {
                     thumbnailpath = QString("preview.png");
                 }
                 if (!thumbnailpath.isEmpty() && store->open(thumbnailpath)) {
@@ -72,7 +76,9 @@ bool KisFileIconCreator::createFileIcon(QString recentFileUrlPath, QIcon &icon, 
             bool r = doc->openUrl(QUrl::fromLocalFile(recentFileUrlPath), KisDocument::DontAddToRecent);
             if (r) {
                 KisPaintDeviceSP projection = doc->image()->projection();
-                icon = QIcon(QPixmap::fromImage(projection->createThumbnail(48, 48, projection->exactBounds())));
+                QImage image = projection->createThumbnail(48*devicePixelRatioF, 48*devicePixelRatioF, projection->exactBounds());
+                image.setDevicePixelRatio(devicePixelRatioF);
+                icon = QIcon(QPixmap::fromImage(image));
                 return true;
 
             } else {
@@ -83,7 +89,7 @@ bool KisFileIconCreator::createFileIcon(QString recentFileUrlPath, QIcon &icon, 
             img.setDevicePixelRatio(devicePixelRatioF);
             img.load(recentFileUrlPath);
             if (!img.isNull()) {
-                icon = QIcon(QPixmap::fromImage(img.scaledToWidth(48)));
+                icon = QIcon(QPixmap::fromImage(img.scaledToWidth(48*devicePixelRatioF)));
                 return true;
             } else {
                 return false;

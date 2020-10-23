@@ -270,7 +270,8 @@ void KisColorSelectorSimple::paint(QPainter* painter)
                                         QRect(0, 0, width(), height()),
                                         realPixelCache,
                                         m_pixelCache,
-                                        pixelCacheOffset);
+                                        pixelCacheOffset,
+                                        painter->device()->devicePixelRatioF());
 
 //        if (!pixelCacheOffset.isNull()) {
 //            warnKrita << "WARNING: offset of the rectangle selector is not null!";
@@ -327,7 +328,7 @@ void KisColorSelectorSimple::paint(QPainter* painter)
     }
 }
 
-KoColor KisColorSelectorSimple::colorAt(int x, int y)
+KoColor KisColorSelectorSimple::colorAt(float x, float y)
 {
     qreal xRel = x/qreal(width());
     qreal yRel = 1.-y/qreal(height());

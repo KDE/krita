@@ -37,7 +37,7 @@ protected:
     bool containsPointInComponentCoords(int x, int y) const override;
 
 private:
-    void paintCache();
+    void paintCache(qreal devicePixelRatioF);
     void colorCache();
     int outerRadius() const;
 

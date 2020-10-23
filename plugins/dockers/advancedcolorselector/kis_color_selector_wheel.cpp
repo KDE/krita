@@ -183,7 +183,8 @@ void KisColorSelectorWheel::paint(QPainter* painter)
 
     if(isDirty()) {
         KisPaintDeviceSP realPixelCache;
-        Acs::PixelCacheRenderer::render(this, m_parent->converter(), QRect(0, 0, width(), height()), realPixelCache, m_pixelCache, m_pixelCacheOffset);
+        Acs::PixelCacheRenderer::render(this, m_parent->converter(), QRect(0, 0, width(), height()), realPixelCache,
+                                        m_pixelCache, m_pixelCacheOffset, painter->device()->devicePixelRatioF());
 
         //antialiasing for wheel
         QPainter tmpPainter(&m_pixelCache);
@@ -208,7 +209,8 @@ void KisColorSelectorWheel::paint(QPainter* painter)
 
     // draw gamut mask
     if (m_gamutMaskOn && m_currentGamutMask) {
-        QImage maskBuffer  = QImage(m_renderAreaSize.width(), m_renderAreaSize.height(), QImage::Format_ARGB32_Premultiplied);
+        QImage maskBuffer = QImage(m_renderAreaSize*painter->device()->devicePixelRatioF(), QImage::Format_ARGB32_Premultiplied);
+        maskBuffer.setDevicePixelRatio(painter->device()->devicePixelRatioF());
         maskBuffer.fill(0);
         QPainter maskPainter(&maskBuffer);
 
@@ -252,7 +254,7 @@ void KisColorSelectorWheel::paint(QPainter* painter)
     }
 }
 
-KoColor KisColorSelectorWheel::colorAt(int x, int y, bool forceValid)
+KoColor KisColorSelectorWheel::colorAt(float x, float y, bool forceValid)
 {
     KoColor color(Qt::transparent, m_parent->colorSpace());
 

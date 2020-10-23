@@ -31,7 +31,18 @@ namespace Acs {
     public:
         /**
          * \p Picker class must provide one method:
-         *     - KoColor Picker::colorAt(int x, int y);
+         *     - KoColor Picker::colorAt(float x, float y);
+         *
+         * How to handle High DPI:
+         *  - pickRect - is in device independent pixels coordinates space
+         *     (amount of space on the widget)
+         *  - devicePixelRatioF - the amount of UI scaling
+         *  - pixelCache and realPixelCache gets the size of
+         *     pickRect.size()*devicePixelRatioF
+         *     and sets the device pixel ratio,
+         *     and color pickers need to take it into account.
+         *  That way you can paint on the cache the same way you'd paint on a low dpi display
+         *    and then just use painter->drawImage() and it works.
          */
         template <class Picker>
         static void render(Picker *picker,
@@ -39,7 +50,8 @@ namespace Acs {
                            const QRect &pickRect,
                            KisPaintDeviceSP &realPixelCache,
                            QImage &pixelCache,
-                           QPoint &pixelCacheOffset)
+                           QPoint &pixelCacheOffset,
+                           qreal devicePixelRatioF)
             {
                 const KoColorSpace *cacheColorSpace = converter->paintingColorSpace();
                 const int pixelSize = cacheColorSpace->pixelSize();
@@ -50,17 +62,19 @@ namespace Acs {
 
                 KoColor color;
 
-                KisSequentialIterator it(realPixelCache, pickRect);
+                QRect pickRectHighDPI = QRect(pickRect.topLeft(), pickRect.size()*devicePixelRatioF);
+                KisSequentialIterator it(realPixelCache, pickRectHighDPI);
 
                 while (it.nextPixel()) {
-                    color = picker->colorAt(it.x(), it.y());
+                    color = picker->colorAt(it.x()/devicePixelRatioF, it.y()/devicePixelRatioF);
                     memcpy(it.rawData(), color.data(), pixelSize);
                 }
 
 
                 // NOTE: toQImage() function of the converter copies exactBounds() only!
                 pixelCache = converter->toQImage(realPixelCache);
-                pixelCacheOffset = realPixelCache->exactBounds().topLeft() - pickRect.topLeft();
+                pixelCache.setDevicePixelRatio(devicePixelRatioF);
+                pixelCacheOffset = realPixelCache->exactBounds().topLeft()/devicePixelRatioF - pickRect.topLeft();
         }
     };
 }

@@ -26,7 +26,7 @@ class LastDocumentsDocker(krita.DockWidget):
         self.layout = QVBoxLayout()
         self.listView = QListView()
         self.loadButton = QPushButton(i18n("Refresh"))
-        self.listModel = lastdocumentslistmodel.LastDocumentsListModel()
+        self.listModel = lastdocumentslistmodel.LastDocumentsListModel(self.devicePixelRatioF())
 
         self.listView.setModel(self.listModel)
         self.listView.setFlow(QListView.LeftToRight)

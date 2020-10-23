@@ -185,6 +185,9 @@ void KisMyPaintShadeSelector::paintEvent(QPaintEvent *) {
 
                     h = 180 + 180*atan2f(dys,-dxs)/M_PI;
                     v = 255*(r-s_radiusHD)/(diag-s_radiusHD) - 128;
+                    s = 0; // overwrite the s value that was meant for the inside of the circle
+                    // here we already have drawn the inside, and the value left should be just the background value
+
                 }
             }
             else {

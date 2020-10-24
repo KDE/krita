@@ -86,10 +86,6 @@ KisToolMove::KisToolMove(KoCanvasBase *canvas)
 
     m_optionsWidget->slotSetTranslate(m_handlesRect.topLeft() + currentOffset());
 
-    connect(m_optionsWidget, SIGNAL(sigSetTranslateX(int)), SLOT(moveBySpinX(int)), Qt::UniqueConnection);
-    connect(m_optionsWidget, SIGNAL(sigSetTranslateY(int)), SLOT(moveBySpinY(int)), Qt::UniqueConnection);
-    connect(m_optionsWidget, SIGNAL(sigRequestCommitOffsetChanges()), this, SLOT(commitChanges()), Qt::UniqueConnection);
-
     connect(this, SIGNAL(moveInNewPosition(QPoint)), m_optionsWidget, SLOT(slotSetTranslate(QPoint)), Qt::UniqueConnection);
 }
 
@@ -411,6 +407,9 @@ void KisToolMove::activate(ToolActivation toolActivation, const QSet<KoShape*> &
 
     connect(m_showCoordinatesAction, SIGNAL(triggered(bool)), m_optionsWidget, SLOT(setShowCoordinates(bool)), Qt::UniqueConnection);
     connect(m_optionsWidget, SIGNAL(showCoordinatesChanged(bool)), m_showCoordinatesAction, SLOT(setChecked(bool)), Qt::UniqueConnection);
+    connect(m_optionsWidget, SIGNAL(sigSetTranslateX(int)), SLOT(moveBySpinX(int)), Qt::UniqueConnection);
+    connect(m_optionsWidget, SIGNAL(sigSetTranslateY(int)), SLOT(moveBySpinY(int)), Qt::UniqueConnection);
+    connect(m_optionsWidget, SIGNAL(sigRequestCommitOffsetChanges()), this, SLOT(commitChanges()), Qt::UniqueConnection);
 
     connect(&m_changesTracker,
             SIGNAL(sigConfigChanged(KisToolChangesTrackerDataSP)),
@@ -724,14 +723,21 @@ QPoint KisToolMove::applyModifiers(Qt::KeyboardModifiers modifiers, QPoint pos)
 
 void KisToolMove::moveBySpinX(int newX)
 {
-    if (mode() == KisTool::PAINT_MODE) return;  // Don't interact with dragging
-    if (!currentNode()->isEditable()) return; // Don't move invisible nodes
+    if (mode() == KisTool::PAINT_MODE ||    // Don't interact with dragging
+            !currentNode()->isEditable() || // Don't move invisible nodes
+            m_handlesRect.isEmpty()) {
+        return;
+    }
+
+    // starting a new stroke resets m_handlesRect and it gets updated asynchronously,
+    // but in this case no change is expected
+    int handlesRectX = m_handlesRect.x();
 
     if (startStrokeImpl(MoveSelectedLayer, 0)) {
         setMode(KisTool::PAINT_MODE);
     }
 
-    m_accumulatedOffset.rx() =  newX - m_handlesRect.x();
+    m_accumulatedOffset.rx() =  newX - handlesRectX;
 
     image()->addJob(m_strokeId, new MoveStrokeStrategy::Data(m_accumulatedOffset));
 
@@ -741,14 +747,21 @@ void KisToolMove::moveBySpinX(int newX)
 
 void KisToolMove::moveBySpinY(int newY)
 {
-    if (mode() == KisTool::PAINT_MODE) return;  // Don't interact with dragging
-    if (!currentNode()->isEditable()) return; // Don't move invisible nodes
+    if (mode() == KisTool::PAINT_MODE ||    // Don't interact with dragging
+            !currentNode()->isEditable() || // Don't move invisible nodes
+            m_handlesRect.isEmpty()) {
+        return;
+    }
+
+    // starting a new stroke resets m_handlesRect and it gets updated asynchronously,
+    // but in this case no change is expected
+    int handlesRectY = m_handlesRect.y();
 
     if (startStrokeImpl(MoveSelectedLayer, 0)) {
         setMode(KisTool::PAINT_MODE);
     }
 
-    m_accumulatedOffset.ry() =  newY - m_handlesRect.y();
+    m_accumulatedOffset.ry() =  newY - handlesRectY;
 
     image()->addJob(m_strokeId, new MoveStrokeStrategy::Data(m_accumulatedOffset));
 

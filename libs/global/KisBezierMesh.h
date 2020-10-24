@@ -9,12 +9,17 @@
 #include <KisBezierPatch.h>
 
 #include <boost/iterator/iterator_facade.hpp>
+#include <boost/operators.hpp>
 
 #include <functional>
 
+#include "kis_debug.h"
+
+class QDomElement;
+
 namespace KisBezierMeshDetails {
 
-struct BaseMeshNode {
+struct BaseMeshNode : public boost::equality_comparable<BaseMeshNode> {
     BaseMeshNode() {}
     BaseMeshNode(const QPointF &_node)
         : leftControl(_node),
@@ -23,6 +28,14 @@ struct BaseMeshNode {
           rightControl(_node),
           bottomControl(_node)
     {
+    }
+
+    bool operator==(const BaseMeshNode &rhs) const {
+        return leftControl == rhs.leftControl &&
+                topControl == rhs.topControl &&
+                node == rhs.node &&
+                rightControl == rhs.rightControl &&
+                bottomControl == rhs.bottomControl;
     }
 
     void setLeftControlRelative(const QPointF &value) {
@@ -57,6 +70,14 @@ struct BaseMeshNode {
         return bottomControl - node;
     }
 
+    void translate(const QPointF &offset) {
+        leftControl += offset;
+        topControl += offset;
+        node += offset;
+        rightControl += offset;
+        bottomControl += offset;
+    }
+
     QPointF leftControl;
     QPointF topControl;
     QPointF node;
@@ -89,22 +110,111 @@ inline void assignPatchData(KisBezierPatch *patch,
     Q_UNUSED(br);
 }
 
-template<typename Node = BaseMeshNode,
-         typename Patch = KisBezierPatch>
-class Mesh
+template<typename NodeArg = BaseMeshNode,
+         typename PatchArg = KisBezierPatch>
+class Mesh : public boost::equality_comparable<Mesh<NodeArg, PatchArg>>
 {
 public:
+    using Node = NodeArg;
+    using Patch = PatchArg;
+    using NodeIndex = QPoint;
+    using SegmentIndex = std::pair<NodeIndex, int>;
+
+    struct ControlPointIndex : public boost::equality_comparable<ControlPointIndex>
+    {
+        enum ControlType {
+            LeftControl = 0,
+            TopControl,
+            RightControl,
+            BottomControl,
+            Node
+        };
+
+        ControlPointIndex()  = default;
+        ControlPointIndex(const ControlPointIndex &rhs) = default;
+        ControlPointIndex(NodeIndex _nodeIndex, ControlType _controlType)
+            : nodeIndex(_nodeIndex),
+              controlType(_controlType)
+        {
+        }
+
+        NodeIndex nodeIndex;
+        ControlType controlType;
+
+        static QPointF& controlPoint(Mesh::Node &node, ControlType controlType) {
+            return
+                controlType == LeftControl ? node.leftControl :
+                controlType == RightControl ? node.rightControl :
+                controlType == TopControl ? node.topControl :
+                controlType == BottomControl ? node.bottomControl :
+                node.node;
+        }
+
+        QPointF& controlPoint(Mesh::Node &node) {
+            return controlPoint(node, controlType);
+        }
+
+        friend bool operator==(const ControlPointIndex &lhs, const ControlPointIndex &rhs) {
+            return lhs.nodeIndex == rhs.nodeIndex && lhs.controlType == rhs.controlType;
+        }
+
+        friend QDebug operator<<(QDebug dbg, const Mesh::ControlPointIndex &index) {
+            dbg.nospace() << "ControlPointIndex ("
+                          << index.nodeIndex.x() << ", " << index.nodeIndex.x() << ", ";
+
+            switch (index.controlType) {
+            case Mesh::ControlType::Node:
+                dbg.nospace() << "Node";
+                break;
+            case Mesh::ControlType::LeftControl:
+                dbg.nospace() << "LeftControl";
+                break;
+            case Mesh::ControlType::RightControl:
+                dbg.nospace() << "RightControl";
+                break;
+            case Mesh::ControlType::TopControl:
+                dbg.nospace() << "TopControl";
+                break;
+            case Mesh::ControlType::BottomControl:
+                dbg.nospace() << "BottomControl";
+                break;
+            }
+
+            dbg.nospace() << ")";
+            return dbg.space();
+        }
+
+    };
+
+    using ControlType = typename ControlPointIndex::ControlType;
+
+
+public:
+    Mesh()
+        : Mesh(QRectF(0.0, 0.0, 777.0, 666.0))
+    {
+    }
+
     Mesh(const QRectF &mapRect, const QSize &size = QSize(2,2))
         : m_size(size),
           m_originalRect(mapRect)
     {
+        const qreal xControlOffset = 0.2 * (mapRect.width() / size.width());
+        const qreal yControlOffset = 0.2 * (mapRect.height() / size.height());
+
         for (int row = 0; row < m_size.height(); row++) {
             const qreal yPos = qreal(row) / (size.height() - 1) * mapRect.height() + mapRect.y();
 
             for (int col = 0; col < m_size.width(); col++) {
                 const qreal xPos = qreal(col) / (size.width() - 1) * mapRect.width() + mapRect.x();
 
-                m_nodes.push_back(Node(QPointF(xPos, yPos)));
+                Node node(QPointF(xPos, yPos));
+                node.setLeftControlRelative(QPointF(-xControlOffset, 50));
+                node.setRightControlRelative(QPointF(xControlOffset, 0));
+                node.setTopControlRelative(QPointF(0, -yControlOffset));
+                node.setBottomControlRelative(QPointF(0, yControlOffset));
+
+                m_nodes.push_back(node);
             }
         }
 
@@ -115,6 +225,14 @@ public:
         for (int row = 0; row < m_size.height(); row++) {
             m_rows.push_back(qreal(row) / (size.height() - 1));
         }
+    }
+
+    bool operator==(const Mesh &rhs) const {
+        return m_size == rhs.m_size &&
+                m_rows == rhs.m_rows &&
+                m_columns == rhs.m_columns &&
+                m_originalRect == rhs.m_originalRect &&
+                m_nodes == rhs.m_nodes;
     }
 
     void splitCurveHorizontally(Node &left, Node &right, qreal t, Node &newNode) {
@@ -146,6 +264,13 @@ public:
         return m_nodes[row * m_size.width() + col];
     }
 
+    Node& node(const NodeIndex &index) {
+        return node(index.x(), index.y());
+    }
+
+    const Node& node(const NodeIndex &index) const {
+        return node(index.x(), index.y());
+    }
 
     void splitCurveVertically(Node &top, Node &bottom, qreal t, Node &newNode) {
         using KisBezierUtils::splitBezierCurve;
@@ -328,12 +453,280 @@ public:
     };
 
 
+    class control_point_iterator :
+        public boost::iterator_facade <control_point_iterator,
+                                       QPointF,
+                                       boost::bidirectional_traversal_tag>
+    {
+    public:
+        control_point_iterator()
+            : m_mesh(0),
+              m_col(0),
+              m_row(0),
+              m_controlIndex(0)
+        {}
+
+        control_point_iterator(Mesh* mesh, int col, int row, int controlIndex)
+            : m_mesh(mesh),
+              m_col(col),
+              m_row(row),
+              m_controlIndex(controlIndex)
+        {
+        }
+
+        Mesh::ControlType type() const {
+            return Mesh::ControlType(m_controlIndex);
+        }
+
+        int col() const {
+            return m_col;
+        }
+
+        int row() const {
+            return m_row;
+        }
+
+        Mesh::ControlPointIndex controlIndex() const {
+            return Mesh::ControlPointIndex(nodeIndex(), type());
+        }
+
+        Mesh::NodeIndex nodeIndex() const {
+            return Mesh::NodeIndex(m_col, m_row);
+        }
+
+        Mesh::Node& node() const {
+            return m_mesh->node(m_col, m_row);
+        }
+
+    private:
+        friend class boost::iterator_core_access;
+
+        bool nodeIsValid() const {
+            return m_col < m_mesh->size().width() && m_row < m_mesh->size().height();
+        }
+
+        bool controlIsValid() const {
+            if (m_col == 0 && m_controlIndex == Mesh::ControlType::LeftControl) {
+                return false;
+            }
+
+            if (m_col == m_mesh->m_size.width() - 1 && m_controlIndex == Mesh::ControlType::RightControl) {
+                return false;
+            }
+
+            if (m_row == 0 && m_controlIndex == Mesh::ControlType::TopControl) {
+                return false;
+            }
+
+            if (m_row == m_mesh->m_size.height() - 1 && m_controlIndex == Mesh::ControlType::BottomControl) {
+                return false;
+            }
+
+            return true;
+        }
+
+        void increment() {
+            do {
+                m_controlIndex++;
+                if (m_controlIndex > 4) {
+                    m_controlIndex = 0;
+                    m_col++;
+                    if (m_col >= m_mesh->m_size.width()) {
+                        m_col = 0;
+                        m_row++;
+                    }
+                }
+            } while (nodeIsValid() && !controlIsValid());
+        }
+
+        void decrement() {
+            do {
+                m_controlIndex--;
+                if (m_controlIndex < 0) {
+                    m_controlIndex = 4;
+                    m_col--;
+                    if (m_col < 0) {
+                        m_col = m_mesh->m_size.width() - 1;
+                        m_row--;
+                    }
+                }
+            } while (nodeIsValid() && !controlIsValid());
+        }
+
+
+        bool equal(control_point_iterator const& other) const {
+            return m_controlIndex == other.m_controlIndex &&
+                m_row == other.m_row &&
+                m_col == other.m_col &&
+                m_mesh == other.m_mesh;
+        }
+
+        QPointF& dereference() const {
+            return Mesh::ControlPointIndex::controlPoint(m_mesh->node(m_col, m_row), Mesh::ControlType(m_controlIndex));
+        }
+
+    private:
+
+        Mesh* m_mesh;
+        int m_col;
+        int m_row;
+        int m_controlIndex;
+    };
+
+    class segment_iterator :
+        public boost::iterator_facade <segment_iterator,
+                                       Mesh::SegmentIndex,
+                                       boost::bidirectional_traversal_tag,
+                                       Mesh::SegmentIndex>
+    {
+    public:
+        segment_iterator()
+            : m_mesh(0),
+              m_col(0),
+              m_row(0),
+              m_isHorizontal(0)
+        {}
+
+        segment_iterator(Mesh* mesh, int col, int row, int isHorizontal)
+            : m_mesh(mesh),
+              m_col(col),
+              m_row(row),
+              m_isHorizontal(isHorizontal)
+        {
+        }
+
+        Mesh::SegmentIndex segmentIndex() const {
+            return
+                 { Mesh::NodeIndex(m_col, m_row),
+                   m_isHorizontal};
+        }
+
+        Mesh::NodeIndex firstNodeIndex() const {
+            return Mesh::NodeIndex(m_col, m_row);
+        }
+
+        Mesh::NodeIndex secondNodeIndex() const {
+            return m_isHorizontal ? Mesh::NodeIndex(m_col + 1, m_row) : Mesh::NodeIndex(m_col, m_row + 1);
+        }
+
+        Mesh::Node& firstNode() const {
+            return m_mesh->node(firstNodeIndex());
+        }
+
+        Mesh::Node& secondNode() const {
+            return m_mesh->node(secondNodeIndex());
+        }
+
+        QPointF& p0() const {
+            return firstNode().node;
+        }
+
+        QPointF& p1() const {
+            return m_isHorizontal ? firstNode().rightControl : firstNode().bottomControl;
+        }
+
+        QPointF& p2() const {
+            return m_isHorizontal ? secondNode().leftControl : secondNode().topControl;
+        }
+
+        QPointF& p3() const {
+            return secondNode().node;
+        }
+
+        int degree() const {
+            return KisBezierUtils::bezierDegree(p0(), p1(), p2(), p3());
+        }
+
+    private:
+        friend class boost::iterator_core_access;
+
+        bool nodeIsValid() const {
+            return m_col < m_mesh->size().width() && m_row < m_mesh->size().height();
+        }
+
+        bool controlIsValid() const {
+            if (m_col == m_mesh->m_size.width() - 1 && m_isHorizontal) {
+                return false;
+            }
+
+            if (m_row == m_mesh->m_size.height() - 1 && !m_isHorizontal) {
+                return false;
+            }
+
+            return true;
+        }
+
+        void increment() {
+            do {
+                m_isHorizontal++;
+                if (m_isHorizontal > 1) {
+                    m_isHorizontal = 0;
+                    m_col++;
+                    if (m_col >= m_mesh->m_size.width()) {
+                        m_col = 0;
+                        m_row++;
+                    }
+                }
+            } while (nodeIsValid() && !controlIsValid());
+        }
+
+        void decrement() {
+            do {
+                m_isHorizontal--;
+                if (m_isHorizontal < 0) {
+                    m_isHorizontal = 1;
+                    m_col--;
+                    if (m_col < 0) {
+                        m_col = m_mesh->m_size.width() - 1;
+                        m_row--;
+                    }
+                }
+            } while (nodeIsValid() && !controlIsValid());
+        }
+
+
+        bool equal(segment_iterator const& other) const {
+            return m_isHorizontal == other.m_isHorizontal &&
+                m_row == other.m_row &&
+                m_col == other.m_col &&
+                m_mesh == other.m_mesh;
+        }
+
+        Mesh::SegmentIndex dereference() const {
+            return segmentIndex();
+        }
+
+    private:
+
+        Mesh* m_mesh;
+        int m_col;
+        int m_row;
+        int m_isHorizontal;
+    };
+
     iterator begin() const {
         return iterator(this, 0, 0);
     }
 
     iterator end() const {
         return iterator(this, 0, m_size.height() - 1);
+    }
+
+    // TODO: constness
+    control_point_iterator beginControlPoints() {
+        return control_point_iterator(this, 0, 0, ControlType::RightControl);
+    }
+
+    control_point_iterator endControlPoints() {
+        return control_point_iterator(this, 0, m_size.height(), 0);
+    }
+
+    segment_iterator beginSegments() {
+        return segment_iterator(this, 0, 0, 0);
+    }
+
+    segment_iterator endSegments() {
+        return segment_iterator(this, 0, m_size.height(), 0);
     }
 
     QSize size() const {
@@ -352,6 +745,85 @@ public:
         return result;
     }
 
+    bool isIdentity() const {
+        // TODO: impletent me!
+        return false;
+    }
+
+    void translate(const QPointF &offset) {
+        for (auto it = m_nodes.begin(); it != m_nodes.end(); ++it) {
+            it->translate(offset);
+        }
+    }
+
+    void toXML(QDomElement *e) const {
+        Q_UNUSED(e);
+        // TODO: impletent me!
+    }
+
+    void fromXML(const QDomElement &e) {
+        Q_UNUSED(e);
+        // TODO: impletent me!
+    }
+
+    control_point_iterator hitTestPointImpl(const QPointF &pt, qreal distanceThreshold, bool onlyNodeMode) {
+        const qreal distanceThresholdSq = pow2(distanceThreshold);
+
+        control_point_iterator result = endControlPoints();
+        qreal minDistanceSq = std::numeric_limits<qreal>::max();
+
+        for (auto it = beginControlPoints(); it != endControlPoints(); ++it) {
+            if (onlyNodeMode != (it.type() == ControlType::Node)) continue;
+
+            const qreal distSq = kisSquareDistance(*it, pt);
+            if (distSq < minDistanceSq && distSq < distanceThresholdSq) {
+                result = it;
+                minDistanceSq = distSq;
+            }
+        }
+
+        return result;
+    }
+
+    control_point_iterator hitTestNode(const QPointF &pt, qreal distanceThreshold) {
+        return hitTestPointImpl(pt, distanceThreshold, true);
+    }
+
+    control_point_iterator hitTestControlPoint(const QPointF &pt, qreal distanceThreshold) {
+        return hitTestPointImpl(pt, distanceThreshold, false);
+    }
+
+    segment_iterator hitTestSegment(const QPointF &pt, qreal distanceThreshold, qreal *t = 0) {
+        segment_iterator result = endSegments();
+        qreal minDistance = std::numeric_limits<qreal>::max();
+
+        for (auto it = beginSegments(); it != endSegments(); ++it) {
+
+            qreal foundDistance = 0.0;
+            const qreal foundT = KisBezierUtils::nearestPoint({it.p0(), it.p1(), it.p2(), it.p3()}, pt, &foundDistance);
+
+            if (foundDistance < minDistance && foundDistance < distanceThreshold) {
+                result = it;
+                minDistance = foundDistance;
+                if (t) {
+                    *t = foundT;
+                }
+            }
+        }
+
+        return result;
+    }
+
+    control_point_iterator find(const ControlPointIndex &index) {
+        // TODO: verify validness
+        return control_point_iterator(this, index.nodeIndex.x(), index.nodeIndex.y(), index.controlType);
+    }
+
+    segment_iterator find(const SegmentIndex &index) {
+        // TODO: verify validness
+        return segment_iterator(this, index.first.x(), index.first.y(), index.second);
+    }
+
 private:
 
     std::vector<Node> m_nodes;
@@ -362,8 +834,8 @@ private:
     QRectF m_originalRect;
 };
 
-template<typename Mesh>
-QDebug operator<<(QDebug dbg, const Mesh &mesh)
+template<typename Node, typename Patch>
+QDebug operator<<(QDebug dbg, const Mesh<Node, Patch> &mesh)
 {
     dbg.nospace() << "Mesh " << mesh.size() << "\n";
 
@@ -374,7 +846,6 @@ QDebug operator<<(QDebug dbg, const Mesh &mesh)
     }
     return dbg.space();
 }
-
 
 }
 

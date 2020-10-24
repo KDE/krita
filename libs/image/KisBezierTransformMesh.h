@@ -28,6 +28,14 @@
 class KRITAIMAGE_EXPORT KisBezierTransformMesh : public KisBezierMesh
 {
 public:
+    KisBezierTransformMesh()
+    {
+    }
+    KisBezierTransformMesh(const QRectF &srcRect, const QSize &size = QSize(2,2))
+        : KisBezierMesh(srcRect, size)
+    {
+    }
+
     static void transformPatch(const KisBezierPatch &patch,
                                const QPoint &srcQImageOffset,
                                const QImage &srcImage,

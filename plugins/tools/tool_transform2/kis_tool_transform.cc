@@ -80,6 +80,7 @@
 #include "kis_liquify_transform_strategy.h"
 #include "kis_free_transform_strategy.h"
 #include "kis_perspective_transform_strategy.h"
+#include "kis_mesh_transform_strategy.h"
 
 #include "kis_transform_mask.h"
 #include "kis_transform_mask_adapter.h"
@@ -105,6 +106,10 @@ KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
         new KisLiquifyTransformStrategy(
             dynamic_cast<KisCanvas2*>(canvas)->coordinatesConverter(),
             m_currentArgs, m_transaction, canvas->resourceManager()))
+    , m_meshStrategy(
+        new KisMeshTransformStrategy(
+            dynamic_cast<KisCanvas2*>(canvas)->coordinatesConverter(),
+            m_currentArgs, m_transaction))
     , m_freeStrategy(
         new KisFreeTransformStrategy(
             dynamic_cast<KisCanvas2*>(canvas)->coordinatesConverter(),
@@ -125,6 +130,7 @@ KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
 
     warpAction = new KisAction(i18n("Warp"));
     liquifyAction = new KisAction(i18n("Liquify"));
+    meshAction = new KisAction(i18n("Mesh"));
     cageAction = new KisAction(i18n("Cage"));
     freeTransformAction = new KisAction(i18n("Free"));
     perspectiveAction = new KisAction(i18n("Perspective"));
@@ -150,6 +156,7 @@ KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
     connect(m_freeStrategy.data(), SIGNAL(requestShowImageTooBig(bool)), SLOT(imageTooBigRequested(bool)));
     connect(m_perspectiveStrategy.data(), SIGNAL(requestCanvasUpdate()), SLOT(canvasUpdateRequested()));
     connect(m_perspectiveStrategy.data(), SIGNAL(requestShowImageTooBig(bool)), SLOT(imageTooBigRequested(bool)));
+    connect(m_meshStrategy.data(), SIGNAL(requestCanvasUpdate()), SLOT(canvasUpdateRequested()));
 
     connect(&m_changesTracker, SIGNAL(sigConfigChanged(KisToolChangesTrackerDataSP)),
             this, SLOT(slotTrackerChangedConfig(KisToolChangesTrackerDataSP)));
@@ -198,6 +205,8 @@ KisTransformStrategyBase* KisToolTransform::currentStrategy() const
         return m_cageStrategy.data();
     } else if (m_currentArgs.mode() == ToolTransformArgs::LIQUIFY) {
         return m_liquifyStrategy.data();
+    } else if (m_currentArgs.mode() == ToolTransformArgs::MESH) {
+        return m_meshStrategy.data();
     } else /* if (m_currentArgs.mode() == ToolTransformArgs::PERSPECTIVE_4POINT) */ {
         return m_perspectiveStrategy.data();
     }
@@ -353,6 +362,7 @@ QMenu*  KisToolTransform::popupActionsMenu()
         m_contextMenu->addAction(warpAction);
         m_contextMenu->addAction(cageAction);
         m_contextMenu->addAction(liquifyAction);
+        m_contextMenu->addAction(meshAction);
 
         // extra options if free transform is selected
         if (transformMode() == FreeTransformMode) {
@@ -473,6 +483,9 @@ KisToolTransform::TransformToolMode KisToolTransform::transformMode() const
     case ToolTransformArgs::PERSPECTIVE_4POINT:
         mode = PerspectiveTransformMode;
         break;
+    case ToolTransformArgs::MESH:
+        mode = MeshTransformMode;
+        break;
     default:
         KIS_ASSERT_RECOVER_NOOP(0 && "unexpected transform mode");
     }
@@ -569,6 +582,9 @@ void KisToolTransform::setTransformMode(KisToolTransform::TransformToolMode newM
     case PerspectiveTransformMode:
         mode = ToolTransformArgs::PERSPECTIVE_4POINT;
         break;
+    case MeshTransformMode:
+        mode = ToolTransformArgs::MESH;
+        break;
     default:
         KIS_ASSERT_RECOVER_NOOP(0 && "unexpected transform mode");
     }
@@ -584,7 +600,10 @@ void KisToolTransform::setTransformMode(KisToolTransform::TransformToolMode newM
             m_optionsWidget->slotSetLiquifyModeButtonClicked( true );
         } else if( newMode == PerspectiveTransformMode ) {
             m_optionsWidget->slotSetPerspectiveModeButtonClicked( true );
+        } else if( newMode == MeshTransformMode ) {
+            m_optionsWidget->slotSetMeshModeButtonClicked( true );
         }
+
         emit transformModeChanged();
     }
 }
@@ -689,6 +708,7 @@ void KisToolTransform::initThumbnailImage(KisPaintDeviceSP previewDevice)
     m_warpStrategy->setThumbnailImage(origImg, thumbToImageTransform);
     m_cageStrategy->setThumbnailImage(origImg, thumbToImageTransform);
     m_liquifyStrategy->setThumbnailImage(origImg, thumbToImageTransform);
+    m_meshStrategy->setThumbnailImage(origImg, thumbToImageTransform);
 }
 
 void KisToolTransform::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
@@ -994,6 +1014,7 @@ QWidget* KisToolTransform::createOptionWidget()
     connect(perspectiveAction, SIGNAL(triggered(bool)), this, SLOT(slotUpdateToPerspectiveType()));
     connect(freeTransformAction, SIGNAL(triggered(bool)), this, SLOT(slotUpdateToFreeTransformType()));
     connect(liquifyAction, SIGNAL(triggered(bool)), this, SLOT(slotUpdateToLiquifyType()));
+    connect(meshAction, SIGNAL(triggered(bool)), this, SLOT(slotUpdateToMeshType()));
     connect(cageAction, SIGNAL(triggered(bool)), this, SLOT(slotUpdateToCageType()));
 
     connect(applyTransformation, SIGNAL(triggered(bool)), this, SLOT(slotApplyTransform()));
@@ -1181,6 +1202,11 @@ void KisToolTransform::slotUpdateToFreeTransformType()
 void KisToolTransform::slotUpdateToLiquifyType()
 {
     setTransformMode(KisToolTransform::TransformToolMode::LiquifyTransformMode);
+}
+
+void KisToolTransform::slotUpdateToMeshType()
+{
+    setTransformMode(KisToolTransform::TransformToolMode::MeshTransformMode);
 }
 
 void KisToolTransform::slotUpdateToCageType()

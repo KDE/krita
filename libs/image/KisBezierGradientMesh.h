@@ -21,9 +21,15 @@ struct GradientMeshPatch : public KisBezierPatch {
     std::array<QColor, 4> colors;
 };
 
-struct GradientMeshNode : public KisBezierMeshDetails::BaseMeshNode
+struct GradientMeshNode : public KisBezierMeshDetails::BaseMeshNode, public boost::equality_comparable<GradientMeshNode>
 {
     QColor color;
+
+    bool operator==(const GradientMeshNode &rhs) const {
+        return static_cast<const KisBezierMeshDetails::BaseMeshNode&>(*this) ==
+                static_cast<const KisBezierMeshDetails::BaseMeshNode&>(rhs) &&
+                color == rhs.color;
+    }
 };
 
 inline void lerpNodeData(const GradientMeshNode &left, const GradientMeshNode &right, qreal t, GradientMeshNode &dst)

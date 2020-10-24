@@ -330,7 +330,7 @@ private:
     QList<QPointF> points;
 };
 
-qreal nearestPoint(const QList<QPointF> controlPoints, const QPointF &point)
+qreal nearestPoint(const QList<QPointF> controlPoints, const QPointF &point, qreal *resultDistance, QPointF *resultPoint)
 {
     const int deg = controlPoints.size() - 1;
 
@@ -457,14 +457,27 @@ qreal nearestPoint(const QList<QPointF> controlPoints, const QPointF &point)
     qreal distanceSquared = kisSquareDistance(point, controlPoints.first());
     qreal minDistanceSquared = distanceSquared;
     qreal resultParam = 0.0;
+    if (resultDistance) {
+        *resultDistance = std::sqrt(distanceSquared);
+    }
+    if (resultPoint) {
+        *resultPoint = controlPoints.first();
+    }
 
     // Iterate over the found candidate params.
     Q_FOREACH (qreal root, rootParams) {
-        distanceSquared = kisSquareDistance(point, bezierCurve(controlPoints, root));
+        const QPointF rootPoint = bezierCurve(controlPoints, root);
+        distanceSquared = kisSquareDistance(point, rootPoint);
 
         if (distanceSquared < minDistanceSquared) {
             minDistanceSquared = distanceSquared;
             resultParam = root;
+            if (resultDistance) {
+                *resultDistance = std::sqrt(distanceSquared);
+            }
+            if (resultPoint) {
+                *resultPoint = rootPoint;
+            }
         }
     }
 
@@ -473,6 +486,12 @@ qreal nearestPoint(const QList<QPointF> controlPoints, const QPointF &point)
     if (distanceSquared < minDistanceSquared) {
         minDistanceSquared = distanceSquared;
         resultParam = 1.0;
+        if (resultDistance) {
+            *resultDistance = std::sqrt(distanceSquared);
+        }
+        if (resultPoint) {
+            *resultPoint = controlPoints.last();
+        }
     }
 
     return resultParam;
@@ -645,6 +664,56 @@ QPointF calculateLocalPos(const std::array<QPointF, 12> &points, const QPointF &
     QRectF approxBounds = std::accumulate(points.begin(), points.end(), QRectF(), std::bit_or<QRectF>());
     return KisAlgebra2D::absoluteToRelative(globalPoint, approxBounds);
 #endif
+}
+
+QPointF interpolateQuadric(const QPointF &p0, const QPointF &p2, const QPointF &pt, qreal t)
+{
+    if (t <= 0.0 || t >= 1.0)
+        return lerp(p0, p2, 0.5);
+
+    /*
+        B(t) = [x2 y2] = (1-t)^2*P0 + 2t*(1-t)*P1 + t^2*P2
+
+               B(t) - (1-t)^2*P0 - t^2*P2
+         P1 =  --------------------------
+                       2t*(1-t)
+    */
+
+    QPointF c1 = pt - (1.0-t) * (1.0-t)*p0 - t * t * p2;
+
+    qreal denom = 2.0 * t * (1.0-t);
+
+    c1.rx() /= denom;
+    c1.ry() /= denom;
+
+    return c1;
+}
+
+std::pair<QPointF, QPointF> offsetSegment(qreal t, const QPointF &offset)
+{
+    /*
+    * method from inkscape, original method and idea borrowed from Simon Budig
+    * <simon@gimp.org> and the GIMP
+    * cf. app/vectors/gimpbezierstroke.c, gimp_bezier_stroke_point_move_relative()
+    *
+    * feel good is an arbitrary parameter that distributes the delta between handles
+    * if t of the drag point is less than 1/6 distance form the endpoint only
+    * the corresponding handle is adjusted. This matches the behavior in GIMP
+    */
+    qreal feel_good;
+    if (t <= 1.0 / 6.0)
+        feel_good = 0;
+    else if (t <= 0.5)
+        feel_good = (pow((6 * t - 1) / 2.0, 3)) / 2;
+    else if (t <= 5.0 / 6.0)
+        feel_good = (1 - pow((6 * (1-t) - 1) / 2.0, 3)) / 2 + 0.5;
+    else
+        feel_good = 1;
+
+    const QPointF moveP1 = ((1-feel_good)/(3*t*(1-t)*(1-t))) * offset;
+    const QPointF moveP2 = (feel_good/(3*t*t*(1-t))) * offset;
+
+    return std::make_pair(moveP1, moveP2);
 }
 
 }

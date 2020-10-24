@@ -212,7 +212,7 @@ KRITAGLOBAL_EXPORT
 QVector<qreal> mergeLinearizationSteps(const QVector<qreal> &a, const QVector<qreal> &b);
 
 KRITAGLOBAL_EXPORT
-qreal nearestPoint(const QList<QPointF> controlPoints, const QPointF &point);
+qreal nearestPoint(const QList<QPointF> controlPoints, const QPointF &point, qreal *resultDistance = 0, QPointF *resultPoint = 0);
 
 KRITAGLOBAL_EXPORT
 int controlPolygonZeros(const QList<QPointF> &controlPoints);
@@ -226,6 +226,24 @@ int controlPolygonZeros(const QList<QPointF> &controlPoints);
 KRITAGLOBAL_EXPORT
 QPointF calculateLocalPos(const std::array<QPointF, 12> &points,
                           const QPointF &globalPoint);
+
+/**
+ * @brief Interpolates quadric curve passing through given points
+ *
+ * Interpolates quadric curve passing through \p p0, \p pt and \p p2
+ * with ensuring that \p pt placed at position \p t
+ * @return interpolated value for control point p1
+ */
+KRITAGLOBAL_EXPORT
+QPointF interpolateQuadric(const QPointF &p0, const QPointF &p2, const QPointF &pt, qreal t);
+
+/**
+ * @brief moves point \p t of the curve by offset \p offset
+ * @return proposed offsets for points p1 and p2 of the curve
+ */
+KRITAGLOBAL_EXPORT
+std::pair<QPointF, QPointF> offsetSegment(qreal t, const QPointF &offset);
+
 
 }
 

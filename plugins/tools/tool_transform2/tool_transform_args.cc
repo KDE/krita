@@ -87,6 +87,8 @@ void ToolTransformArgs::init(const ToolTransformArgs& args)
         m_liquifyWorker.reset(new KisLiquifyTransformWorker(*args.m_liquifyWorker.data()));
     }
 
+    m_meshTransform = args.m_meshTransform;
+
     m_continuedTransformation.reset(args.m_continuedTransformation ? new ToolTransformArgs(*args.m_continuedTransformation) : 0);
 }
 
@@ -94,6 +96,7 @@ void ToolTransformArgs::clear()
 {
     m_origPoints.clear();
     m_transfPoints.clear();
+    m_meshTransform = KisBezierTransformMesh();
 }
 
 ToolTransformArgs::ToolTransformArgs(const ToolTransformArgs& args)
@@ -145,6 +148,7 @@ bool ToolTransformArgs::operator==(const ToolTransformArgs& other) const
         m_editTransformPoints == other.m_editTransformPoints &&
         (m_liquifyProperties == other.m_liquifyProperties ||
          *m_liquifyProperties == *other.m_liquifyProperties) &&
+        m_meshTransform == other.m_meshTransform &&
 
         // pointer types
 
@@ -199,6 +203,8 @@ bool ToolTransformArgs::isSameMode(const ToolTransformArgs& other) const
              *m_liquifyWorker == *other.m_liquifyWorker)
             || m_liquifyWorker == other.m_liquifyWorker;
 
+    } else if (m_mode == MESH) {
+        result &= m_meshTransform == other.m_meshTransform;
     } else {
         KIS_SAFE_ASSERT_RECOVER_NOOP(0 && "unknown transform mode");
     }
@@ -266,6 +272,8 @@ void ToolTransformArgs::translate(const QPointF &offset)
     } else if (m_mode == LIQUIFY) {
         KIS_ASSERT_RECOVER_RETURN(m_liquifyWorker);
         m_liquifyWorker->translate(offset);
+    } else if (m_mode == MESH) {
+        m_meshTransform.translate(offset);
     } else {
         KIS_ASSERT_RECOVER_NOOP(0 && "unknown transform mode");
     }
@@ -289,6 +297,8 @@ bool ToolTransformArgs::isIdentity() const
         return true;
     } else if (m_mode == LIQUIFY) {
         return !m_liquifyWorker || m_liquifyWorker->isIdentity();
+    } else if (m_mode == MESH) {
+        return m_meshTransform.isIdentity();
     } else {
         KIS_ASSERT_RECOVER_NOOP(0 && "unknown transform mode");
         return true;
@@ -361,6 +371,10 @@ void ToolTransformArgs::toXML(QDomElement *e) const
 
         m_liquifyProperties->toXML(&liqEl);
         m_liquifyWorker->toXML(&liqEl);
+    } else if (m_mode == LIQUIFY) {
+        QDomElement meshEl = doc.createElement("mesh_transform");
+        e->appendChild(meshEl);
+        m_meshTransform.toXML(&meshEl);
     } else {
         KIS_ASSERT_RECOVER_RETURN(0 && "Unknown transform mode");
     }
@@ -461,6 +475,14 @@ ToolTransformArgs ToolTransformArgs::fromXML(const QDomElement &e)
 
         *args.m_liquifyProperties = KisLiquifyProperties::fromXML(e);
         args.m_liquifyWorker.reset(KisLiquifyTransformWorker::fromXML(e));
+    } else if (args.m_mode == MESH) {
+        QDomElement meshEl;
+
+        result =
+            KisDomUtils::findOnlyElement(e, "mesh_transform", &meshEl);
+
+        args.m_meshTransform.fromXML(meshEl);
+
     } else {
         KIS_ASSERT_RECOVER_NOOP(0 && "Unknown transform mode");
     }
@@ -490,4 +512,14 @@ void ToolTransformArgs::restoreContinuedState()
 const ToolTransformArgs* ToolTransformArgs::continuedTransform() const
 {
     return m_continuedTransformation.data();
+}
+
+const KisBezierTransformMesh *ToolTransformArgs::meshTransform() const
+{
+    return &m_meshTransform;
+}
+
+KisBezierTransformMesh *ToolTransformArgs::meshTransform()
+{
+    return &m_meshTransform;
 }

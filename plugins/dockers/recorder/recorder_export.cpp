@@ -336,7 +336,7 @@ void RecorderExport::reject()
 
 void RecorderExport::onButtonBrowseDirectoryClicked()
 {
-    QDesktopServices::openUrl(QUrl(d->settings.inputDirectory));
+    QDesktopServices::openUrl(QUrl::fromLocalFile(d->settings.inputDirectory));
 }
 
 void RecorderExport::onSpinInputFpsValueChanged(int value)
@@ -503,7 +503,7 @@ void RecorderExport::onButtonWatchItClicked()
 
 void RecorderExport::onButtonShowInFolderClicked()
 {
-    QDesktopServices::openUrl(QUrl(d->videoDirectory));
+    QDesktopServices::openUrl(QUrl::fromLocalFile(d->videoDirectory));
 }
 
 void RecorderExport::onButtonRestartClicked()

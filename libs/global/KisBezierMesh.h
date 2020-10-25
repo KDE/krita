@@ -838,6 +838,12 @@ public:
         return segment_iterator(this, index.first.x(), index.first.y(), index.second);
     }
 
+    void scaleForThumbnail(const QTransform &t) {
+        KIS_SAFE_ASSERT_RECOVER_RETURN(t.type() <= QTransform::TxScale);
+        transform(t);
+        m_originalRect = t.mapRect(m_originalRect);
+    }
+
 private:
 
     std::vector<Node> m_nodes;

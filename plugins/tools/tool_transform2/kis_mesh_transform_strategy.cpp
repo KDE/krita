@@ -69,8 +69,6 @@ struct KisMeshTransformStrategy::Private
     boost::optional<KisBezierTransformMesh::SegmentIndex> hoveredSegment;
     boost::optional<KisBezierTransformMesh::ControlPointIndex> hoveredControl;
 
-
-
     boost::optional<qreal> mouseClickSegmentPosition;
     QPointF mouseClickPos;
 
@@ -82,9 +80,14 @@ struct KisMeshTransformStrategy::Private
 
     KisSignalCompressor recalculateSignalCompressor;
 
+    QTransform paintingTransform;
+    QPointF paintingOffset;
+    QImage transformedImage;
+
     KisMeshTransformStrategy * const q;
 
     void recalculateTransformations();
+    QTransform imageToThumb(bool useFlakeOptimization);
 };
 
 
@@ -167,9 +170,9 @@ void KisMeshTransformStrategy::paint(QPainter &gc)
 {
     gc.save();
 
-    //gc.setOpacity(m_d->transaction.basePreviewOpacity());
-    //gc.setTransform(m_d->paintingTransform, true);
-    //gc.drawImage(m_d->paintingOffset, m_d->transformedImage);
+    gc.setOpacity(m_d->transaction.basePreviewOpacity());
+    gc.setTransform(m_d->paintingTransform, true);
+    gc.drawImage(m_d->paintingOffset, m_d->transformedImage);
 
     gc.restore();
 
@@ -439,10 +442,59 @@ bool KisMeshTransformStrategy::acceptsClicks() const
     return false;
 }
 
+QTransform KisMeshTransformStrategy::Private::imageToThumb(bool useFlakeOptimization)
+{
+    return useFlakeOptimization ?
+        converter->documentToFlakeTransform() * converter->imageToDocumentTransform() :
+        q->thumbToImageTransform().inverted();
+}
 
 void KisMeshTransformStrategy::Private::recalculateTransformations()
 {
+    const QTransform scaleTransform = KisTransformUtils::imageToFlakeTransform(converter);
 
+    const QTransform resultThumbTransform = q->thumbToImageTransform() * scaleTransform;
+    const qreal scale = KisTransformUtils::scaleFromAffineMatrix(resultThumbTransform);
+    const bool useFlakeOptimization = scale < 1.0 &&
+        !KisTransformUtils::thumbnailTooSmall(resultThumbTransform, q->originalImage().rect());
+
+    const QTransform imageToThumb = this->imageToThumb(useFlakeOptimization);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(imageToThumb.type() <= QTransform::TxScale);
+
+    KisBezierTransformMesh mesh(*currentArgs.meshTransform());
+    mesh.scaleForThumbnail(imageToThumb);
+
+    paintingOffset = transaction.originalTopLeft();
+
+    if (!q->originalImage().isNull()) {
+        QPointF origTLInFlake = imageToThumb.map(transaction.originalTopLeft());
+
+        if (useFlakeOptimization) {
+            transformedImage = q->originalImage().transformed(resultThumbTransform);
+            paintingTransform = QTransform();
+        } else {
+            transformedImage = q->originalImage();
+            paintingTransform = resultThumbTransform;
+
+        }
+
+        const QRect dstImageRect = mesh.dstBoundingRect().toAlignedRect();
+        QImage dstImage(dstImageRect.size(), transformedImage.format());
+        dstImage.fill(0);
+
+        mesh.transformMesh(mesh.originalRect().topLeft().toPoint(), transformedImage,
+                           dstImageRect.topLeft(), &dstImage);
+
+        transformedImage = dstImage;
+        paintingOffset = dstImageRect.topLeft();
+
+    } else {
+        transformedImage = q->originalImage();
+        paintingOffset = imageToThumb.map(transaction.originalTopLeft());
+        paintingTransform = resultThumbTransform;
+    }
+
+    Q_EMIT q->requestCanvasUpdate();
 }
 
 #include "moc_kis_mesh_transform_strategy.cpp"

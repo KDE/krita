@@ -35,8 +35,6 @@ void KisBezierTransformMesh::transformPatch(const KisBezierPatch &patch, const Q
     KIS_SAFE_ASSERT_RECOVER_NOOP(imageSize.contains(dstBoundsI));
 
     {
-        const QPoint dstQImageOffset;
-
         GridIterationTools::QImagePolygonOp polygonOp(srcImage, *dstImage, srcQImageOffset, dstQImageOffset);
 
         GridIterationTools::RegularGridIndexesOp indexesOp(gridSize);
@@ -58,8 +56,6 @@ void KisBezierTransformMesh::transformPatch(const KisBezierPatch &patch, KisPain
     patch.sampleIrregularGrid(gridSize, originalPointsLocal, transformedPointsLocal);
 
     {
-        const QPoint dstQImageOffset;
-
         GridIterationTools::PaintDevicePolygonOp polygonOp(srcDevice, dstDevice);
 
         GridIterationTools::RegularGridIndexesOp indexesOp(gridSize);

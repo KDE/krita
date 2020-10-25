@@ -137,6 +137,8 @@ void KisFillPainter::fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const Ko
 
 void KisFillPainter::fillRectNoCompose(const QRect &rc, const KoPattern * pattern, const QTransform transform)
 {
+    if (!pattern) return;
+    if (!pattern->valid()) return;
     if (!device()) return;
     if (rc.width() < 1) return;
     if (rc.height() < 1) return;

@@ -73,6 +73,10 @@ struct KisMeshTransformStrategy::Private
 
     boost::optional<qreal> mouseClickSegmentPosition;
     QPointF mouseClickPos;
+
+    QPointF initialRotationCenter;
+    qreal initialSelectionMaxDimension = 0.0;
+
     bool pointWasDragged = false;
     QPointF lastMousePos;
 
@@ -264,6 +268,21 @@ bool KisMeshTransformStrategy::beginPrimaryAction(const QPointF &pt)
     bool retval = false;
 
     m_d->mouseClickPos = pt;
+
+    QRectF selectionBounds;
+
+    if (m_d->selectedNodes.size() > 1) {
+        for (auto it = m_d->selectedNodes.begin(); it != m_d->selectedNodes.end(); ++it) {
+            KisAlgebra2D::accumulateBounds(
+                m_d->currentArgs.meshTransform()->node(*it).node, &selectionBounds);
+        }
+    } else {
+        selectionBounds = m_d->currentArgs.meshTransform()->dstBoundingRect();
+    }
+
+    m_d->initialRotationCenter = selectionBounds.center();
+    m_d->initialSelectionMaxDimension = KisAlgebra2D::maxDimension(selectionBounds);
+
     m_d->pointWasDragged = false;
 
     if (m_d->mode == Private::OVER_POINT) {
@@ -362,10 +381,46 @@ void KisMeshTransformStrategy::continuePrimaryAction(const QPointF &pt, bool shi
             m_d->currentArgs.meshTransform()->translate(offset);
         }
     } else if (m_d->mode == Private::SCALE_MODE) {
+        const qreal scale = 1.0 - (pt - m_d->lastMousePos).y() / m_d->initialSelectionMaxDimension;
+
+
+        const QTransform t =
+            QTransform::fromTranslate(-m_d->initialRotationCenter.x(), -m_d->initialRotationCenter.y()) *
+            QTransform::fromScale(scale, scale) *
+            QTransform::fromTranslate(m_d->initialRotationCenter.x(), m_d->initialRotationCenter.y());
+
+        if (m_d->selectedNodes.size() > 1) {
+            for (auto it = m_d->selectedNodes.begin(); it != m_d->selectedNodes.end(); ++it) {
+                m_d->currentArgs.meshTransform()->node(*it).transform(t);
+            }
+        } else {
+            m_d->currentArgs.meshTransform()->transform(t);
+        }
+
     } else if (m_d->mode == Private::ROTATE_MODE) {
+        const QPointF oldDirection = m_d->lastMousePos - m_d->initialRotationCenter;
+        const QPointF newDirection = pt - m_d->initialRotationCenter;
+        const qreal rotateAngle = KisAlgebra2D::angleBetweenVectors(oldDirection, newDirection);
+
+        QTransform R;
+        R.rotateRadians(rotateAngle);
+
+        const QTransform t =
+            QTransform::fromTranslate(-m_d->initialRotationCenter.x(), -m_d->initialRotationCenter.y()) *
+            R *
+            QTransform::fromTranslate(m_d->initialRotationCenter.x(), m_d->initialRotationCenter.y());
+
+        if (m_d->selectedNodes.size() > 1) {
+            for (auto it = m_d->selectedNodes.begin(); it != m_d->selectedNodes.end(); ++it) {
+                m_d->currentArgs.meshTransform()->node(*it).transform(t);
+            }
+        } else {
+            m_d->currentArgs.meshTransform()->transform(t);
+        }
     }
 
     m_d->lastMousePos = pt;
+    m_d->recalculateSignalCompressor.start();
 }
 
 bool KisMeshTransformStrategy::endPrimaryAction()

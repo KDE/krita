@@ -78,6 +78,14 @@ struct BaseMeshNode : public boost::equality_comparable<BaseMeshNode> {
         bottomControl += offset;
     }
 
+    void transform(const QTransform &t) {
+        leftControl = t.map(leftControl);
+        topControl = t.map(topControl);
+        node = t.map(node);
+        rightControl = t.map(rightControl);
+        bottomControl = t.map(bottomControl);
+    }
+
     QPointF leftControl;
     QPointF topControl;
     QPointF node;
@@ -753,6 +761,12 @@ public:
     void translate(const QPointF &offset) {
         for (auto it = m_nodes.begin(); it != m_nodes.end(); ++it) {
             it->translate(offset);
+        }
+    }
+
+    void transform(const QTransform &t) {
+        for (auto it = m_nodes.begin(); it != m_nodes.end(); ++it) {
+            it->transform(t);
         }
     }
 

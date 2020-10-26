@@ -289,7 +289,6 @@ build_3rdparty () {
         ext_eigen3 \
         ext_exiv2 \
         ext_fftw3 \
-        ext_ilmbase \
         ext_jpeg \
         ext_lcms2 \
         ext_ocio \
@@ -392,12 +391,10 @@ rebuild_3rdparty () {
         ext_expat \
         ext_exiv2 \
         ext_fftw3 \
-        ext_ilmbase \
         ext_jpeg \
         ext_patch \
         ext_lcms2 \
         ext_ocio \
-        ext_ilmbase \
         ext_openexr
         #ext_openjpeg
 

@@ -13,7 +13,6 @@ gmic,http://gmic.eu/,CeCILLv2.1
 gmic-qt,http://gmic.eu/,GPLv3
 GNU Scientific Library,http://www.gnu.org/software/gsl,GPLv3
 iconv,https://www.gnu.org/software/libiconv/,LGPLv2 or GPLv3
-ilmbase,http://www.openexr.com,Modified BSD
 KDE Frameworks 5,https://www.kde.org,LGPLv2.1+
 libheif,https://github.com/strukturag/libheif,LGPLv3
 libjpeg-turbo,http://www.libjpeg-turbo.org,BSD

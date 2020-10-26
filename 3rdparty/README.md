@@ -143,7 +143,6 @@ THIS IS ALSO NEEDED IF YOU USE THE build.cmd script.
     cmake --build . --config RelWithDebInfo --target ext_eigen3
     cmake --build . --config RelWithDebInfo --target ext_exiv2
     cmake --build . --config RelWithDebInfo --target ext_fftw3
-    cmake --build . --config RelWithDebInfo --target ext_ilmbase
     cmake --build . --config RelWithDebInfo --target ext_jpeg
     cmake --build . --config RelWithDebInfo --target ext_lcms2
     cmake --build . --config RelWithDebInfo --target ext_ocio

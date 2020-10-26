@@ -217,7 +217,7 @@ public:
                 const qreal xPos = qreal(col) / (size.width() - 1) * mapRect.width() + mapRect.x();
 
                 Node node(QPointF(xPos, yPos));
-                node.setLeftControlRelative(QPointF(-xControlOffset, 50));
+                node.setLeftControlRelative(QPointF(-xControlOffset, 0));
                 node.setRightControlRelative(QPointF(xControlOffset, 0));
                 node.setTopControlRelative(QPointF(0, -yControlOffset));
                 node.setBottomControlRelative(QPointF(0, yControlOffset));

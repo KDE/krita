@@ -294,7 +294,7 @@ void KisLayerManager::layerProperties()
         QString xmlBefore = configBefore->toXML();
 
         KisDlgGeneratorLayer *dlg = new KisDlgGeneratorLayer(generatorLayer->name(), m_view, m_view->mainWindow(), generatorLayer, configBefore, KisStrokeId());
-        dlg->setCaption(i18n("Fill Layer Properties"));
+        dlg->setWindowTitle(i18n("Fill Layer Properties"));
         dlg->setAttribute(Qt::WA_DeleteOnClose);
 
         dlg->setConfiguration(configBefore.data());
@@ -729,7 +729,6 @@ KisNodeSP KisLayerManager::addGeneratorLayer(KisNodeSP activeNode)
     KisFilterConfigurationSP defaultConfig = dlg.configuration();
     defaultConfig->setProperty("color", currentForeground);
     dlg.setConfiguration(defaultConfig);
-    dlg.resize(dlg.minimumSizeHint());
 
     if (dlg.exec() == QDialog::Accepted) {
         node->setName(dlg.layerName());

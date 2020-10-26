@@ -202,7 +202,6 @@ add_subdirectory( ext_png )
 add_subdirectory( ext_eigen3 )
 add_subdirectory( ext_expat ) # for exiv2
 add_subdirectory( ext_exiv2 )
-add_subdirectory( ext_ilmbase )
 add_subdirectory( ext_lcms2 )
 add_subdirectory( ext_openexr )
 add_subdirectory( ext_openssl )

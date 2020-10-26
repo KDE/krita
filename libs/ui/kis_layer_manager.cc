@@ -294,7 +294,6 @@ void KisLayerManager::layerProperties()
         dlg->setAttribute(Qt::WA_DeleteOnClose);
 
         dlg->setConfiguration(configBefore.data());
-        dlg->resize(dlg->minimumSizeHint());
 
         Qt::WindowFlags flags = dlg->windowFlags();
         dlg->setWindowFlags(flags | Qt::Tool | Qt::Dialog);

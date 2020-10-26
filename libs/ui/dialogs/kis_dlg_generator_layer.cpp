@@ -72,6 +72,7 @@ KisDlgGeneratorLayer::KisDlgGeneratorLayer(const QString & defaultName, KisViewM
     if (layer && !isEditing) {
         slotDelayedPreviewGenerator();
     }
+    restoreGeometry(KisConfig(true).readEntry("generatordialog/geometry", QByteArray()));
 }
 
 void KisDlgGeneratorLayer::saveLayer()
@@ -114,6 +115,7 @@ void KisDlgGeneratorLayer::restoreLayer()
 
 KisDlgGeneratorLayer::~KisDlgGeneratorLayer()
 {
+    KisConfig(false).writeEntry("generatordialog/geometry", saveGeometry());
 }
 
 void KisDlgGeneratorLayer::slotNameChanged(const QString & text)

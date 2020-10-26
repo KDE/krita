@@ -57,14 +57,26 @@ void KisBezierPatch::sampleIrregularGrid(QSize &gridSize, QVector<QPointF> &orig
     gridSize.rwidth() = horizontalSteps.size();
     gridSize.rheight() = verticalSteps.size();
 
+    const qreal topLength = KisBezierUtils::curveLength(points[TL], points[TL_HC], points[TR_HC], points[TR], 0.01);
+    const qreal bottomLength = KisBezierUtils::curveLength(points[BL], points[BL_HC], points[BR_HC], points[BR], 0.01);
+
+    const qreal leftLength = KisBezierUtils::curveLength(points[TL], points[TL_VC], points[BL_VC], points[BL], 0.01);
+    const qreal rightLength = KisBezierUtils::curveLength(points[TR], points[TR_VC], points[BR_VC], points[BR], 0.01);
+
     for (int y = 0; y < gridSize.height(); y++) {
         const qreal yProportion = verticalSteps[y];
+
+        const qreal yCoord1 = KisBezierUtils::curveLengthAtPoint(points[TL], points[TL_VC], points[BL_VC], points[BL], yProportion, 0.01) / leftLength;
+        const qreal yCoord2 = KisBezierUtils::curveLengthAtPoint(points[TR], points[TR_VC], points[BR_VC], points[BR], yProportion, 0.01) / rightLength;
 
         for (int x = 0; x < gridSize.width(); x++) {
             const qreal xProportion = horizontalSteps[x];
 
-            const QPointF orig = KisAlgebra2D::relativeToAbsolute(
-                        QPointF(xProportion, yProportion), originalRect);
+            const qreal xCoord1 = KisBezierUtils::curveLengthAtPoint(points[TL], points[TL_HC], points[TR_HC], points[TR], xProportion, 0.01) / topLength;
+            const qreal xCoord2 = KisBezierUtils::curveLengthAtPoint(points[BL], points[BL_HC], points[BR_HC], points[BR], xProportion, 0.01) / bottomLength;
+
+            const QPointF localPt(lerp(xCoord1, xCoord2, yProportion), lerp(yCoord1, yCoord2, xProportion));
+            const QPointF orig = KisAlgebra2D::relativeToAbsolute(localPt, originalRect);
 
             const QPointF Sc =
                     lerp(bezierCurve(points[TL], points[TL_HC], points[TR_HC], points[TR], xProportion),
@@ -99,14 +111,26 @@ void KisBezierPatch::sampleRegularGrid(QSize &gridSize, QVector<QPointF> &origPo
     gridSize.rwidth() = qCeil(bounds.width() / dstStep.x());
     gridSize.rheight() = qCeil(bounds.height() / dstStep.y());
 
+    const qreal topLength = KisBezierUtils::curveLength(points[TL], points[TL_HC], points[TR_HC], points[TR], 0.01);
+    const qreal bottomLength = KisBezierUtils::curveLength(points[BL], points[BL_HC], points[BR_HC], points[BR], 0.01);
+
+    const qreal leftLength = KisBezierUtils::curveLength(points[TL], points[TL_VC], points[BL_VC], points[BL], 0.01);
+    const qreal rightLength = KisBezierUtils::curveLength(points[TR], points[TR_VC], points[BR_VC], points[BR], 0.01);
+
     for (int y = 0; y < gridSize.height(); y++) {
         const qreal yProportion = qreal(y) / (gridSize.height() - 1);
+
+        const qreal yCoord1 = KisBezierUtils::curveLengthAtPoint(points[TL], points[TL_VC], points[BL_VC], points[BL], yProportion, 0.01) / leftLength;
+        const qreal yCoord2 = KisBezierUtils::curveLengthAtPoint(points[TR], points[TR_VC], points[BR_VC], points[BR], yProportion, 0.01) / rightLength;
 
         for (int x = 0; x < gridSize.width(); x++) {
             const qreal xProportion = qreal(x) / (gridSize.width() - 1);
 
-            const QPointF orig = KisAlgebra2D::relativeToAbsolute(
-                        QPointF(xProportion, yProportion), originalRect);
+            const qreal xCoord1 = KisBezierUtils::curveLengthAtPoint(points[TL], points[TL_HC], points[TR_HC], points[TR], xProportion, 0.01) / topLength;
+            const qreal xCoord2 = KisBezierUtils::curveLengthAtPoint(points[BL], points[BL_HC], points[BR_HC], points[BR], xProportion, 0.01) / bottomLength;
+
+            const QPointF localPt(lerp(xCoord1, xCoord2, yProportion), lerp(yCoord1, yCoord2, xProportion));
+            const QPointF orig = KisAlgebra2D::relativeToAbsolute(localPt, originalRect);
 
             const QPointF Sc =
                     lerp(bezierCurve(points[TL], points[TL_HC], points[TR_HC], points[TR], xProportion),

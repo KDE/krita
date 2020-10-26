@@ -27,8 +27,8 @@ void KisBezierTransformMesh::transformPatch(const KisBezierPatch &patch, const Q
     QVector<QPointF> transformedPointsLocal;
     QSize gridSize;
 
-    //patch.sampleRegularGrid(gridSize, originalPointsLocal, transformedPointsLocal, QPointF(16,16));
-    patch.sampleIrregularGrid(gridSize, originalPointsLocal, transformedPointsLocal);
+    patch.sampleRegularGrid(gridSize, originalPointsLocal, transformedPointsLocal, QPointF(8,8));
+    //patch.sampleIrregularGrid(gridSize, originalPointsLocal, transformedPointsLocal);
 
     const QRect dstBoundsI = patch.dstBoundingRect().toAlignedRect();
     const QRect imageSize = QRect(dstQImageOffset, dstImage->size());
@@ -52,8 +52,8 @@ void KisBezierTransformMesh::transformPatch(const KisBezierPatch &patch, KisPain
     QVector<QPointF> transformedPointsLocal;
     QSize gridSize;
 
-    //patch.sampleRegularGrid(gridSize, originalPointsLocal, transformedPointsLocal, QPointF(16,16));
-    patch.sampleIrregularGrid(gridSize, originalPointsLocal, transformedPointsLocal);
+    patch.sampleRegularGrid(gridSize, originalPointsLocal, transformedPointsLocal, QPointF(8,8));
+    //patch.sampleIrregularGrid(gridSize, originalPointsLocal, transformedPointsLocal);
 
     {
         GridIterationTools::PaintDevicePolygonOp polygonOp(srcDevice, dstDevice);

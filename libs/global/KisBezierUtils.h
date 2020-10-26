@@ -103,7 +103,7 @@ inline QPointF bezierCurve(const QPointF p0,
                            const QPointF p3,
                            qreal t)
 {
-#if 1
+#if 0
     const qreal t_2 = pow2(t);
     const qreal t_3 = t_2 * t;
     const qreal t_inv = 1.0 - t;

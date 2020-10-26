@@ -26,6 +26,7 @@
 #include <SeExpr2/UI/ErrorMessages.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_icon.h>
+#include <kis_config.h>
 
 #include "SeExprExpressionContext.h"
 #include "generator.h"
@@ -92,11 +93,14 @@ KisWdgSeExpr::KisWdgSeExpr(QWidget *parent)
 
     togglePresetRenameUIActive(false); // reset the UI state of renaming a preset if we are changing presets
     slotUpdatePresetSettings();        // disable everything until a preset is selected
+
+    m_widget->splitter->restoreState(KisConfig(true).readEntry("seExpr/splitLayoutState", QByteArray())); // restore splitter state
 }
 
 KisWdgSeExpr::~KisWdgSeExpr()
 {
     KisDialogStateSaver::saveState(m_widget->txtEditor, "krita/generators/seexpr");
+    KisConfig(false).writeEntry("seExpr/splitLayoutState", m_widget->splitter->saveState()); // save splitter state
     delete m_saveDialog;
     delete m_widget;
 }

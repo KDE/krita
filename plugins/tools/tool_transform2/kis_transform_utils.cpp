@@ -300,7 +300,13 @@ void KisTransformUtils::transformDevice(const ToolTransformArgs &config,
 
         config.liquifyWorker()->run(device);
     } else if (config.mode() == ToolTransformArgs::MESH) {
-        ENTER_FUNCTION() << "TODO: Mesh Transform";
+        KoUpdaterPtr updater = helper->updater();
+        //FIXME:
+        Q_UNUSED(updater);
+
+        KisPaintDeviceSP srcDevice = new KisPaintDevice(*device);
+        device->clear();
+        config.meshTransform()->transformMesh(srcDevice, device);
 
     } else {
         QVector3D transformedCenter;

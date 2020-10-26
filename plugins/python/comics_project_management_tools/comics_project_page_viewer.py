@@ -57,11 +57,19 @@ class page_viewer(QPushButton):
 
     def paintEvent(self, event):
         painter = QPainter(self)
-        image = self.image.scaled(self.size(), Qt.KeepAspectRatio, Qt.SmoothTransformation)
+        previewSize = self.size()*self.devicePixelRatioF()
+        image = ""
+
+        if self.image.width() <= previewSize.width() or self.image.height() <= previewSize.height():
+            # pixel art
+            image = self.image.scaled(previewSize, Qt.KeepAspectRatio, Qt.FastTransformation)
+        else:
+            image = self.image.scaled(previewSize, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+        image.setDevicePixelRatio(self.devicePixelRatioF())
         if self.alignment == 'right':
-            x_offset = int(self.width() - image.width())
+            x_offset = int(self.width() - image.width()/self.devicePixelRatioF())
         elif self.alignment == 'center':
-            x_offset = int((self.width() - image.width()) / 2)
+            x_offset = int((self.width() - image.width()/self.devicePixelRatioF()) / 2)
         else:
             x_offset = 0
         painter.drawImage(x_offset, 0, image)

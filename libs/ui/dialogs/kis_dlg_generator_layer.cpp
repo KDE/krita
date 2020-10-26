@@ -24,6 +24,7 @@
 #include <QLabel>
 #include <QLayout>
 #include <QGridLayout>
+#include <QPushButton>
 
 #include <klocalizedstring.h>
 
@@ -40,51 +41,47 @@
 #define UPDATE_DELAY 100 /*ms */
 
 KisDlgGeneratorLayer::KisDlgGeneratorLayer(const QString & defaultName, KisViewManager *view, QWidget *parent, KisGeneratorLayerSP glayer = 0, const KisFilterConfigurationSP previousConfig = 0, const KisStrokeId stroke = KisStrokeId())
-        : KoDialog(parent)
+        : QDialog(parent)
+        , layer(glayer)
+        , m_view(view)
+        , isEditing(layer && previousConfig)
         , m_customName(false)
         , m_freezeName(false)
         , m_stroke(stroke)
         , m_compressor(UPDATE_DELAY, KisSignalCompressor::FIRST_INACTIVE)
 {
-
-    setButtons(Ok | Cancel);
-    setDefaultButton(Ok);
-    isEditing = glayer && previousConfig;
-
     if(isEditing){
         setModal(false);
         configBefore = previousConfig->cloneWithResourcesSnapshot();
     }
 
-    layer = glayer;
-
-    QWidget *page = new QWidget(this);
-
-    m_view = view;
-    dlgWidget.setupUi(page);
+    dlgWidget.setupUi(this);
     dlgWidget.wdgGenerator->initialize(m_view);
+    dlgWidget.btnBox->button(QDialogButtonBox::Ok)->setDefault(true);
 
-    setMainWidget(page);
     dlgWidget.txtLayerName->setText( isEditing ? layer->name() : defaultName );
     connect(dlgWidget.txtLayerName, SIGNAL(textChanged(QString)),
             this, SLOT(slotNameChanged(QString)));
     connect(dlgWidget.wdgGenerator, SIGNAL(previewConfiguration()), this, SLOT(previewGenerator()));
     connect(&m_compressor, SIGNAL(timeout()), this, SLOT(slotDelayedPreviewGenerator()));
+    connect(dlgWidget.btnBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(dlgWidget.btnBox, SIGNAL(rejected()), this, SLOT(reject()));
+    connect(this, SIGNAL(accepted()), this, SLOT(saveLayer()));
+    connect(this, SIGNAL(rejected()), this, SLOT(restoreLayer()));
 
     if (layer && !isEditing) {
         slotDelayedPreviewGenerator();
     }
 }
 
-KisDlgGeneratorLayer::~KisDlgGeneratorLayer()
+void KisDlgGeneratorLayer::saveLayer()
 {
     /*
      * Editing a layer should be using the show function with automatic deletion on close.
      * Because of this, the action should be taken care of when the window is closed and
      * the user has accepted the changes.
      */
-    if (isEditing && result() == QDialog::Accepted) {
-
+    if (isEditing) {
         layer->setName(layerName());
 
         KisFilterConfigurationSP configAfter(configuration());
@@ -101,14 +98,22 @@ KisDlgGeneratorLayer::~KisDlgGeneratorLayer()
             m_view->undoAdapter()->addCommand(cmd);
             m_view->document()->setModified(true);
         }
-    }
-    else if (isEditing && result() == QDialog::Rejected){
-        layer->setFilter(configBefore);
-    }
-    else if (result() == QDialog::Accepted) {
+    } else {
         KIS_ASSERT_RECOVER_RETURN(layer);
         layer->setFilter(configuration()->cloneWithResourcesSnapshot());
     }
+}
+
+void KisDlgGeneratorLayer::restoreLayer()
+{
+    if (isEditing)
+    {
+        layer->setFilter(configBefore);
+    }
+}
+
+KisDlgGeneratorLayer::~KisDlgGeneratorLayer()
+{
 }
 
 void KisDlgGeneratorLayer::slotNameChanged(const QString & text)
@@ -117,7 +122,7 @@ void KisDlgGeneratorLayer::slotNameChanged(const QString & text)
         return;
 
     m_customName = !text.isEmpty();
-    enableButtonOk(m_customName);
+    dlgWidget.btnBox->button(QDialogButtonBox::Ok)->setEnabled(m_customName);
 }
 
 void KisDlgGeneratorLayer::slotDelayedPreviewGenerator()

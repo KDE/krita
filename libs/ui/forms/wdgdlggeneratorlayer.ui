@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>WdgDlgGeneratorLayer</class>
- <widget class="QWidget" name="WdgDlgGeneratorLayer">
+ <widget class="QDialog" name="WdgDlgGeneratorLayer">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -53,6 +53,13 @@
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QDialogButtonBox" name="btnBox">
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
      </property>
     </widget>
    </item>

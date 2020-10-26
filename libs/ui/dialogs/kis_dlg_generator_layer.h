@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) Boudewijn Rempt <boud@valdyas.org>, (C) 2008
+ * Copyright (c) 2020 L. E. Segovia <amy@amyspark.me>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -19,7 +20,7 @@
 #ifndef KIS_DLG_GENERATORLAYER_H
 #define KIS_DLG_GENERATORLAYER_H
 
-#include <KoDialog.h>
+#include <QDialog>
 #include <QString>
 
 class KisFilterConfiguration;
@@ -32,7 +33,7 @@ class KisViewManager;
 /**
  * Create a new generator layer
  */
-class KisDlgGeneratorLayer : public KoDialog
+class KisDlgGeneratorLayer : public QDialog
 {
 public:
 
@@ -59,6 +60,8 @@ protected Q_SLOTS:
     void slotNameChanged(const QString &);
     void previewGenerator();
     void slotDelayedPreviewGenerator();
+    void saveLayer();
+    void restoreLayer();
 
 private:
     Ui_WdgDlgGeneratorLayer dlgWidget;

@@ -94,12 +94,15 @@ KisWdgSeExpr::KisWdgSeExpr(QWidget *parent)
     slotUpdatePresetSettings();        // disable everything until a preset is selected
 
     m_widget->splitter->restoreState(KisConfig(true).readEntry("seExpr/splitLayoutState", QByteArray())); // restore splitter state
+    m_widget->tabWidget->setCurrentIndex(KisConfig(true).readEntry("seExpr/selectedTab",  -1));               // save currently selected tab
 }
 
 KisWdgSeExpr::~KisWdgSeExpr()
 {
     KisDialogStateSaver::saveState(m_widget->txtEditor, "krita/generators/seexpr");
     KisConfig(false).writeEntry("seExpr/splitLayoutState", m_widget->splitter->saveState()); // save splitter state
+    KisConfig(false).writeEntry("seExpr/selectedTab", m_widget->tabWidget->currentIndex()); // save currently selected tab
+
     delete m_saveDialog;
     delete m_widget;
 }

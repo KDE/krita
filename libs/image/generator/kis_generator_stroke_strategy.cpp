@@ -40,20 +40,17 @@ KisGeneratorStrokeStrategy::KisGeneratorStrokeStrategy()
 
 QVector<KisStrokeJobData *>KisGeneratorStrokeStrategy::createJobsData(const KisGeneratorLayerSP layer, QSharedPointer<bool> cookie, const KisGeneratorSP f, const KisPaintDeviceSP dev, const QRegion &region, const KisFilterConfigurationSP filterConfig)
 {
+    using namespace KritaUtils;
+
     QVector<KisStrokeJobData *> jobsData;
 
     QSharedPointer<KisProcessingVisitor::ProgressHelper> helper(new KisProcessingVisitor::ProgressHelper(layer));
 
+    addJobBarrier(jobsData, nullptr);
+
     for (const auto& rc: region) {
-        using namespace KritaUtils;
-
         if (f->allowsSplittingIntoPatches()) {
-            using KritaUtils::optimalPatchSize;
-            using KritaUtils::splitRectIntoPatches;
-
             QVector<QRect> tiles = splitRectIntoPatches(rc, optimalPatchSize());
-
-            addJobSequential(jobsData, (QRunnable*)nullptr);
 
             for(const auto& tile: tiles) {
                 KisProcessingInformation dstCfg(dev, tile.topLeft(), KisSelectionSP());

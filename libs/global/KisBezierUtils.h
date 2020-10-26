@@ -28,43 +28,7 @@ namespace KisBezierUtils
 {
 using KisAlgebra2D::lerp;
 
-inline QPointF bezierCurve(const QPointF p0,
-                           const QPointF p1,
-                           const QPointF p2,
-                           const QPointF p3,
-                           qreal t)
-{
-    const qreal t_2 = pow2(t);
-    const qreal t_3 = t_2 * t;
-    const qreal t_inv = 1.0 - t;
-    const qreal t_inv_2 = pow2(t_inv);
-    const qreal t_inv_3 = t_inv_2 * t_inv;
 
-    return
-        t_inv_3 * p0 +
-        3 * t_inv_2 * t * p1 +
-        3 * t_inv * t_2 * p2 +
-        t_3 * p3;
-
-}
-
-inline QPointF bezierCurve(const QList<QPointF> &points,
-                           qreal t)
-{
-    QPointF result;
-
-    if (points.size() == 2) {
-        result = lerp(points.first(), points.last(), t);
-    } else if (points.size() == 3) {
-        result = bezierCurve(points[0], points[1], points[1], points[2], t);
-    } else if (points.size() == 4) {
-        result = bezierCurve(points[0], points[1], points[2], points[3], t);
-    } else {
-        KIS_SAFE_ASSERT_RECOVER_NOOP(0 && "Unsupported number of bezier control points");
-    }
-
-    return result;
-}
 
 
 inline QPointF bezierCurveDeriv(const QPointF p0,
@@ -133,6 +97,49 @@ inline void deCasteljau(const QPointF &q0,
     *p4 = q[2];
 }
 
+inline QPointF bezierCurve(const QPointF p0,
+                           const QPointF p1,
+                           const QPointF p2,
+                           const QPointF p3,
+                           qreal t)
+{
+#if 1
+    const qreal t_2 = pow2(t);
+    const qreal t_3 = t_2 * t;
+    const qreal t_inv = 1.0 - t;
+    const qreal t_inv_2 = pow2(t_inv);
+    const qreal t_inv_3 = t_inv_2 * t_inv;
+
+    return
+        t_inv_3 * p0 +
+        3 * t_inv_2 * t * p1 +
+        3 * t_inv * t_2 * p2 +
+        t_3 * p3;
+#else
+    QPointF q0, q1, q2, q3, q4;
+    deCasteljau(p0, p1, p2, p3, t, &q0, &q1, &q2, &q3, &q4);
+    return q2;
+#endif
+}
+
+inline QPointF bezierCurve(const QList<QPointF> &points,
+                           qreal t)
+{
+    QPointF result;
+
+    if (points.size() == 2) {
+        result = lerp(points.first(), points.last(), t);
+    } else if (points.size() == 3) {
+        result = bezierCurve(points[0], points[1], points[1], points[2], t);
+    } else if (points.size() == 4) {
+        result = bezierCurve(points[0], points[1], points[2], points[3], t);
+    } else {
+        KIS_SAFE_ASSERT_RECOVER_NOOP(0 && "Unsupported number of bezier control points");
+    }
+
+    return result;
+}
+
 inline bool isLinearSegmentByDerivatives(const QPointF &p0, const QPointF &d0,
                                          const QPointF &p1, const QPointF &d1,
                                          const qreal eps = 1e-4)
@@ -178,30 +185,6 @@ inline int bezierDegree(const QPointF p0,
     return degree;
 }
 
-inline void splitBezierCurve(const QPointF &q0,
-                             const QPointF &q1,
-                             const QPointF &q2,
-                             const QPointF &q3,
-                             qreal t,
-                             QPointF *p0,
-                             QPointF *p1,
-                             QPointF *p2,
-                             QPointF *p3,
-                             QPointF *p4)
-{
-    const qreal eps = 1e-4;
-
-    if (isLinearSegmentByControlPoints(q0, q1, q2, q3, eps)) {
-        *p2 = lerp(q0, q3, t);
-        *p0 = lerp(q0, *p2, 0.1);
-        *p1 = lerp(q0, *p2, 0.9);
-        *p3 = lerp(*p2, q3, 0.1);
-        *p4 = lerp(*p2, q3, 0.9);
-    } else {
-        deCasteljau(q0, q1, q2, q3, t, p0, p1, p2, p3, p4);
-    }
-}
-
 KRITAGLOBAL_EXPORT
 QVector<qreal> linearizeCurve(const QPointF p0,
                               const QPointF p1,
@@ -244,6 +227,20 @@ QPointF interpolateQuadric(const QPointF &p0, const QPointF &p2, const QPointF &
 KRITAGLOBAL_EXPORT
 std::pair<QPointF, QPointF> offsetSegment(qreal t, const QPointF &offset);
 
+KRITAGLOBAL_EXPORT
+qreal curveLength(const QPointF p0,
+                  const QPointF p1,
+                  const QPointF p2,
+                  const QPointF p3,
+                  const qreal error);
+
+KRITAGLOBAL_EXPORT
+qreal curveLengthAtPoint(const QPointF p0,
+                         const QPointF p1,
+                         const QPointF p2,
+                         const QPointF p3,
+                         qreal t,
+                         const qreal error);
 
 }
 

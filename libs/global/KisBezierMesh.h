@@ -244,13 +244,13 @@ public:
     }
 
     void splitCurveHorizontally(Node &left, Node &right, qreal t, Node &newNode) {
-        using KisBezierUtils::splitBezierCurve;
+        using KisBezierUtils::deCasteljau;
         using KisAlgebra2D::lerp;
 
         QPointF p1, p2, p3, q1, q2;
 
-        splitBezierCurve(left.node, left.rightControl, right.leftControl, right.node, t,
-                         &p1, &p2, &p3, &q1, &q2);
+        deCasteljau(left.node, left.rightControl, right.leftControl, right.node, t,
+                    &p1, &p2, &p3, &q1, &q2);
 
         left.rightControl = p1;
         newNode.leftControl = p2;
@@ -281,13 +281,13 @@ public:
     }
 
     void splitCurveVertically(Node &top, Node &bottom, qreal t, Node &newNode) {
-        using KisBezierUtils::splitBezierCurve;
+        using KisBezierUtils::deCasteljau;
         using KisAlgebra2D::lerp;
 
         QPointF p1, p2, p3, q1, q2;
 
-        splitBezierCurve(top.node, top.bottomControl, bottom.topControl, bottom.node, t,
-                         &p1, &p2, &p3, &q1, &q2);
+        deCasteljau(top.node, top.bottomControl, bottom.topControl, bottom.node, t,
+                    &p1, &p2, &p3, &q1, &q2);
 
         top.bottomControl = p1;
         newNode.topControl = p2;

@@ -78,7 +78,7 @@ public Q_SLOTS:
     /// \param resource resource that the tag needs to be removed from
     /// \param tag tag that needs to be removed from the resource
     ///
-    void removeResourceExistingTag(KoResourceSP resource, const KisTagSP tag);
+    void removeResourceExistingTag(const KisTagSP tag, KoResourceSP resource);
 
 private:
     ///

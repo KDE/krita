@@ -136,10 +136,10 @@ KisResourceItemChooserContextMenu::KisResourceItemChooserContextMenu(KoResourceS
                 compareWithRemovable.setReferenceTag(tag);
                 std::remove_if(assignables2.begin(), assignables2.end(), compareWithRemovable);
 
-                SimpleExistingTagAction * removeTagAction = new SimpleExistingTagAction(resource, tag, this);
+                SimpleExistingTagAction *removeTagAction = new SimpleExistingTagAction(resource, tag, this);
 
-                connect(removeTagAction, SIGNAL(triggered(KoResourceSP, const KisTagSP)),
-                        this, SLOT(removeResourceExistingTag(KoResourceSP, const KisTagSP)));
+                connect(removeTagAction, SIGNAL(triggered(const KisTagSP, KoResourceSP)),
+                        this, SLOT(removeResourceExistingTag(const KisTagSP, KoResourceSP)));
                 removableTagsMenu->addAction(removeTagAction);
             }
         }
@@ -173,7 +173,7 @@ KisResourceItemChooserContextMenu::~KisResourceItemChooserContextMenu()
     delete m_tagModel;
 }
 
-void KisResourceItemChooserContextMenu::removeResourceExistingTag(KoResourceSP resource, const KisTagSP tag)
+void KisResourceItemChooserContextMenu::removeResourceExistingTag(const KisTagSP tag, KoResourceSP resource)
 {
     KisTagResourceModel tagResourceModel(resource->resourceType().first);
     tagResourceModel.untagResource(tag, resource);

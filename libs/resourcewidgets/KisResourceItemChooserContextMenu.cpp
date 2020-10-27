@@ -30,7 +30,6 @@
 #include <KoResource.h>
 #include <KisResourceModel.h>
 #include <KisTagResourceModel.h>
-#include <KisResourceModelProvider.h>
 #include <KisTag.h>
 
 

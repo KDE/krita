@@ -103,7 +103,6 @@
 #include <KoColorSpaceEngine.h>
 #include <KoUpdater.h>
 #include <KisResourceModel.h>
-#include <KisResourceModelProvider.h>
 #include <KisResourceLoaderRegistry.h>
 #include <KisResourceIterator.h>
 #include <KisResourceTypes.h>

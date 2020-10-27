@@ -29,8 +29,6 @@
 #include <TableModel.h>
 #include <KisResourceModel.h>
 #include <KisTagFilterResourceProxyModel.h>
-#include <KisResourceModelProvider.h>
-#include <KisResourceModelProvider.h>
 #include <KisResourceTypeModel.h>
 #include <KisTagModel.h>
 #include <KisStorageModel.h>

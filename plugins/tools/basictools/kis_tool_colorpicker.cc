@@ -33,7 +33,6 @@
 #include <KoMixColorsOp.h>
 #include <kis_wrapped_rect.h>
 #include <KisResourceModel.h>
-#include <KisResourceModelProvider.h>
 
 #include "kis_tool_utils.h"
 

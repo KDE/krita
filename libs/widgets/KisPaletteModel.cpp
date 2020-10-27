@@ -31,7 +31,6 @@
 #include <resources/KoColorSet.h>
 #include <KoColorDisplayRendererInterface.h>
 #include <KisResourceModel.h>
-#include <KisResourceModelProvider.h>
 
 KisPaletteModel::KisPaletteModel(QObject* parent)
     : QAbstractTableModel(parent)

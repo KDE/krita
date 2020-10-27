@@ -33,7 +33,6 @@
 #include <KisResourceLocator.h>
 #include <KisResourceLoaderRegistry.h>
 #include <KisTagModel.h>
-#include <KisResourceModelProvider.h>
 #include <KisResourceModel.h>
 #include <DummyResource.h>
 #include <ResourceTestHelper.h>

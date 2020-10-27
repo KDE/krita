@@ -47,7 +47,6 @@
 #include <KisKineticScroller.h>
 #include <KisMimeDatabase.h>
 
-#include <KisResourceModelProvider.h>
 #include <KisResourceModel.h>
 #include <KisTagFilterResourceProxyModel.h>
 #include <KisResourceLoaderRegistry.h>
@@ -58,7 +57,6 @@
 #include "KisTagChooserWidget.h"
 #include "KisResourceItemChooserSync.h"
 #include "KisResourceTaggingManager.h"
-#include "KisResourceModelProvider.h"
 
 
 

@@ -53,6 +53,16 @@ KisTagChooserWidget::KisTagChooserWidget(KisTagModel *model, QWidget* parent)
     : QWidget(parent)
     , d(new Private)
 {
+
+    qDebug() << model << model->sourceModel();
+
+    connect(model->sourceModel(), SIGNAL(modelAboutToBeReset()), SLOT(modelAboutToBeReset()));
+    connect(model->sourceModel(), SIGNAL(modelReset()), SLOT(modelReset()));
+    connect(model->sourceModel(), SIGNAL(rowsAboutToBeInserted(const QModelIndex&, int, int)), SLOT(rowsAboutToBeInserted(const QModelIndex&, int, int)));
+    connect(model->sourceModel(), SIGNAL(rowsAboutToBeRemoved(const QModelIndex&, int, int)), SLOT(rowsAboutToBeInserted(const QModelIndex&, int, int)));
+    connect(model->sourceModel(), SIGNAL(rowsInserted(const QModelIndex&, int, int)), SLOT(rowsAboutToBeInserted(const QModelIndex&, int, int)));
+    connect(model->sourceModel(), SIGNAL(rowsRemoved(const QModelIndex&, int, int)), SLOT(rowsAboutToBeInserted(const QModelIndex&, int, int)));
+
     d->comboBox = new QComboBox(this);
 
     d->comboBox->setToolTip(i18n("Tag"));
@@ -60,7 +70,6 @@ KisTagChooserWidget::KisTagChooserWidget(KisTagModel *model, QWidget* parent)
     d->comboBox->setInsertPolicy(QComboBox::InsertAlphabetically);
     model->sort(KisAllTagsModel::Name);
     d->comboBox->setModel(model);
-
 
     d->model = model;
 
@@ -108,6 +117,7 @@ void KisTagChooserWidget::tagToolDeleteCurrentTag()
         d->model->setTagInactive(currentTag);
         setCurrentIndex(0);
         d->tagToolButton->setUndeletionCandidate(currentTag);
+        d->model->sort(KisAllTagsModel::Name);
     }
 }
 
@@ -116,6 +126,7 @@ void KisTagChooserWidget::tagChanged(int tagIndex)
     if (tagIndex >= 0) {
         KisTagSP tag = currentlySelectedTag();
         d->tagToolButton->setCurrentTag(tag);
+        d->model->sort(KisAllTagsModel::Name);
         emit sigTagChosen(tag);
     }
 }
@@ -129,6 +140,7 @@ void KisTagChooserWidget::tagToolRenameCurrentTag(const QString& tagName)
         tag->setName(tagName);
         bool result = d->model->renameTag(tag);
         Q_ASSERT(result);
+        d->model->sort(KisAllTagsModel::Name);
     }
 }
 
@@ -141,6 +153,7 @@ void KisTagChooserWidget::tagToolUndeleteLastTag(KisTagSP tag)
     if (success) {
         d->tagToolButton->setUndeletionCandidate(KisTagSP());
         setCurrentItem(tag->name());
+        d->model->sort(KisAllTagsModel::Name);
     }
 }
 
@@ -167,8 +180,13 @@ void KisTagChooserWidget::setCurrentItem(const QString &tag)
 
 void KisTagChooserWidget::tagToolCreateNewTag(const QString &tagName)
 {
+    qDebug() << "tagToolCreateNewTag" << tagName << d->model->rowCount();
     d->model->addNewTag(tagName, {});
+    qDebug() << "\t1" << d->model->rowCount();
+    d->model->sort(KisAllTagsModel::Name);
+    qDebug() << "\t2";
     setCurrentItem(tagName);
+    qDebug() << "\t3";
 }
 
 KisTagSP KisTagChooserWidget::currentlySelectedTag()
@@ -187,4 +205,38 @@ void KisTagChooserWidget::tagToolContextMenuAboutToShow()
 {
     /* only enable the save button if the selected tag set is editable */
     d->tagToolButton->readOnlyMode(currentlySelectedTag()->id() < 0);
+}
+
+
+
+void KisTagChooserWidget::modelAboutToBeReset()
+{
+    qDebug() << "modelAboutToBeReset";
+}
+
+void KisTagChooserWidget::modelReset()
+{
+    qDebug() << "modelReset";
+}
+
+void KisTagChooserWidget::rowsAboutToBeInserted(const QModelIndex &parent, int start, int end)
+{
+    qDebug() << "rowsAboutToBeInserted" << parent << start << end;
+}
+
+void KisTagChooserWidget::rowsAboutToBeRemoved(const QModelIndex &parent, int first, int last)
+{
+    qDebug() << "rowsAboutToBeRemoved" << parent << first << last;
+}
+
+void KisTagChooserWidget::rowsInserted(const QModelIndex &parent, int first, int last)
+{
+    qDebug() << "rowsInserted" << parent << first << last;
+    d->model->sort(KisAllTagsModel::Name);
+}
+
+void KisTagChooserWidget::rowsRemoved(const QModelIndex &parent, int first, int last)
+{
+    qDebug() << "rowsRemoved" << parent << first << last;
+    d->model->sort(KisAllTagsModel::Name);
 }

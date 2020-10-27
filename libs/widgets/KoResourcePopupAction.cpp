@@ -23,7 +23,6 @@
 
 #include <KisResourceItemListView.h>
 #include <KisResourceModel.h>
-#include <KisResourceModelProvider.h>
 #include <KisResourceItemDelegate.h>
 #include <KoResource.h>
 

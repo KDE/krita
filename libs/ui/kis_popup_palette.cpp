@@ -25,7 +25,6 @@
 #include <QElapsedTimer>
 
 #include <KisTagModel.h>
-#include <KisResourceModelProvider.h>
 
 #include "kis_canvas2.h"
 #include "kis_config.h"

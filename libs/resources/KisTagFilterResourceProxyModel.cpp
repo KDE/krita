@@ -142,6 +142,8 @@ bool KisTagFilterResourceProxyModel::setResourceMetaData(KoResourceSP resource, 
 
 void KisTagFilterResourceProxyModel::setTagFilter(const KisTagSP tag)
 {
+    qDebug() << "setTagFilter" << tag;
+
     if (!tag || tag->url() == "All") {
         qDebug() << 1;
         d->tagResourceModel->setTagsFilter(QVector<KisTagSP>());
@@ -160,6 +162,9 @@ void KisTagFilterResourceProxyModel::setTagFilter(const KisTagSP tag)
             d->tagResourceModel->setTagsFilter(QVector<KisTagSP>() << tag);
         }
     }
+
+    qDebug() << "\tsource model" << sourceModel();
+
     invalidateFilter();
 }
 

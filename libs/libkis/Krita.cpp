@@ -54,7 +54,6 @@
 #include <kis_icon_utils.h>
 
 #include <KisResourceModel.h>
-#include <KisResourceModelProvider.h>
 #include <KisGlobalResourcesInterface.h>
 
 #include "View.h"

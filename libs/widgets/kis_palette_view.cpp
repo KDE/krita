@@ -43,7 +43,6 @@
 #include "kis_color_button.h"
 #include <KisSwatch.h>
 #include <KisResourceModel.h>
-#include <KisResourceModelProvider.h>
 
 int KisPaletteView::MININUM_ROW_HEIGHT = 10;
 

@@ -34,9 +34,7 @@
 #include <KisResourceLoaderRegistry.h>
 #include <KisResourceModel.h>
 #include <KisTagModel.h>
-#include <KisResourceModelProvider.h>
 #include <KisTagResourceModel.h>
-#include <KisResourceModelProvider.h>
 #include <KisResourceTypes.h>
 
 #include <DummyResource.h>

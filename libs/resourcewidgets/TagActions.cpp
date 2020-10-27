@@ -25,8 +25,6 @@
 #include <KoIcon.h>
 #include <klocalizedstring.h>
 #include <KoResource.h>
-#include <KisResourceModelProvider.h>
-
 
 #include <KisTag.h>
 

@@ -18,7 +18,6 @@
 #include "KisGlobalResourcesInterface.h"
 
 #include <QGlobalStatic>
-#include <KisResourceModelProvider.h>
 #include <KisResourceModel.h>
 
 #include <kis_debug.h>

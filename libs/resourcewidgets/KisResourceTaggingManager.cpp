@@ -37,10 +37,8 @@
 #include <KoResource.h>
 
 #include <KisResourceModel.h>
-#include <KisResourceModelProvider.h>
 #include <KisTagFilterResourceProxyModel.h>
 #include <KisTagModel.h>
-#include <KisResourceModelProvider.h>
 
 #include "KisTagFilterWidget.h"
 #include "KisTagChooserWidget.h"

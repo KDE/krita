@@ -103,6 +103,12 @@ private Q_SLOTS:
     ///  sets the correct mode on the KisTagToolButton popup.
     void tagToolContextMenuAboutToShow();
 
+    void modelAboutToBeReset();
+    void modelReset();
+    void rowsAboutToBeInserted(const QModelIndex &parent, int start, int end);
+    void rowsAboutToBeRemoved(const QModelIndex &parent, int first, int last);
+    void rowsInserted(const QModelIndex &parent, int first, int last);
+    void rowsRemoved(const QModelIndex &parent, int first, int last);
 
 private:
 

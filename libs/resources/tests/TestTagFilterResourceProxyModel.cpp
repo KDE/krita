@@ -34,7 +34,6 @@
 #include <KisResourceLoaderRegistry.h>
 #include <KisResourceModel.h>
 #include <KisTagFilterResourceProxyModel.h>
-#include <KisResourceModelProvider.h>
 
 #include <DummyResource.h>
 #include <ResourceTestHelper.h>

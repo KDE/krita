@@ -35,7 +35,6 @@
 #include <KisResourceLocator.h>
 #include <KisResourceLoaderRegistry.h>
 #include <KisMemoryStorage.h>
-#include <KisResourceModelProvider.h>
 #include <KisResourceModel.h>
 #include <KisResourceTypes.h>
 

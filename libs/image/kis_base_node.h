@@ -491,6 +491,12 @@ public:
     bool supportsLodMoves() const;
 
     /**
+     * Returns true if the node can be painted via KisPaintDevice. Notable
+     * exceptions are selection-based layers and masks.
+     */
+    virtual bool supportsLodPainting() const;
+
+    /**
      * Return the keyframe channels associated with this node
      * @return list of keyframe channels
      */

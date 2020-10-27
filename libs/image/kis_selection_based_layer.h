@@ -140,6 +140,8 @@ public:
      */
     void setY(qint32 y) override;
 
+    bool supportsLodPainting() const override;
+
 public:
 
     /**

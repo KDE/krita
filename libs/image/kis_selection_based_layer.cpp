@@ -281,6 +281,11 @@ void KisSelectionBasedLayer::setY(qint32 y)
     }
 }
 
+bool KisSelectionBasedLayer::supportsLodPainting() const
+{
+    return !m_d->selection || !m_d->selection->hasShapeSelection();
+}
+
 KisKeyframeChannel *KisSelectionBasedLayer::requestKeyframeChannel(const QString &id)
 {
     if (id == KisKeyframeChannel::Content.id()) {

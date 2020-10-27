@@ -191,6 +191,8 @@ public:
 
     void testingInitSelection(const QRect &rect, KisLayerSP parentLayer);
 
+    bool supportsLodPainting() const override;
+
 protected:
     /**
      * Apply the effect the projection using the mask as a selection.

@@ -485,6 +485,11 @@ void KisMask::testingInitSelection(const QRect &rect, KisLayerSP parentLayer)
     m_d->selection->setParentNode(this);
 }
 
+bool KisMask::supportsLodPainting() const
+{
+    return !m_d->selection || !m_d->selection->hasShapeSelection();
+}
+
 KisKeyframeChannel *KisMask::requestKeyframeChannel(const QString &id)
 {
     if (id == KisKeyframeChannel::Content.id()) {

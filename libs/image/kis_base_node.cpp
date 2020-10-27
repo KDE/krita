@@ -393,6 +393,11 @@ bool KisBaseNode::supportsLodMoves() const
     return m_d->supportsLodMoves;
 }
 
+bool KisBaseNode::supportsLodPainting() const
+{
+    return true;
+}
+
 void KisBaseNode::setImage(KisImageWSP image)
 {
     m_d->image = image;

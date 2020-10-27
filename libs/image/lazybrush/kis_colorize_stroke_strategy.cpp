@@ -82,7 +82,7 @@ KisColorizeStrokeStrategy::KisColorizeStrokeStrategy(KisPaintDeviceSP src,
                                                      const QRect &boundingRect,
                                                      KisNodeSP progressNode,
                                                      bool prefilterOnly)
-    : KisRunnableBasedStrokeStrategy("colorize-stroke", prefilterOnly ? kundo2_i18n("Prefilter Colorize Mask") : kundo2_i18n("Colorize")),
+    : KisRunnableBasedStrokeStrategy(QLatin1String("colorize-stroke"), prefilterOnly ? kundo2_i18n("Prefilter Colorize Mask") : kundo2_i18n("Colorize")),
       m_d(new Private)
 {
     m_d->progressNode = progressNode;
@@ -96,7 +96,10 @@ KisColorizeStrokeStrategy::KisColorizeStrokeStrategy(KisPaintDeviceSP src,
     enableJob(JOB_INIT, true, KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
     enableJob(JOB_DOSTROKE, true, KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
     enableJob(JOB_CANCEL, true, KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
+
     setNeedsExplicitCancel(true);
+    setRequestsOtherStrokesToEnd(false);
+    setClearsRedoOnStart(false);
 }
 
 KisColorizeStrokeStrategy::KisColorizeStrokeStrategy(const KisColorizeStrokeStrategy &rhs, int levelOfDetail)

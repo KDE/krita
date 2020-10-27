@@ -25,8 +25,9 @@ template <template <class T> class DoSomethingOp, class LayerType>
 class KisDoSomethingCommand : public KUndo2Command
 {
 public:
-    KisDoSomethingCommand(LayerType layer, bool finalUpdate)
-        : m_layer(layer),
+    KisDoSomethingCommand(LayerType layer, bool finalUpdate, KUndo2Command *parentCommand = 0)
+        : KUndo2Command(parentCommand),
+          m_layer(layer),
           m_finalUpdate(finalUpdate) {}
 
     void undo() override {

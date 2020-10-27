@@ -156,8 +156,8 @@ public:
 
     class TabletLatencyTracker : public KisLatencyTracker {
     protected:
-        virtual qint64 currentTimestamp() const;
-        virtual void print(const QString &message);
+        virtual qint64 currentTimestamp() const override;
+        virtual void print(const QString &message) override;
     };
 
     KisSharedPtr<TabletLatencyTracker> tabletLatencyTracker;

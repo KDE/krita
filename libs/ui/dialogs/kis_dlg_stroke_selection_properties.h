@@ -30,25 +30,34 @@
 class KoColorSpace;
 class KoColorPopupAction;
 
-enum class linePosition
+enum LinePosition
 {
-    OUTSIDE, INSIDE, CENTER
+    Outside, Inside, Center
 };
 
-enum class drawType{
-    brushDraw, lineDraw
+enum class DrawType
+{
+    CurrentBrush, Line
 };
-enum class colorFillSource {
+
+enum class ColorLineSource
+{
+    FGColor, BGColor, CustomColor
+};
+
+enum class ColorFillSource {
     None, PaintColor, BGColor, CustomColor, FGColor
 };
 
-struct StrokeSelectionOptions {
+struct StrokeSelectionOptions
+{
     StrokeSelectionOptions ();
-    int lineSize;
-    bool brushSelected;
-    int _colorFillSource;
-    int lineColorSource;
-    int lineDimension;
+
+    int lineSize {1};
+    bool brushSelected {false};
+    ColorFillSource colorFillSource {ColorFillSource::None};
+    ColorLineSource colorLineSource {ColorLineSource::FGColor};
+    int lineDimension {1};
     KoColor color;
     KoColor fillColor;
     KoColor customColor;
@@ -65,14 +74,19 @@ public:
     WdgStrokeSelection(QWidget *parent) ;
     StrokeSelectionOptions  m_options;
 
+    bool m_isVectorLayer;
+    KisPropertiesConfigurationSP m_cfg;
+
+    void enableControls();
+
 Q_SIGNALS:
     void colorFillSelectorChanged();
     void colorSelectorChanged();
 
 private Q_SLOTS:
     void on_fillBox_currentIndexChanged(int index);
-    void on_typeBox_currentIndexChanged(const QString &arg1);
-    void on_lineColorBox_currentIndexChanged(const QString &arg1);
+    void on_typeBox_currentIndexChanged(int index);
+    void on_lineColorBox_currentIndexChanged(int index);
 
 };
 
@@ -82,24 +96,23 @@ class KisDlgStrokeSelection : public KoDialog
 
     Q_OBJECT
 
-
 public:
     KisDlgStrokeSelection(KisImageWSP image, KisViewManager *view, bool isVectorLayer);
     ~KisDlgStrokeSelection() override;
+
     int getLineSize() const;
-    linePosition getLinePosition() const;
+    LinePosition getLinePosition() const;
     KoColor getSelectedColor() const;
     bool isBrushSelected() const;
     KoColor getFillSelectedColor() const;
     StrokeSelectionOptions  getParams() const;
-    void lockVectorLayerFunctions();
-    void unlockVectorLayerFunctions();
 
 private:
-    WdgStrokeSelection * m_page;
+    WdgStrokeSelection *m_page {0};
     KisImageWSP m_image;
-    KoCanvasResourceProvider *m_resourceManager;
-    KisDisplayColorConverter *converter;
+    KoCanvasResourceProvider *m_resourceManager {0};
+    KisDisplayColorConverter *m_converter {0};
+    bool m_isVectorLayer {false};
 
 private Q_SLOTS:
     void setColorFillButton();

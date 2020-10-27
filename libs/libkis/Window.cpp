@@ -45,6 +45,8 @@ Window::Window(KisMainWindow *window, QObject *parent)
 {
     d->window = window;
     connect(window, SIGNAL(destroyed(QObject*)), SIGNAL(windowClosed()));
+    connect(window, SIGNAL(themeChanged()), SIGNAL(themeChanged()));
+    connect(window, SIGNAL(activeViewChanged()), SIGNAL(activeViewChanged()));
 }
 
 Window::~Window()
@@ -84,6 +86,10 @@ QList<View*> Window::views() const
 View *Window::addView(Document *document)
 {
     if (d->window) {
+        // Once the document is shown in the ui, it's owned by Krita
+        // If the Document instance goes out of scope, it shouldn't
+        // delete the owned image.
+        document->setOwnsDocument(false);
         KisView *view = d->window->newView(document->document());
         return new View(view);
     }
@@ -127,26 +133,7 @@ QAction *Window::createAction(const QString &id, const QString &text, const QStr
     KisAction *action = d->window->viewManager()->actionManager()->createAction(id);
     action->setText(text);
     action->setObjectName(id);
-    if (!menuLocation.isEmpty()) {
-        QAction *found = 0;
-        QList<QAction *> candidates = d->window->menuBar()->actions();
-        Q_FOREACH(const QString &name, menuLocation.split("/")) {
-            Q_FOREACH(QAction *candidate, candidates) {
-                if (candidate->objectName().toLower() == name.toLower()) {
-                    found = candidate;
-                    candidates = candidate->menu()->actions();
-                    break;
-                }
-            }
-            if (candidates.isEmpty()) {
-                break;
-            }
-        }
-
-        if (found && found->menu()) {
-            found->menu()->addAction(action);
-        }
-    }
+    action->setProperty("menulocation", menuLocation);
     return action;
 }
 

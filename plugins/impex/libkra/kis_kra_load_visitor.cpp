@@ -28,15 +28,16 @@
 #include <QBuffer>
 #include <QByteArray>
 #include <QMessageBox>
+#include <QApplication>
 
-#include <KoHashGenerator.h>
-#include <KoHashGeneratorProvider.h>
+#include <KoMD5Generator.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>
 #include <KoFileDialog.h>
 #include <KoStore.h>
 #include <KoColorSpace.h>
 #include <KoShapeControllerBase.h>
+#include <KisGlobalResourcesInterface.h>
 
 // kritaimage
 #include <kis_meta_data_io_backend.h>
@@ -68,6 +69,7 @@
 #include "kis_raster_keyframe_channel.h"
 #include "kis_paint_device_frames_interface.h"
 #include "kis_filter_registry.h"
+#include "kis_generator_registry.h"
 
 
 using namespace KRA;
@@ -156,7 +158,8 @@ bool KisKraLoadVisitor::visit(KisExternalLayer * layer)
                         "Path: %1\n\n"
                         "Do you want to select another location?", reference->filename());
 
-                    int locateManually = QMessageBox::warning(0, i18nc("@title:window", "File not found"), msg, QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+                    // qApp->activeWindow() doesn't work here
+                    int locateManually = QMessageBox::warning(qApp->activeWindow(), i18nc("@title:window", "File not found"), msg, QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
 
                     QString url;
                     if (locateManually == QMessageBox::Yes) {
@@ -217,7 +220,7 @@ bool KisKraLoadVisitor::visit(KisPaintLayer *layer)
             if (!pixelSelection->read(m_store->device())) {
                 pixelSelection->disconnect();
             } else {
-                KisTransparencyMask* mask = new KisTransparencyMask();
+                KisTransparencyMask* mask = new KisTransparencyMask(m_image, i18n("Transparency Mask"));
                 mask->setSelection(selection);
                 m_image->addNode(mask, layer, layer->firstChild());
             }
@@ -230,6 +233,8 @@ bool KisKraLoadVisitor::visit(KisPaintLayer *layer)
 
 bool KisKraLoadVisitor::visit(KisGroupLayer *layer)
 {
+    loadNodeKeyframes(layer);
+
     if (*layer->colorSpace() != *m_image->colorSpace()) {
         layer->resetCache(m_image->colorSpace());
     }
@@ -261,12 +266,25 @@ bool KisKraLoadVisitor::visit(KisAdjustmentLayer* layer)
         // We use the default, empty selection
     }
 
+    if (!result) {
+        m_warningMessages.append(i18nc("Warning during loading a kra file with a filter layer",
+                                       "Selection on layer %s couldn't be loaded. It will be replaced by an empty selection.", layer->name()));
+        // otherwise ignore and just use what is there already
+        // (most probably an empty selection)
+    }
+
     if (!loadMetaData(layer)) {
         return false;
     }
 
-    loadFilterConfiguration(layer->filter(), getLocation(layer, DOT_FILTERCONFIG));
-    fixOldFilterConfigurations(layer->filter());
+    KisFilterSP filter = KisFilterRegistry::instance()->value(layer->filter()->name());
+    KisFilterConfigurationSP  kfc = filter->factoryConfiguration(KisGlobalResourcesInterface::instance());
+
+    loadFilterConfiguration(kfc, getLocation(layer, DOT_FILTERCONFIG));
+    fixOldFilterConfigurations(kfc);
+    kfc->createLocalResourcesSnapshot();
+
+    layer->setFilter(kfc);
 
     result = visitAll(layer);
     return result;
@@ -282,11 +300,13 @@ bool KisKraLoadVisitor::visit(KisGeneratorLayer *layer)
     loadNodeKeyframes(layer);
     result = loadSelection(getLocation(layer), layer->internalSelection());
 
-    // HACK ALERT: we set the same filter again to ensure the layer
-    // is correctly updated
-    KisFilterConfigurationSP filter = layer->filter();
-    result = loadFilterConfiguration(filter.data(), getLocation(layer, DOT_FILTERCONFIG));
-    layer->setFilter(filter);
+    KisGeneratorSP filter = KisGeneratorRegistry::instance()->value(layer->filter()->name());
+    KisFilterConfigurationSP  kfc = filter->factoryConfiguration(KisGlobalResourcesInterface::instance());
+
+    result = loadFilterConfiguration(kfc, getLocation(layer, DOT_FILTERCONFIG));
+    kfc->createLocalResourcesSnapshot();
+
+    layer->setFilter(kfc);
 
     result = visitAll(layer);
     return result;
@@ -305,10 +325,15 @@ bool KisKraLoadVisitor::visit(KisCloneLayer *layer)
     }
 
     KisNodeSP srcNode = layer->copyFromInfo().findNode(m_image->rootLayer());
-    KisLayerSP srcLayer = qobject_cast<KisLayer*>(srcNode.data());
-    Q_ASSERT(srcLayer);
+    if (!srcNode.isNull()) {
+        KisLayerSP srcLayer = qobject_cast<KisLayer*>(srcNode.data());
+        Q_ASSERT(srcLayer);
 
-    layer->setCopyFrom(srcLayer);
+        layer->setCopyFrom(srcLayer);
+    } else {
+        m_warningMessages.append(i18nc("Loading a .kra file", "The file contains a clone layer that has an incorrect source node id. "
+                                                              "This layer will be converted into a paint layer."));
+    }
 
     // Clone layers have no data except for their masks
     bool result = visitAll(layer);
@@ -339,8 +364,15 @@ bool KisKraLoadVisitor::visit(KisFilterMask *mask)
 
     bool result = true;
     result = loadSelection(getLocation(mask), mask->selection());
-    result = loadFilterConfiguration(mask->filter(), getLocation(mask, DOT_FILTERCONFIG));
-    fixOldFilterConfigurations(mask->filter());
+
+    KisFilterSP filter = KisFilterRegistry::instance()->value(mask->filter()->name());
+    KisFilterConfigurationSP  kfc = filter->factoryConfiguration(KisGlobalResourcesInterface::instance());
+    result = loadFilterConfiguration(kfc, getLocation(mask, DOT_FILTERCONFIG));
+    fixOldFilterConfigurations(kfc);
+    kfc->createLocalResourcesSnapshot();
+
+    mask->setFilter(kfc);
+
     return result;
 }
 
@@ -427,8 +459,13 @@ bool KisKraLoadVisitor::visit(KisColorizeMask *mask)
         return false;
 
     QVector<KisLazyFillTools::KeyStroke> strokes;
-    if (!KisDomUtils::loadValue(doc.documentElement(), COLORIZE_KEYSTROKES_SECTION, &strokes, mask->colorSpace()))
+    if (!KisDomUtils::loadValue(doc.documentElement(),
+                                COLORIZE_KEYSTROKES_SECTION,
+                                &strokes,
+                                mask->colorSpace(),
+                                QPoint(mask->x(), mask->y()))) {
         return false;
+    }
 
     int i = 0;
     Q_FOREACH (const KisLazyFillTools::KeyStroke &stroke, strokes) {
@@ -439,6 +476,35 @@ bool KisKraLoadVisitor::visit(KisColorizeMask *mask)
     mask->setKeyStrokesDirect(QList<KisLazyFillTools::KeyStroke>::fromVector(strokes));
 
     loadPaintDevice(mask->coloringProjection(), COLORIZE_COLORING_DEVICE);
+
+    const KoColorProfile *profile =
+        loadProfile(getLocation(mask, DOT_ICC), mask->colorSpace()->colorModelId().id(), mask->colorSpace()->colorDepthId().id());
+
+    if (!profile) {
+        KisNodeSP parent = mask->parent();
+        KIS_SAFE_ASSERT_RECOVER(parent) {
+            parent = m_image->root();
+        }
+
+        if (parent->colorSpace()->colorModelId() == mask->colorSpace()->colorModelId() &&
+            parent->colorSpace()->colorDepthId() == mask->colorSpace()->colorDepthId()) {
+
+            profile = parent->colorSpace()->profile();
+        }
+    }
+
+    if (!profile) {
+        if (m_image->colorSpace()->colorModelId() == mask->colorSpace()->colorModelId() &&
+            m_image->colorSpace()->colorDepthId() == mask->colorSpace()->colorDepthId()) {
+
+            profile = m_image->colorSpace()->profile();
+        }
+    }
+
+    if (profile) {
+        mask->setProfile(profile, 0);
+    }
+
     mask->resetCache();
 
     m_store->popDirectory();
@@ -554,35 +620,45 @@ bool KisKraLoadVisitor::loadPaintDeviceFrame(KisPaintDeviceSP device, const QStr
 
 bool KisKraLoadVisitor::loadProfile(KisPaintDeviceSP device, const QString& location)
 {
+    const KoColorProfile *profile = loadProfile(location, device->colorSpace()->colorModelId().id(), device->colorSpace()->colorDepthId().id());
+
+    if (profile) {
+        // TODO: check result!
+        device->setProfile(profile, 0);
+    } else {
+        m_warningMessages << i18n("Could not load profile: %1.", location);
+    }
+
+    return true;
+}
+
+const KoColorProfile *KisKraLoadVisitor::loadProfile(const QString &location, const QString &colorModelId, const QString &colorDepthId)
+{
+    const KoColorProfile *result = 0;
+
     if (m_store->hasFile(location)) {
         m_store->open(location);
         QByteArray data;
         data.resize(m_store->size());
-        dbgFile << "Data to load: " << m_store->size() << " from " << location << " with color space " << device->colorSpace()->id();
+        dbgFile << "Data to load: " << m_store->size() << " from " << location << " with color space " << colorModelId << colorDepthId;
         int read = m_store->read(data.data(), m_store->size());
         dbgFile << "Profile size: " << data.size() << " " << m_store->atEnd() << " " << m_store->device()->bytesAvailable() << " " << read;
         m_store->close();
 
-        KoHashGenerator *hashGenerator = KoHashGeneratorProvider::instance()->getGenerator("MD5");
-        QByteArray hash = hashGenerator->generateHash(data);
+        QByteArray hash = KoMD5Generator::generateHash(data);
 
         if (m_profileCache.contains(hash)) {
-            if (device->setProfile(m_profileCache[hash])) {
-                return true;
-            }
+            result = m_profileCache[hash];
         }
         else {
             // Create a colorspace with the embedded profile
-            const KoColorProfile *profile = KoColorSpaceRegistry::instance()->createColorProfile(device->colorSpace()->colorModelId().id(), device->colorSpace()->colorDepthId().id(), data);
+            const KoColorProfile *profile = KoColorSpaceRegistry::instance()->createColorProfile(colorModelId, colorDepthId, data);
             m_profileCache[hash] = profile;
-            if (device->setProfile(profile)) {
-                return true;
-            }
-
+            result = profile;
         }
     }
-    m_warningMessages << i18n("Could not load profile: %1.", location);
-    return true;
+
+    return result;
 }
 
 bool KisKraLoadVisitor::loadFilterConfiguration(KisFilterConfigurationSP kfc, const QString& location)
@@ -682,7 +758,7 @@ bool KisKraLoadVisitor::loadSelection(const QString& location, KisSelectionSP ds
         m_store->enterDirectory(shapeSelectionLocation) ;
 
         KisShapeSelection* shapeSelection = new KisShapeSelection(m_shapeController, m_image, dstSelection);
-        dstSelection->setShapeSelection(shapeSelection);
+        dstSelection->convertToVectorSelectionNoUndo(shapeSelection);
         result = shapeSelection->loadSelection(m_store);
         m_store->popDirectory();
         if (!result) {

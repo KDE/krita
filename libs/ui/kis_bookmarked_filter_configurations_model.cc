@@ -21,6 +21,7 @@
 #include <filter/kis_filter.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_paint_device.h>
+#include <KisGlobalResourcesInterface.h>
 
 struct KisBookmarkedFilterConfigurationsModel::Private {
     KisPaintDeviceSP thumb;
@@ -54,6 +55,6 @@ KisFilterConfigurationSP KisBookmarkedFilterConfigurationsModel::configuration(c
 {
     KisFilterConfigurationSP config = dynamic_cast<KisFilterConfiguration*>(KisBookmarkedConfigurationsModel::configuration(index).data());
     if (config) return config;
-    return d->filter->defaultConfiguration();
+    return d->filter->defaultConfiguration(KisGlobalResourcesInterface::instance());
 }
 

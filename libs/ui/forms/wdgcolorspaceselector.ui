@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>276</width>
-    <height>151</height>
+    <width>414</width>
+    <height>146</height>
    </rect>
   </property>
   <property name="sizePolicy">
-   <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+   <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
@@ -52,7 +52,7 @@
      <item>
       <widget class="QLabel" name="lblColorModels">
        <property name="text">
-        <string>Depth:</string>
+        <string comment="Label of Color Depth in Color Space Selector dialogue">Depth:</string>
        </property>
        <property name="buddy">
         <cstring>cmbColorModels</cstring>
@@ -90,6 +90,12 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>300</width>
+         <height>0</height>
+        </size>
        </property>
       </widget>
      </item>

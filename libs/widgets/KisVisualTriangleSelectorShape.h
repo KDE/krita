@@ -18,17 +18,6 @@
 #ifndef KIS_VISUAL_TRIANGLE_SELECTOR_SHAPE_H
 #define KIS_VISUAL_TRIANGLE_SELECTOR_SHAPE_H
 
-#include <QWidget>
-#include <QScopedPointer>
-#include <QPixmap>
-#include <QRegion>
-#include <QMouseEvent>
-
-#include <KoColor.h>
-#include <KoColorSpace.h>
-#include "KoColorDisplayRendererInterface.h"
-
-#include "KisColorSelectorConfiguration.h"
 #include "KisVisualColorSelectorShape.h"
 
 class KisVisualTriangleSelectorShape : public KisVisualColorSelectorShape
@@ -40,12 +29,11 @@ public:
                                             const KoColorSpace *cs,
                                             int channel1, int channel2,
                                             const KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance(),
-                                            int barwidth=20
+                                            int margin = 5
             );
     ~KisVisualTriangleSelectorShape() override;
 
-    void setBorderWidth(int width) override;
-    void setTriangle();
+    void setBorderWidth(int /*width*/) override;
 
     /**
      * @brief getSpaceForSquare
@@ -57,18 +45,16 @@ public:
     QRect getSpaceForTriangle(QRect geom) override;
 
 protected:
-    void resizeEvent(QResizeEvent *e) override;
+    QImage renderAlphaMask() const override;
 
 private:
 
     QPointF convertShapeCoordinateToWidgetCoordinate(QPointF coordinate) const override;
-    QPointF convertWidgetCoordinateToShapeCoordinate(QPoint coordinate) const override;
+    QPointF convertWidgetCoordinateToShapeCoordinate(QPointF coordinate) const override;
 
-    int m_barWidth;
-    QPolygon m_triangle;
-    QPointF m_center;
-    qreal m_radius;
     QRegion getMaskMap() override;
     void drawCursor() override;
+
+    int m_margin { 5 };
 };
 #endif

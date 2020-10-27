@@ -116,6 +116,8 @@ protected:
     KisColorSelectorBase* m_popup;
     QWidget* m_parent;
     bool m_colorUpdateAllowed;
+
+    // This boolean here is to check if the color selector is updating the resource, so it won't update itself when the resource is updated.
     bool m_colorUpdateSelf;
 
 private:

@@ -26,12 +26,10 @@
 #include <QtGlobal>
 
 class KoShape;
-class KoGenStyle;
 class KoShapeSavingContext;
 class QPainter;
 class QPointF;
 class QColor;
-class KoViewConverter;
 struct KoInsets;
 
 class KRITAFLAKE_EXPORT KoShapeShadow
@@ -44,19 +42,12 @@ public:
     KoShapeShadow& operator=(const KoShapeShadow &rhs);
 
     /**
-     * Fills the style object
-     * @param style object
-     * @param context used for saving
-     */
-    void fillStyle(KoGenStyle &style, KoShapeSavingContext &context);
-
-    /**
      * Paints the shadow of the shape.
      * @param shape the shape to paint around
      * @param painter the painter to paint shadows to canvas
      * @param converter to convert between internal and view coordinates.
      */
-    void paint(KoShape *shape, QPainter &painter, const KoViewConverter &converter);
+    void paint(KoShape *shape, QPainter &painter);
 
     /**
      * Sets the shadow offset from the topleft corner of the shape

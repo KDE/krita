@@ -19,19 +19,24 @@
 #define KIS_GRADIENT_CHOOSER_H_
 
 #include <KoDialog.h>
+#include <KoColor.h>
 
 #include <QFrame>
 #include <QToolButton>
 #include <kritaui_export.h>
+#include <KoResource.h>
+#include <KoAbstractGradient.h>
+#include <KoStopGradient.h>
+#include <KoSegmentGradient.h>
+#include <KoCanvasResourcesInterface.h>
 
-class KoAbstractGradient;
-class KoStopGradient;
 class KisViewManager;
 class QLabel;
 class QPushButton;
+
+class KisResourceItemChooser;
 class KisAutogradientEditor;
 class KoResource;
-class KoResourceItemChooser;
 
 class KisCustomGradientDialog : public KoDialog
 {
@@ -40,7 +45,7 @@ class KisCustomGradientDialog : public KoDialog
 
 public:
 
-    KisCustomGradientDialog(KoAbstractGradient* gradient, QWidget *parent, const char *name);
+    KisCustomGradientDialog(KoAbstractGradientSP gradient, QWidget *parent, const char *name, KoCanvasResourcesInterfaceSP canvasResourcesInterface);
 
 private:
 
@@ -57,34 +62,39 @@ public:
     KisGradientChooser(QWidget *parent = 0, const char *name = 0);
     ~KisGradientChooser() override;
 
+    void setCanvasResourcesInterface(KoCanvasResourcesInterfaceSP canvasResourcesInterface);
+    KoCanvasResourcesInterfaceSP canvasResourcesInterface() const;
+
     /// Gets the currently selected resource
     /// @returns the selected resource, 0 is no resource is selected
-    KoResource *currentResource();
-    void setCurrentResource(KoResource *resource);
+    KoResourceSP currentResource();
+    void setCurrentResource(KoResourceSP resource);
 
-    void setCurrentItem(int row, int column);
+    void setCurrentItem(int row);
 
 Q_SIGNALS:
     /// Emitted when a resource was selected
-    void resourceSelected(KoResource * resource);
+    void resourceSelected(KoResourceSP resource);
 
 public Q_SLOTS:
     void slotUpdateIcons();
 
 private Q_SLOTS:
-    virtual void update(KoResource * resource);
+    virtual void update(KoResourceSP resource);
     void addStopGradient();
     void addSegmentedGradient();
     void editGradient();
 
 private:
-      void addGradient(KoAbstractGradient* gradient);
+      void addGradient(KoAbstractGradientSP gradient, bool editGradient = false);
 private:
     QLabel *m_lbName;
-    KoResourceItemChooser * m_itemChooser;
+    KisResourceItemChooser * m_itemChooser;
 
     QToolButton* m_addGradient;
     QPushButton* m_editGradient;
+
+    KoCanvasResourcesInterfaceSP m_canvasResourcesInterface;
 };
 
 #endif // KIS_GRADIENT_CHOOSER_H_

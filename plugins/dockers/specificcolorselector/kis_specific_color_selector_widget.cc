@@ -39,7 +39,7 @@
 #include <kis_color_space_selector.h>
 #include <kis_signal_compressor.h>
 #include <kis_display_color_converter.h>
-#include <kis_popup_button.h>
+#include <KisPopupButton.h>
 #include <kis_icon_utils.h>
 
 #include "ui_wdgSpecificColorSelectorWidget.h"
@@ -53,7 +53,7 @@ KisSpecificColorSelectorWidget::KisSpecificColorSelectorWidget(QWidget* parent)
     , m_displayConverter(0)
 {
 
-    m_ui = new Ui_wdgSpecificColorSelectorWidget();
+    m_ui.reset(new Ui_wdgSpecificColorSelectorWidget());
     m_ui->setupUi(this);
 
     m_updateAllowed = true;

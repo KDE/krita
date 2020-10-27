@@ -32,6 +32,7 @@
 #include "ui_WdgSvgCollection.h"
 
 class KoSvgSymbolCollectionResource;
+class KisResourceModel;
 
 class SvgCollectionModel : public QAbstractListModel
 {
@@ -45,9 +46,9 @@ public:
     Qt::ItemFlags flags(const QModelIndex &index) const override;
     Qt::DropActions supportedDragActions() const override;
 public:
-    void setSvgSymbolCollectionResource(KoSvgSymbolCollectionResource *resource);
+    void setSvgSymbolCollectionResource(QSharedPointer<KoSvgSymbolCollectionResource> resource);
 private:
-    KoSvgSymbolCollectionResource *m_symbolCollection;
+    QSharedPointer<KoSvgSymbolCollectionResource> m_symbolCollection;
 };
 
 
@@ -70,6 +71,7 @@ class SvgSymbolCollectionDocker : public QDockWidget, public KoCanvasObserverBas
 public:
 
     explicit SvgSymbolCollectionDocker(QWidget *parent = 0);
+    ~SvgSymbolCollectionDocker();
 
     /// reimplemented
     void setCanvas(KoCanvasBase *canvas) override;
@@ -82,11 +84,21 @@ private Q_SLOTS:
 
     void collectionActivated(int index);
     void slotSetIconSize();
+
+    void slotResourceModelAboutToBeReset();
+    void slotResourceModelReset();
+
+
 private:
 
-    Ui_WdgSvgCollection *m_wdgSvgCollection;
-    QVector<SvgCollectionModel*> m_models;
+    void clearModels();
+
+    QScopedPointer<Ui_WdgSvgCollection> m_wdgSvgCollection;
+    QMap<int, SvgCollectionModel*> m_collectionsModelsCache;
     QSlider* m_iconSizeSlider;
+
+    KisResourceModel* m_resourceModel;
+    int m_rememberedSvgCollectionId;
 };
 
 #endif

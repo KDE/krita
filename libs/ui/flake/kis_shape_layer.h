@@ -38,6 +38,7 @@ class KoViewConverter;
 class KoShapeControllerBase;
 class KoDocumentResourceManager;
 class KisShapeLayerCanvasBase;
+class KoSelectedShapesProxy;
 
 const QString KIS_SHAPE_LAYER_ID = "KisShapeLayer";
 /**
@@ -76,7 +77,9 @@ public:
 protected:
     KisShapeLayer(KoShapeControllerBase* shapeController, KisImageWSP image, const QString &name, quint8 opacity, KisShapeLayerCanvasBase *canvas);
 private:
-    void initShapeLayer(KoShapeControllerBase* controller, KisPaintDeviceSP copyFromProjection = 0, KisShapeLayerCanvasBase *canvas = 0);
+    void initShapeLayerImpl(KoShapeControllerBase* controller, KisPaintDeviceSP newProjectionDevice, KisShapeLayerCanvasBase *overrideCanvas);
+    void initNewShapeLayer(KoShapeControllerBase* controller, const KoColorSpace *projectionColorSpace, KisDefaultBoundsBaseSP bounds, KisShapeLayerCanvasBase *overrideCanvas = 0);
+    void initClonedShapeLayer(KoShapeControllerBase* controller, KisPaintDeviceSP copyFromProjection, KisShapeLayerCanvasBase *overrideCanvas = 0);
 public:
     KisNodeSP clone() const override {
         return new KisShapeLayer(*this);
@@ -130,6 +133,11 @@ public:
 
     KUndo2Command* crop(const QRect & rect) override;
     KUndo2Command* transform(const QTransform &transform) override;
+    KUndo2Command* setProfile(const KoColorProfile *profile) override;
+    KUndo2Command* convertTo(const KoColorSpace * dstColorSpace,
+                                 KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::internalRenderingIntent(),
+                                 KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::internalConversionFlags()) override;
+
 
     bool visible(bool recursive = false) const override;
     void setVisible(bool visible, bool isLoading = false) override;
@@ -158,6 +166,13 @@ public:
 
     void forceUpdateHiddenAreaOnOriginal() override;
 
+    /**
+     * @brief selectedShapesProxy
+     * @return returns the selectedShapesProxy of the KoCanvasBase of this layer,
+     * used for certain undo commands.
+     */
+    KoSelectedShapesProxy* selectedShapesProxy();
+
 protected:
     using KoShape::isVisible;
 
@@ -167,6 +182,8 @@ protected:
     KoViewConverter* converter() const;
 
     KoShapeControllerBase *shapeController() const;
+
+    friend class TransformShapeLayerDeferred;
 
 Q_SIGNALS:
     /**
@@ -190,6 +207,7 @@ Q_SIGNALS:
 
 private Q_SLOTS:
     void slotMoveShapes(const QPointF &diff);
+    void slotTransformShapes(const QTransform &transform);
 
 private:
     QList<KoShape*> shapesToBeTransformed();

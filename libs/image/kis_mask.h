@@ -74,7 +74,7 @@ public:
     /**
      * Create a new KisMask.
      */
-    KisMask(const QString & name);
+    KisMask(KisImageWSP image, const QString &name);
 
     /**
      * Copy the mask
@@ -187,9 +187,11 @@ public:
 
     QRect needRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const override;
     QRect changeRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const override;
-    QImage createThumbnail(qint32 w, qint32 h) override;
+    QImage createThumbnail(qint32 w, qint32 h, Qt::AspectRatioMode aspectRatioMode = Qt::IgnoreAspectRatio) override;
 
     void testingInitSelection(const QRect &rect, KisLayerSP parentLayer);
+
+    bool supportsLodPainting() const override;
 
 protected:
     /**
@@ -218,6 +220,7 @@ protected:
     virtual bool paintsOutsideSelection() const;
 
     KisKeyframeChannel *requestKeyframeChannel(const QString &id) override;
+    bool supportsKeyframeChannel(const QString &id) override;
 
     void baseNodeChangedCallback() override;
 

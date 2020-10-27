@@ -217,7 +217,7 @@ KisLayer::KisLayer(const KisLayer& rhs)
         m_d->safeProjection->setImage(image());
 
         if (rhs.m_d->layerStyle) {
-            m_d->layerStyle = rhs.m_d->layerStyle->clone();
+            m_d->layerStyle = rhs.m_d->layerStyle->clone().dynamicCast<KisPSDLayerStyle>();
 
             if (rhs.m_d->layerStyleProjectionPlane) {
                 m_d->layerStyleProjectionPlane = toQShared(
@@ -734,7 +734,7 @@ QRect KisLayer::updateProjection(const QRect& rect, KisNodeSP filthyNode)
     QRect updatedRect = rect;
     KisPaintDeviceSP originalDevice = original();
     if (!rect.isValid() ||
-        (!visible() && !hasClones()) ||
+        (!visible() && !isIsolatedRoot() && !hasClones()) ||
         !originalDevice) return QRect();
 
     if (!needProjection() && !hasEffectMasks()) {
@@ -810,6 +810,21 @@ KisPaintDeviceSP KisLayer::projection() const
         m_d->safeProjection->getDeviceLazy(originalDevice) : originalDevice;
 }
 
+QRect KisLayer::tightUserVisibleBounds() const
+{
+    QRect changeRect = exactBounds();
+
+    /// we do not use incomingChangeRect() here, because
+    /// exactBounds() already takes it into account (it
+    /// was used while preparing original())
+
+    bool changeRectVaries;
+    changeRect = outgoingChangeRect(changeRect);
+    changeRect = masksChangeRect(effectMasks(), changeRect, changeRectVaries);
+
+    return changeRect;
+}
+
 QRect KisLayer::changeRect(const QRect &rect, PositionToFilthy pos) const
 {
     QRect changeRect = rect;
@@ -881,7 +896,7 @@ QRect KisLayer::needRectForOriginal(const QRect &rect) const
     return needRect;
 }
 
-QImage KisLayer::createThumbnail(qint32 w, qint32 h)
+QImage KisLayer::createThumbnail(qint32 w, qint32 h, Qt::AspectRatioMode aspectRatioMode)
 {
     if (w == 0 || h == 0) {
         return QImage();
@@ -890,12 +905,12 @@ QImage KisLayer::createThumbnail(qint32 w, qint32 h)
     KisPaintDeviceSP originalDevice = original();
 
     return originalDevice ?
-           originalDevice->createThumbnail(w, h, 1,
+           originalDevice->createThumbnail(w, h, aspectRatioMode, 1,
                                            KoColorConversionTransformation::internalRenderingIntent(),
                                            KoColorConversionTransformation::internalConversionFlags()) : QImage();
 }
 
-QImage KisLayer::createThumbnailForFrame(qint32 w, qint32 h, int time)
+QImage KisLayer::createThumbnailForFrame(qint32 w, qint32 h, int time, Qt::AspectRatioMode aspectRatioMode)
 {
     if (w == 0 || h == 0) {
         return QImage();
@@ -907,9 +922,9 @@ QImage KisLayer::createThumbnailForFrame(qint32 w, qint32 h, int time)
 
         if (channel) {
             KisPaintDeviceSP targetDevice = new KisPaintDevice(colorSpace());
-            KisKeyframeSP keyframe = channel->activeKeyframeAt(time);
-            channel->fetchFrame(keyframe, targetDevice);
-            return targetDevice->createThumbnail(w, h, 1,
+            KisRasterKeyframeSP keyframe = channel->activeKeyframeAt<KisRasterKeyframe>(time);
+            keyframe->writeFrameToDevice(targetDevice);
+            return targetDevice->createThumbnail(w, h, aspectRatioMode, 1,
                                                  KoColorConversionTransformation::internalRenderingIntent(),
                                                  KoColorConversionTransformation::internalConversionFlags());
         }

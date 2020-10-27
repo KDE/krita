@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ActionCollection version="2" name="Tools">
-  <Actions category="Rectangular Selection Tool">
-    <text>Rectangular Selection Tool</text>
+    <Actions category="Rectangular Selection Tool">
+        <text>Tool Shortcuts</text>
+    <Action name="KisToolSelectRectangular">
+      <icon></icon>
+      <text>Rectangular Selection Tool</text>
+      <whatsThis></whatsThis>
+      <toolTip>Rectangular Selection Tool</toolTip>
+      <iconText>Rectangular Selection Tool</iconText>
+      <shortcut>Ctrl+R</shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
   </Actions>
 </ActionCollection>

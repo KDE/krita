@@ -33,7 +33,7 @@ KisEdgeDetectionKernel::KisEdgeDetectionKernel()
 /*
  * This code is very similar to the gaussian kernel code, except unlike the gaussian code,
  * edge-detection kernels DO use the diagonals.
- * Except for the simple mode. We implement the simple mode because it is an analogue to
+ * Except for the simple mode. We implement the simple mode because it is an analog to
  * the old sobel filter.
  */
 
@@ -216,25 +216,22 @@ void KisEdgeDetectionKernel::applyEdgeDetection(KisPaintDeviceSP device,
         KisConvolutionKernelSP kernelHorizLeftRight = KisEdgeDetectionKernel::createHorizontalKernel(xRadius, type);
         KisConvolutionKernelSP kernelVerticalTopBottom = KisEdgeDetectionKernel::createVerticalKernel(yRadius, type);
 
-        qreal horizontalCenter = qreal(kernelHorizLeftRight->width()) / 2.0;
-        qreal verticalCenter = qreal(kernelVerticalTopBottom->height()) / 2.0;
-
         KisConvolutionPainter horizPainterLR(x_denormalised);
         horizPainterLR.setChannelFlags(channelFlags);
         horizPainterLR.setProgress(progressUpdater);
         horizPainterLR.applyMatrix(kernelHorizLeftRight, device,
-                                   srcTopLeft - QPoint(0, ceil(horizontalCenter)),
-                                   srcTopLeft - QPoint(0, ceil(horizontalCenter)),
-                                   rect.size() + QSize(0, 2 * ceil(horizontalCenter)), BORDER_REPEAT);
+                                   srcTopLeft,
+                                   srcTopLeft,
+                                   rect.size(), BORDER_REPEAT);
 
 
         KisConvolutionPainter verticalPainterTB(y_denormalised);
         verticalPainterTB.setChannelFlags(channelFlags);
         verticalPainterTB.setProgress(progressUpdater);
         verticalPainterTB.applyMatrix(kernelVerticalTopBottom, device,
-                                      srcTopLeft - QPoint(0, ceil(verticalCenter)),
-                                      srcTopLeft - QPoint(0, ceil(verticalCenter)),
-                                      rect.size() + QSize(0, 2 * ceil(verticalCenter)), BORDER_REPEAT);
+                                      srcTopLeft,
+                                      srcTopLeft,
+                                      rect.size(), BORDER_REPEAT);
 
         KisSequentialIterator yItterator(y_denormalised, rect);
         KisSequentialIterator xItterator(x_denormalised, rect);
@@ -284,20 +281,15 @@ void KisEdgeDetectionKernel::applyEdgeDetection(KisPaintDeviceSP device,
         }
     } else {
         KisConvolutionKernelSP kernel;
-        qreal center = 0;
         bool denormalize = !writeToAlpha;
         if (output == xGrowth) {
             kernel = KisEdgeDetectionKernel::createHorizontalKernel(xRadius, type, denormalize);
-            center = qreal(kernel->width()) / 2.0;
         } else if (output == xFall) {
             kernel = KisEdgeDetectionKernel::createHorizontalKernel(xRadius, type, denormalize, true);
-            center = qreal(kernel->width()) / 2.0;
         } else if (output == yGrowth) {
             kernel = KisEdgeDetectionKernel::createVerticalKernel(yRadius, type, denormalize);
-            center = qreal(kernel->height()) / 2.0;
         } else { //yFall
             kernel = KisEdgeDetectionKernel::createVerticalKernel(yRadius, type, denormalize, true);
-            center = qreal(kernel->height()) / 2.0;
         }
 
         if (writeToAlpha) {
@@ -308,9 +300,8 @@ void KisEdgeDetectionKernel::applyEdgeDetection(KisPaintDeviceSP device,
             kernelP.setChannelFlags(channelFlags);
             kernelP.setProgress(progressUpdater);
             kernelP.applyMatrix(kernel, device,
-                                srcTopLeft - QPoint(0, ceil(center)),
-                                srcTopLeft - QPoint(0, ceil(center)),
-                                rect.size() + QSize(0, 2 * ceil(center)), BORDER_REPEAT);
+                                srcTopLeft, srcTopLeft,
+                                rect.size(), BORDER_REPEAT);
             KisSequentialIterator iterator(denormalised, rect);
             KisSequentialIterator finalIt(device, rect);
             const int pixelSize = device->colorSpace()->pixelSize();
@@ -334,9 +325,8 @@ void KisEdgeDetectionKernel::applyEdgeDetection(KisPaintDeviceSP device,
             kernelP.setChannelFlags(channelFlags);
             kernelP.setProgress(progressUpdater);
             kernelP.applyMatrix(kernel, device,
-                                srcTopLeft - QPoint(0, ceil(center)),
-                                srcTopLeft - QPoint(0, ceil(center)),
-                                rect.size() + QSize(0, 2 * ceil(center)), BORDER_REPEAT);
+                                srcTopLeft, srcTopLeft,
+                                rect.size(), BORDER_REPEAT);
 
             KisSequentialIterator finalIt(device, rect);
             int numConseqPixels = finalIt.nConseqPixels();
@@ -357,7 +347,8 @@ void KisEdgeDetectionKernel::convertToNormalMap(KisPaintDeviceSP device,
                                                 QVector<int> channelOrder,
                                                 QVector<bool> channelFlip,
                                                 const QBitArray &channelFlags,
-                                                KoUpdater *progressUpdater)
+                                                KoUpdater *progressUpdater,
+                                                boost::optional<bool> useFftw)
 {
     QPoint srcTopLeft = rect.topLeft();
     KisPainter finalPainter(device);
@@ -371,25 +362,31 @@ void KisEdgeDetectionKernel::convertToNormalMap(KisPaintDeviceSP device,
     KisConvolutionKernelSP kernelHorizLeftRight = KisEdgeDetectionKernel::createHorizontalKernel(yRadius, type, true, !channelFlip[1]);
     KisConvolutionKernelSP kernelVerticalTopBottom = KisEdgeDetectionKernel::createVerticalKernel(xRadius, type, true, !channelFlip[0]);
 
-    qreal horizontalCenter = qreal(kernelHorizLeftRight->width()) / 2.0;
-    qreal verticalCenter = qreal(kernelVerticalTopBottom->height()) / 2.0;
-
     KisConvolutionPainter horizPainterLR(y_denormalised);
+
+    if (useFftw) {
+        horizPainterLR.setEnginePreference(*useFftw ? KisConvolutionPainter::FFTW : KisConvolutionPainter::SPATIAL);
+    }
+
     horizPainterLR.setChannelFlags(channelFlags);
     horizPainterLR.setProgress(progressUpdater);
     horizPainterLR.applyMatrix(kernelHorizLeftRight, device,
-                               srcTopLeft - QPoint(ceil(horizontalCenter), 0),
-                               srcTopLeft - QPoint(ceil(horizontalCenter), 0),
-                               rect.size() + QSize(2 * ceil(horizontalCenter), 0), BORDER_REPEAT);
+                               srcTopLeft, srcTopLeft,
+                               rect.size(), BORDER_REPEAT);
 
 
     KisConvolutionPainter verticalPainterTB(x_denormalised);
+
+    if (useFftw) {
+        verticalPainterTB.setEnginePreference(*useFftw ? KisConvolutionPainter::FFTW : KisConvolutionPainter::SPATIAL);
+    }
+
     verticalPainterTB.setChannelFlags(channelFlags);
     verticalPainterTB.setProgress(progressUpdater);
     verticalPainterTB.applyMatrix(kernelVerticalTopBottom, device,
-                                  srcTopLeft - QPoint(0, ceil(verticalCenter)),
-                                  srcTopLeft - QPoint(0, ceil(verticalCenter)),
-                                  rect.size() + QSize(0, 2 * ceil(verticalCenter)), BORDER_REPEAT);
+                                  srcTopLeft,
+                                  srcTopLeft,
+                                  rect.size(), BORDER_REPEAT);
 
     KisSequentialIterator yItterator(y_denormalised, rect);
     KisSequentialIterator xItterator(x_denormalised, rect);

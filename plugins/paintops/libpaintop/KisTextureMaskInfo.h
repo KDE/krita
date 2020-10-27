@@ -27,13 +27,15 @@
 
 #include <boost/operators.hpp>
 
-class KoPattern;
+#include <KoPattern.h>
+
 class KisTextureMaskInfo;
+class KisResourcesInterface;
 
 class KisTextureMaskInfo : public boost::equality_comparable<KisTextureMaskInfo>
 {
 public:
-    KisTextureMaskInfo(int levelOfDetail);
+    KisTextureMaskInfo(int levelOfDetail, bool preserveAlpha);
     KisTextureMaskInfo(const KisTextureMaskInfo &rhs);
 
     ~KisTextureMaskInfo();
@@ -50,18 +52,22 @@ public:
 
     QRect maskBounds() const;
 
-    bool fillProperties(const KisPropertiesConfigurationSP setting);
+    bool fillProperties(const KisPropertiesConfigurationSP setting, KisResourcesInterfaceSP resourcesInterface);
 
     void recalculateMask();
 
+    bool hasAlpha();
+
 private:
     int m_levelOfDetail = 0;
+    bool m_preserveAlpha = false;
 
-    KoPattern *m_pattern = 0;
+    KoPatternSP m_pattern = 0;
 
     qreal m_scale = 1.0;
     qreal m_brightness = 0.0;
     qreal m_contrast = 1.0;
+    qreal m_neutralPoint = 0.5;
     bool m_invert = false;
 
     int m_cutoffLeft = 0;

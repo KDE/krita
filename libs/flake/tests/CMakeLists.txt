@@ -13,7 +13,6 @@ ecm_add_tests(
     TestShapeAt.cpp
     TestShapePainting.cpp
     TestKoShapeFactory.cpp
-    TestKoShapeRegistry.cpp
     TestShapeContainer.cpp
     TestShapeGroupCommand.cpp
     TestShapeReorderCommand.cpp
@@ -33,7 +32,6 @@ ecm_add_tests(
     TestSegmentTypeCommand.cpp
     TestKoDrag.cpp
     TestKoMarkerCollection.cpp
-    KisGamutMaskViewConverterTest.cpp
 
     LINK_LIBRARIES kritaflake Qt5::Test
     NAME_PREFIX "libs-flake-")
@@ -67,22 +65,19 @@ krita_add_broken_unit_test(TestPointMergeCommand.cpp
     LINK_LIBRARIES kritaflake Qt5::Test
     NAME_PREFIX "libs-flake-")
 
-krita_add_broken_unit_test(
-    TestSvgText.cpp
+krita_add_broken_unit_test( TestSvgText.cpp
     TEST_NAME TestSvgText
     LINK_LIBRARIES kritaflake Qt5::Test
     NAME_PREFIX "libs-flake-")
 
-krita_add_broken_unit_test(
-    TestSvgText.cpp
+krita_add_broken_unit_test( TestSvgText.cpp
     TEST_NAME TestSvgTextCloned
     LINK_LIBRARIES kritaflake Qt5::Test
     NAME_PREFIX "libs-flake-")
 set_property(TARGET TestSvgTextCloned
              PROPERTY COMPILE_DEFINITIONS USE_CLONED_SHAPES)
 
-krita_add_broken_unit_test(
-    TestSvgText.cpp
+krita_add_broken_unit_test( TestSvgText.cpp
     TEST_NAME TestSvgTextRoundTrip
     LINK_LIBRARIES kritaflake Qt5::Test
     NAME_PREFIX "libs-flake-")

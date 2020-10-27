@@ -49,8 +49,8 @@ set(kritaui_LIB_SRCS
     canvas/kis_snap_line_strategy.cpp
     canvas/KisSnapPointStrategy.cpp
     canvas/KisSnapPixelStrategy.cpp
-	canvas/KisMirrorAxisConfig.cpp
-	dialogs/kis_about_application.cpp
+    canvas/KisMirrorAxisConfig.cpp
+    dialogs/kis_about_application.cpp
     dialogs/kis_dlg_adj_layer_props.cc
     dialogs/kis_dlg_adjustment_layer.cc
     dialogs/kis_dlg_filter.cpp
@@ -62,7 +62,6 @@ set(kritaui_LIB_SRCS
     dialogs/kis_dlg_layer_properties.cc
     dialogs/kis_dlg_preferences.cc
     dialogs/slider_and_spin_box_sync.cpp
-    dialogs/kis_dlg_blacklist_cleanup.cpp
     dialogs/kis_dlg_layer_style.cpp
     dialogs/kis_dlg_png_import.cpp
     dialogs/kis_dlg_import_image_sequence.cpp
@@ -70,6 +69,7 @@ set(kritaui_LIB_SRCS
     dialogs/KisSessionManagerDialog.cpp
     dialogs/KisNewWindowLayoutDialog.cpp
     dialogs/KisDlgChangeCloneSource.cpp
+    dialogs/KisRecoverNamedAutosaveDialog.cpp
     flake/kis_node_dummies_graph.cpp
     flake/kis_dummies_facade_base.cpp
     flake/kis_dummies_facade.cpp
@@ -106,8 +106,6 @@ set(kritaui_LIB_SRCS
     kis_control_frame.cpp
     kis_composite_ops_model.cc
     kis_paint_ops_model.cpp
-    kis_cursor.cc
-    kis_cursor_cache.cpp
     kis_custom_pattern.cc
     kis_file_layer.cpp
     kis_change_file_layer_command.h
@@ -144,7 +142,6 @@ set(kritaui_LIB_SRCS
     kis_png_converter.cpp
     kis_preference_set_registry.cpp
     KisResourceServerProvider.cpp
-    KisResourceBundleServerProvider.cpp
     KisSelectedShapesProxy.cpp
     kis_selection_decoration.cc
     kis_selection_manager.cc
@@ -216,6 +213,7 @@ set(kritaui_LIB_SRCS
     tool/strokes/KisMaskingBrushRenderer.cpp
     tool/strokes/KisMaskingBrushCompositeOpFactory.cpp
     tool/strokes/move_stroke_strategy.cpp
+    tool/strokes/KisNodeSelectionRecipe.cpp
     tool/KisSelectionToolFactoryBase.cpp
     tool/KisToolPaintFactoryBase.cpp
 
@@ -228,6 +226,8 @@ set(kritaui_LIB_SRCS
     widgets/kis_advanced_color_space_selector.cc
     widgets/kis_cie_tongue_widget.cpp
     widgets/kis_tone_curve_widget.cpp
+    widgets/kis_transport_controls.cpp
+    widgets/kis_utility_title_bar.cpp
     widgets/kis_curve_widget.cpp
     widgets/kis_custom_image_widget.cc
     widgets/kis_image_from_clipboard_widget.cpp
@@ -254,7 +254,6 @@ set(kritaui_LIB_SRCS
     widgets/kis_scratch_pad.cpp
     widgets/kis_scratch_pad_event_filter.cpp
     widgets/kis_preset_selector_strip.cpp
-    widgets/kis_slider_spin_box.cpp
     widgets/KisSelectionPropertySlider.cpp
     widgets/kis_size_group.cpp
     widgets/kis_size_group_p.cpp
@@ -265,8 +264,10 @@ set(kritaui_LIB_SRCS
     widgets/kis_tool_button.cpp
     widgets/kis_floating_message.cpp
     widgets/kis_lod_availability_widget.cpp
-    widgets/kis_color_label_selector_widget.cpp
     widgets/kis_color_filter_combo.cpp
+    widgets/kis_color_label_selector_widget.cpp
+    widgets/kis_color_label_button.cpp
+    widgets/kis_layer_filter_widget.cpp
     widgets/kis_elided_label.cpp
     widgets/kis_stopgradient_slider_widget.cpp
     widgets/kis_preset_live_preview_view.cpp
@@ -277,6 +278,7 @@ set(kritaui_LIB_SRCS
     widgets/KisLayerStyleAngleSelector.cpp
     widgets/KisMemoryReportButton.cpp
     widgets/KisDitherWidget.cpp
+    widgets/KisWarningWidget.cpp
 
     KisPaletteEditor.cpp
     dialogs/KisDlgPaletteEditor.cpp
@@ -288,6 +290,7 @@ set(kritaui_LIB_SRCS
     utils/KisSpinBoxSplineUnitConverter.cpp
     utils/KisClipboardUtil.cpp
     utils/KisDitherUtil.cpp
+    utils/KisFileIconCreator.cpp
 
     input/kis_input_manager.cpp
     input/kis_input_manager_p.cpp
@@ -321,6 +324,13 @@ set(kritaui_LIB_SRCS
     actions/kis_selection_action_factories.cpp
     actions/KisPasteActionFactories.cpp
     actions/KisTransformToolActivationCommand.cpp
+    animation/KisVideoSaver.cpp
+    animation/KisAnimationRenderingOptions.cpp
+    animation/KisAnimationRender.cpp
+    animation/KisDlgAnimationRenderer.cpp
+    animation/VideoExportOptionsDialog.cpp
+    animation/VideoHDRMetadataOptionsDialog.cpp
+    animation/KisHDRMetadataOptions.cpp
     input/kis_touch_shortcut.cpp
     kis_document_undo_store.cpp
     kis_gui_context_command.cpp
@@ -342,8 +352,6 @@ set(kritaui_LIB_SRCS
     input/config/kis_wheel_input_editor.cpp
     input/config/kis_key_input_editor.cpp
     processing/fill_processing_visitor.cpp
-    kis_asl_layer_style_serializer.cpp
-    kis_psd_layer_style_resource.cpp
     canvas/kis_mirror_axis.cpp
 
     kis_abstract_perspective_grid.cpp
@@ -361,7 +369,6 @@ set(kritaui_LIB_SRCS
     KisMainWindow.cpp
     KisOpenPane.cpp
     KisPart.cpp
-    KisPrintJob.cpp
     KisTemplate.cpp
     KisTemplateCreateDia.cpp
     KisTemplateGroup.cpp
@@ -385,13 +392,10 @@ set(kritaui_LIB_SRCS
     qtsingleapplication/qtlocalpeer.cpp
     qtsingleapplication/qtsingleapplication.cpp
 
-    KisResourceBundle.cpp
-    KisResourceBundleManifest.cpp
-
-    kis_md5_generator.cpp
     KisApplicationArguments.cpp
 
     KisNetworkAccessManager.cpp
+    KisRssReader.cpp
     KisMultiFeedRSSModel.cpp
     KisRemoteFileFetcher.cpp
 
@@ -407,7 +411,16 @@ set(kritaui_LIB_SRCS
     KisMouseClickEater.cpp
 
     KisDecorationsWrapperLayer.cpp
+
+    KoDocumentInfoDlg.cpp
+    KoDocumentInfo.cpp
 )
+
+if (SeExpr2_FOUND)
+    set(kritaui_LIB_SRCS ${kritaui_LIB_SRCS}
+        widgets/kis_seexpr_script_chooser.cpp
+    )
+endif()
 
 if(WIN32)
     # Private headers are needed for:
@@ -464,9 +477,27 @@ if (UNIX)
         )
 endif()
 
+if (ENABLE_UPDATERS)
+	if (UNIX)
+    	set(kritaui_LIB_SRCS
+        	${kritaui_LIB_SRCS}
+        	utils/KisAppimageUpdater.cpp
+        	)
+	endif()
+
+	set(kritaui_LIB_SRCS
+        ${kritaui_LIB_SRCS}
+    	utils/KisUpdaterBase.cpp
+    	utils/KisManualUpdater.cpp
+    	utils/KisUpdaterStatus.cpp
+		)
+endif()
+
+
 if(APPLE)
     set(kritaui_LIB_SRCS
         ${kritaui_LIB_SRCS}
+        input/kis_extended_modifiers_mapper_osx.mm
         osx.mm
     )
 endif()
@@ -494,7 +525,6 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     forms/wdgcolorspaceselector.ui
     forms/wdgcolorspaceselectoradvanced.ui
     forms/wdgdisplaysettings.ui
-    forms/kis_previewwidgetbase.ui
     forms/kis_matrix_widget.ui
     forms/wdgselectionoptions.ui
     forms/wdggeometryoptions.ui
@@ -515,7 +545,6 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     forms/wdgpresetselectorstrip.ui
     forms/wdgsavebrushpreset.ui
     forms/wdgpreseticonlibrary.ui
-    forms/wdgdlgblacklistcleanup.ui
     forms/wdgrectangleconstraints.ui
     forms/wdgimportimagesequence.ui
     forms/wdgstrokeselectionproperties.ui
@@ -529,9 +558,13 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     forms/KisNewsPage.ui
     forms/wdgGamutMaskToolbar.ui
     forms/wdgchangeclonesource.ui
+    forms/koDocumentInfoAboutWidget.ui
+    forms/koDocumentInfoAuthorWidget.ui
+
 
     brushhud/kis_dlg_brush_hud_config.ui
     dialogs/kis_delayed_save_dialog.ui
+    dialogs/KisRecoverNamedAutosaveDialog.ui
     input/config/kis_input_configuration_page.ui
     input/config/kis_edit_profiles_dialog.ui
     input/config/kis_input_configuration_page_item.ui
@@ -558,6 +591,9 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     input/wintab/kis_screen_size_choice_dialog.ui
     input/wintab/drawpile_tablettester/tablettest.ui
 
+    animation/wdg_animationrenderer.ui
+    animation/video_export_options_dialog.ui
+    animation/VideoHDRMetadataOptionsDialog.ui
 )
 
 if(WIN32)
@@ -577,7 +613,7 @@ add_library(kritaui SHARED ${kritaui_HEADERS_MOC} ${kritaui_LIB_SRCS} )
 generate_export_header(kritaui BASE_NAME kritaui)
 
 target_link_libraries(kritaui KF5::CoreAddons KF5::Completion KF5::I18n KF5::ItemViews Qt5::Network
-                      kritaimpex kritacolor kritaimage kritalibbrush kritawidgets kritawidgetutils ${PNG_LIBRARIES} LibExiv2::LibExiv2
+                      kritaversion kritaimpex kritacolor kritaimage kritalibbrush kritawidgets kritawidgetutils kritaresources ${PNG_LIBRARIES} LibExiv2::LibExiv2
 )
 
 if (ANDROID)
@@ -631,4 +667,10 @@ install(TARGETS kritaui  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 if (APPLE)
     install(FILES osx.stylesheet DESTINATION ${DATA_INSTALL_DIR}/krita)
+endif ()
+
+if (UNIX AND BUILD_TESTING AND ENABLE_UPDATERS)
+    install(FILES tests/data/AppImageUpdateDummy
+            PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
+            DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
 endif ()

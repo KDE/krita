@@ -106,7 +106,7 @@ void KoShapeGroupCommand::redo()
         }
     }
 
-    QTransform groupTransform = d->container->absoluteTransformation(0).inverted();
+    QTransform groupTransform = d->container->absoluteTransformation().inverted();
 
     QList<KoShape*> containerShapes(d->container->shapes());
     std::stable_sort(containerShapes.begin(), containerShapes.end(), KoShape::compareShapeZIndex);
@@ -153,7 +153,7 @@ void KoShapeGroupCommand::undo()
 {
     KUndo2Command::undo();
 
-    QTransform ungroupTransform = d->container->absoluteTransformation(0);
+    QTransform ungroupTransform = d->container->absoluteTransformation();
     for (int i = 0; i < d->shapes.count(); i++) {
         KoShape * shape = d->shapes[i];
         d->container->removeShape(shape);
@@ -196,11 +196,11 @@ QRectF KoShapeGroupCommandPrivate::containerBoundingRect()
 {
     QRectF bound;
     if (container->shapeCount() > 0) {
-        bound = container->absoluteTransformation(0).mapRect(container->outlineRect());
+        bound = container->absoluteTransformation().mapRect(container->outlineRect());
     }
 
     Q_FOREACH (KoShape *shape, shapes) {
-        bound |= shape->absoluteTransformation(0).mapRect(shape->outlineRect());
+        bound |= shape->absoluteTransformation().mapRect(shape->outlineRect());
     }
 
     return bound;

@@ -64,6 +64,7 @@ public: // Implement kis_abstract_canvas_widget interface
     void setDisplayFilter(QSharedPointer<KisDisplayFilter> displayFilter) override;
     void notifyImageColorSpaceChanged(const KoColorSpace *cs) override;
     void setWrapAroundViewingMode(bool value) override;
+    bool wrapAroundViewingMode() const override;
     void channelSelectionChanged(const QBitArray &channelFlags) override;
     void setDisplayColorConverter(KisDisplayColorConverter *colorConverter) override;
     void finishResizingImage(qint32 w, qint32 h) override;

@@ -23,6 +23,10 @@
 #include <QVBoxLayout>
 #include <QMouseEvent>
 #include <QPainter>
+#include <QApplication>
+#include <kconfig.h>
+#include <ksharedconfig.h>
+#include <kconfiggroup.h>
 
 #include "kis_global.h"
 #include "kis_shade_selector_line.h"
@@ -117,7 +121,14 @@ void KisShadeSelectorLineComboBoxPopup::activateItem(QWidget *widget)
 void KisShadeSelectorLineComboBoxPopup::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
-    painter.fillRect(0,0,width(), height(), QColor(128,128,128));
+    QPainter p(this);
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("advancedColorSelector");
+
+    if (cfg.readEntry("useCustomColorForBackground", false)) {
+        p.fillRect(0,0,width(), height(), cfg.readEntry("customSelectorBackgroundColor", QColor(Qt::gray)));
+    } else {
+        p.fillRect(0,0,width(), height(), qApp->palette().window().color());
+    }
     painter.fillRect(m_selectedArea, palette().highlight());
 
     painter.setPen(QPen(palette().highlight(), 2));

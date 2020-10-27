@@ -47,6 +47,18 @@ public:
     ///Set the value, don't use setValue()
     void setValue(qreal value);
     void setExponentRatio(qreal dbl);
+
+    void setPrefix(const QString& prefix);
+    void setSuffix(const QString& suffix);
+
+    void setBlockUpdateSignalOnDrag(bool block);
+
+    void setSingleStep(qreal value);
+
+    QSize sizeHint() const override;
+    QSize minimumSizeHint() const override;
+    virtual QSize minimumSize() const;
+
 Q_SIGNALS:
     void valueChanged(qreal value);
     

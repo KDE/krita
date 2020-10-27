@@ -19,6 +19,7 @@
 #include "TestSvgParser.h"
 
 
+#include <QPainterPath>
 #include <QTest>
 #include <svg/SvgUtil.h>
 #include <KoShapeStrokeModel.h>
@@ -53,8 +54,8 @@ void TestSvgParser::testUnitPx()
     KoShape *shape = t.findShape("testRect");
     QVERIFY(shape);
 
-    QCOMPARE(shape->boundingRect(), kisGrowRect(QRectF(0,0,10,20), 0.5));
-    QCOMPARE(shape->absoluteTransformation(0), QTransform());
+    QCOMPARE(shape->boundingRect(), QRectF(0,0,10,20));
+    QCOMPARE(shape->absoluteTransformation(), QTransform());
     QCOMPARE(shape->outlineRect(), QRectF(0,0,10,20));
     QCOMPARE(shape->absolutePosition(KoFlake::TopLeft), QPointF(0,0));
     QCOMPARE(shape->absolutePosition(KoFlake::BottomRight), QPointF(10,20));
@@ -78,8 +79,8 @@ void TestSvgParser::testUnitPxResolution()
     KoShape *shape = t.findShape("testRect");
     QVERIFY(shape);
 
-    QCOMPARE(shape->boundingRect(), kisGrowRect(QRectF(0,0,5,10), 0.25));
-    QCOMPARE(shape->absoluteTransformation(0), QTransform::fromScale(0.5, 0.5));
+    QCOMPARE(shape->boundingRect(), QRectF(0,0,5,10));
+    QCOMPARE(shape->absoluteTransformation(), QTransform::fromScale(0.5, 0.5));
     QCOMPARE(shape->outlineRect(), QRectF(0,0,10,20));
     QCOMPARE(shape->absolutePosition(KoFlake::TopLeft), QPointF(0,0));
     QCOMPARE(shape->absolutePosition(KoFlake::BottomRight), QPointF(5,10));
@@ -104,8 +105,8 @@ void TestSvgParser::testUnitPt()
     KoShape *shape = t.findShape("testRect");
     QVERIFY(shape);
 
-    QCOMPARE(shape->boundingRect(), kisGrowRect(QRectF(0,0,10,20), 0.5));
-    QCOMPARE(shape->absoluteTransformation(0), QTransform());
+    QCOMPARE(shape->boundingRect(), kisGrowRect(QRectF(0,0,10,20), 0));
+    QCOMPARE(shape->absoluteTransformation(), QTransform());
     QCOMPARE(shape->outlineRect(), QRectF(0,0,10,20));
     QCOMPARE(shape->absolutePosition(KoFlake::TopLeft), QPointF(0,0));
     QCOMPARE(shape->absolutePosition(KoFlake::BottomRight), QPointF(10,20));
@@ -129,8 +130,8 @@ void TestSvgParser::testUnitIn()
     KoShape *shape = t.findShape("testRect");
     QVERIFY(shape);
 
-    QCOMPARE(shape->boundingRect(), kisGrowRect(QRectF(0,0,720,1440), 36));
-    QCOMPARE(shape->absoluteTransformation(0), QTransform::fromScale(72, 72));
+    QCOMPARE(shape->boundingRect(), QRectF(0,0,720,1440));
+    QCOMPARE(shape->absoluteTransformation(), QTransform::fromScale(72, 72));
     QCOMPARE(shape->outlineRect(), QRectF(0,0,10,20));
     QCOMPARE(shape->absolutePosition(KoFlake::TopLeft), QPointF(0,0));
     QCOMPARE(shape->absolutePosition(KoFlake::BottomRight), QPointF(720,1440));
@@ -154,8 +155,8 @@ void TestSvgParser::testUnitPercentInitial()
     KoShape *shape = t.findShape("testRect");
     QVERIFY(shape);
 
-    QCOMPARE(shape->boundingRect(), kisGrowRect(QRectF(0,0,5,10), 0.25));
-    QCOMPARE(shape->absoluteTransformation(0), QTransform::fromScale(0.5, 0.5));
+    QCOMPARE(shape->boundingRect(), QRectF(0,0,5,10));
+    QCOMPARE(shape->absoluteTransformation(), QTransform::fromScale(0.5, 0.5));
     QCOMPARE(shape->outlineRect(), QRectF(0,0,10,20));
     QCOMPARE(shape->absolutePosition(KoFlake::TopLeft), QPointF(0,0));
     QCOMPARE(shape->absolutePosition(KoFlake::BottomRight), QPointF(5,10));
@@ -179,7 +180,7 @@ void TestSvgParser::testScalingViewport()
     KoShape *shape = t.findShape("testRect");
     QVERIFY(shape);
 
-    QCOMPARE(shape->absoluteTransformation(0), QTransform::fromTranslate(4, 4) * QTransform::fromScale(0.5, 0.5));
+    QCOMPARE(shape->absoluteTransformation(), QTransform::fromTranslate(4, 4) * QTransform::fromScale(0.5, 0.5));
     QCOMPARE(shape->outlineRect(), QRectF(0,0,12,32));
     QCOMPARE(shape->absolutePosition(KoFlake::TopLeft), QPointF(2,2));
     QCOMPARE(shape->absolutePosition(KoFlake::TopRight), QPointF(8,2));
@@ -206,7 +207,7 @@ void TestSvgParser::testScalingViewportKeepMeet1()
     KoShape *shape = t.findShape("testRect");
     QVERIFY(shape);
 
-    QCOMPARE(shape->absoluteTransformation(0), QTransform::fromTranslate(4, 4) * QTransform::fromScale(0.5, 0.5));
+    QCOMPARE(shape->absoluteTransformation(), QTransform::fromTranslate(4, 4) * QTransform::fromScale(0.5, 0.5));
     QCOMPARE(shape->outlineRect(), QRectF(0,0,12,32));
     QCOMPARE(shape->absolutePosition(KoFlake::TopLeft), QPointF(2,2));
     QCOMPARE(shape->absolutePosition(KoFlake::TopRight), QPointF(8,2));
@@ -233,7 +234,7 @@ void TestSvgParser::testScalingViewportKeepMeet2()
     KoShape *shape = t.findShape("testRect");
     QVERIFY(shape);
 
-    QCOMPARE(shape->absoluteTransformation(0), QTransform::fromTranslate(4, 4) * QTransform::fromScale(0.5, 0.5));
+    QCOMPARE(shape->absoluteTransformation(), QTransform::fromTranslate(4, 4) * QTransform::fromScale(0.5, 0.5));
     QCOMPARE(shape->outlineRect(), QRectF(0,0,12,32));
     QCOMPARE(shape->absolutePosition(KoFlake::TopLeft), QPointF(2,2));
     QCOMPARE(shape->absolutePosition(KoFlake::TopRight), QPointF(8,2));
@@ -260,7 +261,7 @@ void TestSvgParser::testScalingViewportKeepMeetAlign()
     KoShape *shape = t.findShape("testRect");
     QVERIFY(shape);
 
-    QCOMPARE(shape->absoluteTransformation(0), QTransform::fromTranslate(4, 24) * QTransform::fromScale(0.5, 0.5));
+    QCOMPARE(shape->absoluteTransformation(), QTransform::fromTranslate(4, 24) * QTransform::fromScale(0.5, 0.5));
     QCOMPARE(shape->outlineRect(), QRectF(0,0,12,32));
     QCOMPARE(shape->absolutePosition(KoFlake::TopLeft), QPointF(2,12));
     QCOMPARE(shape->absolutePosition(KoFlake::TopRight), QPointF(8,12));
@@ -287,7 +288,7 @@ void TestSvgParser::testScalingViewportKeepSlice1()
     KoShape *shape = t.findShape("testRect");
     QVERIFY(shape);
 
-    QCOMPARE(shape->absoluteTransformation(0), QTransform::fromTranslate(4, 4) * QTransform::fromScale(0.5, 0.5));
+    QCOMPARE(shape->absoluteTransformation(), QTransform::fromTranslate(4, 4) * QTransform::fromScale(0.5, 0.5));
     QCOMPARE(shape->outlineRect(), QRectF(0,0,12,32));
     QCOMPARE(shape->absolutePosition(KoFlake::TopLeft), QPointF(2,2));
     QCOMPARE(shape->absolutePosition(KoFlake::TopRight), QPointF(8,2));
@@ -314,7 +315,7 @@ void TestSvgParser::testScalingViewportKeepSlice2()
     KoShape *shape = t.findShape("testRect");
     QVERIFY(shape);
 
-    QCOMPARE(shape->absoluteTransformation(0), QTransform::fromTranslate(4, 4) * QTransform::fromScale(0.5, 0.5));
+    QCOMPARE(shape->absoluteTransformation(), QTransform::fromTranslate(4, 4) * QTransform::fromScale(0.5, 0.5));
     QCOMPARE(shape->outlineRect(), QRectF(0,0,12,32));
     QCOMPARE(shape->absolutePosition(KoFlake::TopLeft), QPointF(2,2));
     QCOMPARE(shape->absolutePosition(KoFlake::TopRight), QPointF(8,2));
@@ -340,7 +341,7 @@ void TestSvgParser::testScalingViewportResolution()
     KoShape *shape = t.findShape("testRect");
     QVERIFY(shape);
 
-    QCOMPARE(shape->absoluteTransformation(0), QTransform::fromTranslate(4, 4) * QTransform::fromScale(0.25, 0.25));
+    QCOMPARE(shape->absoluteTransformation(), QTransform::fromTranslate(4, 4) * QTransform::fromScale(0.25, 0.25));
     QCOMPARE(shape->outlineRect(), QRectF(0,0,12,32));
     QCOMPARE(shape->absolutePosition(KoFlake::TopLeft), QPointF(1,1));
     QCOMPARE(shape->absolutePosition(KoFlake::TopRight), QPointF(4,1));
@@ -366,7 +367,7 @@ void TestSvgParser::testScalingViewportPercentInternal()
     KoShape *shape = t.findShape("testRect");
     QVERIFY(shape);
 
-    QCOMPARE(shape->absoluteTransformation(0), QTransform::fromTranslate(4, 4) * QTransform::fromScale(0.5, 0.5));
+    QCOMPARE(shape->absoluteTransformation(), QTransform::fromTranslate(4, 4) * QTransform::fromScale(0.5, 0.5));
     QCOMPARE(shape->outlineRect(), QRectF(0,0,12,32));
     QCOMPARE(shape->absolutePosition(KoFlake::TopLeft), QPointF(2,2));
     QCOMPARE(shape->absolutePosition(KoFlake::TopRight), QPointF(8,2));
@@ -513,7 +514,7 @@ void TestSvgParser::testScalingViewportTransform()
     KoShape *shape = t.findShape("testRect");
     QVERIFY(shape);
 
-    QCOMPARE(shape->absoluteTransformation(0), QTransform::fromTranslate(10, 4) * QTransform::fromScale(0.5, 0.5));
+    QCOMPARE(shape->absoluteTransformation(), QTransform::fromTranslate(10, 4) * QTransform::fromScale(0.5, 0.5));
     QCOMPARE(shape->outlineRect(), QRectF(0,0,12,32));
     QCOMPARE(shape->absolutePosition(KoFlake::TopLeft), QPointF(5,2));
     QCOMPARE(shape->absolutePosition(KoFlake::TopRight), QPointF(11,2));
@@ -540,7 +541,7 @@ void TestSvgParser::testTransformNesting()
     KoShape *shape = t.findShape("testRect");
     QVERIFY(shape);
 
-    QCOMPARE(shape->boundingRect(), QRectF(10 - 1,10 - 0.5, 20 + 2, 20 + 1));
+    QCOMPARE(shape->boundingRect(), QRectF(10,10,20,20));
     QCOMPARE(shape->outlineRect(), QRectF(0,0,10,20));
     QCOMPARE(shape->absolutePosition(KoFlake::TopLeft), QPointF(10,10));
     QCOMPARE(shape->absolutePosition(KoFlake::BottomRight), QPointF(30,30));
@@ -567,7 +568,7 @@ void TestSvgParser::testTransformNestingGroups()
     KoShape *shape = t.findShape("testRect");
     QVERIFY(shape);
 
-    QCOMPARE(shape->boundingRect(), QRectF(10 - 1,10 - 0.5, 20 + 2, 20 + 1));
+    QCOMPARE(shape->boundingRect(), QRectF(10,10, 20, 20));
     QCOMPARE(shape->outlineRect(), QRectF(0,0,10,20));
     QCOMPARE(shape->absolutePosition(KoFlake::TopLeft), QPointF(10,10));
     QCOMPARE(shape->absolutePosition(KoFlake::BottomRight), QPointF(30,30));
@@ -592,7 +593,7 @@ void TestSvgParser::testTransformRotation1()
     KoShape *shape = t.findShape("testRect");
     QVERIFY(shape);
 
-    QCOMPARE(shape->boundingRect(), kisGrowRect(QRectF(-20,0,20,10), 0.5));
+    QCOMPARE(shape->boundingRect(), QRectF(-20,0,20,10));
     QCOMPARE(shape->outlineRect(), QRectF(0,0,10,20));
     QCOMPARE(shape->absolutePosition(KoFlake::TopLeft), QPointF(0,0));
     QCOMPARE(shape->absolutePosition(KoFlake::BottomRight), QPointF(-20,10));
@@ -617,7 +618,7 @@ void TestSvgParser::testTransformRotation2()
     KoShape *shape = t.findShape("testRect");
     QVERIFY(shape);
 
-    QCOMPARE(shape->boundingRect(), kisGrowRect(QRectF(5,5,20,10), 0.5));
+    QCOMPARE(shape->boundingRect(), QRectF(5,5,20,10));
     QCOMPARE(shape->outlineRect(), QRectF(0,0,10,20));
     QCOMPARE(shape->absolutePosition(KoFlake::TopLeft), QPointF(5,15));
     QCOMPARE(shape->absolutePosition(KoFlake::BottomRight), QPointF(25,5));
@@ -1439,6 +1440,775 @@ QTransform viewTransform(const QRectF &src, const QRectF &dst) {
 
 }
 
+
+void TestSvgParser::testRenderMeshGradient_bilinear_1by1_UserCoord()
+{
+    QString data =
+        "<svg"
+        "   width=\"50px\""
+        "   height=\"50px\""
+        "   version=\"1.1\""
+        "   id=\"svg8\">"
+        "  <defs"
+        "     id=\"defs2\">"
+        "    <meshgradient"
+        "       id=\"meshgradient901\""
+        "       gradientUnits=\"userSpaceOnUse\""
+        "       x=\"0\""
+        "       y=\"0\">"
+        "      <meshrow"
+        "         id=\"meshrow903\">"
+        "        <meshpatch"
+        "           id=\"meshpatch905\">"
+        "          <stop"
+        "             path=\"c 15,0  30,0  45,0\""
+        "             style=\"stop-color:#ffffff;stop-opacity:1\""
+        "             id=\"stop907\" />"
+        "          <stop"
+        "             path=\"c 0,15  0,30  0,45\""
+        "             style=\"stop-color:#ff0000;stop-opacity:1\""
+        "             id=\"stop909\" />"
+        "          <stop"
+        "             path=\"c -15,0  -30,0  -45,0\""
+        "             style=\"stop-color:#ffffff;stop-opacity:1\""
+        "             id=\"stop911\" />"
+        "          <stop"
+        "             path=\"c 0,-15  0,-30  0,-45\""
+        "             style=\"stop-color:#ff0000;stop-opacity:1\""
+        "             id=\"stop913\" />"
+        "        </meshpatch>"
+        "      </meshrow>"
+        "    </meshgradient>"
+        "  </defs>"
+        "  <rect"
+        "     style=\"fill:url(#meshgradient901);fill-opacity:1;filter:url(#filter859)\""
+        "     id=\"testRect\""
+        "     width=\"45\""
+        "     height=\"45\""
+        "     x=\"0\""
+        "     y=\"0\" />"
+        "</svg>";
+
+
+    SvgRenderTester t(data);
+    t.setFuzzyThreshold(5);
+    t.test_standard("meshgradient_bilinear_1by1_in_user", QSize(50, 50), 72);
+}
+
+void TestSvgParser::testRenderMeshGradient_bicubic_1by1_UserCoord()
+{
+    QString data =
+        "<svg id=\"svg8\""
+        "   version=\"1.1\""
+        "   height=\"100px\""
+        "   width=\"100px\">"
+        "  <defs"
+        "     id=\"defs2\">"
+        "    <meshgradient"
+        "       type=\"bicubic\""
+        "       y=\"-10\""
+        "       x=\"-10\""
+        "       gradientUnits=\"userSpaceOnUse\""
+        "       id=\"meshgradient1989\">"
+        "      <meshrow"
+        "         id=\"meshrow1991\">"
+        "        <meshpatch"
+        "           id=\"meshpatch1993\">"
+        "          <stop"
+        "             id=\"stop1995\""
+        "             style=\"stop-color:#ffffff;stop-opacity:1\""
+        "             path=\"c 30,0  60,0  90,0\" />"
+        "          <stop"
+        "             id=\"stop1997\""
+        "             style=\"stop-color:#ff0000;stop-opacity:1\""
+        "             path=\"c 0,30  0,60  0,90\" />"
+        "          <stop"
+        "             id=\"stop1999\""
+        "             style=\"stop-color:#ffffff;stop-opacity:1\""
+        "             path=\"c -30,0  -60,0  -90,0\" />"
+        "          <stop"
+        "             id=\"stop2001\""
+        "             style=\"stop-color:#ff0000;stop-opacity:1\""
+        "             path=\"c 0,-30  0,-60  0,-90\" />"
+        "        </meshpatch>"
+        "      </meshrow>"
+        "    </meshgradient>"
+        "  </defs>"
+        "  <rect"
+        "     y=\"-10\""
+        "     x=\"-10\""
+        "     height=\"90\""
+        "     width=\"90\""
+        "     id=\"testRect\""
+        "     style=\"fill:url(#meshgradient1989);fill-opacity:1\" />"
+        "</svg>";
+
+
+    SvgRenderTester t(data);
+    t.setFuzzyThreshold(5);
+    t.test_standard("meshgradient_bicubic_1by1_in_user", QSize(100, 100), 72);
+}
+
+void TestSvgParser::testRenderMeshGradient_bilinear_2by2_UserCoord()
+{
+    QString data =
+        "<svg"
+        "   version=\"1.1\""
+        "   width=\"100px\""
+        "   height=\"100px\""
+        "   id=\"svg856\">"
+        "  <defs"
+        "     id=\"defs850\">"
+        "    <meshgradient"
+        "       y=\"0\""
+        "       x=\"0\""
+        "       gradientUnits=\"userSpaceOnUse\""
+        "       id=\"meshgradient832\">"
+        "      <meshrow"
+        "         id=\"meshrow834\">"
+        "        <meshpatch"
+        "           id=\"meshpatch836\">"
+        "          <stop"
+        "             id=\"stop838\""
+        "             style=\"stop-color:#ffffff;stop-opacity:1\""
+        "             path=\"c 13.3333,0  26.6667,0  40,0\" />"
+        "          <stop"
+        "             id=\"stop840\""
+        "             style=\"stop-color:#000000;stop-opacity:1\""
+        "             path=\"c 0,13.3333  0,26.6667  0,40\" />"
+        "          <stop"
+        "             id=\"stop842\""
+        "             style=\"stop-color:#ffffff;stop-opacity:1\""
+        "             path=\"c -13.3333,0  -26.6667,0  -40,0\" />"
+        "          <stop"
+        "             id=\"stop844\""
+        "             style=\"stop-color:#000000;stop-opacity:1\""
+        "             path=\"c 0,-13.3333  0,-26.6667  0,-40\" />"
+        "        </meshpatch>"
+        "        <meshpatch"
+        "           id=\"meshpatch846\">"
+        "          <stop"
+        "             id=\"stop848\""
+        "             path=\"c 13.3333,0  26.6667,0  40,0\" />"
+        "          <stop"
+        "             id=\"stop850\""
+        "             style=\"stop-color:#ffffff;stop-opacity:1\""
+        "             path=\"c 0,13.3333  0,26.6667  0,40\" />"
+        "          <stop"
+        "             id=\"stop852\""
+        "             style=\"stop-color:#000000;stop-opacity:1\""
+        "             path=\"c -13.3333,0  -26.6667,0  -40,0\" />"
+        "        </meshpatch>"
+        "      </meshrow>"
+        "      <meshrow"
+        "         id=\"meshrow854\">"
+        "        <meshpatch"
+        "           id=\"meshpatch856\">"
+        "          <stop"
+        "             id=\"stop858\""
+        "             path=\"c 0,13.3333  0,26.6667  0,40\" />"
+        "          <stop"
+        "             id=\"stop860\""
+        "             style=\"stop-color:#000000;stop-opacity:1\""
+        "             path=\"c -13.3333,0  -26.6667,0  -40,0\" />"
+        "          <stop"
+        "             id=\"stop862\""
+        "             style=\"stop-color:#ffffff;stop-opacity:1\""
+        "             path=\"c 0,-13.3333  0,-26.6667  0,-40\" />"
+        "        </meshpatch>"
+        "        <meshpatch"
+        "           id=\"meshpatch864\">"
+        "          <stop"
+        "             id=\"stop866\""
+        "             path=\"c 0,13.3333  0,26.6667  0,40\" />"
+        "          <stop"
+        "             id=\"stop868\""
+        "             style=\"stop-color:#ffffff;stop-opacity:1\""
+        "             path=\"c -13.3333,0  -26.6667,0  -40,0\" />"
+        "        </meshpatch>"
+        "      </meshrow>"
+        "    </meshgradient>"
+        "  </defs>"
+        ""
+        "  <rect"
+        "     style=\"fill:url(#meshgradient832);fill-opacity:1\""
+        "     id=\"testRect\""
+        "     width=\"80\""
+        "     height=\"80\""
+        "     x=\"0\""
+        "     y=\"0\" />"
+        "</svg>";
+
+    SvgRenderTester t(data);
+    t.setFuzzyThreshold(5);
+    t.test_standard("meshgradient_bilinear_2by2_in_user", QSize(100, 100), 72);
+}
+
+void TestSvgParser::testRenderMeshGradient_bicubic_2by2_UserCoord()
+{
+    QString data =
+        "<svg width=\"100px\""
+        "    height=\"100px\">"
+        "<defs>"
+        "  <meshgradient id=\"meshgradient0\""
+        "    gradientUnits=\"userSpaceOnUse\" "
+        "    x=\"0\" "
+        "    y=\"0\" "
+        "    type=\"bicubic\">"
+        "   <meshrow "
+        "     id=\"meshrow0\">"
+        "    <meshpatch "
+        "      id=\"meshpatch0\">"
+        "     <stop path=\"C 13.33328,0 26.66664,0 40,0\" "
+        "       stop-color=\"#ffffff\" stop-opacity=\"1\"/>"
+        "     <stop path=\"C 40,13.33328 40,26.66664 40,40\" "
+        "       stop-color=\"#000000\" stop-opacity=\"1\"/>"
+        "     <stop path=\"C 26.66672,40 13.33336,40 0,40\" "
+        "       stop-color=\"#ffffff\" stop-opacity=\"1\"/>"
+        "     <stop path=\"C 0,26.66672 0,13.33336 0,0\" "
+        "       stop-color=\"#000000\" stop-opacity=\"1\"/>"
+        "    </meshpatch>"
+        "    <meshpatch "
+        "      id=\"meshpatch1\">"
+        "     <stop path=\"C 53.33328,0 66.666640,0 80,0\"/>"
+        "     <stop path=\"C 80,13.33328 80,26.66664 80,40\" "
+        "       stop-color=\"#ffffff\" stop-opacity=\"1\"/>"
+        "     <stop path=\"C 66.66672,40 53.33336,40 40,40\" "
+        "       stop-color=\"#000000\" stop-opacity=\"1\"/>"
+        "    </meshpatch>"
+        "   </meshrow>"
+        "   <meshrow "
+        "     id=\"meshrow1\">"
+        "    <meshpatch "
+        "      id=\"meshpatch2\">"
+        "     <stop path=\"C 40,53.33328 40,66.66664 40,80\"/>"
+        "     <stop path=\"C 26.66672,80 13.33336,80 0,80\" "
+        "       stop-color=\"#000000\" stop-opacity=\"1\"/>"
+        "     <stop path=\"C 0,66.66672 0,53.33336 0,40\" "
+        "       stop-color=\"#ffffff\" stop-opacity=\"1\"/>"
+        "    </meshpatch>"
+        "    <meshpatch "
+        "      id=\"meshpatch3\">"
+        "     <stop path=\"C 80,53.33328 80,66.66664 80,80\"/>"
+        "     <stop path=\"C 66.66672,80 53.33336,80 40,80\" "
+        "       stop-color=\"#ffffff\" stop-opacity=\"1\"/>"
+        "    </meshpatch>"
+        "   </meshrow>"
+        "  </meshgradient>"
+        " </defs>"
+        ""
+        "<rect id=\"testRect\" fill=\"url(#meshgradient0)\" width=\"80\" height=\"80\"/>"
+        "</svg>";
+
+    SvgRenderTester t(data);
+    t.setFuzzyThreshold(5);
+    t.test_standard("meshgradient_bicubic_2by2", QSize(100, 100), 72);
+}
+
+void TestSvgParser::testRenderMeshGradient_bilinear_1by1_Obb()
+{
+    // inkscape is _very_ weird with meshgradients in OBB coordinate system
+    QString data =
+        "<svg width=\"100px\" height=\"100px\""
+        "   version=\"1.1\" id=\"svg8\" >"
+        "  <defs>"
+        "    <meshgradient id=\"meshgradient1635\" gradientUnits=\"objectBoundingBox\" x=\"0\" y=\"0\">"
+        "      <meshrow"
+        "         id=\"meshrow2306\">"
+        "        <meshpatch"
+        "           id=\"meshpatch2296\">"
+        "          <stop"
+        "             id=\"stop2288\""
+        "             stop-color=\"#000000\""
+        "             path=\"c  0.25,-0.25  0.75, 0.25  1,0\" />"
+        "          <stop"
+        "             id=\"stop2290\""
+        "             stop-color=\"#0000ff\""
+        "             path=\"c  0.25, 0.25 -0.25, 0.75  0,1\" />"
+        "          <stop"
+        "             id=\"stop2292\""
+        "             stop-color=\"#00ff00\""
+        "             path=\"c -0.25, 0.25 -0.75,-0.25 -1,0\" />"
+        "          <stop"
+        "             id=\"stop2294\""
+        "             stop-color=\"ff0000\""
+        "             path=\"c -0.25,-0.25, 0.25,-0.75\" />"
+        "        </meshpatch>"
+        "      </meshrow>"
+        "    </meshgradient>"
+        "  </defs>"
+        "  <rect"
+        "     style=\"fill:url(#meshgradient1635);fill-opacity:1\""
+        "     id=\"testRect\""
+        "     width=\"70\""
+        "     height=\"70\""
+        "     x=\"0\""
+        "     y=\"0\" />"
+        "</svg>";
+
+    SvgRenderTester t(data);
+    t.setFuzzyThreshold(5);
+    t.test_standard("meshgradient_bilinear_1by1_in_obb", QSize(100, 100), 72);
+}
+
+void TestSvgParser::testRenderMeshGradient_bicubic_2by2_Obb()
+{
+    // inkscape is _very_ weird with meshgradients in OBB coordinate system
+    QString data =
+        "<svg"
+        "   version=\"1.1\""
+        "   width=\"100px\""
+        "   height=\"100px\""
+        "   id=\"svg856\">"
+        "  <defs"
+        "     id=\"defs850\">"
+        "    <meshgradient"
+        "       y=\"0\""
+        "       x=\"0\""
+        "       gradientUnits=\"objectBoundingBox\""
+        "       id=\"meshgradient832\""
+        "       type=\"bicubic\" >"
+        "      <meshrow"
+        "         id=\"meshrow834\">"
+        "        <meshpatch"
+        "           id=\"meshpatch836\">"
+        "          <stop"
+        "             id=\"stop838\""
+        "             style=\"stop-color:#ffffff;stop-opacity:1\""
+        "             path=\"c 0.166666,0  0.333333,0  0.5,0\" />"
+        "          <stop"
+        "             id=\"stop840\""
+        "             style=\"stop-color:#000000;stop-opacity:1\""
+        "             path=\"c 0,0.166666  0,0.333333  0,0.5\" />"
+        "          <stop"
+        "             id=\"stop842\""
+        "             style=\"stop-color:#ffffff;stop-opacity:1\""
+        "             path=\"c -0.166666,0  -0.333333,0  -0.5,0\" />"
+        "          <stop"
+        "             id=\"stop844\""
+        "             style=\"stop-color:#000000;stop-opacity:1\""
+        "             path=\"c 0,-0.166666  0,-0.333333  0,-0.5\" />"
+        "        </meshpatch>"
+        "        <meshpatch"
+        "           id=\"meshpatch846\">"
+        "          <stop"
+        "             id=\"stop848\""
+        "             path=\"c 0.166666,0  0.333333,0  0.5,0\" />"
+        "          <stop"
+        "             id=\"stop850\""
+        "             style=\"stop-color:#ffffff;stop-opacity:1\""
+        "             path=\"c 0,0.166666  0,0.333333  0,0.5\" />"
+        "          <stop"
+        "             id=\"stop852\""
+        "             style=\"stop-color:#000000;stop-opacity:1\""
+        "             path=\"c -0.166666,0  -0.333333,0  -0.5,0\" />"
+        "        </meshpatch>"
+        "      </meshrow>"
+        "      <meshrow"
+        "         id=\"meshrow854\">"
+        "        <meshpatch"
+        "           id=\"meshpatch856\">"
+        "          <stop"
+        "             id=\"stop858\""
+        "             path=\"c 0,0.166666  0,0.333333  0,0.5\" />"
+        "          <stop"
+        "             id=\"stop860\""
+        "             style=\"stop-color:#000000;stop-opacity:1\""
+        "             path=\"c -0.166666,0  -0.333333,0  -0.5,0\" />"
+        "          <stop"
+        "             id=\"stop862\""
+        "             style=\"stop-color:#ffffff;stop-opacity:1\""
+        "             path=\"c 0,-0.166666  0,-0.333333  0,-0.5\" />"
+        "        </meshpatch>"
+        "        <meshpatch"
+        "           id=\"meshpatch864\">"
+        "          <stop"
+        "             id=\"stop866\""
+        "             path=\"c 0,0.166666  0,0.333333  0,0.5\" />"
+        "          <stop"
+        "             id=\"stop868\""
+        "             style=\"stop-color:#ffffff;stop-opacity:1\""
+        "             path=\"c -0.166666,0  -0.333333,0  -0.5,0\" />"
+        "        </meshpatch>"
+        "      </meshrow>"
+        "    </meshgradient>"
+        "  </defs>"
+        ""
+        "  <rect"
+        "     style=\"fill:url(#meshgradient832);fill-opacity:1\""
+        "     id=\"testRect\""
+        "     width=\"80\""
+        "     height=\"80\""
+        "     x=\"0\""
+        "     y=\"0\" />"
+        "</svg>";
+
+
+    SvgRenderTester t(data);
+    t.setFuzzyThreshold(5);
+    t.test_standard("meshgradient_bicubic_2by2", QSize(100, 100), 72);
+}
+
+void TestSvgParser::testRenderMeshGradient_MeshTransform_UserCoord()
+{
+    QString data =
+        "<svg"
+        "   id=\"svg8\""
+        "   version=\"1.1\""
+        "   height=\"100px\""
+        "   width=\"100px\">"
+        "  <defs"
+        "     id=\"defs2\">"
+        "    <meshgradient"
+        "       y=\"0\""
+        "       x=\"0\""
+        "       gradientUnits=\"userSpaceOnUse\""
+        "       id=\"meshgradient1989\""
+        "       transform=\"translate(90, 0) rotate(90)\">"
+        "      <meshrow"
+        "         id=\"meshrow1991\">"
+        "        <meshpatch"
+        "           id=\"meshpatch1993\">"
+        "          <stop"
+        "             id=\"stop1995\""
+        "             style=\"stop-color:#ffffff;stop-opacity:1\""
+        "             path=\"c 30,0  60,0  90,0\" />"
+        "          <stop"
+        "             id=\"stop1997\""
+        "             style=\"stop-color:#ff0000;stop-opacity:1\""
+        "             path=\"c 0,30  0,60  0,90\" />"
+        "          <stop"
+        "             id=\"stop1999\""
+        "             style=\"stop-color:#ffffff;stop-opacity:1\""
+        "             path=\"c -30,0  -60,0  -90,0\" />"
+        "          <stop"
+        "             id=\"stop2001\""
+        "             style=\"stop-color:#ff0000;stop-opacity:1\""
+        "             path=\"c 0,-30  0,-60  0,-90\" />"
+        "        </meshpatch>"
+        "      </meshrow>"
+        "    </meshgradient>"
+        "  </defs>"
+        "  <rect"
+        "     y=\"0\""
+        "     x=\"0\""
+        "     height=\"100\""
+        "     width=\"100\""
+        "     id=\"testRect\""
+        "     style=\"fill:url(#meshgradient1989);fill-opacity:1\" />"
+        "</svg>";
+
+    SvgRenderTester t(data);
+    t.setFuzzyThreshold(5);
+    t.test_standard("meshgradient_meshtransform_in_user", QSize(100, 100), 72);
+}
+
+void TestSvgParser::testRenderMeshGradient_ShapeTransform_UserCoord()
+{
+    // QString data = fetchSvgFile("svg_render", "meshgradient_shapetransform_in_user");
+    QString data =
+        "<svg"
+        "   width=\"100px\""
+        "   height=\"100px\""
+        "   version=\"1.1\""
+        "   id=\"svg8\">"
+        "  <defs"
+        "     id=\"defs2\">"
+        "    <meshgradient"
+        "       y=\"-79.791451\""
+        "       x=\"-154.33087\""
+        "       gradientUnits=\"userSpaceOnUse\""
+        "       id=\"meshgradient839\">"
+        "      <meshrow"
+        "         id=\"meshrow841\">"
+        "        <meshpatch"
+        "           id=\"meshpatch843\">"
+        "          <stop"
+        "             id=\"stop845\""
+        "             style=\"stop-color:#ffffff;stop-opacity:1\""
+        "             path=\"c 51.0352,0  102.07,0  153.105,0\" />"
+        "          <stop"
+        "             id=\"stop847\""
+        "             style=\"stop-color:#000000;stop-opacity:1\""
+        "             path=\"c 0,52.6788  0,105.358  0,158.036\" />"
+        "          <stop"
+        "             id=\"stop849\""
+        "             style=\"stop-color:#ffffff;stop-opacity:1\""
+        "             path=\"c -51.0352,0  -102.07,0  -153.105,0\" />"
+        "          <stop"
+        "             id=\"stop851\""
+        "             style=\"stop-color:#000000;stop-opacity:1\""
+        "             path=\"c 0,-52.6788  0,-105.358  0,-158.036\" />"
+        "        </meshpatch>"
+        "      </meshrow>"
+        "    </meshgradient>"
+        "  </defs>"
+        "  <rect"
+        "     style=\"fill:url(#meshgradient839);fill-opacity:1\""
+        "     id=\"testRect\""
+        "     width=\"153.10547\""
+        "     height=\"158.03641\""
+        "     x=\"-154.33087\""
+        "     y=\"-79.791451\""
+        "     transform=\"matrix(-0.71410131,-0.70004237,0.70026385,-0.71388413,0,0)\" />"
+        "</svg>";
+
+
+    SvgRenderTester t(data);
+    t.setFuzzyThreshold(5);
+    t.test_standard("meshgradient_shapetransform_in_user", QSize(100, 100), 72);
+}
+
+void TestSvgParser::testRenderMeshGradient_MeshTransform_Obb()
+{
+    // inkscape is _very_ weird with meshgradients in OBB coordinate system
+    QString data =
+        "<svg"
+        "   version=\"1.1\""
+        "   height=\"100px\""
+        "   width=\"100px\">"
+        "  <defs"
+        "     id=\"defs2\">"
+        "    <meshgradient"
+        "       y=\"0\""
+        "       x=\"0\""
+        "       transform=\"translate(0.7, 0) rotate(90)\""
+        "       gradientUnits=\"objectBoundingBox\""
+        "       id=\"meshgradient901\">"
+        "      <meshrow"
+        "         id=\"meshrow903\">"
+        "        <meshpatch"
+        "           id=\"meshpatch905\">"
+        "          <stop"
+        "             id=\"stop907\""
+        "             style=\"stop-color:#ffffff;stop-opacity:1\""
+        "             path=\"c 0.166666,0  0.333333,0  0.5,0\" />"
+        "          <stop"
+        "             id=\"stop909\""
+        "             style=\"stop-color:#ff0000;stop-opacity:1\""
+        "             path=\"c 0,0.166666  0,0.333333  0,0.5\" />"
+        "          <stop"
+        "             id=\"stop911\""
+        "             style=\"stop-color:#ffffff;stop-opacity:1\""
+        "             path=\"c -0.166666,0  -0.333333,0  -0.5,0\" />"
+        "          <stop"
+        "             id=\"stop913\""
+        "             style=\"stop-color:#ff0000;stop-opacity:1\""
+        "             path=\"c 0,-0.166666 0,-0.333333  0,-0.5\" />"
+        "        </meshpatch>"
+        "        <meshpatch"
+        "           id=\"meshpatch915\">"
+        "          <stop"
+        "             id=\"stop917\""
+        "             path=\"c 0.166666,0  0.333333,0  0.5,0\" />"
+        "          <stop"
+        "             id=\"stop919\""
+        "             style=\"stop-color:#ffffff;stop-opacity:1\""
+        "             path=\"c 0,0.166666 0,0.333333  0,0.5\" />"
+        "          <stop"
+        "             id=\"stop921\""
+        "             style=\"stop-color:#ff0000;stop-opacity:1\""
+        "             path=\"c -0.166666,0  -0.333333,0  -0.5,0\" />"
+        "        </meshpatch>"
+        "      </meshrow>"
+        "    </meshgradient>"
+        "  </defs>"
+        "  <rect"
+        "     y=\"0\""
+        "     x=\"0\""
+        "     height=\"90\""
+        "     width=\"90\""
+        "     id=\"testRect\""
+        "     style=\"fill:url(#meshgradient901);fill-opacity:1;filter:url(#filter859)\" />"
+        "</svg>";
+
+
+    SvgRenderTester t(data);
+    t.setFuzzyThreshold(5);
+    t.test_standard("meshgradient_meshtransform_in_obb", QSize(100, 100), 72);
+}
+
+void TestSvgParser::testRenderMeshGradient_ShapeTransform_Obb()
+{
+    // inkscape is _very_ weird with meshgradients in OBB coordinate system
+    QString data =
+        "<svg"
+        "   width=\"100px\""
+        "   height=\"100px\""
+        "   version=\"1.1\""
+        "   id=\"svg8\">"
+        "  <defs"
+        "     id=\"defs2\">"
+        "    <meshgradient"
+        "       y=\"0\""
+        "       x=\"0\""
+        "       gradientUnits=\"objectBoundingBox\""
+        "       id=\"meshgradient839\">"
+        "      <meshrow"
+        "         id=\"meshrow841\">"
+        "        <meshpatch"
+        "           id=\"meshpatch843\">"
+        "          <stop"
+        "             id=\"stop845\""
+        "             style=\"stop-color:#ffffff;stop-opacity:1\""
+        "             path=\"c  0.33333,0  0.666666,0  1,0\" />"
+        "          <stop"
+        "             id=\"stop847\""
+        "             style=\"stop-color:#000000;stop-opacity:1\""
+        "             path=\"c 0,0.33333  0,0.66667  0,1\" />"
+        "          <stop"
+        "             id=\"stop849\""
+        "             style=\"stop-color:#ffffff;stop-opacity:1\""
+        "             path=\"c -0.33333,0  -0.666666,0  -1,0\" />"
+        "          <stop"
+        "             id=\"stop851\""
+        "             style=\"stop-color:#000000;stop-opacity:1\""
+        "             path=\"c 0,-0.33333  0,-0.66667  0,-1\" />"
+        "        </meshpatch>"
+        "      </meshrow>"
+        "    </meshgradient>"
+        "  </defs>"
+        "  <rect"
+        "     style=\"fill:url(#meshgradient839);fill-opacity:1\""
+        "     id=\"testRect\""
+        "     width=\"153.10547\""
+        "     height=\"158.03641\""
+        "     x=\"-154.33087\""
+        "     y=\"-79.791451\""
+        "     transform=\"matrix(-0.71410131,-0.70004237,0.70026385,-0.71388413,0,0)\" />"
+        "</svg>";
+
+    SvgRenderTester t(data);
+    t.setFuzzyThreshold(3);
+    t.test_standard("meshgradient_shapetransform_in_obb", QSize(100, 100), 72);
+}
+
+void TestSvgParser::testRenderMeshGradient_transparent()
+{
+    // here I use Krita's output, due to my lack of knowledge about Inkscape's RGBA
+    // output format. But the results, have been verified - SZ
+    QString data =
+        "<svg"
+        "   width=\"100px\""
+        "   height=\"100px\""
+        "   version=\"1.1\""
+        "   id=\"svg8\">"
+        "  <defs"
+        "     id=\"defs2\">"
+        "    <meshgradient"
+        "       id=\"meshgradient1989\""
+        "       gradientUnits=\"userSpaceOnUse\""
+        "       x=\"-10\""
+        "       y=\"-10\""
+        "       type=\"bilinear\">"
+        "      <meshrow"
+        "         id=\"meshrow1991\">"
+        "        <meshpatch"
+        "           id=\"meshpatch1993\">"
+        "          <stop"
+        "             path=\"c 30,0  60,0  90,0\""
+        "             style=\"stop-color:#ffffff;stop-opacity:1\""
+        "             id=\"stop1995\" />"
+        "          <stop"
+        "             path=\"c 0,30  0,60  0,90\""
+        "             style=\"stop-color:#ff0000;stop-opacity:1\""
+        "             id=\"stop1997\" />"
+        "          <stop"
+        "             path=\"c -30,0  -60,0  -90,0\""
+        "             style=\"stop-color:#ffffff;stop-opacity:0\""
+        "             id=\"stop1999\" />"
+        "          <stop"
+        "             path=\"c 0,-30  0,-60  0,-90\""
+        "             style=\"stop-color:#ff0000;stop-opacity:1\""
+        "             id=\"stop2001\" />"
+        "        </meshpatch>"
+        "      </meshrow>"
+        "    </meshgradient>"
+        "  </defs>"
+        "  <rect"
+        "     style=\"fill:url(#meshgradient1989);fill-opacity:1\""
+        "     id=\"testRect\""
+        "     width=\"90\""
+        "     height=\"90\""
+        "     x=\"-10\""
+        "     y=\"-10\" />"
+        "</svg>";
+
+    SvgRenderTester t(data);
+    t.setFuzzyThreshold(5);
+    t.test_standard("meshgradient_transparent", QSize(100, 100), 72);
+}
+
+void TestSvgParser::testRenderMeshGradient_reversed()
+{
+    // Not sure if this is part of specs, but this brings up an underlying problem:
+    // bounds in QPainterPath are inclusive on right and bottom side, so an extra 1px
+    // border is drawn.
+    QString data =
+        "<svg"
+        "   id=\"svg856\""
+        "   height=\"100px\""
+        "   width=\"100px\""
+        ">"
+        "  <defs"
+        "     id=\"defs850\">"
+        "    <meshgradient"
+        "       y=\"0\""
+        "       x=\"80\""
+        "       gradientUnits=\"userSpaceOnUse\""
+        "       id=\"meshgradient903\">"
+        "      <meshrow"
+        "         id=\"meshrow905\">"
+        "        <meshpatch"
+        "           id=\"meshpatch907\">"
+        "          <stop"
+        "             id=\"stop909\""
+        "             style=\"stop-color:#ffffff;stop-opacity:1\""
+        "             path=\"c -13.3333,0  -26.6667,0  -40,0\" />"
+        "          <stop"
+        "             id=\"stop911\""
+        "             style=\"stop-color:#000000;stop-opacity:1\""
+        "             path=\"c 0,26.6667  0,53.3333  0,80\" />"
+        "          <stop"
+        "             id=\"stop913\""
+        "             style=\"stop-color:#ffffff;stop-opacity:1\""
+        "             path=\"c  13.3333,0   26.6667,0   40,0\" />"
+        "          <stop"
+        "             id=\"stop915\""
+        "             style=\"stop-color:#000000;stop-opacity:1\""
+        "             path=\"c 0,-26.6667  0,-53.3333  0,-80\" />"
+        "        </meshpatch>"
+        "        <meshpatch"
+        "           id=\"meshpatch917\">"
+        "          <stop"
+        "             id=\"stop919\""
+        "             path=\"c -13.3333,0  -26.6667,0  -40,0\" />"
+        "          <stop"
+        "             id=\"stop921\""
+        "             style=\"stop-color:#ffffff;stop-opacity:1\""
+        "             path=\"c 0,26.6667  0,53.3333  0,80\" />"
+        "          <stop"
+        "             id=\"stop923\""
+        "             style=\"stop-color:#000000;stop-opacity:1\""
+        "             path=\"c  13.3333,0   26.6667,0   40,0\" />"
+        "        </meshpatch>"
+        "      </meshrow>"
+        "    </meshgradient>"
+        "  </defs>"
+        "  <rect"
+        "     y=\"0\""
+        "     x=\"0\""
+        "     height=\"90\""
+        "     width=\"90\""
+        "     id=\"testRect\""
+        "     style=\"fill:url(#meshgradient903);fill-opacity:1\" />"
+        "</svg>";
+
+    SvgRenderTester t(data);
+    t.setFuzzyThreshold(5);
+    t.test_standard("meshgradient_reversed", QSize(100, 100), 72);
+}
+
 QPainterPath bakeShape(const QPainterPath &path,
                        const QTransform &bakeTransform,
                        bool contentIsObb = false, const QRectF &shapeBoundingRect = QRectF(),
@@ -2226,7 +2996,7 @@ void TestSvgParser::testRenderClipMask_Obb()
             "<svg width=\"30px\" height=\"30px\""
             "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
 
-            //"<defs>"
+            "<defs>"
 
             "    <linearGradient id=\"Gradient\" gradientUnits=\"objectBoundingBox\""
             "        x1=\"0\" y1=\"0\" x2=\"1\" y2=\"0\">"
@@ -2244,7 +3014,7 @@ void TestSvgParser::testRenderClipMask_Obb()
 
             "    </mask>"
 
-            //"</defs>"
+            "</defs>"
 
 
             "<g id=\"testRect\">"
@@ -2260,6 +3030,57 @@ void TestSvgParser::testRenderClipMask_Obb()
     SvgRenderTester t (data);
 
     t.test_standard_30px_72ppi("clip_mask_obb", false);
+}
+
+void TestSvgParser::testRenderClipMaskOnGroup_Obb()
+{
+    const QString data =
+            "<svg width=\"30px\" height=\"30px\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+            "<defs>"
+
+            "    <linearGradient id=\"Gradient\" gradientUnits=\"objectBoundingBox\""
+            "        x1=\"0\" y1=\"0\" x2=\"1\" y2=\"0\">"
+
+            "        <stop offset=\"0\" stop-color=\"white\" stop-opacity=\"0\" />"
+            "        <stop offset=\"1\" stop-color=\"white\" stop-opacity=\"1\" />"
+
+            "    </linearGradient>"
+
+            "    <mask id=\"Mask\" maskUnits=\"objectBoundingBox\""
+            "        maskContentUnits=\"objectBoundingBox\""
+            "        x=\"0.2\" y=\"0.2\" width=\"0.6\" height=\"0.6\">"
+
+            "        <rect x=\"0\" y=\"0\" width=\"1\" height=\"1\" fill=\"url(#Gradient)\" />"
+
+            "    </mask>"
+
+            "</defs>"
+
+
+            "<g id=\"testRect\" mask=\"url(#Mask)\">"
+            "    <rect id=\"testRect1\" x=\"5\" y=\"5\" width=\"15\" height=\"15\""
+            "        fill=\"blue\" stroke=\"none\"/>"
+
+            "    <rect id=\"testRect2\" x=\"10\" y=\"10\" width=\"15\" height=\"15\""
+            "        fill=\"red\" stroke=\"none\" />"
+            "</g>"
+
+            "</svg>";
+
+    SvgRenderTester t (data);
+
+    t.test_standard_30px_72ppi("clip_mask_on_group_obb", false);
+}
+
+QByteArray fileFetcherFunc(const QString &name)
+{
+    const QString fileName = TestUtil::fetchDataFileLazy(name);
+    QFile file(fileName);
+    KIS_ASSERT(file.exists());
+    file.open(QIODevice::ReadOnly);
+    return file.readAll();
 }
 
 void TestSvgParser::testRenderClipMask_User_Clip_Obb()
@@ -2344,15 +3165,6 @@ void TestSvgParser::testRenderClipMask_User_Clip_User()
     SvgRenderTester t (data);
 
     t.test_standard_30px_72ppi("clip_mask_obb", false);
-}
-
-QByteArray fileFetcherFunc(const QString &name)
-{
-    const QString fileName = TestUtil::fetchDataFileLazy(name);
-    QFile file(fileName);
-    KIS_ASSERT(file.exists());
-    file.open(QIODevice::ReadOnly);
-    return file.readAll();
 }
 
 void TestSvgParser::testRenderImage_AspectDefault()

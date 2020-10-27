@@ -37,8 +37,7 @@ class KToggleFullScreenAction;
  *
  * These actions should be used instead of hardcoding menubar and
  * toolbar items.  Using these actions helps your application easily
- * conform to the KDE UI Style Guide
- * @see http://developer.kde.org/documentation/standards/kde/style/basics/index.html .
+ * conform to the KDE UI Style Guide.
  *
  * All of the documentation for QAction holds for KStandardAction
  * also.  When in doubt on how things work, check the QAction
@@ -149,7 +148,7 @@ enum StandardAction {
     // Settings Menu
     ShowMenubar, ShowToolbar, ShowStatusbar,
     SaveOptions, KeyBindings,
-    Preferences, ConfigureToolbars,
+    Preferences, ConfigureToolbars, ResetConfigurations,
 
     // Help Menu
     Help, HelpContents, WhatsThis, ReportBug, AboutApp, AboutKDE,
@@ -324,7 +323,7 @@ KRITAWIDGETUTILS_EXPORT QAction *paste(QObject *parent);
  * class MyListView : public K3ListView {
  *   Q_OBJECT
  * public:
- *   MyListView( QWidget * parent = 0, const char * name = 0, WFlags f = 0 ) : K3ListView( parent, name, f ) {}
+ *   MyListView( QWidget * parent = 0, const char * name = 0, WFlags f = Qt::WindowFlags() ) : K3ListView( parent, name, f ) {}
  *   virtual ~MyListView() {}
  * public Q_SLOTS:
  *   virtual void clear() {}

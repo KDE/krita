@@ -33,7 +33,8 @@ KisFigurePaintingToolHelper::KisFigurePaintingToolHelper(const KUndo2MagicString
                                                          KisNodeSP currentNode,
                                                          KoCanvasResourceProvider *resourceManager,
                                                          KisToolShapeUtils::StrokeStyle strokeStyle,
-                                                         KisToolShapeUtils::FillStyle fillStyle)
+                                                         KisToolShapeUtils::FillStyle fillStyle,
+                                                         QTransform fillTransform)
 {
     m_strokesFacade = image.data();
 
@@ -42,7 +43,7 @@ KisFigurePaintingToolHelper::KisFigurePaintingToolHelper(const KUndo2MagicString
                                  currentNode,
                                  resourceManager);
 
-    setupPaintStyles(m_resources, strokeStyle, fillStyle);
+    setupPaintStyles(m_resources, strokeStyle, fillStyle, fillTransform);
 
     KisFreehandStrokeInfo *strokeInfo = new KisFreehandStrokeInfo();
 
@@ -54,7 +55,8 @@ KisFigurePaintingToolHelper::KisFigurePaintingToolHelper(const KUndo2MagicString
 
 void KisFigurePaintingToolHelper::setupPaintStyles(KisResourcesSnapshotSP resources,
                                                    KisToolShapeUtils::StrokeStyle strokeStyle,
-                                                   KisToolShapeUtils::FillStyle fillStyle)
+                                                   KisToolShapeUtils::FillStyle fillStyle,
+                                                   QTransform fillTransform)
 {
     using namespace KisToolShapeUtils;
 
@@ -97,6 +99,8 @@ void KisFigurePaintingToolHelper::setupPaintStyles(KisResourcesSnapshotSP resour
         resources->setFillStyle(KisPainter::FillStyleNone);
         break;
     }
+
+    resources->setFillTransform(fillTransform);
 }
 
 KisFigurePaintingToolHelper::~KisFigurePaintingToolHelper()

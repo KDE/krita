@@ -209,3 +209,26 @@ KisShaderProgram *KisOpenGLShaderLoader::loadSolidColorShader()
 
     return shader;
 }
+
+KisShaderProgram *KisOpenGLShaderLoader::loadOverlayInvertedShader()
+{
+    QString vertPath, fragPath;
+
+    // Select appropriate shader files
+    if (KisOpenGL::supportsLoD() || KisOpenGL::hasOpenGLES()) {
+        vertPath = "matrix_transform.vert";
+
+        if (KisOpenGL::useFBOForToolOutlineRendering()) {
+            fragPath = "overlay_inverted.frag";
+        } else {
+            fragPath = "solid_color.frag";
+        }
+    } else {
+        vertPath = "matrix_transform_legacy.vert";
+        fragPath = "solid_color_legacy.frag";
+    }
+
+    KisShaderProgram *shader = loadShader(vertPath, fragPath, QByteArray(), QByteArray());
+
+    return shader;
+}

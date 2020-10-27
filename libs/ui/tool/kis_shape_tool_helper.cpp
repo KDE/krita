@@ -18,6 +18,8 @@
 
 #include "kis_shape_tool_helper.h"
 
+#include <QPainterPath>
+
 #include <KoPathShape.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeFactoryBase.h>

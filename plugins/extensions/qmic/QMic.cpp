@@ -61,6 +61,7 @@
 #include "kis_qmic_simple_convertor.h"
 #include "kis_import_qmic_processing_visitor.h"
 #include <PluginSettings.h>
+#include <kis_image_barrier_locker.h>
 
 #include "kis_qmic_applicator.h"
 
@@ -122,7 +123,7 @@ void QMic::slotQMic(bool again)
     // find the krita-gmic-qt plugin
     QString pluginPath = PluginSettings::gmicQtPath();
     if (pluginPath.isEmpty() || !QFileInfo(pluginPath).exists() || !QFileInfo(pluginPath).isFile()) {
-        QMessageBox::warning(0, i18nc("@title:window", "Krita"), i18n("Krita cannot find the gmic-qt plugin. You can set the location of the gmic-qt plugin in Settings/Configure Krita."));
+        QMessageBox::warning(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Krita cannot find the gmic-qt plugin. You can set the location of the gmic-qt plugin in Settings/Configure Krita."));
         return;
     }
 
@@ -323,7 +324,7 @@ void QMic::slotGmicFinished(bool successfully, int milliseconds, const QString &
     }
     else {
         m_gmicApplicator->cancel();
-        QMessageBox::warning(0, i18nc("@title:window", "Krita"), i18n("G'Mic failed, reason:") + msg);
+        QMessageBox::warning(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("G'Mic failed, reason:") + msg);
     }
 }
 
@@ -391,7 +392,7 @@ bool QMic::prepareCroppedImages(QByteArray *message, QRectF &rc, int inputMode)
 {
     if (!viewManager()) return false;
 
-    viewManager()->image()->lock();
+    KisImageBarrierLocker locker(viewManager()->image());
 
     m_inputMode = (InputLayerMode)inputMode;
 
@@ -400,7 +401,6 @@ bool QMic::prepareCroppedImages(QByteArray *message, QRectF &rc, int inputMode)
     KisInputOutputMapper mapper(viewManager()->image(), viewManager()->activeNode());
     KisNodeListSP nodes = mapper.inputNodes(m_inputMode);
     if (nodes->isEmpty()) {
-        viewManager()->image()->unlock();
         return false;
     }
 
@@ -453,8 +453,6 @@ bool QMic::prepareCroppedImages(QByteArray *message, QRectF &rc, int inputMode)
     }
 
     dbgPlugins << QString::fromUtf8(*message);
-
-    viewManager()->image()->unlock();
 
     return true;
 }

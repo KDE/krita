@@ -24,13 +24,15 @@
 #include "kis_wdg_simplex_noise.h"
 #include "3rdparty/c-open-simplex/open-simplex-noise.h"
 
-#include <QCryptographicHash>
-#include <kpluginfactory.h>
-#include <KoUpdater.h>
-#include <kis_processing_information.h>
 #include <KisSequentialIteratorProgress.h>
+#include <KoUpdater.h>
+#include <QCryptographicHash>
 #include <filter/kis_filter_configuration.h>
 #include <generator/kis_generator_registry.h>
+#include <KoColorModelStandardIds.h>
+#include <KoColorSpaceRegistry.h>
+#include <kis_processing_information.h>
+#include <kpluginfactory.h>
 
 K_PLUGIN_FACTORY_WITH_JSON(KritaSimplexNoiseGeneratorFactory, "kritasimplexnoisegenerator.json", registerPlugin<KisSimplexNoiseGeneratorHandle>();)
 
@@ -59,7 +61,12 @@ void KisSimplexNoiseGenerator::generate(KisProcessingInformation dst, const QSiz
     osn_context *noise_context;
 
     QRect bounds = QRect(dst.topLeft(), size);
-    const KoColorSpace * cs = device->colorSpace();
+    QRect whole_image_bounds = device->defaultBounds()->bounds();
+
+    const KoColorSpace *cs = device->colorSpace();
+    const KoColorSpace *src = KoColorSpaceRegistry::instance()->colorSpace(GrayAColorModelID.id(), Float32BitsColorDepthID.id(), "Gray-D50-elle-V2-srgbtrc.icc");
+    KoColorConversionTransformation *conv = KoColorSpaceRegistry::instance()->createColorConverter(src, cs, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
+
     KisSequentialIteratorProgress it(device, bounds, progressUpdater);
 
     QVariant property;
@@ -81,38 +88,42 @@ void KisSimplexNoiseGenerator::generate(KisProcessingInformation dst, const QSiz
         float major_radius = 0.5f * frequency * ratio_x;
         float minor_radius = 0.5f * frequency * ratio_y;
         while(it.nextPixel()){
-            double x_phase = (double)it.x() / (double)bounds.width() * M_PI * 2;
-            double y_phase = (double)it.y() / (double)(bounds.height()) * M_PI * 2;
+            double x_phase = (double)it.x() / (double)whole_image_bounds.width() * M_PI * 2;
+            double y_phase = (double)it.y() / (double)(whole_image_bounds.height()) * M_PI * 2;
             double x_coordinate = major_radius * map_range(cos(x_phase), -1.0, 1.0, 0.0, 1.0);
             double y_coordinate = major_radius * map_range(sin(x_phase), -1.0, 1.0, 0.0, 1.0);
             double z_coordinate = minor_radius * map_range(cos(y_phase), -1.0, 1.0, 0.0, 1.0);
             double w_coordinate = minor_radius * map_range(sin(y_phase), -1.0, 1.0, 0.0, 1.0);
             double value = open_simplex_noise4(noise_context, x_coordinate, y_coordinate, z_coordinate, w_coordinate);
-            value = map_range(value, -1.0, 1.0, 0.0, 255.0);
-            QColor color = qRgb(static_cast<int>(value),
-                                static_cast<int>(value),
-                                static_cast<int>(value));
-            cs->fromQColor(color, it.rawData());
+            value = map_range(value, -1.0, 1.0, 0.0, 1.0);
+
+            KoColor c(src);
+            reinterpret_cast<float *>(c.data())[0] = value;
+            c.setOpacity(OPACITY_OPAQUE_F);
+
+            conv->transform(c.data(), it.rawData(), 1);
         }
     } else {
         while(it.nextPixel()){
-            double x_phase = (double)it.x() / (double)(bounds.width()) * ratio_x;
-            double y_phase = (double)it.y() / (double)(bounds.height()) * ratio_y;
+            double x_phase = (double)it.x() / (double)(whole_image_bounds.width()) * ratio_x;
+            double y_phase = (double)it.y() / (double)(whole_image_bounds.height()) * ratio_y;
             double value = open_simplex_noise4(noise_context, x_phase * frequency, y_phase * frequency, x_phase * frequency, y_phase * frequency);
-            value = map_range(value, -1.0, 1.0, 0.0, 255.0);
-            QColor color = qRgb(static_cast<int>(value),
-                                static_cast<int>(value),
-                                static_cast<int>(value));
-            cs->fromQColor(color, it.rawData());
+            value = map_range(value, -1.0, 1.0, 0.0, 1.0);
+
+            KoColor c(src);
+            reinterpret_cast<float *>(c.data())[0] = value;
+            c.setOpacity(OPACITY_OPAQUE_F);
+
+            conv->transform(c.data(), it.rawData(), 1);
         }
     }
-
+    delete conv;
     open_simplex_noise_free(noise_context);
 }
 
-KisFilterConfigurationSP KisSimplexNoiseGenerator::factoryConfiguration() const
+KisFilterConfigurationSP KisSimplexNoiseGenerator::defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const
 {
-    KisFilterConfigurationSP config = new KisFilterConfiguration("simplex_noise", 1);
+    KisFilterConfigurationSP config = factoryConfiguration(resourcesInterface);
     config->setProperty("looping", false);
     config->setProperty("frequency", 25.0);
     uint seed = static_cast<uint>(rand());

@@ -48,7 +48,7 @@ KisParticlePaintOpSettingsWidget::~ KisParticlePaintOpSettingsWidget()
 
 KisPropertiesConfigurationSP  KisParticlePaintOpSettingsWidget::configuration() const
 {
-    KisParticlePaintOpSettings* config = new KisParticlePaintOpSettings();
+    KisParticlePaintOpSettings* config = new KisParticlePaintOpSettings(resourcesInterface());
     config->setOptionsWidget(const_cast<KisParticlePaintOpSettingsWidget*>(this));
     config->setProperty("paintop", "particlebrush"); // XXX: make this a const id string
     writeConfiguration(config);

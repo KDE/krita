@@ -25,6 +25,7 @@
 #include "kritaimage_export.h"
 
 #include <QVector>
+#include <KisRegion.h>
 
 class QRect;
 class QStringList;
@@ -38,7 +39,7 @@ class KisBusyProgressIndicator;
 class KisAbstractProjectionPlane;
 class KisProjectionLeaf;
 class KisKeyframeChannel;
-class KisTimeRange;
+class KisTimeSpan;
 class KisUndoAdapter;
 
 
@@ -128,7 +129,7 @@ public:
      * this percolates up to parent nodes all the way to the root
      * node, if propagate is true;
      */
-    void setDirty(const QRegion &region);
+    void setDirty(const KisRegion &region);
 
     /**
      * Convenience override of multirect version of setDirtyDontResetAnimationCache()
@@ -152,11 +153,13 @@ public:
     void setDirtyDontResetAnimationCache(const QVector<QRect> &rects);
 
     /**
-     * Informs that the frames in the given range are no longer valid
-     * and need to be recached.
+     * Informs animation cache that the frames in the given range are
+     * no longer valid and need to be recached.
      * @param range frames to invalidate
      */
-    void invalidateFrames(const KisTimeRange &range, const QRect &rect);
+    void invalidateFrames(const KisTimeSpan &range, const QRect &rect);
+
+    void handleKeyframeChannelUpdate(const KisTimeSpan &range, const QRect &rect);
 
     /**
      * Informs that the current world time should be changed.
@@ -188,7 +191,7 @@ public:
 
     /**
      * The rendering of the image may not always happen in the order
-     * of the main graph. Pass-through nodes ake some subgraphs
+     * of the main graph. Pass-through nodes make some subgraphs
      * linear, so it the order of rendering change. projectionLeaf()
      * is a special interface of KisNode that represents "a graph for
      * projection rendering". Therefore the nodes in projectionLeaf()
@@ -209,7 +212,7 @@ protected:
      * a requested rect. E.g. we change a rect of 2x2, then we want to
      * apply a convolution filter with kernel 4x4 (changeRect is
      * (2+2*3)x(2+2*3)=8x8) to that area. The rect that should be updated
-     * on the layer will be exaclty 8x8. More than that the needRect for
+     * on the layer will be exactly 8x8. More than that the needRect for
      * that update will be 14x14. See \ref needeRect.
      */
     virtual QRect changeRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;

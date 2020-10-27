@@ -127,6 +127,7 @@ KisZoomAction::KisZoomAction()
     shortcuts.insert(i18n("Reset Zoom to 100%"), ZoomResetShortcut);
     shortcuts.insert(i18n("Fit to Page"), ZoomToPageShortcut);
     shortcuts.insert(i18n("Fit to Width"), ZoomToWidthShortcut);
+    shortcuts.insert(i18n("Fit to Height"), ZoomToHeightShortcut);
     setShortcutIndexes(shortcuts);
 }
 
@@ -167,9 +168,7 @@ void KisZoomAction::begin(int shortcut, QEvent *event)
         case RelativeZoomModeShortcut: {
             d->startZoom = inputManager()->canvas()->viewManager()->zoomController()->zoomAction()->effectiveZoom();
             d->mode = (Shortcuts)shortcut;
-            QTouchEvent *tevent = dynamic_cast<QTouchEvent*>(event);
-            if(tevent)
-                d->lastPosition = d->centerPoint(tevent);
+            d->lastPosition = QPoint();
             break;
         }
         case DiscreteZoomModeShortcut:
@@ -193,6 +192,9 @@ void KisZoomAction::begin(int shortcut, QEvent *event)
         case ZoomToWidthShortcut:
             inputManager()->canvas()->viewManager()->zoomController()->setZoom(KoZoomMode::ZOOM_WIDTH, 1.0);
             break;
+        case ZoomToHeightShortcut:
+            inputManager()->canvas()->viewManager()->zoomController()->setZoom(KoZoomMode::ZOOM_HEIGHT, 1.0);
+            break;
     }
 }
 
@@ -201,33 +203,75 @@ void KisZoomAction::inputEvent( QEvent* event )
     switch (event->type()) {
         case QEvent::TouchUpdate: {
             QTouchEvent *tevent = static_cast<QTouchEvent*>(event);
+
+            if (tevent->touchPoints().count() != 2) {
+                // Sanity check. The input state machine should only invoke
+                // this action if there are 2 TouchPoints in the event.
+                return;
+            }
+
+            // First, let's determine if we want to handle this event. Sadly
+            // the coordinates of TouchPoints reported by Qt are not always
+            // dependable. TouchPoints that are just getting released can be
+            // off by a significant amount. So we stop the zoom as soon as the
+            // user lifts a finger.
+
+            QTouchEvent::TouchPoint tp0 = tevent->touchPoints().at(0);
+            QTouchEvent::TouchPoint tp1 = tevent->touchPoints().at(1);
+            if (tp0.state() == Qt::TouchPointReleased ||
+                    tp1.state() == Qt::TouchPointReleased) {
+                // Force a recomputation of the position on the next event.
+                d->lastPosition = QPoint();
+                return;
+            }
+
+            QPointF p0 = tp0.pos();
+            QPointF p1 = tp1.pos();
+
+            // Make sure none of the TouchPoints are too close together, which
+            // throws off the zoom calculations. This also addresses a glitch
+            // where a newly pressed TouchPoint can incorrectly report another
+            // existing TouchPoint's coordinates instead of its own.
+
+            if ((p0-p1).manhattanLength() < 10) {
+                d->lastPosition = QPointF();
+                return;
+            }
+
+            // If this is the first valid set of points that we are getting,
+            // then use that as the reference for the zoom.
+
             QPointF center = d->centerPoint(tevent);
-
-            int count = 0;
-            float dist = 0.0f;
-            Q_FOREACH (const QTouchEvent::TouchPoint &point, tevent->touchPoints()) {
-                if (point.state() != Qt::TouchPointReleased) {
-                    count++;
-                    dist += (point.pos() - center).manhattanLength();
-                }
-            }
-            if (count == 0) {
-                count = 1;
+            if (d->lastPosition.isNull()) {
+                d->lastPosition = center;
+                d->lastDistance = 0;
+                return;
             }
 
-            dist /= count;
+            float dist = ((p0 - center).manhattanLength() + (p1 - center).manhattanLength()) / 2;
             float delta = qFuzzyCompare(1.0f, 1.0f + d->lastDistance) ? 1.f : dist / d->lastDistance;
 
-            if(qAbs(delta) > 0.1f) {
-                qreal zoom = inputManager()->canvas()->viewManager()->zoomController()->zoomAction()->effectiveZoom();
-                Q_UNUSED(zoom);
-                static_cast<KisCanvasController*>(inputManager()->canvas()->canvasController())->zoomRelativeToPoint(center.toPoint(), delta);
-                d->lastDistance = dist;
-                // Also do panning here, as doing it later requires a further check for validity
-                QPointF moveDelta = center - d->lastPosition;
-                inputManager()->canvas()->canvasController()->pan(-moveDelta.toPoint());
+            // Workaround: only apply the zoom delta if it's not too
+            // outlandish. As explained above, TouchPoint coordinates are not
+            // always 100% reliable.
+
+            if(qAbs(delta) < 0.8f || qAbs(delta) > 1.2f) {
+                // TouchPoint coordinates tend to converge toward correct
+                // values over time, so assume that the new position is
+                // likelier to be correct than the last and use that as the new
+                // reference.
                 d->lastPosition = center;
+                return;
             }
+
+            qreal zoom = inputManager()->canvas()->viewManager()->zoomController()->zoomAction()->effectiveZoom();
+            Q_UNUSED(zoom);
+            static_cast<KisCanvasController*>(inputManager()->canvas()->canvasController())->zoomRelativeToPoint(center.toPoint(), delta);
+            d->lastDistance = dist;
+            // Also do panning here, as doing it later requires a further check for validity
+            QPointF moveDelta = center - d->lastPosition;
+            inputManager()->canvas()->canvasController()->pan(-moveDelta.toPoint());
+            d->lastPosition = center;
             return;  // Don't try to update the cursor during a pinch-zoom
         }
         case QEvent::NativeGesture: {

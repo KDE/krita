@@ -24,8 +24,9 @@
 #include "filter/kis_filter.h"
 #include "filter/kis_filter_configuration.h"
 #include "filter/kis_filter_registry.h"
+#include <KisGlobalResourcesInterface.h>
 #include "testutil.h"
-
+#include "testing_timed_default_bounds.h"
 
 void KisUnsharpMaskTest::testUnsharpWithTransparency()
 {
@@ -38,11 +39,12 @@ void KisUnsharpMaskTest::testUnsharpWithTransparency()
 
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     dev->convertFromQImage(srcImage, 0, 0, 0);
+    dev->setDefaultBounds(new TestUtil::TestingTimedDefaultBounds(srcImage.rect()));
 
     KisFilterSP f = KisFilterRegistry::instance()->value("unsharp");
     Q_ASSERT(f);
 
-    KisFilterConfigurationSP  kfc = f->defaultConfiguration();
+    KisFilterConfigurationSP  kfc = f->defaultConfiguration(KisGlobalResourcesInterface::instance());
     Q_ASSERT(kfc);
 
     kfc->setProperty("halfSize", 3);
@@ -58,10 +60,10 @@ void KisUnsharpMaskTest::testUnsharpWithTransparency()
                              imageRect.x(), imageRect.y(),
                              imageRect.width(), imageRect.height());
 
-    TestUtil::checkQImage(resultImage,
-                          "unsharp_mask_test",
-                          "with_transparency",
-                          "unsharp_with_transparency");
+    TestUtil::checkQImagePremultiplied(resultImage,
+                                       "unsharp_mask_test",
+                                       "with_transparency",
+                                       "unsharp_with_transparency", 1, 7);
 }
 
 QTEST_MAIN(KisUnsharpMaskTest)

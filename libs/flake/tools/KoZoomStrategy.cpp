@@ -27,6 +27,8 @@
 
 #include <FlakeDebug.h>
 
+#include <QTransform>
+
 KoZoomStrategy::KoZoomStrategy(KoZoomTool *tool, KoCanvasController *controller, const QPointF &clicked)
         : KoShapeRubberSelectStrategy(tool, clicked, false),
         m_controller(controller),
@@ -37,8 +39,12 @@ KoZoomStrategy::KoZoomStrategy(KoZoomTool *tool, KoCanvasController *controller,
 void KoZoomStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
 {
     Q_D(KoShapeRubberSelectStrategy);
-    QRect pixelRect = m_controller->canvas()->viewConverter()->documentToView(d->selectedRect()).toRect();
-    pixelRect.translate(m_controller->canvas()->documentOrigin());
+
+    const QTransform documentToWidget =
+            m_controller->canvas()->viewConverter()->documentToView() *
+            m_controller->canvas()->viewConverter()->viewToWidget();
+
+    const QRect pixelRect = documentToWidget.mapRect(d->selectedRect()).toRect();
 
     bool m_zoomOut = m_forceZoomOut;
     if (modifiers & Qt::ControlModifier) {
@@ -56,8 +62,7 @@ void KoZoomStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
 void KoZoomStrategy::cancelInteraction()
 {
     Q_D(KoShapeRubberSelectStrategy);
-    d->tool->repaintDecorations();
-    d->tool->canvas()->updateCanvas(d->selectedRect().toRect().normalized());
+    d->tool->canvas()->updateCanvas(d->selectedRect().normalized() | d->tool->decorationsRect());
 }
 
 KoShapeRubberSelectStrategy::SelectionMode KoZoomStrategy::currentMode() const

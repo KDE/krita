@@ -57,12 +57,12 @@ public:
     }
 
     QRect exactBounds() {
-        return m_exactBoundsCache.getValue();
+        return m_exactBoundsCache.getValue(m_paintDevice->defaultBounds()->wrapAroundMode());
     }
 
     QRect exactBoundsAmortized() {
         QRect bounds;
-        bool result = m_exactBoundsCache.tryGetValue(bounds);
+        bool result = m_exactBoundsCache.tryGetValue(bounds, m_paintDevice->defaultBounds()->wrapAroundMode());
 
         if (!result) {
             /**
@@ -78,11 +78,11 @@ public:
     }
 
     QRect nonDefaultPixelArea() {
-        return m_nonDefaultPixelAreaCache.getValue();
+        return m_nonDefaultPixelAreaCache.getValue(m_paintDevice->defaultBounds()->wrapAroundMode());
     }
 
-    QRegion region() {
-        return m_regionCache.getValue();
+    KisRegion region() {
+        return m_regionCache.getValue(m_paintDevice->defaultBounds()->wrapAroundMode());
     }
 
     QImage createThumbnail(qint32 w, qint32 h, qreal oversample, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags) {
@@ -128,7 +128,7 @@ private:
 private:
     KisPaintDevice *m_paintDevice;
 
-    struct ExactBoundsCache : KisLockFreeCache<QRect> {
+    struct ExactBoundsCache : KisLockFreeCacheWithModeConsistency<QRect, bool> {
         ExactBoundsCache(KisPaintDevice *paintDevice) : m_paintDevice(paintDevice) {}
 
         QRect calculateNewValue() const override {
@@ -138,7 +138,7 @@ private:
         KisPaintDevice *m_paintDevice;
     };
 
-    struct NonDefaultPixelCache : KisLockFreeCache<QRect> {
+    struct NonDefaultPixelCache : KisLockFreeCacheWithModeConsistency<QRect, bool> {
         NonDefaultPixelCache(KisPaintDevice *paintDevice) : m_paintDevice(paintDevice) {}
 
         QRect calculateNewValue() const override {
@@ -148,10 +148,10 @@ private:
         KisPaintDevice *m_paintDevice;
     };
 
-    struct RegionCache : KisLockFreeCache<QRegion> {
+    struct RegionCache : KisLockFreeCacheWithModeConsistency<KisRegion, bool> {
         RegionCache(KisPaintDevice *paintDevice) : m_paintDevice(paintDevice) {}
 
-        QRegion calculateNewValue() const override {
+        KisRegion calculateNewValue() const override {
             return m_paintDevice->dataManager()->region();
         }
     private:

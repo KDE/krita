@@ -22,6 +22,8 @@
 #ifndef KOCREATEPATHTOOL_P_H
 #define KOCREATEPATHTOOL_P_H
 
+#include <QPainterPath>
+
 #include "KoCreatePathTool.h"
 #include "KoPathPoint.h"
 #include "KoPathPointData.h"
@@ -409,6 +411,7 @@ public:
         existingStartPoint = 0;
         existingEndPoint = 0;
         hoveredPoint = 0;
+        activePoint = 0;
     }
 
     void angleDeltaChanged(int value) {

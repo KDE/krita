@@ -24,7 +24,7 @@
 #include <KisPart.h>
 #include <Document.h>
 
-#include  <sdk/tests/kistest.h>
+#include  <sdk/tests/testui.h>
 
 void TestNotifier::testNotifier()
 {

@@ -18,7 +18,8 @@
 #ifndef FILESTEST
 #define FILESTEST
 
-#include "testutil.h"
+#include <testutil.h>
+#include "testui.h"
 
 #include <QDir>
 
@@ -83,6 +84,7 @@ void testFiles(const QString& _dirname, const QStringList& exclusions, const QSt
                 doc->image()->convertImageColorSpace(KoColorSpaceRegistry::instance()->rgb8(),
                                                     KoColorConversionTransformation::IntentAbsoluteColorimetric,
                                                     KoColorConversionTransformation::NoOptimization);
+                doc->image()->waitForDone();
             }
 
             qApp->processEvents();
@@ -204,7 +206,7 @@ void testImportFromWriteonly(const QString& _dirname, QString mimetype = "")
 }
 
 
-void testExportToReadonly(const QString& _dirname, QString mimetype = "", bool useDocumentExport=false)
+void testExportToReadonly(const QString& _dirname, QString mimetype = "")
 {
     QString readonlyFilename = _dirname + "readonlyFile.txt";
 
@@ -226,21 +228,10 @@ void testExportToReadonly(const QString& _dirname, QString mimetype = "", bool u
 
     doc->setCurrentImage(p.image);
 
-    if (useDocumentExport) {
-        bool result = doc->exportDocumentSync(QUrl(sourceFileInfo.absoluteFilePath()), mimetype.toUtf8());
-        status = result ? ImportExportCodes::OK : ImportExportCodes::Failure;
-    } else {
-        status = manager.exportDocument(sourceFileInfo.absoluteFilePath(), sourceFileInfo.absoluteFilePath(), mimetype.toUtf8());
-    }
+    bool result = doc->exportDocumentSync(QUrl(sourceFileInfo.absoluteFilePath()), mimetype.toUtf8());
+    status = result ? ImportExportCodes::OK : ImportExportCodes::Failure;
 
     qDebug() << "export result = " << status;
-
-    if (!useDocumentExport && status == ImportExportCodes::FileFormatIncorrect) {
-        qDebug() << "Make sure you set the correct mimetype in the test case.";
-        failMessage = "Incorrect status.";
-        fail = true;
-    }
-
 
     qApp->processEvents();
 
@@ -276,7 +267,6 @@ void testImportIncorrectFormat(const QString& _dirname, QString mimetype = "")
     KisImportExportErrorCode status = manager.importDocument(sourceFileInfo.absoluteFilePath(), mimetype);
     qDebug() << "import result = " << status;
 
-
     qApp->processEvents();
 
     if (doc->image()) {
@@ -292,7 +282,7 @@ void testImportIncorrectFormat(const QString& _dirname, QString mimetype = "")
 }
 
 
-void testExportToColorSpace(const QString& _dirname, QString mimetype, const KoColorSpace* space, KisImportExportErrorCode expected, bool useDocumentExport=false)
+void testExportToColorSpace(const QString& _dirname, QString mimetype, const KoColorSpace* space, KisImportExportErrorCode expected)
 {
     QString colorspaceFilename = _dirname + "colorspace.txt";
 
@@ -316,14 +306,10 @@ void testExportToColorSpace(const QString& _dirname, QString mimetype, const KoC
 
     doc->setCurrentImage(p.image);
     doc->image()->convertImageColorSpace(space, KoColorConversionTransformation::Intent::IntentPerceptual, KoColorConversionTransformation::ConversionFlag::Empty);
+    doc->image()->waitForDone();
 
-
-    if (useDocumentExport) {
-        bool result = doc->exportDocumentSync(QUrl(QString("file:") + QString(colorspaceFilename)), mimetype.toUtf8());
-        statusExport = result ? ImportExportCodes::OK : ImportExportCodes::Failure;
-    } else {
-        statusExport = manager.exportDocument(colorspaceFilename, colorspaceFilename, mimetype.toUtf8());
-    }
+    bool result = doc->exportDocumentSync(QUrl(QString("file:") + QString(colorspaceFilename)), mimetype.toUtf8());
+    statusExport = result ? ImportExportCodes::OK : ImportExportCodes::Failure;
 
     statusImport = manager.importDocument(colorspaceFilename, mimetype.toUtf8());
     if (!(statusImport == ImportExportCodes::OK)) {
@@ -338,13 +324,6 @@ void testExportToColorSpace(const QString& _dirname, QString mimetype, const KoC
         fail = true;
         failMessage = "Mismatch of color spaces";
     }
-
-    if (!useDocumentExport && statusExport == ImportExportCodes::FileFormatIncorrect) {
-        qDebug() << "Make sure you set the correct mimetype in the test case.";
-        failMessage = "Incorrect status.";
-        fail = true;
-    }
-
 
     qApp->processEvents();
 
@@ -362,10 +341,7 @@ void testExportToColorSpace(const QString& _dirname, QString mimetype, const KoC
     }
 
     QVERIFY(statusExport.isOk());
-    if (!useDocumentExport) {
-        QVERIFY(statusExport == expected);
-    }
-
+    QVERIFY(statusExport == expected);
 }
 
 

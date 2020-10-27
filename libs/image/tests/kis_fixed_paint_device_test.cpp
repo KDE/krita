@@ -34,7 +34,8 @@
 #include "kis_selection.h"
 #include "kis_datamanager.h"
 #include "kis_global.h"
-#include "testutil.h"
+#include <testutil.h>
+#include <testimage.h>
 #include "kis_transaction.h"
 #include "kis_image.h"
 
@@ -80,7 +81,7 @@ void logFailure(const QString & reason, const KoColorSpace * srcCs, const KoColo
 
 void KisFixedPaintDeviceTest::testColorSpaceConversion()
 {
-    QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "tile.png");
+    QImage image(QString(FILES_DATA_DIR) + '/' + "tile.png");
     const KoColorSpace* srcCs = KoColorSpaceRegistry::instance()->rgb8();
     const KoColorSpace* dstCs = KoColorSpaceRegistry::instance()->lab16();
     KisFixedPaintDeviceSP dev = new KisFixedPaintDevice(srcCs);
@@ -97,7 +98,7 @@ void KisFixedPaintDeviceTest::testColorSpaceConversion()
 
 void KisFixedPaintDeviceTest::testRoundtripQImageConversion()
 {
-    QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
+    QImage image(QString(FILES_DATA_DIR) + '/' + "hakonepa.png");
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisFixedPaintDeviceSP dev = new KisFixedPaintDevice(cs);
     dev->convertFromQImage(image, 0);
@@ -114,7 +115,7 @@ void KisFixedPaintDeviceTest::testRoundtripQImageConversion()
 
 void KisFixedPaintDeviceTest::testBltFixed()
 {
-    QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
+    QImage image(QString(FILES_DATA_DIR) + '/' + "hakonepa.png");
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisFixedPaintDeviceSP fdev = new KisFixedPaintDevice(cs);
     fdev->convertFromQImage(image, 0);
@@ -140,7 +141,7 @@ void KisFixedPaintDeviceTest::testBltFixedOpacity()
 {
     // blt a semi-transparent image on a white paint device
 
-    QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa_transparent.png");
+    QImage image(QString(FILES_DATA_DIR) + '/' + "hakonepa_transparent.png");
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisFixedPaintDeviceSP fdev = new KisFixedPaintDevice(cs);
     fdev->convertFromQImage(image, 0);
@@ -151,7 +152,7 @@ void KisFixedPaintDeviceTest::testBltFixedOpacity()
     gc.bltFixed(QPoint(0, 0), fdev, image.rect());
 
     QImage result = dev->convertToQImage(0, 0, 0, 640, 441);
-    QImage checkResult(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa_transparent_result.png");
+    QImage checkResult(QString(FILES_DATA_DIR) + '/' + "hakonepa_transparent_result.png");
     QPoint errpoint;
 
     if (!TestUtil::compareQImages(errpoint, checkResult, result, 1)) {
@@ -216,7 +217,7 @@ void KisFixedPaintDeviceTest::testFill()
 
 void KisFixedPaintDeviceTest::testBltFixedSmall()
 {
-    QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "fixed_blit_small.png");
+    QImage image(QString(FILES_DATA_DIR) + '/' + "fixed_blit_small.png");
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisFixedPaintDeviceSP fdev = new KisFixedPaintDevice(cs);
     fdev->convertFromQImage(image, 0);
@@ -239,7 +240,7 @@ void KisFixedPaintDeviceTest::testBltFixedSmall()
 
 void KisFixedPaintDeviceTest::testBltPerformance()
 {
-    QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa_transparent.png");
+    QImage image(QString(FILES_DATA_DIR) + '/' + "hakonepa_transparent.png");
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisFixedPaintDeviceSP fdev = new KisFixedPaintDevice(cs);
     fdev->convertFromQImage(image, 0);
@@ -248,7 +249,7 @@ void KisFixedPaintDeviceTest::testBltPerformance()
     dev->fill(0, 0, 640, 441, KoColor(Qt::white, cs).data());
 
 
-    QTime t;
+    QElapsedTimer t;
     t.start();
 
     int x;

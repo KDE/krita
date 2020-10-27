@@ -112,11 +112,13 @@ struct KisWindowLayoutResource::Private
     };
 
     QVector<Window> windows;
-    bool showImageInAllWindows;
-    bool primaryWorkspaceFollowsFocus;
+    bool showImageInAllWindows {false};
+    bool primaryWorkspaceFollowsFocus {false};
     QUuid primaryWindow;
 
     Private() = default;
+    Private(const Private &rhs) = default;
+
 
     explicit Private(QVector<Window> windows)
         : windows(std::move(windows))
@@ -222,12 +224,23 @@ KisWindowLayoutResource::KisWindowLayoutResource(const QString &filename)
 KisWindowLayoutResource::~KisWindowLayoutResource()
 {}
 
-KisWindowLayoutResource * KisWindowLayoutResource::fromCurrentWindows(
+KisWindowLayoutResource::KisWindowLayoutResource(const KisWindowLayoutResource &rhs)
+    : KoResource(rhs)
+    , d(new Private(*rhs.d))
+{
+}
+
+KoResourceSP KisWindowLayoutResource::clone() const
+{
+    return KoResourceSP(new KisWindowLayoutResource(*this));
+}
+
+KisWindowLayoutResourceSP KisWindowLayoutResource::fromCurrentWindows(
     const QString &filename, const QList<QPointer<KisMainWindow>> &mainWindows, bool showImageInAllWindows,
     bool primaryWorkspaceFollowsFocus, KisMainWindow *primaryWindow
 )
 {
-    auto resource = new KisWindowLayoutResource(filename);
+    KisWindowLayoutResourceSP resource(new KisWindowLayoutResource(filename));
     resource->setWindows(mainWindows);
     resource->d->showImageInAllWindows = showImageInAllWindows;
     resource->d->primaryWorkspaceFollowsFocus = primaryWorkspaceFollowsFocus;
@@ -297,35 +310,6 @@ void KisWindowLayoutResource::applyLayout()
     layoutManager->setPrimaryWorkspaceFollowsFocus(d->primaryWorkspaceFollowsFocus, d->primaryWindow);
 }
 
-bool KisWindowLayoutResource::save()
-{
-    if (filename().isEmpty())
-        return false;
-
-    QFile file(filename());
-    file.open(QIODevice::WriteOnly);
-    bool res = saveToDevice(&file);
-    file.close();
-    return res;
-}
-
-bool KisWindowLayoutResource::load()
-{
-    if (filename().isEmpty())
-         return false;
-
-    QFile file(filename());
-    if (file.size() == 0) return false;
-    if (!file.open(QIODevice::ReadOnly)) {
-        warnKrita << "Can't open file " << filename();
-        return false;
-    }
-
-    bool res = loadFromDevice(&file);
-    file.close();
-    return res;
-}
-
 bool KisWindowLayoutResource::saveToDevice(QIODevice *dev) const
 {
     QDomDocument doc;
@@ -346,8 +330,10 @@ bool KisWindowLayoutResource::saveToDevice(QIODevice *dev) const
     return true;
 }
 
-bool KisWindowLayoutResource::loadFromDevice(QIODevice *dev)
+bool KisWindowLayoutResource::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface)
 {
+    Q_UNUSED(resourcesInterface);
+
     QDomDocument doc;
     if (!doc.setContent(dev)) {
         return false;

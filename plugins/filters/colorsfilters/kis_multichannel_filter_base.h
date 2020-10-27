@@ -2,6 +2,7 @@
  * This file is part of Krita
  *
  * Copyright (c) 2018 Jouni Pentikainen <joupent@gmail.com>
+ * Copyright (c) 2020 L. E. Segovia <amy@amyspark.me>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -58,7 +59,8 @@ protected:
 class KisMultiChannelFilterConfiguration : public KisColorTransformationConfiguration
 {
 public:
-    KisMultiChannelFilterConfiguration(int channelCount, const QString & name, qint32 version);
+    KisMultiChannelFilterConfiguration(int channelCount, const QString & name, qint32 version, KisResourcesInterfaceSP resourcesInterface);
+    KisMultiChannelFilterConfiguration(const KisMultiChannelFilterConfiguration &rhs);
     ~KisMultiChannelFilterConfiguration() override;
 
     using KisFilterConfiguration::fromXML;
@@ -75,6 +77,8 @@ public:
 
     const QVector<QVector<quint16> >& transfers() const;
     const QList<KisCubicCurve>& curves() const override;
+
+    virtual bool compareTo(const KisPropertiesConfiguration* rhs) const override;
 
 protected:
     int m_channelCount;
@@ -105,7 +109,7 @@ class KisMultiChannelConfigWidget : public KisConfigWidget
     Q_OBJECT
 
 public:
-    KisMultiChannelConfigWidget(QWidget * parent, KisPaintDeviceSP dev, Qt::WindowFlags f = 0);
+    KisMultiChannelConfigWidget(QWidget * parent, KisPaintDeviceSP dev, Qt::WindowFlags f = Qt::WindowFlags());
     ~KisMultiChannelConfigWidget() override;
 
     void setConfiguration(const KisPropertiesConfigurationSP config) override;

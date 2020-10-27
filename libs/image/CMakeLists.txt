@@ -85,7 +85,6 @@ set(kritaimage_LIB_SRCS
    commands/kis_image_change_layers_command.cpp
    commands/kis_image_change_visibility_command.cpp
    commands/kis_image_command.cpp
-   commands/kis_image_set_projection_color_space_command.cpp
    commands/kis_image_layer_add_command.cpp
    commands/kis_image_layer_move_command.cpp
    commands/kis_image_layer_remove_command.cpp
@@ -112,8 +111,14 @@ set(kritaimage_LIB_SRCS
    commands_new/kis_activate_selection_mask_command.cpp
    commands_new/kis_transaction_based_command.cpp
    commands_new/KisHoldUIUpdatesCommand.cpp
+   commands_new/KisChangeChannelFlagsCommand.cpp
+   commands_new/KisChangeChannelLockFlagsCommand.cpp
+   commands_new/KisMergeLabeledLayersCommand.cpp
+   commands_new/KisAsynchronouslyMergeableCommandInterface.cpp
    processing/kis_do_nothing_processing_visitor.cpp
    processing/kis_simple_processing_visitor.cpp
+   processing/kis_convert_color_space_processing_visitor.cpp
+   processing/kis_assign_profile_processing_visitor.cpp
    processing/kis_crop_processing_visitor.cpp
    processing/kis_crop_selections_processing_visitor.cpp
    processing/kis_transform_processing_visitor.cpp
@@ -128,6 +133,7 @@ set(kritaimage_LIB_SRCS
    generator/kis_generator.cpp
    generator/kis_generator_layer.cpp
    generator/kis_generator_registry.cpp
+   generator/kis_generator_stroke_strategy.cpp
    floodfill/kis_fill_interval_map.cpp
    floodfill/kis_scanline_fill.cpp
    lazybrush/kis_min_cut_worker.cpp
@@ -138,6 +144,7 @@ set(kritaimage_LIB_SRCS
    lazybrush/kis_colorize_stroke_strategy.cpp
    KisDelayedUpdateNodeInterface.cpp
    KisCroppedOriginalLayerInterface.cpp
+   KisDecoratedNodeInterface.cpp
    kis_adjustment_layer.cc
    kis_selection_based_layer.cpp
    kis_node_filter_interface.cpp
@@ -145,9 +152,10 @@ set(kritaimage_LIB_SRCS
    kis_base_node.cpp
    kis_base_processor.cpp
    kis_bookmarked_configuration_manager.cc
+   KisBusyWaitBroker.cpp
+   KisSafeBlockingQueueConnectionProxy.cpp
    kis_node_uuid_info.cpp
    kis_clone_layer.cpp
-   kis_colorspace_convert_visitor.cpp
    kis_config_widget.cpp
    kis_convolution_kernel.cc
    kis_convolution_painter.cc
@@ -155,6 +163,7 @@ set(kritaimage_LIB_SRCS
    kis_edge_detection_kernel.cpp
    kis_cubic_curve.cpp
    kis_default_bounds.cpp
+   kis_default_bounds_node_wrapper.cpp
    kis_default_bounds_base.cpp
    kis_effect_mask.cc
    kis_fast_math.cpp
@@ -197,11 +206,12 @@ set(kritaimage_LIB_SRCS
    kis_update_time_monitor.cpp
    KisImageConfigNotifier.cpp
    kis_group_layer.cc
+   kis_external_layer_iface.cc
    kis_count_visitor.cpp
    kis_histogram.cc
    kis_image_interfaces.cpp
    kis_image_animation_interface.cpp
-   kis_time_range.cpp
+   kis_time_span.cpp
    kis_node_graph_listener.cpp
    kis_image.cc
    kis_image_signal_router.cpp
@@ -281,6 +291,7 @@ set(kritaimage_LIB_SRCS
    kis_selection_filters.cpp
    KisProofingConfiguration.h
    KisRecycleProjectionsJob.cpp
+   kis_selection_component.cc
 
    kis_keyframe.cpp
    kis_keyframe_channel.cpp
@@ -291,7 +302,6 @@ set(kritaimage_LIB_SRCS
    kis_onion_skin_cache.cpp
    kis_idle_watcher.cpp
 
-   kis_psd_layer_style.cpp
    kis_layer_properties_icons.cpp
 
    layerstyles/kis_multiple_projection.cpp
@@ -311,6 +321,11 @@ set(kritaimage_LIB_SRCS
    KisProofingConfiguration.cpp
 
    kis_node_query_path.cc
+
+
+    kis_asl_layer_style_serializer.cpp
+    KisAslStorage.cpp
+    kis_psd_layer_style.cpp
 )
 
 set(einspline_SRCS
@@ -331,11 +346,12 @@ target_link_libraries(kritaimage
         kritawidgets 
         kritaglobal 
         kritapsd 
-        kritaodf 
+         
         kritapigment 
         kritacommand
         kritawidgetutils 
         kritametadata
+        kritaresources
         Qt5::Concurrent
 )
 

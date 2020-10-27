@@ -19,6 +19,7 @@
 
 #include "KisImportExportManager.h"
 
+#include <QDir>
 #include <QFile>
 #include <QLabel>
 #include <QVBoxLayout>
@@ -59,7 +60,7 @@
 #include "kis_painter.h"
 #include "kis_guides_config.h"
 #include "kis_grid_config.h"
-#include "kis_popup_button.h"
+#include "KisPopupButton.h"
 #include <kis_iterator_ng.h>
 #include "kis_async_action_feedback.h"
 #include "KisReferenceImagesLayer.h"
@@ -177,7 +178,11 @@ QStringList KisImportExportManager::supportedMimeTypes(Direction direction)
                 }
             }
             qDeleteAll(list);
-            m_importMimeTypes = mimeTypes.toList();
+#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
+            m_importMimeTypes = QList<QString>(mimeTypes.begin(), mimeTypes.end());
+#else
+            m_importMimeTypes = QList<QString>::fromSet(mimeTypes);
+#endif
         }
         return m_importMimeTypes;
     }
@@ -191,8 +196,13 @@ QStringList KisImportExportManager::supportedMimeTypes(Direction direction)
                     mimeTypes << mimetype;
                 }
             }
-            qDeleteAll(list);
-            m_exportMimeTypes = mimeTypes.toList();
+           qDeleteAll(list);
+#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
+            m_exportMimeTypes = QList<QString>(mimeTypes.begin(), mimeTypes.end());
+#else
+           m_exportMimeTypes = QList<QString>::fromSet(mimeTypes);
+#endif
+
         }
         return m_exportMimeTypes;
     }
@@ -269,7 +279,7 @@ QString KisImportExportManager::askForAudioFileName(const QString &defaultDir, Q
     mimeTypes << "audio/flac";
 
     dialog.setMimeTypeFilters(mimeTypes);
-    dialog.setCaption(i18nc("@titile:window", "Open Audio"));
+    dialog.setCaption(i18nc("@title:window", "Open Audio"));
 
     return dialog.filename();
 }
@@ -362,17 +372,21 @@ KisImportExportManager::ConversionResult KisImportExportManager::convert(KisImpo
             result = doImport(location, filter);
         }
         if (result.status().isOk()) {
-            KisImageSP image = m_document->image();
-            KisUsageLogger::log(QString("Loaded image from %1. Size: %2 * %3 pixels, %4 dpi. Color model: %6 %5 (%7). Layers: %8")
-                                .arg(QString::fromLatin1(from))
-                                .arg(image->width())
-                                .arg(image->height())
-                                .arg(image->xRes())
-                                .arg(image->colorSpace()->colorModelId().name())
-                                .arg(image->colorSpace()->colorDepthId().name())
-                                .arg(image->colorSpace()->profile()->name())
-                                .arg(image->nlayers()));
-
+            KisImageSP image = m_document->image().toStrongRef();
+            if (image) {
+                KisUsageLogger::log(QString("Loaded image from %1. Size: %2 * %3 pixels, %4 dpi. Color model: %6 %5 (%7). Layers: %8")
+                                    .arg(QString::fromLatin1(from))
+                                    .arg(image->width())
+                                    .arg(image->height())
+                                    .arg(image->xRes())
+                                    .arg(image->colorSpace()->colorModelId().name())
+                                    .arg(image->colorSpace()->colorDepthId().name())
+                                    .arg(image->colorSpace()->profile()->name())
+                                    .arg(image->nlayers()));
+            }
+            else {
+                qWarning() << "The filter returned OK, but there is no image";
+            }
 
         }
         else {
@@ -423,7 +437,7 @@ KisImportExportManager::ConversionResult KisImportExportManager::convert(KisImpo
             result = doExport(location, filter, exportConfiguration, alsoAsKra);
         }
 
-        if (exportConfiguration && !batchMode() && showWarnings) {
+        if (exportConfiguration && !batchMode()) {
             KisConfig(false).setExportConfiguration(typeName, exportConfiguration);
         }
     }
@@ -534,12 +548,13 @@ bool KisImportExportManager::askUserAboutExportConfiguration(
             QHBoxLayout *hLayout = new QHBoxLayout();
 
             QLabel *labelWarning = new QLabel();
-            labelWarning->setPixmap(KisIconUtils::loadIcon("warning").pixmap(32, 32));
+            labelWarning->setPixmap(KisIconUtils::loadIcon("dialog-warning").pixmap(48, 48));
             hLayout->addWidget(labelWarning);
 
             KisPopupButton *bn = new KisPopupButton(0);
 
-            bn->setText(i18nc("Keep the extra space at the end of the sentence, please", "Warning: saving as %1 will lose information from your image.    ", mimeUserDescription));
+            bn->setText(i18nc("Keep the extra space at the end of the sentence, please", "Warning: saving as a %1 will lose information from your image.    ", mimeUserDescription));
+            bn->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
             hLayout->addWidget(bn);
 
@@ -671,7 +686,7 @@ KisImportExportErrorCode KisImportExportManager::doExportImpl(const QString &loc
     if (filter->supportsIO() && !file.open(QFile::WriteOnly)) {
 #else
     QFileInfo fi(location);
-    QTemporaryFile file(fi.absolutePath() + ".XXXXXX.kra");
+    QTemporaryFile file(QDir::tempPath() + "/.XXXXXX.kra");
     if (filter->supportsIO() && !file.open()) {
 #endif
         KisImportExportErrorCannotWrite result(file.error());

@@ -50,13 +50,21 @@ KisImportExportErrorCode OraConverter::buildImage(QIODevice *io)
     KoStore* store = KoStore::createStore(io, KoStore::Read, "image/openraster", KoStore::Zip);
     if (!store) {
         delete store;
-        return ImportExportCodes::Failure;
+        return ImportExportCodes::FileFormatIncorrect;
     }
 
     KisOpenRasterLoadContext olc(store);
     KisOpenRasterStackLoadVisitor orslv(m_doc->createUndoStore(), &olc);
     orslv.loadImage();
     m_image = orslv.image();
+
+    qDebug() << "m_image" << m_image;
+
+    if (!m_image) {
+        delete store;
+        return ImportExportCodes::ErrorWhileReading;
+    }
+
     m_activeNodes = orslv.activeNodes();
     delete store;
 

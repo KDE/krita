@@ -26,7 +26,7 @@
 
 #include <kis_debug.h>
 
-#include "kis_brush_server.h"
+#include "KoResourceServer.h"
 #include "kis_auto_brush_factory.h"
 #include "kis_text_brush_factory.h"
 #include "kis_predefined_brush_factory.h"
@@ -36,7 +36,6 @@ Q_GLOBAL_STATIC(KisBrushRegistry, s_instance)
 
 KisBrushRegistry::KisBrushRegistry()
 {
-    KisBrushServer::instance();
 }
 
 KisBrushRegistry::~KisBrushRegistry()
@@ -61,7 +60,7 @@ KisBrushRegistry* KisBrushRegistry::instance()
 }
 
 
-KisBrushSP KisBrushRegistry::createBrush(const QDomElement& element)
+KisBrushSP KisBrushRegistry::createBrush(const QDomElement& element, KisResourcesInterfaceSP resourcesInterface)
 {
     QString brushType = element.attribute("type");
 
@@ -70,6 +69,6 @@ KisBrushSP KisBrushRegistry::createBrush(const QDomElement& element)
     KisBrushFactory* factory = get(brushType);
     if (!factory) return 0;
 
-    return factory->createBrush(element);
+    return factory->createBrush(element, resourcesInterface);
 }
 

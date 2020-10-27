@@ -250,9 +250,18 @@ private:
 public:
     std::function< float(const MaskedImage&, int, int, const MaskedImage& , int , int ) > distance;
 
-    void toPaintDevice(KisPaintDeviceSP imageDev, QRect rect)
+    void toPaintDevice(KisPaintDeviceSP imageDev, QRect rect, KisSelectionSP selection)
     {
-        imageData.saveToDevice(imageDev, rect);
+        if (!selection) {
+            imageData.saveToDevice(imageDev, rect);
+        } else {
+            KisPaintDeviceSP dev = new KisPaintDevice(imageDev->colorSpace());
+            dev->setDefaultBounds(imageDev->defaultBounds());
+
+            imageData.saveToDevice(dev, rect);
+
+            KisPainter::copyAreaOptimized(rect.topLeft(), dev, imageDev, rect, selection);
+        }
     }
 
     void DebugDump(const QString& name)
@@ -484,15 +493,15 @@ template <typename T> float distance_impl(const MaskedImage& my, int x, int y, c
 {
     float dsq = 0;
     quint32 nchannels = my.channelCount();
-    quint8* v1 = my.imageData(x, y);
-    quint8* v2 = other.imageData(xo, yo);
+    T *v1 = reinterpret_cast<T*>(my.imageData(x, y));
+    T *v2 = reinterpret_cast<T*>(other.imageData(xo, yo));
 
     for (quint32 chan = 0; chan < nchannels; chan++) {
         //It's very important not to lose precision in the next line
-        float v = ((float)(*((T*)v1 + chan)) - (float)(*((T*)v2 + chan)));
+        float v = ((float)(*(v1 + chan)) - (float)(*(v2 + chan)));
         dsq += v * v;
     }
-    return dsq / ( (float)KoColorSpaceMathsTraits<T>::unitValue * (float)KoColorSpaceMathsTraits<T>::unitValue / MAX_DIST );
+    return dsq / (KoColorSpaceMathsTraits<float>::unitValue * KoColorSpaceMathsTraits<float>::unitValue / MAX_DIST );
 }
 
 
@@ -972,7 +981,7 @@ QRect getMaskBoundingBox(KisPaintDeviceSP maskDev)
 }
 
 
-QRect patchImage(const KisPaintDeviceSP imageDev, const KisPaintDeviceSP maskDev, int patchRadius, int accuracy)
+QRect patchImage(const KisPaintDeviceSP imageDev, const KisPaintDeviceSP maskDev, int patchRadius, int accuracy, KisSelectionSP selection)
 {
     QRect maskRect = getMaskBoundingBox(maskDev);
     QRect imageRect = imageDev->exactBounds();
@@ -986,7 +995,7 @@ QRect patchImage(const KisPaintDeviceSP imageDev, const KisPaintDeviceSP maskDev
     if (!maskRect.isEmpty()) {
         Inpaint inpaint(imageDev, maskDev, patchRadius, maskRect);
         MaskedImageSP output = inpaint.patch();
-        output->toPaintDevice(imageDev, maskRect);
+        output->toPaintDevice(imageDev, maskRect, selection);
     }
 
     return maskRect;

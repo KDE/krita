@@ -9,7 +9,7 @@
 #include "RgbU16ColorSpace.h"
 #include "LabColorSpace.h"
 
-#include "sdk/tests/kistest.h"
+#include "sdk/tests/testpigment.h"
 
 void TestColorSpaceRegistry::testConstruction()
 {
@@ -79,7 +79,7 @@ void TestColorSpaceRegistry::testLab()
     whitepoint.y = 0.33;
     whitepoint.Y = 1.0;
 
-    cmsHPROFILE lcmsProfile = cmsCreateLab2Profile(&whitepoint);
+    cmsHPROFILE lcmsProfile = cmsCreateLab4Profile(&whitepoint);
     QString testProfileName = "TestLabProfileName";
 
     cmsWriteTag(lcmsProfile, cmsSigProfileDescriptionTag, testProfileName.toLatin1().constData());

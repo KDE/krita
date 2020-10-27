@@ -78,7 +78,7 @@ KisColorSelectorNgDockerWidget::KisColorSelectorNgDockerWidget(QWidget *parent) 
     m_fallbackSettingsButton->hide();
 
     //layout
-    m_widgetLayout = new QHBoxLayout();
+    m_widgetLayout = new QHBoxLayout(this);
     m_widgetLayout->setSpacing(0);
     m_widgetLayout->setMargin(0);
 
@@ -111,7 +111,6 @@ KisColorSelectorNgDockerWidget::KisColorSelectorNgDockerWidget(QWidget *parent) 
 
     m_widgetLayout->addLayout(m_mainLayout);
     m_widgetLayout->addLayout(m_sidebarLayout);
-    setLayout(m_widgetLayout);
 
     updateLayout();
 
@@ -165,9 +164,6 @@ void KisColorSelectorNgDockerWidget::setCanvas(KisCanvas2 *canvas)
     m_colorSelectorContainer->setCanvas(canvas);
 
     if (m_canvas && m_canvas->viewManager()) {
-        if (m_canvas->viewManager()->nodeManager()) {
-            connect(m_canvas->viewManager()->nodeManager(), SIGNAL(sigLayerActivated(KisLayerSP)), SLOT(reactOnLayerChange()), Qt::UniqueConnection);
-        }
         KActionCollection* actionCollection = canvas->viewManager()->actionCollection();
 
         actionCollection->addAction("show_color_history", m_colorHistoryAction);
@@ -176,7 +172,6 @@ void KisColorSelectorNgDockerWidget::setCanvas(KisCanvas2 *canvas)
         connect(m_canvas->viewManager()->mainWindow(), SIGNAL(themeChanged()), m_colorSelectorContainer, SLOT(slotUpdateIcons()), Qt::UniqueConnection);
     }
 
-    reactOnLayerChange();
 }
 
 void KisColorSelectorNgDockerWidget::openSettings()
@@ -270,17 +265,4 @@ void KisColorSelectorNgDockerWidget::updateLayout()
     }
 
     updateGeometry();
-}
-
-void KisColorSelectorNgDockerWidget::reactOnLayerChange()
-{
-    /**
-     * Trigger the update for the case if some legacy code needs it.
-     * Now the node's color space is managed by the
-     * KisDisplayColorConverter and KisColorSelectorBase objects, so
-     * technically this call is not needed anymore. Please remove it
-     * when you are totally sure this will not break something.
-     */
-
-    emit settingsChanged();
 }

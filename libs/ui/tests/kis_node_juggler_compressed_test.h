@@ -20,7 +20,7 @@
 #define __KIS_NODE_JUGGLER_COMPRESSED_TEST_H
 
 #include <QtTest>
-#include "testutil.h"
+#include <testutil.h>
 #include "kis_group_layer.h"
 
 class KisNodeJugglerCompressedTest : public QObject

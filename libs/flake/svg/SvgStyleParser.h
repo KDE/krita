@@ -51,6 +51,8 @@ public:
     /// Parses a color attribute
     bool parseColor(QColor &, const QString &);
 
+    QPair<qreal, QColor> parseColorStop(const KoXmlElement&, SvgGraphicsContext* context, qreal& previousOffset);
+
     /// Parses gradient color stops
     void parseColorStops(QGradient *, const KoXmlElement &, SvgGraphicsContext *context, const QGradientStops &defaultStops);
 

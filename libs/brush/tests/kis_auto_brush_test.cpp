@@ -42,7 +42,7 @@ void KisAutoBrushTest::testCreation()
 void KisAutoBrushTest::testMaskGeneration()
 {
     KisCircleMaskGenerator* circle = new KisCircleMaskGenerator(10, 1.0, 1.0, 1.0, 2, false);
-    KisBrushSP a = new KisAutoBrush(circle, 0.0, 0.0);
+    KisBrushSP a(new KisAutoBrush(circle, 0.0, 0.0));
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
 
     KisPaintInformation info(QPointF(100.0, 100.0), 0.5);
@@ -54,7 +54,7 @@ void KisAutoBrushTest::testMaskGeneration()
     cs->setOpacity(fdev->data(), OPACITY_OPAQUE_U8, 100 * 100);
 
     QPoint errpoint;
-    QImage result(QString(FILES_DATA_DIR) + QDir::separator() + "result_autobrush_1.png");
+    QImage result(QString(FILES_DATA_DIR) + '/' + "result_autobrush_1.png");
     QImage image = fdev->convertToQImage(0);
 
     if (!TestUtil::compareQImages(errpoint, image, result)) {
@@ -66,7 +66,7 @@ void KisAutoBrushTest::testMaskGeneration()
     fdev = new KisFixedPaintDevice(cs);
     a->mask(fdev, KoColor(Qt::black, cs), KisDabShape(), info);
 
-    result = QImage(QString(FILES_DATA_DIR) + QDir::separator() + "result_autobrush_3.png");
+    result = QImage(QString(FILES_DATA_DIR) + '/' + "result_autobrush_3.png");
     image = fdev->convertToQImage(0);
     if (!TestUtil::compareQImages(errpoint, image, result)) {
         image.save("kis_autobrush_test_3.png");
@@ -82,7 +82,7 @@ void KisAutoBrushTest::testMaskGeneration()
     fdev = new KisFixedPaintDevice(cs);
     a->mask(fdev, dev, KisDabShape(), info);
 
-    result = QImage(QString(FILES_DATA_DIR) + QDir::separator() + "result_autobrush_4.png");
+    result = QImage(QString(FILES_DATA_DIR) + '/' + "result_autobrush_4.png");
     image = fdev->convertToQImage(0);
     if (!TestUtil::compareQImages(errpoint, image, result)) {
         image.save("kis_autobrush_test_4.png");
@@ -102,7 +102,7 @@ static void dabSizeHelper(KisBrushSP const& brush,
 void KisAutoBrushTest::testDabSize()
 {
     KisCircleMaskGenerator* circle = new KisCircleMaskGenerator(10, 0.5, 1.0, 1.0, 2, false);
-    KisBrushSP a = new KisAutoBrush(circle, 0.0, 0.0);
+    KisBrushSP a(new KisAutoBrush(circle, 0.0, 0.0));
     QCOMPARE(a->width(), 10);
     QCOMPARE(a->height(), 5);
 
@@ -116,7 +116,7 @@ void KisAutoBrushTest::testDabSize()
     dabSizeHelper(a, "2x, 45d",   KisDabShape(2.0, 1.0, 0.25 * M_PI),   22, 22);
     dabSizeHelper(a, "0.5x, 45d", KisDabShape(0.5, 1.0, 0.25 * M_PI),    6, 6);
     dabSizeHelper(a, "0.5x, 45d", KisDabShape(0.5, 1.0, 0.25 * M_PI),    6, 6);
-    dabSizeHelper(a, "0.5y",      KisDabShape(1.0, 0.5, 0.0),           10, 5);
+    dabSizeHelper(a, "0.5y",      KisDabShape(1.0, 0.5, 0.0),           10, 3);
 }
 
 //#define SAVE_OUTPUT_IMAGES
@@ -176,7 +176,7 @@ void KisAutoBrushTest::testClone()
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
 
     KisCircleMaskGenerator* circle = new KisCircleMaskGenerator(10, 0.7, 0.85, 0.5, 2, true);
-    KisBrushSP brush = new KisAutoBrush(circle, 0.5, 0.0);
+    KisBrushSP brush(new KisAutoBrush(circle, 0.5, 0.0));
 
     KisPaintInformation info(QPointF(100.0, 100.0), 0.5);
 
@@ -184,7 +184,7 @@ void KisAutoBrushTest::testClone()
     brush->mask(fdev1, KoColor(Qt::black, cs), KisDabShape(0.8, 1.0, 8.0), info);
     QImage res1 = fdev1->convertToQImage(0);
 
-    KisBrushSP clone = brush->clone();
+    KisBrushSP clone = brush->clone().dynamicCast<KisBrush>();
 
     KisFixedPaintDeviceSP fdev2 = new KisFixedPaintDevice(cs);
     clone->mask(fdev2, KoColor(Qt::black, cs), KisDabShape(0.8, 1.0, 8.0), info);

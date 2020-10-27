@@ -133,7 +133,7 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
 
     qreal x = info.pos().x();
     qreal y = info.pos().y();
-    KisRandomAccessorSP accessor = dab->createRandomAccessorNG(qRound(x), qRound(y));
+    KisRandomAccessorSP accessor = dab->createRandomAccessorNG();
 
     Q_ASSERT(color.colorSpace()->pixelSize() == dab->pixelSize());
     m_inkColor = color;
@@ -314,7 +314,7 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
                     }
                     m_transformed = m_brushQImage.transformed(m, Qt::SmoothTransformation);
                     m_imageDevice->convertFromQImage(m_transformed, 0);
-                    KisRandomAccessorSP ac = m_imageDevice->createRandomAccessorNG(0, 0);
+                    KisRandomAccessorSP ac = m_imageDevice->createRandomAccessorNG();
                     QRect rc = m_transformed.rect();
 
                     if (m_colorProperties->useRandomHSV && m_transfo) {
@@ -351,9 +351,10 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
             KisPaintOp::splitCoordinate(pt.x(), &ix, &xFraction);
             KisPaintOp::splitCoordinate(pt.y(), &iy, &yFraction);
 
+            m_brush->prepareForSeqNo(info, m_dabSeqNo);
+
             //KisFixedPaintDeviceSP dab;
-            if (m_brush->brushType() == IMAGE ||
-                    m_brush->brushType() == PIPE_IMAGE) {
+            if (m_brush->brushApplication() == IMAGESTAMP) {
                 m_fixedDab = m_brush->paintDevice(m_fixedDab->colorSpace(),
                           shape, info, xFraction, yFraction);
 
@@ -451,7 +452,7 @@ void SprayBrush::paintRectangle(KisPainter* painter, qreal x, qreal y, qreal wid
 void SprayBrush::paintOutline(KisPaintDeviceSP dev , const KoColor &outlineColor, qreal posX, qreal posY, qreal radius)
 {
     QList<QPointF> antiPixels;
-    KisRandomAccessorSP accessor = dev->createRandomAccessorNG(qRound(posX), qRound(posY));
+    KisRandomAccessorSP accessor = dev->createRandomAccessorNG();
 
     for (int y = -radius + posY; y <= radius + posY; y++) {
         for (int x = -radius + posX; x <= radius + posX; x++) {

@@ -120,12 +120,26 @@ if (MSYS)
 endif()
 
 if (APPLE)
-    set(GLOBAL_PROFILE ${GLOBAL_PROFILE} -DCMAKE_MACOSX_RPATH=ON -DKDE_SKIP_RPATH_SETTINGS=ON -DBUILD_WITH_INSTALL_RPATH=ON -DAPPLE_SUPPRESS_X11_WARNING=ON)
+    set(GLOBAL_PROFILE ${GLOBAL_PROFILE}
+                        -DCMAKE_PREFIX_PATH:PATH=${CMAKE_PREFIX_PATH}
+                        -DCMAKE_INCLUDE_PATH:PATH=${CMAKE_PREFIX_PATH}/include
+                        -DCMAKE_LIBRARY_PATH:PATH=${CMAKE_PREFIX_PATH}/lib
+                        -DCMAKE_MACOSX_RPATH=ON
+                        -DKDE_SKIP_RPATH_SETTINGS=ON
+                        -DBUILD_WITH_INSTALL_RPATH=ON
+                        -DAPPLE_SUPPRESS_X11_WARNING=ON)
     set(PATCH_COMMAND patch)
 endif ()
 
 if (ANDROID)
-  set (GLOBAL_PROFILE ${GLOBAL_PROFILE} -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE} -DANDROID_PLATFORM=${ANDROID_PLATFORM} -DANDROID_ABI=${ANDROID_ABI})
+  set (GLOBAL_PROFILE ${GLOBAL_PROFILE}
+                     -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}
+                     -DANDROID_PLATFORM=${ANDROID_PLATFORM}
+                     -DANDROID_ABI=${ANDROID_ABI}
+                     -DCMAKE_FIND_ROOT_PATH=${CMAKE_FIND_ROOT_PATH})
+
+  # see: https://github.com/android/ndk/issues/929
+  unset (CMAKE_SYSROOT)
 endif()
 
 if (UNIX AND NOT APPLE)
@@ -154,8 +168,8 @@ if (MINGW)
         if (ENABLE_PYTHON_2)
             message(FATAL_ERROR "Python 2.7 is not supported on Windows at the moment.")
         else(ENABLE_PYTHON_2)
-            find_package(PythonInterp 3.6 EXACT)
-            find_package(PythonLibs 3.6 EXACT)
+            find_package(PythonInterp 3.8 EXACT)
+            find_package(PythonLibs 3.8 EXACT)
         endif()
 		if (PYTHONLIBS_FOUND AND PYTHONINTERP_FOUND)
 			message(STATUS "Python requirements met.")
@@ -188,7 +202,6 @@ add_subdirectory( ext_png )
 add_subdirectory( ext_eigen3 )
 add_subdirectory( ext_expat ) # for exiv2
 add_subdirectory( ext_exiv2 )
-add_subdirectory( ext_ilmbase )
 add_subdirectory( ext_lcms2 )
 add_subdirectory( ext_openexr )
 add_subdirectory( ext_openssl )
@@ -196,6 +209,11 @@ add_subdirectory( ext_vc )
 add_subdirectory( ext_gsl )
 add_subdirectory( ext_fftw3 )
 add_subdirectory( ext_ocio )
+add_subdirectory( ext_openjpeg )
+
+if (MSVC)
+    add_subdirectory( ext_pthreads )
+endif (MSVC)
 add_subdirectory( ext_fontconfig)
 add_subdirectory( ext_freetype)
 add_subdirectory( ext_qt )
@@ -218,8 +236,9 @@ endif ()
 
 if(UNIX)
     add_subdirectory( ext_pkgconfig )
-    add_subdirectory( ext_heif )
 endif()
 
+add_subdirectory( ext_heif )
 add_subdirectory(ext_giflib)
 add_subdirectory(ext_quazip)
+add_subdirectory(ext_seexpr)

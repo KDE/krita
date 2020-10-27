@@ -32,7 +32,7 @@ KUndo2Command *KisSelectionBasedProcessingHelper::createInitCommand(Functor func
         {
         }
 
-        KUndo2Command* paint() {
+        KUndo2Command* paint() override {
             m_cutSelection->pixelSelection()->makeCloneFromRough(m_selection->pixelSelection(), m_selection->selectedRect());
 
             KisTransaction t(m_selection->pixelSelection());
@@ -81,7 +81,6 @@ void KisSelectionBasedProcessingHelper::transformPaintDevice(KisPaintDeviceSP de
             device->clearSelection(m_cutSelection);
             KisPainter::copyAreaOptimized(pasteBounds.topLeft(), tempDev, device, pasteBounds, m_selection);
             transaction.commit(undoAdapter);
-
         }
     } else {
         KisTransaction transaction(device);

@@ -36,7 +36,7 @@ class KisNodeModel;
  * This class is designed as a Qt model-view widget.
  * 
  * The Qt documentation explains the design and terminology for these classes:
- * http://doc.qt.io/qt-5/model-view-programming.html
+ * https://doc.qt.io/qt-5/model-view-programming.html
  *
  * This widget should work correctly in your Qt designer .ui file.
  */
@@ -127,7 +127,10 @@ public:
 
     void updateNode(const QModelIndex &index);
 
+    void toggleSolo(const QModelIndex &index);
+
     QRect originalVisualRect(const QModelIndex &index) const;
+    QRect fullLineVisualRect(const QModelIndex &index) const;
 
 protected:
     QItemSelectionModel::SelectionFlags selectionCommand(const QModelIndex &index,

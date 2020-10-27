@@ -36,11 +36,16 @@ public:
     ~KisAnimationPlayer() override;
 
     void play();
+    void pause();
     void stop();
+    void goToPlaybackOrigin();
+    void goToStartFrame();
     void displayFrame(int time);
 
     bool isPlaying();
-    int currentTime();
+    bool isPaused();
+    bool isStopped();
+    int visibleFrame();
 
     qreal playbackSpeed();
 
@@ -49,6 +54,14 @@ public:
     qreal effectiveFps() const;
     qreal realFps() const;
     qreal framesDroppedPortion() const;
+
+Q_SIGNALS:
+    void sigFrameChanged();
+    void sigPlaybackStarted();
+    void sigPlaybackStopped();
+    void sigPlaybackStateChanged(bool value);
+    void sigPlaybackStatisticsUpdated();
+    void sigFullClipRangeChanged();
 
 public Q_SLOTS:
     void slotUpdate();
@@ -66,22 +79,22 @@ private Q_SLOTS:
     void slotAudioVolumeChanged();
     void slotOnAudioError(const QString &fileName, const QString &message);
 
-
-Q_SIGNALS:
-    void sigFrameChanged();
-    void sigPlaybackStarted();
-    void sigPlaybackStopped();
-    void sigPlaybackStatisticsUpdated();
-    void sigFullClipRangeChanged();
-
 private:
     void connectCancelSignals();
     void disconnectCancelSignals();
     void uploadFrame(int time, bool forceSyncAudio);
 
+    void refreshCanvas();
+
 private:
     struct Private;
     QScopedPointer<Private> m_d;
+
+    enum PlaybackState {
+        STOPPED,
+        PAUSED,
+        PLAYING
+    };
 };
 
 

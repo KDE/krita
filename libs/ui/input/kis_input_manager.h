@@ -104,9 +104,6 @@ public:
      */
     QPointer<KisToolProxy> toolProxy() const;
 
-public Q_SLOTS:
-    void stopIgnoringEvents();
-
 private Q_SLOTS:
     void slotAboutToChangeTool();
     void slotToolChanged();

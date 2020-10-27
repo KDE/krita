@@ -25,9 +25,8 @@
 
 
 KisSelectionUpdateCompressor::KisSelectionUpdateCompressor(KisSelection *selection)
-    : m_parentSelection(selection),
-      m_updateSignalCompressor(new KisThreadSafeSignalCompressor(100, KisSignalCompressor::POSTPONE)),
-      m_hasStalledUpdate(false)
+    : m_parentSelection(selection)
+    , m_updateSignalCompressor(new KisThreadSafeSignalCompressor(100, KisSignalCompressor::POSTPONE))
 {
     connect(m_updateSignalCompressor, SIGNAL(timeout()), this, SLOT(startUpdateJob()));
 
@@ -61,6 +60,8 @@ void KisSelectionUpdateCompressor::startUpdateJob()
         return;
     }
 
+    // FIXME: we cannot use parentNode->image() here because masks don't
+    //        have the pointer initialized for some reason.
     KisImageSP image = KisLayerUtils::findImageByHierarchy(parentNode);
     if (!image) {
         m_hasStalledUpdate = true;

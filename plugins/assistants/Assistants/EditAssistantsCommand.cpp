@@ -51,27 +51,26 @@ EditAssistantsCommand::EditAssistantsCommand(QPointer<KisCanvas2> canvas, Assist
     KIS_ASSERT_RECOVER_RETURN(type != EDIT);
 }
 
-void EditAssistantsCommand::replaceWith(AssistantSPList assistants, Type type)
+void EditAssistantsCommand::replaceWith(AssistantSPList newAssistants, Type type)
 {
-    AssistantSPList curAssistants = m_canvas->paintingAssistantsDecoration()->assistants();
-    if (type == EDIT) {
-        KIS_ASSERT_RECOVER_RETURN(curAssistants.size() == assistants.size());
-    } else if (type == ADD) {
-        KIS_ASSERT_RECOVER_RETURN(curAssistants.size() == assistants.size() - 1);
-    } else { // type == REMOVE
-        KIS_ASSERT_RECOVER_RETURN(curAssistants.size() == assistants.size() + 1);
+    AssistantSPList oldAssistants = m_canvas->paintingAssistantsDecoration()->assistants();
+
+    if (type == ADD) {
+        KIS_ASSERT_RECOVER_RETURN(newAssistants.size() > oldAssistants.size());
+    } else if (type == REMOVE) {
+        KIS_ASSERT_RECOVER_RETURN(newAssistants.size() < oldAssistants.size());
     }
 
-    Q_FOREACH (KisPaintingAssistantSP assistant, curAssistants) {
+    Q_FOREACH (KisPaintingAssistantSP assistant, oldAssistants) {
         KisAbstractPerspectiveGrid* grid = dynamic_cast<KisAbstractPerspectiveGrid*>(assistant.data());
         if (grid) {
             m_canvas->viewManager()->canvasResourceProvider()->removePerspectiveGrid(grid);
         }
     }
 
-    m_canvas->paintingAssistantsDecoration()->setAssistants(assistants);
+    m_canvas->paintingAssistantsDecoration()->setAssistants(newAssistants);
 
-    Q_FOREACH (KisPaintingAssistantSP assistant, assistants) {
+    Q_FOREACH (KisPaintingAssistantSP assistant, newAssistants) {
         assistant->uncache();
         KisAbstractPerspectiveGrid* grid = dynamic_cast<KisAbstractPerspectiveGrid*>(assistant.data());
         if (grid) {

@@ -53,6 +53,7 @@ public:
     void setFixedDab(KisFixedPaintDeviceSP dab);
 
 private:
+    int m_dabSeqNo = 0;
     KoColor m_inkColor;
     qreal m_radius;
     quint32 m_particlesCount;

@@ -18,3 +18,4 @@
 
 #include "kis_signal_compressor_with_param.h"
 
+#include "kis_signal_compressor_with_param.moc"

@@ -35,9 +35,9 @@ class KRITAIMAGE_EXPORT KisTransformMask : public KisEffectMask, public KisDelay
 public:
 
     /**
-     * Create an empty filter mask.
+     * Create an empty transform mask.
      */
-    KisTransformMask();
+    KisTransformMask(KisImageWSP image, const QString &name);
 
     ~KisTransformMask() override;
 
@@ -82,6 +82,7 @@ public:
 
 protected:
     KisKeyframeChannel *requestKeyframeChannel(const QString &id) override;
+    bool supportsKeyframeChannel(const QString &id) override;
 
 Q_SIGNALS:
     void sigInternalForceStaticImageUpdate();

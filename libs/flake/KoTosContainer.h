@@ -41,13 +41,11 @@ public:
     ~KoTosContainer() override;
 
     // reimplemented
-    void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext) override;
+    void paintComponent(QPainter &painter, KoShapePaintingContext &paintcontext) const override;
 
     // reimplemented
     virtual bool loadText(const KoXmlElement &element, KoShapeLoadingContext &context);
 
-    // reimplemented
-    virtual void saveText(KoShapeSavingContext &context) const;
 
     /// different kinds of resizing behavior to determine how to treat text overflow
     enum ResizeBehavior {
@@ -95,13 +93,7 @@ public:
 protected:
     KoTosContainer(const KoTosContainer &rhs);
 
-    //reimplemented
-    void loadStyle(const KoXmlElement &element, KoShapeLoadingContext &context) override;
-
-    //reimplemented
-    QString saveStyle(KoGenStyle &style, KoShapeSavingContext &context) const override;
-
-    /**
+        /**
      * Set the current preferred text rectangle. This rect contains the coordinates of
      * the embedded text shape relative to the content shape. This value is ignored if
      * resizeBehavior is not TextFollowsPreferredTextRect.

@@ -37,39 +37,21 @@ TasksetResource::~TasksetResource()
 {
 }
 
-bool TasksetResource::save()
+TasksetResource::TasksetResource(const TasksetResource &rhs)
+    : KoResource(rhs),
+      m_actions(rhs.m_actions)
 {
-    if (filename().isEmpty())
-         return false;
-
-    QFile file(filename());
-    file.open(QIODevice::WriteOnly);
-    bool res = saveToDevice(&file);
-    file.close();
-    return res;
 }
 
-bool TasksetResource::load()
+KoResourceSP TasksetResource::clone() const
 {
-    QString fn = filename();
-    if (fn.isEmpty()) return false;
- 
-    QFile file(fn);
-    if (file.size() == 0) return false;
-    if (!file.open(QIODevice::ReadOnly)) {
-        warnKrita << "Can't open file " << filename();
-        return false;
-    }
-
-    bool res = loadFromDevice(&file);
-
-    file.close();
-
-    return res;
+    return KoResourceSP(new TasksetResource(*this));
 }
 
-bool TasksetResource::loadFromDevice(QIODevice *dev)
+bool TasksetResource::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface)
 {
+    Q_UNUSED(resourcesInterface);
+
     QDomDocument doc;
     if (!doc.setContent(dev)) {
         return false;

@@ -20,6 +20,7 @@
 #include <QMouseEvent>
 #include <QApplication>
 #include <QDesktopWidget>
+#include <QScreen>
 #include <QTimer>
 #include <QCursor>
 #include <QPainter>
@@ -64,7 +65,7 @@ public:
     void updatePosition()
     {
         QPoint parentPos = m_parent->mapToGlobal(QPoint(0,0));
-        QRect availRect = QApplication::desktop()->availableGeometry(this);
+        const QRect availRect = QApplication::desktop()->availableGeometry(this);
         QPoint targetPos;
         if ( parentPos.x() - 100 > availRect.x() ) {
             targetPos =  QPoint(parentPos.x() - 100, parentPos.y());
@@ -218,11 +219,6 @@ void KisColorSelectorBase::mousePressEvent(QMouseEvent* event)
 {
     event->accept();
 
-
-//this boolean here is to check if the color selector is updating the resource, so it won't update itself when the resource is updated//
-   if (m_colorUpdateSelf==false)
-   {m_colorUpdateSelf=true;}
-
     if(!m_isPopup && m_popupOnMouseClick &&
        event->button() == Qt::MidButton) {
 
@@ -234,7 +230,8 @@ void KisColorSelectorBase::mousePressEvent(QMouseEvent* event)
         x-=popupsize/2;
         y-=popupsize/2;
 
-        QRect availRect = QApplication::desktop()->availableGeometry(this);
+        const QRect availRect = QApplication::desktop()->availableGeometry(this);
+
         if(x<availRect.x())
             x = availRect.x();
         if(y<availRect.y())
@@ -244,6 +241,7 @@ void KisColorSelectorBase::mousePressEvent(QMouseEvent* event)
         if(y+m_popup->height()>availRect.y()+availRect.height())
             y = availRect.y()+availRect.height()-m_popup->height();
 
+        m_colorUpdateSelf=false;
         m_popup->move(x, y);
         m_popup->setHidingTime(200);
         showPopup(DontMove);
@@ -254,6 +252,7 @@ void KisColorSelectorBase::mousePressEvent(QMouseEvent* event)
         }
         hide();
     } else {
+        m_colorUpdateSelf=true;
         showColorPreview();
         event->ignore();
     }
@@ -390,7 +389,11 @@ void KisColorSelectorBase::lazyCreatePopup()
         // the WM from showing another taskbar entry,
         // but will require that we handle window activation manually
         m_popup->setWindowFlags(Qt::FramelessWindowHint |
+#ifdef Q_OS_MACOS
+                                Qt::Popup |
+#else
                                 Qt::Window |
+#endif
                                 Qt::NoDropShadowWindowHint |
                                 Qt::BypassWindowManagerHint);
         m_popup->m_parent = this;
@@ -407,12 +410,17 @@ void KisColorSelectorBase::showPopup(Move move)
     lazyCreatePopup();
 
     QPoint cursorPos = QCursor::pos();
+    QScreen *activeScreen = 0;
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
+    activeScreen = QGuiApplication::screenAt(cursorPos);
+#endif
+    const QRect availRect = (activeScreen)? activeScreen->availableGeometry() : QApplication::desktop()->availableGeometry(this);
 
     if (move == MoveToMousePosition) {
         m_popup->move(QPoint(cursorPos.x()-m_popup->width()/2, cursorPos.y()-m_popup->height()/2));
         QRect rc = m_popup->geometry();
-        if (rc.x() < 0) rc.setX(0);
-        if (rc.y() < 0) rc.setY(0);
+        if (rc.x() < availRect.x()) rc.setX(availRect.x());
+        if (rc.y() < availRect.y()) rc.setY(availRect.y());
         m_popup->setGeometry(rc);
     }
 
@@ -461,7 +469,7 @@ void KisColorSelectorBase::updateColorPreview(const KoColor &color)
 
 void KisColorSelectorBase::canvasResourceChanged(int key, const QVariant &v)
 {
-    if (key == KoCanvasResourceProvider::ForegroundColor || key == KoCanvasResourceProvider::BackgroundColor) {
+    if (key == KoCanvasResource::ForegroundColor || key == KoCanvasResource::BackgroundColor) {
         KoColor realColor(v.value<KoColor>());
         updateColorPreview(realColor);
         if (m_colorUpdateAllowed && !m_colorUpdateSelf) {

@@ -116,7 +116,8 @@ namespace KisLsUtils
     {
         KisGaussianKernel::applyGaussian(selection, applyRect,
                                          radius, radius,
-                                         QBitArray(), 0, true);
+                                         QBitArray(), 0, true,
+                                         BORDER_IGNORE);
     }
 
     namespace Private {
@@ -260,7 +261,7 @@ namespace KisLsUtils
 
         KisSequentialConstIterator noiseIt(randomSelection, overlayRect);
         KisSequentialConstIterator srcIt(selection, overlayRect);
-        KisRandomAccessorSP dstIt = randomOverlay->createRandomAccessorNG(overlayRect.x(), overlayRect.y());
+        KisRandomAccessorSP dstIt = randomOverlay->createRandomAccessorNG();
 
         while (noiseIt.nextPixel() && srcIt.nextPixel()) {
             int itX = noiseIt.x();
@@ -383,14 +384,11 @@ namespace KisLsUtils
                      const QRect &applyRect,
                      KisLayerStyleFilterEnvironment *env,
                      int scale,
-                     KoPattern *pattern,
+                     KoPatternSP pattern,
                      int horizontalPhase,
                      int verticalPhase,
                      bool alignWithLayer)
     {
-        if (scale != 100) {
-            warnKrita << "KisLsOverlayFilter::applyOverlay(): Pattern scaling is NOT implemented!";
-        }
         KIS_SAFE_ASSERT_RECOVER_RETURN(pattern);
 
         QSize psize(pattern->width(), pattern->height());
@@ -409,8 +407,11 @@ namespace KisLsUtils
         QRect fillRect = applyRect | applyRect.translated(patternOffset);
 
         KisFillPainter gc(fillDevice);
-        gc.fillRect(fillRect.x(), fillRect.y(),
-                    fillRect.width(), fillRect.height(), pattern, -patternOffset);
+        QTransform transform;
+        transform.translate(-patternOffset.x(), -patternOffset.y());
+        qreal scaleNorm = qreal(scale*0.01);
+        transform.scale(scaleNorm, scaleNorm);
+        gc.fillRectNoCompose(fillRect, pattern, transform);
         gc.end();
     }
 
@@ -480,7 +481,7 @@ namespace KisLsUtils
             /* end of copy paste from libpsd */
 
             KisGradientPainter gc(fillDevice);
-            gc.setGradient(config->gradient().data());
+            gc.setGradient(config->gradient());
             QPointF gradStart;
             QPointF gradEnd;
             KisGradientPainter::enumGradientRepeat repeat =

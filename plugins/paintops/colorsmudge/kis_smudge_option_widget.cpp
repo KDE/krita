@@ -22,7 +22,9 @@
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <QFormLayout>
 #include <QComboBox>
+#include <QCheckBox>
 #include <QLabel>
 
 #include "kis_smudge_option_widget.h"
@@ -37,30 +39,39 @@ KisSmudgeOptionWidget::KisSmudgeOptionWidget()
     mCbSmudgeMode = new QComboBox();
     mCbSmudgeMode->addItem(i18n("Smearing"), KisSmudgeOption::SMEARING_MODE);
     mCbSmudgeMode->addItem("dulling-placeholder" , KisSmudgeOption::DULLING_MODE);
-    
+
+    mChkSmearAlpha = new QCheckBox();
+
     // the text for the second item is initialized here
     updateBrushPierced(false);
 
-    QHBoxLayout* h = new QHBoxLayout();
-    h->addWidget(new QLabel(i18n("Smudge mode:")));
-    h->addWidget(mCbSmudgeMode, 1);
+    QFormLayout *formLayout = new QFormLayout();
+    formLayout->addRow(i18n("Smudge mode:"), mCbSmudgeMode);
+    formLayout->addRow(i18n("Smear alpha:"), mChkSmearAlpha);
 
-    QVBoxLayout* v = new QVBoxLayout();
-    v->setMargin(0);
-    QWidget*     w = new QWidget();
+    QWidget     *page = new QWidget();
+    QVBoxLayout *pageLayout = new QVBoxLayout(page);
+    pageLayout->setMargin(0);
 
-    v->addLayout(h);
-    v->addWidget(curveWidget());
-    w->setLayout(v);
+    pageLayout->addLayout(formLayout);
+    pageLayout->addWidget(curveWidget());
 
-    KisCurveOptionWidget::setConfigurationPage(w);
+
+    KisCurveOptionWidget::setConfigurationPage(page);
 
     connect(mCbSmudgeMode, SIGNAL(currentIndexChanged(int)), this, SLOT(slotCurrentIndexChanged(int)));
+    connect(mChkSmearAlpha, SIGNAL(toggled(bool)), SLOT(slotSmearAlphaChanged(bool)));
 }
 
 void KisSmudgeOptionWidget::slotCurrentIndexChanged(int index)
 {
     static_cast<KisSmudgeOption*>(curveOption())->setMode((KisSmudgeOption::Mode)index);
+    emitSettingChanged();
+}
+
+void KisSmudgeOptionWidget::slotSmearAlphaChanged(bool value)
+{
+    static_cast<KisSmudgeOption*>(curveOption())->setSmearAlpha(value);
     emitSettingChanged();
 }
 
@@ -70,6 +81,9 @@ void KisSmudgeOptionWidget::readOptionSetting(const KisPropertiesConfigurationSP
 
     KisSmudgeOption::Mode mode = static_cast<KisSmudgeOption*>(curveOption())->getMode();
     mCbSmudgeMode->setCurrentIndex(mode == KisSmudgeOption::SMEARING_MODE ? 0 : 1);
+
+    const bool smearAlpha = static_cast<KisSmudgeOption*>(curveOption())->getSmearAlpha();
+    mChkSmearAlpha->setChecked(smearAlpha);
 }
 
 void KisSmudgeOptionWidget::updateBrushPierced(bool pierced)

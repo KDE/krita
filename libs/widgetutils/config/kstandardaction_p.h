@@ -102,6 +102,8 @@ static const KStandardActionInfo g_rgActionInfo[] = {
     { Preferences,   KStandardShortcut::Preferences, "options_configure", I18N_NOOP("&Configure %1..."), 0, "configure" },
     { ConfigureToolbars, KStandardShortcut::ConfigureToolbars, "options_configure_toolbars", I18N_NOOP("Configure Tool&bars..."), 0, "configure-toolbars" },
     { ConfigureNotifications, KStandardShortcut::ConfigureNotifications, "options_configure_notifications", I18N_NOOP("Configure &Notifications..."), 0, "preferences-desktop-notification" },
+    { ResetConfigurations, KStandardShortcut::ReportBug, "reset_configurations", I18N_NOOP("Reset Configurations"), 0, "configure-toolbars" },
+
 
     // the idea here is that Contents is used in menus, and Help in dialogs, so both share the same
     // shortcut

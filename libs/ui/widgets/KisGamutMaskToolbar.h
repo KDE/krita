@@ -37,11 +37,12 @@ public:
     void connectMaskSignals(KisCanvasResourceProvider* resourceProvider);
 
 Q_SIGNALS:
-    void sigGamutMaskChanged(KoGamutMask*);
+    void sigGamutMaskToggle(bool state);
+    void sigGamutMaskChanged(KoGamutMaskSP);
     void sigGamutMaskDeactivated();
 
 public Q_SLOTS:
-    void slotGamutMaskSet(KoGamutMask* mask);
+    void slotGamutMaskSet(KoGamutMaskSP mask);
     void slotGamutMaskUnset();
     void slotGamutMaskDeactivate();
 
@@ -50,8 +51,8 @@ private Q_SLOTS:
     void slotGamutMaskRotate(int angle);
 
 private:
-    Ui_wdgGamutMaskToolbar* m_ui;
-    KoGamutMask* m_selectedMask;
+    QScopedPointer<Ui_wdgGamutMaskToolbar> m_ui;
+    KoGamutMaskSP m_selectedMask;
 
     QIcon m_iconMaskOff;
     QIcon m_iconMaskOn;

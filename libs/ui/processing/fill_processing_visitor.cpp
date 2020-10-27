@@ -25,21 +25,25 @@
 #include "lazybrush/kis_colorize_mask.h"
 
 
-FillProcessingVisitor::FillProcessingVisitor(const QPoint &startPoint,
+FillProcessingVisitor::FillProcessingVisitor(KisPaintDeviceSP refPaintDevice,
+                               const QPoint &startPoint,
                                KisSelectionSP selection,
                                KisResourcesSnapshotSP resources,
                                bool useFastMode,
                                bool usePattern,
                                bool selectionOnly,
+                               bool useSelectionAsBoundary,
                                int feather,
                                int sizemod,
                                int fillThreshold,
                                bool unmerged,
                                bool useBgColor)
-    : m_startPoint(startPoint),
+    : m_refPaintDevice(refPaintDevice),
+      m_startPoint(startPoint),
       m_selection(selection),
       m_useFastMode(useFastMode),
       m_selectionOnly(selectionOnly),
+      m_useSelectionAsBoundary(useSelectionAsBoundary),
       m_usePattern(usePattern),
       m_resources(resources),
       m_feather(feather),
@@ -80,15 +84,15 @@ void FillProcessingVisitor::fillPaintDevice(KisPaintDeviceSP device, KisUndoAdap
         fillPainter.setProgress(helper.updater());
 
         if (m_usePattern) {
-            fillPainter.fillRect(fillRect, m_resources->currentPattern());
+            fillPainter.fillRectNoCompose(fillRect, m_resources->currentPattern(), m_resources->fillTransform());
         } else if (m_useBgColor) {
             fillPainter.fillRect(fillRect,
                                  m_resources->currentBgColor(),
-                                 m_resources->opacity());
+                                 OPACITY_OPAQUE_U8);
         } else {
             fillPainter.fillRect(fillRect,
                                  m_resources->currentFgColor(),
-                                 m_resources->opacity());
+                                 OPACITY_OPAQUE_U8);
         }
 
         QVector<QRect> dirtyRect = fillPainter.takeDirtyRegion();
@@ -108,7 +112,7 @@ void FillProcessingVisitor::fillPaintDevice(KisPaintDeviceSP device, KisUndoAdap
 
         QPoint startPoint = m_startPoint;
         if (device->defaultBounds()->wrapAroundMode()) {
-            startPoint = KisWrappedRect::ptToWrappedPt(startPoint, device->defaultBounds()->bounds());
+            startPoint = KisWrappedRect::ptToWrappedPt(startPoint, device->defaultBounds()->imageBorderRect());
         }
 
         KisFillPainter fillPainter(device, m_selection);
@@ -121,14 +125,15 @@ void FillProcessingVisitor::fillPaintDevice(KisPaintDeviceSP device, KisUndoAdap
         fillPainter.setFeather(m_feather);
         fillPainter.setFillThreshold(m_fillThreshold);
         fillPainter.setCareForSelection(true);
+        fillPainter.setUseSelectionAsBoundary((m_selection.isNull() || !m_selection->hasNonEmptyPixelSelection()) ? false : m_useSelectionAsBoundary);
         fillPainter.setWidth(fillRect.width());
         fillPainter.setHeight(fillRect.height());
         fillPainter.setUseCompositioning(!m_useFastMode);
 
-        KisPaintDeviceSP sourceDevice = m_unmerged ? device : m_resources->image()->projection();
+        KisPaintDeviceSP sourceDevice = m_unmerged ? device : m_refPaintDevice;
 
         if (m_usePattern) {
-            fillPainter.fillPattern(startPoint.x(), startPoint.y(), sourceDevice);
+            fillPainter.fillPattern(startPoint.x(), startPoint.y(), sourceDevice, m_resources->fillTransform());
         } else {
             fillPainter.fillColor(startPoint.x(), startPoint.y(), sourceDevice);
         }

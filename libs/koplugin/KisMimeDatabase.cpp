@@ -27,6 +27,10 @@
 
 QList<KisMimeDatabase::KisMimeType> KisMimeDatabase::s_mimeDatabase;
 
+static QString sanitizeSuffix(const QString &suffix)
+{
+    return suffix.split(QLatin1Char(' ')).first();
+}
 
 QString KisMimeDatabase::mimeTypeForFile(const QString &file, bool checkExistingFiles)
 {
@@ -34,6 +38,17 @@ QString KisMimeDatabase::mimeTypeForFile(const QString &file, bool checkExisting
 
     QFileInfo fi(file);
     QString suffix = fi.suffix().toLower();
+
+#ifdef Q_OS_ANDROID
+    // HACK: on Android we can save as .kra with no extension or as something like:
+    // "untitled.kra (1)", (1) being added by the SAF because we can't overwrite the duplicate.
+    // So, we need to be able to remove that number and get extension. If there is no extension,
+    // perhaps try "kra"
+    suffix = sanitizeSuffix(suffix);
+    if (suffix.isEmpty())
+        suffix = "kra";
+#endif
+
     Q_FOREACH(const KisMimeDatabase::KisMimeType &mimeType, s_mimeDatabase) {
         if (mimeType.suffixes.contains(suffix)) {
             debugPlugin << "mimeTypeForFile(). KisMimeDatabase returned" << mimeType.mimeType << "for" << file;
@@ -51,7 +66,13 @@ QString KisMimeDatabase::mimeTypeForFile(const QString &file, bool checkExisting
         }
     }
 
+#ifdef Q_OS_ANDROID
+    QString basename = fi.baseName();
+    // HACK: because we use sanitzed suffix
+    mime = db.mimeTypeForFile(basename + "." + suffix);
+#else
     mime = db.mimeTypeForFile(file);
+#endif
     if (mime.name() != "application/octet-stream") {
         debugPlugin << "mimeTypeForFile(). QMimeDatabase returned" << mime.name() << "for" << file;
         return mime.name();
@@ -252,6 +273,16 @@ void KisMimeDatabase::fillMimeData()
         mimeType.suffixes = QStringList() << "kws";
         s_mimeDatabase << mimeType;
 
+        mimeType.mimeType = "application/x-krita-windowlayout";
+        mimeType.description = i18nc("description of a file type", "Krita Window Layout");
+        mimeType.suffixes = QStringList() << "kwl";
+        s_mimeDatabase << mimeType;
+
+        mimeType.mimeType = "application/x-krita-session";
+        mimeType.description = i18nc("description of a file type", "Krita Session");
+        mimeType.suffixes = QStringList() << "ksn";
+        s_mimeDatabase << mimeType;
+
         mimeType.mimeType = "application/x-krita-taskset";
         mimeType.description = i18nc("description of a file type", "Krita Taskset");
         mimeType.suffixes = QStringList() << "kts";
@@ -262,6 +293,11 @@ void KisMimeDatabase::fillMimeData()
         mimeType.suffixes = QStringList() << "krf";
         s_mimeDatabase << mimeType;
 
+        mimeType.mimeType = "application/x-krita-gamutmasks";
+        mimeType.description = i18nc("description of a file type", "Krita Gamut Mask");
+        mimeType.suffixes = QStringList() << "kgm";
+        s_mimeDatabase << mimeType;
+        
         mimeType.mimeType = "application/x-krita-shortcuts";
         mimeType.description = i18nc("description of a file type", "Krita Shortcut Scheme");
         mimeType.suffixes = QStringList() << "shortcuts";
@@ -285,6 +321,16 @@ void KisMimeDatabase::fillMimeData()
         mimeType.mimeType = "image/heic";
         mimeType.description = i18nc("description of a file type", "HEIC/HEIF Image");
         mimeType.suffixes = QStringList() << "heic" << "heif";
+        s_mimeDatabase << mimeType;
+        
+        mimeType.mimeType = "image/jp2";
+        mimeType.description = i18nc("description of a file type", "JP2 Image");
+        mimeType.suffixes = QStringList() << "jp2" << "j2k";
+        s_mimeDatabase << mimeType;
+
+        mimeType.mimeType = "application/x-krita-seexpr-script";
+        mimeType.description = i18nc("description of a file type", "SeExpr script package");
+        mimeType.suffixes = QStringList() << "kse";
         s_mimeDatabase << mimeType;
 
         debugPlugin << "Filled mimedatabase with" << s_mimeDatabase.count() << "special mimetypes";

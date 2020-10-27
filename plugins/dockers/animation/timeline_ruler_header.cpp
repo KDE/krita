@@ -30,12 +30,28 @@
 #include "kis_time_based_item_model.h"
 #include "timeline_color_scheme.h"
 #include "kis_action.h"
+#include "kis_signal_compressor_with_param.h"
+#include "kis_config.h"
 
 #include "kis_debug.h"
 
 struct TimelineRulerHeader::Private
 {
-    Private() : fps(12), lastPressSectionIndex(-1) {}
+    Private()
+        : fps(12)
+        , lastPressSectionIndex(-1)
+    {
+        // Compressed configuration writing..
+        const int compressorDelayMS = 5000;
+        zoomSaveCompressor.reset(
+                    new KisSignalCompressorWithParam<qreal>(compressorDelayMS,
+                                                            [](qreal zoomValue){
+                                                                KisConfig cfg(false);
+                                                                cfg.setTimelineZoom(zoomValue);
+                                                            },
+                                                            KisSignalCompressor::POSTPONE)
+                );
+    }
 
     int fps;
 
@@ -47,15 +63,28 @@ struct TimelineRulerHeader::Private
 
     KisActionManager* actionMan = 0;
 
+    QScopedPointer<KisSignalCompressorWithParam<qreal>> zoomSaveCompressor;
+
+    const int minSectionSize = 4;
+    const int maxSectionSize = 72;
+    const int unitSectionSize = 18;
+    qreal remainder = 0.0f;
 };
 
 TimelineRulerHeader::TimelineRulerHeader(QWidget *parent)
-    : QHeaderView(Qt::Horizontal, parent),
-      m_d(new Private)
+    : QHeaderView(Qt::Horizontal, parent)
+    , m_d(new Private)
 {
     setSectionResizeMode(QHeaderView::Fixed);
     setDefaultSectionSize(18);
     setMinimumSectionSize(8);
+
+    KisConfig cfg(true);
+    setZoom(cfg.timelineZoom());
+
+    connect(this, &TimelineRulerHeader::sigZoomChanged, [this](qreal zoomValue){
+        m_d->zoomSaveCompressor->start(zoomValue);
+    });
 }
 
 TimelineRulerHeader::~TimelineRulerHeader()
@@ -166,6 +195,7 @@ void TimelineRulerHeader::paintEvent(QPaintEvent *e)
     int logical;
     const int width = viewport()->width();
     const int height = viewport()->height();
+
     for (int i = start; i <= end; ++i) {
         // DK: cannot copy-paste easily...
         // if (d->isVisualIndexHidden(i))
@@ -288,6 +318,7 @@ int TimelineRulerHeader::Private::calcSpanWidth(const int sectionWidth) {
 
 void TimelineRulerHeader::paintSection1(QPainter *painter, const QRect &rect, int logicalIndex) const
 {
+
     if (!rect.isValid())
         return;
 
@@ -364,22 +395,29 @@ void TimelineRulerHeader::setFramePerSecond(int fps)
 
 bool TimelineRulerHeader::setZoom(qreal zoom)
 {
-    const int minSectionSize = 4;
-    const int unitSectionSize = 18;
+    qreal newSectionSize = zoom * m_d->unitSectionSize;
 
-    int newSectionSize = zoom * unitSectionSize;
-
-    if (newSectionSize < minSectionSize) {
-        newSectionSize = minSectionSize;
-        zoom = qreal(newSectionSize) / unitSectionSize;
+    if (newSectionSize < m_d->minSectionSize) {
+        newSectionSize = m_d->minSectionSize;
+        zoom = qreal(newSectionSize) / m_d->unitSectionSize;
+    } else if (newSectionSize > m_d->maxSectionSize) {
+        newSectionSize = m_d->maxSectionSize;
+        zoom = qreal(newSectionSize) / m_d->unitSectionSize;
     }
+
+    m_d->remainder = newSectionSize - floor(newSectionSize);
 
     if (newSectionSize != defaultSectionSize()) {
         setDefaultSectionSize(newSectionSize);
+        emit sigZoomChanged(zoom);
         return true;
     }
 
     return false;
+}
+
+qreal TimelineRulerHeader::zoom() {
+    return  (qreal(defaultSectionSize() + m_d->remainder) / m_d->unitSectionSize);
 }
 
 void TimelineRulerHeader::updateMinimumSize()
@@ -441,6 +479,10 @@ void TimelineRulerHeader::mousePressEvent(QMouseEvent *e)
             }
 
             QMenu menu;
+
+            menu.addSection(i18n("Edit Columns:"));
+            menu.addSeparator();
+
             KisActionManager::safePopulateMenu(&menu, "cut_columns_to_clipboard", m_d->actionMan);
             KisActionManager::safePopulateMenu(&menu, "copy_columns_to_clipboard", m_d->actionMan);
             KisActionManager::safePopulateMenu(&menu, "paste_columns_from_clipboard", m_d->actionMan);
@@ -491,7 +533,9 @@ void TimelineRulerHeader::mouseMoveEvent(QMouseEvent *e)
 {
     int logical = logicalIndexAt(e->pos());
     if (logical != -1) {
+
         if (e->buttons() & Qt::LeftButton) {
+
             m_d->model->setScrubState(true);
             model()->setHeaderData(logical, orientation(), true, KisTimeBasedItemModel::ActiveFrameRole);
 
@@ -509,6 +553,7 @@ void TimelineRulerHeader::mouseMoveEvent(QMouseEvent *e)
             }
 
         }
+
     }
 
     QHeaderView::mouseMoveEvent(e);

@@ -119,15 +119,28 @@ LcmsEnginePlugin::LcmsEnginePlugin(QObject *parent, const QVariantList &)
     iccProfileDirs.append(winPath + "/System32/Spool/Drivers/Color/");
 
 #endif
+#ifdef Q_OS_LINUX
+    iccProfileDirs.append(QDir::homePath() + "./share/color/icc");
+#endif
+
     Q_FOREACH(const QString &iccProfiledir, iccProfileDirs) {
         QDir profileDir(iccProfiledir);
         Q_FOREACH(const QString &entry, profileDir.entryList(QStringList() << "*.icm" << "*.icc", QDir::NoDotAndDotDot | QDir::Files | QDir::Readable)) {
             profileFilenames << iccProfiledir + "/" + entry;
         }
     }
+
+    QStringList blackList = QStringList() << "panhexro.icm"
+                                          << "ctpctdmed.icc";
+
     // Load the profiles
     if (!profileFilenames.empty()) {
         for (QStringList::Iterator it = profileFilenames.begin(); it != profileFilenames.end(); ++it) {
+
+            if (blackList.contains((*it).toLower())) {
+                continue;
+            }
+
             KoColorProfile *profile = new IccColorProfile(*it);
             Q_CHECK_PTR(profile);
 
@@ -144,7 +157,7 @@ LcmsEnginePlugin::LcmsEnginePlugin(QObject *parent, const QVariantList &)
 
     // ------------------- LAB ---------------------------------
 
-    KoColorProfile *labProfile = LcmsColorProfileContainer::createFromLcmsProfile(cmsCreateLab2Profile(0));
+    KoColorProfile *labProfile = LcmsColorProfileContainer::createFromLcmsProfile(cmsCreateLab4Profile(0));
     registry->addProfile(labProfile);
 
     registry->add(new LabU8ColorSpaceFactory());

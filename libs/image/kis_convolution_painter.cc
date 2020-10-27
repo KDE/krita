@@ -58,7 +58,7 @@
 #endif
 
 
-bool KisConvolutionPainter::useFFTImplemenation(const KisConvolutionKernelSP kernel) const
+bool KisConvolutionPainter::useFFTImplementation(const KisConvolutionKernelSP kernel) const
 {
     bool result = false;
 
@@ -85,7 +85,7 @@ KisConvolutionWorker<factory>* KisConvolutionPainter::createWorker(const KisConv
     KisConvolutionWorker<factory> *worker;
 
 #ifdef HAVE_FFTW3
-    if (useFFTImplemenation(kernel)) {
+    if (useFFTImplementation(kernel)) {
         worker = new KisConvolutionWorkerFFT<factory>(painter, progress);
     } else {
         worker = new KisConvolutionWorkerSpatial<factory>(painter, progress);
@@ -127,10 +127,15 @@ KisConvolutionPainter::KisConvolutionPainter(KisPaintDeviceSP device, KisSelecti
 {
 }
 
-KisConvolutionPainter::KisConvolutionPainter(KisPaintDeviceSP device, TestingEnginePreference enginePreference)
+KisConvolutionPainter::KisConvolutionPainter(KisPaintDeviceSP device, EnginePreference enginePreference)
     : KisPainter(device),
       m_enginePreference(enginePreference)
 {
+}
+
+void KisConvolutionPainter::setEnginePreference(EnginePreference value)
+{
+    m_enginePreference = value;
 }
 
 void KisConvolutionPainter::applyMatrix(const KisConvolutionKernelSP kernel, const KisPaintDeviceSP src, QPoint srcPos, QPoint dstPos, QSize areaSize, KisConvolutionBorderOp borderOp)
@@ -147,6 +152,13 @@ void KisConvolutionPainter::applyMatrix(const KisConvolutionKernelSP kernel, con
     // Determine whether we convolve border pixels, or not.
     switch (borderOp) {
     case BORDER_REPEAT: {
+        /**
+         * We don't use defaultBounds->topLevelWrapRect(), because
+         * the main purpose of this wrapping is "getting expected
+         * results when applying to the the layer". If a mask is bigger
+         * than the image, then it should be wrapped around the mask
+         * instead.
+         */
         const QRect boundsRect = src->defaultBounds()->bounds();
         const QRect requestedRect = QRect(srcPos, areaSize);
         QRect dataRect = requestedRect | boundsRect;
@@ -185,5 +197,5 @@ void KisConvolutionPainter::applyMatrix(const KisConvolutionKernelSP kernel, con
 
 bool KisConvolutionPainter::needsTransaction(const KisConvolutionKernelSP kernel) const
 {
-    return !useFFTImplemenation(kernel);
+    return !useFFTImplementation(kernel);
 }

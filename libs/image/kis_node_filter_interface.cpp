@@ -36,7 +36,7 @@
 
 #define SANITY_RELEASE_FILTER(filter)                           \
     do {                                                        \
-        if (m_filter && m_filter->sanityDerefUsageCounter()) {  \
+        if (m_filterConfiguration && m_filterConfiguration->sanityDerefUsageCounter()) {  \
             warnKrita;                                                 \
             warnKrita << "WARNING: filter configuration has more than one user! Krita will probably crash soon!"; \
             warnKrita << "WARNING:" << ppVar(this);                    \
@@ -52,41 +52,37 @@
 
 #endif /* SANITY_CHECK_FILTER_CONFIGURATION_OWNER*/
 
-KisNodeFilterInterface::KisNodeFilterInterface(KisFilterConfigurationSP filterConfig, bool useGeneratorRegistry)
-    : m_filter(filterConfig),
-      m_useGeneratorRegistry(useGeneratorRegistry)
+KisNodeFilterInterface::KisNodeFilterInterface(KisFilterConfigurationSP filterConfig)
+    : m_filterConfiguration(filterConfig)
 {
-    SANITY_ACQUIRE_FILTER(m_filter);
+    SANITY_ACQUIRE_FILTER(m_filterConfiguration);
+    KIS_SAFE_ASSERT_RECOVER_NOOP(!filterConfig || filterConfig->hasLocalResourcesSnapshot());
 }
 
 KisNodeFilterInterface::KisNodeFilterInterface(const KisNodeFilterInterface &rhs)
-    : m_useGeneratorRegistry(rhs.m_useGeneratorRegistry)
-{
-    if (m_useGeneratorRegistry) {
-        m_filter = KisGeneratorRegistry::instance()->cloneConfiguration(const_cast<KisFilterConfiguration*>(rhs.m_filter.data()));
-    } else {
-        m_filter = KisFilterRegistry::instance()->cloneConfiguration(const_cast<KisFilterConfiguration*>(rhs.m_filter.data()));
-    }
+    : m_filterConfiguration(rhs.m_filterConfiguration->clone())
 
-    SANITY_ACQUIRE_FILTER(m_filter);
+{
+    SANITY_ACQUIRE_FILTER(m_filterConfiguration);
 }
 
 KisNodeFilterInterface::~KisNodeFilterInterface()
 {
-    SANITY_RELEASE_FILTER(m_filter);
+    SANITY_RELEASE_FILTER(m_filterConfiguration);
 }
 
 KisFilterConfigurationSP KisNodeFilterInterface::filter() const
 {
-    return m_filter;
+    return m_filterConfiguration;
 }
 
 void KisNodeFilterInterface::setFilter(KisFilterConfigurationSP filterConfig)
 {
-    SANITY_RELEASE_FILTER(m_filter);
+    SANITY_RELEASE_FILTER(m_filterConfiguration);
 
     KIS_SAFE_ASSERT_RECOVER_RETURN(filterConfig);
-    m_filter = filterConfig;
+    KIS_SAFE_ASSERT_RECOVER_NOOP(filterConfig->hasLocalResourcesSnapshot());
+    m_filterConfiguration = filterConfig;
 
-    SANITY_ACQUIRE_FILTER(m_filter);
+    SANITY_ACQUIRE_FILTER(m_filterConfiguration);
 }

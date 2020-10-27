@@ -30,6 +30,7 @@ class KoShapeLayer;
 class KisCanvas2;
 class KisDocument;
 class KisNameServer;
+class KUndo2Stack;
 
 /**
  * KisShapeController keeps track of new layers, shapes, masks and
@@ -43,7 +44,7 @@ class KRITAUI_EXPORT KisShapeController : public KisDummiesFacadeBase, public Ko
 
 public:
 
-    KisShapeController(KisDocument *doc, KisNameServer *nameServer);
+    KisShapeController(KisNameServer *nameServer, KUndo2Stack *undoStack, QObject *parent = 0);
     ~KisShapeController() override;
 
     bool hasDummyForNode(KisNodeSP node) const override;
@@ -79,8 +80,7 @@ Q_SIGNALS:
     void currentLayerChanged(const KoShapeLayer*);
 
 public:
-    void addShapes(const QList<KoShape*> shapes) override;
-    void removeShape(KoShape* shape) override;
+    KoShapeContainer* createParentForShapes(const QList<KoShape*> shapes, KUndo2Command *parentCommand) override;
 
     QRectF documentRectInPixels() const override;
     qreal pixelsPerInch() const override;

@@ -65,7 +65,7 @@ DockerPlugins=\\0
 DockerPluginsDisabled=textdocumentinspection
 FlakePlugins=,
 ShapePlugins=,
-ToolsBlacklist=CreatePathTool,KoPencilTool,ConnectionTool,KarbonFilterEffectsTool,KritaShape/KisToolText,ArtisticTextTool,TextTool
+ToolsBlacklist=CreatePathTool,KoPencilTool,KarbonFilterEffectsTool,KritaShape/KisToolText
 ToolPlugins=,,
 ToolPluginsDisabled=
 
@@ -366,3 +366,13 @@ enable_scripter=true
 enable_tenbrushes=true
 enable_tenscripts=true
 enable_plugin_importer=true
+
+[SPenSettings]
+actionButtonClick=spen_show_popup_palette
+actionButtonDoubleClick=erase_action
+actionGestureCircleCCW=shift_brush_color_counter_clockwise
+actionGestureCircleCW=shift_brush_color_clockwise
+actionGestureSwipeDown=make_brush_color_darker
+actionGestureSwipeRight=KritaSelected/KisToolColorPicker
+actionGestureSwipeLeft=KritaShape/KisToolBrush
+actionGestureSwipeUp=make_brush_color_lighter

@@ -36,8 +36,9 @@
 /**********************************************************************/
 
 
-KisTextureMaskInfo::KisTextureMaskInfo(int levelOfDetail)
-    : m_levelOfDetail(levelOfDetail)
+KisTextureMaskInfo::KisTextureMaskInfo(int levelOfDetail, bool preserveAlpha)
+    : m_levelOfDetail(levelOfDetail),
+      m_preserveAlpha(preserveAlpha)
 {
 }
 
@@ -47,10 +48,12 @@ KisTextureMaskInfo::KisTextureMaskInfo(const KisTextureMaskInfo &rhs)
       m_scale(rhs.m_scale),
       m_brightness(rhs.m_brightness),
       m_contrast(rhs.m_contrast),
+      m_neutralPoint(rhs.m_neutralPoint),
       m_invert(rhs.m_invert),
       m_cutoffLeft(rhs.m_cutoffLeft),
       m_cutoffRight(rhs.m_cutoffRight),
-      m_cutoffPolicy(rhs.m_cutoffPolicy)
+      m_cutoffPolicy(rhs.m_cutoffPolicy),
+      m_preserveAlpha(rhs.m_preserveAlpha)
 {
 }
 
@@ -68,10 +71,12 @@ bool operator==(const KisTextureMaskInfo &lhs, const KisTextureMaskInfo &rhs) {
             qFuzzyCompare(lhs.m_scale, rhs.m_scale) &&
             qFuzzyCompare(lhs.m_brightness, rhs.m_brightness) &&
             qFuzzyCompare(lhs.m_contrast, rhs.m_contrast) &&
+            qFuzzyCompare(lhs.m_neutralPoint, rhs.m_neutralPoint) &&
             lhs.m_invert == rhs.m_invert &&
             lhs.m_cutoffLeft == rhs.m_cutoffLeft &&
             lhs.m_cutoffRight == rhs.m_cutoffRight &&
-            lhs.m_cutoffPolicy == rhs.m_cutoffPolicy;
+            lhs.m_cutoffPolicy == rhs.m_cutoffPolicy &&
+            lhs.m_preserveAlpha == rhs.m_preserveAlpha;
 }
 
 KisTextureMaskInfo &KisTextureMaskInfo::operator=(const KisTextureMaskInfo &rhs)
@@ -81,10 +86,12 @@ KisTextureMaskInfo &KisTextureMaskInfo::operator=(const KisTextureMaskInfo &rhs)
     m_scale = rhs.m_scale;
     m_brightness = rhs.m_brightness;
     m_contrast = rhs.m_contrast;
+    m_neutralPoint = rhs.m_neutralPoint;
     m_invert = rhs.m_invert;
     m_cutoffLeft = rhs.m_cutoffLeft;
     m_cutoffRight = rhs.m_cutoffRight;
     m_cutoffPolicy = rhs.m_cutoffPolicy;
+    m_preserveAlpha = rhs.m_preserveAlpha;
 
     return *this;
 }
@@ -105,14 +112,14 @@ QRect KisTextureMaskInfo::maskBounds() const {
     return m_maskBounds;
 }
 
-bool KisTextureMaskInfo::fillProperties(const KisPropertiesConfigurationSP setting)
+bool KisTextureMaskInfo::fillProperties(const KisPropertiesConfigurationSP setting, KisResourcesInterfaceSP resourcesInterface)
 {
 
     if (!setting->hasProperty("Texture/Pattern/PatternMD5")) {
         return false;
     }
 
-    m_pattern = KisEmbeddedPatternManager::loadEmbeddedPattern(setting);
+    m_pattern = KisEmbeddedPatternManager::tryFetchPattern(setting, resourcesInterface);
 
     if (!m_pattern) {
         warnKrita << "WARNING: Couldn't load the pattern for a stroke";
@@ -122,6 +129,7 @@ bool KisTextureMaskInfo::fillProperties(const KisPropertiesConfigurationSP setti
     m_scale = setting->getDouble("Texture/Pattern/Scale", 1.0);
     m_brightness = setting->getDouble("Texture/Pattern/Brightness");
     m_contrast = setting->getDouble("Texture/Pattern/Contrast", 1.0);
+    m_neutralPoint = setting->getDouble("Texture/Pattern/NeutralPoint", 0.5);
     m_invert = setting->getBool("Texture/Pattern/Invert");
     m_cutoffLeft = setting->getInt("Texture/Pattern/CutoffLeft", 0);
     m_cutoffRight = setting->getInt("Texture/Pattern/CutoffRight", 255);
@@ -134,8 +142,14 @@ void KisTextureMaskInfo::recalculateMask()
 {
     if (!m_pattern) return;
 
-    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->alpha8();
+    const KoColorSpace* cs;
+    const bool useAlpha = m_pattern->hasAlpha() && m_preserveAlpha;
 
+    if (useAlpha) {
+        cs = KoColorSpaceRegistry::instance()->rgb8();
+    } else {
+        cs = KoColorSpaceRegistry::instance()->alpha8();
+    }
     if (!m_mask) {
         m_mask = new KisPaintDevice(cs);
     }
@@ -150,14 +164,17 @@ void KisTextureMaskInfo::recalculateMask()
 
     qreal scale = m_scale * KisLodTransform::lodToScale(m_levelOfDetail);
 
-    if (!qFuzzyCompare(scale, 0.0)) {
+    if (!qFuzzyCompare(scale, 0.0) && !qFuzzyCompare(scale, 1.0)) {
         QTransform tf;
         tf.scale(scale, scale);
         QRect rc = KisAlgebra2D::ensureRectNotSmaller(tf.mapRect(mask.rect()), QSize(2,2));
         mask = mask.scaled(rc.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    } else {
+        // detach the mask from the file loaded from the storage
+        mask = QImage(mask);
     }
 
-    const QRgb* pixel = reinterpret_cast<const QRgb*>(mask.constBits());
+    QRgb* pixel = reinterpret_cast<QRgb*>(mask.bits());
     const int width = mask.width();
     const int height = mask.height();
 
@@ -186,21 +203,51 @@ void KisTextureMaskInfo::recalculateMask()
                 maskValue = 1 - maskValue;
             }
 
-            if (m_cutoffPolicy == 1 && (maskValue < (m_cutoffLeft / 255.0) || maskValue > (m_cutoffRight / 255.0))) {
+            maskValue = qBound(0.0f, maskValue, 1.0f);
+
+            float neutralAdjustedValue;
+            
+            //Adjust neutral point in linear fashion.  Uses separate linear equations from 0 to neutralPoint, and neutralPoint to 1,
+            //to prevent loss of detail (clipping).
+            if (m_neutralPoint == 1 || (m_neutralPoint != 0 && maskValue <= m_neutralPoint)) {
+                neutralAdjustedValue = maskValue / (2 * m_neutralPoint);
+            } else {
+                neutralAdjustedValue = 0.5 +  (maskValue - m_neutralPoint) / (2 - 2 * m_neutralPoint);
+            }
+
+            if (m_cutoffPolicy == 1 && (neutralAdjustedValue < (m_cutoffLeft / 255.0) || neutralAdjustedValue >(m_cutoffRight / 255.0))) {
                 // mask out the dab if it's outside the pattern's cuttoff points
-                maskValue = OPACITY_TRANSPARENT_F;
-            }
-            else if (m_cutoffPolicy == 2 && (maskValue < (m_cutoffLeft / 255.0) || maskValue > (m_cutoffRight / 255.0))) {
-                maskValue = OPACITY_OPAQUE_F;
+                alpha = OPACITY_TRANSPARENT_F;
+                if (!useAlpha) {
+                    neutralAdjustedValue = alpha;
+                }
+            } else if (m_cutoffPolicy == 2 && (neutralAdjustedValue < (m_cutoffLeft / 255.0) || neutralAdjustedValue >(m_cutoffRight / 255.0))) {
+                alpha = OPACITY_OPAQUE_F;
+                if (!useAlpha) {
+                    neutralAdjustedValue = alpha;
+                }
             }
 
-            cs->setOpacity(iter->rawData(), maskValue, 1);
-            iter->nextPixel();
+            if (useAlpha) {
+                int finalValue = qRound(neutralAdjustedValue * 255.0);
+                pixel[row * width + col] = QColor(finalValue, finalValue, finalValue, qRound(alpha * 255.0)).rgba();
+            } else {
+                cs->setOpacity(iter->rawData(), neutralAdjustedValue, 1);
+                iter->nextPixel();
+            }
         }
-        iter->nextRow();
+        if (!useAlpha) {
+            iter->nextRow();
+        }
     }
-
+    if (useAlpha) {
+        m_mask->convertFromQImage(mask, 0);
+    }
     m_maskBounds = QRect(0, 0, width, height);
+}
+
+bool KisTextureMaskInfo::hasAlpha() {
+    return m_pattern->hasAlpha();
 }
 
 /**********************************************************************/

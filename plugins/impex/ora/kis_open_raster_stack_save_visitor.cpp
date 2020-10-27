@@ -60,6 +60,20 @@ void KisOpenRasterStackSaveVisitor::saveLayerInfo(QDomElement& elt, KisLayer* la
     elt.setAttribute("name", layer->name());
     elt.setAttribute("opacity", QString().setNum(layer->opacity() / 255.0));
     elt.setAttribute("visibility", layer->visible() ? "visible" : "hidden");
+
+    if (layer->inherits("KisGroupLayer")) {
+        // Workaround for the issue regarding ora specification.
+        // MyPaint treats layer's x and y relative to the group's x and y
+        //  while Gimp and Krita think those are absolute values.
+        // Hence we set x and y on group layers to always be 0.
+        elt.setAttribute("x", QString().setNum(0));
+        elt.setAttribute("y", QString().setNum(0));
+
+    } else {
+        elt.setAttribute("x", QString().setNum(layer->exactBounds().x()));
+        elt.setAttribute("y", QString().setNum(layer->exactBounds().y()));
+    }
+
     if (layer->userLocked()) {
         elt.setAttribute("edit-locked", "true");
     }
@@ -68,9 +82,7 @@ void KisOpenRasterStackSaveVisitor::saveLayerInfo(QDomElement& elt, KisLayer* la
     }
     QString compop = layer->compositeOpId();
     if (layer->compositeOpId() == COMPOSITE_CLEAR) compop = "svg:clear";
-    else if (layer->compositeOpId() == COMPOSITE_OVER) compop = "svg:src-over";
     else if (layer->compositeOpId() == COMPOSITE_ERASE) compop = "svg:dst-out";
-    else if (layer->alphaChannelDisabled()) compop = "svg:src-atop";
     else if (layer->compositeOpId() == COMPOSITE_DESTINATION_ATOP) compop = "svg:dst-atop";
     else if (layer->compositeOpId() == COMPOSITE_DESTINATION_IN) compop = "svg:dst-in";
     else if (layer->compositeOpId() == COMPOSITE_ADD) compop = "svg:plus";
@@ -88,6 +100,12 @@ void KisOpenRasterStackSaveVisitor::saveLayerInfo(QDomElement& elt, KisLayer* la
     else if (layer->compositeOpId() == COMPOSITE_LUMINIZE) compop = "svg:luminosity";
     else if (layer->compositeOpId() == COMPOSITE_HUE) compop = "svg:hue";
     else if (layer->compositeOpId() == COMPOSITE_SATURATION) compop = "svg:saturation";
+
+    // it is important that the check for alphaChannelDisabled (and other non compositeOpId checks)
+    // come before the check for COMPOSITE_OVER, otherwise they will be logically ignored.
+    else if (layer->alphaChannelDisabled()) compop = "svg:src-atop";
+    else if (layer->compositeOpId() == COMPOSITE_OVER) compop = "svg:src-over";
+
     //else if (layer->compositeOpId() == COMPOSITE_EXCLUSION) compop = "svg:exclusion";
     else compop = "krita:" + layer->compositeOpId();
     elt.setAttribute("composite-op", compop);
@@ -161,7 +179,21 @@ bool KisOpenRasterStackSaveVisitor::visit(KisExternalLayer * layer)
 
 bool KisOpenRasterStackSaveVisitor::saveLayer(KisLayer *layer)
 {
-    QString filename = d->saveContext->saveDeviceData(layer->projection(), layer->metaData(), layer->image()->bounds(), layer->image()->xRes(), layer->image()->yRes());
+    if (layer->isFakeNode()) {
+        // don't save grids, reference images layers etc.
+        return true;
+    }
+
+    // here we adjust the bounds to encompass the entire area of the layer, including transforms
+    QRect adjustedBounds = layer->exactBounds();
+
+    if (adjustedBounds.isEmpty()) {
+        // in case of an empty layer, artificially increase the size of the saved rectangle
+        // to just save an empty layer file
+        adjustedBounds.adjust(0, 0, 1, 1);
+    }
+
+    QString filename = d->saveContext->saveDeviceData(layer->projection(), layer->metaData(), adjustedBounds, layer->image()->xRes(), layer->image()->yRes());
 
     QDomElement elt = d->layerStack.createElement("layer");
     saveLayerInfo(elt, layer);

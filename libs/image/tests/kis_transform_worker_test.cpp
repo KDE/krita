@@ -31,7 +31,8 @@
 #include "kis_filter_strategy.h"
 #include "kis_paint_device.h"
 #include "kis_transform_worker.h"
-#include "testutil.h"
+#include <testutil.h>
+#include "kistest.h"
 #include "kis_transaction.h"
 #include "kis_random_accessor_ng.h"
 
@@ -57,7 +58,7 @@ void testMirror(const QRect &imageRect, const QRect &mirrorRect, Qt::Orientation
 
     qreal axis = QRectF(mirrorRect).center().x();
 
-    KisRandomAccessorSP it = dev->createRandomAccessorNG(imageRect.x(), imageRect.y());
+    KisRandomAccessorSP it = dev->createRandomAccessorNG();
 
     int i = 0;
     for (int y = imageRect.y(); y < imageRect.y() + imageRect.height(); y++) {
@@ -133,7 +134,7 @@ void KisTransformWorkerTest::testOffset()
 {
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     QString imageName("mirror_source.png");
-    QImage image(QString(FILES_DATA_DIR) + QDir::separator() + imageName);
+    QImage image(QString(FILES_DATA_DIR) + '/' + imageName);
     QPoint bottomRight(image.width(), image.height());
     KisPaintDeviceSP dev2 = new KisPaintDevice(cs);
 
@@ -170,7 +171,7 @@ void KisTransformWorkerTest::testOffset()
 void KisTransformWorkerTest::testMirrorTransactionX()
 {
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
-    QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "mirror_source.png");
+    QImage image(QString(FILES_DATA_DIR) + '/' + "mirror_source.png");
     KisPaintDeviceSP dev2 = new KisPaintDevice(cs);
     dev2->convertFromQImage(image, 0);
 
@@ -194,7 +195,7 @@ void KisTransformWorkerTest::testMirrorTransactionX()
 void KisTransformWorkerTest::testMirrorTransactionY()
 {
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
-    QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "mirror_source.png");
+    QImage image(QString(FILES_DATA_DIR) + '/' + "mirror_source.png");
     KisPaintDeviceSP dev2 = new KisPaintDevice(cs);
     dev2->convertFromQImage(image, 0);
 
@@ -222,7 +223,7 @@ void KisTransformWorkerTest::testScaleUp()
     KoUpdaterPtr updater = pu.startSubtask();
 
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
-    QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "mirror_source.png");
+    QImage image(QString(FILES_DATA_DIR) + '/' + "mirror_source.png");
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     dev->convertFromQImage(image, 0);
 
@@ -243,7 +244,7 @@ void KisTransformWorkerTest::testScaleUp()
 
     QImage result = dev->convertToQImage(0, rc.x(), rc.y(), rc.width(), rc.height());
     QPoint errpoint;
-    image.load(QString(FILES_DATA_DIR) + QDir::separator() + "test_scaleup_result.png");
+    image.load(QString(FILES_DATA_DIR) + '/' + "test_scaleup_result.png");
     if (!TestUtil::compareQImages(errpoint, image, result)) {
         image.save("test_scaleup_source.png");
         result.save("test_scaleup_result.png");
@@ -259,7 +260,7 @@ void KisTransformWorkerTest::testXScaleUp()
     KoUpdaterPtr updater = pu.startSubtask();
 
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
-    QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "mirror_source.png");
+    QImage image(QString(FILES_DATA_DIR) + '/' + "mirror_source.png");
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     dev->convertFromQImage(image, 0);
 
@@ -280,7 +281,7 @@ void KisTransformWorkerTest::testXScaleUp()
 
     QImage result = dev->convertToQImage(0, rc.x(), rc.y(), rc.width(), rc.height());
     QPoint errpoint;
-    image.load(QString(FILES_DATA_DIR) + QDir::separator() + "scaleupx_result.png");
+    image.load(QString(FILES_DATA_DIR) + '/' + "scaleupx_result.png");
     if (!TestUtil::compareQImages(errpoint, image, result)) {
         image.save("test_x_scaleup_source.png");
         result.save("test_x_scaleup_result.png");
@@ -295,7 +296,7 @@ void KisTransformWorkerTest::testYScaleUp()
     KoUpdaterPtr updater = pu.startSubtask();
 
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
-    QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "mirror_source.png");
+    QImage image(QString(FILES_DATA_DIR) + '/' + "mirror_source.png");
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     dev->convertFromQImage(image, 0);
 
@@ -317,7 +318,7 @@ void KisTransformWorkerTest::testYScaleUp()
 
     QImage result = dev->convertToQImage(0, rc.x(), rc.y(), rc.width(), rc.height());
     QPoint errpoint;
-    image.load(QString(FILES_DATA_DIR) + QDir::separator() + "scaleupy_result.png");
+    image.load(QString(FILES_DATA_DIR) + '/' + "scaleupy_result.png");
     if (!TestUtil::compareQImages(errpoint, image, result)) {
         image.save("test_y_scaleup_source.png");
         result.save("test_y_scaleup_result.png");
@@ -332,7 +333,7 @@ void KisTransformWorkerTest::testIdentity()
     KoUpdaterPtr updater = pu.startSubtask();
 
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
-    QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "mirror_source.png");
+    QImage image(QString(FILES_DATA_DIR) + '/' + "mirror_source.png");
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     dev->convertFromQImage(image, 0);
     KisFilterStrategy * filter = new KisBoxFilterStrategy();
@@ -367,7 +368,7 @@ void KisTransformWorkerTest::testScaleDown()
     KoUpdaterPtr updater = pu.startSubtask();
 
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
-    QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "mirror_source.png");
+    QImage image(QString(FILES_DATA_DIR) + '/' + "mirror_source.png");
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     dev->convertFromQImage(image, 0);
     KisFilterStrategy * filter = new KisBoxFilterStrategy();
@@ -398,7 +399,7 @@ void KisTransformWorkerTest::testScaleDown()
 
     QImage result = dev->convertToQImage(0, rc.x(), rc.y(), rc.width(), rc.height());
     QPoint errpoint;
-    image.load(QString(FILES_DATA_DIR) + QDir::separator() + "test_scaledown_result.png");
+    image.load(QString(FILES_DATA_DIR) + '/' + "test_scaledown_result.png");
     if (!TestUtil::compareQImages(errpoint, image, result)) {
         image.save("test_scaledown_source.png");
         result.save("test_scaledown_result.png");
@@ -414,7 +415,7 @@ void KisTransformWorkerTest::testXScaleDown()
     KoUpdaterPtr updater = pu.startSubtask();
 
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
-    QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "mirror_source.png");
+    QImage image(QString(FILES_DATA_DIR) + '/' + "mirror_source.png");
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     dev->convertFromQImage(image, 0);
 
@@ -432,7 +433,7 @@ void KisTransformWorkerTest::testXScaleDown()
     QRect rc = dev->exactBounds();
     QImage result = dev->convertToQImage(0, rc.x(), rc.y(), rc.width(), rc.height());
     QPoint errpoint;
-    image.load(QString(FILES_DATA_DIR) + QDir::separator() + "scaledownx_result.png");
+    image.load(QString(FILES_DATA_DIR) + '/' + "scaledownx_result.png");
     if (!TestUtil::compareQImages(errpoint, image, result)) {
         image.save("scaledownx_source.png");
         result.save("scaledownx_result.png");
@@ -447,7 +448,7 @@ void KisTransformWorkerTest::testYScaleDown()
     KoUpdaterPtr updater = pu.startSubtask();
 
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
-    QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "mirror_source.png");
+    QImage image(QString(FILES_DATA_DIR) + '/' + "mirror_source.png");
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     dev->convertFromQImage(image, 0);
 
@@ -468,7 +469,7 @@ void KisTransformWorkerTest::testYScaleDown()
 
     QImage result = dev->convertToQImage(0, rc.x(), rc.y(), rc.width(), rc.height());
     QPoint errpoint;
-    image.load(QString(FILES_DATA_DIR) + QDir::separator() + "scaledowny_result.png");
+    image.load(QString(FILES_DATA_DIR) + '/' + "scaledowny_result.png");
     if (!TestUtil::compareQImages(errpoint, image, result)) {
         image.save("scaledowny_source.png");
         result.save("scaledowny_result.png");
@@ -483,7 +484,7 @@ void KisTransformWorkerTest::testXShear()
     KoUpdaterPtr updater = pu.startSubtask();
 
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
-    QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "mirror_source.png");
+    QImage image(QString(FILES_DATA_DIR) + '/' + "mirror_source.png");
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     dev->convertFromQImage(image, 0);
 
@@ -515,7 +516,7 @@ void KisTransformWorkerTest::testXShear()
 
     QImage result = dev->convertToQImage(0, rc.x(), rc.y(), rc.width(), rc.height());
     QPoint errpoint;
-    image.load(QString(FILES_DATA_DIR) + QDir::separator() + "shearx_result.png");
+    image.load(QString(FILES_DATA_DIR) + '/' + "shearx_result.png");
     if (!TestUtil::compareQImages(errpoint, image, result)) {
         image.save("shearx_source.png");
         result.save("shearx_result.png");
@@ -531,7 +532,7 @@ void KisTransformWorkerTest::testYShear()
     KoUpdaterPtr updater = pu.startSubtask();
 
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
-    QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "mirror_source.png");
+    QImage image(QString(FILES_DATA_DIR) + '/' + "mirror_source.png");
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     dev->convertFromQImage(image, 0);
 
@@ -563,7 +564,7 @@ void KisTransformWorkerTest::testYShear()
 
     QImage result = dev->convertToQImage(0, rc.x(), rc.y(), rc.width(), rc.height());
     QPoint errpoint;
-    image.load(QString(FILES_DATA_DIR) + QDir::separator() + "sheary_result.png");
+    image.load(QString(FILES_DATA_DIR) + '/' + "sheary_result.png");
     if (!TestUtil::compareQImages(errpoint, image, result)) {
         image.save("sheary_source.png");
         result.save("sheary_result.png");
@@ -642,7 +643,7 @@ void testRotationImpl(qreal angle, QString filePrefix, bool useUniformColor = fa
     QImage image;
 
     if (!useUniformColor) {
-        image = QImage(QString(FILES_DATA_DIR) + QDir::separator() + "mirror_source.png");
+        image = QImage(QString(FILES_DATA_DIR) + '/' + "mirror_source.png");
         dev->convertFromQImage(image, 0);
     } else {
         dev->fill(QRect(120, 130, 374, 217), KoColor(QColor(150, 180, 230), cs));
@@ -670,7 +671,7 @@ void testRotationImpl(qreal angle, QString filePrefix, bool useUniformColor = fa
 
     image = QImage();
     image.load(QString(FILES_DATA_DIR) + QDir::separator() + resFileName);
-    if (!TestUtil::compareQImages(errpoint, image, result)) {
+    if (!TestUtil::compareQImagesPremultiplied(errpoint, image, result, 2, 1)) {
         dbgKrita << filePrefix;
         image.save(refFileName);
         result.save(resFileName);
@@ -779,7 +780,7 @@ void KisTransformWorkerTest::testScaleUp5times()
 void KisTransformWorkerTest::rotate90Left()
 {
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
-    QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "transform_rotate_test.png");
+    QImage image(QString(FILES_DATA_DIR) + '/' + "transform_rotate_test.png");
     KisPaintDeviceSP dev2 = new KisPaintDevice(cs);
     dev2->convertFromQImage(image, 0);
 
@@ -806,7 +807,7 @@ void KisTransformWorkerTest::rotate90Left()
 void KisTransformWorkerTest::rotate90Right()
 {
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
-    QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "transform_rotate_test.png");
+    QImage image(QString(FILES_DATA_DIR) + '/' + "transform_rotate_test.png");
     KisPaintDeviceSP dev2 = new KisPaintDevice(cs);
     dev2->convertFromQImage(image, 0);
 
@@ -834,7 +835,7 @@ void KisTransformWorkerTest::rotate90Right()
 void KisTransformWorkerTest::rotate180()
 {
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
-    QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "transform_rotate_test.png");
+    QImage image(QString(FILES_DATA_DIR) + '/' + "transform_rotate_test.png");
     KisPaintDeviceSP dev2 = new KisPaintDevice(cs);
     dev2->convertFromQImage(image, 0);
 
@@ -862,7 +863,7 @@ void KisTransformWorkerTest::rotate180()
 void generateTestImage(QString inputFileName, qreal scale, qreal rotation, qreal xshear, KisFilterStrategy *filter, bool saveImage = true)
 {
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
-    QImage image(QString(FILES_DATA_DIR) + QDir::separator() + inputFileName);
+    QImage image(QString(FILES_DATA_DIR) + '/' + inputFileName);
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     dev->convertFromQImage(image, 0);
 
@@ -990,4 +991,4 @@ void KisTransformWorkerTest::testPartialProcessing()
     TestUtil::checkQImage(result, "transform_test", "partial", "single");
 }
 
-QTEST_MAIN(KisTransformWorkerTest)
+KISTEST_MAIN(KisTransformWorkerTest)

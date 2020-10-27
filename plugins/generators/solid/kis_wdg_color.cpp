@@ -24,6 +24,7 @@
 
 #include <KoColor.h>
 #include <filter/kis_filter_configuration.h>
+#include <KisGlobalResourcesInterface.h>
 
 #include "ui_wdgcoloroptions.h"
 
@@ -52,7 +53,7 @@ void KisWdgColor::setConfiguration(const KisPropertiesConfigurationSP config)
 
 KisPropertiesConfigurationSP KisWdgColor::configuration() const
 {
-    KisFilterConfigurationSP config = new KisFilterConfiguration("color", 1);
+    KisFilterConfigurationSP config = new KisFilterConfiguration("color", 1, KisGlobalResourcesInterface::instance());
     KoColor c;
     c.fromKoColor(this->widget()->bnColor->color());
     QVariant v;

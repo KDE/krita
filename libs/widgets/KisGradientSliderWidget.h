@@ -24,10 +24,12 @@
 #include <QMouseEvent>
 #include <QPaintEvent>
 
+#include <KoSegmentGradient.h>
+
 class QAction;
 class QMenu;
+
 class KoGradientSegment;
-class KoSegmentGradient;
 
 #include "kritawidgets_export.h"
 
@@ -39,14 +41,12 @@ class KRITAWIDGETS_EXPORT KisGradientSliderWidget : public QWidget
     Q_OBJECT
 
 public:
-    KisGradientSliderWidget(QWidget *parent = 0, const char* name = 0, Qt::WindowFlags f = 0);
+    KisGradientSliderWidget(QWidget *parent = 0, const char* name = 0, Qt::WindowFlags f = Qt::WindowFlags());
 
 public:
     void paintEvent(QPaintEvent *) override;
-    void setGradientResource(KoSegmentGradient* agr);
-    KoGradientSegment* selectedSegment() {
-        return m_selectedSegment;
-    }
+    void setGradientResource(KoSegmentGradientSP agr);
+    KoGradientSegment *selectedSegment() { return m_selectedSegment; }
 
 Q_SIGNALS:
     void sigSelectedSegment(KoGradientSegment*);
@@ -57,6 +57,8 @@ protected:
     void mouseReleaseEvent(QMouseEvent * e) override;
     void mouseMoveEvent(QMouseEvent * e) override;
     void contextMenuEvent(QContextMenuEvent * e) override;
+
+    void paintSegmentHandle(int position, const QString text, const QPoint& textPos, QPainter& painter);
 
 private Q_SLOTS:
     void slotSplitSegment();
@@ -80,7 +82,7 @@ private:
         REMOVE_SEGMENT
     };
 
-    KoSegmentGradient* m_autogradientResource;
+    KoSegmentGradientSP m_autogradientResource;
     KoGradientSegment* m_currentSegment;
     KoGradientSegment* m_selectedSegment;
     QMenu* m_segmentMenu;

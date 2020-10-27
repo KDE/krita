@@ -27,6 +27,7 @@
 #include <kis_transform_mask_params_interface.h>
 
 #include <testutil.h>
+#include <testui.h>
 
 #include "config-limit-long-tests.h"
 
@@ -55,10 +56,8 @@ void KisFileLayerTest::testFileLayerPlusTransformMaskOffImage()
     waitForMaskUpdates(p.image->root());
     p.image->waitForDone();
 
-    KisTransformMaskSP mask1 = new KisTransformMask();
+    KisTransformMaskSP mask1 = new KisTransformMask(p.image, "mask1");
     p.image->addNode(mask1, flayer);
-
-    mask1->setName("mask1");
 
     flayer->setDirty(refRect);
     p.image->waitForDone();
@@ -123,10 +122,8 @@ void KisFileLayerTest::testFileLayerPlusTransformMaskSmallFileBigOffset()
     // initialized properly
     QCOMPARE(flayer->original()->defaultBounds()->bounds(), p.image->bounds());
 
-    KisTransformMaskSP mask1 = new KisTransformMask();
+    KisTransformMaskSP mask1 = new KisTransformMask(p.image, "mask1");
     p.image->addNode(mask1, flayer);
-
-    mask1->setName("mask1");
 
     flayer->setDirty(refRect);
     p.image->waitForDone();

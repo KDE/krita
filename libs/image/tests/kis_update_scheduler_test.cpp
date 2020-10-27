@@ -35,14 +35,16 @@
 #include "kis_updater_context.h"
 #include "kis_update_job_item.h"
 #include "kis_simple_update_queue.h"
+#include <KisGlobalResourcesInterface.h>
 
 #include "../../sdk/tests/testutil.h"
+#include "kistest.h"
 
 
 KisImageSP KisUpdateSchedulerTest::buildTestingImage()
 {
-    QImage sourceImage1(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
-    QImage sourceImage2(QString(FILES_DATA_DIR) + QDir::separator() + "inverted_hakonepa.png");
+    QImage sourceImage1(QString(FILES_DATA_DIR) + '/' + "hakonepa.png");
+    QImage sourceImage2(QString(FILES_DATA_DIR) + '/' + "inverted_hakonepa.png");
 
     QRect imageRect = QRect(QPoint(0,0), sourceImage1.size());
 
@@ -51,17 +53,17 @@ KisImageSP KisUpdateSchedulerTest::buildTestingImage()
 
     KisFilterSP filter = KisFilterRegistry::instance()->value("blur");
     Q_ASSERT(filter);
-    KisFilterConfigurationSP configuration = filter->defaultConfiguration();
+    KisFilterConfigurationSP configuration = filter->defaultConfiguration(KisGlobalResourcesInterface::instance());
     Q_ASSERT(configuration);
 
     KisPaintLayerSP paintLayer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8);
     KisPaintLayerSP paintLayer2 = new KisPaintLayer(image, "paint2", OPACITY_OPAQUE_U8 / 3);
-    KisLayerSP blur1 = new KisAdjustmentLayer(image, "blur1", configuration, 0);
+    KisLayerSP blur1 = new KisAdjustmentLayer(image, "blur1", configuration->cloneWithResourcesSnapshot(), 0);
 
     paintLayer1->paintDevice()->convertFromQImage(sourceImage1, 0, 0, 0);
     paintLayer2->paintDevice()->convertFromQImage(sourceImage2, 0, 0, 0);
 
-    image->lock();
+    image->barrierLock();
     image->addNode(paintLayer1);
     image->addNode(paintLayer2);
     image->addNode(blur1);
@@ -90,7 +92,7 @@ void KisUpdateSchedulerTest::testMerge()
     QCOMPARE(rootLayer->exactBounds(), image->bounds());
 
     QImage resultFRProjection = rootLayer->projection()->convertToQImage(0);
-    resultFRProjection.save(QString(FILES_OUTPUT_DIR) + QDir::separator() + "scheduler_fr_merge_result.png");
+    resultFRProjection.save(QString(FILES_OUTPUT_DIR) + '/' + "scheduler_fr_merge_result.png");
 
     /**
      * Test incremental updates
@@ -122,7 +124,7 @@ void KisUpdateSchedulerTest::testMerge()
     QCOMPARE(rootLayer->exactBounds(), image->bounds());
 
     QImage resultDirtyProjection = rootLayer->projection()->convertToQImage(0);
-    resultDirtyProjection.save(QString(FILES_OUTPUT_DIR) + QDir::separator() + "scheduler_dp_merge_result.png");
+    resultDirtyProjection.save(QString(FILES_OUTPUT_DIR) + '/' + "scheduler_dp_merge_result.png");
 
     QPoint pt;
     QVERIFY(TestUtil::compareQImages(pt, resultFRProjection, resultDirtyProjection));
@@ -169,7 +171,7 @@ void KisUpdateSchedulerTest::testLocking()
 
     KisTestableUpdateScheduler scheduler(image.data(), 2);
     KisUpdaterContext *context = scheduler.updaterContext();
-    QVERIFY(context);
+
     QVector<KisUpdateJobItem*> jobs;
 
     QRect dirtyRect1(0,0,50,100);
@@ -229,7 +231,7 @@ void KisUpdateSchedulerTest::testExclusiveStrokes()
     QCOMPARE(jobs[1]->isRunning(), false);
     QVERIFY(checkWalker(jobs[0]->walker(), dirtyRect1));
 
-    KisStrokeId id = scheduler.startStroke(new KisTestingStrokeStrategy("excl_", true, false));
+    KisStrokeId id = scheduler.startStroke(new KisTestingStrokeStrategy(QLatin1String("excl_"), true, false));
 
     jobs = context->getJobs();
     QCOMPARE(jobs[0]->isRunning(), true);
@@ -272,7 +274,7 @@ void KisUpdateSchedulerTest::testEmptyStroke()
 {
     KisImageSP image = buildTestingImage();
 
-    KisStrokeId id = image->startStroke(new KisStrokeStrategy());
+    KisStrokeId id = image->startStroke(new KisStrokeStrategy(QLatin1String()));
     image->addJob(id, 0);
     image->endStroke(id);
     image->waitForDone();
@@ -427,5 +429,5 @@ void KisUpdateSchedulerTest::testLodSync()
     image->waitForDone();
 }
 
-QTEST_MAIN(KisUpdateSchedulerTest)
+KISTEST_MAIN(KisUpdateSchedulerTest)
 

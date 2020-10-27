@@ -35,6 +35,7 @@
 #include <KoDocumentResourceManager.h>
 #include <KoShapeStroke.h>
 #include <KoDocumentInfo.h>
+#include <KoCanvasBase.h>
 
 #include "KisViewManager.h"
 #include "kis_canvas_resource_provider.h"
@@ -60,9 +61,9 @@
 #include "kis_shape_layer.h"
 #include <kis_shape_controller.h>
 #include "kis_image_animation_interface.h"
-#include "kis_time_range.h"
+#include "kis_time_span.h"
 #include "kis_keyframe_channel.h"
-
+#include "kis_node_manager.h"
 
 #include <processing/fill_processing_visitor.h>
 #include <kis_selection_tool_helper.h>
@@ -75,7 +76,7 @@ namespace ActionHelper {
     void copyFromDevice(KisViewManager *view,
                         KisPaintDeviceSP device,
                         bool makeSharpClip = false,
-                        const KisTimeRange &range = KisTimeRange())
+                        const KisTimeSpan &range = KisTimeSpan())
     {
         KisImageWSP image = view->image();
         if (!image) return;
@@ -223,16 +224,18 @@ void KisFillActionFactory::run(const QString &fillSource, KisViewManager *view)
     }
 
     KisProcessingVisitorSP visitor =
-        new FillProcessingVisitor(QPoint(0, 0), // start position
+        new FillProcessingVisitor(resources->image()->projection(),
+                                  QPoint(0, 0), // start position
                                   selection,
                                   resources,
                                   false, // fast mode
                                   usePattern,
                                   true, // fill only selection,
+                                  false,
                                   0, // feathering radius
                                   0, // sizemod
                                   80, // threshold,
-                                  false, // unmerged
+                                  false, // use unmerged
                                   useBgColor);
 
     applicator.applyVisitor(visitor,
@@ -266,9 +269,12 @@ void KisCutCopyActionFactory::run(bool willCut, bool makeSharpClip, KisViewManag
     KisImageSP image = view->image();
     if (!image) return;
 
-    bool haveShapesSelected = view->selectionManager()->haveShapesSelected();
+    const bool haveShapesSelected = view->selectionManager()->haveShapesSelected();
 
-    if (haveShapesSelected) {
+    KisNodeSP node = view->activeNode();
+    KisSelectionSP selection = view->selection();
+
+    if (!makeSharpClip && haveShapesSelected) {
         // XXX: "Add saving of XML data for Cut/Copy of shapes"
 
         KisImageBarrierLocker locker(image);
@@ -277,13 +283,7 @@ void KisCutCopyActionFactory::run(bool willCut, bool makeSharpClip, KisViewManag
         } else {
             view->canvasBase()->toolProxy()->copy();
         }
-    } else {
-        KisNodeSP node = view->activeNode();
-        if (!node) return;
-
-        KisSelectionSP selection = view->selection();
-        if (selection.isNull()) return;
-
+    } else if (node && selection) {
         {
             KisImageBarrierLocker locker(image);
             KisPaintDeviceSP dev = node->paintDevice();
@@ -309,9 +309,9 @@ void KisCutCopyActionFactory::run(bool willCut, bool makeSharpClip, KisViewManag
                 return;
             }
 
-            KisTimeRange range;
+            KisTimeSpan range;
 
-            KisKeyframeChannel *channel = node->getKeyframeChannel(KisKeyframeChannel::Content.id());
+            KisKeyframeChannel *channel = node->getKeyframeChannel(KisKeyframeChannel::Raster.id());
             if (channel) {
                 const int currentTime = image->animationInterface()->currentTime();
                 range = channel->affectedFrames(currentTime);
@@ -372,6 +372,12 @@ void KisCutCopyActionFactory::run(bool willCut, bool makeSharpClip, KisViewManag
         KisOperationConfiguration config(id());
         config.setProperty("will-cut", willCut);
         endAction(ap, config.toXML());
+    } else if (!makeSharpClip) {
+        if (willCut) {
+            view->nodeManager()->cutLayersToClipboard();
+        } else {
+            view->nodeManager()->copyLayersToClipboard();
+        }
     }
 }
 
@@ -512,11 +518,12 @@ void KisSelectionToShapeActionFactory::run(KisViewManager *view)
     KoShape *shape = KoPathShape::createShapeFromPainterPath(transform.map(selectionOutline));
     shape->setShapeId(KoPathShapeId);
 
-    KoColor fgColor = view->canvasBase()->resourceManager()->resource(KoCanvasResourceProvider::ForegroundColor).value<KoColor>();
+    KoColor fgColor = view->canvasBase()->resourceManager()->resource(KoCanvasResource::ForegroundColor).value<KoColor>();
     KoShapeStrokeSP border(new KoShapeStroke(1.0, fgColor.toQColor()));
     shape->setStroke(border);
 
-    view->document()->shapeController()->addShape(shape);
+    KUndo2Command *cmd = view->canvasBase()->shapeController()->addShapeDirect(shape, 0);
+    KisProcessingApplicator::runSingleCommandStroke(view->image(), cmd);
 }
 
 void KisStrokeSelectionActionFactory::run(KisViewManager *view, StrokeSelectionOptions params)
@@ -541,7 +548,7 @@ void KisStrokeSelectionActionFactory::run(KisViewManager *view, StrokeSelectionO
     QPainterPath outline = pixelSelection->outlineCache();
     QColor color = params.color.toQColor();
 
-    KisNodeSP currentNode = view->canvasResourceProvider()->resourceManager()->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeWSP>();
+    KisNodeSP currentNode = view->canvasResourceProvider()->resourceManager()->resource(KoCanvasResource::CurrentKritaNode).value<KisNodeWSP>();
     if (!currentNode->inherits("KisShapeLayer") && currentNode->paintDevice()) {
         KoCanvasResourceProvider * rManager = view->canvasResourceProvider()->resourceManager();
         KisToolShapeUtils::StrokeStyle strokeStyle =  KisToolShapeUtils::StrokeStyleForeground;
@@ -575,10 +582,10 @@ void KisStrokeSelectionActionFactory::run(KisViewManager *view, StrokeSelectionO
         KoShapeStrokeSP border(new KoShapeStroke(size, color));
         shape->setStroke(border);
 
-        view->document()->shapeController()->addShape(shape);
+        KUndo2Command *cmd = view->canvasBase()->shapeController()->addShapeDirect(shape, 0);
+        KisProcessingApplicator::runSingleCommandStroke(view->image(), cmd);
     }
     image->setModified();
-
 }
 
 void KisStrokeBrushSelectionActionFactory::run(KisViewManager *view, StrokeSelectionOptions params)
@@ -598,7 +605,7 @@ void KisStrokeBrushSelectionActionFactory::run(KisViewManager *view, StrokeSelec
         pixelSelection->recalculateOutlineCache();
     }
 
-    KisNodeSP currentNode = view->canvasResourceProvider()->resourceManager()->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeWSP>();
+    KisNodeSP currentNode = view->canvasResourceProvider()->resourceManager()->resource(KoCanvasResource::CurrentKritaNode).value<KisNodeWSP>();
     if (!currentNode->inherits("KisShapeLayer") && currentNode->paintDevice())
     {
         KoCanvasResourceProvider * rManager = view->canvasResourceProvider()->resourceManager();

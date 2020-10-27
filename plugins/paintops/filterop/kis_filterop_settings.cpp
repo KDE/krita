@@ -34,7 +34,8 @@
 #include <kis_types.h>
 #include <kis_paint_device.h>
 
-KisFilterOpSettings::KisFilterOpSettings()
+KisFilterOpSettings::KisFilterOpSettings(KisResourcesInterfaceSP resourcesInterface)
+    : KisBrushBasedPaintOpSettings(resourcesInterface)
 {
     setPropertyNotSaved(FILTER_CONFIGURATION);
 }
@@ -53,7 +54,7 @@ KisFilterConfigurationSP KisFilterOpSettings::filterConfig() const
     if (hasProperty(FILTER_ID)) {
         KisFilterSP filter = KisFilterRegistry::instance()->get(getString(FILTER_ID));
         if (filter) {
-            KisFilterConfigurationSP configuration = filter->factoryConfiguration();
+            KisFilterConfigurationSP configuration = filter->factoryConfiguration(resourcesInterface());
             configuration->fromXML(getString(FILTER_CONFIGURATION));
             return configuration;
         }
@@ -79,10 +80,14 @@ void KisFilterOpSettings::fromXML(const QDomElement& e)
     if (hasProperty(FILTER_ID)) {
         KisFilterSP filter = KisFilterRegistry::instance()->get(getString(FILTER_ID));
         if (filter) {
-            KisFilterConfigurationSP configuration = filter->factoryConfiguration();
+            KisFilterConfigurationSP configuration = filter->factoryConfiguration(resourcesInterface());
             configuration->fromXML(element);
             setProperty(FILTER_CONFIGURATION, configuration->toXML());
         }
     }
 }
 
+bool KisFilterOpSettings::hasPatternSettings() const
+{
+    return false;
+}

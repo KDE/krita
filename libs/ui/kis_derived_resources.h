@@ -84,6 +84,15 @@ public:
     QVariant toSource(const QVariant &value, const QVariant &sourceValue) override;
 };
 
+class KisPatternSizeResourceConverter : public KoDerivedResourceConverter, public QObject
+{
+public:
+    KisPatternSizeResourceConverter();
+
+    QVariant fromSource(const QVariant& value) override;
+    QVariant toSource(const QVariant& value, const QVariant& sourceValue) override;
+};
+
 class KisLodAvailabilityResourceConverter : public KoDerivedResourceConverter
 {
 public:

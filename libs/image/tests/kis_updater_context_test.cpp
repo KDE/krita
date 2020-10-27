@@ -19,6 +19,8 @@
 #include "kis_updater_context_test.h"
 #include <QTest>
 
+#include "kistest.h"
+
 #include <QAtomicInt>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
@@ -45,7 +47,7 @@ void KisUpdaterContextTest::testJobInterference()
 
     KisPaintLayerSP paintLayer = new KisPaintLayer(image, "test", OPACITY_OPAQUE_U8);
 
-    image->lock();
+    image->barrierLock();
     image->addNode(paintLayer);
     image->unlock();
 
@@ -203,6 +205,10 @@ public:
         m_counter.deref();
     }
 
+    QString debugId() const override {
+        return "ExclusivenessCheckerStrategy";
+    }
+
 private:
     QAtomicInt &m_counter;
     QAtomicInt &m_hadConcurrency;
@@ -241,5 +247,5 @@ void KisUpdaterContextTest::stressTestExclusiveJobs()
              << "/" << NUM_CHECKS * NUM_JOBS;
 }
 
-QTEST_MAIN(KisUpdaterContextTest)
+KISTEST_MAIN(KisUpdaterContextTest)
 

@@ -19,7 +19,7 @@
 #ifndef __UI_MANAGER_TEST_H
 #define __UI_MANAGER_TEST_H
 
-#include "testutil.h"
+#include <testutil.h>
 #include "qimage_based_test.h"
 #include "ksharedconfig.h"
 #include <kis_filter_configuration.h>
@@ -36,6 +36,7 @@
 #include <kis_action_manager.h>
 #include "KisMainWindow.h"
 #include "kis_selection_mask.h"
+#include <KisGlobalResourcesInterface.h>
 
 namespace TestUtil
 {
@@ -61,8 +62,8 @@ public:
         imageView = new KisView(doc, mainWindow->viewManager(), mainWindow);
         view = new KisViewManager(mainWindow, mainWindow->actionCollection());
 
-        KoPattern *newPattern = new KoPattern(fetchDataFileLazy("HR_SketchPaper_01.pat"));
-        newPattern->load();
+        KoPatternSP newPattern(new KoPattern(fetchDataFileLazy("HR_SketchPaper_01.pat")));
+        newPattern->load(KisGlobalResourcesInterface::instance());
         Q_ASSERT(newPattern->valid());
         view->canvasResourceProvider()->slotPatternActivated(newPattern);
 

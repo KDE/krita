@@ -24,6 +24,7 @@
 #include <KoShapeBackgroundCommand.h>
 #include <KoShapeFillWrapper.h>
 #include <kis_assert.h>
+#include "kis_algebra_2d.h"
 
 KoShapeGradientHandles::KoShapeGradientHandles(KoFlake::FillVariant fillVariant, KoShape *shape)
     : m_fillVariant(fillVariant),
@@ -31,7 +32,7 @@ KoShapeGradientHandles::KoShapeGradientHandles(KoFlake::FillVariant fillVariant,
 {
 }
 
-QVector<KoShapeGradientHandles::Handle> KoShapeGradientHandles::handles(const KoViewConverter *converter) const {
+QVector<KoShapeGradientHandles::Handle> KoShapeGradientHandles::handles() const {
     QVector<Handle> result;
 
     const QGradient *g = gradient();
@@ -69,7 +70,7 @@ QVector<KoShapeGradientHandles::Handle> KoShapeGradientHandles::handles(const Ko
         const QRectF boundingRect = m_shape->outlineRect();
         const QTransform gradientToUser(boundingRect.width(), 0, 0, boundingRect.height(),
                                         boundingRect.x(), boundingRect.y());
-        const QTransform t = gradientToUser * m_shape->absoluteTransformation(converter);
+        const QTransform t = gradientToUser * m_shape->absoluteTransformation();
 
         QVector<Handle>::iterator it = result.begin();
 
@@ -98,15 +99,15 @@ KUndo2Command *KoShapeGradientHandles::moveGradientHandle(KoShapeGradientHandles
     QTransform originalTransform = wrapper.gradientTransform();
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(originalGradient, 0);
 
-    QGradient *newGradient = 0;
+    QScopedPointer<QGradient> newGradient;
 
     switch (originalGradient->type()) {
     case QGradient::LinearGradient: {
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(handleType == Handle::LinearStart ||
                                              handleType == Handle::LinearEnd, 0);
 
-        newGradient = KoFlake::cloneGradient(originalGradient);
-        QLinearGradient *lgradient = static_cast<QLinearGradient*>(newGradient);
+        newGradient.reset(KoFlake::cloneGradient(originalGradient));
+        QLinearGradient *lgradient = static_cast<QLinearGradient*>(newGradient.data());
 
         if (handleType == Handle::LinearStart) {
             lgradient->setStart(getNewHandlePos(lgradient->start(), absoluteOffset, newGradient->coordinateMode()));
@@ -117,8 +118,8 @@ KUndo2Command *KoShapeGradientHandles::moveGradientHandle(KoShapeGradientHandles
         break;
     }
     case QGradient::RadialGradient: {
-        newGradient = KoFlake::cloneGradient(originalGradient);
-        QRadialGradient *rgradient = static_cast<QRadialGradient*>(newGradient);
+        newGradient.reset(KoFlake::cloneGradient(originalGradient));
+        QRadialGradient *rgradient = static_cast<QRadialGradient*>(newGradient.data());
 
         if (handleType == Handle::RadialCenter) {
             rgradient->setCenter(getNewHandlePos(rgradient->center(), absoluteOffset, newGradient->coordinateMode()));
@@ -139,7 +140,7 @@ KUndo2Command *KoShapeGradientHandles::moveGradientHandle(KoShapeGradientHandles
         break;
     }
 
-    return wrapper.setGradient(newGradient, originalTransform);
+    return wrapper.setGradient(newGradient.data(), originalTransform);
 }
 
 KoShapeGradientHandles::Handle KoShapeGradientHandles::getHandle(KoShapeGradientHandles::Handle::Type handleType)
@@ -164,14 +165,19 @@ const QGradient *KoShapeGradientHandles::gradient() const {
 QPointF KoShapeGradientHandles::getNewHandlePos(const QPointF &oldPos, const QPointF &absoluteOffset, QGradient::CoordinateMode mode)
 {
     const QTransform offset = QTransform::fromTranslate(absoluteOffset.x(), absoluteOffset.y());
-    QTransform localToAbsolute = m_shape->absoluteTransformation(0);
+    QTransform localToAbsolute = m_shape->absoluteTransformation();
+    QTransform absoluteToLocal = localToAbsolute.inverted();
 
     if (mode == QGradient::ObjectBoundingMode) {
-        const QRectF boundingRect = m_shape->outlineRect();
-        const QTransform gradientToUser(boundingRect.width(), 0, 0, boundingRect.height(),
-                                        boundingRect.x(), boundingRect.y());
+        const QRectF rect = m_shape->outlineRect();
+        const QTransform gradientToUser = KisAlgebra2D::mapToRect(rect);
         localToAbsolute = gradientToUser * localToAbsolute;
+
+        /// Some shapes may have zero-width/height, then inverted transform will not
+        /// exist. Therefore we should use a special method for that.
+        const QTransform userToGradient = KisAlgebra2D::mapToRectInverse(rect);
+        absoluteToLocal = absoluteToLocal * userToGradient;
     }
 
-    return (localToAbsolute * offset * localToAbsolute.inverted()).map(oldPos);
+    return (localToAbsolute * offset * absoluteToLocal).map(oldPos);
 }

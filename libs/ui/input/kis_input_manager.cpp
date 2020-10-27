@@ -80,10 +80,21 @@ KisInputManager::KisInputManager(QObject *parent)
 
     QApplication::instance()->
             installEventFilter(new Private::ProximityNotifier(d, this));
+
+    // on macos global Monitor listen to keypresses when krita is not in focus
+    // and local monitor listen presses when krita is in focus.
+#ifdef Q_OS_MACOS
+    KisExtendedModifiersMapper::setGlobalMonitor(true);
+    KisExtendedModifiersMapper::setLocalMonitor(true, &d->matcher);
+#endif
 }
 
 KisInputManager::~KisInputManager()
 {
+#ifdef Q_OS_MACOS
+    KisExtendedModifiersMapper::setGlobalMonitor(false);
+    KisExtendedModifiersMapper::setLocalMonitor(false);
+#endif
     delete d;
 }
 
@@ -146,11 +157,6 @@ void KisInputManager::setupAsEventFilter(QObject *receiver)
     }
 }
 
-void KisInputManager::stopIgnoringEvents()
-{
-    d->allowMouseEvents();
-}
-
 #if defined (__clang__)
 #pragma GCC diagnostic ignored "-Wswitch"
 #endif
@@ -202,7 +208,7 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
     return eventFilterImpl(event);
 }
 
-// Qt's events do not have copy-ctors yes, so we should emulate them
+// Qt's events do not have copy-ctors yet, so we should emulate them
 // See https://bugreports.qt.io/browse/QTBUG-72488
 
 template <class Event> void copyEventHack(Event *src, QScopedPointer<QEvent> &dst);
@@ -356,14 +362,12 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
             retval = d->matcher.autoRepeatedKeyPressed(key);
         }
 
-        /**
-         * Workaround for temporary switching of tools by
-         * KoCanvasControllerWidget. We don't need this switch because
-         * we handle it ourselves.
-         */
-        retval |= !d->forwardAllEventsToTool &&
-                (keyEvent->key() == Qt::Key_Space ||
-                 keyEvent->key() == Qt::Key_Escape);
+        // In case we matched ashortcut we should accept the event to
+        // notify Qt that it shouldn't try to trigger its partially matched
+        // shortcuts.
+        if (retval) {
+            keyEvent->setAccepted(true);
+        }
 
         break;
     }
@@ -453,6 +457,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
         retval = !wasScrolled;
         break;
     }
+#ifndef Q_OS_ANDROID
     case QEvent::Enter:
         d->debugEvent<QEvent, false>(event);
         //Make sure the input actions know we are active.
@@ -463,7 +468,6 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
             d->allowMouseEvents();
             d->touchHasBlockedPressEvents = false;
         }
-
         d->matcher.enterEvent();
         break;
     case QEvent::Leave:
@@ -479,6 +483,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
 
         d->matcher.leaveEvent();
         break;
+#endif
     case QEvent::FocusIn:
         d->debugEvent<QEvent, false>(event);
         KisAbstractInputAction::setInputManager(this);
@@ -516,6 +521,15 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
         if (d->tryHidePopupPalette()) {
             retval = true;
         } else {
+#ifdef Q_OS_ANDROID
+            // this means S-Pen has entered the proximity. Hence the TouchEvents
+            // will be disabled by the OS, but we won't receive TouchEnd event.
+            if (d->touchHasBlockedPressEvents)
+            {
+                QTouchEvent *touchEvent = new QTouchEvent(QEvent::Type::TouchEnd);
+                retval = d->matcher.touchEndEvent(touchEvent);
+            }
+#endif
             //Make sure the input actions know we are active.
             KisAbstractInputAction::setInputManager(this);
             retval = d->matcher.buttonPressed(tabletEvent->button(), tabletEvent);

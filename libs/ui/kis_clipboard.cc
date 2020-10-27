@@ -45,7 +45,7 @@
 #include <kis_annotation.h>
 #include <kis_node.h>
 #include <kis_image.h>
-#include <kis_time_range.h>
+#include <kis_time_span.h>
 #include <utils/KisClipboardUtil.h>
 
 // local
@@ -80,7 +80,7 @@ KisClipboard* KisClipboard::instance()
     return s_instance;
 }
 
-void KisClipboard::setClip(KisPaintDeviceSP dev, const QPoint& topLeft, const KisTimeRange &range)
+void KisClipboard::setClip(KisPaintDeviceSP dev, const QPoint& topLeft, const KisTimeSpan &range)
 {
     if (!dev)
         return;
@@ -174,15 +174,15 @@ void KisClipboard::setClip(KisPaintDeviceSP dev, const QPoint& topLeft, const Ki
 
 void KisClipboard::setClip(KisPaintDeviceSP dev, const QPoint& topLeft)
 {
-    setClip(dev, topLeft, KisTimeRange());
+    setClip(dev, topLeft, KisTimeSpan());
 }
 
-KisPaintDeviceSP KisClipboard::clip(const QRect &imageBounds, bool showPopup, KisTimeRange *clipRange)
+KisPaintDeviceSP KisClipboard::clip(const QRect &imageBounds, bool showPopup, KisTimeSpan *clipRange)
 {
     QByteArray mimeType("application/x-krita-selection");
 
     if (clipRange) {
-        *clipRange = KisTimeRange();
+        *clipRange = KisTimeSpan();
     }
 
     QClipboard *cb = QApplication::clipboard();
@@ -264,7 +264,7 @@ KisPaintDeviceSP KisClipboard::clip(const QRect &imageBounds, bool showPopup, Ki
                     store->close();
                     QStringList list = str.split(' ');
                     if (list.size() == 2) {
-                        KisTimeRange range(list[0].toInt(), list[1].toInt(), true);
+                        KisTimeSpan range = KisTimeSpan::fromTimeToTime(list[0].toInt(), list[1].toInt());
                         *clipRange = range;
                         qDebug() << "Pasted time range" << range;
                     }

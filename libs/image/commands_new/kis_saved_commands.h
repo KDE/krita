@@ -88,9 +88,7 @@ public:
                     KisStrokeJobData::Sequentiality sequentiality = KisStrokeJobData::SEQUENTIAL,
                     KisStrokeJobData::Exclusivity exclusivity = KisStrokeJobData::NORMAL);
 
-    void performCancel(KisStrokeId id, bool strokeUndo);
-
-    void getCommandExecutionJobs(QVector<KisStrokeJobData*> *jobs, bool undo) const;
+    void getCommandExecutionJobs(QVector<KisStrokeJobData*> *jobs, bool undo, bool shouldGoToHistory = true) const;
 
     void setOverrideInfo(const KisSavedMacroCommand *overriddenCommand, const QVector<const KUndo2Command *> &skipWhileOverride);
 

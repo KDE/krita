@@ -36,6 +36,7 @@
 #include <KoResourcePaths.h>
 #include <kis_icon.h>
 #include <KoCanvasBase.h>
+#include <KoCanvasController.h>
 #include <KisViewManager.h>
 #include <kis_canvas2.h>
 #include <KisMainWindow.h>
@@ -184,10 +185,14 @@ void TouchDockerDock::slotButtonPressed(const QString &id)
         showFileOpenDialog();
     }
     else if (id == "fileSaveButton" && m_canvas && m_canvas->viewManager() && m_canvas->viewManager()->document()) {
-        bool batchMode = m_canvas->viewManager()->document()->fileBatchMode();
-        m_canvas->viewManager()->document()->setFileBatchMode(true);
-        m_canvas->viewManager()->document()->save(true, 0);
-        m_canvas->viewManager()->document()->setFileBatchMode(batchMode);
+        if(m_canvas->viewManager()->document()->url().isEmpty()) {
+            showFileSaveAsDialog();
+        } else {
+            bool batchMode = m_canvas->viewManager()->document()->fileBatchMode();
+            m_canvas->viewManager()->document()->setFileBatchMode(true);
+            m_canvas->viewManager()->document()->save(true, 0);
+            m_canvas->viewManager()->document()->setFileBatchMode(batchMode);
+        }
     }
     else if (id == "fileSaveAsButton" && m_canvas && m_canvas->viewManager() && m_canvas->viewManager()->document()) {
         showFileSaveAsDialog();
@@ -298,7 +303,13 @@ QAction *TouchDockerDock::action(QString id) const
         if (d->buttonMapping.contains(id)) {
             id = d->buttonMapping[id];
         }
-        return m_canvas->viewManager()->actionManager()->actionByName(id);
+
+        QAction *action = m_canvas->viewManager()->actionManager()->actionByName(id);
+        if (!action) {
+            return m_canvas->canvasController()->actionCollection()->action(id);
+        }
+
+        return action;
     }
     return 0;
 }

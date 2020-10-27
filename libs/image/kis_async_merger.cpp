@@ -172,9 +172,15 @@ public:
             prepareRegion += needRectOnSource;
         }
 
-        Q_FOREACH (const QRect &rect, prepareRegion.rects()) {
-            walker.collectRects(srcLayer, rect);
+        if (srcLayer.isNull()) {
+            return true;
+        }
+
+        auto rect = prepareRegion.begin();
+        while (rect != prepareRegion.end()) {
+            walker.collectRects(srcLayer,*rect);
             merger.startMerge(walker, false);
+            rect++;
         }
 
         return true;

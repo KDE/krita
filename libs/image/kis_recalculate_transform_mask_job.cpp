@@ -22,6 +22,7 @@
 #include "kis_debug.h"
 #include "kis_layer.h"
 #include "kis_image.h"
+#include "kis_image_animation_interface.h"
 #include "kis_abstract_projection_plane.h"
 #include "kis_transform_mask_params_interface.h"
 
@@ -59,7 +60,6 @@ void KisRecalculateTransformMaskJob::run()
     KisImageSP image = layer->image();
     Q_ASSERT(image);
 
-
     /**
      * Depending on whether the mask is hidden we should either
      * update it entirely via the setDirty() call, or we can use a
@@ -73,7 +73,12 @@ void KisRecalculateTransformMaskJob::run()
         if (layer->original()) {
             updateRect |= layer->original()->defaultBounds()->bounds();
         }
-        m_mask->setDirty(updateRect);
+
+        if (layer->isAnimated()) {
+            m_mask->setDirty(updateRect);
+        } else {
+            m_mask->setDirtyDontResetAnimationCache(updateRect);
+        }
     } else {
         /**
          * When we call requestProjectionUpdateNoFilthy() on a layer,
@@ -81,12 +86,21 @@ void KisRecalculateTransformMaskJob::run()
          * to be N_ABOVE_FILTHY. Therefore, we should expand the dirty
          * rect manually to get the correct update
          */
+
         QRect updateRect = layer->projectionPlane()->changeRect(layer->extent(), KisLayer::N_FILTHY);
-        image->requestProjectionUpdateNoFilthy(layer, updateRect, image->bounds());
+        image->requestProjectionUpdateNoFilthy(layer, updateRect, image->bounds(),layer->isAnimated());
     }
 }
 
 int KisRecalculateTransformMaskJob::levelOfDetail() const
 {
     return 0;
+}
+
+QString KisRecalculateTransformMaskJob::debugName() const
+{
+    QString result;
+    QDebug dbg(&result);
+    dbg << "KisRecalculateTransformMaskJob" << m_mask;
+    return result;
 }

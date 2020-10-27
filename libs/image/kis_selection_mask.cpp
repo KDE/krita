@@ -50,25 +50,22 @@ public:
         , maskColor(Qt::green, KoColorSpaceRegistry::instance()->rgb8())
     {}
     KisSelectionMask *q;
-    KisImageWSP image;
     KisCachedPaintDevice paintDeviceCache;
     KisCachedSelection cachedSelection;
     KisThreadSafeSignalCompressor *updatesCompressor;
     KoColor maskColor;
 
     void slotSelectionChangedCompressed();
+    void slotConfigChangedImpl(bool blockUpdates);
     void slotConfigChanged();
 };
 
-KisSelectionMask::KisSelectionMask(KisImageWSP image)
-    : KisEffectMask()
+KisSelectionMask::KisSelectionMask(KisImageWSP image, const QString &name)
+    : KisEffectMask(image, name)
     , m_d(new Private(this))
 {
-    setName("selection");
     setActive(false);
     setSupportsLodMoves(false);
-
-    m_d->image = image;
 
     m_d->updatesCompressor =
             new KisThreadSafeSignalCompressor(50, KisSignalCompressor::FIRST_ACTIVE);
@@ -77,22 +74,21 @@ KisSelectionMask::KisSelectionMask(KisImageWSP image)
     this->moveToThread(image->thread());
 
     connect(KisImageConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
-    m_d->slotConfigChanged();
+    m_d->slotConfigChangedImpl(false);
 }
 
 KisSelectionMask::KisSelectionMask(const KisSelectionMask& rhs)
     : KisEffectMask(rhs)
     , m_d(new Private(this))
 {
-    m_d->image = rhs.image();
     m_d->updatesCompressor =
             new KisThreadSafeSignalCompressor(300, KisSignalCompressor::POSTPONE);
 
     connect(m_d->updatesCompressor, SIGNAL(timeout()), SLOT(slotSelectionChangedCompressed()));
-    this->moveToThread(m_d->image->thread());
+    this->moveToThread(rhs.image()->thread());
 
     connect(KisImageConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
-    m_d->slotConfigChanged();
+    m_d->slotConfigChangedImpl(false);
 }
 
 KisSelectionMask::~KisSelectionMask()
@@ -168,11 +164,6 @@ void KisSelectionMask::setSelection(KisSelectionSP selection)
     setDirty();
 }
 
-KisImageWSP KisSelectionMask::image() const
-{
-    return m_d->image;
-}
-
 bool KisSelectionMask::accept(KisNodeVisitor &v)
 {
     return v.visit(this);
@@ -214,7 +205,7 @@ bool KisSelectionMask::active() const
 
 void KisSelectionMask::setActive(bool active)
 {
-    KisImageWSP image = this->image();
+    KisImageSP image = this->image();
     KisLayerSP parentLayer = qobject_cast<KisLayer*>(parent().data());
 
     if (active && parentLayer) {
@@ -289,6 +280,33 @@ void KisSelectionMask::notifySelectionChangedCompressed()
     m_d->updatesCompressor->start();
 }
 
+bool KisSelectionMask::decorationsVisible() const
+{
+    return selection()->isVisible();
+}
+
+void KisSelectionMask::setDecorationsVisible(bool value, bool update)
+{
+    if (value == decorationsVisible()) return;
+
+    const QRect oldExtent = extent();
+
+    selection()->setVisible(value);
+
+    if (update) {
+        setDirty(oldExtent | extent());
+    }
+}
+
+void KisSelectionMask::setDirty(const QVector<QRect> &rects)
+{
+    KisImageSP image = this->image();
+
+    if (image && image->overlaySelectionMask() == this) {
+        KisEffectMask::setDirty(rects);
+    }
+}
+
 void KisSelectionMask::flattenSelectionProjection(KisSelectionSP selection, const QRect &dirtyRect) const
 {
     Q_UNUSED(selection);
@@ -303,8 +321,10 @@ void KisSelectionMask::Private::slotSelectionChangedCompressed()
     currentSelection->notifySelectionChanged();
 }
 
-void KisSelectionMask::Private::slotConfigChanged()
+void KisSelectionMask::Private::slotConfigChangedImpl(bool doUpdates)
 {
+    KisImageSP image = q->image();
+
     const KoColorSpace *cs = image ?
         image->colorSpace() :
         KoColorSpaceRegistry::instance()->rgb8();
@@ -313,9 +333,14 @@ void KisSelectionMask::Private::slotConfigChanged()
 
     maskColor = KoColor(cfg.selectionOverlayMaskColor(), cs);
 
-    if (image && image->overlaySelectionMask() == q) {
+    if (doUpdates && image && image->overlaySelectionMask() == q) {
         q->setDirty();
     }
+}
+
+void KisSelectionMask::Private::slotConfigChanged()
+{
+    slotConfigChangedImpl(true);
 }
 
 #include "moc_kis_selection_mask.cpp"

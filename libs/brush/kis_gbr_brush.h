@@ -23,7 +23,7 @@
 #include <QImage>
 #include <QVector>
 
-#include "kis_scaling_size_brush.h"
+#include "KisColorfulBrush.h"
 #include <kis_types.h>
 #include <kis_shared.h>
 #include <brushengine/kis_paint_information.h>
@@ -36,7 +36,7 @@ typedef KisSharedPtr<KisQImagemask> KisQImagemaskSP;
 class QString;
 class QIODevice;
 
-class BRUSH_EXPORT KisGbrBrush : public KisScalingSizeBrush
+class BRUSH_EXPORT KisGbrBrush : public KisColorfulBrush
 {
 
 protected:
@@ -57,40 +57,30 @@ public:
     /// Load brush as a copy from the specified QImage (handy when you need to copy a brush!)
     KisGbrBrush(const QImage& image, const QString& name = QString());
 
-    KisGbrBrush(const KisGbrBrush& rhs);
-
     ~KisGbrBrush() override;
 
-    bool load() override;
-    bool loadFromDevice(QIODevice *dev) override;
-    bool save() override;
+    KisGbrBrush(const KisGbrBrush& rhs);
+
+    KoResourceSP clone() const override;
+
+    KisGbrBrush &operator=(const KisGbrBrush &rhs);
+
+    bool loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface) override;
     bool saveToDevice(QIODevice* dev) const override;
 
-    /**
-     * @return a preview of the brush
-     */
-    QImage brushTipImage() const override;
-    /**
-     * If the brush image data are colorful (e.g. you created the brush from the canvas with custom brush)
-     * and you want to paint with it as with masks, set to true.
-     */
-    virtual void setUseColorAsMask(bool useColorAsMask);
-
-    virtual bool useColorAsMask() const;
+    QPair<QString, QString> resourceType() const override {
+        return QPair<QString, QString>(ResourceType::Brushes, ResourceSubType::GbrBrushes);
+    }
 
     /**
      * Convert the mask to inverted gray scale, so it is alpha mask.
-     * It can be used as MASK brush type. This operates on the date of the brush,
-     * so it destruct the original brush data
+     * It can be used as MASK brush type. This operates on the data of the brush,
+     * so it destruct the original brush data.
+     *
+     * @param preserveAlpha convert to grayscale, but save as full RGBA format, to allow
+     *                      preserving lightness option
      */
-    virtual void makeMaskImage();
-
-    enumBrushType brushType() const override;
-
-    /**
-     * Makes a copy of this brush.
-     */
-    KisBrush* clone() const override;
+    virtual void makeMaskImage(bool preserveAlpha);
 
     /**
      * @return default file extension for saving the brush
@@ -104,7 +94,6 @@ protected:
     friend class KisImageBrushesPipe;
     friend class KisBrushExport;
 
-    void setBrushType(enumBrushType type) override;
     void setBrushTipImage(const QImage& image) override;
 
     void toXML(QDomDocument& d, QDomElement& e) const override;
@@ -117,6 +106,8 @@ private:
     struct Private;
     Private* const d;
 };
+
+typedef QSharedPointer<KisGbrBrush> KisGbrBrushSP;
 
 #endif // KIS_GBR_BRUSH_
 

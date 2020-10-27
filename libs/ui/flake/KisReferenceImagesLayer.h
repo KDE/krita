@@ -25,6 +25,7 @@
 #include <kis_types.h>
 
 class KisDocument;
+class KoCanvasBase;
 
 class KRITAUI_EXPORT KisReferenceImagesLayer : public KisShapeLayer
 {
@@ -53,6 +54,12 @@ public:
     }
 
     bool isFakeNode() const override;
+
+    KUndo2Command* setProfile(const KoColorProfile *profile) override;
+    KUndo2Command* convertTo(const KoColorSpace * dstColorSpace,
+                                 KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::internalRenderingIntent(),
+                                 KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::internalConversionFlags()) override;
+
 
 Q_SIGNALS:
     /**

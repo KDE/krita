@@ -4,8 +4,8 @@ dislikes. Me, (Boudewijn that is), I like indents of four spaces, and
 no scope prefixes for variables. However, in the interests of
 consistency, these are the rules new code should adhere to:
 
-See also http://techbase.kde.org/Policies/Kdelibs_Coding_Style -- that document
-is leading.
+See also https://community.kde.org/Policies/Frameworks_Coding_Style --
+that document is leading.
 
 Qt vs STD vs Boost:
 
@@ -80,6 +80,9 @@ Class naming
 	If you use a well-known design pattern, name the class according to the design
 	pattern. All files should start with 'Kis', all classes with the 'Kis' prefix.
     This filename should be the same as the classname: KisNewClass.h, KisNewClass.
+
+    Filenames in plugins do not start with Kis; only in libraries. Do not make new
+    classes that start with Ko.
 
 Function naming
 
@@ -157,7 +160,7 @@ The PyDev integration can be configured to visually highlight portions of the co
 as well as run autopep8 via shortcuts.
 
 pep8.py and autopep8.py can suppress select rules via the "--ignore" command line argument.
-To ignore the 79 charachers per line rule, pep8.py can be called like this:
+To ignore the 79 characters per line rule, pep8.py can be called like this:
 
 pep8.py --ignore=E501
 

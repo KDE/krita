@@ -81,6 +81,7 @@ public:
      */
     bool imagesNeedUpdate() const;
     QImage getImageMap();
+    const QImage getAlphaMask() const;
     /**
      * @brief setFullImage
      * Set the full widget image to be painted.
@@ -153,6 +154,7 @@ public:
       */
     void setChannelValues(QVector4D channelValues, bool setCursor);
 
+    void setAcceptTabletEvents(bool on);
 
 Q_SIGNALS:
     void sigCursorMoved(QPointF pos);
@@ -174,7 +176,7 @@ protected:
      * @param size the number of bytes to read from data, must match aforementioned cirteria
      * @return the converted QImage guaranteed to match the widget size (black content on failure)
      */
-    QImage convertImageMap(const quint8 *rawColor, quint32 size) const;
+    QImage convertImageMap(const quint8 *rawColor, quint32 bufferSize, QSize imgSize) const;
     /**
      * @brief renderBackground
      * Render the widget background visible inside the widget's mask in current color space
@@ -185,10 +187,20 @@ protected:
      * @param channelValues the normalized channel values of the currently picked color
      */
     virtual QImage renderBackground(const QVector4D &channelValues, quint32 pixelSize) const;
+    /**
+     * @brief render the alpha mask for the widget background
+     * the returned image is expected to be QImage::Format_Alpha8
+     */
+    virtual QImage renderAlphaMask() const;
+    /**
+     * @brief default implementation just calls convertWidgetCoordinateToShapeCoordinate(pos)
+    */
+    virtual QPointF mousePositionToShapeCoordinate(const QPointF &pos, const QPointF &dragStart) const;
 
     void mousePressEvent(QMouseEvent *e) override;
     void mouseMoveEvent(QMouseEvent *e) override;
     void mouseReleaseEvent(QMouseEvent *e) override;
+    void tabletEvent(QTabletEvent* event) override;
     void paintEvent(QPaintEvent*) override;
     void resizeEvent(QResizeEvent *) override;
 
@@ -207,7 +219,7 @@ private:
      * Convert a coordinate in the widget's height/width to a shape coordinate.
      * @param coordinate the position your wish to have the shape coordinates of.
      */
-    virtual QPointF convertWidgetCoordinateToShapeCoordinate(QPoint coordinate) const = 0;
+    virtual QPointF convertWidgetCoordinateToShapeCoordinate(QPointF coordinate) const = 0;
 
     /**
      * @brief getPixmap

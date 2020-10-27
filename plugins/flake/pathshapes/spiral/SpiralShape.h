@@ -72,11 +72,6 @@ public:
 protected:
     SpiralShape(const SpiralShape &rhs);
 
-    // reimplemented
-    void saveOdf(KoShapeSavingContext &context) const override;
-    // reimplemented
-    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
-
     void moveHandleAction(int handleId, const QPointF &point, Qt::KeyboardModifiers modifiers = Qt::NoModifier) override;
     void updatePath(const QSizeF &size) override;
     void createPath(const QSizeF &size);

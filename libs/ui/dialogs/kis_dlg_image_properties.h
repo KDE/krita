@@ -45,19 +45,25 @@ public:
                           const char *name = 0);
     ~KisDlgImageProperties() override;
 
-    const KoColorSpace * colorSpace();
+    bool convertLayerPixels() const;
+    const KoColorSpace * colorSpace() const;
 
 private Q_SLOTS:
 
     void setAnnotation(const QString& type);
     void setCurrentColor();
     void setProofingConfig();
+
+    void slotSaveDialogState();
+
+    void slotColorSpaceChanged(const KoColorSpace*);
 private:
 
     WdgImageProperties *m_page;
     KisImageWSP m_image;
     KisProofingConfigurationSP m_proofingConfig;
     bool m_firstProofingConfigChange {true};
+    QLabel *m_colorWarningLabel {0};
 };
 
 

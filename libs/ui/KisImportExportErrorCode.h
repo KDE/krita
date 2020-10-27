@@ -30,7 +30,7 @@
 namespace ImportExportCodes
 {
 
-    enum KRITAUI_EXPORT ErrorCodeID
+    enum ErrorCodeID
     {
         InternalError, // error that shouldn't happen; only inside ASSERTS
 

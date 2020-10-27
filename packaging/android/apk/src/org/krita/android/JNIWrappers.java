@@ -21,5 +21,7 @@ package org.krita.android;
 
 class JNIWrappers {
 	public static native void saveState();
+	public static native void exitFullScreen();
+	public static native void donationSuccessful();
 }
 

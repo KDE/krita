@@ -18,7 +18,7 @@
 
 #include "kis_regenerate_frame_stroke_strategy.h"
 
-#include <QRegion>
+#include <KisRegion.h>
 #include "kis_image_interfaces.h"
 #include "kis_image_animation_interface.h"
 #include "kis_node.h"
@@ -35,9 +35,9 @@ struct KisRegenerateFrameStrokeStrategy::Private
     Type type;
     int frameId;
     int previousFrameId;
-    QRegion dirtyRegion;
+    KisRegion dirtyRegion;
     KisImageAnimationInterface *interface;
-    KisProjectionUpdatesFilterSP prevUpdatesFilter;
+    QStack<KisProjectionUpdatesFilterSP> prevUpdatesFilters;
 
     class Data : public KisStrokeJobData {
     public:
@@ -61,8 +61,10 @@ struct KisRegenerateFrameStrokeStrategy::Private
         if (!image) {
             return;
         }
-        prevUpdatesFilter = image->projectionUpdatesFilter();
-        image->setProjectionUpdatesFilter(KisProjectionUpdatesFilterSP());
+
+        while (KisProjectionUpdatesFilterCookie cookie = image->currentProjectionUpdatesFilter()) {
+            prevUpdatesFilters.push(image->removeProjectionUpdatesFilter(cookie));
+        }
     }
 
     void restoreUpdatesFilter() {
@@ -70,15 +72,17 @@ struct KisRegenerateFrameStrokeStrategy::Private
         if (!image) {
             return;
         }
-        image->setProjectionUpdatesFilter(prevUpdatesFilter);
-        prevUpdatesFilter.clear();
+
+        while (!prevUpdatesFilters.isEmpty()) {
+            image->addProjectionUpdatesFilter(prevUpdatesFilters.pop());
+        }
     }
 };
 
 KisRegenerateFrameStrokeStrategy::KisRegenerateFrameStrokeStrategy(int frameId,
-                                                                   const QRegion &dirtyRegion,
+                                                                   const KisRegion &dirtyRegion,
                                                                    KisImageAnimationInterface *interface)
-    : KisSimpleStrokeStrategy("regenerate_external_frame_stroke"),
+    : KisSimpleStrokeStrategy(QLatin1String("regenerate_external_frame_stroke")),
       m_d(new Private)
 {
     m_d->type = EXTERNAL_FRAME;
@@ -102,13 +106,13 @@ KisRegenerateFrameStrokeStrategy::KisRegenerateFrameStrokeStrategy(int frameId,
 }
 
 KisRegenerateFrameStrokeStrategy::KisRegenerateFrameStrokeStrategy(KisImageAnimationInterface *interface)
-    : KisSimpleStrokeStrategy("regenerate_current_frame_stroke", kundo2_i18n("Render Animation")),
+    : KisSimpleStrokeStrategy(QLatin1String("regenerate_current_frame_stroke"), kundo2_i18n("Render Animation")),
       m_d(new Private)
 {
     m_d->type = CURRENT_FRAME;
 
     m_d->frameId = 0;
-    m_d->dirtyRegion = QRegion();
+    m_d->dirtyRegion = KisRegion();
     m_d->interface = interface;
 
     enableJob(JOB_INIT);
@@ -200,7 +204,7 @@ KisStrokeStrategy* KisRegenerateFrameStrokeStrategy::createLodClone(int levelOfD
      */
     return m_d->type == CURRENT_FRAME ?
         new KisRegenerateFrameStrokeStrategy(m_d->interface) :
-        new KisSimpleStrokeStrategy("dumb-lodn-KisRegenerateFrameStrokeStrategy");
+        new KisSimpleStrokeStrategy(QLatin1String("dumb-lodn-KisRegenerateFrameStrokeStrategy"));
 }
 
 void KisRegenerateFrameStrokeStrategy::suspendStrokeCallback()

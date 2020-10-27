@@ -16,6 +16,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (QWidget, QVBoxLayout, QPushButton,
                              QLineEdit, QScrollArea, QGridLayout, QFileDialog,
                              QLabel, QDialogButtonBox)
+from PyQt5.QtGui import QKeySequence
 from . import tenscriptsdialog
 import krita
 
@@ -65,7 +66,7 @@ class UITenScripts(object):
         directoryDialogButton = QPushButton(i18n("..."))
 
         directoryTextField.setReadOnly(True)
-        label.setText(self.tenscripts.actions[key].shortcut().toString())
+        label.setText(self.tenscripts.actions[key].shortcut().toString(QKeySequence.NativeText))
         directoryTextField.setToolTip(i18n("Selected path"))
         directoryDialogButton.setToolTip(i18n("Select the script"))
         directoryDialogButton.clicked.connect(self._selectScript)

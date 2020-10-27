@@ -44,6 +44,8 @@
 #include <QUrl>
 #include <QVBoxLayout>
 #include <QWidgetAction>
+#include <QDesktopWidget>
+#include <QScreen>
 
 #include <kcharselect.h>
 #include <klocalizedstring.h>
@@ -73,12 +75,171 @@
 #include "FontSizeAction.h"
 #include "kis_signals_blocker.h"
 
+
+class SvgTextEditor::Private
+{
+public:
+
+    Private() {}
+
+    // collection of last-used properties
+    QColor fontColor {Qt::black};
+    //QColor backgroundColor {Qt::transparent};
+    qreal fontSize {10.0};
+    QFont font;
+
+    qreal letterSpacing {0.0};
+
+    bool bold {false};
+    bool italic {false};
+    bool underline {false};
+
+    bool strikeThrough {false};
+    bool superscript {false};
+    bool subscript {false};
+
+    // unsupported properties:
+    // backgroundColor - because there is no button for that
+    // horizontal alignment - it seems to work without saving
+    // line height - it seems to work without saving
+
+    void saveFromWidgets(KActionCollection* actions)
+    {
+
+        FontSizeAction *fontSizeAction = qobject_cast<FontSizeAction*>(actions->action("svg_font_size"));
+        fontSize = fontSizeAction->fontSize();
+
+        KisFontComboBoxes* fontComboBox2 = qobject_cast<KisFontComboBoxes*>(qobject_cast<QWidgetAction*>(actions->action("svg_font"))->defaultWidget());
+        font = fontComboBox2->currentFont(fontSize);
+
+        KoColorPopupAction *fontColorAction = qobject_cast<KoColorPopupAction*>(actions->action("svg_format_textcolor"));
+        fontColor = fontColorAction->currentColor();
+
+        QWidgetAction *letterSpacingAction = qobject_cast<QWidgetAction*>(actions->action("svg_letter_spacing"));
+        letterSpacing = qobject_cast<QDoubleSpinBox*>(letterSpacingAction->defaultWidget())->value();
+
+        saveBoolActionFromWidget(actions, "svg_weight_bold", bold);
+        saveBoolActionFromWidget(actions, "svg_format_italic", italic);
+        saveBoolActionFromWidget(actions, "svg_format_underline", underline);
+
+        saveBoolActionFromWidget(actions, "svg_format_strike_through", strikeThrough);
+        saveBoolActionFromWidget(actions, "svg_format_superscript", superscript);
+        saveBoolActionFromWidget(actions, "svg_format_subscript", subscript);
+
+    }
+
+    void setSavedToWidgets(KActionCollection* actions)
+    {
+
+        FontSizeAction *fontSizeAction = qobject_cast<FontSizeAction*>(actions->action("svg_font_size"));
+        fontSizeAction->setFontSize(fontSize);
+
+        KisFontComboBoxes* fontComboBox2 = qobject_cast<KisFontComboBoxes*>(qobject_cast<QWidgetAction*>(actions->action("svg_font"))->defaultWidget());
+        fontComboBox2->setCurrentFont(font);
+
+        KoColorPopupAction *fontColorAction = qobject_cast<KoColorPopupAction*>(actions->action("svg_format_textcolor"));
+        fontColorAction->setCurrentColor(fontColor);
+
+        QWidgetAction *letterSpacingAction = qobject_cast<QWidgetAction*>(actions->action("svg_letter_spacing"));
+        qobject_cast<QDoubleSpinBox*>(letterSpacingAction->defaultWidget())->setValue(letterSpacing);
+
+        setBoolActionToWidget(actions, "svg_weight_bold", bold);
+        setBoolActionToWidget(actions, "svg_format_italic", italic);
+
+        setSavedLineDecorationToWidgets(actions);
+
+        setBoolActionToWidget(actions, "svg_format_superscript", superscript);
+        setBoolActionToWidget(actions, "svg_format_subscript", subscript);
+    }
+
+    void setSavedToFormat(QTextCharFormat &format)
+    {
+
+        format.setFont(font);
+        format.setFontPointSize(fontSize);
+        format.setForeground(fontColor);
+
+        format.setFontLetterSpacingType(QFont::AbsoluteSpacing);
+        format.setFontLetterSpacing(letterSpacing);
+
+        format.setFontUnderline(underline);
+        format.setFontStrikeOut(strikeThrough);
+        format.setFontOverline(false);
+
+        if (subscript) {
+            format.setVerticalAlignment(QTextCharFormat::AlignSubScript);
+        } else if (superscript) {
+            format.setVerticalAlignment(QTextCharFormat::AlignSuperScript);
+        } else {
+            format.setVerticalAlignment(QTextCharFormat::AlignMiddle);
+        }
+
+        if (bold) {
+            format.setFontWeight(QFont::Bold);
+        }
+
+        format.setFontItalic(italic);
+
+    }
+
+    void saveFontLineDecoration(KoSvgText::TextDecoration decoration)
+    {
+        // Krita for now cannot handle both at the same time; and there is no way to set overline
+        // FIXME: Krita should support all three at the same time
+        // (It does support it in SVG)
+        switch (decoration) {
+        case KoSvgText::DecorationUnderline:
+            underline = true;
+            strikeThrough = false;
+            break;
+        case KoSvgText::DecorationLineThrough:
+            underline = false;
+            strikeThrough = true;
+            break;
+        case KoSvgText::DecorationOverline:
+            Q_FALLTHROUGH();
+        case KoSvgText::DecorationNone:
+            Q_FALLTHROUGH();
+         default:
+            underline = false;
+            strikeThrough = false;
+            break;
+        }
+    }
+
+
+    void setSavedLineDecorationToWidgets(KActionCollection* actions)
+    {
+        setBoolActionToWidget(actions, "svg_format_underline", underline);
+        setBoolActionToWidget(actions, "svg_format_strike_through", strikeThrough);
+    }
+
+private:
+
+    void saveBoolActionFromWidget(KActionCollection* actions, QString actionName, bool &variable)
+    {
+        QAction *boolAction = actions->action(actionName);
+        KIS_ASSERT_RECOVER_RETURN(boolAction);
+        variable = boolAction->isChecked();
+    }
+
+    void setBoolActionToWidget(KActionCollection* actions, QString actionName, bool variable)
+    {
+        QAction *boolAction = actions->action(actionName);
+        KIS_ASSERT_RECOVER_RETURN(boolAction);
+        boolAction->setChecked(variable);
+    }
+
+};
+
+
 SvgTextEditor::SvgTextEditor(QWidget *parent, Qt::WindowFlags flags)
     : KXmlGuiWindow(parent, flags)
     , m_page(new QWidget(this))
 #ifndef Q_OS_WIN
     , m_charSelectDialog(new KoDialog(this))
 #endif
+    , d(new Private())
 {
     m_textEditorWidget.setupUi(m_page);
     setCentralWidget(m_page);
@@ -100,12 +261,32 @@ SvgTextEditor::SvgTextEditor(QWidget *parent, Qt::WindowFlags flags)
     actionCollection()->setComponentName("svgtexttool");
     actionCollection()->setComponentDisplayName(i18n("Text Tool"));
 
-    QByteArray state;
     if (cg.hasKey("WindowState")) {
-        state = cg.readEntry("State", state);
-        state = QByteArray::fromBase64(state);
+        QByteArray state = cg.readEntry("State", state);
         // One day will need to load the version number, but for now, assume 0
-        restoreState(state);
+        restoreState(QByteArray::fromBase64(state));
+    }
+    if (cg.hasKey("Geometry")) {
+        QByteArray ba = cg.readEntry("Geometry", QByteArray());
+        restoreGeometry(QByteArray::fromBase64(ba));
+    }
+    else {
+        const int scnum = QApplication::desktop()->screenNumber(parent);
+        QRect desk = QGuiApplication::screens().at(scnum)->availableGeometry();
+
+        quint32 x = desk.x();
+        quint32 y = desk.y();
+        quint32 w = 0;
+        quint32 h = 0;
+        const int deskWidth = desk.width();
+        w = (deskWidth / 3) * 2;
+        h = (desk.height() / 3) * 2;
+        x += (desk.width() - w) / 2;
+        y += (desk.height() - h) / 2;
+
+        move(x,y);
+        setGeometry(geometry().x(), geometry().y(), w, h);
+
     }
 
     setAcceptDrops(true);
@@ -146,6 +327,7 @@ SvgTextEditor::SvgTextEditor(QWidget *parent, Qt::WindowFlags flags)
     m_textEditorWidget.richTextEdit->document()->setDefaultStyleSheet("p {margin:0px;}");
 
     applySettings();
+
 }
 
 SvgTextEditor::~SvgTextEditor()
@@ -153,10 +335,12 @@ SvgTextEditor::~SvgTextEditor()
     KConfigGroup g(KSharedConfig::openConfig(), "SvgTextTool");
     QByteArray ba = saveState();
     g.writeEntry("windowState", ba.toBase64());
+    ba = saveGeometry();
+    g.writeEntry("Geometry", ba.toBase64());
 }
 
 
-void SvgTextEditor::setShape(KoSvgTextShape *shape)
+void SvgTextEditor::setInitialShape(KoSvgTextShape *shape)
 {
     m_shape = shape;
     if (m_shape) {
@@ -189,7 +373,22 @@ void SvgTextEditor::setShape(KoSvgTextShape *shape)
             QMessageBox::warning(this, i18n("Conversion failed"), "Could not get svg text from the shape:\n" + converter.errors().join('\n') + "\n" + converter.warnings().join('\n'));
         }
     }
+    KisFontComboBoxes* fontComboBox = qobject_cast<KisFontComboBoxes*>(qobject_cast<QWidgetAction*>(actionCollection()->action("svg_font"))->defaultWidget());
+    fontComboBox->setInitialized();
 
+    KConfigGroup cfg(KSharedConfig::openConfig(), "SvgTextTool");
+
+    d->saveFromWidgets(actionCollection());
+
+    QTextCursor cursor = m_textEditorWidget.richTextEdit->textCursor();
+    QTextCharFormat format = cursor.blockCharFormat();
+
+    d->setSavedToFormat(format);
+
+    KisSignalsBlocker b(m_textEditorWidget.richTextEdit);
+    cursor.setBlockCharFormat(format);
+
+    m_textEditorWidget.richTextEdit->document()->setModified(false);
 }
 
 void SvgTextEditor::save()
@@ -334,23 +533,12 @@ void SvgTextEditor::slotFixUpEmptyTextBlock()
         QTextCursor cursor = m_textEditorWidget.richTextEdit->textCursor();
         QTextCharFormat format = cursor.blockCharFormat();
 
-        {
-            FontSizeAction *fontSizeAction = qobject_cast<FontSizeAction*>(actionCollection()->action("svg_font_size"));
-            KisFontComboBoxes* fontComboBox = qobject_cast<KisFontComboBoxes*>(qobject_cast<QWidgetAction*>(actionCollection()->action("svg_font"))->defaultWidget());
-            format.setFont(fontComboBox->currentFont(fontSizeAction->fontSize()));
-        }
-
-        {
-            KoColorPopupAction *fgColorPopup = qobject_cast<KoColorPopupAction*>(actionCollection()->action("svg_format_textcolor"));
-            format.setForeground(fgColorPopup->currentColor());
-        }
-
-        {
-            //KoColorPopupAction *bgColorPopup = qobject_cast<KoColorPopupAction*>(actionCollection()->action("svg_background_color"));
-            //format.setBackground(bgColorPopup->currentColor());
-        }
 
         KisSignalsBlocker b(m_textEditorWidget.richTextEdit);
+
+        d->setSavedToFormat(format);
+        d->setSavedToWidgets(actionCollection());
+
         cursor.setBlockCharFormat(format);
     }
 }
@@ -394,19 +582,18 @@ void SvgTextEditor::deselect()
 
 void SvgTextEditor::find()
 {
-    QDialog *findDialog = new QDialog(this);
-    findDialog->setWindowTitle(i18n("Find Text"));
-    QFormLayout *layout = new QFormLayout();
-    findDialog->setLayout(layout);
+    QDialog findDialog;
+    findDialog.setWindowTitle(i18n("Find Text"));
+    QFormLayout *layout = new QFormLayout(&findDialog);
     QLineEdit *lnSearchKey = new QLineEdit();
     layout->addRow(i18n("Find:"), lnSearchKey);
     QDialogButtonBox *buttons = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
-    findDialog->layout()->addWidget(buttons);
-    connect(buttons, SIGNAL(accepted()), findDialog, SLOT(accept()));
-    connect(buttons, SIGNAL(rejected()), findDialog, SLOT(reject()));
+    layout->addWidget(buttons);
 
+    connect(buttons, SIGNAL(accepted()), &findDialog, SLOT(accept()));
+    connect(buttons, SIGNAL(rejected()), &findDialog, SLOT(reject()));
 
-    if (findDialog->exec()==QDialog::Accepted) {
+    if (findDialog.exec() == QDialog::Accepted) {
         m_searchKey = lnSearchKey->text();
         m_currentEditor->find(m_searchKey);
     }
@@ -434,21 +621,20 @@ void SvgTextEditor::findPrev()
 
 void SvgTextEditor::replace()
 {
-    QDialog *findDialog = new QDialog(this);
-    findDialog->setWindowTitle(i18n("Find and Replace all"));
-    QFormLayout *layout = new QFormLayout();
-    findDialog->setLayout(layout);
+    QDialog findDialog;
+    findDialog.setWindowTitle(i18n("Find and Replace all"));
+    QFormLayout *layout = new QFormLayout(&findDialog);
     QLineEdit *lnSearchKey = new QLineEdit();
     QLineEdit *lnReplaceKey = new QLineEdit();
     layout->addRow(i18n("Find:"), lnSearchKey);
     QDialogButtonBox *buttons = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
     layout->addRow(i18n("Replace:"), lnReplaceKey);
-    findDialog->layout()->addWidget(buttons);
-    connect(buttons, SIGNAL(accepted()), findDialog, SLOT(accept()));
-    connect(buttons, SIGNAL(rejected()), findDialog, SLOT(reject()));
+    layout->addWidget(buttons);
 
+    connect(buttons, SIGNAL(accepted()), &findDialog, SLOT(accept()));
+    connect(buttons, SIGNAL(rejected()), &findDialog, SLOT(reject()));
 
-    if (findDialog->exec()==QDialog::Accepted) {
+    if (findDialog.exec() == QDialog::Accepted) {
         QString search = lnSearchKey->text();
         QString replace = lnReplaceKey->text();
         QTextCursor cursor(m_currentEditor->textCursor());
@@ -505,6 +691,7 @@ void SvgTextEditor::setTextBold(QFont::Weight weight)
             cursor.insertText(selectionModified);
         }
     }
+    d->bold = weight == QFont::Bold;
 }
 
 void SvgTextEditor::setTextWeightLight()
@@ -546,9 +733,14 @@ void SvgTextEditor::setTextItalic(QFont::Style style)
 
     if (style == QFont::StyleItalic) {
         fontStyle = "italic";
-    } else if(style == QFont::StyleOblique) {
+        d->italic = true;
+    } else if (style == QFont::StyleOblique) {
         fontStyle = "oblique";
+        d->italic = true;
+    } else {
+        d->italic = false;
     }
+
 
     if (m_textEditorWidget.textTab->currentIndex() == Richtext) {
         QTextCharFormat format;
@@ -618,6 +810,9 @@ void SvgTextEditor::setTextDecoration(KoSvgText::TextDecoration decor)
         }
     }
     m_textEditorWidget.richTextEdit->setTextCursor(cursor);
+
+    d->saveFontLineDecoration(decor);
+    d->setSavedLineDecorationToWidgets(actionCollection());
 }
 
 void SvgTextEditor::setTextUnderline()
@@ -640,8 +835,11 @@ void SvgTextEditor::setTextSubscript()
     QTextCharFormat format = m_textEditorWidget.richTextEdit->textCursor().charFormat();
     if (format.verticalAlignment()==QTextCharFormat::AlignSubScript) {
         format.setVerticalAlignment(QTextCharFormat::AlignNormal);
+        d->subscript = false;
     } else {
         format.setVerticalAlignment(QTextCharFormat::AlignSubScript);
+        d->subscript = true;
+        d->superscript = false;
     }
     m_textEditorWidget.richTextEdit->mergeCurrentCharFormat(format);
 }
@@ -651,8 +849,11 @@ void SvgTextEditor::setTextSuperScript()
     QTextCharFormat format = m_textEditorWidget.richTextEdit->textCursor().charFormat();
     if (format.verticalAlignment()==QTextCharFormat::AlignSuperScript) {
         format.setVerticalAlignment(QTextCharFormat::AlignNormal);
+        d->superscript = false;
     } else {
         format.setVerticalAlignment(QTextCharFormat::AlignSuperScript);
+        d->superscript = true;
+        d->subscript = false;
     }
     m_textEditorWidget.richTextEdit->mergeCurrentCharFormat(format);
 }
@@ -666,6 +867,7 @@ void SvgTextEditor::increaseTextSize()
         pointSize = m_textEditorWidget.richTextEdit->textCursor().charFormat().font().pixelSize();
     }
     format.setFontPointSize(pointSize+1.0);
+    d->fontSize = format.fontPointSize();
     m_textEditorWidget.richTextEdit->mergeCurrentCharFormat(format);
     m_textEditorWidget.richTextEdit->setTextCursor(oldCursor);
 }
@@ -679,6 +881,7 @@ void SvgTextEditor::decreaseTextSize()
         pointSize = m_textEditorWidget.richTextEdit->textCursor().charFormat().font().pixelSize();
     }
     format.setFontPointSize(qMax(pointSize-1.0, 1.0));
+    d->fontSize = format.fontPointSize();
     m_textEditorWidget.richTextEdit->mergeCurrentCharFormat(format);
     m_textEditorWidget.richTextEdit->setTextCursor(oldCursor);
 }
@@ -709,6 +912,7 @@ void SvgTextEditor::setLetterSpacing(double letterSpacing)
             cursor.insertText(selectionModified);
         }
     }
+    d->letterSpacing = letterSpacing;
 }
 
 void SvgTextEditor::alignLeft()
@@ -879,6 +1083,8 @@ void SvgTextEditor::setFontColor(const KoColor &c)
             cursor.insertText(selectionModified);
         }
     }
+    // save last used color to be used when the editor is cleared
+    d->fontColor = color;
 }
 
 void SvgTextEditor::setBackgroundColor(const KoColor &c)
@@ -933,6 +1139,8 @@ void SvgTextEditor::setFont(const QString &fontName)
             cursor.insertText(selectionModified);
         }
     }
+    // save last used font to be used when the editor is cleared
+    d->font = font;
 }
 
 void SvgTextEditor::setFontSize(qreal fontSize)
@@ -951,6 +1159,8 @@ void SvgTextEditor::setFontSize(qreal fontSize)
             cursor.insertText(selectionModified);
         }
     }
+    // set last used font size to be used when the editor is cleared
+    d->fontSize = fontSize;
 }
 
 void SvgTextEditor::setBaseline(KoSvgText::BaselineShiftMode)

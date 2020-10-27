@@ -68,9 +68,9 @@ void KoInteractionTool::mouseMoveEvent(KoPointerEvent *event)
     Q_D(KoInteractionTool);
     d->lastPoint = event->point;
 
-    if (d->currentStrategy)
+    if (d->currentStrategy) {
         d->currentStrategy->handleMouseMove(d->lastPoint, event->modifiers());
-    else {
+    } else {
         Q_FOREACH (KoInteractionStrategyFactorySP factory, d->interactionFactories) {
             // skip the rest of rendering if the factory asks for it
             if (factory->hoverEvent(event)) return;

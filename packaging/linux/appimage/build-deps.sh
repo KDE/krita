@@ -23,6 +23,7 @@ export DEPS_INSTALL_PREFIX=$BUILD_PREFIX/deps/usr/
 export DOWNLOADS_DIR=$BUILD_PREFIX/downloads/
 
 # Setup variables needed to help everything find what we build
+ARCH=`dpkg --print-architecture`
 export LD_LIBRARY_PATH=$DEPS_INSTALL_PREFIX/lib:$LD_LIBRARY_PATH
 export PATH=$DEPS_INSTALL_PREFIX/bin:$PATH
 export PKG_CONFIG_PATH=$DEPS_INSTALL_PREFIX/share/pkgconfig:$DEPS_INSTALL_PREFIX/lib/pkgconfig:/usr/lib/pkgconfig:$PKG_CONFIG_PATH
@@ -64,11 +65,14 @@ cmake $KRITA_SOURCES/3rdparty -DCMAKE_INSTALL_PREFIX=$DEPS_INSTALL_PREFIX -DINST
 cmake --build . --config RelWithDebInfo --target ext_boost
 cmake --build . --config RelWithDebInfo --target ext_fftw3
 cmake --build . --config RelWithDebInfo --target ext_eigen3
+cmake --build . --config RelWithDebInfo --target ext_expat
 cmake --build . --config RelWithDebInfo --target ext_exiv2
 cmake --build . --config RelWithDebInfo --target ext_lcms2
 cmake --build . --config RelWithDebInfo --target ext_ocio
 cmake --build . --config RelWithDebInfo --target ext_openexr
+if [[ $ARCH != "arm*" ]]; then
 cmake --build . --config RelWithDebInfo --target ext_vc
+fi
 cmake --build . --config RelWithDebInfo --target ext_libraw
 cmake --build . --config RelWithDebInfo --target ext_giflib
 #cmake --build . --config RelWithDebInfo --target ext_gsl
@@ -82,3 +86,9 @@ cmake --build . --config RelWithDebInfo --target ext_gmic
 cmake --build . --config RelWithDebInfo --target ext_sip
 cmake --build . --config RelWithDebInfo --target ext_pyqt
 cmake --build . --config RelWithDebInfo --target ext_quazip
+cmake --build . --config RelWithDebInfo --target ext_openjpeg
+cmake --build . --config RelWithDebInfo --target ext_nasm
+cmake --build . --config RelWithDebInfo --target ext_libx265
+cmake --build . --config RelWithDebInfo --target ext_libde265
+cmake --build . --config RelWithDebInfo --target ext_libheif
+cmake --build . --config RelWithDebInfo --target ext_seexpr

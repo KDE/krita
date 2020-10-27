@@ -22,6 +22,7 @@
 #include <QGlobalStatic>
 #include <QFontDatabase>
 #include <QDebug>
+#include <QApplication>
 
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
@@ -40,8 +41,8 @@ void KoDockRegistry::init()
     KoPluginLoader::PluginsConfig config;
     config.whiteList = "DockerPlugins";
     config.blacklist = "DockerPluginsDisabled";
-    config.group = "calligra";
-    KoPluginLoader::instance()->load(QString::fromLatin1("Calligra/Dock"),
+    config.group = "krita";
+    KoPluginLoader::instance()->load(QString::fromLatin1("Krita/Dock"),
                                      QString::fromLatin1("[X-Flake-PluginVersion] == 28"),
                                      config);
 }
@@ -65,22 +66,41 @@ KoDockRegistry* KoDockRegistry::instance()
 
 QFont KoDockRegistry::dockFont()
 {
-    KConfigGroup group( KSharedConfig::openConfig(), "GUI");
+    KConfigGroup config(KSharedConfig::openConfig(), "");
+
     QFont dockWidgetFont = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
     QFont smallFont = QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont);
 
-    int pointSize = group.readEntry("palettefontsize", dockWidgetFont.pointSize());
 
-    // Not set by the user
-    if (pointSize == dockWidgetFont.pointSize()) {
-        // and there is no setting for the smallest readable font, calculate something small
-        if (smallFont.pointSize() >= pointSize) {
-            smallFont.setPointSizeF(pointSize * 0.9);
+    if (config.readEntry<bool>("use_custom_system_font", false)) {
+        QString fontName = config.readEntry<QString>("custom_system_font", "");
+        int smallFontSize = config.readEntry<int>("custom_font_size", -1);
+
+        if (smallFontSize <= 6) {
+            smallFontSize = dockWidgetFont.pointSize();
+        }
+
+        if (!fontName.isEmpty()) {
+            dockWidgetFont = QFont(fontName, dockWidgetFont.pointSize());
+            smallFont = QFont(fontName, smallFontSize * 0.9);
         }
     }
     else {
-        // paletteFontSize was set, use that
-        smallFont.setPointSize(pointSize);
+        int pointSize = config.readEntry("palettefontsize", dockWidgetFont.pointSize());
+
+        // Not set by the user
+        if (pointSize == dockWidgetFont.pointSize()) {
+            // and there is no setting for the smallest readable font, calculate something small
+            if (smallFont.pointSize() >= pointSize) {
+                smallFont.setPointSizeF(pointSize * 0.9);
+            }
+        }
+        else {
+            // paletteFontSize was set, use that
+            smallFont.setPointSize(pointSize);
+        }
+
     }
+
     return smallFont;
 }

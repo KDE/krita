@@ -25,6 +25,12 @@
 
 #include "kis_properties_configuration.h"
 #include <KisPaintopSettingsIds.h>
+#include <kis_brush.h>
+#include <KoEphemeralResource.h>
+
+#include <KoCanvasResourcesInterface.h>
+#include <KoCanvasResourcesIds.h>
+
 
 void KisBrushOptionProperties::writeOptionSettingImpl(KisPropertiesConfiguration *setting) const
 {
@@ -38,7 +44,7 @@ void KisBrushOptionProperties::writeOptionSettingImpl(KisPropertiesConfiguration
     setting->setProperty("brush_definition", d.toString());
 
     QString brushFileName  = !m_brush->filename().isEmpty() ?
-                            m_brush->shortFilename() : QString();
+                            m_brush->filename() : QString();
 
     setting->setProperty(KisPaintOpUtils::RequiredBrushFileTag, brushFileName);
 
@@ -68,13 +74,42 @@ QDomElement getBrushXMLElement(const KisPropertiesConfiguration *setting)
     return element;
 }
 
-void KisBrushOptionProperties::readOptionSettingImpl(const KisPropertiesConfiguration *setting)
+void KisBrushOptionProperties::readOptionSettingResourceImpl(const KisPropertiesConfiguration *setting, KisResourcesInterfaceSP resourcesInterface, KoCanvasResourcesInterfaceSP canvasResourcesInterface)
 {
     QDomElement element = getBrushXMLElement(setting);
 
     if (!element.isNull()) {
-        m_brush = KisBrush::fromXML(element);
+        m_brush = KisBrush::fromXML(element, resourcesInterface);
+
+        if (m_brush->applyingGradient() && canvasResourcesInterface) {
+            KoAbstractGradientSP gradient = canvasResourcesInterface->resource(KoCanvasResource::CurrentGradient).value<KoAbstractGradientSP>();
+            m_brush->setGradient(gradient);
+        }
+
     }
+}
+
+QList<KoResourceSP> KisBrushOptionProperties::prepareLinkedResourcesImpl(const KisPropertiesConfiguration *settings, KisResourcesInterfaceSP resourcesInterface) const
+{
+    QList<KoResourceSP> resources;
+
+    QDomElement element = getBrushXMLElement(settings);
+    if (element.isNull()) return resources;
+
+    KisBrushSP brush = KisBrush::fromXML(element, resourcesInterface);
+    // TODO: implement proper property for KoResource about ephemerality
+    if (brush && !dynamic_cast<KoEphemeralResource<KisBrush>*>(brush.data())) {
+        resources << brush;
+    }
+
+    return resources;
+}
+
+QList<KoResourceSP> KisBrushOptionProperties::prepareEmbeddedResourcesImpl(const KisPropertiesConfiguration *settings, KisResourcesInterfaceSP resourcesInterface) const
+{
+    Q_UNUSED(settings);
+    Q_UNUSED(resourcesInterface);
+    return {};
 }
 
 #ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND

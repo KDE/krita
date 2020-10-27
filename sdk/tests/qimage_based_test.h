@@ -23,7 +23,7 @@
 #define USE_DOCUMENT 1
 #endif /* USE_DOCUMENT */
 
-#include "testutil.h"
+#include <testutil.h>
 
 
 #include <KoColorSpace.h>
@@ -36,8 +36,6 @@
 #if USE_DOCUMENT
 #include "KisDocument.h"
 #include "kis_shape_layer.h"
-#else
-#include "kis_filter_configuration.h"
 #endif /* USE_DOCUMENT */
 
 #include "kis_undo_stores.h"
@@ -47,9 +45,11 @@
 #include "kis_adjustment_layer.h"
 #include "kis_transparency_mask.h"
 #include "kis_clone_layer.h"
+#include <KisGlobalResourcesInterface.h>
 
 #include "filter/kis_filter.h"
 #include "filter/kis_filter_registry.h"
+#include "kis_filter_configuration.h"
 
 #include "commands/kis_selection_commands.h"
 
@@ -88,10 +88,18 @@ protected:
 
         KisFilterSP filter = KisFilterRegistry::instance()->value("blur");
         Q_ASSERT(filter);
-        KisFilterConfigurationSP configuration = filter->defaultConfiguration();
+        KisFilterConfigurationSP configuration = filter->defaultConfiguration(KisGlobalResourcesInterface::instance());
         Q_ASSERT(configuration);
 
-        KisAdjustmentLayerSP blur1 = new KisAdjustmentLayer(image, "blur1", configuration, 0);
+        /**
+         * HACK ALERT: before this commit a07ef143f6 the meaning of
+         * 'strength' was different. After that, to make the tests
+         * run correctly we should manually set the old value (it is
+         * not available via GUI anymore).
+         */
+        configuration->setProperty("strength", 500);
+
+        KisAdjustmentLayerSP blur1 = new KisAdjustmentLayer(image, "blur1", configuration->cloneWithResourcesSnapshot(), 0);
         blur1->internalSelection()->clear();
         blur1->internalSelection()->pixelSelection()->select(blurRect);
         blur1->setX(blurShift.x());
@@ -109,8 +117,7 @@ protected:
         image->addNode(blur1);
         image->addNode(paintLayer1);
 
-        KisTransparencyMaskSP transparencyMask1 = new KisTransparencyMask();
-        transparencyMask1->setName("tmask1");
+        KisTransparencyMaskSP transparencyMask1 = new KisTransparencyMask(image, "tmask1");
         transparencyMask1->testingInitSelection(transpRect, paintLayer1);
 
         image->addNode(transparencyMask1, paintLayer1);
@@ -137,7 +144,7 @@ protected:
     void addGlobalSelection(KisImageSP image) {
         QRect selectionRect(40,40,300,300);
 
-        KisSelectionSP selection = new KisSelection(new KisSelectionDefaultBounds(0, image));
+        KisSelectionSP selection = new KisSelection(new KisDefaultBounds(image));
         KisPixelSelectionSP pixelSelection = selection->pixelSelection();
         pixelSelection->select(selectionRect);
 
@@ -241,18 +248,18 @@ private:
 
         bool valid = true;
 
-        QString fullPath = fetchDataFileLazy(m_directoryName + QDir::separator() +
-                                             prefix + QDir::separator() + realName);
+        QString fullPath = fetchDataFileLazy(m_directoryName + '/' +
+                                             prefix + '/' + realName);
 
         if (fullPath.isEmpty()) {
             // Try without the testname subdirectory
-            fullPath = fetchDataFileLazy(prefix + QDir::separator() +
+            fullPath = fetchDataFileLazy(prefix + '/' +
                                          realName);
         }
 
         if (fullPath.isEmpty()) {
             // Try without the prefix subdirectory
-            fullPath = fetchDataFileLazy(m_directoryName + QDir::separator() +
+            fullPath = fetchDataFileLazy(m_directoryName + '/' +
                                          realName);
         }
 
@@ -278,8 +285,8 @@ private:
             dbgKrita << "--- Wrong image:" << realName;
             valid = false;
 
-            image.save(QString(FILES_OUTPUT_DIR) + QDir::separator() + realName);
-            ref.save(QString(FILES_OUTPUT_DIR) + QDir::separator() + expectedName);
+            image.save(QString(FILES_OUTPUT_DIR) + '/' + realName);
+            ref.save(QString(FILES_OUTPUT_DIR) + '/' + expectedName);
         }
 
         return valid;

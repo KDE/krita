@@ -54,13 +54,14 @@ protected:
     bool wantsAutoScroll() const override { return false; }
 
     bool isPixelOnly() const override { return true; }
+    bool usesColorLabels() const override { return true; }
 
 public Q_SLOTS:
     void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
     virtual void slotSetFuzziness(int);
     virtual void slotSetSizemod(int);
     virtual void slotSetFeather(int);
-    virtual void slotLimitToCurrentLayer(int);
+    virtual void slotSetUseSelectionAsBoundary(bool);
     //virtual bool antiAliasSelection();
 
 protected:
@@ -70,7 +71,7 @@ private:
     int  m_fuzziness;
     int  m_sizemod;
     int  m_feather;
-    bool m_limitToCurrentLayer;
+    bool m_useSelectionAsBoundary;
     KConfigGroup m_configGroup;
 };
 

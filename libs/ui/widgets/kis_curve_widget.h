@@ -42,7 +42,7 @@ class KisCubicCurve;
  * a new control point. Control points can be deleted by selecting a point
  * and pressing the delete key.
  *
- * (From: http://techbase.kde.org/Projects/Widgets_and_Classes#KisCurveWidget)
+ * (From: https://techbase.kde.org/Projects/Widgets_and_Classes#KisCurveWidget)
  * KisCurveWidget allows editing of spline based y=f(x) curves. Handy for cases
  * where you want the user to control such things as tablet pressure
  * response, color transformations, acceleration by time, aeroplane lift
@@ -59,7 +59,7 @@ public:
      * Create a new curve widget with a default curve, that is a straight
      * line from bottom-left to top-right.
      */
-    KisCurveWidget(QWidget *parent = 0, Qt::WindowFlags f = 0);
+    KisCurveWidget(QWidget *parent = 0, Qt::WindowFlags f = Qt::WindowFlags());
 
     ~KisCurveWidget() override;
 

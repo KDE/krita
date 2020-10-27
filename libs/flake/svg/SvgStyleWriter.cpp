@@ -39,10 +39,12 @@
 
 #include <KoShape.h>
 #include <KoPathShape.h>
+#include <KoPathSegment.h>
 #include <KoFilterEffect.h>
 #include <KoFilterEffectStack.h>
 #include <KoColorBackground.h>
 #include <KoGradientBackground.h>
+#include <KoMeshGradientBackground.h>
 #include <KoPatternBackground.h>
 #include <KoVectorPatternBackground.h>
 #include <KoShapeStroke.h>
@@ -100,6 +102,11 @@ void SvgStyleWriter::saveSvgFill(KoShape *shape, SvgSavingContext &context)
     QSharedPointer<KoGradientBackground>  gbg = qSharedPointerDynamicCast<KoGradientBackground>(shape->background());
     if (gbg) {
         QString gradientId = saveSvgGradient(gbg->gradient(), gbg->transform(), context);
+        context.shapeWriter().addAttribute("fill", "url(#" + gradientId + ")");
+    }
+    QSharedPointer<KoMeshGradientBackground> mgbg = qSharedPointerDynamicCast<KoMeshGradientBackground>(shape->background());
+    if (mgbg) {
+        QString gradientId = saveSvgMeshGradient(mgbg->gradient(), mgbg->transform(), context);
         context.shapeWriter().addAttribute("fill", "url(#" + gradientId + ")");
     }
     QSharedPointer<KoPatternBackground>  pbg = qSharedPointerDynamicCast<KoPatternBackground>(shape->background());
@@ -405,6 +412,97 @@ QString SvgStyleWriter::saveSvgGradient(const QGradient *gradient, const QTransf
     return uid;
 }
 
+QString SvgStyleWriter::saveSvgMeshGradient(SvgMeshGradient *gradient,
+                                            const QTransform& transform,
+                                            SvgSavingContext &context)
+{
+    if (!gradient && gradient->isValid())
+        return QString();
+
+    const QString uid = context.createUID("meshgradient");
+    context.styleWriter().startElement("meshgradient");
+    context.styleWriter().addAttribute("id", uid);
+
+    if (gradient->gradientUnits() == KoFlake::ObjectBoundingBox) {
+        context.styleWriter().addAttribute("gradientUnits", "objectBoundingBox");
+    } else {
+        context.styleWriter().addAttribute("gradientUnits", "userSpaceOnUse");
+    }
+
+    SvgUtil::writeTransformAttributeLazy("transform", transform, context.styleWriter());
+
+    SvgMeshArray *mesharray = gradient->getMeshArray().data();
+    QPointF start = mesharray->getPatch(0, 0)->getStop(SvgMeshPatch::Top).point;
+
+    context.styleWriter().addAttribute("x", start.x());
+    context.styleWriter().addAttribute("y", start.y());
+
+    if (gradient->type() == SvgMeshGradient::BILINEAR) {
+        context.styleWriter().addAttribute("type", "bilinear");
+    } else {
+        context.styleWriter().addAttribute("type", "bicubic");
+    }
+
+    for (int row = 0; row < mesharray->numRows(); ++row) {
+
+        const QString uid = context.createUID("meshrow");
+        context.styleWriter().startElement("meshrow");
+        context.styleWriter().addAttribute("id", uid);
+
+        for (int col = 0; col < mesharray->numColumns(); ++col) {
+
+            const QString uid = context.createUID("meshpatch");
+            context.styleWriter().startElement("meshpatch");
+            context.styleWriter().addAttribute("id", uid);
+
+            SvgMeshPatch *patch = mesharray->getPatch(row, col);
+
+            for (int s = 0; s < 4; ++s) {
+                SvgMeshPatch::Type type = static_cast<SvgMeshPatch::Type> (s);
+
+                // only first row and first col have Top and Left stop, respectively
+                if ((row != 0 && s == SvgMeshPatch::Top) ||
+                    (col != 0 && s == SvgMeshPatch::Left)) {
+                    continue;
+                }
+
+                context.styleWriter().startElement("stop");
+
+                std::array<QPointF, 4> segment = patch->getSegment(type);
+
+                QString pathstr;
+                QTextStream stream(&pathstr);
+                stream.setRealNumberPrecision(10);
+                // TODO: other path type?
+                stream << "C "
+                       << segment[1].x() << "," << segment[1].y() << " "
+                       << segment[2].x() << "," << segment[2].y() << " "
+                       << segment[3].x() << "," << segment[3].y(); // I don't see any harm, inkscape does this too
+
+                context.styleWriter().addAttribute("path", pathstr);
+
+                // don't add color/opacity if stop is in first row and stop == Top (or)
+                // don't add color/opacity if stop is not in first row and stop == Right
+                if ((row != 0 || col == 0 || s != SvgMeshPatch::Top) &&
+                    (row == 0 || s != SvgMeshPatch::Right)) {
+
+                    SvgMeshStop stop = patch->getStop(type);
+                    context.styleWriter().addAttribute("stop-color", stop.color.name());
+                    context.styleWriter().addAttribute("stop-opacity", stop.color.alphaF());
+                }
+
+                context.styleWriter().endElement(); // stop
+            }
+
+            context.styleWriter().endElement();  // meshpatch
+        }
+        context.styleWriter().endElement(); // meshrow
+    }
+    context.styleWriter().endElement(); // meshgradient
+
+    return uid;
+}
+
 QString SvgStyleWriter::saveSvgPattern(QSharedPointer<KoPatternBackground> pattern, KoShape *shape, SvgSavingContext &context)
 {
     const QString uid = context.createUID("pattern");
@@ -448,7 +546,7 @@ QString SvgStyleWriter::saveSvgPattern(QSharedPointer<KoPatternBackground> patte
         break;
     }
 
-    offset = shape->absoluteTransformation(0).map(offset);
+    offset = shape->absoluteTransformation().map(offset);
 
     context.styleWriter().startElement("pattern");
     context.styleWriter().addAttribute("id", uid);

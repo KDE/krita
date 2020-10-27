@@ -37,7 +37,6 @@
 #include "kis_pressure_texture_strength_option.h"
 #include <brushengine/kis_paintop_lod_limitations.h>
 
-
 KisDuplicateOpSettingsWidget::KisDuplicateOpSettingsWidget(QWidget* parent)
     : KisBrushBasedPaintopOptionWidget(parent)
 {
@@ -61,7 +60,7 @@ KisDuplicateOpSettingsWidget::~KisDuplicateOpSettingsWidget()
 
 KisPropertiesConfigurationSP KisDuplicateOpSettingsWidget::configuration() const
 {
-    KisDuplicateOpSettings *config = new KisDuplicateOpSettings();
+    KisDuplicateOpSettings *config = new KisDuplicateOpSettings(resourcesInterface());
     config->setOptionsWidget(const_cast<KisDuplicateOpSettingsWidget*>(this));
     config->setProperty("paintop", "duplicate"); // XXX: make this a const id string
     writeConfiguration(config);

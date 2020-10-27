@@ -27,6 +27,8 @@
 #include <QDomDocument>
 #include <QBuffer>
 
+#include <KisResourceDirtyStateSaver.h>
+
 #include <brushengine/kis_paintop_settings.h>
 #include "kis_paintop_registry.h"
 #include "kis_painter.h"
@@ -35,88 +37,81 @@
 #include "kis_image.h"
 #include "kis_paintop_settings_update_proxy.h"
 #include <brushengine/kis_paintop_config_widget.h>
+#include <KisRequiredResourcesOperators.h>
+#include <KoLocalStrokeCanvasResources.h>
 
 #include <KoStore.h>
 
 struct Q_DECL_HIDDEN KisPaintOpPreset::Private {
-    Private()
-        : settings(0),
-          dirtyPreset(false)
+    Private(KisPaintOpPreset *q)
     {
+        proxyParent = new ProxyParent(q);
     }
 
-    KisPaintOpSettingsSP settings;
-    bool dirtyPreset;
-    QScopedPointer<KisPaintopSettingsUpdateProxy> updateProxy;
+    QPointer<ProxyParent> proxyParent{0};
+    KisPaintOpSettingsSP settings {0};
+    QPointer<KisPaintopSettingsUpdateProxy> updateProxy {0};
 };
 
 
 KisPaintOpPreset::KisPaintOpPreset()
     : KoResource(QString())
-    , m_d(new Private)
+    , d(new Private(this))
 {
 }
 
 KisPaintOpPreset::KisPaintOpPreset(const QString & fileName)
     : KoResource(fileName)
-    , m_d(new Private)
+    , d(new Private(this))
 {
 }
 
 KisPaintOpPreset::~KisPaintOpPreset()
 {
-    delete m_d;
+    delete d;
 }
 
-KisPaintOpPresetSP KisPaintOpPreset::clone() const
+KisPaintOpPreset::KisPaintOpPreset(const KisPaintOpPreset &rhs)
+    : KoResource(rhs)
+    , d(new Private(this))
 {
-    KisPaintOpPresetSP preset(new KisPaintOpPreset());
-
-    if (settings()) {
-        preset->setSettings(settings()); // the settings are cloned inside!
+    if (rhs.settings()) {
+        setSettings(rhs.settings()); // the settings are cloned inside!
     }
-    preset->setDirty(isDirty());
+    setDirty(isDirty());
     // only valid if we could clone the settings
-    preset->setValid(settings());
+    setValid(rhs.settings());
 
-    preset->setPaintOp(paintOp());
-    preset->setName(name());
-    preset->setImage(image());
-    preset->settings()->setPreset(KisPaintOpPresetWSP(preset));
-
-    Q_ASSERT(preset->valid());
-
-    return preset;
-}
-void KisPaintOpPreset::setDirty(bool value)
-{
-    m_d->dirtyPreset = value;
+    setPaintOp(rhs.paintOp());
+    setName(rhs.name());
+    setImage(rhs.image());
+    settings()->setUpdateProxy(rhs.updateProxy());
 }
 
-bool KisPaintOpPreset::isDirty() const
+KoResourceSP KisPaintOpPreset::clone() const
 {
-    return m_d->dirtyPreset;
+    return KoResourceSP(new KisPaintOpPreset(*this));
 }
 
 void KisPaintOpPreset::setPaintOp(const KoID & paintOp)
 {
-    Q_ASSERT(m_d->settings);
-    m_d->settings->setProperty("paintop", paintOp.id());
+    Q_ASSERT(d->settings);
+    d->settings->setProperty("paintop", paintOp.id());
 }
 
 KoID KisPaintOpPreset::paintOp() const
 {
-    Q_ASSERT(m_d->settings);
-    return KoID(m_d->settings->getString("paintop"));
+    Q_ASSERT(d->settings);
+    return KoID(d->settings->getString("paintop"));
 }
 
 void KisPaintOpPreset::setOptionsWidget(KisPaintOpConfigWidget* widget)
 {
-    if (m_d->settings) {
-        m_d->settings->setOptionsWidget(widget);
+    if (d->settings) {
+        d->settings->setOptionsWidget(widget);
 
         if (widget) {
-            widget->setConfigurationSafe(m_d->settings);
+            widget->setConfigurationSafe(d->settings);
         }
     }
 }
@@ -126,46 +121,47 @@ void KisPaintOpPreset::setSettings(KisPaintOpSettingsSP settings)
     Q_ASSERT(settings);
     Q_ASSERT(!settings->getString("paintop", QString()).isEmpty());
 
-    DirtyStateSaver dirtyStateSaver(this);
+    KisResourceDirtyStateSaver dirtyStateSaver(this);
+    Q_UNUSED(dirtyStateSaver);
 
     KisPaintOpConfigWidget *oldOptionsWidget = 0;
 
-    if (m_d->settings) {
-        oldOptionsWidget = m_d->settings->optionsWidget();
-        m_d->settings->setOptionsWidget(0);
-        m_d->settings->setPreset(0);
-        m_d->settings = 0;
+    if (d->settings) {
+        oldOptionsWidget = d->settings->optionsWidget();
+        d->settings->setOptionsWidget(0);
+        d->settings->setUpdateProxy(updateProxy());
+        d->settings = 0;
     }
 
     if (settings) {
-        m_d->settings = settings->clone();
-        m_d->settings->setPreset(KisPaintOpPresetWSP(this));
+        d->settings = settings->clone();
+        d->settings->setUpdateProxy(updateProxy());
 
         if (oldOptionsWidget) {
-            oldOptionsWidget->setConfigurationSafe(m_d->settings);
-            m_d->settings->setOptionsWidget(oldOptionsWidget);
+            oldOptionsWidget->setConfigurationSafe(d->settings);
+            d->settings->setOptionsWidget(oldOptionsWidget);
         }
     }
 
-    setValid(m_d->settings);
+    setValid(d->settings);
 
-    if (m_d->updateProxy) {
-        m_d->updateProxy->notifyUniformPropertiesChanged();
-        m_d->updateProxy->notifySettingsChanged();
+    if (d->updateProxy) {
+        d->updateProxy->notifyUniformPropertiesChanged();
+        d->updateProxy->notifySettingsChanged();
     }
 }
 
 KisPaintOpSettingsSP KisPaintOpPreset::settings() const
 {
-    Q_ASSERT(m_d->settings);
-    Q_ASSERT(!m_d->settings->getString("paintop", QString()).isEmpty());
+    Q_ASSERT(d->settings);
+    Q_ASSERT(!d->settings->getString("paintop", QString()).isEmpty());
 
-    return m_d->settings;
+    return d->settings;
 }
 
-bool KisPaintOpPreset::load()
+bool KisPaintOpPreset::load(KisResourcesInterfaceSP resourcesInterface)
 {
-    dbgImage << "Load preset " << filename();
+    qDebug() << "Load preset " << filename();
     setValid(false);
 
     if (filename().isEmpty()) {
@@ -215,7 +211,7 @@ bool KisPaintOpPreset::load()
         }
     }
 
-    bool res = loadFromDevice(dev);
+    bool res = loadFromDevice(dev, resourcesInterface);
     delete dev;
 
     setValid(res);
@@ -224,7 +220,7 @@ bool KisPaintOpPreset::load()
 
 }
 
-bool KisPaintOpPreset::loadFromDevice(QIODevice *dev)
+bool KisPaintOpPreset::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface)
 {
 
     QImageReader reader(dev, "PNG");
@@ -254,9 +250,9 @@ bool KisPaintOpPreset::loadFromDevice(QIODevice *dev)
         return false;
     }
 
-    fromXML(doc.documentElement());
+    fromXML(doc.documentElement(), resourcesInterface);
 
-    if (!m_d->settings) {
+    if (!d->settings) {
         return false;
     }
 
@@ -268,42 +264,34 @@ bool KisPaintOpPreset::loadFromDevice(QIODevice *dev)
 
 bool KisPaintOpPreset::save()
 {
-
-    if (filename().isEmpty())
-        return false;
-
-    QString paintopid = m_d->settings->getString("paintop", QString());
-
+    const QString paintopid = d->settings->getString("paintop", QString());
     if (paintopid.isEmpty())
         return false;
 
-    QFile f(filename());
-    f.open(QFile::WriteOnly);
-
-    return saveToDevice(&f);
+    return KoResource::save();
 }
 
 void KisPaintOpPreset::toXML(QDomDocument& doc, QDomElement& elt) const
 {
-    QString paintopid = m_d->settings->getString("paintop", QString());
+    QString paintopid = d->settings->getString("paintop", QString());
 
     elt.setAttribute("paintopid", paintopid);
     elt.setAttribute("name", name());
 
     // sanitize the settings
-    bool hasTexture = m_d->settings->getBool("Texture/Pattern/Enabled");
+    bool hasTexture = d->settings->getBool("Texture/Pattern/Enabled");
     if (!hasTexture) {
-        Q_FOREACH (const QString & key, m_d->settings->getProperties().keys()) {
+        Q_FOREACH (const QString & key, d->settings->getProperties().keys()) {
             if (key.startsWith("Texture") && key != "Texture/Pattern/Enabled") {
-                m_d->settings->removeProperty(key);
+                d->settings->removeProperty(key);
             }
         }
     }
 
-    m_d->settings->toXML(doc, elt);
+    d->settings->toXML(doc, elt);
 }
 
-void KisPaintOpPreset::fromXML(const QDomElement& presetElt)
+void KisPaintOpPreset::fromXML(const QDomElement& presetElt, KisResourcesInterfaceSP resourcesInterface)
 {
     setName(presetElt.attribute("name"));
     QString paintopid = presetElt.attribute("paintopid");
@@ -322,7 +310,7 @@ void KisPaintOpPreset::fromXML(const QDomElement& presetElt)
 
     KoID id(paintopid, QString());
 
-    KisPaintOpSettingsSP settings = KisPaintOpRegistry::instance()->settings(id);
+    KisPaintOpSettingsSP settings = KisPaintOpRegistry::instance()->createSettings(id, resourcesInterface);
     if (!settings) {
         setValid(false);
         warnKrita << "Could not load settings for preset" << paintopid;
@@ -363,7 +351,7 @@ bool KisPaintOpPreset::saveToDevice(QIODevice *dev) const
         img = image();
     }
 
-    m_d->dirtyPreset = false;
+    const_cast<KisPaintOpPreset*>(this)->setDirty(false);
 
     KoResource::saveToDevice(dev);
 
@@ -371,36 +359,36 @@ bool KisPaintOpPreset::saveToDevice(QIODevice *dev) const
 
 }
 
-KisPaintopSettingsUpdateProxy* KisPaintOpPreset::updateProxy() const
+QPointer<KisPaintopSettingsUpdateProxy> KisPaintOpPreset::updateProxy() const
 {
-    if (!m_d->updateProxy) {
-        m_d->updateProxy.reset(new KisPaintopSettingsUpdateProxy());
+    if (!d->updateProxy) {
+        d->updateProxy = new KisPaintopSettingsUpdateProxy(d->proxyParent);
     }
-    return m_d->updateProxy.data();
+    return d->updateProxy;
 }
 
-KisPaintopSettingsUpdateProxy* KisPaintOpPreset::updateProxyNoCreate() const
+QPointer<KisPaintopSettingsUpdateProxy> KisPaintOpPreset::updateProxyNoCreate() const
 {
-    return m_d->updateProxy.data();
+    return d->updateProxy;
 }
 
 QList<KisUniformPaintOpPropertySP> KisPaintOpPreset::uniformProperties()
 {
-    return m_d->settings->uniformProperties(m_d->settings);
+    return d->settings->uniformProperties(d->settings);
 }
 
 bool KisPaintOpPreset::hasMaskingPreset() const
 {
-    return m_d->settings && m_d->settings->hasMaskingSettings();
+    return d->settings && d->settings->hasMaskingSettings();
 }
 
 KisPaintOpPresetSP KisPaintOpPreset::createMaskingPreset() const
 {
     KisPaintOpPresetSP result;
 
-    if (m_d->settings && m_d->settings->hasMaskingSettings()) {
-        result = new KisPaintOpPreset();
-        result->setSettings(m_d->settings->createMaskingSettings());
+    if (d->settings && d->settings->hasMaskingSettings()) {
+        result.reset(new KisPaintOpPreset());
+        result->setSettings(d->settings->createMaskingSettings());
         if (!result->valid()) {
             result.clear();
         }
@@ -409,7 +397,127 @@ KisPaintOpPresetSP KisPaintOpPreset::createMaskingPreset() const
     return result;
 }
 
-KisPaintOpPreset::UpdatedPostponer::UpdatedPostponer(KisPaintOpPreset *preset)
+KisResourcesInterfaceSP KisPaintOpPreset::resourcesInterface() const
+{
+    return d->settings ? d->settings->resourcesInterface() : nullptr;
+}
+
+void KisPaintOpPreset::setResourcesInterface(KisResourcesInterfaceSP resourcesInterface)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(d->settings);
+    d->settings->setResourcesInterface(resourcesInterface);
+}
+
+KoCanvasResourcesInterfaceSP KisPaintOpPreset::canvasResourcesInterface() const
+{
+    return d->settings ? d->settings->canvasResourcesInterface() : nullptr;
+}
+
+void KisPaintOpPreset::setCanvasResourcesInterface(KoCanvasResourcesInterfaceSP canvasResourcesInterface)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(d->settings);
+    d->settings->setCanvasResourcesInterface(canvasResourcesInterface);
+}
+
+namespace KisRequiredResourcesOperators
+{
+template <>
+struct ResourceTraits<KisPaintOpPreset>
+{
+    template <typename T>
+    using SharedPointerType = QSharedPointer<T>;
+
+    template <typename D, typename S>
+    static inline SharedPointerType<D> dynamicCastSP(SharedPointerType<S> src) {
+        return src.template dynamicCast<D>();
+    }
+};
+}
+
+void KisPaintOpPreset::createLocalResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface, KoCanvasResourcesInterfaceSP canvasResourcesInterface)
+{
+    KisRequiredResourcesOperators::createLocalResourcesSnapshot(this, globalResourcesInterface);
+
+    const QList<int> canvasResources = this->requiredCanvasResources();
+    if (!canvasResources.isEmpty()) {
+        KoLocalStrokeCanvasResourcesSP storage(new KoLocalStrokeCanvasResources());
+        Q_FOREACH (int key, canvasResources) {
+            storage->storeResource(key, canvasResourcesInterface->resource(key));
+        }
+        setCanvasResourcesInterface(storage);
+    }
+}
+
+bool KisPaintOpPreset::hasLocalResourcesSnapshot() const
+{
+    return KisRequiredResourcesOperators::hasLocalResourcesSnapshot(this);
+}
+
+KisPaintOpPresetSP KisPaintOpPreset::cloneWithResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface, KoCanvasResourcesInterfaceSP canvasResourcesInterface) const
+{
+    KisPaintOpPresetSP result =
+        KisRequiredResourcesOperators::cloneWithResourcesSnapshot(this, globalResourcesInterface);
+
+    const QList<int> canvasResources = result->requiredCanvasResources();
+    if (!canvasResources.isEmpty()) {
+        KoLocalStrokeCanvasResourcesSP storage(new KoLocalStrokeCanvasResources());
+        Q_FOREACH (int key, canvasResources) {
+            storage->storeResource(key, canvasResourcesInterface->resource(key));
+        }
+        result->setCanvasResourcesInterface(storage);
+    }
+
+    return result;
+}
+
+QList<KoResourceSP> KisPaintOpPreset::linkedResources(KisResourcesInterfaceSP globalResourcesInterface) const
+{
+    QList<KoResourceSP> resources;
+
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(d->settings, resources);
+
+    KisPaintOpFactory* f = KisPaintOpRegistry::instance()->value(paintOp().id());
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(f, resources);
+    resources << f->prepareLinkedResources(d->settings, globalResourcesInterface);
+
+    if (hasMaskingPreset()) {
+        KisPaintOpPresetSP maskingPreset = createMaskingPreset();
+
+        KisPaintOpFactory* f = KisPaintOpRegistry::instance()->value(maskingPreset->paintOp().id());
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(f, resources);
+        resources << f->prepareLinkedResources(maskingPreset->settings(), globalResourcesInterface);
+    }
+
+    return resources;
+}
+
+QList<KoResourceSP> KisPaintOpPreset::embeddedResources(KisResourcesInterfaceSP globalResourcesInterface) const
+{
+    QList<KoResourceSP> resources;
+
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(d->settings, resources);
+
+    KisPaintOpFactory* f = KisPaintOpRegistry::instance()->value(paintOp().id());
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(f, resources);
+    resources << f->prepareEmbeddedResources(d->settings, globalResourcesInterface);
+
+    if (hasMaskingPreset()) {
+        KisPaintOpPresetSP maskingPreset = createMaskingPreset();
+
+        KisPaintOpFactory* f = KisPaintOpRegistry::instance()->value(maskingPreset->paintOp().id());
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(f, resources);
+        resources << f->prepareEmbeddedResources(maskingPreset->settings(), globalResourcesInterface);
+    }
+
+    return resources;
+}
+
+QList<int> KisPaintOpPreset::requiredCanvasResources() const
+{
+    return d->settings ? d->settings->requiredCanvasResources() : QList<int>();
+}
+
+KisPaintOpPreset::UpdatedPostponer::UpdatedPostponer(KisPaintOpPresetSP preset)
     : m_updateProxy(preset->updateProxyNoCreate())
 {
     if (m_updateProxy) {

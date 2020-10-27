@@ -27,9 +27,10 @@ class KRITAUI_EXPORT KisAsyncAnimationFramesSaveDialog : public KisAsyncAnimatio
 {
 public:
     KisAsyncAnimationFramesSaveDialog(KisImageSP image,
-                                      const KisTimeRange &range,
+                                      const KisTimeSpan &range,
                                       const QString &baseFilename,
                                       int sequenceNumberingOffset,
+                                      bool onlyNeedsUniqueFrames,
                                       KisPropertiesConfigurationSP exportConfiguration);
 
     ~KisAsyncAnimationFramesSaveDialog();
@@ -38,6 +39,8 @@ public:
 
     QString savedFilesMask() const;
     QString savedFilesMaskWildcard() const;
+
+    QList<int> getUniqueFrames() const;
 
 protected:
     QList<int> calcDirtyFrames() const override;

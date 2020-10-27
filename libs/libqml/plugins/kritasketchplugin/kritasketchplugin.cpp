@@ -31,9 +31,6 @@
 #include "LayerCompositeDetails.h"
 #include "PaletteColorsModel.h"
 #include "RecentImagesModel.h"
-#include "PaletteModel.h"
-#include "PresetModel.h"
-#include "PresetImageProvider.h"
 #include "RecentImageImageProvider.h"
 #include "RecentFileManager.h"
 #include "IconImageProvider.h"
@@ -64,24 +61,24 @@
 
 static QObject *provideConstantsObject(QQmlEngine *engine, QJSEngine *scriptEngine)
 {
-    Q_UNUSED(engine)
-    Q_UNUSED(scriptEngine)
+    Q_UNUSED(engine);
+    Q_UNUSED(scriptEngine);
 
     return new Constants;
 }
 
 static QObject *provideKritaNamespaceObject(QQmlEngine *engine, QJSEngine *scriptEngine)
 {
-    Q_UNUSED(engine)
-    Q_UNUSED(scriptEngine)
+    Q_UNUSED(engine);
+    Q_UNUSED(scriptEngine);
 
     return new KritaNamespace;
 }
 
 static QObject *provideKritaRssModelObject(QQmlEngine *engine, QJSEngine *scriptEngine)
 {
-    Q_UNUSED(engine)
-    Q_UNUSED(scriptEngine)
+    Q_UNUSED(engine);
+    Q_UNUSED(scriptEngine);
 
     MultiFeedRssModel *rssModel = new MultiFeedRssModel;
     rssModel->addFeed(QLatin1String("https://krita.org/en/feed/"));
@@ -92,15 +89,13 @@ static QObject *provideKritaRssModelObject(QQmlEngine *engine, QJSEngine *script
 
 void KritaSketchPlugin::registerTypes(const char* uri)
 {
-    Q_UNUSED(uri)
+    Q_UNUSED(uri);
     Q_ASSERT(uri == QLatin1String("org.krita.sketch"));
     qmlRegisterType<SimpleTouchArea>("org.krita.sketch", 1, 0, "SimpleTouchArea");
     qmlRegisterType<ColorSelectorItem>("org.krita.sketch", 1, 0, "ColorSelectorItem");
     qmlRegisterType<CurveEditorItem>("org.krita.sketch", 1, 0, "CurveEditorItem");
     qmlRegisterType<DocumentListModel>("org.krita.sketch", 1, 0, "DocumentListModel");
-    qmlRegisterType<PaletteModel>("org.krita.sketch", 1, 0, "PaletteModel");
     qmlRegisterType<PaletteColorsModel>("org.krita.sketch", 1, 0, "PaletteColorsModel");
-    qmlRegisterType<PresetModel>("org.krita.sketch", 1, 0, "PresetModel");
     qmlRegisterType<KisSketchView>("org.krita.sketch", 1, 0, "SketchView");
     qmlRegisterType<LayerModel>("org.krita.sketch", 1, 0, "LayerModel");
     qmlRegisterType<FiltersCategoryModel>("org.krita.sketch", 1, 0, "FiltersCategoryModel");
@@ -125,10 +120,9 @@ void KritaSketchPlugin::registerTypes(const char* uri)
 
 void KritaSketchPlugin::initializeEngine(QQmlEngine* engine, const char* uri)
 {
-    Q_UNUSED(uri)
+    Q_UNUSED(uri);
     Q_ASSERT(uri == QLatin1String("org.krita.sketch"));
 
-    engine->addImageProvider(QLatin1String("presetthumb"), new PresetImageProvider);
     engine->addImageProvider(QLatin1String("color"), new ColorImageProvider);
     engine->addImageProvider(QLatin1String("recentimage"), new RecentImageImageProvider);
     engine->addImageProvider(QLatin1String("icon"), new IconImageProvider);

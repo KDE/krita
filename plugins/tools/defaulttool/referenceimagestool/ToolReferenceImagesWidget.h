@@ -46,6 +46,8 @@ private Q_SLOTS:
     void slotKeepAspectChanged();
     void slotSaveLocationChanged(int index);
 
+    void slotImageValuesChanged();
+
 private:
     struct Private;
     const QScopedPointer<Private> d;

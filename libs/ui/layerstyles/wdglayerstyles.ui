@@ -131,7 +131,7 @@
        </item>
        <item>
         <property name="text">
-         <string>Stroke</string>
+         <string comment="Layer Style - Stroke">Stroke</string>
         </property>
         <property name="checkState">
          <enum>Unchecked</enum>
@@ -149,7 +149,7 @@
      <item>
       <widget class="QPushButton" name="btnNewStyle">
        <property name="text">
-        <string>Ne&amp;w...</string>
+        <string comment="New layer style">&amp;New...</string>
        </property>
       </widget>
      </item>

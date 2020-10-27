@@ -149,12 +149,8 @@ public Q_SLOTS:
     void reject() override;
 
 private Q_SLOTS:
-    /**
-     * @brief slotConfigurationChanged
-     * Wrapper slot for changes to the colorspace.
-     */
-    void slotConfigurationChanged();
 
+    void slotSelectorModelChanged();
     void endUpdateWithNewColor();
 
     /**
@@ -169,7 +165,7 @@ private Q_SLOTS:
      */
     void slotSetColorFromHex();
 
-    void slotChangePalette(KoColorSet *set);
+    void slotChangePalette(KoColorSetSP set);
 
 protected:
     void showEvent(QShowEvent *event) override;

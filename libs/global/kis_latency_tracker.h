@@ -159,7 +159,7 @@ public:
      * @param timestamp Timestamp of the event that just arrived (the difference to the
      * current time is the latency).
      */
-    virtual void push(qint64 timestamp);
+    virtual void push(qint64 timestamp) override;
 
 protected:
     /**

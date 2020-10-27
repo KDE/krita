@@ -43,11 +43,9 @@ public:
     /**
      * Empty implementation, as the layer itself is not visible
      */
-    void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext) override;
+    void paintComponent(QPainter &painter, KoShapePaintingContext &paintcontext) const override;
     bool hitTest(const QPointF &position) const override;
     QRectF boundingRect() const override;
-    void saveOdf(KoShapeSavingContext & context) const override;
-    bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context) override;
 };
 
 #endif // __KOSHAPELAYER_H__

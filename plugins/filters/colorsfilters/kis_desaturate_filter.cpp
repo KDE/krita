@@ -54,6 +54,7 @@
 #include <KoColorSpaceConstants.h>
 #include <KoCompositeOp.h>
 #include <kis_iterator_ng.h>
+#include <KisGlobalResourcesInterface.h>
 
 KisDesaturateFilter::KisDesaturateFilter()
    : KisColorTransformationFilter(id(), FiltersCategoryAdjustId, i18n("&Desaturate..."))
@@ -82,9 +83,9 @@ KoColorTransformation* KisDesaturateFilter::createTransformation(const KoColorSp
     return  cs->createColorTransformation("desaturate_adjustment", params);
 }
 
-KisFilterConfigurationSP KisDesaturateFilter::factoryConfiguration() const
+KisFilterConfigurationSP KisDesaturateFilter::defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const
 {
-    KisColorTransformationConfigurationSP config = new KisColorTransformationConfiguration(id().id(), 1);
+    KisFilterConfigurationSP config = factoryConfiguration(resourcesInterface);
     config->setProperty("type", 0);
     return config;
 }
@@ -111,7 +112,7 @@ KisDesaturateConfigWidget::~KisDesaturateConfigWidget()
 
 KisPropertiesConfigurationSP  KisDesaturateConfigWidget::configuration() const
 {
-    KisColorTransformationConfigurationSP c = new KisColorTransformationConfiguration(KisDesaturateFilter::id().id(), 0);
+    KisColorTransformationConfigurationSP c = new KisColorTransformationConfiguration(KisDesaturateFilter::id().id(), 0, KisGlobalResourcesInterface::instance());
     c->setProperty("type", m_group->checkedId());
     return c;
 }

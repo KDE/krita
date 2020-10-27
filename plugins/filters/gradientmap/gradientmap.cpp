@@ -27,28 +27,28 @@
 #include <KoAbstractGradient.h>
 #include <KoStopGradient.h>
 #include <KoGradientBackground.h>
-#include <KoResourceServerAdapter.h>
+#include <KisGlobalResourcesInterface.h>
 
+#include "KisViewManager.h"
+#include "kis_canvas_resource_provider.h"
 
 K_PLUGIN_FACTORY_WITH_JSON(KritaGradientMapFactory, "kritagradientmap.json", registerPlugin<KritaGradientMap>();)
 
 KritaGradientMapConfigWidget::KritaGradientMapConfigWidget(QWidget *parent, KisPaintDeviceSP dev, Qt::WindowFlags f)
     : KisConfigWidget(parent, f)
 {
-    Q_UNUSED(dev)
+    Q_UNUSED(dev);
     m_page = new WdgGradientMap(this);
     QHBoxLayout *l = new QHBoxLayout(this);
     Q_CHECK_PTR(l);
     l->addWidget(m_page);
     l->setContentsMargins(0, 0, 0, 0);
-    KoResourceServerProvider *serverProvider = KoResourceServerProvider::instance();
-    QSharedPointer<KoAbstractResourceServerAdapter> gradientResourceAdapter(
-                new KoResourceServerAdapter<KoAbstractGradient>(serverProvider->gradientServer()));
+
     m_gradientChangedCompressor = new KisSignalCompressor(100, KisSignalCompressor::FIRST_ACTIVE);
 
-    m_gradientPopUp = new KoResourcePopupAction(gradientResourceAdapter,
-                                                  m_page->btnGradientChooser);
-    m_activeGradient = KoStopGradient::fromQGradient(dynamic_cast<KoAbstractGradient*>(gradientResourceAdapter->resources().first())->toQGradient());
+    m_gradientPopUp = new KoResourcePopupAction(ResourceType::Gradients, 0, m_page->btnGradientChooser);
+
+    m_activeGradient = KoStopGradient::fromQGradient(m_gradientPopUp->currentResource().dynamicCast<KoAbstractGradient>()->toQGradient());
     m_page->gradientEditor->setGradient(m_activeGradient);
     m_page->gradientEditor->setCompactMode(true);
     m_page->gradientEditor->setEnabled(true);
@@ -79,7 +79,8 @@ void KritaGradientMapConfigWidget::setAbstractGradientToEditor()
 
 KisPropertiesConfigurationSP KritaGradientMapConfigWidget::configuration() const
 {
-    KisFilterConfigurationSP cfg = new KisFilterConfiguration("gradientmap", 2);
+    KisFilterSP filter = KisFilterRegistry::instance()->get("gradientmap");
+    KisFilterConfigurationSP cfg = filter->factoryConfiguration(KisGlobalResourcesInterface::instance());
     if (m_activeGradient) {
         QDomDocument doc;
         QDomElement elt = doc.createElement("gradient");
@@ -103,18 +104,25 @@ void KritaGradientMapConfigWidget::setConfiguration(const KisPropertiesConfigura
     if (config->hasProperty("gradientXML")) {
         doc.setContent(config->getString("gradientXML", ""));
         KoStopGradient gradient = KoStopGradient::fromXML(doc.firstChildElement());
-        if (gradient.stops().size()>0) {
+        if (gradient.stops().size() > 0) {
             m_activeGradient->setStops(gradient.stops());
+            m_activeGradient->updateVariableColors(m_page->gradientEditor->canvasResourcesInterface());
         }
+        m_page->gradientEditor->setGradient(m_activeGradient);
     }
 
     m_page->colorModeComboBox->setCurrentIndex(config->getInt("colorMode"));
-    m_page->ditherWidget->setConfiguration(*config, "dither/");
+
+    const KisFilterConfiguration *filterConfig = dynamic_cast<const KisFilterConfiguration*>(config.data());
+    KIS_SAFE_ASSERT_RECOVER_RETURN(filterConfig);
+    m_page->ditherWidget->setConfiguration(*filterConfig, "dither/");
 }
 
 void KritaGradientMapConfigWidget::setView(KisViewManager *view)
 {
-    Q_UNUSED(view)
+    m_page->gradientEditor->setCanvasResourcesInterface(view->canvasResourceProvider()->resourceManager()->canvasResourcesInterface());
+    m_gradientPopUp->setCanvasResourcesInterface(view->canvasResourceProvider()->resourceManager()->canvasResourcesInterface());
+    m_activeGradient->updateVariableColors(m_page->gradientEditor->canvasResourcesInterface());
 }
 //------------------------------
 KritaGradientMap::KritaGradientMap(QObject *parent, const QVariantList &)

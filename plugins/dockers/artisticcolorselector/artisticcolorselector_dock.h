@@ -25,12 +25,11 @@
 
 #include <KoCanvasObserverBase.h>
 #include <KoResourceServerProvider.h>
-#include <KoResourceServerAdapter.h>
 #include <KoResourceServerObserver.h>
 #include <resources/KoGamutMask.h>
 #include <KisDocument.h>
 #include <kis_types.h>
-#include <KoResourceItemChooser.h>
+#include <KisResourceItemChooser.h>
 
 #include <kis_mainwindow_observer.h>
 
@@ -63,7 +62,7 @@ private Q_SLOTS:
     void slotPreferenceChanged();
     void slotResetDefaultSettings();
     void slotGamutMaskToggle(bool value);
-    void slotGamutMaskSet(KoGamutMask* mask);
+    void slotGamutMaskSet(KoGamutMaskSP mask);
     void slotGamutMaskUnset();
     void slotGamutMaskPreviewUpdate();
     void slotGamutMaskDeactivate();
@@ -76,7 +75,7 @@ private:
     ArtisticColorSelectorUI* m_selectorUI;
     ARCSSettingsUI* m_preferencesUI;
     WheelPreferencesPopupUI* m_wheelPrefsUI;
-    KoGamutMask* m_selectedMask;
+    KoGamutMaskSP m_selectedMask;
 
     QIcon m_iconMaskOff;
     QIcon m_iconMaskOn;

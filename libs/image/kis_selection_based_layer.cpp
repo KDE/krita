@@ -53,10 +53,9 @@ public:
 KisSelectionBasedLayer::KisSelectionBasedLayer(KisImageWSP image,
         const QString &name,
         KisSelectionSP selection,
-        KisFilterConfigurationSP filterConfig,
-        bool useGeneratorRegistry)
+        KisFilterConfigurationSP filterConfig)
         : KisLayer(image.data(), name, OPACITY_OPAQUE_U8),
-          KisNodeFilterInterface(filterConfig, useGeneratorRegistry),
+          KisNodeFilterInterface(filterConfig),
           m_d(new Private())
 {
     if (!selection) {
@@ -213,8 +212,11 @@ void KisSelectionBasedLayer::resetCache()
         return;
     }
 
-    if (!m_d->paintDevice || *m_d->paintDevice->colorSpace() != *imageSP->colorSpace()) {
+    if (!m_d->paintDevice) {
         m_d->paintDevice = KisPaintDeviceSP(new KisPaintDevice(KisNodeWSP(this), imageSP->colorSpace(), new KisDefaultBounds(image())));
+    } else if (*m_d->paintDevice->colorSpace() != *imageSP->colorSpace()) {
+        m_d->paintDevice->clear();
+        m_d->paintDevice->convertTo(imageSP->colorSpace());
     } else {
         m_d->paintDevice->clear();
     }
@@ -278,15 +280,29 @@ void KisSelectionBasedLayer::setY(qint32 y)
     }
 }
 
+bool KisSelectionBasedLayer::supportsLodPainting() const
+{
+    return !m_d->selection || !m_d->selection->hasShapeSelection();
+}
+
 KisKeyframeChannel *KisSelectionBasedLayer::requestKeyframeChannel(const QString &id)
 {
-    if (id == KisKeyframeChannel::Content.id()) {
-        KisRasterKeyframeChannel *contentChannel = m_d->selection->pixelSelection()->createKeyframeChannel(KisKeyframeChannel::Content);
+    if (id == KisKeyframeChannel::Raster.id()) {
+        KisRasterKeyframeChannel *contentChannel = m_d->selection->pixelSelection()->createKeyframeChannel(KisKeyframeChannel::Raster);
         contentChannel->setFilenameSuffix(".pixelselection");
         return contentChannel;
     }
 
     return KisLayer::requestKeyframeChannel(id);
+}
+
+bool KisSelectionBasedLayer::supportsKeyframeChannel(const QString &id)
+{
+    if (id == KisKeyframeChannel::Raster.id()) {
+        return true;
+    }
+
+    return KisLayer::supportsKeyframeChannel(id);
 }
 
 void KisSelectionBasedLayer::setDirty()
@@ -345,13 +361,13 @@ QRect KisSelectionBasedLayer::exactBounds() const
     return resultRect;
 }
 
-QImage KisSelectionBasedLayer::createThumbnail(qint32 w, qint32 h)
+QImage KisSelectionBasedLayer::createThumbnail(qint32 w, qint32 h, Qt::AspectRatioMode aspectRatioMode)
 {
     KisSelectionSP originalSelection = internalSelection();
     KisPaintDeviceSP originalDevice = original();
 
     return originalDevice && originalSelection ?
-           originalDevice->createThumbnail(w, h, 1,
+           originalDevice->createThumbnail(w, h, aspectRatioMode, 1,
                                            KoColorConversionTransformation::internalRenderingIntent(),
                                            KoColorConversionTransformation::internalConversionFlags()) :
            QImage();

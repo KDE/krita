@@ -133,19 +133,19 @@ void KisPresetSaveWidget::loadExistingThumbnail()
 void KisPresetSaveWidget::loadImageFromLibrary()
 {
     //add dialog code here.
-    QDialog *dlg = new QDialog(this);
-    dlg->setWindowTitle(i18n("Preset Icon Library"));
-    QVBoxLayout *layout = new QVBoxLayout();
-    dlg->setLayout(layout);
-    KisPaintopPresetIconLibrary *libWidget = new KisPaintopPresetIconLibrary(dlg);
+    QDialog dialog;
+    dialog.setWindowTitle(i18n("Preset Icon Library"));
+    QVBoxLayout *layout = new QVBoxLayout(&dialog);
+
+    KisPaintopPresetIconLibrary *libWidget = new KisPaintopPresetIconLibrary(&dialog);
     layout->addWidget(libWidget);
-    QDialogButtonBox *buttons = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel, dlg);
-    connect(buttons, SIGNAL(accepted()), dlg, SLOT(accept()));
-    connect(buttons, SIGNAL(rejected()), dlg, SLOT(reject()));
+    QDialogButtonBox *buttons = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
+    connect(buttons, SIGNAL(accepted()), &dialog, SLOT(accept()));
+    connect(buttons, SIGNAL(rejected()), &dialog, SLOT(reject()));
     layout->addWidget(buttons);
 
     //if dialog accepted, get image.
-    if (dlg->exec()==QDialog::Accepted) {
+    if (dialog.exec() == QDialog::Accepted) {
 
         QImage presetImage = libWidget->getImage();
         brushPresetThumbnailWidget->paintCustomImage(presetImage);
@@ -160,95 +160,55 @@ void KisPresetSaveWidget::setFavoriteResourceManager(KisFavoriteResourceManager 
 void KisPresetSaveWidget::savePreset()
 {
     KisPaintOpPresetSP curPreset = m_resourceProvider->currentPreset();
-    if (!curPreset)
+    if (!curPreset) {
         return;
+    }
 
-    m_favoriteResourceManager->setBlockUpdates(true);
-
-    KisPaintOpPresetSP oldPreset = curPreset->clone(); // tags are not cloned with this
-    oldPreset->load();
     KisPaintOpPresetResourceServer * rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
     QString saveLocation = rServer->saveLocation();
 
     // if we are saving a new brush, use what we type in for the input
-    QString presetName = m_useNewBrushDialog ? newBrushNameTexField->text() : curPreset->name();
-    QString currentPresetFileName = saveLocation + presetName.replace(" ", "_") + curPreset->defaultFileExtension();
-    bool isSavingOverExistingPreset = rServer->resourceByName(presetName);
+    QString presetFileName = m_useNewBrushDialog ? newBrushNameTexField->text() : curPreset->name();
+    // We don't want dots or spaces in the filenames
+    presetFileName = presetFileName.replace(' ', '_').replace('.', '_');
+    QString extension = curPreset->defaultFileExtension();
 
-    // make a back up of the existing preset if we are saving over it
-    if (isSavingOverExistingPreset) {
-        QString currentDate = QDate::currentDate().toString(Qt::ISODate);
-        QString currentTime = QTime::currentTime().toString(Qt::ISODate).remove(QChar(':'));
-        QString presetFilename = saveLocation + presetName.replace(" ", "_") + "_backup_" + currentDate + "-" + currentTime + oldPreset->defaultFileExtension();
-        oldPreset->setFilename(presetFilename);
-        oldPreset->setName(presetName);
-        oldPreset->setDirty(false);
-        oldPreset->setValid(true);
-
-        // add backup resource to the blacklist
-        rServer->addResource(oldPreset);
-        rServer->removeResourceAndBlacklist(oldPreset.data());
-
-
-        QStringList tags;
-        tags = rServer->assignedTagsList(curPreset.data());
-        Q_FOREACH (const QString & tag, tags) {
-            rServer->addTag(oldPreset.data(), tag);
-        }
+    // Make sure of the extension
+    if (!presetFileName.endsWith(".kpp")) {
+        presetFileName += ".kpp";
     }
 
-
     if (m_useNewBrushDialog) {
-        KisPaintOpPresetSP newPreset = curPreset->clone();
-        newPreset->setFilename(currentPresetFileName);
-        newPreset->setName(presetName);
+        KisPaintOpPresetSP newPreset = curPreset->clone().dynamicCast<KisPaintOpPreset>();
+        if (!presetFileName.endsWith(extension)) {
+            presetFileName.append(extension);
+        }
+        newPreset->setFilename(presetFileName);
+        newPreset->setName(m_useNewBrushDialog ? newBrushNameTexField->text() : curPreset->name());
         newPreset->setImage(brushPresetThumbnailWidget->cutoutOverlay());
         newPreset->setDirty(false);
         newPreset->setValid(true);
 
-
-        // keep tags if we are saving over existing preset
-        if (isSavingOverExistingPreset) {
-            QStringList tags;
-            tags = rServer->assignedTagsList(curPreset.data());
-            Q_FOREACH (const QString & tag, tags) {
-                rServer->addTag(newPreset.data(), tag);
-            }
-        }
-
         rServer->addResource(newPreset);
 
         // trying to get brush preset to load after it is created
-        emit resourceSelected(newPreset.data());
+        emit resourceSelected(newPreset);
     }
     else { // saving a preset that is replacing an existing one
-
-        if (curPreset->filename().contains(saveLocation) == false || curPreset->filename().contains(presetName) == false) {
-            rServer->removeResourceAndBlacklist(curPreset.data());
-            curPreset->setFilename(currentPresetFileName);
-            curPreset->setName(presetName);
-        }
-
-        if (!rServer->resourceByFilename(curPreset->filename())){
-            //this is necessary so that we can get the preset afterwards.
-            rServer->addResource(curPreset, false, false);
-            rServer->removeFromBlacklist(curPreset.data());
-        }
+        curPreset->setName(m_useNewBrushDialog ? newBrushNameTexField->text() : curPreset->name());
         if (curPreset->image().isNull()) {
             curPreset->setImage(brushPresetThumbnailWidget->cutoutOverlay());
         }
 
-        // we should not load() the brush right after saving because it will reset all our saved
-        // eraser size and opacity values
-        curPreset->save();
+        rServer->updateResource(curPreset);
     }
 
 
-    // HACK ALERT! the server does not notify the observers
-    // automatically, so we need to call theupdate manually!
-    rServer->tagCategoryMembersChanged();
+//    // HACK ALERT! the server does not notify the observers
+//    // automatically, so we need to call theupdate manually!
+//    rServer->tagCategoryMembersChanged();
 
-    m_favoriteResourceManager->setBlockUpdates(false);
+    m_favoriteResourceManager->updateFavoritePresets();
 
     close(); // we are done... so close the save brush dialog
 

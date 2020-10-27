@@ -25,6 +25,7 @@
 #include <filter/kis_filter.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_processing_information.h>
+#include <KisGlobalResourcesInterface.h>
 
 #include "ui_wdgunsharp.h"
 
@@ -55,7 +56,7 @@ void KisWdgUnsharp::setConfiguration(const KisPropertiesConfigurationSP config)
 
 KisPropertiesConfigurationSP KisWdgUnsharp::configuration() const
 {
-    KisFilterConfigurationSP config = new KisFilterConfiguration("unsharp", 1);
+    KisFilterConfigurationSP config = new KisFilterConfiguration("unsharp", 1, KisGlobalResourcesInterface::instance());
     config->setProperty("halfSize", widget()->doubleHalfSize->value());
     config->setProperty("amount", widget()->doubleAmount->value());
     config->setProperty("threshold", widget()->intThreshold->value());

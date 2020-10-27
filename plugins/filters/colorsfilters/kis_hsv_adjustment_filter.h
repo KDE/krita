@@ -51,7 +51,7 @@ public:
         return KoID("hsvadjustment", i18n("HSV/HSL Adjustment"));
     }
 
-    KisFilterConfigurationSP factoryConfiguration() const override;
+    KisFilterConfigurationSP defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const override;
 
 };
 
@@ -62,7 +62,7 @@ class KisHSVConfigWidget : public KisConfigWidget
     Q_OBJECT
 
 public:
-    KisHSVConfigWidget(QWidget * parent, Qt::WindowFlags f = 0);
+    KisHSVConfigWidget(QWidget * parent, Qt::WindowFlags f = Qt::WindowFlags());
     ~KisHSVConfigWidget() override;
 
     KisPropertiesConfigurationSP  configuration() const override;

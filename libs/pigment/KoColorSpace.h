@@ -397,6 +397,34 @@ public:
                                quint32 numPixels,
                                KoColorConversionTransformation *proofingTransform) const;
 
+    /**
+     * Convert @p nPixels pixels in @p src into their human-visible
+     * visual representation. The channel is shown as grayscale.
+     *
+     * Both buffers are in the same color space.
+     *
+     * @param src source buffer in (*this) color space
+     * @param dst destination buffer in the same color space as @p src
+     * @param nPixels length of the buffers in number of pixels
+     * @param pixelSize stride of each pixel in the destination buffer
+     * @param selectedChannelIndex Index of the selected channel.
+     */
+    virtual void convertChannelToVisualRepresentation(const quint8 *src, quint8 *dst, quint32 nPixels, const qint32 selectedChannelIndex) const = 0;
+
+    /**
+     * Convert @p nPixels pixels in @p src into their human-visible
+     * visual representation. The channels are shown as if other channels were null (or, if Lab, L = 1.0, *a = *b = 0.0).
+     *
+     * Both buffers are in the same color space.
+     *
+     * @param src source buffer in (*this) color space
+     * @param dst destination buffer in the same color space as @p src
+     * @param nPixels length of the buffers in number of pixels
+     * @param pixelSize stride of each pixel in the destination buffer
+     * @param selectedChannels Bitmap of selected channels
+     */
+    virtual void convertChannelToVisualRepresentation(const quint8 *src, quint8 *dst, quint32 nPixels, const QBitArray selectedChannels) const = 0;
+
 //============================== Manipulation functions ==========================//
 
 
@@ -459,6 +487,42 @@ public:
     virtual void applyInverseNormedFloatMask(quint8 * pixels, const float * alpha, qint32 nPixels) const = 0;
 
     /**
+     * Fills \p pixels with specified \p brushColor and then applies inverted brush
+     * mask specified in \p alpha.
+     */
+    virtual void fillInverseAlphaNormedFloatMaskWithColor(quint8 * pixels, const float * alpha, const quint8 *brushColor, qint32 nPixels) const = 0;
+
+    /**
+     * Fills \p dst with specified \p brushColor and then applies inverted brush
+     * mask specified in \p brush. Premultiplied red channel of the brush is
+     * used as an alpha channel for destination pixels.
+     *
+     * The equation is:
+     *
+     *     dstC = colorC;
+     *     dstA = qAlpha(brush) * (255 - qRed(brush)) / 255;
+     */
+    virtual void fillGrayBrushWithColor(quint8 *dst, const QRgb *brush, quint8 *brushColor, qint32 nPixels) const = 0;
+
+    /**
+     * Fills \p dst with specified \p brushColor and then applies inverted brush
+     * mask specified in \p brush. Inverted red channel of the brush is used
+     * as lightness of the destination. Alpha channel of the brush is used as
+     * alpha of the destination.
+     *
+     * The equation is:
+     *
+     *     dstL_hsl = preserveLightness(colorL_hsl, lightFactor);
+     *     dstA = qAlpha(brush);
+     *
+     * For details on preserveLightness() formula,
+     * see KoColorSpacePreserveLightnessUtils.h
+     */
+    virtual void fillGrayBrushWithColorAndLightnessOverlay(quint8 *dst, const QRgb *brush, quint8 *brushColor, qint32 nPixels) const;
+    //Same as above, but with contrast adjusted by strength.  Strength == 1 -> full contrast.  Allows softer lightness adjustments.
+    virtual void fillGrayBrushWithColorAndLightnessWithStrength(quint8* dst, const QRgb* brush, quint8* brushColor, qreal strength, qint32 nPixels) const;
+
+    /**
      * Create an adjustment object for adjusting the brightness and contrast
      * transferValues is a 256 bins array with values from 0 to 0xFFFF
      * This function is thread-safe, but you need to create one KoColorTransformation per thread.
@@ -494,6 +558,9 @@ public:
      * Get the difference between 2 colors, normalized in the range (0,255). Only completely
      * opaque and completely transparent are taken into account when computing the difference;
      * other transparency levels are not regarded when finding the difference.
+     *
+     * Completely transparent pixels are treated as if they are completely
+     * different from any non-transparent pixels.
      */
     virtual quint8 difference(const quint8* src1, const quint8* src2) const = 0;
 
@@ -501,6 +568,10 @@ public:
      * Get the difference between 2 colors, normalized in the range (0,255). This function
      * takes the Alpha channel of the pixel into account. Alpha channel has the same
      * weight as Lightness channel.
+     *
+     * Completely transparent pixels are treated as if their color channels are
+     * the same as ones of the other pixel. In other words, only alpha channel
+     * difference is compared.
      */
     virtual quint8 differenceA(const quint8* src1, const quint8* src2) const = 0;
 
@@ -556,7 +627,7 @@ public:
 
     /**
      * Serialize this color following Create's swatch color specification available
-     * at http://create.freedesktop.org/wiki/index.php/Swatches_-_colour_file_format
+     * at https://web.archive.org/web/20110826002520/http://create.freedesktop.org/wiki/Swatches_-_colour_file_format/Draft
      *
      * This function doesn't create the \<color /\> element but rather the \<CMYK /\>,
      * \<sRGB /\>, \<RGB /\> ... elements. It is assumed that colorElt is the \<color /\>
@@ -571,7 +642,7 @@ public:
 
     /**
      * Unserialize a color following Create's swatch color specification available
-     * at http://create.freedesktop.org/wiki/index.php/Swatches_-_colour_file_format
+     * at https://web.archive.org/web/20110826002520/http://create.freedesktop.org/wiki/Swatches_-_colour_file_format/Draft
      *
      * @param pixel buffer where the color will be unserialized
      * @param elt the element to unserialize (\<CMYK /\>, \<sRGB /\>, \<RGB /\>)

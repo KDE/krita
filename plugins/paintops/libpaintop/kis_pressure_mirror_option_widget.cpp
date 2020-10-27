@@ -33,7 +33,6 @@ KisPressureMirrorOptionWidget::KisPressureMirrorOptionWidget()
 {
     setObjectName("KisPressureMirrorOptionWidget");
 
-    QWidget* w = new QWidget;
     m_horizontalMirror = new QCheckBox(i18n("Horizontally"));
     m_horizontalMirror->setChecked(false);
     m_verticalMirror = new QCheckBox(i18n("Vertically"));
@@ -46,13 +45,13 @@ KisPressureMirrorOptionWidget::KisPressureMirrorOptionWidget()
     hl->addWidget(m_horizontalMirror);
     hl->addWidget(m_verticalMirror);
 
-    QVBoxLayout* vl = new QVBoxLayout;
-    vl->setMargin(0);
-    vl->addLayout(hl);
-    vl->addWidget(curveWidget());
+    QWidget* page = new QWidget;
+    QVBoxLayout* pageLayout = new QVBoxLayout(page);
+    pageLayout->setMargin(0);
+    pageLayout->addLayout(hl);
+    pageLayout->addWidget(curveWidget());
 
-    w->setLayout(vl);
-    setConfigurationPage(w);
+    setConfigurationPage(page);
     horizontalMirrorChanged(m_horizontalMirror->isChecked());
     verticalMirrorChanged(m_verticalMirror->isChecked());
 }

@@ -17,10 +17,15 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <brushengine/kis_locked_properties_proxy.h>
+
+#include <KoResource.h>
+#include <KisResourceDirtyStateSaver.h>
+
 #include <brushengine/kis_locked_properties.h>
 #include <brushengine/kis_locked_properties_server.h>
 #include <brushengine/kis_paintop_settings.h>
 #include <brushengine/kis_paintop_preset.h>
+
 
 KisLockedPropertiesProxy::KisLockedPropertiesProxy(KisPropertiesConfiguration *p, KisLockedPropertiesSP l)
 {
@@ -35,10 +40,12 @@ KisLockedPropertiesProxy::~KisLockedPropertiesProxy()
 QVariant KisLockedPropertiesProxy::getProperty(const QString &name) const
 {
     KisPaintOpSettings *t = dynamic_cast<KisPaintOpSettings*>(m_parent);
-    if (!t->preset()) return m_parent->getProperty(name);
+    if (!t->updateProxy()) return m_parent->getProperty(name);
 
     // restores the dirty state on returns automagically
-    KisPaintOpPreset::DirtyStateSaver dirtyStateSaver(t->preset().data());
+    // XXX: This is extremely dirty
+    KisResourceDirtyStateSaver dirtyStateSaver(qobject_cast<ProxyParent*>(t->updateProxy()->parent())->m_preset);
+    Q_UNUSED(dirtyStateSaver);
 
     if (m_lockedProperties->lockedProperties()) {
         if (m_lockedProperties->lockedProperties()->hasProperty(name)) {
@@ -63,7 +70,7 @@ QVariant KisLockedPropertiesProxy::getProperty(const QString &name) const
 void KisLockedPropertiesProxy::setProperty(const QString & name, const QVariant & value)
 {
     KisPaintOpSettings *t = dynamic_cast<KisPaintOpSettings*>(m_parent);
-    if (!t->preset()) return;
+    if (!t->updateProxy()) return;
 
     if (m_lockedProperties->lockedProperties()) {
         if (m_lockedProperties->lockedProperties()->hasProperty(name)) {
@@ -72,8 +79,8 @@ void KisLockedPropertiesProxy::setProperty(const QString & name, const QVariant 
 
             if (!m_parent->hasProperty(name + "_previous")) {
                 // restores the dirty state on returns automagically
-                KisPaintOpPreset::DirtyStateSaver dirtyStateSaver(t->preset().data());
-
+                // XXX: This is extremely dirty
+                KisResourceDirtyStateSaver dirtyStateSaver(qobject_cast<ProxyParent*>(t->updateProxy()->parent())->m_preset);
                 m_parent->setProperty(name + "_previous", m_parent->getProperty(name));
             }
             return;
@@ -86,7 +93,7 @@ void KisLockedPropertiesProxy::setProperty(const QString & name, const QVariant 
 bool KisLockedPropertiesProxy::hasProperty(const QString &name) const
 {
     KisPaintOpSettings *t = dynamic_cast<KisPaintOpSettings*>(m_parent);
-    if (!t->preset()) return m_parent->hasProperty(name);
+    if (!t->updateProxy()) return m_parent->hasProperty(name);
 
     return (m_lockedProperties->lockedProperties() &&
             m_lockedProperties->lockedProperties()->hasProperty(name)) ||
@@ -97,15 +104,25 @@ bool KisLockedPropertiesProxy::hasProperty(const QString &name) const
 QList<QString> KisLockedPropertiesProxy::getPropertiesKeys() const
 {
     KisPaintOpSettings *t = dynamic_cast<KisPaintOpSettings*>(m_parent);
-    if (!t->preset()) return m_parent->getPropertiesKeys();
+    if (!t->updateProxy()) return m_parent->getPropertiesKeys();
 
     QList<QString> result = m_parent->getPropertiesKeys();
 
-    if (m_lockedProperties->lockedProperties()) {
+    if (m_lockedProperties->lockedProperties() && !m_lockedProperties->lockedProperties()->getPropertiesKeys().isEmpty()) {
+#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
+        QSet<QString> properties(result.begin(), result.end());
+        QSet<QString> lockedProperties(m_lockedProperties->lockedProperties()->getPropertiesKeys().begin(),
+                                       m_lockedProperties->lockedProperties()->getPropertiesKeys().end());
+#else
         QSet<QString> properties = QSet<QString>::fromList(result);
-        properties += QSet<QString>::fromList(m_lockedProperties->lockedProperties()->getPropertiesKeys());
-
-        result = properties.toList();
+        QSet<QString> lockedProperties = QSet<QString>::fromList(m_lockedProperties->lockedProperties()->getPropertiesKeys());
+#endif
+        properties += lockedProperties;
+#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
+        result = QList<QString>(properties.begin(), properties.end()) ;
+#else
+        result = QList<QString>::fromSet(properties);
+#endif
     }
 
     return result;

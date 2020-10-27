@@ -44,6 +44,7 @@ public:
     QRect changeRect(const QRect &rect, KisNode::PositionToFilthy pos) const override;
     QRect accessRect(const QRect &rect, KisNode::PositionToFilthy pos) const override;
     QRect needRectForOriginal(const QRect &rect) const override;
+    QRect tightUserVisibleBounds() const override;
 
     KisPaintDeviceList getLodCapableDevices() const override;
 

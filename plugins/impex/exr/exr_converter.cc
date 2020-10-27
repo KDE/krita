@@ -467,8 +467,7 @@ void EXRConverter::Private::decodeData1(Imf::InputFile& file, ExrPaintLayerInfo&
 
     QRect paintRegion(xstart, ystart, width, height);
     KisSequentialIterator it(layer->paintDevice(), paintRegion);
-    do {
-
+    while (it.nextPixel()) {
         if (hasAlpha) {
             unmultiplyAlpha<GrayPixelWrapper<_T_> >(srcPtr);
         }
@@ -479,7 +478,7 @@ void EXRConverter::Private::decodeData1(Imf::InputFile& file, ExrPaintLayerInfo&
         dstPtr->alpha = hasAlpha ? srcPtr->alpha : channel_type(1.0);
 
         ++srcPtr;
-    } while (it.nextPixel());
+    } ;
 }
 
 bool recCheckGroup(const ExrGroupLayerInfo& group, QStringList list, int idx1, int idx2)
@@ -885,8 +884,6 @@ KisImportExportErrorCode EXRConverter::decode(const QString &filename)
                 dbgFile << "No decoding " << info.name << " with " << info.channelMap.size() << " channels, and lack of a color space";
             }
         }
-        // Set projectionColor to opaque
-        d->image->setDefaultProjectionColor(KoColor(Qt::transparent, colorSpace));
 
         // After reading the image, notify the user about changed alpha.
         if (d->alphaWasModified) {
@@ -899,7 +896,7 @@ KisImportExportErrorCode EXRConverter::decode(const QString &filename)
                           "<br/><br/>"
                           "This will hardly make any visual difference just keep it in mind.");
             if (d->showNotifications) {
-                QMessageBox::information(0, i18nc("@title:window", "EXR image has been modified"), msg);
+                QMessageBox::information(qApp->activeWindow(), i18nc("@title:window", "EXR image has been modified"), msg);
             } else {
                 warnKrita << "WARNING:" << msg;
             }
@@ -1077,7 +1074,7 @@ KisPaintDeviceSP wrapLayerDevice(KisPaintDeviceSP device)
             cs->colorModelId() == GrayAColorModelID ?
                 GrayAColorModelID.id() : RGBAColorModelID.id(),
             Float16BitsColorDepthID.id());
-    } else if (cs->colorModelId() != GrayColorModelID &&
+    } else if (cs->colorModelId() != GrayAColorModelID &&
                cs->colorModelId() != RGBAColorModelID) {
         cs = KoColorSpaceRegistry::instance()->colorSpace(
             RGBAColorModelID.id(),
@@ -1233,20 +1230,20 @@ void EXRConverter::Private::recBuildPaintLayerSaveInfo(QList<ExrPaintLayerSaveIn
             }
             else {
 
-                if (paintLayer->colorSpace()->colorModelId() == RGBAColorModelID) {
+                if (info.layerDevice->colorSpace()->colorModelId() == RGBAColorModelID) {
                     info.channels.push_back(info.name + remap(current2original, "R"));
                     info.channels.push_back(info.name + remap(current2original, "G"));
                     info.channels.push_back(info.name + remap(current2original, "B"));
                     info.channels.push_back(info.name + remap(current2original, "A"));
                 }
-                else if (paintLayer->colorSpace()->colorModelId() == GrayAColorModelID) {
+                else if (info.layerDevice->colorSpace()->colorModelId() == GrayAColorModelID) {
                     info.channels.push_back(info.name + remap(current2original, "G"));
                     info.channels.push_back(info.name + remap(current2original, "A"));
                 }
-                else if (paintLayer->colorSpace()->colorModelId() == GrayColorModelID) {
+                else if (info.layerDevice->colorSpace()->colorModelId() == GrayColorModelID) {
                     info.channels.push_back(info.name + remap(current2original, "G"));
                 }
-                else if (paintLayer->colorSpace()->colorModelId() == XYZAColorModelID) {
+                else if (info.layerDevice->colorSpace()->colorModelId() == XYZAColorModelID) {
                     info.channels.push_back(info.name + remap(current2original, "X"));
                     info.channels.push_back(info.name + remap(current2original, "Y"));
                     info.channels.push_back(info.name + remap(current2original, "Z"));
@@ -1255,10 +1252,10 @@ void EXRConverter::Private::recBuildPaintLayerSaveInfo(QList<ExrPaintLayerSaveIn
 
             }
 
-            if (paintLayer->colorSpace()->colorDepthId() == Float16BitsColorDepthID) {
+            if (info.layerDevice->colorSpace()->colorDepthId() == Float16BitsColorDepthID) {
                 info.pixelType = Imf::HALF;
             }
-            else if (paintLayer->colorSpace()->colorDepthId() == Float32BitsColorDepthID) {
+            else if (info.layerDevice->colorSpace()->colorDepthId() == Float32BitsColorDepthID) {
                 info.pixelType = Imf::FLOAT;
             }
             else {

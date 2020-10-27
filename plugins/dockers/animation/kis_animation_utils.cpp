@@ -23,6 +23,7 @@
 #include "kis_image.h"
 #include "kis_node.h"
 #include "kis_keyframe_channel.h"
+#include "kis_raster_keyframe_channel.h"
 #include "kis_post_execution_undo_adapter.h"
 #include "kis_global.h"
 #include "kis_tool_utils.h"
@@ -33,21 +34,14 @@
 
 
 namespace KisAnimationUtils {
-    const QString addFrameActionName = i18n("New Frame");
-    const QString duplicateFrameActionName = i18n("Copy Frame");
-    const QString removeFrameActionName = i18n("Remove Frame");
-    const QString removeFramesActionName = i18n("Remove Frames");
     const QString lazyFrameCreationActionName = i18n("Auto Frame Mode");
     const QString dropFramesActionName = i18n("Drop Frames");
-    const QString showLayerActionName = i18n("Show in Timeline");
 
     const QString newLayerActionName = i18n("New Layer");
-    const QString addExistingLayerActionName = i18n("Add Existing Layer");
+    const QString pinExistingLayerActionName = i18n("Pin Existing Layer");
     const QString removeLayerActionName = i18n("Remove Layer");
 
-    const QString addOpacityKeyframeActionName = i18n("Add opacity keyframe");
     const QString addTransformKeyframeActionName = i18n("Add transform keyframe");
-    const QString removeOpacityKeyframeActionName = i18n("Remove opacity keyframe");
     const QString removeTransformKeyframeActionName = i18n("Remove transform keyframe");
 
     KUndo2Command* createKeyframeCommand(KisImageSP image, KisNodeSP node, const QString &channelId, int time, bool copy, KUndo2Command *parentCommand) {
@@ -62,6 +56,7 @@ namespace KisAnimationUtils {
                 QScopedPointer<KUndo2Command> cmd(new KUndo2Command());
 
                 KisKeyframeChannel *channel = node->getKeyframeChannel(channelId);
+                quint8 originalOpacity = node->opacity();
                 bool createdChannel = false;
 
                 if (!channel) {
@@ -72,15 +67,14 @@ namespace KisAnimationUtils {
                     createdChannel = true;
                 }
 
-                if (copy) {
+                if (copy && channel->activeKeyframeAt(time)) {
                     if (!channel->keyframeAt(time)) {
-                        KisKeyframeSP srcFrame = channel->activeKeyframeAt(time);
-                        channel->copyKeyframe(srcFrame, time, cmd.data());
+                        channel->copyKeyframe(channel->activeKeyframeTime(time), time, cmd.data());
                         result = true;
                     }
                 } else {
                     if (channel->keyframeAt(time) && !createdChannel) {
-                        if (image->animationInterface()->currentTime() == time && channelId == KisKeyframeChannel::Content.id()) {
+                        if (image->animationInterface()->currentTime() == time && channelId == KisKeyframeChannel::Raster.id()) {
 
                             //shortcut: clearing the image instead
                             KisPaintDeviceSP device = node->paintDevice();
@@ -102,13 +96,19 @@ namespace KisAnimationUtils {
                     }
                 }
 
+                // when a new opacity keyframe is created, the opacity is set to 0
+                // this makes sure to use the opacity that was previously used
+                // maybe there is a better way to do this
+                node->setOpacity(originalOpacity);
+
                 return result ? new KisCommandUtils::SkipFirstRedoWrapper(cmd.take()) : nullptr;
         });
 
         return cmd;
     }
 
-    void createKeyframeLazy(KisImageSP image, KisNodeSP node, const QString &channelId, int time, bool copy) {
+    void createKeyframeLazy(KisImageSP image, KisNodeSP node, const QString &channelId, int time, bool copy)
+    {
         KUndo2Command *cmd = createKeyframeCommand(image, node, channelId, time, copy);
         KisProcessingApplicator::runSingleCommandStroke(image, cmd,
                                                         KisStrokeJobData::BARRIER,
@@ -140,7 +140,7 @@ namespace KisAnimationUtils {
                     KisKeyframeSP keyframe = channel->keyframeAt(time);
                     if (!keyframe) continue;
 
-                    channel->deleteKeyframe(keyframe, cmd.data());
+                    channel->removeKeyframe(time, cmd.data());
 
                     result = true;
                 }
@@ -201,11 +201,11 @@ namespace KisAnimationUtils {
         if (srcNode == dstNode) {
             if (!srcChannel) return; // TODO: add warning!
 
-            srcChannel->swapFrames(srcTime, dstTime, parentCommand);
+            srcChannel->swapKeyframes(srcTime, dstTime, parentCommand);
         } else {
             if (!srcChannel || !dstChannel) return; // TODO: add warning!
 
-            dstChannel->swapExternalKeyframe(srcChannel, srcTime, dstTime, parentCommand);
+            KisKeyframeChannel::swapKeyframes(srcChannel, srcTime, dstChannel, dstTime, parentCommand);
         }
     }
 
@@ -222,18 +222,16 @@ namespace KisAnimationUtils {
         if (srcNode == dstNode) {
             if (!srcChannel) return; // TODO: add warning!
 
-            KisKeyframeSP srcKeyframe = srcChannel->keyframeAt(srcTime);
-            KisKeyframeSP dstKeyFrame = srcChannel->keyframeAt(dstTime);
-            if (srcKeyframe) {
+            if (srcChannel->keyframeAt(srcTime)) {
                 if (copy) {
-                    srcChannel->copyKeyframe(srcKeyframe, dstTime, parentCommand);
+                    srcChannel->copyKeyframe(srcTime, dstTime, parentCommand);
                 } else {
-                    srcChannel->moveKeyframe(srcKeyframe, dstTime, parentCommand);
+                    srcChannel->moveKeyframe(srcTime, dstTime, parentCommand);
                 }
             } else {
-                if (dstKeyFrame && moveEmptyFrames && !copy) {
+                if (srcChannel->keyframeAt(dstTime) && moveEmptyFrames && !copy) {
                     //Destination is effectively replaced by an empty frame.
-                    dstChannel->deleteKeyframe(dstKeyFrame, parentCommand);
+                    dstChannel->removeKeyframe(dstTime, parentCommand);
                 }
             }
         } else {
@@ -243,10 +241,10 @@ namespace KisAnimationUtils {
 
             if (!srcKeyframe) return; // TODO: add warning!
 
-            dstChannel->copyExternalKeyframe(srcChannel, srcTime, dstTime, parentCommand);
+            KisKeyframeChannel::copyKeyframe(srcChannel, srcTime, dstChannel, dstTime, parentCommand);
 
             if (!copy) {
-                srcChannel->deleteKeyframe(srcKeyframe, parentCommand);
+                srcChannel->removeKeyframe(srcTime, parentCommand);
             }
         }
     }
@@ -338,10 +336,65 @@ namespace KisAnimationUtils {
                     }
                 }
 
-                return result ? new KisCommandUtils::SkipFirstRedoWrapper(cmd.take()) : 0;
+                return result ? new KisCommandUtils::SkipFirstRedoWrapper(cmd.take()) : nullptr;
         });
 
         return cmd;
+    }
+
+    KUndo2Command* createCloneKeyframesCommand(const FrameMovePairList &srcDstPairs,
+                                              KUndo2Command *parentCommand)
+    {
+        return new KisCommandUtils::LambdaCommand(
+                kundo2_i18np("Clone Keyframe",
+                             "Clone %1 Keyframes",
+                             srcDstPairs.size()),
+                parentCommand,
+                [srcDstPairs, parentCommand]() -> KUndo2Command*
+        {
+            QScopedPointer<KUndo2Command> cmd(new KUndo2Command());
+
+            foreach (const FrameMovePair &move, srcDstPairs) {
+                KisRasterKeyframeChannel *srcRasterChan = dynamic_cast<KisRasterKeyframeChannel*>(move.first.node->getKeyframeChannel(move.first.channel));
+                KisRasterKeyframeChannel *dstRasterChan = dynamic_cast<KisRasterKeyframeChannel*>(move.second.node->getKeyframeChannel(move.second.channel));
+
+                if (!srcRasterChan || !dstRasterChan) {
+                    continue;
+                }
+
+                if (srcRasterChan == dstRasterChan) {
+                    srcRasterChan->cloneKeyframe(move.first.time, move.second.time, cmd.data());
+                } else {
+                    KisKeyframeChannel::copyKeyframe(srcRasterChan, move.first.time, dstRasterChan, move.second.time, cmd.data());
+                }
+            }
+
+            return cmd.take();
+        });
+    }
+
+    void makeClonesUnique(KisImageSP image, const FrameItemList &frames)
+    {
+        KUndo2Command* cmd = new KisCommandUtils::LambdaCommand(
+                    kundo2_i18n("Make clones Unique"),
+                    [frames]() {
+            QScopedPointer<KUndo2Command> cmd(new KUndo2Command());
+
+            foreach (const FrameItem &frameItem, frames) {
+                KisRasterKeyframeChannel *rasterChan = dynamic_cast<KisRasterKeyframeChannel*>(frameItem.node->getKeyframeChannel(frameItem.channel));
+                if (!rasterChan) {
+                    continue;
+                }
+
+                rasterChan->makeUnique(frameItem.time, cmd.data());
+            }
+
+            return cmd.take();
+        });
+
+        KisProcessingApplicator::runSingleCommandStroke(image, cmd,
+                                                        KisStrokeJobData::BARRIER,
+                                                        KisStrokeJobData::EXCLUSIVE);
     }
 
     QDebug operator<<(QDebug dbg, const FrameItem &item)
@@ -349,6 +402,5 @@ namespace KisAnimationUtils {
         dbg.nospace() << "FrameItem(" << item.node->name() << ", " << item.channel << ", " << item.time << ")";
         return dbg.space();
     }
-
 }
 

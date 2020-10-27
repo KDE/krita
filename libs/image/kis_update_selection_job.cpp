@@ -86,3 +86,8 @@ int KisUpdateSelectionJob::levelOfDetail() const
 {
     return 0;
 }
+
+QString KisUpdateSelectionJob::debugName() const
+{
+    return "KisUpdateSelectionJob";
+}

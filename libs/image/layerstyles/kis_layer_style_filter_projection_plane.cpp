@@ -45,6 +45,7 @@ struct KisLayerStyleFilterProjectionPlane::Private
           filter(rhs.filter ? rhs.filter->clone() : 0),
           style(clonedStyle),
           environment(new KisLayerStyleFilterEnvironment(_sourceLayer)),
+          knockoutBlower(rhs.knockoutBlower),
           projection(rhs.projection)
     {
         KIS_SAFE_ASSERT_RECOVER_NOOP(_sourceLayer);
@@ -151,5 +152,15 @@ QRect KisLayerStyleFilterProjectionPlane::accessRect(const QRect &rect, KisLayer
 QRect KisLayerStyleFilterProjectionPlane::needRectForOriginal(const QRect &rect) const
 {
     return needRect(rect, KisLayer::N_ABOVE_FILTHY);
+}
+
+QRect KisLayerStyleFilterProjectionPlane::tightUserVisibleBounds() const
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(m_d->filter, QRect());
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(m_d->sourceLayer, QRect());
+
+    return m_d->filter->changedRect(m_d->sourceLayer->exactBounds(),
+                                    m_d->style,
+                                    m_d->environment.data());
 }
 

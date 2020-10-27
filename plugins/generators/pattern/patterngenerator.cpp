@@ -27,9 +27,8 @@
 #include <klocalizedstring.h>
 
 #include <KoColor.h>
-#include <KoResourceServer.h>
+#include <KisResourceTypes.h>
 #include <resources/KoPattern.h>
-#include <KoResourceServerProvider.h>
 
 #include <kis_debug.h>
 #include <kis_fill_painter.h>
@@ -43,6 +42,7 @@
 #include <filter/kis_filter_configuration.h>
 #include <kis_processing_information.h>
 #include <kis_pattern_chooser.h>
+#include <KisResourcesInterface.h>
 
 
 #include "kis_wdg_pattern.h"
@@ -60,22 +60,104 @@ KritaPatternGenerator::~KritaPatternGenerator()
 {
 }
 
-KoPatternGenerator::KoPatternGenerator() : KisGenerator(id(), KoID("basic"), i18n("&Pattern..."))
+/****************************************************************************/
+/*              KoPatternGeneratorConfiguration                             */
+/****************************************************************************/
+
+class KoPatternGeneratorConfiguration : public KisFilterConfiguration
+{
+public:
+    KoPatternGeneratorConfiguration(const QString & name, qint32 version, KisResourcesInterfaceSP resourcesInterface)
+        : KisFilterConfiguration(name, version, resourcesInterface)
+    {
+    }
+
+    KoPatternGeneratorConfiguration(const KoPatternGeneratorConfiguration &rhs)
+        : KisFilterConfiguration(rhs)
+    {
+    }
+
+    virtual KisFilterConfigurationSP clone() const override {
+        return new KoPatternGeneratorConfiguration(*this);
+    }
+
+    KoPatternSP pattern(KisResourcesInterfaceSP resourcesInterface) const {
+        const QString patternName = this->getString("pattern", "Grid01.pat");
+        auto source = resourcesInterface->source<KoPattern>(ResourceType::Patterns);
+        return source.resourceForName(patternName);
+    }
+
+    KoPatternSP pattern() const {
+        return pattern(resourcesInterface());
+    }
+
+    QTransform transform() const {
+        QTransform transform;
+
+        transform.shear(this->getDouble("transform_shear_x", 0.0), this->getDouble("transform_shear_y", 0.0));
+
+        transform.scale(this->getDouble("transform_scale_x", 1.0), this->getDouble("transform_scale_y", 1.0));
+        transform.rotate(this->getDouble("transform_rotation_x", 0.0), Qt::XAxis);
+        transform.rotate(this->getDouble("transform_rotation_y", 0.0), Qt::YAxis);
+        transform.rotate(this->getDouble("transform_rotation_z", 0.0), Qt::ZAxis);
+
+        transform.translate(this->getInt("transform_offset_x", 0), this->getInt("transform_offset_y", 0));
+        return transform;
+    }
+
+    QList<KoResourceSP> linkedResources(KisResourcesInterfaceSP globalResourcesInterface) const override
+    {
+        KoPatternSP pattern = this->pattern(globalResourcesInterface);
+
+        QList<KoResourceSP> resources;
+        if (pattern) {
+            resources << pattern;
+        }
+
+        return resources;
+    }
+};
+
+
+
+/****************************************************************************/
+/*              KoPatternGenerator                                          */
+/****************************************************************************/
+
+KoPatternGenerator::KoPatternGenerator()
+    : KisGenerator(id(), KoID("basic"), i18n("&Pattern..."))
 {
     setColorSpaceIndependence(FULLY_INDEPENDENT);
     setSupportsPainting(true);
 }
 
-KisFilterConfigurationSP KoPatternGenerator::factoryConfiguration() const
+KisFilterConfigurationSP KoPatternGenerator::factoryConfiguration(KisResourcesInterfaceSP resourcesInterface) const
 {
-    KisFilterConfigurationSP config = new KisFilterConfiguration("pattern", 1);
+    return new KoPatternGeneratorConfiguration(id().id(), 1, resourcesInterface);
+}
 
-    QVariant v;
-    v.setValue(QString("Grid01.pat"));
-    config->setProperty("pattern", v);
+KisFilterConfigurationSP KoPatternGenerator::defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const
+{
+    KisFilterConfigurationSP config = factoryConfiguration(resourcesInterface);
 
-//    v.setValue(KoColor());
-//    config->setProperty("color", v);
+    auto source = resourcesInterface->source<KoPattern>(ResourceType::Patterns);
+    config->setProperty("pattern", QVariant::fromValue(source.fallbackResource()->name()));
+
+
+    config->setProperty("transform_shear_x", QVariant::fromValue(0.0));
+    config->setProperty("transform_shear_y", QVariant::fromValue(0.0));
+
+    config->setProperty("transform_scale_x", QVariant::fromValue(1.0));
+    config->setProperty("transform_scale_y", QVariant::fromValue(1.0));
+
+    config->setProperty("transform_rotation_x", QVariant::fromValue(0.0));
+    config->setProperty("transform_rotation_y", QVariant::fromValue(0.0));
+    config->setProperty("transform_rotation_z", QVariant::fromValue(0.0));
+
+    config->setProperty("transform_offset_x", QVariant::fromValue(0));
+    config->setProperty("transform_offset_y", QVariant::fromValue(0));
+
+    config->setProperty("transform_keep_scale_aspect", QVariant::fromValue(true));
 
     return config;
 }
@@ -88,24 +170,22 @@ KisConfigWidget * KoPatternGenerator::createConfigurationWidget(QWidget* parent,
 
 void KoPatternGenerator::generate(KisProcessingInformation dstInfo,
                                  const QSize& size,
-                                 const KisFilterConfigurationSP config,
+                                 const KisFilterConfigurationSP _config,
                                  KoUpdater* progressUpdater) const
 {
     KisPaintDeviceSP dst = dstInfo.paintDevice();
 
     Q_ASSERT(!dst.isNull());
-    Q_ASSERT(config);
 
-    if (!config) return;
-    QString patternName = config->getString("pattern", "Grid01.pat");
-    KoResourceServer<KoPattern> *rserver = KoResourceServerProvider::instance()->patternServer();
-    KoPattern *pattern = rserver->resourceByName(patternName);
+    const KoPatternGeneratorConfiguration *config =
+        dynamic_cast<const KoPatternGeneratorConfiguration*>(_config.data());
 
-//    KoColor c = config->getColor("color");
+    KIS_SAFE_ASSERT_RECOVER_RETURN(config);
+    KoPatternSP pattern = config->pattern();
+    QTransform transform = config->transform();
 
     KisFillPainter gc(dst);
     gc.setPattern(pattern);
-//    gc.setPaintColor(c);
     gc.setProgress(progressUpdater);
     gc.setChannelFlags(config->channelFlags());
     gc.setOpacity(OPACITY_OPAQUE_U8);
@@ -113,7 +193,13 @@ void KoPatternGenerator::generate(KisProcessingInformation dstInfo,
     gc.setWidth(size.width());
     gc.setHeight(size.height());
     gc.setFillStyle(KisFillPainter::FillStylePattern);
-    gc.fillRect(QRect(dstInfo.topLeft(), size), pattern);
+    /**
+     * HACK ALERT: using "no-compose" version of `fillRect` discards all the opacity,
+     * selection, and channel flags options. Though it doesn't seem that we have a any
+     * GUI in Krita that actually passes a selection to the generator itself. Fill
+     * layers apply their settings on a later stage of the compositing pipeline.
+     */
+    gc.fillRectNoCompose(QRect(dstInfo.topLeft(), size), pattern, transform);
     gc.end();
 
 }

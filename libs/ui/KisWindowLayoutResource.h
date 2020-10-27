@@ -22,26 +22,37 @@
 #include <KoResource.h>
 #include <KisMainWindow.h>
 
-class KisWindowLayoutResource : public KoResource
+class KisWindowLayoutResource;
+typedef QSharedPointer<KisWindowLayoutResource> KisWindowLayoutResourceSP;
+
+#include "kritaui_export.h"
+
+class KRITAUI_EXPORT KisWindowLayoutResource : public KoResource
 {
 public:
     explicit KisWindowLayoutResource(const QString &filename);
     ~KisWindowLayoutResource() override;
+    KisWindowLayoutResource(const KisWindowLayoutResource &rhs);
+    KisWindowLayoutResource &operator=(const KisWindowLayoutResource &rhs) = delete;
+    KoResourceSP clone() const override;
 
-    static KisWindowLayoutResource * fromCurrentWindows(
-        const QString &filename, const QList<QPointer<KisMainWindow>> &mainWindows,
-        bool showImageInAllWindows,
-        bool primaryWorkspaceFollowsFocus,
-        KisMainWindow *primaryWindow
-    );
+    static KisWindowLayoutResourceSP fromCurrentWindows (
+            const QString &filename, const QList<QPointer<KisMainWindow>> &mainWindows,
+            bool showImageInAllWindows,
+            bool primaryWorkspaceFollowsFocus,
+            KisMainWindow *primaryWindow
+            );
 
     void applyLayout();
 
-    bool save() override;
-    bool load() override;
-
     bool saveToDevice(QIODevice *dev) const override;
-    bool loadFromDevice(QIODevice *dev) override;
+    bool loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface) override;
+
+
+    QPair<QString, QString> resourceType() const override
+    {
+        return QPair<QString, QString>(ResourceType::WindowLayouts, "");
+    }
 
     QString defaultFileExtension() const override;
 
@@ -57,5 +68,6 @@ private:
 
     QScopedPointer<Private> d;
 };
+
 
 #endif

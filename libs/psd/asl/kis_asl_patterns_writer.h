@@ -24,8 +24,7 @@
 class QDomDocument;
 class QIODevice;
 
-class KoPattern;
-
+#include <KoPattern.h>
 
 class KRITAPSD_EXPORT KisAslPatternsWriter
 {
@@ -35,7 +34,7 @@ public:
     void writePatterns();
 
 private:
-    void addPattern(const KoPattern *pattern);
+    void addPattern(const KoPatternSP pattern);
 
 private:
     const QDomDocument &m_doc;

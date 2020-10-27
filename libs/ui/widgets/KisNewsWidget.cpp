@@ -79,6 +79,8 @@ QSize KisNewsDelegate::sizeHint(const QStyleOptionViewItem &option, const QModel
 
 KisNewsWidget::KisNewsWidget(QWidget *parent)
     : QWidget(parent)
+    , m_getNews(false)
+    , m_rssModel(0)
 {
     setupUi(this);
     m_rssModel = new MultiFeedRssModel(this);
@@ -94,22 +96,7 @@ KisNewsWidget::KisNewsWidget(QWidget *parent)
 
 void KisNewsWidget::setAnalyticsTracking(QString text)
 {
-    analyticsTrackingParameters = text;
-}
-
-bool KisNewsWidget::hasUpdateAvailable()
-{
-    return needsVersionUpdate;
-}
-
-QString KisNewsWidget::versionNumber()
-{
-    return newVersionNumber;
-}
-
-QString KisNewsWidget::versionLink()
-{
-    return newVersionLink;
+    m_analyticsTrackingParameters = text;
 }
 
 void KisNewsWidget::toggleNews(bool toggle)
@@ -118,28 +105,28 @@ void KisNewsWidget::toggleNews(bool toggle)
     cfg.writeEntry<bool>("FetchNews", toggle);
 
     if (toggle) {
-        m_rssModel->addFeed(QLatin1String("https://krita.org/en/feed/"));
+       m_rssModel->addFeed(QLatin1String("https://krita.org/en/feed/"));
     }
     else {
-        m_rssModel->removeFeed(QLatin1String("https://krita.org/en/feed/"));
+       m_rssModel->removeFeed(QLatin1String("https://krita.org/en/feed/"));
     }
 }
 
 void KisNewsWidget::itemSelected(const QModelIndex &idx)
 {
     if (idx.isValid()) {
-        QString link = idx.data(RssRoles::LinkRole).toString();
+        QString link = idx.data(KisRssReader::RssRoles::LinkRole).toString();
 
         // append query string for analytics tracking if we set it
-        if (analyticsTrackingParameters != "") {
+        if (m_analyticsTrackingParameters != "") {
 
             // use title in analytics query string
-            QString linkTitle = idx.data(RssRoles::TitleRole).toString();
+            QString linkTitle = idx.data(KisRssReader::RssRoles::TitleRole).toString();
             linkTitle = linkTitle.simplified(); // trims and makes 1 white space
             linkTitle = linkTitle.replace(" ", "");
 
-            analyticsTrackingParameters = analyticsTrackingParameters.append(linkTitle);
-            QDesktopServices::openUrl(QUrl(link.append(analyticsTrackingParameters)));
+            m_analyticsTrackingParameters = m_analyticsTrackingParameters.append(linkTitle);
+            QDesktopServices::openUrl(QUrl(link.append(m_analyticsTrackingParameters)));
 
         } else {
             QDesktopServices::openUrl(QUrl(link));
@@ -151,73 +138,5 @@ void KisNewsWidget::itemSelected(const QModelIndex &idx)
 
 void KisNewsWidget::rssDataChanged()
 {
-
-    // grab the latest release post and URL for reference later
-    // if we need to update
-    for (int i = 0; i < m_rssModel->rowCount(); i++)
-    {
-       const QModelIndex &idx = m_rssModel->index(i);
-
-       if (idx.isValid()) {
-
-           // only use official release announcements to get version number
-           if ( idx.data(RssRoles::CategoryRole).toString() !=  "Official Release") {
-               continue;
-           }
-
-           QString linkTitle = idx.data(RssRoles::TitleRole).toString();
-
-           // regex to capture version number
-           QRegularExpression versionRegex("\\d\\.\\d\\.?\\d?\\.?\\d");
-           QRegularExpressionMatch matched = versionRegex.match(linkTitle);
-
-           // only take the top match for release version since that is the newest
-           if (matched.hasMatch()) {
-               newVersionNumber = matched.captured(0);
-               newVersionLink = idx.data(RssRoles::LinkRole).toString();
-               break;
-           }
-
-       }
-    }
-
-    // see if we need to update our version, or we are on a dev version
-    calculateVersionUpdateStatus();
-
     emit newsDataChanged();
-}
-
-void KisNewsWidget::calculateVersionUpdateStatus()
-{
-    // do version compare to see if there is a new version available
-    // also check to see if we are on a dev version (newer than newest release)
-    QStringList currentVersionParts = qApp->applicationVersion().split(".");
-    QStringList onlineReleaseAnnouncement = newVersionNumber.split(".");
-
-    // is the major version different?
-    if (onlineReleaseAnnouncement[0] > currentVersionParts[0] ) {
-        needsVersionUpdate = true; // we are a major version behind
-        return;
-    }
-
-    // major versions are the same, so check minor versions
-     if (onlineReleaseAnnouncement[1] > currentVersionParts[1] ) {
-         needsVersionUpdate = true; // we are a minor version behind
-         return;
-     }
-
-     // minor versions are the same, so maybe bugfix version is different
-     // sometimes we don't communicate this, implictly make 0 if it doesn't exist
-     if (onlineReleaseAnnouncement[2].isNull()) {
-         onlineReleaseAnnouncement[2] = "0";
-     }
-     if (currentVersionParts[2].isNull()) {
-         currentVersionParts[2] = "0";
-     }
-
-     if (onlineReleaseAnnouncement[2] > currentVersionParts[2] ) {
-         needsVersionUpdate = true; // we are a bugfix version behind
-         return;
-     }
-
 }

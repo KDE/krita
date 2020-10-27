@@ -6,13 +6,7 @@ set(kritawidgets_LIB_SRCS
     KoVBox.cpp
     KoDialog.cpp
     KoZoomWidget.cpp
-    KoTagToolButton.cpp
-    KoTagChooserWidget.cpp
-    KoTagFilterWidget.cpp
-    KoResourceTaggingManager.cpp
-    KoResourceItemChooserContextMenu.cpp
     KoAspectButton.cpp
-    KoPagePreviewWidget.cpp
     KoSliderCombo.cpp
     KoColorPopupButton.cpp
     KoConfigAuthorPage.cpp
@@ -29,22 +23,11 @@ set(kritawidgets_LIB_SRCS
     KoColorSlider.cpp
     KoTriangleColorSelector.cpp
     KoResourcePopupAction.cpp
-    KoIconToolTip.cpp
-    KoResourceItemChooser.cpp
-    KoResourceItemChooserSync.cpp
-    KoResourceModel.cpp
-    KoResourceItemDelegate.cpp
-    KoResourceItemView.cpp
-    KoResourceTagStore.cpp
     KoRuler.cpp
-    KoItemToolTip.cpp
-    KoCheckerBoardPainter.cpp
-    KoResourceServerAdapter.cpp
     KoResourceServerProvider.cpp
     KoLineStyleSelector.cpp
     KoLineStyleItemDelegate.cpp
     KoLineStyleModel.cpp
-    KoResourceFiltering.cpp
     KoTitledTabWidget.cpp
 
     KoToolBoxButton.cpp
@@ -53,15 +36,10 @@ set(kritawidgets_LIB_SRCS
     KoToolBoxFactory.cpp
     KoToolDocker.cpp
     
-    KoPageLayoutWidget.cpp
-    KoPageLayoutDialog.cpp
     KoShadowConfigWidget.cpp
     KoMarkerSelector.cpp
     KoMarkerModel.cpp
     KoMarkerItemDelegate.cpp
-
-    KoDocumentInfoDlg.cpp
-    KoTableView.cpp
 
     WidgetsDebug.cpp
 
@@ -77,6 +55,7 @@ set(kritawidgets_LIB_SRCS
 
     # classes used by internal color selector
     kis_spinbox_color_selector.cpp
+    KisSpinboxHSXSelector.cpp
     KisVisualColorSelector.cpp
     KisVisualColorSelectorShape.cpp
     KisVisualEllipticalSelectorShape.cpp
@@ -88,19 +67,15 @@ set(kritawidgets_LIB_SRCS
     KisPaletteModel.cpp
     KisPaletteDelegate.cpp
     kis_palette_view.cpp
-    KisPaletteListWidget.cpp
+    KisPaletteChooser.cpp
     KisPaletteComboBox.cpp
 
-    kis_popup_button.cc
     kis_color_button.cpp
 )
 
 ki18n_wrap_ui( kritawidgets_LIB_SRCS
     KoConfigAuthorPage.ui
-    koDocumentInfoAboutWidget.ui
-    koDocumentInfoAuthorWidget.ui
     wdg_file_name_requester.ui
-    KoPageLayoutWidget.ui
     KoShadowConfigWidget.ui
     WdgDlgInternalColorSelector.ui
     WdgPaletteListWidget.ui
@@ -109,11 +84,13 @@ ki18n_wrap_ui( kritawidgets_LIB_SRCS
 add_library(kritawidgets SHARED ${kritawidgets_LIB_SRCS})
 generate_export_header(kritawidgets BASE_NAME kritawidgets)
 target_link_libraries(kritawidgets
-    kritaodf
+    
     kritaglobal
     kritaflake
     kritapigment
     kritawidgetutils
+    kritaresources
+    kritaresourcewidgets
     Qt5::PrintSupport
     KF5::CoreAddons
     KF5::ConfigGui

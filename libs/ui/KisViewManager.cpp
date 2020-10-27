@@ -8,7 +8,7 @@
  *                2003-2011 Boudewijn Rempt <boud@valdyas.org>
  *                2004 Clarence Dang <dang@kde.org>
  *                2011 José Luis Vergara <pentalis@gmail.com>
- *                2017 L. E. Segovia <leo.segovia@siggraph.org>
+ *                2017 L. E. Segovia <amy@amyspark.me>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -61,7 +61,7 @@
 #include <KoCompositeOp.h>
 #include <KoDockRegistry.h>
 #include <KoProperties.h>
-#include <KoResourceItemChooserSync.h>
+#include <KisResourceItemChooserSync.h>
 #include <KoSelection.h>
 #include <KoStore.h>
 #include <KoToolManager.h>
@@ -76,7 +76,6 @@
 #include "canvas/kis_canvas2.h"
 #include "canvas/kis_canvas_controller.h"
 #include "canvas/kis_grid_manager.h"
-#include "dialogs/kis_dlg_blacklist_cleanup.h"
 #include "input/kis_input_profile_manager.h"
 #include "kis_action_manager.h"
 #include "kis_action.h"
@@ -108,7 +107,6 @@
 #include "kis_paintop_box.h"
 #include <brushengine/kis_paintop_preset.h>
 #include "KisPart.h"
-#include "KisPrintJob.h"
 #include <KoUpdater.h>
 #include "KisResourceServerProvider.h"
 #include "kis_selection.h"
@@ -332,10 +330,12 @@ KisViewManager::~KisViewManager()
         cfg.writeKoColor("LastBackGroundColor",canvasResourceProvider()->bgColor());
     }
 
-    cfg.writeEntry("baseLength", KoResourceItemChooserSync::instance()->baseLength());
+    cfg.writeEntry("baseLength", KisResourceItemChooserSync::instance()->baseLength());
     cfg.writeEntry("CanvasOnlyActive", false); // We never restart in CavnasOnlyMode
     delete d;
 }
+
+#include <KoActiveCanvasResourceDependencyKoResource.h>
 
 void KisViewManager::initializeResourceManager(KoCanvasResourceProvider *resourceManager)
 {
@@ -348,7 +348,23 @@ void KisViewManager::initializeResourceManager(KoCanvasResourceProvider *resourc
     resourceManager->addDerivedResourceConverter(toQShared(new KisLodSizeThresholdResourceConverter));
     resourceManager->addDerivedResourceConverter(toQShared(new KisLodSizeThresholdSupportedResourceConverter));
     resourceManager->addDerivedResourceConverter(toQShared(new KisEraserModeResourceConverter));
+    resourceManager->addDerivedResourceConverter(toQShared(new KisPatternSizeResourceConverter));
     resourceManager->addResourceUpdateMediator(toQShared(new KisPresetUpdateMediator));
+
+    resourceManager->addActiveCanvasResourceDependency(
+        toQShared(new KoActiveCanvasResourceDependencyKoResource<KisPaintOpPreset>(
+                      KoCanvasResource::CurrentPaintOpPreset,
+                      KoCanvasResource::CurrentGradient)));
+
+    resourceManager->addActiveCanvasResourceDependency(
+        toQShared(new KoActiveCanvasResourceDependencyKoResource<KoAbstractGradient>(
+                      KoCanvasResource::CurrentGradient,
+                      KoCanvasResource::ForegroundColor)));
+
+    resourceManager->addActiveCanvasResourceDependency(
+        toQShared(new KoActiveCanvasResourceDependencyKoResource<KoAbstractGradient>(
+                      KoCanvasResource::CurrentGradient,
+                      KoCanvasResource::BackgroundColor)));
 }
 
 KActionCollection *KisViewManager::actionCollection() const
@@ -421,19 +437,23 @@ void KisViewManager::setCurrentView(KisView *view)
         // Restore the last used brush preset, color and background color.
         if (first) {
             KisPaintOpPresetResourceServer * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
+            KisResourceModel *resourceModel = rserver->resourceModel();
             QString defaultPresetName = "basic_tip_default";
-            bool foundTip = false;
-            for (int i=0; i<rserver->resourceCount(); i++) {
-                KisPaintOpPresetSP resource = rserver->resources().at(i);
-                if (resource->name().toLower().contains("basic_tip_default")) {
-                    defaultPresetName = resource->name();
-                    foundTip = true;
-                } else if (foundTip == false && (resource->name().toLower().contains("default") ||
-                                                 resource->filename().toLower().contains("default"))) {
-                    defaultPresetName = resource->name();
-                    foundTip = true;
+            for (int i = 0; i < resourceModel->rowCount(); i++) {
+
+                QModelIndex idx = resourceModel->index(i, 0);
+
+                QString resourceName = idx.data(Qt::UserRole + KisAbstractResourceModel::Name).toString().toLower();
+                QString fileName = idx.data(Qt::UserRole + KisAbstractResourceModel::Filename).toString().toLower();
+
+                if (resourceName.contains("basic_tip_default")) {
+                    defaultPresetName = resourceName;
+                }
+                else if (resourceName.contains("default") || fileName.contains("default")) {
+                    defaultPresetName = resourceName;
                 }
             }
+
             KisConfig cfg(true);
             QString lastPreset = cfg.readEntry("LastPreset", defaultPresetName);
             KisPaintOpPresetSP preset = rserver->resourceByName(lastPreset);
@@ -441,11 +461,11 @@ void KisViewManager::setCurrentView(KisView *view)
                 preset = rserver->resourceByName(defaultPresetName);
             }
 
-            if (!preset && !rserver->resources().isEmpty()) {
-                preset = rserver->resources().first();
+            if (!preset && rserver->resourceCount() > 0) {
+                preset = rserver->firstResource();
             }
             if (preset) {
-                paintOpBox()->restoreResource(preset.data());
+                paintOpBox()->restoreResource(preset);
                 canvasResourceProvider()->setCurrentCompositeOp(preset->settings()->paintOpCompositeOp());
             }
         }
@@ -501,6 +521,7 @@ void KisViewManager::setCurrentView(KisView *view)
         d->currentImageView->notifyCurrentStateChanged(true);
         d->currentImageView->canvasController()->activate();
         d->currentImageView->canvasController()->setFocus();
+        d->currentImageView->zoomManager()->updateCurrentZoomResource();
 
         d->viewConnections.addUniqueConnection(
                     image(), SIGNAL(sigSizeChanged(QPointF,QPointF)),
@@ -711,9 +732,6 @@ void KisViewManager::createActions()
         a->setDefaultShortcut(QKeySequence());
     }
 
-    a = actionManager()->createAction("edit_blacklist_cleanup");
-    connect(a, SIGNAL(triggered()), this, SLOT(slotBlacklistCleanup()));
-
     actionManager()->createAction("ruler_pixel_multiple2");
     d->showRulersAction = actionManager()->createAction("view_ruler");
     d->showRulersAction->setChecked(cfg.showRulers());
@@ -772,12 +790,6 @@ void KisViewManager::setupManagers()
 void KisViewManager::updateGUI()
 {
     d->guiUpdateCompressor.start();
-}
-
-void KisViewManager::slotBlacklistCleanup()
-{
-    KisDlgBlacklistCleanup dialog;
-    dialog.exec();
 }
 
 KisNodeManager * KisViewManager::nodeManager() const
@@ -910,7 +922,8 @@ void KisViewManager::slotSaveIncremental()
     QString version = "000";
     QString newVersion;
     QString letter;
-    QString fileName = document()->localFilePath();
+    QString path = QFileInfo(document()->localFilePath()).canonicalPath();
+    QString fileName = QFileInfo(document()->localFilePath()).fileName();
 
     // Find current version filenames
     // v v Regexp to find incremental versions in the filename, taking our backup scheme into account as well
@@ -970,7 +983,7 @@ void KisViewManager::slotSaveIncremental()
             newVersion.append(".");
         }
         fileName.replace(regex, newVersion);
-        fileAlreadyExists = QFile(fileName).exists();
+        fileAlreadyExists = QFileInfo(path + '/' + fileName).exists();
         if (fileAlreadyExists) {
             if (!letter.isNull()) {
                 char letterCh = letter.at(0).toLatin1();
@@ -986,9 +999,11 @@ void KisViewManager::slotSaveIncremental()
         QMessageBox::critical(mainWindow(), i18nc("@title:window", "Couldn't save incremental version"), i18n("Alternative names exhausted, try manually saving with a higher number"));
         return;
     }
+    QUrl newUrl = QUrl::fromUserInput(path + '/' + fileName);
     document()->setFileBatchMode(true);
-    document()->saveAs(QUrl::fromUserInput(fileName), document()->mimeType(), true);
+    document()->saveAs(newUrl, document()->mimeType(), true);
     document()->setFileBatchMode(false);
+    KisPart::instance()->addRecentURLToAllMainWindows(newUrl, document()->url());
 
     if (mainWindow()) {
         mainWindow()->updateCaption();
@@ -1011,7 +1026,8 @@ void KisViewManager::slotSaveIncrementalBackup()
     QString version = "000";
     QString newVersion;
     QString letter;
-    QString fileName = document()->localFilePath();
+    QString path = QFileInfo(document()->localFilePath()).canonicalPath();
+    QString fileName = QFileInfo(document()->localFilePath()).fileName();
 
     // First, discover if working on a backup file, or a normal file
     QRegExp regex("~\\d{1,4}[.]|~\\d{1,4}[a-z][.]");
@@ -1063,8 +1079,8 @@ void KisViewManager::slotSaveIncrementalBackup()
             QMessageBox::critical(mainWindow(), i18nc("@title:window", "Couldn't save incremental backup"), i18n("Alternative names exhausted, try manually saving with a higher number"));
             return;
         }
-        QFile::copy(fileName, backupFileName);
-        document()->saveAs(QUrl::fromUserInput(fileName), document()->mimeType(), true);
+        QFile::copy(path + '/' + fileName, path + '/' + backupFileName);
+        document()->saveAs(QUrl::fromUserInput(path + '/' + fileName), document()->mimeType(), true);
 
         if (mainWindow()) mainWindow()->updateCaption();
     }
@@ -1072,7 +1088,7 @@ void KisViewManager::slotSaveIncrementalBackup()
         // Navigate directory searching for latest backup version, ignore letters
         const quint8 HARDCODED_DIGIT_COUNT = 3;
         QString baseNewVersion = "000";
-        QString backupFileName = document()->localFilePath();
+        QString backupFileName = QFileInfo(document()->localFilePath()).fileName();
         QRegExp regex2("[.][a-z]{2,4}$");  //  Heuristic to find file extension
         regex2.indexIn(backupFileName);
         QStringList matches2 = regex2.capturedTexts();
@@ -1101,8 +1117,8 @@ void KisViewManager::slotSaveIncrementalBackup()
 
         // Save both as backup and on current file for interapplication workflow
         document()->setFileBatchMode(true);
-        QFile::copy(fileName, backupFileName);
-        document()->saveAs(QUrl::fromUserInput(fileName), document()->mimeType(), true);
+        QFile::copy(path + '/' + fileName, path + '/' + backupFileName);
+        document()->saveAs(QUrl::fromUserInput(path + '/' + fileName), document()->mimeType(), true);
         document()->setFileBatchMode(false);
 
         if (mainWindow()) mainWindow()->updateCaption();
@@ -1244,7 +1260,7 @@ void KisViewManager::switchCanvasOnly(bool toggled)
         // show a fading heads-up display about the shortcut to go back
 
         showFloatingMessage(i18n("Going into Canvas-Only mode.\nPress %1 to go back.",
-                                 actionCollection()->action("view_show_canvas_only")->shortcut().toString()), QIcon());
+                                 actionCollection()->action("view_show_canvas_only")->shortcut().toString(QKeySequence::NativeText)), QIcon());
     }
     else {
         main->restoreState(d->canvasState);
@@ -1290,7 +1306,7 @@ void KisViewManager::guiUpdateTimeout()
     d->selectionManager.updateGUI();
     d->filterManager.updateGUI();
     if (zoomManager()) {
-        zoomManager()->updateGUI();
+        zoomManager()->updateGuiAfterDocumentSize();
     }
     d->gridManager.updateGUI();
     d->actionManager.updateGUI();
@@ -1444,4 +1460,12 @@ void KisViewManager::slotResetRotation()
 {
     KisCanvasController *canvasController = d->currentImageView->canvasController();
     canvasController->resetCanvasRotation();
+}
+
+void KisViewManager::slotToggleFullscreen()
+{
+    KisConfig cfg(false);
+    KisMainWindow *main = mainWindow();
+    main->viewFullscreen(!main->isFullScreen());
+    cfg.fullscreenMode(main->isFullScreen());
 }

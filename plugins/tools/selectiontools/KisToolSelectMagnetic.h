@@ -40,7 +40,7 @@ public:
     void endPrimaryAction(KoPointerEvent *event) override;
     void paint(QPainter& gc, const KoViewConverter &converter) override;
 
-    void beginPrimaryDoubleClickAction(KoPointerEvent *event) override;
+    //void beginPrimaryDoubleClickAction(KoPointerEvent *event) override;
 
     void keyPressEvent(QKeyEvent *event) override;
     void keyReleaseEvent(QKeyEvent *event) override;
@@ -50,7 +50,10 @@ public:
     void resetCursorStyle() override;
     void requestStrokeEnd() override;
     void requestStrokeCancellation() override;
-    QWidget * createOptionWidget() override;
+    QWidget *createOptionWidget() override;
+
+Q_SIGNALS:
+    void setButtonsEnabled(bool);
 
 public Q_SLOTS:
     void deactivate() override;

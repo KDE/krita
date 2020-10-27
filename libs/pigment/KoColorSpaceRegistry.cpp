@@ -122,19 +122,19 @@ struct KoColorSpaceRegistry::Private::ConversionSystemInterface : public KoColor
     {
     }
 
-    const KoColorSpace * colorSpace(const QString & colorModelId, const QString & colorDepthId, const QString &profileName) {
+    const KoColorSpace * colorSpace(const QString & colorModelId, const QString & colorDepthId, const QString &profileName) override {
         return q->d->colorSpace1<NoLockPolicy>(q->d->colorSpaceIdImpl(colorModelId, colorDepthId), profileName);
     }
 
-    const KoColorSpaceFactory* colorSpaceFactory(const QString &colorModelId, const QString &colorDepthId) const {
+    const KoColorSpaceFactory* colorSpaceFactory(const QString &colorModelId, const QString &colorDepthId) const override {
         return q->d->colorSpaceFactoryRegistry.get(q->d->colorSpaceIdImpl(colorModelId, colorDepthId));
     }
 
-    QList<const KoColorProfile *>  profilesFor(const KoColorSpaceFactory * csf) const {
+    QList<const KoColorProfile *>  profilesFor(const KoColorSpaceFactory * csf) const override {
         return q->d->profileStorage.profilesFor(csf);
     }
 
-    QList<const KoColorSpaceFactory*> colorSpacesFor(const KoColorProfile* profile) const {
+    QList<const KoColorSpaceFactory*> colorSpacesFor(const KoColorProfile* profile) const override {
         QList<const KoColorSpaceFactory*> csfs;
         Q_FOREACH (KoColorSpaceFactory* csf, q->d->colorSpaceFactoryRegistry.values()) {
             if (csf->profileIsCompatible(profile)) {
@@ -196,14 +196,14 @@ void KoColorSpaceRegistry::init()
     KoPluginLoader::PluginsConfig config;
     config.whiteList = "ColorSpacePlugins";
     config.blacklist = "ColorSpacePluginsDisabled";
-    config.group = "calligra";
-    KoPluginLoader::instance()->load("Calligra/ColorSpace", "[X-Pigment-PluginVersion] == 28", config);
+    config.group = "krita";
+    KoPluginLoader::instance()->load("Krita/ColorSpace", "[X-Pigment-PluginVersion] == 28", config);
 
     KoPluginLoader::PluginsConfig configExtensions;
     configExtensions.whiteList = "ColorSpaceExtensionsPlugins";
     configExtensions.blacklist = "ColorSpaceExtensionsPluginsDisabled";
-    configExtensions.group = "calligra";
-    KoPluginLoader::instance()->load("Calligra/ColorSpaceExtension", "[X-Pigment-PluginVersion] == 28", configExtensions);
+    configExtensions.group = "krita";
+    KoPluginLoader::instance()->load("Krita/ColorSpaceExtension", "[X-Pigment-PluginVersion] == 28", configExtensions);
 
 
     dbgPigment << "Loaded the following colorspaces:";

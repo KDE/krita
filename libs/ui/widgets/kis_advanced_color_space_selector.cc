@@ -222,9 +222,12 @@ void KisAdvancedColorSpaceSelector::fillDescription()
             d->colorSpaceSelector->TRCwidget->setRGBCurve(redcurve, greencurve, bluecurve);
         } else {
             QPolygonF curve = currentColorSpace()->estimatedTRCXYY();
-            redcurve << curve.at(0) << curve.at(1) << curve.at(2) << curve.at(3) << curve.at(4);
-            greencurve << curve.at(5) << curve.at(6) << curve.at(7) << curve.at(8) << curve.at(9);
-            bluecurve << curve.at(10) << curve.at(11) << curve.at(12) << curve.at(13) << curve.at(14);
+            int numPoints = curve.size() / 3;
+            for (int i = 0; i < numPoints; i++) {
+                redcurve << curve.at(i);
+                greencurve << curve.at(i + numPoints);
+                bluecurve << curve.at(i + 2*numPoints);
+            }
             d->colorSpaceSelector->TRCwidget->setRGBCurve(redcurve, greencurve, bluecurve);
         }
 
@@ -281,10 +284,13 @@ void KisAdvancedColorSpaceSelector::fillDescription()
             d->colorSpaceSelector->TRCwidget->setGreyscaleCurve(tonecurve);
         } else {
             QPolygonF curve = currentColorSpace()->estimatedTRCXYY();
-            cyancurve << curve.at(0) << curve.at(1) << curve.at(2) << curve.at(3) << curve.at(4);
-            magentacurve << curve.at(5) << curve.at(6) << curve.at(7) << curve.at(8) << curve.at(9);
-            yellowcurve << curve.at(10) << curve.at(11) << curve.at(12) << curve.at(13) << curve.at(14);
-            tonecurve << curve.at(15) << curve.at(16) << curve.at(17) << curve.at(18) << curve.at(19);
+            int numPoints = curve.size() / 4;
+            for (int i = 0; i < numPoints; i++) {
+                cyancurve << curve.at(i);
+                magentacurve << curve.at(i + numPoints);
+                yellowcurve << curve.at(i + 2*numPoints);
+                tonecurve << curve.at(i + 3*numPoints);
+            }
             d->colorSpaceSelector->TRCwidget->setCMYKCurve(cyancurve, magentacurve, yellowcurve, tonecurve);
         }
         d->colorSpaceSelector->TRCwidget->setToolTip(i18nc("@info:tooltip","Estimated Gamma cannot be retrieved for CMYK."));
@@ -482,8 +488,8 @@ void KisAdvancedColorSpaceSelector::fillDescription()
         d->colorSpaceSelector->textProfileDescription->append("<p>"+i18nc("These are Elle Stone's notes on her profiles that we ship.",
                                                                     "<p><b>Extra notes on profiles by Elle Stone:</b></p>"
                                                                     "<p><i>Krita comes with a number of high quality profiles created by "
-                                                                    "<a href=\"http://ninedegreesbelow.com\">Elle Stone</a>. This is a summary. Please check "
-                                                                    "<a href=\"http://ninedegreesbelow.com/photography/lcms-make-icc-profiles.html\">the full documentation</a> as well.</i></p>"));
+                                                                    "<a href=\"https://ninedegreesbelow.com\">Elle Stone</a>. This is a summary. Please check "
+                                                                    "<a href=\"https://ninedegreesbelow.com/photography/lcms-make-icc-profiles.html\">the full documentation</a> as well.</i></p>"));
 
                 if (profileName.contains("ACES-")) {
 
@@ -522,7 +528,7 @@ void KisAdvancedColorSpaceSelector::fillDescription()
                                                                         "actually has a slightly larger color gamut (to capture some fringe colors that barely qualify "
                                                                         "as real when viewed by the standard observer) and uses the D50 white point.</p><p>"
                                                                         "Just like the ACES color space, AllColorsRGB holds a high percentage of imaginary colors. See the Completely "
-                                                                        "<a href=\"http://ninedegreesbelow.com/photography/xyz-rgb.html\">"
+                                                                        "<a href=\"https://ninedegreesbelow.com/photography/xyz-rgb.html\">"
                                                                         "Painless Programmer's Guide to XYZ, RGB, ICC, xyY, and TRCs</a> for more information about imaginary "
                                                                         "colors.</p><p>"
                                                                         "There is no particular reason why anyone would want to use this profile "
@@ -662,7 +668,7 @@ QString KisAdvancedColorSpaceSelector::nameWhitePoint(QVector <double> whitePoin
         return name;
     }
     //B   (0.34980, 0.35270) (4874K) (Direct Sunlight at noon)(obsolete)
-    //C   (0.31039, 0.31905) (6774K) (avarage/north sky daylight)(obsolete)
+    //C   (0.31039, 0.31905) (6774K) (average/north sky daylight)(obsolete)
     //D50 (0.34773, 0.35952) (5003K) (Horizon Light, default color of white paper, ICC profile standard illuminant)
     if ((whitePoint[0]>0.34773-0.005 && whitePoint[0]<0.34773 + 0.005) &&
             (whitePoint[1]>0.35952-0.005 && whitePoint[1]<0.35952 + 0.005)){

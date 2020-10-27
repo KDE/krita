@@ -11,37 +11,72 @@
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="1" column="2">
-    <widget class="QPushButton" name="deleteButton">
-     <property name="text">
-      <string/>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="1">
-    <widget class="QPushButton" name="saveButton">
-     <property name="text">
-      <string/>
+   <property name="spacing">
+    <number>2</number>
+   </property>
+   <item row="0" column="0" colspan="6">
+    <widget class="QListView" name="compositionView">
+     <property name="toolTip">
+      <string>Checked compositions will be exported, unchecked won't.</string>
      </property>
     </widget>
    </item>
    <item row="1" column="0">
     <widget class="QLineEdit" name="saveNameEdit"/>
    </item>
+   <item row="1" column="1">
+    <widget class="QPushButton" name="saveButton">
+     <property name="text">
+      <string/>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="2">
+    <widget class="QPushButton" name="moveUpButton">
+     <property name="text">
+      <string/>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
    <item row="1" column="3">
-    <widget class="QPushButton" name="exportButton">
+    <widget class="QPushButton" name="moveDownButton">
+     <property name="text">
+      <string/>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="4">
+    <widget class="QPushButton" name="deleteButton">
+     <property name="text">
+      <string/>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="5">
+    <widget class="QToolButton" name="exportCompositions">
      <property name="toolTip">
       <string>Export checked compositions.</string>
      </property>
      <property name="text">
       <string/>
      </property>
-    </widget>
-   </item>
-   <item row="0" column="0" colspan="4">
-    <widget class="QListView" name="compositionView">
-     <property name="toolTip">
-      <string>Checked compositions will be exported, unchecked won't.</string>
+     <property name="popupMode">
+      <enum>QToolButton::MenuButtonPopup</enum>
+     </property>
+     <property name="autoRaise">
+      <bool>true</bool>
      </property>
     </widget>
    </item>

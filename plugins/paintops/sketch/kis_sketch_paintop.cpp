@@ -46,7 +46,7 @@
 #include <QtGlobal>
 
 /*
-* Based on Harmony project http://github.com/mrdoob/harmony/
+* Based on Harmony project https://github.com/mrdoob/harmony/
 */
 // chrome : diff 0.2, sketchy : 0.3, fur: 0.5
 // fur : distance / thresholdDistance
@@ -75,7 +75,7 @@ KisSketchPaintOp::KisSketchPaintOp(const KisPaintOpSettingsSP settings, KisPaint
     m_rotationOption.readOptionSetting(settings);
     m_rateOption.readOptionSetting(settings);
     m_sketchProperties.readOptionSetting(settings);
-    m_brushOption.readOptionSetting(settings);
+    m_brushOption.readOptionSetting(settings, settings->resourcesInterface(), settings->canvasResourcesInterface());
     m_densityOption.readOptionSetting(settings);
     m_lineWidthOption.readOptionSetting(settings);
     m_offsetScaleOption.readOptionSetting(settings);
@@ -96,6 +96,12 @@ KisSketchPaintOp::~KisSketchPaintOp()
 {
     delete m_painter;
     delete m_dabCache;
+}
+
+QList<KoResourceSP> KisSketchPaintOp::prepareLinkedResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface)
+{
+    KisBrushOptionProperties brushOption;
+    return brushOption.prepareLinkedResources(settings, resourcesInterface);
 }
 
 void KisSketchPaintOp::drawConnection(const QPointF& start, const QPointF& end, double lineWidth)

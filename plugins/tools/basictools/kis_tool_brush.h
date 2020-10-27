@@ -35,6 +35,7 @@
 
 class QCheckBox;
 class QComboBox;
+class QLabel;
 
 class KActionCollection;
 
@@ -115,7 +116,7 @@ Q_SIGNALS:
 
 private:
     void addSmoothingAction(int enumId, const QString &id);
-
+    void updateSmoothnessDistanceLabel();
 private:
     QComboBox *m_cmbSmoothingType {0};
 
@@ -123,6 +124,7 @@ private:
     KisSliderSpinBox *m_sliderMagnetism {0};
     QCheckBox *m_chkOnlyOneAssistant {0};
     KisDoubleSliderSpinBox *m_sliderSmoothnessDistance {0};
+    QLabel *m_lblSmoothnessDistance {0};
     KisDoubleSliderSpinBox *m_sliderTailAggressiveness {0};
     QCheckBox *m_chkSmoothPressure {0};
     QCheckBox *m_chkUseScalableDistance {0};

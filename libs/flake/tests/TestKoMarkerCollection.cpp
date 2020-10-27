@@ -21,6 +21,7 @@
 #include <QTest>
 #include <QFileInfo>
 #include <QPainter>
+#include <QPainterPath>
 #include <KoMarker.h>
 #include <KoMarkerCollection.h>
 #include <KoPathShape.h>
@@ -28,7 +29,7 @@
 
 #include "kis_debug.h"
 #include "../../sdk/tests/qimage_test_util.h"
-#include <sdk/tests/kistest.h>
+#include <sdk/tests/testflake.h>
 
 #include <cmath>
 

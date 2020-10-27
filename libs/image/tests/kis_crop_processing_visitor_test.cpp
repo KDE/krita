@@ -26,7 +26,7 @@
 #include "kis_paint_device.h"
 #include "kis_fill_painter.h"
 #include "kis_transparency_mask.h"
-#include "testutil.h"
+#include <testutil.h>
 #include "kis_surrogate_undo_adapter.h"
 #include "kis_image.h"
 #include "kis_pixel_selection.h"
@@ -69,7 +69,7 @@ void KisCropProcessingVisitorTest::testCropTransparencyMask()
 
     QRect cropRect(25,25,100,100);
     QRect selectionRect(40,40,100,100);
-    KisTransparencyMaskSP mask = new KisTransparencyMask();
+    KisTransparencyMaskSP mask = new KisTransparencyMask(image, "tmask");
     mask->testingInitSelection(selectionRect, 0);
     KisPixelSelectionSP pixelSelection = mask->selection()->pixelSelection();
 

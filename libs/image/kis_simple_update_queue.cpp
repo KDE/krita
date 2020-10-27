@@ -171,9 +171,14 @@ void KisSimpleUpdateQueue::addUpdateNoFilthyJob(KisNodeSP node, const QRect& rc,
     addJob(node, {rc}, cropRect, levelOfDetail, KisBaseRectsWalker::UPDATE_NO_FILTHY);
 }
 
-void KisSimpleUpdateQueue::addFullRefreshJob(KisNodeSP node, const QRect& rc, const QRect& cropRect, int levelOfDetail)
+void KisSimpleUpdateQueue::addFullRefreshJob(KisNodeSP node, const QRect &rc, const QRect& cropRect, int levelOfDetail)
 {
     addJob(node, {rc}, cropRect, levelOfDetail, KisBaseRectsWalker::FULL_REFRESH);
+}
+
+void KisSimpleUpdateQueue::addFullRefreshJob(KisNodeSP node, const QVector<QRect>& rects, const QRect& cropRect, int levelOfDetail)
+{
+    addJob(node, rects, cropRect, levelOfDetail, KisBaseRectsWalker::FULL_REFRESH);
 }
 
 void KisSimpleUpdateQueue::addJob(KisNodeSP node, const QVector<QRect> &rects,
@@ -365,10 +370,10 @@ bool KisSimpleUpdateQueue::joinRects(QRect& baseRect,
         return false;
 
     bool result = false;
-    qint64 baseWork = baseRect.width() * baseRect.height() +
-        newRect.width() * newRect.height();
+    qint64 baseWork = qint64(baseRect.width()) * baseRect.height() +
+        qint64(newRect.width()) * newRect.height();
 
-    qint64 newWork = unitedRect.width() * unitedRect.height();
+    qint64 newWork = qint64(unitedRect.width()) * unitedRect.height();
 
     qreal alpha = qreal(newWork) / baseWork;
 

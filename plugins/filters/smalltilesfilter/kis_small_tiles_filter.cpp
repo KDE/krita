@@ -105,9 +105,9 @@ KisConfigWidget * KisSmallTilesFilter::createConfigurationWidget(QWidget* parent
 
 }
 
-KisFilterConfigurationSP KisSmallTilesFilter::factoryConfiguration() const
+KisFilterConfigurationSP KisSmallTilesFilter::defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const
 {
-    KisFilterConfigurationSP config = new KisFilterConfiguration("smalltiles", 1);
+    KisFilterConfigurationSP config = factoryConfiguration(resourcesInterface);
     config->setProperty("numberOfTiles", 2);
     return config;
 }

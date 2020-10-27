@@ -125,9 +125,8 @@ KisToolOptionsPopup::KisToolOptionsPopup(QWidget *parent)
     d->detached = !cfg.paintopPopupDetached();
     d->ignoreHideEvents = false;
 
-    d->housekeeperLayout = new QGridLayout();
+    d->housekeeperLayout = new QGridLayout(this);
     d->housekeeperLayout->setContentsMargins(4,4,4,0);
-    setLayout(d->housekeeperLayout);
     d->housekeeperLayout->setSizeConstraint(QLayout::SetMinAndMaxSize);
     d->hiderWidget = new QWidget(this);
     d->hiderWidget->setVisible(false);

@@ -44,7 +44,6 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
       m_configChanged(false)
 {
     setupUi(this);
-    showDecorationsBox->setIcon(KisIconUtils::loadIcon("krita_tool_transform"));
     chkWorkRecursively->setIcon(KisIconUtils::loadIcon("krita_tool_transform_recursive"));
     flipXButton->setIcon(KisIconUtils::loadIcon("transform_icons_mirror_x"));
     flipYButton->setIcon(KisIconUtils::loadIcon("transform_icons_mirror_y"));
@@ -72,8 +71,9 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     cmbFilter->setToolTip(i18nc("@info:tooltip",
                                 "<p>Select filtering mode:\n"
                                 "<ul>"
-                                "<li><b>Bilinear</b> for areas with uniform color to avoid artifacts</li>"
-                                "<li><b>Bicubic</b> for smoother results</li>"
+                                "<li><b>Nearest neighbor</b> for pixel art. Does not produce new color.</li>"
+                                "<li><b>Bilinear</b> for areas with uniform color to avoid artifacts.</li>"
+                                "<li><b>Bicubic</b> for smoother results.</li>"
                                 "<li><b>Lanczos3</b> for sharp results. May produce aerials.</li>"
                                 "</ul></p>"));
     connect(cmbFilter, SIGNAL(activated(KoID)),
@@ -117,12 +117,12 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
 
 
     // initialize values for free transform sliders
-    shearXBox->setSuffix(i18n(" px"));
-    shearYBox->setSuffix(i18n(" px"));
-    shearXBox->setRange(-5.0, 5.0, 2);
-    shearYBox->setRange(-5.0, 5.0, 2);
-    shearXBox->setSingleStep(0.01);
-    shearYBox->setSingleStep(0.01);
+    shearXBox->setSuffix(QChar(Qt::Key_Percent));
+    shearYBox->setSuffix(QChar(Qt::Key_Percent));
+    shearXBox->setRange(-500, 500, 2);
+    shearYBox->setRange(-500, 500, 2);
+    shearXBox->setSingleStep(1);
+    shearYBox->setSingleStep(1);
     shearXBox->setValue(0.0);
     shearYBox->setValue(0.0);
 
@@ -300,9 +300,6 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     connect(perspectiveTransformButton, SIGNAL(clicked(bool)), this, SLOT(slotSetPerspectiveModeButtonClicked(bool)));
     connect(liquifyButton, SIGNAL(clicked(bool)), this, SLOT(slotSetLiquifyModeButtonClicked(bool)));
 
-    // Connect Decorations switcher
-    connect(showDecorationsBox, SIGNAL(toggled(bool)), canvas, SLOT(updateCanvas()));
-
     tooBigLabelWidget->hide();
 
     connect(canvas->viewManager()->mainWindow(), SIGNAL(themeChanged()), SLOT(slotUpdateIcons()), Qt::UniqueConnection);
@@ -340,31 +337,6 @@ void KisToolTransformConfigWidget::slotUpdateIcons()
     // pressure icons
     liquifySizePressureBox->setIcon(KisIconUtils::loadIcon("transform_icons_penPressure"));
     liquifyAmountPressureBox->setIcon(KisIconUtils::loadIcon("transform_icons_penPressure"));
-}
-
-double KisToolTransformConfigWidget::radianToDegree(double rad)
-{
-    double piX2 = 2 * M_PI;
-
-    if (rad < 0 || rad >= piX2) {
-        rad = fmod(rad, piX2);
-        if (rad < 0) {
-            rad += piX2;
-        }
-    }
-
-    return (rad * 360. / piX2);
-}
-
-double KisToolTransformConfigWidget::degreeToRadian(double degree)
-{
-    if (degree < 0. || degree >= 360.) {
-        degree = fmod(degree, 360.);
-        if (degree < 0)
-            degree += 360.;
-    }
-
-    return (degree * M_PI / 180.);
 }
 
 void KisToolTransformConfigWidget::updateLiquifyControls()
@@ -557,8 +529,8 @@ void KisToolTransformConfigWidget::updateConfig(const ToolTransformArgs &config)
 
         scaleXBox->setValue(config.scaleX() * 100.);
         scaleYBox->setValue(config.scaleY() * 100.);
-        shearXBox->setValue(config.shearX());
-        shearYBox->setValue(config.shearY());
+        shearXBox->setValue(config.shearX() * 100.);
+        shearYBox->setValue(config.shearY() * 100.);
 
         const QPointF anchorPoint = config.originalCenter() + config.rotationCenterOffset();
         const KisTransformUtils::MatricesPack m(config);
@@ -567,9 +539,9 @@ void KisToolTransformConfigWidget::updateConfig(const ToolTransformArgs &config)
         translateXBox->setValue(anchorPointView.x());
         translateYBox->setValue(anchorPointView.y());
 
-        aXBox->setValue(radianToDegree(config.aX()));
-        aYBox->setValue(radianToDegree(config.aY()));
-        aZBox->setValue(radianToDegree(config.aZ()));
+        aXBox->setValue(normalizeAngleDegrees(kisRadiansToDegrees(config.aX())));
+        aYBox->setValue(normalizeAngleDegrees(kisRadiansToDegrees(config.aY())));
+        aZBox->setValue(normalizeAngleDegrees(kisRadiansToDegrees(config.aZ())));
         aspectButton->setKeepAspectRatio(config.keepAspectRatio());
         cmbFilter->setCurrent(config.filterId());
 
@@ -705,11 +677,6 @@ void KisToolTransformConfigWidget::setTooBigLabelVisible(bool value)
     tooBigLabelWidget->setVisible(value);
 }
 
-bool KisToolTransformConfigWidget::showDecorations() const
-{
-    return showDecorationsBox->isChecked();
-}
-
 void KisToolTransformConfigWidget::blockNotifications()
 {
     m_notificationsBlocked++;
@@ -777,7 +744,7 @@ void KisToolTransformConfigWidget::slotButtonBoxClicked(QAbstractButton *button)
         emit sigApplyTransform();
     }
     else if (button == resetButton) {
-        emit sigResetTransform();
+        emit sigCancelTransform();
     }
 
 }
@@ -788,9 +755,7 @@ void KisToolTransformConfigWidget::slotSetFreeTransformModeButtonClicked(bool va
 
     lblTransformType->setText(freeTransformButton->toolTip());
 
-    ToolTransformArgs *config = m_transaction->currentConfig();
-    config->setMode(ToolTransformArgs::FREE_TRANSFORM);
-    emit sigResetTransform();
+    emit sigResetTransform(ToolTransformArgs::FREE_TRANSFORM);
 }
 
 void KisToolTransformConfigWidget::slotSetWarpModeButtonClicked(bool value)
@@ -799,10 +764,7 @@ void KisToolTransformConfigWidget::slotSetWarpModeButtonClicked(bool value)
 
     lblTransformType->setText(warpButton->toolTip());
 
-    ToolTransformArgs *config = m_transaction->currentConfig();
-    config->setMode(ToolTransformArgs::WARP);
-    config->setWarpCalculation(KisWarpTransformWorker::WarpCalculation::GRID);
-    emit sigResetTransform();
+    emit sigResetTransform(ToolTransformArgs::WARP);
 }
 
 void KisToolTransformConfigWidget::slotSetCageModeButtonClicked(bool value)
@@ -811,9 +773,7 @@ void KisToolTransformConfigWidget::slotSetCageModeButtonClicked(bool value)
 
     lblTransformType->setText(cageButton->toolTip());
 
-    ToolTransformArgs *config = m_transaction->currentConfig();
-    config->setMode(ToolTransformArgs::CAGE);
-    emit sigResetTransform();
+    emit sigResetTransform(ToolTransformArgs::CAGE);
 }
 
 void KisToolTransformConfigWidget::slotSetLiquifyModeButtonClicked(bool value)
@@ -822,9 +782,7 @@ void KisToolTransformConfigWidget::slotSetLiquifyModeButtonClicked(bool value)
 
     lblTransformType->setText(liquifyButton->toolTip());
 
-    ToolTransformArgs *config = m_transaction->currentConfig();
-    config->setMode(ToolTransformArgs::LIQUIFY);
-    emit sigResetTransform();
+    emit sigResetTransform(ToolTransformArgs::LIQUIFY);
 }
 
 void KisToolTransformConfigWidget::slotSetPerspectiveModeButtonClicked(bool value)
@@ -833,9 +791,7 @@ void KisToolTransformConfigWidget::slotSetPerspectiveModeButtonClicked(bool valu
 
     lblTransformType->setText(perspectiveTransformButton->toolTip());
 
-    ToolTransformArgs *config = m_transaction->currentConfig();
-    config->setMode(ToolTransformArgs::PERSPECTIVE_4POINT);
-    emit sigResetTransform();
+    emit sigResetTransform(ToolTransformArgs::PERSPECTIVE_4POINT);
 }
 
 void KisToolTransformConfigWidget::slotFilterChanged(const KoID &filterId)
@@ -940,7 +896,7 @@ void KisToolTransformConfigWidget::slotSetShearX(qreal value)
 
     {
         KisTransformUtils::AnchorHolder keeper(config->transformAroundRotationCenter(), config);
-        config->setShearX((double)value);
+        config->setShearX((double)value / 100.);
     }
 
     notifyConfigChanged();
@@ -955,7 +911,7 @@ void KisToolTransformConfigWidget::slotSetShearY(qreal value)
 
     {
         KisTransformUtils::AnchorHolder keeper(config->transformAroundRotationCenter(), config);
-        config->setShearY((double)value);
+        config->setShearY((double)value / 100.);
     }
 
 
@@ -975,7 +931,7 @@ void KisToolTransformConfigWidget::slotSetTranslateX(int value)
     const QPointF anchorPointView = m.finalTransform().map(anchorPoint);
     const QPointF newAnchorPointView(value, anchorPointView.y());
     config->setTransformedCenter(config->transformedCenter() + newAnchorPointView - anchorPointView);
-
+    translateXBox->setValue(value);
     notifyConfigChanged();
 }
 
@@ -991,7 +947,7 @@ void KisToolTransformConfigWidget::slotSetTranslateY(int value)
     const QPointF anchorPointView = m.finalTransform().map(anchorPoint);
     const QPointF newAnchorPointView(anchorPointView.x(), value);
     config->setTransformedCenter(config->transformedCenter() + newAnchorPointView - anchorPointView);
-
+    translateYBox->setValue(value);
     notifyConfigChanged();
 }
 
@@ -1002,7 +958,7 @@ void KisToolTransformConfigWidget::slotSetAX(qreal value)
     ToolTransformArgs *config = m_transaction->currentConfig();
     {
         KisTransformUtils::AnchorHolder keeper(config->transformAroundRotationCenter(), config);
-        config->setAX(degreeToRadian((double)value));
+        config->setAX(normalizeAngle(kisDegreesToRadians(value)));
     }
     notifyConfigChanged();
     notifyEditingFinished();
@@ -1016,7 +972,7 @@ void KisToolTransformConfigWidget::slotSetAY(qreal value)
 
     {
         KisTransformUtils::AnchorHolder keeper(config->transformAroundRotationCenter(), config);
-        config->setAY(degreeToRadian((double)value));
+        config->setAY(normalizeAngle(kisDegreesToRadians(value)));
     }
 
     notifyConfigChanged();
@@ -1031,7 +987,7 @@ void KisToolTransformConfigWidget::slotSetAZ(qreal value)
 
     {
         KisTransformUtils::AnchorHolder keeper(config->transformAroundRotationCenter(), config);
-        config->setAZ(degreeToRadian((double)value));
+        config->setAZ(normalizeAngle(kisDegreesToRadians(value)));
     }
 
     notifyConfigChanged();

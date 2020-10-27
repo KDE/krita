@@ -525,21 +525,6 @@ void KToolBar::Private::loadKDESettings()
         toolButtonStyleSettings[Level_KDEDefault] = toolButtonStyleSetting();
     } else {
         const QString fallBack = toolButtonStyleToString(Qt::ToolButtonTextBesideIcon);
-        /**
-          TODO: if we get complaints about text beside icons on small screens,
-                try the following code out on such systems - aseigo.
-        // if we are on a small screen with a non-landscape ratio, then
-        // we revert to text under icons since width is probably not our
-        // friend in such cases
-        QDesktopWidget *desktop = QApplication::desktop();
-        QRect screenGeom = desktop->screenGeometry(desktop->primaryScreen());
-        qreal ratio = screenGeom.width() / qreal(screenGeom.height());
-
-        if (screenGeom.width() < 1024 && ratio <= 1.4) {
-            fallBack = "TextUnderIcon";
-        }
-        **/
-
         KConfigGroup group(KSharedConfig::openConfig(), "Toolbar style");
         const QString value = group.readEntry("ToolButtonStyleOtherToolbars", fallBack);
         toolButtonStyleSettings[Level_KDEDefault] = KToolBar::Private::toolButtonStyleFromString(value);

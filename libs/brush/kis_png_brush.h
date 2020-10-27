@@ -19,22 +19,26 @@
 #ifndef KIS_PNG_BRUSH_
 #define KIS_PNG_BRUSH_
 
-#include "kis_scaling_size_brush.h"
+#include "KisColorfulBrush.h"
 
-class BRUSH_EXPORT  KisPngBrush : public KisScalingSizeBrush
+class BRUSH_EXPORT  KisPngBrush : public KisColorfulBrush
 {
 public:
     /// Construct brush to load filename later as brush
     KisPngBrush(const QString& filename);
     KisPngBrush(const KisPngBrush &rhs);
-    KisBrush* clone() const override;
+    KoResourceSP clone() const override;
+    KisPngBrush &operator=(const KisPngBrush &rhs) = delete;
 
-    bool load() override;
-    bool loadFromDevice(QIODevice *dev) override;
-    bool save() override;
+    bool loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface) override;
     bool saveToDevice(QIODevice *dev) const override;
+
     QString defaultFileExtension() const override;
     void toXML(QDomDocument& d, QDomElement& e) const override;
+
+    QPair<QString, QString> resourceType() const override {
+        return QPair<QString, QString>(ResourceType::Brushes, ResourceSubType::PngBrushes);
+    }
 
 };
 

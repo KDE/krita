@@ -41,6 +41,7 @@
     #include <filter/kis_filter_configuration.h>
     #include "kis_default_bounds.h"
     #include <KisKineticScroller.h>
+    #include <KisGlobalResourcesInterface.h>
 
     // From krita/ui
     #include "kis_bookmarked_configurations_editor.h"
@@ -140,7 +141,7 @@
             idx = d->filtersModel->indexForFilter("levels");
         }
 
-        if (isFilterGalleryVisible()) {
+        if (d->usedForMask && isFilterGalleryVisible()) {
             d->uiFilterSelector.filtersSelector->activateFilter(idx);
         }
 
@@ -194,7 +195,7 @@
         return d->currentFilter;
     }
 
-    void KisFilterSelectorWidget::setFilter(KisFilterSP f)
+    void KisFilterSelectorWidget::setFilter(KisFilterSP f, KisFilterConfigurationSP overrideDefaultConfig)
     {
         Q_ASSERT(f);
         Q_ASSERT(d->filtersModel);
@@ -223,6 +224,11 @@
             d->uiFilterSelector.scrollArea->setMinimumSize(d->currentCentralWidget->sizeHint());
             qobject_cast<QLabel*>(d->currentCentralWidget)->setAlignment(Qt::AlignCenter);
         } else {
+            KisFilterConfigurationSP defaultConfiguration =
+                overrideDefaultConfig ?
+                overrideDefaultConfig :
+                d->currentFilter->defaultConfiguration(KisGlobalResourcesInterface::instance());
+
             d->uiFilterSelector.comboBoxPresets->setEnabled(true);
             d->uiFilterSelector.pushButtonEditPressets->setEnabled(true);
             d->uiFilterSelector.btnXML->setEnabled(true);
@@ -232,7 +238,7 @@
             widget->layout()->setContentsMargins(0,0,0,0);
             d->currentFilterConfigurationWidget->setView(d->view);
             d->currentFilterConfigurationWidget->blockSignals(true);
-            d->currentFilterConfigurationWidget->setConfiguration(d->currentFilter->defaultConfiguration());
+            d->currentFilterConfigurationWidget->setConfiguration(defaultConfiguration);
             d->currentFilterConfigurationWidget->blockSignals(false);
             d->uiFilterSelector.scrollArea->setContentsMargins(0,0,0,0);
             d->uiFilterSelector.scrollArea->setMinimumWidth(widget->sizeHint().width() + 18);
@@ -266,7 +272,7 @@
         Q_ASSERT(d->filtersModel);
         KisFilter* filter = const_cast<KisFilter*>(d->filtersModel->indexToFilter(idx));
         if (filter) {
-            setFilter(filter);
+            setFilter(filter, 0);
         }
         else {
             if (d->currentFilter) {
@@ -278,9 +284,13 @@
             }
         }
 
+        slotBookMarkCurrentFilter();
+        emit(configurationChanged());
+    }
+
+    void KisFilterSelectorWidget::slotBookMarkCurrentFilter() {
         KisConfig cfg(false);
         cfg.writeEntry<QString>("FilterSelector/LastUsedFilter", d->currentFilter->id());
-        emit(configurationChanged());
     }
 
     void KisFilterSelectorWidget::slotBookmarkedFilterConfigurationSelected(int index)
@@ -332,7 +342,7 @@
                 return config;
             }
         } else if (d->currentFilter) {
-            return d->currentFilter->defaultConfiguration();
+            return d->currentFilter->defaultConfiguration(KisGlobalResourcesInterface::instance());
         }
         return 0;
 

@@ -19,7 +19,7 @@
 
 #include "kis_node_graph_listener.h"
 
-#include "kis_time_range.h"
+#include "kis_time_span.h"
 #include <QRect>
 #include <QtGlobal>
 
@@ -94,7 +94,7 @@ void KisNodeGraphListener::requestProjectionUpdate(KisNode * /*node*/, const QVe
 {
 }
 
-void KisNodeGraphListener::invalidateFrames(const KisTimeRange &range, const QRect &rect)
+void KisNodeGraphListener::invalidateFrames(const KisTimeSpan &range, const QRect &rect)
 {
     Q_UNUSED(range);
     Q_UNUSED(rect);

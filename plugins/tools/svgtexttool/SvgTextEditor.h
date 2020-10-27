@@ -40,7 +40,7 @@ class SvgTextEditor : public KXmlGuiWindow
 {
     Q_OBJECT
 public:
-    SvgTextEditor(QWidget *parent = 0, Qt::WindowFlags flags = 0);
+    SvgTextEditor(QWidget *parent = 0, Qt::WindowFlags f = Qt::WindowFlags());
     ~SvgTextEditor();
 
     //tiny enum to keep track of the tab on which editor something happens while keeping the code readable.
@@ -56,7 +56,7 @@ public:
         Both
     };
 
-    void setShape(KoSvgTextShape *shape);
+    void setInitialShape(KoSvgTextShape *shape);
 
 private Q_SLOTS:
     /**
@@ -166,6 +166,9 @@ private:
     BasicXMLSyntaxHighlighter *m_syntaxHighlighter;
 
     QString m_searchKey;
+
+    class Private;
+    QScopedPointer<Private> d;
 };
 
 #endif //TEXTNGSHAPECONFIGWIDGET_H

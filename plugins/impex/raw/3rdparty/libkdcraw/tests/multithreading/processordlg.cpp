@@ -2,7 +2,7 @@
  * @file
  *
  * This file is a part of digiKam project
- * <a href="http://www.digikam.org">http://www.digikam.org</a>
+ * <a href="https://www.digikam.org">https://www.digikam.org</a>
  *
  * @date  : 2014-10-17
  * @brief : test for implementation of threadWeaver api
@@ -98,7 +98,6 @@ ProcessorDlg::ProcessorDlg(const QList<QUrl>& list)
     QVBoxLayout* const vbx   = new QVBoxLayout(this);
     vbx->addWidget(d->page);
     vbx->addWidget(d->buttons);
-    setLayout(vbx);
 
     int cpu                  = d->thread->maximumNumberOfThreads();
     QGridLayout* const grid  = new QGridLayout(d->page);

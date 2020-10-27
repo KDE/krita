@@ -25,6 +25,7 @@
 #include <QList>
 #include <QSet>
 #include <QPair>
+#include <QDebug>
 
 namespace KisClipboardUtil {
 
@@ -46,8 +47,11 @@ QImage getImageFromClipboard()
     QClipboard *clipboard = QApplication::clipboard();
 
     QImage image;
+    QSet<QString> clipboardMimeTypes;
 
-    const QSet<QString> &clipboardMimeTypes = clipboard->mimeData()->formats().toSet();
+    Q_FOREACH(const QString &format, clipboard->mimeData()->formats()) {
+        clipboardMimeTypes << format;
+    }
 
     Q_FOREACH (const ClipboardImageFormat &item, supportedFormats) {
         const QSet<QString> &intersection = item.mimeTypes & clipboardMimeTypes;

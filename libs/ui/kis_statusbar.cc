@@ -35,6 +35,7 @@
 #include <KoColorSpace.h>
 #include <KoToolManager.h>
 #include <KoViewConverter.h>
+#include <QHBoxLayout>
 
 #include <KisUsageLogger.h>
 
@@ -89,16 +90,17 @@ void KisStatusBar::setup()
     addStatusBarItem(m_selectionStatus);
     m_selectionStatus->setVisible(false);
 
-    m_resetAngleButton = new QToolButton;
-    m_resetAngleButton->setObjectName("Reset Rotation");
-    m_resetAngleButton->setCheckable(false);
-    m_resetAngleButton->setToolTip(i18n("Reset Rotation"));
-    m_resetAngleButton->setAutoRaise(true);
-    m_resetAngleButton->setIcon(KisIconUtils::loadIcon("rotate-canvas-left"));
-    addStatusBarItem(m_resetAngleButton);
-
-    connect(m_resetAngleButton, SIGNAL(clicked()), m_viewManager, SLOT(slotResetRotation()));
-    m_resetAngleButton->setVisible(false);
+#ifdef Q_OS_ANDROID
+    m_fullscreenToggle = new QToolButton;
+    m_fullscreenToggle->setObjectName("Toggle Fullscreen");
+    m_fullscreenToggle->setCheckable(false);
+    m_fullscreenToggle->setToolTip(i18n("Toggle Fullscreen"));
+    m_fullscreenToggle->setAutoRaise(true);
+    m_fullscreenToggle->setIcon(KisIconUtils::loadIcon("zoom-horizontal"));
+    addStatusBarItem(m_fullscreenToggle);
+    m_fullscreenToggle->setVisible(true);
+    connect(m_fullscreenToggle, SIGNAL(clicked()), m_viewManager, SLOT(slotToggleFullscreen()));
+#endif
 
     m_statusBarStatusLabel = new KSqueezedTextLabel();
     m_statusBarStatusLabel->setObjectName("statsBarStatusLabel");
@@ -125,6 +127,15 @@ void KisStatusBar::setup()
     m_progressUpdater.reset(new KisProgressUpdater(m_progress, m_progress->progressProxy()));
     m_progressUpdater->setAutoNestNames(true);
 
+    m_extraWidgetsParent = new QFrame;
+    m_extraWidgetsParent->setMinimumWidth(100);
+    m_extraWidgetsParent->setObjectName("Extra Widgets Parent");
+    m_extraWidgetsLayout = new QHBoxLayout;
+    m_extraWidgetsLayout->setContentsMargins(0, 0, 0, 0);
+    m_extraWidgetsLayout->setObjectName("Extra Widgets Layout");
+    m_extraWidgetsParent->setLayout(m_extraWidgetsLayout);
+    addStatusBarItem(m_extraWidgetsParent);
+
     m_memoryReportBox = new KisMemoryReportButton();
     m_memoryReportBox->setObjectName("memoryReportBox");
     m_memoryReportBox->setFlat(true);
@@ -146,6 +157,18 @@ void KisStatusBar::setup()
     connect(KisMemoryStatisticsServer::instance(),
             SIGNAL(sigUpdateMemoryStatistics()),
             SLOT(imageSizeChanged()));
+
+    m_resetAngleButton = new QToolButton;
+    m_resetAngleButton->setObjectName("Reset Rotation");
+    m_resetAngleButton->setCheckable(false);
+    m_resetAngleButton->setToolTip(i18n("Reset Rotation"));
+    m_resetAngleButton->setAutoRaise(true);
+    m_resetAngleButton->setIcon(KisIconUtils::loadIcon("rotate-canvas-left"));
+    addStatusBarItem(m_resetAngleButton);
+
+    connect(m_resetAngleButton, SIGNAL(clicked()), m_viewManager, SLOT(slotResetRotation()));
+    m_resetAngleButton->setVisible(false);
+
 }
 
 KisStatusBar::~KisStatusBar()
@@ -409,6 +432,16 @@ void KisStatusBar::updateStatusBarProfileLabel()
 KoProgressUpdater *KisStatusBar::progressUpdater()
 {
     return m_progressUpdater.data();
+}
+
+void KisStatusBar::addExtraWidget(QWidget *widget)
+{
+    m_extraWidgetsLayout->addWidget(widget);
+}
+
+void KisStatusBar::removeExtraWidget(QWidget *widget)
+{
+    m_extraWidgetsLayout->removeWidget(widget);
 }
 
 

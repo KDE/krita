@@ -48,6 +48,7 @@ KisLensBlurFilter::KisLensBlurFilter() : KisFilter(id(), FiltersCategoryBlurId, 
     setSupportsAdjustmentLayers(true);
     setSupportsLevelOfDetail(true);
     setColorSpaceIndependence(FULLY_INDEPENDENT);
+
 }
 
 KisConfigWidget * KisLensBlurFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP, bool) const
@@ -66,9 +67,9 @@ QSize KisLensBlurFilter::getKernelHalfSize(const KisFilterConfigurationSP config
     return QSize(w, h);
 }
 
-KisFilterConfigurationSP KisLensBlurFilter::factoryConfiguration() const
+KisFilterConfigurationSP KisLensBlurFilter::defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const
 {
-    KisFilterConfigurationSP config = new KisFilterConfiguration(id().id(), 1);
+    KisFilterConfigurationSP config = factoryConfiguration(resourcesInterface);
     config->setProperty("irisShape", "Pentagon (5)");
     config->setProperty("irisRadius", 5);
     config->setProperty("irisRotation", 0);
@@ -126,21 +127,17 @@ QPolygonF KisLensBlurFilter::getIrisPolygon(const KisFilterConfigurationSP confi
 
 void KisLensBlurFilter::processImpl(KisPaintDeviceSP device,
                                     const QRect& rect,
-                                    const KisFilterConfigurationSP _config,
+                                    const KisFilterConfigurationSP config,
                                     KoUpdater* progressUpdater
                                     ) const
 {
     QPoint srcTopLeft = rect.topLeft();
 
     Q_ASSERT(device != 0);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(config);
 
-    KisFilterConfigurationSP config = _config ? _config : new KisFilterConfiguration(id().id(), 1);
-
-    QBitArray channelFlags;
-    if (config) {
-        channelFlags = config->channelFlags();
-    }
-    if (channelFlags.isEmpty() || !config) {
+    QBitArray channelFlags = config->channelFlags();
+    if (channelFlags.isEmpty()) {
         channelFlags = QBitArray(device->colorSpace()->channelCount(), true);
     }
 

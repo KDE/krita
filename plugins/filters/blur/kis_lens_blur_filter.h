@@ -42,7 +42,7 @@ public:
         return KoID("lens blur", i18n("Lens Blur"));
     }
 
-    KisFilterConfigurationSP factoryConfiguration() const override;
+    KisFilterConfigurationSP defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const override;
 
     static QSize getKernelHalfSize(const KisFilterConfigurationSP config, int lod);
 

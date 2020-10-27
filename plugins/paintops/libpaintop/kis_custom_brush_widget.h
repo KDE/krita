@@ -22,11 +22,10 @@
 #include <QObject>
 #include <QShowEvent>
 
-#include <KoResourceServerAdapter.h>
-
 #include "ui_wdgcustombrush.h"
 #include <kis_types.h>
 #include <kis_brush.h>
+#include <KoResourceServer.h>
 
 const QString TEMPORARY_FILENAME = "/tmp/temporaryKritaBrush.gbr";
 const QString TEMPORARY_BRUSH_NAME = "Temporary custom brush";
@@ -34,6 +33,7 @@ const double DEFAULT_SPACING = 0.25;
 
 
 class KoResource;
+
 
 class KisWdgCustomBrush : public QDialog, public Ui::KisWdgCustomBrush
 {
@@ -63,9 +63,10 @@ private Q_SLOTS:
     void slotUpdateCurrentBrush(int i = 0); // To connect with activated(int)
     void slotSpacingChanged();
     void slotUpdateUseColorAsMask(bool useColorAsMask);
+    void slotUpdateSaveButton();
 
 Q_SIGNALS:
-    void sigNewPredefinedBrush(KoResource *);
+    void sigNewPredefinedBrush(KoResourceSP );
 
 private:
     void createBrush();
@@ -74,7 +75,7 @@ private:
     KisImageWSP m_image;
     KisBrushSP m_brush;
 
-    QSharedPointer<KoAbstractResourceServerAdapter> m_rServerAdapter;
+    KoResourceServer<KisBrush> *m_rServer {0};
 };
 
 

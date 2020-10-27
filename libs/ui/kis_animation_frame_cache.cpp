@@ -24,7 +24,7 @@
 
 #include "kis_image.h"
 #include "kis_image_animation_interface.h"
-#include "kis_time_range.h"
+#include "kis_time_span.h"
 #include "KisPart.h"
 #include "kis_animation_cache_populator.h"
 
@@ -111,7 +111,7 @@ struct KisAnimationFrameCache::Private
         return frameId >= 0 ? swapper->loadFrame(frameId) : 0;
     }
 
-    void addFrame(KisOpenGLUpdateInfoSP info, const KisTimeRange& range)
+    void addFrame(KisOpenGLUpdateInfoSP info, const KisTimeSpan& range)
     {
         invalidate(range);
 
@@ -125,7 +125,7 @@ struct KisAnimationFrameCache::Private
      * @param range
      * @return true if frames were invalidated, false if nothing was changed
      */
-    bool invalidate(const KisTimeRange& range)
+    bool invalidate(const KisTimeSpan& range)
     {
         if (newFrames.isEmpty()) return false;
 
@@ -212,13 +212,21 @@ const QList<KisAnimationFrameCache *> KisAnimationFrameCache::caches()
     return Private::caches.values();
 }
 
+const KisAnimationFrameCacheSP KisAnimationFrameCache::cacheForImage(KisImageWSP image)
+{
+    auto it = std::find_if(Private::caches.begin(), Private::caches.end(),
+                           [image] (KisAnimationFrameCache *cache) { return cache->image() == image; });
+
+    return it != Private::caches.end() ? *it : nullptr;
+}
+
 KisAnimationFrameCache::KisAnimationFrameCache(KisOpenGLImageTexturesSP textures)
     : m_d(new Private(textures))
 {
     // create swapping backend
     slotConfigChanged();
 
-    connect(m_d->image->animationInterface(), SIGNAL(sigFramesChanged(KisTimeRange,QRect)), this, SLOT(framesChanged(KisTimeRange,QRect)));
+    connect(m_d->image->animationInterface(), SIGNAL(sigFramesChanged(KisTimeSpan,QRect)), this, SLOT(framesChanged(KisTimeSpan,QRect)));
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
 }
 
@@ -264,7 +272,7 @@ KisImageWSP KisAnimationFrameCache::image()
     return m_d->image;
 }
 
-void KisAnimationFrameCache::framesChanged(const KisTimeRange &range, const QRect &rect)
+void KisAnimationFrameCache::framesChanged(const KisTimeSpan &range, const QRect &rect)
 {
     Q_UNUSED(rect);
 
@@ -307,7 +315,7 @@ KisOpenGLUpdateInfoSP KisAnimationFrameCache::Private::fetchFrameDataImpl(KisIma
     }
 }
 
-KisOpenGLUpdateInfoSP KisAnimationFrameCache::fetchFrameData(int time, KisImageSP image, const QRegion &requestedRegion) const
+KisOpenGLUpdateInfoSP KisAnimationFrameCache::fetchFrameData(int time, KisImageSP image, const KisRegion &requestedRegion) const
 {
     if (time != image->animationInterface()->currentTime()) {
         qWarning() << "WARNING: KisAnimationFrameCache::frameReady image's time doesn't coincide with the requested time!";
@@ -336,15 +344,15 @@ KisOpenGLUpdateInfoSP KisAnimationFrameCache::fetchFrameData(int time, KisImageS
 
 void KisAnimationFrameCache::addConvertedFrameData(KisOpenGLUpdateInfoSP info, int time)
 {
-    const KisTimeRange identicalRange =
-        KisTimeRange::calculateIdenticalFramesRecursive(m_d->image->root(), time);
+    const KisTimeSpan identicalRange =
+        KisTimeSpan::calculateIdenticalFramesRecursive(m_d->image->root(), time);
 
     m_d->addFrame(info, identicalRange);
 
     emit changed();
 }
 
-void KisAnimationFrameCache::dropLowQualityFrames(const KisTimeRange &range, const QRect &regionOfInterest, const QRect &minimalRect)
+void KisAnimationFrameCache::dropLowQualityFrames(const KisTimeSpan &range, const QRect &regionOfInterest, const QRect &minimalRect)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(!range.isInfinite());
     if (m_d->newFrames.isEmpty()) return;
@@ -376,7 +384,7 @@ void KisAnimationFrameCache::dropLowQualityFrames(const KisTimeRange &range, con
     }
 }
 
-bool KisAnimationFrameCache::framesHaveValidRoi(const KisTimeRange &range, const QRect &regionOfInterest)
+bool KisAnimationFrameCache::framesHaveValidRoi(const KisTimeSpan &range, const QRect &regionOfInterest)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!range.isInfinite(), false);
     if (m_d->newFrames.isEmpty()) return false;

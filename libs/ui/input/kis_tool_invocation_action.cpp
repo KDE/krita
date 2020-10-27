@@ -87,8 +87,8 @@ void KisToolInvocationAction::deactivate(int shortcut)
     if (!inputManager()) return;
 
     /**
-     * Activate call might ave come before actual input manager or tool proxy
-     * was attached. So we may end up wil null activatedToolProxy.
+     * Activate call might have come before actual input manager or tool proxy
+     * was attached. So we may end up with null activatedToolProxy.
      */
     if (d->activatedToolProxy) {
         d->activatedToolProxy->deactivateToolAction(KisTool::Primary);
@@ -200,6 +200,6 @@ bool KisToolInvocationAction::supportsHiResInputEvents() const
 bool KisToolInvocationAction::isShortcutRequired(int shortcut) const
 {
     //These really all are pretty important for basic user interaction.
-    Q_UNUSED(shortcut)
+    Q_UNUSED(shortcut);
     return true;
 }

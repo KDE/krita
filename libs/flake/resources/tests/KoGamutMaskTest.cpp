@@ -19,11 +19,11 @@
 
 #include <QTest>
 #include <resources/KoGamutMask.h>
-#include <KisGamutMaskViewConverter.h>
 
 #include <testutil.h>
 
 #include "KoGamutMaskTest.h"
+#include <KisGlobalResourcesInterface.h>
 
 KoGamutMaskTest::KoGamutMaskTest(QObject *parent) : QObject(parent)
 {
@@ -38,15 +38,14 @@ void KoGamutMaskTest::testCoordIsClear()
     QFETCH(bool, expectedOutput);
 
     QScopedPointer<KoGamutMask> mask(new KoGamutMask(TestUtil::fetchDataFileLazy(maskFile)));
-    mask->load();
+    mask->load(KisGlobalResourcesInterface::instance());
     Q_ASSERT(mask->valid());
     mask->setRotation(maskRotation);
 
-    KisGamutMaskViewConverter* converter = new KisGamutMaskViewConverter();
-    converter->setMaskSize(mask->maskSize());
-    converter->setViewSize(QSize(100.0, 100.0));
+    // for this test we have a hardcoded view size of 100
+    QPointF translatedPoint = mask->viewToMaskTransform(100).map(coord);
 
-    bool maskOutput = mask->coordIsClear(coord, *converter, false);
+    bool maskOutput = mask->coordIsClear(translatedPoint, false);
     QCOMPARE(maskOutput, expectedOutput);
 }
 
@@ -105,7 +104,7 @@ void KoGamutMaskTest::testLoad()
     QFETCH(int, expectedShapeCount);
 
     QScopedPointer<KoGamutMask> mask(new KoGamutMask(TestUtil::fetchDataFileLazy(maskFile)));
-    mask->load();
+    mask->load(KisGlobalResourcesInterface::instance());
 
     Q_ASSERT(mask->valid());
 

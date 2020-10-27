@@ -32,7 +32,8 @@
 #include "kis_selection.h"
 #include "kis_datamanager.h"
 #include "kis_global.h"
-#include "testutil.h"
+#include <testutil.h>
+#include "testimage.h"
 #include "kis_transaction.h"
 #include "kis_image.h"
 #include "testing_timed_default_bounds.h"
@@ -57,13 +58,13 @@ void logFailure(const QString & reason, const KoColorSpace * srcCs, const KoColo
 
 void KisCsConversionTest::testColorSpaceConversion()
 {
-    QTime t;
+    QElapsedTimer t;
     t.start();
 
     QList<const KoColorSpace*> colorSpaces = KoColorSpaceRegistry::instance()->allColorSpaces(KoColorSpaceRegistry::AllColorSpaces, KoColorSpaceRegistry::OnlyDefaultProfile);
     int failedColorSpaces = 0;
 
-    QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "tile.png");
+    QImage image(QString(FILES_DATA_DIR) + '/' + "tile.png");
 
     Q_FOREACH (const KoColorSpace * srcCs, colorSpaces) {
         Q_FOREACH (const KoColorSpace * dstCs,  colorSpaces) {

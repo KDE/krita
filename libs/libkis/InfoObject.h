@@ -58,7 +58,7 @@ public Q_SLOTS:
      * set the property identified by @p key to @p value
      *
      * If you want create a property that represents a color, you can use a QColor
-     * or hex string, as defined in http://doc.qt.io/qt-5/qcolor.html#setNamedColor.
+     * or hex string, as defined in https://doc.qt.io/qt-5/qcolor.html#setNamedColor.
      *
      */
     void setProperty(const QString &key, QVariant value);

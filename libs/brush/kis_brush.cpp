@@ -25,6 +25,7 @@
 
 #include <QDomElement>
 #include <QFile>
+#include <QPainterPath>
 #include <QPoint>
 #include <QFileInfo>
 #include <QBuffer>
@@ -48,6 +49,10 @@
 #include <kis_qimage_pyramid.h>
 #include <KisSharedQImagePyramid.h>
 #include <brushengine/kis_paintop_lod_limitations.h>
+#include <resources/KoAbstractGradient.h>
+#include <resources/KoCachedGradient.h>
+#include <KoResource.h>
+#include <KoResourceServerProvider.h>
 
 
 KisBrush::ColoringInformation::~ColoringInformation()
@@ -102,39 +107,78 @@ void KisBrush::PaintDeviceColoringInformation::nextRow()
 
 struct KisBrush::Private {
     Private()
-        : boundary(0)
+        : brushType(INVALID)
+        , brushApplication(ALPHAMASK)
+        , width(0)
+        , height(0)
+        , spacing (1.0)
+        , hasColor(false)
         , angle(0)
         , scale(1.0)
-        , hasColor(false)
-        , brushType(INVALID)
+        , gradient(0)
         , autoSpacingActive(false)
         , autoSpacingCoeff(1.0)
         , threadingAllowed(true)
-    {}
-
-    ~Private() {
-        delete boundary;
+    {
     }
 
-    mutable KisBoundary* boundary;
-    qreal angle;
-    qreal scale;
-    bool hasColor;
+    Private(const Private &rhs)
+        : brushType(rhs.brushType),
+          brushApplication(rhs.brushApplication),
+          width(rhs.width),
+          height(rhs.height),
+          spacing(rhs.spacing),
+          hotSpot(rhs.hotSpot),
+          hasColor(rhs.hasColor),
+          preserveLightness(rhs.preserveLightness),
+          angle(rhs.angle),
+          scale(rhs.scale),
+          autoSpacingActive(rhs.autoSpacingActive),
+          autoSpacingCoeff(rhs.autoSpacingCoeff),
+          threadingAllowed(rhs.threadingAllowed),
+          brushTipImage(rhs.brushTipImage),
+          /**
+           * Be careful! The pyramid is shared between two brush objects,
+           * therefore you cannot change it, only recreate! That is the
+           * reason why it is defined as const!
+           */
+          brushPyramid(rhs.brushPyramid)
+
+    {
+        gradient = rhs.gradient;
+        if (rhs.cachedGradient) {
+            cachedGradient = rhs.cachedGradient->clone().staticCast<KoCachedGradient>();
+        }
+
+
+        // don't copy the boundary, it will be regenerated -- see bug 291910
+    }
+
+    ~Private() {
+    }
+
+    mutable QScopedPointer<KisBoundary> boundary;
     enumBrushType brushType;
+    enumBrushApplication brushApplication;
 
     qint32 width;
     qint32 height;
     double spacing;
     QPointF hotSpot;
+    bool hasColor;
+    bool preserveLightness;
+    qreal angle;
+    qreal scale;
 
-    mutable QSharedPointer<KisSharedQImagePyramid> brushPyramid;
-
-    QImage brushTipImage;
+    KoAbstractGradientSP gradient;
+    QSharedPointer<KoCachedGradient> cachedGradient;
 
     bool autoSpacingActive;
     qreal autoSpacingCoeff;
-
     bool threadingAllowed;
+
+    QImage brushTipImage;
+    mutable QSharedPointer<KisSharedQImagePyramid> brushPyramid;
 };
 
 KisBrush::KisBrush()
@@ -150,32 +194,9 @@ KisBrush::KisBrush(const QString& filename)
 }
 
 KisBrush::KisBrush(const KisBrush& rhs)
-    : KoResource(QString())
-    , KisShared()
-    , d(new Private)
+    : KoResource(rhs)
+    , d(new Private(*rhs.d))
 {
-    setBrushTipImage(rhs.brushTipImage());
-    d->brushType = rhs.d->brushType;
-    d->width = rhs.d->width;
-    d->height = rhs.d->height;
-    d->spacing = rhs.d->spacing;
-    d->hotSpot = rhs.d->hotSpot;
-    d->hasColor = rhs.d->hasColor;
-    d->angle = rhs.d->angle;
-    d->scale = rhs.d->scale;
-    d->autoSpacingActive = rhs.d->autoSpacingActive;
-    d->autoSpacingCoeff = rhs.d->autoSpacingCoeff;
-    d->threadingAllowed = rhs.d->threadingAllowed;
-    setFilename(rhs.filename());
-
-    /**
-     * Be careful! The pyramid is shared between two brush objects,
-     * therefore you cannot change it, only recreate! That i sthe
-     * reason why it is defined as const!
-     */
-    d->brushPyramid = rhs.d->brushPyramid;
-
-    // don't copy the boundary, it will be regenerated -- see bug 291910
 }
 
 KisBrush::~KisBrush()
@@ -185,9 +206,7 @@ KisBrush::~KisBrush()
 
 QImage KisBrush::brushTipImage() const
 {
-    if (d->brushTipImage.isNull()) {
-        const_cast<KisBrush*>(this)->load();
-    }
+    KIS_SAFE_ASSERT_RECOVER_NOOP(!d->brushTipImage.isNull());
     return d->brushTipImage;
 }
 
@@ -254,15 +273,37 @@ QPointF KisBrush::hotSpot(KisDabShape const& shape, const KisPaintInformation& i
     return p;
 }
 
-
-bool KisBrush::hasColor() const
+void KisBrush::setBrushApplication(enumBrushApplication brushApplication)
 {
-    return d->hasColor;
+    d->brushApplication = brushApplication;
+    clearBrushPyramid();
 }
 
-void KisBrush::setHasColor(bool hasColor)
+enumBrushApplication KisBrush::brushApplication() const
 {
-    d->hasColor = hasColor;
+    return d->brushApplication;
+}
+
+bool KisBrush::preserveLightness() const
+{
+    return d->brushApplication == LIGHTNESSMAP;
+}
+
+bool KisBrush::applyingGradient() const
+{
+    return d->brushApplication == GRADIENTMAP;
+}
+
+void KisBrush::setGradient(KoAbstractGradientSP gradient) {
+    if (gradient && gradient->valid()) {
+        d->gradient = gradient;
+
+        if (!d->cachedGradient) {
+            d->cachedGradient = toQShared(new KoCachedGradient(d->gradient, 256, d->gradient->colorSpace()));
+        } else {
+            d->cachedGradient->setGradient(d->gradient, 256, d->gradient->colorSpace());
+        }
+    }
 }
 
 bool KisBrush::isPiercedApprox() const
@@ -335,12 +376,13 @@ enumBrushType KisBrush::brushType() const
 void KisBrush::predefinedBrushToXML(const QString &type, QDomElement& e) const
 {
     e.setAttribute("type", type);
-    e.setAttribute("filename", shortFilename());
+    e.setAttribute("filename", filename());
     e.setAttribute("spacing", QString::number(spacing()));
     e.setAttribute("useAutoSpacing", QString::number(autoSpacingActive()));
     e.setAttribute("autoSpacingCoeff", QString::number(autoSpacingCoeff()));
     e.setAttribute("angle", QString::number(angle()));
     e.setAttribute("scale", QString::number(scale()));
+    e.setAttribute("brushApplication", QString::number((int)brushApplication()));
 }
 
 void KisBrush::toXML(QDomDocument& /*document*/ , QDomElement& element) const
@@ -348,9 +390,9 @@ void KisBrush::toXML(QDomDocument& /*document*/ , QDomElement& element) const
     element.setAttribute("BrushVersion", "2");
 }
 
-KisBrushSP KisBrush::fromXML(const QDomElement& element)
+KisBrushSP KisBrush::fromXML(const QDomElement& element, KisResourcesInterfaceSP resourcesInterface)
 {
-    KisBrushSP brush = KisBrushRegistry::instance()->createBrush(element);
+    KisBrushSP brush = KisBrushRegistry::instance()->createBrush(element, resourcesInterface);
     if (brush && element.attribute("BrushVersion", "1") == "1") {
         brush->setScale(brush->scale() * 2.0);
     }
@@ -360,11 +402,11 @@ KisBrushSP KisBrush::fromXML(const QDomElement& element)
 QSizeF KisBrush::characteristicSize(KisDabShape const& shape) const
 {
     KisDabShape normalizedShape(
-         shape.scale() * d->scale,
-         shape.ratio(),
-         normalizeAngle(shape.rotation() + d->angle));
+                shape.scale() * d->scale,
+                shape.ratio(),
+                normalizeAngle(shape.rotation() + d->angle));
     return KisQImagePyramid::characteristicSize(
-        QSize(width(), height()), normalizedShape);
+                QSize(width(), height()), normalizedShape);
 }
 
 qint32 KisBrush::maskWidth(KisDabShape const& shape, qreal subPixelX, qreal subPixelY, const KisPaintInformation& info) const
@@ -396,9 +438,8 @@ double KisBrush::maskAngle(double angle) const
     return normalizeAngle(angle + d->angle);
 }
 
-quint32 KisBrush::brushIndex(const KisPaintInformation& info) const
+quint32 KisBrush::brushIndex() const
 {
-    Q_UNUSED(info);
     return 0;
 }
 
@@ -433,11 +474,6 @@ void KisBrush::notifyStrokeStarted()
 {
 }
 
-void KisBrush::notifyCachedDabPainted(const KisPaintInformation& info)
-{
-    Q_UNUSED(info);
-}
-
 void KisBrush::prepareForSeqNo(const KisPaintInformation &info, int seqNo)
 {
     Q_UNUSED(info);
@@ -459,33 +495,52 @@ void KisBrush::clearBrushPyramid()
     d->brushPyramid.reset(new KisSharedQImagePyramid());
 }
 
-void KisBrush::mask(KisFixedPaintDeviceSP dst, const KoColor& color, KisDabShape const& shape, const KisPaintInformation& info, double subPixelX, double subPixelY, qreal softnessFactor) const
+void KisBrush::mask(KisFixedPaintDeviceSP dst, const KoColor& color, KisDabShape const& shape, const KisPaintInformation& info, double subPixelX, double subPixelY, qreal softnessFactor, qreal lightnessStrength) const
 {
     PlainColoringInformation pci(color.data());
-    generateMaskAndApplyMaskOrCreateDab(dst, &pci, shape, info, subPixelX, subPixelY, softnessFactor);
+    generateMaskAndApplyMaskOrCreateDab(dst, &pci, shape, info, subPixelX, subPixelY, softnessFactor, lightnessStrength);
 }
 
-void KisBrush::mask(KisFixedPaintDeviceSP dst, const KisPaintDeviceSP src, KisDabShape const& shape, const KisPaintInformation& info, double subPixelX, double subPixelY, qreal softnessFactor) const
+void KisBrush::mask(KisFixedPaintDeviceSP dst, const KisPaintDeviceSP src, KisDabShape const& shape, const KisPaintInformation& info, double subPixelX, double subPixelY, qreal softnessFactor, qreal lightnessStrength) const
 {
     PaintDeviceColoringInformation pdci(src, maskWidth(shape, subPixelX, subPixelY, info));
-    generateMaskAndApplyMaskOrCreateDab(dst, &pdci, shape, info, subPixelX, subPixelY, softnessFactor);
+    generateMaskAndApplyMaskOrCreateDab(dst, &pdci, shape, info, subPixelX, subPixelY, softnessFactor, lightnessStrength);
 }
 
+namespace {
+void fetchPremultipliedRed(const QRgb* src, quint8 *dst, int maskWidth)
+{
+    for (int x = 0; x < maskWidth; x++) {
+        *dst = KoColorSpaceMaths<quint8>::multiply(255 - *src, qAlpha(*src));
+        src++;
+        dst++;
+    }
+}
+}
+
+void KisBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
+                                                   ColoringInformation* coloringInformation,
+                                                   KisDabShape const& shape,
+                                                   const KisPaintInformation& info_,
+                                                   double subPixelX, double subPixelY, qreal softnessFactor) const
+{
+    generateMaskAndApplyMaskOrCreateDab(dst, coloringInformation, shape, info_, subPixelX, subPixelY, softnessFactor, DEFAULT_LIGHTNESS_STRENGTH);
+}
 
 void KisBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
         ColoringInformation* coloringInformation,
         KisDabShape const& shape,
         const KisPaintInformation& info_,
-        double subPixelX, double subPixelY, qreal softnessFactor) const
+        double subPixelX, double subPixelY, qreal softnessFactor, qreal lightnessStrength) const
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(valid());
     Q_UNUSED(info_);
     Q_UNUSED(softnessFactor);
 
     QImage outputImage = d->brushPyramid->pyramid(this)->createImage(KisDabShape(
-            shape.scale() * d->scale, shape.ratio(),
-            -normalizeAngle(shape.rotation() + d->angle)),
-        subPixelX, subPixelY);
+                                                                         shape.scale() * d->scale, shape.ratio(),
+                                                                         -normalizeAngle(shape.rotation() + d->angle)),
+                                                                     subPixelX, subPixelY);
 
     qint32 maskWidth = outputImage.width();
     qint32 maskHeight = outputImage.height();
@@ -493,75 +548,91 @@ void KisBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
     dst->setRect(QRect(0, 0, maskWidth, maskHeight));
     dst->lazyGrowBufferWithoutInitialization();
 
-    quint8* color = 0;
+    KIS_SAFE_ASSERT_RECOVER_RETURN(coloringInformation);
 
-    if (coloringInformation) {
-        if (dynamic_cast<PlainColoringInformation*>(coloringInformation)) {
-            color = const_cast<quint8*>(coloringInformation->color());
-        }
+    quint8* color = 0;
+    if (dynamic_cast<PlainColoringInformation*>(coloringInformation)) {
+        color = const_cast<quint8*>(coloringInformation->color());
     }
 
     const KoColorSpace *cs = dst->colorSpace();
-    qint32 pixelSize = cs->pixelSize();
-    quint8 *dabPointer = dst->data();
-    quint8 *rowPointer = dabPointer;
-    quint8 *alphaArray = new quint8[maskWidth];
-    bool hasColor = this->hasColor();
+    const quint32 pixelSize = cs->pixelSize();
+    const quint32 maskPixelSize = sizeof(QRgb);
+    quint8 *rowPointer = dst->data();
 
+    const bool preserveLightness = this->preserveLightness();
+    bool applyGradient = this->applyingGradient();
+    QScopedPointer<KoColor> fallbackColor;
+
+    if (applyGradient) {
+        if (d->cachedGradient) {
+            KIS_SAFE_ASSERT_RECOVER_RETURN(d->cachedGradient);
+            d->cachedGradient->setColorSpace(cs); //convert gradient to colorspace so we don't have to convert each pixel
+        } else {
+            fallbackColor.reset(new KoColor(Qt::red, cs));
+            color = fallbackColor->data();
+            applyGradient = false;
+        }
+    }
+
+    KoColor gradientcolor(Qt::blue, cs);
     for (int y = 0; y < maskHeight; y++) {
         const quint8* maskPointer = outputImage.constScanLine(y);
-        if (coloringInformation) {
-            for (int x = 0; x < maskWidth; x++) {
-                if (color) {
-                    memcpy(dabPointer, color, pixelSize);
-                }
-                else {
-                    memcpy(dabPointer, coloringInformation->color(), pixelSize);
-                    coloringInformation->nextColumn();
-                }
-                dabPointer += pixelSize;
+        if (color) {
+            if (preserveLightness) {
+                cs->fillGrayBrushWithColorAndLightnessWithStrength(rowPointer, reinterpret_cast<const QRgb*>(maskPointer), color, lightnessStrength, maskWidth);
             }
-        }
+            else if (applyGradient) {
+                quint8* pixel = rowPointer;
+                for (int x = 0; x < maskWidth; x++) {
+                    const QRgb* maskQRgb = reinterpret_cast<const QRgb*>(maskPointer);
+                    qreal maskOpacity = qreal(qAlpha(*maskQRgb)) / 255.0;
+                    if (maskOpacity > 0) {
+                        qreal gradientvalue = qreal(qGray(*maskQRgb)) / 255.0;
+                        gradientcolor.setColor(d->cachedGradient->cachedAt(gradientvalue), cs);
+                    }
+                    qreal gradientOpacity = gradientcolor.opacityF();
+                    qreal opacity = gradientOpacity * maskOpacity;
+                    gradientcolor.setOpacity(opacity);
+                    memcpy(pixel, gradientcolor.data(), pixelSize);
 
-        if (hasColor) {
-            const quint8 *src = maskPointer;
-            quint8 *dst = alphaArray;
-            for (int x = 0; x < maskWidth; x++) {
-                const QRgb *c = reinterpret_cast<const QRgb*>(src);
-
-                *dst = KoColorSpaceMaths<quint8>::multiply(255 - qGray(*c), qAlpha(*c));
-                src += 4;
-                dst++;
+                    maskPointer += maskPixelSize; 
+                    pixel += pixelSize;
+                }
+            }
+            else {
+                cs->fillGrayBrushWithColor(rowPointer, reinterpret_cast<const QRgb*>(maskPointer), color, maskWidth);
             }
         }
         else {
-            const quint8 *src = maskPointer;
-            quint8 *dst = alphaArray;
-            for (int x = 0; x < maskWidth; x++) {
-                const QRgb *c = reinterpret_cast<const QRgb*>(src);
-
-                *dst = KoColorSpaceMaths<quint8>::multiply(255 - *src, qAlpha(*c));
-                src += 4;
-                dst++;
+            {
+                quint8 *dst = rowPointer;
+                for (int x = 0; x < maskWidth; x++) {
+                    memcpy(dst, coloringInformation->color(), pixelSize);
+                    coloringInformation->nextColumn();
+                    dst += pixelSize;
+                }
             }
+
+            QScopedArrayPointer<quint8> alphaArray(new quint8[maskWidth]);
+            fetchPremultipliedRed(reinterpret_cast<const QRgb*>(maskPointer), alphaArray.data(), maskWidth);
+            cs->applyAlphaU8Mask(rowPointer, alphaArray.data(), maskWidth);
         }
 
-        cs->applyAlphaU8Mask(rowPointer, alphaArray, maskWidth);
         rowPointer += maskWidth * pixelSize;
-        dabPointer = rowPointer;
 
-        if (!color && coloringInformation) {
+        if (!color) {
             coloringInformation->nextRow();
         }
     }
 
-    delete[] alphaArray;
+
 }
 
 KisFixedPaintDeviceSP KisBrush::paintDevice(const KoColorSpace * colorSpace,
-        KisDabShape const& shape,
-        const KisPaintInformation& info,
-        double subPixelX, double subPixelY) const
+                                            KisDabShape const& shape,
+                                            const KisPaintInformation& info,
+                                            double subPixelX, double subPixelY) const
 {
     Q_ASSERT(valid());
     Q_UNUSED(info);
@@ -569,7 +640,7 @@ KisFixedPaintDeviceSP KisBrush::paintDevice(const KoColorSpace * colorSpace,
     double scale = shape.scale() * d->scale;
 
     QImage outputImage = d->brushPyramid->pyramid(this)->createImage(
-        KisDabShape(scale, shape.ratio(), -angle), subPixelX, subPixelY);
+                KisDabShape(scale, shape.ratio(), -angle), subPixelX, subPixelY);
 
     KisFixedPaintDeviceSP dab = new KisFixedPaintDevice(colorSpace);
     Q_CHECK_PTR(dab);
@@ -580,8 +651,7 @@ KisFixedPaintDeviceSP KisBrush::paintDevice(const KoColorSpace * colorSpace,
 
 void KisBrush::resetBoundary()
 {
-    delete d->boundary;
-    d->boundary = 0;
+    d->boundary.reset();
 }
 
 void KisBrush::generateBoundary() const
@@ -589,9 +659,9 @@ void KisBrush::generateBoundary() const
     KisFixedPaintDeviceSP dev;
     KisDabShape inverseTransform(1.0 / scale(), 1.0, -angle());
 
-    if (brushType() == IMAGE || brushType() == PIPE_IMAGE) {
+    if (brushApplication() == IMAGESTAMP) {
         dev = paintDevice(KoColorSpaceRegistry::instance()->rgb8(),
-            inverseTransform, KisPaintInformation());
+                          inverseTransform, KisPaintInformation());
     }
     else {
         const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
@@ -599,7 +669,7 @@ void KisBrush::generateBoundary() const
         mask(dev, KoColor(Qt::black, cs), inverseTransform, KisPaintInformation());
     }
 
-    d->boundary = new KisBoundary(dev);
+    d->boundary.reset(new KisBoundary(dev));
     d->boundary->generateBoundary();
 }
 
@@ -607,7 +677,7 @@ const KisBoundary* KisBrush::boundary() const
 {
     if (!d->boundary)
         generateBoundary();
-    return d->boundary;
+    return d->boundary.data();
 }
 
 void KisBrush::setScale(qreal _scale)

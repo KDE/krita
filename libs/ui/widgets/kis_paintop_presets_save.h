@@ -30,8 +30,6 @@ class KisPaintOpPresetSaveDialog : public QDialog , public Ui::WdgSaveBrushPrese
 {
     Q_OBJECT
 
-
-
 public:
     KisPaintOpPresetSaveDialog(QWidget* parent) : QDialog(parent) {
         setupUi(this);
@@ -59,7 +57,7 @@ public:
     void setFavoriteResourceManager(KisFavoriteResourceManager * favManager);
 
 Q_SIGNALS:
-    void resourceSelected(KoResource* resource);
+    void resourceSelected(KoResourceSP resource);
 
 
 public Q_SLOTS:

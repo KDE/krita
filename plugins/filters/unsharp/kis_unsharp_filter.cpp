@@ -63,9 +63,9 @@ KisConfigWidget * KisUnsharpFilter::createConfigurationWidget(QWidget* parent, c
     return new KisWdgUnsharp(parent);
 }
 
-KisFilterConfigurationSP KisUnsharpFilter::factoryConfiguration() const
+KisFilterConfigurationSP KisUnsharpFilter::defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const
 {
-    KisFilterConfigurationSP config = new KisFilterConfiguration(id().id(), 1);
+    KisFilterConfigurationSP config = factoryConfiguration(resourcesInterface);
     config->setProperty("halfSize", 1);
     config->setProperty("amount", 0.5);
     config->setProperty("threshold", 0);
@@ -75,7 +75,7 @@ KisFilterConfigurationSP KisUnsharpFilter::factoryConfiguration() const
 
 void KisUnsharpFilter::processImpl(KisPaintDeviceSP device,
                                    const QRect& applyRect,
-                                   const KisFilterConfigurationSP _config,
+                                   const KisFilterConfigurationSP config,
                                    KoUpdater* progressUpdater
                                    ) const
 {
@@ -92,7 +92,7 @@ void KisUnsharpFilter::processImpl(KisPaintDeviceSP device,
         filterUpdater = updater->startSubtask();
     }
 
-    KisFilterConfigurationSP config = _config ? _config : new KisFilterConfiguration(id().id(), 1);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(config);
 
     QVariant value;
 

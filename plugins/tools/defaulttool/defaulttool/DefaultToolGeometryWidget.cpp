@@ -86,6 +86,7 @@ DefaultToolGeometryWidget::DefaultToolGeometryWidget(KoInteractionTool *tool, QW
     connect(selectedShapesProxy, SIGNAL(selectionContentChanged()), this, SLOT(slotUpdateOpacitySlider()));
 
     connect(chkGlobalCoordinates, SIGNAL(toggled(bool)), SLOT(slotUpdateSizeBoxes()));
+    connect(chkGlobalCoordinates, SIGNAL(toggled(bool)), SLOT(slotUpdateAspectButton()));
 
 
     /**
@@ -164,7 +165,7 @@ QRectF calculateSelectionBounds(KoSelection *selection,
     tryAnchorPosition(anchor, resultRect, &resultPoint);
 
     if (useGlobalSize) {
-        resultRect = shape->absoluteTransformation(0).mapRect(resultRect);
+        resultRect = shape->absoluteTransformation().mapRect(resultRect);
     } else {
         /**
          * Some shapes, e.g. KoSelection and KoShapeGroup don't have real size() and
@@ -176,7 +177,7 @@ QRectF calculateSelectionBounds(KoSelection *selection,
         resultRect = matrix.scaleTransform().mapRect(resultRect);
     }
 
-    resultPoint = shape->absoluteTransformation(0).map(resultPoint);
+    resultPoint = shape->absoluteTransformation().map(resultPoint);
 
     if (outShapes) {
         *outShapes = shapes;
@@ -257,7 +258,13 @@ void DefaultToolGeometryWidget::slotUpdateAspectButton()
 
     Q_UNUSED(hasNotKeepAspectRatio); // TODO: use for tristated mode of the checkbox
 
-    aspectButton->setKeepAspectRatio(hasKeepAspectRatio);
+    const bool useGlobalSize = chkGlobalCoordinates->isChecked();
+    const KoFlake::AnchorPosition anchor = positionSelector->value();
+    const QRectF bounds = calculateSelectionBounds(selection, anchor, useGlobalSize);
+    const bool hasNullDimensions = bounds.isEmpty();
+
+    aspectButton->setKeepAspectRatio(hasKeepAspectRatio && !hasNullDimensions);
+    aspectButton->setEnabled(!hasNullDimensions);
 }
 
 //namespace {
@@ -308,17 +315,18 @@ void DefaultToolGeometryWidget::slotUpdateSizeBoxes(bool updateAspect)
     const KoFlake::AnchorPosition anchor = positionSelector->value();
 
     KoSelection *selection = m_tool->canvas()->selectedShapesProxy()->selection();
-    QRectF bounds = calculateSelectionBounds(selection, anchor, useGlobalSize);
+    const QRectF bounds = calculateSelectionBounds(selection, anchor, useGlobalSize);
 
     const bool hasSizeConfiguration = !bounds.isNull();
 
-    widthSpinBox->setEnabled(hasSizeConfiguration);
-    heightSpinBox->setEnabled(hasSizeConfiguration);
+    widthSpinBox->setEnabled(hasSizeConfiguration && bounds.width() > 0);
+    heightSpinBox->setEnabled(hasSizeConfiguration && bounds.height() > 0);
 
     if (hasSizeConfiguration) {
         KisSignalsBlocker b(widthSpinBox, heightSpinBox);
         widthSpinBox->changeValue(bounds.width());
         heightSpinBox->changeValue(bounds.height());
+
         if (updateAspect) {
             m_sizeAspectLocker->updateAspect();
         }
@@ -403,8 +411,8 @@ void DefaultToolGeometryWidget::slotResizeShapes()
     QSizeF newSize(widthSpinBox->value(), heightSpinBox->value());
     newSize = KisAlgebra2D::ensureSizeNotSmaller(newSize, QSizeF(eps, eps));
 
-    const qreal scaleX = newSize.width() / oldSize.width();
-    const qreal scaleY = newSize.height() / oldSize.height();
+    const qreal scaleX = oldSize.width() > 0 ? newSize.width() / oldSize.width() : 1.0;
+    const qreal scaleY = oldSize.height() > 0 ? newSize.height() / oldSize.height() : 1.0;
 
     if (qAbs(scaleX - 1.0) < eps && qAbs(scaleY - 1.0) < eps) return;
 
@@ -455,7 +463,7 @@ void DefaultToolGeometryWidget::showEvent(QShowEvent *event)
 
 void DefaultToolGeometryWidget::resourceChanged(int key, const QVariant &res)
 {
-    if (key == KoCanvasResourceProvider::Unit) {
+    if (key == KoCanvasResource::Unit) {
         setUnit(res.value<KoUnit>());
     } else if (key == DefaultTool::HotPosition) {
         positionSelector->setValue(KoFlake::AnchorPosition(res.toInt()));

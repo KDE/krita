@@ -142,7 +142,6 @@ public:
         : QWidget(parent),
         m_layout(new SectionLayout(this))
     {
-        setLayout(m_layout);
 // Re-enable this when we need to debug the section layout again.
 //        setAutoFillBackground(true);
 //        static int i = 0;

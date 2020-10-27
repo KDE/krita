@@ -22,6 +22,7 @@
 
 #include <QPointF>
 #include <QPainter>
+#include <QPainterPath>
 
 #include "KoPointerEvent.h"
 
@@ -205,7 +206,7 @@ void KisLiquifyTransformStrategy::deactivateAlternateAction(KisTool::AlternateAc
 
 bool KisLiquifyTransformStrategy::beginAlternateAction(KoPointerEvent *event, KisTool::AlternateAction action)
 {
-    if (action == KisTool::ChangeSize) {
+    if (action == KisTool::ChangeSize || action == KisTool::ChangeSizeSnap) {
         QPointF widgetPoint = m_d->converter->documentToWidget(event->point);
         m_d->lastMouseWidgetPos = widgetPoint;
         m_d->startResizeImagePos = m_d->converter->documentToImage(event->point);
@@ -217,13 +218,12 @@ bool KisLiquifyTransformStrategy::beginAlternateAction(KoPointerEvent *event, Ki
         return beginPrimaryAction(event);
     }
 
-
     return false;
 }
 
 void KisLiquifyTransformStrategy::continueAlternateAction(KoPointerEvent *event, KisTool::AlternateAction action)
 {
-    if (action == KisTool::ChangeSize) {
+    if (action == KisTool::ChangeSize || action == KisTool::ChangeSizeSnap) {
         QPointF widgetPoint = m_d->converter->documentToWidget(event->point);
 
         QPointF diff = widgetPoint - m_d->lastMouseWidgetPos;
@@ -231,7 +231,11 @@ void KisLiquifyTransformStrategy::continueAlternateAction(KoPointerEvent *event,
         KisLiquifyProperties *props = m_d->currentArgs.liquifyProperties();
         const qreal linearizedOffset = diff.x() / KisTransformUtils::scaleFromAffineMatrix(m_d->converter->imageToWidgetTransform());
         const qreal newSize = qBound(props->minSize(), props->size() + linearizedOffset, props->maxSize());
-        props->setSize(newSize);
+        if (action == KisTool::ChangeSizeSnap) {
+            props->setSize(floor(newSize));
+        } else {
+            props->setSize(newSize);
+        }
         m_d->currentArgs.saveLiquifyTransformMode();
 
         m_d->lastMouseWidgetPos = widgetPoint;
@@ -248,7 +252,7 @@ bool KisLiquifyTransformStrategy::endAlternateAction(KoPointerEvent *event, KisT
 {
     Q_UNUSED(event);
 
-    if (action == KisTool::ChangeSize) {
+    if (action == KisTool::ChangeSize || action == KisTool::ChangeSizeSnap) {
         QCursor::setPos(m_d->startResizeGlobalCursorPos);
         return true;
     } else if (action == KisTool::PickFgNode || action == KisTool::PickBgNode ||

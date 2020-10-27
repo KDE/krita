@@ -119,8 +119,6 @@ private:
     QScopedPointer<KisSignalCompressor> m_colorChangeCompressor;
     KActionCollection *m_actionCollection;
 
-    QTimer m_timer;
-
     KisBrushHud *m_brushHud {0};
     float m_popupPaletteSize {385.0};
     float m_colorHistoryInnerRadius {72.0};
@@ -142,6 +140,7 @@ private:
     QSlider *zoomCanvasSlider {0};
     int zoomSliderMinValue {10};
     int zoomSliderMaxValue {200};
+    QPushButton *clearHistoryButton {0};
     KisAcyclicSignalConnector *m_acyclicConnector = 0;
 
     int m_cachedNumSlots {0};
@@ -158,23 +157,14 @@ Q_SIGNALS:
     void sigUpdateCanvas();
     void zoomLevelChanged(int);
 
-    // These are used to handle a bug:
-    // If pop up palette is visible and a new colour is selected, the new colour
-    // will be added when the user clicks on the canvas to hide the palette
-    // In general, we want to be able to store recent color if the pop up palette
-    // is not visible
-    void sigEnableChangeFGColor(bool);
-    void sigTriggerTimer();
-
 public Q_SLOTS:
     void slotUpdateIcons();
 
 private Q_SLOTS:
+    void slotDisplayConfigurationChanged();
     void slotExternalFgColorChanged(const KoColor &color);
     void slotEmitColorChanged();
     void slotSetSelectedColor(int x) { setSelectedColor(x); update(); }
-    void slotTriggerTimer();
-    void slotEnableChangeFGColor();
     void slotUpdate() { update(); }
     void slotHide() { showPopupPalette(false); }
     void slotShowTagsPopup();

@@ -28,48 +28,25 @@
 #include <kis_dom_utils.h>
 
 KisPngBrush::KisPngBrush(const QString& filename)
-    : KisScalingSizeBrush(filename)
+    : KisColorfulBrush(filename)
 {
     setBrushType(INVALID);
     setSpacing(0.25);
-    setHasColor(false);
 }
 
 KisPngBrush::KisPngBrush(const KisPngBrush &rhs)
-    : KisScalingSizeBrush(rhs)
+    : KisColorfulBrush(rhs)
 {
-    setSpacing(rhs.spacing());
-    if (brushTipImage().isGrayscale()) {
-        setBrushType(MASK);
-        setHasColor(false);
-    }
-    else {
-        setBrushType(IMAGE);
-        setHasColor(true);
-    }
 }
 
-KisBrush* KisPngBrush::clone() const
+KoResourceSP KisPngBrush::clone() const
 {
-    return new KisPngBrush(*this);
+    return KoResourceSP(new KisPngBrush(*this));
 }
 
-bool KisPngBrush::load()
+bool KisPngBrush::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface)
 {
-    QFile f(filename());
-    if (f.size() == 0) return false;
-    if (!f.exists()) return false;
-    if (!f.open(QIODevice::ReadOnly)) {
-        warnKrita << "Can't open file " << filename();
-        return false;
-    }
-    bool res = loadFromDevice(&f);
-    f.close();
-    return res;
-}
-
-bool KisPngBrush::loadFromDevice(QIODevice *dev)
-{
+    Q_UNUSED(resourcesInterface);
 
     // Workaround for some OS (Debian, Ubuntu), where loading directly from the QIODevice
     // fails with "libpng error: IDAT: CRC error"
@@ -106,8 +83,21 @@ bool KisPngBrush::loadFromDevice(QIODevice *dev)
 
     setValid(true);
 
-    if (image.allGray()) {
+    bool hasAlpha = false;
+    for (int y = 0; y < image.height(); y++) {
+        for (int x = 0; x < image.width(); x++) {
+            if (qAlpha(image.pixel(x, y)) != 255) {
+                hasAlpha = true;
+                break;
+            }
+        }
+    }
+
+    if (image.allGray() && !hasAlpha) {
         // Make sure brush tips all have a white background
+        // NOTE: drawing it over white background can probably be skipped now...
+        //       Any images with an Alpha channel should be loaded as RGBA so
+        //       they can have the lightness and gradient options available
         QImage base(image.size(), image.format());
         if ((int)base.format() < (int)QImage::Format_RGB32) {
             base = base.convertToFormat(QImage::Format_ARGB32);
@@ -119,27 +109,21 @@ bool KisPngBrush::loadFromDevice(QIODevice *dev)
         QImage converted = base.convertToFormat(QImage::Format_Grayscale8);
         setBrushTipImage(converted);
         setBrushType(MASK);
-        setHasColor(false);
+        setBrushApplication(ALPHAMASK);
     }
     else {
+        if ((int)image.format() < (int)QImage::Format_RGB32) {
+            image = image.convertToFormat(QImage::Format_ARGB32);
+        }
         setBrushTipImage(image);
         setBrushType(IMAGE);
-        setHasColor(true);
+        setBrushApplication(image.allGray() ? ALPHAMASK : IMAGESTAMP);
     }
 
     setWidth(brushTipImage().width());
     setHeight(brushTipImage().height());
 
     return valid();
-}
-
-bool KisPngBrush::save()
-{
-    QFile f(filename());
-    if (!f.open(QFile::WriteOnly)) return false;
-    bool res = saveToDevice(&f);
-    f.close();
-    return res;
 }
 
 bool KisPngBrush::saveToDevice(QIODevice *dev) const
@@ -160,5 +144,5 @@ QString KisPngBrush::defaultFileExtension() const
 void KisPngBrush::toXML(QDomDocument& d, QDomElement& e) const
 {
     predefinedBrushToXML("png_brush", e);
-    KisBrush::toXML(d, e);
+    KisColorfulBrush::toXML(d, e);
 }

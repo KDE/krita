@@ -83,7 +83,7 @@ void KColorSchemeModel::init()
     Q_FOREACH (const QString &dir, dirs) {
         const QStringList fileNames = QDir(dir).entryList(QStringList() << QStringLiteral("*.colors"));
         Q_FOREACH (const QString &file, fileNames) {
-            schemeFiles << dir + QDir::separator() + file;
+            schemeFiles << dir + '/' + file;
         }
     }
     Q_FOREACH (const QString &schemeFile, schemeFiles) {

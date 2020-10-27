@@ -197,22 +197,55 @@
       <attribute name="title">
        <string>Image Color Space</string>
       </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout">
+      <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0,1">
        <item>
         <widget class="KisColorSpaceSelector" name="colorSpaceSelector" native="true"/>
        </item>
        <item>
-        <widget class="QLabel" name="label_2">
+        <widget class="QCheckBox" name="chkConvertLayers">
          <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Note:&lt;/span&gt; This changes only the colorspace of the rendered image. To convert the colorspace of the layers, use Convert Image Colorspace.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-         </property>
-         <property name="textFormat">
-          <enum>Qt::RichText</enum>
-         </property>
-         <property name="wordWrap">
-          <bool>true</bool>
+          <string>Convert color space of image layers</string>
          </property>
         </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_3">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::MinimumExpanding</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>10</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="KisWarningWidget" name="wdgWarningNotice" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </widget>
@@ -383,7 +416,7 @@
   <customwidget>
    <class>KisDoubleSliderSpinBox</class>
    <extends>QWidget</extends>
-   <header>kis_slider_spin_box.h</header>
+   <header location="global">kis_slider_spin_box.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
@@ -395,6 +428,12 @@
    <class>KisColorSpaceSelector</class>
    <extends>QWidget</extends>
    <header>widgets/kis_color_space_selector.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisWarningWidget</class>
+   <extends>QWidget</extends>
+   <header>widgets/KisWarningWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

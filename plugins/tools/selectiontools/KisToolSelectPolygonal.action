@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ActionCollection version="2" name="Tools">
-  <Actions category="Polygonal Selection Tool">
-    <text>Polygonal Selection Tool</text>
+  <Actions category="tool-shortcuts">
+<text>Tool Shortcuts</text>
+<Action name="KisToolSelectPolygonal">
+      <whatsThis></whatsThis>
+      <toolTip>Polygonal Selection Tool</toolTip>
+      <iconText>Polygonal Selection Tool</iconText>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
   </Actions>
 </ActionCollection>

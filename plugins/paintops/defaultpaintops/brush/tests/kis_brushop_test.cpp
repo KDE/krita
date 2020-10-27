@@ -86,7 +86,7 @@ public:
             utils::createResourceManager(image, 0, m_presetFileName));
 
         KisPaintOpPresetSP preset =
-            manager->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
+            manager->resource(KoCanvasResource::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
 
         if (mirrorDabX || mirrorDabY) {
             KisPaintOpSettingsSP settings = preset->settings()->clone();
@@ -222,7 +222,7 @@ public:
 #include <KoResourcePaths.h>
 void KisBrushOpTest::initTestCase()
 {
-    KoResourcePaths::addResourceDir("kis_brushes", QString(SYSTEM_RESOURCES_DATA_DIR) + "/brushes");
+    KoResourcePaths::addResourceDir(ResourceType::Brushes, QString(SYSTEM_RESOURCES_DATA_DIR) + "/brushes");
 }
 
 void KisBrushOpTest::testRotationMirroring()

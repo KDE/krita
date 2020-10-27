@@ -28,6 +28,7 @@
 #include <QSettings>
 #include <QStandardPaths>
 #include <QDebug>
+#include <QFileInfo>
 
 #include <kconfig.h>
 
@@ -79,20 +80,19 @@ KisConfig::~KisConfig()
 
 void KisConfig::logImportantSettings() const
 {
-
-    KisUsageLogger::writeSectionHeader();
-    KisUsageLogger::log("Current Settings\n");
-    KisUsageLogger::write(QString("Current Swap Location: %1").arg(KisImageConfig(true).swapDir()));
-    KisUsageLogger::write(QString("Undo Enabled: %1").arg(undoEnabled()));
-    KisUsageLogger::write(QString("Undo Stack Limit: %1").arg(undoStackLimit()));
-    KisUsageLogger::write(QString("Use OpenGL: %1").arg(useOpenGL()));
-    KisUsageLogger::write(QString("Use OpenGL Texture Buffer: %1").arg(useOpenGLTextureBuffer()));
-    KisUsageLogger::write(QString("Use AMD Vectorization Workaround: %1").arg(enableAmdVectorizationWorkaround()));
-    KisUsageLogger::write(QString("Canvas State: %1").arg(canvasState()));
-    KisUsageLogger::write(QString("Autosave Interval: %1").arg(autoSaveInterval()));
-    KisUsageLogger::write(QString("Use Backup Files: %1").arg(backupFile()));
-    KisUsageLogger::write(QString("Number of Backups Kept: %1").arg(m_cfg.readEntry("numberofbackupfiles", 1)));
-    KisUsageLogger::write(QString("Backup File Suffix: %1").arg(m_cfg.readEntry("backupfilesuffix", "~")));
+    KisUsageLogger::writeSysInfo("Current Settings\n");
+    KisUsageLogger::writeSysInfo(QString("  Current Swap Location: %1").arg(KisImageConfig(true).swapDir()));
+    KisUsageLogger::writeSysInfo(QString("  Current Swap Location writable: %1").arg(QFileInfo(KisImageConfig(true).swapDir()).isWritable() ? "true" : "false"));
+    KisUsageLogger::writeSysInfo(QString("  Undo Enabled: %1").arg(undoEnabled()? "true" : "false"));
+    KisUsageLogger::writeSysInfo(QString("  Undo Stack Limit: %1").arg(undoStackLimit()));
+    KisUsageLogger::writeSysInfo(QString("  Use OpenGL: %1").arg(useOpenGL() ? "true" : "false"));
+    KisUsageLogger::writeSysInfo(QString("  Use OpenGL Texture Buffer: %1").arg(useOpenGLTextureBuffer() ? "true" : "false"));
+    KisUsageLogger::writeSysInfo(QString("  Use AMD Vectorization Workaround: %1").arg(enableAmdVectorizationWorkaround() ? "true" : "false"));
+    KisUsageLogger::writeSysInfo(QString("  Canvas State: %1").arg(canvasState()));
+    KisUsageLogger::writeSysInfo(QString("  Autosave Interval: %1").arg(autoSaveInterval()));
+    KisUsageLogger::writeSysInfo(QString("  Use Backup Files: %1").arg(backupFile() ? "true" : "false"));
+    KisUsageLogger::writeSysInfo(QString("  Number of Backups Kept: %1").arg(m_cfg.readEntry("numberofbackupfiles", 1)));
+    KisUsageLogger::writeSysInfo(QString("  Backup File Suffix: %1").arg(m_cfg.readEntry("backupfilesuffix", "~")));
 
     QString backupDir;
     switch(m_cfg.readEntry("backupfilelocation", 0)) {
@@ -106,14 +106,15 @@ void KisConfig::logImportantSettings() const
         // Do nothing: the empty string is user file location
         backupDir = "Same Folder as the File";
     }
-    KisUsageLogger::write(QString("Backup Location: %1").arg(backupDir));
+    KisUsageLogger::writeSysInfo(QString("  Backup Location: %1").arg(backupDir));
+    KisUsageLogger::writeSysInfo(QString("  Backup Location writable: %1").arg(QFileInfo(backupDir).isWritable() ? "true" : "false"));
 
-    KisUsageLogger::write(QString("Use Win8 Pointer Input: %1").arg(useWin8PointerInput()));
-    KisUsageLogger::write(QString("Use RightMiddleTabletButton Workaround: %1").arg(useRightMiddleTabletButtonWorkaround()));
-    KisUsageLogger::write(QString("Levels of Detail Enabled: %1").arg(levelOfDetailEnabled()));
-    KisUsageLogger::write(QString("Use Zip64: %1").arg(useZip64()));
+    KisUsageLogger::writeSysInfo(QString("  Use Win8 Pointer Input: %1").arg(useWin8PointerInput() ? "true" : "false"));
+    KisUsageLogger::writeSysInfo(QString("  Use RightMiddleTabletButton Workaround: %1").arg(useRightMiddleTabletButtonWorkaround() ? "true" : "false"));
+    KisUsageLogger::writeSysInfo(QString("  Levels of Detail Enabled: %1").arg(levelOfDetailEnabled() ? "true" : "false"));
+    KisUsageLogger::writeSysInfo(QString("  Use Zip64: %1").arg(useZip64() ? "true" : "false"));
 
-    KisUsageLogger::write("\n");
+    KisUsageLogger::writeSysInfo("\n");
 }
 
 bool KisConfig::disableTouchOnCanvas(bool defaultValue) const
@@ -734,6 +735,16 @@ void KisConfig::setOpenGLFilteringMode(int filteringMode)
     m_cfg.writeEntry("OpenGLFilterMode", filteringMode);
 }
 
+void KisConfig::setWidgetStyle(QString name)
+{
+    m_cfg.writeEntry("widgetStyle", name);
+}
+
+QString KisConfig::widgetStyle(bool defaultValue)
+{
+    return (defaultValue ? "" : m_cfg.readEntry("widgetStyle", ""));
+}
+
 bool KisConfig::useOpenGLTextureBuffer(bool defaultValue) const
 {
     return (defaultValue ? true : m_cfg.readEntry("useOpenGLTextureBuffer", true));
@@ -1206,7 +1217,7 @@ void KisConfig::setUseWin8PointerInput(bool value)
     }
 
 #else
-    Q_UNUSED(value)
+    Q_UNUSED(value);
 #endif
 }
 
@@ -1836,6 +1847,16 @@ void KisConfig::setCompressKra(bool compress)
     m_cfg.writeEntry("compressLayersInKra", compress);
 }
 
+bool KisConfig::trimKra(bool defaultValue) const
+{
+    return (defaultValue ? false : m_cfg.readEntry("TrimKra", false));
+}
+
+void KisConfig::setTrimKra(bool trim)
+{
+    m_cfg.writeEntry("TrimKra", trim);
+}
+
 bool KisConfig::toolOptionsInDocker(bool defaultValue) const
 {
     return (defaultValue ? true : m_cfg.readEntry("ToolOptionsInDocker", true));
@@ -1858,7 +1879,13 @@ void KisConfig::setKineticScrollingEnabled(bool value)
 
 int KisConfig::kineticScrollingGesture(bool defaultValue) const
 {
-    return (defaultValue ? 2 : m_cfg.readEntry("KineticScrollingGesture", 2));
+#ifdef Q_OS_ANDROID
+    int defaultGesture = 1; // LeftMouseButtonGesture
+#else
+    int defaultGesture = 2; // MiddleMouseButtonGesture
+#endif
+
+    return (defaultValue ? defaultGesture : m_cfg.readEntry("KineticScrollingGesture", defaultGesture));
 }
 
 void KisConfig::setKineticScrollingGesture(int gesture)
@@ -1967,6 +1994,26 @@ void KisConfig::setAnimationDropFrames(bool value)
 
     m_cfg.writeEntry("animationDropFrames", value);
     KisConfigNotifier::instance()->notifyDropFramesModeChanged();
+}
+
+bool KisConfig::autoPinLayersToTimeline(bool defaultValue) const
+{
+    return (defaultValue ? true : m_cfg.readEntry("autoPinLayers", true));
+}
+
+void KisConfig::setAutoPinLayersToTimeline(bool value)
+{
+    m_cfg.writeEntry("autoPinLayers", value);
+}
+
+qreal KisConfig::timelineZoom(bool defaultValue) const
+{
+    return (defaultValue ? 1.0f : m_cfg.readEntry("timelineZoom", 1.0f));
+}
+
+void KisConfig::setTimelineZoom(qreal value)
+{
+    m_cfg.writeEntry("timelineZoom", value);
 }
 
 bool KisConfig::animationDropFrames(bool defaultValue) const
@@ -2164,6 +2211,16 @@ bool KisConfig::useZip64(bool defaultValue) const
 void KisConfig::setUseZip64(bool value)
 {
     m_cfg.writeEntry("UseZip64", value);
+}
+
+bool KisConfig::convertLayerColorSpaceInProperties(bool defaultValue) const
+{
+    return defaultValue ? true : m_cfg.readEntry("convertLayerColorSpaceInProperties", true);
+}
+
+void KisConfig::setConvertLayerColorSpaceInProperties(bool value)
+{
+    m_cfg.writeEntry("convertLayerColorSpaceInProperties", value);
 }
 
 #include <QDomDocument>

@@ -23,16 +23,19 @@
 
 #include <boost/thread/locks.hpp>
 #include <QMessageBox>
-#include "kis_cursor.h"
-#include "KisDocument.h"
-#include "kis_canvas2.h"
-#include "KisReferenceImagesLayer.h"
-#include "KoCanvasBase.h"
-#include "kis_random_accessor_ng.h"
-#include "KoResourceServerProvider.h"
+#include <kis_cursor.h>
+#include <KisDocument.h>
+#include <kis_canvas2.h>
+#include <KisReferenceImagesLayer.h>
+#include <KoCanvasBase.h>
+#include <kis_random_accessor_ng.h>
+#include <KoResourceServerProvider.h>
 #include <KoMixColorsOp.h>
-#include "kis_wrapped_rect.h"
+#include <kis_wrapped_rect.h>
+#include <KisResourceModel.h>
+
 #include "kis_tool_utils.h"
+
 
 namespace
 {
@@ -45,9 +48,6 @@ KisToolColorPicker::KisToolColorPicker(KoCanvasBase *canvas)
       m_config(new KisToolUtils::ColorPickerConfig)
 {
     setObjectName("tool_colorpicker");
-    m_isActivated = false;
-    m_optionsWidget = 0;
-    m_pickedColor = KoColor();
 }
 
 KisToolColorPicker::~KisToolColorPicker()
@@ -139,10 +139,10 @@ bool KisToolColorPicker::pickColor(const QPointF &pos)
         publicColor.setOpacity(OPACITY_OPAQUE_U8); // Alpha is unwanted for FG and BG colors.
 
         if (m_config->toForegroundColor) {
-            canvas()->resourceManager()->setResource(KoCanvasResourceProvider::ForegroundColor, publicColor);
+            canvas()->resourceManager()->setResource(KoCanvasResource::ForegroundColor, publicColor);
         }
         else {
-            canvas()->resourceManager()->setResource(KoCanvasResourceProvider::BackgroundColor, publicColor);
+            canvas()->resourceManager()->setResource(KoCanvasResource::BackgroundColor, publicColor);
         }
     }
 
@@ -154,12 +154,12 @@ void KisToolColorPicker::beginPrimaryAction(KoPointerEvent *event)
     bool sampleMerged = m_optionsWidget->cmbSources->currentIndex() == SAMPLE_MERGED;
     if (!sampleMerged) {
         if (!currentNode()) {
-            QMessageBox::information(0, i18nc("@title:window", "Krita"), i18n("Cannot pick a color as no layer is active."));
+            QMessageBox::information(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Cannot pick a color as no layer is active."));
             event->ignore();
             return;
         }
         if (!currentNode()->visible()) {
-            QMessageBox::information(0, i18nc("@title:window", "Krita"), i18n("Cannot pick a color as the active layer is not visible."));
+            QMessageBox::information(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Cannot pick a color as the active layer is not visible."));
             event->ignore();
             return;
         }
@@ -200,11 +200,15 @@ void KisToolColorPicker::endPrimaryAction(KoPointerEvent *event)
         swatch.setColor(m_pickedColor);
         // We don't ask for a name, too intrusive here
 
-        KoColorSet *palette = m_palettes.at(m_optionsWidget->cmbPalette->currentIndex());
-        palette->add(swatch);
+        QModelIndex idx = m_resourceModel->index(m_optionsWidget->cmbPalette->currentIndex(), 0);
+        KoColorSetSP palette = qSharedPointerDynamicCast<KoColorSet>(m_resourceModel->resourceForIndex(idx));
 
-        if (!palette->save()) {
-            QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Cannot write to palette file %1. Maybe it is read-only.", palette->filename()));
+        if (palette) {
+            palette->add(swatch);
+            KoResourceServerProvider::instance()->paletteServer()->updateResource(palette);
+            if (!palette->save()) {
+                QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Cannot write to palette file %1. Maybe it is read-only.", palette->filename()));
+            }
         }
     }
 
@@ -296,14 +300,9 @@ QWidget* KisToolColorPicker::createOptionWidget()
         return m_optionsWidget;
     }
 
-    QList<KoColorSet*> palettes = srv->resources();
-
-    Q_FOREACH (KoColorSet *palette, palettes) {
-        if (palette) {
-            m_optionsWidget->cmbPalette->addSqueezedItem(palette->name());
-            m_palettes.append(palette);
-        }
-    }
+    m_resourceModel = srv->resourceModel();
+    m_optionsWidget->cmbPalette->setModel(srv->resourceModel());
+    m_optionsWidget->cmbPalette->setModelColumn(KisAbstractResourceModel::Name);
 
     return m_optionsWidget;
 }
@@ -360,13 +359,4 @@ void KisToolColorPicker::slotChangeBlend(int value)
 void KisToolColorPicker::slotSetColorSource(int value)
 {
     m_config->sampleMerged = value == SAMPLE_MERGED;
-}
-
-void KisToolColorPicker::slotAddPalette(KoResource *resource)
-{
-    KoColorSet *palette = dynamic_cast<KoColorSet*>(resource);
-    if (palette) {
-        m_optionsWidget->cmbPalette->addSqueezedItem(palette->name());
-        m_palettes.append(palette);
-    }
 }

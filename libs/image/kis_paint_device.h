@@ -45,6 +45,7 @@ class KoColor;
 class KoColorSpace;
 class KoColorProfile;
 
+class KisRegion;
 class KisDataManager;
 class KisPaintDeviceWriter;
 class KisKeyframe;
@@ -254,13 +255,13 @@ public:
      * For tiled data manager, it region will consist of a number
      * of rects each corresponding to a tile.
      */
-    QRegion region() const;
+    KisRegion region() const;
 
     /**
      * The slow version of region() that searches for exact bounds of
      * each rectangle in the region
      */
-    QRegion regionExact() const;
+    KisRegion regionExact() const;
 
     /**
      * Cut the paint device down to the specified rect. If the crop
@@ -285,7 +286,7 @@ public:
 
     /**
      * Frees the memory occupied by the pixels containing default
-     * values. The extents() and exactBounds() of the image will
+     * values. The extents() and exactBounds() of the paint device will
      * probably also shrink
      */
     void purgeDefaultPixels();
@@ -492,7 +493,7 @@ public:
      * Changes the profile of the colorspace of this paint device to the given
      * profile. If the given profile is 0, nothing happens.
      */
-    bool setProfile(const KoColorProfile * profile);
+    bool setProfile(const KoColorProfile * profile, KUndo2Command *parentCommand);
 
     /**
      * Fill this paint device with the data from image; starting at (offsetX, offsetY)
@@ -580,6 +581,16 @@ public:
                            KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::internalConversionFlags());
 
     /**
+     * Cached version of createThumbnail that also adjusts aspect ratio of the
+     * thumbnail to fit the extents of the paint device.
+     */
+    QImage createThumbnail(qint32 maxw, qint32 maxh,
+                           Qt::AspectRatioMode aspectRatioMode,
+                           qreal oversample = 1,
+                           KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::internalRenderingIntent(),
+                           KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::internalConversionFlags());
+
+    /**
      * Fill c and opacity with the values found at x and y.
      *
      * The color values will be transformed from the profile of
@@ -599,6 +610,12 @@ public:
      * @return true if the operation was successful.
      */
     bool pixel(qint32 x, qint32 y, KoColor * kc) const;
+
+    /**
+     * Return pixel value in a form of KoColor. Please don't use this method
+     * for iteration, it is highly inefficient. Use iterators instead.
+     */
+    KoColor pixel(const QPoint &pos) const;
 
     /**
      * Set the specified pixel to the specified color. Note that this
@@ -750,11 +767,7 @@ public:
      */
     void setDirty(const QRect & rc);
 
-    /**
-     *  Add the specified region to the parent layer's dirty region
-     *  (if there is a parent layer)
-     */
-    void setDirty(const QRegion & region);
+    void setDirty(const KisRegion &region);
 
     /**
      *  Set the parent layer completely dirty, if this paint device has
@@ -762,7 +775,7 @@ public:
      */
     void setDirty();
 
-    void setDirty(const QVector<QRect> rects);
+    void setDirty(const QVector<QRect> &rects);
 
     /**
      * Called by KisTransactionData when it thinks current time should
@@ -789,8 +802,8 @@ public:
     KisVLineIteratorSP createVLineIteratorNG(qint32 x, qint32 y, qint32 h);
     KisVLineConstIteratorSP createVLineConstIteratorNG(qint32 x, qint32 y, qint32 h) const;
 
-    KisRandomAccessorSP createRandomAccessorNG(qint32 x, qint32 y);
-    KisRandomConstAccessorSP createRandomConstAccessorNG(qint32 x, qint32 y) const;
+    KisRandomAccessorSP createRandomAccessorNG();
+    KisRandomConstAccessorSP createRandomConstAccessorNG() const;
 
     /**
      * Create an iterator that will "artificially" extend the paint device with the
@@ -822,6 +835,25 @@ public:
     /** Clear the selected pixels from the paint device */
     void clearSelection(KisSelectionSP selection);
 
+    /**
+     * Converts a paint device into a "new" paint device, that has
+     * unconnected history. That is, after reincarnation, the device's
+     * life starts a new page. No history. No memories.
+     *
+     * When the device is fed up with the new life, it can reincarnate
+     * back to its previous life by undoing the command returned by
+     * reincarnateWithDetachedHistory(). The old undo will continue
+     * working as if nothing has happened.
+     *
+     * NOTE: reincarnation affects only the current lod plane and/or
+     *       current frame. All other frames are kept unaffected.
+     *
+     * @param copyContent decides if the device should take its current
+     *                    content to the new life
+     * @return undo command for execution and undoing of the reincarnation
+     */
+    KUndo2Command* reincarnateWithDetachedHistory(bool copyContent);
+
 Q_SIGNALS:
 
     void profileChanged(const KoColorProfile *  profile);
@@ -852,7 +884,7 @@ public:
         virtual ~LodDataStruct();
     };
 
-    QRegion regionForLodSyncing() const;
+    KisRegion regionForLodSyncing() const;
     LodDataStruct* createLodDataStruct(int lod);
     void updateLodDataStruct(LodDataStruct *dst, const QRect &srcRect);
     void uploadLodDataStruct(LodDataStruct *dst);

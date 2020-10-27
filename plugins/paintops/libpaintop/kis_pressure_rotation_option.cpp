@@ -38,9 +38,14 @@ double KisPressureRotationOption::apply(const KisPaintInformation & info) const
 
     const qreal normalizedBaseAngle = -info.canvasRotation() / 360.0;
 
-    qreal value = computeRotationLikeValue(info, normalizedBaseAngle, absoluteAxesFlipped);
+    // we should invert scaling part because it is expected
+    // to rotate the brush counterclockwise
+    const qreal scalingPartCoeff = -1.0;
 
-    // flip to conform global legacy code
+    qreal value = computeRotationLikeValue(info, normalizedBaseAngle, absoluteAxesFlipped, scalingPartCoeff, info.isHoveringMode());
+
+    /// flip to conform global legacy code
+    /// we measure rotation in the opposite direction relative Qt's way
     value = 1.0 - value;
 
     return normalizeAngle(value * M_PI);

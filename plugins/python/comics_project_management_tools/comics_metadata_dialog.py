@@ -77,11 +77,16 @@ class language_combo_box(QComboBox):
                 if codeName not in self.codesList:
                     self.codesList.append(codeName)
             self.codesList.sort()
-            
+
         for lang in self.codesList:
             locale = QLocale(lang)
+
             if locale:
-                languageName = QLocale.languageToString(locale.language())
+                languageName = locale.nativeLanguageName()
+
+                if len(languageName)==0:
+                    languageName = QLocale.languageToString(locale.language())
+
                 self.languageList.append(languageName.title())
                 self.setIconSize(QSize(32, 22))
                 codeIcon = QImage(self.iconSize(), QImage.Format_ARGB32)
@@ -398,7 +403,7 @@ class comic_meta_data_editor(QDialog):
         self.cmb_entry_type.addItems(["IssueID", "SeriesID", "URL"])
         self.cmb_entry_type.setEditable(True)
         self.ln_source = QLineEdit()
-        self.ln_source.setToolTip(i18n("Whether the comic is an adaption of an existing source, and if so, how to find information about that source. So for example, for an adapted webcomic, the official website url should go here."))
+        self.ln_source.setToolTip(i18n("Whether the comic is an adaptation of an existing source, and if so, how to find information about that source. So for example, for an adapted webcomic, the official website url should go here."))
         self.label_uuid = QLabel()
         self.label_uuid.setToolTip(i18n("By default this will be filled with a generated universal unique identifier. The ID by itself is merely so that comic book library management programs can figure out if this particular comic is already in their database and whether it has been rated. Of course, the UUID can be changed into something else by manually changing the JSON, but this is advanced usage."))
         self.ln_database_entry = QLineEdit()
@@ -480,7 +485,7 @@ class comic_meta_data_editor(QDialog):
                 r = 0
                 for row in ratings:
                     listItem = []
-                    if r is 0:
+                    if r == 0:
                         title = row[1]
                     else:
                         listItem = self.ratingKeysList[title]
@@ -614,7 +619,7 @@ class comic_meta_data_editor(QDialog):
             else:
                 self.cmbLanguage.setEntryToCode(code)
         if "readingDirection" in config.keys():
-            if config["readingDirection"] is "leftToRight":
+            if config["readingDirection"] == "leftToRight":
                 self.cmbReadingMode.setCurrentIndex(int(Qt.LeftToRight))
             else:
                 self.cmbReadingMode.setCurrentIndex(int(Qt.RightToLeft))

@@ -37,6 +37,7 @@
 #include "kis_selection.h"
 #include <kis_iterator_ng.h>
 #include "krita_utils.h"
+#include <KisGlobalResourcesInterface.h>
 
 void KisBContrastBenchmark::initTestCase()
 {
@@ -68,10 +69,10 @@ void KisBContrastBenchmark::cleanupTestCase()
 void KisBContrastBenchmark::benchmarkFilter()
 {
     KisFilterSP filter = KisFilterRegistry::instance()->value("brightnesscontrast");
-    KisFilterConfigurationSP  kfc = filter->defaultConfiguration();
+    KisFilterConfigurationSP  kfc = filter->defaultConfiguration(KisGlobalResourcesInterface::instance());
 
     // Get the predefined configuration from a file
-    QFile file(QString(FILES_DATA_DIR) + QDir::separator() + filter->id() + ".cfg");
+    QFile file(QString(FILES_DATA_DIR) + '/' + filter->id() + ".cfg");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         file.open(QIODevice::WriteOnly | QIODevice::Text);
         QTextStream out(&file);

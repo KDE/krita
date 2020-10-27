@@ -73,6 +73,7 @@ public:
         case KoShape::GenericMatrixChange:
         case KoShape::ParameterChanged:
         case KoShape::ClipPathChanged :
+        case KoShape::ClipMaskChanged :
             m_group->invalidateSizeCache();
             break;
         default:
@@ -130,10 +131,9 @@ KoShape *KoShapeGroup::cloneShape() const
     return new KoShapeGroup(*this);
 }
 
-void KoShapeGroup::paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &)
+void KoShapeGroup::paintComponent(QPainter &painter, KoShapePaintingContext &) const
 {
     Q_UNUSED(painter);
-    Q_UNUSED(converter);
 }
 
 bool KoShapeGroup::hitTest(const QPointF &position) const
@@ -190,70 +190,6 @@ QRectF KoShapeGroup::boundingRect() const
         groupBound.adjust(-insets.left, -insets.top, insets.right, insets.bottom);
     }
     return groupBound;
-}
-
-void KoShapeGroup::saveOdf(KoShapeSavingContext & context) const
-{
-    context.xmlWriter().startElement("draw:g");
-    saveOdfAttributes(context, (OdfMandatories ^ (OdfLayer | OdfZIndex)) | OdfAdditionalAttributes);
-    context.xmlWriter().addAttribute("svg:y", position().y());
-
-    QList<KoShape*> shapes = this->shapes();
-    std::sort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
-
-    Q_FOREACH (KoShape* shape, shapes) {
-        shape->saveOdf(context);
-    }
-
-    saveOdfCommonChildElements(context);
-    context.xmlWriter().endElement();
-}
-
-bool KoShapeGroup::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context)
-{
-    loadOdfAttributes(element, context, OdfMandatories | OdfStyle | OdfAdditionalAttributes | OdfCommonChildElements);
-
-    KoXmlElement child;
-    QMap<KoShapeLayer*, int> usedLayers;
-    forEachElement(child, element) {
-        KoShape * shape = KoShapeRegistry::instance()->createShapeFromOdf(child, context);
-        if (shape) {
-            KoShapeLayer *layer = dynamic_cast<KoShapeLayer*>(shape->parent());
-            if (layer) {
-                usedLayers[layer]++;
-            }
-            addShape(shape);
-        }
-    }
-    KoShapeLayer *parent = 0;
-    int maxUseCount = 0;
-    // find most used layer and use this as parent for the group
-    for (QMap<KoShapeLayer*, int>::const_iterator it(usedLayers.constBegin()); it != usedLayers.constEnd(); ++it) {
-        if (it.value() > maxUseCount) {
-            maxUseCount = it.value();
-            parent = it.key();
-        }
-    }
-    setParent(parent);
-
-    QRectF bound;
-    bool boundInitialized = false;
-    Q_FOREACH (KoShape * shape, shapes()) {
-        if (! boundInitialized) {
-            bound = shape->boundingRect();
-            boundInitialized = true;
-        } else
-            bound = bound.united(shape->boundingRect());
-    }
-
-    setSize(bound.size());
-    d->sizeCached = true;
-    setPosition(bound.topLeft());
-
-    Q_FOREACH (KoShape * shape, shapes())
-        shape->setAbsolutePosition(shape->absolutePosition() - bound.topLeft());
-
-    return true;
 }
 
 void KoShapeGroup::shapeChanged(ChangeType type, KoShape *shape)

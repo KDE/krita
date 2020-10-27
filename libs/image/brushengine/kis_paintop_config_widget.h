@@ -26,6 +26,12 @@
 #include <kis_debug.h>
 #include <kis_properties_configuration.h>
 
+class KisResourcesInterface;
+using KisResourcesInterfaceSP = QSharedPointer<KisResourcesInterface>;
+
+class KoCanvasResourcesInterface;
+using KoCanvasResourcesInterfaceSP = QSharedPointer<KoCanvasResourcesInterface>;
+
 class KisPaintopLodLimitations;
 
 /**
@@ -36,7 +42,7 @@ class KRITAIMAGE_EXPORT KisPaintOpConfigWidget : public KisConfigWidget
     Q_OBJECT
 
 public:
-    KisPaintOpConfigWidget(QWidget * parent = 0, Qt::WindowFlags f = 0);
+    KisPaintOpConfigWidget(QWidget * parent = 0, Qt::WindowFlags f = Qt::WindowFlags());
     ~KisPaintOpConfigWidget() override;
 
     void writeConfigurationSafe(KisPropertiesConfigurationSP config) const;
@@ -56,6 +62,11 @@ public:
 
     virtual void setImage(KisImageWSP image);
     virtual void setNode(KisNodeWSP node);
+    virtual void setResourcesInterface(KisResourcesInterfaceSP resourcesInterface);
+    virtual void setCanvasResourcesInterface(KoCanvasResourcesInterfaceSP canvasResourcesInterface);
+
+    KisResourcesInterfaceSP resourcesInterface() const;
+    KoCanvasResourcesInterfaceSP canvasResourcesInterface() const;
 
     /**
      * This is true for all of the paintop widget except for the Custom brush tab in the Brush tip dialog
@@ -72,6 +83,9 @@ public:
 protected:
     KisImageWSP m_image;
     KisNodeWSP m_node;
+
+    KisResourcesInterfaceSP m_resourcesInterface;
+    KoCanvasResourcesInterfaceSP m_canvasResourcesInterface;
 
     mutable int m_isInsideUpdateCall;
 };

@@ -123,17 +123,17 @@ void KMenuMenuHandler::slotSetShortcut()
     }
 
     QDialog dialog(m_builder->widget());
-    dialog.setLayout(new QVBoxLayout);
+    QVBoxLayout *layout = new QVBoxLayout(&dialog);
 
-    KShortcutWidget swidget(&dialog);
-    swidget.setShortcut(m_popupAction->shortcuts());
-    dialog.layout()->addWidget(&swidget);
+    KShortcutWidget *swidget = new KShortcutWidget();
+    swidget->setShortcut(m_popupAction->shortcuts());
+    layout->addWidget(swidget);
 
-    QDialogButtonBox box(&dialog);
-    box.setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
-    connect(&box, SIGNAL(accepted()), &dialog, SLOT(accept()));
-    connect(&box, SIGNAL(rejected()), &dialog, SLOT(reject()));
-    dialog.layout()->addWidget(&box);
+    QDialogButtonBox *buttonBox = new QDialogButtonBox();
+    buttonBox->setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    connect(buttonBox, SIGNAL(accepted()), &dialog, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), &dialog, SLOT(reject()));
+    layout->addWidget(buttonBox);
 
     KActionCollection *parentCollection = 0;
     if (dynamic_cast<KXMLGUIClient *>(m_builder)) {
@@ -143,12 +143,12 @@ void KMenuMenuHandler::slotSetShortcut()
         foreach (KXMLGUIClient *client, factory->clients()) {
             checkCollections += client->actionCollection();
         }
-        swidget.setCheckActionCollections(checkCollections);
+        swidget->setCheckActionCollections(checkCollections);
     }
 
     if (dialog.exec()) {
-        m_popupAction->setShortcuts(swidget.shortcut());
-        swidget.applyStealShortcut();
+        m_popupAction->setShortcuts(swidget->shortcut());
+        swidget->applyStealShortcut();
         if (parentCollection) {
             parentCollection->writeSettings();
         }

@@ -70,7 +70,7 @@ struct KisFilterStrokeStrategy::Private {
 KisFilterStrokeStrategy::KisFilterStrokeStrategy(KisFilterSP filter,
                                                  KisFilterConfigurationSP filterConfig,
                                                  KisResourcesSnapshotSP resources)
-    : KisPainterBasedStrokeStrategy("FILTER_STROKE",
+    : KisPainterBasedStrokeStrategy(QLatin1String("FILTER_STROKE"),
                                     kundo2_i18n("Filter \"%1\"", filter->name()),
                                     resources,
                                     QVector<KisFreehandStrokeInfo*>(),false),
@@ -109,6 +109,9 @@ void KisFilterStrokeStrategy::initStrokeCallback()
     KisPaintDeviceSP dev = targetDevice();
     m_d->filterDeviceBounds = dev->extent();
 
+    if (m_d->filter->needsTransparentPixels(m_d->filterConfig.data(), dev->colorSpace())) {
+        m_d->filterDeviceBounds |= dev->defaultBounds()->bounds();
+    }
 
     if (activeSelection() ||
         (dev->colorSpace() != dev->compositionSourceColorSpace() &&
@@ -166,17 +169,7 @@ void KisFilterStrokeStrategy::cancelStrokeCallback()
     delete m_d->secondaryTransaction;
     m_d->filterDevice = 0;
 
-    KisProjectionUpdatesFilterSP prevUpdatesFilter;
-
     if (m_d->cancelSilently) {
-        /**
-         * TODO: Projection updates filter is not recursive, please
-         *       redesign this part
-         */
-        prevUpdatesFilter = m_d->updatesFacade->projectionUpdatesFilter();
-        if (prevUpdatesFilter) {
-            m_d->updatesFacade->setProjectionUpdatesFilter(KisProjectionUpdatesFilterSP());
-        }
         m_d->updatesFacade->disableDirtyRequests();
     }
 
@@ -184,10 +177,6 @@ void KisFilterStrokeStrategy::cancelStrokeCallback()
 
     if (m_d->cancelSilently) {
         m_d->updatesFacade->enableDirtyRequests();
-        if (prevUpdatesFilter) {
-            m_d->updatesFacade->setProjectionUpdatesFilter(prevUpdatesFilter);
-            prevUpdatesFilter.clear();
-        }
     }
 }
 
@@ -202,6 +191,7 @@ void KisFilterStrokeStrategy::finishStrokeCallback()
 KisStrokeStrategy* KisFilterStrokeStrategy::createLodClone(int levelOfDetail)
 {
     if (!m_d->filter->supportsLevelOfDetail(m_d->filterConfig.data(), levelOfDetail)) return 0;
+    if (!m_d->node->supportsLodPainting()) return 0;
 
     KisFilterStrokeStrategy *clone = new KisFilterStrokeStrategy(*this, levelOfDetail);
     return clone;

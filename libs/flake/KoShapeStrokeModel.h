@@ -28,9 +28,7 @@
 #include <QtGlobal>
 
 class KoShape;
-class KoGenStyle;
 class KoShapeSavingContext;
-class KoViewConverter;
 struct KoInsets;
 
 class QColor;
@@ -48,14 +46,6 @@ class KRITAFLAKE_EXPORT KoShapeStrokeModel
 {
 public:
     virtual ~KoShapeStrokeModel();
-
-    /**
-     * @brief Fill the style object (aka save)
-     *
-     * @param style object
-     * @param context used for saving
-     */
-    virtual void fillStyle(KoGenStyle &style, KoShapeSavingContext &context) const = 0;
 
     /**
      * Return a strokeInsets object filled with the size inside the shape that this stroke takes.
@@ -81,9 +71,8 @@ public:
      * @param shape the shape to paint around
      * @param painter the painter to paint to, the painter will have the topleft of the
      *       shape as its start coordinate.
-     * @param converter to convert between internal and view coordinates.
      */
-    virtual void paint(KoShape *shape, QPainter &painter, const KoViewConverter &converter) = 0;
+    virtual void paint(const KoShape *shape, QPainter &painter) const = 0;
 
     virtual bool compareFillTo(const KoShapeStrokeModel *other) = 0;
     virtual bool compareStyleTo(const KoShapeStrokeModel *other) = 0;

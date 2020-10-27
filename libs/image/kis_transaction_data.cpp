@@ -49,7 +49,7 @@ public:
 
     bool savedOutlineCacheValid;
     QPainterPath savedOutlineCache;
-    KUndo2Command *flattenUndoCommand;
+    QScopedPointer<KUndo2Command> flattenUndoCommand;
     bool resetSelectionOutlineCache;
 
     int transactionTime;
@@ -73,6 +73,8 @@ KisTransactionData::KisTransactionData(const KUndo2MagicString& name, KisPaintDe
 {
     m_d->resetSelectionOutlineCache = resetSelectionOutlineCache;
     setTimedID(-1);
+
+    possiblyFlattenSelection(device);
     init(device);
     saveSelectionOutlineCache();
 }
@@ -85,17 +87,23 @@ void KisTransactionData::Private::tryCreateNewFrame(KisPaintDeviceSP device, int
     if (!device->framesInterface()) return;
 
     KisImageConfig cfg(true);
-    if (!cfg.lazyFrameCreationEnabled()) return;
+    if (!cfg.autoKeyEnabled()) return;
 
     KisRasterKeyframeChannel *channel = device->keyframeChannel();
     KIS_ASSERT_RECOVER(channel) { return; }
 
     KisKeyframeSP keyframe = channel->keyframeAt(time);
-
     if (!keyframe) {
-        keyframe = channel->activeKeyframeAt(time);
-        KisKeyframeSP newKeyframe = channel->copyKeyframe(keyframe, time, &newFrameCommand);
-        newKeyframe->setColorLabel(KisImageConfig(true).defaultFrameColorLabel());
+        if (cfg.autoKeyModeDuplicate()) {
+            int activeKeyTime = channel->activeKeyframeTime(time);
+            channel->copyKeyframe(activeKeyTime, time, &newFrameCommand);
+        } else {
+            channel->addKeyframe(time, &newFrameCommand);
+        }
+
+        keyframe = channel->keyframeAt(time);
+        KIS_SAFE_ASSERT_RECOVER_RETURN(keyframe);
+        keyframe->setColorLabel(KisImageConfig(true).defaultFrameColorLabel());
     }
 }
 
@@ -108,7 +116,6 @@ void KisTransactionData::init(KisPaintDeviceSP device)
     m_d->oldDefaultPixel = device->defaultPixel();
     m_d->firstRedo = true;
     m_d->transactionFinished = false;
-    m_d->flattenUndoCommand = 0;
 
     m_d->transactionTime = device->defaultBounds()->currentTime();
 
@@ -205,6 +212,39 @@ void KisTransactionData::possiblyResetOutlineCache()
     }
 }
 
+void KisTransactionData::possiblyFlattenSelection(KisPaintDeviceSP device)
+{
+    KisPixelSelectionSP pixelSelection =
+        dynamic_cast<KisPixelSelection*>(device.data());
+
+    if (pixelSelection) {
+        KisSelection *selection = pixelSelection->parentSelection().data();
+        if (selection) {
+            m_d->flattenUndoCommand.reset(selection->flatten());
+
+            if (m_d->flattenUndoCommand) {
+                m_d->flattenUndoCommand->redo();
+            }
+        }
+    }
+}
+
+void KisTransactionData::doFlattenUndoRedo(bool undo)
+{
+    KisPixelSelectionSP pixelSelection =
+        dynamic_cast<KisPixelSelection*>(m_d->device.data());
+
+    if (pixelSelection) {
+        if (m_d->flattenUndoCommand) {
+            if (undo) {
+                m_d->flattenUndoCommand->undo();
+            } else {
+                m_d->flattenUndoCommand->redo();
+            }
+        }
+    }
+}
+
 void KisTransactionData::Private::possiblySwitchCurrentTime()
 {
     if (device->defaultBounds()->currentTime() == transactionTime) return;
@@ -225,7 +265,7 @@ void KisTransactionData::redo()
         return;
     }
 
-
+    doFlattenUndoRedo(false);
     restoreSelectionOutlineCache(false);
 
     m_d->newFrameCommand.redo();
@@ -255,6 +295,7 @@ void KisTransactionData::undo()
     }
 
     restoreSelectionOutlineCache(true);
+    doFlattenUndoRedo(true);
 
     m_d->possiblySwitchCurrentTime();
     startUpdates();
@@ -277,19 +318,12 @@ void KisTransactionData::saveSelectionOutlineCache()
 
             possiblyResetOutlineCache();
         }
-
-        KisSelectionSP selection = pixelSelection->parentSelection();
-        if (selection) {
-            m_d->flattenUndoCommand = selection->flatten();
-            if (m_d->flattenUndoCommand) {
-                m_d->flattenUndoCommand->redo();
-            }
-        }
     }
 }
 
 void KisTransactionData::restoreSelectionOutlineCache(bool undo)
 {
+    Q_UNUSED(undo);
     KisPixelSelectionSP pixelSelection =
         dynamic_cast<KisPixelSelection*>(m_d->device.data());
 
@@ -311,14 +345,6 @@ void KisTransactionData::restoreSelectionOutlineCache(bool undo)
         m_d->savedOutlineCacheValid = savedOutlineCacheValid;
         if (m_d->savedOutlineCacheValid) {
             m_d->savedOutlineCache = savedOutlineCache;
-        }
-
-        if (m_d->flattenUndoCommand) {
-            if (undo) {
-                m_d->flattenUndoCommand->undo();
-            } else {
-                m_d->flattenUndoCommand->redo();
-            }
         }
     }
 }

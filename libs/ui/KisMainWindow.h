@@ -32,21 +32,20 @@
 #include <KoCanvasObserverBase.h>
 #include <KoCanvasSupervisor.h>
 #include "KisView.h"
+#include <kis_workspace_resource.h>
 
 class QCloseEvent;
 class QMoveEvent;
 
-struct KoPageLayout;
 class KoCanvasResourceProvider;
 
 class KisDocument;
-class KisPrintJob;
 class KoDockFactoryBase;
 class QDockWidget;
 class KisView;
 class KisViewManager;
 class KoCanvasController;
-class KisWorkspaceResource;
+
 
 /**
  * @brief Main window for Krita
@@ -103,8 +102,9 @@ public:
 
     /**
      * The document opened a URL -> store into recent documents list.
+     * @param oldUrl if not empty, @p url will replace @p oldUrl if present
      */
-    void addRecentURL(const QUrl &url);
+    void addRecentURL(const QUrl &url, const QUrl &oldUrl = QUrl());
 
     /**
      * get list of URL strings for recent files
@@ -174,7 +174,7 @@ public:
      * @param state the saved state
      * @return TRUE on success
      */
-    bool restoreWorkspace(KisWorkspaceResource *workspace);
+    bool restoreWorkspace(int workspaceId);
     bool restoreWorkspaceState(const QByteArray &state);
 
     static void swapWorkspaces(KisMainWindow *a, KisMainWindow *b);
@@ -206,6 +206,12 @@ public:
     /// Copy the given file into the bundle directory.
     bool installBundle(const QString &fileName) const;
 
+    /**
+     * @brief layoutThumbnail
+     * @return image for the workspaces.
+     */
+    QImage layoutThumbnail();
+
 Q_SIGNALS:
 
     /**
@@ -232,6 +238,10 @@ Q_SIGNALS:
 
     /// emitted when the window is migrated among different screens
     void screenChanged();
+
+    /// emitted when the current view has changed
+    void activeViewChanged();
+
 
 public Q_SLOTS:
 
@@ -285,9 +295,6 @@ public Q_SLOTS:
 
     void slotShowSessionManager();
 
-    // XXX: disabled
-    KisPrintJob* exportToPdf(QString pdfFileName = QString());
-
     /**
      * Update the option widgets to the argument ones, removing the currently set widgets.
      */
@@ -314,8 +321,19 @@ public Q_SLOTS:
      */
     void setCanvasDetached(bool detached);
 
-    void slotFileSelected(QString path);
+    /**
+     * @brief Called when a file is picked using Android's Storage Access Framework
+     * @param url
+     */
+    void slotFileSelected(QUrl url);
+
     void slotEmptyFilePath();
+
+    /**
+     * Toggle full screen on/off.
+     */
+    void viewFullscreen(bool fullScreen);
+
 private Q_SLOTS:
     /**
      * Save the list of recent files.
@@ -328,24 +346,23 @@ private Q_SLOTS:
     void slotSaveCanceled(const QString &);
     void forceDockTabFonts();
 
+    void slotUpdateWidgetStyle();
+
     /**
      * @internal
      */
     void slotDocumentTitleModified();
 
     /**
-     *  Prints the actual document.
-     */
-    void slotFilePrint();
-
-    /**
      *  Saves the current document with a new name.
      */
     void slotFileSaveAs();
 
-    void slotFilePrintPreview();
-
     void importAnimation();
+
+    void renderAnimation();
+
+    void renderAnimationAgain();
 
     /**
      * Show a dialog with author and document information.
@@ -379,19 +396,14 @@ private Q_SLOTS:
     void slotNewToolbarConfig();
 
     /**
+     * Reset User Configurations.
+     */
+    void slotResetConfigurations();
+
+    /**
      *  Shows or hides a toolbar
      */
     void slotToolbarToggled(bool toggle);
-
-    /**
-     * Toggle full screen on/off.
-     */
-    void viewFullscreen(bool fullScreen);
-
-    /**
-     * Reload file
-     */
-    void slotReloadFile();
 
 
     /**
@@ -421,6 +433,7 @@ private Q_SLOTS:
     void undo();
     void redo();
     void updateWindowMenu();
+    void updateSubwindowFlags();
     void setActiveSubWindow(QWidget *window);
     void configChanged();
 
@@ -438,6 +451,8 @@ private Q_SLOTS:
     void windowScreenChanged(QScreen *screen);
 
     void slotXmlGuiMakingChanges(bool finished);
+
+    void orientationChanged();
 
 protected:
 
@@ -472,20 +487,11 @@ private:
      */
     QDockWidget* createDockWidget(KoDockFactoryBase* factory);
 
-    bool openDocumentInternal(const QUrl &url, KisMainWindow::OpenFlags flags = 0);
-
-
-    /**
-     * Updates the window caption based on the document info and path.
-     */
-    void updateCaption(const QString & caption, bool modified);
-    void updateReloadFileAction(KisDocument *doc);
+    bool openDocumentInternal(const QUrl &url, KisMainWindow::OpenFlags f = KisMainWindow::OpenFlags());
 
     void saveWindowSettings();
 
     QPointer<KisView> activeKisView();
-
-    void applyDefaultSettings(QPrinter &printer);
 
     void createActions();
 

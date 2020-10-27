@@ -245,9 +245,9 @@ void KisOpenGLModeProber::initSurfaceFormatFromConfig(KisConfig::RootSurfaceForm
     } else
 #else
     if (config == KisConfig::BT2020_PQ) {
-        qWarning() << "WARNING: Bt.2020 PQ surface type is not supoprted by this build of Krita";
+        qWarning() << "WARNING: Bt.2020 PQ surface type is not supported by this build of Krita";
     } else if (config == KisConfig::BT709_G10) {
-        qWarning() << "WARNING: scRGB surface type is not supoprted by this build of Krita";
+        qWarning() << "WARNING: scRGB surface type is not supported by this build of Krita";
     }
 #endif
 
@@ -330,4 +330,5 @@ KisOpenGLModeProber::Result::Result(QOpenGLContext &context) {
     m_supportsDeprecatedFunctions = (context.format().options() & QSurfaceFormat::DeprecatedFunctions);
     m_isOpenGLES = context.isOpenGLES();
     m_format = context.format();
+    m_supportsFBO = context.functions()->hasOpenGLFeature(QOpenGLFunctions::Framebuffers);
 }

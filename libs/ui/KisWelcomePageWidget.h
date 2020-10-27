@@ -23,10 +23,14 @@
 #include "kritaui_export.h"
 #include "KisViewManager.h"
 #include "KisMainWindow.h"
+#include <KisUpdaterBase.h>
 
 #include <QWidget>
 #include "ui_KisWelcomePage.h"
 #include <QStandardItemModel>
+#include <QScopedPointer>
+
+#include "config-updaters.h"
 
 /// A widget for displaying if no documents are open. This will display in the MDI area
 class KRITAUI_EXPORT KisWelcomePageWidget : public QWidget, public Ui::KisWelcomePage
@@ -50,7 +54,14 @@ public Q_SLOTS:
     /// have a preview, an icon is used that needs to be updated
     void populateRecentDocuments();
 
-    void slotUpdateVersionMessage();
+#ifdef ENABLE_UPDATERS
+    void slotSetUpdateStatus(KisUpdaterStatus updateStatus);
+    void slotShowUpdaterErrorDetails();
+#endif
+
+#ifdef Q_OS_ANDROID
+    void slotStartDonationFlow();
+#endif
 
 protected:
 
@@ -62,6 +73,12 @@ protected:
 
 
 private:
+    void showDevVersionHighlight();
+
+#ifdef ENABLE_UPDATERS
+    void updateVersionUpdaterFrame();
+#endif
+
     KisMainWindow *m_mainWindow;
     QStandardItemModel m_recentFilesModel;
 
@@ -81,13 +98,30 @@ private:
     QColor blendedColor;
     QString blendedStyle;
 
+#ifdef ENABLE_UPDATERS
+    QScopedPointer<KisUpdaterBase> m_versionUpdater;
+    KisUpdaterStatus m_updaterStatus;
+#endif
+    bool m_checkUpdates {false};
 
+#ifdef Q_OS_ANDROID
+public:
+    static QPushButton* donationLink;
+    static QLabel* donationBannerImage;
+#endif
 
 private Q_SLOTS:
     void slotNewFileClicked();
     void slotOpenFileClicked();
 
     void recentDocumentClicked(QModelIndex index);
+
+#ifdef ENABLE_UPDATERS
+    void slotRunVersionUpdate();
+    void slotToggleUpdateChecks(bool state);
+#endif
+
+    bool isDevelopmentBuild();
 };
 
 #endif // KISWELCOMEPAGEWIDGET_H

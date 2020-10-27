@@ -23,16 +23,17 @@
 #include "KisImportExportFilter.h"
 #include "KisPart.h"
 #include "KisDocument.h"
-#include "kis_time_range.h"
+#include "kis_time_span.h"
 #include "kis_paint_layer.h"
 
 
 struct KisAsyncAnimationFramesSavingRenderer::Private
 {
-    Private(KisImageSP image, const KisTimeRange &_range, int _sequenceNumberingOffset, KisPropertiesConfigurationSP _exportConfiguration)
+    Private(KisImageSP image, const KisTimeSpan &_range, int _sequenceNumberingOffset, bool _onlyNeedsUniqueFrames, KisPropertiesConfigurationSP _exportConfiguration)
         : savingDoc(KisPart::instance()->createDocument()),
           range(_range),
           sequenceNumberingOffset(_sequenceNumberingOffset),
+          onlyNeedsUniqueFrames(_onlyNeedsUniqueFrames),
           exportConfiguration(_exportConfiguration)
     {
 
@@ -57,9 +58,10 @@ struct KisAsyncAnimationFramesSavingRenderer::Private
     QScopedPointer<KisDocument> savingDoc;
     KisPaintDeviceSP savingDevice;
 
-    KisTimeRange range;
+    KisTimeSpan range;
     int sequenceNumberingOffset = 0;
 
+    bool onlyNeedsUniqueFrames;
 
     QString filenamePrefix;
     QString filenameSuffix;
@@ -72,10 +74,11 @@ KisAsyncAnimationFramesSavingRenderer::KisAsyncAnimationFramesSavingRenderer(Kis
                                                                              const QString &fileNamePrefix,
                                                                              const QString &fileNameSuffix,
                                                                              const QByteArray &outputMimeType,
-                                                                             const KisTimeRange &range,
+                                                                             const KisTimeSpan &range,
                                                                              const int sequenceNumberingOffset,
+                                                                             const bool onlyNeedsUniqueFrames,
                                                                              KisPropertiesConfigurationSP exportConfiguration)
-    : m_d(new Private(image, range, sequenceNumberingOffset, exportConfiguration))
+    : m_d(new Private(image, range, sequenceNumberingOffset, onlyNeedsUniqueFrames, exportConfiguration))
 {
     m_d->filenamePrefix = fileNamePrefix;
     m_d->filenameSuffix = fileNameSuffix;
@@ -92,7 +95,7 @@ KisAsyncAnimationFramesSavingRenderer::~KisAsyncAnimationFramesSavingRenderer()
 {
 }
 
-void KisAsyncAnimationFramesSavingRenderer::frameCompletedCallback(int frame, const QRegion &requestedRegion)
+void KisAsyncAnimationFramesSavingRenderer::frameCompletedCallback(int frame, const KisRegion &requestedRegion)
 {
     KisImageSP image = requestedImage();
     if (!image) return;
@@ -111,6 +114,28 @@ void KisAsyncAnimationFramesSavingRenderer::frameCompletedCallback(int frame, co
 
     if (!m_d->savingDoc->exportDocumentSync(QUrl::fromLocalFile(filename), m_d->outputMimeType, m_d->exportConfiguration)) {
         status = ImportExportCodes::InternalError;
+    }
+
+    //Get all identical frames to this one and either copy or symlink based on settings.
+    KisTimeSpan identicals = KisTimeSpan::calculateIdenticalFramesRecursive(image->root(), frame);
+    identicals &= m_d->range;
+    if( !m_d->onlyNeedsUniqueFrames && identicals.start() < identicals.end() ) {
+        for (int identicalFrame = (identicals.start() + 1); identicalFrame <= identicals.end(); identicalFrame++) {
+            QString identicalFrameNumber = QString("%1").arg(identicalFrame + m_d->sequenceNumberingOffset, 4, 10, QChar('0'));
+            QString identicalFrameName = m_d->filenamePrefix + identicalFrameNumber + m_d->filenameSuffix;
+
+            QFile::copy(filename, identicalFrameName);
+
+            /*  This would be nice to do but sym-linking on windows isn't possible without
+             *  way more other work to be done. This works on linux though!
+             *
+             *  if (m_d->linkRedundantFrames) {
+             *      QFile::link(filename, identicalFrameName);
+             *  } else {
+             *      QFile::copy(filename, identicalFrameName);
+             *  }
+             */
+        }
     }
 
     if (status.isOk()) {

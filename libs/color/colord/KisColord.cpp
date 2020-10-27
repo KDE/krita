@@ -157,7 +157,7 @@ QByteArray KisColord::deviceProfile(const QString &id, int p)
 
 void KisColord::serviceOwnerChanged(const QString &serviceName, const QString &oldOwner, const QString &newOwner)
 {
-    Q_UNUSED(serviceName)
+    Q_UNUSED(serviceName);
     if (newOwner.isEmpty() || oldOwner != newOwner) {
         // colord has quit or restarted
         qDeleteAll(m_devices);

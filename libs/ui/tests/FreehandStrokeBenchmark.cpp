@@ -19,6 +19,7 @@
 #include "FreehandStrokeBenchmark.h"
 
 #include <QTest>
+#include <sdk/tests/testui.h>
 #include <KoCompositeOpRegistry.h>
 #include <KoColor.h>
 #include "stroke_testing_utils.h"
@@ -111,7 +112,7 @@ void benchmarkBrush(const QString &presetName)
 
 void FreehandStrokeBenchmark::initTestCase()
 {
-    KoResourcePaths::addResourceType("kis_brushes", "data", FILES_DATA_DIR);
+    KoResourcePaths::addResourceType(ResourceType::Brushes, "data", FILES_DATA_DIR);
 }
 
 void FreehandStrokeBenchmark::testDefaultTip()
@@ -154,4 +155,4 @@ void FreehandStrokeBenchmark::testColorsmudgeDefaultTip()
     benchmarkBrush("testing_200px_colorsmudge_default.kpp");
 }
 
-QTEST_MAIN(FreehandStrokeBenchmark)
+KISTEST_MAIN(FreehandStrokeBenchmark)

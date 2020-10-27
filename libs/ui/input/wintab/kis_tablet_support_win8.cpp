@@ -442,7 +442,7 @@ bool KisTabletSupportWin8::nativeEventFilter(const QByteArray &eventType, void *
         return true;
     }
 
-    Q_UNUSED(eventType)
+    Q_UNUSED(eventType);
     return false;
 }
 

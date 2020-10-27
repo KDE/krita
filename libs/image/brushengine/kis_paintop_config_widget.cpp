@@ -21,6 +21,10 @@
 
 #include <brushengine/kis_paintop_settings.h>
 
+#include <KisResourcesInterface.h>
+#include <KoCanvasResourcesInterface.h>
+
+
 KisPaintOpConfigWidget::KisPaintOpConfigWidget(QWidget * parent, Qt::WindowFlags f)
     : KisConfigWidget(parent, f, 100),
       m_isInsideUpdateCall(0)
@@ -55,6 +59,26 @@ void KisPaintOpConfigWidget::setImage(KisImageWSP image) {
 
 void KisPaintOpConfigWidget::setNode(KisNodeWSP node) {
     m_node = node;
+}
+
+void KisPaintOpConfigWidget::setResourcesInterface(KisResourcesInterfaceSP resourcesInterface)
+{
+    m_resourcesInterface = resourcesInterface;
+}
+
+void KisPaintOpConfigWidget::setCanvasResourcesInterface(KoCanvasResourcesInterfaceSP canvasResourcesInterface)
+{
+    m_canvasResourcesInterface = canvasResourcesInterface;
+}
+
+KisResourcesInterfaceSP KisPaintOpConfigWidget::resourcesInterface() const
+{
+    return m_resourcesInterface;
+}
+
+KoCanvasResourcesInterfaceSP KisPaintOpConfigWidget::canvasResourcesInterface() const
+{
+    return m_canvasResourcesInterface;
 }
 
 bool KisPaintOpConfigWidget::presetIsValid() {

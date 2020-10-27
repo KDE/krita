@@ -56,7 +56,7 @@ public:
     KoShape* cloneShape() const override;
 
     /// This implementation is empty since a group is itself not visible.
-    void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext) override;
+    void paintComponent(QPainter &painter, KoShapePaintingContext &paintcontext) const override;
     /// always returns false since the group itself can't be selected or hit
     bool hitTest(const QPointF &position) const override;
     QSizeF size() const override;
@@ -64,10 +64,6 @@ public:
     QRectF outlineRect() const override;
     /// a group's boundingRect
     QRectF boundingRect() const override;
-    /// reimplemented from KoShape
-    void saveOdf(KoShapeSavingContext &context) const override;
-    // reimplemented
-    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
 
 private:
     friend class ShapeGroupContainerModel;

@@ -86,10 +86,11 @@ void KarbonCalligraphyTool::paint(QPainter &painter, const KoViewConverter &conv
 
     painter.save();
 
-    painter.setTransform(m_shape->absoluteTransformation(&converter) *
+    painter.setTransform(m_shape->absoluteTransformation() *
+                         converter.documentToView() *
                          painter.transform());
     KoShapePaintingContext paintContext; //FIXME
-    m_shape->paint(painter, converter, paintContext);
+    m_shape->paint(painter, paintContext);
 
     painter.restore();
 }
@@ -434,8 +435,8 @@ QList<QPointer<QWidget> > KarbonCalligraphyTool::createOptionWidgets()
 
     // sync all parameters with the loaded profile
     m_widget->emitAll();
-    m_widget->setObjectName(i18n("Calligraphy"));
-    m_widget->setWindowTitle(i18n("Calligraphy"));
+    m_widget->setObjectName(i18nc("Object name of Calligraphy", "Calligraphy"));
+    m_widget->setWindowTitle(i18nc("Tool Option title of Calligraphy", "Calligraphy"));
     widgets.append(m_widget);
 
     return widgets;

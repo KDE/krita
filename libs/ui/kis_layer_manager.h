@@ -23,6 +23,7 @@
 #include <QList>
 
 #include "kis_adjustment_layer.h"
+#include "kis_generator_layer.h"
 #include "kis_types.h"
 #include "KisView.h"
 #include <filter/kis_filter_configuration.h>
@@ -50,8 +51,6 @@ public:
     void setView(QPointer<KisView>view);
 
 Q_SIGNALS:
-
-    void sigLayerActivated(KisLayerSP layer);
 
 private:
 
@@ -105,6 +104,7 @@ private Q_SLOTS:
     KisAdjustmentLayerSP addAdjustmentLayer(KisNodeSP activeNode, const QString & name, KisFilterConfigurationSP  filter, KisSelectionSP selection, KisProcessingApplicator *applicator);
 
     KisNodeSP addGeneratorLayer(KisNodeSP activeNode);
+    KisGeneratorLayerSP addGeneratorLayer(KisNodeSP activeNode, const QString &name, KisFilterConfigurationSP filter, KisSelectionSP selection, KisProcessingApplicator *applicator);
 
     KisNodeSP addFileLayer(KisNodeSP activeNode);
 
@@ -119,18 +119,18 @@ private:
 private:
 
     KisViewManager * m_view;
-    QPointer<KisView>m_imageView;
+    QPointer<KisView>m_imageView {0};
 
-    KisAction *m_imageFlatten;
-    KisAction *m_imageMergeLayer;
-    KisAction *m_groupLayersSave;
-    KisAction *m_convertGroupAnimated;
-    KisAction *m_imageResizeToLayer;
-    KisAction *m_flattenLayer;
-    KisAction *m_rasterizeLayer;
+    KisAction *m_imageFlatten {0};
+    KisAction *m_imageMergeLayer {0};
+    KisAction *m_groupLayersSave {0};
+    KisAction *m_convertGroupAnimated {0};
+    KisAction *m_imageResizeToLayer {0};
+    KisAction *m_flattenLayer {0};
+    KisAction *m_rasterizeLayer {0};
     KisNodeCommandsAdapter* m_commandsAdapter;
 
-    KisAction *m_layerStyle;
+    KisAction *m_layerStyle {0};
 };
 
 #endif

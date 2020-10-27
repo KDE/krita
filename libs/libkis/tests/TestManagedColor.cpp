@@ -27,7 +27,9 @@
 #include <KoColorProfile.h>
 #include <KoColor.h>
 
-QTEST_MAIN(TestManagedColor)
+#include <sdk/tests/testui.h>
+
+KISTEST_MAIN(TestManagedColor)
 
 void TestManagedColor::testOperatorIs()
 {

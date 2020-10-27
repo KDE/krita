@@ -26,8 +26,9 @@
 #include "kritaimage_export.h"
 
 class KisUpdatesFacade;
-class KisTimeRange;
+class KisTimeSpan;
 class KoColor;
+class KisRegion;
 
 namespace KisLayerUtils {
     struct SwitchFrameCommand;
@@ -98,12 +99,12 @@ public:
      *    frameProjection().  After the signal handler is exited, the
      *    data will no longer be available.
      */
-    void requestFrameRegeneration(int frameId, const QRegion &dirtyRegion);
+    void requestFrameRegeneration(int frameId, const KisRegion &dirtyRegion);
 
 
     void notifyNodeChanged(const KisNode *node, const QRect &rect, bool recursive);
     void notifyNodeChanged(const KisNode *node, const QVector<QRect> &rects, bool recursive);
-    void invalidateFrames(const KisTimeRange &range, const QRect &rect);
+    void invalidateFrames(const KisTimeSpan &range, const QRect &rect);
 
     /**
      * Changes the default color of the "external frame" projection of
@@ -116,15 +117,15 @@ public:
      * The current time range selected by user.
      * @return current time range
      */
-    const KisTimeRange& fullClipRange() const;
-    void setFullClipRange(const KisTimeRange range);
+    const KisTimeSpan& fullClipRange() const;
+    void setFullClipRange(const KisTimeSpan range);
 
     void setFullClipRangeStartTime(int column);
     void setFullClipRangeEndTime(int column);
 
 
-    const KisTimeRange &playbackRange() const;
-    void setPlaybackRange(const KisTimeRange range);
+    const KisTimeSpan &playbackRange() const;
+    void setPlaybackRange(const KisTimeSpan range);
 
     int framerate() const;
 
@@ -187,7 +188,7 @@ Q_SIGNALS:
     void sigFrameReady(int time);
     void sigFrameCancelled();
     void sigUiTimeChanged(int newTime);
-    void sigFramesChanged(const KisTimeRange &range, const QRect &rect);
+    void sigFramesChanged(const KisTimeSpan &range, const QRect &rect);
 
     void sigInternalRequestTimeSwitch(int frameId, bool useUndo);
 

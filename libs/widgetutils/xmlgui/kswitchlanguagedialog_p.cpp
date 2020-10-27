@@ -153,8 +153,7 @@ KSwitchLanguageDialog::KSwitchLanguageDialog(QWidget *parent)
 {
     setWindowTitle(i18n("Switch Application Language"));
 
-    QVBoxLayout *topLayout = new QVBoxLayout;
-    setLayout(topLayout);
+    QVBoxLayout *topLayout = new QVBoxLayout(this);
 
     QLabel *label = new QLabel(i18n("Please choose the language which should be used for this application:"), this);
     topLayout->addWidget(label);

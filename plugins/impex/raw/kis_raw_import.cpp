@@ -102,8 +102,48 @@ KisImportExportErrorCode KisRawImport::convert(KisDocument *document, QIODevice 
 
         QApplication::restoreOverrideCursor();
 
+        const KoColorProfile *profile = 0;
+
+        switch (settings.outputColorSpace) {
+        case RawDecodingSettings::RAWCOLOR:
+        case RawDecodingSettings::SRGB:
+            profile = KoColorSpaceRegistry::instance()->p709SRGBProfile();
+            break;
+        case RawDecodingSettings::ADOBERGB:
+            profile = KoColorSpaceRegistry::instance()->profileByName("ClayRGB-elle-V2-g22.icc");
+            break;
+        case RawDecodingSettings::WIDEGAMMUT:
+            profile = KoColorSpaceRegistry::instance()->profileByName("WideRGB-elle-V2-g22.icc");
+            break;
+        case RawDecodingSettings::PROPHOTO:
+            profile = KoColorSpaceRegistry::instance()->profileByName("LargeRGB-elle-V2-g22.icc");
+            break;
+        case RawDecodingSettings::CUSTOMOUTPUTCS:
+            QFileInfo info(settings.outputProfile);
+
+            if (!info.exists()) {
+                qWarning() << "WARNING: couldn't find custom profile" << settings.outputProfile;
+                profile = KoColorSpaceRegistry::instance()->p709SRGBProfile();
+            } else {
+                QFile profileFile(settings.outputProfile);
+
+                if (profileFile.open(QFile::ReadOnly)) {
+                    profile = KoColorSpaceRegistry::instance()->createColorProfile(RGBAColorModelID.id(), Integer16BitsColorDepthID.id(), profileFile.readAll());
+                } else {
+                    qWarning() << "WARNING: couldn't open custom profile file" << settings.outputProfile;
+                }
+            }
+
+            if (!profile) {
+                qWarning() << "WARNING: reset profile to sRGB";
+                profile = KoColorSpaceRegistry::instance()->p709SRGBProfile();
+            }
+
+            break;
+        }
+
         // Init the image
-        const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb16();
+        const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb16(profile);
         KisImageSP image = new KisImage(document->createUndoStore(), width, height, cs, filename());
         KIS_ASSERT_RECOVER_RETURN_VALUE(!image.isNull(), ImportExportCodes::InternalError);
 
@@ -120,7 +160,7 @@ KisImportExportErrorCode KisRawImport::convert(KisDocument *document, QIODevice 
         for (int y = 0; y < height; ++y) {
             do {
                 KoBgrU16Traits::Pixel* pixel = reinterpret_cast<KoBgrU16Traits::Pixel*>(it->rawData());
-                quint16* ptr = ((quint16*)imageData.data()) + (y * width + it->x()) * 3;
+                quint16* ptr = (reinterpret_cast<quint16*>(imageData.data())) + (y * width + it->x()) * 3;
 #if KDCRAW_VERSION < 0x000400
                 pixel->red = correctIndian(ptr[2]);
                 pixel->green = correctIndian(ptr[1]);

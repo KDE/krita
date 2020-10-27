@@ -53,7 +53,8 @@ public:
     ~KoPathTool() override;
 
     void paint(QPainter &painter, const KoViewConverter &converter) override;
-    void repaintDecorations() override;
+    void repaintDecorations();
+    QRectF decorationsRect() const override;
     void mousePressEvent(KoPointerEvent *event) override;
     void mouseMoveEvent(KoPointerEvent *event) override;
     void mouseReleaseEvent(KoPointerEvent *event) override;
@@ -68,9 +69,6 @@ public:
     void requestStrokeCancellation() override;
     void requestStrokeEnd() override;
     void explicitUserStrokeEndRequest() override;
-
-    /// repaints the specified rect
-    void repaint(const QRectF &repaintRect);
 
     QMenu* popupActionsMenu() override;
 
@@ -115,7 +113,6 @@ private:
     void clearActivePointSelectionReferences();
     void initializeWithShapes(const QList<KoShape*> shapes);
     KUndo2Command* createPointToCurveCommand(const QList<KoPathPointData> &points);
-    void repaintSegment(PathSegment *pathSegment);
     void mergePointsImpl(bool doJoin);
 
 protected:
@@ -123,16 +120,14 @@ protected:
     QCursor m_selectCursor;
 
 private:
-    KoPathToolHandle * m_activeHandle;       ///< the currently active handle
-    int m_handleRadius;    ///< the radius of the control point handles
-    uint m_grabSensitivity; ///< the grab sensitivity
+    QScopedPointer<KoPathToolHandle> m_activeHandle;       ///< the currently active handle
     QPointF m_lastPoint; ///< needed for interaction strategy
-    PathSegment *m_activeSegment;
+    QScopedPointer<PathSegment> m_activeSegment;
 
     // make a frind so that it can test private member/methods
     friend class TestPathTool;
 
-    KoInteractionStrategy *m_currentStrategy; ///< the rubber selection strategy
+    QScopedPointer<KoInteractionStrategy> m_currentStrategy; ///< the rubber selection strategy
 
     QButtonGroup *m_pointTypeGroup;
     QActionGroup *m_points;

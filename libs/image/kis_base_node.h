@@ -70,7 +70,7 @@ public:
         QString name;
 
         /** Whether the property is a boolean (e.g. locked, visible) which can be toggled directly from the widget itself. */
-        bool isMutable;
+        bool isMutable {false};
 
         /** Provide these if the property isMutable. */
         QIcon onIcon;
@@ -82,14 +82,14 @@ public:
         /** If the property is mutable, specifies whether it can be put into stasis. When a property
         is in stasis, a new state is created, and the old one is stored in stateInStasis. When
         stasis ends, the old value is restored and the new one discarded */
-        bool canHaveStasis;
+        bool canHaveStasis {false};
 
         /** If the property isMutable and canHaveStasis, indicate whether it is in stasis or not */
-        bool isInStasis;
+        bool isInStasis {false};
 
         /** If the property isMutable and canHaveStasis, provide this value to store the property's
         state while in stasis */
-        bool stateInStasis;
+        bool stateInStasis {false};
 
         bool operator==(const Property &rhs) const {
             return rhs.name == name && rhs.state == state && isInStasis == rhs.isInStasis;
@@ -334,7 +334,7 @@ public:
      * type cannot generate a thumbnail. If the requested size is too
      * big, return a null QImage.
      */
-    virtual QImage createThumbnail(qint32 w, qint32 h);
+    virtual QImage createThumbnail(qint32 w, qint32 h, Qt::AspectRatioMode aspectRatioMode = Qt::IgnoreAspectRatio);
 
     /**
      * @return a thumbnail in requested size for the defined timestamp.
@@ -343,7 +343,7 @@ public:
      * current node type cannot generate a thumbnail. If the requested
      * size is too big, return a null QImage.
      */
-    virtual QImage createThumbnailForFrame(qint32 w, qint32 h, int time);
+    virtual QImage createThumbnailForFrame(qint32 w, qint32 h, int time, Qt::AspectRatioMode aspectRatioMode = Qt::IgnoreAspectRatio);
 
     /**
      * Ask this node to re-read the pertinent settings from the krita
@@ -383,6 +383,17 @@ public:
      * edited.
      */
     bool userLocked() const;
+
+    /**
+     * Return whether or not the given node is isolated.
+     */
+    bool belongsToIsolatedGroup() const;
+
+    /**
+     * Return whether or not the given node is the root of
+     * isolation.
+     */
+    bool isIsolatedRoot() const;
 
     /**
      * Set the locked status of this node. Locked nodes cannot be
@@ -480,6 +491,12 @@ public:
     bool supportsLodMoves() const;
 
     /**
+     * Returns true if the node can be painted via KisPaintDevice. Notable
+     * exceptions are selection-based layers and masks.
+     */
+    virtual bool supportsLodPainting() const;
+
+    /**
      * Return the keyframe channels associated with this node
      * @return list of keyframe channels
      */
@@ -496,8 +513,15 @@ public:
     KisKeyframeChannel *getKeyframeChannel(const QString &id, bool create);
     KisKeyframeChannel *getKeyframeChannel(const QString &id) const;
 
-    bool useInTimeline() const;
-    void setUseInTimeline(bool value);
+    /**
+     * @return If true, node will be visible on animation timeline even when inactive.
+     */
+    bool isPinnedToTimeline() const;
+
+    /**
+     * Set whether node should be visible on animation timeline even when inactive.
+     */
+    void setPinnedToTimeline(bool pinned);
 
     bool isAnimated() const;
     void enableAnimation();
@@ -571,6 +595,18 @@ protected:
      * @return newly created channel or null
      */
     virtual KisKeyframeChannel * requestKeyframeChannel(const QString &id);
+
+public:
+    /**
+     * Ideally, this function would be used to query for keyframe support
+     * before trying to create channels. The ability to query would help
+     * in cases such as animation curves where you might want to ask
+     * which channels it supports before allowing the user to add.
+     *
+     * @param id querried channel
+     * @return bool whether it supports said channel or not.
+     */
+    virtual bool supportsKeyframeChannel(const QString &id);
 
 Q_SIGNALS:
     void keyframeChannelAdded(KisKeyframeChannel *channel);

@@ -44,11 +44,14 @@
 #include <kis_canvas2.h>
 #include <kis_action.h>
 
+#include <KisToolPaintFactoryBase.h>
+
 
 #include "tool_transform_args.h"
 #include "KisToolChangesTracker.h"
 #include "kis_tool_transform_config_widget.h"
 #include "transform_transaction_properties.h"
+#include "kis_signal_auto_connection.h"
 
 class QTouchEvent;
 class KisTransformStrategyBase;
@@ -249,7 +252,6 @@ private:
     void initGuiAfterTransformMode();
 
     void initThumbnailImage(KisPaintDeviceSP previewDevice);
-    void updateSelectionPath(const QPainterPath &selectionOutline);
     void updateApplyResetAvailability();
 
 private:
@@ -259,6 +261,7 @@ private:
 
     KisPaintDeviceSP m_selectedPortionCache;
     KisStrokeId m_strokeId;
+    void *m_strokeStrategyCookie = 0;
 
     bool m_workRecursively;
 
@@ -269,6 +272,7 @@ private:
 
     TransformTransactionProperties m_transaction;
     KisToolChangesTracker m_changesTracker;
+    KisSignalAutoConnectionsStore m_actionConnections;
 
 
     /// actions for the context click menu
@@ -309,12 +313,22 @@ private Q_SLOTS:
     void slotTrackerChangedConfig(KisToolChangesTrackerDataSP status);
     void slotUiChangedConfig();
     void slotApplyTransform();
-    void slotResetTransform();
+    void slotResetTransform(ToolTransformArgs::TransformMode mode);
+    void slotCancelTransform();
     void slotRestartTransform();
     void slotEditingFinished();
 
-    void slotTransactionGenerated(TransformTransactionProperties transaction, ToolTransformArgs args);
-    void slotPreviewDeviceGenerated(KisPaintDeviceSP device, const QPainterPath &selectionOutline);
+    void slotMoveDiscreteUp();
+    void slotMoveDiscreteUpMore();
+    void slotMoveDiscreteDown();
+    void slotMoveDiscreteDownMore();
+    void slotMoveDiscreteLeft();
+    void slotMoveDiscreteLeftMore();
+    void slotMoveDiscreteRight();
+    void slotMoveDiscreteRightMore();
+
+    void slotTransactionGenerated(TransformTransactionProperties transaction, ToolTransformArgs args, void *strokeStrategyCookie);
+    void slotPreviewDeviceGenerated(KisPaintDeviceSP device);
 
     // context menu options for updating the transform type
     // this is to help with discoverability since come people can't find the tool options
@@ -325,12 +339,12 @@ private Q_SLOTS:
     void slotUpdateToCageType();
 };
 
-class KisToolTransformFactory : public KoToolFactoryBase
+class KisToolTransformFactory : public KisToolPaintFactoryBase
 {
 public:
 
     KisToolTransformFactory()
-            : KoToolFactoryBase("KisToolTransform") {
+            : KisToolPaintFactoryBase("KisToolTransform") {
         setToolTip(i18n("Transform a layer or a selection"));
         setSection(TOOL_TYPE_TRANSFORM);
         setIconName(koIconNameCStr("krita_tool_transform"));
@@ -345,6 +359,7 @@ public:
         return new KisToolTransform(canvas);
     }
 
+    QList<QAction *> createActionsImpl() override;
 };
 
 

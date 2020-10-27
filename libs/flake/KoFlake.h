@@ -47,7 +47,8 @@ namespace KoFlake
         None,
         Solid,
         Gradient,
-        Pattern
+        Pattern,
+        MeshGradient
     };
 
     enum MarkerPosition {
@@ -141,7 +142,19 @@ namespace KoFlake
 
     KRITAFLAKE_EXPORT Qt::Orientation significantScaleOrientation(qreal scaleX, qreal scaleY);
 
+    KRITAFLAKE_EXPORT void scaleShape(KoShape *shape, qreal scaleX, qreal scaleY,
+                                      const QPointF &absoluteStillPoint,
+                                      const QTransform &postScalingCoveringTransform);
+
+    KRITAFLAKE_EXPORT void scaleShapeGlobal(KoShape *shape, qreal scaleX, qreal scaleY,
+                          const QPointF &absoluteStillPoint);
+
+
     KRITAFLAKE_EXPORT void resizeShape(KoShape *shape, qreal scaleX, qreal scaleY,
+                              const QPointF &absoluteStillPoint,
+                              bool useGlobalMode);
+
+    KRITAFLAKE_EXPORT void resizeShapeCommon(KoShape *shape, qreal scaleX, qreal scaleY,
                                        const QPointF &absoluteStillPoint,
                                        bool useGlobalMode,
                                        bool usePostScaling, const QTransform &postScalingCoveringTransform);

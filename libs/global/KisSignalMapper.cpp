@@ -77,7 +77,7 @@ public:
     with particular objects using setMapping(). The objects' signals
     can then be connected to the map() slot which will emit the
     mapped() signal with the string or integer associated with the
-    original signalling object. Mappings can be removed later using
+    original signaling object. Mappings can be removed later using
     removeMappings().
 
     Example: Suppose we want to create a custom widget that contains

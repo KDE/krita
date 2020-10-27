@@ -138,7 +138,7 @@ public:
     void updateProjection(KisNodeSP node, const QVector<QRect> &rects, const QRect &cropRect);
     void updateProjection(KisNodeSP node, const QRect &rc, const QRect &cropRect);
     void updateProjectionNoFilthy(KisNodeSP node, const QRect& rc, const QRect &cropRect);
-    void fullRefreshAsync(KisNodeSP root, const QRect& rc, const QRect &cropRect);
+    void fullRefreshAsync(KisNodeSP root, const QVector<QRect>& rc, const QRect &cropRect);
     void fullRefresh(KisNodeSP root, const QRect& rc, const QRect &cropRect);
     void addSpontaneousJob(KisSpontaneousJob *spontaneousJob);
 
@@ -173,16 +173,11 @@ public:
     void setLod0ToNStrokeStrategyFactory(const KisLodSyncStrokeStrategyFactory &factory);
 
     /**
-     * Install a factory of a stroke strategy, that will be started
-     * every time when the scheduler needs to postpone all the updates
+     * Install a factory of a stroke strategies, that will be started
+     * every time when the scheduler needs to postpone/resume all the updates
      * of the *LOD0* strokes.
      */
-    void setSuspendUpdatesStrokeStrategyFactory(const KisSuspendResumeStrategyFactory &factory);
-
-    /**
-     * \see setSuspendUpdatesStrokeStrategyFactory()
-     */
-    void setResumeUpdatesStrokeStrategyFactory(const KisSuspendResumeStrategyFactory &factory);
+    void setSuspendResumeUpdatesStrokeStrategyFactory(const KisSuspendResumeStrategyPairFactory &factory);
 
     KisPostExecutionUndoAdapter* lodNPostExecutionUndoAdapter() const;
 
@@ -246,7 +241,6 @@ public:
                                qint32 threadCount);
 
     KisUpdaterContext* updaterContext();
-    KisTestableSimpleUpdateQueue* updateQueue();
     using KisUpdateScheduler::processQueues;
 };
 

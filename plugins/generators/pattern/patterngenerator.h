@@ -52,8 +52,15 @@ public:
     static inline KoID id() {
         return KoID("pattern", i18n("Pattern"));
     }
-    KisFilterConfigurationSP factoryConfiguration() const override;
+
+    KisFilterConfigurationSP factoryConfiguration(KisResourcesInterfaceSP resourcesInterface) const override;
+    KisFilterConfigurationSP defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const override;
     KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, bool useForMasks) const override;
+
+    /**
+     * This generator pastes a single instance of pattern over the whole layer.
+     */
+    bool allowsSplittingIntoPatches() const override { return false; }
 };
 
 #endif

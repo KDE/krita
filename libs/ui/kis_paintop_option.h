@@ -73,8 +73,9 @@ public:
      * Reimplement this to use the image in the option widget
      */
     virtual void setImage(KisImageWSP image);
-
     virtual void setNode(KisNodeWSP node);
+    virtual void setResourcesInterface(KisResourcesInterfaceSP resourcesInterface);
+    virtual void setCanvasResourcesInterface(KoCanvasResourcesInterfaceSP canvasResourcesInterface);
 
     void startReadOptionSetting(const KisPropertiesConfigurationSP setting);
     void startWriteOptionSetting(KisPropertiesConfigurationSP setting) const;
@@ -87,6 +88,9 @@ protected:
 
     void setConfigurationPage(QWidget *page);
 
+    KisResourcesInterfaceSP resourcesInterface() const;
+    KoCanvasResourcesInterfaceSP canvasResourcesInterface() const;
+
 protected:
     /**
      * Re-implement this to save the configuration to the paint configuration.
@@ -96,7 +100,7 @@ protected:
     }
 
     /**
-     * Re-implement this to set te widgets with the values in @p setting.
+     * Re-implement this to set the widgets with the values in @p setting.
      */
     virtual void readOptionSetting(const KisPropertiesConfigurationSP setting) {
         Q_UNUSED(setting);

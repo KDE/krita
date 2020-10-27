@@ -77,9 +77,8 @@ KoAnchorSelectionWidget::KoAnchorSelectionWidget(QWidget *parent)
         m_d->buttonGroup->addButton(button, i);
         m_d->buttons[i] = button;
     }
-    connect(m_d->buttonGroup, SIGNAL(buttonClicked(int)), SLOT(slotGroupClicked(int)));
 
-    setLayout(gridLayout);
+    connect(m_d->buttonGroup, SIGNAL(buttonClicked(int)), SLOT(slotGroupClicked(int)));
 }
 
 KoAnchorSelectionWidget::~KoAnchorSelectionWidget()

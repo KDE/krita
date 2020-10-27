@@ -6,6 +6,6 @@
     "X-KDE-Library": "krita_shape_image",
     "X-KDE-PluginInfo-Name": "imageshape",
     "X-KDE-ServiceTypes": [
-        "Calligra/Flake"
+        "Krita/Flake"
     ]
 }

@@ -44,24 +44,25 @@
 #include "kis_fill_painter.h"
 #include "kis_shape_selection.h"
 #include "util.h"
-#include "testutil.h"
+#include <testutil.h>
 #include "kis_keyframe_channel.h"
 #include "kis_image_animation_interface.h"
 #include "kis_layer_properties_icons.h"
+#include <KisGlobalResourcesInterface.h>
 
 #include "kis_transform_mask_params_interface.h"
 
 #include <generator/kis_generator_registry.h>
 
 #include <KoResourcePaths.h>
-#include  <sdk/tests/kistest.h>
+#include  <sdk/tests/testui.h>
 #include <filestest.h>
 
 const QString KraMimetype = "application/x-krita";
 
 void KisKraSaverTest::initTestCase()
 {
-    KoResourcePaths::addResourceDir("ko_patterns", QString(SYSTEM_RESOURCES_DATA_DIR) + "/patterns");
+    KoResourcePaths::addResourceDir(ResourceType::Patterns, QString(SYSTEM_RESOURCES_DATA_DIR) + "/patterns");
 
     KisFilterRegistry::instance();
     KisGeneratorRegistry::instance();
@@ -153,7 +154,7 @@ void testRoundTripFillLayerImpl(const QString &testName, KisFilterConfigurationS
     doc->documentInfo()->setAboutInfo("title", p.image->objectName());
 
     KisSelectionSP selection;
-    KisGeneratorLayerSP glayer = new KisGeneratorLayer(p.image, "glayer", config, selection);
+    KisGeneratorLayerSP glayer = new KisGeneratorLayer(p.image, "glayer", config->cloneWithResourcesSnapshot(), selection);
 
     p.image->addNode(glayer, p.image->root(), KisNodeSP());
     glayer->setDirty();
@@ -180,7 +181,7 @@ void KisKraSaverTest::testRoundTripFillLayerColor()
     Q_ASSERT(generator);
 
     // warning: we pass null paint device to the default constructed value
-    KisFilterConfigurationSP config = generator->factoryConfiguration();
+    KisFilterConfigurationSP config = generator->defaultConfiguration(KisGlobalResourcesInterface::instance());
     Q_ASSERT(config);
 
     QVariant v;
@@ -196,7 +197,7 @@ void KisKraSaverTest::testRoundTripFillLayerPattern()
     QVERIFY(generator);
 
     // warning: we pass null paint device to the default constructed value
-    KisFilterConfigurationSP config = generator->factoryConfiguration();
+    KisFilterConfigurationSP config = generator->defaultConfiguration(KisGlobalResourcesInterface::instance());
     QVERIFY(config);
 
     QVariant v;
@@ -240,15 +241,15 @@ void KisKraSaverTest::testRoundTripLayerStyles()
 
     style->dropShadow()->setAngle(-90);
     style->dropShadow()->setUseGlobalLight(false);
-    layer1->setLayerStyle(style->clone());
+    layer1->setLayerStyle(style->clone().dynamicCast<KisPSDLayerStyle>());
 
     style->dropShadow()->setAngle(180);
     style->dropShadow()->setUseGlobalLight(true);
-    layer2->setLayerStyle(style->clone());
+    layer2->setLayerStyle(style->clone().dynamicCast<KisPSDLayerStyle>());
 
     style->dropShadow()->setAngle(90);
     style->dropShadow()->setUseGlobalLight(false);
-    layer3->setLayerStyle(style->clone());
+    layer3->setLayerStyle(style->clone().dynamicCast<KisPSDLayerStyle>());
 
     image->initialRefreshGraph();
     chk.checkImage(image, "00_initial_layers");
@@ -281,7 +282,7 @@ void KisKraSaverTest::testRoundTripAnimation()
     KUndo2Command parentCommand;
 
     layer1->enableAnimation();
-    KisKeyframeChannel *rasterChannel = layer1->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
+    KisKeyframeChannel *rasterChannel = layer1->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true);
     QVERIFY(rasterChannel);
 
     rasterChannel->addKeyframe(10, &parentCommand);
@@ -298,8 +299,8 @@ void KisKraSaverTest::testRoundTripAnimation()
     layer1->paintDevice()->moveTo(100, 50);
     layer1->paintDevice()->setDefaultPixel(KoColor(Qt::blue, cs));
 
-    QVERIFY(!layer1->useInTimeline());
-    layer1->setUseInTimeline(true);
+    QVERIFY(!layer1->isPinnedToTimeline());
+    layer1->setPinnedToTimeline(true);
 
     doc->setCurrentImage(image);
     doc->exportDocumentSync(QUrl::fromLocalFile("roundtrip_animation.kra"), doc->mimeType());
@@ -314,7 +315,7 @@ void KisKraSaverTest::testRoundTripAnimation()
     cs = layer2->paintDevice()->colorSpace();
 
     QCOMPARE(image2->animationInterface()->currentTime(), 20);
-    KisKeyframeChannel *channel = layer2->getKeyframeChannel(KisKeyframeChannel::Content.id());
+    KisKeyframeChannel *channel = layer2->getKeyframeChannel(KisKeyframeChannel::Raster.id());
     QVERIFY(channel);
     QCOMPARE(channel->keyframeCount(), 3);
 
@@ -342,7 +343,7 @@ void KisKraSaverTest::testRoundTripAnimation()
     QCOMPARE(layer2->paintDevice()->y(), 50);
     QCOMPARE(layer2->paintDevice()->defaultPixel(), KoColor(Qt::blue, cs));
 
-    QVERIFY(layer2->useInTimeline());
+    QVERIFY(layer2->isPinnedToTimeline());
 
 }
 
@@ -361,7 +362,7 @@ void KisKraSaverTest::testRoundTripColorizeMask()
     KisPaintLayerSP layer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8, weirdCS);
     image->addNode(layer1);
 
-    KisColorizeMaskSP mask = new KisColorizeMask();
+    KisColorizeMaskSP mask = new KisColorizeMask(image, "mask1");
     image->addNode(mask, layer1);
     mask->initializeCompositeOp();
     delete mask->setColorSpace(layer1->colorSpace());
@@ -387,8 +388,9 @@ void KisKraSaverTest::testRoundTripColorizeMask()
         // KIS_DUMP_DEVICE_2(key3, refRect, "key3", "dd");
     }
 
-    KisLayerPropertiesIcons::setNodeProperty(mask, KisLayerPropertiesIcons::colorizeEditKeyStrokes, false, image);
-    KisLayerPropertiesIcons::setNodeProperty(mask, KisLayerPropertiesIcons::colorizeShowColoring, false, image);
+    KisLayerPropertiesIcons::setNodePropertyAutoUndo(mask, KisLayerPropertiesIcons::colorizeEditKeyStrokes, false, image);
+    KisLayerPropertiesIcons::setNodePropertyAutoUndo(mask, KisLayerPropertiesIcons::colorizeShowColoring, false, image);
+    image->waitForDone();
 
 
 
@@ -403,7 +405,7 @@ void KisKraSaverTest::testRoundTripColorizeMask()
     QVERIFY(mask2);
 
     QCOMPARE(mask2->compositeOpId(), mask->compositeOpId());
-    QCOMPARE(mask2->colorSpace(), mask->colorSpace());
+    QCOMPARE(*mask2->colorSpace(), *mask->colorSpace());
     QCOMPARE(KisLayerPropertiesIcons::nodeProperty(mask, KisLayerPropertiesIcons::colorizeEditKeyStrokes, true).toBool(), false);
     QCOMPARE(KisLayerPropertiesIcons::nodeProperty(mask, KisLayerPropertiesIcons::colorizeShowColoring, true).toBool(), false);
 
@@ -497,7 +499,7 @@ void KisKraSaverTest::testRoundTripShapeSelection()
     KisSelectionSP selection = new KisSelection(p.layer->paintDevice()->defaultBounds());
 
     KisShapeSelection *shapeSelection = new KisShapeSelection(doc->shapeController(), p.image, selection);
-    selection->setShapeSelection(shapeSelection);
+    selection->convertToVectorSelectionNoUndo(shapeSelection);
 
     KoPathShape* path = new KoPathShape();
     path->setShapeId(KoPathShapeId);
@@ -512,7 +514,7 @@ void KisKraSaverTest::testRoundTripShapeSelection()
 
     shapeSelection->addShape(path);
 
-    KisTransparencyMaskSP tmask = new KisTransparencyMask();
+    KisTransparencyMaskSP tmask = new KisTransparencyMask(p.image, "tmask");
     tmask->setSelection(selection);
     p.image->addNode(tmask, p.layer);
 
@@ -538,7 +540,7 @@ void KisKraSaverTest::testRoundTripShapeSelection()
     KisTransparencyMask *newMask = dynamic_cast<KisTransparencyMask*>(node.data());
     QVERIFY(newMask);
 
-    QVERIFY(newMask->selection()->hasShapeSelection());
+    QVERIFY(newMask->selection()->hasNonEmptyShapeSelection());
 
     QVERIFY(chk.testPassed());
 }

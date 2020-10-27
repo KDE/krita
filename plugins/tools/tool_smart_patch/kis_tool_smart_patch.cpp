@@ -43,23 +43,26 @@
 #include "libs/image/kis_paint_device_debug_utils.h"
 
 #include "kis_paint_layer.h"
+#include "kis_algebra_2d.h"
+#include "kis_resources_snapshot.h"
 
-QRect patchImage(KisPaintDeviceSP imageDev, KisPaintDeviceSP maskDev, int radius, int accuracy);
+QRect patchImage(KisPaintDeviceSP imageDev, KisPaintDeviceSP maskDev, int radius, int accuracy, KisSelectionSP selection);
 
 class KisToolSmartPatch::InpaintCommand : public KisTransactionBasedCommand {
 public:
-    InpaintCommand( KisPaintDeviceSP maskDev, KisPaintDeviceSP imageDev, int accuracy, int patchRadius ) :
-        m_maskDev(maskDev), m_imageDev(imageDev), m_accuracy(accuracy), m_patchRadius(patchRadius) {}
+    InpaintCommand( KisPaintDeviceSP maskDev, KisPaintDeviceSP imageDev, int accuracy, int patchRadius, KisSelectionSP selection) :
+        m_maskDev(maskDev), m_imageDev(imageDev), m_accuracy(accuracy), m_patchRadius(patchRadius), m_selection(selection) {}
 
     KUndo2Command* paint() override {
         KisTransaction transaction(m_imageDev);
-        patchImage(m_imageDev, m_maskDev, m_patchRadius, m_accuracy);
+        patchImage(m_imageDev, m_maskDev, m_patchRadius, m_accuracy, m_selection);
         return transaction.endAndTake();
     }
 
 private:
     KisPaintDeviceSP m_maskDev, m_imageDev;
     int m_accuracy, m_patchRadius;
+    KisSelectionSP m_selection;
 };
 
 struct KisToolSmartPatch::Private {
@@ -121,8 +124,12 @@ void KisToolSmartPatch::deactivatePrimaryAction()
 
 void KisToolSmartPatch::addMaskPath( KoPointerEvent *event )
 {
+    KisCanvas2 *canvas2 = dynamic_cast<KisCanvas2 *>(canvas());
+    KIS_ASSERT(canvas2);
+    const KisCoordinatesConverter *converter = canvas2->coordinatesConverter();
+
     QPointF imagePos = currentImage()->documentToPixel(event->point);
-    QPainterPath currentBrushOutline = brushOutline().translated(imagePos);
+    QPainterPath currentBrushOutline = brushOutline().translated(KisAlgebra2D::alignForZoom(imagePos, converter->effectiveZoom()));
     m_d->maskDevPainter.fillPainterPath(currentBrushOutline);
 
     canvas()->updateCanvas(currentImage()->pixelToDocument(m_d->maskDev->exactBounds()));
@@ -153,7 +160,6 @@ void KisToolSmartPatch::continuePrimaryAction(KoPointerEvent *event)
     KisToolPaint::continuePrimaryAction(event);
 }
 
-
 void KisToolSmartPatch::endPrimaryAction(KoPointerEvent *event)
 {
     CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
@@ -171,11 +177,17 @@ void KisToolSmartPatch::endPrimaryAction(KoPointerEvent *event)
         patchRadius = m_d->optionsWidget->getPatchRadius();
     }
 
+    KisResourcesSnapshotSP resources =
+        new KisResourcesSnapshot(image(), currentNode(), this->canvas()->resourceManager());
+
     KisProcessingApplicator applicator( image(), currentNode(), KisProcessingApplicator::NONE, KisImageSignalVector() << ModifiedSignal,
                                         kundo2_i18n("Smart Patch"));
 
     //actual inpaint operation. filling in areas masked by user
-    applicator.applyCommand( new InpaintCommand( KisPainter::convertToAlphaAsAlpha(m_d->maskDev), currentNode()->paintDevice(), accuracy, patchRadius ),
+    applicator.applyCommand( new InpaintCommand( KisPainter::convertToAlphaAsAlpha(m_d->maskDev),
+                                                 currentNode()->paintDevice(),
+                                                 accuracy, patchRadius,
+                                                 resources->activeSelection()),
                              KisStrokeJobData::BARRIER, KisStrokeJobData::EXCLUSIVE );
 
     applicator.end();
@@ -201,7 +213,10 @@ QPainterPath KisToolSmartPatch::getBrushOutlinePath(const QPointF &documentPos,
     QPointF imagePos = currentImage()->documentToPixel(documentPos);
     QPainterPath path = brushOutline();
 
-    return path.translated( imagePos.rx(), imagePos.ry() );
+    KisCanvas2 *canvas2 = dynamic_cast<KisCanvas2 *>(canvas());
+    const KisCoordinatesConverter *converter = canvas2->coordinatesConverter();
+
+    return path.translated(KisAlgebra2D::alignForZoom(imagePos, converter->effectiveZoom()));
 }
 
 void KisToolSmartPatch::requestUpdateOutline(const QPointF &outlineDocPoint, const KoPointerEvent *event)

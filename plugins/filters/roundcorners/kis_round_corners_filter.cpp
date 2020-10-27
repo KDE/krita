@@ -92,7 +92,7 @@ void KisRoundCornersFilter::processImpl(KisPaintDeviceSP device,
         return;
     }
 
-    const QRect bounds = device->defaultBounds()->bounds();
+    const QRect bounds = device->defaultBounds()->imageBorderRect();
 
     const qint32 radius = qMin(KisAlgebra2D::minDimension(bounds) / 2, qMax(1, config->getInt("radius" , 30)));
     const qreal radiusSq = pow2(radius);
@@ -147,9 +147,9 @@ KisConfigWidget * KisRoundCornersFilter::createConfigurationWidget(QWidget* pare
 
 }
 
-KisFilterConfigurationSP KisRoundCornersFilter::factoryConfiguration() const
+KisFilterConfigurationSP KisRoundCornersFilter::defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const
 {
-    KisFilterConfigurationSP config = new KisFilterConfiguration("roundcorners", 1);
+    KisFilterConfigurationSP config = factoryConfiguration(resourcesInterface);
     config->setProperty("radius", 30);
     return config;
 }

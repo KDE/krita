@@ -26,6 +26,7 @@
 #include "kis_projection_leaf.h"
 #include "kis_group_layer.h"
 
+#include "kistest.h"
 
 
 struct TestImage : TestUtil::QImageBasedTest {
@@ -304,28 +305,14 @@ void KisProjectionLeafTest::testSkippedSelectionMasks()
 
     KisGroupLayerSP group1 = new KisGroupLayer(t.image, "group1", OPACITY_OPAQUE_U8);
     KisPaintLayerSP paint2 = new KisPaintLayer(t.image, "paint2", OPACITY_OPAQUE_U8);
-    KisSelectionMaskSP selection3 = new KisSelectionMask(t.image);
-    selection3->setName("selection3");
-
+    KisSelectionMaskSP selection3 = new KisSelectionMask(t.image, "selection3");
     KisPaintLayerSP paint4 = new KisPaintLayer(t.image, "paint4", OPACITY_OPAQUE_U8);
-
-    KisTransparencyMaskSP tmask5 = new KisTransparencyMask();
-    tmask5->setName("tmask5");
-
-    KisSelectionMaskSP selection6 = new KisSelectionMask(t.image);
-    selection6->setName("selection6");
-
-    KisTransparencyMaskSP tmask7 = new KisTransparencyMask();
-    tmask7->setName("tmask7");
-
+    KisTransparencyMaskSP tmask5 = new KisTransparencyMask(t.image, "tmask5");
+    KisSelectionMaskSP selection6 = new KisSelectionMask(t.image, "selection6");
+    KisTransparencyMaskSP tmask7 = new KisTransparencyMask(t.image, "tmask7");
     KisPaintLayerSP paint8 = new KisPaintLayer(t.image, "paint8", OPACITY_OPAQUE_U8);
-
-    KisSelectionMaskSP selection9 = new KisSelectionMask(t.image);
-    selection9->setName("selection9");
-
-    KisTransparencyMaskSP tmask10 = new KisTransparencyMask();
-    tmask10->setName("tmask10");
-
+    KisSelectionMaskSP selection9 = new KisSelectionMask(t.image, "selection9");
+    KisTransparencyMaskSP tmask10 = new KisTransparencyMask(t.image, "tmask10");
 
     t.image->addNode(group1, t.image->root(), t.findBlur1());
 
@@ -410,7 +397,7 @@ void KisProjectionLeafTest::testSelectionMaskOverlay()
     KisPaintLayerSP paint2 = new KisPaintLayer(t.image, "paint2", OPACITY_OPAQUE_U8);
     KisSelectionMaskSP selection3 = new KisSelectionMask(t.image);
     selection3->setName("selection3");
-    selection3->setSelection(new KisSelection(new KisSelectionDefaultBounds(paint2->paintDevice(), t.image)));
+    selection3->setSelection(new KisSelection(new KisSelectionDefaultBounds(paint2->paintDevice())));
 
     t.image->addNode(group1, t.image->root(), t.findBlur1());
 
@@ -465,4 +452,4 @@ void KisProjectionLeafTest::testSelectionMaskOverlay()
     }
 }
 
-QTEST_MAIN(KisProjectionLeafTest)
+KISTEST_MAIN(KisProjectionLeafTest)

@@ -58,7 +58,7 @@ KRITAPSD_EXPORT void writeUnicodeString(const QString &value, QIODevice *device)
 KRITAPSD_EXPORT void writeVarString(const QString &value, QIODevice *device);
 KRITAPSD_EXPORT void writePascalString(const QString &value, QIODevice *device);
 KRITAPSD_EXPORT void writeFixedString(const QString &value, QIODevice *device);
-KRITAPSD_EXPORT QString getPatternUuidLazy(const KoPattern *pattern);
+KRITAPSD_EXPORT QString getPatternUuidLazy(const KoPatternSP pattern);
 
 /**
  * Align the pointer \p pos by alignment. Grow the pointer

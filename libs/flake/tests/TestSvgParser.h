@@ -101,6 +101,19 @@ private Q_SLOTS:
 
     void testRenderStrokeLinearGradient();
 
+    void testRenderMeshGradient_bilinear_1by1_UserCoord();
+    void testRenderMeshGradient_bicubic_1by1_UserCoord();
+    void testRenderMeshGradient_bilinear_2by2_UserCoord();
+    void testRenderMeshGradient_bicubic_2by2_UserCoord();
+    void testRenderMeshGradient_bilinear_1by1_Obb();
+    void testRenderMeshGradient_bicubic_2by2_Obb();
+    void testRenderMeshGradient_MeshTransform_UserCoord();
+    void testRenderMeshGradient_ShapeTransform_UserCoord();
+    void testRenderMeshGradient_transparent();
+    void testRenderMeshGradient_reversed();
+    void testRenderMeshGradient_MeshTransform_Obb();
+    void testRenderMeshGradient_ShapeTransform_Obb();
+
     void testManualRenderPattern_ContentUser_RefObb();
     void testManualRenderPattern_ContentObb_RefObb();
     void testManualRenderPattern_ContentUser_RefUser();
@@ -127,6 +140,7 @@ private Q_SLOTS:
     void testRenderClipPath_Obb_Transform();
 
     void testRenderClipMask_Obb();
+    void testRenderClipMaskOnGroup_Obb();
     void testRenderClipMask_User_Clip_Obb();
     void testRenderClipMask_User_Clip_User();
 

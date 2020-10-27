@@ -28,7 +28,7 @@
 #include <QScrollArea>
 #include <QEvent>
 #include <QToolButton>
-
+#include <QAction>
 
 #include "kis_uniform_paintop_property.h"
 #include "kis_slider_based_paintop_property.h"
@@ -43,6 +43,10 @@
 #include "kis_brush_hud_properties_config.h"
 #include "kis_elided_label.h"
 
+#include "kis_canvas2.h"
+#include "KisViewManager.h"
+#include "kactioncollection.h"
+
 #include "kis_debug.h"
 
 
@@ -53,6 +57,7 @@ struct KisBrushHud::Private
     QPointer<QWidget> wdgProperties;
     QPointer<QScrollArea> wdgPropertiesArea;
     QPointer<QVBoxLayout> propertiesLayout;
+    QPointer<QToolButton> btnReloadPreset;
     QPointer<QToolButton> btnConfigure;
 
     KisCanvasResourceProvider *provider;
@@ -69,7 +74,7 @@ KisBrushHud::KisBrushHud(KisCanvasResourceProvider *provider, QWidget *parent)
 {
     m_d->provider = provider;
 
-    QVBoxLayout *layout = new QVBoxLayout();
+    QVBoxLayout *layout = new QVBoxLayout(this);
 
     QHBoxLayout *labelLayout = new QHBoxLayout();
     m_d->lblPresetIcon = new QLabel(this);
@@ -80,15 +85,20 @@ KisBrushHud::KisBrushHud(KisCanvasResourceProvider *provider, QWidget *parent)
 
     m_d->lblPresetName = new KisElidedLabel("<Preset Name>", Qt::ElideMiddle, this);
 
+    m_d->btnReloadPreset = new QToolButton(this);
+    m_d->btnReloadPreset->setAutoRaise(true);
+    m_d->btnReloadPreset->setToolTip(i18n("Reload Original Preset"));
+
     m_d->btnConfigure = new QToolButton(this);
     m_d->btnConfigure->setAutoRaise(true);
+    m_d->btnConfigure->setToolTip(i18n("Configure the on-canvas brush editor"));
 
-
-
+    connect(m_d->btnReloadPreset, SIGNAL(clicked()), SLOT(slotReloadPreset()));
     connect(m_d->btnConfigure, SIGNAL(clicked()), SLOT(slotConfigBrushHud()));
 
     labelLayout->addWidget(m_d->lblPresetIcon);
     labelLayout->addWidget(m_d->lblPresetName);
+    labelLayout->addWidget(m_d->btnReloadPreset);
     labelLayout->addWidget(m_d->btnConfigure);
 
     layout->addLayout(labelLayout);
@@ -100,20 +110,23 @@ KisBrushHud::KisBrushHud(KisCanvasResourceProvider *provider, QWidget *parent)
     m_d->wdgPropertiesArea->setWidgetResizable(true);
 
     m_d->wdgProperties = new QWidget(this);
-    m_d->propertiesLayout = new QVBoxLayout(this);
+    m_d->propertiesLayout = new QVBoxLayout(m_d->wdgProperties);
     m_d->propertiesLayout->setSpacing(0);
     m_d->propertiesLayout->setContentsMargins(0, 0, 22, 0);
     m_d->propertiesLayout->setSizeConstraint(QLayout::SetMinimumSize);
 
     // not adding any widgets until explicitly requested
 
-    m_d->wdgProperties->setLayout(m_d->propertiesLayout);
     m_d->wdgPropertiesArea->setWidget(m_d->wdgProperties);
     layout->addWidget(m_d->wdgPropertiesArea);
 
+    // unfortunately the sizeHint() function of QScrollArea is pretty broken
+    // and it would add another event loop iteration to react to it anyway,
+    // so let's just catch LayoutRequest events from the properties widget directly
+    m_d->wdgProperties->installEventFilter(this);
+
     updateIcons();
 
-    setLayout(layout);
     setCursor(Qt::ArrowCursor);
 
     // Prevent tablet events from being captured by the canvas
@@ -147,6 +160,7 @@ void KisBrushHud::updateIcons()
             w->slotThemeChanged(qApp->palette());
         }
     }
+    m_d->btnReloadPreset->setIcon(KisIconUtils::loadIcon("view-refresh"));
     m_d->btnConfigure->setIcon(KisIconUtils::loadIcon("applications-system"));
 }
 
@@ -225,7 +239,6 @@ void KisBrushHud::updateProperties()
     }
 
     m_d->propertiesLayout->addStretch();
-    resize(sizeHint());
 }
 
 void KisBrushHud::showEvent(QShowEvent *event)
@@ -252,7 +265,7 @@ void KisBrushHud::slotCanvasResourceChanged(int key, const QVariant &resource)
 {
     Q_UNUSED(resource);
 
-    if (key == KisCanvasResourceProvider::CurrentPaintOpPreset) {
+    if (key == KoCanvasResource::CurrentPaintOpPreset) {
         updateProperties();
     }
 }
@@ -282,11 +295,27 @@ bool KisBrushHud::event(QEvent *event)
     case QEvent::Wheel:
         event->accept();
         return true;
+    case QEvent::LayoutRequest:
+        // resize when our layout determined a new recommended size
+        resize(sizeHint());
+        return true;
     default:
         break;
     }
 
     return QWidget::event(event);
+}
+
+bool KisBrushHud::eventFilter(QObject *watched, QEvent *event)
+{
+    // LayoutRequest event is sent from a layout to its parent widget
+    // when size requirements have been determined, i.e. sizeHint is available
+    if (watched == m_d->wdgProperties && event->type() == QEvent::LayoutRequest)
+    {
+        int totalMargin = 2 * m_d->wdgPropertiesArea->frameWidth();
+        m_d->wdgPropertiesArea->setMinimumWidth(m_d->wdgProperties->sizeHint().width() + totalMargin);
+    }
+    return false;
 }
 
 void KisBrushHud::slotConfigBrushHud()
@@ -297,4 +326,11 @@ void KisBrushHud::slotConfigBrushHud()
     dlg.exec();
 
     slotReloadProperties();
+}
+
+void KisBrushHud::slotReloadPreset()
+{
+    KisCanvas2* canvas = dynamic_cast<KisCanvas2*>(m_d->provider->canvas());
+    KIS_ASSERT_RECOVER_RETURN(canvas);
+    canvas->viewManager()->actionCollection()->action("reload_preset_action")->trigger();
 }

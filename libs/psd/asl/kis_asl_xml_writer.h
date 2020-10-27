@@ -22,13 +22,16 @@
 #include <QScopedPointer>
 #include <QVector>
 
+#include <KoPattern.h>
+#include <KoSegmentGradient.h>
+
 #include "kritapsd_export.h"
 
 class QString;
 class QColor;
 class QPointF;
 class QDomDocument;
-class KoPattern;
+
 class KoStopGradient;
 class KoSegmentGradient;
 
@@ -58,17 +61,19 @@ public:
     void writePhasePoint(const QString &key, const QPointF &value);
     void writeOffsetPoint(const QString &key, const QPointF &value);
     void writeCurve(const QString &key, const QString &name, const QVector<QPointF> &points);
-    QString writePattern(const QString &key, const KoPattern *pattern);
-    void writePatternRef(const QString &key, const KoPattern *pattern, const QString &uuid);
+    QString writePattern(const QString &key, const KoPatternSP pattern);
+    void writePatternRef(const QString &key, const KoPatternSP pattern, const QString &uuid);
     void writeSegmentGradient(const QString &key, const KoSegmentGradient *gradient);
     void writeStopGradient(const QString &key, const KoStopGradient *gradient);
 
 private:
+    QString getSegmentEndpointTypeString(KoGradientSegmentEndpointType segtype);
     void writeGradientImpl(const QString &key,
                            const QString &name,
                            QVector<QColor> colors,
                            QVector<qreal> transparencies,
                            QVector<qreal> positions,
+                           QVector<QString> types,
                            QVector<qreal> middleOffsets);
 
 private:

@@ -7,6 +7,6 @@
     "X-KDE-Library": "krita_shape_paths",
     "X-KDE-PluginInfo-Name": "pathshapes",
     "X-KDE-ServiceTypes": [
-        "Calligra/Shape"
+        "Krita/Shape"
     ]
 }

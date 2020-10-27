@@ -26,15 +26,22 @@
 #include <kis_icon.h>
 #include <KisViewManager.h>
 #include <kis_action.h>
-#include "dlg_buginfo.h"
+#include "DlgKritaLog.h"
+#include "DlgSysInfo.h"
+
 
 K_PLUGIN_FACTORY_WITH_JSON(BugInfoFactory, "kritabuginfo.json", registerPlugin<BugInfo>();)
+
+
 
 BugInfo::BugInfo(QObject *parent, const QVariantList &)
         : KisActionPlugin(parent)
 {
-    KisAction *action  = createAction("buginfo");
-    connect(action, SIGNAL(triggered()), this, SLOT(slotBugInfo()));
+    KisAction *actionBug  = createAction("buginfo");
+    KisAction *actionSys  = createAction("sysinfo");
+    connect(actionBug, SIGNAL(triggered()), this, SLOT(slotKritaLog()));
+    connect(actionSys, SIGNAL(triggered()), this, SLOT(slotSysInfo()));
+
 }
 
 
@@ -42,10 +49,17 @@ BugInfo::~BugInfo()
 {
 }
 
-void BugInfo::slotBugInfo()
+void BugInfo::slotKritaLog()
 {
-    DlgBugInfo dlgBugInfo(viewManager()->mainWindow());
-    dlgBugInfo.exec();
+    DlgKritaLog dlgKritaLog(viewManager()->mainWindow());
+    dlgKritaLog.exec();
 }
+
+void BugInfo::slotSysInfo()
+{
+    DlgSysInfo dlgSysInfo(viewManager()->mainWindow());
+    dlgSysInfo.exec();
+}
+
 
 #include "buginfo.moc"

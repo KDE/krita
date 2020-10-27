@@ -61,7 +61,7 @@ void KoTosContainerModel::setClipped(const KoShape *shape, bool clipping)
 
 bool KoTosContainerModel::isClipped(const KoShape *shape) const
 {
-    Q_UNUSED(shape)
+    Q_UNUSED(shape);
     return false;
 }
 
@@ -73,7 +73,7 @@ void KoTosContainerModel::setInheritsTransform(const KoShape *shape, bool inheri
 
 bool KoTosContainerModel::inheritsTransform(const KoShape *shape) const
 {
-    Q_UNUSED(shape)
+    Q_UNUSED(shape);
     return true;
 }
 

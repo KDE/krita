@@ -24,15 +24,13 @@
 
 #include <QSharedData>
 
-class KoPathShape::Private : public QSharedData
+class KoPathShape::Private
 {
 public:
     explicit Private();
     explicit Private(const Private &rhs);
 
     QRectF handleRect(const QPointF &p, qreal radius) const;
-    /// Applies the viewbox transformation defined in the given element
-    void applyViewboxTransformation(const KoXmlElement &element);
 
     void map(const QTransform &matrix);
 
@@ -87,8 +85,6 @@ public:
 
     QMap<KoFlake::MarkerPosition, QExplicitlySharedDataPointer<KoMarker>> markersNew;
     bool autoFillMarkers;
-
-    QList<KoPathShape::PointSelectionChangeListener*> pointChangeListeners;
 };
 
 #endif

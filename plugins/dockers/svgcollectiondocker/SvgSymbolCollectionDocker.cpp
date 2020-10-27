@@ -130,7 +130,7 @@ Qt::DropActions SvgCollectionModel::supportedDragActions() const
     return Qt::CopyAction;
 }
 
-void SvgCollectionModel::setSvgSymbolCollectionResource(KoSvgSymbolCollectionResource *resource)
+void SvgCollectionModel::setSvgSymbolCollectionResource(QSharedPointer<KoSvgSymbolCollectionResource> resource)
 {
     m_symbolCollection = resource;
 }
@@ -173,13 +173,10 @@ SvgSymbolCollectionDocker::SvgSymbolCollectionDocker(QWidget *parent)
 
     connect(m_wdgSvgCollection->cmbCollections, SIGNAL(activated(int)), SLOT(collectionActivated(int)));
 
-    KoResourceServer<KoSvgSymbolCollectionResource>  *svgCollectionProvider = KoResourceServerProvider::instance()->svgSymbolCollectionServer();
-    Q_FOREACH(KoSvgSymbolCollectionResource *r, svgCollectionProvider->resources()) {
-        m_wdgSvgCollection->cmbCollections->addSqueezedItem(r->name());
-        SvgCollectionModel *model = new SvgCollectionModel();
-        model->setSvgSymbolCollectionResource(r);
-        m_models.append(model);
-    }
+    m_resourceModel = new KisResourceModel(ResourceType::Symbols, this);
+
+    m_wdgSvgCollection->cmbCollections->setModel(m_resourceModel);
+    m_wdgSvgCollection->cmbCollections->setModelColumn(KisAbstractResourceModel::Name);
 
     m_wdgSvgCollection->listCollection->setDragEnabled(true);
     m_wdgSvgCollection->listCollection->setDragDropMode(QAbstractItemView::DragOnly);
@@ -226,11 +223,52 @@ SvgSymbolCollectionDocker::SvgSymbolCollectionDocker(QWidget *parent)
     }
     m_wdgSvgCollection->cmbCollections->setCurrentIndex(i);
     collectionActivated(i);
+
+    connect(m_resourceModel, SIGNAL(modelAboutToBeReset()), this, SLOT(slotResourceModelAboutToBeReset()));
+    connect(m_resourceModel, SIGNAL(modelReset()), this, SLOT(slotResourceModelReset()));
+}
+
+SvgSymbolCollectionDocker::~SvgSymbolCollectionDocker()
+{
+    clearModels();
 }
 
 void SvgSymbolCollectionDocker::slotSetIconSize()
 {
     m_wdgSvgCollection->listCollection->setIconSize(QSize(m_iconSizeSlider->value(),m_iconSizeSlider->value()));
+}
+
+void SvgSymbolCollectionDocker::slotResourceModelAboutToBeReset()
+{
+    int index = m_wdgSvgCollection->cmbCollections->currentIndex();
+    QModelIndex idx = m_resourceModel->index(index, 0);
+    int id = m_resourceModel->data(idx, Qt::UserRole + KisAbstractResourceModel::Id).toInt();
+    m_rememberedSvgCollectionId = id;
+}
+
+void SvgSymbolCollectionDocker::slotResourceModelReset()
+{
+     int indexToSet = 0;
+    if (m_rememberedSvgCollectionId < 0) {
+        indexToSet = 0;
+    } else {
+        for (int i = 0; i < m_resourceModel->rowCount(); i++) {
+            QModelIndex idx = m_resourceModel->index(i, 0);
+            int id = m_resourceModel->data(idx, Qt::UserRole + KisAbstractResourceModel::Id).toInt();
+            if (id == m_rememberedSvgCollectionId) {
+                indexToSet = i;
+                break;
+            }
+        }
+    }
+    // remove the current model from the view
+    m_wdgSvgCollection->listCollection->setModel(0);
+    // delete all models
+    clearModels();
+    // setting current index will create and set the model
+    m_wdgSvgCollection->cmbCollections->setCurrentIndex(indexToSet);
+    collectionActivated(indexToSet);
+    m_rememberedSvgCollectionId = -1;
 }
 
 void SvgSymbolCollectionDocker::setCanvas(KoCanvasBase *canvas)
@@ -245,10 +283,31 @@ void SvgSymbolCollectionDocker::unsetCanvas()
 
 void SvgSymbolCollectionDocker::collectionActivated(int index)
 {
-    if (index < m_models.size()) {
+    if (index < m_resourceModel->rowCount()) {
+        SvgCollectionModel *model;
+        if (m_collectionsModelsCache.contains(index)) {
+            model = m_collectionsModelsCache.value(index);
+        } else {
+            QModelIndex idx = m_resourceModel->index(index, 0);
+            QSharedPointer<KoSvgSymbolCollectionResource> r = m_resourceModel->resourceForIndex(idx).dynamicCast<KoSvgSymbolCollectionResource>();
+            model = new SvgCollectionModel();
+            model->setSvgSymbolCollectionResource(r);
+            m_collectionsModelsCache.insert(index, model);
+        }
+
         KConfigGroup cfg =  KSharedConfig::openConfig()->group("SvgSymbolCollection");
         cfg.writeEntry("currentCollection", index);
-        m_wdgSvgCollection->listCollection->setModel(m_models[index]);
+
+        m_wdgSvgCollection->listCollection->setModel(model);
+
     }
 
+}
+
+void SvgSymbolCollectionDocker::clearModels()
+{
+    Q_FOREACH(int key, m_collectionsModelsCache.keys()) {
+        delete m_collectionsModelsCache.value(key);
+    }
+    m_collectionsModelsCache.clear();
 }

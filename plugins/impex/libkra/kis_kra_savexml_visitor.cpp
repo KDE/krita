@@ -96,7 +96,11 @@ bool KisSaveXmlVisitor::visit(KisExternalLayer * layer)
 
         QDir d(QFileInfo(m_url).absolutePath());
 
+#ifndef Q_OS_ANDROID
         layerElement.setAttribute("source", d.relativeFilePath(path));
+#else
+        layerElement.setAttribute("source", path);
+#endif
 
         if (fileLayer->scalingMethod() == KisFileLayer::ToImagePPI) {
             layerElement.setAttribute("scale", "true");
@@ -122,7 +126,7 @@ QDomElement KisSaveXmlVisitor::savePaintLayerAttributes(KisPaintLayer *layer, QD
     element.setAttribute(COLORSPACE_NAME, layer->paintDevice()->colorSpace()->id());
 
     element.setAttribute(ONION_SKIN_ENABLED, layer->onionSkinEnabled());
-    element.setAttribute(VISIBLE_IN_TIMELINE, layer->useInTimeline());
+    element.setAttribute(VISIBLE_IN_TIMELINE, layer->isPinnedToTimeline());
 
     return element;
 }
@@ -337,7 +341,7 @@ void KisSaveXmlVisitor::loadLayerAttributes(const QDomElement &el, KisLayer *lay
     }
 
     if (el.hasAttribute(VISIBLE_IN_TIMELINE)) {
-        layer->setUseInTimeline(el.attribute(VISIBLE_IN_TIMELINE).toInt());
+        layer->setPinnedToTimeline(el.attribute(VISIBLE_IN_TIMELINE).toInt());
     }
 
     if (el.hasAttribute(LAYER_STYLE_UUID)) {
@@ -379,7 +383,7 @@ void KisSaveXmlVisitor::saveLayer(QDomElement & el, const QString & layerType, c
     el.setAttribute(UUID, layer->uuid().toString());
     el.setAttribute(COLLAPSED, layer->collapsed());
     el.setAttribute(COLOR_LABEL, layer->colorLabelIndex());
-    el.setAttribute(VISIBLE_IN_TIMELINE, layer->useInTimeline());
+    el.setAttribute(VISIBLE_IN_TIMELINE, layer->isPinnedToTimeline());
 
     if (layer->layerStyle()) {
         el.setAttribute(LAYER_STYLE_UUID, layer->layerStyle()->uuid().toString());
@@ -479,7 +483,7 @@ bool KisSaveXmlVisitor::saveMasks(KisNode * node, QDomElement & layerElement)
 bool KisSaveXmlVisitor::saveReferenceImagesLayer(KisExternalLayer *layer)
 {
     auto *referencesLayer = dynamic_cast<KisReferenceImagesLayer*>(layer);
-    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(referencesLayer, false)
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(referencesLayer, false);
 
     QDomElement layerElement = m_doc.createElement(LAYER);
     layerElement.setAttribute(NODE_TYPE, REFERENCE_IMAGES_LAYER);

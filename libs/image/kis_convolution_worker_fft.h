@@ -51,9 +51,7 @@ class KisConvolutionWorkerFFT : public KisConvolutionWorker<_IteratorFactory_>
 {
 public:
     KisConvolutionWorkerFFT(KisPainter *painter, KoUpdater *progress)
-        : KisConvolutionWorker<_IteratorFactory_>(painter, progress),
-          m_currentProgress(0),
-          m_kernelFFT(0)
+        : KisConvolutionWorker<_IteratorFactory_>(painter, progress)
     {
     }
 
@@ -173,9 +171,7 @@ public:
                 const KisConvolutionKernelSP kernel,
                 const KoColorSpace */*colorSpace*/)
             : fftScale(_fftScale),
-              convChannelList(_convChannelList),
-              alphaCachePos(-1),
-              alphaRealPos(-1)
+              convChannelList(_convChannelList)
         {
             KisMathToolbox mathToolbox;
 
@@ -192,9 +188,11 @@ public:
 
             toDoubleFuncPtr.resize(convChannelList.count());
             fromDoubleFuncPtr.resize(convChannelList.count());
+            fromDoubleCheckNullFuncPtr.resize(convChannelList.count());
 
             bool result = mathToolbox.getToDoubleChannelPtr(convChannelList, toDoubleFuncPtr);
             result &= mathToolbox.getFromDoubleChannelPtr(convChannelList, fromDoubleFuncPtr);
+            result &= mathToolbox.getFromDoubleCheckNullChannelPtr(convChannelList, fromDoubleCheckNullFuncPtr);
 
             KIS_ASSERT(result);
         }
@@ -208,14 +206,15 @@ public:
         QVector<qreal> maxClamp;
         QVector<qreal> absoluteOffset;
 
-        qreal fftScale;
+        qreal fftScale {0.0};
         QList<KoChannelInfo*> convChannelList;
 
         QVector<PtrToDouble> toDoubleFuncPtr;
         QVector<PtrFromDouble> fromDoubleFuncPtr;
+        QVector<PtrFromDoubleCheckNull> fromDoubleCheckNullFuncPtr;
 
-        int alphaCachePos;
-        int alphaRealPos;
+        int alphaCachePos {-1};
+        int alphaRealPos {-1};
     };
 
     void fillCacheFromDevice(KisPaintDeviceSP src,
@@ -287,6 +286,20 @@ public:
         }
     }
 
+    inline qreal writeAlphaFromCache(quint8* dstPtr,
+                                     const quint32 channel,
+                                     const FFTInfo &info,
+                                     double* channelValuePtr,
+                                     bool *dstValueIsNull) {
+        qreal channelPixelValue;
+
+        channelPixelValue = *channelValuePtr * info.fftScale + info.absoluteOffset[channel];
+        limitValue(&channelPixelValue, info.minClamp[channel], info.maxClamp[channel]);
+        info.fromDoubleCheckNullFuncPtr[channel](dstPtr, info.convChannelList[channel]->pos(), channelPixelValue, dstValueIsNull);
+
+        return channelPixelValue;
+    }
+
     template <bool additionalMultiplierActive>
     inline qreal writeOneChannelFromCache(quint8* dstPtr,
                                           const quint32 channel,
@@ -296,7 +309,7 @@ public:
         qreal channelPixelValue;
 
         if (additionalMultiplierActive) {
-            channelPixelValue = (*channelValuePtr * info.fftScale + info.absoluteOffset[channel]) * additionalMultiplier;
+            channelPixelValue = *channelValuePtr * info.fftScale * additionalMultiplier + info.absoluteOffset[channel];
         } else {
             channelPixelValue = *channelValuePtr * info.fftScale + info.absoluteOffset[channel];
         }
@@ -344,13 +357,18 @@ public:
                 quint8 *dstPtr = hitDst->rawData();
 
                 if (info.alphaCachePos >= 0) {
-                    qreal alphaValue =
-                        writeOneChannelFromCache<false>(dstPtr,
-                                                        info.alphaCachePos,
-                                                        info,
-                                                        channelPtr.at(info.alphaCachePos));
+                    bool alphaIsNullInDstSpace = false;
 
-                    if (alphaValue > std::numeric_limits<qreal>::epsilon()) {
+                    qreal alphaValue =
+                        writeAlphaFromCache(dstPtr,
+                                            info.alphaCachePos,
+                                            info,
+                                            channelPtr.at(info.alphaCachePos),
+                                            &alphaIsNullInDstSpace);
+
+                    if (!alphaIsNullInDstSpace &&
+                        alphaValue > std::numeric_limits<qreal>::epsilon()) {
+
                         qreal alphaValueInv = 1.0 / alphaValue;
 
                         int k = 0;
@@ -369,8 +387,8 @@ public:
                         for (auto i = channelPtrBegin; i != channelPtrEnd; ++i, ++k) {
                             if (k != info.alphaCachePos) {
                                 info.fromDoubleFuncPtr[k](dstPtr,
-                                info.convChannelList[k]->pos(),
-                                0.0);
+                                        info.convChannelList[k]->pos(),
+                                        0.0);
                             }
                             ++(*i);
                         }
@@ -531,10 +549,13 @@ private:
         m_channelFFT.clear();
     }
 private:
-    quint32 m_fftWidth, m_fftHeight, m_fftLength, m_extraMem;
-    float m_currentProgress;
+    quint32 m_fftWidth {0};
+    quint32 m_fftHeight {0};
+    quint32 m_fftLength {0};
+    quint32 m_extraMem {0};
+    float m_currentProgress {0.0};
 
-    fftw_complex* m_kernelFFT;
+    fftw_complex* m_kernelFFT {0};
     QVector<fftw_complex*> m_channelFFT;
 };
 

@@ -85,6 +85,7 @@ public:
     KisShaderProgram *loadDisplayShader(QSharedPointer<KisDisplayFilter> displayFilter, bool useHiQualityFiltering);
     KisShaderProgram *loadCheckerShader();
     KisShaderProgram *loadSolidColorShader();
+    KisShaderProgram *loadOverlayInvertedShader();
 
 private:
     KisShaderProgram *loadShader(QString vertPath, QString fragPath, QByteArray vertHeader, QByteArray fragHeader);

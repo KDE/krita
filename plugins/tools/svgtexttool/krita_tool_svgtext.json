@@ -6,6 +6,6 @@
     "X-KDE-Library": "krita_tool_svgtext",
     "X-KDE-PluginInfo-Name": "svgtexttool",
     "X-KDE-ServiceTypes": [
-        "Calligra/Tool"
+        "Krita/Tool"
     ]
 }

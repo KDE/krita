@@ -23,6 +23,7 @@
 #include "kis_selection.h"
 #include "kis_paint_device.h"
 #include "kis_processing_information.h"
+#include <KisGlobalResourcesInterface.h>
 
 KisColorBalanceFilter::KisColorBalanceFilter() 
         : KisColorTransformationFilter(id(), FiltersCategoryAdjustId, i18n("&Color Balance..."))
@@ -58,9 +59,9 @@ KoColorTransformation * KisColorBalanceFilter::createTransformation(const KoColo
     return cs->createColorTransformation("ColorBalance" , params);
 }
 
-KisFilterConfigurationSP KisColorBalanceFilter::factoryConfiguration() const
+KisFilterConfigurationSP KisColorBalanceFilter::defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const
 {
-    KisColorTransformationConfigurationSP config = new KisColorTransformationConfiguration(id().id(), 0);
+    KisFilterConfigurationSP config = factoryConfiguration(resourcesInterface);
     config->setProperty("cyan_red_midtones", 0);
     config->setProperty("yellow_green_midtones", 0);
     config->setProperty("magenta_blue_midtones", 0);
@@ -150,7 +151,7 @@ KisColorBalanceConfigWidget::~KisColorBalanceConfigWidget()
 
 KisPropertiesConfigurationSP  KisColorBalanceConfigWidget::configuration() const
 {
-    KisColorTransformationConfigurationSP c = new KisColorTransformationConfiguration(KisColorBalanceFilter::id().id(), 0);
+    KisColorTransformationConfigurationSP c = new KisColorTransformationConfiguration(KisColorBalanceFilter::id().id(), 0, KisGlobalResourcesInterface::instance());
 
     c->setProperty("cyan_red_shadows", m_page->cyanRedShadowsSlider->value());
     c->setProperty("magenta_green_shadows", m_page->magentaGreenShadowsSlider->value());

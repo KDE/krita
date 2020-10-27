@@ -582,6 +582,10 @@ xcopy /S /Y /I %DEPS_INSTALL_DIR%\lib\plugins\imageformats %pkg_root%\bin\imagef
 xcopy /S /Y /I %DEPS_INSTALL_DIR%\plugins\imageformats %pkg_root%\bin\imageformats
 xcopy /S /Y /I %DEPS_INSTALL_DIR%\lib\plugins\kf5 %pkg_root%\bin\kf5
 xcopy /S /Y /I %DEPS_INSTALL_DIR%\plugins\kf5 %pkg_root%\bin\kf5
+
+:: Copy the sql drivers explicitly
+xcopy /S /Y /I %DEPS_INSTALL_DIR%\plugins\sqldrivers %pkg_root%\bin\sqldrivers
+
 :: Qt Translations
 :: it seems that windeployqt does these, but only *some* of these???
 mkdir %pkg_root%\bin\translations
@@ -622,6 +626,8 @@ xcopy /Y /S /I %DEPS_INSTALL_DIR%\share\locale %pkg_root%\bin\locale
 
 :: Copy shortcut link from source (can't create it dynamically)
 copy %KRITA_SRC_DIR%\packaging\windows\krita.lnk %pkg_root%
+copy %KRITA_SRC_DIR%\packaging\windows\krita-minimal.lnk %pkg_root%
+copy %KRITA_SRC_DIR%\packaging\windows\krita-animation.lnk %pkg_root%
 
 set "QMLDIR_ARGS=--qmldir %DEPS_INSTALL_DIR%\qml"
 if exist "%KRITA_INSTALL_DIR%\lib\qml" (
@@ -636,7 +642,7 @@ if EXIST "%DEPS_INSTALL_DIR%\bin\gmic_krita_qt.exe" (
 )
 
 :: windeployqt
-windeployqt.exe %QMLDIR_ARGS% --release -gui -core -concurrent -network -printsupport -svg -xml -multimedia -qml -quick -quickwidgets %pkg_root%\bin\krita.exe %WINDEPLOYQT_GMIC_ARGS%
+windeployqt.exe %QMLDIR_ARGS% --release -gui -core -concurrent -network -printsupport -svg -xml -sql -multimedia -qml -quick -quickwidgets %pkg_root%\bin\krita.exe %WINDEPLOYQT_GMIC_ARGS%
 if errorlevel 1 (
 	echo ERROR: WinDeployQt failed! 1>&2
 	exit /B 1

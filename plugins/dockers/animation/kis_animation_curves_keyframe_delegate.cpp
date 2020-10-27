@@ -23,9 +23,10 @@
 #include <QVector2D>
 
 #include "kis_animation_curves_model.h"
+#include "kis_scalar_keyframe_channel.h"
 #include "kis_keyframe.h"
 
-const int NODE_RENDER_RADIUS = 2;
+const int NODE_RENDER_RADIUS = 4;
 const int NODE_UI_RADIUS = 8;
 
 struct KisAnimationCurvesKeyframeDelegate::Private
@@ -40,15 +41,18 @@ struct KisAnimationCurvesKeyframeDelegate::Private
 
     int adjustedHandle;
     QPointF handleAdjustment;
+
 };
 
 KisAnimationCurvesKeyframeDelegate::KisAnimationCurvesKeyframeDelegate(const TimelineRulerHeader *horizontalRuler, const KisAnimationCurvesValueRuler *verticalRuler, QObject *parent)
     : QAbstractItemDelegate(parent)
     , m_d(new Private(horizontalRuler, verticalRuler))
-{}
+{
+}
 
 KisAnimationCurvesKeyframeDelegate::~KisAnimationCurvesKeyframeDelegate()
 {}
+
 
 void KisAnimationCurvesKeyframeDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
@@ -120,7 +124,7 @@ bool KisAnimationCurvesKeyframeDelegate::hasHandle(const QModelIndex index, int 
         interpolatedIndex = index;
     }
 
-    return (interpolatedIndex.data(KisAnimationCurvesModel::InterpolationModeRole).toInt() == KisKeyframe::Bezier);
+    return (interpolatedIndex.data(KisAnimationCurvesModel::InterpolationModeRole).toInt() == KisScalarKeyframe::Bezier);
 }
 
 QPointF KisAnimationCurvesKeyframeDelegate::leftHandle(const QModelIndex index, bool active) const
@@ -149,7 +153,7 @@ QPointF KisAnimationCurvesKeyframeDelegate::handlePosition(const QModelIndex ind
                 (handle == 1 && handlePos.x() < 0)) {
                 handlePos.setX(0);
             }
-        } else if (index.data(KisAnimationCurvesModel::TangentsModeRole).toInt() == KisKeyframe::Smooth) {
+        } else if (index.data(KisAnimationCurvesModel::TangentsModeRole).toInt() == KisScalarKeyframe::Smooth) {
             qreal length = QVector2D(handlePos).length();
             QVector2D opposite(handlePosition(index, active, 1-handle));
             handlePos = (-length * opposite.normalized()).toPointF();
@@ -191,6 +195,19 @@ QRect KisAnimationCurvesKeyframeDelegate::itemRect(const QModelIndex index) cons
     QPointF center = nodeCenter(index, false);
 
     return QRect(center.x() - NODE_UI_RADIUS, center.y() - NODE_UI_RADIUS, 2*NODE_UI_RADIUS, 2*NODE_UI_RADIUS);
+}
+
+QRect KisAnimationCurvesKeyframeDelegate::frameRect(const QModelIndex index) const
+{
+    int section = m_d->horizontalRuler->logicalIndex(index.column());
+    int x = m_d->horizontalRuler->sectionViewportPosition(section);
+    int xSize = m_d->horizontalRuler->sectionSize(section);
+
+    float value = index.data(KisAnimationCurvesModel::ScalarValueRole).toReal();
+    float y = m_d->verticalRuler->mapValueToView(value);
+    int ySize = m_d->verticalRuler->height();
+
+   return QRect(x, y, xSize, ySize);
 }
 
 QRect KisAnimationCurvesKeyframeDelegate::visualRect(const QModelIndex index) const

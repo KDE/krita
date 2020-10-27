@@ -32,6 +32,9 @@
 #include "kis_iterator_ng.h"
 #include "KisLazyStorage.h"
 #include "KisSelectionUpdateCompressor.h"
+#include "kis_simple_stroke_strategy.h"
+#include "KisDeleteLaterWrapper.h"
+#include "kis_command_utils.h"
 
 struct Q_DECL_HIDDEN KisSelection::Private {
     Private(KisSelection *q)
@@ -41,6 +44,8 @@ struct Q_DECL_HIDDEN KisSelection::Private {
 
     {
     }
+
+    static void safeDeleteShapeSelection(KisSelectionComponent *shapeSelection, KisSelection *selection);
 
     // used for forwarding setDirty signals only
     KisNodeWSP parentNode;
@@ -52,11 +57,122 @@ struct Q_DECL_HIDDEN KisSelection::Private {
     KisLazyStorage<KisSelectionUpdateCompressor> updateCompressor;
 };
 
+void KisSelection::Private::safeDeleteShapeSelection(KisSelectionComponent *shapeSelection, KisSelection *selection)
+{
+    struct ShapeSelectionReleaseStroke : public KisSimpleStrokeStrategy {
+        ShapeSelectionReleaseStroke(KisSelectionComponent *shapeSelection)
+            : KisSimpleStrokeStrategy(QLatin1String("ShapeSelectionReleaseStroke")),
+              m_shapeSelection(shapeSelection)
+        {
+            setRequestsOtherStrokesToEnd(false);
+            setClearsRedoOnStart(false);
+            setNeedsExplicitCancel(true);
+
+            this->enableJob(JOB_FINISH, true, KisStrokeJobData::BARRIER);
+            this->enableJob(JOB_CANCEL, true, KisStrokeJobData::BARRIER);
+        }
+
+        void finishStrokeCallback() {
+            makeKisDeleteLaterWrapper(m_shapeSelection)->deleteLater();
+        }
+
+        void cancelStrokeCallback() {
+            finishStrokeCallback();
+        }
+
+    private:
+        KisSelectionComponent *m_shapeSelection = 0;
+    };
+
+
+    if (selection) {
+        KisImageSP image = 0;
+
+        KisNodeSP parentNode = selection->parentNode();
+        if (parentNode) {
+            image = parentNode->image();
+        }
+
+        if (image) {
+            KisStrokeId strokeId = image->startStroke(new ShapeSelectionReleaseStroke(shapeSelection));
+            image->endStroke(strokeId);
+            shapeSelection = 0;
+        }
+    }
+
+    if (shapeSelection) {
+        makeKisDeleteLaterWrapper(shapeSelection)->deleteLater();
+        shapeSelection = 0;
+    }
+}
+
+struct KisSelection::ChangeShapeSelectionCommand : public KUndo2Command
+{
+    ChangeShapeSelectionCommand(KisSelectionWSP selection, KisSelectionComponent *shapeSelection)
+        : m_selection(selection),
+          m_shapeSelection(shapeSelection)
+    {
+        m_isFlatten = !shapeSelection;
+    }
+
+    ~ChangeShapeSelectionCommand() {
+        if (m_shapeSelection) {
+            Private::safeDeleteShapeSelection(m_shapeSelection, m_selection ? m_selection.data() : 0);
+        }
+    }
+
+    void undo() override
+    {
+        KIS_SAFE_ASSERT_RECOVER_RETURN(m_selection);
+
+        if (m_reincarnationCommand) {
+            m_reincarnationCommand->undo();
+        }
+
+        std::swap(m_selection->m_d->shapeSelection, m_shapeSelection);
+
+        if (!m_isFlatten) {
+            m_selection->requestCompressedProjectionUpdate(QRect());
+        }
+    }
+
+    void redo() override
+    {
+        KIS_SAFE_ASSERT_RECOVER_RETURN(m_selection);
+
+        if (m_firstRedo) {
+            if (bool(m_selection->m_d->shapeSelection) != bool(m_shapeSelection)) {
+                m_reincarnationCommand.reset(
+                    m_selection->m_d->pixelSelection->reincarnateWithDetachedHistory(m_isFlatten));
+            }
+            m_firstRedo = false;
+
+        }
+
+        if (m_reincarnationCommand) {
+            m_reincarnationCommand->redo();
+        }
+
+        std::swap(m_selection->m_d->shapeSelection, m_shapeSelection);
+
+        if (!m_isFlatten) {
+            m_selection->requestCompressedProjectionUpdate(QRect());
+        }
+    }
+
+private:
+    KisSelectionWSP m_selection;
+    KisSelectionComponent *m_shapeSelection = 0;
+    QScopedPointer<KUndo2Command> m_reincarnationCommand;
+    bool m_firstRedo = true;
+    bool m_isFlatten = false;
+};
+
 KisSelection::KisSelection(KisDefaultBoundsBaseSP defaultBounds)
     : m_d(new Private(this))
 {
     if (!defaultBounds) {
-        defaultBounds = new KisSelectionDefaultBounds(KisPaintDeviceSP());
+        defaultBounds = new KisSelectionEmptyBounds(0);
     }
     m_d->defaultBounds = defaultBounds;
 
@@ -75,7 +191,7 @@ KisSelection::KisSelection(const KisPaintDeviceSP source, KritaUtils::DeviceCopy
     : m_d(new Private(this))
 {
     if (!defaultBounds) {
-        defaultBounds = new KisSelectionDefaultBounds(KisPaintDeviceSP());
+        defaultBounds = new KisSelectionEmptyBounds(0);
     }
 
     m_d->defaultBounds = defaultBounds;
@@ -103,14 +219,19 @@ void KisSelection::copyFrom(const KisSelection &rhs)
     m_d->pixelSelection = new KisPixelSelection(*rhs.m_d->pixelSelection, KritaUtils::CopyAllFrames);
     m_d->pixelSelection->setParentSelection(this);
 
-
-    if (rhs.m_d->shapeSelection) {
+    if (rhs.m_d->shapeSelection && !rhs.m_d->shapeSelection->isEmpty()) {
         m_d->shapeSelection = rhs.m_d->shapeSelection->clone(this);
-        Q_ASSERT(m_d->shapeSelection);
-        Q_ASSERT(m_d->shapeSelection != rhs.m_d->shapeSelection);
+        KIS_SAFE_ASSERT_RECOVER_NOOP(m_d->shapeSelection);
+        KIS_SAFE_ASSERT_RECOVER(m_d->shapeSelection &&
+                                m_d->shapeSelection != rhs.m_d->shapeSelection) {
+            m_d->shapeSelection = 0;
+        }
     }
     else {
-        m_d->shapeSelection = 0;
+        if (m_d->shapeSelection) {
+            Private::safeDeleteShapeSelection(m_d->shapeSelection, this);
+            m_d->shapeSelection = 0;
+        }
     }
 }
 
@@ -140,7 +261,7 @@ KisNodeWSP KisSelection::parentNode() const
 
 bool KisSelection::outlineCacheValid() const
 {
-    return hasShapeSelection() ||
+    return m_d->shapeSelection ||
         m_d->pixelSelection->outlineCacheValid();
 }
 
@@ -148,7 +269,7 @@ QPainterPath KisSelection::outlineCache() const
 {
     QPainterPath outline;
 
-    if (hasShapeSelection()) {
+    if (m_d->shapeSelection) {
         outline += m_d->shapeSelection->outlineCache();
     } else if (m_d->pixelSelection->outlineCacheValid()) {
         outline += m_d->pixelSelection->outlineCache();
@@ -161,7 +282,7 @@ void KisSelection::recalculateOutlineCache()
 {
     Q_ASSERT(m_d->pixelSelection);
 
-    if (hasShapeSelection()) {
+    if (m_d->shapeSelection) {
         m_d->shapeSelection->recalculateOutlineCache();
     } else if (!m_d->pixelSelection->outlineCacheValid()) {
         m_d->pixelSelection->recalculateOutlineCache();
@@ -188,14 +309,19 @@ QTransform KisSelection::thumbnailImageTransform() const
     return m_d->pixelSelection->thumbnailImageTransform();
 }
 
-bool KisSelection::hasPixelSelection() const
+bool KisSelection::hasNonEmptyPixelSelection() const
 {
     return m_d->pixelSelection && !m_d->pixelSelection->isEmpty();
 }
 
-bool KisSelection::hasShapeSelection() const
+bool KisSelection::hasNonEmptyShapeSelection() const
 {
     return m_d->shapeSelection && !m_d->shapeSelection->isEmpty();
+}
+
+bool KisSelection::hasShapeSelection() const
+{
+    return m_d->shapeSelection;
 }
 
 KisPixelSelectionSP KisSelection::pixelSelection() const
@@ -208,15 +334,16 @@ KisSelectionComponent* KisSelection::shapeSelection() const
     return m_d->shapeSelection;
 }
 
-void KisSelection::setShapeSelection(KisSelectionComponent* shapeSelection)
+void KisSelection::convertToVectorSelectionNoUndo(KisSelectionComponent* shapeSelection)
 {
-    const bool needsNotification = shapeSelection != m_d->shapeSelection;
+    QScopedPointer<KUndo2Command> cmd(new ChangeShapeSelectionCommand(this, shapeSelection));
+    cmd->redo();
+}
 
-    m_d->shapeSelection = shapeSelection;
-
-    if (needsNotification) {
-        requestCompressedProjectionUpdate(QRect());
-    }
+KUndo2Command *KisSelection::convertToVectorSelection(KisSelectionComponent *shapeSelection)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!m_d->shapeSelection, nullptr);
+    return new ChangeShapeSelectionCommand(this, shapeSelection);
 }
 
 KisPixelSelectionSP KisSelection::projection() const
@@ -226,7 +353,7 @@ KisPixelSelectionSP KisSelection::projection() const
 
 void KisSelection::updateProjection(const QRect &rc)
 {
-    if(hasShapeSelection()) {
+    if(m_d->shapeSelection) {
         m_d->shapeSelection->renderToProjection(m_d->pixelSelection, rc);
         m_d->pixelSelection->setOutlineCache(m_d->shapeSelection->outlineCache());
     }
@@ -234,7 +361,7 @@ void KisSelection::updateProjection(const QRect &rc)
 
 void KisSelection::updateProjection()
 {
-    if(hasShapeSelection()) {
+    if(m_d->shapeSelection) {
         m_d->pixelSelection->clear();
         m_d->shapeSelection->renderToProjection(m_d->pixelSelection);
         m_d->pixelSelection->setOutlineCache(m_d->shapeSelection->outlineCache());
@@ -312,9 +439,10 @@ void KisSelection::setDefaultBounds(KisDefaultBoundsBaseSP bounds)
 
 void KisSelection::clear()
 {
-    // FIXME: check whether this is safe
-    delete m_d->shapeSelection;
-    m_d->shapeSelection = 0;
+    if (m_d->shapeSelection) {
+        Private::safeDeleteShapeSelection(m_d->shapeSelection, this);
+        m_d->shapeSelection = 0;
+    }
 
     m_d->pixelSelection->clear();
 }
@@ -323,8 +451,17 @@ KUndo2Command* KisSelection::flatten()
 {
     KUndo2Command *command = 0;
 
-    if (hasShapeSelection()) {
+    if (m_d->shapeSelection) {
         command = m_d->shapeSelection->resetToEmpty();
+
+        if (command) {
+            KisCommandUtils::CompositeCommand *cmd = new KisCommandUtils::CompositeCommand();
+            cmd->addCommand(command);
+            cmd->addCommand(new ChangeShapeSelectionCommand(this, nullptr));
+            command = cmd;
+        } else {
+            command = new ChangeShapeSelectionCommand(this, nullptr);
+        }
     }
 
     return command;
@@ -354,3 +491,4 @@ quint8 KisSelection::selected(qint32 x, qint32 y) const
 
     return *pix;
 }
+

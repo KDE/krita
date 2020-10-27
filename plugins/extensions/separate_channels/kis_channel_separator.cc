@@ -58,6 +58,7 @@
 #include <kis_node_manager.h>
 #include <kis_node_commands_adapter.h>
 #include <KisMimeDatabase.h>
+#include "kis_image_barrier_locker.h"
 
 KisChannelSeparator::KisChannelSeparator(KisViewManager * view)
     : m_viewManager(view)
@@ -97,7 +98,7 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
 
     QRect rect = src->exactBounds();
 
-    image->lock();
+    KisImageBarrierLocker locker(image);
     int i = 0;
     for (QList<KoChannelInfo *>::const_iterator it =  channels.constBegin(); it != channels.constEnd(); ++it) {
 
@@ -202,11 +203,6 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
         KisNodeCommandsAdapter adapter(m_viewManager);
         adapter.beginMacro(kundo2_i18n("Separate Image"));
 
-        // Flatten the image if required
-        if (sourceOps == ALL_LAYERS) {
-            image->flatten(0);
-        }
-
         for (QList<KoChannelInfo *>::const_iterator it =  channels.constBegin(); it != channels.constEnd(); ++it) {
 
             KoChannelInfo *ch = (*it);
@@ -234,7 +230,6 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
         adapter.endMacro();
         image->setModified();
     }
-    image->unlock();
 
     progressUpdater->setProgress(100);
 

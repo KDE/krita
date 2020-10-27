@@ -47,20 +47,27 @@ public:
     KisConvolutionPainter(KisPaintDeviceSP device);
     KisConvolutionPainter(KisPaintDeviceSP device, KisSelectionSP selection);
 
-    enum TestingEnginePreference {
+    enum EnginePreference {
         NONE,
         SPATIAL,
         FFTW
     };
 
 
-    KisConvolutionPainter(KisPaintDeviceSP device, TestingEnginePreference enginePreference);
+    KisConvolutionPainter(KisPaintDeviceSP device, EnginePreference enginePreference);
+
+    void setEnginePreference(EnginePreference value);
 
     /**
      * Convolve all channels in src using the specified kernel; there is only one kernel for all
-     * channels possible. By default the border pixels are not convolved, that is, convolving
-     * starts with at (x + kernel.width/2, y + kernel.height/2) and stops at w - (kernel.width/2)
-     * and h - (kernel.height/2)
+     * channels possible.
+     *
+     * WARNING: The painter will read **more** pixels than you pass in \p areaSize.
+     *          The actual processing area will be:
+     *          QRect(x - kernel.width() / 2,
+     *                y - kernel.height() / 2,
+     *                w + 2 * (kernel.width() / 2),
+     *                h + 2 * (kernel.height() / 2))
      *
      * The border op decides what to do with pixels too close to the edge of the rect as defined above.
      *
@@ -96,9 +103,9 @@ private:
                                                     KisPainter *painter,
                                                     KoUpdater *progress);
 
-     bool useFFTImplemenation(const KisConvolutionKernelSP kernel) const;
+     bool useFFTImplementation(const KisConvolutionKernelSP kernel) const;
 
 private:
-    TestingEnginePreference m_enginePreference;
+    EnginePreference m_enginePreference;
 };
 #endif //KIS_CONVOLUTION_PAINTER_H_

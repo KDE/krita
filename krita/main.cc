@@ -157,9 +157,18 @@ Java_org_krita_android_JNIWrappers_saveState(JNIEnv* /*env*/,
     QSettings kritarc(configPath + QStringLiteral("/kritadisplayrc"), QSettings::IniFormat);
     kritarc.setValue("canvasState", "OPENGL_SUCCESS");
 }
-#endif
 
-#ifdef Q_OS_ANDROID
+extern "C" JNIEXPORT void JNICALL
+Java_org_krita_android_JNIWrappers_exitFullScreen(JNIEnv* /*env*/,
+                                                  jobject /*obj*/,
+                                                  jint    /*n*/)
+{
+    if (!KisPart::exists()) return;
+
+    KisMainWindow *mainWindow = KisPart::instance()->currentMainwindow();
+    mainWindow->viewFullscreen(false);
+}
+
 __attribute__ ((visibility ("default")))
 #endif
 extern "C" int main(int argc, char **argv)
@@ -222,13 +231,10 @@ extern "C" int main(int argc, char **argv)
     const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
     QSettings kritarc(configPath + QStringLiteral("/kritadisplayrc"), QSettings::IniFormat);
 
-    bool singleApplication = true;
     bool enableOpenGLDebug = false;
     bool openGLDebugSynchronous = false;
     bool logUsage = true;
     {
-
-        singleApplication = kritarc.value("EnableSingleApplication", true).toBool();
         if (kritarc.value("EnableHiDPI", true).toBool()) {
             QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
         }
@@ -300,6 +306,29 @@ extern "C" int main(int argc, char **argv)
             originalXdgDataDirs = "/usr/local/share/:/usr/share/";
         }
         qputenv("XDG_DATA_DIRS", QFile::encodeName(root + "share") + ":" + originalXdgDataDirs);
+
+        // APPIMAGE SOUND ADDITIONS
+        // GStreamer needs a few environment variables to properly function in an appimage context.
+        // The following code should be configured to **only** run when we detect that Krita is being
+        // run within an appimage. Checking for the presence of an APPDIR path env variable seems to be
+        // enough to filter out this step for non-appimage krita builds.
+
+        const bool isInAppimage = qEnvironmentVariableIsSet("APPIMAGE");
+        if (isInAppimage) {
+            QByteArray appimageMountDir = qgetenv("APPDIR");
+
+            //We need to add new gstreamer plugin paths for the system to find the
+            //appropriate plugins.
+            const QByteArray gstPluginSystemPath = qgetenv("GST_PLUGIN_SYSTEM_PATH_1_0");
+            const QByteArray gstPluginScannerPath = qgetenv("GST_PLUGIN_SCANNER");
+
+            //Plugins Path is where libgstreamer-1.0 should expect to find plugin libraries.
+            qputenv("GST_PLUGIN_SYSTEM_PATH_1_0", appimageMountDir + QFile::encodeName("/usr/lib/gstreamer-1.0/") + ":" + gstPluginSystemPath);
+
+            //Plugin scanner is where gstreamer should expect to find the plugin scanner.
+            //Perhaps invoking the scanenr earlier in the code manually could allow ldd to quickly find all plugin dependencies?
+            qputenv("GST_PLUGIN_SCANNER", appimageMountDir + QFile::encodeName("/usr/lib/gstreamer-1.0/gst-plugin-scanner"));
+        }
     }
 #else
     qputenv("XDG_DATA_DIRS", QFile::encodeName(root + "share"));
@@ -314,10 +343,16 @@ extern "C" int main(int argc, char **argv)
     bool rightToLeft = false;
     if (!language.isEmpty()) {
         KLocalizedString::setLanguages(language.split(":"));
+
         // And override Qt's locale, too
-        qputenv("LANG", language.split(":").first().toLocal8Bit());
         QLocale locale(language.split(":").first());
         QLocale::setDefault(locale);
+#ifdef Q_OS_MAC
+        // prevents python >=3.7 nl_langinfo(CODESET) fail bug 417312.
+        qputenv("LANG", (locale.name() + ".UTF-8").toLocal8Bit());
+#else
+        qputenv("LANG", locale.name().toLocal8Bit());
+#endif
 
         const QStringList rtlLanguages = QStringList()
                 << "ar" << "dv" << "he" << "ha" << "ku" << "fa" << "ps" << "ur" << "yi";
@@ -331,6 +366,23 @@ extern "C" int main(int argc, char **argv)
 
         // And if there isn't one, check the one set by the system.
         QLocale locale = QLocale::system();
+
+#ifdef Q_OS_ANDROID
+        // QLocale::uiLanguages() fails on Android, so if the fallback locale is being
+        // used we, try to fetch the device's default locale.
+        if (locale.name() == QLocale::c().name()) {
+            QAndroidJniObject localeJniObj = QAndroidJniObject::callStaticObjectMethod(
+                "java/util/Locale", "getDefault", "()Ljava/util/Locale;");
+
+            if (localeJniObj.isValid()) {
+                QAndroidJniObject tag = localeJniObj.callObjectMethod("toLanguageTag",
+                                                                      "()Ljava/lang/String;");
+                if (tag.isValid()) {
+                    locale = QLocale(tag.toString());
+                }
+            }
+        }
+#endif
         if (locale.name() != QStringLiteral("en")) {
             QStringList uiLanguages = locale.uiLanguages();
             for (QString &uiLanguage : uiLanguages) {
@@ -350,24 +402,30 @@ extern "C" int main(int argc, char **argv)
                 }
             }
 
-            for (int i = 0; i < uiLanguages.size(); i++) {
-                QString uiLanguage = uiLanguages[i];
-                // Strip the country code
-                int idx = uiLanguage.indexOf(QChar('-'));
+            if (uiLanguages.size() > 0 ) {
+                QString envLanguage = uiLanguages.first();
+                envLanguage.replace(QChar('-'), QChar('_'));
 
-                if (idx != -1) {
-                    uiLanguage = uiLanguage.left(idx);
-                    uiLanguages.replace(i, uiLanguage);
+                for (int i = 0; i < uiLanguages.size(); i++) {
+                    QString uiLanguage = uiLanguages[i];
+                    // Strip the country code
+                    int idx = uiLanguage.indexOf(QChar('-'));
+
+                    if (idx != -1) {
+                        uiLanguage = uiLanguage.left(idx);
+                        uiLanguages.replace(i, uiLanguage);
+                    }
                 }
-            }
-            dbgKrita << "Converted ui languages:" << uiLanguages;
-            qputenv("LANG", uiLanguages.first().toLocal8Bit());
+                dbgKrita << "Converted ui languages:" << uiLanguages;
 #ifdef Q_OS_MAC
-            // See https://bugs.kde.org/show_bug.cgi?id=396370
-            KLocalizedString::setLanguages(QStringList() << uiLanguages.first());
+                // See https://bugs.kde.org/show_bug.cgi?id=396370
+                KLocalizedString::setLanguages(QStringList() << uiLanguages.first());
+                qputenv("LANG", (envLanguage + ".UTF-8").toLocal8Bit());
 #else
-            KLocalizedString::setLanguages(QStringList() << uiLanguages);
+                KLocalizedString::setLanguages(QStringList() << uiLanguages);
+                qputenv("LANG", envLanguage.toLocal8Bit());
 #endif
+            }
         }
     }
 
@@ -387,6 +445,8 @@ extern "C" int main(int argc, char **argv)
 
     // first create the application so we can create a pixmap
     KisApplication app(key, argc, argv);
+    KisUsageLogger::writeHeader();
+    KisOpenGL::initialize();
 
 #ifdef HAVE_SET_HAS_BORDER_IN_FULL_SCREEN_DEFAULT
     if (QCoreApplication::testAttribute(Qt::AA_UseDesktopOpenGL)) {
@@ -394,7 +454,6 @@ extern "C" int main(int argc, char **argv)
     }
 #endif
 
-    KisUsageLogger::writeHeader();
 
     if (!language.isEmpty()) {
         if (rightToLeft) {
@@ -404,6 +463,12 @@ extern "C" int main(int argc, char **argv)
             app.setLayoutDirection(Qt::LeftToRight);
         }
     }
+#ifdef Q_OS_ANDROID
+    // TODO: remove "share" - sh_zam
+    // points to /data/data/org.krita/files/share/locale
+    KLocalizedString::addDomainLocaleDir("krita", QStandardPaths::writableLocation(QStandardPaths::HomeLocation) + "/share/locale");
+#endif
+
     KLocalizedString::setApplicationDomain("krita");
 
     dbgKrita << "Available translations" << KLocalizedString::availableApplicationTranslations();
@@ -433,14 +498,9 @@ extern "C" int main(int argc, char **argv)
     tryInitDrMingw();
 #endif
 
-    // If we should clear the config, it has to be done as soon as possible after
-    // KisApplication has been created. Otherwise the config file may have been read
-    // and stored in a KConfig object we have no control over.
-    app.askClearConfig();
-
     KisApplicationArguments args(app);
 
-    if (singleApplication && app.isRunning()) {
+    if (app.isRunning()) {
         // only pass arguments to main instance if they are not for batch processing
         // any batch processing would be done in this separate instance
         const bool batchRun = args.exportAs() || args.exportSequence();
@@ -457,7 +517,9 @@ extern "C" int main(int argc, char **argv)
         // Icons in menus are ugly and distracting
         app.setAttribute(Qt::AA_DontShowIconsInMenus);
     }
-
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
+    app.setAttribute(Qt::AA_DisableWindowContextHelpButton);
+#endif
     app.installEventFilter(KisQtWidgetsTweaker::instance());
 
     if (!args.noSplash()) {
@@ -488,7 +550,7 @@ extern "C" int main(int argc, char **argv)
         else {
             supportedWindowsVersion  = false;
             if (cfg.readEntry("WarnedAboutUnsupportedWindows", false)) {
-                QMessageBox::information(0,
+                QMessageBox::information(nullptr,
                                          i18nc("@title:window", "Krita: Warning"),
                                          i18n("You are running an unsupported version of Windows: %1.\n"
                                               "This is not recommended. Do not report any bugs.\n"
@@ -540,19 +602,17 @@ extern "C" int main(int argc, char **argv)
 #elif defined QT_HAS_WINTAB_SWITCH
 
     // Check if WinTab/WinInk has actually activated
-    const bool useWinTabAPI = app.testAttribute(Qt::AA_MSWindowsUseWinTabAPI);
+    const bool useWinInkAPI = !app.testAttribute(Qt::AA_MSWindowsUseWinTabAPI);
 
-    if (useWinTabAPI != !cfg.useWin8PointerInput()) {
-        cfg.setUseWin8PointerInput(useWinTabAPI);
+    if (useWinInkAPI != cfg.useWin8PointerInput()) {
+        KisUsageLogger::log("WARNING: WinTab tablet protocol is not supported on this device. Switching to WinInk...");
+
+        cfg.setUseWin8PointerInput(useWinInkAPI);
+        cfg.setUseRightMiddleTabletButtonWorkaround(true);
     }
 
 #endif
 #endif
-
-    if (!app.start(args)) {
-        return 1;
-    }
-
     app.setAttribute(Qt::AA_CompressHighFrequencyEvents, false);
 
     // Set up remote arguments.
@@ -563,13 +623,19 @@ extern "C" int main(int argc, char **argv)
                      &app, SLOT(fileOpenRequested(QString)));
 
     // Hardware information
-    KisUsageLogger::write("\nHardware Information\n");
-    KisUsageLogger::write(QString("  GPU Acceleration: %1").arg(kritarc.value("OpenGLRenderer", "auto").toString()));
-    KisUsageLogger::write(QString("  Memory: %1 Mb").arg(KisImageConfig(true).totalRAM()));
-    KisUsageLogger::write(QString("  Number of Cores: %1").arg(QThread::idealThreadCount()));
-    KisUsageLogger::write(QString("  Swap Location: %1\n").arg(KisImageConfig(true).swapDir()));
+    KisUsageLogger::writeSysInfo("\nHardware Information\n");
+    KisUsageLogger::writeSysInfo(QString("  GPU Acceleration: %1").arg(kritarc.value("OpenGLRenderer", "auto").toString()));
+    KisUsageLogger::writeSysInfo(QString("  Memory: %1 Mb").arg(KisImageConfig(true).totalRAM()));
+    KisUsageLogger::writeSysInfo(QString("  Number of Cores: %1").arg(QThread::idealThreadCount()));
+    KisUsageLogger::writeSysInfo(QString("  Swap Location: %1\n").arg(KisImageConfig(true).swapDir()));
 
     KisConfig(true).logImportantSettings();
+
+    if (!app.start(args)) {
+        KisUsageLogger::log("Could not start Krita Application");
+        return 1;
+    }
+
 
     int state = app.exec();
 

@@ -51,31 +51,6 @@ QRectF KoShapeLayer::boundingRect() const
     return KoShape::boundingRect(shapes());
 }
 
-void KoShapeLayer::saveOdf(KoShapeSavingContext & context) const
-{
-    QList<KoShape*> shapes = this->shapes();
-    std::sort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
-
-    Q_FOREACH (KoShape* shape, shapes) {
-        shape->saveOdf(context);
-    }
-}
-
-bool KoShapeLayer::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context)
-{
-    // set layer name
-    setName(element.attributeNS(KoXmlNS::draw, "name"));
-    // layer locking
-    setGeometryProtected(element.attributeNS(KoXmlNS::draw, "protected", "false") == "true");
-    // layer visibility
-    setVisible(element.attributeNS(KoXmlNS::draw, "display", "false") != "none");
-
-    // add layer by name into shape context
-    context.addLayer(this, name());
-
-    return true;
-}
-
-void KoShapeLayer::paintComponent(QPainter &, const KoViewConverter &, KoShapePaintingContext &)
+void KoShapeLayer::paintComponent(QPainter &, KoShapePaintingContext &) const
 {
 }

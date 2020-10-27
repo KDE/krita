@@ -44,7 +44,7 @@ public:
     };
 
 public:
-    KisColorizeMask();
+    KisColorizeMask(KisImageWSP image, const QString &name);
     ~KisColorizeMask() override;
 
     KisColorizeMask(const KisColorizeMask& rhs);
@@ -53,7 +53,7 @@ public:
     const KoColorSpace* colorSpace() const override;
 
     // assign color profile without conversion of pixel data
-    void setProfile(const KoColorProfile *profile);
+    void setProfile(const KoColorProfile *profile, KUndo2Command *parentCommand);
 
     KUndo2Command* setColorSpace(const KoColorSpace * dstColorSpace,
                                  KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::internalRenderingIntent(),

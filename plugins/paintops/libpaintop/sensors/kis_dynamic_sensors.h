@@ -31,11 +31,6 @@ public:
     KisDynamicSensorSpeed();
     ~KisDynamicSensorSpeed() override { }
     qreal value(const KisPaintInformation& info) override;
-    void reset() override {
-        m_speed = -1.0;
-    }
-private:
-    double m_speed;
 };
 
 class KisDynamicSensorRotation : public KisDynamicSensor
@@ -43,8 +38,13 @@ class KisDynamicSensorRotation : public KisDynamicSensor
 public:
     KisDynamicSensorRotation();
     ~KisDynamicSensorRotation() override { }
+
+    bool isAdditive() const override {
+        return true;
+    }
+
     qreal value(const KisPaintInformation& info) override {
-        return info.rotation() / 360.0;
+        return info.rotation() / 180.0;
     }
 };
 
@@ -64,18 +64,8 @@ public:
     KisDynamicSensorPressureIn();
     ~KisDynamicSensorPressureIn() override { }
     qreal value(const KisPaintInformation& info) override {
-        if(!info.isHoveringMode()) {
-            if(info.pressure() > lastPressure) {
-                lastPressure = info.pressure();
-            }
-            return lastPressure;
-        }
-
-        lastPressure = 0.0;
-        return 0.0;
+        return !info.isHoveringMode() ? info.maxPressure() : 0.0;
     }
-private:
-    qreal lastPressure;
 };
 
 class KisDynamicSensorXTilt : public KisDynamicSensor
@@ -103,8 +93,13 @@ class KisDynamicSensorTiltDirection : public KisDynamicSensor
 public:
     KisDynamicSensorTiltDirection();
     ~KisDynamicSensorTiltDirection() override {}
+
+    bool isAdditive() const override {
+        return true;
+    }
+
     qreal value(const KisPaintInformation& info) override {
-        return KisPaintInformation::tiltDirection(info, true);
+        return scalingToAdditive(KisPaintInformation::tiltDirection(info, true));
     }
 };
 

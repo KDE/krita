@@ -30,28 +30,16 @@
 
 #include <KoClipMask.h>
 
-class KoBorder;
 class KoShapeManager;
 
 
-class KoShape::Private : public QSharedData
+class KoShape::SharedData : public QSharedData
 {
 public:
-    explicit Private();
-    virtual ~Private();
+    explicit SharedData();
+    virtual ~SharedData();
 
-    explicit Private(const Private &rhs);
-
-    /**
-     * Fills the style stack and returns the value of the given style property (e.g fill, stroke).
-     */
-    static QString getStyleProperty(const char *property, KoShapeLoadingContext &context);
-
-    /// Loads the shadow style
-    KoShapeShadow *loadOdfShadow(KoShapeLoadingContext &context) const;
-
-    // Loads the border style.
-    KoBorder *loadOdfBorder(KoShapeLoadingContext &context) const;
+    explicit SharedData(const SharedData &rhs);
 
 
 public:
@@ -63,20 +51,12 @@ public:
 
     QTransform localMatrix; ///< the shapes local transformation matrix
 
-    KoConnectionPoints connectors; ///< glue point id to data mapping
-
-    KoShapeContainer *parent;
-    QSet<KoShapeManager *> shapeManagers;
-    QSet<KoShape *> toolDelegates;
     QScopedPointer<KoShapeUserData> userData;
     QSharedPointer<KoShapeStrokeModel> stroke; ///< points to a stroke, or 0 if there is no stroke
     QSharedPointer<KoShapeBackground> fill; ///< Stands for the background color / fill etc.
     bool inheritBackground = false;
     bool inheritStroke = false;
-    QList<KoShape*> dependees; ///< list of shape dependent on this shape
-    QList<KoShape::ShapeChangeListener*> listeners;
     KoShapeShadow * shadow; ///< the current shape shadow
-    KoBorder *border; ///< the current shape border
     // XXX: change this to instance instead of pointer
     QScopedPointer<KoClipPath> clipPath; ///< the current clip path
     QScopedPointer<KoClipMask> clipMask; ///< the current clip mask
@@ -93,7 +73,6 @@ public:
     int geometryProtected : 1;
     int keepAspect : 1;
     int selectable : 1;
-    int detectCollision : 1;
     int protectContent : 1;
 
     KoShape::TextRunAroundSide textRunAroundSide;
@@ -103,15 +82,16 @@ public:
     qreal textRunAroundDistanceBottom;
     qreal textRunAroundThreshold;
     KoShape::TextRunAroundContour textRunAroundContour;
+};
 
+class KoShape::Private
+{
 public:
-    /// Connection point converters
-
-    /// Convert connection point position from shape coordinates, taking alignment into account
-    void convertFromShapeCoordinates(KoConnectionPoint &point, const QSizeF &shapeSize) const;
-
-    /// Convert connection point position to shape coordinates, taking alignment into account
-    void convertToShapeCoordinates(KoConnectionPoint &point, const QSizeF &shapeSize) const;
+    KoShapeContainer *parent;
+    QSet<KoShapeManager *> shapeManagers;
+    QSet<KoShape *> toolDelegates;
+    QList<KoShape*> dependees; ///< list of shape dependent on this shape
+    QList<KoShape::ShapeChangeListener*> listeners;
 };
 
 #endif

@@ -86,6 +86,6 @@ void KoPathShapeFactory::newDocumentResourceManager(KoDocumentResourceManager *m
     // we also need a MarkerCollection so add if it is not there yet
     if (!manager->hasResource(KoDocumentResourceManager::MarkerCollection)) {
         KoMarkerCollection *markerCollection = new KoMarkerCollection(manager);
-        manager->setResource(KoDocumentResourceManager::MarkerCollection, qVariantFromValue(markerCollection));
+        manager->setResource(KoDocumentResourceManager::MarkerCollection, QVariant::fromValue(markerCollection));
     }
 }

@@ -80,18 +80,18 @@ namespace KisAnimationUtils
     KUndo2Command* createMoveKeyframesCommand(const FrameMovePairList &movePairs,
                                               bool copy, bool moveEmptyFrames, KUndo2Command *parentCommand = 0);
 
+    KUndo2Command* createCloneKeyframesCommand(const FrameMovePairList &srcDstPairs,
+                                               KUndo2Command *parentCommand);
+
+    void makeClonesUnique(KisImageSP image, const FrameItemList &frames);
+
     bool supportsContentFrames(KisNodeSP node);
 
-    extern const QString addFrameActionName;
-    extern const QString duplicateFrameActionName;
-    extern const QString removeFrameActionName;
-    extern const QString removeFramesActionName;
     extern const QString lazyFrameCreationActionName;
     extern const QString dropFramesActionName;
-    extern const QString showLayerActionName;
 
     extern const QString newLayerActionName;
-    extern const QString addExistingLayerActionName;
+    extern const QString pinExistingLayerActionName;
     extern const QString removeLayerActionName;
 
     extern const QString addOpacityKeyframeActionName;

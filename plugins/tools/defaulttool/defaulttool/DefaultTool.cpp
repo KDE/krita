@@ -39,7 +39,6 @@
 #include <KoSelectedShapesProxy.h>
 #include <KoShapeGroup.h>
 #include <KoShapeLayer.h>
-#include <KoShapeOdfSaveHelper.h>
 #include <KoPathShape.h>
 #include <KoDrag.h>
 #include <KoCanvasBase.h>
@@ -67,6 +66,7 @@
 
 #include <KoIcon.h>
 
+#include <QPainterPath>
 #include <QPointer>
 #include <QAction>
 #include <QKeyEvent>
@@ -81,6 +81,7 @@
 #include "kis_assert.h"
 #include "kis_global.h"
 #include "kis_debug.h"
+#include "krita_utils.h"
 
 #include <QVector2D>
 
@@ -92,6 +93,7 @@
 namespace {
 static const QString EditFillGradientFactoryId = "edit_fill_gradient";
 static const QString EditStrokeGradientFactoryId = "edit_stroke_gradient";
+static const QString EditFillMeshGradientFactoryId = "edit_fill_meshgradient";
 
 enum TransformActionType {
     TransformRotate90CW,
@@ -144,6 +146,11 @@ public:
         KoShapeRubberSelectStrategy::paint(painter, converter);
     }
 
+    void cancelInteraction() override
+    {
+        tool()->canvas()->updateCanvas(selectedRectangle() | tool()->decorationsRect());
+    }
+
     void finishInteraction(Qt::KeyboardModifiers modifiers = 0) override
     {
         Q_UNUSED(modifiers);
@@ -164,8 +171,7 @@ public:
                 selection->select(shape);
             }
 
-        defaultTool->repaintDecorations();
-        defaultTool->canvas()->updateCanvas(selectedRectangle());
+        tool()->canvas()->updateCanvas(selectedRectangle() | tool()->decorationsRect());
     }
 };
 #include <KoGradientBackground.h>
@@ -213,9 +219,10 @@ public:
     bool tryUseCustomCursor() override {
         if (m_currentHandle.type != KoShapeGradientHandles::Handle::None) {
             q->useCursor(Qt::OpenHandCursor);
+            return true;
         }
 
-        return m_currentHandle.type != KoShapeGradientHandles::Handle::None;
+        return false;
     }
 
 private:
@@ -247,6 +254,7 @@ private:
             qreal minDistanceSq = std::numeric_limits<qreal>::max();
 
             KoShapeGradientHandles sh(m_fillVariant, shape);
+            auto handless = sh.handles();
             Q_FOREACH (const KoShapeGradientHandles::Handle &handle, sh.handles()) {
                 const QPointF handlePoint = converter->documentToView(handle.pos);
                 const qreal distanceSq = kisSquareDistance(viewPoint, handlePoint);
@@ -265,6 +273,129 @@ private:
     DefaultTool *q;
     KoFlake::FillVariant m_fillVariant;
     KoShapeGradientHandles::Handle m_currentHandle;
+};
+
+#include "KoShapeMeshGradientHandles.h"
+#include "ShapeMeshGradientEditStrategy.h"
+
+class DefaultTool::MoveMeshGradientHandleInteractionFactory: public KoInteractionStrategyFactory
+{
+public:
+    MoveMeshGradientHandleInteractionFactory(KoFlake::FillVariant fillVariant,
+                                             int priority,
+                                             const QString& id,
+                                             DefaultTool* _q)
+        : KoInteractionStrategyFactory(priority, id)
+        , m_fillVariant(fillVariant)
+        , q(_q)
+    {
+    }
+
+    KoInteractionStrategy* createStrategy(KoPointerEvent *ev) override
+    {
+        m_currentHandle = handleAt(ev->point);
+        q->m_selectedMeshHandle = m_currentHandle;
+        emit q->meshgradientHandleSelected(m_currentHandle);
+
+
+        if (m_currentHandle.type != KoShapeMeshGradientHandles::Handle::None) {
+            KoShape *shape = onlyEditableShape();
+            KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(shape, 0);
+
+            return new ShapeMeshGradientEditStrategy(q, m_fillVariant, shape, m_currentHandle, ev->point);
+        }
+
+        return nullptr;
+    }
+
+    bool hoverEvent(KoPointerEvent *ev) override
+    {
+        // for custom cursor
+        KoShapeMeshGradientHandles::Handle handle = handleAt(ev->point);
+
+        // refresh
+        if (handle.type != m_currentHandle.type && handle.type == KoShapeMeshGradientHandles::Handle::None) {
+            q->repaintDecorations();
+        }
+
+        m_currentHandle = handle;
+        q->m_hoveredMeshHandle = m_currentHandle;
+
+        // highlight the decoration which is being hovered
+        if (m_currentHandle.type != KoShapeMeshGradientHandles::Handle::None) {
+            q->repaintDecorations();
+        }
+        return false;
+    }
+
+    bool paintOnHover(QPainter &painter, const KoViewConverter &converter) override
+    {
+        Q_UNUSED(painter);
+        Q_UNUSED(converter);
+        return false;
+    }
+
+    bool tryUseCustomCursor() override
+    {
+        if (m_currentHandle.type != KoShapeMeshGradientHandles::Handle::None) {
+            q->useCursor(Qt::OpenHandCursor);
+            return true;
+        }
+
+        return false;
+    }
+
+
+private:
+    KoShape* onlyEditableShape() const {
+        // FIXME: copy of KoShapeGradientHandles
+        KoSelection *selection = q->koSelection();
+        QList<KoShape*> shapes = selection->selectedEditableShapes();
+
+        KoShape *shape = 0;
+        if (shapes.size() == 1) {
+            shape = shapes.first();
+        }
+
+        return shape;
+    }
+
+    KoShapeMeshGradientHandles::Handle handleAt(const QPointF &pos) const
+    {
+        // FIXME: copy of KoShapeGradientHandles. use a template?
+        KoShapeMeshGradientHandles::Handle result;
+
+        KoShape *shape = onlyEditableShape();
+        if (shape) {
+            KoFlake::SelectionHandle globalHandle = q->handleAt(pos);
+            const qreal distanceThresholdSq =
+                globalHandle == KoFlake::NoHandle ?
+                    HANDLE_DISTANCE_SQ : 0.25 * HANDLE_DISTANCE_SQ;
+
+            const KoViewConverter *converter = q->canvas()->viewConverter();
+            const QPointF viewPoint = converter->documentToView(pos);
+            qreal minDistanceSq = std::numeric_limits<qreal>::max();
+
+            KoShapeMeshGradientHandles sh(m_fillVariant, shape);
+
+            for (const auto& handle: sh.handles()) {
+                const QPointF handlePoint = converter->documentToView(handle.pos);
+                const qreal distanceSq = kisSquareDistance(viewPoint, handlePoint);
+
+                if (distanceSq < distanceThresholdSq && distanceSq < minDistanceSq) {
+                    result = handle;
+                    minDistanceSq = distanceSq;
+                }
+            }
+        }
+
+        return result;
+    }
+
+private:
+    KoFlake::FillVariant m_fillVariant;
+    KoShapeMeshGradientHandles::Handle m_currentHandle;
+    DefaultTool *q;
 };
 
 class SelectionHandler : public KoToolSelection
@@ -293,7 +424,6 @@ DefaultTool::DefaultTool(KoCanvasBase *canvas, bool connectToSelectedShapesProxy
     , m_lastHandle(KoFlake::NoHandle)
     , m_hotPosition(KoFlake::TopLeft)
     , m_mouseWasInsideHandles(false)
-    , m_decorator(0)
     , m_selectionHandler(new SelectionHandler(this))
     , m_tabbedOptionWidget(0)
 {
@@ -342,6 +472,9 @@ DefaultTool::DefaultTool(KoCanvasBase *canvas, bool connectToSelectedShapesProxy
 
     if (connectToSelectedShapesProxy) {
         connect(canvas->selectedShapesProxy(), SIGNAL(selectionChanged()), this, SLOT(updateActions()));
+
+        connect(canvas->selectedShapesProxy(), SIGNAL(selectionChanged()), this, SLOT(repaintDecorations()));
+        connect(canvas->selectedShapesProxy(), SIGNAL(selectionContentChanged()), this, SLOT(repaintDecorations()));
     }
 }
 
@@ -371,6 +504,26 @@ void DefaultTool::slotActivateEditStrokeGradient(bool value)
         removeInteractionFactory(EditStrokeGradientFactoryId);
     }
     repaintDecorations();
+}
+
+void DefaultTool::slotActivateEditFillMeshGradient(bool value)
+{
+    if (value) {
+        connect(this, SIGNAL(meshgradientHandleSelected(KoShapeMeshGradientHandles::Handle)),
+                m_tabbedOptionWidget, SLOT(slotMeshGradientHandleSelected(KoShapeMeshGradientHandles::Handle)));
+        addInteractionFactory(
+            new MoveMeshGradientHandleInteractionFactory(KoFlake::Fill, 1,
+                                                         EditFillMeshGradientFactoryId, this));
+    } else {
+        disconnect(this, SIGNAL(meshgradientHandleSelected(KoShapeMeshGradientHandles::Handle)),
+                   m_tabbedOptionWidget, SLOT(slotMeshGradientHandleSelected(KoShapeMeshGradientHandles::Handle)));
+        removeInteractionFactory(EditFillMeshGradientFactoryId);
+    }
+}
+
+void DefaultTool::slotResetMeshGradientState()
+{
+    m_selectedMeshHandle = KoShapeMeshGradientHandles::Handle();
 }
 
 bool DefaultTool::wantsAutoScroll() const
@@ -667,7 +820,7 @@ void DefaultTool::paint(QPainter &painter, const KoViewConverter &converter)
 {
     KoSelection *selection = koSelection();
     if (selection) {
-        this->m_decorator = new SelectionDecorator(canvas()->resourceManager());
+        m_decorator.reset(new SelectionDecorator(canvas()->resourceManager()));
 
         {
             /**
@@ -685,13 +838,15 @@ void DefaultTool::paint(QPainter &painter, const KoViewConverter &converter)
         m_decorator->setHandleRadius(handleRadius());
         m_decorator->setShowFillGradientHandles(hasInteractioFactory(EditFillGradientFactoryId));
         m_decorator->setShowStrokeFillGradientHandles(hasInteractioFactory(EditStrokeGradientFactoryId));
+        m_decorator->setShowFillMeshGradientHandles(hasInteractioFactory(EditFillMeshGradientFactoryId));
+        m_decorator->setCurrentMeshGradientHandles(m_selectedMeshHandle, m_hoveredMeshHandle);
         m_decorator->paint(painter, converter);
     }
 
     KoInteractionTool::paint(painter, converter);
 
     painter.save();
-    KoShape::applyConversion(painter, converter);
+    painter.setTransform(converter.documentToView(), true);
     canvas()->snapGuide()->paint(painter, converter);
     painter.restore();
 }
@@ -737,11 +892,8 @@ void DefaultTool::mouseMoveEvent(KoPointerEvent *event)
             if (inside != m_mouseWasInsideHandles || m_lastHandle != newDirection) {
                 m_lastHandle = newDirection;
                 m_mouseWasInsideHandles = inside;
-                //repaintDecorations();
             }
         } else {
-            /*if (m_lastHandle != KoFlake::NoHandle)
-                repaintDecorations(); */
             m_lastHandle = KoFlake::NoHandle;
             m_mouseWasInsideHandles = false;
 
@@ -778,9 +930,6 @@ void DefaultTool::mouseReleaseEvent(KoPointerEvent *event)
 {
     KoInteractionTool::mouseReleaseEvent(event);
     updateCursor();
-
-    // This makes sure the decorations that are shown are refreshed. especally the "T" icon
-    canvas()->updateCanvas(QRectF(0,0,canvas()->canvasWidget()->width(), canvas()->canvasWidget()->height()));
 }
 
 void DefaultTool::mouseDoubleClickEvent(KoPointerEvent *event)
@@ -863,11 +1012,22 @@ void DefaultTool::keyPressEvent(QKeyEvent *event)
     }
 }
 
-void DefaultTool::repaintDecorations()
+QRectF DefaultTool::decorationsRect() const
 {
+    QRectF dirtyRect;
+
     if (koSelection() && koSelection()->count() > 0) {
-        canvas()->updateCanvas(handlesSize());
+        /// TODO: avoid cons_cast by implementing proper
+        ///       caching strategy inrecalcSelectionBox() and
+        ///       handlesSize()
+        dirtyRect = const_cast<DefaultTool*>(this)->handlesSize();
     }
+
+    if (canvas()->snapGuide()->isSnapping()) {
+        dirtyRect |= canvas()->snapGuide()->boundingRect();
+    }
+
+    return dirtyRect;
 }
 
 void DefaultTool::copy() const
@@ -966,7 +1126,7 @@ void DefaultTool::recalcSelectionBox(KoSelection *selection)
 {
     KIS_ASSERT_RECOVER_RETURN(selection->count());
 
-    QTransform matrix = selection->absoluteTransformation(0);
+    QTransform matrix = selection->absoluteTransformation();
     m_selectionOutline = matrix.map(QPolygonF(selection->outlineRect()));
     m_angle = 0.0;
 
@@ -1194,7 +1354,7 @@ void DefaultTool::selectionTransform(int transformAction)
         QTransform t;
 
         if (!shouldReset) {
-            const QTransform world = shape->absoluteTransformation(0);
+            const QTransform world = shape->absoluteTransformation();
             t =  world * centerTransInv * applyTransform * centerTrans * world.inverted() * shape->transformation();
         } else {
             const QPointF center = shape->outlineRect().center();
@@ -1228,8 +1388,16 @@ void DefaultTool::selectionBooleanOp(int booleanOp)
     const int referenceShapeIndex = 0;
     KoShape *referenceShape = editableShapes[referenceShapeIndex];
 
+    KisCanvas2 *kisCanvas = static_cast<KisCanvas2 *>(canvas());
+    KIS_SAFE_ASSERT_RECOVER_RETURN(kisCanvas);
+    const QTransform booleanWorkaroundTransform =
+        KritaUtils::pathShapeBooleanSpaceWorkaround(kisCanvas->image());
+
     Q_FOREACH (KoShape *shape, editableShapes) {
-        srcOutlines << shape->absoluteTransformation(0).map(shape->outline());
+        srcOutlines <<
+            booleanWorkaroundTransform.map(
+            shape->absoluteTransformation().map(
+                shape->outline()));
     }
 
     if (booleanOp == BooleanUnion) {
@@ -1262,6 +1430,8 @@ void DefaultTool::selectionBooleanOp(int booleanOp)
 
         actionName = kundo2_i18n("Subtract Shapes");
     }
+
+    dstOutline = booleanWorkaroundTransform.inverted().map(dstOutline);
 
     KoShape *newShape = 0;
 
@@ -1348,10 +1518,10 @@ void DefaultTool::selectionAlign(int _align)
 
     // single selected shape is automatically aligned to document rect
     if (editableShapes.count() == 1) {
-        if (!canvas()->resourceManager()->hasResource(KoCanvasResourceProvider::PageSize)) {
+        if (!canvas()->resourceManager()->hasResource(KoCanvasResource::PageSize)) {
             return;
         }
-        bb = QRectF(QPointF(0, 0), canvas()->resourceManager()->sizeResource(KoCanvasResourceProvider::PageSize));
+        bb = QRectF(QPointF(0, 0), canvas()->resourceManager()->sizeResource(KoCanvasResource::PageSize));
     } else {
         bb = KoShape::absoluteOutlineRect(editableShapes);
     }
@@ -1434,6 +1604,15 @@ QList<QPointer<QWidget> > DefaultTool::createOptionWidgets()
     connect(m_tabbedOptionWidget,
             SIGNAL(sigSwitchModeEditStrokeGradient(bool)),
             SLOT(slotActivateEditStrokeGradient(bool)));
+
+    connect(m_tabbedOptionWidget,
+            SIGNAL(sigSwitchModeEditFillGradient(bool)),
+            SLOT(slotActivateEditFillMeshGradient(bool)));
+    // TODO: strokes!!
+
+    connect(m_tabbedOptionWidget,
+            SIGNAL(sigMeshGradientResetted()),
+            SLOT(slotResetMeshGradientState()));
 
     return widgets;
 }
@@ -1545,7 +1724,6 @@ KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event)
 
     if (avoidSelection || (!shape && handle == KoFlake::NoHandle)) {
         if (!selectMultiple) {
-            repaintDecorations();
             selection->deselectAll();
         }
         return new SelectionInteractionStrategy(this, event->point, false);
@@ -1553,16 +1731,13 @@ KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event)
 
     if (selection->isSelected(shape)) {
         if (selectMultiple) {
-            repaintDecorations();
             selection->deselect(shape);
         }
     } else if (handle == KoFlake::NoHandle) { // clicked on shape which is not selected
-        repaintDecorations();
         if (!selectMultiple) {
             selection->deselectAll();
         }
         selection->select(shape);
-        repaintDecorations();
         // tablet selection isn't precise and may lead to a move, preventing that
         if (event->isTabletEvent()) {
             return new NopInteractionStrategy(this);
@@ -1599,7 +1774,7 @@ void DefaultTool::updateActions()
     const bool alignmentEnabled =
        multipleSelected ||
        (!editableShapes.isEmpty() &&
-        canvas()->resourceManager()->hasResource(KoCanvasResourceProvider::PageSize));
+        canvas()->resourceManager()->hasResource(KoCanvasResource::PageSize));
 
     action("object_align_horizontal_left")->setEnabled(alignmentEnabled);
     action("object_align_horizontal_center")->setEnabled(alignmentEnabled);

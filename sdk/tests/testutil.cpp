@@ -17,7 +17,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "testutil.h"
+#include <testutil.h>
 
 namespace TestUtil
 {

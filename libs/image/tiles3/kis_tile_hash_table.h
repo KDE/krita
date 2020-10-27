@@ -90,6 +90,7 @@ public:
 
     void setDefaultTileData(KisTileData *defaultTileData);
     KisTileData* defaultTileData() const;
+    KisTileData* refAndFetchDefaultTileData() const;
 
     qint32 numTiles() {
         return m_numTiles;

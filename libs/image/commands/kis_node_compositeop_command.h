@@ -20,10 +20,10 @@
 #define KIS_NODE_COMPOSITEOP_COMMAND_H
 
 #include "kis_node_command.h"
-
+#include "commands_new/KisAsynchronouslyMergeableCommandInterface.h"
 
 /// The command for setting the composite op
-class KRITAIMAGE_EXPORT KisNodeCompositeOpCommand : public KisNodeCommand
+class KRITAIMAGE_EXPORT KisNodeCompositeOpCommand : public KisNodeCommand, public KisAsynchronouslyMergeableCommandInterface
 {
 
 public:
@@ -37,6 +37,13 @@ public:
 
     void redo() override;
     void undo() override;
+
+    int id() const override;
+    bool mergeWith(const KUndo2Command *command) override;
+    bool canMergeWith(const KUndo2Command *command) const override;
+
+private:
+    void setCompositeOpImpl(const QString &compositeOp);
 
 private:
     QString m_oldCompositeOp;

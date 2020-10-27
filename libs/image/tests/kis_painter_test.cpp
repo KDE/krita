@@ -19,10 +19,9 @@
 #include "kis_painter_test.h"
 #include <QTest>
 
-
 #include <kis_debug.h>
 #include <QRect>
-#include <QTime>
+#include <QElapsedTimer>
 #include <QtXml>
 
 #include <KoChannelInfo.h>
@@ -37,8 +36,9 @@
 #include "kis_pixel_selection.h"
 #include "kis_fill_painter.h"
 #include <kis_fixed_paint_device.h>
-#include "testutil.h"
+#include <testutil.h>
 #include <kis_iterator_ng.h>
+#include <testimage.h>
 
 void KisPainterTest::allCsApplicator(void (KisPainterTest::* funcPtr)(const KoColorSpace*cs))
 {
@@ -435,7 +435,7 @@ void KisPainterTest::checkPerformance()
     sel->pixelSelection()->select(QRect(0, 0, 10000, 5000), 128);
     sel->updateProjection();
 
-    QTime t;
+    QElapsedTimer t;
     t.start();
     for (int i = 0; i < 10; ++i) {
         KisPainter gc(dst);

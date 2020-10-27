@@ -43,7 +43,7 @@
 #include <QList>
 #include <QAction>
 #include <QMetaMethod>
-
+#include <QTextStream>
 #include <stdio.h>
 
 #if defined(KCONFIG_BEFORE_5_24)
@@ -65,7 +65,7 @@ public:
 
     void setComponentForAction(QAction *action)
     {
-        Q_UNUSED(action)
+        Q_UNUSED(action);
     }
 
     static QList<KActionCollection *> s_allCollections;
@@ -250,7 +250,11 @@ const QList< QActionGroup * > KActionCollection::actionGroups() const
         if (action->actionGroup()) {
             set.insert(action->actionGroup());
         }
-    return set.toList();
+#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
+    return QList<QActionGroup*>(set.begin(), set.end());
+#else
+    return QList<QActionGroup*>::fromSet(set);
+#endif
 }
 
 QAction *KActionCollection::addCategorizedAction(const QString &name, QAction *action, const QString &categoryName)
@@ -279,7 +283,8 @@ QAction *KActionCollection::addAction(const QString &name, QAction *action)
     // No name provided and the action had no name. Make one up. This will not
     // work when trying to save shortcuts.
     if (indexName.isEmpty()) {
-        indexName = indexName.sprintf("unnamed-%p", (void *)action);
+        QTextStream(&indexName) << (void *)action;
+
         action->setObjectName(indexName);
     }
 

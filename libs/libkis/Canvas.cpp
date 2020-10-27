@@ -27,7 +27,7 @@
 
 struct Canvas::Private {
     Private() {}
-    KisCanvas2 *canvas;
+    KisCanvas2 *canvas {0};
 };
 
 Canvas::Canvas(KoCanvasBase *canvas, QObject *parent)
@@ -88,7 +88,7 @@ qreal Canvas::rotation() const
 void Canvas::setRotation(qreal angle)
 {
     if (!d->canvas) return;
-    d->canvas->imageView()->canvasController()->rotateCanvas(angle);
+    d->canvas->imageView()->canvasController()->rotateCanvas(angle - rotation());
 }
 
 

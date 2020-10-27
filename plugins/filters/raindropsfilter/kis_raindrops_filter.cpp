@@ -49,6 +49,7 @@
 #include <filter/kis_filter_configuration.h>
 #include <kis_processing_information.h>
 #include <kis_random_accessor_ng.h>
+#include <KisGlobalResourcesInterface.h>
 
 #include "widgets/kis_multi_integer_filter_widget.h"
 
@@ -133,7 +134,7 @@ void KisRainDropsFilter::processImpl(KisPaintDeviceSP device,
     }
 
     progressUpdater->setRange(0, number);
-    KisRandomAccessorSP dstAccessor = device->createRandomAccessorNG(srcTopLeft.x(), srcTopLeft.y());
+    KisRandomAccessorSP dstAccessor = device->createRandomAccessorNG();
     
     for (uint NumBlurs = 0; NumBlurs <= number; ++NumBlurs) {
         NewSize = (int)(qrand() * ((double)(DropSize - 5) / RAND_MAX) + 5);
@@ -295,6 +296,13 @@ void KisRainDropsFilter::processImpl(KisPaintDeviceSP device,
                     if ((m >= 0) && (m < Height) && (n >= 0) && (n < Width)) {
                         QColor color;
 
+                        if (BlurPixels == 0) {
+                            // Coverity complains that it *is* possible
+                            // for BlurPixels to be 0, so let's make sure
+                            // Krita doesn't crash here
+                            BlurPixels = 1;
+                        }
+
                         color.setRgb((int)(R / BlurPixels), (int)(G / BlurPixels), (int)(B / BlurPixels));
                         dstAccessor->moveTo(srcTopLeft.x() + n, srcTopLeft.y() + m);
                         cs->fromQColor(color, dstAccessor->rawData());
@@ -380,13 +388,13 @@ KisConfigWidget * KisRainDropsFilter::createConfigurationWidget(QWidget* parent,
     param.push_back(KisIntegerWidgetParam(1, 500, 80, i18n("Number of drops"), "number"));
     param.push_back(KisIntegerWidgetParam(1, 100, 30, i18n("Fish eyes"), "fishEyes"));
     KisMultiIntegerFilterWidget * w = new KisMultiIntegerFilterWidget(id().id(), parent, id().id(), param);
-    w->setConfiguration(factoryConfiguration());
+    w->setConfiguration(defaultConfiguration(KisGlobalResourcesInterface::instance()));
     return w;
 }
 
-KisFilterConfigurationSP KisRainDropsFilter::factoryConfiguration() const
+KisFilterConfigurationSP KisRainDropsFilter::defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const
 {
-    KisFilterConfigurationSP config = new KisFilterConfiguration("raindrops", 2);
+    KisFilterConfigurationSP config = factoryConfiguration(resourcesInterface);
     config->setProperty("dropsize", 80);
     config->setProperty("number", 80);
     config->setProperty("fishEyes", 30);

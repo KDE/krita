@@ -19,267 +19,296 @@
 #include "kis_scalar_keyframe_channel.h"
 #include "kis_node.h"
 #include "kundo2command.h"
-#include "kis_time_range.h"
+#include "kis_keyframe_commands.h"
+#include "kis_time_span.h"
 
 #include <kis_global.h>
 #include <kis_dom_utils.h>
 
-struct KisScalarKeyframe : public KisKeyframe
+
+KisScalarKeyframe::KisScalarKeyframe(qreal value, QSharedPointer<ScalarKeyframeLimits> limits)
+    : KisKeyframe(),
+      m_value(value),
+      m_interpolationMode(Constant),
+      m_tangentsMode(Smooth),
+      m_channelLimits(limits)
 {
-    KisScalarKeyframe(KisKeyframeChannel *channel, int time, qreal value)
-        : KisKeyframe(channel, time)
-        , value(value)
-    {}
+}
 
-    KisScalarKeyframe(const KisScalarKeyframe *rhs, KisKeyframeChannel *channel)
-        : KisKeyframe(rhs, channel)
-        , value(rhs->value)
-    {}
+KisScalarKeyframe::KisScalarKeyframe(qreal value, InterpolationMode interpMode, TangentsMode tangentMode,
+                                     QPointF leftTangent, QPointF rightTangent,
+                                     QSharedPointer<ScalarKeyframeLimits> limits)
+    : m_value(value),
+      m_interpolationMode(interpMode),
+      m_tangentsMode(tangentMode),
+      m_leftTangent(leftTangent),
+      m_rightTangent(rightTangent),
+      m_channelLimits(limits)
+{
+}
 
-    qreal value;
-
-    KisKeyframeSP cloneFor(KisKeyframeChannel *channel) const override
-    {
-        return toQShared(new KisScalarKeyframe(this, channel));
+KisKeyframeSP KisScalarKeyframe::duplicate(KisKeyframeChannel *newChannel)
+{
+    if (newChannel) {
+        KisScalarKeyframeChannel *scalarChannel = dynamic_cast<KisScalarKeyframeChannel*>(newChannel);
+        // When transitioning between channels, set limits to those of the new channel.
+        KisScalarKeyframeSP scalarKey = toQShared(new KisScalarKeyframe(m_value, scalarChannel->limits()));
+        scalarKey->setInterpolationMode(m_interpolationMode);
+        scalarKey->setTangentsMode(m_tangentsMode);
+        scalarKey->setInterpolationTangents(leftTangent(), rightTangent());
+        return scalarKey;
+    } else {
+        return toQShared(new KisScalarKeyframe(value(), interpolationMode(), tangentsMode(),
+                                               leftTangent(), rightTangent(),
+                                               m_channelLimits.toStrongRef()));
     }
-};
+}
+
+qreal KisScalarKeyframe::value() const
+{
+    return m_value;
+}
+
+void KisScalarKeyframe::setValue(qreal value, KUndo2Command *parentUndoCmd)
+{
+    if (parentUndoCmd) {
+        KUndo2Command* cmd = new KisScalarKeyframeUpdateCommand(this, value, parentUndoCmd);
+        cmd->redo();
+    } else {
+        m_value = value;
+
+        QSharedPointer<ScalarKeyframeLimits> limits = m_channelLimits.toStrongRef();
+        if (limits) {
+            m_value = limits->clamp(m_value);
+        }
+
+        emit sigChanged(this);
+    }
+}
+
+void KisScalarKeyframe::setInterpolationMode(InterpolationMode mode, KUndo2Command *parentUndoCmd)
+{
+    if (parentUndoCmd) {
+        KUndo2Command* cmd = new KisScalarKeyframeUpdateCommand(this, mode, parentUndoCmd);
+        cmd->redo();
+    } else {
+        m_interpolationMode = mode;
+        emit sigChanged(this);
+    }
+}
+
+KisScalarKeyframe::InterpolationMode KisScalarKeyframe::interpolationMode() const
+{
+    return m_interpolationMode;
+}
+
+void KisScalarKeyframe::setTangentsMode(TangentsMode mode, KUndo2Command *parentUndoCmd)
+{
+    if (parentUndoCmd) {
+        KUndo2Command* cmd = new KisScalarKeyframeUpdateCommand(this, mode, parentUndoCmd);
+        cmd->redo();
+    } else {
+        m_tangentsMode = mode;
+        emit sigChanged(this);
+    }
+}
+
+KisScalarKeyframe::TangentsMode KisScalarKeyframe::tangentsMode() const
+{
+    return m_tangentsMode;
+}
+
+void KisScalarKeyframe::setInterpolationTangents(QPointF leftTangent, QPointF rightTangent, KUndo2Command *parentUndoCmd)
+{
+    if (parentUndoCmd) {
+        KUndo2Command* cmd = new KisScalarKeyframeUpdateCommand(this, leftTangent, rightTangent, parentUndoCmd);
+        cmd->redo();
+    } else {
+        m_leftTangent = leftTangent;
+        m_rightTangent = rightTangent;
+        emit sigChanged(this);
+    }
+}
+
+QPointF KisScalarKeyframe::leftTangent() const
+{
+    return m_leftTangent;
+}
+
+QPointF KisScalarKeyframe::rightTangent() const
+{
+    return m_rightTangent;
+}
+
+void KisScalarKeyframe::setLimits(QSharedPointer<ScalarKeyframeLimits> limits)
+{
+    m_channelLimits = limits;
+}
 
 
-KisScalarKeyframeChannel::AddKeyframeCommand::AddKeyframeCommand(KisScalarKeyframeChannel *channel, int time, qreal value, KUndo2Command *parentCommand)
-    : KisReplaceKeyframeCommand(channel, time, channel->createKeyframe(time, value, parentCommand), parentCommand)
-{}
+// ========================================================================================================
+// ==================================== KisScalarKeyframeChannel ==========================================
+// ========================================================================================================
+
 
 struct KisScalarKeyframeChannel::Private
 {
 public:
-    Private(qreal min, qreal max, KisKeyframe::InterpolationMode defaultInterpolation)
-        : minValue(min), maxValue(max), firstFreeIndex(0), defaultInterpolation(defaultInterpolation)
+    Private()
+        : defaultValue(0),
+          defaultInterpolationMode(KisScalarKeyframe::Constant)
     {}
 
     Private(const Private &rhs)
-        : minValue(rhs.minValue),
-          maxValue(rhs.maxValue),
-          firstFreeIndex(rhs.firstFreeIndex),
-          defaultInterpolation(rhs.defaultInterpolation)
-    {}
+        : defaultValue(rhs.defaultValue),
+          defaultInterpolationMode(rhs.defaultInterpolationMode)
+    {
+        if (rhs.limits) {
+            limits = toQShared(new ScalarKeyframeLimits(*rhs.limits));
+        }
+    }
 
-    qreal minValue;
-    qreal maxValue;
-    int firstFreeIndex;
+    qreal defaultValue;
+    KisScalarKeyframe::InterpolationMode defaultInterpolationMode;
 
-    KisKeyframe::InterpolationMode defaultInterpolation;
-
-    struct SetValueCommand;
-    struct SetTangentsCommand;
-    struct SetInterpolationModeCommand;
+    /** Optional structure that can be added to a channel in order to
+     * limit its scalar values within a certain range. */
+    QSharedPointer<ScalarKeyframeLimits> limits;
 };
 
-KisScalarKeyframeChannel::KisScalarKeyframeChannel(const KoID &id, qreal minValue, qreal maxValue, KisDefaultBoundsBaseSP defaultBounds, KisKeyframe::InterpolationMode defaultInterpolation)
-    : KisKeyframeChannel(id, defaultBounds),
-      m_d(new Private(minValue, maxValue, defaultInterpolation))
+
+KisScalarKeyframeChannel::KisScalarKeyframeChannel(const KoID &id, KisNodeWSP node)
+    : KisScalarKeyframeChannel(id, new KisDefaultBoundsNodeWrapper(node))
 {
+    setNode(node);
 }
 
-KisScalarKeyframeChannel::KisScalarKeyframeChannel(const KisScalarKeyframeChannel &rhs, KisNode *newParentNode)
-    : KisKeyframeChannel(rhs, newParentNode),
-      m_d(new Private(*rhs.m_d))
+KisScalarKeyframeChannel::KisScalarKeyframeChannel(const KoID &id, KisDefaultBoundsBaseSP bounds)
+    : KisKeyframeChannel(id, bounds)
+    , m_d(new Private)
 {
+    // When keyframe is changed (value, tangents, etc), we should notify that the channel has been updated.
+    connect(this, &KisScalarKeyframeChannel::sigKeyframeChanged, [](const KisKeyframeChannel *channel, int time) {
+        const KisScalarKeyframeChannel* chan = dynamic_cast<const KisScalarKeyframeChannel*>(channel);
+        chan->sigChannelUpdated(
+                    chan->affectedFrames(time),
+                    chan->affectedRect(time)
+                    );
+    });
+}
+
+KisScalarKeyframeChannel::KisScalarKeyframeChannel(const KisScalarKeyframeChannel &rhs, KisNodeWSP newParent)
+    : KisKeyframeChannel(rhs, newParent)
+{
+    m_d.reset(new Private(*rhs.m_d));
+
+    Q_FOREACH (int time, rhs.constKeys().keys()) {
+        KisKeyframeChannel::copyKeyframe(&rhs, time, this, time);
+    }
 }
 
 KisScalarKeyframeChannel::~KisScalarKeyframeChannel()
-{}
-
-bool KisScalarKeyframeChannel::hasScalarValue() const
 {
-    return true;
 }
 
-qreal KisScalarKeyframeChannel::minScalarValue() const
-{
-    return m_d->minValue;
+void KisScalarKeyframeChannel::addScalarKeyframe(int time, qreal value, KUndo2Command *parentUndoCmd) {
+    addKeyframe(time, parentUndoCmd);
+    KisScalarKeyframeSP scalarKey = keyframeAt<KisScalarKeyframe>(time);
+    if (scalarKey) {
+        scalarKey->setValue(value, parentUndoCmd);
+    }
 }
 
-qreal KisScalarKeyframeChannel::maxScalarValue() const
+QSharedPointer<ScalarKeyframeLimits> KisScalarKeyframeChannel::limits() const
 {
-    return m_d->maxValue;
+    return m_d->limits;
 }
 
-qreal KisScalarKeyframeChannel::scalarValue(const KisKeyframeSP keyframe) const
+void KisScalarKeyframeChannel::setLimits(qreal low, qreal high)
 {
-    KisScalarKeyframe *key = dynamic_cast<KisScalarKeyframe*>(keyframe.data());
-    Q_ASSERT(key != 0);
-    return key->value;
+    m_d->limits = toQShared(new ScalarKeyframeLimits(low, high));
+    QSet<int> keyEntries = allKeyframeTimes();
+    foreach (const int &time, keyEntries) {
+        KisScalarKeyframeSP scalarKey = keyframeAt<KisScalarKeyframe>(time);
+        scalarKey->setLimits(m_d->limits);
+        scalarKey->setValue(scalarKey->value());
+    }
 }
 
-struct KisScalarKeyframeChannel::Private::SetValueCommand : public KUndo2Command
+void KisScalarKeyframeChannel::removeLimits()
 {
-    SetValueCommand(KisScalarKeyframeChannel *channel, KisKeyframeSP keyframe, qreal oldValue, qreal newValue, KUndo2Command *parentCommand)
-        : KUndo2Command(parentCommand),
-          m_channel(channel),
-          m_keyframe(keyframe),
-          m_oldValue(oldValue),
-          m_newValue(newValue)
-    {
+    if (m_d->limits) {
+        m_d->limits.reset();
     }
-
-    void redo() override {
-        setValue(m_newValue);
-    }
-
-    void undo() override {
-        setValue(m_oldValue);
-    }
-
-    void setValue(qreal value) {
-        KisScalarKeyframe *key = dynamic_cast<KisScalarKeyframe*>(m_keyframe.data());
-        Q_ASSERT(key != 0);
-        key->value = value;
-        m_channel->notifyKeyframeChanged(m_keyframe);
-    }
-
-private:
-    KisScalarKeyframeChannel *m_channel;
-    KisKeyframeSP m_keyframe;
-    qreal m_oldValue;
-    qreal m_newValue;
-};
-
-struct KisScalarKeyframeChannel::Private::SetTangentsCommand : public KUndo2Command
-{
-    SetTangentsCommand(KisScalarKeyframeChannel *channel, KisKeyframeSP keyframe,
-                       KisKeyframe::InterpolationTangentsMode oldMode, QPointF oldLeftTangent, QPointF oldRightTangent,
-                       KisKeyframe::InterpolationTangentsMode newMode, QPointF newLeftTangent, QPointF newRightTangent,
-                       KUndo2Command *parentCommand)
-        : KUndo2Command(parentCommand),
-          m_channel(channel),
-          m_keyframe(keyframe),
-          m_oldMode(oldMode),
-          m_oldLeftTangent(oldLeftTangent),
-          m_oldRightTangent(oldRightTangent),
-          m_newMode(newMode),
-          m_newLeftTangent(newLeftTangent),
-          m_newRightTangent(newRightTangent)
-    {
-    }
-
-    void redo() override {
-        m_keyframe->setTangentsMode(m_newMode);
-        m_keyframe->setInterpolationTangents(m_newLeftTangent, m_newRightTangent);
-        m_channel->notifyKeyframeChanged(m_keyframe);
-    }
-
-    void undo() override {
-        m_keyframe->setTangentsMode(m_oldMode);
-        m_keyframe->setInterpolationTangents(m_oldLeftTangent, m_oldRightTangent);
-        m_channel->notifyKeyframeChanged(m_keyframe);
-    }
-
-private:
-    KisScalarKeyframeChannel *m_channel;
-    KisKeyframeSP m_keyframe;
-    KisKeyframe::InterpolationTangentsMode m_oldMode;
-    QPointF m_oldLeftTangent;
-    QPointF m_oldRightTangent;
-    KisKeyframe::InterpolationTangentsMode m_newMode;
-    QPointF m_newLeftTangent;
-    QPointF m_newRightTangent;
-};
-
-struct KisScalarKeyframeChannel::Private::SetInterpolationModeCommand : public KUndo2Command
-{
-    SetInterpolationModeCommand(KisScalarKeyframeChannel *channel, KisKeyframeSP keyframe, KisKeyframe::InterpolationMode oldMode, KisKeyframe::InterpolationMode newMode, KUndo2Command *parentCommand)
-        : KUndo2Command(parentCommand),
-          m_channel(channel),
-          m_keyframe(keyframe),
-          m_oldMode(oldMode),
-          m_newMode(newMode)
-    {
-    }
-
-    void redo() override {
-        m_keyframe->setInterpolationMode(m_newMode);
-        m_channel->notifyKeyframeChanged(m_keyframe);
-    }
-
-    void undo() override {
-        m_keyframe->setInterpolationMode(m_oldMode);
-        m_channel->notifyKeyframeChanged(m_keyframe);
-    }
-
-private:
-    KisScalarKeyframeChannel *m_channel;
-    KisKeyframeSP m_keyframe;
-    KisKeyframe::InterpolationMode m_oldMode;
-    KisKeyframe::InterpolationMode m_newMode;
-};
-
-void KisScalarKeyframeChannel::setScalarValue(KisKeyframeSP keyframe, qreal value, KUndo2Command *parentCommand)
-{
-    QScopedPointer<KUndo2Command> tempCommand;
-    if (!parentCommand) {
-        tempCommand.reset(new KUndo2Command());
-        parentCommand = tempCommand.data();
-    }
-
-    qreal oldValue = scalarValue(keyframe);
-    KUndo2Command *cmd = new Private::SetValueCommand(this, keyframe, oldValue, value, parentCommand);
-    cmd->redo();
 }
 
-void KisScalarKeyframeChannel::setInterpolationMode(KisKeyframeSP keyframe, KisKeyframe::InterpolationMode mode, KUndo2Command *parentCommand)
+qreal KisScalarKeyframeChannel::valueAt(int time) const
 {
-    QScopedPointer<KUndo2Command> tempCommand;
-    if (!parentCommand) {
-        tempCommand.reset(new KUndo2Command());
-        parentCommand = tempCommand.data();
+    const int activeKeyTime = activeKeyframeTime(time);
+    KisScalarKeyframeSP activeKey = keyframeAt<KisScalarKeyframe>(activeKeyTime);
+    KisScalarKeyframeSP nextKeyframe = keyframeAt<KisScalarKeyframe>(nextKeyframeTime(time));
+    qreal result = qQNaN();
+
+    if (activeKey) {
+        if (!nextKeyframe) {
+            result = activeKey->value();
+        } else {
+            switch (activeKey->interpolationMode()) {
+            case KisScalarKeyframe::Constant: {
+                    result = activeKey->value();
+                    break;
+                }
+            case KisScalarKeyframe::Linear: {
+                    const int nextKeyTime = nextKeyframeTime(time);
+                    const qreal activeKeyValue = activeKey->value();
+                    const qreal nextKeyValue = keyframeAt<KisScalarKeyframe>(nextKeyTime)->value();
+                    result = activeKeyValue + (nextKeyValue - activeKeyValue) * (time - activeKeyTime) / (nextKeyTime - activeKeyTime);
+                    break;
+                }
+            case KisScalarKeyframe::Bezier: {
+                    const int nextKeyTime = nextKeyframeTime(time);
+                    const KisScalarKeyframeSP nextKey = keyframeAt<KisScalarKeyframe>(nextKeyTime);
+                    QPointF point0 = QPointF(activeKeyTime, activeKey->value());
+                    QPointF point1 = QPointF(nextKeyTime, nextKey->value());
+
+                    QPointF tangent0 = activeKey->rightTangent();
+                    QPointF tangent1 = nextKey->leftTangent();
+
+                    normalizeTangents(point0, tangent0, tangent1, point1);
+                    qreal t = KisScalarKeyframeChannel::findCubicCurveParameter(point0.x(), tangent0.x(), tangent1.x(), point1.x(), time);
+                    result = KisScalarKeyframeChannel::interpolate(point0, tangent0, tangent1, point1, t).y();
+                    break;
+                }
+            default: {
+                    KIS_ASSERT_RECOVER_BREAK(false);
+                    break;
+                }
+            }
+        }
+    } else {
+        if (nextKeyframe) {
+            result = nextKeyframe->value();
+        } else {
+            return qQNaN();
+        }
     }
 
-    KisKeyframe::InterpolationMode oldMode = keyframe->interpolationMode();
-
-    KUndo2Command *cmd = new Private::SetInterpolationModeCommand(this, keyframe, oldMode, mode, parentCommand);
-    cmd->redo();
+    // Output value must be also be clamped to account for interpolation.
+    if (m_d->limits) {
+        return m_d->limits->clamp(result);
+    } else {
+        return result;
+    }
 }
 
-void KisScalarKeyframeChannel::setInterpolationTangents(KisKeyframeSP keyframe, KisKeyframe::InterpolationTangentsMode mode, QPointF leftTangent, QPointF rightTangent, KUndo2Command *parentCommand)
+void KisScalarKeyframeChannel::setDefaultValue(qreal value)
 {
-    QScopedPointer<KUndo2Command> tempCommand;
-    if (!parentCommand) {
-        tempCommand.reset(new KUndo2Command());
-        parentCommand = tempCommand.data();
-    }
-
-    KisKeyframe::InterpolationTangentsMode oldMode = keyframe->tangentsMode();
-    QPointF oldLeftTangent = keyframe->leftTangent();
-    QPointF oldRightTangent = keyframe->rightTangent();
-
-    KUndo2Command *cmd = new Private::SetTangentsCommand(this, keyframe, oldMode, oldLeftTangent, oldRightTangent, mode, leftTangent, rightTangent, parentCommand);
-    cmd->redo();
+    m_d->defaultValue = value;
 }
 
-qreal cubicBezier(qreal p0, qreal delta1, qreal delta2, qreal p3, qreal t) {
-    qreal p1 = p0 + delta1;
-    qreal p2 = p3 + delta2;
-
-    qreal c = 1-t;
-    return c*c*c * p0 + 3*c*c*t * p1 + 3*c*t*t * p2 + t*t*t * p3;
-}
-
-void normalizeTangents(const QPointF point1, QPointF &rightTangent, QPointF &leftTangent, const QPointF point2)
+void KisScalarKeyframeChannel::setDefaultInterpolationMode(KisScalarKeyframe::InterpolationMode mode)
 {
-    // To ensure that the curve is monotonic wrt time,
-    // check that control points lie between the endpoints.
-    // If not, force them into range by scaling down the tangents
-
-    float interval = point2.x() - point1.x();
-    if (rightTangent.x() < 0) rightTangent *= 0;
-    if (leftTangent.x() > 0) leftTangent *= 0;
-
-    if (rightTangent.x() > interval) {
-        rightTangent *= interval / rightTangent.x();
-    }
-    if (leftTangent.x() < -interval) {
-        leftTangent *= interval / -leftTangent.x();
-    }
+    m_d->defaultInterpolationMode = mode;
 }
 
 QPointF KisScalarKeyframeChannel::interpolate(QPointF point1, QPointF rightTangent, QPointF leftTangent, QPointF point2, qreal t)
@@ -292,7 +321,90 @@ QPointF KisScalarKeyframeChannel::interpolate(QPointF point1, QPointF rightTange
     return QPointF(x,y);
 }
 
-qreal findCubicCurveParameter(int time0, qreal delta0, qreal delta1, int time1, int time)
+void KisScalarKeyframeChannel::insertKeyframe(int time, KisKeyframeSP keyframe, KUndo2Command *parentUndoCmd)
+{
+    KisKeyframeChannel::insertKeyframe(time, keyframe, parentUndoCmd);
+
+    KisScalarKeyframeSP scalarKeyframe = keyframe.dynamicCast<KisScalarKeyframe>();
+    if (scalarKeyframe) {
+        scalarKeyframe->valueChangedChannelConnection =
+                QObject::connect(scalarKeyframe.data(),
+                                 &KisScalarKeyframe::sigChanged,
+                                 [this, time](const KisScalarKeyframe* key){
+                                     Q_UNUSED(key);
+                                     emit sigKeyframeChanged(this, time);
+                                 });
+    }
+}
+
+void KisScalarKeyframeChannel::removeKeyframe(int time, KUndo2Command *parentUndoCmd)
+{
+    KisKeyframeChannel::removeKeyframe(time, parentUndoCmd);
+
+    KisScalarKeyframeSP keyframe = keyframeAt<KisScalarKeyframe>(time);
+    if (keyframe) {
+        disconnect(keyframe->valueChangedChannelConnection);
+    }
+}
+
+KisTimeSpan KisScalarKeyframeChannel::affectedFrames(int time) const
+{
+    KisTimeSpan normalSpan = KisKeyframeChannel::affectedFrames(time);
+
+    const int activeKeyTime = activeKeyframeTime(time);
+    const int previousKeyTime = previousKeyframeTime(activeKeyTime);
+    const KisScalarKeyframeSP prevScalarKey = keyframeAt<KisScalarKeyframe>(previousKeyTime);
+
+    if(prevScalarKey) {
+        // In the case that a previous keyframe is present with a non-constant interpolation mode,
+        // the affected frames must include all the frames just after the previous keyframe.
+        if (prevScalarKey->interpolationMode() == KisScalarKeyframe::Constant) {
+            return normalSpan;
+        } else {
+            return normalSpan | KisTimeSpan::fromTimeToTime(previousKeyTime + 1, activeKeyTime);
+        }
+    } else {
+        const KisScalarKeyframeSP firstScalarKey = keyframeAt<KisScalarKeyframe>(firstKeyframeTime());
+        if (!firstScalarKey) {
+            return KisTimeSpan::infinite(0);
+        }
+        return normalSpan | KisTimeSpan::fromTimeToTime(0, activeKeyTime);
+    }
+}
+
+KisTimeSpan KisScalarKeyframeChannel::identicalFrames(int time) const
+{
+    //Failsafe == no keys should mean all frames are identical!
+    if (allKeyframeTimes().count() == 0) {
+        return KisTimeSpan::infinite(0);
+    }
+
+    KisScalarKeyframeSP activeScalarKey = activeKeyframeAt<KisScalarKeyframe>(time);
+    if ( activeScalarKey &&
+         activeScalarKey->interpolationMode() != KisScalarKeyframe::Constant &&
+         activeScalarKey != keyframeAt(lastKeyframeTime()) ) {
+        //TODO: Two keyframes should be considered identical if linear with same value..
+        //TODO: Also, if bezier with same value AND tangents lie between points.
+        //                                          (tangenty == keyframey)
+        return KisTimeSpan::fromTimeToTime(time, time);
+    }
+
+    const int nextKeyTime = nextKeyframeTime(time);
+
+    //Before the first frame => there's no active frame but a valid next frame.
+    if (!activeScalarKey && keyframeAt(nextKeyTime)) {
+        return KisTimeSpan::fromTimeToTime(0, nextKeyTime);
+    }
+
+    //No next frame, all frames after are identical.
+    if (!keyframeAt(nextKeyTime)) {
+       return KisTimeSpan::infinite(activeKeyframeTime(time));
+    }
+
+    return KisTimeSpan::fromTimeToTime(activeKeyframeTime(time), nextKeyTime - 1);
+}
+
+qreal KisScalarKeyframeChannel::findCubicCurveParameter(int time0, qreal delta0, qreal delta1, int time1, int time)
 {
     if (time == time0) return 0.0;
     if (time == time1) return 1.0;
@@ -315,108 +427,45 @@ qreal findCubicCurveParameter(int time0, qreal delta0, qreal delta1, int time1, 
     }
 }
 
-qreal KisScalarKeyframeChannel::interpolatedValue(int time) const
+qreal KisScalarKeyframeChannel::cubicBezier(qreal p0, qreal delta1, qreal delta2, qreal p3, qreal t) {
+    qreal p1 = p0 + delta1;
+    qreal p2 = p3 + delta2;
+
+    qreal c = 1-t;
+    return c*c*c * p0 + 3*c*c*t * p1 + 3*c*t*t * p2 + t*t*t * p3;
+}
+
+void KisScalarKeyframeChannel::normalizeTangents(const QPointF point1, QPointF &rightTangent, QPointF &leftTangent, const QPointF point2)
 {
-    KisKeyframeSP activeKey = activeKeyframeAt(time);
-    if (activeKey.isNull()) return qQNaN();
+    // To ensure that the curve is monotonic wrt time,
+    // check that control points lie between the endpoints.
+    // If not, force them into range by scaling down the tangents
 
-    KisKeyframeSP nextKey = nextKeyframe(activeKey);
+    float interval = point2.x() - point1.x();
+    if (rightTangent.x() < 0) rightTangent *= 0;
+    if (leftTangent.x() > 0) leftTangent *= 0;
 
-    qreal result = qQNaN();
-    if (time == activeKey->time() || nextKey.isNull()) {
-        result = scalarValue(activeKey);
-    } else {
-        switch (activeKey->interpolationMode()) {
-        case KisKeyframe::Constant:
-            result = scalarValue(activeKey);
-            break;
-        case KisKeyframe::Linear:
-        {
-            int time0 = activeKey->time();
-            int time1 = nextKey->time();
-            qreal value0 = scalarValue(activeKey);
-            qreal value1 = scalarValue(nextKey);
-            result = value0 + (value1 - value0) * (time - time0) / (time1 - time0);
-        }
-            break;
-        case KisKeyframe::Bezier:
-        {
-            QPointF point0 = QPointF(activeKey->time(), scalarValue(activeKey));
-            QPointF point1 = QPointF(nextKey->time(), scalarValue(nextKey));
-
-            QPointF tangent0 = activeKey->rightTangent();
-            QPointF tangent1 = nextKey->leftTangent();
-
-            normalizeTangents(point0, tangent0, tangent1, point1);
-            qreal t = findCubicCurveParameter(point0.x(), tangent0.x(), tangent1.x(), point1.x(), time);
-            result = interpolate(point0, tangent0, tangent1, point1, t).y();
-        }
-            break;
-        default:
-            KIS_ASSERT_RECOVER_BREAK(false);
-            break;
-        }
+    if (rightTangent.x() > interval) {
+        rightTangent *= interval / rightTangent.x();
     }
-
-    if (result > m_d->maxValue) return m_d->maxValue;
-    if (result < m_d->minValue) return m_d->minValue;
-
-    return result;
-}
-
-qreal KisScalarKeyframeChannel::currentValue() const
-{
-    return interpolatedValue(currentTime());
-}
-
-KisKeyframeSP KisScalarKeyframeChannel::createKeyframe(int time, const KisKeyframeSP copySrc, KUndo2Command *parentCommand)
-{
-    if (copySrc) {
-        KisScalarKeyframe *srcKeyframe = dynamic_cast<KisScalarKeyframe*>(copySrc.data());
-        Q_ASSERT(srcKeyframe);
-        KisScalarKeyframe *keyframe = new KisScalarKeyframe(srcKeyframe, this);
-        keyframe->setTime(time);
-        return toQShared(keyframe);
-    } else {
-        return createKeyframe(time, 0, parentCommand);
+    if (leftTangent.x() < -interval) {
+        leftTangent *= interval / -leftTangent.x();
     }
 }
 
-KisKeyframeSP KisScalarKeyframeChannel::createKeyframe(int time, qreal value, KUndo2Command *parentCommand)
+KisKeyframeSP KisScalarKeyframeChannel::createKeyframe()
 {
-    Q_UNUSED(parentCommand);
-    KisScalarKeyframe *keyframe = new KisScalarKeyframe(this, time, value);
-    keyframe->setInterpolationMode(m_d->defaultInterpolation);
+    KisScalarKeyframe *keyframe = new KisScalarKeyframe(m_d->defaultValue, m_d->limits);
+    keyframe->setInterpolationMode(m_d->defaultInterpolationMode);
     return toQShared(keyframe);
 }
 
-void KisScalarKeyframeChannel::destroyKeyframe(KisKeyframeSP key, KUndo2Command *parentCommand)
+QRect KisScalarKeyframeChannel::affectedRect(int time) const
 {
-    Q_UNUSED(parentCommand);
-    Q_UNUSED(key);
-}
-
-void KisScalarKeyframeChannel::uploadExternalKeyframe(KisKeyframeChannel *srcChannel, int srcTime, KisKeyframeSP dstFrame)
-{
-    KisScalarKeyframeChannel *srcScalarChannel = dynamic_cast<KisScalarKeyframeChannel*>(srcChannel);
-    KIS_ASSERT_RECOVER_RETURN(srcScalarChannel);
-
-    KisKeyframeSP srcFrame = srcScalarChannel->keyframeAt(srcTime);
-    KIS_ASSERT_RECOVER_RETURN(srcFrame);
-
-    KisScalarKeyframe *dstKey = dynamic_cast<KisScalarKeyframe*>(dstFrame.data());
-    if (dstKey) {
-        dstKey->value = srcChannel->scalarValue(srcFrame);
-        notifyKeyframeChanged(dstFrame);
-    }
-}
-
-QRect KisScalarKeyframeChannel::affectedRect(KisKeyframeSP key)
-{
-    Q_UNUSED(key);
+    Q_UNUSED(time);
 
     if (node()) {
-        return node()->extent();
+        return node()->exactBounds();
     } else {
         return QRect();
     }
@@ -425,65 +474,59 @@ QRect KisScalarKeyframeChannel::affectedRect(KisKeyframeSP key)
 void KisScalarKeyframeChannel::saveKeyframe(KisKeyframeSP keyframe, QDomElement keyframeElement, const QString &layerFilename)
 {
     Q_UNUSED(layerFilename);
-    keyframeElement.setAttribute("value", KisDomUtils::toString(scalarValue(keyframe)));
+    KisScalarKeyframeSP scalarKey = keyframe.dynamicCast<KisScalarKeyframe>();
+    KIS_SAFE_ASSERT_RECOVER_RETURN(scalarKey);
+    const qreal value = scalarKey->value();
+    keyframeElement.setAttribute("value", KisDomUtils::toString(value));
 
     QString interpolationMode;
-    if (keyframe->interpolationMode() == KisKeyframe::Constant) interpolationMode = "constant";
-    if (keyframe->interpolationMode() == KisKeyframe::Linear) interpolationMode = "linear";
-    if (keyframe->interpolationMode() == KisKeyframe::Bezier) interpolationMode = "bezier";
+    if (scalarKey->interpolationMode() == KisScalarKeyframe::Constant) interpolationMode = "constant";
+    if (scalarKey->interpolationMode() == KisScalarKeyframe::Linear) interpolationMode = "linear";
+    if (scalarKey->interpolationMode() == KisScalarKeyframe::Bezier) interpolationMode = "bezier";
 
     QString tangentsMode;
-    if (keyframe->tangentsMode() == KisKeyframe::Smooth) tangentsMode = "smooth";
-    if (keyframe->tangentsMode() == KisKeyframe::Sharp) tangentsMode = "sharp";
+    if (scalarKey->tangentsMode() == KisScalarKeyframe::Smooth) tangentsMode = "smooth";
+    if (scalarKey->tangentsMode() == KisScalarKeyframe::Sharp) tangentsMode = "sharp";
 
     keyframeElement.setAttribute("interpolation", interpolationMode);
     keyframeElement.setAttribute("tangents", tangentsMode);
-    KisDomUtils::saveValue(&keyframeElement, "leftTangent", keyframe->leftTangent());
-    KisDomUtils::saveValue(&keyframeElement, "rightTangent", keyframe->rightTangent());
+    KisDomUtils::saveValue(&keyframeElement, "leftTangent", scalarKey->leftTangent());
+    KisDomUtils::saveValue(&keyframeElement, "rightTangent", scalarKey->rightTangent());
 }
 
-KisKeyframeSP KisScalarKeyframeChannel::loadKeyframe(const QDomElement &keyframeNode)
+QPair<int, KisKeyframeSP> KisScalarKeyframeChannel::loadKeyframe(const QDomElement &keyframeNode)
 {
     int time = keyframeNode.toElement().attribute("time").toInt();
     workaroundBrokenFrameTimeBug(&time);
 
     qreal value = KisDomUtils::toDouble(keyframeNode.toElement().attribute("value"));
 
-    KUndo2Command tempParentCommand;
-    KisKeyframeSP keyframe = createKeyframe(time, KisKeyframeSP(), &tempParentCommand);
-    setScalarValue(keyframe, value);
+    KisScalarKeyframeSP keyframe = createKeyframe().dynamicCast<KisScalarKeyframe>();
+    keyframe->setValue(value);
+
+    KisScalarKeyframeSP scalarKey = keyframe.dynamicCast<KisScalarKeyframe>();
 
     QString interpolationMode = keyframeNode.toElement().attribute("interpolation");
     if (interpolationMode == "constant") {
-        keyframe->setInterpolationMode(KisKeyframe::Constant);
+        scalarKey->setInterpolationMode(KisScalarKeyframe::Constant);
     } else if (interpolationMode == "linear") {
-        keyframe->setInterpolationMode(KisKeyframe::Linear);
+        scalarKey->setInterpolationMode(KisScalarKeyframe::Linear);
     } else if (interpolationMode == "bezier") {
-        keyframe->setInterpolationMode(KisKeyframe::Bezier);
+        scalarKey->setInterpolationMode(KisScalarKeyframe::Bezier);
     }
 
     QString tangentsMode = keyframeNode.toElement().attribute("tangents");
     if (tangentsMode == "smooth") {
-        keyframe->setTangentsMode(KisKeyframe::Smooth);
+        scalarKey->setTangentsMode(KisScalarKeyframe::Smooth);
     } else if (tangentsMode == "sharp") {
-        keyframe->setTangentsMode(KisKeyframe::Sharp);
+        scalarKey->setTangentsMode(KisScalarKeyframe::Sharp);
     }
 
     QPointF leftTangent;
     QPointF rightTangent;
     KisDomUtils::loadValue(keyframeNode, "leftTangent", &leftTangent);
     KisDomUtils::loadValue(keyframeNode, "rightTangent", &rightTangent);
-    keyframe->setInterpolationTangents(leftTangent, rightTangent);
+    scalarKey->setInterpolationTangents(leftTangent, rightTangent);
 
-    return keyframe;
-}
-
-void KisScalarKeyframeChannel::notifyKeyframeChanged(KisKeyframeSP keyframe)
-{
-    QRect rect = affectedRect(keyframe);
-    KisTimeRange range = affectedFrames(keyframe->time());
-
-    requestUpdate(range, rect);
-
-    emit sigKeyframeChanged(keyframe);
+    return QPair<int, KisKeyframeSP>(time, keyframe);
 }

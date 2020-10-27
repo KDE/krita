@@ -34,7 +34,8 @@
 #include "kis_group_layer.h"
 #include <KisViewManager.h>
 
-#include "testutil.h"
+#include <testutil.h>
+#include <KisGlobalResourcesInterface.h>
 
 
 KisImageSP utils::createImage(KisUndoStore *undoStore, const QSize &imageSize) {
@@ -49,7 +50,7 @@ KisImageSP utils::createImage(KisUndoStore *undoStore, const QSize &imageSize) {
     KisPaintLayerSP paintLayer4 = new KisPaintLayer(image, "paint4", OPACITY_OPAQUE_U8);
     KisPaintLayerSP paintLayer5 = new KisPaintLayer(image, "paint5", OPACITY_OPAQUE_U8);
 
-    image->lock();
+    image->barrierLock();
     image->addNode(paintLayer1);
     image->addNode(paintLayer2);
     image->addNode(paintLayer3);
@@ -69,15 +70,15 @@ KoCanvasResourceProvider* utils::createResourceManager(KisImageWSP image,
     QVariant i;
 
     i.setValue(KoColor(Qt::black, image->colorSpace()));
-    manager->setResource(KoCanvasResourceProvider::ForegroundColor, i);
+    manager->setResource(KoCanvasResource::ForegroundColor, i);
 
     i.setValue(KoColor(Qt::white, image->colorSpace()));
-    manager->setResource(KoCanvasResourceProvider::BackgroundColor, i);
+    manager->setResource(KoCanvasResource::BackgroundColor, i);
 
     i.setValue(static_cast<void*>(0));
-    manager->setResource(KisCanvasResourceProvider::CurrentPattern, i);
-    manager->setResource(KisCanvasResourceProvider::CurrentGradient, i);
-    manager->setResource(KisCanvasResourceProvider::CurrentGeneratorConfiguration, i);
+    manager->setResource(KoCanvasResource::CurrentPattern, i);
+    manager->setResource(KoCanvasResource::CurrentGradient, i);
+    manager->setResource(KoCanvasResource::CurrentGeneratorConfiguration, i);
 
     if(!node) {
         node = image->root();
@@ -90,34 +91,34 @@ KoCanvasResourceProvider* utils::createResourceManager(KisImageWSP image,
     }
 
     i.setValue(node);
-    manager->setResource(KisCanvasResourceProvider::CurrentKritaNode, i);
+    manager->setResource(KoCanvasResource::CurrentKritaNode, i);
 
     KisPaintOpPresetSP preset;
 
     if (!presetFileName.isEmpty()) {
         QString fullFileName = TestUtil::fetchDataFileLazy(presetFileName);
-        preset = new KisPaintOpPreset(fullFileName);
-        bool presetValid = preset->load();
+        preset = KisPaintOpPresetSP(new KisPaintOpPreset(fullFileName));
+        bool presetValid = preset->load(KisGlobalResourcesInterface::instance());
         Q_ASSERT(presetValid); Q_UNUSED(presetValid);
 
         i.setValue(preset);
-        manager->setResource(KisCanvasResourceProvider::CurrentPaintOpPreset, i);
+        manager->setResource(KoCanvasResource::CurrentPaintOpPreset, i);
     }
 
     i.setValue(COMPOSITE_OVER);
-    manager->setResource(KisCanvasResourceProvider::CurrentCompositeOp, i);
+    manager->setResource(KoCanvasResource::CurrentCompositeOp, i);
 
     i.setValue(false);
-    manager->setResource(KisCanvasResourceProvider::MirrorHorizontal, i);
+    manager->setResource(KoCanvasResource::MirrorHorizontal, i);
 
     i.setValue(false);
-    manager->setResource(KisCanvasResourceProvider::MirrorVertical, i);
+    manager->setResource(KoCanvasResource::MirrorVertical, i);
 
     i.setValue(1.0);
-    manager->setResource(KisCanvasResourceProvider::Opacity, i);
+    manager->setResource(KoCanvasResource::Opacity, i);
 
     i.setValue(1.0);
-    manager->setResource(KisCanvasResourceProvider::HdrExposure, i);
+    manager->setResource(KoCanvasResource::HdrExposure, i);
 
     return manager;
 }
@@ -235,8 +236,8 @@ QString utils::StrokeTester::formatTestName(const QString &baseName,
 QString utils::StrokeTester::referenceFile(const QString &testName)
 {
     QString path =
-        QString(FILES_DATA_DIR) + QDir::separator() +
-        m_name + QDir::separator();
+        QString(FILES_DATA_DIR) + '/' +
+        m_name + '/';
 
     path += testName;
     path += ".png";
@@ -245,7 +246,7 @@ QString utils::StrokeTester::referenceFile(const QString &testName)
 
 QString utils::StrokeTester::dumpReferenceFile(const QString &testName)
 {
-    QString path = QString(FILES_OUTPUT_DIR) + QDir::separator();
+    QString path = QString(FILES_OUTPUT_DIR) + '/';
     path += testName;
     path += "_expected";
     path += ".png";
@@ -254,7 +255,7 @@ QString utils::StrokeTester::dumpReferenceFile(const QString &testName)
 
 QString utils::StrokeTester::resultFile(const QString &testName)
 {
-    QString path = QString(FILES_OUTPUT_DIR) + QDir::separator();
+    QString path = QString(FILES_OUTPUT_DIR) + '/';
     path += testName;
     path += ".png";
     return path;

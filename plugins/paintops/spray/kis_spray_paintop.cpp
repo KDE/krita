@@ -62,7 +62,7 @@ KisSprayPaintOp::KisSprayPaintOp(const KisPaintOpSettingsSP settings, KisPainter
     m_sizeOption.resetAllSensors();
     m_rateOption.resetAllSensors();
 
-    m_brushOption.readOptionSetting(settings);
+    m_brushOption.readOptionSetting(settings, settings->resourcesInterface(), settings->canvasResourcesInterface());
 
     m_colorProperties.fillProperties(settings);
     m_properties.readOptionSetting(settings);
@@ -95,6 +95,12 @@ KisSprayPaintOp::KisSprayPaintOp(const KisPaintOpSettingsSP settings, KisPainter
 
 KisSprayPaintOp::~KisSprayPaintOp()
 {
+}
+
+QList<KoResourceSP> KisSprayPaintOp::prepareLinkedResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface)
+{
+    KisBrushOptionProperties brushOption;
+    return brushOption.prepareLinkedResources(settings, resourcesInterface);
 }
 
 KisSpacingInformation KisSprayPaintOp::paintAt(const KisPaintInformation& info)

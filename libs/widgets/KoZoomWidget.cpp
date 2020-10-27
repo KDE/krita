@@ -44,7 +44,7 @@ public:
     KoZoomInput* input;
     QToolButton* aspectButton;
 
-    qreal effectiveZoom;
+    qreal effectiveZoom {1.0};
 };
 
 KoZoomWidget::KoZoomWidget(QWidget* parent, int maxZoom )

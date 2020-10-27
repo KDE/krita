@@ -44,7 +44,7 @@ namespace KisLayerUtils
     KRITAIMAGE_EXPORT bool checkIsChildOf(KisNodeSP node, const KisNodeList &parents);
     KRITAIMAGE_EXPORT void filterUnlockedNodes(KisNodeList &nodes);
     KRITAIMAGE_EXPORT void refreshHiddenAreaAsync(KisImageSP image, KisNodeSP rootNode, const QRect &preparedArea);
-    KRITAIMAGE_EXPORT QRect recursiveNodeExactBounds(KisNodeSP rootNode);
+    KRITAIMAGE_EXPORT QRect recursiveTightNodeVisibleBounds(KisNodeSP rootNode);
 
     /**
      * Returns true if:
@@ -78,6 +78,8 @@ namespace KisLayerUtils
     KRITAIMAGE_EXPORT KisNodeList findNodesWithProps(KisNodeSP root, const KoProperties &props, bool excludeRoot);
 
     KRITAIMAGE_EXPORT void changeImageDefaultProjectionColor(KisImageSP image, const KoColor &color);
+
+    KRITAIMAGE_EXPORT bool canChangeImageProfileInvisibly(KisImageSP image);
 
     typedef QMap<int, QSet<KisNodeSP> > FrameJobs;
     void updateFrameJobs(FrameJobs *jobs, KisNodeSP node);
@@ -234,6 +236,8 @@ namespace KisLayerUtils
         }).data());
     }
 
+
+    KisNodeSP KRITAIMAGE_EXPORT findRoot(KisNodeSP node);
 }
 
 #endif /* __KIS_LAYER_UTILS_H */

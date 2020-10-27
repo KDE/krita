@@ -122,11 +122,19 @@ int KisMultiChannelFilter::findChannel(const QVector<VirtualChannelInfo> &virtua
 }
 
 
-KisMultiChannelFilterConfiguration::KisMultiChannelFilterConfiguration(int channelCount, const QString & name, qint32 version)
-        : KisColorTransformationConfiguration(name, version)
+KisMultiChannelFilterConfiguration::KisMultiChannelFilterConfiguration(int channelCount, const QString & name, qint32 version, KisResourcesInterfaceSP resourcesInterface)
+        : KisColorTransformationConfiguration(name, version, resourcesInterface)
         , m_channelCount(channelCount)
 {
     m_transfers.resize(m_channelCount);
+}
+
+KisMultiChannelFilterConfiguration::KisMultiChannelFilterConfiguration(const KisMultiChannelFilterConfiguration &rhs)
+    : KisColorTransformationConfiguration(rhs),
+      m_channelCount(rhs.m_channelCount),
+      m_curves(rhs.m_curves),
+      m_transfers(rhs.m_transfers)
+{
 }
 
 KisMultiChannelFilterConfiguration::~KisMultiChannelFilterConfiguration()
@@ -282,6 +290,17 @@ void KisMultiChannelFilterConfiguration::toXML(QDomDocument& doc, QDomElement& r
 
         addParamNode(doc, root, name, value);
     }
+}
+
+bool KisMultiChannelFilterConfiguration::compareTo(const KisPropertiesConfiguration *rhs) const
+{
+    const KisMultiChannelFilterConfiguration *otherConfig = dynamic_cast<const KisMultiChannelFilterConfiguration *>(rhs);
+
+    return otherConfig
+        && KisFilterConfiguration::compareTo(rhs)
+        && m_channelCount == otherConfig->m_channelCount
+        && m_curves == otherConfig->m_curves
+        && m_transfers == otherConfig->m_transfers;
 }
 
 KisMultiChannelConfigWidget::KisMultiChannelConfigWidget(QWidget * parent, KisPaintDeviceSP dev, Qt::WindowFlags f)

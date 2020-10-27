@@ -65,6 +65,8 @@ public:
      */
     KisLayerSP reincarnateAsPaintLayer() const;
 
+    void setImage(KisImageWSP image) override;
+
     bool allowAsChild(KisNodeSP) const override;
 
     KisPaintDeviceSP original() const override;

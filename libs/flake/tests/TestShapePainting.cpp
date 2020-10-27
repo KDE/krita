@@ -24,8 +24,7 @@
 #include "KoShapeContainer.h"
 #include "KoShapeManager.h"
 #include "KoShapePaintingContext.h"
-#include "KoViewConverter.h"
-#include <sdk/tests/kistest.h>
+#include <sdk/tests/testflake.h>
 #include <MockShapes.h>
 
 #include <QTest>
@@ -52,8 +51,7 @@ void TestShapePainting::testPaintShape()
 
     QImage image(100, 100,  QImage::Format_Mono);
     QPainter painter(&image);
-    KoViewConverter vc;
-    manager.paint(painter, vc, false);
+    manager.paint(painter, false);
 
     // with the shape not being clipped, the shapeManager will paint it for us.
     QCOMPARE(shape1->paintedCount, 1);
@@ -65,7 +63,7 @@ void TestShapePainting::testPaintShape()
     shape2->paintedCount = 0;
     container->paintedCount = 0;
     KoShapePaintingContext paintContext;
-    container->paint(painter, vc, paintContext);
+    container->paint(painter, paintContext);
     QCOMPARE(shape1->paintedCount, 0);
     QCOMPARE(shape2->paintedCount, 0);
     QCOMPARE(container->paintedCount, 1);
@@ -79,7 +77,7 @@ void TestShapePainting::testPaintShape()
     shape1->paintedCount = 0;
     shape2->paintedCount = 0;
     container->paintedCount = 0;
-    manager.paint(painter, vc, false);
+    manager.paint(painter, false);
 
 
     // with this shape not being clipped, the shapeManager will paint the container and this shape
@@ -113,8 +111,7 @@ void TestShapePainting::testPaintHiddenShape()
 
     QImage image(100, 100,  QImage::Format_Mono);
     QPainter painter(&image);
-    KoViewConverter vc;
-    manager.paint(painter, vc, false);
+    manager.paint(painter, false);
 
     QCOMPARE(top->paintedCount, 1);
     QCOMPARE(second->paintedCount, 0);
@@ -135,31 +132,31 @@ void TestShapePainting::testPaintOrder()
 
     class OrderedMockShape : public MockShape {
     public:
-        OrderedMockShape(QList<MockShape*> &list) : order(list) {}
-        void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext) override {
-            order.append(this);
-            MockShape::paint(painter, converter, paintcontext);
+        OrderedMockShape(QList<const MockShape*> *list) : order(list) {}
+        void paint(QPainter &painter, KoShapePaintingContext &paintcontext) const override {
+            order->append(this);
+            MockShape::paint(painter, paintcontext);
         }
-        QList<MockShape*> &order;
+        mutable QList<const MockShape*> *order;
     };
 
-    QList<MockShape*> order;
+    QList<const MockShape*> order;
 
     {
         QScopedPointer<MockContainer> top(new MockContainer());
         top->setZIndex(2);
-        OrderedMockShape *shape1 = new OrderedMockShape(order);
+        OrderedMockShape *shape1 = new OrderedMockShape(&order);
         shape1->setZIndex(5);
-        OrderedMockShape *shape2 = new OrderedMockShape(order);
+        OrderedMockShape *shape2 = new OrderedMockShape(&order);
         shape2->setZIndex(0);
         top->addShape(shape1);
         top->addShape(shape2);
 
         QScopedPointer<MockContainer> bottom(new MockContainer());
         bottom->setZIndex(1);
-        OrderedMockShape *shape3 = new OrderedMockShape(order);
+        OrderedMockShape *shape3 = new OrderedMockShape(&order);
         shape3->setZIndex(-1);
-        OrderedMockShape *shape4 = new OrderedMockShape(order);
+        OrderedMockShape *shape4 = new OrderedMockShape(&order);
         shape4->setZIndex(9);
         bottom->addShape(shape3);
         bottom->addShape(shape4);
@@ -172,8 +169,7 @@ void TestShapePainting::testPaintOrder()
 
         QImage image(100, 100,  QImage::Format_Mono);
         QPainter painter(&image);
-        KoViewConverter vc;
-        manager.paint(painter, vc, false);
+        manager.paint(painter, false);
         QCOMPARE(top->paintedCount, 1);
         QCOMPARE(bottom->paintedCount, 1);
         QCOMPARE(shape1->paintedCount, 1);
@@ -190,7 +186,7 @@ void TestShapePainting::testPaintOrder()
         // again, with clipping.
         order.clear();
         painter.setClipRect(0, 0, 100, 100);
-        manager.paint(painter, vc, false);
+        manager.paint(painter, false);
         QCOMPARE(top->paintedCount, 2);
         QCOMPARE(bottom->paintedCount, 2);
         QCOMPARE(shape1->paintedCount, 2);
@@ -214,18 +210,18 @@ void TestShapePainting::testPaintOrder()
 
         MockContainer *branch1 = new MockContainer();
         branch1->setZIndex(1);
-        OrderedMockShape *child1_1 = new OrderedMockShape(order);
+        OrderedMockShape *child1_1 = new OrderedMockShape(&order);
         child1_1->setZIndex(1);
-        OrderedMockShape *child1_2 = new OrderedMockShape(order);
+        OrderedMockShape *child1_2 = new OrderedMockShape(&order);
         child1_2->setZIndex(2);
         branch1->addShape(child1_1);
         branch1->addShape(child1_2);
 
         MockContainer *branch2 = new MockContainer();
         branch2->setZIndex(2);
-        OrderedMockShape *child2_1 = new OrderedMockShape(order);
+        OrderedMockShape *child2_1 = new OrderedMockShape(&order);
         child2_1->setZIndex(1);
-        OrderedMockShape *child2_2 = new OrderedMockShape(order);
+        OrderedMockShape *child2_2 = new OrderedMockShape(&order);
         child2_2->setZIndex(2);
         branch2->addShape(child2_1);
         branch2->addShape(child2_2);
@@ -258,7 +254,14 @@ void TestShapePainting::testPaintOrder()
 #include "kis_debug.h"
 void TestShapePainting::testGroupUngroup()
 {
-    QScopedPointer<MockContainer> shapesFakeLayer(new MockContainer);
+    MockShapeController controller;
+    MockCanvas canvas(&controller);
+
+    KoShapeManager *manager = canvas.shapeManager();
+
+    QScopedPointer<MockContainer> shapesFakeLayer(new MockContainer());
+    shapesFakeLayer->setAssociatedRootShapeManager(manager);
+
     MockShape *shape1(new MockShape());
     MockShape *shape2(new MockShape());
     shape1->setName("shape1");
@@ -268,33 +271,23 @@ void TestShapePainting::testGroupUngroup()
 
     QList<KoShape*> groupedShapes = {shape1, shape2};
 
-
-    MockShapeController controller;
-    MockCanvas canvas(&controller);
-    KoShapeManager *manager = canvas.shapeManager();
-
-    controller.addShape(shape1);
-    controller.addShape(shape2);
-
     QImage image(100, 100,  QImage::Format_Mono);
     QPainter painter(&image);
     painter.setClipRect(image.rect());
-    KoViewConverter vc;
 
     for (int i = 0; i < 3; i++) {
         KoShapeGroup *group = new KoShapeGroup();
-        group->setParent(shapesFakeLayer.data());
 
         {
             group->setName("group");
 
             KUndo2Command groupingCommand;
-            canvas.shapeController()->addShapeDirect(group, 0, &groupingCommand);
+            canvas.shapeController()->addShapeDirect(group, shapesFakeLayer.data(), &groupingCommand);
             new KoShapeGroupCommand(group, groupedShapes, true, &groupingCommand);
 
             groupingCommand.redo();
 
-            manager->paint(painter, vc, false);
+            manager->paint(painter, false);
 
             QCOMPARE(shape1->paintedCount, 2 * i + 1);
             QCOMPARE(shape2->paintedCount, 2 * i + 1);
@@ -310,7 +303,7 @@ void TestShapePainting::testGroupUngroup()
 
             ungroupingCommand.redo();
 
-            manager->paint(painter, vc, false);
+            manager->paint(painter, false);
 
             QCOMPARE(shape1->paintedCount, 2 * i + 2);
             QCOMPARE(shape2->paintedCount, 2 * i + 2);

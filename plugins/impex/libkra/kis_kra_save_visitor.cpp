@@ -95,7 +95,9 @@ bool KisKraSaveVisitor::visit(KisExternalLayer * layer)
     bool result = false;
     if (auto* referencesLayer = dynamic_cast<KisReferenceImagesLayer*>(layer)) {
         result = true;
-        Q_FOREACH(KoShape *shape, referencesLayer->shapes()) {
+        QList <KoShape *> shapes = referencesLayer->shapes();
+        std::sort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
+        Q_FOREACH(KoShape *shape, shapes) {
             auto *reference = dynamic_cast<KisReferenceImage*>(shape);
             KIS_ASSERT_RECOVER_RETURN_VALUE(reference, false);
             bool saved = reference->saveImage(m_store);
@@ -304,6 +306,7 @@ bool KisKraSaveVisitor::visit(KisColorizeMask *mask)
     }
 
     savePaintDevice(mask->coloringProjection(), COLORIZE_COLORING_DEVICE);
+    saveIccProfile(mask, mask->colorSpace()->profile());
 
     m_store->popDirectory();
 
@@ -405,7 +408,15 @@ bool KisKraSaveVisitor::saveAnnotations(KisLayer* layer)
     if (!layer->paintDevice()->colorSpace()) return false;
 
     if (layer->paintDevice()->colorSpace()->profile()) {
-        const KoColorProfile *profile = layer->paintDevice()->colorSpace()->profile();
+        return saveIccProfile(layer, layer->paintDevice()->colorSpace()->profile());
+    }
+    return true;
+
+}
+
+bool KisKraSaveVisitor::saveIccProfile(KisNode *node, const KoColorProfile *profile)
+{
+    if (profile) {
         KisAnnotationSP annotation;
         if (profile) {
             QByteArray profileRawData = profile->rawData();
@@ -420,7 +431,7 @@ bool KisKraSaveVisitor::saveAnnotations(KisLayer* layer)
 
         if (annotation) {
             // save layer profile
-            if (m_store->open(getLocation(layer, DOT_ICC))) {
+            if (m_store->open(getLocation(node, DOT_ICC))) {
                 m_store->write(annotation->annotation());
                 m_store->close();
             } else {
@@ -429,8 +440,8 @@ bool KisKraSaveVisitor::saveAnnotations(KisLayer* layer)
         }
     }
     return true;
-
 }
+
 bool KisKraSaveVisitor::saveSelection(KisNode* node)
 {
     KisSelectionSP selection;
@@ -446,14 +457,14 @@ bool KisKraSaveVisitor::saveSelection(KisNode* node)
 
     bool retval = true;
 
-    if (selection->hasPixelSelection()) {
+    if (selection->hasNonEmptyPixelSelection()) {
         KisPaintDeviceSP dev = selection->pixelSelection();
         if (!savePaintDevice(dev, getLocation(node, DOT_PIXEL_SELECTION))) {
             m_errorMessages << i18n("Failed to save the pixel selection data for layer %1.", node->name());
             retval = false;
         }
     }
-    if (selection->hasShapeSelection()) {
+    if (selection->hasNonEmptyShapeSelection()) {
         m_store->pushDirectory();
         retval = m_store->enterDirectory(getLocation(node, DOT_SHAPE_SELECTION));
         if (retval) {

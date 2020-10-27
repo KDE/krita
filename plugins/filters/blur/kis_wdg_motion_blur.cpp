@@ -28,6 +28,7 @@
 #include <kis_selection.h>
 #include <kis_paint_device.h>
 #include <kis_processing_information.h>
+#include <KisGlobalResourcesInterface.h>
 
 #include "ui_wdg_motion_blur.h"
 
@@ -50,7 +51,7 @@ KisWdgMotionBlur::~KisWdgMotionBlur()
 
 KisPropertiesConfigurationSP KisWdgMotionBlur::configuration() const
 {
-    KisFilterConfigurationSP config = new KisFilterConfiguration("motion blur", 1);
+    KisFilterConfigurationSP config = new KisFilterConfiguration("motion blur", 1, KisGlobalResourcesInterface::instance());
     config->setProperty("blurAngle", m_widget->blurAngleSlider->value());
     config->setProperty("blurLength", m_widget->blurLength->value());
     return config;

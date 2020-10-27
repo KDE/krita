@@ -24,6 +24,7 @@
 #include "filter/kis_filter_configuration.h"
 #include "kis_paint_device.h"
 #include "kis_selection.h"
+#include <KisGlobalResourcesInterface.h>
 
 
 class KisBaseProcessorConfigurationFactory : public KisSerializableConfigurationFactory
@@ -31,11 +32,12 @@ class KisBaseProcessorConfigurationFactory : public KisSerializableConfiguration
 public:
     KisBaseProcessorConfigurationFactory(KisBaseProcessor* _generator) : m_generator(_generator) {}
     ~KisBaseProcessorConfigurationFactory() override {}
+
     KisSerializableConfigurationSP createDefault() override {
-        return m_generator->factoryConfiguration();
+        return m_generator->defaultConfiguration(KisGlobalResourcesInterface::instance());
     }
     KisSerializableConfigurationSP create(const QDomElement& e) override {
-        KisSerializableConfigurationSP config = m_generator->factoryConfiguration();
+        KisSerializableConfigurationSP config = m_generator->factoryConfiguration(KisGlobalResourcesInterface::instance());
         config->fromXML(e);
         return config;
     }
@@ -85,14 +87,14 @@ KisBaseProcessor::~KisBaseProcessor()
     delete d;
 }
 
-KisFilterConfigurationSP KisBaseProcessor::factoryConfiguration() const
+KisFilterConfigurationSP KisBaseProcessor::factoryConfiguration(KisResourcesInterfaceSP resourcesInterface) const
 {
-    return new KisFilterConfiguration(id(), 0);
+    return new KisFilterConfiguration(id(), 1, resourcesInterface);
 }
 
-KisFilterConfigurationSP KisBaseProcessor::defaultConfiguration() const
+KisFilterConfigurationSP KisBaseProcessor::defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const
 {
-    return factoryConfiguration();
+    return factoryConfiguration(resourcesInterface);
 }
 
 KisConfigWidget * KisBaseProcessor::createConfigurationWidget(QWidget *, const KisPaintDeviceSP, bool) const

@@ -53,6 +53,8 @@ public:
     void toYUV(const QVector<double> &channelValues, qreal *y, qreal *u, qreal *v) const override;
     QVector <double> fromYUV(qreal *y, qreal *u, qreal *v) const override;
 
+    void fillGrayBrushWithColorAndLightnessOverlay(quint8 *dst, const QRgb *brush, quint8 *brushColor, qint32 nPixels) const override;
+    void fillGrayBrushWithColorAndLightnessWithStrength(quint8* dst, const QRgb* brush, quint8* brushColor, qreal strength, qint32 nPixels) const override;
 };
 
 class KoRgbU8ColorSpaceFactory : public KoSimpleColorSpaceFactory

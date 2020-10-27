@@ -19,7 +19,7 @@
 #ifndef IMAGESHAPE_H
 #define IMAGESHAPE_H
 
-#include <QScopedPointer>
+#include <QSharedDataPointer>
 
 #include "KoTosContainer.h"
 #include <SvgShape.h>
@@ -35,12 +35,9 @@ public:
 
     KoShape *cloneShape() const override;
 
-    void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext) override;
+    void paint(QPainter &painter, KoShapePaintingContext &paintContext) const override;
 
     void setSize(const QSizeF &size) override;
-
-    void saveOdf(KoShapeSavingContext &context) const override;
-    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
 
     bool saveSvg(SvgSavingContext &context) override;
     bool loadSvg(const KoXmlElement &element, SvgLoadingContext &context) override;
@@ -50,7 +47,7 @@ private:
 
 private:
     struct Private;
-    const QScopedPointer<Private> m_d;
+    QSharedDataPointer<Private> m_d;
 };
 
 #endif // IMAGESHAPE_H

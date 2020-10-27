@@ -61,7 +61,11 @@ KisTiledDataManager::KisTiledDataManager(const KisTiledDataManager &dm)
 
     /* We do not clone the history of the device, there is no usecase for it */
     m_mementoManager = new KisMementoManager();
-    m_mementoManager->setDefaultTileData(dm.m_hashTable->defaultTileData());
+
+    KisTileData *defaultTileData = dm.m_hashTable->refAndFetchDefaultTileData();
+    m_mementoManager->setDefaultTileData(defaultTileData);
+    defaultTileData->deref();
+
     m_hashTable = new KisTileHashTable(*dm.m_hashTable, m_mementoManager);
 
     m_pixelSize = dm.m_pixelSize;
@@ -273,7 +277,7 @@ void KisTiledDataManager::purge(const QRect& area)
     QList<KisTileSP> tilesToDelete;
     {
         const qint32 tileDataSize = KisTileData::HEIGHT * KisTileData::WIDTH * pixelSize();
-        KisTileData *tileData = m_hashTable->defaultTileData();
+        KisTileData *tileData = m_hashTable->refAndFetchDefaultTileData();
         tileData->blockSwapping();
         const quint8 *defaultData = tileData->data();
 
@@ -292,6 +296,7 @@ void KisTiledDataManager::purge(const QRect& area)
         }
 
         tileData->unblockSwapping();
+        tileData->deref();
     }
     Q_FOREACH (KisTileSP tile, tilesToDelete) {
         if (m_hashTable->deleteTile(tile)) {
@@ -667,18 +672,19 @@ QRect KisTiledDataManager::extent() const
     return m_extentManager.extent();
 }
 
-QRegion KisTiledDataManager::region() const
+KisRegion KisTiledDataManager::region() const
 {
-    QRegion region;
+    QVector<QRect> rects;
 
     KisTileHashTableConstIterator iter(m_hashTable);
     KisTileSP tile;
 
     while ((tile = iter.tile())) {
-        region += tile->extent();
+        rects << tile->extent();
         iter.next();
     }
-    return region;
+
+    return KisRegion(std::move(rects));
 }
 
 void KisTiledDataManager::setPixel(qint32 x, qint32 y, const quint8 * data)

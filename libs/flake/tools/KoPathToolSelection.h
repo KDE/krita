@@ -127,11 +127,6 @@ public:
     void setSelectedShapes(const QList<KoPathShape*> shapes);
 
     /**
-    * @brief trigger a repaint
-    */
-    void repaint();
-
-    /**
     * @brief Update the selection to contain only valid points
     *
     * This function checks which points are no longer valid and removes them

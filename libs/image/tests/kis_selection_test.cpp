@@ -34,8 +34,8 @@
 #include "kis_mask.h"
 #include "kis_image.h"
 #include "kis_transparency_mask.h"
-#include "testutil.h"
-
+#include <testutil.h>
+#include "testimage.h"
 #include <KoColorModelStandardIds.h>
 
 void KisSelectionTest::testGrayColorspaceConversion()
@@ -124,20 +124,20 @@ void KisSelectionTest::testSelectionComponents()
 {
     KisSelectionSP selection = new KisSelection();
 
-    QCOMPARE(selection->hasPixelSelection(), false);
-    QCOMPARE(selection->hasShapeSelection(), false);
+    QCOMPARE(selection->hasNonEmptyPixelSelection(), false);
+    QCOMPARE(selection->hasNonEmptyShapeSelection(), false);
     QCOMPARE(selection->shapeSelection(), (void*)0);
 
     selection->pixelSelection()->select(QRect(10,10,10,10));
-    QCOMPARE(selection->hasPixelSelection(), true);
+    QCOMPARE(selection->hasNonEmptyPixelSelection(), true);
     QCOMPARE(selection->selectedExactRect(), QRect(10,10,10,10));
 }
 
 void KisSelectionTest::testSelectionActions()
 {
     KisSelectionSP selection = new KisSelection();
-    QVERIFY(selection->hasPixelSelection() == false);
-    QVERIFY(selection->hasShapeSelection() == false);
+    QVERIFY(selection->hasNonEmptyPixelSelection() == false);
+    QVERIFY(selection->hasNonEmptyShapeSelection() == false);
 
     KisPixelSelectionSP pixelSelection = selection->pixelSelection();
     pixelSelection->select(QRect(0, 0, 20, 20));
@@ -262,11 +262,12 @@ void KisSelectionTest::testSelectionExactBounds()
                                     cs, "stest");
 
     KisPaintDeviceSP device = new KisPaintDevice(cs);
+    device->setDefaultBounds(new KisDefaultBounds(image));
     device->fill(referenceDeviceRect, KoColor(Qt::white, cs));
 
     QCOMPARE(device->exactBounds(), referenceDeviceRect);
 
-    KisSelectionSP selection = new KisSelection(new KisSelectionDefaultBounds(device, image));
+    KisSelectionSP selection = new KisSelection(new KisSelectionDefaultBounds(device));
 
     quint8 defaultPixel = MAX_SELECTED;
     selection->pixelSelection()->setDefaultPixel(KoColor(&defaultPixel, selection->pixelSelection()->colorSpace()));

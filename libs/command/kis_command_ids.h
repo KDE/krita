@@ -34,7 +34,15 @@ enum CommandId {
     ChangePathShapePointId,
     ChangePathShapeControlPointId,
     ChangePaletteId,
-    TransformToolId
+    TransformToolId,
+    ChangeNodeOpacityId,
+    ChangeNodeNameId,
+    ChangeNodeCompositeOpId,
+    ChangeCurrentTimeId,
+    DisableUIUpdatesCommandId,
+    UpdateCommandId,
+    EmitImageSignalsCommandId,
+    NodePropertyListCommandId
 };
 
 }

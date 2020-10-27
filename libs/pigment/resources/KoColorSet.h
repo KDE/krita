@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project
     Copyright (c) 2005 Boudewijn Rempt <boud@valdyas.org>
-    Copyright (c) 2016 L. E. Segovia <leo.segovia@siggraph.org>
+    Copyright (c) 2016 L. E. Segovia <amy@amyspark.me>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -24,8 +24,9 @@
 #include <QColor>
 #include <QVector>
 #include <QScopedPointer>
+#include <QSharedPointer>
 
-#include <resources/KoResource.h>
+#include <KoResource.h>
 #include "KoColor.h"
 #include "KisSwatch.h"
 #include "KisSwatchGroup.h"
@@ -35,9 +36,8 @@
  * Open Gimp, Photoshop or RIFF palette files. This is a straight port
  * from the Gimp.
  */
-class KRITAPIGMENT_EXPORT KoColorSet : public QObject, public KoResource
+class KRITAPIGMENT_EXPORT KoColorSet :public KoResource
 {
-    Q_OBJECT
 public:
     static const QString GLOBAL_GROUP_NAME;
     static const QString KPL_VERSION_ATTR;
@@ -84,20 +84,23 @@ public:
      */
     explicit KoColorSet(const QString &filename = QString());
 
-    // Explicit copy constructor (KoResource copy constructor is private)
     KoColorSet(const KoColorSet& rhs);
 
-public /* overridden methods */: // KoResource
     ~KoColorSet() override;
 
-    bool load() override;
-    bool loadFromDevice(QIODevice *dev) override;
-    bool save() override;
+    KoColorSet &operator=(const KoColorSet &rhs) = delete;
+
+    KoResourceSP clone() const override;
+
+    bool load(KisResourcesInterfaceSP resourcesInterface) override;
+    bool loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface) override;
     bool saveToDevice(QIODevice* dev) const override;
     QString defaultFileExtension() const override;
+    QPair<QString, QString> resourceType() const override
+    {
+        return QPair<QString, QString>(ResourceType::Palettes, "");
+    }
 
-
-public /* methods */:
     void setColumnCount(int columns);
     int columnCount() const;
 
@@ -110,23 +113,11 @@ public /* methods */:
     PaletteType paletteType() const;
     void setPaletteType(PaletteType paletteType);
 
-    /**
-     * @brief isGlobal
-     * A global color set is a set stored in the config directory
-     * Such a color set would be opened every time Krita is launched.
-     *
-     * A non-global color set, on contrary, would be stored in a kra file,
-     * and would only be opened when that file is opened by Krita.
-     * @return @c true if the set is global
-     */
-    bool isGlobal() const;
-    void setIsGlobal(bool);
-
     bool isEditable() const;
     void setIsEditable(bool isEditable);
 
     QByteArray toByteArray() const;
-    bool fromByteArray(QByteArray &data);
+    bool fromByteArray(QByteArray &data, KisResourcesInterfaceSP resourcesInterface);
 
     /**
      * @brief Add a color to the palette.
@@ -159,7 +150,7 @@ public /* methods */:
      * @brief getGroupNames
      * @return returns a list of group names, excluding the unsorted group.
      */
-    QStringList getGroupNames();
+    QStringList getGroupNames() const;
 
     /**
      * @brief getGroup
@@ -216,4 +207,7 @@ private:
     const QScopedPointer<Private> d;
 
 };
+
+typedef QSharedPointer<KoColorSet> KoColorSetSP;
+
 #endif // KOCOLORSET

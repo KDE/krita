@@ -29,9 +29,7 @@
 #include "KoShape.h"
 #include "KoShapeLoadingContext.h"
 
-#include <KoOdfLoadingContext.h>
 #include <KoProperties.h>
-#include <KoStyleStack.h>
 #include <KoJsonTrader.h>
 
 #include <KPluginFactory>
@@ -207,23 +205,15 @@ KoShape *KoShapeFactoryBase::createShape(const KoProperties* properties,
     return createDefaultShape(documentResources);
 }
 
-KoShape *KoShapeFactoryBase::createShapeFromOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
+KoShape *KoShapeFactoryBase::createShapeFromXML(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
+    Q_UNUSED(element);
     KoShape *shape = createDefaultShape(context.documentResourceManager());
     if (!shape)
         return 0;
 
     if (shape->shapeId().isEmpty())
         shape->setShapeId(id());
-
-    context.odfLoadingContext().styleStack().save();
-    bool loaded = shape->loadOdf(element, context);
-    context.odfLoadingContext().styleStack().restore();
-
-    if (!loaded) {
-        delete shape;
-        return 0;
-    }
 
     return shape;
 }
@@ -233,7 +223,7 @@ void KoShapeFactoryBase::getDeferredPlugin()
     QMutexLocker(&d->pluginLoadingMutex);
     if (d->deferredFactory) return;
 
-    const QList<QPluginLoader *> offers = KoJsonTrader::instance()->query("Calligra/Deferred", QString());
+    const QList<QPluginLoader *> offers = KoJsonTrader::instance()->query("Krita/Deferred", QString());
     Q_ASSERT(offers.size() > 0);
 
     Q_FOREACH (QPluginLoader *pluginLoader, offers) {

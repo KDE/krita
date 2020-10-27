@@ -12,16 +12,10 @@ set ( defaulttools_SRCS
     defaulttool/ShapeShearStrategy.cpp
     defaulttool/ShapeGradientEditStrategy.cpp
     defaulttool/SelectionDecorator.cpp
+    defaulttool/ShapeMeshGradientEditStrategy.cpp
 
     defaulttool/KoShapeGradientHandles.cpp
-
-    connectionTool/ConnectionTool.cpp
-    connectionTool/ConnectionToolFactory.cpp
-    connectionTool/AddConnectionPointCommand.cpp
-    connectionTool/RemoveConnectionPointCommand.cpp
-    connectionTool/ChangeConnectionPointCommand.cpp
-    connectionTool/MoveConnectionPointStrategy.cpp
-    connectionTool/ConnectionPointWidget.cpp
+    defaulttool/KoShapeMeshGradientHandles.cpp
 
     referenceimagestool/ToolReferenceImages.cpp
     referenceimagestool/ToolReferenceImagesWidget.cpp
@@ -30,7 +24,6 @@ set ( defaulttools_SRCS
 
 ki18n_wrap_ui(defaulttools_SRCS
     defaulttool/DefaultToolGeometryWidget.ui
-    connectionTool/ConnectionPointWidget.ui
     referenceimagestool/WdgToolOptions.ui
 )
 

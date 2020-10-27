@@ -18,28 +18,20 @@
 
 #include "KisPaintopPropertiesBase.h"
 #include "kis_properties_configuration.h"
+#include <KisResourcesInterface.h>
+
+
+KisPaintopPropertiesResourcesBase::~KisPaintopPropertiesResourcesBase()
+{
+
+}
 
 KisPaintopPropertiesBase::~KisPaintopPropertiesBase()
 {
 }
 
-void KisPaintopPropertiesBase::readOptionSetting(KisPropertiesConfigurationSP settings)
-{
-    readOptionSettingImpl(settings.data());
-}
 
-void KisPaintopPropertiesBase::writeOptionSetting(KisPropertiesConfigurationSP settings) const
+KisPaintopPropertiesCanvasResourcesBase::~KisPaintopPropertiesCanvasResourcesBase()
 {
-    writeOptionSettingImpl(settings.data());
-}
 
-void KisPaintopPropertiesBase::readOptionSetting(const KisPropertiesConfiguration *settings)
-{
-    readOptionSettingImpl(settings);
 }
-
-void KisPaintopPropertiesBase::writeOptionSetting(KisPropertiesConfiguration *settings) const
-{
-    writeOptionSettingImpl(settings);
-}
-

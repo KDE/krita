@@ -41,11 +41,13 @@ protected:
     bool event(QEvent *event) override;
     void showEvent(QShowEvent *event) override;
     void hideEvent(QHideEvent *event) override;
+    bool eventFilter(QObject *watched, QEvent *event) override;
 
 private Q_SLOTS:
     void slotCanvasResourceChanged(int key, const QVariant &resource);
     void slotReloadProperties();
     void slotConfigBrushHud();
+    void slotReloadPreset();
 
 private:
     void clearProperties() const;

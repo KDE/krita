@@ -25,6 +25,7 @@
 
 #include "kritaplugin_export.h"
 
+#ifndef Q_MOC_RUN
 /**
  * The pluginloader singleton is responsible for loading the plugins
  * that it's asked to load. It keeps track of which servicetypes it
@@ -59,6 +60,7 @@ MyPlugin::MyPlugin( QObject *parent, const QVariantList& ) : QObject(parent) {
 #include <MyPlugin.moc>
 @endcode
  */
+#endif
 class KRITAPLUGIN_EXPORT KoPluginLoader : public QObject
 {
 
@@ -77,7 +79,7 @@ public:
          * /code
          *  KConfigGroup configGroup =  KSharedConfig::openConfig()->group(config.group);
          * /endcode
-         * For most cases you can pass the string "calligra" into this variable.
+         * For most cases you can pass the string "krita" into this variable.
          */
         const char * group;
         /// This contains the variable name for the list of plugins (by library name) the user wants to load
@@ -100,7 +102,7 @@ public:
     /**
      * Load all plugins that conform to the versiontype and versionstring,
      * for instance:
-     * KoPluginLoader::instance()->load("Calligra/Flake", "([X-Flake-PluginVersion] == 28)");
+     * KoPluginLoader::instance()->load("Krita/Flake", "([X-Flake-PluginVersion] == 28)");
      * This method allows you to optionally limit the plugins that are loaded by version, but also
      * using a user configurable set of config options.
      * If you pass a PluginsConfig struct only those plugins are loaded that are specified in the

@@ -4,7 +4,7 @@
     <text>File</text>
     <Action name="file_new">
       <icon>document-new</icon>
-      <text>&amp;New</text>
+      <text context="New document">&amp;New...</text>
       <whatsThis></whatsThis>
       <toolTip>Create new document</toolTip>
       <iconText>New</iconText>
@@ -62,20 +62,6 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
-<!-- commented out in the code right now
-    <Action name="file_reload_file">
-      <icon></icon>
-      <text>Reload</text>
-      <whatsThis></whatsThis>
-      <toolTip>Reload</toolTip>
-      <iconText>Reload</iconText>
-      <activationFlags>1</activationFlags>
-      <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
--->
     <Action name="file_sessions">
       <icon></icon>
       <text>Sessions...</text>
@@ -191,30 +177,6 @@
       <whatsThis></whatsThis>
       <toolTip>Create Copy From Current Image</toolTip>
       <iconText>Create Copy From Current Image</iconText>
-      <activationFlags>1</activationFlags>
-      <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="file_print">
-      <icon>document-print</icon>
-      <text>&amp;Print...</text>
-      <whatsThis></whatsThis>
-      <toolTip>Print document</toolTip>
-      <iconText>Print</iconText>
-      <activationFlags>1</activationFlags>
-      <activationConditions>0</activationConditions>
-      <shortcut>Ctrl+P</shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="file_print_preview">
-      <icon>document-print-preview</icon>
-      <text>Print Previe&amp;w</text>
-      <whatsThis></whatsThis>
-      <toolTip>Show a print preview of document</toolTip>
-      <iconText>Print Preview</iconText>
       <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
@@ -610,14 +572,14 @@
       <statusTip></statusTip>
     </Action>
     <Action name="wrap_around_mode">
-      <icon></icon>
+      <icon>wraparound</icon>
       <text>&amp;Wrap Around Mode</text>
       <whatsThis></whatsThis>
       <toolTip>Wrap Around Mode</toolTip>
       <iconText>Wrap Around Mode</iconText>
       <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
+      <shortcut>Shift+W</shortcut>
       <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -992,10 +954,10 @@
     <text>Image</text>
     <Action name="image_properties">
       <icon>document-properties</icon>
-      <text>&amp;Properties...</text>
+      <text context="Image Properties">&amp;Properties...</text>
       <whatsThis></whatsThis>
-      <toolTip>Properties</toolTip>
-      <iconText>Properties</iconText>
+      <toolTip context="Image Properties">Properties</toolTip>
+      <iconText context="Image Properties">Properties</iconText>
       <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
@@ -1454,6 +1416,18 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="filter_apply_reprompt">
+        <icon></icon>
+        <text>Apply Filter Again (Reprompt)</text>
+        <whatsThis></whatsThis>
+        <toolTip>Reapply Last Used Filter with Prompt for Configuration</toolTip>
+        <iconText>Reapply Last Used Filter with Prompt for Configuration</iconText>
+        <activationFlags>0</activationFlags>
+        <activationConditions>0</activationConditions>
+        <shortcut></shortcut>
+        <isCheckable>false</isCheckable>
+        <statusTip></statusTip>
+    </Action>
     <Action name="adjust_filters">
       <icon></icon>
       <text>Adjust</text>
@@ -1646,6 +1620,16 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="style_menu">
+      <icon></icon>
+      <text>&amp;Styles</text>
+      <whatsThis></whatsThis>
+      <toolTip>Styles</toolTip>
+      <iconText>Styles</iconText>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
     <Action name="settings_active_author">
       <icon>im-user</icon>
       <text>Active Author Profile</text>
@@ -1654,6 +1638,16 @@
       <iconText>Active Author Profile</iconText>
       <shortcut></shortcut>
       <isCheckable></isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="reset_configurations">
+      <icon></icon>
+      <text>Reset Krita Configurations</text>
+      <whatsThis></whatsThis>
+      <toolTip>Reset Krita Configurations</toolTip>
+      <iconText>Reset Krita Configurations</iconText>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
     <Action name="options_configure_keybinding">
@@ -1802,6 +1796,16 @@
       <whatsThis></whatsThis>
       <toolTip>Brush option slider 3</toolTip>
       <iconText>Brush option slider 3</iconText>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+	<Action name="brushslider4">
+      <icon></icon>
+      <text>Brush option slider 4</text>
+      <whatsThis></whatsThis>
+      <toolTip>Brush option slider 4</toolTip>
+      <iconText>Brush option slider 4</iconText>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>

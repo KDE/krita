@@ -80,6 +80,11 @@ namespace {
         bool m_explicitlyReset = false;
     };
 
+    // Convenience macros to extract a child node.
+    QDomElement getChild(QDomElement xml, QString node) {
+        return xml.firstChildElement(node);
+    }
+
     // Convenience macros to extract text of a child node.
     QString getChildContent(QDomElement xml, QString node) {
         return xml.firstChildElement(node).text();
@@ -87,17 +92,33 @@ namespace {
 
     // Use Krita debug logging categories instead of KDE's default qDebug() for
     // harmless empty strings and translations
-    QString quietlyTranslate(const QString &s) {
-        if (s.isEmpty()) {
-            return s;
+    QString quietlyTranslate(const QDomElement &s) {
+        if (s.isNull() || s.text().isEmpty()) {
+            return QString();
         }
-        QString translatedString = i18nc("action", s.toUtf8());
-        if (translatedString == s) {
-            translatedString = i18n(s.toUtf8());
+        QString translatedString;
+        const QString attrContext = QStringLiteral("context");
+        const QString attrDomain = QStringLiteral("translationDomain");
+        QString context = QStringLiteral("action");
+
+        if (!s.attribute(attrContext).isEmpty()) {
+            context = s.attribute(attrContext);
+        }
+
+        QByteArray domain = s.attribute(attrDomain).toUtf8();
+        if (domain.isEmpty()) {
+            domain = s.ownerDocument().documentElement().attribute(attrDomain).toUtf8();
+            if (domain.isEmpty()) {
+                domain = KLocalizedString::applicationDomain();
+            }
+        }
+        translatedString = i18ndc(domain.constData(), context.toUtf8().constData(), s.text().toUtf8().constData());
+        if (translatedString == s.text()) {
+            translatedString = i18n(s.text().toUtf8().constData());
         }
         if (translatedString.isEmpty()) {
-            dbgAction << "No translation found for" << s;
-            return s;
+            dbgAction << "No translation found for" << s.text();
+            return s.text();
         }
 
         return translatedString;
@@ -241,7 +262,7 @@ void KisActionRegistry::updateShortcut(const QString &name, QAction *action)
 {
     const ActionInfoItem &info = d->actionInfo(name);
     action->setShortcuts(info.effectiveShortcuts());
-    action->setProperty("defaultShortcuts", qVariantFromValue(info.defaultShortcuts()));
+    action->setProperty("defaultShortcuts", QVariant::fromValue(info.defaultShortcuts()));
 
     d->sanityPropertizedShortcuts.insert(name);
 }
@@ -259,7 +280,7 @@ QList<QString> KisActionRegistry::registeredShortcutIds() const
 bool KisActionRegistry::propertizeAction(const QString &name, QAction * a)
 {
     if (!d->actionInfoList.contains(name)) {
-        warnAction << "No XML data found for action" << name;
+        warnAction << "propertizeAction: No XML data found for action" << name;
         return false;
     }
 
@@ -268,7 +289,7 @@ bool KisActionRegistry::propertizeAction(const QString &name, QAction * a)
     QDomElement actionXml = info.xmlData;
     if (!actionXml.text().isEmpty()) {
         // i18n requires converting format from QString.
-        auto getChildContent_i18n = [=](QString node){return quietlyTranslate(getChildContent(actionXml, node));};
+        auto getChildContent_i18n = [=](QString node){return quietlyTranslate(getChild(actionXml, node));};
 
         // Note: the fields in the .action documents marked for translation are determined by extractrc.
         QString icon      = getChildContent(actionXml, "icon");
@@ -303,7 +324,7 @@ QString KisActionRegistry::getActionProperty(const QString &name, const QString 
     ActionInfoItem info = d->actionInfo(name);
     QDomElement actionXml = info.xmlData;
     if (actionXml.text().isEmpty()) {
-        dbgAction << "No XML data found for action" << name;
+        dbgAction << "getActionProperty: No XML data found for action" << name;
         return QString();
     }
 
@@ -316,6 +337,7 @@ void KisActionRegistry::Private::loadActionFiles()
 {
     QStringList actionDefinitions =
         KoResourcePaths::findAllResources("kis_actions", "*.action", KoResourcePaths::Recursive);
+    dbgAction << "Action Definitions" << actionDefinitions;
 
     // Extract actions all XML .action files.
     Q_FOREACH (const QString &actionDefinition, actionDefinitions)  {
@@ -328,7 +350,7 @@ void KisActionRegistry::Private::loadActionFiles()
         QString collectionName = base.attribute("name");
         QString version        = base.attribute("version");
         if (version != "2") {
-            errAction << ".action XML file" << actionDefinition << "has incorrect version; skipping.";
+            qWarning() << ".action XML file" << actionDefinition << "has incorrect version; skipping.";
             continue;
         }
 
@@ -339,10 +361,14 @@ void KisActionRegistry::Private::loadActionFiles()
 
             // <text> field
             QDomElement categoryTextNode = actions.firstChild().toElement();
-            QString categoryName         = quietlyTranslate(categoryTextNode.text());
+            QString categoryName         = quietlyTranslate(categoryTextNode);
 
             // <action></action> tags
             QDomElement actionXml  = categoryTextNode.nextSiblingElement();
+
+            if (actionXml.isNull()) {
+                qWarning() << actionDefinition << "does not contain any valid actios! (Or the text element was left empty...)";
+            }
 
             // Loop over individual actions
             while (!actionXml.isNull()) {
@@ -352,7 +378,7 @@ void KisActionRegistry::Private::loadActionFiles()
 
                     // Bad things
                     if (name.isEmpty()) {
-                        errAction << "Unnamed action in definitions file " << actionDefinition;
+                        qWarning() << "Unnamed action in definitions file " << actionDefinition;
                     }
 
                     else if (actionInfoList.contains(name)) {

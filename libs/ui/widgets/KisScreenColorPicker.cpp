@@ -57,16 +57,15 @@ struct KisScreenColorPicker::Private
 
 KisScreenColorPicker::KisScreenColorPicker(bool showInfoLabel, QWidget *parent) : KisScreenColorPickerBase(parent), m_d(new Private)
 {
-    QVBoxLayout *layout = new QVBoxLayout();
-    this->setLayout(layout);
+    QVBoxLayout *layout = new QVBoxLayout(this);
     m_d->screenColorPickerButton = new QPushButton();
 
     m_d->screenColorPickerButton->setMinimumHeight(25);
-    this->layout()->addWidget(m_d->screenColorPickerButton);
+    layout->addWidget(m_d->screenColorPickerButton);
 
     if (showInfoLabel) {
         m_d->lblScreenColorInfo = new QLabel(QLatin1String("\n"));
-        this->layout()->addWidget(m_d->lblScreenColorInfo);
+        layout->addWidget(m_d->lblScreenColorInfo);
     }
 
     connect(m_d->screenColorPickerButton, SIGNAL(clicked()), SLOT(pickScreenColor()));

@@ -1,4 +1,4 @@
-/*
+ /*
  *  Copyright (c) 2019 Boudewijn Rempt <boud@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -24,13 +24,17 @@
 #include <QCheckBox>
 #include <QComboBox>
 #include <QLineEdit>
+#include <QTextEdit>
 #include <QAbstractSlider>
 #include <QSpinBox>
 #include <QDoubleSpinBox>
+#include <QGroupBox>
+#include <QRadioButton>
 
 #include "kis_int_parse_spin_box.h"
 #include "kis_double_parse_spin_box.h"
 #include "kis_double_parse_unit_spin_box.h"
+#include "kis_slider_spin_box.h"
 
 
 void KisDialogStateSaver::saveState(QWidget *parent, const QString &dialogName)
@@ -61,6 +65,9 @@ void KisDialogStateSaver::saveState(QWidget *parent, const QString &dialogName)
             else if (qobject_cast<QLineEdit*>(widget)) {
                 group.writeEntry(widget->objectName(), qobject_cast<QLineEdit*>(widget)->text());
             }
+            else if (qobject_cast<QTextEdit*>(widget)) {
+                group.writeEntry(widget->objectName(), qobject_cast<QTextEdit *>(widget)->toPlainText());
+            }
             else if (qobject_cast<QAbstractSlider*>(widget)) {
                 group.writeEntry(widget->objectName(), qobject_cast<QAbstractSlider*>(widget)->value());
             }
@@ -70,9 +77,15 @@ void KisDialogStateSaver::saveState(QWidget *parent, const QString &dialogName)
             else if (qobject_cast<QDoubleSpinBox*>(widget)) {
                 group.writeEntry(widget->objectName(), qobject_cast<QDoubleSpinBox*>(widget)->value());
             }
+            else if (qobject_cast<QRadioButton*>(widget)) {
+                group.writeEntry(widget->objectName(), qobject_cast<QRadioButton*>(widget)->isChecked());
+            }
+            else if (qobject_cast<KisSliderSpinBox*>(widget)){
+                group.writeEntry(widget->objectName(), qobject_cast<KisSliderSpinBox*>(widget)->value());
+            }
 
             else {
-                qWarning() << "Cannot save state for object" << widget;
+                //qWarning() << "Cannot save state for object" << widget;
             }
         }
         else {
@@ -148,6 +161,13 @@ void KisDialogStateSaver::restoreState(QWidget *parent, const QString &dialogNam
                     qobject_cast<QLineEdit*>(widget)->setText(group.readEntry<QString>(widgetName, qobject_cast<QLineEdit*>(widget)->text()));
                 }
             }
+            else if (qobject_cast<QTextEdit *>(widget)) {
+                if (defaultValue.isValid()) {
+                    qobject_cast<QTextEdit *>(widget)->setPlainText(defaultValue.toString());
+                } else {
+                    qobject_cast<QTextEdit *>(widget)->setPlainText(group.readEntry<QString>(widgetName, qobject_cast<QTextEdit *>(widget)->toPlainText()));
+                }
+            }
             else if (qobject_cast<QAbstractSlider*>(widget)) {
                 if (defaultValue.isValid()) {
                     qobject_cast<QAbstractSlider*>(widget)->setValue(defaultValue.toInt());
@@ -171,8 +191,24 @@ void KisDialogStateSaver::restoreState(QWidget *parent, const QString &dialogNam
                 else {
                     qobject_cast<QDoubleSpinBox*>(widget)->setValue(group.readEntry<int>(widgetName, qobject_cast<QDoubleSpinBox*>(widget)->value()));
                 }
-
             }
+            else if (qobject_cast<QRadioButton*>(widget)) {
+                if (defaultValue.isValid()) {
+                    qobject_cast<QRadioButton*>(widget)->setChecked(defaultValue.toBool());
+                }
+                else {
+                    qobject_cast<QRadioButton*>(widget)->setChecked(group.readEntry<bool>(widgetName, qobject_cast<QRadioButton*>(widget)->isChecked()));
+                }
+            }
+            else if (qobject_cast<KisSliderSpinBox*>(widget)) {
+                if (defaultValue.isValid()) {
+                    qobject_cast<KisSliderSpinBox*>(widget)->setValue(defaultValue.toInt());
+                }
+                else {
+                    qobject_cast<KisSliderSpinBox*>(widget)->setValue(group.readEntry<int>(widgetName, qobject_cast<KisSliderSpinBox*>(widget)->value()));
+                }
+            }
+
             else {
                 //qWarning() << "Cannot restore state for object" << widget;
             }

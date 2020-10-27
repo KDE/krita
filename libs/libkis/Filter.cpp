@@ -30,6 +30,7 @@
 
 #include <strokes/kis_filter_stroke_strategy.h>
 #include <krita_utils.h>
+#include <KisGlobalResourcesInterface.h>
 
 #include "Krita.h"
 #include "Document.h"
@@ -77,7 +78,7 @@ void Filter::setName(const QString &name)
     delete d->configuration;
 
     KisFilterSP filter = KisFilterRegistry::instance()->value(d->name);
-    d->configuration = new InfoObject(filter->defaultConfiguration());
+    d->configuration = new InfoObject(filter->defaultConfiguration(KisGlobalResourcesInterface::instance()));
 }
 
 InfoObject* Filter::configuration() const
@@ -166,7 +167,7 @@ bool Filter::startFilter(Node *node, int x, int y, int w, int h)
 
 KisFilterConfigurationSP Filter::filterConfig()
 {
-    KisFilterConfigurationSP config = KisFilterRegistry::instance()->get(d->name)->defaultConfiguration();
+    KisFilterConfigurationSP config = KisFilterRegistry::instance()->get(d->name)->factoryConfiguration(KisGlobalResourcesInterface::instance());
     Q_FOREACH(const QString property, d->configuration->properties().keys()) {
         config->setProperty(property, d->configuration->property(property));
     }

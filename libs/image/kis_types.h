@@ -224,8 +224,8 @@ typedef KisSharedPtr<KisRandomSubAccessor> KisRandomSubAccessorSP;
 typedef QVector<QPointF> vQPointF;
 
 class KisPaintOpPreset;
-typedef KisSharedPtr<KisPaintOpPreset> KisPaintOpPresetSP;
-typedef KisWeakSharedPtr<KisPaintOpPreset> KisPaintOpPresetWSP;
+typedef QSharedPointer<KisPaintOpPreset> KisPaintOpPresetSP;
+typedef QWeakPointer<KisPaintOpPreset> KisPaintOpPresetWSP;
 
 template <typename T>
 class KisPinnedSharedPtr;
@@ -274,6 +274,7 @@ typedef KisSharedPtr<KisLockedProperties> KisLockedPropertiesSP;
 
 class KisProjectionUpdatesFilter;
 typedef QSharedPointer<KisProjectionUpdatesFilter> KisProjectionUpdatesFilterSP;
+using KisProjectionUpdatesFilterCookie = void*;
 
 class KisAbstractProjectionPlane;
 typedef QSharedPointer<KisAbstractProjectionPlane> KisAbstractProjectionPlaneSP;
@@ -286,6 +287,14 @@ typedef QWeakPointer<KisProjectionLeaf> KisProjectionLeafWSP;
 class KisKeyframe;
 typedef QSharedPointer<KisKeyframe> KisKeyframeSP;
 typedef QWeakPointer<KisKeyframe> KisKeyframeWSP;
+
+class KisScalarKeyframe;
+typedef QSharedPointer<KisScalarKeyframe> KisScalarKeyframeSP;
+typedef QWeakPointer<KisScalarKeyframe> KisScalarKeyframeWSP;
+
+class KisRasterKeyframe;
+typedef QSharedPointer<KisRasterKeyframe> KisRasterKeyframeSP;
+typedef QWeakPointer<KisRasterKeyframe> KisRasterKeyframeWSP;
 
 class KisFilterChain;
 typedef KisSharedPtr<KisFilterChain> KisFilterChainSP;

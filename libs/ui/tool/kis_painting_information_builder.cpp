@@ -66,7 +66,7 @@ KisPaintInformation KisPaintingInformationBuilder::startStroke(KoPointerEvent *e
                                                                const KoCanvasResourceProvider *manager)
 {
     if (manager) {
-        m_pressureDisabled = manager->resource(KisCanvasResourceProvider::DisablePressure).toBool();
+        m_pressureDisabled = manager->resource(KoCanvasResource::DisablePressure).toBool();
     }
 
     m_startPoint = event->point;
@@ -126,13 +126,13 @@ KisPaintInformation KisPaintingInformationBuilder::createPaintingInformation(KoP
     qreal speed = m_speedSmoother->getNextSpeed(imageToView(imagePoint));
 
     KisPaintInformation pi(imagePoint,
-                               !m_pressureDisabled ? 1.0 : pressureToCurve(event->pressure()),
-                               event->xTilt(), event->yTilt(),
-                               event->rotation(),
-                               event->tangentialPressure(),
-                               perspective,
-                               timeElapsed,
-                               speed);
+                           !m_pressureDisabled ? 1.0 : pressureToCurve(event->pressure()),
+                           event->xTilt(), event->yTilt(),
+                           event->rotation(),
+                           event->tangentialPressure(),
+                           perspective,
+                           timeElapsed,
+                           speed);
 
     pi.setCanvasRotation(canvasRotation());
     pi.setCanvasMirroredH(canvasMirroredX());
@@ -142,10 +142,13 @@ KisPaintInformation KisPaintingInformationBuilder::createPaintingInformation(KoP
 }
 
 KisPaintInformation KisPaintingInformationBuilder::hover(const QPointF &imagePoint,
-                                                         const KoPointerEvent *event)
+                                                         const KoPointerEvent *event,
+                                                         bool isStrokeStarted)
 {
     qreal perspective = calculatePerspective(imagePoint);
-    qreal speed = m_speedSmoother->getNextSpeed(imageToView(imagePoint));
+    qreal speed = !isStrokeStarted ?
+                m_speedSmoother->getNextSpeed(imageToView(imagePoint)) :
+                m_speedSmoother->lastSpeed();
 
     if (event) {
         return KisPaintInformation::createHoveringModeInfo(imagePoint,

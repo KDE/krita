@@ -186,16 +186,15 @@ public Q_SLOTS:
     void enableAnimation() const;
 
     /**
-     * @brief Should the node be visible in the timeline. It defaults to false
-     * with new layer
+     * @brief Sets whether or not node should be pinned to the Timeline Docker,
+     * regardless of selection activity.
      */
-    void setShowInTimeline(bool showInTimeline) const;
+    void setPinnedToTimeline(bool pinned) const;
 
     /**
-     * @return is layer is shown in the timeline
+     * @return Returns true if node is pinned to the Timeline Docker or false if it is not.
      */
-    bool showInTimeline() const;
-
+    bool isPinnedToTimeline() const;
 
     /**
      * Sets the state of the node to the value of @param collapsed

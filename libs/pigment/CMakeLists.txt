@@ -15,7 +15,7 @@ include_directories(
 set(FILE_OPENEXR_SOURCES)
 set(LINK_OPENEXR_LIB)
 if(OPENEXR_FOUND)
-    include_directories(SYSTEM ${OPENEXR_INCLUDE_DIR})
+    include_directories(SYSTEM ${OPENEXR_INCLUDE_DIRS})
     set(LINK_OPENEXR_LIB ${OPENEXR_LIBRARIES})
     add_definitions(${OPENEXR_DEFINITIONS})
 endif()
@@ -26,9 +26,11 @@ if(HAVE_VC)
     include_directories(SYSTEM ${Vc_INCLUDE_DIR})
     set(LINK_VC_LIB ${Vc_LIBRARIES})
     ko_compile_for_all_implementations_no_scalar(__per_arch_factory_objs compositeops/KoOptimizedCompositeOpFactoryPerArch.cpp)
-
+    ko_compile_for_all_implementations(__per_arch_alpha_applicator_factory_objs KoAlphaMaskApplicatorFactoryImpl.cpp)
     message("Following objects are generated from the per-arch lib")
     message("${__per_arch_factory_objs}")
+else()
+    set(__per_arch_alpha_applicator_factory_objs KoAlphaMaskApplicatorFactoryImpl.cpp)
 endif()
 
 add_subdirectory(tests)
@@ -37,6 +39,7 @@ add_subdirectory(benchmarks)
 set(kritapigment_SRCS
     DebugPigment.cpp
     KoBasicHistogramProducers.cpp
+    KoAlphaMaskApplicatorBase.cpp
     KoColor.cpp
     KoColorDisplayRendererInterface.cpp
     KoColorConversionAlphaTransformation.cpp
@@ -52,6 +55,8 @@ set(kritapigment_SRCS
     KoColorSpaceEngine.cpp
     KoColorSpaceFactory.cpp
     KoColorSpaceMaths.cpp
+    KoCmykColorSpaceMaths.cpp
+    KoLabColorSpaceMaths.cpp
     KoColorSpaceRegistry.cpp
     KoColorProfileStorage.cpp
     KoColorTransformation.cpp
@@ -74,17 +79,17 @@ set(kritapigment_SRCS
     compositeops/KoOptimizedCompositeOpFactoryPerArch_Scalar.cpp
     compositeops/KoAlphaDarkenParamsWrapper.cpp
     ${__per_arch_factory_objs}
+    ${__per_arch_alpha_applicator_factory_objs}
+    KoAlphaMaskApplicatorFactory.cpp
     colorprofiles/KoDummyColorProfile.cpp
     resources/KoAbstractGradient.cpp
     resources/KoColorSet.cpp
     resources/KisSwatch.cpp
     resources/KisSwatchGroup.cpp
     resources/KoPattern.cpp
-    resources/KoResource.cpp
-    resources/KoMD5Generator.cpp
-    resources/KoHashGeneratorProvider.cpp
     resources/KoStopGradient.cpp
     resources/KoSegmentGradient.cpp
+    resources/KoCachedGradient.h
 )
 
 set (EXTRA_LIBRARIES ${LINK_OPENEXR_LIB} ${LINK_VC_LIB})
@@ -108,6 +113,7 @@ target_link_libraries( kritapigment
         kritaplugin
         kritastore
         kritaglobal
+        kritaresources
         ${EXTRA_LIBRARIES}
         KF5::I18n 
         KF5::ConfigCore

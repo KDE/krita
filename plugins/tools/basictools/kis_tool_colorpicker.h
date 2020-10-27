@@ -27,9 +27,9 @@
 #include "ui_wdgcolorpicker.h"
 #include "kis_tool.h"
 #include <kis_icon.h>
+#include <KoColorSet.h>
 
-class KoResource;
-class KoColorSet;
+class KisResourceModel;
 
 namespace KisToolUtils {
 struct ColorPickerConfig;
@@ -95,7 +95,6 @@ public Q_SLOTS:
     void slotSetAddPalette(bool);
     void slotChangeRadius(int);
     void slotChangeBlend(int);
-    void slotAddPalette(KoResource* resource);
     void slotSetColorSource(int value);
 
 private:
@@ -106,17 +105,16 @@ private:
     // Configuration
     QScopedPointer<KisToolUtils::ColorPickerConfig> m_config;
 
-    ToolActivation m_toolActivationSource;
-    bool m_isActivated;
+    ToolActivation m_toolActivationSource {ToolActivation::DefaultActivation};
+    bool m_isActivated {false};
 
     KoColor m_pickedColor;
 
     // Used to skip some tablet events and update color less often
     QTimer m_colorPickerDelayTimer;
 
-    ColorPickerOptionsWidget *m_optionsWidget;
-
-    QList<KoColorSet*> m_palettes;
+    ColorPickerOptionsWidget *m_optionsWidget {0};
+    KisResourceModel *m_resourceModel {0};
 };
 
 class KisToolColorPickerFactory : public KoToolFactoryBase

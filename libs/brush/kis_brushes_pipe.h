@@ -20,6 +20,7 @@
 #define __KIS_BRUSHES_PIPE_H
 
 #include <kis_fixed_paint_device.h>
+#include <kis_brush.h>
 
 template<class BrushType>
 class KisBrushesPipe
@@ -29,82 +30,85 @@ public:
     }
 
     KisBrushesPipe(const KisBrushesPipe &rhs) {
-        qDeleteAll(m_brushes);
         m_brushes.clear();
-        Q_FOREACH (BrushType * brush, rhs.m_brushes) {
-            BrushType *clonedBrush = dynamic_cast<BrushType*>(brush->clone());
+        Q_FOREACH (QSharedPointer<BrushType> brush, rhs.m_brushes) {
+            KoResourceSP clonedBrush = brush->clone();
+            QSharedPointer<BrushType> actualClonedBrush = clonedBrush.dynamicCast<BrushType>();
+            m_brushes.append(actualClonedBrush );
             KIS_ASSERT_RECOVER(clonedBrush) {continue;}
-
-            m_brushes.append(clonedBrush);
         }
     }
 
     virtual ~KisBrushesPipe() {
-        qDeleteAll(m_brushes);
     }
 
     virtual void clear() {
-        qDeleteAll(m_brushes);
         m_brushes.clear();
     }
 
-    BrushType* firstBrush() const {
+    QSharedPointer<BrushType> firstBrush() const {
         return m_brushes.first();
     }
 
-    BrushType* lastBrush() const {
+    QSharedPointer<BrushType> lastBrush() const {
         return m_brushes.last();
     }
 
-    BrushType* currentBrush(const KisPaintInformation& info) {
+
+    QSharedPointer<BrushType> currentBrush(const KisPaintInformation& info) {
         Q_UNUSED(info);
         return !m_brushes.isEmpty() ? m_brushes.at(currentBrushIndex()) : 0;
     }
 
-    int brushIndex(const KisPaintInformation& info) {
-        return chooseNextBrush(info);
-    }
-
     qint32 maskWidth(KisDabShape const& shape, double subPixelX, double subPixelY, const KisPaintInformation& info) {
-        BrushType *brush = currentBrush(info);
+        QSharedPointer<BrushType> brush = currentBrush(info);
         return brush ? brush->maskWidth(shape, subPixelX, subPixelY, info) : 0;
     }
 
     qint32 maskHeight(KisDabShape const& shape, double subPixelX, double subPixelY, const KisPaintInformation& info) {
-        BrushType *brush = currentBrush(info);
+        QSharedPointer<BrushType> brush = currentBrush(info);
         return brush ? brush->maskHeight(shape, subPixelX, subPixelY, info) : 0;
     }
 
     void setAngle(qreal angle) {
-        Q_FOREACH (BrushType * brush, m_brushes) {
+        Q_FOREACH (QSharedPointer<BrushType> brush, m_brushes) {
             brush->setAngle(angle);
         }
     }
 
     void setScale(qreal scale) {
-        Q_FOREACH (BrushType * brush, m_brushes) {
+        Q_FOREACH (QSharedPointer<BrushType> brush, m_brushes) {
             brush->setScale(scale);
         }
     }
 
     void setSpacing(double spacing) {
-        Q_FOREACH (BrushType * brush, m_brushes) {
+        Q_FOREACH (QSharedPointer<BrushType> brush, m_brushes) {
             brush->setSpacing(spacing);
         }
     }
 
     bool hasColor() const {
-        Q_FOREACH (BrushType * brush, m_brushes) {
+        Q_FOREACH (QSharedPointer<BrushType> brush, m_brushes) {
             if (brush->hasColor()) return true;
         }
         return false;
     }
 
-    void notifyCachedDabPainted(const KisPaintInformation& info) {
-        updateBrushIndexes(info, -1);
+    void setBrushApplication(enumBrushApplication brushApplication) const {
+        Q_FOREACH(QSharedPointer<BrushType> brush, m_brushes) {
+            brush->setBrushApplication(brushApplication);
+        }
+    }
+
+    void setGradient(KoAbstractGradientSP gradient) const {
+        Q_FOREACH(QSharedPointer<BrushType> brush, m_brushes) {
+            brush->setGradient(gradient);
+        }
     }
 
     void prepareForSeqNo(const KisPaintInformation& info, int seqNo) {
+        chooseNextBrush(info);
         updateBrushIndexes(info, seqNo);
     }
 
@@ -112,14 +116,13 @@ public:
             KisDabShape const& shape,
             const KisPaintInformation& info,
             double subPixelX , double subPixelY,
-            qreal softnessFactor) {
+            qreal softnessFactor, qreal lightnessStrength = DEFAULT_LIGHTNESS_STRENGTH) {
 
-        BrushType *brush = currentBrush(info);
+        QSharedPointer<BrushType> brush = currentBrush(info);
         if (!brush) return;
 
 
-        brush->generateMaskAndApplyMaskOrCreateDab(dst, coloringInformation, shape, info, subPixelX, subPixelY, softnessFactor);
-        notifyCachedDabPainted(info);
+        brush->generateMaskAndApplyMaskOrCreateDab(dst, coloringInformation, shape, info, subPixelX, subPixelY, softnessFactor, lightnessStrength);
     }
 
     KisFixedPaintDeviceSP paintDevice(const KoColorSpace * colorSpace,
@@ -127,21 +130,20 @@ public:
                                       const KisPaintInformation& info,
                                       double subPixelX, double subPixelY) {
 
-        BrushType *brush = currentBrush(info);
+        QSharedPointer<BrushType> brush = currentBrush(info);
         if (!brush) return 0;
 
         KisFixedPaintDeviceSP device = brush->paintDevice(colorSpace, shape, info, subPixelX, subPixelY);
-        notifyCachedDabPainted(info);
         return device;
     }
 
-    QVector<BrushType*> brushes() {
+    QVector<QSharedPointer<BrushType>> brushes() {
         return m_brushes;
     }
 
     void testingSelectNextBrush(const KisPaintInformation& info) {
         (void) chooseNextBrush(info);
-        notifyCachedDabPainted(info);
+        updateBrushIndexes(info, -1);
     }
 
     /**
@@ -152,7 +154,7 @@ public:
     virtual void notifyStrokeStarted() = 0;
 
 protected:
-    void addBrush(BrushType *brush) {
+    void addBrush(QSharedPointer<BrushType> brush) {
         m_brushes.append(brush);
     }
 
@@ -189,7 +191,7 @@ protected:
     virtual void updateBrushIndexes(const KisPaintInformation& info, int seqNo) = 0;
 
 protected:
-    QVector<BrushType*> m_brushes;
+    QVector<QSharedPointer<BrushType>> m_brushes;
 };
 
 #endif /* __KIS_BRUSHES_PIPE_H */

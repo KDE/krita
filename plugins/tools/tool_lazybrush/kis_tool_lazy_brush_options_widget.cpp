@@ -49,7 +49,7 @@ struct KisToolLazyBrushOptionsWidget::Private
     KisSignalAutoConnectionsStore maskSignals;
     KisColorizeMaskSP activeMask;
 
-    KoColorSet colorSet;
+    KoColorSetSP colorSet {new KoColorSet(QString())};
     int transparentColorIndex;
 
     KisSignalCompressor baseNodeChangedCompressor;
@@ -116,9 +116,8 @@ KisToolLazyBrushOptionsWidget::KisToolLazyBrushOptionsWidget(KisCanvasResourcePr
 
     m_d->provider = provider;
 
-    m_d->colorSet.setIsGlobal(false);
-    m_d->colorSet.setIsEditable(true);
-    m_d->colorModel->setPalette(&m_d->colorSet);
+    m_d->colorSet->setIsEditable(true);
+    m_d->colorModel->setPalette(m_d->colorSet);
 
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
 
@@ -284,7 +283,7 @@ void KisToolLazyBrushOptionsWidget::slotCurrentNodeChanged(KisNodeSP node)
     m_d->ui->colorView->setEnabled(m_d->activeMask);
 }
 
-void KisToolLazyBrushOptionsWidget::slotMakeTransparent(bool value)
+void KisToolLazyBrushOptionsWidget::slotMakeTransparent(bool enableTransparency)
 {
     KIS_ASSERT_RECOVER_RETURN(m_d->activeMask);
 
@@ -292,21 +291,25 @@ void KisToolLazyBrushOptionsWidget::slotMakeTransparent(bool value)
     KisSwatch activeSwatch = m_d->colorModel->getEntry(index);
     if (!index.isValid()) return;
 
-    int activeIndex = -1;
-
-    KisColorizeMask::KeyStrokeColors colors;
-
-    int i = 0;
-    Q_FOREACH (const QString &groupName, m_d->colorSet.getGroupNames()) {
-        KisSwatchGroup *group = m_d->colorSet.getGroup(groupName);
+    QVector<SwatchInfoType> infoList;
+    Q_FOREACH (const QString &groupName, m_d->colorSet->getGroupNames()) {
+        KisSwatchGroup *group = m_d->colorSet->getGroup(groupName);
         Q_FOREACH (const KisSwatchGroup::SwatchInfo &info, group->infoList()) {
-            colors.colors << info.swatch.color();
-            if (activeSwatch == info.swatch) { activeIndex = i; }
-            i++;
+            infoList.append(info);
         }
     }
 
-    colors.transparentIndex = value ? activeIndex : -1;
+    // We can't rely on the order of the colors returned, so we need to sort them row by row from left to right
+    std::sort(infoList.begin(), infoList.end(), sortSwatchInfo);
+    KisColorizeMask::KeyStrokeColors colors;
+    int i = 0;
+    for (const SwatchInfoType &info : infoList) {
+        if (activeSwatch == info.swatch && enableTransparency) {
+            colors.transparentIndex = i;
+        }
+        colors.colors << info.swatch.color();
+        i++;
+    }
 
     m_d->activeMask->setKeyStrokesColors(colors);
 }
@@ -325,7 +328,7 @@ void KisToolLazyBrushOptionsWidget::slotRemove()
 void KisToolLazyBrushOptionsWidget::slotUpdate()
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->activeMask);
-    KisLayerPropertiesIcons::setNodeProperty(m_d->activeMask, KisLayerPropertiesIcons::colorizeNeedsUpdate, false, m_d->provider->currentImage());
+    KisLayerPropertiesIcons::setNodePropertyAutoUndo(m_d->activeMask, KisLayerPropertiesIcons::colorizeNeedsUpdate, false, m_d->provider->currentImage());
 }
 
 void KisToolLazyBrushOptionsWidget::slotSetAutoUpdates(bool value)
@@ -337,13 +340,13 @@ void KisToolLazyBrushOptionsWidget::slotSetAutoUpdates(bool value)
 void KisToolLazyBrushOptionsWidget::slotSetShowKeyStrokes(bool value)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->activeMask);
-    KisLayerPropertiesIcons::setNodeProperty(m_d->activeMask, KisLayerPropertiesIcons::colorizeEditKeyStrokes, value, m_d->provider->currentImage());
+    KisLayerPropertiesIcons::setNodePropertyAutoUndo(m_d->activeMask, KisLayerPropertiesIcons::colorizeEditKeyStrokes, value, m_d->provider->currentImage());
 }
 
 void KisToolLazyBrushOptionsWidget::slotSetShowOutput(bool value)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->activeMask);
-    KisLayerPropertiesIcons::setNodeProperty(m_d->activeMask, KisLayerPropertiesIcons::colorizeShowColoring, value, m_d->provider->currentImage());
+    KisLayerPropertiesIcons::setNodePropertyAutoUndo(m_d->activeMask, KisLayerPropertiesIcons::colorizeShowColoring, value, m_d->provider->currentImage());
 }
 
 void KisToolLazyBrushOptionsWidget::slotUseEdgeDetectionChanged(bool value)
@@ -377,3 +380,9 @@ void KisToolLazyBrushOptionsWidget::slotLimitToDeviceChanged(bool value)
     m_d->activeMask->setLimitToDeviceBounds(value);
 }
 
+bool KisToolLazyBrushOptionsWidget::sortSwatchInfo(const SwatchInfoType &first, const SwatchInfoType &second)
+{
+    if (first.row < second.row) { return true; }
+    if (first.row > second.row) { return false; }
+    return first.column < second.column;
+}

@@ -219,7 +219,7 @@ int KisAnimationCurveChannelListModel::rowCount(const QModelIndex &parent) const
 
 int KisAnimationCurveChannelListModel::columnCount(const QModelIndex &parent) const
 {
-    Q_UNUSED(parent)
+    Q_UNUSED(parent);
     return 1;
 }
 

@@ -84,6 +84,7 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageWSP image, QWidget *parent,
 
     //Set the color space
     m_page->colorSpaceSelector->setCurrentColorSpace(image->colorSpace());
+    m_page->chkConvertLayers->setChecked(KisConfig(true).convertLayerColorSpaceInProperties());
 
     //set the proofing space
     m_proofingConfig = m_image->proofingConfiguration();
@@ -92,7 +93,7 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageWSP image, QWidget *parent,
         m_proofingConfig = KisImageConfig(true).defaultProofingconfiguration();
     }
     else {
-        m_page->chkSaveProofing->setChecked(true);
+        m_page->chkSaveProofing->setChecked(m_proofingConfig->storeSoftproofingInsideImage);
     }
 
     m_page->proofSpaceSelector->setCurrentColorSpace(KoColorSpaceRegistry::instance()->colorSpace(m_proofingConfig->proofingModel, m_proofingConfig->proofingDepth, m_proofingConfig->proofingProfile));
@@ -107,6 +108,7 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageWSP image, QWidget *parent,
 
     KisSignalCompressor *softProofConfigCompressor = new KisSignalCompressor(500, KisSignalCompressor::POSTPONE,this);
 
+    connect(m_page->chkSaveProofing, SIGNAL(toggled(bool)), softProofConfigCompressor, SLOT(start()));
     connect(m_page->gamutAlarm, SIGNAL(changed(KoColor)), softProofConfigCompressor, SLOT(start()));
     connect(m_page->proofSpaceSelector, SIGNAL(colorSpaceChanged(const KoColorSpace*)), softProofConfigCompressor, SLOT(start()));
     connect(m_page->cmbIntent, SIGNAL(currentIndexChanged(int)), softProofConfigCompressor, SLOT(start()));
@@ -133,7 +135,13 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageWSP image, QWidget *parent,
     }
     connect(m_page->cmbAnnotations, SIGNAL(activated(QString)), SLOT(setAnnotation(QString)));
     setAnnotation(m_page->cmbAnnotations->currentText());
+    connect(this, SIGNAL(accepted()), SLOT(slotSaveDialogState()));
 
+    connect(m_page->colorSpaceSelector,
+            SIGNAL(colorSpaceChanged(const KoColorSpace*)),
+            SLOT(slotColorSpaceChanged(const KoColorSpace*)));
+
+    slotColorSpaceChanged(m_image->colorSpace());
 }
 
 KisDlgImageProperties::~KisDlgImageProperties()
@@ -141,7 +149,12 @@ KisDlgImageProperties::~KisDlgImageProperties()
     delete m_page;
 }
 
-const KoColorSpace * KisDlgImageProperties::colorSpace()
+bool KisDlgImageProperties::convertLayerPixels() const
+{
+    return m_page->chkConvertLayers->isChecked();
+}
+
+const KoColorSpace * KisDlgImageProperties::colorSpace() const
 {
     return m_page->colorSpaceSelector->currentColorSpace();
 }
@@ -156,7 +169,9 @@ void KisDlgImageProperties::setCurrentColor()
 void KisDlgImageProperties::setProofingConfig()
 {
     if (m_firstProofingConfigChange) {
-        m_page->chkSaveProofing->setChecked(true);
+        if (!m_proofingConfig->storeSoftproofingInsideImage) {
+            m_page->chkSaveProofing->setChecked(true);
+        }
         m_firstProofingConfigChange = false;
     }
     if (m_page->chkSaveProofing->isChecked()) {
@@ -170,11 +185,33 @@ void KisDlgImageProperties::setProofingConfig()
         m_proofingConfig->proofingDepth = "U8";//default to this
         m_proofingConfig->warningColor = m_page->gamutAlarm->color();
         m_proofingConfig->adaptationState = (double)m_page->sldAdaptationState->value()/20.0;
+        m_proofingConfig->storeSoftproofingInsideImage = true;
 
         m_image->setProofingConfiguration(m_proofingConfig);
     }
     else {
         m_image->setProofingConfiguration(KisProofingConfigurationSP());
+    }
+}
+
+void KisDlgImageProperties::slotSaveDialogState()
+{
+    setProofingConfig();
+
+    KisConfig cfg(false);
+    cfg.setConvertLayerColorSpaceInProperties(m_page->chkConvertLayers->isChecked());
+}
+
+void KisDlgImageProperties::slotColorSpaceChanged(const KoColorSpace *cs)
+{
+    if (*m_image->profile() != *cs->profile() &&
+        !KisLayerUtils::canChangeImageProfileInvisibly(m_image)) {
+
+        m_page->wdgWarningNotice->setVisible(true);
+        m_page->wdgWarningNotice->setText(
+                    m_page->wdgWarningNotice->changeImageProfileWarningText());
+    } else {
+        m_page->wdgWarningNotice->setVisible(false);
     }
 }
 

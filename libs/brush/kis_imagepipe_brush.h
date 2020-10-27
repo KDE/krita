@@ -23,7 +23,7 @@
 #include <QMap>
 #include <QString>
 
-#include <resources/KoResource.h>
+#include <KoResource.h>
 #include "kis_gbr_brush.h"
 #include "kis_global.h"
 
@@ -62,9 +62,14 @@ public:
 
     ~KisImagePipeBrush() override;
 
-    bool load() override;
-    bool loadFromDevice(QIODevice *dev) override;
-    bool save() override;
+    /// Will call KisBrush's saveToDevice as well
+    KisImagePipeBrush(const KisImagePipeBrush& rhs);
+
+    KisImagePipeBrush &operator=(const KisImagePipeBrush &rhs) = delete;
+
+    KoResourceSP clone() const override;
+
+    bool loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface) override;
     bool saveToDevice(QIODevice* dev) const override;
 
     /**
@@ -75,10 +80,9 @@ public:
             const KisPaintInformation& info,
             double subPixelX = 0, double subPixelY = 0) const override;
 
-    void setUseColorAsMask(bool useColorAsMask) override;
-    bool hasColor() const override;
-
-    enumBrushType brushType() const override;
+    void setAdjustmentMidPoint(quint8 value) override;
+    void setBrightnessAdjustment(qreal value) override;
+    void setContrastAdjustment(qreal value) override;
 
     QString parasiteSelection(); // returns random, constant, etc
 
@@ -86,30 +90,29 @@ public:
 
     bool canPaintFor(const KisPaintInformation& info) override;
 
-    void makeMaskImage() override;
+    void makeMaskImage(bool preserveAlpha) override;
 
-    KisBrush* clone() const override;
 
     QString defaultFileExtension() const override;
     void setAngle(qreal _angle) override;
     void setScale(qreal _scale) override;
     void setSpacing(double _spacing) override;
 
-    quint32 brushIndex(const KisPaintInformation& info) const override;
+    quint32 brushIndex() const override;
     qint32 maskWidth(KisDabShape const&, double subPixelX, double subPixelY, const KisPaintInformation& info) const override;
     qint32 maskHeight(KisDabShape const&, double subPixelX, double subPixelY, const KisPaintInformation& info) const override;
 
     void notifyStrokeStarted() override;
-    void notifyCachedDabPainted(const KisPaintInformation& info) override;
     void prepareForSeqNo(const KisPaintInformation& info, int seqNo) override;
 
     void generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst, KisBrush::ColoringInformation* coloringInformation,
             KisDabShape const&,
             const KisPaintInformation& info,
-            double subPixelX = 0, double subPixelY = 0, qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const override;
+            double subPixelX = 0, double subPixelY = 0, 
+            qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR, qreal lightnessStrength = DEFAULT_LIGHTNESS_STRENGTH) const override;
 
 
-    QVector<KisGbrBrush*> brushes() const;
+    QVector<KisGbrBrushSP> brushes() const;
 
     const KisPipeBrushParasite &parasite() const;
 
@@ -117,16 +120,14 @@ public:
     void setDevices(QVector< QVector<KisPaintDevice*> > devices, int w, int h);
 
 protected:
-    void setBrushType(enumBrushType type) override;
-    void setHasColor(bool hasColor) override;
+    virtual void setBrushApplication(enumBrushApplication brushApplication) override;
+    virtual void setGradient(KoAbstractGradientSP gradient) override;
     /// Will call KisBrush's saveToDevice as well
-
-    KisImagePipeBrush(const KisImagePipeBrush& rhs);
 
 private:
     friend class KisImagePipeBrushTest;
 
-    KisGbrBrush* testingGetCurrentBrush(const KisPaintInformation& info) const;
+    KisGbrBrushSP testingGetCurrentBrush(const KisPaintInformation& info) const;
     void testingSelectNextBrush(const KisPaintInformation& info) const;
 
     bool initFromData(const QByteArray &data);
@@ -135,10 +136,9 @@ private:
 
 private:
     struct Private;
-    Private * const m_d;
-
-
-
+    Private * const d;
 };
+
+typedef QSharedPointer<KisImagePipeBrush> KisImagePipeBrushSP;
 
 #endif // KIS_IMAGEPIPE_BRUSH_

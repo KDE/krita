@@ -1,6 +1,7 @@
-/* This file is part of the KDE project
+/*
  * Made by Tomislav Lukman (tomislav.lukman@ck.tel.hr)
  * Copyright (C) 2012 Jean-Nicolas Artaud <jeannicolasartaud@gmail.com>
+ * Copyright (C) 2019 Boudewijn Rempt <boud@valdyas.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -24,13 +25,16 @@
 #include <QAction>
 
 #include <QSharedPointer>
-#include "kritawidgets_export.h"
 
+#include <KoResource.h>
 
 class KoShapeBackground;
-class KoAbstractResourceServerAdapter;
 class QModelIndex;
-class KoResource;
+
+class KoCanvasResourcesInterface;
+using KoCanvasResourcesInterfaceSP = QSharedPointer<KoCanvasResourcesInterface>;
+
+#include "kritawidgets_export.h"
 
 class KRITAWIDGETS_EXPORT KoResourcePopupAction : public QAction
 {
@@ -43,7 +47,7 @@ public:
      * @param gradientResourceAdapter pointer to the gradient or pattern
      * @param parent The parent for this action.
      */
-    explicit KoResourcePopupAction(QSharedPointer<KoAbstractResourceServerAdapter>gradientResourceAdapter, QObject *parent = 0);
+    explicit KoResourcePopupAction(const QString &resourceType, KoCanvasResourcesInterfaceSP canvasResourcesInterface, QObject *parent = 0);
 
     /**
      * Destructor
@@ -53,8 +57,10 @@ public:
     QSharedPointer<KoShapeBackground> currentBackground() const;
     void setCurrentBackground(QSharedPointer<KoShapeBackground> background);
 
-    void setCurrentResource(KoResource *resource);
-    KoResource *currentResource() const;
+    void setCurrentResource(KoResourceSP resource);
+    KoResourceSP currentResource() const;
+
+    void setCanvasResourcesInterface(KoCanvasResourcesInterfaceSP canvasResourcesInterface);
 
 Q_SIGNALS:
     /// Emitted when a resource was selected

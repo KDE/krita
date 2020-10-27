@@ -138,7 +138,7 @@ void TestShapeContainer::testScaling()
     Q_FOREACH (const KoShape* shape, transformShapes) {
         QTransform oldTransform = shape->transformation();
         oldTransformations.append(oldTransform);
-        QTransform globalTransform = shape->absoluteTransformation(0);
+        QTransform globalTransform = shape->absoluteTransformation();
         QTransform localTransform = globalTransform * matrix * globalTransform.inverted();
         newTransformations.append(localTransform*oldTransform);
     }

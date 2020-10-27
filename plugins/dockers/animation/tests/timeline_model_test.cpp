@@ -29,6 +29,7 @@
 
 #include "kis_image_animation_interface.h"
 #include "KisDocument.h"
+#include "KisNodeDisplayModeAdapter.h"
 #include "KisPart.h"
 #include "kis_name_server.h"
 #include "flake/kis_shape_controller.h"
@@ -45,15 +46,16 @@
 #include "kis_double_parse_spin_box.h"
 #include "kis_int_parse_spin_box.h"
 
-#include  <sdk/tests/kistest.h>
 #include <sdk/tests/testutil.h>
+#include <sdk/tests/testui.h>
 
 void TimelineModelTest::init()
 {
     m_doc = KisPart::instance()->createDocument();
 
     m_nameServer = new KisNameServer();
-    m_shapeController = new KisShapeController(m_doc, m_nameServer);
+    m_shapeController = new KisShapeController(m_nameServer, m_doc->undoStack());
+    m_displayModeAdapter = new KisNodeDisplayModeAdapter();
     //m_nodeModel = new KisNodeModel(0);
 
     initBase();
@@ -69,6 +71,7 @@ void TimelineModelTest::cleanup()
     delete m_shapeController;
     delete m_nameServer;
     delete m_doc;
+    delete m_displayModeAdapter;
 }
 
 #include "timeline_frames_index_converter.h"
@@ -81,9 +84,17 @@ void TimelineModelTest::testConverter()
 
     m_layer1->enableAnimation();
 
-    m_layer1->setUseInTimeline(true);
-    m_layer2->setUseInTimeline(true);
-    m_sel3->setUseInTimeline(true);
+    // all nodes are visible in timeline by default, so
+    // we should hide the ones we don't expect to see
+    m_mask1->setPinnedToTimeline(false);
+    m_sel1->setPinnedToTimeline(false);
+    m_sel2->setPinnedToTimeline(false);
+    m_layer3->setPinnedToTimeline(false);
+    m_layer4->setPinnedToTimeline(false);
+
+    m_layer1->setPinnedToTimeline(true);
+    m_layer2->setPinnedToTimeline(true);
+    m_sel3->setPinnedToTimeline(true);
 
     TimelineFramesIndexConverter converter(m_shapeController);
 
@@ -96,7 +107,7 @@ void TimelineModelTest::testConverter()
     QCOMPARE(converter.dummyFromRow(1), m_shapeController->dummyForNode(m_layer2));
     QCOMPARE(converter.dummyFromRow(0), m_shapeController->dummyForNode(m_sel3));
 
-    TimelineNodeListKeeper keeper(0, m_shapeController);
+    TimelineNodeListKeeper keeper(0, m_shapeController, m_displayModeAdapter);
 
     QCOMPARE(keeper.rowCount(), 3);
     QCOMPARE(keeper.rowForDummy(m_shapeController->dummyForNode(m_layer1)), 2);
@@ -193,11 +204,11 @@ void TimelineModelTest::testView()
 
     framesTable->setModel(model);
 
-    model->setDummiesFacade(m_shapeController, m_image);
+    model->setDummiesFacade(m_shapeController, m_image, m_displayModeAdapter);
     model->setNodeManipulationInterface(new TestingInterface(m_image));
 
     m_layer1->enableAnimation();
-    m_layer1->setUseInTimeline(true);
+    m_layer1->setPinnedToTimeline(true);
 
     connect(intFps, SIGNAL(valueChanged(int)),
             m_image->animationInterface(), SLOT(setFramerate(int)));
@@ -298,8 +309,6 @@ void TimelineModelTest::testOnionSkins()
     connect(w, SIGNAL(sigConfigChanged()), SLOT(slotBang()));
 
     layout->addWidget(w);
-
-    dlg.setLayout(layout);
 
     dlg.resize(600, 400);
     dlg.exec();

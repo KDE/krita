@@ -1,6 +1,6 @@
 /*
  *  Copyright (C) 2015 The Qt Company Ltd.
- *  Contact: http://www.qt.io/licensing/
+ *  Contact: https://www.qt.io/licensing/
  *  Copyright (C) 2015 Michael Abrahms <miabraha@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify

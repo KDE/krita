@@ -117,7 +117,9 @@ public:
      * @param strokeBegin the coordinates of the beginning of the stroke
      */
     virtual QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin) = 0;
-    virtual void endStroke() { }
+    virtual void endStroke() {}
+    virtual void setAdjustedBrushPosition(const QPointF position) { Q_UNUSED(position) }
+    virtual void setFollowBrushPosition(bool follow) { Q_UNUSED(follow) }
     virtual QPointF getEditorPosition() const = 0; // Returns editor widget position in document-space coordinates.
     virtual int numHandles() const = 0;
 
@@ -186,7 +188,7 @@ public:
     /// it will return false if we are in the middle of creating the assistant.
     virtual bool isAssistantComplete() const;
 
-    /// Transform the assistant using the given \p tranform. Please note that \p transform
+    /// Transform the assistant using the given \p transform. Please note that \p transform
     /// should be in 'document' coordinate system.
     /// Used with image-wide transformations.
     virtual void transform(const QTransform &transform);

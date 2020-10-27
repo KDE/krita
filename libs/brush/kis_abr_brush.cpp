@@ -40,59 +40,35 @@
 #define DEFAULT_SPACING 0.25
 
 KisAbrBrush::KisAbrBrush(const QString& filename, KisAbrBrushCollection *parent)
-    : KisScalingSizeBrush(filename)
+    : KoEphemeralResource<KisScalingSizeBrush>(filename)
     , m_parent(parent)
 {
     setBrushType(INVALID);
-    setHasColor(false);
     setSpacing(DEFAULT_SPACING);
 }
 
 KisAbrBrush::KisAbrBrush(const KisAbrBrush& rhs)
-    : KisScalingSizeBrush(rhs),
-      m_parent(0)
+    : KoEphemeralResource<KisScalingSizeBrush>(rhs)
+    , m_parent(0)
 {
-    // Warning! The brush became detached from the parent!
+    // Warning! The brush became detached from the parent collection!
 }
 
 KisAbrBrush::KisAbrBrush(const KisAbrBrush& rhs, KisAbrBrushCollection *parent)
-    : KisScalingSizeBrush(rhs),
-      m_parent(parent)
+    : KoEphemeralResource<KisScalingSizeBrush>(rhs)
+    , m_parent(parent)
 {
 }
 
-KisBrush* KisAbrBrush::clone() const
+KoResourceSP KisAbrBrush::clone() const
 {
-    return new KisAbrBrush(*this);
-}
-
-bool KisAbrBrush::load()
-{
-    return true;
-}
-
-bool KisAbrBrush::loadFromDevice(QIODevice */*dev*/)
-{
-    return true;
-}
-
-bool KisAbrBrush::save()
-{
-    //Return true, otherwise the brush won't be added to the
-    //resource server if the brush is loaded via import
-    return true;
-}
-
-bool KisAbrBrush::saveToDevice(QIODevice* /*dev*/) const
-{
-    return true;
+    return KoResourceSP(new KisAbrBrush(*this));
 }
 
 void KisAbrBrush::setBrushTipImage(const QImage& image)
 {
     setValid(true);
     setBrushType(MASK);
-    setHasColor(false);
 
     KisBrush::setBrushTipImage(image);
 }

@@ -18,17 +18,6 @@
 #ifndef KIS_VISUAL_RECTANGLE_SELECTOR_SHAPE_H
 #define KIS_VISUAL_RECTANGLE_SELECTOR_SHAPE_H
 
-#include <QWidget>
-#include <QScopedPointer>
-#include <QPixmap>
-#include <QRegion>
-#include <QMouseEvent>
-
-#include <KoColor.h>
-#include <KoColorSpace.h>
-#include "KoColorDisplayRendererInterface.h"
-
-#include "KisColorSelectorConfiguration.h"
 #include "KisVisualColorSelectorShape.h"
 
 class KisVisualRectangleSelectorShape : public KisVisualColorSelectorShape
@@ -55,9 +44,12 @@ public:
     QRect getSpaceForSquare(QRect geom) override;
     QRect getSpaceForCircle(QRect geom) override;
     QRect getSpaceForTriangle(QRect geom) override;
+protected:
+    QImage renderAlphaMask() const override;
+
 private:
     QPointF convertShapeCoordinateToWidgetCoordinate(QPointF coordinate) const override;
-    QPointF convertWidgetCoordinateToShapeCoordinate(QPoint coordinate) const override;
+    QPointF convertWidgetCoordinateToShapeCoordinate(QPointF coordinate) const override;
 
     singelDTypes m_type;
     int m_barWidth;

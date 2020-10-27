@@ -21,14 +21,19 @@
 
 #include "KisWindowLayoutResource.h"
 
-class KisSessionResource : public KisWindowLayoutResource
+#include "kritaui_export.h"
+
+class KRITAUI_EXPORT KisSessionResource : public KisWindowLayoutResource
 {
 public:
     KisSessionResource(const QString &filename);
     ~KisSessionResource();
+    KisSessionResource(const KisSessionResource &rhs);
+    KisSessionResource &operator=(const KisSessionResource &rhs) = delete;
+    KoResourceSP clone() const override;
 
     void storeCurrentWindows();
-    void restore();
+
 
     QString defaultFileExtension() const override;
 
@@ -37,10 +42,22 @@ protected:
 
     void loadXml(const QDomElement &root) const override;
 
+    QPair<QString, QString> resourceType() const override
+    {
+        return QPair<QString, QString>(ResourceType::Sessions, "");
+    }
+
 private:
+
+    // Only KisPart should be able to call restore() to make sure it contains the pointer to it
+    void restore();
+    friend class KisPart;
+
     struct Private;
     QScopedPointer<Private> d;
 };
 
+
+typedef QSharedPointer<KisSessionResource> KisSessionResourceSP;
 
 #endif

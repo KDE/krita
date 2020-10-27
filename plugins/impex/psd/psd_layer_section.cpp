@@ -45,12 +45,9 @@
 
 
 PSDLayerMaskSection::PSDLayerMaskSection(const PSDHeader& header)
-    : globalInfoSection(header),
-      m_header(header)
+    : globalInfoSection(header)
+    , m_header(header)
 {
-    hasTransparency = false;
-    layerMaskBlockSize = 0;
-    nLayers = 0;
 }
 
 PSDLayerMaskSection::~PSDLayerMaskSection()
@@ -393,8 +390,8 @@ inline QDomNode findNodeByKey(const QString &key, QDomNode parent) {
 
 void mergePatternsXMLSection(const QDomDocument &src, QDomDocument &dst)
 {
-    QDomNode srcPatternsNode = findNodeByKey("Patterns", src.documentElement());
-    QDomNode dstPatternsNode = findNodeByKey("Patterns", dst.documentElement());
+    QDomNode srcPatternsNode = findNodeByKey(ResourceType::Patterns, src.documentElement());
+    QDomNode dstPatternsNode = findNodeByKey(ResourceType::Patterns, dst.documentElement());
 
     if (srcPatternsNode.isNull()) return;
     if (dstPatternsNode.isNull()) {

@@ -40,6 +40,10 @@ private:
             return m_parent->bounds();
         }
 
+        virtual QRect imageBorderRect() const override {
+            return m_parent->imageBorderRect();
+        }
+
         bool wrapAroundMode() const override {
             return m_parent->wrapAroundMode();
         }
@@ -58,6 +62,10 @@ private:
 
         KisDefaultBoundsBaseSP parent() const {
             return m_parent;
+        }
+
+        void * sourceCookie() const override {
+            return 0;
         }
 
     private:

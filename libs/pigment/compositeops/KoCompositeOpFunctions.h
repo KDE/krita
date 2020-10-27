@@ -25,7 +25,7 @@
 template<class HSXType, class TReal>
 inline void cfReorientedNormalMapCombine(TReal srcR, TReal srcG, TReal srcB, TReal& dstR, TReal& dstG, TReal& dstB)
 {
-    // see http://blog.selfshadow.com/publications/blending-in-detail/ by Barre-Brisebois and Hill
+    // see https://blog.selfshadow.com/publications/blending-in-detail/ by Barre-Brisebois and Hill
     TReal tx = 2*srcR-1;
     TReal ty = 2*srcG-1;
     TReal tz = 2*srcB;
@@ -223,7 +223,7 @@ inline T cfDivide(T src, T dst) {
     using namespace Arithmetic;
     //typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
     
-    if(src == zeroValue<T>())
+    if(isUnsafeAsDivisor(src))
         return (dst == zeroValue<T>()) ? zeroValue<T>() : unitValue<T>();
     
     return clamp<T>(div(dst, src));
@@ -284,7 +284,7 @@ inline T cfVividLight(T src, T dst) {
     typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
     
     if(src < halfValue<T>()) {
-        if(src == zeroValue<T>())
+        if(isUnsafeAsDivisor(src))
             return (dst == unitValue<T>()) ? unitValue<T>() : zeroValue<T>();
 
         // min(1,max(0,1-(1-dst) / (2*src)))
@@ -345,17 +345,17 @@ inline T cfParallel(T src, T dst) {
     using namespace Arithmetic;
     typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
     
-    // min(max(2 / (1/dst + 1/src), 0), 1)
-    composite_type unit = unitValue<T>();
-    composite_type s    = (src != zeroValue<T>()) ? div<T>(unit, src) : unit;
-    composite_type d    = (dst != zeroValue<T>()) ? div<T>(unit, dst) : unit;    
-    if (src == zeroValue<T>()) {
-        return zeroValue<T>();    
+    const bool srcIsSafe = !isUnsafeAsDivisor(src);
+    const bool dstIsSafe = !isUnsafeAsDivisor(dst);
+
+    if (!srcIsSafe && !dstIsSafe) {
+        return zeroValue<T>();
     }
 
-    if (dst == zeroValue<T>()) {
-        return zeroValue<T>();    
-    }
+    // min(max(2 / (1/dst + 1/src), 0), 1)
+    composite_type unit = unitValue<T>();
+    composite_type s    = srcIsSafe ? div<T>(unit, src) : unit;
+    composite_type d    = dstIsSafe ? div<T>(unit, dst) : unit;
 
     return clamp<T>((unit+unit) * unit / (d+s));
 }
@@ -661,7 +661,7 @@ inline T cfNegation(T src, T dst) {
         
     composite_type unit = unitValue<T>();
     composite_type a = unit - src - dst;
-    composite_type s = abs(a);
+    composite_type s = std::abs(a);
     composite_type d = unit - s;
         
     return T(d);
@@ -793,7 +793,7 @@ inline T cfShadeIFSIllusions(T src, T dst) {
 template<class T>
 inline T cfFogLightenIFSIllusions(T src, T dst) {
     using namespace Arithmetic;
-    //Known as Bright Blending mode found in IFS Illusions. Picked this name because the shading reminds me of fog when overlaying with a gradientt.
+    //Known as Bright Blending mode found in IFS Illusions. Picked this name because the shading reminds me of fog when overlaying with a gradient.
     
     qreal fsrc = scale<qreal>(src);
     qreal fdst = scale<qreal>(dst);
@@ -844,7 +844,7 @@ inline T cfModuloShift(T src, T dst) {
 template<class T>
 inline T cfModuloShiftContinuous(T src, T dst) {
     using namespace Arithmetic;
-    //This blending mode do not behave like difference/equilavent with destination layer inverted if you use group layer on addition while the content of group layer contains several addition-mode layers, it works as expected on float images. So, no need to change this.
+    //This blending mode do not behave like difference/equivalent with destination layer inverted if you use group layer on addition while the content of group layer contains several addition-mode layers, it works as expected on float images. So, no need to change this.
     qreal fsrc = scale<qreal>(src);
     qreal fdst = scale<qreal>(dst);
     

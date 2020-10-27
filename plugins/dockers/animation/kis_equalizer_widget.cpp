@@ -69,8 +69,6 @@ KisEqualizerWidget::KisEqualizerWidget(int maxDistance, QWidget *parent)
 
     connect(&m_d->updateCompressor, SIGNAL(timeout()), SIGNAL(sigConfigChanged()));
     connect(m_d->columns[0], SIGNAL(sigColumnChanged(int,bool,int)), this, SLOT(slotMasterColumnChanged(int,bool,int)));
-
-    setLayout(layout);
 }
 
 KisEqualizerWidget::~KisEqualizerWidget()

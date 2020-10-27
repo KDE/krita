@@ -28,7 +28,7 @@
 #include <boost/iterator/counting_iterator.hpp>
 #include <boost/iterator/transform_iterator.hpp>
 
-#include <QRegion>
+#include <KisRegion.h>
 
 //#define USE_LAZY_FILL_SANITY_CHECKS 1
 
@@ -332,8 +332,8 @@ public:
     KisLazyFillGraph() {}
 
     KisLazyFillGraph(const QRect &mainRect,
-                     const QRegion &aLabelRegion,
-                     const QRegion &bLabelRegion)
+                     const KisRegion &aLabelRegion,
+                     const KisRegion &bLabelRegion)
         : m_x(mainRect.x()),
           m_y(mainRect.y()),
           m_width(mainRect.width()),
@@ -343,7 +343,6 @@ public:
         m_aLabelArea = aLabelRegion.boundingRect();
         m_bLabelArea = bLabelRegion.boundingRect();
 
-        //QRegion::rects() is deprecated, https://doc.qt.io/qt-5/qregion-obsolete.html#rects
         m_aLabelRects = aLabelRegion.rects();
         m_bLabelRects = bLabelRegion.rects();
 

@@ -60,6 +60,7 @@ KisToolMultihand::KisToolMultihand(KoCanvasBase *canvas)
 
     m_helper =
         new KisToolMultihandHelper(paintingInformationBuilder(),
+                                   canvas->resourceManager(),
                                    kundo2_i18n("Multibrush Stroke"));
     resetHelper(m_helper);
     if (image()) {
@@ -119,7 +120,7 @@ void KisToolMultihand::endPrimaryAction(KoPointerEvent *event)
 
 void KisToolMultihand::beginAlternateAction(KoPointerEvent* event, AlternateAction action)
 {
-    if (action != ChangeSize || m_transformMode != COPYTRANSLATE || !m_addSubbrushesMode) {
+    if ((action != ChangeSize && action != ChangeSizeSnap) || m_transformMode != COPYTRANSLATE || !m_addSubbrushesMode) {
         KisToolBrush::beginAlternateAction(event, action);
         return;
     }
@@ -131,7 +132,7 @@ void KisToolMultihand::beginAlternateAction(KoPointerEvent* event, AlternateActi
 
 void KisToolMultihand::continueAlternateAction(KoPointerEvent* event, AlternateAction action)
 {
-    if (action != ChangeSize || m_transformMode != COPYTRANSLATE || !m_addSubbrushesMode) {
+    if ((action != ChangeSize && action != ChangeSizeSnap) || m_transformMode != COPYTRANSLATE || !m_addSubbrushesMode) {
         KisToolBrush::continueAlternateAction(event, action);
         return;
     }
@@ -144,7 +145,7 @@ void KisToolMultihand::continueAlternateAction(KoPointerEvent* event, AlternateA
 
 void KisToolMultihand::endAlternateAction(KoPointerEvent* event, AlternateAction action)
 {
-    if (action != ChangeSize || m_transformMode != COPYTRANSLATE || !m_addSubbrushesMode) {
+    if ((action != ChangeSize && action != ChangeSizeSnap) || m_transformMode != COPYTRANSLATE || !m_addSubbrushesMode) {
         KisToolBrush::endAlternateAction(event, action);
         return;
     }
@@ -427,7 +428,7 @@ QWidget* KisToolMultihand::createOptionWidget()
     connect(customUI->resetOriginButton, SIGNAL(released()), this, SLOT(resetAxes()));
 
     customUI->multihandTypeCombobox->addItem(i18n("Symmetry"),int(SYMMETRY));  // axis mode
-    customUI->multihandTypeCombobox->addItem(i18n("Mirror"),int(MIRROR));
+    customUI->multihandTypeCombobox->addItem(i18nc("Label of Mirror in Multihand brush tool options", "Mirror"),int(MIRROR));
     customUI->multihandTypeCombobox->addItem(i18n("Translate"),int(TRANSLATE));
     customUI->multihandTypeCombobox->addItem(i18n("Snowflake"),int(SNOWFLAKE));
     customUI->multihandTypeCombobox->addItem(i18n("Copy Translate"),int(COPYTRANSLATE));
@@ -437,7 +438,7 @@ QWidget* KisToolMultihand::createOptionWidget()
 
 
     customUI->axisRotationSpinbox->setSuffix(QChar(Qt::Key_degree));   // origin rotation
-    customUI->axisRotationSpinbox->setSingleStep(0.5);
+    customUI->axisRotationSpinbox->setSingleStep(1.0);
     customUI->axisRotationSpinbox->setRange(0.0, 90.0, 1);
     customUI->axisRotationSpinbox->setValue(m_configGroup.readEntry("axesAngle", 0.0));
     connect( customUI->axisRotationSpinbox, SIGNAL(valueChanged(qreal)),this, SLOT(slotSetAxesAngle(qreal)));
@@ -536,6 +537,7 @@ void KisToolMultihand::slotSetTransformMode(int index)
     customUI->subbrushLabel->setVisible(false);
     customUI->addSubbrushButton->setVisible(false);
     customUI->removeSubbrushButton->setVisible(false);
+    m_addSubbrushesMode = 0;
 
     // turn on what we need
     if (index == MIRROR) {
@@ -558,6 +560,7 @@ void KisToolMultihand::slotSetTransformMode(int index)
     else if (index == COPYTRANSLATE) {
         customUI->subbrushLabel->setVisible(true);
         customUI->addSubbrushButton->setVisible(true);
+        customUI->addSubbrushButton->setChecked(false);
         customUI->removeSubbrushButton->setVisible(true);
     }
 

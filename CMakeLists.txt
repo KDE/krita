@@ -64,7 +64,7 @@ if (APPLE)
 endif()
 
 if (CMAKE_COMPILER_IS_GNUCXX AND NOT CMAKE_CXX_COMPILER_VERSION VERSION_LESS 4.9 AND NOT WIN32)
-    add_compile_options($<$<COMPILE_LANGUAGE:CXX>:-Wno-suggest-override> -Wextra)
+    add_compile_options($<$<COMPILE_LANGUAGE:CXX>:-Wno-suggest-override> -Wextra -Wno-class-memaccess)
 endif()
 
  ######################
@@ -75,11 +75,11 @@ endif()
 
 # define common versions of Krita applications, used to generate kritaversion.h
 # update these version for every release:
-set(KRITA_VERSION_STRING "4.3.0-prealpha")
+set(KRITA_VERSION_STRING "5.0.0-prealpha")
 # Major version: 3 for 3.x, 4 for 4.x, etc.
-set(KRITA_STABLE_VERSION_MAJOR 4)
+set(KRITA_STABLE_VERSION_MAJOR 5)
 # Minor version: 0 for 4.0, 1 for 4.1, etc.
-set(KRITA_STABLE_VERSION_MINOR 3)
+set(KRITA_STABLE_VERSION_MINOR 0)
 # Bugfix release version, or 0 for before the first stable release
 set(KRITA_VERSION_RELEASE 0)
 # the 4th digit, really only used for the Windows installer:
@@ -90,7 +90,6 @@ set(KRITA_VERSION_REVISION 0)
 set(KRITA_ALPHA 1) # uncomment only for Alpha
 #set(KRITA_BETA 1) # uncomment only for Beta
 #set(KRITA_RC 1) # uncomment only for RC
-set(KRITA_YEAR 2018) # update every year
 
 if(NOT DEFINED KRITA_ALPHA AND NOT DEFINED KRITA_BETA AND NOT DEFINED KRITA_RC)
     set(KRITA_STABLE 1) # do not edit
@@ -102,8 +101,8 @@ message(STATUS "Krita version: ${KRITA_VERSION_STRING}")
 # This makes it easy to advance it when the next Krita release comes.
 # 14 was the last GENERIC_KRITA_LIB_VERSION_MAJOR of the previous Krita series
 # (2.x) so we're starting with 15 in 3.x series, 16 in 4.x series
-if(KRITA_STABLE_VERSION_MAJOR EQUAL 4)
-    math(EXPR GENERIC_KRITA_LIB_VERSION_MAJOR "${KRITA_STABLE_VERSION_MINOR} + 16")
+if(KRITA_STABLE_VERSION_MAJOR EQUAL 5)
+    math(EXPR GENERIC_KRITA_LIB_VERSION_MAJOR "${KRITA_STABLE_VERSION_MINOR} + 17")
 else()
     # let's make sure we won't forget to update the "16"
     message(FATAL_ERROR "Reminder: please update offset == 16 used to compute GENERIC_KRITA_LIB_VERSION_MAJOR to something bigger")
@@ -172,11 +171,15 @@ if (WIN32)
 endif ()
 
 option(HIDE_SAFE_ASSERTS "Don't show message box for \"safe\" asserts, just ignore them automatically and dump a message to the terminal." ON)
-configure_file(config-hide-safe-asserts.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-hide-safe-asserts.h)
-add_feature_info("Hide Safe Asserts" HIDE_SAFE_ASSERTS "Don't show message box for \"safe\" asserts, just ignore them automatically and dump a message to the terminal.")
+add_feature_info("Hide safe asserts" HIDE_SAFE_ASSERTS "Don't show message box for \"safe\" asserts, just ignore them automatically and dump a message to the terminal.")
+
+option(CRASH_ON_SAFE_ASSERTS "Crash unconditionally whenever a \"safe\" assert happens. Useful for running unittests" OFF)
+add_feature_info("Crash on safe asserts" CRASH_ON_SAFE_ASSERTS "Crash unconditionally whenever a \"safe\" assert happens. Useful for running unittests")
+
+configure_file(config-safe-asserts.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-safe-asserts.h)
 
 option(USE_LOCK_FREE_HASH_TABLE "Use lock free hash table instead of blocking." ON)
-configure_file(config-hash-table-implementaion.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-hash-table-implementaion.h)
+configure_file(config-hash-table-implementation.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-hash-table-implementation.h)
 add_feature_info("Lock free hash table" USE_LOCK_FREE_HASH_TABLE "Use lock free hash table instead of blocking.")
 
 option(FOUNDATION_BUILD "A Foundation build is a binary release build that can package some extra things like color themes. Linux distributions that build and install Krita into a default system location should not define this option to true." OFF)
@@ -193,6 +196,16 @@ option(ENABLE_PYTHON_2 "Enables the compiler to look for Python 2.7 instead of P
 
 option(BUILD_KRITA_QT_DESIGNER_PLUGINS "Build Qt Designer plugins for Krita widgets" OFF)
 add_feature_info("Build Qt Designer plugins" BUILD_KRITA_QT_DESIGNER_PLUGINS "Builds Qt Designer plugins for Krita widgets (use -DBUILD_KRITA_QT_DESIGNER_PLUGINS=ON to enable).")
+
+option(ENABLE_UPDATERS "Enable updaters/update notifications" ON)
+configure_file(config-updaters.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-updaters.h)
+add_feature_info("Enable updaters" ENABLE_UPDATERS "Enable updaters/update notifications.")
+
+# Branding. Available options: default, Beta, Plus, Next. Can be set from command line
+if (NOT DEFINED BRANDING)
+	set(BRANDING "default")
+endif()
+message(STATUS "Branding selected: ${BRANDING}")
 
 include(MacroJPEG)
 
@@ -220,14 +233,14 @@ if(MINGW)
     if(ENABLE_PYTHON_2)
         message(FATAL_ERROR "Python 2.7 is not supported on Windows at the moment.")
     else(ENABLE_PYTHON_2)
-        find_package(PythonInterp 3.6 EXACT)
-        find_package(PythonLibs 3.6 EXACT)
+        find_package(PythonInterp 3.8 EXACT)
+        find_package(PythonLibs 3.8 EXACT)
     endif(ENABLE_PYTHON_2)
     if (PYTHONLIBS_FOUND AND PYTHONINTERP_FOUND)
         if(ENABLE_PYTHON_2)
             find_package(PythonLibrary 2.7)
         else(ENABLE_PYTHON_2)
-            find_package(PythonLibrary 3.6)
+            find_package(PythonLibrary 3.8)
         endif(ENABLE_PYTHON_2)
         TestCompileLinkPythonLibs(CAN_USE_PYTHON_LIBS)
         if (NOT CAN_USE_PYTHON_LIBS)
@@ -281,7 +294,6 @@ find_package(KF5 ${MIN_FRAMEWORKS_VERSION} REQUIRED COMPONENTS
         ItemModels
         ItemViews
         WindowSystem
-        Archive
 )
 
 find_package(Qt5 ${MIN_QT_VERSION}
@@ -295,6 +307,7 @@ find_package(Qt5 ${MIN_QT_VERSION}
         Svg
         Test
         Concurrent
+        Sql
 )
 
 if (ANDROID)
@@ -381,7 +394,7 @@ macro_ensure_out_of_source_build("Compiling Krita inside the source directory is
 find_package(Qt5Multimedia ${MIN_QT_VERSION})
 set_package_properties(Qt5Multimedia PROPERTIES
         DESCRIPTION "Qt multimedia integration"
-        URL "http://www.qt.io/"
+        URL "https://www.qt.io/"
         TYPE OPTIONAL
         PURPOSE "Optionally used to provide sound support for animations")
 
@@ -392,7 +405,7 @@ if (NOT APPLE)
 find_package(Qt5Quick ${MIN_QT_VERSION})
 set_package_properties(Qt5Quick PROPERTIES
         DESCRIPTION "QtQuick"
-        URL "http://www.qt.io/"
+        URL "https://www.qt.io/"
         TYPE OPTIONAL
         PURPOSE "Optionally used for the touch gui for Krita")
 
@@ -401,7 +414,7 @@ macro_bool_to_01(Qt5Quick_FOUND HAVE_QT_QUICK)
 find_package(Qt5QuickWidgets ${MIN_QT_VERSION})
 set_package_properties(Qt5QuickWidgets PROPERTIES
         DESCRIPTION "QtQuickWidgets"
-        URL "http://www.qt.io/"
+        URL "https://www.qt.io/"
         TYPE OPTIONAL
         PURPOSE "Optionally used for the touch gui for Krita")
 endif()
@@ -414,7 +427,7 @@ if (NOT WIN32 AND NOT APPLE AND NOT ANDROID)
     set(HAVE_DBUS ${Qt5DBus_FOUND})
     set_package_properties(Qt5DBus PROPERTIES
         DESCRIPTION "Qt DBUS integration"
-        URL "http://www.qt.io/"
+        URL "https://www.qt.io/"
         TYPE OPTIONAL
         PURPOSE "Optionally used to provide a dbus api on Linux")
 
@@ -422,7 +435,7 @@ if (NOT WIN32 AND NOT APPLE AND NOT ANDROID)
     macro_bool_to_01(KF5Crash_FOUND HAVE_KCRASH)
     set_package_properties(KF5Crash PROPERTIES
         DESCRIPTION "KDE's Crash Handler"
-        URL "http://api.kde.org/frameworks-api/frameworks5-apidocs/kcrash/html/index.html"
+        URL "https://api.kde.org/frameworks-api/frameworks5-apidocs/kcrash/html/index.html"
         TYPE OPTIONAL
         PURPOSE "Optionally used to provide crash reporting on Linux")
 
@@ -550,7 +563,7 @@ endif()
 
 # FIXME: Still hardcoded
 if (ANDROID)
-    set (Boost_INCLUDE_DIR          ${CMAKE_CURRENT_BINARY_DIR}/i/${ANDROID_ABI}/include/boost-1_69)
+    set (Boost_INCLUDE_DIR          ${CMAKE_CURRENT_BINARY_DIR}/i/${ANDROID_ABI}/include/boost-1_70)
     set (Boost_LIBRARY_DIR          ${CMAKE_CURRENT_BINARY_DIR}/i/${ANDROID_ABI}/lib)
     set (KF5_LIBRARIES              ${CMAKE_CURRENT_BINARY_DIR}/kf5/kde/install/lib)
 endif()
@@ -559,7 +572,7 @@ find_package(PNG REQUIRED)
 list (APPEND ANDROID_EXTRA_LIBS ${PNG_LIBRARY})
 
 if (APPLE)
-    # this is not added correctly on OSX -- see http://forum.kde.org/viewtopic.php?f=139&t=101867&p=221242#p221242
+    # this is not added correctly on OSX -- see https://forum.kde.org/viewtopic.php?f=139&t=101867&p=221242#p221242
     include_directories(SYSTEM ${PNG_INCLUDE_DIR})
 endif()
 
@@ -571,7 +584,7 @@ include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 ##
 find_package(GSL)
 set_package_properties(GSL PROPERTIES
-    URL "http://www.gnu.org/software/gsl"
+    URL "https://www.gnu.org/software/gsl"
     TYPE RECOMMENDED
     PURPOSE "Required by Krita's Transform tool.")
 macro_bool_to_01(GSL_FOUND HAVE_GSL)
@@ -586,10 +599,22 @@ endif()
 ############################
 ###########################
 
+##
+## Test for SeExpr
+##
+find_package(SeExpr2)
+set_package_properties(SeExpr2 PROPERTIES
+    URL "https://invent.kde.org/graphics/seexpr"
+    TYPE OPTIONAL
+    PURPOSE "Required by the SeExpr generator layer"
+)
+macro_bool_to_01(SeExpr2_FOUND HAVE_SEEXPR)
+configure_file(config-seexpr.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-seexpr.h )
+
 find_package(ZLIB)
 set_package_properties(ZLIB PROPERTIES
     DESCRIPTION "Compression library"
-    URL "http://www.zlib.net/"
+    URL "https://www.zlib.net/"
     TYPE OPTIONAL
     PURPOSE "Optionally used by the G'Mic and the PSD plugins")
 macro_bool_to_01(ZLIB_FOUND HAVE_ZLIB)
@@ -597,13 +622,13 @@ macro_bool_to_01(ZLIB_FOUND HAVE_ZLIB)
 find_package(OpenEXR)
 set_package_properties(OpenEXR PROPERTIES
     DESCRIPTION "High dynamic-range (HDR) image file format"
-    URL "http://www.openexr.com"
+    URL "https://www.openexr.com"
     TYPE OPTIONAL
     PURPOSE "Required by the Krita OpenEXR filter")
 macro_bool_to_01(OPENEXR_FOUND HAVE_OPENEXR)
 set(LINK_OPENEXR_LIB)
 if(OPENEXR_FOUND)
-    include_directories(SYSTEM ${OPENEXR_INCLUDE_DIR})
+    include_directories(SYSTEM ${OPENEXR_INCLUDE_DIRS})
     set(LINK_OPENEXR_LIB ${OPENEXR_LIBRARIES})
     add_definitions(${OPENEXR_DEFINITIONS})
 endif()
@@ -611,7 +636,7 @@ endif()
 find_package(TIFF)
 set_package_properties(TIFF PROPERTIES
     DESCRIPTION "TIFF Library and Utilities"
-    URL "http://www.remotesensing.org/libtiff"
+    URL "http://www.libtiff.org"
     TYPE OPTIONAL
     PURPOSE "Required by the Krita TIFF filter")
 if (TIFF_FOUND)
@@ -621,11 +646,12 @@ endif()
 find_package(JPEG)
 set_package_properties(JPEG PROPERTIES
     DESCRIPTION "Free library for JPEG image compression. Note: libjpeg8 is NOT supported."
-    URL "http://www.libjpeg-turbo.org"
+    URL "https://www.libjpeg-turbo.org"
     TYPE OPTIONAL
     PURPOSE "Required by the Krita JPEG filter")
 if (JPEG_FOUND)
     list (APPEND ANDROID_EXTRA_LIBS ${JPEG_LIBRARY})
+    macro_bool_to_01(JPEG_FOUND HAVE_JPEG)
 endif()
 
 find_package(GIF)
@@ -645,11 +671,18 @@ set_package_properties(HEIF PROPERTIES
     TYPE OPTIONAL
     PURPOSE "Required by the Krita HEIF filter")
 
+find_package(OpenJPEG "2.3.0")
+set_package_properties(OpenJPEG PROPERTIES
+    DESCRIPTION "Library for loading and saving jp2000 files."
+    URL "https://www.openjpeg.org/"
+    TYPE OPTIONAL
+    PURPOSE "Required by the Krita JP2000 filter")
+
 set(LIBRAW_MIN_VERSION  "0.16")
 find_package(LibRaw ${LIBRAW_MIN_VERSION})
 set_package_properties(LibRaw PROPERTIES
     DESCRIPTION "Library to decode RAW images"
-    URL "http://www.libraw.org"
+    URL "https://www.libraw.org/"
     TYPE OPTIONAL
     PURPOSE "Required to build the raw import plugin")
 
@@ -667,14 +700,14 @@ endif()
 find_package(OCIO)
 set_package_properties(OCIO PROPERTIES
     DESCRIPTION "The OpenColorIO Library"
-    URL "http://www.opencolorio.org"
+    URL "https://www.opencolorio.org"
     TYPE OPTIONAL
     PURPOSE "Required by the Krita LUT docker")
 macro_bool_to_01(OCIO_FOUND HAVE_OCIO)
 
 set_package_properties(PythonLibrary PROPERTIES
     DESCRIPTION "Python Library"
-    URL "http://www.python.org"
+    URL "https://www.python.org"
     TYPE OPTIONAL
     PURPOSE "Required by the Krita PyQt plugin")
 macro_bool_to_01(PYTHONLIBS_FOUND HAVE_PYTHONLIBS)
@@ -694,7 +727,6 @@ set_package_properties(PyQt5 PROPERTIES
     TYPE OPTIONAL
     PURPOSE "Required by the Krita PyQt plugin")
 macro_bool_to_01(PYQT5_FOUND HAVE_PYQT5)
-
 
 ##
 ## Look for OpenGL
@@ -806,7 +838,7 @@ test_big_endian(CMAKE_WORDS_BIGENDIAN)
 find_package(Poppler COMPONENTS Qt5)
 set_package_properties(Poppler PROPERTIES
     DESCRIPTION "A PDF rendering library"
-    URL "http://poppler.freedesktop.org"
+    URL "https://poppler.freedesktop.org/"
     TYPE OPTIONAL
     PURPOSE "Required by the Krita PDF filter.")
 
@@ -834,8 +866,7 @@ list (APPEND ANDROID_EXTRA_LIBS ${QUAZIP_LIBRARIES}
                                 ${KF5_LIBRARIES}/libKF5I18n.so
                                 ${KF5_LIBRARIES}/libKF5CoreAddons.so
                                 ${KF5_LIBRARIES}/libKF5ConfigGui.so
-                                ${KF5_LIBRARIES}/libKF5ConfigCore.so
-                                ${KF5_LIBRARIES}/libKF5Archive.so)
+                                ${KF5_LIBRARIES}/libKF5ConfigCore.so)
 
 
 ##
@@ -893,6 +924,25 @@ if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/po OR EXISTS ${CMAKE_CURRENT_BINARY_DIR}/p
   ki18n_install(po)
 endif()
 
+if (ANDROID)
+  # ECM passes this to Qt, which was already capable of detecting it..
+  set (ANDROID_SDK_COMPILE_API "android-28")
+  if ((${NDK_VERSION} GREATER_EQUAL 20))
+    set (USE_LLVM ON)
+  endif()
+
+  if (NOT (CMAKE_CXX_STANDARD_LIBRARIES MATCHES "[^ ]*c\\+\\+[^ ]*\\.so"))
+    # copied regex from ECM's toolchain
+    string(REGEX REPLACE "-(clang)?([0-9].[0-9])?$" "" ECM_ANDROID_STL_ARCH ${ANDROID_TOOLCHAIN_NAME})
+
+    set (KRITA_ANDROID_STL_PATH "${ANDROID_TOOLCHAIN_ROOT}/sysroot/usr/lib/${ECM_ANDROID_STL_ARCH}/lib${ANDROID_STL}.so")
+    if (NOT EXISTS ${KRITA_ANDROID_STL_PATH})
+      message(FATAL_ERROR "STL does not exist at the right location, please use NDK r20+")
+    endif()
+
+    set (CMAKE_CXX_STANDARD_LIBRARIES "${CMAKE_CXX_STANDARD_LIBRARIES} \"${KRITA_ANDROID_STL_PATH}\"" CACHE STRING "" FORCE)
+  endif()
+endif()
 
 if(DEFINED QTANDROID_EXPORTED_TARGET AND NOT TARGET "create-apk")
     set (_CMAKE_ANDROID_DIR "${ECM_DIR}/../toolchain")

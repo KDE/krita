@@ -66,7 +66,7 @@ void benchmarkSIMD(qreal fade) {
     dev->setRect(QRect(0, 0, 1000, 1000));
     dev->initialize();
 
-    MaskProcessingData data(dev, cs,
+    MaskProcessingData data(dev, cs, nullptr,
                             0.0, 1.0,
                             500, 500, 0);
 

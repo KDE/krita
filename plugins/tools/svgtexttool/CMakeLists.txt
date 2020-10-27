@@ -11,7 +11,6 @@ set (SvgTextTool_SRCS
     SvgTextTool.cpp
     SvgTextToolFactory.cpp
     svgtexttool.qrc
-    kis_font_family_combo_box.cpp
     FontSizeAction.cpp
 )
 

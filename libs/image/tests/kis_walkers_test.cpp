@@ -30,13 +30,14 @@
 #include "kis_clone_layer.h"
 #include "kis_adjustment_layer.h"
 #include "kis_selection.h"
+#include <KisGlobalResourcesInterface.h>
 
 #include "filter/kis_filter.h"
 #include "filter/kis_filter_configuration.h"
 #include "filter/kis_filter_registry.h"
 #include "kis_filter_mask.h"
 #include "kis_transparency_mask.h"
-#include <sdk/tests/kistest.h>
+#include <sdk/tests/testimage.h>
 
 //#define DEBUG_VISITORS
 
@@ -328,12 +329,12 @@ void KisWalkersTest::testVisitingWithTopmostMask()
     KisLayerSP adjustmentLayer = new KisAdjustmentLayer(image, "adj", 0, 0);
 
 
-    KisFilterMaskSP filterMask1 = new KisFilterMask();
+    KisFilterMaskSP filterMask1 = new KisFilterMask(image, "mask1");
     filterMask1->initSelection(groupLayer);
     KisFilterSP filter = KisFilterRegistry::instance()->value("blur");
     KIS_ASSERT(filter);
-    KisFilterConfigurationSP configuration1 = filter->defaultConfiguration();
-    filterMask1->setFilter(configuration1);
+    KisFilterConfigurationSP configuration1 = filter->defaultConfiguration(KisGlobalResourcesInterface::instance());
+    filterMask1->setFilter(configuration1->cloneWithResourcesSnapshot());
 
     image->addNode(paintLayer1, image->rootLayer());
     image->addNode(groupLayer, image->rootLayer());
@@ -905,17 +906,17 @@ void KisWalkersTest::testMasksVisiting()
     image->addNode(paintLayer1, image->rootLayer());
     image->addNode(paintLayer2, image->rootLayer());
 
-    KisFilterMaskSP filterMask1 = new KisFilterMask();
-    KisFilterMaskSP filterMask2 = new KisFilterMask();
-    KisTransparencyMaskSP transparencyMask = new KisTransparencyMask();
+    KisFilterMaskSP filterMask1 = new KisFilterMask(image, "fmask1");
+    KisFilterMaskSP filterMask2 = new KisFilterMask(image, "fmask2");
+    KisTransparencyMaskSP transparencyMask = new KisTransparencyMask(image, "tmask");
 
     KisFilterSP filter = KisFilterRegistry::instance()->value("blur");
     Q_ASSERT(filter);
-    KisFilterConfigurationSP configuration1 = filter->defaultConfiguration();
-    KisFilterConfigurationSP configuration2 = filter->defaultConfiguration();
+    KisFilterConfigurationSP configuration1 = filter->defaultConfiguration(KisGlobalResourcesInterface::instance());
+    KisFilterConfigurationSP configuration2 = filter->defaultConfiguration(KisGlobalResourcesInterface::instance());
 
-    filterMask1->setFilter(configuration1);
-    filterMask2->setFilter(configuration2);
+    filterMask1->setFilter(configuration1->cloneWithResourcesSnapshot());
+    filterMask2->setFilter(configuration2->cloneWithResourcesSnapshot());
 
     QRect selection1(10, 10, 20, 10);
     QRect selection2(30, 15, 10, 10);
@@ -978,17 +979,17 @@ void KisWalkersTest::testMasksVisitingNoFilthy()
     image->addNode(paintLayer1, image->rootLayer());
     image->addNode(paintLayer2, image->rootLayer());
 
-    KisFilterMaskSP filterMask1 = new KisFilterMask();
-    KisFilterMaskSP filterMask2 = new KisFilterMask();
-    KisTransparencyMaskSP transparencyMask = new KisTransparencyMask();
+    KisFilterMaskSP filterMask1 = new KisFilterMask(image, "fmask1");
+    KisFilterMaskSP filterMask2 = new KisFilterMask(image, "fmask2");
+    KisTransparencyMaskSP transparencyMask = new KisTransparencyMask(image, "tmask");
 
     KisFilterSP filter = KisFilterRegistry::instance()->value("blur");
     Q_ASSERT(filter);
-    KisFilterConfigurationSP configuration1 = filter->defaultConfiguration();
-    KisFilterConfigurationSP configuration2 = filter->defaultConfiguration();
+    KisFilterConfigurationSP configuration1 = filter->defaultConfiguration(KisGlobalResourcesInterface::instance());
+    KisFilterConfigurationSP configuration2 = filter->defaultConfiguration(KisGlobalResourcesInterface::instance());
 
-    filterMask1->setFilter(configuration1);
-    filterMask2->setFilter(configuration2);
+    filterMask1->setFilter(configuration1->cloneWithResourcesSnapshot());
+    filterMask2->setFilter(configuration2->cloneWithResourcesSnapshot());
 
     QRect selection1(10, 10, 20, 10);
     QRect selection2(30, 15, 10, 10);
@@ -1053,19 +1054,19 @@ void KisWalkersTest::testMasksOverlapping()
     image->addNode(paintLayer1, image->rootLayer());
     image->addNode(paintLayer2, image->rootLayer());
 
-    KisFilterMaskSP filterMask1 = new KisFilterMask();
-    KisFilterMaskSP filterMask2 = new KisFilterMask();
-    KisTransparencyMaskSP transparencyMask = new KisTransparencyMask();
+    KisFilterMaskSP filterMask1 = new KisFilterMask(image, "fmask1");
+    KisFilterMaskSP filterMask2 = new KisFilterMask(image, "fmask2");
+    KisTransparencyMaskSP transparencyMask = new KisTransparencyMask(image, "tmask");
 
     KisFilterSP blurFilter = KisFilterRegistry::instance()->value("blur");
     KisFilterSP invertFilter = KisFilterRegistry::instance()->value("invert");
     Q_ASSERT(blurFilter);
     Q_ASSERT(invertFilter);
-    KisFilterConfigurationSP blurConfiguration = blurFilter->defaultConfiguration();
-    KisFilterConfigurationSP invertConfiguration = invertFilter->defaultConfiguration();
+    KisFilterConfigurationSP blurConfiguration = blurFilter->defaultConfiguration(KisGlobalResourcesInterface::instance());
+    KisFilterConfigurationSP invertConfiguration = invertFilter->defaultConfiguration(KisGlobalResourcesInterface::instance());
 
-    filterMask1->setFilter(invertConfiguration);
-    filterMask2->setFilter(blurConfiguration);
+    filterMask1->setFilter(invertConfiguration->cloneWithResourcesSnapshot());
+    filterMask2->setFilter(blurConfiguration->cloneWithResourcesSnapshot());
 
     QRect selection1(0, 0, 128, 128);
     QRect selection2(128, 0, 128, 128);
@@ -1206,7 +1207,7 @@ void KisWalkersTest::testRectsChecksum()
     KisLayerSP paintLayer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8);
     KisAdjustmentLayerSP adjustmentLayer = new KisAdjustmentLayer(image, "adj", 0, 0);
 
-    image->lock();
+    image->barrierLock();
     image->addNode(paintLayer1, image->rootLayer());
     image->addNode(adjustmentLayer, image->rootLayer());
     image->unlock();
@@ -1219,26 +1220,26 @@ void KisWalkersTest::testRectsChecksum()
     walker.collectRects(adjustmentLayer, dirtyRect);
     QCOMPARE(walker.checksumValid(), true);
 
-    configuration = filter->defaultConfiguration();
-    adjustmentLayer->setFilter(configuration);
+    configuration = filter->defaultConfiguration(KisGlobalResourcesInterface::instance());
+    adjustmentLayer->setFilter(configuration->cloneWithResourcesSnapshot());
     QCOMPARE(walker.checksumValid(), false);
 
     walker.recalculate(dirtyRect);
     QCOMPARE(walker.checksumValid(), true);
 
-    configuration = filter->defaultConfiguration();
+    configuration = filter->defaultConfiguration(KisGlobalResourcesInterface::instance());
     configuration->setProperty("halfWidth", 20);
     configuration->setProperty("halfHeight", 20);
-    adjustmentLayer->setFilter(configuration);
+    adjustmentLayer->setFilter(configuration->cloneWithResourcesSnapshot());
     QCOMPARE(walker.checksumValid(), false);
 
     walker.recalculate(dirtyRect);
     QCOMPARE(walker.checksumValid(), true);
 
-    configuration = filter->defaultConfiguration();
+    configuration = filter->defaultConfiguration(KisGlobalResourcesInterface::instance());
     configuration->setProperty("halfWidth", 21);
     configuration->setProperty("halfHeight", 21);
-    adjustmentLayer->setFilter(configuration);
+    adjustmentLayer->setFilter(configuration->cloneWithResourcesSnapshot());
     QCOMPARE(walker.checksumValid(), false);
 
     walker.recalculate(dirtyRect);
@@ -1257,7 +1258,7 @@ void KisWalkersTest::testGraphStructureChecksum()
     KisLayerSP paintLayer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8);
     KisLayerSP paintLayer2 = new KisPaintLayer(image, "paint2", OPACITY_OPAQUE_U8);
 
-    image->lock();
+    image->barrierLock();
     image->addNode(paintLayer1, image->rootLayer());
     image->unlock();
 
@@ -1265,7 +1266,7 @@ void KisWalkersTest::testGraphStructureChecksum()
     walker.collectRects(paintLayer1, dirtyRect);
     QCOMPARE(walker.checksumValid(), true);
 
-    image->lock();
+    image->barrierLock();
     image->addNode(paintLayer2, image->rootLayer());
     image->unlock();
     QCOMPARE(walker.checksumValid(), false);
@@ -1273,7 +1274,7 @@ void KisWalkersTest::testGraphStructureChecksum()
     walker.recalculate(dirtyRect);
     QCOMPARE(walker.checksumValid(), true);
 
-    image->lock();
+    image->barrierLock();
     image->moveNode(paintLayer1, image->rootLayer(), paintLayer2);
     image->unlock();
     QCOMPARE(walker.checksumValid(), false);
@@ -1281,7 +1282,7 @@ void KisWalkersTest::testGraphStructureChecksum()
     walker.recalculate(dirtyRect);
     QCOMPARE(walker.checksumValid(), true);
 
-    image->lock();
+    image->barrierLock();
     image->removeNode(paintLayer1);
     image->unlock();
     QCOMPARE(walker.checksumValid(), false);

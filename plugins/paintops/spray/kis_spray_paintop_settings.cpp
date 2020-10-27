@@ -32,9 +32,10 @@ struct KisSprayPaintOpSettings::Private
 };
 
 
-KisSprayPaintOpSettings::KisSprayPaintOpSettings()
+KisSprayPaintOpSettings::KisSprayPaintOpSettings(KisResourcesInterfaceSP resourcesInterface)
     : KisOutlineGenerationPolicy<KisPaintOpSettings>(KisCurrentOutlineFetcher::SIZE_OPTION |
-                                                     KisCurrentOutlineFetcher::ROTATION_OPTION),
+                                                     KisCurrentOutlineFetcher::ROTATION_OPTION,
+                                                     resourcesInterface),
     m_d(new Private)
 {
 }
@@ -66,7 +67,7 @@ bool KisSprayPaintOpSettings::paintIncremental()
 }
 
 
-QPainterPath KisSprayPaintOpSettings::brushOutline(const KisPaintInformation &info, const OutlineMode &mode)
+QPainterPath KisSprayPaintOpSettings::brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom)
 {
     QPainterPath path;
     if (mode.isVisible) {
@@ -74,12 +75,12 @@ QPainterPath KisSprayPaintOpSettings::brushOutline(const KisPaintInformation &in
         qreal height = getInt(SPRAY_DIAMETER) * getDouble(SPRAY_ASPECT);
         path = ellipseOutline(width, height, getDouble(SPRAY_SCALE), getDouble(SPRAY_ROTATION));
 
-        path = outlineFetcher()->fetchOutline(info, this, path, mode);
+        path = outlineFetcher()->fetchOutline(info, this, path, mode, alignForZoom);
 
         if (mode.forceFullSize) {
             QPainterPath tiltLine =
                 makeTiltIndicator(info, QPointF(0.0, 0.0), width * 0.5, 3.0);
-            path.addPath(outlineFetcher()->fetchOutline(info, this, tiltLine, mode, 1.0, 0.0, true, 0, 0));
+            path.addPath(outlineFetcher()->fetchOutline(info, this, tiltLine, mode, alignForZoom, 1.0, 0.0, true, 0, 0));
         }
     }
     return path;
@@ -124,7 +125,7 @@ QList<KisUniformPaintOpPropertySP> KisSprayPaintOpSettings::uniformProperties(Ki
                     option.writeOptionSetting(prop->settings().data());
                 });
 
-            QObject::connect(preset()->updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
+            QObject::connect(updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
             prop->requestReadValue();
             props << toQShared(prop);
         }
@@ -160,7 +161,7 @@ QList<KisUniformPaintOpPropertySP> KisSprayPaintOpSettings::uniformProperties(Ki
                     return !option.useDensity;
                 });
 
-            QObject::connect(preset()->updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
+            QObject::connect(updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
             prop->requestReadValue();
             props << toQShared(prop);
         }
@@ -197,8 +198,7 @@ QList<KisUniformPaintOpPropertySP> KisSprayPaintOpSettings::uniformProperties(Ki
                     option.readOptionSetting(prop->settings().data());
                     return option.useDensity;
                 });
-
-            QObject::connect(preset()->updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
+            QObject::connect(updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
             prop->requestReadValue();
             props << toQShared(prop);
         }

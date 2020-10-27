@@ -21,6 +21,7 @@
 
 #include "KoAlwaysInline.h"
 #include "kundo2command.h"
+#include "kis_command_utils.h"
 
 
 struct DirectDataAccessPolicy {
@@ -81,62 +82,86 @@ public:
         m_cache.setupCache();
     }
 
-    class ChangeColorSpaceCommand : public KUndo2Command {
+    class ChangeProfileCommand : public KUndo2Command {
     public:
-        ChangeColorSpaceCommand(KisPaintDeviceData *data,
-                                KisDataManagerSP oldDm, KisDataManagerSP newDm,
-                                const KoColorSpace *oldCs, const KoColorSpace *newCs,
-                                KUndo2Command *parent)
+        ChangeProfileCommand(KisPaintDeviceData *data,
+                             const KoColorSpace *oldCs, const KoColorSpace *newCs,
+                             KUndo2Command *parent)
             : KUndo2Command(parent),
-              m_firstRun(true),
               m_data(data),
-              m_oldDm(oldDm),
-              m_newDm(newDm),
               m_oldCs(oldCs),
               m_newCs(newCs)
         {
         }
 
-        void forcedRedo() {
-            m_data->m_dataManager = m_newDm;
+        void redo() override {
+            KUndo2Command::redo();
+
             m_data->m_colorSpace = m_newCs;
             m_data->m_cache.setupCache();
         }
 
-        void redo() override {
-            KUndo2Command::redo();
-
-            if (!m_firstRun) {
-                m_firstRun = false;
-                return;
-            }
-
-            forcedRedo();
-        }
-
         void undo() override {
-            m_data->m_dataManager = m_oldDm;
             m_data->m_colorSpace = m_oldCs;
             m_data->m_cache.setupCache();
 
             KUndo2Command::undo();
         }
 
-    private:
-        bool m_firstRun;
-
+    protected:
         KisPaintDeviceData *m_data;
-        KisDataManagerSP m_oldDm;
-        KisDataManagerSP m_newDm;
+
+    private:
+        bool m_firstRun {true};
         const KoColorSpace *m_oldCs;
         const KoColorSpace *m_newCs;
     };
 
-    void assignColorSpace(const KoColorSpace *dstColorSpace) {
+
+    class ChangeColorSpaceCommand : public ChangeProfileCommand {
+    public:
+        ChangeColorSpaceCommand(KisPaintDeviceData *data,
+                             KisDataManagerSP oldDm, KisDataManagerSP newDm,
+                             const KoColorSpace *oldCs, const KoColorSpace *newCs,
+                             KUndo2Command *parent)
+            : ChangeProfileCommand(data, oldCs, newCs, parent),
+              m_oldDm(oldDm),
+              m_newDm(newDm)
+        {
+        }
+
+        void redo() override {
+            ChangeProfileCommand::redo();
+            m_data->m_dataManager = m_newDm;
+        }
+
+        void undo() override {
+            m_data->m_dataManager = m_oldDm;
+            ChangeProfileCommand::undo();
+        }
+
+    private:
+        KisDataManagerSP m_oldDm;
+        KisDataManagerSP m_newDm;
+    };
+
+    void assignColorSpace(const KoColorSpace *dstColorSpace, KUndo2Command *parentCommand) {
+        if (*m_colorSpace->profile() == *dstColorSpace->profile()) return;
+
         KIS_ASSERT_RECOVER_RETURN(m_colorSpace->pixelSize() == dstColorSpace->pixelSize());
 
-        m_colorSpace = dstColorSpace;
-        m_cache.invalidate();
+        ChangeProfileCommand *cmd =
+            new ChangeProfileCommand(this,
+                                     m_colorSpace, dstColorSpace,
+                                     parentCommand);
+
+        // NOTE: first redo is skipped on a higher level,
+        //       at DeviceChangeColorSpaceCommand
+        cmd->redo();
+
+        if (!parentCommand) {
+            delete cmd;
+        }
     }
 
     void convertDataColorSpace(const KoColorSpace *dstColorSpace, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags, KUndo2Command *parentCommand) {
@@ -187,10 +212,53 @@ public:
                                         m_dataManager, dstDataManager,
                                         m_colorSpace, dstColorSpace,
                                         parentCommand);
-        cmd->forcedRedo();
+
+        // NOTE: first redo is skipped on a higher level,
+        //       at DeviceChangeColorSpaceCommand
+        cmd->redo();
+
         if (!parentCommand) {
             delete cmd;
         }
+    }
+
+    void reincarnateWithDetachedHistory(bool copyContent, KUndo2Command *parentCommand) {
+        struct SwitchDataManager : public KUndo2Command
+        {
+            SwitchDataManager(KisPaintDeviceData *data,
+                              KisDataManagerSP oldDm, KisDataManagerSP newDm,
+                              KUndo2Command *parent = 0)
+                : KUndo2Command(parent),
+                  m_data(data),
+                  m_oldDm(oldDm),
+                  m_newDm(newDm)
+            {
+            }
+
+            void redo() override {
+                m_data->m_dataManager = m_newDm;
+                m_data->cache()->invalidate();
+            }
+
+            void undo() override {
+                m_data->m_dataManager = m_oldDm;
+                m_data->cache()->invalidate();
+            }
+
+        private:
+            KisPaintDeviceData *m_data;
+            KisDataManagerSP m_oldDm;
+            KisDataManagerSP m_newDm;
+        };
+
+        new KisCommandUtils::LambdaCommand(parentCommand,
+            [this, copyContent] () {
+                KisDataManagerSP newDm =
+                    copyContent ?
+                    new KisDataManager(*this->dataManager()) :
+                    new KisDataManager(this->dataManager()->pixelSize(), this->dataManager()->defaultPixel());
+                return new SwitchDataManager(this, this->dataManager(), newDm);
+            });
     }
 
     void prepareClone(const KisPaintDeviceData *srcData, bool copyContent = false) {

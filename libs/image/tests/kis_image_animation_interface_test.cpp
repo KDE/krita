@@ -30,7 +30,7 @@
 #include "kis_image_animation_interface.h"
 #include "kis_signal_compressor_with_param.h"
 #include "kis_raster_keyframe_channel.h"
-#include "kis_time_range.h"
+#include "kis_time_span.h"
 
 
 void checkFrame(KisImageAnimationInterface *i, KisImageSP image, int frameId, bool externalFrameActive, const QRect &rc)
@@ -57,8 +57,8 @@ void KisImageAnimationInterfaceTest::testFrameRegeneration()
     KisPaintDeviceSP dev1 = p.layer->paintDevice();
     KisPaintDeviceSP dev2 = layer2->paintDevice();
 
-    p.layer->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
-    layer2->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
+    p.layer->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true);
+    layer2->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true);
 
     // check frame 0
     {
@@ -103,7 +103,7 @@ void KisImageAnimationInterfaceTest::testFrameRegeneration()
     {
         SignalToFunctionProxy proxy1(std::bind(checkFrame, i, p.image, 0, true, rc1 | rc2));
         connect(i, SIGNAL(sigFrameReady(int)), &proxy1, SLOT(start()), Qt::DirectConnection);
-        i->requestFrameRegeneration(0, QRegion(refRect));
+        i->requestFrameRegeneration(0, KisRegion(refRect));
         QTest::qWait(200);
     }
 
@@ -126,7 +126,7 @@ void KisImageAnimationInterfaceTest::testFrameRegeneration()
     {
         SignalToFunctionProxy proxy2(std::bind(checkFrame, i, p.image, 10, true, rc3 | rc4));
         connect(i, SIGNAL(sigFrameReady(int)), &proxy2, SLOT(start()), Qt::DirectConnection);
-        i->requestFrameRegeneration(10, QRegion(refRect));
+        i->requestFrameRegeneration(10, KisRegion(refRect));
         QTest::qWait(200);
     }
 
@@ -143,8 +143,8 @@ void KisImageAnimationInterfaceTest::testFramesChangedSignal()
     KisPaintLayerSP layer2 = new KisPaintLayer(p.image, "paint2", OPACITY_OPAQUE_U8);
     p.image->addNode(layer2);
 
-    layer1->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
-    layer2->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
+    layer1->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true);
+    layer2->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true);
 
     KisImageAnimationInterface *i = p.image->animationInterface();
     KisPaintDeviceSP dev1 = p.layer->paintDevice();
@@ -155,7 +155,7 @@ void KisImageAnimationInterfaceTest::testFramesChangedSignal()
     channel->addKeyframe(20);
 
     // check switching a frame doesn't invalidate cache
-    QSignalSpy spy(i, SIGNAL(sigFramesChanged(KisTimeRange,QRect)));
+    QSignalSpy spy(i, SIGNAL(sigFramesChanged(KisTimeSpan,QRect)));
 
     p.image->animationInterface()->switchCurrentTimeAsync(15);
     p.image->waitForDone();
@@ -166,13 +166,13 @@ void KisImageAnimationInterfaceTest::testFramesChangedSignal()
 
     QCOMPARE(spy.count(), 1);
     QList<QVariant> arguments = spy.takeFirst();
-    QCOMPARE(arguments.at(0).value<KisTimeRange>(), KisTimeRange::infinite(0));
+    QCOMPARE(arguments.at(0).value<KisTimeSpan>(), KisTimeSpan::infinite(0));
 
     i->notifyNodeChanged(layer2.data(), QRect(), false);
 
     QCOMPARE(spy.count(), 1);
     arguments = spy.takeFirst();
-    QCOMPARE(arguments.at(0).value<KisTimeRange>(), KisTimeRange(10, 10));
+    QCOMPARE(arguments.at(0).value<KisTimeSpan>(), KisTimeSpan::fromTimeWithDuration(10, 10));
 
     // Recursive
 
@@ -185,7 +185,7 @@ void KisImageAnimationInterfaceTest::testFramesChangedSignal()
     QCOMPARE(spy.count(), 1);
     arguments = spy.takeFirst();
     QEXPECT_FAIL("", "Infinite time range is expected to be (0, -2147483648), but is (1, -2147483648)", Continue);
-    QCOMPARE(arguments.at(0).value<KisTimeRange>(), KisTimeRange::infinite(10));
+    QCOMPARE(arguments.at(0).value<KisTimeSpan>(), KisTimeSpan::infinite(10));
 
 }
 
@@ -200,13 +200,13 @@ void KisImageAnimationInterfaceTest::testAnimationCompositionBug()
     KisPaintLayerSP layer2 = new KisPaintLayer(p.image, "paint2", OPACITY_OPAQUE_U8);
     p.image->addNode(layer2);
 
-    layer1->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
-    layer2->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
+    layer1->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true);
+    layer2->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true);
 
     layer1->paintDevice()->fill(rect, KoColor(Qt::red, layer1->paintDevice()->colorSpace()));
     layer2->paintDevice()->fill(QRect(128,128,128,128), KoColor(Qt::black, layer2->paintDevice()->colorSpace()));
 
-    KisKeyframeChannel *rasterChannel = layer2->getKeyframeChannel(KisKeyframeChannel::Content.id());
+    KisKeyframeChannel *rasterChannel = layer2->getKeyframeChannel(KisKeyframeChannel::Raster.id());
     rasterChannel->addKeyframe(10, &parentCommand);
     p.image->refreshGraph();
 
@@ -235,7 +235,7 @@ void KisImageAnimationInterfaceTest::testSwitchFrameWithUndo()
 
     KisPaintLayerSP layer1 = p.layer;
 
-    layer1->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
+    layer1->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true);
 
     KisImageAnimationInterface *i = p.image->animationInterface();
     KisPaintDeviceSP dev1 = p.layer->paintDevice();
@@ -276,7 +276,7 @@ void KisImageAnimationInterfaceTest::testSwitchFrameHangup()
 
     KisPaintLayerSP layer1 = p.layer;
 
-    layer1->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
+    layer1->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true);
 
     KisImageAnimationInterface *i = p.image->animationInterface();
     KisPaintDeviceSP dev1 = p.layer->paintDevice();

@@ -23,6 +23,7 @@
 
 #include "ui_wdg_buginfo.h"
 
+class QSettings;
 
 class WdgBugInfo : public QWidget, public Ui::WdgBugInfo
 {
@@ -40,6 +41,19 @@ class DlgBugInfo: public KoDialog
 public:
     DlgBugInfo(QWidget * parent = 0);
     ~DlgBugInfo() override;
+
+    void initialize();
+    void initializeText();
+    void saveToFile();
+
+    virtual QString defaultNewFileName() = 0;
+    virtual QString originalFileName() = 0;
+    virtual QString captionText() = 0;
+    virtual QString replacementWarningText() = 0;
+    QString infoText(QSettings& kritarc);
+
+    QString basicSystemInformationReplacementText();
+
 private:
     WdgBugInfo *m_page;
 };

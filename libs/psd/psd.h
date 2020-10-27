@@ -29,10 +29,10 @@
 #include <KoColorModelStandardIds.h>
 #include <KoCompositeOpRegistry.h>
 #include <resources/KoAbstractGradient.h>
-
+#include <KoPattern.h>
 #include "kritapsd_export.h"
 
-class KoPattern;
+
 
 const int MAX_CHANNELS = 56;
 
@@ -225,7 +225,7 @@ struct psd_layer_effects_context {
 
 #define PSD_LOOKUP_TABLE_SIZE 256
 
-// dsdw, isdw: http://www.adobe.com/devnet-apps/photoshop/fileformatashtml/PhotoshopFileFormats.htm#50577409_22203
+// dsdw, isdw: https://www.adobe.com/devnet-apps/photoshop/fileformatashtml/PhotoshopFileFormats.htm#50577409_22203
 class KRITAPSD_EXPORT psd_layer_effects_shadow_base {
 public:
     psd_layer_effects_shadow_base()
@@ -497,7 +497,7 @@ public:
     //using psd_layer_effects_shadow_base::setKnocksOut;
 };
 
-// isdw: http://www.adobe.com/devnet-apps/photoshop/fileformatashtml/PhotoshopFileFormats.htm#50577409_22203
+// isdw: https://www.adobe.com/devnet-apps/photoshop/fileformatashtml/PhotoshopFileFormats.htm#50577409_22203
 class KRITAPSD_EXPORT psd_layer_effects_inner_shadow : public psd_layer_effects_shadow_common
 {
 public:
@@ -539,12 +539,12 @@ public:
     // using psd_layer_effects_shadow_base::setGradient;
 };
 
-// oglw: http://www.adobe.com/devnet-apps/photoshop/fileformatashtml/PhotoshopFileFormats.htm#50577409_25738
+// oglw: https://www.adobe.com/devnet-apps/photoshop/fileformatashtml/PhotoshopFileFormats.htm#50577409_25738
 class KRITAPSD_EXPORT psd_layer_effects_outer_glow : public psd_layer_effects_glow_common
 {
 };
 
-// iglw: http://www.adobe.com/devnet-apps/photoshop/fileformatashtml/PhotoshopFileFormats.htm#50577409_27692
+// iglw: https://www.adobe.com/devnet-apps/photoshop/fileformatashtml/PhotoshopFileFormats.htm#50577409_27692
 class KRITAPSD_EXPORT psd_layer_effects_inner_glow : public psd_layer_effects_glow_common
 {
 public:
@@ -614,7 +614,7 @@ struct psd_pattern_info {
     quint8 identifier[256];
 };
 
-// bevl: http://www.adobe.com/devnet-apps/photoshop/fileformatashtml/PhotoshopFileFormats.htm#50577409_31889
+// bevl: https://www.adobe.com/devnet-apps/photoshop/fileformatashtml/PhotoshopFileFormats.htm#50577409_31889
 struct psd_layer_effects_bevel_emboss : public psd_layer_effects_shadow_base
 {
     psd_layer_effects_bevel_emboss()
@@ -792,10 +792,10 @@ struct psd_layer_effects_bevel_emboss : public psd_layer_effects_shadow_base
         m_textureEnabled = value;
     }
 
-    KoPattern* texturePattern() const {
+    KoPatternSP texturePattern() const {
         return m_texturePattern;
     }
-    void setTexturePattern(KoPattern *value) {
+    void setTexturePattern(KoPatternSP value) {
         m_texturePattern = value;
     }
 
@@ -881,7 +881,7 @@ private:
     int m_contourRange;
 
     bool m_textureEnabled;
-    KoPattern *m_texturePattern;
+    KoPatternSP m_texturePattern;
     int m_textureScale;
     int m_textureDepth;
     bool m_textureInvert;
@@ -938,7 +938,7 @@ struct psd_layer_effects_overlay_base : public psd_layer_effects_shadow_base
         return m_gradientYOffset;
     }
 
-    KoPattern* pattern() const {
+    KoPatternSP pattern() const {
         return m_pattern;
     }
 
@@ -978,7 +978,7 @@ public:
         return QPointF(m_gradientXOffset, m_gradientYOffset);
     }
 
-    void setPattern(KoPattern *value) {
+    void setPattern(KoPatternSP value) {
         m_pattern = value;
     }
 
@@ -1009,7 +1009,7 @@ private:
     int m_gradientYOffset; // 0..100%
 
     // Pattern
-    KoPattern *m_pattern;
+    KoPatternSP m_pattern;
     int m_horizontalPhase; // 0..100%
     int m_verticalPhase; // 0..100%
 
@@ -1022,7 +1022,7 @@ protected:
     // using psd_layer_effects_shadow_base::setFillType;
 };
 
-// sofi: http://www.adobe.com/devnet-apps/photoshop/fileformatashtml/PhotoshopFileFormats.htm#50577409_70055
+// sofi: https://www.adobe.com/devnet-apps/photoshop/fileformatashtml/PhotoshopFileFormats.htm#50577409_70055
 struct psd_layer_effects_color_overlay : public psd_layer_effects_overlay_base
 {
     psd_layer_effects_color_overlay() {
@@ -1092,7 +1092,7 @@ private:
     // These are unused
     /*int m_scale;
     bool m_alignWithLayer;
-    KoPattern *m_pattern;
+    KoPatternSP m_pattern;
 
     int m_horizontalPhase;
     int m_verticalPhase;*/

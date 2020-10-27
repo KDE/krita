@@ -90,7 +90,7 @@ private:
         return edge == NoEdge ? edge : static_cast<EdgeType>((edge + 1) % 4);
     }
 
-    void appendCoordinate(QPolygon * path, int x, int y, EdgeType edge);
+    void appendCoordinate(QPolygon * path, int x, int y, EdgeType edge, EdgeType prevEdge);
 
 private:
 

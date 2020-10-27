@@ -43,7 +43,9 @@ KisFileLayer::KisFileLayer(KisImageWSP image, const QString &name, quint8 opacit
      * in the failing execution path.
      */
     m_paintDevice = new KisPaintDevice(image->colorSpace());
-    connect(&m_loader, SIGNAL(loadingFinished(KisPaintDeviceSP,int,int)), SLOT(slotLoadingFinished(KisPaintDeviceSP,int,int)));
+    m_paintDevice->setDefaultBounds(new KisDefaultBounds(image));
+
+    connect(&m_loader, SIGNAL(loadingFinished(KisPaintDeviceSP,qreal,qreal,QSize)), SLOT(slotLoadingFinished(KisPaintDeviceSP,qreal,qreal,QSize)));
 }
 
 KisFileLayer::KisFileLayer(KisImageWSP image, const QString &basePath, const QString &filename, ScalingMethod scaleToImageResolution, const QString &name, quint8 opacity)
@@ -58,8 +60,9 @@ KisFileLayer::KisFileLayer(KisImageWSP image, const QString &basePath, const QSt
      * in the failing execution path.
      */
     m_paintDevice = new KisPaintDevice(image->colorSpace());
+    m_paintDevice->setDefaultBounds(new KisDefaultBounds(image));
 
-    connect(&m_loader, SIGNAL(loadingFinished(KisPaintDeviceSP,int,int)), SLOT(slotLoadingFinished(KisPaintDeviceSP,int,int)));
+    connect(&m_loader, SIGNAL(loadingFinished(KisPaintDeviceSP,qreal,qreal,QSize)), SLOT(slotLoadingFinished(KisPaintDeviceSP,qreal,qreal,QSize)));
 
     QFileInfo fi(path());
     if (fi.exists()) {
@@ -83,7 +86,7 @@ KisFileLayer::KisFileLayer(const KisFileLayer &rhs)
 
     m_paintDevice = new KisPaintDevice(*rhs.m_paintDevice);
 
-    connect(&m_loader, SIGNAL(loadingFinished(KisPaintDeviceSP,int,int)), SLOT(slotLoadingFinished(KisPaintDeviceSP,int,int)));
+    connect(&m_loader, SIGNAL(loadingFinished(KisPaintDeviceSP,qreal,qreal,QSize)), SLOT(slotLoadingFinished(KisPaintDeviceSP,qreal,qreal,QSize)));
     m_loader.setPath(path());
 }
 
@@ -154,7 +157,11 @@ QString KisFileLayer::path() const
         return m_filename;
     }
     else {
+#ifndef Q_OS_ANDROID
         return QDir(m_basePath).filePath(QDir::cleanPath(m_filename));
+#else
+        return m_filename;
+#endif
     }
 }
 
@@ -181,7 +188,9 @@ void KisFileLayer::setScalingMethod(ScalingMethod method)
     m_scalingMethod = method;
 }
 
-void KisFileLayer::slotLoadingFinished(KisPaintDeviceSP projection, int xRes, int yRes)
+void KisFileLayer::slotLoadingFinished(KisPaintDeviceSP projection,
+                                       qreal xRes, qreal yRes,
+                                       const QSize &size)
 {
     qint32 oldX = x();
     qint32 oldY = y();
@@ -190,10 +199,10 @@ void KisFileLayer::slotLoadingFinished(KisPaintDeviceSP projection, int xRes, in
     m_paintDevice->makeCloneFrom(projection, projection->extent());
     m_paintDevice->setDefaultBounds(new KisDefaultBounds(image()));
 
-    QSize size = projection->exactBounds().size();
+    if (m_scalingMethod == ToImagePPI &&
+            (!qFuzzyCompare(image()->xRes(), xRes) ||
+             !qFuzzyCompare(image()->yRes(), yRes))) {
 
-    if (m_scalingMethod == ToImagePPI && (image()->xRes() != xRes
-                                          || image()->yRes() != yRes)) {
         qreal xscale = image()->xRes() / xRes;
         qreal yscale = image()->yRes() / yRes;
 
@@ -248,5 +257,11 @@ KUndo2Command* KisFileLayer::transform(const QTransform &/*transform*/)
 {
     warnKrita << "WARNING: File Layer does not support transformations!" << name();
     return 0;
+}
+
+void KisFileLayer::setImage(KisImageWSP image)
+{
+    m_paintDevice->setDefaultBounds(new KisDefaultBounds(image));
+    KisExternalLayer::setImage(image);
 }
 

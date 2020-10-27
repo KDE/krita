@@ -150,6 +150,9 @@ void KoFileDialog::createFileDialog()
     KConfigGroup group = KSharedConfig::openConfig()->group("File Dialogs");
 
     bool dontUseNative = true;
+#ifdef Q_OS_ANDROID
+    dontUseNative = false;
+#endif
 #ifdef Q_OS_UNIX
     if (qgetenv("XDG_CURRENT_DESKTOP") == "KDE") {
         dontUseNative = false;
@@ -159,9 +162,10 @@ void KoFileDialog::createFileDialog()
     dontUseNative = false;
 #endif
 
-    d->fileDialog->setOption(QFileDialog::DontUseNativeDialog, group.readEntry("DontUseNativeFileDialog", dontUseNative));
+    bool optionDontUseNative = group.readEntry("DontUseNativeFileDialog", dontUseNative);
+    d->fileDialog->setOption(QFileDialog::DontUseNativeDialog, optionDontUseNative);
     d->fileDialog->setOption(QFileDialog::DontConfirmOverwrite, false);
-    d->fileDialog->setOption(QFileDialog::HideNameFilterDetails, true);
+    d->fileDialog->setOption(QFileDialog::HideNameFilterDetails, dontUseNative ? true : false);
 
 #ifdef Q_OS_MACOS
     QList<QUrl> urls = d->fileDialog->sidebarUrls();
@@ -176,6 +180,11 @@ void KoFileDialog::createFileDialog()
     if (d->type == SaveFile) {
         d->fileDialog->setAcceptMode(QFileDialog::AcceptSave);
         d->fileDialog->setFileMode(QFileDialog::AnyFile);
+
+#ifdef Q_OS_ANDROID
+        // HACK: discovered by looking into the code
+        d->fileDialog->setWindowTitle(d->proposedFileName.isEmpty() ? "Untitled.kra" : d->proposedFileName);
+#endif
     }
     else { // open / import
 
@@ -217,7 +226,15 @@ void KoFileDialog::createFileDialog()
     if (d->type == ImportDirectory ||
             d->type == ImportFile || d->type == ImportFiles ||
             d->type == SaveFile) {
-        d->fileDialog->setWindowModality(Qt::WindowModal);
+
+        bool allowModal = true;
+// MacOS do not declare native file dialog as modal BUG:413241.
+#ifdef Q_OS_MACOS
+        allowModal = optionDontUseNative;
+#endif
+        if (allowModal) {
+            d->fileDialog->setWindowModality(Qt::WindowModal);
+        }
     }
 }
 
@@ -251,7 +268,10 @@ QString KoFileDialog::filename()
             if (!(extension.contains(".") || url.endsWith("."))) {
                 extension = "." + extension;
             }
+// We can only write to the Uri that was returned, we don't have permission to change the Uri.
+#ifndef Q_OS_ANDROID
             url = url + extension;
+#endif
         }
 
         d->mimeType = KisMimeDatabase::mimeTypeForFile(url, d->type == KoFileDialog::SaveFile ? false : true);

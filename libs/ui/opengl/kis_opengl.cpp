@@ -166,14 +166,14 @@ void KisOpenGL::initialize()
     debugOut << "\n  supportsOpenGLES:" << bool(g_supportedRenderers & RendererOpenGLES);
     debugOut << "\n  isQtPreferOpenGLES:" << bool(g_rendererPreferredByQt == RendererOpenGLES);
 #endif
-    debugOut << "\n== log ==\n";
-    debugOut.noquote();
-    debugOut << g_surfaceFormatDetectionLog;
-    debugOut.resetFormat();
-    debugOut << "\n== end log ==";
+//    debugOut << "\n== log ==\n";
+//    debugOut.noquote();
+//    debugOut << g_surfaceFormatDetectionLog;
+//    debugOut.resetFormat();
+//    debugOut << "\n== end log ==";
 
     dbgOpenGL.noquote().nospace() << g_debugText;
-    KisUsageLogger::write(g_debugText);
+    KisUsageLogger::writeSysInfo(g_debugText);
 
     if (!openGLCheckResult) {
         return;
@@ -297,6 +297,12 @@ bool KisOpenGL::supportsFenceSync()
 {
     initialize();
     return openGLCheckResult && openGLCheckResult->supportsFenceSync();
+}
+
+bool KisOpenGL::useFBOForToolOutlineRendering()
+{
+    initialize();
+    return openGLCheckResult && openGLCheckResult->supportsFBO();
 }
 
 bool KisOpenGL::needsFenceWorkaround()
@@ -706,7 +712,9 @@ KisOpenGL::RendererConfig KisOpenGL::selectSurfaceConfig(KisOpenGL::OpenGLRender
     using Info = boost::optional<KisOpenGLModeProber::Result>;
 
     QHash<OpenGLRenderer, Info> renderersToTest;
+#ifndef Q_OS_ANDROID
     renderersToTest.insert(RendererDesktopGL, Info());
+#endif
     renderersToTest.insert(RendererOpenGLES, Info());
 
 #ifdef Q_OS_WIN
@@ -741,10 +749,19 @@ KisOpenGL::RendererConfig KisOpenGL::selectSurfaceConfig(KisOpenGL::OpenGLRender
 
     const OpenGLRenderer defaultRenderer = getRendererFromProbeResult(*info);
 
+    /**
+     * On Windows we always prefer Angle, not what Qt suggests us
+     */
+#ifdef Q_OS_WIN
+    const OpenGLRenderer preferredAutoRenderer = RendererOpenGLES;
+#else
+    const OpenGLRenderer preferredAutoRenderer = defaultRenderer;
+#endif
+
     OpenGLRenderers supportedRenderers = RendererNone;
 
     FormatPositionLess compareOp;
-    compareOp.setPreferredRendererByQt(defaultRenderer);
+    compareOp.setPreferredRendererByQt(preferredAutoRenderer);
 
 #ifdef HAVE_HDR
     compareOp.setPreferredColorSpace(
@@ -786,7 +803,7 @@ KisOpenGL::RendererConfig KisOpenGL::selectSurfaceConfig(KisOpenGL::OpenGLRender
         }
     }
 
-    OpenGLRenderer preferredByQt = defaultRenderer;
+    OpenGLRenderer preferredByQt = preferredAutoRenderer;
 
     if (preferredByQt == RendererDesktopGL &&
         supportedRenderers & RendererDesktopGL &&

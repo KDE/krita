@@ -41,7 +41,7 @@ inline QString fetchExternalDataFileName(const QString relativeFileName)
 
     QString filename  =
         path +
-        QDir::separator() +
+        '/' +
         relativeFileName;
 
     return filename;
@@ -54,7 +54,7 @@ inline QString fetchDataFileLazy(const QString relativeFileName, bool externalTe
     } else {
         QString filename  =
             QString(FILES_DATA_DIR) +
-            QDir::separator() +
+            '/' +
             relativeFileName;
 
         if (QFileInfo(filename).exists()) {
@@ -63,7 +63,7 @@ inline QString fetchDataFileLazy(const QString relativeFileName, bool externalTe
 
         filename  =
             QString(FILES_DEFAULT_DATA_DIR) +
-            QDir::separator() +
+            '/' +
             relativeFileName;
 
         if (QFileInfo(filename).exists()) {
@@ -80,7 +80,13 @@ inline bool compareChannels(int ch1, int ch2, int fuzzy)
     return qAbs(ch1 - ch2) <= fuzzy;
 }
 
-inline bool compareQImages(QPoint & pt, const QImage & image1, const QImage & image2, int fuzzy = 0, int fuzzyAlpha = 0, int maxNumFailingPixels = 0, bool showDebug = true)
+inline bool compareChannelsPremultiplied(int ch1, int alpha1, int ch2, int alpha2, int fuzzy, int fuzzyAlpha)
+{
+    return qAbs(ch1 * alpha1 - ch2 * alpha2) / 255 <= fuzzy * qMax(1, fuzzyAlpha);
+}
+
+
+inline bool compareQImagesImpl(QPoint & pt, const QImage & image1, const QImage & image2, int fuzzy = 0, int fuzzyAlpha = 0, int maxNumFailingPixels = 0, bool showDebug = true, bool premultipliedMode = false)
 {
     //     QTime t;
     //     t.start();
@@ -108,10 +114,20 @@ inline bool compareQImages(QPoint & pt, const QImage & image1, const QImage & im
             for (int x = 0; x < w1; ++x) {
                 const QRgb a = firstLine[x];
                 const QRgb b = secondLine[x];
-                const bool same =
-                        compareChannels(qRed(a), qRed(b), fuzzy) &&
-                        compareChannels(qGreen(a), qGreen(b), fuzzy) &&
-                        compareChannels(qBlue(a), qBlue(b), fuzzy);
+
+                bool same = false;
+
+                if (!premultipliedMode) {
+                    same =
+                            compareChannels(qRed(a), qRed(b), fuzzy) &&
+                            compareChannels(qGreen(a), qGreen(b), fuzzy) &&
+                            compareChannels(qBlue(a), qBlue(b), fuzzy);
+                } else {
+                    same =
+                            compareChannelsPremultiplied(qRed(a), qAlpha(a), qRed(b), qAlpha(b), fuzzy, fuzzyAlpha) &&
+                            compareChannelsPremultiplied(qGreen(a), qAlpha(a), qGreen(b), qAlpha(b), fuzzy, fuzzyAlpha) &&
+                            compareChannelsPremultiplied(qBlue(a), qAlpha(a), qBlue(b), qAlpha(b), fuzzy, fuzzyAlpha);
+                }
                 const bool sameAlpha = compareChannels(qAlpha(a), qAlpha(b), fuzzyAlpha);
                 const bool bothTransparent = sameAlpha && qAlpha(a)==0;
 
@@ -141,10 +157,20 @@ inline bool compareQImages(QPoint & pt, const QImage & image1, const QImage & im
     return true;
 }
 
+inline bool compareQImages(QPoint & pt, const QImage & image1, const QImage & image2, int fuzzy = 0, int fuzzyAlpha = 0, int maxNumFailingPixels = 0, bool showDebug = true)
+{
+    return compareQImagesImpl(pt, image1, image2, fuzzy, fuzzyAlpha, maxNumFailingPixels, showDebug, false);
+}
+
+inline bool compareQImagesPremultiplied(QPoint & pt, const QImage & image1, const QImage & image2, int fuzzy = 0, int fuzzyAlpha = 0, int maxNumFailingPixels = 0, bool showDebug = true)
+{
+    return compareQImagesImpl(pt, image1, image2, fuzzy, fuzzyAlpha, maxNumFailingPixels, showDebug, true);
+}
+
 inline bool checkQImageImpl(bool externalTest,
                             const QImage &srcImage, const QString &testName,
                             const QString &prefix, const QString &name,
-                            int fuzzy, int fuzzyAlpha, int maxNumFailingPixels)
+                            int fuzzy, int fuzzyAlpha, int maxNumFailingPixels, bool premultipliedMode)
 {
     QImage image = srcImage.convertToFormat(QImage::Format_ARGB32);
 
@@ -156,21 +182,21 @@ inline bool checkQImageImpl(bool externalTest,
     QString dumpName(prefix + "_" + name + "_expected.png");
 
     const QString standardPath =
-        testName + QDir::separator() +
-        prefix + QDir::separator() + filename;
+        testName + '/' +
+        prefix + '/' + filename;
 
     QString fullPath = fetchDataFileLazy(standardPath, externalTest);
 
     if (fullPath.isEmpty() || !QFileInfo(fullPath).exists()) {
         // Try without the testname subdirectory
-        fullPath = fetchDataFileLazy(prefix + QDir::separator() +
+        fullPath = fetchDataFileLazy(prefix + '/' +
                                      filename,
                                      externalTest);
     }
 
     if (fullPath.isEmpty() || !QFileInfo(fullPath).exists()) {
         // Try without the prefix subdirectory
-        fullPath = fetchDataFileLazy(testName + QDir::separator() +
+        fullPath = fetchDataFileLazy(testName + '/' +
                                      filename,
                                      externalTest);
     }
@@ -184,7 +210,7 @@ inline bool checkQImageImpl(bool externalTest,
 
     bool valid = true;
     QPoint t;
-    if(!compareQImages(t, image, ref, fuzzy, fuzzyAlpha, maxNumFailingPixels)) {
+    if(!compareQImagesImpl(t, image, ref, fuzzy, fuzzyAlpha, maxNumFailingPixels, true, premultipliedMode)) {
         bool saveStandardResults = true;
 
         if (canSkipExternalTest) {
@@ -212,8 +238,8 @@ inline bool checkQImageImpl(bool externalTest,
         }
 
         if (saveStandardResults) {
-            image.save(QString(FILES_OUTPUT_DIR) + QDir::separator() + filename);
-            ref.save(QString(FILES_OUTPUT_DIR) + QDir::separator() + dumpName);
+            image.save(QString(FILES_OUTPUT_DIR) + '/' + filename);
+            ref.save(QString(FILES_OUTPUT_DIR) + '/' + dumpName);
         }
     }
 
@@ -226,8 +252,18 @@ inline bool checkQImage(const QImage &image, const QString &testName,
 {
     return checkQImageImpl(false, image, testName,
                            prefix, name,
-                           fuzzy, fuzzyAlpha, maxNumFailingPixels);
+                           fuzzy, fuzzyAlpha, maxNumFailingPixels, false);
 }
+
+inline bool checkQImagePremultiplied(const QImage &image, const QString &testName,
+                                     const QString &prefix, const QString &name,
+                                     int fuzzy = 0, int fuzzyAlpha = -1, int maxNumFailingPixels = 0)
+{
+    return checkQImageImpl(false, image, testName,
+                           prefix, name,
+                           fuzzy, fuzzyAlpha, maxNumFailingPixels, true);
+}
+
 
 inline bool checkQImageExternal(const QImage &image, const QString &testName,
                                 const QString &prefix, const QString &name,
@@ -235,7 +271,7 @@ inline bool checkQImageExternal(const QImage &image, const QString &testName,
 {
     return checkQImageImpl(true, image, testName,
                            prefix, name,
-                           fuzzy, fuzzyAlpha, maxNumFailingPixels);
+                           fuzzy, fuzzyAlpha, maxNumFailingPixels, false);
 }
 
 }

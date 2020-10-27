@@ -29,10 +29,14 @@
 #include <brushengine/kis_paint_information.h>
 #include <brushengine/kis_uniform_paintop_property.h>
 
-
-
 class KisPaintOpConfigWidget;
 class KisPaintopSettingsUpdateProxy;
+
+class KisResourcesInterface;
+using KisResourcesInterfaceSP = QSharedPointer<KisResourcesInterface>;
+
+class KoCanvasResourcesInterface;
+using KoCanvasResourcesInterfaceSP = QSharedPointer<KoCanvasResourcesInterface>;
 
 /**
  * Configuration property used to control whether airbrushing is enabled.
@@ -74,7 +78,7 @@ class KRITAIMAGE_EXPORT KisPaintOpSettings : public KisPropertiesConfiguration
 
 public:
 
-    KisPaintOpSettings();
+    KisPaintOpSettings(KisResourcesInterfaceSP resourcesInterface);
     ~KisPaintOpSettings() override;
     KisPaintOpSettings(const KisPaintOpSettings &rhs);
 
@@ -185,7 +189,7 @@ public:
      * Outline mode has to be passed to the paintop which builds the outline as some paintops have to paint outline
      * always like clone paintop indicating the duplicate position
      */
-    virtual QPainterPath brushOutline(const KisPaintInformation &info, const OutlineMode &mode);
+    virtual QPainterPath brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom);
 
     /**
     * Helpers for drawing the brush outline
@@ -243,6 +247,11 @@ public:
      */
     virtual qreal paintOpSize() const = 0;
 
+    /**
+     * @return pattern size saved in the properties
+     */
+    virtual qreal paintOpPatternSize();
+
     void setEraserMode(bool value);
     bool eraserMode();
 
@@ -258,9 +267,9 @@ public:
 
     QString effectivePaintOpCompositeOp();
 
-    void setPreset(KisPaintOpPresetWSP preset);
+    void setUpdateProxy(const QPointer<KisPaintopSettingsUpdateProxy> proxy);
 
-    KisPaintOpPresetWSP preset() const;
+    QPointer<KisPaintopSettingsUpdateProxy> updateProxy() const;
 
     /**
      * @return filename of the 3D brush model, empty if no brush is set
@@ -276,11 +285,6 @@ public:
     /// Overwrite if the settings of a paintop can be invalid
     /// @return state of the settings, default implementation is true
     virtual bool isValid() const;
-
-    /// Check if the settings are loadable, that might the case if we can fallback to something
-    /// Overwrite if the settings can do some kind of fallback
-    /// @return loadable state of the settings, by default implementation return the same as isValid()
-    virtual bool isLoadable();
 
     /**
      * Overrides the method in KisPropertiesCofiguration to allow
@@ -330,6 +334,25 @@ public:
      * darken mode, but the final result is combined with this composite op.
      */
     QString maskingBrushCompositeOp() const;
+
+    /**
+     * @return resource interface that is used for loading linked resources
+     */
+    KisResourcesInterfaceSP resourcesInterface() const;
+
+    /**
+     * Set resource interface that will be used for loading linked resources
+     */
+    void setResourcesInterface(KisResourcesInterfaceSP resourcesInterface);
+
+
+    virtual bool hasPatternSettings() const;
+
+    virtual QList<int> requiredCanvasResources() const;
+
+    KoCanvasResourcesInterfaceSP canvasResourcesInterface() const;
+    void setCanvasResourcesInterface(KoCanvasResourcesInterfaceSP canvasResourcesInterface);
+
 
 protected:
 

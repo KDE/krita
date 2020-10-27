@@ -19,10 +19,10 @@
 #ifndef __KIS_STROKE_JOB_H
 #define __KIS_STROKE_JOB_H
 
-#include "kis_runnable.h"
+#include "kis_runnable_with_debug_name.h"
 #include "kis_stroke_job_strategy.h"
 
-class KisStrokeJob : public KisRunnable
+class KisStrokeJob : public KisRunnableWithDebugName
 {
 public:
     KisStrokeJob(KisStrokeJobStrategy *strategy,
@@ -68,11 +68,16 @@ public:
     }
 
     bool isCancellable() const {
-        return m_isOwnJob;
+        return m_isOwnJob &&
+            (!m_dabData || m_dabData->isCancellable());
     }
 
     bool isOwnJob() const {
         return m_isOwnJob;
+    }
+
+    QString debugName() const override {
+        return m_dabStrategy->debugId();
     }
 
 private:

@@ -68,6 +68,7 @@ public:
     virtual void notifyImageColorSpaceChanged(const KoColorSpace *cs) = 0;
 
     virtual void setWrapAroundViewingMode(bool value) = 0;
+    virtual bool wrapAroundViewingMode() const = 0;
 
     // Called from KisCanvas2::channelSelectionChanged
     virtual void channelSelectionChanged(const QBitArray &channelFlags) = 0;

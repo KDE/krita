@@ -2,6 +2,7 @@
  * This file is part of Krita
  *
  * Copyright (c) 2018 Jouni Pentikainen <joupent@gmail.com>
+ * Copyright (c) 2020 L. E. Segovia <amy@amyspark.me>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -45,7 +46,7 @@ public:
     ~KisCrossChannelFilter() override;
 
     KisConfigWidget * createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev, bool useForMasks) const override;
-    KisFilterConfigurationSP factoryConfiguration() const override;
+    KisFilterConfigurationSP factoryConfiguration(KisResourcesInterfaceSP resourcesInterface) const override;
 
     KoColorTransformation* createTransformation(const KoColorSpace *cs, const KisFilterConfigurationSP config) const override;
 
@@ -57,9 +58,12 @@ public:
 class KisCrossChannelFilterConfiguration : public KisMultiChannelFilterConfiguration
 {
 public:
-    KisCrossChannelFilterConfiguration(int channelCount, const KoColorSpace *cs);
+    KisCrossChannelFilterConfiguration(int channelCount, const KoColorSpace *cs, KisResourcesInterfaceSP resourcesInterface);
+    KisCrossChannelFilterConfiguration(const KisCrossChannelFilterConfiguration&rhs);
 
     ~KisCrossChannelFilterConfiguration() override;
+
+    KisFilterConfigurationSP clone() const override;
 
     const QVector<int> driverChannels() const;
 
@@ -72,6 +76,8 @@ public:
 
     KisCubicCurve getDefaultCurve() override;
 
+    virtual bool compareTo(const KisPropertiesConfiguration* rhs) const override;
+
 private:
     QVector<int> m_driverChannels;
 };
@@ -81,7 +87,7 @@ class KisCrossChannelConfigWidget : public KisMultiChannelConfigWidget
     Q_OBJECT
 
 public:
-    KisCrossChannelConfigWidget(QWidget * parent, KisPaintDeviceSP dev, Qt::WindowFlags f = 0);
+    KisCrossChannelConfigWidget(QWidget * parent, KisPaintDeviceSP dev, Qt::WindowFlags f = Qt::WindowFlags());
     ~KisCrossChannelConfigWidget() override;
 
     void setConfiguration(const KisPropertiesConfigurationSP config) override;

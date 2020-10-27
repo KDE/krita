@@ -138,51 +138,9 @@ public:
          * @param absoluteAxesFlipped true if underlying image coordinate system is flipped (horiz. mirror != vert. mirror)
          */
 
-        qreal rotationLikeValue(qreal normalizedBaseAngle, bool absoluteAxesFlipped) const {
-            const qreal offset =
-                !hasAbsoluteOffset ? normalizedBaseAngle :
-                absoluteAxesFlipped ? 1.0 - absoluteOffset :
-                absoluteOffset;
+        qreal rotationLikeValue(qreal normalizedBaseAngle, bool absoluteAxesFlipped, qreal scalingPartCoeff, bool disableScalingPart) const;
 
-            const qreal realScalingPart = hasScaling ? KisDynamicSensor::scalingToAdditive(scaling) : 0.0;
-            const qreal realAdditivePart = hasAdditive ? additive : 0;
-
-            qreal value = wrapInRange(2 * offset + constant * (realScalingPart + realAdditivePart), -1.0, 1.0);
-            if (qIsNaN(value)) {
-                qWarning() << "rotationLikeValue returns NaN!" << normalizedBaseAngle << absoluteAxesFlipped;
-                value = 0;
-            }
-            return value;
-        }
-
-        qreal sizeLikeValue() const {
-            const qreal offset =
-                hasAbsoluteOffset ? absoluteOffset : 1.0;
-
-            const qreal realScalingPart = hasScaling ? scaling : 1.0;
-            const qreal realAdditivePart = hasAdditive ? KisDynamicSensor::additiveToScaling(additive) : 1.0;
-
-            return qBound(minSizeLikeValue,
-                          constant * offset * realScalingPart * realAdditivePart,
-                          maxSizeLikeValue);
-        }
-
-    private:
-        static inline qreal wrapInRange(qreal x, qreal min, qreal max) {
-            const qreal range = max - min;
-
-            x -= min;
-
-            if (x < 0.0) {
-                x = range + fmod(x, range);
-            }
-
-            if (x > range) {
-                x = fmod(x, range);
-            }
-
-            return x + min;
-        }
+        qreal sizeLikeValue() const;
     };
 
     /**
@@ -195,7 +153,20 @@ public:
     ValueComponents computeValueComponents(const KisPaintInformation& info) const;
 
     qreal computeSizeLikeValue(const KisPaintInformation &info) const;
-    qreal computeRotationLikeValue(const KisPaintInformation& info, qreal baseValue, bool absoluteAxesFlipped) const;
+    qreal computeRotationLikeValue(const KisPaintInformation& info, qreal baseValue, bool absoluteAxesFlipped, qreal scalingPartCoeff, bool disableScalingPart) const;
+
+    /**
+     * @brief defaultCurve returns a curve that is set when the KisCurveOption is not initialized yet
+     * the purpose of distinguishing between this one and emptyCurve() is to allow easier finding out that something is wrong
+     * in the code setting common curves
+     * @return a non-standard curve with two hills
+     */
+    KisCubicCurve defaultCurve();
+    /**
+     * @brief emptyCurve returns the simplest usable curve
+     * @return curve from (0, 0) to (1, 1)
+     */
+    KisCubicCurve emptyCurve();
 
 protected:
 

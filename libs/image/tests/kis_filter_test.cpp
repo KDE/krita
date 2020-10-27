@@ -24,11 +24,13 @@
 #include "kis_selection.h"
 #include "kis_processing_information.h"
 #include "filter/kis_filter.h"
-#include "testutil.h"
+#include <testutil.h>
 #include "kis_pixel_selection.h"
+#include <KisGlobalResourcesInterface.h>
 
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>
+#include "testing_timed_default_bounds.h"
 
 class TestFilter : public KisFilter
 {
@@ -63,15 +65,18 @@ void KisFilterTest::testWithProgressUpdater()
 
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
 
-    QImage qimage(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
-    QImage inverted(QString(FILES_DATA_DIR) + QDir::separator() + "inverted_hakonepa.png");
+    QImage qimage(QString(FILES_DATA_DIR) + '/' + "hakonepa.png");
+    QImage inverted(QString(FILES_DATA_DIR) + '/' + "inverted_hakonepa.png");
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     dev->convertFromQImage(qimage, 0, 0, 0);
+    dev->setDefaultBounds(new TestUtil::TestingTimedDefaultBounds(dev->exactBounds()));
+
+
 
     KisFilterSP f = KisFilterRegistry::instance()->value("invert");
     Q_ASSERT(f);
 
-    KisFilterConfigurationSP  kfc = f->defaultConfiguration();
+    KisFilterConfigurationSP  kfc = f->defaultConfiguration(KisGlobalResourcesInterface::instance());
     Q_ASSERT(kfc);
 
     f->process(dev, QRect(QPoint(0,0), qimage.size()), kfc, updater);
@@ -89,15 +94,16 @@ void KisFilterTest::testSingleThreaded()
 {
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
 
-    QImage qimage(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
-    QImage inverted(QString(FILES_DATA_DIR) + QDir::separator() + "inverted_hakonepa.png");
+    QImage qimage(QString(FILES_DATA_DIR) + '/' + "hakonepa.png");
+    QImage inverted(QString(FILES_DATA_DIR) + '/' + "inverted_hakonepa.png");
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     dev->convertFromQImage(qimage, 0, 0, 0);
+    dev->setDefaultBounds(new TestUtil::TestingTimedDefaultBounds(dev->exactBounds()));
 
     KisFilterSP f = KisFilterRegistry::instance()->value("invert");
     Q_ASSERT(f);
 
-    KisFilterConfigurationSP  kfc = f->defaultConfiguration();
+    KisFilterConfigurationSP  kfc = f->defaultConfiguration(KisGlobalResourcesInterface::instance());
     Q_ASSERT(kfc);
 
     f->process(dev, QRect(QPoint(0,0), qimage.size()), kfc);
@@ -113,8 +119,8 @@ void KisFilterTest::testDifferentSrcAndDst()
 {
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
 
-    QImage qimage(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
-    QImage inverted(QString(FILES_DATA_DIR) + QDir::separator() + "inverted_hakonepa.png");
+    QImage qimage(QString(FILES_DATA_DIR) + '/' + "hakonepa.png");
+    QImage inverted(QString(FILES_DATA_DIR) + '/' + "inverted_hakonepa.png");
     KisPaintDeviceSP src = new KisPaintDevice(cs);
     KisPaintDeviceSP dst = new KisPaintDevice(cs);
     KisSelectionSP sel = new KisSelection(new KisSelectionDefaultBounds(src));
@@ -122,11 +128,13 @@ void KisFilterTest::testDifferentSrcAndDst()
     sel->updateProjection();
 
     src->convertFromQImage(qimage, 0, 0, 0);
+    src->setDefaultBounds(new TestUtil::TestingTimedDefaultBounds(src->exactBounds()));
+
 
     KisFilterSP f = KisFilterRegistry::instance()->value("invert");
     Q_ASSERT(f);
 
-    KisFilterConfigurationSP  kfc = f->defaultConfiguration();
+    KisFilterConfigurationSP  kfc = f->defaultConfiguration(KisGlobalResourcesInterface::instance());
     Q_ASSERT(kfc);
 
     f->process(src, dst, sel, QRect(QPoint(0,0), qimage.size()), kfc);
@@ -151,6 +159,8 @@ void KisFilterTest::testOldDataApiAfterCopy()
 
     KisPaintDeviceSP src = new KisPaintDevice(cs);
     src->fill(0, 0, 50, 50, whitePixel);
+    src->setDefaultBounds(new TestUtil::TestingTimedDefaultBounds(src->exactBounds()));
+
 
     /**
      * Make a full copy here to catch the bug.
@@ -167,7 +177,7 @@ void KisFilterTest::testOldDataApiAfterCopy()
 
     KisFilterSP f = KisFilterRegistry::instance()->value("invert");
     Q_ASSERT(f);
-    KisFilterConfigurationSP  kfc = f->defaultConfiguration();
+    KisFilterConfigurationSP  kfc = f->defaultConfiguration(KisGlobalResourcesInterface::instance());
     Q_ASSERT(kfc);
 
     /**
@@ -206,16 +216,19 @@ void KisFilterTest::testBlurFilterApplicationRect()
 
     KisPaintDeviceSP src1 = new KisPaintDevice(cs);
     src1->fill(src1Rect.left(),src1Rect.top(),src1Rect.width(),src1Rect.height(), whitePixel);
+    src1->setDefaultBounds(new TestUtil::TestingTimedDefaultBounds(src1->exactBounds()));
 
     KisPaintDeviceSP src2 = new KisPaintDevice(cs);
     src2->fill(src2Rect.left(),src2Rect.top(),src2Rect.width(),src2Rect.height(), whitePixel);
+    src2->setDefaultBounds(new TestUtil::TestingTimedDefaultBounds(src2->exactBounds()));
+
 
     KisPaintDeviceSP dst1 = new KisPaintDevice(cs);
     KisPaintDeviceSP dst2 = new KisPaintDevice(cs);
 
     KisFilterSP f = KisFilterRegistry::instance()->value("blur");
     Q_ASSERT(f);
-    KisFilterConfigurationSP  kfc = f->defaultConfiguration();
+    KisFilterConfigurationSP  kfc = f->defaultConfiguration(KisGlobalResourcesInterface::instance());
     Q_ASSERT(kfc);
 
     f->process(src1, dst1, 0, filterRect, kfc);

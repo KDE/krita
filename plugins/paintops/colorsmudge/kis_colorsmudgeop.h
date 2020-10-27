@@ -21,17 +21,22 @@
 
 #include <QRect>
 
+#include "KoColorTransformation.h"
+#include <KoAbstractGradient.h>
+
 #include <kis_brush_based_paintop.h>
 #include <kis_types.h>
 #include <kis_pressure_size_option.h>
 #include <kis_pressure_opacity_option.h>
+#include <kis_pressure_ratio_option.h>
 #include <kis_pressure_spacing_option.h>
+#include <kis_pressure_rate_option.h>
 #include <kis_pressure_rotation_option.h>
 #include <kis_pressure_scatter_option.h>
 #include <kis_pressure_gradient_option.h>
 #include <kis_pressure_hsv_option.h>
+#include <kis_airbrush_option_widget.h>
 
-#include "KoColorTransformation.h"
 #include "kis_overlay_mode_option.h"
 #include "kis_rate_option.h"
 #include "kis_smudge_option.h"
@@ -39,7 +44,7 @@
 #include "KisPrecisePaintDeviceWrapper.h"
 
 class QPointF;
-class KoAbstractGradient;
+
 class KisBrushBasedPaintOpSettings;
 class KisPainter;
 class KoColorSpace;
@@ -54,10 +59,11 @@ protected:
     KisSpacingInformation paintAt(const KisPaintInformation& info) override;
 
     KisSpacingInformation updateSpacingImpl(const KisPaintInformation &info) const override;
+    KisTimingInformation updateTimingImpl(const KisPaintInformation &info) const override;
 
 private:
     // Sets the m_maskDab _and m_maskDabRect
-    void updateMask(const KisPaintInformation& info, double scale, double rotation, const QPointF &cursorPoint);
+    void updateMask(const KisPaintInformation& info, const KisDabShape &shape, const QPointF &cursorPoint);
 
     inline void getTopLeftAligned(const QPointF &pos, const QPointF &hotSpot, qint32 *x, qint32 *y);
 
@@ -72,10 +78,12 @@ private:
     QScopedPointer<KisPainter> m_smudgePainter;
     QScopedPointer<KisPainter> m_colorRatePainter;
     QScopedPointer<KisPainter> m_finalPainter;
-    const KoAbstractGradient* m_gradient {0};
+    KoAbstractGradientSP      m_gradient;
     KisPressureSizeOption     m_sizeOption;
     KisPressureOpacityOption  m_opacityOption;
+    KisPressureRatioOption    m_ratioOption;
     KisPressureSpacingOption  m_spacingOption;
+    KisPressureRateOption     m_rateOption;
     KisSmudgeOption           m_smudgeRateOption;
     KisRateOption             m_colorRateOption;
     KisSmudgeRadiusOption     m_smudgeRadiusOption;
@@ -84,6 +92,7 @@ private:
     KisPressureScatterOption  m_scatterOption;
     KisPressureGradientOption m_gradientOption;
     QList<KisPressureHSVOption*> m_hsvOptions;
+    KisAirbrushOptionProperties m_airbrushOption;
     QRect                     m_dstDabRect;
     KisFixedPaintDeviceSP     m_maskDab;
     QPointF                   m_lastPaintPos;

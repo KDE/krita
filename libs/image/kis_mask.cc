@@ -73,13 +73,13 @@ struct Q_DECL_HIDDEN KisMask::Private {
     void initSelectionImpl(KisSelectionSP copyFrom, KisLayerSP parentLayer, KisPaintDeviceSP copyFromDevice);
 };
 
-KisMask::KisMask(const QString & name)
-        : KisNode(nullptr)
+KisMask::KisMask(KisImageWSP image, const QString &name)
+        : KisNode(image)
         , m_d(new Private(this))
 {
     setName(name);
     m_d->safeProjection = new KisSafeSelectionNodeProjectionStore();
-    m_d->safeProjection->setImage(image());
+    m_d->safeProjection->setImage(image);
 }
 
 KisMask::KisMask(const KisMask& rhs)
@@ -115,7 +115,7 @@ KisMask::~KisMask()
 void KisMask::setImage(KisImageWSP image)
 {
     KisPaintDeviceSP parentPaintDevice = parent() ? parent()->original() : 0;
-    KisDefaultBoundsBaseSP defaultBounds = new KisSelectionDefaultBounds(parentPaintDevice, image);
+    KisDefaultBoundsBaseSP defaultBounds = new KisSelectionDefaultBounds(parentPaintDevice);
     if (m_d->selection) {
         m_d->selection->setDefaultBounds(defaultBounds);
     }
@@ -179,16 +179,13 @@ void KisMask::Private::initSelectionImpl(KisSelectionSP copyFrom, KisLayerSP par
          * We can't use setSelection as we may not have parent() yet
          */
         selection = new KisSelection(*copyFrom);
-        selection->setDefaultBounds(new KisSelectionDefaultBounds(parentPaintDevice, parentLayer->image()));
-        if (copyFrom->hasShapeSelection()) {
-            delete selection->flatten();
-        }
+        selection->setDefaultBounds(new KisSelectionDefaultBounds(parentPaintDevice));
     } else if (copyFromDevice) {
         KritaUtils::DeviceCopyMode copyMode =
             q->inherits("KisFilterMask") || q->inherits("KisTransparencyMask") ?
             KritaUtils::CopyAllFrames : KritaUtils::CopySnapshot;
 
-        selection = new KisSelection(copyFromDevice, copyMode, new KisSelectionDefaultBounds(parentPaintDevice, parentLayer->image()));
+        selection = new KisSelection(copyFromDevice, copyMode, new KisSelectionDefaultBounds(parentPaintDevice));
 
         KisPixelSelectionSP pixelSelection = selection->pixelSelection();
         if (pixelSelection->framesInterface()) {
@@ -199,7 +196,7 @@ void KisMask::Private::initSelectionImpl(KisSelectionSP copyFrom, KisLayerSP par
             q->enableAnimation();
         }
     } else {
-        selection = new KisSelection(new KisSelectionDefaultBounds(parentPaintDevice, parentLayer->image()));
+        selection = new KisSelection(new KisSelectionDefaultBounds(parentPaintDevice));
         selection->pixelSelection()->setDefaultPixel(KoColor(Qt::white, selection->pixelSelection()->colorSpace()));
 
         if (deferredSelectionOffset) {
@@ -464,13 +461,13 @@ QRect KisMask::nonDependentExtent() const
     return QRect();
 }
 
-QImage KisMask::createThumbnail(qint32 w, qint32 h)
+QImage KisMask::createThumbnail(qint32 w, qint32 h, Qt::AspectRatioMode aspectRatioMode)
 {
     KisPaintDeviceSP originalDevice =
         selection() ? selection()->projection() : 0;
 
     return originalDevice ?
-           originalDevice->createThumbnail(w, h, 1,
+           originalDevice->createThumbnail(w, h, aspectRatioMode, 1,
                                            KoColorConversionTransformation::internalRenderingIntent(),
                                            KoColorConversionTransformation::internalConversionFlags()) : QImage();
 }
@@ -478,7 +475,7 @@ QImage KisMask::createThumbnail(qint32 w, qint32 h)
 void KisMask::testingInitSelection(const QRect &rect, KisLayerSP parentLayer)
 {
     if (parentLayer) {
-        m_d->selection = new KisSelection(new KisSelectionDefaultBounds(parentLayer->paintDevice(), parentLayer->image()));
+        m_d->selection = new KisSelection(new KisSelectionDefaultBounds(parentLayer->paintDevice()));
     } else {
         m_d->selection = new KisSelection();
     }
@@ -488,18 +485,32 @@ void KisMask::testingInitSelection(const QRect &rect, KisLayerSP parentLayer)
     m_d->selection->setParentNode(this);
 }
 
+bool KisMask::supportsLodPainting() const
+{
+    return !m_d->selection || !m_d->selection->hasShapeSelection();
+}
+
 KisKeyframeChannel *KisMask::requestKeyframeChannel(const QString &id)
 {
-    if (id == KisKeyframeChannel::Content.id()) {
+    if (id == KisKeyframeChannel::Raster.id()) {
         KisPaintDeviceSP device = paintDevice();
         if (device) {
-            KisRasterKeyframeChannel *contentChannel = device->createKeyframeChannel(KisKeyframeChannel::Content);
+            KisRasterKeyframeChannel *contentChannel = device->createKeyframeChannel(KisKeyframeChannel::Raster);
             contentChannel->setFilenameSuffix(".pixelselection");
             return contentChannel;
        }
     }
 
     return KisNode::requestKeyframeChannel(id);
+}
+
+bool KisMask::supportsKeyframeChannel(const QString &id)
+{
+    if (id == KisKeyframeChannel::Raster.id() && paintDevice()) {
+        return true;
+    }
+
+    return KisNode::supportsKeyframeChannel(id);
 }
 
 void KisMask::baseNodeChangedCallback()

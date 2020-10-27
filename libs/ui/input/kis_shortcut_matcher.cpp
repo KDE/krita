@@ -131,8 +131,12 @@ public:
     };
 
     inline bool actionsSuppressed() const {
-        return (suppressAllActions || !cursorEntered)
-                && KisConfig(true).disableTouchOnCanvas();
+#ifndef Q_OS_ANDROID
+        return suppressAllActions || !cursorEntered;
+#else
+        // when S-pen is not pointing the canvas, actions on canvas are disabled, till it points back to canvas.
+        return false;
+#endif
     }
 
     inline bool actionsSuppressedIgnoreFocus() const {
@@ -366,7 +370,7 @@ void KisShortcutMatcher::leaveEvent()
 
 bool KisShortcutMatcher::touchBeginEvent( QTouchEvent* event )
 {
-    Q_UNUSED(event)
+    Q_UNUSED(event);
 
     Private::RecursionNotifier notifier(this);
 
@@ -406,7 +410,7 @@ bool KisShortcutMatcher::touchEndEvent( QTouchEvent* event )
 
 bool KisShortcutMatcher::nativeGestureBeginEvent(QNativeGestureEvent *event)
 {
-    Q_UNUSED(event)
+    Q_UNUSED(event);
 
     Private::RecursionNotifier notifier(this);
 

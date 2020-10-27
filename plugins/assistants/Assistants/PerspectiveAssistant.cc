@@ -24,6 +24,7 @@
 #include <klocalizedstring.h>
 
 #include <QPainter>
+#include <QPainterPath>
 #include <QLinearGradient>
 #include <QTransform>
 
@@ -37,6 +38,8 @@
 PerspectiveAssistant::PerspectiveAssistant(QObject *parent)
     : KisAbstractPerspectiveGrid(parent)
     , KisPaintingAssistant("perspective", i18n("Perspective assistant"))
+    , m_followBrushPosition(false)
+    , m_adjustedPositionValid(false)
 {
 }
 
@@ -47,6 +50,9 @@ PerspectiveAssistant::PerspectiveAssistant(const PerspectiveAssistant &rhs, QMap
     , m_cachedTransform(rhs.m_cachedTransform)
     , m_cachedPolygon(rhs.m_cachedPolygon)
     , m_cacheValid(rhs.m_cacheValid)
+    , m_followBrushPosition(rhs.m_followBrushPosition)
+    , m_adjustedPositionValid(rhs.m_adjustedPositionValid)
+    , m_adjustedBrushPosition(rhs.m_adjustedBrushPosition)
 {
     for (int i = 0; i < 4; ++i) {
         m_cachedPoints[i] = rhs.m_cachedPoints[i];
@@ -66,6 +72,17 @@ inline qreal distsqr(const QPointF& pt, const QLineF& line)
     const qreal cross = (line.dx() * (line.y1() - pt.y()) - line.dy() * (line.x1() - pt.x()));
 
     return cross * cross / (line.dx() * line.dx() + line.dy() * line.dy());
+}
+
+void PerspectiveAssistant::setAdjustedBrushPosition(const QPointF position)
+{
+    m_adjustedBrushPosition = position;
+    m_adjustedPositionValid = true;
+}
+
+void PerspectiveAssistant::setFollowBrushPosition(bool follow)
+{
+    m_followBrushPosition = follow;
 }
 
 QPointF PerspectiveAssistant::project(const QPointF& pt, const QPointF& strokeBegin)
@@ -132,6 +149,10 @@ QPointF PerspectiveAssistant::adjustPosition(const QPointF& pt, const QPointF& s
 
 void PerspectiveAssistant::endStroke()
 {
+    // Brush stroke ended, guides should follow the brush position again.
+    m_followBrushPosition = false;
+    m_adjustedPositionValid = false;
+
     m_snapLine = QLineF();
 }
 
@@ -244,7 +265,7 @@ void PerspectiveAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect,
         QLineF snapLine;
         QRect viewport= gc.viewport();
         QRect bounds;
-        
+
         if (canvas){
             //simplest, cheapest way to get the mouse-position
             mousePos= canvas->canvasWidget()->mapFromGlobal(QCursor::pos());
@@ -254,6 +275,11 @@ void PerspectiveAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect,
             mousePos = QCursor::pos(); // this'll give an offset
             dbgFile<<"canvas does not exist, you may have passed arguments incorrectly:"<<canvas;
         }
+
+        if (m_followBrushPosition && m_adjustedPositionValid) {
+            mousePos = initialTransform.map(m_adjustedBrushPosition);
+        }
+
         //figure out if point is in the perspective grid
         QPointF intersectTransformed(0, 0); // dummy for holding transformed intersection so the code is more readable.
 
@@ -340,7 +366,7 @@ void PerspectiveAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter
         }
         drawPath(gc, path, isSnappingActive());
     }
-    
+
 }
 
 QPointF PerspectiveAssistant::getEditorPosition() const

@@ -17,6 +17,7 @@
  */
 #include "View.h"
 #include <QPointer>
+#include <QScopedPointer>
 
 #include <KoPattern.h>
 #include <KoAbstractGradient.h>
@@ -30,8 +31,8 @@
 #include <KisMainWindow.h>
 #include <KoCanvasBase.h>
 #include <kis_canvas2.h>
+#include <KisResourceTypes.h>
 #include <KisDocument.h>
-
 #include "Document.h"
 #include "Canvas.h"
 #include "Window.h"
@@ -39,6 +40,7 @@
 #include "ManagedColor.h"
 
 #include "LibKisUtils.h"
+
 
 struct View::Private {
     Private() {}
@@ -79,7 +81,7 @@ Window* View::window() const
 Document* View::document() const
 {
     if (!d->view) return 0;
-    Document *doc = new Document(d->view->document());
+    Document *doc = new Document(d->view->document(), false);
     return doc;
 }
 
@@ -120,24 +122,25 @@ void View::activateResource(Resource *resource)
     if (!d->view) return;
     if (!resource) return;
 
-    KoResource *r= resource->resource();
+    KoResourceSP r = resource->resource();
     if (!r) return;
 
-    if (dynamic_cast<KoPattern*>(r)) {
+    if (r.dynamicCast<KoPattern>()) {
         QVariant v;
-        v.setValue(static_cast<void*>(r));
-        d->view->canvasBase()->resourceManager()->setResource(KisCanvasResourceProvider::CurrentPattern, v);
+        v.setValue<KoResourceSP>(r);
+        d->view->canvasBase()->resourceManager()->setResource(KoCanvasResource::CurrentPattern, v);
     }
-    else if (dynamic_cast<KoAbstractGradient*>(r)) {
+    else if (r.dynamicCast<KoAbstractGradient>()) {
         QVariant v;
-        v.setValue(static_cast<void*>(r));
-        d->view->canvasBase()->resourceManager()->setResource(KisCanvasResourceProvider::CurrentGradient, v);
+        v.setValue<KoResourceSP>(r);
+        d->view->canvasBase()->resourceManager()->setResource(KoCanvasResource::CurrentGradient, v);
     }
-    else if (dynamic_cast<KisPaintOpPreset*>(r)) {
+    else if (r.dynamicCast<KisPaintOpPreset>()) {
         d->view->viewManager()->paintOpBox()->resourceSelected(r);
     }
 
 }
+
 
 ManagedColor *View::foregroundColor() const
 {
@@ -166,7 +169,7 @@ void View::setBackGroundColor(ManagedColor *color)
 Resource *View::currentBrushPreset() const
 {
     if (!d->view) return 0;
-    return new Resource(d->view->resourceProvider()->currentPreset().data());
+    return new Resource(d->view->resourceProvider()->currentPreset(), ResourceType::PaintOpPresets);
 }
 
 void View::setCurrentBrushPreset(Resource *resource)
@@ -177,7 +180,7 @@ void View::setCurrentBrushPreset(Resource *resource)
 Resource *View::currentPattern() const
 {
     if (!d->view) return 0;
-    return new Resource(d->view->resourceProvider()->currentPattern());
+    return new Resource(d->view->resourceProvider()->currentPattern(), ResourceType::Patterns);
 }
 
 void View::setCurrentPattern(Resource *resource)
@@ -188,7 +191,7 @@ void View::setCurrentPattern(Resource *resource)
 Resource *View::currentGradient() const
 {
     if (!d->view) return 0;
-    return new Resource(d->view->resourceProvider()->currentGradient());
+    return new Resource(d->view->resourceProvider()->currentGradient(), ResourceType::Gradients);
 }
 
 void View::setCurrentGradient(Resource *resource)
@@ -276,4 +279,14 @@ QList<Node *> View::selectedNodes() const
 
     KisNodeList selectedNodes = d->view->viewManager()->nodeManager()->selectedNodes();
     return LibKisUtils::createNodeList(selectedNodes, d->view->image());
+}
+
+void View::showFloatingMessage(const QString &message, const QIcon& icon, int timeout, int priority)
+{
+    if (!d->view) return;
+
+    KisFloatingMessage::Priority p;
+    p = static_cast<KisFloatingMessage::Priority>(priority);
+
+    d->view->showFloatingMessage(message, icon, timeout, p);
 }

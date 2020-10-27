@@ -99,7 +99,6 @@ KisUniformPaintOpPropertyIntSlider::KisUniformPaintOpPropertyIntSlider(KisUnifor
     connect(m_slider, SIGNAL(valueChanged(int)), SLOT(slotSliderChanged(int)));
 
     layout->addWidget(m_slider);
-    setLayout(layout);
 }
 
 void KisUniformPaintOpPropertyIntSlider::setValue(const QVariant &value)
@@ -138,7 +137,6 @@ KisUniformPaintOpPropertyDoubleSlider::KisUniformPaintOpPropertyDoubleSlider(Kis
     connect(m_slider, SIGNAL(valueChanged(qreal)), SLOT(slotSliderChanged(qreal)));
 
     layout->addWidget(m_slider);
-    setLayout(layout);
 }
 
 void KisUniformPaintOpPropertyDoubleSlider::setValue(const QVariant &value)
@@ -165,7 +163,6 @@ KisUniformPaintOpPropertyCheckBox::KisUniformPaintOpPropertyCheckBox(KisUniformP
     connect(m_checkBox, SIGNAL(toggled(bool)), SLOT(slotCheckBoxChanged(bool)));
 
     layout->addWidget(m_checkBox);
-    setLayout(layout);
 }
 
 void KisUniformPaintOpPropertyCheckBox::setValue(const QVariant &value)
@@ -221,7 +218,6 @@ KisUniformPaintOpPropertyComboBox::KisUniformPaintOpPropertyComboBox(KisUniformP
     connect(m_comboBox, SIGNAL(currentIndexChanged(int)), SLOT(slotComboBoxChanged(int)));
 
     layout->addWidget(m_comboBox);
-    setLayout(layout);
 }
 
 void KisUniformPaintOpPropertyComboBox::setValue(const QVariant &value)

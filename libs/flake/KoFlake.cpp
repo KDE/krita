@@ -186,122 +186,157 @@ Qt::Orientation KoFlake::significantScaleOrientation(qreal scaleX, qreal scaleY)
     return scaleXDeviation > scaleYDeviation ? Qt::Horizontal : Qt::Vertical;
 }
 
+void KoFlake::scaleShape(KoShape *shape, qreal scaleX, qreal scaleY,
+                          const QPointF &absoluteStillPoint,
+                          const QTransform &postScalingCoveringTransform)
+{
+    const QTransform scale = QTransform::fromScale(scaleX, scaleY);
+    QPointF localStillPoint = postScalingCoveringTransform.inverted().map(absoluteStillPoint);
+    const QTransform localStillPointOffset = QTransform::fromTranslate(-localStillPoint.x(), -localStillPoint.y());
+
+    shape->setTransformation( shape->transformation() *
+                postScalingCoveringTransform.inverted() *
+                localStillPointOffset *
+                scale *
+                localStillPointOffset.inverted() *
+                postScalingCoveringTransform);
+}
+
+void KoFlake::scaleShapeGlobal(KoShape *shape, qreal scaleX, qreal scaleY,
+                               const QPointF &absoluteStillPoint)
+{
+    const QTransform scale = QTransform::fromScale(scaleX, scaleY);
+    const QTransform absoluteStillPointOffset = QTransform::fromTranslate(-absoluteStillPoint.x(), -absoluteStillPoint.y());
+
+    const QTransform uniformGlobalTransform =
+            shape->absoluteTransformation() *
+            absoluteStillPointOffset *
+            scale *
+            absoluteStillPointOffset.inverted() *
+            shape->absoluteTransformation().inverted() *
+            shape->transformation();
+
+    shape->setTransformation(uniformGlobalTransform);
+}
+
 void KoFlake::resizeShape(KoShape *shape, qreal scaleX, qreal scaleY,
+                          const QPointF &absoluteStillPoint,
+                          bool useGlobalMode)
+{
+    using namespace KisAlgebra2D;
+
+    if (useGlobalMode) {
+        const QTransform scale = QTransform::fromScale(scaleX, scaleY);
+        const QTransform uniformGlobalTransform =
+                shape->absoluteTransformation() *
+                scale *
+                shape->absoluteTransformation().inverted();
+
+        const QRectF rect = shape->outlineRect();
+
+        /**
+         * The basic idea of such global scaling:
+         *
+         * 1) We choose two the most distant points of the original outline rect
+         * 2) Calculate their expected position if transformed using `uniformGlobalTransform`
+         * 3) NOTE1: we do not transform the entire shape using `uniformGlobalTransform`,
+         *           because it will cause massive shearing. We transform only two points
+         *           and adjust other points using dumb scaling.
+         * 4) NOTE2: given that `scale` transform is much more simpler than
+         *           `uniformGlobalTransform`, we cannot guarantee equivalent changes on
+         *           both globalScaleX and globalScaleY at the same time. We can guarantee
+         *           only one of them. Therefore we select the most "important" axis and
+         *           guarantee scael along it. The scale along the other direction is not
+         *           controlled.
+         * 5) After we have the two most distant points, we can just calculate the scale
+         *    by dividing difference between their expected and original positions. This
+         *    formula can be derived from equation:
+         *
+         *    localPoint_i * ScaleMatrix = localPoint_i * UniformGlobalTransform = expectedPoint_i
+         */
+
+        // choose the most significant scale direction
+        Qt::Orientation significantOrientation = significantScaleOrientation(scaleX, scaleY);
+
+        std::function<qreal(const QPointF&)> dimension;
+
+        if (significantOrientation == Qt::Horizontal) {
+            dimension = [] (const QPointF &pt) {
+                return pt.x();
+            };
+
+        } else {
+            dimension = [] (const QPointF &pt) {
+                return pt.y();
+            };
+        }
+
+        // find min and max points (in absolute coordinates),
+        // by default use top-left and bottom-right
+        QPolygonF localPoints(rect);
+        QPolygonF globalPoints = shape->absoluteTransformation().map(localPoints);
+
+        int minPointIndex = 0;
+        int maxPointIndex = 2;
+
+        findMinMaxPoints(globalPoints, &minPointIndex, &maxPointIndex, dimension);
+
+        // calculate the scale using the extremum points
+        const QPointF minPoint = localPoints[minPointIndex];
+        const QPointF maxPoint = localPoints[maxPointIndex];
+
+        const QPointF minPointExpected = uniformGlobalTransform.map(minPoint);
+        const QPointF maxPointExpected = uniformGlobalTransform.map(maxPoint);
+
+        scaleX = getScaleByPointsPair(minPoint.x(), maxPoint.x(),
+                                      minPointExpected.x(), maxPointExpected.x());
+        scaleY = getScaleByPointsPair(minPoint.y(), maxPoint.y(),
+                                      minPointExpected.y(), maxPointExpected.y());
+    }
+
+    const QSizeF oldSize(shape->size());
+    const QSizeF newSize(oldSize.width() * qAbs(scaleX), oldSize.height() * qAbs(scaleY));
+
+    const QTransform mirrorTransform = QTransform::fromScale(signPZ(scaleX), signPZ(scaleY));
+
+    /**
+     * NOTE: when resizing a shape we expect top-left corner in parent's
+     *       coordinates to keep it's position.
+     */
+
+    shape->setSize(newSize);
+
+    QPointF localStillPoint = shape->absoluteTransformation().inverted().map(absoluteStillPoint);
+    const QTransform localStillPointOffset = QTransform::fromTranslate(-localStillPoint.x(), -localStillPoint.y());
+    const QSizeF realNewSize = shape->size();
+
+    const QTransform realResizeTransform =
+        QTransform::fromScale(oldSize.width() > 0 ? realNewSize.width() / oldSize.width() : 1.0,
+                              oldSize.height() > 0 ? realNewSize.height() / oldSize.height() : 1.0);
+
+    shape->setTransformation(realResizeTransform.inverted() *
+                             localStillPointOffset *
+                             realResizeTransform *
+                             mirrorTransform *
+                             localStillPointOffset.inverted() *
+                             shape->transformation()
+                             );
+}
+
+void KoFlake::resizeShapeCommon(KoShape *shape, qreal scaleX, qreal scaleY,
                           const QPointF &absoluteStillPoint,
                           bool useGlobalMode,
                           bool usePostScaling, const QTransform &postScalingCoveringTransform)
 {
-    QPointF localStillPoint = shape->absoluteTransformation(0).inverted().map(absoluteStillPoint);
-
-    QPointF relativeStillPoint = KisAlgebra2D::absoluteToRelative(localStillPoint, shape->outlineRect());
-    QPointF parentalStillPointBefore = shape->transformation().map(localStillPoint);
-
     if (usePostScaling) {
-        const QTransform scale = QTransform::fromScale(scaleX, scaleY);
-
         if (!useGlobalMode) {
-            shape->setTransformation(shape->transformation() *
-                                     postScalingCoveringTransform.inverted() *
-                                     scale * postScalingCoveringTransform);
+            scaleShape(shape, scaleX, scaleY, absoluteStillPoint, postScalingCoveringTransform);
         } else {
-            const QTransform uniformGlobalTransform =
-                    shape->absoluteTransformation(0) *
-                    scale *
-                    shape->absoluteTransformation(0).inverted() *
-                    shape->transformation();
-
-            shape->setTransformation(uniformGlobalTransform);
+            scaleShapeGlobal(shape, scaleX, scaleY, absoluteStillPoint);
         }
     } else {
-        using namespace KisAlgebra2D;
-
-        if (useGlobalMode) {
-            const QTransform scale = QTransform::fromScale(scaleX, scaleY);
-            const QTransform uniformGlobalTransform =
-                    shape->absoluteTransformation(0) *
-                    scale *
-                    shape->absoluteTransformation(0).inverted();
-
-            const QRectF rect = shape->outlineRect();
-
-            /**
-             * The basic idea of such global scaling:
-             *
-             * 1) We choose two the most distant points of the original outline rect
-             * 2) Calculate their expected position if transformed using `uniformGlobalTransform`
-             * 3) NOTE1: we do not transform the entire shape using `uniformGlobalTransform`,
-             *           because it will cause massive shearing. We transform only two points
-             *           and adjust other points using dumb scaling.
-             * 4) NOTE2: given that `scale` transform is much more simpler than
-             *           `uniformGlobalTransform`, we cannot guarantee equivalent changes on
-             *           both globalScaleX and globalScaleY at the same time. We can guarantee
-             *           only one of them. Therefore we select the most "important" axis and
-             *           guarantee scael along it. The scale along the other direction is not
-             *           controlled.
-             * 5) After we have the two most distant points, we can just calculate the scale
-             *    by dividing difference between their expected and original positions. This
-             *    formula can be derived from equation:
-             *
-             *    localPoint_i * ScaleMatrix = localPoint_i * UniformGlobalTransform = expectedPoint_i
-             */
-
-            // choose the most significant scale direction
-            Qt::Orientation significantOrientation = significantScaleOrientation(scaleX, scaleY);
-
-            std::function<qreal(const QPointF&)> dimension;
-
-            if (significantOrientation == Qt::Horizontal) {
-                dimension = [] (const QPointF &pt) {
-                    return pt.x();
-                };
-
-            } else {
-                dimension = [] (const QPointF &pt) {
-                    return pt.y();
-                };
-            }
-
-            // find min and max points (in absolute coordinates),
-            // by default use top-left and bottom-right
-            QPolygonF localPoints(rect);
-            QPolygonF globalPoints = shape->absoluteTransformation(0).map(localPoints);
-
-            int minPointIndex = 0;
-            int maxPointIndex = 2;
-
-            findMinMaxPoints(globalPoints, &minPointIndex, &maxPointIndex, dimension);
-
-            // calculate the scale using the extremum points
-            const QPointF minPoint = localPoints[minPointIndex];
-            const QPointF maxPoint = localPoints[maxPointIndex];
-
-            const QPointF minPointExpected = uniformGlobalTransform.map(minPoint);
-            const QPointF maxPointExpected = uniformGlobalTransform.map(maxPoint);
-
-            scaleX = getScaleByPointsPair(minPoint.x(), maxPoint.x(),
-                                          minPointExpected.x(), maxPointExpected.x());
-            scaleY = getScaleByPointsPair(minPoint.y(), maxPoint.y(),
-                                          minPointExpected.y(), maxPointExpected.y());
-        }
-
-        const QSizeF oldSize(shape->size());
-        const QSizeF newSize(oldSize.width() * qAbs(scaleX), oldSize.height() * qAbs(scaleY));
-
-        const QTransform mirrorTransform = QTransform::fromScale(signPZ(scaleX), signPZ(scaleY));
-
-        shape->setSize(newSize);
-
-        if (!mirrorTransform.isIdentity()) {
-            shape->setTransformation(mirrorTransform * shape->transformation());
-        }
-
+        resizeShape(shape, scaleX, scaleY, absoluteStillPoint, useGlobalMode);
     }
-
-    QPointF newLocalStillPoint = KisAlgebra2D::relativeToAbsolute(relativeStillPoint, shape->outlineRect());
-    QPointF parentalStillPointAfter = shape->transformation().map(newLocalStillPoint);
-
-    QPointF diff = parentalStillPointBefore - parentalStillPointAfter;
-    shape->setTransformation(shape->transformation() * QTransform::fromTranslate(diff.x(), diff.y()));
 }
 
 QPointF KoFlake::anchorToPoint(AnchorPosition anchor, const QRectF rect, bool *valid)

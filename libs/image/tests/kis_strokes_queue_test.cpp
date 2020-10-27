@@ -19,6 +19,8 @@
 #include "kis_strokes_queue_test.h"
 #include <QTest>
 
+#include "kistest.h"
+
 #include "scheduler_utils.h"
 #include "kis_strokes_queue.h"
 #include "kis_updater_context.h"
@@ -29,7 +31,7 @@
 void KisStrokesQueueTest::testSequentialJobs()
 {
     KisStrokesQueue queue;
-    KisStrokeId id = queue.startStroke(new KisTestingStrokeStrategy("tri_", false));
+    KisStrokeId id = queue.startStroke(new KisTestingStrokeStrategy(QLatin1String("tri_"), false));
     queue.addJob(id, new KisStrokeJobData(KisStrokeJobData::CONCURRENT));
     queue.addJob(id, new KisStrokeJobData(KisStrokeJobData::CONCURRENT));
     queue.addJob(id, new KisStrokeJobData(KisStrokeJobData::CONCURRENT));
@@ -69,7 +71,7 @@ void KisStrokesQueueTest::testSequentialJobs()
 void KisStrokesQueueTest::testConcurrentSequentialBarrier()
 {
     KisStrokesQueue queue;
-    KisStrokeId id = queue.startStroke(new KisTestingStrokeStrategy("tri_", false));
+    KisStrokeId id = queue.startStroke(new KisTestingStrokeStrategy(QLatin1String("tri_"), false));
     queue.addJob(id, new KisStrokeJobData(KisStrokeJobData::CONCURRENT));
     queue.addJob(id, new KisStrokeJobData(KisStrokeJobData::CONCURRENT));
     queue.endStroke(id);
@@ -102,7 +104,7 @@ void KisStrokesQueueTest::testConcurrentSequentialBarrier()
 void KisStrokesQueueTest::testExclusiveStrokes()
 {
     KisStrokesQueue queue;
-    KisStrokeId id = queue.startStroke(new KisTestingStrokeStrategy("excl_", true));
+    KisStrokeId id = queue.startStroke(new KisTestingStrokeStrategy(QLatin1String("excl_"), true));
     queue.addJob(id, new KisStrokeJobData(KisStrokeJobData::CONCURRENT));
     queue.addJob(id, new KisStrokeJobData(KisStrokeJobData::CONCURRENT));
     queue.addJob(id, new KisStrokeJobData(KisStrokeJobData::CONCURRENT));
@@ -171,7 +173,7 @@ void KisStrokesQueueTest::testExclusiveStrokes()
 void KisStrokesQueueTest::testBarrierStrokeJobs()
 {
     KisStrokesQueue queue;
-    KisStrokeId id = queue.startStroke(new KisTestingStrokeStrategy("nor_", false));
+    KisStrokeId id = queue.startStroke(new KisTestingStrokeStrategy(QLatin1String("nor_"), false));
     queue.addJob(id, new KisStrokeJobData(KisStrokeJobData::CONCURRENT));
     queue.addJob(id, new KisStrokeJobData(KisStrokeJobData::BARRIER));
     queue.addJob(id, new KisStrokeJobData(KisStrokeJobData::CONCURRENT));
@@ -292,13 +294,13 @@ void KisStrokesQueueTest::testBarrierStrokeJobs()
 void KisStrokesQueueTest::testStrokesOverlapping()
 {
     KisStrokesQueue queue;
-    KisStrokeId id = queue.startStroke(new KisTestingStrokeStrategy("1_", false, true));
+    KisStrokeId id = queue.startStroke(new KisTestingStrokeStrategy(QLatin1String("1_"), false, true));
     queue.addJob(id, 0);
 
     // comment out this line to catch an assert
     queue.endStroke(id);
 
-    id = queue.startStroke(new KisTestingStrokeStrategy("2_", false, true));
+    id = queue.startStroke(new KisTestingStrokeStrategy(QLatin1String("2_"), false, true));
     queue.addJob(id, 0);
     queue.endStroke(id);
 
@@ -327,7 +329,7 @@ void KisStrokesQueueTest::testImmediateCancel()
     KisStrokesQueue queue;
     KisTestableUpdaterContext context(2);
 
-    KisStrokeId id = queue.startStroke(new KisTestingStrokeStrategy("1_", false, false));
+    KisStrokeId id = queue.startStroke(new KisTestingStrokeStrategy(QLatin1String("1_"), false, false));
     queue.cancelStroke(id);
 
     // this should not crash
@@ -339,9 +341,9 @@ void KisStrokesQueueTest::testOpenedStrokeCounter()
     KisStrokesQueue queue;
 
     QVERIFY(!queue.hasOpenedStrokes());
-    KisStrokeId id0 = queue.startStroke(new KisTestingStrokeStrategy("0"));
+    KisStrokeId id0 = queue.startStroke(new KisTestingStrokeStrategy(QLatin1String("0")));
     QVERIFY(queue.hasOpenedStrokes());
-    KisStrokeId id1 = queue.startStroke(new KisTestingStrokeStrategy("1"));
+    KisStrokeId id1 = queue.startStroke(new KisTestingStrokeStrategy(QLatin1String("1")));
     QVERIFY(queue.hasOpenedStrokes());
     queue.endStroke(id0);
     QVERIFY(queue.hasOpenedStrokes());
@@ -358,7 +360,7 @@ void KisStrokesQueueTest::testOpenedStrokeCounter()
 void KisStrokesQueueTest::testAsyncCancelWhileOpenedStroke()
 {
     KisStrokesQueue queue;
-    KisStrokeId id = queue.startStroke(new KisTestingStrokeStrategy("nor_", false));
+    KisStrokeId id = queue.startStroke(new KisTestingStrokeStrategy(QLatin1String("nor_"), false));
     queue.addJob(id, 0);
     queue.addJob(id, 0);
     queue.addJob(id, 0);
@@ -391,24 +393,24 @@ struct KisStrokesQueueTest::LodStrokesQueueTester {
           realContext(2),
           context(!real ? fakeContext : realContext)
     {
-        queue.setSuspendUpdatesStrokeStrategyFactory(
+        queue.setSuspendResumeUpdatesStrokeStrategyFactory(
             []() {
-                return KisSuspendResumePair(
-                    new KisTestingStrokeStrategy("susp_u_", false, true, true),
+                KisSuspendResumePair suspend(
+                    new KisTestingStrokeStrategy(QLatin1String("susp_u_"), false, true, true),
                     QList<KisStrokeJobData*>());
+
+                KisSuspendResumePair resume(
+                    new KisTestingStrokeStrategy(QLatin1String("resu_u_"), false, true, true),
+                    QList<KisStrokeJobData*>());
+
+                return std::make_pair(suspend, resume);
             });
 
-        queue.setResumeUpdatesStrokeStrategyFactory(
-            []() {
-                return KisSuspendResumePair(
-                    new KisTestingStrokeStrategy("resu_u_", false, true, true),
-                    QList<KisStrokeJobData*>());
-            });
         queue.setLod0ToNStrokeStrategyFactory(
-            [](bool forgettable) {
+            [] (bool forgettable) {
                 Q_UNUSED(forgettable);
-                return KisSuspendResumePair(
-                    new KisTestingStrokeStrategy("sync_u_", false, true, true),
+                return KisLodSyncPair(
+                    new KisTestingStrokeStrategy(QLatin1String("sync_u_"), false, true, true),
                     QList<KisStrokeJobData*>());
             });
     }
@@ -516,7 +518,7 @@ void KisStrokesQueueTest::testStrokesLevelOfDetail()
     t.processQueue();
     t.checkOnlyJob("sync_u_init");
 
-    KisStrokeId id2 = queue.startStroke(new KisTestingStrokeStrategy("lod_", false, true));
+    KisStrokeId id2 = queue.startStroke(new KisTestingStrokeStrategy(QLatin1String("lod_"), false, true));
     queue.addJob(id2, new KisTestingStrokeJobData(KisStrokeJobData::CONCURRENT));
     queue.endStroke(id2);
 
@@ -612,11 +614,11 @@ void KisStrokesQueueTest::testLodUndoBase()
     t.processQueue();
     t.checkOnlyJob("sync_u_init");
 
-    KisStrokeId id1 = queue.startStroke(new KisTestingStrokeStrategy("str1_", false, true));
+    KisStrokeId id1 = queue.startStroke(new KisTestingStrokeStrategy(QLatin1String("str1_"), false, true));
     queue.addJob(id1, new KisTestingStrokeJobData(KisStrokeJobData::CONCURRENT));
     queue.endStroke(id1);
 
-    KisStrokeId id2 = queue.startStroke(new KisTestingStrokeStrategy("str2_", false, true));
+    KisStrokeId id2 = queue.startStroke(new KisTestingStrokeStrategy(QLatin1String("str2_"), false, true));
     queue.addJob(id2, new KisTestingStrokeJobData(KisStrokeJobData::CONCURRENT));
     queue.endStroke(id2);
 
@@ -653,11 +655,11 @@ void KisStrokesQueueTest::testLodUndoBase2()
 
     // create a stroke with LOD0 + LOD2
     queue.setDesiredLevelOfDetail(2);
-    KisStrokeId id1 = queue.startStroke(new KisTestingStrokeStrategy("str1_", false, true, false, true));
+    KisStrokeId id1 = queue.startStroke(new KisTestingStrokeStrategy(QLatin1String("str1_"), false, true, false, true));
     queue.addJob(id1, new KisTestingStrokeJobData(KisStrokeJobData::CONCURRENT));
     queue.endStroke(id1);
 
-    KisStrokeId id2 = queue.startStroke(new KisTestingStrokeStrategy("str2_", false, true, false, true));
+    KisStrokeId id2 = queue.startStroke(new KisTestingStrokeStrategy(QLatin1String("str2_"), false, true, false, true));
     queue.addJob(id2, new KisTestingStrokeJobData(KisStrokeJobData::CONCURRENT));
     queue.endStroke(id2);
 
@@ -703,7 +705,7 @@ void KisStrokesQueueTest::testMutatedJobs()
     LodStrokesQueueTester t(true);
     KisStrokesQueue &queue = t.queue;
 
-    KisStrokeId id1 = queue.startStroke(new KisTestingStrokeStrategy("str1_", false, true, false, true));
+    KisStrokeId id1 = queue.startStroke(new KisTestingStrokeStrategy(QLatin1String("str1_"), false, true, false, true));
 
     queue.addJob(id1,
                  new KisTestingStrokeJobData(
@@ -799,7 +801,7 @@ void KisStrokesQueueTest::testUniquelyConcurrentJobs()
     LodStrokesQueueTester t;
     KisStrokesQueue &queue = t.queue;
 
-    KisStrokeId id1 = queue.startStroke(new KisTestingStrokeStrategy("str1_", false, true));
+    KisStrokeId id1 = queue.startStroke(new KisTestingStrokeStrategy(QLatin1String("str1_"), false, true));
     queue.addJob(id1, new KisTestingStrokeJobData(KisStrokeJobData::CONCURRENT));
     queue.addJob(id1, new KisTestingStrokeJobData(KisStrokeJobData::CONCURRENT));
 
@@ -836,4 +838,4 @@ void KisStrokesQueueTest::testUniquelyConcurrentJobs()
 }
 
 
-QTEST_MAIN(KisStrokesQueueTest)
+KISTEST_MAIN(KisStrokesQueueTest)

@@ -28,7 +28,7 @@
 #include "kis_lod_transform.h"
 #include <QElapsedTimer>
 #include "KisAsyncronousStrokeUpdateHelper.h"
-
+#include "KisNodeSelectionRecipe.h"
 
 class KisUpdatesFacade;
 class KisPostExecutionUndoAdapter;
@@ -38,38 +38,45 @@ class KRITAUI_EXPORT MoveStrokeStrategy : public QObject, public KisStrokeStrate
 {
     Q_OBJECT
 public:
-    class Data : public KisStrokeJobData {
+    class KRITAUI_EXPORT Data : public KisStrokeJobData {
     public:
-        Data(QPoint _offset)
-            : KisStrokeJobData(SEQUENTIAL, NORMAL),
-              offset(_offset)
-        {
-        }
-
-        KisStrokeJobData* createLodClone(int levelOfDetail) override {
-            return new Data(*this, levelOfDetail);
-        }
+        Data(QPoint _offset);
+        KisStrokeJobData* createLodClone(int levelOfDetail) override;
 
         QPoint offset;
 
     private:
-        Data(const Data &rhs, int levelOfDetail)
-            : KisStrokeJobData(rhs)
-        {
-            KisLodTransform t(levelOfDetail);
-            offset = t.map(rhs.offset);
-        }
+        Data(const Data &rhs, int levelOfDetail);
     };
 
-    struct BarrierUpdateData : public KisAsyncronousStrokeUpdateHelper::UpdateData
+    class KRITAUI_EXPORT PickLayerData : public KisStrokeJobData {
+    public:
+        PickLayerData(QPoint _pos);
+
+        KisStrokeJobData* createLodClone(int levelOfDetail) override;
+
+        QPoint pos;
+
+    private:
+        PickLayerData(const PickLayerData &rhs, int levelOfDetail);
+    };
+
+
+    struct KRITAUI_EXPORT BarrierUpdateData : public KisAsyncronousStrokeUpdateHelper::UpdateData
     {
-        BarrierUpdateData(bool forceUpdate)
-            : KisAsyncronousStrokeUpdateHelper::UpdateData(forceUpdate, BARRIER, EXCLUSIVE)
-        {}
+        BarrierUpdateData(bool forceUpdate);
+        KisStrokeJobData* createLodClone(int levelOfDetail) override;
+    protected:
+        BarrierUpdateData(const BarrierUpdateData &rhs, int levelOfDetail);
     };
 
 public:
-    MoveStrokeStrategy(KisNodeList nodes, KisUpdatesFacade *updatesFacade,
+    MoveStrokeStrategy(KisNodeSelectionRecipe nodeSelection,
+                       KisUpdatesFacade *updatesFacade,
+                       KisStrokeUndoFacade *undoFacade);
+
+    MoveStrokeStrategy(KisNodeList nodes,
+                       KisUpdatesFacade *updatesFacade,
                        KisStrokeUndoFacade *undoFacade);
 
     void initStrokeCallback() override;
@@ -81,9 +88,11 @@ public:
 
 Q_SIGNALS:
     void sigHandlesRectCalculated(const QRect &handlesRect);
+    void sigStrokeStartedEmpty();
+    void sigLayersPicked(const KisNodeList &nodes);
 
 private:
-    MoveStrokeStrategy(const MoveStrokeStrategy &rhs);
+    MoveStrokeStrategy(const MoveStrokeStrategy &rhs, int lod);
     void setUndoEnabled(bool value);
     void setUpdatesEnabled(bool value);
 private:
@@ -94,7 +103,9 @@ private:
     void tryPostUpdateJob(bool forceUpdate);
 
 private:
+    KisNodeSelectionRecipe m_requestedNodeSelection;
     KisNodeList m_nodes;
+    QSharedPointer<KisNodeList> m_sharedNodes;
     QSet<KisNodeSP> m_blacklistedNodes;
     KisUpdatesFacade *m_updatesFacade;
     QPoint m_finalOffset;

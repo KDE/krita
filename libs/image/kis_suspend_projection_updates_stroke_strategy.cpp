@@ -44,6 +44,7 @@ struct KisSuspendProjectionUpdatesStrokeStrategy::Private
     bool sanityResumingFinished = false;
     int updatesEpoch = 0;
     bool haveDisabledGUILodSync = false;
+    SharedDataSP sharedData;
 
     void tryFetchUsedUpdatesFilter(KisImageSP image);
     void tryIssueRecordedDirtyRequests(KisImageSP image);
@@ -62,7 +63,19 @@ struct KisSuspendProjectionUpdatesStrokeStrategy::Private
             bool resetAnimationCache;
         };
 
-        typedef QHash<KisNodeSP, QVector<Request> > RectsHash;
+        struct FullRefreshRequest {
+            FullRefreshRequest() {}
+            FullRefreshRequest(const QRect &_rect, const QRect &_cropRect)
+                : rect(_rect), cropRect(_cropRect)
+            {
+            }
+
+            QRect rect;
+            QRect cropRect;
+        };
+
+        typedef QHash<KisNodeSP, QVector<Request> > UpdatesHash;
+        typedef QHash<KisNodeSP, QVector<FullRefreshRequest> > RefreshesHash;
     public:
         SuspendLod0Updates()
         {
@@ -75,6 +88,18 @@ struct KisSuspendProjectionUpdatesStrokeStrategy::Private
 
             Q_FOREACH(const QRect &rc, rects) {
                 m_requestsHash[KisNodeSP(node)].append(Request(rc, resetAnimationCache));
+            }
+
+            return true;
+        }
+
+        bool filterRefreshGraph(KisImage *image, KisNode *node, const QVector<QRect> &rects, const QRect &cropRect) override {
+            if (image->currentLevelOfDetail() > 0) return false;
+
+            QMutexLocker l(&m_mutex);
+
+            Q_FOREACH(const QRect &rc, rects) {
+                m_refreshesHash[KisNodeSP(node)].append(FullRefreshRequest(rc, cropRect));
             }
 
             return true;
@@ -97,30 +122,59 @@ struct KisSuspendProjectionUpdatesStrokeStrategy::Private
             return result;
         }
 
-        void notifyUpdates(KisNodeGraphListener *listener) {
-            RectsHash::const_iterator it = m_requestsHash.constBegin();
-            RectsHash::const_iterator end = m_requestsHash.constEnd();
-
+        void notifyUpdates(KisImageSP image) {
             const int step = 64;
 
-            for (; it != end; ++it) {
-                KisNodeSP node = it.key();
+            {
+                RefreshesHash::const_iterator it = m_refreshesHash.constBegin();
+                RefreshesHash::const_iterator end = m_refreshesHash.constEnd();
 
-                QRegion region;
 
-                bool resetAnimationCache = false;
-                Q_FOREACH (const Request &req, it.value()) {
-                    region += alignRect(req.rect, step);
-                    resetAnimationCache |= req.resetAnimationCache;
+                for (; it != end; ++it) {
+                    KisNodeSP node = it.key();
+
+                    QHash<QRect, QVector<QRect>> fullRefreshRequests;
+
+                    Q_FOREACH (const FullRefreshRequest &req, it.value()) {
+                        fullRefreshRequests[req.cropRect] += req.rect;
+                    }
+
+                    auto reqIt = fullRefreshRequests.begin();
+                    for (; reqIt != fullRefreshRequests.end(); ++reqIt) {
+                        const QVector<QRect> simplifiedRects = KisRegion::fromOverlappingRects(reqIt.value(), step).rects();
+
+                        // FIXME: constness: port rPU to SP
+                        image->refreshGraphAsync(const_cast<KisNode*>(node.data()), simplifiedRects, reqIt.key());
+                    }
                 }
+            }
 
-                // FIXME: constness: port rPU to SP
-                listener->requestProjectionUpdate(const_cast<KisNode*>(node.data()), region.rects(), resetAnimationCache);
+            {
+                UpdatesHash::const_iterator it = m_requestsHash.constBegin();
+                UpdatesHash::const_iterator end = m_requestsHash.constEnd();
+
+                for (; it != end; ++it) {
+                    KisNodeSP node = it.key();
+
+                    QVector<QRect> dirtyRects;
+
+                    bool resetAnimationCache = false;
+                    Q_FOREACH (const Request &req, it.value()) {
+                        dirtyRects += req.rect;
+                        resetAnimationCache |= req.resetAnimationCache;
+                    }
+
+                    const QVector<QRect> simplifiedRects = KisRegion::fromOverlappingRects(dirtyRects, step).rects();
+
+                    // FIXME: constness: port rPU to SP
+                    image->requestProjectionUpdate(const_cast<KisNode*>(node.data()), simplifiedRects, resetAnimationCache);
+                }
             }
         }
 
     private:
-        RectsHash m_requestsHash;
+        UpdatesHash m_requestsHash;
+        RefreshesHash m_refreshesHash;
         QMutex m_mutex;
     };
 
@@ -168,17 +222,20 @@ struct KisSuspendProjectionUpdatesStrokeStrategy::Private
         void redo() override {
             KisImageSP image = m_d->image.toStrongRef();
             KIS_SAFE_ASSERT_RECOVER_RETURN(image);
-            KIS_SAFE_ASSERT_RECOVER_RETURN(!image->projectionUpdatesFilter());
+            KIS_SAFE_ASSERT_RECOVER_RETURN(!image->currentProjectionUpdatesFilter());
+            KIS_SAFE_ASSERT_RECOVER_RETURN(!m_d->sharedData->installedFilterCookie);
 
-            image->setProjectionUpdatesFilter(
-                KisProjectionUpdatesFilterSP(new Private::SuspendLod0Updates()));
+            m_d->sharedData->installedFilterCookie = image->addProjectionUpdatesFilter(
+                toQShared(new Private::SuspendLod0Updates()));
         }
 
 
         void undo() override {
             KisImageSP image = m_d->image.toStrongRef();
             KIS_SAFE_ASSERT_RECOVER_RETURN(image);
-            KIS_SAFE_ASSERT_RECOVER_RETURN(image->projectionUpdatesFilter());
+            KIS_SAFE_ASSERT_RECOVER_RETURN(image->currentProjectionUpdatesFilter());
+            KIS_SAFE_ASSERT_RECOVER_RETURN(image->currentProjectionUpdatesFilter() == m_d->sharedData->installedFilterCookie);
+
 
             m_d->tryFetchUsedUpdatesFilter(image);
         }
@@ -196,7 +253,8 @@ struct KisSuspendProjectionUpdatesStrokeStrategy::Private
         void redo() override {
             KisImageSP image = m_d->image.toStrongRef();
             KIS_SAFE_ASSERT_RECOVER_RETURN(image);
-            KIS_SAFE_ASSERT_RECOVER_RETURN(image->projectionUpdatesFilter());
+            KIS_SAFE_ASSERT_RECOVER_RETURN(image->currentProjectionUpdatesFilter());
+            KIS_SAFE_ASSERT_RECOVER_RETURN(image->currentProjectionUpdatesFilter() == m_d->sharedData->installedFilterCookie);
 
             image->disableUIUpdates();
             m_d->tryFetchUsedUpdatesFilter(image);
@@ -206,10 +264,11 @@ struct KisSuspendProjectionUpdatesStrokeStrategy::Private
         void undo() override {
             KisImageSP image = m_d->image.toStrongRef();
             KIS_SAFE_ASSERT_RECOVER_RETURN(image);
-            KIS_SAFE_ASSERT_RECOVER_RETURN(!image->projectionUpdatesFilter());
+            KIS_SAFE_ASSERT_RECOVER_RETURN(!image->currentProjectionUpdatesFilter());
+            KIS_SAFE_ASSERT_RECOVER_RETURN(!m_d->sharedData->installedFilterCookie);
 
-            image->setProjectionUpdatesFilter(
-                KisProjectionUpdatesFilterSP(new Private::SuspendLod0Updates()));
+            m_d->sharedData->installedFilterCookie = image->addProjectionUpdatesFilter(
+                toQShared(new Private::SuspendLod0Updates()));
             image->enableUIUpdates();
         }
 
@@ -358,13 +417,15 @@ struct KisSuspendProjectionUpdatesStrokeStrategy::Private
     QVector<StrokeJobCommand*> executedCommands;
 };
 
-KisSuspendProjectionUpdatesStrokeStrategy::KisSuspendProjectionUpdatesStrokeStrategy(KisImageWSP image, bool suspend)
-    : KisRunnableBasedStrokeStrategy(suspend ? "suspend_stroke_strategy" : "resume_stroke_strategy"),
+KisSuspendProjectionUpdatesStrokeStrategy::KisSuspendProjectionUpdatesStrokeStrategy(KisImageWSP image, bool suspend, SharedDataSP sharedData)
+    : KisRunnableBasedStrokeStrategy(suspend ?
+                                     QLatin1String("suspend_stroke_strategy") :
+                                     QLatin1String("resume_stroke_strategy")),
       m_d(new Private)
 {
     m_d->image = image;
     m_d->suspend = suspend;
-
+    m_d->sharedData = sharedData;
 
     /**
      * Here we add a dumb INIT job so that KisStrokesQueue would know that the
@@ -466,20 +527,26 @@ QList<KisStrokeJobData*> KisSuspendProjectionUpdatesStrokeStrategy::createResume
     return QList<KisStrokeJobData*>();
 }
 
+KisSuspendProjectionUpdatesStrokeStrategy::SharedDataSP KisSuspendProjectionUpdatesStrokeStrategy::createSharedData()
+{
+    return toQShared(new SharedData());
+}
+
 void KisSuspendProjectionUpdatesStrokeStrategy::Private::tryFetchUsedUpdatesFilter(KisImageSP image)
 {
-    KisProjectionUpdatesFilterSP filter =
-        image->projectionUpdatesFilter();
+    if (!this->sharedData->installedFilterCookie) return;
 
-    if (!filter) return;
+    KisProjectionUpdatesFilterSP filter = image->removeProjectionUpdatesFilter(image->currentProjectionUpdatesFilter());
+    this->sharedData->installedFilterCookie = KisProjectionUpdatesFilterCookie();
+
+    KIS_SAFE_ASSERT_RECOVER_RETURN(filter);
 
     QSharedPointer<Private::SuspendLod0Updates> localFilter =
         filter.dynamicCast<Private::SuspendLod0Updates>();
 
-    if (localFilter) {
-        image->setProjectionUpdatesFilter(KisProjectionUpdatesFilterSP());
-        this->usedFilters.append(localFilter);
-    }
+    KIS_SAFE_ASSERT_RECOVER_RETURN(localFilter);
+
+    this->usedFilters.append(localFilter);
 }
 
 void KisSuspendProjectionUpdatesStrokeStrategy::Private::tryIssueRecordedDirtyRequests(KisImageSP image)

@@ -144,7 +144,7 @@ public:
      * <li>A KoColor
      * <li>A QColor
      * <li>A string that can be parsed as an XML color definition
-     * <li>A string that QColor can convert to a color (see http://doc.qt.io/qt-5/qcolor.html#setNamedColor)
+     * <li>A string that QColor can convert to a color (see https://doc.qt.io/qt-5/qcolor.html#setNamedColor)
      * <li>An integer that QColor can convert to a color
      * </ul>
      *
@@ -198,6 +198,11 @@ public:
     void setProperty(const QString &name, const QStringList &value);
     QStringList getStringList(const QString &name, const QStringList &defaultValue = QStringList()) const;
     QStringList getPropertyLazy(const QString &name, const QStringList &defaultValue) const;
+
+    /**
+     * Structural comparison between two instances.
+     */
+    virtual bool compareTo(const KisPropertiesConfiguration* rhs) const;
 
 public:
 

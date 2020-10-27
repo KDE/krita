@@ -53,3 +53,11 @@ int KisRecalculateGeneratorLayerJob::levelOfDetail() const
 {
     return 0;
 }
+
+QString KisRecalculateGeneratorLayerJob::debugName() const
+{
+    QString result;
+    QDebug dbg(&result);
+    dbg << "KisRecalculateGeneratorLayerJob" << m_layer;
+    return result;
+}

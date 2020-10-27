@@ -112,8 +112,16 @@ KisLayerStyleProjectionPlane::KisLayerStyleProjectionPlane(const KisLayerStylePr
         m_d->style = toQShared(new KisPSDLayerStyle());
     }
 
-    Q_FOREACH (KisLayerStyleFilterProjectionPlaneSP plane, rhs.m_d->allStyles()) {
+    Q_FOREACH (KisLayerStyleFilterProjectionPlaneSP plane, rhs.m_d->stylesBefore) {
         m_d->stylesBefore << toQShared(new KisLayerStyleFilterProjectionPlane(*plane, sourceLayer, m_d->style));
+    }
+
+    Q_FOREACH (KisLayerStyleFilterProjectionPlaneSP plane, rhs.m_d->stylesAfter) {
+        m_d->stylesAfter << toQShared(new KisLayerStyleFilterProjectionPlane(*plane, sourceLayer, m_d->style));
+    }
+
+    Q_FOREACH (KisLayerStyleFilterProjectionPlaneSP plane, rhs.m_d->stylesOverlay) {
+        m_d->stylesOverlay << toQShared(new KisLayerStyleFilterProjectionPlane(*plane, sourceLayer, m_d->style));
     }
 }
 
@@ -214,12 +222,16 @@ KisAbstractProjectionPlaneSP KisLayerStyleProjectionPlane::factoryObject(KisLaye
 QRect KisLayerStyleProjectionPlane::recalculate(const QRect& rect, KisNodeSP filthyNode)
 {
     KisAbstractProjectionPlaneSP sourcePlane = m_d->sourceProjectionPlane.toStrongRef();
-    QRect result = sourcePlane->recalculate(stylesNeedRect(rect), filthyNode);
+    QRect result = rect;
 
     if (m_d->style->isEnabled()) {
+        result = sourcePlane->recalculate(stylesNeedRect(rect), filthyNode);
+
         Q_FOREACH (const KisAbstractProjectionPlaneSP plane, m_d->allStyles()) {
             plane->recalculate(rect, filthyNode);
         }
+    } else {
+        result = sourcePlane->recalculate(rect, filthyNode);
     }
 
     return result;
@@ -396,6 +408,18 @@ QRect KisLayerStyleProjectionPlane::needRectForOriginal(const QRect &rect) const
     needRect = sourcePlane->needRectForOriginal(needRect);
 
     return needRect;
+}
+
+QRect KisLayerStyleProjectionPlane::tightUserVisibleBounds() const
+{
+    KisAbstractProjectionPlaneSP sourcePlane = m_d->sourceProjectionPlane.toStrongRef();
+    QRect rect = sourcePlane->tightUserVisibleBounds();
+
+    Q_FOREACH (const KisAbstractProjectionPlaneSP plane, m_d->allStyles()) {
+        rect |= plane->tightUserVisibleBounds();
+    }
+
+    return rect;
 }
 
 QRect KisLayerStyleProjectionPlane::stylesNeedRect(const QRect &rect) const

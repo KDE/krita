@@ -50,8 +50,7 @@ public:
     }
 
 private:
-    KisFilterConfigurationSP  factoryConfiguration() const override;
-
+    KisFilterConfigurationSP  defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const override;
 };
 
 #endif

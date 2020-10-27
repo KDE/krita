@@ -54,6 +54,40 @@ KoCreatePathTool::~KoCreatePathTool()
 {
 }
 
+QRectF KoCreatePathTool::decorationsRect() const
+{
+    Q_D(const KoCreatePathTool);
+
+    QRectF dirtyRect;
+
+    if (pathStarted()) {
+        dirtyRect |= kisGrowRect(d->shape->boundingRect(), handleDocRadius());
+    }
+
+    if (d->hoveredPoint) {
+        dirtyRect |= kisGrowRect(d->hoveredPoint->boundingRect(false), handleDocRadius());
+    }
+
+    if (d->activePoint) {
+        dirtyRect |= kisGrowRect(d->activePoint->boundingRect(false), handleDocRadius());
+
+        if (d->pointIsDragged) {
+            // the path is not closed, therefore the point is not marked as
+            // active inside the path itself
+            dirtyRect |= handlePaintRect(
+                        d->activePoint->parent()->shapeToDocument(
+                            d->activePoint->controlPoint2()));
+        }
+
+    }
+
+    if (canvas()->snapGuide()->isSnapping()) {
+        dirtyRect |= canvas()->snapGuide()->boundingRect();
+    }
+
+    return dirtyRect;
+}
+
 void KoCreatePathTool::paint(QPainter &painter, const KoViewConverter &converter)
 {
     Q_D(KoCreatePathTool);
@@ -65,7 +99,7 @@ void KoCreatePathTool::paint(QPainter &painter, const KoViewConverter &converter
         painter.restore();
 
         KisHandlePainterHelper helper =
-            KoShape::createHandlePainterHelper(&painter, d->shape, converter, d->handleRadius);
+            KoShape::createHandlePainterHelperView(&painter, d->shape, converter, d->handleRadius);
 
         const bool firstPointActive = d->firstPoint == d->activePoint;
 
@@ -90,13 +124,13 @@ void KoCreatePathTool::paint(QPainter &painter, const KoViewConverter &converter
     }
 
     if (d->hoveredPoint) {
-        KisHandlePainterHelper helper = KoShape::createHandlePainterHelper(&painter, d->hoveredPoint->parent(), converter, d->handleRadius);
+        KisHandlePainterHelper helper = KoShape::createHandlePainterHelperView(&painter, d->hoveredPoint->parent(), converter, d->handleRadius);
         helper.setHandleStyle(KisHandleStyle::highlightedPrimaryHandles());
         d->hoveredPoint->paint(helper, KoPathPoint::Node);
     }
 
     painter.save();
-    KoShape::applyConversion(painter, converter);
+    painter.setTransform(converter.documentToView(), true);
     canvas()->snapGuide()->paint(painter, converter);
     painter.restore();
 }
@@ -104,16 +138,18 @@ void KoCreatePathTool::paint(QPainter &painter, const KoViewConverter &converter
 void KoCreatePathTool::paintPath(KoPathShape& pathShape, QPainter &painter, const KoViewConverter &converter)
 {
     Q_D(KoCreatePathTool);
-    painter.setTransform(pathShape.absoluteTransformation(&converter) * painter.transform());
+    painter.setTransform(pathShape.absoluteTransformation() *
+                         converter.documentToView() *
+                         painter.transform());
     painter.save();
 
     KoShapePaintingContext paintContext; //FIXME
-    pathShape.paint(painter, converter, paintContext);
+    pathShape.paint(painter, paintContext);
     painter.restore();
 
     if (pathShape.stroke()) {
         painter.save();
-        pathShape.stroke()->paint(d->shape, painter, converter);
+        pathShape.stroke()->paint(d->shape, painter);
         painter.restore();
     }
 }
@@ -159,10 +195,9 @@ void KoCreatePathTool::mousePressEvent(KoPointerEvent *event)
                 // the path shape will get closed when the user releases
                 // the mouse button
                 d->finishAfterThisPoint = true;
+                repaintDecorations();
             }
         } else {
-            canvas()->updateCanvas(canvas()->snapGuide()->boundingRect());
-
             QPointF point = canvas()->snapGuide()->snap(event->point, event->modifiers());
 
             // check whether we hit an start/end node of an existing path
@@ -174,8 +209,7 @@ void KoCreatePathTool::mousePressEvent(KoPointerEvent *event)
                 endPath();
             } else {
                 d->activePoint->setPoint(point);
-                canvas()->updateCanvas(d->shape->boundingRect());
-                canvas()->updateCanvas(canvas()->snapGuide()->boundingRect());
+                repaintDecorations();
             }
         }
     } else {
@@ -184,13 +218,12 @@ void KoCreatePathTool::mousePressEvent(KoPointerEvent *event)
         pathShape->setShapeId(KoPathShapeId);
 
         KoShapeStrokeSP stroke(new KoShapeStroke());
-        const qreal size = canvas()->resourceManager()->resource(KisCanvasResourceProvider::Size).toReal();
+        const qreal size = canvas()->resourceManager()->resource(KoCanvasResource::Size).toReal();
 
         stroke->setLineWidth(canvas()->unit().fromUserValue(size));
         stroke->setColor(canvas()->resourceManager()->foregroundColor().toQColor());
 
         pathShape->setStroke(stroke);
-        canvas()->updateCanvas(canvas()->snapGuide()->boundingRect());
         QPointF point = canvas()->snapGuide()->snap(event->point, event->modifiers());
 
         // check whether we hit an start/end node of an existing path
@@ -202,13 +235,13 @@ void KoCreatePathTool::mousePressEvent(KoPointerEvent *event)
 
         d->activePoint = pathShape->moveTo(point);
         d->firstPoint = d->activePoint;
-        canvas()->updateCanvas(handlePaintRect(point));
-        canvas()->updateCanvas(canvas()->snapGuide()->boundingRect());
 
         canvas()->snapGuide()->setAdditionalEditedShape(pathShape);
 
         d->angleSnapStrategy = new AngleSnapStrategy(d->angleSnappingDelta, d->angleSnapStatus);
         canvas()->snapGuide()->addCustomSnapStrategy(d->angleSnapStrategy);
+
+        repaintDecorations();
     }
 
     d->dragStartPoint = event->point;
@@ -217,9 +250,9 @@ void KoCreatePathTool::mousePressEvent(KoPointerEvent *event)
         d->angleSnapStrategy->setStartPoint(d->activePoint->point());
 }
 
-bool KoCreatePathTool::pathStarted()
+bool KoCreatePathTool::pathStarted() const
 {
-    Q_D(KoCreatePathTool);
+    Q_D(const KoCreatePathTool);
     return ((bool) d->shape);
 }
 
@@ -246,27 +279,11 @@ void KoCreatePathTool::mouseMoveEvent(KoPointerEvent *event)
 {
     Q_D(KoCreatePathTool);
 
-    KoPathPoint *endPoint = d->endPointAtPosition(event->point);
-    if (d->hoveredPoint != endPoint) {
-
-        if (d->hoveredPoint) {
-            QPointF nodePos = d->hoveredPoint->parent()->shapeToDocument(d->hoveredPoint->point());
-            canvas()->updateCanvas(handlePaintRect(nodePos));
-        }
-
-        d->hoveredPoint = endPoint;
-
-        if (d->hoveredPoint) {
-            QPointF nodePos = d->hoveredPoint->parent()->shapeToDocument(d->hoveredPoint->point());
-            canvas()->updateCanvas(handlePaintRect(nodePos));
-        }
-    }
+    d->hoveredPoint = d->endPointAtPosition(event->point);
 
     if (!pathStarted()) {
-
-        canvas()->updateCanvas(canvas()->snapGuide()->boundingRect());
         canvas()->snapGuide()->snap(event->point, event->modifiers());
-        canvas()->updateCanvas(canvas()->snapGuide()->boundingRect());
+        repaintDecorations();
 
         d->mouseOverFirstPoint = false;
         return;
@@ -274,11 +291,7 @@ void KoCreatePathTool::mouseMoveEvent(KoPointerEvent *event)
 
     d->mouseOverFirstPoint = handleGrabRect(d->firstPoint->point()).contains(event->point);
 
-    canvas()->updateCanvas(d->shape->boundingRect());
-    canvas()->updateCanvas(canvas()->snapGuide()->boundingRect());
     QPointF snappedPosition = canvas()->snapGuide()->snap(event->point, event->modifiers());
-
-    d->repaintActivePoint();
 
     if (event->buttons() & Qt::LeftButton) {
         if (d->pointIsDragged ||
@@ -291,7 +304,6 @@ void KoCreatePathTool::mouseMoveEvent(KoPointerEvent *event)
             if ((event->modifiers() & Qt::AltModifier) == 0) {
                 d->activePoint->setControlPoint1(d->activePoint->point() - offset);
             }
-            d->repaintActivePoint();
         }
     } else {
         d->activePoint->setPoint(snappedPosition);
@@ -329,8 +341,7 @@ void KoCreatePathTool::mouseMoveEvent(KoPointerEvent *event)
 
     }
 
-    canvas()->updateCanvas(d->shape->boundingRect());
-    canvas()->updateCanvas(canvas()->snapGuide()->boundingRect());
+    repaintDecorations();
 }
 
 void KoCreatePathTool::mouseReleaseEvent(KoPointerEvent *event)
@@ -339,7 +350,6 @@ void KoCreatePathTool::mouseReleaseEvent(KoPointerEvent *event)
 
     if (! d->shape || (event->buttons() & Qt::RightButton)) return;
 
-    d->repaintActivePoint();
     d->prevPointWasDragged  = d->pointIsDragged;
     d->pointIsDragged = false;
     KoPathPoint *lastActivePoint = d->activePoint;
@@ -378,6 +388,8 @@ void KoCreatePathTool::mouseReleaseEvent(KoPointerEvent *event)
     if (d->angleSnapStrategy && lastActivePoint->activeControlPoint2()) {
         d->angleSnapStrategy->deactivate();
     }
+
+    repaintDecorations();
 }
 
 void KoCreatePathTool::keyPressEvent(QKeyEvent *event)
@@ -394,6 +406,7 @@ void KoCreatePathTool::endPath()
     Q_D(KoCreatePathTool);
 
     d->addPathShape();
+    repaintDecorations();
 }
 
 void KoCreatePathTool::endPathWithoutLastPoint()
@@ -401,11 +414,10 @@ void KoCreatePathTool::endPathWithoutLastPoint()
     Q_D(KoCreatePathTool);
 
     if (d->shape) {
-        QRectF dirtyRect = d->shape->boundingRect();
         delete d->shape->removePoint(d->shape->pathPointIndex(d->activePoint));
-        canvas()->updateCanvas(dirtyRect);
-
         d->addPathShape();
+
+        repaintDecorations();
     }
 }
 
@@ -414,12 +426,11 @@ void KoCreatePathTool::cancelPath()
     Q_D(KoCreatePathTool);
 
     if (d->shape) {
-        canvas()->updateCanvas(handlePaintRect(d->firstPoint->point()));
-        canvas()->updateCanvas(d->shape->boundingRect());
         d->firstPoint = 0;
         d->activePoint = 0;
     }
     d->cleanUp();
+    repaintDecorations();
 }
 
 void KoCreatePathTool::removeLastPoint()
@@ -435,8 +446,7 @@ void KoCreatePathTool::removeLastPoint()
 
             d->hoveredPoint = 0;
 
-            d->repaintActivePoint();
-            canvas()->updateCanvas(d->shape->boundingRect());
+            repaintDecorations();
         }
     }
 }
@@ -453,8 +463,8 @@ void KoCreatePathTool::activate(ToolActivation activation, const QSet<KoShape*> 
     d->loadAutoSmoothValueFromConfig();
 
     // reset snap guide
-    canvas()->updateCanvas(canvas()->snapGuide()->boundingRect());
     canvas()->snapGuide()->reset();
+    repaintDecorations();
 }
 
 void KoCreatePathTool::deactivate()

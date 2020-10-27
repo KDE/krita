@@ -247,7 +247,7 @@ QString KisImageConfig::safelyGetWritableTempLocation(const QString &suffix, con
     // furthermore, this is just a default and swapDir can always be configured
     // to another location.
 
-    QString swap = QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation) + QDir::separator() + suffix;
+    QString swap = QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation) + '/' + suffix;
 #else
     Q_UNUSED(suffix);
     QString swap = QDir::tempPath();
@@ -275,7 +275,7 @@ QString KisImageConfig::safelyGetWritableTempLocation(const QString &suffix, con
          * (yes, there is a hacky-global-variable workaround, but let's be safe)
          */
         QTemporaryFile tempFile;
-        tempFile.setFileTemplate(location + QDir::separator() + "krita_test_swap_location");
+        tempFile.setFileTemplate(location + '/' + "krita_test_swap_location");
         if (tempFile.open() && !tempFile.fileName().isEmpty()) {
             chosenLocation = location;
             break;
@@ -375,17 +375,27 @@ void KisImageConfig::setOnionSkinTintColorForward(const QColor &value)
     m_config.writeEntry("oninSkinTintColorForward", value);
 }
 
-bool KisImageConfig::lazyFrameCreationEnabled(bool requestDefault) const
+bool KisImageConfig::autoKeyEnabled(bool requestDefault) const
 {
     return !requestDefault ?
         m_config.readEntry("lazyFrameCreationEnabled", true) : true;
 }
 
-void KisImageConfig::setLazyFrameCreationEnabled(bool value)
+void KisImageConfig::setAutoKeyEnabled(bool value)
 {
     m_config.writeEntry("lazyFrameCreationEnabled", value);
 }
 
+bool KisImageConfig::autoKeyModeDuplicate(bool requestDefault) const
+{
+    return !requestDefault ?
+        m_config.readEntry("lazyFrameModeDuplicate", true) : true;
+}
+
+void KisImageConfig::setAutoKeyModeDuplicate(bool value)
+{
+    m_config.writeEntry("lazyFrameModeDuplicate", value);
+}
 
 #if defined Q_OS_LINUX
 #include <sys/sysinfo.h>
@@ -632,4 +642,10 @@ QColor KisImageConfig::selectionOverlayMaskColor(bool defaultValue) const
 void KisImageConfig::setSelectionOverlayMaskColor(const QColor &color)
 {
     m_config.writeEntry("selectionOverlayMaskColor", color);
+}
+
+void KisImageConfig::resetConfig()
+{
+    KConfigGroup config = KSharedConfig::openConfig()->group(QString());
+    config.deleteGroup();
 }

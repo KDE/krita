@@ -34,6 +34,7 @@
 #include <KoCompositeOpRegistry.h>
 #include <KoColorSpace.h>
 #include <KoToolManager.h>
+#include <KisGlobalResourcesInterface.h>
 
 class CompositeOpModel::Private
 {
@@ -198,10 +199,10 @@ void CompositeOpModel::setView(QObject* newView)
             connect(d->view->canvasBase()->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
                     this, SLOT(resourceChanged(int,QVariant)));
         }
-        if (d->view->nodeManager()) {
-            connect(d->view->nodeManager(), SIGNAL(sigLayerActivated(KisLayerSP)),
-                    this, SLOT(currentNodeChanged(KisLayerSP)));
-        }
+//        if (d->view->nodeManager()) {
+//            connect(d->view->nodeManager(), SIGNAL(sigLayerActivated(KisLayerSP)),
+//                    this, SLOT(currentNodeChanged(KisLayerSP)));
+//        }
         slotToolChanged(0, 0);
     }
     emit viewChanged();
@@ -393,22 +394,24 @@ void CompositeOpModel::resourceChanged(int key, const QVariant& /*v*/)
 {
     if (d->view && d->view->canvasBase() && d->view->canvasBase()->resourceManager() && d->view->canvasResourceProvider()) {
 
-        if (key == KisCanvasResourceProvider::MirrorHorizontal) {
+        if (key == KoCanvasResource::MirrorHorizontal) {
             emit mirrorHorizontallyChanged();
             return;
         }
-        else if(key == KisCanvasResourceProvider::MirrorVertical) {
+        else if(key == KoCanvasResource::MirrorVertical) {
             emit mirrorVerticallyChanged();
             return;
         }
 
-        KisPaintOpPresetSP preset = d->view->canvasBase()->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
+        KisPaintOpPresetSP preset = d->view->canvasBase()->resourceManager()->resource(KoCanvasResource::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
 
         if (preset && d->currentPreset.data() != preset.data()) {
             d->currentPreset = preset;
             if (!d->settingsWidgets.contains(preset.data())) {
                 d->settingsWidgets[preset.data()] = KisPaintOpRegistry::instance()->get(preset->paintOp().id())->createConfigWidget(0);
                 d->settingsWidgets[preset.data()]->setImage(d->view->image());
+                d->settingsWidgets[preset.data()]->setResourcesInterface(KisGlobalResourcesInterface::instance());
+                d->settingsWidgets[preset.data()]->setCanvasResourcesInterface(d->view->canvasResourceProvider()->resourceManager()->canvasResourcesInterface());
                 d->settingsWidgets[preset.data()]->setConfiguration(preset->settings());
             }
 

@@ -54,7 +54,7 @@ KisDeformPaintOpSettingsWidget::~ KisDeformPaintOpSettingsWidget()
 
 KisPropertiesConfigurationSP KisDeformPaintOpSettingsWidget::configuration() const
 {
-    KisDeformPaintOpSettings* config = new KisDeformPaintOpSettings();
+    KisDeformPaintOpSettings* config = new KisDeformPaintOpSettings(resourcesInterface());
     config->setOptionsWidget(const_cast<KisDeformPaintOpSettingsWidget*>(this));
     config->setProperty("paintop", "deformBrush");
     writeConfiguration(config);

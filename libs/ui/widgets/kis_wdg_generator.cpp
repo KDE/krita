@@ -1,4 +1,5 @@
 /* This file is part of the KDE project
+ *
  * Copyright (C) Boudewijn Rempt <boud@valdyas.org>, (C) 2008
  *
  * This library is free software; you can redistribute it and/or
@@ -33,6 +34,7 @@
 #include <kis_config_widget.h>
 #include <filter/kis_filter_configuration.h>
 #include <KoColorSpaceRegistry.h>
+#include <KisGlobalResourcesInterface.h>
 
 #include "ui_wdggenerators.h"
 
@@ -40,12 +42,15 @@ class KisGeneratorItem : public QListWidgetItem
 {
 public:
 
-    KisGeneratorItem(const QString & text, QListWidget * parent = 0, int type = Type)
-            : QListWidgetItem(text, parent, type) {
+    KisGeneratorItem(KisGeneratorSP _generator, QListWidget *parent = 0, int type = Type)
+        : QListWidgetItem(_generator->name(), parent, type)
+        , generator(_generator)
+    {
+        currentConfiguration = generator->defaultConfiguration(KisGlobalResourcesInterface::instance());
     }
 
     KisGeneratorSP generator;
-
+    KisPropertiesConfigurationSP currentConfiguration;
 };
 
 struct KisWdgGenerator::Private
@@ -65,15 +70,15 @@ public:
 };
 
 KisWdgGenerator::KisWdgGenerator(QWidget * parent)
-        : QWidget(parent)
-        , d(new Private())
+    : QWidget(parent)
+    , d(new Private())
 {
     KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8(0));
 }
 
 KisWdgGenerator::~KisWdgGenerator()
 {
-  delete d;
+    delete d;
 }
 
 void KisWdgGenerator::initialize(KisViewManager *view)
@@ -81,19 +86,19 @@ void KisWdgGenerator::initialize(KisViewManager *view)
     d->view = view;
     d->uiWdgGenerators.setupUi(this);
     d->widgetLayout = new QGridLayout(d->uiWdgGenerators.centralWidgetHolder);
+    d->widgetLayout->setContentsMargins(0, 0, 0, 0);
+    d->widgetLayout->setHorizontalSpacing(0);
     QStringList generatorNames = KisGeneratorRegistry::instance()->keys();
     generatorNames.sort();
 
     Q_FOREACH (const QString &generatorName, generatorNames) {
 
         KisGeneratorSP generator = KisGeneratorRegistry::instance()->get(generatorName);
+        // The item is automatically added to the lstGenerators listwidget
+        new KisGeneratorItem(generator,
+                             d->uiWdgGenerators.lstGenerators,
+                             QListWidgetItem::UserType + 1);
 
-        Q_ASSERT(generator);
-        KisGeneratorItem * item = new KisGeneratorItem(generator->name(),
-                d->uiWdgGenerators.lstGenerators,
-                QListWidgetItem::UserType + 1);
-
-        item->generator = generator;
     }
     connect(d->uiWdgGenerators.lstGenerators, SIGNAL(currentRowChanged(int)),
             this, SLOT(slotGeneratorActivated(int)));
@@ -132,13 +137,27 @@ KisFilterConfigurationSP KisWdgGenerator::configuration()
             return config;
         }
     } else {
-        return d->currentGenerator->defaultConfiguration();
+        return d->currentGenerator->defaultConfiguration(KisGlobalResourcesInterface::instance());
     }
     return 0;
 }
 
+
 void KisWdgGenerator::slotGeneratorActivated(int row)
 {
+    // Store the old settings
+    KisConfigWidget *wdg = dynamic_cast<KisConfigWidget*>(d->centralWidget);
+    if (wdg) {
+        KisPropertiesConfigurationSP config = wdg->configuration();
+        for (int i = 0; i < d->uiWdgGenerators.lstGenerators->count(); ++i) {
+            KisGeneratorItem * item = static_cast<KisGeneratorItem*>(d->uiWdgGenerators.lstGenerators->item(i));
+            if (item->generator->id() == static_cast<KisFilterConfiguration*>(config.data())->name()) {
+                item->currentConfiguration = wdg->configuration();
+            }
+        }
+    }
+
+    // Retrieve the new configuration
     KisGeneratorItem *item = dynamic_cast<KisGeneratorItem*>(d->uiWdgGenerators.lstGenerators->item(row));
 
     if (!item) {
@@ -151,7 +170,7 @@ void KisWdgGenerator::slotGeneratorActivated(int row)
         delete d->centralWidget;
 
         KisConfigWidget* widget =
-            d->currentGenerator->createConfigurationWidget(d->uiWdgGenerators.centralWidgetHolder, d->dev, true);
+                d->currentGenerator->createConfigurationWidget(d->uiWdgGenerators.centralWidgetHolder, d->dev, true);
 
         if (!widget) { // No widget, so display a label instead
             d->centralWidget = new QLabel(i18n("No configuration options."),
@@ -162,13 +181,9 @@ void KisWdgGenerator::slotGeneratorActivated(int row)
             connect( widget, SIGNAL(sigConfigurationUpdated()), this, SIGNAL(previewConfiguration()));
 
             widget->setView(d->view);
-            widget->setConfiguration(d->currentGenerator->defaultConfiguration());
+            widget->setConfiguration(item->currentConfiguration);
         }
     }
     d->widgetLayout->addWidget(d->centralWidget, 0 , 0);
     d->uiWdgGenerators.centralWidgetHolder->setMinimumSize(d->centralWidget->minimumSize());
-
-
 }
-
-

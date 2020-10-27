@@ -37,6 +37,8 @@
 
 #include "kis_clone_layer.h"
 
+#include "kis_time_span.h"
+
 #include "kis_safe_read_list.h"
 typedef KisSafeReadList<KisNodeSP> KisSafeReadNodeList;
 
@@ -46,6 +48,7 @@ typedef KisSafeReadList<KisNodeSP> KisSafeReadNodeList;
 #include "kis_keyframe_channel.h"
 #include "kis_image.h"
 #include "kis_layer_utils.h"
+#include "KisRegion.h"
 
 /**
  *The link between KisProjection and KisImageUpdater
@@ -616,7 +619,7 @@ void KisNode::setDirty(const QVector<QRect> &rects)
     }
 }
 
-void KisNode::setDirty(const QRegion &region)
+void KisNode::setDirty(const KisRegion &region)
 {
     setDirty(region.rects());
 }
@@ -643,10 +646,21 @@ void KisNode::setDirtyDontResetAnimationCache(const QVector<QRect> &rects)
     }
 }
 
-void KisNode::invalidateFrames(const KisTimeRange &range, const QRect &rect)
+void KisNode::invalidateFrames(const KisTimeSpan &range, const QRect &rect)
 {
     if(m_d->graphListener) {
         m_d->graphListener->invalidateFrames(range, rect);
+    }
+}
+
+void KisNode::handleKeyframeChannelUpdate(const KisTimeSpan &range, const QRect &rect)
+{
+    invalidateFrames(range, rect);
+
+    if (original() && original()->defaultBounds()) {
+        if (range.contains(original()->defaultBounds()->currentTime())) {
+            setDirty(rect);
+        }
     }
 }
 

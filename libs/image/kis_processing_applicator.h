@@ -35,7 +35,8 @@ public:
         NONE = 0x0,
         RECURSIVE = 0x1,
         NO_UI_UPDATES = 0x2,
-        SUPPORTS_WRAPAROUND_MODE = 0x4
+        SUPPORTS_WRAPAROUND_MODE = 0x4,
+        NO_IMAGE_UPDATES = 0x8
     };
 
     Q_DECLARE_FLAGS(ProcessingFlags, ProcessingFlag)
@@ -79,6 +80,12 @@ public:
     void cancel();
 
     /**
+     * Returns the underlying stroke.
+     * Useful if you want to inject additional jobs in the applicator.
+     */
+    const KisStrokeId getStroke() const;
+
+    /**
      * @brief runSingleCommandStroke creates a stroke and runs \p cmd in it.
      *        The text() field fo \p cmd is used as a title of the stroke.
      * @param image the image to run the stroke on
@@ -104,6 +111,7 @@ private:
     KisImageSignalVector m_emitSignals;
     KisStrokeId m_strokeId;
     bool m_finalSignalsEmitted;
+    QSharedPointer<bool> m_sharedAllFramesToken;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(KisProcessingApplicator::ProcessingFlags)

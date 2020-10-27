@@ -50,9 +50,9 @@ KisConfigWidget * KisBlurFilter::createConfigurationWidget(QWidget* parent, cons
     return new KisWdgBlur(parent);
 }
 
-KisFilterConfigurationSP KisBlurFilter::factoryConfiguration() const
+KisFilterConfigurationSP KisBlurFilter::defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const
 {
-    KisFilterConfigurationSP config = new KisFilterConfiguration(id().id(), 1);
+    KisFilterConfigurationSP config = factoryConfiguration(resourcesInterface);
     config->setProperty("halfWidth", 5);
     config->setProperty("halfHeight", 5);
     config->setProperty("rotate", 0);
@@ -63,13 +63,13 @@ KisFilterConfigurationSP KisBlurFilter::factoryConfiguration() const
 
 void KisBlurFilter::processImpl(KisPaintDeviceSP device,
                                 const QRect& rect,
-                                const KisFilterConfigurationSP _config,
+                                const KisFilterConfigurationSP config,
                                 KoUpdater* progressUpdater
                                 ) const
 {
     QPoint srcTopLeft = rect.topLeft();
     Q_ASSERT(device != 0);
-    KisFilterConfigurationSP config = _config ? _config : new KisFilterConfiguration(id().id(), 1);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(config);
 
     KisLodTransformScalar t(device);
 
@@ -80,12 +80,11 @@ void KisBlurFilter::processImpl(KisPaintDeviceSP device,
     int shape = (config->getProperty("shape", value)) ? value.toInt() : 0;
     uint width = 2 * halfWidth + 1;
     uint height = 2 * halfHeight + 1;
-    float aspectRatio = (float) width / height;
+    qreal aspectRatio = (qreal) height / width;
     int rotate = (config->getProperty("rotate", value)) ? value.toInt() : 0;
-    int strength = 100 - (config->getProperty("strength", value) ? value.toUInt() : 0);
-
-    int hFade = (halfWidth * strength) / 100;
-    int vFade = (halfHeight * strength) / 100;
+    qreal strength = (config->getProperty("strength", value) ? value.toUInt() : 0) / (qreal) 100;
+    qreal hFade = strength;
+    qreal vFade = strength;
 
     KisMaskGenerator* kas;
     dbgKrita << width << "" << height << "" << hFade << "" << vFade;

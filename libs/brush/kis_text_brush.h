@@ -22,13 +22,15 @@
 
 #include <QFont>
 
+#include <KoEphemeralResource.h>
+
 #include "kis_scaling_size_brush.h"
 #include "kritabrush_export.h"
 
 class KisTextBrushesPipe;
 
 
-class BRUSH_EXPORT KisTextBrush : public KisScalingSizeBrush
+class BRUSH_EXPORT KisTextBrush : public KoEphemeralResource<KisScalingSizeBrush>
 {
 
 public:
@@ -36,33 +38,21 @@ public:
     KisTextBrush(const KisTextBrush &rhs);
     ~KisTextBrush() override;
 
+    KisTextBrush &operator=(const KisTextBrush &rhs) = delete;
+
+    KoResourceSP clone() const override;
+
+
     void notifyStrokeStarted() override;
-    void notifyCachedDabPainted(const KisPaintInformation& info) override;
     void prepareForSeqNo(const KisPaintInformation& info, int seqNo) override;
 
     void generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst, KisBrush::ColoringInformation* coloringInformation,
             KisDabShape const&,
             const KisPaintInformation& info,
-            double subPixelX = 0, double subPixelY = 0, qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const override;
+            double subPixelX = 0, double subPixelY = 0, qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR, qreal lightnessStrength = 1.0) const override;
 
     KisFixedPaintDeviceSP paintDevice(const KoColorSpace * colorSpace,
         KisDabShape const&, const KisPaintInformation& info, double subPixelX, double subPixelY) const override;
-
-    bool load() override {
-        return false;
-    }
-
-    bool loadFromDevice(QIODevice *) override {
-        return false;
-    }
-
-    bool save() override {
-        return false;
-    }
-
-    bool saveToDevice(QIODevice* ) const override {
-        return false;
-    }
 
     void setText(const QString& txt);
     QString text(void) const;
@@ -76,14 +66,12 @@ public:
     void updateBrush();
     void toXML(QDomDocument& , QDomElement&) const override;
 
-    quint32 brushIndex(const KisPaintInformation& info) const override;
+    quint32 brushIndex() const override;
     qint32 maskWidth(KisDabShape const&, double subPixelX, double subPixelY, const KisPaintInformation& info) const override;
     qint32 maskHeight(KisDabShape const&, double subPixelX, double subPixelY, const KisPaintInformation& info) const override;
     void setAngle(qreal _angle) override;
     void setScale(qreal _scale) override;
     void setSpacing(double _spacing) override;
-
-    KisBrush* clone() const override;
 
 private:
     QFont m_font;
@@ -92,5 +80,7 @@ private:
 private:
     KisTextBrushesPipe *m_brushesPipe;
 };
+
+typedef QSharedPointer<KisTextBrush> KisTextBrushSP;
 
 #endif

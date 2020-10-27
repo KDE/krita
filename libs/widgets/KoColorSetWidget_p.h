@@ -34,15 +34,14 @@
 #include <QMenu>
 #include <QWidgetAction>
 #include <QDir>
-#include <QPointer>
 #include <QScrollArea>
 #include <QComboBox>
 
 #include <klocalizedstring.h>
 #include <WidgetsDebug.h>
 #include <KoResourceServer.h>
-#include <kis_popup_button.h>
-#include <KisPaletteListWidget.h>
+#include <KisPopupButton.h>
+#include <KisPaletteChooser.h>
 #include <KisPaletteComboBox.h>
 
 #include <resources/KoColorSet.h>
@@ -54,10 +53,10 @@ class KisPaletteView;
 class Q_DECL_HIDDEN KoColorSetWidget::KoColorSetWidgetPrivate {
 public:
     KoColorSetWidget *thePublic;
-    QPointer<KoColorSet> colorSet;
+    KoColorSetSP colorSet;
 
     KisPaletteView *paletteView;
-    KisPaletteListWidget *paletteChooser;
+    KisPaletteChooser *paletteChooser;
     KisPopupButton *paletteChooserButton;
 
     QVBoxLayout *mainLayout;

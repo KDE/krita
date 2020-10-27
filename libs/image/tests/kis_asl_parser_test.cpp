@@ -20,7 +20,8 @@
 
 #include <QTest>
 
-#include "testutil.h"
+#include <testutil.h>
+#include "testimage.h"
 
 #include <QDomDocument>
 
@@ -84,7 +85,7 @@ struct CallbackVerifier {
         m_numCallsHappened++;
     }
 
-    void setPattern(const KoPattern *pattern) {
+    void setPattern(const KoPatternSP pattern) {
         dbgKrita << ppVar(pattern->name());
         dbgKrita << ppVar(pattern->filename());
 
@@ -130,12 +131,12 @@ void KisAslParserTest::testASLXMLWriter()
     KisAslXmlWriter w;
 
     QImage testImage(QSize(16, 16), QImage::Format_ARGB32);
-    KoPattern testPattern1(testImage, "Some very nice name ;)", "");
-    KoPattern testPattern2(testImage, "Another very nice name ;P", "");
+    KoPatternSP testPattern1(new KoPattern(testImage, "Some very nice name ;)", ""));
+    KoPatternSP testPattern2(new KoPattern(testImage, "Another very nice name ;P", ""));
 
-    w.enterList("Patterns");
-    w.writePattern("", &testPattern1);
-    w.writePattern("", &testPattern2);
+    w.enterList(ResourceType::Patterns);
+    w.writePattern("", testPattern1);
+    w.writePattern("", testPattern2);
     w.leaveList();
 
     w.enterDescriptor("", "", "null");
@@ -213,10 +214,10 @@ void KisAslParserTest::testWritingGradients()
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
 
     QList<KoGradientStop> stops;
-    stops << KoGradientStop(0.0, KoColor(Qt::black, cs));
-    stops << KoGradientStop(0.3, KoColor(Qt::red, cs));
-    stops << KoGradientStop(0.6, KoColor(Qt::green, cs));
-    stops << KoGradientStop(1.0, KoColor(Qt::white, cs));
+    stops << KoGradientStop(0.0, KoColor(Qt::black, cs), COLORSTOP);
+    stops << KoGradientStop(0.3, KoColor(Qt::red, cs), COLORSTOP);
+    stops << KoGradientStop(0.6, KoColor(Qt::green, cs), COLORSTOP);
+    stops << KoGradientStop(1.0, KoColor(Qt::white, cs), COLORSTOP);
 
     KoStopGradient stopGradient;
     stopGradient.setStops(stops);
@@ -287,7 +288,7 @@ void KisAslParserTest::testASLWriter()
 
 void KisAslParserTest::testParserWithPatterns()
 {
-    QDir dir(QString(FILES_DATA_DIR) + QDir::separator() + "testset");
+    QDir dir(QString(FILES_DATA_DIR) + '/' + "testset");
 
     QFileInfoList files = dir.entryInfoList(QStringList() << "*.asl", QDir::Files);
 
@@ -317,6 +318,7 @@ void KisAslParserTest::testParserWithPatterns()
         KisAslCallbackObjectCatcher c;
 
         c.subscribePattern("/Patterns/KisPattern", std::bind(&CallbackVerifier::setPattern, &verifier, std::placeholders::_1));
+        c.subscribePattern("/patterns/KisPattern", std::bind(&CallbackVerifier::setPattern, &verifier, std::placeholders::_1));
 
         KisAslXmlParser parser;
         parser.parseXML(doc, c);
@@ -328,4 +330,4 @@ void KisAslParserTest::testParserWithPatterns()
     }
 }
 
-QTEST_MAIN(KisAslParserTest)
+KISTEST_MAIN(KisAslParserTest)

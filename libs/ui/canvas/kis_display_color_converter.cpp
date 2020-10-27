@@ -195,7 +195,7 @@ struct KisDisplayColorConverter::Private
             qreal maxValue = chaninfo->getUIMax();
 
             if (m_resourceManager) {
-                qreal exposure = m_resourceManager->resource(KisCanvasResourceProvider::HdrExposure).value<qreal>();
+                qreal exposure = m_resourceManager->resource(KoCanvasResource::HdrExposure).value<qreal>();
                 // not sure if *= is what we want
                 maxValue *= std::pow(2.0, -exposure);
             }
@@ -285,10 +285,10 @@ void KisDisplayColorConverter::Private::updateIntermediateFgColor(const KoColor 
 
 void KisDisplayColorConverter::Private::slotCanvasResourceChanged(int key, const QVariant &v)
 {
-    if (key == KisCanvasResourceProvider::CurrentKritaNode) {
+    if (key == KoCanvasResource::CurrentKritaNode) {
         KisNodeSP currentNode = v.value<KisNodeWSP>();
         setCurrentNode(currentNode);
-    } else if (useOcio() && key == KoCanvasResourceProvider::ForegroundColor) {
+    } else if (useOcio() && key == KoCanvasResource::ForegroundColor) {
         updateIntermediateFgColor(v.value<KoColor>());
     }
 }
@@ -535,7 +535,7 @@ QImage KisDisplayColorConverter::toQImage(KisPaintDeviceSP srcDevice) const
             m_d->displayFilter->filter(it.rawData(), numConseqPixels);
         }
 
-        device->setProfile(m_d->ocioOutputProfile());
+        device->setProfile(m_d->ocioOutputProfile(), 0);
     }
 
     // we expect the display profile is rgb8, which is BGRA here

@@ -43,13 +43,13 @@
 KisHairyPaintOp::KisHairyPaintOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisNodeSP node, KisImageSP image)
     : KisPaintOp(painter)
 {
-    Q_UNUSED(image)
+    Q_UNUSED(image);
     Q_ASSERT(settings);
 
     m_dev = node ? node->paintDevice() : 0;
 
     KisBrushOptionProperties brushOption;
-    brushOption.readOptionSetting(settings);
+    brushOption.readOptionSetting(settings, settings->resourcesInterface(), settings->canvasResourcesInterface());
     KisBrushSP brush = brushOption.brush();
     KisFixedPaintDeviceSP dab = cachedDab(painter->device()->compositionSourceColorSpace());
 
@@ -58,7 +58,7 @@ KisHairyPaintOp::KisHairyPaintOp(const KisPaintOpSettingsSP settings, KisPainter
     fakePaintInformation.setRandomSource(new KisRandomSource());
     fakePaintInformation.setPerStrokeRandomSource(new KisPerStrokeRandomSource());
 
-    if (brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {
+    if (brush->brushApplication() == IMAGESTAMP) {
         dab = brush->paintDevice(source()->colorSpace(), KisDabShape(), fakePaintInformation);
     } else {
         brush->mask(dab, painter->paintColor(), KisDabShape(), fakePaintInformation);
@@ -78,6 +78,11 @@ KisHairyPaintOp::KisHairyPaintOp(const KisPaintOpSettingsSP settings, KisPainter
     m_sizeOption.resetAllSensors();
 }
 
+QList<KoResourceSP> KisHairyPaintOp::prepareLinkedResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface)
+{
+    KisBrushOptionProperties brushOption;
+    return brushOption.prepareLinkedResources(settings, resourcesInterface);
+}
 
 void KisHairyPaintOp::loadSettings(const KisBrushBasedPaintOpSettings *settings)
 {

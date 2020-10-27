@@ -23,7 +23,7 @@
 #include "kis_paint_layer.h"
 #include "kis_image.h"
 #include "kis_fill_painter.h"
-#include "testutil.h"
+#include <testutil.h>
 #include "kis_selection.h"
 #include "kis_pixel_selection.h"
 #define IMAGE_WIDTH 1000
@@ -43,16 +43,11 @@ KisPaintDeviceSP createDevice()
     return dev;
 }
 
-void KisTransparencyMaskTest::testCreation()
-{
-    KisTransparencyMask test;
-}
-
 #define initImage(image, layer, device, mask) do {                      \
     image = new KisImage(0, IMAGE_WIDTH, IMAGE_HEIGHT, 0, "tests");     \
     device = createDevice();                                            \
     layer = new KisPaintLayer(image, "paint1", 100, device);                  \
-    mask = new KisTransparencyMask();                                   \
+    mask = new KisTransparencyMask(image, "tmask");                                   \
     image->addNode(layer);                                              \
     image->addNode(mask, layer);                                        \
     } while(0)
@@ -76,7 +71,7 @@ void KisTransparencyMaskTest::testApply()
     QImage qimage = dev->convertToQImage(0, 0, 0, 200, 100);
 
     if (!TestUtil::compareQImages(errpoint,
-                                  QImage(QString(FILES_DATA_DIR) + QDir::separator() + "transparency_mask_test_2.png"),
+                                  QImage(QString(FILES_DATA_DIR) + '/' + "transparency_mask_test_2.png"),
                                   qimage)) {
         QFAIL(QString("Failed to mask out image, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
     }
@@ -89,7 +84,7 @@ void KisTransparencyMaskTest::testApply()
     qimage = dev->convertToQImage(0, 0, 0, 200, 100);
 
     if (!TestUtil::compareQImages(errpoint,
-                                  QImage(QString(FILES_DATA_DIR) + QDir::separator() + "transparency_mask_test_1.png"),
+                                  QImage(QString(FILES_DATA_DIR) + '/' + "transparency_mask_test_1.png"),
                                   qimage)) {
         QFAIL(QString("Failed to mask in image, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
     }
@@ -102,7 +97,7 @@ void KisTransparencyMaskTest::testApply()
     qimage = dev->convertToQImage(0, 0, 0, 200, 100);
 
     if (!TestUtil::compareQImages(errpoint,
-                                  QImage(QString(FILES_DATA_DIR) + QDir::separator() + "transparency_mask_test_3.png"),
+                                  QImage(QString(FILES_DATA_DIR) + '/' + "transparency_mask_test_3.png"),
                                   qimage)) {
 
         QFAIL(QString("Failed to apply partial mask, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toLatin1());

@@ -60,9 +60,9 @@ KisEmbossFilter::KisEmbossFilter() : KisFilter(id(), FiltersCategoryEmbossId, i1
     setSupportsAdjustmentLayers(false);
 }
 
-KisFilterConfigurationSP KisEmbossFilter::factoryConfiguration() const
+KisFilterConfigurationSP KisEmbossFilter::defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const
 {
-    KisFilterConfigurationSP config = new KisFilterConfiguration(id().id(), 0);
+    KisFilterConfigurationSP config = factoryConfiguration(resourcesInterface);
     config->setProperty("depth", 30);
     return config;
 }
@@ -104,7 +104,7 @@ void KisEmbossFilter::processImpl(KisPaintDeviceSP device,
     KisSequentialIteratorProgress it(device, applyRect, progressUpdater);
     QColor color1;
     QColor color2;
-    KisRandomConstAccessorSP acc = device->createRandomAccessorNG(srcTopLeft.x(), srcTopLeft.y());
+    KisRandomConstAccessorSP acc = device->createRandomAccessorNG();
     while (it.nextPixel()) {
 
         // XXX: COLORSPACE_INDEPENDENCE or at least work IN RGB16A

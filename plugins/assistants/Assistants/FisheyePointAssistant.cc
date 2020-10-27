@@ -25,6 +25,7 @@
 #include <klocalizedstring.h>
 
 #include <QPainter>
+#include <QPainterPath>
 #include <QLinearGradient>
 #include <QTransform>
 
@@ -36,7 +37,9 @@
 #include <limits>
 
 FisheyePointAssistant::FisheyePointAssistant()
-        : KisPaintingAssistant("fisheye-point", i18n("Fish Eye Point assistant"))
+    : KisPaintingAssistant("fisheye-point", i18n("Fish Eye Point assistant"))
+    , m_followBrushPosition(false)
+    , m_adjustedPositionValid(false)
 {
 }
 
@@ -44,6 +47,9 @@ FisheyePointAssistant::FisheyePointAssistant(const FisheyePointAssistant &rhs, Q
     : KisPaintingAssistant(rhs, handleMap)
     , e(rhs.e)
     , extraE(rhs.extraE)
+    , m_followBrushPosition(rhs.m_followBrushPosition)
+    , m_adjustedPositionValid(rhs.m_adjustedPositionValid)
+    , m_adjustedBrushPosition(rhs.m_adjustedBrushPosition)
 {
 }
 
@@ -52,19 +58,37 @@ KisPaintingAssistantSP FisheyePointAssistant::clone(QMap<KisPaintingAssistantHan
     return KisPaintingAssistantSP(new FisheyePointAssistant(*this, handleMap));
 }
 
+void FisheyePointAssistant::setAdjustedBrushPosition(const QPointF position)
+{
+    m_adjustedBrushPosition = position;
+    m_adjustedPositionValid = true;
+}
+
+void FisheyePointAssistant::endStroke()
+{
+    // Brush stroke ended, guides should follow the brush position again.
+    m_followBrushPosition = false;
+    m_adjustedPositionValid = false;
+}
+
+void FisheyePointAssistant::setFollowBrushPosition(bool follow)
+{
+    m_followBrushPosition = follow;
+}
+
 QPointF FisheyePointAssistant::project(const QPointF& pt, const QPointF& strokeBegin)
 {
     const static QPointF nullPoint(std::numeric_limits<qreal>::quiet_NaN(), std::numeric_limits<qreal>::quiet_NaN());
     Q_ASSERT(isAssistantComplete());
     e.set(*handles()[0], *handles()[1], *handles()[2]);
 
-    qreal
-            dx = pt.x() - strokeBegin.x(),
-            dy = pt.y() - strokeBegin.y();
-        if (dx * dx + dy * dy < 4.0) {
-            // allow some movement before snapping
-            return strokeBegin;
-        }
+    qreal dx = pt.x() - strokeBegin.x();
+    qreal dy = pt.y() - strokeBegin.y();
+
+    if (dx * dx + dy * dy < 4.0) {
+        // allow some movement before snapping
+        return strokeBegin;
+    }
 
     //set the extrapolation ellipse.
     if (e.set(*handles()[0], *handles()[1], *handles()[2])){
@@ -78,11 +102,11 @@ QPointF FisheyePointAssistant::project(const QPointF& pt, const QPointF& strokeB
             return extraE.project(pt);
         } else if (extraE.set(radius2.p1(), radius2.p2(),strokeBegin)){
             return extraE.project(pt);
-        }   
+        }
     }
-    
+
     return nullPoint;
-    
+
 }
 
 QPointF FisheyePointAssistant::adjustPosition(const QPointF& pt, const QPointF& strokeBegin)
@@ -96,7 +120,7 @@ void FisheyePointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect
     gc.resetTransform();
 
     QPointF mousePos(0,0);
-    
+
     if (canvas){
         //simplest, cheapest way to get the mouse-position//
         mousePos= canvas->canvasWidget()->mapFromGlobal(QCursor::pos());
@@ -106,13 +130,18 @@ void FisheyePointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect
         mousePos = QCursor::pos();//this'll give an offset//
         dbgFile<<"canvas does not exist in ruler, you may have passed arguments incorrectly:"<<canvas;
     }
-    
-    QTransform initialTransform = converter->documentToWidgetTransform();
-    
+
+
     if (isSnappingActive() && previewVisible == true ) {
 
         if (isAssistantComplete()){
-                
+
+            QTransform initialTransform = converter->documentToWidgetTransform();
+
+            if (m_followBrushPosition && m_adjustedPositionValid) {
+                mousePos = initialTransform.map(m_adjustedBrushPosition);
+            }
+
             if (e.set(*handles()[0], *handles()[1], *handles()[2])) {
                 if (extraE.set(*handles()[0], *handles()[1], initialTransform.inverted().map(mousePos))){
                     gc.setTransform(initialTransform);
@@ -142,12 +171,12 @@ void FisheyePointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect
                     path.addEllipse(QPointF(0, 0), extraE.semiMajor(), extraE.semiMinor());
                     drawPreview(gc, path);
                 }
-                
+
             }
         }
     }
     gc.restore();
-    
+
     KisPaintingAssistant::drawAssistant(gc, updateRect, converter, cached, canvas, assistantVisible, previewVisible);
 
 }
@@ -157,7 +186,7 @@ void FisheyePointAssistant::drawCache(QPainter& gc, const KisCoordinatesConverte
     if (assistantVisible == false){
         return;
     }
-    
+
     QTransform initialTransform = converter->documentToWidgetTransform();
 
     if (handles().size() == 2) {
@@ -187,7 +216,7 @@ void FisheyePointAssistant::drawCache(QPainter& gc, const KisCoordinatesConverte
         path.addEllipse(QPointF(0, 0), e.semiMajor(), e.semiMinor());
         drawPath(gc, path, isSnappingActive());
     }
-    
+
 }
 
 QRect FisheyePointAssistant::boundingRect() const

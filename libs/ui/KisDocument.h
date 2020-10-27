@@ -27,8 +27,6 @@
 
 #include <klocalizedstring.h>
 
-#include <KoPageLayout.h>
-#include <KoDocumentBase.h>
 #include <kundo2stack.h>
 #include <KoColorSet.h>
 
@@ -41,6 +39,7 @@
 #include <kis_debug.h>
 #include <KisImportExportUtils.h>
 #include <kis_config.h>
+#include "kis_scratch_pad.h"
 
 #include "kritaui_export.h"
 
@@ -56,7 +55,6 @@ class KoColorSpace;
 class KoShapeControllerBase;
 class KoShapeLayer;
 class KoStore;
-class KoOdfReadStore;
 class KoDocumentInfo;
 class KoDocumentInfoDlg;
 class KisImportExportManager;
@@ -77,13 +75,13 @@ class KisReferenceImagesLayer;
  *
  *  @short The %Calligra document class
  */
-class KRITAUI_EXPORT KisDocument : public QObject, public KoDocumentBase
+class KRITAUI_EXPORT KisDocument : public QObject
 {
     Q_OBJECT
 
 protected:
 
-    explicit KisDocument();
+    explicit KisDocument(bool addStorage = true);
 
     /**
      * @brief KisDocument makes a deep copy of the document \p rhs.
@@ -108,14 +106,16 @@ public:
      * The destructor does not delete any attached KisView objects and it does not
      * delete the attached widget as returned by widget().
      */
-    ~KisDocument() override;
+    ~KisDocument();
 
     /**
-     * @brief reload Reloads the document from the original url
-     * @return the result of loading the document
+     * @brief uniqueID is a temporary unique ID that identifies the document. It is
+     * generated on creation and can be used to uniquely associated temporary objects
+     * with this document.
+     *
+     * @return the temporary unique id for this document.
      */
-    bool reload();
-
+    QString uniqueID() const;
 
     /**
      * @brief creates a clone of the document and returns it. Please make sure that you
@@ -189,7 +189,7 @@ public:
     /**
      * Returns the actual mimetype of the document
      */
-    QByteArray mimeType() const override;
+    QByteArray mimeType() const;
 
     /**
      * @brief Sets the mime type for the document.
@@ -197,7 +197,7 @@ public:
      * When choosing "save as" this is also the mime type
      * selected by default.
      */
-    void setMimeType(const QByteArray & mimeType) override;
+    void setMimeType(const QByteArray & mimeType);
 
     /**
      * @return true if file operations should inhibit the option dialog
@@ -314,7 +314,7 @@ public:
     /**
      * Returns true if this document or any of its internal child documents are modified.
      */
-    bool isModified() const override;
+    bool isModified() const;
 
     /**
      * @return caption of the document
@@ -356,14 +356,22 @@ public:
     const KisGuidesConfig& guidesConfig() const;
     void setGuidesConfig(const KisGuidesConfig &data);
 
+    /**
+     * @brief paletteList returns all the palettes found in the document's local resource storage
+     */
+    QList<KoColorSetSP> paletteList();
+
+    /**
+     * @brief setPaletteList replaces the palettes in the document's local resource storage with the list
+     * of palettes passed to this function. It will then emitsigPaletteListChanged with both the old and
+     * the new list, if emitsignal is true.
+     */
+    void setPaletteList(const QList<KoColorSetSP> &paletteList, bool emitSignal = false);
+
     const KisMirrorAxisConfig& mirrorAxisConfig() const;
     void setMirrorAxisConfig(const KisMirrorAxisConfig& config);
 
-    QList<KoColorSet *> &paletteList();
-    void setPaletteList(const QList<KoColorSet *> &paletteList, bool emitSignal = false);
-
     void clearUndoHistory();
-
 
     /**
      *  Sets the modified flag on the document. This means that it has
@@ -471,7 +479,7 @@ Q_SIGNALS:
      * Emitted when the palette list has changed.
      * The pointers in oldPaletteList are to be deleted by the resource server.
      **/
-    void sigPaletteListChanged(const QList<KoColorSet *> &oldPaletteList, const QList<KoColorSet *> &newPaletteList);
+    void sigPaletteListChanged(const QList<KoColorSetSP> &oldPaletteList, const QList<KoColorSetSP> &newPaletteList);
 
     void sigAssistantsChanged();
 
@@ -483,6 +491,8 @@ private Q_SLOTS:
     void slotCompleteSavingDocument(const KritaUtils::ExportFileJob &job, KisImportExportErrorCode status, const QString &errorMessage);
 
     void slotInitiateAsyncAutosaving(KisDocument *clonedDocument);
+
+    void slotPerformIdleRoutines();
 
 private:
 
@@ -533,19 +543,19 @@ private:
 
 public:
 
-    bool isAutosaving() const override;
+    bool isAutosaving() const;
 
 public:
 
-    QString localFilePath() const override;
+    QString localFilePath() const;
     void setLocalFilePath( const QString &localFilePath );
 
     KoDocumentInfoDlg* createDocumentInfoDialog(QWidget *parent, KoDocumentInfo *docInfo) const;
 
     bool isReadWrite() const;
 
-    QUrl url() const override;
-    void setUrl(const QUrl &url) override;
+    QUrl url() const;
+    void setUrl(const QUrl &url);
 
     bool closeUrl(bool promptToSave = true);
 
@@ -641,6 +651,13 @@ public:
      * @brief Start saving when android activity is pushed to the background
      */
     void autoSaveOnPause();
+
+    /**
+      * @brief Helper method to convert a URI to path. Specifically for handling Android's
+      * "content://" URIs
+      */
+    QString toPath(const QUrl& url) const;
+
 Q_SIGNALS:
 
     void completed();

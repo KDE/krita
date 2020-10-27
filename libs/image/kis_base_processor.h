@@ -40,6 +40,12 @@ class KisBookmarkedConfigurationManager;
 class KisFilterConfiguration;
 class KisConfigWidget;
 
+class KoResource;
+typedef QSharedPointer<KoResource> KoResourceSP;
+
+class KisResourcesInterface;
+typedef QSharedPointer<KisResourcesInterface> KisResourcesInterfaceSP;
+
 /**
  * Base class for classes that process areas of pixels.
  * Processors can either read in pixels and write out pixels
@@ -72,7 +78,7 @@ public:
      *
      * @return the default configuration of this widget
      */
-    KisFilterConfigurationSP  defaultConfiguration() const;
+    virtual KisFilterConfigurationSP  defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const;
 
     /**
      * @return the bookmark manager for this processor
@@ -140,8 +146,9 @@ public:
      */
     ColorSpaceIndependence colorSpaceIndependence() const;
 
-    /// @return the default configuration as defined by whoever wrote the plugin
-    virtual KisFilterConfigurationSP factoryConfiguration() const;
+    /// @return the default configuration object as defined by whoever wrote the plugin.
+    /// This object must be filled in with fromXML after that.
+    virtual KisFilterConfigurationSP factoryConfiguration(KisResourcesInterfaceSP resourcesInterface) const;
 
 protected:
 

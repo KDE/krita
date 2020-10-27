@@ -323,6 +323,9 @@ FastRowProcessor::process<Vc::CurrentImplementation::current()>(float* buffer, i
 
             Vc::float_v alphaValueF = valDist - vFloatAlphaValue;
 
+            Vc::float_m alphaMask = vAlphaValue < vZero;
+            vAlphaValue.setZero(alphaMask);
+
             vCurvedData.gather(curveDataPointer,vAlphaValue);
             vCurvedData1.gather(curveDataPointer,vAlphaValue + 1);
 //            Vc::float_v vCurvedData1(curveDataPointer,vAlphaValue + 1);
@@ -437,14 +440,11 @@ FastRowProcessor::process<Vc::CurrentImplementation::current()>(float* buffer, i
 
             Vc::float_v vFade(vZero);
 
-            Vc::float_v::IndexType fxrInt(fxr * vTolerance);
-            Vc::float_v::IndexType fyrInt(fyr * vTolerance);
-
-            Vc::float_m fadeXMask = (fxr > vOne) && ((fxrInt >= fyrInt) || fyr < vOne);
-            Vc::float_m fadeYMask = (fyr > vOne) && ((fyrInt > fxrInt) || fxr < vOne);
-
-            vFade(fadeXMask) = fxrNorm;
-            vFade(!fadeXMask && fadeYMask) = fyrNorm;
+            Vc::float_m vFadeMask = fxrNorm < fyrNorm;
+            Vc::float_v vMaxVal = vFade;
+            vMaxVal(fxr > vOne) = fxrNorm;
+            vMaxVal(vFadeMask && fyr > vOne) = fyrNorm;
+            vFade = vMaxVal;
 
             // Mask out the outer circle of the mask
             vFade(outsideMask) = vOne;

@@ -942,5 +942,185 @@ void KisTiledDataManagerTest::stressTestLazyCopying()
     pool.waitForDone();
 }
 
+void KisTiledDataManagerTest::stressTestExtentsColumn()
+{
+    KisTiledExtentManager::Data column;
+
+    struct Job : public QRunnable
+    {
+        Job(KisTiledExtentManager::Data &column, int index, int numCycles)
+            : m_column(column), m_index(index), m_numCycles(numCycles) {}
+
+        void run() override {
+            for(qint32 i = 0; i < m_numCycles; i++) {
+                if (!m_isCreated) {
+                    m_column.add(m_index);
+                    KIS_SAFE_ASSERT_RECOVER_NOOP(m_column.max() >= m_index);
+                    KIS_SAFE_ASSERT_RECOVER_NOOP(m_column.min() <= m_index);
+                } else {
+                    m_column.remove(m_index);
+                }
+
+                m_isCreated = !m_isCreated;
+            }
+        }
+
+        KisTiledExtentManager::Data &m_column;
+        const int m_index;
+        const int m_numCycles;
+        bool m_isCreated = false;
+    };
+
+
+#ifdef LIMIT_LONG_TESTS
+    const int numThreads = 8;
+    const int numWorkers = 32;
+    const int numCycles = 10000;
+#else
+    const int numThreads = 16;
+    const int numWorkers = 32;
+    const int numCycles = 100000;
+#endif
+
+    QThreadPool pool;
+    pool.setMaxThreadCount(numThreads);
+
+    for(qint32 i = 0; i < numWorkers; i++) {
+        const int index = 18 + i / 13;
+        pool.start(new Job(column, index, numCycles));
+    }
+    pool.waitForDone();
+
+    QVERIFY(column.isEmpty());
+    QVERIFY(column.max() < column.min()); // really empty :)
+}
+
+void KisTiledDataManagerTest::benchmaskQRegion()
+{
+    QVector<QRect> rects;
+
+    int poison = 0;
+    for (int y = 0; y < 8000; y += 64) {
+        for (int x = 0; x < 8000; x += 64) {
+            if (poison++ % 7 == 0) continue;
+            rects << QRect(x, y, 64, 64);
+        }
+    }
+
+    std::random_shuffle(rects.begin(), rects.end());
+
+    QElapsedTimer timer;
+    timer.start();
+
+    QRegion region;
+
+    Q_FOREACH (const QRect &rc, rects) {
+        region += rc;
+    }
+
+    qDebug() << "compressed rects:" << ppVar(rects.size()) << "-->" << ppVar(region.rectCount());
+    qDebug() << "compression time:" << timer.elapsed() << "ms";
+}
+
+#include "KisRegion.h"
+void KisTiledDataManagerTest::benchmaskKisRegion()
+{
+    QVector<QRect> rects;
+
+    int poison = 0;
+
+    for (int y = 0; y < 8000; y += 64) {
+        for (int x = 0; x < 8000; x += 64) {
+            if (poison++ % 7 == 0) continue;
+            rects << QRect(x, y, 64, 64);
+        }
+    }
+
+    std::random_shuffle(rects.begin(), rects.end());
+
+    QElapsedTimer timer;
+    timer.start();
+
+    auto endIt = KisRegion::mergeSparseRects(rects.begin(), rects.end());
+
+    qDebug() << "compressed rects:" << ppVar(rects.size()) << "-->" << ppVar(std::distance(rects.begin(), endIt));
+    qDebug() << "compression time:" << timer.elapsed() << "ms";
+}
+
+inline bool findPoint (const QPoint &pt, const QVector<QRect> &rects)
+{
+    for (auto it = rects.begin(); it != rects.end(); ++it) {
+        if (it->contains(pt)) return true;
+    }
+
+    return false;
+}
+
+void KisTiledDataManagerTest::benchmaskOverlappedKisRegion()
+{
+    QVector<QRect> rects;
+
+    int poison = 0;
+    for (int y = 0; y < 8000; y += 13) {
+        for (int x = 0; x < 8000; x += 17) {
+            if (poison++ % 7 == 0) continue;
+            rects << QRect(x, y, 13 + (poison % 17) * 7, 17 + (poison % 13) * 7);
+        }
+    }
+
+    const int originalSize = rects.size();
+    QVector<QRect> originalRects = rects;
+
+    std::random_shuffle(rects.begin(), rects.end());
+
+    QElapsedTimer timer;
+    timer.start();
+
+#if 0
+    // speed reference: executes for about 150 seconds! (150000ms)
+    QRegion region;
+    Q_FOREACH (const QRect &rc, rects) {
+        region += rc;
+    }
+#endif
+
+    KisRegion::approximateOverlappingRects(rects, 64);
+
+    qDebug() << "deoverlapped rects:" << ppVar(originalSize) << "-->" << ppVar(rects.size());
+    qDebug() << "deoverlaping time:" << timer.restart() << "ms";
+
+    KisRegion region(rects);
+
+    qDebug() << "compressed rects:" << ppVar(region.rects().size());
+    qDebug() << "compression time:" << timer.restart() << "ms";
+
+    for (auto it1 = rects.begin(); it1 != rects.end(); ++it1) {
+        for (auto it2 = std::next(it1); it2 != rects.end(); ++it2) {
+            QVERIFY(!it1->intersects(*it2));
+        }
+    }
+
+
+#if 0
+    /// very slow sanity check for invariant: "all source rects are
+    /// represented in the deoverlapped set of rects"
+
+    QVector<QRect> comressedRects = region.rects();
+    int i = 0;
+    Q_FOREACH(const QRect &rc, originalRects) {
+        if (i % 1000 == 0) {
+            qDebug() << ppVar(i);
+        }
+
+        for (int y = rc.y(); y <= rc.bottom(); ++y) {
+            for (int x = rc.x(); x <= rc.right(); ++x) {
+                QVERIFY(findPoint(QPoint(x, y), comressedRects));
+            }
+        }
+        i++;
+    }
+#endif
+}
+
 QTEST_MAIN(KisTiledDataManagerTest)
 

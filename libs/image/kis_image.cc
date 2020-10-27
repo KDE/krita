@@ -29,7 +29,6 @@
 #include <QSize>
 #include <QDateTime>
 #include <QRect>
-#include <QRegion>
 #include <QtConcurrent>
 
 #include <klocalizedstring.h>
@@ -42,15 +41,12 @@
 
 #include "kis_adjustment_layer.h"
 #include "kis_annotation.h"
-#include "kis_change_profile_visitor.h"
-#include "kis_colorspace_convert_visitor.h"
 #include "kis_count_visitor.h"
 #include "kis_filter_strategy.h"
 #include "kis_group_layer.h"
 #include "commands/kis_image_commands.h"
 #include "kis_layer.h"
 #include "kis_meta_data_merge_strategy_registry.h"
-#include "kis_name_server.h"
 #include "kis_paint_layer.h"
 #include "kis_projection_leaf.h"
 #include "kis_painter.h"
@@ -58,6 +54,8 @@
 #include "kis_transaction.h"
 #include "kis_meta_data_merge_strategy.h"
 #include "kis_memory_statistics_server.h"
+#include "kis_node.h"
+#include "kis_types.h"
 
 #include "kis_image_config.h"
 #include "kis_update_scheduler.h"
@@ -77,9 +75,12 @@
 #include "processing/kis_crop_processing_visitor.h"
 #include "processing/kis_crop_selections_processing_visitor.h"
 #include "processing/kis_transform_processing_visitor.h"
+#include "processing/kis_convert_color_space_processing_visitor.h"
+#include "processing/kis_assign_profile_processing_visitor.h"
 #include "commands_new/kis_image_resize_command.h"
 #include "commands_new/kis_image_set_resolution_command.h"
 #include "commands_new/kis_activate_selection_mask_command.h"
+#include "kis_do_something_command.h"
 #include "kis_composite_progress_proxy.h"
 #include "kis_layer_composition.h"
 #include "kis_wrapped_rect.h"
@@ -96,18 +97,21 @@
 #include "kis_layer_projection_plane.h"
 
 #include "kis_update_time_monitor.h"
-#include "tiles3/kis_lockless_stack.h"
+#include "kis_lockless_stack.h"
 
 #include <QtCore>
 
 #include <functional>
 
-#include "kis_time_range.h"
+#include "kis_time_span.h"
 
 #include "KisRunnableBasedStrokeStrategy.h"
 #include "KisRunnableStrokeJobData.h"
 #include "KisRunnableStrokeJobUtils.h"
 #include "KisRunnableStrokeJobsInterface.h"
+
+#include "KisBusyWaitBroker.h"
+
 
 // #define SANITY_CHECKS
 
@@ -140,7 +144,8 @@ public:
         , width(w)
         , height(h)
         , colorSpace(c ? c : KoColorSpaceRegistry::instance()->rgb8())
-        , nserver(1)
+        , isolateLayer(false)
+        , isolateGroup(false)
         , undoStore(undo ? undo : new KisDumbUndoStore())
         , legacyUndoAdapter(undoStore.data(), _q)
         , postExecutionUndoAdapter(undoStore.data(), _q)
@@ -163,18 +168,16 @@ public:
                         KisSyncLodCacheStrokeStrategy::createJobsData(KisImageWSP(q)));
                 });
 
-            scheduler.setSuspendUpdatesStrokeStrategyFactory(
+            scheduler.setSuspendResumeUpdatesStrokeStrategyFactory(
                 [=]() {
-                    return KisSuspendResumePair(
-                        new KisSuspendProjectionUpdatesStrokeStrategy(KisImageWSP(q), true),
-                        KisSuspendProjectionUpdatesStrokeStrategy::createSuspendJobsData(KisImageWSP(q)));
-                });
+                    KisSuspendProjectionUpdatesStrokeStrategy::SharedDataSP data = KisSuspendProjectionUpdatesStrokeStrategy::createSharedData();
 
-            scheduler.setResumeUpdatesStrokeStrategyFactory(
-                [=]() {
-                    return KisSuspendResumePair(
-                        new KisSuspendProjectionUpdatesStrokeStrategy(KisImageWSP(q), false),
-                        KisSuspendProjectionUpdatesStrokeStrategy::createResumeJobsData(KisImageWSP(q)));
+                    KisSuspendResumePair suspend(new KisSuspendProjectionUpdatesStrokeStrategy(KisImageWSP(q), true, data),
+                                                 KisSuspendProjectionUpdatesStrokeStrategy::createSuspendJobsData(KisImageWSP(q)));
+                    KisSuspendResumePair resume(new KisSuspendProjectionUpdatesStrokeStrategy(KisImageWSP(q), false, data),
+                                                KisSuspendProjectionUpdatesStrokeStrategy::createResumeJobsData(KisImageWSP(q)));
+
+                    return std::make_pair(suspend, resume);
                 });
         }
 
@@ -213,10 +216,12 @@ public:
     KisSelectionMaskSP targetOverlaySelectionMask; // the overlay switching stroke will try to switch into this mask
     KisSelectionMaskSP overlaySelectionMask;
     QList<KisLayerCompositionSP> compositions;
-    KisNodeSP isolatedRootNode;
-    bool wrapAroundModePermitted = false;
 
-    KisNameServer nserver;
+    KisNodeSP isolationRootNode;
+    bool isolateLayer;
+    bool isolateGroup;
+
+    bool wrapAroundModePermitted = false;
 
     QScopedPointer<KisUndoStore> undoStore;
     KisLegacyUndoAdapter legacyUndoAdapter;
@@ -227,12 +232,13 @@ public:
     QAtomicInt disableUIUpdateSignals;
     KisLocklessStack<QRect> savedDisabledUIUpdates;
 
-    KisProjectionUpdatesFilterSP projectionUpdatesFilter;
+    // filters are applied in a reversed way, from rbegin() to rend()
+    QVector<KisProjectionUpdatesFilterSP> projectionUpdatesFilters;
+    QStack<KisProjectionUpdatesFilterCookie> disabledUpdatesCookies;
     KisImageSignalRouter signalRouter;
     KisImageAnimationInterface *animationInterface;
     KisUpdateScheduler scheduler;
     QAtomicInt disableDirtyRequests;
-
 
     KisCompositeProgressProxy compositeProgressProxy;
 
@@ -244,6 +250,13 @@ public:
     bool tryCancelCurrentStrokeAsync();
 
     void notifyProjectionUpdatedInPatches(const QRect &rc, QVector<KisRunnableStrokeJobData *> &jobs);
+
+    void convertImageColorSpaceImpl(const KoColorSpace *dstColorSpace,
+                                    bool convertLayers,
+                                    KoColorConversionTransformation::Intent renderingIntent,
+                                    KoColorConversionTransformation::ConversionFlags conversionFlags);
+
+    struct SetImageProjectionColorSpace;
 };
 
 KisImage::KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const KoColorSpace * colorSpace, const QString& name)
@@ -263,8 +276,6 @@ KisImage::KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const K
 
 KisImage::~KisImage()
 {
-    dbgImage << "deleting kisimage" << objectName();
-
     /**
      * Request the tools to end currently running strokes
      */
@@ -400,7 +411,10 @@ void KisImage::copyFromImageImpl(const KisImage &rhs, int policy)
 
     bool exactCopy = policy & EXACT_COPY;
 
-    if (exactCopy || rhs.m_d->isolatedRootNode) {
+    if (exactCopy || rhs.m_d->isolationRootNode || rhs.m_d->overlaySelectionMask) {
+        m_d->isolateLayer = rhs.m_d->isolateLayer;
+        m_d->isolateGroup = rhs.m_d->isolateGroup;
+
         QQueue<KisNodeSP> linearizedNodes;
         KisLayerUtils::recursiveApplyNodes(rhs.root(),
                                            [&linearizedNodes](KisNodeSP node) {
@@ -414,9 +428,16 @@ void KisImage::copyFromImageImpl(const KisImage &rhs, int policy)
                                                    node->setUuid(refNode->uuid());
                                                }
 
-                                               if (rhs.m_d->isolatedRootNode &&
-                                                   rhs.m_d->isolatedRootNode == refNode) {
-                                                   m_d->isolatedRootNode = node;
+                                               if (rhs.m_d->isolationRootNode &&
+                                                   rhs.m_d->isolationRootNode == refNode) {
+                                                   m_d->isolationRootNode = node;
+                                               }
+
+                                               if (rhs.m_d->overlaySelectionMask &&
+                                                   KisNodeSP(rhs.m_d->overlaySelectionMask) == refNode) {
+                                                   m_d->targetOverlaySelectionMask = dynamic_cast<KisSelectionMask*>(node.data());
+                                                   m_d->overlaySelectionMask = m_d->targetOverlaySelectionMask;
+                                                   m_d->rootLayer->notifyChildMaskChanged();
                                                }
                                            });
     }
@@ -434,27 +455,18 @@ void KisImage::copyFromImageImpl(const KisImage &rhs, int policy)
 
     EMIT_IF_NEEDED sigLayersChangedAsync();
 
-    m_d->nserver = rhs.m_d->nserver;
-
     vKisAnnotationSP newAnnotations;
     Q_FOREACH (KisAnnotationSP annotation, rhs.m_d->annotations) {
         newAnnotations << annotation->clone();
     }
     m_d->annotations = newAnnotations;
 
-    KIS_ASSERT_RECOVER_NOOP(!rhs.m_d->projectionUpdatesFilter);
+    KIS_ASSERT_RECOVER_NOOP(rhs.m_d->projectionUpdatesFilters.isEmpty());
     KIS_ASSERT_RECOVER_NOOP(!rhs.m_d->disableUIUpdateSignals);
     KIS_ASSERT_RECOVER_NOOP(!rhs.m_d->disableDirtyRequests);
 
     m_d->blockLevelOfDetail = rhs.m_d->blockLevelOfDetail;
 
-    /**
-     * The overlay device is not inherited when cloning the image!
-     */
-    if (rhs.m_d->overlaySelectionMask) {
-        const QRect dirtyRect = rhs.m_d->overlaySelectionMask->extent();
-        m_d->rootLayer->setDirty(dirtyRect);
-    }
 #undef EMIT_IF_NEEDED
 }
 
@@ -493,7 +505,7 @@ void KisImage::aboutToRemoveANode(KisNode *parent, int index)
 {
     KisNodeSP deletedNode = parent->at(index);
     if (!dynamic_cast<KisSelectionMask*>(deletedNode.data()) &&
-        deletedNode == m_d->isolatedRootNode) {
+        deletedNode == m_d->isolationRootNode) {
 
         emit sigInternalStopIsolatedModeRequested();
     }
@@ -513,7 +525,7 @@ void KisImage::nodeChanged(KisNode* node)
 
 void KisImage::invalidateAllFrames()
 {
-    invalidateFrames(KisTimeRange::infinite(0), QRect());
+    invalidateFrames(KisTimeSpan::infinite(0), QRect());
 }
 
 void KisImage::setOverlaySelectionMask(KisSelectionMaskSP mask)
@@ -524,7 +536,7 @@ void KisImage::setOverlaySelectionMask(KisSelectionMaskSP mask)
 
     struct UpdateOverlaySelectionStroke : public KisSimpleStrokeStrategy {
         UpdateOverlaySelectionStroke(KisImageSP image)
-            : KisSimpleStrokeStrategy("update-overlay-selection-mask", kundo2_noi18n("update-overlay-selection-mask")),
+            : KisSimpleStrokeStrategy(QLatin1String("update-overlay-selection-mask"), kundo2_noi18n("update-overlay-selection-mask")),
               m_image(image)
         {
             this->enableJob(JOB_INIT, true, KisStrokeJobData::BARRIER, KisStrokeJobData::EXCLUSIVE);
@@ -594,7 +606,7 @@ void KisImage::setGlobalSelection(KisSelectionSP globalSelection)
     }
     else {
         if (!selectionMask) {
-            selectionMask = new KisSelectionMask(this);
+            selectionMask = new KisSelectionMask(this, i18n("Selection Mask"));
             selectionMask->initSelection(m_d->rootLayer);
             addNode(selectionMask);
             // If we do not set the selection now, the setActive call coming next
@@ -637,21 +649,31 @@ QString KisImage::nextLayerName(const QString &_baseName) const
 {
     QString baseName = _baseName;
 
-    if (m_d->nserver.currentSeed() == 0) {
-        m_d->nserver.number();
+    int numLayers = 0;
+    int maxLayerIndex = 0;
+    QRegularExpression numberedLayerRegexp(".* (\\d+)$");
+    KisLayerUtils::recursiveApplyNodes(root(),
+        [&numLayers, &maxLayerIndex, &numberedLayerRegexp] (KisNodeSP node) {
+            if (node->inherits("KisLayer")) {
+                QRegularExpressionMatch match = numberedLayerRegexp.match(node->name());
+
+                if (match.hasMatch()) {
+                    maxLayerIndex = qMax(maxLayerIndex, match.captured(1).toInt());
+                }
+                numLayers++;
+            }
+        });
+
+    // special case if there is only root node
+    if (numLayers == 1) {
         return i18n("background");
     }
 
     if (baseName.isEmpty()) {
-        baseName = i18n("Layer");
+        baseName = i18n("Paint Layer");
     }
 
-    return QString("%1 %2").arg(baseName).arg(m_d->nserver.number());
-}
-
-void KisImage::rollBackLayerName()
-{
-    m_d->nserver.rollback();
+    return QString("%1 %2").arg(baseName).arg(maxLayerIndex + 1);
 }
 
 KisCompositeProgressProxy* KisImage::compositeProgressProxy()
@@ -668,7 +690,9 @@ void KisImage::barrierLock(bool readOnly)
 {
     if (!locked()) {
         requestStrokeEnd();
+        KisBusyWaitBroker::instance()->notifyWaitOnImageStarted(this);
         m_d->scheduler.barrierLock();
+        KisBusyWaitBroker::instance()->notifyWaitOnImageEnded(this);
         m_d->lockedForReadOnly = readOnly;
     } else {
         m_d->lockedForReadOnly &= readOnly;
@@ -703,7 +727,9 @@ void KisImage::lock()
 {
     if (!locked()) {
         requestStrokeEnd();
+        KisBusyWaitBroker::instance()->notifyWaitOnImageStarted(this);
         m_d->scheduler.lock();
+        KisBusyWaitBroker::instance()->notifyWaitOnImageEnded(this);
     }
     m_d->lockCount++;
     m_d->lockedForReadOnly = false;
@@ -780,10 +806,60 @@ void KisImage::cropImage(const QRect& newRect)
     resizeImageImpl(newRect, true);
 }
 
-
-void KisImage::cropNode(KisNodeSP node, const QRect& newRect)
+void KisImage::purgeUnusedData(bool isCancellable)
 {
-    bool isLayer = qobject_cast<KisLayer*>(node.data());
+    /**
+     * WARNING: don't use this function unless you know what you are doing!
+     *
+     * It breaks undo on layers! Therefore, after calling it, KisImage is not
+     * undo-capable anymore!
+     */
+
+    struct PurgeUnusedDataStroke : public KisRunnableBasedStrokeStrategy {
+        PurgeUnusedDataStroke(KisImageSP image, bool isCancellable)
+            : KisRunnableBasedStrokeStrategy(QLatin1String("purge-unused-data"),
+                                             kundo2_noi18n("purge-unused-data")),
+              m_image(image)
+        {
+            this->enableJob(JOB_INIT, true, KisStrokeJobData::BARRIER, KisStrokeJobData::EXCLUSIVE);
+            this->enableJob(JOB_DOSTROKE, true);
+            setClearsRedoOnStart(false);
+            setRequestsOtherStrokesToEnd(!isCancellable);
+            setCanForgetAboutMe(isCancellable);
+        }
+
+        void initStrokeCallback() {
+            KisPaintDeviceList deviceList;
+            QVector<KisStrokeJobData*> jobsData;
+
+            KisLayerUtils::recursiveApplyNodes(m_image->root(),
+                [&deviceList](KisNodeSP node) {
+                   deviceList << node->getLodCapableDevices();
+                 });
+
+            Q_FOREACH (KisPaintDeviceSP device, deviceList) {
+                if (!device) continue;
+
+                KritaUtils::addJobConcurrent(jobsData,
+                    [device] () {
+                        const_cast<KisPaintDevice*>(device.data())->purgeDefaultPixels();
+                    });
+            }
+
+            addMutatedJobs(jobsData);
+        }
+
+    private:
+        KisImageSP m_image;
+    };
+
+    KisStrokeId id = startStroke(new PurgeUnusedDataStroke(this, isCancellable));
+    endStroke(id);
+}
+
+void KisImage::cropNode(KisNodeSP node, const QRect& newRect, const bool activeFrameOnly)
+{
+    const bool isLayer = qobject_cast<KisLayer*>(node.data());
     KUndo2MagicString actionName = isLayer ?
         kundo2_i18n("Crop Layer") :
         kundo2_i18n("Crop Mask");
@@ -801,7 +877,14 @@ void KisImage::cropNode(KisNodeSP node, const QRect& newRect)
 
     KisProcessingVisitorSP visitor =
         new KisCropProcessingVisitor(newRect, true, false);
-    applicator.applyVisitorAllFrames(visitor, KisStrokeJobData::CONCURRENT);
+
+    if (node->isAnimated() && activeFrameOnly) {
+        // Crop active frame..
+        applicator.applyVisitor(visitor, KisStrokeJobData::CONCURRENT);
+    } else {
+        // Crop all frames..
+        applicator.applyVisitorAllFrames(visitor, KisStrokeJobData::CONCURRENT);
+    }
     applicator.end();
 }
 
@@ -1097,63 +1180,221 @@ void KisImage::shear(double angleX, double angleY)
               angleX, angleY, 0);
 }
 
+void KisImage::convertLayerColorSpace(KisNodeSP node,
+                                      const KoColorSpace *dstColorSpace,
+                                      KoColorConversionTransformation::Intent renderingIntent,
+                                      KoColorConversionTransformation::ConversionFlags conversionFlags)
+{
+    if (!node->projectionLeaf()->isLayer()) return;
+
+    const KoColorSpace *srcColorSpace = node->colorSpace();
+
+    if (!dstColorSpace || *srcColorSpace == *dstColorSpace) return;
+
+    KUndo2MagicString actionName =
+        kundo2_i18n("Convert Layer Color Space");
+
+    KisImageSignalVector emitSignals;
+    emitSignals << ModifiedSignal;
+
+    KisProcessingApplicator applicator(this, node,
+                                       KisProcessingApplicator::RECURSIVE,
+                                       emitSignals, actionName);
+
+    applicator.applyVisitor(
+        new KisConvertColorSpaceProcessingVisitor(
+            srcColorSpace, dstColorSpace,
+            renderingIntent, conversionFlags),
+        KisStrokeJobData::CONCURRENT);
+
+    applicator.end();
+}
+
+struct KisImage::KisImagePrivate::SetImageProjectionColorSpace : public KisCommandUtils::FlipFlopCommand
+{
+    SetImageProjectionColorSpace(const KoColorSpace *cs, KisImageWSP image,
+                                 State initialState, KUndo2Command *parent = 0)
+        : KisCommandUtils::FlipFlopCommand(initialState, parent),
+          m_cs(cs),
+          m_image(image)
+    {
+    }
+
+    void partA() override {
+        KisImageSP image = m_image;
+
+        if (image) {
+            image->setProjectionColorSpace(m_cs);
+        }
+    }
+
+private:
+    const KoColorSpace *m_cs;
+    KisImageWSP m_image;
+};
+
+void KisImage::KisImagePrivate::convertImageColorSpaceImpl(const KoColorSpace *dstColorSpace,
+                                                           bool convertLayers,
+                                                           KoColorConversionTransformation::Intent renderingIntent,
+                                                           KoColorConversionTransformation::ConversionFlags conversionFlags)
+{
+    const KoColorSpace *srcColorSpace = this->colorSpace;
+
+    if (!dstColorSpace || *srcColorSpace == *dstColorSpace) return;
+
+    const KUndo2MagicString actionName =
+        convertLayers ?
+        kundo2_i18n("Convert Image Color Space") :
+        kundo2_i18n("Convert Projection Color Space");
+
+    KisImageSignalVector emitSignals;
+    emitSignals << ColorSpaceChangedSignal;
+    emitSignals << ModifiedSignal;
+
+    KisProcessingApplicator applicator(q, this->rootLayer,
+                                       KisProcessingApplicator::RECURSIVE |
+                                       KisProcessingApplicator::NO_UI_UPDATES,
+                                       emitSignals, actionName);
+
+    applicator.applyCommand(
+        new KisImagePrivate::SetImageProjectionColorSpace(dstColorSpace,
+                                                          KisImageWSP(q),
+                                                          KisCommandUtils::FlipFlopCommand::INITIALIZING),
+        KisStrokeJobData::BARRIER);
+
+    if (convertLayers) {
+        applicator.applyVisitor(
+                    new KisConvertColorSpaceProcessingVisitor(
+                        srcColorSpace, dstColorSpace,
+                        renderingIntent, conversionFlags),
+                    KisStrokeJobData::CONCURRENT);
+    } else {
+        applicator.applyCommand(
+            new KisDoSomethingCommand<
+                    KisDoSomethingCommandOps::ResetOp, KisGroupLayerSP>
+                    (this->rootLayer, false));
+        applicator.applyCommand(
+            new KisDoSomethingCommand<
+                    KisDoSomethingCommandOps::ResetOp, KisGroupLayerSP>
+                    (this->rootLayer, true));
+    }
+
+    applicator.applyCommand(
+        new KisImagePrivate::SetImageProjectionColorSpace(srcColorSpace,
+                                                          KisImageWSP(q),
+                                                          KisCommandUtils::FlipFlopCommand::FINALIZING),
+        KisStrokeJobData::BARRIER);
+
+
+    applicator.end();
+}
+
 void KisImage::convertImageColorSpace(const KoColorSpace *dstColorSpace,
                                       KoColorConversionTransformation::Intent renderingIntent,
                                       KoColorConversionTransformation::ConversionFlags conversionFlags)
 {
-    if (!dstColorSpace) return;
-
-    const KoColorSpace *srcColorSpace = m_d->colorSpace;
-
-    undoAdapter()->beginMacro(kundo2_i18n("Convert Image Color Space"));
-    undoAdapter()->addCommand(new KisImageLockCommand(KisImageWSP(this), true));
-    undoAdapter()->addCommand(new KisImageSetProjectionColorSpaceCommand(KisImageWSP(this), dstColorSpace));
-
-    KisColorSpaceConvertVisitor visitor(this, srcColorSpace, dstColorSpace, renderingIntent, conversionFlags);
-    m_d->rootLayer->accept(visitor);
-
-    undoAdapter()->addCommand(new KisImageLockCommand(KisImageWSP(this), false));
-    undoAdapter()->endMacro();
-
-    setModified();
+    m_d->convertImageColorSpaceImpl(dstColorSpace, true, renderingIntent, conversionFlags);
 }
 
-bool KisImage::assignImageProfile(const KoColorProfile *profile)
+void KisImage::convertImageProjectionColorSpace(const KoColorSpace *dstColorSpace)
+{
+    m_d->convertImageColorSpaceImpl(dstColorSpace, false,
+                                    KoColorConversionTransformation::internalRenderingIntent(),
+                                    KoColorConversionTransformation::internalConversionFlags());
+}
+
+
+bool KisImage::assignLayerProfile(KisNodeSP node, const KoColorProfile *profile)
+{
+    const KoColorSpace *srcColorSpace = node->colorSpace();
+
+    if (!node->projectionLeaf()->isLayer()) return false;
+    if (!profile || *srcColorSpace->profile() == *profile) return false;
+
+    KUndo2MagicString actionName = kundo2_i18n("Assign Profile to Layer");
+
+    KisImageSignalVector emitSignals;
+    emitSignals << ModifiedSignal;
+
+    const KoColorSpace *dstColorSpace = KoColorSpaceRegistry::instance()->colorSpace(colorSpace()->colorModelId().id(), colorSpace()->colorDepthId().id(), profile);
+    if (!dstColorSpace) return false;
+
+    KisProcessingApplicator applicator(this, node,
+                                       KisProcessingApplicator::RECURSIVE |
+                                       KisProcessingApplicator::NO_UI_UPDATES,
+                                       emitSignals, actionName);
+
+    applicator.applyVisitor(
+        new KisAssignProfileProcessingVisitor(
+            srcColorSpace, dstColorSpace),
+        KisStrokeJobData::CONCURRENT);
+
+    applicator.end();
+
+    return true;
+}
+
+
+bool KisImage::assignImageProfile(const KoColorProfile *profile, bool blockAllUpdates)
 {
     if (!profile) return false;
 
-    const KoColorSpace *dstCs = KoColorSpaceRegistry::instance()->colorSpace(colorSpace()->colorModelId().id(), colorSpace()->colorDepthId().id(), profile);
-    const KoColorSpace *srcCs = colorSpace();
+    const KoColorSpace *srcColorSpace = m_d->colorSpace;
+    bool imageProfileIsSame = *srcColorSpace->profile() == *profile;
 
-    if (!dstCs) return false;
+    imageProfileIsSame &=
+        !KisLayerUtils::recursiveFindNode(m_d->rootLayer,
+            [profile] (KisNodeSP node) {
+                return *node->colorSpace()->profile() != *profile;
+            });
 
-    m_d->colorSpace = dstCs;
+    if (imageProfileIsSame) {
+        dbgImage << "Trying to set the same image profile again" << ppVar(srcColorSpace->profile()->name()) << ppVar(profile->name());
+        return true;
+    }
 
-    KisChangeProfileVisitor visitor(srcCs, dstCs);
-    bool retval = m_d->rootLayer->accept(visitor);
-    m_d->signalRouter.emitNotification(ProfileChangedSignal);
-    return retval;
+    KUndo2MagicString actionName = kundo2_i18n("Assign Profile");
 
-}
+    KisImageSignalVector emitSignals;
+    emitSignals << ProfileChangedSignal;
+    emitSignals << ModifiedSignal;
 
-void KisImage::convertProjectionColorSpace(const KoColorSpace *dstColorSpace)
-{
-    if (*m_d->colorSpace == *dstColorSpace) return;
+    const KoColorSpace *dstColorSpace = KoColorSpaceRegistry::instance()->colorSpace(colorSpace()->colorModelId().id(), colorSpace()->colorDepthId().id(), profile);
+    if (!dstColorSpace) return false;
 
-    undoAdapter()->beginMacro(kundo2_i18n("Convert Projection Color Space"));
-    undoAdapter()->addCommand(new KisImageLockCommand(KisImageWSP(this), true));
-    undoAdapter()->addCommand(new KisImageSetProjectionColorSpaceCommand(KisImageWSP(this), dstColorSpace));
-    undoAdapter()->addCommand(new KisImageLockCommand(KisImageWSP(this), false));
-    undoAdapter()->endMacro();
+    KisProcessingApplicator applicator(this, m_d->rootLayer,
+                                       KisProcessingApplicator::RECURSIVE |
+                                       (!blockAllUpdates ?
+                                            KisProcessingApplicator::NO_UI_UPDATES :
+                                            KisProcessingApplicator::NO_IMAGE_UPDATES),
+                                       emitSignals, actionName);
 
-    setModified();
+    applicator.applyCommand(
+        new KisImagePrivate::SetImageProjectionColorSpace(dstColorSpace,
+                                                          KisImageWSP(this),
+                                                          KisCommandUtils::FlipFlopCommand::INITIALIZING),
+        KisStrokeJobData::BARRIER);
+
+    applicator.applyVisitor(
+        new KisAssignProfileProcessingVisitor(
+            srcColorSpace, dstColorSpace),
+        KisStrokeJobData::CONCURRENT);
+
+    applicator.applyCommand(
+        new KisImagePrivate::SetImageProjectionColorSpace(srcColorSpace,
+                                                          KisImageWSP(this),
+                                                          KisCommandUtils::FlipFlopCommand::FINALIZING),
+        KisStrokeJobData::BARRIER);
+
+
+    applicator.end();
+
+    return true;
 }
 
 void KisImage::setProjectionColorSpace(const KoColorSpace * colorSpace)
 {
     m_d->colorSpace = colorSpace;
-    m_d->rootLayer->resetCache();
-    m_d->signalRouter.emitNotification(ColorSpaceChangedSignal);
 }
 
 const KoColorSpace * KisImage::colorSpace() const
@@ -1180,7 +1421,6 @@ void KisImage::setResolution(double xres, double yres)
 {
     m_d->xres = xres;
     m_d->yres = yres;
-    m_d->signalRouter.emitNotification(ResolutionChangedSignal);
 }
 
 QPointF KisImage::documentToPixel(const QPointF &documentCoord) const
@@ -1232,10 +1472,9 @@ KisGroupLayerSP KisImage::rootLayer() const
 
 KisPaintDeviceSP KisImage::projection() const
 {
-    if (m_d->isolatedRootNode) {
-        return m_d->isolatedRootNode->projection();
+    if (m_d->isolationRootNode) {
+        return m_d->isolationRootNode->projection();
     }
-
 
     Q_ASSERT(m_d->rootLayer);
     KisPaintDeviceSP projection = m_d->rootLayer->projection();
@@ -1496,7 +1735,9 @@ KisImageSignalRouter* KisImage::signalRouter()
 void KisImage::waitForDone()
 {
     requestStrokeEnd();
+    KisBusyWaitBroker::instance()->notifyWaitOnImageStarted(this);
     m_d->scheduler.waitForDone();
+    KisBusyWaitBroker::instance()->notifyWaitOnImageEnded(this);
 }
 
 KisStrokeId KisImage::startStroke(KisStrokeStrategy *strokeStrategy)
@@ -1541,33 +1782,56 @@ void KisImage::KisImagePrivate::notifyProjectionUpdatedInPatches(const QRect &rc
     }
 }
 
-bool KisImage::startIsolatedMode(KisNodeSP node)
+bool KisImage::startIsolatedMode(KisNodeSP node, bool isolateLayer, bool isolateGroup)
 {
+    m_d->isolateLayer = isolateLayer;
+    m_d->isolateGroup = isolateGroup;
+    if ((isolateLayer || isolateGroup) == false) return false;
+
     struct StartIsolatedModeStroke : public KisRunnableBasedStrokeStrategy {
-        StartIsolatedModeStroke(KisNodeSP node, KisImageSP image)
-            : KisRunnableBasedStrokeStrategy("start-isolated-mode", kundo2_noi18n("start-isolated-mode")),
+        StartIsolatedModeStroke(KisNodeSP node, KisImageSP image, bool isolateLayer, bool isolateGroup)
+            : KisRunnableBasedStrokeStrategy(QLatin1String("start-isolated-mode"),
+                                             kundo2_noi18n("start-isolated-mode")),
               m_node(node),
-              m_image(image)
+              m_image(image),
+              m_needsFullRefresh(false),
+              m_isolateLayer(isolateLayer),
+              m_isolateGroup(isolateGroup)
         {
             this->enableJob(JOB_INIT, true, KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
             this->enableJob(JOB_DOSTROKE, true);
+            this->enableJob(JOB_FINISH, true, KisStrokeJobData::BARRIER);
             setClearsRedoOnStart(false);
         }
 
-        void initStrokeCallback() {
+        void initStrokeCallback() override {
+            if (m_isolateLayer == false && m_isolateGroup == true) {
+                // Isolate parent node unless node is the root note.
+                m_node = m_node->parent() ? m_node->parent() : m_node;
+            }
             // pass-though node don't have any projection prepared, so we should
             // explicitly regenerate it before activating isolated mode.
             m_node->projectionLeaf()->explicitlyRegeneratePassThroughProjection();
 
-            m_image->m_d->isolatedRootNode = m_node;
+            const bool beforeVisibility = m_node->projectionLeaf()->visible();
+            m_image->m_d->isolationRootNode = m_node;
             emit m_image->sigIsolatedModeChanged();
+            const bool afterVisibility = m_node->projectionLeaf()->visible();
 
+            m_needsFullRefresh = (beforeVisibility != afterVisibility);
+        }
+
+        void finishStrokeCallback() override {
             // the GUI uses our thread to do the color space conversion so we
             // need to emit this signal in multiple threads
-            QVector<KisRunnableStrokeJobData*> jobs;
-            m_image->m_d->notifyProjectionUpdatedInPatches(m_image->bounds(), jobs);
-            this->runnableJobsInterface()->addRunnableJobs(jobs);
 
+            if (m_needsFullRefresh) {
+                m_image->refreshGraphAsync(m_node);
+            } else {
+                QVector<KisRunnableStrokeJobData*> jobs;
+                m_image->m_d->notifyProjectionUpdatedInPatches(m_image->bounds(), jobs);
+                this->runnableJobsInterface()->addRunnableJobs(jobs);
+            }
 
             m_image->invalidateAllFrames();
         }
@@ -1575,9 +1839,12 @@ bool KisImage::startIsolatedMode(KisNodeSP node)
     private:
         KisNodeSP m_node;
         KisImageSP m_image;
+        bool m_needsFullRefresh;
+        bool m_isolateLayer;
+        bool m_isolateGroup;
     };
 
-    KisStrokeId id = startStroke(new StartIsolatedModeStroke(node, this));
+    KisStrokeId id = startStroke(new StartIsolatedModeStroke(node, this, isolateLayer, isolateGroup));
     endStroke(id);
 
     return true;
@@ -1585,52 +1852,77 @@ bool KisImage::startIsolatedMode(KisNodeSP node)
 
 void KisImage::stopIsolatedMode()
 {
-    if (!m_d->isolatedRootNode)  return;
+    if (!m_d->isolationRootNode)  return;
 
     struct StopIsolatedModeStroke : public KisRunnableBasedStrokeStrategy {
         StopIsolatedModeStroke(KisImageSP image)
-            : KisRunnableBasedStrokeStrategy("stop-isolated-mode", kundo2_noi18n("stop-isolated-mode")),
-              m_image(image)
+            : KisRunnableBasedStrokeStrategy(QLatin1String("stop-isolated-mode"), kundo2_noi18n("stop-isolated-mode")),
+              m_image(image),
+              m_oldRootNode(nullptr),
+              m_oldNodeNeedsRefresh(false)
         {
             this->enableJob(JOB_INIT);
             this->enableJob(JOB_DOSTROKE, true);
+            this->enableJob(JOB_FINISH, true, KisStrokeJobData::BARRIER);
             setClearsRedoOnStart(false);
         }
 
-        void initStrokeCallback() {
-            if (!m_image->m_d->isolatedRootNode)  return;
+        void initStrokeCallback() override {
+            if (!m_image->m_d->isolationRootNode)  return;
 
-            //KisNodeSP oldRootNode = m_image->m_d->isolatedRootNode;
-            m_image->m_d->isolatedRootNode = 0;
+            m_oldRootNode = m_image->m_d->isolationRootNode;
 
+            const bool beforeVisibility = m_oldRootNode->projectionLeaf()->visible();
+            m_image->m_d->isolationRootNode = 0;
+            m_image->m_d->isolateLayer = false;
+            m_image->m_d->isolateGroup = false;
             emit m_image->sigIsolatedModeChanged();
+            const bool afterVisibility = m_oldRootNode->projectionLeaf()->visible();
+
+            m_oldNodeNeedsRefresh = (beforeVisibility != afterVisibility);
+        }
+
+        void finishStrokeCallback() override {
 
             m_image->invalidateAllFrames();
 
-            // the GUI uses our thread to do the color space conversion so we
-            // need to emit this signal in multiple threads
-            QVector<KisRunnableStrokeJobData*> jobs;
-            m_image->m_d->notifyProjectionUpdatedInPatches(m_image->bounds(), jobs);
-            this->runnableJobsInterface()->addRunnableJobs(jobs);
+            if (m_oldNodeNeedsRefresh){
+                m_oldRootNode->setDirty(m_image->bounds());
+            } else {
+                // TODO: Substitute notifyProjectionUpdated() with this code
+                // when update optimization is implemented
+                //
+                // QRect updateRect = bounds() | oldRootNode->extent();
+                //oldRootNode->setDirty(updateRect);
 
-            // TODO: Substitute notifyProjectionUpdated() with this code
-            // when update optimization is implemented
-            //
-            // QRect updateRect = bounds() | oldRootNode->extent();
-            // oldRootNode->setDirty(updateRect);
+                QVector<KisRunnableStrokeJobData*> jobs;
+                m_image->m_d->notifyProjectionUpdatedInPatches(m_image->bounds(), jobs);
+                this->runnableJobsInterface()->addRunnableJobs(jobs);
+            }
         }
 
     private:
         KisImageSP m_image;
+        KisNodeSP m_oldRootNode;
+        bool m_oldNodeNeedsRefresh;
     };
 
     KisStrokeId id = startStroke(new StopIsolatedModeStroke(this));
     endStroke(id);
 }
 
-KisNodeSP KisImage::isolatedModeRoot() const
+KisNodeSP KisImage::isolationRootNode() const {
+    return m_d->isolationRootNode;
+}
+
+bool KisImage::isIsolatingLayer() const
 {
-    return m_d->isolatedRootNode;
+    return m_d->isolateLayer;
+}
+
+bool KisImage::isIsolatingGroup() const
+{
+     return m_d->isolateGroup;
 }
 
 void KisImage::addJob(KisStrokeId id, KisStrokeJobData *data)
@@ -1718,17 +2010,46 @@ void KisImage::refreshGraphAsync(KisNodeSP root, const QRect &rc)
 
 void KisImage::refreshGraphAsync(KisNodeSP root, const QRect &rc, const QRect &cropRect)
 {
+    refreshGraphAsync(root, QVector<QRect>({rc}), cropRect);
+}
+
+void KisImage::refreshGraphAsync(KisNodeSP root, const QVector<QRect> &rects, const QRect &cropRect)
+{
     if (!root) root = m_d->rootLayer;
 
-    m_d->animationInterface->notifyNodeChanged(root.data(), rc, true);
-    m_d->scheduler.fullRefreshAsync(root, rc, cropRect);
+    /**
+     * We iterate through the filters in a reversed way. It makes the most nested filters
+     * to execute first.
+     */
+    for (auto it = m_d->projectionUpdatesFilters.rbegin();
+         it != m_d->projectionUpdatesFilters.rend();
+         ++it) {
+
+        KIS_SAFE_ASSERT_RECOVER(*it) { continue; }
+
+        if ((*it)->filterRefreshGraph(this, root.data(), rects, cropRect)) {
+            return;
+        }
+    }
+
+
+    m_d->animationInterface->notifyNodeChanged(root.data(), rects, true);
+    m_d->scheduler.fullRefreshAsync(root, rects, cropRect);
 }
+
 
 void KisImage::requestProjectionUpdateNoFilthy(KisNodeSP pseudoFilthy, const QRect &rc, const QRect &cropRect)
 {
+    requestProjectionUpdateNoFilthy(pseudoFilthy, rc, cropRect, true);
+}
+
+void KisImage::requestProjectionUpdateNoFilthy(KisNodeSP pseudoFilthy, const QRect &rc, const QRect &cropRect, const bool resetAnimationCache)
+{
     KIS_ASSERT_RECOVER_RETURN(pseudoFilthy);
 
-    m_d->animationInterface->notifyNodeChanged(pseudoFilthy.data(), rc, false);
+    if (resetAnimationCache) {
+        m_d->animationInterface->notifyNodeChanged(pseudoFilthy.data(), rc, false);
+    }
     m_d->scheduler.updateProjectionNoFilthy(pseudoFilthy, rc, cropRect);
 }
 
@@ -1742,27 +2063,47 @@ bool KisImage::hasUpdatesRunning() const
     return m_d->scheduler.hasUpdatesRunning();
 }
 
-void KisImage::setProjectionUpdatesFilter(KisProjectionUpdatesFilterSP filter)
+KisProjectionUpdatesFilterCookie KisImage::addProjectionUpdatesFilter(KisProjectionUpdatesFilterSP filter)
 {
-    // update filters are *not* recursive!
-    KIS_ASSERT_RECOVER_NOOP(!filter || !m_d->projectionUpdatesFilter);
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(filter, KisProjectionUpdatesFilterCookie());
 
-    m_d->projectionUpdatesFilter = filter;
+    m_d->projectionUpdatesFilters.append(filter);
+
+    return KisProjectionUpdatesFilterCookie(filter.data());
 }
 
-KisProjectionUpdatesFilterSP KisImage::projectionUpdatesFilter() const
+KisProjectionUpdatesFilterSP KisImage::removeProjectionUpdatesFilter(KisProjectionUpdatesFilterCookie cookie)
 {
-    return m_d->projectionUpdatesFilter;
+    KIS_SAFE_ASSERT_RECOVER_NOOP(cookie);
+    KIS_SAFE_ASSERT_RECOVER_NOOP(m_d->projectionUpdatesFilters.last() == cookie);
+
+    auto it = std::find(m_d->projectionUpdatesFilters.begin(), m_d->projectionUpdatesFilters.end(), cookie);
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(it != m_d->projectionUpdatesFilters.end(), KisProjectionUpdatesFilterSP());
+
+    KisProjectionUpdatesFilterSP filter = *it;
+
+    m_d->projectionUpdatesFilters.erase(it);
+
+    return filter;
+}
+
+KisProjectionUpdatesFilterCookie KisImage::currentProjectionUpdatesFilter() const
+{
+    return !m_d->projectionUpdatesFilters.isEmpty() ?
+                m_d->projectionUpdatesFilters.last().data() :
+                KisProjectionUpdatesFilterCookie();
 }
 
 void KisImage::disableDirtyRequests()
 {
-    setProjectionUpdatesFilter(KisProjectionUpdatesFilterSP(new KisDropAllProjectionUpdatesFilter()));
+    m_d->disabledUpdatesCookies.push(
+        addProjectionUpdatesFilter(toQShared(new KisDropAllProjectionUpdatesFilter())));
 }
 
 void KisImage::enableDirtyRequests()
 {
-    setProjectionUpdatesFilter(KisProjectionUpdatesFilterSP());
+    KIS_SAFE_ASSERT_RECOVER_RETURN(!m_d->disabledUpdatesCookies.isEmpty());
+    removeProjectionUpdatesFilter(m_d->disabledUpdatesCookies.pop());
 }
 
 void KisImage::disableUIUpdates()
@@ -1828,7 +2169,7 @@ int KisImage::workingThreadsLimit() const
 void KisImage::notifySelectionChanged()
 {
     /**
-     * The selection is calculated asynchromously, so it is not
+     * The selection is calculated asynchronously, so it is not
      * handled by disableUIUpdates() and other special signals of
      * KisImageSignalRouter
      */
@@ -1839,8 +2180,8 @@ void KisImage::notifySelectionChanged()
      * setDirty() call, so in the end of the stroke we need to request
      * direct update of the UI's cache.
      */
-    if (m_d->isolatedRootNode &&
-        dynamic_cast<KisSelectionMask*>(m_d->isolatedRootNode.data())) {
+    if (m_d->isolationRootNode &&
+        dynamic_cast<KisSelectionMask*>(m_d->isolationRootNode.data())) {
 
         notifyProjectionUpdated(bounds());
     }
@@ -1857,10 +2198,19 @@ void KisImage::requestProjectionUpdateImpl(KisNode *node,
 
 void KisImage::requestProjectionUpdate(KisNode *node, const QVector<QRect> &rects, bool resetAnimationCache)
 {
-    if (m_d->projectionUpdatesFilter
-        && m_d->projectionUpdatesFilter->filter(this, node, rects, resetAnimationCache)) {
+    /**
+     * We iterate through the filters in a reversed way. It makes the most nested filters
+     * to execute first.
+     */
+    for (auto it = m_d->projectionUpdatesFilters.rbegin();
+         it != m_d->projectionUpdatesFilters.rend();
+         ++it) {
 
-        return;
+        KIS_SAFE_ASSERT_RECOVER(*it) { continue; }
+
+        if ((*it)->filter(this, node, rects, resetAnimationCache)) {
+            return;
+        }
     }
 
     if (resetAnimationCache) {
@@ -1891,7 +2241,7 @@ void KisImage::requestProjectionUpdate(KisNode *node, const QVector<QRect> &rect
     KisNodeGraphListener::requestProjectionUpdate(node, rects, resetAnimationCache);
 }
 
-void KisImage::invalidateFrames(const KisTimeRange &range, const QRect &rect)
+void KisImage::invalidateFrames(const KisTimeSpan &range, const QRect &rect)
 {
     m_d->animationInterface->invalidateFrames(range, rect);
 }
@@ -1919,6 +2269,24 @@ void KisImage::addComposition(KisLayerCompositionSP composition)
 void KisImage::removeComposition(KisLayerCompositionSP composition)
 {
     m_d->compositions.removeAll(composition);
+}
+
+void KisImage::moveCompositionUp(KisLayerCompositionSP composition)
+{
+    int index = m_d->compositions.indexOf(composition);
+    if (index <= 0) {
+        return;
+    }
+    m_d->compositions.move(index, index - 1);
+}
+
+void KisImage::moveCompositionDown(KisLayerCompositionSP composition)
+{
+    int index = m_d->compositions.indexOf(composition);
+    if (index >= m_d->compositions.size() -1) {
+        return;
+    }
+    m_d->compositions.move(index, index + 1);
 }
 
 bool checkMasksNeedConversion(KisNodeSP root, const QRect &bounds)

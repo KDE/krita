@@ -24,7 +24,6 @@
 #include <KoDockFactoryBase.h>
 #include <KoDockRegistry.h>
 #include <KoDocumentInfo.h>
-#include "KoPageLayout.h"
 #include <KoToolManager.h>
 
 #include <kis_icon.h>
@@ -51,6 +50,7 @@
 #include <QStatusBar>
 #include <QMoveEvent>
 #include <QMdiSubWindow>
+#include <QFileInfo>
 
 #include <kis_image.h>
 #include <kis_node.h>
@@ -72,7 +72,6 @@
 #include "kis_node_commands_adapter.h"
 #include "kis_node_manager.h"
 #include "KisPart.h"
-#include "KisPrintJob.h"
 #include "kis_shape_controller.h"
 #include "kis_tool_freehand.h"
 #include "KisViewManager.h"
@@ -111,8 +110,6 @@ public:
         , canvas(&viewConverter, viewManager->canvasResourceProvider()->resourceManager(), viewManager->mainWindow(), _q, document->shapeController())
         , zoomManager(_q, &this->viewConverter, &this->canvasController)
         , viewManager(viewManager)
-        , paintingAssistantsDecoration(new KisPaintingAssistantsDecoration(_q))
-        , referenceImagesDecoration(new KisReferenceImagesDecoration(_q, document))
         , floatingMessageCompressor(100, KisSignalCompressor::POSTPONE)
     {
     }
@@ -236,9 +233,11 @@ KisView::KisView(KisDocument *document, KisViewManager *viewManager, QWidget *pa
     connect(d->document, SIGNAL(sigLoadingFinished()), this, SLOT(slotLoadingFinished()));
     connect(d->document, SIGNAL(sigSavingFinished()), this, SLOT(slotSavingFinished()));
 
+    d->referenceImagesDecoration = new KisReferenceImagesDecoration(this, document, /* viewReady = */ false);
     d->canvas.addDecoration(d->referenceImagesDecoration);
     d->referenceImagesDecoration->setVisible(true);
 
+    d->paintingAssistantsDecoration = new KisPaintingAssistantsDecoration(this);
     d->canvas.addDecoration(d->paintingAssistantsDecoration);
     d->paintingAssistantsDecoration->setVisible(true);
 
@@ -443,6 +442,7 @@ KisImageWSP KisView::image() const
     return 0;
 }
 
+
 KisCoordinatesConverter *KisView::viewConverter() const
 {
     return &d->viewConverter;
@@ -577,8 +577,9 @@ void KisView::dropEvent(QDropEvent *event)
                         }
                         else if (action == insertAsNewFileLayer || action == insertManyFileLayers) {
                             KisNodeCommandsAdapter adapter(viewManager());
+                            QFileInfo fileInfo(url.toLocalFile());
                             KisFileLayer *fileLayer = new KisFileLayer(image(), "", url.toLocalFile(),
-                                                                       KisFileLayer::None, image()->nextLayerName(), OPACITY_OPAQUE_U8);
+                                                                       KisFileLayer::None, fileInfo.fileName(), OPACITY_OPAQUE_U8);
                             adapter.addNode(fileLayer, viewManager()->activeNode()->parent(), viewManager()->activeNode());
                         }
                         else if (action == openInNewDocument || action == openManyDocuments) {
@@ -630,16 +631,6 @@ KisView *KisView::replaceBy(KisDocument *document)
     delete this;
     return window->newView(document, subWindow);
 }
-
-QPrintDialog *KisView::createPrintDialog(KisPrintJob *printJob, QWidget *parent)
-{
-    Q_UNUSED(parent);
-    QPrintDialog *printDialog = new QPrintDialog(&printJob->printer(), this);
-    printDialog->setMinMax(printJob->printer().fromPage(), printJob->printer().toPage());
-    printDialog->setEnabledOptions(printJob->printDialogOptions());
-    return printDialog;
-}
-
 
 KisMainWindow * KisView::mainWindow() const
 {
@@ -716,11 +707,7 @@ bool KisView::queryClose()
 
     if (document()->isModified()) {
         QString name;
-        if (document()->documentInfo()) {
-            name = document()->documentInfo()->aboutInfo("title");
-        }
-        if (name.isEmpty())
-            name = document()->url().fileName();
+        name = document()->url().fileName();
 
         if (name.isEmpty())
             name = i18n("Untitled");
@@ -807,7 +794,8 @@ void KisView::resetImageSizeAndScroll(bool changeCentering,
 
     QSizeF size(image()->width() / image()->xRes(), image()->height() / image()->yRes());
     KoZoomController *zc = d->zoomManager.zoomController();
-    zc->setZoom(KoZoomMode::ZOOM_CONSTANT, zc->zoomAction()->effectiveZoom());
+    zc->setZoom(KoZoomMode::ZOOM_CONSTANT, zc->zoomAction()->effectiveZoom(),
+                d->zoomManager.resolutionX(), d->zoomManager.resolutionY());
     zc->setPageSize(size);
     zc->setDocumentSize(size, true);
 
@@ -1013,21 +1001,16 @@ void KisView::slotSavingFinished()
     }
 }
 
-KisPrintJob * KisView::createPrintJob()
-{
-    return new KisPrintJob(image());
-}
-
 void KisView::slotImageResolutionChanged()
 {
     resetImageSizeAndScroll(false);
     zoomManager()->updateImageBoundsSnapping();
-    zoomManager()->updateGUI();
+    zoomManager()->updateGuiAfterDocumentSize();
 
     // update KoUnit value for the document
     if (resourceProvider()) {
         resourceProvider()->resourceManager()->
-                setResource(KoCanvasResourceProvider::Unit, d->canvas.unit());
+                setResource(KoCanvasResource::Unit, d->canvas.unit());
     }
 }
 
@@ -1035,7 +1018,7 @@ void KisView::slotImageSizeChanged(const QPointF &oldStillPoint, const QPointF &
 {
     resetImageSizeAndScroll(true, oldStillPoint, newStillPoint);
     zoomManager()->updateImageBoundsSnapping();
-    zoomManager()->updateGUI();
+    zoomManager()->updateGuiAfterDocumentSize();
 }
 
 void KisView::closeView()

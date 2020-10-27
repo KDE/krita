@@ -25,8 +25,6 @@
 #include <KisDocument.h>
 #include <KisMimeDatabase.h>
 #include <KisPart.h>
-#include <kis_change_profile_visitor.h>
-#include <kis_colorspace_convert_visitor.h>
 #include <kis_image.h>
 #include <kis_types.h>
 #include <kis_node.h>
@@ -47,6 +45,9 @@
 #include <kis_meta_data_merge_strategy.h>
 #include <kis_meta_data_merge_strategy_registry.h>
 #include <kis_filter_strategy.h>
+#include <commands/kis_node_compositeop_command.h>
+#include <commands/kis_image_layer_add_command.h>
+#include <kis_processing_applicator.h>
 
 #include <kis_raster_keyframe_channel.h>
 #include <kis_keyframe.h>
@@ -86,6 +87,9 @@ Node::Node(KisImageSP image, KisNodeSP node, QObject *parent)
 
 Node *Node::createNode(KisImageSP image, KisNodeSP node, QObject *parent)
 {
+    if (node.isNull()) {
+        return 0;
+    }
     if (node->inherits("KisGroupLayer")) {
         return new GroupLayer(dynamic_cast<KisGroupLayer*>(node.data()));
     }
@@ -169,7 +173,13 @@ QString Node::blendingMode() const
 void Node::setBlendingMode(QString value)
 {
     if (!d->node) return;
-    d->node->setCompositeOpId(value);
+
+    KUndo2Command *cmd = new KisNodeCompositeOpCommand(d->node,
+                                                       d->node->compositeOpId(),
+                                                       value);
+
+    KisProcessingApplicator::runSingleCommandStroke(d->image, cmd);
+    d->image->waitForDone();
 }
 
 
@@ -205,12 +215,19 @@ QList<Node*> Node::childNodes() const
 bool Node::addChildNode(Node *child, Node *above)
 {
     if (!d->node) return false;
+
+    KUndo2Command *cmd = 0;
+
     if (above) {
-        return d->image->addNode(child->node(), d->node, above->node());
+        cmd = new KisImageLayerAddCommand(d->image, child->node(), d->node, above->node());
+    } else {
+        cmd = new KisImageLayerAddCommand(d->image, child->node(), d->node, d->node->childCount());
     }
-    else {
-        return d->image->addNode(child->node(), d->node, d->node->childCount());
-    }
+
+    KisProcessingApplicator::runSingleCommandStroke(d->image, cmd);
+    d->image->waitForDone();
+
+    return true;
 }
 
 bool Node::removeChildNode(Node *child)
@@ -272,26 +289,22 @@ bool Node::setColorProfile(const QString &colorProfile)
     if (!d->node->inherits("KisLayer")) return false;
     KisLayer *layer = qobject_cast<KisLayer*>(d->node.data());
     const KoColorProfile *profile = KoColorSpaceRegistry::instance()->profileByName(colorProfile);
-    const KoColorSpace *srcCS = layer->colorSpace();
-    const KoColorSpace *dstCs = KoColorSpaceRegistry::instance()->colorSpace(srcCS->colorModelId().id(),
-                                                                             srcCS->colorDepthId().id(),
-                                                                             profile);
-    KisChangeProfileVisitor v(srcCS, dstCs);
-    return layer->accept(v);
+    bool result = d->image->assignLayerProfile(layer, profile);
+    d->image->waitForDone();
+    return result;
 }
 
 bool Node::setColorSpace(const QString &colorModel, const QString &colorDepth, const QString &colorProfile)
 {
     if (!d->node) return false;
     if (!d->node->inherits("KisLayer")) return false;
-    KisLayer *layer = qobject_cast<KisLayer*>(d->node.data());
     const KoColorProfile *profile = KoColorSpaceRegistry::instance()->profileByName(colorProfile);
-    const KoColorSpace *srcCS = layer->colorSpace();
     const KoColorSpace *dstCs = KoColorSpaceRegistry::instance()->colorSpace(colorModel,
                                                                              colorDepth,
                                                                              profile);
-    KisColorSpaceConvertVisitor v(d->image, srcCS, dstCs, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
-    return layer->accept(v);
+    d->image->convertLayerColorSpace(d->node, dstCs, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
+    d->image->waitForDone();
+    return true;
 }
 
 bool Node::animated() const
@@ -306,16 +319,16 @@ void Node::enableAnimation() const
     d->node->enableAnimation();
 }
 
-void Node::setShowInTimeline(bool showInTimeline) const
+void Node::setPinnedToTimeline(bool pinned) const
 {
     if (!d->node) return;
-    d->node->setUseInTimeline(showInTimeline);
+    d->node->setPinnedToTimeline(pinned);
 }
 
-bool Node::showInTimeline() const
+bool Node::isPinnedToTimeline() const
 {
     if (!d->node) return false;
-    return d->node->useInTimeline();
+    return d->node->isPinnedToTimeline();
 }
 
 bool Node::collapsed() const
@@ -392,6 +405,7 @@ void Node::setOpacity(int value)
 Node* Node::parentNode() const
 {
     if (!d->node) return 0;
+    if (!d->node->parent()) return 0;
     return Node::createNode(d->image, d->node->parent());
 }
 
@@ -459,17 +473,15 @@ bool Node::hasKeyframeAtTime(int frameNumber)
 {
     if (!d->node || !d->node->isAnimated()) return false;
 
-    KisRasterKeyframeChannel *rkc = dynamic_cast<KisRasterKeyframeChannel*>(d->node->getKeyframeChannel(KisKeyframeChannel::Content.id()));
+    KisRasterKeyframeChannel *rkc = dynamic_cast<KisRasterKeyframeChannel*>(d->node->getKeyframeChannel(KisKeyframeChannel::Raster.id()));
     if (!rkc) return false;
 
-    KisKeyframeSP timeOfCurrentKeyframe = rkc->keyframeAt(frameNumber);
+    KisKeyframeSP currentKeyframe = rkc->keyframeAt(frameNumber);
 
-    if (!timeOfCurrentKeyframe) {
+    if (!currentKeyframe) {
         return false;
     }
 
-    // do an assert just to be careful
-    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(timeOfCurrentKeyframe->time() == frameNumber, false);
     return true;
 }
 
@@ -501,14 +513,14 @@ QByteArray Node::pixelDataAtTime(int x, int y, int w, int h, int time) const
     if (!d->node || !d->node->isAnimated()) return ba;
 
     //
-    KisRasterKeyframeChannel *rkc = dynamic_cast<KisRasterKeyframeChannel*>(d->node->getKeyframeChannel(KisKeyframeChannel::Content.id()));
+    KisRasterKeyframeChannel *rkc = dynamic_cast<KisRasterKeyframeChannel*>(d->node->getKeyframeChannel(KisKeyframeChannel::Raster.id()));
     if (!rkc) return ba;
-    KisKeyframeSP frame = rkc->keyframeAt(time);
+    KisRasterKeyframeSP frame = rkc->keyframeAt<KisRasterKeyframe>(time);
     if (!frame) return ba;
-    KisPaintDeviceSP dev = d->node->paintDevice();
+    KisPaintDeviceSP dev = new KisPaintDevice(*d->node->paintDevice(), KritaUtils::DeviceCopyMode::CopySnapshot);
     if (!dev) return ba;
 
-    rkc->fetchFrame(frame, dev);
+    frame->writeFrameToDevice(dev);
 
     ba.resize(w * h * dev->pixelSize());
     dev->readBytes(reinterpret_cast<quint8*>(ba.data()), x, y, w, h);
@@ -630,6 +642,7 @@ void Node::scaleNode(QPointF origin, int width, int height, QString strategy)
                         qreal(width) / bounds.width(),
                         qreal(height) / bounds.height(),
                         actualStrategy, 0);
+    d->image->waitForDone();
 }
 
 void Node::rotateNode(double radians)
@@ -639,6 +652,7 @@ void Node::rotateNode(double radians)
     if (!d->node->parent()) return;
 
     d->image->rotateNode(d->node, radians, 0);
+    d->image->waitForDone();
 }
 
 void Node::cropNode(int x, int y, int w, int h)
@@ -649,6 +663,7 @@ void Node::cropNode(int x, int y, int w, int h)
 
     QRect rect = QRect(x, y, w, h);
     d->image->cropNode(d->node, rect);
+    d->image->waitForDone();
 }
 
 void Node::shearNode(double angleX, double angleY)
@@ -658,6 +673,7 @@ void Node::shearNode(double angleX, double angleY)
     if (!d->node->parent()) return;
 
     d->image->shearNode(d->node, angleX, angleY, 0);
+    d->image->waitForDone();
 }
 
 QImage Node::thumbnail(int w, int h)

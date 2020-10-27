@@ -103,6 +103,14 @@ public:
     void setDefaultTileData(KisTileData *defaultTileData);
     KisTileData* defaultTileData();
 
+    /**
+     * Returns a pointer to the default tile data object with ref counter
+     * increased by one. Make sure you call deref() after you finished using
+     * this object.
+     */
+    KisTileData* refAndFetchDefaultTileData();
+
+
     qint32 numTiles()
     {
         return m_numTiles.load();
@@ -130,7 +138,7 @@ private:
     inline quint32 calculateHash(qint32 col, qint32 row)
     {
 #ifdef SANITY_CHECK
-        KIS_ASSERT_RECOVER_NOOP(row < 0x7FFF && col < 0x7FFF)
+        KIS_ASSERT_RECOVER_NOOP(row < 0x7FFF && col < 0x7FFF);
 #endif // SANITY_CHECK
 
         if (col == 0 && row == 0) {
@@ -464,6 +472,15 @@ inline KisTileData* KisTileHashTableTraits2<T>::defaultTileData()
     QReadLocker locker(&m_defaultPixelDataLock);
     return m_defaultTileData;
 }
+
+template <class T>
+inline KisTileData* KisTileHashTableTraits2<T>::refAndFetchDefaultTileData()
+{
+    QReadLocker locker(&m_defaultPixelDataLock);
+    m_defaultTileData->ref();
+    return m_defaultTileData;
+}
+
 
 template <class T>
 void KisTileHashTableTraits2<T>::debugPrintInfo()

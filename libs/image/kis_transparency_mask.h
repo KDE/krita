@@ -39,7 +39,7 @@ class KRITAIMAGE_EXPORT KisTransparencyMask : public KisEffectMask
 
 public:
 
-    KisTransparencyMask();
+    KisTransparencyMask(KisImageWSP image, const QString &name);
     KisTransparencyMask(const KisTransparencyMask& rhs);
     ~KisTransparencyMask() override;
 

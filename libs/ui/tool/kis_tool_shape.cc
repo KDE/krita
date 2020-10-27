@@ -87,12 +87,24 @@ QWidget * KisToolShape::createOptionWidget()
 
     m_shapeOptionsWidget->cmbOutline->setCurrentIndex(KisPainter::StrokeStyleBrush);
 
+    m_shapeOptionsWidget->sldRotation->setSuffix(QChar(Qt::Key_degree));
+    m_shapeOptionsWidget->sldRotation->setRange(0.0, 360.0, 2);
+    m_shapeOptionsWidget->sldRotation->setSingleStep(1.0);
+
+    m_shapeOptionsWidget->sldScale->setSuffix("%");
+    m_shapeOptionsWidget->sldScale->setRange(0.0, 500.0, 2);
+    m_shapeOptionsWidget->sldScale->setSingleStep(1.0);
+
     //connect two combo box event. Inherited classes can call the slots to make appropriate changes
     connect(m_shapeOptionsWidget->cmbOutline, SIGNAL(currentIndexChanged(int)), this, SLOT(outlineSettingChanged(int)));
     connect(m_shapeOptionsWidget->cmbFill, SIGNAL(currentIndexChanged(int)), this, SLOT(fillSettingChanged(int)));
+    connect(m_shapeOptionsWidget->sldRotation, SIGNAL(valueChanged(qreal)), this, SLOT(patternRotationSettingChanged(qreal)));
+    connect(m_shapeOptionsWidget->sldScale, SIGNAL(valueChanged(qreal)), this, SLOT(patternScaleSettingChanged(qreal)));
 
     m_shapeOptionsWidget->cmbOutline->setCurrentIndex(m_configGroup.readEntry("outlineType", 0));
     m_shapeOptionsWidget->cmbFill->setCurrentIndex(m_configGroup.readEntry("fillType", 0));
+    m_shapeOptionsWidget->sldScale->setValue(m_configGroup.readEntry("patternTransformScale", 100));
+    m_shapeOptionsWidget->sldRotation->setValue(m_configGroup.readEntry("patternTransformRotation", 0));
 
     //if both settings are empty, force the outline to brush so the tool will work when first activated
     if (  m_shapeOptionsWidget->cmbFill->currentIndex() == 0 &&
@@ -100,6 +112,9 @@ QWidget * KisToolShape::createOptionWidget()
     {
         m_shapeOptionsWidget->cmbOutline->setCurrentIndex(1); // brush
     }
+
+    bool enablePatternTransform = (m_shapeOptionsWidget->cmbFill->currentIndex() == int(KisToolShapeUtils::FillStylePattern));
+    m_shapeOptionsWidget->gbPatternTransform->setEnabled(enablePatternTransform);
 
     return m_shapeOptionsWidget;
 }
@@ -112,6 +127,18 @@ void KisToolShape::outlineSettingChanged(int value)
 void KisToolShape::fillSettingChanged(int value)
 {
     m_configGroup.writeEntry("fillType", value);
+    bool enable = (value == int(KisToolShapeUtils::FillStylePattern));
+    m_shapeOptionsWidget->gbPatternTransform->setEnabled(enable);
+}
+
+void KisToolShape::patternRotationSettingChanged(qreal value)
+{
+    m_configGroup.writeEntry("patternTransformRotation", value);
+}
+
+void KisToolShape::patternScaleSettingChanged(qreal value)
+{
+    m_configGroup.writeEntry("patternTransformScale", value);
 }
 
 KisToolShapeUtils::FillStyle KisToolShape::fillStyle()
@@ -132,10 +159,23 @@ KisToolShapeUtils::StrokeStyle KisToolShape::strokeStyle()
     }
 }
 
+QTransform KisToolShape::fillTransform()
+{
+    QTransform transform;
+
+    if (m_shapeOptionsWidget) {
+        transform.rotate(m_shapeOptionsWidget->sldRotation->value());
+        qreal scale = m_shapeOptionsWidget->sldScale->value()*0.01;
+        transform.scale(scale, scale);
+    }
+
+    return transform;
+}
+
 qreal KisToolShape::currentStrokeWidth() const
 {
     const qreal sizeInPx =
-        canvas()->resourceManager()->resource(KisCanvasResourceProvider::Size).toReal();
+        canvas()->resourceManager()->resource(KoCanvasResource::Size).toReal();
 
     return canvas()->unit().fromUserValue(sizeInPx);
 }
@@ -180,6 +220,7 @@ void KisToolShape::addShape(KoShape* shape)
                 QSharedPointer<KoPatternBackground> fill(new KoPatternBackground(imageCollection));
                 if (currentPattern()) {
                     fill->setPattern(currentPattern()->pattern());
+                    fill->setTransform(fillTransform());
                     shape->setBackground(fill);
                 }
             } else {
@@ -243,7 +284,8 @@ void KisToolShape::addPathShape(KoPathShape* pathShape, const KUndo2MagicString&
                                            node,
                                            canvas()->resourceManager(),
                                            strokeStyle(),
-                                           fillStyle());
+                                           fillStyle(),
+                                           fillTransform());
         helper.paintPainterPath(mapedOutline);
     } else if (node->inherits("KisShapeLayer")) {
         pathShape->normalize();

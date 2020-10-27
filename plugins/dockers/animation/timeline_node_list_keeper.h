@@ -30,6 +30,7 @@
 
 class KisNodeDummy;
 class KisDummiesFacadeBase;
+class KisNodeDisplayModeAdapter;
 
 
 class KRITAANIMATIONDOCKER_EXPORT TimelineNodeListKeeper : public QObject
@@ -42,7 +43,9 @@ public:
     typedef QList<OtherLayer> OtherLayersList;
 
 
-    TimelineNodeListKeeper(ModelWithExternalNotifications *model, KisDummiesFacadeBase *dummiesFacade);
+    TimelineNodeListKeeper(ModelWithExternalNotifications *model,
+                           KisDummiesFacadeBase *dummiesFacade,
+                           KisNodeDisplayModeAdapter *displayModeAdapter);
     ~TimelineNodeListKeeper() override;
 
     KisNodeDummy* dummyFromRow(int row);
@@ -60,10 +63,20 @@ private Q_SLOTS:
 
     void slotUpdateDummyContent(QObject *dummy);
 
+    void slotDisplayModeChanged();
+
 public:
     struct ModelWithExternalNotifications : public KisTimeBasedItemModel {
         ModelWithExternalNotifications(QObject *parent)
             : KisTimeBasedItemModel(parent) {}
+
+        void callBeginResetModel() {
+            beginResetModel();
+        }
+
+        void callEndResetModel() {
+            endResetModel();
+        }
 
         void callBeginInsertRows(const QModelIndex &parent, int first, int last) {
             beginInsertRows(parent, first, last);

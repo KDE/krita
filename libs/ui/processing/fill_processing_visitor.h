@@ -30,12 +30,15 @@
 class KRITAUI_EXPORT FillProcessingVisitor : public KisSimpleProcessingVisitor
 {
 public:
-    FillProcessingVisitor(const QPoint &startPoint,
+    FillProcessingVisitor(
+                   KisPaintDeviceSP referencePaintDevice,
+                   const QPoint &startPoint,
                    KisSelectionSP selection,
                    KisResourcesSnapshotSP resources,
                    bool useFastMode,
                    bool usePattern,
                    bool selectionOnly,
+                   bool useSelectionAsBoundary,
                    int feather,
                    int sizemod,
                    int fillThreshold,
@@ -50,10 +53,12 @@ private:
     void fillPaintDevice(KisPaintDeviceSP device, KisUndoAdapter *undoAdapter, ProgressHelper &helper);
 
 private:
+    KisPaintDeviceSP m_refPaintDevice;
     QPoint m_startPoint;
     KisSelectionSP m_selection;
     bool m_useFastMode;
     bool m_selectionOnly;
+    bool m_useSelectionAsBoundary;
     bool m_usePattern;
     KisResourcesSnapshotSP m_resources;
 

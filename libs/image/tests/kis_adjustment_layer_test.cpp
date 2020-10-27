@@ -33,7 +33,8 @@
 #include "kis_types.h"
 #include "kis_datamanager.h"
 #include "kis_pixel_selection.h"
-#include "testutil.h"
+#include <testutil.h>
+#include <KisGlobalResourcesInterface.h>
 
 void KisAdjustmentLayerTest::testCreation()
 {
@@ -41,7 +42,7 @@ void KisAdjustmentLayerTest::testCreation()
     KisImageSP image = new KisImage(0, 512, 512, colorSpace, "adj layer test");
     KisFilterSP f = KisFilterRegistry::instance()->value("invert");
     Q_ASSERT(f);
-    KisFilterConfigurationSP  kfc = f->defaultConfiguration();
+    KisFilterConfigurationSP  kfc = f->defaultConfiguration(KisGlobalResourcesInterface::instance());
     Q_ASSERT(kfc);
 
     KisAdjustmentLayerSP test = new KisAdjustmentLayer(image, "test", kfc, 0);
@@ -54,10 +55,10 @@ void KisAdjustmentLayerTest::testSetSelection()
     KisImageSP image = new KisImage(0, 512, 512, colorSpace, "adj layer test");
     KisFilterSP f = KisFilterRegistry::instance()->value("invert");
     Q_ASSERT(f);
-    KisFilterConfigurationSP  kfc = f->defaultConfiguration();
+    KisFilterConfigurationSP  kfc = f->defaultConfiguration(KisGlobalResourcesInterface::instance());
     Q_ASSERT(kfc);
     sel->pixelSelection()->select(QRect(10, 10, 200, 200), 128);
-    KisAdjustmentLayerSP l1 = new KisAdjustmentLayer(image, "bla", kfc, sel);
+    KisAdjustmentLayerSP l1 = new KisAdjustmentLayer(image, "bla", kfc->cloneWithResourcesSnapshot(), sel);
     QCOMPARE(sel->selectedExactRect(), l1->internalSelection()->selectedExactRect());
 }
 
@@ -67,12 +68,12 @@ void KisAdjustmentLayerTest::testInverted()
     KisImageSP image = new KisImage(0, 512, 512, colorSpace, "adj layer test");
     KisFilterSP f = KisFilterRegistry::instance()->value("invert");
     Q_ASSERT(f);
-    KisFilterConfigurationSP  kfc = f->defaultConfiguration();
+    KisFilterConfigurationSP  kfc = f->defaultConfiguration(KisGlobalResourcesInterface::instance());
     Q_ASSERT(kfc);
 
     KisSelectionSP sel2 = new KisSelection();
     sel2->pixelSelection()->invert();
-    KisAdjustmentLayerSP l2 = new KisAdjustmentLayer(image, "bla", kfc, sel2);
+    KisAdjustmentLayerSP l2 = new KisAdjustmentLayer(image, "bla", kfc->cloneWithResourcesSnapshot(), sel2);
     QCOMPARE(l2->internalSelection()->selectedExactRect(), image->bounds());
 
     KisSelectionSP sel3 = new KisSelection();
@@ -90,7 +91,7 @@ void KisAdjustmentLayerTest::testSelectionParent()
 
     {
         KisAdjustmentLayerSP adjLayer =
-            new KisAdjustmentLayer(image, "bla", f->defaultConfiguration(), 0);
+            new KisAdjustmentLayer(image, "bla", f->defaultConfiguration(KisGlobalResourcesInterface::instance())->cloneWithResourcesSnapshot(), 0);
 
         QCOMPARE(adjLayer->internalSelection()->parentNode(), KisNodeWSP(adjLayer));
     }
@@ -98,14 +99,14 @@ void KisAdjustmentLayerTest::testSelectionParent()
     {
         KisSelectionSP selection = new KisSelection();
         KisAdjustmentLayerSP adjLayer =
-            new KisAdjustmentLayer(image, "bla", f->defaultConfiguration(), selection);
+            new KisAdjustmentLayer(image, "bla", f->defaultConfiguration(KisGlobalResourcesInterface::instance())->cloneWithResourcesSnapshot(), selection);
 
         QCOMPARE(adjLayer->internalSelection()->parentNode(), KisNodeWSP(adjLayer));
     }
 
     {
         KisAdjustmentLayerSP adjLayer =
-            new KisAdjustmentLayer(image, "bla", f->defaultConfiguration(), 0);
+            new KisAdjustmentLayer(image, "bla", f->defaultConfiguration(KisGlobalResourcesInterface::instance())->cloneWithResourcesSnapshot(), 0);
 
         KisSelectionSP selection = new KisSelection();
         adjLayer->setInternalSelection(selection);

@@ -1,5 +1,7 @@
 /*
  *  Copyright (c) 2015 Jouni Pentikäinen <joupent@gmail.com>
+ *  Copyright (c) 2020 Emmet O'Neill <emmetoneill.pdx@gmail.com>
+ *  Copyright (c) 2020 Eoin O'Neill <eoinoneill1991@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -28,54 +30,28 @@
 
 class KisKeyframeChannel;
 
-class KRITAIMAGE_EXPORT KisKeyframe
-{
+/** @brief Krita's base keyframe class.
+ * Mainly contained by KisKeyframeChannels.
+ * A core part of Krita's animation bankend.
+ */
+class KRITAIMAGE_EXPORT KisKeyframe : public QObject {
+    Q_OBJECT
 public:
-    enum InterpolationMode {
-        Constant,
-        Linear,
-        Bezier
-    };
-
-    enum InterpolationTangentsMode {
-        Sharp,
-        Smooth
-    };
-
-    KisKeyframe(KisKeyframeChannel *channel, int time);
+    KisKeyframe();
     virtual ~KisKeyframe();
 
-    /**
-     * Create a copy of the keyframe for insertion into given channel.
-     * Used when constructing a copy of a keyframe channel.
-     */
-    virtual KisKeyframeSP cloneFor(KisKeyframeChannel *channel) const = 0;
-
-    int time() const;
-    void setTime(int time);
-
-    void setInterpolationMode(InterpolationMode mode);
-    InterpolationMode interpolationMode() const;
-    void setTangentsMode(InterpolationTangentsMode mode);
-    InterpolationTangentsMode tangentsMode() const;
-    void setInterpolationTangents(QPointF leftTangent, QPointF rightTangent);
-    QPointF leftTangent() const;
-    QPointF rightTangent() const;
-
     int colorLabel() const;
-    void setColorLabel(int label);
-    virtual bool hasContent() const; // does any content exist in keyframe, or is it empty?
+    void setColorLabel(int colorIndex);
 
-    KisKeyframeChannel *channel() const;
-
-protected:
-    KisKeyframe(const KisKeyframe *rhs, KisKeyframeChannel *channel);
+    /** Creates a copy of this keyframe.
+     * @param  newChannel  (Optional) The channel that will hold this duplicate.
+     * This is used when some action must be taken to insert a frame into a new channel,
+     * for example, the registration of a KisRasterKeyframe with the new channel's paint device. */
+    virtual KisKeyframeSP duplicate(class KisKeyframeChannel* newChannel = nullptr) = 0;
 
 private:
     struct Private;
     QScopedPointer<Private> m_d;
 };
 
-Q_DECLARE_METATYPE(KisKeyframe*)
-Q_DECLARE_METATYPE(KisKeyframeSP)
 #endif

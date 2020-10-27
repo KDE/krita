@@ -92,7 +92,7 @@ KisHatchingPaintOpSettingsWidget:: KisHatchingPaintOpSettingsWidget(QWidget* par
     /*More things I know by reading the XML tree. At this point you can just read it with:
     dbgKrita << xMLAnalyzer.toString() ;
     those QDomElements are the way to navigate the XML tree, read
-    http://doc.qt.nokia.com/latest/qdomdocument.html for more information */
+    https://doc.qt.io/qt-5/qdomdocument.html for more information */
     QDomElement firstTag = xMLAnalyzer.documentElement();
     QDomElement firstTagsChild = firstTag.elementsByTagName("MaskGenerator").item(0).toElement();
 
@@ -130,7 +130,7 @@ KisHatchingPaintOpSettingsWidget::~ KisHatchingPaintOpSettingsWidget()
 
 KisPropertiesConfigurationSP  KisHatchingPaintOpSettingsWidget::configuration() const
 {
-    KisHatchingPaintOpSettingsSP config = new KisHatchingPaintOpSettings();
+    KisHatchingPaintOpSettingsSP config = new KisHatchingPaintOpSettings(resourcesInterface());
     config->setOptionsWidget(const_cast<KisHatchingPaintOpSettingsWidget*>(this));
     config->setProperty("paintop", "hatchingbrush"); // XXX: make this a const id string
     writeConfiguration(config);

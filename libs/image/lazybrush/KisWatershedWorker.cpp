@@ -43,7 +43,7 @@ namespace {
 
 struct CompareQPoints
 {
-    bool operator() (const QPoint &p1, const QPoint &p2) {
+    bool operator() (const QPoint &p1, const QPoint &p2) const {
         return p1.y() < p2.y() || (p1.y() == p2.y() && p1.x() < p2.x());
     }
 };
@@ -638,13 +638,13 @@ void KisWatershedWorker::Private::processQueue(qint32 _backgroundGroupId)
 
     // TODO: lazy initialization of the iterator's position
     // TODO: reuse iterators if possible!
-    groupIt = groupsMap->createRandomAccessorNG(boundingRect.x(), boundingRect.y());
-    levelIt = heightMap->createRandomConstAccessorNG(boundingRect.x(), boundingRect.y());
+    groupIt = groupsMap->createRandomAccessorNG();
+    levelIt = heightMap->createRandomConstAccessorNG();
     backgroundGroupId = _backgroundGroupId;
     backgroundGroupColor = groups[backgroundGroupId].colorIndex;
     recolorMode = backgroundGroupId > 1;
 
-    totalPixelsToFill = boundingRect.width() * boundingRect.height();
+    totalPixelsToFill = qint64(boundingRect.width()) * boundingRect.height();
     numFilledPixels = 0;
     const int progressReportingMask = (1 << 18) - 1; // report every 512x512 patch
 

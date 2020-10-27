@@ -144,7 +144,7 @@ QVariant KisMimeData::retrieveData(const QString &mimetype, QVariant::Type prefe
     if (mimetype == "application/x-qt-image") {
         KisConfig cfg(true);
 
-        KisDocument *doc = createDocument(m_nodes, m_image);
+        QScopedPointer<KisDocument> doc(createDocument(m_nodes, m_image));
 
         return doc->image()->projection()->convertToQImage(cfg.displayProfile(QApplication::desktop()->screenNumber(qApp->activeWindow())),
                                                            KoColorConversionTransformation::internalRenderingIntent(),
@@ -162,7 +162,7 @@ QVariant KisMimeData::retrieveData(const QString &mimetype, QVariant::Type prefe
         QByteArray ba = serializeToByteArray(m_nodes, m_image);
 
         QString temporaryPath =
-                QDir::tempPath() + QDir::separator() +
+                QDir::tempPath() + '/' +
                 QString("krita_tmp_dnd_layer_%1_%2.kra")
                 .arg(QApplication::applicationPid())
                 .arg(qrand());
@@ -315,7 +315,7 @@ QList<KisNodeSP> KisMimeData::loadNodes(const QMimeData *data,
         bool result = tempDoc->openUrl(QUrl::fromEncoded(ba));
 
         if (result) {
-            KisImageWSP tempImage = tempDoc->image();
+            KisImageSP tempImage = tempDoc->image();
             Q_FOREACH (KisNodeSP node, tempImage->root()->childNodes(QStringList(), KoProperties())) {
                 tempImage->removeNode(node);
                 initializeExternalNode(&node, image, shapeController);
@@ -383,7 +383,7 @@ bool nodeAllowsAsChild(KisNodeSP parent, KisNodeList nodes)
 {
     bool result = true;
     Q_FOREACH (KisNodeSP node, nodes) {
-        if (!parent->allowAsChild(node)) {
+        if (!parent->allowAsChild(node) || !parent->isEditable(false)) {
             result = false;
             break;
         }

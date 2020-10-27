@@ -20,6 +20,7 @@
 #include <filter/kis_filter_configuration.h>
 #include <QComboBox>
 #include <klocalizedstring.h>
+#include <KisGlobalResourcesInterface.h>
 
 KisWdgEdgeDetection::KisWdgEdgeDetection(QWidget *parent) :
     KisConfigWidget(parent),
@@ -65,7 +66,7 @@ KisWdgEdgeDetection::~KisWdgEdgeDetection()
 
 KisPropertiesConfigurationSP KisWdgEdgeDetection::configuration() const
 {
-    KisFilterConfigurationSP config = new KisFilterConfiguration("edge detection", 1);
+    KisFilterConfigurationSP config = new KisFilterConfiguration("edge detection", 1, KisGlobalResourcesInterface::instance());
     config->setProperty("horizRadius", ui->sldHorizontalRadius->value());
     config->setProperty("vertRadius", ui->sldVerticalRadius->value());
     config->setProperty("type", m_types.at(ui->cmbType->currentIndex()));

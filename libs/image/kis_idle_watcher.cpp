@@ -121,7 +121,9 @@ void KisIdleWatcher::slotIdleCheckTick()
     if (isIdle()) {
         if (m_d->idleCheckCounter >= Private::IDLE_CHECK_COUNT) {
             stopIdleCheck();
-            emit startedIdleMode();
+            if (!m_d->trackedImages.isEmpty()) {
+                emit startedIdleMode();
+            }
         } else {
             m_d->idleCheckCounter++;
             m_d->idleCheckTimer.start();

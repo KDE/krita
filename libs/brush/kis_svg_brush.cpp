@@ -29,8 +29,6 @@ KisSvgBrush::KisSvgBrush(const QString& filename)
 {
     setBrushType(INVALID);
     setSpacing(0.25);
-    setHasColor(false);
-
 }
 
 KisSvgBrush::KisSvgBrush(const KisSvgBrush& rhs)
@@ -39,28 +37,14 @@ KisSvgBrush::KisSvgBrush(const KisSvgBrush& rhs)
 {
 }
 
-KisBrush* KisSvgBrush::clone() const
+KoResourceSP KisSvgBrush::clone() const
 {
-    return new KisSvgBrush(*this);
+    return KoResourceSP(new KisSvgBrush(*this));
 }
 
-bool KisSvgBrush::load()
+bool KisSvgBrush::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface)
 {
-    QFile f(filename());
-    if (f.size() == 0) return false;
-    if (!f.exists()) return false;
-    if (!f.open(QIODevice::ReadOnly)) {
-        warnKrita << "Can't open file " << filename();
-        return false;
-    }
-    bool res = loadFromDevice(&f);
-    f.close();
-
-    return res;
-}
-
-bool KisSvgBrush::loadFromDevice(QIODevice *dev)
-{
+    Q_UNUSED(resourcesInterface);
 
     m_svg = dev->readAll();
 
@@ -87,11 +71,9 @@ bool KisSvgBrush::loadFromDevice(QIODevice *dev)
     // Well for now, always true
     if (brushTipImage().isGrayscale()) {
         setBrushType(MASK);
-        setHasColor(false);
     }
     else {
         setBrushType(IMAGE);
-        setHasColor(true);
     }
     setWidth(brushTipImage().width());
     setHeight(brushTipImage().height());
@@ -100,15 +82,6 @@ bool KisSvgBrush::loadFromDevice(QIODevice *dev)
     setName(fi.completeBaseName());
 
     return !brushTipImage().isNull() && valid();
-}
-
-bool KisSvgBrush::save()
-{
-    QFile f(filename());
-    if (!f.open(QFile::WriteOnly)) return false;
-    bool res = saveToDevice(&f);
-    f.close();
-    return res;
 }
 
 bool KisSvgBrush::saveToDevice(QIODevice *dev) const

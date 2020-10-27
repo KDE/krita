@@ -30,7 +30,7 @@
 #include "kis_painter.h"
 #include <brushengine/kis_paint_information.h>
 
-#include "kistest.h"
+#include "testui.h"
 
 class FreehandStrokeTester : public utils::StrokeTester
 {
@@ -63,7 +63,7 @@ protected:
     }
 
     void beforeCheckingResult(KisImageWSP image, KisNodeSP activeNode) override {
-        Q_UNUSED(image)
+        Q_UNUSED(image);
         Q_UNUSED(activeNode);
 
         if (m_useLod) {
@@ -85,7 +85,7 @@ protected:
         if (m_paintColor && iteration > 0) {
             QVariant i;
             i.setValue(KoColor(*m_paintColor, image->colorSpace()));
-            manager->setResource(KoCanvasResourceProvider::ForegroundColor, i);
+            manager->setResource(KoCanvasResource::ForegroundColor, i);
         }
     }
 

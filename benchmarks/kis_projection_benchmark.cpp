@@ -42,9 +42,9 @@ void KisProjectionBenchmark::benchmarkProjection()
 {
     QBENCHMARK{
         KisDocument *doc = KisPart::instance()->createDocument();
-        doc->loadNativeFormat(QString(FILES_DATA_DIR) + QDir::separator() + "load_test.kra");
+        doc->loadNativeFormat(QString(FILES_DATA_DIR) + '/' + "load_test.kra");
         doc->image()->refreshGraph();
-        doc->exportDocumentSync(QUrl::fromLocalFile(QString(FILES_OUTPUT_DIR) + QDir::separator() + "save_test.kra"), doc->mimeType());
+        doc->exportDocumentSync(QUrl::fromLocalFile(QString(FILES_OUTPUT_DIR) + '/' + "save_test.kra"), doc->mimeType());
         delete doc;
     }
 }
@@ -53,7 +53,7 @@ void KisProjectionBenchmark::benchmarkLoading()
 {
     QBENCHMARK{
         KisDocument *doc2 = KisPart::instance()->createDocument();
-        doc2->loadNativeFormat(QString(FILES_DATA_DIR) + QDir::separator() + "load_test.kra");
+        doc2->loadNativeFormat(QString(FILES_DATA_DIR) + '/' + "load_test.kra");
         delete doc2;
     }
 }

@@ -154,7 +154,7 @@ public:
 
     void clientAdded(KXMLGUIClient *client)
     {
-        Q_UNUSED(client)
+        Q_UNUSED(client);
         parent->setupActions();
     }
 

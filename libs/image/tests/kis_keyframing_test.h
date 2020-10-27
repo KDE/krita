@@ -1,5 +1,7 @@
 /*
  *  Copyright (c) 2015 Jouni Pentikäinen <joupent@gmail.com>
+ *  Copyright (c) 2020 Emmet O'Neill <emmetoneill.pdx@gmail.com>
+ *  Copyright (c) 2020 Eoin O'Neill <eoinoneill1991@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,30 +24,32 @@
 #include <QtTest>
 #include "KoColor.h"
 
+
 class KisKeyframingTest : public QObject
 {
     Q_OBJECT
 
 private Q_SLOTS:
-
     void initTestCase();
-
-    void testScalarChannel();
-    void testScalarChannelUndoRedo();
-    void testScalarInterpolation();
-
-    void testRasterChannel();
-    void testChannelSignals();
-    void testRasterFrameFetching();
-    void testDeleteFirstRasterChannel();
-    void testAffectedFrames();
     void cleanupTestCase();
 
-    void testMovingFrames();
+    void testChannelSignals();
+
+    void testRasterChannel();
+    void testRasterFrameFetching();
+    void testRasterUndoRedo();
+    void testFirstFrameOperations();
+    void testInterChannelMovement();
+
+    void testScalarChannel();
+    void testScalarValueInterpolation();
+    void testScalarChannelUndoRedo();
+    void testScalarAffectedFrames();
+    void testChangeOfScalarLimits();
 
 private:
-
     const KoColorSpace *cs;
+
     quint8* red;
     quint8* green;
     quint8* blue;

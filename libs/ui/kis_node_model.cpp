@@ -122,7 +122,7 @@ QModelIndex KisNodeModel::indexFromNode(KisNodeSP node) const
 
 bool KisNodeModel::belongsToIsolatedGroup(KisImageSP image, KisNodeSP node, KisDummiesFacadeBase *dummiesFacade)
 {
-    KisNodeSP isolatedRoot = image->isolatedModeRoot();
+    KisNodeSP isolatedRoot = image->isolationRootNode();
     if (!isolatedRoot) return true;
 
     KisNodeDummy *isolatedRootDummy =
@@ -372,6 +372,7 @@ void KisNodeModel::slotBeginRemoveDummy(KisNodeDummy *dummy)
 
     if (itemIndex.isValid()) {
         connectDummy(dummy, false);
+        emit sigBeforeBeginRemoveRows(parentIndex, itemIndex.row(), itemIndex.row());
         beginRemoveRows(parentIndex, itemIndex.row(), itemIndex.row());
         m_d->needFinishRemoveRows = true;
     }
@@ -518,15 +519,7 @@ QVariant KisNodeModel::data(const QModelIndex &index, int role) const
         if (role >= int(KisNodeModel::BeginThumbnailRole) && belongsToIsolatedGroup(node)) {
 
             const int maxSize = role - int(KisNodeModel::BeginThumbnailRole);
-
-            QSize size = node->extent().size();
-            size.scale(maxSize, maxSize, Qt::KeepAspectRatio);
-            if (size.width() == 0 || size.height() == 0) {
-                // No thumbnail can be shown if there isn't width or height...
-                return QVariant();
-            }
-
-            return node->createThumbnail(size.width(), size.height());
+            return node->createThumbnail(maxSize, maxSize, Qt::KeepAspectRatio);
         } else {
             return QVariant();
         }
@@ -666,12 +659,16 @@ QStringList KisNodeModel::mimeTypes() const
 
 QMimeData * KisNodeModel::mimeData(const QModelIndexList &indexes) const
 {
+    bool hasLockedLayer = false;
     KisNodeList nodes;
     Q_FOREACH (const QModelIndex &idx, indexes) {
-        nodes << nodeFromIndex(idx);
+        KisNodeSP node = nodeFromIndex(idx);
+
+        nodes << node;
+        hasLockedLayer |= !node->isEditable(false);
     }
 
-    return KisMimeData::mimeForLayers(nodes, m_d->image);
+    return KisMimeData::mimeForLayers(nodes, m_d->image, hasLockedLayer);
 }
 
 bool KisNodeModel::dropMimeData(const QMimeData * data, Qt::DropAction action, int row, int column, const QModelIndex & parent)
@@ -736,7 +733,7 @@ void KisNodeModel::updateDropEnabled(const QList<KisNodeSP> &nodes, QModelIndex 
 
         bool dropEnabled = true;
         Q_FOREACH (const KisNodeSP &node, nodes) {
-            if (!target->allowAsChild(node)) {
+            if (!target->allowAsChild(node) || !target->isEditable(false)) {
                 dropEnabled = false;
                 break;
             }

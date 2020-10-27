@@ -61,11 +61,10 @@ KoSliderCombo::KoSliderCombo(QWidget *parent)
     // When set to true, causes flicker on Qt 4.6. Any reason to keep it?
     d->firstShowOfSlider = false; //true;
 
-    QHBoxLayout * l = new QHBoxLayout();
-    l->setMargin(2);
-    l->setSpacing(2);
-    l->addWidget(d->slider);
-    d->container->setLayout(l);
+    QHBoxLayout *layout = new QHBoxLayout(d->container);
+    layout->setMargin(2);
+    layout->setSpacing(2);
+    layout->addWidget(d->slider);
     d->container->resize(200, 30);
 
     setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
@@ -93,8 +92,11 @@ QSize KoSliderCombo::minimumSizeHint() const
     QSize sh;
 
     const QFontMetrics &fm = fontMetrics();
-
+#if QT_VERSION >= QT_VERSION_CHECK(5,11,0)
+    sh.setWidth(5 * fm.horizontalAdvance(QLatin1Char('8')));
+#else
     sh.setWidth(5 * fm.width(QLatin1Char('8')));
+#endif
     sh.setHeight(qMax(fm.lineSpacing(), 14) + 2);
 
     // add style and strut values
@@ -104,7 +106,7 @@ QSize KoSliderCombo::minimumSizeHint() const
     opt.editable = true;
     sh = style()->sizeFromContents(QStyle::CT_ComboBox, &opt, sh, this);
 
-    return sh.expandedTo(QApplication::globalStrut());
+    return sh;
 }
 
 void KoSliderCombo::KoSliderComboPrivate::showPopup()

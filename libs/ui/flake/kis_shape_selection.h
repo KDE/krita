@@ -18,6 +18,8 @@
 #ifndef KIS_SHAPE_SELECTION_H
 #define KIS_SHAPE_SELECTION_H
 
+#include <QPainterPath>
+
 #include <KoShapeLayer.h>
 #include <KoShapeFactoryBase.h>
 #include <KoShapeUserData.h>
@@ -97,13 +99,13 @@ private Q_SLOTS:
 
 protected:
 
-    void paintComponent(QPainter& painter, const KoViewConverter& converter, KoShapePaintingContext &paintcontext) override;
+    void paintComponent(QPainter& painter, KoShapePaintingContext &paintcontext) const override;
 
 private:
     friend class KisTakeAllShapesCommand;
     void setUpdatesEnabled(bool enabled);
     bool updatesEnabled() const;
-
+    void init(KisImageSP image, KoShapeControllerBase *shapeControllerBase);
 private:
 
     void renderSelection(KisPaintDeviceSP projection, const QRect& requestedRect);

@@ -27,6 +27,8 @@
 #include <QSet>
 #include <QButtonGroup>
 
+#include <KoColorSet.h>
+
 #include "kritaui_export.h"
 
 class QAction;
@@ -55,7 +57,7 @@ public:
 
 public:
     void setPaletteModel(KisPaletteModel *);
-    KoColorSet* palette() const { return m_colorSet; }
+    KoColorSetSP palette() const { return m_colorSet; }
     void setView(KisViewManager *);
 
 private Q_SLOTS:
@@ -69,8 +71,6 @@ private Q_SLOTS:
     void slotSetGlobal();
 
     void slotNameChanged();
-    void slotFilenameChanged(const QString &newFilename);
-    void slotFilenameInputFinished();
     void slotColCountChanged(int);
 
     void slotAccepted();
@@ -85,7 +85,7 @@ private:
     QScopedPointer<QAction> m_actRenGroup;
     QScopedPointer<QButtonGroup> m_globalButtons;
     QScopedPointer<KisPaletteEditor> m_paletteEditor;
-    QPointer<KoColorSet> m_colorSet;
+    QSharedPointer<KoColorSet> m_colorSet;
     QString m_currentGroupOriginalName;
 
     QPalette m_normalPalette;

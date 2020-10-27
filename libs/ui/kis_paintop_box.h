@@ -26,7 +26,7 @@
 #include <QWidget>
 #include <QList>
 
-
+#include <KoResource.h>
 #include <KoID.h>
 #include <KoInputDevice.h>
 
@@ -40,13 +40,11 @@
 #include "kis_signal_compressor.h"
 
 
-
 class QToolButton;
 class QString;
 class QHBoxLayout;
 
 class KoColorSpace;
-class KoResource;
 class KoCanvasController;
 
 class KisViewManager;
@@ -99,6 +97,8 @@ class KRITAUI_EXPORT KisPaintopBox : public QWidget
         DISABLE_FLOW        = 0x0080,
         ENABLE_SIZE         = 0x0100,
         DISABLE_SIZE        = 0x0200,
+        ENABLE_PATTERNSIZE  = 0x0400,
+        DISABLE_PATTERNSIZE = 0x0800,
         ENABLE_ALL          = 0x5555,
         DISABLE_ALL         = 0xAAAA
     };
@@ -108,7 +108,7 @@ public:
     KisPaintopBox(KisViewManager* view, QWidget* parent, const char* name);
     ~KisPaintopBox() override;
 
-    void restoreResource(KoResource* resource);
+    void restoreResource(KoResourceSP resource);
     /**
      * Update the option widgets to the argument ones, removing the currently set widgets.
      */
@@ -120,8 +120,9 @@ public Q_SLOTS:
 
     void slotColorSpaceChanged(const KoColorSpace* colorSpace);
     void slotInputDeviceChanged(const KoInputDevice & inputDevice);
+    void slotCanvasResourceChangeAttempted(int key, const QVariant &value);
     void slotCanvasResourceChanged(int key, const QVariant& v);
-    void resourceSelected(KoResource* resource);
+    void resourceSelected(KoResourceSP resource);
 
     /// This should take care of creating a new brush preset from scratch
     /// It will either load the default brush preset for the engine,
@@ -138,7 +139,9 @@ private:
     void updateCompositeOp(QString compositeOpID);
     void setWidgetState(int flags);
     void setSliderValue(const QString& sliderID, qreal value);
+    void setMultiplierSliderValue(const QString& sliderID, qreal value);
     void sliderChanged(int n);
+    void findDefaultPresets();
 
 private Q_SLOTS:
 
@@ -152,6 +155,7 @@ private Q_SLOTS:
     void slotSlider1Changed();
     void slotSlider2Changed();
     void slotSlider3Changed();
+    void slotSlider4Changed();
     void slotToolChanged(KoCanvasController* canvas, int toolId);
     void slotPreviousFavoritePreset();
     void slotNextFavoritePreset();
@@ -193,12 +197,13 @@ private:
     QToolButton*                        m_alphaLockButton;
     QToolButton*                        m_hMirrorButton;
     QToolButton*                        m_vMirrorButton;
+    QToolButton*                        m_wrapAroundButton;
     KisToolOptionsPopup*                m_toolOptionsPopup;
     KisPaintOpPresetsPopup*             m_presetsPopup;
     KisPaintOpPresetsChooserPopup*      m_presetsChooserPopup;
     KisViewManager*                     m_viewManager;
     KisPopupButton*                     m_workspaceWidget;
-    KisWidgetChooser*                   m_sliderChooser[3];
+    KisWidgetChooser*                   m_sliderChooser[4];
     QMap<KoID, KisPaintOpConfigWidget*> m_paintopOptionWidgets;
     KisFavoriteResourceManager*         m_favoriteResourceManager;
     QToolButton*                        m_reloadButton;

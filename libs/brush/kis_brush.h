@@ -22,12 +22,13 @@
 
 #include <QImage>
 
-#include <resources/KoResource.h>
+#include <KoResource.h>
 
 #include <kis_types.h>
 #include <kis_shared.h>
 #include <kis_dab_shape.h>
 #include <kritabrush_export.h>
+#include <resources/KoAbstractGradient.h>
 
 class KisQImagemask;
 typedef KisSharedPtr<KisQImagemask> KisQImagemaskSP;
@@ -48,10 +49,18 @@ enum enumBrushType {
     PIPE_IMAGE
 };
 
+enum enumBrushApplication {
+    ALPHAMASK,
+    IMAGESTAMP,
+    LIGHTNESSMAP,
+    GRADIENTMAP
+};
+
 static const qreal DEFAULT_SOFTNESS_FACTOR = 1.0;
+static const qreal DEFAULT_LIGHTNESS_STRENGTH = 1.0;
 
 class KisBrush;
-typedef KisSharedPtr<KisBrush> KisBrushSP;
+typedef QSharedPointer<KisBrush> KisBrushSP;
 
 /**
  * KisBrush is the base class for brush resources. A brush resource
@@ -68,10 +77,8 @@ typedef KisSharedPtr<KisBrush> KisBrushSP;
  * XXX: This api is still a big mess -- it needs a good refactoring.
  * And the whole KoResource architecture is way over-designed.
  */
-class BRUSH_EXPORT KisBrush : public KoResource, public KisShared
+class BRUSH_EXPORT KisBrush : public KoResource
 {
-
-
 public:
     class ColoringInformation
     {
@@ -117,27 +124,16 @@ public:
 
     KisBrush();
     KisBrush(const QString& filename);
-
     ~KisBrush() override;
+
+    KisBrush(const KisBrush &rhs);
+    KisBrush &operator=(const KisBrush &rhs) = delete;
 
     virtual qreal userEffectiveSize() const = 0;
     virtual void setUserEffectiveSize(qreal value) = 0;
 
-    bool load() override {
-        return false;
-    }
-
-    bool loadFromDevice(QIODevice *) override {
-        return false;
-    }
-
-
-    bool save() override {
-        return false;
-    }
-
-    bool saveToDevice(QIODevice* ) const override {
-        return false;
+    QPair<QString, QString> resourceType() const override {
+        return QPair<QString, QString>(ResourceType::Brushes, "");
     }
 
     /**
@@ -202,10 +198,12 @@ public:
     double maskAngle(double angle = 0) const;
 
     /**
-     * @return the index of the brush
+     * @return the currently selected index of the brush
      *         if the brush consists of multiple images
+     *
+     * @see prepareForSeqNo()
      */
-    virtual quint32 brushIndex(const KisPaintInformation& info) const;
+    virtual quint32 brushIndex() const;
 
     /**
      * The brush type defines how the brush is used.
@@ -230,22 +228,10 @@ public:
     virtual void notifyStrokeStarted();
 
     /**
-     * Is called by the cache, when cache hit has happened.
-     * Having got this notification the brush can update the counters
-     * of dabs, generate some new random values if needed.
-     *
-     * * NOTE: one should use **either** notifyCachedDabPainted() or prepareForSeqNo()
-     *
-     * Currently, this is used by pipe'd brushes to implement
-     * incremental and random parasites
-     */
-    virtual void notifyCachedDabPainted(const KisPaintInformation& info);
-
-    /**
      * Is called by the multithreaded queue to prepare a specific brush
      * tip for the particular seqNo.
      *
-     * NOTE: one should use **either** notifyCachedDabPainted() or prepareForSeqNo()
+     * NOTE: one should use always call prepareForSeqNo() before using the brush
      *
      * Currently, this is used by pipe'd brushes to implement
      * incremental and random parasites
@@ -279,7 +265,8 @@ public:
               const KoColor& color,
               KisDabShape const& shape,
               const KisPaintInformation& info,
-              double subPixelX = 0, double subPixelY = 0, qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const;
+              double subPixelX = 0, double subPixelY = 0, 
+              qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR, qreal lightnessStrength = DEFAULT_LIGHTNESS_STRENGTH) const;
 
     /**
      * clear dst and fill it with a mask colored with the corresponding colors of src
@@ -288,10 +275,20 @@ public:
               const KisPaintDeviceSP src,
               KisDabShape const& shape,
               const KisPaintInformation& info,
-              double subPixelX = 0, double subPixelY = 0, qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const;
+              double subPixelX = 0, double subPixelY = 0, 
+              qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR, qreal lightnessStrength = DEFAULT_LIGHTNESS_STRENGTH) const;
 
 
-    virtual bool hasColor() const;
+    virtual enumBrushApplication brushApplication() const;
+
+    virtual void setBrushApplication(enumBrushApplication brushApplication);
+
+    virtual bool preserveLightness() const;
+
+    virtual bool applyingGradient() const;
+
+    virtual void setGradient(KoAbstractGradientSP gradient);
+
 
     /**
      * Create a mask and either mask dst (that is, change all alpha values of the
@@ -317,7 +314,15 @@ public:
             ColoringInformation* coloringInfo,
             KisDabShape const&,
             const KisPaintInformation& info,
-            double subPixelX = 0, double subPixelY = 0, qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const;
+            double subPixelX, double subPixelY,
+            qreal softnessFactor, qreal lightnessStrength) const;
+
+    void generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
+        ColoringInformation* coloringInfo,
+        KisDabShape const&,
+        const KisPaintInformation& info,
+        double subPixelX = 0, double subPixelY = 0,
+        qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const;
 
 
     /**
@@ -325,7 +330,7 @@ public:
      */
     virtual void toXML(QDomDocument& , QDomElement&) const;
 
-    static KisBrushSP fromXML(const QDomElement& element);
+    static KisBrushSP fromXML(const QDomElement& element, KisResourcesInterfaceSP resourcesInterface);
 
     virtual const KisBoundary* boundary() const;
     virtual QPainterPath outline() const;
@@ -339,11 +344,7 @@ public:
 
     virtual void lodLimitations(KisPaintopLodLimitations *l) const;
 
-    virtual KisBrush* clone() const = 0;
-
 protected:
-
-    KisBrush(const KisBrush& rhs);
 
     void setWidth(qint32 width);
 
@@ -355,8 +356,6 @@ protected:
      * XXX
      */
     virtual void setBrushType(enumBrushType type);
-
-    virtual void setHasColor(bool hasColor);
 
 public:
 

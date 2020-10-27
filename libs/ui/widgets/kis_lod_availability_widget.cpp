@@ -93,13 +93,10 @@ KisLodAvailabilityWidget::KisLodAvailabilityWidget(QWidget *parent)
         m_d->thresholdMenu->addAction(sliderAction);
     }
 
-    QHBoxLayout *layout = new QHBoxLayout;
+    QHBoxLayout *layout = new QHBoxLayout(this);
+    layout->setSpacing(0);
     layout->addWidget(m_d->chkLod);
     layout->addWidget(m_d->btnLod);
-
-    layout->setSpacing(0);
-
-    setLayout(layout);
 
     // set no limitations
     setLimitations(m_d->limitations);
@@ -147,7 +144,7 @@ void KisLodAvailabilityWidget::setLimitations(const KisPaintopLodLimitations &l)
 
     m_d->thresholdSupported =
         m_d->resourceManager ?
-        m_d->resourceManager->resource(KisCanvasResourceProvider::LodSizeThresholdSupported).toBool() :
+        m_d->resourceManager->resource(KoCanvasResource::LodSizeThresholdSupported).toBool() :
         true;
     bool isBlockedByThreshold = !m_d->sizeThresholdPassed() && m_d->thresholdSupported;
 
@@ -162,8 +159,8 @@ void KisLodAvailabilityWidget::setLimitations(const KisPaintopLodLimitations &l)
                         "disabled by the following options:"
                         "<ul>%1</ul></p>", blockersText);
     } else if (isBlockedByThreshold) {
-        const qreal lodThreshold = m_d->resourceManager->resource(KisCanvasResourceProvider::LodSizeThreshold).toDouble();
-        const qreal size = m_d->resourceManager->resource(KisCanvasResourceProvider::Size).toDouble();
+        const qreal lodThreshold = m_d->resourceManager->resource(KoCanvasResource::LodSizeThreshold).toDouble();
+        const qreal size = m_d->resourceManager->resource(KoCanvasResource::Size).toDouble();
 
         toolTip = i18nc("@info:tooltip",
                         "<p>Instant Preview Mode is "
@@ -208,9 +205,9 @@ void KisLodAvailabilityWidget::setLimitations(const KisPaintopLodLimitations &l)
     if (m_d->resourceManager) {
         const bool lodAvailableForUse =
             !isBlocked && !isBlockedByThreshold &&
-            m_d->resourceManager->resource(KisCanvasResourceProvider::LodAvailability).toBool();
+            m_d->resourceManager->resource(KoCanvasResource::LodAvailability).toBool();
 
-        m_d->resourceManager->setResource(KisCanvasResourceProvider::EffectiveLodAvailablility, lodAvailableForUse);
+        m_d->resourceManager->setResource(KoCanvasResource::EffectiveLodAvailablility, lodAvailableForUse);
     }
 
 }
@@ -246,8 +243,8 @@ bool KisLodAvailabilityWidget::Private::sizeThresholdPassed()
 {
     if (!resourceManager) return true;
 
-    const qreal lodThreshold = resourceManager->resource(KisCanvasResourceProvider::LodSizeThreshold).toDouble();
-    const qreal size = resourceManager->resource(KisCanvasResourceProvider::Size).toDouble();
+    const qreal lodThreshold = resourceManager->resource(KoCanvasResource::LodSizeThreshold).toDouble();
+    const qreal size = resourceManager->resource(KoCanvasResource::Size).toDouble();
 
     return size >= lodThreshold;
 }

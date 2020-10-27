@@ -22,6 +22,7 @@
 #include "KoToolBox_p.h"
 #include "KoToolBoxLayout_p.h"
 #include "KoToolBoxButton_p.h"
+#include "kis_assert.h"
 
 #include <QButtonGroup>
 #include <QToolButton>
@@ -47,6 +48,8 @@
 
 static int buttonSize(int screen)
 {
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(screen < QGuiApplication::screens().size() && screen >= 0, 16);
+
     QRect rc = QGuiApplication::screens().at(screen)->availableGeometry();
     if (rc.width() <= 1024) {
         return 12;
@@ -60,30 +63,23 @@ static int buttonSize(int screen)
     else {
         return 22;
     }
+
 }
 
 class KoToolBox::Private
 {
 public:
-    Private()
-        : layout(0)
-        , buttonGroup(0)
-        , floating(false)
-        , contextSize(0)
-    {
-    }
-
     void addSection(Section *section, const QString &name);
 
     QList<QToolButton*> buttons;
     QMap<QString, Section*> sections;
-    KoToolBoxLayout *layout;
-    QButtonGroup *buttonGroup;
+    KoToolBoxLayout *layout {0};
+    QButtonGroup *buttonGroup {0};
     QHash<QToolButton*, QString> visibilityCodes;
-    bool floating;
+    bool floating {false};
     QMap<QAction*,int> contextIconSizes;
-    QMenu* contextSize;
-    Qt::Orientation orientation;
+    QMenu *contextSize {0};
+    Qt::Orientation orientation {Qt::Vertical};
 };
 
 void KoToolBox::Private::addSection(Section *section, const QString &name)
@@ -102,7 +98,7 @@ KoToolBox::KoToolBox()
     d->addSection(new Section(this), "dynamic");
 
     d->buttonGroup = new QButtonGroup(this);
-    setLayout(d->layout);
+
     Q_FOREACH (KoToolAction *toolAction, KoToolManager::instance()->toolActionList()) {
         addButton(toolAction);
     }
@@ -132,9 +128,14 @@ void KoToolBox::addButton(KoToolAction *toolAction)
 
     d->buttons << button;
 
-    int toolbuttonSize = buttonSize(qApp->desktop()->screenNumber(this));
+    // Get screen the widget exists in, but fall back to primary screen if invalid.
+    const int widgetsScreen = qApp->desktop()->screenNumber(this);
+    const int primaryScreen = 0; //In QT, primary screen should always be the first index of QGuiApplication::screens()
+    const int screen = (widgetsScreen >= 0 && widgetsScreen < QGuiApplication::screens().size()) ? widgetsScreen : primaryScreen;
+    const int toolbuttonSize = buttonSize(screen);
     KConfigGroup cfg =  KSharedConfig::openConfig()->group("KoToolBox");
-    int iconSize = cfg.readEntry("iconSize", toolbuttonSize);
+    const int iconSize = cfg.readEntry("iconSize", toolbuttonSize);
+
 
    button->setIconSize(QSize(iconSize, iconSize));
     foreach (Section *section, d->sections.values())  {

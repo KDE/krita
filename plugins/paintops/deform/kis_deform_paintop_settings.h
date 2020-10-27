@@ -28,13 +28,13 @@ class KisDeformPaintOpSettings : public KisOutlineGenerationPolicy<KisPaintOpSet
 {
 
 public:
-    KisDeformPaintOpSettings();
+    KisDeformPaintOpSettings(KisResourcesInterfaceSP resourcesInterface);
     ~KisDeformPaintOpSettings() override;
 
     void setPaintOpSize(qreal value) override;
     qreal paintOpSize() const override;
 
-    QPainterPath brushOutline(const KisPaintInformation &info, const OutlineMode &mode) override;
+    QPainterPath brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom) override;
 
     bool paintIncremental() override;
     bool isAirbrushing() const override;

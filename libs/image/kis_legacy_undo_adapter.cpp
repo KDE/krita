@@ -47,17 +47,19 @@ void KisLegacyUndoAdapter::addCommand(KUndo2Command *command)
         undoStore()->addCommand(command);
     }
     else {
-        // TODO: add feedback
         m_image->barrierLock();
         undoStore()->addCommand(command);
         m_image->unlock();
+
+        /// Sometimes legacy commands forget to emit sigImageModified() signal,
+        /// it causes dockers to be updated in correctly. Let's help them.
+        m_image->setModified();
     }
 }
 
 void KisLegacyUndoAdapter::beginMacro(const KUndo2MagicString& macroName)
 {
     if(!m_macroCounter) {
-        // TODO: add feedback
         m_image->barrierLock();
     }
 
@@ -73,5 +75,9 @@ void KisLegacyUndoAdapter::endMacro()
         m_image->unlock();
     }
     undoStore()->endMacro();
+
+    /// Sometimes legacy commands forget to emit sigImageModified() signal,
+    /// it causes dockers to be updated in correctly. Let's help them.
+    m_image->setModified();
 }
 

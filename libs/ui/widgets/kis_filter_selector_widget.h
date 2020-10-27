@@ -46,7 +46,7 @@ class KisFilterSelectorWidget : public QWidget
 public:
     KisFilterSelectorWidget(QWidget* parent);
     ~KisFilterSelectorWidget() override;
-    void setFilter(KisFilterSP f);
+    void setFilter(KisFilterSP f, KisFilterConfigurationSP overrideDefaultConfig);
     void setView(KisViewManager *view);
     void setPaintDevice(bool showAll, KisPaintDeviceSP);
     KisFilterConfigurationSP configuration();
@@ -57,6 +57,7 @@ public Q_SLOTS:
     void showFilterGallery(bool visible);
 protected Q_SLOTS:
     void slotBookmarkedFilterConfigurationSelected(int);
+    void slotBookMarkCurrentFilter();
     void setFilterIndex(const QModelIndex&);
     void editConfigurations();
     void update();

@@ -29,6 +29,7 @@
 #include <kis_dom_utils.h>
 #include <KoColorConversions.h>
 #include <KoColorSpaceMaths.h>
+#include <KoColorSpacePreserveLightnessUtils.h>
 
 RgbF32ColorSpace::RgbF32ColorSpace(const QString &name, KoColorProfile *p) :
     LcmsColorSpace<KoRgbF32Traits>(colorSpaceId(), name, TYPE_RGBA_FLT, cmsSigRgbData, p)
@@ -113,4 +114,14 @@ QVector <double> RgbF32ColorSpace::fromYUV(qreal *y, qreal *u, qreal *v) const
     YUVToRGB(*y, *u, *v, &channelValues[0],&channelValues[1],&channelValues[2], lumaCoefficients()[0], lumaCoefficients()[1], lumaCoefficients()[2]);
     channelValues[3]=1.0;
     return channelValues;
+}
+
+void RgbF32ColorSpace::fillGrayBrushWithColorAndLightnessOverlay(quint8 *dst, const QRgb *brush, quint8 *brushColor, qint32 nPixels) const
+{
+    fillGrayBrushWithColorPreserveLightnessRGB<KoRgbF32Traits>(dst, brush, brushColor, 1.0, nPixels);
+}
+
+void RgbF32ColorSpace::fillGrayBrushWithColorAndLightnessWithStrength(quint8* dst, const QRgb* brush, quint8* brushColor, qreal strength, qint32 nPixels) const
+{
+    fillGrayBrushWithColorPreserveLightnessRGB<KoRgbF32Traits>(dst, brush, brushColor, strength, nPixels);
 }

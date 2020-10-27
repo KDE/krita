@@ -61,23 +61,22 @@ KisConfigWidget * KisGaussianHighPassFilter::createConfigurationWidget(QWidget* 
     return new KisWdgGaussianHighPass(parent);
 }
 
-KisFilterConfigurationSP KisGaussianHighPassFilter::factoryConfiguration() const
+KisFilterConfigurationSP KisGaussianHighPassFilter::defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const
 {
-    KisFilterConfigurationSP config = new KisFilterConfiguration(id().id(), 1);
+    KisFilterConfigurationSP config = factoryConfiguration(resourcesInterface);
     config->setProperty("blurAmount", 1);
     return config;
 }
 
 void KisGaussianHighPassFilter::processImpl(KisPaintDeviceSP device,
                                    const QRect& applyRect,
-                                   const KisFilterConfigurationSP _config,
+                                   const KisFilterConfigurationSP config,
                                    KoUpdater *
                                    ) const
 {
     QPointer<KoUpdater> convolutionUpdater = 0;
+    KIS_SAFE_ASSERT_RECOVER_RETURN(config);
 
-    KisFilterConfigurationSP config = _config ? _config : new KisFilterConfiguration(id().id(), 1);
-    
     QVariant value;
     KisLodTransformScalar t(device);
     const qreal blurAmount = t.scale(config->getProperty("blurAmount", value) ? value.toDouble() : 1.0);
@@ -92,7 +91,7 @@ void KisGaussianHighPassFilter::processImpl(KisPaintDeviceSP device,
                                      blurAmount, blurAmount,
                                      channelFlags,
                                      convolutionUpdater,
-                                     true); // make sure we cerate an internal transaction on temp device
+                                     true); // make sure we craate an internal transaction on temp device
     
     KisPainter painter(device);
     painter.setCompositeOp(blur->colorSpace()->compositeOp(COMPOSITE_GRAIN_EXTRACT));

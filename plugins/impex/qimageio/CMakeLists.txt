@@ -4,6 +4,7 @@ set(kritaqimageioexport_SOURCES
     kis_qimageio_export.cpp
     )
 
+ki18n_wrap_ui(kritaqimageioexport_SOURCES kis_wdg_options_qimageio.ui)
 ki18n_wrap_ui(kritaqimageioexport_SOURCES )
 
 add_library(kritaqimageioexport MODULE ${kritaqimageioexport_SOURCES})
@@ -16,7 +17,6 @@ set(kritaqimageioimport_SOURCES
     kis_qimageio_import.cpp
     )
 
-ki18n_wrap_ui(kritaqimageioimport_SOURCES )
 
 add_library(kritaqimageioimport MODULE ${kritaqimageioimport_SOURCES})
 

@@ -24,7 +24,8 @@
 #include "kis_current_outline_fetcher.h"
 
 
-KisSketchPaintOpSettings::KisSketchPaintOpSettings()
+KisSketchPaintOpSettings::KisSketchPaintOpSettings(KisResourcesInterfaceSP resourcesInterface)
+    : KisBrushBasedPaintOpSettings(resourcesInterface)
 {
 }
 
@@ -33,12 +34,12 @@ bool KisSketchPaintOpSettings::paintIncremental()
     return (enumPaintActionType)getInt("PaintOpAction", WASH) == BUILDUP;
 }
 
-QPainterPath KisSketchPaintOpSettings::brushOutline(const KisPaintInformation &info, const OutlineMode &mode)
+QPainterPath KisSketchPaintOpSettings::brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom)
 {
     bool isSimpleMode = getBool(SKETCH_USE_SIMPLE_MODE);
 
     if (!isSimpleMode) {
-        return KisBrushBasedPaintOpSettings::brushOutline(info, mode);
+        return KisBrushBasedPaintOpSettings::brushOutline(info, mode, alignForZoom);
     }
 
     QPainterPath path;
@@ -50,13 +51,17 @@ QPainterPath KisSketchPaintOpSettings::brushOutline(const KisPaintInformation &i
         qreal diameter = qMax(brush->width(), brush->height());
         path = ellipseOutline(diameter, diameter, 1.0, 0.0);
 
-        path = outlineFetcher()->fetchOutline(info, this, path, mode);
+        path = outlineFetcher()->fetchOutline(info, this, path, mode, alignForZoom);
         if (mode.showTiltDecoration) {
             QPainterPath tiltLine =
                 makeTiltIndicator(info, path.boundingRect().center(), diameter * 0.5, 3.0);
-            path.addPath(outlineFetcher()->fetchOutline(info, this, tiltLine, mode, 1.0, 0.0, true, path.boundingRect().center().x(), path.boundingRect().center().y()));
+            path.addPath(outlineFetcher()->fetchOutline(info, this, tiltLine, mode, alignForZoom, 1.0, 0.0, true, path.boundingRect().center().x(), path.boundingRect().center().y()));
         }
     }
     return path;
 }
 
+bool KisSketchPaintOpSettings::hasPatternSettings() const
+{
+    return false;
+}

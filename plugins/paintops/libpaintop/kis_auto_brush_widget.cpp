@@ -64,7 +64,7 @@ KisAutoBrushWidget::KisAutoBrushWidget(QWidget *parent, const char* name)
     inputRadius->setBlockUpdateSignalOnDrag(true);
     connect(inputRadius, SIGNAL(valueChanged(qreal)), m_updateCompressor.data(), SLOT(start()));
 
-    inputRatio->setRange(0.0, 1.0, 2);
+    inputRatio->setRange(0.01, 1.0, 2);
     inputRatio->setSingleStep(0.1);
     inputRatio->setValue(1.0);
     inputRatio->setBlockUpdateSignalOnDrag(true);
@@ -188,7 +188,7 @@ void KisAutoBrushWidget::paramChanged()
     }
     Q_CHECK_PTR(kas);
 
-    m_autoBrush = new KisAutoBrush(kas, inputAngle->value() / 180.0 * M_PI, inputRandomness->value() / 100.0, density->value() / 100.0);
+    m_autoBrush = KisBrushSP(new KisAutoBrush(kas, inputAngle->value() / 180.0 * M_PI, inputRandomness->value() / 100.0, density->value() / 100.0));
     m_autoBrush->setSpacing(spacingWidget->spacing());
     m_autoBrush->setAutoSpacing(spacingWidget->autoSpacingActive(), spacingWidget->autoSpacingCoeff());
     m_brush = m_autoBrush->image();

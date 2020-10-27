@@ -30,6 +30,7 @@
 class QLabel;
 class QToolButton;
 class QPushButton;
+class QBoxLayout;
 class KSqueezedTextLabel;
 class KisViewManager;
 class KisProgressWidget;
@@ -87,6 +88,9 @@ public:
 
     KoProgressUpdater *progressUpdater();
 
+    void addExtraWidget(QWidget *widget);
+    void removeExtraWidget(QWidget *widget);
+
 public Q_SLOTS:
 
     void documentMousePositionChanged(const QPointF &p);
@@ -125,7 +129,10 @@ private:
     QToolButton *m_selectionStatus;
     KisMemoryReportButton *m_memoryReportBox;
     QLabel *m_pointerPositionLabel;
+    QWidget *m_extraWidgetsParent;
+    QBoxLayout *m_extraWidgetsLayout;
     QToolButton *m_resetAngleButton;
+    QToolButton *m_fullscreenToggle;
 
     KSqueezedTextLabel *m_statusBarStatusLabel;
     KSqueezedTextLabel *m_statusBarProfileLabel;

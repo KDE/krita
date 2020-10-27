@@ -30,12 +30,13 @@
 #include "EnhancedPathHandle.h"
 #include "EnhancedPathFormula.h"
 
+#include <QPainterPath>
+
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
 #include <KoShapeSavingContext.h>
 #include <KoUnit.h>
-#include <KoOdfWorkaround.h>
 #include <KoPathPoint.h>
 
 EnhancedPathShape::EnhancedPathShape(const QRect &viewBox)
@@ -457,189 +458,6 @@ bool EnhancedPathShape::useStretchPoints(const QSizeF &size, qreal &scale)
         notifyPointsChanged();
     }
     return retval;
-}
-
-void EnhancedPathShape::saveOdf(KoShapeSavingContext &context) const
-{
-    if (isParametricShape()) {
-        context.xmlWriter().startElement("draw:custom-shape");
-
-        const QSizeF currentSize = outline().boundingRect().size();
-
-        // save the right position so that when loading we fit the viewbox
-        // to the right position without getting any wrong scaling
-        // -> calculate the right position from the current 0 position / viewbound ratio
-        // this is e.g. the case when there is a callout that goes into negative viewbound coordinates
-        QPointF topLeft = m_viewBound.topLeft();
-        QPointF diff;
-        if (qAbs(topLeft.x()) > 1E-5) {
-            diff.setX(topLeft.x()*currentSize.width() / m_viewBound.width());
-        }
-        if (qAbs(topLeft.y()) > 1E-5) {
-            diff.setY(topLeft.y()*currentSize.height() / m_viewBound.height());
-        }
-
-        if (diff.isNull()) {
-            saveOdfAttributes(context, OdfAllAttributes & ~OdfSize);
-        } else {
-            //FIXME: this needs to be fixed for shapes that are transformed by rotation or skewing
-            QTransform offset(context.shapeOffset(this));
-            QTransform newOffset(offset);
-            newOffset.translate(-diff.x(), -diff.y());
-            context.addShapeOffset(this, newOffset);
-            saveOdfAttributes(context, OdfAllAttributes & ~OdfSize);
-            if (offset.isIdentity()) {
-                context.removeShapeOffset(this);
-            } else {
-                context.addShapeOffset(this, offset);
-            }
-        }
-
-        // save the right size so that when loading we fit the viewbox
-        // to the right size without getting any wrong scaling
-        // -> calculate the right size from the current size/viewbound ratio
-        context.xmlWriter().addAttribute("svg:width", currentSize.width() == 0 ? 0 : m_viewBox.width()*currentSize.width() / m_viewBound.width());
-        context.xmlWriter().addAttribute("svg:height", currentSize.height() == 0 ? 0 : m_viewBox.height()*currentSize.height() / m_viewBound.height());
-
-        saveText(context);
-
-        context.xmlWriter().startElement("draw:enhanced-geometry");
-        context.xmlWriter().addAttribute("svg:viewBox", QString("%1 %2 %3 %4").arg(m_viewBox.x()).arg(m_viewBox.y()).arg(m_viewBox.width()).arg(m_viewBox.height()));
-
-        if (m_pathStretchPointX != -1) {
-            context.xmlWriter().addAttribute("draw:path-stretchpoint-x", m_pathStretchPointX);
-        }
-        if (m_pathStretchPointY != -1) {
-            context.xmlWriter().addAttribute("draw:path-stretchpoint-y", m_pathStretchPointY);
-        }
-
-        if (m_mirrorHorizontally) {
-            context.xmlWriter().addAttribute("draw:mirror-horizontal", "true");
-        }
-        if (m_mirrorVertically) {
-            context.xmlWriter().addAttribute("draw:mirror-vertical", "true");
-        }
-
-        QString modifiers;
-        foreach (qreal modifier, m_modifiers) {
-            modifiers += QString::number(modifier) + ' ';
-        }
-        context.xmlWriter().addAttribute("draw:modifiers", modifiers.trimmed());
-
-        if (m_textArea.size() >= 4) {
-            context.xmlWriter().addAttribute("draw:text-areas", m_textArea.join(" "));
-        }
-
-        QString path;
-        foreach (EnhancedPathCommand *c, m_commands) {
-            path += c->toString() + ' ';
-        }
-        context.xmlWriter().addAttribute("draw:enhanced-path", path.trimmed());
-
-        FormulaStore::const_iterator i = m_formulae.constBegin();
-        for (; i != m_formulae.constEnd(); ++i) {
-            context.xmlWriter().startElement("draw:equation");
-            context.xmlWriter().addAttribute("draw:name", i.key());
-            context.xmlWriter().addAttribute("draw:formula", i.value()->toString());
-            context.xmlWriter().endElement(); // draw:equation
-        }
-
-        foreach (EnhancedPathHandle *handle, m_enhancedHandles) {
-            handle->saveOdf(context);
-        }
-
-        context.xmlWriter().endElement(); // draw:enhanced-geometry
-        saveOdfCommonChildElements(context);
-        context.xmlWriter().endElement(); // draw:custom-shape
-
-    } else {
-        KoPathShape::saveOdf(context);
-    }
-}
-
-bool EnhancedPathShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
-{
-    reset();
-
-    const KoXmlElement enhancedGeometry(KoXml::namedItemNS(element, KoXmlNS::draw, "enhanced-geometry"));
-    if (!enhancedGeometry.isNull()) {
-
-        setPathStretchPointX(enhancedGeometry.attributeNS(KoXmlNS::draw, "path-stretchpoint-x", "-1").toDouble());
-        setPathStretchPointY(enhancedGeometry.attributeNS(KoXmlNS::draw, "path-stretchpoint-y", "-1").toDouble());
-
-        // load the modifiers
-        QString modifiers = enhancedGeometry.attributeNS(KoXmlNS::draw, "modifiers", "");
-        if (!modifiers.isEmpty()) {
-            addModifiers(modifiers);
-        }
-
-        m_textArea = enhancedGeometry.attributeNS(KoXmlNS::draw, "text-areas", "").split(' ');
-        if (m_textArea.size() >= 4) {
-            setResizeBehavior(TextFollowsPreferredTextRect);
-        }
-
-        KoXmlElement grandChild;
-        forEachElement(grandChild, enhancedGeometry) {
-            if (grandChild.namespaceURI() != KoXmlNS::draw) {
-                continue;
-            }
-            if (grandChild.localName() == "equation") {
-                QString name = grandChild.attributeNS(KoXmlNS::draw, "name");
-                QString formula = grandChild.attributeNS(KoXmlNS::draw, "formula");
-                addFormula(name, formula);
-            } else if (grandChild.localName() == "handle") {
-                EnhancedPathHandle *handle = new EnhancedPathHandle(this);
-                if (handle->loadOdf(grandChild, context)) {
-                    m_enhancedHandles.append(handle);
-                    evaluateHandles();
-                } else {
-                    delete handle;
-                }
-            }
-
-        }
-
-        setMirrorHorizontally(enhancedGeometry.attributeNS(KoXmlNS::draw, "mirror-horizontal") == "true");
-        setMirrorVertically(enhancedGeometry.attributeNS(KoXmlNS::draw, "mirror-vertical") == "true");
-
-        // load the enhanced path data
-        QString path = enhancedGeometry.attributeNS(KoXmlNS::draw, "enhanced-path", "");
-#ifndef NWORKAROUND_ODF_BUGS
-        KoOdfWorkaround::fixEnhancedPath(path, enhancedGeometry, context);
-#endif
-        // load the viewbox
-        m_viewBox = loadOdfViewbox(enhancedGeometry);
-
-        if (!path.isEmpty()) {
-            parsePathData(path);
-        }
-
-        if (m_viewBox.isEmpty()) {
-            // if there is no view box defined make it is big as the path.
-            m_viewBox = m_viewBound.toAlignedRect();
-        }
-
-    }
-
-    QSizeF size;
-    size.setWidth(KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "width", QString())));
-    size.setHeight(KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "height", QString())));
-    // the viewbox is to be fitted into the size of the shape, so before setting
-    // the size we just loaded // we set the viewbox to be the basis to calculate
-    // the viewbox matrix from
-    m_viewBound = m_viewBox;
-    setSize(size);
-
-    QPointF pos;
-    pos.setX(KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "x", QString())));
-    pos.setY(KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "y", QString())));
-    setPosition(pos - m_viewMatrix.map(QPointF(0, 0)) - m_viewBoxOffset);
-
-    loadOdfAttributes(element, context, OdfMandatories | OdfTransformation | OdfAdditionalAttributes | OdfCommonChildElements);
-
-    loadText(element, context);
-
-    return true;
 }
 
 void EnhancedPathShape::parsePathData(const QString &data)

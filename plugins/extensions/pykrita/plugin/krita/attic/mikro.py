@@ -26,11 +26,11 @@ This code uses a lot of metaprogramming magic. To fully understand it,
 you have to know about metaclasses in Python
 """
 
-# NOTE: This has not been tested with private sip module for PyQt5, as required
-#       by newer PyQt5. In particular, `import sip` may or may not work.
-
 import sys
-import sip
+try:
+    from PyQt5 import sip  # Private sip module, used by modern PyQt5
+except ImportError:
+    import sip             # For older PyQt5 versions
 from PyQt5.QtCore import QVariant, QMetaObject, Q_RETURN_ARG, Q_ARG, QObject, Qt, QMetaMethod, pyqtSignal
 from PyQt5.QtGui import QBrush, QFont, QImage, QPalette, QPixmap
 from PyQt5.QtWidgets import qApp

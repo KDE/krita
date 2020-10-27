@@ -40,12 +40,13 @@
 #include "kis_imagepipe_brush.h"
 #include <kis_fixed_paint_device.h>
 
-#include "kis_brush_server.h"
+#include "KisBrushServerProvider.h"
 #include "kis_paint_layer.h"
 #include "kis_group_layer.h"
 #include <kis_selection.h>
 #include <KoProperties.h>
 #include "kis_iterator_ng.h"
+#include "kis_image_barrier_locker.h"
 
 KisCustomBrushWidget::KisCustomBrushWidget(QWidget *parent, const QString& caption, KisImageWSP image)
     : KisWdgCustomBrush(parent)
@@ -56,8 +57,7 @@ KisCustomBrushWidget::KisCustomBrushWidget(QWidget *parent, const QString& capti
     preview->setFixedSize(preview->size());
     preview->setStyleSheet("border: 2px solid #222; border-radius: 4px; padding: 5px; font: normal 10px;");
 
-    KisBrushResourceServer* rServer = KisBrushServer::instance()->brushServer();
-    m_rServerAdapter = QSharedPointer<KisBrushResourceServerAdapter>(new KisBrushResourceServerAdapter(rServer));
+    m_rServer = KisBrushServerProvider::instance()->brushServer();
 
     m_brush = 0;
 
@@ -98,7 +98,8 @@ void KisCustomBrushWidget::updatePreviewImage()
     QImage brushImage = m_brush ? m_brush->brushTipImage() : QImage();
 
     if (!brushImage.isNull()) {
-        brushImage = brushImage.scaled(preview->size(), Qt::KeepAspectRatio);
+        int w = preview->size().width() - 10; // 10 for the padding...
+        brushImage = brushImage.scaled(w, w, Qt::KeepAspectRatio);
     }
 
     preview->setPixmap(QPixmap::fromImage(brushImage));
@@ -127,60 +128,63 @@ void KisCustomBrushWidget::slotSpacingChanged()
 
 void KisCustomBrushWidget::slotUpdateUseColorAsMask(bool useColorAsMask)
 {
+    preserveAlpha->setEnabled(useColorAsMask);
     if (m_brush) {
-        static_cast<KisGbrBrush*>(m_brush.data())->setUseColorAsMask(useColorAsMask);
+        static_cast<KisGbrBrush*>(m_brush.data())->setBrushApplication(ALPHAMASK);
         updatePreviewImage();
+    }
+}
+
+void KisCustomBrushWidget::slotUpdateSaveButton()
+{
+    QString suffix = ".gbr";
+    if (brushStyle->currentIndex() != 0) {
+        suffix = ".gih";
+    }
+    if (QFileInfo(m_rServer->saveLocation() + "/" + nameLineEdit->text().split(" ").join("_")
+                  + suffix).exists()) {
+        buttonBox->button(QDialogButtonBox::Save)->setText(i18n("Overwrite"));
+    } else {
+        buttonBox->button(QDialogButtonBox::Save)->setText(i18n("Save"));
     }
 }
 
 
 void KisCustomBrushWidget::slotAddPredefined()
 {
-    QString dir = KoResourcePaths::saveLocation("data", "brushes");
-    QString extension;
-
-    if (brushStyle->currentIndex() == 0) {
-        extension = ".gbr";
-    }
-    else {
-        extension = ".gih";
-    }
+    QString dir = KoResourcePaths::saveLocation("data", ResourceType::Brushes);
 
     QString name = nameLineEdit->text();
-    QString tempFileName;
-    {
-        QFileInfo fileInfo;
-        fileInfo.setFile(dir + name + extension);
 
-        int i = 1;
-        while (fileInfo.exists()) {
-            fileInfo.setFile(dir + name + QString("%1").arg(i) + extension);
-            i++;
-        }
-
-        tempFileName = fileInfo.filePath();
+    if (nameLineEdit->text().isEmpty()) {
+        name = (QDateTime::currentDateTime().toString("yyyy-MM-ddThh:mm"));
     }
 
     // Add it to the brush server, so that it automatically gets to the mediators, and
     // so to the other brush choosers can pick it up, if they want to
-    if (m_rServerAdapter && m_brush) {
-        qDebug() << "m_brush" << m_brush;
-        KisGbrBrush *resource = dynamic_cast<KisGbrBrush*>(m_brush->clone());
-        resource->setFilename(tempFileName);
+    if (m_rServer && m_brush) {
 
-        if (nameLineEdit->text().isEmpty()) {
-            resource->setName(QDateTime::currentDateTime().toString("yyyy-MM-ddThh:mm"));
+
+        if (m_brush->clone().dynamicCast<KisGbrBrush>()) {
+            KisGbrBrushSP resource = m_brush->clone().dynamicCast<KisGbrBrush>();
+            resource->setName(name);
+            resource->setFilename(resource->name().split(" ").join("_") + resource->defaultFileExtension());
+            if (colorAsMask->isChecked()) {
+                resource->makeMaskImage(preserveAlpha->isChecked());
+            }
+            m_rServer->addResource(resource.dynamicCast<KisBrush>());
+            emit sigNewPredefinedBrush(resource);
         }
         else {
+            KisImagePipeBrushSP resource = m_brush->clone().dynamicCast<KisImagePipeBrush>();
             resource->setName(name);
+            resource->setFilename(resource->name().split(" ").join("_") + resource->defaultFileExtension());
+            if (colorAsMask->isChecked()) {
+                resource->makeMaskImage(preserveAlpha->isChecked());
+            }
+            m_rServer->addResource(resource.dynamicCast<KisBrush>());
+            emit sigNewPredefinedBrush(resource);
         }
-
-        if (colorAsMask->isChecked()) {
-            resource->makeMaskImage();
-        }
-
-        m_rServerAdapter->addResource(resource);
-        emit sigNewPredefinedBrush(resource);
     }
 
     close();
@@ -193,18 +197,18 @@ void KisCustomBrushWidget::createBrush()
 
     if (brushStyle->currentIndex() == 0) {
         KisSelectionSP selection = m_image->globalSelection();
+
         // create copy of the data
-        m_image->lock();
+        m_image->barrierLock();
         KisPaintDeviceSP dev = new KisPaintDevice(*m_image->projection());
         m_image->unlock();
 
         if (!selection) {
-            m_brush = new KisGbrBrush(dev, 0, 0, m_image->width(), m_image->height());
+            m_brush = KisBrushSP(new KisGbrBrush(dev, 0, 0, m_image->width(), m_image->height()));
         }
         else {
             // apply selection mask
             QRect r = selection->selectedExactRect();
-            dev->crop(r);
 
             KisHLineIteratorSP pixelIt = dev->createHLineIteratorNG(r.x(), r.top(), r.width());
             KisHLineConstIteratorSP maskIt = selection->projection()->createHLineIteratorNG(r.x(), r.top(), r.width());
@@ -218,9 +222,7 @@ void KisCustomBrushWidget::createBrush()
                 pixelIt->nextRow();
                 maskIt->nextRow();
             }
-
-            QRect rc = dev->exactBounds();
-            m_brush = new KisGbrBrush(dev, rc.x(), rc.y(), rc.width(), rc.height());
+            m_brush = KisBrushSP(new KisGbrBrush(dev, r.x(), r.y(), r.width(), r.height()));
         }
 
     }
@@ -231,7 +233,7 @@ void KisCustomBrushWidget::createBrush()
         int w = m_image->width();
         int h = m_image->height();
 
-        m_image->lock();
+        KisImageBarrierLocker locker(m_image);
 
         // We only loop over the rootLayer. Since we actually should have a layer selection
         // list, no need to elaborate on that here and now
@@ -254,11 +256,10 @@ void KisCustomBrushWidget::createBrush()
         default: modes.push_back(KisParasite::Incremental);
         }
 
-        m_brush = new KisImagePipeBrush(m_image->objectName(), w, h, devices, modes);
-        m_image->unlock();
+        m_brush = KisBrushSP(new KisImagePipeBrush(m_image->objectName(), w, h, devices, modes));
     }
 
-    static_cast<KisGbrBrush*>(m_brush.data())->setUseColorAsMask(colorAsMask->isChecked());
+    static_cast<KisGbrBrush*>(m_brush.data())->setBrushApplication(colorAsMask->isChecked() ? ALPHAMASK : IMAGESTAMP);
     m_brush->setSpacing(spacingWidget->spacing());
     m_brush->setAutoSpacing(spacingWidget->autoSpacingActive(), spacingWidget->autoSpacingCoeff());
     m_brush->setFilename(TEMPORARY_FILENAME);

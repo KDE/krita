@@ -239,8 +239,10 @@ void SvgTextTool::showEditor()
 
         m_editor->activateWindow(); // raise on creation only
     }
-    m_editor->setInitialShape(shape);
-    m_editor->show();
+    if (!m_editor->isVisible()) {
+        m_editor->setInitialShape(shape);
+        m_editor->show();
+    }
 }
 
 void SvgTextTool::textUpdated(KoSvgTextShape *shape, const QString &svg, const QString &defs, bool richTextUpdated)

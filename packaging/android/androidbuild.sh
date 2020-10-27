@@ -54,7 +54,8 @@ configure_ext() {
         -DCMAKE_TOOLCHAIN_FILE=$CMAKE_ANDROID_NDK/build/cmake/android.toolchain.cmake   \
         -DANDROID_ABI=$ANDROID_ABI                                                      \
         -DANDROID_PLATFORM=$ANDROID_NATIVE_API_LEVEL                                    \
-        -DANDROID_SDK_ROOT=$ANDROID_SDK_ROOT
+        -DANDROID_SDK_ROOT=$ANDROID_SDK_ROOT                                            \
+        -DCMAKE_FIND_ROOT_PATH="$QT_ANDROID;$BUILD_ROOT/kf5/kde/install/;$BUILD_ROOT/i"
     cd $BUILD_ROOT
 }
 
@@ -98,14 +99,14 @@ build_ext() {
 }
 
 build_boost() {
-    VERSION="1_69"
+    VERSION="1_70"
     if [[ ! -d $DOWNLOADS_DIR/boost ]]; then
         git clone https://github.com/moritz-wundke/Boost-for-Android $DOWNLOADS_DIR/boost
     fi
 
     cd $DOWNLOADS_DIR/boost
     ./build-android.sh --prefix=$THIRDPARTY_INSTALL --with-libraries=system \
-        --boost=1.69.0 --arch=$ANDROID_ABI $CMAKE_ANDROID_NDK
+        --boost=1.70.0 --arch=$ANDROID_ABI $CMAKE_ANDROID_NDK
 
     cd $THIRDPARTY_INSTALL/$ANDROID_ABI/lib
 
@@ -195,6 +196,7 @@ build_krita() {
          -DANDROID_APK_DIR=$KRITA_ROOT/packaging/android/apk                                \
          -DANDROID_STL=c++_shared                                                           \
          -DANDROID_ABI=$ANDROID_ABI                                                         \
+         -DNDK_VERSION=21                                                                   \
          -DCMAKE_FIND_ROOT_PATH="$QT_ANDROID;$BUILD_ROOT/kf5/kde/install/;$BUILD_ROOT/i"
 
     make -j$PROC_COUNT install
@@ -292,6 +294,7 @@ check_exists KRITA_ROOT
 export ANDROID_NDK_HOME=$CMAKE_ANDROID_NDK
 export ANDROID_NATIVE_API_LEVEL=android-$ANDROID_API_LEVEL
 export INSTALL_PREFIX=$BUILD_ROOT/krita-android-build
+export ANDROID_NDK=$CMAKE_ANDROID_NDK
 if [[ -z $QT_ANDROID ]]; then
     export QT_ANDROID=$BUILD_ROOT/i
 fi

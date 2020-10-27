@@ -86,6 +86,8 @@ void KisWdgGenerator::initialize(KisViewManager *view)
     d->view = view;
     d->uiWdgGenerators.setupUi(this);
     d->widgetLayout = new QGridLayout(d->uiWdgGenerators.centralWidgetHolder);
+    d->widgetLayout->setContentsMargins(0, 0, 0, 0);
+    d->widgetLayout->setHorizontalSpacing(0);
     QStringList generatorNames = KisGeneratorRegistry::instance()->keys();
     generatorNames.sort();
 

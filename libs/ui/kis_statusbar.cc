@@ -35,6 +35,7 @@
 #include <KoColorSpace.h>
 #include <KoToolManager.h>
 #include <KoViewConverter.h>
+#include <QHBoxLayout>
 
 #include <KisUsageLogger.h>
 
@@ -125,6 +126,15 @@ void KisStatusBar::setup()
 
     m_progressUpdater.reset(new KisProgressUpdater(m_progress, m_progress->progressProxy()));
     m_progressUpdater->setAutoNestNames(true);
+
+    m_extraWidgetsParent = new QFrame;
+    m_extraWidgetsParent->setMinimumWidth(100);
+    m_extraWidgetsParent->setObjectName("Extra Widgets Parent");
+    m_extraWidgetsLayout = new QHBoxLayout;
+    m_extraWidgetsLayout->setContentsMargins(0, 0, 0, 0);
+    m_extraWidgetsLayout->setObjectName("Extra Widgets Layout");
+    m_extraWidgetsParent->setLayout(m_extraWidgetsLayout);
+    addStatusBarItem(m_extraWidgetsParent);
 
     m_memoryReportBox = new KisMemoryReportButton();
     m_memoryReportBox->setObjectName("memoryReportBox");
@@ -422,6 +432,16 @@ void KisStatusBar::updateStatusBarProfileLabel()
 KoProgressUpdater *KisStatusBar::progressUpdater()
 {
     return m_progressUpdater.data();
+}
+
+void KisStatusBar::addExtraWidget(QWidget *widget)
+{
+    m_extraWidgetsLayout->addWidget(widget);
+}
+
+void KisStatusBar::removeExtraWidget(QWidget *widget)
+{
+    m_extraWidgetsLayout->removeWidget(widget);
 }
 
 

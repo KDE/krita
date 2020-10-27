@@ -65,6 +65,9 @@ public:
     struct KRITAUI_EXPORT BarrierUpdateData : public KisAsyncronousStrokeUpdateHelper::UpdateData
     {
         BarrierUpdateData(bool forceUpdate);
+        KisStrokeJobData* createLodClone(int levelOfDetail) override;
+    protected:
+        BarrierUpdateData(const BarrierUpdateData &rhs, int levelOfDetail);
     };
 
 public:

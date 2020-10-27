@@ -33,6 +33,7 @@
 #include "kis_paint_device_frames_interface.h"
 #include "kis_paint_device_debug_utils.h"
 
+#include <testui.h>
 
 KisPaintDeviceSP lodDevice(KisPaintDeviceSP dev)
 {
@@ -126,4 +127,4 @@ void MoveSelectionStrokeTest::test()
 
 }
 
-QTEST_GUILESS_MAIN(MoveSelectionStrokeTest)
+KISTEST_MAIN(MoveSelectionStrokeTest)

@@ -42,8 +42,12 @@ bool compareWithSpecialTags(KisTagSP tag) {
 
 
 KisResourceItemChooserContextMenu::KisResourceItemChooserContextMenu(KoResourceSP resource,
-                                                                     const KisTagSP currentlySelectedTag)
+                                                                     const KisTagSP currentlySelectedTag,
+                                                                     KisTagChooserWidget *tagChooser)
+    : m_tagChooserWidget(tagChooser)
 {
+
+
 
     QImage image = resource->image();
     QIcon icon(QPixmap::fromImage(image));
@@ -100,10 +104,6 @@ KisResourceItemChooserContextMenu::KisResourceItemChooserContextMenu(KoResourceS
 
         if (!currentTag.isNull() && currentTagInRemovables) {
             // remove the current tag from both "Remove from tag: " and "Assign to tag: " lists
-            ENTER_FUNCTION() << "# remove the current tag from both lists";
-
-            ENTER_FUNCTION() << "now just removeables";
-            ENTER_FUNCTION() << "comparer's tag: " << comparer.referenceTag();
             QList<QSharedPointer<KisTag> >::iterator b = std::remove_if(removables.begin(), removables.end(), comparer);
             if (b != removables.end()) {
                 removables.removeAll(*b);
@@ -112,11 +112,6 @@ KisResourceItemChooserContextMenu::KisResourceItemChooserContextMenu(KoResourceS
             if (b2 != assignables2.end()) {
                 assignables2.removeAll(*b2);
             }
-            ENTER_FUNCTION() << "done. The list now consists of: ";
-            Q_FOREACH(KisTagSP tag, removables) {
-                ENTER_FUNCTION() << tag;
-            }
-            ENTER_FUNCTION() << "end";
 
             SimpleExistingTagAction * removeTagAction = new SimpleExistingTagAction(resource, currentTag, this);
             removeTagAction->setText(i18n("Remove from this tag"));
@@ -151,7 +146,6 @@ KisResourceItemChooserContextMenu::KisResourceItemChooserContextMenu(KoResourceS
 
     }
 
-
     foreach (const KisTagSP &tag, assignables2) {
         if (tag.isNull()) {
             continue;
@@ -159,8 +153,8 @@ KisResourceItemChooserContextMenu::KisResourceItemChooserContextMenu(KoResourceS
 
         SimpleExistingTagAction * addTagAction = new SimpleExistingTagAction(resource, tag, this);
 
-        connect(addTagAction, SIGNAL(triggered(KoResourceSP, const KisTagSP)),
-                this, SLOT(addResourceExistingTag(KoResourceSP, const KisTagSP)));
+        connect(addTagAction, SIGNAL(triggered(const KisTagSP, KoResourceSP)),
+                m_tagChooserWidget, SLOT(addTag(const KisTagSP, KoResourceSP)));
 
         assignableTagsMenu->addAction(addTagAction);
     }
@@ -168,7 +162,7 @@ KisResourceItemChooserContextMenu::KisResourceItemChooserContextMenu(KoResourceS
     assignableTagsMenu->addSeparator();
 
     NewTagResourceAction *addNewTagAction = new NewTagResourceAction(resource, this);
-    connect(addNewTagAction, SIGNAL(triggered(KoResourceSP, QString)), this, SLOT(addResourceNewTag(KoResourceSP, QString)));
+    connect(addNewTagAction, SIGNAL(triggered(QString, KoResourceSP)), m_tagChooserWidget, SLOT(addTag(QString, KoResourceSP)));
 
     assignableTagsMenu->addAction(addNewTagAction);
 
@@ -179,18 +173,9 @@ KisResourceItemChooserContextMenu::~KisResourceItemChooserContextMenu()
     delete m_tagModel;
 }
 
-void KisResourceItemChooserContextMenu::addResourceExistingTag(KoResourceSP resource, const KisTagSP tag)
-{
-    m_tagModel->addTag(tag, {resource});
-}
-
 void KisResourceItemChooserContextMenu::removeResourceExistingTag(KoResourceSP resource, const KisTagSP tag)
 {
     KisTagResourceModel tagResourceModel(resource->resourceType().first);
     tagResourceModel.untagResource(tag, resource);
 }
 
-void KisResourceItemChooserContextMenu::addResourceNewTag(KoResourceSP resource, const QString tag)
-{
-    m_tagModel->addNewTag(tag, {resource});
-}

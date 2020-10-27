@@ -152,8 +152,8 @@ void TestTagFilterResourceProxyModel::testFilterByResource()
     KoResourceSP resource = resourceModel.resourceForName("test2.kpp");
     QVERIFY(resource);
 
-    tagModel.addNewTag("testtag1", QVector<KoResourceSP>() << resource);
-    tagModel.addNewTag("testtag2", QVector<KoResourceSP>() << resource);
+    tagModel.addTag("testtag1", QVector<KoResourceSP>() << resource);
+    tagModel.addTag("testtag2", QVector<KoResourceSP>() << resource);
 
     int rowCount = proxyModel.rowCount();
 

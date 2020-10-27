@@ -32,6 +32,8 @@
 
 class KisTagModel;
 
+#include <KoResource.h>
+
 /**
  * \brief The KisTagToolButton class manages the logic of the tag management popup.
  *

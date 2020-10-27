@@ -46,7 +46,7 @@ public:
     ~SimpleExistingTagAction() override;
 
 Q_SIGNALS:
-    void triggered(KoResourceSP resource, KisTagSP tag);
+    void triggered(KisTagSP tag, KoResourceSP resource);
 
 protected Q_SLOTS:
     void onTriggered();
@@ -174,7 +174,7 @@ public:
     void setResource(KoResourceSP resource);
 
 Q_SIGNALS:
-    void triggered(KoResourceSP resource, const QString &newTagName);
+    void triggered(const QString &newTagName, KoResourceSP resource);
 
 protected Q_SLOTS:
 

@@ -30,10 +30,11 @@
 #include <QPushButton>
 
 #include <KoResource.h>
-
 #include <KisTag.h>
 #include <KisTagModel.h>
-#include <TagActions.h>
+
+#include "TagActions.h"
+#include "KisTagChooserWidget.h"
 
 ///
 /// \brief The KisResourceItemChooserContextMenu class is responsible for the context menu in ResourceItemChooser
@@ -54,47 +55,37 @@ public:
     /// \param resource the resource that the context menu is called for
     /// \param currentlySelectedTag the currently selected tag in the combobox over the resource item chooser
     ///
-    explicit KisResourceItemChooserContextMenu(KoResourceSP resource, const KisTagSP currentlySelectedTag);
+    explicit KisResourceItemChooserContextMenu(KoResourceSP resource, const KisTagSP currentlySelectedTag, KisTagChooserWidget *tagChooser);
     /// \brief the destructor
     ~KisResourceItemChooserContextMenu() override;
 
 Q_SIGNALS:
 
     /// Emitted when a resource should be added to an existing tag.
-    void resourceTagAdditionRequested(KoResourceSP resource, const KisTagSP tag);
+    void resourceTagAdditionRequested(const KisTagSP tag, KoResourceSP resource);
 
     /// Emitted when a resource should be removed from an existing tag.
     void resourceTagRemovalRequested(KoResourceSP resource, const KisTagSP tag);
 
     /// Emitted when a resource should be added to a new tag, which will need to be created.
-    void resourceAssignmentToNewTagRequested(KoResourceSP resource, const QString &tag);
+    void resourceAssignmentToNewTagRequested(const QString &tag, KoResourceSP resource);
 
 
 public Q_SLOTS:
-    ///
-    /// \brief addResourceTag slot for a signal from the action to add the tag to the resource
-    /// \param resource resource that needs to be tagged
-    /// \param tag tag to add to the resource
-    ///
-    void addResourceExistingTag(KoResourceSP resource, const KisTagSP tag);
+
     ///
     /// \brief removeResourceExistingTag slot for a signal from the action to remove the tag from the resource
     /// \param resource resource that the tag needs to be removed from
     /// \param tag tag that needs to be removed from the resource
     ///
     void removeResourceExistingTag(KoResourceSP resource, const KisTagSP tag);
-    ///
-    /// \brief addResourceNewTag slot for the signal from the action to add the tag to the resource
-    /// \param resource resource that the tag needs to be added to
-    /// \param tag tag (more precisely, tag name encapsulated in a tag class) that needs to be added to the resource
-    ///
-    void addResourceNewTag(KoResourceSP resource, const QString tag);
 
 private:
     ///
     /// \brief m_tagModel data model for tags (for tagging and untagging resources and create lists of tags)
     ///
-    KisTagModel *m_tagModel;
+    KisTagModel *m_tagModel {0};
+    KisTagChooserWidget *m_tagChooserWidget {0};
 
 };
 

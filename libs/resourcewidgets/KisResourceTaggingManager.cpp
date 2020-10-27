@@ -115,8 +115,9 @@ void KisResourceTaggingManager::contextMenuRequested(KoResourceSP resource, QPoi
     if (!resource || !d->tagChooser->isVisible())
         return;
 
-    KisResourceItemChooserContextMenu menu(resource, d->tagChooser->currentlySelectedTag());
+    KisResourceItemChooserContextMenu menu(resource, d->tagChooser->currentlySelectedTag(), d->tagChooser);
     menu.exec(pos);
+
 }
 
 KisTagChooserWidget *KisResourceTaggingManager::tagChooserWidget()

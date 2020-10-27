@@ -157,7 +157,7 @@ void TestTagModel::testAddEmptyTag()
     QString tagName("A Brand New Tag");
 
     int rowCount = tagModel.rowCount();
-    tagModel.addNewTag(tagName, {});
+    tagModel.addTag(tagName, {});
 
     QCOMPARE(tagModel.rowCount(), rowCount + 1);
     QModelIndex idx = tagModel.index(3, 0);
@@ -284,7 +284,7 @@ void TestTagModel::testAddEmptyTagWithResources()
         resources << resourceModel.resourceForIndex(resourceModel.index(i, 0));
     }
 
-    tagModel.addNewTag(tagName, resources);
+    tagModel.addTag(tagName, resources);
 
     // XXX: check KisTagResourceModel
 }

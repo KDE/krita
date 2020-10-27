@@ -77,12 +77,14 @@ public Q_SLOTS:
     ///  combobox emits a signal; this method is called when it happens.
     void tagChanged(int index);
 
-private Q_SLOTS:
-
     /// \brief tagToolCreateNewTag slot for the signal from KisTagToolButton that a new tag needs to be created
     /// \param tag tag with the name to be created
     /// \return created tag taken from the model, with a valid id
-    void tagToolCreateNewTag(const QString &tag);
+    void addTag(const QString &tag);
+    void addTag(const QString &tag, KoResourceSP resource);
+    void addTag(KisTagSP tag, KoResourceSP resource);
+
+private Q_SLOTS:
 
     /// \brief tagToolRenameCurrentTag slot for the signal from KisTagToolButton that the current tag needs to be renamed
     /// \param newName new name for the tag
@@ -102,13 +104,6 @@ private Q_SLOTS:
     /// Based on the current tag (if it's readonly or not), the popup looks different, so this function
     ///  sets the correct mode on the KisTagToolButton popup.
     void tagToolContextMenuAboutToShow();
-
-    void modelAboutToBeReset();
-    void modelReset();
-    void rowsAboutToBeInserted(const QModelIndex &parent, int start, int end);
-    void rowsAboutToBeRemoved(const QModelIndex &parent, int first, int last);
-    void rowsInserted(const QModelIndex &parent, int first, int last);
-    void rowsRemoved(const QModelIndex &parent, int first, int last);
 
 private:
 

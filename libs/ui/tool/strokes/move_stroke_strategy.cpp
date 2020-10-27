@@ -398,3 +398,12 @@ MoveStrokeStrategy::PickLayerData::PickLayerData(const MoveStrokeStrategy::PickL
 MoveStrokeStrategy::BarrierUpdateData::BarrierUpdateData(bool _forceUpdate)
     : KisAsyncronousStrokeUpdateHelper::UpdateData(_forceUpdate, BARRIER, EXCLUSIVE)
 {}
+
+KisStrokeJobData *MoveStrokeStrategy::BarrierUpdateData::createLodClone(int levelOfDetail) {
+    return new BarrierUpdateData(*this, levelOfDetail);
+}
+
+MoveStrokeStrategy::BarrierUpdateData::BarrierUpdateData(const MoveStrokeStrategy::BarrierUpdateData &rhs, int levelOfDetail)
+    : KisAsyncronousStrokeUpdateHelper::UpdateData(rhs, levelOfDetail)
+{
+}

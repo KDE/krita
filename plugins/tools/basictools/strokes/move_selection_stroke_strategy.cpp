@@ -209,3 +209,14 @@ KisStrokeStrategy* MoveSelectionStrokeStrategy::createLodClone(int levelOfDetail
     connect(clone, SIGNAL(sigHandlesRectCalculated(QRect)), this, SIGNAL(sigHandlesRectCalculated(QRect)));
     return clone;
 }
+
+KisStrokeJobData *MoveSelectionStrokeStrategy::ShowSelectionData::createLodClone(int levelOfDetail)
+{
+    return new ShowSelectionData(*this, levelOfDetail);
+}
+
+MoveSelectionStrokeStrategy::ShowSelectionData::ShowSelectionData(const MoveSelectionStrokeStrategy::ShowSelectionData &rhs, int levelOfDetail)
+    : KisStrokeJobData(rhs),
+      showSelection(rhs.showSelection)
+{
+}

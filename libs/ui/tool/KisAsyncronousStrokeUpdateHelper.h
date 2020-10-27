@@ -47,7 +47,7 @@ public:
         }
 
 
-    private:
+    protected:
         UpdateData(const UpdateData &rhs, int levelOfDetail)
             : KisStrokeJobData(rhs),
               forceUpdate(rhs.forceUpdate)

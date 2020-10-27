@@ -42,7 +42,7 @@ QStringList errorWords = { "Unable", "Invalid", "Error", "failed", "NULL", "No s
     Tokens with spaces can be surrounded by double quotes; three
     consecutive double quotes represent the quote character itself.
 */
-QStringList splitCommand(QStringView command)
+QStringList splitCommand(const QString &command)
 {
     QStringList args;
     QString tmp;

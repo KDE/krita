@@ -20,6 +20,7 @@
 #include "recorder_config.h"
 #include "recorder_writer.h"
 #include "ui_recorderdocker.h"
+#include "recorder_snapshots_manager.h"
 #include "recorder_export.h"
 
 #include <klocalizedstring.h>
@@ -176,6 +177,7 @@ RecorderDockerDock::RecorderDockerDock()
     d->ui->setupUi(page);
     d->ui->labelUnsupportedColorSpace->setVisible(false);
 
+    d->ui->buttonCleanUpSnapshots->setIcon(KisIconUtils::loadIcon("configure"));
     d->ui->buttonBrowse->setIcon(KisIconUtils::loadIcon("folder"));
     d->ui->buttonRecordToggle->setIcon(KisIconUtils::loadIcon("media-record"));
     d->ui->buttonExport->setIcon(KisIconUtils::loadIcon("document-export"));
@@ -204,6 +206,7 @@ RecorderDockerDock::RecorderDockerDock()
     connect(KisPart::instance(), SIGNAL(sigMainWindowIsBeingCreated(KisMainWindow *)),
             this, SLOT(onMainWindowIsBeingCreated(KisMainWindow *)));
 
+    connect(d->ui->buttonCleanUpSnapshots, SIGNAL(clicked()), this, SLOT(onCleanUpSnapshotsButtonClicked()));
     connect(d->ui->buttonBrowse, SIGNAL(clicked()), this, SLOT(onSelectRecordFolderButtonClicked()));
     connect(d->ui->spinCaptureInterval, SIGNAL(valueChanged(int)), this, SLOT(onCaptureIntervalChanged(int)));
     connect(d->ui->spinQuality, SIGNAL(valueChanged(int)), this, SLOT(onQualityChanged(int)));
@@ -318,6 +321,13 @@ void RecorderDockerDock::onExportButtonClicked()
     });
     exportDialog.exec();
 }
+
+void RecorderDockerDock::onCleanUpSnapshotsButtonClicked()
+{
+    RecorderSnapshotsManager snapshotsManager(this);
+    snapshotsManager.execFor(d->snapshotDirectory);
+}
+
 
 void RecorderDockerDock::onSelectRecordFolderButtonClicked()
 {

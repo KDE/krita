@@ -762,31 +762,22 @@ For example to make your speedpaint twice faster it should be twice larger of th
          <property name="horizontalSpacing">
           <number>12</number>
          </property>
-         <item row="5" column="0" colspan="2">
-          <widget class="QPushButton" name="buttonShowInFolder">
+         <item row="2" column="0" colspan="2">
+          <widget class="QLabel" name="labelVideoPathDone">
            <property name="minimumSize">
             <size>
              <width>0</width>
              <height>32</height>
             </size>
            </property>
-           <property name="font">
-            <font>
-             <underline>true</underline>
-            </font>
-           </property>
            <property name="text">
-            <string comment="Open the folder when the new created video is placed">Show in folder</string>
+            <string notr="true">/</string>
            </property>
-           <property name="flat">
+           <property name="wordWrap">
             <bool>true</bool>
            </property>
-          </widget>
-         </item>
-         <item row="1" column="0" colspan="2">
-          <widget class="QLabel" name="labelWritten">
-           <property name="text">
-            <string>The timelapse video has been written to:</string>
+           <property name="textInteractionFlags">
+            <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
            </property>
           </widget>
          </item>
@@ -806,25 +797,6 @@ For example to make your speedpaint twice faster it should be twice larger of th
            </property>
            <property name="text">
             <string comment="Caption: Video exporting finished">Done!</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0" colspan="2">
-          <widget class="QLabel" name="labelVideoPathDone">
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>32</height>
-            </size>
-           </property>
-           <property name="text">
-            <string notr="true">/</string>
-           </property>
-           <property name="wordWrap">
-            <bool>true</bool>
-           </property>
-           <property name="textInteractionFlags">
-            <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
            </property>
           </widget>
          </item>
@@ -849,6 +821,34 @@ For example to make your speedpaint twice faster it should be twice larger of th
            </property>
           </widget>
          </item>
+         <item row="1" column="0" colspan="2">
+          <widget class="QLabel" name="labelWritten">
+           <property name="text">
+            <string>The timelapse video has been written to:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="0" colspan="2">
+          <widget class="QPushButton" name="buttonShowInFolder">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="font">
+            <font>
+             <underline>true</underline>
+            </font>
+           </property>
+           <property name="text">
+            <string comment="Open the folder when the new created video is placed">Show in folder</string>
+           </property>
+           <property name="flat">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
          <item row="3" column="0" colspan="2">
           <spacer name="verticalSpacer_6">
            <property name="orientation">
@@ -864,6 +864,27 @@ For example to make your speedpaint twice faster it should be twice larger of th
             </size>
            </property>
           </spacer>
+         </item>
+         <item row="6" column="0" colspan="2">
+          <widget class="QPushButton" name="buttonRemoveSnapshots">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="font">
+            <font>
+             <underline>true</underline>
+            </font>
+           </property>
+           <property name="text">
+            <string comment="Open the folder when the new created video is placed">Remove snapshots</string>
+           </property>
+           <property name="flat">
+            <bool>true</bool>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>

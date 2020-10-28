@@ -57,7 +57,7 @@ private Q_SLOTS:
     void onButtonBrowseExportClicked();
     void onButtonExportClicked();
     // second page
-    void onButtonCancelExportClicked();
+    void onButtonCancelClicked();
     // ffmpeg
     void onFFMpegStarted();
     void onFFMpegFinished();
@@ -66,7 +66,9 @@ private Q_SLOTS:
     // third page
     void onButtonWatchItClicked();
     void onButtonShowInFolderClicked();
+    void onButtonRemoveSnapshotsClicked();
     void onButtonRestartClicked();
+    void onCleanUpFinished();
 
 private:
      bool eventFilter(QObject *obj, QEvent *event) override;

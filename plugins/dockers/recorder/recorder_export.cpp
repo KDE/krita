@@ -16,10 +16,11 @@
  */
 
 #include "recorder_export.h"
+#include "ui_recorder_export.h"
 #include "recorder_export_config.h"
 #include "recorder_ffmpeg_wrapper.h"
 #include "recorder_profile_settings.h"
-#include "ui_recorder_export.h"
+#include "recorder_directory_cleaner.h"
 
 #include <klocalizedstring.h>
 #include <kis_icon_utils.h>
@@ -39,9 +40,9 @@ namespace
 {
 enum ExportPageIndex
 {
-    pageSettingsIndex = 0,
-    pageProgressIndex = 1,
-    pageDoneIndex = 2
+    PageSettings = 0,
+    PageProgress = 1,
+    PageDone = 2
 };
 }
 
@@ -69,6 +70,7 @@ public:
     int framesCount = 0;
 
     RecorderFFMpegWrapper *ffmpeg = nullptr;
+    RecorderDirectoryCleaner *cleaner = nullptr;
 
     Private(RecorderExport *q_ptr)
         : q(q_ptr)
@@ -247,7 +249,8 @@ RecorderExport::RecorderExport(QWidget *parent)
     d->ui->buttonLockRatio->setIcon(KisIconUtils::loadIcon("locked"));
     d->ui->buttonWatchIt->setIcon(KisIconUtils::loadIcon("media-playback-start"));
     d->ui->buttonShowInFolder->setIcon(KisIconUtils::loadIcon("folder"));
-    d->ui->stackedWidget->setCurrentIndex(ExportPageIndex::pageSettingsIndex);
+    d->ui->buttonRemoveSnapshots->setIcon(KisIconUtils::loadIcon("trash-empty"));
+    d->ui->stackedWidget->setCurrentIndex(ExportPageIndex::PageSettings);
 
     connect(d->ui->buttonBrowseDirectory, SIGNAL(clicked()), SLOT(onButtonBrowseDirectoryClicked()));
     connect(d->ui->spinInputFps, SIGNAL(valueChanged(int)), SLOT(onSpinInputFpsValueChanged(int)));
@@ -262,9 +265,10 @@ RecorderExport::RecorderExport(QWidget *parent)
     connect(d->ui->editVideoFilePath, SIGNAL(textChanged(QString)), SLOT(onEditVideoPathChanged(QString)));
     connect(d->ui->buttonBrowseExport, SIGNAL(clicked()), SLOT(onButtonBrowseExportClicked()));
     connect(d->ui->buttonExport, SIGNAL(clicked()), SLOT(onButtonExportClicked()));
-    connect(d->ui->buttonCancelExport, SIGNAL(clicked()), SLOT(onButtonCancelExportClicked()));
+    connect(d->ui->buttonCancelExport, SIGNAL(clicked()), SLOT(onButtonCancelClicked()));
     connect(d->ui->buttonWatchIt, SIGNAL(clicked()), SLOT(onButtonWatchItClicked()));
     connect(d->ui->buttonShowInFolder, SIGNAL(clicked()), SLOT(onButtonShowInFolderClicked()));
+    connect(d->ui->buttonRemoveSnapshots, SIGNAL(clicked()), SLOT(onButtonRemoveSnapshotsClicked()));
     connect(d->ui->buttonRestart, SIGNAL(clicked()), SLOT(onButtonRestartClicked()));
 
     d->ui->editVideoFilePath->installEventFilter(this);
@@ -460,14 +464,21 @@ void RecorderExport::onButtonExportClicked()
         }
     }
 
-    d->ui->stackedWidget->setCurrentIndex(ExportPageIndex::pageProgressIndex);
+    d->ui->stackedWidget->setCurrentIndex(ExportPageIndex::PageProgress);
     d->startExport();
 }
 
-void RecorderExport::onButtonCancelExportClicked()
+void RecorderExport::onButtonCancelClicked()
 {
+    if (d->cleaner) {
+        d->cleaner->stop();
+        d->cleaner->deleteLater();
+        d->cleaner = nullptr;
+        return;
+    }
+
     if (d->tryAbortExport())
-        d->ui->stackedWidget->setCurrentIndex(ExportPageIndex::pageSettingsIndex);
+        d->ui->stackedWidget->setCurrentIndex(ExportPageIndex::PageSettings);
 }
 
 
@@ -479,14 +490,14 @@ void RecorderExport::onFFMpegStarted()
 
 void RecorderExport::onFFMpegFinished()
 {
-    d->ui->stackedWidget->setCurrentIndex(ExportPageIndex::pageDoneIndex);
+    d->ui->stackedWidget->setCurrentIndex(ExportPageIndex::PageDone);
     d->ui->labelVideoPathDone->setText(d->videoFilePath);
     d->cleanupFFMpeg();
 }
 
 void RecorderExport::onFFMpegFinishedWithError(QString error)
 {
-    d->ui->stackedWidget->setCurrentIndex(ExportPageIndex::pageSettingsIndex);
+    d->ui->stackedWidget->setCurrentIndex(ExportPageIndex::PageSettings);
     QMessageBox::critical(this, windowTitle(), i18n("Export failed. FFMpeg message:") % "\n\n" % error);
     d->cleanupFFMpeg();
 }
@@ -506,9 +517,35 @@ void RecorderExport::onButtonShowInFolderClicked()
     QDesktopServices::openUrl(QUrl::fromLocalFile(d->videoDirectory));
 }
 
+void RecorderExport::onButtonRemoveSnapshotsClicked()
+{
+    const QString confirmation(i18n("The snapshots directory for this timelapse will be removed."
+                                    " Do you wish to continue?"));
+    if (QMessageBox::question(this, windowTitle(), confirmation) != QMessageBox::Yes)
+        return;
+
+    d->ui->labelStatus->setText(i18nc("Label title, Snapshot directory deleting is in progress", "Cleaning up..."));
+    d->ui->stackedWidget->setCurrentIndex(ExportPageIndex::PageProgress);
+
+    Q_ASSERT(d->cleaner == nullptr);
+    d->cleaner = new RecorderDirectoryCleaner({d->settings.inputDirectory});
+    connect(d->cleaner, SIGNAL(finished()), this, SLOT(onCleanUpFinished()));
+    d->cleaner->start();
+}
+
 void RecorderExport::onButtonRestartClicked()
 {
-    d->ui->stackedWidget->setCurrentIndex(ExportPageIndex::pageSettingsIndex);
+    d->ui->stackedWidget->setCurrentIndex(ExportPageIndex::PageSettings);
+}
+
+void RecorderExport::onCleanUpFinished()
+{
+    d->cleaner->deleteLater();
+    d->cleaner = nullptr;
+
+    d->ui->stackedWidget->setCurrentIndex(ExportPageIndex::PageDone);
+    d->ui->buttonRestart->hide();
+    d->ui->buttonRemoveSnapshots->hide();
 }
 
 bool RecorderExport::eventFilter(QObject *obj, QEvent *event)

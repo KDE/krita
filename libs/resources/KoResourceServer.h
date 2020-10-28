@@ -164,25 +164,6 @@ public:
         return false;
     }
 
-    QList<QSharedPointer<T>> resources() {
-
-        qDebug() << "KoResourceServer::resources()" << m_type;
-
-        KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == qApp->thread());
-        if (QThread::currentThread() != qApp->thread()) {
-            Q_FOREACH(const QString &s, kisBacktrace().split('\n')) {
-                qDebug() << s;
-            }
-        }
-
-        KIS_SAFE_ASSERT_RECOVER_NOOP(m_type != "paintoppresets");
-        QList<QSharedPointer<T>> resourceList;
-        for (int row = 0; row < m_resourceModel->rowCount(); ++row) {
-            resourceList << m_resourceModel->resourceForIndex(m_resourceModel->index(row, 0)).dynamicCast<T>();
-        }
-        return resourceList;
-    }
-
     /// Returns path where to save user defined and imported resources to
     QString saveLocation() {
         return KoResourcePaths::saveLocation(m_type.toLatin1());

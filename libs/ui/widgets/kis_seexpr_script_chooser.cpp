@@ -71,9 +71,9 @@ KoResourceSP KisSeExprScriptChooser::currentResource()
 {
     if (!m_itemChooser->currentResource()) {
         KoResourceServer<KisSeExprScript> *rserver = KoResourceServerProvider::instance()->seExprScriptServer();
-        if (rserver->resources().size() > 0) {
+        if (rserver->resourceCount() > 0) {
             KisSignalsBlocker blocker(m_itemChooser);
-            m_itemChooser->setCurrentResource(rserver->resources().first());
+            m_itemChooser->setCurrentResource(rserver->firstResource());
         }
     }
     return m_itemChooser->currentResource();

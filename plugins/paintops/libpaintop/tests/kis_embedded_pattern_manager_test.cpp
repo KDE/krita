@@ -65,7 +65,13 @@ void KisEmbeddedPatternManagerTest::testRoundTrip()
 
 void KisEmbeddedPatternManagerTest::init()
 {
-    Q_FOREACH(KoPatternSP pa, KoResourceServerProvider::instance()->patternServer()->resources()) {
+    QList<KoResourceSP> resourceList;
+    KisResourceModel *resourceModel = KoResourceServerProvider::instance()->patternServer()->resourceModel();
+    for (int row = 0; row < resourceModel->rowCount(); ++row) {
+        resourceList << resourceModel->resourceForIndex(resourceModel->index(row, 0));
+    }
+
+    Q_FOREACH(KoResourceSP pa, resourceList) {
         if (pa) {
             KoResourceServerProvider::instance()->patternServer()->removeResourceFile(pa->filename());
         }

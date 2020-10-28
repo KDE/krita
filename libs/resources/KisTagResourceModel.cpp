@@ -83,7 +83,7 @@ QVariant KisAllTagResourceModel::data(const QModelIndex &index, int role) const
     if (index.column() > d->columnCount) { return v;}
 
     bool pos = const_cast<KisAllTagResourceModel*>(this)->d->query.seek(index.row());
-    if (!pos) { abort(); return v;}
+    if (!pos) {return v;}
 
     if (role < Qt::UserRole + TagId) {
 

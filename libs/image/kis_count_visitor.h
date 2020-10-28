@@ -50,9 +50,9 @@ public:
     using KisNodeVisitor::visit;
 
     KisCountVisitor(const QStringList & nodeTypes, const KoProperties & properties)
-            : m_nodeTypes(nodeTypes)
-            , m_properties(properties)
-            , m_count(0) {
+        : m_nodeTypes(nodeTypes)
+        , m_properties(properties)
+        , m_count(0) {
     }
 
     quint32 count() {

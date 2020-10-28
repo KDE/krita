@@ -321,11 +321,12 @@ set(kritaimage_LIB_SRCS
    KisProofingConfiguration.cpp
 
    kis_node_query_path.cc
+ 
+   KisTranslateLayerNamesVisitor.cpp
 
-
-    kis_asl_layer_style_serializer.cpp
-    KisAslStorage.cpp
-    kis_psd_layer_style.cpp
+   kis_asl_layer_style_serializer.cpp
+   KisAslStorage.cpp
+   kis_psd_layer_style.cpp
 )
 
 set(einspline_SRCS

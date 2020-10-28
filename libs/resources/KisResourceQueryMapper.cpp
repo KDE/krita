@@ -89,12 +89,10 @@ QVariant KisResourceQueryMapper::variantFromResourceQuery(const QSqlQuery &query
     case Qt::UserRole + KisAbstractResourceModel::Thumbnail:
     {
         QByteArray ba = query.value("thumbnail").toByteArray();
-        Q_ASSERT(!ba.isEmpty());
         QBuffer buf(&ba);
         buf.open(QBuffer::ReadOnly);
         QImage img;
         img.load(&buf, "PNG");
-        Q_ASSERT(!img.isNull());
         return QVariant::fromValue<QImage>(img);
     }
     case Qt::UserRole + KisAbstractResourceModel::Status:

@@ -146,10 +146,6 @@ bool Palette::moveGroup(const QString &groupName, const QString &groupNameInsert
 
 bool Palette::save()
 {
-    if (d->palette->filename().size()>0) {
-        return d->palette->save();
-    }
-    //if there's no filename the palette proly doesn't even exist...
     return false;
 }
 

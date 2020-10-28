@@ -160,7 +160,7 @@ bool KoColorSet::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resource
 
 bool KoColorSet::saveToDevice(QIODevice *dev) const
 {
-    bool res;
+    bool res = false;
     switch(d->paletteType) {
     case GPL:
         res = d->saveGpl(dev);
@@ -169,7 +169,7 @@ bool KoColorSet::saveToDevice(QIODevice *dev) const
         res = d->saveKpl(dev);
     }
     if (res) {
-        KoResource::saveToDevice(dev);
+        res = KoResource::saveToDevice(dev);
     }
     return res;
 }
@@ -180,7 +180,7 @@ QByteArray KoColorSet::toByteArray() const
     QBuffer s(&ba);
     s.open(QIODevice::WriteOnly);
     if (!saveToDevice(&s)) {
-        warnPigment << "saving palette failed:" << name();
+        qWarning() << "saving palette failed:" << name();
         return QByteArray();
     }
     s.close();
@@ -1496,7 +1496,10 @@ bool KoColorSet::Private::loadXml() {
 bool KoColorSet::Private::saveKpl(QIODevice *dev) const
 {
     QScopedPointer<KoStore> store(KoStore::createStore(dev, KoStore::Write, "krita/x-colorset", KoStore::Zip));
-    if (!store || store->bad()) return false;
+    if (!store || store->bad()) {
+        qWarning() << "saveKpl could not create store";
+        return false;
+    }
 
     QSet<const KoColorSpace *> colorSpaces;
 
@@ -1546,12 +1549,17 @@ bool KoColorSet::Private::saveKpl(QIODevice *dev) const
 
     }
     doc.appendChild(profileElement);
-    if (!store->open("profiles.xml")) { return false; }
-    QByteArray ba = doc.toByteArray();
-    if (store->write(ba) != ba.size()) { return false; }
-    if (!store->close()) { return false; }
 
-    return store->finalize();
+    if (!store->open("profiles.xml")) { qWarning() << "Could not open profiles.xml"; return false; }
+    QByteArray ba = doc.toByteArray();
+
+    int bytesWritten = store->write(ba);
+    if (bytesWritten != ba.size()) { qWarning() << "Bytes written is wrong" << ba.size(); return false; }
+
+    if (!store->close()) { qWarning() << "Could not close the store"; return false; }
+
+    bool r = store->finalize();
+    return r;
 }
 
 void KoColorSet::Private::saveKplGroup(QDomDocument &doc,

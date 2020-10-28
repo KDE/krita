@@ -926,7 +926,7 @@ endif()
 
 if (ANDROID)
   # ECM passes this to Qt, which was already capable of detecting it..
-  set (ANDROID_SDK_COMPILE_API "android-28")
+  set (ANDROID_SDK_COMPILE_API "29")
   if ((${NDK_VERSION} GREATER_EQUAL 20))
     set (USE_LLVM ON)
   endif()

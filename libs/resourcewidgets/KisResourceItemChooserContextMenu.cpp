@@ -87,9 +87,6 @@ KisResourceItemChooserContextMenu::KisResourceItemChooserContextMenu(KoResourceS
     currentTagInRemovables = currentTagInRemovables
             && (std::find_if(removables.begin(), removables.end(), comparer) != removables.end());
 
-    ENTER_FUNCTION() << "current tag in removeables: " <<currentTagInRemovables;
-
-
     // remove "All" tag from both "Remove from tag: " and "Assign to tag: " lists
     std::remove_if(removables.begin(), removables.end(), compareWithSpecialTags);
     std::remove_if(assignables2.begin(), assignables2.end(), compareWithSpecialTags);

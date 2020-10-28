@@ -132,6 +132,8 @@ void KisBezierPatch::sampleRegularGrid(QSize &gridSize, QVector<QPointF> &origPo
             const QPointF localPt(lerp(xCoord1, xCoord2, yProportion), lerp(yCoord1, yCoord2, xProportion));
             const QPointF orig = KisAlgebra2D::relativeToAbsolute(localPt, originalRect);
 
+#if 1
+
             const QPointF Sc =
                     lerp(bezierCurve(points[TL], points[TL_HC], points[TR_HC], points[TR], xProportion),
                          bezierCurve(points[BL], points[BL_HC], points[BR_HC], points[BR], xProportion),
@@ -148,7 +150,29 @@ void KisBezierPatch::sampleRegularGrid(QSize &gridSize, QVector<QPointF> &origPo
                          yProportion);
 
             const QPointF transf = Sc + Sd - Sb;
+#else
+            const QPointF p0 = bezierCurve(points[TL], points[TL_VC], points[BL_VC], points[BL], yProportion);
 
+            const QPointF relP1 = lerp(points[TL_HC] - points[TL], points[BL_HC] - points[BL], yProportion);
+            const QPointF relP2 = lerp(points[TR_HC] - points[TR], points[BR_HC] - points[BR], yProportion);
+
+            const QPointF p3 = bezierCurve(points[TR], points[TR_VC], points[BR_VC], points[BR], yProportion);
+
+            const QPointF transf1 = bezierCurve(p0, p0 + relP1, p3 + relP2, p3, xProportion);
+
+
+            const QPointF q0 = bezierCurve(points[TL], points[TL_HC], points[TR_HC], points[TR], xProportion);
+
+            const QPointF relQ1 = lerp(points[TL_VC] - points[TL], points[TR_VC] - points[TR], xProportion);
+            const QPointF relQ2 = lerp(points[BL_VC] - points[BL], points[BR_VC] - points[BR], xProportion);
+
+            const QPointF q3 = bezierCurve(points[BL], points[BL_HC], points[BR_HC], points[BR], xProportion);
+
+            const QPointF transf2 = bezierCurve(q0, q0 + relQ1, q3 + relQ2, q3, yProportion);
+
+
+            const QPointF transf = 0.5 * (transf1 + transf2);
+#endif
             origPoints.append(orig);
             transfPoints.append(transf);
         }

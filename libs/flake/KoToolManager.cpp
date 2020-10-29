@@ -324,8 +324,9 @@ KoToolBase *KoToolManager::toolById(KoCanvasBase *canvas, const QString &id) con
 {
     Q_ASSERT(canvas);
     Q_FOREACH (KoCanvasController *controller, d->canvasses.keys()) {
-        if (controller->canvas() == canvas)
+        if (controller->canvas() == canvas) {
             return d->canvasData->allTools.value(id);
+        }
     }
     return 0;
 }

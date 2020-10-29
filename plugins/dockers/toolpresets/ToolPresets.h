@@ -19,19 +19,43 @@
 #ifndef TOOLPRESETS_H
 #define TOOLPRESETS_H
 
+#include <QDockWidget>
+#include <KoCanvasObserverBase.h>
 #include <QWidget>
 
-class KisCanvas2;
-class KisSignalCompressor;
+#include <ui_WdgToolPresets.h>
 
-class ToolPresets : public QWidget  {
+class QLabel;
+class QListWidgetItem;
+class KoCanvasBase;
+class KisCanvas2;
+class KoCanvasController;
+
+class ToolPresets;
+
+class ToolPresetDocker : public QDockWidget, public KoCanvasObserverBase, public Ui_WdgToolPresets
+{
     Q_OBJECT
 public:
-    ToolPresets(QWidget *parent);
-    ~ToolPresets() override;
+    ToolPresetDocker();
+    ~ToolPresetDocker() override;
+    QString observerName() override { return "ToolPresetsDocker"; }
+    void setCanvas(KoCanvasBase *) override;
+    void unsetCanvas() override;
+
+private Q_SLOTS:
+
+    void optionWidgetsChanged(KoCanvasController *canvasController, QList<QPointer<QWidget> > optionWidgets);
+    void toolChanged(KoCanvasController *canvasController, int uniqueToolId);
+
+    void bnSavePressed();
+    void bnDeletePressed();
+    void itemSelected(QListWidgetItem *item);
 
 private:
-
+    KoCanvasBase *m_canvas {0};
+    QList<QPointer<QWidget> > m_currentOptionWidgets;
+    QString m_currentToolId;
 };
 
 

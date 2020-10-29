@@ -26,18 +26,6 @@
 #include <klocalizedstring.h>
 #include <KoCanvasObserverBase.h>
 
-class ToolPresets;
-
-class BasicDocker : public QDockWidget, public KoCanvasObserverBase
-{
-    Q_OBJECT
-public:
-    BasicDocker() : QDockWidget(i18n("Tool Presets")) {}
-    ~BasicDocker() override {}
-    QString observerName() override { return "ToolPresetsDocker"; }
-    void setCanvas(KoCanvasBase *) override {}
-    void unsetCanvas() override {}
-};
 
 class ToolPresetsPlugin : public QObject
 {

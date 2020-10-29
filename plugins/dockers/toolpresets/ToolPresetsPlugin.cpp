@@ -17,18 +17,18 @@
 
 #include "ToolPresetsPlugin.h"
 
-#include <QApplication>
-#include <QDesktopWidget>
+#include <QVersionNumber>
+#include <QDockWidget>
 
-#include <kis_debug.h>
 #include <kpluginfactory.h>
 #include <klocalizedstring.h>
+
+#include <KoDockRegistry.h>
+#include <KoDockFactoryBase.h>
+
+#include <kis_debug.h>
 #include <kis_action.h>
 #include <kis_config.h>
-#include <kis_types.h>
-#include <KisViewManager.h>
-#include <KoDockFactoryBase.h>
-#include <KoDockRegistry.h>
 
 #include "ToolPresets.h"
 
@@ -53,10 +53,8 @@ public:
 
     QDockWidget* createDockWidget() override
     {
-        QDockWidget *dockWidget = new BasicDocker();
+        QDockWidget *dockWidget = new ToolPresetDocker();
         dockWidget->setObjectName(id());
-        ToolPresets *toolpresets = new ToolPresets(dockWidget);
-        dockWidget->setWidget(toolpresets);
         return dockWidget;
     }
 
@@ -77,6 +75,5 @@ ToolPresetsPlugin::ToolPresetsPlugin(QObject *parent, const QVariantList &)
 ToolPresetsPlugin::~ToolPresetsPlugin()
 {
 }
-
 
 #include "ToolPresetsPlugin.moc"

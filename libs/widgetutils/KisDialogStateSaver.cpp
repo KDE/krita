@@ -42,8 +42,18 @@ void KisDialogStateSaver::saveState(QWidget *parent, const QString &dialogName, 
     Q_ASSERT(parent);
     Q_ASSERT(!dialogName.isEmpty());
 
-    KConfigGroup group(KSharedConfig::openConfig(configFile), dialogName);
+    KConfig cfg(configFile);
+    KConfigGroup group;
+    if (configFile.isEmpty()) {
+        group = KConfigGroup(KSharedConfig::openConfig(), dialogName);
+    }
+    else {
+        group = cfg.group(dialogName);
+    }
+
     Q_FOREACH(QWidget *widget, parent->findChildren<QWidget*>(QString())) {
+
+        qDebug() << "\twidget" << widget << widget->objectName();
 
         if (!widget->objectName().isEmpty() ) {
             if (qobject_cast<KisIntParseSpinBox*>(widget)) {
@@ -85,13 +95,12 @@ void KisDialogStateSaver::saveState(QWidget *parent, const QString &dialogName, 
             }
 
             else {
-                //qWarning() << "Cannot save state for object" << widget;
+                qWarning() << "Cannot save state for object" << widget;
             }
         }
         else {
-            qWarning() << "Dialog" << dialogName << "has a widget without an objectname:" << widget;
+            qWarning() << "Widget" << dialogName << "has a widget without an objectname:" << widget;
         }
-
     }
 }
 
@@ -100,7 +109,13 @@ void KisDialogStateSaver::restoreState(QWidget *parent, const QString &dialogNam
     Q_ASSERT(parent);
     Q_ASSERT(!dialogName.isEmpty());
 
-    KConfigGroup group( KSharedConfig::openConfig(configFile), dialogName);
+    KConfigGroup group;
+    if (configFile.isEmpty()) {
+        group = KConfigGroup(KSharedConfig::openConfig(), dialogName);
+    }
+    else {
+        group = KConfig(configFile).group(dialogName);
+    }
 
     Q_FOREACH(QWidget *widget, parent->findChildren<QWidget*>(QString())) {
 
@@ -214,7 +229,7 @@ void KisDialogStateSaver::restoreState(QWidget *parent, const QString &dialogNam
             }
         }
         else {
-            qWarning() << "Dialog" << dialogName << "has a widget without an object name:" << widget;
+            // qWarning() << "Dialog" << dialogName << "has a widget without an object name:" << widget;
         }
     }
 }

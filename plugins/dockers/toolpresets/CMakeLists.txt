@@ -3,6 +3,11 @@ set(KRITA_TOOLPRESETSDOCKER_SOURCES
     ToolPresets.cpp 
 )
 
+ki18n_wrap_ui(KRITA_TOOLPRESETSDOCKER_SOURCES
+    WdgToolPresets.ui
+)
+
+
 add_library(kritatoolpresetsdocker MODULE ${KRITA_TOOLPRESETSDOCKER_SOURCES})
 target_link_libraries(kritatoolpresetsdocker
     kritaui 

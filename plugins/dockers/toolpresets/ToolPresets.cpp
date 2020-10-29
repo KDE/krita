@@ -17,12 +17,20 @@
 
 #include "ToolPresets.h"
 
+#include <QApplication>
 #include <QAction>
 #include <QThread>
+#include <QLabel>
+#include <QListWidget>
+#include <QMessageBox>
+#include <QStandardPaths>
 
 #include <klocalizedstring.h>
 #include <kactioncollection.h>
+#include <ksharedconfig.h>
+#include <kconfiggroup.h>
 
+#include <KoToolRegistry.h>
 #include <kis_image_config.h>
 #include <kis_icon.h>
 #include <KoCanvasBase.h>
@@ -31,13 +39,118 @@
 #include <KisMainWindow.h>
 #include "kis_signal_compressor.h"
 
-#include <QVersionNumber>
+#include <kis_types.h>
+#include <KisViewManager.h>
+#include <KoToolManager.h>
+#include <KoCanvasController.h>
+#include <KoToolBase.h>
+#include <KoToolFactoryBase.h>
 
-ToolPresets::ToolPresets(QWidget *parent)
-    : QWidget(parent)
+#include <KisDialogStateSaver.h>
+
+#include "ToolPresets.h"
+
+static QIcon toolIcon(const QString &toolId)
 {
+    KoToolFactoryBase *factory = KoToolRegistry::instance()->value(toolId);
+    return koIcon(factory->iconName().toLatin1());
 }
 
-ToolPresets::~ToolPresets()
+static QString createConfigFileName(QString toolId)
 {
+    return QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + '/' + "toolpresets/" + toolId.replace('/', '_') + ".toolpreset";
+}
+
+ToolPresetDocker::ToolPresetDocker()
+    : QDockWidget(i18n("Tool Presets"))
+{
+    setFeatures(DockWidgetMovable|DockWidgetFloatable);
+
+    QWidget *page = new QWidget(this);
+    setupUi(page);
+    setWidget(page);
+
+    bnSave->setIcon(koIcon("document-save"));
+    bnDelete->setIcon(koIcon("edit-delete"));
+
+    connect(KoToolManager::instance(), SIGNAL(toolOptionWidgetsChanged(KoCanvasController*,QList<QPointer<QWidget> >)), this, SLOT(optionWidgetsChanged(KoCanvasController*,QList<QPointer<QWidget> >)));
+    connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController *, int)), this, SLOT(toolChanged(KoCanvasController *, int)));
+    connect(bnSave, SIGNAL(clicked()), SLOT(bnSavePressed()));
+    connect(bnDelete, SIGNAL(clicked()), SLOT(bnDeletePressed()));
+    connect(lstPresets, SIGNAL(itemClicked(QListWidgetItem*)), SLOT(itemSelected(QListWidgetItem*)));
+}
+
+ToolPresetDocker::~ToolPresetDocker()
+{
+
+}
+
+void ToolPresetDocker::setCanvas(KoCanvasBase *canvas)
+{
+    m_canvas = canvas;
+    setEnabled(canvas != 0);
+}
+
+void ToolPresetDocker::unsetCanvas()
+{
+    m_canvas = 0;
+    setEnabled(false);
+}
+
+void ToolPresetDocker::optionWidgetsChanged(KoCanvasController *canvasController, QList<QPointer<QWidget> > optionWidgets)
+{
+    m_currentOptionWidgets = optionWidgets;
+}
+
+void ToolPresetDocker::toolChanged(KoCanvasController *canvasController, int toolId)
+{
+    m_currentToolId = KoToolManager::instance()->activeToolId();
+
+    lstPresets->clear();
+    txtName->clear();
+
+    KConfig cfg(createConfigFileName(m_currentToolId), KConfig::SimpleConfig);
+
+    Q_FOREACH(const QString &group, cfg.groupList()) {
+        QListWidgetItem *item = new QListWidgetItem(toolIcon(m_currentToolId), group, lstPresets);
+    }
+}
+
+void ToolPresetDocker::bnSavePressed()
+{
+    if (txtName->text().isEmpty()) {
+        QMessageBox::warning(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Please enter a name for the tool preset."));
+        return;
+    }
+
+    QString section = txtName->text();
+    QString optionFile = createConfigFileName(m_currentToolId);
+    Q_FOREACH (QPointer<QWidget> widget, m_currentOptionWidgets) {
+        if (widget) {
+            KisDialogStateSaver::saveState(widget, section, optionFile);
+        }
+    }
+    QListWidgetItem *item = new QListWidgetItem(toolIcon(m_currentToolId), section);
+    lstPresets->addItem(item);
+    lstPresets->blockSignals(true);
+    lstPresets->setCurrentItem(item);
+    lstPresets->blockSignals(false);
+}
+
+void ToolPresetDocker::bnDeletePressed()
+{
+    if (!lstPresets->count()) return;
+
+    KConfig cfg(createConfigFileName(m_currentToolId), KConfig::SimpleConfig);
+    cfg.deleteGroup(lstPresets->currentItem()->text());
+    delete lstPresets->takeItem(lstPresets->currentRow());
+}
+
+void ToolPresetDocker::itemSelected(QListWidgetItem *item)
+{
+    Q_FOREACH (QPointer<QWidget> widget, m_currentOptionWidgets) {
+        if (widget) {
+            KisDialogStateSaver::restoreState(widget, createConfigFileName(m_currentToolId));
+        }
+    }
 }

@@ -64,7 +64,7 @@ void StoryboardDelegate::paint(QPainter *p, const QStyleOptionViewItem &option, 
             parentRect.setBottomRight(parentRect.bottomRight() - QPoint(4, 4));
 
             if (option.state & QStyle::State_Selected) {
-                p->fillRect(option.rect, option.palette.foreground());
+                p->fillRect(option.rect, option.palette.highlight());
             }
             else {
                 p->fillRect(option.rect, option.palette.window());

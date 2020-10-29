@@ -27,6 +27,8 @@
 #include "kis_slider_spin_box.h"
 #include "kis_iterator_ng.h"
 #include "kis_image.h"
+#include "commands_new/KisMergeLabeledLayersCommand.h"
+#include "kis_command_utils.h"
 
 void selectByColor(KisPaintDeviceSP dev, KisPixelSelectionSP selection, const quint8 *c, int fuzziness, const QRect & rc)
 {
@@ -109,29 +111,72 @@ void KisToolSelectSimilar::beginPrimaryAction(KoPointerEvent *event)
     QPointF pos = convertToPixelCoord(event);
 
     KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
-    KIS_ASSERT_RECOVER_RETURN(kisCanvas);
+    KIS_SAFE_ASSERT_RECOVER(kisCanvas) {
+        QApplication::restoreOverrideCursor();
+        return;
+    };
 
     QApplication::setOverrideCursor(KisCursor::waitCursor());
 
-    KoColor c;
-    dev->pixel(pos.x(), pos.y(), &c);
+    KisProcessingApplicator applicator(currentImage(), currentNode(),
+                                       KisProcessingApplicator::NONE,
+                                       KisImageSignalVector() << ModifiedSignal,
+                                       kundo2_i18n("Select Contiguous Area"));
+
+
+    KisImageSP imageSP = currentImage();
+    KisPaintDeviceSP sourceDevice;
+    if (sampleLayersMode() == SampleAllLayers) {
+        sourceDevice = imageSP->projection();
+    } else if (sampleLayersMode() == SampleColorLabeledLayers) {
+        KisImageSP refImage = KisMergeLabeledLayersCommand::createRefImage(imageSP, "Similar Colors Selection Tool Reference Image");
+        sourceDevice = KisMergeLabeledLayersCommand::createRefPaintDevice(
+                    imageSP, "Similar Colors Selection Tool Reference Result Paint Device");
+
+        KisMergeLabeledLayersCommand* command = new KisMergeLabeledLayersCommand(refImage, sourceDevice, imageSP->root(), colorLabelsSelected());
+        applicator.applyCommand(command,
+                                KisStrokeJobData::SEQUENTIAL,
+                                KisStrokeJobData::EXCLUSIVE);
+
+    } else { // Sample Current Layer
+        sourceDevice = dev;
+    }
 
     // XXX we should make this configurable: "allow to select transparent"
     // if (opacity > OPACITY_TRANSPARENT)
     KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection());
 
-    QRect rc;
-    if (dev->colorSpace()->difference(c.data(), dev->defaultPixel().data()) <= m_fuzziness) {
-        rc = image()->bounds();
-    } else {
-        rc = dev->exactBounds();
-    }
-    selectByColor(dev, tmpSel, c.data(), m_fuzziness, rc);
 
-    tmpSel->invalidateOutlineCache();
+    int fuzziness = m_fuzziness;
+    // new stroke
+
+    KUndo2Command* cmd = new KisCommandUtils::LambdaCommand(
+                [fuzziness, tmpSel, pos, sourceDevice, imageSP] () mutable -> KUndo2Command* {
+
+                    KoColor c;
+                    sourceDevice->pixel(pos.x(), pos.y(), &c);
+
+                    QRect rc;
+                    if (sourceDevice->colorSpace()->difference(c.data(), sourceDevice->defaultPixel().data()) <= fuzziness) {
+                        rc = imageSP->bounds();
+                    } else {
+                        rc = sourceDevice->exactBounds();
+                    }
+
+                    selectByColor(sourceDevice, tmpSel, c.data(), fuzziness, rc);
+
+                    tmpSel->invalidateOutlineCache();
+
+                    return 0;
+    });
+
+    applicator.applyCommand(cmd,
+                            KisStrokeJobData::SEQUENTIAL);
+
     KisSelectionToolHelper helper(kisCanvas, kundo2_i18n("Select Similar Color"));
-    helper.selectPixelSelection(tmpSel, selectionAction());
+    helper.selectPixelSelection(applicator, tmpSel, selectionAction());
 
+    applicator.end();
     QApplication::restoreOverrideCursor();
 
 }
@@ -160,6 +205,9 @@ QWidget* KisToolSelectSimilar::createOptionWidget()
     input->setSingleStep(10);
     fl->addWidget(input);
     connect(input, SIGNAL(valueChanged(int)), this, SLOT(slotSetFuzziness(int)));
+
+
+    selectionWidget->attachToImage(image(), dynamic_cast<KisCanvas2*>(canvas()));
 
     QVBoxLayout* l = dynamic_cast<QVBoxLayout*>(selectionWidget->layout());
     Q_ASSERT(l);

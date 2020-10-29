@@ -1,0 +1,9 @@
+{
+    "Id": "Tool Presets Docker",
+    "Type": "Service",
+    "X-KDE-Library": "kritattoolpresetsdocker",
+    "X-KDE-ServiceTypes": [
+        "Krita/ViewPlugin"
+    ],
+    "X-Krita-Version": "28"
+}

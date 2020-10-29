@@ -35,3 +35,4 @@ endif()
 
 add_subdirectory(logdocker)
 add_subdirectory(snapshotdocker)
+add_subdirectory(toolpresets)

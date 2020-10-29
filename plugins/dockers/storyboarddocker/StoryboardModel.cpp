@@ -551,6 +551,7 @@ void StoryboardModel::setImage(KisImageWSP image)
         int frame = qvariant_cast<ThumbnailData>(item->child(StoryboardItem::FrameNumber)->data()).frameNum.toInt();
         m_renderScheduler->scheduleFrameForRegeneration(frame,true);
     }
+    m_lastScene = m_items.size();
 
     m_imageIdleWatcher.startCountdown();
     connect(&m_imageIdleWatcher, SIGNAL(startedIdleMode()), m_renderScheduler, SLOT(slotStartFrameRendering()));
@@ -1068,9 +1069,9 @@ void StoryboardModel::slotInsertChildRows(const QModelIndex parent, int first, i
             QModelIndex parentIndex = index(first + row, 0);
             insertRows(0, 4 + m_commentList.count(), parentIndex);
 
+            m_lastScene++;
             QString sceneName = i18nc("default name for storyboard item", "scene ") + QString::number(m_lastScene);
             setData (index (1, 0, parentIndex), sceneName);
-            m_lastScene++;
 
             //get the next keyframe and set duration to the num of frames in between
             const int currentKeyframeTime = m_activeNode->paintDevice()->keyframeChannel()->activeKeyframeTime(data(index(StoryboardItem::FrameNumber, 0, parentIndex)).toInt());

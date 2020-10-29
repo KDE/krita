@@ -46,6 +46,7 @@ public Q_SLOTS:
 protected:
     using KisToolSelectBase::m_widgetHelper;
     bool isPixelOnly() const override { return true; }
+    bool usesColorLabels() const override { return true; }
 
 private:
     int m_fuzziness;

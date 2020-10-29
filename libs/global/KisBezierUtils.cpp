@@ -785,4 +785,36 @@ qreal curveLengthAtPoint(const QPointF p0, const QPointF p1, const QPointF p2, c
     return curveLength(p0, q0, q1, q2, error);
 }
 
+qreal curveParamBySegmentLength(const QPointF p0, const QPointF p1, const QPointF p2, const QPointF p3, qreal expectedLength, qreal totalLength, const qreal error)
+{
+    const qreal splitAtParam = expectedLength / totalLength;
+
+    QPointF q0, q1, q2, q3, q4;
+    deCasteljau(p0, p1, p2, p3, splitAtParam, &q0, &q1, &q2, &q3, &q4);
+
+    const qreal portionLength = curveLength(p0, q0, q1, q2, error);
+
+    if (std::abs(portionLength - expectedLength) < error) {
+        return splitAtParam;
+    } else if (portionLength < expectedLength) {
+        return splitAtParam + (1.0 - splitAtParam) * curveParamBySegmentLength(q2, q3, q4, p3, expectedLength - portionLength, totalLength - portionLength, error);
+    } else {
+        return splitAtParam * curveParamBySegmentLength(p0, q0, q1, q2, expectedLength, portionLength, error);
+    }
+}
+
+
+qreal curveParamByProportion(const QPointF p0, const QPointF p1, const QPointF p2, const QPointF p3, qreal proportion, const qreal error)
+{
+    const qreal totalLength = curveLength(p0, p1, p2, p3, error);
+    const qreal expectedLength = proportion * totalLength;
+
+    return curveParamBySegmentLength(p0, p1, p2, p3, expectedLength, totalLength, error);
+}
+
+qreal curveProportionByParam(const QPointF p0, const QPointF p1, const QPointF p2, const QPointF p3, qreal t, const qreal error)
+{
+    return curveLengthAtPoint(p0, p1, p2, p3, t, error) / curveLength(p0, p1, p2, p3, error);
+}
+
 }

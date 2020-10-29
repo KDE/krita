@@ -308,22 +308,35 @@ public:
 
         const auto it = prev(upper_bound(m_rows.begin(), m_rows.end(), t));
         const int topRow = distance(m_rows.begin(), it);
-        const int bottomRow = topRow + 1;
-
-
         const qreal relT = (t - *it) / (*next(it) - *it);
+
+        subdivideRow(topRow, relT);
+    }
+
+    void subdivideRow(int topRow, qreal relT) {
+        const auto it = m_rows.begin() + topRow;
+        const int bottomRow = topRow + 1;
+        const qreal absT = KisAlgebra2D::lerp(*it, *next(it), relT);
 
         std::vector<Node> newRow;
         newRow.resize(m_size.width());
         for (int col = 0; col < m_size.width(); col++) {
-            splitCurveVertically(node(col, topRow), node(col, bottomRow), relT, newRow[col]);
+            const qreal paramForCurve =
+                KisBezierUtils::curveParamByProportion(node(col, topRow).node,
+                                                       node(col, topRow).bottomControl,
+                                                       node(col, bottomRow).topControl,
+                                                       node(col, bottomRow).node,
+                                                       relT,
+                                                       0.01);
+
+            splitCurveVertically(node(col, topRow), node(col, bottomRow), paramForCurve, newRow[col]);
         }
 
         m_nodes.insert(m_nodes.begin() + bottomRow * m_size.width(),
                        newRow.begin(), newRow.end());
 
         m_size.rheight()++;
-        m_rows.insert(next(it), t);
+        m_rows.insert(next(it), absT);
     }
 
     void subdivideColumn(qreal t) {
@@ -333,14 +346,29 @@ public:
 
         const auto it = prev(upper_bound(m_columns.begin(), m_columns.end(), t));
         const int leftColumn = distance(m_columns.begin(), it);
-        const int rightColumn = leftColumn + 1;
 
         const qreal relT = (t - *it) / (*next(it) - *it);
+
+        subdivideColumn(leftColumn, relT);
+    }
+
+    void subdivideColumn(int leftColumn, qreal relT) {
+        const auto it = m_columns.begin() + leftColumn;
+        const int rightColumn = leftColumn + 1;
+        const qreal absT = KisAlgebra2D::lerp(*it, *next(it), relT);
 
         std::vector<Node> newColumn;
         newColumn.resize(m_size.height());
         for (int row = 0; row < m_size.height(); row++) {
-            splitCurveHorizontally(node(leftColumn, row), node(rightColumn, row), relT, newColumn[row]);
+            const qreal paramForCurve =
+                KisBezierUtils::curveParamByProportion(node(leftColumn, row).node,
+                                                       node(leftColumn, row).rightControl,
+                                                       node(rightColumn, row).leftControl,
+                                                       node(rightColumn, row).node,
+                                                       relT,
+                                                       0.01);
+
+            splitCurveHorizontally(node(leftColumn, row), node(rightColumn, row), paramForCurve, newColumn[row]);
         }
 
         auto dstIt = m_nodes.begin() + rightColumn;
@@ -350,7 +378,7 @@ public:
         }
 
         m_size.rwidth()++;
-        m_columns.insert(next(it), t);
+        m_columns.insert(next(it), absT);
     }
 
     Patch makePatch(int col, int row) const
@@ -643,6 +671,10 @@ public:
 
         int degree() const {
             return KisBezierUtils::bezierDegree(p0(), p1(), p2(), p3());
+        }
+
+        bool isHorizontal() const {
+            return m_isHorizontal;
         }
 
     private:

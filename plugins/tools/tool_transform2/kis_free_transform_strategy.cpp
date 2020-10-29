@@ -163,8 +163,10 @@ void KisFreeTransformStrategy::Private::recalculateTransformedHandles()
     transformedHandles.bottomRight = transform.map(transaction.originalBottomRight());
 }
 
-void KisFreeTransformStrategy::setTransformFunction(const QPointF &mousePos, bool perspectiveModifierActive)
+void KisFreeTransformStrategy::setTransformFunction(const QPointF &mousePos, bool perspectiveModifierActive, bool shiftModifierActive)
 {
+    Q_UNUSED(shiftModifierActive);
+
     if (perspectiveModifierActive && !m_d->transaction.shouldAvoidPerspectiveTransform()) {
         m_d->function = PERSPECTIVE;
         return;

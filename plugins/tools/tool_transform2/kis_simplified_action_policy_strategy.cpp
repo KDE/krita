@@ -129,7 +129,7 @@ bool KisSimplifiedActionPolicyStrategy::endPrimaryAction(KoPointerEvent *event)
 
 void KisSimplifiedActionPolicyStrategy::activatePrimaryAction()
 {
-    setTransformFunction(m_d->lastImagePos, m_d->anyPickerModifierActive);
+    setTransformFunction(m_d->lastImagePos, m_d->anyPickerModifierActive, m_d->changeSizeModifierActive);
 }
 
 void KisSimplifiedActionPolicyStrategy::activateAlternateAction(KisTool::AlternateAction action)
@@ -142,7 +142,7 @@ void KisSimplifiedActionPolicyStrategy::activateAlternateAction(KisTool::Alterna
         m_d->anyPickerModifierActive = true;
     }
 
-    setTransformFunction(m_d->lastImagePos, m_d->anyPickerModifierActive);
+    setTransformFunction(m_d->lastImagePos, m_d->anyPickerModifierActive, m_d->changeSizeModifierActive);
 }
 
 void KisSimplifiedActionPolicyStrategy::deactivateAlternateAction(KisTool::AlternateAction action)
@@ -195,6 +195,6 @@ bool KisSimplifiedActionPolicyStrategy::endAlternateAction(KoPointerEvent *event
 
 void KisSimplifiedActionPolicyStrategy::hoverActionCommon(const QPointF &pt)
 {
-    setTransformFunction(pt, m_d->anyPickerModifierActive);
+    setTransformFunction(pt, m_d->anyPickerModifierActive, m_d->changeSizeModifierActive);
 }
 

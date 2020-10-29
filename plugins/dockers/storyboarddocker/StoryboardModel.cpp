@@ -770,6 +770,11 @@ bool StoryboardModel::insertItem(QModelIndex index, bool after)
     //index is the index at which context menu was created, or the + button belongs to
     //after is whether we want the item before or after index
 
+    //disable for vector layers
+    if (!m_activeNode->paintDevice()) {
+        return false;
+    }
+
     KisKeyframeChannel* keyframeChannel = m_activeNode->paintDevice()->keyframeChannel();
     if (!index.isValid()) {
 

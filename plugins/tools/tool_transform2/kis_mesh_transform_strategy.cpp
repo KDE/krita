@@ -298,15 +298,12 @@ bool KisMeshTransformStrategy::beginPrimaryAction(const QPointF &pt)
     } else if (m_d->mode == Private::OVER_SEGMENT) {
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(m_d->hoveredSegment, false);
 
-        m_d->selectedNodes.clear();
-
         auto it = m_d->currentArgs.meshTransform()->find(*m_d->hoveredSegment);
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(it != m_d->currentArgs.meshTransform()->endSegments(), false);
 
         m_d->mouseClickSegmentPosition =
             KisBezierUtils::nearestPoint({it.p0(), it.p1(), it.p2(), it.p3()}, pt);
 
-        m_d->selectedNodes << it.firstNodeIndex() << it.secondNodeIndex();
         retval = true;
 
     } else if (m_d->mode == Private::MULTIPLE_POINT_SELECTION) {

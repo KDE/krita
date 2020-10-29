@@ -152,9 +152,10 @@ void KisPerspectiveTransformStrategy::Private::recalculateTransformedHandles()
     transformedHandles.yVanishing = v.toVector2DAffine().toPointF();
 }
 
-void KisPerspectiveTransformStrategy::setTransformFunction(const QPointF &mousePos, bool perspectiveModifierActive)
+void KisPerspectiveTransformStrategy::setTransformFunction(const QPointF &mousePos, bool perspectiveModifierActive, bool shiftModifierActive)
 {
     Q_UNUSED(perspectiveModifierActive);
+    Q_UNUSED(shiftModifierActive);
 
     QPolygonF transformedPolygon = m_d->transform.map(QPolygonF(m_d->transaction.originalRect()));
     StrokeFunction defaultFunction = transformedPolygon.containsPoint(mousePos, Qt::OddEvenFill) ? MOVE : NONE;

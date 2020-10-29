@@ -53,6 +53,7 @@ struct KisMeshTransformStrategy::Private
         OVER_POINT = 0,
         OVER_SEGMENT,
         OVER_PATCH,
+        SPLIT_SEGMENT,
         MULTIPLE_POINT_SELECTION,
         MOVE_MODE,
         ROTATE_MODE,
@@ -110,7 +111,7 @@ KisMeshTransformStrategy::~KisMeshTransformStrategy()
 {
 }
 
-void KisMeshTransformStrategy::setTransformFunction(const QPointF &mousePos, bool perspectiveModifierActive)
+void KisMeshTransformStrategy::setTransformFunction(const QPointF &mousePos, bool perspectiveModifierActive, bool shiftModifierActive)
 {
     const qreal grabRadius = KisTransformUtils::effectiveHandleGrabRadius(m_d->converter);
 
@@ -141,17 +142,21 @@ void KisMeshTransformStrategy::setTransformFunction(const QPointF &mousePos, boo
         }
     }
 
-    if (hoveredControl || hoveredSegment) {
-        if (perspectiveModifierActive) {
-            mode = Private::MULTIPLE_POINT_SELECTION;
-        }
+    if (shiftModifierActive) {
+        mode = hoveredSegment ? Private::SPLIT_SEGMENT : Private::NOTHING;
     } else {
-        if (m_d->currentArgs.meshTransform()->dstBoundingRect().contains(mousePos)) {
-            mode = Private::MOVE_MODE;
-        } else if (perspectiveModifierActive) {
-            mode = Private::SCALE_MODE;
+        if (hoveredControl || hoveredSegment) {
+            if (perspectiveModifierActive) {
+                mode = Private::MULTIPLE_POINT_SELECTION;
+            }
         } else {
-            mode = Private::ROTATE_MODE;
+            if (m_d->currentArgs.meshTransform()->dstBoundingRect().contains(mousePos)) {
+                mode = Private::MOVE_MODE;
+            } else if (perspectiveModifierActive) {
+                mode = Private::SCALE_MODE;
+            } else {
+                mode = Private::ROTATE_MODE;
+            }
         }
     }
 
@@ -240,6 +245,17 @@ QCursor KisMeshTransformStrategy::getCurrentCursor() const
     case Private::OVER_PATCH:
         cursor = KisCursor::pointingHandCursor();
         break;
+    case Private::SPLIT_SEGMENT: {
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(m_d->hoveredSegment, KisCursor::arrowCursor());
+
+        auto it = m_d->currentArgs.meshTransform()->find(*m_d->hoveredSegment);
+
+        const QRectF segmentRect(it.p0(), it.p3());
+        cursor = segmentRect.width() > segmentRect.height() ?
+
+                    KisCursor::splitHCursor() : KisCursor::splitVCursor();
+        break;
+    }
     case Private::MULTIPLE_POINT_SELECTION:
         cursor = KisCursor::crossCursor();
         break;
@@ -303,6 +319,28 @@ bool KisMeshTransformStrategy::beginPrimaryAction(const QPointF &pt)
 
         m_d->mouseClickSegmentPosition =
             KisBezierUtils::nearestPoint({it.p0(), it.p1(), it.p2(), it.p3()}, pt);
+
+        retval = true;
+
+    } else if (m_d->mode == Private::SPLIT_SEGMENT) {
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(m_d->hoveredSegment, false);
+
+        auto it = m_d->currentArgs.meshTransform()->find(*m_d->hoveredSegment);
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(it != m_d->currentArgs.meshTransform()->endSegments(), false);
+
+        const qreal t = KisBezierUtils::nearestPoint({it.p0(), it.p1(), it.p2(), it.p3()}, pt);
+
+        const qreal eps = 0.01;
+
+        const qreal proportion = KisBezierUtils::curveProportionByParam(it.p0(), it.p1(), it.p2(), it.p3(), t, eps);
+
+        if (it.isHorizontal()) {
+            m_d->currentArgs.meshTransform()->subdivideColumn(it.firstNodeIndex().x(), proportion);
+        } else {
+            m_d->currentArgs.meshTransform()->subdivideRow(it.firstNodeIndex().y(), proportion);
+        }
+
+        m_d->recalculateSignalCompressor.start();
 
         retval = true;
 

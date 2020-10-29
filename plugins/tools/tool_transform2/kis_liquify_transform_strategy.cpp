@@ -108,10 +108,11 @@ QPainterPath KisLiquifyTransformStrategy::getCursorOutline() const
     return m_d->helper.brushOutline(*m_d->currentArgs.liquifyProperties());
 }
 
-void KisLiquifyTransformStrategy::setTransformFunction(const QPointF &mousePos, bool perspectiveModifierActive)
+void KisLiquifyTransformStrategy::setTransformFunction(const QPointF &mousePos, bool perspectiveModifierActive, bool shiftModifierActive)
 {
     Q_UNUSED(mousePos);
     Q_UNUSED(perspectiveModifierActive);
+    Q_UNUSED(shiftModifierActive);
 }
 
 QCursor KisLiquifyTransformStrategy::getCurrentCursor() const

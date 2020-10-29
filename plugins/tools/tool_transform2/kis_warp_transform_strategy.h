@@ -47,7 +47,7 @@ public:
                              TransformTransactionProperties &transaction);
     ~KisWarpTransformStrategy() override;
 
-    void setTransformFunction(const QPointF &mousePos, bool perspectiveModifierActive) override;
+    void setTransformFunction(const QPointF &mousePos, bool perspectiveModifierActive, bool shiftModifierActive) override;
     void setTransformType(TransformType type);
 
     void paint(QPainter &gc) override;

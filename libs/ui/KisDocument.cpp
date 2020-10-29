@@ -1345,9 +1345,30 @@ QPixmap KisDocument::generatePreview(const QSize& size)
 
     if (image) {
         QRect bounds = image->bounds();
+        QSize originalSize = bounds.size();
         QSize newSize = bounds.size();
         newSize.scale(size, Qt::KeepAspectRatio);
-        QPixmap px = QPixmap::fromImage(image->convertToQImage(newSize, 0));
+
+        bool pixelArt = false;
+        // determine if the image is pixel art or not
+        if (originalSize.width() < size.width() && originalSize.height() < size.height()) {
+            // the image must be smaller than the requested preview
+            // the scale must be integer
+            if (newSize.height()%originalSize.height() == 0 && newSize.width()%originalSize.width() == 0) {
+                pixelArt = true;
+            }
+        }
+
+        QPixmap px;
+        if (pixelArt) {
+            // do not scale while converting (because it uses Bicubic)
+            QImage original = image->convertToQImage(originalSize, 0);
+            // scale using FastTransformation, which is probably Nearest neighbour, suitable for pixel art
+            QImage scaled = original.scaled(newSize, Qt::KeepAspectRatio, Qt::FastTransformation);
+            px = QPixmap::fromImage(scaled);
+        } else {
+            px = QPixmap::fromImage(image->convertToQImage(newSize, 0));
+        }
         if (px.size() == QSize(0,0)) {
             px = QPixmap(newSize);
             QPainter gc(&px);

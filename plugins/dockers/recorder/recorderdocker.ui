@@ -98,7 +98,7 @@
             <item>
              <widget class="QPushButton" name="buttonCleanUpSnapshots">
               <property name="toolTip">
-               <string>Manage snapshot directories...</string>
+               <string>Manage recorder snapshot directories...</string>
               </property>
               <property name="text">
                <string/>

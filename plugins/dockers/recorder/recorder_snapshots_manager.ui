@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Clean up Snapshots</string>
+   <string>Clean up Recorder Snapshots</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <property name="leftMargin">
@@ -191,7 +191,7 @@
             </sizepolicy>
            </property>
            <property name="text">
-            <string>Please select snapshots to remove</string>
+            <string>Please select recorder snapshots to remove</string>
            </property>
           </widget>
          </item>

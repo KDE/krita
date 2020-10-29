@@ -38,7 +38,7 @@ namespace KisDialogStateSaver
      * @param dialogName the name for the section under which we will save the state
      * @return true if all the widgets could be saved, false if there was a problem
      */
-    KRITAWIDGETUTILS_EXPORT void saveState(QWidget *parent, const QString &dialogName);
+    KRITAWIDGETUTILS_EXPORT void saveState(QWidget *parent, const QString &dialogName, const QString &configFile = "");
 
     /**
      * @brief restoreState restores the state of the dialog
@@ -49,7 +49,7 @@ namespace KisDialogStateSaver
      * the widget (for instance in the ui file) will be used.
      * @return true if all the widgets could be restored, false if there was a problem
      */
-    KRITAWIDGETUTILS_EXPORT void restoreState(QWidget *parent, const QString &dialogName, const QMap<QString, QVariant> &defaults = QMap<QString, QVariant>());
+    KRITAWIDGETUTILS_EXPORT void restoreState(QWidget *parent, const QString &dialogName, const QMap<QString, QVariant> &defaults = QMap<QString, QVariant>(), const QString &configFile = "");
 };
 
 #endif // KISDIALOGSTATESAVER_H

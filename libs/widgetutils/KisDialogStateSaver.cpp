@@ -37,12 +37,12 @@
 #include "kis_slider_spin_box.h"
 
 
-void KisDialogStateSaver::saveState(QWidget *parent, const QString &dialogName)
+void KisDialogStateSaver::saveState(QWidget *parent, const QString &dialogName, const QString &configFile)
 {
     Q_ASSERT(parent);
     Q_ASSERT(!dialogName.isEmpty());
 
-    KConfigGroup group(KSharedConfig::openConfig(), dialogName);
+    KConfigGroup group(KSharedConfig::openConfig(configFile), dialogName);
     Q_FOREACH(QWidget *widget, parent->findChildren<QWidget*>(QString())) {
 
         if (!widget->objectName().isEmpty() ) {
@@ -95,12 +95,12 @@ void KisDialogStateSaver::saveState(QWidget *parent, const QString &dialogName)
     }
 }
 
-void KisDialogStateSaver::restoreState(QWidget *parent, const QString &dialogName, const QMap<QString, QVariant> &defaults)
+void KisDialogStateSaver::restoreState(QWidget *parent, const QString &dialogName, const QMap<QString, QVariant> &defaults, const QString &configFile)
 {
     Q_ASSERT(parent);
     Q_ASSERT(!dialogName.isEmpty());
 
-    KConfigGroup group( KSharedConfig::openConfig(), dialogName);
+    KConfigGroup group( KSharedConfig::openConfig(configFile), dialogName);
 
     Q_FOREACH(QWidget *widget, parent->findChildren<QWidget*>(QString())) {
 

@@ -17,6 +17,7 @@
   <developer_name xml:lang="fr">La fondation Krita</developer_name>
   <developer_name xml:lang="gl">Fundación Krita</developer_name>
   <developer_name xml:lang="hi">क्रिता संस्थान</developer_name>
+  <developer_name xml:lang="ia">Krita Foundation (Fundation Krita)</developer_name>
   <developer_name xml:lang="id">Asas Krita</developer_name>
   <developer_name xml:lang="it">Fondazione Krita</developer_name>
   <developer_name xml:lang="ko">Krita Foundation</developer_name>
@@ -46,6 +47,7 @@
   <name xml:lang="fr">Krita</name>
   <name xml:lang="gl">Krita</name>
   <name xml:lang="hi">क्रिता</name>
+  <name xml:lang="ia">Krita</name>
   <name xml:lang="id">Krita</name>
   <name xml:lang="it">Krita</name>
   <name xml:lang="ko">Krita</name>
@@ -238,6 +240,7 @@
       <caption xml:lang="eu">Krita pintura-digital lantegi osoa bat da</caption>
       <caption xml:lang="fr">Krita est un studio d'art numérique complet.</caption>
       <caption xml:lang="hi">क्रिता एक विशेषताओं से परिपूर्ण डिजिटल कला स्टूडियो है।</caption>
+      <caption xml:lang="ia">Krita es un studio de pictura digital complete</caption>
       <caption xml:lang="it">Krita è uno studio d'arte digitale completo</caption>
       <caption xml:lang="ko">Krita는 다기능 디지털 예술 스튜디오입니다</caption>
       <caption xml:lang="nl">Krita is een digitale schilderstudio vol mogelijkheden</caption>

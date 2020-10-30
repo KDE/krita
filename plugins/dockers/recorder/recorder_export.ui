@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Export timelapse</string>
+   <string>Export Timelapse</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_4">
    <property name="leftMargin">
@@ -879,7 +879,7 @@ For example to make your speedpaint twice faster it should be twice larger of th
             </font>
            </property>
            <property name="text">
-            <string comment="Open the folder when the new created video is placed">Remove snapshots</string>
+            <string comment="Open the folder when the new created video is placed">Remove recordings</string>
            </property>
            <property name="flat">
             <bool>true</bool>

@@ -519,8 +519,10 @@ void RecorderExport::onButtonShowInFolderClicked()
 
 void RecorderExport::onButtonRemoveSnapshotsClicked()
 {
-    const QString confirmation(i18n("The snapshots directory for this timelapse will be removed."
-                                    " Do you wish to continue?"));
+    const QString confirmation(i18n("The recordings for this document will be deleted"
+                                    " and you will not be able to export a timelapse for it again"
+                                    " (the already exported timelapses will be preserved though)."
+                                    "\nDo you wish to continue?"));
     if (QMessageBox::question(this, windowTitle(), confirmation) != QMessageBox::Yes)
         return;
 

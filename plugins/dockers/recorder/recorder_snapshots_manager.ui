@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Clean up Recorder Snapshots</string>
+   <string>Clean up Recordings</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <property name="leftMargin">
@@ -29,7 +29,7 @@
    <item row="0" column="0">
     <widget class="QStackedWidget" name="stackedWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="pageProgress">
       <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,1,0">
@@ -191,7 +191,7 @@
             </sizepolicy>
            </property>
            <property name="text">
-            <string>Please select recorder snapshots to remove</string>
+            <string>Please select recordings to remove</string>
            </property>
           </widget>
          </item>

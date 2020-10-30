@@ -46,7 +46,7 @@ private Q_SLOTS:
     void onCaptureIntervalChanged(int interval);
     void onQualityChanged(int quality);
     void onResolutionChanged(int resolution);
-    void onCleanUpSnapshotsButtonClicked();
+    void onManageRecordingsButtonClicked();
     void onSelectRecordFolderButtonClicked();
     void onRecordButtonToggled(bool checked);
     void onExportButtonClicked();

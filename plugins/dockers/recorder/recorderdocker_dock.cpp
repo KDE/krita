@@ -177,7 +177,7 @@ RecorderDockerDock::RecorderDockerDock()
     d->ui->setupUi(page);
     d->ui->labelUnsupportedColorSpace->setVisible(false);
 
-    d->ui->buttonCleanUpSnapshots->setIcon(KisIconUtils::loadIcon("configure"));
+    d->ui->buttonManageRecordings->setIcon(KisIconUtils::loadIcon("configure"));
     d->ui->buttonBrowse->setIcon(KisIconUtils::loadIcon("folder"));
     d->ui->buttonRecordToggle->setIcon(KisIconUtils::loadIcon("media-record"));
     d->ui->buttonExport->setIcon(KisIconUtils::loadIcon("document-export"));
@@ -206,7 +206,7 @@ RecorderDockerDock::RecorderDockerDock()
     connect(KisPart::instance(), SIGNAL(sigMainWindowIsBeingCreated(KisMainWindow *)),
             this, SLOT(onMainWindowIsBeingCreated(KisMainWindow *)));
 
-    connect(d->ui->buttonCleanUpSnapshots, SIGNAL(clicked()), this, SLOT(onCleanUpSnapshotsButtonClicked()));
+    connect(d->ui->buttonManageRecordings, SIGNAL(clicked()), this, SLOT(onManageRecordingsButtonClicked()));
     connect(d->ui->buttonBrowse, SIGNAL(clicked()), this, SLOT(onSelectRecordFolderButtonClicked()));
     connect(d->ui->spinCaptureInterval, SIGNAL(valueChanged(int)), this, SLOT(onCaptureIntervalChanged(int)));
     connect(d->ui->spinQuality, SIGNAL(valueChanged(int)), this, SLOT(onQualityChanged(int)));
@@ -322,7 +322,7 @@ void RecorderDockerDock::onExportButtonClicked()
     exportDialog.exec();
 }
 
-void RecorderDockerDock::onCleanUpSnapshotsButtonClicked()
+void RecorderDockerDock::onManageRecordingsButtonClicked()
 {
     RecorderSnapshotsManager snapshotsManager(this);
     snapshotsManager.execFor(d->snapshotDirectory);
@@ -334,7 +334,7 @@ void RecorderDockerDock::onSelectRecordFolderButtonClicked()
     QFileDialog dialog(this);
     dialog.setFileMode(QFileDialog::DirectoryOnly);
     const QString &directory = dialog.getExistingDirectory(this,
-                               i18n("Select a Folder for Recordings"),
+                               i18n("Select a Directory for Recordings"),
                                d->ui->editDirectory->text(),
                                QFileDialog::ShowDirsOnly);
     if (!directory.isEmpty()) {

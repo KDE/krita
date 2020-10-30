@@ -226,7 +226,10 @@ void RecorderSnapshotsManager::onButtonSelectAllClicked()
 
 void RecorderSnapshotsManager::onButtonCleanUpClicked()
 {
-    const QString confirmation(i18n("Are you sure you want to delete selected directories?"));
+    const QString confirmation(i18n("The selected recordings will be deleted"
+                                    " and you will not be able to export a timelapse for them again"
+                                    " (the already exported timelapses will be preserved though)."
+                                    "\nDo you wish to continue?"));
     if (QMessageBox::question(this, windowTitle(), confirmation) != QMessageBox::Yes)
         return;
 

@@ -88,7 +88,7 @@
                </sizepolicy>
               </property>
               <property name="text">
-               <string comment="A folder where recordings are stored">Snapshots directory:</string>
+               <string comment="A folder where recordings are stored">Recordings directory:</string>
               </property>
               <property name="buddy">
                <cstring>buttonBrowse</cstring>
@@ -96,9 +96,9 @@
              </widget>
             </item>
             <item>
-             <widget class="QPushButton" name="buttonCleanUpSnapshots">
+             <widget class="QPushButton" name="buttonManageRecordings">
               <property name="toolTip">
-               <string>Manage recorder snapshot directories...</string>
+               <string>Manage recordings...</string>
               </property>
               <property name="text">
                <string/>
@@ -123,7 +123,7 @@
             <item>
              <widget class="QPushButton" name="buttonBrowse">
               <property name="toolTip">
-               <string>Select the snapshots directory...</string>
+               <string>Select the recordings directory...</string>
               </property>
               <property name="text">
                <string/>

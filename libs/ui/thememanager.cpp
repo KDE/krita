@@ -226,7 +226,8 @@ void ThemeManager::populateThemeMenu()
             this, SLOT(slotChangePalette()));
 
     QAction * action;
-    const QStringList schemeFiles = KoResourcePaths::findAllResources("data", "color-schemes/*.colors");
+    QStringList schemeFiles = KoResourcePaths::findAllResources("data", "color-schemes/*.colors");
+    schemeFiles += KoResourcePaths::findAllResources("genericdata", "color-schemes/*.colors");
 
     QMap<QString, QAction*> actionMap;
     for (int i = 0; i < schemeFiles.size(); ++i) {
@@ -296,7 +297,9 @@ QPixmap ThemeManager::createSchemePreviewIcon(const KSharedConfigPtr& config)
 
 void ThemeManager::populateThemeMap()
 {
-    const QStringList schemeFiles = KoResourcePaths::findAllResources("data", "color-schemes/*.colors");
+    QStringList schemeFiles = KoResourcePaths::findAllResources("data", "color-schemes/*.colors");
+    schemeFiles += KoResourcePaths::findAllResources("genericdata", "color-schemes/*.colors");
+    
     for (int i = 0; i < schemeFiles.size(); ++i) {
         const QString filename  = schemeFiles.at(i);
         const QFileInfo info(filename);

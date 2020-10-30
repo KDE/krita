@@ -782,29 +782,28 @@ bool StoryboardModel::insertItem(QModelIndex index, bool after)
         int lastKeyframeTime = 0;
         KisNodeSP node = m_image->rootLayer();
         if (node) {
-        KisLayerUtils::recursiveApplyNodes (node, [&lastKeyframeTime] (KisNodeSP node)
-        {
-            if (node->isAnimated()) {
-                lastKeyframeTime = qMax(lastKeyframeTime, node->paintDevice()->keyframeChannel()->lastKeyframeTime());
-            }
-        });
+            KisLayerUtils::recursiveApplyNodes (node, [&lastKeyframeTime] (KisNodeSP node) {
+                if (node->isAnimated()) {
+                    lastKeyframeTime = qMax(lastKeyframeTime, node->paintDevice()->keyframeChannel()->lastKeyframeTime());
+                }
+            });
         }
 
         QModelIndex lastIndex = this->index(rowCount() - 1, 0);
         if (!keyframeChannel) {
             keyframeChannel = m_activeNode->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true);
-            slotKeyframeAdded(keyframeChannel, 0);
         }
 
         //insert keyframe after the last storyboard item
         if (lastIndex.isValid()) {
             insertItem(lastIndex, true);
+        } else if (keyframeChannel->keyframeCount() != 1) {
+            keyframeChannel->addKeyframe(lastKeyframeTime + 1);
         }
     }
     else {
         if (!keyframeChannel) {
             keyframeChannel = m_activeNode->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true);
-            slotKeyframeAdded(keyframeChannel, 0);
         }
 
         int frame = this->index(StoryboardItem::FrameNumber, 0, index).data().toInt();

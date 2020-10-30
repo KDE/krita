@@ -237,18 +237,18 @@ void StoryboardView::slotContextMenuRequested(const QPoint &point)
     QMenu contextMenu;
     QModelIndex index = indexAt(point);
     if (!index.isValid()) {
-        contextMenu.addAction(i18nc("Add Storyboard Item at the end", "Add Storyboard Item"), [this, index, Model] {Model->insertItem(index, false); });
+        contextMenu.addAction(i18nc("Add new scene as the last storyboard", "Add Scene"), [this, index, Model] {Model->insertItem(index, false); });
     }
     else if (index.parent().isValid()) {
         index = index.parent();
     }
 
     if (index.isValid()) {
-        contextMenu.addAction(i18nc("Add Storyboard Item after the current item", "Add Storyboard Item After"), [this, index, Model] {Model->insertItem(index, true); });
+        contextMenu.addAction(i18nc("Add scene after active scene", "Add Scene After"), [this, index, Model] {Model->insertItem(index, true); });
         if (index.row() > 0) {
-            contextMenu.addAction(i18nc("Add Storyboard Item before the current item", "Add Storyboard Item Before"), [this, index, Model] {Model->insertItem(index, false); });
+            contextMenu.addAction(i18nc("Add scene before active scene", "Add Scene Before"), [this, index, Model] {Model->insertItem(index, false); });
         }
-        contextMenu.addAction(i18nc("Remove current storyboard item", "Remove Storyboard Item"), [this, index] {model()->removeRows(index.row(), 1); });
+        contextMenu.addAction(i18nc("Remove current scene from storyboards", "Remove Scene"), [this, index] {model()->removeRows(index.row(), 1); });
     }
     contextMenu.exec(viewport()->mapToGlobal(point));
 }

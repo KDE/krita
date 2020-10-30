@@ -178,6 +178,9 @@ public:
         else if (type == "locale") {
             return QStandardPaths::AppDataLocation;
         }
+        else if (type == "genericdata") {
+            return QStandardPaths::GenericDataLocation;
+        }
         else {
             return QStandardPaths::AppDataLocation;
         }

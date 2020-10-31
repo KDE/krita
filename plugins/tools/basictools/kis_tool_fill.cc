@@ -232,6 +232,7 @@ QWidget* KisToolFill::createOptionWidget()
 
     QLabel *lbl_fastMode = new QLabel(i18n("Fast mode: "), widget);
     m_checkUseFastMode = new QCheckBox(QString(), widget);
+    m_checkUseFastMode->setObjectName("m_checkUseFastMode");
     m_checkUseFastMode->setToolTip(
         i18n("Fills area faster, but does not take composition "
              "mode into account. Selections and other extended "
@@ -240,6 +241,7 @@ QWidget* KisToolFill::createOptionWidget()
 
     QLabel *lbl_threshold = new QLabel(i18nc("The Threshold label in Fill tool options", "Threshold: "), widget);
     m_slThreshold = new KisSliderSpinBox(widget);
+    m_slThreshold->setObjectName("m_slThreshold");
     m_slThreshold->setObjectName("int_widget");
     m_slThreshold->setRange(1, 100);
     m_slThreshold->setPageStep(3);
@@ -247,6 +249,7 @@ QWidget* KisToolFill::createOptionWidget()
 
     QLabel *lbl_sizemod = new QLabel(i18n("Grow selection: "), widget);
     m_sizemodWidget = new KisSliderSpinBox(widget);
+    m_sizemodWidget->setObjectName("m_sizemodWidget");
     m_sizemodWidget->setObjectName("sizemod");
     m_sizemodWidget->setRange(-40, 40);
     m_sizemodWidget->setSingleStep(1);
@@ -254,6 +257,7 @@ QWidget* KisToolFill::createOptionWidget()
 
     QLabel *lbl_feather = new QLabel(i18n("Feathering radius: "), widget);
     m_featherWidget = new KisSliderSpinBox(widget);
+    m_featherWidget->setObjectName("m_feathreWidget");
     m_featherWidget->setObjectName("feather");
     m_featherWidget->setRange(0, 40);
     m_featherWidget->setSingleStep(1);
@@ -261,10 +265,12 @@ QWidget* KisToolFill::createOptionWidget()
 
     QLabel *lbl_usePattern = new QLabel(i18n("Use pattern:"), widget);
     m_checkUsePattern = new QCheckBox(QString(), widget);
+    m_checkUsePattern->setObjectName("m_checkUsePattern");
     m_checkUsePattern->setToolTip(i18n("When checked do not use the foreground color, but the pattern selected to fill with"));
 
     QLabel *lbl_patternRotation = new QLabel(i18n("Rotate:"), widget);
     m_sldPatternRotate = new KisDoubleSliderSpinBox(widget);
+    m_sldPatternRotate->setObjectName("m_sldPatternRotate");
     m_sldPatternRotate->setObjectName("patternrotate");
     m_sldPatternRotate->setRange(0, 360, 2);
     m_sldPatternRotate->setSingleStep(1.0);
@@ -272,6 +278,7 @@ QWidget* KisToolFill::createOptionWidget()
 
     QLabel *lbl_patternScale = new QLabel(i18n("Scale:"), widget);
     m_sldPatternScale = new KisDoubleSliderSpinBox(widget);
+    m_sldPatternScale->setObjectName("m_sldPatternScale");
     m_sldPatternScale->setObjectName("patternscale");
     m_sldPatternScale->setRange(0, 500, 2);
     m_sldPatternScale->setSingleStep(1.0);
@@ -282,6 +289,7 @@ QWidget* KisToolFill::createOptionWidget()
                                                 "Options together with the label are: /Sample current layer/ /Sample all layers/ "
                                                 "/Sample color labeled layers/. Sample is a verb here and means something akin to 'take into account'.", "Sample:"), widget);
     m_cmbSampleLayersMode = new QComboBox(widget);
+    m_cmbSampleLayersMode->setObjectName("m_cmbSampleLayersMode");
     m_cmbSampleLayersMode->addItem(sampleLayerModeToUserString(SAMPLE_LAYERS_MODE_CURRENT), SAMPLE_LAYERS_MODE_CURRENT);
     m_cmbSampleLayersMode->addItem(sampleLayerModeToUserString(SAMPLE_LAYERS_MODE_ALL), SAMPLE_LAYERS_MODE_ALL);
     m_cmbSampleLayersMode->addItem(sampleLayerModeToUserString(SAMPLE_LAYERS_MODE_COLOR_LABELED), SAMPLE_LAYERS_MODE_COLOR_LABELED);
@@ -291,17 +299,18 @@ QWidget* KisToolFill::createOptionWidget()
                                             "a choice of color labels that a layer can be marked with. Those color labels "
                                             "will be used for calculating the area to fill.", "Labels used:"), widget);
     m_cmbSelectedLabels = new KisColorFilterCombo(widget, false, false);
+    m_cmbSelectedLabels->setObjectName("m_cmbSelectedLabels");
     m_cmbSelectedLabels->updateAvailableLabels(currentImage().isNull() ? KisNodeSP() : currentImage()->root());
 
     QLabel *lbl_fillSelection = new QLabel(i18n("Fill entire selection:"), widget);
     m_checkFillSelection = new QCheckBox(QString(), widget);
+    m_checkFillSelection->setObjectName("m_checkFillSelection");
     m_checkFillSelection->setToolTip(i18n("When checked do not look at the current layer colors, but just fill all of the selected area"));
 
     QLabel *lbl_useSelectionAsBoundary = new QLabel(i18nc("Description for a checkbox in a Fill Tool to use selection borders as boundary when filling", "Use selection as boundary:"), widget);
     m_checkUseSelectionAsBoundary = new QCheckBox(QString(), widget);
+    m_checkUseSelectionAsBoundary->setObjectName("m_checkUseSelectionAsBoundary");
     m_checkUseSelectionAsBoundary->setToolTip(i18nc("Tooltip for 'Use selection as boundary' checkbox", "When checked, use selection borders as boundary when filling"));
-
-
 
     connect (m_checkUseFastMode       , SIGNAL(toggled(bool))    , this, SLOT(slotSetUseFastMode(bool)));
     connect (m_slThreshold       , SIGNAL(valueChanged(int)), this, SLOT(slotSetThreshold(int)));
@@ -333,8 +342,6 @@ QWidget* KisToolFill::createOptionWidget()
     updateGUI();
 
     widget->setFixedHeight(widget->sizeHint().height());
-
-
 
     // load configuration options
     m_checkUseFastMode->setChecked(m_configGroup.readEntry("useFastMode", false));
@@ -369,7 +376,6 @@ QWidget* KisToolFill::createOptionWidget()
     m_usePattern = m_checkUsePattern->isChecked();
     // m_sampleLayersMode is set manually above
     // selectedColors are also set manually
-
 
     activateConnectionsToImage();
 

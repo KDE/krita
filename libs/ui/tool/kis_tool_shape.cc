@@ -81,7 +81,7 @@ int KisToolShape::flags() const
            |KisTool::FLAG_USES_CUSTOM_SIZE;
 }
 
-QWidget * KisToolShape::createOptionWidget()
+QWidget *KisToolShape::createOptionWidget()
 {
     m_shapeOptionsWidget = new WdgGeometryOptions(0);
 

@@ -95,24 +95,26 @@ void KisToolLine::deactivate()
     cancelStroke();
 }
 
-QWidget* KisToolLine::createOptionWidget()
+QWidget *KisToolLine::createOptionWidget()
 {
     QWidget* widget = KisToolPaint::createOptionWidget();
 
     m_chkUseSensors = new QCheckBox(i18n("Use sensors"));
+    m_chkUseSensors->setObjectName("m_chkUseSensors");
     addOptionWidgetOption(m_chkUseSensors);
 
     m_chkShowPreview = new QCheckBox(i18n("Show Preview"));
+    m_chkShowPreview->setObjectName("m_chkShowPreview");
     addOptionWidgetOption(m_chkShowPreview);
 
     m_chkShowGuideline = new QCheckBox(i18n("Show Guideline"));
+    m_chkShowGuideline->setObjectName("m_chkShowGuildeine");
     addOptionWidgetOption(m_chkShowGuideline);
 
     // hook up connections for value changing
     connect(m_chkUseSensors, SIGNAL(clicked(bool)), this, SLOT(setUseSensors(bool)) );
     connect(m_chkShowPreview, SIGNAL(clicked(bool)), this, SLOT(setShowPreview(bool)) );
     connect(m_chkShowGuideline, SIGNAL(clicked(bool)), this, SLOT(setShowGuideline(bool)) );
-
 
     // read values in from configuration
     m_chkUseSensors->setChecked(configGroup.readEntry("useSensors", true));

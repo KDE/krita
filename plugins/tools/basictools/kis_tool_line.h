@@ -78,7 +78,7 @@ private:
     QPointF straightLine(QPointF point);
     void updateGuideline();
     void updatePreviewTimer(bool showGuide);
-    QWidget* createOptionWidget() override;
+    QWidget *createOptionWidget() override;
 
     void endStroke();
     void cancelStroke();

@@ -68,7 +68,7 @@ public Q_SLOTS:
     virtual void patternScaleSettingChanged(qreal value);
 
 protected:
-    QWidget* createOptionWidget() override;
+    QWidget *createOptionWidget() override;
 
     KisToolShapeUtils::FillStyle fillStyle();
     KisToolShapeUtils::StrokeStyle strokeStyle();

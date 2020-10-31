@@ -42,7 +42,7 @@ public:
     KisToolLazyBrush(KoCanvasBase * canvas);
     ~KisToolLazyBrush() override;
 
-    QWidget * createOptionWidget() override;
+    QWidget *createOptionWidget() override;
 
     void activatePrimaryAction() override;
     void deactivatePrimaryAction() override;

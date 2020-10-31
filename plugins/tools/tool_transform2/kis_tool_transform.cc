@@ -950,7 +950,7 @@ QList<KisNodeSP> KisToolTransform::fetchNodesList(ToolTransformArgs::TransformMo
     return result;
 }
 
-QWidget* KisToolTransform::createOptionWidget()
+QWidget *KisToolTransform::createOptionWidget()
 {
     if (!m_canvas) return 0;
 

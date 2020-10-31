@@ -35,7 +35,7 @@ public:
     ~KisToolPolyline() override;
 
 protected:
-    QWidget* createOptionWidget() override;
+    QWidget *createOptionWidget() override;
     void finishPolyline(const QVector<QPointF>& points) override;
 
 protected Q_SLOTS:

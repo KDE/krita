@@ -142,7 +142,7 @@ public:
         return false;
     }
 
-    QWidget* createOptionWidget() override;
+    QWidget *createOptionWidget() override;
 
     void mousePressEvent(KoPointerEvent *e) override;
     void mouseMoveEvent(KoPointerEvent *e) override;

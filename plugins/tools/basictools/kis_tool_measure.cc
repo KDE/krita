@@ -62,6 +62,7 @@ KisToolMeasureOptionsWidget::KisToolMeasureOptionsWidget(QWidget* parent, double
     optionLayout->addWidget(m_angleLabel, 1, 1);
 
     KComboBox* unitBox = new KComboBox(this);
+    unitBox->setObjectName("unitBox");
     unitBox->addItems(KoUnit::listOfUnitNameForUi(KoUnit::ListAll));
     connect(unitBox, SIGNAL(currentIndexChanged(int)), this, SLOT(slotUnitChanged(int)));
     unitBox->setCurrentIndex(m_unit.indexInListForUi(KoUnit::ListAll));

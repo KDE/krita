@@ -339,7 +339,7 @@ void KisToolLazyBrush::explicitUserStrokeEndRequest()
     }
 }
 
-QWidget * KisToolLazyBrush::createOptionWidget()
+QWidget *KisToolLazyBrush::createOptionWidget()
 {
     KisCanvas2 * kiscanvas = dynamic_cast<KisCanvas2*>(canvas());
 

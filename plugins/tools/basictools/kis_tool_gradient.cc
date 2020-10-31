@@ -232,7 +232,7 @@ void KisToolGradient::paintLine(QPainter& gc)
     }
 }
 
-QWidget* KisToolGradient::createOptionWidget()
+QWidget *KisToolGradient::createOptionWidget()
 {
     QWidget *widget = KisToolPaint::createOptionWidget();
     Q_CHECK_PTR(widget);

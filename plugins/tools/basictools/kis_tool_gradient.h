@@ -60,7 +60,7 @@ public:
 
     void paint(QPainter &painter, const KoViewConverter &converter) override;
 
-    QWidget* createOptionWidget() override;
+    QWidget *createOptionWidget() override;
 
 public Q_SLOTS:
     void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;

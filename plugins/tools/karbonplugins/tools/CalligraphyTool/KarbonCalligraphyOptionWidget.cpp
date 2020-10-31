@@ -66,6 +66,7 @@ KarbonCalligraphyOptionWidget::KarbonCalligraphyOptionWidget()
     layout->setContentsMargins(0, 0, 0, 0);
 
     m_comboBox = new KComboBox(this);
+    m_comboBox->setObjectName("m_combobox");
     layout->addWidget(m_comboBox, 0, 0);
 
     m_saveButton = new QToolButton(this);
@@ -83,14 +84,17 @@ KarbonCalligraphyOptionWidget::KarbonCalligraphyOptionWidget()
     detailsLayout->setVerticalSpacing(0);
 
     m_usePath = new QCheckBox(i18n("&Follow selected path"), this);
+    m_usePath->setObjectName("m_usePath");
     detailsLayout->addWidget(m_usePath, 0, 0, 1, 4);
 
     m_usePressure = new QCheckBox(i18n("Use tablet &pressure"), this);
+    m_usePressure->setObjectName("m_usePressure");
     detailsLayout->addWidget(m_usePressure, 1, 0, 1, 4);
 
     QLabel *widthLabel = new QLabel(i18n("Width:"), this);
     widthLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     m_widthBox = new KisDoubleParseSpinBox(this);
+    m_widthBox->setObjectName("m_widthBox");
     m_widthBox->setRange(0.0, 999.0);
     widthLabel->setBuddy(m_widthBox);
     detailsLayout->addWidget(widthLabel, 2, 2);
@@ -99,18 +103,22 @@ KarbonCalligraphyOptionWidget::KarbonCalligraphyOptionWidget()
     QLabel *thinningLabel = new QLabel(i18n("Thinning:"), this);
     thinningLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     m_thinningBox = new KisDoubleParseSpinBox(this);
+    m_thinningBox->setObjectName("m_thinningBox");
     m_thinningBox->setRange(-1.0, 1.0);
     m_thinningBox->setSingleStep(0.1);
+
     thinningLabel->setBuddy(m_thinningBox);
     detailsLayout->addWidget(thinningLabel, 2, 0);
     detailsLayout->addWidget(m_thinningBox, 2, 1);
 
     m_useAngle = new QCheckBox(i18n("Use tablet &angle"), this);
+    m_useAngle->setObjectName("m_useAngle");
     detailsLayout->addWidget(m_useAngle, 3, 0, 1, 4);
 
     QLabel *angleLabel = new QLabel(i18n("Angle:"), this);
     angleLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     m_angleBox = new KisIntParseSpinBox(this);
+    m_angleBox->setObjectName("m_angleBox");
     m_angleBox->setRange(0, 179);
     m_angleBox->setWrapping(true);
     angleLabel->setBuddy(m_angleBox);
@@ -120,6 +128,7 @@ KarbonCalligraphyOptionWidget::KarbonCalligraphyOptionWidget()
     QLabel *fixationLabel = new QLabel(i18n("Fixation:"), this);
     fixationLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     m_fixationBox = new KisDoubleParseSpinBox(this);
+    m_fixationBox->setObjectName("m_fixationBox");
     m_fixationBox->setRange(0.0, 1.0);
     m_fixationBox->setSingleStep(0.1);
     fixationLabel->setBuddy(m_fixationBox);
@@ -129,6 +138,7 @@ KarbonCalligraphyOptionWidget::KarbonCalligraphyOptionWidget()
     QLabel *capsLabel = new QLabel(i18n("Caps:"), this);
     capsLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     m_capsBox = new KisDoubleParseSpinBox(this);
+    m_capsBox->setObjectName("m_capsBox");
     m_capsBox->setRange(0.0, 2.0);
     m_capsBox->setSingleStep(0.03);
     capsLabel->setBuddy(m_capsBox);
@@ -138,6 +148,7 @@ KarbonCalligraphyOptionWidget::KarbonCalligraphyOptionWidget()
     QLabel *massLabel = new QLabel(i18n("Mass:"), this);
     massLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     m_massBox = new KisDoubleParseSpinBox(this);
+    m_massBox->setObjectName("m_massBox");
     m_massBox->setRange(0.0, 20.0);
     m_massBox->setDecimals(1);
     massLabel->setBuddy(m_massBox);
@@ -147,6 +158,7 @@ KarbonCalligraphyOptionWidget::KarbonCalligraphyOptionWidget()
     QLabel *dragLabel = new QLabel(i18n("Drag:"), this);
     dragLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     m_dragBox = new KisDoubleParseSpinBox(this);
+    m_dragBox->setObjectName("m_dragBox");
     m_dragBox->setRange(0.0, 1.0);
     m_dragBox->setSingleStep(0.1);
     dragLabel->setBuddy(m_dragBox);

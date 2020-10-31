@@ -45,8 +45,10 @@
 #include <KoCanvasController.h>
 #include <KoToolBase.h>
 #include <KoToolFactoryBase.h>
-
+#include <kis_canvas_resource_provider.h>
 #include <KisDialogStateSaver.h>
+#include <kis_paintop_preset.h>
+#include <kis_paintop_settings.h>
 
 #include "ToolPresets.h"
 
@@ -85,6 +87,11 @@ ToolPresetDocker::~ToolPresetDocker()
 
 }
 
+void ToolPresetDocker::setViewManager(KisViewManager *kisview)
+{
+    m_resourceProvider = kisview->canvasResourceProvider();
+}
+
 void ToolPresetDocker::setCanvas(KoCanvasBase *canvas)
 {
     m_canvas = canvas;
@@ -97,12 +104,13 @@ void ToolPresetDocker::unsetCanvas()
     setEnabled(false);
 }
 
-void ToolPresetDocker::optionWidgetsChanged(KoCanvasController *canvasController, QList<QPointer<QWidget> > optionWidgets)
+void ToolPresetDocker::optionWidgetsChanged(KoCanvasController */*canvasController*/, QList<QPointer<QWidget> > optionWidgets)
 {
+
     m_currentOptionWidgets = optionWidgets;
 }
 
-void ToolPresetDocker::toolChanged(KoCanvasController *canvasController, int toolId)
+void ToolPresetDocker::toolChanged(KoCanvasController *canvasController, int /*toolId*/)
 {
     m_currentToolId = KoToolManager::instance()->activeToolId();
 
@@ -130,6 +138,14 @@ void ToolPresetDocker::bnSavePressed()
             KisDialogStateSaver::saveState(widget, section, optionFile);
         }
     }
+
+    KoToolBase *tool = KoToolManager::instance()->toolById(m_canvas, m_currentToolId);
+    if (tool && tool->inherits("KisToolPaint")) {
+        KConfig cfg(createConfigFileName(m_currentToolId));
+        KConfigGroup grp = cfg.group(txtName->text());
+        KisPaintOpSettingsSP settings = m_resourceProvider->currentPreset()->settings();
+        grp.writeEntry("brush_size",settings->paintOpSize());
+    }
     QListWidgetItem *item = new QListWidgetItem(toolIcon(m_currentToolId), section);
     lstPresets->addItem(item);
     lstPresets->blockSignals(true);
@@ -152,5 +168,12 @@ void ToolPresetDocker::itemSelected(QListWidgetItem *item)
         if (widget) {
             KisDialogStateSaver::restoreState(widget, item->text(), QMap<QString, QVariant>(), createConfigFileName(m_currentToolId));
         }
+    }
+
+    KoToolBase *tool = KoToolManager::instance()->toolById(m_canvas, m_currentToolId);
+    if (tool && tool->inherits("KisToolPaint")) {
+        KConfig cfg(createConfigFileName(m_currentToolId));
+        KConfigGroup grp = cfg.group(item->text());
+        m_resourceProvider->setSize(grp.readEntry("brush_size", m_resourceProvider->size()));
     }
 }

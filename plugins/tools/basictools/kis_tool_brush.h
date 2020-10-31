@@ -63,7 +63,7 @@ public:
     KisToolBrush(KoCanvasBase * canvas);
     ~KisToolBrush() override;
 
-    QWidget * createOptionWidget() override;
+    QWidget *createOptionWidget() override;
 
     int smoothnessQuality() const;
     qreal smoothnessFactor() const;
@@ -118,6 +118,7 @@ private:
     void addSmoothingAction(int enumId, const QString &id);
     void updateSmoothnessDistanceLabel();
 private:
+
     QComboBox *m_cmbSmoothingType {0};
 
     QCheckBox *m_chkAssistant {0};

@@ -20,7 +20,7 @@
 #define TOOLPRESETS_H
 
 #include <QDockWidget>
-#include <KoCanvasObserverBase.h>
+#include <kis_mainwindow_observer.h>
 #include <QWidget>
 
 #include <ui_WdgToolPresets.h>
@@ -30,16 +30,20 @@ class QListWidgetItem;
 class KoCanvasBase;
 class KisCanvas2;
 class KoCanvasController;
+class KisCanvasResourceProvider;
 
 class ToolPresets;
 
-class ToolPresetDocker : public QDockWidget, public KoCanvasObserverBase, public Ui_WdgToolPresets
+class ToolPresetDocker : public QDockWidget, public KisMainwindowObserver , public Ui_WdgToolPresets
 {
     Q_OBJECT
 public:
     ToolPresetDocker();
     ~ToolPresetDocker() override;
     QString observerName() override { return "ToolPresetsDocker"; }
+
+    void setViewManager(KisViewManager* kisview) override;
+
     void setCanvas(KoCanvasBase *) override;
     void unsetCanvas() override;
 
@@ -53,6 +57,7 @@ private Q_SLOTS:
     void itemSelected(QListWidgetItem *item);
 
 private:
+    KisCanvasResourceProvider *m_resourceProvider;
     KoCanvasBase *m_canvas {0};
     QList<QPointer<QWidget> > m_currentOptionWidgets;
     QString m_currentToolId;

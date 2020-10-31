@@ -190,7 +190,7 @@ private:
     KisPopupButton*                     m_toolOptionsPopupButton;
 
     KisPresetSaveWidget*                m_savePresetWidget;
-    KisIconWidget*                     m_brushEditorPopupButton;
+    KisIconWidget*                      m_brushEditorPopupButton;
     KisPopupButton*                     m_presetSelectorPopupButton;
     KisCompositeOpComboBox*             m_cmbCompositeOp;
     QToolButton*                        m_eraseModeButton;

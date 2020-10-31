@@ -150,7 +150,7 @@ void ToolPresetDocker::itemSelected(QListWidgetItem *item)
 {
     Q_FOREACH (QPointer<QWidget> widget, m_currentOptionWidgets) {
         if (widget) {
-            KisDialogStateSaver::restoreState(widget, createConfigFileName(m_currentToolId));
+            KisDialogStateSaver::restoreState(widget, item->text(), QMap<QString, QVariant>(), createConfigFileName(m_currentToolId));
         }
     }
 }

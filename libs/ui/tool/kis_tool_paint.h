@@ -102,7 +102,7 @@ protected:
     void showControl(QWidget *control, bool value);
     void enableControl(QWidget *control, bool value);
 
-    QWidget * createOptionWidget() override;
+    QWidget *createOptionWidget() override;
 
     /**
      * Quick help is a short help text about the way the tool functions.

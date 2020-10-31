@@ -121,6 +121,7 @@ void ToolPresetDocker::toolChanged(KoCanvasController *canvasController, int /*t
 
     Q_FOREACH(const QString &group, cfg.groupList()) {
         QListWidgetItem *item = new QListWidgetItem(toolIcon(m_currentToolId), group, lstPresets);
+        Q_UNUSED(item);
     }
 }
 
@@ -159,6 +160,7 @@ void ToolPresetDocker::bnDeletePressed()
 
     KConfig cfg(createConfigFileName(m_currentToolId), KConfig::SimpleConfig);
     cfg.deleteGroup(lstPresets->currentItem()->text());
+    txtName->clear();
     delete lstPresets->takeItem(lstPresets->currentRow());
 }
 
@@ -176,4 +178,6 @@ void ToolPresetDocker::itemSelected(QListWidgetItem *item)
         KConfigGroup grp = cfg.group(item->text());
         m_resourceProvider->setSize(grp.readEntry("brush_size", m_resourceProvider->size()));
     }
+
+    txtName->setText(item->text());
 }

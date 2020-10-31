@@ -32,6 +32,8 @@
 #include <QRadioButton>
 #include <QLabel>
 
+#include "WidgetUtilsDebug.h"
+
 #include "kis_int_parse_spin_box.h"
 #include "kis_double_parse_spin_box.h"
 #include "kis_double_parse_unit_spin_box.h"
@@ -99,11 +101,11 @@ void KisDialogStateSaver::saveState(QWidget *parent, const QString &dialogName, 
             }
 
             else {
-                qWarning() << "Cannot save state for object" << widget;
+                warnWidgetUtils << "Cannot save state for object" << widget;
             }
         }
         else if (!qobject_cast<QLabel*>(widget)) {
-            qWarning() << "Widget" << dialogName << "has a widget without an objectname:" << widget;
+           warnWidgetUtils << "Widget" << dialogName << "has a widget without an objectname:" << widget;
         }
     }
 }
@@ -241,11 +243,11 @@ void KisDialogStateSaver::restoreState(QWidget *parent, const QString &dialogNam
             }
 
             else {
-                //qWarning() << "Cannot restore state for object" << widget;
+                warnWidgetUtils << "Cannot restore state for object" << widget;
             }
         }
         else if (!qobject_cast<QLabel*>(widget)) {
-            qWarning() << "Dialog" << dialogName << "has a widget without an object name:" << widget;
+            warnWidgetUtils << "Dialog" << dialogName << "has a widget without an object name:" << widget;
         }
     }
 }

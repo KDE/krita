@@ -30,6 +30,7 @@
 #include <QDoubleSpinBox>
 #include <QGroupBox>
 #include <QRadioButton>
+#include <QLabel>
 
 #include "kis_int_parse_spin_box.h"
 #include "kis_double_parse_spin_box.h"
@@ -66,6 +67,9 @@ void KisDialogStateSaver::saveState(QWidget *parent, const QString &dialogName, 
                 // XXX: also save the unit
                 group.writeEntry(widget->objectName(), qobject_cast<KisDoubleParseUnitSpinBox*>(widget)->value());
             }
+            else if (qobject_cast<KisDoubleSliderSpinBox*>(widget)) {
+                group.writeEntry(widget->objectName(), qobject_cast<KisDoubleSliderSpinBox*>(widget)->value());
+            }
             else if (qobject_cast<QCheckBox*>(widget)) {
                 group.writeEntry(widget->objectName(), qobject_cast<const QCheckBox*>(widget)->isChecked());
             }
@@ -98,7 +102,7 @@ void KisDialogStateSaver::saveState(QWidget *parent, const QString &dialogName, 
                 qWarning() << "Cannot save state for object" << widget;
             }
         }
-        else {
+        else if (!qobject_cast<QLabel*>(widget)) {
             qWarning() << "Widget" << dialogName << "has a widget without an objectname:" << widget;
         }
     }
@@ -109,12 +113,13 @@ void KisDialogStateSaver::restoreState(QWidget *parent, const QString &dialogNam
     Q_ASSERT(parent);
     Q_ASSERT(!dialogName.isEmpty());
 
+    KConfig cfg(configFile, KConfig::SimpleConfig);
     KConfigGroup group;
     if (configFile.isEmpty()) {
         group = KConfigGroup(KSharedConfig::openConfig(), dialogName);
     }
     else {
-        group = KConfig(configFile).group(dialogName);
+        group = cfg.group(dialogName);
     }
 
     Q_FOREACH(QWidget *widget, parent->findChildren<QWidget*>(QString())) {
@@ -124,6 +129,7 @@ void KisDialogStateSaver::restoreState(QWidget *parent, const QString &dialogNam
             QString widgetName = widget->objectName();
 
             QVariant defaultValue;
+
             if (defaults.contains(widgetName)) {
                 defaultValue = defaults[widgetName];
             }
@@ -152,6 +158,14 @@ void KisDialogStateSaver::restoreState(QWidget *parent, const QString &dialogNam
                     qobject_cast<KisDoubleParseUnitSpinBox*>(widget)->setValue(group.readEntry<int>(widgetName, qobject_cast<KisDoubleParseUnitSpinBox*>(widget)->value()));
                 }
             }
+            else if (qobject_cast<KisDoubleSliderSpinBox*>(widget)) {
+                if (defaultValue.isValid()) {
+                    qobject_cast<KisDoubleSliderSpinBox*>(widget)->setValue(defaultValue.toInt());
+                }
+                else {
+                    qobject_cast<KisDoubleSliderSpinBox*>(widget)->setValue(group.readEntry<int>(widgetName, qobject_cast<KisDoubleSliderSpinBox*>(widget)->value()));
+                }
+            }
             else if (qobject_cast<QCheckBox*>(widget)) {
                 if (defaultValue.isValid()) {
                     qobject_cast<QCheckBox*>(widget)->setChecked(defaultValue.toBool());
@@ -162,9 +176,11 @@ void KisDialogStateSaver::restoreState(QWidget *parent, const QString &dialogNam
             }
             else if (qobject_cast<QComboBox*>(widget)) {
                 if (defaultValue.isValid()) {
+                    qDebug() << "defaultValue";
                     qobject_cast<QComboBox*>(widget)->setCurrentIndex(defaultValue.toInt());
                 }
                 else {
+                    qDebug() << "setting index to " << group.readEntry<int>(widgetName, -1);
                     qobject_cast<QComboBox*>(widget)->setCurrentIndex(group.readEntry<int>(widgetName, qobject_cast<QComboBox*>(widget)->currentIndex()));
                 }
             }
@@ -228,8 +244,8 @@ void KisDialogStateSaver::restoreState(QWidget *parent, const QString &dialogNam
                 //qWarning() << "Cannot restore state for object" << widget;
             }
         }
-        else {
-            // qWarning() << "Dialog" << dialogName << "has a widget without an object name:" << widget;
+        else if (!qobject_cast<QLabel*>(widget)) {
+            qWarning() << "Dialog" << dialogName << "has a widget without an object name:" << widget;
         }
     }
 }

@@ -30,13 +30,17 @@ KisAsyncStoryboardThumbnailRenderer::~KisAsyncStoryboardThumbnailRenderer()
 {
 }
 
-void KisAsyncStoryboardThumbnailRenderer::frameCompletedCallback(int frame, const KisRegion &requestedRegion)
+void KisAsyncStoryboardThumbnailRenderer::frameCompletedCallback(int frameTime, const KisRegion &requestedRegion)
 {
     KisImageSP image = requestedImage();
-    if (image) {
-        m_requestedFrameProjection = new KisPaintDevice(*image->projection(), KritaUtils::CopySnapshot);
+    KisPaintDeviceSP requestedFrame = image ? new KisPaintDevice(*image->projection(), KritaUtils::CopySnapshot) : nullptr;
+
+    if (requestedFrame) {
+        emit sigNotifyFrameCompleted(frameTime);
+        emit sigNotifyFrameCompleted(frameTime, requestedFrame);
+    } else {
+        emit sigNotifyFrameCancelled(frameTime);
     }
-    emit sigNotifyFrameCompleted(frame);
 }
 
 void KisAsyncStoryboardThumbnailRenderer::frameCancelledCallback(int frame)

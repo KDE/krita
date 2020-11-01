@@ -25,7 +25,7 @@ KisStoryboardThumbnailRenderScheduler::KisStoryboardThumbnailRenderScheduler(QOb
     : m_renderer(new KisAsyncStoryboardThumbnailRenderer(this))
 {
     //connect signals to the renderer.
-    connect(m_renderer, SIGNAL(sigFrameCompleted(int)), this, SLOT(slotFrameRegenerationCompleted(int)));
+    connect(m_renderer, SIGNAL(sigNotifyFrameCompleted(int,KisPaintDeviceSP)), this, SLOT(slotFrameRegenerationCompleted(int, KisPaintDeviceSP)));
     connect(m_renderer, SIGNAL(sigFrameCancelled(int)), this, SLOT(slotFrameRegenerationCancelled(int)));
 }
 
@@ -102,9 +102,9 @@ void KisStoryboardThumbnailRenderScheduler::slotStartFrameRendering()
 }
 
 
-void KisStoryboardThumbnailRenderScheduler::slotFrameRegenerationCompleted(int frame)
+void KisStoryboardThumbnailRenderScheduler::slotFrameRegenerationCompleted(int frame, KisPaintDeviceSP contents)
 {
-    emit sigFrameCompleted(frame, m_renderer->frameProjection());
+    emit sigFrameCompleted(frame, contents);
     renderNextFrame();
 }
 

@@ -73,7 +73,7 @@ private Q_SLOTS:
      * @brief Emits @c sigFrameCompleted(int,KisPaintDeviceSP) if the regeneration was complete
      * and calls regenration of the next frame in queue.
      */
-    void slotFrameRegenerationCompleted(int frame);
+    void slotFrameRegenerationCompleted(int frame, KisPaintDeviceSP contents);
 
     /**
      * @brief Emits @c sigFrameCancelled(int) and schedules the next frame for regenration.

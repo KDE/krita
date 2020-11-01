@@ -35,27 +35,16 @@ public:
     KisAsyncStoryboardThumbnailRenderer(QObject *parent);
     ~KisAsyncStoryboardThumbnailRenderer();
 
-    /**
-     * @brief returns the projection of the requested frame.
-     * Should only be called after the frame regeneration is complete.
-     * @return Projection of requested frame.
-     */
-    KisPaintDeviceSP frameProjection()
-    {
-        return m_requestedFrameProjection;
-    }
-
 protected:
     void frameCompletedCallback(int frame, const KisRegion &requestedRegion) override;
     void frameCancelledCallback(int frame) override;
     void clearFrameRegenerationState(bool isCancelled) override;
 
 Q_SIGNALS:
-    void sigNotifyFrameCompleted(int frame);
+    void sigNotifyFrameCompleted(int frameTime, KisPaintDeviceSP frameContents);
+    void sigNotifyFrameCompleted(int frameTime);
     void sigNotifyFrameCancelled(int frame);
 
-private:
-    KisPaintDeviceSP m_requestedFrameProjection;
 };
 
 #endif

@@ -799,6 +799,7 @@ bool StoryboardModel::insertItem(QModelIndex index, bool after)
             insertItem(lastIndex, true);
         } else if (keyframeChannel->keyframeCount() != 1) {
             keyframeChannel->addKeyframe(lastKeyframeTime + 1);
+            slotUpdateThumbnailForFrame(lastKeyframeTime + 1, false);
         }
     }
     else {
@@ -812,20 +813,23 @@ bool StoryboardModel::insertItem(QModelIndex index, bool after)
         if (after) {
             int fps = m_image->animationInterface()->framerate();
             int durationInFrame = frameIndex.data().toInt() + fps * frameIndex.siblingAtRow(StoryboardItem::DurationSecond).data().toInt();
-
+            int newFrame = frame + qMax(1, durationInFrame);
             //if this is the last keyframe globally don't insert hold frames
             if (nextKeyframeGlobal(frame) == INT_MAX) {
-                keyframeChannel->addKeyframe(frame + qMax(1, durationInFrame));
+                keyframeChannel->addKeyframe(newFrame);
             }
             else {
             //move keyframes to right by 1 and insert keyframe
                 insertHoldFramesAfter(frameIndex.data().toInt() + 1, frameIndex.data().toInt(), frameIndex);
-                keyframeChannel->addKeyframe(frame + qMax(1, durationInFrame));
+                keyframeChannel->addKeyframe(newFrame);
             }
+
+            slotUpdateThumbnailForFrame(newFrame, false);
         }
         else {
             insertHoldFramesAfter(frameIndex.data().toInt() + 1, frameIndex.data().toInt(), this->index(StoryboardItem::DurationFrame, 0, index.siblingAtRow(index.row() - 1)));
             keyframeChannel->addKeyframe(frame);
+            slotUpdateThumbnailForFrame(frame, false);
         }
     }
     return true;

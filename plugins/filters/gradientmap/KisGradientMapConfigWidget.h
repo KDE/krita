@@ -2,7 +2,8 @@
  * This file is part of Krita
  *
  * Copyright (c) 2016 Spencer Brown <sbrown655@gmail.com>
- *
+ * Copyright (c) 2020 Deif Lou <ginoba@gmail.com>
+ * 
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -18,51 +19,36 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#pragma once
+#ifndef KIS_GRADIENT_MAP_CONFIG_WIDGET_H
+#define KIS_GRADIENT_MAP_CONFIG_WIDGET_H
 
-#include "QObject"
-#include "ui_wdg_gradientmap.h"
-#include "kis_properties_configuration.h"
-#include "filter/kis_color_transformation_configuration.h"
-#include "kis_config_widget.h"
+//#include <filter/kis_color_transformation_configuration.h>
+#include <kis_config_widget.h>
 #include <KoResourcePopupAction.h>
 #include <kis_signal_compressor.h>
 #include <KoStopGradient.h>
 
-class WdgGradientMap : public QWidget, public Ui::WdgGradientMap
-{
-    Q_OBJECT
+#include "ui_KisGradientMapConfigWidget.h"
 
-public:
-    WdgGradientMap(QWidget *parent) : QWidget(parent) {
-        setupUi(this);
-    }
-};
-
-class KritaGradientMapConfigWidget : public KisConfigWidget
+class KisGradientMapConfigWidget : public KisConfigWidget
 {
     Q_OBJECT
 public:
-    KritaGradientMapConfigWidget(QWidget *parent, KisPaintDeviceSP dev, Qt::WindowFlags f = Qt::WindowFlags());
-    ~KritaGradientMapConfigWidget() override;
+    KisGradientMapConfigWidget(QWidget *parent, KisPaintDeviceSP dev, Qt::WindowFlags f = Qt::WindowFlags());
+    ~KisGradientMapConfigWidget() override;
 
     KisPropertiesConfigurationSP configuration() const override;
     void setConfiguration(const KisPropertiesConfigurationSP config) override;
 
-    WdgGradientMap *m_page;
+private:
+    Ui_GradientMapConfigWidget m_ui;
     KoResourcePopupAction *m_gradientPopUp;
     KisSignalCompressor *m_gradientChangedCompressor;
     KoStopGradientSP m_activeGradient;
     void setView(KisViewManager *view) override;
+    
 private Q_SLOTS:
     void setAbstractGradientToEditor();
 };
 
-class KritaGradientMap : public QObject
-{
-    Q_OBJECT
-public:
-    KritaGradientMap(QObject *parent, const QVariantList &);
-    ~KritaGradientMap() override;
-};
-
+#endif

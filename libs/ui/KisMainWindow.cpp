@@ -2042,7 +2042,7 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
         if (!dockWidget->titleBarWidget() && factory->id() != "TimelineDocker") {
             titleBar = new KoDockWidgetTitleBar(dockWidget);
             dockWidget->setTitleBarWidget(titleBar);
-            titleBar->setCollapsable(factory->isCollapsable());
+            titleBar->setCollapsable(false);
         }
         qDebug() << titleBar << factory->id();
         if (titleBar) {
@@ -2090,17 +2090,10 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
         if (!visible) {
             dockWidget->hide();
         }
-        bool collapsed = factory->defaultCollapsed();
 
         bool locked = false;
         group =  KSharedConfig::openConfig()->group("krita").group("DockWidget " + factory->id());
-        collapsed = group.readEntry("Collapsed", collapsed);
         locked = group.readEntry("Locked", locked);
-
-        //dbgKrita << "docker" << factory->id() << dockWidget << "collapsed" << collapsed << "locked" << locked << "titlebar" << titleBar;
-
-        if (titleBar && collapsed)
-            titleBar->setCollapsed(true);
 
         if (titleBar && locked)
             titleBar->setLocked(true);

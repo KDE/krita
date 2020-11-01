@@ -67,8 +67,8 @@ KoDockWidgetTitleBar::KoDockWidgetTitleBar(QDockWidget* dockWidget)
     d->collapseButton = new KoDockWidgetTitleBarButton(this);
     d->collapseButton->setIcon(d->openIcon);
     connect(d->collapseButton, SIGNAL(clicked()), SLOT(toggleCollapsed()));
-    d->collapseButton->setVisible(true);
-    d->collapsable = true;
+    d->collapseButton->setVisible(false);
+    d->collapsable = false;
     d->collapseButton->setToolTip(i18nc("@info:tooltip", "Collapse Docker"));
     d->collapseButton->setStyleSheet("border: 0");
 
@@ -249,8 +249,8 @@ void KoDockWidgetTitleBar::resizeEvent(QResizeEvent*)
         d->lockButton->setVisible(false);
         d->lockable = false;
     } else {
-        d->collapsable = d->collapsableSet;
-        d->collapseButton->setVisible(d->collapsableSet);
+        d->collapsable = false;
+        d->collapseButton->setVisible(false);
         d->lockButton->setVisible(true);
         d->lockable = true;
     }
@@ -266,9 +266,9 @@ void KoDockWidgetTitleBar::resizeEvent(QResizeEvent*)
 
 void KoDockWidgetTitleBar::setCollapsed(bool collapsed)
 {
-    QDockWidget *q = qobject_cast<QDockWidget*>(parentWidget());
-    if (q && q->widget() && q->widget()->isHidden() != collapsed)
-        d->toggleCollapsed();
+//    QDockWidget *q = qobject_cast<QDockWidget*>(parentWidget());
+//    if (q && q->widget() && q->widget()->isHidden() != collapsed)
+//        d->toggleCollapsed();
 }
 
 void KoDockWidgetTitleBar::setLocked(bool locked)
@@ -293,7 +293,9 @@ void KoDockWidgetTitleBar::setLocked(bool locked)
     q->toggleViewAction()->setEnabled(!locked);
     d->closeButton->setEnabled(!locked);
     d->floatButton->setEnabled(!locked);
-    d->collapseButton->setEnabled(!locked);
+    d->collapseButton->setVisible(false);
+    d->collapsableSet = false;
+    d->collapsable = false;
 
     d->updateIcons();
     q->setProperty("Locked", locked);
@@ -303,9 +305,9 @@ void KoDockWidgetTitleBar::setLocked(bool locked)
 
 void KoDockWidgetTitleBar::setCollapsable(bool collapsable)
 {
-    d->collapsableSet = collapsable;
-    d->collapsable = collapsable;
-    d->collapseButton->setVisible(collapsable);
+    d->collapsableSet = false;
+    d->collapsable = false;
+    d->collapseButton->setVisible(false);
 }
 
 void KoDockWidgetTitleBar::setTextVisibilityMode(TextVisibilityMode textVisibilityMode)

@@ -191,6 +191,9 @@ QIcon KisPaintLayer::icon() const
 void KisPaintLayer::setImage(KisImageWSP image)
 {
     m_d->paintDevice->setDefaultBounds(new KisDefaultBounds(image));
+    if( m_d->paintDevice->keyframeChannel() ) {
+        m_d->paintDevice->keyframeChannel()->setNode(this);
+    }
     KisLayer::setImage(image);
 }
 

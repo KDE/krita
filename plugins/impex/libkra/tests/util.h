@@ -168,7 +168,7 @@ KisDocument* createCompleteDocument()
     KisFilterMaskSP filterMask2 = new KisFilterMask(image, "filterMask2");
 
     kfc = KisFilterRegistry::instance()->get("pixelize")->defaultConfiguration(KisGlobalResourcesInterface::instance());
-    filterMask2->setFilter(kfc);
+    filterMask2->setFilter(kfc->cloneWithResourcesSnapshot());
     kfc = 0; // kfc cannot be shared!
 
     filterMask2->setSelection(createVectorSelection(paintLayer2->paintDevice(), image, doc->shapeController()));

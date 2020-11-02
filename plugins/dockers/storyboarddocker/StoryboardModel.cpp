@@ -792,6 +792,7 @@ bool StoryboardModel::insertItem(QModelIndex index, bool after)
         QModelIndex lastIndex = this->index(rowCount() - 1, 0);
         if (!keyframeChannel) {
             keyframeChannel = m_activeNode->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true);
+            slotUpdateThumbnailForFrame(0, false);
         }
 
         //insert keyframe after the last storyboard item

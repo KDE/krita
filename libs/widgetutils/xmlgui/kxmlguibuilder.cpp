@@ -26,7 +26,6 @@
 #include "kxmlguiwindow.h"
 #include "kmenumenuhandler_p.h"
 
-#include <kauthorized.h>
 #include <klocalizedstring.h>
 
 #include <QDomElement>
@@ -173,10 +172,6 @@ QWidget *KXMLGUIBuilder::createContainer(QWidget *parent, int index, const QDomE
         }
 
         QString name = element.attribute(d->attrName);
-
-        if (!KAuthorized::authorizeAction(name)) {
-            return 0;
-        }
 
         QMenu *popup = new QMenu(p);
         popup->setObjectName(name);

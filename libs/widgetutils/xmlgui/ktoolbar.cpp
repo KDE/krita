@@ -44,7 +44,6 @@
 #endif
 #include <QDebug>
 
-#include <kauthorized.h>
 #include <kconfig.h>
 #include <ksharedconfig.h>
 #ifdef HAVE_ICONTHEMES
@@ -262,11 +261,7 @@ void KToolBar::Private::init(bool readConfig, bool _isMainToolBar)
                 q->mainWindow(), SLOT(setSettingsDirty()));
     }
 
-    if (!KAuthorized::authorize(QStringLiteral("movable_toolbars"))) {
-        q->setMovable(false);
-    } else {
-        q->setMovable(!KToolBar::toolBarsLocked());
-    }
+    q->setMovable(!KToolBar::toolBarsLocked());
 
     connect(q, SIGNAL(movableChanged(bool)),
             q, SLOT(slotMovableChanged(bool)));
@@ -1022,9 +1017,7 @@ int KToolBar::iconSizeDefault() const
 
 void KToolBar::slotMovableChanged(bool movable)
 {
-    if (movable && !KAuthorized::authorize(QStringLiteral("movable_toolbars"))) {
-        setMovable(false);
-    }
+    setMovable(movable);
 }
 
 void KToolBar::dragEnterEvent(QDragEnterEvent *event)

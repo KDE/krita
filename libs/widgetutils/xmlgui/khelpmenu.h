@@ -102,9 +102,6 @@ class KHelpMenuPrivate;
  *
  * \image html khelpmenu.png "KDE Help Menu"
  *
- * KHelpMenu respects Kiosk settings (see the KAuthorized namespace in the
- * KConfig framework).  In particular, system administrators can disable items
- * on this menu using some subset of the following configuration:
  * @verbatim
    [KDE Action Restrictions][$i]
    actions/help_contents=false

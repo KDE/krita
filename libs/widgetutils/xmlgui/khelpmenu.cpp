@@ -45,7 +45,6 @@
 #include "kswitchlanguagedialog_p.h"
 
 #include <kaboutdata.h>
-#include <kauthorized.h>
 #include <klocalizedstring.h>
 #include <kstandardaction.h>
 

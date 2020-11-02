@@ -29,6 +29,7 @@
 #include "kis_image.h"
 #include "commands_new/KisMergeLabeledLayersCommand.h"
 #include "kis_command_utils.h"
+#include "krita_utils.h"
 
 void selectByColor(KisPaintDeviceSP dev, KisPixelSelectionSP selection, const quint8 *c, int fuzziness, const QRect & rc)
 {
@@ -126,6 +127,8 @@ void KisToolSelectSimilar::beginPrimaryAction(KoPointerEvent *event)
 
     KisImageSP imageSP = currentImage();
     KisPaintDeviceSP sourceDevice;
+    QRect areaToCheck;
+
     if (sampleLayersMode() == SampleAllLayers) {
         sourceDevice = imageSP->projection();
     } else if (sampleLayersMode() == SampleColorLabeledLayers) {
@@ -142,6 +145,20 @@ void KisToolSelectSimilar::beginPrimaryAction(KoPointerEvent *event)
         sourceDevice = dev;
     }
 
+    if (sampleLayersMode() == SampleColorLabeledLayers) {
+        // source device is not ready to get a pixel out of it, let's assume image bounds
+        areaToCheck = imageSP->bounds();
+    } else {
+        KoColor pixelColor;
+        sourceDevice->pixel(pos.x(), pos.y(), &pixelColor);
+        if (sourceDevice->colorSpace()->difference(pixelColor.data(), sourceDevice->defaultPixel().data()) <= m_fuzziness) {
+            areaToCheck = imageSP->bounds();
+        } else {
+            areaToCheck = sourceDevice->exactBounds();
+        }
+    }
+
+
     // XXX we should make this configurable: "allow to select transparent"
     // if (opacity > OPACITY_TRANSPARENT)
     KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection());
@@ -150,28 +167,41 @@ void KisToolSelectSimilar::beginPrimaryAction(KoPointerEvent *event)
     int fuzziness = m_fuzziness;
     // new stroke
 
-    KUndo2Command* cmd = new KisCommandUtils::LambdaCommand(
-                [fuzziness, tmpSel, pos, sourceDevice, imageSP] () mutable -> KUndo2Command* {
+    QSharedPointer<KoColor> color = QSharedPointer<KoColor>(new KoColor(sourceDevice->colorSpace()));
 
-                    KoColor c;
-                    sourceDevice->pixel(pos.x(), pos.y(), &c);
+    KUndo2Command* cmdPickColor = new KisCommandUtils::LambdaCommand(
+                [pos, sourceDevice, color] () mutable -> KUndo2Command* {
 
-                    QRect rc;
-                    if (sourceDevice->colorSpace()->difference(c.data(), sourceDevice->defaultPixel().data()) <= fuzziness) {
-                        rc = imageSP->bounds();
-                    } else {
-                        rc = sourceDevice->exactBounds();
-                    }
-
-                    selectByColor(sourceDevice, tmpSel, c.data(), fuzziness, rc);
-
-                    tmpSel->invalidateOutlineCache();
+                    sourceDevice->pixel(pos.x(), pos.y(), color.data());
 
                     return 0;
     });
 
-    applicator.applyCommand(cmd,
-                            KisStrokeJobData::SEQUENTIAL);
+    applicator.applyCommand(cmdPickColor, KisStrokeJobData::SEQUENTIAL);
+
+    QVector<QRect> patches = KritaUtils::splitRectIntoPatches(areaToCheck, KritaUtils::optimalPatchSize());
+
+    for (int i = 0; i < patches.count(); i++) {
+        QSharedPointer<QRect> patch = QSharedPointer<QRect>(new QRect(patches[i]));
+        KUndo2Command* patchCmd = new KisCommandUtils::LambdaCommand(
+                    [fuzziness, tmpSel, sourceDevice, patch, color] () mutable -> KUndo2Command* {
+
+                        QRect patchRect = *patch.data();
+                        selectByColor(sourceDevice, tmpSel, color->data(), fuzziness, patchRect);
+                        return 0;
+        });
+
+        applicator.applyCommand(patchCmd, KisStrokeJobData::CONCURRENT);
+    }
+
+
+    KUndo2Command* cmdInvalidateCache = new KisCommandUtils::LambdaCommand(
+                [tmpSel] () mutable -> KUndo2Command* {
+
+                    tmpSel->invalidateOutlineCache();
+                    return 0;
+    });
+    applicator.applyCommand(cmdInvalidateCache, KisStrokeJobData::SEQUENTIAL);
 
     KisSelectionToolHelper helper(kisCanvas, kundo2_i18n("Select Similar Color"));
     helper.selectPixelSelection(applicator, tmpSel, selectionAction());

@@ -199,7 +199,10 @@ void KisToolSelectSimilar::beginPrimaryAction(KoPointerEvent *event)
                     [fuzziness, tmpSel, sourceDevice, patch, color] () mutable -> KUndo2Command* {
 
                         QRect patchRect = *patch.data();
-                        selectByColor(sourceDevice, tmpSel, color->data(), fuzziness, patchRect);
+                        QRect finalRect = patchRect.intersected(sourceDevice->exactBounds());
+                        if (!finalRect.isEmpty()) {
+                            selectByColor(sourceDevice, tmpSel, color->data(), fuzziness, patchRect);
+                        }
                         return 0;
         });
 

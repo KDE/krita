@@ -35,6 +35,8 @@ private Q_SLOTS:
     void testGlobalToLocal();
 
     void testDistanceToCurve();
+
+    void testRemovePoint();
 };
 
 #endif /* __KIS_MESH_TRANSFORM_WORKER_TEST_H */

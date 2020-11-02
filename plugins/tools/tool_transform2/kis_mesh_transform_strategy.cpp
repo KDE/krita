@@ -75,6 +75,7 @@ struct KisMeshTransformStrategy::Private
 
     QPointF initialRotationCenter;
     qreal initialSelectionMaxDimension = 0.0;
+    KisBezierTransformMesh initialMeshState;
 
     bool pointWasDragged = false;
     QPointF lastMousePos;
@@ -143,7 +144,19 @@ void KisMeshTransformStrategy::setTransformFunction(const QPointF &mousePos, boo
     }
 
     if (shiftModifierActive) {
-        mode = hoveredSegment ? Private::SPLIT_SEGMENT : Private::NOTHING;
+        if (hoveredControl) {
+            if (!hoveredControl->isNode() ||
+                !controlIt.isBorderNode() ||
+                controlIt.isCornerNode()) {
+
+                hoveredControl = boost::none;
+            } else {
+                hoveredSegment = boost::none;
+            }
+        }
+
+        mode = hoveredSegment || hoveredControl ?
+            Private::SPLIT_SEGMENT : Private::NOTHING;
     } else {
         if (hoveredControl || hoveredSegment) {
             if (perspectiveModifierActive) {
@@ -246,14 +259,22 @@ QCursor KisMeshTransformStrategy::getCurrentCursor() const
         cursor = KisCursor::pointingHandCursor();
         break;
     case Private::SPLIT_SEGMENT: {
-        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(m_d->hoveredSegment, KisCursor::arrowCursor());
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(m_d->hoveredSegment || m_d->hoveredControl,
+                                             KisCursor::arrowCursor());
 
-        auto it = m_d->currentArgs.meshTransform()->find(*m_d->hoveredSegment);
+        if (m_d->hoveredControl) {
+            auto it = m_d->currentArgs.meshTransform()->find(*m_d->hoveredControl);
+            cursor = it.isTopBorder() || it.isBottomBorder() ?
+                KisCursor::splitHCursor() : KisCursor::splitVCursor();
 
-        const QRectF segmentRect(it.p0(), it.p3());
-        cursor = segmentRect.width() > segmentRect.height() ?
+        } else if (m_d->hoveredSegment) {
+            auto it = m_d->currentArgs.meshTransform()->find(*m_d->hoveredSegment);
 
-                    KisCursor::splitHCursor() : KisCursor::splitVCursor();
+            const QRectF segmentRect(it.p0(), it.p3());
+            cursor = segmentRect.width() > segmentRect.height() ?
+                KisCursor::splitHCursor() : KisCursor::splitVCursor();
+        }
+
         break;
     }
     case Private::MULTIPLE_POINT_SELECTION:
@@ -281,6 +302,92 @@ void KisMeshTransformStrategy::externalConfigChanged()
     m_d->recalculateTransformations();
 }
 
+bool KisMeshTransformStrategy::splitHoveredSegment(const QPointF &pt)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(m_d->hoveredSegment || m_d->hoveredControl, false);
+
+    if (m_d->hoveredControl) {
+        auto it = m_d->currentArgs.meshTransform()->find(*m_d->hoveredControl);
+
+        KisBezierTransformMesh::segment_iterator resultSegment = m_d->currentArgs.meshTransform()->endSegments();
+        qreal resultParam = 0;
+        qreal resultDistance = std::numeric_limits<qreal>::max();
+        KisBezierTransformMesh::NodeIndex resultRemovedNodeIndex;
+
+        auto estimateSegment =
+            [&resultParam,
+             &resultSegment,
+             &resultDistance,
+             &resultRemovedNodeIndex] (const KisBezierTransformMesh::segment_iterator &segment,
+                               const QPoint &removedNodeOffset,
+                               const QPointF &pt,
+                               KisBezierTransformMesh &mesh)
+        {
+            if (segment != mesh.endSegments()) {
+
+                qreal distance = 0.0;
+                qreal param = KisBezierUtils::nearestPoint({segment.p0(), segment.p1(), segment.p2(), segment.p3()}, pt, &distance);
+
+                if (distance < resultDistance) {
+                    resultDistance = distance;
+                    resultParam = param;
+                    resultSegment = segment;
+                    resultRemovedNodeIndex = segment.firstNodeIndex() + removedNodeOffset;
+                }
+            }
+        };
+
+
+        if (it.isTopBorder() || it.isBottomBorder()) {
+            estimateSegment(it.leftSegment(), QPoint(2, 0), pt, *m_d->currentArgs.meshTransform());
+            estimateSegment(it.rightSegment(), QPoint(0, 0), pt, *m_d->currentArgs.meshTransform());
+        } else {
+            estimateSegment(it.topSegment(), QPoint(0, 2), pt, *m_d->currentArgs.meshTransform());
+            estimateSegment(it.bottomSegment(), QPoint(0, 0), pt, *m_d->currentArgs.meshTransform());
+        }
+
+        if (resultSegment != m_d->currentArgs.meshTransform()->endSegments()) {
+            if (!shouldDeleteNode(resultDistance, resultParam)) {
+                const qreal eps = 0.01;
+                const qreal proportion = KisBezierUtils::curveProportionByParam(resultSegment.p0(), resultSegment.p1(), resultSegment.p2(), resultSegment.p3(), resultParam, eps);
+
+                m_d->currentArgs.meshTransform()->subdivideSegment(resultSegment.segmentIndex(), proportion);
+                m_d->currentArgs.meshTransform()->removeColumnOrRow(resultRemovedNodeIndex, !resultSegment.isHorizontal());
+
+            } else {
+                m_d->currentArgs.meshTransform()->removeColumnOrRow(m_d->hoveredControl->nodeIndex, !resultSegment.isHorizontal());
+            }
+        }
+
+    } else if (m_d->hoveredSegment) {
+        auto it = m_d->currentArgs.meshTransform()->find(*m_d->hoveredSegment);
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(it != m_d->currentArgs.meshTransform()->endSegments(), false);
+
+        qreal distance = 0;
+        const qreal t = KisBezierUtils::nearestPoint({it.p0(), it.p1(), it.p2(), it.p3()}, pt, &distance);
+
+        if (!shouldDeleteNode(distance, t)) {
+            const qreal eps = 0.01;
+            const qreal proportion = KisBezierUtils::curveProportionByParam(it.p0(), it.p1(), it.p2(), it.p3(), t, eps);
+            m_d->currentArgs.meshTransform()->subdivideSegment(it.segmentIndex(), proportion);
+        }
+    }
+
+    m_d->recalculateSignalCompressor.start();
+
+    return true;
+}
+
+bool KisMeshTransformStrategy::shouldDeleteNode(qreal distance, qreal param)
+{
+    const qreal grabRadius = KisTransformUtils::effectiveHandleGrabRadius(m_d->converter);
+    return
+        distance > 10 * grabRadius ||
+        qFuzzyCompare(param, 0.0) ||
+        qFuzzyCompare(param, 1.0);
+
+}
+
 bool KisMeshTransformStrategy::beginPrimaryAction(const QPointF &pt)
 {
     // retval shows if the stroke may have a continuation
@@ -301,6 +408,7 @@ bool KisMeshTransformStrategy::beginPrimaryAction(const QPointF &pt)
 
     m_d->initialRotationCenter = selectionBounds.center();
     m_d->initialSelectionMaxDimension = KisAlgebra2D::maxDimension(selectionBounds);
+    m_d->initialMeshState = *m_d->currentArgs.meshTransform();
 
     m_d->pointWasDragged = false;
 
@@ -323,26 +431,7 @@ bool KisMeshTransformStrategy::beginPrimaryAction(const QPointF &pt)
         retval = true;
 
     } else if (m_d->mode == Private::SPLIT_SEGMENT) {
-        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(m_d->hoveredSegment, false);
-
-        auto it = m_d->currentArgs.meshTransform()->find(*m_d->hoveredSegment);
-        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(it != m_d->currentArgs.meshTransform()->endSegments(), false);
-
-        const qreal t = KisBezierUtils::nearestPoint({it.p0(), it.p1(), it.p2(), it.p3()}, pt);
-
-        const qreal eps = 0.01;
-
-        const qreal proportion = KisBezierUtils::curveProportionByParam(it.p0(), it.p1(), it.p2(), it.p3(), t, eps);
-
-        if (it.isHorizontal()) {
-            m_d->currentArgs.meshTransform()->subdivideColumn(it.firstNodeIndex().x(), proportion);
-        } else {
-            m_d->currentArgs.meshTransform()->subdivideRow(it.firstNodeIndex().y(), proportion);
-        }
-
-        m_d->recalculateSignalCompressor.start();
-
-        retval = true;
+        retval = splitHoveredSegment(pt);
 
     } else if (m_d->mode == Private::MULTIPLE_POINT_SELECTION) {
         if (m_d->hoveredControl) {
@@ -409,6 +498,11 @@ void KisMeshTransformStrategy::continuePrimaryAction(const QPointF &pt, bool shi
 
         it.p1() += offsetP1;
         it.p2() += offsetP2;
+    } else if (m_d->mode == Private::SPLIT_SEGMENT) {
+        *m_d->currentArgs.meshTransform() = m_d->initialMeshState;
+        const bool sanitySplitResult = splitHoveredSegment(pt);
+        KIS_SAFE_ASSERT_RECOVER_NOOP(sanitySplitResult);
+
     } else if (m_d->mode == Private::MOVE_MODE) {
         const QPointF offset = pt - m_d->lastMousePos;
         if (m_d->selectedNodes.size() > 1) {

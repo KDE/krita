@@ -32,6 +32,8 @@
 #include <gsl/gsl_multimin.h>
 #endif
 
+#include <Eigen/Dense>
+
 namespace KisBezierUtils
 {
 
@@ -815,6 +817,134 @@ qreal curveParamByProportion(const QPointF p0, const QPointF p1, const QPointF p
 qreal curveProportionByParam(const QPointF p0, const QPointF p1, const QPointF p2, const QPointF p3, qreal t, const qreal error)
 {
     return curveLengthAtPoint(p0, p1, p2, p3, t, error) / curveLength(p0, p1, p2, p3, error);
+}
+
+std::pair<QPointF, QPointF> removeBezierNode(const QPointF &p0,
+                                             const QPointF &p1,
+                                             const QPointF &p2,
+                                             const QPointF &p3,
+                                             const QPointF &q1,
+                                             const QPointF &q2,
+                                             const QPointF &q3)
+{
+    /**
+     * Calculates the curve control point after removal of a node
+     * by minimizing squared error for the folloing problem:
+     *
+     * Given two consequent 3rd order curves P and Q with lengths Lp and Lq,
+     * find 3rd order curve B, so that when splitting it at t = Lp / (Lp + Lq)
+     * (using de Casteljau algorithm) the control points of the resulting
+     * curves will have least square errors, compared to the corresponding
+     * control points of curves P and Q.
+     *
+     * First we represent curves in matrix form:
+     *
+     * B(t) = T * M * B,
+     * P(t) = T * Z1 * M * P,
+     * Q(t) = T * Z2 * M * Q,
+     *
+     * where
+     *    T = [1, t, t^2, t^3]
+     *    M --- 4x4 matrix of Bezier coefficients
+     *    B, P, Q --- vector of control points for the curves
+     *
+     *    Z1 --- conversion matrix that splits the curve into range [0.0...t]
+     *    Z2 --- conversion matrix that splits the curve into range [t...1.0]
+     *
+     * Then we represent vectors P and Q via B:
+     *
+     * P = M^(-1) * Z1 * M * B
+     * Q = M^(-1) * Z2 * M * B
+     *
+     * which in block matrix form looks like:
+     *
+     * [ P ]   [ M^(-1) * Z1 * M ]
+     * |   | = |                 | * B
+     * [ Q ]   [ M^(-1) * Z2 * M ]
+     *
+     *
+     *         [ M^(-1) * Z1 * M ]
+     * let C = |                 |,
+     *         [ M^(-1) * Z2 * M ]
+     *
+     *     [ P ]
+     * R = |   |
+     *     [ Q ]
+     *
+     *
+     * then
+     *
+     * R = C * B
+     *
+     * applying normal equation to find a solution with least square error,
+     * get the final result:
+     *
+     * B = (C'C)^(-1) * C' * R
+     */
+
+    const qreal lenP = KisBezierUtils::curveLength(p0, p1, p2, p3, 0.001);
+    const qreal lenQ = KisBezierUtils::curveLength(p3, q1, q2, q3, 0.001);
+
+    const qreal z = lenP / (lenP + lenQ);
+
+    Eigen::Matrix4f M;
+    M << 1, 0, 0, 0,
+         -3, 3, 0, 0,
+          3, -6, 3, 0,
+         -1, 3, -3, 1;
+
+    Eigen::DiagonalMatrix<float, 4> Z_1;
+    Z_1.diagonal() << 1, z, pow2(z), pow3(z);
+
+    Eigen::Matrix4f Z_2;
+    Z_2 << 1,     z,         pow2(z),               pow3(z),
+           0, 1 - z, 2 * z * (1 - z), 3 * pow2(z) * (1 - z),
+           0,     0,     pow2(1 - z),   3 * z * pow2(1 - z),
+           0,     0,               0,           pow3(1 - z);
+
+    Eigen::Matrix<float, 8, 2> R;
+    R << p0.x(), p0.y(),
+         p1.x(), p1.y(),
+         p2.x(), p2.y(),
+         p3.x(), p3.y(),
+         p3.x(), p3.y(),
+         q1.x(), q1.y(),
+         q2.x(), q2.y(),
+         q3.x(), q3.y();
+
+    Eigen::Matrix<float, 2, 2> B_const;
+    B_const << p0.x(), p0.y(),
+               q3.x(), q3.y();
+
+
+    Eigen::Matrix4f M1 = M.inverse() * Z_1 * M;
+    Eigen::Matrix4f M2 = M.inverse() * Z_2 * M;
+
+    Eigen::Matrix<float, 8, 4> C;
+    C << M1, M2;
+
+    Eigen::Matrix<float, 8, 2> C_const;
+    C_const << C.col(0), C.col(3);
+
+    Eigen::Matrix<float, 8, 2> C_var;
+    C_var << C.col(1), C.col(2);
+
+    Eigen::Matrix<float, 8, 2> R_var;
+    R_var = R - C_const * B_const;
+
+    Eigen::Matrix<float, 6, 2> R_reduced;
+    R_reduced = R_var.block(1, 0, 6, 2);
+
+    Eigen::Matrix<float, 6, 2> C_reduced;
+    C_reduced = C_var.block(1, 0, 6, 2);
+
+    Eigen::Matrix<float, 2, 2> result;
+    result = (C_reduced.transpose() * C_reduced).inverse() * C_reduced.transpose() * R_reduced;
+
+    QPointF resultP0(result(0, 0), result(0, 1));
+    QPointF resultP1(result(1, 0), result(1, 1));
+
+    return std::make_pair(resultP0, resultP1);
 }
 
 }

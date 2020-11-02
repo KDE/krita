@@ -54,6 +54,9 @@ public:
     bool acceptsClicks() const override;
 
 private:
+    bool splitHoveredSegment(const QPointF &pt);
+    bool shouldDeleteNode(qreal distance, qreal param);
+private:
     Q_PRIVATE_SLOT(m_d, void recalculateTransformations());
 
 Q_SIGNALS:

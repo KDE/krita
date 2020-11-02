@@ -316,4 +316,35 @@ void KisMeshTransformWorkerTest::testDistanceToCurve()
     QVERIFY(verifyPoint(QPointF(200,150), QPointF(184.575,109.326)));
 }
 
+void KisMeshTransformWorkerTest::testRemovePoint()
+{
+    const QPointF p0(100, 100);
+    const QPointF p1(120, 120);
+    const QPointF p2(180, 120);
+    const QPointF p3(200, 100);
+
+    QPointF c0, c1, c2, c3;
+    QPointF q0, q1, q2, q3;
+
+    c0 = p0;
+    q3 = p3;
+
+    const qreal t1 = 0.05;
+
+    deCasteljau(p0, p1, p2, p3, t1, &c1, &c2, &c3, &q1, &q2);
+    q0 = c3;
+
+//    qDebug() << ppVar(p0) << ppVar(p1) << ppVar(p2) << ppVar(p3);
+//    qDebug() << ppVar(c0) << ppVar(c1) << ppVar(c2) << ppVar(c3);
+//    qDebug() << ppVar(q0) << ppVar(q1) << ppVar(q2) << ppVar(q3);
+
+    QPointF r1;
+    QPointF r2;
+
+    std::tie(r1, r2) = KisBezierUtils::removeBezierNode(c0, c1, c2, c3, q1, q2, q3);
+
+    QVERIFY(KisAlgebra2D::fuzzyPointCompare(r1, QPointF(121.314,120.167), 0.01));
+    QVERIFY(KisAlgebra2D::fuzzyPointCompare(r2, QPointF(180.184,119.801), 0.01));
+}
+
 QTEST_MAIN(KisMeshTransformWorkerTest)

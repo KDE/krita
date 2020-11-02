@@ -71,15 +71,13 @@ void KisFilterTest::testWithProgressUpdater()
     dev->convertFromQImage(qimage, 0, 0, 0);
     dev->setDefaultBounds(new TestUtil::TestingTimedDefaultBounds(dev->exactBounds()));
 
-
-
     KisFilterSP f = KisFilterRegistry::instance()->value("invert");
     Q_ASSERT(f);
 
     KisFilterConfigurationSP  kfc = f->defaultConfiguration(KisGlobalResourcesInterface::instance());
     Q_ASSERT(kfc);
 
-    f->process(dev, QRect(QPoint(0,0), qimage.size()), kfc, updater);
+    f->process(dev, QRect(QPoint(0,0), qimage.size()), kfc->cloneWithResourcesSnapshot(), updater);
 
     QPoint errpoint;
     if (!TestUtil::compareQImages(errpoint, inverted, dev->convertToQImage(0, 0, 0, qimage.width(), qimage.height()))) {
@@ -106,7 +104,7 @@ void KisFilterTest::testSingleThreaded()
     KisFilterConfigurationSP  kfc = f->defaultConfiguration(KisGlobalResourcesInterface::instance());
     Q_ASSERT(kfc);
 
-    f->process(dev, QRect(QPoint(0,0), qimage.size()), kfc);
+    f->process(dev, QRect(QPoint(0,0), qimage.size()), kfc->cloneWithResourcesSnapshot());
 
     QPoint errpoint;
     if (!TestUtil::compareQImages(errpoint, inverted, dev->convertToQImage(0, 0, 0, qimage.width(), qimage.height()))) {
@@ -137,7 +135,7 @@ void KisFilterTest::testDifferentSrcAndDst()
     KisFilterConfigurationSP  kfc = f->defaultConfiguration(KisGlobalResourcesInterface::instance());
     Q_ASSERT(kfc);
 
-    f->process(src, dst, sel, QRect(QPoint(0,0), qimage.size()), kfc);
+    f->process(src, dst, sel, QRect(QPoint(0,0), qimage.size()), kfc->cloneWithResourcesSnapshot());
 
     QPoint errpoint;
     if (!TestUtil::compareQImages(errpoint, inverted, dst->convertToQImage(0, 0, 0, qimage.width(), qimage.height()))) {
@@ -186,7 +184,7 @@ void KisFilterTest::testOldDataApiAfterCopy()
      * version of the device and we will see a black square instead
      * of empty device in tmp
      */
-    f->process(dst, tmp, 0, updateRect, kfc);
+    f->process(dst, tmp, 0, updateRect, kfc->cloneWithResourcesSnapshot());
 
     /**
      * In theory, both devices: dst and tmp must be empty by now
@@ -231,8 +229,8 @@ void KisFilterTest::testBlurFilterApplicationRect()
     KisFilterConfigurationSP  kfc = f->defaultConfiguration(KisGlobalResourcesInterface::instance());
     Q_ASSERT(kfc);
 
-    f->process(src1, dst1, 0, filterRect, kfc);
-    f->process(src2, dst2, 0, filterRect, kfc);
+    f->process(src1, dst1, 0, filterRect, kfc->cloneWithResourcesSnapshot());
+    f->process(src2, dst2, 0, filterRect, kfc->cloneWithResourcesSnapshot());
 
     KisPaintDeviceSP reference = new KisPaintDevice(cs);
     reference->fill(filterRect.left(),filterRect.top(),filterRect.width(),filterRect.height(), whitePixel);

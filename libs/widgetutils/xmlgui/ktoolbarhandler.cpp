@@ -23,7 +23,6 @@
 #include <QMenu>
 
 #include <kactionmenu.h>
-#include <kauthorized.h>
 #include <klocalizedstring.h>
 
 #include "kxmlguiwindow.h"
@@ -264,9 +263,7 @@ void ToolBarHandler::setupActions()
     // We have no XML file associated with our action collection, so load settings from KConfig
     actionCollection()->readSettings(); // #233712
 
-    if (KAuthorized::authorizeAction(QStringLiteral("options_show_toolbar"))) {
-        plugActionList(QLatin1String(actionListName), d->actions);
-    }
+    plugActionList(QLatin1String(actionListName), d->actions);
 
     d->connectToActionContainers();
 }

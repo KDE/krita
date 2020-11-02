@@ -45,7 +45,7 @@ void KisAdjustmentLayerTest::testCreation()
     KisFilterConfigurationSP  kfc = f->defaultConfiguration(KisGlobalResourcesInterface::instance());
     Q_ASSERT(kfc);
 
-    KisAdjustmentLayerSP test = new KisAdjustmentLayer(image, "test", kfc, 0);
+    KisAdjustmentLayerSP test = new KisAdjustmentLayer(image, "test", kfc->cloneWithResourcesSnapshot(), 0);
 }
 
 void KisAdjustmentLayerTest::testSetSelection()

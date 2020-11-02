@@ -253,7 +253,25 @@ qreal curveParamByProportion(const QPointF p0,
 KRITAGLOBAL_EXPORT
 qreal curveProportionByParam(const QPointF p0, const QPointF p1, const QPointF p2, const QPointF p3, qreal t, const qreal error);
 
-
+/**
+ * @brief Adjusts position for the bezier control points
+ * after removing a node.
+ *
+ * First source curve P: \p p0, \p p1, \p p2, \p p3
+ * Second source curve Q: \p p3, \p q1, \p q2, \p q3
+ *
+ * Node to remove: \p p3 and its control points \p p2 and \p q1
+ *
+ * @return a pair of new positions for \p p1 and \p q2
+ */
+KRITAGLOBAL_EXPORT
+std::pair<QPointF, QPointF> removeBezierNode(const QPointF &p0,
+                                             const QPointF &p1,
+                                             const QPointF &p2,
+                                             const QPointF &p3,
+                                             const QPointF &q1,
+                                             const QPointF &q2,
+                                             const QPointF &q3);
 }
 
 #endif // KISBEZIERUTILS_H

@@ -149,6 +149,14 @@ public:
         NodeIndex nodeIndex;
         ControlType controlType;
 
+        inline bool isNode() const {
+            return controlType == Node;
+        }
+
+        inline bool isControlPoint() const {
+            return controlType != Node;
+        }
+
         static QPointF& controlPoint(Mesh::Node &node, ControlType controlType) {
             return
                 controlType == LeftControl ? node.leftControl :
@@ -381,6 +389,77 @@ public:
         m_columns.insert(next(it), absT);
     }
 
+    void unlinkNodeHorizontally(Mesh::Node &left, const Mesh::Node &node, Mesh::Node &right)
+    {
+        std::tie(left.rightControl, right.leftControl) =
+            KisBezierUtils::removeBezierNode(left.node, left.rightControl,
+                                             node.leftControl, node.node, node.rightControl,
+                                             right.leftControl, right.node);
+    }
+
+    void unlinkNodeVertically(Mesh::Node &top, const Mesh::Node &node, Mesh::Node &bottom)
+    {
+        std::tie(top.bottomControl, bottom.topControl) =
+            KisBezierUtils::removeBezierNode(top.node, top.bottomControl,
+                                             node.topControl, node.node, node.bottomControl,
+                                             bottom.topControl, bottom.node);
+    }
+
+
+    void removeColumn(int column) {
+        const bool hasNeighbours = column > 0 || column < m_size.width() - 1;
+
+        if (hasNeighbours) {
+            for (int row = 0; row < m_size.height(); row++) {
+                unlinkNodeHorizontally(node(column - 1, row), node(column, row), node(column + 1, row));
+            }
+        }
+
+        auto it = m_nodes.begin() + column;
+        for (int row = 0; row < m_size.height(); row++) {
+            it = m_nodes.erase(it);
+            it += m_size.width() - 1;
+        }
+
+        m_size.rwidth()--;
+        m_columns.erase(m_columns.begin() + column);
+    }
+
+    void removeRow(int row) {
+        const bool hasNeighbours = row > 0 || row < m_size.height() - 1;
+
+        if (hasNeighbours) {
+            for (int column = 0; column < m_size.width(); column++) {
+                unlinkNodeVertically(node(column, row - 1), node(column, row), node(column, row + 1));
+            }
+        }
+
+        auto it = m_nodes.begin() + row * m_size.width();
+        m_nodes.erase(it, it + m_size.width());
+
+        m_size.rheight()--;
+        m_rows.erase(m_rows.begin() + row);
+    }
+
+    void removeColumnOrRow(NodeIndex index, bool row) {
+        if (row) {
+            removeRow(index.y());
+        } else {
+            removeColumn(index.x());
+        }
+    }
+
+    void subdivideSegment(SegmentIndex index, qreal proportion) {
+        auto it = find(index);
+        KIS_SAFE_ASSERT_RECOVER_RETURN(it != endSegments());
+
+        if (it.isHorizontal()) {
+            subdivideColumn(it.firstNodeIndex().x(), proportion);
+        } else {
+            subdivideRow(it.firstNodeIndex().y(), proportion);
+        }
+    }
+
     Patch makePatch(int col, int row) const
     {
         const Node &tl = node(col, row);
@@ -416,6 +495,9 @@ public:
 
         return patch;
     }
+
+
+    class segment_iterator;
 
     class iterator :
         public boost::iterator_facade <iterator,
@@ -533,6 +615,36 @@ public:
         Mesh::Node& node() const {
             return m_mesh->node(m_col, m_row);
         }
+
+        bool isLeftBorder() const {
+            return m_col == 0;
+        }
+
+        bool isRightBorder() const {
+            return m_col == m_mesh->size().width() - 1;
+        }
+
+        bool isTopBorder() const {
+            return m_row == 0;
+        }
+
+        bool isBottomBorder() const {
+            return m_row == m_mesh->size().height() - 1;
+        }
+
+
+        bool isBorderNode() const {
+            return isLeftBorder() || isRightBorder() || isTopBorder() || isBottomBorder();
+        }
+
+        bool isCornerNode() const {
+            return (isLeftBorder() + isRightBorder() + isTopBorder() + isBottomBorder()) > 1;
+        }
+
+        segment_iterator topSegment() const;
+        segment_iterator bottomSegment() const;
+        segment_iterator leftSegment() const;
+        segment_iterator rightSegment() const;
 
     private:
         friend class boost::iterator_core_access;
@@ -897,6 +1009,50 @@ QDebug operator<<(QDebug dbg, const Mesh<Node, Patch> &mesh)
         }
     }
     return dbg.space();
+}
+
+template<typename NodeArg, typename PatchArg>
+typename Mesh<NodeArg, PatchArg>::segment_iterator
+Mesh<NodeArg, PatchArg>::control_point_iterator::topSegment() const
+{
+    if (isTopBorder()) {
+        return m_mesh->endSegments();
+    }
+
+    return segment_iterator(m_mesh, m_col, m_row - 1, false);
+}
+
+template<typename NodeArg, typename PatchArg>
+typename Mesh<NodeArg, PatchArg>::segment_iterator
+Mesh<NodeArg, PatchArg>::control_point_iterator::bottomSegment() const
+{
+    if (isBottomBorder()) {
+        return m_mesh->endSegments();
+    }
+
+    return segment_iterator(m_mesh, m_col, m_row, false);
+}
+
+template<typename NodeArg, typename PatchArg>
+typename Mesh<NodeArg, PatchArg>::segment_iterator
+Mesh<NodeArg, PatchArg>::control_point_iterator::leftSegment() const
+{
+    if (isLeftBorder()) {
+        return m_mesh->endSegments();
+    }
+
+    return segment_iterator(m_mesh, m_col - 1, m_row, true);
+}
+
+template<typename NodeArg, typename PatchArg>
+typename Mesh<NodeArg, PatchArg>::segment_iterator
+Mesh<NodeArg, PatchArg>::control_point_iterator::rightSegment() const
+{
+    if (isRightBorder()) {
+        return m_mesh->endSegments();
+    }
+
+    return segment_iterator(m_mesh, m_col, m_row, true);
 }
 
 }

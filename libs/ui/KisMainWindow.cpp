@@ -42,9 +42,6 @@
 #include <QMutex>
 #include <QMutexLocker>
 #include <QPointer>
-#include <QPrintDialog>
-#include <QPrinter>
-#include <QPrintPreviewDialog>
 #include <QToolButton>
 #include <KisSignalMapper.h>
 #include <QTabBar>

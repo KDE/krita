@@ -1763,9 +1763,14 @@ bool KisMainWindow::restoreWorkspaceState(const QByteArray &state)
     return success;
 }
 
+void KisMainWindow::restoreWorkspace()
+{
+    int resourceId = sender()->property("resource_id").toInt();
+    restoreWorkspace(resourceId);
+}
+
 bool KisMainWindow::restoreWorkspace(int workspaceId)
 {
-
     KisWorkspaceResourceSP workspace =
             KisResourceModel(ResourceType::Workspaces)
                 .resourceForId(workspaceId)
@@ -2272,9 +2277,8 @@ void KisMainWindow::updateWindowMenu()
     while (resourceIterator.hasNext()) {
         KisResourceItemSP resource = resourceIterator.next();
         QAction *action = workspaceMenu->addAction(resource->name());
-        connect(action, &QAction::triggered, this, [=]() {
-            m_this->restoreWorkspace(resource->id());
-        });
+        action->setProperty("resource_id", QVariant::fromValue<int>(resource->id()));
+        connect(action, SIGNAL(triggered()), this, SLOT(restoreWorkspace()));
     }
     workspaceMenu->addSeparator();
     connect(workspaceMenu->addAction(i18nc("@action:inmenu", "&Import Workspace...")),

@@ -262,7 +262,9 @@ KoResourceSP KisResourceLocator::resource(QString storageLocation, const QString
 
 KoResourceSP KisResourceLocator::resourceForId(int resourceId)
 {
+
     ResourceStorage rs = getResourceStorage(resourceId);
+
     KoResourceSP r = resource(rs.storageLocation, rs.resourceType, rs.resourceFileName);
     return r;
 }

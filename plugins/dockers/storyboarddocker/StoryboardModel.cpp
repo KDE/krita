@@ -36,6 +36,7 @@
 StoryboardModel::StoryboardModel(QObject *parent)
         : QAbstractItemModel(parent)
         , m_locked(false)
+        , m_reorderingKeyframes(false)
         , m_imageIdleWatcher(10)
         , m_renderScheduler(new KisStoryboardThumbnailRenderScheduler(this))
         , m_renderSchedulingCompressor(1000,KisSignalCompressor::FIRST_ACTIVE)
@@ -334,9 +335,11 @@ bool StoryboardModel::removeRows(int position, int rows, const QModelIndex &pare
             return false;
         }
         beginRemoveRows(QModelIndex(), position, position+rows-1);
+
         for (int row = position + rows - 1; row >= position; row--) {
             m_items.removeAt(row);
         }
+
         endRemoveRows();
         emit(sigStoryboardItemListChanged());
         return true;
@@ -393,7 +396,8 @@ bool StoryboardModel::moveRows(const QModelIndex &sourceParent, int sourceRow, i
             item->moveChild(sourceRow, destinationChild + row);
         }
         endMoveRows();
-        emit(sigStoryboardItemListChanged());
+        reorderKeyframes();
+        emit sigStoryboardItemListChanged();
         return true;
     }
     else if (!sourceParent.isValid()) {                  //for moves of 1st level nodes
@@ -408,7 +412,8 @@ bool StoryboardModel::moveRows(const QModelIndex &sourceParent, int sourceRow, i
             m_items.move(sourceRow, destinationChild + row);
         }
         endMoveRows();
-        emit(sigStoryboardItemListChanged());
+        reorderKeyframes();
+        emit sigStoryboardItemListChanged();
         return true;
     }
     else {
@@ -524,6 +529,11 @@ void StoryboardModel::setLocked(bool value)
 bool StoryboardModel::isLocked() const
 {
     return m_locked;
+}
+
+int StoryboardModel::getFramesPerSecond() const
+{
+    return m_image.isValid() ? m_image->animationInterface()->framerate(): 24;
 }
 
 void StoryboardModel::setView(StoryboardView *view)
@@ -693,13 +703,104 @@ int StoryboardModel::nextKeyframeGlobal(int keyframeTime) const
     return nextKeyframeTime;
 }
 
+void StoryboardModel::reorderKeyframes()
+{
+    //Get the earliest frame number in the storyboard list
+    int earliestFrame = INT_MAX;
+
+    typedef int AssociateFrameOffset;
+
+    QMultiHash<QModelIndex, AssociateFrameOffset> frameAssociates;
+
+    for (int i = 0; i < rowCount(); i++) {
+        QModelIndex sceneIndex = index(i, 0);
+        int sceneFrame = index(StoryboardItem::FrameNumber, 0, sceneIndex).data().toInt();
+        earliestFrame = sceneFrame < earliestFrame ? sceneFrame : earliestFrame;
+        frameAssociates.insert(sceneIndex, 0);
+
+        const int lastFrameOfScene = index(StoryboardItem::FrameNumber, 0, sceneIndex).data().toInt()
+                                     + index(StoryboardItem::DurationFrame, 0, sceneIndex).data().toInt()
+                                     + index(StoryboardItem::DurationSecond, 0, sceneIndex).data().toInt()
+                                     * getFramesPerSecond();
+
+        for( int i = sceneFrame; i < lastFrameOfScene; i++) {
+            frameAssociates.insert(sceneIndex, i - sceneFrame);
+        }
+    }
+
+    if (earliestFrame == INT_MAX) {
+        return;
+    }
+
+    //We want to temporarily lock respondance to keyframe removal / addition.
+    m_reorderingKeyframes = true;
+
+    //Let's cancel all frame rendering for the time being.
+    m_renderScheduler->cancelAllFrameRendering();
+
+    KisNodeSP root = m_image->root();
+    if (root) {
+        KisLayerUtils::recursiveApplyNodes(root, [this, earliestFrame, frameAssociates](KisNodeSP node) {
+            if (!node->isAnimated() || !node->paintDevice())
+                return;
+
+            KisRasterKeyframeChannel* rasterChan = node->paintDevice()->keyframeChannel();
+
+            if (!rasterChan)
+                return;
+
+            // Gather all original keyframes and their associated time values.
+            QHash<int, KisKeyframeSP> originalKeyframes;
+            Q_FOREACH( const int& time, rasterChan->allKeyframeTimes()) {
+                if (time >= earliestFrame && rasterChan->keyframeAt(time)) {
+                    originalKeyframes.insert(time, rasterChan->keyframeAt(time));
+                    rasterChan->removeKeyframe(time);
+                }
+            }
+
+            //Now lets re-sort the raster channels...
+            int intendedSceneFrameTime = earliestFrame;
+            for (int i = 0; i < rowCount(); i++) {
+                QModelIndex sceneIndex = index(i, 0);
+                const int srcFrame = index(StoryboardItem::FrameNumber, 0, sceneIndex).data().toInt();
+                Q_FOREACH( const int& associateFrameOffset, frameAssociates.values(sceneIndex) ) {
+                    if (!originalKeyframes.contains(srcFrame + associateFrameOffset))
+                        continue;
+
+                    rasterChan->insertKeyframe(intendedSceneFrameTime + associateFrameOffset,
+                                               originalKeyframes.value(srcFrame + associateFrameOffset));
+                }
+
+                intendedSceneFrameTime += index(StoryboardItem::DurationFrame, 0, sceneIndex).data().toInt()
+                                        + index(StoryboardItem::DurationSecond, 0, sceneIndex).data().toInt() * getFramesPerSecond();
+            }
+        });
+    }
+
+    //Lastly, let's update all of the frame values.
+    int intendedFrameValue = earliestFrame;
+    for (int i = 0; i < rowCount(); i++) {
+        QModelIndex sceneIndex = index(i, 0);
+        setData(index(StoryboardItem::FrameNumber, 0, sceneIndex), intendedFrameValue);
+        slotUpdateThumbnailForFrame(intendedFrameValue);
+        intendedFrameValue += index(StoryboardItem::DurationFrame, 0, sceneIndex).data().toInt()
+                            + index(StoryboardItem::DurationSecond, 0, sceneIndex).data().toInt()
+                            * getFramesPerSecond();
+    }
+
+    m_renderScheduler->slotStartFrameRendering();
+
+    //Unlock keyframe add/remove respondance.
+    m_reorderingKeyframes = false;
+}
+
 bool StoryboardModel::insertHoldFramesAfter(int newDuration, int oldDuration, QModelIndex index)
 {
     if (!index.isValid()) {
         return false;
     }
     int frame = index.siblingAtRow(StoryboardItem::FrameNumber).data().toInt();
-    int fps = m_image.isValid() ? m_image->animationInterface()->framerate(): 24;
+    int fps = getFramesPerSecond();
 
     if (newDuration < 0) {
         if (index.row() == StoryboardItem::DurationFrame
@@ -736,30 +837,31 @@ bool StoryboardModel::insertHoldFramesAfter(int newDuration, int oldDuration, QM
 
     KisNodeSP node = m_image->rootLayer();
     if (node) {
-    KisLayerUtils::recursiveApplyNodes (node, [frame, durationChange] (KisNodeSP node)
-    {
-        if (node->isAnimated()) {
-            KisKeyframeChannel *keyframeChannel = node->paintDevice()->keyframeChannel();
-            if (keyframeChannel){
-                if (durationChange > 0) {
-                    int timeIteration = keyframeChannel->lastKeyframeTime();
-                    while (keyframeChannel->keyframeAt(timeIteration) && keyframeChannel->keyframeAt(timeIteration) != keyframeChannel->activeKeyframeAt(frame)) {
-                        keyframeChannel->moveKeyframe(timeIteration, timeIteration + durationChange);
-                        timeIteration = keyframeChannel->previousKeyframeTime(timeIteration);
+        KisLayerUtils::recursiveApplyNodes (node, [frame, durationChange] (KisNodeSP node)
+            {
+                if (node->isAnimated()) {
+                    KisKeyframeChannel *keyframeChannel = node->paintDevice()->keyframeChannel();
+                    if (keyframeChannel){
+                        if (durationChange > 0) {
+                            int timeIteration = keyframeChannel->lastKeyframeTime();
+                            while (keyframeChannel->keyframeAt(timeIteration) &&
+                                   keyframeChannel->keyframeAt(timeIteration) != keyframeChannel->activeKeyframeAt(frame)) {
+                                keyframeChannel->moveKeyframe(timeIteration, timeIteration + durationChange);
+                                timeIteration = keyframeChannel->previousKeyframeTime(timeIteration);
+                            }
+                        }
+                        else if (durationChange < 0) {
+                            int timeIteration = keyframeChannel->nextKeyframeTime(frame);
+                            const int minTime = frame + 1;
+                            while (keyframeChannel->keyframeAt(timeIteration)) {
+                                const int newTimeValue = qMax(minTime, timeIteration + durationChange);
+                                keyframeChannel->moveKeyframe(timeIteration, newTimeValue);
+                                timeIteration = keyframeChannel->nextKeyframeTime(newTimeValue);
+                            }
+                        }
                     }
                 }
-                else if (durationChange < 0) {
-                    int timeIteration = keyframeChannel->nextKeyframeTime(frame);
-                    const int minTime = frame + 1;
-                    while (keyframeChannel->keyframeAt(timeIteration)) {
-                        const int newTimeValue = qMax(minTime, timeIteration + durationChange);
-                        keyframeChannel->moveKeyframe(timeIteration, newTimeValue);
-                        timeIteration = keyframeChannel->nextKeyframeTime(newTimeValue);
-                    }
-                }
-            }
-        }
-    });
+            });
     }
     slotChangeFrameGlobal(m_view->selectionModel()->selection(), QItemSelection());
 
@@ -812,7 +914,7 @@ bool StoryboardModel::insertItem(QModelIndex index, bool after)
         QModelIndex frameIndex = this->index(StoryboardItem::DurationFrame, 0, index);
 
         if (after) {
-            int fps = m_image->animationInterface()->framerate();
+            int fps = getFramesPerSecond();
             int durationInFrame = frameIndex.data().toInt() + fps * frameIndex.siblingAtRow(StoryboardItem::DurationSecond).data().toInt();
             int newFrame = frame + qMax(1, durationInFrame);
             //if this is the last keyframe globally don't insert hold frames
@@ -864,7 +966,9 @@ void StoryboardModel::slotChangeFrameGlobal(QItemSelection selected, QItemSelect
 
 void StoryboardModel::slotKeyframeAdded(const KisKeyframeChannel* channel, int time)
 {
-    if (!indexFromFrame(time).isValid() && !isLocked()) {
+    Q_UNUSED(channel);
+
+    if (!indexFromFrame(time).isValid() && !isLocked() && !m_reorderingKeyframes) {
         int frame = time;
         int prevItemRow = lastIndexBeforeFrame(frame).row();
 
@@ -887,7 +991,7 @@ void StoryboardModel::slotKeyframeAdded(const KisKeyframeChannel* channel, int t
 void StoryboardModel::slotKeyframeRemoved(const KisKeyframeChannel *channel, int time)
 {
     QModelIndex itemIndex = indexFromFrame(time);
-    if (itemIndex.isValid()) {
+    if (itemIndex.isValid() && !m_reorderingKeyframes) {
         if (isOnlyKeyframe(channel->node().toStrongRef(), time)) {
             removeRows(itemIndex.row(), 1);
             m_renderScheduler->cancelFrameRendering(itemIndex.row());
@@ -898,6 +1002,9 @@ void StoryboardModel::slotKeyframeRemoved(const KisKeyframeChannel *channel, int
 
 void StoryboardModel::slotKeyframeMoved(const KisKeyframeChannel* channel, int from, int to)
 {
+    if (m_reorderingKeyframes)
+        return;
+
     KisKeyframeSP keyframe = channel->keyframeAt(to);
     KIS_ASSERT(keyframe);
 
@@ -973,6 +1080,7 @@ void StoryboardModel::slotUpdateThumbnailForFrame(int frame, bool delay)
                 affected = false;
             }
         }
+
         m_renderScheduler->scheduleFrameForRegeneration(frame, affected);
     }
 }

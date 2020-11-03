@@ -135,6 +135,7 @@ public:
 
     void setLocked(bool);
     bool isLocked() const;
+    int getFramesPerSecond() const;
     void setView(StoryboardView *view);
     void setImage(KisImageWSP image);
 
@@ -177,6 +178,13 @@ public:
      * @return The time of the next keyframe in any layer.
      */
     int nextKeyframeGlobal(int keyframeTime) const;
+
+    /**
+     * @brief reorders all keyframes to reflect storyboard docker's arrangement.
+     * typically used after drag and drop to keep storyboard timing acurate
+     * to timeline timing.
+     */
+    void reorderKeyframes();
 
     /**
      * @brief moves all keyframes in all layers after the frame of the parent of @c durationIndex
@@ -282,6 +290,7 @@ private:
     QVector<Comment> m_commentList;
     CommentModel *m_commentModel;
     bool m_locked;
+    bool m_reorderingKeyframes;
     int m_lastScene = 0;
     KisIdleWatcher m_imageIdleWatcher;
     KisImageWSP m_image;

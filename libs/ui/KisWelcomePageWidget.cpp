@@ -88,50 +88,17 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
     recentDocumentsListView->setDragEnabled(false);
     recentDocumentsListView->viewport()->setAutoFillBackground(false);
     recentDocumentsListView->setSpacing(2);
+    recentDocumentsListView->installEventFilter(this);
+    QSizePolicy sp_retain = widgetRecentDocuments->sizePolicy();
+    sp_retain.setRetainSizeWhenHidden(true);
+    widgetRecentDocuments->setSizePolicy(sp_retain);
 
     // set up URLs that go to web browser
-    manualLink->setTextFormat(Qt::RichText);
-    manualLink->setTextInteractionFlags(Qt::TextBrowserInteraction);
-    manualLink->setOpenExternalLinks(true);
-
-    gettingStartedLink->setTextFormat(Qt::RichText);
-    gettingStartedLink->setTextInteractionFlags(Qt::TextBrowserInteraction);
-    gettingStartedLink->setOpenExternalLinks(true);
-
-    supportKritaLink->setTextFormat(Qt::RichText);
-    supportKritaLink->setTextInteractionFlags(Qt::TextBrowserInteraction);
-    supportKritaLink->setOpenExternalLinks(true);
-
-    userCommunityLink->setTextFormat(Qt::RichText);
-    userCommunityLink->setTextInteractionFlags(Qt::TextBrowserInteraction);
-    userCommunityLink->setOpenExternalLinks(true);
-
-
-    kritaWebsiteLink->setTextFormat(Qt::RichText);
-    kritaWebsiteLink->setTextInteractionFlags(Qt::TextBrowserInteraction);
-    kritaWebsiteLink->setOpenExternalLinks(true);
-
-
-    sourceCodeLink->setTextFormat(Qt::RichText);
-    sourceCodeLink->setTextInteractionFlags(Qt::TextBrowserInteraction);
-    sourceCodeLink->setOpenExternalLinks(true);
-
-    poweredByKDELink->setTextFormat(Qt::RichText);
-    poweredByKDELink->setTextInteractionFlags(Qt::TextBrowserInteraction);
-    poweredByKDELink->setOpenExternalLinks(true);
     kdeIcon->setIconSize(QSize(20, 20));
     kdeIcon->setIcon(KisIconUtils::loadIcon(QStringLiteral("kde")).pixmap(20));
 
-
-    versionNotificationLabel->setTextFormat(Qt::RichText);
-    versionNotificationLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);
-    versionNotificationLabel->setOpenExternalLinks(true);
-
     devBuildIcon->setIcon(KisIconUtils::loadIcon("warning"));
 
-    devBuildLabel->setTextFormat(Qt::RichText);
-    devBuildLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);
-    devBuildLabel->setOpenExternalLinks(true);
     devBuildLabel->setVisible(false);
 
     updaterFrame->setVisible(false);
@@ -296,17 +263,20 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
 
     // make the welcome screen labels a subtle color so it doesn't clash with the main UI elements
     blendedColor = KritaUtils::blendColors(textColor, backgroundColor, 0.8);
-    blendedStyle = QString("color: ").append(blendedColor.name());
-
+    // only apply color to the widget itself, not to the tooltip or something
+    blendedStyle = "QWidget{color: " + blendedColor.name() + "}";
 
     // what labels to change the color...
     startTitleLabel->setStyleSheet(blendedStyle);
     recentDocumentsLabel->setStyleSheet(blendedStyle);
     helpTitleLabel->setStyleSheet(blendedStyle);
+    newsTitleLabel->setStyleSheet(blendedStyle);
+    chkShowNews->setStyleSheet(blendedStyle);
     newFileLinkShortcut->setStyleSheet(blendedStyle);
     openFileShortcut->setStyleSheet(blendedStyle);
     clearRecentFilesLink->setStyleSheet(blendedStyle);
     recentDocumentsListView->setStyleSheet(blendedStyle);
+    newsWidget->setStyleSheet(blendedStyle);
 
     newFileLink->setStyleSheet(blendedStyle);
     openFileLink->setStyleSheet(blendedStyle);
@@ -369,63 +339,55 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
     donationLink->setStyleSheet(blendedStyle);
     donationLink->setText(QString(i18n("Get your Krita Supporter Badge here!")));
 #endif
-    // re-populate recent files since they might have themed icons
-    populateRecentDocuments();
-
 }
 
 void KisWelcomePageWidget::populateRecentDocuments()
 {
 
-    m_recentFilesModel.clear(); // clear existing data before it gets re-populated
-
+    const QList<QUrl> &recentFileUrls = m_mainWindow->recentFilesUrls();
     // grab recent files data
-    int numRecentFiles = m_mainWindow->recentFilesUrls().length() > 5 ? 5 : m_mainWindow->recentFilesUrls().length(); // grab at most 5
+    int numRecentFiles = qMin(recentFileUrls.length(), 5); // grab at most 5
     KisFileIconCreator iconCreator;
+    int iconSide = recentDocumentsListView->width() / 6;
+    QSize iconSize(iconSide, iconSide);
+    QList<QUrl> brokenUrls;
+    QList<QStandardItem *> items;
 
-    for (int i = 0; i < numRecentFiles; i++ ) {
-
-        QStandardItem *recentItem = new QStandardItem(1,2); // 1 row, 1 column
-        recentItem->setIcon(KisIconUtils::loadIcon("document-export"));
-
-        QString recentFileUrlPath = m_mainWindow->recentFilesUrls().at(i).toLocalFile();
-
-        QString fileName = QFileInfo(recentFileUrlPath).fileName();
-
-        QList<QUrl> brokenUrls;
-
+    for (int i = 0; i < numRecentFiles; i++) {
+        QString recentFileUrlPath = recentFileUrls.at(i).toLocalFile();
+        QIcon icon;
 
         if (m_thumbnailMap.contains(recentFileUrlPath)) {
-            recentItem->setIcon(m_thumbnailMap[recentFileUrlPath]);
+            icon = m_thumbnailMap[recentFileUrlPath];
         } else {
-            QIcon icon;
-            bool success = iconCreator.createFileIcon(recentFileUrlPath, icon, devicePixelRatioF());
+            bool success = iconCreator.createFileIcon(recentFileUrlPath, icon, devicePixelRatioF(), iconSize, true);
             if (success) {
-                recentItem->setIcon(icon);
-                m_thumbnailMap[recentFileUrlPath] = recentItem->icon();
+                m_thumbnailMap[recentFileUrlPath] = icon;
             } else {
-                brokenUrls << m_mainWindow->recentFilesUrls().at(i);
+                brokenUrls << recentFileUrls.at(i);
+                continue;
             }
+        }
 
-        }
-        Q_FOREACH(const QUrl &url, brokenUrls) {
-            m_mainWindow->removeRecentUrl(url);
-        }
-        // set the recent object with the data
-        if (brokenUrls.isEmpty() || brokenUrls.last().toLocalFile() != recentFileUrlPath) {
-            recentItem->setText(fileName); // what to display for the item
-            recentItem->setToolTip(recentFileUrlPath);
-            m_recentFilesModel.appendRow(recentItem);
-        }
+        const QString &fileName = QFileInfo(recentFileUrlPath).fileName();
+        QStandardItem *recentItem = new QStandardItem(icon, fileName);
+        recentItem->setToolTip(recentFileUrlPath);
+        items.append(recentItem);
+    }
+
+    for (const QUrl &url : brokenUrls) {
+        m_mainWindow->removeRecentUrl(url);
     }
 
     // hide clear and Recent files title if there are none
-    bool hasRecentFiles = m_mainWindow->recentFilesUrls().length() > 0;
+    widgetRecentDocuments->setVisible(!items.isEmpty());
 
-    recentDocumentsLabel->setVisible(hasRecentFiles);
-    clearRecentFilesLink->setVisible(hasRecentFiles);
+    m_recentFilesModel.clear(); // clear existing data before it gets re-populated
+    for (QStandardItem *item : items) {
+        m_recentFilesModel.appendRow(item);
+    }
 
-    recentDocumentsListView->setIconSize(QSize(48, 48));
+    recentDocumentsListView->setIconSize(iconSize);
     recentDocumentsListView->setModel(&m_recentFilesModel);
 }
 
@@ -491,6 +453,15 @@ void KisWelcomePageWidget::dragLeaveEvent(QDragLeaveEvent */*event*/)
     m_mainWindow->dragLeave();
 }
 
+bool KisWelcomePageWidget::eventFilter(QObject *watched, QEvent *event)
+{
+    if (watched == recentDocumentsListView && event->type() == QEvent::Leave) {
+        recentDocumentsListView->clearSelection();
+    }
+    return QWidget::eventFilter(watched, event);
+}
+
+
 void KisWelcomePageWidget::showDevVersionHighlight()
 {
     // always flag developement version
@@ -512,8 +483,12 @@ void KisWelcomePageWidget::showDevVersionHighlight()
 
 void KisWelcomePageWidget::recentDocumentClicked(QModelIndex index)
 {
+    setEnabled(false); // prevent multiple clicks while doc is opening
+    QApplication::processEvents();
+
     QString fileUrl = index.data(Qt::ToolTipRole).toString();
     m_mainWindow->openDocument(QUrl::fromLocalFile(fileUrl), KisMainWindow::None );
+    setEnabled(true);
 }
 
 

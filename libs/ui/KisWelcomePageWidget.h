@@ -71,6 +71,8 @@ protected:
     void dragMoveEvent(QDragMoveEvent * event) override;
     void dragLeaveEvent(QDragLeaveEvent * event) override;
 
+    bool eventFilter(QObject *watched, QEvent *event) override;
+
 
 private:
     void showDevVersionHighlight();

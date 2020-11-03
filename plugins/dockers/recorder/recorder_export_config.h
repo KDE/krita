@@ -60,6 +60,9 @@ public:
 
     QList<RecorderProfile> defaultProfiles() const;
 
+    QSet<int> editedProfilesIndexes() const;
+    void setEditedProfilesIndexes(const QSet<int> &value);
+
     QString ffmpegPath() const;
     void setFfmpegPath(const QString &value);
 
@@ -70,5 +73,8 @@ private:
     Q_DISABLE_COPY(RecorderExportConfig)
     mutable KisConfig *config;
 };
+
+bool operator==(const RecorderProfile &left, const RecorderProfile &right);
+bool operator!=(const RecorderProfile &left, const RecorderProfile &right);
 
 #endif // RECORDER_EXPORT_CONFIG_H

@@ -34,8 +34,9 @@ const QString keySize = "recorder_export/size";
 const QString keyLockRatio = "recorder_export/lockratio";
 const QString keyProfileIndex = "recorder_export/profileIndex";
 const QString keyProfiles = "recorder_export/profiles";
+const QString keyEditedProfiles = "recorder_export/editedprofiles";
 
-const QString profilePrefix = "-framerate $IN_FPS\n-pattern_type glob -i \"$INPUT_DIR*.jpg\"\n";
+const QString profilePrefix = "-framerate $IN_FPS\n-i \"$INPUT_DIR%07d.jpg\"\n";
 
 const QList<RecorderProfile> defaultProfiles = {
     { "MP4 x264",   "mp4",  profilePrefix % "-vf \"scale=$WIDTH:$HEIGHT\"\n-c:v libx264\n-r $OUT_FPS\n-pix_fmt yuv420p" },
@@ -143,34 +144,80 @@ QList<RecorderProfile> RecorderExportConfig::profiles() const
     if (profilesStr.isEmpty())
         return ::defaultProfiles;
 
+    const QSet<int> &editedIndexes = editedProfilesIndexes();
     QList<RecorderProfile> profiles;
     const QStringList &profilesList = profilesStr.split("\n");
+    int index = 0;
     for (const QString &profileStr : profilesList) {
-        const QStringList& profileList = profileStr.split("|");
-        if (profileList.size() != 3)
-            continue;
+        // take saved profile in case it's edited.. or something bad happen
+        if (editedIndexes.contains(index) || index >= ::defaultProfiles.size()) {
+            const QStringList& profileList = profileStr.split("|");
+            if (profileList.size() == 3) {
+                profiles.append({profileList[0], profileList[1], QString(profileList[2]).replace("\\n", "\n")});
+            }
+        } else {
+            // use default profile to make it possible to upgrade
+            profiles.append(::defaultProfiles[index]);
+        }
 
-        profiles.append({profileList[0], profileList[1], QString(profileList[2]).replace("\\n", "\n")});
+        ++index;
     }
     return profiles;
 }
 
 void RecorderExportConfig::setProfiles(const QList<RecorderProfile> &value)
 {
+    Q_ASSERT(value.size() == ::defaultProfiles.size());
+
+    const QSet<int> &savedEditedProfilesIndexes = editedProfilesIndexes();
+    QSet<int> editedProfilesIndexes = savedEditedProfilesIndexes;
     QString outValue;
     const QRegExp cleanUp("[\n|]");
+    int index = 0;
     for (const RecorderProfile &profile : value) {
+        const RecorderProfile &defaultProfile = ::defaultProfiles[index];
+        if (profile != defaultProfile) {
+            editedProfilesIndexes.insert(index);
+        } else {
+            editedProfilesIndexes.remove(index);
+        }
+
         outValue += QString(profile.name).replace(cleanUp, " ") % "|"
                 % QString(profile.extension).replace(cleanUp, " ") % "|"
                 % QString(profile.arguments).replace("\n", "\\n").replace("|", " ") % "\n";
+
+        ++index;
     }
+
     config->writeEntry(keyProfiles, outValue);
+    if (savedEditedProfilesIndexes != editedProfilesIndexes) {
+        setEditedProfilesIndexes(editedProfilesIndexes);
+    }
 }
 
 
 QList<RecorderProfile> RecorderExportConfig::defaultProfiles() const
 {
     return ::defaultProfiles;
+}
+
+QSet<int> RecorderExportConfig::editedProfilesIndexes() const
+{
+    const QVariantList &readValue = config->readEntry(keyEditedProfiles, QVariantList());
+    QSet<int> result;
+    for (const QVariant &item : readValue) {
+        result.insert(item.toInt());
+    }
+    return result;
+}
+
+void RecorderExportConfig::setEditedProfilesIndexes(const QSet<int> &value)
+{
+    QVariantList writeValue;
+    for (int index : value) {
+        writeValue.append(index);
+    }
+    config->writeEntry(keyEditedProfiles, writeValue);
 }
 
 
@@ -195,4 +242,16 @@ QString RecorderExportConfig::videoDirectory() const
 void RecorderExportConfig::setVideoDirectory(const QString &value)
 {
     config->writeEntry(keyVideoDirectory, value);
+}
+
+bool operator==(const RecorderProfile &left, const RecorderProfile &right)
+{
+    return left.arguments == right.arguments
+        && left.name == right.name
+        && left.extension == right.extension;
+}
+
+bool operator!=(const RecorderProfile &left, const RecorderProfile &right)
+{
+    return !(left == right);
 }

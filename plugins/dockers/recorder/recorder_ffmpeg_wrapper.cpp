@@ -30,7 +30,7 @@ namespace
 QRegularExpression frameRegexp("^frame=[ ]*([0-9]+) .*$");
 QRegularExpression lineDelimiter("[\n\r]");
 QRegularExpression junkRegex("\\[[a-zA-Z0-9]+ @ 0x[a-fA-F0-9]*\\][ ]*");
-QStringList errorWords = { "Unable", "Invalid", "Error", "failed", "NULL", "No such", "divisible" };
+QStringList errorWords = { "Unable", "Invalid", "Error", "failed", "NULL", "No such", "divisible", "not" };
 
 // TODO: use QProcess::splitCommand after moving to Qt 5.15
 /*!

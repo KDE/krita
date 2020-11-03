@@ -145,9 +145,11 @@ void KisMeshTransformStrategy::setTransformFunction(const QPointF &mousePos, boo
 
     if (shiftModifierActive) {
         if (hoveredControl) {
+            auto it = m_d->currentArgs.meshTransform()->find(*hoveredControl);
+
             if (!hoveredControl->isNode() ||
-                !controlIt.isBorderNode() ||
-                controlIt.isCornerNode()) {
+                !it.isBorderNode() ||
+                it.isCornerNode()) {
 
                 hoveredControl = boost::none;
             } else {

@@ -641,6 +641,40 @@ public:
             return (isLeftBorder() + isRightBorder() + isTopBorder() + isBottomBorder()) > 1;
         }
 
+        bool isNode() const {
+            return type() == Mesh::ControlPointIndex::Node;
+        }
+
+        control_point_iterator symmetricControl() const {
+            typename Mesh::ControlPointIndex::ControlType newIndex =
+                    Mesh::ControlPointIndex::Node;
+
+            switch (type()) {
+            case Mesh::ControlPointIndex::Node:
+                newIndex = Mesh::ControlPointIndex::Node;
+                break;
+            case Mesh::ControlPointIndex::LeftControl:
+                newIndex = Mesh::ControlPointIndex::RightControl;
+                break;
+            case Mesh::ControlPointIndex::RightControl:
+                newIndex = Mesh::ControlPointIndex::LeftControl;
+                break;
+            case Mesh::ControlPointIndex::TopControl:
+                newIndex = Mesh::ControlPointIndex::BottomControl;
+                break;
+            case Mesh::ControlPointIndex::BottomControl:
+                newIndex = Mesh::ControlPointIndex::TopControl;
+                break;
+            }
+
+            control_point_iterator it(m_mesh, m_col, m_row, newIndex);
+            if (!it.controlIsValid()) {
+                it = m_mesh->endControlPoints();
+            }
+
+            return it;
+        }
+
         segment_iterator topSegment() const;
         segment_iterator bottomSegment() const;
         segment_iterator leftSegment() const;
@@ -779,6 +813,28 @@ public:
 
         QPointF& p3() const {
             return secondNode().node;
+        }
+
+        control_point_iterator itP0() const {
+            return m_mesh->find(firstNodeIndex());
+        }
+
+        control_point_iterator itP1() const {
+            return m_mesh->find(ControlPointIndex(firstNodeIndex(),
+                                                  m_isHorizontal ?
+                                                      Mesh::ControlType::RightControl :
+                                                      Mesh::ControlType::BottomControl));
+        }
+
+        control_point_iterator itP2() const {
+            return m_mesh->find(ControlPointIndex(secondNodeIndex(),
+                                                  m_isHorizontal ?
+                                                      Mesh::ControlType::LeftControl :
+                                                      Mesh::ControlType::TopControl));
+        }
+
+        control_point_iterator itP3() const {
+            return m_mesh->find(secondNodeIndex());
         }
 
         int degree() const {

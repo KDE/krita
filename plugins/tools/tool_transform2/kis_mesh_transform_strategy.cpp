@@ -51,7 +51,9 @@ struct KisMeshTransformStrategy::Private
 
     enum Mode {
         OVER_POINT = 0,
+        OVER_POINT_SYMMETRIC,
         OVER_SEGMENT,
+        OVER_SEGMENT_SYMMETRIC,
         OVER_PATCH,
         SPLIT_SEGMENT,
         MULTIPLE_POINT_SELECTION,
@@ -76,6 +78,9 @@ struct KisMeshTransformStrategy::Private
     QPointF initialRotationCenter;
     qreal initialSelectionMaxDimension = 0.0;
     KisBezierTransformMesh initialMeshState;
+
+    qreal symmetricLengthProportion1 = 1.0;
+    qreal symmetricLengthProportion2 = 1.0;
 
     bool pointWasDragged = false;
     QPointF lastMousePos;
@@ -112,7 +117,7 @@ KisMeshTransformStrategy::~KisMeshTransformStrategy()
 {
 }
 
-void KisMeshTransformStrategy::setTransformFunction(const QPointF &mousePos, bool perspectiveModifierActive, bool shiftModifierActive)
+void KisMeshTransformStrategy::setTransformFunction(const QPointF &mousePos, bool perspectiveModifierActive, bool shiftModifierActive, bool altModifierActive)
 {
     const qreal grabRadius = KisTransformUtils::effectiveHandleGrabRadius(m_d->converter);
 
@@ -121,10 +126,12 @@ void KisMeshTransformStrategy::setTransformFunction(const QPointF &mousePos, boo
     Private::Mode mode = Private::NOTHING;
 
 
-    auto controlIt = m_d->currentArgs.meshTransform()->hitTestControlPoint(mousePos, grabRadius);
-    if (controlIt != m_d->currentArgs.meshTransform()->endControlPoints()) {
-        hoveredControl = controlIt.controlIndex();
-        mode = Private::OVER_POINT;
+    {
+        auto controlIt = m_d->currentArgs.meshTransform()->hitTestControlPoint(mousePos, grabRadius);
+        if (controlIt != m_d->currentArgs.meshTransform()->endControlPoints()) {
+            hoveredControl = controlIt.controlIndex();
+            mode = Private::OVER_POINT;
+        }
     }
 
     if (mode == Private::NOTHING) {
@@ -143,22 +150,32 @@ void KisMeshTransformStrategy::setTransformFunction(const QPointF &mousePos, boo
         }
     }
 
-    if (shiftModifierActive) {
-        if (hoveredControl) {
-            auto it = m_d->currentArgs.meshTransform()->find(*hoveredControl);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(bool(hoveredControl) + bool(hoveredSegment) <= 1);
 
-            if (!hoveredControl->isNode() ||
-                !it.isBorderNode() ||
-                it.isCornerNode()) {
 
-                hoveredControl = boost::none;
-            } else {
-                hoveredSegment = boost::none;
-            }
-        }
+    KisBezierTransformMesh::control_point_iterator controlIt =
+        m_d->currentArgs.meshTransform()->endControlPoints();
 
-        mode = hoveredSegment || hoveredControl ?
-            Private::SPLIT_SEGMENT : Private::NOTHING;
+    if (hoveredControl) {
+        controlIt = m_d->currentArgs.meshTransform()->find(*hoveredControl);
+    }
+
+    if (altModifierActive &&
+        ((hoveredControl &&
+          hoveredControl->isNode() &&
+          controlIt.isBorderNode() &&
+          !controlIt.isCornerNode()) ||
+         hoveredSegment)) {
+
+        mode = Private::SPLIT_SEGMENT;
+
+    } else if (shiftModifierActive &&
+               hoveredControl &&
+               !hoveredControl->isNode()) {
+        mode = Private::OVER_POINT_SYMMETRIC;
+    } else if (shiftModifierActive &&
+               hoveredSegment) {
+        mode = Private::OVER_SEGMENT_SYMMETRIC;
     } else {
         if (hoveredControl || hoveredSegment) {
             if (perspectiveModifierActive) {
@@ -252,9 +269,11 @@ QCursor KisMeshTransformStrategy::getCurrentCursor() const
 
     switch (m_d->mode) {
     case Private::OVER_POINT:
+    case Private::OVER_POINT_SYMMETRIC:
         cursor = KisCursor::pointingHandCursor();
         break;
     case Private::OVER_SEGMENT:
+    case Private::OVER_SEGMENT_SYMMETRIC:
         cursor = KisCursor::pointingHandCursor();
         break;
     case Private::OVER_PATCH:
@@ -390,6 +409,40 @@ bool KisMeshTransformStrategy::shouldDeleteNode(qreal distance, qreal param)
 
 }
 
+namespace {
+qreal calcSymmetricLengthProportion(KisBezierTransformMesh &mesh,
+                                    KisBezierTransformMesh::control_point_iterator it)
+{
+    qreal result = 1.0;
+
+    auto symmetricIt = it.symmetricControl();
+    if (symmetricIt != mesh.endControlPoints()) {
+        const QPointF p1 = *it - it.node().node;
+        const QPointF p2 = *symmetricIt - it.node().node;
+
+        const qreal baseLength = KisAlgebra2D::norm(p1);
+        result =
+            baseLength > 0 ?
+            qAbs(KisAlgebra2D::dotProduct(p1, p2) / pow2(baseLength)) : 1.0;
+
+    }
+
+    return result;
+}
+
+void correctSymmetricNeightbour(KisBezierTransformMesh &mesh,
+                                KisBezierTransformMesh::control_point_iterator it,
+                                qreal lengthProportion)
+{
+    auto symmetricIt = it.symmetricControl();
+    if (symmetricIt != mesh.endControlPoints()) {
+        const QPointF p1 = *it - it.node().node;
+        *symmetricIt = it.node().node - lengthProportion * p1;
+    }
+}
+
+}
+
 bool KisMeshTransformStrategy::beginPrimaryAction(const QPointF &pt)
 {
     // retval shows if the stroke may have a continuation
@@ -414,14 +467,21 @@ bool KisMeshTransformStrategy::beginPrimaryAction(const QPointF &pt)
 
     m_d->pointWasDragged = false;
 
-    if (m_d->mode == Private::OVER_POINT) {
+    if (m_d->mode == Private::OVER_POINT || m_d->mode == Private::OVER_POINT_SYMMETRIC) {
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(m_d->hoveredControl, false);
 
         m_d->selectedNodes.clear();
         m_d->selectedNodes << m_d->hoveredControl->nodeIndex;
+
+        if (m_d->mode == Private::OVER_POINT_SYMMETRIC) {
+            auto it = m_d->currentArgs.meshTransform()->find(*m_d->hoveredControl);
+            m_d->symmetricLengthProportion1 =
+                calcSymmetricLengthProportion(*m_d->currentArgs.meshTransform(), it);
+        }
+
         retval = true;
 
-    } else if (m_d->mode == Private::OVER_SEGMENT) {
+    } else if (m_d->mode == Private::OVER_SEGMENT || m_d->mode == Private::OVER_SEGMENT_SYMMETRIC) {
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(m_d->hoveredSegment, false);
 
         auto it = m_d->currentArgs.meshTransform()->find(*m_d->hoveredSegment);
@@ -429,6 +489,18 @@ bool KisMeshTransformStrategy::beginPrimaryAction(const QPointF &pt)
 
         m_d->mouseClickSegmentPosition =
             KisBezierUtils::nearestPoint({it.p0(), it.p1(), it.p2(), it.p3()}, pt);
+
+        if (m_d->mode == Private::OVER_SEGMENT_SYMMETRIC) {
+            auto it = m_d->currentArgs.meshTransform()->find(*m_d->hoveredSegment);
+
+            m_d->symmetricLengthProportion1 =
+                calcSymmetricLengthProportion(*m_d->currentArgs.meshTransform(),
+                                              it.itP1().symmetricControl());
+
+            m_d->symmetricLengthProportion2 =
+                calcSymmetricLengthProportion(*m_d->currentArgs.meshTransform(),
+                                              it.itP2().symmetricControl());
+        }
 
         retval = true;
 
@@ -470,17 +542,21 @@ bool KisMeshTransformStrategy::beginPrimaryAction(const QPointF &pt)
 
 void KisMeshTransformStrategy::continuePrimaryAction(const QPointF &pt, bool shiftModifierActve, bool altModifierActive)
 {
-    if (m_d->mode == Private::OVER_POINT) {
+    if (m_d->mode == Private::OVER_POINT || m_d->mode == Private::OVER_POINT_SYMMETRIC) {
         KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->hoveredControl);
 
         auto it = m_d->currentArgs.meshTransform()->find(*m_d->hoveredControl);
 
-        if (it.type() == KisBezierTransformMesh::ControlType::Node) {
+        if (it.isNode()) {
             it.node().translate(pt - m_d->lastMousePos);
         } else {
             *it += pt - m_d->lastMousePos;
+
+            if (m_d->mode == Private::OVER_POINT_SYMMETRIC) {
+                correctSymmetricNeightbour(*m_d->currentArgs.meshTransform(), it, m_d->symmetricLengthProportion1);
+            }
         }
-    } else if (m_d->mode == Private::OVER_SEGMENT) {
+    } else if (m_d->mode == Private::OVER_SEGMENT || m_d->mode == Private::OVER_SEGMENT_SYMMETRIC) {
         KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->hoveredSegment);
         KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->mouseClickSegmentPosition);
 
@@ -500,6 +576,12 @@ void KisMeshTransformStrategy::continuePrimaryAction(const QPointF &pt, bool shi
 
         it.p1() += offsetP1;
         it.p2() += offsetP2;
+
+        if (m_d->mode == Private::OVER_SEGMENT_SYMMETRIC) {
+            correctSymmetricNeightbour(*m_d->currentArgs.meshTransform(), it.itP1(), m_d->symmetricLengthProportion1);
+            correctSymmetricNeightbour(*m_d->currentArgs.meshTransform(), it.itP2(), m_d->symmetricLengthProportion2);
+        }
+
     } else if (m_d->mode == Private::SPLIT_SEGMENT) {
         *m_d->currentArgs.meshTransform() = m_d->initialMeshState;
         const bool sanitySplitResult = splitHoveredSegment(pt);
@@ -562,6 +644,7 @@ bool KisMeshTransformStrategy::endPrimaryAction()
     m_d->mouseClickSegmentPosition = boost::none;
 
     return m_d->mode == Private::OVER_POINT ||
+       m_d->mode == Private::OVER_POINT_SYMMETRIC ||
         m_d->mode == Private::OVER_SEGMENT ||
         m_d->mode == Private::MOVE_MODE ||
         m_d->mode == Private::SCALE_MODE ||

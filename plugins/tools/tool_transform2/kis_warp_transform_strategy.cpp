@@ -127,9 +127,10 @@ KisWarpTransformStrategy::~KisWarpTransformStrategy()
 {
 }
 
-void KisWarpTransformStrategy::setTransformFunction(const QPointF &mousePos, bool perspectiveModifierActive, bool shiftModifierActive)
+void KisWarpTransformStrategy::setTransformFunction(const QPointF &mousePos, bool perspectiveModifierActive, bool shiftModifierActive, bool altModifierActive)
 {
     Q_UNUSED(shiftModifierActive);
+    Q_UNUSED(altModifierActive);
 
     const double handleRadius = KisTransformUtils::effectiveHandleGrabRadius(m_d->converter);
 

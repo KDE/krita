@@ -204,11 +204,20 @@ int controlPolygonZeros(const QList<QPointF> &controlPoints);
  * @brief calculates local (u,v) coordinates of the patch corrresponding to \p globalPoint
  * @param points control points as the layouted in KisBezierPatch
  * @param globalPoint point in global coordinates
- * @return
+ * @return point in local coordinates
  */
 KRITAGLOBAL_EXPORT
 QPointF calculateLocalPos(const std::array<QPointF, 12> &points,
                           const QPointF &globalPoint);
+
+/**
+ * @brief calculates global coordinate corresponding to the patch coordinate (u, v)
+ * @param points control points as the layouted in KisBezierPatch
+ * @param localPoint point in local coordinates
+ * @return point in global coordinates
+ */
+KRITAGLOBAL_EXPORT
+QPointF calculateGlobalPos(const std::array<QPointF, 12> &points, const QPointF &localPoint);
 
 /**
  * @brief Interpolates quadric curve passing through given points

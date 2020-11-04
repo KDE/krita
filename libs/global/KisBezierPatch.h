@@ -51,6 +51,9 @@ public:
 
     QRectF srcBoundingRect() const;
 
+    QPointF localToGlobal(const QPointF &pt) const;
+    QPointF globalToLocal(const QPointF &pt) const;
+
     void sampleIrregularGrid(QSize &gridSize,
                              QVector<QPointF> &origPoints,
                              QVector<QPointF> &transfPoints) const;

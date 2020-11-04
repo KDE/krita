@@ -71,8 +71,10 @@ struct KisMeshTransformStrategy::Private
     QSet<KisBezierTransformMesh::NodeIndex> selectedNodes;
     boost::optional<KisBezierTransformMesh::SegmentIndex> hoveredSegment;
     boost::optional<KisBezierTransformMesh::ControlPointIndex> hoveredControl;
+    boost::optional<KisBezierTransformMesh::PatchIndex> hoveredPatch;
+    qreal localSegmentPosition = 0.0;
+    QPointF localPatchPosition;
 
-    boost::optional<qreal> mouseClickSegmentPosition;
     QPointF mouseClickPos;
 
     QPointF initialRotationCenter;
@@ -123,7 +125,10 @@ void KisMeshTransformStrategy::setTransformFunction(const QPointF &mousePos, boo
 
     boost::optional<KisBezierTransformMesh::SegmentIndex> hoveredSegment;
     boost::optional<KisBezierTransformMesh::ControlPointIndex> hoveredControl;
+    boost::optional<KisBezierTransformMesh::PatchIndex> hoveredPatch;
     Private::Mode mode = Private::NOTHING;
+    QPointF localPatchPos;
+    qreal localSegmentPos = 0.0;
 
 
     {
@@ -143,14 +148,26 @@ void KisMeshTransformStrategy::setTransformFunction(const QPointF &mousePos, boo
     }
 
     if (mode == Private::NOTHING) {
-        auto segmentIt = m_d->currentArgs.meshTransform()->hitTestSegment(mousePos, grabRadius);
+        auto segmentIt = m_d->currentArgs.meshTransform()->hitTestSegment(mousePos, grabRadius, &localSegmentPos);
         if (segmentIt != m_d->currentArgs.meshTransform()->endSegments()) {
             hoveredSegment = segmentIt.segmentIndex();
             mode = Private::OVER_SEGMENT;
         }
     }
 
-    KIS_SAFE_ASSERT_RECOVER_RETURN(bool(hoveredControl) + bool(hoveredSegment) <= 1);
+    if (mode == Private::NOTHING) {
+        auto patchIt = m_d->currentArgs.meshTransform()->hitTestPatch(mousePos, &localPatchPos);
+        if (patchIt != m_d->currentArgs.meshTransform()->end()) {
+            hoveredPatch = patchIt.patchIndex();
+            mode = Private::OVER_PATCH;
+        }
+    }
+
+
+    // verify that we have only one active selection at a time
+    KIS_SAFE_ASSERT_RECOVER_RETURN(bool(hoveredControl) +
+                                   bool(hoveredSegment) +
+                                   bool(hoveredPatch)<= 1);
 
 
     KisBezierTransformMesh::control_point_iterator controlIt =
@@ -183,7 +200,7 @@ void KisMeshTransformStrategy::setTransformFunction(const QPointF &mousePos, boo
             }
         } else {
             if (m_d->currentArgs.meshTransform()->dstBoundingRect().contains(mousePos)) {
-                mode = Private::MOVE_MODE;
+                mode = shiftModifierActive ? Private::OVER_PATCH : Private::MOVE_MODE;
             } else if (perspectiveModifierActive) {
                 mode = Private::SCALE_MODE;
             } else {
@@ -194,13 +211,19 @@ void KisMeshTransformStrategy::setTransformFunction(const QPointF &mousePos, boo
 
     if (mode != m_d->mode ||
         hoveredControl != m_d->hoveredControl ||
-        hoveredSegment != m_d->hoveredSegment) {
+        hoveredSegment != m_d->hoveredSegment ||
+        hoveredPatch != m_d->hoveredPatch) {
 
         m_d->hoveredControl = hoveredControl;
         m_d->hoveredSegment = hoveredSegment;
+        m_d->hoveredPatch = hoveredPatch;
+
         m_d->mode = mode;
         Q_EMIT requestCanvasUpdate();
     }
+
+    m_d->localPatchPosition = localPatchPos;
+    m_d->localSegmentPosition = localSegmentPos;
 }
 
 void KisMeshTransformStrategy::paint(QPainter &gc)
@@ -277,7 +300,7 @@ QCursor KisMeshTransformStrategy::getCurrentCursor() const
         cursor = KisCursor::pointingHandCursor();
         break;
     case Private::OVER_PATCH:
-        cursor = KisCursor::pointingHandCursor();
+        cursor = KisCursor::roundCursor();
         break;
     case Private::SPLIT_SEGMENT: {
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(m_d->hoveredSegment || m_d->hoveredControl,
@@ -487,21 +510,19 @@ bool KisMeshTransformStrategy::beginPrimaryAction(const QPointF &pt)
         auto it = m_d->currentArgs.meshTransform()->find(*m_d->hoveredSegment);
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(it != m_d->currentArgs.meshTransform()->endSegments(), false);
 
-        m_d->mouseClickSegmentPosition =
-            KisBezierUtils::nearestPoint({it.p0(), it.p1(), it.p2(), it.p3()}, pt);
-
         if (m_d->mode == Private::OVER_SEGMENT_SYMMETRIC) {
-            auto it = m_d->currentArgs.meshTransform()->find(*m_d->hoveredSegment);
-
             m_d->symmetricLengthProportion1 =
                 calcSymmetricLengthProportion(*m_d->currentArgs.meshTransform(),
-                                              it.itP1().symmetricControl());
+                                              it.itP1());
 
             m_d->symmetricLengthProportion2 =
                 calcSymmetricLengthProportion(*m_d->currentArgs.meshTransform(),
-                                              it.itP2().symmetricControl());
+                                              it.itP2());
         }
 
+        retval = true;
+
+    } else if (m_d->mode == Private::OVER_PATCH) {
         retval = true;
 
     } else if (m_d->mode == Private::SPLIT_SEGMENT) {
@@ -558,7 +579,6 @@ void KisMeshTransformStrategy::continuePrimaryAction(const QPointF &pt, bool shi
         }
     } else if (m_d->mode == Private::OVER_SEGMENT || m_d->mode == Private::OVER_SEGMENT_SYMMETRIC) {
         KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->hoveredSegment);
-        KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->mouseClickSegmentPosition);
 
         auto it = m_d->currentArgs.meshTransform()->find(*m_d->hoveredSegment);
 
@@ -572,7 +592,7 @@ void KisMeshTransformStrategy::continuePrimaryAction(const QPointF &pt, bool shi
         QPointF offsetP2;
 
         std::tie(offsetP1, offsetP2) =
-            KisBezierUtils::offsetSegment(*m_d->mouseClickSegmentPosition, offset);
+            KisBezierUtils::offsetSegment(m_d->localSegmentPosition, offset);
 
         it.p1() += offsetP1;
         it.p2() += offsetP2;
@@ -581,6 +601,35 @@ void KisMeshTransformStrategy::continuePrimaryAction(const QPointF &pt, bool shi
             correctSymmetricNeightbour(*m_d->currentArgs.meshTransform(), it.itP1(), m_d->symmetricLengthProportion1);
             correctSymmetricNeightbour(*m_d->currentArgs.meshTransform(), it.itP2(), m_d->symmetricLengthProportion2);
         }
+    } else if (m_d->mode == Private::OVER_PATCH) {
+        KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->hoveredPatch);
+
+        *m_d->currentArgs.meshTransform() = m_d->initialMeshState;
+
+        auto patchIt = m_d->currentArgs.meshTransform()->findPatch(*m_d->hoveredPatch);
+
+        const QPointF offset = pt - m_d->mouseClickPos;
+
+        auto offsetSegment =
+            [] (KisBezierTransformMesh::segment_iterator it,
+                qreal t,
+                qreal distance,
+                const QPointF &offset) {
+
+            QPointF offsetP1;
+            QPointF offsetP2;
+
+            std::tie(offsetP1, offsetP2) =
+                KisBezierUtils::offsetSegment(t, (1.0 - distance) * offset);
+
+            it.p1() += offsetP1;
+            it.p2() += offsetP2;
+        };
+
+        offsetSegment(patchIt.segmentP(), m_d->localPatchPosition.x(), m_d->localPatchPosition.y(), offset);
+        offsetSegment(patchIt.segmentQ(), m_d->localPatchPosition.x(), 1.0 - m_d->localPatchPosition.y(), offset);
+        offsetSegment(patchIt.segmentR(), m_d->localPatchPosition.y(), m_d->localPatchPosition.x(), offset);
+        offsetSegment(patchIt.segmentS(), m_d->localPatchPosition.y(), 1.0 - m_d->localPatchPosition.x(), offset);
 
     } else if (m_d->mode == Private::SPLIT_SEGMENT) {
         *m_d->currentArgs.meshTransform() = m_d->initialMeshState;
@@ -641,11 +690,12 @@ void KisMeshTransformStrategy::continuePrimaryAction(const QPointF &pt, bool shi
 
 bool KisMeshTransformStrategy::endPrimaryAction()
 {
-    m_d->mouseClickSegmentPosition = boost::none;
-
     return m_d->mode == Private::OVER_POINT ||
        m_d->mode == Private::OVER_POINT_SYMMETRIC ||
         m_d->mode == Private::OVER_SEGMENT ||
+        m_d->mode == Private::OVER_SEGMENT_SYMMETRIC ||
+        m_d->mode == Private::OVER_PATCH ||
+        m_d->mode == Private::SPLIT_SEGMENT ||
         m_d->mode == Private::MOVE_MODE ||
         m_d->mode == Private::SCALE_MODE ||
         m_d->mode == Private::ROTATE_MODE;

@@ -125,6 +125,7 @@ class Mesh : public boost::equality_comparable<Mesh<NodeArg, PatchArg>>
 public:
     using Node = NodeArg;
     using Patch = PatchArg;
+    using PatchIndex = QPoint;
     using NodeIndex = QPoint;
     using SegmentIndex = std::pair<NodeIndex, int>;
 
@@ -460,6 +461,10 @@ public:
         }
     }
 
+    Patch makePatch(const PatchIndex &index) const {
+        return makePatch(index.x(), index.y());
+    }
+
     Patch makePatch(int col, int row) const
     {
         const Node &tl = node(col, row);
@@ -518,6 +523,15 @@ public:
         {
         }
 
+        Mesh::PatchIndex patchIndex() const {
+            return {m_col, m_row};
+        }
+
+        segment_iterator segmentP() const;
+        segment_iterator segmentQ() const;
+        segment_iterator segmentR() const;
+        segment_iterator segmentS() const;
+
     private:
         friend class boost::iterator_core_access;
 
@@ -569,7 +583,6 @@ public:
         int m_col;
         int m_row;
     };
-
 
     class control_point_iterator :
         public boost::iterator_facade <control_point_iterator,
@@ -668,6 +681,7 @@ public:
             }
 
             control_point_iterator it(m_mesh, m_col, m_row, newIndex);
+
             if (!it.controlIsValid()) {
                 it = m_mesh->endControlPoints();
             }
@@ -1028,6 +1042,29 @@ public:
         return result;
     }
 
+    iterator hitTestPatch(const QPointF &pt, QPointF *localPointResult = 0) {
+        const QRectF unitRect(0, 0, 1, 1);
+
+        for (auto it = begin(); it != end(); ++it) {
+            Patch patch = *it;
+
+            if (patch.dstBoundingRect().contains(pt)) {
+                const QPointF localPos = KisBezierUtils::calculateLocalPos(patch.points, pt);
+
+                if (unitRect.contains(localPos)) {
+
+                    if (localPointResult) {
+                        *localPointResult = localPos;
+                    }
+
+                    return it;
+                }
+            }
+        }
+        return end();
+
+    }
+
     control_point_iterator find(const ControlPointIndex &index) {
         // TODO: verify validness
         return control_point_iterator(this, index.nodeIndex.x(), index.nodeIndex.y(), index.controlType);
@@ -1036,6 +1073,11 @@ public:
     segment_iterator find(const SegmentIndex &index) {
         // TODO: verify validness
         return segment_iterator(this, index.first.x(), index.first.y(), index.second);
+    }
+
+    iterator findPatch(const PatchIndex &index) {
+        // TODO: verify validness
+        return iterator(this, index.x(), index.y());
     }
 
     void scaleForThumbnail(const QTransform &t) {
@@ -1065,6 +1107,38 @@ QDebug operator<<(QDebug dbg, const Mesh<Node, Patch> &mesh)
         }
     }
     return dbg.space();
+}
+
+template<typename NodeArg, typename PatchArg>
+typename Mesh<NodeArg, PatchArg>::segment_iterator
+Mesh<NodeArg, PatchArg>::iterator::segmentP() const
+{
+    // FIXME: remove const cast
+    return segment_iterator(const_cast<Mesh<NodeArg, PatchArg>*>(m_mesh), m_col, m_row, 1);
+}
+
+template<typename NodeArg, typename PatchArg>
+typename Mesh<NodeArg, PatchArg>::segment_iterator
+Mesh<NodeArg, PatchArg>::iterator::segmentQ() const
+{
+    // FIXME: remove const cast
+    return segment_iterator(const_cast<Mesh<NodeArg, PatchArg>*>(m_mesh), m_col, m_row + 1, 1);
+}
+
+template<typename NodeArg, typename PatchArg>
+typename Mesh<NodeArg, PatchArg>::segment_iterator
+Mesh<NodeArg, PatchArg>::iterator::segmentR() const
+{
+    // FIXME: remove const cast
+    return segment_iterator(const_cast<Mesh<NodeArg, PatchArg>*>(m_mesh), m_col, m_row, 0);
+}
+
+template<typename NodeArg, typename PatchArg>
+typename Mesh<NodeArg, PatchArg>::segment_iterator
+Mesh<NodeArg, PatchArg>::iterator::segmentS() const
+{
+    // FIXME: remove const cast
+    return segment_iterator(const_cast<Mesh<NodeArg, PatchArg>*>(m_mesh), m_col + 1, m_row, 0);
 }
 
 template<typename NodeArg, typename PatchArg>

@@ -25,6 +25,7 @@
 #include "kis_debug.h"
 
 #include "KisBezierPatch.h"
+#include <iostream>
 
 #include <config-gsl.h>
 
@@ -515,24 +516,187 @@ struct Params2D {
     QPointF dstPoint;
 };
 
-QPointF meshForwardMapping(qreal u, qreal v, const Params2D &p) {
-    return p.r0 + pow3(u)*v*(p.p0 - 3*p.p1 + 3*p.p2 - p.p3 - p.q0 + 3*p.q1 - 3*p.q2 + p.q3) + pow3(u)*(-p.p0 + 3*p.p1 - 3*p.p2 + p.p3) + pow2(u)*v*(-3*p.p0 + 6*p.p1 - 3*p.p2 + 3*p.q0 - 6*p.q1 + 3*p.q2) + pow2(u)*(3*p.p0 - 6*p.p1 + 3*p.p2) + u*pow3(v)*(p.r0 - 3*p.r1 + 3*p.r2 - p.r3 - p.s0 + 3*p.s1 - 3*p.s2 + p.s3) + u*pow2(v)*(-3*p.r0 + 6*p.r1 - 3*p.r2 + 3*p.s0 - 6*p.s1+ 3*p.s2) + u*v*(2*p.p0 - 3*p.p1 + p.p3 - 2*p.q0 + 3*p.q1 - p.q3 + 3*p.r0 - 3*p.r1 - 3*p.s0 + 3*p.s1) + u*(-2*p.p0 + 3*p.p1 - p.p3 - p.r0 + p.s0) + pow3(v)*(-p.r0 + 3*p.r1 - 3*p.r2 + p.r3) + pow2(v)*(3*p.r0 - 6*p.r1 + 3*p.r2) + v*(-3*p.r0 + 3*p.r1);
-}
+struct PatchMatrixForm
+{
+    PatchMatrixForm(qreal u, qreal v, const Params2D &p)
+    {
+        M_3 << 1, 0, 0, 0,
+             -3, 3, 0, 0,
+              3, -6, 3, 0,
+             -1, 3, -3, 1;
 
-QPointF meshForwardMappingDiffU(qreal u, qreal v, const Params2D &p) {
-    return -2*p.p0 + 3*p.p1 - p.p3 - p.r0 + p.s0 + pow2(u)*v*(3*p.p0 - 9*p.p1 + 9*p.p2 - 3*p.p3 - 3*p.q0 + 9*p.q1 - 9*p.q2 + 3*p.q3) + pow2(u)*(-3*p.p0 + 9*p.p1 - 9*p.p2 + 3*p.p3) + u*v*(-6*p.p0 + 12*p.p1 - 6*p.p2 + 6*p.q0 - 12*p.q1 + 6*p.q2) + u*(6*p.p0 - 12*p.p1 + 6*p.p2) + pow3(v)*(p.r0 - 3*p.r1 + 3*p.r2 - p.r3 - p.s0 + 3*p.s1 - 3*p.s2 + p.s3) + pow2(v)*(-3*p.r0 + 6*p.r1 - 3*p.r2 + 3*p.s0 - 6*p.s1 + 3*p.s2) + v*(2*p.p0 - 3*p.p1 + p.p3 - 2*p.q0 + 3*p.q1 - p.q3 + 3*p.r0 - 3*p.r1 - 3*p.s0 + 3*p.s1);
-}
+        M_3rel2abs << 1, 0, 0, 0,
+                      1, 1, 0, 0,
+                      0, 0, 1, 1,
+                      0, 0, 0, 1;
 
-QPointF meshForwardMappingDiffV(qreal u, qreal v, const Params2D &p) {
-    return -3*p.r0 + 3*p.r1 + pow3(u)*(p.p0 - 3*p.p1 + 3*p.p2 - p.p3 - p.q0 + 3*p.q1 - 3*p.q2 + p.q3) + pow2(u)*(-3*p.p0 + 6*p.p1 - 3*p.p2 + 3*p.q0 - 6*p.q1 + 3*p.q2) + u*pow2(v)*(3*p.r0 - 9*p.r1 + 9*p.r2 - 3*p.r3 - 3*p.s0 + 9*p.s1 - 9*p.s2 + 3*p.s3) + u*v*(-6*p.r0 + 12*p.r1 - 6*p.r2 + 6*p.s0 - 12*p.s1 + 6*p.s2) + u*(2*p.p0 - 3*p.p1 + p.p3 - 2*p.q0 + 3*p.q1 - p.q3 + 3*p.r0 - 3*p.r1 - 3*p.s0 + 3*p.s1) + pow2(v)*(-3*p.r0 + 9*p.r1 - 9*p.r2 + 3*p.r3) + v*(6*p.r0 - 12*p.r1 + 6*p.r2);
-}
+        M_1 << -1,  1,  0, 0,
+                1, -1, -1, 1;
+
+        PQ_left << p.p0.x(), p.p0.y(),
+                   p.p1.x(), p.p1.y(),
+                   p.q0.x(), p.q0.y(),
+                   p.q1.x(), p.q1.y();
+
+        PQ_right << p.p3.x(), p.p3.y(),
+                    p.p2.x(), p.p2.y(),
+                    p.q3.x(), p.q3.y(),
+                    p.q2.x(), p.q2.y();
+
+        RS_top << p.r0.x(), p.r0.y(),
+                  p.r1.x(), p.r1.y(),
+                  p.s0.x(), p.s0.y(),
+                  p.s1.x(), p.s1.y();
+
+        RS_bottom << p.r3.x(), p.r3.y(),
+                     p.r2.x(), p.r2.y(),
+                     p.s3.x(), p.s3.y(),
+                     p.s2.x(), p.s2.y();
+
+        R << p.r0.x(), p.r0.y(),
+             p.r1.x(), p.r1.y(),
+             p.r2.x(), p.r2.y(),
+             p.r3.x(), p.r3.y();
+
+        S << p.s0.x(), p.s0.y(),
+             p.s1.x(), p.s1.y(),
+             p.s2.x(), p.s2.y(),
+             p.s3.x(), p.s3.y();
+
+        P << p.p0.x(), p.p0.y(),
+             p.p1.x(), p.p1.y(),
+             p.p2.x(), p.p2.y(),
+             p.p3.x(), p.p3.y();
+
+        Q << p.q0.x(), p.q0.y(),
+             p.q1.x(), p.q1.y(),
+             p.q2.x(), p.q2.y(),
+             p.q3.x(), p.q3.y();
+
+        T_u3 << 1, u, pow2(u), pow3(u);
+        T_v3 << 1, v, pow2(v), pow3(v);
+        T_dot_u3 << 0, 1, 2 * u, 3 * pow2(u);
+        T_dot_v3 << 0, 1, 2 * v, 3 * pow2(v);
+
+        T_u1 << 1, u;
+        T_v1 << 1, v;
+        T_dot_u1 << 0, 1;
+        T_dot_v1 << 0, 1;
+    }
+
+    Eigen::Matrix4d M_3;
+    Eigen::Matrix4d M_3rel2abs;
+    Eigen::Matrix<double, 2, 4> M_1;
+
+
+    Eigen::Matrix<double, 4, 2> PQ_left;
+    Eigen::Matrix<double, 4, 2> PQ_right;
+    Eigen::Matrix<double, 4, 2> RS_top;
+    Eigen::Matrix<double, 4, 2> RS_bottom;
+
+    Eigen::Matrix<double, 4, 2> R;
+    Eigen::Matrix<double, 4, 2> S;
+    Eigen::Matrix<double, 4, 2> P;
+    Eigen::Matrix<double, 4, 2> Q;
+
+    Eigen::Matrix<double, 1, 4> T_u3;
+    Eigen::Matrix<double, 1, 4> T_v3;
+    Eigen::Matrix<double, 1, 4> T_dot_u3;
+    Eigen::Matrix<double, 1, 4> T_dot_v3;
+
+    Eigen::Matrix<double, 1, 2> T_u1;
+    Eigen::Matrix<double, 1, 2> T_v1;
+    Eigen::Matrix<double, 1, 2> T_dot_u1;
+    Eigen::Matrix<double, 1, 2> T_dot_v1;
+
+    QPointF value() const {
+        Eigen::Matrix<double, 1, 2> L_1 = T_v3 * M_3 * R;
+        Eigen::Matrix<double, 1, 2> L_2 = T_v1 * M_1 * PQ_left;
+        Eigen::Matrix<double, 1, 2> L_3 = T_v1 * M_1 * PQ_right;
+        Eigen::Matrix<double, 1, 2> L_4 = T_v3 * M_3 * S;
+
+        Eigen::Matrix<double, 4, 2> L_controls;
+        L_controls << L_1, L_2, L_3, L_4;
+
+        Eigen::Matrix<double, 1, 2> L = T_u3 * M_3 * M_3rel2abs * L_controls;
+
+
+        Eigen::Matrix<double, 1, 2> H_1 = T_u3 * M_3 * P;
+        Eigen::Matrix<double, 1, 2> H_2 = T_u1 * M_1 * RS_top;
+        Eigen::Matrix<double, 1, 2> H_3 = T_u1 * M_1 * RS_bottom;
+        Eigen::Matrix<double, 1, 2> H_4 = T_u3 * M_3 * Q;
+
+        Eigen::Matrix<double, 4, 2> H_controls;
+        H_controls << H_1, H_2, H_3, H_4;
+
+        Eigen::Matrix<double, 1, 2> H = T_v3 * M_3 * M_3rel2abs * H_controls;
+
+        Eigen::Matrix<double, 1, 2> result = 0.5 * (L + H);
+
+        return QPointF(result(0,0), result(0,1));
+    }
+
+    QPointF diffU() const {
+        Eigen::Matrix<double, 1, 2> L_1 = T_v3 * M_3 * R;
+        Eigen::Matrix<double, 1, 2> L_2 = T_v1 * M_1 * PQ_left;
+        Eigen::Matrix<double, 1, 2> L_3 = T_v1 * M_1 * PQ_right;
+        Eigen::Matrix<double, 1, 2> L_4 = T_v3 * M_3 * S;
+
+        Eigen::Matrix<double, 4, 2> L_controls;
+        L_controls << L_1, L_2, L_3, L_4;
+
+        Eigen::Matrix<double, 1, 2> L = T_dot_u3 * M_3 * M_3rel2abs * L_controls;
+
+
+        Eigen::Matrix<double, 1, 2> H_1 = T_dot_u3 * M_3 * P;
+        Eigen::Matrix<double, 1, 2> H_2 = T_dot_u1 * M_1 * RS_top;
+        Eigen::Matrix<double, 1, 2> H_3 = T_dot_u1 * M_1 * RS_bottom;
+        Eigen::Matrix<double, 1, 2> H_4 = T_dot_u3 * M_3 * Q;
+
+        Eigen::Matrix<double, 4, 2> H_controls;
+        H_controls << H_1, H_2, H_3, H_4;
+
+        Eigen::Matrix<double, 1, 2> H = T_v3 * M_3 * M_3rel2abs * H_controls;
+
+        Eigen::Matrix<double, 1, 2> result = 0.5 * (L + H);
+        return QPointF(result(0,0), result(0,1));
+    }
+
+    QPointF diffV() const {
+        Eigen::Matrix<double, 1, 2> L_1 = T_dot_v3 * M_3 * R;
+        Eigen::Matrix<double, 1, 2> L_2 = T_dot_v1 * M_1 * PQ_left;
+        Eigen::Matrix<double, 1, 2> L_3 = T_dot_v1 * M_1 * PQ_right;
+        Eigen::Matrix<double, 1, 2> L_4 = T_dot_v3 * M_3 * S;
+
+        Eigen::Matrix<double, 4, 2> L_controls;
+        L_controls << L_1, L_2, L_3, L_4;
+
+        Eigen::Matrix<double, 1, 2> L = T_u3 * M_3 * M_3rel2abs * L_controls;
+
+        Eigen::Matrix<double, 1, 2> H_1 = T_u3 * M_3 * P;
+        Eigen::Matrix<double, 1, 2> H_2 = T_u1 * M_1 * RS_top;
+        Eigen::Matrix<double, 1, 2> H_3 = T_u1 * M_1 * RS_bottom;
+        Eigen::Matrix<double, 1, 2> H_4 = T_u3 * M_3 * Q;
+
+        Eigen::Matrix<double, 4, 2> H_controls;
+        H_controls << H_1, H_2, H_3, H_4;
+
+        Eigen::Matrix<double, 1, 2> H = T_dot_v3 * M_3 * M_3rel2abs * H_controls;
+
+        Eigen::Matrix<double, 1, 2> result = 0.5 * (L + H);
+
+        return QPointF(result(0,0), result(0,1));
+    }
+
+};
 
 double my_f(const gsl_vector * x, void *paramsPtr)
 {
     const Params2D *params = static_cast<const Params2D*>(paramsPtr);
     const QPointF pos(gsl_vector_get(x, 0), gsl_vector_get(x, 1));
 
-    const QPointF S = meshForwardMapping(pos.x(), pos.y(), *params);
+    PatchMatrixForm mat(pos.x(), pos.y(), *params);
+    const QPointF S = mat.value();
 
     return kisSquareDistance(S, params->dstPoint);
 }
@@ -542,9 +706,10 @@ void my_fdf (const gsl_vector *x, void *paramsPtr, double *f, gsl_vector *df)
     const Params2D *params = static_cast<const Params2D*>(paramsPtr);
     const QPointF pos(gsl_vector_get(x, 0), gsl_vector_get(x, 1));
 
-    const QPointF S = meshForwardMapping(pos.x(), pos.y(), *params);
-    const QPointF dU = meshForwardMappingDiffU(pos.x(), pos.y(), *params);
-    const QPointF dV = meshForwardMappingDiffV(pos.x(), pos.y(), *params);
+    PatchMatrixForm mat(pos.x(), pos.y(), *params);
+    const QPointF S = mat.value();
+    const QPointF dU = mat.diffU();
+    const QPointF dV = mat.diffV();
 
     *f = kisSquareDistance(S, params->dstPoint);
 
@@ -562,9 +727,10 @@ void my_df (const gsl_vector *x, void *paramsPtr,
     const Params2D *params = static_cast<const Params2D*>(paramsPtr);
     const QPointF pos(gsl_vector_get(x, 0), gsl_vector_get(x, 1));
 
-    const QPointF S = meshForwardMapping(pos.x(), pos.y(), *params);
-    const QPointF dU = meshForwardMappingDiffU(pos.x(), pos.y(), *params);
-    const QPointF dV = meshForwardMappingDiffV(pos.x(), pos.y(), *params);
+    PatchMatrixForm mat(pos.x(), pos.y(), *params);
+    const QPointF S = mat.value();
+    const QPointF dU = mat.diffU();
+    const QPointF dV = mat.diffV();
 
     gsl_vector_set(df, 0,
                    2 * (S.x() - params->dstPoint.x()) * dU.x() +
@@ -577,6 +743,15 @@ void my_df (const gsl_vector *x, void *paramsPtr,
 
 QPointF calculateLocalPos(const std::array<QPointF, 12> &points, const QPointF &globalPoint)
 {
+    QRectF patchBounds;
+
+    for (auto it = points.begin(); it != points.end(); ++it) {
+        KisAlgebra2D::accumulateBounds(*it, &patchBounds);
+    }
+
+    const QPointF approxStart = KisAlgebra2D::absoluteToRelative(globalPoint, patchBounds);
+    KIS_SAFE_ASSERT_RECOVER_NOOP(QRectF(0,0,1.0,1.0).contains(approxStart));
+
 #ifdef HAVE_GSL
     const gsl_multimin_fdfminimizer_type *T =
         gsl_multimin_fdfminimizer_vector_bfgs2;
@@ -589,8 +764,8 @@ QPointF calculateLocalPos(const std::array<QPointF, 12> &points, const QPointF &
 
     /* Starting point */
     x = gsl_vector_alloc (2);
-    gsl_vector_set (x, 0, 0.5);
-    gsl_vector_set (x, 1, 0.5);
+    gsl_vector_set (x, 0, approxStart.x());
+    gsl_vector_set (x, 1, approxStart.y());
 
     Params2D p;
 
@@ -663,10 +838,40 @@ QPointF calculateLocalPos(const std::array<QPointF, 12> &points, const QPointF &
 
     return result;
 #else
-    QRectF approxBounds = std::accumulate(points.begin(), points.end(), QRectF(), std::bit_or<QRectF>());
-    return KisAlgebra2D::absoluteToRelative(globalPoint, approxBounds);
+    return approxStart;
 #endif
 }
+
+
+QPointF calculateGlobalPos(const std::array<QPointF, 12> &points, const QPointF &localPoint)
+{
+    Params2D p;
+
+    p.p0 = points[KisBezierPatch::TL];
+    p.p1 = points[KisBezierPatch::TL_HC];
+    p.p2 = points[KisBezierPatch::TR_HC];
+    p.p3 = points[KisBezierPatch::TR];
+
+    p.q0 = points[KisBezierPatch::BL];
+    p.q1 = points[KisBezierPatch::BL_HC];
+    p.q2 = points[KisBezierPatch::BR_HC];
+    p.q3 = points[KisBezierPatch::BR];
+
+    p.r0 = points[KisBezierPatch::TL];
+    p.r1 = points[KisBezierPatch::TL_VC];
+    p.r2 = points[KisBezierPatch::BL_VC];
+    p.r3 = points[KisBezierPatch::BL];
+
+    p.s0 = points[KisBezierPatch::TR];
+    p.s1 = points[KisBezierPatch::TR_VC];
+    p.s2 = points[KisBezierPatch::BR_VC];
+    p.s3 = points[KisBezierPatch::BR];
+
+    PatchMatrixForm f(localPoint.x(), localPoint.y(), p);
+
+    return f.value();
+}
+
 
 QPointF interpolateQuadric(const QPointF &p0, const QPointF &p2, const QPointF &pt, qreal t)
 {

@@ -38,6 +38,16 @@ QRectF KisBezierPatch::srcBoundingRect() const {
     return originalRect;
 }
 
+QPointF KisBezierPatch::localToGlobal(const QPointF &pt) const
+{
+    return KisBezierUtils::calculateGlobalPos(points, pt);
+}
+
+QPointF KisBezierPatch::globalToLocal(const QPointF &pt) const
+{
+    return KisBezierUtils::calculateLocalPos(points, pt);
+}
+
 void KisBezierPatch::sampleIrregularGrid(QSize &gridSize, QVector<QPointF> &origPoints, QVector<QPointF> &transfPoints) const
 {
     using KisAlgebra2D::lerp;
@@ -132,7 +142,7 @@ void KisBezierPatch::sampleRegularGrid(QSize &gridSize, QVector<QPointF> &origPo
             const QPointF localPt(lerp(xCoord1, xCoord2, yProportion), lerp(yCoord1, yCoord2, xProportion));
             const QPointF orig = KisAlgebra2D::relativeToAbsolute(localPt, originalRect);
 
-#if 1
+#if 0
 
             const QPointF Sc =
                     lerp(bezierCurve(points[TL], points[TL_HC], points[TR_HC], points[TR], xProportion),

@@ -180,6 +180,13 @@ public:
     int nextKeyframeGlobal(int keyframeTime) const;
 
     /**
+     * @brief Gets the last keyframe that exists within an index's duration.
+     * Used to prevent duration from overwriting keyframes that exist internal
+     * to an existing scene.
+     */
+    int lastKeyframeWithin(QModelIndex index);
+
+    /**
      * @brief reorders all keyframes to reflect storyboard docker's arrangement.
      * typically used after drag and drop to keep storyboard timing acurate
      * to timeline timing.

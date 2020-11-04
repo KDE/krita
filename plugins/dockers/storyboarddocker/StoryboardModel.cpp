@@ -171,8 +171,6 @@ bool StoryboardModel::setData(const QModelIndex & index, const QVariant & value,
 
         QSharedPointer<StoryboardChild> child = m_items.at(index.parent().row())->child(index.row());
         if (child) {
-            int fps = m_image.isValid() ? m_image->animationInterface()->framerate() : 24;      //TODO: update all items on framerate change
-
             if (index.row() == StoryboardItem::FrameNumber) {
                 if (value.toInt() < 0) {
                     return false;
@@ -181,23 +179,33 @@ bool StoryboardModel::setData(const QModelIndex & index, const QVariant & value,
                 thumbnailData.frameNum = value.toInt();
                 child->setData(QVariant::fromValue<ThumbnailData>(thumbnailData));
             }
-            else if (index.row() == StoryboardItem::DurationSecond) {
+            else if (index.row() == StoryboardItem::DurationSecond ||
+                     index.row() == StoryboardItem::DurationFrame) {
                 if (value.toInt() < 0) {
                     return false;
                 }
-                child->setData(value);
-            }
-            else if (index.row() == StoryboardItem::DurationFrame) {
-                if (value.toInt() < 0) {
-                    return false;
-                }
-                QModelIndex secondIndex = index.siblingAtRow(StoryboardItem::DurationSecond);
 
-                if (secondIndex.data().toInt() == 0 && value.toInt() == 0) {
-                    return false;
-                }
-                setData(secondIndex, secondIndex.data().toInt() + value.toInt() / fps, role);
-                child->setData(value.toInt() % fps);
+                QModelIndex secondIndex = index.row() == StoryboardItem::DurationSecond ? index : index.siblingAtRow(StoryboardItem::DurationSecond);
+                const int secondCount = index.row() == StoryboardItem::DurationSecond ? value.toInt() : secondIndex.data().toInt();
+                QModelIndex frameIndex = index.row() == StoryboardItem::DurationFrame ? index : index.siblingAtRow(StoryboardItem::DurationFrame);
+                const int frameCount = index.row() == StoryboardItem::DurationFrame ? value.toInt() : frameIndex.data().toInt();
+                const int sceneStartFrame = index.siblingAtRow(StoryboardItem::FrameNumber).data().toInt();
+
+                // Do not allow desired scene length to be shorter than keyframes within
+                // the given scene. This prevents overwriting data that exists internal
+                // to a scene.
+                const int sceneDesiredDuration = frameCount + secondCount * getFramesPerSecond();
+                const int implicitSceneDuration = qMax(
+                                                  qMax( sceneDesiredDuration, lastKeyframeWithin(index.parent()) - sceneStartFrame ),
+                                                  1 );
+
+                int fps = m_image.isValid() ? m_image->animationInterface()->framerate() : 24;
+
+                StoryboardItemSP scene = m_items.at(index.parent().row());
+                QSharedPointer<StoryboardChild> durationSeconds = scene->child(secondIndex.row());
+                QSharedPointer<StoryboardChild> durationFrames = scene->child(frameIndex.row());
+                durationSeconds->setData(QVariant::fromValue<int>(implicitSceneDuration / fps));
+                durationFrames->setData(QVariant::fromValue<int>(implicitSceneDuration % fps));
             }
             else if (index.row() >= StoryboardItem::Comments) {
                 CommentBox commentBox = qvariant_cast<CommentBox>(child->data());
@@ -253,25 +261,25 @@ bool StoryboardModel::setThumbnailPixmapData(const QModelIndex & parentIndex, co
     return false;
 }
 
-bool StoryboardModel::updateDurationData(const QModelIndex & parentIndex)
+bool StoryboardModel::updateDurationData(const QModelIndex& parentIndex)
 {
     if (!parentIndex.isValid()) {
         return false;
     }
 
-    int currentKeyframeTime = data(index(StoryboardItem::FrameNumber, 0, parentIndex)).toInt();
-    int nextKeyframeTime = nextKeyframeGlobal(currentKeyframeTime);
+    QModelIndex currentScene = parentIndex;
+    QModelIndex nextScene = index(currentScene.row() + 1, 0);
+    if (nextScene.isValid()) {
+        const int currentSceneFrame = index(StoryboardItem::FrameNumber, 0, currentScene).data().toInt();
+        const int nextSceneFrame = index(StoryboardItem::FrameNumber, 0, nextScene).data().toInt();
+        const int sceneDuration = nextSceneFrame - currentSceneFrame;
+        const int fps = getFramesPerSecond();
 
-    if (nextKeyframeTime != INT_MAX) {
-        int timeInFrame = nextKeyframeTime - currentKeyframeTime;
-
-        int fps = m_image->animationInterface()->framerate();
-
-        if (index (StoryboardItem::DurationSecond, 0, parentIndex).data().toInt() != timeInFrame / fps) {
-            setData (index (StoryboardItem::DurationSecond, 0, parentIndex), timeInFrame / fps);
+        if (index(StoryboardItem::DurationSecond, 0, parentIndex).data().toInt() != sceneDuration / fps) {
+            setData (index (StoryboardItem::DurationSecond, 0, parentIndex), sceneDuration / fps);
         }
-        if (index (StoryboardItem::DurationFrame, 0, parentIndex).data().toInt() != timeInFrame % fps) {
-            setData (index (StoryboardItem::DurationFrame, 0, parentIndex), timeInFrame % fps);
+        if (index(StoryboardItem::DurationFrame, 0, parentIndex).data().toInt() != sceneDuration % fps) {
+            setData (index (StoryboardItem::DurationFrame, 0, parentIndex), sceneDuration % fps);
         }
     }
 
@@ -336,8 +344,22 @@ bool StoryboardModel::removeRows(int position, int rows, const QModelIndex &pare
         }
         beginRemoveRows(QModelIndex(), position, position+rows-1);
 
+        const bool needsDurationUpdate = position > 0 && position < m_items.count();
+
         for (int row = position + rows - 1; row >= position; row--) {
             m_items.removeAt(row);
+        }
+
+        if (needsDurationUpdate && index(position, 0).isValid()) {
+            QModelIndex indexA = index(position - 1, 0 );
+            QModelIndex indexB = index(position, 0);
+            KIS_ASSERT( indexA.isValid() && indexB.isValid() );
+            const int duration = index(StoryboardItem::FrameNumber, 0, indexB).data().toInt()
+                               - index(StoryboardItem::FrameNumber, 0, indexA).data().toInt();
+            const int durationFrames = duration % getFramesPerSecond();
+            const int durationSeconds = duration / getFramesPerSecond();
+            setData(index(StoryboardItem::DurationFrame, 0, indexA), durationFrames);
+            setData(index(StoryboardItem::DurationSecond, 0, indexA), durationSeconds);
         }
 
         endRemoveRows();
@@ -703,6 +725,22 @@ int StoryboardModel::nextKeyframeGlobal(int keyframeTime) const
     return nextKeyframeTime;
 }
 
+int StoryboardModel::lastKeyframeWithin(QModelIndex sceneIndex)
+{
+    KIS_ASSERT(sceneIndex.isValid());
+    const int sceneFrame = index(StoryboardItem::FrameNumber, 0, sceneIndex).data().toInt();
+    const int nextSceneFrame = sceneFrame + index(StoryboardItem::DurationFrame, 0, sceneIndex).data().toInt()
+                                            + index(StoryboardItem::DurationSecond, 0, sceneIndex).data().toInt()
+                                            * getFramesPerSecond();
+
+    int lastFrameOfScene = sceneFrame;
+    for (int frame = sceneFrame; frame < nextSceneFrame; frame = nextKeyframeGlobal(frame)) {
+        lastFrameOfScene = frame;
+    }
+
+    return lastFrameOfScene;
+}
+
 void StoryboardModel::reorderKeyframes()
 {
     //Get the earliest frame number in the storyboard list
@@ -799,8 +837,20 @@ bool StoryboardModel::insertHoldFramesAfter(int newDuration, int oldDuration, QM
     if (!index.isValid()) {
         return false;
     }
-    int frame = index.siblingAtRow(StoryboardItem::FrameNumber).data().toInt();
-    int fps = getFramesPerSecond();
+
+    const int frame = index.siblingAtRow(StoryboardItem::FrameNumber).data().toInt();
+    const int lengthFrames = index.row() == StoryboardItem::DurationFrame ? index.data().toInt() : index.siblingAtRow(StoryboardItem::DurationFrame).data().toInt();
+    const int lengthSeconds = index.row() == StoryboardItem::DurationSecond ? index.data().toInt() : index.siblingAtRow(StoryboardItem::DurationSecond).data().toInt();
+    const int sceneFrameCount = lengthSeconds * getFramesPerSecond() + lengthFrames;
+    const int sceneFrame = index.siblingAtRow(StoryboardItem::FrameNumber).data().toInt();
+    const int lastFrameOfScene = lastKeyframeWithin(index.parent());
+    const int fps = getFramesPerSecond();
+
+    if (oldDuration > newDuration) {
+        if (sceneFrame + sceneFrameCount - 1 <= lastFrameOfScene) {
+            return false;
+        }
+    }
 
     if (newDuration < 0) {
         if (index.row() == StoryboardItem::DurationFrame
@@ -837,7 +887,7 @@ bool StoryboardModel::insertHoldFramesAfter(int newDuration, int oldDuration, QM
 
     KisNodeSP node = m_image->rootLayer();
     if (node) {
-        KisLayerUtils::recursiveApplyNodes (node, [frame, durationChange] (KisNodeSP node)
+        KisLayerUtils::recursiveApplyNodes (node, [frame, lastFrameOfScene, durationChange] (KisNodeSP node)
             {
                 if (node->isAnimated()) {
                     KisKeyframeChannel *keyframeChannel = node->paintDevice()->keyframeChannel();
@@ -845,13 +895,13 @@ bool StoryboardModel::insertHoldFramesAfter(int newDuration, int oldDuration, QM
                         if (durationChange > 0) {
                             int timeIteration = keyframeChannel->lastKeyframeTime();
                             while (keyframeChannel->keyframeAt(timeIteration) &&
-                                   keyframeChannel->keyframeAt(timeIteration) != keyframeChannel->activeKeyframeAt(frame)) {
+                                   keyframeChannel->keyframeAt(timeIteration) != keyframeChannel->activeKeyframeAt(lastFrameOfScene)) {
                                 keyframeChannel->moveKeyframe(timeIteration, timeIteration + durationChange);
                                 timeIteration = keyframeChannel->previousKeyframeTime(timeIteration);
                             }
                         }
                         else if (durationChange < 0) {
-                            int timeIteration = keyframeChannel->nextKeyframeTime(frame);
+                            int timeIteration = keyframeChannel->nextKeyframeTime(lastFrameOfScene);
                             const int minTime = frame + 1;
                             while (keyframeChannel->keyframeAt(timeIteration)) {
                                 const int newTimeValue = qMax(minTime, timeIteration + durationChange);

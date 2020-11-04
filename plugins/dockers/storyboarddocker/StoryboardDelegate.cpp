@@ -339,12 +339,10 @@ bool StoryboardDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, c
 
             StoryboardModel* sbModel = dynamic_cast<StoryboardModel*>(model);
             if (leftButton && upButtonClicked) {
-                sbModel->insertHoldFramesAfter(index.data().toInt() + 1, index.data().toInt(), index);
-                return true;
+                return sbModel->insertHoldFramesAfter(index.data().toInt() + 1, index.data().toInt(), index);
             }
             else if (leftButton && downButtonClicked) {
-                sbModel->insertHoldFramesAfter(std::max(-1, index.data().toInt() - 1), index.data().toInt(), index);
-                return true;
+                return sbModel->insertHoldFramesAfter(std::max(-1, index.data().toInt() - 1), index.data().toInt(), index);
             }
         }
         else if (index.parent().isValid() && index.row() >= StoryboardItem::Comments) {

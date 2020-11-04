@@ -349,7 +349,7 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
     poweredByKDELink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://userbase.kde.org/What_is_KDE?" + analyticsString + "what-is-kde" + "\">")
                               .append(i18n("Powered by KDE")).append("</a>"));
 
-    const QColor faintTextColor = KritaUtils::blendColors(textColor, backgroundColor, 0.2);
+    const QColor faintTextColor = KritaUtils::blendColors(textColor, backgroundColor, 0.4);
     const QString &faintTextStyle = "QWidget{color: " + faintTextColor.name() + "}";
     labelNoRecentDocs->setStyleSheet(faintTextStyle);
     labelNoFeed->setStyleSheet(faintTextStyle);

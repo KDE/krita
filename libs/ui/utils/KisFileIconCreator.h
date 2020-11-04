@@ -50,10 +50,9 @@ public:
      * @param icon created icon
      * @param devicePixelRatioF a result from devicePixelRatioF() called in a widget
      * @param iconSize size of the icon
-     * @param crop make the square icon - zoom crop icon to the minimum side
      * @return true if icon was created successfully, false if not (for example the file doesn't exist)
      */
-    bool createFileIcon(QString path, QIcon &icon, qreal devicePixelRatioF, QSize iconSize, bool crop);
+    bool createFileIcon(QString path, QIcon &icon, qreal devicePixelRatioF, QSize iconSize);
 };
 
 #endif // KIS_FILE_ICON_CREATOR_H

@@ -81,26 +81,41 @@ QLabel* KisWelcomePageWidget::donationBannerImage;
 #endif
 
 
+// class to override item height for Breeze since qss seems to not work
+class RecentItemDelegate : public QStyledItemDelegate
+{
+    int itemHeight = 0;
+public:
+    RecentItemDelegate(QObject *parent = 0)
+        : QStyledItemDelegate(parent)
+    {
+    }
+
+    void setItemHeight(int itemHeight)
+    {
+        this->itemHeight = itemHeight;
+    }
+
+    QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &/*index*/) const override
+    {
+        return QSize(option.rect.width(), itemHeight);
+    }
+};
+
+
 KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
     : QWidget(parent)
 {
     setupUi(this);
+    labelNoRecentDocs->setVisible(false);
     recentDocumentsListView->setDragEnabled(false);
     recentDocumentsListView->viewport()->setAutoFillBackground(false);
     recentDocumentsListView->setSpacing(2);
     recentDocumentsListView->installEventFilter(this);
-    QSizePolicy sp_retain = widgetRecentDocuments->sizePolicy();
-    sp_retain.setRetainSizeWhenHidden(true);
-    widgetRecentDocuments->setSizePolicy(sp_retain);
 
     // set up URLs that go to web browser
-    kdeIcon->setIconSize(QSize(20, 20));
-    kdeIcon->setIcon(KisIconUtils::loadIcon(QStringLiteral("kde")).pixmap(20));
-
     devBuildIcon->setIcon(KisIconUtils::loadIcon("warning"));
-
     devBuildLabel->setVisible(false);
-
     updaterFrame->setVisible(false);
     versionNotificationLabel->setVisible(false);
     bnVersionUpdate->setVisible(false);
@@ -201,6 +216,7 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
 #endif // ENABLE_UPDATERS
 
     chkShowNews->setChecked(m_checkUpdates);
+    newsWidget->setVisible(m_checkUpdates);
 
     setAcceptDrops(true);
 }
@@ -301,8 +317,15 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
     openFileLink->setIcon(KisIconUtils::loadIcon("document-open"));
     newFileLink->setIcon(KisIconUtils::loadIcon("document-new"));
 
+    supportKritaIcon->setIcon(KisIconUtils::loadIcon(QStringLiteral("support-krita")));
+    const QIcon &linkIcon = KisIconUtils::loadIcon(QStringLiteral("bookmarks"));
+    userManualIcon->setIcon(linkIcon);
+    gettingStartedIcon->setIcon(linkIcon);
+    userCommunityIcon->setIcon(linkIcon);
+    kritaWebsiteIcon->setIcon(linkIcon);
+    sourceCodeIcon->setIcon(linkIcon);
 
-    kdeIcon->setIcon(KisIconUtils::loadIcon(QStringLiteral("kde")).pixmap(20));
+    kdeIcon->setIcon(KisIconUtils::loadIcon(QStringLiteral("kde")));
 
     // HTML links seem to be a bit more stubborn with theme changes... setting inline styles to help with color change
     userCommunityLink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://krita-artists.org\">")
@@ -326,6 +349,15 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
     poweredByKDELink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://userbase.kde.org/What_is_KDE?" + analyticsString + "what-is-kde" + "\">")
                               .append(i18n("Powered by KDE")).append("</a>"));
 
+    const QColor faintTextColor = KritaUtils::blendColors(textColor, backgroundColor, 0.2);
+    const QString &faintTextStyle = "QWidget{color: " + faintTextColor.name() + "}";
+    labelNoRecentDocs->setStyleSheet(faintTextStyle);
+    labelNoFeed->setStyleSheet(faintTextStyle);
+
+    const QColor frameColor = KritaUtils::blendColors(textColor, backgroundColor, 0.1);
+    const QString &frameQss = "{border: 1px solid " + frameColor.name() + "}";
+    recentDocsFrame->setStyleSheet("QFrame#recentDocsFrame" + frameQss);
+    newsFrame->setStyleSheet("QFrame#newsFrame" + frameQss);
 
     // show the dev version labels, if dev version is detected
     showDevVersionHighlight();
@@ -343,13 +375,15 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
 
 void KisWelcomePageWidget::populateRecentDocuments()
 {
+    constexpr const int maxItemsCount = 5;
+    const int itemHeight = recentDocumentsListView->height() / maxItemsCount
+            - recentDocumentsListView->spacing() * 2;
 
     const QList<QUrl> &recentFileUrls = m_mainWindow->recentFilesUrls();
     // grab recent files data
-    int numRecentFiles = qMin(recentFileUrls.length(), 5); // grab at most 5
+    int numRecentFiles = qMin(recentFileUrls.length(), maxItemsCount); // grab at most 5
     KisFileIconCreator iconCreator;
-    int iconSide = recentDocumentsListView->width() / 6;
-    QSize iconSize(iconSide, iconSide);
+    QSize iconSize(itemHeight, itemHeight);
     QList<QUrl> brokenUrls;
     QList<QStandardItem *> items;
 
@@ -360,7 +394,7 @@ void KisWelcomePageWidget::populateRecentDocuments()
         if (m_thumbnailMap.contains(recentFileUrlPath)) {
             icon = m_thumbnailMap[recentFileUrlPath];
         } else {
-            bool success = iconCreator.createFileIcon(recentFileUrlPath, icon, devicePixelRatioF(), iconSize, true);
+            bool success = iconCreator.createFileIcon(recentFileUrlPath, icon, devicePixelRatioF(), iconSize);
             if (success) {
                 m_thumbnailMap[recentFileUrlPath] = icon;
             } else {
@@ -380,7 +414,9 @@ void KisWelcomePageWidget::populateRecentDocuments()
     }
 
     // hide clear and Recent files title if there are none
-    widgetRecentDocuments->setVisible(!items.isEmpty());
+    labelNoRecentDocs->setVisible(items.isEmpty());
+    recentDocumentsListView->setVisible(!items.isEmpty());
+    clearRecentFilesLink->setVisible(!items.isEmpty());
 
     m_recentFilesModel.clear(); // clear existing data before it gets re-populated
     for (QStandardItem *item : items) {
@@ -388,6 +424,11 @@ void KisWelcomePageWidget::populateRecentDocuments()
     }
 
     recentDocumentsListView->setIconSize(iconSize);
+    if (!recentItemDelegate) {
+        recentItemDelegate = new RecentItemDelegate(this);
+        recentDocumentsListView->setItemDelegate(recentItemDelegate);
+    }
+    recentItemDelegate->setItemHeight(itemHeight);
     recentDocumentsListView->setModel(&m_recentFilesModel);
 }
 
@@ -483,12 +524,8 @@ void KisWelcomePageWidget::showDevVersionHighlight()
 
 void KisWelcomePageWidget::recentDocumentClicked(QModelIndex index)
 {
-    setEnabled(false); // prevent multiple clicks while doc is opening
-    QApplication::processEvents();
-
     QString fileUrl = index.data(Qt::ToolTipRole).toString();
     m_mainWindow->openDocument(QUrl::fromLocalFile(fileUrl), KisMainWindow::None );
-    setEnabled(true);
 }
 
 

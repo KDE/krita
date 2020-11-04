@@ -49,12 +49,12 @@ KisRecoverNamedAutosaveDialog::KisRecoverNamedAutosaveDialog(QWidget *parent, QS
 
     QSize size = ui->rbOpenAutosave->iconSize();
     size = size*4;
-    bool success = creator.createFileIcon(mainFile, mainFileIcon, devicePixelRatioF(), size, false);
+    bool success = creator.createFileIcon(mainFile, mainFileIcon, devicePixelRatioF(), size);
     if (success) {
         ui->rbDiscardAutosave->setIcon(mainFileIcon);
         ui->rbDiscardAutosave->setIconSize(size);
     }
-    success = creator.createFileIcon(autosaveFile, autosaveFileIcon, devicePixelRatioF(), size, false);
+    success = creator.createFileIcon(autosaveFile, autosaveFileIcon, devicePixelRatioF(), size);
     if (success) {
         ui->rbOpenAutosave->setIcon(autosaveFileIcon);
         ui->rbOpenAutosave->setIconSize(size);

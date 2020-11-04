@@ -71,5 +71,6 @@
         <file>pics/workspace-chooser.png</file>
         <file>pics/svg/light_diagonal-stripe.svg</file>
         <file>pics/svg/light_diagonal-stripe.png</file>
+        <file>pics/support-krita.svg</file>
     </qresource>
 </RCC>

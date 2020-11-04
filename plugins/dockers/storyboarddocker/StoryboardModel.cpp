@@ -985,6 +985,10 @@ bool StoryboardModel::insertItem(QModelIndex index, bool after)
             slotUpdateThumbnailForFrame(frame, false);
         }
     }
+
+    // Let's start rendering after adding new storyboard items.
+    m_renderScheduler->slotStartFrameRendering();
+
     return true;
 }
 

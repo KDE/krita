@@ -212,6 +212,8 @@ StoryboardDockerDock::StoryboardDockerDock( )
     m_modeGroup->button(Mode::Grid)->click();
     m_viewGroup->button(View::All)->click();
 
+    setMinimumWidth(350);
+
     setEnabled(false);
 }
 

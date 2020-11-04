@@ -29,28 +29,6 @@
 #include "kis_config.h"
 #include "KisMultiFeedRSSModel.h"
 
-namespace
-{
-
-constexpr const int feedLimit = 5;
-
-class LimitedMultiFeedRssModel : public MultiFeedRssModel
-{
-public:
-    explicit LimitedMultiFeedRssModel(QObject *parent)
-        : MultiFeedRssModel(parent)
-    {
-    }
-
-    int rowCount(const QModelIndex &parent = QModelIndex()) const override
-    {
-        const int realCount = MultiFeedRssModel::rowCount(parent);
-        return qMin(realCount, feedLimit);
-    }
-};
-
-}
-
 KisNewsDelegate::KisNewsDelegate(QObject *parent)
     : QStyledItemDelegate(parent)
 {
@@ -115,7 +93,7 @@ KisNewsWidget::KisNewsWidget(QWidget *parent)
     listNews->viewport()->setAutoFillBackground(false);
     listNews->installEventFilter(this);
 
-    m_rssModel = new LimitedMultiFeedRssModel(this);
+    m_rssModel = new MultiFeedRssModel(this);
     connect(m_rssModel, SIGNAL(feedDataChanged()), this, SLOT(rssDataChanged()));
 
     setCursor(Qt::PointingHandCursor);

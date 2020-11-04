@@ -1730,7 +1730,10 @@
              <widget class="QLabel" name="labelNoFeed">
               <property name="text">
                <string>Enable news to get the latest 
-feeds from Krita team here</string>
+feeds from Krita team here.
+This needs internet to retrieve
+information from the
+krita.org website.</string>
               </property>
               <property name="textFormat">
                <enum>Qt::PlainText</enum>

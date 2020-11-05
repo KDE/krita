@@ -1,0 +1,46 @@
+From 0a19957d5d30d47dd491a1b4f0e71af98c35f2e3 Mon Sep 17 00:00:00 2001
+From: Sharaf Zaman <sharafzaz121@gmail.com>
+Date: Thu, 5 Nov 2020 11:13:49 +0000
+Subject: [PATCH] Android: Use processOpenModeFlags to get right OpenMode
+
+processOpenModeFlags handles flags individually so, we get the right
+behavior which is consistent with rest of the Qt. Previously using
+WriteOnly would only pass the flag "w" to Android. Now it correctly
+handles the additional Truncate flag.
+---
+ .../platforms/android/androidcontentfileengine.cpp | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
+
+diff --git a/src/plugins/platforms/android/androidcontentfileengine.cpp b/src/plugins/platforms/android/androidcontentfileengine.cpp
+index 9a743f3946..aea5f7832c 100644
+--- a/src/plugins/platforms/android/androidcontentfileengine.cpp
++++ b/src/plugins/platforms/android/androidcontentfileengine.cpp
+@@ -54,15 +54,21 @@ AndroidContentFileEngine::AndroidContentFileEngine(const QString &f)
+ bool AndroidContentFileEngine::open(QIODevice::OpenMode openMode)
+ {
+     QString openModeStr;
+-    if (openMode & QFileDevice::ReadOnly) {
++    ProcessOpenModeResult res = processOpenModeFlags(openMode);
++    if (!res.ok) {
++        setError(QFileDevice::OpenError, res.error);
++        return false;
++    }
++
++    if (res.openMode & QFileDevice::ReadOnly) {
+         openModeStr += QLatin1Char('r');
+     }
+-    if (openMode & QFileDevice::WriteOnly) {
++    if (res.openMode & QFileDevice::WriteOnly) {
+         openModeStr += QLatin1Char('w');
+     }
+-    if (openMode & QFileDevice::Truncate) {
++    if (res.openMode & QFileDevice::Truncate) {
+         openModeStr += QLatin1Char('t');
+-    } else if (openMode & QFileDevice::Append) {
++    } else if (res.openMode & QFileDevice::Append) {
+         openModeStr += QLatin1Char('a');
+     }
+ 
+-- 
+2.28.0
+

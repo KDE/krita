@@ -1104,14 +1104,17 @@ QString KoSvgTextShapeMarkupConverter::style(QTextCharFormat format,
             c.append("baseline-shift").append(":").append(val);
         }
 
-        //we might need a better check than 'isn't black'
         if (propertyId == QTextCharFormat::ForegroundBrush) {
-            QString c;
-            c.append("fill").append(":")
-                    .append(format.foreground().color().name());
-            if (!c.isEmpty()) {
-                style.append(c);
+            QColor::NameFormat colorFormat;
+
+            if (format.foreground().color().alphaF() < 1.0) {
+                colorFormat = QColor::HexArgb;
+            } else {
+                colorFormat = QColor::HexRgb;
             }
+
+            c.append("fill").append(":")
+                    .append(format.foreground().color().name(colorFormat));
         }
 
         if (!c.isEmpty()) {
@@ -1303,6 +1306,32 @@ QVector<QTextFormat> KoSvgTextShapeMarkupConverter::stylesFromString(QStringList
             if (property == "fill") {
                 QColor color;
                 color.setNamedColor(value);
+
+                // default color is #ff000000, so default alpha will be 1.0
+                qreal currentAlpha = charFormat.foreground().color().alphaF();
+
+                // if alpha was already defined by `fill-opacity` prop
+                if (currentAlpha < 1.0) {
+                    // and `fill` doesn't have alpha component
+                    if (color.alphaF() < 1.0) {
+                        color.setAlphaF(currentAlpha);
+                    }
+                }
+
+                charFormat.setForeground(color);
+            }
+
+            if (property == "fill-opacity") {
+                QColor color = charFormat.foreground().color();
+                bool ok = true;
+                qreal alpha = qBound(0.0, SvgUtil::fromPercentage(value, &ok), 1.0);
+
+                // if conversion fails due to non-numeric input,
+                // it defaults to 0.0, default to current alpha instead
+                if (!ok) {
+                    alpha = color.alphaF();
+                }
+                color.setAlphaF(alpha);
                 charFormat.setForeground(color);
             }
 

@@ -62,27 +62,31 @@ namespace KisDomUtils {
         return str;
     }
 
-    inline int toInt(const QString &str) {
-        bool ok = false;
+    inline int toInt(const QString &str, bool *ok=nullptr) {
+        bool ok_locale = false;
         int value = 0;
 
         QLocale c(QLocale::German);
 
-        value = str.toInt(&ok);
-        if (!ok) {
-            value = c.toInt(str, &ok);
+        value = str.toInt(&ok_locale);
+        if (!ok_locale) {
+            value = c.toInt(str, &ok_locale);
         }
 
-        if (!ok) {
+        if (!ok_locale && ok == nullptr) {
             warnKrita << "WARNING: KisDomUtils::toInt failed:" << ppVar(str);
             value = 0;
+        }
+
+        if (ok != nullptr) {
+            *ok = ok_locale;
         }
 
         return value;
     }
 
-    inline double toDouble(const QString &str) {
-        bool ok = false;
+    inline double toDouble(const QString &str, bool *ok=nullptr) {
+        bool ok_locale = false;
         double value = 0;
 
         QLocale c(QLocale::German);
@@ -97,14 +101,18 @@ namespace KisDomUtils {
          * which did local-aware conversion.
          */
 
-        value = str.toDouble(&ok);
-        if (!ok) {
-            value = c.toDouble(str, &ok);
+        value = str.toDouble(&ok_locale);
+        if (!ok_locale) {
+            value = c.toDouble(str, &ok_locale);
         }
 
-        if (!ok) {
+        if (!ok_locale && ok == nullptr) {
             warnKrita << "WARNING: KisDomUtils::toDouble failed:" << ppVar(str);
-            value = 0;
+            value = 0.0;
+        }
+
+        if (ok != nullptr) {
+            *ok = ok_locale;
         }
 
         return value;

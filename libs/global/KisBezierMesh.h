@@ -1185,6 +1185,56 @@ Mesh<NodeArg, PatchArg>::control_point_iterator::rightSegment() const
     return segment_iterator(m_mesh, m_col, m_row, true);
 }
 
+template<typename NodeArg, typename PatchArg>
+void smartMoveControl(Mesh<NodeArg, PatchArg> &mesh,
+                      typename Mesh<NodeArg, PatchArg>::ControlPointIndex index,
+                      const QPointF &move,
+                      bool lockNodes)
+{
+    using ControlType = typename Mesh<NodeArg, PatchArg>::ControlType;
+    using ControlPointIndex = typename Mesh<NodeArg, PatchArg>::ControlPointIndex;
+
+    auto it = mesh.find(index);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(it != mesh.endControlPoints());
+
+    if (it.isNode()) {
+        it.node().translate(move);
+    } else {
+        const QPointF newPos = *it + move;
+
+        if (lockNodes) {
+            const qreal rotation = KisAlgebra2D::angleBetweenVectors(*it - it.node().node,
+                                                                     newPos - it.node().node);
+            QTransform R;
+            R.rotateRadians(rotation);
+
+            const QTransform t =
+                    QTransform::fromTranslate(-it.node().node.x(), -it.node().node.y()) *
+                    R *
+                    QTransform::fromTranslate(it.node().node.x(), it.node().node.y());
+
+            for (int intType = 0; intType < 4; intType++) {
+                ControlType type = static_cast<ControlType>(intType);
+
+                if (type == ControlType::Node ||
+                    type == index.controlType) {
+
+                    continue;
+                }
+
+                auto neighbourIt = mesh.find(ControlPointIndex(index.nodeIndex, type));
+                if (neighbourIt == mesh.endControlPoints()) continue;
+
+                *neighbourIt = t.map(*neighbourIt);
+            }
+        }
+
+        *it = newPos;
+    }
+}
+
+
+
 }
 
 template <typename Node, typename Patch>

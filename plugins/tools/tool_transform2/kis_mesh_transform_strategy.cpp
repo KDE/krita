@@ -81,9 +81,6 @@ struct KisMeshTransformStrategy::Private
     qreal initialSelectionMaxDimension = 0.0;
     KisBezierTransformMesh initialMeshState;
 
-    qreal symmetricLengthProportion1 = 1.0;
-    qreal symmetricLengthProportion2 = 1.0;
-
     bool pointWasDragged = false;
     QPointF lastMousePos;
 
@@ -199,7 +196,7 @@ void KisMeshTransformStrategy::setTransformFunction(const QPointF &mousePos, boo
                 mode = Private::MULTIPLE_POINT_SELECTION;
             }
         } else {
-            if (m_d->currentArgs.meshTransform()->dstBoundingRect().contains(mousePos)) {
+            if (hoveredPatch) {
                 mode = shiftModifierActive ? Private::OVER_PATCH : Private::MOVE_MODE;
             } else if (perspectiveModifierActive) {
                 mode = Private::SCALE_MODE;
@@ -433,38 +430,9 @@ bool KisMeshTransformStrategy::shouldDeleteNode(qreal distance, qreal param)
 }
 
 namespace {
-qreal calcSymmetricLengthProportion(KisBezierTransformMesh &mesh,
-                                    KisBezierTransformMesh::control_point_iterator it)
-{
-    qreal result = 1.0;
-
-    auto symmetricIt = it.symmetricControl();
-    if (symmetricIt != mesh.endControlPoints()) {
-        const QPointF p1 = *it - it.node().node;
-        const QPointF p2 = *symmetricIt - it.node().node;
-
-        const qreal baseLength = KisAlgebra2D::norm(p1);
-        result =
-            baseLength > 0 ?
-            qAbs(KisAlgebra2D::dotProduct(p1, p2) / pow2(baseLength)) : 1.0;
-
-    }
-
-    return result;
-}
-
-void correctSymmetricNeightbour(KisBezierTransformMesh &mesh,
-                                KisBezierTransformMesh::control_point_iterator it,
-                                qreal lengthProportion)
-{
-    auto symmetricIt = it.symmetricControl();
-    if (symmetricIt != mesh.endControlPoints()) {
-        const QPointF p1 = *it - it.node().node;
-        *symmetricIt = it.node().node - lengthProportion * p1;
-    }
-}
 
 }
+
 
 bool KisMeshTransformStrategy::beginPrimaryAction(const QPointF &pt)
 {
@@ -496,12 +464,6 @@ bool KisMeshTransformStrategy::beginPrimaryAction(const QPointF &pt)
         m_d->selectedNodes.clear();
         m_d->selectedNodes << m_d->hoveredControl->nodeIndex;
 
-        if (m_d->mode == Private::OVER_POINT_SYMMETRIC) {
-            auto it = m_d->currentArgs.meshTransform()->find(*m_d->hoveredControl);
-            m_d->symmetricLengthProportion1 =
-                calcSymmetricLengthProportion(*m_d->currentArgs.meshTransform(), it);
-        }
-
         retval = true;
 
     } else if (m_d->mode == Private::OVER_SEGMENT || m_d->mode == Private::OVER_SEGMENT_SYMMETRIC) {
@@ -509,16 +471,6 @@ bool KisMeshTransformStrategy::beginPrimaryAction(const QPointF &pt)
 
         auto it = m_d->currentArgs.meshTransform()->find(*m_d->hoveredSegment);
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(it != m_d->currentArgs.meshTransform()->endSegments(), false);
-
-        if (m_d->mode == Private::OVER_SEGMENT_SYMMETRIC) {
-            m_d->symmetricLengthProportion1 =
-                calcSymmetricLengthProportion(*m_d->currentArgs.meshTransform(),
-                                              it.itP1());
-
-            m_d->symmetricLengthProportion2 =
-                calcSymmetricLengthProportion(*m_d->currentArgs.meshTransform(),
-                                              it.itP2());
-        }
 
         retval = true;
 
@@ -566,17 +518,11 @@ void KisMeshTransformStrategy::continuePrimaryAction(const QPointF &pt, bool shi
     if (m_d->mode == Private::OVER_POINT || m_d->mode == Private::OVER_POINT_SYMMETRIC) {
         KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->hoveredControl);
 
-        auto it = m_d->currentArgs.meshTransform()->find(*m_d->hoveredControl);
+        smartMoveControl(*m_d->currentArgs.meshTransform(),
+                         *m_d->hoveredControl,
+                         pt - m_d->lastMousePos,
+                         m_d->mode == Private::OVER_POINT_SYMMETRIC);
 
-        if (it.isNode()) {
-            it.node().translate(pt - m_d->lastMousePos);
-        } else {
-            *it += pt - m_d->lastMousePos;
-
-            if (m_d->mode == Private::OVER_POINT_SYMMETRIC) {
-                correctSymmetricNeightbour(*m_d->currentArgs.meshTransform(), it, m_d->symmetricLengthProportion1);
-            }
-        }
     } else if (m_d->mode == Private::OVER_SEGMENT || m_d->mode == Private::OVER_SEGMENT_SYMMETRIC) {
         KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->hoveredSegment);
 
@@ -594,13 +540,9 @@ void KisMeshTransformStrategy::continuePrimaryAction(const QPointF &pt, bool shi
         std::tie(offsetP1, offsetP2) =
             KisBezierUtils::offsetSegment(m_d->localSegmentPosition, offset);
 
-        it.p1() += offsetP1;
-        it.p2() += offsetP2;
+        smartMoveControl(*m_d->currentArgs.meshTransform(), it.itP1().controlIndex(), offsetP1, m_d->mode == Private::OVER_SEGMENT_SYMMETRIC);
+        smartMoveControl(*m_d->currentArgs.meshTransform(), it.itP2().controlIndex(), offsetP2, m_d->mode == Private::OVER_SEGMENT_SYMMETRIC);
 
-        if (m_d->mode == Private::OVER_SEGMENT_SYMMETRIC) {
-            correctSymmetricNeightbour(*m_d->currentArgs.meshTransform(), it.itP1(), m_d->symmetricLengthProportion1);
-            correctSymmetricNeightbour(*m_d->currentArgs.meshTransform(), it.itP2(), m_d->symmetricLengthProportion2);
-        }
     } else if (m_d->mode == Private::OVER_PATCH) {
         KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->hoveredPatch);
 

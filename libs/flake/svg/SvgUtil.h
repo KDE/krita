@@ -61,9 +61,10 @@ public:
     /**
      * Parses the given string containing a percentage number.
      * @param s the input string containing the percentage
+     * @param ok optional failure indicator
      * @return the percentage number normalized to 0..1
      */
-    static double fromPercentage(QString s);
+    static double fromPercentage(QString s, bool *ok=nullptr);
 
     /**
      * Converts position from objectBoundingBox units to userSpace units.

@@ -1166,6 +1166,12 @@ QVector<QTextFormat> KoSvgTextShapeMarkupConverter::stylesFromString(QStringList
     for (int i=0; i<styles.size(); i++) {
         if (!styles.at(i).isEmpty()){
             QStringList style = styles.at(i).split(":");
+            // ignore the property instead of crashing,
+            // if user forgets to separate property name and value with ':'.
+            if (style.size() < 2) {
+                continue;
+            }
+
             QString property = style.at(0).trimmed();
             QString value = style.at(1).trimmed();
 

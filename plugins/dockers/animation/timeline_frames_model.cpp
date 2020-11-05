@@ -756,9 +756,19 @@ bool TimelineFramesModel::dropMimeDataExtended(const QMimeData *data, Qt::DropAc
     }
 
     if (cmd) {
-        KisProcessingApplicator::runSingleCommandStroke(m_d->image, cmd,
+        // STORYBOARD TEMPORARY
+        // NOTE TO DMITRY:
+        // For some reason, uncommenting this and removing the below `cmd->redo()`
+        // call is creating strange behavior when using linked frames where
+        // cloning is called twice. When combined with the storyboard docker, this
+        // creates unintended side effects where keyframes will be "cleaned" up
+        // over existing content.
+
+        /*KisProcessingApplicator::runSingleCommandStroke(m_d->image, cmd,
                                                         KisStrokeJobData::BARRIER,
-                                                        KisStrokeJobData::EXCLUSIVE);
+                                                        KisStrokeJobData::EXCLUSIVE);*/
+        cmd->redo();
+        // END STORYBOARD TEMPORARY
     }
 
     return cmd;

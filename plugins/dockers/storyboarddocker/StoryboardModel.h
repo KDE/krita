@@ -92,6 +92,11 @@ public:
     bool moveRows(const QModelIndex &sourceParent, int sourceRow, int count,
                     const QModelIndex &destinationParent, int destinationChild) override;
 
+    /* @brief used to prevent reordering of keyframes when drag+droping keyframes in timeline docker.
+     */
+    bool moveRowsNoReorder(const QModelIndex &sourceParent, int sourceRow, int count,
+                           const QModelIndex &destinationParent, int destinationChild);
+
     //for drag and drop
     QMimeData *mimeData(const QModelIndexList &indexes) const override;
     bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent) override;
@@ -185,6 +190,11 @@ public:
      * to an existing scene.
      */
     int lastKeyframeWithin(QModelIndex index);
+
+    /**
+     * @brief delete all keyframes from frame for specific duration.
+     */
+    void cleanKeyframes(int startFrame, int duration);
 
     /**
      * @brief reorders all keyframes to reflect storyboard docker's arrangement.
@@ -298,6 +308,7 @@ private:
     CommentModel *m_commentModel;
     bool m_locked;
     bool m_reorderingKeyframes;
+    bool m_shouldReorderKeyframes;
     int m_lastScene = 0;
     KisIdleWatcher m_imageIdleWatcher;
     KisImageWSP m_image;

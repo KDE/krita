@@ -1,4 +1,4 @@
-/*
+﻿/*
  *  Copyright (c) 2020 Saurabh Kumar <saurabhk660@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -37,6 +37,7 @@ StoryboardModel::StoryboardModel(QObject *parent)
         : QAbstractItemModel(parent)
         , m_locked(false)
         , m_reorderingKeyframes(false)
+        , m_shouldReorderKeyframes(true)
         , m_imageIdleWatcher(10)
         , m_renderScheduler(new KisStoryboardThumbnailRenderScheduler(this))
         , m_renderSchedulingCompressor(1000,KisSignalCompressor::FIRST_ACTIVE)
@@ -347,7 +348,13 @@ bool StoryboardModel::removeRows(int position, int rows, const QModelIndex &pare
         const bool needsDurationUpdate = position > 0 && position < m_items.count();
 
         for (int row = position + rows - 1; row >= position; row--) {
+            QModelIndex itemIndex = index(row, 0);
+            const int sceneFrame = index(StoryboardItem::FrameNumber, 0, itemIndex).data().toInt();
+            const int sceneDuration = index(StoryboardItem::DurationFrame, 0, itemIndex).data().toInt()
+                                     + index(StoryboardItem::DurationSecond, 0, itemIndex).data().toInt()
+                                     * getFramesPerSecond();
             m_items.removeAt(row);
+            cleanKeyframes(sceneFrame, sceneDuration);
         }
 
         if (needsDurationUpdate && index(position, 0).isValid()) {
@@ -418,7 +425,10 @@ bool StoryboardModel::moveRows(const QModelIndex &sourceParent, int sourceRow, i
             item->moveChild(sourceRow, destinationChild + row);
         }
         endMoveRows();
-        reorderKeyframes();
+
+        if (m_shouldReorderKeyframes)
+            reorderKeyframes();
+
         emit sigStoryboardItemListChanged();
         return true;
     }
@@ -434,13 +444,25 @@ bool StoryboardModel::moveRows(const QModelIndex &sourceParent, int sourceRow, i
             m_items.move(sourceRow, destinationChild + row);
         }
         endMoveRows();
-        reorderKeyframes();
+
+        if (m_shouldReorderKeyframes)
+            reorderKeyframes();
+
         emit sigStoryboardItemListChanged();
         return true;
     }
     else {
         return false;
     }
+}
+
+bool StoryboardModel::moveRowsNoReorder(const QModelIndex &sourceParent, int sourceRow, int count, const QModelIndex &destinationParent, int destinationChild)
+{
+    m_shouldReorderKeyframes = false;
+    bool val = moveRows(sourceParent, sourceRow, count, destinationParent, destinationChild);
+    m_shouldReorderKeyframes = true;
+
+    return val;
 }
 
 QMimeData *StoryboardModel::mimeData(const QModelIndexList &indexes) const
@@ -485,7 +507,6 @@ bool StoryboardModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
             moveRowIndexes.append(index);
         }
         moveRows(QModelIndex(), moveRowIndexes.at(0).row(), moveRowIndexes.count(), parent, row);
-
         //returning true deletes the source row
         return false;
     }
@@ -739,6 +760,27 @@ int StoryboardModel::lastKeyframeWithin(QModelIndex sceneIndex)
     }
 
     return lastFrameOfScene;
+}
+
+void StoryboardModel::cleanKeyframes(int startFrame, int duration)
+{
+    KisNodeSP node = m_image->rootLayer();
+    if (node) {
+        KisLayerUtils::recursiveApplyNodes (node, [startFrame, duration] (KisNodeSP node)
+        {
+            const int lastFrame = startFrame + duration - 1;
+            if (node->isAnimated()) {
+                KisKeyframeChannel *keyframeChannel = node->paintDevice()->keyframeChannel();
+                int currentFrame = lastFrame;
+                while (currentFrame >= startFrame) {
+                    if (keyframeChannel->keyframeAt(currentFrame))
+                        keyframeChannel->removeKeyframe(currentFrame);
+
+                    currentFrame = keyframeChannel->previousKeyframeTime(currentFrame);
+                }
+            }
+        });
+    }
 }
 
 void StoryboardModel::reorderKeyframes()
@@ -1048,7 +1090,7 @@ void StoryboardModel::slotKeyframeRemoved(const KisKeyframeChannel *channel, int
     if (itemIndex.isValid() && !m_reorderingKeyframes) {
         if (isOnlyKeyframe(channel->node().toStrongRef(), time)) {
             removeRows(itemIndex.row(), 1);
-            m_renderScheduler->cancelFrameRendering(itemIndex.row());
+            m_renderScheduler->cancelFrameRendering(time);
             updateDurationData(lastIndexBeforeFrame(time));
         }
     }
@@ -1072,7 +1114,7 @@ void StoryboardModel::slotKeyframeMoved(const KisKeyframeChannel* channel, int f
 
         if (onlyKeyframe && !destinationIndex.isValid()) {
             setData(index(StoryboardItem::FrameNumber, 0, fromIndex), to);
-            moveRows(QModelIndex(), fromIndex.row(), 1, QModelIndex(), toItemRow + 1);
+            moveRowsNoReorder(QModelIndex(), fromIndex.row(), 1, QModelIndex(), toItemRow + 1);
 
             updateDurationData(indexFromFrame(to));
             updateDurationData(lastIndexBeforeFrame(to));

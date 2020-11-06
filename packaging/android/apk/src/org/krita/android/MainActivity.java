@@ -19,6 +19,7 @@
 
 package org.krita.android;
 
+import android.util.Log;
  import android.os.Bundle;
  import android.content.Intent;
  import android.net.Uri;
@@ -32,7 +33,9 @@ package org.krita.android;
 
 public class MainActivity extends QtActivity {
 
-	public boolean isStartup = true;
+    private boolean isStartup = true;
+    private Thread mDocSaverThread;
+    private String TAG = "MainActivity";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -84,12 +87,40 @@ public class MainActivity extends QtActivity {
 		// onPause() _is_ called when the app starts. If the native lib
 		// isn't loaded, it crashes.
 		if (!isStartup) {
-			JNIWrappers.saveState();
+            synchronized(this) {
+                // let's not block the Android UI thread if we return to the app quickly
+                mDocSaverThread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        JNIWrappers.saveState();
+                    }
+                });
+                mDocSaverThread.start();
+            }
 		}
 		else {
 			isStartup = false;
 		}
 	}
+
+    @Override
+    public void onDestroy() {
+        synchronized (this) {
+            if (mDocSaverThread != null) {
+                try {
+                    mDocSaverThread.join();
+                } catch (InterruptedException e) {
+                    Log.e(TAG, "Interrupted :" + e.getMessage());
+                }
+            }
+        }
+        // Hack or not, I'm not sure. Beyond this, Qt will invoke libc's exit()
+        // which doesn't kill our global static properly. So, because Qt app *is*
+        // supposed to terminate now, this should perfectly safe.
+        android.os.Process.killProcess(android.os.Process.myPid());
+        super.onDestroy();
+    }
+
 
 	@Override
 	public boolean onKeyUp(final int keyCode, final KeyEvent event) {

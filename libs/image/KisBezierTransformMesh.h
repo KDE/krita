@@ -56,6 +56,9 @@ public:
     void transformMesh(KisPaintDeviceSP srcDevice,
                        KisPaintDeviceSP dstDevice) const;
 
+    QRect approxNeedRect(const QRect &rc) const;
+    QRect approxChangeRect(const QRect &rc) const;
+
     friend void saveValue(QDomElement *parent, const QString &tag, const KisBezierTransformMesh &mesh);
     friend bool loadValue(const QDomElement &parent, KisBezierTransformMesh *mesh);
 };

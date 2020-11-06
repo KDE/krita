@@ -371,7 +371,7 @@ void ToolTransformArgs::toXML(QDomElement *e) const
 
         m_liquifyProperties->toXML(&liqEl);
         m_liquifyWorker->toXML(&liqEl);
-    } else if (m_mode == LIQUIFY) {
+    } else if (m_mode == MESH) {
         QDomElement meshEl = doc.createElement("mesh_transform");
         e->appendChild(meshEl);
 

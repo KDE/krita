@@ -366,7 +366,7 @@ QRect KisTransformUtils::needRect(const ToolTransformArgs &config,
         result = config.liquifyWorker() ?
             config.liquifyWorker()->approxNeedRect(rc, srcBounds) : rc;
     } else if (config.mode() == ToolTransformArgs::MESH) {
-        ENTER_FUNCTION() << "TODO: Mesh Transform";
+        result = config.meshTransform()->approxNeedRect(rc);
     } else {
         KIS_ASSERT_RECOVER_NOOP(0 && "this works for non-affine transformations only!");
     }
@@ -401,7 +401,8 @@ QRect KisTransformUtils::changeRect(const ToolTransformArgs &config,
         result = config.liquifyWorker() ?
             config.liquifyWorker()->approxChangeRect(rc) : rc;
     } else if (config.mode() == ToolTransformArgs::MESH) {
-        ENTER_FUNCTION() << "TODO: Mesh Transform";
+        result = config.meshTransform()->approxChangeRect(rc);
+
     } else {
         KIS_ASSERT_RECOVER_NOOP(0 && "this works for non-affine transformations only!");
     }

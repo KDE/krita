@@ -81,6 +81,36 @@ void KisBezierTransformMesh::transformMesh(KisPaintDeviceSP srcDevice, KisPaintD
     }
 }
 
+QRect KisBezierTransformMesh::approxNeedRect(const QRect &rc) const
+{
+    QRect result = rc;
+
+    for (auto it = beginPatches(); it != endPatches(); ++it) {
+        KisBezierPatch patch = *it;
+
+        if (patch.dstBoundingRect().intersects(rc)) {
+            result |= patch.srcBoundingRect().toAlignedRect();
+        }
+    }
+
+    return result;
+}
+
+QRect KisBezierTransformMesh::approxChangeRect(const QRect &rc) const
+{
+    QRect result = rc;
+
+    for (auto it = beginPatches(); it != endPatches(); ++it) {
+        const KisBezierPatch patch = *it;
+
+        if (patch.srcBoundingRect().intersects(rc)) {
+            result |= patch.dstBoundingRect().toAlignedRect();
+        }
+    }
+
+    return result;
+}
+
 #include <kis_dom_utils.h>
 
 void KisBezierTransformMeshDetail::saveValue(QDomElement *parent, const QString &tag, const KisBezierTransformMesh &mesh)

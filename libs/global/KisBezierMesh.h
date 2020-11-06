@@ -101,9 +101,6 @@ inline void lerpNodeData(const BaseMeshNode &left, const BaseMeshNode &right, qr
     Q_UNUSED(dst);
 }
 
-KRITAGLOBAL_EXPORT
-QDebug operator<<(QDebug dbg, const BaseMeshNode &n);
-
 inline void assignPatchData(KisBezierPatch *patch,
                             const QRectF &srcRect,
                             const BaseMeshNode &tl,
@@ -504,19 +501,19 @@ public:
 
     class segment_iterator;
 
-    class iterator :
-        public boost::iterator_facade <iterator,
+    class patch_iterator :
+        public boost::iterator_facade <patch_iterator,
                                        Patch,
                                        boost::random_access_traversal_tag,
                                        Patch>
     {
     public:
-        iterator()
+        patch_iterator()
             : m_mesh(0),
               m_col(0),
               m_row(0) {}
 
-        iterator(const Mesh* mesh, int col, int row)
+        patch_iterator(const Mesh* mesh, int col, int row)
             : m_mesh(mesh),
               m_col(col),
               m_row(row)
@@ -531,6 +528,14 @@ public:
         segment_iterator segmentQ() const;
         segment_iterator segmentR() const;
         segment_iterator segmentS() const;
+
+        bool isValid() const {
+            return
+                m_col >= 0 &&
+                m_col < m_mesh->size().width() - 1 &&
+                m_row >= 0 &&
+                m_row < m_mesh->size().height() - 1;
+        }
 
     private:
         friend class boost::iterator_core_access;
@@ -560,14 +565,14 @@ public:
             KIS_SAFE_ASSERT_RECOVER_NOOP(m_row < m_mesh->m_size.height() - 1);
         }
 
-        int distance_to(const iterator &z) const {
+        int distance_to(const patch_iterator &z) const {
             const int index = m_row * (m_mesh->m_size.width() - 1) + m_col;
             const int otherIndex = z.m_row * (m_mesh->m_size.width() - 1) + z.m_col;
 
             return otherIndex - index;
         }
 
-        bool equal(iterator const& other) const {
+        bool equal(patch_iterator const& other) const {
             return m_row == other.m_row &&
                     m_col == other.m_col &&
                 m_mesh == other.m_mesh;
@@ -693,6 +698,10 @@ public:
         segment_iterator bottomSegment() const;
         segment_iterator leftSegment() const;
         segment_iterator rightSegment() const;
+
+        bool isValid() const {
+            return nodeIsValid() && controlIsValid();
+        }
 
     private:
         friend class boost::iterator_core_access;
@@ -859,6 +868,10 @@ public:
             return m_isHorizontal;
         }
 
+        bool isValid() const {
+            return nodeIsValid() && controlIsValid();
+        }
+
     private:
         friend class boost::iterator_core_access;
 
@@ -926,12 +939,12 @@ public:
         int m_isHorizontal;
     };
 
-    iterator begin() const {
-        return iterator(this, 0, 0);
+    patch_iterator beginPatches() const {
+        return patch_iterator(this, 0, 0);
     }
 
-    iterator end() const {
-        return iterator(this, 0, m_size.height() - 1);
+    patch_iterator endPatches() const {
+        return patch_iterator(this, 0, m_size.height() - 1);
     }
 
     // TODO: constness
@@ -961,15 +974,15 @@ public:
 
     QRectF dstBoundingRect() const {
         QRectF result;
-        for (auto it = begin(); it != end(); ++it) {
+        for (auto it = beginPatches(); it != endPatches(); ++it) {
             result |= it->dstBoundingRect();
         }
         return result;
     }
 
     bool isIdentity() const {
-        // TODO: impletent me!
-        return false;
+        Mesh identityMesh(m_originalRect, m_size);
+        return *this == identityMesh;
     }
 
     void translate(const QPointF &offset) {
@@ -982,16 +995,6 @@ public:
         for (auto it = m_nodes.begin(); it != m_nodes.end(); ++it) {
             it->transform(t);
         }
-    }
-
-    void toXML(QDomElement *e) const {
-        Q_UNUSED(e);
-        // TODO: impletent me!
-    }
-
-    void fromXML(const QDomElement &e) {
-        Q_UNUSED(e);
-        // TODO: impletent me!
     }
 
     control_point_iterator hitTestPointImpl(const QPointF &pt, qreal distanceThreshold, bool onlyNodeMode) {
@@ -1042,10 +1045,10 @@ public:
         return result;
     }
 
-    iterator hitTestPatch(const QPointF &pt, QPointF *localPointResult = 0) {
+    patch_iterator hitTestPatch(const QPointF &pt, QPointF *localPointResult = 0) {
         const QRectF unitRect(0, 0, 1, 1);
 
-        for (auto it = begin(); it != end(); ++it) {
+        for (auto it = beginPatches(); it != endPatches(); ++it) {
             Patch patch = *it;
 
             if (patch.dstBoundingRect().contains(pt)) {
@@ -1061,23 +1064,23 @@ public:
                 }
             }
         }
-        return end();
+        return endPatches();
 
     }
 
     control_point_iterator find(const ControlPointIndex &index) {
-        // TODO: verify validness
-        return control_point_iterator(this, index.nodeIndex.x(), index.nodeIndex.y(), index.controlType);
+        control_point_iterator it(this, index.nodeIndex.x(), index.nodeIndex.y(), index.controlType);
+        return it.isValid() ? it : endControlPoints();
     }
 
     segment_iterator find(const SegmentIndex &index) {
-        // TODO: verify validness
-        return segment_iterator(this, index.first.x(), index.first.y(), index.second);
+        segment_iterator it(this, index.first.x(), index.first.y(), index.second);
+        return it.isValid() ? it : endSegments();
     }
 
-    iterator findPatch(const PatchIndex &index) {
-        // TODO: verify validness
-        return iterator(this, index.x(), index.y());
+    patch_iterator findPatch(const PatchIndex &index) {
+        patch_iterator it(this, index.x(), index.y());
+        return it.isValid() ? it : endPatches();
     }
 
     void scaleForThumbnail(const QTransform &t) {
@@ -1086,7 +1089,7 @@ public:
         m_originalRect = t.mapRect(m_originalRect);
     }
 
-private:
+protected:
 
     std::vector<Node> m_nodes;
     std::vector<qreal> m_rows;
@@ -1111,7 +1114,7 @@ QDebug operator<<(QDebug dbg, const Mesh<Node, Patch> &mesh)
 
 template<typename NodeArg, typename PatchArg>
 typename Mesh<NodeArg, PatchArg>::segment_iterator
-Mesh<NodeArg, PatchArg>::iterator::segmentP() const
+Mesh<NodeArg, PatchArg>::patch_iterator::segmentP() const
 {
     // FIXME: remove const cast
     return segment_iterator(const_cast<Mesh<NodeArg, PatchArg>*>(m_mesh), m_col, m_row, 1);
@@ -1119,7 +1122,7 @@ Mesh<NodeArg, PatchArg>::iterator::segmentP() const
 
 template<typename NodeArg, typename PatchArg>
 typename Mesh<NodeArg, PatchArg>::segment_iterator
-Mesh<NodeArg, PatchArg>::iterator::segmentQ() const
+Mesh<NodeArg, PatchArg>::patch_iterator::segmentQ() const
 {
     // FIXME: remove const cast
     return segment_iterator(const_cast<Mesh<NodeArg, PatchArg>*>(m_mesh), m_col, m_row + 1, 1);
@@ -1127,7 +1130,7 @@ Mesh<NodeArg, PatchArg>::iterator::segmentQ() const
 
 template<typename NodeArg, typename PatchArg>
 typename Mesh<NodeArg, PatchArg>::segment_iterator
-Mesh<NodeArg, PatchArg>::iterator::segmentR() const
+Mesh<NodeArg, PatchArg>::patch_iterator::segmentR() const
 {
     // FIXME: remove const cast
     return segment_iterator(const_cast<Mesh<NodeArg, PatchArg>*>(m_mesh), m_col, m_row, 0);
@@ -1135,7 +1138,7 @@ Mesh<NodeArg, PatchArg>::iterator::segmentR() const
 
 template<typename NodeArg, typename PatchArg>
 typename Mesh<NodeArg, PatchArg>::segment_iterator
-Mesh<NodeArg, PatchArg>::iterator::segmentS() const
+Mesh<NodeArg, PatchArg>::patch_iterator::segmentS() const
 {
     // FIXME: remove const cast
     return segment_iterator(const_cast<Mesh<NodeArg, PatchArg>*>(m_mesh), m_col + 1, m_row, 0);
@@ -1233,8 +1236,20 @@ void smartMoveControl(Mesh<NodeArg, PatchArg> &mesh,
     }
 }
 
+KRITAGLOBAL_EXPORT
+QDebug operator<<(QDebug dbg, const BaseMeshNode &n);
 
+KRITAGLOBAL_EXPORT
+void saveValue(QDomElement *parent, const QString &tag, const BaseMeshNode &node);
 
+KRITAGLOBAL_EXPORT
+bool loadValue(const QDomElement &parent, BaseMeshNode *node);
+
+}
+
+namespace KisDomUtils {
+using KisBezierMeshDetails::loadValue;
+using KisBezierMeshDetails::saveValue;
 }
 
 template <typename Node, typename Patch>

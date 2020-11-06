@@ -32,6 +32,7 @@
 
 #include "kritaglobal_export.h"
 #include "kis_debug.h"
+#include "krita_container_utils.h"
 
 namespace KisDomUtils {
 
@@ -147,11 +148,13 @@ namespace KisDomUtils {
  * \see loadValue()
  */
 void KRITAGLOBAL_EXPORT saveValue(QDomElement *parent, const QString &tag, const QRect &rc);
+void KRITAGLOBAL_EXPORT saveValue(QDomElement *parent, const QString &tag, const QRectF &rc);
 void KRITAGLOBAL_EXPORT saveValue(QDomElement *parent, const QString &tag, const QSize &size);
 void KRITAGLOBAL_EXPORT saveValue(QDomElement *parent, const QString &tag, const QPoint &pt);
 void KRITAGLOBAL_EXPORT saveValue(QDomElement *parent, const QString &tag, const QPointF &pt);
 void KRITAGLOBAL_EXPORT saveValue(QDomElement *parent, const QString &tag, const QVector3D &pt);
 void KRITAGLOBAL_EXPORT saveValue(QDomElement *parent, const QString &tag, const QTransform &t);
+void KRITAGLOBAL_EXPORT saveValue(QDomElement *parent, const QString &tag, const QColor &t);
 
 /**
  * Save a value of a scalar type into an XML tree. A child for \p parent
@@ -179,8 +182,9 @@ void saveValue(QDomElement *parent, const QString &tag, T value)
  *
  * \see loadValue()
  */
-template <template <class> class Container, typename T>
-void saveValue(QDomElement *parent, const QString &tag, const Container<T> &array)
+template <template <class...> class Container, typename T, typename ...Args>
+typename std::enable_if<KritaUtils::is_container<Container<T, Args...>>::value, void>::type
+saveValue(QDomElement *parent, const QString &tag, const Container<T, Args...> &array)
 {
     QDomDocument doc = parent->ownerDocument();
     QDomElement e = doc.createElement(tag);
@@ -215,11 +219,13 @@ bool KRITAGLOBAL_EXPORT loadValue(const QDomElement &e, float *v);
 bool KRITAGLOBAL_EXPORT loadValue(const QDomElement &e, double *v);
 bool KRITAGLOBAL_EXPORT loadValue(const QDomElement &e, QSize *size);
 bool KRITAGLOBAL_EXPORT loadValue(const QDomElement &e, QRect *rc);
+bool KRITAGLOBAL_EXPORT loadValue(const QDomElement &e, QRectF *rc);
 bool KRITAGLOBAL_EXPORT loadValue(const QDomElement &e, QPoint *pt);
 bool KRITAGLOBAL_EXPORT loadValue(const QDomElement &e, QPointF *pt);
 bool KRITAGLOBAL_EXPORT loadValue(const QDomElement &e, QVector3D *pt);
 bool KRITAGLOBAL_EXPORT loadValue(const QDomElement &e, QTransform *t);
 bool KRITAGLOBAL_EXPORT loadValue(const QDomElement &e, QString *value);
+bool KRITAGLOBAL_EXPORT loadValue(const QDomElement &e, QColor *value);
 
 
 namespace Private {
@@ -253,7 +259,7 @@ loadValue(const QDomElement &e, T *value)
 template <typename T, typename E>
     typename std::enable_if<std::is_empty<E>::value, bool>::type
 loadValue(const QDomElement &parent, T *value, const E &/*env*/) {
-    return KisDomUtils::loadValue(parent, value);
+    return loadValue(parent, value);
 }
 
 /**
@@ -264,9 +270,10 @@ loadValue(const QDomElement &parent, T *value, const E &/*env*/) {
  *
  * \see saveValue()
  */
-template <template <class> class Container, typename T, typename E = std::tuple<>>
-    bool loadValue(const QDomElement &e, Container<T> *array, const E &env = E())
 
+template <template <class ...> class Container, typename T, typename E, typename ...Args>
+typename std::enable_if<KritaUtils::is_appendable_container<Container<T, Args...>>::value, bool>::type
+loadValue(const QDomElement &e, Container<T, Args...> *array, const E &env = std::tuple<>())
 {
     if (!Private::checkType(e, "array")) return false;
 
@@ -274,15 +281,15 @@ template <template <class> class Container, typename T, typename E = std::tuple<
     while (!child.isNull()) {
         T value;
         if (!loadValue(child, &value, env)) return false;
-        *array << value;
+        array->push_back(value);
         child = child.nextSiblingElement();
     }
     return true;
 }
 
-template <template <class> class Container, typename T, typename E, typename F>
-    bool loadValue(const QDomElement &e, Container<T> *array, const E &env1, const F &env2)
-
+template <template <class ...> class Container, typename T, typename E, typename F, typename ...Args>
+typename std::enable_if<KritaUtils::is_appendable_container<Container<T, Args...>>::value, bool>::type
+loadValue(const QDomElement &e, Container<T, Args...> *array, const E &env1, const F &env2)
 {
     if (!Private::checkType(e, "array")) return false;
 
@@ -290,7 +297,7 @@ template <template <class> class Container, typename T, typename E, typename F>
     while (!child.isNull()) {
         T value;
         if (!loadValue(child, &value, env1, env2)) return false;
-        *array << value;
+        array->push_back(value);
         child = child.nextSiblingElement();
     }
     return true;

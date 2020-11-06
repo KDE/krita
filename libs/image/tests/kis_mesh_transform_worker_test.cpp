@@ -30,9 +30,13 @@
 
 #include <KisBezierUtils.h>
 #include <KisBezierPatch.h>
+
+
 #include <KisBezierMesh.h>
 #include <KisBezierGradientMesh.h>
 #include <KisBezierTransformMesh.h>
+
+#include "kis_dom_utils.h"
 
 #include <kis_grid_interpolation_tools.h>
 
@@ -345,6 +349,66 @@ void KisMeshTransformWorkerTest::testRemovePoint()
 
     QVERIFY(KisAlgebra2D::fuzzyPointCompare(r1, QPointF(121.314,120.167), 0.01));
     QVERIFY(KisAlgebra2D::fuzzyPointCompare(r2, QPointF(180.184,119.801), 0.01));
+}
+
+void KisMeshTransformWorkerTest::testIsIdentity()
+{
+    KisBezierMesh mesh(QRectF(0,0,100,100));
+
+    QVERIFY(mesh.isIdentity());
+
+    mesh.node(0,0).setRightControlRelative(QPointF(18, 0));
+    mesh.node(0,0).setBottomControlRelative(QPointF(0, 18));
+
+    /**
+     * WISHLIST: in the current implementation even a slight change of the
+     * mesh, which doesn't cause any deformations, will be considered as
+     * making the mesh non-identity. Ideally, we could check the mesh for
+     * mathematical transformation identity, but that seems to be a bit of
+     * overkill for the current usecase (silently canceling transform tool
+     * a action). Implementing this change is rather complicated because the
+     * same functionality is used in the KisBezierGradientMesh.
+     */
+    QVERIFY(!mesh.isIdentity());
+
+    mesh.node(0,0).setRightControlRelative(QPointF(10, -5));
+    mesh.node(0,0).setBottomControlRelative(QPointF(-5, 10));
+
+    QVERIFY(!mesh.isIdentity());
+
+}
+
+void KisMeshTransformWorkerTest::testSerialization()
+{
+    KisBezierTransformMesh mesh(QRectF(0,0,100,100));
+    mesh.node(0,0).setRightControlRelative(QPointF(10, -5));
+    mesh.node(0,0).setBottomControlRelative(QPointF(-5, 10));
+
+    mesh.node(1,0).setLeftControlRelative(QPointF(-10, -5));
+    mesh.node(1,0).setBottomControlRelative(QPointF(5, 10));
+
+    mesh.node(0,1).setRightControlRelative(QPointF(10, 5));
+    mesh.node(0,1).setTopControlRelative(QPointF(-5, -10));
+
+    mesh.node(1,1).setLeftControlRelative(QPointF(-10, 5));
+    mesh.node(1,1).setTopControlRelative(QPointF(5, -10));
+
+    mesh.subdivideRow(0.5);
+    mesh.subdivideColumn(0.5);
+
+    QDomDocument doc;
+    QDomElement e = doc.createElement("root");
+    doc.appendChild(e);
+
+    KisDomUtils::saveValue(&e, "mytransform", mesh);
+
+    //printf("%s", doc.toString(4).toLatin1().data());
+
+    KisBezierTransformMesh roundTripMesh;
+
+    KisDomUtils::loadValue(e, "mytransform", &roundTripMesh);
+
+    QCOMPARE(mesh, roundTripMesh);
 }
 
 QTEST_MAIN(KisMeshTransformWorkerTest)

@@ -26,8 +26,8 @@ namespace
 {
 enum ArgumentsPageIndex
 {
-    pageEdit,
-    pagePreview
+    PageEdit,
+    PagePreview
 };
 }
 
@@ -39,7 +39,7 @@ RecorderProfileSettings::RecorderProfileSettings(QWidget *parent)
     ui->setupUi(this);
 
     ui->buttonPresetRevert->setIcon(KisIconUtils::loadIcon("edit-undo"));
-    ui->stackedWidget->setCurrentIndex(ArgumentsPageIndex::pageEdit);
+    ui->stackedWidget->setCurrentIndex(ArgumentsPageIndex::PageEdit);
 
     connect(ui->labelSupportedVariables, SIGNAL(linkActivated(QString)), this, SLOT(onLinkActivated(QString)));
     connect(ui->checkPreview, SIGNAL(toggled(bool)), this, SLOT(onPreviewToggled(bool)));
@@ -93,7 +93,7 @@ void RecorderProfileSettings::onPreviewToggled(bool checked)
     if (checked)
         emit requestPreview(ui->editFfmpegArguments->toPlainText());
 
-    ui->stackedWidget->setCurrentIndex(checked ? ArgumentsPageIndex::pagePreview : ArgumentsPageIndex::pageEdit);
+    ui->stackedWidget->setCurrentIndex(checked ? ArgumentsPageIndex::PagePreview : ArgumentsPageIndex::PageEdit);
 }
 
 void RecorderProfileSettings::fillProfile(const RecorderProfile &profile)

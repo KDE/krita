@@ -20,6 +20,8 @@
 package org.krita.android;
 
  import android.os.Bundle;
+ import android.content.Intent;
+ import android.net.Uri;
  import android.view.InputDevice;
  import android.view.KeyEvent;
  import android.view.MotionEvent;
@@ -36,12 +38,45 @@ public class MainActivity extends QtActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 		                     WindowManager.LayoutParams.FLAG_FULLSCREEN);
-		super.onCreate(savedInstanceState);
 
+        // we have to do this before loading main()
+        Intent i = getIntent();
+        String uri = addToKnownUris(i);
+        if (uri != null) {
+            // this will be passed as a command line argument to main()
+            i.putExtra("applicationArguments", uri);
+        }
+
+		super.onCreate(savedInstanceState);
 		new ConfigsManager().handleAssets(this);
 
         DonationHelper.getInstance();
 	}
+
+    @Override
+    protected void onNewIntent (Intent intent) {
+        String uri = addToKnownUris(intent);
+        if (uri != null) {
+            JNIWrappers.openFileFromIntent(uri);
+        }
+
+        super.onNewIntent(intent);
+    }
+
+    private String addToKnownUris(Intent intent) {
+        if (intent != null) {
+            Uri fileUri = intent.getData();
+            if (fileUri != null) {
+                int modeFlags = Intent.FLAG_GRANT_READ_URI_PERMISSION;
+                if ((intent.getFlags() & Intent.FLAG_GRANT_WRITE_URI_PERMISSION) != 0) {
+                    modeFlags |= Intent.FLAG_GRANT_WRITE_URI_PERMISSION;
+                }
+                QtNative.addToKnownUri(fileUri, modeFlags);
+                return fileUri.toString();
+            }
+        }
+        return null;
+    }
 
 	@Override
 	public void onPause() {

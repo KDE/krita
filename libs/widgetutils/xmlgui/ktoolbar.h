@@ -48,17 +48,6 @@ class KXMLGUIClient;
  * construction. It will reread this config group on a
  * KApplication::appearanceChanged() signal.
  *
- * KToolBar respects Kiosk settings (see the KAuthorized namespace in the
- * KConfig framework).  In particular, system administrators can prevent users
- * from moving toolbars with the "movable_toolbars" action, and from showing or
- * hiding toolbars with the "options_show_toolbar" action.  For example, to
- * disable both, add the following the application or global configuration:
- * @verbatim
-   [KDE Action Restrictions][$i]
-   movable_toolbars=false
-   options_show_toolbar=false
-   @endverbatim
- *
  * @note If you can't depend on KXmlGui but you want to integrate with KDE, you can use QToolBar with:
  *    Set ToolButtonStyle to Qt::ToolButtonFollowStyle, this will make QToolBar use the settings for "Main Toolbar"
  *    Additionally set QToolBar::setProperty("otherToolbar", true) to use settings for "Other toolbars"

@@ -489,7 +489,7 @@ void KisAsyncMergerTest::testFilterMaskOnFilterLayer()
     KIS_ASSERT(filter2);
     KisFilterConfigurationSP configuration2 = filter2->defaultConfiguration(KisGlobalResourcesInterface::instance());
     KIS_ASSERT(configuration2);
-    KisLayerSP adjLayer2 = new KisAdjustmentLayer(image, "adj2", configuration2, 0);
+    KisLayerSP adjLayer2 = new KisAdjustmentLayer(image, "adj2", configuration2->cloneWithResourcesSnapshot(), 0);
     image->addNode(adjLayer2, image->rootLayer());
 
 
@@ -499,7 +499,7 @@ void KisAsyncMergerTest::testFilterMaskOnFilterLayer()
     KIS_ASSERT(configuration3);
     KisFilterMaskSP mask3 = new KisFilterMask(image, "mask3");
     mask3->initSelection(adjLayer2);
-    mask3->setFilter(configuration3);
+    mask3->setFilter(configuration3->cloneWithResourcesSnapshot());
     image->addNode(mask3, adjLayer2);
 
     image->initialRefreshGraph();

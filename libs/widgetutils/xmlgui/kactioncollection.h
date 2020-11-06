@@ -305,9 +305,6 @@ public:
      * Inserting an action under a name that is already used for another action will replace
      * the other action in the collection (but will not delete it).
      *
-     * If KAuthorized::authorizeKAction() reports that the action is not
-     * authorized, it will be disabled and hidden.
-     *
      * @param name The name by which the action be retrieved again from the collection.
      * @param action The action to add.
      * @return the same as the action given as parameter. This is just for convenience

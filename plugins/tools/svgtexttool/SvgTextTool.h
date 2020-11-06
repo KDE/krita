@@ -26,6 +26,7 @@
 #include <QPushButton>
 #include <QFontComboBox>
 #include <QPointer>
+#include <QDoubleSpinBox>
 
 class KoSelection;
 class SvgTextEditor;
@@ -92,6 +93,7 @@ private:
     QFontComboBox *m_defFont;
     QComboBox *m_defPointSize;
     QButtonGroup *m_defAlignment;
+    QDoubleSpinBox *m_defLetterSpacing;
     KConfigGroup m_configGroup;
 
     QRectF m_hoveredShapeHighlightRect;

@@ -103,7 +103,7 @@ bool Filter::apply(Node *node, int x, int y, int w, int h)
 
     QRect applyRect = QRect(x, y, w, h);
     KisFilterConfigurationSP config = static_cast<KisFilterConfiguration*>(d->configuration->configuration().data());
-    filter->process(dev, applyRect, config);
+    filter->process(dev, applyRect, config->cloneWithResourcesSnapshot());
     return true;
 }
 

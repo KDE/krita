@@ -16,6 +16,7 @@
  */
 
 #include "recorder_writer.h"
+#include "recorder_const.h"
 
 #include <kis_canvas2.h>
 #include <kis_image.h>
@@ -32,7 +33,6 @@
 
 namespace
 {
-constexpr int waitThreadTimeoutMs = 5000;
 const QStringList blacklistedTools = { "KritaTransform/KisToolMove", "KisToolTransform" };
 }
 
@@ -62,12 +62,11 @@ public:
         QDirIterator dirIterator(directory);
 
         int recordIndex = -1;
-        QRegularExpression namePattern("^([0-9]{7}).jpg$");
         while (dirIterator.hasNext()) {
             dirIterator.next();
 
             const QString &fileName = dirIterator.fileName();
-            const QRegularExpressionMatch &match = namePattern.match(fileName);
+            const QRegularExpressionMatch &match = RecorderConst::snapshotFilePattern.match(fileName);
             if (match.hasMatch()) {
                 int index = match.captured(1).toInt();
                 if (recordIndex < index)
@@ -235,9 +234,9 @@ bool RecorderWriter::stop()
         return true;
 
     quit();
-    if (!wait(waitThreadTimeoutMs)) {
+    if (!wait(RecorderConst::waitThreadTimeoutMs)) {
         terminate();
-        if (!wait(waitThreadTimeoutMs)) {
+        if (!wait(RecorderConst::waitThreadTimeoutMs)) {
             qCritical() << "Unable to stop Writer";
             return false;
         }

@@ -49,6 +49,8 @@ struct KisMeshTransformStrategy::Private
     {
     }
 
+    KisMeshTransformStrategy * const q;
+
     enum Mode {
         OVER_POINT = 0,
         OVER_POINT_SYMMETRIC,
@@ -89,8 +91,6 @@ struct KisMeshTransformStrategy::Private
     QTransform paintingTransform;
     QPointF paintingOffset;
     QImage transformedImage;
-
-    KisMeshTransformStrategy * const q;
 
     void recalculateTransformations();
     QTransform imageToThumb(bool useFlakeOptimization);
@@ -515,6 +515,9 @@ bool KisMeshTransformStrategy::beginPrimaryAction(const QPointF &pt)
 
 void KisMeshTransformStrategy::continuePrimaryAction(const QPointF &pt, bool shiftModifierActve, bool altModifierActive)
 {
+    Q_UNUSED(shiftModifierActve);
+    Q_UNUSED(altModifierActive);
+
     if (m_d->mode == Private::OVER_POINT || m_d->mode == Private::OVER_POINT_SYMMETRIC) {
         KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->hoveredControl);
 
@@ -665,8 +668,6 @@ void KisMeshTransformStrategy::Private::recalculateTransformations()
     paintingOffset = transaction.originalTopLeft();
 
     if (!q->originalImage().isNull()) {
-        QPointF origTLInFlake = imageToThumb.map(transaction.originalTopLeft());
-
         if (useFlakeOptimization) {
             transformedImage = q->originalImage().transformed(resultThumbTransform);
             paintingTransform = QTransform();

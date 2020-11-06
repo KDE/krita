@@ -38,21 +38,25 @@ class KRITAUI_EXPORT KisCompositeOpListModel: public BaseKoIDCategorizedListMode
 public:
     static KisCompositeOpListModel* sharedInstance();
 
-    virtual QString  categoryToString(const KoID& val) const { return val.name(); }
-    virtual QString  entryToString   (const KoID& val) const { return val.name(); }
-    bool     setData         (const QModelIndex& idx, const QVariant& value, int role=Qt::EditRole) override;
-    QVariant data            (const QModelIndex& idx, int role=Qt::DisplayRole) const override;
+    virtual QString categoryToString(const KoID& val) const { return val.name(); }
+    virtual QString entryToString(const KoID& val) const { return val.name(); }
+    bool setData(const QModelIndex& idx, const QVariant& value, int role=Qt::EditRole) override;
+    QVariant data(const QModelIndex& idx, int role=Qt::DisplayRole) const override;
+
+private:
+
+    friend class KisSortedCompositeOpListModel;
 
     void validate(const KoColorSpace *cs);
-    void readFavoriteCompositeOpsFromConfig();
-    void writeFavoriteCompositeOpsToConfig() const;
 
     static KoID favoriteCategory();
 
     void initialize();
     void initializeForLayerStyles();
 
-private:
+    void readFavoriteCompositeOpsFromConfig();
+    void writeFavoriteCompositeOpsToConfig() const;
+
     void addFavoriteEntry(const KoID &entry);
     void removeFavoriteEntry(const KoID &entry);
 };

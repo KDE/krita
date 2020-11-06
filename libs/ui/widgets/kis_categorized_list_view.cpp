@@ -75,8 +75,8 @@ void KisCategorizedListView::updateRows(int begin, int end)
 {
     for(; begin!=end; ++begin) {
         QModelIndex index    = model()->index(begin, 0);
-        bool        isHeader = model()->data(index, __CategorizedListModelBase::IsHeaderRole).toBool();
-        bool        expanded = model()->data(index, __CategorizedListModelBase::ExpandCategoryRole).toBool();
+        bool isHeader = model()->data(index, __CategorizedListModelBase::IsHeaderRole).toBool();
+        bool expanded = model()->data(index, __CategorizedListModelBase::ExpandCategoryRole).toBool();
         setRowHidden(begin, !expanded && !isHeader);
     }
 }

@@ -51,6 +51,10 @@ public:
     void continuePrimaryAction(const QPointF &pt, bool shiftModifierActve, bool altModifierActive) override;
     bool endPrimaryAction() override;
 
+    using KisSimplifiedActionPolicyStrategy::beginPrimaryAction;
+    using KisSimplifiedActionPolicyStrategy::continuePrimaryAction;
+    using KisSimplifiedActionPolicyStrategy::endPrimaryAction;
+
     bool acceptsClicks() const override;
 
 private:

@@ -41,9 +41,9 @@ void TestNode::testSetColorSpace()
     NodeSP node = NodeSP(Node::createNode(image, layer));
     QStringList profiles = Krita().profiles("GRAYA", "U16");
     node->setColorSpace("GRAYA", "U16", profiles.first());
-    QVERIFY(layer->colorSpace()->colorModelId().id() == "GRAYA");
-    QVERIFY(layer->colorSpace()->colorDepthId().id() == "U16");
-    QVERIFY(layer->colorSpace()->profile()->name() == "gray built-in");
+    QCOMPARE(layer->colorSpace()->colorModelId().id() , "GRAYA");
+    QCOMPARE(layer->colorSpace()->colorDepthId().id() , "U16");
+    QCOMPARE(layer->colorSpace()->profile()->name(), "Gray-D50-elle-V2-g10.icc");
 }
 
 void TestNode::testSetColorProfile()

@@ -29,7 +29,7 @@ class BRUSH_EXPORT KisQImagePyramid
 {
 public:
     KisQImagePyramid() = default;
-    KisQImagePyramid(const QImage &baseImage);
+    KisQImagePyramid(const QImage &baseImage, bool useSmoothingForEnlarging = true);
     ~KisQImagePyramid();
 
     static QSize imageSize(const QSize &originalSize,
@@ -42,6 +42,8 @@ public:
                        qreal subPixelX, qreal subPixelY) const;
 
     QImage getClosest(QTransform transform, qreal *scale) const;
+
+    QImage getClosestWithoutWorkaroundBorder(QTransform transform, qreal *scale) const;
 
 private:
     friend class KisGbrBrushTest;

@@ -85,27 +85,30 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
         return;
     }
 
-    bool dirty = index.data(Qt::UserRole + KisResourceModel::Dirty).toBool();
+    bool dirty = index.data(Qt::UserRole + KisAbstractResourceModel::Dirty).toBool();
 
-    QImage preview = index.data(Qt::UserRole + KisResourceModel::Thumbnail).value<QImage>();
+    QImage preview = index.data(Qt::UserRole + KisAbstractResourceModel::Thumbnail).value<QImage>();
 
     if (preview.isNull()) {
-        qDebug() << "KisPresetDelegate::paint:  Preview is null";
-        painter->restore();
-        return;
+        preview = QImage(512, 512, QImage::Format_RGB32);
+        preview.fill(Qt::red);
     }
 
-    QMap<QString, QVariant> metaData = index.data(Qt::UserRole + KisResourceModel::MetaData).value<QMap<QString, QVariant>>();
+    QMap<QString, QVariant> metaData = index.data(Qt::UserRole + KisAbstractResourceModel::MetaData).value<QMap<QString, QVariant>>();
+
+    qreal devicePixelRatioF = painter->device()->devicePixelRatioF();
 
     QRect paintRect = option.rect.adjusted(1, 1, -1, -1);
     if (!m_showText) {
-        painter->drawImage(paintRect.x(), paintRect.y(),
-                           preview.scaled(paintRect.size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+        QImage previewHighDpi = preview.scaled(paintRect.size()*devicePixelRatioF, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+        previewHighDpi.setDevicePixelRatio(devicePixelRatioF);
+        painter->drawImage(paintRect.x(), paintRect.y(), previewHighDpi);
     }
     else {
         QSize pixSize(paintRect.height(), paintRect.height());
-        painter->drawImage(paintRect.x(), paintRect.y(),
-                           preview.scaled(pixSize, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        QImage previewHighDpi = preview.scaled(pixSize*devicePixelRatioF, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        previewHighDpi.setDevicePixelRatio(devicePixelRatioF);
+        painter->drawImage(paintRect.x(), paintRect.y(), previewHighDpi);
 
         // Put an asterisk after the preset if it is dirty. This will help in case the pixmap icon is too small
 
@@ -126,7 +129,7 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
 
 //        painter->drawText(pixSize.width() + 10, option.rect.y() + option.rect.height() - 10, brushSizeText); // brush size
 
-        QString presetDisplayName = index.data(Qt::UserRole + KisResourceModel::Name).toString().replace("_", " "); // don't need underscores that might be part of the file name
+        QString presetDisplayName = index.data(Qt::UserRole + KisAbstractResourceModel::Name).toString().replace("_", " "); // don't need underscores that might be part of the file name
         painter->drawText(pixSize.width() + 40, option.rect.y() + option.rect.height() - 10, presetDisplayName.append(dirtyPresetIndicator));
 
     }
@@ -192,20 +195,20 @@ public:
         return 0;
     }
 
-    QModelIndex indexFromResource(KoResourceSP resource) const override
+    QModelIndex indexForResource(KoResourceSP resource) const override
     {
         KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
         if (source) {
-            return mapFromSource(source->indexFromResource(resource));
+            return mapFromSource(source->indexForResource(resource));
         }
         return QModelIndex();
     }
 
-    bool removeResource(const QModelIndex &index) override
+    bool setResourceInactive(const QModelIndex &index) override
     {
         KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
         if (source) {
-            return source->removeResource(mapToSource(index));
+            return source->setResourceInactive(mapToSource(index));
         }
         return false;
     }
@@ -246,15 +249,6 @@ public:
         return false;
     }
 
-    bool removeResource(KoResourceSP resource) override
-    {
-        KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
-        if (source) {
-            return source->removeResource(resource);
-        }
-        return false;
-    }
-
     bool setResourceMetaData(KoResourceSP resource, QMap<QString, QVariant> metadata) override
     {
         KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
@@ -278,7 +272,7 @@ protected:
         if (m_id.isEmpty()) return true;
 
         QModelIndex idx = sourceModel()->index(source_row, 0, source_parent);
-        QMap<QString, QVariant> metadata = sourceModel()->data(idx, Qt::UserRole + KisResourceModel::MetaData).toMap();
+        QMap<QString, QVariant> metadata = sourceModel()->data(idx, Qt::UserRole + KisAbstractResourceModel::MetaData).toMap();
         if (metadata.contains("paintopid")) {
             return (metadata["paintopid"].toString() == m_id);
         }
@@ -293,8 +287,8 @@ protected:
 
     bool lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const override
     {
-        QString nameLeft = sourceModel()->data(source_left, Qt::UserRole + KisResourceModel::Name).toString();
-        QString nameRight = sourceModel()->data(source_right, Qt::UserRole + KisResourceModel::Name).toString();
+        QString nameLeft = sourceModel()->data(source_left, Qt::UserRole + KisAbstractResourceModel::Name).toString();
+        QString nameRight = sourceModel()->data(source_right, Qt::UserRole + KisAbstractResourceModel::Name).toString();
         return nameLeft < nameRight;
     }
 
@@ -393,10 +387,10 @@ void KisPresetChooser::slotCurrentPresetChanged()
     KoResourceSP currentResource = m_chooser->currentResource();
     if (!currentResource) return;
 
-    QModelIndex index = m_paintOpFilterModel->indexFromResource(currentResource);
+    QModelIndex index = m_paintOpFilterModel->indexForResource(currentResource);
     emit m_paintOpFilterModel->dataChanged(index,
                                            index,
-                                           {Qt::UserRole + KisResourceModel::Thumbnail});
+                                           {Qt::UserRole + KisAbstractResourceModel::Thumbnail});
 }
 
 void KisPresetChooser::updateViewSettings()

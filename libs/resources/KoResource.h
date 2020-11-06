@@ -189,6 +189,7 @@ public:
 
 private:
 
+    friend class KisResourceCacheDb;
     friend class KisResourceModel;
     friend class KisResourceLocator;
     friend class TestResourceModel;

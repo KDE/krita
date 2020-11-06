@@ -1,0 +1,9 @@
+{
+    "Id": "Gradient Map Filter",
+    "Type": "Service",
+    "X-KDE-Library": "KritaGradientMapFilter",
+    "X-KDE-ServiceTypes": [
+        "Krita/Filter"
+    ],
+    "X-Krita-Version": "30"
+}

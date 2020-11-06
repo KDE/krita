@@ -47,7 +47,9 @@
 #include "KisMemoryStorage.h"
 #include "KisResourceModelProvider.h"
 #include <KisGlobalResourcesInterface.h>
+#include <KisStorageModel.h>
 
+#include "ResourceDebug.h"
 
 const QString KisResourceLocator::resourceLocationKey {"ResourceDirectory"};
 
@@ -208,9 +210,9 @@ KoResourceSP KisResourceLocator::resource(QString storageLocation, const QString
     }
 
     if (!resource) {
-        qDebug() << "KoResourceSP KisResourceLocator::resource" << storageLocation << resourceType << filename;
+        qWarning() << "KoResourceSP KisResourceLocator::resource" << storageLocation << resourceType << filename << "was not found";
+        return 0;
     }
-    Q_ASSERT(resource);
 
     resource->setStorageLocation(storageLocation);
     Q_ASSERT(!resource->storageLocation().isEmpty());
@@ -260,12 +262,14 @@ KoResourceSP KisResourceLocator::resource(QString storageLocation, const QString
 
 KoResourceSP KisResourceLocator::resourceForId(int resourceId)
 {
+
     ResourceStorage rs = getResourceStorage(resourceId);
+
     KoResourceSP r = resource(rs.storageLocation, rs.resourceType, rs.resourceFileName);
     return r;
 }
 
-bool KisResourceLocator::removeResource(int resourceId, const QString &/*storageLocation*/)
+bool KisResourceLocator::setResourceActive(int resourceId, bool active)
 {
     // First remove the resource from the cache
     ResourceStorage rs = getResourceStorage(resourceId);
@@ -273,7 +277,7 @@ bool KisResourceLocator::removeResource(int resourceId, const QString &/*storage
 
     d->resourceCache.remove(key);
 
-    return KisResourceCacheDb::removeResource(resourceId);
+    return KisResourceCacheDb::setResourceActive(resourceId, active);
 }
 
 bool KisResourceLocator::importResourceFromFile(const QString &resourceType, const QString &fileName, const QString &storageLocation)
@@ -335,7 +339,7 @@ bool KisResourceLocator::updateResource(const QString &resourceType, const KoRes
 {
     QString storageLocation = makeStorageLocationAbsolute(resource->storageLocation());
 
-    qDebug() << ">>>>>>>>>>>>>>>> storageLocation"<< storageLocation << "resource storage location" << resource->storageLocation();
+    //debugResource << ">>>>>>>>>>>>>>>> storageLocation"<< storageLocation << "resource storage location" << resource->storageLocation();
 
     Q_ASSERT(d->storages.contains(storageLocation));
     Q_ASSERT(resource->resourceId() > -1);
@@ -409,35 +413,6 @@ void KisResourceLocator::setMetaDataForStorage(const QString &storageLocation, Q
     }
 }
 
-bool KisResourceLocator::storageContainsResourceByFile(const QString &storageLocation, const QString &resourceType, const QString &filename) const
-{
-    QSqlQuery q;
-    if (!q.prepare("SELECT *\n"
-                   "FROM   storages\n"
-                   ",      resources\n"
-                   ",      resource_types\n"
-                   "WHERE  resources.filename = :filename\n"
-                   "AND    resources.storage_id = storages.id\n"
-                   "AND    storages.location = :storage_location\n"
-                   "AND    resources.resource_type_id = resource_types.id\n"
-                   "AND    resource_types.name = :resource_type"))
-    {
-        qWarning() << "Could not prepare storageCOntainsResourceByFile query" << q.lastError();
-        return false;
-    }
-
-    q.bindValue(":filename", filename);
-    q.bindValue(":storage_location", storageLocation);
-    q.bindValue(":resource_type", resourceType);
-
-    if (!q.exec()) {
-        qWarning() << "Could not execute storageCOntainsResourceByFile query" << q.lastError() << q.boundValues();
-        return false;
-    }
-
-    return q.first();
-}
-
 void KisResourceLocator::purge()
 {
     d->resourceCache.clear();
@@ -453,9 +428,7 @@ bool KisResourceLocator::addStorage(const QString &storageLocation, KisResourceS
         d->errorMessages.append(i18n("Could not add %1 to the database", storage->location()));
         return false;
     }
-
-    KisResourceModelProvider::resetAllModels();
-    emit storageAdded();
+    emit storageAdded(storage->location());
 
     return true;
 }
@@ -466,14 +439,14 @@ bool KisResourceLocator::removeStorage(const QString &document)
     if (!d->storages.contains(document)) return true;
 
     purge();
+
     KisResourceStorageSP storage = d->storages. take(document);
     if (!KisResourceCacheDb::deleteStorage(storage)) {
         d->errorMessages.append(i18n("Could not remove storage %1 from the database", storage->location()));
         return false;
     }
-    KisResourceModelProvider::resetAllModels();
+    emit storageRemoved(storage->location());
 
-    emit storageRemoved();
     return true;
 }
 
@@ -551,7 +524,7 @@ bool KisResourceLocator::initializeDb()
             d->errorMessages.append(i18n("Could not add storage %1 to the cache database", storage->location()));
         }
 
-        qDebug() << "Adding storage" << storage->location() << "to the database took" << t.elapsed() << "ms";
+        debugResource << "Adding storage" << storage->location() << "to the database took" << t.elapsed() << "ms";
     }
 
     return (d->errorMessages.isEmpty());
@@ -653,7 +626,7 @@ KisResourceLocator::ResourceStorage KisResourceLocator::getResourceStorage(int r
 
 QString KisResourceLocator::makeStorageLocationAbsolute(QString storageLocation) const
 {
-//    qDebug() << "makeStorageLocationAbsolute" << storageLocation;
+//    debugResource << "makeStorageLocationAbsolute" << storageLocation;
 
     if (storageLocation.isEmpty()) {
         return resourceLocationBase();
@@ -670,7 +643,7 @@ QString KisResourceLocator::makeStorageLocationAbsolute(QString storageLocation)
         }
     }
 
-//    qDebug()  << "\t" << storageLocation;
+//    debugResource  << "\t" << storageLocation;
     return storageLocation;
 }
 
@@ -689,6 +662,6 @@ bool KisResourceLocator::synchronizeDb()
 
 QString KisResourceLocator::makeStorageLocationRelative(QString location) const
 {
-//    qDebug() << "makeStorageLocationRelative" << location << "locationbase" << resourceLocationBase();
+//    debugResource << "makeStorageLocationRelative" << location << "locationbase" << resourceLocationBase();
     return location.remove(resourceLocationBase());
 }

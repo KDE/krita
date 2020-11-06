@@ -120,7 +120,10 @@ void KisImageFromClipboard::createClipboardPreview()
         QByteArray mimeType("application/x-krita-selection");
 
         if ((cbData && cbData->hasFormat(mimeType)) || !qimage.isNull()) {
-            lblPreview->setPixmap(QPixmap::fromImage(qimage.scaled(75, 75, Qt::KeepAspectRatio)));
+            QSize previewSize = QSize(75, 75)*devicePixelRatioF();
+            QPixmap preview = QPixmap::fromImage(qimage.scaled(previewSize, Qt::KeepAspectRatio));
+            preview.setDevicePixelRatio(devicePixelRatioF());
+            lblPreview->setPixmap(preview);
             lblPreview->show();
             newDialogConfirmationButtonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
 

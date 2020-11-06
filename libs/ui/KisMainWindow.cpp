@@ -42,9 +42,6 @@
 #include <QMutex>
 #include <QMutexLocker>
 #include <QPointer>
-#include <QPrintDialog>
-#include <QPrinter>
-#include <QPrintPreviewDialog>
 #include <QToolButton>
 #include <KisSignalMapper.h>
 #include <QTabBar>
@@ -104,7 +101,6 @@
 #include <KoColorSpaceEngine.h>
 #include <KoUpdater.h>
 #include <KisResourceModel.h>
-#include <KisResourceModelProvider.h>
 #include <KisResourceLoaderRegistry.h>
 #include <KisResourceIterator.h>
 #include <KisResourceTypes.h>
@@ -331,8 +327,8 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     : KXmlGuiWindow()
     , d(new Private(this, uuid))
 {
-    d->workspacemodel = KisResourceModelProvider::resourceModel(ResourceType::Workspaces);
-    connect(d->workspacemodel, SIGNAL(afterResourcesLayoutReset()), this, SLOT(updateWindowMenu()));
+    d->workspacemodel = new KisResourceModel(ResourceType::Workspaces, this);
+    connect(d->workspacemodel, SIGNAL(modelReset()), this, SLOT(updateWindowMenu()));
 
     d->viewManager = new KisViewManager(this, actionCollection());
     KConfigGroup group( KSharedConfig::openConfig(), "theme");
@@ -1775,12 +1771,18 @@ bool KisMainWindow::restoreWorkspaceState(const QByteArray &state)
     return success;
 }
 
+void KisMainWindow::restoreWorkspace()
+{
+    int resourceId = sender()->property("resource_id").toInt();
+    restoreWorkspace(resourceId);
+}
+
 bool KisMainWindow::restoreWorkspace(int workspaceId)
 {
-
     KisWorkspaceResourceSP workspace =
-            KisResourceModelProvider::resourceModel(ResourceType::Workspaces)
-            ->resourceForId(workspaceId).dynamicCast<KisWorkspaceResource>();
+            KisResourceModel(ResourceType::Workspaces)
+                .resourceForId(workspaceId)
+                .dynamicCast<KisWorkspaceResource>();
 
     bool success = restoreWorkspaceState(workspace->dockerState());
 
@@ -2304,16 +2306,15 @@ void KisMainWindow::updateWindowMenu()
     menu->addAction(d->workspaceMenu);
     QMenu *workspaceMenu = d->workspaceMenu->menu();
     workspaceMenu->clear();
-
-    KisResourceIterator resourceIterator(KisResourceModelProvider::resourceModel(ResourceType::Workspaces));
+    KisResourceModel resourceModel(ResourceType::Workspaces);
+    KisResourceIterator resourceIterator(&resourceModel);
     KisMainWindow *m_this = this;
 
     while (resourceIterator.hasNext()) {
         KisResourceItemSP resource = resourceIterator.next();
         QAction *action = workspaceMenu->addAction(resource->name());
-        connect(action, &QAction::triggered, this, [=]() {
-            m_this->restoreWorkspace(resource->id());
-        });
+        action->setProperty("resource_id", QVariant::fromValue<int>(resource->id()));
+        connect(action, SIGNAL(triggered()), this, SLOT(restoreWorkspace()));
     }
     workspaceMenu->addSeparator();
     connect(workspaceMenu->addAction(i18nc("@action:inmenu", "&Import Workspace...")),
@@ -2512,6 +2513,30 @@ void KisMainWindow::configChanged()
     }
 
     d->mdiArea->update();
+
+    if (KisConfig(false).readEntry<bool>("use_custom_system_font", false)) {
+        QString fontName = KisConfig(false).readEntry<QString>("custom_system_font", "");
+        int fontSize = KisConfig(false).readEntry<int>("custom_font_size", -1);
+
+        if (fontSize <= 6) {
+            fontSize = qApp->font().pointSize();
+        }
+        if (!fontName.isEmpty()) {
+            QFont f(fontName, fontSize);
+            qApp->setFont(f);
+
+            Q_FOREACH (QObject* widget, children()) {
+                if (widget->inherits("QDockWidget")) {
+                    QDockWidget* dw = static_cast<QDockWidget*>(widget);
+                    dw->setFont(KoDockRegistry::dockFont());
+                }
+            }
+
+        }
+    }
+    else {
+        qApp->setFont(QFontDatabase::systemFont(QFontDatabase::GeneralFont));
+    }
 }
 
 KisView* KisMainWindow::newView(QObject *document, QMdiSubWindow *subWindow)

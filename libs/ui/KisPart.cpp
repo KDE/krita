@@ -62,6 +62,7 @@
 #include <KisMimeDatabase.h>
 #include <dialogs/KisSessionManagerDialog.h>
 
+#include <kis_group_layer.h>
 #include "kis_config.h"
 #include "kis_shape_controller.h"
 #include "KisResourceServerProvider.h"
@@ -71,7 +72,7 @@
 #include "kis_idle_watcher.h"
 #include "kis_image.h"
 #include "KisOpenPane.h"
-
+#include "KisTranslateLayerNamesVisitor.h"
 #include "kis_color_manager.h"
 
 #include "kis_action.h"
@@ -554,6 +555,11 @@ void KisPart::openTemplate(const QUrl &url)
         delete document;
         return;
     }
+    QMap<QString, QString> dictionary;
+    // XXX: fill the dictionary from the desktop file
+    KisTranslateLayerNamesVisitor v(dictionary);
+    document->image()->rootLayer()->accept(v);
+
     addDocument(document);
 
     KisMainWindow *mw = currentMainwindow();

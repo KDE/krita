@@ -173,10 +173,10 @@ SvgSymbolCollectionDocker::SvgSymbolCollectionDocker(QWidget *parent)
 
     connect(m_wdgSvgCollection->cmbCollections, SIGNAL(activated(int)), SLOT(collectionActivated(int)));
 
-    m_resourceModel = KisResourceModelProvider::resourceModel(ResourceType::Symbols);
+    m_resourceModel = new KisResourceModel(ResourceType::Symbols, this);
 
     m_wdgSvgCollection->cmbCollections->setModel(m_resourceModel);
-    m_wdgSvgCollection->cmbCollections->setModelColumn(KisResourceModel::Name);
+    m_wdgSvgCollection->cmbCollections->setModelColumn(KisAbstractResourceModel::Name);
 
     m_wdgSvgCollection->listCollection->setDragEnabled(true);
     m_wdgSvgCollection->listCollection->setDragDropMode(QAbstractItemView::DragOnly);
@@ -242,7 +242,7 @@ void SvgSymbolCollectionDocker::slotResourceModelAboutToBeReset()
 {
     int index = m_wdgSvgCollection->cmbCollections->currentIndex();
     QModelIndex idx = m_resourceModel->index(index, 0);
-    int id = m_resourceModel->data(idx, Qt::UserRole + KisResourceModel::Id).toInt();
+    int id = m_resourceModel->data(idx, Qt::UserRole + KisAbstractResourceModel::Id).toInt();
     m_rememberedSvgCollectionId = id;
 }
 
@@ -254,7 +254,7 @@ void SvgSymbolCollectionDocker::slotResourceModelReset()
     } else {
         for (int i = 0; i < m_resourceModel->rowCount(); i++) {
             QModelIndex idx = m_resourceModel->index(i, 0);
-            int id = m_resourceModel->data(idx, Qt::UserRole + KisResourceModel::Id).toInt();
+            int id = m_resourceModel->data(idx, Qt::UserRole + KisAbstractResourceModel::Id).toInt();
             if (id == m_rememberedSvgCollectionId) {
                 indexToSet = i;
                 break;

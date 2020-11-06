@@ -67,20 +67,24 @@ bool KisStorageFilterProxyModel::filterAcceptsRow(int source_row, const QModelIn
 {
     if (d->filter.isNull()) return true;
 
-    QModelIndex idx = sourceModel()->index(source_row, KisResourceModel::Name, source_parent);
+    QModelIndex idx = sourceModel()->index(source_row, KisAbstractResourceModel::Name, source_parent);
 
     switch (d->filterType) {
     case ByFileName:
     {
-        QMap<QString, QVariant> v = d->filter.toMap();
-        return KisResourceLocator::instance()->storageContainsResourceByFile(sourceModel()->data(idx, Qt::UserRole + KisStorageModel::Location).toString()
-                                                                             , v["resourcetype"].toString()
-                                                                             , v["filename"].toString());
+        QString filename = d->filter.toString();
+        return (sourceModel()->data(idx, Qt::UserRole + KisStorageModel::Location).toString().contains(filename));
     }
     case ByStorageType:
     {
         QString storageType = sourceModel()->data(idx, Qt::UserRole + KisStorageModel::StorageType).toString();
         return (d->filter.toStringList().contains(storageType));
+    }
+    case ByActive:
+    {
+        bool active = d->filter.toBool();
+        bool isActive = sourceModel()->data(idx, Qt::UserRole + KisStorageModel::Active).toBool();
+        return (active == isActive);
     }
     default:
         ;
@@ -91,8 +95,8 @@ bool KisStorageFilterProxyModel::filterAcceptsRow(int source_row, const QModelIn
 
 bool KisStorageFilterProxyModel::lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const
 {
-    QString nameLeft = sourceModel()->data(source_left, Qt::UserRole + KisResourceModel::Name).toString();
-    QString nameRight = sourceModel()->data(source_right, Qt::UserRole + KisResourceModel::Name).toString();
+    QString nameLeft = sourceModel()->data(source_left, Qt::UserRole + KisAbstractResourceModel::Name).toString();
+    QString nameRight = sourceModel()->data(source_right, Qt::UserRole + KisAbstractResourceModel::Name).toString();
     return nameLeft < nameRight;
 }
 

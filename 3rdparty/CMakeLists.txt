@@ -132,7 +132,14 @@ if (APPLE)
 endif ()
 
 if (ANDROID)
-  set (GLOBAL_PROFILE ${GLOBAL_PROFILE} -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE} -DANDROID_PLATFORM=${ANDROID_PLATFORM} -DANDROID_ABI=${ANDROID_ABI})
+  set (GLOBAL_PROFILE ${GLOBAL_PROFILE}
+                     -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}
+                     -DANDROID_PLATFORM=${ANDROID_PLATFORM}
+                     -DANDROID_ABI=${ANDROID_ABI}
+                     -DCMAKE_FIND_ROOT_PATH=${CMAKE_FIND_ROOT_PATH})
+
+  # see: https://github.com/android/ndk/issues/929
+  unset (CMAKE_SYSROOT)
 endif()
 
 if (UNIX AND NOT APPLE)
@@ -195,7 +202,6 @@ add_subdirectory( ext_png )
 add_subdirectory( ext_eigen3 )
 add_subdirectory( ext_expat ) # for exiv2
 add_subdirectory( ext_exiv2 )
-add_subdirectory( ext_ilmbase )
 add_subdirectory( ext_lcms2 )
 add_subdirectory( ext_openexr )
 add_subdirectory( ext_openssl )

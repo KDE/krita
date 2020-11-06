@@ -39,7 +39,9 @@ QTextDocument *NodeToolTip::createDocument(const QModelIndex &index)
 {
     QTextDocument *doc = new QTextDocument(this);
 
-    QImage thumb = index.data(int(KisNodeModel::BeginThumbnailRole) + 250).value<QImage>();
+    int size = 250*devicePixelRatioF();
+    QImage thumb = index.data(int(KisNodeModel::BeginThumbnailRole) + size).value<QImage>();
+    thumb.setDevicePixelRatio(devicePixelRatioF());
     doc->addResource(QTextDocument::ImageResource, QUrl("data:thumbnail"), thumb);
 
     QString name = index.data(Qt::DisplayRole).toString();

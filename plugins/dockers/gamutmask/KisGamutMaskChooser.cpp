@@ -66,8 +66,8 @@ void KisGamutMaskDelegate::paint(QPainter * painter, const QStyleOptionViewItem 
     if (!index.isValid())
         return;
 
-    QImage preview = index.data(Qt::UserRole + KisResourceModel::Thumbnail).value<QImage>();
-    QString name = index.data(Qt::UserRole + KisResourceModel::Name).value<QString>();
+    QImage preview = index.data(Qt::UserRole + KisAbstractResourceModel::Thumbnail).value<QImage>();
+    QString name = index.data(Qt::UserRole + KisAbstractResourceModel::Name).value<QString>();
 
     if(preview.isNull()) {
         return;
@@ -75,9 +75,12 @@ void KisGamutMaskDelegate::paint(QPainter * painter, const QStyleOptionViewItem 
 
     QRect paintRect = option.rect.adjusted(1, 1, -1, -1);
 
+    qreal devicePixelRatioF = painter->device()->devicePixelRatioF();
+
     if (m_mode == KisGamutMaskChooser::ViewMode::THUMBNAIL) {
-        painter->drawImage(paintRect.x(), paintRect.y(),
-                           preview.scaled(paintRect.size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+        QImage previewHighDPI = preview.scaled(paintRect.size()*devicePixelRatioF, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+        previewHighDPI.setDevicePixelRatio(devicePixelRatioF);
+        painter->drawImage(paintRect.x(), paintRect.y(), previewHighDPI);
 
         if (option.state & QStyle::State_Selected) {
             painter->setCompositionMode(QPainter::CompositionMode_Overlay);
@@ -91,8 +94,11 @@ void KisGamutMaskDelegate::paint(QPainter * painter, const QStyleOptionViewItem 
         }
     } else {
         QSize previewSize(paintRect.height(), paintRect.height());
-        painter->drawImage(paintRect.x(), paintRect.y(),
-                           preview.scaled(previewSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+
+        QImage previewHighDPI = preview.scaled(previewSize*devicePixelRatioF, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+        previewHighDPI.setDevicePixelRatio(devicePixelRatioF);
+
+        painter->drawImage(paintRect.x(), paintRect.y(), previewHighDPI);
 
         int leftMargin = 8;
         int rightMargin = 7;

@@ -23,7 +23,6 @@
 
 #include <KisResourceItemListView.h>
 #include <KisResourceModel.h>
-#include <KisResourceModelProvider.h>
 #include <KisResourceItemDelegate.h>
 #include <KoResource.h>
 
@@ -68,7 +67,7 @@ KoResourcePopupAction::KoResourcePopupAction(const QString &resourceType, KoCanv
 
     d->resourceList = new KisResourceItemListView(widget);
 
-    d->model = KisResourceModelProvider::resourceModel(resourceType);
+    d->model = new KisResourceModel(resourceType, this);
     d->resourceList->setModel(d->model);
     d->resourceList->setItemDelegate(new KisResourceItemDelegate(widget));
     d->resourceList->setCurrentIndex(d->model->index(0, 0));
@@ -121,7 +120,7 @@ void KoResourcePopupAction::setCurrentBackground(QSharedPointer<KoShapeBackgroun
 
 void KoResourcePopupAction::setCurrentResource(KoResourceSP resource)
 {
-    QModelIndex index = d->model->indexFromResource(resource);
+    QModelIndex index = d->model->indexForResource(resource);
     if (index.isValid()) {
         d->resourceList->setCurrentIndex(index);
         indexChanged(index);

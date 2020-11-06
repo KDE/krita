@@ -44,7 +44,7 @@ protected:
 
 private:
     friend class Acs::PixelCacheRenderer;
-    KoColor colorAt(int x, int y, bool forceValid = false);
+    KoColor colorAt(float x, float y, bool forceValid = false);
 
 private:
     bool allowsColorSelectionAtPoint(const QPoint &pt) const override;

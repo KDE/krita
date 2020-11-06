@@ -194,6 +194,9 @@ bool KisMemoryStorage::addResource(const QString &resourceType, KoResourceSP res
     if (!d->resources[resourceType].contains(resource)) {
         d->resources[resourceType].append(resource);
     }
+    else {
+        resource->setVersion(resource->version() + 1);
+    }
     return true;
 }
 

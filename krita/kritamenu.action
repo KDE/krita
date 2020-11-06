@@ -375,7 +375,8 @@
       <iconText>Clear</iconText>
       <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>
-      <shortcut>Del</shortcut>
+      <shortcut operatingSystem="macos">Backspace</shortcut>
+      <shortcut operatingSystemElse="">Del</shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -399,7 +400,8 @@
       <iconText>Fill with Background Color</iconText>
       <activationFlags>10000</activationFlags>
       <activationConditions>1</activationConditions>
-      <shortcut>Backspace</shortcut>
+      <shortcut operatingSystem="macos">Del</shortcut>
+      <shortcut operatingSystemElse="">Backspace</shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>

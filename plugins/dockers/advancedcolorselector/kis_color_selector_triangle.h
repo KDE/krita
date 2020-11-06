@@ -41,12 +41,12 @@ protected:
 
 private:
     friend class Acs::PixelCacheRenderer;
-    KoColor colorAt(int x, int y) const;
+    KoColor colorAt(float x, float y) const;
 
 private:
     int triangleWidth() const;
     int triangleHeight() const;
-    void updatePixelCache();
+    void updatePixelCache(qreal devicePixelRatioF);
     QPoint widgetToTriangleCoordinates(const QPoint& point) const;
     QPoint triangleToWidgetCoordinates(const QPoint& point) const;
 

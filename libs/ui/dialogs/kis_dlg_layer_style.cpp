@@ -511,9 +511,9 @@ bool StylesSelector::LocationProxyModel::filterAcceptsRow(int source_row, const 
     }
 
     QModelIndex idx = sourceModel()->index(source_row, 0);
-    QString location = sourceModel()->data(idx, Qt::UserRole + KisResourceModel::Location).toString();
-    qDebug() << sourceModel()->data(idx, Qt::UserRole + KisResourceModel::Location).toString()
-             << sourceModel()->data(idx, Qt::UserRole + KisResourceModel::Name).toString();
+    QString location = sourceModel()->data(idx, Qt::UserRole + KisAbstractResourceModel::Location).toString();
+    qDebug() << sourceModel()->data(idx, Qt::UserRole + KisAbstractResourceModel::Location).toString()
+             << sourceModel()->data(idx, Qt::UserRole + KisAbstractResourceModel::Name).toString();
     return location == m_locationToFilter;
 }
 
@@ -539,13 +539,13 @@ StylesSelector::StylesSelector(QWidget *parent)
     ui.setupUi(this);
 
     //ui.cmbStyleCollections->setModel();
-    m_resourceModel = KisResourceModelProvider::resourceModel(ResourceType::LayerStyles);
+    m_resourceModel = new KisResourceModel(ResourceType::LayerStyles, this);
     m_locationsProxyModel = new LocationProxyModel(this);
     m_locationsProxyModel->setSourceModel(m_resourceModel);
     m_locationsProxyModel->setEnableFiltering(false);
 
     ui.listStyles->setModel(m_locationsProxyModel);
-    ui.listStyles->setModelColumn(KisResourceModel::Name);
+    ui.listStyles->setModelColumn(KisAbstractResourceModel::Name);
 
     connect(ui.cmbStyleCollections, SIGNAL(activated(QString)), this, SLOT(loadStyles(QString)));
     connect(ui.listStyles, SIGNAL(clicked(QModelIndex)), this, SLOT(selectStyle(QModelIndex)));
@@ -565,7 +565,7 @@ void StylesSelector::refillCollections()
     QStringList locationsList;
     for (int i = 0; i < m_resourceModel->rowCount(); i++) {
         QModelIndex idx = m_resourceModel->index(i, 0);
-        QString location = m_resourceModel->data(idx, Qt::UserRole + KisResourceModel::Location).toString();
+        QString location = m_resourceModel->data(idx, Qt::UserRole + KisAbstractResourceModel::Location).toString();
         if (!locationsList.contains(location)) {
             locationsList << location;
         }

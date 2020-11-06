@@ -52,7 +52,7 @@ void KisUnsharpMaskTest::testUnsharpWithTransparency()
     kfc->setProperty("threshold", 0);
 
     KisTransaction t(dev);
-    f->process(dev, QRect(imageRect.topLeft(), imageRect.size()), kfc);
+    f->process(dev, QRect(imageRect.topLeft(), imageRect.size()), kfc->cloneWithResourcesSnapshot());
     t.end();
 
     QImage resultImage =

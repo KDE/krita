@@ -18,6 +18,9 @@
 #include "KisResourceModelProvider.h"
 
 #include "KisResourceModel.h"
+#include "KisTagModel.h"
+#include "KisTagResourceModel.h"
+
 #include "KoResource.h"
 
 #include <memory>
@@ -28,7 +31,9 @@ Q_GLOBAL_STATIC(KisResourceModelProvider, s_instance)
 
 struct KisResourceModelProvider::Private
 {
-    QMap<QString, KisResourceModel*> resourceModels;
+    QMap<QString, KisAllResourcesModel*> resourceModels;
+    QMap<QString, KisAllTagsModel*> tagModels;
+    QMap<QString, KisAllTagResourceModel*> tagResourceModels;
 };
 
 KisResourceModelProvider::KisResourceModelProvider()
@@ -39,31 +44,32 @@ KisResourceModelProvider::KisResourceModelProvider()
 KisResourceModelProvider::~KisResourceModelProvider()
 {
     qDeleteAll(d->resourceModels);
+    qDeleteAll(d->tagModels);
+    qDeleteAll(d->tagResourceModels);
     delete d;
 }
 
-KisResourceModel *KisResourceModelProvider::resourceModel(const QString &resourceType)
+KisAllResourcesModel *KisResourceModelProvider::resourceModel(const QString &resourceType)
 {
     if (!s_instance->d->resourceModels.contains(resourceType)) {
-       s_instance->d->resourceModels[resourceType] = new KisResourceModel(resourceType);
+       s_instance->d->resourceModels[resourceType] = new KisAllResourcesModel(resourceType);
     }
     return s_instance->d->resourceModels[resourceType];
 }
 
-void KisResourceModelProvider::resetAllModels()
+KisAllTagsModel *KisResourceModelProvider::tagModel(const QString &resourceType)
 {
-    Q_FOREACH(KisResourceModel *model, s_instance->d->resourceModels.values()) {
-        model->resetQuery();
+    if (!s_instance->d->tagModels.contains(resourceType)) {
+       s_instance->d->tagModels[resourceType] = new KisAllTagsModel(resourceType);
     }
+    return s_instance->d->tagModels[resourceType];
 }
 
-void KisResourceModelProvider::resetModel(const QString& resourceType)
-{
-    QMap<QString, KisResourceModel*>::iterator found
-            = s_instance->d->resourceModels.find(resourceType);
 
-    if (found != s_instance->d->resourceModels.end())
-    {
-        found.value()->resetQuery();
+KisAllTagResourceModel *KisResourceModelProvider::tagResourceModel(const QString &resourceType)
+{
+    if (!s_instance->d->tagResourceModels.contains(resourceType)) {
+       s_instance->d->tagResourceModels[resourceType] = new KisAllTagResourceModel(resourceType);
     }
+    return s_instance->d->tagResourceModels[resourceType];
 }

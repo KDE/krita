@@ -43,7 +43,6 @@
 #include "kis_color_button.h"
 #include <KisSwatch.h>
 #include <KisResourceModel.h>
-#include <KisResourceModelProvider.h>
 
 int KisPaletteView::MININUM_ROW_HEIGHT = 10;
 
@@ -260,8 +259,8 @@ void KisPaletteView::resizeRows(int newSize)
 void KisPaletteView::saveModification()
 {
     qDebug() << "saving modification in palette view" << m_d->model->colorSet()->filename() << m_d->model->colorSet()->storageLocation();
-    KisResourceModel *model = KisResourceModelProvider::resourceModel(m_d->model->colorSet()->resourceType().first);
-    model->updateResource(m_d->model->colorSet());
+    KisResourceModel model(m_d->model->colorSet()->resourceType().first);
+    model.updateResource(m_d->model->colorSet());
 }
 
 void KisPaletteView::removeSelectedEntry()

@@ -191,6 +191,7 @@ void KisFilterStrokeStrategy::finishStrokeCallback()
 KisStrokeStrategy* KisFilterStrokeStrategy::createLodClone(int levelOfDetail)
 {
     if (!m_d->filter->supportsLevelOfDetail(m_d->filterConfig.data(), levelOfDetail)) return 0;
+    if (!m_d->node->supportsLodPainting()) return 0;
 
     KisFilterStrokeStrategy *clone = new KisFilterStrokeStrategy(*this, levelOfDetail);
     return clone;

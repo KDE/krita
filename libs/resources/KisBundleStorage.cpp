@@ -48,7 +48,7 @@ public:
                 }
                 KoResourceSP resource = m_bundle->resource(resourceType, resourceReference.resourcePath);
                 if (resource) {
-                    m_tags[tagname]->setDefaultResources(m_tags[tagname]->defaultResources() << resource->name());
+                    m_tags[tagname]->setDefaultResources(m_tags[tagname]->defaultResources() << resource->filename());
                 } else {
                     qWarning() << tagname << "The following resource could not be tagged:" << resourceReference.resourcePath << "from" << bundle->filename();
                 }
@@ -212,25 +212,19 @@ QVariant KisBundleStorage::metaData(const QString &key) const
 
 bool KisBundleStorage::addResource(const QString &resourceType, KoResourceSP resource)
 {
-    bool addVersion = true;
-    QString bloc = location() + "_modified" + "/" + resourceType;
+    QString bundleSaveLocation = location() + "_modified" + "/" + resourceType;
 
-    if (!QDir(bloc).exists()) {
-        QDir().mkpath(bloc);
+    if (!QDir(bundleSaveLocation).exists()) {
+        QDir().mkpath(bundleSaveLocation);
     }
 
-    QString fn = bloc  + "/" + resource->filename();
+    QString fn = bundleSaveLocation  + "/" + resource->filename();
     if (!QFileInfo(fn).exists()) {
-        addVersion = false;
         resource->setFilename(fn);
     }
-
-    bool result = KisStorageVersioningHelper::addVersionedResource(fn, bloc, resource);
-
-    if (addVersion) {
+    else {
         resource->setVersion(resource->version() + 1);
     }
-
-    return result;
+    return KisStorageVersioningHelper::addVersionedResource(fn, bundleSaveLocation, resource);
 }
 

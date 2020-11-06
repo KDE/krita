@@ -38,6 +38,11 @@ public:
         }
         QByteArray hash = KoMD5Generator::generateHash(ba);
         setMD5(hash);
+
+        QImage img(512, 512, QImage::Format_RGB32);
+        img.fill(Qt::blue);
+        setImage(img);
+
         setValid(true);
     }
 
@@ -55,8 +60,6 @@ public:
     bool load(KisResourcesInterfaceSP resourcesInterface) override
     {
         Q_UNUSED(resourcesInterface);
-
-        Q_ASSERT(false);
         setValid(true);
         return true;
     }
@@ -75,7 +78,6 @@ public:
 
     bool save() override
     {
-        Q_ASSERT(false);
         return true;
     }
 

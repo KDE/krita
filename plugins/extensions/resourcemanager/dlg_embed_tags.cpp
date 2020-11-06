@@ -35,6 +35,7 @@
 #include <KoResource.h>
 #include <KoResourceServer.h>
 #include <KoResourceServerProvider.h>
+#include <KisTagModel.h>
 
 #include <kis_workspace_resource.h>
 #include <brushengine/kis_paintop_preset.h>
@@ -131,13 +132,13 @@ void DlgEmbedTags::resourceTypeSelected(int idx)
 
     QString standarizedResourceType = (resourceType == "presets" ? ResourceType::PaintOpPresets : resourceType);
 
-    KisTagModel* model = KisTagModelProvider::tagModel(standarizedResourceType);
+    KisTagModel model(standarizedResourceType);
 
-    for (int i = 0; i < model->rowCount(); i++) {
+    for (int i = 0; i < model.rowCount(); i++) {
 
-        QModelIndex idx = model->index(i, 0);
-        QString name = model->data(idx, Qt::DisplayRole).toString();
-        int id = model->data(idx, Qt::UserRole + KisTagModel::Id).toInt();
+        QModelIndex idx = model.index(i, 0);
+        QString name = model.data(idx, Qt::DisplayRole).toString();
+        int id = model.data(idx, Qt::UserRole + KisAllTagsModel::Id).toInt();
 
         if (id < 0) {
             // skip automated tags

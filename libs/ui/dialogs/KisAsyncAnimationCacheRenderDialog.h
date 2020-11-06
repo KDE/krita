@@ -27,7 +27,7 @@ class KisAsyncAnimationCacheRenderDialog : public KisAsyncAnimationRenderDialogB
 {
 public:
     KisAsyncAnimationCacheRenderDialog(KisAnimationFrameCacheSP cache, const KisTimeSpan &range, int busyWait = 200);
-    ~KisAsyncAnimationCacheRenderDialog();
+    virtual ~KisAsyncAnimationCacheRenderDialog();
 
     static int calcFirstDirtyFrame(KisAnimationFrameCacheSP cache, const KisTimeSpan &playbackRange, const KisTimeSpan &skipRange);
 

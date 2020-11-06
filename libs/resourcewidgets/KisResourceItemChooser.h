@@ -92,8 +92,10 @@ public:
 
     /// determines whether the preview right or below the splitter
     void setPreviewOrientation(Qt::Orientation orientation);
+
     /// determines whether the preview should tile the resource's image or not
     void setPreviewTiled(bool tiled);
+
     /// shows the preview converted to grayscale
     void setGrayscalePreview(bool grayscale);
 
@@ -129,8 +131,6 @@ private Q_SLOTS:
     void contextMenuRequested(const QPoint &pos);
     void baseLengthChanged(int length);
     void updateView();
-    void slotBeforeResourcesLayoutReset(QModelIndex activateAfterReset);
-    void slotAfterResourcesLayoutReset();
 
 protected:
     void showEvent(QShowEvent *event) override;

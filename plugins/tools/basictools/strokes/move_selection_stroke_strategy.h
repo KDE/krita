@@ -40,7 +40,12 @@ public:
               showSelection(_showSelection)
         {}
 
+        KisStrokeJobData* createLodClone(int levelOfDetail) override;
+
         bool showSelection = false;
+
+    protected:
+        ShowSelectionData(const ShowSelectionData &rhs, int levelOfDetail);
     };
 
 public:

@@ -18,7 +18,6 @@
 #ifndef KIS_TAG_MODEL_PROVIDER_H
 #define KIS_TAG_MODEL_PROVIDER_H
 
-
 #include <QObject>
 #include <QAbstractTableModel>
 
@@ -27,8 +26,7 @@
 
 #include "kritaresources_export.h"
 #include "KisTagModel.h"
-
-
+#include "KisTagResourceModel.h"
 
 class KRITARESOURCES_EXPORT KisTagModelProvider : public QObject
 {
@@ -39,9 +37,8 @@ public:
     KisTagModelProvider();
     ~KisTagModelProvider();
 
-    static KisTagModel* tagModel(const QString& resourceType);
-    static void resetModels();
-    static void resetModel(const QString& resourceType);
+    static KisTagModel *tagModel(const QString& resourceType);
+    static KisTagResourceModel *tagResourceModel(const QString& resourceType);
 
 private:
 

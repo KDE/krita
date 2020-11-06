@@ -119,21 +119,23 @@ Q_SIGNALS:
     void progressMessage(const QString&);
 
     /// Emitted whenever a storage is added
-    void storageAdded();
+    void storageAdded(const QString &location);
 
     /// Emitted whenever a storage is removed
-    void storageRemoved();
+    void storageRemoved(const QString &location);
 
 private:
 
-    friend class KisResourceModel;
-    friend class KisTagModel;
+    friend class KisTagResourceModel;
+    friend class KisAllResourcesModel;
+    friend class KisAllTagResourceModel;
     friend class KisStorageModel;
     friend class TestResourceLocator;
     friend class TestResourceModel;
     friend class Resource;
     friend class KisResourceCacheDb;
     friend class KisStorageFilterProxyModel;
+    friend class KisResourceQueryMapper;
 
     /// @return true if the resource is present in the cache, false if it hasn't been loaded
     bool resourceCached(QString storageLocation, const QString &resourceType, const QString &filename) const;
@@ -166,7 +168,7 @@ private:
      * @param optional: the storage that contains the given resource
      * @return
      */
-    bool removeResource(int resourceId, const QString &storageLocation = QString());
+    bool setResourceActive(int resourceId, bool active = false);
 
     /**
      * @brief importResourceFromFile
@@ -222,14 +224,6 @@ private:
      * @param map
      */
     void setMetaDataForStorage(const QString &storageLocation, QMap<QString, QVariant> map) const;
-
-    /**
-     * @brief storageContainsResourceByFile
-     * @param storageLocation
-     * @param filename
-     * @return
-     */
-    bool storageContainsResourceByFile(const QString &storageLocation, const QString &resourceType, const QString &filename) const;
 
     /**
      * Loads all the resources required by \p resource into the cache

@@ -152,7 +152,7 @@ void KisUpdateTimeMonitor::endStrokeMeasure()
 
     QMutexLocker locker(&m_d->mutex);
 
-    if(m_d->numTickets) {
+    if (m_d->numTickets) {
         printValues();
     }
 }

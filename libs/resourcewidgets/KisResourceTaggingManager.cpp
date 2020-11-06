@@ -37,10 +37,8 @@
 #include <KoResource.h>
 
 #include <KisResourceModel.h>
-#include <KisResourceModelProvider.h>
 #include <KisTagFilterResourceProxyModel.h>
 #include <KisTagModel.h>
-#include <KisTagModelProvider.h>
 
 #include "KisTagFilterWidget.h"
 #include "KisTagChooserWidget.h"
@@ -51,24 +49,18 @@
 class KisResourceTaggingManager::Private
 {
 public:
-    ///
     /// \brief tagChooser tag chooser widget (tags combobox + tag tool button with the popup)
-    ///
     KisTagChooserWidget *tagChooser;
-    ///
+
     /// \brief tagFilter resources filter widget (resources filter box + "filter by tag" checkbox)
-    ///
     KisTagFilterWidget *tagFilter;
 
-    ///
     /// \brief model main data model for resources in the item chooser that the Tagging Manager is taking care of
-    ///
     QPointer<KisTagFilterResourceProxyModel> model;
 
-    ///
+
     /// \brief tagModel main tag model for tags in the tags combobox
-    ///
-    KisTagModel* tagModel;
+    KisTagModel *tagModel;
 };
 
 
@@ -79,7 +71,7 @@ KisResourceTaggingManager::KisResourceTaggingManager(QString resourceType, KisTa
 {
     d->model = model;
 
-    d->tagModel = KisTagModelProvider::tagModel(resourceType);
+    d->tagModel = new KisTagModel(resourceType);
     d->tagChooser = new KisTagChooserWidget(d->tagModel, parent);
     d->tagFilter = new KisTagFilterWidget(d->tagModel, parent);
 
@@ -91,6 +83,7 @@ KisResourceTaggingManager::KisResourceTaggingManager(QString resourceType, KisTa
 
 KisResourceTaggingManager::~KisResourceTaggingManager()
 {
+    delete d->tagModel;
     delete d;
 }
 
@@ -102,17 +95,17 @@ void KisResourceTaggingManager::showTaggingBar(bool show)
 
 void KisResourceTaggingManager::tagChooserIndexChanged(const KisTagSP tag)
 {
-    d->model->setTag(tag);
+    d->model->setTagFilter(tag);
 }
 
 void KisResourceTaggingManager::tagSearchLineEditTextChanged(const QString& lineEditText)
 {
-    d->model->setSearchBoxText(lineEditText);
+    d->model->setSearchText(lineEditText);
 }
 
 void KisResourceTaggingManager::slotFilterByTagChanged(const bool filterByTag)
 {
-    d->model->setFilterByCurrentTag(filterByTag);
+    d->model->setFilterInCurrentTag(filterByTag);
 }
 
 void KisResourceTaggingManager::contextMenuRequested(KoResourceSP resource, QPoint pos)
@@ -122,8 +115,9 @@ void KisResourceTaggingManager::contextMenuRequested(KoResourceSP resource, QPoi
     if (!resource || !d->tagChooser->isVisible())
         return;
 
-    KisResourceItemChooserContextMenu menu(resource, d->tagChooser->currentlySelectedTag());
+    KisResourceItemChooserContextMenu menu(resource, d->tagChooser->currentlySelectedTag(), d->tagChooser);
     menu.exec(pos);
+
 }
 
 KisTagChooserWidget *KisResourceTaggingManager::tagChooserWidget()

@@ -16,6 +16,7 @@ set(kritaresources_LIB_SRCS
     KisStorageFilterProxyModel.cpp
     KisResourceIterator.cpp
     KisResourceSearchBoxFilter.cpp
+    KisResourceQueryMapper.cpp
 
     KisStoragePlugin.cpp
     KisBundleStorage.cpp
@@ -24,8 +25,8 @@ set(kritaresources_LIB_SRCS
 
     KisTag.cpp
     KisTagModel.cpp
-    KisTagModelProvider.cpp
-    KisActiveFilterTagProxyModel.cpp
+
+    KisTagResourceModel.cpp
 
     KoResource.cpp
     KoResourceBundle.cpp

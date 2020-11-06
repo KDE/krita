@@ -187,11 +187,20 @@ QWidget *SvgTextTool::createOptionWidget()
         alignLeft->setChecked(true);
     }
 
+    double storedLetterSpacing = m_configGroup.readEntry<double>("defaultLetterSpacing", 0.0);
+    m_defLetterSpacing = new QDoubleSpinBox();
+    m_defLetterSpacing->setToolTip(i18n("Letter Spacing"));
+    m_defLetterSpacing->setRange(-20.0, 20.0);
+    m_defLetterSpacing->setSingleStep(0.5);
+    m_defLetterSpacing->setValue(storedLetterSpacing);
+    alignButtons->addWidget(m_defLetterSpacing);
+
     defOptionsLayout->addLayout(alignButtons);
     layout->addWidget(defsOptions);
     connect(m_defAlignment, SIGNAL(buttonClicked(int)), this, SLOT(storeDefaults()));
     connect(m_defFont, SIGNAL(currentFontChanged(QFont)), this, SLOT(storeDefaults()));
     connect(m_defPointSize, SIGNAL(currentIndexChanged(int)), this, SLOT(storeDefaults()));
+    connect(m_defLetterSpacing, SIGNAL(valueChanged(double)), SLOT(storeDefaults()));
 
     m_edit = new QPushButton(optionWidget);
     m_edit->setText(i18n("Edit Text"));
@@ -239,8 +248,10 @@ void SvgTextTool::showEditor()
 
         m_editor->activateWindow(); // raise on creation only
     }
-    m_editor->setInitialShape(shape);
-    m_editor->show();
+    if (!m_editor->isVisible()) {
+        m_editor->setInitialShape(shape);
+        m_editor->show();
+    }
 }
 
 void SvgTextTool::textUpdated(KoSvgTextShape *shape, const QString &svg, const QString &defs, bool richTextUpdated)
@@ -270,8 +281,9 @@ QString SvgTextTool::generateDefs()
     }
 
     QString fontColor = canvas()->resourceManager()->foregroundColor().toQColor().name();
+    QString letterSpacing = QString::number(m_defLetterSpacing->value());
 
-    return QString("<defs>\n <style>\n  text {\n   font-family:'%1';\n   font-size:%2 ; fill:%3 ;  text-anchor:%4;\n  }\n </style>\n</defs>").arg(font, size, fontColor, textAnchor);
+    return QString("<defs>\n <style>\n  text {\n   font-family:'%1';\n   font-size:%2 ; fill:%3 ;  text-anchor:%4; letter-spacing:%5;\n  }\n </style>\n</defs>").arg(font, size, fontColor, textAnchor, letterSpacing);
 }
 
 void SvgTextTool::storeDefaults()
@@ -280,6 +292,7 @@ void SvgTextTool::storeDefaults()
     m_configGroup.writeEntry("defaultFont", m_defFont->currentFont().family());
     m_configGroup.writeEntry("defaultSize", QFontDatabase::standardSizes().at(m_defPointSize->currentIndex() > -1 ? m_defPointSize->currentIndex() : 0));
     m_configGroup.writeEntry("defaultAlignment", m_defAlignment->checkedId());
+    m_configGroup.writeEntry("defaultLetterSpacing", m_defLetterSpacing->value());
 }
 
 void SvgTextTool::paint(QPainter &gc, const KoViewConverter &converter)

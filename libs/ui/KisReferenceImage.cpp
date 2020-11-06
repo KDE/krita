@@ -120,7 +120,7 @@ struct KisReferenceImage::Private : public QSharedData
             cachedImage = image;
         }
 
-        mipmap = KisQImagePyramid(cachedImage);
+        mipmap = KisQImagePyramid(cachedImage, false);
     }
 };
 
@@ -221,6 +221,7 @@ void KisReferenceImage::paint(QPainter &gc, KoShapePaintingContext &/*paintconte
     gc.save();
 
     QSizeF shapeSize = size();
+    // scale and rotation done by the user (excluding zoom)
     QTransform transform = QTransform::fromScale(shapeSize.width() / d->image.width(), shapeSize.height() / d->image.height());
 
     if (d->cachedImage.isNull()) {
@@ -229,10 +230,20 @@ void KisReferenceImage::paint(QPainter &gc, KoShapePaintingContext &/*paintconte
     }
 
     qreal scale;
-    QImage prescaled = d->mipmap.getClosest(transform * gc.transform(), &scale);
+    // scale from the highDPI display
+    QTransform devicePixelRatioFTransform = QTransform::fromScale(gc.device()->devicePixelRatioF(), gc.device()->devicePixelRatioF());
+    // all three transformations: scale and rotation done by the user, scale from highDPI display, and zoom + rotation of the view
+    // order: zoom/rotation of the view; scale to high res; scale and rotation done by the user
+    QImage prescaled = d->mipmap.getClosestWithoutWorkaroundBorder(transform * devicePixelRatioFTransform * gc.transform(), &scale);
     transform.scale(1.0 / scale, 1.0 / scale);
 
-    gc.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
+    if (scale > 1.0) {
+        // enlarging should be done without smooth transformation
+        // so the user can see pixels just as they are painted
+        gc.setRenderHints(QPainter::Antialiasing);
+    } else {
+        gc.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
+    }
     gc.setClipRect(QRectF(QPointF(), shapeSize), Qt::IntersectClip);
     gc.setTransform(transform, true);
     gc.drawImage(QPoint(), prescaled);

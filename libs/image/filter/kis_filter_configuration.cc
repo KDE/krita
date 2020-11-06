@@ -224,6 +224,19 @@ bool KisFilterConfiguration::isCompatible(const KisPaintDeviceSP) const
     return true;
 }
 
+bool KisFilterConfiguration::compareTo(const KisPropertiesConfiguration *rhs) const
+{
+    const KisFilterConfiguration *otherConfig = dynamic_cast<const KisFilterConfiguration *>(rhs);
+
+    return otherConfig
+        && KisPropertiesConfiguration::compareTo(rhs)
+        && name() == otherConfig->name()
+        && version() == otherConfig->version()
+        && channelFlags() == otherConfig->channelFlags()
+        && curve() == otherConfig->curve()
+        && curves() == otherConfig->curves();
+}
+
 QBitArray KisFilterConfiguration::channelFlags() const
 {
     return d->channelFlags;

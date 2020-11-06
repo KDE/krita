@@ -482,7 +482,6 @@ void KisPaletteEditor::updatePalette()
         m_d->model->addGroup(modified.groups[newGroupName]);
     }
     m_d->newGroupNames.clear();
-    qDebug() << "updating palette from updatePalette" << m_d->model->colorSet()->filename() << resourceLocation;
     m_d->rServer->resourceModel()->addResource(m_d->model->colorSet(), resourceLocation);
 }
 

@@ -1,8 +1,4 @@
 /*
- *    This file is part of the KDE project
- *    Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *    Copyright (c) 2007 Jan Hambrecht <jaham@gmx.net>
- *    Copyright (c) 2007 Sven Langkamp <sven.langkamp@gmail.com>
  *    Copyright (C) 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
  *    Copyright (c) 2011 José Luis Vergara <pentalis@gmail.com>
  *    Copyright (c) 2013 Sascha Suelzer <s.suelzer@gmail.com>
@@ -46,10 +42,10 @@ class KisTagFilterWidget::Private
 public:
     QString tagSearchBarTooltip_saving_disabled;
     QString tagSearchBarTooltip_saving_enabled;
-    QLineEdit* tagSearchLineEdit;
-    QGridLayout* filterBarLayout;
-    QCompleter* completer;
-    QCheckBox* filterByTagCheckbox;
+    QLineEdit *tagSearchLineEdit;
+    QGridLayout *filterBarLayout;
+    QCompleter *completer;
+    QCheckBox *filterByTagCheckbox;
 
     QString configGroup {"resources"};
     QString configName {"filterByTagChecked"};
@@ -100,7 +96,7 @@ KisTagFilterWidget::KisTagFilterWidget(KisTagModel* model, QWidget* parent)
 
     d->filterByTagCheckbox = new QCheckBox(this);
     d->filterByTagCheckbox->setText(i18nc("It appears in the checkbox next to the filter box "
-                                          "in resources dockers; must be short.", "filter by tag"));
+                                          "in resources dockers; must be short.", "Filter in Tag"));
 
     KConfigGroup cfg = KSharedConfig::openConfig()->group(d->configGroup);
     bool filterByTagCheckboxChecked = cfg.readEntry(d->configName, true);

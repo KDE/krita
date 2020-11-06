@@ -50,7 +50,7 @@ const QPixmap &KisTemplate::loadPicture()
 
     m_cached = true;
 
-    if (m_picture[ 0 ] == '/') {
+    if (QFile::exists(m_picture)) {
         QImage img(m_picture);
         if (img.isNull()) {
             dbgKrita << "Couldn't find icon " << m_picture;

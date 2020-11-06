@@ -336,6 +336,7 @@ void FreehandStrokeStrategy::issueSetDirtySignals()
 KisStrokeStrategy* FreehandStrokeStrategy::createLodClone(int levelOfDetail)
 {
     if (!m_d->resources->presetAllowsLod()) return 0;
+    if (!m_d->resources->currentNode()->supportsLodPainting()) return 0;
 
     FreehandStrokeStrategy *clone = new FreehandStrokeStrategy(*this, levelOfDetail);
     return clone;

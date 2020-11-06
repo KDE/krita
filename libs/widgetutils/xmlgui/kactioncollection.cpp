@@ -31,7 +31,6 @@
 #include "kxmlguifactory.h"
 #include "kis_action_registry.h"
 
-#include <kauthorized.h>
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
 
@@ -297,13 +296,6 @@ QAction *KActionCollection::addAction(const QString &name, QAction *action)
         // This is not a multi map!
         Q_ASSERT(d->actionByName.count(indexName) == 1);
         return action;
-    }
-
-    if (!KAuthorized::authorizeAction(indexName)) {
-        // Disable this action
-        action->setEnabled(false);
-        action->setVisible(false);
-        action->blockSignals(true);
     }
 
     // Check if we have another action under this name

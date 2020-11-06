@@ -737,17 +737,7 @@ bool KisKraLoadVisitor::loadSelection(const QString& location, KisSelectionSP ds
         pixelSelection->setDefaultPixel(transparent);
     }
 
-    // Pixel selection
     bool result = true;
-    QString pixelSelectionLocation = location + DOT_PIXEL_SELECTION;
-    if (m_store->hasFile(pixelSelectionLocation)) {
-        KisPixelSelectionSP pixelSelection = dstSelection->pixelSelection();
-        result = loadPaintDevice(pixelSelection, pixelSelectionLocation);
-        if (!result) {
-            m_warningMessages << i18n("Could not load raster selection %1.", location);
-        }
-        pixelSelection->invalidateOutlineCache();
-    }
 
     // Shape selection
     QString shapeSelectionLocation = location + DOT_SHAPE_SELECTION;
@@ -760,11 +750,43 @@ bool KisKraLoadVisitor::loadSelection(const QString& location, KisSelectionSP ds
         KisShapeSelection* shapeSelection = new KisShapeSelection(m_shapeController, m_image, dstSelection);
         dstSelection->convertToVectorSelectionNoUndo(shapeSelection);
         result = shapeSelection->loadSelection(m_store);
+
+        /**
+         * We need to explicitly call updateProjection() here, because
+         * KisUpdateSelectionJob that is put into the queue will not update
+         * actual layers that own this selection. In normal situation,
+         * the setDirty() call is done explicitly while painting.
+         *
+         * TODO: consider adding a proper setDirty() call to
+         *       KisUpdateSelectionJob. Though it doesn't seem to be needed
+         *       until we allow modifying vector selections on non-selection
+         *       masks.
+         */
+        dstSelection->updateProjection();
         m_store->popDirectory();
         if (!result) {
             m_warningMessages << i18n("Could not load vector selection %1.", location);
         }
+    } else {
+        /**
+         * NOTE: since loading a vector selection discards all the contents
+         * of a raster projection by reincarnating the paint device, there is
+         * no need to load pixel selection in case any vector selection
+         * is present.
+         */
+
+        // Pixel selection
+        QString pixelSelectionLocation = location + DOT_PIXEL_SELECTION;
+        if (m_store->hasFile(pixelSelectionLocation)) {
+            KisPixelSelectionSP pixelSelection = dstSelection->pixelSelection();
+            result = loadPaintDevice(pixelSelection, pixelSelectionLocation);
+            if (!result) {
+                m_warningMessages << i18n("Could not load raster selection %1.", location);
+            }
+            pixelSelection->invalidateOutlineCache();
+        }
     }
+
     return true;
 }
 

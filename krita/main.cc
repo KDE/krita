@@ -169,6 +169,19 @@ Java_org_krita_android_JNIWrappers_exitFullScreen(JNIEnv* /*env*/,
     mainWindow->viewFullscreen(false);
 }
 
+extern "C" JNIEXPORT void JNICALL
+Java_org_krita_android_JNIWrappers_openFileFromIntent(JNIEnv* /*env*/,
+                                                      jobject /*obj*/,
+                                                      jstring str)
+{
+    QAndroidJniObject jUri(str);
+    if (jUri.isValid()) {
+        QString uri = jUri.toString();
+        QMetaObject::invokeMethod(KisApplication::instance(), "fileOpenRequested",
+                                  Qt::QueuedConnection, Q_ARG(QString, uri));
+    }
+}
+
 __attribute__ ((visibility ("default")))
 #endif
 extern "C" int main(int argc, char **argv)
@@ -366,6 +379,23 @@ extern "C" int main(int argc, char **argv)
 
         // And if there isn't one, check the one set by the system.
         QLocale locale = QLocale::system();
+
+#ifdef Q_OS_ANDROID
+        // QLocale::uiLanguages() fails on Android, so if the fallback locale is being
+        // used we, try to fetch the device's default locale.
+        if (locale.name() == QLocale::c().name()) {
+            QAndroidJniObject localeJniObj = QAndroidJniObject::callStaticObjectMethod(
+                "java/util/Locale", "getDefault", "()Ljava/util/Locale;");
+
+            if (localeJniObj.isValid()) {
+                QAndroidJniObject tag = localeJniObj.callObjectMethod("toLanguageTag",
+                                                                      "()Ljava/lang/String;");
+                if (tag.isValid()) {
+                    locale = QLocale(tag.toString());
+                }
+            }
+        }
+#endif
         if (locale.name() != QStringLiteral("en")) {
             QStringList uiLanguages = locale.uiLanguages();
             for (QString &uiLanguage : uiLanguages) {
@@ -446,6 +476,12 @@ extern "C" int main(int argc, char **argv)
             app.setLayoutDirection(Qt::LeftToRight);
         }
     }
+#ifdef Q_OS_ANDROID
+    // TODO: remove "share" - sh_zam
+    // points to /data/data/org.krita/files/share/locale
+    KLocalizedString::addDomainLocaleDir("krita", QStandardPaths::writableLocation(QStandardPaths::HomeLocation) + "/share/locale");
+#endif
+
     KLocalizedString::setApplicationDomain("krita");
 
     dbgKrita << "Available translations" << KLocalizedString::availableApplicationTranslations();

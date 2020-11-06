@@ -88,7 +88,7 @@ KisImportExportErrorCode KisPDFImport::convert(KisDocument *document, QIODevice 
             pdoc->unlock(dlg.password().toLocal8Bit(), dlg.password().toLocal8Bit());
     }
 
-    KoDialog* kdb = new KoDialog(0);
+    KoDialog* kdb = new KoDialog(qApp->activeWindow());
     kdb->setCaption(i18n("PDF Import Options"));
     kdb->setModal(false);
 

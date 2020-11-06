@@ -69,7 +69,7 @@ void KisTasksetResourceDelegate::paint(QPainter * painter, const QStyleOptionVie
     if (! index.isValid())
         return;
 
-    QString name = index.data(Qt::UserRole + KisResourceModel::Name).toString();
+    QString name = index.data(Qt::UserRole + KisAbstractResourceModel::Name).toString();
 
     if (option.state & QStyle::State_Selected) {
         painter->setPen(QPen(option.palette.highlight(), 2.0));

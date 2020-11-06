@@ -192,10 +192,10 @@ bool KoResourceBundle::save()
     if (!store || store->bad()) return false;
 
     Q_FOREACH (const QString &resType, m_manifest.types()) {
-        KisResourceModel* model = KisResourceModelProvider::resourceModel(resType);
+        KisResourceModel model(resType);
         Q_FOREACH (const KoResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
-            KoResourceSP res = model->resourceForMD5(ref.md5sum);
-            if (!res) res = model->resourceForFilename(QFileInfo(ref.resourcePath).fileName());
+            KoResourceSP res = model.resourceForMD5(ref.md5sum);
+            if (!res) res = model.resourceForFilename(QFileInfo(ref.resourcePath).fileName());
             qDebug() << "res  is or isn't found: " << (res.isNull() ? "(null)" : res->name());
             if (!saveResourceToStore(res, store.data(), resType)) {
                 if (res) {

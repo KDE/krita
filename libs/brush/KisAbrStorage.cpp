@@ -111,7 +111,6 @@ KisAbrStorage::KisAbrStorage(const QString &location)
     : KisStoragePlugin(location)
     , m_brushCollection(new KisAbrBrushCollection(location))
 {
-
 }
 
 KisAbrStorage::~KisAbrStorage()

@@ -30,14 +30,18 @@
 #include <QWidget>
 #include <KisTag.h>
 
-///
-/// \brief The KisTagToolButton class manages the logic of the tag management popup.
-///
-/// This class is responsible for the GUI for creating, renaming and removing tags.
-/// Since both renaming and removing is context-dependent (it depends on which tag
-/// is currently selected in the combobox), all actions emit signals to the TagChooserWidget
-/// for it to handle actual creationg, renaming and removal of tags in the KisTagModel.
-///
+class KisTagModel;
+
+#include <KoResource.h>
+
+/**
+ * \brief The KisTagToolButton class manages the logic of the tag management popup.
+ *
+ * This class is responsible for the GUI for creating, renaming and removing tags.
+ * Since both renaming and removing is context-dependent (it depends on which tag
+ * is currently selected in the combobox), all actions emit signals to the TagChooserWidget
+ * for it to handle actual creationg, renaming and removal of tags in the KisTagModel.
+ */
 class KisTagToolButton : public QWidget
 {
     Q_OBJECT
@@ -54,6 +58,7 @@ private:
     /// \param activate if true, then the popup is in the read-only mode.
     ///
     void readOnlyMode(bool activate);
+
     ///
     /// \brief setUndeletionCandidate sets a new item in the deleted tags list
     ///
@@ -64,6 +69,8 @@ private:
     ///
     void setUndeletionCandidate(const KisTagSP deletedTag);
 
+    void setCurrentTag(const KisTagSP tag);
+
 Q_SIGNALS:
     ///
     /// \brief newTagRequested signals to the KisTagChooserWidget to create a new tag
@@ -72,20 +79,23 @@ Q_SIGNALS:
     /// Since KisTagToolButton doesn't know which KisTagModel it should be using (because it doesn't
     /// know the resourceType) and for the consistency, it signals KisTagChooserWidget to create
     /// a new tag with the name written by the user.
-    void newTagRequested(const KisTagSP tag);
+    void newTagRequested(const QString &tagName);
+
     ///
     /// \brief renamingOfCurrentTagRequested signals to KisTagChooserWidget to rename the current tag
     /// \param tag tag name written by the user (other fields are not used)
     ///
     /// Since KisTagToolButton doesn't know which tag is current or which KisTagModel it should be using,
     /// it signals KisTagChooserWidget to do rename the current tag to the name written by the user.
-    void renamingOfCurrentTagRequested(const KisTagSP tag);
+    void renamingOfCurrentTagRequested(const QString &tagName);
+
     ///
     /// \brief deletionOfCurrentTagRequested signals to KisTagChooserWidget to delete the current tag
     ///
     /// Since KisTagToolButton doesn't know which tag is current or which KisTagModel it should be using,
     /// it signals KisTagChooserWidget to do remove the current tag.
     void deletionOfCurrentTagRequested();
+
     ///
     /// \brief undeletionOfTagRequested signals to KisTagChooserWidget to undelete the mentioned tag
     /// \param tag tag to be undeleted (marked active again)

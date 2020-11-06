@@ -63,9 +63,9 @@ void KoToolBoxButton::setDataFromToolAction()
     const QKeySequence shortcut = m_toolAction->shortcut();
     const QString toolTip =
         shortcut.isEmpty() ?
-            i18nc("@info:tooltip", "%1", plainToolTip) :
+            plainToolTip :
             i18nc("@info:tooltip %2 is shortcut", "%1 (%2)", plainToolTip,
-                shortcut.toString());
+                shortcut.toString(QKeySequence::NativeText));
 
     setToolTip(toolTip);
 }

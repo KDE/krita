@@ -35,7 +35,6 @@
 #include <QStandardPaths>
 #include <QDebug>
 
-#include <kauthorized.h>
 #include <klocalizedstring.h>
 
 #include <assert.h>
@@ -432,8 +431,7 @@ bool KXMLGUIClientPrivate::mergeXML(QDomElement &base, QDomElement &additive, KA
             // not implemented, then we remove the element
             if (equalstr(tag, tagAction)) {
                 const QString name =  e.attribute(attrName);
-                if (!actionCollection->action(name) ||
-                        !KAuthorized::authorizeAction(name)) {
+                if (!actionCollection->action(name)) {
                     // remove this child as we aren't using it
                     base.removeChild(e);
                     continue;

@@ -71,8 +71,9 @@ class CPE(enum.IntEnum):
 
 class comic_page_delegate(QStyledItemDelegate):
 
-    def __init__(self, parent=None):
+    def __init__(self, devicePixelRatioF, parent=None):
         super(QStyledItemDelegate, self).__init__(parent)
+        self.devicePixelRatioF = devicePixelRatioF
 
     def paint(self, painter, option, index):
         
@@ -96,11 +97,14 @@ class comic_page_delegate(QStyledItemDelegate):
         margin = 4
         decoratonSize = QSize(option.decorationSize)
         imageSize = icon.actualSize(option.decorationSize)
+        imageSizeHighDPI = imageSize*self.devicePixelRatioF
         leftSideThumbnail = (decoratonSize.width()-imageSize.width())/2
         if (rect.width() < decoratonSize.width()):
             leftSideThumbnail = max(0, (rect.width()-imageSize.width())/2)
         topSizeThumbnail = ((rect.height()-imageSize.height())/2)+rect.top()
-        painter.drawImage(QRect(leftSideThumbnail, topSizeThumbnail, imageSize.width(), imageSize.height()), icon.pixmap(imageSize).toImage())
+        thumbImage = icon.pixmap(imageSizeHighDPI).toImage()
+        thumbImage.setDevicePixelRatio(self.devicePixelRatioF)
+        painter.drawImage(QRect(leftSideThumbnail, topSizeThumbnail, imageSize.width(), imageSize.height()), thumbImage)
         
         labelWidth = rect.width()-decoratonSize.width()-(margin*3)
         
@@ -223,7 +227,7 @@ class comics_project_manager_docker(DockWidget):
         self.comicPageList.setDragDropMode(QAbstractItemView.InternalMove)
         self.comicPageList.setDefaultDropAction(Qt.MoveAction)
         self.comicPageList.setAcceptDrops(True)
-        self.comicPageList.setItemDelegate(comic_page_delegate())
+        self.comicPageList.setItemDelegate(comic_page_delegate(self.devicePixelRatioF()))
         self.pagesModel = QStandardItemModel()
         self.comicPageList.doubleClicked.connect(self.slot_open_page)
         self.comicPageList.setIconSize(QSize(128, 128))
@@ -389,7 +393,10 @@ class comics_project_manager_docker(DockWidget):
             if (os.path.exists(absurl)):
                 #page = Application.openDocument(absurl)
                 page = zipfile.ZipFile(absurl, "r")
-                thumbnail = QImage.fromData(page.read("preview.png"))
+                thumbnail = QImage.fromData(page.read("mergedimage.png"))
+                if thumbnail.isNull():
+                    thumbnail = QImage.fromData(page.read("preview.png"))
+                thumbnail.setDevicePixelRatio(self.devicePixelRatioF())
                 pageItem = QStandardItem()
                 dataList = self.get_description_and_title(page.read("documentinfo.xml"))
                 if (dataList[0].isspace() or len(dataList[0]) < 1):

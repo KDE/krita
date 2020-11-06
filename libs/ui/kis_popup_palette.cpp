@@ -25,7 +25,6 @@
 #include <QElapsedTimer>
 
 #include <KisTagModel.h>
-#include <KisTagModelProvider.h>
 
 #include "kis_canvas2.h"
 #include "kis_config.h"
@@ -149,7 +148,12 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
     this->installEventFilter(m_clicksEater);
     m_triangleColorSelector->installEventFilter(m_clicksEater);
 
-    QRegion maskedRegion(0, 0, m_triangleColorSelector->width(), m_triangleColorSelector->height(), QRegion::Ellipse );
+    // ellipse - to make sure the widget doesn't eat events meant for recent colors or brushes
+    //         - needs to be +2 pixels on every side for anti-aliasing to look nice on high dpi displays
+    // rectange - to make sure the area doesn't extend outside of the widget
+    QRegion maskedEllipse(-2, -2, m_triangleColorSelector->width() + 4, m_triangleColorSelector->height() + 4, QRegion::Ellipse );
+    QRegion maskedRectange(0, 0, m_triangleColorSelector->width(), m_triangleColorSelector->height(), QRegion::Rectangle);
+    QRegion maskedRegion = maskedEllipse.intersected(maskedRectange);
     m_triangleColorSelector->setMask(maskedRegion);
 
     //setAttribute(Qt::WA_TranslucentBackground, true);
@@ -557,7 +561,9 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
             painter.setClipPath(presetPath);
 
             QRect bounds = presetPath.boundingRect().toAlignedRect();
-            painter.drawImage(bounds.topLeft() , images.at(pos).scaled(bounds.size() , Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation));
+            QImage previewHighDPI = images.at(pos).scaled(bounds.size()*devicePixelRatioF() , Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
+            previewHighDPI.setDevicePixelRatio(devicePixelRatioF());
+            painter.drawImage(bounds.topLeft(), previewHighDPI);
         }
         else {
             painter.fillPath(presetPath, palette().brush(QPalette::Window));  // brush slot that has no brush in it
@@ -797,11 +803,11 @@ void KisPopupPalette::mousePressEvent(QMouseEvent *event)
 
 void KisPopupPalette::slotShowTagsPopup()
 {
-    KisTagModel *model = KisTagModelProvider::tagModel(ResourceType::PaintOpPresets);
+    KisTagModel model (ResourceType::PaintOpPresets);
     QVector<QString> tags;
-    for (int i = 0; i < model->rowCount(); ++i) {
-        QModelIndex idx = model->index(i, 0);
-        tags << model->data(idx, Qt::DisplayRole).toString();
+    for (int i = 0; i < model.rowCount(); ++i) {
+        QModelIndex idx = model.index(i, 0);
+        tags << model.data(idx, Qt::DisplayRole).toString();
     }
 
     //std::sort(tags.begin(), tags.end());
@@ -815,10 +821,10 @@ void KisPopupPalette::slotShowTagsPopup()
         QAction *action = menu.exec(QCursor::pos());
         if (action) {
 
-            for (int i = 0; i < model->rowCount(); ++i) {
-                QModelIndex idx = model->index(i, 0);
-                if (model->data(idx, Qt::DisplayRole).toString() == KLocalizedString::removeAcceleratorMarker(action->text())) {
-                    m_resourceManager->setCurrentTag(model->tagForIndex(idx));
+            for (int i = 0; i < model.rowCount(); ++i) {
+                QModelIndex idx = model.index(i, 0);
+                if (model.data(idx, Qt::DisplayRole).toString() == KLocalizedString::removeAcceleratorMarker(action->text())) {
+                    m_resourceManager->setCurrentTag(model.tagForIndex(idx));
                     break;
                 }
             }

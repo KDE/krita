@@ -32,6 +32,7 @@
 #include <QCheckBox>
 #include <QFormLayout>
 #include <QLineEdit>
+#include <QString>
 
 #include <KisSqueezedComboBox.h>
 #include <klocalizedstring.h>
@@ -82,7 +83,7 @@ PaletteDockerDock::PaletteDockerDock( )
     setWidget(mainWidget);
     m_ui->setupUi(mainWidget);
 
-    connect(KisResourceLocator::instance(), SIGNAL(storageRemoved()), this, SLOT(slotStoragesChanged()));
+    connect(KisResourceLocator::instance(), SIGNAL(storageRemoved(QString)), this, SLOT(slotStoragesChanged(QString)));
 
     m_ui->bnAdd->setDefaultAction(m_actAdd.data());
     m_ui->bnRemove->setDefaultAction(m_actRemove.data());
@@ -351,7 +352,7 @@ void PaletteDockerDock::slotFGColorResourceChanged(const KoColor &color)
 
 }
 
-void PaletteDockerDock::slotStoragesChanged()
+void PaletteDockerDock::slotStoragesChanged(const QString &/*location*/)
 {
     if (m_activeDocument.isNull()) {
         slotSetColorSet(0);

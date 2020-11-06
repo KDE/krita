@@ -26,6 +26,7 @@
 #include <klocalizedstring.h>
 #include <KisShortcutsDialog.h>
 #include <KConfigGroup>
+#include <qdom.h>
 
 #include "kis_debug.h"
 #include "KoResourcePaths.h"
@@ -88,6 +89,33 @@ namespace {
     // Convenience macros to extract text of a child node.
     QString getChildContent(QDomElement xml, QString node) {
         return xml.firstChildElement(node).text();
+    }
+
+    QString getChildContentForOS(QDomElement xml, QString tagName, QString os = QString()) {
+        bool found = false;
+
+        QDomElement node = xml.firstChildElement(tagName);
+        QDomElement nodeElse;
+
+        while(!found && !node.isNull()) {
+            if (node.attribute("operatingSystem") == os) {
+                found = true;
+                break;
+            }
+            else if (node.hasAttribute("operatingSystemElse")) {
+                nodeElse = node;
+            }
+            else if (nodeElse.isNull()) {
+                nodeElse = node;
+            }
+
+            node = node.nextSiblingElement(tagName);
+        }
+
+        if (!found && !nodeElse.isNull()) {
+            return nodeElse.text();
+        }
+        return node.text();
     }
 
     // Use Krita debug logging categories instead of KDE's default qDebug() for
@@ -390,7 +418,11 @@ void KisActionRegistry::Private::loadActionFiles()
                         info.xmlData         = actionXml;
 
                         // Use empty list to signify no shortcut
-                        QString shortcutText = getChildContent(actionXml, "shortcut");
+#ifdef Q_OS_MACOS
+                        QString shortcutText = getChildContentForOS(actionXml, "shortcut", "macos");
+#else
+                        QString shortcutText = getChildContentForOS(actionXml, "shortcut");
+#endif
                         if (!shortcutText.isEmpty()) {
                             info.setDefaultShortcuts(QKeySequence::listFromString(shortcutText));
                         }

@@ -334,6 +334,7 @@ public Q_SLOTS:
      */
     void viewFullscreen(bool fullScreen);
 
+
 private Q_SLOTS:
     /**
      * Save the list of recent files.
@@ -458,6 +459,7 @@ private Q_SLOTS:
 
     void orientationChanged();
 
+    void restoreWorkspace();
 protected:
 
     void closeEvent(QCloseEvent * e) override;

@@ -436,10 +436,15 @@ void KisColorSelector::recalculateAreas(quint8 numLightPieces)
     m_renderArea     = QRect(x+stripThick, y, size, size);
     m_lightStripArea = QRect(0, 0, stripThick, QWidget::height());
 
-    m_renderBuffer   = QImage(size, size, QImage::Format_ARGB32_Premultiplied);
-    m_colorPreviewBuffer   = QImage(QWidget::width(), QWidget::height(), QImage::Format_ARGB32_Premultiplied);
-    m_maskBuffer   = QImage(size, size, QImage::Format_ARGB32_Premultiplied);
-    m_lightStripBuffer = QImage(stripThick, QWidget::height(), QImage::Format_ARGB32_Premultiplied);
+    m_renderBuffer   = QImage(size*devicePixelRatioF(), size*devicePixelRatioF(), QImage::Format_ARGB32_Premultiplied);
+    m_colorPreviewBuffer   = QImage(QWidget::width()*devicePixelRatioF(), QWidget::height()*devicePixelRatioF(), QImage::Format_ARGB32_Premultiplied);
+    m_maskBuffer   = QImage(size*devicePixelRatioF(), size*devicePixelRatioF(), QImage::Format_ARGB32_Premultiplied);
+    m_lightStripBuffer = QImage(stripThick*devicePixelRatioF(), QWidget::height()*devicePixelRatioF(), QImage::Format_ARGB32_Premultiplied);
+
+    m_renderBuffer.setDevicePixelRatio(devicePixelRatioF());
+    m_colorPreviewBuffer.setDevicePixelRatio(devicePixelRatioF());
+    m_maskBuffer.setDevicePixelRatio(devicePixelRatioF());
+    m_lightStripBuffer.setDevicePixelRatio(devicePixelRatioF());
 
     m_numLightPieces = numLightPieces;
 

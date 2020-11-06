@@ -1455,8 +1455,8 @@ void KisPaintopBox::findDefaultPresets()
 
         QModelIndex idx = resourceModel->index(i, 0);
 
-        QString resourceName = idx.data(Qt::UserRole + KisResourceModel::Name).toString().toLower();
-        QString fileName = idx.data(Qt::UserRole + KisResourceModel::Filename).toString().toLower();
+        QString resourceName = idx.data(Qt::UserRole + KisAbstractResourceModel::Name).toString().toLower();
+        QString fileName = idx.data(Qt::UserRole + KisAbstractResourceModel::Filename).toString().toLower();
 
         if (resourceName.contains("eraser_circle")) {
             m_eraserName = resourceName;

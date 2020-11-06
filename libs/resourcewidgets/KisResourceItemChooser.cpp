@@ -47,7 +47,6 @@
 #include <KisKineticScroller.h>
 #include <KisMimeDatabase.h>
 
-#include <KisResourceModelProvider.h>
 #include <KisResourceModel.h>
 #include <KisTagFilterResourceProxyModel.h>
 #include <KisResourceLoaderRegistry.h>
@@ -58,7 +57,6 @@
 #include "KisTagChooserWidget.h"
 #include "KisResourceItemChooserSync.h"
 #include "KisResourceTaggingManager.h"
-#include "KisTagModelProvider.h"
 
 
 
@@ -77,7 +75,7 @@ public:
 
     KisResourceModel *resourceModel {0};
     KisTagFilterResourceProxyModel *tagFilterProxyModel {0};
-    QSortFilterProxyModel *extraFilterModel {0};
+    KisResourceModel *extraFilterModel {0};
 
     KisResourceTaggingManager *tagManager {0};
     KisResourceItemListView *view {0};
@@ -111,21 +109,16 @@ KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool
 {
     d->splitter = new QSplitter(this);
 
-    d->resourceModel = KisResourceModelProvider::resourceModel(resourceType);
+    d->resourceModel = new KisResourceModel(resourceType);
 
-    d->tagFilterProxyModel = new KisTagFilterResourceProxyModel(KisTagModelProvider::tagModel(resourceType), this);
+    d->tagFilterProxyModel = new KisTagFilterResourceProxyModel(resourceType, this);
 
-    d->extraFilterModel = extraFilterProxy;
+    d->extraFilterModel = qobject_cast<KisResourceModel*>(extraFilterProxy);
     if (d->extraFilterModel) {
         d->extraFilterModel->setParent(this);
         d->extraFilterModel->setSourceModel(d->resourceModel);
-        d->tagFilterProxyModel->setSourceModel(d->extraFilterModel);
-    } else {
-        d->tagFilterProxyModel->setSourceModel(d->resourceModel);
+        d->tagFilterProxyModel->setResourceModel(d->extraFilterModel);
     }
-
-    connect(d->resourceModel, SIGNAL(beforeResourcesLayoutReset(QModelIndex)), SLOT(slotBeforeResourcesLayoutReset(QModelIndex)));
-    connect(d->resourceModel, SIGNAL(afterResourcesLayoutReset()), SLOT(slotAfterResourcesLayoutReset()));
 
     d->view = new KisResourceItemListView(this);
     d->view->setObjectName("ResourceItemview");
@@ -226,6 +219,7 @@ KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool
 KisResourceItemChooser::~KisResourceItemChooser()
 {
     disconnect();
+    delete d->resourceModel;
     delete d;
 }
 
@@ -245,7 +239,7 @@ void KisResourceItemChooser::slotButtonClicked(int button)
     else if (button == Button_Remove) {
         QModelIndex index = d->view->currentIndex();
         if (index.isValid()) {
-            d->tagFilterProxyModel->removeResource(index);
+            d->tagFilterProxyModel->setResourceInactive(index);
         }
         int row = index.row();
         int rowMin = --row;
@@ -315,25 +309,9 @@ void KisResourceItemChooser::setCurrentResource(KoResourceSP resource)
     if (d->updatesBlocked) {
         return;
     }
-    QModelIndex index = d->resourceModel->indexFromResource(resource);
+    QModelIndex index = d->resourceModel->indexForResource(resource);
     d->view->setCurrentIndex(index);
     updatePreview(index);
-}
-
-void KisResourceItemChooser::slotBeforeResourcesLayoutReset(QModelIndex activateAfterReset)
-{
-    QModelIndex proxyIndex = d->tagFilterProxyModel->mapFromSource(d->tagFilterProxyModel->mapFromSource(activateAfterReset));
-    d->savedResourceWhileReset = proxyIndex.isValid() ? proxyIndex : d->view->currentIndex();
-}
-
-void KisResourceItemChooser::slotAfterResourcesLayoutReset()
-{
-    if (d->savedResourceWhileReset.isValid()) {
-        this->blockSignals(true);
-        setCurrentItem(d->savedResourceWhileReset.row());
-        this->blockSignals(false);
-    }
-    d->savedResourceWhileReset = QModelIndex();
 }
 
 void KisResourceItemChooser::setPreviewOrientation(Qt::Orientation orientation)
@@ -415,7 +393,7 @@ void KisResourceItemChooser::updatePreview(const QModelIndex &idx)
         return;
     }
 
-    QImage image = idx.data(Qt::UserRole + KisResourceModel::Thumbnail).value<QImage>();
+    QImage image = idx.data(Qt::UserRole + KisAbstractResourceModel::Thumbnail).value<QImage>();
 
     if (image.format() != QImage::Format_RGB32 &&
         image.format() != QImage::Format_ARGB32 &&

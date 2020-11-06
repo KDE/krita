@@ -258,7 +258,7 @@ QVector<KisTagSP> DlgCreateBundle::getTagsForEmbeddingInResource(QVector<KisTagS
 
 void DlgCreateBundle::putResourcesInTheBundle() const
 {
-    KisResourceModel* emptyModel = KisResourceModelProvider::resourceModel("");
+    KisResourceModel emptyModel("");
     QStack<int> allResourcesIds;
     Q_FOREACH(int id, m_selectedResourcesIds) {
         allResourcesIds << id;
@@ -267,13 +267,13 @@ void DlgCreateBundle::putResourcesInTheBundle() const
     // note: if there are repetitions, it's fine; the bundle will filter them out
     while(!allResourcesIds.isEmpty()) {
         int id = allResourcesIds.takeFirst();
-        KoResourceSP res = emptyModel->resourceForId(id);
+        KoResourceSP res = emptyModel.resourceForId(id);
         if (!res) {
             warnKrita << "No resource for id " << id;
             continue;
         }
-        KisResourceModel* resModel = KisResourceModelProvider::resourceModel(res->resourceType().first);
-        QVector<KisTagSP> tags = getTagsForEmbeddingInResource(resModel->tagsForResource(id));
+        KisResourceModel resModel(res->resourceType().first);
+        QVector<KisTagSP> tags = getTagsForEmbeddingInResource(resModel.tagsForResource(id));
         m_bundle->addResource(res->resourceType().first, res->filename(), tags, res->md5());
 
         QList<KoResourceSP> linkedResources = res->linkedResources(KisGlobalResourcesInterface::instance());
@@ -416,11 +416,11 @@ void DlgCreateBundle::resourceTypeSelected(int idx)
 
     QString standarizedResourceType = (resourceType == "presets" ? ResourceType::PaintOpPresets : resourceType);
 
-    KisResourceModel* model = KisResourceModelProvider::resourceModel(standarizedResourceType);
-    for (int i = 0; i < model->rowCount(); i++) {
-        QModelIndex idx = model->index(i, 0);
-        QString filename = model->data(idx, Qt::UserRole + KisResourceModel::Filename).toString();
-        int id = model->data(idx, Qt::UserRole + KisResourceModel::Id).toInt();
+    KisResourceModel model(standarizedResourceType);
+    for (int i = 0; i < model.rowCount(); i++) {
+        QModelIndex idx = model.index(i, 0);
+        QString filename = model.data(idx, Qt::UserRole + KisAbstractResourceModel::Filename).toString();
+        int id = model.data(idx, Qt::UserRole + KisAbstractResourceModel::Id).toInt();
 
         if (resourceType == ResourceType::Gradients) {
             if (filename == "Foreground to Transparent" || filename == "Foreground to Background") {
@@ -428,8 +428,8 @@ void DlgCreateBundle::resourceTypeSelected(int idx)
             }
         }
 
-        QImage image = (model->data(idx, Qt::UserRole + KisResourceModel::Thumbnail)).value<QImage>();
-        QString name = model->data(idx, Qt::UserRole + KisResourceModel::Name).toString();
+        QImage image = (model.data(idx, Qt::UserRole + KisAbstractResourceModel::Thumbnail)).value<QImage>();
+        QString name = model.data(idx, Qt::UserRole + KisAbstractResourceModel::Name).toString();
 
         // Function imageToIcon(QImage()) returns a square white pixmap and a warning "QImage::scaled: Image is a null image"
         //  while QPixmap() returns an empty pixmap.

@@ -44,7 +44,7 @@ protected:
 
 private:
     friend class Acs::PixelCacheRenderer;
-    KoColor colorAt(int x, int y);
+    KoColor colorAt(float x, float y);
 
 private:
     QPointF m_lastClickPos;

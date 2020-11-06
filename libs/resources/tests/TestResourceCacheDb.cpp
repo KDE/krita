@@ -60,6 +60,9 @@ void TestResourceCacheDb::testCreateDatabase()
     }
 
     res = KisResourceCacheDb::initialize(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
+    if (!res) {
+        qWarning() << KisResourceCacheDb::lastError();
+    }
     QVERIFY(res);
     QVERIFY(KisResourceCacheDb::isValid());
 }

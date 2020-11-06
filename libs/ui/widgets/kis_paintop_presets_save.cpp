@@ -173,6 +173,11 @@ void KisPresetSaveWidget::savePreset()
     presetFileName = presetFileName.replace(' ', '_').replace('.', '_');
     QString extension = curPreset->defaultFileExtension();
 
+    // Make sure of the extension
+    if (!presetFileName.endsWith(".kpp")) {
+        presetFileName += ".kpp";
+    }
+
     if (m_useNewBrushDialog) {
         KisPaintOpPresetSP newPreset = curPreset->clone().dynamicCast<KisPaintOpPreset>();
         if (!presetFileName.endsWith(extension)) {

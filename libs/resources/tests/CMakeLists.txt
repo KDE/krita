@@ -22,5 +22,7 @@ ecm_add_tests(
     TestResourceTypeModel
     TestStorageModel
     TestResourceSearchBoxFilter
+    TestStorageFilterProxyModel
+    TestTagResourceModel
     NAME_PREFIX "libs-kritaresources-"
     LINK_LIBRARIES kritaglobal kritaplugin kritaresources kritaversion KF5::ConfigCore Qt5::Sql Qt5::Test)

@@ -37,6 +37,10 @@ private Q_SLOTS:
     void testDistanceToCurve();
 
     void testRemovePoint();
+
+    void testIsIdentity();
+
+    void testSerialization();
 };
 
 #endif /* __KIS_MESH_TRANSFORM_WORKER_TEST_H */

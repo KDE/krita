@@ -375,7 +375,8 @@ void ToolTransformArgs::toXML(QDomElement *e) const
     } else if (m_mode == LIQUIFY) {
         QDomElement meshEl = doc.createElement("mesh_transform");
         e->appendChild(meshEl);
-        m_meshTransform.toXML(&meshEl);
+
+        KisDomUtils::saveValue(&meshEl, "mesh", m_meshTransform);
     } else {
         KIS_ASSERT_RECOVER_RETURN(0 && "Unknown transform mode");
     }
@@ -482,7 +483,7 @@ ToolTransformArgs ToolTransformArgs::fromXML(const QDomElement &e)
         result =
             KisDomUtils::findOnlyElement(e, "mesh_transform", &meshEl);
 
-        args.m_meshTransform.fromXML(meshEl);
+        result &= KisDomUtils::loadValue(meshEl, "mesh", &args.m_meshTransform);
 
     } else {
         KIS_ASSERT_RECOVER_NOOP(0 && "Unknown transform mode");

@@ -24,6 +24,7 @@
 
 #include "kis_types.h"
 
+namespace KisBezierTransformMeshDetail {
 
 class KRITAIMAGE_EXPORT KisBezierTransformMesh : public KisBezierMesh
 {
@@ -54,6 +55,24 @@ public:
 
     void transformMesh(KisPaintDeviceSP srcDevice,
                        KisPaintDeviceSP dstDevice) const;
+
+    friend void saveValue(QDomElement *parent, const QString &tag, const KisBezierTransformMesh &mesh);
+    friend bool loadValue(const QDomElement &parent, KisBezierTransformMesh *mesh);
 };
+
+KRITAIMAGE_EXPORT
+void saveValue(QDomElement *parent, const QString &tag, const KisBezierTransformMesh &mesh);
+
+KRITAIMAGE_EXPORT
+bool loadValue(const QDomElement &parent, KisBezierTransformMesh *mesh);
+
+}
+
+namespace KisDomUtils {
+using KisBezierTransformMeshDetail::loadValue;
+using KisBezierTransformMeshDetail::saveValue;
+}
+
+using KisBezierTransformMesh = KisBezierTransformMeshDetail::KisBezierTransformMesh;
 
 #endif // KISBEZIERTRANSFORMMESH_H

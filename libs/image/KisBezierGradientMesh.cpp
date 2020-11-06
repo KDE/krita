@@ -2,6 +2,7 @@
 
 #include "kis_grid_interpolation_tools.h"
 #include "kis_debug.h"
+#include "kis_dom_utils.h"
 
 namespace KisBezierGradientMeshDetail {
 
@@ -58,6 +59,70 @@ struct QImageGradientOp
     QRect m_dstImageRect;
 };
 
+void saveValue(QDomElement *parent, const QString &tag, const GradientMeshNode &node)
+{
+    QDomDocument doc = parent->ownerDocument();
+    QDomElement e = doc.createElement(tag);
+    parent->appendChild(e);
+
+    e.setAttribute("type", "gradient-mesh-node");
+    KisDomUtils::saveValue(&e, "color", node.color);
+    KisDomUtils::saveValue(&e, "node", node.node);
+    KisDomUtils::saveValue(&e, "left-control", node.leftControl);
+    KisDomUtils::saveValue(&e, "right-control", node.rightControl);
+    KisDomUtils::saveValue(&e, "top-control", node.topControl);
+    KisDomUtils::saveValue(&e, "bottom-control", node.bottomControl);
+
+}
+
+bool loadValue(const QDomElement &parent, GradientMeshNode *node)
+{
+    if (!KisDomUtils::Private::checkType(parent, "gradient-mesh-node")) return false;
+
+    KisDomUtils::loadValue(parent, "node", &node->node);
+    KisDomUtils::loadValue(parent, "left-control", &node->leftControl);
+    KisDomUtils::loadValue(parent, "right-control", &node->rightControl);
+    KisDomUtils::loadValue(parent, "top-control", &node->topControl);
+    KisDomUtils::loadValue(parent, "bottom-control", &node->bottomControl);
+
+    return true;
+}
+
+void saveValue(QDomElement *parent, const QString &tag, const KisBezierGradientMesh &mesh)
+{
+    QDomDocument doc = parent->ownerDocument();
+    QDomElement e = doc.createElement(tag);
+    parent->appendChild(e);
+
+    e.setAttribute("type", "gradient-mesh");
+
+    KisDomUtils::saveValue(&e, "size", mesh.m_size);
+    KisDomUtils::saveValue(&e, "srcRect", mesh.m_originalRect);
+    KisDomUtils::saveValue(&e, "columns", mesh.m_columns);
+    KisDomUtils::saveValue(&e, "rows", mesh.m_rows);
+    KisDomUtils::saveValue(&e, "nodes", mesh.m_nodes);
+}
+
+bool loadValue(const QDomElement &parent, const QString &tag, KisBezierGradientMesh *mesh)
+{
+    QDomElement e;
+    if (!KisDomUtils::findOnlyElement(parent, tag, &e)) return false;
+
+    if (!KisDomUtils::Private::checkType(e, "gradient-mesh")) return false;
+
+    mesh->m_columns.clear();
+    mesh->m_rows.clear();
+    mesh->m_nodes.clear();
+
+    KisDomUtils::loadValue(e, "size", &mesh->m_size);
+    KisDomUtils::loadValue(e, "srcRect", &mesh->m_originalRect);
+    KisDomUtils::loadValue(e, "columns", &mesh->m_columns);
+    KisDomUtils::loadValue(e, "rows", &mesh->m_rows);
+    KisDomUtils::loadValue(e, "nodes", &mesh->m_nodes);
+
+    return true;
+}
+
 }
 
 void KisBezierGradientMesh::renderPatch(const KisBezierGradientMeshDetail::GradientMeshPatch &patch,
@@ -92,7 +157,7 @@ void KisBezierGradientMesh::renderPatch(const KisBezierGradientMeshDetail::Gradi
 void KisBezierGradientMesh::renderMesh(const QPoint &dstQImageOffset,
                                        QImage *dstImage) const
 {
-    for (auto it = begin(); it != end(); ++it) {
+    for (auto it = beginPatches(); it != endPatches(); ++it) {
         renderPatch(*it, dstQImageOffset, dstImage);
     }
 }

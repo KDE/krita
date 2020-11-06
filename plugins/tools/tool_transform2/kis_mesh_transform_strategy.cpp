@@ -154,7 +154,7 @@ void KisMeshTransformStrategy::setTransformFunction(const QPointF &mousePos, boo
 
     if (mode == Private::NOTHING) {
         auto patchIt = m_d->currentArgs.meshTransform()->hitTestPatch(mousePos, &localPatchPos);
-        if (patchIt != m_d->currentArgs.meshTransform()->end()) {
+        if (patchIt != m_d->currentArgs.meshTransform()->endPatches()) {
             hoveredPatch = patchIt.patchIndex();
             mode = Private::OVER_PATCH;
         }
@@ -632,20 +632,12 @@ void KisMeshTransformStrategy::continuePrimaryAction(const QPointF &pt, bool shi
 
 bool KisMeshTransformStrategy::endPrimaryAction()
 {
-    return m_d->mode == Private::OVER_POINT ||
-       m_d->mode == Private::OVER_POINT_SYMMETRIC ||
-        m_d->mode == Private::OVER_SEGMENT ||
-        m_d->mode == Private::OVER_SEGMENT_SYMMETRIC ||
-        m_d->mode == Private::OVER_PATCH ||
-        m_d->mode == Private::SPLIT_SEGMENT ||
-        m_d->mode == Private::MOVE_MODE ||
-        m_d->mode == Private::SCALE_MODE ||
-        m_d->mode == Private::ROTATE_MODE;
+    return m_d->mode != Private::NOTHING;
 }
 
 bool KisMeshTransformStrategy::acceptsClicks() const
 {
-    return false;
+    return m_d->mode == Private::SPLIT_SEGMENT;
 }
 
 QTransform KisMeshTransformStrategy::Private::imageToThumb(bool useFlakeOptimization)

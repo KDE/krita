@@ -63,10 +63,29 @@ public:
 
     void renderMesh(const QPoint &dstQImageOffset,
                     QImage *dstImage) const;
+
+    friend void saveValue(QDomElement *parent, const QString &tag, const KisBezierGradientMesh &mesh);
+    friend bool loadValue(const QDomElement &parent, const QString &tag, KisBezierGradientMesh *mesh);
 };
 
+KRITAIMAGE_EXPORT
+void saveValue(QDomElement *parent, const QString &tag, const GradientMeshNode &node);
+
+KRITAIMAGE_EXPORT
+bool loadValue(const QDomElement &parent, GradientMeshNode *node);
+
+KRITAIMAGE_EXPORT
+void saveValue(QDomElement *parent, const QString &tag, const KisBezierGradientMesh &mesh);
+
+KRITAIMAGE_EXPORT
+bool loadValue(const QDomElement &parent, const QString &tag, KisBezierGradientMesh *mesh);
 }
 
-using KisBezierGradientMeshDetail::KisBezierGradientMesh;
+namespace KisDomUtils {
+using KisBezierGradientMeshDetail::loadValue;
+using KisBezierGradientMeshDetail::saveValue;
+}
+
+using KisBezierGradientMesh = KisBezierGradientMeshDetail::KisBezierGradientMesh;
 
 #endif // KISBEZIERGRADIENTMESH_H

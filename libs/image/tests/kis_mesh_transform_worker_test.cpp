@@ -411,4 +411,93 @@ void KisMeshTransformWorkerTest::testSerialization()
     QCOMPARE(mesh, roundTripMesh);
 }
 
+void KisMeshTransformWorkerTest::testIteratorConstness()
+{
+    KisBezierTransformMesh mesh(QRectF(0,0,100,100));
+
+    {
+        auto controlIt = mesh.beginControlPoints();
+
+        Q_STATIC_ASSERT((std::is_same<decltype(*controlIt), QPointF&>::value));
+        Q_STATIC_ASSERT((std::is_same<decltype(controlIt.node()), KisBezierTransformMesh::Node&>::value));
+        Q_STATIC_ASSERT((std::is_same<decltype(controlIt.topSegment().p0()), QPointF&>::value));
+
+        auto constControlIt1 = mesh.constBeginControlPoints();
+
+        Q_STATIC_ASSERT((std::is_same<decltype(*constControlIt1), const QPointF&>::value));
+        Q_STATIC_ASSERT((std::is_same<decltype(constControlIt1.node()), const KisBezierTransformMesh::Node&>::value));
+        Q_STATIC_ASSERT((std::is_same<decltype(constControlIt1.topSegment().p0()), const QPointF&>::value));
+
+        auto constControlIt2 = std::as_const(mesh).beginControlPoints();
+
+        Q_STATIC_ASSERT((std::is_same<decltype(*constControlIt2), const QPointF&>::value));
+        Q_STATIC_ASSERT((std::is_same<decltype(constControlIt2.node()), const KisBezierTransformMesh::Node&>::value));
+        Q_STATIC_ASSERT((std::is_same<decltype(constControlIt2.topSegment().p0()), const QPointF&>::value));
+    }
+
+    {
+        auto segmentIt = mesh.beginSegments();
+
+        Q_STATIC_ASSERT((std::is_same<decltype(segmentIt.p0()), QPointF&>::value));
+        Q_STATIC_ASSERT((std::is_same<decltype(segmentIt.firstNode()), KisBezierTransformMesh::Node&>::value));
+
+        auto constSegmentIt1 = mesh.constBeginSegments();
+
+        Q_STATIC_ASSERT((std::is_same<decltype(constSegmentIt1.p0()), const QPointF&>::value));
+        Q_STATIC_ASSERT((std::is_same<decltype(constSegmentIt1.firstNode()), const KisBezierTransformMesh::Node&>::value));
+
+        auto constSegmentIt2 = std::as_const(mesh).beginSegments();
+
+        Q_STATIC_ASSERT((std::is_same<decltype(constSegmentIt2.p0()), const QPointF&>::value));
+        Q_STATIC_ASSERT((std::is_same<decltype(constSegmentIt2.firstNode()), const KisBezierTransformMesh::Node&>::value));
+    }
+
+    {
+        using NodeIndex = KisBezierTransformMesh::NodeIndex;
+        using ControlPointIndex = KisBezierTransformMesh::ControlPointIndex;
+        using ControlType = KisBezierTransformMesh::ControlType;
+
+        auto controlIt = mesh.find(ControlPointIndex(NodeIndex(0,0), ControlType::Node));
+
+        Q_STATIC_ASSERT((std::is_same<decltype(*controlIt), QPointF&>::value));
+        Q_STATIC_ASSERT((std::is_same<decltype(controlIt.node()), KisBezierTransformMesh::Node&>::value));
+        Q_STATIC_ASSERT((std::is_same<decltype(controlIt.topSegment().p0()), QPointF&>::value));
+
+        auto constControlIt1 = mesh.constFind(ControlPointIndex(NodeIndex(0,0), ControlType::Node));;
+
+        Q_STATIC_ASSERT((std::is_same<decltype(*constControlIt1), const QPointF&>::value));
+        Q_STATIC_ASSERT((std::is_same<decltype(constControlIt1.node()), const KisBezierTransformMesh::Node&>::value));
+        Q_STATIC_ASSERT((std::is_same<decltype(constControlIt1.topSegment().p0()), const QPointF&>::value));
+
+        auto constControlIt2 = std::as_const(mesh).find(ControlPointIndex(NodeIndex(0,0), ControlType::Node));;
+
+        Q_STATIC_ASSERT((std::is_same<decltype(*constControlIt2), const QPointF&>::value));
+        Q_STATIC_ASSERT((std::is_same<decltype(constControlIt2.node()), const KisBezierTransformMesh::Node&>::value));
+        Q_STATIC_ASSERT((std::is_same<decltype(constControlIt2.topSegment().p0()), const QPointF&>::value));
+    }
+
+    {
+        using NodeIndex = KisBezierTransformMesh::NodeIndex;
+        using SegmentIndex = KisBezierTransformMesh::SegmentIndex;
+        using ControlPointIndex = KisBezierTransformMesh::ControlPointIndex;
+        using ControlType = KisBezierTransformMesh::ControlType;
+
+        auto segmentIt = mesh.find(SegmentIndex(NodeIndex(0,0), 1));
+
+        Q_STATIC_ASSERT((std::is_same<decltype(segmentIt.p0()), QPointF&>::value));
+        Q_STATIC_ASSERT((std::is_same<decltype(segmentIt.firstNode()), KisBezierTransformMesh::Node&>::value));
+
+        auto constSegmentIt1 = mesh.constFind(SegmentIndex(NodeIndex(0,0), 1));
+
+        Q_STATIC_ASSERT((std::is_same<decltype(constSegmentIt1.p0()), const QPointF&>::value));
+        Q_STATIC_ASSERT((std::is_same<decltype(constSegmentIt1.firstNode()), const KisBezierTransformMesh::Node&>::value));
+
+        auto constSegmentIt2 = std::as_const(mesh).find(SegmentIndex(NodeIndex(0,0), 1));
+
+        Q_STATIC_ASSERT((std::is_same<decltype(constSegmentIt2.p0()), const QPointF&>::value));
+        Q_STATIC_ASSERT((std::is_same<decltype(constSegmentIt2.firstNode()), const KisBezierTransformMesh::Node&>::value));
+    }
+
+}
+
 QTEST_MAIN(KisMeshTransformWorkerTest)

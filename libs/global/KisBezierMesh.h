@@ -12,6 +12,7 @@
 #include <boost/operators.hpp>
 
 #include <functional>
+#include "KisCppQuirks.h"
 
 #include "kis_debug.h"
 
@@ -180,7 +181,10 @@ public:
             return controlType != Node;
         }
 
-        static QPointF& controlPoint(Mesh::Node &node, ControlType controlType) {
+        template <class NodeType,
+                  class PointType = std::add_const_if_t<std::is_const<NodeType>::value, QPointF>>
+        static
+        PointType& controlPoint(NodeType &node, ControlType controlType) {
             return
                 controlType == LeftControl ? node.leftControl :
                 controlType == RightControl ? node.rightControl :
@@ -222,7 +226,6 @@ public:
             dbg.nospace() << ")";
             return dbg.space();
         }
-
     };
 
     using ControlType = typename ControlPointIndex::ControlType;
@@ -523,22 +526,27 @@ public:
         return patch;
     }
 
+    template<bool is_const>
+    class segment_iterator_impl;
 
-    class segment_iterator;
-
-    class patch_iterator :
-        public boost::iterator_facade <patch_iterator,
+    template<bool is_const>
+    class patch_iterator_impl :
+        public boost::iterator_facade <patch_iterator_impl<is_const>,
                                        Patch,
                                        boost::random_access_traversal_tag,
                                        Patch>
     {
+        using PointType = std::add_const_if_t<is_const, QPointF>;
+        using MeshType = std::add_const_if_t<is_const, Mesh>;
+        using SegmentIteratorType = segment_iterator_impl<is_const>;
+
     public:
-        patch_iterator()
+        patch_iterator_impl()
             : m_mesh(0),
               m_col(0),
               m_row(0) {}
 
-        patch_iterator(const Mesh* mesh, int col, int row)
+        patch_iterator_impl(MeshType* mesh, int col, int row)
             : m_mesh(mesh),
               m_col(col),
               m_row(row)
@@ -549,10 +557,10 @@ public:
             return {m_col, m_row};
         }
 
-        segment_iterator segmentP() const;
-        segment_iterator segmentQ() const;
-        segment_iterator segmentR() const;
-        segment_iterator segmentS() const;
+        SegmentIteratorType segmentP() const;
+        SegmentIteratorType segmentQ() const;
+        SegmentIteratorType segmentR() const;
+        SegmentIteratorType segmentS() const;
 
         bool isValid() const {
             return
@@ -590,14 +598,14 @@ public:
             KIS_SAFE_ASSERT_RECOVER_NOOP(m_row < m_mesh->m_size.height() - 1);
         }
 
-        int distance_to(const patch_iterator &z) const {
+        int distance_to(const patch_iterator_impl &z) const {
             const int index = m_row * (m_mesh->m_size.width() - 1) + m_col;
             const int otherIndex = z.m_row * (m_mesh->m_size.width() - 1) + z.m_col;
 
             return otherIndex - index;
         }
 
-        bool equal(patch_iterator const& other) const {
+        bool equal(patch_iterator_impl const& other) const {
             return m_row == other.m_row &&
                     m_col == other.m_col &&
                 m_mesh == other.m_mesh;
@@ -609,25 +617,36 @@ public:
 
     private:
 
-        const Mesh* m_mesh;
+        MeshType *m_mesh;
         int m_col;
         int m_row;
     };
 
-    class control_point_iterator :
-        public boost::iterator_facade <control_point_iterator,
-                                       QPointF,
+    using patch_iterator = patch_iterator_impl<false>;
+    using patch_const_iterator = patch_iterator_impl<true>;
+
+
+
+    template<bool is_const>
+    class control_point_iterator_impl :
+        public boost::iterator_facade <control_point_iterator_impl<is_const>,
+                                       std::add_const_if_t<is_const, QPointF>,
                                        boost::bidirectional_traversal_tag>
     {
+        using PointType = std::add_const_if_t<is_const, QPointF>;
+        using NodeType = std::add_const_if_t<is_const, Node>;
+        using MeshType = std::add_const_if_t<is_const, Mesh>;
+        using SegmentIteratorType = segment_iterator_impl<is_const>;
+
     public:
-        control_point_iterator()
+        control_point_iterator_impl()
             : m_mesh(0),
               m_col(0),
               m_row(0),
               m_controlIndex(0)
         {}
 
-        control_point_iterator(Mesh* mesh, int col, int row, int controlIndex)
+        control_point_iterator_impl(MeshType* mesh, int col, int row, int controlIndex)
             : m_mesh(mesh),
               m_col(col),
               m_row(row),
@@ -655,7 +674,7 @@ public:
             return Mesh::NodeIndex(m_col, m_row);
         }
 
-        Mesh::Node& node() const {
+        NodeType& node() const {
             return m_mesh->node(m_col, m_row);
         }
 
@@ -688,7 +707,7 @@ public:
             return type() == Mesh::ControlPointIndex::Node;
         }
 
-        control_point_iterator symmetricControl() const {
+        control_point_iterator_impl symmetricControl() const {
             typename Mesh::ControlPointIndex::ControlType newIndex =
                     Mesh::ControlPointIndex::Node;
 
@@ -710,7 +729,7 @@ public:
                 break;
             }
 
-            control_point_iterator it(m_mesh, m_col, m_row, newIndex);
+            control_point_iterator_impl it(m_mesh, m_col, m_row, newIndex);
 
             if (!it.controlIsValid()) {
                 it = m_mesh->endControlPoints();
@@ -719,10 +738,10 @@ public:
             return it;
         }
 
-        segment_iterator topSegment() const;
-        segment_iterator bottomSegment() const;
-        segment_iterator leftSegment() const;
-        segment_iterator rightSegment() const;
+        SegmentIteratorType topSegment() const;
+        SegmentIteratorType bottomSegment() const;
+        SegmentIteratorType leftSegment() const;
+        SegmentIteratorType rightSegment() const;
 
         bool isValid() const {
             return nodeIsValid() && controlIsValid();
@@ -732,7 +751,7 @@ public:
         friend class boost::iterator_core_access;
 
         bool nodeIsValid() const {
-            return m_col < m_mesh->size().width() && m_row < m_mesh->size().height();
+            return m_col >= 0 && m_row >= 0 && m_col < m_mesh->size().width() && m_row < m_mesh->size().height();
         }
 
         bool controlIsValid() const {
@@ -784,40 +803,50 @@ public:
         }
 
 
-        bool equal(control_point_iterator const& other) const {
+        bool equal(control_point_iterator_impl const& other) const {
             return m_controlIndex == other.m_controlIndex &&
                 m_row == other.m_row &&
                 m_col == other.m_col &&
                 m_mesh == other.m_mesh;
         }
 
-        QPointF& dereference() const {
+        PointType& dereference() const {
             return Mesh::ControlPointIndex::controlPoint(m_mesh->node(m_col, m_row), Mesh::ControlType(m_controlIndex));
         }
 
     private:
 
-        Mesh* m_mesh;
+        MeshType* m_mesh;
         int m_col;
         int m_row;
         int m_controlIndex;
     };
 
-    class segment_iterator :
-        public boost::iterator_facade <segment_iterator,
+    using control_point_iterator = control_point_iterator_impl<false>;
+    using control_point_const_iterator = control_point_iterator_impl<true>;
+
+
+    template<bool is_const>
+    class segment_iterator_impl :
+        public boost::iterator_facade <segment_iterator_impl<is_const>,
                                        Mesh::SegmentIndex,
                                        boost::bidirectional_traversal_tag,
                                        Mesh::SegmentIndex>
     {
+        using PointType = std::add_const_if_t<is_const, QPointF>;
+        using NodeType = std::add_const_if_t<is_const, Node>;
+        using MeshType = std::add_const_if_t<is_const, Mesh>;
+        using ControlPointIteratorType = control_point_iterator_impl<is_const>;
+
     public:
-        segment_iterator()
+        segment_iterator_impl()
             : m_mesh(0),
               m_col(0),
               m_row(0),
               m_isHorizontal(0)
         {}
 
-        segment_iterator(Mesh* mesh, int col, int row, int isHorizontal)
+        segment_iterator_impl(MeshType* mesh, int col, int row, int isHorizontal)
             : m_mesh(mesh),
               m_col(col),
               m_row(row),
@@ -839,49 +868,49 @@ public:
             return m_isHorizontal ? Mesh::NodeIndex(m_col + 1, m_row) : Mesh::NodeIndex(m_col, m_row + 1);
         }
 
-        Mesh::Node& firstNode() const {
+        NodeType& firstNode() const {
             return m_mesh->node(firstNodeIndex());
         }
 
-        Mesh::Node& secondNode() const {
+        NodeType& secondNode() const {
             return m_mesh->node(secondNodeIndex());
         }
 
-        QPointF& p0() const {
+        PointType& p0() const {
             return firstNode().node;
         }
 
-        QPointF& p1() const {
+        PointType& p1() const {
             return m_isHorizontal ? firstNode().rightControl : firstNode().bottomControl;
         }
 
-        QPointF& p2() const {
+        PointType& p2() const {
             return m_isHorizontal ? secondNode().leftControl : secondNode().topControl;
         }
 
-        QPointF& p3() const {
+        PointType& p3() const {
             return secondNode().node;
         }
 
-        control_point_iterator itP0() const {
+        ControlPointIteratorType itP0() const {
             return m_mesh->find(firstNodeIndex());
         }
 
-        control_point_iterator itP1() const {
+        ControlPointIteratorType itP1() const {
             return m_mesh->find(ControlPointIndex(firstNodeIndex(),
                                                   m_isHorizontal ?
                                                       Mesh::ControlType::RightControl :
                                                       Mesh::ControlType::BottomControl));
         }
 
-        control_point_iterator itP2() const {
+        ControlPointIteratorType itP2() const {
             return m_mesh->find(ControlPointIndex(secondNodeIndex(),
                                                   m_isHorizontal ?
                                                       Mesh::ControlType::LeftControl :
                                                       Mesh::ControlType::TopControl));
         }
 
-        control_point_iterator itP3() const {
+        ControlPointIteratorType itP3() const {
             return m_mesh->find(secondNodeIndex());
         }
 
@@ -945,7 +974,7 @@ public:
         }
 
 
-        bool equal(segment_iterator const& other) const {
+        bool equal(segment_iterator_impl const& other) const {
             return m_isHorizontal == other.m_isHorizontal &&
                 m_row == other.m_row &&
                 m_col == other.m_col &&
@@ -958,35 +987,84 @@ public:
 
     private:
 
-        Mesh* m_mesh;
+        MeshType* m_mesh;
         int m_col;
         int m_row;
         int m_isHorizontal;
     };
 
-    patch_iterator beginPatches() const {
+    using segment_iterator = segment_iterator_impl<false>;
+    using segment_const_iterator = segment_iterator_impl<true>;
+
+    patch_iterator beginPatches() {
         return patch_iterator(this, 0, 0);
     }
 
-    patch_iterator endPatches() const {
+    patch_const_iterator beginPatches() const {
+        return patch_const_iterator(this, 0, 0);
+    }
+    patch_const_iterator constBeginPatches() const {
+        return patch_const_iterator(this, 0, 0);
+    }
+
+    patch_iterator endPatches() {
         return patch_iterator(this, 0, m_size.height() - 1);
     }
 
-    // TODO: constness
+    patch_const_iterator endPatches() const {
+        return patch_const_iterator(this, 0, m_size.height() - 1);
+    }
+
+    patch_const_iterator constEndPatches() const {
+        return patch_const_iterator(this, 0, m_size.height() - 1);
+    }
+
     control_point_iterator beginControlPoints() {
         return control_point_iterator(this, 0, 0, ControlType::RightControl);
+    }
+
+    control_point_const_iterator beginControlPoints() const {
+        return control_point_const_iterator(this, 0, 0, ControlType::RightControl);
+    }
+
+    control_point_const_iterator constBeginControlPoints() const {
+        return control_point_const_iterator(this, 0, 0, ControlType::RightControl);
     }
 
     control_point_iterator endControlPoints() {
         return control_point_iterator(this, 0, m_size.height(), 0);
     }
 
+    control_point_const_iterator endControlPoints() const {
+        return control_point_const_iterator(this, 0, m_size.height(), 0);
+    }
+
+    control_point_const_iterator constEndControlPoints() const {
+        return control_point_const_iterator(this, 0, m_size.height(), 0);
+    }
+
     segment_iterator beginSegments() {
         return segment_iterator(this, 0, 0, 0);
     }
 
+    segment_const_iterator beginSegments() const {
+        return segment_const_iterator(this, 0, 0, 0);
+    }
+
+    segment_const_iterator constBeginSegments() const {
+        return segment_const_iterator(this, 0, 0, 0);
+    }
+
     segment_iterator endSegments() {
         return segment_iterator(this, 0, m_size.height(), 0);
+    }
+
+    segment_const_iterator endSegments() const {
+        return segment_const_iterator(this, 0, m_size.height(), 0);
+    }
+
+    segment_const_iterator constEndSegments() const {
+        return segment_const_iterator(this, 0, m_size.height(), 0);
     }
 
     QSize size() const {
@@ -1022,10 +1100,16 @@ public:
         }
     }
 
-    control_point_iterator hitTestPointImpl(const QPointF &pt, qreal distanceThreshold, bool onlyNodeMode) {
+    void scaleForThumbnail(const QTransform &t) {
+        KIS_SAFE_ASSERT_RECOVER_RETURN(t.type() <= QTransform::TxScale);
+        transform(t);
+        m_originalRect = t.mapRect(m_originalRect);
+    }
+
+    ControlPointIndex hitTestPointImpl(const QPointF &pt, qreal distanceThreshold, bool onlyNodeMode) const {
         const qreal distanceThresholdSq = pow2(distanceThreshold);
 
-        control_point_iterator result = endControlPoints();
+        auto result = endControlPoints();
         qreal minDistanceSq = std::numeric_limits<qreal>::max();
 
         for (auto it = beginControlPoints(); it != endControlPoints(); ++it) {
@@ -1038,19 +1122,19 @@ public:
             }
         }
 
-        return result;
+        return result.controlIndex();
     }
 
-    control_point_iterator hitTestNode(const QPointF &pt, qreal distanceThreshold) {
+    ControlPointIndex hitTestNode(const QPointF &pt, qreal distanceThreshold) const {
         return hitTestPointImpl(pt, distanceThreshold, true);
     }
 
-    control_point_iterator hitTestControlPoint(const QPointF &pt, qreal distanceThreshold) {
+    ControlPointIndex hitTestControlPoint(const QPointF &pt, qreal distanceThreshold) const {
         return hitTestPointImpl(pt, distanceThreshold, false);
     }
 
-    segment_iterator hitTestSegment(const QPointF &pt, qreal distanceThreshold, qreal *t = 0) {
-        segment_iterator result = endSegments();
+    SegmentIndex hitTestSegment(const QPointF &pt, qreal distanceThreshold, qreal *t = 0) const {
+        auto result = endSegments();
         qreal minDistance = std::numeric_limits<qreal>::max();
 
         for (auto it = beginSegments(); it != endSegments(); ++it) {
@@ -1067,10 +1151,12 @@ public:
             }
         }
 
-        return result;
+        return result.segmentIndex();
     }
 
-    patch_iterator hitTestPatch(const QPointF &pt, QPointF *localPointResult = 0) {
+    PatchIndex hitTestPatch(const QPointF &pt, QPointF *localPointResult = 0) const {
+        auto result = endPatches();
+
         const QRectF unitRect(0, 0, 1, 1);
 
         for (auto it = beginPatches(); it != endPatches(); ++it) {
@@ -1085,33 +1171,80 @@ public:
                         *localPointResult = localPos;
                     }
 
-                    return it;
+                    result = it;
+                    break;
                 }
             }
         }
-        return endPatches();
 
+        return result.patchIndex();
+
+    }
+
+
+    template <class MeshType,
+              class IteratorType = control_point_iterator_impl<std::is_const<MeshType>::value>>
+    static
+    IteratorType find(MeshType &mesh, const ControlPointIndex &index) {
+        IteratorType it(&mesh, index.nodeIndex.x(), index.nodeIndex.y(), index.controlType);
+        return it.isValid() ? it : mesh.endControlPoints();
+    }
+
+    template <class MeshType,
+              class IteratorType = segment_iterator_impl<std::is_const<MeshType>::value>>
+    static
+    IteratorType find(MeshType &mesh, const SegmentIndex &index) {
+        IteratorType it(&mesh, index.first.x(), index.first.y(), index.second);
+        return it.isValid() ? it : mesh.endSegments();
+    }
+
+    template <class MeshType,
+              class IteratorType = patch_iterator_impl<std::is_const<MeshType>::value>>
+    static
+    IteratorType find(MeshType &mesh, const PatchIndex &index) {
+        IteratorType it(&mesh, index.x(), index.y());
+        return it.isValid() ? it : mesh.endPatches();
     }
 
     control_point_iterator find(const ControlPointIndex &index) {
-        control_point_iterator it(this, index.nodeIndex.x(), index.nodeIndex.y(), index.controlType);
-        return it.isValid() ? it : endControlPoints();
+        return find(*this, index);
+    }
+
+    control_point_const_iterator find(const ControlPointIndex &index) const {
+        return find(*this, index);
+    }
+
+    control_point_const_iterator constFind(const ControlPointIndex &index) const {
+        return find(*this, index);
     }
 
     segment_iterator find(const SegmentIndex &index) {
-        segment_iterator it(this, index.first.x(), index.first.y(), index.second);
-        return it.isValid() ? it : endSegments();
+        return find(*this, index);
+    }
+
+    segment_const_iterator find(const SegmentIndex &index) const {
+        return find(*this, index);
+    }
+
+    segment_const_iterator constFind(const SegmentIndex &index) const {
+        return find(*this, index);
     }
 
     patch_iterator find(const PatchIndex &index) {
-        patch_iterator it(this, index.x(), index.y());
-        return it.isValid() ? it : endPatches();
+        return find(*this, index);
     }
 
-    void scaleForThumbnail(const QTransform &t) {
-        KIS_SAFE_ASSERT_RECOVER_RETURN(t.type() <= QTransform::TxScale);
-        transform(t);
-        m_originalRect = t.mapRect(m_originalRect);
+    patch_const_iterator find(const PatchIndex &index) const {
+        return find(*this, index);
+    }
+
+    patch_const_iterator constFind(const PatchIndex &index) const {
+        return find(*this, index);
+    }
+
+    template <typename T>
+    bool isIndexValid(const T &index) const {
+        return find(index).isValid();
     }
 
 protected:
@@ -1138,79 +1271,95 @@ QDebug operator<<(QDebug dbg, const Mesh<Node, Patch> &mesh)
 }
 
 template<typename NodeArg, typename PatchArg>
-typename Mesh<NodeArg, PatchArg>::segment_iterator
-Mesh<NodeArg, PatchArg>::patch_iterator::segmentP() const
+template<bool is_const>
+typename Mesh<NodeArg, PatchArg>::template patch_iterator_impl<is_const>::SegmentIteratorType
+Mesh<NodeArg, PatchArg>::patch_iterator_impl<is_const>::segmentP() const
 {
-    // FIXME: remove const cast
-    return segment_iterator(const_cast<Mesh<NodeArg, PatchArg>*>(m_mesh), m_col, m_row, 1);
+    using SegmentIteratorType = typename Mesh<NodeArg, PatchArg>::template patch_iterator_impl<is_const>::SegmentIteratorType;
+    return SegmentIteratorType(m_mesh, m_col, m_row, 1);
 }
 
 template<typename NodeArg, typename PatchArg>
-typename Mesh<NodeArg, PatchArg>::segment_iterator
-Mesh<NodeArg, PatchArg>::patch_iterator::segmentQ() const
+template<bool is_const>
+typename Mesh<NodeArg, PatchArg>::template patch_iterator_impl<is_const>::SegmentIteratorType
+Mesh<NodeArg, PatchArg>::patch_iterator_impl<is_const>::segmentQ() const
 {
-    // FIXME: remove const cast
-    return segment_iterator(const_cast<Mesh<NodeArg, PatchArg>*>(m_mesh), m_col, m_row + 1, 1);
+    using SegmentIteratorType = typename Mesh<NodeArg, PatchArg>::template patch_iterator_impl<is_const>::SegmentIteratorType;
+    return SegmentIteratorType(const_cast<Mesh<NodeArg, PatchArg>*>(m_mesh), m_col, m_row + 1, 1);
 }
 
 template<typename NodeArg, typename PatchArg>
-typename Mesh<NodeArg, PatchArg>::segment_iterator
-Mesh<NodeArg, PatchArg>::patch_iterator::segmentR() const
+template<bool is_const>
+typename Mesh<NodeArg, PatchArg>::template patch_iterator_impl<is_const>::SegmentIteratorType
+Mesh<NodeArg, PatchArg>::patch_iterator_impl<is_const>::segmentR() const
 {
-    // FIXME: remove const cast
-    return segment_iterator(const_cast<Mesh<NodeArg, PatchArg>*>(m_mesh), m_col, m_row, 0);
+    using SegmentIteratorType = typename Mesh<NodeArg, PatchArg>::template patch_iterator_impl<is_const>::SegmentIteratorType;
+    return SegmentIteratorType(const_cast<Mesh<NodeArg, PatchArg>*>(m_mesh), m_col, m_row, 0);
 }
 
 template<typename NodeArg, typename PatchArg>
-typename Mesh<NodeArg, PatchArg>::segment_iterator
-Mesh<NodeArg, PatchArg>::patch_iterator::segmentS() const
+template<bool is_const>
+typename Mesh<NodeArg, PatchArg>::template patch_iterator_impl<is_const>::SegmentIteratorType
+Mesh<NodeArg, PatchArg>::patch_iterator_impl<is_const>::segmentS() const
 {
-    // FIXME: remove const cast
-    return segment_iterator(const_cast<Mesh<NodeArg, PatchArg>*>(m_mesh), m_col + 1, m_row, 0);
+    using SegmentIteratorType = typename Mesh<NodeArg, PatchArg>::template patch_iterator_impl<is_const>::SegmentIteratorType;
+    return SegmentIteratorType(const_cast<Mesh<NodeArg, PatchArg>*>(m_mesh), m_col + 1, m_row, 0);
 }
 
 template<typename NodeArg, typename PatchArg>
-typename Mesh<NodeArg, PatchArg>::segment_iterator
-Mesh<NodeArg, PatchArg>::control_point_iterator::topSegment() const
+template<bool is_const>
+typename Mesh<NodeArg, PatchArg>::template control_point_iterator_impl<is_const>::SegmentIteratorType
+Mesh<NodeArg, PatchArg>::control_point_iterator_impl<is_const>::topSegment() const
 {
+    using SegmentIteratorType = typename Mesh<NodeArg, PatchArg>::template control_point_iterator_impl<is_const>::SegmentIteratorType;
+
     if (isTopBorder()) {
         return m_mesh->endSegments();
     }
 
-    return segment_iterator(m_mesh, m_col, m_row - 1, false);
+    return SegmentIteratorType(m_mesh, m_col, m_row - 1, false);
 }
 
 template<typename NodeArg, typename PatchArg>
-typename Mesh<NodeArg, PatchArg>::segment_iterator
-Mesh<NodeArg, PatchArg>::control_point_iterator::bottomSegment() const
+template<bool is_const>
+typename Mesh<NodeArg, PatchArg>::template control_point_iterator_impl<is_const>::SegmentIteratorType
+Mesh<NodeArg, PatchArg>::control_point_iterator_impl<is_const>::bottomSegment() const
 {
+    using SegmentIteratorType = typename Mesh<NodeArg, PatchArg>::template control_point_iterator_impl<is_const>::SegmentIteratorType;
+
     if (isBottomBorder()) {
         return m_mesh->endSegments();
     }
 
-    return segment_iterator(m_mesh, m_col, m_row, false);
+    return SegmentIteratorType(m_mesh, m_col, m_row, false);
 }
 
 template<typename NodeArg, typename PatchArg>
-typename Mesh<NodeArg, PatchArg>::segment_iterator
-Mesh<NodeArg, PatchArg>::control_point_iterator::leftSegment() const
+template<bool is_const>
+typename Mesh<NodeArg, PatchArg>::template control_point_iterator_impl<is_const>::SegmentIteratorType
+Mesh<NodeArg, PatchArg>::control_point_iterator_impl<is_const>::leftSegment() const
 {
+    using SegmentIteratorType = typename Mesh<NodeArg, PatchArg>::template control_point_iterator_impl<is_const>::SegmentIteratorType;
+
     if (isLeftBorder()) {
         return m_mesh->endSegments();
     }
 
-    return segment_iterator(m_mesh, m_col - 1, m_row, true);
+    return SegmentIteratorType(m_mesh, m_col - 1, m_row, true);
 }
 
 template<typename NodeArg, typename PatchArg>
-typename Mesh<NodeArg, PatchArg>::segment_iterator
-Mesh<NodeArg, PatchArg>::control_point_iterator::rightSegment() const
+template<bool is_const>
+typename Mesh<NodeArg, PatchArg>::template control_point_iterator_impl<is_const>::SegmentIteratorType
+Mesh<NodeArg, PatchArg>::control_point_iterator_impl<is_const>::rightSegment() const
 {
+    using SegmentIteratorType = typename Mesh<NodeArg, PatchArg>::template control_point_iterator_impl<is_const>::SegmentIteratorType;
+
     if (isRightBorder()) {
         return m_mesh->endSegments();
     }
 
-    return segment_iterator(m_mesh, m_col, m_row, true);
+    return SegmentIteratorType(m_mesh, m_col, m_row, true);
 }
 
 template<typename NodeArg, typename PatchArg>

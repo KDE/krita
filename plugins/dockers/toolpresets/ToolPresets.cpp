@@ -49,22 +49,15 @@
 #include <KisDialogStateSaver.h>
 #include <kis_paintop_preset.h>
 #include <kis_paintop_settings.h>
+#include <kis_categorized_list_view.h>
+#include <kis_categorized_item_delegate.h>
 
 #include "ToolPresets.h"
+#include "ToolPresetModel.h"
 
-static QIcon toolIcon(const QString &toolId)
-{
-    KoToolFactoryBase *factory = KoToolRegistry::instance()->value(toolId);
-    return koIcon(factory->iconName().toLatin1());
-}
-
-static QString createConfigFileName(QString toolId)
-{
-    return QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + '/' + "toolpresets/" + toolId.replace('/', '_') + ".toolpreset";
-}
 
 ToolPresetDocker::ToolPresetDocker()
-    : QDockWidget(i18n("Tool Presets"))
+    : QDockWidget(i18n("Tool Option Presets"))
 {
     setFeatures(DockWidgetMovable|DockWidgetFloatable);
 
@@ -75,16 +68,20 @@ ToolPresetDocker::ToolPresetDocker()
     bnSave->setIcon(koIcon("document-save"));
     bnDelete->setIcon(koIcon("edit-delete"));
 
+    m_toolPresetModel = new ToolPresetFilterProxyModel(0);
+    lstPresets->setModel(m_toolPresetModel);
+    lstPresets->setItemDelegate(new KisCategorizedItemDelegate(this));
+
     connect(KoToolManager::instance(), SIGNAL(toolOptionWidgetsChanged(KoCanvasController*,QList<QPointer<QWidget> >)), this, SLOT(optionWidgetsChanged(KoCanvasController*,QList<QPointer<QWidget> >)));
     connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController *, int)), this, SLOT(toolChanged(KoCanvasController *, int)));
     connect(bnSave, SIGNAL(clicked()), SLOT(bnSavePressed()));
     connect(bnDelete, SIGNAL(clicked()), SLOT(bnDeletePressed()));
-    connect(lstPresets, SIGNAL(itemClicked(QListWidgetItem*)), SLOT(itemSelected(QListWidgetItem*)));
+    //connect(lstPresets, SIGNAL(itemClicked(QListWidgetItem*)), SLOT(itemSelected(QListWidgetItem*)));
 }
 
 ToolPresetDocker::~ToolPresetDocker()
 {
-
+    delete m_toolPresetModel;
 }
 
 void ToolPresetDocker::setViewManager(KisViewManager *kisview)
@@ -114,15 +111,15 @@ void ToolPresetDocker::toolChanged(KoCanvasController *canvasController, int /*t
 {
     m_currentToolId = KoToolManager::instance()->activeToolId();
 
-    lstPresets->clear();
+//    lstPresets->clear();
     txtName->clear();
 
     KConfig cfg(createConfigFileName(m_currentToolId), KConfig::SimpleConfig);
 
-    Q_FOREACH(const QString &group, cfg.groupList()) {
-        QListWidgetItem *item = new QListWidgetItem(toolIcon(m_currentToolId), group, lstPresets);
-        Q_UNUSED(item);
-    }
+//    Q_FOREACH(const QString &group, cfg.groupList()) {
+//        QListWidgetItem *item = new QListWidgetItem(toolIcon(m_currentToolId), group, lstPresets);
+//        Q_UNUSED(item);
+//    }
 }
 
 void ToolPresetDocker::bnSavePressed()
@@ -147,21 +144,21 @@ void ToolPresetDocker::bnSavePressed()
         KisPaintOpSettingsSP settings = m_resourceProvider->currentPreset()->settings();
         grp.writeEntry("brush_size",settings->paintOpSize());
     }
-    QListWidgetItem *item = new QListWidgetItem(toolIcon(m_currentToolId), section);
-    lstPresets->addItem(item);
-    lstPresets->blockSignals(true);
-    lstPresets->setCurrentItem(item);
-    lstPresets->blockSignals(false);
+//    QListWidgetItem *item = new QListWidgetItem(toolIcon(m_currentToolId), section);
+//    lstPresets->addItem(item);
+//    lstPresets->blockSignals(true);
+//    lstPresets->setCurrentItem(item);
+//    lstPresets->blockSignals(false);
 }
 
 void ToolPresetDocker::bnDeletePressed()
 {
-    if (!lstPresets->count()) return;
+//    if (!lstPresets->count()) return;
 
-    KConfig cfg(createConfigFileName(m_currentToolId), KConfig::SimpleConfig);
-    cfg.deleteGroup(lstPresets->currentItem()->text());
-    txtName->clear();
-    delete lstPresets->takeItem(lstPresets->currentRow());
+//    KConfig cfg(createConfigFileName(m_currentToolId), KConfig::SimpleConfig);
+//    cfg.deleteGroup(lstPresets->currentItem()->text());
+//    txtName->clear();
+//    delete lstPresets->takeItem(lstPresets->currentRow());
 }
 
 void ToolPresetDocker::itemSelected(QListWidgetItem *item)

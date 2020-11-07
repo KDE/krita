@@ -31,7 +31,7 @@ class KoCanvasBase;
 class KisCanvas2;
 class KoCanvasController;
 class KisCanvasResourceProvider;
-
+class ToolPresetFilterProxyModel;
 class ToolPresets;
 
 class ToolPresetDocker : public QDockWidget, public KisMainwindowObserver , public Ui_WdgToolPresets
@@ -61,6 +61,7 @@ private:
     KoCanvasBase *m_canvas {0};
     QList<QPointer<QWidget> > m_currentOptionWidgets;
     QString m_currentToolId;
+    ToolPresetFilterProxyModel *m_toolPresetModel {0};
 };
 
 

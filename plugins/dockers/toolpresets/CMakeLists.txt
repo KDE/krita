@@ -1,6 +1,7 @@
 set(KRITA_TOOLPRESETSDOCKER_SOURCES 
     ToolPresetsPlugin.cpp 
     ToolPresets.cpp 
+    ToolPresetModel.cpp
 )
 
 ki18n_wrap_ui(KRITA_TOOLPRESETSDOCKER_SOURCES

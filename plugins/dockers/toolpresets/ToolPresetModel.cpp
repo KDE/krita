@@ -36,7 +36,7 @@ ToolPresetModel::ToolPresetModel(QObject *parent)
         // All the tool presets for this id
         KConfig cfg(createConfigFileName(info.toolId), KConfig::SimpleConfig);
         Q_FOREACH(const QString &group, cfg.groupList()) {
-            auto item = categoriesMapper()->addEntry(info.presetName, ToolPresetInfo(info.presetName, group));
+            auto item = categoriesMapper()->addEntry(info.toolId, ToolPresetInfo(info.toolId, group));
             item->setCheckable(true);
         }
     }
@@ -69,7 +69,7 @@ QVariant ToolPresetModel::data(const QModelIndex& idx, int role) const
 {
     if (!idx.isValid()) return QVariant();
 
-    if(role == Qt::DecorationRole) {
+    if (role == Qt::DecorationRole) {
         DataItem *item = categoriesMapper()->itemFromRow(idx.row());
         Q_ASSERT(item);
 
@@ -77,6 +77,7 @@ QVariant ToolPresetModel::data(const QModelIndex& idx, int role) const
             QStyle *style = QApplication::style();
             QStyleOptionButton so;
             QSize size = style->sizeFromContents(QStyle::CT_CheckBox, &so, QSize(), 0);
+            ToolPresetInfo *toolInfo = item->data();
             return toolIcon(item->data()->toolId).pixmap(size);
         }
     }
@@ -99,9 +100,10 @@ bool ToolPresetModel::setData(const QModelIndex& idx, const QVariant& value, int
             removeFavoriteEntry(*item->data());
         }
 
+        // Save all favorites
         QStringList favoritesList;
         QVector<DataItem*> filteredItems =
-            categoriesMapper()->itemsForCategory(favoriteCategory().presetName);
+                categoriesMapper()->itemsForCategory(favoriteCategory().presetName);
 
         Q_FOREACH (DataItem *entry, filteredItems) {
             ToolPresetInfo *info = entry->data();
@@ -137,7 +139,7 @@ void ToolPresetModel::addFavoriteEntry(const ToolPresetInfo &entry)
 
 void ToolPresetModel::removeFavoriteEntry(const ToolPresetInfo &entry)
 {
-    categoriesMapper()->removeEntry(favoriteCategory().presetName, entry);
+    categoriesMapper()->removeEntry(favoriteCategory().toolId, entry);
 }
 
 bool operator==(const ToolPresetInfo &a, const ToolPresetInfo &b)
@@ -145,9 +147,22 @@ bool operator==(const ToolPresetInfo &a, const ToolPresetInfo &b)
     return ((a.toolId == b.toolId) && (a.presetName == b.presetName));
 }
 
+ToolPresetInfo *ToolPresetFilterProxyModel::toolPresetInfo(int row) const
+{
+    QModelIndex idx = index(row, 0);
+    QModelIndex sourceIdx = mapToSource(idx);
+
+    ToolPresetModel *presetModel = dynamic_cast<ToolPresetModel*>(sourceModel());
+
+    if (!presetModel) return 0;
+
+    return presetModel->toolPresetInfo(sourceIdx.row());
+}
+
 void ToolPresetFilterProxyModel::setFilter(const QString &toolId)
 {
     m_toolIdFilter = toolId;
+    invalidateFilter();
 }
 
 bool ToolPresetFilterProxyModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const

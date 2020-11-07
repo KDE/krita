@@ -54,7 +54,11 @@ private Q_SLOTS:
 
     void bnSavePressed();
     void bnDeletePressed();
-    void itemSelected(QListWidgetItem *item);
+
+    void presetSelected(const QModelIndex*);
+
+    void toggleCurrentToolOnly(bool toggle);
+
 
 private:
     KisCanvasResourceProvider *m_resourceProvider;

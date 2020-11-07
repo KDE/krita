@@ -21,6 +21,7 @@
 #include "kis_categorized_list_model.h"
 
 #include <QStandardPaths>
+#include <QDebug>
 
 #include <KoIcon.h>
 
@@ -31,7 +32,7 @@ static QIcon toolIcon(const QString &toolId)
 {
     KoToolFactoryBase *factory = KoToolRegistry::instance()->value(toolId);
     if (factory) {
-        return koIcon(factory->iconName().toLatin1());
+        return KisIconUtils::loadIcon(factory->iconName().toLatin1());
     }
     else {
         return QIcon();
@@ -103,9 +104,11 @@ public:
         delete m_model;
     }
 
-protected:
+    ToolPresetInfo *toolPresetInfo(int row) const;
 
     void setFilter(const QString &toolId);
+
+protected:
 
     bool lessThan(const QModelIndex &left, const QModelIndex &right) const override {
         return lessThanPriority(left, right, ToolPresetModel::favoriteCategory().presetName);

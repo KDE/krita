@@ -230,302 +230,7 @@ public:
 
     using ControlType = typename ControlPointIndex::ControlType;
 
-
-public:
-    Mesh()
-        : Mesh(QRectF(0.0, 0.0, 777.0, 666.0))
-    {
-    }
-
-    Mesh(const QRectF &mapRect, const QSize &size = QSize(2,2))
-        : m_size(size),
-          m_originalRect(mapRect)
-    {
-        const qreal xControlOffset = 0.2 * (mapRect.width() / size.width());
-        const qreal yControlOffset = 0.2 * (mapRect.height() / size.height());
-
-        for (int row = 0; row < m_size.height(); row++) {
-            const qreal yPos = qreal(row) / (size.height() - 1) * mapRect.height() + mapRect.y();
-
-            for (int col = 0; col < m_size.width(); col++) {
-                const qreal xPos = qreal(col) / (size.width() - 1) * mapRect.width() + mapRect.x();
-
-                Node node(QPointF(xPos, yPos));
-                node.setLeftControlRelative(QPointF(-xControlOffset, 0));
-                node.setRightControlRelative(QPointF(xControlOffset, 0));
-                node.setTopControlRelative(QPointF(0, -yControlOffset));
-                node.setBottomControlRelative(QPointF(0, yControlOffset));
-
-                m_nodes.push_back(node);
-            }
-        }
-
-        for (int col = 0; col < m_size.width(); col++) {
-            m_columns.push_back(qreal(col) / (size.width() - 1));
-        }
-
-        for (int row = 0; row < m_size.height(); row++) {
-            m_rows.push_back(qreal(row) / (size.height() - 1));
-        }
-    }
-
-    bool operator==(const Mesh &rhs) const {
-        return m_size == rhs.m_size &&
-                m_rows == rhs.m_rows &&
-                m_columns == rhs.m_columns &&
-                m_originalRect == rhs.m_originalRect &&
-                m_nodes == rhs.m_nodes;
-    }
-
-    void splitCurveHorizontally(Node &left, Node &right, qreal t, Node &newNode) {
-        using KisBezierUtils::deCasteljau;
-        using KisAlgebra2D::lerp;
-
-        QPointF p1, p2, p3, q1, q2;
-
-        deCasteljau(left.node, left.rightControl, right.leftControl, right.node, t,
-                    &p1, &p2, &p3, &q1, &q2);
-
-        left.rightControl = p1;
-        newNode.leftControl = p2;
-        newNode.node = p3;
-        newNode.rightControl = q1;
-        right.leftControl = q2;
-
-        newNode.topControl = newNode.node + lerp(left.topControl - left.node, right.topControl - right.node, t);
-        newNode.bottomControl = newNode.node + lerp(left.bottomControl - left.node, right.bottomControl - right.node, t);
-
-        lerpNodeData(left, right, t, newNode);
-    }
-
-    Node& node(int col, int row) {
-        return m_nodes[row * m_size.width() + col];
-    }
-
-    const Node& node(int col, int row) const {
-        return m_nodes[row * m_size.width() + col];
-    }
-
-    Node& node(const NodeIndex &index) {
-        return node(index.x(), index.y());
-    }
-
-    const Node& node(const NodeIndex &index) const {
-        return node(index.x(), index.y());
-    }
-
-    void splitCurveVertically(Node &top, Node &bottom, qreal t, Node &newNode) {
-        using KisBezierUtils::deCasteljau;
-        using KisAlgebra2D::lerp;
-
-        QPointF p1, p2, p3, q1, q2;
-
-        deCasteljau(top.node, top.bottomControl, bottom.topControl, bottom.node, t,
-                    &p1, &p2, &p3, &q1, &q2);
-
-        top.bottomControl = p1;
-        newNode.topControl = p2;
-        newNode.node = p3;
-        newNode.bottomControl = q1;
-        bottom.topControl = q2;
-
-        newNode.leftControl = newNode.node + lerp(top.leftControl - top.node, bottom.leftControl - bottom.node, t);
-        newNode.rightControl = newNode.node + lerp(top.rightControl - top.node, bottom.rightControl - bottom.node, t);
-
-        lerpNodeData(top, bottom, t, newNode);
-    }
-
-    void subdivideRow(qreal t) {
-        if (qFuzzyCompare(t, 0.0) || qFuzzyCompare(t, 1.0)) return;
-
-        KIS_SAFE_ASSERT_RECOVER_RETURN(t > 0.0 && t < 1.0);
-
-        const auto it = prev(upper_bound(m_rows.begin(), m_rows.end(), t));
-        const int topRow = distance(m_rows.begin(), it);
-        const qreal relT = (t - *it) / (*next(it) - *it);
-
-        subdivideRow(topRow, relT);
-    }
-
-    void subdivideRow(int topRow, qreal relT) {
-        const auto it = m_rows.begin() + topRow;
-        const int bottomRow = topRow + 1;
-        const qreal absT = KisAlgebra2D::lerp(*it, *next(it), relT);
-
-        std::vector<Node> newRow;
-        newRow.resize(m_size.width());
-        for (int col = 0; col < m_size.width(); col++) {
-            const qreal paramForCurve =
-                KisBezierUtils::curveParamByProportion(node(col, topRow).node,
-                                                       node(col, topRow).bottomControl,
-                                                       node(col, bottomRow).topControl,
-                                                       node(col, bottomRow).node,
-                                                       relT,
-                                                       0.01);
-
-            splitCurveVertically(node(col, topRow), node(col, bottomRow), paramForCurve, newRow[col]);
-        }
-
-        m_nodes.insert(m_nodes.begin() + bottomRow * m_size.width(),
-                       newRow.begin(), newRow.end());
-
-        m_size.rheight()++;
-        m_rows.insert(next(it), absT);
-    }
-
-    void subdivideColumn(qreal t) {
-        if (qFuzzyCompare(t, 0.0) || qFuzzyCompare(t, 1.0)) return;
-
-        KIS_SAFE_ASSERT_RECOVER_RETURN(t > 0.0 && t < 1.0);
-
-        const auto it = prev(upper_bound(m_columns.begin(), m_columns.end(), t));
-        const int leftColumn = distance(m_columns.begin(), it);
-
-        const qreal relT = (t - *it) / (*next(it) - *it);
-
-        subdivideColumn(leftColumn, relT);
-    }
-
-    void subdivideColumn(int leftColumn, qreal relT) {
-        const auto it = m_columns.begin() + leftColumn;
-        const int rightColumn = leftColumn + 1;
-        const qreal absT = KisAlgebra2D::lerp(*it, *next(it), relT);
-
-        std::vector<Node> newColumn;
-        newColumn.resize(m_size.height());
-        for (int row = 0; row < m_size.height(); row++) {
-            const qreal paramForCurve =
-                KisBezierUtils::curveParamByProportion(node(leftColumn, row).node,
-                                                       node(leftColumn, row).rightControl,
-                                                       node(rightColumn, row).leftControl,
-                                                       node(rightColumn, row).node,
-                                                       relT,
-                                                       0.01);
-
-            splitCurveHorizontally(node(leftColumn, row), node(rightColumn, row), paramForCurve, newColumn[row]);
-        }
-
-        auto dstIt = m_nodes.begin() + rightColumn;
-        for (auto columnIt = newColumn.begin(); columnIt != newColumn.end(); ++columnIt) {
-            dstIt = m_nodes.insert(dstIt, *columnIt);
-            dstIt += m_size.width() + 1;
-        }
-
-        m_size.rwidth()++;
-        m_columns.insert(next(it), absT);
-    }
-
-    void unlinkNodeHorizontally(Mesh::Node &left, const Mesh::Node &node, Mesh::Node &right)
-    {
-        std::tie(left.rightControl, right.leftControl) =
-            KisBezierUtils::removeBezierNode(left.node, left.rightControl,
-                                             node.leftControl, node.node, node.rightControl,
-                                             right.leftControl, right.node);
-    }
-
-    void unlinkNodeVertically(Mesh::Node &top, const Mesh::Node &node, Mesh::Node &bottom)
-    {
-        std::tie(top.bottomControl, bottom.topControl) =
-            KisBezierUtils::removeBezierNode(top.node, top.bottomControl,
-                                             node.topControl, node.node, node.bottomControl,
-                                             bottom.topControl, bottom.node);
-    }
-
-
-    void removeColumn(int column) {
-        const bool hasNeighbours = column > 0 || column < m_size.width() - 1;
-
-        if (hasNeighbours) {
-            for (int row = 0; row < m_size.height(); row++) {
-                unlinkNodeHorizontally(node(column - 1, row), node(column, row), node(column + 1, row));
-            }
-        }
-
-        auto it = m_nodes.begin() + column;
-        for (int row = 0; row < m_size.height(); row++) {
-            it = m_nodes.erase(it);
-            it += m_size.width() - 1;
-        }
-
-        m_size.rwidth()--;
-        m_columns.erase(m_columns.begin() + column);
-    }
-
-    void removeRow(int row) {
-        const bool hasNeighbours = row > 0 || row < m_size.height() - 1;
-
-        if (hasNeighbours) {
-            for (int column = 0; column < m_size.width(); column++) {
-                unlinkNodeVertically(node(column, row - 1), node(column, row), node(column, row + 1));
-            }
-        }
-
-        auto it = m_nodes.begin() + row * m_size.width();
-        m_nodes.erase(it, it + m_size.width());
-
-        m_size.rheight()--;
-        m_rows.erase(m_rows.begin() + row);
-    }
-
-    void removeColumnOrRow(NodeIndex index, bool row) {
-        if (row) {
-            removeRow(index.y());
-        } else {
-            removeColumn(index.x());
-        }
-    }
-
-    void subdivideSegment(SegmentIndex index, qreal proportion) {
-        auto it = find(index);
-        KIS_SAFE_ASSERT_RECOVER_RETURN(it != endSegments());
-
-        if (it.isHorizontal()) {
-            subdivideColumn(it.firstNodeIndex().x(), proportion);
-        } else {
-            subdivideRow(it.firstNodeIndex().y(), proportion);
-        }
-    }
-
-    Patch makePatch(const PatchIndex &index) const {
-        return makePatch(index.x(), index.y());
-    }
-
-    Patch makePatch(int col, int row) const
-    {
-        const Node &tl = node(col, row);
-        const Node &tr = node(col + 1, row);
-        const Node &bl = node(col, row + 1);
-        const Node &br = node(col + 1, row + 1);
-
-        Patch patch;
-
-        patch.points[Patch::TL] = tl.node;
-        patch.points[Patch::TL_HC] = tl.rightControl;
-        patch.points[Patch::TL_VC] = tl.bottomControl;
-
-        patch.points[Patch::TR] = tr.node;
-        patch.points[Patch::TR_HC] = tr.leftControl;
-        patch.points[Patch::TR_VC] = tr.bottomControl;
-
-        patch.points[Patch::BL] = bl.node;
-        patch.points[Patch::BL_HC] = bl.rightControl;
-        patch.points[Patch::BL_VC] = bl.topControl;
-
-        patch.points[Patch::BR] = br.node;
-        patch.points[Patch::BR_HC] = br.leftControl;
-        patch.points[Patch::BR_VC] = br.topControl;
-
-        const QRectF relRect(m_columns[col],
-                             m_rows[row],
-                             m_columns[col + 1] - m_columns[col],
-                             m_rows[row + 1] - m_rows[row]);
-
-        assignPatchData(&patch, KisAlgebra2D::relativeToAbsolute(relRect, m_originalRect),
-                        tl, tr, bl, br);
-
-        return patch;
-    }
-
+private:
     template<bool is_const>
     class segment_iterator_impl;
 
@@ -621,11 +326,6 @@ public:
         int m_col;
         int m_row;
     };
-
-    using patch_iterator = patch_iterator_impl<false>;
-    using patch_const_iterator = patch_iterator_impl<true>;
-
-
 
     template<bool is_const>
     class control_point_iterator_impl :
@@ -815,16 +515,11 @@ public:
         }
 
     private:
-
         MeshType* m_mesh;
         int m_col;
         int m_row;
         int m_controlIndex;
     };
-
-    using control_point_iterator = control_point_iterator_impl<false>;
-    using control_point_const_iterator = control_point_iterator_impl<true>;
-
 
     template<bool is_const>
     class segment_iterator_impl :
@@ -930,7 +625,7 @@ public:
         friend class boost::iterator_core_access;
 
         bool nodeIsValid() const {
-            return m_col < m_mesh->size().width() && m_row < m_mesh->size().height();
+            return m_col >= 0 && m_row >= 0 && m_col < m_mesh->size().width() && m_row < m_mesh->size().height();
         }
 
         bool controlIsValid() const {
@@ -993,79 +688,287 @@ public:
         int m_isHorizontal;
     };
 
+public:
+    Mesh()
+        : Mesh(QRectF(0.0, 0.0, 777.0, 666.0))
+    {
+    }
+
+    Mesh(const QRectF &mapRect, const QSize &size = QSize(2,2))
+        : m_size(size),
+          m_originalRect(mapRect)
+    {
+        const qreal xControlOffset = 0.2 * (mapRect.width() / size.width());
+        const qreal yControlOffset = 0.2 * (mapRect.height() / size.height());
+
+        for (int row = 0; row < m_size.height(); row++) {
+            const qreal yPos = qreal(row) / (size.height() - 1) * mapRect.height() + mapRect.y();
+
+            for (int col = 0; col < m_size.width(); col++) {
+                const qreal xPos = qreal(col) / (size.width() - 1) * mapRect.width() + mapRect.x();
+
+                Node node(QPointF(xPos, yPos));
+                node.setLeftControlRelative(QPointF(-xControlOffset, 0));
+                node.setRightControlRelative(QPointF(xControlOffset, 0));
+                node.setTopControlRelative(QPointF(0, -yControlOffset));
+                node.setBottomControlRelative(QPointF(0, yControlOffset));
+
+                m_nodes.push_back(node);
+            }
+        }
+
+        for (int col = 0; col < m_size.width(); col++) {
+            m_columns.push_back(qreal(col) / (size.width() - 1));
+        }
+
+        for (int row = 0; row < m_size.height(); row++) {
+            m_rows.push_back(qreal(row) / (size.height() - 1));
+        }
+    }
+
+    bool operator==(const Mesh &rhs) const {
+        return m_size == rhs.m_size &&
+                m_rows == rhs.m_rows &&
+                m_columns == rhs.m_columns &&
+                m_originalRect == rhs.m_originalRect &&
+                m_nodes == rhs.m_nodes;
+    }
+
+    Node& node(int col, int row) {
+        return m_nodes[row * m_size.width() + col];
+    }
+
+    const Node& node(int col, int row) const {
+        return m_nodes[row * m_size.width() + col];
+    }
+
+    Node& node(const NodeIndex &index) {
+        return node(index.x(), index.y());
+    }
+
+    const Node& node(const NodeIndex &index) const {
+        return node(index.x(), index.y());
+    }
+
+
+    void subdivideRow(qreal t) {
+        if (qFuzzyCompare(t, 0.0) || qFuzzyCompare(t, 1.0)) return;
+
+        KIS_SAFE_ASSERT_RECOVER_RETURN(t > 0.0 && t < 1.0);
+
+        const auto it = prev(upper_bound(m_rows.begin(), m_rows.end(), t));
+        const int topRow = distance(m_rows.begin(), it);
+        const qreal relT = (t - *it) / (*next(it) - *it);
+
+        subdivideRow(topRow, relT);
+    }
+
+    void subdivideRow(int topRow, qreal relT) {
+        const auto it = m_rows.begin() + topRow;
+        const int bottomRow = topRow + 1;
+        const qreal absT = KisAlgebra2D::lerp(*it, *next(it), relT);
+
+        std::vector<Node> newRow;
+        newRow.resize(m_size.width());
+        for (int col = 0; col < m_size.width(); col++) {
+            const qreal paramForCurve =
+                KisBezierUtils::curveParamByProportion(node(col, topRow).node,
+                                                       node(col, topRow).bottomControl,
+                                                       node(col, bottomRow).topControl,
+                                                       node(col, bottomRow).node,
+                                                       relT,
+                                                       0.01);
+
+            splitCurveVertically(node(col, topRow), node(col, bottomRow), paramForCurve, newRow[col]);
+        }
+
+        m_nodes.insert(m_nodes.begin() + bottomRow * m_size.width(),
+                       newRow.begin(), newRow.end());
+
+        m_size.rheight()++;
+        m_rows.insert(next(it), absT);
+    }
+
+    void subdivideColumn(qreal t) {
+        if (qFuzzyCompare(t, 0.0) || qFuzzyCompare(t, 1.0)) return;
+
+        KIS_SAFE_ASSERT_RECOVER_RETURN(t > 0.0 && t < 1.0);
+
+        const auto it = prev(upper_bound(m_columns.begin(), m_columns.end(), t));
+        const int leftColumn = distance(m_columns.begin(), it);
+
+        const qreal relT = (t - *it) / (*next(it) - *it);
+
+        subdivideColumn(leftColumn, relT);
+    }
+
+    void subdivideColumn(int leftColumn, qreal relT) {
+        const auto it = m_columns.begin() + leftColumn;
+        const int rightColumn = leftColumn + 1;
+        const qreal absT = KisAlgebra2D::lerp(*it, *next(it), relT);
+
+        std::vector<Node> newColumn;
+        newColumn.resize(m_size.height());
+        for (int row = 0; row < m_size.height(); row++) {
+            const qreal paramForCurve =
+                KisBezierUtils::curveParamByProportion(node(leftColumn, row).node,
+                                                       node(leftColumn, row).rightControl,
+                                                       node(rightColumn, row).leftControl,
+                                                       node(rightColumn, row).node,
+                                                       relT,
+                                                       0.01);
+
+            splitCurveHorizontally(node(leftColumn, row), node(rightColumn, row), paramForCurve, newColumn[row]);
+        }
+
+        auto dstIt = m_nodes.begin() + rightColumn;
+        for (auto columnIt = newColumn.begin(); columnIt != newColumn.end(); ++columnIt) {
+            dstIt = m_nodes.insert(dstIt, *columnIt);
+            dstIt += m_size.width() + 1;
+        }
+
+        m_size.rwidth()++;
+        m_columns.insert(next(it), absT);
+    }
+
+    void removeColumn(int column) {
+        const bool hasNeighbours = column > 0 || column < m_size.width() - 1;
+
+        if (hasNeighbours) {
+            for (int row = 0; row < m_size.height(); row++) {
+                unlinkNodeHorizontally(node(column - 1, row), node(column, row), node(column + 1, row));
+            }
+        }
+
+        auto it = m_nodes.begin() + column;
+        for (int row = 0; row < m_size.height(); row++) {
+            it = m_nodes.erase(it);
+            it += m_size.width() - 1;
+        }
+
+        m_size.rwidth()--;
+        m_columns.erase(m_columns.begin() + column);
+    }
+
+    void removeRow(int row) {
+        const bool hasNeighbours = row > 0 || row < m_size.height() - 1;
+
+        if (hasNeighbours) {
+            for (int column = 0; column < m_size.width(); column++) {
+                unlinkNodeVertically(node(column, row - 1), node(column, row), node(column, row + 1));
+            }
+        }
+
+        auto it = m_nodes.begin() + row * m_size.width();
+        m_nodes.erase(it, it + m_size.width());
+
+        m_size.rheight()--;
+        m_rows.erase(m_rows.begin() + row);
+    }
+
+    void removeColumnOrRow(NodeIndex index, bool row) {
+        if (row) {
+            removeRow(index.y());
+        } else {
+            removeColumn(index.x());
+        }
+    }
+
+    void subdivideSegment(SegmentIndex index, qreal proportion) {
+        auto it = find(index);
+        KIS_SAFE_ASSERT_RECOVER_RETURN(it != endSegments());
+
+        if (it.isHorizontal()) {
+            subdivideColumn(it.firstNodeIndex().x(), proportion);
+        } else {
+            subdivideRow(it.firstNodeIndex().y(), proportion);
+        }
+    }
+
+    Patch makePatch(const PatchIndex &index) const {
+        return makePatch(index.x(), index.y());
+    }
+
+    Patch makePatch(int col, int row) const
+    {
+        const Node &tl = node(col, row);
+        const Node &tr = node(col + 1, row);
+        const Node &bl = node(col, row + 1);
+        const Node &br = node(col + 1, row + 1);
+
+        Patch patch;
+
+        patch.points[Patch::TL] = tl.node;
+        patch.points[Patch::TL_HC] = tl.rightControl;
+        patch.points[Patch::TL_VC] = tl.bottomControl;
+
+        patch.points[Patch::TR] = tr.node;
+        patch.points[Patch::TR_HC] = tr.leftControl;
+        patch.points[Patch::TR_VC] = tr.bottomControl;
+
+        patch.points[Patch::BL] = bl.node;
+        patch.points[Patch::BL_HC] = bl.rightControl;
+        patch.points[Patch::BL_VC] = bl.topControl;
+
+        patch.points[Patch::BR] = br.node;
+        patch.points[Patch::BR_HC] = br.leftControl;
+        patch.points[Patch::BR_VC] = br.topControl;
+
+        const QRectF relRect(m_columns[col],
+                             m_rows[row],
+                             m_columns[col + 1] - m_columns[col],
+                             m_rows[row + 1] - m_rows[row]);
+
+        assignPatchData(&patch, KisAlgebra2D::relativeToAbsolute(relRect, m_originalRect),
+                        tl, tr, bl, br);
+
+        return patch;
+    }
+
+    using patch_iterator = patch_iterator_impl<false>;
+    using patch_const_iterator = patch_iterator_impl<true>;
+
+    using control_point_iterator = control_point_iterator_impl<false>;
+    using control_point_const_iterator = control_point_iterator_impl<true>;
+
     using segment_iterator = segment_iterator_impl<false>;
     using segment_const_iterator = segment_iterator_impl<true>;
 
-    patch_iterator beginPatches() {
-        return patch_iterator(this, 0, 0);
-    }
+    patch_iterator beginPatches() { return beginPatches(*this); }
+    patch_const_iterator beginPatches() const { return beginPatches(*this); }
+    patch_const_iterator constBeginPatches() const { return beginPatches(*this); }
 
-    patch_const_iterator beginPatches() const {
-        return patch_const_iterator(this, 0, 0);
-    }
-    patch_const_iterator constBeginPatches() const {
-        return patch_const_iterator(this, 0, 0);
-    }
+    patch_iterator endPatches() { return endPatches(*this); }
+    patch_const_iterator endPatches() const { return endPatches(*this); }
+    patch_const_iterator constEndPatches() const { return endPatches(*this); }
 
-    patch_iterator endPatches() {
-        return patch_iterator(this, 0, m_size.height() - 1);
-    }
+    control_point_iterator beginControlPoints() { return beginControlPoints(*this); }
+    control_point_const_iterator beginControlPoints() const { return beginControlPoints(*this); }
+    control_point_const_iterator constBeginControlPoints() const { return beginControlPoints(*this); }
 
-    patch_const_iterator endPatches() const {
-        return patch_const_iterator(this, 0, m_size.height() - 1);
-    }
+    control_point_iterator endControlPoints() { return endControlPoints(*this); }
+    control_point_const_iterator endControlPoints() const { return endControlPoints(*this); }
+    control_point_const_iterator constEndControlPoints() const { return endControlPoints(*this); }
 
-    patch_const_iterator constEndPatches() const {
-        return patch_const_iterator(this, 0, m_size.height() - 1);
-    }
+    segment_iterator beginSegments() { return beginSegments(*this); }
+    segment_const_iterator beginSegments() const { return beginSegments(*this); }
+    segment_const_iterator constBeginSegments() const { return beginSegments(*this); }
 
-    control_point_iterator beginControlPoints() {
-        return control_point_iterator(this, 0, 0, ControlType::RightControl);
-    }
+    segment_iterator endSegments() { return endSegments(*this); }
+    segment_const_iterator endSegments() const {  return endSegments(*this); }
+    segment_const_iterator constEndSegments() const { return endSegments(*this); }
 
-    control_point_const_iterator beginControlPoints() const {
-        return control_point_const_iterator(this, 0, 0, ControlType::RightControl);
-    }
+    control_point_iterator find(const ControlPointIndex &index) { return find(*this, index); }
+    control_point_const_iterator find(const ControlPointIndex &index) const { return find(*this, index); }
+    control_point_const_iterator constFind(const ControlPointIndex &index) const { return find(*this, index); }
 
-    control_point_const_iterator constBeginControlPoints() const {
-        return control_point_const_iterator(this, 0, 0, ControlType::RightControl);
-    }
+    segment_iterator find(const SegmentIndex &index) { return find(*this, index); }
+    segment_const_iterator find(const SegmentIndex &index) const { return find(*this, index); }
+    segment_const_iterator constFind(const SegmentIndex &index) const { return find(*this, index); }
 
-    control_point_iterator endControlPoints() {
-        return control_point_iterator(this, 0, m_size.height(), 0);
-    }
-
-    control_point_const_iterator endControlPoints() const {
-        return control_point_const_iterator(this, 0, m_size.height(), 0);
-    }
-
-    control_point_const_iterator constEndControlPoints() const {
-        return control_point_const_iterator(this, 0, m_size.height(), 0);
-    }
-
-    segment_iterator beginSegments() {
-        return segment_iterator(this, 0, 0, 0);
-    }
-
-    segment_const_iterator beginSegments() const {
-        return segment_const_iterator(this, 0, 0, 0);
-    }
-
-    segment_const_iterator constBeginSegments() const {
-        return segment_const_iterator(this, 0, 0, 0);
-    }
-
-    segment_iterator endSegments() {
-        return segment_iterator(this, 0, m_size.height(), 0);
-    }
-
-    segment_const_iterator endSegments() const {
-        return segment_const_iterator(this, 0, m_size.height(), 0);
-    }
-
-    segment_const_iterator constEndSegments() const {
-        return segment_const_iterator(this, 0, m_size.height(), 0);
-    }
+    patch_iterator find(const PatchIndex &index) { return find(*this, index); }
+    patch_const_iterator find(const PatchIndex &index) const { return find(*this, index); }
+    patch_const_iterator constFind(const PatchIndex &index) const { return find(*this, index); }
 
     QSize size() const {
         return m_size;
@@ -1104,25 +1007,6 @@ public:
         KIS_SAFE_ASSERT_RECOVER_RETURN(t.type() <= QTransform::TxScale);
         transform(t);
         m_originalRect = t.mapRect(m_originalRect);
-    }
-
-    ControlPointIndex hitTestPointImpl(const QPointF &pt, qreal distanceThreshold, bool onlyNodeMode) const {
-        const qreal distanceThresholdSq = pow2(distanceThreshold);
-
-        auto result = endControlPoints();
-        qreal minDistanceSq = std::numeric_limits<qreal>::max();
-
-        for (auto it = beginControlPoints(); it != endControlPoints(); ++it) {
-            if (onlyNodeMode != (it.type() == ControlType::Node)) continue;
-
-            const qreal distSq = kisSquareDistance(*it, pt);
-            if (distSq < minDistanceSq && distSq < distanceThresholdSq) {
-                result = it;
-                minDistanceSq = distSq;
-            }
-        }
-
-        return result.controlIndex();
     }
 
     ControlPointIndex hitTestNode(const QPointF &pt, qreal distanceThreshold) const {
@@ -1181,7 +1065,90 @@ public:
 
     }
 
+    template <typename T>
+    bool isIndexValid(const T &index) const {
+        return find(index).isValid();
+    }
 
+private:
+    void splitCurveHorizontally(Node &left, Node &right, qreal t, Node &newNode) {
+        using KisBezierUtils::deCasteljau;
+        using KisAlgebra2D::lerp;
+
+        QPointF p1, p2, p3, q1, q2;
+
+        deCasteljau(left.node, left.rightControl, right.leftControl, right.node, t,
+                    &p1, &p2, &p3, &q1, &q2);
+
+        left.rightControl = p1;
+        newNode.leftControl = p2;
+        newNode.node = p3;
+        newNode.rightControl = q1;
+        right.leftControl = q2;
+
+        newNode.topControl = newNode.node + lerp(left.topControl - left.node, right.topControl - right.node, t);
+        newNode.bottomControl = newNode.node + lerp(left.bottomControl - left.node, right.bottomControl - right.node, t);
+
+        lerpNodeData(left, right, t, newNode);
+    }
+
+    void splitCurveVertically(Node &top, Node &bottom, qreal t, Node &newNode) {
+        using KisBezierUtils::deCasteljau;
+        using KisAlgebra2D::lerp;
+
+        QPointF p1, p2, p3, q1, q2;
+
+        deCasteljau(top.node, top.bottomControl, bottom.topControl, bottom.node, t,
+                    &p1, &p2, &p3, &q1, &q2);
+
+        top.bottomControl = p1;
+        newNode.topControl = p2;
+        newNode.node = p3;
+        newNode.bottomControl = q1;
+        bottom.topControl = q2;
+
+        newNode.leftControl = newNode.node + lerp(top.leftControl - top.node, bottom.leftControl - bottom.node, t);
+        newNode.rightControl = newNode.node + lerp(top.rightControl - top.node, bottom.rightControl - bottom.node, t);
+
+        lerpNodeData(top, bottom, t, newNode);
+    }
+
+    void unlinkNodeHorizontally(Mesh::Node &left, const Mesh::Node &node, Mesh::Node &right)
+    {
+        std::tie(left.rightControl, right.leftControl) =
+            KisBezierUtils::removeBezierNode(left.node, left.rightControl,
+                                             node.leftControl, node.node, node.rightControl,
+                                             right.leftControl, right.node);
+    }
+
+    void unlinkNodeVertically(Mesh::Node &top, const Mesh::Node &node, Mesh::Node &bottom)
+    {
+        std::tie(top.bottomControl, bottom.topControl) =
+            KisBezierUtils::removeBezierNode(top.node, top.bottomControl,
+                                             node.topControl, node.node, node.bottomControl,
+                                             bottom.topControl, bottom.node);
+    }
+
+    ControlPointIndex hitTestPointImpl(const QPointF &pt, qreal distanceThreshold, bool onlyNodeMode) const {
+        const qreal distanceThresholdSq = pow2(distanceThreshold);
+
+        auto result = endControlPoints();
+        qreal minDistanceSq = std::numeric_limits<qreal>::max();
+
+        for (auto it = beginControlPoints(); it != endControlPoints(); ++it) {
+            if (onlyNodeMode != (it.type() == ControlType::Node)) continue;
+
+            const qreal distSq = kisSquareDistance(*it, pt);
+            if (distSq < minDistanceSq && distSq < distanceThresholdSq) {
+                result = it;
+                minDistanceSq = distSq;
+            }
+        }
+
+        return result.controlIndex();
+    }
+
+private:
     template <class MeshType,
               class IteratorType = control_point_iterator_impl<std::is_const<MeshType>::value>>
     static
@@ -1206,45 +1173,46 @@ public:
         return it.isValid() ? it : mesh.endPatches();
     }
 
-    control_point_iterator find(const ControlPointIndex &index) {
-        return find(*this, index);
+    template <class MeshType,
+              class IteratorType = patch_iterator_impl<std::is_const<MeshType>::value>>
+    static
+    IteratorType beginPatches(MeshType &mesh) {
+        return IteratorType(&mesh, 0, 0);
     }
 
-    control_point_const_iterator find(const ControlPointIndex &index) const {
-        return find(*this, index);
+    template <class MeshType,
+              class IteratorType = patch_iterator_impl<std::is_const<MeshType>::value>>
+    static
+    IteratorType endPatches(MeshType &mesh) {
+        return IteratorType(&mesh, 0, mesh.m_size.height() - 1);
     }
 
-    control_point_const_iterator constFind(const ControlPointIndex &index) const {
-        return find(*this, index);
+    template <class MeshType,
+              class IteratorType = control_point_iterator_impl<std::is_const<MeshType>::value>>
+    static
+    IteratorType beginControlPoints(MeshType &mesh) {
+        return IteratorType(&mesh, 0, 0, ControlType::RightControl);
     }
 
-    segment_iterator find(const SegmentIndex &index) {
-        return find(*this, index);
+    template <class MeshType,
+              class IteratorType = control_point_iterator_impl<std::is_const<MeshType>::value>>
+    static
+    IteratorType endControlPoints(MeshType &mesh) {
+        return IteratorType(&mesh, 0, mesh.m_size.height(), 0);
     }
 
-    segment_const_iterator find(const SegmentIndex &index) const {
-        return find(*this, index);
+    template <class MeshType,
+              class IteratorType = segment_iterator_impl<std::is_const<MeshType>::value>>
+    static
+    IteratorType beginSegments(MeshType &mesh) {
+        return IteratorType(&mesh, 0, 0, 0);
     }
 
-    segment_const_iterator constFind(const SegmentIndex &index) const {
-        return find(*this, index);
-    }
-
-    patch_iterator find(const PatchIndex &index) {
-        return find(*this, index);
-    }
-
-    patch_const_iterator find(const PatchIndex &index) const {
-        return find(*this, index);
-    }
-
-    patch_const_iterator constFind(const PatchIndex &index) const {
-        return find(*this, index);
-    }
-
-    template <typename T>
-    bool isIndexValid(const T &index) const {
-        return find(index).isValid();
+    template <class MeshType,
+              class IteratorType = segment_iterator_impl<std::is_const<MeshType>::value>>
+    static
+    IteratorType endSegments(MeshType &mesh) {
+        return IteratorType(&mesh, 0, mesh.m_size.height(), 0);
     }
 
 protected:

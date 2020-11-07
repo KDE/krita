@@ -81,7 +81,7 @@ public:
             m_name = converter(entry);
         }
 
-        TEntry* data() const {
+        TEntry *data() const {
             return m_data.data();
         }
 

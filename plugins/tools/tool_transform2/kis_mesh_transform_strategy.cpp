@@ -429,11 +429,6 @@ bool KisMeshTransformStrategy::shouldDeleteNode(qreal distance, qreal param)
 
 }
 
-namespace {
-
-}
-
-
 bool KisMeshTransformStrategy::beginPrimaryAction(const QPointF &pt)
 {
     // retval shows if the stroke may have a continuation

@@ -134,7 +134,7 @@
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
-    </Action>
+    </Action>    
     <Action name="save_incremental_version">
       <icon></icon>
       <text>Save Incremental &amp;Version</text>
@@ -1584,6 +1584,18 @@
       <whatsThis></whatsThis>
       <toolTip>Show Dockers</toolTip>
       <iconText>Show Dockers</iconText>
+      <activationFlags>0</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>true</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="view_toggledockertitlebars">
+      <icon></icon>
+      <text>Sho&amp;w Docker Titlebars</text>
+      <whatsThis></whatsThis>
+      <toolTip>Show Docker Titlebars</toolTip>
+      <iconText>Show Docker Titlebars</iconText>
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>

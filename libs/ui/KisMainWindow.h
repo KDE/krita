@@ -406,6 +406,10 @@ private Q_SLOTS:
      */
     void slotToolbarToggled(bool toggle);
 
+    /**
+     * Toggle docker titlebars on/off.
+     */
+    void showDockerTitleBars(bool show);
 
     /**
      * File --> Import

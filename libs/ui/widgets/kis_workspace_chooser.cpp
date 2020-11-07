@@ -37,6 +37,8 @@
 #include <KoResource.h>
 #include <KisResourceModel.h>
 #include <KisResourceServerProvider.h>
+#include <KoDockWidgetTitleBar.h>
+#include <KisMainWindow.h>
 
 #include "kis_workspace_resource.h"
 #include "KisViewManager.h"

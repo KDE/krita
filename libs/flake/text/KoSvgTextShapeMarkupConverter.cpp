@@ -1037,7 +1037,6 @@ QString KoSvgTextShapeMarkupConverter::style(QTextCharFormat format,
         }
 
         if (propertyId == QTextCharFormat::FontCapitalization) {
-            QString val;
             if (format.fontCapitalization() == QFont::SmallCaps){
                 c.append("font-variant").append(":")
                         .append("small-caps");

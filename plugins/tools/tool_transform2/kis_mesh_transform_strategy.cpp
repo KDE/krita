@@ -551,7 +551,7 @@ void KisMeshTransformStrategy::continuePrimaryAction(const QPointF &pt, bool shi
 
         *m_d->currentArgs.meshTransform() = m_d->initialMeshState;
 
-        auto patchIt = m_d->currentArgs.meshTransform()->findPatch(*m_d->hoveredPatch);
+        auto patchIt = m_d->currentArgs.meshTransform()->find(*m_d->hoveredPatch);
 
         const QPointF offset = pt - m_d->mouseClickPos;
 

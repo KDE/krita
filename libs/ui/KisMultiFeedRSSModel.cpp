@@ -99,11 +99,11 @@ bool sortForPubDate(const RssItem& item1, const RssItem& item2)
 
 void MultiFeedRssModel::appendFeedData(QNetworkReply *reply)
 {
+    beginResetModel();
     KisRssReader reader;
     m_aggregatedFeed.append(reader.parse(reply));
     sortAggregatedFeed();
     setArticleCount(m_aggregatedFeed.size());
-    beginResetModel();
     endResetModel();
 
     emit feedDataChanged();
@@ -122,15 +122,20 @@ void MultiFeedRssModel::initialize()
 
 void MultiFeedRssModel::removeFeed(const QString &feed)
 {
-    QMutableListIterator<RssItem> it(m_aggregatedFeed);
-    while (it.hasNext()) {
-        RssItem item = it.next();
-        if (item.source == feed)
-            it.remove();
-    }
-    setArticleCount(m_aggregatedFeed.size());
+    bool isRemoved = m_sites.removeOne(feed);
+    if (isRemoved) {
+        beginResetModel();
+        QMutableListIterator<RssItem> it(m_aggregatedFeed);
+        while (it.hasNext()) {
+            RssItem item = it.next();
+            if (item.source == feed)
+                it.remove();
+        }
+        setArticleCount(m_aggregatedFeed.size());
+        endResetModel();
 
-    m_sites.removeOne(feed);
+        emit feedDataChanged();
+    }
 }
 
 int MultiFeedRssModel::rowCount(const QModelIndex &) const

@@ -16,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef TOOLPRESETS_H
-#define TOOLPRESETS_H
+#ifndef TOOLPRESET_DOCKER_H
+#define TOOLPRESET_DOCKER_H
 
 #include <QDockWidget>
 #include <kis_mainwindow_observer.h>

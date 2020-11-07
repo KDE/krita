@@ -1,6 +1,6 @@
 set(KRITA_TOOLPRESETSDOCKER_SOURCES 
     ToolPresetsPlugin.cpp 
-    ToolPresets.cpp 
+    ToolPresetDocker.cpp 
     ToolPresetModel.cpp
 )
 

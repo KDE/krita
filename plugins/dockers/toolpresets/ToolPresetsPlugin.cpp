@@ -30,7 +30,7 @@
 #include <kis_action.h>
 #include <kis_config.h>
 
-#include "ToolPresets.h"
+#include "ToolPresetDocker.h"
 
 K_PLUGIN_FACTORY_WITH_JSON(ToolPresetsPluginFactory, "krita_toolpresets.json", registerPlugin<ToolPresetsPlugin>();)
 

@@ -15,7 +15,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "ToolPresets.h"
+#include "ToolPresetDocker.h"
 
 #include <QApplication>
 #include <QAction>
@@ -52,7 +52,6 @@
 #include <kis_categorized_list_view.h>
 #include <kis_categorized_item_delegate.h>
 
-#include "ToolPresets.h"
 #include "ToolPresetModel.h"
 
 

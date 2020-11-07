@@ -153,11 +153,9 @@ void KisCategorizedListView::mousePressEvent(QMouseEvent* event)
         }
     }
 
-
-
-    if(event->button() == Qt::RightButton){
+    if (event->button() == Qt::RightButton){
         QMenu menu(this);
-        if(index.data(__CategorizedListModelBase::isLockableRole).toBool() && index.isValid()) {
+        if (index.data(__CategorizedListModelBase::isLockableRole).toBool() && index.isValid()) {
 
             bool locked = index.data(__CategorizedListModelBase::isLockedRole).toBool();
 
@@ -167,7 +165,7 @@ void KisCategorizedListView::mousePressEvent(QMouseEvent* event)
 
             connect(action1, SIGNAL(triggered()), this, SIGNAL(rightClickedMenuDropSettingsTriggered()));
 
-            if (locked){
+            if (locked) {
                 QAction* action2 = menu.addAction(icon, i18n("Unlock (keep current settings)"));
                 connect(action2, SIGNAL(triggered()), this, SIGNAL(rightClickedMenuSaveSettingsTriggered()));
             }

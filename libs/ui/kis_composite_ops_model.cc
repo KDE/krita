@@ -101,7 +101,6 @@ bool KisCompositeOpListModel::setData(const QModelIndex& idx, const QVariant& va
     DataItem *item = categoriesMapper()->itemFromRow(idx.row());
     Q_ASSERT(item);
 
-
     if(role == Qt::CheckStateRole) {
         if (item->isChecked()) {
             addFavoriteEntry(*item->data());
@@ -119,7 +118,7 @@ QVariant KisCompositeOpListModel::data(const QModelIndex& idx, int role) const
 {
     if (!idx.isValid()) return QVariant();
 
-    if(role == Qt::DecorationRole) {
+    if (role == Qt::DecorationRole) {
         DataItem *item = categoriesMapper()->itemFromRow(idx.row());
         Q_ASSERT(item);
 

@@ -82,9 +82,6 @@ public:
         connect(&m_mapper, SIGNAL(endInsertRow()), SLOT(slotEndInsertRow()));
         connect(&m_mapper, SIGNAL(beginRemoveRow(int)), SLOT(slotBeginRemoveRow(int)));
         connect(&m_mapper, SIGNAL(endRemoveRow()), SLOT(slotEndRemoveRow()));
-
-
-
     }
 
     int rowCount(const QModelIndex& parent) const override {

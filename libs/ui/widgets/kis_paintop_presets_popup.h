@@ -26,15 +26,34 @@
 #include <KoID.h>
 #include <kis_types.h>
 #include <brushengine/kis_paintop_factory.h>
-#include "../kis_paint_ops_model.h"
 #include <kis_action.h>
-#include <widgets/kis_paintop_presets_save.h>
-#include "widgets/kis_paintop_presets_popup.h"
+#include "widgets/kis_paintop_presets_save.h"
 #include "kis_favorite_resource_manager.h"
 
 class QString;
 class KisCanvasResourceProvider;
 class KoResource;
+
+struct KRITAUI_EXPORT KisPaintOpInfo
+{
+    KisPaintOpInfo() { }
+    KisPaintOpInfo(const QString& _id, const QString& _name, const QString& _category, const QIcon& _icon, qint32 _priority):
+        id(_id),  name(_name), category(_category), icon(_icon), priority(_priority) { }
+
+    KisPaintOpInfo(const QString& _id):
+        id(_id) { }
+
+    bool operator==(const KisPaintOpInfo info) const{
+        return (info.id == id);
+    }
+
+    QString id;
+    QString name;
+    QString category;
+    QIcon icon;
+    qint32  priority;
+};
+
 
 /**
  * Popup widget for presets with built-in functionality

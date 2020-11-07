@@ -75,7 +75,6 @@
 #include "widgets/kis_paintop_presets_popup.h"
 #include "widgets/kis_paintop_presets_chooser_popup.h"
 #include "widgets/kis_workspace_chooser.h"
-#include "widgets/kis_paintop_list_widget.h"
 #include "kis_slider_spin_box.h"
 #include "widgets/kis_multipliers_double_slider_spinbox.h"
 #include "widgets/kis_cmb_composite.h"

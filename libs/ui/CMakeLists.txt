@@ -105,7 +105,6 @@ set(kritaui_LIB_SRCS
     KisOcioConfiguration.cpp
     kis_control_frame.cpp
     kis_composite_ops_model.cc
-    kis_paint_ops_model.cpp
     kis_custom_pattern.cc
     kis_file_layer.cpp
     kis_change_file_layer_command.h
@@ -220,7 +219,6 @@ set(kritaui_LIB_SRCS
     widgets/kis_cmb_composite.cc
     widgets/kis_cmb_contour.cpp
     widgets/kis_cmb_gradient.cpp
-    widgets/kis_paintop_list_widget.cpp
     widgets/kis_cmb_idlist.cc
     widgets/kis_color_space_selector.cc
     widgets/kis_advanced_color_space_selector.cc

@@ -751,74 +751,74 @@ public:
     }
 
 
-    void subdivideRow(qreal t) {
-        if (qFuzzyCompare(t, 0.0) || qFuzzyCompare(t, 1.0)) return;
+    void subdivideRow(qreal proportionalT) {
+        if (qFuzzyCompare(proportionalT, 0.0) || qFuzzyCompare(proportionalT, 1.0)) return;
 
-        KIS_SAFE_ASSERT_RECOVER_RETURN(t > 0.0 && t < 1.0);
+        KIS_SAFE_ASSERT_RECOVER_RETURN(proportionalT > 0.0 && proportionalT < 1.0);
 
-        const auto it = prev(upper_bound(m_rows.begin(), m_rows.end(), t));
+        const auto it = prev(upper_bound(m_rows.begin(), m_rows.end(), proportionalT));
         const int topRow = distance(m_rows.begin(), it);
-        const qreal relT = (t - *it) / (*next(it) - *it);
+        const qreal relT = (proportionalT - *it) / (*next(it) - *it);
 
         subdivideRow(topRow, relT);
     }
 
-    void subdivideRow(int topRow, qreal relT) {
+    void subdivideRow(int topRow, qreal relProportionalT) {
         const auto it = m_rows.begin() + topRow;
         const int bottomRow = topRow + 1;
-        const qreal absT = KisAlgebra2D::lerp(*it, *next(it), relT);
+        const qreal absProportionalT = KisAlgebra2D::lerp(*it, *next(it), relProportionalT);
 
         std::vector<Node> newRow;
         newRow.resize(m_size.width());
         for (int col = 0; col < m_size.width(); col++) {
-            const qreal paramForCurve =
+            const qreal t =
                 KisBezierUtils::curveParamByProportion(node(col, topRow).node,
                                                        node(col, topRow).bottomControl,
                                                        node(col, bottomRow).topControl,
                                                        node(col, bottomRow).node,
-                                                       relT,
+                                                       relProportionalT,
                                                        0.01);
 
-            splitCurveVertically(node(col, topRow), node(col, bottomRow), paramForCurve, newRow[col]);
+            splitCurveVertically(node(col, topRow), node(col, bottomRow), t, newRow[col]);
         }
 
         m_nodes.insert(m_nodes.begin() + bottomRow * m_size.width(),
                        newRow.begin(), newRow.end());
 
         m_size.rheight()++;
-        m_rows.insert(next(it), absT);
+        m_rows.insert(next(it), absProportionalT);
     }
 
-    void subdivideColumn(qreal t) {
-        if (qFuzzyCompare(t, 0.0) || qFuzzyCompare(t, 1.0)) return;
+    void subdivideColumn(qreal proportionalT) {
+        if (qFuzzyCompare(proportionalT, 0.0) || qFuzzyCompare(proportionalT, 1.0)) return;
 
-        KIS_SAFE_ASSERT_RECOVER_RETURN(t > 0.0 && t < 1.0);
+        KIS_SAFE_ASSERT_RECOVER_RETURN(proportionalT > 0.0 && proportionalT < 1.0);
 
-        const auto it = prev(upper_bound(m_columns.begin(), m_columns.end(), t));
+        const auto it = prev(upper_bound(m_columns.begin(), m_columns.end(), proportionalT));
         const int leftColumn = distance(m_columns.begin(), it);
 
-        const qreal relT = (t - *it) / (*next(it) - *it);
+        const qreal relT = (proportionalT - *it) / (*next(it) - *it);
 
         subdivideColumn(leftColumn, relT);
     }
 
-    void subdivideColumn(int leftColumn, qreal relT) {
+    void subdivideColumn(int leftColumn, qreal relProportionalT) {
         const auto it = m_columns.begin() + leftColumn;
         const int rightColumn = leftColumn + 1;
-        const qreal absT = KisAlgebra2D::lerp(*it, *next(it), relT);
+        const qreal absProportinalT = KisAlgebra2D::lerp(*it, *next(it), relProportionalT);
 
         std::vector<Node> newColumn;
         newColumn.resize(m_size.height());
         for (int row = 0; row < m_size.height(); row++) {
-            const qreal paramForCurve =
+            const qreal t =
                 KisBezierUtils::curveParamByProportion(node(leftColumn, row).node,
                                                        node(leftColumn, row).rightControl,
                                                        node(rightColumn, row).leftControl,
                                                        node(rightColumn, row).node,
-                                                       relT,
+                                                       relProportionalT,
                                                        0.01);
 
-            splitCurveHorizontally(node(leftColumn, row), node(rightColumn, row), paramForCurve, newColumn[row]);
+            splitCurveHorizontally(node(leftColumn, row), node(rightColumn, row), t, newColumn[row]);
         }
 
         auto dstIt = m_nodes.begin() + rightColumn;
@@ -828,7 +828,7 @@ public:
         }
 
         m_size.rwidth()++;
-        m_columns.insert(next(it), absT);
+        m_columns.insert(next(it), absProportinalT);
     }
 
     void removeColumn(int column) {
@@ -874,14 +874,14 @@ public:
         }
     }
 
-    void subdivideSegment(SegmentIndex index, qreal proportion) {
+    void subdivideSegment(SegmentIndex index, qreal proportionalT) {
         auto it = find(index);
         KIS_SAFE_ASSERT_RECOVER_RETURN(it != endSegments());
 
         if (it.isHorizontal()) {
-            subdivideColumn(it.firstNodeIndex().x(), proportion);
+            subdivideColumn(it.firstNodeIndex().x(), proportionalT);
         } else {
-            subdivideRow(it.firstNodeIndex().y(), proportion);
+            subdivideRow(it.firstNodeIndex().y(), proportionalT);
         }
     }
 

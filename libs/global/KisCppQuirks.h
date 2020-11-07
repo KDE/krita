@@ -45,6 +45,13 @@ inline reverse_iterator<BidirectionalIterator> make_reverse_iterator(Bidirection
 template< bool B, class T = void >
 using enable_if_t = typename enable_if<B,T>::type;
 
+template< bool B, class T, class F >
+using conditional_t = typename conditional<B,T,F>::type;
+
+template< class T >
+using add_const_t    = typename add_const<T>::type;
+
+
 #endif
 
 // from C++17
@@ -54,7 +61,25 @@ using enable_if_t = typename enable_if<B,T>::type;
 template<typename...>
 using void_t = void;
 
+template <class T>
+constexpr std::add_const_t<T>& as_const(T& t) noexcept
+{
+    return t;
+}
+
+template <class T>
+void as_const(const T&&) = delete;
+
 #endif
+
+template <bool is_const, class T>
+struct add_const_if
+{
+    using type = std::conditional_t<is_const, std::add_const_t<T>, T>;
+};
+
+template <bool is_const, class T>
+using add_const_if_t = typename add_const_if<is_const, T>::type;
 
 }
 

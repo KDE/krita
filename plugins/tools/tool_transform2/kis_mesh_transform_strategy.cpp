@@ -129,33 +129,33 @@ void KisMeshTransformStrategy::setTransformFunction(const QPointF &mousePos, boo
 
 
     {
-        auto controlIt = m_d->currentArgs.meshTransform()->hitTestControlPoint(mousePos, grabRadius);
-        if (controlIt != m_d->currentArgs.meshTransform()->endControlPoints()) {
-            hoveredControl = controlIt.controlIndex();
+        auto index = m_d->currentArgs.meshTransform()->hitTestControlPoint(mousePos, grabRadius);
+        if (m_d->currentArgs.meshTransform()->isIndexValid(index)) {
+            hoveredControl = index;
             mode = Private::OVER_POINT;
         }
     }
 
     if (mode == Private::NOTHING) {
-        auto nodeIt = m_d->currentArgs.meshTransform()->hitTestNode(mousePos, grabRadius);
-        if (nodeIt != m_d->currentArgs.meshTransform()->endControlPoints()) {
-            hoveredControl = nodeIt.controlIndex();
+        auto index = m_d->currentArgs.meshTransform()->hitTestNode(mousePos, grabRadius);
+        if (m_d->currentArgs.meshTransform()->isIndexValid(index)) {
+            hoveredControl = index;
             mode = Private::OVER_POINT;
         }
     }
 
     if (mode == Private::NOTHING) {
-        auto segmentIt = m_d->currentArgs.meshTransform()->hitTestSegment(mousePos, grabRadius, &localSegmentPos);
-        if (segmentIt != m_d->currentArgs.meshTransform()->endSegments()) {
-            hoveredSegment = segmentIt.segmentIndex();
+        auto index = m_d->currentArgs.meshTransform()->hitTestSegment(mousePos, grabRadius, &localSegmentPos);
+        if (m_d->currentArgs.meshTransform()->isIndexValid(index)) {
+            hoveredSegment = index;
             mode = Private::OVER_SEGMENT;
         }
     }
 
     if (mode == Private::NOTHING) {
-        auto patchIt = m_d->currentArgs.meshTransform()->hitTestPatch(mousePos, &localPatchPos);
-        if (patchIt != m_d->currentArgs.meshTransform()->endPatches()) {
-            hoveredPatch = patchIt.patchIndex();
+        auto index = m_d->currentArgs.meshTransform()->hitTestPatch(mousePos, &localPatchPos);
+        if (m_d->currentArgs.meshTransform()->isIndexValid(index)) {
+            hoveredPatch = index;
             mode = Private::OVER_PATCH;
         }
     }

@@ -41,6 +41,8 @@ private Q_SLOTS:
     void testIsIdentity();
 
     void testSerialization();
+
+    void testIteratorConstness();
 };
 
 #endif /* __KIS_MESH_TRANSFORM_WORKER_TEST_H */

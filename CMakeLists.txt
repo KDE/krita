@@ -2,12 +2,14 @@ project(krita)
 
 message(STATUS "Using CMake version: ${CMAKE_VERSION}")
 
-cmake_minimum_required(VERSION 3.0.0 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
 
 set(MIN_QT_VERSION 5.9.0)
 set(MIN_FRAMEWORKS_VERSION 5.44.0)
+set(Boost_MINIMUM_VERSION "1.70")
+set(LIBRAW_MIN_VERSION  "0.16")
 
-set( CMAKE_CXX_STANDARD 11 )
+set( CMAKE_CXX_STANDARD 17 )
 set( CMAKE_CXX_STANDARD_REQUIRED ON )
 
 
@@ -263,7 +265,7 @@ endif(MINGW)
 #########################
 ########################
 
-find_package(ECM 5.22 REQUIRED NOMODULE)
+find_package(ECM ${MIN_FRAMEWORKS_VERSION} REQUIRED NOMODULE)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
 include(ECMOptionalAddSubdirectory)
 include(ECMAddAppIcon)
@@ -577,8 +579,8 @@ if (APPLE)
 endif()
 
 add_definitions(-DBOOST_ALL_NO_LIB)
-find_package(Boost 1.55 REQUIRED COMPONENTS system)
-include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
+find_package(Boost ${Boost_MINIMUM_VERSION} MODULE REQUIRED)
+include_directories(SYSTEM Boost::boost)
 ##
 ## Test for GNU Scientific Library
 ##
@@ -678,7 +680,6 @@ set_package_properties(OpenJPEG PROPERTIES
     TYPE OPTIONAL
     PURPOSE "Required by the Krita JP2000 filter")
 
-set(LIBRAW_MIN_VERSION  "0.16")
 find_package(LibRaw ${LIBRAW_MIN_VERSION})
 set_package_properties(LibRaw PROPERTIES
     DESCRIPTION "Library to decode RAW images"

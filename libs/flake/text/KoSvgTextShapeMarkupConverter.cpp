@@ -1057,8 +1057,10 @@ QString KoSvgTextShapeMarkupConverter::style(QTextCharFormat format,
                     .append(format.properties()[propertyId].toString());
         }
         if (propertyId == QTextCharFormat::FontKerning) {
-            QString val = "normal";
-            if(!format.fontKerning()) {
+            QString val;
+            if (format.fontKerning()) {
+                val = "auto";
+            } else {
                 val = "0";
             }
             c.append("kerning").append(":")
@@ -1281,7 +1283,7 @@ QVector<QTextFormat> KoSvgTextShapeMarkupConverter::stylesFromString(QStringList
             }
 
             if (property == "kerning") {
-                if (value=="normal") {
+                if (value == "auto") {
                     charFormat.setFontKerning(true);
                 } else {
                     qreal val = SvgUtil::parseUnitX(context.data(), value);

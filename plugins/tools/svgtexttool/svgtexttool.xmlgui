@@ -57,6 +57,8 @@
       <Action name="svg_align_center"/>
       <Action name="svg_align_right"/>
       <!--Action name="svg_align_justified"/-->
+      <Separator/>
+      <Action name="svg_font_kerning"/>
     </Menu>
     <Menu name="settings">
       <text>Setti&amp;ngs</text>
@@ -94,6 +96,7 @@
     <Action name="svg_align_right"/>
     <Action name="svg_line_height"/>
     <Action name="svg_letter_spacing"/>
+    <Action name="svg_font_kerning"/>
   </ToolBar>
   
   

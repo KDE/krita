@@ -122,6 +122,7 @@ private Q_SLOTS:
     void setFont(const QString &fontName);
     void setFontSize(qreal size);
     void setBaseline(KoSvgText::BaselineShiftMode baseline);
+    void setKerning(bool enable);
 
     void setSettings();
     void slotToolbarToggled(bool);

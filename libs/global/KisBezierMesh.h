@@ -122,8 +122,33 @@ class Mesh : public boost::equality_comparable<Mesh<NodeArg, PatchArg>>
 public:
     using Node = NodeArg;
     using Patch = PatchArg;
-    using PatchIndex = QPoint;
-    using NodeIndex = QPoint;
+
+    struct PatchIndex : public QPoint, boost::additive<PatchIndex, QPoint>
+    {
+        using QPoint::QPoint;
+        PatchIndex& operator+=(const QPoint &rhs) {
+            QPoint::operator+=(rhs);
+            return *this;
+        }
+        PatchIndex& operator-=(const QPoint &rhs) {
+            QPoint::operator-=(rhs);
+            return *this;
+        }
+    };
+
+    struct NodeIndex : public QPoint, boost::additive<NodeIndex, QPoint>
+    {
+        using QPoint::QPoint;
+        NodeIndex& operator+=(const QPoint &rhs) {
+            QPoint::operator+=(rhs);
+            return *this;
+        }
+        NodeIndex& operator-=(const QPoint &rhs) {
+            QPoint::operator-=(rhs);
+            return *this;
+        }
+    };
+
     using SegmentIndex = std::pair<NodeIndex, int>;
 
     struct ControlPointIndex : public boost::equality_comparable<ControlPointIndex>
@@ -1078,7 +1103,7 @@ public:
         return it.isValid() ? it : endSegments();
     }
 
-    patch_iterator findPatch(const PatchIndex &index) {
+    patch_iterator find(const PatchIndex &index) {
         patch_iterator it(this, index.x(), index.y());
         return it.isValid() ? it : endPatches();
     }

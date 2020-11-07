@@ -56,8 +56,6 @@ void KisDialogStateSaver::saveState(QWidget *parent, const QString &dialogName, 
 
     Q_FOREACH(QWidget *widget, parent->findChildren<QWidget*>(QString())) {
 
-        qDebug() << "\twidget" << widget << widget->objectName();
-
         if (!widget->objectName().isEmpty() ) {
             if (qobject_cast<KisIntParseSpinBox*>(widget)) {
                 group.writeEntry(widget->objectName(), qobject_cast<KisIntParseSpinBox*>(widget)->value());
@@ -101,11 +99,11 @@ void KisDialogStateSaver::saveState(QWidget *parent, const QString &dialogName, 
             }
 
             else {
-                warnWidgetUtils << "Cannot save state for object" << widget;
+                //warnWidgetUtils << "Cannot save state for object" << widget;
             }
         }
         else if (!qobject_cast<QLabel*>(widget)) {
-           warnWidgetUtils << "Widget" << dialogName << "has a widget without an objectname:" << widget;
+           //warnWidgetUtils << "Widget" << dialogName << "has a widget without an objectname:" << widget;
         }
     }
 }
@@ -178,11 +176,9 @@ void KisDialogStateSaver::restoreState(QWidget *parent, const QString &dialogNam
             }
             else if (qobject_cast<QComboBox*>(widget)) {
                 if (defaultValue.isValid()) {
-                    qDebug() << "defaultValue";
                     qobject_cast<QComboBox*>(widget)->setCurrentIndex(defaultValue.toInt());
                 }
                 else {
-                    qDebug() << "setting index to " << group.readEntry<int>(widgetName, -1);
                     qobject_cast<QComboBox*>(widget)->setCurrentIndex(group.readEntry<int>(widgetName, qobject_cast<QComboBox*>(widget)->currentIndex()));
                 }
             }
@@ -243,11 +239,11 @@ void KisDialogStateSaver::restoreState(QWidget *parent, const QString &dialogNam
             }
 
             else {
-                warnWidgetUtils << "Cannot restore state for object" << widget;
+                //warnWidgetUtils << "Cannot restore state for object" << widget;
             }
         }
         else if (!qobject_cast<QLabel*>(widget)) {
-            warnWidgetUtils << "Dialog" << dialogName << "has a widget without an object name:" << widget;
+            //warnWidgetUtils << "Dialog" << dialogName << "has a widget without an object name:" << widget;
         }
     }
 }

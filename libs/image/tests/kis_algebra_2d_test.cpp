@@ -300,17 +300,17 @@ void KisAlgebra2DTest::testNullRectProcessing()
     // rotate
     QTransform rot;
     rot.rotate(90);
-    QCOMPARE(rot.mapRect(lineRect), QRect(-10, 10, 0, 100));
+    QCOMPARE(rot.mapRect(lineRect), QRectF(-10, 10, 0, 100));
 
     // shear-x
     QTransform shearX;
     shearX.shear(2.0, 0.0);
-    QCOMPARE(shearX.mapRect(lineRect), QRect(30, 10, 100, 0));
+    QCOMPARE(shearX.mapRect(lineRect), QRectF(30, 10, 100, 0));
 
     // shear-y
     QTransform shearY;
     shearY.shear(0.0, 2.0);
-    QCOMPARE(shearY.mapRect(lineRect), QRect(10, 30, 100, 200));
+    QCOMPARE(shearY.mapRect(lineRect), QRectF(10, 30, 100, 200));
 
     /// binary operations
 

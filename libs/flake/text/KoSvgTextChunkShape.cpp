@@ -911,7 +911,9 @@ KoSvgText::KoSvgCharChunkFormat KoSvgTextChunkShape::fetchCharFormat() const
     }
 
     KoSvgText::AutoValue kerning = s->properties.propertyOrDefault(KoSvgTextProperties::KerningId).value<KoSvgText::AutoValue>();
-    if (!kerning.isAuto) {
+    if (kerning.isAuto) {
+        format.setFontKerning(true);
+    } else {
         format.setFontKerning(false);
         format.setFontLetterSpacingType(QFont::AbsoluteSpacing);
         format.setFontLetterSpacing(format.fontLetterSpacing() + kerning.customValue);

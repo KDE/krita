@@ -54,12 +54,17 @@ QIcon PluginSettings::icon()
 
 QString PluginSettings::gmicQtPath()
 {
-    QString gmicqt = "gmic_krita_qt";
-#ifdef Q_OS_WIN
-    gmicqt += ".exe";
+    QString gmicqt = "libgmic_krita_qt";
+#if defined(Q_OS_WIN)
+    gmicqt += ".dll";
+#elif defined(Q_OS_MACOS)
+    gmicqt += ".dylib";
+#else
+    gmicqt += ".so";
 #endif
 
     QString gmic_qt_path = KisConfig(true).readEntry<QString>("gmic_qt_plugin_path", "");
+    dbgPlugins << 1 << gmic_qt_path;
     if (!gmic_qt_path.isEmpty() && QFileInfo(gmic_qt_path).exists()) {
         return gmic_qt_path;
     }
@@ -67,8 +72,8 @@ QString PluginSettings::gmicQtPath()
     QFileInfo fi(qApp->applicationDirPath() + "/" + gmicqt);
 
     // Check for gmic-qt next to krita
+    dbgPlugins << 2 << fi.filePath();
     if (fi.exists() && fi.isFile()) {
-//        dbgPlugins << 1 << fi.canonicalFilePath();
         return fi.canonicalFilePath();
     }
 
@@ -76,17 +81,25 @@ QString PluginSettings::gmicQtPath()
     QDir d(qApp->applicationDirPath());
     QStringList gmicdirs = d.entryList(QStringList() << "gmic*", QDir::Dirs);
     dbgPlugins << gmicdirs;
-    if (gmicdirs.isEmpty()) {
-//        dbgPlugins << 2;
-        return "";
-    }
-    fi = QFileInfo(qApp->applicationDirPath() + "/" + gmicdirs.first() + "/" + gmicqt);
-    if (fi.exists() && fi.isFile()) {
-//        dbgPlugins << "3" << fi.canonicalFilePath();
-        return fi.canonicalFilePath();
+
+    for (const auto &gmicDir : gmicdirs) {
+        fi = QFileInfo(qApp->applicationDirPath() + "/" + gmicDir + "/" + gmicqt);
+        dbgPlugins << "3" << fi.filePath();
+        if (fi.exists() && fi.isFile()) {
+            return fi.canonicalFilePath();
+        }
     }
 
-//    dbgPlugins << 4 << gmicqt;
+    // Amyspark: check for gmic-qt plugin in the library path
+    for (const auto &path : qApp->libraryPaths()) {
+        QFileInfo fi(path + "/" + gmicqt);
+        dbgPlugins << 4 << fi.filePath();
+        if (fi.exists() && fi.isFile()) {
+            return fi.canonicalFilePath();
+        }
+    }
+
+    dbgPlugins << 5 << gmicqt;
     return gmicqt;
 }
 

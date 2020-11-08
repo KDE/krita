@@ -1,3 +1,7 @@
+/*
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
 #include "kis_default_bounds_node_wrapper.h"
 #include "kis_global.h"
 

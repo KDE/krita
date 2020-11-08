@@ -1,4 +1,6 @@
 #
+#  SPDX-License-Identifier: GPL-3.0-or-later
+#
 # Helper function for extracting translatable messages from Krita source code.
 # Usage: kundo2_aware_xgettext <pot-filename-without-path> <source-files-list>
 # If there are no messages or the <source-files-list> is empty, the pot file is deleted.
@@ -78,7 +80,7 @@ function kundo2_aware_xgettext_internal() {
         # ensure an empty line or else KDE_HEADER search will fail
         # in case POT_PART_NORMAL only contains header
         echo "" >>${POT_PART_NORMAL}
-        
+
         ${MSGCAT} -F "${POT_PART_NORMAL}" "${POT_PART_QUNDOFORMAT}" > ${POT_MERGED}
         MERGED_HEADER_LINE_COUNT=$(cat ${POT_MERGED} | grep "^$" -B 100000 --max-count=1 | wc -l)
         KDE_HEADER="$(cat ${POT_PART_NORMAL} | grep "^$" -B 100000 --max-count=1)"

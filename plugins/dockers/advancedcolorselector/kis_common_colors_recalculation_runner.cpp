@@ -1,3 +1,7 @@
+/*
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
 #include "kis_common_colors_recalculation_runner.h"
 
 #include <cmath>

@@ -1,3 +1,7 @@
+;
+;  SPDX-License-Identifier: GPL-3.0-or-later
+;
+
 !define CURRENT_LANG ${LANG_TRADCHINESE}
 
 # Strings to show in the installation log:

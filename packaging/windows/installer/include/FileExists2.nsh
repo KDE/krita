@@ -1,3 +1,7 @@
+;
+;  SPDX-License-Identifier: GPL-3.0-or-later
+;
+
 ;FileExists is already part of LogicLib, but returns true for directories as well as files
 !macro _FileExists2 _a _b _t _f
 	!insertmacro _LOGICLIB_TEMP
@@ -13,7 +17,7 @@
 !define FileExists `"" FileExists2`
 !macro _DirExists _a _b _t _f
 	!insertmacro _LOGICLIB_TEMP
-	StrCpy $_LOGICLIB_TEMP "0"	
+	StrCpy $_LOGICLIB_TEMP "0"
 	StrCmp `${_b}` `` +3 0 ;if path is not blank, continue to next check
 	IfFileExists `${_b}\*.*` 0 +2 ;if directory exists, continue to confirm exists
 	StrCpy $_LOGICLIB_TEMP "1"

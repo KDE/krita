@@ -1,3 +1,7 @@
+#
+#  SPDX-License-Identifier: GPL-3.0-or-later
+#
+
 """Unit tests for the plugin_importer module.
 
 Unit tests can either be toplevel functions whose names start with

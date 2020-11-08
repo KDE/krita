@@ -1,3 +1,7 @@
+/*
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
 #include "KoMeshGradientBackground.h"
 #include <KoColorSpaceRegistry.h>
 #include <KoMixColorsOp.h>

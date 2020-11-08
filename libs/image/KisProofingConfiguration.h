@@ -1,3 +1,7 @@
+/*
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
 #ifndef KISPROOFINGCONFIGURATION_H
 #define KISPROOFINGCONFIGURATION_H
 

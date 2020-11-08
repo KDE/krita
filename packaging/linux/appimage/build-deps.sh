@@ -1,5 +1,8 @@
 #!/bin/bash
 #
+#  SPDX-License-Identifier: GPL-3.0-or-later
+#
+#
 # Build all Krita's dependencies on Ubuntu 14.04.
 #
 # Prerequisites: cmake git build-essential libxcb-keysyms1-dev plus all deps for Qt5
@@ -13,7 +16,7 @@ set -x
 export BUILD_PREFIX=$1
 export KRITA_SOURCES=$2
 
-# qjsonparser, used to add metadata to the plugins needs to work in a en_US.UTF-8 environment. 
+# qjsonparser, used to add metadata to the plugins needs to work in a en_US.UTF-8 environment.
 # That's not always the case, so make sure it is
 export LC_ALL=en_US.UTF-8
 export LANG=en_us.UTF-8

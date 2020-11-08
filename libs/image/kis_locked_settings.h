@@ -1,3 +1,7 @@
+/*
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
 #ifndef KIS_LOCKED_SETTINGS_H
 #define KIS_LOCKED_SETTINGS_H
 

@@ -1,3 +1,7 @@
+/*
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
 #include "KisSelectionBasedProcessingHelper.h"
 
 #include "kis_paint_device.h"

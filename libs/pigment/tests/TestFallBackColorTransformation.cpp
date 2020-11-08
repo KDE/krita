@@ -1,3 +1,7 @@
+/*
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
 #include "TestFallBackColorTransformation.h"
 
 #include "KoColorTransformation.h"
@@ -33,7 +37,7 @@ struct KoDummyColorTransformation : public KoColorTransformation
     }
     void setParameter(int id, const QVariant& parameter) override
     {
-      m_parameters[id] = parameter;          
+      m_parameters[id] = parameter;
     }
 };
 

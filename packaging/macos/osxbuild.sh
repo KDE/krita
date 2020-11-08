@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+#
+#  SPDX-License-Identifier: GPL-3.0-or-later
+#
 
 # osxbuild.sh automates building and installing of krita and krita dependencies
 # for OSX, the script only needs you to set BUILDROOT environment to work
@@ -182,7 +185,7 @@ cmake_3rdparty () {
         fi
         print_msg "Building ${package}"
         log_cmd cmake --build . --config RelWithDebInfo --target ${package}
-        
+
         print_if_error "Failed build ${package}"
         if [[ ! ${osxbuild_error} -ne 0 ]]; then
             print_msg "Build Success! ${package}"
@@ -269,7 +272,7 @@ build_3rdparty () {
         # -DLDFLAGS=-L${KIS_INSTALL_DIR}/lib
 
     print_msg "finished 3rdparty build setup"
-    
+
     if [[ -n ${1} ]]; then
         cmake_3rdparty "${@}"
         # log "Syncing install backup..."
@@ -665,7 +668,7 @@ osxbuild.sh install ${KIS_BUILD_DIR}"
             log "File not a tarball tar.gz file"
         fi
 
-        
+
 
     elif [[ ${1} = "clean" ]]; then
         # remove all build and install directories to start

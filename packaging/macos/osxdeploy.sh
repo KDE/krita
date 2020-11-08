@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+#
+#  SPDX-License-Identifier: GPL-3.0-or-later
+#
 
 # Krita tool to create dmg from installed source
 # Copies all files to a folder to be converted into the final dmg
@@ -92,14 +95,14 @@ export QMAKE_MACOSX_DEPLOYMENT_TARGET=10.11
 
 
 print_usage () {
-    printf "USAGE: 
+    printf "USAGE:
   osxdeploy.sh [-s=<identity>] [-notarize-ac=<apple-account>] [-style=<style.txt>] [-bg=<background-image>]
 
     -s \t\t\t Code sign identity for codesign
 
     -notarize-ac \t Apple account name for notarization purposes
 \t\t\t script will attempt to get password from keychain, if fails provide one with
-\t\t\t the -notarize-pass option: To add a password run 
+\t\t\t the -notarize-pass option: To add a password run
 
 \t\t\t   security add-generic-password -a \"AC_USERNAME\" -w <secret_password> -s \"AC_PASSWORD\"
 
@@ -531,7 +534,7 @@ krita_deploy () {
 
     cd ${BUILDROOT}
     rsync -prul ${KIS_INSTALL_DIR}/lib/kritaplugins/ ${KRITA_DMG}/krita.app/Contents/PlugIns
-    
+
     # rsync -prul {KIS_INSTALL_DIR}/lib/libkrita* Frameworks/
 
     # To avoid errors macdeployqt must be run from bin location
@@ -562,7 +565,7 @@ krita_deploy () {
     rsync -prul ${KIS_INSTALL_DIR}/lib/krita-python-libs ${KRITA_DMG}/krita.app/Contents/Frameworks/
     # change perms on Python to allow header change
     chmod +w ${KRITA_DMG}/krita.app/Contents/Frameworks/Python.framework/Python
-    
+
     fix_python_framework
     strip_python_dmginstall
 
@@ -728,7 +731,7 @@ createDMG () {
     #Set Icon for DMG
     cp -v "${SCRIPT_SOURCE_DIR}/KritaIcon.icns" "/Volumes/${DMG_title}/.VolumeIcon.icns"
     SetFile -a C "/Volumes/${DMG_title}"
-    
+
     chmod -Rf go-w "/Volumes/${DMG_title}"
 
     # ensure all writing operations to dmg are over
@@ -736,7 +739,7 @@ createDMG () {
 
     hdiutil detach $device
     hdiutil convert "krita.temp.dmg" -format UDZO -imagekey -zlib-level=9 -o krita-out.dmg
-    
+
 
     mv krita-out.dmg ${DMG_NAME}
     echo "moved krita-out.dmg to ${DMG_NAME}"

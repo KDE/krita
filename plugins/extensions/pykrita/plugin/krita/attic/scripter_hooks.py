@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+#
+#  SPDX-License-Identifier: GPL-3.0-or-later
+#
+
 """
 This module will be a collection of functions to hook into the GUI of Scribus.
 

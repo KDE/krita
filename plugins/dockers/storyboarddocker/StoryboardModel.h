@@ -192,11 +192,6 @@ public:
     int lastKeyframeWithin(QModelIndex index);
 
     /**
-     * @brief delete all keyframes from frame for specific duration.
-     */
-    void cleanKeyframes(int startFrame, int duration);
-
-    /**
      * @brief reorders all keyframes to reflect storyboard docker's arrangement.
      * typically used after drag and drop to keep storyboard timing acurate
      * to timeline timing.
@@ -206,13 +201,11 @@ public:
     /**
      * @brief moves all keyframes in all layers after the frame of the parent of @c durationIndex
      * Keyframes are moved to the left or right based on the difference (newDuration-oldDuration)
-     * @param newDuration The new duration assigned to item
-     * @param oldDuration The old duration assigned to item
-     * @param durationIndex The index of the duration item. This index must correspond to the duration
-     * indices, i.e. Either the frame index or the "second" index.
+     * @param oldDuration The old duration in frames assigned to item
+     * @param itemIndex The storyboard item index.
      * @return True if keyframes were moved, otherwise False
      */
-    bool insertHoldFramesAfter(int newDuration, int oldDuration, QModelIndex durationIndex);
+    bool changeSceneHoldLength(int oldDuration, QModelIndex itemIndex);
 
     /**
      * @brief inserts item after or before @c index based on @c after parameter
@@ -233,6 +226,10 @@ public:
      */
     StoryboardItemList getData();
 
+
+    void shiftKeyframes(KisTimeSpan affected, int offset);
+
+    int lastKeyframeGlobal() const;
 private Q_SLOTS:
     /**
      * @brief called when currentUiTime changes

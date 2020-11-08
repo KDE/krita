@@ -339,10 +339,14 @@ bool StoryboardDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, c
 
             StoryboardModel* sbModel = dynamic_cast<StoryboardModel*>(model);
             if (leftButton && upButtonClicked) {
-                return sbModel->insertHoldFramesAfter(index.data().toInt() + 1, index.data().toInt(), index);
+                sbModel->setData(index, index.data().toInt() + 1);
+//                return sbModel->insertHoldFramesAfter(index.data().toInt() + 1, index.data().toInt(), index);
+                return true;
             }
             else if (leftButton && downButtonClicked) {
-                return sbModel->insertHoldFramesAfter(std::max(-1, index.data().toInt() - 1), index.data().toInt(), index);
+                sbModel->setData(index, index.data().toInt() - 1);
+//                return sbModel->insertHoldFramesAfter(std::max(-1, index.data().toInt() - 1), index.data().toInt(), index);
+                return true;
             }
         }
         else if (index.parent().isValid() && index.row() >= StoryboardItem::Comments) {
@@ -481,7 +485,7 @@ void StoryboardDelegate::setModelData(QWidget *editor, QAbstractItemModel *model
                 int value = spinbox->value();
 
                 StoryboardModel* sbModel = dynamic_cast<StoryboardModel*>(model);
-                sbModel->insertHoldFramesAfter(value, index.data().toInt(), index);
+                sbModel->setData(index, value);
                 return;
             }
             default:             // for comments

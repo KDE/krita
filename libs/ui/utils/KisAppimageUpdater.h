@@ -37,9 +37,7 @@ class KRITAUI_EXPORT KisAppimageUpdater : public KisUpdaterBase
 
 public:
     KisAppimageUpdater();
-#ifdef KRITA_GIT_SHA1_STRING
     explicit KisAppimageUpdater(QString dummyUpdaterPath);
-#endif
 
     void checkForUpdate() override;
     bool hasUpdateCapability() override;

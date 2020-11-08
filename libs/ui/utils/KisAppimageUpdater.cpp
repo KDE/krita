@@ -56,14 +56,12 @@ KisAppimageUpdater::KisAppimageUpdater()
     initialize(updaterPath);
 }
 
-#if defined(KRITA_GIT_SHA1_STRING)
 KisAppimageUpdater::KisAppimageUpdater(QString dummyUpdaterPath)
     : m_checkProcess(new QProcess(this))
     , m_updateProcess(new QProcess(this))
 {
     initialize(dummyUpdaterPath);
 }
-#endif
 
 void KisAppimageUpdater::checkForUpdate()
 {

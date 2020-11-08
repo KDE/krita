@@ -100,7 +100,7 @@ KRITA_VERSION=$(grep "#define KRITA_VERSION_STRING" libs/version/kritaversion.h 
 # Also find out the revision of Git we built
 # Then use that to generate a combined name we'll distribute
 cd $KRITA_SOURCES
-if [[ -d .git ]]; then
+if git rev-parse --is-inside-work-tree; then
 	GIT_REVISION=$(git rev-parse --short HEAD)
 	export VERSION=$KRITA_VERSION-$GIT_REVISION
 	VERSION_TYPE="development"
@@ -116,21 +116,25 @@ if [[ -d .git ]]; then
 else
 	export VERSION=$KRITA_VERSION
 
+    pushd $BUILD_PREFIX/krita-build
+
     #if KRITA_BETA is set, set channel to Beta, otherwise set it to stable
-    grep "define KRITA_BETA 1" libs/version/kritaversion.h;
-    is_beta=$?
+    is_beta=0
+    grep "define KRITA_BETA 1" libs/version/kritaversion.h || is_beta=$?
 
-    grep "define KRITA_RC 1" libs/version/kritaversion.h;
-    is_rc=$?
+    is_rc=0
+    grep "define KRITA_RC 1" libs/version/kritaversion.h || is_rc=$?
 
-    if [ is_beta -eq 0 ]; then
+    popd
+
+    if [ $is_beta -eq 0 ]; then
         VERSION_TYPE="development"
     else
         VERSION_TYPE="stable"
     fi
 
     if [ -z "${CHANNEL}" ]; then
-        if [ is_beta -eq 0 -o is_rc -eq 0 ]; then
+        if [ $is_beta -eq 0 ] || [ $is_rc -eq 0 ]; then
             CHANNEL="Beta"
         else
             CHANNEL="Stable"

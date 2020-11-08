@@ -109,6 +109,8 @@ void ToolPresetDocker::optionWidgetsChanged(KoCanvasController */*canvasControll
 
 void ToolPresetDocker::toolChanged(KoCanvasController *canvasController, int /*toolId*/)
 {
+    qDebug() << "ToolPresetDocker::toolChanged";
+
     m_currentToolId = KoToolManager::instance()->activeToolId();
 
     if (chkExecuteToolOnSelection->isChecked()) {
@@ -121,8 +123,6 @@ void ToolPresetDocker::toolChanged(KoCanvasController *canvasController, int /*t
     txtName->clear();
     chkExecuteToolOnSelection->setChecked(false);
     chkSaveBrushPresetInformation->setChecked(true);
-
-    KConfig cfg(createConfigFileName(m_currentToolId), KConfig::SimpleConfig);
 }
 
 void ToolPresetDocker::bnSavePressed()
@@ -167,6 +167,10 @@ void ToolPresetDocker::bnDeletePressed()
 void ToolPresetDocker::presetSelected(const QModelIndex *idx)
 {
     ToolPresetInfo *info = m_toolPresetModel->toolPresetInfo(idx->row());
+
+    if (info->toolId != m_currentToolId) {
+        KoToolManager::instance()->switchToolRequested(info->toolId);
+    }
 
     QString text = info->presetName;
     txtName->setText(text);

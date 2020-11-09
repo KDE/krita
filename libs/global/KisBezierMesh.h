@@ -690,7 +690,7 @@ private:
 
 public:
     Mesh()
-        : Mesh(QRectF(0.0, 0.0, 777.0, 666.0))
+        : Mesh(QRectF(0.0, 0.0, 1.0, 1.0))
     {
     }
 

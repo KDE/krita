@@ -21,6 +21,32 @@
 #include "kis_grid_interpolation_tools.h"
 #include "kis_debug.h"
 
+KisBezierTransformMesh::PatchIndex KisBezierTransformMesh::hitTestPatch(const QPointF &pt, QPointF *localPointResult) const {
+    auto result = endPatches();
+
+    const QRectF unitRect(0, 0, 1, 1);
+
+    for (auto it = beginPatches(); it != endPatches(); ++it) {
+        Patch patch = *it;
+
+        if (patch.dstBoundingRect().contains(pt)) {
+            const QPointF localPos = KisBezierUtils::calculateLocalPos(patch.points, pt);
+
+            if (unitRect.contains(localPos)) {
+
+                if (localPointResult) {
+                    *localPointResult = localPos;
+                }
+
+                result = it;
+                break;
+            }
+        }
+    }
+
+    return result.patchIndex();
+}
+
 void KisBezierTransformMesh::transformPatch(const KisBezierPatch &patch, const QPoint &srcQImageOffset, const QImage &srcImage, const QPoint &dstQImageOffset, QImage *dstImage)
 {
     QVector<QPointF> originalPointsLocal;
@@ -28,7 +54,6 @@ void KisBezierTransformMesh::transformPatch(const KisBezierPatch &patch, const Q
     QSize gridSize;
 
     patch.sampleRegularGrid(gridSize, originalPointsLocal, transformedPointsLocal, QPointF(8,8));
-    //patch.sampleIrregularGrid(gridSize, originalPointsLocal, transformedPointsLocal);
 
     const QRect dstBoundsI = patch.dstBoundingRect().toAlignedRect();
     const QRect imageSize = QRect(dstQImageOffset, dstImage->size());
@@ -53,7 +78,6 @@ void KisBezierTransformMesh::transformPatch(const KisBezierPatch &patch, KisPain
     QSize gridSize;
 
     patch.sampleRegularGrid(gridSize, originalPointsLocal, transformedPointsLocal, QPointF(8,8));
-    //patch.sampleIrregularGrid(gridSize, originalPointsLocal, transformedPointsLocal);
 
     {
         GridIterationTools::PaintDevicePolygonOp polygonOp(srcDevice, dstDevice);

@@ -1038,33 +1038,6 @@ public:
         return result.segmentIndex();
     }
 
-    PatchIndex hitTestPatch(const QPointF &pt, QPointF *localPointResult = 0) const {
-        auto result = endPatches();
-
-        const QRectF unitRect(0, 0, 1, 1);
-
-        for (auto it = beginPatches(); it != endPatches(); ++it) {
-            Patch patch = *it;
-
-            if (patch.dstBoundingRect().contains(pt)) {
-                const QPointF localPos = KisBezierUtils::calculateLocalPos(patch.points, pt);
-
-                if (unitRect.contains(localPos)) {
-
-                    if (localPointResult) {
-                        *localPointResult = localPos;
-                    }
-
-                    result = it;
-                    break;
-                }
-            }
-        }
-
-        return result.patchIndex();
-
-    }
-
     template <typename T>
     bool isIndexValid(const T &index) const {
         return find(index).isValid();

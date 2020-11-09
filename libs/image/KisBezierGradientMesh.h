@@ -57,6 +57,8 @@ class KRITAIMAGE_EXPORT KisBezierGradientMesh : public KisBezierMeshBase<Gradien
 {
 public:
 
+    PatchIndex hitTestPatch(const QPointF &pt, QPointF *localPointResult) const;
+
     static void renderPatch(const GradientMeshPatch &patch,
                      const QPoint &dstQImageOffset,
                      QImage *dstImage);

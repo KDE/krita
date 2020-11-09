@@ -516,9 +516,9 @@ struct Params2D {
     QPointF dstPoint;
 };
 
-struct PatchMatrixForm
+struct LevelBasedPatchMethod
 {
-    PatchMatrixForm(qreal u, qreal v, const Params2D &p)
+    LevelBasedPatchMethod(qreal u, qreal v, const Params2D &p)
     {
         M_3 << 1, 0, 0, 0,
              -3, 3, 0, 0,
@@ -690,23 +690,69 @@ struct PatchMatrixForm
 
 };
 
+struct SvgPatchMethod
+{
+private:
+
+    /**
+     * TODO: optimize these function somehow!
+     */
+
+    static QPointF meshForwardMapping(qreal u, qreal v, const Params2D &p) {
+        return p.r0 + pow3(u)*v*(p.p0 - 3*p.p1 + 3*p.p2 - p.p3 - p.q0 + 3*p.q1 - 3*p.q2 + p.q3) + pow3(u)*(-p.p0 + 3*p.p1 - 3*p.p2 + p.p3) + pow2(u)*v*(-3*p.p0 + 6*p.p1 - 3*p.p2 + 3*p.q0 - 6*p.q1 + 3*p.q2) + pow2(u)*(3*p.p0 - 6*p.p1 + 3*p.p2) + u*pow3(v)*(p.r0 - 3*p.r1 + 3*p.r2 - p.r3 - p.s0 + 3*p.s1 - 3*p.s2 + p.s3) + u*pow2(v)*(-3*p.r0 + 6*p.r1 - 3*p.r2 + 3*p.s0 - 6*p.s1+ 3*p.s2) + u*v*(2*p.p0 - 3*p.p1 + p.p3 - 2*p.q0 + 3*p.q1 - p.q3 + 3*p.r0 - 3*p.r1 - 3*p.s0 + 3*p.s1) + u*(-2*p.p0 + 3*p.p1 - p.p3 - p.r0 + p.s0) + pow3(v)*(-p.r0 + 3*p.r1 - 3*p.r2 + p.r3) + pow2(v)*(3*p.r0 - 6*p.r1 + 3*p.r2) + v*(-3*p.r0 + 3*p.r1);
+    }
+
+    static QPointF meshForwardMappingDiffU(qreal u, qreal v, const Params2D &p) {
+        return -2*p.p0 + 3*p.p1 - p.p3 - p.r0 + p.s0 + pow2(u)*v*(3*p.p0 - 9*p.p1 + 9*p.p2 - 3*p.p3 - 3*p.q0 + 9*p.q1 - 9*p.q2 + 3*p.q3) + pow2(u)*(-3*p.p0 + 9*p.p1 - 9*p.p2 + 3*p.p3) + u*v*(-6*p.p0 + 12*p.p1 - 6*p.p2 + 6*p.q0 - 12*p.q1 + 6*p.q2) + u*(6*p.p0 - 12*p.p1 + 6*p.p2) + pow3(v)*(p.r0 - 3*p.r1 + 3*p.r2 - p.r3 - p.s0 + 3*p.s1 - 3*p.s2 + p.s3) + pow2(v)*(-3*p.r0 + 6*p.r1 - 3*p.r2 + 3*p.s0 - 6*p.s1 + 3*p.s2) + v*(2*p.p0 - 3*p.p1 + p.p3 - 2*p.q0 + 3*p.q1 - p.q3 + 3*p.r0 - 3*p.r1 - 3*p.s0 + 3*p.s1);
+    }
+
+    static QPointF meshForwardMappingDiffV(qreal u, qreal v, const Params2D &p) {
+        return -3*p.r0 + 3*p.r1 + pow3(u)*(p.p0 - 3*p.p1 + 3*p.p2 - p.p3 - p.q0 + 3*p.q1 - 3*p.q2 + p.q3) + pow2(u)*(-3*p.p0 + 6*p.p1 - 3*p.p2 + 3*p.q0 - 6*p.q1 + 3*p.q2) + u*pow2(v)*(3*p.r0 - 9*p.r1 + 9*p.r2 - 3*p.r3 - 3*p.s0 + 9*p.s1 - 9*p.s2 + 3*p.s3) + u*v*(-6*p.r0 + 12*p.r1 - 6*p.r2 + 6*p.s0 - 12*p.s1 + 6*p.s2) + u*(2*p.p0 - 3*p.p1 + p.p3 - 2*p.q0 + 3*p.q1 - p.q3 + 3*p.r0 - 3*p.r1 - 3*p.s0 + 3*p.s1) + pow2(v)*(-3*p.r0 + 9*p.r1 - 9*p.r2 + 3*p.r3) + v*(6*p.r0 - 12*p.r1 + 6*p.r2);
+    }
+
+    qreal u = 0.0;
+    qreal v = 0.0;
+    const Params2D p;
+
+public:
+    SvgPatchMethod(qreal _u, qreal _v, const Params2D &_p)
+        : u(_u), v(_v), p(_p)
+    {
+    }
+
+    QPointF value() const {
+        return meshForwardMapping(u, v, p);
+    }
+
+    QPointF diffU() const {
+        return meshForwardMappingDiffU(u, v, p);
+    }
+
+    QPointF diffV() const {
+        return meshForwardMappingDiffV(u, v, p);
+    }
+
+};
+
+template <class PatchMethod>
 double my_f(const gsl_vector * x, void *paramsPtr)
 {
     const Params2D *params = static_cast<const Params2D*>(paramsPtr);
     const QPointF pos(gsl_vector_get(x, 0), gsl_vector_get(x, 1));
 
-    PatchMatrixForm mat(pos.x(), pos.y(), *params);
+    PatchMethod mat(pos.x(), pos.y(), *params);
     const QPointF S = mat.value();
 
     return kisSquareDistance(S, params->dstPoint);
 }
 
+template <class PatchMethod>
 void my_fdf (const gsl_vector *x, void *paramsPtr, double *f, gsl_vector *df)
 {
     const Params2D *params = static_cast<const Params2D*>(paramsPtr);
     const QPointF pos(gsl_vector_get(x, 0), gsl_vector_get(x, 1));
 
-    PatchMatrixForm mat(pos.x(), pos.y(), *params);
+    PatchMethod mat(pos.x(), pos.y(), *params);
     const QPointF S = mat.value();
     const QPointF dU = mat.diffU();
     const QPointF dV = mat.diffV();
@@ -721,13 +767,14 @@ void my_fdf (const gsl_vector *x, void *paramsPtr, double *f, gsl_vector *df)
                    2 * (S.y() - params->dstPoint.y()) * dV.y());
 }
 
+template <class PatchMethod>
 void my_df (const gsl_vector *x, void *paramsPtr,
             gsl_vector *df)
 {
     const Params2D *params = static_cast<const Params2D*>(paramsPtr);
     const QPointF pos(gsl_vector_get(x, 0), gsl_vector_get(x, 1));
 
-    PatchMatrixForm mat(pos.x(), pos.y(), *params);
+    PatchMethod mat(pos.x(), pos.y(), *params);
     const QPointF S = mat.value();
     const QPointF dU = mat.diffU();
     const QPointF dV = mat.diffV();
@@ -741,7 +788,8 @@ void my_df (const gsl_vector *x, void *paramsPtr,
 }
 }
 
-QPointF calculateLocalPos(const std::array<QPointF, 12> &points, const QPointF &globalPoint)
+template <class PatchMethod>
+QPointF calculateLocalPosImpl(const std::array<QPointF, 12> &points, const QPointF &globalPoint)
 {
     QRectF patchBounds;
 
@@ -793,10 +841,10 @@ QPointF calculateLocalPos(const std::array<QPointF, 12> &points, const QPointF &
 
     /* Initialize method and iterate */
     minex_func.n = 2;
-    minex_func.f = my_f;
+    minex_func.f = my_f<PatchMethod>;
     minex_func.params = (void*)&p;
-    minex_func.df = my_df;
-    minex_func.fdf = my_fdf;
+    minex_func.df = my_df<PatchMethod>;
+    minex_func.fdf = my_fdf<PatchMethod>;
 
     s = gsl_multimin_fdfminimizer_alloc (T, 2);
     gsl_multimin_fdfminimizer_set (s, &minex_func, x, 0.01, 0.1);
@@ -842,8 +890,8 @@ QPointF calculateLocalPos(const std::array<QPointF, 12> &points, const QPointF &
 #endif
 }
 
-
-QPointF calculateGlobalPos(const std::array<QPointF, 12> &points, const QPointF &localPoint)
+template <class PatchMethod>
+QPointF calculateGlobalPosImpl(const std::array<QPointF, 12> &points, const QPointF &localPoint)
 {
     Params2D p;
 
@@ -867,11 +915,29 @@ QPointF calculateGlobalPos(const std::array<QPointF, 12> &points, const QPointF 
     p.s2 = points[KisBezierPatch::BR_VC];
     p.s3 = points[KisBezierPatch::BR];
 
-    PatchMatrixForm f(localPoint.x(), localPoint.y(), p);
-
+    PatchMethod f(localPoint.x(), localPoint.y(), p);
     return f.value();
 }
 
+QPointF calculateLocalPos(const std::array<QPointF, 12> &points, const QPointF &globalPoint)
+{
+   return calculateLocalPosImpl<LevelBasedPatchMethod>(points, globalPoint);
+}
+
+QPointF calculateGlobalPos(const std::array<QPointF, 12> &points, const QPointF &localPoint)
+{
+    return calculateGlobalPosImpl<LevelBasedPatchMethod>(points, localPoint);
+}
+
+QPointF calculateLocalPosSVG2(const std::array<QPointF, 12> &points, const QPointF &globalPoint)
+{
+   return calculateLocalPosImpl<SvgPatchMethod>(points, globalPoint);
+}
+
+QPointF calculateGlobalPosSVG2(const std::array<QPointF, 12> &points, const QPointF &localPoint)
+{
+    return calculateGlobalPosImpl<SvgPatchMethod>(points, localPoint);
+}
 
 QPointF interpolateQuadric(const QPointF &p0, const QPointF &p2, const QPointF &pt, qreal t)
 {

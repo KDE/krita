@@ -125,6 +125,32 @@ bool loadValue(const QDomElement &parent, const QString &tag, KisBezierGradientM
 
 }
 
+KisBezierGradientMesh::PatchIndex KisBezierGradientMesh::hitTestPatch(const QPointF &pt, QPointF *localPointResult) const {
+    auto result = endPatches();
+
+    const QRectF unitRect(0, 0, 1, 1);
+
+    for (auto it = beginPatches(); it != endPatches(); ++it) {
+        Patch patch = *it;
+
+        if (patch.dstBoundingRect().contains(pt)) {
+            const QPointF localPos = KisBezierUtils::calculateLocalPosSVG2(patch.points, pt);
+
+            if (unitRect.contains(localPos)) {
+
+                if (localPointResult) {
+                    *localPointResult = localPos;
+                }
+
+                result = it;
+                break;
+            }
+        }
+    }
+
+    return result.patchIndex();
+}
+
 void KisBezierGradientMesh::renderPatch(const KisBezierGradientMeshDetail::GradientMeshPatch &patch,
                                         const QPoint &dstQImageOffset,
                                         QImage *dstImage)
@@ -133,8 +159,7 @@ void KisBezierGradientMesh::renderPatch(const KisBezierGradientMeshDetail::Gradi
     QVector<QPointF> transformedPointsLocal;
     QSize gridSize;
 
-    //patch.sampleRegularGrid(gridSize, originalPointsLocal, transformedPointsLocal, QPointF(16,16));
-    patch.sampleIrregularGrid(gridSize, originalPointsLocal, transformedPointsLocal);
+    patch.sampleRegularGridSVG2(gridSize, originalPointsLocal, transformedPointsLocal, QPointF(8,8));
 
     const QRect dstBoundsI = patch.dstBoundingRect().toAlignedRect();
     const QRect imageSize = QRect(dstQImageOffset, dstImage->size());

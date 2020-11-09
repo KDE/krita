@@ -2046,7 +2046,6 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
             dockWidget->setTitleBarWidget(titleBar);
             titleBar->setCollapsable(false);
         }
-        qDebug() << titleBar << factory->id();
         if (titleBar) {
             titleBar->setFont(KoDockRegistry::dockFont());
         }

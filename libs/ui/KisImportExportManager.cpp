@@ -275,6 +275,18 @@ QString KisImportExportManager::askForAudioFileName(const QString &defaultDir, Q
     return dialog.filename();
 }
 
+QString KisImportExportManager::getUriForAdditionalFile(const QString &defaultUri, QWidget *parent)
+{
+    KoFileDialog dialog(parent, KoFileDialog::SaveFile, "Save Kra");
+
+    KIS_SAFE_ASSERT_RECOVER_NOOP(!defaultUri.isEmpty());
+
+    dialog.setDirectoryUrl(QUrl(defaultUri));
+    dialog.setMimeTypeFilters(QStringList("application/x-krita"));
+
+    return dialog.filename();
+}
+
 KisImportExportManager::ConversionResult KisImportExportManager::convert(KisImportExportManager::Direction direction, const QString &location, const QString& realLocation, const QString &mimeType, bool showWarnings, KisPropertiesConfigurationSP exportConfiguration, bool isAsync)
 {
     // export configuration is supported for export only
@@ -637,7 +649,11 @@ KisImportExportErrorCode KisImportExportManager::doExport(const QString &locatio
             doExportImpl(location, filter, exportConfiguration);
 
     if (alsoAsKra && status.isOk()) {
+#ifdef Q_OS_ANDROID
+        QString kraLocation = getUriForAdditionalFile(location, nullptr);
+#else
         QString kraLocation = location + ".kra";
+#endif
         QByteArray mime = m_document->nativeFormatMimeType();
         QSharedPointer<KisImportExportFilter> filter(
                     filterForMimeType(QString::fromLatin1(mime), Export));

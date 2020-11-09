@@ -199,6 +199,8 @@ double SquareGradientStrategy::valueAt(double x, double y) const
     double distance1 = 0;
     double distance2 = 0;
 
+    double t;
+
     if (m_vectorLength > DBL_EPSILON) {
 
         // Point to line distance is:
@@ -212,9 +214,11 @@ double SquareGradientStrategy::valueAt(double x, double y) const
         // Rotate point by 90 degrees and get the distance to the perpendicular
         distance2 = -m_normalisedVectorY * -py + m_normalisedVectorX * px;
         distance2 = fabs(distance2);
+        
+        t = qMax(distance1, distance2) / m_vectorLength;
+    } else {
+        t = 0;
     }
-
-    double t = qMax(distance1, distance2) / m_vectorLength;
 
     return t;
 }

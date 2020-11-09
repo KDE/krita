@@ -1314,6 +1314,11 @@ QVector<QTextFormat> KoSvgTextShapeMarkupConverter::stylesFromString(QStringList
                 QColor color;
                 color.setNamedColor(value);
 
+                // avoid assertion failure in `KoColor` later
+                if (!color.isValid()) {
+                    continue;
+                }
+
                 // default color is #ff000000, so default alpha will be 1.0
                 qreal currentAlpha = charFormat.foreground().color().alphaF();
 

@@ -46,7 +46,7 @@ void KisGradientGenerator::generate(KisProcessingInformation dst,
 
     device->clear(QRect(dst.topLeft(), size));
 
-    QSize imageSize = device->defaultBounds()->bounds().size();
+    QSize imageSize = device->defaultBounds()->imageBorderRect().size();
     QPair<QPointF, QPointF> positions =
         generatorConfiguration->absoluteCartesianPositionsInPixels(imageSize.width(), imageSize.height());
 

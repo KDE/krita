@@ -28,6 +28,7 @@
 #include <kis_gradient_painter.h>
 #include <KoAbstractGradient.h>
 #include <KoStopGradient.h>
+#include <KoColorSpaceRegistry.h>
 
 class KisGradientGeneratorConfiguration;
 typedef KisPinnedSharedPtr<KisGradientGeneratorConfiguration> KisGradientGeneratorConfigurationSP;
@@ -173,8 +174,8 @@ public:
         KoStopGradientSP gradient = KoStopGradientSP(new KoStopGradient);
         gradient->setStops(
             QList<KoGradientStop>()
-            << KoGradientStop(0.0, KoColor(), FOREGROUNDSTOP)
-            << KoGradientStop(1.0, KoColor(), BACKGROUNDSTOP)
+            << KoGradientStop(0.0, KoColor(Qt::black, KoColorSpaceRegistry::instance()->rgb8(0)), FOREGROUNDSTOP)
+            << KoGradientStop(1.0, KoColor(Qt::white, KoColorSpaceRegistry::instance()->rgb8(0)), BACKGROUNDSTOP)
         );
         gradient->setName(i18nc("Default gradient name for the gradient generator", "Unnamed"));
         return gradient;

@@ -194,6 +194,13 @@ void KisMeshTransformStrategy::setTransformFunction(const QPointF &mousePos, boo
         if (hoveredControl || hoveredSegment) {
             if (perspectiveModifierActive) {
                 mode = Private::MULTIPLE_POINT_SELECTION;
+            } else if (hoveredControl &&
+                       hoveredControl->isNode() &&
+                       m_d->selectedNodes.size() > 1 &&
+                       m_d->selectedNodes.contains(hoveredControl->nodeIndex)) {
+
+                mode = Private::MOVE_MODE;
+
             }
         } else {
             if (hoveredPatch) {

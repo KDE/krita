@@ -27,9 +27,10 @@
 #include <KisViewManager.h>
 #include <kis_canvas_resource_provider.h>
 
-#include "KisGradientConfigWidget.h"
+#include "KisGradientGeneratorConfiguration.h"
+#include "KisGradientGeneratorConfigWidget.h"
 
-KisGradientConfigWidget::KisGradientConfigWidget(QWidget* parent)
+KisGradientGeneratorConfigWidget::KisGradientGeneratorConfigWidget(QWidget* parent)
     : KisConfigWidget(parent)
     , m_view(nullptr)
     , m_gradient(nullptr)
@@ -114,10 +115,10 @@ KisGradientConfigWidget::KisGradientConfigWidget(QWidget* parent)
     connect(m_ui.widgetGradientChooser, SIGNAL(resourceSelected(KoResourceSP)), this, SLOT(slot_widgetGradientChooser_resourceSelected(KoResourceSP)));
 }
 
-KisGradientConfigWidget::~KisGradientConfigWidget()
+KisGradientGeneratorConfigWidget::~KisGradientGeneratorConfigWidget()
 {}
 
-void KisGradientConfigWidget::setConfiguration(const KisPropertiesConfigurationSP config)
+void KisGradientGeneratorConfigWidget::setConfiguration(const KisPropertiesConfigurationSP config)
 {
     const KisGradientGeneratorConfiguration *generatorConfig =
         dynamic_cast<const KisGradientGeneratorConfiguration*>(config.data());
@@ -159,7 +160,7 @@ void KisGradientConfigWidget::setConfiguration(const KisPropertiesConfigurationS
     emit sigConfigurationUpdated();
 }
 
-KisPropertiesConfigurationSP KisGradientConfigWidget::configuration() const
+KisPropertiesConfigurationSP KisGradientGeneratorConfigWidget::configuration() const
 {
     KisGradientGeneratorConfiguration *config = new KisGradientGeneratorConfiguration(KisGlobalResourcesInterface::instance());
 
@@ -192,7 +193,7 @@ KisPropertiesConfigurationSP KisGradientConfigWidget::configuration() const
     return config;
 }
 
-void KisGradientConfigWidget::setView(KisViewManager *view)
+void KisGradientGeneratorConfigWidget::setView(KisViewManager *view)
 {
     m_view = view;
     if (view) {
@@ -203,7 +204,7 @@ void KisGradientConfigWidget::setView(KisViewManager *view)
     }
 }
 
-void KisGradientConfigWidget::slot_widgetGradientChooser_resourceSelected(KoResourceSP resource)
+void KisGradientGeneratorConfigWidget::slot_widgetGradientChooser_resourceSelected(KoResourceSP resource)
 {
     m_gradient = resource->clone().dynamicCast<KoAbstractGradient>();
     if (m_view) {
@@ -213,7 +214,7 @@ void KisGradientConfigWidget::slot_widgetGradientChooser_resourceSelected(KoReso
     emit sigConfigurationUpdated();
 }
 
-void KisGradientConfigWidget::slot_radioButtonEndPositionCartesianCoordinates_toggled(bool enabled)
+void KisGradientGeneratorConfigWidget::slot_radioButtonEndPositionCartesianCoordinates_toggled(bool enabled)
 {
     if (!enabled) {
         return;
@@ -223,7 +224,7 @@ void KisGradientConfigWidget::slot_radioButtonEndPositionCartesianCoordinates_to
     emit sigConfigurationUpdated();
 }
 
-void KisGradientConfigWidget::slot_radioButtonEndPositionPolarCoordinates_toggled(bool enabled)
+void KisGradientGeneratorConfigWidget::slot_radioButtonEndPositionPolarCoordinates_toggled(bool enabled)
 {
     if (!enabled) {
         return;

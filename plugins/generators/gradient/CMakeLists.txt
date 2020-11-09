@@ -1,11 +1,11 @@
 set(kritagradientgenerator_SOURCES
     KisGradientGeneratorPlugin.cpp
     KisGradientGenerator.cpp
-    KisGradientConfigWidget.cpp
+    KisGradientGeneratorConfigWidget.cpp
     KisGradientGeneratorConfiguration.cpp
     )
 ki18n_wrap_ui(kritagradientgenerator_SOURCES
-    KisGradientConfigWidget.ui
+    KisGradientGeneratorConfigWidget.ui
     )
 
 add_library(kritagradientgenerator MODULE ${kritagradientgenerator_SOURCES})

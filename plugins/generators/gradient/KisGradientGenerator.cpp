@@ -25,7 +25,7 @@
 #include <kis_gradient_painter.h>
 
 #include "KisGradientGenerator.h"
-#include "KisGradientConfigWidget.h"
+#include "KisGradientGeneratorConfigWidget.h"
 
 KisGradientGenerator::KisGradientGenerator() : KisGenerator(id(), KoID("basic"), i18n("&Gradient..."))
 {
@@ -79,5 +79,5 @@ KisFilterConfigurationSP KisGradientGenerator::defaultConfiguration(KisResources
 KisConfigWidget* KisGradientGenerator::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, bool) const
 {
     Q_UNUSED(dev);
-    return new KisGradientConfigWidget(parent);
+    return new KisGradientGeneratorConfigWidget(parent);
 }

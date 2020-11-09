@@ -18,23 +18,22 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KISGRADIENTCONFIGWIDGET_H
-#define KISGRADIENTCONFIGWIDGET_H
+#ifndef KISGRADIENTGENERATORCONFIGWIDGET_H
+#define KISGRADIENTGENERATORCONFIGWIDGET_H
 
 #include <kis_config_widget.h>
 #include <KoAbstractGradient.h>
 
-#include "ui_KisGradientConfigWidget.h"
-#include "KisGradientGeneratorConfiguration.h"
+#include "ui_KisGradientGeneratorConfigWidget.h"
 
 class KisViewManager;
 
-class KisGradientConfigWidget : public KisConfigWidget
+class KisGradientGeneratorConfigWidget : public KisConfigWidget
 {
     Q_OBJECT
 public:
-    KisGradientConfigWidget(QWidget* parent = 0);
-    ~KisGradientConfigWidget() override;
+    KisGradientGeneratorConfigWidget(QWidget* parent = 0);
+    ~KisGradientGeneratorConfigWidget() override;
     
     void setConfiguration(const KisPropertiesConfigurationSP) override;
     KisPropertiesConfigurationSP configuration() const override;
@@ -42,7 +41,7 @@ public:
     void setView(KisViewManager *view) override;
 
 private:
-    Ui_GradientConfigWidget m_ui;
+    Ui_GradientGeneratorConfigWidget m_ui;
     KisViewManager *m_view;
     KoAbstractGradientSP m_gradient;
 

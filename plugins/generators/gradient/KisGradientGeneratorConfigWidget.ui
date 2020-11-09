@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>GradientConfigWidget</class>
- <widget class="QWidget" name="GradientConfigWidget">
+ <class>GradientGeneratorConfigWidget</class>
+ <widget class="QWidget" name="GradientGeneratorConfigWidget">
   <property name="geometry">
    <rect>
     <x>0</x>

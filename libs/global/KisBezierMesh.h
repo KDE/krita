@@ -1003,7 +1003,7 @@ public:
         }
     }
 
-    void scaleForThumbnail(const QTransform &t) {
+    void transformSrcAndDst(const QTransform &t) {
         KIS_SAFE_ASSERT_RECOVER_RETURN(t.type() <= QTransform::TxScale);
         transform(t);
         m_originalRect = t.mapRect(m_originalRect);

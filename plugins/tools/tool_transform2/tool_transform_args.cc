@@ -273,7 +273,7 @@ void ToolTransformArgs::translate(const QPointF &offset)
         KIS_ASSERT_RECOVER_RETURN(m_liquifyWorker);
         m_liquifyWorker->translate(offset);
     } else if (m_mode == MESH) {
-        m_meshTransform.translate(offset);
+        m_meshTransform.transformSrcAndDst(QTransform::fromTranslate(offset.x(), offset.y()));
     } else {
         KIS_ASSERT_RECOVER_NOOP(0 && "unknown transform mode");
     }

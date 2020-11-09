@@ -662,7 +662,7 @@ void KisMeshTransformStrategy::Private::recalculateTransformations()
     KIS_SAFE_ASSERT_RECOVER_RETURN(imageToThumb.type() <= QTransform::TxScale);
 
     KisBezierTransformMesh mesh(*currentArgs.meshTransform());
-    mesh.scaleForThumbnail(imageToThumb);
+    mesh.transformSrcAndDst(imageToThumb);
 
     paintingOffset = transaction.originalTopLeft();
 

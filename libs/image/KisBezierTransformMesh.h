@@ -37,6 +37,8 @@ public:
     {
     }
 
+    PatchIndex hitTestPatch(const QPointF &pt, QPointF *localPointResult = 0) const;
+
     static void transformPatch(const KisBezierPatch &patch,
                                const QPoint &srcQImageOffset,
                                const QImage &srcImage,

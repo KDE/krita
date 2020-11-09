@@ -54,14 +54,15 @@ public:
     QPointF localToGlobal(const QPointF &pt) const;
     QPointF globalToLocal(const QPointF &pt) const;
 
-    void sampleIrregularGrid(QSize &gridSize,
-                             QVector<QPointF> &origPoints,
-                             QVector<QPointF> &transfPoints) const;
-
     void sampleRegularGrid(QSize &gridSize,
                            QVector<QPointF> &origPoints,
                            QVector<QPointF> &transfPoints,
                            const QPointF &dstStep) const;
+
+    void sampleRegularGridSVG2(QSize &gridSize,
+                               QVector<QPointF> &origPoints,
+                               QVector<QPointF> &transfPoints,
+                               const QPointF &dstStep) const;
 };
 
 KRITAGLOBAL_EXPORT

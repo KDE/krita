@@ -456,8 +456,12 @@ bool KisMeshTransformStrategy::beginPrimaryAction(const QPointF &pt)
     if (m_d->mode == Private::OVER_POINT || m_d->mode == Private::OVER_POINT_SYMMETRIC) {
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(m_d->hoveredControl, false);
 
-        m_d->selectedNodes.clear();
-        m_d->selectedNodes << m_d->hoveredControl->nodeIndex;
+        if (m_d->selectedNodes.size() <= 1 ||
+            !m_d->selectedNodes.contains(m_d->hoveredControl->nodeIndex)) {
+
+            m_d->selectedNodes.clear();
+            m_d->selectedNodes << m_d->hoveredControl->nodeIndex;
+        }
 
         retval = true;
 

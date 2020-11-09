@@ -60,6 +60,7 @@ public:
     QString caption;
     QString defaultDirectory;
     QString proposedFileName;
+    QUrl defaultUri;
     QStringList filterList;
     QString defaultFilter;
     QScopedPointer<QFileDialog> fileDialog;
@@ -100,6 +101,11 @@ void KoFileDialog::setDefaultDir(const QString &defaultDir, bool force)
             d->proposedFileName = QFileInfo(defaultDir).fileName();
         }
     }
+}
+
+void KoFileDialog::setDirectoryUrl(const QUrl &defaultUri)
+{
+    d->defaultUri = defaultUri;
 }
 
 void KoFileDialog::setImageFilters()
@@ -147,6 +153,9 @@ QString KoFileDialog::selectedMimeType() const
 void KoFileDialog::createFileDialog()
 {
     d->fileDialog.reset(new QFileDialog(d->parent, d->caption, d->defaultDirectory + "/" + d->proposedFileName));
+    if (!d->defaultUri.isEmpty()) {
+        d->fileDialog->setDirectoryUrl(d->defaultUri);
+    }
     KConfigGroup group = KSharedConfig::openConfig()->group("File Dialogs");
 
     bool dontUseNative = true;

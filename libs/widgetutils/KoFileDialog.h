@@ -73,6 +73,14 @@ public:
     void setDefaultDir(const QString &defaultDir, bool force = false);
 
     /**
+     * @brief setDirectoryUrl set the default URI to defaultUri.
+     * @param defaultUri a Uri to a file from some ContentProvider
+     *
+     * Used only on Android.
+     */
+    void setDirectoryUrl(const QUrl &defaultUri);
+
+    /**
      * @brief setImageFilters sets the name filters for the file dialog to all
      * image formats Qt's QImageReader supports.
      */

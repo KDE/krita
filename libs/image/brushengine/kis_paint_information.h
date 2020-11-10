@@ -201,6 +201,7 @@ public:
 
     /// Number of ms since the beginning of the stroke
     qreal currentTime() const;
+    void setCurrentTime(qreal time) const;
 
     /// Number of dabs painted since the beginning of the stroke
     int currentDabSeqNo() const;

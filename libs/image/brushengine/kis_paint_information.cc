@@ -443,6 +443,11 @@ qreal KisPaintInformation::drawingSpeed() const
     return d->speed;
 }
 
+void KisPaintInformation::setCurrentTime(qreal time) const {
+
+    d->time =  time;
+}
+
 qreal KisPaintInformation::rotation() const
 {
     return d->rotation;

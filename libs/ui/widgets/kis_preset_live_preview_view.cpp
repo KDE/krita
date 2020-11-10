@@ -299,6 +299,12 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
 
     KisStrokeId strokeId = m_image->startStroke(stroke);
 
+    if (proxy_preset->paintOp().id() == "mypaintbrush") {
+
+        m_curvePointPI1.setCurrentTime(123);
+        m_curvePointPI2.setCurrentTime(1230);
+    }
+
     // paint the stroke. The sketchbrush gets a different shape than the others to show how it works
     if (proxy_preset->paintOp().id() == "sketchbrush"
             || proxy_preset->paintOp().id() == "curvebrush"

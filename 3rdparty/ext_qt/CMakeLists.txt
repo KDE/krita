@@ -123,6 +123,7 @@ elseif (ANDROID)
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0098-Handle-Primary-and-Secondary-stylus-buttons-on-Andro.patch
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0099-Emulate-Long-Press-as-Right-Click-on-Android.patch
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0100-Fix-artifacts-when-rendering-multisubpath-dashed-QPa.patch
+            COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0096-Android-Pass-the-button-state-through-JNI.patch
 
             # Upstream Qt 5.13
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0040-Add-file-engine-for-Android-content-URLs.patch

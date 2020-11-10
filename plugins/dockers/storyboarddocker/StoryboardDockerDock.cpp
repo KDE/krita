@@ -185,7 +185,7 @@ StoryboardDockerDock::StoryboardDockerDock( )
     m_ui->btnComment->setPopupMode(QToolButton::MenuButtonPopup);
 
     m_lockAction = new KisAction(KisIconUtils::loadIcon("unlocked"),
-                                i18nc("Lock addition of keyframes to storyboard", "Lock"), m_ui->btnLock);
+                                i18nc("Freeze keyframe positions and ignore storyboard adjustments", "Freeze Keyframe Data"), m_ui->btnLock);
     m_lockAction->setCheckable(true);
     m_ui->btnLock->setDefaultAction(m_lockAction);
     m_ui->btnLock->setIconSize(QSize(22, 22));
@@ -525,11 +525,11 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
 void StoryboardDockerDock::slotLockClicked(bool isLocked){
     if (isLocked) {
         m_lockAction->setIcon(KisIconUtils::loadIcon("locked"));
-        m_storyboardModel->setLocked(true);
+        m_storyboardModel->setFreeze(true);
     }
     else {
         m_lockAction->setIcon(KisIconUtils::loadIcon("unlocked"));
-        m_storyboardModel->setLocked(false);
+        m_storyboardModel->setFreeze(false);
     }
 }
 

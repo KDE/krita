@@ -92,11 +92,6 @@ public:
     bool moveRows(const QModelIndex &sourceParent, int sourceRow, int count,
                     const QModelIndex &destinationParent, int destinationChild) override;
 
-    /* @brief used to prevent reordering of keyframes when drag+droping keyframes in timeline docker.
-     */
-    bool moveRowsNoReorder(const QModelIndex &sourceParent, int sourceRow, int count,
-                           const QModelIndex &destinationParent, int destinationChild);
-
     //for drag and drop
     QMimeData *mimeData(const QModelIndexList &indexes) const override;
     bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent) override;
@@ -138,8 +133,8 @@ public:
      */
     Comment getComment(int row) const;
 
-    void setLocked(bool);
-    bool isLocked() const;
+    void setFreeze(bool);
+    bool isFrozen() const;
     int getFramesPerSecond() const;
     void setView(StoryboardView *view);
     void setImage(KisImageWSP image);
@@ -167,15 +162,6 @@ public:
      * @return The list of index corresponding to the range.
      */
     QModelIndexList affectedIndexes(KisTimeSpan range) const;
-
-    /**
-     * @brief whether there are keyframes at @c time in layers other than @c keyframeNode
-     * @param keyframeNode the node which is to be excluded when looking for extra keyframes.
-     * @note This node may or may not have a keyframe at @c time
-     * @param time The time at which keyframes in other nodes are checked
-     * @return True if there are no keyframes at time at nodes other than @c keyframeNode
-     */
-    bool isOnlyKeyframe(KisNodeSP keyframeNode, int time) const;
 
     /**
      * @brief the next time at which there is a keyframe in any layer after @c keyframeTime
@@ -230,6 +216,7 @@ public:
     void shiftKeyframes(KisTimeSpan affected, int offset);
 
     int lastKeyframeGlobal() const;
+    void slotUpdateThumbnailsForItems(QModelIndexList indices);
 private Q_SLOTS:
     /**
      * @brief called when currentUiTime changes
@@ -248,6 +235,8 @@ private Q_SLOTS:
     void slotKeyframeRemoved(const KisKeyframeChannel *channel, int time);
     void slotKeyframeMoved(const KisKeyframeChannel* channel, int from, int to);
     void slotNodeRemoved(KisNodeSP node);
+
+    void slotFramerateChanged();
 
     /**
      * @brief calls regeneration of @c frame in the background i.e. in another thread.
@@ -303,9 +292,8 @@ private:
     StoryboardItemList m_items;
     QVector<Comment> m_commentList;
     CommentModel *m_commentModel;
-    bool m_locked;
+    bool m_freeze;
     bool m_reorderingKeyframes;
-    bool m_shouldReorderKeyframes;
     int m_lastScene = 0;
     KisIdleWatcher m_imageIdleWatcher;
     KisImageWSP m_image;

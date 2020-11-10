@@ -867,7 +867,9 @@ void KisToolTransform::slotTransactionGenerated(TransformTransactionProperties t
 {
     if (!m_strokeId || strokeStrategyCookie != m_strokeStrategyCookie) return;
 
-    if (transaction.transformedNodes().isEmpty()) {
+    if (transaction.transformedNodes().isEmpty() ||
+        transaction.originalRect().isEmpty()) {
+
         KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
         KIS_ASSERT(kisCanvas);
         kisCanvas->viewManager()->

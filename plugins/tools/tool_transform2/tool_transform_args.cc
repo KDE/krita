@@ -296,8 +296,7 @@ bool ToolTransformArgs::isIdentity() const
 
         return true;
     } else if (m_mode == LIQUIFY) {
-        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(m_liquifyWorker, false);
-        return m_liquifyWorker->isIdentity();
+        return !m_liquifyWorker || m_liquifyWorker->isIdentity();
     } else if (m_mode == MESH) {
         return m_meshTransform.isIdentity();
     } else {

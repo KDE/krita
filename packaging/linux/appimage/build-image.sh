@@ -72,6 +72,10 @@ if [[ -d "$APPDIR/usr/lib/$TRIPLET" ]] ; then
 fi
 
 # Step 3: Update the rpath in the various plugins we have to make sure they'll be loadable in an Appimage context
+for lib in $APPDIR/usr/bin/*.so*; do
+  patchelf --set-rpath '$ORIGIN/../lib' $lib;
+done
+
 for lib in $PLUGINS/*.so*; do
   patchelf --set-rpath '$ORIGIN/..' $lib;
 done

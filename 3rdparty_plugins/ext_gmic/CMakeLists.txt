@@ -21,6 +21,7 @@ ExternalProject_Add( ext_gmic_qt
     URL https://github.com/c-koi/gmic-qt/archive/v.2.9.2.tar.gz
     URL_HASH SHA256=50b401f999ddaff7ef86657ef115a7bfa844e9c465c8a7e878dd5b6b8bba99be
     PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-First-working-version-of-the-GMic-Qt-Krita-native-pl.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0002-Remove-shared-segment-infrastructure.patch
 
     SOURCE_DIR gmic-qt
     INSTALL_DIR ${PREFIX_ext_gmic}

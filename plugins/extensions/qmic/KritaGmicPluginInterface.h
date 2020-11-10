@@ -27,12 +27,13 @@
 
 #include "kis_image_interface.h"
 
+#define KRITA_GMIC_PLUGIN_INTERFACE_IID "org.kde.krita.KritaGmicPluginInterface"
 class KritaGmicPluginInterface {
 public:
   virtual ~KritaGmicPluginInterface() = default;
   virtual int launch(std::shared_ptr<KisImageInterface> iface, bool headless = false) = 0;
 };
 
-Q_DECLARE_INTERFACE(KritaGmicPluginInterface, "org.kde.krita.KritaGmicPluginInterface")
+Q_DECLARE_INTERFACE(KritaGmicPluginInterface, KRITA_GMIC_PLUGIN_INTERFACE_IID)
 
 #endif

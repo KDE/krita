@@ -23,13 +23,53 @@
 
 #include "kisimageinterface_export.h"
 
+#include <QDebug>
+#include <QMutex>
 #include <QObject>
 #include <QRect>
-#include <QSharedMemory>
+#include <QSharedPointer>
 #include <QSize>
+#include <QVector>
 
 class KisQmicApplicator;
 class KisViewManager;
+
+struct KISIMAGEINTERFACE_EXPORT KisQMicImage {
+    QMutex m_mutex;
+    QString m_layerName;
+    int m_width;
+    int m_height;
+    int m_spectrum;
+    float* m_data;
+
+    KisQMicImage(QString layerName, int width, int height, int spectrum = 4)
+        : m_mutex()
+        , m_layerName(layerName)
+        , m_width(width)
+        , m_height(height)
+        , m_spectrum(spectrum)
+        , m_data(new float[width * height * spectrum])
+    {
+    }
+
+    ~KisQMicImage() {
+        delete[] m_data;
+    }
+
+    const float* constData() const
+    {
+        return m_data;
+    }
+
+    size_t size() const
+    {
+        return m_width * m_height * m_spectrum * sizeof(float);
+    }
+};
+
+QDebug operator<<(QDebug d, const KisQMicImage &model);
+
+using KisQMicImageSP = QSharedPointer<KisQMicImage>;
 
 class KISIMAGEINTERFACE_EXPORT KisImageInterface : public QObject
 {
@@ -40,8 +80,8 @@ public:
     ~KisImageInterface() = default;
 
     QSize gmic_qt_get_image_size();
-    QByteArray gmic_qt_get_cropped_images(int mode, QRectF &cropRect);
-    void gmic_qt_output_images(int mode, QStringList layers);
+    QVector<KisQMicImageSP> gmic_qt_get_cropped_images(int mode, QRectF &cropRect);
+    void gmic_qt_output_images(int mode, QVector<KisQMicImageSP> layers);
     void gmic_qt_detach();
 
 private:
@@ -49,7 +89,7 @@ private:
     Private *p;
 
 private Q_SLOTS:
-    void slotStartApplicator(QStringList gmicImages);
+    void slotStartApplicator(QVector<KisQMicImageSP> gmicImages);
     void slotGmicFinished(bool successfully, int milliseconds, const QString &msg);
 };
 

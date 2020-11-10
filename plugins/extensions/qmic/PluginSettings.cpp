@@ -57,8 +57,6 @@ QString PluginSettings::gmicQtPath()
     QString gmicqt = "libgmic_krita_qt";
 #if defined(Q_OS_WIN)
     gmicqt += ".dll";
-#elif defined(Q_OS_MACOS)
-    gmicqt += ".dylib";
 #else
     gmicqt += ".so";
 #endif

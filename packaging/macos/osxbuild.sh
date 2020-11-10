@@ -63,6 +63,7 @@ export KIS_TBUILD_DIR=${BUILDROOT}/depbuild
 export KIS_TDEPINSTALL_DIR=${BUILDROOT}/depinstall
 export KIS_DOWN_DIR=${BUILDROOT}/down
 export KIS_BUILD_DIR=${BUILDROOT}/kisbuild
+export KIS_PLUGIN_BUILD_DIR=${BUILDROOT}/plugins_build
 export KIS_INSTALL_DIR=${BUILDROOT}/i
 
 # flags for OSX environment
@@ -200,6 +201,33 @@ cmake_3rdparty () {
         elif [[ "${error}" = "true" ]]; then
             log "ERROR: ${pkg} failed a second time, time to check the logs"
             log "stoping..."
+        fi
+    done
+}
+
+cmake_3rdparty_plugins () {
+    cd ${KIS_PLUGIN_BUILD_DIR}
+
+    local build_pkgs=("${@}") # convert to array
+    local error="false"
+
+    if [[ ${2} = "1" ]]; then
+        local build_pkgs=(${build_pkgs[@]:0:1})
+    fi
+
+    for package in ${build_pkgs[@]} ; do
+        if [[ ${package:0:3} != "ext" ]]; then
+            continue
+        fi
+        print_msg "Building ${package}"
+        log_cmd cmake --build . --config RelWithDebInfo --target ${package}
+        
+        print_if_error "Failed build ${package}"
+        if [[ ! ${osxbuild_error} -ne 0 ]]; then
+            print_msg "Build Success! ${package}"
+        else
+            log "${pkg} build fail, stoping..."
+            error="true"
         fi
     done
 }
@@ -552,6 +580,30 @@ install_krita () {
     fi
 }
 
+build_plugins () {
+    print_msg "building in ${KIS_PLUGIN_BUILD_DIR}"
+
+    log "$(check_dir_path ${KIS_PLUGIN_BUILD_DIR})"
+    log "$(check_dir_path ${KIS_DOWN_DIR})"
+    log "$(check_dir_path ${KIS_INSTALL_DIR})"
+
+    cd ${KIS_PLUGIN_BUILD_DIR}
+
+    log_cmd cmake ${KIS_SRC_DIR}/3rdparty_plugins/ \
+        -DCMAKE_OSX_DEPLOYMENT_TARGET=10.12 \
+        -DCMAKE_INSTALL_PREFIX=${KIS_INSTALL_DIR} \
+        -DCMAKE_PREFIX_PATH:PATH=${KIS_INSTALL_DIR} \
+        -DEXTERNALS_DOWNLOAD_DIR=${KIS_DOWN_DIR} \
+        -DINSTALL_ROOT=${KIS_INSTALL_DIR}
+
+    print_msg "finished plugins build setup"
+
+    cmake_3rdparty_plugins \
+        ext_gmic \
+
+    print_msg "Build Finished!"
+}
+
 # Runs all fixes for path and packages.
 # Historically only fixed boost @rpath
 fix_boost_rpath () {
@@ -644,6 +696,14 @@ script_run() {
         OSXBUILD_DIR=$(get_directory_fromargs "${@}")
 
         build_krita "${OSXBUILD_DIR}"
+        build_plugins "${OSXBUILD_DIR}"
+        exit
+
+    elif [[ ${1} = "buildplugins" ]]; then
+        if [[ -z ${OSXBUILD_CLEAN} ]]; then
+            dir_clean "${KIS_PLUGIN_BUILD_DIR}"
+        fi
+        build_plugins "${@:2}"
         exit
 
     elif [[ ${1} = "buildtarball" ]]; then
@@ -689,6 +749,7 @@ osxbuild.sh install ${KIS_BUILD_DIR}"
 
         build_krita "${OSXBUILD_DIR}"
         install_krita "${OSXBUILD_DIR}"
+        build_plugins "${OSXBUILD_DIR}"
         fix_boost_rpath "${OSXBUILD_DIR}"
 
     elif [[ ${1} = "test" ]]; then

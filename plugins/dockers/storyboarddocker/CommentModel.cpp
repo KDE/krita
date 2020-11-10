@@ -90,7 +90,7 @@ bool CommentModel::insertRows(int position, int rows, const QModelIndex &parent)
     beginInsertRows(QModelIndex(), position, position+rows-1);
 
     for (int row = 0; row < rows; ++row) {
-        Comment newcomment;                       //maybe set a default name like comment 1
+        StoryboardComment newcomment;                       //maybe set a default name like comment 1
         newcomment.name = "";
         newcomment.visibility = true;
 
@@ -205,7 +205,7 @@ Qt::DropActions CommentModel::supportedDragActions() const
     return Qt::CopyAction | Qt::MoveAction;
 }
 
-void CommentModel::resetData(QVector<Comment> list)
+void CommentModel::resetData(QVector<StoryboardComment> list)
 {
     beginResetModel();
     m_commentList = list;
@@ -213,7 +213,7 @@ void CommentModel::resetData(QVector<Comment> list)
     endResetModel();
 }
 
-QVector<Comment> CommentModel::getData()
+QVector<StoryboardComment> CommentModel::getData()
 {
     return m_commentList;
 }

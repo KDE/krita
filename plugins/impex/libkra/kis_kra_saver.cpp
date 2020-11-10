@@ -207,7 +207,7 @@ void KisKraSaver:: saveStoryboard(QDomDocument& doc, QDomElement &element)
 {
     //saving storyboard comments
     QDomElement eCommentList = doc.createElement("StoryboardCommentList");
-    for (Comment comment: m_d->doc->getStoryboardCommentsList()) {
+    for (StoryboardComment comment: m_d->doc->getStoryboardCommentsList()) {
         QDomElement commentElement = doc.createElement("storyboardcomment");
         commentElement.setAttribute("name", comment.name);
         commentElement.setAttribute("visibility", comment.visibility);

@@ -28,7 +28,7 @@ class KoStore;
 class KisDocument;
 class KoColorSpace;
 class KisPaintingAssistant;
-class Comment;
+class StoryboardComment;
 
 #include <kis_types.h>
 #include "kritalibkra_export.h"
@@ -63,7 +63,7 @@ public:
 
     StoryboardItemList storyboardItemList() const;
 
-    QVector<Comment> storyboardCommentList() const;
+    QVector<StoryboardComment> storyboardCommentList() const;
 
     /// if empty, loading didn't fail...
     QStringList errorMessages() const;

@@ -37,7 +37,7 @@ class QDomElement;
  * It stores the name and visiblity of comments. It is used in
  * @c CommentModel and @c StoryboardModel.
  */
-struct Comment
+struct StoryboardComment
 {
     QString name;
     bool visibility;

@@ -546,7 +546,7 @@ Qt::DropActions StoryboardModel::supportedDragActions() const
 int StoryboardModel::visibleCommentCount() const
 {
     int visibleComments = 0;
-    foreach(Comment comment, m_commentList) {
+    foreach(StoryboardComment comment, m_commentList) {
         if (comment.visibility) {
             visibleComments++;
         }
@@ -579,7 +579,7 @@ void StoryboardModel::setCommentModel(CommentModel *commentModel)
                 this, SLOT(slotCommentRowMoved(const QModelIndex, int, int, const QModelIndex, int)));
 }
 
-Comment StoryboardModel::getComment(int row) const
+StoryboardComment StoryboardModel::getComment(int row) const
 {
     return m_commentList.at(row);
 }

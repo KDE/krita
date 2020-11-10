@@ -59,12 +59,12 @@ public:
      * @brief resets m_commentList to @c list.
      * @param list The new list.
      */
-    void resetData(QVector<Comment> list);
+    void resetData(QVector<StoryboardComment> list);
     /**
      * @brief returns a list of comments
      * @return m_commentList
      */
-    QVector<Comment> getData();
+    QVector<StoryboardComment> getData();
 
 Q_SIGNALS:
     /**
@@ -75,7 +75,7 @@ Q_SIGNALS:
     void sigCommentListChanged();
     //TODO: Use a signal compressor to reduce frequency
 private:
-    QVector<Comment> m_commentList;
+    QVector<StoryboardComment> m_commentList;
     friend class StoryboardModel;
 };
 

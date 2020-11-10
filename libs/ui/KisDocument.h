@@ -382,12 +382,12 @@ public:
     /**
      * @brief returns the list of comments for the storyboard docker in the document
      */
-    QVector<Comment> getStoryboardCommentsList();
+    QVector<StoryboardComment> getStoryboardCommentsList();
 
     /**
      * @brief sets the  list of comments for the storyboard docker in the document, emits empty signal if emitSignal is true.
      */
-    void setStoryboardCommentList(const QVector<Comment> &storyboardCommentList, bool emitSignal = false);
+    void setStoryboardCommentList(const QVector<StoryboardComment> &storyboardCommentList, bool emitSignal = false);
 
     const KisMirrorAxisConfig& mirrorAxisConfig() const;
     void setMirrorAxisConfig(const KisMirrorAxisConfig& config);

@@ -333,7 +333,7 @@ public:
     QList<KisPaintingAssistantSP> assistants;
 
     StoryboardItemList m_storyboardItemList;
-    QVector<Comment> m_storyboardCommentList;
+    QVector<StoryboardComment> m_storyboardCommentList;
 
     QColor globalAssistantsColor;
 
@@ -1984,12 +1984,12 @@ void KisDocument::setStoryboardItemList(const StoryboardItemList &storyboardItem
     }
 }
 
-QVector<Comment> KisDocument::getStoryboardCommentsList()
+QVector<StoryboardComment> KisDocument::getStoryboardCommentsList()
 {
     return d->m_storyboardCommentList;
 }
 
-void KisDocument::setStoryboardCommentList(const QVector<Comment> &storyboardCommentList, bool emitSignal)
+void KisDocument::setStoryboardCommentList(const QVector<StoryboardComment> &storyboardCommentList, bool emitSignal)
 {
     d->m_storyboardCommentList = storyboardCommentList;
     if (emitSignal) {

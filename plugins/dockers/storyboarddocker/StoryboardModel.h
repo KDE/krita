@@ -131,7 +131,7 @@ public:
      * Not to be confused with CommentBox.
      * @sa Comment
      */
-    Comment getComment(int row) const;
+    StoryboardComment getComment(int row) const;
 
     void setFreeze(bool);
     bool isFrozen() const;
@@ -290,7 +290,7 @@ Q_SIGNALS:
 
 private:
     StoryboardItemList m_items;
-    QVector<Comment> m_commentList;
+    QVector<StoryboardComment> m_commentList;
     CommentModel *m_commentModel;
     bool m_freeze;
     bool m_reorderingKeyframes;

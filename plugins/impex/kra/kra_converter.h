@@ -56,7 +56,7 @@ public:
     vKisNodeSP activeNodes();
     QList<KisPaintingAssistantSP> assistants();
     StoryboardItemList storyboardItemList();
-    QVector<Comment> storyboardCommentList();
+    QVector<StoryboardComment> storyboardCommentList();
 
 public Q_SLOTS:
 
@@ -80,7 +80,7 @@ private:
     vKisNodeSP m_activeNodes;
     QList<KisPaintingAssistantSP> m_assistants;
     StoryboardItemList m_storyboardItemList;
-    QVector<Comment> m_storyboardCommentList;
+    QVector<StoryboardComment> m_storyboardCommentList;
     bool m_stop {false};
 
     KoStore *m_store {0};

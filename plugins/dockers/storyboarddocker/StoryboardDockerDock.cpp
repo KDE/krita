@@ -239,7 +239,7 @@ void StoryboardDockerDock::setCanvas(KoCanvasBase *canvas)
         //update the lists in KisDocument and empty storyboardModel's list and commentModel's list
         slotUpdateDocumentList();
         m_storyboardModel->resetData(StoryboardItemList());
-        m_commentModel->resetData(QVector<Comment>());
+        m_commentModel->resetData(QVector<StoryboardComment>());
     }
 
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
@@ -479,7 +479,7 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
                 QTextDocument doc;
                 doc.setDocumentMargin(0);
                 doc.setDefaultFont(p.font());
-                QVector<Comment> comments = m_commentModel->getData();
+                QVector<StoryboardComment> comments = m_commentModel->getData();
                 int numComments = comments.size();
                 QString comment;
                 for (int j = 0; j < numComments; j++) {

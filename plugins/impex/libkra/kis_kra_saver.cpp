@@ -86,7 +86,6 @@ KisKraSaver::KisKraSaver(KisDocument* document, const QString &filename)
         : m_d(new Private)
 {
     m_d->doc = document;
-    qDebug()<<"creating kra saver and size of array is "<<document->getStoryboardItemList().count();
     m_d->filename = filename;
 
     m_d->imageName = m_d->doc->documentInfo()->aboutInfo("title");

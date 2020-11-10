@@ -1,4 +1,4 @@
-From c8bbe706618bcb859733cd9be1ab8fd7faa78ad8 Mon Sep 17 00:00:00 2001
+From ada45cc4f5e2ac61992fe10f4d22899971c07793 Mon Sep 17 00:00:00 2001
 From: Sharaf Zaman <sharafzaz121@gmail.com>
 Date: Thu, 10 Sep 2020 10:42:31 +0000
 Subject: [PATCH 4/5] Pass keyboard modifiers for mouse and tablet events
@@ -12,7 +12,7 @@ Change-Id: I79238d8454d8e10303af794625dcc704642f99e5
  2 files changed, 25 insertions(+), 21 deletions(-)
 
 diff --git a/src/android/jar/src/org/qtproject/qt5/android/QtNative.java b/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
-index 6850e89ef5..f8f1d31c4d 100644
+index ed599a4369..81bdb83a65 100644
 --- a/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
 +++ b/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
 @@ -495,7 +495,7 @@ public class QtNative
@@ -24,7 +24,7 @@ index 6850e89ef5..f8f1d31c4d 100644
          } else {
              touchBegin(id);
              for (int i = 0; i < event.getPointerCount(); ++i) {
-@@ -548,11 +548,11 @@ public class QtNative
+@@ -545,23 +545,23 @@ public class QtNative
      {
          switch (event.getActionMasked()) {
              case MotionEvent.ACTION_UP:
@@ -38,10 +38,9 @@ index 6850e89ef5..f8f1d31c4d 100644
                  m_oldx = (int) event.getX();
                  m_oldy = (int) event.getY();
                  break;
-@@ -560,12 +560,12 @@ public class QtNative
+             case MotionEvent.ACTION_HOVER_MOVE:
              case MotionEvent.ACTION_MOVE:
-                 if (event.isFromSource(InputDevice.SOURCE_MOUSE) ||
-                     event.isFromSource(InputDevice.SOURCE_TOUCHPAD)) {
+                 if (event.getToolType(0) == MotionEvent.TOOL_TYPE_MOUSE) {
 -                    mouseMove(id, (int) event.getX(), (int) event.getY());
 +                    mouseMove(id, (int) event.getX(), (int) event.getY(), event.getMetaState());
                  } else {
@@ -53,7 +52,7 @@ index 6850e89ef5..f8f1d31c4d 100644
                          m_oldx = (int) event.getX();
                          m_oldy = (int) event.getY();
                      }
-@@ -1047,9 +1047,9 @@ public class QtNative
+@@ -1043,9 +1043,9 @@ public class QtNative
      // screen methods
  
      // pointer methods
@@ -66,7 +65,7 @@ index 6850e89ef5..f8f1d31c4d 100644
      public static native void mouseWheel(int winId, int x, int y, float hdelta, float vdelta);
      public static native void touchBegin(int winId);
      public static native void touchAdd(int winId, int pointerId, int action, boolean primary, int x, int y, float major, float minor, float rotation, float pressure);
-@@ -1059,7 +1059,7 @@ public class QtNative
+@@ -1055,7 +1055,7 @@ public class QtNative
  
      // tablet methods
      public static native boolean isTabletEventSupported();

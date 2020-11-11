@@ -6,19 +6,33 @@
 #include <KoColor.h>
 #include <kis_paintop_settings.h>
 #include <kis_painter.h>
+#include <KoResource.h>
 
-class KisMyPaintBrush : public QObject
+class KisMyPaintBrush : public QObject, public KoResource
 {
     Q_OBJECT
+
 public:
-    explicit KisMyPaintBrush(KisPainter *painter, QObject *parent = nullptr);
+
+    KisMyPaintBrush(const QString &fileName="");
+    virtual ~KisMyPaintBrush() {} ;
+
     void setColor(const KoColor color);
     void apply(KisPaintOpSettingsSP settings);
     MyPaintBrush* brush();
 
+    bool load() override;
+    bool loadFromDevice(QIODevice *dev) override;
+    bool save() override;
+
+    QByteArray getJsonData();
+
 private:
-    MyPaintBrush *m_brush;
-    KisPainter *m_painter;
+
+    class Private;
+    Private* const m_d;
 };
+
+//Q_DECLARE_METATYPE(KisMyPaintBrush);
 
 #endif // KIS_MYPAINT_BRUSH_H

@@ -272,6 +272,7 @@ bool KisPaintOpPreset::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP re
     setValid(true);
     setImage(img);
 
+    saveInitialState();
     return true;
 }
 
@@ -281,6 +282,7 @@ bool KisPaintOpPreset::save()
     if (paintopid.isEmpty())
         return false;
 
+    saveInitialState();
     return KoResource::save();
 }
 

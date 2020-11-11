@@ -112,39 +112,3 @@ void KisScalarKeyframeUpdateCommand::undo()
 
     keyframe->sigChanged(keyframe);
 }
-
-KisMoveKeyframeInternalCommand::KisMoveKeyframeInternalCommand(KisKeyframeChannel *channel, int srcTime, int dstTime, KUndo2Command *parentCmd)
-    :   KUndo2Command(parentCmd)
-    , m_channel(channel)
-    , m_srcTime(srcTime)
-    , m_dstTime(dstTime)
-{}
-
-void KisMoveKeyframeInternalCommand::redo()
-{
-    m_channel->moveKeyframe(m_srcTime, m_dstTime);
-}
-
-void KisMoveKeyframeInternalCommand::undo()
-{
-    m_channel->moveKeyframe(m_dstTime, m_srcTime);
-}
-
-KisSwapKeyframesInternalCommand::KisSwapKeyframesInternalCommand(KisKeyframeChannel *channel, int timeA, int timeB, KUndo2Command *parentCmd)
-    : KUndo2Command(parentCmd)
-    , m_channel(channel)
-    , m_timeA(timeA)
-    , m_timeB(timeB)
-{
-
-}
-
-void KisSwapKeyframesInternalCommand::redo()
-{
-    m_channel->swapKeyframes(m_timeA, m_timeB);
-}
-
-void KisSwapKeyframesInternalCommand::undo()
-{
-    m_channel->swapKeyframes(m_timeB, m_timeA);
-}

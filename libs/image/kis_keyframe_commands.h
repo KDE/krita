@@ -58,34 +58,6 @@ private:
     KisKeyframeSP m_cached;
 };
 
-class KisMoveKeyframeInternalCommand : public KUndo2Command
-{
-public:
-    KisMoveKeyframeInternalCommand(KisKeyframeChannel *channel, int srcTime, int dstTime, KUndo2Command* parentCmd);
-
-    void redo() override;
-    void undo() override;
-
-private:
-    KisKeyframeChannel* m_channel;
-    int m_srcTime;
-    int m_dstTime;
-};
-
-class KisSwapKeyframesInternalCommand : public KUndo2Command
-{
-public:
-    KisSwapKeyframesInternalCommand(KisKeyframeChannel *channel, int timeA, int timeB, KUndo2Command* parentCmd);
-
-    void redo() override;
-    void undo() override;
-
-private:
-    KisKeyframeChannel* m_channel;
-    int m_timeA;
-    int m_timeB;
-};
-
 
 class KisScalarKeyframeUpdateCommand : public KUndo2Command
 {

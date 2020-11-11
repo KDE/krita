@@ -28,7 +28,6 @@
 #include "kis_image_animation_interface.h"
 #include "kis_keyframe_commands.h"
 #include "kis_scalar_keyframe_channel.h"
-#include "kis_signals_blocker.h"
 
 #include <QMap>
 
@@ -93,19 +92,6 @@ KisKeyframeChannel::KisKeyframeChannel(const KoID &id, KisDefaultBoundsBaseSP bo
                    channel->affectedRect(time)
                    );
     });
-
-    connect(this, &KisKeyframeChannel::sigMovedKeyframe, [](const KisKeyframeChannel *channel, int fromTime, int toTime) {
-        int fromActiveFrame = channel->activeKeyframeTime(fromTime);
-        channel->sigChannelUpdated(
-                    channel->affectedFrames(fromActiveFrame),
-                    channel->affectedRect(fromActiveFrame)
-                   );
-
-        channel->sigChannelUpdated(
-                    channel->affectedFrames(toTime),
-                    channel->affectedRect(toTime)
-                    );
-    });
 }
 
 KisKeyframeChannel::KisKeyframeChannel(const KisKeyframeChannel &rhs, KisNodeWSP newParent)
@@ -159,45 +145,16 @@ void KisKeyframeChannel::moveKeyframe(KisKeyframeChannel *sourceChannel, int sou
 {
     KIS_ASSERT(sourceChannel && targetChannel);
 
-    const bool internalMovement = (sourceChannel == targetChannel);
+    KisKeyframeSP sourceKeyframe = sourceChannel->keyframeAt(sourceTime);
+    sourceChannel->removeKeyframe(sourceTime, parentUndoCmd);
 
-    if (internalMovement) {
-
-        // Since we'll be blocking signals for internal movement. we'll
-        // remove the keyframe that is going to be overwritten first.
-        // This will preserve overwritten keyframes with undo/redo
-        // while also having signals register correctly...
-        if (targetChannel->keyframeAt(targetTime)) {
-            targetChannel->removeKeyframe(targetTime, parentUndoCmd);
-        }
-
-        if (parentUndoCmd) {
-            new KisMoveKeyframeInternalCommand(sourceChannel, sourceTime, targetTime, parentUndoCmd);
-        }
-
-        {
-            QScopedPointer<KisSignalsBlocker> blocker;
-            blocker.reset(new KisSignalsBlocker(sourceChannel));
-
-            KisKeyframeSP keyToMove = sourceChannel->keyframeAt(sourceTime);
-            sourceChannel->removeKeyframe(sourceTime);
-            targetChannel->insertKeyframe(targetTime, keyToMove);
-        }
-
-        sourceChannel->sigMovedKeyframe(sourceChannel, sourceTime, targetTime);
-
-    } else {
-
-        KisKeyframeSP sourceKeyframe = sourceChannel->keyframeAt(sourceTime);
-        sourceChannel->removeKeyframe(sourceTime, parentUndoCmd);
-
-        KisKeyframeSP targetKeyframe = sourceKeyframe;
-
+    KisKeyframeSP targetKeyframe = sourceKeyframe;
+    if (sourceChannel != targetChannel) {
         // When "moving" Keyframes between channels, a new copy is made for that channel.
         targetKeyframe = sourceKeyframe->duplicate(targetChannel);
-
-        targetChannel->insertKeyframe(targetTime, targetKeyframe, parentUndoCmd);
     }
+
+    targetChannel->insertKeyframe(targetTime, targetKeyframe, parentUndoCmd);
 }
 
 void KisKeyframeChannel::copyKeyframe(const KisKeyframeChannel *sourceChannel, int sourceTime, KisKeyframeChannel *targetChannel, int targetTime, KUndo2Command* parentUndoCmd)
@@ -213,42 +170,18 @@ void KisKeyframeChannel::copyKeyframe(const KisKeyframeChannel *sourceChannel, i
 void KisKeyframeChannel::swapKeyframes(KisKeyframeChannel *channelA, int timeA, KisKeyframeChannel *channelB, int timeB, KUndo2Command *parentUndoCmd)
 {
     KIS_ASSERT(channelA && channelB);
-    const bool internalSwap = (channelA == channelB);
 
-    if (internalSwap) {
+    // Store B.
+    KisKeyframeSP keyframeB = channelB->keyframeAt(timeB);
 
-        {
-            QScopedPointer<KisSignalsBlocker> blocker;
-            blocker.reset(new KisSignalsBlocker(channelA));
+    // Move A -> B
+    moveKeyframe(channelA, timeA, channelB, timeB, parentUndoCmd);
 
-            if (parentUndoCmd) {
-                new KisSwapKeyframesInternalCommand(channelA, timeA, timeB, parentUndoCmd);
-            }
-
-            KisKeyframeSP keyframeA = channelA->keyframeAt(timeA);
-            KisKeyframeSP keyframeB = channelB->keyframeAt(timeB);
-
-            channelA->insertKeyframe(timeA, keyframeB);
-            channelB->insertKeyframe(timeB, keyframeA);
-        }
-
-        channelA->sigMovedKeyframe(channelA, timeA, timeB);
-        channelA->sigMovedKeyframe(channelA, timeB, timeA);
-
-    } else {
-
-        // Store B.
-        KisKeyframeSP keyframeB = channelB->keyframeAt(timeB);
-
-        // Move A -> B
-        moveKeyframe(channelA, timeA, channelB, timeB, parentUndoCmd);
-
-        // Insert B -> A
-        if (channelA != channelB) {
-            keyframeB = keyframeB->duplicate(channelA);
-        }
-        channelA->insertKeyframe(timeA, keyframeB, parentUndoCmd);
+    // Insert B -> A
+    if (channelA != channelB) {
+        keyframeB = keyframeB->duplicate(channelA);
     }
+    channelA->insertKeyframe(timeA, keyframeB, parentUndoCmd);
 }
 
 KisKeyframeSP KisKeyframeChannel::keyframeAt(int time) const

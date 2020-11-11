@@ -723,6 +723,8 @@ if(LIBMYPAINT_FOUND)
         message(WARNING "Please update libmypaint to version above 1.4.0 as lower versions are known to crash")
     endif()
 endif()
+macro_bool_to_01(LIBMYPAINT_FOUND HAVE_LIBMYPAINT)
+configure_file(config-mypaint.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-mypaint.h )
 
 ##
 ## Look for OpenGL

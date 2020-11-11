@@ -501,6 +501,13 @@ bool StoryboardModel::moveRows(const QModelIndex &sourceParent, int sourceRow, i
     }
 }
 
+QStringList StoryboardModel::mimeTypes() const
+{
+    QStringList types;
+    types << QLatin1String("application/x-krita-storyboard");
+    return types;
+}
+
 QMimeData *StoryboardModel::mimeData(const QModelIndexList &indexes) const
 {
     QMimeData *mimeData = new QMimeData();
@@ -516,7 +523,7 @@ QMimeData *StoryboardModel::mimeData(const QModelIndexList &indexes) const
         }
     }
 
-    mimeData->setData("application/x-qabstractitemmodeldatalist", encodeData); //default mimetype
+    mimeData->setData("application/x-krita-storyboard", encodeData); //default mimetype
     return mimeData;
 }
 
@@ -528,8 +535,8 @@ bool StoryboardModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
         return false;
     }
 
-    if (action == Qt::MoveAction && data->hasFormat("application/x-qabstractitemmodeldatalist")) {
-        QByteArray bytes = data->data("application/x-qabstractitemmodeldatalist");
+    if (action == Qt::MoveAction && data->hasFormat("application/x-krita-storyboard")) {
+        QByteArray bytes = data->data("application/x-krita-storyboardboard");
         QDataStream stream(&bytes, QIODevice::ReadOnly);
 
         if (parent.isValid()) {

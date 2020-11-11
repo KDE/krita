@@ -93,6 +93,7 @@ public:
                     const QModelIndex &destinationParent, int destinationChild) override;
 
     //for drag and drop
+    QStringList mimeTypes() const override;
     QMimeData *mimeData(const QModelIndexList &indexes) const override;
     bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent) override;
     Qt::DropActions supportedDropActions() const override;

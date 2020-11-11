@@ -186,6 +186,8 @@ void KisToolLine::beginPrimaryAction(KoPointerEvent *event)
         KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
         QString message = i18n("The MyPaint Brush Engine is not available for this colorspace");
         kiscanvas->viewManager()->showFloatingMessage(message, koIcon("object-locked"));
+        event->ignore();
+        return;
     }
 
     setMode(KisTool::PAINT_MODE);

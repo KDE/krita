@@ -123,6 +123,8 @@
 #include <kis_psd_layer_style.h>
 
 #include <config-seexpr.h>
+#include <config-mypaint.h>
+
 
 namespace {
 const QTime appStartTime(QTime::currentTime());
@@ -255,8 +257,12 @@ void KisApplication::addResourceTypes()
     KoResourcePaths::addResourceType("kis_images", "data", "/images/");
     KoResourcePaths::addResourceType("metadata_schema", "data", "/metadata/schemas/");
     KoResourcePaths::addResourceType(ResourceType::Brushes, "data", "/brushes/");
+
+#ifdef HAVE_LIBMYPAINT
     KoResourcePaths::addResourceType("mypaint_brushes", "data", "/mypaint-data/");
     KoResourcePaths::addResourceType("mypaint_brushes", "data", "../mypaint/brushes/");
+#endif
+
     KoResourcePaths::addResourceType("kis_taskset", "data", "/taskset/");
     KoResourcePaths::addResourceType("kis_taskset", "data", "/taskset/");
     KoResourcePaths::addResourceType("gmic_definitions", "data", "/gmic/");

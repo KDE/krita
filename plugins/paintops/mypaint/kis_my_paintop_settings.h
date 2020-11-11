@@ -19,6 +19,9 @@ public:
     void setPaintOpSize(qreal value) override;
     qreal paintOpSize() const override;
 
+    void setPaintOpOpacity(qreal value) override;
+    qreal paintOpOpacity() override;
+
     QPainterPath brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom) override;
 
     QString modelName() const override {

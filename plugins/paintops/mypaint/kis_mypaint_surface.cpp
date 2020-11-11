@@ -32,7 +32,11 @@
 
 using namespace std;
 
-KoChannelInfo::enumChannelValueType KisMyPaintSurface::bitDepth;
+void destroy_internal_surface_callback(MyPaintSurface *surface)
+{
+    KisMyPaintSurface::MyPaintSurfaceInternal *ptr = static_cast<KisMyPaintSurface::MyPaintSurfaceInternal*>(surface);
+    delete ptr;
+}
 
 KisMyPaintSurface::KisMyPaintSurface(KisPainter *painter, KisPaintDeviceSP paintNode, KisImageSP image)
 {
@@ -46,12 +50,13 @@ KisMyPaintSurface::KisMyPaintSurface(KisPainter *painter, KisPaintDeviceSP paint
 
     m_surface->draw_dab = this->draw_dab;
     m_surface->get_color = this->get_color;
-    bitDepth = painter->device()->colorSpace()->channels()[0]->channelValueType();
+    m_surface->destroy = destroy_internal_surface_callback;
+    m_surface->bitDepth = painter->device()->colorSpace()->channels()[0]->channelValueType();
 }
 
-KisMyPaintSurface::~KisMyPaintSurface() {
-
-    delete m_surface;
+KisMyPaintSurface::~KisMyPaintSurface()
+{
+    mypaint_surface_unref(m_surface);
 }
 
 int KisMyPaintSurface::draw_dab(MyPaintSurface *self, float x, float y, float radius, float color_r, float color_g,
@@ -60,18 +65,18 @@ int KisMyPaintSurface::draw_dab(MyPaintSurface *self, float x, float y, float ra
 
     MyPaintSurfaceInternal *surface = static_cast<MyPaintSurfaceInternal*>(self);
 
-    if (bitDepth == KoChannelInfo::UINT8) {
+    if (surface->bitDepth == KoChannelInfo::UINT8) {
         return surface->m_owner->drawDabImpl<quint8>(self, x, y, radius, color_r, color_g,
                  color_b, opaque, hardness, color_a,
                 aspect_ratio, angle, lock_alpha,  colorize);
     }
-    else if (bitDepth == KoChannelInfo::UINT16) {
+    else if (surface->bitDepth == KoChannelInfo::UINT16) {
         return surface->m_owner->drawDabImpl<quint16>(self, x, y, radius, color_r, color_g,
                  color_b, opaque, hardness, color_a,
                 aspect_ratio, angle, lock_alpha,  colorize);
     }
 #if defined HAVE_OPENEXR
-    else if (bitDepth == KoChannelInfo::FLOAT16) {
+    else if (surface->bitDepth == KoChannelInfo::FLOAT16) {
         return surface->m_owner->drawDabImpl<half>(self, x, y, radius, color_r, color_g,
                  color_b, opaque, hardness, color_a,
                 aspect_ratio, angle, lock_alpha,  colorize);
@@ -88,14 +93,14 @@ void KisMyPaintSurface::get_color(MyPaintSurface *self, float x, float y, float 
                             float * color_r, float * color_g, float * color_b, float * color_a) {
 
     MyPaintSurfaceInternal *surface = static_cast<MyPaintSurfaceInternal*>(self);
-    if (bitDepth == KoChannelInfo::UINT8) {
+    if (surface->bitDepth == KoChannelInfo::UINT8) {
         surface->m_owner->getColorImpl<quint8>(self, x, y, radius, color_r, color_g, color_b, color_a);
     }
-    else if (bitDepth == KoChannelInfo::UINT16) {
+    else if (surface->bitDepth == KoChannelInfo::UINT16) {
         surface->m_owner->getColorImpl<quint16>(self, x, y, radius, color_r, color_g, color_b, color_a);
     }
 #if defined HAVE_OPENEXR
-    else if (bitDepth == KoChannelInfo::FLOAT16) {
+    else if (surface->bitDepth == KoChannelInfo::FLOAT16) {
         surface->m_owner->getColorImpl<half>(self, x, y, radius, color_r, color_g, color_b, color_a);
     }
 #endif

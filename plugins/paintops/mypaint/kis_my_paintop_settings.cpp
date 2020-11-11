@@ -56,6 +56,21 @@ qreal KisMyPaintOpSettings::paintOpSize() const
     return op.diameter;
 }
 
+void KisMyPaintOpSettings::setPaintOpOpacity(qreal value)
+{
+    KisMyPaintOptionProperties op;
+    op.readOptionSettingImpl(this);
+    op.opacity = value;
+    op.writeOptionSettingImpl(this);
+}
+
+qreal KisMyPaintOpSettings::paintOpOpacity()
+{
+    KisMyPaintOptionProperties op;
+    op.readOptionSettingImpl(this);
+    return op.opacity;
+}
+
 bool KisMyPaintOpSettings::paintIncremental()
 {
     return true;

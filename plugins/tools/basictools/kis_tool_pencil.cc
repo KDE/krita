@@ -22,6 +22,7 @@
 #include <KoCanvasBase.h>
 #include <KoPointerEvent.h>
 #include <KoShapeStroke.h>
+#include <KisViewManager.h>
 
 #include <kis_cursor.h>
 
@@ -46,6 +47,15 @@ void KisToolPencil::updatePencilCursor(bool value)
 void KisToolPencil::mousePressEvent(KoPointerEvent *event)
 {
     if (!nodeEditable()) return;
+
+    if (nodePaintAbility() == KisToolPencil::MYPAINTBRUSH_UNPAINTABLE) {
+        KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
+        QString message = i18n("The MyPaint Brush Engine is not available for this colorspace");
+        kiscanvas->viewManager()->showFloatingMessage(message, koIcon("object-locked"));
+        event->ignore();
+        return;
+    }
+
     DelegatedPencilTool::mousePressEvent(event);
 }
 

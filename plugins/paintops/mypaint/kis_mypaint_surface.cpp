@@ -248,10 +248,6 @@ void KisMyPaintSurface::getColorImpl(MyPaintSurface *self, float x, float y, flo
     const QPoint pt = QPoint(x - radius, y - radius);
     const QSize sz = QSize(2 * radius, 2 * radius);
 
-    if( m_image.isNull() && m_imageDevice.isNull()) {
-        return;
-    }
-
     const QRect dabRectAligned = QRect(pt, sz);
     const QPointF center = QPointF(x, y);
     KisAlgebra2D::OuterCircle outer(center, radius);
@@ -265,12 +261,14 @@ void KisMyPaintSurface::getColorImpl(MyPaintSurface *self, float x, float y, flo
 
     KisPaintDeviceSP targetDevice;
 
-    if(!m_image.isNull()) {
-
+    if(m_image) {
         m_image->blockUpdates();
         targetDevice = m_image->projection();
+    } else if (m_imageDevice) {
+        targetDevice = m_imageDevice;
+    } else {
+        targetDevice = m_painter->device();
     }
-    else { targetDevice = m_imageDevice; }
 
     KisSequentialIterator it(targetDevice, dabRectAligned);
     QVector<float> surface_color_vec = {0,0,0,0};
@@ -329,7 +327,7 @@ void KisMyPaintSurface::getColorImpl(MyPaintSurface *self, float x, float y, flo
         *color_a = CLAMP(sum_a, 0.0f, 1.0f);
     }
 
-    if(!m_image.isNull()) {
+    if(m_image) {
         m_image->unblockUpdates();
     }
 }

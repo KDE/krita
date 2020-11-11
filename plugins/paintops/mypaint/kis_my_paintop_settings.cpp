@@ -58,7 +58,7 @@ qreal KisMyPaintOpSettings::paintOpSize() const
 
 bool KisMyPaintOpSettings::paintIncremental()
 {
-    return false;
+    return true;
 }
 
 

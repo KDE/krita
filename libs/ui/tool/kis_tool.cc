@@ -538,7 +538,7 @@ void KisTool::deleteSelection()
 KisTool::NodePaintAbility KisTool::nodePaintAbility()
 {
     KisNodeSP node = currentNode();
-    KisPaintOpPresetSP currentPaintOpPreset = canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
+    KisPaintOpPresetSP currentPaintOpPreset = canvas()->resourceManager()->resource(KoCanvasResource::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
     const KoColorSpace *colorSpace = node->paintDevice()->colorSpace();
 
     if (!node) {

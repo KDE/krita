@@ -14,13 +14,19 @@ public:
     virtual ~KisMyPaintOpFactory();
 
     KisPaintOp* createOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP node, KisImageSP image) override;
-    KisPaintOpSettingsSP settings() override;
+    KisPaintOpSettingsSP createSettings(KisResourcesInterfaceSP resourcesInterface) override;
     KisPaintOpConfigWidget* createConfigWidget(QWidget* parent) override;
     QString id() const override;
     QString name() const override;
     QIcon icon() override;
     QString category() const override;
+
+    QList<KoResourceSP> prepareLinkedResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface) override;
+    QList<KoResourceSP> prepareEmbeddedResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface) override;
+
+#if 0
     void processAfterLoading() override;
+#endif
 
 private:
 

@@ -339,7 +339,8 @@ bool KisApplication::registerResources()
 {
     KisResourceLoaderRegistry *reg = KisResourceLoaderRegistry::instance();
 
-    reg->add(new KisResourceLoader<KisPaintOpPreset>(ResourceType::PaintOpPresets, ResourceType::PaintOpPresets, i18n("Brush presets"), QStringList() << "application/x-krita-paintoppreset"));
+    reg->add(new KisResourceLoader<KisPaintOpPreset>(ResourceType::PaintOpPresets, ResourceType::PaintOpPresets, i18n("Brush presets"),
+                                                     QStringList() << "application/x-krita-paintoppreset" << "application/x-mypaint-brush"));
 
     reg->add(new KisResourceLoader<KisGbrBrush>(ResourceSubType::GbrBrushes, ResourceType::Brushes, i18n("Brush tips"), QStringList() << "image/x-gimp-brush"));
     reg->add(new KisResourceLoader<KisImagePipeBrush>(ResourceSubType::GihBrushes, ResourceType::Brushes, i18n("Brush tips"), QStringList() << "image/x-gimp-brush-animated"));

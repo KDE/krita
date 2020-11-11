@@ -34,23 +34,15 @@
 #include "kis_my_paintop_settings_widget.h"
 
 class KisMyPaintOpFactory::Private {
-
-    public:
-        KoResourceServer<KisMyPaintBrush> *brushServer;
-        QMap<QString, KisMyPaintBrush*> brushes;
 };
 
 KisMyPaintOpFactory::KisMyPaintOpFactory()
     : m_d(new Private)
 {
-
-    m_d->brushServer = new KoResourceServerSimpleConstruction<KisMyPaintBrush>("mypaint_brushes", "*.myb");
-    m_d->brushServer->loadResources(KoResourceServerProvider::blacklistFileNames(m_d->brushServer->fileNames(), m_d->brushServer->blackListedFiles()));
 }
 
 KisMyPaintOpFactory::~KisMyPaintOpFactory() {
 
-    delete m_d->brushServer;
     delete m_d;
 }
 
@@ -62,9 +54,9 @@ KisPaintOp* KisMyPaintOpFactory::createOp(const KisPaintOpSettingsSP settings, K
     return op;
 }
 
-KisPaintOpSettingsSP KisMyPaintOpFactory::settings() {
+KisPaintOpSettingsSP KisMyPaintOpFactory::createSettings(KisResourcesInterfaceSP resourcesInterface) {
 
-    KisPaintOpSettingsSP settings = new KisMyPaintOpSettings();
+    KisPaintOpSettingsSP settings = new KisMyPaintOpSettings(resourcesInterface);
     return settings;
 }
 
@@ -93,6 +85,22 @@ QString KisMyPaintOpFactory::category() const {
     return KisPaintOpFactory::categoryStable();
 }
 
+QList<KoResourceSP> KisMyPaintOpFactory::prepareLinkedResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface)
+{
+    Q_UNUSED(settings)
+    Q_UNUSED(resourcesInterface);
+
+    return {};
+}
+
+QList<KoResourceSP> KisMyPaintOpFactory::prepareEmbeddedResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface)
+{
+    Q_UNUSED(settings)
+    Q_UNUSED(resourcesInterface);
+
+    return {};
+}
+#if 0
 void KisMyPaintOpFactory::processAfterLoading() {
 
     KisPaintOpPresetResourceServer *paintOpServer = KisResourceServerProvider::instance()->paintOpPresetServer();
@@ -129,5 +137,6 @@ void KisMyPaintOpFactory::processAfterLoading() {
     }
 
 }
+#endif
 
 #include "kis_my_paintop_factory.moc"

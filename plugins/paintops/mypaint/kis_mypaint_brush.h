@@ -22,8 +22,7 @@ public:
     void apply(KisPaintOpSettingsSP settings);
     MyPaintBrush* brush();
 
-    bool load() override;
-    bool loadFromDevice(QIODevice *dev) override;
+    bool loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface) override;
     bool save() override;
     void reloadSettings();
 

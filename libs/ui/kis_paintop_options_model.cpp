@@ -48,21 +48,12 @@ void KisPaintOpOptionListModel::addPaintOpOption(KisPaintOpOption *option, int w
     case KisPaintOpOption::MASKING_BRUSH:
         category = i18nc("option category", "Masked Brush");
         break;
-    default:
-        category = i18n("Unknown");
     };
 
-    DataItem *item = categoriesMapper()->addEntry(category, KisOptionInfo(option, widgetIndex, label));
-
-    if (option->isCheckable()) {
-        item->setCheckable(true);
-        item->setChecked(option->isChecked());
-    }
-
-    categoriesMapper()->expandAllCategories();
+    addPaintOpOption(option, widgetIndex, label, category);
 }
 
-void KisPaintOpOptionListModel::addPaintOpOption(KisPaintOpOption *option, int widgetIndex, const QString &label, const QString category) {
+void KisPaintOpOptionListModel::addPaintOpOption(KisPaintOpOption *option, int widgetIndex, const QString &label, const QString &category) {
 
     DataItem *item = categoriesMapper()->addEntry(category, KisOptionInfo(option, widgetIndex, label));
 

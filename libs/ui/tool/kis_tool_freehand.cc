@@ -205,7 +205,7 @@ void KisToolFreehand::beginPrimaryAction(KoPointerEvent *event)
             QString message = i18n("The brush tool cannot paint on this layer.  Please select a paint layer or mask.");
             kiscanvas->viewManager()->showFloatingMessage(message, koIcon("object-locked"));
         }
-        else if (paintability==MYPAINTBRUSH_UNPAINTABLE) {
+        else if (paintability == MYPAINTBRUSH_UNPAINTABLE) {
             KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
             QString message = i18n("The MyPaint Brush Engine is not available for this colorspace");
             kiscanvas->viewManager()->showFloatingMessage(message, koIcon("object-locked"));

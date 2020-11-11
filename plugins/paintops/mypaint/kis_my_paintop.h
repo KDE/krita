@@ -38,8 +38,8 @@ private:
     KisPaintOpSettingsSP m_settings;
     KisAirbrushOptionProperties m_airBrushOption;
     KisImageWSP m_image;
-    double dtime, m_radius, previousTime = 0;
-    bool isStrokeStarted;    
+    double m_dtime, m_radius, m_previousTime = 0;
+    bool m_isStrokeStarted;
 };
 
 #endif // KIS_MY_PAINTOP_H_

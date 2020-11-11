@@ -21,13 +21,10 @@ set(kritamypaintop_SOURCES
 )
 
 ki18n_wrap_ui(kritamypaintop_SOURCES wdgmypaintoptions.ui wdgmypaintcurveoption.ui)
-#ki18n_wrap_ui(kritamypaintop_SOURCES wdgmypaintcurveoption.ui )
 
 add_library(kritamypaintop MODULE ${kritamypaintop_SOURCES})
 
 target_link_libraries(kritamypaintop kritalibpaintop mypaint kritawidgetutils kritaui kritalibbrush)
-#target_link_libraries(kritamypaintop kritaui kritalibbrush kritawidgetutils)
-#target_link_libraries(kritamypaintop LINK_INTERFACE_LIBRARIES kritaui kritalibbrush)
 
 
 install(TARGETS kritamypaintop  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})

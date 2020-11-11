@@ -53,6 +53,7 @@ struct Q_DECL_HIDDEN KisPaintOpPreset::Private {
     QPointer<KisPaintopSettingsUpdateProxy> updateProxy {0};
 };
 
+
 KisPaintOpPreset::KisPaintOpPreset()
     : KoResource(QString())
     , d(new Private(this))
@@ -210,8 +211,7 @@ bool KisPaintOpPreset::load(KisResourcesInterfaceSP resourcesInterface)
         }
     }
 
-    bool res = false;
-    res = loadFromDevice(dev, resourcesInterface);
+    bool res = loadFromDevice(dev, resourcesInterface);
     delete dev;
 
     setValid(res);

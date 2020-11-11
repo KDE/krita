@@ -53,34 +53,21 @@ struct Q_DECL_HIDDEN KisPaintOpPreset::Private {
     QPointer<KisPaintopSettingsUpdateProxy> updateProxy {0};
 };
 
-struct Q_DECL_HIDDEN KisPaintOpPreset::State {
-    State()
-    {}
-
-    KisPaintOpSettingsSP settings;
-    QString name;
-    KoID paintopID;
-    QImage image;
-    bool isValid;
-};
-
-
 KisPaintOpPreset::KisPaintOpPreset()
     : KoResource(QString())
-    , d(new Private(this)), m_state(new State)
+    , d(new Private(this))
 {
 }
 
 KisPaintOpPreset::KisPaintOpPreset(const QString & fileName)
     : KoResource(fileName)
-    , d(new Private), m_state(new State)
+    , d(new Private(this))
 {
 }
 
 KisPaintOpPreset::~KisPaintOpPreset()
 {
     delete d;
-    delete m_state;
 }
 
 KisPaintOpPreset::KisPaintOpPreset(const KisPaintOpPreset &rhs)
@@ -272,7 +259,6 @@ bool KisPaintOpPreset::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP re
     setValid(true);
     setImage(img);
 
-    saveInitialState();
     return true;
 }
 
@@ -282,7 +268,6 @@ bool KisPaintOpPreset::save()
     if (paintopid.isEmpty())
         return false;
 
-    saveInitialState();
     return KoResource::save();
 }
 
@@ -372,28 +357,6 @@ bool KisPaintOpPreset::saveToDevice(QIODevice *dev) const
 
     return writer.write(img);
 
-}
-
-void KisPaintOpPreset::saveInitialState()
-{
-    m_state->name = name();
-    m_state->image = image();
-    m_state->isValid = valid();
-    m_state->settings = settings()->clone();
-    m_state->paintopID = KoID(m_d->settings->getProperty("paintop").toString(), name());
-}
-
-void KisPaintOpPreset::loadInitialState()
-{
-    if(!m_state)
-        return;
-
-    this->setName(m_state->name);
-    this->setSettings(m_state->settings);
-    this->setPaintOp(m_state->paintopID);
-    this->setImage(m_state->image);
-    this->setValid(true);
-    this->setDirty(false);
 }
 
 QPointer<KisPaintopSettingsUpdateProxy> KisPaintOpPreset::updateProxy() const

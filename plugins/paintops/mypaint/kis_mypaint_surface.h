@@ -20,6 +20,7 @@ public:
 
     struct MyPaintSurfaceInternal: public MyPaintSurface {
           KisMyPaintSurface *m_owner;
+          KoChannelInfo::enumChannelValueType bitDepth;
     };
 
 public:
@@ -66,7 +67,6 @@ public:
                                             float xp, float yp, float aspect_ratio, float radius);
 
     MyPaintSurface* surface();
-    static KoChannelInfo::enumChannelValueType bitDepth;
 
 private:
     KisPainter *m_painter;

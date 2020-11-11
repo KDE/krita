@@ -493,6 +493,11 @@ bool StoryboardModel::moveRows(const QModelIndex &sourceParent, int sourceRow, i
 
         reorderKeyframes();
 
+        const int frameNumber = index(StoryboardItem::FrameNumber, 0, index(destinationChild, 0)).data().toInt();
+        if (m_image) {
+            m_image->animationInterface()->switchCurrentTimeAsync(frameNumber);
+        }
+
         emit sigStoryboardItemListChanged();
         return true;
     }
@@ -1291,6 +1296,11 @@ void StoryboardModel::slotInsertChildRows(const QModelIndex parent, int first, i
 
             setData (index (StoryboardItem::DurationFrame, 0, parentIndex), 1);
             setData (index (StoryboardItem::DurationSecond, 0, parentIndex), 0);
+        }
+
+        const int frameToSwitch = index(StoryboardItem::FrameNumber, 0, index(last, 0)).data().toInt();
+        if (m_image) {
+            m_image->animationInterface()->switchCurrentTimeAsync(frameToSwitch);
         }
     }
 }

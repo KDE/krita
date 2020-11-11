@@ -33,6 +33,9 @@ public:
     QList<MyPaintBrushInput> inputList();
 
     void setCurve(DynamicSensorType sensorType, bool useSameCurve, const KisCubicCurve &curve);
+    QList<KoID> sensorsIds();
+    DynamicSensorType id2Type(const KoID &id);
+    KisDynamicSensorSP id2Sensor(const KoID& id, const QString &parentOptionName);
 
 protected:
 

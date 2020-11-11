@@ -20,7 +20,16 @@
 #include "kis_curve_option.h"
 
 #include <QDomNode>
+
 #include "kis_algebra_2d.h"
+
+#include <sensors/kis_dynamic_sensor_distance.h>
+#include <sensors/kis_dynamic_sensor_drawing_angle.h>
+#include <sensors/kis_dynamic_sensor_fade.h>
+#include <sensors/kis_dynamic_sensor_fuzzy.h>
+#include <sensors/kis_dynamic_sensor_time.h>
+#include <sensors/kis_dynamic_sensors.h>
+
 
 qreal KisCurveOption::ValueComponents::rotationLikeValue(qreal normalizedBaseAngle, bool absoluteAxesFlipped, qreal scalingPartCoeff, bool disableScalingPart) const {
     const qreal offset =
@@ -511,4 +520,135 @@ QList<KisDynamicSensorSP> KisCurveOption::activeSensors() const
     }
     //dbgKrita << "ID" << name() << "has" <<  m_sensorMap.count() << "Sensors of which" << sensorList.count() << "are active.";
     return sensorList;
+}
+
+QList<KoID> KisCurveOption::sensorsIds()
+{
+    QList<KoID> ids;
+
+    ids << PressureId
+        << PressureInId
+        << XTiltId
+        << YTiltId
+        << TiltDirectionId
+        << TiltElevationId
+        << SpeedId
+        << DrawingAngleId
+        << RotationId
+        << DistanceId
+        << TimeId
+        << FuzzyPerDabId
+        << FuzzyPerStrokeId
+        << FadeId
+        << PerspectiveId
+        << TangentialPressureId;
+
+    return ids;
+}
+
+DynamicSensorType KisCurveOption::id2Type(const KoID &id)
+{
+    if (id.id() == PressureId.id()) {
+        return PRESSURE;
+    }
+    else if (id.id() == PressureInId.id()) {
+        return PRESSURE_IN;
+    }
+    else if (id.id() == XTiltId.id()) {
+        return XTILT;
+    }
+    else if (id.id() == YTiltId.id()) {
+        return YTILT;
+    }
+    else if (id.id() == TiltDirectionId.id()) {
+        return TILT_DIRECTION;
+    }
+    else if (id.id() == TiltElevationId.id()) {
+        return TILT_ELEVATATION;
+    }
+    else if (id.id() == SpeedId.id()) {
+        return SPEED;
+    }
+    else if (id.id() == DrawingAngleId.id()) {
+        return ANGLE;
+    }
+    else if (id.id() == RotationId.id()) {
+        return ROTATION;
+    }
+    else if (id.id() == DistanceId.id()) {
+        return DISTANCE;
+    }
+    else if (id.id() == TimeId.id()) {
+        return TIME;
+    }
+    else if (id.id() == FuzzyPerDabId.id()) {
+        return FUZZY_PER_DAB;
+    }
+    else if (id.id() == FuzzyPerStrokeId.id()) {
+        return FUZZY_PER_STROKE;
+    }
+    else if (id.id() == FadeId.id()) {
+        return FADE;
+    }
+    else if (id.id() == PerspectiveId.id()) {
+        return PERSPECTIVE;
+    }
+    else if (id.id() == TangentialPressureId.id()) {
+        return TANGENTIAL_PRESSURE;
+    }
+    return UNKNOWN;
+}
+
+KisDynamicSensorSP KisCurveOption::id2Sensor(const KoID& id, const QString &parentOptionName)
+{
+    if (id.id() == PressureId.id()) {
+        return new KisDynamicSensorPressure();
+    }
+    else if (id.id() == PressureInId.id()) {
+        return new KisDynamicSensorPressureIn();
+    }
+    else if (id.id() == XTiltId.id()) {
+        return new KisDynamicSensorXTilt();
+    }
+    else if (id.id() == YTiltId.id()) {
+        return new KisDynamicSensorYTilt();
+    }
+    else if (id.id() == TiltDirectionId.id()) {
+        return new KisDynamicSensorTiltDirection();
+    }
+    else if (id.id() == TiltElevationId.id()) {
+        return new KisDynamicSensorTiltElevation();
+    }
+    else if (id.id() == SpeedId.id()) {
+        return new KisDynamicSensorSpeed();
+    }
+    else if (id.id() == DrawingAngleId.id()) {
+        return new KisDynamicSensorDrawingAngle();
+    }
+    else if (id.id() == RotationId.id()) {
+        return new KisDynamicSensorRotation();
+    }
+    else if (id.id() == DistanceId.id()) {
+        return new KisDynamicSensorDistance();
+    }
+    else if (id.id() == TimeId.id()) {
+        return new KisDynamicSensorTime();
+    }
+    else if (id.id() == FuzzyPerDabId.id()) {
+        return new KisDynamicSensorFuzzy(false, parentOptionName);
+    }
+    else if (id.id() == FuzzyPerStrokeId.id()) {
+        return new KisDynamicSensorFuzzy(true, parentOptionName);
+    }
+    else if (id.id() == FadeId.id()) {
+        return new KisDynamicSensorFade();
+    }
+    else if (id.id() == PerspectiveId.id()) {
+        return new KisDynamicSensorPerspective();
+    }
+    else if (id.id() == TangentialPressureId.id()) {
+        return new KisDynamicSensorTangentialPressure();
+    }
+    dbgPlugins << "Unknown transform parameter :" << id.id();
+    return 0;
 }

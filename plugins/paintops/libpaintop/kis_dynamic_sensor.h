@@ -209,6 +209,7 @@ public:
      * @return the currently set length or -1 if not relevant
      */
     int length() { return m_length; }
+    QString identifier();
 
 
 public:
@@ -224,7 +225,8 @@ protected:
 
     virtual qreal value(const KisPaintInformation& info) = 0;
 
-    int m_length;    
+    int m_length;
+    QString m_id;
 
     DynamicSensorType m_type;
     bool m_customCurve;

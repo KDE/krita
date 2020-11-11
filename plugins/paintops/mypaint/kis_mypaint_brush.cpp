@@ -23,6 +23,7 @@
 #include <kis_my_paintop_option.h>
 #include <libmypaint/mypaint-brush.h>
 #include <KisResourceServerProvider.h>
+#include <KoColorModelStandardIds.h>
 
 #include "kis_mypaint_brush.h"
 #include "kis_my_paintop_settings.h"
@@ -59,7 +60,7 @@ void KisMyPaintBrush::setColor(const KoColor color, const KoColorSpace *colorSpa
     qreal r, g, b;
     QColor dstColor;
 
-    if (colorSpace->id().startsWith("RGBA")) {
+    if (colorSpace->colorModelId() == RGBAColorModelID) {
         colorSpace->toQColor(color.data(), &dstColor, colorSpace->profile());
         dstColor.getRgbF(&r, &g, &b);
     }
@@ -114,27 +115,21 @@ bool KisMyPaintBrush::load() {
         return false;
     }
 
-    QIODevice *dev = 0;
     QByteArray ba;
 
-    dev = new QFile(filename());
+    QFile dev(filename());
 
-    if (dev->size() == 0)
-    {
-        delete dev;
+    if (dev.size() == 0) {
         return false;
     }
 
-    if (!dev->open(QIODevice::ReadOnly)) {
+    if (!dev.open(QIODevice::ReadOnly)) {
         warnKrita << "Can't open file " << filename();
-        delete dev;
         return false;
     }
 
-    bool res = false;
-    res = loadFromDevice(dev);
+    const bool res = loadFromDevice(&dev);
 
-    delete dev;
     setValid(res);
     setDirty(false);
 

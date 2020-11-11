@@ -1289,8 +1289,7 @@ void KisPaintopBox::slotReloadPreset()
     KisPaintOpPresetResourceServer * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
     KisPaintOpPresetSP preset = rserver->resourceByName(m_resourceProvider->currentPreset()->name());
     if (preset) {
-
-         preset->load();
+        preset->load();
     }
 
     if (m_resourceProvider->currentPreset() != preset) {

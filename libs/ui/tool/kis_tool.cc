@@ -29,6 +29,7 @@
 #include <kis_icon.h>
 #include <KoConfig.h>
 #include <KoColorSpaceRegistry.h>
+#include <KoColorModelStandardIds.h>
 #include <KoColor.h>
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
@@ -543,7 +544,9 @@ KisTool::NodePaintAbility KisTool::nodePaintAbility()
     if (!node) {
         return NodePaintAbility::UNPAINTABLE;
     }
-    if (currentPaintOpPreset->paintOp().id() == "mypaintbrush" && !colorSpace->id().startsWith("RGBA")) {
+    if (currentPaintOpPreset->paintOp().id() == "mypaintbrush" &&
+        colorSpace->colorModelId() != RGBAColorModelID) {
+
         return NodePaintAbility::MYPAINTBRUSH_UNPAINTABLE;
     }
     if (node->inherits("KisShapeLayer")) {

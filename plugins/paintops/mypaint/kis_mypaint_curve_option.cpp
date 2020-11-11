@@ -105,11 +105,6 @@ void KisMyPaintCurveOption::writeOptionSetting(KisPropertiesConfigurationSP sett
 
     setting->setProperty(MYPAINT_JSON, doc2.toJson());
 
-//     QIODevice *dev = new QFile("/home/ashwin/b009.myb");
-//     dev->open(QIODevice::ReadWrite);
-//     dev->write(doc2.toJson());
-//     dev->close();
-
     setting->setProperty(m_name + "UseCurve", m_useCurve);
     setting->setProperty(m_name + "UseSameCurve", m_useSameCurve);
     setting->setProperty(m_name + "Value", m_value);

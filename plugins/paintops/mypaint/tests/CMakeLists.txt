@@ -13,7 +13,3 @@ ecm_add_test(kis_mypaintop_test.cpp ../kis_my_paintop_settings.cpp ../kis_mypain
     NAME_PREFIX plugins-kismypaintop-
     LINK_LIBRARIES kritaimage kritamypaintop kritalibpaintop mypaint Qt5::Test)
 
-#krita_add_broken_unit_test(kis_embedded_pattern_manager_test.cpp
-#    NAME_PREFIX plugins-libpaintop-
-#    LINK_LIBRARIES kritaimage kritalibpaintop Qt5::Test)
-

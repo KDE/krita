@@ -37,8 +37,6 @@ public Q_SLOTS:
 
 protected:
 
-    KisMyPaintOpOption *m_baseOption;
-
     void checkRanges() const;
     float getBaseValue(KisPropertiesConfigurationSP setting);
     void setBaseValue(KisPropertiesConfigurationSP setting, float val) const;

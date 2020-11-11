@@ -42,7 +42,6 @@ KisMyPaintCurveOptionWidget::KisMyPaintCurveOptionWidget(KisMyPaintCurveOption* 
     strengthToCurveOptionValueScale = 1.0;
     hideRangeLabelsAndBoxes(false);
 
-    //disconnect(m_curveOptionWidget->sensorSelector, SIGNAL(parametersChanged()), this, SLOT(emitSettingChanged()));
     connect(m_curveOptionWidget->sensorSelector, SIGNAL(highlightedSensorChanged(KisDynamicSensorSP)), SLOT(updateRangeSpinBoxes(KisDynamicSensorSP)));
     connect(m_curveOptionWidget->xMinBox, SIGNAL(valueChanged(double)), SLOT(emitSettingChanged()));
     connect(m_curveOptionWidget->xMaxBox, SIGNAL(valueChanged(double)), SLOT(emitSettingChanged()));
@@ -55,7 +54,7 @@ KisMyPaintCurveOptionWidget::KisMyPaintCurveOptionWidget(KisMyPaintCurveOption* 
     m_curveOptionWidget->strengthSlider->setSuffix("");
 
     if (hideSlider) {
-          m_curveOptionWidget->strengthSlider->hide();
+        m_curveOptionWidget->strengthSlider->hide();
     }
 
     connect(m_curveOption, SIGNAL(unCheckUseCurve()), SLOT(slotUnCheckUseCurve()));

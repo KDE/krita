@@ -1282,7 +1282,6 @@ void KisPaintopBox::slotReloadPreset()
     KisPaintOpPresetResourceServer *rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
     QSharedPointer<KisPaintOpPreset> preset = rserver->resourceByName(m_resourceProvider->currentPreset()->name());
     if (preset) {
-
         preset->load(KisGlobalResourcesInterface::instance());
     }
 

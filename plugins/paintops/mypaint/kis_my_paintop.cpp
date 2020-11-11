@@ -46,14 +46,14 @@ KisMyPaintOp::KisMyPaintOp(const KisPaintOpSettingsSP settings, KisPainter * pai
 
     m_brush->apply(settings);
 
-    if(!qRound(settings->getFloat(MYPAINT_ERASER)) && settings->getBool("EraserMode")) {
+    if (!qRound(settings->getFloat(MYPAINT_ERASER)) && settings->getBool("EraserMode")) {
 
         mypaint_brush_from_defaults(m_brush->brush());
         mypaint_brush_set_base_value(m_brush->brush(), MYPAINT_BRUSH_SETTING_RADIUS_LOGARITHMIC, log(settings->getFloat(MYPAINT_DIAMETER)/2));
         painter->setCompositeOp(COMPOSITE_ERASE);
         mypaint_brush_set_base_value(m_brush->brush(), MYPAINT_BRUSH_SETTING_ERASER, false);
     }
-    else if(qRound(settings->getFloat(MYPAINT_ERASER)) && settings->getBool("EraserMode")) {
+    else if (qRound(settings->getFloat(MYPAINT_ERASER)) && settings->getBool("EraserMode")) {
 
         painter->setCompositeOp(COMPOSITE_ERASE);
         mypaint_brush_set_base_value(m_brush->brush(), MYPAINT_BRUSH_SETTING_ERASER, false);
@@ -61,14 +61,15 @@ KisMyPaintOp::KisMyPaintOp(const KisPaintOpSettingsSP settings, KisPainter * pai
 
     m_brush->setColor(this->painter()->paintColor(), painter->device()->colorSpace());
 
-    if (KoToolManager::instance()->activeToolId() != "KritaShape/KisToolBrush")
+    if (KoToolManager::instance()->activeToolId() != "KritaShape/KisToolBrush") {
         mypaint_brush_set_base_value(m_brush->brush(), MYPAINT_BRUSH_SETTING_SLOW_TRACKING, 0.0);
+    }
 
     m_settings = settings;
     m_airBrushOption.readOptionSetting(m_settings);
 
-    dtime = -1;
-    isStrokeStarted = false;
+    m_dtime = -1;
+    m_isStrokeStarted = false;
     m_radius = settings->getFloat(MYPAINT_DIAMETER)/2;
 }
 
@@ -77,7 +78,7 @@ KisMyPaintOp::~KisMyPaintOp() {
 
 KisSpacingInformation KisMyPaintOp::paintAt(const KisPaintInformation& info) {
 
-    if(!painter()) {
+    if (!painter()) {
         return KisSpacingInformation(1.0);
     }
 
@@ -86,22 +87,22 @@ KisSpacingInformation KisMyPaintOp::paintAt(const KisPaintInformation& info) {
 
     mypaint_brush_set_base_value(m_brush->brush(), MYPAINT_BRUSH_SETTING_RADIUS_LOGARITHMIC, log(radius));
 
-    isStrokeStarted = mypaint_brush_get_state(m_brush->brush(), MYPAINT_BRUSH_STATE_STROKE_STARTED);
-    if(!isStrokeStarted) {
+    m_isStrokeStarted = mypaint_brush_get_state(m_brush->brush(), MYPAINT_BRUSH_STATE_STROKE_STARTED);
+    if (!m_isStrokeStarted) {
 
         mypaint_brush_stroke_to(m_brush->brush(), m_surface->surface(), info.pos().x(), info.pos().y(), info.pressure(),
                                info.xTilt(), info.yTilt(), 1.0f);
 
-        dtime = 0.015;
+        m_dtime = 0.015;
     }
     else {
-        dtime = abs(info.currentTime() - previousTime)*0.001;
+        m_dtime = abs(info.currentTime() - m_previousTime)*0.001;
     }
 
     mypaint_brush_stroke_to(m_brush->brush(), m_surface->surface(), info.pos().x(), info.pos().y(), info.pressure(),
-                           info.xTilt(), info.yTilt(), dtime);
+                           info.xTilt(), info.yTilt(), m_dtime);
 
-    previousTime = info.currentTime();
+    m_previousTime = info.currentTime();
 
     return computeSpacing(info, lodScale);
 }

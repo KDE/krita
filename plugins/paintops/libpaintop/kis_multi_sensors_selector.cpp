@@ -39,8 +39,6 @@ KisMultiSensorsSelector::KisMultiSensorsSelector(QWidget* parent)
     d->model = new KisMultiSensorsModel(this);
     connect(d->model, SIGNAL(sensorChanged(KisDynamicSensorSP)), SIGNAL(sensorChanged(KisDynamicSensorSP)));
     connect(d->model, SIGNAL(parametersChanged()), SIGNAL(parametersChanged()));
-    //connect(d->form.sensorsList, SIGNAL(activated(QModelIndex)), SLOT(sensorActivated(QModelIndex)));
-    //connect(d->form.sensorsList, SIGNAL(clicked(QModelIndex)), SLOT(sensorActivated(QModelIndex)));
 
     connect(d->form.sensorsList, SIGNAL(activated(QModelIndex)), SLOT(setCurrent(QModelIndex)));
     connect(d->form.sensorsList, SIGNAL(clicked(QModelIndex)), SLOT(setCurrent(QModelIndex)));

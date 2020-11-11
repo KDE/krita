@@ -24,14 +24,12 @@
 #include "kis_pointer_utils.h"
 
 StoryboardItem::StoryboardItem()
+    : m_childData()
 {}
 
 StoryboardItem::StoryboardItem(const StoryboardItem& other)
-{
-    for (int i = 0; i < other.childCount(); i++) {
-        appendChild(other.child(i)->data());
-    }
-}
+    : m_childData()
+{}
 
 StoryboardItem::~StoryboardItem()
 {
@@ -43,6 +41,15 @@ void StoryboardItem::appendChild(QVariant data)
     QSharedPointer<StoryboardChild> child = toQShared( new StoryboardChild(data) );
     child->setParent(sharedFromThis());
     m_childData.append(child);
+}
+
+void StoryboardItem::cloneChildrenFrom(const StoryboardItem& other)
+{
+    for (int i = 0; i < other.m_childData.count(); i++) {
+        QSharedPointer<StoryboardChild> child = toQShared( new StoryboardChild(*other.m_childData.at(i)));
+        child->setParent(sharedFromThis());
+        m_childData.append(child);
+    }
 }
 
 void StoryboardItem::insertChild(int row, QVariant data)
@@ -126,6 +133,7 @@ StoryboardItemList StoryboardItem::cloneStoryboardItemList(const StoryboardItemL
     StoryboardItemList clonedList;
     for (auto i = 0; i < list.count(); i++) {
         StoryboardItemSP item = toQShared( new StoryboardItem(*list.at(i)) );
+        item->cloneChildrenFrom(*list.at(i));
         clonedList.append(item);
     }
     return clonedList;

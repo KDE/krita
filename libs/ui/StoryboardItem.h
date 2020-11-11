@@ -165,6 +165,7 @@ public:
     ~StoryboardItem();
 
     void appendChild(QVariant data);
+    void cloneChildrenFrom(const StoryboardItem &other);
     void insertChild(int row, QVariant data = QVariant());
     void removeChild(int row);
     void moveChild(int from, int to);

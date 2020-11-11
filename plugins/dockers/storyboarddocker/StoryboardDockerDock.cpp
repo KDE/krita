@@ -525,11 +525,11 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
 void StoryboardDockerDock::slotLockClicked(bool isLocked){
     if (isLocked) {
         m_lockAction->setIcon(KisIconUtils::loadIcon("locked"));
-        m_storyboardModel->setFreeze(true);
+        m_storyboardModel->setLocked(true);
     }
     else {
         m_lockAction->setIcon(KisIconUtils::loadIcon("unlocked"));
-        m_storyboardModel->setFreeze(false);
+        m_storyboardModel->setLocked(false);
     }
 }
 

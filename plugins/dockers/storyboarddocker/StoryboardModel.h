@@ -135,6 +135,8 @@ public:
 
     void setFreeze(bool);
     bool isFrozen() const;
+    void setLocked(bool);
+    bool isLocked() const;
     int getFramesPerSecond() const;
     void setView(StoryboardView *view);
     void setImage(KisImageWSP image);
@@ -233,7 +235,6 @@ private Q_SLOTS:
 
     void slotKeyframeAdded(const KisKeyframeChannel *channel, int time);
     void slotKeyframeRemoved(const KisKeyframeChannel *channel, int time);
-    void slotKeyframeMoved(const KisKeyframeChannel* channel, int from, int to);
     void slotNodeRemoved(KisNodeSP node);
 
     void slotFramerateChanged();
@@ -292,7 +293,8 @@ private:
     StoryboardItemList m_items;
     QVector<StoryboardComment> m_commentList;
     CommentModel *m_commentModel;
-    bool m_freeze;
+    bool m_freezeKeyframePosition;
+    bool m_lockBoards;
     bool m_reorderingKeyframes;
     int m_lastScene = 0;
     KisIdleWatcher m_imageIdleWatcher;

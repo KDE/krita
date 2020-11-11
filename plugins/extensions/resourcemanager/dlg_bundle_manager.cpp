@@ -279,7 +279,10 @@ void DlgBundleManager::itemSelected(QListWidgetItem *current, QListWidgetItem *)
             } else {
                 m_ui->lblUpdated->setText(QDate::fromString(bundle->getMeta("updated"), "dd/MM/yyyy").toString(Qt::DefaultLocaleShortDate));
             }
-            m_ui->lblPreview->setPixmap(QPixmap::fromImage(bundle->image().scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation)));
+            QSize iconSize = QSize(128, 128);
+            QImage icon = bundle->image().scaled(iconSize*devicePixelRatioF(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+            icon.setDevicePixelRatio(devicePixelRatioF());
+            m_ui->lblPreview->setPixmap(QPixmap::fromImage(icon));
             m_ui->listBundleContents->clear();
 
             Q_FOREACH (const QString & resType, bundle->resourceTypes()) {
@@ -352,16 +355,19 @@ void DlgBundleManager::editBundle()
 
 void DlgBundleManager::fillListWidget(QList<KisResourceBundle *> bundles, QListWidget *w)
 {
-    w->setIconSize(QSize(ICON_SIZE, ICON_SIZE));
+	QSize iconSize = QSize(ICON_SIZE, ICON_SIZE);
+    w->setIconSize(iconSize);
     w->setSelectionMode(QAbstractItemView::MultiSelection);
 
     Q_FOREACH (KisResourceBundle *bundle, bundles) {
-        QPixmap pixmap(ICON_SIZE, ICON_SIZE);
+        QPixmap pixmap(iconSize*devicePixelRatioF());
+        pixmap.setDevicePixelRatio(devicePixelRatioF());
         pixmap.fill(Qt::gray);
         if (!bundle->image().isNull()) {
-            QImage scaled = bundle->image().scaled(ICON_SIZE, ICON_SIZE, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-            int x = (ICON_SIZE - scaled.width()) / 2;
-            int y = (ICON_SIZE - scaled.height()) / 2;
+            QImage scaled = bundle->image().scaled(iconSize*devicePixelRatioF(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+            scaled.setDevicePixelRatio(devicePixelRatioF());
+            int x = (ICON_SIZE - scaled.width()/devicePixelRatioF()) / 2;
+            int y = (ICON_SIZE - scaled.height()/devicePixelRatioF()) / 2;
             QPainter gc(&pixmap);
             gc.drawImage(x, y, scaled);
             gc.end();

@@ -188,6 +188,13 @@ public:
     bool touchUpdateEvent(QTouchEvent *event);
     bool touchEndEvent(QTouchEvent *event);
 
+    /**
+     * We received TouchCancel event, it means this event sequence has ended
+     * right here i.e without a valid TouchEnd, so we should immediately stop
+     * all running actions.
+     */
+    void touchCancelEvent(const QPointF &localPos);
+
 
     bool nativeGestureBeginEvent(QNativeGestureEvent *event);
     bool nativeGestureEvent(QNativeGestureEvent *event);

@@ -34,6 +34,7 @@ KisMyPaintBrushOption::KisMyPaintBrushOption(DynamicSensorType type)
     m_customCurve = false;
     m_active = false;
     m_length = -1;
+    m_id = KisMyPaintBrushOption::id(type);
 }
 
 KisMyPaintBrushOption::~KisMyPaintBrushOption()
@@ -332,11 +333,6 @@ QString KisMyPaintBrushOption::id(DynamicSensorType sensorType)
     default:
         return QString();
     };
-}
-
-QString KisMyPaintBrushOption::id() {
-
-    return id(m_type);
 }
 
 void KisMyPaintBrushOption::setCurveFromPoints(QList<QPointF> points) {

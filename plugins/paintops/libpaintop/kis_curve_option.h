@@ -168,10 +168,13 @@ public:
      */
     KisCubicCurve emptyCurve();
 
+    virtual QList<KoID> sensorsIds();
+    virtual DynamicSensorType id2Type(const KoID &id);
+    virtual KisDynamicSensorSP id2Sensor(const KoID& id, const QString &parentOptionName);    
+
 protected:
 
-    void setValueRange(qreal min, qreal max);
-
+    void setValueRange(qreal min, qreal max);    
     /**
      * Read the option using the prefix in argument
      */

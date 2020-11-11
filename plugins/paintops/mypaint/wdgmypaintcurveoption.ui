@@ -228,7 +228,7 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_4">
      <item>
-      <widget class="KisMyPaintBrushOptionsSelector" name="sensorSelector" native="true">
+      <widget class="KisMultiSensorsSelector" name="sensorSelector" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
          <horstretch>0</horstretch>
@@ -638,9 +638,9 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>KisMyPaintBrushOptionsSelector</class>
+   <class>KisMultiSensorsSelector</class>
    <extends>QWidget</extends>
-   <header>kis_mypaintbrush_options_selector.h</header>
+   <header>kis_multi_sensors_selector.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

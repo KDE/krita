@@ -14,10 +14,10 @@ set(kritamypaintop_SOURCES
     kis_mypaint_brush.cpp
     kis_my_paintop_factory.cpp
     kis_mypaint_curve_option_widget.cpp
-    kis_mypaintbrush_options_selector.cpp
-    kis_mypaintbrush_options_model.cpp
     kis_mypaintbrush_option.cpp
     kis_mypaint_curve_option.cpp
+    ../libpaintop/kis_multi_sensors_selector.cpp
+    ../libpaintop/kis_multi_sensors_model_p.cpp
 )
 
 ki18n_wrap_ui(kritamypaintop_SOURCES wdgmypaintoptions.ui wdgmypaintcurveoption.ui wdgmypaintbrushoptionsselector.ui)

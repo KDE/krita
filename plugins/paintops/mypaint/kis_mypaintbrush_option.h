@@ -64,8 +64,7 @@ public:
     static QList<DynamicSensorType> sensorsTypes();
     static DynamicSensorType typeForInput(MyPaintBrushInput input);
 
-    QString id(DynamicSensorType sensorType);
-    QString id();
+    QString id(DynamicSensorType sensorType);    
 
     void setCurveFromPoints(QList<QPointF> points);
 

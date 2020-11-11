@@ -156,17 +156,17 @@ void KisMyPaintCurveOption::readNamedOptionSetting(const QString& prefix, const 
             option->setCurveFromPoints(points);
         }
 
-        if(!setting->getProperty(name() + option->id() + "XMIN").isNull())
-            option->setXRangeMin(setting->getProperty(name() + option->id() + "XMIN").toReal());
+        if(!setting->getProperty(name() + option->identifier() + "XMIN").isNull())
+            option->setXRangeMin(setting->getProperty(name() + option->identifier() + "XMIN").toReal());
 
-        if(!setting->getProperty(name() + option->id() + "XMAX").isNull())
-            option->setXRangeMax(setting->getProperty(name() + option->id() + "XMAX").toReal());
+        if(!setting->getProperty(name() + option->identifier() + "XMAX").isNull())
+            option->setXRangeMax(setting->getProperty(name() + option->identifier() + "XMAX").toReal());
 
-        if(!setting->getProperty(name() + option->id() + "YMIN").isNull())
-            option->setYRangeMin(setting->getProperty(name() + option->id() + "YMIN").toReal());
+        if(!setting->getProperty(name() + option->identifier() + "YMIN").isNull())
+            option->setYRangeMin(setting->getProperty(name() + option->identifier() + "YMIN").toReal());
 
-        if(!setting->getProperty(name() + option->id() + "YMAX").isNull())
-            option->setYRangeMax(setting->getProperty(name() + option->id() + "YMAX").toReal());
+        if(!setting->getProperty(name() + option->identifier() + "YMAX").isNull())
+            option->setYRangeMax(setting->getProperty(name() + option->identifier() + "YMAX").toReal());
 
         replaceSensor(option);
         option->setActive(points.size()>0);
@@ -341,4 +341,78 @@ QList<MyPaintBrushInput> KisMyPaintCurveOption::inputList() {
          << MYPAINT_BRUSH_INPUT_CUSTOM;
 
     return list;
+}
+
+QList<KoID> KisMyPaintCurveOption::sensorsIds()
+{
+    QList<KoID> ids;
+
+    ids << Pressure
+        << FineSpeed
+        << GrossSpeed
+        << Random
+        << Stroke
+        << Direction
+        << Declination
+        << Ascension
+        << Custom;
+
+    return ids;
+}
+
+DynamicSensorType KisMyPaintCurveOption::id2Type(const KoID &id)
+{
+    if (id.id() == Pressure.id()) {
+        return MYPAINT_PRESSURE;
+    }
+    else if (id.id() == FineSpeed.id()) {
+        return MYPAINT_FINE_SPEED;
+    }
+    else if (id.id() == GrossSpeed.id()) {
+        return MYPAINT_GROSS_SPEED;
+    }
+    else if (id.id() == Random.id()) {
+        return MYPAINT_RANDOM;
+    }
+    else if (id.id() == Stroke.id()) {
+        return MYPAINT_STROKE;
+    }
+    else if (id.id() == Direction.id()) {
+        return MYPAINT_DIRECTION;
+    }
+    else if (id.id() == Declination.id()) {
+        return MYPAINT_DECLINATION;
+    }
+    else if (id.id() == Ascension.id()) {
+        return MYPAINT_ASCENSION;
+    }
+    else if (id.id() == Custom.id()) {
+        return MYPAINT_CUSTOM;
+    }
+    return UNKNOWN;
+}
+
+KisDynamicSensorSP KisMyPaintCurveOption::id2Sensor(const KoID& id, const QString &parentOptionName)
+{
+    if(id.id()==Pressure.id())
+        return new KisMyPaintBrushOption(MYPAINT_PRESSURE);
+    else if(id.id()==FineSpeed.id())
+        return new KisMyPaintBrushOption(MYPAINT_FINE_SPEED);
+    else if(id.id()==GrossSpeed.id())
+        return new KisMyPaintBrushOption(MYPAINT_GROSS_SPEED);
+    else if(id.id()==Random.id())
+        return new KisMyPaintBrushOption(MYPAINT_RANDOM);
+    else if(id.id()==Stroke.id())
+        return new KisMyPaintBrushOption(MYPAINT_STROKE);
+    else if(id.id()==Direction.id())
+        return new KisMyPaintBrushOption(MYPAINT_DIRECTION);
+    else if(id.id()==Ascension.id())
+        return new KisMyPaintBrushOption(MYPAINT_ASCENSION);
+    else if(id.id()==Declination.id())
+        return new KisMyPaintBrushOption(MYPAINT_DECLINATION);
+    else if(id.id()==Custom.id())
+        return new KisMyPaintBrushOption(MYPAINT_CUSTOM);
+    else {
+        return 0;
+    }
 }

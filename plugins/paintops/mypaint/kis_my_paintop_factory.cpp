@@ -115,14 +115,15 @@ void KisMyPaintOpFactory::processAfterLoading() {
         s->setProperty(MYPAINT_ERASER, brush->isEraser());
         s->setProperty("EraserMode", qRound(brush->isEraser()));
 
-        KisPaintOpPresetSP preset = new KisPaintOpPreset();
+        KisSharedPtr<KisMyPaintBrush> preset = new KisMyPaintBrush();
         preset->setName(fileInfo.baseName());
         preset->setSettings(s);
         KoID paintOpID(id(), name());
-        preset->setPaintOp(paintOpID);        
-        preset->setImage(brush->image());        
+        preset->setPaintOp(paintOpID);
+        preset->setImage(brush->image());
         preset->setValid(true);
-        preset->saveInitialState();
+        preset->setFilename(brush->filename());
+        preset->load();
 
         paintOpServer->addResource(preset, false);
     }

@@ -110,9 +110,6 @@ public:
         return QPair<QString, QString>(ResourceType::PaintOpPresets, "");
     }
 
-    void saveInitialState();
-    void loadInitialState();
-
     void toXML(QDomDocument& doc, QDomElement& elt) const;
 
     void fromXML(const QDomElement& elt, KisResourcesInterfaceSP resourcesInterface);
@@ -203,9 +200,7 @@ public:
 private:
 
     struct Private;
-    struct State;
     Private * const d;
-    State * m_state;
 };
 
 Q_DECLARE_METATYPE(KisPaintOpPresetSP)

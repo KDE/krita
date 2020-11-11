@@ -7,8 +7,9 @@
 #include <kis_paintop_settings.h>
 #include <kis_painter.h>
 #include <KoResource.h>
+#include <kis_paintop_preset.h>
 
-class KisMyPaintBrush : public QObject, public KoResource
+class KisMyPaintBrush : public QObject, public KisPaintOpPreset
 {
     Q_OBJECT
 
@@ -24,6 +25,7 @@ public:
     bool load() override;
     bool loadFromDevice(QIODevice *dev) override;
     bool save() override;
+    void reloadSettings();
 
     QByteArray getJsonData();
     float getSize();
@@ -36,6 +38,7 @@ private:
 
     class Private;
     Private* const m_d;
+    bool firstLoad = true;
 };
 
 #endif // KIS_MYPAINT_BRUSH_H

@@ -25,7 +25,7 @@
 
 void StoryboardModelTest::init()
 {
-    m_commentModel = new CommentModel(this);
+    m_commentModel = new StoryboardCommentModel(this);
     m_storyboardModel = new StoryboardModel(this);
     m_storyboardModel->setCommentModel(m_commentModel);
 

@@ -67,7 +67,7 @@ class CommentMenu: public QMenu
 {
     Q_OBJECT
 public:
-    CommentMenu(QWidget *parent, CommentModel *m_model)
+    CommentMenu(QWidget *parent, StoryboardCommentModel *m_model)
         : QMenu(parent)
         , m_menuUI(new Ui_WdgCommentMenu())
         , model(m_model)
@@ -117,7 +117,7 @@ private Q_SLOTS:
 
 private:
     QScopedPointer<Ui_WdgCommentMenu> m_menuUI;
-    CommentModel *model;
+    StoryboardCommentModel *model;
     CommentDelegate *delegate;
 };
 
@@ -160,7 +160,7 @@ StoryboardDockerDock::StoryboardDockerDock( )
     , m_canvas(0)
     , m_ui(new Ui_WdgStoryboardDock())
     , m_exportMenu(new QMenu(this))
-    , m_commentModel(new CommentModel(this))
+    , m_commentModel(new StoryboardCommentModel(this))
     , m_commentMenu(new CommentMenu(this, m_commentModel))
     , m_arrangeMenu(new ArrangeMenu(this))
     , m_storyboardModel(new StoryboardModel(this))

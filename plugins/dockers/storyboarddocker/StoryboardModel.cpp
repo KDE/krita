@@ -594,7 +594,7 @@ int StoryboardModel::visibleCommentsUpto(QModelIndex index) const
     return visibleComments;
 }
 
-void StoryboardModel::setCommentModel(CommentModel *commentModel)
+void StoryboardModel::setCommentModel(StoryboardCommentModel *commentModel)
 {
     m_commentModel = commentModel;
     connect(m_commentModel, SIGNAL(dataChanged(const QModelIndex ,const QModelIndex)),

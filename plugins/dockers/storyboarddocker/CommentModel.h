@@ -30,13 +30,13 @@ class StoryboardModel;
  * It enables addition, deletion and modification of comments in
  * the @a Comments menu of the storyboard docker.
  */
-class KRITASTORYBOARDDOCKER_EXPORT CommentModel : public QAbstractListModel
+class KRITASTORYBOARDDOCKER_EXPORT StoryboardCommentModel : public QAbstractListModel
 {
 
     Q_OBJECT
 
 public:
-    CommentModel(QObject *parent = 0);
+    StoryboardCommentModel(QObject *parent = 0);
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
 

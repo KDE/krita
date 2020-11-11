@@ -30,7 +30,7 @@
 class Ui_WdgStoryboardDock;
 class CommentMenu;
 class ArrangeMenu;
-class CommentModel;
+class StoryboardCommentModel;
 class StoryboardModel;
 class StoryboardDelegate;
 class KisNodeManager;
@@ -115,7 +115,7 @@ private:
     KisAction *m_exportAsPdfAction;
     KisAction *m_exportAsSvgAction;
 
-    QPointer<CommentModel> m_commentModel;
+    QPointer<StoryboardCommentModel> m_commentModel;
     CommentMenu *m_commentMenu;
 
     KisAction *m_lockAction;

@@ -23,18 +23,18 @@
 
 #include <kis_icon.h>
 
-CommentModel::CommentModel(QObject *parent)
+StoryboardCommentModel::StoryboardCommentModel(QObject *parent)
         : QAbstractListModel(parent) 
 {
     //initialize variables
 }
 
-int CommentModel::rowCount(const QModelIndex &parent) const
+int StoryboardCommentModel::rowCount(const QModelIndex &parent) const
 {
    return m_commentList.count();
 }
 
-QVariant CommentModel::data(const QModelIndex &index, int role) const
+QVariant StoryboardCommentModel::data(const QModelIndex &index, int role) const
 {
     
     if (!index.isValid()) {
@@ -58,7 +58,7 @@ QVariant CommentModel::data(const QModelIndex &index, int role) const
     
 }
 
-bool CommentModel::setData(const QModelIndex & index, const QVariant & value, int role)
+bool StoryboardCommentModel::setData(const QModelIndex & index, const QVariant & value, int role)
 {
     if (index.isValid() && (role == Qt::EditRole || role == Qt::DisplayRole)) {
         m_commentList[index.row()].name = value.toString();
@@ -76,7 +76,7 @@ bool CommentModel::setData(const QModelIndex & index, const QVariant & value, in
     return false;
 }
 
-Qt::ItemFlags CommentModel::flags(const QModelIndex & index) const
+Qt::ItemFlags StoryboardCommentModel::flags(const QModelIndex & index) const
 {
     if (!index.isValid()) {
         return Qt::ItemIsDropEnabled;
@@ -85,7 +85,7 @@ Qt::ItemFlags CommentModel::flags(const QModelIndex & index) const
            Qt::ItemIsEditable | Qt::ItemIsEnabled ;
 }
 
-bool CommentModel::insertRows(int position, int rows, const QModelIndex &parent)
+bool StoryboardCommentModel::insertRows(int position, int rows, const QModelIndex &parent)
 {
     beginInsertRows(QModelIndex(), position, position+rows-1);
 
@@ -105,7 +105,7 @@ bool CommentModel::insertRows(int position, int rows, const QModelIndex &parent)
     return true;
 }
 
-bool CommentModel::removeRows(int position, int rows, const QModelIndex &parent)
+bool StoryboardCommentModel::removeRows(int position, int rows, const QModelIndex &parent)
 {
     beginRemoveRows(QModelIndex(), position, position+rows-1);
 
@@ -120,7 +120,7 @@ bool CommentModel::removeRows(int position, int rows, const QModelIndex &parent)
     return true;
 }
 
-bool CommentModel::moveRows(const QModelIndex &sourceParent, int sourceRow, int count,
+bool StoryboardCommentModel::moveRows(const QModelIndex &sourceParent, int sourceRow, int count,
                             const QModelIndex &destinationParent, int destinationChild)
 {
     if (destinationChild == sourceRow || destinationChild == sourceRow + 1) {
@@ -148,14 +148,14 @@ bool CommentModel::moveRows(const QModelIndex &sourceParent, int sourceRow, int 
     return true;
 }
 
-QStringList CommentModel::mimeTypes() const
+QStringList StoryboardCommentModel::mimeTypes() const
 {
     QStringList types;
     types << QLatin1String("application/x-krita-storyboard");
     return types;
 }
 
-QMimeData *CommentModel::mimeData(const QModelIndexList &indexes) const
+QMimeData *StoryboardCommentModel::mimeData(const QModelIndexList &indexes) const
 {
     QMimeData *mimeData = new QMimeData();
     QByteArray encodeData;
@@ -174,7 +174,7 @@ QMimeData *CommentModel::mimeData(const QModelIndexList &indexes) const
     return mimeData;
 }
 
-bool CommentModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
+bool StoryboardCommentModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
                                 int row, int column, const QModelIndex &parent)
 {
     if (action == Qt::IgnoreAction) {
@@ -202,17 +202,17 @@ bool CommentModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
     return false;
 }
 
-Qt::DropActions CommentModel::supportedDropActions() const
+Qt::DropActions StoryboardCommentModel::supportedDropActions() const
 {
     return Qt::CopyAction | Qt::MoveAction;
 }
 
-Qt::DropActions CommentModel::supportedDragActions() const
+Qt::DropActions StoryboardCommentModel::supportedDragActions() const
 {
     return Qt::CopyAction | Qt::MoveAction;
 }
 
-void CommentModel::resetData(QVector<StoryboardComment> list)
+void StoryboardCommentModel::resetData(QVector<StoryboardComment> list)
 {
     beginResetModel();
     m_commentList = list;
@@ -220,7 +220,7 @@ void CommentModel::resetData(QVector<StoryboardComment> list)
     endResetModel();
 }
 
-QVector<StoryboardComment> CommentModel::getData()
+QVector<StoryboardComment> StoryboardCommentModel::getData()
 {
     return m_commentList;
 }

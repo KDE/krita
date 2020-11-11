@@ -21,7 +21,7 @@
 
 #include <QStyledItemDelegate>
 
-class CommentModel;
+class StoryboardCommentModel;
 
 /**
  * @class CommentDelegate

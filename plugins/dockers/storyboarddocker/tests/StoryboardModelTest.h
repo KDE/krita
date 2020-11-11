@@ -21,7 +21,7 @@
 
 #include <QtTest>
 
-class CommentModel;
+class StoryboardCommentModel;
 class StoryboardModel;
 
 class StoryboardModelTest : public QObject
@@ -44,7 +44,7 @@ private Q_SLOTS:
     void testCommentChanged();
 
 private:
-    CommentModel *m_commentModel;
+    StoryboardCommentModel *m_commentModel;
     StoryboardModel *m_storyboardModel;
 
 };

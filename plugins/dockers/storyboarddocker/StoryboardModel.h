@@ -123,7 +123,7 @@ public:
      * @sa slotCommentRowRemoved(QModelIndex,int,int)
      * @sa slotCommentRowMoved();
      */
-    void setCommentModel(CommentModel *commentModel);
+    void setCommentModel(StoryboardCommentModel *commentModel);
 
     /**
      * @param row The row of the comment.
@@ -293,7 +293,7 @@ Q_SIGNALS:
 private:
     StoryboardItemList m_items;
     QVector<StoryboardComment> m_commentList;
-    CommentModel *m_commentModel;
+    StoryboardCommentModel *m_commentModel;
     bool m_freezeKeyframePosition;
     bool m_lockBoards;
     bool m_reorderingKeyframes;

@@ -18,7 +18,7 @@ KisMyPaintOp::KisMyPaintOp(const KisPaintOpSettingsSP settings, KisPainter * pai
     : KisPaintOp (painter) {
 
     m_node = node;
-    m_brush = new KisMyPaintBrush(this->painter());
+    m_brush = new KisMyPaintBrush();
     m_surface = new KisMyPaintSurface(this->painter(), m_node);
 
     m_brush->apply(settings);

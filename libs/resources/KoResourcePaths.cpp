@@ -492,7 +492,7 @@ QStringList KoResourcePaths::findAllResourcesInternal(const QString &type,
         }
 
         if(_filter.endsWith("*.myb")) {
-            dirs << "/usr/share" << "/home";
+            dirs << "/usr/share";
         }
 
         Q_FOREACH (const QString &dir, dirs) {

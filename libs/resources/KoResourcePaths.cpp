@@ -491,6 +491,10 @@ QStringList KoResourcePaths::findAllResourcesInternal(const QString &type,
                  << getInstallationPrefix() + "share/krita/" + alias + "/";
         }
 
+        if(_filter.endsWith("*.myb")) {
+            dirs << "/usr/share" << "/home";
+        }
+
         Q_FOREACH (const QString &dir, dirs) {
             appendResources(&resources,
                             filesInDir(dir, filter, recursive),

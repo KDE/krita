@@ -114,6 +114,8 @@ public:
 
     void fromXML(const QDomElement& elt, KisResourcesInterfaceSP resourcesInterface);
 
+    bool loadMYB(QIODevice* dev);
+
     bool removable() const {
         return true;
     }

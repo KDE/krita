@@ -25,6 +25,11 @@ if(FFTW3_FOUND)
   include_directories(${FFTW3_INCLUDE_DIR})
 endif()
 
+if(LIBMYPAINT_FOUND)
+    include_directories(${LIBMYPAINT_INCLUDE_DIR})
+    link_directories(${LIBMYPAINT_LIBRARIES})
+endif()
+
 if(HAVE_VC)
   include_directories(SYSTEM ${Vc_INCLUDE_DIR} ${Qt5Core_INCLUDE_DIRS} ${Qt5Gui_INCLUDE_DIRS})
   ko_compile_for_all_implementations(__per_arch_circle_mask_generator_objs kis_brush_mask_applicator_factories.cpp)
@@ -370,6 +375,10 @@ endif()
 
 if(FFTW3_FOUND)
   target_link_libraries(kritaimage PRIVATE ${FFTW3_LIBRARIES})
+endif()
+
+if(LIBMYPAINT_FOUND)
+    target_link_libraries(kritaimage PUBLIC mypaint)
 endif()
 
 if(HAVE_VC)

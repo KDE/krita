@@ -41,6 +41,7 @@
 #include <KoLocalStrokeCanvasResources.h>
 
 #include <KoStore.h>
+#include <libmypaint/mypaint-surface.h>
 
 struct Q_DECL_HIDDEN KisPaintOpPreset::Private {
     Private(KisPaintOpPreset *q)
@@ -211,7 +212,13 @@ bool KisPaintOpPreset::load(KisResourcesInterfaceSP resourcesInterface)
         }
     }
 
-    bool res = loadFromDevice(dev, resourcesInterface);
+    bool res = false;
+    if(filename().endsWith(".myb")) {
+     //   res = loadMYB(dev);
+    }
+    else {
+        res = loadFromDevice(dev, resourcesInterface);
+    }
     delete dev;
 
     setValid(res);
@@ -259,6 +266,26 @@ bool KisPaintOpPreset::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP re
     setValid(true);
     setImage(img);
 
+    return true;
+}
+
+bool KisPaintOpPreset::loadMYB(QIODevice *dev) {
+
+    QString pngFilePath = filename();
+    pngFilePath = pngFilePath.remove(filename().size()-4, 4);
+    pngFilePath = pngFilePath + "_prev.png";
+    QIODevice *imgDev = new QFile(pngFilePath);
+
+    QImageReader reader(imgDev, "PNG");
+
+    QImage img;
+    if (!reader.read(&img)) {
+        dbgImage << "Fail to decode PNG";
+        return false;
+    }
+
+    setValid(true);
+    setImage(img);
     return true;
 }
 

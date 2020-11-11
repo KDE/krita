@@ -26,7 +26,7 @@
 #include "kis_debug.h"
 #include "kis_image.h"
 #include "kis_image_barrier_locker.h"
-#include "kis_image_interface.h"
+#include "kis_qmic_interface.h"
 #include "kis_input_output_mapper.h"
 #include "kis_qmic_applicator.h"
 #include "kis_qmic_simple_convertor.h"

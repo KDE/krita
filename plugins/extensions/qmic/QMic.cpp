@@ -4,57 +4,23 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include "QMic.h"
-
-#include <QApplication>
-#include <QBuffer>
-#include <QByteArray>
-#include <QDataStream>
+#include <KoJsonTrader.h>
+#include <PluginSettings.h>
 #include <QDebug>
 #include <QFileInfo>
 #include <QList>
-#include <QLocalServer>
-#include <QLocalSocket>
 #include <QMessageBox>
-#include <QMultiMap>
-#include <QProcess>
-#include <QSharedMemory>
-#include <QSharedPointer>
 #include <QUuid>
-#include <QVBoxLayout>
-
+#include <kis_action.h>
+#include <kis_config.h>
+#include <kis_preference_set_registry.h>
 #include <klocalizedstring.h>
 #include <kpluginfactory.h>
+#include <qfileinfo.h>
 
-#include <KoColorModelStandardIds.h>
-#include <KoColorSpace.h>
-#include <KoColorSpaceConstants.h>
-#include <KoColorSpaceRegistry.h>
-#include <KoColorSpaceTraits.h>
-#include <KoDialog.h>
-
-#include <KisPart.h>
-#include <KisViewManager.h>
-#include <kis_action.h>
-#include <kis_algebra_2d.h>
-#include <kis_config.h>
-#include <kis_image.h>
-#include <kis_layer.h>
-#include <kis_paint_device.h>
-#include <kis_paint_layer.h>
-#include <kis_preference_set_registry.h>
-#include <kis_selection.h>
-
-#include "KritaGmicPluginInterface.h"
-#include "kis_image_interface.h"
-#include "kis_import_qmic_processing_visitor.h"
-#include "kis_input_output_mapper.h"
-#include "kis_qmic_simple_convertor.h"
-#include <PluginSettings.h>
-#include <kis_image_barrier_locker.h>
-#include <qsize.h>
-
-#include "kis_qmic_applicator.h"
+#include "QMic.h"
+#include "kis_qmic_interface.h"
+#include "KisViewManager.h"
 
 K_PLUGIN_FACTORY_WITH_JSON(QMicFactory, "kritaqmic.json", registerPlugin<QMic>();)
 
@@ -88,27 +54,76 @@ void QMic::slotQMic(bool again)
 
     // find the krita-gmic-qt plugin
     QString pluginPath = PluginSettings::gmicQtPath();
-    if (pluginPath.isEmpty() || !QFileInfo(pluginPath).exists() || !QFileInfo(pluginPath).isFile()) {
-        QMessageBox::warning(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Krita cannot find the gmic-qt plugin. You can set the location of the gmic-qt plugin in Settings/Configure Krita."));
-        return;
+
+    if (!pluginPath.isEmpty()) {
+        QFileInfo fi(pluginPath);
+
+        if (!fi.exists() || !fi.isFile()) {
+            QMessageBox::warning(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Krita cannot find the gmic-qt plugin. You can set the location of the gmic-qt plugin in Settings/Configure Krita."));
+            return;
+        }
+
+        QPluginLoader loader(pluginPath);
+
+        if (!loader.load()) {
+            QMessageBox msgBox(qApp->activeWindow());
+            msgBox.setIcon(QMessageBox::Critical);
+            msgBox.setWindowTitle(i18nc("@title:window", "Krita"));
+            msgBox.setText(i18n("Krita cannot load the gmic-qt plugin. See below for more information."));
+            msgBox.setDetailedText(loader.errorString());
+            msgBox.exec();
+            return;
+        }
+
+        auto *factory = qobject_cast<KPluginFactory *>(loader.instance());
+        if (!factory) {
+            QMessageBox::warning(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Krita cannot launch the gmic-qt plugin. The provided library is not a Krita plugin."));
+            return;
+        }
+
+        auto *pluginBase = factory->create<QObject>(0);
+
+        plugin = qobject_cast<KisQmicPluginInterface *>(pluginBase);
+
+        if (!plugin) {
+            QMessageBox::warning(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Krita cannot launch the gmic-qt plugin. The provided library is not a valid plugin."));
+            return;
+        }
     }
+    else {
+        const auto offers = KoJsonTrader::instance()->query("Krita/GMic", QString());
+        if (offers.isEmpty()) {
+            QMessageBox::warning(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("The GMic plugin is not installed or could not be loaded."));
+            return;
+        }
 
-    QPluginLoader loader(pluginPath);
+        for (const auto &loader : offers) {
+            auto *factory = qobject_cast<KPluginFactory *>(loader->instance());
+            if (!factory) {
+                warnPlugins << "(GMic) This is not a Krita plugin: " << loader->fileName();
 
-    if (!loader.load()) {
-        QMessageBox msgBox(qApp->activeWindow());
-        msgBox.setIcon(QMessageBox::Critical);
-        msgBox.setWindowTitle(i18nc("@title:window", "Krita"));
-        msgBox.setText(i18n("Krita cannot load the gmic-qt plugin. See below for more information."));
-        msgBox.setDetailedText(loader.errorString());
-        msgBox.exec();
-        return;
-    }
+                continue;
+            }
 
-    plugin = qobject_cast<KritaGmicPluginInterface *>(loader.instance());
-    if (!plugin) {
-        QMessageBox::warning(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Krita cannot launch the gmic-qt plugin. The provided library is not a valid plugin."));
-        return;
+            auto *pluginBase = factory->create<QObject>(this);
+
+            plugin = qobject_cast<KisQmicPluginInterface *>(pluginBase);
+
+            if (!plugin) {
+                warnPlugins << "(GMic) This is not a valid GMic-Qt plugin: " << loader->fileName();
+
+                continue;
+            }
+
+            break;
+        }
+
+        if (!plugin) {
+            QMessageBox::warning(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Krita cannot launch the gmic-qt plugin. No bundled library found."));
+            return;
+        }
+
+        qDeleteAll(offers);
     }
 
     m_key = QUuid::createUuid().toString();
@@ -118,7 +133,6 @@ void QMic::slotQMic(bool again)
     dbgPlugins << "pluginFinished" << status;
     delete plugin;
     plugin = nullptr;
-    loader.unload();
 
     m_qmicAction->setEnabled(true);
     m_againAction->setEnabled(true);

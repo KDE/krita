@@ -21,7 +21,7 @@
 #ifndef __KIS_IMAGE_INTERFACE_H
 #define __KIS_IMAGE_INTERFACE_H
 
-#include "kisimageinterface_export.h"
+#include "kisqmicinterface_export.h"
 
 #include <QDebug>
 #include <QMutex>
@@ -34,7 +34,7 @@
 class KisQmicApplicator;
 class KisViewManager;
 
-struct KISIMAGEINTERFACE_EXPORT KisQMicImage {
+struct KISQMICINTERFACE_EXPORT KisQMicImage {
     QMutex m_mutex;
     QString m_layerName;
     int m_width;
@@ -71,7 +71,7 @@ QDebug operator<<(QDebug d, const KisQMicImage &model);
 
 using KisQMicImageSP = QSharedPointer<KisQMicImage>;
 
-class KISIMAGEINTERFACE_EXPORT KisImageInterface : public QObject
+class KISQMICINTERFACE_EXPORT KisImageInterface : public QObject
 {
     Q_OBJECT
 

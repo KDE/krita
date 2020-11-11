@@ -8,14 +8,14 @@
 #define QMIC_H
 
 #include <KisActionPlugin.h>
-#include <QProcess>
+#include <QPointer>
 #include <QVariant>
 #include <QVector>
 #include <kis_types.h>
 
-#include "KritaGmicPluginInterface.h"
 #include "gmic.h"
-#include "kis_image_interface.h"
+#include "kis_qmic_interface.h"
+#include "kis_qmic_plugin_interface.h"
 
 class KisAction;
 class QLocalServer;
@@ -30,18 +30,13 @@ public:
     QMic(QObject *parent, const QVariantList &);
     ~QMic() override = default;
 
-    QSize getSelection();
-    QByteArray prepareImages(int mode, QRectF cropRect);
-    void outputImages(int mode, QStringList layers);
-    void detach();
-
 private Q_SLOTS:
 
     void slotQMicAgain();
     void slotQMic(bool again = false);
 
 private:
-    KritaGmicPluginInterface *plugin {nullptr};
+    KisQmicPluginInterface *plugin {nullptr};
     QString m_key;
     KisAction *m_qmicAction {0};
     KisAction *m_againAction {0};

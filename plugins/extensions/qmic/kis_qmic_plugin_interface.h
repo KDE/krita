@@ -21,19 +21,21 @@
 #ifndef KRITA_GMIC_PLUGIN_INTERFACE
 #define KRITA_GMIC_PLUGIN_INTERFACE
 
-#include <QString>
-#include <QtPlugin>
 #include <memory>
+#include <qobject.h>
 
-#include "kis_image_interface.h"
+#include "kis_qmic_interface.h"
+#include "kisqmicinterface_export.h"
 
 #define KRITA_GMIC_PLUGIN_INTERFACE_IID "org.kde.krita.KritaGmicPluginInterface"
-class KritaGmicPluginInterface {
+
+class KISQMICINTERFACE_EXPORT KisQmicPluginInterface
+{
 public:
-  virtual ~KritaGmicPluginInterface() = default;
+  virtual ~KisQmicPluginInterface() = default;
   virtual int launch(std::shared_ptr<KisImageInterface> iface, bool headless = false) = 0;
 };
 
-Q_DECLARE_INTERFACE(KritaGmicPluginInterface, KRITA_GMIC_PLUGIN_INTERFACE_IID)
+Q_DECLARE_INTERFACE(KisQmicPluginInterface, KRITA_GMIC_PLUGIN_INTERFACE_IID)
 
 #endif

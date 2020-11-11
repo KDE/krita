@@ -22,6 +22,7 @@ ExternalProject_Add( ext_gmic_qt
     URL_HASH SHA256=50b401f999ddaff7ef86657ef115a7bfa844e9c465c8a7e878dd5b6b8bba99be
     PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-First-working-version-of-the-GMic-Qt-Krita-native-pl.patch
         COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0002-Remove-shared-segment-infrastructure.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0003-Refactor-into-a-completely-Krita-native-plugin.patch
 
     SOURCE_DIR gmic-qt
     INSTALL_DIR ${PREFIX_ext_gmic}

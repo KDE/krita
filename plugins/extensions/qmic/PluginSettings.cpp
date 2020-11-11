@@ -62,7 +62,7 @@ QString PluginSettings::gmicQtPath()
 #endif
 
     QString gmic_qt_path = KisConfig(true).readEntry<QString>("gmic_qt_plugin_path", "");
-    dbgPlugins << 1 << gmic_qt_path;
+    // dbgPlugins << 1 << gmic_qt_path;
     if (!gmic_qt_path.isEmpty() && QFileInfo(gmic_qt_path).exists()) {
         return gmic_qt_path;
     }
@@ -70,7 +70,7 @@ QString PluginSettings::gmicQtPath()
     QFileInfo fi(qApp->applicationDirPath() + "/" + gmicqt);
 
     // Check for gmic-qt next to krita
-    dbgPlugins << 2 << fi.filePath();
+    // dbgPlugins << 2 << fi.filePath();
     if (fi.exists() && fi.isFile()) {
         return fi.canonicalFilePath();
     }
@@ -82,7 +82,7 @@ QString PluginSettings::gmicQtPath()
 
     for (const auto &gmicDir : gmicdirs) {
         fi = QFileInfo(qApp->applicationDirPath() + "/" + gmicDir + "/" + gmicqt);
-        dbgPlugins << "3" << fi.filePath();
+        // dbgPlugins << "3" << fi.filePath();
         if (fi.exists() && fi.isFile()) {
             return fi.canonicalFilePath();
         }
@@ -91,14 +91,14 @@ QString PluginSettings::gmicQtPath()
     // Amyspark: check for gmic-qt plugin in the library path
     for (const auto &path : qApp->libraryPaths()) {
         QFileInfo fi(path + "/" + gmicqt);
-        dbgPlugins << 4 << fi.filePath();
+        // dbgPlugins << 4 << fi.filePath();
         if (fi.exists() && fi.isFile()) {
             return fi.canonicalFilePath();
         }
     }
 
-    dbgPlugins << 5 << gmicqt;
-    return gmicqt;
+    // dbgPlugins << 5 << gmicqt;
+    return ""; // if filepath lookup fails, fall back to KoJsonTrader
 }
 
 

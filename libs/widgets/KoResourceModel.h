@@ -54,7 +54,8 @@ public:
     {
         /// A larger thumbnail for displaying in a tooltip. 200x200 or so.
         LargeThumbnailRole = Qt::UserRole + 1,
-        TagsRole
+        TagsRole,
+        OriginalThumbnailRole
     };
 
     QModelIndex indexFromResource(KoResource* resource) const;

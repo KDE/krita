@@ -129,6 +129,14 @@ QVariant KoResourceModel::data( const QModelIndex &index, int role ) const
             else
                 return QVariant(resource->image());
         }
+        case KoResourceModel::OriginalThumbnailRole:
+        {
+            KoResource * resource = static_cast<KoResource*>(index.internalPointer());
+            if( ! resource )
+                return QVariant();
+
+            return QVariant(resource->image());
+        }
 
         default:
             return QVariant();

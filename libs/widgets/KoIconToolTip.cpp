@@ -23,6 +23,7 @@
 
 #include <QTextDocument>
 #include <QUrl>
+#include <QDebug>
 
 #include <KoResourceModel.h>
 #include <klocalizedstring.h>
@@ -41,7 +42,10 @@ QTextDocument *KoIconToolTip::createDocument( const QModelIndex &index )
 {
     QTextDocument *doc = new QTextDocument( this );
 
-    QImage thumb = index.data( KoResourceModel::LargeThumbnailRole ).value<QImage>();
+    QImage thumb = index.data( KoResourceModel::OriginalThumbnailRole ).value<QImage>();
+    thumb.setDevicePixelRatio(devicePixelRatioF());
+    QSize thumbnailSize = QSize(100, 100)*devicePixelRatioF();
+    thumb = thumb.scaled(thumbnailSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
     doc->addResource( QTextDocument::ImageResource, QUrl( "data:thumbnail" ), thumb );
 
     QString name = index.data( Qt::DisplayRole ).toString();

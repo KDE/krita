@@ -184,7 +184,6 @@ private:
     bool isMouseDown;
     bool linkCanvasZoomLevel;
     KisPaintLayerSP m_paintLayer;
-    KisImageSP m_image;
     const KoColorProfile* m_displayProfile;
     QCursor m_cursor;
     QCursor m_colorPickerCursor;

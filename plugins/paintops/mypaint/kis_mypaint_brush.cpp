@@ -106,41 +106,10 @@ MyPaintBrush* KisMyPaintBrush::brush() {
     return m_d->m_brush;
 }
 
-bool KisMyPaintBrush::load() {
+bool KisMyPaintBrush::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface)
+{
+    Q_UNUSED(resourcesInterface);
 
-    dbgImage << "Load MyPaint Brush " << filename();
-    setValid(false);
-
-    if (filename().isEmpty()) {
-        return false;
-    }
-
-    QByteArray ba;
-
-    QFile dev(filename());
-
-    if (dev.size() == 0) {
-        return false;
-    }
-
-    if (!dev.open(QIODevice::ReadOnly)) {
-        warnKrita << "Can't open file " << filename();
-        return false;
-    }
-
-    const bool res = loadFromDevice(&dev);
-
-    setValid(res);
-    setDirty(false);
-
-    if (!firstLoad)
-        reloadSettings();
-
-    firstLoad = false;
-    return res;
-}
-
-bool KisMyPaintBrush::loadFromDevice(QIODevice *dev) {
 
     QFileInfo fileInfo(filename());
     m_d->m_icon.load(fileInfo.path() + '/' + fileInfo.baseName() + "_prev.png");
@@ -169,7 +138,7 @@ void KisMyPaintBrush::reloadSettings() {
 
     QFileInfo fileInfo(this->filename());
 
-    KisPaintOpSettingsSP s = new KisMyPaintOpSettings();
+    KisPaintOpSettingsSP s = new KisMyPaintOpSettings(settings()->resourcesInterface());
     s->setProperty("paintop", "mypaintbrush");
     s->setProperty("filename", this->filename());
     s->setProperty(MYPAINT_JSON, this->getJsonData());

@@ -34,6 +34,8 @@
 #include "kis_mypaint_surface.h"
 #include "kis_my_paintop_settings.h"
 
+#include <qimage_test_util.h>
+
 class KisMyPaintOpSettings;
 KisMyPaintOpTest::KisMyPaintOpTest(): TestUtil::QImageBasedTest("MyPaintOp")
 {
@@ -54,7 +56,12 @@ void KisMyPaintOpTest::testDab() {
     QImage img = dst->convertToQImage(0, dst->exactBounds().x(), dst->exactBounds().y(), dst->exactBounds().width(), dst->exactBounds().height());
     QImage source(QString(FILES_DATA_DIR) + QDir::separator() + "draw_dab.png");
 
-    QVERIFY(img == source);
+    QPoint errpoint;
+    if (!TestUtil::compareQImages(errpoint, source, img)) {
+        img.save("mypaint_test_draw_dab.png");
+        QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
+    }
+
 }
 
 void KisMyPaintOpTest::testGetColor() {
@@ -86,7 +93,7 @@ void KisMyPaintOpTest::testGetColor() {
 void KisMyPaintOpTest::testLoading() {
 
     QScopedPointer<KisMyPaintBrush> brush (new KisMyPaintBrush(QString(FILES_DATA_DIR) + QDir::separator() + "basic.myb"));
-    brush->load();
+    brush->load(0);
     QVERIFY(brush->valid());
 }
 

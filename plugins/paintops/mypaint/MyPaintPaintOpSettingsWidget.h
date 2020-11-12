@@ -2,8 +2,8 @@
 #define KIS_MYPAINTOP_SETTINGS_WIDGET_H_
 
 #include <kis_paintop_settings_widget.h>
-#include <kis_my_paintop_option.h>
-#include <kis_mypaint_curve_option_widget.h>
+#include <MyPaintPaintOpOption.h>
+#include <MyPaintCurveOptionWidget.h>
 
 class KisMyPaintOpSettingsWidget : public KisPaintOpSettingsWidget
 {

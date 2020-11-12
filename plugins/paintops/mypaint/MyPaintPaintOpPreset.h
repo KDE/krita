@@ -9,14 +9,14 @@
 #include <KoResource.h>
 #include <kis_paintop_preset.h>
 
-class KisMyPaintBrush : public QObject, public KisPaintOpPreset
+class KisMyPaintPaintOpPreset : public QObject, public KisPaintOpPreset
 {
     Q_OBJECT
 
 public:
 
-    KisMyPaintBrush(const QString &fileName="");
-    virtual ~KisMyPaintBrush();
+    KisMyPaintPaintOpPreset(const QString &fileName="");
+    virtual ~KisMyPaintPaintOpPreset();
 
     void setColor(const KoColor color, const KoColorSpace *colorSpace);
     void apply(KisPaintOpSettingsSP settings);

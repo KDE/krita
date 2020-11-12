@@ -10,7 +10,7 @@
 #include "kis_curve_option.h"
 #include <brushengine/kis_paint_information.h>
 #include "kritapaintop_export.h"
-#include "kis_mypaintbrush_option.h"
+#include "MyPaintBrushOption.h"
 #include "libmypaint/mypaint-brush.h"
 
 class PAINTOP_EXPORT KisMyPaintCurveOption: public KisCurveOption

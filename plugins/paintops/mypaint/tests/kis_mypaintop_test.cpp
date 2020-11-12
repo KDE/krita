@@ -30,9 +30,9 @@
 #include <kis_random_accessor_ng.h>
 
 #include "kis_mypaintop_test.h"
-#include "kis_my_paintop.h"
-#include "kis_mypaint_surface.h"
-#include "kis_my_paintop_settings.h"
+#include "MyPaintPaintOp.h"
+#include "MyPaintSurface.h"
+#include "MyPaintPaintOpSettings.h"
 
 #include <qimage_test_util.h>
 
@@ -92,7 +92,7 @@ void KisMyPaintOpTest::testGetColor() {
 
 void KisMyPaintOpTest::testLoading() {
 
-    QScopedPointer<KisMyPaintBrush> brush (new KisMyPaintBrush(QString(FILES_DATA_DIR) + QDir::separator() + "basic.myb"));
+    QScopedPointer<KisMyPaintPaintOpPreset> brush (new KisMyPaintPaintOpPreset(QString(FILES_DATA_DIR) + QDir::separator() + "basic.myb"));
     brush->load(0);
     QVERIFY(brush->valid());
 }

@@ -8,7 +8,7 @@ macro_add_unittest_definitions()
 
 include(KritaAddBrokenUnitTest)
 
-ecm_add_test(kis_mypaintop_test.cpp ../kis_my_paintop_settings.cpp ../kis_mypaint_brush.cpp ../kis_mypaint_surface.cpp
+ecm_add_test(kis_mypaintop_test.cpp ../MyPaintPaintOpSettings.cpp ../MyPaintPaintOpPreset.cpp ../MyPaintSurface.cpp
     TEST_NAME KisMyPaintOpTest
     NAME_PREFIX plugins-kismypaintop-
     LINK_LIBRARIES kritaimage kritamypaintop kritalibpaintop mypaint Qt5::Test)

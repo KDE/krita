@@ -22,8 +22,8 @@
 #include <kis_paint_action_type_option.h>
 
 #include <libmypaint/mypaint-brush.h>
-#include "kis_my_paintop_settings.h"
-#include "kis_my_paintop_option.h"
+#include "MyPaintPaintOpSettings.h"
+#include "MyPaintPaintOpOption.h"
 
 struct KisMyPaintOpSettings::Private
 {

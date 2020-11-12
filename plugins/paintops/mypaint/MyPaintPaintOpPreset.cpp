@@ -20,15 +20,15 @@
 #include <QFileInfo>
 
 #include <KoColorConversions.h>
-#include <kis_my_paintop_option.h>
+#include <MyPaintPaintOpOption.h>
 #include <libmypaint/mypaint-brush.h>
 #include <KisResourceServerProvider.h>
 #include <KoColorModelStandardIds.h>
 
-#include "kis_mypaint_brush.h"
-#include "kis_my_paintop_settings.h"
+#include "MyPaintPaintOpPreset.h"
+#include "MyPaintPaintOpSettings.h"
 
-class KisMyPaintBrush::Private {
+class KisMyPaintPaintOpPreset::Private {
 
 public:
     MyPaintBrush *m_brush;
@@ -41,20 +41,20 @@ public:
     float isEraser;
 };
 
-KisMyPaintBrush::KisMyPaintBrush(const QString &fileName)
+KisMyPaintPaintOpPreset::KisMyPaintPaintOpPreset(const QString &fileName)
     : KisPaintOpPreset (fileName), m_d(new Private) {
 
     m_d->m_brush = mypaint_brush_new();
     mypaint_brush_from_defaults(m_d->m_brush);
 }
 
-KisMyPaintBrush::~KisMyPaintBrush() {
+KisMyPaintPaintOpPreset::~KisMyPaintPaintOpPreset() {
 
     mypaint_brush_unref(m_d->m_brush);
     delete m_d;
 }
 
-void KisMyPaintBrush::setColor(const KoColor color, const KoColorSpace *colorSpace) {
+void KisMyPaintPaintOpPreset::setColor(const KoColor color, const KoColorSpace *colorSpace) {
 
     float hue, saturation, value;
     qreal r, g, b;
@@ -72,7 +72,7 @@ void KisMyPaintBrush::setColor(const KoColor color, const KoColorSpace *colorSpa
     mypaint_brush_set_base_value(m_d->m_brush, MYPAINT_BRUSH_SETTING_COLOR_V, (value));
 }
 
-void KisMyPaintBrush::apply(KisPaintOpSettingsSP settings) {
+void KisMyPaintPaintOpPreset::apply(KisPaintOpSettingsSP settings) {
 
     if(settings->getProperty(MYPAINT_JSON).isNull()) {
         mypaint_brush_from_defaults(m_d->m_brush);
@@ -101,12 +101,12 @@ void KisMyPaintBrush::apply(KisPaintOpSettingsSP settings) {
     mypaint_brush_new_stroke(m_d->m_brush);
 }
 
-MyPaintBrush* KisMyPaintBrush::brush() {
+MyPaintBrush* KisMyPaintPaintOpPreset::brush() {
 
     return m_d->m_brush;
 }
 
-bool KisMyPaintBrush::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface)
+bool KisMyPaintPaintOpPreset::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface)
 {
     Q_UNUSED(resourcesInterface);
 
@@ -129,12 +129,12 @@ bool KisMyPaintBrush::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP res
     return true;
 }
 
-bool KisMyPaintBrush::save() {
+bool KisMyPaintPaintOpPreset::save() {
 
     return false;
 }
 
-void KisMyPaintBrush::reloadSettings() {
+void KisMyPaintPaintOpPreset::reloadSettings() {
 
     QFileInfo fileInfo(this->filename());
 
@@ -152,32 +152,32 @@ void KisMyPaintBrush::reloadSettings() {
     this->setSettings(s);
 }
 
-QByteArray KisMyPaintBrush::getJsonData() {
+QByteArray KisMyPaintPaintOpPreset::getJsonData() {
 
     return m_d->m_json;
 }
 
-float KisMyPaintBrush::getSize() {
+float KisMyPaintPaintOpPreset::getSize() {
 
     return m_d->diameter;
 }
 
-float KisMyPaintBrush::getHardness() {
+float KisMyPaintPaintOpPreset::getHardness() {
 
     return m_d->hardness;
 }
 
-float KisMyPaintBrush::getOpacity() {
+float KisMyPaintPaintOpPreset::getOpacity() {
 
     return m_d->opacity;
 }
 
-float KisMyPaintBrush::getOffset() {
+float KisMyPaintPaintOpPreset::getOffset() {
 
     return m_d->offset;
 }
 
-float KisMyPaintBrush::isEraser() {
+float KisMyPaintPaintOpPreset::isEraser() {
 
     return m_d->isEraser;
 }

@@ -33,15 +33,15 @@
 #include <kis_brush_based_paintop_settings.h>
 #include <libmypaint/mypaint-brush.h>
 
-#include "kis_my_paintop.h"
-#include "kis_my_paintop_option.h"
+#include "MyPaintPaintOp.h"
+#include "MyPaintPaintOpOption.h"
 
-KisMyPaintOp::KisMyPaintOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisNodeSP node, KisImageSP image)
+KisMyPaintPaintOp::KisMyPaintPaintOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP /*node*/, KisImageSP image)
     : KisPaintOp (painter) {
 
     m_image = image;
 
-    m_brush.reset(new KisMyPaintBrush());
+    m_brush.reset(new KisMyPaintPaintOpPreset());
     m_surface.reset(new KisMyPaintSurface(this->painter(), nullptr, m_image));
 
     m_brush->apply(settings);
@@ -73,10 +73,10 @@ KisMyPaintOp::KisMyPaintOp(const KisPaintOpSettingsSP settings, KisPainter * pai
     m_radius = settings->getFloat(MYPAINT_DIAMETER)/2;
 }
 
-KisMyPaintOp::~KisMyPaintOp() {    
+KisMyPaintPaintOp::~KisMyPaintPaintOp() {
 }
 
-KisSpacingInformation KisMyPaintOp::paintAt(const KisPaintInformation& info) {
+KisSpacingInformation KisMyPaintPaintOp::paintAt(const KisPaintInformation& info) {
 
     if (!painter()) {
         return KisSpacingInformation(1.0);
@@ -107,18 +107,18 @@ KisSpacingInformation KisMyPaintOp::paintAt(const KisPaintInformation& info) {
     return computeSpacing(info, lodScale);
 }
 
-KisSpacingInformation KisMyPaintOp::updateSpacingImpl(const KisPaintInformation &info) const
+KisSpacingInformation KisMyPaintPaintOp::updateSpacingImpl(const KisPaintInformation &info) const
 {
     KisSpacingInformation spacingInfo = computeSpacing(info, KisLodTransform::lodToScale(painter()->device()));
     return spacingInfo;
 }
 
-KisTimingInformation KisMyPaintOp::updateTimingImpl(const KisPaintInformation &info) const {
+KisTimingInformation KisMyPaintPaintOp::updateTimingImpl(const KisPaintInformation &info) const {
 
     return KisPaintOpPluginUtils::effectiveTiming(&m_airBrushOption, nullptr, info);
 }
 
-KisSpacingInformation KisMyPaintOp::computeSpacing(const KisPaintInformation &info, qreal lodScale) const {
+KisSpacingInformation KisMyPaintPaintOp::computeSpacing(const KisPaintInformation &info, qreal lodScale) const {
 
     return KisPaintOpPluginUtils::effectiveSpacing(m_radius*2, m_radius*2,
                                                    false, 0.0, false, m_radius*2,

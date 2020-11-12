@@ -5,17 +5,17 @@ include_directories(${LIBMYPAINT_INCLUDE_DIR})
 link_directories(${LIBMYPAINT_LIBRARIES})
 
 set(kritamypaintop_SOURCES
-    my_paintop_plugin.cpp
-    kis_my_paintop.cpp
-    kis_my_paintop_option.cpp
-    kis_my_paintop_settings.cpp
-    kis_my_paintop_settings_widget.cpp
-    kis_mypaint_surface.cpp
-    kis_mypaint_brush.cpp
-    kis_my_paintop_factory.cpp
-    kis_mypaint_curve_option_widget.cpp
-    kis_mypaintbrush_option.cpp
-    kis_mypaint_curve_option.cpp
+    MyPaintPaintOpPlugin.cpp
+    MyPaintPaintOp.cpp
+    MyPaintPaintOpOption.cpp
+    MyPaintPaintOpSettings.cpp
+    MyPaintPaintOpSettingsWidget.cpp
+    MyPaintSurface.cpp
+    MyPaintPaintOpPreset.cpp
+    MyPaintPaintOpFactory.cpp
+    MyPaintCurveOptionWidget.cpp
+    MyPaintBrushOption.cpp
+    MyPaintCurveOption.cpp
     ../libpaintop/kis_multi_sensors_selector.cpp
     ../libpaintop/kis_multi_sensors_model_p.cpp
 )

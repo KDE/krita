@@ -6,8 +6,8 @@
 #include <kis_curve_option_widget.h>
 #include "ui_wdgmypaintcurveoption.h"
 #include "ui_wdgcurveoption.h"
-#include <kis_mypaint_curve_option.h>
-#include <kis_my_paintop_option.h>
+#include <MyPaintCurveOption.h>
+#include <MyPaintPaintOpOption.h>
 
 class Ui_WdgMyPaintCurveOption;
 class KisMyPaintCurveOption;

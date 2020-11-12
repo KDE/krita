@@ -23,7 +23,7 @@
 #include <kis_paint_information.h>
 #include <libmypaint/mypaint-brush.h>
 
-#include "kis_mypaintbrush_option.h"
+#include "MyPaintBrushOption.h"
 
 using namespace std;
 
@@ -61,6 +61,7 @@ QString KisMyPaintBrushOption::minimumLabel(DynamicSensorType sensorType)
 
 QString KisMyPaintBrushOption::maximumLabel(DynamicSensorType sensorType, int max)
 {
+    Q_UNUSED(max);
     switch (sensorType) {
     default:
         return i18n("1.0");
@@ -99,6 +100,7 @@ int KisMyPaintBrushOption::minimumValue(DynamicSensorType sensorType)
 
 int KisMyPaintBrushOption::maximumValue(DynamicSensorType sensorType, int max)
 {
+    Q_UNUSED(max);
     switch (sensorType) {
     default:
         return 100;

@@ -27,9 +27,9 @@
 #include <libmypaint/mypaint-brush.h>
 #include <libmypaint/mypaint-config.h>
 
-#include "kis_mypaint_brush.h"
-#include "kis_my_paintop_option.h"
-#include "kis_mypaint_curve_option.h"
+#include "MyPaintPaintOpPreset.h"
+#include "MyPaintPaintOpOption.h"
+#include "MyPaintCurveOption.h"
 
 
 struct MyPaintBrush;
@@ -37,6 +37,7 @@ KisMyPaintCurveOption::KisMyPaintCurveOption(const QString& name, KisPaintOpOpti
                                bool checked, qreal value, qreal min, qreal max)
     : KisCurveOption (name, category, true, value, min, max)
 {            
+    Q_UNUSED(checked);
     m_checkable = false;
     m_checked = true;
     m_useCurve = true;
@@ -109,7 +110,7 @@ void KisMyPaintCurveOption::writeOptionSetting(KisPropertiesConfigurationSP sett
     setting->setProperty(m_name + "UseSameCurve", m_useSameCurve);
     setting->setProperty(m_name + "Value", m_value);
     setting->setProperty(m_name + "curveMode", m_curveMode);
-    setting->setProperty(m_name + "commonCurve", qVariantFromValue(m_commonCurve));        
+    setting->setProperty(m_name + "commonCurve", QVariant::fromValue(m_commonCurve));
 }
 
 void KisMyPaintCurveOption::readOptionSetting(KisPropertiesConfigurationSP setting)
@@ -370,6 +371,7 @@ DynamicSensorType KisMyPaintCurveOption::id2Type(const KoID &id)
 
 KisDynamicSensorSP KisMyPaintCurveOption::id2Sensor(const KoID& id, const QString &parentOptionName)
 {
+    Q_UNUSED(parentOptionName);
     if(id.id()==Pressure.id())
         return new KisMyPaintBrushOption(MYPAINT_PRESSURE);
     else if(id.id()==FineSpeed.id())

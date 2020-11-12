@@ -28,15 +28,16 @@
 #include <widgets/kis_curve_widget.h>
 
 #include "ui_wdgmypaintcurveoption.h"
-#include "kis_my_paintop_option.h"
-#include "kis_mypaintbrush_option.h"
-#include "kis_mypaint_curve_option.h"
-#include "kis_my_paintop_settings_widget.h"
-#include "kis_mypaint_curve_option_widget.h"
+#include "MyPaintPaintOpOption.h"
+#include "MyPaintBrushOption.h"
+#include "MyPaintCurveOption.h"
+#include "MyPaintPaintOpSettingsWidget.h"
+#include "MyPaintCurveOptionWidget.h"
 
 KisMyPaintCurveOptionWidget::KisMyPaintCurveOptionWidget(KisMyPaintCurveOption* curveOption, const QString &minLabel, const QString &maxLabel, bool hideSlider, KisMyPaintOpOption *baseOption)
     : KisCurveOptionWidget (curveOption, minLabel, maxLabel, hideSlider)
 {
+    Q_UNUSED(baseOption);
     setObjectName("KisMyPaintCurveOptionWidget");   
 
     strengthToCurveOptionValueScale = 1.0;
@@ -159,6 +160,7 @@ void KisMyPaintCurveOptionWidget::setBaseValue(KisPropertiesConfigurationSP sett
     QVariantMap settings_map = map["settings"].toMap();
     QVariantMap name_map = settings_map[m_curveOption->name()].toMap();
     double base_val = name_map["base_value"].toDouble();
+    Q_UNUSED(base_val);
 
     name_map["base_value"] = val;
     settings_map[m_curveOption->name()] = name_map;

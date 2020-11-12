@@ -26,12 +26,14 @@
 #include <KoResourceServerProvider.h>
 #include <KisResourceServerProvider.h>
 
-#include "kis_my_paintop.h"
-#include "kis_mypaint_brush.h"
-#include "kis_my_paintop_option.h"
-#include "kis_my_paintop_factory.h"
-#include "kis_my_paintop_settings.h"
-#include "kis_my_paintop_settings_widget.h"
+#include "MyPaintPaintOp.h"
+#include "MyPaintPaintOpPreset.h"
+#include "MyPaintPaintOpOption.h"
+#include "MyPaintPaintOpFactory.h"
+#include "MyPaintPaintOpSettings.h"
+#include "MyPaintPaintOpSettingsWidget.h"
+
+
 
 class KisMyPaintOpFactory::Private {
 };
@@ -48,8 +50,7 @@ KisMyPaintOpFactory::~KisMyPaintOpFactory() {
 
 KisPaintOp* KisMyPaintOpFactory::createOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP node, KisImageSP image) {
 
-    KisPaintOp* op = new KisMyPaintOp(settings, painter, node, image);
-
+    KisPaintOp* op = new KisMyPaintPaintOp(settings, painter, node, image);
     Q_CHECK_PTR(op);
     return op;
 }
@@ -139,4 +140,4 @@ void KisMyPaintOpFactory::processAfterLoading() {
 }
 #endif
 
-#include "kis_my_paintop_factory.moc"
+#include "MyPaintPaintOpFactory.moc"

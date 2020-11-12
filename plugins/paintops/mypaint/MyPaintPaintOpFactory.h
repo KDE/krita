@@ -13,7 +13,7 @@ public:
     KisMyPaintOpFactory();
     virtual ~KisMyPaintOpFactory();
 
-    KisPaintOp* createOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP node, KisImageSP image) override;
+    KisPaintOp *createOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP node, KisImageSP image) override;
     KisPaintOpSettingsSP createSettings(KisResourcesInterfaceSP resourcesInterface) override;
     KisPaintOpConfigWidget* createConfigWidget(QWidget* parent) override;
     QString id() const override;

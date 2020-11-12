@@ -20,11 +20,11 @@
 #include <kis_airbrush_option_widget.h>
 #include <kis_paintop_settings_widget.h>
 
-#include "kis_my_paintop_option.h"
-#include "kis_my_paintop_settings.h"
-#include "kis_mypaint_curve_option.h"
-#include "kis_my_paintop_settings_widget.h"
-#include "kis_mypaint_curve_option_widget.h"
+#include "MyPaintPaintOpOption.h"
+#include "MyPaintPaintOpSettings.h"
+#include "MyPaintCurveOption.h"
+#include "MyPaintPaintOpSettingsWidget.h"
+#include "MyPaintCurveOptionWidget.h"
 
 KisMyPaintOpSettingsWidget:: KisMyPaintOpSettingsWidget(QWidget* parent)
     : KisPaintOpSettingsWidget(parent)

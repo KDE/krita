@@ -49,6 +49,7 @@ namespace ResourceSubType {
     static const QString PngBrushes {"png_brushes"};
     static const QString SegmentedGradients {"segmented_gradients"};
     static const QString StopGradients {"stop_gradients"};
+    static const QString MyPaintPaintOpPresets {"mypaint_paintop_presets"};
 }
 
 

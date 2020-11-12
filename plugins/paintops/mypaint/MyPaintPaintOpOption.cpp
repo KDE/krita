@@ -18,7 +18,7 @@
 
 #include <QWidget>
 #include "ui_wdgmypaintoptions.h"
-#include "kis_my_paintop_option.h"
+#include "MyPaintPaintOpOption.h"
 #include <kis_paintop_lod_limitations.h>
 
 class KisMyPaintOpOptionsWidget: public QWidget, public Ui::WdgMyPaintOptions

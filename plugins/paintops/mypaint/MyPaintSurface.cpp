@@ -28,7 +28,7 @@
 #include <KoColorSpaceMaths.h>
 #include <kis_cross_device_color_picker.h>
 
-#include "kis_mypaint_surface.h"
+#include "MyPaintSurface.h"
 
 using namespace std;
 

@@ -7,19 +7,19 @@
 #include <libmypaint/mypaint-brush.h>
 #include <kis_airbrush_option_widget.h>
 
-#include "kis_mypaint_brush.h"
-#include "kis_mypaint_surface.h"
+#include "MyPaintPaintOpPreset.h"
+#include "MyPaintSurface.h"
 
 class KisPainter;
 
 
-class KisMyPaintOp : public KisPaintOp
+class KisMyPaintPaintOp : public KisPaintOp
 {
 
 public:
 
-    KisMyPaintOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisNodeSP node, KisImageSP image);
-    ~KisMyPaintOp() override;
+    KisMyPaintPaintOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisNodeSP node, KisImageSP image);
+    ~KisMyPaintPaintOp() override;
 
 protected:
 
@@ -33,7 +33,7 @@ private:
     KisSpacingInformation computeSpacing(const KisPaintInformation &info, qreal lodScale) const;
 
 private:
-    QScopedPointer<KisMyPaintBrush> m_brush;
+    QScopedPointer<KisMyPaintPaintOpPreset> m_brush;
     QScopedPointer<KisMyPaintSurface> m_surface;
     KisPaintOpSettingsSP m_settings;
     KisAirbrushOptionProperties m_airBrushOption;

@@ -600,6 +600,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
 
     case QEvent::TouchBegin:
     {
+        d->debugEvent<QTouchEvent, false>(event);
         if (startTouch(retval)) {
             QTouchEvent *touchEvent = static_cast<QTouchEvent *> (event);
             KisAbstractInputAction::setInputManager(this);
@@ -609,6 +610,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
             {
                 d->previousPos = touchEvent->touchPoints().at(0).pos();
                 d->buttonPressed = false;
+                d->resetCompressor();
             }
             else {
                 retval = d->matcher.touchBeginEvent(touchEvent);
@@ -625,6 +627,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
     case QEvent::TouchUpdate:
     {
         QTouchEvent *touchEvent = static_cast<QTouchEvent*>(event);
+        d->debugEvent<QTouchEvent, false>(event);
 
 #ifdef Q_OS_MAC
         int count = 0;
@@ -660,7 +663,6 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
                 d->touchStrokeStarted = true;
                 retval = compressMoveEventCommon(touchEvent);
                 d->blockMouseEvents();
-                d->resetCompressor();
             }
             else if (!d->touchStrokeStarted){
                 KisAbstractInputAction::setInputManager(this);
@@ -681,6 +683,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
 
     case QEvent::TouchEnd:
     {
+        d->debugEvent<QTouchEvent, false>(event);
         endTouch();
         QTouchEvent *touchEvent = static_cast<QTouchEvent*>(event);
         retval = d->matcher.touchEndEvent(touchEvent);
@@ -701,6 +704,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
     }
     case QEvent::TouchCancel:
     {
+        d->debugEvent<QTouchEvent, false>(event);
         endTouch();
         d->matcher.touchCancelEvent(d->previousPos);
         // reset state

@@ -85,6 +85,7 @@ struct KisMeshTransformStrategy::Private
 
     bool pointWasDragged = false;
     QPointF lastMousePos;
+    QSize lastMeshSize;
 
     KisSignalCompressor recalculateSignalCompressor;
 
@@ -228,6 +229,24 @@ void KisMeshTransformStrategy::setTransformFunction(const QPointF &mousePos, boo
 
     m_d->localPatchPosition = localPatchPos;
     m_d->localSegmentPosition = localSegmentPos;
+
+    verifyExpectedMeshSize();
+}
+
+void KisMeshTransformStrategy::verifyExpectedMeshSize()
+{
+    bool shouldUpdate = false;
+
+    const QSize currentMeshSize = m_d->currentArgs.meshTransform()->size();
+    if (currentMeshSize != m_d->lastMeshSize) {
+        m_d->selectedNodes.clear();
+        shouldUpdate = true;
+    }
+    m_d->lastMeshSize = currentMeshSize;
+
+    if (shouldUpdate) {
+        emit requestCanvasUpdate();
+    }
 }
 
 void KisMeshTransformStrategy::paint(QPainter &gc)
@@ -347,6 +366,7 @@ QCursor KisMeshTransformStrategy::getCurrentCursor() const
 
 void KisMeshTransformStrategy::externalConfigChanged()
 {
+    verifyExpectedMeshSize();
     m_d->recalculateTransformations();
 }
 

@@ -60,6 +60,8 @@ public:
 private:
     bool splitHoveredSegment(const QPointF &pt);
     bool shouldDeleteNode(qreal distance, qreal param);
+    void verifyExpectedMeshSize();
+
 private:
     Q_PRIVATE_SLOT(m_d, void recalculateTransformations());
 

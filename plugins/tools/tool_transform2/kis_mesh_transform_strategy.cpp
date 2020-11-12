@@ -694,6 +694,7 @@ void KisMeshTransformStrategy::Private::recalculateTransformations()
     paintingOffset = transaction.originalTopLeft();
 
     if (!q->originalImage().isNull()) {
+        const QPointF origTLInFlake = imageToThumb.map(transaction.originalTopLeft());
         if (useFlakeOptimization) {
             transformedImage = q->originalImage().transformed(resultThumbTransform);
             paintingTransform = QTransform();
@@ -707,7 +708,7 @@ void KisMeshTransformStrategy::Private::recalculateTransformations()
         QImage dstImage(dstImageRect.size(), transformedImage.format());
         dstImage.fill(0);
 
-        mesh.transformMesh(mesh.originalRect().topLeft().toPoint(), transformedImage,
+        mesh.transformMesh(origTLInFlake.toPoint(), transformedImage,
                            dstImageRect.topLeft(), &dstImage);
 
         transformedImage = dstImage;

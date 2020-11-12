@@ -46,6 +46,7 @@
 #include "kis_keyframe_channel.h"
 
 #include "kis_image_config.h"
+#include "kis_lod_capable_layer_offset.h"
 
 //#include "kis_paint_device_debug_utils.h"
 //#define DEBUG_RENDERING
@@ -55,10 +56,11 @@
 
 struct Q_DECL_HIDDEN KisTransformMask::Private
 {
-    Private()
+    Private(KisImageSP image)
         : worker(0, QTransform(), 0),
           staticCacheValid(false),
           recalculatingStaticImage(false),
+          offset(new KisDefaultBounds(image)),
           updateSignalCompressor(UPDATE_DELAY, KisSignalCompressor::POSTPONE),
           offBoundsReadArea(0.5)
     {
@@ -69,6 +71,7 @@ struct Q_DECL_HIDDEN KisTransformMask::Private
           params(rhs.params),
           staticCacheValid(rhs.staticCacheValid),
           recalculatingStaticImage(rhs.recalculatingStaticImage),
+          offset(rhs.offset),
           updateSignalCompressor(UPDATE_DELAY, KisSignalCompressor::POSTPONE),
           offBoundsReadArea(rhs.offBoundsReadArea)
     {
@@ -93,6 +96,8 @@ struct Q_DECL_HIDDEN KisTransformMask::Private
     bool recalculatingStaticImage;
     KisPaintDeviceSP staticCacheDevice;
 
+    KisLodCapableLayerOffset offset;
+
     KisThreadSafeSignalCompressor updateSignalCompressor;
     qreal offBoundsReadArea;
 };
@@ -100,7 +105,7 @@ struct Q_DECL_HIDDEN KisTransformMask::Private
 
 KisTransformMask::KisTransformMask(KisImageWSP image, const QString &name)
     : KisEffectMask(image, name),
-      m_d(new Private())
+      m_d(new Private(image))
 {
     setTransformParams(
         KisTransformMaskParamsInterfaceSP(
@@ -428,18 +433,28 @@ QRect KisTransformMask::sourceDataBounds() const
     return partialChangeRect;
 }
 
+qint32 KisTransformMask::x() const
+{
+    return m_d->offset.x();
+}
+
+qint32 KisTransformMask::y() const
+{
+    return m_d->offset.y();
+}
+
 void KisTransformMask::setX(qint32 x)
 {
     m_d->params->translate(QPointF(x - this->x(), 0));
     setTransformParams(m_d->params);
-    KisEffectMask::setX(x);
+    m_d->offset.setX(x);
 }
 
 void KisTransformMask::setY(qint32 y)
 {
     m_d->params->translate(QPointF(0, y - this->y()));
     setTransformParams(m_d->params);
-    KisEffectMask::setY(y);
+    m_d->offset.setY(y);
 }
 
 void KisTransformMask::forceUpdateTimedNode()
@@ -460,6 +475,12 @@ bool KisTransformMask::hasPendingTimedUpdates() const
 void KisTransformMask::threadSafeForceStaticImageUpdate()
 {
     emit sigInternalForceStaticImageUpdate();
+}
+
+void KisTransformMask::syncLodCache()
+{
+    m_d->offset.syncLodOffset();
+    KisEffectMask::syncLodCache();
 }
 
 void KisTransformMask::slotInternalForceStaticImageUpdate()

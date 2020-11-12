@@ -109,6 +109,7 @@ KisTransformMask::KisTransformMask(KisImageWSP image, const QString &name)
     connect(&m_d->updateSignalCompressor, SIGNAL(timeout()), SLOT(slotDelayedStaticUpdate()));
     connect(this, SIGNAL(sigInternalForceStaticImageUpdate()), SLOT(slotInternalForceStaticImageUpdate()));
     m_d->offBoundsReadArea = KisImageConfig(true).transformMaskOffBoundsReadArea();
+    setSupportsLodMoves(false);
 }
 
 KisTransformMask::~KisTransformMask()

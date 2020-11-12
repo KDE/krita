@@ -81,6 +81,10 @@ QString KisTabletDebugger::exTypeToString(QEvent::Type type) {
         type == QTabletEvent::TabletMove ? "TabletMove" :
         type == QTabletEvent::TabletPress ? "TabletPress" :
         type == QTabletEvent::TabletRelease ? "TabletRelease" :
+        type == QTouchEvent::TouchBegin ? "TouchBegin" :
+        type == QTouchEvent::TouchUpdate ? "TouchUpdate" :
+        type == QTouchEvent::TouchEnd ? "TouchEnd" :
+        type == QTouchEvent::TouchCancel ? "TouchCancel" :
         "unknown";
 }
 
@@ -170,6 +174,24 @@ QString KisTabletDebugger::eventToString(const QWheelEvent &ev, const QString &p
 
     s << "delta: " << ev.delta() << " ";
     s << "orientation: " << (ev.orientation() == Qt::Horizontal ? "H" : "V") << " ";
+
+    return string;
+}
+
+QString KisTabletDebugger::eventToString(const QTouchEvent &ev, const QString &prefix)
+{
+    QString string;
+    QTextStream s(&string);
+
+    dumpBaseParams(s, ev, prefix);
+
+    s << (ev.device()->type() ? "TouchPad" : "TouchScreen") << " ";
+    for (const auto& touchpoint: ev.touchPoints()) {
+        s << "id: " << touchpoint.id() << " ";
+        s << "hires: " << qSetFieldWidth(8) << touchpoint.screenPos().x() << qSetFieldWidth(0) << "," << qSetFieldWidth(8) << touchpoint.screenPos().y() << qSetFieldWidth(0) << " ";
+        s << "prs: " << touchpoint.pressure() << " ";
+        s << "rot: "<< touchpoint.rotation() << "; ";
+    }
 
     return string;
 }

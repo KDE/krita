@@ -39,6 +39,7 @@ public:
     QString eventToString(const QMouseEvent &ev, const QString &prefix);
     QString eventToString(const QKeyEvent &ev, const QString &prefix);
     QString eventToString(const QWheelEvent &ev, const QString &prefix);
+    QString eventToString(const QTouchEvent &ev, const QString &prefix);
     QString eventToString(const QTabletEvent &ev, const QString &prefix);
     QString eventToString(const QEvent &ev, const QString &prefix);
 

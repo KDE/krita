@@ -735,10 +735,12 @@ public:
     }
 
     Node& node(int col, int row) {
+        KIS_ASSERT(col >= 0 && col < m_size.width() && row >= 0 && row < m_size.height());
         return m_nodes[row * m_size.width() + col];
     }
 
     const Node& node(int col, int row) const {
+        KIS_ASSERT(col >= 0 && col < m_size.width() && row >= 0 && row < m_size.height());
         return m_nodes[row * m_size.width() + col];
     }
 

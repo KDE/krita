@@ -315,15 +315,13 @@ QCursor KisMeshTransformStrategy::getCurrentCursor() const
 
     switch (m_d->mode) {
     case Private::OVER_POINT:
-    case Private::OVER_POINT_SYMMETRIC:
-        cursor = KisCursor::pointingHandCursor();
-        break;
     case Private::OVER_SEGMENT:
-    case Private::OVER_SEGMENT_SYMMETRIC:
-        cursor = KisCursor::pointingHandCursor();
+        cursor = KisCursor::meshCursorFree();
         break;
+    case Private::OVER_POINT_SYMMETRIC:
+    case Private::OVER_SEGMENT_SYMMETRIC:
     case Private::OVER_PATCH:
-        cursor = KisCursor::roundCursor();
+        cursor = KisCursor::meshCursorLocked();
         break;
     case Private::SPLIT_SEGMENT: {
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(m_d->hoveredSegment || m_d->hoveredControl,

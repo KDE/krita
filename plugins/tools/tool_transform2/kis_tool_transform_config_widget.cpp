@@ -315,7 +315,7 @@ void KisToolTransformConfigWidget::slotUpdateIcons()
     cageButton->setIcon(KisIconUtils::loadIcon("transform_icons_cage"));
     perspectiveTransformButton->setIcon(KisIconUtils::loadIcon("transform_icons_perspective"));
     liquifyButton->setIcon(KisIconUtils::loadIcon("transform_icons_liquify_main"));
-    meshButton->setIcon(KisIconUtils::loadIcon("transform_icons_warp"));
+    meshButton->setIcon(KisIconUtils::loadIcon("transform_icons_mesh"));
 
     liquifyMove->setIcon(KisIconUtils::loadIcon("transform_icons_liquify_move"));
     liquifyScale->setIcon(KisIconUtils::loadIcon("transform_icons_liquify_resize"));

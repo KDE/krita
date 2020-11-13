@@ -21,6 +21,7 @@
 
 #include <QPoint>
 #include <KoColor.h>
+#include "kis_iterator_ng.h"
 
 
 namespace Acs {
@@ -60,6 +61,11 @@ namespace Acs {
     template <class PaintDeviceSP>
     void setColor(PaintDeviceSP device, const QPoint &pt, const KoColor &color) {
         (void) device->setPixel(pt.x(), pt.y(), color);
+    }
+
+    template<class Iterator>
+    void setColorWithIterator(Iterator &it, const KoColor &color, const int pixelSize) {
+        memcpy(it.rawData(), color.data(), pixelSize);
     }
 
 }

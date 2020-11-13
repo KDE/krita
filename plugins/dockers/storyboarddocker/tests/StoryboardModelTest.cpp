@@ -34,6 +34,7 @@ void StoryboardModelTest::init()
     QCOMPARE(m_commentModel->rowCount(), 1);
 }
 
+
 void StoryboardModelTest::cleanup()
 {
     m_storyboardModel->removeRows(0, m_storyboardModel->rowCount());
@@ -43,7 +44,6 @@ void StoryboardModelTest::cleanup()
     delete m_commentModel;
 }
 
-
 void StoryboardModelTest::testAddComment()
 {
 
@@ -52,20 +52,20 @@ void StoryboardModelTest::testAddComment()
     Q_UNUSED(sbTester);
     Q_UNUSED(commentTester);
 
-    int rowStoryboard = m_storyboardModel->rowCount(m_storyboardModel->index(0,0));
-    int rowsComment = m_commentModel->rowCount();
+    QModelIndex storyboardItem = m_storyboardModel->index(0,0);
+    int rowStoryboard = m_storyboardModel->rowCount(storyboardItem);
+    int commentCount = m_commentModel->rowCount();
 
-    QCOMPARE(rowStoryboard, rowsComment + 4);
-
+    QCOMPARE(rowStoryboard, commentCount + 4);
     m_commentModel->insertRows(m_commentModel->rowCount(),1);
 
-    QCOMPARE(rowsComment + 1, m_commentModel->rowCount());
+    QCOMPARE(commentCount + 1, m_commentModel->rowCount());
     QCOMPARE(m_storyboardModel->rowCount(m_storyboardModel->index(0,0)), m_commentModel->rowCount() + 4);
 
     //add at an invalid position
     m_commentModel->insertRows(-1, 1);
 
-    QCOMPARE(rowsComment + 1, m_commentModel->rowCount());
+    QCOMPARE(commentCount + 1, m_commentModel->rowCount());
     QCOMPARE(m_storyboardModel->rowCount(m_storyboardModel->index(0,0)), m_commentModel->rowCount() + 4);
 }
 
@@ -114,7 +114,6 @@ void StoryboardModelTest::testFrameAdded()
     QCOMPARE(rows + 1, m_storyboardModel->rowCount());
 }
 
-
 void StoryboardModelTest::testFrameRemoved()
 {
     int rows = m_storyboardModel->rowCount();
@@ -124,6 +123,7 @@ void StoryboardModelTest::testFrameRemoved()
 
     QCOMPARE(rows-1, m_storyboardModel->rowCount());
 }
+
 
 void StoryboardModelTest::testFrameChanged()
 {
@@ -159,7 +159,7 @@ void StoryboardModelTest::testDurationChanged()
     QVariant invalidValue = QVariant(-100);
     m_storyboardModel->setData(secIndex, invalidValue, Qt::EditRole);
 
-    QCOMPARE(m_storyboardModel->data(secIndex).toInt(), 100);
+    QCOMPARE(m_storyboardModel->data(secIndex).toInt(), 0);
 }
 
 void StoryboardModelTest::testCommentChanged()

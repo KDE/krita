@@ -186,6 +186,11 @@ KisImportExportErrorCode KraConverter::buildFile(QIODevice *io, const QString &f
         qWarning() << "saving palettes data failed";
     }
 
+    result = m_kraSaver->saveStoryboard(m_store, m_image, m_doc->url().toLocalFile());
+    if (!result) {
+        qWarning() << "Saving storyboard data failed";
+    }
+
     setProgress(80);
     if (!m_store->finalize()) {
         return ImportExportCodes::Failure;
@@ -413,6 +418,7 @@ bool KraConverter::completeLoading(KoStore* store)
 
     m_kraLoader->loadBinaryData(store, m_image, m_doc->localFilePath(), true);
     m_kraLoader->loadPalettes(store, m_doc);
+    m_kraLoader->loadStoryboards(store, m_doc);
 
     if (!m_kraLoader->errorMessages().isEmpty()) {
         m_doc->setErrorMessage(m_kraLoader->errorMessages().join("\n"));

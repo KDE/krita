@@ -55,6 +55,7 @@ public:
     void loadBinaryData(KoStore* store, KisImageSP image, const QString & uri, bool external);
 
     void loadPalettes(KoStore *store, KisDocument *doc);
+    void loadStoryboards(KoStore *store, KisDocument *doc);
 
     vKisNodeSP selectedNodes() const;
 

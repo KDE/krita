@@ -353,8 +353,8 @@ KisImageSP KisKraLoader::loadXML(const KoXmlElement& element)
             }
         }
     }
-    KoXmlNode child;
 
+    KoXmlNode child;
     for (child = element.lastChild(); !child.isNull(); child = child.previousSibling()) {
         KoXmlElement e = child.toElement();
         if (e.tagName() == "grid") {
@@ -367,10 +367,6 @@ KisImageSP KisKraLoader::loadXML(const KoXmlElement& element)
             loadAssistantsList(e);
         } else if (e.tagName() == "audio") {
             loadAudio(e, image);
-        } else if (e.tagName() == "StoryboardItemList") {
-            loadStoryboardItemList(e);
-        } else if (e.tagName() == "StoryboardCommentList") {
-            loadStoryboardCommentList(e);
         }
     }
 
@@ -546,6 +542,29 @@ void KisKraLoader::loadPalettes(KoStore *store, KisDocument *doc)
         list.append(newPalette);
     }
     doc->setPaletteList(list);
+}
+
+void KisKraLoader::loadStoryboards(KoStore *store, KisDocument *doc)
+{
+    store->open(m_d->imageName + STORYBOARD_PATH + "index.xml");
+    QByteArray data = store->read(store->size());
+    QDomDocument document;
+    document.setContent(data);
+    store->close();
+
+    QDomElement root = document.documentElement();
+    QDomNode node;
+    for (node = root.lastChild(); !node.isNull(); node = node.previousSibling()) {
+        if (node.isElement()) {
+            QDomElement element = node.toElement();
+            if (element.tagName() == "StoryboardItemList") {
+                loadStoryboardItemList(element);
+            } else if (element.tagName() == "StoryboardCommentList") {
+                loadStoryboardCommentList(element);
+            }
+
+        }
+    }
 }
 
 vKisNodeSP KisKraLoader::selectedNodes() const

@@ -112,7 +112,6 @@ public:
 
     void next() override
     {
-        qDebug() << m_dirIterator->filePath() << m_dirIterator->fileName();
         m_dirIterator->next();
     }
 

@@ -28,6 +28,8 @@
 #include "MyPaintPaintOpPreset.h"
 #include "MyPaintPaintOpSettings.h"
 
+#include <KisResourceLocator.h>
+
 class KisMyPaintPaintOpPreset::Private {
 
 public:
@@ -110,9 +112,11 @@ bool KisMyPaintPaintOpPreset::loadFromDevice(QIODevice *dev, KisResourcesInterfa
 {
     qDebug() << "loadFromDevice" << dev;
 
-    QFileInfo fileInfo(filename());
-    d->icon.load(fileInfo.path() + '/' + fileInfo.baseName() + "_prev.png");
-    qDebug() << filename() << d->icon.isNull();
+    // XXX: this breaks when myb files are in bundles!
+    QString thumnailFile = KisResourceLocator::instance()->makeStorageLocationAbsolute(storageLocation()) + ResourceType::PaintOpPresets + '/' + QFileInfo(filename()).baseName() + "_prev.png";
+    if (QFileInfo(thumnailFile).exists()) {
+        d->icon.load(thumnailFile);
+    }
 
     setImage(d->icon);
 

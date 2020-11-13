@@ -7,6 +7,7 @@
 #include <kis_paintop_settings.h>
 #include <kis_painter.h>
 #include <KoResource.h>
+#include <KisResourceTypes.h>
 #include <kis_paintop_preset.h>
 
 class KisMyPaintPaintOpPreset : public QObject, public KisPaintOpPreset
@@ -24,6 +25,11 @@ public:
 
     bool loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface) override;
     bool save() override;
+
+    QPair<QString, QString> resourceType() const override {
+        return QPair<QString, QString>(ResourceType::PaintOpPresets, ResourceSubType::MyPaintPaintOpPresets);
+    }
+
 
     QByteArray getJsonData();
     float getSize();

@@ -31,9 +31,9 @@
 class KisMyPaintPaintOpPreset::Private {
 
 public:
-    MyPaintBrush *m_brush;
-    QImage m_icon;
-    QByteArray m_json;
+    MyPaintBrush *brush;
+    QImage icon;
+    QByteArray json;
     float diameter;
     float hardness;
     float opacity;
@@ -42,16 +42,16 @@ public:
 };
 
 KisMyPaintPaintOpPreset::KisMyPaintPaintOpPreset(const QString &fileName)
-    : KisPaintOpPreset (fileName), m_d(new Private) {
+    : KisPaintOpPreset (fileName), d(new Private) {
 
-    m_d->m_brush = mypaint_brush_new();
-    mypaint_brush_from_defaults(m_d->m_brush);
+    d->brush = mypaint_brush_new();
+    mypaint_brush_from_defaults(d->brush);
 }
 
 KisMyPaintPaintOpPreset::~KisMyPaintPaintOpPreset() {
 
-    mypaint_brush_unref(m_d->m_brush);
-    delete m_d;
+    mypaint_brush_unref(d->brush);
+    delete d;
 }
 
 void KisMyPaintPaintOpPreset::setColor(const KoColor color, const KoColorSpace *colorSpace) {
@@ -67,78 +67,65 @@ void KisMyPaintPaintOpPreset::setColor(const KoColor color, const KoColorSpace *
 
     RGBToHSV(r, g, b, &hue, &saturation, &value);
 
-    mypaint_brush_set_base_value(m_d->m_brush, MYPAINT_BRUSH_SETTING_COLOR_H, (hue)/360);
-    mypaint_brush_set_base_value(m_d->m_brush, MYPAINT_BRUSH_SETTING_COLOR_S, (saturation));
-    mypaint_brush_set_base_value(m_d->m_brush, MYPAINT_BRUSH_SETTING_COLOR_V, (value));
+    mypaint_brush_set_base_value(d->brush, MYPAINT_BRUSH_SETTING_COLOR_H, (hue)/360);
+    mypaint_brush_set_base_value(d->brush, MYPAINT_BRUSH_SETTING_COLOR_S, (saturation));
+    mypaint_brush_set_base_value(d->brush, MYPAINT_BRUSH_SETTING_COLOR_V, (value));
 }
 
 void KisMyPaintPaintOpPreset::apply(KisPaintOpSettingsSP settings) {
 
     if(settings->getProperty(MYPAINT_JSON).isNull()) {
-        mypaint_brush_from_defaults(m_d->m_brush);
+        mypaint_brush_from_defaults(d->brush);
     }
     else {
         QByteArray ba = settings->getProperty(MYPAINT_JSON).toByteArray();
-        mypaint_brush_from_string(m_d->m_brush, ba);
+        mypaint_brush_from_string(d->brush, ba);
     }
 
     float diameter = settings->getFloat(MYPAINT_DIAMETER);
-    m_d->diameter = diameter;
-    mypaint_brush_set_base_value(m_d->m_brush, MYPAINT_BRUSH_SETTING_RADIUS_LOGARITHMIC, log(diameter/2));
+    d->diameter = diameter;
+    mypaint_brush_set_base_value(d->brush, MYPAINT_BRUSH_SETTING_RADIUS_LOGARITHMIC, log(diameter/2));
 
     float hardness = settings->getFloat(MYPAINT_HARDNESS);
-    m_d->hardness = hardness;
-    mypaint_brush_set_base_value(m_d->m_brush, MYPAINT_BRUSH_SETTING_HARDNESS, hardness);
+    d->hardness = hardness;
+    mypaint_brush_set_base_value(d->brush, MYPAINT_BRUSH_SETTING_HARDNESS, hardness);
 
     float opacity = settings->getFloat(MYPAINT_OPACITY);
-    m_d->opacity = opacity;
-    mypaint_brush_set_base_value(m_d->m_brush, MYPAINT_BRUSH_SETTING_OPAQUE, opacity);
+    d->opacity = opacity;
+    mypaint_brush_set_base_value(d->brush, MYPAINT_BRUSH_SETTING_OPAQUE, opacity);
 
     float offset = settings->getFloat(MYPAINT_OFFSET_BY_RANDOM);
-    m_d->offset = offset;
-    mypaint_brush_set_base_value(m_d->m_brush, MYPAINT_BRUSH_SETTING_OFFSET_BY_RANDOM, offset);
+    d->offset = offset;
+    mypaint_brush_set_base_value(d->brush, MYPAINT_BRUSH_SETTING_OFFSET_BY_RANDOM, offset);
 
-    mypaint_brush_new_stroke(m_d->m_brush);
+    mypaint_brush_new_stroke(d->brush);
 }
 
 MyPaintBrush* KisMyPaintPaintOpPreset::brush() {
 
-    return m_d->m_brush;
+    return d->brush;
 }
 
 bool KisMyPaintPaintOpPreset::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface)
 {
-    Q_UNUSED(resourcesInterface);
-
+    qDebug() << "loadFromDevice" << dev;
 
     QFileInfo fileInfo(filename());
-    m_d->m_icon.load(fileInfo.path() + '/' + fileInfo.baseName() + "_prev.png");
+    d->icon.load(fileInfo.path() + '/' + fileInfo.baseName() + "_prev.png");
+    qDebug() << filename() << d->icon.isNull();
 
-    setImage(m_d->m_icon);
+    setImage(d->icon);
 
     QByteArray ba = dev->readAll();
-    m_d->m_json = ba;
-    mypaint_brush_from_string(m_d->m_brush, ba);
-    m_d->diameter = 2*exp(mypaint_brush_get_base_value(m_d->m_brush, MYPAINT_BRUSH_SETTING_RADIUS_LOGARITHMIC));
-    m_d->hardness = mypaint_brush_get_base_value(m_d->m_brush, MYPAINT_BRUSH_SETTING_HARDNESS);
-    m_d->opacity = mypaint_brush_get_base_value(m_d->m_brush, MYPAINT_BRUSH_SETTING_OPAQUE);
-    m_d->offset = mypaint_brush_get_base_value(m_d->m_brush, MYPAINT_BRUSH_SETTING_OFFSET_BY_RANDOM);
-    m_d->isEraser = mypaint_brush_get_base_value(m_d->m_brush, MYPAINT_BRUSH_SETTING_ERASER);
+    d->json = ba;
+    mypaint_brush_from_string(d->brush, ba);
+    d->diameter = 2*exp(mypaint_brush_get_base_value(d->brush, MYPAINT_BRUSH_SETTING_RADIUS_LOGARITHMIC));
+    d->hardness = mypaint_brush_get_base_value(d->brush, MYPAINT_BRUSH_SETTING_HARDNESS);
+    d->opacity = mypaint_brush_get_base_value(d->brush, MYPAINT_BRUSH_SETTING_OPAQUE);
+    d->offset = mypaint_brush_get_base_value(d->brush, MYPAINT_BRUSH_SETTING_OFFSET_BY_RANDOM);
+    d->isEraser = mypaint_brush_get_base_value(d->brush, MYPAINT_BRUSH_SETTING_ERASER);
 
-
-    return true;
-}
-
-bool KisMyPaintPaintOpPreset::save() {
-
-    return false;
-}
-
-void KisMyPaintPaintOpPreset::reloadSettings() {
-
-    QFileInfo fileInfo(this->filename());
-
-    KisPaintOpSettingsSP s = new KisMyPaintOpSettings(settings()->resourcesInterface());
+    KisPaintOpSettingsSP s = new KisMyPaintOpSettings(resourcesInterface);
     s->setProperty("paintop", "mypaintbrush");
     s->setProperty("filename", this->filename());
     s->setProperty(MYPAINT_JSON, this->getJsonData());
@@ -150,34 +137,42 @@ void KisMyPaintPaintOpPreset::reloadSettings() {
     s->setProperty("EraserMode", qRound(this->isEraser()));
 
     this->setSettings(s);
+    setValid(true);
+
+    return true;
+}
+
+bool KisMyPaintPaintOpPreset::save() {
+
+    return false;
 }
 
 QByteArray KisMyPaintPaintOpPreset::getJsonData() {
 
-    return m_d->m_json;
+    return d->json;
 }
 
 float KisMyPaintPaintOpPreset::getSize() {
 
-    return m_d->diameter;
+    return d->diameter;
 }
 
 float KisMyPaintPaintOpPreset::getHardness() {
 
-    return m_d->hardness;
+    return d->hardness;
 }
 
 float KisMyPaintPaintOpPreset::getOpacity() {
 
-    return m_d->opacity;
+    return d->opacity;
 }
 
 float KisMyPaintPaintOpPreset::getOffset() {
 
-    return m_d->offset;
+    return d->offset;
 }
 
 float KisMyPaintPaintOpPreset::isEraser() {
 
-    return m_d->isEraser;
+    return d->isEraser;
 }

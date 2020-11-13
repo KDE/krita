@@ -101,43 +101,5 @@ QList<KoResourceSP> KisMyPaintOpFactory::prepareEmbeddedResources(const KisPaint
 
     return {};
 }
-#if 0
-void KisMyPaintOpFactory::processAfterLoading() {
-
-    KisPaintOpPresetResourceServer *paintOpServer = KisResourceServerProvider::instance()->paintOpPresetServer();
-
-    Q_FOREACH(KisMyPaintBrush* brush, m_d->brushServer->resources()) {
-
-        QFileInfo fileInfo(brush->filename());
-
-        if(!brush->valid())
-            continue;        
-
-        KisPaintOpSettingsSP s = new KisMyPaintOpSettings();
-        s->setProperty("paintop", id());
-        s->setProperty("filename", brush->filename());
-        s->setProperty(MYPAINT_JSON, brush->getJsonData());
-        s->setProperty(MYPAINT_DIAMETER, brush->getSize());
-        s->setProperty(MYPAINT_HARDNESS, brush->getHardness());
-        s->setProperty(MYPAINT_OPACITY, brush->getOpacity());
-        s->setProperty(MYPAINT_OFFSET_BY_RANDOM, brush->getOffset());
-        s->setProperty(MYPAINT_ERASER, brush->isEraser());
-        s->setProperty("EraserMode", qRound(brush->isEraser()));
-
-        KisSharedPtr<KisMyPaintBrush> preset = new KisMyPaintBrush();
-        preset->setName(fileInfo.baseName());
-        preset->setSettings(s);
-        KoID paintOpID(id(), name());
-        preset->setPaintOp(paintOpID);
-        preset->setImage(brush->image());
-        preset->setValid(true);
-        preset->setFilename(brush->filename());
-        preset->load();
-
-        paintOpServer->addResource(preset, false);
-    }
-
-}
-#endif
 
 #include "MyPaintPaintOpFactory.moc"

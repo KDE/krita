@@ -70,4 +70,4 @@ modelling2_prev.png
 puantilism2.myb
 slow_ink_prev.png
 
-    DESTINATION ${DATA_INSTALL_DIR}/krita/mypaint-data)
+    DESTINATION ${DATA_INSTALL_DIR}/krita/paintoppresets)

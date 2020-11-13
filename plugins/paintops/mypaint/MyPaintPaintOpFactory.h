@@ -24,9 +24,6 @@ public:
     QList<KoResourceSP> prepareLinkedResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface) override;
     QList<KoResourceSP> prepareEmbeddedResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface) override;
 
-#if 0
-    void processAfterLoading() override;
-#endif
 
 private:
 

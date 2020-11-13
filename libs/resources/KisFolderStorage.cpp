@@ -112,6 +112,7 @@ public:
 
     void next() override
     {
+        qDebug() << m_dirIterator->filePath() << m_dirIterator->fileName();
         m_dirIterator->next();
     }
 
@@ -141,6 +142,7 @@ public:
 protected:
 
     bool loadResourceInternal() const {
+
         if (!m_resource || (m_resource && m_resource->filename() != m_dirIterator->filePath())) {
             QFile f(m_dirIterator->filePath());
             f.open(QFile::ReadOnly);

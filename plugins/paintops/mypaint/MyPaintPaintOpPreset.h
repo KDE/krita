@@ -24,7 +24,6 @@ public:
 
     bool loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface) override;
     bool save() override;
-    void reloadSettings();
 
     QByteArray getJsonData();
     float getSize();
@@ -36,7 +35,7 @@ public:
 private:
 
     class Private;
-    Private* const m_d;
+    Private* const d;
     bool firstLoad = true;
 };
 

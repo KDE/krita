@@ -45,16 +45,17 @@ KisResourceLoaderRegistry* KisResourceLoaderRegistry::instance()
     return reg;
 }
 
-bool KisResourceLoaderRegistry::registerLoader(KisResourceLoaderBase *loader)
+void KisResourceLoaderRegistry::registerLoader(KisResourceLoaderBase *loader)
 {
     add(loader);
-    return KisResourceCacheDb::registerResourceType(loader->resourceType());
 }
 
 KisResourceLoaderBase *KisResourceLoaderRegistry::loader(const QString &resourceType, const QString &mimetype) const
 {
     Q_FOREACH(KisResourceLoaderBase *loader, resourceTypeLoaders(resourceType)) {
-        if (loader->mimetypes().contains(mimetype)) return loader;
+        if (loader->mimetypes().contains(mimetype)) {
+            return loader;
+        }
     }
     return 0;
 }

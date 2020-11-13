@@ -161,7 +161,6 @@ KisPaintOpSettingsSP KisPaintOpPreset::settings() const
 
 bool KisPaintOpPreset::load(KisResourcesInterfaceSP resourcesInterface)
 {
-    qDebug() << "Load preset " << filename();
     setValid(false);
 
     if (filename().isEmpty()) {
@@ -222,7 +221,6 @@ bool KisPaintOpPreset::load(KisResourcesInterfaceSP resourcesInterface)
 
 bool KisPaintOpPreset::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface)
 {
-
     QImageReader reader(dev, "PNG");
 
     QString version = reader.text("version");

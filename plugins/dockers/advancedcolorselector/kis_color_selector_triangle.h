@@ -55,6 +55,7 @@ private:
     KisPaintDeviceSP m_realPixelCache;
     QSize m_cachedSize;
     QPointF m_lastClickPos;
+    qreal m_cacheDevicePixelRatioF {1.0};
 };
 
 #endif // KIS_COLOR_SELECTOR_TRIANGLE_H

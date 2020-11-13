@@ -36,7 +36,7 @@ KisColorSelectorTriangle::KisColorSelectorTriangle(KisColorSelector* parent) :
 
 bool KisColorSelectorTriangle::containsPointInComponentCoords(int x, int y) const
 {
-    QPoint triangleCoords = widgetToTriangleCoordinates(QPoint(x, y));
+    QPoint triangleCoords = widgetToTriangleCoordinates(QPoint(x, y))*m_cacheDevicePixelRatioF;
 
     if (!m_realPixelCache) return false;
     KoColor pixel = Acs::pickColor(m_realPixelCache, triangleCoords);
@@ -81,6 +81,8 @@ void KisColorSelectorTriangle::updatePixelCache(qreal devicePixelRatioF)
                                     m_renderedPixelCache,
                                     pixelCacheOffset,
                                     devicePixelRatioF);
+
+    m_cacheDevicePixelRatioF = devicePixelRatioF; // save device pixel ratio of the cache
 
 //    if (!pixelCacheOffset.isNull()) {
 //        warnKrita << "WARNING: offset of the triangle selector is not null!";

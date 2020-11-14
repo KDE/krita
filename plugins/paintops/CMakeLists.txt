@@ -16,3 +16,7 @@ add_subdirectory( sketch )
 add_subdirectory( colorsmudge )
 add_subdirectory( roundmarker )
 add_subdirectory( tangentnormal )
+
+if(LIBMYPAINT_FOUND)
+    add_subdirectory( mypaint )
+endif()

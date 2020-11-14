@@ -44,8 +44,9 @@ class KisDynamicSensor;
  * manage to read and write its settings directly.
  *
  */
-class PAINTOP_EXPORT KisCurveOption
+class PAINTOP_EXPORT KisCurveOption: public QObject
 {
+    Q_OBJECT
 public:
     KisCurveOption(const QString& name,
                    KisPaintOpOption::PaintopCategory category,
@@ -168,14 +169,19 @@ public:
      */
     KisCubicCurve emptyCurve();
 
+    virtual QList<KoID> sensorsIds();
+    virtual DynamicSensorType id2Type(const KoID &id);
+    virtual KisDynamicSensorSP id2Sensor(const KoID& id, const QString &parentOptionName);
+    virtual KisDynamicSensorSP type2Sensor(DynamicSensorType sensorType, const QString &parentOptionName);
+    virtual QList<DynamicSensorType> sensorsTypes();
+
 protected:
 
-    void setValueRange(qreal min, qreal max);
-
+    void setValueRange(qreal min, qreal max);    
     /**
      * Read the option using the prefix in argument
      */
-    void readNamedOptionSetting(const QString& prefix, const KisPropertiesConfigurationSP setting);
+    virtual void readNamedOptionSetting(const QString& prefix, const KisPropertiesConfigurationSP setting);
 
     QString m_name;
     KisPaintOpOption::PaintopCategory m_category;
@@ -196,11 +202,12 @@ protected:
 
     QMap<DynamicSensorType, KisDynamicSensorSP> m_sensorMap;
 
-private:
-
     qreal m_value;
     qreal m_minValue;
     qreal m_maxValue;
+
+Q_SIGNALS:
+    void unCheckUseCurve();
 };
 
 #endif

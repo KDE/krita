@@ -210,7 +210,7 @@ public:
     /**
      * Set paintop opacity directly in the properties
      */
-    void setPaintOpOpacity(qreal value);
+    virtual void setPaintOpOpacity(qreal value);
 
     /**
      * Set paintop flow directly in the properties
@@ -225,7 +225,7 @@ public:
     /**
      * @return opacity saved in the properties
      */
-    qreal paintOpOpacity();
+    virtual qreal paintOpOpacity();
 
     /**
      * @return flow saved in the properties

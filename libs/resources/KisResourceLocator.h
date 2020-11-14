@@ -266,6 +266,8 @@ private:
         QString resourceFileName;
      };
 
+    friend class KisMyPaintPaintOpPreset;
+
     ResourceStorage getResourceStorage(int resourceId) const;
     QString makeStorageLocationAbsolute(QString storageLocation) const;
     QString makeStorageLocationRelative(QString location) const;

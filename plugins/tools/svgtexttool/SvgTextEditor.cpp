@@ -87,6 +87,7 @@ public:
     //QColor backgroundColor {Qt::transparent};
     qreal fontSize {10.0};
     QFont font;
+    bool kerning {true};
 
     qreal letterSpacing {0.0};
 
@@ -126,6 +127,7 @@ public:
         saveBoolActionFromWidget(actions, "svg_format_superscript", superscript);
         saveBoolActionFromWidget(actions, "svg_format_subscript", subscript);
 
+        saveBoolActionFromWidget(actions, "svg_font_kerning", kerning);
     }
 
     void setSavedToWidgets(KActionCollection* actions)
@@ -150,6 +152,8 @@ public:
 
         setBoolActionToWidget(actions, "svg_format_superscript", superscript);
         setBoolActionToWidget(actions, "svg_format_subscript", subscript);
+
+        setBoolActionToWidget(actions, "svg_font_kerning", kerning);
     }
 
     void setSavedToFormat(QTextCharFormat &format)
@@ -179,7 +183,7 @@ public:
         }
 
         format.setFontItalic(italic);
-
+        format.setFontKerning(kerning);
     }
 
     void saveFontLineDecoration(KoSvgText::TextDecoration decoration)
@@ -481,6 +485,7 @@ void SvgTextEditor::checkFormat()
     actionCollection()->action("svg_format_italic")->setChecked(format.fontItalic());
     actionCollection()->action("svg_format_underline")->setChecked(format.fontUnderline());
     actionCollection()->action("svg_format_strike_through")->setChecked(format.fontStrikeOut());
+    actionCollection()->action("svg_font_kerning")->setChecked(format.fontKerning());
 
     {
         FontSizeAction *fontSizeAction = qobject_cast<FontSizeAction*>(actionCollection()->action("svg_font_size"));
@@ -1174,6 +1179,34 @@ void SvgTextEditor::setBaseline(KoSvgText::BaselineShiftMode)
     }
 }
 
+void SvgTextEditor::setKerning(bool enable)
+{
+    d->kerning = enable;
+
+    if (m_textEditorWidget.textTab->currentIndex() == Richtext) {
+        QTextCharFormat format;
+        QTextCursor origCursor = setTextSelection();
+        format.setFontKerning(enable);
+        m_textEditorWidget.richTextEdit->mergeCurrentCharFormat(format);
+        m_textEditorWidget.richTextEdit->setTextCursor(origCursor);
+    } else {
+        QTextCursor cursor = m_textEditorWidget.svgTextEdit->textCursor();
+
+        if (cursor.hasSelection()) {
+            QString value;
+            if (enable) {
+                value = "auto";
+            } else {
+                value = "0";
+            }
+            
+            QString selectionModified = "<tspan style=\"kerning:"+value+";\">" + cursor.selectedText() + "</tspan>";
+            cursor.removeSelectedText();
+            cursor.insertText(selectionModified);
+        }
+    }
+}
+
 void SvgTextEditor::wheelEvent(QWheelEvent *event)
 {
     if (event->modifiers() & Qt::ControlModifier) {
@@ -1342,6 +1375,9 @@ void SvgTextEditor::createActions()
 
 //    m_richTextActions << createAction("svg_align_justified",
 //                                      SLOT(alignJustified()));
+
+    m_richTextActions << createAction("svg_font_kerning",
+                                      SLOT(setKerning(bool)));
 
     // Settings
     m_richTextActions << createAction("svg_settings",

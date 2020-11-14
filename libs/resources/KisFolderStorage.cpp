@@ -141,24 +141,23 @@ public:
 protected:
 
     bool loadResourceInternal() const {
+
         if (!m_resource || (m_resource && m_resource->filename() != m_dirIterator->filePath())) {
             QFile f(m_dirIterator->filePath());
             f.open(QFile::ReadOnly);
-            if (!m_resourceLoader) {
-                const_cast<FolderIterator*>(this)->m_resourceLoader = KisResourceLoaderRegistry::instance()->loader(m_resourceType, KisMimeDatabase::mimeTypeForFile(m_dirIterator->filePath()));
+            QString mimeType = KisMimeDatabase::mimeTypeForFile(m_dirIterator->filePath());
+            if (!m_resourceLoaders.contains(mimeType)) {
+                KisResourceLoaderBase *resourceLoader = KisResourceLoaderRegistry::instance()->loader(m_resourceType, KisMimeDatabase::mimeTypeForFile(m_dirIterator->filePath()));
+                Q_ASSERT(resourceLoader);
+                const_cast<FolderIterator*>(this)->m_resourceLoaders[mimeType] = resourceLoader;
             }
-            if (m_resourceLoader) {
-                const_cast<FolderIterator*>(this)->m_resource = m_resourceLoader->load(m_dirIterator->fileName(), f, KisGlobalResourcesInterface::instance());
-            }
-            else {
-                qWarning() << "Could not get resource loader for type" << m_resourceType;
-            }
+            const_cast<FolderIterator*>(this)->m_resource = m_resourceLoaders[mimeType]->load(m_dirIterator->fileName(), f, KisGlobalResourcesInterface::instance());
             f.close();
         }
         return !m_resource.isNull();
     }
 
-    KisResourceLoaderBase *m_resourceLoader {0};
+    QMap<QString, KisResourceLoaderBase *> m_resourceLoaders;
     KoResourceSP m_resource;
     QScopedPointer<QDirIterator> m_dirIterator;
     const QString m_location;

@@ -515,6 +515,10 @@ bool KisResourceLocator::initializeDb()
     d->errorMessages.clear();
     findStorages();
 
+    Q_FOREACH(auto loader, KisResourceLoaderRegistry::instance()->values()) {
+        KisResourceCacheDb::registerResourceType(loader->resourceType());
+    }
+
     Q_FOREACH(KisResourceStorageSP storage, d->storages) {
 
         QElapsedTimer t;

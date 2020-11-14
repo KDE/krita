@@ -126,6 +126,8 @@ public:
 
     static QString askForAudioFileName(const QString &defaultDir, QWidget *parent);
 
+    static QString getUriForAdditionalFile(const QString &defaultUri, QWidget *parent);
+
 
 private:
 

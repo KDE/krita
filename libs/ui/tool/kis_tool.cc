@@ -29,6 +29,7 @@
 #include <kis_icon.h>
 #include <KoConfig.h>
 #include <KoColorSpaceRegistry.h>
+#include <KoColorModelStandardIds.h>
 #include <KoColor.h>
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
@@ -53,6 +54,7 @@
 #include <brushengine/kis_paintop_settings.h>
 #include <resources/KoPattern.h>
 #include <kis_floating_message.h>
+#include <KisResourceServerProvider.h>
 
 #include "opengl/kis_opengl_canvas2.h"
 #include "kis_canvas_resource_provider.h"
@@ -536,8 +538,16 @@ void KisTool::deleteSelection()
 KisTool::NodePaintAbility KisTool::nodePaintAbility()
 {
     KisNodeSP node = currentNode();
+    KisPaintOpPresetSP currentPaintOpPreset = canvas()->resourceManager()->resource(KoCanvasResource::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
+    const KoColorSpace *colorSpace = node->paintDevice()->colorSpace();
+
     if (!node) {
         return NodePaintAbility::UNPAINTABLE;
+    }
+    if (currentPaintOpPreset->paintOp().id() == "mypaintbrush" &&
+        colorSpace->colorModelId() != RGBAColorModelID) {
+
+        return NodePaintAbility::MYPAINTBRUSH_UNPAINTABLE;
     }
     if (node->inherits("KisShapeLayer")) {
         return NodePaintAbility::VECTOR;

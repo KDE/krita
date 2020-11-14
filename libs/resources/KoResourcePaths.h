@@ -38,6 +38,9 @@
  * There are many debug lines that can be uncommented for more specific installation
  * checks. In the future these should be converted to qloggingcategory to enable
  * convenient enable/disable functionality.
+ *
+ * Note: DO NOT USE THIS CLASS WHEN LOCATING RESOURCES LIKE BRUSHES OR GRADIENTS. Use
+ * KisResourceLocator instead.
  */
 class KRITARESOURCES_EXPORT KoResourcePaths
 {

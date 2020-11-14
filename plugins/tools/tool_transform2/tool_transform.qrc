@@ -1,6 +1,8 @@
 <!DOCTYPE RCC>
 <RCC version="1.0">
     <qresource>
+        <file>mesh_cursor_free.png</file>
+        <file>mesh_cursor_locked.png</file>
         <file>rotate_cursor.xpm</file>
         <file>shear_cursor.png</file>
     </qresource>

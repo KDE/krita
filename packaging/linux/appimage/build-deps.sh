@@ -62,6 +62,7 @@ cmake $KRITA_SOURCES/3rdparty -DCMAKE_INSTALL_PREFIX=$DEPS_INSTALL_PREFIX -DINST
 #cmake --build . --config RelWithDebInfo --target ext_png
 #cmake --build . --config RelWithDebInfo --target ext_tiff
 #cmake --build . --config RelWithDebInfo --target ext_jpeg
+
 cmake --build . --config RelWithDebInfo --target ext_boost
 cmake --build . --config RelWithDebInfo --target ext_fftw3
 cmake --build . --config RelWithDebInfo --target ext_eigen3

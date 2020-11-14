@@ -127,7 +127,7 @@ namespace KisCommandUtils
 
     private:
         State m_currentState;
-        bool m_firstRedo;
+        bool m_firstRedo {true};
     };
 
     struct KRITACOMMAND_EXPORT CompositeCommand : public KUndo2Command {

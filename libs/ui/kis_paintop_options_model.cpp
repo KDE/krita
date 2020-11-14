@@ -48,9 +48,12 @@ void KisPaintOpOptionListModel::addPaintOpOption(KisPaintOpOption *option, int w
     case KisPaintOpOption::MASKING_BRUSH:
         category = i18nc("option category", "Masked Brush");
         break;
-    default:
-        category = i18n("Unknown");
     };
+
+    addPaintOpOption(option, widgetIndex, label, category);
+}
+
+void KisPaintOpOptionListModel::addPaintOpOption(KisPaintOpOption *option, int widgetIndex, const QString &label, const QString &category) {
 
     DataItem *item = categoriesMapper()->addEntry(category, KisOptionInfo(option, widgetIndex, label));
 

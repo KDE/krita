@@ -21,6 +21,7 @@
 #include <KoPathShape.h>
 #include <KoCanvasBase.h>
 #include <kis_cursor.h>
+#include <KisViewManager.h>
 
 KisToolPath::KisToolPath(KoCanvasBase * canvas)
     : DelegatedPathTool(canvas, Qt::ArrowCursor,
@@ -75,8 +76,19 @@ bool KisToolPath::eventFilter(QObject *obj, QEvent *event)
 
 void KisToolPath::beginAlternateAction(KoPointerEvent *event, AlternateAction action) {
     Q_UNUSED(action);
+
+    if (!nodeEditable()) return;
+
+    if (nodePaintAbility() == KisToolPath::MYPAINTBRUSH_UNPAINTABLE) {
+        KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
+        QString message = i18n("The MyPaint Brush Engine is not available for this colorspace");
+        kiscanvas->viewManager()->showFloatingMessage(message, koIcon("object-locked"));
+        event->ignore();
+        return;
+    }
     mousePressEvent(event);
 }
+
 void KisToolPath::continueAlternateAction(KoPointerEvent *event, AlternateAction action){
     Q_UNUSED(action);
     mouseMoveEvent(event);

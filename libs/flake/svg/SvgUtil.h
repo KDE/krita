@@ -52,18 +52,19 @@ public:
     static QSizeF toUserSpace(const QSizeF &size);
 
     /**
-     * Parses the given string containing a percentage number.
-     * @param value the input number containing the percentage
-     * @return the percentage number normalized to 0..100
+     * Parses the given float percentage.
+     * @param value the input number containing float percentage (0..1)
+     * @return the percentage string (0%..100%), not normalized
      */
     static QString toPercentage(qreal value);
 
     /**
-     * Parses the given string containing a percentage number.
-     * @param s the input string containing the percentage
-     * @return the percentage number normalized to 0..1
+     * Parses the given string containing a percentage.
+     * @param s the input string containing the percentage, float (0..1) or integer (0%..100%)
+     * @param ok optional failure indicator
+     * @return the float percentage (0..1), not normalized
      */
-    static double fromPercentage(QString s);
+    static double fromPercentage(QString s, bool *ok=nullptr);
 
     /**
      * Converts position from objectBoundingBox units to userSpace units.

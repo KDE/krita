@@ -40,9 +40,6 @@ struct KisAllResourcesModel::Private {
     int cachedRowCount {-1};
 };
 
-
-//static int s_i = 0;
-
 KisAllResourcesModel::KisAllResourcesModel(const QString &resourceType, QObject *parent)
     : QAbstractTableModel(parent)
     , d(new Private)
@@ -166,8 +163,6 @@ Qt::ItemFlags KisAllResourcesModel::flags(const QModelIndex &index) const
     return QAbstractTableModel::flags(index) | Qt::ItemIsEditable;
 }
 
-//static int s_i2 {0};
-
 KoResourceSP KisAllResourcesModel::resourceForIndex(QModelIndex index) const
 {
     KoResourceSP resource = 0;
@@ -281,8 +276,6 @@ KoResourceSP KisAllResourcesModel::resourceForMD5(const QByteArray md5sum) const
     return resource;
 }
 
-//static int s_i3 {0};
-
 QModelIndex KisAllResourcesModel::indexForResource(KoResourceSP resource) const
 {
     if (!resource || !resource->valid() || resource->resourceId() < 0) return QModelIndex();
@@ -297,8 +290,6 @@ QModelIndex KisAllResourcesModel::indexForResource(KoResourceSP resource) const
     
     return QModelIndex();
 }
-
-//static int s_i4 {0};
 
 bool KisAllResourcesModel::setResourceInactive(const QModelIndex &index)
 {
@@ -329,8 +320,6 @@ bool KisAllResourcesModel::importResourceFile(const QString &filename)
     return r;
 }
 
-//static int s_i7 {0};
-
 bool KisAllResourcesModel::addResource(KoResourceSP resource, const QString &storageId)
 {
 
@@ -349,8 +338,6 @@ bool KisAllResourcesModel::addResource(KoResourceSP resource, const QString &sto
     endInsertRows();
     return r;
 }
-
-//static int s_i8 {0};
 
 bool KisAllResourcesModel::updateResource(KoResourceSP resource)
 {

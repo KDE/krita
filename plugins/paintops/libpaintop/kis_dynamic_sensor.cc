@@ -34,6 +34,7 @@ KisDynamicSensor::KisDynamicSensor(DynamicSensorType type)
     , m_type(type)
     , m_customCurve(false)
     , m_active(false)
+    , m_id(KisDynamicSensor::id(type))
 {
 }
 
@@ -103,99 +104,6 @@ KisDynamicSensorSP KisDynamicSensor::id2Sensor(const KoID& id, const QString &pa
     }
     dbgPlugins << "Unknown transform parameter :" << id.id();
     return 0;
-}
-
-DynamicSensorType KisDynamicSensor::id2Type(const KoID &id)
-{
-    if (id.id() == PressureId.id()) {
-        return PRESSURE;
-    }
-    else if (id.id() == PressureInId.id()) {
-        return PRESSURE_IN;
-    }
-    else if (id.id() == XTiltId.id()) {
-        return XTILT;
-    }
-    else if (id.id() == YTiltId.id()) {
-        return YTILT;
-    }
-    else if (id.id() == TiltDirectionId.id()) {
-        return TILT_DIRECTION;
-    }
-    else if (id.id() == TiltElevationId.id()) {
-        return TILT_ELEVATATION;
-    }
-    else if (id.id() == SpeedId.id()) {
-        return SPEED;
-    }
-    else if (id.id() == DrawingAngleId.id()) {
-        return ANGLE;
-    }
-    else if (id.id() == RotationId.id()) {
-        return ROTATION;
-    }
-    else if (id.id() == DistanceId.id()) {
-        return DISTANCE;
-    }
-    else if (id.id() == TimeId.id()) {
-        return TIME;
-    }
-    else if (id.id() == FuzzyPerDabId.id()) {
-        return FUZZY_PER_DAB;
-    }
-    else if (id.id() == FuzzyPerStrokeId.id()) {
-        return FUZZY_PER_STROKE;
-    }
-    else if (id.id() == FadeId.id()) {
-        return FADE;
-    }
-    else if (id.id() == PerspectiveId.id()) {
-        return PERSPECTIVE;
-    }
-    else if (id.id() == TangentialPressureId.id()) {
-        return TANGENTIAL_PRESSURE;
-    }
-    return UNKNOWN;
-}
-
-KisDynamicSensorSP KisDynamicSensor::type2Sensor(DynamicSensorType sensorType, const QString &parentOptionName)
-{
-    switch (sensorType) {
-    case FUZZY_PER_DAB:
-        return new KisDynamicSensorFuzzy(false, parentOptionName);
-    case FUZZY_PER_STROKE:
-        return new KisDynamicSensorFuzzy(true, parentOptionName);
-    case SPEED:
-        return new KisDynamicSensorSpeed();
-    case FADE:
-        return new KisDynamicSensorFade();
-    case DISTANCE:
-        return new KisDynamicSensorDistance();
-    case TIME:
-        return new KisDynamicSensorTime();
-    case ANGLE:
-        return new KisDynamicSensorDrawingAngle();
-    case ROTATION:
-        return new KisDynamicSensorRotation();
-    case PRESSURE:
-        return new KisDynamicSensorPressure();
-    case XTILT:
-        return new KisDynamicSensorXTilt();
-    case YTILT:
-        return new KisDynamicSensorYTilt();
-    case TILT_DIRECTION:
-        return new KisDynamicSensorTiltDirection();
-    case TILT_ELEVATATION:
-        return new KisDynamicSensorTiltElevation();
-    case PERSPECTIVE:
-        return new KisDynamicSensorPerspective();
-    case TANGENTIAL_PRESSURE:
-        return new KisDynamicSensorTangentialPressure();
-    case PRESSURE_IN:
-        return new KisDynamicSensorPressureIn();
-    default:
-        return 0;
-    }
 }
 
 QString KisDynamicSensor::minimumLabel(DynamicSensorType sensorType)
@@ -401,53 +309,6 @@ KisDynamicSensorSP KisDynamicSensor::createFromXML(const QDomElement& e, const Q
     return sensor;
 }
 
-QList<KoID> KisDynamicSensor::sensorsIds()
-{
-    QList<KoID> ids;
-
-    ids << PressureId
-        << PressureInId
-        << XTiltId
-        << YTiltId
-        << TiltDirectionId
-        << TiltElevationId
-        << SpeedId
-        << DrawingAngleId
-        << RotationId
-        << DistanceId
-        << TimeId
-        << FuzzyPerDabId
-        << FuzzyPerStrokeId
-        << FadeId
-        << PerspectiveId
-        << TangentialPressureId;
-
-    return ids;
-}
-
-QList<DynamicSensorType> KisDynamicSensor::sensorsTypes()
-{
-    QList<DynamicSensorType> sensorTypes;
-    sensorTypes
-            << PRESSURE
-            << PRESSURE_IN
-            << XTILT
-            << YTILT
-            << TILT_DIRECTION
-            << TILT_ELEVATATION
-            << SPEED
-            << ANGLE
-            << ROTATION
-            << DISTANCE
-            << TIME
-            << FUZZY_PER_DAB
-            << FUZZY_PER_STROKE
-            << FADE
-            << PERSPECTIVE
-            << TANGENTIAL_PRESSURE;
-    return sensorTypes;
-}
-
 QString KisDynamicSensor::id(DynamicSensorType sensorType)
 {
     switch (sensorType) {
@@ -580,4 +441,9 @@ void KisDynamicSensor::setActive(bool active)
 bool KisDynamicSensor::isActive() const
 {
     return m_active;
+}
+
+QString KisDynamicSensor::identifier()
+{
+    return m_id;
 }

@@ -252,5 +252,15 @@
       <isCheckable>false</isCheckable>
       <text>Color Picker</text>
     </Action>
+    <Action name="svg_font_kerning">
+      <iconText>Kerning</iconText>
+      <shortcut></shortcut>
+      <toolTip>Kerning</toolTip>
+      <icon>kerning</icon>
+      <whatsThis/>
+      <statusTip/>
+      <isCheckable>true</isCheckable>
+      <text>Kerning</text>
+    </Action>
     </Actions>
 </ActionCollection>

@@ -53,6 +53,7 @@ void KisResourceLoaderRegistry::registerLoader(KisResourceLoaderBase *loader)
 KisResourceLoaderBase *KisResourceLoaderRegistry::loader(const QString &resourceType, const QString &mimetype) const
 {
     Q_FOREACH(KisResourceLoaderBase *loader, resourceTypeLoaders(resourceType)) {
+
         if (loader->mimetypes().contains(mimetype)) {
             return loader;
         }
@@ -91,6 +92,7 @@ QStringList KisResourceLoaderRegistry::mimeTypes(const QString &resourceType) co
     }
     mimeTypes.removeDuplicates();
     mimeTypes.sort();
+
     return mimeTypes;
 }
 

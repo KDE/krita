@@ -110,8 +110,6 @@ MyPaintBrush* KisMyPaintPaintOpPreset::brush() {
 
 bool KisMyPaintPaintOpPreset::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface)
 {
-    qDebug() << "loadFromDevice" << dev;
-
     // XXX: this breaks when myb files are in bundles!
     QString thumnailFile = KisResourceLocator::instance()->makeStorageLocationAbsolute(storageLocation()) + ResourceType::PaintOpPresets + '/' + QFileInfo(filename()).baseName() + "_prev.png";
     if (QFileInfo(thumnailFile).exists()) {

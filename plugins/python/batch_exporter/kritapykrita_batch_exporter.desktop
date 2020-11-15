@@ -24,6 +24,7 @@ Name[sv]=Bakgrundsexport
 Name[uk]=Пакетне експортування
 Name[x-test]=xxBatch Exporterxx
 Name[zh_CN]=批量导出工具
+Name[zh_TW]=批次匯出工具
 Comment=Smart export tool that uses layer names to scale and (re-)export art assets in batches fast
 Comment[ca]=Eina d'exportació intel·ligent que usa els noms de les capes per a escalar i re/exportar ràpidament elements d'art per lots
 Comment[ca@valencia]=Eina d'exportació intel·ligent que usa els noms de les capes per a escalar i re/exportar ràpidament elements d'art per lots

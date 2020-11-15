@@ -543,7 +543,7 @@ install_krita () {
 
     # compile integrations
     if test ${OSTYPE} == "darwin*"; then
-        cd ${KIS_BUILD_DIR}/krita/integration/kritaquicklook
+        cd ${KIS_BUILD_DIR}/krita/integration
         make install
     fi
 }

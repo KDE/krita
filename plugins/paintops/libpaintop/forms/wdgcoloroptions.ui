@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgColorOptions</class>
  <widget class="QWidget" name="WdgColorOptions">
   <property name="geometry">
@@ -32,7 +36,7 @@
    </item>
    <item>
     <layout class="QFormLayout" name="formLayout">
-     <item row="0" column="0">
+     <item column="0" row="0">
       <widget class="QLabel" name="label">
        <property name="text">
         <string>Hue:</string>
@@ -42,7 +46,7 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="1">
+     <item column="1" row="0">
       <widget class="KisSliderSpinBox" name="hueSlider">
        <property name="sizePolicy">
         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
@@ -52,7 +56,7 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="0">
+     <item column="0" row="1">
       <widget class="QLabel" name="label_2">
        <property name="text">
         <string>Saturation:</string>
@@ -62,7 +66,7 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="1">
+     <item column="1" row="1">
       <widget class="KisSliderSpinBox" name="saturationSlider">
        <property name="sizePolicy">
         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
@@ -72,7 +76,7 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="0">
+     <item column="0" row="2">
       <widget class="QLabel" name="label_3">
        <property name="text">
         <string>Value:</string>
@@ -82,7 +86,7 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="1">
+     <item column="1" row="2">
       <widget class="KisSliderSpinBox" name="valueSlider">
        <property name="sizePolicy">
         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
@@ -106,7 +110,7 @@
      <property name="sizeConstraint">
       <enum>QLayout::SetMinimumSize</enum>
      </property>
-     <item row="0" column="0">
+     <item column="0" row="0">
       <widget class="QCheckBox" name="colorPerParticleCHBox">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -119,7 +123,7 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="1">
+     <item column="1" row="0">
       <spacer name="horizontalSpacer">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
@@ -135,7 +139,7 @@
        </property>
       </spacer>
      </item>
-     <item row="0" column="2">
+     <item column="2" row="0">
       <widget class="QCheckBox" name="fillBackgroundCHBox">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -151,7 +155,7 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="0">
+     <item column="0" row="1">
       <widget class="QCheckBox" name="sampleInputCHBox">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -164,7 +168,7 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="2">
+     <item column="2" row="1">
       <widget class="QCheckBox" name="mixBgColorCHBox">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -177,7 +181,7 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="1">
+     <item column="1" row="1">
       <spacer name="horizontalSpacer_2">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>

@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>GradientGeneratorConfigWidget</class>
  <widget class="QWidget" name="GradientGeneratorConfigWidget">
   <property name="geometry">
@@ -71,48 +75,48 @@
          <property name="verticalSpacing">
           <number>5</number>
          </property>
-         <item row="0" column="0">
+         <item column="0" row="0">
           <widget class="QLabel" name="labeShape">
            <property name="text">
             <string>Shape:</string>
            </property>
           </widget>
          </item>
-         <item row="0" column="1">
+         <item column="1" row="0">
           <widget class="QComboBox" name="comboBoxShape"/>
          </item>
-         <item row="1" column="0">
+         <item column="0" row="1">
           <widget class="QLabel" name="labelRepeat">
            <property name="text">
             <string>Repeat:</string>
            </property>
           </widget>
          </item>
-         <item row="1" column="1">
+         <item column="1" row="1">
           <widget class="QComboBox" name="comboBoxRepeat"/>
          </item>
-         <item row="2" column="0">
+         <item column="0" row="2">
           <widget class="QLabel" name="labelAntiAliasThreshold">
            <property name="text">
             <string>Anti-alias threshold:</string>
            </property>
           </widget>
          </item>
-         <item row="2" column="1">
+         <item column="1" row="2">
           <widget class="KisDoubleSliderSpinBox" name="sliderAntiAliasThreshold" native="true">
            <property name="focusPolicy">
             <enum>Qt::WheelFocus</enum>
            </property>
           </widget>
          </item>
-         <item row="3" column="0">
+         <item column="0" row="3">
           <widget class="QLabel" name="labelReverse">
            <property name="text">
             <string>Reverse:</string>
            </property>
           </widget>
          </item>
-         <item row="3" column="1">
+         <item column="1" row="3">
           <widget class="QCheckBox" name="checkBoxReverse">
            <property name="text">
             <string/>
@@ -167,25 +171,25 @@
          <property name="verticalSpacing">
           <number>10</number>
          </property>
-         <item row="0" column="0">
+         <item column="0" row="0">
           <widget class="QLabel" name="labelStartPosition">
            <property name="text">
             <string>Start:</string>
            </property>
           </widget>
          </item>
-         <item row="0" column="1">
-          <layout class="QGridLayout" name="gridLayout" rowstretch="0,0" columnstretch="0,0,1">
+         <item column="1" row="0">
+          <layout class="QGridLayout" columnstretch="0,0,1" name="gridLayout" rowstretch="0,0">
            <property name="spacing">
             <number>5</number>
            </property>
-           <item row="0" column="2">
+           <item column="2" row="0">
             <widget class="QComboBox" name="comboBoxStartPositionXUnits"/>
            </item>
-           <item row="1" column="2">
+           <item column="2" row="1">
             <widget class="QComboBox" name="comboBoxStartPositionYUnits"/>
            </item>
-           <item row="0" column="1">
+           <item column="1" row="0">
             <widget class="QDoubleSpinBox" name="spinBoxStartPositionX">
              <property name="alignment">
               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -201,7 +205,7 @@
              </property>
             </widget>
            </item>
-           <item row="1" column="1">
+           <item column="1" row="1">
             <widget class="QDoubleSpinBox" name="spinBoxStartPositionY">
              <property name="alignment">
               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -217,7 +221,7 @@
              </property>
             </widget>
            </item>
-           <item row="0" column="0">
+           <item column="0" row="0">
             <widget class="QLabel" name="label">
              <property name="text">
               <string>X:</string>
@@ -227,7 +231,7 @@
              </property>
             </widget>
            </item>
-           <item row="1" column="0">
+           <item column="0" row="1">
             <widget class="QLabel" name="label_2">
              <property name="text">
               <string>Y:</string>
@@ -239,14 +243,14 @@
            </item>
           </layout>
          </item>
-         <item row="1" column="0">
+         <item column="0" row="1">
           <widget class="QLabel" name="labelEndPosition">
            <property name="text">
             <string>End:</string>
            </property>
           </widget>
          </item>
-         <item row="1" column="1">
+         <item column="1" row="1">
           <layout class="QVBoxLayout" name="verticalLayout_2">
            <property name="spacing">
             <number>5</number>
@@ -310,7 +314,7 @@
               <number>0</number>
              </property>
              <widget class="QWidget" name="stackedWidgetPageEndPositionCartesian">
-              <layout class="QGridLayout" name="gridLayout_3" columnstretch="0,0,1,1">
+              <layout class="QGridLayout" columnstretch="0,0,1,1" name="gridLayout_3">
                <property name="leftMargin">
                 <number>0</number>
                </property>
@@ -326,7 +330,7 @@
                <property name="spacing">
                 <number>5</number>
                </property>
-               <item row="0" column="1">
+               <item column="1" row="0">
                 <widget class="QDoubleSpinBox" name="spinBoxEndPositionX">
                  <property name="alignment">
                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -342,19 +346,19 @@
                  </property>
                 </widget>
                </item>
-               <item row="0" column="2">
+               <item column="2" row="0">
                 <widget class="QComboBox" name="comboBoxEndPositionXUnits"/>
                </item>
-               <item row="1" column="3">
+               <item column="3" row="1">
                 <widget class="QComboBox" name="comboBoxEndPositionYPositioning"/>
                </item>
-               <item row="0" column="3">
+               <item column="3" row="0">
                 <widget class="QComboBox" name="comboBoxEndPositionXPositioning"/>
                </item>
-               <item row="1" column="2">
+               <item column="2" row="1">
                 <widget class="QComboBox" name="comboBoxEndPositionYUnits"/>
                </item>
-               <item row="1" column="1">
+               <item column="1" row="1">
                 <widget class="QDoubleSpinBox" name="spinBoxEndPositionY">
                  <property name="alignment">
                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -370,7 +374,7 @@
                  </property>
                 </widget>
                </item>
-               <item row="0" column="0">
+               <item column="0" row="0">
                 <widget class="QLabel" name="label_3">
                  <property name="text">
                   <string>X:</string>
@@ -380,7 +384,7 @@
                  </property>
                 </widget>
                </item>
-               <item row="1" column="0">
+               <item column="0" row="1">
                 <widget class="QLabel" name="label_4">
                  <property name="text">
                   <string>Y:</string>

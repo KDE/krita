@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgGeneralSettings</class>
  <widget class="QWidget" name="WdgGeneralSettings">
   <property name="geometry">
@@ -23,7 +27,7 @@
    </size>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
+   <item column="0" row="0">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
       <number>0</number>
@@ -33,7 +37,7 @@
        <string>Cursor</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_2">
-       <item row="1" column="0">
+       <item column="0" row="1">
         <layout class="QFormLayout" name="formLayout_2">
          <property name="horizontalSpacing">
           <number>10</number>
@@ -53,7 +57,7 @@
          <property name="bottomMargin">
           <number>10</number>
          </property>
-         <item row="0" column="0">
+         <item column="0" row="0">
           <widget class="QLabel" name="textLabel1">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -69,10 +73,10 @@
            </property>
           </widget>
          </item>
-         <item row="0" column="1">
+         <item column="1" row="0">
           <widget class="QComboBox" name="m_cmbCursorShape"/>
          </item>
-         <item row="1" column="0">
+         <item column="0" row="1">
           <widget class="QLabel" name="textLabel1_2">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -88,10 +92,10 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="1">
+         <item column="1" row="1">
           <widget class="QComboBox" name="m_cmbOutlineShape"/>
          </item>
-         <item row="2" column="1">
+         <item column="1" row="2">
           <widget class="QGroupBox" name="groupBox">
            <property name="title">
             <string>While painting...</string>
@@ -138,14 +142,14 @@
            </layout>
           </widget>
          </item>
-         <item row="3" column="0">
+         <item column="0" row="3">
           <widget class="QLabel" name="label_11">
            <property name="text">
             <string>Cursor Color:</string>
            </property>
           </widget>
          </item>
-         <item row="3" column="1">
+         <item column="1" row="3">
           <widget class="KisColorButton" name="cursorColorBtutton">
            <property name="maximumSize">
             <size>
@@ -160,7 +164,7 @@
          </item>
         </layout>
        </item>
-       <item row="2" column="0">
+       <item column="0" row="2">
         <spacer name="verticalSpacer_3">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -180,7 +184,7 @@
        <string>Window</string>
       </attribute>
       <layout class="QFormLayout" name="formLayout">
-       <item row="0" column="0">
+       <item column="0" row="0">
         <widget class="QLabel" name="label_2">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -196,7 +200,7 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="1">
+       <item column="1" row="0">
         <widget class="QComboBox" name="m_cmbMDIType">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -219,14 +223,14 @@
          </item>
         </widget>
        </item>
-       <item row="1" column="0">
+       <item column="0" row="1">
         <widget class="QLabel" name="label_5">
          <property name="text">
           <string>Background Image (overrides color):</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="1">
+       <item column="1" row="1">
         <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,0">
          <item>
           <widget class="QLabel" name="m_backgroundimage">
@@ -269,7 +273,7 @@
          </item>
         </layout>
        </item>
-       <item row="2" column="0">
+       <item column="0" row="2">
         <widget class="QLabel" name="label_4">
          <property name="text">
           <string>Window Background:</string>
@@ -279,7 +283,7 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="1">
+       <item column="1" row="2">
         <widget class="KisColorButton" name="m_mdiColor">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -292,7 +296,7 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="0">
+       <item column="0" row="3">
         <widget class="QCheckBox" name="chkUseCustomFont">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
@@ -305,7 +309,7 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="1">
+       <item column="1" row="3">
         <layout class="QHBoxLayout" name="horizontalLayout_3">
          <item>
           <widget class="KisFontComboBoxes" name="cmbCustomFont" native="true">
@@ -329,14 +333,14 @@
          </item>
         </layout>
        </item>
-       <item row="4" column="0">
+       <item column="0" row="4">
         <widget class="QLabel" name="lbl_window_general">
          <property name="text">
           <string>General:</string>
          </property>
         </widget>
        </item>
-       <item row="4" column="1">
+       <item column="1" row="4">
         <widget class="QCheckBox" name="m_chkRubberBand">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -349,28 +353,28 @@
          </property>
         </widget>
        </item>
-       <item row="5" column="1">
+       <item column="1" row="5">
         <widget class="QCheckBox" name="m_chkCanvasMessages">
          <property name="text">
           <string>Show on-canvas popup messages</string>
          </property>
         </widget>
        </item>
-       <item row="6" column="1">
+       <item column="1" row="6">
         <widget class="QCheckBox" name="m_chkHiDPI">
          <property name="text">
           <string>Enable Hi-DPI support</string>
          </property>
         </widget>
        </item>
-       <item row="7" column="1">
+       <item column="1" row="7">
         <widget class="QCheckBox" name="m_chkHiDPIFractionalScaling">
          <property name="text">
           <string>(Hi-DPI) Enable fractional scale factor</string>
          </property>
         </widget>
        </item>
-       <item row="8" column="0">
+       <item column="0" row="8">
         <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -418,14 +422,14 @@
        </item>
        <item>
         <layout class="QFormLayout" name="formLayout_4">
-         <item row="0" column="0">
+         <item column="0" row="0">
           <widget class="QLabel" name="lblFlowMode">
            <property name="text">
             <string>Brush Flow Mode (needs restart):</string>
            </property>
           </widget>
          </item>
-         <item row="0" column="1">
+         <item column="1" row="0">
           <widget class="QComboBox" name="cmbFlowMode">
            <item>
             <property name="text">
@@ -540,14 +544,14 @@
           <bool>true</bool>
          </property>
          <layout class="QFormLayout" name="formLayout_6">
-          <item row="0" column="0">
+          <item column="0" row="0">
            <widget class="QLabel" name="label_6">
             <property name="text">
              <string>Autosave Interval:</string>
             </property>
            </widget>
           </item>
-          <item row="0" column="1">
+          <item column="1" row="0">
            <widget class="KisIntParseSpinBox" name="m_autosaveSpinBox">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -581,7 +585,7 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="1">
+          <item column="1" row="1">
            <widget class="QCheckBox" name="chkHideAutosaveFiles">
             <property name="text">
              <string>Unnamed autosave files are hidden by default</string>
@@ -603,14 +607,14 @@
           <bool>true</bool>
          </property>
          <layout class="QFormLayout" name="formLayout_5">
-          <item row="0" column="0">
+          <item column="0" row="0">
            <widget class="QLabel" name="label_13">
             <property name="text">
              <string>Backup File Location</string>
             </property>
            </widget>
           </item>
-          <item row="0" column="1">
+          <item column="1" row="0">
            <widget class="QComboBox" name="cmbBackupFileLocation">
             <item>
              <property name="text">
@@ -629,14 +633,14 @@
             </item>
            </widget>
           </item>
-          <item row="1" column="0">
+          <item column="0" row="1">
            <widget class="QLabel" name="label_8">
             <property name="text">
              <string>Backup File Suffix:</string>
             </property>
            </widget>
           </item>
-          <item row="1" column="1">
+          <item column="1" row="1">
            <widget class="QLineEdit" name="txtBackupFileSuffix">
             <property name="text">
              <string>~</string>
@@ -646,14 +650,14 @@
             </property>
            </widget>
           </item>
-          <item row="3" column="0">
+          <item column="0" row="3">
            <widget class="QLabel" name="label_7">
             <property name="text">
              <string>Number of Backup Files Kept:</string>
             </property>
            </widget>
           </item>
-          <item row="3" column="1">
+          <item column="1" row="3">
            <widget class="QSpinBox" name="intNumBackupFiles">
             <property name="minimum">
              <number>1</number>
@@ -672,7 +676,7 @@
           <string>Kra File Compression</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_3">
-          <item row="1" column="0">
+          <item column="0" row="1">
            <widget class="QCheckBox" name="chkZip64">
             <property name="toolTip">
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Only use this option for &lt;span style=&quot; font-weight:600;&quot;&gt;very&lt;/span&gt; large files: larger than 4 GiB on disk.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -682,14 +686,14 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="0">
+          <item column="0" row="0">
            <widget class="QCheckBox" name="m_chkCompressKra">
             <property name="text">
              <string>Compress .kra files more (slows loading/saving)</string>
             </property>
            </widget>
           </item>
-          <item row="2" column="0">
+          <item column="0" row="2">
            <widget class="QCheckBox" name="m_chkTrimKra">
             <property name="toolTip">
              <string extracomment="(information outside the image boundaries will get lost. Saving will be slower."/>
@@ -722,7 +726,7 @@
        <string>Miscellaneous</string>
       </attribute>
       <layout class="QFormLayout" name="formLayout_3">
-       <item row="0" column="0">
+       <item column="0" row="0">
         <widget class="QLabel" name="label_12">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -738,7 +742,7 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="1">
+       <item column="1" row="0">
         <widget class="QComboBox" name="cmbStartupSession">
          <property name="sizePolicy">
           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
@@ -748,21 +752,21 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="1">
+       <item column="1" row="2">
         <widget class="QCheckBox" name="chkSaveSessionOnQuit">
          <property name="text">
           <string>Save session when Krita closes</string>
          </property>
         </widget>
        </item>
-       <item row="3" column="1">
+       <item column="1" row="3">
         <widget class="QCheckBox" name="m_chkConvertOnImport">
          <property name="text">
           <string>On importing images as layers, convert to the image colorspace</string>
          </property>
         </widget>
        </item>
-       <item row="5" column="0">
+       <item column="0" row="5">
         <widget class="QLabel" name="label">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -781,7 +785,7 @@
          </property>
         </widget>
        </item>
-       <item row="5" column="1">
+       <item column="1" row="5">
         <widget class="KisIntParseSpinBox" name="m_undoStackSize">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -812,7 +816,7 @@
          </property>
         </widget>
        </item>
-       <item row="6" column="0">
+       <item column="0" row="6">
         <widget class="QLabel" name="label_3">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -828,7 +832,7 @@
          </property>
         </widget>
        </item>
-       <item row="6" column="1">
+       <item column="1" row="6">
         <widget class="KisIntParseSpinBox" name="m_favoritePresetsSpinBox">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -850,14 +854,14 @@
          </property>
         </widget>
        </item>
-       <item row="8" column="1">
+       <item column="1" row="8">
         <widget class="QCheckBox" name="chkShowRootLayer">
          <property name="text">
           <string>Show root layer</string>
          </property>
         </widget>
        </item>
-       <item row="9" column="1">
+       <item column="1" row="9">
         <widget class="QCheckBox" name="chkUsageLogging">
          <property name="text">
           <string>Enable Logging for bug reports</string>
@@ -867,7 +871,7 @@
          </property>
         </widget>
        </item>
-       <item row="10" column="1">
+       <item column="1" row="10">
         <widget class="QCheckBox" name="m_chkNativeFileDialog">
          <property name="toolTip">
           <string>Warning: if you enable this setting and the file dialogs do weird stuff, do not report a bug.</string>
@@ -877,14 +881,14 @@
          </property>
         </widget>
        </item>
-       <item row="12" column="0">
+       <item column="0" row="12">
         <widget class="QLabel" name="label_9">
          <property name="text">
           <string>Maximum brush size:</string>
          </property>
         </widget>
        </item>
-       <item row="12" column="1">
+       <item column="1" row="12">
         <layout class="QHBoxLayout" name="horizontalLayout_2">
          <item>
           <widget class="QSpinBox" name="intMaxBrushSize">
@@ -920,7 +924,7 @@
          </item>
         </layout>
        </item>
-       <item row="15" column="1">
+       <item column="1" row="15">
         <spacer name="verticalSpacer_4">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -933,7 +937,7 @@
          </property>
         </spacer>
        </item>
-       <item row="14" column="1">
+       <item column="1" row="14">
         <widget class="QCheckBox" name="m_chkAutoPin">
          <property name="enabled">
           <bool>true</bool>
@@ -953,24 +957,24 @@
        <string>Resources</string>
       </attribute>
       <layout class="QFormLayout" name="formLayout_7">
-       <item row="0" column="0">
+       <item column="0" row="0">
         <widget class="QLabel" name="label_14">
          <property name="text">
           <string>Cache Location:</string>
          </property>
         </widget>
        </item>
-       <item row="0" column="1">
+       <item column="1" row="0">
         <widget class="KisFileNameRequester" name="m_urlCacheDbLocation" native="true"/>
        </item>
-       <item row="1" column="0">
+       <item column="0" row="1">
         <widget class="QLabel" name="label_15">
          <property name="text">
           <string>Resource Folder:</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="1">
+       <item column="1" row="1">
         <widget class="KisFileNameRequester" name="m_urlResourceFolder" native="true"/>
        </item>
       </layout>

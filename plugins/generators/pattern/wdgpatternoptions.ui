@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgPatternOptions</class>
  <widget class="QWidget" name="WdgPatternOptions">
   <property name="geometry">
@@ -21,7 +25,7 @@
        <string>Pattern</string>
       </attribute>
       <layout class="QFormLayout" name="formLayout">
-       <item row="0" column="0">
+       <item column="0" row="0">
         <widget class="QLabel" name="lblPattern">
          <property name="text">
           <string>&amp;Pattern:</string>
@@ -34,7 +38,7 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="1">
+       <item column="1" row="0">
         <widget class="KisPatternChooser" name="patternChooser" native="true">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -51,27 +55,27 @@
        <string>Transform</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_2">
-       <item row="4" column="0" colspan="2">
+       <item colspan="2" column="0" row="4">
         <widget class="QGroupBox" name="gb3dRotation">
          <property name="title">
           <string>3d Rotation:</string>
          </property>
          <layout class="QFormLayout" name="formLayout_3">
-          <item row="0" column="0">
+          <item column="0" row="0">
            <widget class="QLabel" name="label_5">
             <property name="text">
              <string>X-Rotation:</string>
             </property>
            </widget>
           </item>
-          <item row="1" column="0">
+          <item column="0" row="1">
            <widget class="QLabel" name="label_6">
             <property name="text">
              <string>Y-Rotation:</string>
             </property>
            </widget>
           </item>
-          <item row="0" column="1">
+          <item column="1" row="0">
            <widget class="KisDoubleSliderSpinBox" name="sldRotationX" native="true">
             <property name="sizePolicy">
              <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
@@ -81,7 +85,7 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="1">
+          <item column="1" row="1">
            <widget class="KisDoubleSliderSpinBox" name="sldRotationY" native="true">
             <property name="sizePolicy">
              <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
@@ -94,13 +98,13 @@
          </layout>
         </widget>
        </item>
-       <item row="1" column="0">
+       <item column="0" row="1">
         <widget class="QGroupBox" name="gbScale">
          <property name="title">
           <string>Scale:</string>
          </property>
          <layout class="QGridLayout" name="gridLayout">
-          <item row="0" column="0">
+          <item column="0" row="0">
            <widget class="QLabel" name="label">
             <property name="text">
              <string>Width:</string>
@@ -110,7 +114,7 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="1">
+          <item column="1" row="0">
            <widget class="KisDoubleParseSpinBox" name="spbScaleWidth">
             <property name="suffix">
              <string>%</string>
@@ -126,10 +130,10 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="2" rowspan="2">
+          <item column="2" row="0" rowspan="2">
            <widget class="KoAspectButton" name="btnLockAspectRatio" native="true"/>
           </item>
-          <item row="1" column="0">
+          <item column="0" row="1">
            <widget class="QLabel" name="label_2">
             <property name="text">
              <string>Height:</string>
@@ -139,7 +143,7 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="1">
+          <item column="1" row="1">
            <widget class="KisDoubleParseSpinBox" name="spbScaleHeight">
             <property name="suffix">
              <string>%</string>
@@ -158,56 +162,56 @@
          </layout>
         </widget>
        </item>
-       <item row="1" column="1">
+       <item column="1" row="1">
         <widget class="QGroupBox" name="gbOffset">
          <property name="title">
           <string>Offset:</string>
          </property>
          <layout class="QFormLayout" name="formLayout_2">
-          <item row="0" column="0">
+          <item column="0" row="0">
            <widget class="QLabel" name="label_3">
             <property name="text">
              <string>X:</string>
             </property>
            </widget>
           </item>
-          <item row="1" column="0">
+          <item column="0" row="1">
            <widget class="QLabel" name="label_4">
             <property name="text">
              <string>Y:</string>
             </property>
            </widget>
           </item>
-          <item row="0" column="1">
+          <item column="1" row="0">
            <widget class="KisIntParseSpinBox" name="spbOffsetX"/>
           </item>
-          <item row="1" column="1">
+          <item column="1" row="1">
            <widget class="KisIntParseSpinBox" name="spbOffsetY"/>
           </item>
          </layout>
         </widget>
        </item>
-       <item row="2" column="0" colspan="2">
+       <item colspan="2" column="0" row="2">
         <widget class="QGroupBox" name="gbShear">
          <property name="title">
           <string>Shear:</string>
          </property>
          <layout class="QFormLayout" name="formLayout_4">
-          <item row="0" column="0">
+          <item column="0" row="0">
            <widget class="QLabel" name="label_7">
             <property name="text">
              <string>X:</string>
             </property>
            </widget>
           </item>
-          <item row="1" column="0">
+          <item column="0" row="1">
            <widget class="QLabel" name="label_8">
             <property name="text">
              <string>Y:</string>
             </property>
            </widget>
           </item>
-          <item row="0" column="1">
+          <item column="1" row="0">
            <widget class="KisDoubleSliderSpinBox" name="sldShearX" native="true">
             <property name="sizePolicy">
              <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
@@ -217,7 +221,7 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="1">
+          <item column="1" row="1">
            <widget class="KisDoubleSliderSpinBox" name="sldShearY" native="true">
             <property name="sizePolicy">
              <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
@@ -230,7 +234,7 @@
          </layout>
         </widget>
        </item>
-       <item row="0" column="0" colspan="2">
+       <item colspan="2" column="0" row="0">
         <widget class="QGroupBox" name="gbRotation">
          <property name="title">
           <string>Rotation:</string>

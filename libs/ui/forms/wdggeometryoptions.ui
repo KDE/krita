@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgGeometryOptions</class>
  <widget class="QWidget" name="WdgGeometryOptions">
   <property name="geometry">
@@ -35,14 +39,14 @@
    <property name="bottomMargin">
     <number>0</number>
    </property>
-   <item row="1" column="0">
+   <item column="0" row="1">
     <widget class="QLabel" name="textLabelFill">
      <property name="text">
       <string>Fill:</string>
      </property>
     </widget>
    </item>
-   <item row="1" column="1">
+   <item column="1" row="1">
     <widget class="QComboBox" name="cmbFill">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -72,14 +76,14 @@
      </item>
     </widget>
    </item>
-   <item row="2" column="0">
+   <item column="0" row="2">
     <widget class="QLabel" name="textLabelOutline">
      <property name="text">
       <string>Outline:</string>
      </property>
     </widget>
    </item>
-   <item row="2" column="1">
+   <item column="1" row="2">
     <widget class="QComboBox" name="cmbOutline">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -104,30 +108,30 @@
      </item>
     </widget>
    </item>
-   <item row="3" column="0" colspan="2">
+   <item colspan="2" column="0" row="3">
     <widget class="QGroupBox" name="gbPatternTransform">
      <property name="title">
       <string>Pattern Transform</string>
      </property>
      <layout class="QFormLayout" name="formLayout">
-      <item row="0" column="0">
+      <item column="0" row="0">
        <widget class="QLabel" name="label">
         <property name="text">
          <string>Rotate:</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="0">
+      <item column="0" row="1">
        <widget class="QLabel" name="label_2">
         <property name="text">
          <string>Scale:</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="1">
+      <item column="1" row="0">
        <widget class="KisDoubleSliderSpinBox" name="sldRotation" native="true"/>
       </item>
-      <item row="1" column="1">
+      <item column="1" row="1">
        <widget class="KisDoubleSliderSpinBox" name="sldScale" native="true"/>
       </item>
      </layout>

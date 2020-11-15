@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgColorOverlay</class>
  <widget class="QWidget" name="WdgColorOverlay">
   <property name="geometry">
@@ -11,7 +15,7 @@
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
+   <item column="0" row="0">
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
       <string>Color Overlay</string>
@@ -26,7 +30,7 @@
          <property name="fieldGrowthPolicy">
           <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
          </property>
-         <item row="0" column="0">
+         <item column="0" row="0">
           <widget class="QLabel" name="label_13">
            <property name="text">
             <string>Ble&amp;nd Mode:</string>
@@ -36,7 +40,7 @@
            </property>
           </widget>
          </item>
-         <item row="0" column="1">
+         <item column="1" row="0">
           <layout class="QHBoxLayout" name="horizontalLayout">
            <item>
             <widget class="KisLayerStyleCompositeOpComboBox" name="cmbCompositeOp">
@@ -60,7 +64,7 @@
            </item>
           </layout>
          </item>
-         <item row="1" column="0">
+         <item column="0" row="1">
           <widget class="QLabel" name="label_14">
            <property name="text">
             <string>&amp;Opacity:</string>
@@ -70,7 +74,7 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="1">
+         <item column="1" row="1">
           <widget class="KisSliderSpinBox" name="intOpacity" native="true">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Minimum">

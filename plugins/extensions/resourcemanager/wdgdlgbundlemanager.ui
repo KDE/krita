@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgDlgBundleManager</class>
  <widget class="QWidget" name="WdgDlgBundleManager">
   <property name="geometry">
@@ -48,7 +52,9 @@
          </property>
          <property name="icon">
           <iconset theme="new">
-           <normaloff>.</normaloff>.</iconset>
+           <normaloff>.</normaloff>
+           .
+          </iconset>
          </property>
         </widget>
        </item>
@@ -62,7 +68,9 @@
          </property>
          <property name="icon">
           <iconset theme="add">
-           <normaloff>.</normaloff>.</iconset>
+           <normaloff>.</normaloff>
+           .
+          </iconset>
          </property>
         </widget>
        </item>
@@ -76,7 +84,9 @@
          </property>
          <property name="icon">
           <iconset theme="delete">
-           <normaloff>.</normaloff>.</iconset>
+           <normaloff>.</normaloff>
+           .
+          </iconset>
          </property>
         </widget>
        </item>
@@ -240,21 +250,21 @@
               <property name="verticalSpacing">
                <number>3</number>
               </property>
-              <item row="2" column="0">
+              <item column="0" row="2">
                <widget class="QLabel" name="label_5">
                 <property name="text">
                  <string>Website:</string>
                 </property>
                </widget>
               </item>
-              <item row="5" column="1">
+              <item column="1" row="5">
                <widget class="QLabel" name="lblUpdated">
                 <property name="text">
                  <string/>
                 </property>
                </widget>
               </item>
-              <item row="0" column="0">
+              <item column="0" row="0">
                <widget class="QLabel" name="label_3">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
@@ -273,28 +283,28 @@
                 </property>
                </widget>
               </item>
-              <item row="4" column="0">
+              <item column="0" row="4">
                <widget class="QLabel" name="label_6">
                 <property name="text">
                  <string>Created:</string>
                 </property>
                </widget>
               </item>
-              <item row="4" column="1">
+              <item column="1" row="4">
                <widget class="QLabel" name="lblCreated">
                 <property name="text">
                  <string/>
                 </property>
                </widget>
               </item>
-              <item row="3" column="0">
+              <item column="0" row="3">
                <widget class="QLabel" name="label_8">
                 <property name="text">
                  <string>Email:</string>
                 </property>
                </widget>
               </item>
-              <item row="7" column="0" colspan="2">
+              <item colspan="2" column="0" row="7">
                <spacer name="verticalSpacer_5">
                 <property name="orientation">
                  <enum>Qt::Vertical</enum>
@@ -307,56 +317,56 @@
                 </property>
                </spacer>
               </item>
-              <item row="3" column="1">
+              <item column="1" row="3">
                <widget class="QLabel" name="lblEmail">
                 <property name="text">
                  <string/>
                 </property>
                </widget>
               </item>
-              <item row="1" column="1">
+              <item column="1" row="1">
                <widget class="QLabel" name="lblLicense">
                 <property name="text">
                  <string/>
                 </property>
                </widget>
               </item>
-              <item row="5" column="0">
+              <item column="0" row="5">
                <widget class="QLabel" name="label_7">
                 <property name="text">
                  <string>Updated:</string>
                 </property>
                </widget>
               </item>
-              <item row="0" column="1">
+              <item column="1" row="0">
                <widget class="QLabel" name="lblAuthor">
                 <property name="text">
                  <string/>
                 </property>
                </widget>
               </item>
-              <item row="2" column="1">
+              <item column="1" row="2">
                <widget class="QLabel" name="lblWebsite">
                 <property name="text">
                  <string/>
                 </property>
                </widget>
               </item>
-              <item row="1" column="0">
+              <item column="0" row="1">
                <widget class="QLabel" name="label_4">
                 <property name="text">
                  <string>License:</string>
                 </property>
                </widget>
               </item>
-              <item row="6" column="0">
+              <item column="0" row="6">
                <widget class="QLabel" name="label">
                 <property name="text">
                  <string>Type:</string>
                 </property>
                </widget>
               </item>
-              <item row="6" column="1">
+              <item column="1" row="6">
                <widget class="QLabel" name="lblType">
                 <property name="text">
                  <string/>

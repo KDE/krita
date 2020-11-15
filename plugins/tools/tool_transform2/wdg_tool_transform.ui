@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgToolTransform</class>
  <widget class="QWidget" name="WdgToolTransform">
   <property name="geometry">
@@ -301,7 +305,7 @@
            <property name="verticalSpacing">
             <number>15</number>
            </property>
-           <item row="0" column="0">
+           <item column="0" row="0">
             <widget class="QLabel" name="label_10">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -323,15 +327,15 @@
              </property>
             </widget>
            </item>
-           <item row="1" column="1">
-            <layout class="QGridLayout" name="freeAnchorOriginGroup" rowstretch="0,0,0,0" columnstretch="0,0,0">
+           <item column="1" row="1">
+            <layout class="QGridLayout" columnstretch="0,0,0" name="freeAnchorOriginGroup" rowstretch="0,0,0,0">
              <property name="sizeConstraint">
               <enum>QLayout::SetDefaultConstraint</enum>
              </property>
              <property name="spacing">
               <number>0</number>
              </property>
-             <item row="1" column="0">
+             <item column="0" row="1">
               <widget class="QToolButton" name="topLeftButton">
                <property name="enabled">
                 <bool>true</bool>
@@ -353,7 +357,7 @@
                </property>
               </widget>
              </item>
-             <item row="1" column="2">
+             <item column="2" row="1">
               <widget class="QToolButton" name="topRightButton">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -372,7 +376,7 @@
                </property>
               </widget>
              </item>
-             <item row="3" column="0">
+             <item column="0" row="3">
               <widget class="QToolButton" name="bottomLeftButton">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -391,7 +395,7 @@
                </property>
               </widget>
              </item>
-             <item row="2" column="1">
+             <item column="1" row="2">
               <widget class="QToolButton" name="centerButton">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -413,7 +417,7 @@
                </property>
               </widget>
              </item>
-             <item row="2" column="2">
+             <item column="2" row="2">
               <widget class="QToolButton" name="middleRightButton">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -432,7 +436,7 @@
                </property>
               </widget>
              </item>
-             <item row="3" column="1">
+             <item column="1" row="3">
               <widget class="QToolButton" name="middleBottomButton">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -451,7 +455,7 @@
                </property>
               </widget>
              </item>
-             <item row="3" column="2">
+             <item column="2" row="3">
               <widget class="QToolButton" name="bottomRightButton">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -470,7 +474,7 @@
                </property>
               </widget>
              </item>
-             <item row="1" column="1">
+             <item column="1" row="1">
               <widget class="QToolButton" name="middleTopButton">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -489,7 +493,7 @@
                </property>
               </widget>
              </item>
-             <item row="2" column="0">
+             <item column="0" row="2">
               <widget class="QToolButton" name="middleLeftButton">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -510,7 +514,7 @@
              </item>
             </layout>
            </item>
-           <item row="0" column="1">
+           <item column="1" row="0">
             <widget class="KisCmbIDList" name="cmbFilter" native="true">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -520,7 +524,7 @@
              </property>
             </widget>
            </item>
-           <item row="1" column="0">
+           <item column="0" row="1">
             <widget class="QToolButton" name="btnTransformAroundPivotPoint">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -708,7 +712,7 @@
             <property name="verticalSpacing">
              <number>5</number>
             </property>
-            <item row="0" column="0">
+            <item column="0" row="0">
              <widget class="QLabel" name="label_rotateX">
               <property name="sizePolicy">
                <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
@@ -736,14 +740,14 @@
               </property>
              </widget>
             </item>
-            <item row="0" column="1">
+            <item column="1" row="0">
              <widget class="KisDoubleSliderSpinBox" name="aXBox" native="true">
               <property name="toolTip">
                <string>Rotate around X-Axis</string>
               </property>
              </widget>
             </item>
-            <item row="2" column="0">
+            <item column="0" row="2">
              <widget class="QLabel" name="label_rotateY">
               <property name="sizePolicy">
                <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
@@ -771,14 +775,14 @@
               </property>
              </widget>
             </item>
-            <item row="2" column="1">
+            <item column="1" row="2">
              <widget class="KisDoubleSliderSpinBox" name="aYBox" native="true">
               <property name="toolTip">
                <string>Rotate around Y-Axis</string>
               </property>
              </widget>
             </item>
-            <item row="3" column="1">
+            <item column="1" row="3">
              <widget class="KisDoubleSliderSpinBox" name="aZBox" native="true">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -791,7 +795,7 @@
               </property>
              </widget>
             </item>
-            <item row="3" column="0">
+            <item column="0" row="3">
              <widget class="QLabel" name="label_rotateZ">
               <property name="sizePolicy">
                <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
@@ -873,7 +877,7 @@
               <property name="verticalSpacing">
                <number>5</number>
               </property>
-              <item row="0" column="0">
+              <item column="0" row="0">
                <widget class="QLabel" name="label_width">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
@@ -901,7 +905,7 @@
                 </property>
                </widget>
               </item>
-              <item row="0" column="1">
+              <item column="1" row="0">
                <widget class="KisIntParseSpinBox" name="scaleXBox">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
@@ -917,7 +921,7 @@
                 </property>
                </widget>
               </item>
-              <item row="1" column="1">
+              <item column="1" row="1">
                <widget class="KisIntParseSpinBox" name="scaleYBox">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
@@ -933,7 +937,7 @@
                 </property>
                </widget>
               </item>
-              <item row="1" column="0">
+              <item column="0" row="1">
                <widget class="QLabel" name="label_height">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
@@ -1028,7 +1032,7 @@
             <property name="fieldGrowthPolicy">
              <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
             </property>
-            <item row="0" column="0">
+            <item column="0" row="0">
              <widget class="QLabel" name="label_offsetX">
               <property name="sizePolicy">
                <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
@@ -1050,7 +1054,7 @@
               </property>
              </widget>
             </item>
-            <item row="0" column="1">
+            <item column="1" row="0">
              <widget class="KisIntParseSpinBox" name="translateXBox">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -1066,7 +1070,7 @@
               </property>
              </widget>
             </item>
-            <item row="2" column="1">
+            <item column="1" row="2">
              <widget class="KisIntParseSpinBox" name="translateYBox">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -1079,7 +1083,7 @@
               </property>
              </widget>
             </item>
-            <item row="2" column="0">
+            <item column="0" row="2">
              <widget class="QLabel" name="label_offsetY">
               <property name="sizePolicy">
                <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
@@ -1159,7 +1163,7 @@
             <property name="leftMargin">
              <number>20</number>
             </property>
-            <item row="0" column="0">
+            <item column="0" row="0">
              <widget class="QLabel" name="label_shearX">
               <property name="sizePolicy">
                <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
@@ -1181,7 +1185,7 @@
               </property>
              </widget>
             </item>
-            <item row="1" column="1">
+            <item column="1" row="1">
              <widget class="KisDoubleSliderSpinBox" name="shearYBox" native="true">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -1194,7 +1198,7 @@
               </property>
              </widget>
             </item>
-            <item row="1" column="0">
+            <item column="0" row="1">
              <widget class="QLabel" name="label_shearY">
               <property name="sizePolicy">
                <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
@@ -1222,7 +1226,7 @@
               </property>
              </widget>
             </item>
-            <item row="0" column="1">
+            <item column="1" row="0">
              <widget class="KisDoubleSliderSpinBox" name="shearXBox" native="true">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -1413,7 +1417,7 @@
          <property name="verticalSpacing">
           <number>0</number>
          </property>
-         <item row="1" column="1">
+         <item column="1" row="1">
           <widget class="KisDoubleSliderSpinBox" name="alphaBox" native="true">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -1423,7 +1427,7 @@
            </property>
           </widget>
          </item>
-         <item row="0" column="1">
+         <item column="1" row="0">
           <widget class="QLabel" name="flexibilityLabel">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -1448,7 +1452,7 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="0">
+         <item column="0" row="1">
           <widget class="QComboBox" name="cmbWarpType">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -1458,7 +1462,7 @@
            </property>
           </widget>
          </item>
-         <item row="0" column="0">
+         <item column="0" row="0">
           <widget class="QLabel" name="warpTypeLabel">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -1494,7 +1498,7 @@
           <bool>false</bool>
          </property>
          <layout class="QGridLayout" name="gridLayout">
-          <item row="0" column="0">
+          <item column="0" row="0">
            <layout class="QHBoxLayout" name="horizontalLayout_7">
             <property name="spacing">
              <number>0</number>
@@ -1551,7 +1555,7 @@
             </item>
            </layout>
           </item>
-          <item row="1" column="0">
+          <item column="0" row="1">
            <layout class="QHBoxLayout" name="horizontalLayout_8">
             <property name="spacing">
              <number>0</number>
@@ -1929,7 +1933,7 @@
            <property name="verticalSpacing">
             <number>5</number>
            </property>
-           <item row="5" column="0">
+           <item column="0" row="5">
             <widget class="QLabel" name="label">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
@@ -1948,10 +1952,10 @@
              </property>
             </widget>
            </item>
-           <item row="4" column="1">
+           <item column="1" row="4">
             <widget class="KisDoubleSliderSpinBox" name="liquifySpacingSlider" native="true"/>
            </item>
-           <item row="4" column="0">
+           <item column="0" row="4">
             <widget class="QLabel" name="lblSpacing">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
@@ -1970,7 +1974,7 @@
              </property>
             </widget>
            </item>
-           <item row="3" column="0">
+           <item column="0" row="3">
             <widget class="QLabel" name="lblFlow">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
@@ -1989,10 +1993,10 @@
              </property>
             </widget>
            </item>
-           <item row="3" column="1">
+           <item column="1" row="3">
             <widget class="KisDoubleSliderSpinBox" name="liquifyFlowSlider" native="true"/>
            </item>
-           <item row="1" column="0">
+           <item column="0" row="1">
             <widget class="QLabel" name="lblSize">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
@@ -2011,10 +2015,10 @@
              </property>
             </widget>
            </item>
-           <item row="1" column="1">
+           <item column="1" row="1">
             <widget class="KisDoubleSliderSpinBox" name="liquifySizeSlider" native="true"/>
            </item>
-           <item row="2" column="0">
+           <item column="0" row="2">
             <widget class="QLabel" name="lblAmount">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
@@ -2033,10 +2037,10 @@
              </property>
             </widget>
            </item>
-           <item row="2" column="1">
+           <item column="1" row="2">
             <widget class="KisDoubleSliderSpinBox" name="liquifyAmountSlider" native="true"/>
            </item>
-           <item row="0" column="0">
+           <item column="0" row="0">
             <widget class="QLabel" name="label_2">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
@@ -2055,7 +2059,7 @@
              </property>
             </widget>
            </item>
-           <item row="0" column="1">
+           <item column="1" row="0">
             <widget class="QComboBox" name="buidupModeComboBox">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
@@ -2078,7 +2082,7 @@
              </item>
             </widget>
            </item>
-           <item row="5" column="1">
+           <item column="1" row="5">
             <widget class="QCheckBox" name="liquifyReverseDirectionChk">
              <property name="enabled">
               <bool>true</bool>
@@ -2094,7 +2098,7 @@
              </property>
             </widget>
            </item>
-           <item row="1" column="2">
+           <item column="2" row="1">
             <widget class="QToolButton" name="liquifySizePressureBox">
              <property name="enabled">
               <bool>true</bool>
@@ -2113,7 +2117,7 @@
              </property>
             </widget>
            </item>
-           <item row="2" column="2">
+           <item column="2" row="2">
             <widget class="QToolButton" name="liquifyAmountPressureBox">
              <property name="text">
               <string>Pressure</string>
@@ -2226,7 +2230,7 @@
  <customwidgets>
   <customwidget>
    <class>KisCmbIDList</class>
-   <extends></extends>
+   <extends/>
    <header>widgets/kis_cmb_idlist.h</header>
   </customwidget>
   <customwidget>

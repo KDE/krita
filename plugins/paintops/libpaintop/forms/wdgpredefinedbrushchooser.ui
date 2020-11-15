@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgPredefinedBrushChooser</class>
  <widget class="QWidget" name="WdgPredefinedBrushChooser">
   <property name="geometry">
@@ -158,7 +162,7 @@
        <property name="verticalSpacing">
         <number>10</number>
        </property>
-       <item row="2" column="1">
+       <item column="1" row="2">
         <widget class="KisSpacingSelectionWidget" name="brushSpacingSelectionWidget" native="true">
          <property name="sizePolicy">
           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
@@ -168,21 +172,21 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="0">
+       <item column="0" row="1">
         <widget class="QLabel" name="brushRotationLabel">
          <property name="text">
           <string>Rotation:</string>
          </property>
         </widget>
        </item>
-       <item row="6" column="1">
+       <item column="1" row="6">
         <widget class="QPushButton" name="resetBrushButton">
          <property name="text">
           <string>Reset Predefined Tip</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="1">
+       <item column="1" row="1">
         <widget class="KisDoubleSliderSpinBox" name="brushRotationSpinBox" native="true">
          <property name="sizePolicy">
           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
@@ -192,14 +196,14 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="0">
+       <item column="0" row="0">
         <widget class="QLabel" name="brushSizeLabel">
          <property name="text">
           <string>Size:</string>
          </property>
         </widget>
        </item>
-       <item row="0" column="1">
+       <item column="1" row="0">
         <widget class="KisDoubleSliderSpinBox" name="brushSizeSpinBox" native="true">
          <property name="sizePolicy">
           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
@@ -209,14 +213,14 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="0">
+       <item column="0" row="2">
         <widget class="QLabel" name="brushSpacingLabel">
          <property name="text">
           <string>Spacing:</string>
          </property>
         </widget>
        </item>
-       <item row="3" column="0" colspan="2">
+       <item colspan="2" column="0" row="3">
         <widget class="QGroupBox" name="grpBrushMode">
          <property name="title">
           <string>Brush mode</string>
@@ -268,7 +272,7 @@
          </layout>
         </widget>
        </item>
-       <item row="4" column="0" colspan="2">
+       <item colspan="2" column="0" row="4">
         <widget class="QCheckBox" name="preserveBrushPresetSettings">
          <property name="text">
           <string>Preserve Brush Preset Settings</string>

@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgBlendingOptions</class>
  <widget class="QWidget" name="WdgBlendingOptions">
   <property name="geometry">
@@ -23,7 +27,7 @@
          <string>General Blending</string>
         </property>
         <layout class="QFormLayout" name="formLayout_4">
-         <item row="0" column="0">
+         <item column="0" row="0">
           <widget class="QLabel" name="label_13">
            <property name="text">
             <string>Ble&amp;nd Mode:</string>
@@ -33,7 +37,7 @@
            </property>
           </widget>
          </item>
-         <item row="0" column="1">
+         <item column="1" row="0">
           <widget class="KisCompositeOpComboBox" name="cmbCompositeOp">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -46,7 +50,7 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="0">
+         <item column="0" row="1">
           <widget class="QLabel" name="label_14">
            <property name="text">
             <string>&amp;Opacity:</string>
@@ -56,7 +60,7 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="1">
+         <item column="1" row="1">
           <widget class="KisSliderSpinBox" name="intOpacity" native="true">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
@@ -87,7 +91,7 @@
          <string>Advanced Blending</string>
         </property>
         <layout class="QFormLayout" name="formLayout_3">
-         <item row="0" column="0">
+         <item column="0" row="0">
           <widget class="QLabel" name="label_8">
            <property name="text">
             <string>&amp;Fill Opacity:</string>
@@ -97,7 +101,7 @@
            </property>
           </widget>
          </item>
-         <item row="0" column="1">
+         <item column="1" row="0">
           <widget class="KisSliderSpinBox" name="intFillOpacity" native="true">
            <property name="sizePolicy">
             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
@@ -119,14 +123,14 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="0">
+         <item column="0" row="1">
           <widget class="QLabel" name="label_9">
            <property name="text">
             <string>Channels:</string>
            </property>
           </widget>
          </item>
-         <item row="1" column="1">
+         <item column="1" row="1">
           <layout class="QHBoxLayout" name="horizontalLayout_4">
            <item>
             <widget class="QCheckBox" name="chkChannel1_2">
@@ -190,7 +194,7 @@
            </item>
           </layout>
          </item>
-         <item row="2" column="0">
+         <item column="0" row="2">
           <widget class="QLabel" name="label_10">
            <property name="text">
             <string>K&amp;nockout:</string>
@@ -200,7 +204,7 @@
            </property>
           </widget>
          </item>
-         <item row="2" column="1">
+         <item column="1" row="2">
           <widget class="QComboBox" name="cmbKnockout">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -228,7 +232,7 @@
            </item>
           </widget>
          </item>
-         <item row="3" column="1">
+         <item column="1" row="3">
           <widget class="QCheckBox" name="checkBox_7">
            <property name="toolTip">
             <string>Blend inner glow, satin, and overlay with layer before blending with document.</string>
@@ -238,7 +242,7 @@
            </property>
           </widget>
          </item>
-         <item row="4" column="1">
+         <item column="1" row="4">
           <widget class="QCheckBox" name="checkBox_8">
            <property name="toolTip">
             <string>Blend clipping group before blending with document</string>
@@ -248,7 +252,7 @@
            </property>
           </widget>
          </item>
-         <item row="5" column="1">
+         <item column="1" row="5">
           <widget class="QCheckBox" name="checkBox_9">
            <property name="toolTip">
             <string>Use layer transparency in determining the shape of the interior and the effects</string>
@@ -258,7 +262,7 @@
            </property>
           </widget>
          </item>
-         <item row="6" column="1">
+         <item column="1" row="6">
           <widget class="QCheckBox" name="checkBox_10">
            <property name="toolTip">
             <string>Use layer mask to hide layer and effects rather than shaping the layer and effects</string>
@@ -268,7 +272,7 @@
            </property>
           </widget>
          </item>
-         <item row="7" column="1">
+         <item column="1" row="7">
           <widget class="QCheckBox" name="checkBox_11">
            <property name="toolTip">
             <string>Use layer mask to hide layer and effects rather than shaping the layer and effects</string>

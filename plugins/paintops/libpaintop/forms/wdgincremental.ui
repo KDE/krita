@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgIncremental</class>
  <widget class="QWidget" name="WdgIncremental">
   <property name="geometry">
@@ -26,14 +30,14 @@
       <bool>false</bool>
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
-      <item row="0" column="0">
+      <item column="0" row="0">
        <widget class="QRadioButton" name="radioBuildup">
         <property name="text">
          <string>Build up</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="0">
+      <item column="0" row="1">
        <widget class="QRadioButton" name="radioWash">
         <property name="text">
          <string>Wash</string>
@@ -43,7 +47,7 @@
         </property>
        </widget>
       </item>
-      <item row="3" column="0">
+      <item column="0" row="3">
        <widget class="QLabel" name="label">
         <property name="toolTip">
          <string>&lt;html&gt;
@@ -61,7 +65,7 @@
         </property>
        </widget>
       </item>
-      <item row="4" column="0">
+      <item column="0" row="4">
        <spacer name="verticalSpacer">
         <property name="orientation">
          <enum>Qt::Vertical</enum>
@@ -74,7 +78,7 @@
         </property>
        </spacer>
       </item>
-      <item row="2" column="0">
+      <item column="0" row="2">
        <spacer name="verticalSpacer_2">
         <property name="orientation">
          <enum>Qt::Vertical</enum>

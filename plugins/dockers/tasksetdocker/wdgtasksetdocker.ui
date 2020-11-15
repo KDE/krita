@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgTasksetDocker</class>
  <widget class="QWidget" name="WdgTasksetDocker">
   <property name="geometry">
@@ -11,10 +15,10 @@
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0" colspan="5">
+   <item colspan="5" column="0" row="0">
     <widget class="QListView" name="tasksetView"/>
    </item>
-   <item row="1" column="1">
+   <item column="1" row="1">
     <spacer name="horizontalSpacer">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -27,28 +31,28 @@
      </property>
     </spacer>
    </item>
-   <item row="1" column="2">
+   <item column="2" row="1">
     <widget class="QPushButton" name="recordButton">
      <property name="text">
       <string/>
      </property>
     </widget>
    </item>
-   <item row="1" column="4">
+   <item column="4" row="1">
     <widget class="QPushButton" name="clearButton">
      <property name="text">
       <string/>
      </property>
     </widget>
    </item>
-   <item row="1" column="3">
+   <item column="3" row="1">
     <widget class="QPushButton" name="saveButton">
      <property name="text">
       <string/>
      </property>
     </widget>
    </item>
-   <item row="1" column="0">
+   <item column="0" row="1">
     <widget class="KisPopupButton" name="chooserButton"/>
    </item>
   </layout>

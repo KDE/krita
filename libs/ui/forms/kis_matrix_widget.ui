@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>KisMatrixWidget</class>
  <widget class="QWidget" name="KisMatrixWidget">
   <property name="geometry">
@@ -14,42 +18,42 @@
    <string>Matrix Widget</string>
   </property>
   <layout class="QGridLayout">
-   <item row="0" column="0">
+   <item column="0" row="0">
     <widget class="KisIntParseSpinBox" name="m11">
      <property name="minimum">
       <number>-99</number>
      </property>
     </widget>
    </item>
-   <item row="0" column="2">
+   <item column="2" row="0">
     <widget class="KisIntParseSpinBox" name="m13">
      <property name="minimum">
       <number>-99</number>
      </property>
     </widget>
    </item>
-   <item row="0" column="1">
+   <item column="1" row="0">
     <widget class="KisIntParseSpinBox" name="m12">
      <property name="minimum">
       <number>-99</number>
      </property>
     </widget>
    </item>
-   <item row="1" column="2">
+   <item column="2" row="1">
     <widget class="KisIntParseSpinBox" name="m23">
      <property name="minimum">
       <number>-99</number>
      </property>
     </widget>
    </item>
-   <item row="1" column="0">
+   <item column="0" row="1">
     <widget class="KisIntParseSpinBox" name="m21">
      <property name="minimum">
       <number>-99</number>
      </property>
     </widget>
    </item>
-   <item row="1" column="1">
+   <item column="1" row="1">
     <widget class="KisIntParseSpinBox" name="m22">
      <property name="minimum">
       <number>-99</number>
@@ -59,28 +63,28 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="0">
+   <item column="0" row="2">
     <widget class="KisIntParseSpinBox" name="m31">
      <property name="minimum">
       <number>-99</number>
      </property>
     </widget>
    </item>
-   <item row="2" column="1">
+   <item column="1" row="2">
     <widget class="KisIntParseSpinBox" name="m32">
      <property name="minimum">
       <number>-99</number>
      </property>
     </widget>
    </item>
-   <item row="2" column="2">
+   <item column="2" row="2">
     <widget class="KisIntParseSpinBox" name="m33">
      <property name="minimum">
       <number>-99</number>
      </property>
     </widget>
    </item>
-   <item row="3" column="1">
+   <item column="1" row="3">
     <spacer name="spacer4">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -96,7 +100,7 @@
      </property>
     </spacer>
    </item>
-   <item row="1" column="3">
+   <item column="3" row="1">
     <spacer name="spacer5">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>

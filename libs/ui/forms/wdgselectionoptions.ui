@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgSelectionOptions</class>
  <widget class="QWidget" name="WdgSelectionOptions">
   <property name="geometry">
@@ -11,12 +15,12 @@
    </rect>
   </property>
   <layout class="QFormLayout" name="formLayout">
-   <item row="0" column="0">
+   <item column="0" row="0">
     <layout class="QGridLayout" name="gridLayout">
      <property name="spacing">
       <number>0</number>
      </property>
-     <item row="1" column="3">
+     <item column="3" row="1">
       <widget class="KoGroupButton" name="intersect">
        <property name="toolTip">
         <string>Intersect</string>
@@ -32,7 +36,7 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="3">
+     <item column="3" row="0">
       <widget class="KoGroupButton" name="shape">
        <property name="toolTip">
         <string>Vector Selection</string>
@@ -48,7 +52,7 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="1">
+     <item column="1" row="1">
       <widget class="KoGroupButton" name="replace">
        <property name="toolTip">
         <string>Replace</string>
@@ -67,7 +71,7 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="6">
+     <item column="6" row="1">
       <widget class="KoGroupButton" name="add">
        <property name="toolTip">
         <string>Add</string>
@@ -83,7 +87,7 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="0">
+     <item column="0" row="0">
       <widget class="QLabel" name="lblMode">
        <property name="cursor">
         <cursorShape>CrossCursor</cursorShape>
@@ -96,7 +100,7 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="0">
+     <item column="0" row="1">
       <widget class="QLabel" name="lblAction">
        <property name="text">
         <string>Action:</string>
@@ -106,7 +110,7 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="1">
+     <item column="1" row="0">
       <widget class="KoGroupButton" name="pixel">
        <property name="toolTip">
         <string>Pixel Selection</string>
@@ -125,7 +129,7 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="7">
+     <item column="7" row="1">
       <widget class="KoGroupButton" name="subtract">
        <property name="toolTip">
         <string>Subtract</string>
@@ -141,7 +145,7 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="8">
+     <item column="8" row="1">
       <widget class="KoGroupButton" name="symmetricdifference">
        <property name="toolTip">
         <string>Symmetric Difference</string>
@@ -162,7 +166,7 @@
      </item>
     </layout>
    </item>
-   <item row="0" column="1">
+   <item column="1" row="0">
     <spacer name="horizontalSpacer">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -175,7 +179,7 @@
      </property>
     </spacer>
    </item>
-   <item row="1" column="0">
+   <item column="0" row="1">
     <widget class="QCheckBox" name="chkAntiAliasing">
      <property name="text">
       <string>Anti-aliasing</string>
@@ -185,10 +189,10 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="0" colspan="2">
+   <item colspan="2" column="0" row="3">
     <widget class="KisColorFilterCombo" name="cmbColorLabels"/>
    </item>
-   <item row="2" column="0" colspan="2">
+   <item colspan="2" column="0" row="2">
     <widget class="QComboBox" name="cmbSampleLayersMode"/>
    </item>
   </layout>

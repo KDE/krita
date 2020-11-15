@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>RecorderProfileSettings</class>
  <widget class="QDialog" name="RecorderProfileSettings">
   <property name="geometry">
@@ -14,7 +18,7 @@
    <string>Edit profile</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
+   <item column="0" row="0">
     <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,0">
      <item>
       <widget class="QLabel" name="labelTitleProfileSettings">
@@ -33,20 +37,22 @@
        </property>
        <property name="icon">
         <iconset theme="reload">
-         <normaloff>.</normaloff>.</iconset>
+         <normaloff>.</normaloff>
+         .
+        </iconset>
        </property>
       </widget>
      </item>
     </layout>
    </item>
-   <item row="1" column="0">
+   <item column="0" row="1">
     <widget class="Line" name="line1">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
     </widget>
    </item>
-   <item row="4" column="0">
+   <item column="0" row="4">
     <widget class="QStackedWidget" name="stackedWidget">
      <property name="currentIndex">
       <number>0</number>
@@ -65,7 +71,7 @@
        <property name="bottomMargin">
         <number>0</number>
        </property>
-       <item row="0" column="0">
+       <item column="0" row="0">
         <widget class="QPlainTextEdit" name="editFfmpegArguments">
          <property name="documentTitle">
           <string notr="true"/>
@@ -75,7 +81,7 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="0">
+       <item column="0" row="1">
         <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,1">
          <item>
           <widget class="QLabel" name="labelTitleSupportedVariables">
@@ -124,7 +130,7 @@
        <property name="bottomMargin">
         <number>0</number>
        </property>
-       <item row="0" column="0">
+       <item column="0" row="0">
         <widget class="QPlainTextEdit" name="editPreview">
          <property name="textInteractionFlags">
           <set>Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
@@ -135,14 +141,14 @@
      </widget>
     </widget>
    </item>
-   <item row="6" column="0">
+   <item column="0" row="6">
     <widget class="Line" name="line2_2">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
     </widget>
    </item>
-   <item row="7" column="0">
+   <item column="0" row="7">
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -152,7 +158,7 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="0">
+   <item column="0" row="3">
     <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,0">
      <item>
       <widget class="QLabel" name="labelTitleFFMpegArguments">
@@ -173,7 +179,7 @@
      </item>
     </layout>
    </item>
-   <item row="2" column="0">
+   <item column="0" row="2">
     <layout class="QGridLayout" name="gridLayout_2">
      <property name="leftMargin">
       <number>9</number>
@@ -181,7 +187,7 @@
      <property name="rightMargin">
       <number>9</number>
      </property>
-     <item row="0" column="0">
+     <item column="0" row="0">
       <widget class="QLabel" name="labelProfileName">
        <property name="text">
         <string>Profile name:</string>
@@ -194,14 +200,14 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="1">
+     <item column="1" row="0">
       <widget class="QLineEdit" name="editProfileName">
        <property name="maxLength">
         <number>64</number>
        </property>
       </widget>
      </item>
-     <item row="1" column="0">
+     <item column="0" row="1">
       <widget class="QLabel" name="labelFileExt">
        <property name="text">
         <string>File extension:</string>
@@ -214,7 +220,7 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="1">
+     <item column="1" row="1">
       <widget class="QLineEdit" name="editFileExtension">
        <property name="maxLength">
         <number>15</number>

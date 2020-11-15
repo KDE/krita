@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>RecorderExport</class>
  <widget class="QWidget" name="RecorderExport">
   <property name="geometry">
@@ -26,14 +30,14 @@
    <property name="bottomMargin">
     <number>0</number>
    </property>
-   <item row="0" column="0">
+   <item column="0" row="0">
     <widget class="QStackedWidget" name="stackedWidget">
      <property name="currentIndex">
       <number>0</number>
      </property>
      <widget class="QWidget" name="pageSettings">
       <layout class="QGridLayout" name="gridLayout_3">
-       <item row="0" column="0">
+       <item column="0" row="0">
         <layout class="QHBoxLayout" name="layoutRecordInfo">
          <property name="leftMargin">
           <number>9</number>
@@ -61,28 +65,30 @@
            </property>
            <property name="icon">
             <iconset theme="document-open">
-             <normaloff>.</normaloff>.</iconset>
+             <normaloff>.</normaloff>
+             .
+            </iconset>
            </property>
           </widget>
          </item>
         </layout>
        </item>
-       <item row="1" column="0">
+       <item column="0" row="1">
         <widget class="Line" name="line1">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
         </widget>
        </item>
-       <item row="2" column="0">
-        <layout class="QGridLayout" name="gridLayout" columnstretch="0,1,0">
+       <item column="0" row="2">
+        <layout class="QGridLayout" columnstretch="0,1,0" name="gridLayout">
          <property name="leftMargin">
           <number>9</number>
          </property>
          <property name="rightMargin">
           <number>9</number>
          </property>
-         <item row="7" column="2">
+         <item column="2" row="7">
           <widget class="QPushButton" name="buttonBrowseExport">
            <property name="toolTip">
             <string>Select a file to export timelapse video</string>
@@ -92,11 +98,13 @@
            </property>
            <property name="icon">
             <iconset theme="folder">
-             <normaloff>.</normaloff>.</iconset>
+             <normaloff>.</normaloff>
+             .
+            </iconset>
            </property>
           </widget>
          </item>
-         <item row="5" column="2">
+         <item column="2" row="5">
           <widget class="QPushButton" name="buttonBrowseFfmpeg">
            <property name="toolTip">
             <string>Setup ffmpeg executable location</string>
@@ -106,11 +114,13 @@
            </property>
            <property name="icon">
             <iconset theme="folder">
-             <normaloff>.</normaloff>.</iconset>
+             <normaloff>.</normaloff>
+             .
+            </iconset>
            </property>
           </widget>
          </item>
-         <item row="5" column="1">
+         <item column="1" row="5">
           <widget class="QLineEdit" name="editFfmpegPath">
            <property name="minimumSize">
             <size>
@@ -126,7 +136,7 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="1">
+         <item column="1" row="1">
           <layout class="QHBoxLayout" name="layoutFps" stretch="0,1">
            <item>
             <widget class="QSpinBox" name="spinFps">
@@ -168,7 +178,7 @@
            </item>
           </layout>
          </item>
-         <item row="3" column="1">
+         <item column="1" row="3">
           <widget class="QWidget" name="widgetResolution" native="true">
            <property name="enabled">
             <bool>false</bool>
@@ -274,7 +284,7 @@
            </layout>
           </widget>
          </item>
-         <item row="6" column="0">
+         <item column="0" row="6">
           <widget class="QLabel" name="labelResolution">
            <property name="text">
             <string>Render as:</string>
@@ -287,7 +297,7 @@
            </property>
           </widget>
          </item>
-         <item row="5" column="0">
+         <item column="0" row="5">
           <widget class="QLabel" name="labelFfmpegLocation">
            <property name="text">
             <string>FFMpeg:</string>
@@ -300,7 +310,7 @@
            </property>
           </widget>
          </item>
-         <item row="7" column="1">
+         <item column="1" row="7">
           <widget class="QLineEdit" name="editVideoFilePath">
            <property name="minimumSize">
             <size>
@@ -313,7 +323,7 @@
            </property>
           </widget>
          </item>
-         <item row="6" column="2">
+         <item column="2" row="6">
           <widget class="QPushButton" name="buttonEditProfile">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -338,7 +348,7 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="0">
+         <item column="0" row="1">
           <widget class="QLabel" name="labelFps">
            <property name="text">
             <string>Video FPS:</string>
@@ -351,7 +361,7 @@
            </property>
           </widget>
          </item>
-         <item row="3" column="0">
+         <item column="0" row="3">
           <layout class="QHBoxLayout" name="horizontalLayout_8" stretch="1,0">
            <item>
             <spacer name="horizontalSpacer_12">
@@ -384,7 +394,7 @@
            </item>
           </layout>
          </item>
-         <item row="7" column="0">
+         <item column="0" row="7">
           <widget class="QLabel" name="labelExportTo">
            <property name="text">
             <string>Video location:</string>
@@ -397,14 +407,14 @@
            </property>
           </widget>
          </item>
-         <item row="4" column="0" colspan="3">
+         <item colspan="3" column="0" row="4">
           <widget class="Line" name="line">
            <property name="orientation">
             <enum>Qt::Horizontal</enum>
            </property>
           </widget>
          </item>
-         <item row="0" column="1">
+         <item column="1" row="0">
           <layout class="QHBoxLayout" name="layoutFps_2" stretch="0,1">
            <item>
             <widget class="QSpinBox" name="spinInputFps">
@@ -446,7 +456,7 @@
            </item>
           </layout>
          </item>
-         <item row="3" column="2">
+         <item column="2" row="3">
           <widget class="QPushButton" name="buttonLockRatio">
            <property name="toolTip">
             <string>Constrain proportions</string>
@@ -456,14 +466,16 @@
            </property>
            <property name="icon">
             <iconset theme="lock">
-             <normaloff>.</normaloff>.</iconset>
+             <normaloff>.</normaloff>
+             .
+            </iconset>
            </property>
            <property name="checkable">
             <bool>true</bool>
            </property>
           </widget>
          </item>
-         <item row="6" column="1">
+         <item column="1" row="6">
           <widget class="QComboBox" name="comboProfile">
            <property name="minimumSize">
             <size>
@@ -473,7 +485,7 @@
            </property>
           </widget>
          </item>
-         <item row="0" column="0">
+         <item column="0" row="0">
           <widget class="QLabel" name="labelFpsInput">
            <property name="toolTip">
             <string>The speed of reading the input stream.
@@ -492,7 +504,7 @@ For example to make your speedpaint twice faster it should be twice larger of th
          </item>
         </layout>
        </item>
-       <item row="3" column="0">
+       <item column="0" row="3">
         <spacer name="verticalSpacer_3">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -508,14 +520,14 @@ For example to make your speedpaint twice faster it should be twice larger of th
          </property>
         </spacer>
        </item>
-       <item row="4" column="0">
+       <item column="0" row="4">
         <widget class="Line" name="line2">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
         </widget>
        </item>
-       <item row="5" column="0">
+       <item column="0" row="5">
         <layout class="QHBoxLayout" name="horizontalLayout">
          <property name="leftMargin">
           <number>9</number>
@@ -573,7 +585,7 @@ For example to make your speedpaint twice faster it should be twice larger of th
      </widget>
      <widget class="QWidget" name="pageProperties">
       <layout class="QGridLayout" name="gridLayout_2">
-       <item row="0" column="1">
+       <item column="1" row="0">
         <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -586,7 +598,7 @@ For example to make your speedpaint twice faster it should be twice larger of th
          </property>
         </spacer>
        </item>
-       <item row="1" column="0">
+       <item column="0" row="1">
         <spacer name="horizontalSpacer_9">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
@@ -599,7 +611,7 @@ For example to make your speedpaint twice faster it should be twice larger of th
          </property>
         </spacer>
        </item>
-       <item row="1" column="1">
+       <item column="1" row="1">
         <layout class="QVBoxLayout" name="layoutExporting">
          <property name="spacing">
           <number>16</number>
@@ -714,7 +726,7 @@ For example to make your speedpaint twice faster it should be twice larger of th
          </item>
         </layout>
        </item>
-       <item row="1" column="2">
+       <item column="2" row="1">
         <spacer name="horizontalSpacer_10">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
@@ -727,7 +739,7 @@ For example to make your speedpaint twice faster it should be twice larger of th
          </property>
         </spacer>
        </item>
-       <item row="2" column="1">
+       <item column="1" row="2">
         <spacer name="verticalSpacer_2">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -744,7 +756,7 @@ For example to make your speedpaint twice faster it should be twice larger of th
      </widget>
      <widget class="QWidget" name="pageDone">
       <layout class="QGridLayout" name="gridLayout_6">
-       <item row="0" column="1">
+       <item column="1" row="0">
         <spacer name="verticalSpacer_5">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -757,12 +769,12 @@ For example to make your speedpaint twice faster it should be twice larger of th
          </property>
         </spacer>
        </item>
-       <item row="1" column="1" rowspan="2">
+       <item column="1" row="1" rowspan="2">
         <layout class="QGridLayout" name="gridLayout_5">
          <property name="horizontalSpacing">
           <number>12</number>
          </property>
-         <item row="2" column="0" colspan="2">
+         <item colspan="2" column="0" row="2">
           <widget class="QLabel" name="labelVideoPathDone">
            <property name="minimumSize">
             <size>
@@ -781,7 +793,7 @@ For example to make your speedpaint twice faster it should be twice larger of th
            </property>
           </widget>
          </item>
-         <item row="0" column="0" colspan="2">
+         <item colspan="2" column="0" row="0">
           <widget class="QLabel" name="labelDone">
            <property name="minimumSize">
             <size>
@@ -800,7 +812,7 @@ For example to make your speedpaint twice faster it should be twice larger of th
            </property>
           </widget>
          </item>
-         <item row="4" column="0" colspan="2">
+         <item colspan="2" column="0" row="4">
           <widget class="QPushButton" name="buttonWatchIt">
            <property name="minimumSize">
             <size>
@@ -821,14 +833,14 @@ For example to make your speedpaint twice faster it should be twice larger of th
            </property>
           </widget>
          </item>
-         <item row="1" column="0" colspan="2">
+         <item colspan="2" column="0" row="1">
           <widget class="QLabel" name="labelWritten">
            <property name="text">
             <string>The timelapse video has been written to:</string>
            </property>
           </widget>
          </item>
-         <item row="5" column="0" colspan="2">
+         <item colspan="2" column="0" row="5">
           <widget class="QPushButton" name="buttonShowInFolder">
            <property name="minimumSize">
             <size>
@@ -849,7 +861,7 @@ For example to make your speedpaint twice faster it should be twice larger of th
            </property>
           </widget>
          </item>
-         <item row="3" column="0" colspan="2">
+         <item colspan="2" column="0" row="3">
           <spacer name="verticalSpacer_6">
            <property name="orientation">
             <enum>Qt::Vertical</enum>
@@ -865,7 +877,7 @@ For example to make your speedpaint twice faster it should be twice larger of th
            </property>
           </spacer>
          </item>
-         <item row="6" column="0" colspan="2">
+         <item colspan="2" column="0" row="6">
           <widget class="QPushButton" name="buttonRemoveSnapshots">
            <property name="minimumSize">
             <size>
@@ -888,7 +900,7 @@ For example to make your speedpaint twice faster it should be twice larger of th
          </item>
         </layout>
        </item>
-       <item row="2" column="0">
+       <item column="0" row="2">
         <spacer name="horizontalSpacer_13">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
@@ -901,7 +913,7 @@ For example to make your speedpaint twice faster it should be twice larger of th
          </property>
         </spacer>
        </item>
-       <item row="2" column="2">
+       <item column="2" row="2">
         <spacer name="horizontalSpacer_2">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
@@ -914,7 +926,7 @@ For example to make your speedpaint twice faster it should be twice larger of th
          </property>
         </spacer>
        </item>
-       <item row="3" column="1">
+       <item column="1" row="3">
         <spacer name="verticalSpacer_4">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -927,7 +939,7 @@ For example to make your speedpaint twice faster it should be twice larger of th
          </property>
         </spacer>
        </item>
-       <item row="4" column="0" colspan="3">
+       <item colspan="3" column="0" row="4">
         <layout class="QHBoxLayout" name="horizontalLayout_5">
          <item>
           <spacer name="horizontalSpacer_3">

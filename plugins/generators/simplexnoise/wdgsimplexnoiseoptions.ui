@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgSimplexNoiseOptions</class>
  <widget class="QWidget" name="WdgSimplexNoiseOptions">
   <property name="geometry">
@@ -35,7 +39,7 @@
    <property name="bottomMargin">
     <number>0</number>
    </property>
-   <item row="3" column="0">
+   <item column="0" row="3">
     <layout class="QHBoxLayout" name="layout_frequency">
      <item>
       <widget class="QLabel" name="label_frequency">
@@ -55,7 +59,7 @@
      </item>
     </layout>
    </item>
-   <item row="7" column="0">
+   <item column="0" row="7">
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -68,14 +72,14 @@
      </property>
     </spacer>
    </item>
-   <item row="2" column="0">
+   <item column="0" row="2">
     <widget class="QCheckBox" name="cb_looping">
      <property name="text">
       <string>Looping</string>
      </property>
     </widget>
    </item>
-   <item row="5" column="0">
+   <item column="0" row="5">
     <widget class="QGroupBox" name="seed_groupbox">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -99,7 +103,7 @@
      </layout>
     </widget>
    </item>
-   <item row="4" column="0">
+   <item column="0" row="4">
     <widget class="QGroupBox" name="ratio_groupbox">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">

@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgSeparations</class>
  <widget class="QWidget" name="WdgSeparations">
   <property name="geometry">
@@ -58,7 +62,7 @@
         <string>Source</string>
        </property>
        <layout class="QGridLayout">
-        <item row="0" column="0">
+        <item column="0" row="0">
          <widget class="QRadioButton" name="radioCurrentLayer">
           <property name="text">
            <string>Current layer</string>
@@ -68,7 +72,7 @@
           </property>
          </widget>
         </item>
-        <item row="1" column="0">
+        <item column="0" row="1">
          <widget class="QRadioButton" name="radioAllLayers">
           <property name="text">
            <string>Flatten all layers before separation</string>
@@ -86,14 +90,14 @@
       <string>Alpha Options</string>
      </property>
      <layout class="QGridLayout">
-      <item row="0" column="0">
+      <item column="0" row="0">
        <widget class="QRadioButton" name="radioCopyAlpha">
         <property name="text">
          <string>Copy alpha channel to each separated channel as an alpha channel</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="0">
+      <item column="0" row="1">
        <widget class="QRadioButton" name="radioDiscardAlpha">
         <property name="text">
          <string>Discard alpha channel</string>
@@ -103,7 +107,7 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="0">
+      <item column="0" row="2">
        <widget class="QRadioButton" name="radioSeparateAlpha">
         <property name="text">
          <string>Create separate separation from alpha channel</string>

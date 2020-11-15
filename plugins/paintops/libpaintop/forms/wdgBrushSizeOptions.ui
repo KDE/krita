@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgBrushSizeOptions</class>
  <widget class="QWidget" name="WdgBrushSizeOptions">
   <property name="geometry">
@@ -26,9 +30,9 @@
    <property name="margin">
     <number>0</number>
    </property>
-   <item row="0" column="0">
-    <layout class="QGridLayout" name="gridLayout" columnstretch="0,1">
-     <item row="1" column="0">
+   <item column="0" row="0">
+    <layout class="QGridLayout" columnstretch="0,1" name="gridLayout">
+     <item column="0" row="1">
       <widget class="QLabel" name="DiameterLbl">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -50,7 +54,7 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="1">
+     <item column="1" row="1">
       <widget class="KisDoubleSliderSpinBox" name="diameter">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -60,7 +64,7 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="0">
+     <item column="0" row="3">
       <widget class="QLabel" name="ScaleLbl">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -82,7 +86,7 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="1">
+     <item column="1" row="3">
       <widget class="KisDoubleSliderSpinBox" name="scale">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -92,7 +96,7 @@
        </property>
       </widget>
      </item>
-     <item row="5" column="0">
+     <item column="0" row="5">
       <widget class="QLabel" name="spacingLbl">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -114,7 +118,7 @@
        </property>
       </widget>
      </item>
-     <item row="5" column="1">
+     <item column="1" row="5">
       <widget class="KisDoubleSliderSpinBox" name="spacing">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -124,7 +128,7 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="0">
+     <item column="0" row="2">
       <widget class="QLabel" name="aspectLbl">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -146,7 +150,7 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="1">
+     <item column="1" row="2">
       <widget class="KisDoubleSliderSpinBox" name="aspectBox">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -156,7 +160,7 @@
        </property>
       </widget>
      </item>
-     <item row="4" column="0">
+     <item column="0" row="4">
       <widget class="QLabel" name="rotationLbl">
        <property name="enabled">
         <bool>true</bool>
@@ -181,7 +185,7 @@
        </property>
       </widget>
      </item>
-     <item row="4" column="1">
+     <item column="1" row="4">
       <widget class="KisDoubleSliderSpinBox" name="rotationBox">
        <property name="enabled">
         <bool>true</bool>
@@ -194,7 +198,7 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="0">
+     <item column="0" row="0">
       <widget class="QLabel" name="shapeLbl">
        <property name="enabled">
         <bool>false</bool>
@@ -219,7 +223,7 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="1">
+     <item column="1" row="0">
       <widget class="QComboBox" name="shapeBox">
        <property name="enabled">
         <bool>false</bool>
@@ -239,7 +243,7 @@
        </item>
       </widget>
      </item>
-     <item row="6" column="1">
+     <item column="1" row="6">
       <widget class="KisDoubleSliderSpinBox" name="densityBox">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -249,7 +253,7 @@
        </property>
       </widget>
      </item>
-     <item row="6" column="0">
+     <item column="0" row="6">
       <widget class="QLabel" name="densityLbl">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -273,9 +277,9 @@
      </item>
     </layout>
    </item>
-   <item row="1" column="0">
-    <layout class="QGridLayout" name="gridLayout_2" columnstretch="0,1">
-     <item row="0" column="0">
+   <item column="0" row="1">
+    <layout class="QGridLayout" columnstretch="0,1" name="gridLayout_2">
+     <item column="0" row="0">
       <widget class="QCheckBox" name="jitterMoveBox">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -288,7 +292,7 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="1">
+     <item column="1" row="0">
       <widget class="KisDoubleSliderSpinBox" name="jitterMove">
        <property name="enabled">
         <bool>false</bool>
@@ -298,7 +302,7 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
-       </property>   
+       </property>
       </widget>
      </item>
     </layout>
@@ -306,12 +310,11 @@
   </layout>
  </widget>
  <customwidgets>
-
   <customwidget>
-    <class>KisDoubleSliderSpinBox</class>
-    <extends>QWidget</extends>
-    <header>kis_slider_spin_box.h</header>
-    <container>1</container>
+   <class>KisDoubleSliderSpinBox</class>
+   <extends>QWidget</extends>
+   <header>kis_slider_spin_box.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

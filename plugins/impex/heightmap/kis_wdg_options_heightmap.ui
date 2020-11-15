@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgOptionsHeightMap</class>
  <widget class="QWidget" name="WdgOptionsHeightMap">
   <property name="geometry">
@@ -17,7 +21,7 @@
    </sizepolicy>
   </property>
   <layout class="QFormLayout" name="formLayout">
-   <item row="0" column="0">
+   <item column="0" row="0">
     <widget class="QLabel" name="fileSizeDescLabel">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -30,7 +34,7 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="1">
+   <item column="1" row="0">
     <widget class="QLabel" name="fileSizeLabel">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
@@ -46,14 +50,14 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="0">
+   <item column="0" row="3">
     <widget class="QLabel" name="endiannessLabel">
      <property name="text">
       <string>Endianness:</string>
      </property>
     </widget>
    </item>
-   <item row="3" column="1">
+   <item column="1" row="3">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QRadioButton" name="radioLittle">
@@ -86,13 +90,13 @@
      </item>
     </layout>
    </item>
-   <item row="5" column="0" colspan="2">
+   <item colspan="2" column="0" row="5">
     <widget class="QGroupBox" name="dimensionsGroupBox">
      <property name="title">
       <string/>
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
-      <item row="4" column="0" colspan="3">
+      <item colspan="3" column="0" row="4">
        <widget class="QPushButton" name="guessButton">
         <property name="toolTip">
          <string>Guess width and height based on file size and bits per pixel. Only values set to 0 will be updated.</string>
@@ -102,21 +106,21 @@
         </property>
        </widget>
       </item>
-      <item row="3" column="0">
+      <item column="0" row="3">
        <widget class="QLabel" name="heightLabel">
         <property name="text">
          <string>Height:</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="2">
+      <item column="2" row="1">
        <widget class="QLabel" name="pxLabel">
         <property name="text">
          <string>px</string>
         </property>
        </widget>
       </item>
-      <item row="3" column="1">
+      <item column="1" row="3">
        <widget class="QSpinBox" name="heightInput">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -132,14 +136,14 @@
         </property>
        </widget>
       </item>
-      <item row="3" column="2">
+      <item column="2" row="3">
        <widget class="QLabel" name="pxLabel2">
         <property name="text">
          <string>px</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="1">
+      <item column="1" row="1">
        <widget class="QSpinBox" name="widthInput">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -155,7 +159,7 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="0">
+      <item column="0" row="1">
        <widget class="QLabel" name="widthLabel">
         <property name="text">
          <string>Width:</string>
@@ -165,21 +169,21 @@
      </layout>
     </widget>
    </item>
-   <item row="6" column="0" colspan="2">
+   <item colspan="2" column="0" row="6">
     <widget class="QLabel" name="statusLabel">
      <property name="text">
       <string/>
      </property>
     </widget>
    </item>
-   <item row="1" column="0">
+   <item column="0" row="1">
     <widget class="QLabel" name="bppDescLabel">
      <property name="text">
       <string>Bits per pixel:</string>
      </property>
     </widget>
    </item>
-   <item row="1" column="1">
+   <item column="1" row="1">
     <widget class="QLabel" name="bppLabel">
      <property name="toolTip">
       <string/>
@@ -189,14 +193,14 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="0">
+   <item column="0" row="2">
     <widget class="QLabel" name="typeDescLabel">
      <property name="text">
       <string>Type:</string>
      </property>
     </widget>
    </item>
-   <item row="2" column="1">
+   <item column="1" row="2">
     <widget class="QLabel" name="typeLabel">
      <property name="text">
       <string/>

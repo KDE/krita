@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>KoShadowConfigWidget</class>
  <widget class="QWidget" name="KoShadowConfigWidget">
   <property name="geometry">
@@ -16,15 +20,15 @@
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
-  <layout class="QGridLayout" name="gridLayout_3" columnstretch="0,0,1">
-   <item row="0" column="0">
+  <layout class="QGridLayout" columnstretch="0,0,1" name="gridLayout_3">
+   <item column="0" row="0">
     <widget class="QCheckBox" name="shadowVisible">
      <property name="text">
       <string/>
      </property>
     </widget>
    </item>
-   <item row="0" column="1" rowspan="2">
+   <item column="1" row="0" rowspan="2">
     <widget class="QDial" name="shadowAngle">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -49,9 +53,9 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="2">
-    <layout class="QGridLayout" name="gridLayout_2" columnstretch="0,0,1">
-     <item row="0" column="0">
+   <item column="2" row="0">
+    <layout class="QGridLayout" columnstretch="0,0,1" name="gridLayout_2">
+     <item column="0" row="0">
       <widget class="QToolButton" name="shadowColor">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -61,7 +65,7 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="1">
+     <item column="1" row="0">
       <widget class="QLabel" name="label_2">
        <property name="text">
         <string>Blur:</string>
@@ -71,14 +75,14 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="2">
+     <item column="2" row="0">
       <widget class="KisDoubleParseUnitSpinBox" name="shadowBlur"/>
      </item>
     </layout>
    </item>
-   <item row="1" column="2">
-    <layout class="QGridLayout" name="gridLayout" columnstretch="0,1">
-     <item row="0" column="0">
+   <item column="2" row="1">
+    <layout class="QGridLayout" columnstretch="0,1" name="gridLayout">
+     <item column="0" row="0">
       <widget class="QLabel" name="label">
        <property name="text">
         <string>Distance:</string>
@@ -88,12 +92,12 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="1">
+     <item column="1" row="0">
       <widget class="KisDoubleParseUnitSpinBox" name="shadowOffset"/>
      </item>
     </layout>
    </item>
-   <item row="2" column="1">
+   <item column="1" row="2">
     <widget class="QWidget" name="SpecialSpacer" native="true">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Expanding">

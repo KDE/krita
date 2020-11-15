@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>wdgARCSSettings</class>
  <widget class="QWidget" name="wdgARCSSettings">
   <property name="geometry">
@@ -110,7 +114,7 @@
            <property name="verticalSpacing">
             <number>6</number>
            </property>
-           <item row="0" column="3">
+           <item column="3" row="0">
             <widget class="KisDoubleParseSpinBox" name="spLumaG">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
@@ -129,7 +133,7 @@
              </property>
             </widget>
            </item>
-           <item row="0" column="2">
+           <item column="2" row="0">
             <widget class="QLabel" name="greenlabel">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
@@ -142,7 +146,7 @@
              </property>
             </widget>
            </item>
-           <item row="0" column="4">
+           <item column="4" row="0">
             <widget class="QLabel" name="bluelabel">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
@@ -155,7 +159,7 @@
              </property>
             </widget>
            </item>
-           <item row="0" column="1">
+           <item column="1" row="0">
             <widget class="KisDoubleParseSpinBox" name="spLumaR">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
@@ -174,7 +178,7 @@
              </property>
             </widget>
            </item>
-           <item row="0" column="5">
+           <item column="5" row="0">
             <widget class="KisDoubleParseSpinBox" name="spLumaB">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
@@ -193,7 +197,7 @@
              </property>
             </widget>
            </item>
-           <item row="1" column="1">
+           <item column="1" row="1">
             <widget class="KisDoubleParseSpinBox" name="spLumaGamma">
              <property name="toolTip">
               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This sets the gamma value that the linearised HSY Luminosity is crunched with. 1 makes the selector fully linear, 2.2 is a practical default value.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -215,14 +219,14 @@
              </property>
             </widget>
            </item>
-           <item row="1" column="0">
+           <item column="0" row="1">
             <widget class="QLabel" name="gamma_label">
              <property name="text">
               <string>Gamma:</string>
              </property>
             </widget>
            </item>
-           <item row="0" column="0">
+           <item column="0" row="0">
             <widget class="QLabel" name="redlabel">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
@@ -279,7 +283,7 @@
       <string>Default Selector Steps Settings</string>
      </property>
      <layout class="QGridLayout" name="gridLayout">
-      <item row="1" column="1">
+      <item column="1" row="1">
        <widget class="KisSliderSpinBox" name="defaultHueSteps" native="true">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
@@ -289,7 +293,7 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="0">
+      <item column="0" row="1">
        <widget class="QLabel" name="labelDefHueSteps">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -305,7 +309,7 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="0">
+      <item column="0" row="2">
        <widget class="QLabel" name="labelDefSaturationSteps">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -321,7 +325,7 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="2">
+      <item column="2" row="1">
        <widget class="QPushButton" name="bnDefInfHueSteps">
         <property name="text">
          <string/>
@@ -331,7 +335,7 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="1">
+      <item column="1" row="2">
        <widget class="KisSliderSpinBox" name="defaultSaturationSteps" native="true">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
@@ -341,7 +345,7 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="0">
+      <item column="0" row="0">
        <widget class="QLabel" name="labelDefValueScaleSteps">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -357,7 +361,7 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="1">
+      <item column="1" row="0">
        <widget class="KisSliderSpinBox" name="defaultValueScaleSteps" native="true">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
@@ -367,7 +371,7 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="2">
+      <item column="2" row="0">
        <widget class="QPushButton" name="bnDefInfValueScaleSteps">
         <property name="text">
          <string/>

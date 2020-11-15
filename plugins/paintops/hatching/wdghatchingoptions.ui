@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgHatchingOptions</class>
  <widget class="QWidget" name="WdgHatchingOptions">
   <property name="geometry">
@@ -31,7 +35,7 @@
    </property>
    <item>
     <layout class="QGridLayout" name="gridLayout">
-     <item row="0" column="0">
+     <item column="0" row="0">
       <widget class="QLabel" name="label_14">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -56,7 +60,7 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="1">
+     <item column="1" row="0">
       <widget class="KisDoubleSliderSpinBox" name="angleKisDoubleSliderSpinBox" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
@@ -78,7 +82,7 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="0">
+     <item column="0" row="1">
       <widget class="QLabel" name="label_18">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -94,7 +98,7 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="1">
+     <item column="1" row="1">
       <widget class="KisDoubleSliderSpinBox" name="separationKisDoubleSliderSpinBox" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
@@ -116,7 +120,7 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="0">
+     <item column="0" row="2">
       <widget class="QLabel" name="label_20">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -132,7 +136,7 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="1">
+     <item column="1" row="2">
       <widget class="KisDoubleSliderSpinBox" name="thicknessKisDoubleSliderSpinBox" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
@@ -154,7 +158,7 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="0">
+     <item column="0" row="3">
       <widget class="QLabel" name="label_22">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -170,7 +174,7 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="1">
+     <item column="1" row="3">
       <widget class="KisDoubleSliderSpinBox" name="originXKisDoubleSliderSpinBox" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
@@ -192,7 +196,7 @@
        </property>
       </widget>
      </item>
-     <item row="4" column="0">
+     <item column="0" row="4">
       <widget class="QLabel" name="label_24">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -208,7 +212,7 @@
        </property>
       </widget>
      </item>
-     <item row="4" column="1">
+     <item column="1" row="4">
       <widget class="KisDoubleSliderSpinBox" name="originYKisDoubleSliderSpinBox" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
@@ -372,7 +376,7 @@
       <bool>false</bool>
      </property>
      <layout class="QFormLayout" name="formLayout">
-      <item row="0" column="0">
+      <item column="0" row="0">
        <widget class="QLabel" name="label">
         <property name="text">
          <string>Input-based intervals:</string>
@@ -382,7 +386,7 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="1">
+      <item column="1" row="0">
        <widget class="KisIntParseSpinBox" name="separationIntervalSpinBox">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">

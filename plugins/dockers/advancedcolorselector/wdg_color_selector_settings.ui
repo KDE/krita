@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>KisColorSelectorSettings</class>
  <widget class="QWidget" name="KisColorSelectorSettings">
   <property name="geometry">
@@ -31,14 +35,14 @@
      <property name="bottomMargin">
       <number>20</number>
      </property>
-     <item row="0" column="0">
+     <item column="0" row="0">
       <widget class="QLabel" name="dockerColorSettingsLabel">
        <property name="text">
         <string>Docker:</string>
        </property>
       </widget>
      </item>
-     <item row="0" column="1">
+     <item column="1" row="0">
       <widget class="QComboBox" name="dockerColorSettingsComboBox">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -215,7 +219,7 @@
                    <property name="verticalSpacing">
                     <number>6</number>
                    </property>
-                   <item row="0" column="0">
+                   <item column="0" row="0">
                     <widget class="QLabel" name="redlabel">
                      <property name="sizePolicy">
                       <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
@@ -231,7 +235,7 @@
                      </property>
                     </widget>
                    </item>
-                   <item row="0" column="3">
+                   <item column="3" row="0">
                     <widget class="KisDoubleParseSpinBox" name="l_lumaG">
                      <property name="sizePolicy">
                       <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
@@ -250,7 +254,7 @@
                      </property>
                     </widget>
                    </item>
-                   <item row="0" column="2">
+                   <item column="2" row="0">
                     <widget class="QLabel" name="greenlabel">
                      <property name="sizePolicy">
                       <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
@@ -263,7 +267,7 @@
                      </property>
                     </widget>
                    </item>
-                   <item row="0" column="4">
+                   <item column="4" row="0">
                     <widget class="QLabel" name="bluelabel">
                      <property name="sizePolicy">
                       <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
@@ -276,7 +280,7 @@
                      </property>
                     </widget>
                    </item>
-                   <item row="0" column="1">
+                   <item column="1" row="0">
                     <widget class="KisDoubleParseSpinBox" name="l_lumaR">
                      <property name="sizePolicy">
                       <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
@@ -295,7 +299,7 @@
                      </property>
                     </widget>
                    </item>
-                   <item row="0" column="5">
+                   <item column="5" row="0">
                     <widget class="KisDoubleParseSpinBox" name="l_lumaB">
                      <property name="sizePolicy">
                       <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
@@ -314,7 +318,7 @@
                      </property>
                     </widget>
                    </item>
-                   <item row="1" column="1">
+                   <item column="1" row="1">
                     <widget class="KisDoubleParseSpinBox" name="SP_Gamma">
                      <property name="toolTip">
                       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This sets the gamma value that the linearised HSY Luminosity is crunched with. 1 makes the selector fully linear, 2.2 is a practical default value.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -336,7 +340,7 @@
                      </property>
                     </widget>
                    </item>
-                   <item row="1" column="0">
+                   <item column="0" row="1">
                     <widget class="QLabel" name="gamma_label">
                      <property name="text">
                       <string>Gamma:</string>
@@ -356,24 +360,24 @@
         </widget>
        </item>
        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_16">
-            <item>
-               <layout class="QGridLayout" name="gridLayout_7">
-                  <item row="0" column="0">
-                     <widget class="QCheckBox" name="useCustomColorForBackground">
-                        <property name="text">
-                           <string>Use custom color for selector background.</string>
-                        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout_16">
+         <item>
+          <layout class="QGridLayout" name="gridLayout_7">
+           <item column="0" row="0">
+            <widget class="QCheckBox" name="useCustomColorForBackground">
+             <property name="text">
+              <string>Use custom color for selector background.</string>
+             </property>
+            </widget>
+           </item>
+           <item column="1" row="0">
+            <widget class="KisColorButton" name="customColorBackgroundSelector">
                      </widget>
-                  </item>
-                  <item row="0" column="1">
-                     <widget class="KisColorButton" name="customColorBackgroundSelector">
-                     </widget>
-                  </item>
-               </layout>
-            </item>
-         </layout>
-      </item>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </item>
        <item>
         <widget class="QGroupBox" name="useDifferentColorSpaceCheckbox">
          <property name="minimumSize">
@@ -430,7 +434,7 @@
       <layout class="QVBoxLayout" name="verticalLayout_15">
        <item>
         <layout class="QGridLayout" name="gridLayout_6">
-         <item row="0" column="0">
+         <item column="0" row="0">
           <widget class="QLabel" name="label_3">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
@@ -449,10 +453,10 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="1">
+         <item column="1" row="1">
           <widget class="QComboBox" name="zoomSelectorOptionComboBox"/>
          </item>
-         <item row="1" column="0">
+         <item column="0" row="1">
           <widget class="QLabel" name="label_5">
            <property name="text">
             <string>Show Zoom Selector UI: </string>
@@ -462,7 +466,7 @@
            </property>
           </widget>
          </item>
-         <item row="2" column="0">
+         <item column="0" row="2">
           <widget class="QLabel" name="label_11">
            <property name="text">
             <string>Zoom Selector Size: </string>
@@ -472,7 +476,7 @@
            </property>
           </widget>
          </item>
-         <item row="2" column="1">
+         <item column="1" row="2">
           <widget class="KisIntParseSpinBox" name="popupSize">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -497,7 +501,7 @@
            </property>
           </widget>
          </item>
-         <item row="0" column="1">
+         <item column="1" row="0">
           <widget class="QComboBox" name="dockerResizeOptionsComboBox">
            <property name="enabled">
             <bool>true</bool>
@@ -510,7 +514,7 @@
            </property>
           </widget>
          </item>
-         <item row="3" column="1">
+         <item column="1" row="3">
           <widget class="QCheckBox" name="hidePopupOnClickCheck">
            <property name="text">
             <string>Hide Popup on click.</string>
@@ -548,24 +552,24 @@
           <layout class="QVBoxLayout" name="verticalLayout_8">
            <item>
             <layout class="QGridLayout" name="gridLayout_3">
-             <item row="0" column="0">
+             <item column="0" row="0">
               <widget class="QLabel" name="label_16">
                <property name="text">
                 <string>Type:</string>
                </property>
               </widget>
              </item>
-             <item row="0" column="2">
+             <item column="2" row="0">
               <widget class="QLabel" name="myPaintColorModelLabel">
                <property name="text">
                 <string>Color model:</string>
                </property>
               </widget>
              </item>
-             <item row="0" column="1">
+             <item column="1" row="0">
               <widget class="QComboBox" name="ACSShadeSelectorTypeComboBox"/>
              </item>
-             <item row="0" column="3">
+             <item column="3" row="0">
               <widget class="QComboBox" name="ACSshadeSelectorMyPaintColorModelComboBox"/>
              </item>
             </layout>
@@ -719,7 +723,7 @@
           </item>
           <item>
            <layout class="QFormLayout" name="formLayout_3">
-            <item row="0" column="0">
+            <item column="0" row="0">
              <widget class="QLabel" name="label_2">
               <property name="text">
                <string>Line Count: </string>
@@ -729,7 +733,7 @@
               </property>
              </widget>
             </item>
-            <item row="0" column="1">
+            <item column="1" row="0">
              <widget class="KisIntParseSpinBox" name="minimalShadeSelectorLineCount">
               <property name="minimum">
                <number>1</number>
@@ -742,7 +746,7 @@
               </property>
              </widget>
             </item>
-            <item row="1" column="0">
+            <item column="0" row="1">
              <widget class="QLabel" name="label_6">
               <property name="text">
                <string>Line Height: </string>
@@ -752,7 +756,7 @@
               </property>
              </widget>
             </item>
-            <item row="1" column="1">
+            <item column="1" row="1">
              <widget class="KisIntParseSpinBox" name="minimalShadeSelectorLineHeight">
               <property name="suffix">
                <string> px</string>
@@ -768,7 +772,7 @@
               </property>
              </widget>
             </item>
-            <item row="2" column="0">
+            <item column="0" row="2">
              <widget class="QLabel" name="patchesPerLineLabel">
               <property name="text">
                <string>Patches Per Line: </string>
@@ -778,7 +782,7 @@
               </property>
              </widget>
             </item>
-            <item row="2" column="1">
+            <item column="1" row="2">
              <widget class="KisIntParseSpinBox" name="minimalShadeSelectorPatchesPerLine"/>
             </item>
            </layout>
@@ -841,7 +845,7 @@
                <string>Patch Options</string>
               </property>
               <layout class="QFormLayout" name="formLayout_4">
-               <item row="0" column="0">
+               <item column="0" row="0">
                 <widget class="QLabel" name="label_14">
                  <property name="text">
                   <string>Height:</string>
@@ -851,7 +855,7 @@
                  </property>
                 </widget>
                </item>
-               <item row="0" column="1">
+               <item column="1" row="0">
                 <widget class="KisIntParseSpinBox" name="lastUsedColorsWidth">
                  <property name="suffix">
                   <string> px</string>
@@ -864,7 +868,7 @@
                  </property>
                 </widget>
                </item>
-               <item row="1" column="0">
+               <item column="0" row="1">
                 <widget class="QLabel" name="label">
                  <property name="text">
                   <string>Width: </string>
@@ -874,7 +878,7 @@
                  </property>
                 </widget>
                </item>
-               <item row="1" column="1">
+               <item column="1" row="1">
                 <widget class="KisIntParseSpinBox" name="lastUsedColorsHeight">
                  <property name="suffix">
                   <string> px</string>
@@ -884,7 +888,7 @@
                  </property>
                 </widget>
                </item>
-               <item row="2" column="0">
+               <item column="0" row="2">
                 <widget class="QLabel" name="label_10">
                  <property name="text">
                   <string>Max Patches: </string>
@@ -894,7 +898,7 @@
                  </property>
                 </widget>
                </item>
-               <item row="2" column="1">
+               <item column="1" row="2">
                 <widget class="KisIntParseSpinBox" name="lastUsedColorsPatchCount">
                  <property name="minimum">
                   <number>1</number>
@@ -929,7 +933,7 @@
                <property name="verticalSpacing">
                 <number>0</number>
                </property>
-               <item row="0" column="0">
+               <item column="0" row="0">
                 <widget class="QRadioButton" name="lastUsedColorsAlignVertical">
                  <property name="text">
                   <string>&amp;Vertical</string>
@@ -939,7 +943,7 @@
                  </property>
                 </widget>
                </item>
-               <item row="0" column="1">
+               <item column="1" row="0">
                 <widget class="QLabel" name="lbl_lastUsedNumCols">
                  <property name="text">
                   <string>Colu&amp;mns:</string>
@@ -952,7 +956,7 @@
                  </property>
                 </widget>
                </item>
-               <item row="0" column="2">
+               <item column="2" row="0">
                 <widget class="KisIntParseSpinBox" name="lastUsedColorsNumCols">
                  <property name="minimum">
                   <number>1</number>
@@ -965,14 +969,14 @@
                  </property>
                 </widget>
                </item>
-               <item row="1" column="0">
+               <item column="0" row="1">
                 <widget class="QRadioButton" name="lastUsedColorsAlignHorizontal">
                  <property name="text">
                   <string>Hori&amp;zontal</string>
                  </property>
                 </widget>
                </item>
-               <item row="1" column="1">
+               <item column="1" row="1">
                 <widget class="QLabel" name="lbl_lastUsedNumRows">
                  <property name="text">
                   <string>&amp;Rows:</string>
@@ -985,7 +989,7 @@
                  </property>
                 </widget>
                </item>
-               <item row="1" column="2">
+               <item column="2" row="1">
                 <widget class="KisIntParseSpinBox" name="lastUsedColorsNumRows">
                  <property name="minimum">
                   <number>1</number>
@@ -1059,7 +1063,7 @@
                <string>Patch Options</string>
               </property>
               <layout class="QFormLayout" name="formLayout_2">
-               <item row="0" column="0">
+               <item column="0" row="0">
                 <widget class="QLabel" name="label_12">
                  <property name="text">
                   <string>Height:</string>
@@ -1069,7 +1073,7 @@
                  </property>
                 </widget>
                </item>
-               <item row="0" column="1">
+               <item column="1" row="0">
                 <widget class="KisIntParseSpinBox" name="commonColorsWidth">
                  <property name="suffix">
                   <string> px</string>
@@ -1082,7 +1086,7 @@
                  </property>
                 </widget>
                </item>
-               <item row="1" column="0">
+               <item column="0" row="1">
                 <widget class="QLabel" name="label_4">
                  <property name="text">
                   <string>Width:</string>
@@ -1092,7 +1096,7 @@
                  </property>
                 </widget>
                </item>
-               <item row="1" column="1">
+               <item column="1" row="1">
                 <widget class="KisIntParseSpinBox" name="commonColorsHeight">
                  <property name="suffix">
                   <string> px</string>
@@ -1102,7 +1106,7 @@
                  </property>
                 </widget>
                </item>
-               <item row="2" column="0">
+               <item column="0" row="2">
                 <widget class="QLabel" name="label_9">
                  <property name="text">
                   <string>Max Patches: </string>
@@ -1112,7 +1116,7 @@
                  </property>
                 </widget>
                </item>
-               <item row="2" column="1">
+               <item column="1" row="2">
                 <widget class="KisIntParseSpinBox" name="commonColorsPatchCount">
                  <property name="minimum">
                   <number>1</number>
@@ -1150,14 +1154,14 @@
                <property name="verticalSpacing">
                 <number>0</number>
                </property>
-               <item row="0" column="0">
+               <item column="0" row="0">
                 <widget class="QRadioButton" name="commonColorsAlignVertical">
                  <property name="text">
                   <string>&amp;Vertical</string>
                  </property>
                 </widget>
                </item>
-               <item row="0" column="1">
+               <item column="1" row="0">
                 <widget class="QLabel" name="lbl_commonColorsNumCols">
                  <property name="text">
                   <string>Colu&amp;mns:</string>
@@ -1170,7 +1174,7 @@
                  </property>
                 </widget>
                </item>
-               <item row="0" column="2">
+               <item column="2" row="0">
                 <widget class="KisIntParseSpinBox" name="commonColorsNumCols">
                  <property name="minimum">
                   <number>1</number>
@@ -1183,7 +1187,7 @@
                  </property>
                 </widget>
                </item>
-               <item row="1" column="0">
+               <item column="0" row="1">
                 <widget class="QRadioButton" name="commonColorsAlignHorizontal">
                  <property name="text">
                   <string>Hori&amp;zontal</string>
@@ -1193,7 +1197,7 @@
                  </property>
                 </widget>
                </item>
-               <item row="1" column="1">
+               <item column="1" row="1">
                 <widget class="QLabel" name="lbl_commonColorsNumRows">
                  <property name="text">
                   <string>&amp;Rows:</string>
@@ -1206,7 +1210,7 @@
                  </property>
                 </widget>
                </item>
-               <item row="1" column="2">
+               <item column="2" row="1">
                 <widget class="KisIntParseSpinBox" name="commonColorsNumRows">
                  <property name="minimum">
                   <number>1</number>

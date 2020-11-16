@@ -28,7 +28,6 @@
 #include <klocalizedstring.h>
 #include <limits>
 #include <math.h>
-#include "kis_command_utils.h"
 #include <KisBezierUtils.h>
 
 KoPathSegmentChangeStrategy::KoPathSegmentChangeStrategy(KoPathTool *tool, const QPointF &pos, const KoPathPointData &segment, qreal segmentParam)

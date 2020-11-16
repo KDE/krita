@@ -390,46 +390,6 @@ void KisLiquifyTransformWorker::rotatePoints(const QPointF &base,
     m_d->processTransformedPixels(op, base, sigma, useWashMode, flow);
 }
 
-struct KisLiquifyTransformWorker::Private::MapIndexesOp {
-
-    MapIndexesOp(KisLiquifyTransformWorker::Private *d)
-        : m_d(d)
-    {
-    }
-
-    inline QVector<int> calculateMappedIndexes(int col, int row,
-                                               int *numExistingPoints) const {
-
-        *numExistingPoints = 4;
-        QVector<int> cellIndexes =
-            GridIterationTools::calculateCellIndexes(col, row, m_d->gridSize);
-
-        return cellIndexes;
-    }
-
-    inline int tryGetValidIndex(const QPoint &cellPt) const {
-        Q_UNUSED(cellPt);
-
-        KIS_ASSERT_RECOVER_NOOP(0 && "Not applicable");
-        return -1;
-    }
-
-    inline QPointF getSrcPointForce(const QPoint &cellPt) const {
-        Q_UNUSED(cellPt);
-
-        KIS_ASSERT_RECOVER_NOOP(0 && "Not applicable");
-        return QPointF();
-    }
-
-    inline const QPolygonF srcCropPolygon() const {
-        KIS_ASSERT_RECOVER_NOOP(0 && "Not applicable");
-        return QPolygonF();
-    }
-
-    KisLiquifyTransformWorker::Private *m_d;
-};
-
-
 void KisLiquifyTransformWorker::run(KisPaintDeviceSP device)
 {
     KisPaintDeviceSP srcDev = new KisPaintDevice(*device.data());
@@ -438,7 +398,7 @@ void KisLiquifyTransformWorker::run(KisPaintDeviceSP device)
     using namespace GridIterationTools;
 
     PaintDevicePolygonOp polygonOp(srcDev, device);
-    Private::MapIndexesOp indexesOp(m_d.data());
+    RegularGridIndexesOp indexesOp(m_d->gridSize);
     iterateThroughGrid<AlwaysCompletePolygonPolicy>(polygonOp, indexesOp,
                                                     m_d->gridSize,
                                                     m_d->originalPoints,
@@ -530,7 +490,7 @@ QImage KisLiquifyTransformWorker::runOnQImage(const QImage &srcImage,
     dstImage.fill(0);
 
     GridIterationTools::QImagePolygonOp polygonOp(srcImage, dstImage, srcImageOffset, dstQImageOffset);
-    Private::MapIndexesOp indexesOp(m_d.data());
+    GridIterationTools::RegularGridIndexesOp indexesOp(m_d->gridSize);
     GridIterationTools::iterateThroughGrid
         <GridIterationTools::AlwaysCompletePolygonPolicy>(polygonOp, indexesOp,
                                                           m_d->gridSize,

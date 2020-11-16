@@ -41,7 +41,7 @@ public:
                              TransformTransactionProperties &transaction, const KoCanvasResourceProvider *manager);
     ~KisLiquifyTransformStrategy() override;
 
-    void setTransformFunction(const QPointF &mousePos, bool perspectiveModifierActive);
+    void setTransformFunction(const QPointF &mousePos, bool perspectiveModifierActive, bool shiftModifierActive);
     void paint(QPainter &gc) override;
     QCursor getCurrentCursor() const override;
     QPainterPath getCursorOutline() const override;

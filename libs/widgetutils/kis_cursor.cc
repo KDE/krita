@@ -264,6 +264,16 @@ QCursor KisCursor::rotateCursor()
     return load("rotate_cursor.xpm");
 }
 
+QCursor KisCursor::meshCursorFree()
+{
+    return load("mesh_cursor_free.png", 5, 5);
+}
+
+QCursor KisCursor::meshCursorLocked()
+{
+    return load("mesh_cursor_locked.png", 5, 5);
+}
+
 QCursor KisCursor::load(const QString & cursorName, int hotspotX, int hotspotY)
 {
     return KisCursorCache::instance()->load(cursorName, hotspotX, hotspotY);

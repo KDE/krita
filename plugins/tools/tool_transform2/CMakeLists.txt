@@ -17,6 +17,7 @@ set(kritatooltransform_SOURCES
     kis_liquify_paint_helper.cpp
     kis_liquify_paintop.cpp
     kis_liquify_properties.cpp
+    kis_mesh_transform_strategy.cpp
     kis_free_transform_strategy.cpp
     kis_free_transform_strategy_gsl_helpers.cpp
     kis_perspective_transform_strategy.cpp

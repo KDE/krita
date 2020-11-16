@@ -97,7 +97,6 @@ OSStatus GenerateThumbnailForURL(void *thisInterface,
           [appIcon CGImageForProposedRect:&renderRect context:NULL hints:nil];
 
       QLThumbnailRequestSetImage(thumbnail, cgImage, NULL);
-      CGImageRelease(cgImage);
     } else {
       return NSFileNoSuchFileError;
     }

@@ -414,13 +414,13 @@
   <customwidget>
    <class>ExprControlCollection</class>
    <extends>QWidget</extends>
-   <header location="global">SeExpr2/UI/ExprControlCollection.h</header>
+   <header location="global">KSeExprUI/ExprControlCollection.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>ExprEditor</class>
    <extends>QWidget</extends>
-   <header location="global">SeExpr2/UI/ExprEditor.h</header>
+   <header location="global">KSeExprUI/ExprEditor.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

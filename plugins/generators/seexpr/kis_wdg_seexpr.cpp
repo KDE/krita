@@ -22,7 +22,7 @@
 #include <KoColor.h>
 #include <KoResourceServer.h>
 #include <KoResourceServerProvider.h>
-#include <SeExpr2/UI/ErrorMessages.h>
+#include <KSeExprUI/ErrorMessages.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_icon.h>
 #include <kis_config.h>
@@ -312,7 +312,7 @@ void KisWdgSeExpr::isValid()
     QString script = m_widget->txtEditor->getExpr();
     SeExprExpressionContext expression(script);
 
-    expression.setDesiredReturnType(SeExpr2::ExprType().FP(3));
+    expression.setDesiredReturnType(KSeExpr::ExprType().FP(3));
 
     expression.m_vars["u"] = new SeExprVariable();
     expression.m_vars["v"] = new SeExprVariable();

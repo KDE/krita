@@ -20,12 +20,12 @@
 
 #include <QMap>
 #include <QString>
-#include <SeExpr2/Expression.h>
+#include <KSeExpr/Expression.h>
 #include <cstring>
 
 #include "SeExprVariable.h"
 
-class SeExprExpressionContext : public SeExpr2::Expression
+class SeExprExpressionContext : public KSeExpr::Expression
 {
 public:
     typedef QMap<std::string, SeExprVariable *> VariableMap;
@@ -34,5 +34,5 @@ public:
 
     SeExprExpressionContext(const QString &expr);
 
-    virtual SeExpr2::ExprVarRef *resolveVar(const std::string &name) const override;
+    virtual KSeExpr::ExprVarRef *resolveVar(const std::string &name) const override;
 };

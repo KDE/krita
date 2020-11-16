@@ -589,16 +589,21 @@ endif()
 ###########################
 
 ##
-## Test for SeExpr
+## Test for KSeExpr
 ##
-find_package(SeExpr2)
-set_package_properties(SeExpr2 PROPERTIES
-    URL "https://wdas.github.io/SeExpr/"
+find_package(KSeExpr 4.0.0.0)
+set_package_properties(KSeExpr PROPERTIES
+    URL "https://invent.kde.org/graphics/kseexpr"
     TYPE OPTIONAL
     PURPOSE "Required by the SeExpr generator layer"
 )
-macro_bool_to_01(SeExpr2_FOUND HAVE_SEEXPR)
+macro_bool_to_01(KSeExpr_FOUND HAVE_SEEXPR)
 configure_file(config-seexpr.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-seexpr.h )
+if(KSeExpr_FOUND)
+    get_target_property(KSeExpr_LIBRARY KSeExpr::KSeExpr "LOCATION")
+    get_target_property(KSeExprUI_LIBRARY KSeExpr::KSeExprUI "LOCATION") 
+    list (APPEND ANDROID_EXTRA_LIBS ${KSeExpr_LIBRARY} ${KSeExprUI_LIBRARY})
+endif()
 
 find_package(ZLIB)
 set_package_properties(ZLIB PROPERTIES

@@ -226,7 +226,7 @@ set(kritaflake_SRCS
     tests/MockShapes.cpp
 )
 
-if (SeExpr2_FOUND)
+if (KSeExpr_FOUND)
     set(kritaflake_SRCS ${kritaflake_SRCS}
         resources/KisSeExprScript.cpp
     )

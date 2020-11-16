@@ -21,12 +21,12 @@
 #include "SeExprExpressionContext.h"
 
 SeExprExpressionContext::SeExprExpressionContext(const QString &expr)
-    : SeExpr2::Expression(expr.toStdString())
+    : KSeExpr::Expression(expr.toStdString())
     , m_vars(VariableMap())
 {
 }
 
-SeExpr2::ExprVarRef *SeExprExpressionContext::resolveVar(const std::string &name) const
+KSeExpr::ExprVarRef *SeExprExpressionContext::resolveVar(const std::string &name) const
 {
     return m_vars.value(name, nullptr);
 }

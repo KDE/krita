@@ -31,9 +31,6 @@ struct KisVisualColorModel::Private
 {
     KoColor currentcolor;
     const KoColorSpace *currentCS {0};
-    //QList<KisVisualColorSelectorShape*> widgetlist;
-    bool acceptTabletEvents {false};
-    bool circular {false};
     bool exposureSupported {false};
     bool isRGBA {false};
     bool isLinear {false};
@@ -153,11 +150,10 @@ void KisVisualColorModel::setRGBColorModel(KisVisualColorModel::ColorModel model
         m_d->modelRGB = model;
         if (m_d->isRGBA) {
             m_d->model = model;
-            m_d->allowUpdates = false;
+            m_d->applyGamma = (m_d->isLinear && m_d->modelRGB != ColorModel::HSY);
             emit sigColorModelChanged();
             m_d->channelValues = convertKoColorToChannelValues(m_d->currentcolor);
-            emit sigChannelValuesChanged(m_d->channelValues);
-            m_d->allowUpdates = true;
+            emitChannelValues();
         }
     }
 }
@@ -349,14 +345,7 @@ void KisVisualColorModel::slotLoadACSConfig()
         RGB_model = KisVisualColorModel::HSV;
     }
 
-    m_d->modelRGB = RGB_model;
-
-    if (m_d->isRGBA && m_d->model != m_d->modelRGB) {
-        m_d->model = m_d->modelRGB;
-        emit sigColorModelChanged();
-        // recalculate channel values and update widgets
-        slotDisplayConfigurationChanged();
-    }
+    setRGBColorModel(RGB_model);
 }
 
 void KisVisualColorModel::slotDisplayConfigurationChanged()

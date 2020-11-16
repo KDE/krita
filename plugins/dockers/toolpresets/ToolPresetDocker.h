@@ -52,7 +52,7 @@ private Q_SLOTS:
     void optionWidgetsChanged(KoCanvasController *canvasController, QList<QPointer<QWidget> > optionWidgets);
     void toolChanged(KoCanvasController *canvasController, int uniqueToolId);
 
-    void bnSavePressed();
+    void bnAddPressed();
     void bnDeletePressed();
 
     void presetSelected(const QModelIndex*);

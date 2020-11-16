@@ -96,6 +96,8 @@ public:
 
     KisResourceItemListView *itemView() const;
 
+    void setStoragePopupButtonVisible(bool visible);
+    
     void setViewModeButtonVisible(bool visible);
     QToolButton *viewModeButton() const;
 

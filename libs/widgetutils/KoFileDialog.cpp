@@ -215,6 +215,7 @@ void KoFileDialog::createFileDialog()
         }
     }
 
+#ifndef Q_OS_ANDROID
     d->fileDialog->setNameFilters(d->filterList);
 
     if (!d->proposedFileName.isEmpty()) {
@@ -231,6 +232,7 @@ void KoFileDialog::createFileDialog()
     else if (!d->defaultFilter.isEmpty()) {
         d->fileDialog->selectNameFilter(d->defaultFilter);
     }
+#endif
 
     if (d->type == ImportDirectory ||
             d->type == ImportFile || d->type == ImportFiles ||

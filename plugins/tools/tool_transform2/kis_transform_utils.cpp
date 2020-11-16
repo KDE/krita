@@ -299,6 +299,15 @@ void KisTransformUtils::transformDevice(const ToolTransformArgs &config,
         Q_UNUSED(updater);
 
         config.liquifyWorker()->run(device);
+    } else if (config.mode() == ToolTransformArgs::MESH) {
+        KoUpdaterPtr updater = helper->updater();
+        //FIXME:
+        Q_UNUSED(updater);
+
+        KisPaintDeviceSP srcDevice = new KisPaintDevice(*device);
+        device->clear();
+        config.meshTransform()->transformMesh(srcDevice, device);
+
     } else {
         QVector3D transformedCenter;
         KoUpdaterPtr updater1 = helper->updater();
@@ -356,6 +365,8 @@ QRect KisTransformUtils::needRect(const ToolTransformArgs &config,
     } else if (config.mode() == ToolTransformArgs::LIQUIFY) {
         result = config.liquifyWorker() ?
             config.liquifyWorker()->approxNeedRect(rc, srcBounds) : rc;
+    } else if (config.mode() == ToolTransformArgs::MESH) {
+        result = config.meshTransform()->approxNeedRect(rc);
     } else {
         KIS_ASSERT_RECOVER_NOOP(0 && "this works for non-affine transformations only!");
     }
@@ -389,6 +400,9 @@ QRect KisTransformUtils::changeRect(const ToolTransformArgs &config,
     } else if (config.mode() == ToolTransformArgs::LIQUIFY) {
         result = config.liquifyWorker() ?
             config.liquifyWorker()->approxChangeRect(rc) : rc;
+    } else if (config.mode() == ToolTransformArgs::MESH) {
+        result = config.meshTransform()->approxChangeRect(rc);
+
     } else {
         KIS_ASSERT_RECOVER_NOOP(0 && "this works for non-affine transformations only!");
     }
@@ -481,7 +495,13 @@ ToolTransformArgs KisTransformUtils::resetArgsForMode(ToolTransformArgs::Transfo
         args.setMode(ToolTransformArgs::LIQUIFY);
         const QRect srcRect = transaction.originalRect().toAlignedRect();
         if (!srcRect.isEmpty()) {
-            args.initLiquifyTransformMode(transaction.originalRect().toAlignedRect());
+            args.initLiquifyTransformMode(srcRect);
+        }
+    } else if (mode == ToolTransformArgs::MESH) {
+        args.setMode(ToolTransformArgs::MESH);
+        const QRect srcRect = transaction.originalRect().toAlignedRect();
+        if (!srcRect.isEmpty()) {
+            *args.meshTransform() = KisBezierTransformMesh(QRectF(srcRect));
         }
     } else if (mode == ToolTransformArgs::PERSPECTIVE_4POINT) {
         args.setMode(ToolTransformArgs::PERSPECTIVE_4POINT);

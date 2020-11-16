@@ -57,6 +57,63 @@ template <class C, typename KeepIfFunction>
         }
 }
 
+template<typename T>
+struct is_container
+{
+    typedef typename std::remove_const<T>::type test_type;
+
+    template<typename A>
+    static constexpr bool test(
+            A *pointer,
+            A const *const_pointer = nullptr,
+            decltype(pointer->begin()) * = nullptr,
+            decltype(pointer->end()) * = nullptr,
+            decltype(const_pointer->begin()) * = nullptr,
+            decltype(const_pointer->end()) * = nullptr,
+            typename A::iterator * it = nullptr,
+            typename A::const_iterator * constIt = nullptr,
+            typename A::value_type * = nullptr) {
+
+        typedef typename A::iterator iterator;
+        typedef typename A::const_iterator const_iterator;
+        typedef typename A::value_type value_type;
+        return  std::is_same<decltype(pointer->begin()),iterator>::value &&
+                std::is_same<decltype(pointer->end()),iterator>::value &&
+                std::is_same<decltype(const_pointer->begin()),const_iterator>::value &&
+                std::is_same<decltype(const_pointer->end()),const_iterator>::value &&
+                std::is_same<decltype(**it),value_type &>::value &&
+                std::is_same<decltype(**constIt),value_type const &>::value;
+
+    }
+
+    template<typename A>
+    static constexpr bool test(...) {
+        return false;
+    }
+
+    static const bool value = test<test_type>(nullptr);
+};
+
+template<typename T>
+struct is_appendable_container
+{
+    typedef typename std::remove_const<T>::type test_type;
+
+    template<typename A>
+    static constexpr bool test(A *pointer) {
+        return  is_container<A>::value &&
+                std::is_same<decltype(pointer->push_back(std::declval<typename T::value_type>())), void>::value ;
+
+    }
+
+    template<typename A>
+    static constexpr bool test(...) {
+        return false;
+    }
+
+    static const bool value = test<test_type>(nullptr);
+};
+
 }
 
 

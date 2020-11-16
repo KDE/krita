@@ -60,6 +60,7 @@ class KisCageTransformStrategy;
 class KisLiquifyTransformStrategy;
 class KisFreeTransformStrategy;
 class KisPerspectiveTransformStrategy;
+class KisMeshTransformStrategy;
 
 
 /**
@@ -116,7 +117,8 @@ public:
         WarpTransformMode,
         CageTransformMode,
         LiquifyTransformMode,
-        PerspectiveTransformMode
+        PerspectiveTransformMode,
+        MeshTransformMode
     };
     Q_ENUMS(TransformToolMode)
 
@@ -277,6 +279,7 @@ private:
 
     /// actions for the context click menu
     KisAction* warpAction;
+    KisAction* meshAction;
     KisAction* liquifyAction;
     KisAction* cageAction;
     KisAction* freeTransformAction;
@@ -303,6 +306,7 @@ private:
     QScopedPointer<KisWarpTransformStrategy> m_warpStrategy;
     QScopedPointer<KisCageTransformStrategy> m_cageStrategy;
     QScopedPointer<KisLiquifyTransformStrategy> m_liquifyStrategy;
+    QScopedPointer<KisMeshTransformStrategy> m_meshStrategy;
     QScopedPointer<KisFreeTransformStrategy> m_freeStrategy;
     QScopedPointer<KisPerspectiveTransformStrategy> m_perspectiveStrategy;
     KisTransformStrategyBase* currentStrategy() const;
@@ -336,6 +340,7 @@ private Q_SLOTS:
     void slotUpdateToPerspectiveType();
     void slotUpdateToFreeTransformType();
     void slotUpdateToLiquifyType();
+    void slotUpdateToMeshType();
     void slotUpdateToCageType();
 };
 

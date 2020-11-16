@@ -81,6 +81,12 @@ Point normalize(const Point &a)
     return (1.0 / length) * a;
 }
 
+template <typename Point>
+Point lerp(const Point &pt1, const Point &pt2, qreal t)
+{
+    return pt1 + (pt2 - pt1) * t;
+}
+
 /**
  * Usual sign() function with positive zero
  */
@@ -547,6 +553,22 @@ inline qreal relativeToAbsolute(qreal value, const QRectF &rc) {
 inline qreal absoluteToRelative(const qreal value, const QRectF &rc) {
     const qreal coeff = std::sqrt(pow2(rc.width()) + pow2(rc.height())) / std::sqrt(2.0);
     return coeff != 0 ? value / coeff : 0;
+}
+
+/**
+ * Scales relative isotropic value from relative to absolute coordinate system
+ * using SVG 1.1 rules (see chapter 7.10)
+ */
+inline QRectF relativeToAbsolute(const QRectF &rel, const QRectF &rc) {
+    return QRectF(relativeToAbsolute(rel.topLeft(), rc), relativeToAbsolute(rel.bottomRight(), rc));
+}
+
+/**
+ * Scales absolute isotropic value from absolute to relative coordinate system
+ * using SVG 1.1 rules (see chapter 7.10)
+ */
+inline QRectF absoluteToRelative(const QRectF &rel, const QRectF &rc) {
+    return QRectF(absoluteToRelative(rel.topLeft(), rc), absoluteToRelative(rel.bottomRight(), rc));
 }
 
 /**

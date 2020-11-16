@@ -50,6 +50,20 @@ void saveValue(QDomElement *parent, const QString &tag, const QRect &rc)
     e.setAttribute("h", toString(rc.height()));
 }
 
+void saveValue(QDomElement *parent, const QString &tag, const QRectF &rc)
+{
+    QDomDocument doc = parent->ownerDocument();
+    QDomElement e = doc.createElement(tag);
+    parent->appendChild(e);
+
+    e.setAttribute("type", "rectf");
+
+    e.setAttribute("x", toString(rc.x()));
+    e.setAttribute("y", toString(rc.y()));
+    e.setAttribute("w", toString(rc.width()));
+    e.setAttribute("h", toString(rc.height()));
+}
+
 void saveValue(QDomElement *parent, const QString &tag, const QPoint &pt)
 {
     QDomDocument doc = parent->ownerDocument();
@@ -106,6 +120,16 @@ void saveValue(QDomElement *parent, const QString &tag, const QTransform &t)
     e.setAttribute("m31", toString(t.m31()));
     e.setAttribute("m32", toString(t.m32()));
     e.setAttribute("m33", toString(t.m33()));
+}
+
+void saveValue(QDomElement *parent, const QString &tag, const QColor &c)
+{
+    QDomDocument doc = parent->ownerDocument();
+    QDomElement e = doc.createElement(tag);
+    parent->appendChild(e);
+
+    e.setAttribute("type", "qcolor");
+    e.setAttribute("value", c.name(QColor::HexArgb));
 }
 
 bool findOnlyElement(const QDomElement &parent, const QString &tag, QDomElement *el, QStringList *errorMessages)
@@ -186,6 +210,18 @@ bool loadValue(const QDomElement &e, QRect *rc)
     return true;
 }
 
+bool loadValue(const QDomElement &e, QRectF *rc)
+{
+    if (!Private::checkType(e, "rectf")) return false;
+
+    rc->setX(toInt(e.attribute("x", "0")));
+    rc->setY(toInt(e.attribute("y", "0")));
+    rc->setWidth(toInt(e.attribute("w", "0")));
+    rc->setHeight(toInt(e.attribute("h", "0")));
+
+    return true;
+}
+
 bool loadValue(const QDomElement &e, QPoint *pt)
 {
     if (!Private::checkType(e, "point")) return false;
@@ -248,6 +284,13 @@ bool loadValue(const QDomElement &e, QString *value)
     return true;
 }
 
+bool loadValue(const QDomElement &e, QColor *value)
+{
+    if (!Private::checkType(e, "qcolor")) return false;
+    value->setNamedColor(e.attribute("value", "#FFFF0000"));
+    return true;
+}
+
 QDomElement findElementByAttibute(QDomNode parent,
                                   const QString &tag,
                                   const QString &attribute,
@@ -268,8 +311,6 @@ QDomElement findElementByAttibute(QDomNode parent,
 
     return QDomElement();
 }
-
-
 
 
 }

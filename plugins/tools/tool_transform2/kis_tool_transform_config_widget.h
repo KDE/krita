@@ -97,6 +97,9 @@ public Q_SLOTS:
     void slotSetLiquifyModeButtonClicked(bool);
     void slotButtonBoxClicked(QAbstractButton *button);
 
+    void slotSetMeshModeButtonClicked(bool);
+
+
     void slotEditCagePoints(bool value);
 
     void liquifySizeChanged(qreal value);

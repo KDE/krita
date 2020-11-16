@@ -198,6 +198,84 @@ void KisToolSelectSimilar::beginPrimaryAction(KoPointerEvent *event)
     }
 
 
+
+    /*
+     * Division of out-of-the-image-bounds areas
+     * into different commands
+     *
+     * i---i------------------i
+     * |   |       top        |
+     * | l |--------------i---|
+     * | e |              |   |
+     * | f |              | r |
+     * | t |    image     | i |
+     * |   |              | g |
+     * |   |              | h |
+     * |___|______________| t |
+     * |      bottom      |   |
+     * |__________________|___|
+     */
+
+    if (sampleLayersMode() == SampleColorLabeledLayers) {
+        QRect imageRect = image()->bounds();
+
+        KUndo2Command* topCmd = new KisCommandUtils::LambdaCommand(
+                    [fuzziness, tmpSel, sourceDevice, color] () mutable -> KUndo2Command* {
+
+                        QRect contentRect = sourceDevice->exactBounds();
+                        QRect patchRect = QRect(QPoint(0, contentRect.top()), QPoint(contentRect.right(), 0));
+                        QRect finalRect = patchRect.intersected(contentRect);
+                        if (!finalRect.isEmpty()) {
+                            selectByColor(sourceDevice, tmpSel, color->data(), fuzziness, patchRect);
+                        }
+                        return 0;
+        });
+
+        KUndo2Command* rightCmd = new KisCommandUtils::LambdaCommand(
+                    [fuzziness, tmpSel, sourceDevice, color, imageRect] () mutable -> KUndo2Command* {
+
+                        QRect contentRect = sourceDevice->exactBounds();
+                        QRect patchRect = QRect(QPoint(imageRect.width(), 0), QPoint(contentRect.right(), contentRect.bottom()));
+                        QRect finalRect = patchRect.intersected(contentRect);
+                        if (!finalRect.isEmpty()) {
+                            selectByColor(sourceDevice, tmpSel, color->data(), fuzziness, patchRect);
+                        }
+                        return 0;
+        });
+
+        KUndo2Command* bottomCmd = new KisCommandUtils::LambdaCommand(
+                    [fuzziness, tmpSel, sourceDevice, color, imageRect] () mutable -> KUndo2Command* {
+
+                        QRect contentRect = sourceDevice->exactBounds();
+                        QRect patchRect = QRect(QPoint(contentRect.left(), imageRect.bottom()), QPoint(imageRect.right(), contentRect.bottom()));
+                        QRect finalRect = patchRect.intersected(contentRect);
+                        if (!finalRect.isEmpty()) {
+                            selectByColor(sourceDevice, tmpSel, color->data(), fuzziness, patchRect);
+                        }
+                        return 0;
+        });
+
+        KUndo2Command* leftCmd = new KisCommandUtils::LambdaCommand(
+                    [fuzziness, tmpSel, sourceDevice, color, imageRect] () mutable -> KUndo2Command* {
+
+                        QRect contentRect = sourceDevice->exactBounds();
+                        QRect patchRect = QRect(QPoint(contentRect.left(), contentRect.top()), QPoint(0, imageRect.bottom()));
+                        QRect finalRect = patchRect.intersected(contentRect);
+                        if (!finalRect.isEmpty()) {
+                            selectByColor(sourceDevice, tmpSel, color->data(), fuzziness, patchRect);
+                        }
+                        return 0;
+        });
+
+
+        applicator.applyCommand(topCmd, KisStrokeJobData::CONCURRENT);
+        applicator.applyCommand(rightCmd, KisStrokeJobData::CONCURRENT);
+        applicator.applyCommand(bottomCmd, KisStrokeJobData::CONCURRENT);
+        applicator.applyCommand(leftCmd, KisStrokeJobData::CONCURRENT);
+
+    }
+
+
     KUndo2Command* cmdInvalidateCache = new KisCommandUtils::LambdaCommand(
                 [tmpSel] () mutable -> KUndo2Command* {
 

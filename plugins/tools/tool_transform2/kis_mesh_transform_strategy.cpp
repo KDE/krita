@@ -21,6 +21,7 @@
 
 #include <QPointF>
 #include <QPainter>
+#include <QPainterPath>
 
 #include "kis_painting_tweaks.h"
 #include "kis_cursor.h"

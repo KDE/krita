@@ -1375,8 +1375,11 @@ void SvgTextEditor::createActions()
                                       SLOT(setKerning(bool)));
 
     // Settings
-    m_richTextActions << createAction("svg_settings",
-                                      SLOT(setSettings()));
+    // do not add settings action to m_richTextActions list,
+    // it should always be active, regardless of which editor mode is used.
+    // otherwise we can lock the user out of being able to change
+    // editor mode, if user changes to SVG only mode.
+    createAction("svg_settings", SLOT(setSettings()));
 
     QWidgetAction *fontComboAction = new QWidgetAction(this);
     fontComboAction->setToolTip(i18n("Font"));

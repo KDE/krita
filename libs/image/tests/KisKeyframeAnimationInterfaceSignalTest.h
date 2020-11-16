@@ -37,14 +37,12 @@ private Q_SLOTS:
     void init();
 
     void testSignalFromKeyframeChannelToInterface();
-    void testSignalOnNodeReset();
     void testSignalOnImageReset();
 
 private:
     KisImageSP m_image1;
     KisImageSP m_image2;
-    KisPaintLayerSP m_layer1;
-    KisPaintLayerSP m_layer2;
+    KisPaintLayerSP m_layer;
     KisKeyframeChannel *m_channel;
 };
 

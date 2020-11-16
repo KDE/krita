@@ -38,11 +38,8 @@ private Q_SLOTS:
     void cleanupTestCase();
     void cleanup();
 
-    void testStoryboardItemSortedUniquePositive();
-    void testStoryboardItemAddFromTimeline();
-    void testStoryboardItemMoveFromTimeline();
-    void testStoryboardItemRemoveFromTimeline();
-    void testStorybaordTimeleineSync();
+    void testAddKeyframeExtendsDuration();
+    void testStoryboardTimelineTimeSyncronization();
     void testDurationChange();
     void testFpsChanged();
 

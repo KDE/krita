@@ -25,11 +25,10 @@
 void KisKeyframeAnimationInterfaceSignalTest::initTestCase()
 {
     m_image1 = new KisImage(0, 100, 100, nullptr, "image1");
-    m_layer1 = new KisPaintLayer(m_image1, "layer1", OPACITY_OPAQUE_U8);
-    m_channel = m_layer1->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true);
-
     m_image2 = new KisImage(0, 100, 100, nullptr, "image2");
-    m_layer2 = new KisPaintLayer(m_image1, "layer2", OPACITY_OPAQUE_U8);
+    m_layer = new KisPaintLayer(m_image1, "layer1", OPACITY_OPAQUE_U8);
+    m_image1->addNode(m_layer);
+    m_channel = m_layer->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true);
 }
 
 void KisKeyframeAnimationInterfaceSignalTest::init()
@@ -49,73 +48,52 @@ void KisKeyframeAnimationInterfaceSignalTest::testSignalFromKeyframeChannelToInt
     QCOMPARE(m_channel->keyframeCount(), 1);
 
     //add keyframe
-    QSignalSpy spyFrameAdded(m_image1->animationInterface() , SIGNAL(sigKeyframeAdded(KisKeyframeSP)));
+    qRegisterMetaType<const KisKeyframeChannel*>("const KisKeyframeChannel*");
+    QSignalSpy spyFrameAdded(m_image1->animationInterface() , SIGNAL(sigKeyframeAdded(const KisKeyframeChannel*, int)));
     QVERIFY(spyFrameAdded.isValid());
 
     m_channel->addKeyframe(2);
     QCOMPARE(spyFrameAdded.count(), 1);
 
-    //move keyframe
-    QSignalSpy spyFrameMoved(m_image1->animationInterface() , SIGNAL(sigKeyframeMoved(KisKeyframeSP, int)));
-    QVERIFY(spyFrameMoved.isValid());
-
-    m_channel->moveKeyframe(2, 5);
-    QCOMPARE(spyFrameMoved.count(), 1);
-
     //remove keyframe
-    QSignalSpy spyFrameRemoved(m_image1->animationInterface() , SIGNAL(sigKeyframeRemoved(KisKeyframeSP)));
+    QSignalSpy spyFrameRemoved(m_image1->animationInterface() , SIGNAL(sigKeyframeRemoved(const KisKeyframeChannel*, int)));
     QVERIFY(spyFrameRemoved.isValid());
 
     m_channel->removeKeyframe(5);
     QCOMPARE(spyFrameRemoved.count(), 1);
 }
 
-void KisKeyframeAnimationInterfaceSignalTest::testSignalOnNodeReset()
-{
-    //change node check connections, the node must belong to the same image
-    m_channel->setNode((KisNodeWSP)(m_layer2));
-
-    testSignalFromKeyframeChannelToInterface();
-}
-
 void KisKeyframeAnimationInterfaceSignalTest::testSignalOnImageReset()
 {
-    m_layer1->setImage(m_image2);
-    
+    m_image1->removeNode(m_layer);
+    m_image2->addNode(m_layer);
+    m_layer->setImage(m_image2);
+
     //test the connections between m_channel and new image's animation interface
-    QVERIFY(!connect(m_channel, SIGNAL(sigKeyframeAdded(KisKeyframeSP)), m_image2->animationInterface(), SIGNAL(sigKeyframeAdded(KisKeyframeSP)), Qt::UniqueConnection));  
+    QVERIFY(!connect(m_channel, SIGNAL(sigAddedKeyframe(const KisKeyframeChannel*,int)), m_image2->animationInterface(), SIGNAL(sigKeyframeAdded(const KisKeyframeChannel*, int)), Qt::UniqueConnection));
 
     //test signals from the old image on changing m_channel after image reset
-    QSignalSpy spyFrameAdded(m_image1->animationInterface() , SIGNAL(sigKeyframeAdded(KisKeyframeSP)));
+    QSignalSpy spyFrameAdded(m_image1->animationInterface() , SIGNAL(sigKeyframeAdded(const KisKeyframeChannel*, int)));
     QVERIFY(spyFrameAdded.isValid());
     
-    QSignalSpy spyFrameMoved(m_image1->animationInterface() , SIGNAL(sigKeyframeMoved(KisKeyframeSP, int)));
-    QVERIFY(spyFrameMoved.isValid());
-    
-    QSignalSpy spyFrameRemoved(m_image1->animationInterface() , SIGNAL(sigKeyframeRemoved(KisKeyframeSP)));
+    QSignalSpy spyFrameRemoved(m_image1->animationInterface() , SIGNAL(sigKeyframeRemoved(const KisKeyframeChannel*, int)));
     QVERIFY(spyFrameRemoved.isValid());
 
     //check if signal are emitted from the new image on changing m_channnel
-    QSignalSpy newSpyFrameAdded(m_image2->animationInterface() , SIGNAL(sigKeyframeAdded(KisKeyframeSP)));
+    QSignalSpy newSpyFrameAdded(m_image2->animationInterface() , SIGNAL(sigKeyframeAdded(const KisKeyframeChannel*, int)));
     QVERIFY(newSpyFrameAdded.isValid());
 
-    QSignalSpy newSpyFrameMoved(m_image2->animationInterface() , SIGNAL(sigKeyframeMoved(KisKeyframeSP, int)));
-    QVERIFY(newSpyFrameMoved.isValid());
-
-    QSignalSpy newSpyFrameRemoved(m_image2->animationInterface() , SIGNAL(sigKeyframeRemoved(KisKeyframeSP)));
+    QSignalSpy newSpyFrameRemoved(m_image2->animationInterface() , SIGNAL(sigKeyframeRemoved(const KisKeyframeChannel*, int)));
     QVERIFY(newSpyFrameRemoved.isValid());
 
     m_channel->addKeyframe(2);
-    m_channel->moveKeyframe(2, 3);
-    m_channel->removeKeyframe(3);
+    m_channel->removeKeyframe(2);
 
     QCOMPARE(spyFrameAdded.count(), 0);
     QCOMPARE(spyFrameRemoved.count(), 0);
-    QCOMPARE(spyFrameMoved.count(), 0);
 
     QCOMPARE(newSpyFrameAdded.count(), 1);
     QCOMPARE(newSpyFrameRemoved.count(), 1);
-    QCOMPARE(newSpyFrameMoved.count(), 1);
 
     QCOMPARE(m_channel->keyframeCount(), 1);
 }

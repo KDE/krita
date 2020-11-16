@@ -210,7 +210,6 @@ Q_SIGNALS:
 
     void sigKeyframeAdded(const KisKeyframeChannel* channel, int time);
     void sigKeyframeRemoved(const KisKeyframeChannel* channel, int time);
-    void sigKeyframeMoved(const KisKeyframeChannel* channel, int from, int to);
 
 private:
     struct Private;

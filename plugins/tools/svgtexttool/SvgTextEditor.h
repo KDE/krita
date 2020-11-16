@@ -155,6 +155,7 @@ private:
     void enableSvgTextActions(bool enable);
 
     Ui_WdgSvgTextEditor m_textEditorWidget;
+    EditorMode m_currentEditorMode {EditorMode::Both};
     QTextEdit *m_currentEditor {0};
     QWidget *m_page {0};
     QList<QAction*> m_richTextActions;

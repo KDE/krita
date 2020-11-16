@@ -981,15 +981,15 @@ void SvgTextEditor::setSettings()
     }
     textSettings.lwScripts->setModel(writingSystemsModel);
 
-    EditorMode mode = (EditorMode)cfg.readEntry("EditorMode", (int)Both);
-    switch(mode) {
-    case(RichText):
+    m_currentEditorMode = (EditorMode)cfg.readEntry("EditorMode", (int)EditorMode::Both);
+    switch (m_currentEditorMode) {
+    case EditorMode::RichText:
         textSettings.radioRichText->setChecked(true);
         break;
-    case(SvgSource):
+    case EditorMode::SvgSource:
         textSettings.radioSvgSource->setChecked(true);
         break;
-    case(Both):
+    case EditorMode::Both:
         textSettings.radioBoth->setChecked(true);
     }
 
@@ -1230,7 +1230,7 @@ void SvgTextEditor::applySettings()
 {
     KConfigGroup cfg(KSharedConfig::openConfig(), "SvgTextTool");
 
-    EditorMode mode = (EditorMode)cfg.readEntry("EditorMode", (int)Both);
+    m_currentEditorMode = (EditorMode)cfg.readEntry("EditorMode", (int)EditorMode::Both);
 
     QWidget *richTab = m_textEditorWidget.richTab;
     QWidget *svgTab = m_textEditorWidget.svgTab;
@@ -1238,14 +1238,14 @@ void SvgTextEditor::applySettings()
     m_page->setUpdatesEnabled(false);
     m_textEditorWidget.textTab->clear();
 
-    switch(mode) {
-    case(RichText):
+    switch (m_currentEditorMode) {
+    case EditorMode::RichText:
         m_textEditorWidget.textTab->addTab(richTab, i18n("Rich text"));
         break;
-    case(SvgSource):
+    case EditorMode::SvgSource:
         m_textEditorWidget.textTab->addTab(svgTab, i18n("SVG Source"));
         break;
-    case(Both):
+    case EditorMode::Both:
         m_textEditorWidget.textTab->addTab(richTab, i18n("Rich text"));
         m_textEditorWidget.textTab->addTab(svgTab, i18n("SVG Source"));
     }

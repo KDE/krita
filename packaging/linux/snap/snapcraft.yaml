@@ -83,6 +83,7 @@ parts:
       - libx11-dev
       - libxi-dev
       - vc-dev
+      - libmypaint-dev
     parse-info: [usr/share/metainfo/org.kde.krita.appdata.xml]
 
 
@@ -104,6 +105,7 @@ parts:
       - libxi6
       - libyaml-cpp0.5v5
       - zlib1g
+      - libmypaint-1.5-1
       # Required for rendering animations
       - ffmpeg
       - libglu1-mesa

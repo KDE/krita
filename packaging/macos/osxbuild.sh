@@ -343,6 +343,7 @@ build_3rdparty () {
         ext_quazip
 
     cmake_3rdparty ext_seexpr
+    cmake_3rdparty ext_mypaint
 
     ## All builds done, creating a new install onlydeps install dir
     dir_clean "${KIS_INSTALL_DIR}.onlydeps"

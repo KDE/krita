@@ -223,7 +223,6 @@ private:
     KoDocumentResourceManager *m_documentResourceManager;
     QList<KoShape*> m_shapes;
     QMap<QString, KoSvgSymbol*> m_symbols;
-    QList<KoShape*> m_toplevelShapes;
     QList<KoShape*> m_defsShapes;
     bool m_isInsideTextSubtree = false;
     QString m_documentTitle;

@@ -273,15 +273,15 @@ KisProjectionLeafSP KisNode::projectionLeaf() const
     return m_d->projectionLeaf;
 }
 
-void KisNode::setImage(KisImageWSP image)
+void KisNode::setImage(KisImageWSP newImage)
 {
-    KisBaseNode::setImage(image);
+    KisBaseNode::setImage(newImage);
 
     KisNodeSP node = firstChild();
     while (node) {
         KisLayerUtils::recursiveApplyNodes(node,
-                                           [image] (KisNodeSP node) {
-                                               node->setImage(image);
+                                           [newImage] (KisNodeSP node) {
+                                               node->setImage(newImage);
                                            });
 
         node = node->nextSibling();
@@ -374,6 +374,10 @@ void KisNode::addKeyframeChannel(KisKeyframeChannel *channel)
 {
     channel->setNode(this);
     KisBaseNode::addKeyframeChannel(channel);
+
+    if (m_d->graphListener) {
+        m_d->graphListener->keyframeChannelHasBeenAdded(this, channel);
+    }
 }
 
 KisNodeSP KisNode::firstChild() const

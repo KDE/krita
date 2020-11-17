@@ -28,12 +28,14 @@ struct KisSimplifiedActionPolicyStrategy::Private
     Private(const KisCoordinatesConverter *_converter, KoSnapGuide *_snapGuide)
         : converter(_converter),
           snapGuide(_snapGuide),
+          pickFromNodeModifierActive(false),
           changeSizeModifierActive(false),
           anyPickerModifierActive(false) {}
 
     const KisCoordinatesConverter *converter;
     KoSnapGuide *snapGuide;
 
+    bool pickFromNodeModifierActive;
     bool changeSizeModifierActive;
     bool anyPickerModifierActive;
     QPointF dragOffset;
@@ -129,20 +131,22 @@ bool KisSimplifiedActionPolicyStrategy::endPrimaryAction(KoPointerEvent *event)
 
 void KisSimplifiedActionPolicyStrategy::activatePrimaryAction()
 {
-    setTransformFunction(m_d->lastImagePos, m_d->anyPickerModifierActive);
+    setTransformFunction(m_d->lastImagePos, m_d->anyPickerModifierActive && !m_d->pickFromNodeModifierActive, m_d->changeSizeModifierActive, m_d->pickFromNodeModifierActive);
 }
 
 void KisSimplifiedActionPolicyStrategy::activateAlternateAction(KisTool::AlternateAction action)
 {
     if (action == KisTool::ChangeSize) {
         m_d->changeSizeModifierActive = true;
-    } else if (action == KisTool::PickFgNode || action == KisTool::PickBgNode ||
-               action == KisTool::PickFgImage || action == KisTool::PickBgImage) {
-
+    } else if (action == KisTool::PickFgNode || action == KisTool::PickBgNode) {
         m_d->anyPickerModifierActive = true;
+        m_d->pickFromNodeModifierActive = true;
+    } else if (action == KisTool::PickFgImage || action == KisTool::PickBgImage) {
+        m_d->anyPickerModifierActive = true;
+        m_d->pickFromNodeModifierActive = false;
     }
 
-    setTransformFunction(m_d->lastImagePos, m_d->anyPickerModifierActive);
+    setTransformFunction(m_d->lastImagePos, m_d->anyPickerModifierActive && !m_d->pickFromNodeModifierActive, m_d->changeSizeModifierActive, m_d->pickFromNodeModifierActive);
 }
 
 void KisSimplifiedActionPolicyStrategy::deactivateAlternateAction(KisTool::AlternateAction action)
@@ -153,6 +157,7 @@ void KisSimplifiedActionPolicyStrategy::deactivateAlternateAction(KisTool::Alter
                action == KisTool::PickFgImage || action == KisTool::PickBgImage) {
 
         m_d->anyPickerModifierActive = false;
+        m_d->pickFromNodeModifierActive = false;
     }
 }
 
@@ -195,6 +200,6 @@ bool KisSimplifiedActionPolicyStrategy::endAlternateAction(KoPointerEvent *event
 
 void KisSimplifiedActionPolicyStrategy::hoverActionCommon(const QPointF &pt)
 {
-    setTransformFunction(pt, m_d->anyPickerModifierActive);
+    setTransformFunction(pt, m_d->anyPickerModifierActive && !m_d->pickFromNodeModifierActive, m_d->changeSizeModifierActive, m_d->pickFromNodeModifierActive);
 }
 

@@ -49,6 +49,9 @@ public:
 Q_SIGNALS:
     void newsDataChanged();
 
+protected:
+    bool eventFilter(QObject *watched, QEvent *event) override;
+
 private Q_SLOTS:
     void toggleNews(bool toggle);
     void itemSelected(const QModelIndex &idx);

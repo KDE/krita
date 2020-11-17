@@ -28,6 +28,7 @@
 #include <klocalizedstring.h>
 #include <limits>
 #include <math.h>
+#include <KisBezierUtils.h>
 
 KoPathSegmentChangeStrategy::KoPathSegmentChangeStrategy(KoPathTool *tool, const QPointF &pos, const KoPathPointData &segment, qreal segmentParam)
 : KoInteractionStrategy(tool)
@@ -83,30 +84,14 @@ void KoPathSegmentChangeStrategy::handleMouseMove(const QPointF &mouseLocation, 
         }
     }
     else if (m_segment.degree() == 3) {
-        /*
-        * method from inkscape, original method and idea borrowed from Simon Budig
-        * <simon@gimp.org> and the GIMP
-        * cf. app/vectors/gimpbezierstroke.c, gimp_bezier_stroke_point_move_relative()
-        *
-        * feel good is an arbitrary parameter that distributes the delta between handles
-        * if t of the drag point is less than 1/6 distance form the endpoint only
-        * the corresponding handle is adjusted. This matches the behavior in GIMP
-        */
-        const qreal t = m_segmentParam;
-        qreal feel_good;
-        if (t <= 1.0 / 6.0)
-            feel_good = 0;
-        else if (t <= 0.5)
-            feel_good = (pow((6 * t - 1) / 2.0, 3)) / 2;
-        else if (t <= 5.0 / 6.0)
-            feel_good = (1 - pow((6 * (1-t) - 1) / 2.0, 3)) / 2 + 0.5;
-        else
-            feel_good = 1;
-
         QPointF lastLocalPos = m_path->documentToShape(m_lastPosition);
         QPointF delta = localPos - lastLocalPos;
-        move2 = ((1-feel_good)/(3*t*(1-t)*(1-t))) * delta;
-        move1 = (feel_good/(3*t*t*(1-t))) * delta;
+
+        QPointF move2;
+        QPointF move1;
+
+        std::tie(move2, move1) =
+            KisBezierUtils::offsetSegment(m_segmentParam, delta);
     }
 
     if(m_segment.first()->activeControlPoint2()) {

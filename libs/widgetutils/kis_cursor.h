@@ -84,6 +84,9 @@ public:
     static QCursor closedHandCursor();    // Pan tool cursor
     static QCursor rotateCursor();    // Transform tool cursor
 
+    static QCursor meshCursorFree();    // Transform tool cursor
+    static QCursor meshCursorLocked();    // Transform tool cursor
+
 
     // Load a cursor from an image file. The image should have an alpha channel
     // and will be converted to black and white on loading. Any format loadable

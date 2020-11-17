@@ -299,6 +299,8 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     connect(cageButton, SIGNAL(clicked(bool)), this, SLOT(slotSetCageModeButtonClicked(bool)));
     connect(perspectiveTransformButton, SIGNAL(clicked(bool)), this, SLOT(slotSetPerspectiveModeButtonClicked(bool)));
     connect(liquifyButton, SIGNAL(clicked(bool)), this, SLOT(slotSetLiquifyModeButtonClicked(bool)));
+    connect(meshButton, SIGNAL(clicked(bool)), this, SLOT(slotSetMeshModeButtonClicked(bool)));
+
 
     tooBigLabelWidget->hide();
 
@@ -313,6 +315,7 @@ void KisToolTransformConfigWidget::slotUpdateIcons()
     cageButton->setIcon(KisIconUtils::loadIcon("transform_icons_cage"));
     perspectiveTransformButton->setIcon(KisIconUtils::loadIcon("transform_icons_perspective"));
     liquifyButton->setIcon(KisIconUtils::loadIcon("transform_icons_liquify_main"));
+    meshButton->setIcon(KisIconUtils::loadIcon("transform_icons_mesh"));
 
     liquifyMove->setIcon(KisIconUtils::loadIcon("transform_icons_liquify_move"));
     liquifyScale->setIcon(KisIconUtils::loadIcon("transform_icons_liquify_resize"));
@@ -629,6 +632,8 @@ void KisToolTransformConfigWidget::updateConfig(const ToolTransformArgs &config)
         }
 
         updateLiquifyControls();
+    } else if (config.mode() == ToolTransformArgs::MESH) {
+        stackedWidget->setCurrentIndex(4);
     }
 
     unblockUiSlots();
@@ -747,6 +752,17 @@ void KisToolTransformConfigWidget::slotButtonBoxClicked(QAbstractButton *button)
         emit sigCancelTransform();
     }
 
+}
+
+void KisToolTransformConfigWidget::slotSetMeshModeButtonClicked(bool value)
+{
+    if (!value) return;
+
+    lblTransformType->setText(meshButton->toolTip());
+
+    ToolTransformArgs *config = m_transaction->currentConfig();
+    config->setMode(ToolTransformArgs::MESH);
+    emit sigResetTransform(ToolTransformArgs::MESH);
 }
 
 void KisToolTransformConfigWidget::slotSetFreeTransformModeButtonClicked(bool value)

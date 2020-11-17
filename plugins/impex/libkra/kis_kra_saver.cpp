@@ -185,7 +185,38 @@ bool KisKraSaver::savePalettes(KoStore *store, KisImageSP image, const QString &
         store->close();
         res = true;
     }
+
     return res;
+}
+
+bool KisKraSaver::saveStoryboard(KoStore *store, KisImageSP image, const QString &uri)
+{
+    Q_UNUSED(image);
+    Q_UNUSED(uri);
+
+    if (m_d->doc->getStoryboardItemList().count() == 0) {
+        return true;
+    } else {
+        if (!store->open(m_d->imageName + STORYBOARD_PATH + "index.xml")) {
+            m_d->errorMessages << i18n("could not save storyboards");
+            return false;
+        }
+
+        QDomDocument storyboardDocument = m_d->doc->createDomDocument("storyboard-info", "1.1");
+        QDomElement root = storyboardDocument.documentElement();
+        saveStoryboardToXML(storyboardDocument, root);
+
+        QByteArray ba = storyboardDocument.toByteArray();
+        if (!ba.isEmpty()) {
+            store->write(ba);
+        } else {
+            qWarning() << "Could not save storyboard data to a byte array!";
+        }
+
+        store->close();
+    }
+
+    return true;
 }
 
 void KisKraSaver::savePalettesToXML(QDomDocument &doc, QDomElement &element)
@@ -199,6 +230,27 @@ void KisKraSaver::savePalettesToXML(QDomDocument &doc, QDomElement &element)
         ePalette.appendChild(eFile);
     }
     element.appendChild(ePalette);
+}
+
+void KisKraSaver:: saveStoryboardToXML(QDomDocument& doc, QDomElement &element)
+{
+    //saving storyboard comments
+    QDomElement eCommentList = doc.createElement("StoryboardCommentList");
+    for (StoryboardComment comment: m_d->doc->getStoryboardCommentsList()) {
+        QDomElement commentElement = doc.createElement("storyboardcomment");
+        commentElement.setAttribute("name", comment.name);
+        commentElement.setAttribute("visibility", comment.visibility);
+        eCommentList.appendChild(commentElement);
+    }
+    element.appendChild(eCommentList);
+
+    //saving storyboard items
+    QDomElement eItemList = doc.createElement("StoryboardItemList");
+    for (StoryboardItemSP item : m_d->doc->getStoryboardItemList()) {
+        QDomElement eItem =  item->toXML(doc);
+        eItemList.appendChild(eItem);
+    }
+    element.appendChild(eItemList);
 }
 
 bool KisKraSaver::saveKeyframes(KoStore *store, const QString &uri, bool external)

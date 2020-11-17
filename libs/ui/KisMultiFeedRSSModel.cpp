@@ -146,9 +146,13 @@ QVariant MultiFeedRssModel::data(const QModelIndex &index, int role) const
     switch (role) {
     case Qt::DisplayRole:
     {
+        QString text = item.description.left(90).append("...");
+        if (text.startsWith("<p>")) {
+            text.insert(2, " style=\"margin-top: 4px\"");
+        }
         return QString("<b><a href=\"" + item.link + "\">" + item.title + "</a></b>"
                "<br><small>(" + item.pubDate.toLocalTime().toString(Qt::DefaultLocaleShortDate) + ") "
-               + item.description.left(90).append("...") + "</small><hr>");
+               + text + "</small>");
     }
     case KisRssReader::RssRoles::TitleRole:
         return item.title;

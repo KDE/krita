@@ -25,6 +25,7 @@
 class KisTimeSpan;
 class KisNode;
 class QRect;
+class KisKeyframeChannel;
 
 /**
  * Implementations of this class are called by nodes whenever the node
@@ -118,6 +119,12 @@ public:
      * should be regenerated.
      */
      int graphSequenceNumber() const;
+
+     /**
+      * Inform the model that a keyframe channel has been added or removed.
+      */
+     virtual void keyframeChannelHasBeenAdded(KisNode *node, KisKeyframeChannel *channel);
+     virtual void keyframeChannelAboutToBeRemoved(KisNode *node, KisKeyframeChannel *channel);
 
 private:
     struct Private;

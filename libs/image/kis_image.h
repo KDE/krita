@@ -96,6 +96,9 @@ public: // KisNodeGraphListener implementation
     void requestTimeSwitch(int time) override;
     KisNode* graphOverlayNode() const override;
 
+    void keyframeChannelHasBeenAdded(KisNode *node, KisKeyframeChannel *channel) override;
+    void keyframeChannelAboutToBeRemoved(KisNode *node, KisKeyframeChannel *channel) override;
+
 public: // KisProjectionUpdateListener implementation
     void notifyProjectionUpdated(const QRect &rc) override;
 

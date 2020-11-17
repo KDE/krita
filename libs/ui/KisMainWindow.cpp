@@ -323,6 +323,22 @@ public:
     }
 };
 
+class ScopedWidgetDisabler
+{
+    QWidget *widget;
+public:
+    ScopedWidgetDisabler(QWidget *widget_)
+        : widget(widget_)
+    {
+        widget->setEnabled(false);
+    }
+
+    ~ScopedWidgetDisabler()
+    {
+        widget->setEnabled(true);
+    }
+};
+
 KisMainWindow::KisMainWindow(QUuid uuid)
     : KXmlGuiWindow()
     , d(new Private(this, uuid))
@@ -994,6 +1010,9 @@ KisView *KisMainWindow::activeView() const
 
 bool KisMainWindow::openDocument(const QUrl &url, OpenFlags flags)
 {
+    ScopedWidgetDisabler disabler(d->welcomeScroller);
+    QApplication::processEvents(); // make UI more responsive
+
     if (!QFile(url.toLocalFile()).exists()) {
         if (!(flags & BatchMode)) {
             QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("The file %1 does not exist.", url.url()));

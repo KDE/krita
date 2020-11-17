@@ -28,6 +28,7 @@ class KoStore;
 class KisDocument;
 class KoColorSpace;
 class KisPaintingAssistant;
+class StoryboardComment;
 
 #include <kis_types.h>
 #include "kritalibkra_export.h"
@@ -54,11 +55,16 @@ public:
     void loadBinaryData(KoStore* store, KisImageSP image, const QString & uri, bool external);
 
     void loadPalettes(KoStore *store, KisDocument *doc);
+    void loadStoryboards(KoStore *store, KisDocument *doc);
 
     vKisNodeSP selectedNodes() const;
 
     // it's neater to follow the same design as with selectedNodes, so let's have a getter here
     QList<KisPaintingAssistantSP> assistants() const;
+
+    StoryboardItemList storyboardItemList() const;
+
+    QVector<StoryboardComment> storyboardCommentList() const;
 
     /// if empty, loading didn't fail...
     QStringList errorMessages() const;
@@ -118,6 +124,8 @@ private:
     void loadGuides(const KoXmlElement& elem);
     void loadMirrorAxis(const KoXmlElement& elem);
     void loadAudio(const KoXmlElement& elem, KisImageSP image);
+    void loadStoryboardItemList(const KoXmlElement& elem);
+    void loadStoryboardCommentList(const KoXmlElement& elem);
 private:
 
     struct Private;

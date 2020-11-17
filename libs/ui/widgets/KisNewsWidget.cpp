@@ -24,11 +24,10 @@
 #include <QModelIndex>
 #include <QTextDocument>
 #include <QAbstractTextDocumentLayout>
+#include <QRegularExpression>
 
 #include "kis_config.h"
 #include "KisMultiFeedRSSModel.h"
-#include "QRegularExpression"
-
 
 KisNewsDelegate::KisNewsDelegate(QObject *parent)
     : QStyledItemDelegate(parent)
@@ -45,8 +44,9 @@ void KisNewsDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     QStyle *style = optionCopy.widget? optionCopy.widget->style() : QApplication::style();
 
     QTextDocument doc;
+    doc.setDocumentMargin(6);
     doc.setHtml(optionCopy.text);
-    doc.setDocumentMargin(10);
+    doc.setTextWidth(optionCopy.rect.width());
 
     /// Painting item without text
     optionCopy.text = QString();
@@ -55,14 +55,20 @@ void KisNewsDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     QAbstractTextDocumentLayout::PaintContext ctx;
 
     // Highlighting text if item is selected
+    QColor textColor;
     if (optionCopy.state & QStyle::State_Selected) {
-        ctx.palette.setColor(QPalette::Text, optionCopy.palette.color(QPalette::Active, QPalette::HighlightedText));
+        textColor = optionCopy.palette.color(QPalette::Active, QPalette::HighlightedText);
+    } else {
+        textColor = optionCopy.palette.color(QPalette::Text);
     }
+    ctx.palette.setColor(QPalette::Text, textColor);
 
     painter->translate(optionCopy.rect.left(), optionCopy.rect.top());
     QRect clip(0, 0, optionCopy.rect.width(), optionCopy.rect.height());
+    ctx.clip = clip;
     doc.setPageSize(clip.size());
-    doc.drawContents(painter, clip);
+    doc.documentLayout()->draw(painter, ctx);
+
     painter->restore();
 }
 
@@ -72,6 +78,7 @@ QSize KisNewsDelegate::sizeHint(const QStyleOptionViewItem &option, const QModel
     initStyleOption(&optionCopy, index);
 
     QTextDocument doc;
+    doc.setDocumentMargin(6);
     doc.setHtml(optionCopy.text);
     doc.setTextWidth(optionCopy.rect.width());
     return QSize(doc.idealWidth(), doc.size().height());
@@ -83,9 +90,11 @@ KisNewsWidget::KisNewsWidget(QWidget *parent)
     , m_rssModel(0)
 {
     setupUi(this);
+    listNews->viewport()->setAutoFillBackground(false);
+    listNews->installEventFilter(this);
+
     m_rssModel = new MultiFeedRssModel(this);
     connect(m_rssModel, SIGNAL(feedDataChanged()), this, SLOT(rssDataChanged()));
-
 
     setCursor(Qt::PointingHandCursor);
 
@@ -97,6 +106,15 @@ KisNewsWidget::KisNewsWidget(QWidget *parent)
 void KisNewsWidget::setAnalyticsTracking(QString text)
 {
     m_analyticsTrackingParameters = text;
+}
+
+bool KisNewsWidget::eventFilter(QObject *watched, QEvent *event)
+{
+    if (watched == listNews && event->type() == QEvent::Leave) {
+        listNews->clearSelection();
+        listNews->setCurrentIndex(QModelIndex());
+    }
+    return QWidget::eventFilter(watched, event);
 }
 
 void KisNewsWidget::toggleNews(bool toggle)
@@ -140,3 +158,4 @@ void KisNewsWidget::rssDataChanged()
 {
     emit newsDataChanged();
 }
+

@@ -20,9 +20,9 @@
 
 #include <QMap>
 #include <QString>
-#include <SeExpr2/Expression.h>
+#include <KSeExpr/Expression.h>
 
-class SeExprVariable : public SeExpr2::ExprVarRef
+class SeExprVariable : public KSeExpr::ExprVarRef
 {
 public:
     double m_value;

@@ -23,6 +23,7 @@
 #include <kis_processing_information.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_gradient_painter.h>
+#include "KoCompositeOpRegistry.h"
 
 #include "KisGradientGenerator.h"
 #include "KisGradientGeneratorConfigWidget.h"
@@ -44,13 +45,12 @@ void KisGradientGenerator::generate(KisProcessingInformation dst,
     const KisGradientGeneratorConfiguration *generatorConfiguration =
         dynamic_cast<const KisGradientGeneratorConfiguration*>(config.data());
 
-    device->clear(QRect(dst.topLeft(), size));
-
     QSize imageSize = device->defaultBounds()->imageBorderRect().size();
     QPair<QPointF, QPointF> positions =
         generatorConfiguration->absoluteCartesianPositionsInPixels(imageSize.width(), imageSize.height());
 
     KisGradientPainter painter(device);
+    painter.setCompositeOp(COMPOSITE_COPY);
     painter.setProgress(progressUpdater);
     painter.setGradientShape(generatorConfiguration->shape());
     painter.setGradient(generatorConfiguration->gradient());

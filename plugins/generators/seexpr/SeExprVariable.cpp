@@ -21,13 +21,13 @@
 #include "SeExprVariable.h"
 
 SeExprVariable::SeExprVariable()
-    : SeExpr2::ExprVarRef(SeExpr2::ExprType().FP(1).Varying())
+    : KSeExpr::ExprVarRef(KSeExpr::ExprType().FP(1).Varying())
     , m_value(0)
 {
 }
 
 SeExprVariable::SeExprVariable(const double v)
-    : SeExpr2::ExprVarRef(SeExpr2::ExprType().FP(1).Varying())
+    : KSeExpr::ExprVarRef(KSeExpr::ExprType().FP(1).Varying())
     , m_value(v)
 {
 }

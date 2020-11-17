@@ -343,6 +343,7 @@ build_3rdparty () {
         ext_quazip
 
     cmake_3rdparty ext_seexpr
+    cmake_3rdparty ext_mypaint
 
     ## All builds done, creating a new install onlydeps install dir
     dir_clean "${KIS_INSTALL_DIR}.onlydeps"
@@ -543,7 +544,7 @@ install_krita () {
 
     # compile integrations
     if test ${OSTYPE} == "darwin*"; then
-        cd ${KIS_BUILD_DIR}/krita/integration/kritaquicklook
+        cd ${KIS_BUILD_DIR}/krita/integration
         make install
     fi
 }

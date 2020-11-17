@@ -31,6 +31,7 @@
 #include <QScopedPointer>
 
 #include "config-updaters.h"
+class RecentItemDelegate;
 
 /// A widget for displaying if no documents are open. This will display in the MDI area
 class KRITAUI_EXPORT KisWelcomePageWidget : public QWidget, public Ui::KisWelcomePage
@@ -71,6 +72,8 @@ protected:
     void dragMoveEvent(QDragMoveEvent * event) override;
     void dragLeaveEvent(QDragLeaveEvent * event) override;
 
+    bool eventFilter(QObject *watched, QEvent *event) override;
+
 
 private:
     void showDevVersionHighlight();
@@ -109,6 +112,7 @@ public:
     static QPushButton* donationLink;
     static QLabel* donationBannerImage;
 #endif
+    RecentItemDelegate *recentItemDelegate = nullptr;
 
 private Q_SLOTS:
     void slotNewFileClicked();

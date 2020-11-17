@@ -203,6 +203,25 @@
             </property>
            </widget>
           </item>
+          <item>
+           <widget class="QToolButton" name="meshButton">
+            <property name="toolTip">
+             <string>Mesh</string>
+            </property>
+            <property name="text">
+             <string>Mesh</string>
+            </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+            <property name="autoExclusive">
+             <bool>true</bool>
+            </property>
+            <property name="autoRaise">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
          </layout>
         </item>
        </layout>
@@ -235,7 +254,7 @@
       <enum>QFrame::Raised</enum>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>4</number>
      </property>
      <widget class="QWidget" name="freeTransformWidget">
       <layout class="QVBoxLayout" name="verticalLayout">
@@ -2129,6 +2148,7 @@
        </item>
       </layout>
      </widget>
+     <widget class="QWidget" name="meshTransformPage"/>
     </widget>
    </item>
    <item>
@@ -2230,8 +2250,8 @@
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="cageTransformButtonGroup"/>
   <buttongroup name="buttonGroup"/>
+  <buttongroup name="cageTransformButtonGroup"/>
   <buttongroup name="freeTransformRadioGroup"/>
  </buttongroups>
 </ui>

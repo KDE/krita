@@ -139,6 +139,8 @@ public:
     int syntaxVersion; // version of the fileformat we are loading
     vKisNodeSP selectedNodes; // the nodes that were active when saving the document.
     QMap<QString, QString> assistantsFilenames;
+    StoryboardItemList storyboardItemList;
+    QVector<StoryboardComment> storyboardCommentList;
     QList<KisPaintingAssistantSP> assistants;
     QMap<KisNode*, QString> keyframeFilenames;
     QVector<QString> paletteFilenames;
@@ -351,8 +353,8 @@ KisImageSP KisKraLoader::loadXML(const KoXmlElement& element)
             }
         }
     }
-    KoXmlNode child;
 
+    KoXmlNode child;
     for (child = element.lastChild(); !child.isNull(); child = child.previousSibling()) {
         KoXmlElement e = child.toElement();
         if (e.tagName() == "grid") {
@@ -542,6 +544,29 @@ void KisKraLoader::loadPalettes(KoStore *store, KisDocument *doc)
     doc->setPaletteList(list);
 }
 
+void KisKraLoader::loadStoryboards(KoStore *store, KisDocument *doc)
+{
+    store->open(m_d->imageName + STORYBOARD_PATH + "index.xml");
+    QByteArray data = store->read(store->size());
+    QDomDocument document;
+    document.setContent(data);
+    store->close();
+
+    QDomElement root = document.documentElement();
+    QDomNode node;
+    for (node = root.lastChild(); !node.isNull(); node = node.previousSibling()) {
+        if (node.isElement()) {
+            QDomElement element = node.toElement();
+            if (element.tagName() == "StoryboardItemList") {
+                loadStoryboardItemList(element);
+            } else if (element.tagName() == "StoryboardCommentList") {
+                loadStoryboardCommentList(element);
+            }
+
+        }
+    }
+}
+
 vKisNodeSP KisKraLoader::selectedNodes() const
 {
     return m_d->selectedNodes;
@@ -552,6 +577,15 @@ QList<KisPaintingAssistantSP> KisKraLoader::assistants() const
     return m_d->assistants;
 }
 
+StoryboardItemList KisKraLoader::storyboardItemList() const
+{
+    return m_d->storyboardItemList;
+}
+
+QVector<StoryboardComment> KisKraLoader::storyboardCommentList() const
+{
+    return m_d->storyboardCommentList;
+}
 QStringList KisKraLoader::errorMessages() const
 {
     return m_d->errorMessages;
@@ -1287,6 +1321,41 @@ void KisKraLoader::loadAudio(const KoXmlElement& elem, KisImageSP image)
     }
 }
 
+void KisKraLoader::loadStoryboardItemList(const KoXmlElement& elem)
+{
+    KoXmlNode child;
+    int count = 0;
+    for (child = elem.firstChild(); !child.isNull(); child = child.nextSibling()) {
+        KoXmlElement e = child.toElement();
+        if (e.tagName() == "storyboarditem") {
+            StoryboardItemSP item = toQShared( new StoryboardItem() );
+            item->loadXML(e);
+            count++;
+            m_d->storyboardItemList.append(item);
+        }
+    }
+    qDebug()<<"found "<<count<<" storyboards";
+}
+
+void KisKraLoader::loadStoryboardCommentList(const KoXmlElement& elem)
+{
+    KoXmlNode child;
+    int count = 0;
+    for (child = elem.firstChild(); !child.isNull(); child = child.nextSibling()) {
+        KoXmlElement e = child.toElement();
+        if (e.tagName() == "storyboardcomment") {
+            StoryboardComment comment;
+            if (e.hasAttribute("visibility")) {
+                comment.visibility = e.attribute("visibility").toInt();
+            }
+            if (e.hasAttribute("name")) {
+                comment.name = e.attribute("name");
+            }
+            count++;
+            m_d->storyboardCommentList.append(comment);
+        }
+    }
+}
 KisNodeSP KisKraLoader::loadReferenceImagesLayer(const KoXmlElement &elem, KisImageSP image)
 {
     KisSharedPtr<KisReferenceImagesLayer> layer =

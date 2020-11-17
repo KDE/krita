@@ -29,6 +29,7 @@
 #include "kritatooltransform_export.h"
 #include "kis_global.h"
 #include "KisToolChangesTrackerData.h"
+#include "KisBezierTransformMesh.h"
 
 #include <QScopedPointer>
 class KisLiquifyTransformWorker;
@@ -49,6 +50,7 @@ public:
                         CAGE,
                         LIQUIFY,
                         PERSPECTIVE_4POINT,
+                        MESH,
                         N_MODES};
 
     /**
@@ -308,6 +310,9 @@ public:
     void restoreContinuedState();
     const ToolTransformArgs* continuedTransform() const;
 
+    const KisBezierTransformMesh* meshTransform() const;
+    KisBezierTransformMesh* meshTransform();
+
 private:
     void clear();
     void init(const ToolTransformArgs& args);
@@ -350,6 +355,8 @@ private:
     bool m_editTransformPoints {false};
     QSharedPointer<KisLiquifyProperties> m_liquifyProperties;
     QScopedPointer<KisLiquifyTransformWorker> m_liquifyWorker;
+
+    KisBezierTransformMesh m_meshTransform;
 
     /**
      * When we continue a transformation, m_continuedTransformation

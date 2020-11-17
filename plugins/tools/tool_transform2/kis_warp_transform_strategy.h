@@ -34,7 +34,8 @@ class QImage;
 
 enum TransformType {
     WARP_TRANSFORM,
-    CAGE_TRANSFORM
+    CAGE_TRANSFORM,
+    MESH_TRANSFORM
 };
 
 class KisWarpTransformStrategy : public KisSimplifiedActionPolicyStrategy
@@ -46,7 +47,7 @@ public:
                              TransformTransactionProperties &transaction);
     ~KisWarpTransformStrategy() override;
 
-    void setTransformFunction(const QPointF &mousePos, bool perspectiveModifierActive) override;
+    void setTransformFunction(const QPointF &mousePos, bool perspectiveModifierActive, bool shiftModifierActive, bool altModifierActive) override;
     void setTransformType(TransformType type);
 
     void paint(QPainter &gc) override;

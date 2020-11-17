@@ -74,6 +74,16 @@ int KisNodeGraphListener::graphSequenceNumber() const
     return m_d->sequenceNumber;
 }
 
+void KisNodeGraphListener::keyframeChannelHasBeenAdded(KisNode *node, KisKeyframeChannel *channel)
+{
+
+}
+
+void KisNodeGraphListener::keyframeChannelAboutToBeRemoved(KisNode *node, KisKeyframeChannel *channel)
+{
+
+}
+
 void KisNodeGraphListener::nodeChanged(KisNode * /*node*/)
 {
 }

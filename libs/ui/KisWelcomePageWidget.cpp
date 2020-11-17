@@ -81,59 +81,41 @@ QLabel* KisWelcomePageWidget::donationBannerImage;
 #endif
 
 
+// class to override item height for Breeze since qss seems to not work
+class RecentItemDelegate : public QStyledItemDelegate
+{
+    int itemHeight = 0;
+public:
+    RecentItemDelegate(QObject *parent = 0)
+        : QStyledItemDelegate(parent)
+    {
+    }
+
+    void setItemHeight(int itemHeight)
+    {
+        this->itemHeight = itemHeight;
+    }
+
+    QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &/*index*/) const override
+    {
+        return QSize(option.rect.width(), itemHeight);
+    }
+};
+
+
 KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
     : QWidget(parent)
 {
     setupUi(this);
+    labelNoRecentDocs->setVisible(false);
     recentDocumentsListView->setDragEnabled(false);
     recentDocumentsListView->viewport()->setAutoFillBackground(false);
     recentDocumentsListView->setSpacing(2);
+    recentDocumentsListView->installEventFilter(this);
 
     // set up URLs that go to web browser
-    manualLink->setTextFormat(Qt::RichText);
-    manualLink->setTextInteractionFlags(Qt::TextBrowserInteraction);
-    manualLink->setOpenExternalLinks(true);
-
-    gettingStartedLink->setTextFormat(Qt::RichText);
-    gettingStartedLink->setTextInteractionFlags(Qt::TextBrowserInteraction);
-    gettingStartedLink->setOpenExternalLinks(true);
-
-    supportKritaLink->setTextFormat(Qt::RichText);
-    supportKritaLink->setTextInteractionFlags(Qt::TextBrowserInteraction);
-    supportKritaLink->setOpenExternalLinks(true);
-
-    userCommunityLink->setTextFormat(Qt::RichText);
-    userCommunityLink->setTextInteractionFlags(Qt::TextBrowserInteraction);
-    userCommunityLink->setOpenExternalLinks(true);
-
-
-    kritaWebsiteLink->setTextFormat(Qt::RichText);
-    kritaWebsiteLink->setTextInteractionFlags(Qt::TextBrowserInteraction);
-    kritaWebsiteLink->setOpenExternalLinks(true);
-
-
-    sourceCodeLink->setTextFormat(Qt::RichText);
-    sourceCodeLink->setTextInteractionFlags(Qt::TextBrowserInteraction);
-    sourceCodeLink->setOpenExternalLinks(true);
-
-    poweredByKDELink->setTextFormat(Qt::RichText);
-    poweredByKDELink->setTextInteractionFlags(Qt::TextBrowserInteraction);
-    poweredByKDELink->setOpenExternalLinks(true);
-    kdeIcon->setIconSize(QSize(20, 20));
-    kdeIcon->setIcon(KisIconUtils::loadIcon(QStringLiteral("kde")).pixmap(20));
-
-
-    versionNotificationLabel->setTextFormat(Qt::RichText);
-    versionNotificationLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);
-    versionNotificationLabel->setOpenExternalLinks(true);
-
     devBuildIcon->setIcon(KisIconUtils::loadIcon("warning"));
-
-    devBuildLabel->setTextFormat(Qt::RichText);
-    devBuildLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);
-    devBuildLabel->setOpenExternalLinks(true);
     devBuildLabel->setVisible(false);
-
     updaterFrame->setVisible(false);
     versionNotificationLabel->setVisible(false);
     bnVersionUpdate->setVisible(false);
@@ -234,6 +216,7 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
 #endif // ENABLE_UPDATERS
 
     chkShowNews->setChecked(m_checkUpdates);
+    newsWidget->setVisible(m_checkUpdates);
 
     setAcceptDrops(true);
 }
@@ -296,17 +279,20 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
 
     // make the welcome screen labels a subtle color so it doesn't clash with the main UI elements
     blendedColor = KritaUtils::blendColors(textColor, backgroundColor, 0.8);
-    blendedStyle = QString("color: ").append(blendedColor.name());
-
+    // only apply color to the widget itself, not to the tooltip or something
+    blendedStyle = "QWidget{color: " + blendedColor.name() + "}";
 
     // what labels to change the color...
     startTitleLabel->setStyleSheet(blendedStyle);
     recentDocumentsLabel->setStyleSheet(blendedStyle);
     helpTitleLabel->setStyleSheet(blendedStyle);
+    newsTitleLabel->setStyleSheet(blendedStyle);
+    chkShowNews->setStyleSheet(blendedStyle);
     newFileLinkShortcut->setStyleSheet(blendedStyle);
     openFileShortcut->setStyleSheet(blendedStyle);
     clearRecentFilesLink->setStyleSheet(blendedStyle);
     recentDocumentsListView->setStyleSheet(blendedStyle);
+    newsWidget->setStyleSheet(blendedStyle);
 
     newFileLink->setStyleSheet(blendedStyle);
     openFileLink->setStyleSheet(blendedStyle);
@@ -331,8 +317,15 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
     openFileLink->setIcon(KisIconUtils::loadIcon("document-open"));
     newFileLink->setIcon(KisIconUtils::loadIcon("document-new"));
 
+    supportKritaIcon->setIcon(KisIconUtils::loadIcon(QStringLiteral("support-krita")));
+    const QIcon &linkIcon = KisIconUtils::loadIcon(QStringLiteral("bookmarks"));
+    userManualIcon->setIcon(linkIcon);
+    gettingStartedIcon->setIcon(linkIcon);
+    userCommunityIcon->setIcon(linkIcon);
+    kritaWebsiteIcon->setIcon(linkIcon);
+    sourceCodeIcon->setIcon(linkIcon);
 
-    kdeIcon->setIcon(KisIconUtils::loadIcon(QStringLiteral("kde")).pixmap(20));
+    kdeIcon->setIcon(KisIconUtils::loadIcon(QStringLiteral("kde")));
 
     // HTML links seem to be a bit more stubborn with theme changes... setting inline styles to help with color change
     userCommunityLink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://krita-artists.org\">")
@@ -356,6 +349,15 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
     poweredByKDELink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://userbase.kde.org/What_is_KDE?" + analyticsString + "what-is-kde" + "\">")
                               .append(i18n("Powered by KDE")).append("</a>"));
 
+    const QColor faintTextColor = KritaUtils::blendColors(textColor, backgroundColor, 0.4);
+    const QString &faintTextStyle = "QWidget{color: " + faintTextColor.name() + "}";
+    labelNoRecentDocs->setStyleSheet(faintTextStyle);
+    labelNoFeed->setStyleSheet(faintTextStyle);
+
+    const QColor frameColor = KritaUtils::blendColors(textColor, backgroundColor, 0.1);
+    const QString &frameQss = "{border: 1px solid " + frameColor.name() + "}";
+    recentDocsFrame->setStyleSheet("QFrame#recentDocsFrame" + frameQss);
+    newsFrame->setStyleSheet("QFrame#newsFrame" + frameQss);
 
     // show the dev version labels, if dev version is detected
     showDevVersionHighlight();
@@ -369,63 +371,64 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
     donationLink->setStyleSheet(blendedStyle);
     donationLink->setText(QString(i18n("Get your Krita Supporter Badge here!")));
 #endif
-    // re-populate recent files since they might have themed icons
-    populateRecentDocuments();
-
 }
 
 void KisWelcomePageWidget::populateRecentDocuments()
 {
+    constexpr const int maxItemsCount = 5;
+    const int itemHeight = recentDocumentsListView->height() / maxItemsCount
+            - recentDocumentsListView->spacing() * 2;
 
-    m_recentFilesModel.clear(); // clear existing data before it gets re-populated
-
+    const QList<QUrl> &recentFileUrls = m_mainWindow->recentFilesUrls();
     // grab recent files data
-    int numRecentFiles = m_mainWindow->recentFilesUrls().length() > 5 ? 5 : m_mainWindow->recentFilesUrls().length(); // grab at most 5
+    int numRecentFiles = qMin(recentFileUrls.length(), maxItemsCount); // grab at most 5
     KisFileIconCreator iconCreator;
+    QSize iconSize(itemHeight, itemHeight);
+    QList<QUrl> brokenUrls;
+    QList<QStandardItem *> items;
 
-    for (int i = 0; i < numRecentFiles; i++ ) {
-
-        QStandardItem *recentItem = new QStandardItem(1,2); // 1 row, 1 column
-        recentItem->setIcon(KisIconUtils::loadIcon("document-export"));
-
-        QString recentFileUrlPath = m_mainWindow->recentFilesUrls().at(i).toLocalFile();
-
-        QString fileName = QFileInfo(recentFileUrlPath).fileName();
-
-        QList<QUrl> brokenUrls;
-
+    for (int i = 0; i < numRecentFiles; i++) {
+        QString recentFileUrlPath = recentFileUrls.at(i).toLocalFile();
+        QIcon icon;
 
         if (m_thumbnailMap.contains(recentFileUrlPath)) {
-            recentItem->setIcon(m_thumbnailMap[recentFileUrlPath]);
+            icon = m_thumbnailMap[recentFileUrlPath];
         } else {
-            QIcon icon;
-            bool success = iconCreator.createFileIcon(recentFileUrlPath, icon, devicePixelRatioF());
+            bool success = iconCreator.createFileIcon(recentFileUrlPath, icon, devicePixelRatioF(), iconSize);
             if (success) {
-                recentItem->setIcon(icon);
-                m_thumbnailMap[recentFileUrlPath] = recentItem->icon();
+                m_thumbnailMap[recentFileUrlPath] = icon;
             } else {
-                brokenUrls << m_mainWindow->recentFilesUrls().at(i);
+                brokenUrls << recentFileUrls.at(i);
+                continue;
             }
+        }
 
-        }
-        Q_FOREACH(const QUrl &url, brokenUrls) {
-            m_mainWindow->removeRecentUrl(url);
-        }
-        // set the recent object with the data
-        if (brokenUrls.isEmpty() || brokenUrls.last().toLocalFile() != recentFileUrlPath) {
-            recentItem->setText(fileName); // what to display for the item
-            recentItem->setToolTip(recentFileUrlPath);
-            m_recentFilesModel.appendRow(recentItem);
-        }
+        const QString &fileName = QFileInfo(recentFileUrlPath).fileName();
+        QStandardItem *recentItem = new QStandardItem(icon, fileName);
+        recentItem->setToolTip(recentFileUrlPath);
+        items.append(recentItem);
+    }
+
+    for (const QUrl &url : brokenUrls) {
+        m_mainWindow->removeRecentUrl(url);
     }
 
     // hide clear and Recent files title if there are none
-    bool hasRecentFiles = m_mainWindow->recentFilesUrls().length() > 0;
+    labelNoRecentDocs->setVisible(items.isEmpty());
+    recentDocumentsListView->setVisible(!items.isEmpty());
+    clearRecentFilesLink->setVisible(!items.isEmpty());
 
-    recentDocumentsLabel->setVisible(hasRecentFiles);
-    clearRecentFilesLink->setVisible(hasRecentFiles);
+    m_recentFilesModel.clear(); // clear existing data before it gets re-populated
+    for (QStandardItem *item : items) {
+        m_recentFilesModel.appendRow(item);
+    }
 
-    recentDocumentsListView->setIconSize(QSize(48, 48));
+    recentDocumentsListView->setIconSize(iconSize);
+    if (!recentItemDelegate) {
+        recentItemDelegate = new RecentItemDelegate(this);
+        recentDocumentsListView->setItemDelegate(recentItemDelegate);
+    }
+    recentItemDelegate->setItemHeight(itemHeight);
     recentDocumentsListView->setModel(&m_recentFilesModel);
 }
 
@@ -490,6 +493,15 @@ void KisWelcomePageWidget::dragLeaveEvent(QDragLeaveEvent */*event*/)
     showDropAreaIndicator(false);
     m_mainWindow->dragLeave();
 }
+
+bool KisWelcomePageWidget::eventFilter(QObject *watched, QEvent *event)
+{
+    if (watched == recentDocumentsListView && event->type() == QEvent::Leave) {
+        recentDocumentsListView->clearSelection();
+    }
+    return QWidget::eventFilter(watched, event);
+}
+
 
 void KisWelcomePageWidget::showDevVersionHighlight()
 {

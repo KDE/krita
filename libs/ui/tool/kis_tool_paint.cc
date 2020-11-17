@@ -705,7 +705,7 @@ void KisToolPaint::requestUpdateOutline(const QPointF &outlineDocPoint, const Ko
     m_outlineDocPoint = outlineDocPoint;
     m_currentOutline = getOutlinePath(m_outlineDocPoint, event, outlineMode);
 
-    QRectF outlinePixelRect = m_currentOutline.boundingRect();
+    QRectF outlinePixelRect = tryFixBrushOutline(m_currentOutline).boundingRect();
     QRectF outlineDocRect = currentImage()->pixelToDocument(outlinePixelRect);
 
     // This adjusted call is needed as we paint with a 3 pixel wide brush and the pen is outside the bounds of the path

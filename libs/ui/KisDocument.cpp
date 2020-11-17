@@ -332,6 +332,9 @@ public:
 
     QList<KisPaintingAssistantSP> assistants;
 
+    StoryboardItemList m_storyboardItemList;
+    QVector<StoryboardComment> m_storyboardCommentList;
+
     QColor globalAssistantsColor;
 
     KisGridConfig gridConfig;
@@ -432,6 +435,8 @@ void KisDocument::Private::copyFromImpl(const Private &rhs, KisDocument *q, KisD
         q->setMirrorAxisConfig(rhs.mirrorAxisConfig);
         q->setModified(rhs.modified);
         q->setAssistants(KisPaintingAssistant::cloneAssistantList(rhs.assistants));
+        q->setStoryboardItemList(StoryboardItem::cloneStoryboardItemList(rhs.m_storyboardItemList));
+        q->setStoryboardCommentList(rhs.m_storyboardCommentList);
         q->setGridConfig(rhs.gridConfig);
     } else {
         // in CONSTRUCT mode, we cannot use the functions of KisDocument
@@ -440,6 +445,8 @@ void KisDocument::Private::copyFromImpl(const Private &rhs, KisDocument *q, KisD
         mirrorAxisConfig = rhs.mirrorAxisConfig;
         modified = rhs.modified;
         assistants = KisPaintingAssistant::cloneAssistantList(rhs.assistants);
+        m_storyboardItemList = StoryboardItem::cloneStoryboardItemList(rhs.m_storyboardItemList);
+        m_storyboardCommentList = rhs.m_storyboardCommentList;
         gridConfig = rhs.gridConfig;
     }
     m_bAutoDetectedMime = rhs.m_bAutoDetectedMime;
@@ -1984,6 +1991,32 @@ void KisDocument::setPaletteList(const QList<KoColorSetSP > &paletteList, bool e
                 emit sigPaletteListChanged(oldPaletteList, paletteList);
             }
         }
+    }
+}
+
+StoryboardItemList KisDocument::getStoryboardItemList()
+{
+    return d->m_storyboardItemList;
+}
+
+void KisDocument::setStoryboardItemList(const StoryboardItemList &storyboardItemList, bool emitSignal)
+{
+    d->m_storyboardItemList = storyboardItemList;
+    if (emitSignal) {
+        emit sigStoryboardItemListChanged();
+    }
+}
+
+QVector<StoryboardComment> KisDocument::getStoryboardCommentsList()
+{
+    return d->m_storyboardCommentList;
+}
+
+void KisDocument::setStoryboardCommentList(const QVector<StoryboardComment> &storyboardCommentList, bool emitSignal)
+{
+    d->m_storyboardCommentList = storyboardCommentList;
+    if (emitSignal) {
+        emit sigStoryboardCommentListChanged();
     }
 }
 

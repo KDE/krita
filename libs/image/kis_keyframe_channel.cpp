@@ -24,6 +24,8 @@
 #include "kis_node.h"
 #include "kis_time_span.h"
 #include "kundo2command.h"
+#include "kis_image.h"
+#include "kis_image_animation_interface.h"
 #include "kis_keyframe_commands.h"
 #include "kis_scalar_keyframe_channel.h"
 
@@ -96,7 +98,7 @@ KisKeyframeChannel::KisKeyframeChannel(const KisKeyframeChannel &rhs, KisNodeWSP
     : KisKeyframeChannel(rhs.m_d->id, KisDefaultBoundsNodeWrapperSP( new KisDefaultBoundsNodeWrapper(newParent)))
 {
     m_d.reset(new Private(*rhs.m_d));
-    m_d->parentNode = newParent;
+    setNode(newParent);
 }
 
 KisKeyframeChannel::~KisKeyframeChannel()

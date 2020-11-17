@@ -51,6 +51,7 @@
 #include <KisGlobalResourcesInterface.h>
 
 #include "kis_transform_mask_params_interface.h"
+#include "StoryboardItem.h"
 
 #include <generator/kis_generator_registry.h>
 
@@ -545,6 +546,29 @@ void KisKraSaverTest::testRoundTripShapeSelection()
     QVERIFY(chk.testPassed());
 }
 
+
+void KisKraSaverTest::testRoundTripStoryboard()
+{
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    QRect imageRect(0,0,512,512);
+
+    QScopedPointer<KisDocument> doc(KisPart::instance()->createDocument());
+    KisImageSP image = new KisImage(new KisSurrogateUndoStore(), imageRect.width(), imageRect.height(), cs, "test image");
+    doc->setCurrentImage(image);
+
+    StoryboardItemList list;
+    list.append(toQShared(new StoryboardItem()));
+
+    doc->setStoryboardItemList(list);
+    bool result = doc->exportDocumentSync(QUrl::fromLocalFile("storyboardroundtriptest.kra"), doc->mimeType());
+    QVERIFY(result);
+
+    KisDocument *doc2 = KisPart::instance()->createDocument();
+    result = doc2->loadNativeFormat("storyboardroundtriptest.kra");
+    QVERIFY(result);
+
+    QCOMPARE(doc2->getStoryboardItemList().count(), list.count());
+}
 
 void KisKraSaverTest::testExportToReadonly()
 {

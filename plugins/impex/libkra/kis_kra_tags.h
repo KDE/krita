@@ -41,6 +41,7 @@ const QString LAYER_STYLES_PATH = "/annotations/layerstyles.asl";
 const QString ASSISTANTS_PATH = "/assistants/";
 const QString LAYER_PATH = "/layers/";
 const QString PALETTE_PATH = "/palettes/";
+const QString STORYBOARD_PATH = "/storyboard/";
 
 const QString ADJUSTMENT_LAYER = "adjustmentlayer";
 const QString CHANNEL_FLAGS = "channelflags";

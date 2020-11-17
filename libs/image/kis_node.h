@@ -200,7 +200,7 @@ public:
     virtual KisProjectionLeafSP projectionLeaf() const;
 
 
-    void setImage(KisImageWSP image) override;
+    void setImage(KisImageWSP newImage) override;
 
 protected:
 

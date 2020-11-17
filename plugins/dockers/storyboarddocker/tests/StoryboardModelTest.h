@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007 Boudewijn Rempt boud@valdyas.org
+ *  Copyright (c) 2020 Saurabh Kumar <saurabhk660@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,39 +16,37 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_KRA_SAVER_TEST_H
-#define KIS_KRA_SAVER_TEST_H
+#ifndef __STORYBOARD_MODEL_TEST_H
+#define __STORYBOARD_MODEL_TEST_H
 
 #include <QtTest>
 
-class KisKraSaverTest : public QObject
+class StoryboardCommentModel;
+class StoryboardModel;
+
+class StoryboardModelTest : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:
+    void init();
+    void cleanup();
 
-    void initTestCase();
+    //interaction with comment model
+    void testAddComment();
+    void testRemoveComment();
+    void testCommentNameChanged();
 
-    void testCrashyShapeLayer();
+    //"storyboard model only" tests
+    void testFrameAdded();
+    void testFrameRemoved();
+    void testFrameChanged();
+    void testDurationChanged();
+    void testCommentChanged();
 
-    // XXX: Also test roundtripping of metadata
-    void testRoundTrip();
-
-    void testSaveEmpty();
-    void testRoundTripFillLayerColor();
-    void testRoundTripFillLayerPattern();
-
-    void testRoundTripLayerStyles();
-
-    void testRoundTripAnimation();
-
-    void testRoundTripColorizeMask();
-
-    void testRoundTripShapeLayer();
-    void testRoundTripShapeSelection();
-    void testRoundTripStoryboard();
-
-    void testExportToReadonly();
+private:
+    StoryboardCommentModel *m_commentModel;
+    StoryboardModel *m_storyboardModel;
 
 };
 
-#endif
+#endif /* __STORYBOARD_MODEL_TEST_H */

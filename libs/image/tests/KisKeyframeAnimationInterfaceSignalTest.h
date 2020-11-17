@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007 Boudewijn Rempt boud@valdyas.org
+ *  Copyright (c) 2020 Saurabh Kumar <saurabhk660@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,39 +16,34 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_KRA_SAVER_TEST_H
-#define KIS_KRA_SAVER_TEST_H
+#ifndef KIS_KEYFRAME_ANIMATIONINTERFACE_SIGNAL_TEST_H
+#define KIS_KEYFRAME_ANIMATIONINTERFACE_SIGNAL_TEST_H
 
 #include <QtTest>
 
-class KisKraSaverTest : public QObject
+#include "kis_paint_layer.h"
+#include "kis_image.h"
+#include "kis_image_animation_interface.h"
+#include "kis_raster_keyframe_channel.h"
+#include "kis_undo_store.h"
+
+class KisKeyframeAnimationInterfaceSignalTest : public QObject
 {
     Q_OBJECT
+
 private Q_SLOTS:
 
     void initTestCase();
+    void init();
 
-    void testCrashyShapeLayer();
+    void testSignalFromKeyframeChannelToInterface();
+    void testSignalOnImageReset();
 
-    // XXX: Also test roundtripping of metadata
-    void testRoundTrip();
-
-    void testSaveEmpty();
-    void testRoundTripFillLayerColor();
-    void testRoundTripFillLayerPattern();
-
-    void testRoundTripLayerStyles();
-
-    void testRoundTripAnimation();
-
-    void testRoundTripColorizeMask();
-
-    void testRoundTripShapeLayer();
-    void testRoundTripShapeSelection();
-    void testRoundTripStoryboard();
-
-    void testExportToReadonly();
-
+private:
+    KisImageSP m_image1;
+    KisImageSP m_image2;
+    KisPaintLayerSP m_layer;
+    KisKeyframeChannel *m_channel;
 };
 
 #endif

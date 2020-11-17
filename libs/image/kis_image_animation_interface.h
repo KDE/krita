@@ -27,6 +27,7 @@
 
 class KisUpdatesFacade;
 class KisTimeSpan;
+class KisKeyframeChannel;
 class KoColor;
 class KisRegion;
 
@@ -206,6 +207,9 @@ Q_SIGNALS:
      * when you mute the channel! When muting, sigAudioChannelChanged() is used instead!
      */
     void sigAudioVolumeChanged();
+
+    void sigKeyframeAdded(const KisKeyframeChannel* channel, int time);
+    void sigKeyframeRemoved(const KisKeyframeChannel* channel, int time);
 
 private:
     struct Private;

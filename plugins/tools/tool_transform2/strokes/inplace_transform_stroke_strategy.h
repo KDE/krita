@@ -21,6 +21,7 @@
 
 #include <QObject>
 #include <QMutex>
+#include <QElapsedTimer>
 #include <KoUpdater.h>
 #include <kis_stroke_strategy_undo_command_based.h>
 #include <kis_types.h>
@@ -30,6 +31,9 @@
 #include <boost/optional.hpp>
 #include <transform_transaction_properties.h>
 #include "kis_selection_mask.h"
+#include "KisAsyncronousStrokeUpdateHelper.h"
+#include "kis_undo_stores.h"
+
 
 class KisPostExecutionUndoAdapter;
 class TransformTransactionProperties;
@@ -41,41 +45,32 @@ class InplaceTransformStrokeStrategy : public QObject, public KisStrokeStrategyU
 {
     Q_OBJECT
 public:
-    struct SharedState {
-        QMutex initializationMutex;
-        bool processingStarted = false;
-        ToolTransformArgs nextInitializationArgs;
+    class UpdateTransformData : public KisStrokeJobData {
+    public:
+        UpdateTransformData(ToolTransformArgs _args)
+            : KisStrokeJobData(SEQUENTIAL, NORMAL),
+              args(_args)
+        {}
 
-        bool isInitialized = false;
-        ToolTransformArgs args;
-        ToolTransformArgs initialTransformArgs;
-        TransformTransactionProperties props;
-        KisSelectionSP selection;
-        QVector<QRect> pendingUIUpdates;
-        QList<KisSelectionSP> deactivatedSelections;
-        KisSelectionMaskSP deactivatedOverlaySelectionMask;
-
-        QMutex commandsMutex;
-        QVector<KUndo2CommandSP> clearCommands;
-        QVector<KUndo2CommandSP> transformCommands;
-
-        QMutex devicesCacheMutex;
-        QHash<KisPaintDevice*, KisPaintDeviceSP> devicesCacheHash;
-
-        QAtomicInt skipCancellationMarker;
-
-
-        QMutex dirtyRectsMutex;
-        QHash<KisNodeSP, QRect> dirtyRects;
-
-
-        void addDirtyRect(KisNodeSP node, const QRect &rect) {
-            QMutexLocker l(&dirtyRectsMutex);
-            dirtyRects[node] |= rect;
+        KisStrokeJobData* createLodClone(int levelOfDetail) override {
+            return new UpdateTransformData(*this, levelOfDetail);
         }
-    };
-    typedef QSharedPointer<SharedState> SharedStateSP;
 
+    private:
+        UpdateTransformData(const UpdateTransformData &rhs, int levelOfDetail)
+            : KisStrokeJobData(rhs),
+              args(rhs.args)
+        {
+            Q_UNUSED(levelOfDetail);
+        }
+    public:
+        ToolTransformArgs args;
+    };
+
+    struct KRITAUI_EXPORT BarrierUpdateData : public KisAsyncronousStrokeUpdateHelper::UpdateData
+    {
+        BarrierUpdateData(bool forceUpdate);
+    };
 
 public:
     InplaceTransformStrokeStrategy(ToolTransformArgs::TransformMode mode,
@@ -84,16 +79,8 @@ public:
                                    bool forceReset,
                                    KisNodeSP rootNode,
                                    KisSelectionSP selection,
-                                   SharedStateSP sharedState,
                                    KisStrokeUndoFacade *undoFacade,
                                    KisUpdatesFacade *updatesFacade);
-
-    InplaceTransformStrokeStrategy(const ToolTransformArgs &args,
-                                   SharedStateSP sharedState,
-                                   KisStrokeUndoFacade *undoFacade,
-                                   KisUpdatesFacade *updatesFacade);
-
-
 
     ~InplaceTransformStrokeStrategy() override;
 
@@ -152,6 +139,10 @@ private:
     void clearNode(KisNodeSP node);
     void transformNode(KisNodeSP node, const ToolTransformArgs &config);
 
+    void tryPostUpdateJob(bool forceUpdate);
+    void doCanvasUpdate(bool forceUpdate);
+
+
 private:
     KisUpdatesFacade *m_updatesFacade;
     ToolTransformArgs::TransformMode m_mode;
@@ -164,17 +155,44 @@ private:
     KisTransformMaskSP writeToTransformMask;
 
     ToolTransformArgs m_initialTransformArgs;
+    ToolTransformArgs m_currentTransformArgs;
     KisNodeSP m_rootNode;
     KisNodeList m_processedNodes;
     QVector<KisDecoratedNodeInterface*> m_disabledDecoratedNodes;
+    QList<KisSelectionSP> m_deactivatedSelections;
+    KisSelectionMaskSP m_deactivatedOverlaySelectionMask;
 
     const KisSavedMacroCommand *m_overriddenCommand = 0;
     QVector<const KUndo2Command*> m_skippedWhileMergeCommands;
 
     bool m_finalizingActionsStarted = false;
 
-    SharedStateSP m_sharedState;
     bool m_updatesDisabled = false;
+
+    boost::optional<ToolTransformArgs> m_pendingUpdateArgs;
+    QElapsedTimer m_updateTimer;
+    const int m_updateInterval = 30;
+
+    QMutex m_commandsMutex;
+    QVector<KUndo2CommandSP> m_clearCommands;
+    QVector<KUndo2CommandSP> m_transformCommands;
+
+    QMutex m_devicesCacheMutex;
+    QHash<KisPaintDevice*, KisPaintDeviceSP> m_devicesCacheHash;
+
+    QMutex m_dirtyRectsMutex;
+    QHash<KisNodeSP, QRect> m_dirtyRects;
+    QHash<KisNodeSP, QRect> m_prevDirtyRects;
+
+
+    void executeAndAddClearCommand(KUndo2Command *cmd);
+
+    void executeAndAddTransformCommand(KUndo2Command *cmd);
+
+    void addDirtyRect(KisNodeSP node, const QRect &rect) {
+        QMutexLocker l(&m_dirtyRectsMutex);
+        m_dirtyRects[node] |= rect;
+    }
 };
 
 #endif /* __INPLACE_TRANSFORM_STROKE_STRATEGY_H */

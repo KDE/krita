@@ -61,7 +61,6 @@ InplaceTransformStrokeStrategy::InplaceTransformStrokeStrategy(ToolTransformArgs
                                                                bool forceReset,
                                                                KisNodeSP rootNode,
                                                                KisSelectionSP selection,
-                                                               InplaceTransformStrokeStrategy::SharedStateSP sharedState,
                                                                KisStrokeUndoFacade *undoFacade, KisUpdatesFacade *updatesFacade)
     : KisStrokeStrategyUndoCommandBased(kundo2_i18n("Transform"), false, undoFacade),
       m_updatesFacade(updatesFacade),
@@ -70,27 +69,11 @@ InplaceTransformStrokeStrategy::InplaceTransformStrokeStrategy(ToolTransformArgs
       m_filterId(filterId),
       m_forceReset(forceReset),
       m_selection(selection),
-      m_rootNode(rootNode),
-      m_sharedState(sharedState)
+      m_rootNode(rootNode)
 {
     KIS_SAFE_ASSERT_RECOVER_NOOP(!selection || !dynamic_cast<KisTransformMask*>(rootNode.data()));
     setMacroId(KisCommandUtils::TransformToolId);
     setNeedsExplicitCancel(true);
-}
-
-InplaceTransformStrokeStrategy::InplaceTransformStrokeStrategy(const ToolTransformArgs &args, InplaceTransformStrokeStrategy::SharedStateSP sharedState, KisStrokeUndoFacade *undoFacade, KisUpdatesFacade *updatesFacade)
-    : InplaceTransformStrokeStrategy(sharedState->args.mode(),
-                                     sharedState->props.transformedNodes().size() > 1,
-                                     sharedState->args.filterId(),
-                                     false,
-                                     sharedState->props.rootNode(),
-                                     sharedState->selection,
-                                     sharedState,
-                                     undoFacade,
-                                     updatesFacade)
-{
-    m_sharedState->nextInitializationArgs = args;
-    m_processedNodes = sharedState->props.transformedNodes();
 }
 
 InplaceTransformStrokeStrategy::~InplaceTransformStrokeStrategy()
@@ -138,20 +121,20 @@ KisPaintDeviceSP InplaceTransformStrokeStrategy::createDeviceCache(KisPaintDevic
 
 bool InplaceTransformStrokeStrategy::haveDeviceInCache(KisPaintDeviceSP src)
 {
-    QMutexLocker l(&m_sharedState->devicesCacheMutex);
-    return m_sharedState->devicesCacheHash.contains(src.data());
+    QMutexLocker l(&m_devicesCacheMutex);
+    return m_devicesCacheHash.contains(src.data());
 }
 
 void InplaceTransformStrokeStrategy::putDeviceCache(KisPaintDeviceSP src, KisPaintDeviceSP cache)
 {
-    QMutexLocker l(&m_sharedState->devicesCacheMutex);
-    m_sharedState->devicesCacheHash.insert(src.data(), cache);
+    QMutexLocker l(&m_devicesCacheMutex);
+    m_devicesCacheHash.insert(src.data(), cache);
 }
 
 KisPaintDeviceSP InplaceTransformStrokeStrategy::getDeviceCache(KisPaintDeviceSP src)
 {
-    QMutexLocker l(&m_sharedState->devicesCacheMutex);
-    KisPaintDeviceSP cache = m_sharedState->devicesCacheHash.value(src.data());
+    QMutexLocker l(&m_devicesCacheMutex);
+    KisPaintDeviceSP cache = m_devicesCacheHash.value(src.data());
     if (!cache) {
         warnKrita << "WARNING: Transform Stroke: the device is absent in cache!";
     }
@@ -161,24 +144,123 @@ KisPaintDeviceSP InplaceTransformStrokeStrategy::getDeviceCache(KisPaintDeviceSP
 
 void InplaceTransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 {
-    KisStrokeStrategyUndoCommandBased::doStrokeCallback(data);
+    if (UpdateTransformData *upd = dynamic_cast<UpdateTransformData*>(data)) {
+        m_pendingUpdateArgs = upd->args;
+        tryPostUpdateJob(false);
+
+    } else if (BarrierUpdateData *barrierData =
+               dynamic_cast<BarrierUpdateData*>(data)) {
+
+        doCanvasUpdate(barrierData->forceUpdate);
+
+    } else if (KisAsyncronousStrokeUpdateHelper::UpdateData *updateData =
+               dynamic_cast<KisAsyncronousStrokeUpdateHelper::UpdateData*>(data)) {
+
+        tryPostUpdateJob(updateData->forceUpdate);
+
+    } else {
+        KisStrokeStrategyUndoCommandBased::doStrokeCallback(data);
+    }
+
+}
+
+void InplaceTransformStrokeStrategy::tryPostUpdateJob(bool forceUpdate)
+{
+    if (!m_pendingUpdateArgs) return;
+
+    if (forceUpdate ||
+        (m_updateTimer.elapsed() > m_updateInterval &&
+         !m_updatesFacade->hasUpdatesRunning())) {
+
+        addMutatedJob(new BarrierUpdateData(forceUpdate));
+    }
+}
+
+void InplaceTransformStrokeStrategy::doCanvasUpdate(bool forceUpdate)
+{
+    if (!m_pendingUpdateArgs) return;
+
+    if (!forceUpdate &&
+            (m_updateTimer.elapsed() < m_updateInterval ||
+             m_updatesFacade->hasUpdatesRunning())) {
+
+        return;
+    }
+
+    QVector<KisStrokeJobData *> jobs;
+
+    KritaUtils::addJobBarrier(jobs, [this]() {
+        m_updatesFacade->disableDirtyRequests();
+        m_updatesDisabled = true;
+
+        for (auto it = std::make_reverse_iterator(m_transformCommands.end());
+             it != std::make_reverse_iterator(m_transformCommands.begin());
+             ++it) {
+
+            executeCommand(*it, true);
+        }
+        m_transformCommands.clear();
+
+        KIS_SAFE_ASSERT_RECOVER_RETURN(m_pendingUpdateArgs);
+        m_currentTransformArgs = *m_pendingUpdateArgs;
+        m_pendingUpdateArgs = boost::none;
+    });
+
+    Q_FOREACH (KisNodeSP node, m_processedNodes) {
+        KritaUtils::addJobConcurrent(jobs, [this, node]() {
+            transformNode(node, m_currentTransformArgs);
+        });
+    }
+
+    KritaUtils::addJobBarrier(jobs, [this]() {
+        QMutexLocker l(&m_dirtyRectsMutex);
+
+        m_updatesFacade->enableDirtyRequests();
+        m_updatesDisabled = false;
+
+        Q_FOREACH (KisNodeSP node, m_processedNodes) {
+            m_updatesFacade->refreshGraphAsync(node, m_dirtyRects[node] | m_prevDirtyRects[node]);
+        }
+
+        m_prevDirtyRects.clear();
+        m_dirtyRects.swap(m_prevDirtyRects);
+        m_updateTimer.restart();
+
+        // sanity check that no job has been squeezed inbetween
+        KIS_SAFE_ASSERT_RECOVER_RETURN(!m_pendingUpdateArgs);
+    });
+
+    addMutatedJobs(jobs);
+}
+
+void InplaceTransformStrokeStrategy::executeAndAddClearCommand(KUndo2Command *cmd)
+{
+    QMutexLocker l(&m_commandsMutex);
+    KUndo2CommandSP sharedCommand = toQShared(cmd);
+    executeCommand(sharedCommand, false);
+    m_clearCommands.append(sharedCommand);
+}
+
+void InplaceTransformStrokeStrategy::executeAndAddTransformCommand(KUndo2Command *cmd)
+{
+    QMutexLocker l(&m_commandsMutex);
+    KUndo2CommandSP sharedCommand = toQShared(cmd);
+    executeCommand(sharedCommand, false);
+    m_transformCommands.append(sharedCommand);
 }
 
 void InplaceTransformStrokeStrategy::clearSelection(KisPaintDeviceSP device)
 {
     KisTransaction transaction(device);
-    if (m_sharedState->selection) {
-        device->clearSelection(m_sharedState->selection);
+    if (m_selection) {
+        device->clearSelection(m_selection);
     } else {
         QRect oldExtent = device->extent();
         device->clear();
         device->setDirty(oldExtent);
     }
 
-    {
-        QMutexLocker l(&m_sharedState->commandsMutex);
-        m_sharedState->clearCommands.append(toQShared(transaction.endAndTake()));
-    }
+    executeAndAddClearCommand(transaction.endAndTake());
 }
 
 void InplaceTransformStrokeStrategy::transformAndMergeDevice(const ToolTransformArgs &config,
@@ -212,9 +294,9 @@ struct TransformExtraData : public KUndo2CommandExtraData
 void InplaceTransformStrokeStrategy::postProcessToplevelCommand(KUndo2Command *command)
 {
     TransformExtraData *data = new TransformExtraData();
-    data->savedTransformArgs = m_sharedState->args;
-    data->rootNode = m_sharedState->props.rootNode();
-    data->transformedNodes = m_sharedState->props.transformedNodes();
+    data->savedTransformArgs = m_currentTransformArgs;
+    data->rootNode = m_rootNode;
+    data->transformedNodes = m_processedNodes;
 
     command->setExtraData(data);
 
@@ -331,180 +413,136 @@ void InplaceTransformStrokeStrategy::initStrokeCallback()
 {
     KisStrokeStrategyUndoCommandBased::initStrokeCallback();
 
-    QMutexLocker l(&m_sharedState->initializationMutex);
-    m_sharedState->processingStarted = true;
-
-
-    KIS_SAFE_ASSERT_RECOVER_NOOP(!m_sharedState->isInitialized ||
-                                 m_selection == m_sharedState->selection);
-
-    KIS_SAFE_ASSERT_RECOVER_NOOP(!m_sharedState->isInitialized || !m_forceReset);
-
     QVector<KisStrokeJobData *> extraInitJobs;
 
-    if (!m_sharedState->isInitialized) {
+    if (m_selection) {
+        m_selection->setVisible(false);
+        m_deactivatedSelections.append(m_selection);
+    }
 
-        if (m_selection) {
-            m_selection->setVisible(false);
-            m_sharedState->deactivatedSelections.append(m_selection);
-        }
+    KisSelectionMaskSP overlaySelectionMask =
+            dynamic_cast<KisSelectionMask*>(m_rootNode->graphListener()->graphOverlayNode());
+    if (overlaySelectionMask) {
+        overlaySelectionMask->setDecorationsVisible(false);
+        m_deactivatedOverlaySelectionMask = overlaySelectionMask;
+    }
 
-        KisSelectionMaskSP overlaySelectionMask =
-                dynamic_cast<KisSelectionMask*>(m_rootNode->graphListener()->graphOverlayNode());
-        if (overlaySelectionMask) {
-            overlaySelectionMask->setDecorationsVisible(false);
-            m_sharedState->deactivatedOverlaySelectionMask = overlaySelectionMask;
-        }
+    m_processedNodes = fetchNodesList(m_mode, m_rootNode, m_workRecursively);
 
-        m_processedNodes = fetchNodesList(m_mode, m_rootNode, m_workRecursively);
+    bool argsAreInitialized = false;
+    QVector<KisStrokeJobData *> lastCommandUndoJobs;
 
-        bool argsAreInitialized = false;
-        QVector<KisStrokeJobData *> lastCommandUndoJobs;
+    if (!m_forceReset && tryFetchArgsFromCommandAndUndo(&m_initialTransformArgs,
+                                                        m_mode,
+                                                        m_rootNode,
+                                                        m_processedNodes,
+                                                        &lastCommandUndoJobs)) {
+        argsAreInitialized = true;
+    } else if (!m_forceReset && tryInitArgsFromNode(m_rootNode, &m_initialTransformArgs)) {
+        argsAreInitialized = true;
+    }
 
-        if (!m_forceReset && tryFetchArgsFromCommandAndUndo(&m_initialTransformArgs,
-                                                            m_mode,
-                                                            m_rootNode,
-                                                            m_processedNodes,
-                                                            &lastCommandUndoJobs)) {
-            argsAreInitialized = true;
-        } else if (!m_forceReset && tryInitArgsFromNode(m_rootNode, &m_initialTransformArgs)) {
-            argsAreInitialized = true;
-        }
+    //extraInitJobs << new Data(new KisHoldUIUpdatesCommand(m_updatesFacade, KisCommandUtils::FlipFlopCommand::INITIALIZING), false, KisStrokeJobData::BARRIER);
 
-        //extraInitJobs << new Data(new KisHoldUIUpdatesCommand(m_updatesFacade, KisCommandUtils::FlipFlopCommand::INITIALIZING), false, KisStrokeJobData::BARRIER);
+    KritaUtils::addJobBarrier(extraInitJobs, [this]() {
+        m_updatesFacade->disableDirtyRequests();
+        m_updatesDisabled = true;
+    });
 
-        KritaUtils::addJobBarrier(extraInitJobs, [this]() {
-            m_updatesFacade->disableDirtyRequests();
-            m_updatesDisabled = true;
-        });
+    extraInitJobs << lastCommandUndoJobs;
 
-        extraInitJobs << lastCommandUndoJobs;
-
-        KritaUtils::addJobSequential(extraInitJobs, [this]() {
-            /**
+    KritaUtils::addJobSequential(extraInitJobs, [this]() {
+        /**
              * We must request shape layers to rerender areas outside image bounds
              */
-            KisLayerUtils::forceAllHiddenOriginalsUpdate(m_rootNode);
-        });
+        KisLayerUtils::forceAllHiddenOriginalsUpdate(m_rootNode);
+    });
 
-        KritaUtils::addJobBarrier(extraInitJobs, [this]() {
-            /**
+    KritaUtils::addJobBarrier(extraInitJobs, [this]() {
+        /**
              * We must ensure that the currently selected subtree
              * has finished all its updates.
              */
-            KisLayerUtils::forceAllDelayedNodesUpdate(m_rootNode);
-        });
+        KisLayerUtils::forceAllDelayedNodesUpdate(m_rootNode);
+    });
 
-        /// Disable all decorated nodes to generate outline
-        /// and preview correctly. We will enable them back
-        /// as soon as preview generation is finished.
-        KritaUtils::addJobBarrier(extraInitJobs, [this]() {
+    /// Disable all decorated nodes to generate outline
+    /// and preview correctly. We will enable them back
+    /// as soon as preview generation is finished.
+    KritaUtils::addJobBarrier(extraInitJobs, [this]() {
+        Q_FOREACH (KisNodeSP node, m_processedNodes) {
+            KisDecoratedNodeInterface *decoratedNode = dynamic_cast<KisDecoratedNodeInterface*>(node.data());
+            if (decoratedNode && decoratedNode->decorationsVisible()) {
+                decoratedNode->setDecorationsVisible(false);
+                m_disabledDecoratedNodes << decoratedNode;
+            }
+        }
+    });
+
+    KritaUtils::addJobBarrier(extraInitJobs,
+                              [this,
+                              argsAreInitialized]() mutable {
+        QRect srcRect;
+
+        if (m_selection) {
+            srcRect = m_selection->selectedExactRect();
+        } else {
+            srcRect = QRect();
             Q_FOREACH (KisNodeSP node, m_processedNodes) {
-                KisDecoratedNodeInterface *decoratedNode = dynamic_cast<KisDecoratedNodeInterface*>(node.data());
-                if (decoratedNode && decoratedNode->decorationsVisible()) {
-                    decoratedNode->setDecorationsVisible(false);
-                    m_disabledDecoratedNodes << decoratedNode;
+                // group layers may have a projection of layers
+                // that are locked and will not be transformed
+                if (node->inherits("KisGroupLayer")) continue;
+
+                if (const KisTransformMask *mask = dynamic_cast<const KisTransformMask*>(node.data())) {
+                    srcRect |= mask->sourceDataBounds();
+                } else if (const KisSelectionMask *mask = dynamic_cast<const KisSelectionMask*>(node.data())) {
+                    srcRect |= mask->selection()->selectedExactRect();
+                } else {
+                    srcRect |= node->exactBounds();
                 }
             }
-        });
-
-        KritaUtils::addJobBarrier(extraInitJobs,
-                                  [this,
-                                  argsAreInitialized]() mutable {
-            QRect srcRect;
-
-            if (m_selection) {
-                srcRect = m_selection->selectedExactRect();
-            } else {
-                srcRect = QRect();
-                Q_FOREACH (KisNodeSP node, m_processedNodes) {
-                    // group layers may have a projection of layers
-                    // that are locked and will not be transformed
-                    if (node->inherits("KisGroupLayer")) continue;
-
-                    if (const KisTransformMask *mask = dynamic_cast<const KisTransformMask*>(node.data())) {
-                        srcRect |= mask->sourceDataBounds();
-                    } else if (const KisSelectionMask *mask = dynamic_cast<const KisSelectionMask*>(node.data())) {
-                        srcRect |= mask->selection()->selectedExactRect();
-                    } else {
-                        srcRect |= node->exactBounds();
-                    }
-                }
-            }
-
-            TransformTransactionProperties transaction(srcRect, &m_initialTransformArgs, m_rootNode, m_processedNodes);
-            if (!argsAreInitialized) {
-                m_initialTransformArgs = KisTransformUtils::resetArgsForMode(m_mode, m_filterId, transaction);
-            }
-
-            m_sharedState->isInitialized = true;
-            m_sharedState->args = m_initialTransformArgs;
-            m_sharedState->props = transaction;
-            m_sharedState->selection = m_selection;
-            m_sharedState->initialTransformArgs = m_initialTransformArgs;
-
-            Q_EMIT this->sigTransactionGenerated(transaction, m_initialTransformArgs, this);
-        });
-
-        /// recover back visibility of decorated nodes
-        KritaUtils::addJobBarrier(extraInitJobs, [this]() {
-            Q_FOREACH (KisDecoratedNodeInterface *decoratedNode, m_disabledDecoratedNodes) {
-                decoratedNode->setDecorationsVisible(true);
-            }
-            m_disabledDecoratedNodes.clear();
-        });
-
-        Q_FOREACH (KisNodeSP node, m_processedNodes) {
-            KritaUtils::addJobConcurrent(extraInitJobs, [this, node]() {
-                clearNode(node);
-            });
         }
 
-        //extraInitJobs << new Data(toQShared(neHoldUIUpdatesCommand(m_updatesFacade, KisCommandUtils::FlipFlopCommand::FINALIZING)), false, KisStrokeJobData::BARRIER);
-
-        if (!lastCommandUndoJobs.isEmpty()) {
-            KIS_SAFE_ASSERT_RECOVER_NOOP(m_overriddenCommand);
-
-            for (auto it = extraInitJobs.begin(); it != extraInitJobs.end(); ++it) {
-                (*it)->setCancellable(false);
-            }
+        TransformTransactionProperties transaction(srcRect, &m_initialTransformArgs, m_rootNode, m_processedNodes);
+        if (!argsAreInitialized) {
+            m_initialTransformArgs = KisTransformUtils::resetArgsForMode(m_mode, m_filterId, transaction);
         }
-    } else {
-        KritaUtils::addJobBarrier(extraInitJobs, [this]() {
-            m_updatesFacade->disableDirtyRequests();
-            m_updatesDisabled = true;
 
-            for (auto it = std::make_reverse_iterator(m_sharedState->transformCommands.end());
-                 it != std::make_reverse_iterator(m_sharedState->transformCommands.begin());
-                 ++it) {
+        Q_EMIT this->sigTransactionGenerated(transaction, m_initialTransformArgs, this);
+    });
 
-                executeCommand(*it, true);
-            }
-            m_sharedState->transformCommands.clear();
-            m_sharedState->args = m_sharedState->nextInitializationArgs;
+    /// recover back visibility of decorated nodes
+    KritaUtils::addJobBarrier(extraInitJobs, [this]() {
+        Q_FOREACH (KisDecoratedNodeInterface *decoratedNode, m_disabledDecoratedNodes) {
+            decoratedNode->setDecorationsVisible(true);
+        }
+        m_disabledDecoratedNodes.clear();
+    });
+
+    Q_FOREACH (KisNodeSP node, m_processedNodes) {
+        KritaUtils::addJobConcurrent(extraInitJobs, [this, node]() {
+            clearNode(node);
         });
     }
 
-    if (!m_sharedState->args.isIdentity()) {
-        Q_FOREACH (KisNodeSP node, m_processedNodes) {
-            KritaUtils::addJobConcurrent(extraInitJobs, [this, node]() {
-                transformNode(node, m_sharedState->args);
-            });
-        }
-    }
+    //extraInitJobs << new Data(toQShared(neHoldUIUpdatesCommand(m_updatesFacade, KisCommandUtils::FlipFlopCommand::FINALIZING)), false, KisStrokeJobData::BARRIER);
 
     KritaUtils::addJobBarrier(extraInitJobs, [this]() {
-        QMutexLocker l(&m_sharedState->dirtyRectsMutex);
+        QMutexLocker l(&m_dirtyRectsMutex);
 
         m_updatesFacade->enableDirtyRequests();
         m_updatesDisabled = false;
-
-        Q_FOREACH (KisNodeSP node, m_sharedState->props.transformedNodes()) {
-            m_updatesFacade->refreshGraphAsync(node, m_sharedState->dirtyRects[node]);
-        }
-
-        m_sharedState->dirtyRects.clear();
+        m_updateTimer.start();
     });
+
+    if (!lastCommandUndoJobs.isEmpty()) {
+        KIS_SAFE_ASSERT_RECOVER_NOOP(m_overriddenCommand);
+
+        for (auto it = extraInitJobs.begin(); it != extraInitJobs.end(); ++it) {
+            (*it)->setCancellable(false);
+        }
+    }
+
 
     addMutatedJobs(extraInitJobs);
 }
@@ -539,12 +577,9 @@ void InplaceTransformStrokeStrategy::transformNode(KisNodeSP node, const ToolTra
         transformAndMergeDevice(config, src,
                                 device, &helper);
 
-        {
-            QMutexLocker l(&m_sharedState->commandsMutex);
-            // TODO: add cmd->redo();
-            m_sharedState->transformCommands.append(toQShared(transaction.endAndTake()));
-        }
-        m_sharedState->addDirtyRect(node, cachedPortion->extent() | device->extent());
+        executeAndAddTransformCommand(transaction.endAndTake());
+        addDirtyRect(node, cachedPortion->extent() | device->extent());
+
     } else if (KisExternalLayer *extLayer =
                dynamic_cast<KisExternalLayer*>(node.data())) {
 
@@ -559,13 +594,8 @@ void InplaceTransformStrokeStrategy::transformNode(KisNodeSP node, const ToolTra
             QTransform t = w.transform();
             KUndo2Command *cmd = extLayer->transform(t);
 
-            {
-                QMutexLocker l(&m_sharedState->commandsMutex);
-                // TODO: add cmd->redo();
-                m_sharedState->transformCommands.append(toQShared(cmd));
-            }
-
-            m_sharedState->addDirtyRect(node, oldDirtyRect | node->extent());
+            executeAndAddTransformCommand(cmd);
+            addDirtyRect(node, oldDirtyRect | node->extent());
         }
 
     } else if (KisTransformMask *transformMask =
@@ -576,26 +606,33 @@ void InplaceTransformStrokeStrategy::transformNode(KisNodeSP node, const ToolTra
         KUndo2Command *cmd = new KisModifyTransformMaskCommand(transformMask,
                                                                KisTransformMaskParamsInterfaceSP(
                                                                    new KisTransformMaskAdapter(config)));
-        {
-            QMutexLocker l(&m_sharedState->commandsMutex);
-            // TODO: add cmd->redo();
-            m_sharedState->transformCommands.append(toQShared(cmd));
-        }
-
-        m_sharedState->addDirtyRect(node, oldDirtyRect | transformMask->extent());
+        executeAndAddTransformCommand(cmd);
+        addDirtyRect(node, oldDirtyRect | transformMask->extent());
     }
 }
 
 void InplaceTransformStrokeStrategy::finalizeStrokeImpl(QVector<KisStrokeJobData *> &mutatedJobs)
 {
     KritaUtils::addJobBarrier(mutatedJobs, [this]() {
-        Q_FOREACH (KisSelectionSP selection, m_sharedState->deactivatedSelections) {
+        Q_FOREACH (KisSelectionSP selection, m_deactivatedSelections) {
             selection->setVisible(true);
         }
 
-        if (m_sharedState->deactivatedOverlaySelectionMask) {
-            m_sharedState->deactivatedOverlaySelectionMask->selection()->setVisible(true);
-            m_sharedState->deactivatedOverlaySelectionMask->setDirty();
+        if (m_deactivatedOverlaySelectionMask) {
+            m_deactivatedOverlaySelectionMask->selection()->setVisible(true);
+            m_deactivatedOverlaySelectionMask->setDirty();
+        }
+    });
+
+    KritaUtils::addJobBarrier(mutatedJobs, [this]() {
+        Q_FOREACH (KUndo2CommandSP cmd, m_clearCommands) {
+            notifyCommandDone(cmd, KisStrokeJobData::CONCURRENT, KisStrokeJobData::NORMAL);
+        }
+
+        notifyCommandDone(toQShared(new KUndo2Command()), KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::NORMAL);
+
+        Q_FOREACH (KUndo2CommandSP cmd, m_transformCommands) {
+            notifyCommandDone(cmd, KisStrokeJobData::CONCURRENT, KisStrokeJobData::NORMAL);
         }
     });
 }
@@ -615,19 +652,9 @@ void InplaceTransformStrokeStrategy::finishStrokeCallback()
     if (m_finalizingActionsStarted) return;
     m_finalizingActionsStarted = true;
 
-    if (m_sharedState->args.isIdentity()) {
+    if (m_currentTransformArgs.isIdentity()) {
         cancelStrokeCallback();
         return;
-    }
-
-    Q_FOREACH (KUndo2CommandSP cmd, m_sharedState->clearCommands) {
-        notifyCommandDone(cmd, KisStrokeJobData::CONCURRENT, KisStrokeJobData::NORMAL);
-    }
-
-    notifyCommandDone(toQShared(new KUndo2Command()), KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::NORMAL);
-
-    Q_FOREACH (KUndo2CommandSP cmd, m_sharedState->transformCommands) {
-        notifyCommandDone(cmd, KisStrokeJobData::CONCURRENT, KisStrokeJobData::NORMAL);
     }
 
     QVector<KisStrokeJobData *> mutatedJobs;
@@ -646,9 +673,6 @@ void InplaceTransformStrokeStrategy::cancelStrokeCallback()
         m_updatesFacade->enableDirtyRequests();
     }
 
-    const int value = m_sharedState->skipCancellationMarker.fetchAndAddOrdered(-1);
-    if (value >= 0) return;
-
     /**
      * Since our finishStrokeCallback() initiates new jobs,
      * cancellation request may come even after
@@ -665,42 +689,71 @@ void InplaceTransformStrokeStrategy::cancelStrokeCallback()
     QVector<KisStrokeJobData *> mutatedJobs;
 
     if (m_initialTransformArgs.isIdentity()) {
-        for (auto it = std::make_reverse_iterator(m_sharedState->transformCommands.end());
-             it != std::make_reverse_iterator(m_sharedState->transformCommands.begin());
+        for (auto it = std::make_reverse_iterator(m_transformCommands.end());
+             it != std::make_reverse_iterator(m_transformCommands.begin());
              ++it) {
 
             executeCommand(*it, true);
         }
-        m_sharedState->transformCommands.clear();
+        m_transformCommands.clear();
 
-        for (auto it = std::make_reverse_iterator(m_sharedState->clearCommands.end());
-             it != std::make_reverse_iterator(m_sharedState->clearCommands.begin());
+        for (auto it = std::make_reverse_iterator(m_clearCommands.end());
+             it != std::make_reverse_iterator(m_clearCommands.begin());
              ++it) {
 
             executeCommand(*it, true);
         }
-        m_sharedState->clearCommands.clear();
+        m_clearCommands.clear();
     } else {
-        for (auto it = std::make_reverse_iterator(m_sharedState->transformCommands.end());
-             it != std::make_reverse_iterator(m_sharedState->transformCommands.begin());
-             ++it) {
+        KritaUtils::addJobBarrier(mutatedJobs, [this]() {
+            m_updatesFacade->disableDirtyRequests();
+            m_updatesDisabled = true;
+        });
 
-            executeCommand(*it, true);
-        }
-        m_sharedState->transformCommands.clear();
+        KritaUtils::addJobBarrier(mutatedJobs, [this]() {
+            for (auto it = std::make_reverse_iterator(m_transformCommands.end());
+                 it != std::make_reverse_iterator(m_transformCommands.begin());
+                 ++it) {
 
-        Q_FOREACH (KisNodeSP node, m_sharedState->props.transformedNodes()) {
+                executeCommand(*it, true);
+            }
+            m_transformCommands.clear();
+        });
+
+        Q_FOREACH (KisNodeSP node, m_processedNodes) {
             KritaUtils::addJobConcurrent(mutatedJobs, [this, node]() {
-                transformNode(node, m_sharedState->initialTransformArgs);
+                transformNode(node, m_initialTransformArgs);
             });
         }
+
+        KritaUtils::addJobBarrier(mutatedJobs, [this]() {
+            m_updatesFacade->enableDirtyRequests();
+            m_updatesDisabled = false;
+
+            Q_FOREACH (KisNodeSP node, m_processedNodes) {
+                m_updatesFacade->refreshGraphAsync(node, m_dirtyRects[node] | m_prevDirtyRects[node]);
+            }
+
+            m_prevDirtyRects.clear();
+            m_dirtyRects.swap(m_prevDirtyRects);
+        });
     }
 
     finalizeStrokeImpl(mutatedJobs);
 
     KritaUtils::addJobBarrier(mutatedJobs, [this]() {
-        KisStrokeStrategyUndoCommandBased::cancelStrokeCallback();
+        if (m_initialTransformArgs.isIdentity()) {
+            KisStrokeStrategyUndoCommandBased::cancelStrokeCallback();
+        } else {
+            KisStrokeStrategyUndoCommandBased::finishStrokeCallback();
+        }
     });
 
     addMutatedJobs(mutatedJobs);
+}
+
+InplaceTransformStrokeStrategy::BarrierUpdateData::BarrierUpdateData(bool _forceUpdate)
+    : KisAsyncronousStrokeUpdateHelper::UpdateData(_forceUpdate, BARRIER, NORMAL)
+{
+
 }

@@ -305,7 +305,7 @@ private:
 
     QPainterPath m_cursorOutline;
 
-    InplaceTransformStrokeStrategy::SharedStateSP m_sharedState;
+    KisAsyncronousStrokeUpdateHelper m_asyncUpdateHelper;
 
 private Q_SLOTS:
     void slotTrackerChangedConfig(KisToolChangesTrackerDataSP status);

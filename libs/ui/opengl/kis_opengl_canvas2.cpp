@@ -1166,7 +1166,7 @@ QRect KisOpenGLCanvas2::updateCanvasProjection(KisUpdateInfoSP info)
 
 QVector<QRect> KisOpenGLCanvas2::updateCanvasProjection(const QVector<KisUpdateInfoSP> &infoObjects)
 {
-#ifdef Q_OS_MACOS
+#if defined(Q_OS_MACOS) || defined(Q_OS_ANDROID)
     /**
      * On OSX openGL different (shared) contexts have different execution queues.
      * It means that the textures uploading and their painting can be easily reordered.
@@ -1182,7 +1182,7 @@ QVector<QRect> KisOpenGLCanvas2::updateCanvasProjection(const QVector<KisUpdateI
 
     QVector<QRect> result = KisCanvasWidgetBase::updateCanvasProjection(infoObjects);
 
-#ifdef Q_OS_MACOS
+#if defined(Q_OS_MACOS) || defined(Q_OS_ANDROID)
     if (oldContext) {
         oldContext->makeCurrent(oldSurface);
     } else {

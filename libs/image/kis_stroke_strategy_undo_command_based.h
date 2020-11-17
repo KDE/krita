@@ -135,8 +135,8 @@ protected:
 
     KisStrokeUndoFacade* undoFacade() const;
 
-private:
     void executeCommand(KUndo2CommandSP command, bool undo);
+
 
 private:
     bool m_undo;

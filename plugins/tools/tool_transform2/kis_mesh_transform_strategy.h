@@ -55,6 +55,7 @@ private:
 
 Q_SIGNALS:
     void requestCanvasUpdate();
+    void requestImageRecalculation();
 
 private:
     struct Private;

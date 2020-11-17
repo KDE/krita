@@ -41,6 +41,8 @@
 #include "transform_transaction_properties.h"
 #include "kis_signal_auto_connection.h"
 
+#include "strokes/inplace_transform_stroke_strategy.h"
+
 class QTouchEvent;
 class KisTransformStrategyBase;
 class KisWarpTransformStrategy;
@@ -181,6 +183,8 @@ public Q_SLOTS:
     // Applies the current transformation to the original paint device and commits it to the undo stack
     void applyTransform();
 
+    void requestImageRecalculation();
+
     void setTransformMode( KisToolTransform::TransformToolMode newMode );
 
     void setTranslateX(double translateX);
@@ -300,6 +304,8 @@ private:
     KisTransformStrategyBase* currentStrategy() const;
 
     QPainterPath m_cursorOutline;
+
+    InplaceTransformStrokeStrategy::SharedStateSP m_sharedState;
 
 private Q_SLOTS:
     void slotTrackerChangedConfig(KisToolChangesTrackerDataSP status);

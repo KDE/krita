@@ -78,6 +78,7 @@
 #include <KisDelayedUpdateNodeInterface.h>
 
 #include "strokes/transform_stroke_strategy.h"
+#include "strokes/inplace_transform_stroke_strategy.h"
 
 KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
     : KisTool(canvas, KisCursor::rotateCursor())
@@ -145,6 +146,7 @@ KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
     connect(m_perspectiveStrategy.data(), SIGNAL(requestCanvasUpdate()), SLOT(canvasUpdateRequested()));
     connect(m_perspectiveStrategy.data(), SIGNAL(requestShowImageTooBig(bool)), SLOT(imageTooBigRequested(bool)));
     connect(m_meshStrategy.data(), SIGNAL(requestCanvasUpdate()), SLOT(canvasUpdateRequested()));
+    connect(m_meshStrategy.data(), SIGNAL(requestImageRecalculation()), SLOT(requestImageRecalculation()));
 
     connect(&m_changesTracker, SIGNAL(sigConfigChanged(KisToolChangesTrackerDataSP)),
             this, SLOT(slotTrackerChangedConfig(KisToolChangesTrackerDataSP)));
@@ -758,6 +760,29 @@ void KisToolTransform::requestStrokeCancellation()
     }
 }
 
+void KisToolTransform::requestImageRecalculation()
+{
+    if (m_strokeId) {
+        QMutexLocker locker(&m_sharedState->initializationMutex);
+        if (m_sharedState->processingStarted) {
+            m_sharedState->skipCancellationMarker.ref();
+            image()->cancelStroke(m_strokeId);
+
+            m_strokeId.clear();
+            m_sharedState->processingStarted = false;
+
+            locker.unlock();
+
+            InplaceTransformStrokeStrategy *strategy = new InplaceTransformStrokeStrategy(m_currentArgs, m_sharedState, image().data(), image().data());
+            m_strokeId = image()->startStroke(strategy);
+            m_strokeStrategyCookie = strategy;
+        } else {
+            m_sharedState->nextInitializationArgs = m_currentArgs;
+        }
+    }
+
+}
+
 void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool forceReset)
 {
     Q_ASSERT(!m_strokeId);
@@ -817,7 +842,8 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool f
         selection = 0;
     }
 
-    TransformStrokeStrategy *strategy = new TransformStrokeStrategy(mode, m_workRecursively, m_currentArgs.filterId(), forceReset, currentNode, selection, image().data(), image().data());
+    m_sharedState = toQShared(new InplaceTransformStrokeStrategy::SharedState());
+    InplaceTransformStrokeStrategy *strategy = new InplaceTransformStrokeStrategy(mode, m_workRecursively, m_currentArgs.filterId(), forceReset, currentNode, selection, m_sharedState, image().data(), image().data());
     connect(strategy, SIGNAL(sigPreviewDeviceReady(KisPaintDeviceSP)), SLOT(slotPreviewDeviceGenerated(KisPaintDeviceSP)));
     connect(strategy, SIGNAL(sigTransactionGenerated(TransformTransactionProperties, ToolTransformArgs, void*)), SLOT(slotTransactionGenerated(TransformTransactionProperties, ToolTransformArgs, void*)));
 
@@ -838,8 +864,8 @@ void KisToolTransform::endStroke()
     if (!m_strokeId) return;
 
     if (m_transaction.rootNode() && !m_currentArgs.isIdentity()) {
-        image()->addJob(m_strokeId,
-                        new TransformStrokeStrategy::TransformAllData(m_currentArgs));
+//        image()->addJob(m_strokeId,
+//                        new TransformStrokeStrategy::TransformAllData(m_currentArgs));
     }
     image()->endStroke(m_strokeId);
 

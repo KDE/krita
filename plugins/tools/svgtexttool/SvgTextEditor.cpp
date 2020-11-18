@@ -398,7 +398,7 @@ void SvgTextEditor::setInitialShape(KoSvgTextShape *shape)
 void SvgTextEditor::save()
 {
     if (m_shape) {
-        if (isRichTextEditorActive()) {
+        if (isRichTextEditorTabActive()) {
             QString svg;
             QString styles = m_textEditorWidget.svgStylesEdit->document()->toPlainText();
             KoSvgTextShapeMarkupConverter converter(m_shape);
@@ -408,7 +408,7 @@ void SvgTextEditor::save()
             }
             m_textEditorWidget.richTextEdit->document()->setModified(false);
             emit textUpdated(m_shape, svg, styles, true);
-        } else if (isSvgSourceEditorActive()) {
+        } else if (isSvgSourceEditorTabActive()) {
             emit textUpdated(m_shape, m_textEditorWidget.svgTextEdit->document()->toPlainText(), m_textEditorWidget.svgStylesEdit->document()->toPlainText(), false);
             m_textEditorWidget.svgTextEdit->document()->setModified(false);
         }
@@ -426,7 +426,7 @@ void SvgTextEditor::switchTextEditorTab(bool convertData)
     }
 
     // do not switch to the same tab again, otherwise we're losing current changes
-    if (m_currentEditor != m_textEditorWidget.richTextEdit && isRichTextEditorActive()) {
+    if (m_currentEditor != m_textEditorWidget.richTextEdit && isRichTextEditorTabActive()) {
         //first, make buttons checkable
         enableRichTextActions(true);
         enableSvgTextActions(false);
@@ -445,7 +445,7 @@ void SvgTextEditor::switchTextEditorTab(bool convertData)
             doc->clearUndoRedoStacks();
         }
         m_currentEditor = m_textEditorWidget.richTextEdit;
-    } else if (m_currentEditor != m_textEditorWidget.svgTextEdit && isSvgSourceEditorActive()) {
+    } else if (m_currentEditor != m_textEditorWidget.svgTextEdit && isSvgSourceEditorTabActive()) {
         //first, make buttons uncheckable
         enableRichTextActions(false);
         enableSvgTextActions(true);
@@ -676,7 +676,7 @@ void SvgTextEditor::insertCharacter(const QChar &c)
 
 void SvgTextEditor::setTextBold(QFont::Weight weight)
 {
-    if (isRichTextEditorActive()) {
+    if (isRichTextEditorTabActive()) {
         QTextCharFormat format;
         QTextCursor oldCursor = setTextSelection();
         if (m_textEditorWidget.richTextEdit->textCursor().charFormat().fontWeight() > QFont::Normal && weight==QFont::Bold) {
@@ -686,7 +686,7 @@ void SvgTextEditor::setTextBold(QFont::Weight weight)
         }
         m_textEditorWidget.richTextEdit->mergeCurrentCharFormat(format);
         m_textEditorWidget.richTextEdit->setTextCursor(oldCursor);
-    } else if (isSvgSourceEditorActive()) {
+    } else if (isSvgSourceEditorTabActive()) {
         QTextCursor cursor = m_textEditorWidget.svgTextEdit->textCursor();
         if (cursor.hasSelection()) {
             QString selectionModified = "<tspan style=\"font-weight:700;\">" + cursor.selectedText() + "</tspan>";
@@ -745,13 +745,13 @@ void SvgTextEditor::setTextItalic(QFont::Style style)
     }
 
 
-    if (isRichTextEditorActive()) {
+    if (isRichTextEditorTabActive()) {
         QTextCharFormat format;
         QTextCursor origCursor = setTextSelection();
         format.setFontItalic(!m_textEditorWidget.richTextEdit->textCursor().charFormat().fontItalic());
         m_textEditorWidget.richTextEdit->mergeCurrentCharFormat(format);
         m_textEditorWidget.richTextEdit->setTextCursor(origCursor);
-    } else if (isSvgSourceEditorActive()) {
+    } else if (isSvgSourceEditorTabActive()) {
         if (cursor.hasSelection()) {
             QString selectionModified = "<tspan style=\"font-style:"+fontStyle+";\">" + cursor.selectedText() + "</tspan>";
             cursor.removeSelectedText();
@@ -801,9 +801,9 @@ void SvgTextEditor::setTextDecoration(KoSvgText::TextDecoration decor)
         format.setFontStrikeOut(false);
     }
 
-    if (isRichTextEditorActive()) {
+    if (isRichTextEditorTabActive()) {
         m_textEditorWidget.richTextEdit->mergeCurrentCharFormat(format);
-    } else if (isSvgSourceEditorActive()) {
+    } else if (isSvgSourceEditorTabActive()) {
         if (cursor.hasSelection()) {
             QString selectionModified = "<tspan style=\"text-decoration:" + textDecoration + ";\">" + cursor.selectedText() + "</tspan>";
             cursor.removeSelectedText();
@@ -899,13 +899,13 @@ void SvgTextEditor::setLineHeight(double lineHeightPercentage)
 void SvgTextEditor::setLetterSpacing(double letterSpacing)
 {
     QTextCursor cursor = setTextSelection();
-    if (isRichTextEditorActive()) {
+    if (isRichTextEditorTabActive()) {
         QTextCharFormat format;
         format.setFontLetterSpacingType(QFont::AbsoluteSpacing);
         format.setFontLetterSpacing(letterSpacing);
         m_textEditorWidget.richTextEdit->mergeCurrentCharFormat(format);
         m_textEditorWidget.richTextEdit->setTextCursor(cursor);
-    } else if (isSvgSourceEditorActive()) {
+    } else if (isSvgSourceEditorTabActive()) {
         if (cursor.hasSelection()) {
             QString selectionModified = "<tspan style=\"letter-spacing:" + QString::number(letterSpacing) + "\">" + cursor.selectedText() + "</tspan>";
             cursor.removeSelectedText();
@@ -1068,13 +1068,13 @@ void SvgTextEditor::slotToolbarToggled(bool)
 void SvgTextEditor::setFontColor(const KoColor &c)
 {
     QColor color = c.toQColor();
-    if (isRichTextEditorActive()) {
+    if (isRichTextEditorTabActive()) {
         QTextCursor oldCursor = setTextSelection();
         QTextCharFormat format;
         format.setForeground(QBrush(color));
         m_textEditorWidget.richTextEdit->mergeCurrentCharFormat(format);
         m_textEditorWidget.richTextEdit->setTextCursor(oldCursor);
-    } else if (isSvgSourceEditorActive()) {
+    } else if (isSvgSourceEditorTabActive()) {
         QTextCursor cursor = m_textEditorWidget.svgTextEdit->textCursor();
         if (cursor.hasSelection()) {
             QString selectionModified = "<tspan fill=\""+color.name()+"\">" + cursor.selectedText() + "</tspan>";
@@ -1126,11 +1126,11 @@ void SvgTextEditor::setFont(const QString &fontName)
     QTextCharFormat format;
     //This disables the style being set from the font-comboboxes too, so we need to rethink how we use that.
     format.setFontFamily(font.family());
-    if (isRichTextEditorActive()) {
+    if (isRichTextEditorTabActive()) {
         QTextCursor oldCursor = setTextSelection();
         m_textEditorWidget.richTextEdit->mergeCurrentCharFormat(format);
         m_textEditorWidget.richTextEdit->setTextCursor(oldCursor);
-    } else if (isSvgSourceEditorActive()) {
+    } else if (isSvgSourceEditorTabActive()) {
         QTextCursor cursor = m_textEditorWidget.svgTextEdit->textCursor();
         if (cursor.hasSelection()) {
             QString selectionModified = "<tspan style=\"font-family:"+font.family()+" "+font.styleName()+";\">" + cursor.selectedText() + "</tspan>";
@@ -1144,13 +1144,13 @@ void SvgTextEditor::setFont(const QString &fontName)
 
 void SvgTextEditor::setFontSize(qreal fontSize)
 {
-    if (isRichTextEditorActive()) {
+    if (isRichTextEditorTabActive()) {
         QTextCursor oldCursor = setTextSelection();
         QTextCharFormat format;
         format.setFontPointSize(fontSize);
         m_textEditorWidget.richTextEdit->mergeCurrentCharFormat(format);
         m_textEditorWidget.richTextEdit->setTextCursor(oldCursor);
-    } else if (isSvgSourceEditorActive()) {
+    } else if (isSvgSourceEditorTabActive()) {
         QTextCursor cursor = m_textEditorWidget.svgTextEdit->textCursor();
         if (cursor.hasSelection()) {
             QString selectionModified = "<tspan style=\"font-size:" + QString::number(fontSize) + ";\">" + cursor.selectedText() + "</tspan>";
@@ -1177,13 +1177,13 @@ void SvgTextEditor::setKerning(bool enable)
 {
     d->kerning = enable;
 
-    if (isRichTextEditorActive()) {
+    if (isRichTextEditorTabActive()) {
         QTextCharFormat format;
         QTextCursor origCursor = setTextSelection();
         format.setFontKerning(enable);
         m_textEditorWidget.richTextEdit->mergeCurrentCharFormat(format);
         m_textEditorWidget.richTextEdit->setTextCursor(origCursor);
-    } else if (isSvgSourceEditorActive()) {
+    } else if (isSvgSourceEditorTabActive()) {
         QTextCursor cursor = m_textEditorWidget.svgTextEdit->textCursor();
 
         if (cursor.hasSelection()) {
@@ -1460,13 +1460,13 @@ void SvgTextEditor::enableSvgTextActions(bool enable)
     }
 }
 
-bool SvgTextEditor::isRichTextEditorActive() {
+bool SvgTextEditor::isRichTextEditorTabActive() {
     return m_currentEditorMode == EditorMode::RichText 
         || (m_currentEditorMode == EditorMode::Both 
             && m_textEditorWidget.textTab->currentIndex() == Editor::Richtext);
 }
 
-bool SvgTextEditor::isSvgSourceEditorActive() {
+bool SvgTextEditor::isSvgSourceEditorTabActive() {
     return m_currentEditorMode == EditorMode::SvgSource 
         || (m_currentEditorMode == EditorMode::Both 
             && m_textEditorWidget.textTab->currentIndex() == Editor::SVGsource);

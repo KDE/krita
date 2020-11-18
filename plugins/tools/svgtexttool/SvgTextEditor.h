@@ -153,8 +153,8 @@ private:
     void createActions();
     void enableRichTextActions(bool enable);
     void enableSvgTextActions(bool enable);
-    bool isRichTextEditorActive();
-    bool isSvgSourceEditorActive();
+    bool isRichTextEditorTabActive();
+    bool isSvgSourceEditorTabActive();
 
     Ui_WdgSvgTextEditor m_textEditorWidget;
     EditorMode m_currentEditorMode {EditorMode::Both};

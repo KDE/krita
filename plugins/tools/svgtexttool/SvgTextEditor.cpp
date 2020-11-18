@@ -1203,6 +1203,10 @@ void SvgTextEditor::setKerning(bool enable)
 
 void SvgTextEditor::wheelEvent(QWheelEvent *event)
 {
+    if (!isSvgSourceEditorTabActive()) {
+        return;
+    }
+
     if (event->modifiers() & Qt::ControlModifier) {
         int numDegrees = event->delta() / 8;
         int numSteps = numDegrees / 7;

@@ -364,12 +364,12 @@ void SvgTextEditor::setInitialShape(KoSvgTextShape *shape)
 
                 m_textEditorWidget.richTextEdit->setDocument(doc);
                 KisSignalsBlocker b(m_textEditorWidget.textTab);
-                m_textEditorWidget.textTab->setCurrentIndex(Richtext);
+                m_textEditorWidget.textTab->setCurrentIndex(Editor::Richtext);
                 doc->clearUndoRedoStacks();
                 switchTextEditorTab(false);
             } else {
                 KisSignalsBlocker b(m_textEditorWidget.textTab);
-                m_textEditorWidget.textTab->setCurrentIndex(SvgSource);
+                m_textEditorWidget.textTab->setCurrentIndex(Editor::SVGsource);
                 switchTextEditorTab(false);
             }
         }
@@ -1025,13 +1025,13 @@ void SvgTextEditor::setSettings()
         cfg.writeEntry("selectedWritingSystems", writingSystems.join(','));
 
         if (textSettings.radioRichText->isChecked()) {
-            cfg.writeEntry("EditorMode", (int)Richtext);
+            cfg.writeEntry("EditorMode", (int)EditorMode::RichText);
         }
         else if (textSettings.radioSvgSource->isChecked()) {
-            cfg.writeEntry("EditorMode", (int)SvgSource);
+            cfg.writeEntry("EditorMode", (int)EditorMode::SvgSource);
         }
         else  if (textSettings.radioBoth->isChecked()) {
-            cfg.writeEntry("EditorMode", (int)Both);
+            cfg.writeEntry("EditorMode", (int)EditorMode::Both);
         }
 
         cfg.writeEntry("colorEditorBackground", textSettings.colorEditorBackground->color());

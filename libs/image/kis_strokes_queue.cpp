@@ -15,6 +15,7 @@
 #include "kis_stroke_strategy.h"
 #include "kis_undo_stores.h"
 #include "kis_post_execution_undo_adapter.h"
+#include "KisCppQuirks.h"
 
 typedef QQueue<KisStrokeSP> StrokesQueue;
 typedef QQueue<KisStrokeSP>::iterator StrokesQueueIterator;
@@ -93,10 +94,11 @@ struct Q_DECL_HIDDEN KisStrokesQueue::Private {
     void cancelForgettableStrokes();
     void startLod0ToNStroke(int levelOfDetail, bool forgettable);
 
-    bool canUseLodN() const;
+
+    std::pair<StrokesQueueIterator, StrokesQueueIterator> currentLodRange();
     StrokesQueueIterator findNewLod0Pos();
     StrokesQueueIterator findNewLodNPos(KisStrokeSP lodN);
-    bool shouldWrapInSuspendUpdatesStroke() const;
+    bool shouldWrapInSuspendUpdatesStroke();
 
     void switchDesiredLevelOfDetail(bool forced);
     bool hasUnfinishedStrokes() const;
@@ -141,6 +143,14 @@ void KisStrokesQueue::Private::startLod0ToNStroke(int levelOfDetail, bool forget
     // precondition: lod > 0
     KIS_ASSERT_RECOVER_RETURN(levelOfDetail);
 
+    {
+        // sanity check: there should be no open LoD range now!
+        StrokesQueueIterator it;
+        StrokesQueueIterator end;
+        std::tie(it, end) = currentLodRange();
+        KIS_SAFE_ASSERT_RECOVER_NOOP(it == end);
+    }
+
     if (!this->lod0ToNStrokeStrategyFactory) return;
 
     KisLodSyncPair syncPair = this->lod0ToNStrokeStrategyFactory(forgettable);
@@ -162,20 +172,35 @@ void KisStrokesQueue::Private::cancelForgettableStrokes()
     }
 }
 
-bool KisStrokesQueue::Private::canUseLodN() const
+std::pair<StrokesQueueIterator, StrokesQueueIterator> KisStrokesQueue::Private::currentLodRange()
 {
-    Q_FOREACH (KisStrokeSP stroke, strokesQueue) {
-        if (stroke->type() == KisStroke::LEGACY) {
-            return false;
+    /**
+     * LoD-capable strokes should live in the range after the last
+     * legacy stroke of the queue
+     */
+
+    for (auto it = std::make_reverse_iterator(strokesQueue.end());
+         it != std::make_reverse_iterator(strokesQueue.begin());
+         ++it) {
+
+        if ((*it)->type() == KisStroke::LEGACY) {
+            // it.base() returns the next element after the one we found
+            return std::make_pair(it.base(), strokesQueue.end());
         }
     }
 
-    return true;
+    return std::make_pair(strokesQueue.begin(), strokesQueue.end());
 }
 
-bool KisStrokesQueue::Private::shouldWrapInSuspendUpdatesStroke() const
+bool KisStrokesQueue::Private::shouldWrapInSuspendUpdatesStroke()
 {
-    Q_FOREACH (KisStrokeSP stroke, strokesQueue) {
+    StrokesQueueIterator it;
+    StrokesQueueIterator end;
+    std::tie(it, end) = currentLodRange();
+
+    for (; it != end; ++it) {
+        KisStrokeSP stroke = *it;
+
         if (stroke->isCancelled()) continue;
 
         if (stroke->type() == KisStroke::RESUME) {
@@ -188,8 +213,9 @@ bool KisStrokesQueue::Private::shouldWrapInSuspendUpdatesStroke() const
 
 StrokesQueueIterator KisStrokesQueue::Private::findNewLod0Pos()
 {
-    StrokesQueueIterator it = strokesQueue.begin();
-    StrokesQueueIterator end = strokesQueue.end();
+    StrokesQueueIterator it;
+    StrokesQueueIterator end;
+    std::tie(it, end) = currentLodRange();
 
     for (; it != end; ++it) {
         if ((*it)->isCancelled()) continue;
@@ -204,8 +230,9 @@ StrokesQueueIterator KisStrokesQueue::Private::findNewLod0Pos()
 
 StrokesQueueIterator KisStrokesQueue::Private::findNewLodNPos(KisStrokeSP lodN)
 {
-    StrokesQueueIterator it = strokesQueue.begin();
-    StrokesQueueIterator end = strokesQueue.end();
+    StrokesQueueIterator it;
+    StrokesQueueIterator end;
+    std::tie(it, end) = currentLodRange();
 
     for (; it != end; ++it) {
         if ((*it)->isCancelled()) continue;
@@ -259,9 +286,20 @@ KisStrokeId KisStrokesQueue::startStroke(KisStrokeStrategy *strokeStrategy)
     }
 
     if (m_d->desiredLevelOfDetail &&
-        m_d->canUseLodN() &&
         (lodBuddyStrategy =
          strokeStrategy->createLodClone(m_d->desiredLevelOfDetail))) {
+
+        KisStrokeStrategy *legacyInitializingStrategy = strokeStrategy->createLegacyInitializingStroke();
+        if (legacyInitializingStrategy) {
+            // this strategy must be legacy, that is without lod support
+            KIS_SAFE_ASSERT_RECOVER_NOOP(!legacyInitializingStrategy->createLodClone(m_d->desiredLevelOfDetail));
+
+            KisStrokeSP legacyInitializingStroke(new KisStroke(legacyInitializingStrategy, KisStroke::LEGACY, 0));
+            legacyInitializingStrategy->setMutatedJobsInterface(this, legacyInitializingStroke);
+            m_d->strokesQueue.enqueue(legacyInitializingStroke);
+            legacyInitializingStroke->endStroke();
+            m_d->lodNNeedsSynchronization = true;
+        }
 
         if (m_d->lodNNeedsSynchronization) {
             m_d->startLod0ToNStroke(m_d->desiredLevelOfDetail, false);
@@ -291,6 +329,20 @@ KisStrokeId KisStrokesQueue::startStroke(KisStrokeStrategy *strokeStrategy)
         }
 
     } else {
+
+        KisStrokeStrategy *legacyInitializingStrategy = strokeStrategy->createLegacyInitializingStroke();
+        if (legacyInitializingStrategy) {
+            // this strategy must be legacy, that is without lod support
+            KIS_SAFE_ASSERT_RECOVER_NOOP(!legacyInitializingStrategy->createLodClone(m_d->desiredLevelOfDetail));
+
+            KisStrokeSP legacyInitializingStroke(new KisStroke(legacyInitializingStrategy, KisStroke::LEGACY, 0));
+            legacyInitializingStrategy->setMutatedJobsInterface(this, legacyInitializingStroke);
+            m_d->strokesQueue.enqueue(legacyInitializingStroke);
+            legacyInitializingStroke->endStroke();
+            m_d->lodNNeedsSynchronization = true;
+        }
+
+
         stroke = KisStrokeSP(new KisStroke(strokeStrategy, KisStroke::LEGACY, 0));
         m_d->strokesQueue.enqueue(stroke);
     }
@@ -427,14 +479,14 @@ UndoResult KisStrokesQueue::tryUndoLastStrokeAsync()
 
     QMutexLocker locker(&m_d->mutex);
 
-    std::reverse_iterator<StrokesQueue::ConstIterator> it(m_d->strokesQueue.constEnd());
-    std::reverse_iterator<StrokesQueue::ConstIterator> end(m_d->strokesQueue.constBegin());
-
     KisStrokeSP lastStroke;
     KisStrokeSP lastBuddy;
     bool buddyFound = false;
 
-    for (; it != end; ++it) {
+    for (auto it = std::make_reverse_iterator(m_d->strokesQueue.constEnd());
+         it != std::make_reverse_iterator(m_d->strokesQueue.constBegin());
+         ++it) {
+
         if ((*it)->type() == KisStroke::LEGACY) {
             break;
         }
@@ -502,8 +554,13 @@ void KisStrokesQueue::Private::tryClearUndoOnStrokeCompletion(KisStrokeSP finish
     bool hasResumeStrokes = false;
     bool hasLod0Strokes = false;
 
-    Q_FOREACH (KisStrokeSP stroke, strokesQueue) {
-        if (stroke == finishingStroke) continue;
+    auto it = std::find(strokesQueue.begin(), strokesQueue.end(), finishingStroke);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(it != strokesQueue.end());
+    ++it;
+
+    for (; it != strokesQueue.end(); ++it) {
+        KisStrokeSP stroke = *it;
+        if (stroke->type() == KisStroke::LEGACY) break;
 
         hasLod0Strokes |= stroke->type() == KisStroke::LOD0;
         hasResumeStrokes |= stroke->type() == KisStroke::RESUME;

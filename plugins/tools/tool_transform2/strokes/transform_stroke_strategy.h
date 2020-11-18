@@ -103,7 +103,7 @@ Q_SIGNALS:
     void sigPreviewDeviceReady(KisPaintDeviceSP device);
 
 protected:
-    void postProcessToplevelCommand(KUndo2Command *command) override;
+    bool postProcessToplevelCommand(KUndo2Command *command) override;
 
 private:
     KoUpdaterPtr fetchUpdater(KisNodeSP node);

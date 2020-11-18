@@ -411,9 +411,9 @@ struct TransformExtraData : public KUndo2CommandExtraData
     }
 };
 
-void TransformStrokeStrategy::postProcessToplevelCommand(KUndo2Command *command)
+bool TransformStrokeStrategy::postProcessToplevelCommand(KUndo2Command *command)
 {
-    KIS_SAFE_ASSERT_RECOVER_RETURN(m_savedTransformArgs);
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(m_savedTransformArgs, true);
 
     TransformExtraData *data = new TransformExtraData();
     data->savedTransformArgs = *m_savedTransformArgs;
@@ -429,7 +429,7 @@ void TransformStrokeStrategy::postProcessToplevelCommand(KUndo2Command *command)
         macroCommand->setOverrideInfo(m_overriddenCommand, m_skippedWhileMergeCommands);
     }
 
-    KisStrokeStrategyUndoCommandBased::postProcessToplevelCommand(command);
+    return true;
 }
 
 bool TransformStrokeStrategy::fetchArgsFromCommand(const KUndo2Command *command, ToolTransformArgs *args, KisNodeSP *rootNode, KisNodeList *transformedNodes)

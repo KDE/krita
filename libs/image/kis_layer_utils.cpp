@@ -1364,13 +1364,6 @@ namespace KisLayerUtils {
 
         if (mergedNodes.isEmpty()) return;
 
-        /* If the putAfter node is invisible,
-         * we should instead pick one of the nodes
-         * to be merged to avoid a null putAfter.
-         */
-        if (!putAfter->visible()){
-            putAfter = mergedNodes.first();
-        }
 
         // make sure we don't add the new layer into a locked group
         KIS_SAFE_ASSERT_RECOVER_RETURN(putAfter->parent());
@@ -1395,7 +1388,21 @@ namespace KisLayerUtils {
                                            actionName);
 
 
-        if (!invisibleNodes.isEmpty()) {
+        if (!invisibleNodes.isEmpty() && cleanupNodes) {
+
+            /* If the putAfter node is invisible,
+             * we should instead pick one of the nodes
+             * to be merged to avoid a null putAfter
+             * after we remove all invisible layers from
+             * the image.
+             * (The assumption is that putAfter is among
+             * the layers to merge, so if it's invisible,
+             * it's going to be removed)
+             */
+            if (!putAfter->visible()){
+                putAfter = mergedNodes.first();
+            }
+
             applicator.applyCommand(
                 new SimpleRemoveLayers(invisibleNodes,
                                        image),

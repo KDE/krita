@@ -41,21 +41,21 @@ index afba70b..882e20e 100644
      DESTINATION lib/pkgconfig)
 +
 +configure_package_config_file(
-+    "libmypaint-Config.cmake.in" "libmypaintConfig.cmake"
++    "libmypaint-config.cmake.in" "libmypaint-config.cmake"
 +    INSTALL_DESTINATION lib/cmake/libmypaint
 +    PATH_VARS CMAKE_INSTALL_PREFIX CMAKE_INSTALL_LIBDIR CMAKE_INSTALL_INCLUDEDIR)
-+write_basic_package_version_file(libmypaintConfigVersion.cmake
++write_basic_package_version_file(libmypaint-config-version.cmake
 +    COMPATIBILITY SameMinorVersion)
-+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/libmypaintConfigVersion.cmake"
-+    "${CMAKE_CURRENT_BINARY_DIR}/libmypaintConfig.cmake"
++install(FILES "${CMAKE_CURRENT_BINARY_DIR}/libmypaint-config-version.cmake"
++    "${CMAKE_CURRENT_BINARY_DIR}/libmypaint-config.cmake"
 +    DESTINATION lib/cmake/libmypaint)
 +
 +install(EXPORT libmypaintTargets DESTINATION lib/cmake/libmypaint)
-diff --git a/libmypaint-Config.cmake.in b/libmypaint-Config.cmake.in
+diff --git a/libmypaint-config.cmake.in b/libmypaint-config.cmake.in
 new file mode 100644
 index 0000000..752d388
 --- /dev/null
-+++ b/libmypaint-Config.cmake.in
++++ b/libmypaint-config.cmake.in
 @@ -0,0 +1,11 @@
 +@PACKAGE_INIT@
 +

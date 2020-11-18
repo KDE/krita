@@ -32,14 +32,14 @@ index 882e20e..fa80b3b 100644
 +    DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
  
  configure_package_config_file(
-     "libmypaint-Config.cmake.in" "libmypaintConfig.cmake"
+     "libmypaint-config.cmake.in" "libmypaint-config.cmake"
 -    INSTALL_DESTINATION lib/cmake/libmypaint
 +    INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/libmypaint
      PATH_VARS CMAKE_INSTALL_PREFIX CMAKE_INSTALL_LIBDIR CMAKE_INSTALL_INCLUDEDIR)
- write_basic_package_version_file(libmypaintConfigVersion.cmake
+ write_basic_package_version_file(libmypaint-config-version.cmake
      COMPATIBILITY SameMinorVersion)
- install(FILES "${CMAKE_CURRENT_BINARY_DIR}/libmypaintConfigVersion.cmake"
-     "${CMAKE_CURRENT_BINARY_DIR}/libmypaintConfig.cmake"
+ install(FILES "${CMAKE_CURRENT_BINARY_DIR}/libmypaint-config-version.cmake"
+     "${CMAKE_CURRENT_BINARY_DIR}/libmypaint-config.cmake"
 -    DESTINATION lib/cmake/libmypaint)
 +    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/libmypaint)
  

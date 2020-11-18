@@ -16,13 +16,13 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
 
-#include <cmath>
+#include "MyPaintPaintOpSettings.h"
 
+#include <cmath>
 #include <kis_color_option.h>
 #include <kis_paint_action_type_option.h>
-
 #include <libmypaint/mypaint-brush.h>
-#include "MyPaintPaintOpSettings.h"
+
 #include "MyPaintPaintOpOption.h"
 
 struct KisMyPaintOpSettings::Private

@@ -15,20 +15,18 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
-
-#include <QtMath>
-#include <qmath.h>
-
-#include <kis_node.h>
-#include <kis_image.h>
-#include <KoColorSpace.h>
-#include <kis_algebra_2d.h>
-#include <kis_sequential_iterator.h>
-#include <KoColorConversions.h>
-#include <KoColorSpaceMaths.h>
-#include <kis_cross_device_color_picker.h>
-
 #include "MyPaintSurface.h"
+
+#include <KoColorConversions.h>
+#include <KoColorSpace.h>
+#include <KoColorSpaceMaths.h>
+#include <QtMath>
+#include <kis_algebra_2d.h>
+#include <kis_cross_device_color_picker.h>
+#include <kis_image.h>
+#include <kis_node.h>
+#include <kis_sequential_iterator.h>
+#include <qmath.h>
 
 using namespace std;
 

@@ -2,18 +2,20 @@
 #define KIS_MYPAINT_CURVE_OPTION_WIDGET_H
 
 #include <QObject>
-#include <kis_paintop_option.h>
-#include <kis_curve_option_widget.h>
-#include "ui_wdgmypaintcurveoption.h"
-#include "ui_wdgcurveoption.h"
+
 #include <MyPaintCurveOption.h>
 #include <MyPaintPaintOpOption.h>
+#include <kis_curve_option_widget.h>
+#include <kis_paintop_option.h>
+#include <kritapaintop_export.h>
+
+#include "ui_wdgcurveoption.h"
+#include "ui_wdgmypaintcurveoption.h"
 
 class Ui_WdgMyPaintCurveOption;
-class KisMyPaintCurveOption;
 class QComboBox;
 
-class PAINTOP_EXPORT KisMyPaintCurveOptionWidget : public KisCurveOptionWidget
+class KisMyPaintCurveOptionWidget : public KisCurveOptionWidget
 {
     Q_OBJECT
 public:

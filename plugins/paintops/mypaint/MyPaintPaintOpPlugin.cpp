@@ -15,24 +15,23 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
-
-#include <kis_debug.h>
-#include <kis_global.h>
-#include <kpluginfactory.h>
-#include <klocalizedstring.h>
-#include <kis_fixed_paint_device.h>
-#include <kis_simple_paintop_factory.h>
-#include <brushengine/kis_paintop_registry.h>
-
-#include "MyPaintPaintOpPreset.h"
-#include "MyPaintPaintOp.h"
 #include "MyPaintPaintOpPlugin.h"
-#include "MyPaintPaintOpFactory.h"
-#include "MyPaintPaintOpSettings.h"
-#include "MyPaintPaintOpSettingsWidget.h"
 
 #include <KisResourceLoader.h>
 #include <KisResourceLoaderRegistry.h>
+#include <brushengine/kis_paintop_registry.h>
+#include <kis_debug.h>
+#include <kis_fixed_paint_device.h>
+#include <kis_global.h>
+#include <kis_simple_paintop_factory.h>
+#include <klocalizedstring.h>
+#include <kpluginfactory.h>
+
+#include "MyPaintPaintOp.h"
+#include "MyPaintPaintOpFactory.h"
+#include "MyPaintPaintOpPreset.h"
+#include "MyPaintPaintOpSettings.h"
+#include "MyPaintPaintOpSettingsWidget.h"
 
 K_PLUGIN_FACTORY_WITH_JSON(MyPaintOpPluginFactory, "kritamypaintop.json", registerPlugin<MyPaintOpPlugin>();)
 

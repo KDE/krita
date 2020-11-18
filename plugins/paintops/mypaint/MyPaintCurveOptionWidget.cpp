@@ -18,21 +18,20 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
+#include "MyPaintCurveOptionWidget.h"
 
-#include <QJsonObject>
 #include <QJsonDocument>
-
+#include <QJsonObject>
 #include <kis_global.h>
 #include <kis_icon_utils.h>
 #include <kis_signals_blocker.h>
 #include <widgets/kis_curve_widget.h>
 
-#include "ui_wdgmypaintcurveoption.h"
-#include "MyPaintPaintOpOption.h"
 #include "MyPaintBrushOption.h"
 #include "MyPaintCurveOption.h"
+#include "MyPaintPaintOpOption.h"
 #include "MyPaintPaintOpSettingsWidget.h"
-#include "MyPaintCurveOptionWidget.h"
+#include "ui_wdgmypaintcurveoption.h"
 
 KisMyPaintCurveOptionWidget::KisMyPaintCurveOptionWidget(KisMyPaintCurveOption* curveOption, const QString &minLabel, const QString &maxLabel, bool hideSlider, KisMyPaintOpOption *baseOption)
     : KisCurveOptionWidget (curveOption, minLabel, maxLabel, hideSlider)

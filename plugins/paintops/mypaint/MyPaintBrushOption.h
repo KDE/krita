@@ -6,17 +6,15 @@
 #include <QObject>
 
 #include <KoID.h>
-
-#include <klocalizedstring.h>
-
-#include "kis_serializable_configuration.h"
-#include "kis_curve_label.h"
 #include <kis_cubic_curve.h>
-#include <kis_shared_ptr.h>
-#include <kis_shared.h>
+#include <kis_curve_label.h>
 #include <kis_dynamic_sensor.h>
+#include <kis_serializable_configuration.h>
+#include <kis_shared.h>
+#include <kis_shared_ptr.h>
+#include <klocalizedstring.h>
+#include <kritapaintop_export.h>
 #include <libmypaint/mypaint-brush.h>
-
 
 class QWidget;
 class KisPaintInformation;
@@ -31,9 +29,7 @@ const KoID Declination("tilt_declination", ki18n("Declination"));
 const KoID Ascension("tilt_ascension", ki18n("Ascension"));
 const KoID Custom("custom", ki18n("Custom"));
 
-class KisMyPaintBrushOption;
-
-class PAINTOP_EXPORT KisMyPaintBrushOption : public KisDynamicSensor
+class KisMyPaintBrushOption : public KisDynamicSensor
 {
 
 public:
@@ -43,11 +39,11 @@ public:
 
     qreal value(const KisPaintInformation &info) override;    
 
-    QString minimumLabel(DynamicSensorType sensorType);
-    QString maximumLabel(DynamicSensorType sensorType, int max = -1);
-    int minimumValue(DynamicSensorType sensorType);
-    int maximumValue(DynamicSensorType sensorType, int max = -1);
-    QString valueSuffix(DynamicSensorType sensorType);
+    QString minimumLabel(DynamicSensorType sensorType) override;
+    QString maximumLabel(DynamicSensorType sensorType, int max = -1) override;
+    int minimumValue(DynamicSensorType sensorType) override;
+    int maximumValue(DynamicSensorType sensorType, int max = -1) override;
+    QString valueSuffix(DynamicSensorType sensorType) override;
 
     static DynamicSensorType typeForInput(MyPaintBrushInput input);
 

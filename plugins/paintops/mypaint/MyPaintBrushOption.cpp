@@ -16,6 +16,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
 
+#include "MyPaintBrushOption.h"
+
 #include <qmath.h>
 #include <QDomElement>
 
@@ -23,7 +25,6 @@
 #include <kis_paint_information.h>
 #include <libmypaint/mypaint-brush.h>
 
-#include "MyPaintBrushOption.h"
 
 using namespace std;
 

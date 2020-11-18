@@ -15,20 +15,18 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
-
-#include <QFile>
-#include <QFileInfo>
-
-#include <KoColorConversions.h>
-#include <MyPaintPaintOpOption.h>
-#include <libmypaint/mypaint-brush.h>
-#include <KisResourceServerProvider.h>
-#include <KoColorModelStandardIds.h>
-
 #include "MyPaintPaintOpPreset.h"
-#include "MyPaintPaintOpSettings.h"
 
 #include <KisResourceLocator.h>
+#include <KisResourceServerProvider.h>
+#include <KoColorConversions.h>
+#include <KoColorModelStandardIds.h>
+#include <MyPaintPaintOpOption.h>
+#include <QFile>
+#include <QFileInfo>
+#include <libmypaint/mypaint-brush.h>
+
+#include "MyPaintPaintOpSettings.h"
 
 class KisMyPaintPaintOpPreset::Private {
 

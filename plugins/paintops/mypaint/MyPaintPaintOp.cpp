@@ -16,24 +16,24 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
 
+#include "MyPaintPaintOp.h"
+
+#include <KoColorConversions.h>
+#include <KoCompositeOpRegistry.h>
+#include <KoToolManager.h>
 #include <QDebug>
 #include <QtMath>
-
-#include <kis_node.h>
-#include <kis_image.h>
-#include <kis_paintop.h>
-#include <kis_painter.h>
-#include <KoToolManager.h>
-#include <KoColorConversions.h>
-#include <kis_paintop_settings.h>
-#include <kis_paint_information.h>
-#include <kis_spacing_information.h>
-#include <kis_paintop_plugin_utils.h>
-#include <KoCompositeOpRegistry.h>
 #include <kis_brush_based_paintop_settings.h>
+#include <kis_image.h>
+#include <kis_node.h>
+#include <kis_paint_information.h>
+#include <kis_painter.h>
+#include <kis_paintop.h>
+#include <kis_paintop_plugin_utils.h>
+#include <kis_paintop_settings.h>
+#include <kis_spacing_information.h>
 #include <libmypaint/mypaint-brush.h>
 
-#include "MyPaintPaintOp.h"
 #include "MyPaintPaintOpOption.h"
 
 KisMyPaintPaintOp::KisMyPaintPaintOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP /*node*/, KisImageSP image)

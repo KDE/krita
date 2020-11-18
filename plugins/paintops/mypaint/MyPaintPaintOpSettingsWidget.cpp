@@ -15,16 +15,16 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
+#include "MyPaintPaintOpSettingsWidget.h"
 
-#include <klocalizedstring.h>
 #include <kis_airbrush_option_widget.h>
 #include <kis_paintop_settings_widget.h>
+#include <klocalizedstring.h>
 
+#include "MyPaintCurveOption.h"
+#include "MyPaintCurveOptionWidget.h"
 #include "MyPaintPaintOpOption.h"
 #include "MyPaintPaintOpSettings.h"
-#include "MyPaintCurveOption.h"
-#include "MyPaintPaintOpSettingsWidget.h"
-#include "MyPaintCurveOptionWidget.h"
 
 KisMyPaintOpSettingsWidget:: KisMyPaintOpSettingsWidget(QWidget* parent)
     : KisPaintOpSettingsWidget(parent)

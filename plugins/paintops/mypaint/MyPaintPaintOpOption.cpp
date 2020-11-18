@@ -16,9 +16,10 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
 
+#include "MyPaintPaintOpOption.h"
+
 #include <QWidget>
 #include "ui_wdgmypaintoptions.h"
-#include "MyPaintPaintOpOption.h"
 #include <kis_paintop_lod_limitations.h>
 
 class KisMyPaintOpOptionsWidget: public QWidget, public Ui::WdgMyPaintOptions

@@ -454,8 +454,6 @@ void SvgTextEditor::switchTextEditorTab(bool convertData)
         // Convert the rich text to svg and styles strings
         if (m_shape && convertData) {
             QString svg;
-            QString styles;
-
             if (!converter.convertDocumentToSvg(m_textEditorWidget.richTextEdit->document(), &svg)) {
                     qWarning()<<"new converter docToSVG doesn't work!";
             }

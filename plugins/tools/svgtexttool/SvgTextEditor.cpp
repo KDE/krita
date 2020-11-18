@@ -425,7 +425,8 @@ void SvgTextEditor::switchTextEditorTab(bool convertData)
         disconnect(m_currentEditor->document(), SIGNAL(modificationChanged(bool)), this, SLOT(setModified(bool)));
     }
 
-    if (isRichTextEditorActive()) {
+    // do not switch to the same tab again, otherwise we're losing current changes
+    if (m_currentEditor != m_textEditorWidget.richTextEdit && isRichTextEditorActive()) {
         //first, make buttons checkable
         enableRichTextActions(true);
         enableSvgTextActions(false);
@@ -444,7 +445,7 @@ void SvgTextEditor::switchTextEditorTab(bool convertData)
             doc->clearUndoRedoStacks();
         }
         m_currentEditor = m_textEditorWidget.richTextEdit;
-    } else if (isSvgSourceEditorActive()) {
+    } else if (m_currentEditor != m_textEditorWidget.svgTextEdit && isSvgSourceEditorActive()) {
         //first, make buttons uncheckable
         enableRichTextActions(false);
         enableSvgTextActions(true);

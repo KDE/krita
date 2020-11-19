@@ -135,6 +135,7 @@ KoAbstractGradientSP KisGradientGeneratorConfiguration::gradient() const
             }
             if (gradient) {
                 gradient->setName(gradientElement.attribute("name", ""));
+                gradient->setValid(true);
                 return gradient;
             }
         }

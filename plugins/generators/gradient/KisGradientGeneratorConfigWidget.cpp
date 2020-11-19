@@ -68,6 +68,7 @@ KisGradientGeneratorConfigWidget::KisGradientGeneratorConfigWidget(QWidget* pare
     m_ui.comboBoxEndPositionDistanceUnits->addItems(spatialUnitsNames);
 
     m_ui.widgetGradientEditor->setContentsMargins(10, 10, 10, 10);
+    m_ui.widgetGradientEditor->loadUISettings();
 
     connect(m_ui.comboBoxShape, SIGNAL(currentIndexChanged(int)), this, SIGNAL(sigConfigurationUpdated()));
     connect(m_ui.comboBoxRepeat, SIGNAL(currentIndexChanged(int)), this, SIGNAL(sigConfigurationUpdated()));
@@ -105,7 +106,9 @@ KisGradientGeneratorConfigWidget::KisGradientGeneratorConfigWidget(QWidget* pare
 }
 
 KisGradientGeneratorConfigWidget::~KisGradientGeneratorConfigWidget()
-{}
+{
+    m_ui.widgetGradientEditor->saveUISettings();
+}
 
 void KisGradientGeneratorConfigWidget::setConfiguration(const KisPropertiesConfigurationSP config)
 {

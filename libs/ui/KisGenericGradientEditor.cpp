@@ -133,7 +133,7 @@ KisGenericGradientEditor::KisGenericGradientEditor(QWidget* parent)
     m_d->buttonUpdateGradient->setToolTip(
         i18nc(
             "Update the current gradient in the presets with the one in the generic gradient editor",
-            "Update the selected preset gradient with the current gradient"
+            "Update the selected gradient preset with the current gradient"
         )
     );
     
@@ -258,6 +258,7 @@ KisGenericGradientEditor::KisGenericGradientEditor(QWidget* parent)
 
     layoutMain->addWidget(m_d->widgetGradientPresetChooser, 1);
     layoutMain->addLayout(layoutButtons, 0);
+    layoutMain->addStretch();
 
     setLayout(layoutMain);
 
@@ -545,7 +546,12 @@ void KisGenericGradientEditor::setGradient(KoAbstractGradientSP newGradient)
         m_d->widgetGradientEditor = newGradientEditorWidget;
         m_d->widgetGradientEditor->layout()->setContentsMargins(0, 0, 0, 0);
         m_d->widgetGradientEditor->setMinimumSize(0, 0);
-        m_d->widgetGradientEditor->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+        m_d->widgetGradientEditor->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
+        if (dynamic_cast<KisStopGradientEditor*>(m_d->widgetGradientEditor)) {
+            dynamic_cast<KisStopGradientEditor*>(m_d->widgetGradientEditor)->setCompactMode(m_d->compactGradientPresetChooserMode);
+        } else {
+            dynamic_cast<KisAutogradientEditor*>(m_d->widgetGradientEditor)->setCompactMode(m_d->compactGradientPresetChooserMode);
+        }
         if (oldGradientEditorWidget) {
             setUpdatesEnabled(false);
             layout()->replaceWidget(oldGradientEditorWidget, m_d->widgetGradientEditor);
@@ -554,7 +560,11 @@ void KisGenericGradientEditor::setGradient(KoAbstractGradientSP newGradient)
             delete oldGradientEditorWidget;
             setUpdatesEnabled(true);
         } else {
-            dynamic_cast<QVBoxLayout*>(layout())->addWidget(m_d->widgetGradientEditor, 0);
+            dynamic_cast<QVBoxLayout*>(layout())->insertWidget(
+                m_d->useGradientPresetChooserPopUp ? 1 : 2,
+                m_d->widgetGradientEditor,
+                0
+            );
         }
         connect(m_d->widgetGradientEditor, SIGNAL(sigGradientChanged()), this, SLOT(on_widgetGradientEditor_sigGradientChanged()));
         updateConvertGradientButton();

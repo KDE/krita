@@ -133,7 +133,7 @@ KisGenericGradientEditor::KisGenericGradientEditor(QWidget* parent)
     m_d->buttonUpdateGradient->setToolTip(
         i18nc(
             "Update the current gradient in the presets with the one in the generic gradient editor",
-            "Update the selected preset gradient"
+            "Update the selected preset gradient with the current gradient"
         )
     );
     
@@ -167,8 +167,9 @@ KisGenericGradientEditor::KisGenericGradientEditor(QWidget* parent)
             "Show compact gradient preset chooser"
         )
     );
-    QAction *separatorGradientPresetChooserOptions1 = new QAction(this);
-    separatorGradientPresetChooserOptions1->setSeparator(true);
+    m_d->toolButtonGradientPresetChooserOptions->addAction(m_d->actionUseGradientPresetChooserPopUp);
+    m_d->toolButtonGradientPresetChooserOptions->addAction(m_d->actionCompactGradientPresetChooserMode);
+
     QActionGroup *actionGroupGradientPresetChooserViewMode = new QActionGroup(this);
     m_d->actionGradientPresetChooserViewModeIcon = new QAction(this);
     m_d->actionGradientPresetChooserViewModeIcon->setCheckable(true);
@@ -188,8 +189,8 @@ KisGenericGradientEditor::KisGenericGradientEditor(QWidget* parent)
             "List view"
         )
     );
-    QAction *separatorGradientPresetChooserOptions2 = new QAction(this);
-    separatorGradientPresetChooserOptions2->setSeparator(true);
+    QAction *separatorGradientPresetChooserViewMode1 = new QAction(this);
+    separatorGradientPresetChooserViewMode1->setSeparator(true);
     QActionGroup *actionGroupGradientPresetChooserItemSize = new QActionGroup(this);
     m_d->actionGradientPresetChooserItemSizeSmall = new QAction(this);
     m_d->actionGradientPresetChooserItemSizeSmall->setCheckable(true);
@@ -240,13 +241,12 @@ KisGenericGradientEditor::KisGenericGradientEditor(QWidget* parent)
     widgetActionSliderGradientPresetChooserItemSizeCustom->setDefaultWidget(
         m_d->widgetSliderGradientPresetChooserItemSizeCustom
     );
-    m_d->toolButtonGradientPresetChooserOptions->addAction(m_d->actionUseGradientPresetChooserPopUp);
-    m_d->toolButtonGradientPresetChooserOptions->addAction(m_d->actionCompactGradientPresetChooserMode);
-    m_d->toolButtonGradientPresetChooserOptions->addAction(separatorGradientPresetChooserOptions1);
-    m_d->toolButtonGradientPresetChooserOptions->addActions(actionGroupGradientPresetChooserViewMode->actions());
-    m_d->toolButtonGradientPresetChooserOptions->addAction(separatorGradientPresetChooserOptions2);
-    m_d->toolButtonGradientPresetChooserOptions->addActions(actionGroupGradientPresetChooserItemSize->actions());
-    m_d->toolButtonGradientPresetChooserOptions->addAction(widgetActionSliderGradientPresetChooserItemSizeCustom);
+    QToolButton *toolButtonWidgetGradientPresetChooserViewMode =
+        m_d->widgetGradientPresetChooser->viewModeButton();
+    toolButtonWidgetGradientPresetChooserViewMode->addActions(actionGroupGradientPresetChooserViewMode->actions());
+    toolButtonWidgetGradientPresetChooserViewMode->addAction(separatorGradientPresetChooserViewMode1);
+    toolButtonWidgetGradientPresetChooserViewMode->addActions(actionGroupGradientPresetChooserItemSize->actions());
+    toolButtonWidgetGradientPresetChooserViewMode->addAction(widgetActionSliderGradientPresetChooserItemSizeCustom);
 
     layoutButtons->addWidget(m_d->buttonAddGradient, 0);
     layoutButtons->addWidget(m_d->buttonUpdateGradient, 0);
@@ -729,7 +729,8 @@ void KisGenericGradientEditor::updateUpdateGradientButton()
     KoResourceSP selectedGradient = m_d->widgetGradientPresetChooser->currentResource();
     m_d->buttonUpdateGradient->setEnabled(
         m_d->gradient && selectedGradient &&
-        m_d->gradient->resourceId() == selectedGradient->resourceId()
+        m_d->gradient->resourceId() == selectedGradient->resourceId() &&
+        !selectedGradient->permanent()
     );
 }
 
@@ -744,6 +745,7 @@ void KisGenericGradientEditor::updateGradientPresetChooser()
     m_d->widgetGradientPresetChooser->showButtons(!m_d->compactGradientPresetChooserMode);
     m_d->widgetGradientPresetChooser->setStoragePopupButtonVisible(!m_d->compactGradientPresetChooserMode);
     m_d->widgetGradientPresetChooser->showTaggingBar(!m_d->compactGradientPresetChooserMode);
+    m_d->widgetGradientPresetChooser->setViewModeButtonVisible(!m_d->compactGradientPresetChooserMode);
 
     m_d->widgetGradientPresetChooser->itemView()->setViewMode(
         m_d->gradientPresetChooserViewMode == GradientPresetChooserViewMode_Icon
@@ -861,7 +863,9 @@ void KisGenericGradientEditor::on_buttonUpdateGradient_clicked()
     }
 
     KoResourceSP selectedGradient = m_d->widgetGradientPresetChooser->currentResource();
-    if (!selectedGradient || !(m_d->gradient->resourceId() == selectedGradient->resourceId())) {
+    if (!selectedGradient ||
+        !(m_d->gradient->resourceId() == selectedGradient->resourceId()) ||
+        selectedGradient->permanent()) {
         return;
     }
 

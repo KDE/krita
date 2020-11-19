@@ -189,6 +189,8 @@ namespace KisGradientConversion
         }
 
         stopGradient->setStops(stops);
+        
+        stopGradient->setValid(true);
 
         return stopGradient;
     }
@@ -282,6 +284,7 @@ namespace KisGradientConversion
 
         stopGradient->setName(gradient->name());
         stopGradient->setFilename(gradient->filename());
+        stopGradient->setValid(true);
 
         return stopGradient;
     }
@@ -302,6 +305,8 @@ namespace KisGradientConversion
             );
         }
 
+        segmentGradient->setValid(true);
+        
         return segmentGradient;
     }
 
@@ -360,6 +365,7 @@ namespace KisGradientConversion
 
         segmentGradient->setName(gradient->name());
         segmentGradient->setFilename(gradient->filename());
+        segmentGradient->setValid(true);
 
         return segmentGradient;
     }

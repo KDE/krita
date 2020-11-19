@@ -83,14 +83,16 @@ class PluginImporterTestCase(TestCase):
         `self.resources_dir`.
         """
 
-        assert os.path.exists(os.path.join(self.resources_dir.name, *path))
+        exists = os.path.exists(os.path.join(self.resources_dir.name, *path))
+        assert exists, 'File missing: %s' % os.path.join(*path)
 
     def assert_not_in_resources_dir(self, *path):
         """Helper method to check whether a directory or file doesn't exist
         inside `self.resources_dir`.
         """
 
-        assert not os.path.exists(os.path.join(self.resources_dir.name, *path))
+        exists = os.path.exists(os.path.join(self.resources_dir.name, *path))
+        assert not exists, 'Unexpected file: %s' % os.path.join(*path)
 
     ############################################################
     # The actual tests start below
@@ -123,6 +125,21 @@ class PluginImporterTestCase(TestCase):
         """Test: Import a basic plugin."""
 
         self.zip_plugin('success_simple')
+        importer = PluginImporter(self.zip_filename,
+                                  self.resources_dir.name,
+                                  lambda x: True)
+        imported = importer.import_all()
+        assert len(imported) == 1
+        self.assert_in_resources_dir('pykrita', 'foo')
+        self.assert_in_resources_dir('pykrita', 'foo', '__init__.py')
+        self.assert_in_resources_dir('pykrita', 'foo', 'foo.py')
+        self.assert_in_resources_dir('pykrita', 'foo.desktop')
+        self.assert_in_resources_dir('actions', 'foo.action')
+
+    def test_plugin_different_action_name_success(self):
+        """Test: Import a basic plugin."""
+
+        self.zip_plugin('success_different_action_name')
         importer = PluginImporter(self.zip_filename,
                                   self.resources_dir.name,
                                   lambda x: True)
@@ -285,16 +302,5 @@ class PluginImporterTestCase(TestCase):
                                   self.resources_dir.name,
                                   lambda x: True)
         with pytest.raises(NoPluginsFoundException):
-            # We expect an exception
-            importer.import_all()
-
-    def test_unparsable_action_file(self):
-        """Test: Import plugin whose action file isn't parsable."""
-
-        self.zip_plugin('fail_unparsable_action_file')
-        importer = PluginImporter(self.zip_filename,
-                                  self.resources_dir.name,
-                                  lambda x: True)
-        with pytest.raises(PluginReadError):
             # We expect an exception
             importer.import_all()

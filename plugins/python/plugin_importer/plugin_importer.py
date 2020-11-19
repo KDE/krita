@@ -28,7 +28,6 @@ import shutil
 import sys
 from tempfile import TemporaryDirectory
 import zipfile
-from xml.etree import ElementTree
 
 
 class PluginImportError(Exception):
@@ -140,16 +139,9 @@ class PluginImporter:
 
     def get_source_actionfile(self, name):
         for filename in self.action_filenames:
-            try:
-                root = ElementTree.fromstring(
-                    self.archive.read(filename).decode('utf-8'))
-            except ElementTree.ParseError as e:
-                raise PluginReadError(
-                    '%s: %s' % (i18n('Action file'), str(e)))
-
-            for action in root.findall('./Actions/Action'):
-                if action.get('name') == name:
-                    return filename
+            _, actionfilename = os.path.split(filename)
+            if actionfilename == '%s.action' % name:
+                return filename
 
     def read_desktop_config(self, desktop_filename):
         config = ConfigParser()

@@ -35,6 +35,7 @@
 #include <KisGradientConversion.h>
 #include <KisResourceItemListView.h>
 #include <kis_signals_blocker.h>
+#include <KoResourceServerProvider.h>
 
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
@@ -48,7 +49,8 @@ public:
     KoCanvasResourcesInterfaceSP canvasResourcesInterface;
 
     QPushButton *buttonConvertGradient;
-    QPushButton *buttonSaveGradient;
+    QPushButton *buttonUpdateGradient;
+    QPushButton *buttonAddGradient;
     QLabel *labelConvertGradientWarning;
     KisResourceItemChooser *widgetGradientPresetChooser;
     QToolButton *toolButtonGradientPresetChooser;
@@ -68,7 +70,8 @@ public:
 
     bool compactMode;
     bool isConvertGradientButtonVisible;
-    bool isSaveGradientButtonVisible;
+    bool isUpdateGradientButtonVisible;
+    bool isAddGradientButtonVisible;
     bool isGradientPresetChooserVisible;
     bool isGradientPresetChooserOptionsButtonVisible;
     bool useGradientPresetChooserPopUp;
@@ -125,12 +128,21 @@ KisGenericGradientEditor::KisGenericGradientEditor(QWidget* parent)
     widgetActionToolButtonGradientPresetChooser->setDefaultWidget(m_d->widgetToolButtonGradientPresetChooser);
     m_d->toolButtonGradientPresetChooser->addAction(widgetActionToolButtonGradientPresetChooser);
     
-    m_d->buttonSaveGradient = new QPushButton(this);
-    m_d->buttonSaveGradient->setIcon(KisIconUtils::loadIcon("document-save"));
-    m_d->buttonSaveGradient->setToolTip(
+    m_d->buttonUpdateGradient = new QPushButton(this);
+    m_d->buttonUpdateGradient->setIcon(KisIconUtils::loadIcon("document-save"));
+    m_d->buttonUpdateGradient->setToolTip(
         i18nc(
-            "Save the current gradient in the generic gradient editor to the presets",
-            "Save the current gradient"
+            "Update the current gradient in the presets with the one in the generic gradient editor",
+            "Update the selected preset gradient"
+        )
+    );
+    
+    m_d->buttonAddGradient = new QPushButton(this);
+    m_d->buttonAddGradient->setIcon(KisIconUtils::loadIcon("list-add"));
+    m_d->buttonAddGradient->setToolTip(
+        i18nc(
+            "Add the current gradient in the generic gradient editor to the presets",
+            "Add the current gradient to the presets"
         )
     );
 
@@ -236,7 +248,8 @@ KisGenericGradientEditor::KisGenericGradientEditor(QWidget* parent)
     m_d->toolButtonGradientPresetChooserOptions->addActions(actionGroupGradientPresetChooserItemSize->actions());
     m_d->toolButtonGradientPresetChooserOptions->addAction(widgetActionSliderGradientPresetChooserItemSizeCustom);
 
-    layoutButtons->addWidget(m_d->buttonSaveGradient, 0);
+    layoutButtons->addWidget(m_d->buttonAddGradient, 0);
+    layoutButtons->addWidget(m_d->buttonUpdateGradient, 0);
     layoutButtons->addWidget(m_d->buttonConvertGradient, 0);
     layoutButtons->addWidget(m_d->labelConvertGradientWarning, 0);
     layoutButtons->addStretch(1);
@@ -250,7 +263,8 @@ KisGenericGradientEditor::KisGenericGradientEditor(QWidget* parent)
 
     m_d->compactMode = false;
     m_d->isConvertGradientButtonVisible = true;
-    m_d->isSaveGradientButtonVisible = true;
+    m_d->isUpdateGradientButtonVisible = true;
+    m_d->isAddGradientButtonVisible = true;
     m_d->isGradientPresetChooserVisible = true;
     m_d->isGradientPresetChooserOptionsButtonVisible = true;
     m_d->useGradientPresetChooserPopUp = true;
@@ -265,7 +279,8 @@ KisGenericGradientEditor::KisGenericGradientEditor(QWidget* parent)
     m_d->compactGradientEditorMode = false;
 
     updateConvertGradientButton();
-    updateSaveGradientButton();
+    updateUpdateGradientButton();
+    updateAddGradientButton();
     updateGradientPresetChooser();
     updateGradientEditor();
     updateWidgetSliderGradientPresetChooserItemSizeCustom();
@@ -278,10 +293,17 @@ KisGenericGradientEditor::KisGenericGradientEditor(QWidget* parent)
     );
 
     connect(
-        m_d->buttonSaveGradient,
+        m_d->buttonUpdateGradient,
         SIGNAL(clicked()),
         this,
-        SLOT(on_buttonSaveGradient_clicked())
+        SLOT(on_buttonUpdateGradient_clicked())
+    );
+
+    connect(
+        m_d->buttonAddGradient,
+        SIGNAL(clicked()),
+        this,
+        SLOT(on_buttonAddGradient_clicked())
     );
 
     connect(
@@ -406,9 +428,14 @@ bool KisGenericGradientEditor::isConvertGradientButtonVisible() const
     return m_d->isConvertGradientButtonVisible;
 }
 
-bool KisGenericGradientEditor::isSaveGradientButtonVisible() const
+bool KisGenericGradientEditor::isUpdateGradientButtonVisible() const
 {
-    return m_d->isSaveGradientButtonVisible;
+    return m_d->isUpdateGradientButtonVisible;
+}
+
+bool KisGenericGradientEditor::isAddGradientButtonVisible() const
+{
+    return m_d->isAddGradientButtonVisible;
 }
 
 bool KisGenericGradientEditor::isGradientPresetChooserVisible() const
@@ -477,7 +504,7 @@ void KisGenericGradientEditor::setGradient(KoAbstractGradientSP newGradient)
         return;
     }
 
-    if (!newGradient) {
+    if (!newGradient || !newGradient->valid()) {
         if (m_d->widgetGradientEditor) {
             layout()->removeWidget(m_d->widgetGradientEditor);
             delete m_d->widgetGradientEditor;
@@ -485,7 +512,8 @@ void KisGenericGradientEditor::setGradient(KoAbstractGradientSP newGradient)
         }
         m_d->gradient = nullptr;
         updateConvertGradientButton();
-        updateSaveGradientButton();
+        updateUpdateGradientButton();
+        updateAddGradientButton();
         updateGradientEditor();
         return;
     }
@@ -530,7 +558,8 @@ void KisGenericGradientEditor::setGradient(KoAbstractGradientSP newGradient)
         }
         connect(m_d->widgetGradientEditor, SIGNAL(sigGradientChanged()), this, SLOT(on_widgetGradientEditor_sigGradientChanged()));
         updateConvertGradientButton();
-        updateSaveGradientButton();
+        updateUpdateGradientButton();
+        updateAddGradientButton();
         updateGradientEditor();
     }
 
@@ -553,7 +582,8 @@ void KisGenericGradientEditor::setCompactMode(bool compact)
     m_d->compactMode = compact;
     
     updateConvertGradientButton();
-    updateSaveGradientButton();
+    updateUpdateGradientButton();
+    updateAddGradientButton();
     updateGradientPresetChooser();
 }
 
@@ -563,10 +593,16 @@ void KisGenericGradientEditor::setConvertGradientButtonVisible(bool visible)
     updateConvertGradientButton();
 }
 
-void KisGenericGradientEditor::setSaveGradientButtonVisible(bool visible)
+void KisGenericGradientEditor::setUpdateGradientButtonVisible(bool visible)
 {
-    m_d->isSaveGradientButtonVisible = visible;
-    updateSaveGradientButton();
+    m_d->isUpdateGradientButtonVisible = visible;
+    updateUpdateGradientButton();
+}
+
+void KisGenericGradientEditor::setAddGradientButtonVisible(bool visible)
+{
+    m_d->isAddGradientButtonVisible = visible;
+    updateAddGradientButton();
 }
 
 void KisGenericGradientEditor::setGradientPresetChooserVisible(bool visible)
@@ -687,10 +723,20 @@ void KisGenericGradientEditor::updateConvertGradientButton()
     m_d->buttonConvertGradient->setEnabled(m_d->gradient);
 }
 
-void KisGenericGradientEditor::updateSaveGradientButton()
+void KisGenericGradientEditor::updateUpdateGradientButton()
 {
-    m_d->buttonSaveGradient->setVisible(!m_d->compactMode && m_d->isSaveGradientButtonVisible);
-    m_d->buttonSaveGradient->setEnabled(m_d->gradient && !m_d->gradient->name().isEmpty());
+    m_d->buttonUpdateGradient->setVisible(!m_d->compactMode && m_d->isUpdateGradientButtonVisible);
+    KoResourceSP selectedGradient = m_d->widgetGradientPresetChooser->currentResource();
+    m_d->buttonUpdateGradient->setEnabled(
+        m_d->gradient && selectedGradient &&
+        m_d->gradient->resourceId() == selectedGradient->resourceId()
+    );
+}
+
+void KisGenericGradientEditor::updateAddGradientButton()
+{
+    m_d->buttonAddGradient->setVisible(!m_d->compactMode && m_d->isAddGradientButtonVisible);
+    m_d->buttonAddGradient->setEnabled(m_d->gradient && !m_d->gradient->name().isEmpty());
 }
 
 void KisGenericGradientEditor::updateGradientPresetChooser()
@@ -808,8 +854,33 @@ void KisGenericGradientEditor::on_buttonConvertGradient_clicked()
     }
 }
 
-void KisGenericGradientEditor::on_buttonSaveGradient_clicked()
+void KisGenericGradientEditor::on_buttonUpdateGradient_clicked()
 {
+    if (!m_d->gradient || !m_d->gradient->valid() || !(m_d->gradient->resourceId() > -1)) {
+        return;
+    }
+
+    KoResourceSP selectedGradient = m_d->widgetGradientPresetChooser->currentResource();
+    if (!selectedGradient || !(m_d->gradient->resourceId() == selectedGradient->resourceId())) {
+        return;
+    }
+
+    KoResourceServer<KoAbstractGradient> *gradientServer =
+        KoResourceServerProvider::instance()->gradientServer();
+
+    gradientServer->updateResource(m_d->gradient);
+}
+
+void KisGenericGradientEditor::on_buttonAddGradient_clicked()
+{
+    if (!m_d->gradient || !m_d->gradient->valid() || m_d->gradient->name().isEmpty()) {
+        return;
+    }
+
+    KoResourceServer<KoAbstractGradient> *gradientServer =
+        KoResourceServerProvider::instance()->gradientServer();
+    
+    gradientServer->addResource(m_d->gradient);
 }
 
 void KisGenericGradientEditor::on_widgetGradientPresetChooser_resourceClicked(KoResourceSP resource)
@@ -847,6 +918,7 @@ void KisGenericGradientEditor::on_sliderGradientPresetChooserItemSizeCustom_valu
 
 void KisGenericGradientEditor::on_widgetGradientEditor_sigGradientChanged()
 {
-    updateSaveGradientButton();
+    updateUpdateGradientButton();
+    updateAddGradientButton();
     emit sigGradientChanged();
 }

@@ -28,9 +28,6 @@
 #include <KoAbstractGradient.h>
 #include <KoCanvasResourcesInterface.h>
 
-class KisResourceItemChooser;
-class QPushButton;
-
 /**
  * @brief This is a generic gradient editor widget
  * 
@@ -39,7 +36,6 @@ class QPushButton;
  * 
  * It supports loading/saving from/to resources and conversion between
  * the different types of gradients
- * 
  */
 class KRITAUI_EXPORT KisGenericGradientEditor : public QWidget
 {
@@ -133,11 +129,17 @@ public:
      */
     bool isConvertGradientButtonVisible() const;
     /**
-     * @brief Tell if the save gradient button is being shown
-     * @return true if the save gradient button is being shown, false otherwise
-     * @see setSaveGradientButtonVisible(bool)
+     * @brief Tell if the update gradient button is being shown
+     * @return true if the update gradient button is being shown, false otherwise
+     * @see setUpdateGradientButtonVisible(bool)
      */
-    bool isSaveGradientButtonVisible() const;
+    bool isUpdateGradientButtonVisible() const;
+    /**
+     * @brief Tell if the add gradient button is being shown
+     * @return true if the add gradient button is being shown, false otherwise
+     * @see setAddGradientButtonVisible(bool)
+     */
+    bool isAddGradientButtonVisible() const;
     /**
      * @brief Tell if the gradient preset chooser is being shown
      * @return true if the gradient preset chooser is being shown, false otherwise
@@ -282,11 +284,17 @@ public Q_SLOTS:
      */
     void setConvertGradientButtonVisible(bool visible);
     /**
-     * @brief Set if the save gradient button must be shown
-     * @param visible true if the save gradient button must be shown, false otherwise
-     * @see isSaveGradientButtonVisible()
+     * @brief Set if the update gradient button must be shown
+     * @param visible true if the update gradient button must be shown, false otherwise
+     * @see isUpdateGradientButtonVisible()
      */
-    void setSaveGradientButtonVisible(bool visible);
+    void setUpdateGradientButtonVisible(bool visible);
+    /**
+     * @brief Set if the add gradient button must be shown
+     * @param visible true if the add gradient button must be shown, false otherwise
+     * @see isAddGradientButtonVisible()
+     */
+    void setAddGradientButtonVisible(bool visible);
     /**
      * @brief Set if the gradient preset chooser must be shown
      * @param visible true if the gradient preset chooser must be shown, false otherwise
@@ -384,22 +392,23 @@ Q_SIGNALS:
      */
     void sigGradientChanged();
 
-protected:
-    bool event(QEvent *e) override;
-
 private:
     class Private;
     QScopedPointer<Private> m_d;
 
+    bool event(QEvent *e) override;
+
     void updateConvertGradientButton();
-    void updateSaveGradientButton();
+    void updateUpdateGradientButton();
+    void updateAddGradientButton();
     void updateGradientPresetChooser();
     void updateGradientEditor();
     void updateWidgetSliderGradientPresetChooserItemSizeCustom();
 
 private Q_SLOTS:
     void on_buttonConvertGradient_clicked();
-    void on_buttonSaveGradient_clicked();
+    void on_buttonUpdateGradient_clicked();
+    void on_buttonAddGradient_clicked();
     void on_widgetGradientPresetChooser_resourceClicked(KoResourceSP resoure);
     void on_actionGroupGradientPresetChooserViewMode_triggered(QAction *triggeredAction);
     void on_actionGroupGradientPresetChooserItemSize_triggered(QAction *triggeredAction);

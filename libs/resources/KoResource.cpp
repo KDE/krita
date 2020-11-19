@@ -164,8 +164,7 @@ QByteArray KoResource::generateMD5() const
 
 QString KoResource::filename() const
 {
-
-    return (!d->filename.isEmpty() ? d->filename : d->name);
+    return d->filename;
 }
 
 void KoResource::setFilename(const QString& filename)
@@ -175,7 +174,7 @@ void KoResource::setFilename(const QString& filename)
 
 QString KoResource::name() const
 {
-    return (!d->name.isEmpty() ? d->name : QFileInfo(filename()).fileName());
+    return d->name;
 }
 
 void KoResource::setName(const QString& name)

@@ -623,7 +623,7 @@ signBundle() {
     printf "kritaquicklook.qlgenerator" | batch_codesign
 
     cd ${KRITA_DMG}/krita.app/Contents/Library/Spotlight
-    printf "kritaspotlight.mdimporter" | batch_codesign
+    printf "kritaspotlight.mdimporter" | batch_codesign
 
     # It is recommended to sign every Resource file
     cd ${KRITA_DMG}/krita.app/Contents/Resources

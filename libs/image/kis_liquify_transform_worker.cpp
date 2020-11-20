@@ -22,7 +22,7 @@ struct Q_DECL_HIDDEN KisLiquifyTransformWorker::Private
     {
     }
 
-    const QRect srcBounds;
+    QRect srcBounds;
 
     QVector<QPointF> originalPoints;
     QVector<QPointF> transformedPoints;
@@ -418,6 +418,20 @@ QRect KisLiquifyTransformWorker::approxNeedRect(const QRect &rc, const QRect &fu
 {
     Q_UNUSED(rc);
     return fullBounds;
+}
+
+void KisLiquifyTransformWorker::transformSrcAndDst(const QTransform &t)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(t.type() <= QTransform::TxScale);
+
+    m_d->srcBounds = t.mapRect(m_d->srcBounds);
+
+    for (auto it = m_d->originalPoints.begin(); it != m_d->originalPoints.end(); ++it) {
+        *it = t.map(*it);
+    }
+    for (auto it = m_d->transformedPoints.begin(); it != m_d->transformedPoints.end(); ++it) {
+        *it = t.map(*it);
+    }
 }
 
 #include <functional>

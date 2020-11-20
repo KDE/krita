@@ -87,6 +87,8 @@ public:
         bool forceReset;
         KisNodeSP rootNode;
         KisSelectionSP selection;
+        KisNodeSP imageRoot;
+        int previewLevelOfDetail = -1;
 
         // properties filled by initialization stroke
         KisNodeList processedNodes;
@@ -99,6 +101,11 @@ public:
         QMutex commandsMutex;
         QVector<KUndo2CommandSP> clearCommands;
         QVector<KUndo2CommandSP> transformCommands;
+        QVector<KUndo2CommandSP> transformPreviewCommands;
+
+        inline QVector<KUndo2CommandSP>& effectiveTransformCommands(int levelOfDetail) {
+            return levelOfDetail > 0 ? transformPreviewCommands : transformCommands;
+        }
 
         QMutex devicesCacheMutex;
         QHash<KisPaintDevice*, KisPaintDeviceSP> devicesCacheHash;
@@ -106,6 +113,17 @@ public:
         QMutex dirtyRectsMutex;
         QHash<KisNodeSP, QRect> dirtyRects;
         QHash<KisNodeSP, QRect> prevDirtyRects;
+
+        QHash<KisNodeSP, QRect> dirtyPreviewRects;
+        QHash<KisNodeSP, QRect> prevDirtyPreviewRects;
+
+        inline QHash<KisNodeSP, QRect>& effectiveDirtyRects(int levelOfDetail) {
+            return levelOfDetail > 0 ? dirtyPreviewRects : dirtyRects;
+        }
+
+        inline QHash<KisNodeSP, QRect>& effectivePrevDirtyRects(int levelOfDetail) {
+            return levelOfDetail > 0 ? prevDirtyPreviewRects : prevDirtyRects;
+        }
 
         const KisSavedMacroCommand *overriddenCommand = 0;
         QVector<const KUndo2Command*> skippedWhileMergeCommands;
@@ -115,21 +133,21 @@ public:
 
 
         void executeAndAddClearCommand(KUndo2Command *cmd, KisStrokeStrategyUndoCommandBased *interface);
-        void executeAndAddTransformCommand(KUndo2Command *cmd, KisStrokeStrategyUndoCommandBased *interface);
+        void executeAndAddTransformCommand(KUndo2Command *cmd, KisStrokeStrategyUndoCommandBased *interface, int levelOfDetail);
 
         void notifyAllCommandsDone(KisStrokeStrategyUndoCommandBased *interface);
         void undoClearCommands(KisStrokeStrategyUndoCommandBased *interface);
-        void undoTransformCommands(KisStrokeStrategyUndoCommandBased *interface);
+        void undoTransformCommands(KisStrokeStrategyUndoCommandBased *interface, int levelOfDetail);
 
-        void postAllUpdates();
+        void postAllUpdates(int levelOfDetail);
 
-        void transformNode(KisNodeSP node, const ToolTransformArgs &config, KisStrokeStrategyUndoCommandBased *interface);
-        void reapplyTransform(ToolTransformArgs args, QVector<KisStrokeJobData *> &mutatedJobs, KisStrokeStrategyUndoCommandBased *interface);
+        void transformNode(KisNodeSP node, const ToolTransformArgs &config, KisStrokeStrategyUndoCommandBased *interface, int levelOfDetail);
+        void reapplyTransform(ToolTransformArgs args, QVector<KisStrokeJobData *> &mutatedJobs, KisStrokeStrategyUndoCommandBased *interface, int levelOfDetail);
         void finalizeStrokeImpl(QVector<KisStrokeJobData *> &mutatedJobs, KisStrokeStrategyUndoCommandBased *interface);
 
         void finishAction(QVector<KisStrokeJobData *> &mutatedJobs, KisStrokeStrategyUndoCommandBased *interface);
         void cancelAction(QVector<KisStrokeJobData *> &mutatedJobs, KisStrokeStrategyUndoCommandBased *interface);
-        void addDirtyRect(KisNodeSP node, const QRect &rect);
+        void addDirtyRect(KisNodeSP node, const QRect &rect, int levelOfDetail);
 
         bool postProcessToplevelCommand(KUndo2Command *command);
     };
@@ -143,7 +161,7 @@ public:
                                    KisNodeSP rootNode,
                                    KisSelectionSP selection,
                                    KisStrokeUndoFacade *undoFacade,
-                                   KisUpdatesFacade *updatesFacade);
+                                   KisUpdatesFacade *updatesFacade, KisNodeSP imageRoot);
 
     ~InplaceTransformStrokeStrategy() override;
 
@@ -158,14 +176,8 @@ public:
 
     static bool fetchArgsFromCommand(const KUndo2Command *command, ToolTransformArgs *args, KisNodeSP *rootNode, KisNodeList *transformedNodes);
 
-    KisStrokeStrategy* createLegacyInitializingStroke() override;
-    KisStrokeStrategy* createLodClone(int levelOfDetail) override;
-
 Q_SIGNALS:
     void sigTransactionGenerated(TransformTransactionProperties transaction, ToolTransformArgs args, void *cookie);
-
-private Q_SLOTS:
-    void slotForwardTransactionGenerated(TransformTransactionProperties transaction, ToolTransformArgs args, void *cookie);
 
 protected:
     bool postProcessToplevelCommand(KUndo2Command *command) override;
@@ -226,7 +238,7 @@ private:
     QElapsedTimer m_updateTimer;
     const int m_updateInterval = 30;
 
-    bool m_isOverriddenByClone = false;
+    QVector<KisDecoratedNodeInterface*> m_disabledDecoratedNodes;
 };
 
 #endif /* __INPLACE_TRANSFORM_STROKE_STRATEGY_H */

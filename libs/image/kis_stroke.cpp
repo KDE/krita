@@ -268,7 +268,13 @@ qreal KisStroke::balancingRatioOverride() const
 KisStrokeJobData::Sequentiality KisStroke::nextJobSequentiality() const
 {
     return !m_jobsQueue.isEmpty() ?
-        m_jobsQueue.head()->sequentiality() : KisStrokeJobData::SEQUENTIAL;
+                m_jobsQueue.head()->sequentiality() : KisStrokeJobData::SEQUENTIAL;
+}
+
+int KisStroke::nextJobLevelOfDetail() const
+{
+    return !m_jobsQueue.isEmpty() ?
+                m_jobsQueue.head()->levelOfDetail() : worksOnLevelOfDetail();
 }
 
 void KisStroke::enqueue(KisStrokeJobStrategy *strategy,

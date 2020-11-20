@@ -264,6 +264,7 @@ int KisUpdateScheduler::currentLevelOfDetail() const
     int levelOfDetail = m_d->updaterContext.currentLevelOfDetail();
 
     if (levelOfDetail < 0) {
+        // it is safe, because is called iff updaterContext has no running jobs at all
         levelOfDetail = m_d->updatesQueue.overrideLevelOfDetail();
     }
 

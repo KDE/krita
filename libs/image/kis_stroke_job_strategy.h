@@ -43,6 +43,9 @@ public:
     bool isCancellable() const;
     void setCancellable(bool value);
 
+    int levelOfDetailOverride() const;
+    void setLevelOfDetailOverride(int value);
+
 protected:
     KisStrokeJobData(const KisStrokeJobData &rhs);
 
@@ -50,6 +53,7 @@ private:
     Sequentiality m_sequentiality;
     Exclusivity m_exclusivity;
     bool m_isCancellable;
+    int m_levelOfDetailOverride;
 };
 
 

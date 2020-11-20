@@ -570,6 +570,66 @@ void KisStrokesQueueTest::testStrokesLevelOfDetail()
     context.clear();
 }
 
+void KisStrokesQueueTest::testStrokeWithMixedLodJobs()
+{
+    LodStrokesQueueTester t;
+    KisStrokesQueue &queue = t.queue;
+
+    // create a stroke with LOD0 + LOD2
+    queue.setDesiredLevelOfDetail(2);
+
+    // process sync-lodn-planes stroke
+    t.processQueue();
+    t.checkOnlyJob("sync_u_init");
+
+    KisStrokeId id2 = queue.startStroke(new KisTestingStrokeStrategy(QLatin1String("lod_"), false, true, false, false, true));
+
+    KisStrokeJobData *data = 0;
+    data = new KisTestingStrokeJobData(KisStrokeJobData::CONCURRENT,
+                                       KisStrokeJobData::NORMAL,
+                                       false, "job0_l0");
+    queue.addJob(id2, data);
+
+    data = new KisTestingStrokeJobData(KisStrokeJobData::CONCURRENT,
+                                       KisStrokeJobData::NORMAL,
+                                       false, "job1_l0");
+    queue.addJob(id2, data);
+
+    data = new KisTestingStrokeJobData(KisStrokeJobData::CONCURRENT,
+                                       KisStrokeJobData::NORMAL,
+                                       false, "job2_l0");
+    queue.addJob(id2, data);
+
+    data = new KisTestingStrokeJobData(KisStrokeJobData::CONCURRENT,
+                                       KisStrokeJobData::NORMAL,
+                                       false, "job3_l2");
+    data->setLevelOfDetailOverride(2);
+    queue.addJob(id2, data);
+
+    data = new KisTestingStrokeJobData(KisStrokeJobData::CONCURRENT,
+                                       KisStrokeJobData::NORMAL,
+                                       false, "job4_l0");
+    queue.addJob(id2, data);
+
+    queue.endStroke(id2);
+
+    t.processQueue();
+    t.checkJobs({"lod_dab_job0_l0", "lod_dab_job1_l0"});
+    QCOMPARE(t.context.currentLevelOfDetail(), 0);
+
+    t.processQueue();
+    t.checkOnlyJob("lod_dab_job2_l0");
+    QCOMPARE(t.context.currentLevelOfDetail(), 0);
+
+    t.processQueue();
+    t.checkOnlyJob("lod_dab_job3_l2");
+    QCOMPARE(t.context.currentLevelOfDetail(), 2);
+
+    t.processQueue();
+    t.checkOnlyJob("lod_dab_job4_l0");
+    QCOMPARE(t.context.currentLevelOfDetail(), 0);
+}
+
 void KisStrokesQueueTest::testMultipleLevelOfDetailStrokes()
 {
     LodStrokesQueueTester t;

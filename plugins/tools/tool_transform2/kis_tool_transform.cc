@@ -767,10 +767,9 @@ void KisToolTransform::requestStrokeCancellation()
 
 void KisToolTransform::requestImageRecalculation()
 {
-    if (m_strokeId) {
+    if (m_strokeId && m_transaction.rootNode()) {
         image()->addJob(m_strokeId, new InplaceTransformStrokeStrategy::UpdateTransformData(m_currentArgs));
     }
-
 }
 
 void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool forceReset)
@@ -832,7 +831,7 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool f
         selection = 0;
     }
 
-    InplaceTransformStrokeStrategy *strategy = new InplaceTransformStrokeStrategy(mode, m_workRecursively, m_currentArgs.filterId(), forceReset, currentNode, selection, image().data(), image().data());
+    InplaceTransformStrokeStrategy *strategy = new InplaceTransformStrokeStrategy(mode, m_workRecursively, m_currentArgs.filterId(), forceReset, currentNode, selection, image().data(), image().data(), image()->root());
     connect(strategy, SIGNAL(sigPreviewDeviceReady(KisPaintDeviceSP)), SLOT(slotPreviewDeviceGenerated(KisPaintDeviceSP)));
     connect(strategy, SIGNAL(sigTransactionGenerated(TransformTransactionProperties, ToolTransformArgs, void*)), SLOT(slotTransactionGenerated(TransformTransactionProperties, ToolTransformArgs, void*)));
 
@@ -842,7 +841,6 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool f
     // strokes at the same time, if he is quick enough)
     m_strokeStrategyCookie = strategy;
     m_strokeId = image()->startStroke(strategy);
-    m_asyncUpdateHelper.startUpdateStream(image().data(), m_strokeId);
 
     KIS_SAFE_ASSERT_RECOVER_NOOP(m_changesTracker.isEmpty());
 
@@ -888,6 +886,7 @@ void KisToolTransform::slotTransactionGenerated(TransformTransactionProperties t
     m_transaction = transaction;
     m_currentArgs = args;
     m_transaction.setCurrentConfigLocation(&m_currentArgs);
+    m_asyncUpdateHelper.startUpdateStream(image().data(), m_strokeId);
 
     KIS_SAFE_ASSERT_RECOVER_NOOP(m_changesTracker.isEmpty());
     commitChanges();

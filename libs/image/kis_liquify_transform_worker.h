@@ -77,6 +77,8 @@ public:
     QRect approxChangeRect(const QRect &rc);
     QRect approxNeedRect(const QRect &rc, const QRect &fullBounds);
 
+    void transformSrcAndDst(const QTransform &t);
+
 private:
     struct Private;
     const QScopedPointer<Private> m_d;

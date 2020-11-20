@@ -849,5 +849,5 @@ bool KisStrokesQueue::checkLevelOfDetailProperty(int runningLevelOfDetail)
     KisStrokeSP stroke = m_d->strokesQueue.head();
 
     return runningLevelOfDetail < 0 ||
-        stroke->worksOnLevelOfDetail() == runningLevelOfDetail;
+        stroke->nextJobLevelOfDetail() == runningLevelOfDetail;
 }

@@ -164,7 +164,7 @@ void KisToolSelectSimilar::beginPrimaryAction(KoPointerEvent *event)
         KoColor pixelColor;
         sourceDevice->pixel(pos.x(), pos.y(), &pixelColor);
         if (sourceDevice->colorSpace()->difference(pixelColor.data(), sourceDevice->defaultPixel().data()) <= m_fuzziness) {
-            areaToCheck = imageSP->bounds();
+            areaToCheck = imageSP->bounds() | sourceDevice->exactBounds();
         } else {
             areaToCheck = sourceDevice->exactBounds();
         }
@@ -180,11 +180,13 @@ void KisToolSelectSimilar::beginPrimaryAction(KoPointerEvent *event)
     // new stroke
 
     QSharedPointer<KoColor> color = QSharedPointer<KoColor>(new KoColor(sourceDevice->colorSpace()));
+    QSharedPointer<bool> isDefaultPixel = QSharedPointer<bool>(new bool(true));
 
     KUndo2Command* cmdPickColor = new KisCommandUtils::LambdaCommand(
-                [pos, sourceDevice, color] () mutable -> KUndo2Command* {
+                [pos, sourceDevice, color, isDefaultPixel, fuzziness] () mutable -> KUndo2Command* {
 
                     sourceDevice->pixel(pos.x(), pos.y(), color.data());
+                    *isDefaultPixel.data() = sourceDevice->colorSpace()->difference(color.data()->data(), sourceDevice->defaultPixel().data()) < fuzziness;
 
                     return 0;
     });
@@ -196,10 +198,13 @@ void KisToolSelectSimilar::beginPrimaryAction(KoPointerEvent *event)
     for (int i = 0; i < patches.count(); i++) {
         QSharedPointer<QRect> patch = QSharedPointer<QRect>(new QRect(patches[i]));
         KUndo2Command* patchCmd = new KisCommandUtils::LambdaCommand(
-                    [fuzziness, tmpSel, sourceDevice, patch, color] () mutable -> KUndo2Command* {
+                    [fuzziness, tmpSel, sourceDevice, patch, color, isDefaultPixel] () mutable -> KUndo2Command* {
 
                         QRect patchRect = *patch.data();
-                        QRect finalRect = patchRect.intersected(sourceDevice->exactBounds());
+                        QRect finalRect = patchRect;
+                        if (!isDefaultPixel) {
+                            finalRect = patchRect.intersected(sourceDevice->exactBounds());
+                        }
                         if (!finalRect.isEmpty()) {
                             selectByColor(sourceDevice, tmpSel, color->data(), fuzziness, patchRect);
                         }
@@ -232,49 +237,61 @@ void KisToolSelectSimilar::beginPrimaryAction(KoPointerEvent *event)
         QRect imageRect = image()->bounds();
 
         KUndo2Command* topCmd = new KisCommandUtils::LambdaCommand(
-                    [fuzziness, tmpSel, sourceDevice, color] () mutable -> KUndo2Command* {
+                    [fuzziness, tmpSel, sourceDevice, color, imageRect, isDefaultPixel] () mutable -> KUndo2Command* {
 
                         QRect contentRect = sourceDevice->exactBounds();
-                        QRect patchRect = QRect(QPoint(0, contentRect.top()), QPoint(contentRect.right(), 0));
-                        QRect finalRect = patchRect.intersected(contentRect);
+                        QRect patchRect = QRect(QPoint(0, contentRect.top()), QPoint(qMax(contentRect.right(), imageRect.right()), 0));
+                        QRect finalRect = patchRect;
+                        if (!*isDefaultPixel) {
+                            finalRect = patchRect.intersected(contentRect);
+                        }
                         if (!finalRect.isEmpty()) {
-                            selectByColor(sourceDevice, tmpSel, color->data(), fuzziness, patchRect);
+                            selectByColor(sourceDevice, tmpSel, color->data(), fuzziness, finalRect);
                         }
                         return 0;
         });
 
         KUndo2Command* rightCmd = new KisCommandUtils::LambdaCommand(
-                    [fuzziness, tmpSel, sourceDevice, color, imageRect] () mutable -> KUndo2Command* {
+                    [fuzziness, tmpSel, sourceDevice, color, imageRect, isDefaultPixel] () mutable -> KUndo2Command* {
 
                         QRect contentRect = sourceDevice->exactBounds();
-                        QRect patchRect = QRect(QPoint(imageRect.width(), 0), QPoint(contentRect.right(), contentRect.bottom()));
-                        QRect finalRect = patchRect.intersected(contentRect);
+                        QRect patchRect = QRect(QPoint(imageRect.width(), 0), QPoint(contentRect.right(), qMax(contentRect.bottom(), imageRect.bottom())));
+                        QRect finalRect = patchRect;
+                        if (!*isDefaultPixel) {
+                            finalRect = patchRect.intersected(contentRect);
+                        }
                         if (!finalRect.isEmpty()) {
-                            selectByColor(sourceDevice, tmpSel, color->data(), fuzziness, patchRect);
+                            selectByColor(sourceDevice, tmpSel, color->data(), fuzziness, finalRect);
                         }
                         return 0;
         });
 
         KUndo2Command* bottomCmd = new KisCommandUtils::LambdaCommand(
-                    [fuzziness, tmpSel, sourceDevice, color, imageRect] () mutable -> KUndo2Command* {
+                    [fuzziness, tmpSel, sourceDevice, color, imageRect, isDefaultPixel] () mutable -> KUndo2Command* {
 
                         QRect contentRect = sourceDevice->exactBounds();
-                        QRect patchRect = QRect(QPoint(contentRect.left(), imageRect.bottom()), QPoint(imageRect.right(), contentRect.bottom()));
-                        QRect finalRect = patchRect.intersected(contentRect);
+                        QRect patchRect = QRect(QPoint(qMin(contentRect.left(), imageRect.left()), imageRect.bottom()), QPoint(imageRect.right(), contentRect.bottom()));
+                        QRect finalRect = patchRect;
+                        if (!*isDefaultPixel) {
+                            finalRect = patchRect.intersected(contentRect);
+                        }
                         if (!finalRect.isEmpty()) {
-                            selectByColor(sourceDevice, tmpSel, color->data(), fuzziness, patchRect);
+                            selectByColor(sourceDevice, tmpSel, color->data(), fuzziness, finalRect);
                         }
                         return 0;
         });
 
         KUndo2Command* leftCmd = new KisCommandUtils::LambdaCommand(
-                    [fuzziness, tmpSel, sourceDevice, color, imageRect] () mutable -> KUndo2Command* {
+                    [fuzziness, tmpSel, sourceDevice, color, imageRect, isDefaultPixel] () mutable -> KUndo2Command* {
 
                         QRect contentRect = sourceDevice->exactBounds();
-                        QRect patchRect = QRect(QPoint(contentRect.left(), contentRect.top()), QPoint(0, imageRect.bottom()));
-                        QRect finalRect = patchRect.intersected(contentRect);
+                        QRect patchRect = QRect(QPoint(contentRect.left(), qMin(contentRect.top(), imageRect.top())), QPoint(0, imageRect.bottom()));
+                        QRect finalRect = patchRect;
+                        if (!*isDefaultPixel) {
+                            finalRect = patchRect.intersected(contentRect);
+                        }
                         if (!finalRect.isEmpty()) {
-                            selectByColor(sourceDevice, tmpSel, color->data(), fuzziness, patchRect);
+                            selectByColor(sourceDevice, tmpSel, color->data(), fuzziness, finalRect);
                         }
                         return 0;
         });

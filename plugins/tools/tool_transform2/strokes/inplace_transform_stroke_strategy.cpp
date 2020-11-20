@@ -440,9 +440,25 @@ void InplaceTransformStrokeStrategy::initStrokeCallback()
     });
 
     Q_FOREACH (KisNodeSP node, m_s->processedNodes) {
-        KritaUtils::addJobConcurrent(extraInitJobs, [this, node]() {
+        KritaUtils::addJobConcurrent(extraInitJobs, [this, node]() mutable {
 
-            KisPaintDeviceSP device = node->paintDevice();
+            KisPaintDeviceSP device;
+            SharedData::CommandGroup commandGroup = SharedData::Clear;
+
+            if (KisExternalLayer *extLayer =
+                           dynamic_cast<KisExternalLayer*>(node.data())) {
+
+                if (m_s->mode == ToolTransformArgs::FREE_TRANSFORM ||
+                    (m_s->mode == ToolTransformArgs::PERSPECTIVE_4POINT &&
+                     extLayer->supportsPerspectiveTransform())) {
+
+                    device = node->projection();
+                    commandGroup = SharedData::ClearTemporary;
+                }
+            } else {
+                device = node->paintDevice();
+            }
+
             if (device) {
 
                 {
@@ -475,12 +491,7 @@ void InplaceTransformStrokeStrategy::initStrokeCallback()
                     device->setDirty(oldExtent);
                 }
 
-                {
-                    QMutexLocker l(&m_s->commandsMutex);
-                    KUndo2CommandSP sharedCommand = toQShared(transaction.endAndTake());
-                    executeCommand(sharedCommand, false);
-                    m_s->clearCommands.append(sharedCommand);
-                }
+                m_s->executeAndAddCommand(transaction.endAndTake(), this, commandGroup);
             }
         });
     }
@@ -561,55 +572,58 @@ InplaceTransformStrokeStrategy::BarrierUpdateData::BarrierUpdateData(const Inpla
 {
 }
 
-void InplaceTransformStrokeStrategy::SharedData::executeAndAddClearCommand(KUndo2Command *cmd, KisStrokeStrategyUndoCommandBased *interface)
+void InplaceTransformStrokeStrategy::SharedData::executeAndAddCommand(KUndo2Command *cmd, KisStrokeStrategyUndoCommandBased *interface, InplaceTransformStrokeStrategy::SharedData::CommandGroup group)
 {
     QMutexLocker l(&commandsMutex);
     KUndo2CommandSP sharedCommand = toQShared(cmd);
     interface->executeCommand(sharedCommand, false);
-    clearCommands.append(sharedCommand);
-}
-
-void InplaceTransformStrokeStrategy::SharedData::executeAndAddTransformCommand(KUndo2Command *cmd, KisStrokeStrategyUndoCommandBased *interface, int levelOfDetail)
-{
-    QMutexLocker l(&commandsMutex);
-    KUndo2CommandSP sharedCommand = toQShared(cmd);
-    interface->executeCommand(sharedCommand, false);
-    effectiveTransformCommands(levelOfDetail).append(sharedCommand);
+    commands.append(std::make_pair(group, sharedCommand));
 }
 
 void InplaceTransformStrokeStrategy::SharedData::notifyAllCommandsDone(KisStrokeStrategyUndoCommandBased *interface)
 {
-    Q_FOREACH (KUndo2CommandSP cmd, clearCommands) {
-        interface->notifyCommandDone(cmd, KisStrokeJobData::CONCURRENT, KisStrokeJobData::NORMAL);
+    for (auto it = commands.begin(); it != commands.end(); ++it) {
+        if (it->first == Clear) {
+            interface->notifyCommandDone(it->second, KisStrokeJobData::CONCURRENT, KisStrokeJobData::NORMAL);
+        }
     }
 
     interface->notifyCommandDone(toQShared(new KUndo2Command()), KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::NORMAL);
 
-    Q_FOREACH (KUndo2CommandSP cmd, transformCommands) {
-        interface->notifyCommandDone(cmd, KisStrokeJobData::CONCURRENT, KisStrokeJobData::NORMAL);
+    for (auto it = commands.begin(); it != commands.end(); ++it) {
+        if (it->first == Transform) {
+            interface->notifyCommandDone(it->second, KisStrokeJobData::CONCURRENT, KisStrokeJobData::NORMAL);
+        }
     }
 }
 
-void InplaceTransformStrokeStrategy::SharedData::undoClearCommands(KisStrokeStrategyUndoCommandBased *interface)
+void InplaceTransformStrokeStrategy::SharedData::undoAllCommands(KisStrokeStrategyUndoCommandBased *interface)
 {
-    for (auto it = std::make_reverse_iterator(clearCommands.end());
-         it != std::make_reverse_iterator(clearCommands.begin());
-         ++it) {
-
-        interface->executeCommand(*it, true);
-    }
-    clearCommands.clear();
-}
-
-void InplaceTransformStrokeStrategy::SharedData::undoTransformCommands(KisStrokeStrategyUndoCommandBased *interface, int levelOfDetail)
-{
-    QVector<KUndo2CommandSP> &commands = effectiveTransformCommands(levelOfDetail);
-
     for (auto it = std::make_reverse_iterator(commands.end());
          it != std::make_reverse_iterator(commands.begin());
          ++it) {
 
-        interface->executeCommand(*it, true);
+        interface->executeCommand(it->second, true);
+    }
+
+    commands.clear();
+}
+
+void InplaceTransformStrokeStrategy::SharedData::undoTransformCommands(KisStrokeStrategyUndoCommandBased *interface, int levelOfDetail)
+{
+    for (auto it = std::make_reverse_iterator(commands.end());
+         it != std::make_reverse_iterator(commands.begin());) {
+
+        if ((levelOfDetail > 0 &&
+             (it->first == TransformLod || it->first == TransformLodTemporary)) ||
+            (levelOfDetail <= 0 &&
+             (it->first == Transform || it->first == TransformTemporary))) {
+
+            interface->executeCommand(it->second, true);
+            it = std::make_reverse_iterator(commands.erase(std::next(it).base()));
+        } else {
+            ++it;
+        }
     }
     commands.clear();
 }
@@ -632,6 +646,37 @@ void InplaceTransformStrokeStrategy::SharedData::transformNode(KisNodeSP node, c
 {
     KisPaintDeviceSP device = node->paintDevice();
 
+    SharedData::CommandGroup commandGroup =
+        levelOfDetail > 0 ? SharedData::TransformLod : SharedData::Transform;
+
+    if (KisExternalLayer *extLayer =
+        dynamic_cast<KisExternalLayer*>(node.data())) {
+
+            if (config.mode() == ToolTransformArgs::FREE_TRANSFORM ||
+                    (config.mode() == ToolTransformArgs::PERSPECTIVE_4POINT &&
+                     extLayer->supportsPerspectiveTransform())) {
+
+                if (levelOfDetail <= 0) {
+                    const QRect oldDirtyRect = extLayer->extent();
+
+                    QVector3D transformedCenter;
+                    KisTransformWorker w = KisTransformUtils::createTransformWorker(config, 0, 0, &transformedCenter);
+                    QTransform t = w.transform();
+                    KUndo2Command *cmd = extLayer->transform(t);
+
+                    executeAndAddCommand(cmd, interface, SharedData::Transform);
+                    addDirtyRect(node, oldDirtyRect | node->extent(), 0);
+                    return;
+                } else {
+                    device = node->projection();
+                    commandGroup = SharedData::TransformLodTemporary;
+                }
+            }
+
+    } else {
+        device = node->paintDevice();
+    }
+
     if (device) {
         KisPaintDeviceSP cachedPortion;
 
@@ -650,26 +695,8 @@ void InplaceTransformStrokeStrategy::SharedData::transformNode(KisNodeSP node, c
         transformAndMergeDevice(config, src,
                                 device, &helper);
 
-        executeAndAddTransformCommand(transaction.endAndTake(), interface, levelOfDetail);
+        executeAndAddCommand(transaction.endAndTake(), interface, commandGroup);
         addDirtyRect(node, cachedPortion->extent() | device->extent(), levelOfDetail);
-
-    } else if (KisExternalLayer *extLayer =
-               dynamic_cast<KisExternalLayer*>(node.data())) {
-
-        if (config.mode() == ToolTransformArgs::FREE_TRANSFORM ||
-                (config.mode() == ToolTransformArgs::PERSPECTIVE_4POINT &&
-                 extLayer->supportsPerspectiveTransform())) {
-
-            const QRect oldDirtyRect = extLayer->extent();
-
-            QVector3D transformedCenter;
-            KisTransformWorker w = KisTransformUtils::createTransformWorker(config, 0, 0, &transformedCenter);
-            QTransform t = w.transform();
-            KUndo2Command *cmd = extLayer->transform(t);
-
-            executeAndAddTransformCommand(cmd, interface, levelOfDetail);
-            addDirtyRect(node, oldDirtyRect | node->extent(), levelOfDetail);
-        }
 
     } else if (KisTransformMask *transformMask =
                dynamic_cast<KisTransformMask*>(node.data())) {
@@ -679,7 +706,8 @@ void InplaceTransformStrokeStrategy::SharedData::transformNode(KisNodeSP node, c
         KUndo2Command *cmd = new KisModifyTransformMaskCommand(transformMask,
                                                                KisTransformMaskParamsInterfaceSP(
                                                                    new KisTransformMaskAdapter(config)));
-        executeAndAddTransformCommand(cmd, interface, levelOfDetail);
+        // TODO: fix transform masks
+        executeAndAddCommand(cmd, interface, commandGroup);
         addDirtyRect(node, oldDirtyRect | transformMask->extent(), levelOfDetail);
     }
 }
@@ -788,7 +816,7 @@ void InplaceTransformStrokeStrategy::SharedData::cancelAction(QVector<KisStrokeJ
     if (initialTransformArgs.isIdentity()) {
         KritaUtils::addJobBarrier(mutatedJobs, [this, interface]() {
             undoTransformCommands(interface, 0);
-            undoClearCommands(interface);
+            undoAllCommands(interface);
         });
         finalizeStrokeImpl(mutatedJobs, interface);
 

@@ -99,13 +99,17 @@ public:
         KisSelectionMaskSP deactivatedOverlaySelectionMask;
 
         QMutex commandsMutex;
-        QVector<KUndo2CommandSP> clearCommands;
-        QVector<KUndo2CommandSP> transformCommands;
-        QVector<KUndo2CommandSP> transformPreviewCommands;
 
-        inline QVector<KUndo2CommandSP>& effectiveTransformCommands(int levelOfDetail) {
-            return levelOfDetail > 0 ? transformPreviewCommands : transformCommands;
-        }
+        enum CommandGroup {
+            Clear = 0,
+            ClearTemporary,
+            Transform,
+            TransformTemporary,
+            TransformLod,
+            TransformLodTemporary
+        };
+
+        QVector<std::pair<CommandGroup, KUndo2CommandSP>> commands;
 
         QMutex devicesCacheMutex;
         QHash<KisPaintDevice*, KisPaintDeviceSP> devicesCacheHash;
@@ -132,11 +136,10 @@ public:
         bool finalizingActionsStarted = false;
 
 
-        void executeAndAddClearCommand(KUndo2Command *cmd, KisStrokeStrategyUndoCommandBased *interface);
-        void executeAndAddTransformCommand(KUndo2Command *cmd, KisStrokeStrategyUndoCommandBased *interface, int levelOfDetail);
+        void executeAndAddCommand(KUndo2Command *cmd, KisStrokeStrategyUndoCommandBased *interface, CommandGroup group);
 
         void notifyAllCommandsDone(KisStrokeStrategyUndoCommandBased *interface);
-        void undoClearCommands(KisStrokeStrategyUndoCommandBased *interface);
+        void undoAllCommands(KisStrokeStrategyUndoCommandBased *interface);
         void undoTransformCommands(KisStrokeStrategyUndoCommandBased *interface, int levelOfDetail);
 
         void postAllUpdates(int levelOfDetail);

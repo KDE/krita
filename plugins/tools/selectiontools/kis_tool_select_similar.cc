@@ -48,12 +48,15 @@ void selectByColor(KisPaintDeviceSP dev, KisPixelSelectionSP selection, const qu
     KisHLineConstIteratorSP hiter = dev->createHLineConstIteratorNG(x, y, w);
     KisHLineIteratorSP selIter = selection->createHLineIteratorNG(x, y, w);
 
+    quint8 wantedOpacity = cs->opacityU8(c);
+
     for (int row = y; row < y + h; ++row) {
         do {
-            //if (dev->colorSpace()->hasAlpha())
-            //    opacity = dev->colorSpace()->alpha(hiter->rawData());
             if (fuzziness == 1) {
-                if (memcmp(c, hiter->oldRawData(), cs->pixelSize()) == 0) {
+                if (wantedOpacity == 0 && cs->opacityU8(hiter->oldRawData()) == 0) {
+                    *(selIter->rawData()) = MAX_SELECTED;
+                }
+                else if (memcmp(c, hiter->oldRawData(), cs->pixelSize()) == 0) {
                     *(selIter->rawData()) = MAX_SELECTED;
                 }
             }

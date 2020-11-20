@@ -351,6 +351,7 @@ QWidget* KisToolSelectSimilar::createOptionWidget()
 
 
     selectionWidget->attachToImage(image(), dynamic_cast<KisCanvas2*>(canvas()));
+    m_widgetHelper.setConfigGroupForExactTool(toolId());
 
     QVBoxLayout* l = dynamic_cast<QVBoxLayout*>(selectionWidget->layout());
     Q_ASSERT(l);

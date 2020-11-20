@@ -64,7 +64,9 @@ void KisResourceItemDelegate::paint(QPainter *painter, const QStyleOptionViewIte
         if (imageSize.height() > innerRect.height() || imageSize.width() > innerRect.width()) {
             thumbnail = thumbnail.scaled(innerRect.size()*devicePixelRatioF, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         }
-        painter->fillRect(innerRect, QBrush(thumbnail));
+        QBrush patternBrush(thumbnail);
+        patternBrush.setTransform(QTransform::fromTranslate(innerRect.x(), innerRect.y()));
+        painter->fillRect(innerRect, patternBrush);
     }
     else if (resourceType == ResourceType::Workspaces || resourceType == ResourceType::WindowLayouts) {
         // TODO: thumbnails for workspaces and window layouts?

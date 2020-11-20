@@ -538,17 +538,11 @@ void KisTool::deleteSelection()
 KisTool::NodePaintAbility KisTool::nodePaintAbility()
 {
     KisNodeSP node = currentNode();
-    KisPaintOpPresetSP currentPaintOpPreset = canvas()->resourceManager()->resource(KoCanvasResource::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
-    const KoColorSpace *colorSpace = node->paintDevice()->colorSpace();
 
     if (!node) {
         return NodePaintAbility::UNPAINTABLE;
     }
-    if (currentPaintOpPreset->paintOp().id() == "mypaintbrush" &&
-        colorSpace->colorModelId() != RGBAColorModelID) {
 
-        return NodePaintAbility::MYPAINTBRUSH_UNPAINTABLE;
-    }
     if (node->inherits("KisShapeLayer")) {
         return NodePaintAbility::VECTOR;
     }
@@ -556,6 +550,15 @@ KisTool::NodePaintAbility KisTool::nodePaintAbility()
         return NodePaintAbility::CLONE;
     }
     if (node->paintDevice()) {
+
+        KisPaintOpPresetSP currentPaintOpPreset = canvas()->resourceManager()->resource(KoCanvasResource::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
+        if (currentPaintOpPreset->paintOp().id() == "mypaintbrush") {
+            const KoColorSpace *colorSpace = node->paintDevice()->colorSpace();
+            if (colorSpace->colorModelId() != RGBAColorModelID) {
+                return NodePaintAbility::MYPAINTBRUSH_UNPAINTABLE;
+            }
+        }
+
         return NodePaintAbility::PAINT;
     }
 

@@ -1098,7 +1098,24 @@ bool KoSegmentGradient::hasVariableColors() const
 
 void KoSegmentGradient::setVariableColors(const KoColor& foreground, const KoColor& background)
 {
+    const KoColor fgColor = foreground.convertedTo(colorSpace());
+    const KoColor bgColor = background.convertedTo(colorSpace());
+
     for (int i = 0; i < m_segments.count(); i++) {
-        m_segments[i]->setVariableColors(foreground, background);
+        m_segments[i]->setVariableColors(fgColor, bgColor);
+    }
+}
+
+void KoSegmentGradient::bakeVariableColors(const KoColor& foreground, const KoColor& background)
+{
+    const KoColor fgColor = foreground.convertedTo(colorSpace());
+    const KoColor bgColor = background.convertedTo(colorSpace());
+
+    for (int i = 0; i < m_segments.count(); i++) {
+        if (m_segments[i]->hasVariableColors()) {
+            m_segments[i]->setVariableColors(fgColor, bgColor);
+            m_segments[i]->setStartType(COLOR_ENDPOINT);
+            m_segments[i]->setEndType(COLOR_ENDPOINT);
+        }
     }
 }

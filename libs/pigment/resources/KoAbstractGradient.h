@@ -86,6 +86,12 @@ public:
         //Do nothing... Override if gradient type supports variable colors.
         Q_UNUSED(foreground); Q_UNUSED(background);
     }
+    ///Set the colors for stops that use the foreground or background color
+    ///and change the stop type to 'color'
+    virtual void bakeVariableColors(const KoColor& foreground, const KoColor& background) {
+        //Do nothing... Override if gradient type supports variable colors.
+        Q_UNUSED(foreground); Q_UNUSED(background);
+    }
 
     void updatePreview();
 

@@ -320,6 +320,8 @@ public:
     bool hasVariableColors() const override;
     /// reimplemented
     void setVariableColors(const KoColor& foreground, const KoColor& background) override;
+    /// reimplemented
+    void bakeVariableColors(const KoColor& foreground, const KoColor& background) override;
 
     /**
      * Returns the segment at a given position

@@ -304,6 +304,22 @@ void KoStopGradient::setVariableColors(const KoColor& foreground, const KoColor&
     updatePreview();
 }
 
+void KoStopGradient::bakeVariableColors(const KoColor& foreground, const KoColor& background) {
+    const KoColor fgColor = foreground.convertedTo(colorSpace());
+    const KoColor bgColor = background.convertedTo(colorSpace());
+
+    for (int i = 0; i < m_stops.count(); i++){
+        if (m_stops[i].type == FOREGROUNDSTOP) {
+            m_stops[i].color = fgColor;
+            m_stops[i].type = COLORSTOP;
+        } else if (m_stops[i].type == BACKGROUNDSTOP) {
+            m_stops[i].color = bgColor;
+            m_stops[i].type = COLORSTOP;
+        } else continue;
+    }
+    updatePreview();
+}
+
 void KoStopGradient::loadSvgGradient(QIODevice* file)
 {
     QDomDocument doc;

@@ -566,7 +566,7 @@ bool EXRConverter::Private::checkExtraLayersInfoConsistent(const QDomDocument &d
 KisImportExportErrorCode EXRConverter::decode(const QString &filename)
 {
     try {
-        Imf::InputFile file(QFile::encodeName(filename));
+        Imf::InputFile file(filename.toUtf8());
 
         Imath::Box2i dw = file.header().dataWindow();
         Imath::Box2i displayWindow = file.header().displayWindow();
@@ -1125,7 +1125,7 @@ KisImportExportErrorCode EXRConverter::buildFile(const QString &filename, KisPai
 
     // Open file for writing
     try {
-        Imf::OutputFile file(QFile::encodeName(filename), header);
+        Imf::OutputFile file(filename.toUtf8(), header);
 
         QList<ExrPaintLayerSaveInfo> informationObjects;
         informationObjects.push_back(info);
@@ -1134,7 +1134,7 @@ KisImportExportErrorCode EXRConverter::buildFile(const QString &filename, KisPai
 
     } catch(std::exception &e) {
         dbgFile << "Exception while writing to exr file: " << e.what();
-        if (!KisImportExportAdditionalChecks::isFileWritable(QFile::encodeName(filename))) {
+        if (!KisImportExportAdditionalChecks::isFileWritable(filename.toUtf8())) {
             return ImportExportCodes::NoAccessToWrite;
         }
         return ImportExportCodes::ErrorWhileWriting;
@@ -1377,12 +1377,12 @@ KisImportExportErrorCode EXRConverter::buildFile(const QString &filename, KisGro
 
         // Open file for writing
         try {
-            Imf::OutputFile file(QFile::encodeName(filename), header);
+            Imf::OutputFile file(filename.toUtf8(), header);
             encodeData(file, informationObjects, width, height);
             return ImportExportCodes::OK;
         } catch(std::exception &e) {
             dbgFile << "Exception while writing to exr file: " << e.what();
-            if (!KisImportExportAdditionalChecks::isFileWritable(QFile::encodeName(filename))) {
+            if (!KisImportExportAdditionalChecks::isFileWritable(filename.toUtf8())) {
                 return ImportExportCodes::NoAccessToWrite;
             }
             return ImportExportCodes::ErrorWhileWriting;

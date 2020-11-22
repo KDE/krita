@@ -38,6 +38,8 @@
 #include <QCoreApplication>
 #include <QLocale>
 #include <QFile>
+#include <QTextBlock>
+#include <QTextDocument>
 
 #include <QNetworkRequest>
 #include <QNetworkReply>
@@ -151,13 +153,19 @@ QVariant MultiFeedRssModel::data(const QModelIndex &index, int role) const
     switch (role) {
     case Qt::DisplayRole:
     {
-        QString text = item.description.left(90).append("...");
-        if (text.startsWith("<p>")) {
-            text.insert(2, " style=\"margin-top: 4px\"");
+        QTextDocument doc;
+        doc.setHtml(item.description);
+        // Extract the first text block, which is the `<p>` element containing
+        // the shortened post text, excluding the "This post [...] appeared
+        // first on [...]" text.
+        QString text = doc.firstBlock().text();
+        if (text.length() > 92) {
+            text.truncate(90);
+            text.append("...");
         }
         return QString("<b><a href=\"" + item.link + "\">" + item.title + "</a></b>"
                "<br><small>(" + item.pubDate.toLocalTime().toString(Qt::DefaultLocaleShortDate) + ") "
-               + text + "</small>");
+               "<p style=\"margin-top: 4px\">" + text + "</p></small>");
     }
     case KisRssReader::RssRoles::TitleRole:
         return item.title;

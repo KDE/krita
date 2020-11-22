@@ -44,6 +44,7 @@ WGColorSelectorDock::WGColorSelectorDock()
     mainWidget->setLayout(new QVBoxLayout());
 
     m_selector = new KisVisualColorSelector(mainWidget);
+    m_selector->setMinimumSliderWidth(12);
     connect(m_selector, SIGNAL(sigNewColor(KoColor)), SLOT(slotColorSelected(KoColor)));
     connect(m_selector, SIGNAL(sigInteraction(bool)), SLOT(slotColorInteraction(bool)));
     connect(m_colorChangeCompressor, SIGNAL(timeout()), SLOT(slotSetNewColors()));

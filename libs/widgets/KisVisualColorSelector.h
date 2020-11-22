@@ -63,6 +63,7 @@ public:
     void setConfiguration(const KisColorSelectorConfiguration *config);
     void setAcceptTabletEvents(bool on);
     KoColor getCurrentColor() const override;
+    void setMinimumSliderWidth(int width);
     RenderMode renderMode() const;
     void setRenderMode(RenderMode mode);
 

@@ -286,10 +286,18 @@ QImage KisVisualRectangleSelectorShape::renderAlphaMask() const
     painter.setBrush(Qt::white);
     painter.setPen(Qt::NoPen);
 
-    painter.drawRect(3, 3, width() - 6, height() - 6);
-    if (m_type == border || m_type == borderMirrored) {
-        painter.setBrush(Qt::black);
-        painter.drawRect(m_barWidth, m_barWidth, width() - 2 * m_barWidth, height() - 2 * m_barWidth);
+    if (getDimensions() == onedimensional) {
+        if (m_type == KisVisualRectangleSelectorShape::vertical) {
+            painter.drawRect(2, 3, width() - 4, height() - 6);
+        } else if (m_type == KisVisualRectangleSelectorShape::horizontal) {
+            painter.drawRect(3, 2, width() - 6, height() - 4);
+        } else /*if (m_type == border || m_type == borderMirrored)*/ {
+            painter.drawRect(2, 2, width() - 4, height() - 4);
+            painter.setBrush(Qt::black);
+            painter.drawRect(m_barWidth, m_barWidth, width() - 2 * m_barWidth, height() - 2 * m_barWidth);
+        }
+    } else {
+        painter.drawRect(3, 3, width() - 6, height() - 6);
     }
 
     return alphaMask;

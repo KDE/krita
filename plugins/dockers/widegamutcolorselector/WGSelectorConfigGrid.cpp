@@ -41,6 +41,7 @@ WGSelectorConfigGrid::WGSelectorConfigGrid(QWidget *parent, bool multiSelect)
     m_actionGroup->setExclusive(!multiSelect);
     connect(m_actionGroup, SIGNAL(triggered(QAction*)), SLOT(slotActionTriggered(QAction*)));
 
+    m_selector->setMinimumSliderWidth(10);
     m_selector->setGeometry(0, 0, m_iconSize, m_iconSize);
     m_selector->setVisible(false);
     m_selector->setEnabled(false);

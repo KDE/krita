@@ -33,6 +33,7 @@ struct KisVisualColorSelector::Private
     bool initialized {false};
     bool useACSConfig {true};
     int colorChannelCount {0};
+    int minimumSliderWidth {16};
     qreal stretchLimit {1.5};
     QVector4D channelValues;
     KisVisualColorSelector::RenderMode renderMode {RenderMode::DynamicBackground};
@@ -132,6 +133,15 @@ KoColor KisVisualColorSelector::getCurrentColor() const
         return m_d->selector->currentColor();
     }
     return KoColor();
+}
+
+void KisVisualColorSelector::setMinimumSliderWidth(int width)
+{
+    int newWidth = qMax(5, width);
+    if (newWidth != m_d->minimumSliderWidth) {
+        m_d->minimumSliderWidth = width;
+        KisVisualColorSelector::resizeEvent(0);
+    }
 }
 
 KisVisualColorSelector::RenderMode KisVisualColorSelector::renderMode() const
@@ -393,7 +403,10 @@ void KisVisualColorSelector::resizeEvent(QResizeEvent *)
         return;
     }
     int sizeValue = qMin(width(), height());
-    int borderWidth = qMax(sizeValue*0.1, 20.0);
+    // due to masking/antialiasing, the visible width is ~4 pixels less, so add them here
+    const int margin = 4;
+    const qreal sliderRatio = 0.09;
+    int borderWidth = qMax(int(sizeValue * sliderRatio), m_d->minimumSliderWidth) + margin;
     QRect newrect(0,0, this->geometry().width(), this->geometry().height());
 
     if (m_d->colorChannelCount == 1) {

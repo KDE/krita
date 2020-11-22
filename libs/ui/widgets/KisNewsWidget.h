@@ -20,6 +20,7 @@
 
 #include <QWidget>
 #include <QListView>
+#include <QSet>
 #include <QStyledItemDelegate>
 
 #include <ui_KisNewsPage.h>
@@ -45,6 +46,7 @@ public:
     explicit KisNewsWidget(QWidget *parent = nullptr);
 
     void setAnalyticsTracking(QString text);
+    void toggleNewsLanguage(QLatin1String langCode, bool enabled);
 
 Q_SIGNALS:
     void newsDataChanged();
@@ -61,6 +63,7 @@ private:
     bool m_getNews {false};
     MultiFeedRssModel *m_rssModel {0};
     QString m_analyticsTrackingParameters;
+    QSet<QString> m_enabledFeeds;
 };
 
 #endif // KISNEWSWIDGET_H

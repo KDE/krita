@@ -76,6 +76,7 @@ protected:
 
 
 private:
+    void setupNewsLangSelection();
     void showDevVersionHighlight();
 
 #ifdef ENABLE_UPDATERS

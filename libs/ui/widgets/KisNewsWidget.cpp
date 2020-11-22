@@ -117,16 +117,45 @@ bool KisNewsWidget::eventFilter(QObject *watched, QEvent *event)
     return QWidget::eventFilter(watched, event);
 }
 
+void KisNewsWidget::toggleNewsLanguage(QLatin1String langCode, bool enabled)
+{
+    // Sanity check: Since the code is adding the language code directly into
+    // the URL, this prevents any nasty surprises with malformed URLs.
+    Q_FOREACH(const char &ch, langCode) {
+        bool isValidChar = (ch >= 'a' && ch <= 'z') || ch == '-';
+        if (!isValidChar) {
+            warnUI << "Ignoring attempt to toggle malformed news lang:" << langCode;
+            return;
+        }
+    }
+
+    QString feed = QStringLiteral("https://krita.org/%1/feed/").arg(langCode);
+    if (enabled) {
+        m_enabledFeeds.insert(feed);
+        if (m_getNews) {
+            m_rssModel->addFeed(feed);
+        }
+    } else {
+        m_enabledFeeds.remove(feed);
+        if (m_getNews) {
+            m_rssModel->removeFeed(feed);
+        }
+    }
+}
+
 void KisNewsWidget::toggleNews(bool toggle)
 {
+    m_getNews = toggle;
+
     KisConfig cfg(false);
     cfg.writeEntry<bool>("FetchNews", toggle);
 
-    if (toggle) {
-       m_rssModel->addFeed(QLatin1String("https://krita.org/en/feed/"));
-    }
-    else {
-       m_rssModel->removeFeed(QLatin1String("https://krita.org/en/feed/"));
+    Q_FOREACH(const QString &feed, m_enabledFeeds) {
+        if (toggle) {
+            m_rssModel->addFeed(feed);
+        } else {
+            m_rssModel->removeFeed(feed);
+        }
     }
 }
 

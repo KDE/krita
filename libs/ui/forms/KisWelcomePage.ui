@@ -1484,6 +1484,13 @@
              </item>
             </layout>
            </item>
+           <item>
+           <widget class="QPushButton" name="btnNewsLang">
+           <property name="text">
+           <string comment="News language selection">Lang</string>
+           </property>
+           </widget>
+           </item>
           </layout>
          </item>
          <item>

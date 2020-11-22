@@ -76,7 +76,7 @@ protected:
 
 
 private:
-    void setupNewsLangSelection();
+    void setupNewsLangSelection(QMenu *newsOptionMenu);
     void showDevVersionHighlight();
 
 #ifdef ENABLE_UPDATERS

@@ -1443,53 +1443,14 @@
             </spacer>
            </item>
            <item>
-            <layout class="QVBoxLayout" name="verticalLayout_7">
-             <property name="spacing">
-              <number>0</number>
+            <widget class="QPushButton" name="btnNewsOptions">
+             <property name="toolTip">
+              <string>News options</string>
              </property>
-             <item>
-              <spacer name="verticalSpacer_4">
-               <property name="orientation">
-                <enum>Qt::Vertical</enum>
-               </property>
-               <property name="sizeType">
-                <enum>QSizePolicy::Fixed</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>0</width>
-                 <height>4</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-             <item>
-              <widget class="QCheckBox" name="chkShowNews">
-               <property name="enabled">
-                <bool>true</bool>
-               </property>
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="toolTip">
-                <string>Show news about Krita: this needs internet to retrieve information from the krita.org website</string>
-               </property>
-               <property name="text">
-                <string>Check for updates</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-           <item>
-           <widget class="QPushButton" name="btnNewsLang">
-           <property name="text">
-           <string comment="News language selection">Lang</string>
-           </property>
-           </widget>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
            </item>
           </layout>
          </item>
@@ -1828,38 +1789,5 @@ krita.org website.</string>
   </customwidget>
  </customwidgets>
  <resources/>
- <connections>
-  <connection>
-   <sender>chkShowNews</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>newsWidget</receiver>
-   <slot>setVisible(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>942</x>
-     <y>69</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>843</x>
-     <y>393</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>chkShowNews</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>labelNoFeed</receiver>
-   <slot>setHidden(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>992</x>
-     <y>66</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>888</x>
-     <y>190</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

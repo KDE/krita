@@ -124,19 +124,32 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
     bnVersionUpdate->setVisible(false);
     bnErrorDetails->setVisible(false);
 
-    setupNewsLangSelection();
+    QMenu *newsOptionsMenu = new QMenu(this);
+    newsOptionsMenu->setToolTipsVisible(true);
+    QAction *showNewsAction = newsOptionsMenu->addAction(i18n("Check for updates"));
+    showNewsAction->setToolTip(i18n("Show news about Krita: this needs internet to retrieve information from the krita.org website"));
+    showNewsAction->setCheckable(true);
 
-    connect(chkShowNews, SIGNAL(toggled(bool)), newsWidget, SLOT(toggleNews(bool)));
+    newsOptionsMenu->addSection(i18n("Language"));
+    QAction *newsInfoAction = newsOptionsMenu->addAction(i18n("English news are always up to date."));
+    newsInfoAction->setEnabled(false);
+
+    setupNewsLangSelection(newsOptionsMenu);
+    btnNewsOptions->setMenu(newsOptionsMenu);
+
+    connect(showNewsAction, SIGNAL(toggled(bool)), newsWidget, SLOT(setVisible(bool)));
+    connect(showNewsAction, SIGNAL(toggled(bool)), labelNoFeed, SLOT(setHidden(bool)));
+    connect(showNewsAction, SIGNAL(toggled(bool)), newsWidget, SLOT(toggleNews(bool)));
 
 #ifdef ENABLE_UPDATERS
-    connect(chkShowNews, SIGNAL(toggled(bool)), this, SLOT(slotToggleUpdateChecks(bool)));
+    connect(showNewsAction, SIGNAL(toggled(bool)), this, SLOT(slotToggleUpdateChecks(bool)));
 #endif
 
 #ifdef Q_OS_ANDROID
     // enabling this widgets crashes the app, so it is better for it to be hidden for now
     newsWidget->hide();
     helpTitleLabel_2->hide();
-    chkShowNews->hide();
+    btnNewsOptions->hide();
 
     donationLink = new QPushButton(dropFrameBorder);
     donationLink->setFlat(true);
@@ -220,7 +233,7 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
 #endif // ifndef Q_OS_ANDROID
 #endif // ENABLE_UPDATERS
 
-    chkShowNews->setChecked(m_checkUpdates);
+    showNewsAction->setChecked(m_checkUpdates);
     newsWidget->setVisible(m_checkUpdates);
 
     setAcceptDrops(true);
@@ -292,7 +305,6 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
     recentDocumentsLabel->setStyleSheet(blendedStyle);
     helpTitleLabel->setStyleSheet(blendedStyle);
     newsTitleLabel->setStyleSheet(blendedStyle);
-    chkShowNews->setStyleSheet(blendedStyle);
     newFileLinkShortcut->setStyleSheet(blendedStyle);
     openFileShortcut->setStyleSheet(blendedStyle);
     clearRecentFilesLink->setStyleSheet(blendedStyle);
@@ -321,6 +333,8 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
     newFileLink->setIconSize(QSize(30, 30));
     openFileLink->setIcon(KisIconUtils::loadIcon("document-open"));
     newFileLink->setIcon(KisIconUtils::loadIcon("document-new"));
+
+    btnNewsOptions->setIcon(KisIconUtils::loadIcon("configure"));
 
     supportKritaIcon->setIcon(KisIconUtils::loadIcon(QStringLiteral("support-krita")));
     const QIcon &linkIcon = KisIconUtils::loadIcon(QStringLiteral("bookmarks"));
@@ -550,7 +564,7 @@ QString getAutoNewsLang()
 
 } /* namespace */
 
-void KisWelcomePageWidget::setupNewsLangSelection()
+void KisWelcomePageWidget::setupNewsLangSelection(QMenu *newsOptionsMenu)
 {
     // Hard-coded news language data:
     // These are languages in which the news items should be regularly
@@ -583,9 +597,8 @@ void KisWelcomePageWidget::setupNewsLangSelection()
         enabledNewsLangs->insert(QString(getAutoNewsLang()));
     }
 
-    QMenu *newsLangMenu = new QMenu(this);
     for (const auto &lang : newsLangs) {
-        QAction *langItem = newsLangMenu->addAction(lang.name);
+        QAction *langItem = newsOptionsMenu->addAction(lang.name);
         langItem->setCheckable(true);
         // We can copy `code` into the lambda because its backing string is a
         // static string literal.
@@ -614,7 +627,6 @@ void KisWelcomePageWidget::setupNewsLangSelection()
             cfg.writeList(newsLangConfigName, enabledNewsLangs->toList());
         });
     }
-    btnNewsLang->setMenu(newsLangMenu);
 }
 
 void KisWelcomePageWidget::showDevVersionHighlight()

@@ -1,3 +1,7 @@
+<!--
+  SPDX-FileCopyrightText: none
+  SPDX-License-Identifier: CC0-1.0
+-->
 <RCC>
     <qresource prefix="/">
         <file>bilinear_gradient.frag</file>

@@ -1,3 +1,11 @@
+/*
+ * Copyright (C) 2008 Boudewijn Rempt <boud@valdyas.org>
+ * Copyright (C) 2011 Silvio Heinrich <plassy@web.de>
+ * Copyright (c) 2020 Ashwin Dhakaita <ashwingpdhakaita@gmail.com>
+ *
+ * SPDX-License-Identifier: GPL-2.0-or-later
+ */
+
 #ifndef KIS_MYPAINTBRUSH_OPTION_H
 #define KIS_MYPAINTBRUSH_OPTION_H
 
@@ -37,7 +45,7 @@ public:
     KisMyPaintBrushOption(DynamicSensorType type);
     ~KisMyPaintBrushOption() override;
 
-    qreal value(const KisPaintInformation &info) override;    
+    qreal value(const KisPaintInformation &info) override;
 
     QString minimumLabel(DynamicSensorType sensorType) override;
     QString maximumLabel(DynamicSensorType sensorType, int max = -1) override;
@@ -47,7 +55,7 @@ public:
 
     static DynamicSensorType typeForInput(MyPaintBrushInput input);
 
-    QString id(DynamicSensorType sensorType);    
+    QString id(DynamicSensorType sensorType);
 
     void setCurveFromPoints(QList<QPointF> points);
 

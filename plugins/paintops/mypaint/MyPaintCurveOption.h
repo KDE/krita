@@ -1,3 +1,10 @@
+/*
+ *  Copyright (C) 2008 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (C) 2011 Silvio Heinrich <plassy@web.de>
+ *
+ *  SPDX-License-Identifier: LGPL-2.0-or-later
+ */
+
 #ifndef KIS_MYPAINT_CURVE_OPTION_H
 #define KIS_MYPAINT_CURVE_OPTION_H
 

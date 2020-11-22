@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>WdgMyPaintCurveOption</class>
+ <author>
+   SPDX-FileCopyrightText: none
+   SPDX-License-Identifier: GPL-3.0-or-later
+ </author> <class>WdgMyPaintCurveOption</class>
  <widget class="QWidget" name="WdgMyPaintCurveOption">
   <property name="geometry">
    <rect>

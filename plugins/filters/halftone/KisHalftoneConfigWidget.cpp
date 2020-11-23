@@ -183,6 +183,18 @@ KisPropertiesConfigurationSP KisHalftoneConfigWidget::configuration() const
     return filterConfig;
 }
 
+void KisHalftoneConfigWidget::setView(KisViewManager *view)
+{
+    if (m_intensityWidget) {
+        m_intensityWidget->setView(view);
+    }
+    for (KisHalftoneConfigPageWidget *configPageWidget : m_channelWidgets) {
+        if (configPageWidget) {
+            configPageWidget->setView(view);
+        }
+    }
+}
+
 void KisHalftoneConfigWidget::slot_comboBoxMode_currentIndexChanged(int index)
 {
     while (m_ui.tabWidgetChannels->count()) {

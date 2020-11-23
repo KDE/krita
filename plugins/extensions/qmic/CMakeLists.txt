@@ -36,16 +36,14 @@ install(TARGETS kisqmicinterface ${INSTALL_TARGETS_DEFAULT_ARGS}
 
 set(kritaqmic_SOURCES 
     QMic.cpp
-    PluginSettings.cpp
 )
 
 ki18n_wrap_ui (
     kritaqmic_SOURCES
-    WdgQMicSettings.ui
 )
 
 add_library(kritaqmic MODULE ${kritaqmic_SOURCES})
-target_link_libraries(kritaqmic kritaui kisqmicinterface)
+target_link_libraries(kritaqmic kisqmicinterface)
 
 install(TARGETS kritaqmic LIBRARY DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 

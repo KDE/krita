@@ -1134,7 +1134,7 @@ KisImportExportErrorCode EXRConverter::buildFile(const QString &filename, KisPai
 
     } catch(std::exception &e) {
         dbgFile << "Exception while writing to exr file: " << e.what();
-        if (!KisImportExportAdditionalChecks::isFileWritable(filename.toUtf8())) {
+        if (!KisImportExportAdditionalChecks::isFileWritable(filename)) {
             return ImportExportCodes::NoAccessToWrite;
         }
         return ImportExportCodes::ErrorWhileWriting;

@@ -27,6 +27,7 @@
 #include <QMutex>
 #include <QObject>
 #include <QRect>
+#include <QScopedPointer>
 #include <QSharedPointer>
 #include <QSize>
 #include <QVector>
@@ -77,7 +78,7 @@ class KISQMICINTERFACE_EXPORT KisImageInterface : public QObject
 
 public:
     KisImageInterface(KisViewManager *parent = nullptr);
-    ~KisImageInterface() = default;
+    ~KisImageInterface() override;
 
     QSize gmic_qt_get_image_size();
     QVector<KisQMicImageSP> gmic_qt_get_cropped_images(int mode, QRectF &cropRect);
@@ -86,7 +87,7 @@ public:
 
 private:
     struct Private;
-    Private *p;
+    const QScopedPointer<Private> p;
 
 private Q_SLOTS:
     void slotStartApplicator(QVector<KisQMicImageSP> gmicImages);

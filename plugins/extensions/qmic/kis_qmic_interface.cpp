@@ -54,6 +54,10 @@ KisImageInterface::KisImageInterface(KisViewManager *parent)
     connect(p->m_gmicApplicator, SIGNAL(gmicFinished(bool, int, QString)), this, SLOT(slotGmicFinished(bool, int, QString)));
 }
 
+KisImageInterface::~KisImageInterface()
+{
+}
+
 QSize KisImageInterface::gmic_qt_get_image_size()
 {
     KisSelectionSP selection = p->m_viewManager->image()->globalSelection();

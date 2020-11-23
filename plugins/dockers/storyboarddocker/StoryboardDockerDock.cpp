@@ -348,7 +348,11 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
             firstIndex = m_storyboardModel->index(0,0);
         }
         else {
+#if QT_VERSION >= QT_VERSION_CHECK(5,11,0)
             firstIndex = firstIndex.siblingAtRow(firstIndex.row() + 1);
+#else
+            firestIndex = firstIndex.sibling(firstIndex.row() + 1, 0);
+#endif
         }
 
         int lastItemFrame = dlg.lastItem();

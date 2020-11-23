@@ -35,6 +35,7 @@ KisHalftoneConfigPageWidget::KisHalftoneConfigPageWidget(QWidget *parent, const 
     : QWidget(parent)
     , m_paintDevice(dev)
     , m_generatorWidget(nullptr)
+    , m_view(nullptr)
 {
     Q_ASSERT(m_paintDevice);
 
@@ -166,6 +167,7 @@ void KisHalftoneConfigPageWidget::setGenerator(const QString & generatorId, KisF
         KisConfigWidget *generatorWidget = generator->createConfigurationWidget(this, m_paintDevice, false);
         if (generatorWidget) {
             ui()->widgetGeneratorContainer->layout()->addWidget(generatorWidget);
+            generatorWidget->setView(m_view);
             if (config) {
                 generatorWidget->setConfiguration(config);
             } else {
@@ -176,6 +178,14 @@ void KisHalftoneConfigPageWidget::setGenerator(const QString & generatorId, KisF
             m_generatorWidget = generatorWidget;
             connect(generatorWidget, SIGNAL(sigConfigurationUpdated()), this, SIGNAL(signal_configurationUpdated()));
         }
+    }
+}
+
+void KisHalftoneConfigPageWidget::setView(KisViewManager *view)
+{
+    m_view = view;
+    if (m_generatorWidget) {
+        m_generatorWidget->setView(m_view);
     }
 }
 

@@ -43,6 +43,8 @@ public:
     KisPropertiesConfigurationSP configuration() const override;
     void setConfiguration(const KisPropertiesConfigurationSP config) override;
 
+    void setView(KisViewManager *view) override;
+
 private:
     Ui_HalftoneConfigWidget m_ui;
     const KisPaintDeviceSP m_paintDevice;

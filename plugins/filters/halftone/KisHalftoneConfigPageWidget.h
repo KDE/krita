@@ -28,6 +28,8 @@
 #include "ui_KisHalftoneConfigPageWidget.h"
 #include "KisHalftoneFilterConfiguration.h"
 
+class KisViewManager;
+
 class KisHalftoneFilterConfiguration;
 
 class KisHalftoneConfigPageWidget : public QWidget
@@ -44,11 +46,14 @@ public:
     void setConfiguration(const KisHalftoneFilterConfigurationSP config, const QString & prefix);
     void configuration(KisHalftoneFilterConfigurationSP config, const QString & prefix) const;
 
+    void setView(KisViewManager *view);
+
 private:
     Ui_HalftoneConfigPageWidget m_ui;
     const KisPaintDeviceSP m_paintDevice;
     QStringList m_generatorIds;
     KisConfigWidget *m_generatorWidget;
+    KisViewManager *m_view;
 
     const Ui_HalftoneConfigPageWidget* ui() const;
     Ui_HalftoneConfigPageWidget* ui();

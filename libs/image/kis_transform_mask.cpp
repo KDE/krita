@@ -205,7 +205,8 @@ KisPaintDeviceSP KisTransformMask::buildSourcePreviewDevice()
     if (prevSibling) {
         parentLayer->buildProjectionUpToNode(device, prevSibling, requestedRect);
     } else {
-        KisPainter::copyAreaOptimized(requestedRect.topLeft(), parentLayer->original(), device, requestedRect);
+        requestedRect = parentLayer->outgoingChangeRect(requestedRect);
+        parentLayer->copyOriginalToProjection(parentLayer->original(), device, requestedRect);
     }
 
     return device;

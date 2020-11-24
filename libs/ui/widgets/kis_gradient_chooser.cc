@@ -49,8 +49,7 @@
 #include <KoCanvasResourcesInterface.h>
 
 
-KisCustomGradientDialog::KisCustomGradientDialog(KoAbstractGradientSP gradient, QWidget *parent, const char *name,
-    KoCanvasResourcesInterfaceSP canvasResourcesInterface)
+KisCustomGradientDialog::KisCustomGradientDialog(KoAbstractGradientSP gradient, QWidget *parent, const char *name, KoCanvasResourcesInterfaceSP canvasResourcesInterface)
     : KoDialog(parent, Qt::Dialog)
 {
     setButtons(Ok|Cancel);
@@ -201,7 +200,9 @@ void KisGradientChooser::addSegmentedGradient()
 
 void KisGradientChooser::addGradient(KoAbstractGradientSP gradient, bool editGradient)
 {
-    KoResourceServer<KoAbstractGradient> * rserver = KoResourceServerProvider::instance()->gradientServer();
+    if (!gradient) return;
+
+    KoResourceServer<KoAbstractGradient> *rserver = KoResourceServerProvider::instance()->gradientServer();
     QString saveLocation = rserver->saveLocation();
 
     gradient->updateVariableColors(m_canvasResourcesInterface);
@@ -255,7 +256,13 @@ void KisGradientChooser::addGradient(KoAbstractGradientSP gradient, bool editGra
 
 void KisGradientChooser::editGradient()
 {
+    if (!currentResource()) {
+        m_itemChooser->setCurrentItem(0);
+    }
+    Q_ASSERT(currentResource());
     addGradient(currentResource().staticCast<KoAbstractGradient>(), true);
+
+
 }
 
 

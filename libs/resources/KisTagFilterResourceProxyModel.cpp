@@ -43,6 +43,8 @@ struct KisTagFilterResourceProxyModel::Private
     QScopedPointer<KisResourceSearchBoxFilter> filter;
     bool filterInCurrentTag {false};
 
+    QMap<QString, QVariant> metaDataMapFilter;
+
 };
 
 KisTagFilterResourceProxyModel::KisTagFilterResourceProxyModel(const QString &resourceType, QObject *parent)
@@ -140,6 +142,12 @@ bool KisTagFilterResourceProxyModel::setResourceMetaData(KoResourceSP resource, 
     return false;
 }
 
+void KisTagFilterResourceProxyModel::setMetaDataFilter(QMap<QString, QVariant> metaDataMap)
+{
+    d->metaDataMapFilter = metaDataMap;
+    invalidateFilter();
+}
+
 void KisTagFilterResourceProxyModel::setTagFilter(const KisTagSP tag)
 {
     if (!tag || tag->url() == "All") {
@@ -204,7 +212,7 @@ bool KisTagFilterResourceProxyModel::filterAcceptsRow(int source_row, const QMod
 {
     // we don't need to check anything else because the user wants to search in all resources
     // but if the filter text is empty, we do need to filter by the current tag
-    if (!d->filterInCurrentTag && d->filter->isEmpty()) {
+    if (!d->filterInCurrentTag && d->filter->isEmpty() && d->metaDataMapFilter.isEmpty()) {
         return true;
     }
 
@@ -216,9 +224,19 @@ bool KisTagFilterResourceProxyModel::filterAcceptsRow(int source_row, const QMod
         return false;
     }
 
-    QString resourceName = sourceModel()->data(idx, Qt::UserRole + KisAbstractResourceModel::Name).toString();
+    bool metaDataMatches = true;
+    QMap<QString, QVariant> resourceMetaData = sourceModel()->data(idx, Qt::UserRole + KisAbstractResourceModel::MetaData).toMap();
+    Q_FOREACH(const QString &key, d->metaDataMapFilter.keys()) {
+        if (resourceMetaData.contains(key)) {
+            metaDataMatches = (resourceMetaData[key] != d->metaDataMapFilter[key]);
+        }
+    }
 
-    return d->filter->matchesResource(resourceName);
+    QString resourceName = sourceModel()->data(idx, Qt::UserRole + KisAbstractResourceModel::Name).toString();
+    bool resourceNameMatches = d->filter->matchesResource(resourceName);
+
+
+    return (resourceNameMatches && metaDataMatches);
 }
 
 bool KisTagFilterResourceProxyModel::lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const

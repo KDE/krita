@@ -35,8 +35,8 @@
  * @brief The KisTagFilterResourceProxyModel class filters the resources by tag or resource name
  */
 class KRITARESOURCES_EXPORT KisTagFilterResourceProxyModel
-        : public QSortFilterProxyModel
-        , public KisAbstractResourceModel
+    : public QSortFilterProxyModel
+    , public KisAbstractResourceModel
 {
     Q_OBJECT
 public:
@@ -47,7 +47,7 @@ public:
     // To be used if we need an extra proxy model, like for
     void setResourceModel(KisResourceModel *resourceModel);
 
-// KisAbstractResourceModel interface
+    // KisAbstractResourceModel interface
 
     KoResourceSP resourceForIndex(QModelIndex index = QModelIndex()) const override;
     QModelIndex indexForResource(KoResourceSP resource) const override;
@@ -57,6 +57,14 @@ public:
     bool updateResource(KoResourceSP resource) override;
     bool renameResource(KoResourceSP resource, const QString &name) override;
     bool setResourceMetaData(KoResourceSP resource, QMap<QString, QVariant> metadata) override;
+
+
+    /**
+     * @brief setMetaDataFilter provides a set of metadata to filter on, for instance
+     * by paintop id category.
+     * @param metaDataMap
+     */
+    void setMetaDataFilter(QMap<QString, QVariant> metaDataMap);
 
     /**
      * @brief setTagFilter sets the tag to filter with

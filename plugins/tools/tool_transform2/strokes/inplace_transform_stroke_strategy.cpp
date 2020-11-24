@@ -722,8 +722,7 @@ void InplaceTransformStrokeStrategy::SharedData::transformNode(KisNodeSP node, c
             KUndo2Command *cmd = new KisModifyTransformMaskCommand(transformMask,
                                                                    KisTransformMaskParamsInterfaceSP(
                                                                        new KisTransformMaskAdapter(config)));
-            cmd->redo();
-            executeAndAddCommand(cmd, interface, commandGroup);
+            executeAndAddCommand(cmd, interface, Transform);
             addDirtyRect(node, oldDirtyRect | transformMask->extent(), levelOfDetail);
         } else {
             KisPaintDeviceSP cachedPortion;
@@ -746,9 +745,13 @@ void InplaceTransformStrokeStrategy::SharedData::transformNode(KisNodeSP node, c
                                     dst, &helper);
 
             transformMask->overrideStaticCacheDevice(dst);
-            // no undo information is needed!
+            KUndo2Command *cmd = new KisModifyTransformMaskCommand(transformMask,
+                                                                   KisTransformMaskParamsInterfaceSP(
+                                                                       new KisTransformMaskAdapter(config)),
+                                                                   true);
+            executeAndAddCommand(cmd, interface, commandGroup);
 
-            addDirtyRect(node, oldDirtyRect | transformMask->extent(), levelOfDetail);
+            addDirtyRect(node, oldDirtyRect | transformMask->extent(), TransformLod);
         }
     }
 }
@@ -828,11 +831,24 @@ void InplaceTransformStrokeStrategy::SharedData::finishAction(QVector<KisStrokeJ
     if (previewLevelOfDetail > 0) {
         mutatedJobs << new Data(new KisHoldUIUpdatesCommand(updatesFacade, KisCommandUtils::FlipFlopCommand::INITIALIZING), false, KisStrokeJobData::BARRIER);
 
-        KritaUtils::addJobSequential(mutatedJobs, [this]() {
-            Q_FOREACH (KisTransformMask *mask, transformMaskCacheHash.keys()) {
-                mask->overrideStaticCacheDevice(0);
-            }
-        });
+        if (!transformMaskCacheHash.isEmpty()) {
+            KritaUtils::addJobSequential(mutatedJobs, [this, interface]() {
+                Q_FOREACH (KisTransformMask *mask, transformMaskCacheHash.keys()) {
+                    mask->overrideStaticCacheDevice(0);
+                }
+
+                /**
+                 * Transform masks don't have internal state switch for LoD mode,
+                 * therefore all the preview transformations must be cancelled
+                 * before applying the final command
+                 */
+                updatesFacade->disableDirtyRequests();
+                updatesDisabled = true;
+                undoTransformCommands(interface, previewLevelOfDetail);
+                updatesFacade->enableDirtyRequests();
+                updatesDisabled = false;
+            });
+        }
 
         reapplyTransform(currentTransformArgs, mutatedJobs, interface, 0);
         mutatedJobs << new Data(new KisHoldUIUpdatesCommand(updatesFacade, KisCommandUtils::FlipFlopCommand::FINALIZING), false, KisStrokeJobData::BARRIER);

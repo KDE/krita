@@ -106,9 +106,10 @@ void TestResourceModel::testData()
         QVariant v = resourceModel.data(resourceModel.index(i, KisAbstractResourceModel::Name), Qt::DisplayRole);
         resourceNames << v.toString();
     }
-    QVERIFY(resourceNames.contains("test0.kpp"));
-    QVERIFY(resourceNames.contains("test1.kpp"));
-    QVERIFY(resourceNames.contains("test2.kpp"));
+
+    QVERIFY(resourceNames.contains("test0"));
+    QVERIFY(resourceNames.contains("test1"));
+    QVERIFY(resourceNames.contains("test2"));
 }
 
 

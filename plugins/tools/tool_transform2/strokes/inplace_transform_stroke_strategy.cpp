@@ -330,7 +330,7 @@ void InplaceTransformStrokeStrategy::initStrokeCallback()
 
     KisSelectionMaskSP overlaySelectionMask =
             dynamic_cast<KisSelectionMask*>(m_s->rootNode->graphListener()->graphOverlayNode());
-    if (overlaySelectionMask) {
+    if (overlaySelectionMask && m_s->rootNode != KisNodeSP(overlaySelectionMask)) {
         overlaySelectionMask->setDecorationsVisible(false);
         m_s->deactivatedOverlaySelectionMask = overlaySelectionMask;
     }

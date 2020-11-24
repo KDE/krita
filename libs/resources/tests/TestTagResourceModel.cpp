@@ -113,7 +113,7 @@ void TestTagResourceModel::testData()
      KoResourceSP resource = tagResourceModel.data(idx, Qt::UserRole + KisAllTagResourceModel::Resource).value<KoResourceSP>();
      QVERIFY(resource);
      QVERIFY(resource->valid());
-     QCOMPARE(resource->name(), "test0.kpp");
+     QCOMPARE(resource->name(), "test0");
      QCOMPARE(resource->resourceId(), 4);
 
      bool tagActive = tagResourceModel.data(idx, Qt::UserRole + KisAllTagResourceModel::TagActive).toBool();
@@ -129,7 +129,7 @@ void TestTagResourceModel::testData()
 void TestTagResourceModel::testTagResource()
 {
     KisResourceModel resourceModel(ResourceType::PaintOpPresets);
-    KoResourceSP resource = resourceModel.resourceForName("test2.kpp");
+    KoResourceSP resource = resourceModel.resourceForName("test2");
     Q_ASSERT(resource);
 
     KisTagModel tagModel(ResourceType::PaintOpPresets);
@@ -147,7 +147,7 @@ void TestTagResourceModel::testTagResource()
 void TestTagResourceModel::testUntagResource()
 {
     KisResourceModel resourceModel(ResourceType::PaintOpPresets);
-    KoResourceSP resource = resourceModel.resourceForName("test1.kpp");
+    KoResourceSP resource = resourceModel.resourceForName("test1");
     Q_ASSERT(resource);
 
     KisTagModel tagModel(ResourceType::PaintOpPresets);
@@ -164,7 +164,7 @@ void TestTagResourceModel::testUntagResource()
 void TestTagResourceModel::testFilterTagResource()
 {
     KisResourceModel resourceModel(ResourceType::PaintOpPresets);
-    KoResourceSP resource = resourceModel.resourceForName("test2.kpp");
+    KoResourceSP resource = resourceModel.resourceForName("test2");
     Q_ASSERT(resource);
 
     KisTagModel tagModel(ResourceType::PaintOpPresets);

@@ -50,7 +50,7 @@ class PluginImporterExtension(krita.Extension):
             QMessageBox.Yes | QMessageBox.No)
         return reply == QMessageBox.Yes
 
-    def get_success_text(self, plugins):
+    def confirm_activate(self, plugins):
         txt = [
             '<p>',
             i18n('The following plugins were imported:'),
@@ -61,13 +61,24 @@ class PluginImporterExtension(krita.Extension):
             txt.append('<li>%s</li>' % plugin['ui_name'])
 
         txt.append('</ul>')
-        txt.append('<p>')
+        txt.append('<p><strong>')
         txt.append(i18n(
-            'Please restart Krita and activate the plugins in '
-            '<em>Settings -> Configure Krita -> '
-            'Python Plugin Manager</em>.'))
-        txt.append('</p>')
-        return ('\n').join(txt)
+            'Enable plugins now? (Requires restart)'))
+        txt.append('</strong></p>')
+
+        reply = QMessageBox.question(
+            self.parent.activeWindow().qwindow(),
+            i18n('Activate Plugins?'),
+            ('\n').join(txt),
+            QMessageBox.Yes | QMessageBox.No)
+        return reply == QMessageBox.Yes
+
+    def activate_plugins(self, plugins):
+        for plugin in plugins:
+            Application.writeSetting(
+                'python',
+                'enable_%s' % plugin['name'],
+                'true')
 
     def get_resources_dir(self):
         return QStandardPaths.writableLocation(
@@ -100,7 +111,6 @@ class PluginImporterExtension(krita.Extension):
             return
 
         if imported:
-            QMessageBox.information(
-                self.parent.activeWindow().qwindow(),
-                i18n('Import successful'),
-                self.get_success_text(imported))
+            activate = self.confirm_activate(imported)
+            if activate:
+                self.activate_plugins(imported)

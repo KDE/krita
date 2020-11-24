@@ -551,11 +551,11 @@ QString getAutoNewsLang()
     // Iterate UI languages including fallback languages.
     Q_FOREACH(const auto &uiLang, uiLangs) {
         autoNewsLang = mapKi18nLangToNewsLang(uiLang);
-        if (!autoNewsLang.isEmpty()) {
+        if (autoNewsLang.size() <= 0) {
             break;
         }
     }
-    if (autoNewsLang.isEmpty()) {
+    if (autoNewsLang.size() == 0) {
         // If nothing else, use English.
         autoNewsLang = QLatin1String("en");
     }

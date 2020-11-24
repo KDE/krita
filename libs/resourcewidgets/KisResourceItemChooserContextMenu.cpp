@@ -114,8 +114,8 @@ KisResourceItemChooserContextMenu::KisResourceItemChooserContextMenu(KoResourceS
             removeTagAction->setText(i18n("Remove from this tag"));
             removeTagAction->setIcon(koIcon("list-remove"));
 
-            connect(removeTagAction, SIGNAL(triggered(KoResourceSP, const KisTagSP)),
-                    this, SLOT(removeResourceExistingTag(KoResourceSP, const KisTagSP)));
+            connect(removeTagAction, SIGNAL(triggered(const KisTagSP, KoResourceSP)),
+                    this, SLOT(removeResourceExistingTag(const KisTagSP, KoResourceSP)));
             addAction(removeTagAction);
         }
 

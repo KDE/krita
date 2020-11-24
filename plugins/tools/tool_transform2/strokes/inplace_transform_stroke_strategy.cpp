@@ -443,7 +443,7 @@ void InplaceTransformStrokeStrategy::initStrokeCallback()
         KritaUtils::addJobSequential(extraInitJobs, [this, node]() mutable {
 
             KisPaintDeviceSP device;
-            SharedData::CommandGroup commandGroup = SharedData::Clear;
+            CommandGroup commandGroup = Clear;
 
             if (KisExternalLayer *extLayer =
                            dynamic_cast<KisExternalLayer*>(node.data())) {
@@ -453,7 +453,7 @@ void InplaceTransformStrokeStrategy::initStrokeCallback()
                      extLayer->supportsPerspectiveTransform())) {
 
                     device = node->projection();
-                    commandGroup = SharedData::ClearTemporary;
+                    commandGroup = ClearTemporary;
                 }
             } else if (KisTransformMask *mask = dynamic_cast<KisTransformMask*>(node.data())) {
                 KIS_SAFE_ASSERT_RECOVER_NOOP(!m_s->selection);
@@ -587,7 +587,7 @@ InplaceTransformStrokeStrategy::BarrierUpdateData::BarrierUpdateData(const Inpla
 {
 }
 
-void InplaceTransformStrokeStrategy::SharedData::executeAndAddCommand(KUndo2Command *cmd, KisStrokeStrategyUndoCommandBased *interface, InplaceTransformStrokeStrategy::SharedData::CommandGroup group)
+void InplaceTransformStrokeStrategy::SharedData::executeAndAddCommand(KUndo2Command *cmd, KisStrokeStrategyUndoCommandBased *interface, InplaceTransformStrokeStrategy::CommandGroup group)
 {
     QMutexLocker l(&commandsMutex);
     KUndo2CommandSP sharedCommand = toQShared(cmd);
@@ -661,8 +661,8 @@ void InplaceTransformStrokeStrategy::SharedData::transformNode(KisNodeSP node, c
 {
     KisPaintDeviceSP device = node->paintDevice();
 
-    SharedData::CommandGroup commandGroup =
-        levelOfDetail > 0 ? SharedData::TransformLod : SharedData::Transform;
+    CommandGroup commandGroup =
+        levelOfDetail > 0 ? TransformLod : Transform;
 
     if (KisExternalLayer *extLayer =
         dynamic_cast<KisExternalLayer*>(node.data())) {
@@ -679,12 +679,12 @@ void InplaceTransformStrokeStrategy::SharedData::transformNode(KisNodeSP node, c
                     QTransform t = w.transform();
                     KUndo2Command *cmd = extLayer->transform(t);
 
-                    executeAndAddCommand(cmd, interface, SharedData::Transform);
+                    executeAndAddCommand(cmd, interface, Transform);
                     addDirtyRect(node, oldDirtyRect | node->extent(), 0);
                     return;
                 } else {
                     device = node->projection();
-                    commandGroup = SharedData::TransformLodTemporary;
+                    commandGroup = TransformLodTemporary;
                 }
             }
 

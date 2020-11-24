@@ -77,6 +77,15 @@ public:
     };
 
 
+    enum CommandGroup {
+        Clear = 0,
+        ClearTemporary,
+        Transform,
+        TransformTemporary,
+        TransformLod,
+        TransformLodTemporary
+    };
+
     struct SharedData {
         // initial conditions
         KisUpdatesFacade *updatesFacade;
@@ -99,15 +108,6 @@ public:
         KisSelectionMaskSP deactivatedOverlaySelectionMask;
 
         QMutex commandsMutex;
-
-        enum CommandGroup {
-            Clear = 0,
-            ClearTemporary,
-            Transform,
-            TransformTemporary,
-            TransformLod,
-            TransformLodTemporary
-        };
 
         QVector<std::pair<CommandGroup, KUndo2CommandSP>> commands;
 
@@ -156,6 +156,8 @@ public:
         bool postProcessToplevelCommand(KUndo2Command *command);
     };
     using SharedDataSP = QSharedPointer<SharedData>;
+
+    Q_ENUM(CommandGroup);
 
 public:
     InplaceTransformStrokeStrategy(ToolTransformArgs::TransformMode mode,

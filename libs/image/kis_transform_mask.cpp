@@ -255,7 +255,12 @@ void KisTransformMask::recaclulateStaticImage()
      * into account all the change rects of all the masks. Usually,
      * this work is done by the walkers.
      */
-    QRect requestedRect = parentLayer->changeRect(parentLayer->original()->exactBounds());
+    QRect requestedRect =
+        parentLayer->changeRect(parentLayer->original()->exactBounds());
+
+    // force reset parent layer's projection, because we might have changed
+    // our mask parameters and going to write to some other area
+    parentLayer->projection()->clear();
 
     /**
      * Here we use updateProjection() to regenerate the projection of

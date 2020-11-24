@@ -83,6 +83,7 @@ struct Q_DECL_HIDDEN KisTransformMask::Private
     bool staticCacheValid;
     bool recalculatingStaticImage;
     KisPaintDeviceSP staticCacheDevice;
+    bool staticCacheIsOverridden = false;
 
     KisLodCapableLayerOffset offset;
 
@@ -165,7 +166,8 @@ KisPaintDeviceSP KisTransformMask::buildPreviewDevice()
     /**
      * Note: this function must be called from within the scheduler's
      * context. We are accessing parent's updateProjection(), which
-     * is not entirely safe.
+     * is not entirely safe. The calling job must ensure it is the
+     * only job running.
      */
 
     KisLayerSP parentLayer = qobject_cast<KisLayer*>(parent().data());
@@ -173,11 +175,53 @@ KisPaintDeviceSP KisTransformMask::buildPreviewDevice()
 
     KisPaintDeviceSP device =
         new KisPaintDevice(parentLayer->original()->colorSpace());
+    device->setDefaultBounds(parentLayer->original()->defaultBounds());
 
     QRect requestedRect = parentLayer->original()->exactBounds();
     parentLayer->buildProjectionUpToNode(device, this, requestedRect);
 
     return device;
+}
+
+KisPaintDeviceSP KisTransformMask::buildSourcePreviewDevice()
+{
+    /**
+     * Note: this function must be called from within the scheduler's
+     * context. We are accessing parent's updateProjection(), which
+     * is not entirely safe. The calling job must ensure it is the
+     * only job running.
+     */
+
+    KisLayerSP parentLayer = qobject_cast<KisLayer*>(parent().data());
+    KIS_ASSERT_RECOVER(parentLayer) { return new KisPaintDevice(colorSpace()); }
+
+    KisPaintDeviceSP device =
+        new KisPaintDevice(parentLayer->original()->colorSpace());
+    device->setDefaultBounds(parentLayer->original()->defaultBounds());
+
+    QRect requestedRect = parentLayer->original()->exactBounds();
+
+    KisNodeSP prevSibling = this->prevSibling();
+    if (prevSibling) {
+        parentLayer->buildProjectionUpToNode(device, prevSibling, requestedRect);
+    } else {
+        KisPainter::copyAreaOptimized(requestedRect.topLeft(), parentLayer->original(), device, requestedRect);
+    }
+
+    return device;
+}
+
+void KisTransformMask::overrideStaticCacheDevice(KisPaintDeviceSP device)
+{
+    m_d->staticCacheDevice->clear();
+
+    if (device) {
+        const QRect rc = device->extent();
+        KisPainter::copyAreaOptimized(rc.topLeft(), device, m_d->staticCacheDevice, rc);
+    }
+
+    m_d->staticCacheValid = bool(device);
+    m_d->staticCacheIsOverridden = bool(device);
 }
 
 void KisTransformMask::recaclulateStaticImage()
@@ -201,6 +245,7 @@ void KisTransformMask::recaclulateStaticImage()
 
         m_d->staticCacheDevice =
             new KisPaintDevice(parentLayer->original()->colorSpace());
+        m_d->staticCacheDevice->setDefaultBounds(parentLayer->original()->defaultBounds());
     }
 
     m_d->recalculatingStaticImage = true;
@@ -240,7 +285,8 @@ QRect KisTransformMask::decorateRect(KisPaintDeviceSP &src,
 
     if (m_d->params->hasChanged()) m_d->reloadParameters();
 
-    if (!m_d->recalculatingStaticImage &&
+    if (!m_d->staticCacheIsOverridden &&
+        !m_d->recalculatingStaticImage &&
         (maskPos == N_FILTHY || maskPos == N_ABOVE_FILTHY)) {
 
         m_d->staticCacheValid = false;
@@ -474,6 +520,16 @@ void KisTransformMask::syncLodCache()
 {
     m_d->offset.syncLodOffset();
     KisEffectMask::syncLodCache();
+}
+
+KisPaintDeviceList KisTransformMask::getLodCapableDevices() const
+{
+    KisPaintDeviceList devices;
+    devices += KisEffectMask::getLodCapableDevices();
+    if (m_d->staticCacheDevice) {
+        devices << m_d->staticCacheDevice;
+    }
+    return devices;
 }
 
 void KisTransformMask::slotInternalForceStaticImageUpdate()

@@ -2062,12 +2062,33 @@ void KisImage::requestProjectionUpdateNoFilthy(KisNodeSP pseudoFilthy, const QRe
 
 void KisImage::requestProjectionUpdateNoFilthy(KisNodeSP pseudoFilthy, const QRect &rc, const QRect &cropRect, const bool resetAnimationCache)
 {
+    requestProjectionUpdateNoFilthy(pseudoFilthy, QVector<QRect>({rc}), cropRect, resetAnimationCache);
+}
+
+void KisImage::requestProjectionUpdateNoFilthy(KisNodeSP pseudoFilthy, const QVector<QRect> &rects, const QRect &cropRect, const bool resetAnimationCache)
+{
     KIS_ASSERT_RECOVER_RETURN(pseudoFilthy);
 
-    if (resetAnimationCache) {
-        m_d->animationInterface->notifyNodeChanged(pseudoFilthy.data(), rc, false);
+    /**
+     * We iterate through the filters in a reversed way. It makes the most nested filters
+     * to execute first.
+     */
+    for (auto it = m_d->projectionUpdatesFilters.rbegin();
+         it != m_d->projectionUpdatesFilters.rend();
+         ++it) {
+
+        KIS_SAFE_ASSERT_RECOVER(*it) { continue; }
+
+        if ((*it)->filterProjectionUpdateNoFilthy(this, pseudoFilthy.data(), rects, cropRect, resetAnimationCache)) {
+            return;
+        }
     }
-    m_d->scheduler.updateProjectionNoFilthy(pseudoFilthy, rc, cropRect);
+
+    if (resetAnimationCache) {
+        m_d->animationInterface->notifyNodeChanged(pseudoFilthy.data(), rects, false);
+    }
+
+    m_d->scheduler.updateProjectionNoFilthy(pseudoFilthy, rects, cropRect);
 }
 
 void KisImage::addSpontaneousJob(KisSpontaneousJob *spontaneousJob)

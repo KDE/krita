@@ -62,8 +62,21 @@ struct KisSuspendProjectionUpdatesStrokeStrategy::Private
             QRect cropRect;
         };
 
+        struct NoFilthyUpdate {
+            NoFilthyUpdate() {}
+            NoFilthyUpdate(const QRect &_rect, const QRect &_cropRect, bool _resetAnimationCache)
+                : rect(_rect), cropRect(_cropRect), resetAnimationCache(_resetAnimationCache)
+            {
+            }
+
+            QRect rect;
+            QRect cropRect;
+            bool resetAnimationCache;
+        };
+
         typedef QHash<KisNodeSP, QVector<Request> > UpdatesHash;
         typedef QHash<KisNodeSP, QVector<FullRefreshRequest> > RefreshesHash;
+        typedef QHash<KisNodeSP, QVector<NoFilthyUpdate> > NoFilthyUpdatesHash;
     public:
         SuspendLod0Updates()
         {
@@ -88,6 +101,18 @@ struct KisSuspendProjectionUpdatesStrokeStrategy::Private
 
             Q_FOREACH(const QRect &rc, rects) {
                 m_refreshesHash[KisNodeSP(node)].append(FullRefreshRequest(rc, cropRect));
+            }
+
+            return true;
+        }
+
+        bool filterProjectionUpdateNoFilthy(KisImage *image, KisNode* pseudoFilthy, const QVector<QRect> &rects, const QRect &cropRect, const bool resetAnimationCache) override {
+            if (image->currentLevelOfDetail() > 0) return false;
+
+            QMutexLocker l(&m_mutex);
+
+            Q_FOREACH(const QRect &rc, rects) {
+                m_noFilthyRequestsHash[KisNodeSP(pseudoFilthy)].append(NoFilthyUpdate(rc, cropRect, resetAnimationCache));
             }
 
             return true;
@@ -158,11 +183,37 @@ struct KisSuspendProjectionUpdatesStrokeStrategy::Private
                     image->requestProjectionUpdate(const_cast<KisNode*>(node.data()), simplifiedRects, resetAnimationCache);
                 }
             }
+
+            {
+                NoFilthyUpdatesHash::const_iterator it = m_noFilthyRequestsHash.constBegin();
+                NoFilthyUpdatesHash::const_iterator end = m_noFilthyRequestsHash.constEnd();
+
+                for (; it != end; ++it) {
+                    KisNodeSP node = it.key();
+
+                    QHash<QRect, std::pair<QVector<QRect>, bool>> noFilthyRequests;
+
+                    Q_FOREACH (const NoFilthyUpdate &req, it.value()) {
+                        noFilthyRequests[req.cropRect].first += req.rect;
+                        noFilthyRequests[req.cropRect].second |= req.resetAnimationCache;
+                    }
+
+
+                    auto reqIt = noFilthyRequests.begin();
+                    for (; reqIt != noFilthyRequests.end(); ++reqIt) {
+                        const QVector<QRect> simplifiedRects = KisRegion::fromOverlappingRects(reqIt.value().first, step).rects();
+
+                        // FIXME: constness: port rPU to SP
+                        image->requestProjectionUpdateNoFilthy(const_cast<KisNode*>(node.data()), simplifiedRects, reqIt.key(), reqIt.value().second);
+                    }
+                }
+            }
         }
 
     private:
         UpdatesHash m_requestsHash;
         RefreshesHash m_refreshesHash;
+        NoFilthyUpdatesHash m_noFilthyRequestsHash;
         QMutex m_mutex;
     };
 

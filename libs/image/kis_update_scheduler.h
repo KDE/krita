@@ -125,6 +125,7 @@ public:
 
     void updateProjection(KisNodeSP node, const QVector<QRect> &rects, const QRect &cropRect);
     void updateProjection(KisNodeSP node, const QRect &rc, const QRect &cropRect);
+    void updateProjectionNoFilthy(KisNodeSP node, const QVector<QRect>& rects, const QRect &cropRect);
     void updateProjectionNoFilthy(KisNodeSP node, const QRect& rc, const QRect &cropRect);
     void fullRefreshAsync(KisNodeSP root, const QVector<QRect>& rc, const QRect &cropRect);
     void fullRefresh(KisNodeSP root, const QRect& rc, const QRect &cropRect);

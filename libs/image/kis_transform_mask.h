@@ -59,6 +59,9 @@ public:
 
     void recaclulateStaticImage();
     KisPaintDeviceSP buildPreviewDevice();
+    KisPaintDeviceSP buildSourcePreviewDevice();
+
+    void overrideStaticCacheDevice(KisPaintDeviceSP device);
 
     qint32 x() const override;
     qint32 y() const override;
@@ -72,6 +75,8 @@ public:
     void threadSafeForceStaticImageUpdate();
 
     void syncLodCache() override;
+
+    KisPaintDeviceList getLodCapableDevices() const override;
 
 protected:
     KisKeyframeChannel *requestKeyframeChannel(const QString &id) override;

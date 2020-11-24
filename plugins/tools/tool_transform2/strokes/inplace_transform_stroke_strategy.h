@@ -113,6 +113,7 @@ public:
 
         QMutex devicesCacheMutex;
         QHash<KisPaintDevice*, KisPaintDeviceSP> devicesCacheHash;
+        QHash<KisTransformMask*, KisPaintDeviceSP> transformMaskCacheHash;
 
         QMutex dirtyRectsMutex;
         QHash<KisNodeSP, QRect> dirtyRects;
@@ -146,7 +147,7 @@ public:
 
         void transformNode(KisNodeSP node, const ToolTransformArgs &config, KisStrokeStrategyUndoCommandBased *interface, int levelOfDetail);
         void reapplyTransform(ToolTransformArgs args, QVector<KisStrokeJobData *> &mutatedJobs, KisStrokeStrategyUndoCommandBased *interface, int levelOfDetail);
-        void finalizeStrokeImpl(QVector<KisStrokeJobData *> &mutatedJobs, KisStrokeStrategyUndoCommandBased *interface);
+        void finalizeStrokeImpl(QVector<KisStrokeJobData *> &mutatedJobs, KisStrokeStrategyUndoCommandBased *interface, bool saveCommands);
 
         void finishAction(QVector<KisStrokeJobData *> &mutatedJobs, KisStrokeStrategyUndoCommandBased *interface);
         void cancelAction(QVector<KisStrokeJobData *> &mutatedJobs, KisStrokeStrategyUndoCommandBased *interface);

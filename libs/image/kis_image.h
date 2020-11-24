@@ -1119,6 +1119,8 @@ public Q_SLOTS:
 
     void requestProjectionUpdateNoFilthy(KisNodeSP pseudoFilthy, const QRect &rc, const QRect &cropRect, const bool notifyFrameChange );
 
+    void requestProjectionUpdateNoFilthy(KisNodeSP pseudoFilthy, const QVector<QRect> &rects, const QRect &cropRect, const bool resetAnimationCache);
+
     /**
      * Adds a spontaneous job to the updates queue.
      *

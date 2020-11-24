@@ -640,7 +640,6 @@ void InplaceTransformStrokeStrategy::SharedData::undoTransformCommands(KisStroke
             ++it;
         }
     }
-    commands.clear();
 }
 
 void InplaceTransformStrokeStrategy::SharedData::postAllUpdates(int levelOfDetail)

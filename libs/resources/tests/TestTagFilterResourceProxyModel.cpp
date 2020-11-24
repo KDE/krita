@@ -101,9 +101,9 @@ void TestTagFilterResourceProxyModel::testData()
     KisTagFilterResourceProxyModel proxyModel(resourceType);
     KisResourceModel *resourceModel = qobject_cast<KisResourceModel*>(proxyModel.sourceModel());
 
-    QStringList names = QStringList() << "test0.kpp"
-                                      << "test1.kpp"
-                                      << "test2.kpp";
+    QStringList names = QStringList() << "test0"
+                                      << "test1"
+                                      << "test2";
     for (int i = 0; i < proxyModel.rowCount(); ++i)  {
         QVariant v = resourceModel->data(proxyModel.mapToSource(proxyModel.index(i, 0)), Qt::UserRole + KisAbstractResourceModel::Name);
         QVERIFY(names.contains(v.toString()));
@@ -126,7 +126,7 @@ void TestTagFilterResourceProxyModel::testFilterByTag()
     KisTagModel tagModel(ResourceType::PaintOpPresets);
     KisTagFilterResourceProxyModel proxyModel(resourceType);
 
-    KoResourceSP resource = resourceModel.resourceForName("test2.kpp");
+    KoResourceSP resource = resourceModel.resourceForName("test2");
     QVERIFY(resource);
 
     KisTagSP tag = tagModel.tagForIndex(tagModel.index(2, 0));
@@ -149,7 +149,7 @@ void TestTagFilterResourceProxyModel::testFilterByResource()
 
     KisTagFilterResourceProxyModel proxyModel(resourceType);
 
-    KoResourceSP resource = resourceModel.resourceForName("test2.kpp");
+    KoResourceSP resource = resourceModel.resourceForName("test2");
     QVERIFY(resource);
 
     tagModel.addTag("testtag1", QVector<KoResourceSP>() << resource);
@@ -174,7 +174,7 @@ void TestTagFilterResourceProxyModel::testFilterByString()
     proxyModel.setSearchText("test2");
     QCOMPARE(proxyModel.rowCount(), 1);
 
-    KoResourceSP resource = resourceModel.resourceForName("test2.kpp");
+    KoResourceSP resource = resourceModel.resourceForName("test2");
     QVERIFY(resource);
 
     KisTagSP tag = tagModel.tagForIndex(tagModel.index(2, 0));
@@ -193,13 +193,13 @@ void TestTagFilterResourceProxyModel::testDataWhenSwitchingBetweenTagAllAllUntag
     KisTagFilterResourceProxyModel proxyModel(resourceType);
     KisResourceModel *resourceModel = qobject_cast<KisResourceModel*>(proxyModel.sourceModel());
 
-    KoResourceSP resource = resourceModel->resourceForName("test2.kpp");
+    KoResourceSP resource = resourceModel->resourceForName("test2");
     QModelIndex idx = proxyModel.indexForResource(resource);
 
     QVERIFY(idx.isValid());
 
     QString name = proxyModel.data(idx, Qt::UserRole + KisAbstractResourceModel::Name).toString();
-    QCOMPARE(name, "test2.kpp");
+    QCOMPARE(name, "test2");
 
     QImage thumbnail = proxyModel.data(idx, Qt::UserRole + KisAbstractResourceModel::Thumbnail).value<QImage>();
     QVERIFY(!thumbnail.isNull());
@@ -214,7 +214,7 @@ void TestTagFilterResourceProxyModel::testResourceForIndex()
     KisTagFilterResourceProxyModel proxyModel(resourceType);
     KisResourceModel *resourceModel = qobject_cast<KisResourceModel*>(proxyModel.sourceModel());
 
-    KoResourceSP resource = resourceModel->resourceForName("test2.kpp");
+    KoResourceSP resource = resourceModel->resourceForName("test2");
     QVERIFY(resource);
 
     QModelIndex idx = proxyModel.indexForResource(resource);

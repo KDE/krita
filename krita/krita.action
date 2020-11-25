@@ -1350,7 +1350,7 @@
       <whatsThis></whatsThis>
       <toolTip>Rectangle Tool</toolTip>
       <iconText>Rectangle Tool</iconText>
-      <shortcut></shortcut>
+      <shortcut>Shift+R</shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1437,7 +1437,7 @@
       <whatsThis></whatsThis>
       <toolTip>Ellipse Tool</toolTip>
       <iconText>Ellipse Tool</iconText>
-      <shortcut></shortcut>
+      <shortcut>Shift+J</shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>

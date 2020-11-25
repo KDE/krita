@@ -245,9 +245,9 @@ bool KisUpdateScheduler::wrapAroundModeSupported() const
     return m_d->strokesQueue.wrapAroundModeSupported();
 }
 
-void KisUpdateScheduler::setDesiredLevelOfDetail(int lod)
+void KisUpdateScheduler::setLodPreferences(const KisLodPreferences &value)
 {
-    m_d->strokesQueue.setDesiredLevelOfDetail(lod);
+    m_d->strokesQueue.setLodPreferences(value);
 
     /**
      * The queue might have started an internal stroke for
@@ -255,6 +255,11 @@ void KisUpdateScheduler::setDesiredLevelOfDetail(int lod)
      * it if needed.
      */
     processQueues();
+}
+
+KisLodPreferences KisUpdateScheduler::lodPreferences() const
+{
+    return m_d->strokesQueue.lodPreferences();
 }
 
 void KisUpdateScheduler::explicitRegenerateLevelOfDetail()

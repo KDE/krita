@@ -90,6 +90,7 @@ struct Q_DECL_HIDDEN KisStrokesQueue::Private {
     KisSurrogateUndoStore lodNUndoStore;
     LodNUndoStrokesFacade lodNStrokesFacade;
     KisPostExecutionUndoAdapter lodNPostExecutionUndoAdapter;
+    KisLodPreferences lodPreferences;
 
     void cancelForgettableStrokes();
     void startLod0ToNStroke(int levelOfDetail, bool forgettable);
@@ -286,6 +287,7 @@ KisStrokeId KisStrokesQueue::startStroke(KisStrokeStrategy *strokeStrategy)
     }
 
     if (m_d->desiredLevelOfDetail &&
+        m_d->lodPreferences.lodPreferred() &&
         (lodBuddyStrategy =
          strokeStrategy->createLodClone(m_d->desiredLevelOfDetail))) {
 
@@ -602,6 +604,31 @@ qreal KisStrokesQueue::balancingRatioOverride() const
     return m_d->balancingRatioOverride;
 }
 
+KisLodPreferences KisStrokesQueue::lodPreferences() const
+{
+    QMutexLocker locker(&m_d->mutex);
+
+    /**
+     * The desired level of detail might have not been activated due to
+     * multi-stage activation process
+     */
+    return KisLodPreferences(m_d->lodPreferences.flags(), m_d->desiredLevelOfDetail);
+}
+
+void KisStrokesQueue::setLodPreferences(const KisLodPreferences &value)
+{
+    QMutexLocker locker(&m_d->mutex);
+
+    m_d->lodPreferences = value;
+
+    if (m_d->lodPreferences.desiredLevelOfDetail() != m_d->nextDesiredLevelOfDetail ||
+            (m_d->lodPreferences.lodPreferred() && m_d->lodNNeedsSynchronization)) {
+
+        m_d->nextDesiredLevelOfDetail = m_d->lodPreferences.desiredLevelOfDetail();
+        m_d->switchDesiredLevelOfDetail(false);
+    }
+}
+
 bool KisStrokesQueue::isEmpty() const
 {
     QMutexLocker locker(&m_d->mutex);
@@ -632,7 +659,7 @@ void KisStrokesQueue::Private::switchDesiredLevelOfDetail(bool forced)
         desiredLevelOfDetail = nextDesiredLevelOfDetail;
         lodNNeedsSynchronization |= !forgettable;
 
-        if (desiredLevelOfDetail) {
+        if (desiredLevelOfDetail && lodPreferences.lodPreferred()) {
             startLod0ToNStroke(desiredLevelOfDetail, forgettable);
         }
     }
@@ -644,14 +671,9 @@ void KisStrokesQueue::explicitRegenerateLevelOfDetail()
     m_d->switchDesiredLevelOfDetail(true);
 }
 
-void KisStrokesQueue::setDesiredLevelOfDetail(int lod)
+void KisStrokesQueue::testingSetDesiredLevelOfDetail(int lod)
 {
-    QMutexLocker locker(&m_d->mutex);
-
-    if (lod == m_d->nextDesiredLevelOfDetail) return;
-
-    m_d->nextDesiredLevelOfDetail = lod;
-    m_d->switchDesiredLevelOfDetail(false);
+    setLodPreferences(KisLodPreferences(lod));
 }
 
 void KisStrokesQueue::notifyUFOChangedImage()

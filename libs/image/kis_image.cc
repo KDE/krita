@@ -231,8 +231,6 @@ public:
 
     KisCompositeProgressProxy compositeProgressProxy;
 
-    bool blockLevelOfDetail = false;
-
     QPointF axesCenter;
     bool allowMasksOnRootNode = false;
 
@@ -453,8 +451,6 @@ void KisImage::copyFromImageImpl(const KisImage &rhs, int policy)
     KIS_ASSERT_RECOVER_NOOP(rhs.m_d->projectionUpdatesFilters.isEmpty());
     KIS_ASSERT_RECOVER_NOOP(!rhs.m_d->disableUIUpdateSignals);
     KIS_ASSERT_RECOVER_NOOP(!rhs.m_d->disableDirtyRequests);
-
-    m_d->blockLevelOfDetail = rhs.m_d->blockLevelOfDetail;
 
 #undef EMIT_IF_NEEDED
 }
@@ -2400,47 +2396,28 @@ bool KisImage::wrapAroundModeActive() const
         m_d->scheduler.wrapAroundModeSupported();
 }
 
-void KisImage::setDesiredLevelOfDetail(int lod)
-{
-    if (m_d->blockLevelOfDetail) {
-        qWarning() << "WARNING: KisImage::setDesiredLevelOfDetail()"
-                   << "was called while LoD functionality was being blocked!";
-        return;
-    }
-
-    m_d->scheduler.setDesiredLevelOfDetail(lod);
-}
-
 int KisImage::currentLevelOfDetail() const
 {
-    if (m_d->blockLevelOfDetail) {
-        return 0;
-    }
-
     return m_d->scheduler.currentLevelOfDetail();
-}
-
-void KisImage::setLevelOfDetailBlocked(bool value)
-{
-    KisImageBarrierLockerRaw l(this);
-
-    if (value && !m_d->blockLevelOfDetail) {
-        m_d->scheduler.setDesiredLevelOfDetail(0);
-    }
-
-    m_d->blockLevelOfDetail = value;
 }
 
 void KisImage::explicitRegenerateLevelOfDetail()
 {
-    if (!m_d->blockLevelOfDetail) {
+    const KisLodPreferences pref = m_d->scheduler.lodPreferences();
+
+    if (pref.lodSupported() && pref.lodPreferred()) {
         m_d->scheduler.explicitRegenerateLevelOfDetail();
     }
 }
 
-bool KisImage::levelOfDetailBlocked() const
+void KisImage::setLodPreferences(const KisLodPreferences &value)
 {
-    return m_d->blockLevelOfDetail;
+    m_d->scheduler.setLodPreferences(value);
+}
+
+KisLodPreferences KisImage::lodPreferences() const
+{
+    return m_d->scheduler.lodPreferences();
 }
 
 void KisImage::nodeCollapsedChanged(KisNode * node)

@@ -138,6 +138,12 @@ KUndo2MagicString KisStrokeStrategy::name() const
     return m_name;
 }
 
+KisLodPreferences KisStrokeStrategy::currentLodPreferences() const
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(m_mutatedJobsInterface, KisLodPreferences());
+    return m_mutatedJobsInterface->lodPreferences();
+}
+
 void KisStrokeStrategy::setMutatedJobsInterface(KisStrokesQueueMutatedJobInterface *mutatedJobsInterface, KisStrokeId strokeId)
 {
     m_mutatedJobsInterface = mutatedJobsInterface;

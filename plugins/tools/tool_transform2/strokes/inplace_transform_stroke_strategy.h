@@ -232,6 +232,7 @@ private:
     void tryPostUpdateJob(bool forceUpdate);
     void doCanvasUpdate(bool forceUpdate);
 
+    int calculatePreferredLevelOfDetail(const QRect &srcRect);
 
 public:
     static void transformAndMergeDevice(const ToolTransformArgs &config,

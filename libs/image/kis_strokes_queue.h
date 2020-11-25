@@ -16,7 +16,7 @@
 #include "kis_strokes_queue_undo_result.h"
 #include "KisStrokesQueueMutatedJobInterface.h"
 #include "KisUpdaterContextSnapshotEx.h"
-
+#include "KisLodPreferences.h"
 
 class KisUpdaterContext;
 class KisStroke;
@@ -53,7 +53,8 @@ public:
     bool wrapAroundModeSupported() const;
     qreal balancingRatioOverride() const;
 
-    void setDesiredLevelOfDetail(int lod);
+    KisLodPreferences lodPreferences() const override;
+    void setLodPreferences(const KisLodPreferences &value);
     void explicitRegenerateLevelOfDetail();
     void setLod0ToNStrokeStrategyFactory(const KisLodSyncStrokeStrategyFactory &factory);
     void setSuspendResumeUpdatesStrokeStrategyFactory(const KisSuspendResumeStrategyPairFactory &factory);
@@ -71,6 +72,8 @@ public:
     // interface for KisStrokeStrategy only!
     void addMutatedJobs(KisStrokeId id, const QVector<KisStrokeJobData*> list) final override;
 
+public:
+    void testingSetDesiredLevelOfDetail(int lod);
 private:
     bool processOneJob(KisUpdaterContext &updaterContext,
                        bool externalJobsPending);

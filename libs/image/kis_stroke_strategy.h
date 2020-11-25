@@ -11,7 +11,7 @@
 #include "kis_types.h"
 #include "kundo2magicstring.h"
 #include "kritaimage_export.h"
-
+#include "KisLodPreferences.h"
 
 class KisStrokeJobStrategy;
 class KisStrokeJobData;
@@ -100,6 +100,11 @@ public:
 
     QString id() const;
     KUndo2MagicString name() const;
+
+    /**
+     * Returns current lod preferences of the strokes queue
+     */
+    KisLodPreferences currentLodPreferences() const;
 
     void setMutatedJobsInterface(KisStrokesQueueMutatedJobInterface *mutatedJobsInterface, KisStrokeId strokeId);
 

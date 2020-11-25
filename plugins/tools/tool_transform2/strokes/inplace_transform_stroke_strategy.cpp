@@ -79,9 +79,6 @@ InplaceTransformStrokeStrategy::InplaceTransformStrokeStrategy(ToolTransformArgs
     m_s->undoFacade = undoFacade;
     m_s->imageRoot = imageRoot;
 
-    // TODO: auto-select level of detail for preview
-    m_s->previewLevelOfDetail = 2;
-
     KIS_SAFE_ASSERT_RECOVER_NOOP(!selection || !dynamic_cast<KisTransformMask*>(rootNode.data()));
     setMacroId(KisCommandUtils::TransformToolId);
 
@@ -179,6 +176,22 @@ void InplaceTransformStrokeStrategy::doCanvasUpdate(bool forceUpdate)
     });
 
     addMutatedJobs(jobs);
+}
+
+int InplaceTransformStrokeStrategy::calculatePreferredLevelOfDetail(const QRect &srcRect)
+{
+    KisLodPreferences lodPreferences = this->currentLodPreferences();
+    if (!lodPreferences.lodSupported()) return -1;
+
+    const int maxSize = 2000;
+    const int maxDimension = KisAlgebra2D::maxDimension(srcRect);
+
+    const qreal zoom = qMax(1.0, qreal(maxDimension) / maxSize);
+
+    const int calculatedLod = qCeil(std::log2(zoom));
+
+    return qMax(calculatedLod, lodPreferences.desiredLevelOfDetail());
+
 }
 
 void InplaceTransformStrokeStrategy::transformAndMergeDevice(const ToolTransformArgs &config,
@@ -375,16 +388,6 @@ void InplaceTransformStrokeStrategy::initStrokeCallback()
     //extraInitJobs << new Data(new KisHoldUIUpdatesCommand(m_s->updatesFacade, KisCommandUtils::FlipFlopCommand::INITIALIZING), false, KisStrokeJobData::BARRIER);
 
     KritaUtils::addJobBarrier(extraInitJobs, [this]() {
-        Q_FOREACH (KisNodeSP node, m_s->processedNodes) {
-            m_s->prevDirtyRects[node] = node->extent();
-
-            if (m_s->previewLevelOfDetail > 0) {
-                KisLodTransform t(m_s->previewLevelOfDetail);
-                m_s->prevDirtyPreviewRects[node] = t.map(node->extent());
-            }
-
-        }
-
         m_s->updatesFacade->disableDirtyRequests();
         m_s->updatesDisabled = true;
     });
@@ -446,6 +449,18 @@ void InplaceTransformStrokeStrategy::initStrokeCallback()
         TransformTransactionProperties transaction(srcRect, &m_s->initialTransformArgs, m_s->rootNode, m_s->processedNodes);
         if (!argsAreInitialized) {
             m_s->initialTransformArgs = KisTransformUtils::resetArgsForMode(m_s->mode, m_s->filterId, transaction);
+        }
+
+        m_s->previewLevelOfDetail = calculatePreferredLevelOfDetail(srcRect);
+
+        Q_FOREACH (KisNodeSP node, m_s->processedNodes) {
+            m_s->prevDirtyRects[node] = node->extent();
+
+            if (m_s->previewLevelOfDetail > 0) {
+                KisLodTransform t(m_s->previewLevelOfDetail);
+                m_s->prevDirtyPreviewRects[node] = t.map(node->extent());
+            }
+
         }
 
         Q_EMIT sigTransactionGenerated(transaction, m_s->initialTransformArgs, this);
@@ -549,9 +564,8 @@ void InplaceTransformStrokeStrategy::initStrokeCallback()
         }
     }
 
-
-    if (m_s->previewLevelOfDetail > 0) {
-        KritaUtils::addJobBarrier(extraInitJobs, [this]() {
+    KritaUtils::addJobBarrier(extraInitJobs, [this]() {
+        if (m_s->previewLevelOfDetail > 0) {
             QVector<KisStrokeJobData*> lodSyncJobs;
             KisSyncLodCacheStrokeStrategy::createJobsData(lodSyncJobs,
                                                           m_s->imageRoot,
@@ -564,8 +578,9 @@ void InplaceTransformStrokeStrategy::initStrokeCallback()
             }
 
             addMutatedJobs(lodSyncJobs);
-        });
-    }
+        }
+    });
+
 
     addMutatedJobs(extraInitJobs);
 }

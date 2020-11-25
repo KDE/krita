@@ -811,6 +811,15 @@ void InplaceTransformStrokeStrategy::SharedData::finalizeStrokeImpl(QVector<KisS
 void InplaceTransformStrokeStrategy::SharedData::finishAction(QVector<KisStrokeJobData *> &mutatedJobs, KisStrokeStrategyUndoCommandBased *interface)
 {
     /**
+     * Forward to cancelling should happen before the guard for
+     * finalizingActionsStarted.
+     */
+    if (currentTransformArgs.isIdentity() && !overriddenCommand) {
+        cancelAction(mutatedJobs, interface);
+        return;
+    }
+
+    /**
      * Since our finishStrokeCallback() initiates new jobs,
      * cancellation request may come even after
      * finishStrokeCallback() (cancellations may be called
@@ -822,11 +831,6 @@ void InplaceTransformStrokeStrategy::SharedData::finishAction(QVector<KisStrokeJ
 
     if (finalizingActionsStarted) return;
     finalizingActionsStarted = true;
-
-    if (currentTransformArgs.isIdentity() && !overriddenCommand) {
-        cancelAction(mutatedJobs, interface);
-        return;
-    }
 
     if (previewLevelOfDetail > 0) {
         mutatedJobs << new Data(new KisHoldUIUpdatesCommand(updatesFacade, KisCommandUtils::FlipFlopCommand::INITIALIZING), false, KisStrokeJobData::BARRIER);

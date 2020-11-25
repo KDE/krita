@@ -351,7 +351,7 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
 #if QT_VERSION >= QT_VERSION_CHECK(5,11,0)
             firstIndex = firstIndex.siblingAtRow(firstIndex.row() + 1);
 #else
-            firestIndex = firstIndex.sibling(firstIndex.row() + 1, 0);
+            firstIndex = firstIndex.sibling(firstIndex.row() + 1, 0);
 #endif
         }
 
@@ -454,7 +454,12 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
                 p.drawPixmap(thumbRect, pxmp, pxmp.rect());
 
                 //get the panelInfo rect and draw panel name and duration
+#if QT_VERSION >= QT_VERSION_CHECK(5,11,0)
                 int numericFontWidth = p.fontMetrics().horizontalAdvance("0");
+#else
+                int numericFontWidth = p.fontMetrics().width("0");
+#endif
+
                 QRectF panelInfoRect = cellRect;
                 panelInfoRect.setHeight(p.fontMetrics().height());
                 panelInfoRect.setWidth((scale * pxmp.rect().size()).width() - 6 * numericFontWidth);

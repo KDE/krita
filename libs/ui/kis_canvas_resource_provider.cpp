@@ -175,12 +175,11 @@ KisPaintOpPresetSP KisCanvasResourceProvider::currentPreset() const
 
 void KisCanvasResourceProvider::setPaintOpPreset(const KisPaintOpPresetSP preset)
 {
+    if (!preset) return;
+
     Q_ASSERT(preset->valid());
     Q_ASSERT(!preset->paintOp().id().isEmpty());
     Q_ASSERT(preset->settings());
-    if (!preset) return;
-
-    dbgUI << "setPaintOpPreset" << preset->paintOp();
 
     QVariant v;
     v.setValue(preset);

@@ -523,23 +523,23 @@ bool KisWelcomePageWidget::eventFilter(QObject *watched, QEvent *event)
 
 namespace {
 
-QLatin1String mapKi18nLangToNewsLang(const QString &ki18nLang) {
+QString mapKi18nLangToNewsLang(const QString &ki18nLang) {
     if (ki18nLang == "ja") {
-        return QLatin1String("jp");
+        return QString("jp");
     }
     if (ki18nLang == "zh_CN") {
-        return QLatin1String("zh");
+        return QString("zh");
     }
     if (ki18nLang == "zh_TW") {
-        return QLatin1String("zh-tw");
+        return QString("zh-tw");
     }
     if (ki18nLang == "zh_HK") {
-        return QLatin1String("zh-hk");
+        return QString("zh-hk");
     }
     if (ki18nLang == "en" || ki18nLang == "en_US" || ki18nLang == "en_GB") {
-        return QLatin1String("en");
+        return QString("en");
     }
-    return QLatin1String();
+    return QString();
 };
 
 QString getAutoNewsLang()
@@ -547,7 +547,7 @@ QString getAutoNewsLang()
     // Get current UI languages:
     const QStringList uiLangs = KLocalizedString::languages();
 
-    QLatin1String autoNewsLang;
+    QString autoNewsLang;
     // Iterate UI languages including fallback languages.
     Q_FOREACH(const auto &uiLang, uiLangs) {
         autoNewsLang = mapKi18nLangToNewsLang(uiLang);
@@ -557,7 +557,7 @@ QString getAutoNewsLang()
     }
     if (autoNewsLang.size() == 0) {
         // If nothing else, use English.
-        autoNewsLang = QLatin1String("en");
+        autoNewsLang = QString("en");
     }
     return autoNewsLang;
 }
@@ -572,15 +572,15 @@ void KisWelcomePageWidget::setupNewsLangSelection(QMenu *newsOptionsMenu)
     // The language display names should not be translated. This reflects
     // the language selection box on the Krita website.
     struct Lang {
-        const QLatin1String siteCode;
+        const QString siteCode;
         const QString name;
     };
     static const std::array<Lang, 5> newsLangs = {{
-        {QLatin1String("en"), QStringLiteral("English")},
-        {QLatin1String("jp"), QStringLiteral("日本語")},
-        {QLatin1String("zh"), QStringLiteral("中文 (简体)")},
-        {QLatin1String("zh-tw"), QStringLiteral("中文 (台灣正體)")},
-        {QLatin1String("zh-hk"), QStringLiteral("香港廣東話")},
+        {QString("en"), QStringLiteral("English")},
+        {QString("jp"), QStringLiteral("日本語")},
+        {QString("zh"), QStringLiteral("中文 (简体)")},
+        {QString("zh-tw"), QStringLiteral("中文 (台灣正體)")},
+        {QString("zh-hk"), QStringLiteral("香港廣東話")},
     }};
 
     static const QString newsLangConfigName = QStringLiteral("FetchNewsLanguages");
@@ -602,7 +602,7 @@ void KisWelcomePageWidget::setupNewsLangSelection(QMenu *newsOptionsMenu)
         langItem->setCheckable(true);
         // We can copy `code` into the lambda because its backing string is a
         // static string literal.
-        const QLatin1String code = lang.siteCode;
+        const QString code = lang.siteCode;
         connect(langItem, &QAction::toggled, [=](bool checked) {
             newsWidget->toggleNewsLanguage(code, checked);
         });

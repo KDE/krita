@@ -46,7 +46,7 @@ public:
     explicit KisNewsWidget(QWidget *parent = nullptr);
 
     void setAnalyticsTracking(QString text);
-    void toggleNewsLanguage(QLatin1String langCode, bool enabled);
+    void toggleNewsLanguage(QString langCode, bool enabled);
 
 Q_SIGNALS:
     void newsDataChanged();

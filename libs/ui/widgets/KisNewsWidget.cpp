@@ -117,11 +117,11 @@ bool KisNewsWidget::eventFilter(QObject *watched, QEvent *event)
     return QWidget::eventFilter(watched, event);
 }
 
-void KisNewsWidget::toggleNewsLanguage(QLatin1String langCode, bool enabled)
+void KisNewsWidget::toggleNewsLanguage(QString langCode, bool enabled)
 {
     // Sanity check: Since the code is adding the language code directly into
     // the URL, this prevents any nasty surprises with malformed URLs.
-    Q_FOREACH(const char &ch, langCode) {
+    Q_FOREACH(const char &ch, langCode.toLatin1()) {
         bool isValidChar = (ch >= 'a' && ch <= 'z') || ch == '-';
         if (!isValidChar) {
             warnUI << "Ignoring attempt to toggle malformed news lang:" << langCode;

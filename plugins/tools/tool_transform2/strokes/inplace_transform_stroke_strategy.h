@@ -212,6 +212,7 @@ private:
     ToolTransformArgs resetArgsForMode(ToolTransformArgs::TransformMode mode,
                                        const QString &filterId,
                                        const TransformTransactionProperties &transaction);
+    static KisNodeSP tryOverrideRootToTransformMask(KisNodeSP root);
     static bool tryInitArgsFromNode(KisNodeSP node, ToolTransformArgs *args);
     static bool tryFetchArgsFromCommandAndUndo(ToolTransformArgs *args,
                                                ToolTransformArgs::TransformMode mode,

@@ -229,9 +229,27 @@ bool InplaceTransformStrokeStrategy::fetchArgsFromCommand(const KUndo2Command *c
     return bool(data);
 }
 
+KisNodeSP InplaceTransformStrokeStrategy::tryOverrideRootToTransformMask(KisNodeSP root)
+{
+    if (root->childCount() == 1 && root->firstChild()->inherits("KisTransformMask")) {
+        return root->firstChild();
+    }
+    return root;
+}
+
 QList<KisNodeSP> InplaceTransformStrokeStrategy::fetchNodesList(ToolTransformArgs::TransformMode mode, KisNodeSP root, bool recursive)
 {
     QList<KisNodeSP> result;
+
+    bool hasTransformMaskDescendant =
+        KisLayerUtils::recursiveFindNode(root, [root] (KisNodeSP node) {
+            return node != root && node->visible() && node->inherits("KisTransformMask");
+        });
+
+    if (hasTransformMaskDescendant) {
+        // cannot transform nodes with visible transform masks inside
+        return result;
+    }
 
     auto fetchFunc =
         [&result, mode, root] (KisNodeSP node) {
@@ -335,6 +353,8 @@ void InplaceTransformStrokeStrategy::initStrokeCallback()
         m_s->deactivatedOverlaySelectionMask = overlaySelectionMask;
     }
 
+
+    m_s->rootNode = tryOverrideRootToTransformMask(m_s->rootNode);
     m_s->processedNodes = InplaceTransformStrokeStrategy::fetchNodesList(m_s->mode, m_s->rootNode, m_s->workRecursively);
 
     bool argsAreInitialized = false;

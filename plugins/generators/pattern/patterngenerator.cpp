@@ -141,6 +141,11 @@ KisFilterConfigurationSP PatternGenerator::defaultConfiguration(KisResourcesInte
     KisFilterConfigurationSP config = factoryConfiguration(resourcesInterface);
 
     auto source = resourcesInterface->source<KoPattern>(ResourceType::Patterns);
+
+    if (!source.fallbackResource()) {
+        return config;
+    }
+
     config->setProperty("pattern", QVariant::fromValue(source.fallbackResource()->name()));
 
 

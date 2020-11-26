@@ -291,18 +291,6 @@ KisStrokeId KisStrokesQueue::startStroke(KisStrokeStrategy *strokeStrategy)
         (lodBuddyStrategy =
          strokeStrategy->createLodClone(m_d->desiredLevelOfDetail))) {
 
-        KisStrokeStrategy *legacyInitializingStrategy = strokeStrategy->createLegacyInitializingStroke();
-        if (legacyInitializingStrategy) {
-            // this strategy must be legacy, that is without lod support
-            KIS_SAFE_ASSERT_RECOVER_NOOP(!legacyInitializingStrategy->createLodClone(m_d->desiredLevelOfDetail));
-
-            KisStrokeSP legacyInitializingStroke(new KisStroke(legacyInitializingStrategy, KisStroke::LEGACY, 0));
-            legacyInitializingStrategy->setMutatedJobsInterface(this, legacyInitializingStroke);
-            m_d->strokesQueue.enqueue(legacyInitializingStroke);
-            legacyInitializingStroke->endStroke();
-            m_d->lodNNeedsSynchronization = true;
-        }
-
         if (m_d->lodNNeedsSynchronization) {
             m_d->startLod0ToNStroke(m_d->desiredLevelOfDetail, false);
         }
@@ -331,20 +319,6 @@ KisStrokeId KisStrokesQueue::startStroke(KisStrokeStrategy *strokeStrategy)
         }
 
     } else {
-
-        KisStrokeStrategy *legacyInitializingStrategy = strokeStrategy->createLegacyInitializingStroke();
-        if (legacyInitializingStrategy) {
-            // this strategy must be legacy, that is without lod support
-            KIS_SAFE_ASSERT_RECOVER_NOOP(!legacyInitializingStrategy->createLodClone(m_d->desiredLevelOfDetail));
-
-            KisStrokeSP legacyInitializingStroke(new KisStroke(legacyInitializingStrategy, KisStroke::LEGACY, 0));
-            legacyInitializingStrategy->setMutatedJobsInterface(this, legacyInitializingStroke);
-            m_d->strokesQueue.enqueue(legacyInitializingStroke);
-            legacyInitializingStroke->endStroke();
-            m_d->lodNNeedsSynchronization = true;
-        }
-
-
         stroke = KisStrokeSP(new KisStroke(strokeStrategy, KisStroke::LEGACY, 0));
         m_d->strokesQueue.enqueue(stroke);
     }

@@ -88,13 +88,9 @@ void KisStrokeStrategyUndoCommandBased::finishStrokeCallback()
     QMutexLocker locker(&m_mutex);
     if(m_macroCommand) {
         Q_ASSERT(m_undoFacade);
-        if (postProcessToplevelCommand(m_macroCommand)) {
-            m_undoFacade->postExecutionUndoAdapter()->addMacro(m_macroCommand);
-        } else {
-            delete m_macroCommand;
-        }
+        postProcessToplevelCommand(m_macroCommand);
+        m_undoFacade->postExecutionUndoAdapter()->addMacro(m_macroCommand);
         m_macroCommand = 0;
-
     }
 }
 
@@ -166,7 +162,7 @@ void KisStrokeStrategyUndoCommandBased::setMacroId(int value)
     m_macroId = value;
 }
 
-bool KisStrokeStrategyUndoCommandBased::postProcessToplevelCommand(KUndo2Command *command)
+void KisStrokeStrategyUndoCommandBased::postProcessToplevelCommand(KUndo2Command *command)
 {
     if (m_commandExtraData) {
         command->setExtraData(m_commandExtraData.take());
@@ -176,8 +172,6 @@ bool KisStrokeStrategyUndoCommandBased::postProcessToplevelCommand(KUndo2Command
     if (savedCommand) {
         savedCommand->setMacroId(m_macroId);
     }
-
-    return true;
 }
 
  KisStrokeUndoFacade* KisStrokeStrategyUndoCommandBased::undoFacade() const

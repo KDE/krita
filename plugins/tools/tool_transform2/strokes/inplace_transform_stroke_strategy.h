@@ -187,7 +187,7 @@ Q_SIGNALS:
     void sigTransactionGenerated(TransformTransactionProperties transaction, ToolTransformArgs args, void *cookie);
 
 protected:
-    bool postProcessToplevelCommand(KUndo2Command *command) override;
+    void postProcessToplevelCommand(KUndo2Command *command) override;
 
 private:
     friend class InitializeTransformModeStrokeStrategy;

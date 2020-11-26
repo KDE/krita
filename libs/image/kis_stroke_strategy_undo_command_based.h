@@ -130,9 +130,8 @@ protected:
 
     /**
      * @brief Applies some modifications (e.g. assigning extra data) to the toplevel command
-     * @return false to skip adding the macro command into the undo stack
      */
-    virtual bool postProcessToplevelCommand(KUndo2Command *command);
+    virtual void postProcessToplevelCommand(KUndo2Command *command);
 
     KisStrokeUndoFacade* undoFacade() const;
 public:
@@ -141,7 +140,6 @@ public:
                            KisStrokeJobData::Exclusivity exclusivity);
 
     void executeCommand(KUndo2CommandSP command, bool undo);
-
 
 private:
     bool m_undo;

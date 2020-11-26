@@ -29,8 +29,6 @@ private Q_SLOTS:
     void testMultipleLevelOfDetailStrokes();
     void testMultipleLevelOfDetailAfterLegacy();
     void testMultipleLevelOfDetailMixedLegacy();
-    void testLegacyInitializerStrategy();
-    void testLegacyStrokeWithLegacyInitializerStrategy();
     void testLodUndoBase();
     void testLodUndoBase2();
     void testMutatedJobs();

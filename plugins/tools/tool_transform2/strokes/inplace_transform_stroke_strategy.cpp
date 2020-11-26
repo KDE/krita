@@ -225,10 +225,10 @@ struct TransformExtraData : public KUndo2CommandExtraData
     }
 };
 
-bool InplaceTransformStrokeStrategy::postProcessToplevelCommand(KUndo2Command *command)
+void InplaceTransformStrokeStrategy::postProcessToplevelCommand(KUndo2Command *command)
 {
-    return KisStrokeStrategyUndoCommandBased::postProcessToplevelCommand(command) &&
-        m_s->postProcessToplevelCommand(command);
+    KisStrokeStrategyUndoCommandBased::postProcessToplevelCommand(command);
+    m_s->postProcessToplevelCommand(command);
 }
 
 

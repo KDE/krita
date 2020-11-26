@@ -57,7 +57,6 @@ public:
     virtual KisStrokeJobData* createResumeData();
 
     virtual KisStrokeStrategy* createLodClone(int levelOfDetail);
-    virtual KisStrokeStrategy* createLegacyInitializingStroke();
 
     bool isExclusive() const;
     bool supportsWrapAroundMode() const;

@@ -125,11 +125,6 @@ KisStrokeStrategy* KisStrokeStrategy::createLodClone(int levelOfDetail)
     return 0;
 }
 
-KisStrokeStrategy *KisStrokeStrategy::createLegacyInitializingStroke()
-{
-    return 0;
-}
-
 bool KisStrokeStrategy::isExclusive() const
 {
     return m_exclusive;

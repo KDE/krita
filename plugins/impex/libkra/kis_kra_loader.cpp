@@ -529,7 +529,6 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageSP image, const QStri
 
 void KisKraLoader::loadPalettes(KoStore *store, KisDocument *doc)
 {
-    qDebug() << ">>>> loadPalettes" << m_d->paletteFilenames;
     QList<KoColorSetSP> list;
     Q_FOREACH (const QString &filename, m_d->paletteFilenames) {
         qDebug() << "loading palettes" << filename;
@@ -546,23 +545,26 @@ void KisKraLoader::loadPalettes(KoStore *store, KisDocument *doc)
 
 void KisKraLoader::loadStoryboards(KoStore *store, KisDocument *doc)
 {
-    store->open(m_d->imageName + STORYBOARD_PATH + "index.xml");
-    QByteArray data = store->read(store->size());
-    QDomDocument document;
-    document.setContent(data);
-    store->close();
+    if (!store->hasFile(m_d->imageName + STORYBOARD_PATH + "index.xml")) return;
 
-    QDomElement root = document.documentElement();
-    QDomNode node;
-    for (node = root.lastChild(); !node.isNull(); node = node.previousSibling()) {
-        if (node.isElement()) {
-            QDomElement element = node.toElement();
-            if (element.tagName() == "StoryboardItemList") {
-                loadStoryboardItemList(element);
-            } else if (element.tagName() == "StoryboardCommentList") {
-                loadStoryboardCommentList(element);
+    if (store->open(m_d->imageName + STORYBOARD_PATH + "index.xml")) {
+        QByteArray data = store->read(store->size());
+        QDomDocument document;
+        document.setContent(data);
+        store->close();
+
+        QDomElement root = document.documentElement();
+        QDomNode node;
+        for (node = root.lastChild(); !node.isNull(); node = node.previousSibling()) {
+            if (node.isElement()) {
+                QDomElement element = node.toElement();
+                if (element.tagName() == "StoryboardItemList") {
+                    loadStoryboardItemList(element);
+                } else if (element.tagName() == "StoryboardCommentList") {
+                    loadStoryboardCommentList(element);
+                }
+
             }
-
         }
     }
 }

@@ -3,8 +3,8 @@
 # Copyright (c) 2006, 2007, Laurent Montel, <montel@kde.org>
 # Copyright (c) 2007 Matthias Kretz <kretz@kde.org>
 #
-# Redistribution and use is allowed according to the terms of the BSD license.
-# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+# SPDX-License-Identifier: BSD-3-Clause
+#
 
 add_custom_target(benchmark)
 

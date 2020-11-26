@@ -1,4 +1,7 @@
 #For finding LibMyPaint library in the system
+#
+# SPDX-License-Identifier: BSD-3-Clause
+#
 
 find_package(LibMyPaint ${LibMyPaint_FIND_VERSION} QUIET NO_MODULE)
 

@@ -1,3 +1,6 @@
+#
+# SPDX-License-Identifier: BSD-3-Clause
+#
 # QUAZIP_FOUND               - QuaZip library was found
 # QUAZIP_INCLUDE_DIR         - Path to QuaZip include dir
 # QUAZIP_INCLUDE_DIRS        - Path to QuaZip and zlib include dir (combined from QUAZIP_INCLUDE_DIR + ZLIB_INCLUDE_DIR)

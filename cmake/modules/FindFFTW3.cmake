@@ -4,8 +4,8 @@
 #  FFTW3_FOUND - system has fftw3
 #  FFTW3_INCLUDE_DIRS - the fftw3 include directories
 #  FFTW3_LIBRARIES - the libraries needed to use fftw3
-# Redistribution and use is allowed according to the terms of the BSD license.
-# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+#
+# SPDX-License-Identifier: BSD-3-Clause
 #
 if (NOT WIN32)
     include(LibFindMacros)

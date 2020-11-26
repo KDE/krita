@@ -8,19 +8,14 @@
   - KisResourceModel: This model can be used to access resources without loading
     the actual resource until it is needed.
 
-    There is only one instance of a KisResourceModel for a given resource type,
-    and KisResourceModel can only be used from the gui thread. Accessing the
-    data() method will in general not load the actual resource.
-
   - KisTagResourceModel: this model represents the intersection between tags and resources and
-    can be used to tag and unta resources.
+    can be used to tag and untag resources.
 
   - KisTagModel: this model represents tags. It can be used create tags and activate or deactivate
     tags.
 
-  These three models are access through KisResourceModelProvider and are singletons per
-  resource type. The models themselves are proxy models that allow filtering by active
-  or inactive state or the resource, tag or storage.
+  These three models are accessed through KisResourceModelProvider. The models themselves are
+  proxy models that allow filtering by active or inactive state or the resource, tag or storage.
 
   - KisTagFilterResourceProxyModel. This model should be used in resource choosers. Under the
     hood it switches between KisResourceModel and KisTagResourceModel based on whether the
@@ -38,7 +33,7 @@
     KisResourceLocator is also repsonsible for initializing the cache database.
 
   - KisResourceCacheDB: this class creates the sqlite database and handles synchronizing resources
-    with he contents of storages.
+    with the contents of storages.
 
  */
 

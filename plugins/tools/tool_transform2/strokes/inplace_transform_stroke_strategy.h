@@ -98,6 +98,7 @@ public:
         KisSelectionSP selection;
         KisNodeSP imageRoot;
         int previewLevelOfDetail = -1;
+        bool forceLodMode = true;
 
         // properties filled by initialization stroke
         KisNodeList processedNodes;
@@ -167,7 +168,7 @@ public:
                                    KisNodeSP rootNode,
                                    KisSelectionSP selection,
                                    KisStrokeUndoFacade *undoFacade,
-                                   KisUpdatesFacade *updatesFacade, KisNodeSP imageRoot);
+                                   KisUpdatesFacade *updatesFacade, KisNodeSP imageRoot, bool forceLodMode);
 
     ~InplaceTransformStrokeStrategy() override;
 

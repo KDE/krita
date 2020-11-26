@@ -93,6 +93,7 @@ public:
 
     bool needsExplicitCancel() const;
 
+
     /**
      * \see setBalancingRatioOverride() for details
      */
@@ -107,6 +108,9 @@ public:
     KisLodPreferences currentLodPreferences() const;
 
     void setMutatedJobsInterface(KisStrokesQueueMutatedJobInterface *mutatedJobsInterface, KisStrokeId strokeId);
+
+    bool forceLodModeIfPossible() const;
+    void setForceLodModeIfPossible(bool forceLodModeIfPossible);
 
 protected:
     // testing surrogate class
@@ -176,6 +180,7 @@ private:
     bool m_requestsOtherStrokesToEnd;
     bool m_canForgetAboutMe;
     bool m_needsExplicitCancel;
+    bool m_forceLodModeIfPossible;
     qreal m_balancingRatioOverride;
 
     QLatin1String m_id;

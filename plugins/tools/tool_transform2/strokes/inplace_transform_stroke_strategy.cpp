@@ -64,7 +64,8 @@ InplaceTransformStrokeStrategy::InplaceTransformStrokeStrategy(ToolTransformArgs
                                                                KisSelectionSP selection,
                                                                KisStrokeUndoFacade *undoFacade,
                                                                KisUpdatesFacade *updatesFacade,
-                                                               KisNodeSP imageRoot)
+                                                               KisNodeSP imageRoot,
+                                                               bool forceLodMode)
     : KisStrokeStrategyUndoCommandBased(kundo2_i18n("Transform"), false, undoFacade),
       m_s(new SharedData())
 {
@@ -78,6 +79,7 @@ InplaceTransformStrokeStrategy::InplaceTransformStrokeStrategy(ToolTransformArgs
     m_s->updatesFacade = updatesFacade;
     m_s->undoFacade = undoFacade;
     m_s->imageRoot = imageRoot;
+    m_s->forceLodMode = forceLodMode;
 
     KIS_SAFE_ASSERT_RECOVER_NOOP(!selection || !dynamic_cast<KisTransformMask*>(rootNode.data()));
     setMacroId(KisCommandUtils::TransformToolId);
@@ -181,7 +183,8 @@ void InplaceTransformStrokeStrategy::doCanvasUpdate(bool forceUpdate)
 int InplaceTransformStrokeStrategy::calculatePreferredLevelOfDetail(const QRect &srcRect)
 {
     KisLodPreferences lodPreferences = this->currentLodPreferences();
-    if (!lodPreferences.lodSupported()) return -1;
+    if (!lodPreferences.lodSupported() ||
+        !(lodPreferences.lodPreferred() || m_s->forceLodMode)) return -1;
 
     const int maxSize = 2000;
     const int maxDimension = KisAlgebra2D::maxDimension(srcRect);

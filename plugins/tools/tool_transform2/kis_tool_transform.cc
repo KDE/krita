@@ -76,6 +76,7 @@
 #include "krita_container_utils.h"
 #include "kis_layer_utils.h"
 #include <KisDelayedUpdateNodeInterface.h>
+#include "kis_config_notifier.h"
 
 #include "strokes/transform_stroke_strategy.h"
 #include "strokes/inplace_transform_stroke_strategy.h"
@@ -155,6 +156,9 @@ KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
 
     connect(&m_changesTracker, SIGNAL(sigConfigChanged(KisToolChangesTrackerDataSP)),
             this, SLOT(slotTrackerChangedConfig(KisToolChangesTrackerDataSP)));
+
+    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotGlobalConfigChanged()));
+    slotGlobalConfigChanged();
 }
 
 KisToolTransform::~KisToolTransform()
@@ -176,6 +180,13 @@ void KisToolTransform::canvasUpdateRequested()
 void KisToolTransform::resetCursorStyle()
 {
     setFunctionalCursor();
+}
+
+void KisToolTransform::slotGlobalConfigChanged()
+{
+    KConfigGroup group = KSharedConfig::openConfig()->group(toolId());
+    m_preferOverlayPreviewStyle = group.readEntry("useOverlayPreviewStyle", false);
+    m_forceLodMode = group.readEntry("forceLodMode", true);
 }
 
 void KisToolTransform::resetRotationCenterButtonsRequested()
@@ -767,7 +778,7 @@ void KisToolTransform::requestStrokeCancellation()
 
 void KisToolTransform::requestImageRecalculation()
 {
-    if (m_strokeId && m_transaction.rootNode()) {
+    if (!m_currentlyUsingOverlayPreviewStyle && m_strokeId && m_transaction.rootNode()) {
         image()->addJob(m_strokeId, new InplaceTransformStrokeStrategy::UpdateTransformData(m_currentArgs));
     }
 }
@@ -831,16 +842,36 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool f
         selection = 0;
     }
 
-    InplaceTransformStrokeStrategy *strategy = new InplaceTransformStrokeStrategy(mode, m_workRecursively, m_currentArgs.filterId(), forceReset, currentNode, selection, image().data(), image().data(), image()->root());
-    //connect(strategy, SIGNAL(sigPreviewDeviceReady(KisPaintDeviceSP)), SLOT(slotPreviewDeviceGenerated(KisPaintDeviceSP)));
-    connect(strategy, SIGNAL(sigTransactionGenerated(TransformTransactionProperties, ToolTransformArgs, void*)), SLOT(slotTransactionGenerated(TransformTransactionProperties, ToolTransformArgs, void*)));
+    m_currentlyUsingOverlayPreviewStyle = m_preferOverlayPreviewStyle;
 
-    // save unique identifier of the stroke so we could
-    // recognize it when sigTransactionGenerated() is
-    // received (theoretically, the user can start two
-    // strokes at the same time, if he is quick enough)
-    m_strokeStrategyCookie = strategy;
+    KisStrokeStrategy *strategy = 0;
+
+    if (m_currentlyUsingOverlayPreviewStyle) {
+        TransformStrokeStrategy *transformStrategy = new TransformStrokeStrategy(mode, m_workRecursively, m_currentArgs.filterId(), forceReset, currentNode, selection, image().data(), image().data());
+        connect(transformStrategy, SIGNAL(sigPreviewDeviceReady(KisPaintDeviceSP)), SLOT(slotPreviewDeviceGenerated(KisPaintDeviceSP)));
+        connect(transformStrategy, SIGNAL(sigTransactionGenerated(TransformTransactionProperties, ToolTransformArgs, void*)), SLOT(slotTransactionGenerated(TransformTransactionProperties, ToolTransformArgs, void*)));
+        strategy = transformStrategy;
+
+        // save unique identifier of the stroke so we could
+        // recognize it when sigTransactionGenerated() is
+        // received (theoretically, the user can start two
+        // strokes at the same time, if he is quick enough)
+        m_strokeStrategyCookie = transformStrategy;
+
+    } else {
+        InplaceTransformStrokeStrategy *transformStrategy = new InplaceTransformStrokeStrategy(mode, m_workRecursively, m_currentArgs.filterId(), forceReset, currentNode, selection, image().data(), image().data(), image()->root(), m_forceLodMode);
+        connect(transformStrategy, SIGNAL(sigTransactionGenerated(TransformTransactionProperties, ToolTransformArgs, void*)), SLOT(slotTransactionGenerated(TransformTransactionProperties, ToolTransformArgs, void*)));
+        strategy = transformStrategy;
+
+        // save unique identifier of the stroke so we could
+        // recognize it when sigTransactionGenerated() is
+        // received (theoretically, the user can start two
+        // strokes at the same time, if he is quick enough)
+        m_strokeStrategyCookie = transformStrategy;
+    }
+
     m_strokeId = image()->startStroke(strategy);
+
 
     KIS_SAFE_ASSERT_RECOVER_NOOP(m_changesTracker.isEmpty());
 
@@ -850,6 +881,14 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool f
 void KisToolTransform::endStroke()
 {
     if (!m_strokeId) return;
+
+    if (m_currentlyUsingOverlayPreviewStyle &&
+        m_transaction.rootNode() &&
+        !m_currentArgs.isIdentity()) {
+
+        image()->addJob(m_strokeId,
+                        new TransformStrokeStrategy::TransformAllData(m_currentArgs));
+    }
 
     if (m_asyncUpdateHelper.isActive()) {
         m_asyncUpdateHelper.endUpdateStream();
@@ -886,7 +925,10 @@ void KisToolTransform::slotTransactionGenerated(TransformTransactionProperties t
     m_transaction = transaction;
     m_currentArgs = args;
     m_transaction.setCurrentConfigLocation(&m_currentArgs);
-    m_asyncUpdateHelper.startUpdateStream(image().data(), m_strokeId);
+
+    if (!m_currentlyUsingOverlayPreviewStyle) {
+        m_asyncUpdateHelper.startUpdateStream(image().data(), m_strokeId);
+    }
 
     KIS_SAFE_ASSERT_RECOVER_NOOP(m_changesTracker.isEmpty());
     commitChanges();

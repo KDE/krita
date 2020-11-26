@@ -206,6 +206,7 @@ public Q_SLOTS:
 
 protected Q_SLOTS:
     void resetCursorStyle() override;
+    void slotGlobalConfigChanged();
 
 Q_SIGNALS:
     void transformModeChanged();
@@ -256,6 +257,9 @@ private:
     KisPaintDeviceSP m_selectedPortionCache;
     KisStrokeId m_strokeId;
     void *m_strokeStrategyCookie = 0;
+    bool m_currentlyUsingOverlayPreviewStyle = false;
+    bool m_preferOverlayPreviewStyle = false;
+    bool m_forceLodMode = false;
 
     bool m_workRecursively;
 

@@ -287,7 +287,7 @@ KisStrokeId KisStrokesQueue::startStroke(KisStrokeStrategy *strokeStrategy)
     }
 
     if (m_d->desiredLevelOfDetail &&
-        m_d->lodPreferences.lodPreferred() &&
+        (m_d->lodPreferences.lodPreferred() || strokeStrategy->forceLodModeIfPossible()) &&
         (lodBuddyStrategy =
          strokeStrategy->createLodClone(m_d->desiredLevelOfDetail))) {
 

@@ -393,6 +393,10 @@ void InplaceTransformStrokeStrategy::initStrokeCallback()
     KritaUtils::addJobBarrier(extraInitJobs, [this]() {
         m_s->updatesFacade->disableDirtyRequests();
         m_s->updatesDisabled = true;
+
+        Q_FOREACH (KisNodeSP node, m_s->processedNodes) {
+            m_s->prevDirtyRects[node] = node->extent();
+        }
     });
 
     extraInitJobs << lastCommandUndoJobs;
@@ -456,14 +460,11 @@ void InplaceTransformStrokeStrategy::initStrokeCallback()
 
         m_s->previewLevelOfDetail = calculatePreferredLevelOfDetail(srcRect);
 
-        Q_FOREACH (KisNodeSP node, m_s->processedNodes) {
-            m_s->prevDirtyRects[node] = node->extent();
-
-            if (m_s->previewLevelOfDetail > 0) {
+        if (m_s->previewLevelOfDetail > 0) {
+            for (auto it = m_s->prevDirtyRects.begin(); it != m_s->prevDirtyRects.end(); ++it) {
                 KisLodTransform t(m_s->previewLevelOfDetail);
-                m_s->prevDirtyPreviewRects[node] = t.map(node->extent());
+                m_s->prevDirtyPreviewRects[it.key()] = t.map(it.value());
             }
-
         }
 
         Q_EMIT sigTransactionGenerated(transaction, m_s->initialTransformArgs, this);

@@ -61,6 +61,10 @@ public:
     KisPaintDeviceSP buildPreviewDevice();
     KisPaintDeviceSP buildSourcePreviewDevice();
 
+    /**
+     * Transform Tool may override mask's device for the sake of
+     * in-stack preview
+     */
     void overrideStaticCacheDevice(KisPaintDeviceSP device);
 
     qint32 x() const override;

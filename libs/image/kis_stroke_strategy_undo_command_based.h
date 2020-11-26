@@ -125,6 +125,9 @@ protected:
     void runAndSaveCommand(KUndo2CommandSP command,
                            KisStrokeJobData::Sequentiality sequentiality,
                            KisStrokeJobData::Exclusivity exclusivity);
+    void notifyCommandDone(KUndo2CommandSP command,
+                           KisStrokeJobData::Sequentiality sequentiality,
+                           KisStrokeJobData::Exclusivity exclusivity);
 
     KisStrokeStrategyUndoCommandBased(const KisStrokeStrategyUndoCommandBased &rhs);
 
@@ -134,11 +137,8 @@ protected:
     virtual void postProcessToplevelCommand(KUndo2Command *command);
 
     KisStrokeUndoFacade* undoFacade() const;
-public:
-    void notifyCommandDone(KUndo2CommandSP command,
-                           KisStrokeJobData::Sequentiality sequentiality,
-                           KisStrokeJobData::Exclusivity exclusivity);
 
+protected:
     void executeCommand(KUndo2CommandSP command, bool undo);
 
 private:

@@ -645,11 +645,6 @@ void KisStrokesQueue::explicitRegenerateLevelOfDetail()
     m_d->switchDesiredLevelOfDetail(true);
 }
 
-void KisStrokesQueue::testingSetDesiredLevelOfDetail(int lod)
-{
-    setLodPreferences(KisLodPreferences(lod));
-}
-
 void KisStrokesQueue::notifyUFOChangedImage()
 {
     QMutexLocker locker(&m_d->mutex);

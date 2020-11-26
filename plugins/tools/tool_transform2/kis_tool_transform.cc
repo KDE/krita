@@ -1158,9 +1158,9 @@ void KisToolTransform::slotResetTransform(ToolTransformArgs::TransformMode mode)
             KIS_ASSERT_RECOVER_NOOP(!m_currentArgs.continuedTransform());
         }
     } else {
-        if (!TransformStrokeStrategy::shouldRestartStrokeOnModeChange(previousMode,
-                                                                      m_currentArgs.mode(),
-                                                                      m_transaction.transformedNodes())) {
+        if (!KisTransformUtils::shouldRestartStrokeOnModeChange(previousMode,
+                                                                m_currentArgs.mode(),
+                                                                m_transaction.transformedNodes())) {
             initTransformMode(m_currentArgs.mode());
             slotEditingFinished();
 

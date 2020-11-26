@@ -500,7 +500,7 @@ void KisStrokesQueueTest::testStrokesLevelOfDetail()
     KisStrokesQueue &queue = t.queue;
 
     // create a stroke with LOD0 + LOD2
-    queue.testingSetDesiredLevelOfDetail(2);
+    queue.setLodPreferences(KisLodPreferences(2));
 
     // process sync-lodn-planes stroke
     t.processQueue();
@@ -576,7 +576,7 @@ void KisStrokesQueueTest::testStrokeWithMixedLodJobs()
     KisStrokesQueue &queue = t.queue;
 
     // create a stroke with LOD0 + LOD2
-    queue.testingSetDesiredLevelOfDetail(2);
+    queue.setLodPreferences(KisLodPreferences(2));
 
     // process sync-lodn-planes stroke
     t.processQueue();
@@ -636,7 +636,7 @@ void KisStrokesQueueTest::testMultipleLevelOfDetailStrokes()
     KisStrokesQueue &queue = t.queue;
 
     // create a stroke with LOD0 + LOD2
-    queue.testingSetDesiredLevelOfDetail(2);
+    queue.setLodPreferences(KisLodPreferences(2));
 
     KisStrokeId id1 = queue.startStroke(new KisTestingStrokeStrategy(QLatin1String("lod1_"), false, true));
     queue.addJob(id1, new KisTestingStrokeJobData(KisStrokeJobData::CONCURRENT));
@@ -674,7 +674,7 @@ void KisStrokesQueueTest::testMultipleLevelOfDetailAfterLegacy()
     KisStrokesQueue &queue = t.queue;
 
     // create a stroke with LOD0 + LOD2
-    queue.testingSetDesiredLevelOfDetail(2);
+    queue.setLodPreferences(KisLodPreferences(2));
 
     KisStrokeId id0 = queue.startStroke(new KisTestingStrokeStrategy(QLatin1String("leg0_"), false, true, false, false, true));
     queue.addJob(id0, new KisTestingStrokeJobData(KisStrokeJobData::CONCURRENT));
@@ -723,7 +723,7 @@ void KisStrokesQueueTest::testMultipleLevelOfDetailMixedLegacy()
     KisStrokesQueue &queue = t.queue;
 
     // create a stroke with LOD0 + LOD2
-    queue.testingSetDesiredLevelOfDetail(2);
+    queue.setLodPreferences(KisLodPreferences(2));
 
     KisStrokeId id0 = queue.startStroke(new KisTestingStrokeStrategy(QLatin1String("lod0_"), false, true));
     queue.addJob(id0, new KisTestingStrokeJobData(KisStrokeJobData::CONCURRENT));
@@ -797,7 +797,7 @@ void KisStrokesQueueTest::testLodUndoBase()
     KisStrokesQueue &queue = t.queue;
 
     // create a stroke with LOD0 + LOD2
-    queue.testingSetDesiredLevelOfDetail(2);
+    queue.setLodPreferences(KisLodPreferences(2));
 
     // process sync-lodn-planes stroke
     t.processQueue();
@@ -843,7 +843,7 @@ void KisStrokesQueueTest::testLodUndoBase2()
     KisStrokesQueue &queue = t.queue;
 
     // create a stroke with LOD0 + LOD2
-    queue.testingSetDesiredLevelOfDetail(2);
+    queue.setLodPreferences(KisLodPreferences(2));
     KisStrokeId id1 = queue.startStroke(new KisTestingStrokeStrategy(QLatin1String("str1_"), false, true, false, true));
     queue.addJob(id1, new KisTestingStrokeJobData(KisStrokeJobData::CONCURRENT));
     queue.endStroke(id1);

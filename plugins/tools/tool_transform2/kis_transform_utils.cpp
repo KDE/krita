@@ -14,6 +14,19 @@
 #include "kis_paint_device.h"
 #include "kis_algebra_2d.h"
 #include "transform_transaction_properties.h"
+#include "kis_painter.h"
+
+#include <kis_transform_worker.h>
+#include <kis_perspectivetransform_worker.h>
+#include <kis_warptransform_worker.h>
+#include <kis_cage_transform_worker.h>
+#include <kis_liquify_transform_worker.h>
+
+#include "commands_new/kis_saved_commands.h"
+#include "kis_transform_mask.h"
+#include "kis_transform_mask_adapter.h"
+#include "krita_container_utils.h"
+
 
 struct TransformTransactionPropertiesRegistrar {
     TransformTransactionPropertiesRegistrar() {
@@ -213,12 +226,6 @@ bool KisTransformUtils::checkImageTooBig(const QRectF &bounds, const MatricesPac
 
     return imageTooBig;
 }
-
-#include <kis_transform_worker.h>
-#include <kis_perspectivetransform_worker.h>
-#include <kis_warptransform_worker.h>
-#include <kis_cage_transform_worker.h>
-#include <kis_liquify_transform_worker.h>
 
 KisTransformWorker KisTransformUtils::createTransformWorker(const ToolTransformArgs &config,
                                                             KisPaintDeviceSP device,
@@ -496,4 +503,186 @@ ToolTransformArgs KisTransformUtils::resetArgsForMode(ToolTransformArgs::Transfo
     }
 
     return args;
+}
+
+bool KisTransformUtils::shouldRestartStrokeOnModeChange(ToolTransformArgs::TransformMode oldMode, ToolTransformArgs::TransformMode newMode, KisNodeList processedNodes)
+{
+    bool hasExternalLayers = false;
+    Q_FOREACH (KisNodeSP node, processedNodes) {
+        if (node->inherits("KisShapeLayer")) {
+            hasExternalLayers = true;
+            break;
+        }
+    }
+
+    bool result = false;
+
+    if (hasExternalLayers) {
+        result =
+            (oldMode == ToolTransformArgs::FREE_TRANSFORM) !=
+            (newMode == ToolTransformArgs::FREE_TRANSFORM);
+    }
+
+    return result;
+}
+
+void KisTransformUtils::transformAndMergeDevice(const ToolTransformArgs &config, KisPaintDeviceSP src, KisPaintDeviceSP dst, KisProcessingVisitor::ProgressHelper *helper)
+{
+    KoUpdaterPtr mergeUpdater = src != dst ? helper->updater() : 0;
+
+    KisTransformUtils::transformDevice(config, src, helper);
+    if (src != dst) {
+        QRect mergeRect = src->extent();
+        KisPainter painter(dst);
+        painter.setProgress(mergeUpdater);
+        painter.bitBlt(mergeRect.topLeft(), src, mergeRect);
+        painter.end();
+    }
+}
+
+struct TransformExtraData : public KUndo2CommandExtraData
+{
+    ToolTransformArgs savedTransformArgs;
+    KisNodeSP rootNode;
+    KisNodeList transformedNodes;
+
+    KUndo2CommandExtraData* clone() const override {
+        return new TransformExtraData(*this);
+    }
+};
+
+void KisTransformUtils::postProcessToplevelCommand(KUndo2Command *command, const ToolTransformArgs &args, KisNodeSP rootNode, KisNodeList processedNodes, const KisSavedMacroCommand *overriddenCommand)
+{
+    TransformExtraData *data = new TransformExtraData();
+    data->savedTransformArgs = args;
+    data->rootNode = rootNode;
+    data->transformedNodes = processedNodes;
+
+    command->setExtraData(data);
+
+    KisSavedMacroCommand *macroCommand = dynamic_cast<KisSavedMacroCommand*>(command);
+    KIS_SAFE_ASSERT_RECOVER_NOOP(macroCommand);
+
+    if (overriddenCommand && macroCommand) {
+        macroCommand->setOverrideInfo(overriddenCommand, {});
+    }
+}
+
+bool KisTransformUtils::fetchArgsFromCommand(const KUndo2Command *command, ToolTransformArgs *args, KisNodeSP *rootNode, KisNodeList *transformedNodes)
+{
+    const TransformExtraData *data = dynamic_cast<const TransformExtraData*>(command->extraData());
+
+    if (data) {
+        *args = data->savedTransformArgs;
+        *rootNode = data->rootNode;
+        *transformedNodes = data->transformedNodes;
+    }
+
+    return bool(data);
+}
+
+KisNodeSP KisTransformUtils::tryOverrideRootToTransformMask(KisNodeSP root)
+{
+    if (root->childCount() == 1 && root->firstChild()->inherits("KisTransformMask")) {
+        return root->firstChild();
+    }
+    return root;
+}
+
+QList<KisNodeSP> KisTransformUtils::fetchNodesList(ToolTransformArgs::TransformMode mode, KisNodeSP root, bool recursive)
+{
+    QList<KisNodeSP> result;
+
+    bool hasTransformMaskDescendant =
+        KisLayerUtils::recursiveFindNode(root, [root] (KisNodeSP node) {
+            return node != root && node->visible() && node->inherits("KisTransformMask");
+        });
+
+    if (hasTransformMaskDescendant) {
+        // cannot transform nodes with visible transform masks inside
+        return result;
+    }
+
+    auto fetchFunc =
+        [&result, mode, root] (KisNodeSP node) {
+        if (node->isEditable(node == root) &&
+                (!node->inherits("KisShapeLayer") || mode == ToolTransformArgs::FREE_TRANSFORM) &&
+                !node->inherits("KisFileLayer") &&
+                (!node->inherits("KisTransformMask") || node == root)) {
+
+                result << node;
+            }
+    };
+
+    if (recursive) {
+        KisLayerUtils::recursiveApplyNodes(root, fetchFunc);
+    } else {
+        fetchFunc(root);
+    }
+
+    return result;
+}
+
+bool KisTransformUtils::tryInitArgsFromNode(KisNodeSP node, ToolTransformArgs *args)
+{
+    bool result = false;
+
+    if (KisTransformMaskSP mask =
+        dynamic_cast<KisTransformMask*>(node.data())) {
+
+        KisTransformMaskParamsInterfaceSP savedParams =
+            mask->transformParams();
+
+        KisTransformMaskAdapter *adapter =
+            dynamic_cast<KisTransformMaskAdapter*>(savedParams.data());
+
+        if (adapter) {
+            *args = adapter->transformArgs();
+            result = true;
+        }
+    }
+
+    return result;
+}
+
+bool KisTransformUtils::tryFetchArgsFromCommandAndUndo(ToolTransformArgs *outArgs,
+                                                                    ToolTransformArgs::TransformMode mode,
+                                                                    KisNodeSP currentNode,
+                                                                    KisNodeList selectedNodes,
+                                                                    KisStrokeUndoFacade *undoFacade,
+                                                                    QVector<KisStrokeJobData *> *undoJobs,
+                                                                    const KisSavedMacroCommand **overriddenCommand)
+{
+    bool result = false;
+
+    const KUndo2Command *lastCommand = undoFacade->lastExecutedCommand();
+    KisNodeSP oldRootNode;
+    KisNodeList oldTransformedNodes;
+
+    ToolTransformArgs args;
+
+    if (lastCommand &&
+        KisTransformUtils::fetchArgsFromCommand(lastCommand, &args, &oldRootNode, &oldTransformedNodes) &&
+        args.mode() == mode &&
+        oldRootNode == currentNode) {
+
+        if (KritaUtils::compareListsUnordered(oldTransformedNodes, selectedNodes)) {
+            args.saveContinuedState();
+
+            *outArgs = args;
+
+            const KisSavedMacroCommand *command = dynamic_cast<const KisSavedMacroCommand*>(lastCommand);
+            KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(command, false);
+
+            // the jobs are fetched as !shouldGoToHistory,
+            // so there is no need to put them into
+            // m_s->skippedWhileMergeCommands
+            command->getCommandExecutionJobs(undoJobs, true, false);
+            *overriddenCommand = command;
+
+            result = true;
+        }
+    }
+
+    return result;
 }

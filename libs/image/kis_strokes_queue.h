@@ -72,8 +72,6 @@ public:
     // interface for KisStrokeStrategy only!
     void addMutatedJobs(KisStrokeId id, const QVector<KisStrokeJobData*> list) final override;
 
-public:
-    void testingSetDesiredLevelOfDetail(int lod);
 private:
     bool processOneJob(KisUpdaterContext &updaterContext,
                        bool externalJobsPending);

@@ -100,8 +100,7 @@ void notifyVar(bool *value) {
 
 void testingSetOldDesiredLevelOfDetail(KisImageSP image, int lod)
 {
-    KisLodPreferences pref(KisLodPreferences::LodSupported | KisLodPreferences::LodPreferred,
-                           lod);
+    KisLodPreferences pref(lod);
     image->setLodPreferences(pref);
 }
 

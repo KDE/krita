@@ -49,6 +49,7 @@ void KisSyncLodCacheStrokeStrategy::initStrokeCallback()
 
 QList<KisStrokeJobData*> KisSyncLodCacheStrokeStrategy::createJobsData(KisImageWSP _image)
 {
+    // all the jobs are populates in the init job
     return {};
 }
 

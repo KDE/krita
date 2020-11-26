@@ -40,10 +40,6 @@ KisSyncLodCacheStrokeStrategy::~KisSyncLodCacheStrokeStrategy()
 {
 }
 
-void KisSyncLodCacheStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
-{
-}
-
 void KisSyncLodCacheStrokeStrategy::initStrokeCallback()
 {
     QVector<KisStrokeJobData *> jobs;

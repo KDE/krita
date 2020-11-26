@@ -23,7 +23,6 @@ public:
     static void createJobsData(QVector<KisStrokeJobData *> &jobs, KisNodeSP imageRoot, int levelOfDetail, KisPaintDeviceList extraDevices = {});
 
 private:
-    void doStrokeCallback(KisStrokeJobData *data) override;
     void initStrokeCallback() override;
 
 private:

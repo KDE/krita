@@ -60,6 +60,7 @@ struct KisFilterManager::Private {
     KisFilterConfigurationSP currentlyAppliedConfiguration;
     KisStrokeId currentStrokeId;
     QRect initialApplyRect;
+    QRect currentProcessRect;
 
     KisSignalMapper actionsMapper;
 
@@ -321,7 +322,20 @@ void KisFilterManager::apply(KisFilterConfigurationSP _filterConfig)
                       new KisFilterStrokeStrategy::Data(processRect, false));
     }
 
+    QRegion extraUpdateRegion(d->currentProcessRect);
+    extraUpdateRegion -= processRect;
+
+    if (!extraUpdateRegion.isEmpty()) {
+        QVector<QRect> rects;
+        std::copy(extraUpdateRegion.begin(), extraUpdateRegion.end(), std::back_inserter(rects));
+
+        image->addJob(d->currentStrokeId,
+                      new KisFilterStrokeStrategy::ExtraCleanUpUpdates(rects));
+    }
+
+
     d->currentlyAppliedConfiguration = filterConfig;
+    d->currentProcessRect = processRect;
 }
 
 void KisFilterManager::finish()
@@ -342,6 +356,7 @@ void KisFilterManager::finish()
 
     d->currentStrokeId.clear();
     d->currentlyAppliedConfiguration.clear();
+    d->currentProcessRect = QRect();
 }
 
 void KisFilterManager::cancel()
@@ -352,6 +367,7 @@ void KisFilterManager::cancel()
 
     d->currentStrokeId.clear();
     d->currentlyAppliedConfiguration.clear();
+    d->currentProcessRect = QRect();
 }
 
 bool KisFilterManager::isStrokeRunning() const

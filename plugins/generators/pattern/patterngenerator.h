@@ -35,11 +35,11 @@ public:
     ~KritaPatternGenerator() override;
 };
 
-class KoPatternGenerator : public KisGenerator
+class PatternGenerator : public KisGenerator
 {
 public:
 
-    KoPatternGenerator();
+    PatternGenerator();
 
     using KisGenerator::generate;
 

@@ -1,3 +1,7 @@
+/*
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
 #ifndef TESTKOCOLORSPACEABSTRACT_H
 #define TESTKOCOLORSPACEABSTRACT_H
 

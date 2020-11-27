@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+#
+#  SPDX-License-Identifier: GPL-3.0-or-later
+#
 
 set -x
 set -e
@@ -38,4 +41,4 @@ ret=$?
 if [ $ret -eq 0 ]; then
   mv $APPIMAGE_PATH.zsync.new Krita-${CHANNEL}-x86_64.appimage.zsync
 fi
- 
+

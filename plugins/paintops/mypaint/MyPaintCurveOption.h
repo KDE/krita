@@ -1,3 +1,10 @@
+/*
+ *  Copyright (C) 2008 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (C) 2011 Silvio Heinrich <plassy@web.de>
+ *
+ *  SPDX-License-Identifier: LGPL-2.0-or-later
+ */
+
 #ifndef KIS_MYPAINT_CURVE_OPTION_H
 #define KIS_MYPAINT_CURVE_OPTION_H
 
@@ -13,7 +20,7 @@
 #include "MyPaintBrushOption.h"
 #include "libmypaint/mypaint-brush.h"
 
-class PAINTOP_EXPORT KisMyPaintCurveOption: public KisCurveOption
+class KisMyPaintCurveOption: public KisCurveOption
 {
     Q_OBJECT
 public:
@@ -26,22 +33,21 @@ public:
 
     virtual ~KisMyPaintCurveOption();
 
-    void writeOptionSetting(KisPropertiesConfigurationSP setting) const;
-    void readOptionSetting(KisPropertiesConfigurationSP setting);
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const override;
+    void readOptionSetting(KisPropertiesConfigurationSP setting) override;
     void lodLimitations(KisPaintopLodLimitations *l) const override;
 
     MyPaintBrushSetting currentSetting();
     QList<MyPaintBrushInput> inputList();
 
-    QList<KoID> sensorsIds();
-    DynamicSensorType id2Type(const KoID &id);
-    KisDynamicSensorSP id2Sensor(const KoID& id, const QString &parentOptionName);
-    QList<DynamicSensorType> sensorsTypes();
-    KisDynamicSensorSP type2Sensor(DynamicSensorType sensorType, const QString &parentOptionName);
+    QList<KoID> sensorsIds() override;
+    DynamicSensorType id2Type(const KoID &id) override;
+    KisDynamicSensorSP id2Sensor(const KoID &id, const QString &parentOptionName) override;
+    QList<DynamicSensorType> sensorsTypes() override;
+    KisDynamicSensorSP type2Sensor(DynamicSensorType sensorType, const QString &parentOptionName) override;
 
 protected:
-
-    void readNamedOptionSetting(const QString& prefix, const KisPropertiesConfigurationSP setting);   
+    void readNamedOptionSetting(const QString &prefix, const KisPropertiesConfigurationSP setting) override;
 
 private:
     bool firstRead = true;

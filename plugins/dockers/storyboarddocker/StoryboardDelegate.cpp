@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2020 Saurabh Kumar <saurabhk660@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "StoryboardDelegate.h"
@@ -78,82 +66,87 @@ void StoryboardDelegate::paint(QPainter *p, const QStyleOptionViewItem &option, 
 
             switch (childNum)
             {
-                case StoryboardItem::FrameNumber:
-                {
-                    if (m_view->thumbnailIsVisible()) {
-                        QRect frameNumRect = option.rect;
-                        frameNumRect.setHeight(m_view->fontMetrics().height()+3);
-                        frameNumRect.setWidth(3 * m_view->fontMetrics().horizontalAdvance("0")+2);
-                        frameNumRect.moveBottom(option.rect.top()-1);
-                        p->setPen(QPen(option.palette.dark(), 2));
-                        p->drawRect(frameNumRect);
-                        p->setPen(QPen(option.palette.text(), 1));
-                        p->drawText(frameNumRect, Qt::AlignHCenter | Qt::AlignVCenter, data);
-
-                        if (!m_imageSize.isEmpty()) {
-                            float scale = qMin(option.rect.height() / (float)m_imageSize.height(), (float)option.rect.width() / m_imageSize.width());
-                            QRect thumbnailRect = option.rect;
-                            thumbnailRect.setSize(m_imageSize * scale);
-                            thumbnailRect.moveCenter(option.rect.center());
-
-                            QPixmap  thumbnailPixmap= index.data(Qt::UserRole).value<QPixmap>();
-                            p->drawPixmap(thumbnailRect, thumbnailPixmap);
-                        }
-                        p->setPen(QPen(option.palette.dark(), 2));
-                        p->drawRect(option.rect);
-
-                        QRect buttonsRect = option.rect;
-                        buttonsRect.setTop(option.rect.bottom() - 22);
-
-                        buttonsRect.setWidth(22);
-                        buttonsRect.moveBottomLeft(option.rect.bottomLeft());
-                        QIcon addIcon = KisIconUtils::loadIcon("list-add");
-                        p->fillRect(buttonsRect, option.palette.window());
-                        addIcon.paint(p, buttonsRect);
-
-                        buttonsRect.moveBottomRight(option.rect.bottomRight());
-                        QIcon deleteIcon = KisIconUtils::loadIcon("trash-empty");
-                        p->fillRect(buttonsRect, option.palette.window());
-                        deleteIcon.paint(p, buttonsRect);
-                    }
-                    else {
-                        QRect frameNumRect = option.rect;
-                        p->setPen(QPen(option.palette.dark(), 2));
-                        p->drawRect(frameNumRect);
-                        p->setPen(QPen(option.palette.text(), 1));
-                        p->drawText(frameNumRect, Qt::AlignHCenter | Qt::AlignVCenter, data);
-                    }
-                    break;
-                }
-                case StoryboardItem::ItemName:
-                {
-                    QRect itemNameRect = option.rect;
-                    itemNameRect.setLeft(option.rect.left() + 5);
+            case StoryboardItem::FrameNumber:
+            {
+                if (m_view->thumbnailIsVisible()) {
+                    QRect frameNumRect = option.rect;
+                    frameNumRect.setHeight(m_view->fontMetrics().height()+3);
+#if QT_VERSION >= QT_VERSION_CHECK(5,11,0)
+                    frameNumRect.setWidth(3 * m_view->fontMetrics().horizontalAdvance("0") + 2);
+#else
+                    frameNumRect.setWidth(3 * m_view->fontMetrics().width() + 2);
+                    int numericFontWidth = p.fontMetrics().width("0");
+#endif
+                    frameNumRect.moveBottom(option.rect.top()-1);
+                    p->setPen(QPen(option.palette.dark(), 2));
+                    p->drawRect(frameNumRect);
                     p->setPen(QPen(option.palette.text(), 1));
-                    p->drawText(itemNameRect, Qt::AlignLeft | Qt::AlignVCenter, data);
+                    p->drawText(frameNumRect, Qt::AlignHCenter | Qt::AlignVCenter, data);
+
+                    if (!m_imageSize.isEmpty()) {
+                        float scale = qMin(option.rect.height() / (float)m_imageSize.height(), (float)option.rect.width() / m_imageSize.width());
+                        QRect thumbnailRect = option.rect;
+                        thumbnailRect.setSize(m_imageSize * scale);
+                        thumbnailRect.moveCenter(option.rect.center());
+
+                        QPixmap  thumbnailPixmap= index.data(Qt::UserRole).value<QPixmap>();
+                        p->drawPixmap(thumbnailRect, thumbnailPixmap);
+                    }
                     p->setPen(QPen(option.palette.dark(), 2));
                     p->drawRect(option.rect);
-                    break;
+
+                    QRect buttonsRect = option.rect;
+                    buttonsRect.setTop(option.rect.bottom() - 22);
+
+                    buttonsRect.setWidth(22);
+                    buttonsRect.moveBottomLeft(option.rect.bottomLeft());
+                    QIcon addIcon = KisIconUtils::loadIcon("list-add");
+                    p->fillRect(buttonsRect, option.palette.window());
+                    addIcon.paint(p, buttonsRect);
+
+                    buttonsRect.moveBottomRight(option.rect.bottomRight());
+                    QIcon deleteIcon = KisIconUtils::loadIcon("trash-empty");
+                    p->fillRect(buttonsRect, option.palette.window());
+                    deleteIcon.paint(p, buttonsRect);
                 }
-                case StoryboardItem::DurationSecond:
-                {
-                    drawSpinBox(p, option, data, i18nc("suffix in spin box in storyboard that means 'seconds'", "s"));
-                    break;
+                else {
+                    QRect frameNumRect = option.rect;
+                    p->setPen(QPen(option.palette.dark(), 2));
+                    p->drawRect(frameNumRect);
+                    p->setPen(QPen(option.palette.text(), 1));
+                    p->drawText(frameNumRect, Qt::AlignHCenter | Qt::AlignVCenter, data);
                 }
-                case StoryboardItem::DurationFrame:
-                {
-                    drawSpinBox(p, option, data, i18nc("suffix in spin box in storyboard that means 'frames'", "f"));
-                    break;
+                break;
+            }
+            case StoryboardItem::ItemName:
+            {
+                QRect itemNameRect = option.rect;
+                itemNameRect.setLeft(option.rect.left() + 5);
+                p->setPen(QPen(option.palette.text(), 1));
+                p->drawText(itemNameRect, Qt::AlignLeft | Qt::AlignVCenter, data);
+                p->setPen(QPen(option.palette.dark(), 2));
+                p->drawRect(option.rect);
+                break;
+            }
+            case StoryboardItem::DurationSecond:
+            {
+                drawSpinBox(p, option, data, i18nc("suffix in spin box in storyboard that means 'seconds'", "s"));
+                break;
+            }
+            case StoryboardItem::DurationFrame:
+            {
+                drawSpinBox(p, option, data, i18nc("suffix in spin box in storyboard that means 'frames'", "f"));
+                break;
+            }
+            default:
+            {
+                const StoryboardModel* model = dynamic_cast<const StoryboardModel*>(index.model());
+                if (m_view->commentIsVisible() && model->getComment(index.row() - 4).visibility) {
+                    p->setPen(QPen(option.palette.dark(), 2));
+                    drawComment(p, option, index);
                 }
-                default:
-                {
-                    const StoryboardModel* model = dynamic_cast<const StoryboardModel*>(index.model());
-                    if (m_view->commentIsVisible() && model->getComment(index.row() - 4).visibility) {
-                        p->setPen(QPen(option.palette.dark(), 2));
-                        drawComment(p, option, index);
-                    }
-                    break;
-                }
+                break;
+            }
             }
         }
     }
@@ -172,7 +165,7 @@ void StoryboardDelegate::drawSpinBox(QPainter *p, const QStyleOptionViewItem &op
     style->drawComplexControl(QStyle::CC_SpinBox, &spinBoxOption, p, option.widget);
 
     QRect rect = style->subControlRect(QStyle::CC_SpinBox, &spinBoxOption,
-                    QStyle::QStyle::SC_SpinBoxEditField);
+                                       QStyle::QStyle::SC_SpinBoxEditField);
     rect.moveTopLeft(option.rect.topLeft());
     p->setPen(QPen(option.palette.text(), 1));
     p->drawText(rect, Qt::AlignLeft | Qt::AlignVCenter, data + suffix);
@@ -247,7 +240,7 @@ QStyleOptionSlider StoryboardDelegate::drawComment(QPainter *p, const QStyleOpti
 }
 
 QSize StoryboardDelegate::sizeHint(const QStyleOptionViewItem &option,
-                                const QModelIndex &index) const
+                                   const QModelIndex &index) const
 {
     if (!index.parent().isValid()) {
         if (m_view->itemOrientation() == Qt::Vertical) {
@@ -281,8 +274,8 @@ QSize StoryboardDelegate::sizeHint(const QStyleOptionViewItem &option,
 }
 
 QWidget *StoryboardDelegate::createEditor(QWidget *parent,
-    const QStyleOptionViewItem &option ,
-    const QModelIndex &index) const
+                                          const QStyleOptionViewItem &option ,
+                                          const QModelIndex &index) const
 {
     Q_UNUSED(option);
     //only create editor for children
@@ -290,32 +283,32 @@ QWidget *StoryboardDelegate::createEditor(QWidget *parent,
         int row = index.row();
         switch (row)
         {
-            case StoryboardItem::FrameNumber:
+        case StoryboardItem::FrameNumber:
             return nullptr;
-            case StoryboardItem::ItemName:
-            {
-                QLineEdit *editor = new QLineEdit(parent);
-                return editor;
-            }
-            case StoryboardItem::DurationSecond:
-            {
-                QSpinBox *spinbox = new QSpinBox(parent);
-                spinbox->setRange(0, 999);
-                spinbox->setSuffix(i18nc("suffix in spin box in storyboard that means 'seconds'", "s"));
-                return spinbox;
-            }
-            case StoryboardItem::DurationFrame:
-            {
-                QSpinBox *spinbox = new QSpinBox(parent);
-                spinbox->setRange(0, 99);
-                spinbox->setSuffix(i18nc("suffix in spin box in storyboard that means 'frames'", "f"));
-                return spinbox;
-            }
-            default:              //for comments
-            {
-                QTextEdit *editor = new QTextEdit(parent);
-                return editor;
-            }
+        case StoryboardItem::ItemName:
+        {
+            QLineEdit *editor = new QLineEdit(parent);
+            return editor;
+        }
+        case StoryboardItem::DurationSecond:
+        {
+            QSpinBox *spinbox = new QSpinBox(parent);
+            spinbox->setRange(0, 999);
+            spinbox->setSuffix(i18nc("suffix in spin box in storyboard that means 'seconds'", "s"));
+            return spinbox;
+        }
+        case StoryboardItem::DurationFrame:
+        {
+            QSpinBox *spinbox = new QSpinBox(parent);
+            spinbox->setRange(0, 99);
+            spinbox->setSuffix(i18nc("suffix in spin box in storyboard that means 'frames'", "f"));
+            return spinbox;
+        }
+        default:              //for comments
+        {
+            QTextEdit *editor = new QTextEdit(parent);
+            return editor;
+        }
         }
     }
     return nullptr;
@@ -324,7 +317,7 @@ QWidget *StoryboardDelegate::createEditor(QWidget *parent,
 bool StoryboardDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index)
 {
     if ((event->type() == QEvent::MouseButtonPress || event->type() == QEvent::MouseButtonDblClick)
-        && (index.flags() & Qt::ItemIsEnabled))
+            && (index.flags() & Qt::ItemIsEnabled))
     {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
         const bool leftButton = mouseEvent->buttons() & Qt::LeftButton;
@@ -340,12 +333,12 @@ bool StoryboardDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, c
             StoryboardModel* sbModel = dynamic_cast<StoryboardModel*>(model);
             if (leftButton && upButtonClicked) {
                 sbModel->setData(index, index.data().toInt() + 1);
-//                return sbModel->insertHoldFramesAfter(index.data().toInt() + 1, index.data().toInt(), index);
+                //                return sbModel->insertHoldFramesAfter(index.data().toInt() + 1, index.data().toInt(), index);
                 return true;
             }
             else if (leftButton && downButtonClicked) {
                 sbModel->setData(index, index.data().toInt() - 1);
-//                return sbModel->insertHoldFramesAfter(std::max(-1, index.data().toInt() - 1), index.data().toInt(), index);
+                //                return sbModel->insertHoldFramesAfter(std::max(-1, index.data().toInt() - 1), index.data().toInt(), index);
                 return true;
             }
         }
@@ -425,82 +418,82 @@ bool StoryboardDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, c
 
 //set the existing data in the editor
 void StoryboardDelegate::setEditorData(QWidget *editor,
-                                    const QModelIndex &index) const
+                                       const QModelIndex &index) const
 {
     QVariant value = index.data();
     if (index.parent().isValid()) {
         int row = index.row();
         switch (row)
         {
-            case StoryboardItem::FrameNumber:             //frame thumbnail is uneditable
-                return;
-            case StoryboardItem::ItemName:
-            {
-                QLineEdit *lineEdit = static_cast<QLineEdit*>(editor);
-                lineEdit->setText(value.toString());
-                return;
-            }
-            case StoryboardItem::DurationSecond:
-            case StoryboardItem::DurationFrame:
-            {
-                QSpinBox *spinbox = static_cast<QSpinBox*>(editor);
-                spinbox->setValue(value.toInt());
-                return;
-            }
-            default:             // for comments
-            {
-                QTextEdit *textEdit = static_cast<QTextEdit*>(editor);
-                textEdit->setText(value.toString());
-                textEdit->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
-                textEdit->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-                textEdit->verticalScrollBar()->setProperty("index", index);
-                connect(textEdit->verticalScrollBar(), SIGNAL(sliderMoved(int)), this, SLOT(slotCommentScrolledTo(int)));
-                return;
-            }
+        case StoryboardItem::FrameNumber:             //frame thumbnail is uneditable
+            return;
+        case StoryboardItem::ItemName:
+        {
+            QLineEdit *lineEdit = static_cast<QLineEdit*>(editor);
+            lineEdit->setText(value.toString());
+            return;
+        }
+        case StoryboardItem::DurationSecond:
+        case StoryboardItem::DurationFrame:
+        {
+            QSpinBox *spinbox = static_cast<QSpinBox*>(editor);
+            spinbox->setValue(value.toInt());
+            return;
+        }
+        default:             // for comments
+        {
+            QTextEdit *textEdit = static_cast<QTextEdit*>(editor);
+            textEdit->setText(value.toString());
+            textEdit->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
+            textEdit->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+            textEdit->verticalScrollBar()->setProperty("index", index);
+            connect(textEdit->verticalScrollBar(), SIGNAL(sliderMoved(int)), this, SLOT(slotCommentScrolledTo(int)));
+            return;
+        }
         }
     }
 }
 
 void StoryboardDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
-                                   const QModelIndex &index) const
+                                      const QModelIndex &index) const
 {
     QVariant value = index.data();
     if (index.parent().isValid()) {
         int row = index.row();
         switch (row)
         {
-            case StoryboardItem::FrameNumber:             //frame thumbnail is uneditable
-                return;
-            case StoryboardItem::ItemName:
-            {
-                QLineEdit *lineEdit = static_cast<QLineEdit*>(editor);
-                QString value = lineEdit->text();
-                model->setData(index, value, Qt::EditRole);
-                return;
-            }
-            case StoryboardItem::DurationSecond:
-            case StoryboardItem::DurationFrame:
-            {
-                QSpinBox *spinbox = static_cast<QSpinBox*>(editor);
-                int value = spinbox->value();
+        case StoryboardItem::FrameNumber:             //frame thumbnail is uneditable
+            return;
+        case StoryboardItem::ItemName:
+        {
+            QLineEdit *lineEdit = static_cast<QLineEdit*>(editor);
+            QString value = lineEdit->text();
+            model->setData(index, value, Qt::EditRole);
+            return;
+        }
+        case StoryboardItem::DurationSecond:
+        case StoryboardItem::DurationFrame:
+        {
+            QSpinBox *spinbox = static_cast<QSpinBox*>(editor);
+            int value = spinbox->value();
 
-                StoryboardModel* sbModel = dynamic_cast<StoryboardModel*>(model);
-                sbModel->setData(index, value);
-                return;
-            }
-            default:             // for comments
-            {
-                QTextEdit *textEdit = static_cast<QTextEdit*>(editor);
-                QString value = textEdit->toPlainText();
-                model->setData(index, value, Qt::EditRole);
-                return;
-            }
+            StoryboardModel* sbModel = dynamic_cast<StoryboardModel*>(model);
+            sbModel->setData(index, value);
+            return;
+        }
+        default:             // for comments
+        {
+            QTextEdit *textEdit = static_cast<QTextEdit*>(editor);
+            QString value = textEdit->toPlainText();
+            model->setData(index, value, Qt::EditRole);
+            return;
+        }
         }
     }
 }
 
 void StoryboardDelegate::updateEditorGeometry(QWidget *editor,
-    const QStyleOptionViewItem &option, const QModelIndex &index) const
+                                              const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     if (index.row() < StoryboardItem::Comments) {
         editor->setGeometry(option.rect);
@@ -523,7 +516,7 @@ QRect StoryboardDelegate::spinBoxUpButton(const QStyleOptionViewItem &option)
     QStyleOptionSpinBox spinOption;
     spinOption.rect = option.rect;
     QRect rect = style->subControlRect(QStyle::CC_SpinBox, &spinOption,
-                    QStyle::QStyle::SC_SpinBoxUp);
+                                       QStyle::QStyle::SC_SpinBoxUp);
     rect.moveTopRight(option.rect.topRight());
     return rect;
 }
@@ -534,7 +527,7 @@ QRect StoryboardDelegate::spinBoxDownButton(const QStyleOptionViewItem &option)
     QStyleOptionSpinBox spinOption;
     spinOption.rect = option.rect;
     QRect rect = style->subControlRect(QStyle::CC_SpinBox, &spinOption,
-                    QStyle::QStyle::SC_SpinBoxDown);
+                                       QStyle::QStyle::SC_SpinBoxDown);
     rect.moveBottomRight(option.rect.bottomRight());
     return rect;
 }
@@ -545,7 +538,7 @@ QRect StoryboardDelegate::spinBoxEditField(const QStyleOptionViewItem &option)
     QStyleOptionSpinBox spinOption;
     spinOption.rect = option.rect;
     QRect rect = style->subControlRect(QStyle::CC_SpinBox, &spinOption,
-                    QStyle::QStyle::SC_SpinBoxEditField);
+                                       QStyle::QStyle::SC_SpinBoxEditField);
     rect.moveTopLeft(option.rect.topLeft());
     return rect;
 }
@@ -561,7 +554,7 @@ QRect StoryboardDelegate::scrollBar(const QStyleOptionViewItem &option, QStyleOp
 {
     QStyle *style = option.widget ? option.widget->style() : QApplication::style();
     QRect rect = style->subControlRect(QStyle::CC_ScrollBar, &scrollBarOption,
-                    QStyle::QStyle::SC_ScrollBarSlider);
+                                       QStyle::QStyle::SC_ScrollBarSlider);
     rect.moveTopLeft(rect.topLeft() + scrollBarOption.rect.topLeft());
     rect.moveTopLeft(rect.topLeft() + option.rect.bottomRight() - scrollBarOption.rect.bottomRight());
     return rect;
@@ -571,7 +564,7 @@ QRect StoryboardDelegate::scrollDownButton(const QStyleOptionViewItem &option, Q
 {
     QStyle *style = option.widget ? option.widget->style() : QApplication::style();
     QRect rect = style->subControlRect(QStyle::CC_ScrollBar, &scrollBarOption,
-                    QStyle::QStyle::SC_ScrollBarAddLine);
+                                       QStyle::QStyle::SC_ScrollBarAddLine);
     rect.moveTopLeft(rect.topLeft() + scrollBarOption.rect.topLeft());
     rect.moveBottomRight(option.rect.bottomRight());
     return rect;
@@ -581,7 +574,7 @@ QRect StoryboardDelegate::scrollUpButton(const QStyleOptionViewItem &option, QSt
 {
     QStyle *style = option.widget ? option.widget->style() : QApplication::style();
     QRect rect = style->subControlRect(QStyle::CC_ScrollBar, &scrollBarOption,
-                    QStyle::QStyle::SC_ScrollBarSubLine);
+                                       QStyle::QStyle::SC_ScrollBarSubLine);
     rect.moveTopLeft(rect.topLeft() + scrollBarOption.rect.topLeft());
     rect.moveTop(option.rect.bottom() - scrollBarOption.rect.height());
     rect.moveRight(option.rect.right());

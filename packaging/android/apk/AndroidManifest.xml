@@ -8,6 +8,8 @@
                   android:name="org.krita.android.MainActivity"
                   android:label="Krita"
                   android:screenOrientation="unspecified"
+                  android:resizeableActivity="true"
+                  android:theme="@style/DefaultTheme"
                   android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

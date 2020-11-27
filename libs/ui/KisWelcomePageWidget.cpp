@@ -1,20 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2018 Scott Petrovic <scottpetrovic@gmail.com>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #include "KisWelcomePageWidget.h"
@@ -35,6 +22,7 @@
 
 #include <QListWidget>
 #include <QListWidgetItem>
+#include <QMenu>
 
 #include "kis_icon_utils.h"
 #include "krita_utils.h"
@@ -51,6 +39,8 @@
 #include <QCoreApplication>
 #include <kis_debug.h>
 #include <QDir>
+
+#include <array>
 
 #include "config-updaters.h"
 
@@ -121,17 +111,32 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
     bnVersionUpdate->setVisible(false);
     bnErrorDetails->setVisible(false);
 
-    connect(chkShowNews, SIGNAL(toggled(bool)), newsWidget, SLOT(toggleNews(bool)));
+    QMenu *newsOptionsMenu = new QMenu(this);
+    newsOptionsMenu->setToolTipsVisible(true);
+    QAction *showNewsAction = newsOptionsMenu->addAction(i18n("Check for updates"));
+    showNewsAction->setToolTip(i18n("Show news about Krita: this needs internet to retrieve information from the krita.org website"));
+    showNewsAction->setCheckable(true);
+
+    newsOptionsMenu->addSection(i18n("Language"));
+    QAction *newsInfoAction = newsOptionsMenu->addAction(i18n("English news are always up to date."));
+    newsInfoAction->setEnabled(false);
+
+    setupNewsLangSelection(newsOptionsMenu);
+    btnNewsOptions->setMenu(newsOptionsMenu);
+
+    connect(showNewsAction, SIGNAL(toggled(bool)), newsWidget, SLOT(setVisible(bool)));
+    connect(showNewsAction, SIGNAL(toggled(bool)), labelNoFeed, SLOT(setHidden(bool)));
+    connect(showNewsAction, SIGNAL(toggled(bool)), newsWidget, SLOT(toggleNews(bool)));
 
 #ifdef ENABLE_UPDATERS
-    connect(chkShowNews, SIGNAL(toggled(bool)), this, SLOT(slotToggleUpdateChecks(bool)));
+    connect(showNewsAction, SIGNAL(toggled(bool)), this, SLOT(slotToggleUpdateChecks(bool)));
 #endif
 
 #ifdef Q_OS_ANDROID
     // enabling this widgets crashes the app, so it is better for it to be hidden for now
     newsWidget->hide();
     helpTitleLabel_2->hide();
-    chkShowNews->hide();
+    btnNewsOptions->hide();
 
     donationLink = new QPushButton(dropFrameBorder);
     donationLink->setFlat(true);
@@ -215,7 +220,7 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
 #endif // ifndef Q_OS_ANDROID
 #endif // ENABLE_UPDATERS
 
-    chkShowNews->setChecked(m_checkUpdates);
+    showNewsAction->setChecked(m_checkUpdates);
     newsWidget->setVisible(m_checkUpdates);
 
     setAcceptDrops(true);
@@ -287,7 +292,6 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
     recentDocumentsLabel->setStyleSheet(blendedStyle);
     helpTitleLabel->setStyleSheet(blendedStyle);
     newsTitleLabel->setStyleSheet(blendedStyle);
-    chkShowNews->setStyleSheet(blendedStyle);
     newFileLinkShortcut->setStyleSheet(blendedStyle);
     openFileShortcut->setStyleSheet(blendedStyle);
     clearRecentFilesLink->setStyleSheet(blendedStyle);
@@ -316,6 +320,8 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
     newFileLink->setIconSize(QSize(30, 30));
     openFileLink->setIcon(KisIconUtils::loadIcon("document-open"));
     newFileLink->setIcon(KisIconUtils::loadIcon("document-new"));
+
+    btnNewsOptions->setIcon(KisIconUtils::loadIcon("configure"));
 
     supportKritaIcon->setIcon(KisIconUtils::loadIcon(QStringLiteral("support-krita")));
     const QIcon &linkIcon = KisIconUtils::loadIcon(QStringLiteral("bookmarks"));
@@ -502,6 +508,113 @@ bool KisWelcomePageWidget::eventFilter(QObject *watched, QEvent *event)
     return QWidget::eventFilter(watched, event);
 }
 
+namespace {
+
+QString mapKi18nLangToNewsLang(const QString &ki18nLang) {
+    if (ki18nLang == "ja") {
+        return QString("jp");
+    }
+    if (ki18nLang == "zh_CN") {
+        return QString("zh");
+    }
+    if (ki18nLang == "zh_TW") {
+        return QString("zh-tw");
+    }
+    if (ki18nLang == "zh_HK") {
+        return QString("zh-hk");
+    }
+    if (ki18nLang == "en" || ki18nLang == "en_US" || ki18nLang == "en_GB") {
+        return QString("en");
+    }
+    return QString();
+};
+
+QString getAutoNewsLang()
+{
+    // Get current UI languages:
+    const QStringList uiLangs = KLocalizedString::languages();
+
+    QString autoNewsLang;
+    // Iterate UI languages including fallback languages.
+    Q_FOREACH(const auto &uiLang, uiLangs) {
+        autoNewsLang = mapKi18nLangToNewsLang(uiLang);
+        if (autoNewsLang.size() <= 0) {
+            break;
+        }
+    }
+    if (autoNewsLang.size() == 0) {
+        // If nothing else, use English.
+        autoNewsLang = QString("en");
+    }
+    return autoNewsLang;
+}
+
+} /* namespace */
+
+void KisWelcomePageWidget::setupNewsLangSelection(QMenu *newsOptionsMenu)
+{
+    // Hard-coded news language data:
+    // These are languages in which the news items should be regularly
+    // translated into as of 2020-11-07.
+    // The language display names should not be translated. This reflects
+    // the language selection box on the Krita website.
+    struct Lang {
+        const QString siteCode;
+        const QString name;
+    };
+    static const std::array<Lang, 5> newsLangs = {{
+        {QString("en"), QStringLiteral("English")},
+        {QString("jp"), QStringLiteral("日本語")},
+        {QString("zh"), QStringLiteral("中文 (简体)")},
+        {QString("zh-tw"), QStringLiteral("中文 (台灣正體)")},
+        {QString("zh-hk"), QStringLiteral("香港廣東話")},
+    }};
+
+    static const QString newsLangConfigName = QStringLiteral("FetchNewsLanguages");
+
+    QSharedPointer<QSet<QString>> enabledNewsLangs = QSharedPointer<QSet<QString>>::create();
+    {
+        // Initialize with the config.
+        KisConfig cfg(true);
+        *enabledNewsLangs = cfg.readList<QString>(newsLangConfigName).toSet();
+    }
+
+    // If no languages are selected in the config, use the automatic selection.
+    if (enabledNewsLangs->isEmpty()) {
+        enabledNewsLangs->insert(QString(getAutoNewsLang()));
+    }
+
+    for (const auto &lang : newsLangs) {
+        QAction *langItem = newsOptionsMenu->addAction(lang.name);
+        langItem->setCheckable(true);
+        // We can copy `code` into the lambda because its backing string is a
+        // static string literal.
+        const QString code = lang.siteCode;
+        connect(langItem, &QAction::toggled, [=](bool checked) {
+            newsWidget->toggleNewsLanguage(code, checked);
+        });
+
+        // Set the initial checked state.
+        if (enabledNewsLangs->contains(code)) {
+            langItem->setChecked(true);
+        }
+
+        // Connect this lambda after setting the initial checked state because
+        // we don't want to overwrite the config when doing the initial setup.
+        connect(langItem, &QAction::toggled, [=](bool checked) {
+            KisConfig cfg(false);
+            // It is safe to modify `enabledNewsLangs` here, because the slots
+            // are called synchronously on the UI thread so there is no need
+            // for explicit synchronization.
+            if (checked) {
+                enabledNewsLangs->insert(QString(code));
+            } else {
+                enabledNewsLangs->remove(QString(code));
+            }
+            cfg.writeList(newsLangConfigName, enabledNewsLangs->toList());
+        });
+    }
+}
 
 void KisWelcomePageWidget::showDevVersionHighlight()
 {

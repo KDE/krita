@@ -1,4 +1,7 @@
 #!/bin/bash
+#
+#  SPDX-License-Identifier: GPL-3.0-or-later
+#
 
 # exit when any command fails
 set -e

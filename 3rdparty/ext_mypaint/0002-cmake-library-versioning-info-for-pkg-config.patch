@@ -1,0 +1,66 @@
+From 39d42d865210cf1c61804a6494e933c3792570a0 Mon Sep 17 00:00:00 2001
+From: "L. E. Segovia" <amy@amyspark.me>
+Date: Tue, 17 Nov 2020 22:04:57 +0000
+Subject: [PATCH 2/3] cmake: library versioning info for pkg-config
+
+---
+ CMakeLists.txt   | 14 +++++++++++++-
+ libmypaint.pc.in | 16 ++++++++--------
+ 2 files changed, 21 insertions(+), 9 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index e6b00cc..afba70b 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,6 +1,9 @@
+ cmake_minimum_required(VERSION 3.0.0 FATAL_ERROR)
+ 
+-set (project libmypaint)
++project(libmypaint
++    VERSION "1.6.1"
++    HOMEPAGE_URL "https://github.com/mypaint/libmypaint"
++)
+ 
+ LIST (APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}")
+ 
+@@ -62,3 +65,12 @@ target_link_libraries(mypaint ${JSONC_LIBRARIES})
+ set_property(TARGET mypaint PROPERTY C_STANDARD 11)
+ install(TARGETS mypaint RUNTIME DESTINATION bin LIBRARY DESTINATION lib ARCHIVE DESTINATION lib) 
+ install(FILES ${mypaint_HEADERS} DESTINATION include)
++
++if(JsonC_FOUND)
++    set(PKG_CONFIG_REQUIRES "json-c")
++else()
++    set(PKG_CONFIG_REQUIRES "")
++endif()
++configure_file("libmypaint.pc.in" "libmypaint.pc" @ONLY)
++install(FILES "${CMAKE_CURRENT_BINARY_DIR}/libmypaint.pc"
++    DESTINATION lib/pkgconfig)
+diff --git a/libmypaint.pc.in b/libmypaint.pc.in
+index cdd8a24..bd3367d 100644
+--- a/libmypaint.pc.in
++++ b/libmypaint.pc.in
+@@ -1,12 +1,12 @@
+-prefix=@prefix@
+-exec_prefix=@exec_prefix@
+-libdir=@libdir@
+-includedir=@includedir@
++prefix=@CMAKE_INSTALL_PREFIX@
++exec_prefix=${prefix}
++libdir=${prefix}/@CMAKE_INSTALL_LIBDIR@
++includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@
+ 
+-Name: @PACKAGE_NAME@
+-Description: MyPaint's brushstroke rendering library (@LIBMYPAINT_VERSION_FULL@)
+-URL: @PACKAGE_URL@
+-Version: @LIBMYPAINT_VERSION@
++Name: @PROJECT_NAME@
++Description: MyPaint's brushstroke rendering library (@libmypaint_VERSION@)
++URL: @libmypaint_HOMEPAGE_URL@
++Version: @libmypaint_VERSION@
+ Requires: @PKG_CONFIG_REQUIRES@
+ Cflags: -I${includedir}/libmypaint
+ Libs: -L${libdir} -lmypaint @OPENMP_CFLAGS@
+-- 
+2.29.2.windows.1
+

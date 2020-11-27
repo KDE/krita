@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgColorSpaceSelectorAdvanced</class>
  <widget class="QWidget" name="WdgColorSpaceSelectorAdvanced">
   <property name="geometry">
@@ -20,7 +24,7 @@
    <property name="leftMargin">
     <number>0</number>
    </property>
-   <item row="0" column="0">
+   <item column="0" row="0">
     <widget class="QGroupBox" name="groupBox">
      <property name="maximumSize">
       <size>
@@ -34,28 +38,28 @@
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
        <layout class="QFormLayout" name="formLayout_2">
-        <item row="1" column="0">
+        <item column="0" row="1">
          <widget class="QLabel" name="label_2">
           <property name="text">
            <string>Depth</string>
           </property>
          </widget>
         </item>
-        <item row="0" column="0">
+        <item column="0" row="0">
          <widget class="QLabel" name="label">
           <property name="text">
            <string>Model</string>
           </property>
          </widget>
         </item>
-        <item row="2" column="0">
+        <item column="0" row="2">
          <widget class="QLabel" name="label_3">
           <property name="text">
            <string>Profile</string>
           </property>
          </widget>
         </item>
-        <item row="1" column="1">
+        <item column="1" row="1">
          <widget class="KisCmbIDList" name="cmbColorDepth">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -65,7 +69,7 @@
           </property>
          </widget>
         </item>
-        <item row="0" column="1">
+        <item column="1" row="0">
          <widget class="KisCmbIDList" name="cmbColorModels">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -110,7 +114,7 @@
      </layout>
     </widget>
    </item>
-   <item row="1" column="0" rowspan="2" colspan="2">
+   <item colspan="2" column="0" row="1" rowspan="2">
     <spacer name="horizontalSpacer">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -123,16 +127,16 @@
      </property>
     </spacer>
    </item>
-   <item row="2" column="2">
+   <item column="2" row="2">
     <widget class="QDialogButtonBox" name="bnOK">
      <property name="standardButtons">
       <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
      </property>
     </widget>
    </item>
-   <item row="0" column="1" colspan="2">
+   <item colspan="2" column="1" row="0">
     <layout class="QGridLayout" name="gridLayout">
-     <item row="0" column="0" colspan="2">
+     <item colspan="2" column="0" row="0">
       <widget class="QLabel" name="lbl_descriptionwidget">
        <property name="minimumSize">
         <size>
@@ -160,7 +164,7 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="0" colspan="2">
+     <item colspan="2" column="0" row="3">
       <widget class="QTextBrowser" name="textProfileDescription">
        <property name="minimumSize">
         <size>
@@ -179,7 +183,7 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="1">
+     <item column="1" row="2">
       <widget class="QGroupBox" name="groupBox_2">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -200,7 +204,7 @@
         <property name="fieldGrowthPolicy">
          <enum>QFormLayout::ExpandingFieldsGrow</enum>
         </property>
-        <item row="0" column="0" colspan="2">
+        <item colspan="2" column="0" row="0">
          <widget class="KisToneCurveWidget" name="TRCwidget" native="true">
           <property name="minimumSize">
            <size>
@@ -210,14 +214,14 @@
           </property>
          </widget>
         </item>
-        <item row="1" column="0">
+        <item column="0" row="1">
          <widget class="QLabel" name="lblWhitepoint">
           <property name="text">
            <string>White Point:</string>
           </property>
          </widget>
         </item>
-        <item row="1" column="1">
+        <item column="1" row="1">
          <widget class="QLabel" name="lblXYZ_W">
           <property name="text">
            <string>xyz</string>
@@ -227,7 +231,7 @@
        </layout>
       </widget>
      </item>
-     <item row="2" column="0">
+     <item column="0" row="2">
       <widget class="KisCIETongueWidget" name="TongueWidget">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">

@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgInnerGlow</class>
  <widget class="QWidget" name="WdgInnerGlow">
   <property name="geometry">
@@ -23,7 +27,7 @@
          <string>Structure</string>
         </property>
         <layout class="QFormLayout" name="formLayout">
-         <item row="0" column="0">
+         <item column="0" row="0">
           <widget class="QLabel" name="label_13">
            <property name="text">
             <string>Ble&amp;nd Mode:</string>
@@ -33,7 +37,7 @@
            </property>
           </widget>
          </item>
-         <item row="0" column="1">
+         <item column="1" row="0">
           <widget class="KisLayerStyleCompositeOpComboBox" name="cmbCompositeOp">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -46,7 +50,7 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="0">
+         <item column="0" row="1">
           <widget class="QLabel" name="label_14">
            <property name="text">
             <string>&amp;Opacity:</string>
@@ -56,7 +60,7 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="1">
+         <item column="1" row="1">
           <widget class="KisSliderSpinBox" name="intOpacity" native="true">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
@@ -78,7 +82,7 @@
            </property>
           </widget>
          </item>
-         <item row="2" column="0">
+         <item column="0" row="2">
           <widget class="QLabel" name="label">
            <property name="text">
             <string>&amp;Noise:</string>
@@ -88,7 +92,7 @@
            </property>
           </widget>
          </item>
-         <item row="2" column="1">
+         <item column="1" row="2">
           <widget class="KisSliderSpinBox" name="intNoise" native="true">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
@@ -110,7 +114,7 @@
            </property>
           </widget>
          </item>
-         <item row="3" column="0" colspan="2">
+         <item colspan="2" column="0" row="3">
           <layout class="QHBoxLayout" name="horizontalLayout">
            <item>
             <widget class="QRadioButton" name="radioColor">
@@ -154,7 +158,7 @@
          <string>Elements</string>
         </property>
         <layout class="QFormLayout" name="formLayout_3">
-         <item row="0" column="0">
+         <item column="0" row="0">
           <widget class="QLabel" name="label_2">
            <property name="text">
             <string>&amp;Technique:</string>
@@ -164,7 +168,7 @@
            </property>
           </widget>
          </item>
-         <item row="0" column="1">
+         <item column="1" row="0">
           <widget class="QComboBox" name="cmbTechnique">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -184,7 +188,7 @@
            </item>
           </widget>
          </item>
-         <item row="1" column="0">
+         <item column="0" row="1">
           <widget class="QLabel" name="lblSource">
            <property name="text">
             <string>&amp;Source:</string>
@@ -194,7 +198,7 @@
            </property>
           </widget>
          </item>
-         <item row="2" column="0">
+         <item column="0" row="2">
           <widget class="QLabel" name="lblChoke">
            <property name="text">
             <string>&amp;Choke:</string>
@@ -204,7 +208,7 @@
            </property>
           </widget>
          </item>
-         <item row="2" column="1">
+         <item column="1" row="2">
           <widget class="KisSliderSpinBox" name="intChoke" native="true">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
@@ -220,7 +224,7 @@
            </property>
           </widget>
          </item>
-         <item row="3" column="0">
+         <item column="0" row="3">
           <widget class="QLabel" name="label_5">
            <property name="text">
             <string>&amp;Size:</string>
@@ -230,7 +234,7 @@
            </property>
           </widget>
          </item>
-         <item row="3" column="1">
+         <item column="1" row="3">
           <widget class="KisSliderSpinBox" name="intSize" native="true">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
@@ -246,7 +250,7 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="1">
+         <item column="1" row="1">
           <widget class="QComboBox" name="cmbSource">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -275,14 +279,14 @@
          <string>Quality</string>
         </property>
         <layout class="QFormLayout" name="formLayout_2">
-         <item row="0" column="0">
+         <item column="0" row="0">
           <widget class="QLabel" name="label_6">
            <property name="text">
             <string>Contour:</string>
            </property>
           </widget>
          </item>
-         <item row="0" column="1">
+         <item column="1" row="0">
           <layout class="QHBoxLayout" name="horizontalLayout_2">
            <item>
             <widget class="KisCmbContour" name="cmbContour" native="true"/>
@@ -296,7 +300,7 @@
            </item>
           </layout>
          </item>
-         <item row="1" column="0">
+         <item column="0" row="1">
           <widget class="QLabel" name="label_7">
            <property name="text">
             <string>&amp;Range:</string>
@@ -306,7 +310,7 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="1">
+         <item column="1" row="1">
           <widget class="KisSliderSpinBox" name="intRange" native="true">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
@@ -325,7 +329,7 @@
            </property>
           </widget>
          </item>
-         <item row="2" column="0">
+         <item column="0" row="2">
           <widget class="QLabel" name="label_8">
            <property name="text">
             <string>&amp;Jitter:</string>
@@ -335,7 +339,7 @@
            </property>
           </widget>
          </item>
-         <item row="2" column="1">
+         <item column="1" row="2">
           <widget class="KisSliderSpinBox" name="intJitter" native="true">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">

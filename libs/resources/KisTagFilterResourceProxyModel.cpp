@@ -1,20 +1,7 @@
 /*
  * Copyright (C) 2018 Boudewijn Rempt <boud@valdyas.org>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 #include "KisTagFilterResourceProxyModel.h"
 
@@ -42,6 +29,8 @@ struct KisTagFilterResourceProxyModel::Private
 
     QScopedPointer<KisResourceSearchBoxFilter> filter;
     bool filterInCurrentTag {false};
+
+    QMap<QString, QVariant> metaDataMapFilter;
 
 };
 
@@ -140,6 +129,12 @@ bool KisTagFilterResourceProxyModel::setResourceMetaData(KoResourceSP resource, 
     return false;
 }
 
+void KisTagFilterResourceProxyModel::setMetaDataFilter(QMap<QString, QVariant> metaDataMap)
+{
+    d->metaDataMapFilter = metaDataMap;
+    invalidateFilter();
+}
+
 void KisTagFilterResourceProxyModel::setTagFilter(const KisTagSP tag)
 {
     if (!tag || tag->url() == "All") {
@@ -204,7 +199,7 @@ bool KisTagFilterResourceProxyModel::filterAcceptsRow(int source_row, const QMod
 {
     // we don't need to check anything else because the user wants to search in all resources
     // but if the filter text is empty, we do need to filter by the current tag
-    if (!d->filterInCurrentTag && d->filter->isEmpty()) {
+    if (!d->filterInCurrentTag && d->filter->isEmpty() && d->metaDataMapFilter.isEmpty()) {
         return true;
     }
 
@@ -216,9 +211,19 @@ bool KisTagFilterResourceProxyModel::filterAcceptsRow(int source_row, const QMod
         return false;
     }
 
-    QString resourceName = sourceModel()->data(idx, Qt::UserRole + KisAbstractResourceModel::Name).toString();
+    bool metaDataMatches = true;
+    QMap<QString, QVariant> resourceMetaData = sourceModel()->data(idx, Qt::UserRole + KisAbstractResourceModel::MetaData).toMap();
+    Q_FOREACH(const QString &key, d->metaDataMapFilter.keys()) {
+        if (resourceMetaData.contains(key)) {
+            metaDataMatches = (resourceMetaData[key] != d->metaDataMapFilter[key]);
+        }
+    }
 
-    return d->filter->matchesResource(resourceName);
+    QString resourceName = sourceModel()->data(idx, Qt::UserRole + KisAbstractResourceModel::Name).toString();
+    bool resourceNameMatches = d->filter->matchesResource(resourceName);
+
+
+    return (resourceNameMatches && metaDataMatches);
 }
 
 bool KisTagFilterResourceProxyModel::lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const

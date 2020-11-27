@@ -6,20 +6,7 @@
    Copyright (c) 2011 José Luis Vergara <pentalis@gmail.com>
    Copyright (c) 2013 Sascha Suelzer <s.suelzer@gmail.com>
 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
-
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
-
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   SPDX-License-Identifier: LGPL-2.0-or-later
 */
 #include "KisResourceItemChooser.h"
 
@@ -73,9 +60,7 @@ public:
 
     QString resourceType;
 
-    KisResourceModel *resourceModel {0};
     KisTagFilterResourceProxyModel *tagFilterProxyModel {0};
-    KisResourceModel *extraFilterModel {0};
 
     KisResourceTaggingManager *tagManager {0};
     KisResourceItemListView *view {0};
@@ -103,22 +88,11 @@ public:
 
 };
 
-KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool usePreview, QWidget *parent, QSortFilterProxyModel *extraFilterProxy)
+KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool usePreview, QWidget *parent)
     : QWidget(parent)
     , d(new Private(resourceType))
 {
     d->splitter = new QSplitter(this);
-
-    d->resourceModel = new KisResourceModel(resourceType);
-
-    d->tagFilterProxyModel = new KisTagFilterResourceProxyModel(resourceType, this);
-
-    d->extraFilterModel = qobject_cast<KisResourceModel*>(extraFilterProxy);
-    if (d->extraFilterModel) {
-        d->extraFilterModel->setParent(this);
-        d->extraFilterModel->setSourceModel(d->resourceModel);
-        d->tagFilterProxyModel->setResourceModel(d->extraFilterModel);
-    }
 
     d->view = new KisResourceItemListView(this);
     d->view->setObjectName("ResourceItemview");
@@ -128,10 +102,12 @@ KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool
         d->view->setToolTipShouldRenderCheckers(true);
     }
 
-    d->view->setModel(d->tagFilterProxyModel);
     d->view->setItemDelegate(new KisResourceItemDelegate(this));
     d->view->setSelectionMode(QAbstractItemView::SingleSelection);
     d->view->viewport()->installEventFilter(this);
+
+    d->tagFilterProxyModel = new KisTagFilterResourceProxyModel(resourceType, this);
+    d->view->setModel(d->tagFilterProxyModel);
 
     connect(d->view, SIGNAL(currentResourceChanged(QModelIndex)), this, SLOT(activated(QModelIndex)));
     connect(d->view, SIGNAL(currentResourceClicked(QModelIndex)), this, SLOT(clicked(QModelIndex)));
@@ -219,8 +195,12 @@ KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool
 KisResourceItemChooser::~KisResourceItemChooser()
 {
     disconnect();
-    delete d->resourceModel;
     delete d;
+}
+
+KisTagFilterResourceProxyModel *KisResourceItemChooser::tagFilterModel() const
+{
+    return d->tagFilterProxyModel;
 }
 
 void KisResourceItemChooser::slotButtonClicked(int button)
@@ -309,7 +289,7 @@ void KisResourceItemChooser::setCurrentResource(KoResourceSP resource)
     if (d->updatesBlocked) {
         return;
     }
-    QModelIndex index = d->resourceModel->indexForResource(resource);
+    QModelIndex index = d->tagFilterProxyModel->indexForResource(resource);
     d->view->setCurrentIndex(index);
     updatePreview(index);
 }

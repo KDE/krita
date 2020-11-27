@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>Exif</class>
  <widget class="QWidget" name="Exif">
   <property name="geometry">
@@ -23,7 +27,7 @@
       <layout class="QHBoxLayout">
        <item>
         <layout class="QGridLayout">
-         <item row="0" column="0">
+         <item column="0" row="0">
           <widget class="QLabel" name="label">
            <property name="text">
             <string>Brightness &amp;value:</string>
@@ -36,10 +40,10 @@
            </property>
           </widget>
          </item>
-         <item row="0" column="1">
+         <item column="1" row="0">
           <widget class="QLineEdit" name="editBrightnessValue"/>
          </item>
-         <item row="1" column="0">
+         <item column="0" row="1">
           <widget class="QLabel" name="label_2">
            <property name="text">
             <string>&amp;ISO:</string>
@@ -52,7 +56,7 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="1">
+         <item column="1" row="1">
           <widget class="KisIntParseSpinBox" name="editISO">
            <property name="maximum">
             <number>3600</number>
@@ -65,7 +69,7 @@
            </property>
           </widget>
          </item>
-         <item row="2" column="0">
+         <item column="0" row="2">
           <widget class="QLabel" name="label_16">
            <property name="text">
             <string>Exposure &amp;time:</string>
@@ -78,10 +82,10 @@
            </property>
           </widget>
          </item>
-         <item row="2" column="1">
+         <item column="1" row="2">
           <widget class="QLineEdit" name="editExposureTime"/>
          </item>
-         <item row="3" column="0">
+         <item column="0" row="3">
           <widget class="QLabel" name="label_3">
            <property name="text">
             <string>E&amp;xposure mode:</string>
@@ -94,7 +98,7 @@
            </property>
           </widget>
          </item>
-         <item row="3" column="1">
+         <item column="1" row="3">
           <widget class="QComboBox" name="editExposureMode">
            <item>
             <property name="text">
@@ -113,7 +117,7 @@
            </item>
           </widget>
          </item>
-         <item row="4" column="0">
+         <item column="0" row="4">
           <widget class="QLabel" name="label_14">
            <property name="text">
             <string>Exposure pro&amp;gram:</string>
@@ -126,7 +130,7 @@
            </property>
           </widget>
          </item>
-         <item row="4" column="1">
+         <item column="1" row="4">
           <widget class="QComboBox" name="editExposureProgram">
            <item>
             <property name="text">
@@ -175,7 +179,7 @@
            </item>
           </widget>
          </item>
-         <item row="5" column="0">
+         <item column="0" row="5">
           <widget class="QLabel" name="label_7">
            <property name="text">
             <string>Exposure index:</string>
@@ -188,10 +192,10 @@
            </property>
           </widget>
          </item>
-         <item row="5" column="1">
+         <item column="1" row="5">
           <widget class="QLineEdit" name="editExposureIndex"/>
          </item>
-         <item row="6" column="0">
+         <item column="0" row="6">
           <widget class="QLabel" name="label_10">
            <property name="text">
             <string>Exposure bias:</string>
@@ -204,10 +208,10 @@
            </property>
           </widget>
          </item>
-         <item row="6" column="1">
+         <item column="1" row="6">
           <widget class="QLineEdit" name="editExposureBiasValue"/>
          </item>
-         <item row="7" column="0">
+         <item column="0" row="7">
           <widget class="QLabel" name="label_9">
            <property name="text">
             <string>Ape&amp;rture:</string>
@@ -220,10 +224,10 @@
            </property>
           </widget>
          </item>
-         <item row="7" column="1">
+         <item column="1" row="7">
           <widget class="QLineEdit" name="editApertureValue"/>
          </item>
-         <item row="8" column="0">
+         <item column="0" row="8">
           <widget class="QLabel" name="label_8">
            <property name="text">
             <string>Shutter speed:</string>
@@ -236,10 +240,10 @@
            </property>
           </widget>
          </item>
-         <item row="8" column="1">
+         <item column="1" row="8">
           <widget class="QLineEdit" name="editShutterSpeedValue"/>
          </item>
-         <item row="9" column="0">
+         <item column="0" row="9">
           <widget class="QLabel" name="label_25">
            <property name="text">
             <string>&amp;F Number:</string>
@@ -252,10 +256,10 @@
            </property>
           </widget>
          </item>
-         <item row="9" column="1">
+         <item column="1" row="9">
           <widget class="QLineEdit" name="editFNumber"/>
          </item>
-         <item row="10" column="0" colspan="2">
+         <item colspan="2" column="0" row="10">
           <spacer>
            <property name="orientation">
             <enum>Qt::Vertical</enum>
@@ -279,7 +283,7 @@
       <layout class="QHBoxLayout">
        <item>
         <layout class="QGridLayout">
-         <item row="0" column="0">
+         <item column="0" row="0">
           <widget class="QLabel" name="label_6">
            <property name="text">
             <string>&amp;Focal length:</string>
@@ -292,7 +296,7 @@
            </property>
           </widget>
          </item>
-         <item row="0" column="1">
+         <item column="1" row="0">
           <widget class="KisIntParseSpinBox" name="editFocalLength">
            <property name="maximum">
             <number>1000</number>
@@ -305,7 +309,7 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="0">
+         <item column="0" row="1">
           <widget class="QLabel" name="label_5">
            <property name="text">
             <string>Focal length (&amp;35mm equivalent):</string>
@@ -318,7 +322,7 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="1">
+         <item column="1" row="1">
           <widget class="KisIntParseSpinBox" name="editFocalLengthIn35mmFilm">
            <property name="maximum">
             <number>1000</number>
@@ -331,7 +335,7 @@
            </property>
           </widget>
          </item>
-         <item row="2" column="0">
+         <item column="0" row="2">
           <widget class="QLabel" name="label_12">
            <property name="text">
             <string>Max aperture:</string>
@@ -344,10 +348,10 @@
            </property>
           </widget>
          </item>
-         <item row="2" column="1">
+         <item column="1" row="2">
           <widget class="QLineEdit" name="editMaxApertureValue"/>
          </item>
-         <item row="3" column="0" colspan="2">
+         <item colspan="2" column="0" row="3">
           <spacer>
            <property name="orientation">
             <enum>Qt::Vertical</enum>
@@ -371,7 +375,7 @@
       <layout class="QHBoxLayout">
        <item>
         <layout class="QGridLayout">
-         <item row="0" column="0">
+         <item column="0" row="0">
           <widget class="QLabel" name="label_17">
            <property name="text">
             <string>Sub&amp;ject distance:</string>
@@ -384,10 +388,10 @@
            </property>
           </widget>
          </item>
-         <item row="0" column="1">
+         <item column="1" row="0">
           <widget class="QLineEdit" name="editSubjectDistance"/>
          </item>
-         <item row="1" column="0">
+         <item column="0" row="1">
           <widget class="QLabel" name="label_11">
            <property name="text">
             <string>Meterin&amp;g mode:</string>
@@ -400,7 +404,7 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="1">
+         <item column="1" row="1">
           <widget class="QComboBox" name="editMeteringMode">
            <item>
             <property name="text">
@@ -444,7 +448,7 @@
            </item>
           </widget>
          </item>
-         <item row="2" column="0">
+         <item column="0" row="2">
           <widget class="QLabel" name="label_24">
            <property name="text">
             <string>D&amp;istance range:</string>
@@ -457,7 +461,7 @@
            </property>
           </widget>
          </item>
-         <item row="2" column="1">
+         <item column="1" row="2">
           <widget class="QComboBox" name="editSubjectDistanceRange">
            <item>
             <property name="text">
@@ -481,7 +485,7 @@
            </item>
           </widget>
          </item>
-         <item row="3" column="0" colspan="2">
+         <item colspan="2" column="0" row="3">
           <spacer>
            <property name="orientation">
             <enum>Qt::Vertical</enum>
@@ -505,14 +509,14 @@
       <layout class="QHBoxLayout">
        <item>
         <layout class="QGridLayout">
-         <item row="0" column="0" colspan="2">
+         <item colspan="2" column="0" row="0">
           <widget class="QCheckBox" name="editFlashFired">
            <property name="text">
             <string>Fired</string>
            </property>
           </widget>
          </item>
-         <item row="1" column="0">
+         <item column="0" row="1">
           <widget class="QLabel" name="label_22">
            <property name="text">
             <string>Stro&amp;be return:</string>
@@ -525,7 +529,7 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="1">
+         <item column="1" row="1">
           <widget class="QComboBox" name="editStrobeReturn">
            <item>
             <property name="text">
@@ -549,7 +553,7 @@
            </item>
           </widget>
          </item>
-         <item row="2" column="0">
+         <item column="0" row="2">
           <widget class="QLabel" name="label_21">
            <property name="text">
             <string>Mode:</string>
@@ -562,7 +566,7 @@
            </property>
           </widget>
          </item>
-         <item row="2" column="1">
+         <item column="1" row="2">
           <widget class="QComboBox" name="editFlashMode">
            <item>
             <property name="text">
@@ -586,21 +590,21 @@
            </item>
           </widget>
          </item>
-         <item row="3" column="0" colspan="2">
+         <item colspan="2" column="0" row="3">
           <widget class="QCheckBox" name="editFlashFunction">
            <property name="text">
             <string>Function</string>
            </property>
           </widget>
          </item>
-         <item row="4" column="0" colspan="2">
+         <item colspan="2" column="0" row="4">
           <widget class="QCheckBox" name="editFlashRedEyeMode">
            <property name="text">
             <string>Red-eye removal</string>
            </property>
           </widget>
          </item>
-         <item row="5" column="0">
+         <item column="0" row="5">
           <widget class="QLabel" name="label_23">
            <property name="text">
             <string>Flash ener&amp;gy:</string>
@@ -613,10 +617,10 @@
            </property>
           </widget>
          </item>
-         <item row="5" column="1">
+         <item column="1" row="5">
           <widget class="QLineEdit" name="editFlashEnergy"/>
          </item>
-         <item row="6" column="0" colspan="2">
+         <item colspan="2" column="0" row="6">
           <spacer>
            <property name="orientation">
             <enum>Qt::Vertical</enum>
@@ -640,7 +644,7 @@
       <layout class="QHBoxLayout">
        <item>
         <layout class="QGridLayout">
-         <item row="0" column="0">
+         <item column="0" row="0">
           <widget class="QLabel" name="label_13">
            <property name="text">
             <string>&amp;Gain control:</string>
@@ -653,7 +657,7 @@
            </property>
           </widget>
          </item>
-         <item row="0" column="1">
+         <item column="1" row="0">
           <widget class="QComboBox" name="editGainControl">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -688,7 +692,7 @@
            </item>
           </widget>
          </item>
-         <item row="1" column="0">
+         <item column="0" row="1">
           <widget class="QLabel" name="label_15">
            <property name="text">
             <string>L&amp;ight source:</string>
@@ -701,7 +705,7 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="1">
+         <item column="1" row="1">
           <widget class="QComboBox" name="editLightSource">
            <item>
             <property name="text">
@@ -835,7 +839,7 @@
            </item>
           </widget>
          </item>
-         <item row="2" column="0">
+         <item column="0" row="2">
           <widget class="QLabel" name="label_18">
            <property name="text">
             <string>Sharpness:</string>
@@ -848,7 +852,7 @@
            </property>
           </widget>
          </item>
-         <item row="2" column="1">
+         <item column="1" row="2">
           <widget class="QComboBox" name="editSharpness">
            <item>
             <property name="text">
@@ -867,7 +871,7 @@
            </item>
           </widget>
          </item>
-         <item row="3" column="0">
+         <item column="0" row="3">
           <widget class="QLabel" name="label_20">
            <property name="text">
             <string>Contrast:</string>
@@ -880,7 +884,7 @@
            </property>
           </widget>
          </item>
-         <item row="3" column="1">
+         <item column="1" row="3">
           <widget class="QComboBox" name="editContrast">
            <item>
             <property name="text">
@@ -899,7 +903,7 @@
            </item>
           </widget>
          </item>
-         <item row="4" column="0">
+         <item column="0" row="4">
           <widget class="QLabel" name="label_28">
            <property name="text">
             <string>White &amp;balance:</string>
@@ -912,7 +916,7 @@
            </property>
           </widget>
          </item>
-         <item row="4" column="1">
+         <item column="1" row="4">
           <widget class="QComboBox" name="editWhiteBalance">
            <item>
             <property name="text">
@@ -926,7 +930,7 @@
            </item>
           </widget>
          </item>
-         <item row="5" column="0" colspan="2">
+         <item colspan="2" column="0" row="5">
           <spacer>
            <property name="orientation">
             <enum>Qt::Vertical</enum>
@@ -950,7 +954,7 @@
       <layout class="QHBoxLayout">
        <item>
         <layout class="QGridLayout">
-         <item row="0" column="0">
+         <item column="0" row="0">
           <widget class="QLabel" name="label_4">
            <property name="text">
             <string>Scene capture t&amp;ype:</string>
@@ -963,7 +967,7 @@
            </property>
           </widget>
          </item>
-         <item row="0" column="1">
+         <item column="1" row="0">
           <widget class="QComboBox" name="editSceneCaptureType">
            <item>
             <property name="text">
@@ -987,7 +991,7 @@
            </item>
           </widget>
          </item>
-         <item row="1" column="0">
+         <item column="0" row="1">
           <widget class="QLabel" name="label_19">
            <property name="text">
             <string>Ma&amp;ker:</string>
@@ -1000,10 +1004,10 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="1">
+         <item column="1" row="1">
           <widget class="QLineEdit" name="editMake"/>
          </item>
-         <item row="2" column="0">
+         <item column="0" row="2">
           <widget class="QLabel" name="label_26">
            <property name="text">
             <string>Model:</string>
@@ -1016,10 +1020,10 @@
            </property>
           </widget>
          </item>
-         <item row="2" column="1">
+         <item column="1" row="2">
           <widget class="QLineEdit" name="editModel"/>
          </item>
-         <item row="3" column="0">
+         <item column="0" row="3">
           <widget class="QLabel" name="label_27">
            <property name="text">
             <string>Sens&amp;ing method type:</string>
@@ -1032,7 +1036,7 @@
            </property>
           </widget>
          </item>
-         <item row="3" column="1">
+         <item column="1" row="3">
           <widget class="QComboBox" name="editSensingMethod">
            <item>
             <property name="text">
@@ -1076,7 +1080,7 @@
            </item>
           </widget>
          </item>
-         <item row="4" column="0" colspan="2">
+         <item colspan="2" column="0" row="4">
           <spacer>
            <property name="orientation">
             <enum>Qt::Vertical</enum>

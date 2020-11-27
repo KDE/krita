@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>KisWdgIndexColors</class>
  <widget class="QWidget" name="KisWdgIndexColors">
   <property name="geometry">
@@ -23,7 +27,7 @@
    <property name="bottomMargin">
     <number>0</number>
    </property>
-   <item row="0" column="0">
+   <item column="0" row="0">
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
       <string>Ramps</string>
@@ -32,7 +36,7 @@
       <bool>true</bool>
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
-      <item row="1" column="0">
+      <item column="0" row="1">
        <widget class="QWidget" name="colorsBox" native="true">
         <property name="minimumSize">
          <size>
@@ -62,7 +66,7 @@
         </layout>
        </widget>
       </item>
-      <item row="2" column="0">
+      <item column="0" row="2">
        <widget class="QCheckBox" name="diagCheck">
         <property name="text">
          <string>Diagonal Gradients</string>
@@ -72,7 +76,7 @@
      </layout>
     </widget>
    </item>
-   <item row="2" column="0">
+   <item column="0" row="2">
     <widget class="QGroupBox" name="gradientStepsBox">
      <property name="title">
       <string>Gradient Steps</string>
@@ -81,14 +85,14 @@
       <bool>true</bool>
      </property>
      <layout class="QGridLayout" name="layoutGradientSteps">
-      <item row="3" column="0">
+      <item column="0" row="3">
        <widget class="QCheckBox" name="colorLimitCheck">
         <property name="text">
          <string>Limit to</string>
         </property>
        </widget>
       </item>
-      <item row="3" column="1">
+      <item column="1" row="3">
        <widget class="KisIntParseSpinBox" name="colorLimit">
         <property name="enabled">
          <bool>true</bool>
@@ -104,7 +108,7 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="1">
+      <item column="1" row="0">
        <widget class="KisIntParseSpinBox" name="inbetweenSpinBox">
         <property name="minimum">
          <number>0</number>
@@ -117,14 +121,14 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="0">
+      <item column="0" row="0">
        <widget class="QLabel" name="label">
         <property name="text">
          <string>In-between ramps</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="0" colspan="2">
+      <item colspan="2" column="0" row="1">
        <layout class="QGridLayout" name="layoutRowSteps">
         <property name="sizeConstraint">
          <enum>QLayout::SetMinimumSize</enum>
@@ -143,14 +147,14 @@
         </property>
        </layout>
       </item>
-      <item row="2" column="0">
+      <item column="0" row="2">
        <widget class="QLabel" name="label_3">
         <property name="text">
          <string>Color count:</string>
         </property>
        </widget>
       </item>
-      <item row="2" column="1">
+      <item column="1" row="2">
        <widget class="QLabel" name="colorCount">
         <property name="text">
          <string>0</string>
@@ -160,7 +164,7 @@
      </layout>
     </widget>
    </item>
-   <item row="3" column="0">
+   <item column="0" row="3">
     <widget class="QGroupBox" name="indexingBox">
      <property name="title">
       <string>Indexing Factors</string>
@@ -169,14 +173,14 @@
       <bool>true</bool>
      </property>
      <layout class="QFormLayout" name="formLayout_2">
-      <item row="0" column="0">
+      <item column="0" row="0">
        <widget class="QLabel" name="label_4">
         <property name="text">
          <string>L*</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="1">
+      <item column="1" row="0">
        <widget class="QSlider" name="luminanceSlider">
         <property name="minimumSize">
          <size>
@@ -204,7 +208,7 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="1">
+      <item column="1" row="1">
        <spacer name="horizontalSpacer">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
@@ -217,14 +221,14 @@
         </property>
        </spacer>
       </item>
-      <item row="2" column="0">
+      <item column="0" row="2">
        <widget class="QLabel" name="label_5">
         <property name="text">
          <string>a*</string>
         </property>
        </widget>
       </item>
-      <item row="2" column="1">
+      <item column="1" row="2">
        <widget class="QSlider" name="aSlider">
         <property name="minimumSize">
          <size>
@@ -249,14 +253,14 @@
         </property>
        </widget>
       </item>
-      <item row="3" column="0">
+      <item column="0" row="3">
        <widget class="QLabel" name="label_6">
         <property name="text">
          <string>b*</string>
         </property>
        </widget>
       </item>
-      <item row="3" column="1">
+      <item column="1" row="3">
        <widget class="QSlider" name="bSlider">
         <property name="minimumSize">
          <size>
@@ -284,7 +288,7 @@
      </layout>
     </widget>
    </item>
-   <item row="4" column="0">
+   <item column="0" row="4">
     <widget class="QGroupBox" name="otherBox">
      <property name="title">
       <string>Other</string>
@@ -296,14 +300,14 @@
       <property name="fieldGrowthPolicy">
        <enum>QFormLayout::ExpandingFieldsGrow</enum>
       </property>
-      <item row="0" column="0">
+      <item column="0" row="0">
        <widget class="QLabel" name="label_2">
         <property name="text">
          <string>Alpha Steps</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="1">
+      <item column="1" row="0">
        <widget class="KisIntParseSpinBox" name="alphaStepsSpinBox">
         <property name="minimum">
          <number>0</number>

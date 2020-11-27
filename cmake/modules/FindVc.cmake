@@ -25,6 +25,9 @@
 # to use them to skip whole compilation units.
 # Vc_SSE_INTRINSICS_BROKEN
 # Vc_AVX_INTRINSICS_BROKEN
+#
+# SPDX-License-Identifier: BSD-3-Clause
+#
 
 find_package(Vc ${Vc_FIND_VERSION} QUIET NO_MODULE PATHS $ENV{HOME} /opt/Vc /usr/lib)
 

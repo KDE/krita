@@ -4,41 +4,29 @@
  * Copyright (C) 2011 Silvio Heinrich <plassy@web.de>
  * Copyright (c) 2020 Ashwin Dhakaita <ashwingpdhakaita@gmail.com>
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
-*/
+ * SPDX-License-Identifier: GPL-2.0-or-later
+ */
 
-#include <QJsonObject>
+#include "MyPaintCurveOptionWidget.h"
+
 #include <QJsonDocument>
-
+#include <QJsonObject>
 #include <kis_global.h>
 #include <kis_icon_utils.h>
 #include <kis_signals_blocker.h>
 #include <widgets/kis_curve_widget.h>
 
-#include "ui_wdgmypaintcurveoption.h"
-#include "MyPaintPaintOpOption.h"
 #include "MyPaintBrushOption.h"
 #include "MyPaintCurveOption.h"
+#include "MyPaintPaintOpOption.h"
 #include "MyPaintPaintOpSettingsWidget.h"
-#include "MyPaintCurveOptionWidget.h"
+#include "ui_wdgmypaintcurveoption.h"
 
 KisMyPaintCurveOptionWidget::KisMyPaintCurveOptionWidget(KisMyPaintCurveOption* curveOption, const QString &minLabel, const QString &maxLabel, bool hideSlider, KisMyPaintOpOption *baseOption)
     : KisCurveOptionWidget (curveOption, minLabel, maxLabel, hideSlider)
 {
     Q_UNUSED(baseOption);
-    setObjectName("KisMyPaintCurveOptionWidget");   
+    setObjectName("KisMyPaintCurveOptionWidget");
 
     strengthToCurveOptionValueScale = 1.0;
     hideRangeLabelsAndBoxes(false);
@@ -66,7 +54,7 @@ KisMyPaintCurveOptionWidget::~KisMyPaintCurveOptionWidget()
 }
 
 void KisMyPaintCurveOptionWidget::writeOptionSetting(KisPropertiesConfigurationSP setting) const
-{    
+{
     checkRanges();
     KisMyPaintBrushOption* currentSensor = dynamic_cast<KisMyPaintBrushOption*>(m_curveOptionWidget->sensorSelector->currentHighlighted().data());
     setting->setProperty(m_curveOption->name() + currentSensor->identifier() + "XMIN", m_curveOptionWidget->xMinBox->value());
@@ -81,11 +69,11 @@ void KisMyPaintCurveOptionWidget::writeOptionSetting(KisPropertiesConfigurationS
 
     updateSensorCurveLabels(currentSensor);
     setBaseValue(setting, m_curveOptionWidget->strengthSlider->value());
-    m_curveOption->writeOptionSetting(setting);    
+    m_curveOption->writeOptionSetting(setting);
 }
 
 void KisMyPaintCurveOptionWidget::readOptionSetting(const KisPropertiesConfigurationSP setting)
-{    
+{
     KisCurveOptionWidget::readOptionSetting(setting);
 
     m_curveOptionWidget->checkBoxUseCurve->setChecked(m_curveOption->isCurveUsed());
@@ -100,7 +88,7 @@ void KisMyPaintCurveOptionWidget::slotUnCheckUseCurve() {
 }
 
 void KisMyPaintCurveOptionWidget::updateSensorCurveLabels(KisDynamicSensorSP sensor) const
-{    
+{
     KisCurveOptionWidget::updateSensorCurveLabels(sensor);
     KisMyPaintBrushOption* mySensor = dynamic_cast<KisMyPaintBrushOption*>(sensor.data());
     if (mySensor) {
@@ -169,7 +157,7 @@ void KisMyPaintCurveOptionWidget::setBaseValue(KisPropertiesConfigurationSP sett
     QJsonObject json_obj = QJsonObject::fromVariantMap(map);
     QJsonDocument doc2(json_obj);
 
-    setting->setProperty(MYPAINT_JSON, doc2.toJson());    
+    setting->setProperty(MYPAINT_JSON, doc2.toJson());
 
     KisMyPaintCurveOption *curveOpt = dynamic_cast<KisMyPaintCurveOption*>(m_curveOption);
     if(curveOpt->currentSetting() == MYPAINT_BRUSH_SETTING_RADIUS_LOGARITHMIC)

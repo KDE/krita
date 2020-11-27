@@ -1,19 +1,7 @@
 /*
  * Copyright (c) 2019 boud <boud@valdyas.org>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 #include "TestTagFilterResourceProxyModel.h"
 
@@ -101,9 +89,9 @@ void TestTagFilterResourceProxyModel::testData()
     KisTagFilterResourceProxyModel proxyModel(resourceType);
     KisResourceModel *resourceModel = qobject_cast<KisResourceModel*>(proxyModel.sourceModel());
 
-    QStringList names = QStringList() << "test0.kpp"
-                                      << "test1.kpp"
-                                      << "test2.kpp";
+    QStringList names = QStringList() << "test0"
+                                      << "test1"
+                                      << "test2";
     for (int i = 0; i < proxyModel.rowCount(); ++i)  {
         QVariant v = resourceModel->data(proxyModel.mapToSource(proxyModel.index(i, 0)), Qt::UserRole + KisAbstractResourceModel::Name);
         QVERIFY(names.contains(v.toString()));
@@ -126,7 +114,7 @@ void TestTagFilterResourceProxyModel::testFilterByTag()
     KisTagModel tagModel(ResourceType::PaintOpPresets);
     KisTagFilterResourceProxyModel proxyModel(resourceType);
 
-    KoResourceSP resource = resourceModel.resourceForName("test2.kpp");
+    KoResourceSP resource = resourceModel.resourceForName("test2");
     QVERIFY(resource);
 
     KisTagSP tag = tagModel.tagForIndex(tagModel.index(2, 0));
@@ -149,7 +137,7 @@ void TestTagFilterResourceProxyModel::testFilterByResource()
 
     KisTagFilterResourceProxyModel proxyModel(resourceType);
 
-    KoResourceSP resource = resourceModel.resourceForName("test2.kpp");
+    KoResourceSP resource = resourceModel.resourceForName("test2");
     QVERIFY(resource);
 
     tagModel.addTag("testtag1", QVector<KoResourceSP>() << resource);
@@ -174,7 +162,7 @@ void TestTagFilterResourceProxyModel::testFilterByString()
     proxyModel.setSearchText("test2");
     QCOMPARE(proxyModel.rowCount(), 1);
 
-    KoResourceSP resource = resourceModel.resourceForName("test2.kpp");
+    KoResourceSP resource = resourceModel.resourceForName("test2");
     QVERIFY(resource);
 
     KisTagSP tag = tagModel.tagForIndex(tagModel.index(2, 0));
@@ -193,13 +181,13 @@ void TestTagFilterResourceProxyModel::testDataWhenSwitchingBetweenTagAllAllUntag
     KisTagFilterResourceProxyModel proxyModel(resourceType);
     KisResourceModel *resourceModel = qobject_cast<KisResourceModel*>(proxyModel.sourceModel());
 
-    KoResourceSP resource = resourceModel->resourceForName("test2.kpp");
+    KoResourceSP resource = resourceModel->resourceForName("test2");
     QModelIndex idx = proxyModel.indexForResource(resource);
 
     QVERIFY(idx.isValid());
 
     QString name = proxyModel.data(idx, Qt::UserRole + KisAbstractResourceModel::Name).toString();
-    QCOMPARE(name, "test2.kpp");
+    QCOMPARE(name, "test2");
 
     QImage thumbnail = proxyModel.data(idx, Qt::UserRole + KisAbstractResourceModel::Thumbnail).value<QImage>();
     QVERIFY(!thumbnail.isNull());
@@ -214,7 +202,7 @@ void TestTagFilterResourceProxyModel::testResourceForIndex()
     KisTagFilterResourceProxyModel proxyModel(resourceType);
     KisResourceModel *resourceModel = qobject_cast<KisResourceModel*>(proxyModel.sourceModel());
 
-    KoResourceSP resource = resourceModel->resourceForName("test2.kpp");
+    KoResourceSP resource = resourceModel->resourceForName("test2");
     QVERIFY(resource);
 
     QModelIndex idx = proxyModel.indexForResource(resource);

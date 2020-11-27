@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgSatin</class>
  <widget class="QWidget" name="WdgSatin">
   <property name="geometry">
@@ -11,19 +15,19 @@
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
+   <item column="0" row="0">
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
       <string>Satin</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
-      <item row="0" column="0">
+      <item column="0" row="0">
        <widget class="QGroupBox" name="groupBox_2">
         <property name="title">
          <string>Structure</string>
         </property>
         <layout class="QFormLayout" name="formLayout">
-         <item row="0" column="0">
+         <item column="0" row="0">
           <widget class="QLabel" name="label_13">
            <property name="text">
             <string>Ble&amp;nd Mode:</string>
@@ -33,7 +37,7 @@
            </property>
           </widget>
          </item>
-         <item row="0" column="1">
+         <item column="1" row="0">
           <layout class="QHBoxLayout" name="horizontalLayout">
            <item>
             <widget class="KisLayerStyleCompositeOpComboBox" name="cmbCompositeOp">
@@ -57,7 +61,7 @@
            </item>
           </layout>
          </item>
-         <item row="1" column="0">
+         <item column="0" row="1">
           <widget class="QLabel" name="label_14">
            <property name="text">
             <string>Opaci&amp;ty:</string>
@@ -67,7 +71,7 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="1">
+         <item column="1" row="1">
           <widget class="KisSliderSpinBox" name="intOpacity" native="true">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
@@ -89,7 +93,7 @@
            </property>
           </widget>
          </item>
-         <item row="2" column="0">
+         <item column="0" row="2">
           <widget class="QLabel" name="label">
            <property name="text">
             <string>An&amp;gle:</string>
@@ -99,7 +103,7 @@
            </property>
           </widget>
          </item>
-         <item row="4" column="0">
+         <item column="0" row="4">
           <widget class="QLabel" name="label_2">
            <property name="text">
             <string>&amp;Distance:</string>
@@ -109,7 +113,7 @@
            </property>
           </widget>
          </item>
-         <item row="4" column="1">
+         <item column="1" row="4">
           <widget class="KisSliderSpinBox" name="intDistance" native="true">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
@@ -119,7 +123,7 @@
            </property>
           </widget>
          </item>
-         <item row="5" column="0">
+         <item column="0" row="5">
           <widget class="QLabel" name="label_4">
            <property name="text">
             <string>S&amp;ize:</string>
@@ -129,7 +133,7 @@
            </property>
           </widget>
          </item>
-         <item row="5" column="1">
+         <item column="1" row="5">
           <widget class="KisSliderSpinBox" name="intSize" native="true">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
@@ -139,17 +143,17 @@
            </property>
           </widget>
          </item>
-         <item row="6" column="0">
+         <item column="0" row="6">
           <widget class="QLabel" name="label_6">
            <property name="text">
             <string>Contour:</string>
            </property>
           </widget>
          </item>
-         <item row="6" column="1">
+         <item column="1" row="6">
           <widget class="KisCmbContour" name="cmbContour" native="true"/>
          </item>
-         <item row="7" column="1">
+         <item column="1" row="7">
           <widget class="QCheckBox" name="chkAntiAliased">
            <property name="toolTip">
             <string>Smooth the contour</string>
@@ -159,14 +163,14 @@
            </property>
           </widget>
          </item>
-         <item row="8" column="1">
+         <item column="1" row="8">
           <widget class="QCheckBox" name="chkInvert">
            <property name="text">
             <string comment="@option:check In Layer Style">&amp;Invert</string>
            </property>
           </widget>
          </item>
-         <item row="2" column="1">
+         <item column="1" row="2">
           <layout class="QHBoxLayout" name="horizontalLayout_2">
            <item>
             <widget class="KisLayerStyleAngleSelector" name="angleSelector" native="true">
@@ -208,7 +212,7 @@
         <zorder>chkInvert</zorder>
        </widget>
       </item>
-      <item row="1" column="0">
+      <item column="0" row="1">
        <spacer name="verticalSpacer">
         <property name="orientation">
          <enum>Qt::Vertical</enum>

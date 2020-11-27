@@ -8,20 +8,7 @@
    Copyright (c) 2013 Sascha Suelzer <s.suelzer@gmail.com>
    Copyright (c) 2019 Boudewijn Rempt <boud@valdyas.org>   
 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
-
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
-
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
 #ifndef KIS_RESOURCE_ITEM_CHOOSER
@@ -41,6 +28,7 @@ class QAbstractButton;
 class QToolButton;
 class QSortFilterProxyModel;
 class KisResourceItemListView;
+class KisTagFilterResourceProxyModel;
 
 #include "kritaresourcewidgets_export.h"
 
@@ -57,8 +45,10 @@ public:
 
     /// \p usePreview shows the aside preview with the resource's image
     /// \p extraFilterProxy is an extra filter proxy model for additional filtering. KisResourceItemChooser will take over ownership
-    explicit KisResourceItemChooser(const QString &resourceType, bool usePreview = false, QWidget *parent = 0, QSortFilterProxyModel *extraFilterProxy = 0);
+    explicit KisResourceItemChooser(const QString &resourceType, bool usePreview = false, QWidget *parent = 0);
     ~KisResourceItemChooser() override;
+
+    KisTagFilterResourceProxyModel *tagFilterModel() const;
 
     /// return the number of rows in the view
     int rowCount() const;

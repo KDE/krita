@@ -4,6 +4,8 @@
  * - KisPaintingAssistantsDecoration
  * - ParallelRulerAssistant
  * - PerspectiveAssistant
+ *
+ *  SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #include <testutil.h>

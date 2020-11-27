@@ -1,7 +1,12 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="utf-8"?>
+<ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgBookmarkedConfigurationsEditor</class>
- <widget class="QWidget" name="WdgBookmarkedConfigurationsEditor" >
-  <property name="geometry" >
+ <widget class="QWidget" name="WdgBookmarkedConfigurationsEditor">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
@@ -9,25 +14,25 @@
     <height>324</height>
    </rect>
   </property>
-  <property name="sizePolicy" >
-   <sizepolicy vsizetype="MinimumExpanding" hsizetype="MinimumExpanding" >
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>Edit presets</string>
   </property>
-  <layout class="QHBoxLayout" >
+  <layout class="QHBoxLayout">
    <item>
-    <widget class="QListView" name="listConfigurations" >
-     <property name="sizePolicy" >
-      <sizepolicy vsizetype="MinimumExpanding" hsizetype="MinimumExpanding" >
+    <widget class="QListView" name="listConfigurations">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <property name="minimumSize" >
+     <property name="minimumSize">
       <size>
        <width>400</width>
        <height>0</height>
@@ -36,27 +41,27 @@
     </widget>
    </item>
    <item>
-    <layout class="QVBoxLayout" >
+    <layout class="QVBoxLayout">
      <item>
-      <widget class="QPushButton" name="pushButtonBookmarkCurrent" >
-       <property name="text" >
+      <widget class="QPushButton" name="pushButtonBookmarkCurrent">
+       <property name="text">
         <string>Bookmark current</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButtonDelete" >
-       <property name="text" >
+      <widget class="QPushButton" name="pushButtonDelete">
+       <property name="text">
         <string>Delete</string>
        </property>
       </widget>
      </item>
      <item>
       <spacer>
-       <property name="orientation" >
+       <property name="orientation">
         <enum>Qt::Vertical</enum>
        </property>
-       <property name="sizeHint" >
+       <property name="sizeHint">
         <size>
          <width>20</width>
          <height>40</height>
@@ -65,8 +70,8 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButtonClose" >
-       <property name="text" >
+      <widget class="QPushButton" name="pushButtonClose">
+       <property name="text">
         <string>Close</string>
        </property>
       </widget>
@@ -75,6 +80,6 @@
    </item>
   </layout>
  </widget>
-  <resources/>
+ <resources/>
  <connections/>
 </ui>

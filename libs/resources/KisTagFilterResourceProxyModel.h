@@ -1,20 +1,7 @@
 /*
  * Copyright (C) 2018 Boudewijn Rempt <boud@valdyas.org>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #ifndef KISTAGFILTERRESOURCEPROXYMODEL_H
@@ -35,8 +22,8 @@
  * @brief The KisTagFilterResourceProxyModel class filters the resources by tag or resource name
  */
 class KRITARESOURCES_EXPORT KisTagFilterResourceProxyModel
-        : public QSortFilterProxyModel
-        , public KisAbstractResourceModel
+    : public QSortFilterProxyModel
+    , public KisAbstractResourceModel
 {
     Q_OBJECT
 public:
@@ -47,7 +34,7 @@ public:
     // To be used if we need an extra proxy model, like for
     void setResourceModel(KisResourceModel *resourceModel);
 
-// KisAbstractResourceModel interface
+    // KisAbstractResourceModel interface
 
     KoResourceSP resourceForIndex(QModelIndex index = QModelIndex()) const override;
     QModelIndex indexForResource(KoResourceSP resource) const override;
@@ -57,6 +44,14 @@ public:
     bool updateResource(KoResourceSP resource) override;
     bool renameResource(KoResourceSP resource, const QString &name) override;
     bool setResourceMetaData(KoResourceSP resource, QMap<QString, QVariant> metadata) override;
+
+
+    /**
+     * @brief setMetaDataFilter provides a set of metadata to filter on, for instance
+     * by paintop id category.
+     * @param metaDataMap
+     */
+    void setMetaDataFilter(QMap<QString, QVariant> metaDataMap);
 
     /**
      * @brief setTagFilter sets the tag to filter with

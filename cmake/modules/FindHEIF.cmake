@@ -4,8 +4,8 @@
 #  HEIF_FOUND - system has heif
 #  HEIF_INCLUDE_DIRS - the heif include directories
 #  HEIF_LIBRARIES - the libraries needed to use heif
-# Redistribution and use is allowed according to the terms of the BSD license.
-# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+#
+# SPDX-License-Identifier: BSD-3-Clause
 #
 
 include(LibFindMacros)

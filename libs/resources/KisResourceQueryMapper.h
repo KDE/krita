@@ -1,3 +1,7 @@
+/*
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
 #ifndef KISRESOURCEQUERYMAPPER_H
 #define KISRESOURCEQUERYMAPPER_H
 

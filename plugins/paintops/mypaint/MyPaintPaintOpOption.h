@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2020 Ashwin Dhakaita <ashwingpdhakaita@gmail.com>
+ *
+ * SPDX-License-Identifier: GPL-2.0-or-later
+ */
+
 #ifndef KIS_MY_PAINTOP_OPTION_H
 #define KIS_MY_PAINTOP_OPTION_H
 
@@ -52,7 +58,7 @@ private:
 
 class KisMyPaintOptionProperties: public KisPaintopPropertiesBase
 {
-public:    
+public:
     float radius() const {
         return log(diameter/2);
     }

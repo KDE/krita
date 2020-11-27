@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2006, 2010 Boudewijn Rempt <boud@valdyas.org>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 #include "kis_tool.h"
 #include <QCursor>
@@ -538,17 +526,11 @@ void KisTool::deleteSelection()
 KisTool::NodePaintAbility KisTool::nodePaintAbility()
 {
     KisNodeSP node = currentNode();
-    KisPaintOpPresetSP currentPaintOpPreset = canvas()->resourceManager()->resource(KoCanvasResource::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
-    const KoColorSpace *colorSpace = node->paintDevice()->colorSpace();
 
     if (!node) {
         return NodePaintAbility::UNPAINTABLE;
     }
-    if (currentPaintOpPreset->paintOp().id() == "mypaintbrush" &&
-        colorSpace->colorModelId() != RGBAColorModelID) {
 
-        return NodePaintAbility::MYPAINTBRUSH_UNPAINTABLE;
-    }
     if (node->inherits("KisShapeLayer")) {
         return NodePaintAbility::VECTOR;
     }
@@ -556,6 +538,15 @@ KisTool::NodePaintAbility KisTool::nodePaintAbility()
         return NodePaintAbility::CLONE;
     }
     if (node->paintDevice()) {
+
+        KisPaintOpPresetSP currentPaintOpPreset = canvas()->resourceManager()->resource(KoCanvasResource::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
+        if (currentPaintOpPreset->paintOp().id() == "mypaintbrush") {
+            const KoColorSpace *colorSpace = node->paintDevice()->colorSpace();
+            if (colorSpace->colorModelId() != RGBAColorModelID) {
+                return NodePaintAbility::MYPAINTBRUSH_UNPAINTABLE;
+            }
+        }
+
         return NodePaintAbility::PAINT;
     }
 

@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>KisWelcomePage</class>
  <widget class="QWidget" name="KisWelcomePage">
   <property name="geometry">
@@ -35,7 +39,7 @@
       <number>0</number>
      </property>
      <layout class="QGridLayout" name="gridLayout">
-      <item row="2" column="4">
+      <item column="4" row="2">
        <widget class="QWidget" name="widgetCentral" native="true">
         <property name="minimumSize">
          <size>
@@ -780,7 +784,7 @@
         </layout>
        </widget>
       </item>
-      <item row="2" column="5">
+      <item column="5" row="2">
        <spacer name="horizontalSpacer_10">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
@@ -796,7 +800,7 @@
         </property>
        </spacer>
       </item>
-      <item row="2" column="3">
+      <item column="3" row="2">
        <spacer name="horizontalSpacer_17">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
@@ -812,7 +816,7 @@
         </property>
        </spacer>
       </item>
-      <item row="2" column="2">
+      <item column="2" row="2">
        <widget class="QWidget" name="widgetLeft" native="true">
         <property name="minimumSize">
          <size>
@@ -1367,7 +1371,7 @@
         </layout>
        </widget>
       </item>
-      <item row="2" column="6">
+      <item column="6" row="2">
        <widget class="QWidget" name="widgetRight" native="true">
         <property name="minimumSize">
          <size>
@@ -1443,46 +1447,14 @@
             </spacer>
            </item>
            <item>
-            <layout class="QVBoxLayout" name="verticalLayout_7">
-             <property name="spacing">
-              <number>0</number>
+            <widget class="QPushButton" name="btnNewsOptions">
+             <property name="toolTip">
+              <string>News options</string>
              </property>
-             <item>
-              <spacer name="verticalSpacer_4">
-               <property name="orientation">
-                <enum>Qt::Vertical</enum>
-               </property>
-               <property name="sizeType">
-                <enum>QSizePolicy::Fixed</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>0</width>
-                 <height>4</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-             <item>
-              <widget class="QCheckBox" name="chkShowNews">
-               <property name="enabled">
-                <bool>true</bool>
-               </property>
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="toolTip">
-                <string>Show news about Krita: this needs internet to retrieve information from the krita.org website</string>
-               </property>
-               <property name="text">
-                <string>Check for updates</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
            </item>
           </layout>
          </item>
@@ -1546,7 +1518,7 @@
               <property name="topMargin">
                <number>8</number>
               </property>
-              <item row="0" column="0">
+              <item column="0" row="0">
                <widget class="QPushButton" name="updateIcon">
                 <property name="enabled">
                  <bool>false</bool>
@@ -1583,7 +1555,7 @@
                 </property>
                </widget>
               </item>
-              <item row="0" column="1">
+              <item column="1" row="0">
                <widget class="QLabel" name="versionNotificationLabel">
                 <property name="enabled">
                  <bool>false</bool>
@@ -1716,7 +1688,7 @@
             <property name="spacing">
              <number>0</number>
             </property>
-            <item row="1" column="0">
+            <item column="0" row="1">
              <widget class="KisNewsWidget" name="newsWidget" native="true">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
@@ -1726,7 +1698,7 @@
               </property>
              </widget>
             </item>
-            <item row="0" column="0">
+            <item column="0" row="0">
              <widget class="QLabel" name="labelNoFeed">
               <property name="text">
                <string>Enable news to get the latest 
@@ -1755,7 +1727,7 @@ krita.org website.</string>
         </layout>
        </widget>
       </item>
-      <item row="2" column="0">
+      <item column="0" row="2">
        <spacer name="horizontalSpacer_11">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
@@ -1768,7 +1740,7 @@ krita.org website.</string>
         </property>
        </spacer>
       </item>
-      <item row="2" column="7">
+      <item column="7" row="2">
        <spacer name="horizontalSpacer_9">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
@@ -1781,7 +1753,7 @@ krita.org website.</string>
         </property>
        </spacer>
       </item>
-      <item row="0" column="3" colspan="3">
+      <item colspan="3" column="3" row="0">
        <spacer name="verticalSpacer_3">
         <property name="orientation">
          <enum>Qt::Vertical</enum>
@@ -1794,7 +1766,7 @@ krita.org website.</string>
         </property>
        </spacer>
       </item>
-      <item row="3" column="1" colspan="3">
+      <item colspan="3" column="1" row="3">
        <spacer name="verticalSpacer_2">
         <property name="orientation">
          <enum>Qt::Vertical</enum>
@@ -1821,38 +1793,5 @@ krita.org website.</string>
   </customwidget>
  </customwidgets>
  <resources/>
- <connections>
-  <connection>
-   <sender>chkShowNews</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>newsWidget</receiver>
-   <slot>setVisible(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>942</x>
-     <y>69</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>843</x>
-     <y>393</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>chkShowNews</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>labelNoFeed</receiver>
-   <slot>setHidden(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>992</x>
-     <y>66</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>888</x>
-     <y>190</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

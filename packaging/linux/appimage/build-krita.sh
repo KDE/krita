@@ -1,4 +1,7 @@
 #!/bin/bash
+#
+#  SPDX-License-Identifier: GPL-3.0-or-later
+#
 
 # Halt on errors and be verbose about what we are doing
 set -e
@@ -9,7 +12,7 @@ export BUILD_PREFIX=$1
 export KRITA_SOURCES=$2
 export BRANDING="${3}"
 
-# qjsonparser, used to add metadata to the plugins needs to work in a en_US.UTF-8 environment. 
+# qjsonparser, used to add metadata to the plugins needs to work in a en_US.UTF-8 environment.
 # That's not always the case, so make sure it is
 export LC_ALL=en_US.UTF-8
 export LANG=en_us.UTF-8
@@ -43,10 +46,10 @@ if [ -z "${BRANDING}" ]; then
         #if KRITA_BETA is set, set channel to Beta, otherwise set it to stable
         grep "define KRITA_BETA 1" libs/version/kritaversion.h;
         is_beta=$?
-        
+
         grep "define KRITA_RC 1" libs/version/kritaversion.h;
         is_rc=$?
-    
+
         if [ is_beta -eq 0 -o is_rc -eq 0 ]; then
             BRANDING="Beta"
         else
@@ -80,7 +83,7 @@ cmake $KRITA_SOURCES \
     -DHAVE_MEMORY_LEAK_TRACKER=FALSE \
     -DBRANDING="${BRANDING}"
 
-    
+
 # Build and Install Krita (ready for the next phase)
 make -j$CPU_COUNT install
 

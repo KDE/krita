@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgConvertColorSpace</class>
  <widget class="QWidget" name="WdgConvertColorSpace">
   <property name="geometry">
@@ -26,7 +30,7 @@
       <string>&amp;Rendering Intent</string>
      </property>
      <layout class="QGridLayout">
-      <item row="0" column="0">
+      <item column="0" row="0">
        <widget class="QRadioButton" name="radioPerceptual">
         <property name="toolTip">
          <string>For images</string>
@@ -48,13 +52,12 @@ result in neutral grays. Intended for images.</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="0">
+      <item column="0" row="1">
        <widget class="QRadioButton" name="radioRelativeColorimetric">
         <property name="whatsThis">
          <string>Within and outside gamut; same as Absolute
 Colorimetric. White point changed to result in
 neutral grays.
-
 If adequate table is present in profile,
 then, it is used. Else reverts to perceptual
 intent.</string>
@@ -67,7 +70,7 @@ intent.</string>
         </property>
        </widget>
       </item>
-      <item row="2" column="0">
+      <item column="0" row="2">
        <widget class="QRadioButton" name="radioSaturation">
         <property name="toolTip">
          <string>Best for graphs and charts</string>
@@ -78,7 +81,6 @@ sacrificed to maintain saturation. White point
 changed to result in neutral grays. Intended for
 business graphics (make it colorful charts,
 graphs, overheads, ...)
-
 If adequate table is present in profile,
 then, it is used. Else reverts to perceptual
 intent.</string>
@@ -91,7 +93,7 @@ intent.</string>
         </property>
        </widget>
       </item>
-      <item row="3" column="0">
+      <item column="0" row="3">
        <widget class="QRadioButton" name="radioAbsoluteColorimetric">
         <property name="toolTip">
          <string>Best for spot colors</string>

@@ -2,18 +2,7 @@
 
 # This file is part of Krita.
 
-# Krita is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-
-# Krita is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-
-# You should have received a copy of the GNU General Public License
-# along with Krita.  If not, see <https://www.gnu.org/licenses/>.
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 import os
 
@@ -50,7 +39,7 @@ class PluginImporterExtension(krita.Extension):
             QMessageBox.Yes | QMessageBox.No)
         return reply == QMessageBox.Yes
 
-    def get_success_text(self, plugins):
+    def confirm_activate(self, plugins):
         txt = [
             '<p>',
             i18n('The following plugins were imported:'),
@@ -61,13 +50,24 @@ class PluginImporterExtension(krita.Extension):
             txt.append('<li>%s</li>' % plugin['ui_name'])
 
         txt.append('</ul>')
-        txt.append('<p>')
+        txt.append('<p><strong>')
         txt.append(i18n(
-            'Please restart Krita and activate the plugins in '
-            '<em>Settings -> Configure Krita -> '
-            'Python Plugin Manager</em>.'))
-        txt.append('</p>')
-        return ('\n').join(txt)
+            'Enable plugins now? (Requires restart)'))
+        txt.append('</strong></p>')
+
+        reply = QMessageBox.question(
+            self.parent.activeWindow().qwindow(),
+            i18n('Activate Plugins?'),
+            ('\n').join(txt),
+            QMessageBox.Yes | QMessageBox.No)
+        return reply == QMessageBox.Yes
+
+    def activate_plugins(self, plugins):
+        for plugin in plugins:
+            Application.writeSetting(
+                'python',
+                'enable_%s' % plugin['name'],
+                'true')
 
     def get_resources_dir(self):
         return QStandardPaths.writableLocation(
@@ -100,7 +100,6 @@ class PluginImporterExtension(krita.Extension):
             return
 
         if imported:
-            QMessageBox.information(
-                self.parent.activeWindow().qwindow(),
-                i18n('Import successful'),
-                self.get_success_text(imported))
+            activate = self.confirm_activate(imported)
+            if activate:
+                self.activate_plugins(imported)

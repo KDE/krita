@@ -1,3 +1,7 @@
+/*
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
 #ifndef RAND_SALT
 #define RAND_SALT
 // Generated with:

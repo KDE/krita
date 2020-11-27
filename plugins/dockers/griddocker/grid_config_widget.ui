@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>GridConfigWidget</class>
  <widget class="QWidget" name="GridConfigWidget">
   <property name="geometry">
@@ -100,11 +104,11 @@
         </layout>
        </item>
        <item>
-        <layout class="QGridLayout" name="isometricControlsLayout" columnstretch="0,0">
+        <layout class="QGridLayout" columnstretch="0,0" name="isometricControlsLayout">
          <property name="sizeConstraint">
           <enum>QLayout::SetDefaultConstraint</enum>
          </property>
-         <item row="2" column="1">
+         <item column="1" row="2">
           <widget class="QSpinBox" name="cellSpacingSpinbox">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -126,7 +130,7 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="1">
+         <item column="1" row="1">
           <widget class="QSpinBox" name="angleRightSpinbox">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -142,7 +146,7 @@
            </property>
           </widget>
          </item>
-         <item row="2" column="0">
+         <item column="0" row="2">
           <widget class="QLabel" name="cellSpacingLabel">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -155,7 +159,7 @@
            </property>
           </widget>
          </item>
-         <item row="0" column="1">
+         <item column="1" row="0">
           <widget class="QSpinBox" name="angleLeftSpinbox">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -177,7 +181,7 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="0">
+         <item column="0" row="1">
           <widget class="QLabel" name="rightAngleLabel">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -190,7 +194,7 @@
            </property>
           </widget>
          </item>
-         <item row="0" column="0">
+         <item column="0" row="0">
           <widget class="QLabel" name="leftAngleLabel">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
@@ -207,7 +211,7 @@
        </item>
        <item>
         <layout class="QGridLayout" name="rectangleGridLayout">
-         <item row="0" column="0">
+         <item column="0" row="0">
           <widget class="QLabel" name="lblXSpacing">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -220,7 +224,7 @@
            </property>
           </widget>
          </item>
-         <item row="0" column="1">
+         <item column="1" row="0">
           <widget class="KisIntParseSpinBox" name="intHSpacing">
            <property name="suffix">
             <string> px</string>
@@ -236,10 +240,10 @@
            </property>
           </widget>
          </item>
-         <item row="0" column="2" rowspan="2">
+         <item column="2" row="0" rowspan="2">
           <widget class="KoAspectButton" name="spacingAspectButton" native="true"/>
          </item>
-         <item row="1" column="0">
+         <item column="0" row="1">
           <widget class="QLabel" name="lblYSpacing">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -252,7 +256,7 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="1">
+         <item column="1" row="1">
           <widget class="KisIntParseSpinBox" name="intVSpacing">
            <property name="suffix">
             <string> px</string>
@@ -268,14 +272,14 @@
            </property>
           </widget>
          </item>
-         <item row="2" column="0">
+         <item column="0" row="2">
           <widget class="QLabel" name="lblSubdivision">
            <property name="text">
             <string>Subdivision:</string>
            </property>
           </widget>
          </item>
-         <item row="2" column="1">
+         <item column="1" row="2">
           <widget class="KisIntParseSpinBox" name="intSubdivision">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -298,7 +302,7 @@
        </item>
        <item>
         <layout class="QGridLayout" name="gridLayout">
-         <item row="1" column="2">
+         <item column="2" row="1">
           <widget class="KColorButton" name="colorSubdivision">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -331,7 +335,7 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="0">
+         <item column="0" row="1">
           <widget class="QLabel" name="lblSubdivisionStyle">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -347,7 +351,7 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="1">
+         <item column="1" row="1">
           <widget class="KComboBox" name="selectSubdivisionStyle">
            <property name="currentIndex">
             <number>1</number>
@@ -369,7 +373,7 @@
            </item>
           </widget>
          </item>
-         <item row="0" column="2">
+         <item column="2" row="0">
           <widget class="KColorButton" name="colorMain">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -388,7 +392,7 @@
            </property>
           </widget>
          </item>
-         <item row="0" column="1">
+         <item column="1" row="0">
           <widget class="KComboBox" name="selectMainStyle">
            <property name="currentIndex">
             <number>0</number>
@@ -410,7 +414,7 @@
            </item>
           </widget>
          </item>
-         <item row="0" column="0">
+         <item column="0" row="0">
           <widget class="QLabel" name="lblMainStyle">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
@@ -460,7 +464,7 @@
         <layout class="QHBoxLayout" name="horizontalLayout_3">
          <item>
           <layout class="QGridLayout" name="gridLayout_2">
-           <item row="0" column="1">
+           <item column="1" row="0">
             <widget class="KisIntParseSpinBox" name="intXOffset">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -479,7 +483,7 @@
              </property>
             </widget>
            </item>
-           <item row="0" column="0">
+           <item column="0" row="0">
             <widget class="QLabel" name="lblXOffset">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -492,7 +496,7 @@
              </property>
             </widget>
            </item>
-           <item row="1" column="0">
+           <item column="0" row="1">
             <widget class="QLabel" name="lblYOffset">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -505,7 +509,7 @@
              </property>
             </widget>
            </item>
-           <item row="1" column="1">
+           <item column="1" row="1">
             <widget class="KisIntParseSpinBox" name="intYOffset">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -568,28 +572,28 @@
         <layout class="QVBoxLayout" name="verticalLayout_2">
          <item>
           <layout class="QGridLayout" name="gridLayout_4">
-           <item row="0" column="0">
+           <item column="0" row="0">
             <widget class="QCheckBox" name="chkShowGuides">
              <property name="text">
               <string>Show guides</string>
              </property>
             </widget>
            </item>
-           <item row="0" column="1">
+           <item column="1" row="0">
             <widget class="QCheckBox" name="chkSnapToGuides">
              <property name="text">
               <string>Snap to guides</string>
              </property>
             </widget>
            </item>
-           <item row="1" column="0">
+           <item column="0" row="1">
             <widget class="QCheckBox" name="chkLockGuides">
              <property name="text">
               <string>Lock guides</string>
              </property>
             </widget>
            </item>
-           <item row="1" column="1">
+           <item column="1" row="1">
             <widget class="QCheckBox" name="chkShowRulers">
              <property name="text">
               <string>Show rulers</string>

@@ -1,7 +1,12 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="utf-8"?>
+<ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>KShortcutWidget</class>
- <widget class="QWidget" name="KShortcutWidget" >
-  <property name="geometry" >
+ <widget class="QWidget" name="KShortcutWidget">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
@@ -9,23 +14,23 @@
     <height>49</height>
    </rect>
   </property>
-  <layout class="QHBoxLayout" >
-   <property name="margin" >
+  <layout class="QHBoxLayout">
+   <property name="margin">
     <number>9</number>
    </property>
-   <property name="spacing" >
+   <property name="spacing">
     <number>6</number>
    </property>
    <item>
-    <widget class="QLabel" name="priLabel" >
-     <property name="text" >
+    <widget class="QLabel" name="priLabel">
+     <property name="text">
       <string>Main:</string>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="KKeySequenceWidget" native="1" name="priEditor" >
-     <property name="minimumSize" >
+    <widget class="KKeySequenceWidget" name="priEditor" native="1">
+     <property name="minimumSize">
       <size>
        <width>0</width>
        <height>0</height>
@@ -35,10 +40,10 @@
    </item>
    <item>
     <spacer>
-     <property name="orientation" >
+     <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
-     <property name="sizeHint" >
+     <property name="sizeHint">
       <size>
        <width>50</width>
        <height>31</height>
@@ -47,15 +52,15 @@
     </spacer>
    </item>
    <item>
-    <widget class="QLabel" name="altLabel" >
-     <property name="text" >
+    <widget class="QLabel" name="altLabel">
+     <property name="text">
       <string>Alternate:</string>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="KKeySequenceWidget" native="1" name="altEditor" >
-     <property name="minimumSize" >
+    <widget class="KKeySequenceWidget" name="altEditor" native="1">
+     <property name="minimumSize">
       <size>
        <width>0</width>
        <height>0</height>

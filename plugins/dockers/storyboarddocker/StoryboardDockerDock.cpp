@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2020 Saurabh Kumar <saurabhk660@gmail.com>
  *
- *  This library is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This library is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU Lesser General Public License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #include "StoryboardDockerDock.h"
@@ -348,7 +336,11 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
             firstIndex = m_storyboardModel->index(0,0);
         }
         else {
+#if QT_VERSION >= QT_VERSION_CHECK(5,11,0)
             firstIndex = firstIndex.siblingAtRow(firstIndex.row() + 1);
+#else
+            firstIndex = firstIndex.sibling(firstIndex.row() + 1, 0);
+#endif
         }
 
         int lastItemFrame = dlg.lastItem();
@@ -450,7 +442,12 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
                 p.drawPixmap(thumbRect, pxmp, pxmp.rect());
 
                 //get the panelInfo rect and draw panel name and duration
+#if QT_VERSION >= QT_VERSION_CHECK(5,11,0)
                 int numericFontWidth = p.fontMetrics().horizontalAdvance("0");
+#else
+                int numericFontWidth = p.fontMetrics().width("0");
+#endif
+
                 QRectF panelInfoRect = cellRect;
                 panelInfoRect.setHeight(p.fontMetrics().height());
                 panelInfoRect.setWidth((scale * pxmp.rect().size()).width() - 6 * numericFontWidth);

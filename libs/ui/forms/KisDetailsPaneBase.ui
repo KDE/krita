@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>KisDetailsPaneBase</class>
  <widget class="QWidget" name="KisDetailsPaneBase">
   <property name="geometry">
@@ -26,7 +30,7 @@
    <property name="bottomMargin">
     <number>0</number>
    </property>
-   <item row="0" column="0" colspan="2">
+   <item colspan="2" column="0" row="0">
     <widget class="QSplitter" name="m_splitter">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -47,7 +51,7 @@
      </widget>
      <widget class="QWidget" name="layoutWidget">
       <layout class="QGridLayout">
-       <item row="0" column="2">
+       <item column="2" row="0">
         <spacer>
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
@@ -63,7 +67,7 @@
          </property>
         </spacer>
        </item>
-       <item row="4" column="1">
+       <item column="1" row="4">
         <spacer>
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
@@ -79,7 +83,7 @@
          </property>
         </spacer>
        </item>
-       <item row="3" column="0" colspan="3">
+       <item colspan="3" column="0" row="3">
         <widget class="QTextBrowser" name="m_detailsLabel">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -92,7 +96,7 @@
          </property>
         </widget>
        </item>
-       <item row="4" column="2">
+       <item column="2" row="4">
         <widget class="QPushButton" name="m_openButton">
          <property name="enabled">
           <bool>false</bool>
@@ -108,7 +112,7 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="0">
+       <item column="0" row="0">
         <spacer>
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
@@ -124,7 +128,7 @@
          </property>
         </spacer>
        </item>
-       <item row="2" column="0" colspan="3">
+       <item colspan="3" column="0" row="2">
         <widget class="Line" name="line1">
          <property name="frameShape">
           <enum>QFrame::HLine</enum>
@@ -137,7 +141,7 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="1">
+       <item column="1" row="0">
         <widget class="QCheckBox" name="m_alwaysUseCheckBox">
          <property name="enabled">
           <bool>false</bool>

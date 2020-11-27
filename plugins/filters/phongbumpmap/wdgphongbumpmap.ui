@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgPhongBumpmap</class>
  <widget class="QWidget" name="WdgPhongBumpmap">
   <property name="geometry">
@@ -60,7 +64,7 @@
        <string>General settings</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_4">
-       <item row="2" column="0" colspan="2">
+       <item colspan="2" column="0" row="2">
         <widget class="QGroupBox" name="materialParametersGroupBox">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -75,7 +79,7 @@
           <bool>true</bool>
          </property>
          <layout class="QGridLayout" name="gridLayout_6">
-          <item row="2" column="0">
+          <item column="0" row="2">
            <widget class="QGroupBox" name="specularReflectivityGroup">
             <property name="title">
              <string>Specula&amp;r</string>
@@ -102,7 +106,7 @@
              <property name="bottomMargin">
               <number>0</number>
              </property>
-             <item row="0" column="0">
+             <item column="0" row="0">
               <widget class="QLabel" name="lblSpecularReflectivity">
                <property name="text">
                 <string>Reflectivity:</string>
@@ -112,7 +116,7 @@
                </property>
               </widget>
              </item>
-             <item row="0" column="1">
+             <item column="1" row="0">
               <widget class="KisDoubleSliderSpinBox" name="specularReflectivityKisDoubleSliderSpinBox" native="true">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
@@ -134,7 +138,7 @@
                </property>
               </widget>
              </item>
-             <item row="1" column="0">
+             <item column="0" row="1">
               <widget class="QLabel" name="lblSpecularShinyExp">
                <property name="text">
                 <string>Shinyness exponent:</string>
@@ -144,7 +148,7 @@
                </property>
               </widget>
              </item>
-             <item row="1" column="1">
+             <item column="1" row="1">
               <widget class="KisSliderSpinBox" name="shinynessExponentKisSliderSpinBox" native="true">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -166,7 +170,7 @@
                </property>
               </widget>
              </item>
-             <item row="2" column="0">
+             <item column="0" row="2">
               <spacer name="horizontalSpacer_3">
                <property name="orientation">
                 <enum>Qt::Horizontal</enum>
@@ -185,7 +189,7 @@
             </layout>
            </widget>
           </item>
-          <item row="1" column="0">
+          <item column="0" row="1">
            <widget class="QGroupBox" name="diffuseReflectivityGroup">
             <property name="layoutDirection">
              <enum>Qt::LeftToRight</enum>
@@ -215,7 +219,7 @@
              <property name="bottomMargin">
               <number>0</number>
              </property>
-             <item row="0" column="0">
+             <item column="0" row="0">
               <widget class="QLabel" name="lblDiffuseReflectivity">
                <property name="text">
                 <string>Reflectivity:</string>
@@ -225,7 +229,7 @@
                </property>
               </widget>
              </item>
-             <item row="0" column="1">
+             <item column="1" row="0">
               <widget class="KisDoubleSliderSpinBox" name="diffuseReflectivityKisDoubleSliderSpinBox" native="true">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -247,7 +251,7 @@
                </property>
               </widget>
              </item>
-             <item row="1" column="0">
+             <item column="0" row="1">
               <spacer name="horizontalSpacer_2">
                <property name="orientation">
                 <enum>Qt::Horizontal</enum>
@@ -266,7 +270,7 @@
             </layout>
            </widget>
           </item>
-          <item row="0" column="0">
+          <item column="0" row="0">
            <widget class="QGroupBox" name="AmbientGroup">
             <property name="title">
              <string>Ambient</string>
@@ -293,7 +297,7 @@
              <property name="spacing">
               <number>6</number>
              </property>
-             <item row="0" column="0">
+             <item column="0" row="0">
               <widget class="QLabel" name="lblAmbientReflectivity">
                <property name="text">
                 <string>Reflectivity:</string>
@@ -303,7 +307,7 @@
                </property>
               </widget>
              </item>
-             <item row="0" column="1">
+             <item column="1" row="0">
               <widget class="KisDoubleSliderSpinBox" name="ambientReflectivityKisDoubleSliderSpinBox" native="true">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
@@ -325,7 +329,7 @@
                </property>
               </widget>
              </item>
-             <item row="1" column="0">
+             <item column="0" row="1">
               <spacer name="horizontalSpacer_4">
                <property name="orientation">
                 <enum>Qt::Horizontal</enum>
@@ -347,7 +351,7 @@
          </layout>
         </widget>
        </item>
-       <item row="0" column="0">
+       <item column="0" row="0">
         <widget class="QLabel" name="lblHeightmapChannel">
          <property name="text">
           <string>Heightmap channel:</string>
@@ -357,7 +361,7 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="1">
+       <item column="1" row="0">
         <widget class="QComboBox" name="heightChannelComboBox">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -367,7 +371,7 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="0">
+       <item column="0" row="1">
         <spacer name="verticalSpacer_3">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -383,7 +387,7 @@
          </property>
         </spacer>
        </item>
-       <item row="3" column="0">
+       <item column="0" row="3">
         <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -399,7 +403,7 @@
          </property>
         </spacer>
        </item>
-       <item row="1" column="1">
+       <item column="1" row="1">
         <widget class="QCheckBox" name="useNormalMap">
          <property name="text">
           <string extracomment="Whether or not this filter should only use a given channel or use all channels and treat them as a normal map">Use Normal map</string>
@@ -416,7 +420,7 @@
        <string>Light Sources</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_9">
-       <item row="1" column="1">
+       <item column="1" row="1">
         <widget class="QGroupBox" name="lightSourceGroupBox4">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -446,9 +450,9 @@
           <property name="topMargin">
            <number>3</number>
           </property>
-          <item row="0" column="0">
+          <item column="0" row="0">
            <layout class="QFormLayout" name="formLayout_4">
-            <item row="0" column="0">
+            <item column="0" row="0">
              <widget class="QLabel" name="colorLabel4">
               <property name="text">
                <string>Color:</string>
@@ -458,7 +462,7 @@
               </property>
              </widget>
             </item>
-            <item row="0" column="1">
+            <item column="1" row="0">
              <widget class="KColorCombo" name="lightKColorCombo4">
               <property name="color" stdset="0">
                <color>
@@ -469,7 +473,7 @@
               </property>
              </widget>
             </item>
-            <item row="1" column="0">
+            <item column="0" row="1">
              <widget class="QLabel" name="azimuthLabel4">
               <property name="toolTip">
                <string>Direction of the light, the dial tip represents where the light comes from.</string>
@@ -482,7 +486,7 @@
               </property>
              </widget>
             </item>
-            <item row="1" column="1">
+            <item column="1" row="1">
              <widget class="KisIntParseSpinBox" name="azimuthSpinBox4">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -513,7 +517,7 @@
               </property>
              </widget>
             </item>
-            <item row="2" column="0">
+            <item column="0" row="2">
              <widget class="QLabel" name="inclinationLabel4">
               <property name="toolTip">
                <string>Vertical tilt of the light. 90° is perpendicular to the canvas, 0° is parallel.</string>
@@ -526,7 +530,7 @@
               </property>
              </widget>
             </item>
-            <item row="2" column="1">
+            <item column="1" row="2">
              <widget class="KisIntParseSpinBox" name="inclinationSpinBox4">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -556,7 +560,7 @@
             </item>
            </layout>
           </item>
-          <item row="0" column="1">
+          <item column="1" row="0">
            <widget class="QDial" name="azimuthDial4">
             <property name="toolTip">
              <string>Azimuth</string>
@@ -602,7 +606,7 @@
          </layout>
         </widget>
        </item>
-       <item row="1" column="0">
+       <item column="0" row="1">
         <widget class="QGroupBox" name="lightSourceGroupBox2">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -626,9 +630,9 @@
           <property name="topMargin">
            <number>3</number>
           </property>
-          <item row="0" column="0">
+          <item column="0" row="0">
            <layout class="QFormLayout" name="formLayout_2">
-            <item row="0" column="0">
+            <item column="0" row="0">
              <widget class="QLabel" name="colorLabel2">
               <property name="text">
                <string>Color:</string>
@@ -638,7 +642,7 @@
               </property>
              </widget>
             </item>
-            <item row="0" column="1">
+            <item column="1" row="0">
              <widget class="KColorCombo" name="lightKColorCombo2">
               <property name="color" stdset="0">
                <color>
@@ -649,7 +653,7 @@
               </property>
              </widget>
             </item>
-            <item row="1" column="0">
+            <item column="0" row="1">
              <widget class="QLabel" name="azimuthLabel2">
               <property name="toolTip">
                <string>Direction of the light, the dial tip represents where the light comes from.</string>
@@ -662,7 +666,7 @@
               </property>
              </widget>
             </item>
-            <item row="1" column="1">
+            <item column="1" row="1">
              <widget class="KisIntParseSpinBox" name="azimuthSpinBox2">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -696,7 +700,7 @@
               </property>
              </widget>
             </item>
-            <item row="2" column="0">
+            <item column="0" row="2">
              <widget class="QLabel" name="inclinationLabel2">
               <property name="toolTip">
                <string>Vertical tilt of the light. 90° is perpendicular to the canvas, 0° is parallel.</string>
@@ -709,7 +713,7 @@
               </property>
              </widget>
             </item>
-            <item row="2" column="1">
+            <item column="1" row="2">
              <widget class="KisIntParseSpinBox" name="inclinationSpinBox2">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -742,7 +746,7 @@
             </item>
            </layout>
           </item>
-          <item row="0" column="1">
+          <item column="1" row="0">
            <widget class="QDial" name="azimuthDial2">
             <property name="toolTip">
              <string>Azimuth</string>
@@ -788,7 +792,7 @@
          </layout>
         </widget>
        </item>
-       <item row="0" column="0">
+       <item column="0" row="0">
         <widget class="QGroupBox" name="lightSourceGroupBox1">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -812,7 +816,7 @@
           <property name="topMargin">
            <number>3</number>
           </property>
-          <item row="0" column="0">
+          <item column="0" row="0">
            <layout class="QFormLayout" name="formLayout">
             <property name="horizontalSpacing">
              <number>6</number>
@@ -820,7 +824,7 @@
             <property name="verticalSpacing">
              <number>6</number>
             </property>
-            <item row="0" column="0">
+            <item column="0" row="0">
              <widget class="QLabel" name="colorLabel1">
               <property name="text">
                <string>Color:</string>
@@ -830,7 +834,7 @@
               </property>
              </widget>
             </item>
-            <item row="0" column="1">
+            <item column="1" row="0">
              <widget class="KColorCombo" name="lightKColorCombo1">
               <property name="color" stdset="0">
                <color>
@@ -841,7 +845,7 @@
               </property>
              </widget>
             </item>
-            <item row="1" column="0">
+            <item column="0" row="1">
              <widget class="QLabel" name="azimuthLabel1">
               <property name="toolTip">
                <string>Direction of the light, the dial tip represents where the light comes from.</string>
@@ -854,7 +858,7 @@
               </property>
              </widget>
             </item>
-            <item row="1" column="1">
+            <item column="1" row="1">
              <widget class="KisIntParseSpinBox" name="azimuthSpinBox1">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -888,7 +892,7 @@
               </property>
              </widget>
             </item>
-            <item row="2" column="0">
+            <item column="0" row="2">
              <widget class="QLabel" name="inclinationLabel1">
               <property name="toolTip">
                <string>Vertical tilt of the light. 90° is perpendicular to the canvas, 0° is parallel.</string>
@@ -901,7 +905,7 @@
               </property>
              </widget>
             </item>
-            <item row="2" column="1">
+            <item column="1" row="2">
              <widget class="KisIntParseSpinBox" name="inclinationSpinBox1">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -931,7 +935,7 @@
             </item>
            </layout>
           </item>
-          <item row="0" column="1">
+          <item column="1" row="0">
            <widget class="QDial" name="azimuthDial1">
             <property name="toolTip">
              <string>Azimuth</string>
@@ -977,7 +981,7 @@
          </layout>
         </widget>
        </item>
-       <item row="0" column="1">
+       <item column="1" row="0">
         <widget class="QGroupBox" name="lightSourceGroupBox3">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -1004,9 +1008,9 @@
           <property name="topMargin">
            <number>3</number>
           </property>
-          <item row="0" column="0">
+          <item column="0" row="0">
            <layout class="QFormLayout" name="formLayout_3">
-            <item row="0" column="0">
+            <item column="0" row="0">
              <widget class="QLabel" name="colorLabel3">
               <property name="text">
                <string>Color:</string>
@@ -1016,7 +1020,7 @@
               </property>
              </widget>
             </item>
-            <item row="0" column="1">
+            <item column="1" row="0">
              <widget class="KColorCombo" name="lightKColorCombo3">
               <property name="color" stdset="0">
                <color>
@@ -1027,7 +1031,7 @@
               </property>
              </widget>
             </item>
-            <item row="1" column="0">
+            <item column="0" row="1">
              <widget class="QLabel" name="azimuthLabel3">
               <property name="toolTip">
                <string>Direction of the light, the dial tip represents where the light comes from.</string>
@@ -1040,7 +1044,7 @@
               </property>
              </widget>
             </item>
-            <item row="1" column="1">
+            <item column="1" row="1">
              <widget class="KisIntParseSpinBox" name="azimuthSpinBox3">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -1071,7 +1075,7 @@
               </property>
              </widget>
             </item>
-            <item row="2" column="0">
+            <item column="0" row="2">
              <widget class="QLabel" name="inclinationLabel3">
               <property name="toolTip">
                <string>Vertical tilt of the light. 90° is perpendicular to the canvas, 0° is parallel.</string>
@@ -1084,7 +1088,7 @@
               </property>
              </widget>
             </item>
-            <item row="2" column="1">
+            <item column="1" row="2">
              <widget class="KisIntParseSpinBox" name="inclinationSpinBox3">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -1114,7 +1118,7 @@
             </item>
            </layout>
           </item>
-          <item row="0" column="1">
+          <item column="1" row="0">
            <widget class="QDial" name="azimuthDial3">
             <property name="toolTip">
              <string>Azimuth</string>
@@ -1160,7 +1164,7 @@
          </layout>
         </widget>
        </item>
-       <item row="2" column="0" colspan="2">
+       <item colspan="2" column="0" row="2">
         <spacer name="verticalSpacer_2">
          <property name="orientation">
           <enum>Qt::Vertical</enum>

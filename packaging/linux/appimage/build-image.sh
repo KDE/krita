@@ -1,4 +1,7 @@
 #!/bin/bash
+#
+#  SPDX-License-Identifier: GPL-3.0-or-later
+#
 
 # Halt on errors and be verbose about what we are doing
 set -e
@@ -229,7 +232,7 @@ linuxdeployqt $APPDIR/usr/share/applications/org.kde.krita.desktop \
   -bundle-non-qt-libs \
   -extra-plugins=mediaservice,$PLUGINS,$APPDIR/usr/lib/krita-python-libs/PyKrita/krita.so,$APPDIR/usr/lib//qml/org/krita/sketch/libkritasketchplugin.so,$APPDIR/usr/lib/qml/org/krita/draganddrop/libdraganddropplugin.so  \
   -updateinformation="${ZSYNC_URL}" \
-  
+
 # Currently, we're skipping linuxdeployqt's automatic image building because it's choosing to ignore the inclusion of QtMultimedia.
 # I have an issue pending on linuxdeployqt's github page, but for the time being, manually bundling with appimagetool after linuxdeployqt
 # seems to work without any regressions.

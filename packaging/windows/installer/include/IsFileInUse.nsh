@@ -1,3 +1,6 @@
+;
+;  SPDX-License-Identifier: GPL-3.0-or-later
+;
 ; Checks whether a file is in use by trying to open it in Append mode
 
 !macro _IsFileInUse _a _b _t _f

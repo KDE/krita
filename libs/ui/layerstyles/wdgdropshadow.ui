@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgDropShadow</class>
  <widget class="QWidget" name="WdgDropShadow">
   <property name="geometry">
@@ -11,13 +15,13 @@
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
+   <item column="0" row="0">
     <widget class="QGroupBox" name="grpMain">
      <property name="title">
       <string>Drop Shadow</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
-      <item row="3" column="0">
+      <item column="0" row="3">
        <spacer name="verticalSpacer">
         <property name="orientation">
          <enum>Qt::Vertical</enum>
@@ -30,7 +34,7 @@
         </property>
        </spacer>
       </item>
-      <item row="2" column="0">
+      <item column="0" row="2">
        <widget class="QCheckBox" name="chkLayerKnocksOutDropShadow">
         <property name="toolTip">
          <string>Use to obscure the shadow when fill is transparent</string>
@@ -40,20 +44,20 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="0">
+      <item column="0" row="1">
        <widget class="QGroupBox" name="groupBox_2">
         <property name="title">
          <string>Quality</string>
         </property>
         <layout class="QFormLayout" name="formLayout_2">
-         <item row="0" column="0">
+         <item column="0" row="0">
           <widget class="QLabel" name="label_5">
            <property name="text">
             <string>Contour:</string>
            </property>
           </widget>
          </item>
-         <item row="0" column="1">
+         <item column="1" row="0">
           <layout class="QHBoxLayout" name="horizontalLayout_2">
            <item>
             <widget class="KisCmbContour" name="cmbContour" native="true">
@@ -77,7 +81,7 @@
            </item>
           </layout>
          </item>
-         <item row="1" column="0">
+         <item column="0" row="1">
           <widget class="QLabel" name="label_6">
            <property name="text">
             <string>&amp;Noise:</string>
@@ -87,7 +91,7 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="1">
+         <item column="1" row="1">
           <widget class="KisSliderSpinBox" name="intNoise" native="true">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
@@ -103,13 +107,13 @@
         </layout>
        </widget>
       </item>
-      <item row="0" column="0">
+      <item column="0" row="0">
        <widget class="QGroupBox" name="groupBox_3">
         <property name="title">
          <string>Structure</string>
         </property>
         <layout class="QGridLayout" name="gridLayout_3">
-         <item row="0" column="1">
+         <item column="1" row="0">
           <widget class="KisLayerStyleCompositeOpComboBox" name="cmbCompositeOp">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -122,7 +126,7 @@
            </property>
           </widget>
          </item>
-         <item row="4" column="1" colspan="2">
+         <item colspan="2" column="1" row="4">
           <widget class="KisSliderSpinBox" name="intDistance" native="true">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
@@ -132,10 +136,10 @@
            </property>
           </widget>
          </item>
-         <item row="0" column="2">
+         <item column="2" row="0">
           <widget class="KisColorButton" name="bnColor"/>
          </item>
-         <item row="1" column="1" colspan="2">
+         <item colspan="2" column="1" row="1">
           <widget class="KisSliderSpinBox" name="intOpacity" native="true">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
@@ -157,7 +161,7 @@
            </property>
           </widget>
          </item>
-         <item row="4" column="0">
+         <item column="0" row="4">
           <widget class="QLabel" name="label_2">
            <property name="text">
             <string>&amp;Distance:</string>
@@ -167,7 +171,7 @@
            </property>
           </widget>
          </item>
-         <item row="6" column="1" colspan="2">
+         <item colspan="2" column="1" row="6">
           <widget class="KisSliderSpinBox" name="intSize" native="true">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
@@ -177,7 +181,7 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="0">
+         <item column="0" row="1">
           <widget class="QLabel" name="label_14">
            <property name="text">
             <string>Opaci&amp;ty:</string>
@@ -187,7 +191,7 @@
            </property>
           </widget>
          </item>
-         <item row="3" column="0">
+         <item column="0" row="3">
           <widget class="QLabel" name="label">
            <property name="text">
             <string>An&amp;gle:</string>
@@ -197,7 +201,7 @@
            </property>
           </widget>
          </item>
-         <item row="5" column="0">
+         <item column="0" row="5">
           <widget class="QLabel" name="lblSpread">
            <property name="text">
             <string>Sp&amp;read:</string>
@@ -207,7 +211,7 @@
            </property>
           </widget>
          </item>
-         <item row="5" column="1" colspan="2">
+         <item colspan="2" column="1" row="5">
           <widget class="KisSliderSpinBox" name="intSpread" native="true">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
@@ -217,7 +221,7 @@
            </property>
           </widget>
          </item>
-         <item row="6" column="0">
+         <item column="0" row="6">
           <widget class="QLabel" name="label_4">
            <property name="text">
             <string>S&amp;ize:</string>
@@ -227,7 +231,7 @@
            </property>
           </widget>
          </item>
-         <item row="0" column="0">
+         <item column="0" row="0">
           <widget class="QLabel" name="label_13">
            <property name="text">
             <string>&amp;Blend Mode:</string>
@@ -237,7 +241,7 @@
            </property>
           </widget>
          </item>
-         <item row="3" column="1" colspan="2">
+         <item colspan="2" column="1" row="3">
           <widget class="KisLayerStyleAngleSelector" name="angleSelector" native="true"/>
          </item>
         </layout>

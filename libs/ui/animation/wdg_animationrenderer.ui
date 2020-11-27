@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgAnimaterionRenderer</class>
  <widget class="QWidget" name="WdgAnimaterionRenderer">
   <property name="geometry">
@@ -75,7 +79,7 @@
    </item>
    <item>
     <layout class="QGridLayout" name="gridLayout_3">
-     <item row="0" column="1">
+     <item column="1" row="0">
       <widget class="QSpinBox" name="intStart">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -85,7 +89,7 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="0">
+     <item column="0" row="0">
       <widget class="QLabel" name="label_3">
        <property name="text">
         <string>First frame:</string>
@@ -95,7 +99,7 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="4">
+     <item column="4" row="0">
       <widget class="QLabel" name="fpsLabel">
        <property name="layoutDirection">
         <enum>Qt::LeftToRight</enum>
@@ -108,7 +112,7 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="5">
+     <item column="5" row="0">
       <widget class="QSpinBox" name="intFramesPerSecond">
        <property name="minimum">
         <number>1</number>
@@ -118,7 +122,7 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="1">
+     <item column="1" row="1">
       <widget class="QSpinBox" name="intEnd">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -131,7 +135,7 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="0">
+     <item column="0" row="1">
       <widget class="QLabel" name="label_4">
        <property name="text">
         <string>Last frame:</string>
@@ -141,7 +145,7 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="3">
+     <item column="3" row="0">
       <widget class="QSpinBox" name="intWidth">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -154,7 +158,7 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="2">
+     <item column="2" row="0">
       <widget class="QLabel" name="lblWidth">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -170,7 +174,7 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="2">
+     <item column="2" row="1">
       <widget class="QLabel" name="lblHeight">
        <property name="text">
         <string>Height:</string>
@@ -180,7 +184,7 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="3">
+     <item column="3" row="1">
       <widget class="QSpinBox" name="intHeight">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -214,7 +218,7 @@
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
          <layout class="QGridLayout" name="gridLayout">
-          <item row="2" column="1">
+          <item column="1" row="2">
            <widget class="KisFileNameRequester" name="videoFilename" native="true">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -224,7 +228,7 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="1">
+          <item column="1" row="1">
            <layout class="QHBoxLayout" name="horizontalLayout_3">
             <item>
              <widget class="QComboBox" name="cmbRenderType"/>
@@ -241,7 +245,7 @@
             </item>
            </layout>
           </item>
-          <item row="0" column="0">
+          <item column="0" row="0">
            <widget class="QLabel" name="label_9">
             <property name="text">
              <string>FF&amp;Mpeg: </string>
@@ -254,10 +258,10 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="1">
+          <item column="1" row="0">
            <widget class="KisFileNameRequester" name="ffmpegLocation" native="true"/>
           </item>
-          <item row="1" column="0">
+          <item column="0" row="1">
            <widget class="QLabel" name="label_6">
             <property name="text">
              <string>Render as:</string>
@@ -267,7 +271,7 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="0">
+          <item column="0" row="2">
            <widget class="QLabel" name="label_7">
             <property name="text">
              <string>Video Location:</string>
@@ -277,7 +281,7 @@
             </property>
            </widget>
           </item>
-          <item row="4" column="1">
+          <item column="1" row="4">
            <widget class="QCheckBox" name="chkIncludeAudio">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -326,7 +330,7 @@
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
          <layout class="QGridLayout" name="gridLayout_2">
-          <item row="0" column="0">
+          <item column="0" row="0">
            <widget class="QLabel" name="label_8">
             <property name="text">
              <string>Fi&amp;le format:</string>
@@ -339,7 +343,7 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="1">
+          <item column="1" row="0">
            <layout class="QHBoxLayout" name="horizontalLayout_2">
             <item>
              <widget class="QComboBox" name="cmbMimetype">
@@ -366,14 +370,14 @@
             </item>
            </layout>
           </item>
-          <item row="3" column="0">
+          <item column="0" row="3">
            <widget class="QLabel" name="label_5">
             <property name="text">
              <string>Start numbering at:</string>
             </property>
            </widget>
           </item>
-          <item row="3" column="1">
+          <item column="1" row="3">
            <widget class="QSpinBox" name="sequenceStart">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -386,7 +390,7 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="0">
+          <item column="0" row="2">
            <widget class="QLabel" name="label">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -402,14 +406,14 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="1">
+          <item column="1" row="2">
            <widget class="QLineEdit" name="txtBasename">
             <property name="text">
              <string>frame</string>
             </property>
            </widget>
           </item>
-          <item row="1" column="0">
+          <item column="0" row="1">
            <widget class="QLabel" name="label_2">
             <property name="text">
              <string>Image location:</string>
@@ -419,7 +423,7 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="1">
+          <item column="1" row="1">
            <widget class="KisFileNameRequester" name="dirRequester" native="true">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -429,7 +433,7 @@
             </property>
            </widget>
           </item>
-          <item row="4" column="1">
+          <item column="1" row="4">
            <widget class="QCheckBox" name="chkOnlyUniqueFrames">
             <property name="text">
              <string>Only Unique Frames</string>

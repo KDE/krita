@@ -1,3 +1,7 @@
+/*
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
 #ifndef _KIS_TIME_SPAN_TEST_H
 #define _KIS_TIME_SPAN_TEST_H
 

@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgPaintOpPresets</class>
  <widget class="QWidget" name="WdgPaintOpPresets">
   <property name="geometry">
@@ -18,8 +22,8 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <layout class="QGridLayout" name="layout" columnstretch="0,0">
-     <item row="0" column="0" colspan="2">
+    <layout class="QGridLayout" columnstretch="0,0" name="layout">
+     <item colspan="2" column="0" row="0">
       <widget class="KisPresetChooser" name="wdgPresetChooser">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">

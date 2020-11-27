@@ -1,3 +1,7 @@
+/*
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
 import QtQuick 2.3
 import org.krita.sketch 1.0
 import org.krita.sketch.components 1.0
@@ -9,7 +13,7 @@ Rectangle {
         colorGroup: SystemPalette.Active }
     property int rowHeight: height/13;
     color: palette.base;
-    
+
     Column {
         width: root.width
         Row {

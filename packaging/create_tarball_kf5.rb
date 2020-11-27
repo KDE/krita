@@ -9,7 +9,7 @@
 # (c) 2006-2008 Tom Albers <tomalbers@kde.nl>
 # (c) 2007 Angelo Naselli <anaselli@linux.it> (command line parameters)
 # Some parts of this code taken from cvs2dist
-# License: GNU General Public License V2
+SPDX-License-Identifier: GPL-2.0-only
 
 require 'optparse'
 require 'ostruct'

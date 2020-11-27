@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgUnsharp</class>
  <widget class="QWidget" name="WdgUnsharp">
   <property name="geometry">
@@ -11,7 +15,7 @@
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
+   <item column="0" row="0">
     <widget class="QLabel" name="textLabel1">
      <property name="sizePolicy">
       <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
@@ -30,7 +34,7 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="1">
+   <item column="1" row="0">
     <widget class="KisDoubleParseSpinBox" name="doubleHalfSize">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -43,7 +47,7 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="2" rowspan="4">
+   <item column="2" row="0" rowspan="4">
     <spacer name="horizontalSpacer">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -56,7 +60,7 @@
      </property>
     </spacer>
    </item>
-   <item row="1" column="0">
+   <item column="0" row="1">
     <widget class="QLabel" name="textLabel3">
      <property name="sizePolicy">
       <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
@@ -75,7 +79,7 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="1">
+   <item column="1" row="1">
     <widget class="KisDoubleParseSpinBox" name="doubleAmount">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -91,7 +95,7 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="0">
+   <item column="0" row="2">
     <widget class="QLabel" name="textLabel2">
      <property name="sizePolicy">
       <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
@@ -110,7 +114,7 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="1">
+   <item column="1" row="2">
     <widget class="KisIntParseSpinBox" name="intThreshold">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -120,7 +124,7 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="0">
+   <item column="0" row="3">
     <widget class="QLabel" name="label">
      <property name="text">
       <string>Lightness Only:</string>
@@ -133,14 +137,14 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="1">
+   <item column="1" row="3">
     <widget class="QCheckBox" name="chkLightnessOnly">
      <property name="text">
       <string notr="true"/>
      </property>
     </widget>
    </item>
-   <item row="4" column="0" colspan="2">
+   <item colspan="2" column="0" row="4">
     <spacer>
      <property name="orientation">
       <enum>Qt::Vertical</enum>

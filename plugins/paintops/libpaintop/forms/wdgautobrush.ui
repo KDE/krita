@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>KisWdgAutoBrush</class>
  <widget class="QWidget" name="KisWdgAutoBrush">
   <property name="geometry">
@@ -16,7 +20,7 @@
     <height>0</height>
    </size>
   </property>
-  <layout class="QGridLayout" name="gridLayout_3" columnstretch="0,1">
+  <layout class="QGridLayout" columnstretch="0,1" name="gridLayout_3">
    <property name="leftMargin">
     <number>0</number>
    </property>
@@ -29,7 +33,7 @@
    <property name="bottomMargin">
     <number>0</number>
    </property>
-   <item row="0" column="0">
+   <item column="0" row="0">
     <layout class="QVBoxLayout">
      <property name="spacing">
       <number>8</number>
@@ -127,7 +131,7 @@
      </item>
     </layout>
    </item>
-   <item row="1" column="1">
+   <item column="1" row="1">
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -143,9 +147,9 @@
      </property>
     </spacer>
    </item>
-   <item row="0" column="1">
-    <layout class="QGridLayout" name="gridLayout_2" columnstretch="0,0,1">
-     <item row="0" column="1" colspan="2">
+   <item column="1" row="0">
+    <layout class="QGridLayout" columnstretch="0,0,1" name="gridLayout_2">
+     <item colspan="2" column="1" row="0">
       <widget class="KisDoubleSliderSpinBox" name="inputRadius" native="true">
        <property name="minimumSize">
         <size>
@@ -155,7 +159,7 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="0">
+     <item column="0" row="3">
       <widget class="QLabel" name="lblAngle">
        <property name="text">
         <string>Angle:</string>
@@ -165,7 +169,7 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="0">
+     <item column="0" row="0">
       <widget class="QLabel" name="lblDiameter">
        <property name="text">
         <string>Diameter:</string>
@@ -175,7 +179,7 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="0">
+     <item column="0" row="1">
       <widget class="QLabel" name="lblRatio">
        <property name="text">
         <string>Ratio:</string>
@@ -185,10 +189,10 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="1" colspan="2">
+     <item colspan="2" column="1" row="1">
       <widget class="KisDoubleSliderSpinBox" name="inputRatio" native="true"/>
      </item>
-     <item row="2" column="0" colspan="3">
+     <item colspan="3" column="0" row="2">
       <widget class="QStackedWidget" name="stackedWidget">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -207,7 +211,7 @@
        </property>
        <widget class="QWidget" name="PageFade">
         <layout class="QGridLayout" name="gridLayout_5">
-         <item row="0" column="0">
+         <item column="0" row="0">
           <widget class="QGroupBox" name="grpFade">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -232,8 +236,8 @@
              <number>4</number>
             </property>
             <item>
-             <layout class="QGridLayout" name="gridLayout" columnstretch="0,1,0">
-              <item row="0" column="0">
+             <layout class="QGridLayout" columnstretch="0,1,0" name="gridLayout">
+              <item column="0" row="0">
                <widget class="QLabel" name="lblHorizontalFade">
                 <property name="text">
                  <string>Horizontal:</string>
@@ -243,13 +247,13 @@
                 </property>
                </widget>
               </item>
-              <item row="0" column="1">
+              <item column="1" row="0">
                <widget class="KisDoubleSliderSpinBox" name="inputHFade" native="true"/>
               </item>
-              <item row="0" column="2" rowspan="2">
+              <item column="2" row="0" rowspan="2">
                <widget class="KoAspectButton" name="aspectButton" native="true"/>
               </item>
-              <item row="1" column="0">
+              <item column="0" row="1">
                <widget class="QLabel" name="lblVerticalFade">
                 <property name="text">
                  <string>Vertical:</string>
@@ -259,7 +263,7 @@
                 </property>
                </widget>
               </item>
-              <item row="1" column="1">
+              <item column="1" row="1">
                <widget class="KisDoubleSliderSpinBox" name="inputVFade" native="true"/>
               </item>
              </layout>
@@ -271,7 +275,7 @@
        </widget>
        <widget class="QWidget" name="PageCurve">
         <layout class="QGridLayout" name="gridLayout_6">
-         <item row="0" column="0">
+         <item column="0" row="0">
           <widget class="QLabel" name="lblSoftness">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
@@ -293,7 +297,7 @@
            </property>
           </widget>
          </item>
-         <item row="0" column="1">
+         <item column="1" row="0">
           <widget class="KisCurveWidget" name="softnessCurve" native="true">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
@@ -315,7 +319,7 @@
            </property>
           </widget>
          </item>
-         <item row="0" column="2">
+         <item column="2" row="0">
           <spacer name="horizontalSpacer">
            <property name="orientation">
             <enum>Qt::Horizontal</enum>
@@ -332,7 +336,7 @@
        </widget>
       </widget>
      </item>
-     <item row="5" column="0">
+     <item column="0" row="5">
       <widget class="QLabel" name="lblRandomness">
        <property name="text">
         <string>Randomness:</string>
@@ -342,7 +346,7 @@
        </property>
       </widget>
      </item>
-     <item row="4" column="0">
+     <item column="0" row="4">
       <widget class="QLabel" name="lblSpikes">
        <property name="text">
         <string>Spikes:</string>
@@ -352,7 +356,7 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="1" colspan="2">
+     <item colspan="2" column="1" row="3">
       <widget class="KisSliderSpinBox" name="inputAngle" native="true">
        <property name="minimumSize">
         <size>
@@ -362,16 +366,16 @@
        </property>
       </widget>
      </item>
-     <item row="4" column="1" colspan="2">
+     <item colspan="2" column="1" row="4">
       <widget class="KisSliderSpinBox" name="inputSpikes" native="true"/>
      </item>
-     <item row="6" column="1" colspan="2">
+     <item colspan="2" column="1" row="6">
       <widget class="KisDoubleSliderSpinBox" name="density" native="true"/>
      </item>
-     <item row="5" column="1" colspan="2">
+     <item colspan="2" column="1" row="5">
       <widget class="KisDoubleSliderSpinBox" name="inputRandomness" native="true"/>
      </item>
-     <item row="6" column="0">
+     <item column="0" row="6">
       <widget class="QLabel" name="lblDensity">
        <property name="text">
         <string>Density:</string>
@@ -381,10 +385,10 @@
        </property>
       </widget>
      </item>
-     <item row="7" column="1" colspan="2">
+     <item colspan="2" column="1" row="7">
       <widget class="KisSpacingSelectionWidget" name="spacingWidget" native="true"/>
      </item>
-     <item row="7" column="0">
+     <item column="0" row="7">
       <widget class="QLabel" name="lblSpacing">
        <property name="text">
         <string>Spacing:</string>

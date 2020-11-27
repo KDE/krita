@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgLayerBox</class>
  <widget class="QWidget" name="WdgLayerBox">
   <property name="geometry">
@@ -350,7 +354,7 @@
   </customwidget>
   <customwidget>
    <class>NodeView</class>
-   <extends></extends>
+   <extends/>
    <header location="global">NodeView.h</header>
   </customwidget>
   <customwidget>

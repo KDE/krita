@@ -1,19 +1,7 @@
 /*
  * Copyright (c) 2020 boud <boud@valdyas.org>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 #include "TestTagResourceModel.h"
 
@@ -113,7 +101,7 @@ void TestTagResourceModel::testData()
      KoResourceSP resource = tagResourceModel.data(idx, Qt::UserRole + KisAllTagResourceModel::Resource).value<KoResourceSP>();
      QVERIFY(resource);
      QVERIFY(resource->valid());
-     QCOMPARE(resource->name(), "test0.kpp");
+     QCOMPARE(resource->name(), "test0");
      QCOMPARE(resource->resourceId(), 4);
 
      bool tagActive = tagResourceModel.data(idx, Qt::UserRole + KisAllTagResourceModel::TagActive).toBool();
@@ -129,7 +117,7 @@ void TestTagResourceModel::testData()
 void TestTagResourceModel::testTagResource()
 {
     KisResourceModel resourceModel(ResourceType::PaintOpPresets);
-    KoResourceSP resource = resourceModel.resourceForName("test2.kpp");
+    KoResourceSP resource = resourceModel.resourceForName("test2");
     Q_ASSERT(resource);
 
     KisTagModel tagModel(ResourceType::PaintOpPresets);
@@ -147,7 +135,7 @@ void TestTagResourceModel::testTagResource()
 void TestTagResourceModel::testUntagResource()
 {
     KisResourceModel resourceModel(ResourceType::PaintOpPresets);
-    KoResourceSP resource = resourceModel.resourceForName("test1.kpp");
+    KoResourceSP resource = resourceModel.resourceForName("test1");
     Q_ASSERT(resource);
 
     KisTagModel tagModel(ResourceType::PaintOpPresets);
@@ -164,7 +152,7 @@ void TestTagResourceModel::testUntagResource()
 void TestTagResourceModel::testFilterTagResource()
 {
     KisResourceModel resourceModel(ResourceType::PaintOpPresets);
-    KoResourceSP resource = resourceModel.resourceForName("test2.kpp");
+    KoResourceSP resource = resourceModel.resourceForName("test2");
     Q_ASSERT(resource);
 
     KisTagModel tagModel(ResourceType::PaintOpPresets);

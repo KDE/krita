@@ -1,4 +1,7 @@
 #!/bin/bash -e
+#
+#  SPDX-License-Identifier: GPL-3.0-or-later
+#
 
 # Example: androidbuild.sh -p=all --src=/home/sh_zam/workspace/krita --build-type=Release --build-root=/home/sh_zam/workspace/test-kreeta --ndk-path=/home/sh_zam/Android/Sdk/ndk-bundle --sdk-path=/home/sh_zam/Android/Sdk --api-level=21 --android-abi=armeabi-v7a --qt-path=/home/sh_zam/Qt/5.12.1/android_armv7
 
@@ -118,7 +121,7 @@ build_boost() {
     cd $BUILD_ROOT
 }
 
-build_kf5() { 
+build_kf5() {
     if [[ ! -d $QT_ANDROID ]]; then
         echoerr "qt libs not found"
         echo "Please run -p=qt prior to this"
@@ -137,16 +140,16 @@ build_kf5() {
 
     if [[ ! -d $BUILD_ROOT/kf5 ]]; then
         mkdir $BUILD_ROOT/kf5 -p
-    fi 
+    fi
     cd $BUILD_ROOT/kf5
 
     cp $KRITA_ROOT/packaging/android/kdesrc-buildrc $BUILD_ROOT/kf5/
 
-    if [[ ! -d extragear/kdesrc-build ]]; then 
+    if [[ ! -d extragear/kdesrc-build ]]; then
         mkdir -p extragear/kdesrc-build
         git clone http://invent.kde.org/sdk/kdesrc-build extragear/kdesrc-build
     fi
-    if [[ ! -e  $BUILD_ROOT/kf5/kdesrc-build ]]; then 
+    if [[ ! -e  $BUILD_ROOT/kf5/kdesrc-build ]]; then
         ln -s extragear/kdesrc-build/kdesrc-build kdesrc-build
     fi
 
@@ -178,7 +181,7 @@ build_kf5() {
          kconfig ki18n                 \
          kwidgetsaddons kcompletion    \
          kguiaddons kitemmodels        \
-         kitemviews kwindowsystem      
+         kitemviews kwindowsystem
 
     cd $BUILD_ROOT
 }

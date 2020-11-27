@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>VideoHDRMetadataOptionsDialog</class>
  <widget class="QDialog" name="VideoHDRMetadataOptionsDialog">
   <property name="geometry">
@@ -16,14 +20,14 @@
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <layout class="QFormLayout" name="formLayout_2">
-     <item row="0" column="0">
+     <item column="0" row="0">
       <widget class="QLabel" name="label">
        <property name="text">
         <string>Master Display:</string>
        </property>
       </widget>
      </item>
-     <item row="0" column="1">
+     <item column="1" row="0">
       <widget class="QComboBox" name="cmbMasterDisplay"/>
      </item>
     </layout>
@@ -34,7 +38,7 @@
       <string>Display</string>
      </property>
      <layout class="QFormLayout" name="formLayout_3">
-      <item row="0" column="1">
+      <item column="1" row="0">
        <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="1,1">
         <item>
          <widget class="QLabel" name="label_5">
@@ -58,14 +62,14 @@
         </item>
        </layout>
       </item>
-      <item row="1" column="0">
+      <item column="0" row="1">
        <widget class="QLabel" name="label_4">
         <property name="text">
          <string>Red Primary:</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="1">
+      <item column="1" row="1">
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
          <widget class="QDoubleSpinBox" name="dblRedX">
@@ -95,14 +99,14 @@
         </item>
        </layout>
       </item>
-      <item row="3" column="0">
+      <item column="0" row="3">
        <widget class="QLabel" name="label_7">
         <property name="text">
          <string>Green Primary:</string>
         </property>
        </widget>
       </item>
-      <item row="3" column="1">
+      <item column="1" row="3">
        <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
          <widget class="QDoubleSpinBox" name="dblGreenX">
@@ -132,14 +136,14 @@
         </item>
        </layout>
       </item>
-      <item row="5" column="0">
+      <item column="0" row="5">
        <widget class="QLabel" name="label_8">
         <property name="text">
          <string>Blue Primary:</string>
         </property>
        </widget>
       </item>
-      <item row="5" column="1">
+      <item column="1" row="5">
        <layout class="QHBoxLayout" name="horizontalLayout_3">
         <item>
          <widget class="QDoubleSpinBox" name="dblBlueX">
@@ -169,14 +173,14 @@
         </item>
        </layout>
       </item>
-      <item row="7" column="0">
+      <item column="0" row="7">
        <widget class="QLabel" name="label_9">
         <property name="text">
          <string>White Point:</string>
         </property>
        </widget>
       </item>
-      <item row="7" column="1">
+      <item column="1" row="7">
        <layout class="QHBoxLayout" name="horizontalLayout_4">
         <item>
          <widget class="QDoubleSpinBox" name="dblWhiteX">
@@ -206,7 +210,7 @@
         </item>
        </layout>
       </item>
-      <item row="9" column="1">
+      <item column="1" row="9">
        <spacer name="verticalSpacer">
         <property name="orientation">
          <enum>Qt::Vertical</enum>
@@ -222,14 +226,14 @@
         </property>
        </spacer>
       </item>
-      <item row="10" column="0">
+      <item column="0" row="10">
        <widget class="QLabel" name="label_11">
         <property name="text">
          <string>Min Luminance:</string>
         </property>
        </widget>
       </item>
-      <item row="10" column="1">
+      <item column="1" row="10">
        <widget class="QDoubleSpinBox" name="dblMinLuminance">
         <property name="suffix">
          <string> cd/m²</string>
@@ -242,14 +246,14 @@
         </property>
        </widget>
       </item>
-      <item row="12" column="0">
+      <item column="0" row="12">
        <widget class="QLabel" name="label_10">
         <property name="text">
          <string>Max Luminance:</string>
         </property>
        </widget>
       </item>
-      <item row="12" column="1">
+      <item column="1" row="12">
        <widget class="QDoubleSpinBox" name="dblMaxLuminance">
         <property name="suffix">
          <string> cd/m²</string>
@@ -283,14 +287,14 @@
    </item>
    <item>
     <layout class="QFormLayout" name="formLayout">
-     <item row="0" column="0">
+     <item column="0" row="0">
       <widget class="QLabel" name="label_2">
        <property name="text">
         <string>MaxCLL:</string>
        </property>
       </widget>
      </item>
-     <item row="0" column="1">
+     <item column="1" row="0">
       <widget class="QSpinBox" name="intMaxCLL">
        <property name="suffix">
         <string> cd/m²</string>
@@ -300,14 +304,14 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="0">
+     <item column="0" row="1">
       <widget class="QLabel" name="label_3">
        <property name="text">
         <string>MaxFALL:</string>
        </property>
       </widget>
      </item>
-     <item row="1" column="1">
+     <item column="1" row="1">
       <widget class="QSpinBox" name="intMaxFALL">
        <property name="suffix">
         <string> cd/m²</string>

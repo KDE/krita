@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgWaveletDecompose</class>
  <widget class="QWidget" name="WdgWaveletDecompose">
   <property name="geometry">
@@ -14,7 +18,7 @@
    <string>Wavelet Decompose</string>
   </property>
   <layout class="QFormLayout" name="formLayout">
-   <item row="0" column="0">
+   <item column="0" row="0">
     <widget class="QLabel" name="lblWaveletScales">
      <property name="text">
       <string>Wavelet scales:</string>
@@ -24,7 +28,7 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="1">
+   <item column="1" row="0">
     <widget class="QSpinBox" name="scales">
      <property name="maximumSize">
       <size>

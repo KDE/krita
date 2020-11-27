@@ -75,7 +75,6 @@ void StoryboardDelegate::paint(QPainter *p, const QStyleOptionViewItem &option, 
                     frameNumRect.setWidth(3 * m_view->fontMetrics().horizontalAdvance("0") + 2);
 #else
                     frameNumRect.setWidth(3 * m_view->fontMetrics().width() + 2);
-                    int numericFontWidth = p.fontMetrics().width("0");
 #endif
                     frameNumRect.moveBottom(option.rect.top()-1);
                     p->setPen(QPen(option.palette.dark(), 2));

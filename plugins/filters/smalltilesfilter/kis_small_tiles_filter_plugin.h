@@ -3,7 +3,7 @@
  *
  * Copyright (c) Michael Thaler <michael.thaler@physik.tu-muenchen.de>
  *
- *  SPDX-License-Identifier: GPL-2.0-or-later/
+ *  SPDX-License-Identifier: GPL-2.0-or-later */
 
 #ifndef _KIS_SMALL_TILES_FILTER_PLUGIN_H_
 #define _KIS_SMALL_TILES_FILTER_PLUGIN_H_

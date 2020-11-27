@@ -3,7 +3,8 @@
  *
  * Copyright (c) Michael Thaler <michael.thaler@physik.tu-muenchen.de>
  *
- *  SPDX-License-Identifier: GPL-2.0-or-later/
+ *  SPDX-License-Identifier: GPL-2.0-or-later
+ */
 
 #ifndef _KIS_SEPARATE_CHANNELS_PLUGIN_H_
 #define _KIS_SEPARATE_CHANNELS_PLUGIN_H_

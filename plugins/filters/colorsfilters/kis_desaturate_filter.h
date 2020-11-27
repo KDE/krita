@@ -3,7 +3,7 @@
  *
  * Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
  *
- *  SPDX-License-Identifier: GPL-2.0-or-later/
+ *  SPDX-License-Identifier: GPL-2.0-or-later */
 
 #ifndef KIS_DESATURATE_FILTER_H
 #define KIS_DESATURATE_FILTER_H

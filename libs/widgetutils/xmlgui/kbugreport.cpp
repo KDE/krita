@@ -191,7 +191,7 @@ KBugReport::KBugReport(const KAboutData &aboutData, QWidget *_parent)
 
     additionalInformation += "\n---------------------\n";
 
-    QFile crashes(QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/krita-crash.log");
+    QFile crashes(QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/kritacrash.log");
     if (crashes.exists()) {
         crashes.open(QFile::ReadOnly);
         additionalInformation += crashes.readAll();

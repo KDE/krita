@@ -3,7 +3,8 @@
  *
  * Copyright (c) 2004 Michael Thaler (michael.thaler@physik.tu-muenchen.de)
  *
- *  SPDX-License-Identifier: GPL-2.0-or-later/
+ *  SPDX-License-Identifier: GPL-2.0-or-later
+ */
 
 #ifndef ROTATEIMAGE_H
 #define ROTATEIMAGE_H

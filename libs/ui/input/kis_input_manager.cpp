@@ -249,6 +249,32 @@ bool KisInputManager::compressMoveEventCommon(Event *event)
                   std::is_same<Event, QTouchEvent>::value,
                   "event should be a mouse or a tablet event");
 
+#ifdef Q_OS_WIN32
+    /**
+     * On Windows, when the user presses some global window manager shortcuts,
+     * e.g. Alt+Space (to show window title menu), events for these key presses
+     * and releases are not delivered (see bug 424319). This code is a workaround
+     * for this problem. It checks consistency of standard modifiers and resets
+     * shortcut's matcher state in case of a trouble.
+     */
+    if (event->type() == QEvent::MouseButtonPress ||
+        event->type() == QEvent::MouseButtonRelease ||
+        event->type() == QEvent::MouseMove ||
+        event->type() == QEvent::TabletMove ||
+        event->type() == QEvent::TabletPress ||
+        event->type() == QEvent::TabletRelease) {
+
+        QInputEvent *inputEvent = static_cast<QInputEvent*>(event);
+        if (!d->matcher.sanityCheckModifiersCorrectness(inputEvent->modifiers())) {
+            qWarning() << "WARNING: modifiers state became inconsistent! Trying to fix that...";
+            qWarning() << "    " << ppVar(inputEvent->modifiers());
+            qWarning() << "    " << ppVar(d->matcher.debugPressedKeys());
+
+            d->fixShortcutMatcherModifiersState();
+        }
+    }
+#endif
+
     bool retval = false;
 
     /**

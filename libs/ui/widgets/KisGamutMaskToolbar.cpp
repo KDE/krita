@@ -68,9 +68,9 @@ void KisGamutMaskToolbar::slotGamutMaskSet(KoGamutMaskSP mask)
     m_selectedMask = mask;
 
     if (m_selectedMask) {
-        slotGamutMaskToggle(true);
+        updateMaskState(true, false);
     } else {
-        slotGamutMaskToggle(false);
+        updateMaskState(false, false);
     }
 }
 
@@ -90,16 +90,33 @@ void KisGamutMaskToolbar::slotGamutMaskDeactivate()
         return;
     }
 
-    slotGamutMaskToggle(false);
+    updateMaskState(false, false);
 }
 
 void KisGamutMaskToolbar::slotGamutMaskToggle(bool state)
 {
-    bool b = (!m_selectedMask) ? false : state;
+    updateMaskState(state, true);
+}
 
-    m_ui->bnToggleMask->setChecked(b);
+void KisGamutMaskToolbar::slotGamutMaskRotate(qreal angle)
+{
+    if (!m_selectedMask) {
+        return;
+    }
 
-    if (b == true) {
+    m_selectedMask->setRotation(angle);
+    m_selfUpdate = true;
+    emit sigGamutMaskChanged(m_selectedMask);
+    m_selfUpdate = false;
+}
+
+void KisGamutMaskToolbar::updateMaskState(bool maskEnabled, bool internalChange)
+{
+    bool enabled = (m_selectedMask) ? maskEnabled : false;
+
+    m_ui->bnToggleMask->setChecked(enabled);
+
+    if (enabled) {
         m_ui->bnToggleMask->setEnabled(true);
         m_ui->bnToggleMask->setIcon(m_iconMaskOn);
         m_ui->labelMaskName->hide();
@@ -109,9 +126,11 @@ void KisGamutMaskToolbar::slotGamutMaskToggle(bool state)
         m_ui->rotationAngleSelector->setAngle(static_cast<qreal>(m_selectedMask->rotation()));
         m_ui->rotationAngleSelector->blockSignals(false);
 
-        m_selfUpdate = true;
-        emit sigGamutMaskChanged(m_selectedMask);
-        m_selfUpdate = false;
+        if (internalChange) {
+            m_selfUpdate = true;
+            emit sigGamutMaskChanged(m_selectedMask);
+            m_selfUpdate = false;
+        }
 
     } else {
         m_ui->bnToggleMask->setIcon(m_iconMaskOff);
@@ -119,18 +138,10 @@ void KisGamutMaskToolbar::slotGamutMaskToggle(bool state)
         m_ui->labelMaskName->show();
         m_ui->labelMaskName->setText(m_textMaskDisabled);
 
-        m_selfUpdate = true;
-        emit sigGamutMaskDeactivated();
-        m_selfUpdate = false;
+        if (internalChange) {
+            m_selfUpdate = true;
+            emit sigGamutMaskDeactivated();
+            m_selfUpdate = false;
+        }
     }
-}
-
-void KisGamutMaskToolbar::slotGamutMaskRotate(qreal angle)
-{
-    if (!m_selectedMask) {
-        return;
-    }
-
-    m_selectedMask->setRotation(static_cast<int>(angle));
-    emit sigGamutMaskChanged(m_selectedMask);
 }

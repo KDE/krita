@@ -496,6 +496,26 @@ void KisShortcutMatcher::recoveryModifiersWithoutFocus(const QVector<Qt::Key> &k
     DEBUG_ACTION("recoverySyncModifiers");
 }
 
+bool KisShortcutMatcher::sanityCheckModifiersCorrectness(Qt::KeyboardModifiers modifiers) const
+{
+    auto checkKey = [this, modifiers] (Qt::Key key, Qt::KeyboardModifier modifier) {
+        return m_d->keys.contains(key) == bool(modifiers & modifier);
+    };
+
+    return checkKey(Qt::Key_Shift, Qt::ShiftModifier) &&
+        checkKey(Qt::Key_Control, Qt::ControlModifier) &&
+        checkKey(Qt::Key_Alt, Qt::AltModifier) &&
+        checkKey(Qt::Key_Meta, Qt::MetaModifier);
+
+}
+
+QVector<Qt::Key> KisShortcutMatcher::debugPressedKeys() const
+{
+    QVector<Qt::Key> keys;
+    std::copy(m_d->keys.begin(), m_d->keys.end(), std::back_inserter(keys));
+    return keys;
+}
+
 void KisShortcutMatcher::lostFocusEvent(const QPointF &localPos)
 {
     Private::RecursionNotifier notifier(this);

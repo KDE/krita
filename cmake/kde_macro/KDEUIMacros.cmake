@@ -1,6 +1,6 @@
-# Copyright (c) 2006-2009 Alexander Neundorf, <neundorf@kde.org>
-# Copyright (c) 2006, 2007, Laurent Montel, <montel@kde.org>
-# Copyright (c) 2007 Matthias Kretz <kretz@kde.org>
+# SPDX-FileCopyrightText: 2006-2009 Alexander Neundorf <neundorf@kde.org>
+# SPDX-FileCopyrightText: 2006, 2007 Laurent Montel <montel@kde.org>
+# SPDX-FileCopyrightText: 2007 Matthias Kretz <kretz@kde.org>
 #
 # SPDX-License-Identifier: BSD-3-Clause
 #

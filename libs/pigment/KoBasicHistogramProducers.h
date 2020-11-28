@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2005 Bart Coppens <kde@bartcoppens.be>
+ *  SPDX-FileCopyrightText: 2005 Bart Coppens <kde@bartcoppens.be>
  *
  *  SPDX-License-Identifier: LGPL-2.1-or-later
  */

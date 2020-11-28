@@ -1,7 +1,7 @@
 /*
- *  Copyright (c) 2008,2011 Cyrille Berger <cberger@cberger.net>
- *  Copyright (c) 2010 Geoffry Song <goffrie@gmail.com>
- *  Copyright (c) 2017 Scott Petrovic <scottpetrovic@gmail.com>
+ *  SPDX-FileCopyrightText: 2008, 2011 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2010 Geoffry Song <goffrie@gmail.com>
+ *  SPDX-FileCopyrightText: 2017 Scott Petrovic <scottpetrovic@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

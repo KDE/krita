@@ -1,7 +1,7 @@
 /* This file is part of the KDE libraries
 
-   Copyright (C) 1999 Daniel M. Duley <mosfet@kde.org>
-                 2006 Tobias Koenig <tokoe@kde.org>
+   SPDX-FileCopyrightText: 1999 Daniel M. Duley <mosfet@kde.org>
+   SPDX-FileCopyrightText: 2006 Tobias Koenig <tokoe@kde.org>
 
    SPDX-License-Identifier: LGPL-2.0-only
 */

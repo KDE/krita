@@ -1,11 +1,11 @@
 /* 
- * Copyright (C) 2015 by Wolthera van Hövell tot Westerflier <griffinvalley@gmail.com>
+ * SPDX-FileCopyrightText: 2015 Wolthera van Hövell tot Westerflier <griffinvalley@gmail.com>
  *
  * Based on the Digikam CIE Tongue widget
- * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * SPDX-FileCopyrightText: 2006-2013 Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Any source code are inspired from lprof project and
- * Copyright (C) 1998-2001 Marti Maria
+ * SPDX-FileCopyrightText: 1998-2001 Marti Maria
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  **/

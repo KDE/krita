@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
 
-   Copyright (c) 2017 L. E. Segovia <amy@amyspark.me>
+   SPDX-FileCopyrightText: 2017 L. E. Segovia <amy@amyspark.me>
 
 
    SPDX-License-Identifier: LGPL-2.1-or-later

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Matthew Woehlke <mw_triad@users.sourceforge.net>
+ * SPDX-FileCopyrightText: 2009 Matthew Woehlke <mw_triad@users.sourceforge.net>
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  */

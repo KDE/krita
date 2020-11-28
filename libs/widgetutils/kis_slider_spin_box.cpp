@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
- * Copyright (c) 2010 Justin Noel <justin@ics.com>
- * Copyright (c) 2010 Cyrille Berger <cberger@cberger.net>
- * Copyright (c) 2015 Moritz Molch <kde@moritzmolch.de>
+ * SPDX-FileCopyrightText: 2010 Justin Noel <justin@ics.com>
+ * SPDX-FileCopyrightText: 2010 Cyrille Berger <cberger@cberger.net>
+ * SPDX-FileCopyrightText: 2015 Moritz Molch <kde@moritzmolch.de>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */

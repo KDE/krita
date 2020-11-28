@@ -1,6 +1,6 @@
 /*
- *  Copyright (c) 2005 Adrian Page <adrian@pagenet.plus.com>
- *  Copyright (c) 2008 Bart Coppens <kde@bartcoppens.be>
+ *  SPDX-FileCopyrightText: 2005 Adrian Page <adrian@pagenet.plus.com>
+ *  SPDX-FileCopyrightText: 2008 Bart Coppens <kde@bartcoppens.be>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

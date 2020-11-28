@@ -1,6 +1,6 @@
 /*
- *  Copyright (c) 2006 Cyrille Berger <cberger@cberger.net>
- *  Copyright (c) 2007 Emanuele Tamponi <emanuele@valinor.it>
+ *  SPDX-FileCopyrightText: 2006 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2007 Emanuele Tamponi <emanuele@valinor.it>
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
 */

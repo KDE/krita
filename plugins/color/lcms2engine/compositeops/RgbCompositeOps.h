@@ -1,12 +1,12 @@
 /*
- *  Copyright (c) 2006 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2006 Boudewijn Rempt <boud@valdyas.org>
  *
  *  SPDX-License-Identifier: LGPL-2.1-or-later
 
  Some code is derived from GraphicsMagick/magick/composite.c and is
  subject to the following license and copyright:
 
-  Copyright (C) 2002 GraphicsMagick Group, an organization dedicated
+  SPDX-FileCopyrightText: 2002 GraphicsMagick Group an organization dedicated
   to making software imaging solutions freely available.
 
   Permission is hereby granted, free of charge, to any person obtaining

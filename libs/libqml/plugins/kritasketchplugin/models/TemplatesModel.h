@@ -1,6 +1,6 @@
 /*
  * This file is part of the KDE project
- * Copyright (C) 2014 Dan Leinir Turthra Jensen <admin@leinir.dk>
+ * SPDX-FileCopyrightText: 2014 Dan Leinir Turthra Jensen <admin@leinir.dk>
  *
  * SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
  *

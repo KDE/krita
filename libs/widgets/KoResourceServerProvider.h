@@ -1,8 +1,8 @@
 /*  This file is part of the KDE project
 
-    Copyright (c) 1999 Matthias Elter <elter@kde.org>
-    Copyright (c) 2003 Patrick Julien <freak@codepimps.org>
-    Copyright (c) 2005 Sven Langkamp <sven.langkamp@gmail.com>
+    SPDX-FileCopyrightText: 1999 Matthias Elter <elter@kde.org>
+    SPDX-FileCopyrightText: 2003 Patrick Julien <freak@codepimps.org>
+    SPDX-FileCopyrightText: 2005 Sven Langkamp <sven.langkamp@gmail.com>
 
     SPDX-License-Identifier: LGPL-2.1-or-later
  */

@@ -1,7 +1,7 @@
 /*
  *  kis_tool_dyna.cpp - part of Krita
  *
- *  Copyright (c) 2009-2011 Lukáš Tvrdý <LukasT.dev@gmail.com>
+ *  SPDX-FileCopyrightText: 2009-2011 Lukáš Tvrdý <LukasT.dev@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

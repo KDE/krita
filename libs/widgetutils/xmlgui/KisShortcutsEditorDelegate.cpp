@@ -1,12 +1,12 @@
 /* This file is part of the KDE libraries
-    Copyright (C) 1998 Mark Donohoe <donohoe@kde.org>
-    Copyright (C) 1997 Nicolas Hadacek <hadacek@kde.org>
-    Copyright (C) 1998 Matthias Ettrich <ettrich@kde.org>
-    Copyright (C) 2001 Ellis Whitehead <ellis@kde.org>
-    Copyright (C) 2006 Hamish Rodda <rodda@kde.org>
-    Copyright (C) 2007 Roberto Raggi <roberto@kdevelop.org>
-    Copyright (C) 2007 Andreas Hartmetz <ahartmetz@gmail.com>
-    Copyright (C) 2008 Michael Jansen <kde@michael-jansen.biz>
+    SPDX-FileCopyrightText: 1998 Mark Donohoe <donohoe@kde.org>
+    SPDX-FileCopyrightText: 1997 Nicolas Hadacek <hadacek@kde.org>
+    SPDX-FileCopyrightText: 1998 Matthias Ettrich <ettrich@kde.org>
+    SPDX-FileCopyrightText: 2001 Ellis Whitehead <ellis@kde.org>
+    SPDX-FileCopyrightText: 2006 Hamish Rodda <rodda@kde.org>
+    SPDX-FileCopyrightText: 2007 Roberto Raggi <roberto@kdevelop.org>
+    SPDX-FileCopyrightText: 2007 Andreas Hartmetz <ahartmetz@gmail.com>
+    SPDX-FileCopyrightText: 2008 Michael Jansen <kde@michael-jansen.biz>
 
     SPDX-License-Identifier: LGPL-2.0-or-later
 */

@@ -1,7 +1,7 @@
 /*
    Drawpile - a collaborative drawing program.
 
-   Copyright (C) 2017 Calle Laakkonen
+   SPDX-FileCopyrightText: 2017 Calle Laakkonen
 
    SPDX-License-Identifier: GPL-3.0-or-later
 */

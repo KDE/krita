@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2019 Dmitrii Utkin <loentar@gmail.com>
+ *  SPDX-FileCopyrightText: 2019 Dmitrii Utkin <loentar@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

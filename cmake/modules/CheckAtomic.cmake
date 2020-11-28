@@ -4,7 +4,7 @@
 # University of Illinois/NCSA
 # Open Source License
 #
-# Copyright (c) 2003-2018 University of Illinois at Urbana-Champaign.
+# SPDX-FileCopyrightText: 2003-2018 University of Illinois at Urbana-Champaign.
 # All rights reserved.
 #
 # Developed by:

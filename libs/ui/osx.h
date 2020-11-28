@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2017 Bernhard Liebl
+ *  SPDX-FileCopyrightText: 2017 Bernhard Liebl
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */

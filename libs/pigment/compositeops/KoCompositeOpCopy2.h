@@ -1,8 +1,8 @@
 /*
- *  Copyright (c) 2006, 2010 Cyrille Berger <cberger@cberger.net>
- *  Copyright (c) 2007 Emanuele Tamponi <emanuele@valinor.it>
- *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
- *  Copyright (c) 2011 Silvio Heinrich <plassy@web.de>
+ *  SPDX-FileCopyrightText: 2006, 2010 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2007 Emanuele Tamponi <emanuele@valinor.it>
+ *  SPDX-FileCopyrightText: 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  SPDX-FileCopyrightText: 2011 Silvio Heinrich <plassy@web.de>
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
 */

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2016 Alvin Wong <alvinhochun-at-gmail-com>
+ *  SPDX-FileCopyrightText: 2016 Alvin Wong <alvinhochun-at-gmail-com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

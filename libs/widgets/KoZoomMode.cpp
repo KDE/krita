@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005 Johannes Schaub <litb_devel@web.de>
-   Copyright (C) 2011 Arjen Hiemstra <ahiemstra@heimr.nl>
+   SPDX-FileCopyrightText: 2005 Johannes Schaub <litb_devel@web.de>
+   SPDX-FileCopyrightText: 2011 Arjen Hiemstra <ahiemstra@heimr.nl>
 
    SPDX-License-Identifier: LGPL-2.0-or-later
 */

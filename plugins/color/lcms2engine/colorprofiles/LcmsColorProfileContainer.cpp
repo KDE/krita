@@ -1,10 +1,10 @@
 /*
  * This file is part of the KDE project
- *  Copyright (c) 2000 Matthias Elter <elter@kde.org>
- *                2001 John Califf
- *                2004 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2007 Thomas Zander <zander@kde.org>
- *  Copyright (c) 2007 Adrian Page <adrian@pagenet.plus.com>
+ *  SPDX-FileCopyrightText: 2000 Matthias Elter <elter@kde.org>
+ *  SPDX-FileCopyrightText: 2001 John Califf
+ *  SPDX-FileCopyrightText: 2004 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2007 Thomas Zander <zander@kde.org>
+ *  SPDX-FileCopyrightText: 2007 Adrian Page <adrian@pagenet.plus.com>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
 */

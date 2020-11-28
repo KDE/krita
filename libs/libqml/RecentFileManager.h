@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
- * Copyright (C) 2012 Boudewijn Rempt <boud@kogmbh.com>
+ * SPDX-FileCopyrightText: 2012 Boudewijn Rempt <boud@kogmbh.com>
  *
- *  SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: GPL-2.0-or-later
  */
 #ifndef RECENTFILEMANAGER_H
 #define RECENTFILEMANAGER_H

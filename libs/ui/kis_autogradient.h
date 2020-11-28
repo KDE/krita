@@ -1,6 +1,6 @@
 /*
- *  Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
- *                2004 Sven Langkamp <sven.langkamp@gmail.com>
+ *  SPDX-FileCopyrightText: 2004 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2004 Sven Langkamp <sven.langkamp@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -22,7 +22,7 @@ class KRITAUI_EXPORT KisAutogradientEditor : public QWidget, public Ui::KisWdgAu
 public:
     KisAutogradientEditor(QWidget *parent);
     KisAutogradientEditor(KoSegmentGradientSP gradient, QWidget *parent, const char* name, const QString& caption, KoCanvasResourcesInterfaceSP canvasResourcesInterface);
-    
+
     void activate();
 
     void setCompactMode(bool value);

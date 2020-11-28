@@ -1,8 +1,8 @@
 /*
  *  kis_tool_brush.cc - part of Krita
  *
- *  Copyright (c) 2003-2004 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2015 Moritz Molch <kde@moritzmolch.de>
+ *  SPDX-FileCopyrightText: 2003-2004 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2015 Moritz Molch <kde@moritzmolch.de>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

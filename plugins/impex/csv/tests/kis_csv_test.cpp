@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2016 Laszlo Fazekas <mneko@freemail.hu>
+ *  SPDX-FileCopyrightText: 2016 Laszlo Fazekas <mneko@freemail.hu>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

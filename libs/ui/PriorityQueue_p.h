@@ -1,5 +1,5 @@
 /* This file is part of the Calligra libraries
-   Copyright (C) 2001 Werner Trobin <trobin@kde.org>
+   SPDX-FileCopyrightText: 2001 Werner Trobin <trobin@kde.org>
 
    SPDX-License-Identifier: LGPL-2.0-only
 */

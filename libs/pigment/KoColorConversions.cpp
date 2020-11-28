@@ -1,6 +1,6 @@
 /*
- *  Copyright (c) 2005 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2014 Wolthera van Hövell <griffinvalley@gmail.com>
+ *  SPDX-FileCopyrightText: 2005 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2014 Wolthera van Hövell <griffinvalley@gmail.com>
  *
  *  SPDX-License-Identifier: LGPL-2.1-or-later
  */

@@ -1,6 +1,6 @@
-# Copyright (C) 2012, 2013 Shaheed Haque <srhaque@theiet.org>
-# Copyright (C) 2013 Alex Turbov <i.zaufi@gmail.com>
-# Copyright (C) 2014-2016 Boudewijn Rempt <boud@valdyas.org>
+# SPDX-FileCopyrightText: 2012, 2013 Shaheed Haque <srhaque@theiet.org>
+# SPDX-FileCopyrightText: 2013 Alex Turbov <i.zaufi@gmail.com>
+# SPDX-FileCopyrightText: 2014-2016 Boudewijn Rempt <boud@valdyas.org>
 #
 # SPDX-License-Identifier: BSD-2-Clause.
 

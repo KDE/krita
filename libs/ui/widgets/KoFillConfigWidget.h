@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Made by Tomislav Lukman (tomislav.lukman@ck.tel.hr)
- * Copyright (C) 2012 Jean-Nicolas Artaud <jeannicolasartaud@gmail.com>
+ * SPDX-FileCopyrightText: 2012 Jean-Nicolas Artaud <jeannicolasartaud@gmail.com>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */

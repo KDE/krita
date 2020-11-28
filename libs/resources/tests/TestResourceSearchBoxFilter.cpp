@@ -1,6 +1,6 @@
 /*  This file is part of the Krita project
 
-    Copyright (c) 2019 Agata Cacko <cacko.azh@gmail.com>
+    SPDX-FileCopyrightText: 2019 Agata Cacko <cacko.azh@gmail.com>
 
     SPDX-License-Identifier: LGPL-2.1-or-later
  */

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Manuel Riecke <spell1337@gmail.com>
+ * SPDX-FileCopyrightText: 2014 Manuel Riecke <spell1337@gmail.com>
  *
  * SPDX-License-Identifier: ICS
  */

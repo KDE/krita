@@ -1,7 +1,7 @@
 /*
  *  kis_cmb_idlist.cc - part of KImageShop/Krayon/Krita
  *
- *  Copyright (c) 2005 Boudewijn Rempt (boud@valdyas.org)
+ *  SPDX-FileCopyrightText: 2005 Boudewijn Rempt (boud@valdyas.org)
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

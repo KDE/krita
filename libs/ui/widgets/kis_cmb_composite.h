@@ -50,8 +50,8 @@ public:
 
     void connectBlendmodeActions(KisActionManager *manager);
 
-    void wheelEvent(QWheelEvent *e);
-    void keyPressEvent(QKeyEvent *e);
+    void wheelEvent(QWheelEvent *e) override;
+    void keyPressEvent(QKeyEvent *e) override;
 
 private Q_SLOTS:
     void slotCategoryToggled(const QModelIndex& index, bool toggled);

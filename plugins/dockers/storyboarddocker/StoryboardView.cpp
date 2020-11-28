@@ -8,9 +8,50 @@
 #include <QPainter>
 #include <QPaintEvent>
 #include <QMenu>
+#include <QProxyStyle>
 
 #include "StoryboardView.h"
 #include "StoryboardModel.h"
+
+class StoryboardStyle : public QProxyStyle
+{
+public:
+    StoryboardStyle(QStyle *baseStyle = 0) : QProxyStyle(baseStyle) {}
+
+    void drawPrimitive(PrimitiveElement element, const QStyleOption *option,
+                       QPainter *painter, const QWidget *widget) const
+    {
+        if (element == QStyle::PE_IndicatorItemViewItemDrop)
+        {
+            QColor color(widget->palette().color(QPalette::Highlight).lighter());
+            if (option->rect.width() == 0 && option->rect.height() == 0){
+                return;
+            }
+            else if (option->rect.width() == 0) {
+                QBrush brush(color);
+
+                QRect r(option->rect);
+                r.setLeft(r.left() - 4);
+                r.setRight(r.right() + 4);
+
+                painter->fillRect(r, brush);
+            }
+            else if (option->rect.height() == 0) {
+                QBrush brush(color);
+
+                QRect r(option->rect);
+                r.setTop(r.top() - 4);
+                r.setBottom(r.bottom() + 4);
+
+                painter->fillRect(r, brush);
+            }
+        }
+        else
+        {
+            QProxyStyle::drawPrimitive(element, option, painter, widget);
+        }
+    }
+};
 
 /**
  * This view draws the children of every index in the first column of 
@@ -35,6 +76,7 @@ StoryboardView::StoryboardView(QWidget *parent)
     viewport()->setAcceptDrops(true);
     setDropIndicatorShown(true);
     setDragDropMode(QAbstractItemView::InternalMove);
+    setStyle(new StoryboardStyle(this->style()));
 
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)),
                 this, SLOT(slotContextMenuRequested(const QPoint &)));

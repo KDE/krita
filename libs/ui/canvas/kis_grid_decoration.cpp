@@ -136,6 +136,10 @@ void KisGridDecoration::drawDecoration(QPainter& gc, const QRectF& updateArea, c
 
     if (gridType == KisGridConfig::GRID_ISOMETRIC)  {
 
+        // get true coordinates, not just the updateArea
+        QRectF trueImageRect = converter->imageRectInImagePixels();
+        trueImageRect.getCoords(&x1, &y1, &x2, &y2);
+
         const int offset = m_d->config.offset().x();
         const int offsetY = m_d->config.offset().y();
         const int step = scaleCoeff * m_d->config.spacing().y();

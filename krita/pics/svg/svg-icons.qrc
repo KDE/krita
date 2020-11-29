@@ -157,5 +157,7 @@
         <file>light_ratio.svg</file>
         <file>dark_python.svg</file>
         <file>light_python.svg</file>
+        <file>dark_hamburger_menu_dots.svg</file>
+        <file>light_hamburger_menu_dots.svg</file>
     </qresource>
 </RCC>

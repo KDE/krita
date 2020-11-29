@@ -32,7 +32,6 @@
 KisGradientGeneratorConfigWidget::KisGradientGeneratorConfigWidget(QWidget* parent)
     : KisConfigWidget(parent)
     , m_view(nullptr)
-    , m_gradient(nullptr)
 {
     QStringList shapeNames =
         QStringList()
@@ -78,6 +77,9 @@ KisGradientGeneratorConfigWidget::KisGradientGeneratorConfigWidget(QWidget* pare
     m_ui.sliderEndPositionAngle->setSuffix(i18nc("Degrees symbol", "˚"));
     m_ui.sliderEndPositionAngle->setRange(0, 360, 3);
     m_ui.comboBoxEndPositionDistanceUnits->addItems(spatialUnitsNames);
+    
+    m_ui.widgetGradientEditor->setContentsMargins(10, 10, 10, 10);
+    m_ui.widgetGradientEditor->loadUISettings();
 
     connect(m_ui.comboBoxShape, SIGNAL(currentIndexChanged(int)), this, SIGNAL(sigConfigurationUpdated()));
     connect(m_ui.comboBoxRepeat, SIGNAL(currentIndexChanged(int)), this, SIGNAL(sigConfigurationUpdated()));
@@ -111,11 +113,13 @@ KisGradientGeneratorConfigWidget::KisGradientGeneratorConfigWidget(QWidget* pare
     connect(m_ui.spinBoxEndPositionDistance, SIGNAL(valueChanged(double)), this, SIGNAL(sigConfigurationUpdated()));
     connect(m_ui.comboBoxEndPositionDistanceUnits, SIGNAL(currentIndexChanged(int)), this, SIGNAL(sigConfigurationUpdated()));
 
-    connect(m_ui.widgetGradientChooser, SIGNAL(resourceSelected(KoResource*)), this, SLOT(slot_widgetGradientChooser_resourceSelected(KoResource*)));
+    connect(m_ui.widgetGradientEditor, SIGNAL(sigGradientChanged()), this, SIGNAL(sigConfigurationUpdated()));
 }
 
 KisGradientGeneratorConfigWidget::~KisGradientGeneratorConfigWidget()
-{}
+{
+    m_ui.widgetGradientEditor->saveUISettings();
+}
 
 void KisGradientGeneratorConfigWidget::setConfiguration(const KisPropertiesConfigurationSP config)
 {
@@ -149,11 +153,7 @@ void KisGradientGeneratorConfigWidget::setConfiguration(const KisPropertiesConfi
         m_ui.spinBoxEndPositionDistance->setValue(generatorConfig->endPositionDistance());
         m_ui.comboBoxEndPositionDistanceUnits->setCurrentIndex(generatorConfig->endPositionDistanceUnits());
 
-        m_gradient = generatorConfig->gradient();
-        if (m_view) {
-            KisCanvasResourceProvider *canvasResourceProvider = m_view->canvasResourceProvider();
-            m_gradient->bakeVariableColors(canvasResourceProvider->fgColor(), canvasResourceProvider->bgColor());
-        }
+        m_ui.widgetGradientEditor->setGradient(generatorConfig->gradient());
     }
 
     emit sigConfigurationUpdated();
@@ -187,7 +187,13 @@ KisPropertiesConfigurationSP KisGradientGeneratorConfigWidget::configuration() c
     config->setEndPositionDistance(m_ui.spinBoxEndPositionDistance->value());
     config->setEndPositionDistanceUnits(static_cast<KisGradientGeneratorConfiguration::SpatialUnits>(m_ui.comboBoxEndPositionDistanceUnits->currentIndex()));
 
-    config->setGradient(m_gradient);
+    KoAbstractGradientSP gradient = m_ui.widgetGradientEditor->gradient();
+    if (gradient && m_view) {
+        KisCanvasResourceProvider *canvasResourceProvider = m_view->canvasResourceProvider();
+        gradient->bakeVariableColors(canvasResourceProvider->fgColor(), canvasResourceProvider->bgColor());
+    }
+    config->setGradient(gradient);
+
 
     return config;
 }
@@ -195,16 +201,10 @@ KisPropertiesConfigurationSP KisGradientGeneratorConfigWidget::configuration() c
 void KisGradientGeneratorConfigWidget::setView(KisViewManager *view)
 {
     m_view = view;
-}
-
-void KisGradientGeneratorConfigWidget::slot_widgetGradientChooser_resourceSelected(KoResource *resource)
-{
-    m_gradient = KoAbstractGradientSP(static_cast<KoAbstractGradient*>(resource)->clone());
-    if (m_view) {
+    if (view) {
         KisCanvasResourceProvider *canvasResourceProvider = m_view->canvasResourceProvider();
-        m_gradient->bakeVariableColors(canvasResourceProvider->fgColor(), canvasResourceProvider->bgColor());
+        m_ui.widgetGradientEditor->setVariableColors(canvasResourceProvider->fgColor(), canvasResourceProvider->bgColor());
     }
-    emit sigConfigurationUpdated();
 }
 
 void KisGradientGeneratorConfigWidget::slot_radioButtonEndPositionCartesianCoordinates_toggled(bool enabled)

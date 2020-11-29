@@ -177,6 +177,7 @@ public:
             << KoGradientStop(1.0, KoColor(Qt::white, KoColorSpaceRegistry::instance()->rgb8(0)), BACKGROUNDSTOP)
         );
         gradient->setName(i18nc("Default gradient name for the gradient generator", "Unnamed"));
+        gradient->setValid(true);
         return gradient;
     }
 

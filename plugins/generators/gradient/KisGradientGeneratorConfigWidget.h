@@ -43,10 +43,8 @@ public:
 private:
     Ui_GradientGeneratorConfigWidget m_ui;
     KisViewManager *m_view;
-    KoAbstractGradientSP m_gradient;
 
 private Q_SLOTS:
-    void slot_widgetGradientChooser_resourceSelected(KoResource *resource);
     void slot_radioButtonEndPositionCartesianCoordinates_toggled(bool enabled);
     void slot_radioButtonEndPositionPolarCoordinates_toggled(bool enabled);
 

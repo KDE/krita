@@ -475,73 +475,50 @@
       <attribute name="title">
        <string>Gradient Colors</string>
       </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_4" stretch="0,0">
+      <layout class="QVBoxLayout" name="verticalLayout_4" stretch="0">
        <property name="spacing">
         <number>0</number>
        </property>
        <property name="leftMargin">
-        <number>10</number>
+        <number>0</number>
        </property>
        <property name="topMargin">
-        <number>10</number>
+        <number>0</number>
        </property>
        <property name="rightMargin">
-        <number>10</number>
+        <number>0</number>
        </property>
        <property name="bottomMargin">
-        <number>10</number>
+        <number>0</number>
        </property>
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_4">
-         <property name="spacing">
-          <number>0</number>
+        <widget class="QScrollArea" name="scrollAreaGradientEditor">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Ignored">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
          </property>
-         <property name="topMargin">
-          <number>0</number>
+         <property name="frameShape">
+          <enum>QFrame::NoFrame</enum>
          </property>
-         <item>
-          <spacer name="horizontalSpacer_3">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>0</width>
-             <height>0</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <widget class="KisGradientChooser" name="widgetGradientChooser" native="true"/>
-         </item>
-         <item>
-          <spacer name="horizontalSpacer_2">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>0</width>
-             <height>0</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <spacer name="verticalSpacer_3">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
+         <property name="horizontalScrollBarPolicy">
+          <enum>Qt::ScrollBarAlwaysOff</enum>
          </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>0</width>
-           <height>0</height>
-          </size>
+         <property name="widgetResizable">
+          <bool>true</bool>
          </property>
-        </spacer>
+         <widget class="KisGenericGradientEditor" name="widgetGradientEditor">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>356</width>
+            <height>188</height>
+           </rect>
+          </property>
+         </widget>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -557,9 +534,9 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>KisGradientChooser</class>
+   <class>KisGenericGradientEditor</class>
    <extends>QWidget</extends>
-   <header location="global">kis_gradient_chooser.h</header>
+   <header location="global">KisGenericGradientEditor.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

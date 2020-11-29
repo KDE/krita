@@ -21,6 +21,8 @@
 
 #include <resources/KoAbstractGradient.h>
 #include <resources/KoColorSet.h>
+#include <resources/KisGradientConversion.h>
+
 #include <QPainter>
 
 KoResourceItemDelegate::KoResourceItemDelegate( QObject * parent )
@@ -47,7 +49,7 @@ void KoResourceItemDelegate::paint( QPainter * painter, const QStyleOptionViewIt
     KoAbstractGradient * gradient = dynamic_cast<KoAbstractGradient*>( resource );
     KoColorSet * palette = dynamic_cast<KoColorSet*>( resource );
     if (gradient) {
-        QGradient * g = gradient->toQGradient();
+        QGradient * g = KisGradientConversion::toQGradient(gradient);
 
         QLinearGradient paintGradient;
         paintGradient.setStops( g->stops() );

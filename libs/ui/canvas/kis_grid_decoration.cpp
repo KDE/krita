@@ -144,7 +144,6 @@ void KisGridDecoration::drawDecoration(QPainter& gc, const QRectF& updateArea, c
         // left angle
         {
             int gridXAngle = m_d->config.angleLeft();
-            int counter = lineIndexFirst;
             int bottomRightOfImageY = y2; // this should be the height of the image
             int finalY = 0;
 
@@ -157,10 +156,11 @@ void KisGridDecoration::drawDecoration(QPainter& gc, const QRectF& updateArea, c
 
             }
 
+            int counter = qFloor((-(offset + offsetY))/(qreal)correctedAngleSpacing);
 
             while (finalY < bottomRightOfImageY) {
 
-                int w = (counter * correctedAngleSpacing) - offsetY;
+                int w = (counter * correctedAngleSpacing) + offsetY + offset;
                 gc.setPen(mainPen);
 
                 // calculate where the ending point will be based off the angle
@@ -180,7 +180,6 @@ void KisGridDecoration::drawDecoration(QPainter& gc, const QRectF& updateArea, c
         // right angle (almost the same thing, except starting the lines on the right side)
         {
             int gridXAngle = m_d->config.angleRight(); // TODO: add another angle property
-            int counter = lineIndexFirst;
             int bottomLeftOfImageY = y2;
 
 
@@ -200,10 +199,11 @@ void KisGridDecoration::drawDecoration(QPainter& gc, const QRectF& updateArea, c
             int yLeftFirst = qCeil(qreal(yHigher)/correctedAngleSpacing)*correctedAngleSpacing;
             int additionalOffset = yLeftFirst - yHigher;
             int finalY = 0;
+            int counter = qFloor((-(offsetY - offset))/(qreal)correctedAngleSpacing);
 
             while (finalY < bottomLeftOfImageY) {
 
-                int w = (counter * correctedAngleSpacing) - offsetY - offset + additionalOffset;
+                int w = (counter * correctedAngleSpacing) + offsetY - offset + additionalOffset;
                 gc.setPen(mainPen);
 
                 // calculate where the ending point will be based off the angle

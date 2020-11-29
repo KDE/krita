@@ -32,21 +32,13 @@
 
 /****************************** KisAutogradient ******************************/
 
-KisAutogradientEditor::KisAutogradientEditor(KoSegmentGradient* gradient, QWidget *parent, const char* name, const QString& caption, KoColor fgColor, KoColor bgColor)
+KisAutogradientEditor::KisAutogradientEditor(QWidget *parent)
     : QWidget(parent)
-    , m_autogradientResource(gradient),
-    m_fgColor(fgColor),
-    m_bgColor(bgColor)
+    , m_autogradientResource(nullptr)
+    , m_fgColor(KoColor())
+    , m_bgColor(KoColor())
 {
-    setObjectName(name);
     setupUi(this);
-    setWindowTitle(caption);
-    gradientSlider->setGradientResource(m_autogradientResource);
-    nameedit->setText(gradient->name());
-    KoGradientSegment* segment = gradientSlider->selectedSegment();
-    if (segment) {
-        slotSelectedSegment(segment);
-    }
 
     connect(nameedit, SIGNAL(editingFinished()), this, SLOT(slotChangedName()));
     connect(gradientSlider, SIGNAL(sigSelectedSegment(KoGradientSegment*)), SLOT(slotSelectedSegment(KoGradientSegment*)));
@@ -66,11 +58,44 @@ KisAutogradientEditor::KisAutogradientEditor(KoSegmentGradient* gradient, QWidge
     connect(leftBackgroundTransparent, SIGNAL(toggled(bool)), this, SLOT(slotChangedLeftTypeTransparent(bool)));
     connect(rightForegroundTransparent, SIGNAL(toggled(bool)), this, SLOT(slotChangedRightTypeTransparent(bool)));
     connect(rightBackgroundTransparent, SIGNAL(toggled(bool)), this, SLOT(slotChangedRightTypeTransparent(bool)));
+
+    setCompactMode(false);
+    setGradient(0);
+}
+
+KisAutogradientEditor::KisAutogradientEditor(KoSegmentGradient* gradient, QWidget *parent, const char* name, const QString& caption, KoColor fgColor, KoColor bgColor)
+    : KisAutogradientEditor(parent)
+{
+    m_fgColor = fgColor;
+    m_bgColor = bgColor;
+    setObjectName(name);
+    setWindowTitle(caption);
+    setGradient(gradient);
 }
 
 void KisAutogradientEditor::activate()
 {
     paramChanged();
+}
+
+void KisAutogradientEditor::setCompactMode(bool value)
+{
+    label->setVisible(!value);
+    nameedit->setVisible(!value);
+}
+
+void KisAutogradientEditor::setGradient(KoSegmentGradient *gradient)
+{
+    m_autogradientResource = gradient;
+    setEnabled(m_autogradientResource);
+
+    if (m_autogradientResource) {
+        gradientSlider->setGradientResource(m_autogradientResource);
+        nameedit->setText(m_autogradientResource->name());
+        slotSelectedSegment(gradientSlider->selectedSegment());
+    }
+
+    emit sigGradientChanged();
 }
 
 void KisAutogradientEditor::disableTransparentCheckboxes() {
@@ -135,6 +160,7 @@ void KisAutogradientEditor::slotSelectedSegment(KoGradientSegment* segment)
 void KisAutogradientEditor::slotChangedSegment(KoGradientSegment*)
 {
     paramChanged();
+    emit sigGradientChanged();
 }
 
 void KisAutogradientEditor::slotChangedInterpolation(int type)
@@ -145,6 +171,7 @@ void KisAutogradientEditor::slotChangedInterpolation(int type)
     gradientSlider->update();
 
     paramChanged();
+    emit sigGradientChanged();
 }
 
 void KisAutogradientEditor::slotChangedColorInterpolation(int type)
@@ -155,6 +182,7 @@ void KisAutogradientEditor::slotChangedColorInterpolation(int type)
     gradientSlider->update();
 
     paramChanged();
+    emit sigGradientChanged();
 }
 
 void KisAutogradientEditor::slotChangedLeftColor(const KoColor& color)
@@ -168,6 +196,7 @@ void KisAutogradientEditor::slotChangedLeftColor(const KoColor& color)
     gradientSlider->update();
 
     paramChanged();
+    emit sigGradientChanged();
 }
 
 void KisAutogradientEditor::slotChangedRightColor(const KoColor& color)
@@ -181,6 +210,7 @@ void KisAutogradientEditor::slotChangedRightColor(const KoColor& color)
     gradientSlider->repaint();
 
     paramChanged();
+    emit sigGradientChanged();
 }
 
 void KisAutogradientEditor::slotChangedLeftOpacity(int value)
@@ -194,6 +224,7 @@ void KisAutogradientEditor::slotChangedLeftOpacity(int value)
     gradientSlider->repaint();
 
     paramChanged();
+    emit sigGradientChanged();
 }
 
 void KisAutogradientEditor::slotChangedRightOpacity(int value)
@@ -207,6 +238,7 @@ void KisAutogradientEditor::slotChangedRightOpacity(int value)
     gradientSlider->repaint();
 
     paramChanged();
+    emit sigGradientChanged();
 }
 
 void KisAutogradientEditor::slotChangedLeftType(QAbstractButton* button, bool checked)
@@ -349,6 +381,7 @@ void KisAutogradientEditor::slotChangedRightTypeTransparent(bool checked)
 void KisAutogradientEditor::slotChangedName()
 {
     m_autogradientResource->setName(nameedit->text());
+    emit sigGradientChanged();
 }
 
 void KisAutogradientEditor::paramChanged()

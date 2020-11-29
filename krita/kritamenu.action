@@ -393,6 +393,18 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="paste_shape_style">
+      <icon></icon>
+      <text>Paste Shape Style</text>
+      <whatsThis></whatsThis>
+      <toolTip>Paste Shape Style</toolTip>
+      <iconText>Paste into New Image</iconText>
+      <activationFlags>1000000000000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
     <Action name="paste_as_reference">
       <icon></icon>
       <text>Paste as R&amp;eference Image</text>

@@ -43,4 +43,9 @@ struct KRITAUI_EXPORT KisPasteReferenceActionFactory : public KisNoParameterActi
     void run(KisViewManager *view) override;
 };
 
+struct KRITAUI_EXPORT KisPasteShapeStyleActionFactory : public KisNoParameterActionFactory {
+    KisPasteShapeStyleActionFactory() : KisNoParameterActionFactory("paste-shape-style-action") {}
+    void run(KisViewManager *view) override;
+};
+
 #endif // KISPASTEACTIONFACTORY_H

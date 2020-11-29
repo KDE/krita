@@ -125,6 +125,9 @@ void KisSelectionManager::setup(KisActionManager* actionManager)
     m_pasteAsReference = actionManager->createAction("paste_as_reference");
     connect(m_pasteAsReference, SIGNAL(triggered()), this, SLOT(pasteAsReference()));
 
+    m_pasteShapeStyle = actionManager->createAction("paste_shape_style");
+    connect(m_pasteShapeStyle, SIGNAL(triggered()), this, SLOT(pasteShapeStyle()));
+
     m_copyMerged = actionManager->createAction("copy_merged");
     connect(m_copyMerged, SIGNAL(triggered()), this, SLOT(copyMerged()));
 
@@ -388,6 +391,12 @@ void KisSelectionManager::pasteAsReference()
 void KisSelectionManager::pasteNew()
 {
     KisPasteNewActionFactory factory;
+    factory.run(m_view);
+}
+
+void KisSelectionManager::pasteShapeStyle()
+{
+    KisPasteShapeStyleActionFactory factory;
     factory.run(m_view);
 }
 

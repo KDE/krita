@@ -53,6 +53,11 @@
 #include <KisPart.h>
 #include <KisDocument.h>
 #include <KisReferenceImagesLayer.h>
+#include <KoShapeBackgroundCommand.h>
+#include <KoShapeStrokeCommand.h>
+#include <KoShapeBackground.h>
+#include <KoShapeStroke.h>
+
 
 namespace {
 QPointF getFittingOffset(QList<KoShape*> shapes,
@@ -311,4 +316,40 @@ void KisPasteReferenceActionFactory::run(KisViewManager *viewManager)
     doc->addCommand(KisReferenceImagesLayer::addReferenceImages(doc, {reference}));
 
     KoToolManager::instance()->switchToolRequested("ToolReferenceImages");
+}
+
+void KisPasteShapeStyleActionFactory::run(KisViewManager *view)
+{
+    KoSvgPaste paste;
+
+    KisCanvas2 *canvas = view->canvasBase();
+
+    KoShapeManager *shapeManager = canvas->shapeManager();
+    QList<KoShape*> selectedShapes = shapeManager->selection()->selectedEditableShapes();
+
+    if (selectedShapes.isEmpty()) return;
+
+    if (paste.hasShapes()) {
+        KoCanvasBase *canvas = view->canvasBase();
+
+        QSizeF fragmentSize;
+        QList<KoShape*> shapes =
+            paste.fetchShapes(canvas->shapeController()->documentRectInPixels(),
+                              canvas->shapeController()->pixelsPerInch(), &fragmentSize);
+
+        if (!shapes.isEmpty()) {
+            KoShape *referenceShape = shapes.first();
+
+
+            KUndo2Command *parentCommand = new KUndo2Command(kundo2_i18n("Paste Style"));
+
+            new KoShapeBackgroundCommand(selectedShapes, referenceShape->background(), parentCommand);
+            new KoShapeStrokeCommand(selectedShapes, referenceShape->stroke(), parentCommand);
+
+
+            canvas->addCommand(parentCommand);
+        }
+
+        qDeleteAll(shapes);
+    }
 }

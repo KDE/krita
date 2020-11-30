@@ -1305,11 +1305,17 @@ Mesh<NodeArg, PatchArg>::control_point_iterator_impl<is_const>::rightSegment() c
     return SegmentIteratorType(m_mesh, m_col, m_row, true);
 }
 
+enum SmartMoveMeshControlMode {
+    MoveFree,
+    MoveSymmetricLock,
+    MoveRotationLock
+};
+
 template<typename NodeArg, typename PatchArg>
 void smartMoveControl(Mesh<NodeArg, PatchArg> &mesh,
                       typename Mesh<NodeArg, PatchArg>::ControlPointIndex index,
                       const QPointF &move,
-                      bool lockNodes)
+                      SmartMoveMeshControlMode mode)
 {
     using ControlType = typename Mesh<NodeArg, PatchArg>::ControlType;
     using ControlPointIndex = typename Mesh<NodeArg, PatchArg>::ControlPointIndex;
@@ -1322,7 +1328,7 @@ void smartMoveControl(Mesh<NodeArg, PatchArg> &mesh,
     } else {
         const QPointF newPos = *it + move;
 
-        if (lockNodes) {
+        if (mode == MoveRotationLock || mode == MoveSymmetricLock) {
             const qreal rotation = KisAlgebra2D::angleBetweenVectors(*it - it.node().node,
                                                                      newPos - it.node().node);
             QTransform R;
@@ -1333,19 +1339,26 @@ void smartMoveControl(Mesh<NodeArg, PatchArg> &mesh,
                     R *
                     QTransform::fromTranslate(it.node().node.x(), it.node().node.y());
 
-            for (int intType = 0; intType < 4; intType++) {
-                ControlType type = static_cast<ControlType>(intType);
+            if (mode == MoveRotationLock) {
+                for (int intType = 0; intType < 4; intType++) {
+                    ControlType type = static_cast<ControlType>(intType);
 
-                if (type == ControlType::Node ||
-                    type == index.controlType) {
+                    if (type == ControlType::Node ||
+                            type == index.controlType) {
 
-                    continue;
+                        continue;
+                    }
+
+                    auto neighbourIt = mesh.find(ControlPointIndex(index.nodeIndex, type));
+                    if (neighbourIt == mesh.endControlPoints()) continue;
+
+                    *neighbourIt = t.map(*neighbourIt);
                 }
-
-                auto neighbourIt = mesh.find(ControlPointIndex(index.nodeIndex, type));
-                if (neighbourIt == mesh.endControlPoints()) continue;
-
-                *neighbourIt = t.map(*neighbourIt);
+            } else {
+                auto neighbourIt = it.symmetricControl();
+                if (neighbourIt != mesh.endControlPoints()) {
+                    *neighbourIt = t.map(*neighbourIt);
+                }
             }
         }
 
@@ -1372,6 +1385,7 @@ using KisBezierMeshDetails::saveValue;
 template <typename Node, typename Patch>
 using KisBezierMeshBase = KisBezierMeshDetails::Mesh<Node, Patch>;
 
+using KisSmartMoveMeshControlMode = KisBezierMeshDetails::SmartMoveMeshControlMode;
 using KisBezierMesh = KisBezierMeshDetails::Mesh<KisBezierMeshDetails::BaseMeshNode, KisBezierPatch>;
 
 

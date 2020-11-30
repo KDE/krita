@@ -37,6 +37,7 @@ ToolTransformArgs::ToolTransformArgs()
     QString savedFilterId = configGroup.readEntry("filterId", "Bicubic");
     setFilterId(savedFilterId);
     m_transformAroundRotationCenter = configGroup.readEntry("transformAroundRotationCenter", "0").toInt();
+    m_meshShowHandles = configGroup.readEntry("meshShowHandles", true);
 }
 
 void ToolTransformArgs::setFilterId(const QString &id) {
@@ -88,6 +89,7 @@ void ToolTransformArgs::init(const ToolTransformArgs& args)
     }
 
     m_meshTransform = args.m_meshTransform;
+    m_meshShowHandles = args.m_meshShowHandles;
 
     m_continuedTransformation.reset(args.m_continuedTransformation ? new ToolTransformArgs(*args.m_continuedTransformation) : 0);
 }
@@ -523,4 +525,17 @@ const KisBezierTransformMesh *ToolTransformArgs::meshTransform() const
 KisBezierTransformMesh *ToolTransformArgs::meshTransform()
 {
     return &m_meshTransform;
+}
+
+bool ToolTransformArgs::meshShowHandles() const
+{
+    return m_meshShowHandles;
+}
+
+void ToolTransformArgs::setMeshShowHandles(bool value)
+{
+    m_meshShowHandles = value;
+
+    KConfigGroup configGroup =  KSharedConfig::openConfig()->group("KisToolTransform");
+    configGroup.writeEntry("meshShowHandles", value);
 }

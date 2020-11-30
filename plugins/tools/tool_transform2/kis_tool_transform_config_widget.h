@@ -118,6 +118,9 @@ public Q_SLOTS:
     void slotGranularityChanged(QString value);
     void slotPreviewGranularityChanged(QString value);
 
+    void slotMeshSizeChanged();
+    void slotMeshShowHandlesChanged();
+
 private:
 
     void blockNotifications();

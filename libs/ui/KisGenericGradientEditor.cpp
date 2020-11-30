@@ -959,6 +959,8 @@ void KisGenericGradientEditor::on_buttonUpdateGradient_clicked()
         return;
     }
 
+    selectedGradient->setName(m_d->gradient->name());
+
     KoResourceServer<KoAbstractGradient> *gradientServer =
         KoResourceServerProvider::instance()->gradientServer();
     gradientServer->updateResource(selectedGradient);

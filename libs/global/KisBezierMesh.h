@@ -753,19 +753,24 @@ public:
     }
 
 
-    void subdivideRow(qreal proportionalT) {
-        if (qFuzzyCompare(proportionalT, 0.0) || qFuzzyCompare(proportionalT, 1.0)) return;
+    int subdivideRow(qreal proportionalT) {
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(proportionalT >= 0.0 && proportionalT <= 1.0, -1);
 
-        KIS_SAFE_ASSERT_RECOVER_RETURN(proportionalT > 0.0 && proportionalT < 1.0);
+        {
+            auto existing = std::find(m_rows.begin(), m_rows.end(), proportionalT);
+            if (existing != m_rows.end()) {
+                return distance(m_rows.begin(), existing);
+            }
+        }
 
         const auto it = prev(upper_bound(m_rows.begin(), m_rows.end(), proportionalT));
         const int topRow = distance(m_rows.begin(), it);
         const qreal relT = (proportionalT - *it) / (*next(it) - *it);
 
-        subdivideRow(topRow, relT);
+        return subdivideRow(topRow, relT);
     }
 
-    void subdivideRow(int topRow, qreal relProportionalT) {
+    int subdivideRow(int topRow, qreal relProportionalT) {
         const auto it = m_rows.begin() + topRow;
         const int bottomRow = topRow + 1;
         const qreal absProportionalT = KisAlgebra2D::lerp(*it, *next(it), relProportionalT);
@@ -788,23 +793,29 @@ public:
                        newRow.begin(), newRow.end());
 
         m_size.rheight()++;
-        m_rows.insert(next(it), absProportionalT);
+        auto insertedIt = m_rows.insert(next(it), absProportionalT);
+        return distance(m_rows.begin(), insertedIt);
     }
 
-    void subdivideColumn(qreal proportionalT) {
-        if (qFuzzyCompare(proportionalT, 0.0) || qFuzzyCompare(proportionalT, 1.0)) return;
+    int subdivideColumn(qreal proportionalT) {
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(proportionalT >= 0.0 && proportionalT <= 1.0, -1);
 
-        KIS_SAFE_ASSERT_RECOVER_RETURN(proportionalT > 0.0 && proportionalT < 1.0);
+        {
+            auto existing = std::find(m_columns.begin(), m_columns.end(), proportionalT);
+            if (existing != m_columns.end()) {
+                return distance(m_columns.begin(), existing);
+            }
+        }
 
         const auto it = prev(upper_bound(m_columns.begin(), m_columns.end(), proportionalT));
         const int leftColumn = distance(m_columns.begin(), it);
 
         const qreal relT = (proportionalT - *it) / (*next(it) - *it);
 
-        subdivideColumn(leftColumn, relT);
+        return subdivideColumn(leftColumn, relT);
     }
 
-    void subdivideColumn(int leftColumn, qreal relProportionalT) {
+    int subdivideColumn(int leftColumn, qreal relProportionalT) {
         const auto it = m_columns.begin() + leftColumn;
         const int rightColumn = leftColumn + 1;
         const qreal absProportinalT = KisAlgebra2D::lerp(*it, *next(it), relProportionalT);
@@ -830,7 +841,8 @@ public:
         }
 
         m_size.rwidth()++;
-        m_columns.insert(next(it), absProportinalT);
+        auto insertedIt = m_columns.insert(next(it), absProportinalT);
+        return distance(m_columns.begin(), insertedIt);
     }
 
     void removeColumn(int column) {
@@ -1043,6 +1055,46 @@ public:
     template <typename T>
     bool isIndexValid(const T &index) const {
         return find(index).isValid();
+    }
+
+    void reshapeMeshHorizontally(int numColumns) {
+        KIS_SAFE_ASSERT_RECOVER_RETURN(numColumns >= 2);
+
+        std::vector<int> insertedIndexes;
+
+        for (int i = 1; i < numColumns - 1; i++) {
+            const qreal pos = qreal(i) / (numColumns - 1);
+            int inserted = subdivideColumn(pos);
+            KIS_SAFE_ASSERT_RECOVER(inserted >= 0) { continue; }
+
+            insertedIndexes.push_back(inserted);
+        }
+
+        for (int i = m_columns.size() - 2; i >= 1; i--) {
+            if (std::find(insertedIndexes.begin(), insertedIndexes.end(), i) == insertedIndexes.end()) {
+                removeColumn(i);
+            }
+        }
+    }
+
+    void reshapeMeshVertically(int numRows) {
+        KIS_SAFE_ASSERT_RECOVER_RETURN(numRows >= 2);
+
+        std::vector<int> insertedIndexes;
+
+        for (int i = 1; i < numRows - 1; i++) {
+            const qreal pos = qreal(i) / (numRows - 1);
+            int inserted = subdivideRow(pos);
+            KIS_SAFE_ASSERT_RECOVER(inserted >= 0) { continue; }
+
+            insertedIndexes.push_back(inserted);
+        }
+
+        for (int i = m_rows.size() - 2; i >= 1; i--) {
+            if (std::find(insertedIndexes.begin(), insertedIndexes.end(), i) == insertedIndexes.end()) {
+                removeRow(i);
+            }
+        }
     }
 
 private:

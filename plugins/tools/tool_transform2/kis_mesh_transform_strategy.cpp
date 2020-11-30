@@ -120,7 +120,7 @@ void KisMeshTransformStrategy::setTransformFunction(const QPointF &mousePos, boo
     qreal localSegmentPos = 0.0;
 
 
-    {
+    if (m_d->currentArgs.meshShowHandles()) {
         auto index = m_d->currentArgs.meshTransform()->hitTestControlPoint(mousePos, grabRadius);
         if (m_d->currentArgs.meshTransform()->isIndexValid(index)) {
             hoveredControl = index;
@@ -271,6 +271,13 @@ void KisMeshTransformStrategy::paint(QPainter &gc)
     for (auto it = m_d->currentArgs.meshTransform()->beginControlPoints();
          it != m_d->currentArgs.meshTransform()->endControlPoints();
          ++it) {
+
+        if (!m_d->currentArgs.meshShowHandles() && !it.isNode()) {
+            KIS_SAFE_ASSERT_RECOVER_NOOP(!m_d->hoveredControl || *m_d->hoveredControl != it.controlIndex());
+
+            continue;
+        }
+
 
         if (m_d->hoveredControl && *m_d->hoveredControl == it.controlIndex()) {
 

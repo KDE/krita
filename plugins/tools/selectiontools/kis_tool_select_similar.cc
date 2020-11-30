@@ -53,15 +53,15 @@ void selectByColor(KisPaintDeviceSP dev, KisPixelSelectionSP selection, const qu
     for (int row = y; row < y + h; ++row) {
         do {
             if (fuzziness == 1) {
-                if (wantedOpacity == 0 && cs->opacityU8(hiter->oldRawData()) == 0) {
+                if (wantedOpacity == 0 && cs->opacityU8(hiter->rawDataConst()) == 0) {
                     *(selIter->rawData()) = MAX_SELECTED;
                 }
-                else if (memcmp(c, hiter->oldRawData(), cs->pixelSize()) == 0) {
+                else if (memcmp(c, hiter->rawDataConst(), cs->pixelSize()) == 0) {
                     *(selIter->rawData()) = MAX_SELECTED;
                 }
             }
             else {
-                quint8 match = cs->difference(c, hiter->oldRawData());
+                quint8 match = cs->difference(c, hiter->rawDataConst());
                 if (match <= fuzziness) {
                     *(selIter->rawData()) = MAX_SELECTED;
                 }

@@ -198,7 +198,7 @@ build_krita() {
          -DANDROID_STL=c++_shared                                                           \
          -DANDROID_ABI=$ANDROID_ABI                                                         \
          -DNDK_VERSION=21                                                                   \
-         -DCMAKE_FIND_ROOT_PATH="$QT_ANDROID;$BUILD_ROOT/kf5/kde/install/;$BUILD_ROOT/i"
+         -DCMAKE_FIND_ROOT_PATH="$BUILD_ROOT/kf5/kde/install/;$QT_ANDROID;$BUILD_ROOT/i"
 
     make -j$PROC_COUNT install
 }

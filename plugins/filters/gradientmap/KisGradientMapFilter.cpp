@@ -9,8 +9,6 @@
 
 #include <QDomDocument>
 
-#include <kpluginfactory.h>
-#include <kis_filter_registry.h>
 #include <KoColorSpace.h>
 #include <KoColor.h>
 #include <kis_paint_device.h>
@@ -29,17 +27,6 @@
 #include "KisGradientMapFilter.h"
 #include "KisGradientMapFilterConfigWidget.h"
 #include "KisGradientMapFilterConfiguration.h"
-
-K_PLUGIN_FACTORY_WITH_JSON(KritaGradientMapFilterFactory, "KritaGradientMapFilter.json", registerPlugin<KritaGradientMapFilterPlugin>();)
-
-KritaGradientMapFilterPlugin::KritaGradientMapFilterPlugin(QObject *parent, const QVariantList &)
-    : QObject(parent)
-{
-    KisFilterRegistry::instance()->add(new KisGradientMapFilter());
-}
-
-KritaGradientMapFilterPlugin::~KritaGradientMapFilterPlugin()
-{}
 
 KisGradientMapFilter::KisGradientMapFilter()
     : KisFilter(id(), FiltersCategoryMapId, i18n("&Gradient Map..."))
@@ -300,5 +287,3 @@ KisConfigWidget* KisGradientMapFilter::createConfigurationWidget(QWidget * paren
 {
     return new KisGradientMapFilterConfigWidget(parent, dev);
 }
-
-#include "KisGradientMapFilter.moc"

@@ -2,6 +2,7 @@ set(kritagradientmap_SOURCES
     KisGradientMapFilter.cpp
     KisGradientMapFilterConfigWidget.cpp
     KisGradientMapFilterConfiguration.cpp
+    KisGradientMapFilterPlugin.cpp
 )
 
 ki18n_wrap_ui(kritagradientmap_SOURCES

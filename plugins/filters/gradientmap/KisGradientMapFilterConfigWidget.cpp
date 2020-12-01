@@ -28,9 +28,9 @@
 #include <kis_filter_registry.h>
 #include <KoResourceServerAdapter.h>
 
-#include "KisGradientMapConfigWidget.h"
+#include "KisGradientMapFilterConfigWidget.h"
 
-KisGradientMapConfigWidget::KisGradientMapConfigWidget(QWidget *parent, KisPaintDeviceSP dev, Qt::WindowFlags f)
+KisGradientMapFilterConfigWidget::KisGradientMapFilterConfigWidget(QWidget *parent, KisPaintDeviceSP dev, Qt::WindowFlags f)
     : KisConfigWidget(parent, f)
 {
     Q_UNUSED(dev);
@@ -60,10 +60,10 @@ KisGradientMapConfigWidget::KisGradientMapConfigWidget(QWidget *parent, KisPaint
     QObject::connect(m_ui.ditherWidget, &KisDitherWidget::sigConfigurationItemChanged, this, &KisConfigWidget::sigConfigurationItemChanged);
 }
 
-KisGradientMapConfigWidget::~KisGradientMapConfigWidget()
+KisGradientMapFilterConfigWidget::~KisGradientMapFilterConfigWidget()
 {}
 
-void KisGradientMapConfigWidget::setAbstractGradientToEditor()
+void KisGradientMapFilterConfigWidget::setAbstractGradientToEditor()
 {
     QSharedPointer<KoGradientBackground> bg =
         qSharedPointerDynamicCast<KoGradientBackground>(
@@ -73,7 +73,7 @@ void KisGradientMapConfigWidget::setAbstractGradientToEditor()
 
 }
 
-KisPropertiesConfigurationSP KisGradientMapConfigWidget::configuration() const
+KisPropertiesConfigurationSP KisGradientMapFilterConfigWidget::configuration() const
 {
     KisFilterSP filter = KisFilterRegistry::instance()->get("gradientmap");
     KisFilterConfigurationSP cfg = filter->factoryConfiguration();
@@ -91,7 +91,7 @@ KisPropertiesConfigurationSP KisGradientMapConfigWidget::configuration() const
     return cfg;
 }
 
-void KisGradientMapConfigWidget::setConfiguration(const KisPropertiesConfigurationSP config)
+void KisGradientMapFilterConfigWidget::setConfiguration(const KisPropertiesConfigurationSP config)
 {
     Q_ASSERT(config);
     QDomDocument doc;
@@ -111,7 +111,7 @@ void KisGradientMapConfigWidget::setConfiguration(const KisPropertiesConfigurati
     m_ui.ditherWidget->setConfiguration(*filterConfig, "dither/");
 }
 
-void KisGradientMapConfigWidget::setView(KisViewManager *view)
+void KisGradientMapFilterConfigWidget::setView(KisViewManager *view)
 {
     Q_UNUSED(view)
 }

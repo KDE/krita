@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>GradientMapConfigWidget</class>
- <widget class="QWidget" name="GradientMapConfigWidget">
+ <class>GradientMapFilterConfigWidget</class>
+ <widget class="QWidget" name="GradientMapFilterConfigWidget">
   <property name="geometry">
    <rect>
     <x>0</x>

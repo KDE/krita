@@ -195,12 +195,13 @@ void KisGradientChooser::addSegmentedGradient()
 
 void KisGradientChooser::addGradient(KoAbstractGradient* gradient)
 {
+    if (!gradient) return;
+
     KoResourceServer<KoAbstractGradient> * rserver = KoResourceServerProvider::instance()->gradientServer();
     QString saveLocation = rserver->saveLocation();
 
     KisCustomGradientDialog dialog(gradient, this, "KisCustomGradientDialog", m_foregroundColor, m_backgroundColor);
     dialog.exec();
-
     gradient->setFilename(saveLocation + gradient->name() + gradient->defaultFileExtension());
     gradient->setValid(true);
     rserver->addResource(gradient);
@@ -209,10 +210,17 @@ void KisGradientChooser::addGradient(KoAbstractGradient* gradient)
 
 void KisGradientChooser::editGradient()
 {
-    KisCustomGradientDialog dialog(static_cast<KoAbstractGradient*>(currentResource()), this, "KisCustomGradientDialog", m_foregroundColor, m_backgroundColor);
+    KoAbstractGradient *gradient = dynamic_cast<KoAbstractGradient*>(currentResource());
+    if (!gradient) return;
+
+    KisCustomGradientDialog dialog(gradient, this, "KisCustomGradientDialog", m_foregroundColor, m_backgroundColor);
     dialog.exec();
 
-
+    KoResourceServer<KoAbstractGradient> * rserver = KoResourceServerProvider::instance()->gradientServer();
+    QString saveLocation = rserver->saveLocation();
+    rserver->updateResource(gradient);
+    gradient->setFilename(saveLocation + gradient->name() + gradient->defaultFileExtension());
+    gradient->save();
 }
 
 

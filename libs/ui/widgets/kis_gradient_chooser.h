@@ -45,7 +45,7 @@ public:
 
 private:
 
-    QWidget * m_page;
+    QWidget *m_page {0};
 
 };
 

@@ -55,7 +55,7 @@ configure_ext() {
         -DANDROID_ABI=$ANDROID_ABI                                                      \
         -DANDROID_PLATFORM=$ANDROID_NATIVE_API_LEVEL                                    \
         -DANDROID_SDK_ROOT=$ANDROID_SDK_ROOT                                            \
-        -DCMAKE_FIND_ROOT_PATH="$QT_ANDROID;$BUILD_ROOT/kf5/kde/install/;$BUILD_ROOT/i"
+        -DCMAKE_FIND_ROOT_PATH="$QT_ANDROID;$BUILD_ROOT/i"
     cd $BUILD_ROOT
 }
 
@@ -124,60 +124,20 @@ build_kf5() {
         exit
     fi
 
-    cd $BUILD_ROOT
+    configure_ext
+    cd $DEPS_BUILD
 
-    if [[ $ANDROID_ABI == "armeabi-v7a" ]]; then
-        ANDROID_ARCHITECTURE=arm
-    elif [[ $ANDROID_ABI == "arm64-v8a" ]]; then
-        ANDROID_ARCHITECTURE=arm64
-    elif [[ $ANDROID_ABI == "x86" || $ANDROID_ABI == "x86_64" ]]; then
-        ANDROID_ARCHITECTURE=$ANDROID_ABI
-    fi
-
-    if [[ ! -d $BUILD_ROOT/kf5 ]]; then
-        mkdir $BUILD_ROOT/kf5 -p
-    fi 
-    cd $BUILD_ROOT/kf5
-
-    cp $KRITA_ROOT/packaging/android/kdesrc-buildrc $BUILD_ROOT/kf5/
-
-    if [[ ! -d extragear/kdesrc-build ]]; then 
-        mkdir -p extragear/kdesrc-build
-        git clone http://invent.kde.org/sdk/kdesrc-build extragear/kdesrc-build
-    fi
-    if [[ ! -e  $BUILD_ROOT/kf5/kdesrc-build ]]; then 
-        ln -s extragear/kdesrc-build/kdesrc-build kdesrc-build
-    fi
-
-    # Change the kdesrc-buildrc configuration
-    sed -E -i "s|build-dir.*|build-dir $BUILD_ROOT/kf5/kde/build |g" $BUILD_ROOT/kf5/kdesrc-buildrc
-    sed -E -i "s|source-dir.*|source-dir $BUILD_ROOT/kf5/kde/src |g" $BUILD_ROOT/kf5/kdesrc-buildrc
-    sed -E -i "s|kdedir.*|kdedir $BUILD_ROOT/kf5/kde/install |g" $BUILD_ROOT/kf5/kdesrc-buildrc
-
-    sed -E -i "s|cmake-options -DCMAKE_TOOLCHAIN_FILE=#replace-ecm#|cmake-options -DCMAKE_TOOLCHAIN_FILE=$CMAKE_ANDROID_NDK/build/cmake/android.toolchain.cmake|g" $BUILD_ROOT/kf5/kdesrc-buildrc
-    # build first, so toolchain could be used
-    $BUILD_ROOT/kf5/kdesrc-build --debug extra-cmake-modules
-
-    if [[ -e $QT_ANDROID ]]; then
-        sed -E -i "s|cmake-options -DCMAKE_TOOLCHAIN_FILE=#replace#|cmake-options -DCMAKE_PREFIX_PATH=$QT_ANDROID- -DCMAKE_ANDROID_NDK=$CMAKE_ANDROID_NDK -DECM_ADDITIONAL_FIND_ROOT_PATH=$QT_ANDROID\;$BUILD_ROOT/kf5/kde/install -DANDROID_STL=c++_static -DCMAKE_TOOLCHAIN_FILE=$BUILD_ROOT/kf5/kde/install/share/ECM/toolchain/Android.cmake -DKCONFIG_USE_DBUS=OFF -DANDROID_PLATFORM=$ANDROID_NATIVE_API_LEVEL -DANDROID_API_LEVEL=$ANDROID_API_LEVEL -DANDROID_ABI=$ANDROID_ABI -DANDROID_ARCHITECTURE=$ANDROID_ARCHITECTURE |g" $BUILD_ROOT/kf5/kdesrc-buildrc
-
-        # add __ANDROID_API__ to cxxflags
-        sed -E -i "s|cxxflags.*|cxxflags -D__ANDROID_API__=$ANDROID_API_LEVEL|g" $BUILD_ROOT/kf5/kdesrc-buildrc
-    else
-        echoerr "Qt Android libraries path doesn't exist. Exiting."
-        exit
-    fi
-
-    sed -E -i "s|use-modules.+|use-modules kconfig ki18n |g" $BUILD_ROOT/kf5/kdesrc-buildrc
-    rm -rf $BUILD_ROOT/kf5/kde/build/* # clean build folders
-
-    # Please do not change the order
-    ./kdesrc-build --debug libintl-lite
-    ./kdesrc-build --debug kcoreaddons \
-         kconfig ki18n                 \
-         kwidgetsaddons kcompletion    \
-         kguiaddons kitemmodels        \
-         kitemviews kwindowsystem      
+    cmake --build . --config $BUILD_TYPE --target ext_extra_cmake_modules -- -j$PROC_COUNT
+    cmake --build . --config $BUILD_TYPE --target ext_libintl-lite -- -j$PROC_COUNT
+    cmake --build . --config $BUILD_TYPE --target ext_kconfig -- -j$PROC_COUNT
+    cmake --build . --config $BUILD_TYPE --target ext_kwidgetsaddons -- -j$PROC_COUNT
+    cmake --build . --config $BUILD_TYPE --target ext_kcompletion -- -j$PROC_COUNT
+    cmake --build . --config $BUILD_TYPE --target ext_kcoreaddons -- -j$PROC_COUNT
+    cmake --build . --config $BUILD_TYPE --target ext_kguiaddons -- -j$PROC_COUNT
+    cmake --build . --config $BUILD_TYPE --target ext_ki18n -- -j$PROC_COUNT
+    cmake --build . --config $BUILD_TYPE --target ext_kitemmodels -- -j$PROC_COUNT
+    cmake --build . --config $BUILD_TYPE --target ext_kitemviews -- -j$PROC_COUNT
+    cmake --build . --config $BUILD_TYPE --target ext_kwindowsystem -- -j$PROC_COUNT
 
     cd $BUILD_ROOT
 }
@@ -198,7 +158,7 @@ build_krita() {
          -DANDROID_STL=c++_shared                                                           \
          -DANDROID_ABI=$ANDROID_ABI                                                         \
          -DNDK_VERSION=21                                                                   \
-         -DCMAKE_FIND_ROOT_PATH="$BUILD_ROOT/kf5/kde/install/;$QT_ANDROID;$BUILD_ROOT/i"
+         -DCMAKE_FIND_ROOT_PATH="$QT_ANDROID;$BUILD_ROOT/i"
 
     make -j$PROC_COUNT install
 }

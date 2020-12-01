@@ -61,7 +61,7 @@
 KisToolSelectOutline::KisToolSelectOutline(KoCanvasBase * canvas)
     : KisToolSelect(canvas,
                     KisCursor::load("tool_outline_selection_cursor.png", 5, 5),
-                    i18n("Outline Selection")),
+                    i18n("Freehand Selection")),
       m_continuedMode(false)
 {
 }
@@ -169,7 +169,7 @@ void KisToolSelectOutline::finishSelectionAction()
     const QRectF boundingRect = KisAlgebra2D::accumulateBounds(m_points);
     const QRectF boundingViewRect = pixelToView(boundingRect);
 
-    KisSelectionToolHelper helper(kisCanvas, kundo2_i18n("Select by Outline"));
+    KisSelectionToolHelper helper(kisCanvas, kundo2_i18n("Freehand Selection"));
 
     if (helper.tryDeselectCurrentSelection(boundingViewRect, selectionAction())) {
         return;

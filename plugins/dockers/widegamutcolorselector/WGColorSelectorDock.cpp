@@ -108,14 +108,28 @@ void WGColorSelectorDock::setCanvas(KoCanvasBase *canvas)
     m_canvas = qobject_cast<KisCanvas2*>(canvas);
     if (m_canvas) {
         KoColorDisplayRendererInterface *dri = m_canvas->displayColorConverter()->displayRendererInterface();
+        KisCanvasResourceProvider *resourceProvider = m_canvas->imageView()->resourceProvider();
         m_selector->setDisplayRenderer(dri);
         m_history->setDisplayRenderer(dri);
         //m_toggle->setBackgroundColor(dri->toQColor(color));
         connect(dri, SIGNAL(displayConfigurationChanged()), this, SLOT(slotDisplayConfigurationChanged()));
         connect(m_canvas->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
                 this, SLOT(slotCanvasResourceChanged(int,QVariant)));
-        connect(m_canvas->imageView()->resourceProvider(), SIGNAL(sigFGColorUsed(KoColor)),
+        connect(resourceProvider, SIGNAL(sigFGColorUsed(KoColor)),
                 this, SLOT(slotFGColorUsed(KoColor)), Qt::UniqueConnection);
+
+        // Gamut Mask
+        connect(resourceProvider, SIGNAL(sigGamutMaskChanged(KoGamutMaskSP)),
+                m_selector, SLOT(slotGamutMaskChanged(KoGamutMaskSP)), Qt::UniqueConnection);
+
+        connect(resourceProvider, SIGNAL(sigGamutMaskPreviewUpdate()),
+                m_selector, SLOT(slotGamutMaskPreviewUpdate()), Qt::UniqueConnection);
+
+        connect(resourceProvider, SIGNAL(sigGamutMaskUnset()),
+                m_selector, SLOT(slotGamutMaskUnset()), Qt::UniqueConnection);
+
+        connect(resourceProvider, SIGNAL(sigGamutMaskDeactivated()),
+                m_selector, SLOT(slotGamutMaskUnset()), Qt::UniqueConnection);
     }
     setEnabled(canvas != 0);
 }
@@ -132,6 +146,7 @@ void WGColorSelectorDock::disconnectFromCanvas()
 {
     m_canvas->disconnectCanvasObserver(this);
     m_canvas->displayColorConverter()->displayRendererInterface()->disconnect(this);
+    m_canvas->imageView()->resourceProvider()->disconnect(m_selector);
     m_canvas = 0;
 }
 

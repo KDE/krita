@@ -10,6 +10,8 @@
 #include <QWidget>
 #include <QScopedPointer>
 
+#include <resources/KoGamutMask.h>
+
 #include "KisColorSelectorInterface.h"
 #include "KisVisualColorModel.h"
 #include "kritawidgets_export.h"
@@ -66,12 +68,16 @@ public:
     void setMinimumSliderWidth(int width);
     RenderMode renderMode() const;
     void setRenderMode(RenderMode mode);
+    KoGamutMask* activeGamutMask() const;
 
 public Q_SLOTS:
     void slotSetColor(const KoColor &c) override;
     void slotSetColorSpace(const KoColorSpace *cs) override;
     void slotConfigurationChanged();
     void setDisplayRenderer(const KoColorDisplayRendererInterface *displayRenderer) override;
+    void slotGamutMaskChanged(KoGamutMaskSP mask);
+    void slotGamutMaskUnset();
+    void slotGamutMaskPreviewUpdate();
 
 private Q_SLOTS:
     void slotChannelValuesChanged(const QVector4D &values);

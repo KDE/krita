@@ -83,11 +83,21 @@ public:
     virtual QRect getSpaceForTriangle(QRect geom) = 0;
 
     bool isHueControl() const;
+    virtual bool supportsGamutMask() const;
+
     /**
      * @brief forceImageUpdate
      * force the image to recache.
      */
     void forceImageUpdate();
+
+    /**
+     * @brief Notify shape that the gamut mask changed
+     *
+     * The gamut mask shall be updated and the widget repainted if necessary.
+     * This includes removal of gamut masks
+     */
+    virtual void updateGamutMask();
 
     /**
      * @brief setBorderWidth
@@ -190,6 +200,7 @@ private:
      */
     virtual QRegion getMaskMap() = 0;
     virtual void drawCursor(QPainter &painter) = 0;
+    virtual void drawGamutMask(QPainter &painter);
 };
 
 #endif

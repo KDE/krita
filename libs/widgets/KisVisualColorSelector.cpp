@@ -40,6 +40,7 @@ struct KisVisualColorSelector::Private
     KisColorSelectorConfiguration acs_config;
     KisSignalCompressor *updateTimer {0};
     KisVisualColorModel *selector {0};
+    KoGamutMaskSP gamutMask;
 };
 
 KisVisualColorSelector::KisVisualColorSelector(QWidget *parent)
@@ -160,6 +161,11 @@ void KisVisualColorSelector::setRenderMode(KisVisualColorSelector::RenderMode mo
     }
 }
 
+KoGamutMask *KisVisualColorSelector::activeGamutMask() const
+{
+    return m_d->gamutMask.data();
+}
+
 void KisVisualColorSelector::slotSetColor(const KoColor &c)
 {
     if (m_d->selector) {
@@ -189,6 +195,32 @@ void KisVisualColorSelector::setDisplayRenderer(const KoColorDisplayRendererInte
 {
     if (m_d->selector) {
         m_d->selector->setDisplayRenderer(displayRenderer);
+    }
+}
+
+void KisVisualColorSelector::slotGamutMaskChanged(KoGamutMaskSP mask)
+{
+    // Note: KisCanvasResourceProvider currently does not distinguish
+    // between activating, switching and property changes of a gamut mask
+    m_d->gamutMask = mask;
+    for (KisVisualColorSelectorShape *shape: m_d->widgetlist) {
+        shape->updateGamutMask();
+    }
+}
+
+void KisVisualColorSelector::slotGamutMaskUnset()
+{
+    m_d->gamutMask.clear();
+    for (KisVisualColorSelectorShape *shape: m_d->widgetlist) {
+        shape->updateGamutMask();
+    }
+}
+
+void KisVisualColorSelector::slotGamutMaskPreviewUpdate()
+{
+    // Shapes currently always requests preview shapes if available, so more of the same...
+    for (KisVisualColorSelectorShape *shape: m_d->widgetlist) {
+        shape->updateGamutMask();
     }
 }
 

@@ -14,6 +14,8 @@
 #include "kis_debug.h"
 #include "kis_global.h"
 
+#include "resources/KoGamutMask.h"
+
 KisVisualEllipticalSelectorShape::KisVisualEllipticalSelectorShape(KisVisualColorSelector *parent,
                                                                  Dimensions dimension,
                                                                  int channel1, int channel2,
@@ -24,6 +26,7 @@ KisVisualEllipticalSelectorShape::KisVisualEllipticalSelectorShape(KisVisualColo
     //qDebug() << "creating KisVisualEllipticalSelectorShape" << this;
     m_type = d;
     m_barWidth = barWidth;
+    m_gamutMaskNeedsUpdate = (dimension == KisVisualColorSelectorShape::twodimensional);
 }
 
 KisVisualEllipticalSelectorShape::~KisVisualEllipticalSelectorShape()
@@ -86,6 +89,19 @@ QRect KisVisualEllipticalSelectorShape::getSpaceForTriangle(QRect geom)
     bound.adjust(-5, -5, 5, 5);
     bound.translate(pos());
     return bound;
+}
+
+bool KisVisualEllipticalSelectorShape::supportsGamutMask() const
+{
+    return (getDimensions() == KisVisualColorSelectorShape::twodimensional);
+}
+
+void KisVisualEllipticalSelectorShape::updateGamutMask()
+{
+    if (supportsGamutMask()) {
+        m_gamutMaskNeedsUpdate = true;
+        update();
+    }
 }
 
 QPointF KisVisualEllipticalSelectorShape::convertShapeCoordinateToWidgetCoordinate(QPointF coordinate) const
@@ -223,6 +239,47 @@ QImage KisVisualEllipticalSelectorShape::renderStaticAlphaMask() const
     return renderAlphaMaskImpl(2.0, innerBorder);
 }
 
+void KisVisualEllipticalSelectorShape::renderGamutMask()
+{
+    KoGamutMask *mask = colorSelector()->activeGamutMask();
+
+    if (!mask) {
+        m_gamutMaskImage = QImage();
+        return;
+    }
+    const int deviceWidth = qCeil(width() * devicePixelRatioF());
+    const int deviceHeight = qCeil(height() * devicePixelRatioF());
+
+    if (m_gamutMaskImage.size() != QSize(deviceWidth, deviceHeight)) {
+        m_gamutMaskImage = QImage(deviceWidth, deviceHeight, QImage::Format_ARGB32_Premultiplied);
+        m_gamutMaskImage.setDevicePixelRatio(devicePixelRatioF());
+    }
+    m_gamutMaskImage.fill(0);
+
+    QPainter painter(&m_gamutMaskImage);
+    QPen pen(Qt::white);
+    painter.setRenderHint(QPainter::Antialiasing, true);
+    painter.translate(2.0, 2.0);
+    painter.setBrush(QColor(0, 0, 0, 128));
+    painter.setPen(pen);
+
+    painter.drawEllipse(QRectF(0, 0, width() - 4.0, height() - 4.0));
+
+    painter.setTransform(mask->maskToViewTransform(width() - 4), true);
+    painter.setCompositionMode(QPainter::CompositionMode_DestinationIn);
+    mask->paint(painter, true);
+
+    // TODO: implement a way to render gamut mask outline with custom pen
+    // determine how many units 1 pixel is now:
+    //QLineF measure = painter.transform().map(QLineF(0.0, 0.0, 1.0, 0.0));
+    //pen.setWidthF(1.0 / measure.length());
+    //painter.setPen(pen);
+    painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
+    mask->paintStroke(painter, true);
+
+    m_gamutMaskNeedsUpdate = false;
+}
+
 void KisVisualEllipticalSelectorShape::drawCursor(QPainter &painter)
 {
     //qDebug() << this << "KisVisualEllipticalSelectorShape::drawCursor: image needs update" << imagesNeedUpdate();
@@ -255,4 +312,12 @@ void KisVisualEllipticalSelectorShape::drawCursor(QPainter &painter)
         painter.setBrush(fill);
         painter.drawEllipse(cursorPoint, cursorwidth-1.0, cursorwidth-1.0);
     }
+}
+
+void KisVisualEllipticalSelectorShape::drawGamutMask(QPainter &painter)
+{
+    if (m_gamutMaskNeedsUpdate) {
+        renderGamutMask();
+    }
+    painter.drawImage(0, 0, m_gamutMaskImage);
 }

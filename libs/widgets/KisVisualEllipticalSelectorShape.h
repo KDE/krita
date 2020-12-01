@@ -31,9 +31,12 @@ public:
     QRect getSpaceForSquare(QRect geom) override;
     QRect getSpaceForCircle(QRect geom) override;
     QRect getSpaceForTriangle(QRect geom) override;
+    bool supportsGamutMask() const override;
+    void updateGamutMask() override;
 protected:
     QImage renderAlphaMask() const override;
     QImage renderStaticAlphaMask() const override;
+    void renderGamutMask();
     QPointF mousePositionToShapeCoordinate(const QPointF &pos, const QPointF &dragStart) const override;
 
 private:
@@ -41,11 +44,15 @@ private:
     QPointF convertShapeCoordinateToWidgetCoordinate(QPointF coordinate) const override;
     QPointF convertWidgetCoordinateToShapeCoordinate(QPointF coordinate) const override;
 
-    singelDTypes m_type;
-    int m_barWidth;
     QRegion getMaskMap() override;
     void drawCursor(QPainter &painter) override;
+    void drawGamutMask(QPainter &painter) override;
     QSize sizeHint() const override;
+
+    singelDTypes m_type;
+    int m_barWidth;
+    QImage m_gamutMaskImage;
+    bool m_gamutMaskNeedsUpdate;
 };
 
 #endif // KISVISUALCOLORSELECTOR_H

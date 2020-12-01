@@ -108,11 +108,21 @@ bool KisVisualColorSelectorShape::isHueControl() const
             && m_d->channel1 == 0;
 }
 
+bool KisVisualColorSelectorShape::supportsGamutMask() const
+{
+    return false;
+}
+
 void KisVisualColorSelectorShape::forceImageUpdate()
 {
     //qDebug() << this  << "forceImageUpdate";
     m_d->alphaNeedsUpdate = true;
     m_d->imagesNeedUpdate = true;
+}
+
+void KisVisualColorSelectorShape::updateGamutMask()
+{
+    // Nothing to do if gamut masks not supported
 }
 
 QColor KisVisualColorSelectorShape::getColorFromConverter(KoColor c)
@@ -355,6 +365,8 @@ void KisVisualColorSelectorShape::paintEvent(QPaintEvent*)
         painter.drawImage(0, 0, fullSelector);
     }
 
+    drawGamutMask(painter);
+
     if (isEnabled()) {
         painter.setRenderHint(QPainter::Antialiasing);
         drawCursor(painter);
@@ -364,7 +376,14 @@ void KisVisualColorSelectorShape::paintEvent(QPaintEvent*)
 void KisVisualColorSelectorShape::resizeEvent(QResizeEvent *)
 {
     forceImageUpdate();
+    updateGamutMask();
     setMask(getMaskMap());
+}
+
+void KisVisualColorSelectorShape::drawGamutMask(QPainter &painter)
+{
+    // Nothing to do if gamut masks not supported
+    Q_UNUSED(painter);
 }
 
 KisVisualColorSelectorShape::Dimensions KisVisualColorSelectorShape::getDimensions() const

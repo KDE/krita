@@ -47,7 +47,6 @@ private:
     QRegion getMaskMap() override;
     void drawCursor(QPainter &painter) override;
     void drawGamutMask(QPainter &painter) override;
-    QSize sizeHint() const override;
 
     singelDTypes m_type;
     int m_barWidth;

@@ -34,11 +34,6 @@ KisVisualEllipticalSelectorShape::~KisVisualEllipticalSelectorShape()
     //qDebug() << "deleting KisVisualEllipticalSelectorShape" << this;
 }
 
-QSize KisVisualEllipticalSelectorShape::sizeHint() const
-{
-    return QSize(180,180);
-}
-
 void KisVisualEllipticalSelectorShape::setBorderWidth(int width)
 {
     m_barWidth = width;

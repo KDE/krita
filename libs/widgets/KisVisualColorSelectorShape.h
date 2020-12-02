@@ -48,7 +48,7 @@ public:
      * @brief getCursorPosition
      * @return current cursor position in shape-coordinates.
      */
-    QPointF getCursorPosition();
+    QPointF getCursorPosition() const;
     /**
      * @brief getDimensions
      * @return whether this is a single or twodimensional widget.

@@ -16,6 +16,8 @@
 
 #include "resources/KoGamutMask.h"
 
+#define KVESS_MARGIN 2
+
 KisVisualEllipticalSelectorShape::KisVisualEllipticalSelectorShape(KisVisualColorSelector *parent,
                                                                  Dimensions dimension,
                                                                  int channel1, int channel2,
@@ -95,6 +97,11 @@ void KisVisualEllipticalSelectorShape::updateGamutMask()
 {
     if (supportsGamutMask()) {
         m_gamutMaskNeedsUpdate = true;
+        KoGamutMask *mask = colorSelector()->activeGamutMask();
+        if (mask) {
+            m_gamutMaskTransform = mask->viewToMaskTransform(width() - 2*KVESS_MARGIN);
+            m_gamutMaskTransform.translate(-KVESS_MARGIN, -KVESS_MARGIN);
+        }
         update();
     }
 }
@@ -166,6 +173,17 @@ QPointF KisVisualEllipticalSelectorShape::mousePositionToShapeCoordinate(const Q
             pos2.setX(h_center);
         }
     }
+    else if (getDimensions() == KisVisualColorSelectorShape::twodimensional) {
+        KoGamutMask *mask = colorSelector()->activeGamutMask();
+        if (mask) {
+            QPointF maskPoint = m_gamutMaskTransform.map(pos);
+            if (!mask->coordIsClear(maskPoint, true)) {
+                // Ideally we try  to find the closest point on the mask border, possibly
+                // depending on dragStart. Currently just returns old position.
+                return getCursorPosition();
+            }
+        }
+    }
     return convertWidgetCoordinateToShapeCoordinate(pos2);
 }
 
@@ -210,10 +228,10 @@ QImage KisVisualEllipticalSelectorShape::renderAlphaMask() const
     if (isHueControl() && mode == KisVisualColorSelector::StaticBackground) {
         return QImage();
     }
-    qreal outerBorder = 2.0;
+    qreal outerBorder = KVESS_MARGIN;
     qreal innerBorder = -1;
     if (mode == KisVisualColorSelector::CompositeBackground && isHueControl()) {
-        outerBorder =  2 + 0.25 * (m_barWidth - 4);
+        outerBorder += 0.25 * (m_barWidth - 4);
     }
     if (getDimensions() == KisVisualColorSelectorShape::onedimensional) {
         innerBorder = m_barWidth - 2;
@@ -229,9 +247,9 @@ QImage KisVisualEllipticalSelectorShape::renderStaticAlphaMask() const
     }
     qreal innerBorder = m_barWidth - 2;
     if (mode == KisVisualColorSelector::CompositeBackground) {
-        innerBorder = 3 + 0.25 * (m_barWidth - 4);
+        innerBorder = KVESS_MARGIN + 1 + 0.25 * (m_barWidth - 4);
     }
-    return renderAlphaMaskImpl(2.0, innerBorder);
+    return renderAlphaMaskImpl(KVESS_MARGIN, innerBorder);
 }
 
 void KisVisualEllipticalSelectorShape::renderGamutMask()
@@ -254,13 +272,13 @@ void KisVisualEllipticalSelectorShape::renderGamutMask()
     QPainter painter(&m_gamutMaskImage);
     QPen pen(Qt::white);
     painter.setRenderHint(QPainter::Antialiasing, true);
-    painter.translate(2.0, 2.0);
+    painter.translate(KVESS_MARGIN, KVESS_MARGIN);
     painter.setBrush(QColor(0, 0, 0, 128));
     painter.setPen(pen);
 
-    painter.drawEllipse(QRectF(0, 0, width() - 4.0, height() - 4.0));
+    painter.drawEllipse(QRectF(0, 0, width() - 2*KVESS_MARGIN, height() - 2*KVESS_MARGIN));
 
-    painter.setTransform(mask->maskToViewTransform(width() - 4), true);
+    painter.setTransform(mask->maskToViewTransform(width() - 2*KVESS_MARGIN), true);
     painter.setCompositionMode(QPainter::CompositionMode_DestinationIn);
     mask->paint(painter, true);
 

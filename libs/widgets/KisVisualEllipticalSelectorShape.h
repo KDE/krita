@@ -8,6 +8,8 @@
 
 #include "KisVisualColorSelectorShape.h"
 
+#include <QTransform>
+
 class KisVisualEllipticalSelectorShape : public KisVisualColorSelectorShape
 {
     Q_OBJECT
@@ -51,6 +53,7 @@ private:
     singelDTypes m_type;
     int m_barWidth;
     QImage m_gamutMaskImage;
+    QTransform m_gamutMaskTransform;
     bool m_gamutMaskNeedsUpdate;
 };
 

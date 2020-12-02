@@ -55,7 +55,7 @@ KisVisualColorSelectorShape::~KisVisualColorSelectorShape()
 {
 }
 
-QPointF KisVisualColorSelectorShape::getCursorPosition() {
+QPointF KisVisualColorSelectorShape::getCursorPosition() const {
     return m_d->currentCoordinates;
 }
 

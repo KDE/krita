@@ -759,8 +759,6 @@ void KisToolTransformConfigWidget::slotSetMeshModeButtonClicked(bool value)
 
     lblTransformType->setText(meshButton->toolTip());
 
-    ToolTransformArgs *config = m_transaction->currentConfig();
-    config->setMode(ToolTransformArgs::MESH);
     emit sigResetTransform(ToolTransformArgs::MESH);
 }
 

@@ -34,13 +34,8 @@ public:
 
 private:
     Ui_GradientMapFilterConfigWidget m_ui;
-    KoResourcePopupAction *m_gradientPopUp;
     KisSignalCompressor *m_gradientChangedCompressor;
-    KoStopGradientSP m_activeGradient;
     KisViewManager *m_view;
-    
-private Q_SLOTS:
-    void setAbstractGradientToEditor();
 };
 
 #endif

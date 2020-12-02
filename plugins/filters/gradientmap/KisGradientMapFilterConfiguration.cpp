@@ -25,9 +25,7 @@ KisGradientMapFilterConfiguration::KisGradientMapFilterConfiguration(qint32 vers
 
 KoStopGradientSP KisGradientMapFilterConfiguration::gradient() const
 {
-    KoStopGradientSP gradient = nullptr;
-
-    if (this->version() == 1) {
+    if (version() == 1) {
         QDomDocument doc;
         QDomElement elt = doc.createElement("gradient");
         KoAbstractGradient *gradientAb = KoResourceServerProvider::instance()->gradientServer()->resourceByName(getString("gradientName"));
@@ -38,13 +36,26 @@ KoStopGradientSP KisGradientMapFilterConfiguration::gradient() const
         QScopedPointer<QGradient> qGradient(gradientAb->toQGradient());
         KoStopGradient::fromQGradient(qGradient.data())->toXML(doc, elt);
         doc.appendChild(elt);
-        gradient = KoStopGradientSP(dynamic_cast<KoStopGradient*>(KoStopGradient::fromXML(doc.firstChildElement()).clone()));
-    } else {
-        QDomDocument doc;
-        doc.setContent(getString("gradientXML", ""));
-        gradient = KoStopGradientSP(dynamic_cast<KoStopGradient*>(KoStopGradient::fromXML(doc.firstChildElement()).clone()));
+        KoStopGradientSP gradient =
+            KoStopGradientSP(dynamic_cast<KoStopGradient*>(KoStopGradient::fromXML(doc.firstChildElement()).clone()));
+        gradient->setValid(true);
+        return gradient;
+    } else if (version() == 2) {
+        QDomDocument document;
+        if (document.setContent(getString("gradientXML", ""))) {
+            const QDomElement gradientElement = document.firstChildElement();
+            if (!gradientElement.isNull()) {
+                KoStopGradientSP gradient =
+                    KoStopGradientSP(dynamic_cast<KoStopGradient*>(KoStopGradient::fromXML(gradientElement).clone()));
+                if (gradient) {
+                    gradient->setName(gradientElement.attribute("name", ""));
+                    gradient->setValid(true);
+                    return gradient;
+                }
+            }
+        }
     }
-    return gradient;
+    return defaultGradient();
 }
 
 int KisGradientMapFilterConfiguration::colorMode() const

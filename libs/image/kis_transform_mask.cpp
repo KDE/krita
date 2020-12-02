@@ -201,7 +201,12 @@ void KisTransformMask::recaclulateStaticImage()
      */
 
     KisLayerSP parentLayer = qobject_cast<KisLayer*>(parent().data());
-    KIS_ASSERT_RECOVER_RETURN(parentLayer);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(parentLayer);
+
+    // It might happen that the mask became invisible in the meantime
+    // and the projection has become disabled. That mush be "impossible"
+    // situation, hence assert.
+    KIS_SAFE_ASSERT_RECOVER_RETURN(parentLayer->projection() != parentLayer->paintDevice());
 
     if (!m_d->staticCacheDevice ||
         *m_d->staticCacheDevice->colorSpace() != *parentLayer->original()->colorSpace()) {

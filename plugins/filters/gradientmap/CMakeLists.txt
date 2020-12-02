@@ -3,6 +3,8 @@ set(kritagradientmap_SOURCES
     KisGradientMapFilterConfigWidget.cpp
     KisGradientMapFilterConfiguration.cpp
     KisGradientMapFilterPlugin.cpp
+    KisGradientMapFilterNearestCachedGradient.cpp
+    KisGradientMapFilterDitherCachedGradient.cpp
 )
 
 ki18n_wrap_ui(kritagradientmap_SOURCES

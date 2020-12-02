@@ -791,12 +791,6 @@ void InplaceTransformStrokeStrategy::finishAction(QVector<KisStrokeJobData *> &m
 
         reapplyTransform(m_d->currentTransformArgs, mutatedJobs, 0);
         mutatedJobs << new Data(new KisHoldUIUpdatesCommand(m_d->updatesFacade, KisCommandUtils::FlipFlopCommand::FINALIZING), false, KisStrokeJobData::BARRIER);
-
-        KritaUtils::addJobSequential(mutatedJobs, [this]() {
-            Q_FOREACH (KisTransformMask *mask, m_d->transformMaskCacheHash.keys()) {
-                mask->threadSafeForceStaticImageUpdate();
-            }
-        });
     }
 
     finalizeStrokeImpl(mutatedJobs, true);

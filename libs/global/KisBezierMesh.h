@@ -235,6 +235,9 @@ private:
     class segment_iterator_impl;
 
     template<bool is_const>
+    class control_point_iterator_impl;
+
+    template<bool is_const>
     class patch_iterator_impl :
         public boost::iterator_facade <patch_iterator_impl<is_const>,
                                        Patch,
@@ -244,6 +247,7 @@ private:
         using PointType = std::add_const_if_t<is_const, QPointF>;
         using MeshType = std::add_const_if_t<is_const, Mesh>;
         using SegmentIteratorType = segment_iterator_impl<is_const>;
+        using ControlPointIteratorType = control_point_iterator_impl<is_const>;
 
     public:
         patch_iterator_impl()
@@ -266,6 +270,11 @@ private:
         SegmentIteratorType segmentQ() const;
         SegmentIteratorType segmentR() const;
         SegmentIteratorType segmentS() const;
+
+        ControlPointIteratorType nodeTopLeft() const;
+        ControlPointIteratorType nodeTopRight() const;
+        ControlPointIteratorType nodeBottomLeft() const;
+        ControlPointIteratorType nodeBottomRight() const;
 
         bool isValid() const {
             return
@@ -1300,6 +1309,43 @@ Mesh<NodeArg, PatchArg>::patch_iterator_impl<is_const>::segmentS() const
     using SegmentIteratorType = typename Mesh<NodeArg, PatchArg>::template patch_iterator_impl<is_const>::SegmentIteratorType;
     return SegmentIteratorType(const_cast<Mesh<NodeArg, PatchArg>*>(m_mesh), m_col + 1, m_row, 0);
 }
+
+template<typename NodeArg, typename PatchArg>
+template<bool is_const>
+typename Mesh<NodeArg, PatchArg>::template patch_iterator_impl<is_const>::ControlPointIteratorType
+Mesh<NodeArg, PatchArg>::patch_iterator_impl<is_const>::nodeTopLeft() const
+{
+    using ControlPointIteratorType = typename Mesh<NodeArg, PatchArg>::template patch_iterator_impl<is_const>::ControlPointIteratorType;
+    return ControlPointIteratorType(const_cast<Mesh<NodeArg, PatchArg>*>(m_mesh), m_col, m_row, Mesh::ControlType::Node);
+}
+
+template<typename NodeArg, typename PatchArg>
+template<bool is_const>
+typename Mesh<NodeArg, PatchArg>::template patch_iterator_impl<is_const>::ControlPointIteratorType
+Mesh<NodeArg, PatchArg>::patch_iterator_impl<is_const>::nodeTopRight() const
+{
+    using ControlPointIteratorType = typename Mesh<NodeArg, PatchArg>::template patch_iterator_impl<is_const>::ControlPointIteratorType;
+    return ControlPointIteratorType(const_cast<Mesh<NodeArg, PatchArg>*>(m_mesh), m_col + 1, m_row, Mesh::ControlType::Node);
+}
+
+template<typename NodeArg, typename PatchArg>
+template<bool is_const>
+typename Mesh<NodeArg, PatchArg>::template patch_iterator_impl<is_const>::ControlPointIteratorType
+Mesh<NodeArg, PatchArg>::patch_iterator_impl<is_const>::nodeBottomLeft() const
+{
+    using ControlPointIteratorType = typename Mesh<NodeArg, PatchArg>::template patch_iterator_impl<is_const>::ControlPointIteratorType;
+    return ControlPointIteratorType(const_cast<Mesh<NodeArg, PatchArg>*>(m_mesh), m_col, m_row + 1, Mesh::ControlType::Node);
+}
+
+template<typename NodeArg, typename PatchArg>
+template<bool is_const>
+typename Mesh<NodeArg, PatchArg>::template patch_iterator_impl<is_const>::ControlPointIteratorType
+Mesh<NodeArg, PatchArg>::patch_iterator_impl<is_const>::nodeBottomRight() const
+{
+    using ControlPointIteratorType = typename Mesh<NodeArg, PatchArg>::template patch_iterator_impl<is_const>::ControlPointIteratorType;
+    return ControlPointIteratorType(const_cast<Mesh<NodeArg, PatchArg>*>(m_mesh), m_col + 1, m_row + 1, Mesh::ControlType::Node);
+}
+
 
 template<typename NodeArg, typename PatchArg>
 template<bool is_const>

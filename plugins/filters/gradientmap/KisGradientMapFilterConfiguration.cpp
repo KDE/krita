@@ -12,18 +12,20 @@
 #include <KoStopGradient.h>
 #include <KoAbstractGradient.h>
 #include <KisDitherWidget.h>
-#include <KoResourceServerProvider.h>
 
 #include "KisGradientMapFilterConfiguration.h"
 
-KisGradientMapFilterConfiguration::KisGradientMapFilterConfiguration(const QString & name, qint32 version)
-    : KisFilterConfiguration(name, version)
-{
-}
+KisGradientMapFilterConfiguration::KisGradientMapFilterConfiguration()
+    : KisFilterConfiguration(defaultName(), defaultVersion())
+{}
 
-KoStopGradientSP KisGradientMapFilterConfiguration::gradientImpl() const
+KisGradientMapFilterConfiguration::KisGradientMapFilterConfiguration(qint32 version)
+    : KisFilterConfiguration(defaultName(), version)
+{}
+
+KoStopGradientSP KisGradientMapFilterConfiguration::gradient() const
 {
-    KoStopGradientSP gradient;
+    KoStopGradientSP gradient = nullptr;
 
     if (this->version() == 1) {
         QDomDocument doc;
@@ -45,7 +47,36 @@ KoStopGradientSP KisGradientMapFilterConfiguration::gradientImpl() const
     return gradient;
 }
 
-KoStopGradientSP KisGradientMapFilterConfiguration::gradient() const
+int KisGradientMapFilterConfiguration::colorMode() const
 {
-    return gradientImpl();
+    return getInt("colorMode", defaultColorMode());
+}
+
+void KisGradientMapFilterConfiguration::setGradient(KoStopGradientSP newGradient)
+{
+    if (!newGradient) {
+        setProperty("gradientXML", "");
+        return;
+    }
+
+    QDomDocument document;
+    QDomElement gradientElement = document.createElement("gradient");
+    gradientElement.setAttribute("name", newGradient->name());
+
+    newGradient->toXML(document, gradientElement);
+
+    document.appendChild(gradientElement);
+    setProperty("gradientXML", document.toString());
+}
+
+void KisGradientMapFilterConfiguration::setColorMode(int newColorMode)
+{
+    setProperty("colorMode", newColorMode);
+}
+
+void KisGradientMapFilterConfiguration::setDefaults()
+{
+    setGradient(defaultGradient());
+    setColorMode(defaultColorMode());
+    KisDitherWidget::factoryConfiguration(*this, "dither/");
 }

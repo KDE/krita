@@ -10,7 +10,6 @@
 #ifndef KIS_GRADIENT_MAP_FILTER_CONFIG_WIDGET_H
 #define KIS_GRADIENT_MAP_FILTER_CONFIG_WIDGET_H
 
-//#include <filter/kis_color_transformation_configuration.h>
 #include <kis_config_widget.h>
 #include <KoResourcePopupAction.h>
 #include <kis_signal_compressor.h>
@@ -18,22 +17,27 @@
 
 #include "ui_KisGradientMapFilterConfigWidget.h"
 
+class KisViewManager;
+
 class KisGradientMapFilterConfigWidget : public KisConfigWidget
 {
     Q_OBJECT
+    
 public:
-    KisGradientMapFilterConfigWidget(QWidget *parent, KisPaintDeviceSP dev, Qt::WindowFlags f = Qt::WindowFlags());
+    KisGradientMapFilterConfigWidget(QWidget *parent, Qt::WindowFlags f = Qt::WindowFlags());
     ~KisGradientMapFilterConfigWidget() override;
 
     KisPropertiesConfigurationSP configuration() const override;
     void setConfiguration(const KisPropertiesConfigurationSP config) override;
 
+    void setView(KisViewManager *view) override;
+
 private:
     Ui_GradientMapFilterConfigWidget m_ui;
     KoResourcePopupAction *m_gradientPopUp;
     KisSignalCompressor *m_gradientChangedCompressor;
-    KoStopGradient *m_activeGradient;
-    void setView(KisViewManager *view) override;
+    KoStopGradientSP m_activeGradient;
+    KisViewManager *m_view;
     
 private Q_SLOTS:
     void setAbstractGradientToEditor();

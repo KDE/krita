@@ -28,6 +28,9 @@
 #include <kritapigment_export.h>
 #include <boost/operators.hpp>
 
+class KoStopGradient;
+using KoStopGradientSP = QSharedPointer<KoStopGradient>;
+
 enum KoGradientStopType 
 {
     COLORSTOP,

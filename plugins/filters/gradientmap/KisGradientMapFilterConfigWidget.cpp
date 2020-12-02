@@ -15,14 +15,16 @@
 #include <kis_canvas_resource_provider.h>
 #include <kis_filter_registry.h>
 #include <KoResourceServerAdapter.h>
+#include <kis_signals_blocker.h>
 
 #include "KisGradientMapFilterConfigWidget.h"
+#include "KisGradientMapFilterConfiguration.h"
 
-KisGradientMapFilterConfigWidget::KisGradientMapFilterConfigWidget(QWidget *parent, KisPaintDeviceSP dev, Qt::WindowFlags f)
+KisGradientMapFilterConfigWidget::KisGradientMapFilterConfigWidget(QWidget *parent, Qt::WindowFlags f)
     : KisConfigWidget(parent, f)
-{
-    Q_UNUSED(dev);
-    
+    , m_activeGradient(nullptr)
+    , m_view(nullptr)
+{    
     m_ui.setupUi(this);
 
     m_gradientChangedCompressor = new KisSignalCompressor(100, KisSignalCompressor::FIRST_ACTIVE);
@@ -34,8 +36,7 @@ KisGradientMapFilterConfigWidget::KisGradientMapFilterConfigWidget(QWidget *pare
     m_gradientPopUp = new KoResourcePopupAction(gradientResourceAdapter,
                                                 m_ui.btnGradientChooser);
     m_gradientPopUp->keepAspectRatio(false);
-    m_activeGradient = KoStopGradient::fromQGradient(dynamic_cast<KoAbstractGradient*>(gradientResourceAdapter->resources().first())->toQGradient());
-    m_ui.gradientEditor->setGradient(m_activeGradient);
+    m_ui.gradientEditor->setGradient(m_activeGradient.data());
     m_ui.gradientEditor->setCompactMode(true);
     m_ui.gradientEditor->setEnabled(true);
     m_ui.btnGradientChooser->setDefaultAction(m_gradientPopUp);
@@ -56,50 +57,52 @@ void KisGradientMapFilterConfigWidget::setAbstractGradientToEditor()
     QSharedPointer<KoGradientBackground> bg =
         qSharedPointerDynamicCast<KoGradientBackground>(
             m_gradientPopUp->currentBackground());
-    m_activeGradient = KoStopGradient::fromQGradient(bg->gradient());
-    m_ui.gradientEditor->setGradient(m_activeGradient);
+    m_activeGradient = KoStopGradientSP(KoStopGradient::fromQGradient(bg->gradient()));
+    m_ui.gradientEditor->setGradient(m_activeGradient.data());
 
 }
 
 KisPropertiesConfigurationSP KisGradientMapFilterConfigWidget::configuration() const
 {
-    KisFilterSP filter = KisFilterRegistry::instance()->get("gradientmap");
-    KisFilterConfigurationSP cfg = filter->factoryConfiguration();
-    if (m_activeGradient) {
-        QDomDocument doc;
-        QDomElement elt = doc.createElement("gradient");
-        m_activeGradient->toXML(doc, elt);
-        doc.appendChild(elt);
-        cfg->setProperty("gradientXML", doc.toString());
+    KisGradientMapFilterConfiguration *config = new KisGradientMapFilterConfiguration();
+
+    KoStopGradientSP gradient = KoStopGradientSP(static_cast<KoStopGradient*>(m_activeGradient->clone()));
+    if (gradient && m_view) {
+        KisCanvasResourceProvider *canvasResourceProvider = m_view->canvasResourceProvider();
+        gradient->bakeVariableColors(canvasResourceProvider->fgColor(), canvasResourceProvider->bgColor());
     }
+    config->setGradient(m_activeGradient);
+    config->setColorMode(m_ui.colorModeComboBox->currentIndex());
+    m_ui.ditherWidget->configuration(*config, "dither/");
 
-    cfg->setProperty("colorMode", m_ui.colorModeComboBox->currentIndex());
-    m_ui.ditherWidget->configuration(*cfg, "dither/");
-
-    return cfg;
+    return config;
 }
 
 void KisGradientMapFilterConfigWidget::setConfiguration(const KisPropertiesConfigurationSP config)
 {
-    Q_ASSERT(config);
-    QDomDocument doc;
-    if (config->hasProperty("gradientXML")) {
-        doc.setContent(config->getString("gradientXML", ""));
-        KoStopGradient gradient = KoStopGradient::fromXML(doc.firstChildElement());
-        if (gradient.stops().size() > 0) {
-            m_activeGradient->setStops(gradient.stops());
+    const KisGradientMapFilterConfiguration *filterConfig =
+        dynamic_cast<const KisGradientMapFilterConfiguration*>(config.data());
+    Q_ASSERT(filterConfig);
+
+    {
+        KisSignalsBlocker signalsBlocker(this);
+
+        m_activeGradient = filterConfig->gradient();
+        if (m_activeGradient && m_view) {
+            KisCanvasResourceProvider *canvasResourceProvider = m_view->canvasResourceProvider();
+            m_activeGradient->setVariableColors(canvasResourceProvider->fgColor(), canvasResourceProvider->bgColor());
         }
-        m_ui.gradientEditor->setGradient(m_activeGradient);
+        m_ui.gradientEditor->setGradient(m_activeGradient.data());
+
+        m_ui.colorModeComboBox->setCurrentIndex(filterConfig->colorMode());
+
+        m_ui.ditherWidget->setConfiguration(*filterConfig, "dither/");
     }
 
-    m_ui.colorModeComboBox->setCurrentIndex(config->getInt("colorMode"));
-
-    const KisFilterConfiguration *filterConfig = dynamic_cast<const KisFilterConfiguration*>(config.data());
-    KIS_SAFE_ASSERT_RECOVER_RETURN(filterConfig);
-    m_ui.ditherWidget->setConfiguration(*filterConfig, "dither/");
+    emit sigConfigurationUpdated();
 }
 
 void KisGradientMapFilterConfigWidget::setView(KisViewManager *view)
 {
-    Q_UNUSED(view)
+    m_view = view;
 }

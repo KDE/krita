@@ -11,8 +11,8 @@
 #define KIS_GRADIENT_MAP_FILTER_CONFIGURATION_H
 
 #include <kis_filter_configuration.h>
-
-using KoStopGradientSP = QSharedPointer<KoStopGradient>;
+#include <KisGradientConversion.h>
+#include <KoResourceServerProvider.h>
 
 class KisGradientMapFilterConfiguration;
 typedef KisPinnedSharedPtr<KisGradientMapFilterConfiguration> KisGradientMapFilterConfigurationSP;
@@ -20,12 +20,50 @@ typedef KisPinnedSharedPtr<KisGradientMapFilterConfiguration> KisGradientMapFilt
 class KisGradientMapFilterConfiguration : public KisFilterConfiguration
 {
 public:
-    KisGradientMapFilterConfiguration(const QString & name, qint32 version);
-    
-    KoStopGradientSP gradient() const;
+    enum ColorMode {
+        ColorMode_Blend,
+        ColorMode_Nearest,
+        ColorMode_Dither
+    };
 
-private:
-    KoStopGradientSP gradientImpl() const;
+    KisGradientMapFilterConfiguration();
+    KisGradientMapFilterConfiguration(qint32 version);
+    
+    static inline QString defaultName()
+    {
+        return "gradientmap";
+    }
+    
+    static constexpr qint32 defaultVersion()
+    {
+        return 2;
+    }
+
+    static inline KoStopGradientSP defaultGradient()
+    {
+        KoStopGradientSP gradient =
+            KoStopGradientSP(
+                KisGradientConversion::toStopGradient(
+                    KoResourceServerProvider::instance()->gradientServer()->resources().first()
+                )
+            );
+        gradient->setName(i18nc("Default gradient name for the gradient generator", "Unnamed"));
+        gradient->setValid(true);
+        return gradient;
+    }
+
+    static constexpr int defaultColorMode()
+    {
+        return ColorMode_Blend;
+    }
+
+    KoStopGradientSP gradient() const;
+    int colorMode() const;
+
+    void setGradient(KoStopGradientSP newGradient);
+    void setColorMode(int newColorMode);
+    void setDefaults();
+
 };
 
 #endif

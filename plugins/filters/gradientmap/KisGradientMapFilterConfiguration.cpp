@@ -23,30 +23,29 @@ KisGradientMapFilterConfiguration::KisGradientMapFilterConfiguration(qint32 vers
     : KisFilterConfiguration(defaultName(), version)
 {}
 
-KoStopGradientSP KisGradientMapFilterConfiguration::gradient() const
+KoAbstractGradientSP KisGradientMapFilterConfiguration::gradient() const
 {
     if (version() == 1) {
-        QDomDocument doc;
-        QDomElement elt = doc.createElement("gradient");
-        KoAbstractGradient *gradientAb = KoResourceServerProvider::instance()->gradientServer()->resourceByName(getString("gradientName"));
-        if (!gradientAb) {
+        KoAbstractGradient *resourceGradient = KoResourceServerProvider::instance()->gradientServer()->resourceByName(getString("gradientName"));
+        if (resourceGradient) {
+            KoAbstractGradientSP gradient = KoAbstractGradientSP(resourceGradient->clone());
+            gradient->setValid(true);
+            return gradient;
+        } else {
             qWarning() << "Could not find gradient" << getString("gradientName");
         }
-        gradientAb = KoResourceServerProvider::instance()->gradientServer()->resources().first();
-        QScopedPointer<QGradient> qGradient(gradientAb->toQGradient());
-        KoStopGradient::fromQGradient(qGradient.data())->toXML(doc, elt);
-        doc.appendChild(elt);
-        KoStopGradientSP gradient =
-            KoStopGradientSP(dynamic_cast<KoStopGradient*>(KoStopGradient::fromXML(doc.firstChildElement()).clone()));
-        gradient->setValid(true);
-        return gradient;
     } else if (version() == 2) {
         QDomDocument document;
         if (document.setContent(getString("gradientXML", ""))) {
             const QDomElement gradientElement = document.firstChildElement();
             if (!gradientElement.isNull()) {
-                KoStopGradientSP gradient =
-                    KoStopGradientSP(dynamic_cast<KoStopGradient*>(KoStopGradient::fromXML(gradientElement).clone()));
+                const QString gradientType = gradientElement.attribute("type");
+                KoAbstractGradientSP gradient;
+                if (gradientType == "stop") {
+                    gradient = KoAbstractGradientSP(KoStopGradient::fromXML(gradientElement).clone());
+                } else if (gradientType == "segment") {
+                    gradient = KoAbstractGradientSP(KoSegmentGradient::fromXML(gradientElement).clone());
+                }
                 if (gradient) {
                     gradient->setName(gradientElement.attribute("name", ""));
                     gradient->setValid(true);
@@ -63,18 +62,24 @@ int KisGradientMapFilterConfiguration::colorMode() const
     return getInt("colorMode", defaultColorMode());
 }
 
-void KisGradientMapFilterConfiguration::setGradient(KoStopGradientSP newGradient)
+void KisGradientMapFilterConfiguration::setGradient(KoAbstractGradientSP newGradient)
 {
     if (!newGradient) {
         setProperty("gradientXML", "");
         return;
     }
-
+    
     QDomDocument document;
     QDomElement gradientElement = document.createElement("gradient");
     gradientElement.setAttribute("name", newGradient->name());
 
-    newGradient->toXML(document, gradientElement);
+    if (dynamic_cast<KoStopGradient*>(newGradient.data())) {
+        KoStopGradient *gradient = dynamic_cast<KoStopGradient*>(newGradient.data());
+        gradient->toXML(document, gradientElement);
+    } else if (dynamic_cast<KoSegmentGradient*>(newGradient.data())) {
+        KoSegmentGradient *gradient = dynamic_cast<KoSegmentGradient*>(newGradient.data());
+        gradient->toXML(document, gradientElement);
+    }
 
     document.appendChild(gradientElement);
     setProperty("gradientXML", document.toString());

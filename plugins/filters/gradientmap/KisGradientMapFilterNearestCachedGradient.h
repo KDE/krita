@@ -19,7 +19,7 @@ class KoColorSpace;
 class KisGradientMapFilterNearestCachedGradient
 {
 public:
-    KisGradientMapFilterNearestCachedGradient(const KoStopGradientSP gradient, qint32 steps, const KoColorSpace *cs);
+    KisGradientMapFilterNearestCachedGradient(const KoAbstractGradientSP gradient, qint32 steps, const KoColorSpace *cs);
 
     /// gets the color data at position 0 <= t <= 1
     const quint8* cachedAt(qreal t) const;

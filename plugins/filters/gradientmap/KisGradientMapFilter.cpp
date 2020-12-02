@@ -119,21 +119,22 @@ void KisGradientMapFilter::processImpl(KisPaintDeviceSP device,
 
     KIS_SAFE_ASSERT_RECOVER_RETURN(filterConfig);
 
-    KoStopGradientSP gradient = filterConfig->gradient();
-    const ColorMode colorMode = ColorMode(filterConfig->getInt("colorMode"));
+    KoAbstractGradientSP gradient = filterConfig->gradient();
+    const int colorMode = filterConfig->colorMode();
     const KoColorSpace *colorSpace = device->colorSpace();
+    const int cachedGradientSize = qMax(device->extent().width(), device->extent().height());
 
-    if (colorMode == ColorMode::Blend) {
-        KoCachedGradient cachedGradient(gradient.data(), qMax(device->extent().width(), device->extent().height()), colorSpace);
+    if (colorMode == KisGradientMapFilterConfiguration::ColorMode_Blend) {
+        KoCachedGradient cachedGradient(gradient.data(), cachedGradientSize, colorSpace);
         BlendColorModePolicy colorModePolicy(&cachedGradient);
         processImpl(device, applyRect, config, progressUpdater, colorModePolicy);
-    } else if (colorMode == ColorMode::Nearest) {
-        KisGradientMapFilterNearestCachedGradient cachedGradient(gradient, qMax(device->extent().width(), device->extent().height()), colorSpace);
+    } else if (colorMode == KisGradientMapFilterConfiguration::ColorMode_Nearest) {
+        KisGradientMapFilterNearestCachedGradient cachedGradient(gradient, cachedGradientSize, colorSpace);
         NearestColorModePolicy colorModePolicy(&cachedGradient);
         processImpl(device, applyRect, config, progressUpdater, colorModePolicy);
-    } else /* if colorMode == ColorMode::Dither */ {
+    } else /* if colorMode == KisGradientMapFilterConfiguration::ColorMode_Dither */ {
         KisDitherUtil ditherUtil;
-        KisGradientMapFilterDitherCachedGradient cachedGradient(gradient, qMax(device->extent().width(), device->extent().height()), colorSpace);
+        KisGradientMapFilterDitherCachedGradient cachedGradient(gradient, cachedGradientSize, colorSpace);
         ditherUtil.setConfiguration(*filterConfig, "dither/");
         DitherColorModePolicy colorModePolicy(&cachedGradient, &ditherUtil);
         processImpl(device, applyRect, config, progressUpdater, colorModePolicy);
@@ -167,7 +168,6 @@ void KisGradientMapFilter::processImpl(KisPaintDeviceSP device,
 
 KisFilterConfigurationSP KisGradientMapFilter::factoryConfiguration() const
 {
-
     return new KisGradientMapFilterConfiguration;
 }
 

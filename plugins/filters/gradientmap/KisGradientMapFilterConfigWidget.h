@@ -11,9 +11,7 @@
 #define KIS_GRADIENT_MAP_FILTER_CONFIG_WIDGET_H
 
 #include <kis_config_widget.h>
-#include <KoResourcePopupAction.h>
 #include <kis_signal_compressor.h>
-#include <KoStopGradient.h>
 
 #include "ui_KisGradientMapFilterConfigWidget.h"
 

@@ -26,7 +26,7 @@ public:
         qreal localT;
     };
 
-    KisGradientMapFilterDitherCachedGradient(const KoStopGradientSP gradient, qint32 steps, const KoColorSpace *cs);
+    KisGradientMapFilterDitherCachedGradient(const KoAbstractGradientSP gradient, qint32 steps, const KoColorSpace *cs);
 
     /// gets the color data at position 0 <= t <= 1
     const CachedEntry& cachedAt(qreal t) const;

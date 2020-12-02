@@ -13,6 +13,9 @@
 #include <kis_filter_configuration.h>
 #include <KisGradientConversion.h>
 #include <KoResourceServerProvider.h>
+#include <KoColorSpaceRegistry.h>
+#include <KoAbstractGradient.h>
+#include <KoStopGradient.h>
 
 class KisGradientMapFilterConfiguration;
 typedef KisPinnedSharedPtr<KisGradientMapFilterConfiguration> KisGradientMapFilterConfigurationSP;
@@ -39,16 +42,25 @@ public:
         return 2;
     }
 
-    static inline KoStopGradientSP defaultGradient()
+    static inline KoAbstractGradientSP defaultGradient()
     {
-        KoStopGradientSP gradient =
-            KoStopGradientSP(
-                KisGradientConversion::toStopGradient(
-                    KoResourceServerProvider::instance()->gradientServer()->resources().first()
-                )
+        KoAbstractGradientSP gradient;
+        KoAbstractGradient *resourceGradient = KoResourceServerProvider::instance()->gradientServer()->resources().first();
+        if (resourceGradient) {
+            gradient = KoAbstractGradientSP(resourceGradient->clone());
+        } else {
+            KoStopGradient *stopGradient = new KoStopGradient;
+            stopGradient->setStops(
+                QList<KoGradientStop>()
+                << KoGradientStop(0.0, KoColor(Qt::black, KoColorSpaceRegistry::instance()->rgb8(0)), FOREGROUNDSTOP)
+                << KoGradientStop(1.0, KoColor(Qt::white, KoColorSpaceRegistry::instance()->rgb8(0)), BACKGROUNDSTOP)
             );
-        gradient->setName(i18nc("Default gradient name for the gradient generator", "Unnamed"));
-        gradient->setValid(true);
+            gradient = KoAbstractGradientSP(static_cast<KoAbstractGradient*>(stopGradient));
+        }
+        if (gradient) {
+            gradient->setName(i18nc("Default gradient name for the gradient generator", "Unnamed"));
+            gradient->setValid(true);
+        }
         return gradient;
     }
 
@@ -57,10 +69,10 @@ public:
         return ColorMode_Blend;
     }
 
-    KoStopGradientSP gradient() const;
+    KoAbstractGradientSP gradient() const;
     int colorMode() const;
 
-    void setGradient(KoStopGradientSP newGradient);
+    void setGradient(KoAbstractGradientSP newGradient);
     void setColorMode(int newColorMode);
     void setDefaults();
 

@@ -20,12 +20,6 @@ class KisConfigWidget;
 class KisGradientMapFilter : public KisFilter
 {
 public:
-    enum ColorMode {
-        Blend,
-        Nearest,
-        Dither,
-    };
-
     KisGradientMapFilter();
 
     static inline KoID id() {

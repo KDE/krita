@@ -35,6 +35,7 @@ void KisRecalculateTransformMaskJob::run()
      * such a case, don't try do update it.
      */
     if (!m_mask->parent()) return;
+    if (!m_mask->visible()) return;
 
     m_mask->recaclulateStaticImage();
 

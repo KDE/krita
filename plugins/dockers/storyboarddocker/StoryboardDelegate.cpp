@@ -249,7 +249,7 @@ QSize StoryboardDelegate::sizeHint(const QStyleOptionViewItem &option,
             int numComments = model->visibleCommentCount();
             int numItem = width/250;
             if (numItem <= 0) {
-                return QSize(0, 0);
+                numItem = 1;
             }
 
             int thumbnailheight = m_view->thumbnailIsVisible() ? 120 : 0;

@@ -57,6 +57,7 @@
 #include <boost/optional.hpp>
 #include "kis_selection_mask.h"
 #include "kis_undo_stores.h"
+#include "kis_transparency_mask.h"
 
 
 struct InplaceTransformStrokeStrategy::Private
@@ -342,6 +343,8 @@ void InplaceTransformStrokeStrategy::initStrokeCallback()
                 if (const KisTransformMask *mask = dynamic_cast<const KisTransformMask*>(node.data())) {
                     srcRect |= mask->sourceDataBounds();
                 } else if (const KisSelectionMask *mask = dynamic_cast<const KisSelectionMask*>(node.data())) {
+                    srcRect |= mask->selection()->selectedExactRect();
+                } else if (const KisTransparencyMask *mask = dynamic_cast<const KisTransparencyMask*>(node.data())) {
                     srcRect |= mask->selection()->selectedExactRect();
                 } else {
                     srcRect |= node->exactBounds();

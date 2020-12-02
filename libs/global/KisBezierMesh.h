@@ -588,7 +588,7 @@ private:
         }
 
         ControlPointIteratorType itP0() const {
-            return m_mesh->find(firstNodeIndex());
+            return m_mesh->find(ControlPointIndex(firstNodeIndex(), Mesh::ControlType::Node));
         }
 
         ControlPointIteratorType itP1() const {
@@ -606,7 +606,7 @@ private:
         }
 
         ControlPointIteratorType itP3() const {
-            return m_mesh->find(secondNodeIndex());
+            return m_mesh->find(ControlPointIndex(secondNodeIndex(), Mesh::ControlType::Node));
         }
 
         int degree() const {

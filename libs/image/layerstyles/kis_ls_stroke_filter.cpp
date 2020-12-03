@@ -52,21 +52,14 @@ namespace {
 
 int borderSize(psd_stroke_position position, int size)
 {
-    int border = 0;
+    Q_UNUSED(position);
 
-    switch (position) {
-    case psd_stroke_outside:
-        border = size + 1;
-        break;
-    case psd_stroke_center:
-        border = qCeil(0.5 * size) + 1;
-        break;
-    case psd_stroke_inside:
-        border = 1;
-        break;
-    }
+    // The need rect border should not depend on the postition;
+    // instead it should extend the area all the time. Otherwise
+    // small changes on the borderline will not be propagated to
+    // the inner side of the blob. See bug 429165.
 
-    return border;
+    return size + 1;
 }
 
 }

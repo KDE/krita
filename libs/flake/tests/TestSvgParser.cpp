@@ -2124,6 +2124,7 @@ void TestSvgParser::testRenderMeshGradient_transparent()
 
     SvgRenderTester t(data);
     t.setFuzzyThreshold(5);
+    t.setCheckQImagePremultiplied(true);
     t.test_standard("meshgradient_transparent", QSize(100, 100), 72);
 }
 

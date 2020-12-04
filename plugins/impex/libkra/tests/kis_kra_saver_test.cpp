@@ -544,14 +544,21 @@ void KisKraSaverTest::testRoundTripStoryboard()
     KisImageSP image = new KisImage(new KisSurrogateUndoStore(), imageRect.width(), imageRect.height(), cs, "test image");
     doc->setCurrentImage(image);
 
+    // TODO: make initialization of StoryboardItem more fool-proof
+    StoryboardItemSP item(new StoryboardItem());
+    item->appendChild(QVariant::fromValue(ThumbnailData()));
+    item->appendChild("scene0");
+    item->appendChild(10);
+    item->appendChild(2);
+
     StoryboardItemList list;
-    list.append(toQShared(new StoryboardItem()));
+    list.append(item);
 
     doc->setStoryboardItemList(list);
     bool result = doc->exportDocumentSync(QUrl::fromLocalFile("storyboardroundtriptest.kra"), doc->mimeType());
     QVERIFY(result);
 
-    KisDocument *doc2 = KisPart::instance()->createDocument();
+    QScopedPointer<KisDocument> doc2(KisPart::instance()->createDocument());
     result = doc2->loadNativeFormat("storyboardroundtriptest.kra");
     QVERIFY(result);
 

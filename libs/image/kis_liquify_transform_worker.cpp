@@ -6,6 +6,7 @@
 
 #include "kis_liquify_transform_worker.h"
 
+#include <KoColorSpace.h>
 #include "kis_grid_interpolation_tools.h"
 #include "kis_dom_utils.h"
 #include "krita_utils.h"
@@ -378,14 +379,15 @@ void KisLiquifyTransformWorker::rotatePoints(const QPointF &base,
     m_d->processTransformedPixels(op, base, sigma, useWashMode, flow);
 }
 
-void KisLiquifyTransformWorker::run(KisPaintDeviceSP device)
+void KisLiquifyTransformWorker::run(KisPaintDeviceSP srcDevice, KisPaintDeviceSP dstDevice)
 {
-    KisPaintDeviceSP srcDev = new KisPaintDevice(*device.data());
-    device->clear();
+    KIS_SAFE_ASSERT_RECOVER_RETURN(*srcDevice->colorSpace() == *dstDevice->colorSpace());
+
+    dstDevice->clear();
 
     using namespace GridIterationTools;
 
-    PaintDevicePolygonOp polygonOp(srcDev, device);
+    PaintDevicePolygonOp polygonOp(srcDevice, dstDevice);
     RegularGridIndexesOp indexesOp(m_d->gridSize);
     iterateThroughGrid<AlwaysCompletePolygonPolicy>(polygonOp, indexesOp,
                                                     m_d->gridSize,

@@ -267,54 +267,66 @@ void KisTransformUtils::transformDevice(const ToolTransformArgs &config,
                                         KisPaintDeviceSP device,
                                         KisProcessingVisitor::ProgressHelper *helper)
 {
+    KisPaintDeviceSP tmp = new KisPaintDevice(*device);
+    transformDevice(config, tmp, device, helper);
+}
+
+
+void KisTransformUtils::transformDevice(const ToolTransformArgs &config,
+                                        KisPaintDeviceSP srcDevice,
+                                        KisPaintDeviceSP dstDevice,
+                                        KisProcessingVisitor::ProgressHelper *helper)
+{
     if (config.mode() == ToolTransformArgs::WARP) {
         KoUpdaterPtr updater = helper->updater();
 
         KisWarpTransformWorker worker(config.warpType(),
-                                      device,
                                       config.origPoints(),
                                       config.transfPoints(),
                                       config.alpha(),
                                       updater);
-        worker.run();
+        worker.run(srcDevice, dstDevice);
     } else if (config.mode() == ToolTransformArgs::CAGE) {
         KoUpdaterPtr updater = helper->updater();
 
-        KisCageTransformWorker worker(device,
+        dstDevice->makeCloneFromRough(srcDevice, srcDevice->extent());
+
+        KisCageTransformWorker worker(srcDevice->region().boundingRect(),
                                       config.origPoints(),
                                       updater,
                                       config.pixelPrecision());
 
         worker.prepareTransform();
         worker.setTransformedCage(config.transfPoints());
-        worker.run();
+        worker.run(srcDevice, dstDevice);
     } else if (config.mode() == ToolTransformArgs::LIQUIFY && config.liquifyWorker()) {
         KoUpdaterPtr updater = helper->updater();
         //FIXME:
         Q_UNUSED(updater);
 
-        config.liquifyWorker()->run(device);
+        config.liquifyWorker()->run(srcDevice, dstDevice);
     } else if (config.mode() == ToolTransformArgs::MESH) {
         KoUpdaterPtr updater = helper->updater();
         //FIXME:
         Q_UNUSED(updater);
 
-        KisPaintDeviceSP srcDevice = new KisPaintDevice(*device);
-        device->clear();
-        config.meshTransform()->transformMesh(srcDevice, device);
+        dstDevice->clear();
+        config.meshTransform()->transformMesh(srcDevice, dstDevice);
 
     } else {
         QVector3D transformedCenter;
         KoUpdaterPtr updater1 = helper->updater();
         KoUpdaterPtr updater2 = helper->updater();
 
+        dstDevice->makeCloneFromRough(srcDevice, srcDevice->extent());
+
         KisTransformWorker transformWorker =
-            createTransformWorker(config, device, updater1, &transformedCenter);
+            createTransformWorker(config, dstDevice, updater1, &transformedCenter);
 
         transformWorker.run();
 
         if (config.mode() == ToolTransformArgs::FREE_TRANSFORM) {
-            KisPerspectiveTransformWorker perspectiveWorker(device,
+            KisPerspectiveTransformWorker perspectiveWorker(dstDevice,
                                                             config.transformedCenter(),
                                                             config.aX(),
                                                             config.aY(),
@@ -326,7 +338,7 @@ void KisTransformUtils::transformDevice(const ToolTransformArgs &config,
                 QTransform::fromTranslate(config.transformedCenter().x(),
                                           config.transformedCenter().y());
 
-            KisPerspectiveTransformWorker perspectiveWorker(device,
+            KisPerspectiveTransformWorker perspectiveWorker(dstDevice,
                                                             T.inverted() * config.flattenedPerspectiveTransform() * T,
                                                             updater2);
             perspectiveWorker.run();
@@ -342,7 +354,6 @@ QRect KisTransformUtils::needRect(const ToolTransformArgs &config,
 
     if (config.mode() == ToolTransformArgs::WARP) {
         KisWarpTransformWorker worker(config.warpType(),
-                                      0,
                                       config.origPoints(),
                                       config.transfPoints(),
                                       config.alpha(),
@@ -351,7 +362,7 @@ QRect KisTransformUtils::needRect(const ToolTransformArgs &config,
         result = worker.approxNeedRect(rc, srcBounds);
 
     } else if (config.mode() == ToolTransformArgs::CAGE) {
-        KisCageTransformWorker worker(0,
+        KisCageTransformWorker worker(srcBounds,
                                       config.origPoints(),
                                       0,
                                       config.pixelPrecision());
@@ -376,7 +387,6 @@ QRect KisTransformUtils::changeRect(const ToolTransformArgs &config,
 
     if (config.mode() == ToolTransformArgs::WARP) {
         KisWarpTransformWorker worker(config.warpType(),
-                                      0,
                                       config.origPoints(),
                                       config.transfPoints(),
                                       config.alpha(),
@@ -385,7 +395,7 @@ QRect KisTransformUtils::changeRect(const ToolTransformArgs &config,
         result = worker.approxChangeRect(rc);
 
     } else if (config.mode() == ToolTransformArgs::CAGE) {
-        KisCageTransformWorker worker(0,
+        KisCageTransformWorker worker(rc,
                                       config.origPoints(),
                                       0,
                                       config.pixelPrecision());
@@ -526,18 +536,23 @@ bool KisTransformUtils::shouldRestartStrokeOnModeChange(ToolTransformArgs::Trans
     return result;
 }
 
-void KisTransformUtils::transformAndMergeDevice(const ToolTransformArgs &config, KisPaintDeviceSP src, KisPaintDeviceSP dst, KisProcessingVisitor::ProgressHelper *helper)
+void KisTransformUtils::transformAndMergeDevice(const ToolTransformArgs &config,
+                                                KisPaintDeviceSP src,
+                                                KisPaintDeviceSP dst,
+                                                KisProcessingVisitor::ProgressHelper *helper)
 {
-    KoUpdaterPtr mergeUpdater = src != dst ? helper->updater() : 0;
+    KoUpdaterPtr mergeUpdater = helper->updater();
 
-    KisTransformUtils::transformDevice(config, src, helper);
-    if (src != dst) {
-        QRect mergeRect = src->extent();
-        KisPainter painter(dst);
-        painter.setProgress(mergeUpdater);
-        painter.bitBlt(mergeRect.topLeft(), src, mergeRect);
-        painter.end();
-    }
+    KisPaintDeviceSP tmp = new KisPaintDevice(src->colorSpace());
+    tmp->prepareClone(src);
+
+    KisTransformUtils::transformDevice(config, src, tmp, helper);
+
+    QRect mergeRect = tmp->extent();
+    KisPainter painter(dst);
+    painter.setProgress(mergeUpdater);
+    painter.bitBlt(mergeRect.topLeft(), tmp, mergeRect);
+    painter.end();
 }
 
 struct TransformExtraData : public KUndo2CommandExtraData

@@ -571,12 +571,10 @@ void InplaceTransformStrokeStrategy::transformNode(KisNodeSP node, const ToolTra
 
         KIS_SAFE_ASSERT_RECOVER_RETURN(cachedPortion);
 
-        KisPaintDeviceSP src = new KisPaintDevice(*cachedPortion);
-
         KisTransaction transaction(device);
 
         KisProcessingVisitor::ProgressHelper helper(node);
-        KisTransformUtils::transformAndMergeDevice(config, src,
+        KisTransformUtils::transformAndMergeDevice(config, cachedPortion,
                                                    device, &helper);
 
         executeAndAddCommand(transaction.endAndTake(), commandGroup);
@@ -604,14 +602,11 @@ void InplaceTransformStrokeStrategy::transformNode(KisNodeSP node, const ToolTra
 
             KIS_SAFE_ASSERT_RECOVER_RETURN(cachedPortion);
 
-            KisPaintDeviceSP src = new KisPaintDevice(*cachedPortion);
             KisPaintDeviceSP dst = new KisPaintDevice(cachedPortion->colorSpace());
-            dst->prepareClone(src);
-
-            KisTransaction transaction(dst);
+            dst->prepareClone(cachedPortion);
 
             KisProcessingVisitor::ProgressHelper helper(node);
-            KisTransformUtils::transformAndMergeDevice(config, src,
+            KisTransformUtils::transformAndMergeDevice(config, cachedPortion,
                                                        dst, &helper);
 
             transformMask->overrideStaticCacheDevice(dst);

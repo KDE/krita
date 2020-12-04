@@ -90,6 +90,11 @@ public:
                                 KisPaintDeviceSP device,
                                 KisProcessingVisitor::ProgressHelper *helper);
 
+    static void transformDevice(const ToolTransformArgs &config,
+                                KisPaintDeviceSP srcDevice,
+                                KisPaintDeviceSP dstDevice,
+                                KisProcessingVisitor::ProgressHelper *helper);
+
     static QRect needRect(const ToolTransformArgs &config,
                           const QRect &rc,
                           const QRect &srcBounds);

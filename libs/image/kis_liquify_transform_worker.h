@@ -63,7 +63,7 @@ public:
     const QVector<QPointF>& originalPoints() const;
     QVector<QPointF>& transformedPoints();
 
-    void run(KisPaintDeviceSP device);
+    void run(KisPaintDeviceSP srcDevice, KisPaintDeviceSP dstDevice);
     QImage runOnQImage(const QImage &srcImage,
                        const QPointF &srcImageOffset,
                        const QTransform &imageToThumbTransform,

@@ -53,10 +53,10 @@ bool KisTransformMaskAdapter::isHidden() const
 
 void KisTransformMaskAdapter::transformDevice(KisNodeSP node, KisPaintDeviceSP src, KisPaintDeviceSP dst) const
 {
-    dst->makeCloneFrom(src, src->extent());
+    dst->prepareClone(src);
 
     KisProcessingVisitor::ProgressHelper helper(node);
-    KisTransformUtils::transformDevice(transformArgs(), dst, &helper);
+    KisTransformUtils::transformDevice(transformArgs(), src, dst, &helper);
 }
 
 const ToolTransformArgs& KisTransformMaskAdapter::transformArgs() const

@@ -753,10 +753,16 @@ void InplaceTransformStrokeStrategy::finalizeStrokeImpl(QVector<KisStrokeJobData
 void InplaceTransformStrokeStrategy::finishAction(QVector<KisStrokeJobData *> &mutatedJobs)
 {
     /**
-     * Forward to cancelling should happen before the guard for
-     * finalizingActionsStarted.
+     * * Forward to cancelling should happen before the guard for
+     *   finalizingActionsStarted.
+     *
+     * * Transform masks may switch mode and become identity, that
+     *   shouldn't be cancelled.
      */
-    if (m_d->currentTransformArgs.isIdentity() && !m_d->overriddenCommand) {
+    if (m_d->currentTransformArgs.isIdentity() &&
+        m_d->transformMaskCacheHash.isEmpty() &&
+        !m_d->overriddenCommand) {
+
         cancelAction(mutatedJobs);
         return;
     }

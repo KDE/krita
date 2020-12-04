@@ -45,6 +45,8 @@ void StoryboardTimelineSyncTest::cleanupTestCase()
 {
     delete m_storyboardModel;
     delete m_storyboardView;
+
+    m_image->waitForDone();
 }
 
 void StoryboardTimelineSyncTest::cleanup()

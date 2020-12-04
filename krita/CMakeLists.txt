@@ -119,7 +119,7 @@ endif()
 
 
 install(TARGETS krita ${INSTALL_TARGETS_DEFAULT_ARGS})
-install(PROGRAMS org.kde.krita.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
+install(FILES org.kde.krita.desktop DESTINATION ${KDE_INSTALL_APPDIR})
 install(FILES  krita.action kritamenu.action DESTINATION ${DATA_INSTALL_DIR}/krita/actions)
 install(FILES  org.kde.krita.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR} )
 

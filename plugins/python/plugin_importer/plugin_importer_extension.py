@@ -4,14 +4,17 @@
 
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+import html
 import os
+import tempfile
 
 import krita
 
 from PyQt5.QtCore import QStandardPaths
-from PyQt5.QtWidgets import QFileDialog, QMessageBox
+from PyQt5.QtWidgets import QFileDialog, QMessageBox, QInputDialog
 
 from .plugin_importer import PluginImporter, PluginImportError
+from .plugin_downloader import download_plugin, PluginDownloadError
 
 
 class PluginImporterExtension(krita.Extension):
@@ -25,10 +28,15 @@ class PluginImporterExtension(krita.Extension):
 
     def createActions(self, window):
         action = window.createAction(
-            'plugin_importer',
-            i18n('Import Python Plugin...'),
+            'plugin_importer_file',
+            i18n('Import Python Plugin from File...'),
             'tools/scripts')
-        action.triggered.connect(self.import_plugin)
+        action.triggered.connect(self.import_plugin_from_file)
+        action = window.createAction(
+            'plugin_importer_web',
+            i18n('Import Python Plugin from Web...'),
+            'tools/scripts')
+        action.triggered.connect(self.import_plugin_from_web)
 
     def confirm_overwrite(self, plugin):
         reply = QMessageBox.question(
@@ -62,6 +70,15 @@ class PluginImporterExtension(krita.Extension):
             QMessageBox.Yes | QMessageBox.No)
         return reply == QMessageBox.Yes
 
+    def display_errors(self, error):
+        msg = '<p>%s</p><pre>%s</pre>' % (
+            i18n('Error during import:'),
+            html.escape(str(error)))
+        QMessageBox.warning(
+            self.parent.activeWindow().qwindow(),
+            i18n('Error'),
+            msg)
+
     def activate_plugins(self, plugins):
         for plugin in plugins:
             Application.writeSetting(
@@ -73,7 +90,28 @@ class PluginImporterExtension(krita.Extension):
         return QStandardPaths.writableLocation(
             QStandardPaths.AppDataLocation)
 
-    def import_plugin(self):
+    def import_plugin_from_web(self):
+        infotext = i18n(
+            '<p><strong>Enter download URL</strong></p>'
+            '<p>For example:'
+            '<ul>'
+            '<li>Zip download link (http://example.com/plugin.zip)</li>'
+            '<li>Github repository (https://github.com/test/plugin)</li>'
+        )
+        url = QInputDialog.getText(
+            self.parent.activeWindow().qwindow(),
+            i18n('Import Plugin'),
+            infotext)[0]
+        if url:
+            with tempfile.TemporaryDirectory() as tmpdir:
+                try:
+                    zipfile = download_plugin(url=url, dest_dir=tmpdir)
+                except PluginDownloadError as e:
+                    self.display_errors(e)
+                    return
+                self.do_import(zipfile)
+
+    def import_plugin_from_file(self):
         zipfile = QFileDialog.getOpenFileName(
             self.parent.activeWindow().qwindow(),
             i18n('Import Plugin'),
@@ -84,6 +122,9 @@ class PluginImporterExtension(krita.Extension):
         if not zipfile:
             return
 
+        self.do_import(zipfile)
+
+    def do_import(self, zipfile):
         try:
             imported = PluginImporter(
                 zipfile,
@@ -91,12 +132,7 @@ class PluginImporterExtension(krita.Extension):
                 self.confirm_overwrite
             ).import_all()
         except PluginImportError as e:
-            msg = '<p>%s</p><pre>%s</pre>' % (
-                i18n('Error during import:'), str(e))
-            QMessageBox.warning(
-                self.parent.activeWindow().qwindow(),
-                i18n('Error'),
-                msg)
+            self.display_errors(e)
             return
 
         if imported:

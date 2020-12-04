@@ -2,5 +2,6 @@ flake8==3.8.4
 pytest==6.1.2
 PyQt5==5.11.3
 PyQt5-sip==4.19.13
+httpretty==1.0.3
 
 -e dev-tools/python/krita-mock

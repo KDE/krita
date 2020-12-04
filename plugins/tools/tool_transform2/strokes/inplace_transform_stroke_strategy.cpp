@@ -519,7 +519,17 @@ void InplaceTransformStrokeStrategy::postAllUpdates(int levelOfDetail)
     QHash<KisNodeSP, QRect> &prevDirtyRects = m_d->effectivePrevDirtyRects(levelOfDetail);
 
     Q_FOREACH (KisNodeSP node, m_d->processedNodes) {
-        m_d->updatesFacade->refreshGraphAsync(node, dirtyRects[node] | prevDirtyRects[node]);
+        const QRect dirtyRect = dirtyRects[node] | prevDirtyRects[node];
+        if (dirtyRect.isEmpty()) continue;
+
+        /**
+         * When transforming transform masks in non-lod mode, the projection is
+         * jenerated by KisRecalculateTransformMaskJob, which is forced by the
+         * undo command. We shouldn't try to start the update after a command.
+         */
+        if (dynamic_cast<KisTransformMask*>(node.data()) && levelOfDetail <= 0) continue;
+
+        m_d->updatesFacade->refreshGraphAsync(node, dirtyRect);
     }
 
     prevDirtyRects.clear();
@@ -591,7 +601,6 @@ void InplaceTransformStrokeStrategy::transformNode(KisNodeSP node, const ToolTra
                                                                    KisTransformMaskParamsInterfaceSP(
                                                                        new KisTransformMaskAdapter(config)));
             executeAndAddCommand(cmd, Transform);
-            addDirtyRect(node, oldDirtyRect | transformMask->extent(), levelOfDetail);
         } else {
             KisPaintDeviceSP cachedPortion;
 
@@ -766,6 +775,14 @@ void InplaceTransformStrokeStrategy::finishAction(QVector<KisStrokeJobData *> &m
     m_d->finalizingActionsStarted = true;
 
     if (m_d->previewLevelOfDetail > 0) {
+        /**
+         * Update jobs from level of detail updates may cause dirtying
+         * of the transform mask's static cache device. Therefore we must
+         * ensure that final update of the mask happens strictly after
+         * them.
+         */
+        KritaUtils::addJobBarrier(mutatedJobs, [this]() {});
+
         mutatedJobs << new Data(new KisHoldUIUpdatesCommand(m_d->updatesFacade, KisCommandUtils::FlipFlopCommand::INITIALIZING), false, KisStrokeJobData::BARRIER);
 
         if (!m_d->transformMaskCacheHash.isEmpty()) {

@@ -11,6 +11,8 @@
 
 #include <KoResourceBundle.h>
 
+class KisWdgTagSelectionControllerBundleTags;
+
 namespace Ui
 {
 class WdgDlgCreateBundle;
@@ -44,8 +46,7 @@ private Q_SLOTS:
     void resourceTypeSelected(int idx);
     void getPreviewImage();
     void saveToConfiguration(bool full);
-    void slotEmbedTags();
-    QVector<KisTagSP> getTagsForEmbeddingInResource(QVector<KisTagSP> resourceTags) const;
+    QVector<KisTagSP> getTagsForEmbeddingInResource(QVector<KisTagSP> resourceTags, QList<int> selectedTagIds) const;
 
 
 private:
@@ -57,6 +58,8 @@ private:
 
     QList<int> m_selectedResourcesIds;
     QList<int> m_selectedTagIds;
+
+    KisWdgTagSelectionControllerBundleTags* m_tagSelectionWidgetController;
 
     QString m_previewImage;
 

@@ -59,7 +59,7 @@ public:
         KisTagRole,
     };
 
-    enum Ids {
+    enum Ids { // to get actual id, you need to add s_fakeRowsCount
         All = -2, // so it gets on top in the combobox
         AllUntagged = -1,
     };

@@ -4,6 +4,7 @@ set(kritaresourcemanager_SOURCES
     dlg_bundle_manager.cpp
     dlg_embed_tags.cpp
     DlgResourceManager.cpp
+    wdgtagselection.cpp
 )
 
 ki18n_wrap_ui(kritaresourcemanager_SOURCES

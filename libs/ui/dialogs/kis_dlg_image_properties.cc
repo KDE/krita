@@ -18,7 +18,6 @@
 
 #include <klocalizedstring.h>
 
-
 #include <KoColorSpace.h>
 #include <KoColorProfile.h>
 #include <KoColorSpaceRegistry.h>
@@ -32,7 +31,6 @@
 #include <kis_config.h>
 #include <kis_signal_compressor.h>
 #include <kis_image_config.h>
-
 #include "widgets/kis_cmb_idlist.h"
 #include <KisSqueezedComboBox.h>
 #include "kis_layer_utils.h"
@@ -54,6 +52,7 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageWSP image, QWidget *parent,
 
     m_page->lblWidthValue->setText(QString::number(image->width()));
     m_page->lblHeightValue->setText(QString::number(image->height()));
+    m_page->lblLayerCount->setText(QString::number(image->nlayers()));
 
     m_page->lblResolutionValue->setText(QLocale().toString(image->xRes()*72, 2)); // XXX: separate values for x & y?
 

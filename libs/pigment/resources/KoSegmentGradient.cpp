@@ -1053,6 +1053,35 @@ const QList<KoGradientSegment *>& KoSegmentGradient::segments() const
     return m_segments;
 }
 
+void KoSegmentGradient::setSegments(const QList<KoGradientSegment*> &segments)
+{
+    for (int i = 0; i < m_segments.count(); i++) {
+        delete m_segments[i];
+    }
+    m_segments.clear();
+    KoColor color;
+    for (const KoGradientSegment *segment : segments) {
+        KoGradientSegment *newSegment =
+            new KoGradientSegment(
+                segment->interpolation(),
+                segment->colorInterpolation(),
+                KoGradientSegmentEndpoint(
+                    segment->startOffset(),
+                    segment->startColor().convertedTo(colorSpace()),
+                    segment->startType()
+                ),
+                KoGradientSegmentEndpoint(
+                    segment->endOffset(),
+                    segment->endColor().convertedTo(colorSpace()),
+                    segment->endType()
+                ),
+                segment->middleOffset()
+            );
+        m_segments.append(newSegment);
+    }
+    updatePreview();
+}
+
 QList<int> KoSegmentGradient::requiredCanvasResources() const
 {
     bool hasVariableColors = false;

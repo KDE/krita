@@ -1,19 +1,7 @@
 /*
  *  Copyright (C) 2015 Michael Abrahams <miabraha@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_input_manager_p.h"
@@ -82,7 +70,7 @@ KisInputManager::Private::EventEater::EventEater()
 
 bool KisInputManager::Private::EventEater::eventFilter(QObject* target, QEvent* event )
 {
-    Q_UNUSED(target)
+    Q_UNUSED(target);
 
     auto debugEvent = [&](int i) {
         if (KisTabletDebugger::instance()->debugEnabled()) {
@@ -259,8 +247,10 @@ void KisInputManager::Private::CanvasSwitcher::removeCanvas(KisCanvas2 *canvas)
 
     widget->removeEventFilter(this);
 
-    d->canvas = 0;
-    d->toolProxy = 0;
+    if (d->canvas == canvas) {
+        d->canvas = 0;
+        d->toolProxy = 0;
+    }
 }
 
 bool isInputWidget(QWidget *w)
@@ -455,7 +445,7 @@ BOOST_PP_REPEAT_FROM_TO(1, 25, EXTRA_BUTTON, _)
 
     if (!buttonSet.empty()) {
 #if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
-        strokeShortcut->setButtons(QSet<Qt::Key>(modifiers.begin(), modifiers.end()), buttonSet);
+        strokeShortcut->setButtons(QSet<Qt::Key>(modifiers.cbegin(), modifiers.cend()), buttonSet);
 #else
         strokeShortcut->setButtons(QSet<Qt::Key>::fromList(modifiers), buttonSet);
 #endif
@@ -634,6 +624,27 @@ void KisInputManager::Private::blockMouseEvents()
 
 void KisInputManager::Private::allowMouseEvents()
 {
+    /**
+     * On Windows tablet events may arrive asynchronously to the
+     * mouse events (in WinTab mode). The problem is that Qt
+     * generates Enter/Leave and FocusIn/Out events via mouse
+     * events only. It means that TabletPress may come much before
+     * Enter and FocusIn event and start the stroke. In such a case
+     * we shouldn't unblock mouse events.
+     *
+     * See https://bugs.kde.org/show_bug.cgi?id=417040
+     *
+     * PS:
+     * Ideally, we should fix Qt to generate Enter/Leave and
+     * FocusIn/Out events based on tablet events as well, but
+     * it is a lot of work.
+     */
+#ifdef Q_OS_WIN32
+    if (eventEater.hungry && matcher.hasRunningShortcut()) {
+        return;
+    }
+#endif
+
     eventEater.deactivate();
 }
 
@@ -662,16 +673,7 @@ bool KisInputManager::Private::handleCompressedTabletEvent(QEvent *event)
      */
     QWidget *recievingWidget = dynamic_cast<QWidget*>(eventsReceiver);
     if (recievingWidget && !recievingWidget->hasFocus()) {
-        QVector<Qt::Key> guessedKeys;
-
-        KisExtendedModifiersMapper mapper;
-        Qt::KeyboardModifiers modifiers = mapper.queryStandardModifiers();
-        Q_FOREACH (Qt::Key key, mapper.queryExtendedModifiers()) {
-            QKeyEvent kevent(QEvent::ShortcutOverride, key, modifiers);
-            guessedKeys << KisExtendedModifiersMapper::workaroundShiftAltMetaHell(&kevent);
-        }
-
-        matcher.recoveryModifiersWithoutFocus(guessedKeys);
+        fixShortcutMatcherModifiersState();
     }
 
     if (!matcher.pointerMoved(event) && toolProxy) {
@@ -681,6 +683,19 @@ bool KisInputManager::Private::handleCompressedTabletEvent(QEvent *event)
     event->setAccepted(true);
 
     return retval;
+}
+
+void KisInputManager::Private::fixShortcutMatcherModifiersState()
+{
+    QVector<Qt::Key> guessedKeys;
+    KisExtendedModifiersMapper mapper;
+    Qt::KeyboardModifiers modifiers = mapper.queryStandardModifiers();
+    Q_FOREACH (Qt::Key key, mapper.queryExtendedModifiers()) {
+        QKeyEvent kevent(QEvent::ShortcutOverride, key, modifiers);
+        guessedKeys << KisExtendedModifiersMapper::workaroundShiftAltMetaHell(&kevent);
+    }
+
+    matcher.recoveryModifiersWithoutFocus(guessedKeys);
 }
 
 qint64 KisInputManager::Private::TabletLatencyTracker::currentTimestamp() const

@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2015 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_speed_smoother.h"
@@ -25,8 +13,9 @@
 #include "kis_debug.h"
 #include "kis_global.h"
 
-#define MAX_SMOOTH_HISTORY 10
+#define MAX_SMOOTH_HISTORY 512
 #define MAX_TIME_DIFF 500
+#define MIN_TIME_DIFF 15
 #define MAX_TRACKING_DISTANCE 300
 #define MIN_TRACKING_DISTANCE 5
 
@@ -73,6 +62,11 @@ KisSpeedSmoother::~KisSpeedSmoother()
 {
 }
 
+qreal KisSpeedSmoother::lastSpeed() const
+{
+    return m_d->lastSpeed;
+}
+
 qreal KisSpeedSmoother::getNextSpeed(const QPointF &pt)
 {
     if (m_d->lastPoint.isNull()) {
@@ -92,22 +86,26 @@ qreal KisSpeedSmoother::getNextSpeed(const QPointF &pt)
     const qreal currentTime = it->time;
 
     qreal totalDistance = 0;
-    qreal startTime = currentTime;
+    qreal totalTime = 0.0;
+    int itemsSearched = 0;
 
     for (; it != end; ++it) {
-        if (currentTime - it->time > MAX_TIME_DIFF) {
-            break;
-        }
-
+        itemsSearched++;
         totalDistance += it->distance;
-        startTime = it->time;
+        totalTime = currentTime - it->time;
 
-        if (totalDistance > MAX_TRACKING_DISTANCE) {
-            break;
+        if (totalTime > MIN_TIME_DIFF) {
+            if (totalTime > MAX_TIME_DIFF) {
+                break;
+            }
+
+            if (totalDistance > MAX_TRACKING_DISTANCE) {
+                break;
+            }
         }
     }
 
-    qreal totalTime = currentTime - startTime;
+
 
     if (totalTime > 0 && totalDistance > MIN_TRACKING_DISTANCE) {
         qreal speed = totalDistance / totalTime;
@@ -117,4 +115,13 @@ qreal KisSpeedSmoother::getNextSpeed(const QPointF &pt)
     }
 
     return m_d->lastSpeed;
+}
+
+void KisSpeedSmoother::clear()
+{
+    m_d->timer.restart();
+    m_d->distances.clear();
+    m_d->distances.push_back(Private::DistancePoint(0.0, 0.0));
+    m_d->lastPoint = QPointF();
+    m_d->lastSpeed = 0.0;
 }

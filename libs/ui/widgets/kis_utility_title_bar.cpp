@@ -1,3 +1,7 @@
+/*
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
 #include "kis_utility_title_bar.h"
 
 #include <QDockWidget>
@@ -51,7 +55,7 @@ KisUtilityTitleBar::KisUtilityTitleBar(QLabel *title, QWidget *parent)
         {   // Float button...
             QPushButton *button = new QPushButton(style()->standardIcon(QStyle::SP_TitleBarNormalButton), "", this);
             button->setFlat(true);
-            connect(button, &QPushButton::clicked, [this, dockWidget](){
+            connect(button, &QPushButton::clicked, [dockWidget](){
                 dockWidget->setFloating(!dockWidget->isFloating());
             } );
             sublayout->addWidget(button);

@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2012 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_filter_weights_applicator_test.h"
@@ -24,6 +12,7 @@
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include "kis_paint_device.h"
+#include "kistest.h"
 
 #include <sstream>
 
@@ -32,14 +21,14 @@
 
 void debugSpan(const KisFilterWeightsApplicator::BlendSpan &span)
 {
-    dbgKrita << ppVar(span.weights->centerIndex);
+    qDebug() << ppVar(span.weights->centerIndex);
     for (int i = 0; i < span.weights->span; i++) {
-        dbgKrita << "Weights" << i << span.weights->weight[i];
+        qDebug() << "Weights" << i << span.weights->weight[i];
     }
 
-    dbgKrita << ppVar(span.firstBlendPixel);
-    dbgKrita << ppVar(span.offset);
-    dbgKrita << ppVar(span.offsetInc);
+    qDebug() << ppVar(span.firstBlendPixel);
+    qDebug() << ppVar(span.offset);
+    qDebug() << ppVar(span.offsetInc);
 }
 
 void testSpan(qreal scale, qreal dx, int dst_l,
@@ -60,11 +49,11 @@ void testSpan(qreal scale, qreal dx, int dst_l,
         span.offset != KisFixedPoint(expectedOffset) ||
         span.offsetInc != KisFixedPoint(expectedOffsetInc)) {
 
-        dbgKrita << "Failed to generate a span:";
-        dbgKrita << ppVar(scale) << ppVar(dx) << ppVar(dst_l);
-        dbgKrita << ppVar(span.firstBlendPixel) << ppVar(expectedFirstPixel);
-        dbgKrita << ppVar(span.offset) << ppVar(KisFixedPoint(expectedOffset));
-        dbgKrita << ppVar(span.offsetInc) << ppVar(KisFixedPoint(expectedOffsetInc));
+        qDebug() << "Failed to generate a span:";
+        qDebug() << ppVar(scale) << ppVar(dx) << ppVar(dst_l);
+        qDebug() << ppVar(span.firstBlendPixel) << ppVar(expectedFirstPixel);
+        qDebug() << ppVar(span.offset) << ppVar(KisFixedPoint(expectedOffset));
+        qDebug() << ppVar(span.offsetInc) << ppVar(KisFixedPoint(expectedOffsetInc));
         QFAIL("fail");
     }
 }
@@ -179,7 +168,7 @@ void printPixels(KisPaintDeviceSP dev, int x0, int len, bool horizontal, bool de
         if (dense){
             ss << c.red() << " , " << c.alpha() << " | ";
         } else {
-            dbgKrita << "px" << x << y << "|" << c.red() << c.green() << c.blue() << c.alpha();
+            qDebug() << "px" << x << y << "|" << c.red() << c.green() << c.blue() << c.alpha();
         }
     }
 
@@ -202,9 +191,9 @@ void checkRA(KisPaintDeviceSP dev, int x0, int len, quint8 r[], quint8 a[], bool
         if (c.red() != r[i] ||
             c.alpha() != a[i]) {
 
-            dbgKrita << "Failed to compare RA channels:" << ppVar(x0 + i);
-            dbgKrita << "Red:" << c.red() << "Expected:" << r[i];
-            dbgKrita << "Alpha:" << c.alpha() << "Expected:" << a[i];
+            qDebug() << "Failed to compare RA channels:" << ppVar(x0 + i);
+            qDebug() << "Red:" << c.red() << "Expected:" << r[i];
+            qDebug() << "Alpha:" << c.alpha() << "Expected:" << a[i];
             failed = true;
         }
     }
@@ -333,7 +322,7 @@ void KisFilterWeightsApplicatorTest::testProcessLine_Scale_1_0_Shift_m0_25()
     qreal scale = 1.0;
     qreal dx = -0.25;
 
-    quint8 r[] = { 10, 12, 22, 32, 40,  0,  0};
+    quint8 r[] = { 10, 13, 23, 33, 40,  0,  0};
     quint8 a[] = { 64,255,255,255,191,  0,  0};
 
     testLine(scale, dx, r, a, -1, 7);
@@ -344,7 +333,7 @@ void KisFilterWeightsApplicatorTest::testProcessLine_Scale_0_5_Aligned()
     qreal scale = 0.5;
     qreal dx = 0.0;
 
-    quint8 r[] = { 10, 17, 32, 40,  0,  0,  0};
+    quint8 r[] = { 10, 17, 33, 40,  0,  0,  0};
     quint8 a[] = { 32,223,223, 32,  0,  0,  0};
 
     testLine(scale, dx, r, a, -1, 7);
@@ -366,7 +355,7 @@ void KisFilterWeightsApplicatorTest::testProcessLine_Scale_2_0_Aligned()
     qreal scale = 2.0;
     qreal dx = 0.0;
 
-    quint8 r[] = {  0, 10, 10, 12, 17, 22, 27, 32, 37, 40, 40,  0};
+    quint8 r[] = {  0, 10, 10, 13, 17, 23, 27, 33, 37, 40, 40,  0};
     quint8 a[] = {  0, 64,191,255,255,255,255,255,255,191, 64,  0};
 
     testLine(scale, dx, r, a, -2, 12);
@@ -410,7 +399,7 @@ void KisFilterWeightsApplicatorTest::testProcessLine_Scale_0_5_Aligned_Clamped()
     qreal scale = 0.5;
     qreal dx = 0.0;
 
-    quint8 r[] = {  0, 16, 33,  0,  0,  0,  0};
+    quint8 r[] = {  0, 16, 34,  0,  0,  0,  0};
     quint8 a[] = {  0,255,255,  0,  0,  0,  0};
 
     testLine(scale, dx, r, a, -1, 7, true);
@@ -421,7 +410,7 @@ void KisFilterWeightsApplicatorTest::testProcessLine_Scale_2_0_Aligned_Clamped()
     qreal scale = 2.0;
     qreal dx = 0.0;
 
-    quint8 r[] = {  0,  0, 10, 12, 17, 22, 27, 32, 37, 40,  0,  0};
+    quint8 r[] = {  0,  0, 10, 13, 17, 23, 27, 33, 37, 40,  0,  0};
     quint8 a[] = {  0,  0,255,255,255,255,255,255,255,255,  0,  0};
 
     testLine(scale, dx, r, a, -2, 12, true);
@@ -443,7 +432,7 @@ void KisFilterWeightsApplicatorTest::testProcessLine_Scale_1_0_Shift_0_25_Mirror
     qreal scale = -1.0;
     qreal dx = 0.25;
 
-    quint8 r[] = {  0,  0, 40, 32, 22, 12, 10,  0,  0,  0};
+    quint8 r[] = {  0,  0, 40, 33, 23, 13, 10,  0,  0,  0};
     quint8 a[] = {  0,  0,191,255,255,255, 64,  0,  0,  0};
 
     testLine(scale, dx, r, a, -6, 10);
@@ -454,7 +443,7 @@ void KisFilterWeightsApplicatorTest::testProcessLine_Scale_0_5_Aligned_Mirrored_
     qreal scale = -0.5;
     qreal dx = 0.0;
 
-    quint8 r[] = {  0,  0,  0,  0, 33, 16,  0,  0,  0,  0};
+    quint8 r[] = {  0,  0,  0,  0, 34, 16,  0,  0,  0,  0};
     quint8 a[] = {  0,  0,  0,  0,255,255,  0,  0,  0,  0};
 
     testLine(scale, dx, r, a, -6, 10, true);
@@ -465,7 +454,7 @@ void KisFilterWeightsApplicatorTest::testProcessLine_Scale_0_5_Shift_0_125_Mirro
     qreal scale = -0.5;
     qreal dx = 0.125;
 
-    quint8 r[] = {  0,  0,  0, 40, 34, 18, 10,  0,  0,  0};
+    quint8 r[] = {  0,  0,  0, 40, 35, 19, 10,  0,  0,  0};
     quint8 a[] = {  0,  0,  0, 16,207,239, 48,  0,  0,  0};
 
     testLine(scale, dx, r, a, -6, 10);
@@ -766,4 +755,4 @@ void KisFilterWeightsApplicatorTest::benchmarkProcesssLine()
     }
 }
 
-QTEST_MAIN(KisFilterWeightsApplicatorTest)
+KISTEST_MAIN(KisFilterWeightsApplicatorTest)

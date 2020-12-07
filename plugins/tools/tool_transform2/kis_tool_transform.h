@@ -5,19 +5,7 @@
  *  Copyright (c) 2005 C. Boemann <cbo@boemann.dk>
  *  Copyright (c) 2010 Marc Pegon <pe.marc@free.fr>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #ifndef KIS_TOOL_TRANSFORM_H_
@@ -60,6 +48,7 @@ class KisCageTransformStrategy;
 class KisLiquifyTransformStrategy;
 class KisFreeTransformStrategy;
 class KisPerspectiveTransformStrategy;
+class KisMeshTransformStrategy;
 
 
 /**
@@ -116,7 +105,8 @@ public:
         WarpTransformMode,
         CageTransformMode,
         LiquifyTransformMode,
-        PerspectiveTransformMode
+        PerspectiveTransformMode,
+        MeshTransformMode
     };
     Q_ENUMS(TransformToolMode)
 
@@ -277,6 +267,7 @@ private:
 
     /// actions for the context click menu
     KisAction* warpAction;
+    KisAction* meshAction;
     KisAction* liquifyAction;
     KisAction* cageAction;
     KisAction* freeTransformAction;
@@ -303,6 +294,7 @@ private:
     QScopedPointer<KisWarpTransformStrategy> m_warpStrategy;
     QScopedPointer<KisCageTransformStrategy> m_cageStrategy;
     QScopedPointer<KisLiquifyTransformStrategy> m_liquifyStrategy;
+    QScopedPointer<KisMeshTransformStrategy> m_meshStrategy;
     QScopedPointer<KisFreeTransformStrategy> m_freeStrategy;
     QScopedPointer<KisPerspectiveTransformStrategy> m_perspectiveStrategy;
     KisTransformStrategyBase* currentStrategy() const;
@@ -313,7 +305,8 @@ private Q_SLOTS:
     void slotTrackerChangedConfig(KisToolChangesTrackerDataSP status);
     void slotUiChangedConfig();
     void slotApplyTransform();
-    void slotResetTransform();
+    void slotResetTransform(ToolTransformArgs::TransformMode mode);
+    void slotCancelTransform();
     void slotRestartTransform();
     void slotEditingFinished();
 
@@ -335,6 +328,7 @@ private Q_SLOTS:
     void slotUpdateToPerspectiveType();
     void slotUpdateToFreeTransformType();
     void slotUpdateToLiquifyType();
+    void slotUpdateToMeshType();
     void slotUpdateToCageType();
 };
 

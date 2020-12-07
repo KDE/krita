@@ -1,9 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>InfoPage</class>
  <widget class="QWidget" name="InfoPage">
   <layout class="QGridLayout" name="gridLayout_2">
-   <item row="1" column="0" colspan="2">
+   <item colspan="2" column="0" row="1">
     <widget class="KTabWidget" name="tabs">
      <property name="currentIndex">
       <number>0</number>
@@ -15,7 +19,7 @@
       <layout class="QVBoxLayout" name="tab2lo">
        <item>
         <layout class="QGridLayout" name="tab2_1lo">
-         <item row="1" column="3" rowspan="8">
+         <item column="3" row="1" rowspan="8">
           <widget class="QIconButton" name="actionIcon">
            <property name="minimumSize">
             <size>
@@ -31,14 +35,14 @@
            </property>
           </widget>
          </item>
-         <item row="4" column="1" rowspan="5">
+         <item column="1" row="4" rowspan="5">
           <widget class="QLabel" name="shortcut">
            <property name="whatsThis">
             <string>The shortcut to fire this action, such as 'Ctrl+1', or a QKeySequence instance, or None.</string>
            </property>
           </widget>
          </item>
-         <item row="9" column="0">
+         <item column="0" row="9">
           <widget class="QLabel" name="labelTopics">
            <property name="text">
             <string>Description:</string>
@@ -51,14 +55,14 @@
            </property>
           </widget>
          </item>
-         <item row="9" column="1" colspan="3">
+         <item colspan="3" column="1" row="9">
           <widget class="QTextEdit" name="description">
            <property name="textInteractionFlags">
             <set>Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
            </property>
           </widget>
          </item>
-         <item row="3" column="0">
+         <item column="0" row="3">
           <widget class="QLabel" name="labelText">
            <property name="text">
             <string>Menu Item:</string>
@@ -71,21 +75,21 @@
            </property>
           </widget>
          </item>
-         <item row="3" column="1">
+         <item column="1" row="3">
           <widget class="QLabel" name="text">
            <property name="whatsThis">
             <string>The text associated with the action (used as the menu item label, etc), or None.</string>
            </property>
           </widget>
          </item>
-         <item row="1" column="1" rowspan="2">
+         <item column="1" row="1" rowspan="2">
           <widget class="QLabel" name="menu">
            <property name="whatsThis">
             <string>The menu under which to place this item, such as 'tools' or 'settings', or None.</string>
            </property>
           </widget>
          </item>
-         <item row="4" column="0" rowspan="5">
+         <item column="0" row="4" rowspan="5">
           <widget class="QLabel" name="labelShortcut">
            <property name="text">
             <string>Shortcut:</string>
@@ -98,7 +102,7 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="0" rowspan="2">
+         <item column="0" row="1" rowspan="2">
           <widget class="QLabel" name="labelMenu">
            <property name="text">
             <string>Menu:</string>
@@ -111,7 +115,7 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="2" rowspan="8">
+         <item column="2" row="1" rowspan="8">
           <widget class="QLabel" name="labelActionIcon">
            <property name="text">
             <string>Icon:</string>
@@ -124,10 +128,10 @@
            </property>
           </widget>
          </item>
-         <item row="0" column="1" colspan="3">
+         <item colspan="3" column="1" row="0">
           <widget class="KComboBox" name="actions"/>
          </item>
-         <item row="0" column="0">
+         <item column="0" row="0">
           <widget class="QLabel" name="label_2">
            <property name="text">
             <string>Action:</string>
@@ -161,14 +165,14 @@
       <layout class="QVBoxLayout" name="tab3lo">
        <item>
         <layout class="QGridLayout" name="tab3_1lo">
-         <item row="1" column="1" colspan="3">
+         <item colspan="3" column="1" row="1">
           <widget class="QLabel" name="fullName">
            <property name="whatsThis">
             <string>The shortcut to fire this action such as 'Ctrl+1', or a QKeySequence instance, or None.</string>
            </property>
           </widget>
          </item>
-         <item row="1" column="0">
+         <item column="0" row="1">
           <widget class="QLabel" name="label">
            <property name="text">
             <string>Title:</string>
@@ -178,7 +182,7 @@
            </property>
           </widget>
          </item>
-         <item row="2" column="2" rowspan="5">
+         <item column="2" row="2" rowspan="5">
           <widget class="QLabel" name="labelPageIcon">
            <property name="text">
             <string>Icon:</string>
@@ -191,7 +195,7 @@
            </property>
           </widget>
          </item>
-         <item row="2" column="3" rowspan="5">
+         <item column="3" row="2" rowspan="5">
           <widget class="QIconButton" name="configPageIcon">
            <property name="minimumSize">
             <size>
@@ -207,7 +211,7 @@
            </property>
           </widget>
          </item>
-         <item row="2" column="0" rowspan="5">
+         <item column="0" row="2" rowspan="5">
           <widget class="QLabel" name="labelName">
            <property name="text">
             <string>Name:</string>
@@ -220,17 +224,17 @@
            </property>
           </widget>
          </item>
-         <item row="2" column="1" rowspan="5">
+         <item column="1" row="2" rowspan="5">
           <widget class="QLabel" name="name">
            <property name="whatsThis">
             <string>The text associated with the action (used as the menu item label, etc), or None.</string>
            </property>
           </widget>
          </item>
-         <item row="0" column="1" colspan="3">
+         <item colspan="3" column="1" row="0">
           <widget class="KComboBox" name="configPages"/>
          </item>
-         <item row="0" column="0">
+         <item column="0" row="0">
           <widget class="QLabel" name="label_3">
            <property name="text">
             <string>Page:</string>
@@ -259,7 +263,7 @@
      </widget>
     </widget>
    </item>
-   <item row="0" column="0" colspan="2">
+   <item colspan="2" column="0" row="0">
     <widget class="KComboBox" name="topics">
      <property name="whatsThis">
       <string>Select a Plugin or Built-in Module</string>

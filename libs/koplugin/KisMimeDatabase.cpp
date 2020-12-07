@@ -1,20 +1,7 @@
 /*
  * Copyright (c) 2016 Boudewijn Rempt <boud@valdyas.org>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 #include "KisMimeDatabase.h"
 
@@ -27,6 +14,10 @@
 
 QList<KisMimeDatabase::KisMimeType> KisMimeDatabase::s_mimeDatabase;
 
+static QString sanitizeSuffix(const QString &suffix)
+{
+    return suffix.split(QLatin1Char(' ')).first();
+}
 
 QString KisMimeDatabase::mimeTypeForFile(const QString &file, bool checkExistingFiles)
 {
@@ -34,6 +25,17 @@ QString KisMimeDatabase::mimeTypeForFile(const QString &file, bool checkExisting
 
     QFileInfo fi(file);
     QString suffix = fi.suffix().toLower();
+
+#ifdef Q_OS_ANDROID
+    // HACK: on Android we can save as .kra with no extension or as something like:
+    // "untitled.kra (1)", (1) being added by the SAF because we can't overwrite the duplicate.
+    // So, we need to be able to remove that number and get extension. If there is no extension,
+    // perhaps try "kra"
+    suffix = sanitizeSuffix(suffix);
+    if (suffix.isEmpty())
+        suffix = "kra";
+#endif
+
     Q_FOREACH(const KisMimeDatabase::KisMimeType &mimeType, s_mimeDatabase) {
         if (mimeType.suffixes.contains(suffix)) {
             debugPlugin << "mimeTypeForFile(). KisMimeDatabase returned" << mimeType.mimeType << "for" << file;
@@ -51,7 +53,13 @@ QString KisMimeDatabase::mimeTypeForFile(const QString &file, bool checkExisting
         }
     }
 
+#ifdef Q_OS_ANDROID
+    QString basename = fi.baseName();
+    // HACK: because we use sanitzed suffix
+    mime = db.mimeTypeForFile(basename + "." + suffix);
+#else
     mime = db.mimeTypeForFile(file);
+#endif
     if (mime.name() != "application/octet-stream") {
         debugPlugin << "mimeTypeForFile(). QMimeDatabase returned" << mime.name() << "for" << file;
         return mime.name();
@@ -175,6 +183,11 @@ void KisMimeDatabase::fillMimeData()
         mimeType.mimeType = "application/x-krita-paintoppreset";
         mimeType.description = i18nc("description of a file type", "Krita Brush Preset");
         mimeType.suffixes = QStringList() << "kpp";
+        s_mimeDatabase << mimeType;
+
+        mimeType.mimeType = "application/x-mypaint-brush";
+        mimeType.description = i18nc("description of a file type", "MyPaint Brush");
+        mimeType.suffixes = QStringList() << "myb";
         s_mimeDatabase << mimeType;
 
         mimeType.mimeType = "application/x-krita-assistant";
@@ -305,6 +318,11 @@ void KisMimeDatabase::fillMimeData()
         mimeType.mimeType = "image/jp2";
         mimeType.description = i18nc("description of a file type", "JP2 Image");
         mimeType.suffixes = QStringList() << "jp2" << "j2k";
+        s_mimeDatabase << mimeType;
+
+        mimeType.mimeType = "application/x-krita-seexpr-script";
+        mimeType.description = i18nc("description of a file type", "SeExpr script package");
+        mimeType.suffixes = QStringList() << "kse";
         s_mimeDatabase << mimeType;
 
         debugPlugin << "Filled mimedatabase with" << s_mimeDatabase.count() << "special mimetypes";

@@ -1,20 +1,7 @@
 /*
  *  Copyright (c) 2011 Silvio Heinrich <plassy@web.de>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.1-or-later
 */
 
 #ifndef KOCOMPOSITEOP_FUNCTIONS_H_
@@ -223,7 +210,7 @@ inline T cfDivide(T src, T dst) {
     using namespace Arithmetic;
     //typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
     
-    if(src == zeroValue<T>())
+    if(isUnsafeAsDivisor(src))
         return (dst == zeroValue<T>()) ? zeroValue<T>() : unitValue<T>();
     
     return clamp<T>(div(dst, src));
@@ -284,7 +271,7 @@ inline T cfVividLight(T src, T dst) {
     typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
     
     if(src < halfValue<T>()) {
-        if(src == zeroValue<T>())
+        if(isUnsafeAsDivisor(src))
             return (dst == unitValue<T>()) ? unitValue<T>() : zeroValue<T>();
 
         // min(1,max(0,1-(1-dst) / (2*src)))
@@ -345,17 +332,17 @@ inline T cfParallel(T src, T dst) {
     using namespace Arithmetic;
     typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
     
-    // min(max(2 / (1/dst + 1/src), 0), 1)
-    composite_type unit = unitValue<T>();
-    composite_type s    = (src != zeroValue<T>()) ? div<T>(unit, src) : unit;
-    composite_type d    = (dst != zeroValue<T>()) ? div<T>(unit, dst) : unit;    
-    if (src == zeroValue<T>()) {
-        return zeroValue<T>();    
+    const bool srcIsSafe = !isUnsafeAsDivisor(src);
+    const bool dstIsSafe = !isUnsafeAsDivisor(dst);
+
+    if (!srcIsSafe && !dstIsSafe) {
+        return zeroValue<T>();
     }
 
-    if (dst == zeroValue<T>()) {
-        return zeroValue<T>();    
-    }
+    // min(max(2 / (1/dst + 1/src), 0), 1)
+    composite_type unit = unitValue<T>();
+    composite_type s    = srcIsSafe ? div<T>(unit, src) : unit;
+    composite_type d    = dstIsSafe ? div<T>(unit, dst) : unit;
 
     return clamp<T>((unit+unit) * unit / (d+s));
 }

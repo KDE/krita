@@ -2,19 +2,7 @@
  *  Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 #include "kis_node_model.h"
 
@@ -372,6 +360,7 @@ void KisNodeModel::slotBeginRemoveDummy(KisNodeDummy *dummy)
 
     if (itemIndex.isValid()) {
         connectDummy(dummy, false);
+        emit sigBeforeBeginRemoveRows(parentIndex, itemIndex.row(), itemIndex.row());
         beginRemoveRows(parentIndex, itemIndex.row(), itemIndex.row());
         m_d->needFinishRemoveRows = true;
     }
@@ -658,12 +647,16 @@ QStringList KisNodeModel::mimeTypes() const
 
 QMimeData * KisNodeModel::mimeData(const QModelIndexList &indexes) const
 {
+    bool hasLockedLayer = false;
     KisNodeList nodes;
     Q_FOREACH (const QModelIndex &idx, indexes) {
-        nodes << nodeFromIndex(idx);
+        KisNodeSP node = nodeFromIndex(idx);
+
+        nodes << node;
+        hasLockedLayer |= !node->isEditable(false);
     }
 
-    return KisMimeData::mimeForLayers(nodes, m_d->image);
+    return KisMimeData::mimeForLayers(nodes, m_d->image, hasLockedLayer);
 }
 
 bool KisNodeModel::dropMimeData(const QMimeData * data, Qt::DropAction action, int row, int column, const QModelIndex & parent)
@@ -728,7 +721,7 @@ void KisNodeModel::updateDropEnabled(const QList<KisNodeSP> &nodes, QModelIndex 
 
         bool dropEnabled = true;
         Q_FOREACH (const KisNodeSP &node, nodes) {
-            if (!target->allowAsChild(node)) {
+            if (!target->allowAsChild(node) || !target->isEditable(false)) {
                 dropEnabled = false;
                 break;
             }

@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgWaveOptions</class>
  <widget class="QWidget" name="WdgWaveOptions">
   <property name="geometry">
@@ -26,7 +30,7 @@
    <property name="verticalSpacing">
     <number>6</number>
    </property>
-   <item row="2" column="0">
+   <item column="0" row="2">
     <spacer>
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -42,7 +46,7 @@
      </property>
     </spacer>
    </item>
-   <item row="0" column="0">
+   <item column="0" row="0">
     <widget class="QGroupBox" name="groupBox1">
      <property name="title">
       <string>Horizontal Wave</string>
@@ -60,13 +64,13 @@
       <property name="bottomMargin">
        <number>9</number>
       </property>
-      <item row="2" column="3">
+      <item column="3" row="2">
        <widget class="KisIntParseSpinBox" name="intHAmplitude"/>
       </item>
-      <item row="1" column="3">
+      <item column="3" row="1">
        <widget class="KisIntParseSpinBox" name="intHShift"/>
       </item>
-      <item row="3" column="1">
+      <item column="1" row="3">
        <widget class="QLabel" name="textLabel1_2">
         <property name="text">
          <string>Shape:</string>
@@ -79,7 +83,7 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="1" colspan="2">
+      <item colspan="2" column="1" row="2">
        <widget class="QLabel" name="textLabel2_2">
         <property name="text">
          <string>Amplitude:</string>
@@ -92,7 +96,7 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="1" colspan="2">
+      <item colspan="2" column="1" row="0">
        <widget class="QLabel" name="textLabel1">
         <property name="text">
          <string>Wavelength:</string>
@@ -105,7 +109,7 @@
         </property>
        </widget>
       </item>
-      <item row="3" column="2" colspan="2">
+      <item colspan="2" column="2" row="3">
        <widget class="KComboBox" name="cbHShape">
         <property name="sizePolicy">
          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
@@ -131,7 +135,7 @@
         </item>
        </widget>
       </item>
-      <item row="1" column="1" colspan="2">
+      <item colspan="2" column="1" row="1">
        <widget class="QLabel" name="textLabel2">
         <property name="text">
          <string>Shift:</string>
@@ -144,10 +148,10 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="3">
+      <item column="3" row="0">
        <widget class="KisIntParseSpinBox" name="intHWavelength"/>
       </item>
-      <item row="3" column="0">
+      <item column="0" row="3">
        <spacer name="horizontalSpacer">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
@@ -163,7 +167,7 @@
      </layout>
     </widget>
    </item>
-   <item row="1" column="0">
+   <item column="0" row="1">
     <widget class="QGroupBox" name="Vertical_wave">
      <property name="title">
       <string>Vertical Wave</string>
@@ -181,7 +185,7 @@
       <property name="bottomMargin">
        <number>9</number>
       </property>
-      <item row="0" column="1" colspan="2">
+      <item colspan="2" column="1" row="0">
        <widget class="QLabel" name="textLabel1_3">
         <property name="text">
          <string>Wavelength:</string>
@@ -194,7 +198,7 @@
         </property>
        </widget>
       </item>
-      <item row="3" column="2" colspan="2">
+      <item colspan="2" column="2" row="3">
        <widget class="KComboBox" name="cbVShape">
         <property name="sizePolicy">
          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
@@ -220,7 +224,7 @@
         </item>
        </widget>
       </item>
-      <item row="1" column="1" colspan="2">
+      <item colspan="2" column="1" row="1">
        <widget class="QLabel" name="textLabel2_3">
         <property name="text">
          <string>Shift:</string>
@@ -233,10 +237,10 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="3">
+      <item column="3" row="1">
        <widget class="KisIntParseSpinBox" name="intVShift"/>
       </item>
-      <item row="2" column="1" colspan="2">
+      <item colspan="2" column="1" row="2">
        <widget class="QLabel" name="textLabel2_2_2">
         <property name="text">
          <string>Amplitude:</string>
@@ -249,7 +253,7 @@
         </property>
        </widget>
       </item>
-      <item row="3" column="1">
+      <item column="1" row="3">
        <widget class="QLabel" name="textLabel1_2_2">
         <property name="text">
          <string>Shape:</string>
@@ -262,13 +266,13 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="3">
+      <item column="3" row="0">
        <widget class="KisIntParseSpinBox" name="intVWavelength"/>
       </item>
-      <item row="2" column="3">
+      <item column="3" row="2">
        <widget class="KisIntParseSpinBox" name="intVAmplitude"/>
       </item>
-      <item row="3" column="0">
+      <item column="0" row="3">
        <spacer name="horizontalSpacer_2">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>

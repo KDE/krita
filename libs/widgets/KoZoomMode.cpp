@@ -2,20 +2,7 @@
    Copyright (C) 2005 Johannes Schaub <litb_devel@web.de>
    Copyright (C) 2011 Arjen Hiemstra <ahiemstra@heimr.nl>
 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
-
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
-
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
 #include "KoZoomMode.h"
@@ -31,7 +18,15 @@ const char* const KoZoomMode::modes[] =
     0,
     0,
     0,
-    I18N_NOOP("Fit Text Width")
+    I18N_NOOP("Fit Text Width"),
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    I18N_NOOP("Fit Page Height")
 };
 
 qreal KoZoomMode::minimumZoomValue = 0.2;
@@ -53,7 +48,10 @@ KoZoomMode::Mode KoZoomMode::toMode(const QString& mode)
             if (mode == i18n(modes[ZOOM_PIXELS]))
                 return ZOOM_PIXELS;
             else
-                return ZOOM_CONSTANT;
+                if (mode == i18n(modes[ZOOM_HEIGHT]))
+                    return ZOOM_HEIGHT;
+                else
+                    return ZOOM_CONSTANT;
     // we return ZOOM_CONSTANT else because then we can pass '10%' or '15%'
     // or whatever, it's automatically converted. ZOOM_CONSTANT is
     // changeable, whereas all other zoom modes (non-constants) are normal

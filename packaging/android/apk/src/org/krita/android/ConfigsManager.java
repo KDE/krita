@@ -2,19 +2,7 @@
   * This file is part of the KDE project
   * Copyright (C) 2019 Sharaf Zaman <sharafzaz121@gmail.com>
   *
-  * This program is free software; you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation; either version 2 of the License, or
-  * (at your option) any later version.
-  *
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with this program; if not, write to the Free Software
-  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+  * SPDX-License-Identifier: GPL-2.0-or-later
   */
 
 package org.krita.android;
@@ -22,7 +10,10 @@ package org.krita.android;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
+import android.os.Build;
 import android.util.Log;
 
 import java.io.File;
@@ -39,6 +30,8 @@ class ConfigsManager {
 
 	private final String LOG_TAG = "krita.ConfigsManager";
 	private final String FIRST_RUN_COOKIE = "ORG_KRITA_FIRST_RUN";
+	private final String VERSION_CODE = "ORG_KRITA_VERSIONCODE";
+	private long mVersionCode;
 	private Activity mActivity;
 
 	private boolean isFirstRun() {
@@ -54,15 +47,39 @@ class ConfigsManager {
 		editor.apply();
 	}
 
+	private void updateVersionCode() {
+		SharedPreferences sharedPref = mActivity.getPreferences(Context.MODE_PRIVATE);
+		SharedPreferences.Editor editor = sharedPref.edit();
+		editor.putLong(VERSION_CODE, mVersionCode);
+		editor.apply();
+	}
+
+	private boolean isVersionUpdated() {
+		return mActivity.getPreferences(Context.MODE_PRIVATE)
+		                .getLong(VERSION_CODE, 0) < mVersionCode;
+	}
+
 	void handleAssets(Activity activity) {
 		mActivity = activity;
-		if (!isFirstRun()) {
+		try {
+			PackageInfo info = mActivity.getPackageManager().getPackageInfo(mActivity.getPackageName(), 0);
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+				mVersionCode = info.getLongVersionCode();
+			}
+			else {
+				mVersionCode = info.versionCode;
+			}
+		} catch (PackageManager.NameNotFoundException e) {
+			Log.e(LOG_TAG, "handleAssets(): packageName not found: ", e);
+		}
+		if (!isFirstRun() && !isVersionUpdated()) {
 			return;
 		}
 
 		Log.d(LOG_TAG, mActivity.getFilesDir().getPath());
 		copyAssets();
 		setFirstRunCookie();
+		updateVersionCode();
 	}
 
 	private void copyAssets() {
@@ -173,5 +190,5 @@ class ConfigsManager {
 		}
 		return "";
 	}
-
 }
+

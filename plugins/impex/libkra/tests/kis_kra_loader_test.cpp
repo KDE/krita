@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2007 Boudewijn Rempt boud@valdyas.org
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_kra_loader_test.h"
@@ -27,7 +15,7 @@
 #include <KoColor.h>
 
 #include "kis_image.h"
-#include "testutil.h"
+#include <testutil.h>
 #include "KisPart.h"
 
 #include <filter/kis_filter_registry.h>
@@ -35,11 +23,11 @@
 
 #include "kis_image_animation_interface.h"
 #include "kis_keyframe_channel.h"
-#include "kis_time_range.h"
+#include "kis_time_span.h"
 
 #include <filestest.h>
 
-#include  <sdk/tests/kistest.h>
+#include  <sdk/tests/testui.h>
 
 
 const QString KraMimetype = "application/x-krita";
@@ -134,12 +122,12 @@ void KisKraLoaderTest::testLoadAnimated()
     QVERIFY(layer1->isAnimated());
     QVERIFY(!layer2->isAnimated());
 
-    KisKeyframeChannel *channel1 = layer1->getKeyframeChannel(KisKeyframeChannel::Content.id());
+    KisKeyframeChannel *channel1 = layer1->getKeyframeChannel(KisKeyframeChannel::Raster.id());
     QVERIFY(channel1);
     QCOMPARE(channel1->keyframeCount(), 3);
 
     QCOMPARE(image->animationInterface()->framerate(), 17);
-    QCOMPARE(image->animationInterface()->fullClipRange(), KisTimeRange::fromTime(15, 45));
+    QCOMPARE(image->animationInterface()->fullClipRange(), KisTimeSpan::fromTimeToTime(15, 45));
     QCOMPARE(image->animationInterface()->currentTime(), 19);
 
     KisPaintDeviceSP dev = layer1->paintDevice();

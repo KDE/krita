@@ -3,19 +3,7 @@
    Copyright (C) 2006 Hamish Rodda <rodda@kde.org>
    Copyright     2007 David Faure <faure@kde.org>
 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License version 2 as published by the Free Software Foundation.
-
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
-
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+   SPDX-License-Identifier: LGPL-2.0-only
 */
 
 #include "kedittoolbar.h"
@@ -344,7 +332,7 @@ QMimeData *ToolBarListWidget::mimeData(const QList<QListWidgetItem *> items) con
 
 bool ToolBarListWidget::dropMimeData(int index, const QMimeData *mimeData, Qt::DropAction action)
 {
-    Q_UNUSED(action)
+    Q_UNUSED(action);
     const QByteArray data = mimeData->data(QStringLiteral("application/x-kde-action-list"));
     if (data.isEmpty()) {
         return false;
@@ -368,8 +356,7 @@ IconTextEditDialog::IconTextEditDialog(QWidget *parent)
     setWindowTitle(i18n("Change Text"));
     setModal(true);
 
-    QVBoxLayout *layout = new QVBoxLayout;
-    setLayout(layout);
+    QVBoxLayout *layout = new QVBoxLayout(this);
 
     QGridLayout *grid = new QGridLayout;
     grid->setMargin(0);
@@ -622,8 +609,7 @@ void KEditToolBarPrivate::init()
     q->setWindowTitle(i18n("Configure Toolbars"));
     q->setModal(false);
 
-    m_layout = new QVBoxLayout;
-    q->setLayout(m_layout);
+    m_layout = new QVBoxLayout(q);
 
     m_layout->addWidget(m_widget);
 

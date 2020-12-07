@@ -1,19 +1,7 @@
 /*
  * Copyright (C) 2007, 2010 Adrian Page <adrian@pagenet.plus.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_canvas_widget_base.h"
@@ -104,11 +92,8 @@ void KisCanvasWidgetBase::drawDecorations(QPainter & gc, const QRect &updateWidg
 
     gc.setRenderHint(QPainter::SmoothPixmapTransform);
 
-
     {
         KisQPainterStateSaver paintShapesState(&gc);
-
-        gc.setClipRect(updateWidgetRect);
         gc.setTransform(m_d->coordinatesConverter->documentToWidgetTransform());
 
         // Paint the shapes (other than the layers)
@@ -119,7 +104,9 @@ void KisCanvasWidgetBase::drawDecorations(QPainter & gc, const QRect &updateWidg
     // ask the decorations to paint themselves
     // decorations are painted in "widget" coordinate system
     Q_FOREACH (KisCanvasDecorationSP deco, m_d->decorations) {
-        deco->paint(gc, m_d->coordinatesConverter->widgetToDocument(updateWidgetRect), m_d->coordinatesConverter,m_d->canvas);
+        if (deco->visible()) {
+            deco->paint(gc, m_d->coordinatesConverter->widgetToDocument(updateWidgetRect), m_d->coordinatesConverter,m_d->canvas);
+        }
     }
 
     {
@@ -127,8 +114,6 @@ void KisCanvasWidgetBase::drawDecorations(QPainter & gc, const QRect &updateWidg
         gc.setTransform(m_d->coordinatesConverter->flakeToWidgetTransform());
 
         // - some tools do not restore gc, but that is not important here
-        // - we need to disable clipping to draw handles properly
-        gc.setClipping(false);
         toolProxy()->paint(gc, *m_d->viewConverter);
     }
 

@@ -2,19 +2,7 @@
  *  Copyright (c) 2006 Boudewijn Rempt <boud@valdyas.org>
  *
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_selection_mask.h"
@@ -50,7 +38,6 @@ public:
         , maskColor(Qt::green, KoColorSpaceRegistry::instance()->rgb8())
     {}
     KisSelectionMask *q;
-    KisImageWSP image;
     KisCachedPaintDevice paintDeviceCache;
     KisCachedSelection cachedSelection;
     KisThreadSafeSignalCompressor *updatesCompressor;
@@ -62,14 +49,11 @@ public:
 };
 
 KisSelectionMask::KisSelectionMask(KisImageWSP image, const QString &name)
-    : KisEffectMask(name)
+    : KisEffectMask(image, name)
     , m_d(new Private(this))
 {
-    setName("selection");
     setActive(false);
     setSupportsLodMoves(false);
-
-    m_d->image = image;
 
     m_d->updatesCompressor =
             new KisThreadSafeSignalCompressor(50, KisSignalCompressor::FIRST_ACTIVE);
@@ -85,12 +69,11 @@ KisSelectionMask::KisSelectionMask(const KisSelectionMask& rhs)
     : KisEffectMask(rhs)
     , m_d(new Private(this))
 {
-    m_d->image = rhs.image();
     m_d->updatesCompressor =
             new KisThreadSafeSignalCompressor(300, KisSignalCompressor::POSTPONE);
 
     connect(m_d->updatesCompressor, SIGNAL(timeout()), SLOT(slotSelectionChangedCompressed()));
-    this->moveToThread(m_d->image->thread());
+    this->moveToThread(rhs.image()->thread());
 
     connect(KisImageConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
     m_d->slotConfigChangedImpl(false);
@@ -169,11 +152,6 @@ void KisSelectionMask::setSelection(KisSelectionSP selection)
     setDirty();
 }
 
-KisImageWSP KisSelectionMask::image() const
-{
-    return m_d->image;
-}
-
 bool KisSelectionMask::accept(KisNodeVisitor &v)
 {
     return v.visit(this);
@@ -215,7 +193,7 @@ bool KisSelectionMask::active() const
 
 void KisSelectionMask::setActive(bool active)
 {
-    KisImageWSP image = this->image();
+    KisImageSP image = this->image();
     KisLayerSP parentLayer = qobject_cast<KisLayer*>(parent().data());
 
     if (active && parentLayer) {
@@ -310,7 +288,9 @@ void KisSelectionMask::setDecorationsVisible(bool value, bool update)
 
 void KisSelectionMask::setDirty(const QVector<QRect> &rects)
 {
-    if (m_d->image && m_d->image->overlaySelectionMask() == this) {
+    KisImageSP image = this->image();
+
+    if (image && image->overlaySelectionMask() == this) {
         KisEffectMask::setDirty(rects);
     }
 }
@@ -331,6 +311,8 @@ void KisSelectionMask::Private::slotSelectionChangedCompressed()
 
 void KisSelectionMask::Private::slotConfigChangedImpl(bool doUpdates)
 {
+    KisImageSP image = q->image();
+
     const KoColorSpace *cs = image ?
         image->colorSpace() :
         KoColorSpaceRegistry::instance()->rgb8();

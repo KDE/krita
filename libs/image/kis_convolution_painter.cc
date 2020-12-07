@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2005 Cyrille Berger <cberger@cberger.net>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_convolution_painter.h"
@@ -127,10 +115,15 @@ KisConvolutionPainter::KisConvolutionPainter(KisPaintDeviceSP device, KisSelecti
 {
 }
 
-KisConvolutionPainter::KisConvolutionPainter(KisPaintDeviceSP device, TestingEnginePreference enginePreference)
+KisConvolutionPainter::KisConvolutionPainter(KisPaintDeviceSP device, EnginePreference enginePreference)
     : KisPainter(device),
       m_enginePreference(enginePreference)
 {
+}
+
+void KisConvolutionPainter::setEnginePreference(EnginePreference value)
+{
+    m_enginePreference = value;
 }
 
 void KisConvolutionPainter::applyMatrix(const KisConvolutionKernelSP kernel, const KisPaintDeviceSP src, QPoint srcPos, QPoint dstPos, QSize areaSize, KisConvolutionBorderOp borderOp)

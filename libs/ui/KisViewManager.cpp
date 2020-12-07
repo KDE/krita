@@ -10,19 +10,7 @@
  *                2011 José Luis Vergara <pentalis@gmail.com>
  *                2017 L. E. Segovia <amy@amyspark.me>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include <stdio.h>
@@ -60,6 +48,7 @@
 #include <KoCanvasController.h>
 #include <KoCompositeOp.h>
 #include <KoDockRegistry.h>
+#include <KoDockWidgetTitleBar.h>
 #include <KoProperties.h>
 #include <KisResourceItemChooserSync.h>
 #include <KoSelection.h>
@@ -443,8 +432,8 @@ void KisViewManager::setCurrentView(KisView *view)
 
                 QModelIndex idx = resourceModel->index(i, 0);
 
-                QString resourceName = idx.data(Qt::UserRole + KisResourceModel::Name).toString().toLower();
-                QString fileName = idx.data(Qt::UserRole + KisResourceModel::Filename).toString().toLower();
+                QString resourceName = idx.data(Qt::UserRole + KisAbstractResourceModel::Name).toString().toLower();
+                QString fileName = idx.data(Qt::UserRole + KisAbstractResourceModel::Filename).toString().toLower();
 
                 if (resourceName.contains("basic_tip_default")) {
                     defaultPresetName = resourceName;
@@ -521,6 +510,7 @@ void KisViewManager::setCurrentView(KisView *view)
         d->currentImageView->notifyCurrentStateChanged(true);
         d->currentImageView->canvasController()->activate();
         d->currentImageView->canvasController()->setFocus();
+        d->currentImageView->zoomManager()->updateCurrentZoomResource();
 
         d->viewConnections.addUniqueConnection(
                     image(), SIGNAL(sigSizeChanged(QPointF,QPointF)),
@@ -1259,7 +1249,7 @@ void KisViewManager::switchCanvasOnly(bool toggled)
         // show a fading heads-up display about the shortcut to go back
 
         showFloatingMessage(i18n("Going into Canvas-Only mode.\nPress %1 to go back.",
-                                 actionCollection()->action("view_show_canvas_only")->shortcut().toString()), QIcon());
+                                 actionCollection()->action("view_show_canvas_only")->shortcut().toString(QKeySequence::NativeText)), QIcon());
     }
     else {
         main->restoreState(d->canvasState);
@@ -1283,6 +1273,10 @@ void KisViewManager::updateIcons()
     if (mainWindow()) {
         QList<QDockWidget*> dockers = mainWindow()->dockWidgets();
         Q_FOREACH (QDockWidget* dock, dockers) {
+            KoDockWidgetTitleBar* titlebar = dynamic_cast<KoDockWidgetTitleBar*>(dock->titleBarWidget());
+            if (titlebar) {
+                titlebar->updateIcons();
+            }
             QObjectList objects;
             objects.append(dock);
             while (!objects.isEmpty()) {

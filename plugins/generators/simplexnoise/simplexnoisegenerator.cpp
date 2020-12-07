@@ -4,19 +4,7 @@
  * Copyright (c) 2019 Eoin O'Neill <eoinoneill1991@gmail.com>
  * Copyright (c) 2019 Emmet O'Neill <emmetoneill.pdx@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "simplexnoisegenerator.h"
@@ -65,7 +53,7 @@ void KisSimplexNoiseGenerator::generate(KisProcessingInformation dst, const QSiz
 
     const KoColorSpace *cs = device->colorSpace();
     const KoColorSpace *src = KoColorSpaceRegistry::instance()->colorSpace(GrayAColorModelID.id(), Float32BitsColorDepthID.id(), "Gray-D50-elle-V2-srgbtrc.icc");
-    auto conv = KoColorSpaceRegistry::instance()->createColorConverter(src, cs, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
+    KoColorConversionTransformation *conv = KoColorSpaceRegistry::instance()->createColorConverter(src, cs, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
 
     KisSequentialIteratorProgress it(device, bounds, progressUpdater);
 
@@ -117,7 +105,7 @@ void KisSimplexNoiseGenerator::generate(KisProcessingInformation dst, const QSiz
             conv->transform(c.data(), it.rawData(), 1);
         }
     }
-
+    delete conv;
     open_simplex_noise_free(noise_context);
 }
 

@@ -1,4 +1,7 @@
 #!/bin/bash
+#
+#  SPDX-License-Identifier: GPL-3.0-or-later
+#
 
 # Halt on errors and be verbose about what we are doing
 set -e
@@ -32,12 +35,14 @@ export CMAKE_PREFIX_PATH=$DEPS_INSTALL_PREFIX:$CMAKE_PREFIX_PATH
 export PYTHONPATH=$DEPS_INSTALL_PREFIX/sip/:$DEPS_INSTALL_PREFIX/lib/python3.8/site-packages/:$DEPS_INSTALL_PREFIX/lib/python3.8/
 export PYTHONHOME=$DEPS_INSTALL_PREFIX
 
-# download
-# XXX: bundle this inside the Docker image *and* make it portable to ARM
-mkdir -p $DOWNLOADS_DIR
-cd $DOWNLOADS_DIR
-wget "https://files.kde.org/krita/build/AppImageUpdate-x86_64.AppImage" -O AppImageUpdate
-echo -n "ebc4763e8eac6aa7b9dfcbea77ec07d2e01fa1b9f10a38d4af0fc040bc965c1f AppImageUpdate" | sha256sum -c -
+if [ -n "${CHANNEL}" ]; then
+    # download
+    # XXX: bundle this inside the Docker image *and* make it portable to ARM
+    mkdir -p $DOWNLOADS_DIR
+    cd $DOWNLOADS_DIR
+    wget "https://files.kde.org/krita/build/AppImageUpdate-x86_64.AppImage" -O AppImageUpdate
+    echo -n "ebc4763e8eac6aa7b9dfcbea77ec07d2e01fa1b9f10a38d4af0fc040bc965c1f AppImageUpdate" | sha256sum -c -
+fi
 
 # Switch over to our build prefix
 cd $BUILD_PREFIX
@@ -98,7 +103,7 @@ KRITA_VERSION=$(grep "#define KRITA_VERSION_STRING" libs/version/kritaversion.h 
 # Also find out the revision of Git we built
 # Then use that to generate a combined name we'll distribute
 cd $KRITA_SOURCES
-if [[ -d .git ]]; then
+if git rev-parse --is-inside-work-tree; then
 	GIT_REVISION=$(git rev-parse --short HEAD)
 	export VERSION=$KRITA_VERSION-$GIT_REVISION
 	VERSION_TYPE="development"
@@ -114,21 +119,25 @@ if [[ -d .git ]]; then
 else
 	export VERSION=$KRITA_VERSION
 
+    pushd $BUILD_PREFIX/krita-build
+
     #if KRITA_BETA is set, set channel to Beta, otherwise set it to stable
-    grep "define KRITA_BETA 1" libs/version/kritaversion.h;
-    is_beta=$?
+    is_beta=0
+    grep "define KRITA_BETA 1" libs/version/kritaversion.h || is_beta=$?
 
-    grep "define KRITA_RC 1" libs/version/kritaversion.h;
-    is_rc=$?
+    is_rc=0
+    grep "define KRITA_RC 1" libs/version/kritaversion.h || is_rc=$?
 
-    if [ is_beta -eq 0 ]; then
+    popd
+
+    if [ $is_beta -eq 0 ]; then
         VERSION_TYPE="development"
     else
         VERSION_TYPE="stable"
     fi
 
     if [ -z "${CHANNEL}" ]; then
-        if [ is_beta -eq 0 -o is_rc -eq 0 ]; then
+        if [ $is_beta -eq 0 ] || [ $is_rc -eq 0 ]; then
             CHANNEL="Beta"
         else
             CHANNEL="Stable"
@@ -223,11 +232,11 @@ linuxdeployqt $APPDIR/usr/share/applications/org.kde.krita.desktop \
   -bundle-non-qt-libs \
   -extra-plugins=mediaservice,$PLUGINS,$APPDIR/usr/lib/krita-python-libs/PyKrita/krita.so,$APPDIR/usr/lib//qml/org/krita/sketch/libkritasketchplugin.so,$APPDIR/usr/lib/qml/org/krita/draganddrop/libdraganddropplugin.so  \
   -updateinformation="${ZSYNC_URL}" \
-  
+
 # Currently, we're skipping linuxdeployqt's automatic image building because it's choosing to ignore the inclusion of QtMultimedia.
 # I have an issue pending on linuxdeployqt's github page, but for the time being, manually bundling with appimagetool after linuxdeployqt
 # seems to work without any regressions.
-appimagetool $APPDIR $BUILD_PREFIX/Krita-$VERSION-$ARCH.AppImage
+appimagetool -u "${ZSYNC_URL}" $APPDIR $BUILD_PREFIX/Krita-$VERSION-$ARCH.AppImage
 
 
 # Generate a new name for the Appimage file and rename it accordingly

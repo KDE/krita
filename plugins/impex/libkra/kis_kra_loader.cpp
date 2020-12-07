@@ -1,20 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) Boudewijn Rempt <boud@valdyas.org>, (C) 2007
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #include "kis_kra_loader.h"
@@ -82,7 +69,7 @@
 #include "kis_kra_load_visitor.h"
 #include "kis_dom_utils.h"
 #include "kis_image_animation_interface.h"
-#include "kis_time_range.h"
+#include "kis_time_span.h"
 #include "kis_grid_config.h"
 #include "kis_guides_config.h"
 #include "kis_image_config.h"
@@ -139,6 +126,8 @@ public:
     int syntaxVersion; // version of the fileformat we are loading
     vKisNodeSP selectedNodes; // the nodes that were active when saving the document.
     QMap<QString, QString> assistantsFilenames;
+    StoryboardItemList storyboardItemList;
+    QVector<StoryboardComment> storyboardCommentList;
     QList<KisPaintingAssistantSP> assistants;
     QMap<KisNode*, QString> keyframeFilenames;
     QVector<QString> paletteFilenames;
@@ -351,8 +340,8 @@ KisImageSP KisKraLoader::loadXML(const KoXmlElement& element)
             }
         }
     }
-    KoXmlNode child;
 
+    KoXmlNode child;
     for (child = element.lastChild(); !child.isNull(); child = child.previousSibling()) {
         KoXmlElement e = child.toElement();
         if (e.tagName() == "grid") {
@@ -527,7 +516,6 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageSP image, const QStri
 
 void KisKraLoader::loadPalettes(KoStore *store, KisDocument *doc)
 {
-    qDebug() << ">>>> loadPalettes" << m_d->paletteFilenames;
     QList<KoColorSetSP> list;
     Q_FOREACH (const QString &filename, m_d->paletteFilenames) {
         qDebug() << "loading palettes" << filename;
@@ -542,6 +530,32 @@ void KisKraLoader::loadPalettes(KoStore *store, KisDocument *doc)
     doc->setPaletteList(list);
 }
 
+void KisKraLoader::loadStoryboards(KoStore *store, KisDocument *doc)
+{
+    if (!store->hasFile(m_d->imageName + STORYBOARD_PATH + "index.xml")) return;
+
+    if (store->open(m_d->imageName + STORYBOARD_PATH + "index.xml")) {
+        QByteArray data = store->read(store->size());
+        QDomDocument document;
+        document.setContent(data);
+        store->close();
+
+        QDomElement root = document.documentElement();
+        QDomNode node;
+        for (node = root.lastChild(); !node.isNull(); node = node.previousSibling()) {
+            if (node.isElement()) {
+                QDomElement element = node.toElement();
+                if (element.tagName() == "StoryboardItemList") {
+                    loadStoryboardItemList(element);
+                } else if (element.tagName() == "StoryboardCommentList") {
+                    loadStoryboardCommentList(element);
+                }
+
+            }
+        }
+    }
+}
+
 vKisNodeSP KisKraLoader::selectedNodes() const
 {
     return m_d->selectedNodes;
@@ -552,6 +566,15 @@ QList<KisPaintingAssistantSP> KisKraLoader::assistants() const
     return m_d->assistants;
 }
 
+StoryboardItemList KisKraLoader::storyboardItemList() const
+{
+    return m_d->storyboardItemList;
+}
+
+QVector<StoryboardComment> KisKraLoader::storyboardCommentList() const
+{
+    return m_d->storyboardCommentList;
+}
 QStringList KisKraLoader::errorMessages() const
 {
     return m_d->errorMessages;
@@ -603,7 +626,7 @@ void KisKraLoader::loadAnimationMetadata(const KoXmlElement &element, KisImageSP
     QDomElement qElement = qDom.firstChildElement();
 
     float framerate;
-    KisTimeRange range;
+    KisTimeSpan range;
     int currentTime;
 
     KisImageAnimationInterface *animation = image->animationInterface();
@@ -644,7 +667,6 @@ KisNodeSP KisKraLoader::loadNodes(const KoXmlElement& element, KisImageSP image,
                     }
 
                     if (node ) {
-                        image->nextLayerName(); // Make sure the nameserver is current with the number of nodes.
                         image->addNode(node, parent);
                         if (node->inherits("KisLayer") && KoXml::childNodesCount(child) > 0) {
                             loadNodes(child.toElement(), image, node);
@@ -745,11 +767,11 @@ KisNodeSP KisKraLoader::loadNode(const KoXmlElement& element, KisImageSP image)
     else if (nodeType == CLONE_LAYER)
         node = loadCloneLayer(element, image, name, colorSpace, opacity);
     else if (nodeType == FILTER_MASK)
-        node = loadFilterMask(element);
+        node = loadFilterMask(image, element);
     else if (nodeType == TRANSFORM_MASK)
-        node = loadTransformMask(element);
+        node = loadTransformMask(image, element);
     else if (nodeType == TRANSPARENCY_MASK)
-        node = loadTransparencyMask(element);
+        node = loadTransparencyMask(image, element);
     else if (nodeType == SELECTION_MASK)
         node = loadSelectionMask(image, element);
     else if (nodeType == COLORIZE_MASK)
@@ -878,7 +900,11 @@ KisNodeSP KisKraLoader::loadFileLayer(const KoXmlElement& element, KisImageSP im
     QFileInfo info(documentPath);
     QString basePath = info.absolutePath();
 
+#ifndef Q_OS_ANDROID
     QString fullPath = QDir(basePath).filePath(QDir::cleanPath(filename));
+#else
+    QString fullPath = filename;
+#endif
     if (!QFileInfo(fullPath).exists()) {
 
         qApp->setOverrideCursor(Qt::ArrowCursor);
@@ -889,7 +915,7 @@ KisNodeSP KisKraLoader::loadFileLayer(const KoXmlElement& element, KisImageSP im
             "%2\n\n"
             "Do you want to locate it manually?", name, fullPath);
 
-        int result = QMessageBox::warning(0, i18nc("@title:window", "File not found"), msg, QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+        int result = QMessageBox::warning(qApp->activeWindow(), i18nc("@title:window", "File not found"), msg, QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
 
         if (result == QMessageBox::Yes) {
 
@@ -1065,7 +1091,7 @@ KisNodeSP KisKraLoader::loadCloneLayer(const KoXmlElement& element, KisImageSP i
 }
 
 
-KisNodeSP KisKraLoader::loadFilterMask(const KoXmlElement& element)
+KisNodeSP KisKraLoader::loadFilterMask(KisImageSP image, const KoXmlElement& element)
 {
     QString attr;
     KisFilterMask* mask;
@@ -1089,14 +1115,14 @@ KisNodeSP KisKraLoader::loadFilterMask(const KoXmlElement& element)
     kfc->createLocalResourcesSnapshot();
 
     // We'll load the configuration and the selection later.
-    mask = new KisFilterMask();
+    mask = new KisFilterMask(image);
     mask->setFilter(kfc);
     Q_CHECK_PTR(mask);
 
     return mask;
 }
 
-KisNodeSP KisKraLoader::loadTransformMask(const KoXmlElement& element)
+KisNodeSP KisKraLoader::loadTransformMask(KisImageSP image, const KoXmlElement& element)
 {
     Q_UNUSED(element);
 
@@ -1106,16 +1132,16 @@ KisNodeSP KisKraLoader::loadTransformMask(const KoXmlElement& element)
      * We'll load the transform configuration later on a stage
      * of binary data loading
      */
-    mask = new KisTransformMask();
+    mask = new KisTransformMask(image, "");
     Q_CHECK_PTR(mask);
 
     return mask;
 }
 
-KisNodeSP KisKraLoader::loadTransparencyMask(const KoXmlElement& element)
+KisNodeSP KisKraLoader::loadTransparencyMask(KisImageSP image, const KoXmlElement& element)
 {
     Q_UNUSED(element);
-    KisTransparencyMask* mask = new KisTransparencyMask();
+    KisTransparencyMask* mask = new KisTransparencyMask(image, "");
     Q_CHECK_PTR(mask);
 
     return mask;
@@ -1133,12 +1159,14 @@ KisNodeSP KisKraLoader::loadSelectionMask(KisImageSP image, const KoXmlElement& 
 
 KisNodeSP KisKraLoader::loadColorizeMask(KisImageSP image, const KoXmlElement& element, const KoColorSpace *colorSpace)
 {
-    KisColorizeMaskSP mask = new KisColorizeMask();
+    KisColorizeMaskSP mask = new KisColorizeMask(image, "");
     const bool editKeystrokes = element.attribute(COLORIZE_EDIT_KEYSTROKES, "1") == "0" ? false : true;
     const bool showColoring = element.attribute(COLORIZE_SHOW_COLORING, "1") == "0" ? false : true;
 
-    KisLayerPropertiesIcons::setNodeProperty(mask, KisLayerPropertiesIcons::colorizeEditKeyStrokes, editKeystrokes, image);
-    KisLayerPropertiesIcons::setNodeProperty(mask, KisLayerPropertiesIcons::colorizeShowColoring, showColoring, image);
+    KisBaseNode::PropertyList props = mask->sectionModelProperties();
+    KisLayerPropertiesIcons::setNodeProperty(&props, KisLayerPropertiesIcons::colorizeEditKeyStrokes, editKeystrokes);
+    KisLayerPropertiesIcons::setNodeProperty(&props, KisLayerPropertiesIcons::colorizeShowColoring, showColoring);
+    mask->setSectionModelProperties(props);
 
     const bool useEdgeDetection = KisDomUtils::toInt(element.attribute(COLORIZE_USE_EDGE_DETECTION, "0"));
     const qreal edgeDetectionSize = KisDomUtils::toDouble(element.attribute(COLORIZE_EDGE_DETECTION_SIZE, "4"));
@@ -1244,7 +1272,7 @@ void KisKraLoader::loadAudio(const KoXmlElement& elem, KisImageSP image)
         fileName = QDir::toNativeSeparators(fileName);
 
         QDir baseDirectory = QFileInfo(m_d->document->localFilePath()).absoluteDir();
-        fileName = baseDirectory.absoluteFilePath(fileName);
+        fileName = QDir::cleanPath( baseDirectory.filePath(fileName) );
 
         QFileInfo info(fileName);
 
@@ -1257,7 +1285,7 @@ void KisKraLoader::loadAudio(const KoXmlElement& elem, KisImageSP image)
                 "%2\n\n"
                 "Do you want to locate it manually?", info.fileName(), info.absoluteFilePath());
 
-            int result = QMessageBox::warning(0, i18nc("@title:window", "File not found"), msg, QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+            int result = QMessageBox::warning(qApp->activeWindow(), i18nc("@title:window", "File not found"), msg, QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
 
             if (result == QMessageBox::Yes) {
                 info.setFile(KisImportExportManager::askForAudioFileName(info.absolutePath(), 0));
@@ -1282,6 +1310,41 @@ void KisKraLoader::loadAudio(const KoXmlElement& elem, KisImageSP image)
     }
 }
 
+void KisKraLoader::loadStoryboardItemList(const KoXmlElement& elem)
+{
+    KoXmlNode child;
+    int count = 0;
+    for (child = elem.firstChild(); !child.isNull(); child = child.nextSibling()) {
+        KoXmlElement e = child.toElement();
+        if (e.tagName() == "storyboarditem") {
+            StoryboardItemSP item = toQShared( new StoryboardItem() );
+            item->loadXML(e);
+            count++;
+            m_d->storyboardItemList.append(item);
+        }
+    }
+    qDebug()<<"found "<<count<<" storyboards";
+}
+
+void KisKraLoader::loadStoryboardCommentList(const KoXmlElement& elem)
+{
+    KoXmlNode child;
+    int count = 0;
+    for (child = elem.firstChild(); !child.isNull(); child = child.nextSibling()) {
+        KoXmlElement e = child.toElement();
+        if (e.tagName() == "storyboardcomment") {
+            StoryboardComment comment;
+            if (e.hasAttribute("visibility")) {
+                comment.visibility = e.attribute("visibility").toInt();
+            }
+            if (e.hasAttribute("name")) {
+                comment.name = e.attribute("name");
+            }
+            count++;
+            m_d->storyboardCommentList.append(comment);
+        }
+    }
+}
 KisNodeSP KisKraLoader::loadReferenceImagesLayer(const KoXmlElement &elem, KisImageSP image)
 {
     KisSharedPtr<KisReferenceImagesLayer> layer =
@@ -1292,6 +1355,7 @@ KisNodeSP KisKraLoader::loadReferenceImagesLayer(const KoXmlElement &elem, KisIm
     for (QDomElement child = elem.firstChildElement(); !child.isNull(); child = child.nextSiblingElement()) {
         if (child.nodeName().toLower() == "referenceimage") {
             auto* reference = KisReferenceImage::fromXml(child);
+            reference->setZIndex(layer->shapes().size());
             layer->addShape(reference);
         }
     }

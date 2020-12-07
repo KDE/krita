@@ -1,25 +1,12 @@
 /*
  *  Copyright (c) 2010 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #ifndef __KIS_UPDATER_CONTEXT_H
 #define __KIS_UPDATER_CONTEXT_H
 
-#include <QObject>
 #include <QMutex>
 #include <QReadWriteLock>
 #include <QThreadPool>
@@ -34,16 +21,16 @@
 class KisUpdateJobItem;
 class KisSpontaneousJob;
 class KisStrokeJob;
+class KisUpdateScheduler;
 
-class KRITAIMAGE_EXPORT KisUpdaterContext : public QObject
+class KRITAIMAGE_EXPORT KisUpdaterContext
 {
-    Q_OBJECT
 public:
     static const int useIdealThreadCountTag;
 
 public:
-    KisUpdaterContext(qint32 threadCount = useIdealThreadCountTag, QObject *parent = 0);
-    ~KisUpdaterContext() override;
+    KisUpdaterContext(qint32 threadCount = useIdealThreadCountTag, KisUpdateScheduler *parent = 0);
+    ~KisUpdaterContext();
 
 
     /**
@@ -88,14 +75,14 @@ public:
      * \see isWalkerAllowed()
      * \see hasSpareThread()
      */
-    virtual void addMergeJob(KisBaseRectsWalkerSP walker);
+    void addMergeJob(KisBaseRectsWalkerSP walker);
 
     /**
      * Adds a stroke job to the context. The prerequisites are
      * the same as for addMergeJob()
      * \see addMergeJob()
      */
-    virtual void addStrokeJob(KisStrokeJob *strokeJob);
+    void addStrokeJob(KisStrokeJob *strokeJob);
 
 
     /**
@@ -103,7 +90,7 @@ public:
      * the same as for addMergeJob()
      * \see addMergeJob()
      */
-    virtual void addSpontaneousJob(KisSpontaneousJob *spontaneousJob);
+    void addSpontaneousJob(KisSpontaneousJob *spontaneousJob);
 
     /**
      * Block execution of the caller until all the jobs are finished
@@ -143,6 +130,8 @@ public:
     void doSomeUsefulWork();
     void jobFinished();
 
+    void setTestingMode(bool value);
+
 protected:
     static bool walkerIntersectsJob(KisBaseRectsWalkerSP walker,
                                     const KisUpdateJobItem* job);
@@ -162,6 +151,7 @@ protected:
     QThreadPool m_threadPool;
     KisLockFreeLodCounter m_lodCounter;
     KisUpdateScheduler *m_scheduler;
+    bool m_testingMode = false;
 
 private:
 
@@ -170,10 +160,6 @@ private:
     friend class KisStrokesQueueTest;
     friend class KisSimpleUpdateQueueTest;
     friend class KisUpdateJobItem;
-
-    void addMergeJobTest(KisBaseRectsWalkerSP walker);
-    void addStrokeJobTest(KisStrokeJob *strokeJob);
-    void addSpontaneousJobTest(KisSpontaneousJob *spontaneousJob);
 
     const QVector<KisUpdateJobItem*> getJobs();
     void clear();
@@ -187,20 +173,6 @@ public:
      * Creates an explicit number of threads
      */
     KisTestableUpdaterContext(qint32 threadCount);
-    ~KisTestableUpdaterContext() override;
-
-    /**
-     * The only difference - it doesn't start execution
-     * of the job
-     */
-    void addMergeJob(KisBaseRectsWalkerSP walker) override;
-    void addStrokeJob(KisStrokeJob *strokeJob) override;
-    void addSpontaneousJob(KisSpontaneousJob *spontaneousJob) override;
-
-     const QVector<KisUpdateJobItem*> getJobs();
-     void clear();
-
-    friend class KisUpdateJobItem;
 };
 
 

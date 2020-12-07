@@ -12,20 +12,7 @@
  * Copyright (C) 2007,2011 Thorsten Zachmann <t.zachmann@zagge.de>
  * Copyright (C) 2011 Jean-Nicolas Artaud <jeannicolasartaud@gmail.com>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 // Own
@@ -88,7 +75,7 @@ public:
 CapNJoinMenu::CapNJoinMenu(QWidget *parent)
     : QMenu(parent)
 {
-    QGridLayout *mainLayout = new QGridLayout();
+    QGridLayout *mainLayout = new QGridLayout(this);
     mainLayout->setMargin(2);
 
     // The cap group
@@ -153,7 +140,6 @@ CapNJoinMenu::CapNJoinMenu(QWidget *parent)
     mainLayout->addWidget(miterLimit, 4, 0, 1, 3);
 
     mainLayout->setSizeConstraint(QLayout::SetMinAndMaxSize);
-    setLayout(mainLayout);
 }
 
 QSize CapNJoinMenu::sizeHint() const
@@ -194,7 +180,7 @@ public:
 
     std::vector<KisAcyclicSignalConnector::Blocker> deactivationLocks;
 
-    Ui_KoStrokeConfigWidget *ui;
+    QScopedPointer<Ui_KoStrokeConfigWidget> ui;
 };
 
 
@@ -203,7 +189,7 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(KoCanvasBase *canvas, QWidget * paren
     , d(new Private())
 {
     // configure GUI
-    d->ui = new Ui_KoStrokeConfigWidget();
+    d->ui.reset(new Ui_KoStrokeConfigWidget());
     d->ui->setupUi(this);
 
     setObjectName("Stroke widget");

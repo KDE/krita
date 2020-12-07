@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_shape_controller.h"
@@ -64,20 +52,18 @@
 struct KisShapeController::Private
 {
 public:
-    KisDocument *doc;
     KisNameServer *nameServer;
     KisSignalAutoConnectionsStore imageConnections;
 
     KisNodeShapesGraph shapesGraph;
 };
 
-KisShapeController::KisShapeController(KisDocument *doc, KisNameServer *nameServer)
-    : KisDummiesFacadeBase(doc)
+KisShapeController::KisShapeController(KisNameServer *nameServer, KUndo2Stack *undoStack, QObject *parent)
+    : KisDummiesFacadeBase(parent)
     , m_d(new Private())
 {
-    m_d->doc = doc;
     m_d->nameServer = nameServer;
-    resourceManager()->setUndoStack(doc->undoStack());
+    resourceManager()->setUndoStack(undoStack);
 }
 
 
@@ -93,13 +79,21 @@ KisShapeController::~KisShapeController()
 
 void KisShapeController::slotUpdateDocumentResolution()
 {
-    const qreal pixelsPerInch = m_d->doc->image()->xRes() * 72.0;
-    resourceManager()->setResource(KoDocumentResourceManager::DocumentResolution, pixelsPerInch);
+    KisImageSP image = this->image();
+
+    if (image) {
+        const qreal pixelsPerInch = image->xRes() * 72.0;
+        resourceManager()->setResource(KoDocumentResourceManager::DocumentResolution, pixelsPerInch);
+    }
 }
 
 void KisShapeController::slotUpdateDocumentSize()
 {
-    resourceManager()->setResource(KoDocumentResourceManager::DocumentRectInPixels, m_d->doc->image()->bounds());
+    KisImageSP image = this->image();
+
+    if (image) {
+        resourceManager()->setResource(KoDocumentResourceManager::DocumentRectInPixels, image->bounds());
+    }
 }
 
 void KisShapeController::addNodeImpl(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis)
@@ -218,12 +212,14 @@ KoShapeContainer *KisShapeController::createParentForShapes(const QList<KoShape 
 
 QRectF KisShapeController::documentRectInPixels() const
 {
-    return m_d->doc->image()->bounds();
+    KisImageSP image = this->image();
+    return image ? image->bounds() : QRect(0, 0, 666, 777);
 }
 
 qreal KisShapeController::pixelsPerInch() const
 {
-    return m_d->doc->image()->xRes() * 72.0;
+    KisImageSP image = this->image();
+    return image ? image->xRes() * 72.0 : 72.0;
 }
 
 void KisShapeController::setInitialShapeForCanvas(KisCanvas2 *canvas)
@@ -251,10 +247,11 @@ void KisShapeController::setImage(KisImageWSP image)
         m_d->imageConnections.addConnection(image, SIGNAL(sigResolutionChanged(double, double)), this, SLOT(slotUpdateDocumentResolution()));
         m_d->imageConnections.addConnection(image, SIGNAL(sigSizeChanged(QPointF, QPointF)), this, SLOT(slotUpdateDocumentSize()));
     }
-    slotUpdateDocumentResolution();
-    slotUpdateDocumentSize();
 
     KisDummiesFacadeBase::setImage(image);
+
+    slotUpdateDocumentResolution();
+    slotUpdateDocumentSize();
 }
 
 KoShapeLayer* KisShapeController::shapeForNode(KisNodeSP node) const

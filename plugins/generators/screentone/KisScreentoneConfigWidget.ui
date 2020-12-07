@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>ScreentoneConfigWidget</class>
  <widget class="QWidget" name="ScreentoneConfigWidget">
   <property name="geometry">
@@ -74,14 +78,14 @@
          <property name="verticalSpacing">
           <number>5</number>
          </property>
-         <item row="0" column="0">
+         <item column="0" row="0">
           <widget class="QLabel" name="labelPattern">
            <property name="text">
             <string>Pattern:</string>
            </property>
           </widget>
          </item>
-         <item row="0" column="1">
+         <item column="1" row="0">
           <widget class="QComboBox" name="comboBoxPattern">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -91,14 +95,14 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="0">
+         <item column="0" row="1">
           <widget class="QLabel" name="labelShape">
            <property name="text">
             <string>Shape:</string>
            </property>
           </widget>
          </item>
-         <item row="1" column="1">
+         <item column="1" row="1">
           <widget class="QComboBox" name="comboBoxShape">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -108,14 +112,14 @@
            </property>
           </widget>
          </item>
-         <item row="2" column="0">
+         <item column="0" row="2">
           <widget class="QLabel" name="labelInterpolation">
            <property name="text">
             <string>Interpolation:</string>
            </property>
           </widget>
          </item>
-         <item row="2" column="1">
+         <item column="1" row="2">
           <widget class="QComboBox" name="comboBoxInterpolation">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -164,14 +168,14 @@
          <property name="verticalSpacing">
           <number>5</number>
          </property>
-         <item row="0" column="0">
+         <item column="0" row="0">
           <widget class="QLabel" name="labelTranslation">
            <property name="text">
             <string>Position:</string>
            </property>
           </widget>
          </item>
-         <item row="0" column="1">
+         <item column="1" row="0">
           <layout class="QHBoxLayout" name="horizontalLayout">
            <property name="spacing">
             <number>5</number>
@@ -204,14 +208,14 @@
            </item>
           </layout>
          </item>
-         <item row="1" column="0">
+         <item column="0" row="1">
           <widget class="QLabel" name="labelSize">
            <property name="text">
             <string>Size:</string>
            </property>
           </widget>
          </item>
-         <item row="1" column="1">
+         <item column="1" row="1">
           <layout class="QHBoxLayout" name="horizontalLayout_3">
            <property name="spacing">
             <number>5</number>
@@ -251,14 +255,14 @@
            </item>
           </layout>
          </item>
-         <item row="2" column="0">
+         <item column="0" row="2">
           <widget class="QLabel" name="labelShear">
            <property name="text">
             <string>Shear:</string>
            </property>
           </widget>
          </item>
-         <item row="2" column="1">
+         <item column="1" row="2">
           <layout class="QHBoxLayout" name="horizontalLayout_5">
            <property name="spacing">
             <number>5</number>
@@ -291,14 +295,14 @@
            </item>
           </layout>
          </item>
-         <item row="3" column="0">
+         <item column="0" row="3">
           <widget class="QLabel" name="labelRotation">
            <property name="text">
             <string>Rotation:</string>
            </property>
           </widget>
          </item>
-         <item row="3" column="1">
+         <item column="1" row="3">
           <widget class="KisDoubleSliderSpinBox" name="sliderRotation" native="true">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
@@ -350,14 +354,14 @@
          <property name="verticalSpacing">
           <number>5</number>
          </property>
-         <item row="0" column="0">
+         <item column="0" row="0">
           <widget class="QLabel" name="labelForeground">
            <property name="text">
             <string>Foreground:</string>
            </property>
           </widget>
          </item>
-         <item row="0" column="1">
+         <item column="1" row="0">
           <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,2">
            <property name="spacing">
             <number>5</number>
@@ -384,14 +388,14 @@
            </item>
           </layout>
          </item>
-         <item row="1" column="0">
+         <item column="0" row="1">
           <widget class="QLabel" name="mLabelBackground">
            <property name="text">
             <string>Background:</string>
            </property>
           </widget>
          </item>
-         <item row="1" column="1">
+         <item column="1" row="1">
           <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="1,2">
            <property name="spacing">
             <number>5</number>
@@ -418,28 +422,28 @@
            </item>
           </layout>
          </item>
-         <item row="2" column="0">
+         <item column="0" row="2">
           <widget class="QLabel" name="labelInvert">
            <property name="text">
-            <string>Invert:</string>
+            <string comment="Swapping FG and BG color in the screentone pattern">Invert:</string>
            </property>
           </widget>
          </item>
-         <item row="2" column="1">
+         <item column="1" row="2">
           <widget class="QCheckBox" name="checkBoxInvert">
            <property name="text">
             <string/>
            </property>
           </widget>
          </item>
-         <item row="3" column="0">
+         <item column="0" row="3">
           <widget class="QLabel" name="labelBrightness">
            <property name="text">
             <string>Brightness:</string>
            </property>
           </widget>
          </item>
-         <item row="3" column="1">
+         <item column="1" row="3">
           <widget class="KisDoubleSliderSpinBox" name="sliderBrightness" native="true">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
@@ -458,14 +462,14 @@
            </property>
           </widget>
          </item>
-         <item row="4" column="0">
+         <item column="0" row="4">
           <widget class="QLabel" name="labelContrast">
            <property name="text">
             <string>Contrast:</string>
            </property>
           </widget>
          </item>
-         <item row="4" column="1">
+         <item column="1" row="4">
           <widget class="KisDoubleSliderSpinBox" name="sliderContrast" native="true">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Minimum">

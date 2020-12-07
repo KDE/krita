@@ -4,20 +4,7 @@
                  2012 C. Boemann <cbo@boemann.dk>
                  2017 Wolthera van Hövell tot Westerflier <griffinvalley@gmail.com>
 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
-
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
-
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+   SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
 #include "KoConfigAuthorPage.h"
@@ -69,7 +56,7 @@ public:
 KoConfigAuthorPage::KoConfigAuthorPage()
         : d(new Private)
 {
-    QGridLayout *layout = new QGridLayout;
+    QGridLayout *layout = new QGridLayout(this);
 
     d->cmbAuthorProfiles = new QComboBox();
     layout->addWidget(d->cmbAuthorProfiles, 0, 0);
@@ -86,7 +73,6 @@ KoConfigAuthorPage::KoConfigAuthorPage()
     layout->addWidget(f, 1, 0);
     d->stack = new QStackedWidget();
     layout->addWidget(d->stack, 2, 0, 1, 3);
-    setLayout(layout);
 
     //list of positions that we can use to provide useful autocompletion.
     d->positions << QString(i18nc("This is a list of suggestions for positions an artist can take, comma-separated","Adapter,Animator,Artist,Art Director,Author,Assistant,"

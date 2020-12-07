@@ -129,7 +129,7 @@
       <icon>format-text-subscript</icon>
       <whatsThis/>
       <statusTip/>
-      <isCheckable>false</isCheckable>
+      <isCheckable>true</isCheckable>
       <text>Subscript</text>
     </Action>
     <Action name="svg_format_superscript">
@@ -139,7 +139,7 @@
       <icon>format-text-superscript</icon>
       <whatsThis/>
       <statusTip/>
-      <isCheckable>false</isCheckable>
+      <isCheckable>true</isCheckable>
       <text>Superscript</text>
     </Action>
     <Action name="svg_format_underline">
@@ -149,7 +149,7 @@
       <icon>format-text-underline</icon>
       <whatsThis/>
       <statusTip/>
-      <isCheckable>false</isCheckable>
+      <isCheckable>true</isCheckable>
       <text>Underline</text>
     </Action>
     <Action name="svg_format_strike_through">
@@ -159,7 +159,7 @@
       <icon>format-text-strikethrough</icon>
       <whatsThis/>
       <statusTip/>
-      <isCheckable>false</isCheckable>
+      <isCheckable>true</isCheckable>
       <text>Strikethrough</text>
     </Action>
     <Action name="svg_weight_bold">
@@ -189,7 +189,7 @@
       <icon>format-text-normal</icon>
       <whatsThis/>
       <statusTip/>
-      <isCheckable>false</isCheckable>
+      <isCheckable>true</isCheckable>
       <text>Normal</text>
     </Action>
     <Action name="svg_weight_demi">
@@ -199,7 +199,7 @@
       <icon>format-text-demi</icon>
       <whatsThis/>
       <statusTip/>
-      <isCheckable>false</isCheckable>
+      <isCheckable>true</isCheckable>
       <text>Demi</text>
     </Action>
     <Action name="svg_weight_black">
@@ -209,7 +209,7 @@
       <icon>format-text-black</icon>
       <whatsThis/>
       <statusTip/>
-      <isCheckable>false</isCheckable>
+      <isCheckable>true</isCheckable>
       <text>Black</text>
     </Action>
     <Action name="svg_weight_light">
@@ -219,7 +219,7 @@
       <icon>format-text-light</icon>
       <whatsThis/>
       <statusTip/>
-      <isCheckable>false</isCheckable>
+      <isCheckable>true</isCheckable>
       <text>Light</text>
     </Action>
     <Action name="svg_line_height">
@@ -251,6 +251,16 @@
       <statusTip/>
       <isCheckable>false</isCheckable>
       <text>Color Picker</text>
+    </Action>
+    <Action name="svg_font_kerning">
+      <iconText>Kerning</iconText>
+      <shortcut></shortcut>
+      <toolTip>Kerning</toolTip>
+      <icon>kerning</icon>
+      <whatsThis/>
+      <statusTip/>
+      <isCheckable>true</isCheckable>
+      <text>Kerning</text>
     </Action>
     </Actions>
 </ActionCollection>

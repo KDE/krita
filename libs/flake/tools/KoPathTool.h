@@ -4,20 +4,7 @@
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007 Boudewijn Rempt <boud@valdyas.org>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #ifndef KOPATHTOOL_H
@@ -53,7 +40,8 @@ public:
     ~KoPathTool() override;
 
     void paint(QPainter &painter, const KoViewConverter &converter) override;
-    void repaintDecorations() override;
+    void repaintDecorations();
+    QRectF decorationsRect() const override;
     void mousePressEvent(KoPointerEvent *event) override;
     void mouseMoveEvent(KoPointerEvent *event) override;
     void mouseReleaseEvent(KoPointerEvent *event) override;
@@ -68,9 +56,6 @@ public:
     void requestStrokeCancellation() override;
     void requestStrokeEnd() override;
     void explicitUserStrokeEndRequest() override;
-
-    /// repaints the specified rect
-    void repaint(const QRectF &repaintRect);
 
     QMenu* popupActionsMenu() override;
 
@@ -115,7 +100,6 @@ private:
     void clearActivePointSelectionReferences();
     void initializeWithShapes(const QList<KoShape*> shapes);
     KUndo2Command* createPointToCurveCommand(const QList<KoPathPointData> &points);
-    void repaintSegment(PathSegment *pathSegment);
     void mergePointsImpl(bool doJoin);
 
 protected:
@@ -123,16 +107,14 @@ protected:
     QCursor m_selectCursor;
 
 private:
-    KoPathToolHandle * m_activeHandle;       ///< the currently active handle
-    int m_handleRadius;    ///< the radius of the control point handles
-    uint m_grabSensitivity; ///< the grab sensitivity
+    QScopedPointer<KoPathToolHandle> m_activeHandle;       ///< the currently active handle
     QPointF m_lastPoint; ///< needed for interaction strategy
-    PathSegment *m_activeSegment;
+    QScopedPointer<PathSegment> m_activeSegment;
 
     // make a frind so that it can test private member/methods
     friend class TestPathTool;
 
-    KoInteractionStrategy *m_currentStrategy; ///< the rubber selection strategy
+    QScopedPointer<KoInteractionStrategy> m_currentStrategy; ///< the rubber selection strategy
 
     QButtonGroup *m_pointTypeGroup;
     QActionGroup *m_points;

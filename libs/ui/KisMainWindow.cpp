@@ -4,20 +4,7 @@
    Copyright (C) 2007, 2009 Thomas zander <zander@kde.org>
    Copyright (C) 2010 Benjamin Port <port.benjamin@gmail.com>
 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
-
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
-
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
 #include "KisMainWindow.h"
@@ -42,9 +29,6 @@
 #include <QMutex>
 #include <QMutexLocker>
 #include <QPointer>
-#include <QPrintDialog>
-#include <QPrinter>
-#include <QPrintPreviewDialog>
 #include <QToolButton>
 #include <KisSignalMapper.h>
 #include <QTabBar>
@@ -89,6 +73,7 @@
 #include <KoToolFactoryBase.h>
 #include <KoToolRegistry.h>
 #include "KoDockFactoryBase.h"
+#include "KoDockWidgetTitleBar.h"
 #include "KoDocumentInfoDlg.h"
 #include "KoDocumentInfo.h"
 #include "KoFileDialog.h"
@@ -103,7 +88,6 @@
 #include <KoColorSpaceEngine.h>
 #include <KoUpdater.h>
 #include <KisResourceModel.h>
-#include <KisResourceModelProvider.h>
 #include <KisResourceLoaderRegistry.h>
 #include <KisResourceIterator.h>
 #include <KisResourceTypes.h>
@@ -213,6 +197,7 @@ public:
         widgetStack->addWidget(mdiArea);
         mdiArea->setTabsMovable(true);
         mdiArea->setActivationOrder(QMdiArea::ActivationHistoryOrder);
+        mdiArea->setDocumentMode(true);
     }
 
     ~Private() {
@@ -325,12 +310,28 @@ public:
     }
 };
 
+class ScopedWidgetDisabler
+{
+    QWidget *widget;
+public:
+    ScopedWidgetDisabler(QWidget *widget_)
+        : widget(widget_)
+    {
+        widget->setEnabled(false);
+    }
+
+    ~ScopedWidgetDisabler()
+    {
+        widget->setEnabled(true);
+    }
+};
+
 KisMainWindow::KisMainWindow(QUuid uuid)
     : KXmlGuiWindow()
     , d(new Private(this, uuid))
 {
-    d->workspacemodel = KisResourceModelProvider::resourceModel(ResourceType::Workspaces);
-    connect(d->workspacemodel, SIGNAL(afterResourcesLayoutReset()), this, SLOT(updateWindowMenu()));
+    d->workspacemodel = new KisResourceModel(ResourceType::Workspaces, this);
+    connect(d->workspacemodel, SIGNAL(modelReset()), this, SLOT(updateWindowMenu()));
 
     d->viewManager = new KisViewManager(this, actionCollection());
     KConfigGroup group( KSharedConfig::openConfig(), "theme");
@@ -467,14 +468,12 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     updateWindowMenu();
 
     if (isHelpMenuEnabled() && !d->helpMenu) {
-        // workaround for KHelpMenu (or rather KAboutData::applicationData()) internally
-        // not using the Q*Application metadata ATM, which results e.g. in the bugreport wizard
-        // not having the app version preset
-        // fixed hopefully in KF5 5.22.0, patch pending
         QGuiApplication *app = qApp;
-        KAboutData aboutData(app->applicationName(), app->applicationDisplayName(), app->applicationVersion());
+        KAboutData aboutData(KAboutData::applicationData());
         aboutData.setOrganizationDomain(app->organizationDomain().toUtf8());
+
         d->helpMenu = new KHelpMenu(this, aboutData, false);
+
         // workaround-less version:
         // d->helpMenu = new KHelpMenu(this, QString()/*unused*/, false);
 
@@ -596,6 +595,21 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     this->winId(); // Ensures the native window has been created.
     QWindow *window = this->windowHandle();
     connect(window, SIGNAL(screenChanged(QScreen *)), this, SLOT(windowScreenChanged(QScreen *)));
+
+#ifdef Q_OS_ANDROID
+    connect(d->fileManager, SIGNAL(sigFileSelected(QUrl)), this, SLOT(slotFileSelected(QUrl)));
+    connect(d->fileManager, SIGNAL(sigEmptyFilePath()), this, SLOT(slotEmptyFilePath()));
+
+    QScreen *s = QGuiApplication::primaryScreen();
+    s->setOrientationUpdateMask(Qt::LandscapeOrientation|Qt::InvertedLandscapeOrientation|Qt::PortraitOrientation|Qt::InvertedPortraitOrientation);
+    connect(s, SIGNAL(orientationChanged(Qt::ScreenOrientation)), this, SLOT(orientationChanged()));
+
+    // When Krita starts, Java side sends an event to set applicationState() to active. But, before
+    // the event could reach KisApplication's platform integration, it is cleared by KisOpenGLModeProber::probeFomat.
+    // So, we send it manually when MainWindow shows up.
+    QAndroidJniObject::callStaticMethod<void>("org/qtproject/qt5/android/QtNative", "setApplicationState", "(I)V", Qt::ApplicationActive);
+#endif
+
 }
 
 KisMainWindow::~KisMainWindow()
@@ -733,6 +747,15 @@ void KisMainWindow::showView(KisView *imageView, QMdiSubWindow *subwin)
 
         updateWindowMenu();
         updateCaption();
+
+#ifdef Q_OS_ANDROID
+        // HACK! When loading a new document, Krita wouldn't refresh the screen,
+        // even though it has been successfully created in background. So, When
+        // appliction is hidden and made active QPA Android force-requests a
+        // redraw call. So, this workaround fixes that.
+        QAndroidJniObject::callStaticMethod<void>("org/qtproject/qt5/android/QtNative", "setApplicationState", "(I)V", Qt::ApplicationHidden);
+        QAndroidJniObject::callStaticMethod<void>("org/qtproject/qt5/android/QtNative", "setApplicationState", "(I)V", Qt::ApplicationActive);
+#endif
     }
 }
 
@@ -815,20 +838,14 @@ void KisMainWindow::setCanvasDetached(bool detach)
     }
 }
 
-void KisMainWindow::slotFileSelected(QString path)
+void KisMainWindow::slotFileSelected(QUrl url)
 {
-    QString url = path;
-    if (!url.isEmpty()) {
-        bool res = openDocument(QUrl::fromLocalFile(url), Import);
-        if (!res) {
-            warnKrita << "Loading" << url << "failed";
-        }
-    }
+    openDocumentInternal(url);
 }
 
 void KisMainWindow::slotEmptyFilePath()
 {
-    QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("The chosen file's location could not be found. Does it exist?"));
+    QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("The chosen file's location could not be found. Does it exist?"));
 }
 
 QWidget * KisMainWindow::canvasWindow() const
@@ -921,32 +938,44 @@ void KisMainWindow::reloadRecentFileList()
 void KisMainWindow::updateCaption()
 {
     if (!d->mdiArea->activeSubWindow()) {
-        updateCaption(QString(), false);
-    }
+        setWindowTitle("");
+   }
     else if (d->activeView && d->activeView->document() && d->activeView->image()){
         KisDocument *doc = d->activeView->document();
 
-        QString caption(doc->caption());
+        QString caption = doc->caption();
 
-        caption = "RESOURCES REWRITE GOING ON " + caption;
-
+        if (d->mdiArea->activeSubWindow() && d->mdiArea->activeSubWindow()->isMaximized() && d->mdiArea->viewMode() == QMdiArea::SubWindowView) {
+            caption = "";
+        }
 
         if (d->readOnly) {
-            caption += " [" + i18n("Write Protected") + "] ";
+            caption += " " + i18n("Write Protected") + " ";
         }
 
         if (doc->isRecovered()) {
-            caption += " [" + i18n("Recovered") + "] ";
+            caption += " " + i18n("Recovered") + " ";
         }
 
         // show the file size for the document
         KisMemoryStatisticsServer::Statistics m_fileSizeStats = KisMemoryStatisticsServer::instance()->fetchMemoryStatistics(d->activeView ? d->activeView->image() : 0);
 
         if (m_fileSizeStats.imageSize) {
-            caption += QString(" (").append( KFormat().formatByteSize(m_fileSizeStats.imageSize)).append( ")");
+            caption += QString(" (").append( KFormat().formatByteSize(m_fileSizeStats.imageSize)).append( ") ");
         }
 
-        updateCaption(caption, doc->isModified());
+        if (doc->isModified()) {
+            caption += " *";
+        }
+
+        if (doc->isModified()) {
+            d->mdiArea->activeSubWindow()->setWindowTitle(doc->caption() + " *");
+        }
+        else {
+            d->mdiArea->activeSubWindow()->setWindowTitle(doc->caption());
+        }
+
+        setWindowTitle(caption);
 
         if (!doc->url().fileName().isEmpty()) {
             d->saveAction->setToolTip(i18n("Save as %1", doc->url().fileName()));
@@ -954,39 +983,7 @@ void KisMainWindow::updateCaption()
         else {
             d->saveAction->setToolTip(i18n("Save"));
         }
-
-
     }
-
-}
-
-void KisMainWindow::updateCaption(const QString &caption, bool modified)
-{
-    QString versionString = KritaVersionWrapper::versionString(true);
-
-    QString title = caption;
-    if (!title.contains(QStringLiteral("[*]"))) { // append the placeholder so that the modified mechanism works
-        title.append(QStringLiteral(" [*]"));
-    }
-
-    if (d->mdiArea->activeSubWindow()) {
-#if defined(KRITA_ALPHA) || defined (KRITA_BETA) || defined (KRITA_RC)
-        d->mdiArea->activeSubWindow()->setWindowTitle(QString("%1: %2").arg(versionString).arg(title));
-#else
-        d->mdiArea->activeSubWindow()->setWindowTitle(title);
-#endif
-        d->mdiArea->activeSubWindow()->setWindowModified(modified);
-    }
-    else {
-#if defined(KRITA_ALPHA) || defined (KRITA_BETA) || defined (KRITA_RC)
-    setWindowTitle(QString("%1: %2").arg(versionString).arg(title));
-#else
-    setWindowTitle(title);
-#endif
-    }
-    setWindowModified(modified);
-
-
 }
 
 
@@ -1000,9 +997,12 @@ KisView *KisMainWindow::activeView() const
 
 bool KisMainWindow::openDocument(const QUrl &url, OpenFlags flags)
 {
+    ScopedWidgetDisabler disabler(d->welcomeScroller);
+    QApplication::processEvents(); // make UI more responsive
+
     if (!QFile(url.toLocalFile()).exists()) {
         if (!(flags & BatchMode)) {
-            QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("The file %1 does not exist.", url.url()));
+            QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("The file %1 does not exist.", url.url()));
         }
         d->recentFiles->removeUrl(url); //remove the file from the recent-opened-file-list
         saveRecentFiles();
@@ -1013,10 +1013,17 @@ bool KisMainWindow::openDocument(const QUrl &url, OpenFlags flags)
 
 bool KisMainWindow::openDocumentInternal(const QUrl &url, OpenFlags flags)
 {
+#ifndef Q_OS_ANDROID
     if (!url.isLocalFile()) {
         qWarning() << "KisMainWindow::openDocumentInternal. Not a local file:" << url;
         return false;
     }
+#else
+    if (!QFile(url.toString()).exists() && !url.isLocalFile()) {
+        qWarning() << "KisMainWindow::openDocumentInternal. Could not open:" << url;
+        return false;
+    }
+#endif
 
     KisDocument *newdoc = KisPart::instance()->createDocument();
 
@@ -1042,10 +1049,6 @@ bool KisMainWindow::openDocumentInternal(const QUrl &url, OpenFlags flags)
     }
 
     KisPart::instance()->addDocument(newdoc);
-
-    if (!QFileInfo(url.toLocalFile()).isWritable()) {
-        setReadWrite(false);
-    }
 
     // Try to determine whether this was an unnamed autosave
     if (flags & RecoveryFile &&
@@ -1231,7 +1234,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExpo
         return false;
     }
     else if (dlg.result() == KisDelayedSaveDialog::Ignored) {
-        QMessageBox::critical(0,
+        QMessageBox::critical(qApp->activeWindow(),
                               i18nc("@title:window", "Krita"),
                               i18n("You are saving a file while the image is "
                                    "still rendering. The saved file may be "
@@ -1335,11 +1338,13 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExpo
         QUrl newURL = QUrl::fromUserInput(dialog.filename());
 
         if (newURL.isLocalFile()) {
+#ifndef Q_OS_ANDROID
             QString fn = newURL.toLocalFile();
             if (QFileInfo(fn).completeSuffix().isEmpty()) {
                 fn.append(KisMimeDatabase::suffixesForMimeType(nativeFormat).first());
                 newURL = QUrl::fromLocalFile(fn);
             }
+#endif
         }
 
         if (document->documentInfo()->aboutInfo("title") == i18n("Unnamed")) {
@@ -1656,7 +1661,6 @@ void KisMainWindow::slotImportFile()
 
 void KisMainWindow::slotFileOpen(bool isImporting)
 {
-#ifndef Q_OS_ANDROID
     QStringList urls = showOpenFileDialog(isImporting);
 
     if (urls.isEmpty())
@@ -1672,13 +1676,6 @@ void KisMainWindow::slotFileOpen(bool isImporting)
             }
         }
     }
-#else
-    Q_UNUSED(isImporting)
-
-    d->fileManager->openImportFile();
-    connect(d->fileManager, SIGNAL(sigFileSelected(QString)), this, SLOT(slotFileSelected(QString)));
-    connect(d->fileManager, SIGNAL(sigEmptyFilePath()), this, SLOT(slotEmptyFilePath()));
-#endif
 }
 
 void KisMainWindow::slotFileOpenRecent(const QUrl &url)
@@ -1756,31 +1753,52 @@ void KisMainWindow::saveWindowState(bool restoreNormalState)
 bool KisMainWindow::restoreWorkspaceState(const QByteArray &state)
 {
     QByteArray oldState = saveState();
+    const bool showTitlebars = KisConfig(false).showDockerTitleBars();
 
     // needed because otherwise the layout isn't correctly restored in some situations
     Q_FOREACH (QDockWidget *dock, dockWidgets()) {
+        dock->setProperty("Locked", false); // Unlock invisible dockers
         dock->toggleViewAction()->setEnabled(true);
         dock->hide();
+        dock->titleBarWidget()->setVisible(showTitlebars);
     }
 
     bool success = KXmlGuiWindow::restoreState(state);
 
     if (!success) {
         KXmlGuiWindow::restoreState(oldState);
+        Q_FOREACH (QDockWidget *dock, dockWidgets()) {
+            if (dock->titleBarWidget()) {
+                dock->titleBarWidget()->setVisible(showTitlebars || dock->isFloating());
+            }
+        }
         return false;
     }
-
     return success;
+}
+
+void KisMainWindow::restoreWorkspace()
+{
+    int resourceId = sender()->property("resource_id").toInt();
+    restoreWorkspace(resourceId);
 }
 
 bool KisMainWindow::restoreWorkspace(int workspaceId)
 {
-
     KisWorkspaceResourceSP workspace =
-            KisResourceModelProvider::resourceModel(ResourceType::Workspaces)
-            ->resourceForId(workspaceId).dynamicCast<KisWorkspaceResource>();
+            KisResourceModel(ResourceType::Workspaces)
+                .resourceForId(workspaceId)
+                .dynamicCast<KisWorkspaceResource>();
 
     bool success = restoreWorkspaceState(workspace->dockerState());
+
+    const bool showTitlebars = KisConfig(false).showDockerTitleBars();
+    Q_FOREACH (QDockWidget *dock, dockWidgets()) {
+        if (dock->titleBarWidget()) {
+            const bool isCollapsed = (dock->widget() && dock->widget()->isHidden()) || !dock->widget();
+            dock->titleBarWidget()->setVisible(showTitlebars || (dock->isFloating() && isCollapsed));
+        }
+    }
 
     if (activeKisView()) {
         activeKisView()->resourceProvider()->notifyLoadingWorkspace(workspace);
@@ -1899,7 +1917,7 @@ void KisMainWindow::importAnimation()
         if (!status.isOk() && !status.isInternalError()) {
             QString msg = status.errorMessage();
             if (!msg.isEmpty())
-                QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not finish import animation:\n%1", msg));
+                QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Could not finish import animation:\n%1", msg));
         }
         activeView()->canvasBase()->refetchDataFromImage();
     }
@@ -2026,10 +2044,22 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
             return 0;
         }
 
-        dockWidget->setFont(KoDockRegistry::dockFont());
+        KoDockWidgetTitleBar *titleBar = dynamic_cast<KoDockWidgetTitleBar*>(dockWidget->titleBarWidget());
+
+        // Check if the dock widget is supposed to be collapsible
+        if (!dockWidget->titleBarWidget() && factory->id() != "TimelineDocker") {
+            titleBar = new KoDockWidgetTitleBar(dockWidget);
+            dockWidget->setTitleBarWidget(titleBar);
+            titleBar->setCollapsable(false);
+        }
+        if (titleBar) {
+            titleBar->setFont(KoDockRegistry::dockFont());
+        }
+
+
         dockWidget->setObjectName(factory->id());
         dockWidget->setParent(this);
-        if (lockAllDockers) {
+        if (lockAllDockers && factory->id() != "TimelineDocker") {
             if (dockWidget->titleBarWidget()) {
                 dockWidget->titleBarWidget()->setVisible(false);
             }
@@ -2067,6 +2097,13 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
         if (!visible) {
             dockWidget->hide();
         }
+
+        bool locked = false;
+        group =  KSharedConfig::openConfig()->group("krita").group("DockWidget " + factory->id());
+        locked = group.readEntry("Locked", locked);
+
+        if (titleBar && locked)
+            titleBar->setLocked(true);
 
         d->dockWidgetsMap.insert(factory->id(), dockWidget);
     }
@@ -2274,16 +2311,15 @@ void KisMainWindow::updateWindowMenu()
     menu->addAction(d->workspaceMenu);
     QMenu *workspaceMenu = d->workspaceMenu->menu();
     workspaceMenu->clear();
-
-    KisResourceIterator resourceIterator(KisResourceModelProvider::resourceModel(ResourceType::Workspaces));
+    KisResourceModel resourceModel(ResourceType::Workspaces);
+    KisResourceIterator resourceIterator(&resourceModel);
     KisMainWindow *m_this = this;
 
     while (resourceIterator.hasNext()) {
         KisResourceItemSP resource = resourceIterator.next();
         QAction *action = workspaceMenu->addAction(resource->name());
-        connect(action, &QAction::triggered, this, [=]() {
-            m_this->restoreWorkspace(resource->id());
-        });
+        action->setProperty("resource_id", QVariant::fromValue<int>(resource->id()));
+        connect(action, SIGNAL(triggered()), this, SLOT(restoreWorkspace()));
     }
     workspaceMenu->addSeparator();
     connect(workspaceMenu->addAction(i18nc("@action:inmenu", "&Import Workspace...")),
@@ -2482,6 +2518,30 @@ void KisMainWindow::configChanged()
     }
 
     d->mdiArea->update();
+
+    if (KisConfig(false).readEntry<bool>("use_custom_system_font", false)) {
+        QString fontName = KisConfig(false).readEntry<QString>("custom_system_font", "");
+        int fontSize = KisConfig(false).readEntry<int>("custom_font_size", -1);
+
+        if (fontSize <= 6) {
+            fontSize = qApp->font().pointSize();
+        }
+        if (!fontName.isEmpty()) {
+            QFont f(fontName, fontSize);
+            qApp->setFont(f);
+
+            Q_FOREACH (QObject* widget, children()) {
+                if (widget->inherits("QDockWidget")) {
+                    QDockWidget* dw = static_cast<QDockWidget*>(widget);
+                    dw->setFont(KoDockRegistry::dockFont());
+                }
+            }
+
+        }
+    }
+    else {
+        qApp->setFont(QFontDatabase::systemFont(QFontDatabase::GeneralFont));
+    }
 }
 
 KisView* KisMainWindow::newView(QObject *document, QMdiSubWindow *subWindow)
@@ -2536,7 +2596,7 @@ void KisMainWindow::checkSanity()
 
 void KisMainWindow::showErrorAndDie()
 {
-    QMessageBox::critical(0, i18nc("@title:window", "Installation error"), m_errorMessage);
+    QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Installation error"), m_errorMessage);
     if (m_dieOnError) {
         exit(10);
     }
@@ -2642,15 +2702,12 @@ void KisMainWindow::createActions()
     d->showDocumentInfo  = actionManager->createAction("file_documentinfo");
     connect(d->showDocumentInfo, SIGNAL(triggered(bool)), this, SLOT(slotDocumentInfo()));
 
-
     d->themeManager->setThemeMenuAction(new KActionMenu(i18nc("@action:inmenu", "&Themes"), this));
     d->themeManager->registerThemeActions(actionCollection());
     connect(d->themeManager, SIGNAL(signalThemeChanged()), this, SLOT(slotThemeChanged()));
-
-
     connect(d->themeManager, SIGNAL(signalThemeChanged()), d->welcomePage, SLOT(slotUpdateThemeColors()));
-
     d->toggleDockers = actionManager->createAction("view_toggledockers");
+
     KisConfig(true).showDockers(true);
     d->toggleDockers->setChecked(true);
     connect(d->toggleDockers, SIGNAL(toggled(bool)), SLOT(toggleDockersVisibility(bool)));
@@ -2662,6 +2719,10 @@ void KisMainWindow::createActions()
     d->toggleDetachCanvas->setChecked(false);
     connect(d->toggleDetachCanvas, SIGNAL(toggled(bool)), SLOT(setCanvasDetached(bool)));
     setCanvasDetached(false);
+
+    d->toggleDockerTitleBars = actionManager->createAction("view_toggledockertitlebars");
+    d->toggleDockerTitleBars->setChecked(KisConfig(false).showDockerTitleBars());
+    connect(d->toggleDockerTitleBars, SIGNAL(toggled(bool)), SLOT(showDockerTitleBars(bool)));
 
     actionCollection()->addAction("settings_dockers_menu", d->dockWidgetMenu);
     actionCollection()->addAction("window", d->windowMenu);
@@ -2768,10 +2829,59 @@ void KisMainWindow::windowScreenChanged(QScreen *screen)
                                             this, SIGNAL(screenChanged()));
 }
 
+void KisMainWindow::showDockerTitleBars(bool show)
+{
+    Q_FOREACH (QDockWidget *dock, dockWidgets()) {
+        if (dock->titleBarWidget()) {
+            const bool isCollapsed = (dock->widget() && dock->widget()->isHidden()) || !dock->widget();
+            dock->titleBarWidget()->setVisible(show || (dock->isFloating() && isCollapsed));
+        }
+    }
+
+    KisConfig cfg(true);
+    cfg.setShowDockerTitleBars(show);
+}
+
 void KisMainWindow::slotXmlGuiMakingChanges(bool finished)
 {
     if (finished) {
         subWindowActivated();
+    }
+}
+
+void KisMainWindow::orientationChanged()
+{
+    QScreen *screen = QGuiApplication::primaryScreen();
+
+    for (QWindow* window: QGuiApplication::topLevelWindows()) {
+        if (window->geometry().topLeft() != QPoint(0, 0)) {
+            // We are using reversed values. Because geometry returned is not the updated one,
+            // but the previous one.
+            int screenHeight = screen->geometry().width();
+            int screenWidth = screen->geometry().height();
+
+            // scaling
+            int new_x = (window->position().x() * screenWidth) / screenHeight;
+            int new_y = (window->position().y() * screenHeight) / screenWidth;
+
+            // window width or height shouldn't change
+            int winWidth = window->geometry().width();
+            int winHeight = window->geometry().height();
+
+            // Try best to not let the window go beyond screen.
+            if (new_x > screenWidth - winWidth) {
+                new_x = screenWidth - winWidth;
+                if (new_x < 0)
+                    new_x = 0;
+            }
+            if (new_y > screenHeight - winHeight) {
+                new_y = screenHeight - winHeight;
+                if (new_y < 0)
+                    new_y = 0;
+            }
+
+            window->setPosition(QPoint(new_x, new_y));
+        }
     }
 }
 

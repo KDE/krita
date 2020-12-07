@@ -1,19 +1,7 @@
 /*
  * Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_node.h"
@@ -36,6 +24,8 @@
 #include "kis_busy_progress_indicator.h"
 
 #include "kis_clone_layer.h"
+
+#include "kis_time_span.h"
 
 #include "kis_safe_read_list.h"
 typedef KisSafeReadList<KisNodeSP> KisSafeReadNodeList;
@@ -271,15 +261,15 @@ KisProjectionLeafSP KisNode::projectionLeaf() const
     return m_d->projectionLeaf;
 }
 
-void KisNode::setImage(KisImageWSP image)
+void KisNode::setImage(KisImageWSP newImage)
 {
-    KisBaseNode::setImage(image);
+    KisBaseNode::setImage(newImage);
 
     KisNodeSP node = firstChild();
     while (node) {
         KisLayerUtils::recursiveApplyNodes(node,
-                                           [image] (KisNodeSP node) {
-                                               node->setImage(image);
+                                           [newImage] (KisNodeSP node) {
+                                               node->setImage(newImage);
                                            });
 
         node = node->nextSibling();
@@ -372,6 +362,10 @@ void KisNode::addKeyframeChannel(KisKeyframeChannel *channel)
 {
     channel->setNode(this);
     KisBaseNode::addKeyframeChannel(channel);
+
+    if (m_d->graphListener) {
+        m_d->graphListener->keyframeChannelHasBeenAdded(this, channel);
+    }
 }
 
 KisNodeSP KisNode::firstChild() const
@@ -644,10 +638,21 @@ void KisNode::setDirtyDontResetAnimationCache(const QVector<QRect> &rects)
     }
 }
 
-void KisNode::invalidateFrames(const KisTimeRange &range, const QRect &rect)
+void KisNode::invalidateFrames(const KisTimeSpan &range, const QRect &rect)
 {
     if(m_d->graphListener) {
         m_d->graphListener->invalidateFrames(range, rect);
+    }
+}
+
+void KisNode::handleKeyframeChannelUpdate(const KisTimeSpan &range, const QRect &rect)
+{
+    invalidateFrames(range, rect);
+
+    if (original() && original()->defaultBounds()) {
+        if (range.contains(original()->defaultBounds()->currentTime())) {
+            setDirty(rect);
+        }
     }
 }
 

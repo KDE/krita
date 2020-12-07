@@ -1,10 +1,7 @@
 /*
  *  Copyright (c) 2016 Laszlo Fazekas <mneko@freemail.hu>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -40,7 +37,7 @@
 #include <kis_paint_layer.h>
 #include <kis_raster_keyframe_channel.h>
 #include <kis_image_animation_interface.h>
-#include <kis_time_range.h>
+#include <kis_time_span.h>
 
 #include "csv_read_line.h"
 #include "csv_layer_record.h"
@@ -298,7 +295,7 @@ KisImportExportErrorCode CSVLoader::decode(QIODevice *io, const QString &filenam
             if (frame > frameCount)
                 frameCount = frame;
 
-            animation->setFullClipRange(KisTimeRange::fromTime(0,frameCount - 1));
+            animation->setFullClipRange(KisTimeSpan::fromTimeToTime(0,frameCount - 1));
             animation->setFramerate((int)framerate);
         }
 
@@ -433,7 +430,7 @@ KisImportExportErrorCode CSVLoader::setLayer(CSVLayerRecord* layer, KisDocument 
 
         layer->layer = paintLayer;
         layer->channel = qobject_cast<KisRasterKeyframeChannel*>
-            (paintLayer->getKeyframeChannel(KisKeyframeChannel::Content.id(), true));
+            (paintLayer->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true));
     }
 
 

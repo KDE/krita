@@ -1,29 +1,18 @@
-﻿/*
+/*
  *  Copyright (c) 2019 Kuntal Majumder <hellozee@disroot.org>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "KisToolSelectMagnetic.h"
 
 #include <QApplication>
-#include <QPainter>
-#include <QWidget>
-#include <QPainterPath>
 #include <QLayout>
+#include <QPainter>
+#include <QPainterPath>
+#include <QPushButton>
 #include <QVBoxLayout>
+#include <QWidget>
 
 #include <kis_debug.h>
 #include <klocalizedstring.h>
@@ -221,6 +210,7 @@ void KisToolSelectMagnetic::beginPrimaryAction(KoPointerEvent *event)
         m_pointCollection.push_back(edge);
     } else {
         updateInitialAnchorBounds(temp.toPoint());
+        emit setButtonsEnabled(true);
     }
 
     m_lastAnchor = temp.toPoint();
@@ -542,7 +532,7 @@ void KisToolSelectMagnetic::updatePaintPath()
 
 void KisToolSelectMagnetic::paint(QPainter& gc, const KoViewConverter &converter)
 {
-    Q_UNUSED(converter)
+    Q_UNUSED(converter);
     updatePaintPath();
     if ((mode() == KisTool::PAINT_MODE || m_continuedMode) &&
         !m_anchorPoints.isEmpty())
@@ -635,6 +625,7 @@ void KisToolSelectMagnetic::requestStrokeEnd()
 {
     if (m_finished || m_anchorPoints.count() < 2) return;
 
+    setButtonsEnabled(false);
     finishSelectionAction();
     m_finished = false;
 }
@@ -643,6 +634,7 @@ void KisToolSelectMagnetic::requestStrokeCancellation()
 {
     m_complete = false;
     m_finished = false;
+    setButtonsEnabled(false);
     resetVariables();
 }
 
@@ -658,7 +650,8 @@ QWidget * KisToolSelectMagnetic::createOptionWidget()
     filterRadiusInput->setObjectName("radius");
     filterRadiusInput->setRange(2.5, 100.0, 2);
     filterRadiusInput->setSingleStep(0.5);
-    filterRadiusInput->setToolTip("Radius of the filter for the detecting edges, might take some time to calculate");
+    filterRadiusInput->setToolTip(
+        i18nc("@info:tooltip", "Radius of the filter for the detecting edges, might take some time to calculate"));
     f1->addWidget(filterRadiusInput);
     connect(filterRadiusInput, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetFilterRadius(qreal)));
 
@@ -670,7 +663,7 @@ QWidget * KisToolSelectMagnetic::createOptionWidget()
     thresholdInput->setObjectName("threshold");
     thresholdInput->setRange(1, 255);
     thresholdInput->setSingleStep(10);
-    thresholdInput->setToolTip("Threshold for determining the minimum intensity of the edges");
+    thresholdInput->setToolTip(i18nc("@info:tooltip", "Threshold for determining the minimum intensity of the edges"));
     f2->addWidget(thresholdInput);
     connect(thresholdInput, SIGNAL(valueChanged(int)), this, SLOT(slotSetThreshold(int)));
 
@@ -682,7 +675,7 @@ QWidget * KisToolSelectMagnetic::createOptionWidget()
     searchRadiusInput->setObjectName("frequency");
     searchRadiusInput->setRange(20, 200);
     searchRadiusInput->setSingleStep(10);
-    searchRadiusInput->setToolTip("Extra area to be searched");
+    searchRadiusInput->setToolTip(i18nc("@info:tooltip", "Extra area to be searched"));
     searchRadiusInput->setSuffix(" px");
     f3->addWidget(searchRadiusInput);
     connect(searchRadiusInput, SIGNAL(valueChanged(int)), this, SLOT(slotSetSearchRadius(int)));
@@ -695,18 +688,36 @@ QWidget * KisToolSelectMagnetic::createOptionWidget()
     anchorGapInput->setObjectName("anchorgap");
     anchorGapInput->setRange(20, 200);
     anchorGapInput->setSingleStep(10);
-    anchorGapInput->setToolTip("Gap between 2 anchors in interative mode");
+    anchorGapInput->setToolTip(i18nc("@info:tooltip", "Gap between 2 anchors in interactive mode"));
     anchorGapInput->setSuffix(" px");
     f4->addWidget(anchorGapInput);
 
     connect(anchorGapInput, SIGNAL(valueChanged(int)), this, SLOT(slotSetAnchorGap(int)));
+
+    QHBoxLayout *f5 = new QHBoxLayout();
+    QPushButton* completeSelection = new QPushButton(i18nc("Complete the selection", "Complete"), selectionWidget);
+    QPushButton* discardSelection = new QPushButton(i18nc("Discard the selection", "Discard"), selectionWidget);
+
+    f5->addWidget(completeSelection);
+    f5->addWidget(discardSelection);
+
+    completeSelection->setEnabled(false);
+    completeSelection->setToolTip(i18nc("@info:tooltip", "Complete Selection"));
+    connect(completeSelection, SIGNAL(clicked()), this, SLOT(requestStrokeEnd()));
+    connect(this, SIGNAL(setButtonsEnabled(bool)), completeSelection, SLOT(setEnabled(bool)));
+
+    discardSelection->setEnabled(false);
+    discardSelection->setToolTip(i18nc("@info:tooltip", "Discard Selection"));
+    connect(discardSelection, SIGNAL(clicked()), this, SLOT(requestStrokeCancellation()));
+    connect(this, SIGNAL(setButtonsEnabled(bool)), discardSelection, SLOT(setEnabled(bool)));
 
     QVBoxLayout *l = dynamic_cast<QVBoxLayout *>(selectionWidget->layout());
 
     l->insertLayout(1, f1);
     l->insertLayout(2, f2);
     l->insertLayout(3, f3);
-    l->insertLayout(5, f4);
+    l->insertLayout(4, f4);
+    l->insertLayout(5, f5);
 
     filterRadiusInput->setValue(m_configGroup.readEntry("filterradius", 3.0));
     thresholdInput->setValue(m_configGroup.readEntry("threshold", 100));
@@ -714,6 +725,7 @@ QWidget * KisToolSelectMagnetic::createOptionWidget()
     anchorGapInput->setValue(m_configGroup.readEntry("anchorgap", 20));
 
     return selectionWidget;
+
 } // KisToolSelectMagnetic::createOptionWidget
 
 void KisToolSelectMagnetic::slotSetFilterRadius(qreal r)

@@ -1,31 +1,20 @@
 /*
  *  Copyright (c) 2016 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_colorize_mask_test.h"
 
 #include <QTest>
 
-#include "testutil.h"
+#include <testutil.h>
 #include "lazybrush/kis_colorize_mask.h"
 #include "kis_paint_device_debug_utils.h"
 #include "kis_global.h"
 #include "lazybrush/kis_lazy_fill_tools.h"
 #include "kundo2command.h"
+#include "kistest.h"
 
 #include <KoColor.h>
 
@@ -45,7 +34,7 @@ struct ColorizeMaskTester
 
         // KIS_DUMP_DEVICE_2(src, refRect, "src", "dd");
 
-        mask = new KisColorizeMask();
+        mask = new KisColorizeMask(p.image, "mask1");
         p.image->addNode(mask, p.layer);
 
         mask->initializeCompositeOp();
@@ -139,7 +128,7 @@ void KisColorizeMaskTest::test()
     QCOMPARE(strokes[1].color.colorSpace(), oldCS);
     QCOMPARE(strokes[2].color.colorSpace(), oldCS);
 
-    KUndo2Command *cmd = t.mask->setColorSpace(newCS);
+    QScopedPointer<KUndo2Command> cmd(t.mask->setColorSpace(newCS));
     cmd->redo();
     strokes = t.mask->fetchKeyStrokesDirect();
 
@@ -215,4 +204,4 @@ void KisColorizeMaskTest::testCrop()
     QCOMPARE(strokes[2].dev->exactBounds(), QRect(0,0,5,5));
 }
 
-QTEST_MAIN(KisColorizeMaskTest)
+KISTEST_MAIN(KisColorizeMaskTest)

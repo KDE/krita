@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2017 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "KoShapeGradientHandles.h"
@@ -99,15 +87,15 @@ KUndo2Command *KoShapeGradientHandles::moveGradientHandle(KoShapeGradientHandles
     QTransform originalTransform = wrapper.gradientTransform();
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(originalGradient, 0);
 
-    QGradient *newGradient = 0;
+    QScopedPointer<QGradient> newGradient;
 
     switch (originalGradient->type()) {
     case QGradient::LinearGradient: {
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(handleType == Handle::LinearStart ||
                                              handleType == Handle::LinearEnd, 0);
 
-        newGradient = KoFlake::cloneGradient(originalGradient);
-        QLinearGradient *lgradient = static_cast<QLinearGradient*>(newGradient);
+        newGradient.reset(KoFlake::cloneGradient(originalGradient));
+        QLinearGradient *lgradient = static_cast<QLinearGradient*>(newGradient.data());
 
         if (handleType == Handle::LinearStart) {
             lgradient->setStart(getNewHandlePos(lgradient->start(), absoluteOffset, newGradient->coordinateMode()));
@@ -118,8 +106,8 @@ KUndo2Command *KoShapeGradientHandles::moveGradientHandle(KoShapeGradientHandles
         break;
     }
     case QGradient::RadialGradient: {
-        newGradient = KoFlake::cloneGradient(originalGradient);
-        QRadialGradient *rgradient = static_cast<QRadialGradient*>(newGradient);
+        newGradient.reset(KoFlake::cloneGradient(originalGradient));
+        QRadialGradient *rgradient = static_cast<QRadialGradient*>(newGradient.data());
 
         if (handleType == Handle::RadialCenter) {
             rgradient->setCenter(getNewHandlePos(rgradient->center(), absoluteOffset, newGradient->coordinateMode()));
@@ -140,7 +128,7 @@ KUndo2Command *KoShapeGradientHandles::moveGradientHandle(KoShapeGradientHandles
         break;
     }
 
-    return wrapper.setGradient(newGradient, originalTransform);
+    return wrapper.setGradient(newGradient.data(), originalTransform);
 }
 
 KoShapeGradientHandles::Handle KoShapeGradientHandles::getHandle(KoShapeGradientHandles::Handle::Type handleType)

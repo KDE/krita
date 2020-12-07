@@ -2,19 +2,7 @@
  *  Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
  *
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include <KoIcon.h>
@@ -46,6 +34,7 @@
 #include "kis_keyframe_channel.h"
 
 #include "kis_image_config.h"
+#include "kis_lod_capable_layer_offset.h"
 
 //#include "kis_paint_device_debug_utils.h"
 //#define DEBUG_RENDERING
@@ -55,10 +44,11 @@
 
 struct Q_DECL_HIDDEN KisTransformMask::Private
 {
-    Private()
+    Private(KisImageSP image)
         : worker(0, QTransform(), 0),
           staticCacheValid(false),
           recalculatingStaticImage(false),
+          offset(new KisDefaultBounds(image)),
           updateSignalCompressor(UPDATE_DELAY, KisSignalCompressor::POSTPONE),
           offBoundsReadArea(0.5)
     {
@@ -69,6 +59,7 @@ struct Q_DECL_HIDDEN KisTransformMask::Private
           params(rhs.params),
           staticCacheValid(rhs.staticCacheValid),
           recalculatingStaticImage(rhs.recalculatingStaticImage),
+          offset(rhs.offset),
           updateSignalCompressor(UPDATE_DELAY, KisSignalCompressor::POSTPONE),
           offBoundsReadArea(rhs.offBoundsReadArea)
     {
@@ -93,14 +84,16 @@ struct Q_DECL_HIDDEN KisTransformMask::Private
     bool recalculatingStaticImage;
     KisPaintDeviceSP staticCacheDevice;
 
+    KisLodCapableLayerOffset offset;
+
     KisThreadSafeSignalCompressor updateSignalCompressor;
     qreal offBoundsReadArea;
 };
 
 
-KisTransformMask::KisTransformMask(const QString &name)
-    : KisEffectMask(name),
-      m_d(new Private())
+KisTransformMask::KisTransformMask(KisImageWSP image, const QString &name)
+    : KisEffectMask(image, name),
+      m_d(new Private(image))
 {
     setTransformParams(
         KisTransformMaskParamsInterfaceSP(
@@ -109,6 +102,7 @@ KisTransformMask::KisTransformMask(const QString &name)
     connect(&m_d->updateSignalCompressor, SIGNAL(timeout()), SLOT(slotDelayedStaticUpdate()));
     connect(this, SIGNAL(sigInternalForceStaticImageUpdate()), SLOT(slotInternalForceStaticImageUpdate()));
     m_d->offBoundsReadArea = KisImageConfig(true).transformMaskOffBoundsReadArea();
+    setSupportsLodMoves(false);
 }
 
 KisTransformMask::~KisTransformMask()
@@ -195,7 +189,12 @@ void KisTransformMask::recaclulateStaticImage()
      */
 
     KisLayerSP parentLayer = qobject_cast<KisLayer*>(parent().data());
-    KIS_ASSERT_RECOVER_RETURN(parentLayer);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(parentLayer);
+
+    // It might happen that the mask became invisible in the meantime
+    // and the projection has become disabled. That mush be "impossible"
+    // situation, hence assert.
+    KIS_SAFE_ASSERT_RECOVER_RETURN(parentLayer->projection() != parentLayer->paintDevice());
 
     if (!m_d->staticCacheDevice ||
         *m_d->staticCacheDevice->colorSpace() != *parentLayer->original()->colorSpace()) {
@@ -427,18 +426,28 @@ QRect KisTransformMask::sourceDataBounds() const
     return partialChangeRect;
 }
 
+qint32 KisTransformMask::x() const
+{
+    return m_d->offset.x();
+}
+
+qint32 KisTransformMask::y() const
+{
+    return m_d->offset.y();
+}
+
 void KisTransformMask::setX(qint32 x)
 {
     m_d->params->translate(QPointF(x - this->x(), 0));
     setTransformParams(m_d->params);
-    KisEffectMask::setX(x);
+    m_d->offset.setX(x);
 }
 
 void KisTransformMask::setY(qint32 y)
 {
     m_d->params->translate(QPointF(0, y - this->y()));
     setTransformParams(m_d->params);
-    KisEffectMask::setY(y);
+    m_d->offset.setY(y);
 }
 
 void KisTransformMask::forceUpdateTimedNode()
@@ -459,6 +468,12 @@ bool KisTransformMask::hasPendingTimedUpdates() const
 void KisTransformMask::threadSafeForceStaticImageUpdate()
 {
     emit sigInternalForceStaticImageUpdate();
+}
+
+void KisTransformMask::syncLodCache()
+{
+    m_d->offset.syncLodOffset();
+    KisEffectMask::syncLodCache();
 }
 
 void KisTransformMask::slotInternalForceStaticImageUpdate()

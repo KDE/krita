@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2014 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_transform_utils.h"
@@ -299,6 +287,15 @@ void KisTransformUtils::transformDevice(const ToolTransformArgs &config,
         Q_UNUSED(updater);
 
         config.liquifyWorker()->run(device);
+    } else if (config.mode() == ToolTransformArgs::MESH) {
+        KoUpdaterPtr updater = helper->updater();
+        //FIXME:
+        Q_UNUSED(updater);
+
+        KisPaintDeviceSP srcDevice = new KisPaintDevice(*device);
+        device->clear();
+        config.meshTransform()->transformMesh(srcDevice, device);
+
     } else {
         QVector3D transformedCenter;
         KoUpdaterPtr updater1 = helper->updater();
@@ -356,6 +353,8 @@ QRect KisTransformUtils::needRect(const ToolTransformArgs &config,
     } else if (config.mode() == ToolTransformArgs::LIQUIFY) {
         result = config.liquifyWorker() ?
             config.liquifyWorker()->approxNeedRect(rc, srcBounds) : rc;
+    } else if (config.mode() == ToolTransformArgs::MESH) {
+        result = config.meshTransform()->approxNeedRect(rc);
     } else {
         KIS_ASSERT_RECOVER_NOOP(0 && "this works for non-affine transformations only!");
     }
@@ -389,6 +388,9 @@ QRect KisTransformUtils::changeRect(const ToolTransformArgs &config,
     } else if (config.mode() == ToolTransformArgs::LIQUIFY) {
         result = config.liquifyWorker() ?
             config.liquifyWorker()->approxChangeRect(rc) : rc;
+    } else if (config.mode() == ToolTransformArgs::MESH) {
+        result = config.meshTransform()->approxChangeRect(rc);
+
     } else {
         KIS_ASSERT_RECOVER_NOOP(0 && "this works for non-affine transformations only!");
     }
@@ -481,7 +483,13 @@ ToolTransformArgs KisTransformUtils::resetArgsForMode(ToolTransformArgs::Transfo
         args.setMode(ToolTransformArgs::LIQUIFY);
         const QRect srcRect = transaction.originalRect().toAlignedRect();
         if (!srcRect.isEmpty()) {
-            args.initLiquifyTransformMode(transaction.originalRect().toAlignedRect());
+            args.initLiquifyTransformMode(srcRect);
+        }
+    } else if (mode == ToolTransformArgs::MESH) {
+        args.setMode(ToolTransformArgs::MESH);
+        const QRect srcRect = transaction.originalRect().toAlignedRect();
+        if (!srcRect.isEmpty()) {
+            *args.meshTransform() = KisBezierTransformMesh(QRectF(srcRect));
         }
     } else if (mode == ToolTransformArgs::PERSPECTIVE_4POINT) {
         args.setMode(ToolTransformArgs::PERSPECTIVE_4POINT);

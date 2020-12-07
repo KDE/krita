@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2009 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_async_merger_test.h"
@@ -201,7 +189,7 @@ void KisAsyncMergerTest::testFullRefreshWithClones()
     Q_ASSERT(configuration);
 
     KisLayerSP paintLayer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8, device1);
-    KisFilterMaskSP invertMask1 = new KisFilterMask();
+    KisFilterMaskSP invertMask1 = new KisFilterMask(image, "invert_mask");
     invertMask1->initSelection(paintLayer1);
     invertMask1->setFilter(configuration->cloneWithResourcesSnapshot());
 
@@ -374,7 +362,7 @@ void testFullRefreshForDependentNodes(const DependentNodeType dependentNode,
         KisFilterConfigurationSP configuration = filter->defaultConfiguration(KisGlobalResourcesInterface::instance());
         KIS_ASSERT(configuration);
 
-        KisFilterMaskSP blurMask1 = new KisFilterMask();
+        KisFilterMaskSP blurMask1 = new KisFilterMask(image, "blur_mask");
         blurMask1->initSelection(groupLayer);
         blurMask1->setFilter(configuration->cloneWithResourcesSnapshot());
         image->addNode(blurMask1, testingLayer);
@@ -489,7 +477,7 @@ void KisAsyncMergerTest::testFilterMaskOnFilterLayer()
     KIS_ASSERT(filter2);
     KisFilterConfigurationSP configuration2 = filter2->defaultConfiguration(KisGlobalResourcesInterface::instance());
     KIS_ASSERT(configuration2);
-    KisLayerSP adjLayer2 = new KisAdjustmentLayer(image, "adj2", configuration2, 0);
+    KisLayerSP adjLayer2 = new KisAdjustmentLayer(image, "adj2", configuration2->cloneWithResourcesSnapshot(), 0);
     image->addNode(adjLayer2, image->rootLayer());
 
 
@@ -497,9 +485,9 @@ void KisAsyncMergerTest::testFilterMaskOnFilterLayer()
     KIS_ASSERT(filter3);
     KisFilterConfigurationSP configuration3 = filter3->defaultConfiguration(KisGlobalResourcesInterface::instance());
     KIS_ASSERT(configuration3);
-    KisFilterMaskSP mask3 = new KisFilterMask();
+    KisFilterMaskSP mask3 = new KisFilterMask(image, "mask3");
     mask3->initSelection(adjLayer2);
-    mask3->setFilter(configuration3);
+    mask3->setFilter(configuration3->cloneWithResourcesSnapshot());
     image->addNode(mask3, adjLayer2);
 
     image->initialRefreshGraph();

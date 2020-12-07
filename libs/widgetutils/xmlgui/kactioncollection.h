@@ -8,19 +8,7 @@
               (C) 2002 Ellis Whitehead <ellis@kde.org>
               (C) 2005-2006 Hamish Rodda <rodda@kde.org>
 
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Library General Public
-    License version 2 as published by the Free Software Foundation.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Library General Public License for more details.
-
-    You should have received a copy of the GNU Library General Public License
-    along with this library; see the file COPYING.LIB.  If not, write to
-    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-    Boston, MA 02110-1301, USA.
+    SPDX-License-Identifier: LGPL-2.0-only
 */
 
 #ifndef KACTIONCOLLECTION_H
@@ -304,9 +292,6 @@ public:
      *
      * Inserting an action under a name that is already used for another action will replace
      * the other action in the collection (but will not delete it).
-     *
-     * If KAuthorized::authorizeKAction() reports that the action is not
-     * authorized, it will be disabled and hidden.
      *
      * @param name The name by which the action be retrieved again from the collection.
      * @param action The action to add.

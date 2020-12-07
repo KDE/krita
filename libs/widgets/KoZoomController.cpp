@@ -5,20 +5,7 @@
  * Copyright (C) 2010 Boudewijn Rempt <boud@valdyas.org>
  * Copyright (C) 2011 Arjen Hiemstra <ahiemstra@heimr.nl>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 #include <KoZoomController.h>
 #include <KoZoomController_p.h>
@@ -92,6 +79,8 @@ void KoZoomController::setPageSize(const QSizeF &pageSize)
         setZoom(KoZoomMode::ZOOM_WIDTH, 0);
     if(d->zoomHandler->zoomMode() == KoZoomMode::ZOOM_PAGE)
         setZoom(KoZoomMode::ZOOM_PAGE, 0);
+    if(d->zoomHandler->zoomMode() == KoZoomMode::ZOOM_HEIGHT)
+        setZoom(KoZoomMode::ZOOM_HEIGHT, 0);
 }
 
 QSizeF KoZoomController::pageSize() const
@@ -165,6 +154,13 @@ void KoZoomController::setZoom(KoZoomMode::Mode mode, qreal zoom, qreal resoluti
         d->action->setSelectedZoomMode(mode);
         d->action->setEffectiveZoom(zoom);
     }
+    else if(mode == KoZoomMode::ZOOM_HEIGHT) {
+        zoom = (d->canvasController->viewportSize().height() - 2 * d->fitMargin)
+                / (oldPageViewportSize.height() / d->zoomHandler->zoom());
+
+        d->action->setSelectedZoomMode(mode);
+        d->action->setEffectiveZoom(zoom);
+    }
 
     d->zoomHandler->setZoomMode(mode);
     d->zoomHandler->setZoom(d->action->effectiveZoom());
@@ -190,7 +186,7 @@ void KoZoomController::setZoom(KoZoomMode::Mode mode, qreal zoom, qreal resoluti
 
     // Finally ask the canvasController to recenter
     QPointF documentCenter;
-    if (mode == KoZoomMode::ZOOM_WIDTH || mode == KoZoomMode::ZOOM_PAGE) {
+    if (mode == KoZoomMode::ZOOM_WIDTH || mode == KoZoomMode::ZOOM_PAGE || mode == KoZoomMode::ZOOM_HEIGHT) {
         documentCenter = QRectF(QPointF(), documentViewportSize).center();
     }
     else {

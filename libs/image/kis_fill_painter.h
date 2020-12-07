@@ -2,19 +2,7 @@
  *  Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
  *  Copyright (c) 2004 Bart Coppens <kde@bartcoppens.be>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 #ifndef KIS_FILL_PAINTER_H_
 #define KIS_FILL_PAINTER_H_
@@ -127,14 +115,15 @@ public:
      * @param pattern pattern to use.
      * @param transform transformation to apply to the pattern.
      */
-    void fillRect(const QRect& rc, const KoPatternSP pattern, const QTransform transform);
+    void fillRectNoCompose(const QRect& rc, const KoPatternSP pattern, const QTransform transform);
+
     /**
      * Fill a rectangle with a certain pattern. The pattern is repeated if it does not fit the
      * entire rectangle.
      *
      * This one supports transforms, but does not use blitting.
      */
-    void fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const KisPaintDeviceSP device, const QRect& deviceRect, const QTransform transform);
+    void fillRectNoCompose(qint32 x1, qint32 y1, qint32 w, qint32 h, const KisPaintDeviceSP device, const QRect& deviceRect, const QTransform transform);
 
     /**
      * Fill the specified area with the output of the generator plugin that is configured

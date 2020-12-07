@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgDlgEmbedTags</class>
  <widget class="QWidget" name="WdgDlgEmbedTags">
   <property name="geometry">
@@ -38,12 +42,12 @@
    <property name="horizontalSpacing">
     <number>20</number>
    </property>
-   <item row="0" column="0">
+   <item column="0" row="0">
     <layout class="QGridLayout" name="gridLayout_4">
      <property name="verticalSpacing">
       <number>12</number>
      </property>
-     <item row="0" column="0">
+     <item column="0" row="0">
       <layout class="QHBoxLayout" name="horizontalLayout_2">
        <property name="spacing">
         <number>12</number>
@@ -70,7 +74,7 @@
        </item>
       </layout>
      </item>
-     <item row="1" column="0">
+     <item column="0" row="1">
       <layout class="QHBoxLayout" name="horizontalLayout_3">
        <property name="spacing">
         <number>12</number>
@@ -83,7 +87,7 @@
          <property name="spacing">
           <number>12</number>
          </property>
-         <item row="1" column="1">
+         <item column="1" row="1">
           <widget class="QListWidget" name="tableAvailable">
            <property name="minimumSize">
             <size>
@@ -96,14 +100,14 @@
            </property>
           </widget>
          </item>
-         <item row="0" column="1">
+         <item column="1" row="0">
           <widget class="QLabel" name="label_4">
            <property name="text">
             <string>Available</string>
            </property>
           </widget>
          </item>
-         <item row="2" column="1">
+         <item column="1" row="2">
           <spacer name="verticalSpacer">
            <property name="orientation">
             <enum>Qt::Vertical</enum>
@@ -170,7 +174,7 @@
          <property name="spacing">
           <number>12</number>
          </property>
-         <item row="1" column="0">
+         <item column="0" row="1">
           <widget class="QListWidget" name="tableSelected">
            <property name="minimumSize">
             <size>
@@ -183,14 +187,14 @@
            </property>
           </widget>
          </item>
-         <item row="0" column="0">
+         <item column="0" row="0">
           <widget class="QLabel" name="label_6">
            <property name="text">
             <string>Selected</string>
            </property>
           </widget>
          </item>
-         <item row="2" column="0">
+         <item column="0" row="2">
           <spacer name="verticalSpacer_2">
            <property name="orientation">
             <enum>Qt::Vertical</enum>

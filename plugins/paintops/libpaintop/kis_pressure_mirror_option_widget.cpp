@@ -1,20 +1,7 @@
 /*
  * Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #include "kis_pressure_mirror_option_widget.h"
@@ -33,7 +20,6 @@ KisPressureMirrorOptionWidget::KisPressureMirrorOptionWidget()
 {
     setObjectName("KisPressureMirrorOptionWidget");
 
-    QWidget* w = new QWidget;
     m_horizontalMirror = new QCheckBox(i18n("Horizontally"));
     m_horizontalMirror->setChecked(false);
     m_verticalMirror = new QCheckBox(i18n("Vertically"));
@@ -46,13 +32,13 @@ KisPressureMirrorOptionWidget::KisPressureMirrorOptionWidget()
     hl->addWidget(m_horizontalMirror);
     hl->addWidget(m_verticalMirror);
 
-    QVBoxLayout* vl = new QVBoxLayout;
-    vl->setMargin(0);
-    vl->addLayout(hl);
-    vl->addWidget(curveWidget());
+    QWidget* page = new QWidget;
+    QVBoxLayout* pageLayout = new QVBoxLayout(page);
+    pageLayout->setMargin(0);
+    pageLayout->addLayout(hl);
+    pageLayout->addWidget(curveWidget());
 
-    w->setLayout(vl);
-    setConfigurationPage(w);
+    setConfigurationPage(page);
     horizontalMirrorChanged(m_horizontalMirror->isChecked());
     verticalMirrorChanged(m_verticalMirror->isChecked());
 }

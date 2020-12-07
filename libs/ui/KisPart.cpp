@@ -6,20 +6,7 @@
  * Copyright (C) 2011 Inge Wallin            <ingwa@kogmbh.com>
  * Copyright (C) 2015 Michael Abrahams       <miabraha@gmail.com>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #include "KisPart.h"
@@ -62,16 +49,17 @@
 #include <KisMimeDatabase.h>
 #include <dialogs/KisSessionManagerDialog.h>
 
+#include <kis_group_layer.h>
 #include "kis_config.h"
 #include "kis_shape_controller.h"
 #include "KisResourceServerProvider.h"
 #include "kis_animation_cache_populator.h"
 #include "kis_image_animation_interface.h"
-#include "kis_time_range.h"
+#include "kis_time_span.h"
 #include "kis_idle_watcher.h"
 #include "kis_image.h"
 #include "KisOpenPane.h"
-
+#include "KisTranslateLayerNamesVisitor.h"
 #include "kis_color_manager.h"
 
 #include "kis_action.h"
@@ -486,10 +474,9 @@ KisAnimationCachePopulator* KisPart::cachePopulator() const
 
 void KisPart::prioritizeFrameForCache(KisImageSP image, int frame) {
     KisImageAnimationInterface* animInterface = image->animationInterface();
-    KIS_SAFE_ASSERT_RECOVER_RETURN(animInterface->fullClipRange().contains(frame));
-
-    d->animationCachePopulator.requestRegenerationWithPriorityFrame(image, frame);
-
+    if ( animInterface && animInterface->fullClipRange().contains(frame)) {
+        d->animationCachePopulator.requestRegenerationWithPriorityFrame(image, frame);
+    }
 }
 
 void KisPart::openExistingFile(const QUrl &url)
@@ -523,7 +510,7 @@ void KisPart::updateShortcuts()
             if (action->shortcut() == QKeySequence(0))
                 action->setToolTip(strippedTooltip);
             else
-                action->setToolTip( strippedTooltip + " (" + action->shortcut().toString() + ")");
+                action->setToolTip( strippedTooltip + " (" + action->shortcut().toString(QKeySequence::NativeText) + ")");
         }
     }
 }
@@ -547,14 +534,19 @@ void KisPart::openTemplate(const QUrl &url)
     }
     else {
         if (document->errorMessage().isEmpty()) {
-            QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not create document from template\n%1", document->localFilePath()));
+            QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Could not create document from template\n%1", document->localFilePath()));
         }
         else {
-            QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not create document from template\n%1\nReason: %2", document->localFilePath(), document->errorMessage()));
+            QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Could not create document from template\n%1\nReason: %2", document->localFilePath(), document->errorMessage()));
         }
         delete document;
         return;
     }
+    QMap<QString, QString> dictionary;
+    // XXX: fill the dictionary from the desktop file
+    KisTranslateLayerNamesVisitor v(dictionary);
+    document->image()->rootLayer()->accept(v);
+
     addDocument(document);
 
     KisMainWindow *mw = currentMainwindow();

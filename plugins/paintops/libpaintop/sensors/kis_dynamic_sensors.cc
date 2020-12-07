@@ -2,19 +2,7 @@
  *  Copyright (c) 2007,2010 Cyrille Berger <cberger@cberger.net>
  *  Copyright (c) 2011 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
- *  This library is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This library is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU Lesser General Public License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #include "kis_dynamic_sensors.h"
@@ -33,19 +21,9 @@ qreal KisDynamicSensorSpeed::value(const KisPaintInformation& info)
      * a big image. If you need smaller speeds, just change the curve.
      */
     const qreal maxSpeed = 30.0; // px / ms
-    const qreal blendExponent = 0.05;
+    const qreal currentSpeed = qMin(1.0, info.drawingSpeed() / maxSpeed);
 
-    qreal currentSpeed = info.drawingSpeed() / maxSpeed;
-
-    if (m_speed >= 0.0) {
-        m_speed = qMin(1.0, (m_speed * (1 - blendExponent) +
-                             currentSpeed * blendExponent));
-    }
-    else {
-        m_speed = currentSpeed;
-    }
-
-    return m_speed;
+    return currentSpeed;
 }
 
 KisDynamicSensorRotation::KisDynamicSensorRotation()
@@ -60,7 +38,6 @@ KisDynamicSensorPressure::KisDynamicSensorPressure()
 
 KisDynamicSensorPressureIn::KisDynamicSensorPressureIn() 
     : KisDynamicSensor(PRESSURE_IN)
-    , lastPressure(0.0)
 {
 }
 

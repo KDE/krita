@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2015 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_node_filter_proxy_model.h"
@@ -25,6 +13,7 @@
 #include "kis_node_model.h"
 #include "kis_node_manager.h"
 #include "kis_signal_compressor.h"
+#include "kis_signal_auto_connection.h"
 
 #include "kis_image.h"
 
@@ -43,6 +32,7 @@ struct KisNodeFilterProxyModel::Private
     boost::optional<QString> activeTextFilter;
     KisSignalCompressor activeNodeCompressor;
     bool isUpdatingFilter = false;
+    KisSignalAutoConnectionsStore modelConnections;
 
     bool checkIndexAllowedRecursively(QModelIndex srcIndex);
 };
@@ -60,6 +50,10 @@ KisNodeFilterProxyModel::~KisNodeFilterProxyModel()
 
 void KisNodeFilterProxyModel::setNodeModel(KisNodeModel *model)
 {
+    m_d->modelConnections.clear();
+    m_d->modelConnections.addConnection(model, SIGNAL(sigBeforeBeginRemoveRows(const QModelIndex &, int, int)),
+                                        this, SLOT(slotBeforeBeginRemoveRows(const QModelIndex &, int, int)));
+
     m_d->nodeModel = model;
     setSourceModel(model);
 }
@@ -173,6 +167,18 @@ void KisNodeFilterProxyModel::slotUpdateCurrentNodeFilter()
     m_d->isUpdatingFilter = true;
     invalidateFilter();
     m_d->isUpdatingFilter = false;
+}
+
+void KisNodeFilterProxyModel::slotBeforeBeginRemoveRows(const QModelIndex &parent, int start, int end)
+{
+    for (int row = start; row <= end; row++) {
+        const QModelIndex sourceIndex = sourceModel()->index(row, 0, parent);
+        const QModelIndex mappedIndex = mapFromSource(sourceIndex);
+
+        if (mappedIndex.isValid()) {
+            emit sigBeforeBeginRemoveRows(mappedIndex.parent(), mappedIndex.row(), mappedIndex.row());
+        }
+    }
 }
 
 void KisNodeFilterProxyModel::unsetDummiesFacade()

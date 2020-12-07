@@ -2,19 +2,7 @@
  *  Copyright (c) 2005 Michael Thaler
  *  Copyright (c) 2011 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_selection_filters.h"
@@ -345,13 +333,10 @@ void KisBorderSelectionFilter::process(KisPixelSelectionSP pixelSelection, const
         const qreal minRadius = maxRadius - 1.0;
 
         for (qint32 x = 0; x < (m_xRadius + 1); x++) {
-            double tmpx, tmpy, dist;
+            double dist;
             quint8 a;
 
-            tmpx = x > 0.0 ? x - 0.5 : 0.0;
-
             for (qint32 y = 0; y < (m_yRadius + 1); y++) {
-                tmpy = y > 0.0 ? y - 0.5 : 0.0;
 
                 dist = sqrt(pow2(x) + pow2(y));
 

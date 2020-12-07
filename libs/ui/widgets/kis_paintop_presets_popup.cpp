@@ -3,20 +3,7 @@
  * Copyright (C) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  * Copyright (C) 2011 Silvio Heinrich <plassy@web.de>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #include "widgets/kis_paintop_presets_popup.h"
@@ -563,13 +550,18 @@ void KisPaintOpPresetsPopup::resourceSelected(KoResourceSP resource)
     // when viewing the names, so replace them with spaces
     QString formattedBrushName = resource->name().replace("_", " ");
 
+    m_d->uiWdgPaintOpPresetSettings.currentBrushNameLabel->setToolTip(formattedBrushName);
+    formattedBrushName = this->fontMetrics().elidedText(formattedBrushName, Qt::ElideRight, m_d->uiWdgPaintOpPresetSettings.currentBrushNameLabel->width());
     m_d->uiWdgPaintOpPresetSettings.currentBrushNameLabel->setText(formattedBrushName);
     m_d->uiWdgPaintOpPresetSettings.currentBrushEngineLabel->setText(i18nc("%1 is the name of a brush engine", "%1 Engine", currentBrushEngineName));
     m_d->uiWdgPaintOpPresetSettings.currentBrushEngineIcon->setPixmap(currentBrushEngineIcon);
     m_d->uiWdgPaintOpPresetSettings.renameBrushNameTextField->setText(resource->name()); // use file name
 
     // get the preset image and pop it into the thumbnail area on the top of the brush editor
-    m_d->uiWdgPaintOpPresetSettings.presetThumbnailicon->setPixmap(QPixmap::fromImage(resource->image().scaled(55, 55, Qt::KeepAspectRatio, Qt::SmoothTransformation)));
+    QSize thumbSize = QSize(55, 55)*devicePixelRatioF();
+    QPixmap thumbnail = QPixmap::fromImage(resource->image().scaled(thumbSize, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    thumbnail.setDevicePixelRatio(devicePixelRatioF());
+    m_d->uiWdgPaintOpPresetSettings.presetThumbnailicon->setPixmap(thumbnail);
 
     toggleBrushRenameUIActive(false); // reset the UI state of renaming a brush if we are changing brush presets
     slotUpdatePresetSettings(); // check to see if the dirty preset icon needs to be shown

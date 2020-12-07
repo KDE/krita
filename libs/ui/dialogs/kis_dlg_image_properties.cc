@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_dlg_image_properties.h"
@@ -30,7 +18,6 @@
 
 #include <klocalizedstring.h>
 
-
 #include <KoColorSpace.h>
 #include <KoColorProfile.h>
 #include <KoColorSpaceRegistry.h>
@@ -44,7 +31,6 @@
 #include <kis_config.h>
 #include <kis_signal_compressor.h>
 #include <kis_image_config.h>
-
 #include "widgets/kis_cmb_idlist.h"
 #include <KisSqueezedComboBox.h>
 #include "kis_layer_utils.h"
@@ -66,6 +52,7 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageWSP image, QWidget *parent,
 
     m_page->lblWidthValue->setText(QString::number(image->width()));
     m_page->lblHeightValue->setText(QString::number(image->height()));
+    m_page->lblLayerCount->setText(QString::number(image->nlayers()));
 
     m_page->lblResolutionValue->setText(QLocale().toString(image->xRes()*72, 2)); // XXX: separate values for x & y?
 
@@ -136,6 +123,12 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageWSP image, QWidget *parent,
     connect(m_page->cmbAnnotations, SIGNAL(activated(QString)), SLOT(setAnnotation(QString)));
     setAnnotation(m_page->cmbAnnotations->currentText());
     connect(this, SIGNAL(accepted()), SLOT(slotSaveDialogState()));
+
+    connect(m_page->colorSpaceSelector,
+            SIGNAL(colorSpaceChanged(const KoColorSpace*)),
+            SLOT(slotColorSpaceChanged(const KoColorSpace*)));
+
+    slotColorSpaceChanged(m_image->colorSpace());
 }
 
 KisDlgImageProperties::~KisDlgImageProperties()
@@ -194,6 +187,19 @@ void KisDlgImageProperties::slotSaveDialogState()
 
     KisConfig cfg(false);
     cfg.setConvertLayerColorSpaceInProperties(m_page->chkConvertLayers->isChecked());
+}
+
+void KisDlgImageProperties::slotColorSpaceChanged(const KoColorSpace *cs)
+{
+    if (*m_image->profile() != *cs->profile() &&
+        !KisLayerUtils::canChangeImageProfileInvisibly(m_image)) {
+
+        m_page->wdgWarningNotice->setVisible(true);
+        m_page->wdgWarningNotice->setText(
+                    m_page->wdgWarningNotice->changeImageProfileWarningText());
+    } else {
+        m_page->wdgWarningNotice->setVisible(false);
+    }
 }
 
 void KisDlgImageProperties::setAnnotation(const QString &type)

@@ -2,22 +2,11 @@
   * This file is part of the KDE project
   * Copyright (C) 2019 Sharaf Zaman <sharafzaz121@gmail.com>
   *
-  * This program is free software; you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation; either version 2 of the License, or
-  * (at your option) any later version.
-  *
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with this program; if not, write to the Free Software
-  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+  * SPDX-License-Identifier: GPL-2.0-or-later
   */
 
 #include "KisAndroidFileManager.h"
+#include <QUrl>
 
 #include <kis_debug.h>
 
@@ -68,6 +57,55 @@ void KisAndroidFileManager::openImportFile()
     }
 }
 
+void KisAndroidFileManager::takePersistableUriPermission(const QUrl &url)
+{
+    QAndroidJniObject rawUri = QAndroidJniObject::fromString(url.toString());
+    QAndroidJniObject uri = QAndroidJniObject::callStaticObjectMethod("android/net/Uri",
+                                                                      "parse",
+                                                                      "(Ljava/lang/String;)Landroid/net/Uri;",
+                                                                      rawUri.object());
+    if (uri.isValid()) {
+        takePersistableUriPermission(uri);
+    } else {
+        warnKrita << "Uri returned is not valid";
+    }
+}
+
+QString KisAndroidFileManager::mimeType(const QString& uri)
+{
+    QAndroidJniObject mimeType = QAndroidJniObject::callStaticObjectMethod(
+        "org/qtproject/qt5/android/QtNative",
+        "getMimeTypeFromUri",
+        "(Landroid/content/Context;Ljava/lang/String;)Ljava/lang/String;",
+        QtAndroid::androidContext().object(),
+        QAndroidJniObject::fromString(uri).object());
+
+    if (mimeType.isValid()) {
+        return mimeType.toString();
+    } else {
+        return QString();
+    }
+}
+
+void KisAndroidFileManager::takePersistableUriPermission(const QAndroidJniObject& uri)
+{
+    int mode = QAndroidJniObject::getStaticField<jint>("android/content/Intent",
+                                                       "FLAG_GRANT_WRITE_URI_PERMISSION");
+
+    mode |= QAndroidJniObject::getStaticField<jint>("android/content/Intent",
+                                                    "FLAG_GRANT_READ_URI_PERMISSION");
+
+    QAndroidJniObject contentResolver = QtAndroid::androidActivity()
+            .callObjectMethod("getContentResolver",
+                              "()Landroid/content/ContentResolver;");
+
+    // This protects us SecurityException, which might be hard to figure out in future..
+    contentResolver.callMethod<void>("takePersistableUriPermission",
+                                     "(Landroid/net/Uri;I)V",
+                                     uri.object(),
+                                     mode);
+}
+
 void KisAndroidFileManager::ActivityResultReceiver::handleActivityResult(int requestCode, int resultCode, const QAndroidJniObject &data)
 {
     if (requestCode == FILE_PICK_RC)
@@ -85,12 +123,14 @@ void KisAndroidFileManager::ActivityResultReceiver::handleActivityResult(int req
                                                                   uri.object());
                 QString path = pathObject.toString();
                 dbgAndroid << path;
+                _manager->takePersistableUriPermission(uri);
+
                 if (path.isEmpty())
                 {
                     emit _manager->sigEmptyFilePath();
                     return;
                 }
-                emit _manager->sigFileSelected(path);
+                emit _manager->sigFileSelected(QUrl(path));
             }
             else
             {

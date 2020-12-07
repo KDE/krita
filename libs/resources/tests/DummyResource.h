@@ -1,19 +1,7 @@
 /*
  * Copyright (c) 2018 boud <boud@valdyas.org>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 #ifndef DUMMYRESOURCE_H
 #define DUMMYRESOURCE_H
@@ -38,6 +26,11 @@ public:
         }
         QByteArray hash = KoMD5Generator::generateHash(ba);
         setMD5(hash);
+
+        QImage img(512, 512, QImage::Format_RGB32);
+        img.fill(Qt::blue);
+        setImage(img);
+
         setValid(true);
     }
 
@@ -55,8 +48,6 @@ public:
     bool load(KisResourcesInterfaceSP resourcesInterface) override
     {
         Q_UNUSED(resourcesInterface);
-
-        Q_ASSERT(false);
         setValid(true);
         return true;
     }
@@ -75,7 +66,6 @@ public:
 
     bool save() override
     {
-        Q_ASSERT(false);
         return true;
     }
 

@@ -76,6 +76,7 @@ set(kritaflake_SRCS
     KoShapeBackground.cpp
     KoColorBackground.cpp
     KoGradientBackground.cpp
+    KoMeshGradientBackground.cpp
     KoHatchBackground.cpp
     KoPatternBackground.cpp
     KoVectorPatternBackground.cpp
@@ -197,6 +198,9 @@ set(kritaflake_SRCS
     svg/SvgLoadingContext.cpp
     svg/SvgShapeFactory.cpp
     svg/parsers/SvgTransformParser.cpp
+    svg/SvgMeshGradient.cpp
+    svg/SvgMeshPatch.cpp
+    svg/SvgMeshArray.cpp
 
     text/KoSvgText.cpp
     text/KoSvgTextProperties.cpp
@@ -210,6 +214,12 @@ set(kritaflake_SRCS
     FlakeDebug.cpp
     tests/MockShapes.cpp
 )
+
+if (KSeExpr_FOUND)
+    set(kritaflake_SRCS ${kritaflake_SRCS}
+        resources/KisSeExprScript.cpp
+    )
+endif()
 
 ki18n_wrap_ui(kritaflake_SRCS
     tools/PathToolOptionWidgetBase.ui

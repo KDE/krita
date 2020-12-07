@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgStrokeSelection</class>
  <widget class="QWidget" name="WdgStrokeSelection">
   <property name="geometry">
@@ -20,7 +24,7 @@
    <string>New Image</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
-   <item row="0" column="0">
+   <item column="0" row="0">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
       <number>0</number>
@@ -30,14 +34,14 @@
        <string>Stroke</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout">
-       <item row="0" column="0">
+       <item column="0" row="0">
         <widget class="QLabel" name="label_2">
          <property name="text">
           <string>Type:</string>
          </property>
         </widget>
        </item>
-       <item row="0" column="1">
+       <item column="1" row="0">
         <widget class="QComboBox" name="typeBox">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -66,14 +70,14 @@
          </item>
         </widget>
        </item>
-       <item row="1" column="0">
+       <item column="0" row="1">
         <widget class="QLabel" name="label_3">
          <property name="text">
           <string>Line:</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="1">
+       <item column="1" row="1">
         <widget class="QComboBox" name="lineColorBox">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -104,7 +108,7 @@
          </item>
         </widget>
        </item>
-       <item row="1" column="2">
+       <item column="2" row="1">
         <widget class="KColorButton" name="colorSelector">
          <property name="text">
           <string>Color</string>
@@ -123,7 +127,7 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="0">
+       <item column="0" row="2">
         <widget class="QLabel" name="lblSize">
          <property name="text">
           <string>Width:</string>
@@ -133,7 +137,7 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="1">
+       <item column="1" row="2">
         <widget class="QSpinBox" name="lineSize">
          <property name="minimumSize">
           <size>
@@ -155,7 +159,7 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="2">
+       <item column="2" row="2">
         <widget class="QComboBox" name="sizeBox">
          <item>
           <property name="text">
@@ -174,14 +178,14 @@
          </item>
         </widget>
        </item>
-       <item row="3" column="0">
+       <item column="0" row="3">
         <widget class="QLabel" name="label">
          <property name="text">
           <string>Fill:</string>
          </property>
         </widget>
        </item>
-       <item row="3" column="1">
+       <item column="1" row="3">
         <widget class="QComboBox" name="fillBox">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -222,7 +226,7 @@
          </item>
         </widget>
        </item>
-       <item row="3" column="2">
+       <item column="2" row="3">
         <widget class="KColorButton" name="colorFillSelector">
          <property name="text">
           <string>Color</string>

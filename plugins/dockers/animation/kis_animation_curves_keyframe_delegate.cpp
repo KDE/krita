@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2016 Jouni Pentikäinen <joupent@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_animation_curves_keyframe_delegate.h"
@@ -23,6 +11,7 @@
 #include <QVector2D>
 
 #include "kis_animation_curves_model.h"
+#include "kis_scalar_keyframe_channel.h"
 #include "kis_keyframe.h"
 
 const int NODE_RENDER_RADIUS = 4;
@@ -123,7 +112,7 @@ bool KisAnimationCurvesKeyframeDelegate::hasHandle(const QModelIndex index, int 
         interpolatedIndex = index;
     }
 
-    return (interpolatedIndex.data(KisAnimationCurvesModel::InterpolationModeRole).toInt() == KisKeyframe::Bezier);
+    return (interpolatedIndex.data(KisAnimationCurvesModel::InterpolationModeRole).toInt() == KisScalarKeyframe::Bezier);
 }
 
 QPointF KisAnimationCurvesKeyframeDelegate::leftHandle(const QModelIndex index, bool active) const
@@ -152,7 +141,7 @@ QPointF KisAnimationCurvesKeyframeDelegate::handlePosition(const QModelIndex ind
                 (handle == 1 && handlePos.x() < 0)) {
                 handlePos.setX(0);
             }
-        } else if (index.data(KisAnimationCurvesModel::TangentsModeRole).toInt() == KisKeyframe::Smooth) {
+        } else if (index.data(KisAnimationCurvesModel::TangentsModeRole).toInt() == KisScalarKeyframe::Smooth) {
             qreal length = QVector2D(handlePos).length();
             QVector2D opposite(handlePosition(index, active, 1-handle));
             handlePos = (-length * opposite.normalized()).toPointF();

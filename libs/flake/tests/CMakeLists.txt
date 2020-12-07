@@ -13,7 +13,6 @@ ecm_add_tests(
     TestShapeAt.cpp
     TestShapePainting.cpp
     TestKoShapeFactory.cpp
-    TestKoShapeRegistry.cpp
     TestShapeContainer.cpp
     TestShapeGroupCommand.cpp
     TestShapeReorderCommand.cpp

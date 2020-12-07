@@ -2,19 +2,7 @@
  *  Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
  *  Copyright (C) 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "widgets/kis_gradient_chooser.h"
@@ -49,8 +37,7 @@
 #include <KoCanvasResourcesInterface.h>
 
 
-KisCustomGradientDialog::KisCustomGradientDialog(KoAbstractGradientSP gradient, QWidget *parent, const char *name,
-    KoCanvasResourcesInterfaceSP canvasResourcesInterface)
+KisCustomGradientDialog::KisCustomGradientDialog(KoAbstractGradientSP gradient, QWidget *parent, const char *name, KoCanvasResourcesInterfaceSP canvasResourcesInterface)
     : KoDialog(parent, Qt::Dialog)
 {
     setButtons(Ok|Cancel);
@@ -130,7 +117,6 @@ KisGradientChooser::KisGradientChooser(QWidget *parent, const char *name)
     mainLayout->addWidget(buttonWidget);
 
     slotUpdateIcons();
-    setLayout(mainLayout);
 }
 
 KisGradientChooser::~KisGradientChooser()
@@ -184,7 +170,7 @@ void KisGradientChooser::addStopGradient()
     KoStopGradientSP gradient(new KoStopGradient(""));
 
     QList<KoGradientStop> stops;
-    stops << KoGradientStop(0.0, KoColor(QColor(250, 250, 0), KoColorSpaceRegistry::instance()->rgb8()), COLORSTOP) 
+    stops << KoGradientStop(0.0, KoColor(QColor(250, 250, 0), KoColorSpaceRegistry::instance()->rgb8()), COLORSTOP)
         << KoGradientStop(1.0, KoColor(QColor(255, 0, 0, 255), KoColorSpaceRegistry::instance()->rgb8()), COLORSTOP);
     gradient->setType(QGradient::LinearGradient);
     gradient->setName(i18n("unnamed"));
@@ -202,7 +188,9 @@ void KisGradientChooser::addSegmentedGradient()
 
 void KisGradientChooser::addGradient(KoAbstractGradientSP gradient, bool editGradient)
 {
-    KoResourceServer<KoAbstractGradient> * rserver = KoResourceServerProvider::instance()->gradientServer();
+    if (!gradient) return;
+
+    KoResourceServer<KoAbstractGradient> *rserver = KoResourceServerProvider::instance()->gradientServer();
     QString saveLocation = rserver->saveLocation();
 
     gradient->updateVariableColors(m_canvasResourcesInterface);
@@ -256,7 +244,13 @@ void KisGradientChooser::addGradient(KoAbstractGradientSP gradient, bool editGra
 
 void KisGradientChooser::editGradient()
 {
+    if (!currentResource()) {
+        m_itemChooser->setCurrentItem(0);
+    }
+    Q_ASSERT(currentResource());
     addGradient(currentResource().staticCast<KoAbstractGradient>(), true);
+
+
 }
 
 

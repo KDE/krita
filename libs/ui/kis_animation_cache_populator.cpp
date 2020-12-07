@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2015 Jouni Pentikäinen <joupent@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_animation_cache_populator.h"
@@ -31,7 +19,7 @@
 #include "kis_image.h"
 #include "kis_image_animation_interface.h"
 #include "kis_canvas2.h"
-#include "kis_time_range.h"
+#include "kis_time_span.h"
 #include "kis_animation_frame_cache.h"
 #include "kis_update_info.h"
 #include "kis_signal_auto_connection.h"
@@ -135,7 +123,7 @@ struct KisAnimationCachePopulator::Private
             KisAnimationFrameCacheSP cache = KisAnimationFrameCache::cacheForImage(image);
             KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(cache, false);
 
-            bool requested = tryRequestGeneration(cache, KisTimeRange(), priorityFrame);
+            bool requested = tryRequestGeneration(cache, KisTimeSpan(), priorityFrame);
             if (requested) return true;
         }
 
@@ -152,7 +140,7 @@ struct KisAnimationCachePopulator::Private
                 // Let's skip frames affected by changes to the active node (on the active document)
                 // This avoids constant invalidation and regeneration while drawing
                 KisNodeSP activeNode = activeCanvas->viewManager()->nodeManager()->activeNode();
-                KisTimeRange skipRange;
+                KisTimeSpan skipRange;
                 if (activeNode) {
                     const int currentTime = activeCanvas->currentImage()->animationInterface()->currentUITime();
 
@@ -161,7 +149,7 @@ struct KisAnimationCachePopulator::Private
                             skipRange |= channel->affectedFrames(currentTime);
                         }
                     } else {
-                        skipRange = KisTimeRange::infinite(0);
+                        skipRange = KisTimeSpan::infinite(0);
                     }
                 }
 
@@ -178,20 +166,20 @@ struct KisAnimationCachePopulator::Private
                 continue;
             }
 
-            bool requested = tryRequestGeneration(cache, KisTimeRange(), -1);
+            bool requested = tryRequestGeneration(cache, KisTimeSpan(), -1);
             if (requested) return true;
         }
 
         return false;
     }
 
-    bool tryRequestGeneration(KisAnimationFrameCacheSP cache, KisTimeRange skipRange, int priorityFrame)
+    bool tryRequestGeneration(KisAnimationFrameCacheSP cache, KisTimeSpan skipRange, int priorityFrame)
     {
         KisImageSP image = cache->image();
         if (!image) return false;
 
         KisImageAnimationInterface *animation = image->animationInterface();
-        KisTimeRange currentRange = animation->fullClipRange();
+        KisTimeSpan currentRange = animation->fullClipRange();
 
         const int frame = priorityFrame >= 0 ? priorityFrame : KisAsyncAnimationCacheRenderDialog::calcFirstDirtyFrame(cache, currentRange, skipRange);
 

@@ -1,10 +1,7 @@
 /*
  *  Copyright (c) 2016 Laszlo Fazekas <mneko@freemail.hu>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -46,7 +43,7 @@
 #include <kis_paint_device.h>
 #include <kis_raster_keyframe_channel.h>
 #include <kis_image_animation_interface.h>
-#include <kis_time_range.h>
+#include <kis_time_span.h>
 #include <kis_iterator_ng.h>
 
 #include "csv_layer_record.h"
@@ -74,6 +71,7 @@ KisImportExportErrorCode CSVSaver::encode(QIODevice *io)
     int start, end;
     KisNodeSP node;
     QByteArray ba;
+//    KisTimeKeyframePair keyframeEntry;
     KisKeyframeSP keyframe;
     QVector<CSVLayerRecord*> layers;
 
@@ -140,7 +138,7 @@ KisImportExportErrorCode CSVSaver::encode(QIODevice *io)
         node = node->nextSibling();
     }
 
-    KisTimeRange range = animation->fullClipRange();
+    KisTimeSpan range = animation->fullClipRange();
 
     start = (range.isValid()) ? range.start() : 0;
 
@@ -151,15 +149,16 @@ KisImportExportErrorCode CSVSaver::encode(QIODevice *io)
     } else {
         //undefined length, searching for the last keyframe
         end = start;
+        int keyframeTime;
 
         for (idx = 0; idx < layers.size(); idx++) {
             KisRasterKeyframeChannel *channel = layers.at(idx)->channel;
 
             if (channel) {
-                keyframe = channel->lastKeyframe();
+                keyframeTime = channel->lastKeyframeTime();
 
-                if ( (!keyframe.isNull()) && (keyframe->time() > end) )
-                    end = keyframe->time();
+                if ( (channel->keyframeAt(keyframeTime)) && (keyframeTime > end) )
+                    end = keyframeTime;
             }
         }
     }
@@ -307,13 +306,13 @@ KisImportExportErrorCode CSVSaver::encode(QIODevice *io)
                     if (frame == start) {
                         keyframe = channel->activeKeyframeAt(frame);
                     } else {
-                        keyframe = channel->keyframeAt(frame);
+                        keyframe = channel->keyframeAt(frame); //TODO: Ugly...
                     }
                 } else {
                     keyframe.clear(); // without animation
                 }
 
-                if ( !keyframe.isNull() || (frame == start) ) {
+                if ( keyframe || (frame == start) ) {
 
                     if (!m_batchMode) {
                         //emit m_doc->sigProgress(((frame - start) * layers.size() + idx) * 100 /
@@ -396,7 +395,10 @@ KisImportExportErrorCode CSVSaver::getLayer(CSVLayerRecord* layer, KisDocument* 
     KisPaintDeviceSP device = image->rootLayer()->firstChild()->projection();
 
     if (!keyframe.isNull()) {
-        layer->channel->fetchFrame(keyframe, device);
+        KisRasterKeyframeSP rasterKeyframe = keyframe.dynamicCast<KisRasterKeyframe>();
+        if (rasterKeyframe) {
+            rasterKeyframe->writeFrameToDevice(device);
+        }
     } else {
         device->makeCloneFrom(layer->layer->projection(),image->bounds()); // without animation
     }

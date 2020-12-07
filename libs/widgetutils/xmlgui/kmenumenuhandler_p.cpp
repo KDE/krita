@@ -1,20 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2006  Olivier Goffart  <ogoffart@kde.org>
 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
-
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
-
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+   SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
 #include "kmenumenuhandler_p.h"
@@ -123,17 +110,17 @@ void KMenuMenuHandler::slotSetShortcut()
     }
 
     QDialog dialog(m_builder->widget());
-    dialog.setLayout(new QVBoxLayout);
+    QVBoxLayout *layout = new QVBoxLayout(&dialog);
 
-    KShortcutWidget swidget(&dialog);
-    swidget.setShortcut(m_popupAction->shortcuts());
-    dialog.layout()->addWidget(&swidget);
+    KShortcutWidget *swidget = new KShortcutWidget();
+    swidget->setShortcut(m_popupAction->shortcuts());
+    layout->addWidget(swidget);
 
-    QDialogButtonBox box(&dialog);
-    box.setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
-    connect(&box, SIGNAL(accepted()), &dialog, SLOT(accept()));
-    connect(&box, SIGNAL(rejected()), &dialog, SLOT(reject()));
-    dialog.layout()->addWidget(&box);
+    QDialogButtonBox *buttonBox = new QDialogButtonBox();
+    buttonBox->setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    connect(buttonBox, SIGNAL(accepted()), &dialog, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), &dialog, SLOT(reject()));
+    layout->addWidget(buttonBox);
 
     KActionCollection *parentCollection = 0;
     if (dynamic_cast<KXMLGUIClient *>(m_builder)) {
@@ -143,12 +130,12 @@ void KMenuMenuHandler::slotSetShortcut()
         foreach (KXMLGUIClient *client, factory->clients()) {
             checkCollections += client->actionCollection();
         }
-        swidget.setCheckActionCollections(checkCollections);
+        swidget->setCheckActionCollections(checkCollections);
     }
 
     if (dialog.exec()) {
-        m_popupAction->setShortcuts(swidget.shortcut());
-        swidget.applyStealShortcut();
+        m_popupAction->setShortcuts(swidget->shortcut());
+        swidget->applyStealShortcut();
         if (parentCollection) {
             parentCollection->writeSettings();
         }

@@ -3,19 +3,7 @@
  *
  * Copyright (c) 2019 Carl Olsson <carl.olsson@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "palettize.h"
@@ -132,7 +120,7 @@ KisPalettizeWidget::KisPalettizeWidget(QWidget* parent)
     alphaClipSpinBox->setSingleStep(0.125);
     QObject::connect(alphaClipSpinBox, &KisDoubleSliderSpinBox::valueChanged, this, &KisConfigWidget::sigConfigurationItemChanged);
 
-    alphaIndexSpinBox->setPrefix(QString("%1  ").arg(i18n("Index:")));
+    alphaIndexSpinBox->setPrefix(QString("%1  ").arg(i18nc("Index as in Index Color", "Index:")));
     alphaIndexSpinBox->setRange(0, 255);
     QObject::connect(alphaIndexSpinBox, &KisSliderSpinBox::valueChanged, this, &KisConfigWidget::sigConfigurationItemChanged);
     QObject::connect(m_paletteWidget, &KisResourceItemChooser::resourceSelected, [this](){
@@ -185,8 +173,8 @@ KisPropertiesConfigurationSP KisPalettizeWidget::configuration() const
 
 KisConfigWidget* KisFilterPalettize::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev, bool useForMasks) const
 {
-    Q_UNUSED(dev)
-    Q_UNUSED(useForMasks)
+    Q_UNUSED(dev);
+    Q_UNUSED(useForMasks);
 
     return new KisPalettizeWidget(parent);
 }

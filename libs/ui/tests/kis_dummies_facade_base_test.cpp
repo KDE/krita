@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2011 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_dummies_facade_base_test.h"
@@ -90,7 +78,7 @@ void KisDummiesFacadeBaseTest::testSetImage()
     m_dummiesFacade->setImage(m_image);
 
     QString actualGraph = collectGraphPatternFull(m_dummiesFacade->rootDummy());
-    QString expectedGraph = "root layer1 layer2 layer3 effect layer4";
+    QString expectedGraph = "root layer1 layer2 layer3 mask1 layer4";
 
     QCOMPARE(actualGraph, expectedGraph);
     QCOMPARE(m_dummiesFacade->dummiesCount(), 6);
@@ -99,8 +87,8 @@ void KisDummiesFacadeBaseTest::testSetImage()
     QCOMPARE(m_dummiesFacade->dummiesCount(), 0);
 
     verifyActivatedNodes("layer1 __null");
-    verifyMovedDummies("A_root A_layer1 A_layer2 A_layer3 A_effect A_layer4 "
-                       "R_layer4 R_effect R_layer3 R_layer2 R_layer1 R_root");
+    verifyMovedDummies("A_root A_layer1 A_layer2 A_layer3 A_mask1 A_layer4 "
+                       "R_layer4 R_mask1 R_layer3 R_layer2 R_layer1 R_root");
 }
 
 void KisDummiesFacadeBaseTest::testAddNode()
@@ -119,7 +107,7 @@ void KisDummiesFacadeBaseTest::testAddNode()
     constructImage();
 
     actualGraph = collectGraphPatternFull(m_dummiesFacade->rootDummy());
-    expectedGraph = "root layer1 layer2 layer3 effect layer4";
+    expectedGraph = "root layer1 layer2 layer3 mask1 layer4";
 
     QCOMPARE(actualGraph, expectedGraph);
     QCOMPARE(m_dummiesFacade->dummiesCount(), 6);
@@ -127,9 +115,9 @@ void KisDummiesFacadeBaseTest::testAddNode()
     m_dummiesFacade->setImage(0);
     QCOMPARE(m_dummiesFacade->dummiesCount(), 0);
 
-    verifyActivatedNodes("__null layer1 layer2 layer3 layer4 effect __null");
-    verifyMovedDummies("A_root A_layer1 A_layer2 A_layer3 A_layer4 A_effect "
-                       "R_layer4 R_effect R_layer3 R_layer2 R_layer1 R_root");
+    verifyActivatedNodes("__null layer1 layer2 layer3 layer4 mask1 __null");
+    verifyMovedDummies("A_root A_layer1 A_layer2 A_layer3 A_layer4 A_mask1 "
+                       "R_layer4 R_mask1 R_layer3 R_layer2 R_layer1 R_root");
 }
 
 void KisDummiesFacadeBaseTest::testRemoveNode()
@@ -142,7 +130,7 @@ void KisDummiesFacadeBaseTest::testRemoveNode()
     m_dummiesFacade->setImage(m_image);
 
     actualGraph = collectGraphPatternFull(m_dummiesFacade->rootDummy());
-    expectedGraph = "root layer1 layer2 layer3 effect layer4";
+    expectedGraph = "root layer1 layer2 layer3 mask1 layer4";
 
     QCOMPARE(actualGraph, expectedGraph);
     QCOMPARE(m_dummiesFacade->dummiesCount(), 6);
@@ -150,7 +138,7 @@ void KisDummiesFacadeBaseTest::testRemoveNode()
     m_image->removeNode(m_layer2);
 
     actualGraph = collectGraphPatternFull(m_dummiesFacade->rootDummy());
-    expectedGraph = "root layer1 layer3 effect layer4";
+    expectedGraph = "root layer1 layer3 mask1 layer4";
 
     QCOMPARE(actualGraph, expectedGraph);
     QCOMPARE(m_dummiesFacade->dummiesCount(), 5);
@@ -168,8 +156,8 @@ void KisDummiesFacadeBaseTest::testRemoveNode()
     // we are not expected to handle nodes removal, it is done by Qt
     verifyActivatedNodes("layer1 __null");
 
-    verifyMovedDummies("A_root A_layer1 A_layer2 A_layer3 A_effect A_layer4 "
-                       "R_layer2 R_effect R_layer3 R_layer4 R_layer1 R_root");
+    verifyMovedDummies("A_root A_layer1 A_layer2 A_layer3 A_mask1 A_layer4 "
+                       "R_layer2 R_mask1 R_layer3 R_layer4 R_layer1 R_root");
 }
 
 void KisDummiesFacadeBaseTest::testMoveNodeSameParent()
@@ -182,7 +170,7 @@ void KisDummiesFacadeBaseTest::testMoveNodeSameParent()
     m_dummiesFacade->setImage(m_image);
 
     actualGraph = collectGraphPatternFull(m_dummiesFacade->rootDummy());
-    expectedGraph = "root layer1 layer2 layer3 effect layer4";
+    expectedGraph = "root layer1 layer2 layer3 mask1 layer4";
 
     QCOMPARE(actualGraph, expectedGraph);
     QCOMPARE(m_dummiesFacade->dummiesCount(), 6);
@@ -190,7 +178,7 @@ void KisDummiesFacadeBaseTest::testMoveNodeSameParent()
     m_image->moveNode(m_layer2, m_image->root(), m_layer3);
 
     actualGraph = collectGraphPatternFull(m_dummiesFacade->rootDummy());
-    expectedGraph = "root layer1 layer3 effect layer2 layer4";
+    expectedGraph = "root layer1 layer3 mask1 layer2 layer4";
 
     QCOMPARE(actualGraph, expectedGraph);
     QCOMPARE(m_dummiesFacade->dummiesCount(), 6);
@@ -200,9 +188,9 @@ void KisDummiesFacadeBaseTest::testMoveNodeSameParent()
     // layer is first removed then added again
     verifyActivatedNodes("layer1 layer2 __null");
 
-    verifyMovedDummies("A_root A_layer1 A_layer2 A_layer3 A_effect A_layer4 "
+    verifyMovedDummies("A_root A_layer1 A_layer2 A_layer3 A_mask1 A_layer4 "
                        "R_layer2 A_layer2 "
-                       "R_layer4 R_layer2 R_effect R_layer3 R_layer1 R_root");
+                       "R_layer4 R_layer2 R_mask1 R_layer3 R_layer1 R_root");
 }
 
 void KisDummiesFacadeBaseTest::testMoveNodeDifferentParent()
@@ -215,7 +203,7 @@ void KisDummiesFacadeBaseTest::testMoveNodeDifferentParent()
     m_dummiesFacade->setImage(m_image);
 
     actualGraph = collectGraphPatternFull(m_dummiesFacade->rootDummy());
-    expectedGraph = "root layer1 layer2 layer3 effect layer4";
+    expectedGraph = "root layer1 layer2 layer3 mask1 layer4";
 
     QCOMPARE(actualGraph, expectedGraph);
     QCOMPARE(m_dummiesFacade->dummiesCount(), 6);
@@ -223,7 +211,7 @@ void KisDummiesFacadeBaseTest::testMoveNodeDifferentParent()
     m_image->moveNode(m_layer2, m_image->root(), m_layer4);
 
     actualGraph = collectGraphPatternFull(m_dummiesFacade->rootDummy());
-    expectedGraph = "root layer1 layer3 effect layer4 layer2";
+    expectedGraph = "root layer1 layer3 mask1 layer4 layer2";
 
     QCOMPARE(actualGraph, expectedGraph);
     QCOMPARE(m_dummiesFacade->dummiesCount(), 6);
@@ -231,7 +219,7 @@ void KisDummiesFacadeBaseTest::testMoveNodeDifferentParent()
     m_image->moveNode(m_layer3, m_layer4, m_layer4->lastChild());
 
     actualGraph = collectGraphPatternFull(m_dummiesFacade->rootDummy());
-    expectedGraph = "root layer1 layer4 layer3 effect layer2";
+    expectedGraph = "root layer1 layer4 layer3 mask1 layer2";
 
     QCOMPARE(actualGraph, expectedGraph);
     QCOMPARE(m_dummiesFacade->dummiesCount(), 6);
@@ -241,9 +229,9 @@ void KisDummiesFacadeBaseTest::testMoveNodeDifferentParent()
     // layer is first removed then added again
     verifyActivatedNodes("layer1 layer2 layer3 __null");
 
-    verifyMovedDummies("A_root A_layer1 A_layer2 A_layer3 A_effect A_layer4 "
-                       "R_layer2 A_layer2 R_effect R_layer3 A_layer3 A_effect "
-                       "R_layer2 R_effect R_layer3 R_layer4 R_layer1 R_root");
+    verifyMovedDummies("A_root A_layer1 A_layer2 A_layer3 A_mask1 A_layer4 "
+                       "R_layer2 A_layer2 R_mask1 R_layer3 A_layer3 A_mask1 "
+                       "R_layer2 R_mask1 R_layer3 R_layer4 R_layer1 R_root");
 }
 
 void KisDummiesFacadeBaseTest::testSubstituteRootNode()
@@ -256,28 +244,28 @@ void KisDummiesFacadeBaseTest::testSubstituteRootNode()
     m_dummiesFacade->setImage(m_image);
 
     actualGraph = collectGraphPatternFull(m_dummiesFacade->rootDummy());
-    expectedGraph = "root layer1 layer2 layer3 effect layer4";
+    expectedGraph = "root layer1 layer2 layer3 mask1 layer4";
 
     QCOMPARE(actualGraph, expectedGraph);
     QCOMPARE(m_dummiesFacade->dummiesCount(), 6);
 
     m_image->flatten(0);
+    m_image->waitForDone();
+    QTest::qWait(50);
 
     actualGraph = collectGraphPatternFull(m_dummiesFacade->rootDummy());
-    expectedGraph = "root Layer 1";
+    expectedGraph = "root root Merged"; // "root Merged" is the name of the layer :)
 
-    QEXPECT_FAIL("", "Expected 'root Layer 1', got 'root layer1 layer2 layer3 effect layer4'", Continue);
     QCOMPARE(actualGraph, expectedGraph);
-    QEXPECT_FAIL("", "Expected 2 dummies, got 6", Continue);
     QCOMPARE(m_dummiesFacade->dummiesCount(), 2);
 
     m_dummiesFacade->setImage(0);
 
-    verifyActivatedNodes("layer1 __null Layer 1 __null");
-    verifyMovedDummies("A_root A_layer1 A_layer2 A_layer3 A_effect A_layer4 "
-                       "R_layer4 R_effect R_layer3 R_layer2 R_layer1 R_root "
-                       "A_root A_Layer 1 "
-                       "R_Layer 1 R_root");
+    verifyActivatedNodes("layer1 __null root Merged __null");
+    verifyMovedDummies("A_root A_layer1 A_layer2 A_layer3 A_mask1 A_layer4 "
+                       "R_layer4 R_mask1 R_layer3 R_layer2 R_layer1 R_root "
+                       "A_root A_root Merged "
+                       "R_root Merged R_root");
 }
 
 void KisDummiesFacadeBaseTest::testAddSelectionMasksNoActivation()
@@ -297,7 +285,7 @@ void KisDummiesFacadeBaseTest::testAddSelectionMasksNoActivation()
     addSelectionMasks();
 
     actualGraph = collectGraphPatternFull(m_dummiesFacade->rootDummy());
-    expectedGraph = "root selection layer1 layer2 selection layer3 effect selection layer4";
+    expectedGraph = "root sel1 layer1 layer2 sel2 layer3 mask1 sel3 layer4";
 
     QCOMPARE(actualGraph, expectedGraph);
     QCOMPARE(m_dummiesFacade->dummiesCount(), 9);
@@ -305,9 +293,9 @@ void KisDummiesFacadeBaseTest::testAddSelectionMasksNoActivation()
     m_dummiesFacade->setImage(0);
     QCOMPARE(m_dummiesFacade->dummiesCount(), 0);
 
-    verifyActivatedNodes("__null layer1 layer2 layer3 layer4 effect __null");
-    verifyMovedDummies("A_root A_layer1 A_layer2 A_layer3 A_layer4 A_effect "
-                       "A_selection A_selection A_selection "
-                       "R_layer4 R_selection R_effect R_layer3 R_selection "
-                       "R_layer2 R_layer1 R_selection R_root");
+    verifyActivatedNodes("__null layer1 layer2 layer3 layer4 mask1 __null");
+    verifyMovedDummies("A_root A_layer1 A_layer2 A_layer3 A_layer4 A_mask1 "
+                       "A_sel1 A_sel2 A_sel3 "
+                       "R_layer4 R_sel3 R_mask1 R_layer3 R_sel2 "
+                       "R_layer2 R_layer1 R_sel1 R_root");
 }

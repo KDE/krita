@@ -1,19 +1,7 @@
 /*
  * Copyright (C) Wolthera van Hovell tot Westerflier <griffinvalley@gmail.com>, (C) 2016
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 #include "KisVisualColorSelector.h"
 
@@ -136,7 +124,7 @@ void KisVisualColorSelector::slotSetHSX(const QVector3D &hsx)
 
 void KisVisualColorSelector::setConfig(bool forceCircular, bool forceSelfUpdate)
 {
-    Q_UNUSED(forceSelfUpdate)
+    Q_UNUSED(forceSelfUpdate);
     m_d->circular = forceCircular;
 }
 
@@ -369,7 +357,7 @@ void KisVisualColorSelector::slotRebuildSelectors()
     qDeleteAll(children());
     m_d->widgetlist.clear();
     // TODO: Layout only used for monochrome selector currently, but always present
-    QLayout *layout = new QHBoxLayout;
+    QLayout *layout = new QHBoxLayout(this);
     //recreate all the widgets.
     m_d->model = KisVisualColorSelector::Channel;
 
@@ -558,7 +546,6 @@ void KisVisualColorSelector::slotRebuildSelectors()
         m_d->widgetlist.append(block2);
     }
 
-    this->setLayout(layout);
     // make sure we call "our" resize function
     KisVisualColorSelector::resizeEvent(0);
 

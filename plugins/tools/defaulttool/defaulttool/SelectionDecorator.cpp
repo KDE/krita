@@ -3,20 +3,7 @@
    Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
-
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
-
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
 #include "SelectionDecorator.h"
@@ -76,6 +63,18 @@ void SelectionDecorator::setShowFillGradientHandles(bool value)
 void SelectionDecorator::setShowStrokeFillGradientHandles(bool value)
 {
     m_showStrokeFillGradientHandles = value;
+}
+
+void SelectionDecorator::setShowFillMeshGradientHandles(bool value)
+{
+    m_showFillMeshGradientHandles = value;
+}
+
+void SelectionDecorator::setCurrentMeshGradientHandles(const KoShapeMeshGradientHandles::Handle &selectedHandle,
+                                                       const KoShapeMeshGradientHandles::Handle &hoveredHandle)
+{
+    m_selectedMeshHandle = selectedHandle;
+    m_currentHoveredMeshHandle = hoveredHandle;
 }
 
 void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &converter)
@@ -165,7 +164,13 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
         } else if (m_showStrokeFillGradientHandles) {
             paintGradientHandles(shape, KoFlake::StrokeFill, painter, converter);
         }
+
+        // paint meshgradient handles
+        if(m_showFillMeshGradientHandles) {
+            paintMeshGradientHandles(shape, KoFlake::Fill, painter, converter);
+        }
     }
+
 }
 
 void SelectionDecorator::paintGradientHandles(KoShape *shape, KoFlake::FillVariant fillVariant, QPainter &painter, const KoViewConverter &converter)
@@ -194,6 +199,46 @@ void SelectionDecorator::paintGradientHandles(KoShape *shape, KoFlake::FillVaria
             helper.drawGradientCrossHandle(t.map(h.pos), 1.2 * m_handleRadius);
         } else {
             helper.drawGradientHandle(t.map(h.pos), 1.2 * m_handleRadius);
+        }
+    }
+}
+
+void SelectionDecorator::paintMeshGradientHandles(KoShape *shape,
+                                                  KoFlake::FillVariant fillVariant,
+                                                  QPainter &painter,
+                                                  const KoViewConverter &converter)
+{
+    KoShapeMeshGradientHandles gradientHandles(fillVariant, shape);
+
+    KisHandlePainterHelper helper =
+        KoShape::createHandlePainterHelperView(&painter, shape, converter, m_handleRadius);
+    helper.setHandleStyle(KisHandleStyle::secondarySelection());
+
+    helper.drawPath(gradientHandles.path());
+
+    // invert them, because we draw in logical coordinates.
+    QTransform t = shape->absoluteTransformation().inverted();
+    QVector<KoShapeMeshGradientHandles::Handle> cornerHandles = gradientHandles.handles();
+    for (const auto& corner: cornerHandles) {
+        if (corner.type == KoShapeMeshGradientHandles::Handle::BezierHandle) {
+            helper.drawHandleSmallCircle(t.map(corner.pos));
+        } else if (corner.type == KoShapeMeshGradientHandles::Handle::Corner) {
+            helper.drawHandleRect(t.map(corner.pos));
+        }
+    }
+
+    helper.setHandleStyle(KisHandleStyle::highlightedPrimaryHandlesWithSolidOutline());
+
+    // highlight the selected handle (only corner)
+    if (m_selectedMeshHandle.type == KoShapeMeshGradientHandles::Handle::Corner) {
+        helper.drawHandleRect(t.map(gradientHandles.getHandle(m_selectedMeshHandle.getPosition()).pos));
+    }
+
+    // highlight the path which is being hovered/moved
+    if (m_currentHoveredMeshHandle.type != KoShapeMeshGradientHandles::Handle::None) {
+        QVector<QPainterPath> paths = gradientHandles.getConnectedPath(m_currentHoveredMeshHandle);
+        for (const auto &path: paths) {
+            helper.drawPath(path);
         }
     }
 }

@@ -2,10 +2,7 @@
  *  Copyright (c) 2007 Cyrille Berger <cberger@cberger.net>
  *  Copyright (c) 2008 Boudewijn Rempt <boud@valdysa.org>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -198,7 +195,7 @@ void KisDlgFilter::createMask()
     }
 
     KisLayer *layer = qobject_cast<KisLayer*>(d->node.data());
-    KisFilterMaskSP mask = new KisFilterMask(i18n("Filter Mask"));
+    KisFilterMaskSP mask = new KisFilterMask(d->view->image(), i18n("Filter Mask"));
     mask->setName(d->currentFilter->name());
     mask->initSelection(d->view->selection(), layer);
     mask->setFilter(d->uiFilterDialog.filterSelection->configuration()->cloneWithResourcesSnapshot());

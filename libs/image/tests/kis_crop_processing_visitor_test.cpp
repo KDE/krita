@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2011 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_crop_processing_visitor_test.h"
@@ -26,7 +14,7 @@
 #include "kis_paint_device.h"
 #include "kis_fill_painter.h"
 #include "kis_transparency_mask.h"
-#include "testutil.h"
+#include <testutil.h>
 #include "kis_surrogate_undo_adapter.h"
 #include "kis_image.h"
 #include "kis_pixel_selection.h"
@@ -69,7 +57,7 @@ void KisCropProcessingVisitorTest::testCropTransparencyMask()
 
     QRect cropRect(25,25,100,100);
     QRect selectionRect(40,40,100,100);
-    KisTransparencyMaskSP mask = new KisTransparencyMask();
+    KisTransparencyMaskSP mask = new KisTransparencyMask(image, "tmask");
     mask->testingInitSelection(selectionRect, 0);
     KisPixelSelectionSP pixelSelection = mask->selection()->pixelSelection();
 

@@ -1,20 +1,7 @@
 /* This file is part of the KDE project
  * Copyright 2008 (C) Boudewijn Rempt <boud@valdyas.org>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 #include "kis_kra_saver.h"
 
@@ -22,6 +9,8 @@
 #include "kis_kra_save_visitor.h"
 #include "kis_kra_savexml_visitor.h"
 
+#include <QApplication>
+#include <QMessageBox>
 #include <QDomDocument>
 #include <QDomElement>
 #include <QString>
@@ -45,6 +34,7 @@
 #include <kis_annotation.h>
 #include <kis_image.h>
 #include <kis_image_animation_interface.h>
+#include <KisImportExportManager.h>
 #include <kis_group_layer.h>
 #include <kis_layer.h>
 #include <kis_adjustment_layer.h>
@@ -52,7 +42,7 @@
 #include <kis_painting_assistants_decoration.h>
 #include "kis_png_converter.h"
 #include "kis_keyframe_channel.h"
-#include <kis_time_range.h>
+#include <kis_time_span.h>
 #include "KisDocument.h"
 #include <string>
 #include "kis_dom_utils.h"
@@ -159,19 +149,21 @@ bool KisKraSaver::savePalettes(KoStore *store, KisImageSP image, const QString &
     Q_UNUSED(image);
     Q_UNUSED(uri);
 
-    qDebug() << "saving palettes to document" << m_d->doc->paletteList().size();
-
     bool res = false;
     if (m_d->doc->paletteList().size() == 0) {
         return true;
     }
     for (const KoColorSetSP palette : m_d->doc->paletteList()) {
-        qDebug() << "saving palette..." << palette->storageLocation() << palette->filename();
+        // Ensure stored palettes are KPL.
+        palette->setPaletteType(KoColorSet::KPL);
+
         if (!store->open(m_d->imageName + PALETTE_PATH + palette->filename())) {
             m_d->errorMessages << i18n("could not save palettes");
             return false;
         }
+
         QByteArray ba = palette->toByteArray();
+
         if (!ba.isEmpty()) {
             store->write(ba);
         } else {
@@ -180,18 +172,72 @@ bool KisKraSaver::savePalettes(KoStore *store, KisImageSP image, const QString &
         store->close();
         res = true;
     }
+
     return res;
+}
+
+bool KisKraSaver::saveStoryboard(KoStore *store, KisImageSP image, const QString &uri)
+{
+    Q_UNUSED(image);
+    Q_UNUSED(uri);
+
+    if (m_d->doc->getStoryboardItemList().count() == 0) {
+        return true;
+    } else {
+        if (!store->open(m_d->imageName + STORYBOARD_PATH + "index.xml")) {
+            m_d->errorMessages << i18n("could not save storyboards");
+            return false;
+        }
+
+        QDomDocument storyboardDocument = m_d->doc->createDomDocument("storyboard-info", "1.1");
+        QDomElement root = storyboardDocument.documentElement();
+        saveStoryboardToXML(storyboardDocument, root);
+
+        QByteArray ba = storyboardDocument.toByteArray();
+        if (!ba.isEmpty()) {
+            store->write(ba);
+        } else {
+            qWarning() << "Could not save storyboard data to a byte array!";
+        }
+
+        store->close();
+    }
+
+    return true;
 }
 
 void KisKraSaver::savePalettesToXML(QDomDocument &doc, QDomElement &element)
 {
     QDomElement ePalette = doc.createElement(PALETTES);
     for (const KoColorSetSP palette : m_d->doc->paletteList()) {
+        // Ensure stored palettes are KPL.
+        palette->setPaletteType(KoColorSet::KPL);
         QDomElement eFile =  doc.createElement("palette");
         eFile.setAttribute("filename", palette->filename());
         ePalette.appendChild(eFile);
     }
     element.appendChild(ePalette);
+}
+
+void KisKraSaver:: saveStoryboardToXML(QDomDocument& doc, QDomElement &element)
+{
+    //saving storyboard comments
+    QDomElement eCommentList = doc.createElement("StoryboardCommentList");
+    for (StoryboardComment comment: m_d->doc->getStoryboardCommentsList()) {
+        QDomElement commentElement = doc.createElement("storyboardcomment");
+        commentElement.setAttribute("name", comment.name);
+        commentElement.setAttribute("visibility", comment.visibility);
+        eCommentList.appendChild(commentElement);
+    }
+    element.appendChild(eCommentList);
+
+    //saving storyboard items
+    QDomElement eItemList = doc.createElement("StoryboardItemList");
+    for (StoryboardItemSP item : m_d->doc->getStoryboardItemList()) {
+        QDomElement eItem =  item->toXML(doc);
+        eItemList.appendChild(eItem);
+    }
+    element.appendChild(eItemList);
 }
 
 bool KisKraSaver::saveKeyframes(KoStore *store, const QString &uri, bool external)
@@ -515,12 +561,8 @@ bool KisKraSaver::saveAudio(QDomDocument& doc, QDomElement& element)
 {
     const KisImageAnimationInterface *interface = m_d->doc->image()->animationInterface();
     QString fileName = interface->audioChannelFileName();
-    if (fileName.isEmpty()) return true;
 
-    if (!QFileInfo::exists(fileName)) {
-        m_d->errorMessages << i18n("Audio channel file %1 doesn't exist!", fileName);
-        return false;
-    }
+    if (fileName.isEmpty()) return true;
 
     const QDir documentDir = QFileInfo(m_d->filename).absoluteDir();
     KIS_ASSERT_RECOVER_RETURN_VALUE(documentDir.exists(), false);

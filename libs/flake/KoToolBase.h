@@ -2,20 +2,7 @@
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
  * Copyright (C) 2011 Jan Hambrecht <jaham@gmx.net>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 #ifndef KOTOOLBASE_H
 #define KOTOOLBASE_H
@@ -78,11 +65,7 @@ public:
     explicit KoToolBase(KoCanvasBase *canvas);
     ~KoToolBase() override;
 
-    /**
-     * request a repaint of the decorations to be made. This triggers
-     * an update call on the canvas, but does not paint directly.
-     */
-    virtual void repaintDecorations();
+    virtual QRectF decorationsRect() const;
 
     /**
      * Return if dragging (moving with the mouse down) to the edge of a canvas should scroll the
@@ -395,6 +378,12 @@ public Q_SLOTS:
      */
     void setStatusText(const QString &statusText);
 
+    /**
+     * request a repaint of the decorations to be made. This triggers
+     * an update call on the canvas, but does not paint directly.
+     */
+    virtual void repaintDecorations();
+
 Q_SIGNALS:
 
     /**
@@ -455,10 +444,14 @@ protected:
     virtual QList<QPointer<QWidget> > createOptionWidgets();
 
     /// Convenience function to get the current handle radius
-    uint handleRadius() const;
+    int handleRadius() const;
+
+    /// Convenience function to get the current handle radius measured in document
+    /// coordinates (points)
+    qreal handleDocRadius() const;
 
     /// Convencience function to get the current grab sensitivity
-    uint grabSensitivity() const;
+    int grabSensitivity() const;
 
     /**
     * Returns a handle grab rect at the given position.

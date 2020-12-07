@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2017 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "KisTextureMaskInfo.h"
@@ -36,8 +24,9 @@
 /**********************************************************************/
 
 
-KisTextureMaskInfo::KisTextureMaskInfo(int levelOfDetail)
-    : m_levelOfDetail(levelOfDetail)
+KisTextureMaskInfo::KisTextureMaskInfo(int levelOfDetail, bool preserveAlpha)
+    : m_levelOfDetail(levelOfDetail),
+      m_preserveAlpha(preserveAlpha)
 {
 }
 
@@ -51,7 +40,8 @@ KisTextureMaskInfo::KisTextureMaskInfo(const KisTextureMaskInfo &rhs)
       m_invert(rhs.m_invert),
       m_cutoffLeft(rhs.m_cutoffLeft),
       m_cutoffRight(rhs.m_cutoffRight),
-      m_cutoffPolicy(rhs.m_cutoffPolicy)
+      m_cutoffPolicy(rhs.m_cutoffPolicy),
+      m_preserveAlpha(rhs.m_preserveAlpha)
 {
 }
 
@@ -73,7 +63,8 @@ bool operator==(const KisTextureMaskInfo &lhs, const KisTextureMaskInfo &rhs) {
             lhs.m_invert == rhs.m_invert &&
             lhs.m_cutoffLeft == rhs.m_cutoffLeft &&
             lhs.m_cutoffRight == rhs.m_cutoffRight &&
-            lhs.m_cutoffPolicy == rhs.m_cutoffPolicy;
+            lhs.m_cutoffPolicy == rhs.m_cutoffPolicy &&
+            lhs.m_preserveAlpha == rhs.m_preserveAlpha;
 }
 
 KisTextureMaskInfo &KisTextureMaskInfo::operator=(const KisTextureMaskInfo &rhs)
@@ -88,6 +79,7 @@ KisTextureMaskInfo &KisTextureMaskInfo::operator=(const KisTextureMaskInfo &rhs)
     m_cutoffLeft = rhs.m_cutoffLeft;
     m_cutoffRight = rhs.m_cutoffRight;
     m_cutoffPolicy = rhs.m_cutoffPolicy;
+    m_preserveAlpha = rhs.m_preserveAlpha;
 
     return *this;
 }
@@ -139,9 +131,9 @@ void KisTextureMaskInfo::recalculateMask()
     if (!m_pattern) return;
 
     const KoColorSpace* cs;
-    bool hasAlpha = m_pattern->hasAlpha();
+    const bool useAlpha = m_pattern->hasAlpha() && m_preserveAlpha;
 
-    if (hasAlpha) {
+    if (useAlpha) {
         cs = KoColorSpaceRegistry::instance()->rgb8();
     } else {
         cs = KoColorSpaceRegistry::instance()->alpha8();
@@ -174,6 +166,8 @@ void KisTextureMaskInfo::recalculateMask()
     const int width = mask.width();
     const int height = mask.height();
 
+    KisHLineIteratorSP iter = m_mask->createHLineIteratorNG(0, 0, width);
+
     for (int row = 0; row < height; ++row) {
         for (int col = 0; col < width; ++col) {
             const QRgb currentPixel = pixel[row * width + col];
@@ -197,14 +191,6 @@ void KisTextureMaskInfo::recalculateMask()
                 maskValue = 1 - maskValue;
             }
 
-            if (m_cutoffPolicy == 1 && (maskValue < (m_cutoffLeft / 255.0) || maskValue > (m_cutoffRight / 255.0))) {
-                // mask out the dab if it's outside the pattern's cuttoff points
-                alpha = OPACITY_TRANSPARENT_F;
-            }
-            else if (m_cutoffPolicy == 2 && (maskValue < (m_cutoffLeft / 255.0) || maskValue > (m_cutoffRight / 255.0))) {
-                alpha = OPACITY_OPAQUE_F;
-            }
-
             maskValue = qBound(0.0f, maskValue, 1.0f);
 
             float neutralAdjustedValue;
@@ -213,18 +199,38 @@ void KisTextureMaskInfo::recalculateMask()
             //to prevent loss of detail (clipping).
             if (m_neutralPoint == 1 || (m_neutralPoint != 0 && maskValue <= m_neutralPoint)) {
                 neutralAdjustedValue = maskValue / (2 * m_neutralPoint);
-            }
-            else {
+            } else {
                 neutralAdjustedValue = 0.5 +  (maskValue - m_neutralPoint) / (2 - 2 * m_neutralPoint);
             }
 
-            int finalValue = neutralAdjustedValue * 255;
-            pixel[row * width + col] = QColor(finalValue, finalValue, finalValue, alpha * 255).rgba();
+            if (m_cutoffPolicy == 1 && (neutralAdjustedValue < (m_cutoffLeft / 255.0) || neutralAdjustedValue >(m_cutoffRight / 255.0))) {
+                // mask out the dab if it's outside the pattern's cuttoff points
+                alpha = OPACITY_TRANSPARENT_F;
+                if (!useAlpha) {
+                    neutralAdjustedValue = alpha;
+                }
+            } else if (m_cutoffPolicy == 2 && (neutralAdjustedValue < (m_cutoffLeft / 255.0) || neutralAdjustedValue >(m_cutoffRight / 255.0))) {
+                alpha = OPACITY_OPAQUE_F;
+                if (!useAlpha) {
+                    neutralAdjustedValue = alpha;
+                }
+            }
 
+            if (useAlpha) {
+                int finalValue = qRound(neutralAdjustedValue * 255.0);
+                pixel[row * width + col] = QColor(finalValue, finalValue, finalValue, qRound(alpha * 255.0)).rgba();
+            } else {
+                cs->setOpacity(iter->rawData(), neutralAdjustedValue, 1);
+                iter->nextPixel();
+            }
+        }
+        if (!useAlpha) {
+            iter->nextRow();
         }
     }
-
-    m_mask->convertFromQImage(mask, 0);
+    if (useAlpha) {
+        m_mask->convertFromQImage(mask, 0);
+    }
     m_maskBounds = QRect(0, 0, width, height);
 }
 

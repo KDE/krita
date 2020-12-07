@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2005 Adrian Page <adrian@pagenet.plus.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_image_test.h"
@@ -44,6 +32,7 @@
 
 #include "kis_undo_stores.h"
 
+#include <testimage.h>
 
 #define IMAGE_WIDTH 128
 #define IMAGE_HEIGHT 128
@@ -81,7 +70,7 @@ void KisImageTest::benchmarkCreation()
     }
 }
 
-#include "testutil.h"
+#include <testutil.h>
 #include "kis_stroke_strategy.h"
 #include <functional>
 
@@ -457,7 +446,7 @@ struct FlattenTestImage
         layer5->disableAlphaChannel(true);
 
         layer2 = new KisPaintLayer(p.image, "paint2", OPACITY_OPAQUE_U8);
-        tmask = new KisTransparencyMask();
+        tmask = new KisTransparencyMask(p.image, "tmask");
 
         // check channel flags
         // make addition composite op
@@ -814,7 +803,7 @@ void KisImageTest::testMergeDownMultipleFrames()
     {
         KisLayerSP l = p.layer5;
         l->enableAnimation();
-        KisKeyframeChannel *channel = l->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
+        KisKeyframeChannel *channel = l->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true);
         channel->addKeyframe(10);
         channel->addKeyframe(20);
         channel->addKeyframe(30);

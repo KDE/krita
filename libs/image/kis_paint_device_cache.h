@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2015 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #ifndef __KIS_PAINT_DEVICE_CACHE_H
@@ -57,12 +45,12 @@ public:
     }
 
     QRect exactBounds() {
-        return m_exactBoundsCache.getValue();
+        return m_exactBoundsCache.getValue(m_paintDevice->defaultBounds()->wrapAroundMode());
     }
 
     QRect exactBoundsAmortized() {
         QRect bounds;
-        bool result = m_exactBoundsCache.tryGetValue(bounds);
+        bool result = m_exactBoundsCache.tryGetValue(bounds, m_paintDevice->defaultBounds()->wrapAroundMode());
 
         if (!result) {
             /**
@@ -78,11 +66,11 @@ public:
     }
 
     QRect nonDefaultPixelArea() {
-        return m_nonDefaultPixelAreaCache.getValue();
+        return m_nonDefaultPixelAreaCache.getValue(m_paintDevice->defaultBounds()->wrapAroundMode());
     }
 
     KisRegion region() {
-        return m_regionCache.getValue();
+        return m_regionCache.getValue(m_paintDevice->defaultBounds()->wrapAroundMode());
     }
 
     QImage createThumbnail(qint32 w, qint32 h, qreal oversample, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags) {
@@ -128,7 +116,7 @@ private:
 private:
     KisPaintDevice *m_paintDevice;
 
-    struct ExactBoundsCache : KisLockFreeCache<QRect> {
+    struct ExactBoundsCache : KisLockFreeCacheWithModeConsistency<QRect, bool> {
         ExactBoundsCache(KisPaintDevice *paintDevice) : m_paintDevice(paintDevice) {}
 
         QRect calculateNewValue() const override {
@@ -138,7 +126,7 @@ private:
         KisPaintDevice *m_paintDevice;
     };
 
-    struct NonDefaultPixelCache : KisLockFreeCache<QRect> {
+    struct NonDefaultPixelCache : KisLockFreeCacheWithModeConsistency<QRect, bool> {
         NonDefaultPixelCache(KisPaintDevice *paintDevice) : m_paintDevice(paintDevice) {}
 
         QRect calculateNewValue() const override {
@@ -148,7 +136,7 @@ private:
         KisPaintDevice *m_paintDevice;
     };
 
-    struct RegionCache : KisLockFreeCache<KisRegion> {
+    struct RegionCache : KisLockFreeCacheWithModeConsistency<KisRegion, bool> {
         RegionCache(KisPaintDevice *paintDevice) : m_paintDevice(paintDevice) {}
 
         KisRegion calculateNewValue() const override {

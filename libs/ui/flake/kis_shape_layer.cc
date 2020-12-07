@@ -4,19 +4,7 @@
  *  Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
  *  Copyright (c) 2011 Jan Hambrecht <jaham@gmx.net>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_shape_layer.h"
@@ -140,11 +128,8 @@ KisShapeLayer::KisShapeLayer(KoShapeControllerBase* controller,
                              KisImageWSP image,
                              const QString &name,
                              quint8 opacity)
-    : KisExternalLayer(image, name, opacity),
-      KoShapeLayer(new ShapeLayerContainerModel(this)),
-      m_d(new Private())
+    : KisShapeLayer(controller, image, name, opacity, nullptr)
 {
-    initShapeLayer(controller);
 }
 
 KisShapeLayer::KisShapeLayer(const KisShapeLayer& rhs)
@@ -158,7 +143,7 @@ KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs, KoShapeControllerBase* c
         , m_d(new Private())
 {
     // copy the projection to avoid extra round of updates!
-    initShapeLayer(controller, _rhs.m_d->paintDevice, canvas);
+    initClonedShapeLayer(controller, _rhs.m_d->paintDevice, canvas);
 
     /**
      * The transformaitons of the added shapes are automatically merged into the transformation
@@ -186,7 +171,9 @@ KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs, const KisShapeLayer &_ad
     // Make sure our new layer is visible otherwise the shapes cannot be painted.
     setVisible(true);
 
-    initShapeLayer(_rhs.m_d->controller);
+    initNewShapeLayer(_rhs.m_d->controller,
+                      _rhs.m_d->paintDevice->colorSpace(),
+                      _rhs.m_d->paintDevice->defaultBounds());
 
     /**
      * With current implementation this matrix will always be an identity, because
@@ -233,7 +220,22 @@ KisShapeLayer::KisShapeLayer(KoShapeControllerBase* controller,
         , KoShapeLayer(new ShapeLayerContainerModel(this))
         , m_d(new Private())
 {
-    initShapeLayer(controller, nullptr, canvas);
+    const KoColorSpace *cs = 0;
+    KisDefaultBoundsBaseSP bounds;
+
+    if (image) {
+        cs = image->colorSpace();
+        bounds = new KisDefaultBounds(this->image());
+    } else {
+        /// assert will always fail, because it is
+        /// a recovery code path
+        KIS_SAFE_ASSERT_RECOVER_NOOP(image);
+
+        cs = KoColorSpaceRegistry::instance()->rgb8();
+        bounds = new KisDefaultBounds();
+    }
+
+    initNewShapeLayer(controller, cs, bounds, canvas);
 }
 
 KisShapeLayer::~KisShapeLayer()
@@ -252,28 +254,22 @@ KisShapeLayer::~KisShapeLayer()
     delete m_d;
 }
 
-void KisShapeLayer::initShapeLayer(KoShapeControllerBase* controller, KisPaintDeviceSP copyFromProjection, KisShapeLayerCanvasBase *canvas)
+void KisShapeLayer::initShapeLayerImpl(KoShapeControllerBase* controller,
+                                   KisPaintDeviceSP newProjectionDevice,
+                                   KisShapeLayerCanvasBase *overrideCanvas)
 {
     setSupportsLodMoves(false);
     setShapeId(KIS_SHAPE_LAYER_ID);
 
-    KIS_ASSERT_RECOVER_NOOP(this->image());
+    m_d->paintDevice = newProjectionDevice;
 
-    if (!copyFromProjection) {
-        m_d->paintDevice = new KisPaintDevice(image()->colorSpace());
-        m_d->paintDevice->setDefaultBounds(new KisDefaultBounds(this->image()));
-        m_d->paintDevice->setParentNode(this);
-    } else {
-        m_d->paintDevice = new KisPaintDevice(*copyFromProjection);
-    }
-
-    if (!canvas) {
-        auto *slCanvas = new KisShapeLayerCanvas(this, image());
+    if (!overrideCanvas) {
+        KisShapeLayerCanvas *slCanvas = new KisShapeLayerCanvas(this, image());
         slCanvas->setProjection(m_d->paintDevice);
-        canvas = slCanvas;
+        overrideCanvas = slCanvas;
     }
 
-    m_d->canvas = canvas;
+    m_d->canvas = overrideCanvas;
     m_d->canvas->moveToThread(this->thread());
     m_d->controller = controller;
 
@@ -288,6 +284,24 @@ void KisShapeLayer::initShapeLayer(KoShapeControllerBase* controller, KisPaintDe
     ShapeLayerContainerModel *model = dynamic_cast<ShapeLayerContainerModel*>(this->model());
     KIS_SAFE_ASSERT_RECOVER_RETURN(model);
     model->setAssociatedRootShapeManager(m_d->canvas->shapeManager());
+}
+
+void KisShapeLayer::initNewShapeLayer(KoShapeControllerBase *controller,
+                                      const KoColorSpace *projectionColorSpace,
+                                      KisDefaultBoundsBaseSP bounds,
+                                      KisShapeLayerCanvasBase *overrideCanvas)
+{
+    KisPaintDeviceSP projection = new KisPaintDevice(projectionColorSpace);
+    projection->setDefaultBounds(bounds);
+    projection->setParentNode(this);
+
+    initShapeLayerImpl(controller, projection, overrideCanvas);
+}
+
+void KisShapeLayer::initClonedShapeLayer(KoShapeControllerBase *controller, KisPaintDeviceSP copyFromProjection, KisShapeLayerCanvasBase *overrideCanvas)
+{
+    KisPaintDeviceSP projection = new KisPaintDevice(*copyFromProjection);
+    initShapeLayerImpl(controller, projection, overrideCanvas);
 }
 
 bool KisShapeLayer::allowAsChild(KisNodeSP node) const
@@ -322,7 +336,7 @@ void KisShapeLayer::fillMergedLayerTemplate(KisLayerSP dstLayer, KisLayerSP prev
 
 void KisShapeLayer::setParent(KoShapeContainer *parent)
 {
-    Q_UNUSED(parent)
+    Q_UNUSED(parent);
     KIS_ASSERT_RECOVER_RETURN(0);
 }
 
@@ -488,6 +502,11 @@ bool KisShapeLayer::hasPendingTimedUpdates() const
 void KisShapeLayer::forceUpdateHiddenAreaOnOriginal()
 {
     m_d->canvas->forceRepaintWithHiddenAreas();
+}
+
+KoSelectedShapesProxy *KisShapeLayer::selectedShapesProxy()
+{
+    return m_d->canvas->selectedShapesProxy();
 }
 
 bool KisShapeLayer::saveShapesToStore(KoStore *store, QList<KoShape *> shapes, const QSizeF &sizeInPt)

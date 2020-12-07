@@ -1,3 +1,6 @@
+/*
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+ */
 
 #include "TestColorSpaceRegistry.h"
 
@@ -9,7 +12,7 @@
 #include "RgbU16ColorSpace.h"
 #include "LabColorSpace.h"
 
-#include "sdk/tests/kistest.h"
+#include "sdk/tests/testpigment.h"
 
 void TestColorSpaceRegistry::testConstruction()
 {

@@ -1,20 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2018 Scott Petrovic <scottpetrovic@gmail.com>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #ifndef KISWELCOMEPAGEWIDGET_H
@@ -31,6 +18,7 @@
 #include <QScopedPointer>
 
 #include "config-updaters.h"
+class RecentItemDelegate;
 
 /// A widget for displaying if no documents are open. This will display in the MDI area
 class KRITAUI_EXPORT KisWelcomePageWidget : public QWidget, public Ui::KisWelcomePage
@@ -59,6 +47,10 @@ public Q_SLOTS:
     void slotShowUpdaterErrorDetails();
 #endif
 
+#ifdef Q_OS_ANDROID
+    void slotStartDonationFlow();
+#endif
+
 protected:
 
     // QWidget overrides
@@ -67,8 +59,11 @@ protected:
     void dragMoveEvent(QDragMoveEvent * event) override;
     void dragLeaveEvent(QDragLeaveEvent * event) override;
 
+    bool eventFilter(QObject *watched, QEvent *event) override;
+
 
 private:
+    void setupNewsLangSelection(QMenu *newsOptionMenu);
     void showDevVersionHighlight();
 
 #ifdef ENABLE_UPDATERS
@@ -99,6 +94,13 @@ private:
     KisUpdaterStatus m_updaterStatus;
 #endif
     bool m_checkUpdates {false};
+
+#ifdef Q_OS_ANDROID
+public:
+    static QPushButton* donationLink;
+    static QLabel* donationBannerImage;
+#endif
+    RecentItemDelegate *recentItemDelegate = nullptr;
 
 private Q_SLOTS:
     void slotNewFileClicked();

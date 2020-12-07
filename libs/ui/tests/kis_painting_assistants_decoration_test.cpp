@@ -4,9 +4,11 @@
  * - KisPaintingAssistantsDecoration
  * - ParallelRulerAssistant
  * - PerspectiveAssistant
+ *
+ *  SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include "testutil.h"
+#include <testutil.h>
 #include "qimage_based_test.h"
 
 #include <KoCanvasResourceProvider.h>
@@ -21,9 +23,9 @@
 
 #include "kis_painting_assistants_decoration.h"
 #include "KisPart.h"
-#include "kistest.h"
+#include "testui.h"
 #include <kis_config.h>
-#include "testutil.h"
+#include <testutil.h>
 #include <KoResourcePaths.h>
 #include "opengl/kis_opengl.h"
 #include "kis_painting_assistants_decoration_test.h"

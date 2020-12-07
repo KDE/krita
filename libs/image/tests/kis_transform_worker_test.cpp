@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2007 Boudewijn Rempt boud@valdyas.org
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_transform_worker_test.h"
@@ -31,7 +19,8 @@
 #include "kis_filter_strategy.h"
 #include "kis_paint_device.h"
 #include "kis_transform_worker.h"
-#include "testutil.h"
+#include <testutil.h>
+#include "kistest.h"
 #include "kis_transaction.h"
 #include "kis_random_accessor_ng.h"
 
@@ -669,8 +658,8 @@ void testRotationImpl(qreal angle, QString filePrefix, bool useUniformColor = fa
     QString refFileName = QString("%1_expected.png").arg(filePrefix);
 
     image = QImage();
-    image.load(QString(FILES_DATA_DIR) + '/' + resFileName);
-    if (!TestUtil::compareQImages(errpoint, image, result)) {
+    image.load(QString(FILES_DATA_DIR) + QDir::separator() + resFileName);
+    if (!TestUtil::compareQImagesPremultiplied(errpoint, image, result, 2, 1)) {
         dbgKrita << filePrefix;
         image.save(refFileName);
         result.save(resFileName);
@@ -990,4 +979,4 @@ void KisTransformWorkerTest::testPartialProcessing()
     TestUtil::checkQImage(result, "transform_test", "partial", "single");
 }
 
-QTEST_MAIN(KisTransformWorkerTest)
+KISTEST_MAIN(KisTransformWorkerTest)

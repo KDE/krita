@@ -2,19 +2,7 @@
  *  Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
  *  Copyright (c) 2011 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_text_brush.h"
@@ -134,14 +122,14 @@ public:
         updateBrushIndexesImpl();
     }
 
+    int currentBrushIndex() override {
+        return m_currentBrushIndex;
+    }
+
 protected:
 
     int chooseNextBrush(const KisPaintInformation& info) override {
         Q_UNUSED(info);
-        return m_currentBrushIndex;
-    }
-
-    int currentBrushIndex() override {
         return m_currentBrushIndex;
     }
 
@@ -239,26 +227,20 @@ void KisTextBrush::notifyStrokeStarted()
     m_brushesPipe->notifyStrokeStarted();
 }
 
-void KisTextBrush::notifyCachedDabPainted(const KisPaintInformation& info)
-{
-    m_brushesPipe->notifyCachedDabPainted(info);
-}
-
 void KisTextBrush::prepareForSeqNo(const KisPaintInformation &info, int seqNo)
 {
     m_brushesPipe->prepareForSeqNo(info, seqNo);
 }
 
-void KisTextBrush::generateMaskAndApplyMaskOrCreateDab(
-    KisFixedPaintDeviceSP dst, KisBrush::ColoringInformation* coloringInformation,
+void KisTextBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst, KisBrush::ColoringInformation* coloringInformation,
     KisDabShape const& shape,
-    const KisPaintInformation& info, double subPixelX, double subPixelY, qreal softnessFactor) const
+    const KisPaintInformation& info, double subPixelX, double subPixelY, qreal softnessFactor, qreal lightnessStrength) const
 {
     if (brushType() == MASK) {
-        KisBrush::generateMaskAndApplyMaskOrCreateDab(dst, coloringInformation, shape, info, subPixelX, subPixelY, softnessFactor);
+        KisBrush::generateMaskAndApplyMaskOrCreateDab(dst, coloringInformation, shape, info, subPixelX, subPixelY, softnessFactor, lightnessStrength);
     }
     else { /* if (brushType() == PIPE_MASK)*/
-        m_brushesPipe->generateMaskAndApplyMaskOrCreateDab(dst, coloringInformation, shape, info, subPixelX, subPixelY, softnessFactor);
+        m_brushesPipe->generateMaskAndApplyMaskOrCreateDab(dst, coloringInformation, shape, info, subPixelX, subPixelY, softnessFactor, lightnessStrength);
     }
 }
 
@@ -288,7 +270,9 @@ void KisTextBrush::toXML(QDomDocument& doc, QDomElement& e) const
 
 void KisTextBrush::updateBrush()
 {
-    Q_ASSERT((brushType() == PIPE_MASK) || (brushType() == MASK));
+    KIS_ASSERT_RECOVER((brushType() == PIPE_MASK) || (brushType() == MASK)) {
+        setBrushType(MASK);
+    }
 
     if (brushType() == PIPE_MASK) {
         m_brushesPipe->setText(m_text, m_font);
@@ -302,9 +286,9 @@ void KisTextBrush::updateBrush()
     setValid(true);
 }
 
-quint32 KisTextBrush::brushIndex(const KisPaintInformation& info) const
+quint32 KisTextBrush::brushIndex() const
 {
-    return brushType() == MASK ? 0 : 1 + m_brushesPipe->brushIndex(info);
+    return brushType() == MASK ? 0 : 1 + m_brushesPipe->currentBrushIndex();
 }
 
 qint32 KisTextBrush::maskWidth(KisDabShape const& shape, double subPixelX, double subPixelY, const KisPaintInformation& info) const

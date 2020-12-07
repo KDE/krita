@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>KisInputConfigurationPageItem</class>
  <widget class="QWidget" name="KisInputConfigurationPageItem">
   <property name="geometry">
@@ -26,7 +30,7 @@
    <property name="spacing">
     <number>6</number>
    </property>
-   <item row="1" column="1" colspan="2">
+   <item colspan="2" column="1" row="1">
     <widget class="QLabel" name="descriptionLabel">
      <property name="text">
       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Action Description&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -36,7 +40,7 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="0">
+   <item column="0" row="2">
     <spacer name="horizontalSpacer">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -52,7 +56,7 @@
      </property>
     </spacer>
    </item>
-   <item row="0" column="0" colspan="3">
+   <item colspan="3" column="0" row="0">
     <widget class="QToolButton" name="collapseButton">
      <property name="sizePolicy">
       <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
@@ -83,7 +87,7 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="1" colspan="2">
+   <item colspan="2" column="1" row="2">
     <widget class="QTreeView" name="shortcutsView">
      <property name="alternatingRowColors">
       <bool>true</bool>

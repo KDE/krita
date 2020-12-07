@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2014 Boudewijn Rempt <boud@valdyas.org>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 #include "kis_dlg_layer_style.h"
 
@@ -246,6 +234,7 @@ void KisDlgLayerStyle::slotNotifyOnReject()
 
 bool checkCustomNameAvailable(const QString &name)
 {
+    Q_UNUSED(name);
     const QString customName = "CustomStyles.asl";
 
     KoResourceServer<KisPSDLayerStyle> *server = KisResourceServerProvider::instance()->layerStyleServer();
@@ -504,14 +493,15 @@ void StylesSelector::LocationProxyModel::setLocationToFilterBy(QString location)
 
 bool StylesSelector::LocationProxyModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
 {
+    Q_UNUSED(source_parent);
     if (!m_enableFiltering) {
         return true;
     }
 
     QModelIndex idx = sourceModel()->index(source_row, 0);
-    QString location = sourceModel()->data(idx, Qt::UserRole + KisResourceModel::Location).toString();
-    qDebug() << sourceModel()->data(idx, Qt::UserRole + KisResourceModel::Location).toString()
-             << sourceModel()->data(idx, Qt::UserRole + KisResourceModel::Name).toString();
+    QString location = sourceModel()->data(idx, Qt::UserRole + KisAbstractResourceModel::Location).toString();
+    qDebug() << sourceModel()->data(idx, Qt::UserRole + KisAbstractResourceModel::Location).toString()
+             << sourceModel()->data(idx, Qt::UserRole + KisAbstractResourceModel::Name).toString();
     return location == m_locationToFilter;
 }
 
@@ -537,13 +527,13 @@ StylesSelector::StylesSelector(QWidget *parent)
     ui.setupUi(this);
 
     //ui.cmbStyleCollections->setModel();
-    m_resourceModel = KisResourceModelProvider::resourceModel(ResourceType::LayerStyles);
+    m_resourceModel = new KisResourceModel(ResourceType::LayerStyles, this);
     m_locationsProxyModel = new LocationProxyModel(this);
     m_locationsProxyModel->setSourceModel(m_resourceModel);
     m_locationsProxyModel->setEnableFiltering(false);
 
     ui.listStyles->setModel(m_locationsProxyModel);
-    ui.listStyles->setModelColumn(KisResourceModel::Name);
+    ui.listStyles->setModelColumn(KisAbstractResourceModel::Name);
 
     connect(ui.cmbStyleCollections, SIGNAL(activated(QString)), this, SLOT(loadStyles(QString)));
     connect(ui.listStyles, SIGNAL(clicked(QModelIndex)), this, SLOT(selectStyle(QModelIndex)));
@@ -563,7 +553,7 @@ void StylesSelector::refillCollections()
     QStringList locationsList;
     for (int i = 0; i < m_resourceModel->rowCount(); i++) {
         QModelIndex idx = m_resourceModel->index(i, 0);
-        QString location = m_resourceModel->data(idx, Qt::UserRole + KisResourceModel::Location).toString();
+        QString location = m_resourceModel->data(idx, Qt::UserRole + KisAbstractResourceModel::Location).toString();
         if (!locationsList.contains(location)) {
             locationsList << location;
         }
@@ -574,6 +564,8 @@ void StylesSelector::refillCollections()
 
 void StylesSelector::notifyExternalStyleChanged(const QString &name, const QUuid &uuid)
 {
+    Q_UNUSED(name);
+    Q_UNUSED(uuid);
     /*
     int currentIndex = -1;
 
@@ -626,6 +618,7 @@ void StylesSelector::selectStyle(QModelIndex current)
 
 void StylesSelector::loadCollection(const QString &fileName)
 {
+    Q_UNUSED(fileName);
     // TODO: RESOURCES: implement or remove
     warnKrita << "Collection cannot be loaded, because we do not use collections now; please use KisAslStorage instead.";
 

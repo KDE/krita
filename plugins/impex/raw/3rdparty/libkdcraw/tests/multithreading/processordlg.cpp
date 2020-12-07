@@ -83,7 +83,7 @@ public:
 };
 
 ProcessorDlg::ProcessorDlg(const QList<QUrl>& list)
-    : QDialog(0), d(new Private)
+    : QDialog(qApp->activeWindow()), d(new Private)
 {
     setModal(false);
     setWindowTitle(i18n("Convert RAW files To PNG"));
@@ -98,7 +98,6 @@ ProcessorDlg::ProcessorDlg(const QList<QUrl>& list)
     QVBoxLayout* const vbx   = new QVBoxLayout(this);
     vbx->addWidget(d->page);
     vbx->addWidget(d->buttons);
-    setLayout(vbx);
 
     int cpu                  = d->thread->maximumNumberOfThreads();
     QGridLayout* const grid  = new QGridLayout(d->page);

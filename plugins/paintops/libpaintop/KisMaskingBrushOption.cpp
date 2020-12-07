@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2017 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "KisMaskingBrushOption.h"
@@ -40,9 +28,7 @@ struct KisMaskingBrushOption::Private
     Private()
         : ui(new QWidget())
     {
-        QVBoxLayout *l  = new QVBoxLayout();
 
-        QHBoxLayout *compositeOpLayout = new QHBoxLayout();
         compositeSelector = new QComboBox(ui.data());
 
         const QStringList supportedComposites = KisMaskingBrushCompositeOpFactory::supportedCompositeOpIds();
@@ -52,15 +38,15 @@ struct KisMaskingBrushOption::Private
         }
         compositeSelector->setCurrentIndex(0);
 
+        QHBoxLayout *compositeOpLayout = new QHBoxLayout();
         compositeOpLayout->addWidget(new QLabel(i18n("Blending Mode:")), 0);
         compositeOpLayout->addWidget(compositeSelector, 1);
 
-        l->addLayout(compositeOpLayout, 0);
-
-
         brushChooser = new KisBrushSelectionWidget(ui.data());
-        l->addWidget(brushChooser, 1);
-        ui->setLayout(l);
+
+        QVBoxLayout *layout  = new QVBoxLayout(ui.data());
+        layout->addLayout(compositeOpLayout, 0);
+        layout->addWidget(brushChooser, 1);
     }
 
     QScopedPointer<QWidget> ui;

@@ -6,20 +6,7 @@
    Copyright (c) 2011 José Luis Vergara <pentalis@gmail.com>
    Copyright (c) 2013 Sascha Suelzer <s.suelzer@gmail.com>
 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
-
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
-
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   SPDX-License-Identifier: LGPL-2.0-or-later
 */
 #include "KisResourceItemChooser.h"
 
@@ -47,7 +34,6 @@
 #include <KisKineticScroller.h>
 #include <KisMimeDatabase.h>
 
-#include <KisResourceModelProvider.h>
 #include <KisResourceModel.h>
 #include <KisTagFilterResourceProxyModel.h>
 #include <KisResourceLoaderRegistry.h>
@@ -58,7 +44,6 @@
 #include "KisTagChooserWidget.h"
 #include "KisResourceItemChooserSync.h"
 #include "KisResourceTaggingManager.h"
-#include "KisTagModelProvider.h"
 
 
 
@@ -75,9 +60,7 @@ public:
 
     QString resourceType;
 
-    KisResourceModel *resourceModel {0};
     KisTagFilterResourceProxyModel *tagFilterProxyModel {0};
-    QSortFilterProxyModel *extraFilterModel {0};
 
     KisResourceTaggingManager *tagManager {0};
     KisResourceItemListView *view {0};
@@ -105,27 +88,11 @@ public:
 
 };
 
-KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool usePreview, QWidget *parent, QSortFilterProxyModel *extraFilterProxy)
+KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool usePreview, QWidget *parent)
     : QWidget(parent)
     , d(new Private(resourceType))
 {
     d->splitter = new QSplitter(this);
-
-    d->resourceModel = KisResourceModelProvider::resourceModel(resourceType);
-
-    d->tagFilterProxyModel = new KisTagFilterResourceProxyModel(KisTagModelProvider::tagModel(resourceType), this);
-
-    d->extraFilterModel = extraFilterProxy;
-    if (d->extraFilterModel) {
-        d->extraFilterModel->setParent(this);
-        d->extraFilterModel->setSourceModel(d->resourceModel);
-        d->tagFilterProxyModel->setSourceModel(d->extraFilterModel);
-    } else {
-        d->tagFilterProxyModel->setSourceModel(d->resourceModel);
-    }
-
-    connect(d->resourceModel, SIGNAL(beforeResourcesLayoutReset(QModelIndex)), SLOT(slotBeforeResourcesLayoutReset(QModelIndex)));
-    connect(d->resourceModel, SIGNAL(afterResourcesLayoutReset()), SLOT(slotAfterResourcesLayoutReset()));
 
     d->view = new KisResourceItemListView(this);
     d->view->setObjectName("ResourceItemview");
@@ -135,10 +102,12 @@ KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool
         d->view->setToolTipShouldRenderCheckers(true);
     }
 
-    d->view->setModel(d->tagFilterProxyModel);
     d->view->setItemDelegate(new KisResourceItemDelegate(this));
     d->view->setSelectionMode(QAbstractItemView::SingleSelection);
     d->view->viewport()->installEventFilter(this);
+
+    d->tagFilterProxyModel = new KisTagFilterResourceProxyModel(resourceType, this);
+    d->view->setModel(d->tagFilterProxyModel);
 
     connect(d->view, SIGNAL(currentResourceChanged(QModelIndex)), this, SLOT(activated(QModelIndex)));
     connect(d->view, SIGNAL(currentResourceClicked(QModelIndex)), this, SLOT(clicked(QModelIndex)));
@@ -229,6 +198,11 @@ KisResourceItemChooser::~KisResourceItemChooser()
     delete d;
 }
 
+KisTagFilterResourceProxyModel *KisResourceItemChooser::tagFilterModel() const
+{
+    return d->tagFilterProxyModel;
+}
+
 void KisResourceItemChooser::slotButtonClicked(int button)
 {
     if (button == Button_Import) {
@@ -245,7 +219,7 @@ void KisResourceItemChooser::slotButtonClicked(int button)
     else if (button == Button_Remove) {
         QModelIndex index = d->view->currentIndex();
         if (index.isValid()) {
-            d->tagFilterProxyModel->removeResource(index);
+            d->tagFilterProxyModel->setResourceInactive(index);
         }
         int row = index.row();
         int rowMin = --row;
@@ -315,25 +289,9 @@ void KisResourceItemChooser::setCurrentResource(KoResourceSP resource)
     if (d->updatesBlocked) {
         return;
     }
-    QModelIndex index = d->resourceModel->indexFromResource(resource);
+    QModelIndex index = d->tagFilterProxyModel->indexForResource(resource);
     d->view->setCurrentIndex(index);
     updatePreview(index);
-}
-
-void KisResourceItemChooser::slotBeforeResourcesLayoutReset(QModelIndex activateAfterReset)
-{
-    QModelIndex proxyIndex = d->tagFilterProxyModel->mapFromSource(d->tagFilterProxyModel->mapFromSource(activateAfterReset));
-    d->savedResourceWhileReset = proxyIndex.isValid() ? proxyIndex : d->view->currentIndex();
-}
-
-void KisResourceItemChooser::slotAfterResourcesLayoutReset()
-{
-    if (d->savedResourceWhileReset.isValid()) {
-        this->blockSignals(true);
-        setCurrentItem(d->savedResourceWhileReset.row());
-        this->blockSignals(false);
-    }
-    d->savedResourceWhileReset = QModelIndex();
 }
 
 void KisResourceItemChooser::setPreviewOrientation(Qt::Orientation orientation)
@@ -415,7 +373,7 @@ void KisResourceItemChooser::updatePreview(const QModelIndex &idx)
         return;
     }
 
-    QImage image = idx.data(Qt::UserRole + KisResourceModel::Thumbnail).value<QImage>();
+    QImage image = idx.data(Qt::UserRole + KisAbstractResourceModel::Thumbnail).value<QImage>();
 
     if (image.format() != QImage::Format_RGB32 &&
         image.format() != QImage::Format_ARGB32 &&
@@ -475,6 +433,11 @@ KisResourceItemListView *KisResourceItemChooser::itemView() const
 void KisResourceItemChooser::contextMenuRequested(const QPoint &pos)
 {
     d->tagManager->contextMenuRequested(currentResource(), pos);
+}
+
+void KisResourceItemChooser::setStoragePopupButtonVisible(bool visible)
+{
+    d->storagePopupButton->setVisible(visible);
 }
 
 void KisResourceItemChooser::setViewModeButtonVisible(bool visible)

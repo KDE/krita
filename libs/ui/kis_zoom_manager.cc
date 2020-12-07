@@ -2,19 +2,7 @@
  *  Copyright (C) 2006, 2010 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (C) 2009 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_zoom_manager.h"
@@ -145,7 +133,6 @@ void KisZoomManager::setup(KActionCollection * actionCollection)
     QGridLayout * layout = new QGridLayout(m_view);
     layout->setSpacing(0);
     layout->setMargin(0);
-    m_view->setLayout(layout);
 
     m_view->document()->setUnit(KoUnit(KoUnit::Pixel));
 
@@ -222,6 +209,14 @@ void KisZoomManager::updateImageBoundsSnapping()
 
         snapGuide->overrideSnapStrategy(KoSnapGuide::DocumentCenterSnapping, centerSnap);
     }
+}
+
+void KisZoomManager::updateCurrentZoomResource()
+{
+    const qreal effectiveZoom =
+        m_view->canvasBase()->coordinatesConverter()->effectiveZoom();
+
+    m_view->canvasBase()->resourceManager()->setResource(KoCanvasResource::EffectiveZoom, effectiveZoom);
 }
 
 void KisZoomManager::updateMouseTrackingConnections()
@@ -330,7 +325,7 @@ void KisZoomManager::slotUpdateGuiAfterZoomChange()
                     QIcon(), 500, KisFloatingMessage::Low, Qt::AlignCenter);
     }
 
-
+    updateCurrentZoomResource();
 
     m_view->canvasBase()->resourceManager()->setResource(KoCanvasResource::EffectiveZoom, effectiveZoom);
 }

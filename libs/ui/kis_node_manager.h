@@ -1,19 +1,7 @@
 /*
  *  Copyright (C) 2007 Boudewijn Rempt <boud@valdyas.org>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 #ifndef KIS_NODE_MANAGER
 #define KIS_NODE_MANAGER
@@ -116,6 +104,13 @@ public:
     static bool isNodeHidden(KisNodeSP node, bool isGlobalSelectionHidden);
 
     bool trySetNodeProperties(KisNodeSP node, KisImageSP image, KisBaseNode::PropertyList properties) const;
+
+
+    bool canModifyLayers(KisNodeList nodes, bool showWarning = true);
+    bool canModifyLayer(KisNodeSP node, bool showWarning = true);
+
+    bool canMoveLayers(KisNodeList nodes, bool showWarning = true);
+    bool canMoveLayer(KisNodeSP node, bool showWarning = true);
 
 public Q_SLOTS:
 
@@ -268,7 +263,7 @@ private:
     qint32 convertOpacityToInt(qreal opacity);
     void removeSelectedNodes(KisNodeList selectedNodes);
     void slotSomethingActivatedNodeImpl(KisNodeSP node);
-    void createQuickGroupImpl(KisNodeJugglerCompressed *juggler,
+    bool createQuickGroupImpl(KisNodeJugglerCompressed *juggler,
                               const QString &overrideGroupName,
                               KisNodeSP *newGroup,
                               KisNodeSP *newLastChild);

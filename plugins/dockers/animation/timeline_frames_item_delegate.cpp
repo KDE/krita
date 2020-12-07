@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2015 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "timeline_frames_item_delegate.h"
@@ -21,6 +9,7 @@
 #include <QPen>
 #include <QPainter>
 #include <QApplication>
+#include <QSvgRenderer>
 #include "krita_utils.h"
 #include "timeline_frames_model.h"
 #include "timeline_color_scheme.h"
@@ -28,10 +17,16 @@
 #include "kis_node_view_color_scheme.h"
 
 TimelineFramesItemDelegate::TimelineFramesItemDelegate(QObject *parent)
-    : QItemDelegate(parent)
+    : QItemDelegate(parent),
+      stripes(64, 64)
 {
     KisNodeViewColorScheme scm;
     labelColors = scm.allColorLabels();
+
+    // Clone frame stripes SVG -> Pixmap..
+    QImage stripesImage(":/pics/svg/light_diagonal-stripe.png", "png");
+    stripesImage.save("/tmp/krita_stripes.png", "png");
+    stripes = QPixmap::fromImage(stripesImage);
 }
 
 TimelineFramesItemDelegate::~TimelineFramesItemDelegate()
@@ -158,8 +153,6 @@ void TimelineFramesItemDelegate::drawBackground(QPainter *painter, const QModelI
         painter->fillRect(rc, color);
     }
 
-
-
     // pass of outline for empty keyframes
     if (doesFrameExist && !hasContent) {
 
@@ -173,7 +166,6 @@ void TimelineFramesItemDelegate::drawBackground(QPainter *painter, const QModelI
         painter->setBrush(oldBrush);
         painter->setPen(oldPen);
     }
-
 
     // pass of hold frame line
     if (!doesFrameExist && hasContent) {
@@ -197,8 +189,6 @@ void TimelineFramesItemDelegate::drawBackground(QPainter *painter, const QModelI
         painter->setPen(holdFramePen);
         painter->drawLine(QLine(lineStart, lineEnd));
     }
-
-
 
 }
 
@@ -224,12 +214,32 @@ void TimelineFramesItemDelegate::drawFocus(QPainter *painter,
     style->drawPrimitive(QStyle::PE_FrameFocusRect, &o, painter, widget);
 }
 
+void TimelineFramesItemDelegate::drawCloneGraphics(QPainter *painter, const QRect &rect) const
+{
+    painter->save();
+
+    QBrush brush(stripes);
+    brush.setStyle(Qt::TexturePattern);
+
+    painter->setPen(Qt::NoPen);
+    painter->setBrush(brush);
+    painter->setOpacity(0.25f);
+    painter->drawRect(rect);
+
+    painter->restore();
+}
+
 void TimelineFramesItemDelegate::paint(QPainter *painter,
                                const QStyleOptionViewItem &option,
                                const QModelIndex &index) const
-{    
+{
     // draws background as well as fills normal keyframes
     drawBackground(painter, index, option.rect);
+
+    // Clone graphics..
+    if (index.data(TimelineFramesModel::CloneOfActiveFrame).toBool() && index.data(TimelineFramesModel::ActiveLayerRole).toBool()) {
+        drawCloneGraphics(painter, option.rect);
+    }
 
     // creates a semi transparent orange rectangle in the frame that is actively selected on the active row
     if (option.showDecorationSelected &&
@@ -261,5 +271,16 @@ void TimelineFramesItemDelegate::paint(QPainter *painter,
     bool layerIsCurrent = index.data(TimelineFramesModel::ActiveLayerRole).toBool();
     if (active) {
         paintActiveFrameSelector(painter, option.rect, layerIsCurrent);
+    }
+
+    { // Shade over anthing that's outside of the animation range...
+        if (index.data(TimelineFramesModel::WithinClipRange).toBool() == false) {
+            painter->save();
+
+            painter->setOpacity(0.50f);
+            painter->fillRect(option.rect, qApp->palette().color(QPalette::Base).darker(110));
+
+            painter->restore();
+        }
     }
 }

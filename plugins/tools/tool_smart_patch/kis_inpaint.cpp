@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2017 Eugene Ingerman
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 /**
@@ -493,15 +481,15 @@ template <typename T> float distance_impl(const MaskedImage& my, int x, int y, c
 {
     float dsq = 0;
     quint32 nchannels = my.channelCount();
-    quint8* v1 = my.imageData(x, y);
-    quint8* v2 = other.imageData(xo, yo);
+    T *v1 = reinterpret_cast<T*>(my.imageData(x, y));
+    T *v2 = reinterpret_cast<T*>(other.imageData(xo, yo));
 
     for (quint32 chan = 0; chan < nchannels; chan++) {
         //It's very important not to lose precision in the next line
-        float v = ((float)(*((T*)v1 + chan)) - (float)(*((T*)v2 + chan)));
+        float v = ((float)(*(v1 + chan)) - (float)(*(v2 + chan)));
         dsq += v * v;
     }
-    return dsq / ( (float)KoColorSpaceMathsTraits<T>::unitValue * (float)KoColorSpaceMathsTraits<T>::unitValue / MAX_DIST );
+    return dsq / (KoColorSpaceMathsTraits<float>::unitValue * KoColorSpaceMathsTraits<float>::unitValue / MAX_DIST );
 }
 
 

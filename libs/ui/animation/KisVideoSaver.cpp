@@ -1,10 +1,7 @@
 /*
  *  Copyright (c) 2016 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -32,7 +29,7 @@
 
 #include <kis_image.h>
 #include <kis_image_animation_interface.h>
-#include <kis_time_range.h>
+#include <kis_time_span.h>
 
 #include "kis_config.h"
 
@@ -215,8 +212,8 @@ KisImportExportErrorCode KisVideoSaver::encode(const QString &savedFilesMask, co
     KisImageAnimationInterface *animation = m_image->animationInterface();
 
     const int sequenceNumberingOffset = options.sequenceStart;
-    const KisTimeRange clipRange(sequenceNumberingOffset + options.firstFrame,
-                                 sequenceNumberingOffset + options.lastFrame);
+    const KisTimeSpan clipRange = KisTimeSpan::fromTimeToTime(sequenceNumberingOffset + options.firstFrame,
+                                                        sequenceNumberingOffset + options.lastFrame);
 
      // export dimensions could be off a little bit, so the last force option tweaks the pixels for the export to work
     const QString exportDimensions =

@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2017 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "KisWatershedWorkerTest.h"
@@ -30,6 +18,7 @@
 
 #include "lazybrush/kis_lazy_fill_tools.h"
 #include "testutil.h"
+#include "testing_timed_default_bounds.h"
 
 
 #include <lazybrush/KisWatershedWorker.h>
@@ -39,7 +28,6 @@ inline KisPaintDeviceSP loadTestImage(const QString &name, bool convertToAlpha)
     QImage image(TestUtil::fetchDataFileLazy(name));
     KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
     dev->convertFromQImage(image, 0);
-
     if (convertToAlpha) {
         dev = KisPainter::convertToAlphaAsAlpha(dev);
     }
@@ -56,6 +44,13 @@ void KisWatershedWorkerTest::testWorker()
 
     KisPaintDeviceSP filteredMainDev = KisPainter::convertToAlphaAsGray(mainDev);
     const QRect filterRect = filteredMainDev->exactBounds();
+
+    mainDev->setDefaultBounds(new TestUtil::TestingTimedDefaultBounds(filterRect));
+    aLabelDev->setDefaultBounds(mainDev->defaultBounds());
+    bLabelDev->setDefaultBounds(mainDev->defaultBounds());
+    resultColoring->setDefaultBounds(mainDev->defaultBounds());
+    filteredMainDev->setDefaultBounds(mainDev->defaultBounds());
+
     KisGaussianKernel::applyLoG(filteredMainDev,
                                 filterRect,
                                 2,

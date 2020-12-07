@@ -14,7 +14,7 @@
 #include <QVector>
 #include <QMutex>
 #include <QMutexLocker>
-#include <tiles3/kis_lockless_stack.h>
+#include <kis_lockless_stack.h>
 
 #define CALL_MEMBER(obj, pmf) ((obj).*(pmf))
 

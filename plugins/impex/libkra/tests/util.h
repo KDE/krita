@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2008 Boudewijn Rempt boud@valdyas.org
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 #ifndef _UTIL_H_
 #define _UTIL_H_
@@ -156,8 +144,7 @@ KisDocument* createCompleteDocument()
     image->addNode(shapeLayer, group1);
     image->addNode(adjustmentLayer2, group1);
 
-    KisFilterMaskSP filterMask1 = new KisFilterMask();
-    filterMask1->setName("filterMask1");
+    KisFilterMaskSP filterMask1 = new KisFilterMask(image, "filterMask1");
 
     kfc = KisFilterRegistry::instance()->get("pixelize")->defaultConfiguration(KisGlobalResourcesInterface::instance());
     filterMask1->setFilter(kfc->cloneWithResourcesSnapshot());
@@ -166,38 +153,32 @@ KisDocument* createCompleteDocument()
     filterMask1->setSelection(createPixelSelection(paintLayer1->paintDevice()));
     image->addNode(filterMask1, paintLayer1);
 
-    KisFilterMaskSP filterMask2 = new KisFilterMask();
-    filterMask2->setName("filterMask2");
+    KisFilterMaskSP filterMask2 = new KisFilterMask(image, "filterMask2");
 
     kfc = KisFilterRegistry::instance()->get("pixelize")->defaultConfiguration(KisGlobalResourcesInterface::instance());
-    filterMask2->setFilter(kfc);
+    filterMask2->setFilter(kfc->cloneWithResourcesSnapshot());
     kfc = 0; // kfc cannot be shared!
 
     filterMask2->setSelection(createVectorSelection(paintLayer2->paintDevice(), image, doc->shapeController()));
     image->addNode(filterMask2, paintLayer2);
 
-    KisTransparencyMaskSP transparencyMask1 = new KisTransparencyMask();
-    transparencyMask1->setName("transparencyMask1");
+    KisTransparencyMaskSP transparencyMask1 = new KisTransparencyMask(image, "transparencyMask1");
     transparencyMask1->setSelection(createPixelSelection(paintLayer1->paintDevice()));
     image->addNode(transparencyMask1, group1);
 
-    KisTransparencyMaskSP transparencyMask2 = new KisTransparencyMask();
-    transparencyMask2->setName("transparencyMask2");
+    KisTransparencyMaskSP transparencyMask2 = new KisTransparencyMask(image, "transparencyMask2");
     transparencyMask2->setSelection(createPixelSelection(paintLayer1->paintDevice()));
     image->addNode(transparencyMask2, group2);
 
-    KisSelectionMaskSP selectionMask1 = new KisSelectionMask(image);
+    KisSelectionMaskSP selectionMask1 = new KisSelectionMask(image, "selectionMask1");
     image->addNode(selectionMask1, paintLayer1);
-    selectionMask1->setName("selectionMask1");
     selectionMask1->setSelection(createPixelSelection(paintLayer1->paintDevice()));
 
-    KisSelectionMaskSP selectionMask2 = new KisSelectionMask(image);
-    selectionMask2->setName("selectionMask2");
+    KisSelectionMaskSP selectionMask2 = new KisSelectionMask(image, "selectionMask2");
     selectionMask2->setSelection(createPixelSelection(paintLayer2->paintDevice()));
     image->addNode(selectionMask2, paintLayer2);
 
-    KisTransformMaskSP transformMask = new KisTransformMask();
-    transformMask->setName("testTransformMask");
+    KisTransformMaskSP transformMask = new KisTransformMask(image, "testTransformMask");
     transformMask->setTransformParams(KisTransformMaskParamsInterfaceSP(
                                           new KisDumbTransformMaskParams(createTestingTransform())));
 

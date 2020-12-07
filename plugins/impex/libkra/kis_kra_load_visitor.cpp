@@ -2,19 +2,7 @@
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *  Copyright (c) 2005 C. Boemann <cbo@boemann.dk>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_kra_load_visitor.h"
@@ -28,6 +16,7 @@
 #include <QBuffer>
 #include <QByteArray>
 #include <QMessageBox>
+#include <QApplication>
 
 #include <KoMD5Generator.h>
 #include <KoColorSpaceRegistry.h>
@@ -157,7 +146,8 @@ bool KisKraLoadVisitor::visit(KisExternalLayer * layer)
                         "Path: %1\n\n"
                         "Do you want to select another location?", reference->filename());
 
-                    int locateManually = QMessageBox::warning(0, i18nc("@title:window", "File not found"), msg, QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+                    // qApp->activeWindow() doesn't work here
+                    int locateManually = QMessageBox::warning(qApp->activeWindow(), i18nc("@title:window", "File not found"), msg, QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
 
                     QString url;
                     if (locateManually == QMessageBox::Yes) {
@@ -218,7 +208,7 @@ bool KisKraLoadVisitor::visit(KisPaintLayer *layer)
             if (!pixelSelection->read(m_store->device())) {
                 pixelSelection->disconnect();
             } else {
-                KisTransparencyMask* mask = new KisTransparencyMask();
+                KisTransparencyMask* mask = new KisTransparencyMask(m_image, i18n("Transparency Mask"));
                 mask->setSelection(selection);
                 m_image->addNode(mask, layer, layer->firstChild());
             }
@@ -231,6 +221,8 @@ bool KisKraLoadVisitor::visit(KisPaintLayer *layer)
 
 bool KisKraLoadVisitor::visit(KisGroupLayer *layer)
 {
+    loadNodeKeyframes(layer);
+
     if (*layer->colorSpace() != *m_image->colorSpace()) {
         layer->resetCache(m_image->colorSpace());
     }
@@ -455,8 +447,13 @@ bool KisKraLoadVisitor::visit(KisColorizeMask *mask)
         return false;
 
     QVector<KisLazyFillTools::KeyStroke> strokes;
-    if (!KisDomUtils::loadValue(doc.documentElement(), COLORIZE_KEYSTROKES_SECTION, &strokes, mask->colorSpace()))
+    if (!KisDomUtils::loadValue(doc.documentElement(),
+                                COLORIZE_KEYSTROKES_SECTION,
+                                &strokes,
+                                mask->colorSpace(),
+                                QPoint(mask->x(), mask->y()))) {
         return false;
+    }
 
     int i = 0;
     Q_FOREACH (const KisLazyFillTools::KeyStroke &stroke, strokes) {
@@ -467,6 +464,35 @@ bool KisKraLoadVisitor::visit(KisColorizeMask *mask)
     mask->setKeyStrokesDirect(QList<KisLazyFillTools::KeyStroke>::fromVector(strokes));
 
     loadPaintDevice(mask->coloringProjection(), COLORIZE_COLORING_DEVICE);
+
+    const KoColorProfile *profile =
+        loadProfile(getLocation(mask, DOT_ICC), mask->colorSpace()->colorModelId().id(), mask->colorSpace()->colorDepthId().id());
+
+    if (!profile) {
+        KisNodeSP parent = mask->parent();
+        KIS_SAFE_ASSERT_RECOVER(parent) {
+            parent = m_image->root();
+        }
+
+        if (parent->colorSpace()->colorModelId() == mask->colorSpace()->colorModelId() &&
+            parent->colorSpace()->colorDepthId() == mask->colorSpace()->colorDepthId()) {
+
+            profile = parent->colorSpace()->profile();
+        }
+    }
+
+    if (!profile) {
+        if (m_image->colorSpace()->colorModelId() == mask->colorSpace()->colorModelId() &&
+            m_image->colorSpace()->colorDepthId() == mask->colorSpace()->colorDepthId()) {
+
+            profile = m_image->colorSpace()->profile();
+        }
+    }
+
+    if (profile) {
+        mask->setProfile(profile, 0);
+    }
+
     mask->resetCache();
 
     m_store->popDirectory();
@@ -582,11 +608,27 @@ bool KisKraLoadVisitor::loadPaintDeviceFrame(KisPaintDeviceSP device, const QStr
 
 bool KisKraLoadVisitor::loadProfile(KisPaintDeviceSP device, const QString& location)
 {
+    const KoColorProfile *profile = loadProfile(location, device->colorSpace()->colorModelId().id(), device->colorSpace()->colorDepthId().id());
+
+    if (profile) {
+        // TODO: check result!
+        device->setProfile(profile, 0);
+    } else {
+        m_warningMessages << i18n("Could not load profile: %1.", location);
+    }
+
+    return true;
+}
+
+const KoColorProfile *KisKraLoadVisitor::loadProfile(const QString &location, const QString &colorModelId, const QString &colorDepthId)
+{
+    const KoColorProfile *result = 0;
+
     if (m_store->hasFile(location)) {
         m_store->open(location);
         QByteArray data;
         data.resize(m_store->size());
-        dbgFile << "Data to load: " << m_store->size() << " from " << location << " with color space " << device->colorSpace()->id();
+        dbgFile << "Data to load: " << m_store->size() << " from " << location << " with color space " << colorModelId << colorDepthId;
         int read = m_store->read(data.data(), m_store->size());
         dbgFile << "Profile size: " << data.size() << " " << m_store->atEnd() << " " << m_store->device()->bytesAvailable() << " " << read;
         m_store->close();
@@ -594,22 +636,17 @@ bool KisKraLoadVisitor::loadProfile(KisPaintDeviceSP device, const QString& loca
         QByteArray hash = KoMD5Generator::generateHash(data);
 
         if (m_profileCache.contains(hash)) {
-            if (device->setProfile(m_profileCache[hash], 0)) {
-                return true;
-            }
+            result = m_profileCache[hash];
         }
         else {
             // Create a colorspace with the embedded profile
-            const KoColorProfile *profile = KoColorSpaceRegistry::instance()->createColorProfile(device->colorSpace()->colorModelId().id(), device->colorSpace()->colorDepthId().id(), data);
+            const KoColorProfile *profile = KoColorSpaceRegistry::instance()->createColorProfile(colorModelId, colorDepthId, data);
             m_profileCache[hash] = profile;
-            if (device->setProfile(profile, 0)) {
-                return true;
-            }
-
+            result = profile;
         }
     }
-    m_warningMessages << i18n("Could not load profile: %1.", location);
-    return true;
+
+    return result;
 }
 
 bool KisKraLoadVisitor::loadFilterConfiguration(KisFilterConfigurationSP kfc, const QString& location)
@@ -688,17 +725,7 @@ bool KisKraLoadVisitor::loadSelection(const QString& location, KisSelectionSP ds
         pixelSelection->setDefaultPixel(transparent);
     }
 
-    // Pixel selection
     bool result = true;
-    QString pixelSelectionLocation = location + DOT_PIXEL_SELECTION;
-    if (m_store->hasFile(pixelSelectionLocation)) {
-        KisPixelSelectionSP pixelSelection = dstSelection->pixelSelection();
-        result = loadPaintDevice(pixelSelection, pixelSelectionLocation);
-        if (!result) {
-            m_warningMessages << i18n("Could not load raster selection %1.", location);
-        }
-        pixelSelection->invalidateOutlineCache();
-    }
 
     // Shape selection
     QString shapeSelectionLocation = location + DOT_SHAPE_SELECTION;
@@ -711,11 +738,43 @@ bool KisKraLoadVisitor::loadSelection(const QString& location, KisSelectionSP ds
         KisShapeSelection* shapeSelection = new KisShapeSelection(m_shapeController, m_image, dstSelection);
         dstSelection->convertToVectorSelectionNoUndo(shapeSelection);
         result = shapeSelection->loadSelection(m_store);
+
+        /**
+         * We need to explicitly call updateProjection() here, because
+         * KisUpdateSelectionJob that is put into the queue will not update
+         * actual layers that own this selection. In normal situation,
+         * the setDirty() call is done explicitly while painting.
+         *
+         * TODO: consider adding a proper setDirty() call to
+         *       KisUpdateSelectionJob. Though it doesn't seem to be needed
+         *       until we allow modifying vector selections on non-selection
+         *       masks.
+         */
+        dstSelection->updateProjection();
         m_store->popDirectory();
         if (!result) {
             m_warningMessages << i18n("Could not load vector selection %1.", location);
         }
+    } else {
+        /**
+         * NOTE: since loading a vector selection discards all the contents
+         * of a raster projection by reincarnating the paint device, there is
+         * no need to load pixel selection in case any vector selection
+         * is present.
+         */
+
+        // Pixel selection
+        QString pixelSelectionLocation = location + DOT_PIXEL_SELECTION;
+        if (m_store->hasFile(pixelSelectionLocation)) {
+            KisPixelSelectionSP pixelSelection = dstSelection->pixelSelection();
+            result = loadPaintDevice(pixelSelection, pixelSelectionLocation);
+            if (!result) {
+                m_warningMessages << i18n("Could not load raster selection %1.", location);
+            }
+            pixelSelection->invalidateOutlineCache();
+        }
     }
+
     return true;
 }
 

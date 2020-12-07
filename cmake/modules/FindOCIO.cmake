@@ -11,8 +11,8 @@
 # Copyright (c) 2009, Cyrille Berger, <cberger@cberger.net>
 # Copyright (c) 2012, Boudewijn Rempt, <boud@valdyas.org>
 #
-# Redistribution and use is allowed according to the terms of the BSD license.
-# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+# SPDX-License-Identifier: BSD-3-Clause
+#
 
 if(OCIO_PATH)
     message(STATUS "OCIO path explicitly specified: ${OCIO_PATH}")
@@ -51,7 +51,7 @@ find_library(OCIO_LIBRARIES OpenColorIO
 )
 
 if(OCIO_INCLUDE_DIR AND OCIO_LIBRARIES)
-   set(OCIO_FOUND TRUE) 
+   set(OCIO_FOUND TRUE)
 else()
    set(OCIO_FOUND FALSE)
 endif()

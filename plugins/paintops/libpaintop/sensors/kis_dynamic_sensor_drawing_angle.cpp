@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2013 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_dynamic_sensor_drawing_angle.h"
@@ -73,21 +61,21 @@ void KisDynamicSensorDrawingAngle::updateGUI()
 
 QWidget* KisDynamicSensorDrawingAngle::createConfigurationWidget(QWidget* parent, QWidget *ss)
 {
-    QWidget *w = new QWidget(parent);
+    QWidget *widget = new QWidget(parent);
 
-    m_chkLockedMode = new QCheckBox(i18n("Lock"), w);
+    m_chkLockedMode = new QCheckBox(i18n("Lock"), widget);
     m_chkLockedMode->setChecked(m_lockedAngleMode);
 
     connect(m_chkLockedMode, SIGNAL(stateChanged(int)), SLOT(setLockedAngleMode(int)));
     connect(m_chkLockedMode, SIGNAL(stateChanged(int)), SLOT(updateGUI()));
 
-    m_chkFanCorners = new QCheckBox(i18n("Fan Corners"), w);
+    m_chkFanCorners = new QCheckBox(i18n("Fan Corners"), widget);
 
     connect(m_chkFanCorners, SIGNAL(stateChanged(int)), SLOT(setFanCornersEnabled(int)));
 
     m_chkFanCorners->setChecked(m_fanCornersEnabled);
 
-    m_intFanCornersStep = new KisSliderSpinBox(w);
+    m_intFanCornersStep = new KisSliderSpinBox(widget);
     m_intFanCornersStep->setRange(5, 90);
     m_intFanCornersStep->setSingleStep(1);
     m_intFanCornersStep->setSuffix(i18n("°"));
@@ -96,7 +84,7 @@ QWidget* KisDynamicSensorDrawingAngle::createConfigurationWidget(QWidget* parent
 
     m_intFanCornersStep->setValue(m_fanCornersStep);
 
-    KisSliderSpinBox *angleOffset = new KisSliderSpinBox(w);
+    KisSliderSpinBox *angleOffset = new KisSliderSpinBox(widget);
     angleOffset->setRange(0, 359);
     angleOffset->setSingleStep(1);
     angleOffset->setSuffix(i18n("°"));
@@ -105,12 +93,12 @@ QWidget* KisDynamicSensorDrawingAngle::createConfigurationWidget(QWidget* parent
 
     angleOffset->setValue(m_angleOffset);
 
-    QVBoxLayout* l = new QVBoxLayout(w);
-    l->addWidget(m_chkLockedMode);
-    l->addWidget(m_chkFanCorners);
-    l->addWidget(m_intFanCornersStep);
-    l->addWidget(new QLabel(i18n("Angle Offset")));
-    l->addWidget(angleOffset);
+    QVBoxLayout *layout = new QVBoxLayout(widget);
+    layout->addWidget(m_chkLockedMode);
+    layout->addWidget(m_chkFanCorners);
+    layout->addWidget(m_intFanCornersStep);
+    layout->addWidget(new QLabel(i18n("Angle Offset")));
+    layout->addWidget(angleOffset);
 
     updateGUI();
 
@@ -119,8 +107,7 @@ QWidget* KisDynamicSensorDrawingAngle::createConfigurationWidget(QWidget* parent
     connect(m_chkFanCorners, SIGNAL(stateChanged(int)), ss, SIGNAL(parametersChanged()));
     connect(m_intFanCornersStep, SIGNAL(valueChanged(int)), ss, SIGNAL(parametersChanged()));
 
-    w->setLayout(l);
-    return w;
+    return widget;
 }
 
 bool KisDynamicSensorDrawingAngle::fanCornersEnabled() const

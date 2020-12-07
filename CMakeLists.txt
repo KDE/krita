@@ -171,11 +171,15 @@ if (WIN32)
 endif ()
 
 option(HIDE_SAFE_ASSERTS "Don't show message box for \"safe\" asserts, just ignore them automatically and dump a message to the terminal." ON)
-configure_file(config-hide-safe-asserts.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-hide-safe-asserts.h)
-add_feature_info("Hide Safe Asserts" HIDE_SAFE_ASSERTS "Don't show message box for \"safe\" asserts, just ignore them automatically and dump a message to the terminal.")
+add_feature_info("Hide safe asserts" HIDE_SAFE_ASSERTS "Don't show message box for \"safe\" asserts, just ignore them automatically and dump a message to the terminal.")
+
+option(CRASH_ON_SAFE_ASSERTS "Crash unconditionally whenever a \"safe\" assert happens. Useful for running unittests" OFF)
+add_feature_info("Crash on safe asserts" CRASH_ON_SAFE_ASSERTS "Crash unconditionally whenever a \"safe\" assert happens. Useful for running unittests")
+
+configure_file(config-safe-asserts.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-safe-asserts.h)
 
 option(USE_LOCK_FREE_HASH_TABLE "Use lock free hash table instead of blocking." ON)
-configure_file(config-hash-table-implementaion.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-hash-table-implementaion.h)
+configure_file(config-hash-table-implementation.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-hash-table-implementation.h)
 add_feature_info("Lock free hash table" USE_LOCK_FREE_HASH_TABLE "Use lock free hash table instead of blocking.")
 
 option(FOUNDATION_BUILD "A Foundation build is a binary release build that can package some extra things like color themes. Linux distributions that build and install Krita into a default system location should not define this option to true." OFF)
@@ -559,9 +563,9 @@ endif()
 
 # FIXME: Still hardcoded
 if (ANDROID)
-    set (Boost_INCLUDE_DIR          ${CMAKE_CURRENT_BINARY_DIR}/i/${ANDROID_ABI}/include/boost-1_69)
+    set (Boost_INCLUDE_DIR          ${CMAKE_CURRENT_BINARY_DIR}/i/${ANDROID_ABI}/include/boost-1_70)
     set (Boost_LIBRARY_DIR          ${CMAKE_CURRENT_BINARY_DIR}/i/${ANDROID_ABI}/lib)
-    set (KF5_LIBRARIES              ${CMAKE_CURRENT_BINARY_DIR}/kf5/kde/install/lib)
+    set (KF5_LIBRARIES              ${CMAKE_CURRENT_BINARY_DIR}/i/lib)
 endif()
 
 find_package(PNG REQUIRED)
@@ -594,6 +598,23 @@ endif()
 ## Optional dependencies  ##
 ############################
 ###########################
+
+##
+## Test for KSeExpr
+##
+find_package(KSeExpr 4.0.0.0)
+set_package_properties(KSeExpr PROPERTIES
+    URL "https://invent.kde.org/graphics/kseexpr"
+    TYPE OPTIONAL
+    PURPOSE "Required by the SeExpr generator layer"
+)
+macro_bool_to_01(KSeExpr_FOUND HAVE_SEEXPR)
+configure_file(config-seexpr.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-seexpr.h )
+if(KSeExpr_FOUND)
+    get_target_property(KSeExpr_LIBRARY KSeExpr::KSeExpr "LOCATION")
+    get_target_property(KSeExprUI_LIBRARY KSeExpr::KSeExprUI "LOCATION") 
+    list (APPEND ANDROID_EXTRA_LIBS ${KSeExpr_LIBRARY} ${KSeExprUI_LIBRARY})
+endif()
 
 find_package(ZLIB)
 set_package_properties(ZLIB PROPERTIES
@@ -635,6 +656,7 @@ set_package_properties(JPEG PROPERTIES
     PURPOSE "Required by the Krita JPEG filter")
 if (JPEG_FOUND)
     list (APPEND ANDROID_EXTRA_LIBS ${JPEG_LIBRARY})
+    macro_bool_to_01(JPEG_FOUND HAVE_JPEG)
 endif()
 
 find_package(GIF)
@@ -711,6 +733,18 @@ set_package_properties(PyQt5 PROPERTIES
     PURPOSE "Required by the Krita PyQt plugin")
 macro_bool_to_01(PYQT5_FOUND HAVE_PYQT5)
 
+find_package(LibMyPaint)
+set_package_properties(LibMyPaint PROPERTIES
+    DESCRIPTION "MyPaint brush engine API for C/C++"
+    TYPE OPTIONAL
+    PURPOSE "Required for the mypaint brush engine")
+if(LibMyPaint_FOUND)
+    if(LibMyPaint_VERSION VERSION_LESS "1.4.0")
+        message(WARNING "Please update libmypaint to version above 1.4.0 as lower versions are known to crash")
+    endif()
+endif()
+macro_bool_to_01(LibMyPaint_FOUND HAVE_LIBMYPAINT)
+configure_file(config-mypaint.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-mypaint.h )
 
 ##
 ## Look for OpenGL
@@ -908,6 +942,25 @@ if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/po OR EXISTS ${CMAKE_CURRENT_BINARY_DIR}/p
   ki18n_install(po)
 endif()
 
+if (ANDROID)
+  # ECM passes this to Qt, which was already capable of detecting it..
+  set (ANDROID_SDK_COMPILE_API "29")
+  if ((${NDK_VERSION} GREATER_EQUAL 20))
+    set (USE_LLVM ON)
+  endif()
+
+  if (NOT (CMAKE_CXX_STANDARD_LIBRARIES MATCHES "[^ ]*c\\+\\+[^ ]*\\.so"))
+    # copied regex from ECM's toolchain
+    string(REGEX REPLACE "-(clang)?([0-9].[0-9])?$" "" ECM_ANDROID_STL_ARCH ${ANDROID_TOOLCHAIN_NAME})
+
+    set (KRITA_ANDROID_STL_PATH "${ANDROID_TOOLCHAIN_ROOT}/sysroot/usr/lib/${ECM_ANDROID_STL_ARCH}/lib${ANDROID_STL}.so")
+    if (NOT EXISTS ${KRITA_ANDROID_STL_PATH})
+      message(FATAL_ERROR "STL does not exist at the right location, please use NDK r20+")
+    endif()
+
+    set (CMAKE_CXX_STANDARD_LIBRARIES "${CMAKE_CXX_STANDARD_LIBRARIES} \"${KRITA_ANDROID_STL_PATH}\"" CACHE STRING "" FORCE)
+  endif()
+endif()
 
 if(DEFINED QTANDROID_EXPORTED_TARGET AND NOT TARGET "create-apk")
     set (_CMAKE_ANDROID_DIR "${ECM_DIR}/../toolchain")

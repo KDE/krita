@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2017 Eugene Ingerman
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "ToolReferenceImagesWidget.h"
@@ -25,6 +13,7 @@
 #include <KoShapeKeepAspectRatioCommand.h>
 #include <kis_config.h>
 #include <kis_signals_blocker.h>
+#include <kis_signal_compressor.h>
 #include <KisReferenceImage.h>
 
 #include <QClipboard>
@@ -94,8 +83,12 @@ ToolReferenceImagesWidget::ToolReferenceImagesWidget(ToolReferenceImages *tool, 
     connect(d->ui->bnLoad, SIGNAL(clicked()), tool, SLOT(loadReferenceImages()));
 
     connect(d->ui->chkKeepAspectRatio, SIGNAL(stateChanged(int)), this, SLOT(slotKeepAspectChanged()));
-    connect(d->ui->opacitySlider, SIGNAL(valueChanged(qreal)), this, SLOT(slotOpacitySliderChanged(qreal)));
-    connect(d->ui->saturationSlider, SIGNAL(valueChanged(qreal)), this, SLOT(slotSaturationSliderChanged(qreal)));
+
+    KisSignalCompressor *compressor = new KisSignalCompressor(100 /* ms */, KisSignalCompressor::POSTPONE, this);
+    connect(compressor, SIGNAL(timeout()), this, SLOT(slotImageValuesChanged()));
+
+    connect(d->ui->saturationSlider, SIGNAL(valueChanged(qreal)), compressor, SLOT(start()));
+    connect(d->ui->opacitySlider, SIGNAL(valueChanged(qreal)), compressor, SLOT(start()));
 
     d->ui->referenceImageLocationCombobox->addItem(i18n("Embed to .KRA"));
     d->ui->referenceImageLocationCombobox->addItem(i18n("Link to Image"));
@@ -208,6 +201,12 @@ void ToolReferenceImagesWidget::slotSaveLocationChanged(int index)
             }
         }
     }
+}
+
+void ToolReferenceImagesWidget::slotImageValuesChanged()
+{
+    slotSaturationSliderChanged(d->ui->saturationSlider->value());
+    slotOpacitySliderChanged(d->ui->opacitySlider->value());
 }
 
 void ToolReferenceImagesWidget::updateVisibility(bool hasSelection)

@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2016 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #ifndef TESTSVGPARSER_H
@@ -100,6 +88,19 @@ private Q_SLOTS:
     void testRenderFillLinearGradientUserCoordPercent();
 
     void testRenderStrokeLinearGradient();
+
+    void testRenderMeshGradient_bilinear_1by1_UserCoord();
+    void testRenderMeshGradient_bicubic_1by1_UserCoord();
+    void testRenderMeshGradient_bilinear_2by2_UserCoord();
+    void testRenderMeshGradient_bicubic_2by2_UserCoord();
+    void testRenderMeshGradient_bilinear_1by1_Obb();
+    void testRenderMeshGradient_bicubic_2by2_Obb();
+    void testRenderMeshGradient_MeshTransform_UserCoord();
+    void testRenderMeshGradient_ShapeTransform_UserCoord();
+    void testRenderMeshGradient_transparent();
+    void testRenderMeshGradient_reversed();
+    void testRenderMeshGradient_MeshTransform_Obb();
+    void testRenderMeshGradient_ShapeTransform_Obb();
 
     void testManualRenderPattern_ContentUser_RefObb();
     void testManualRenderPattern_ContentObb_RefObb();

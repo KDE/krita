@@ -3,18 +3,7 @@ Copyright (c) 2017 Wolthera van Hövell tot Westerflier <griffinvalley@gmail.com
 
 This file is part of the Comics Project Management Tools(CPMT).
 
-CPMT is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-CPMT is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with the CPMT.  If not, see <http://www.gnu.org/licenses/>.
+SPDX-License-Identifier: GPL-3.0-or-later
 """
 
 """
@@ -77,11 +66,16 @@ class language_combo_box(QComboBox):
                 if codeName not in self.codesList:
                     self.codesList.append(codeName)
             self.codesList.sort()
-            
+
         for lang in self.codesList:
             locale = QLocale(lang)
+
             if locale:
-                languageName = QLocale.languageToString(locale.language())
+                languageName = locale.nativeLanguageName()
+
+                if len(languageName)==0:
+                    languageName = QLocale.languageToString(locale.language())
+
                 self.languageList.append(languageName.title())
                 self.setIconSize(QSize(32, 22))
                 codeIcon = QImage(self.iconSize(), QImage.Format_ARGB32)

@@ -2,19 +2,7 @@
  *  Copyright (c) 2006 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2007 Thomas Zander <zander@kde.org>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #ifndef KIS_SHAPE_LAYER_H_
@@ -38,6 +26,7 @@ class KoViewConverter;
 class KoShapeControllerBase;
 class KoDocumentResourceManager;
 class KisShapeLayerCanvasBase;
+class KoSelectedShapesProxy;
 
 const QString KIS_SHAPE_LAYER_ID = "KisShapeLayer";
 /**
@@ -76,7 +65,9 @@ public:
 protected:
     KisShapeLayer(KoShapeControllerBase* shapeController, KisImageWSP image, const QString &name, quint8 opacity, KisShapeLayerCanvasBase *canvas);
 private:
-    void initShapeLayer(KoShapeControllerBase* controller, KisPaintDeviceSP copyFromProjection = 0, KisShapeLayerCanvasBase *canvas = 0);
+    void initShapeLayerImpl(KoShapeControllerBase* controller, KisPaintDeviceSP newProjectionDevice, KisShapeLayerCanvasBase *overrideCanvas);
+    void initNewShapeLayer(KoShapeControllerBase* controller, const KoColorSpace *projectionColorSpace, KisDefaultBoundsBaseSP bounds, KisShapeLayerCanvasBase *overrideCanvas = 0);
+    void initClonedShapeLayer(KoShapeControllerBase* controller, KisPaintDeviceSP copyFromProjection, KisShapeLayerCanvasBase *overrideCanvas = 0);
 public:
     KisNodeSP clone() const override {
         return new KisShapeLayer(*this);
@@ -162,6 +153,13 @@ public:
     bool hasPendingTimedUpdates() const override;
 
     void forceUpdateHiddenAreaOnOriginal() override;
+
+    /**
+     * @brief selectedShapesProxy
+     * @return returns the selectedShapesProxy of the KoCanvasBase of this layer,
+     * used for certain undo commands.
+     */
+    KoSelectedShapesProxy* selectedShapesProxy();
 
 protected:
     using KoShape::isVisible;

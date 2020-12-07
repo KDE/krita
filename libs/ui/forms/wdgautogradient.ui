@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>KisWdgAutogradient</class>
  <widget class="QWidget" name="KisWdgAutogradient">
   <property name="geometry">
@@ -46,7 +50,7 @@
    </item>
    <item>
     <layout class="QGridLayout" name="gridLayout">
-     <item row="1" column="0">
+     <item column="0" row="1">
       <widget class="QLabel" name="labelLeftColor">
        <property name="font">
         <font>
@@ -67,7 +71,7 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="2">
+     <item column="2" row="1">
       <widget class="KisColorButton" name="leftColorButton">
        <property name="sizePolicy">
         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
@@ -97,7 +101,7 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="1">
+     <item column="1" row="1">
       <widget class="QRadioButton" name="leftColorRadioButton">
        <property name="text">
         <string>Color</string>
@@ -110,7 +114,7 @@
        </attribute>
       </widget>
      </item>
-     <item row="4" column="0">
+     <item column="0" row="4">
       <widget class="QLabel" name="labelRightColor">
        <property name="font">
         <font>
@@ -131,7 +135,7 @@
        </property>
       </widget>
      </item>
-     <item row="4" column="1">
+     <item column="1" row="4">
       <widget class="QRadioButton" name="rightColorRadioButton">
        <property name="text">
         <string>Color</string>
@@ -144,7 +148,7 @@
        </attribute>
       </widget>
      </item>
-     <item row="5" column="1">
+     <item column="1" row="5">
       <widget class="QRadioButton" name="rightForegroundRadioButton">
        <property name="text">
         <string>Foreground</string>
@@ -154,7 +158,7 @@
        </attribute>
       </widget>
      </item>
-     <item row="4" column="2">
+     <item column="2" row="4">
       <widget class="KisColorButton" name="rightColorButton">
        <property name="sizePolicy">
         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
@@ -184,7 +188,7 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="3">
+     <item column="3" row="0">
       <widget class="QLabel" name="textLabel2">
        <property name="font">
         <font>
@@ -202,7 +206,7 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="1">
+     <item column="1" row="3">
       <widget class="QRadioButton" name="leftBackgroundRadioButton">
        <property name="text">
         <string>Background</string>
@@ -212,7 +216,7 @@
        </attribute>
       </widget>
      </item>
-     <item row="4" column="3">
+     <item column="3" row="4">
       <widget class="KisIntParseSpinBox" name="intNumInputRightOpacity">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Ignored">
@@ -242,7 +246,7 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="1">
+     <item column="1" row="2">
       <widget class="QRadioButton" name="leftForegroundRadioButton">
        <property name="text">
         <string>Foreground</string>
@@ -252,7 +256,7 @@
        </attribute>
       </widget>
      </item>
-     <item row="0" column="0" colspan="3">
+     <item colspan="3" column="0" row="0">
       <widget class="QLabel" name="textLabel1">
        <property name="font">
         <font>
@@ -270,7 +274,7 @@
        </property>
       </widget>
      </item>
-     <item row="6" column="1">
+     <item column="1" row="6">
       <widget class="QRadioButton" name="rightBackgroundRadioButton">
        <property name="text">
         <string>Background</string>
@@ -280,7 +284,7 @@
        </attribute>
       </widget>
      </item>
-     <item row="1" column="3">
+     <item column="3" row="1">
       <widget class="KisIntParseSpinBox" name="intNumInputLeftOpacity">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -310,28 +314,28 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="2">
+     <item column="2" row="2">
       <widget class="QCheckBox" name="leftForegroundTransparent">
        <property name="text">
         <string>Transparent</string>
        </property>
       </widget>
      </item>
-     <item row="3" column="2">
+     <item column="2" row="3">
       <widget class="QCheckBox" name="leftBackgroundTransparent">
        <property name="text">
         <string>Transparent</string>
        </property>
       </widget>
      </item>
-     <item row="5" column="2">
+     <item column="2" row="5">
       <widget class="QCheckBox" name="rightForegroundTransparent">
        <property name="text">
         <string>Transparent</string>
        </property>
       </widget>
      </item>
-     <item row="6" column="2">
+     <item column="2" row="6">
       <widget class="QCheckBox" name="rightBackgroundTransparent">
        <property name="text">
         <string>Transparent</string>
@@ -460,7 +464,7 @@
   </customwidget>
   <customwidget>
    <class>KisGradientSliderWidget</class>
-   <extends></extends>
+   <extends/>
    <header>KisGradientSliderWidget.h</header>
   </customwidget>
  </customwidgets>

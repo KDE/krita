@@ -5,19 +5,7 @@
  *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *  Copyright (C) 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_brush_chooser.h"
@@ -80,7 +68,7 @@ void KisBrushDelegate::paint(QPainter * painter, const QStyleOptionViewItem & op
     if (! index.isValid())
         return;
 
-    QImage thumbnail = index.data(Qt::UserRole + KisResourceModel::Thumbnail).value<QImage>();
+    QImage thumbnail = index.data(Qt::UserRole + KisAbstractResourceModel::Thumbnail).value<QImage>();
 
     QRect itemRect = option.rect;
 
@@ -192,20 +180,18 @@ KisPredefinedBrushChooser::KisPredefinedBrushChooser(QWidget *parent, const char
     btnResetAdjustments->setToolTip(i18nc("@info:tooltip", "Resets all the adjustments to default values:\n Neutral Point: 127\n Brightness: 0%\n Contrast: 0%"));
     connect(btnResetAdjustments, SIGNAL(clicked()), SLOT(slotResetAdjustments()));
 
-    connect(btnMaskMode, SIGNAL(toggled(bool)), SLOT(slotUpdateBrushAdjustmentsState()));
-    connect(btnColorMode, SIGNAL(toggled(bool)), SLOT(slotUpdateBrushAdjustmentsState()));
-    connect(btnGradientMode, SIGNAL(toggled(bool)), SLOT(slotUpdateBrushAdjustmentsState()));
-    connect(btnLightnessMode, SIGNAL(toggled(bool)), SLOT(slotUpdateBrushAdjustmentsState()));
+    cmbBrushMode->addItem(i18n("Alpha Mask"));
+    cmbBrushMode->addItem(i18n("Color Image"));
+    cmbBrushMode->addItem(i18n("Lightness Map"));
+    cmbBrushMode->addItem(i18n("Gradient Map"));
+    cmbBrushMode->setItemData(int(ALPHAMASK), i18nc("@info:tooltip", "Luminosity of the brush tip image is used as alpha channel for the stroke"), Qt::ToolTipRole);
+    cmbBrushMode->setItemData(int(IMAGESTAMP), i18nc("@info:tooltip", "The brush tip image is painted as it is"), Qt::ToolTipRole);
+    cmbBrushMode->setItemData(int(LIGHTNESSMAP), i18nc("@info:tooltip", "Luminosity of the brush tip image is used as lightness correction for the painting color. Alpha channel of the brush tip image is used as alpha for the final stroke"), Qt::ToolTipRole);
+    cmbBrushMode->setItemData(int(GRADIENTMAP), i18nc("@info:tooltip", "The brush tip maps its value to the currently selected gradient. Alpha channel of the brush tip image is used as alpha for the final stroke"), Qt::ToolTipRole);
 
-    connect(btnMaskMode, SIGNAL(toggled(bool)), SLOT(slotWriteBrushMode()));
-    connect(btnColorMode, SIGNAL(toggled(bool)), SLOT(slotWriteBrushMode()));
-    connect(btnGradientMode, SIGNAL(toggled(bool)), SLOT(slotWriteBrushMode()));
-    connect(btnLightnessMode, SIGNAL(toggled(bool)), SLOT(slotWriteBrushMode()));
-
-    connect(btnMaskMode, SIGNAL(toggled(bool)), SLOT(slotUpdateResetBrushAdjustmentsButtonState()));
-    connect(btnColorMode, SIGNAL(toggled(bool)), SLOT(slotUpdateResetBrushAdjustmentsButtonState()));
-    connect(btnGradientMode, SIGNAL(toggled(bool)), SLOT(slotUpdateResetBrushAdjustmentsButtonState()));
-    connect(btnLightnessMode, SIGNAL(toggled(bool)), SLOT(slotUpdateResetBrushAdjustmentsButtonState()));
+    connect(cmbBrushMode, SIGNAL(currentIndexChanged(int)), SLOT(slotUpdateBrushAdjustmentsState()));
+    connect(cmbBrushMode, SIGNAL(currentIndexChanged(int)), SLOT(slotWriteBrushMode()));
+    connect(cmbBrushMode, SIGNAL(currentIndexChanged(int)), SLOT(slotUpdateResetBrushAdjustmentsButtonState()));
 
     connect(intAdjustmentMidPoint, SIGNAL(valueChanged(int)), SLOT(slotWriteBrushAdjustments()));
     connect(intBrightnessAdjustment, SIGNAL(valueChanged(int)), SLOT(slotWriteBrushAdjustments()));
@@ -269,7 +255,6 @@ void KisPredefinedBrushChooser::slotResetBrush()
         brush->setAngle(0.0);
 
         if (KisColorfulBrush *colorfulBrush = dynamic_cast<KisColorfulBrush*>(m_brush.data())) {
-            colorfulBrush->setUseColorAsMask(false);
             colorfulBrush->setBrushApplication(IMAGESTAMP);
             colorfulBrush->setAdjustmentMidPoint(127);
             colorfulBrush->setBrightnessAdjustment(0.0);
@@ -422,15 +407,7 @@ void KisPredefinedBrushChooser::slotUpdateBrushModeButtonsState()
         m_hslBrushTipEnabled && colorfulBrush && colorfulBrush->hasColor();
 
     if (modeSwitchEnabled) {
-        if (colorfulBrush->preserveLightness()) {
-            btnLightnessMode->setChecked(true);
-        } else if (colorfulBrush->applyingGradient()) {
-            btnGradientMode->setChecked(true);
-        } else if (colorfulBrush->useColorAsMask()) {
-            btnMaskMode->setChecked(true);
-        } else {
-            btnColorMode->setChecked(true);
-        }
+        cmbBrushMode->setCurrentIndex(int(colorfulBrush->brushApplication()));
 
         {
             // sliders emit update signals when modified from the code
@@ -440,10 +417,6 @@ void KisPredefinedBrushChooser::slotUpdateBrushModeButtonsState()
             intContrastAdjustment->setValue(qRound(colorfulBrush->contrastAdjustment() * 100.0));
         }
 
-        btnMaskMode->setToolTip(i18nc("@info:tooltip", "Luminosity of the brush tip image is used as alpha channel for the stroke"));
-        btnColorMode->setToolTip(i18nc("@info:tooltip", "The brush tip image is painted as it is"));
-        btnGradientMode->setToolTip(i18nc("@info:tooltip", "The brush tip maps its value to the currently selected gradient. Alpha channel of the brush tip image is used as alpha for the final stroke"));
-        btnLightnessMode->setToolTip(i18nc("@info:tooltip", "Luminosity of the brush tip image is used as lightness correction for the painting color. Alpha channel of the brush tip image is used as alpha for the final stroke"));
         intAdjustmentMidPoint->setToolTip(i18nc("@info:tooltip", "Luminosity value of the brush that will not change the painting color. All brush pixels darker than neutral point will paint with darker color, pixels lighter than neutral point — lighter."));
         intBrightnessAdjustment->setToolTip(i18nc("@info:tooltip", "Brightness correction for the brush"));
         intContrastAdjustment->setToolTip(i18nc("@info:tooltip", "Contrast correction for the brush"));
@@ -457,12 +430,7 @@ void KisPredefinedBrushChooser::slotUpdateBrushModeButtonsState()
             intBrightnessAdjustment->setValue(0);
             intContrastAdjustment->setValue(0);
         }
-        btnMaskMode->setChecked(true);
 
-        btnMaskMode->setToolTip("");
-        btnColorMode->setToolTip("");
-        btnGradientMode->setToolTip("");
-        btnLightnessMode->setToolTip("");
         intAdjustmentMidPoint->setToolTip("");
         intBrightnessAdjustment->setToolTip("");
         intContrastAdjustment->setToolTip("");
@@ -483,9 +451,8 @@ void KisPredefinedBrushChooser::slotUpdateBrushModeButtonsState()
 
 void KisPredefinedBrushChooser::slotUpdateBrushAdjustmentsState()
 {
-    const bool adjustmentsEnabled = (btnLightnessMode->isEnabled() && btnLightnessMode->isChecked()) ||
-                    (btnGradientMode->isEnabled() && btnGradientMode->isChecked());
-
+    const bool adjustmentsEnabled = (cmbBrushMode->currentIndex() == LIGHTNESSMAP) ||
+                    (cmbBrushMode->currentIndex() == GRADIENTMAP);
     intAdjustmentMidPoint->setEnabled(adjustmentsEnabled);
     intBrightnessAdjustment->setEnabled(adjustmentsEnabled);
     intContrastAdjustment->setEnabled(adjustmentsEnabled);
@@ -493,8 +460,8 @@ void KisPredefinedBrushChooser::slotUpdateBrushAdjustmentsState()
 
 void KisPredefinedBrushChooser::slotUpdateResetBrushAdjustmentsButtonState()
 {
-    const bool adjustmentsEnabled = (btnLightnessMode->isEnabled() && btnLightnessMode->isChecked()) ||
-                    (btnGradientMode->isEnabled() && btnGradientMode->isChecked());
+    const bool adjustmentsEnabled = (cmbBrushMode->currentIndex() == LIGHTNESSMAP) ||
+                    (cmbBrushMode->currentIndex() == GRADIENTMAP);
 
     const bool adjustmentsDefault =
             intAdjustmentMidPoint->value() == 127 &&
@@ -509,19 +476,7 @@ void KisPredefinedBrushChooser::slotWriteBrushMode()
     KisColorfulBrush *colorfulBrush = dynamic_cast<KisColorfulBrush*>(m_brush.data());
     if (!colorfulBrush) return;
 
-    if (btnLightnessMode->isChecked()) {
-        colorfulBrush->setUseColorAsMask(true);
-        colorfulBrush->setBrushApplication(LIGHTNESSMAP);
-    } else if (btnGradientMode->isChecked()) {
-        colorfulBrush->setUseColorAsMask(true);
-        colorfulBrush->setBrushApplication(GRADIENTMAP);
-    } else if (btnMaskMode->isChecked()) {
-        colorfulBrush->setUseColorAsMask(true);
-        colorfulBrush->setBrushApplication(ALPHAMASK);
-    } else {
-        colorfulBrush->setUseColorAsMask(false);
-        colorfulBrush->setBrushApplication(IMAGESTAMP);
-    }
+    colorfulBrush->setBrushApplication(enumBrushApplication(cmbBrushMode->currentIndex()));
 
     emit sigBrushChanged();
 }

@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #ifndef TEST_UTIL
@@ -21,6 +9,7 @@
 
 #include <QProcessEnvironment>
 
+#include <QTest>
 #include <QList>
 #include <QTime>
 #include <QDir>
@@ -37,8 +26,6 @@
 #include "kis_iterator_ng.h"
 #include "kis_image.h"
 #include "testing_nodes.h"
-
-#include "kistest.h"
 
 #ifndef FILES_DATA_DIR
 #define FILES_DATA_DIR "."
@@ -395,7 +382,13 @@ struct MaskParent
         qApp->processEvents();
         image->waitForDone();
         KisLayerUtils::forceAllDelayedNodesUpdate(image->root());
-        qApp->processEvents();
+        /**
+         * Shape updates have two chanis of compresion, 100ms each.
+         * One in KoShapeManager, the other one in KisShapeLayerCanvas.
+         * Therefore we should wait for a decent amount of time for all
+         * of them to land.
+         */
+        QTest::qWait(500);
         image->waitForDone();
     }
 

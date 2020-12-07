@@ -1,19 +1,7 @@
 /*
  * Copyright (C) Wolthera van Hovell tot Westerflier <griffinvalley@gmail.com>, (C) 2016
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include <QDesktopWidget>
@@ -57,16 +45,15 @@ struct KisScreenColorPicker::Private
 
 KisScreenColorPicker::KisScreenColorPicker(bool showInfoLabel, QWidget *parent) : KisScreenColorPickerBase(parent), m_d(new Private)
 {
-    QVBoxLayout *layout = new QVBoxLayout();
-    this->setLayout(layout);
+    QVBoxLayout *layout = new QVBoxLayout(this);
     m_d->screenColorPickerButton = new QPushButton();
 
     m_d->screenColorPickerButton->setMinimumHeight(25);
-    this->layout()->addWidget(m_d->screenColorPickerButton);
+    layout->addWidget(m_d->screenColorPickerButton);
 
     if (showInfoLabel) {
         m_d->lblScreenColorInfo = new QLabel(QLatin1String("\n"));
-        this->layout()->addWidget(m_d->lblScreenColorInfo);
+        layout->addWidget(m_d->lblScreenColorInfo);
     }
 
     connect(m_d->screenColorPickerButton, SIGNAL(clicked()), SLOT(pickScreenColor()));

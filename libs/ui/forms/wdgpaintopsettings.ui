@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgPaintOpSettings</class>
  <widget class="QWidget" name="WdgPaintOpSettings">
   <property name="geometry">
@@ -14,7 +18,7 @@
    <string>Brush Editor</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0" colspan="3">
+   <item colspan="3" column="0" row="0">
     <layout class="QHBoxLayout" name="brushEditorDashboard">
      <property name="spacing">
       <number>9</number>
@@ -114,7 +118,7 @@
          <item>
           <widget class="QLabel" name="currentBrushNameLabel">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+            <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -197,19 +201,6 @@
             <string>Cancel</string>
            </property>
           </widget>
-         </item>
-         <item>
-          <spacer name="horizontalSpacer_3">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>20</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
          </item>
         </layout>
        </item>
@@ -377,7 +368,7 @@
      </item>
     </layout>
    </item>
-   <item row="1" column="0">
+   <item column="0" row="1">
     <widget class="QGroupBox" name="presetsContainer">
      <property name="title">
       <string/>
@@ -586,7 +577,7 @@
      </layout>
     </widget>
    </item>
-   <item row="1" column="1">
+   <item column="1" row="1">
     <widget class="QGroupBox" name="brushEditorSettingsControls">
      <property name="title">
       <string/>
@@ -753,7 +744,7 @@
      </layout>
     </widget>
    </item>
-   <item row="1" column="2">
+   <item column="2" row="1">
     <widget class="QGroupBox" name="scratchpadControls">
      <property name="title">
       <string/>

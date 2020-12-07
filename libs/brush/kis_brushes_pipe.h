@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2012 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #ifndef __KIS_BRUSHES_PIPE_H
@@ -58,10 +46,6 @@ public:
     QSharedPointer<BrushType> currentBrush(const KisPaintInformation& info) {
         Q_UNUSED(info);
         return !m_brushes.isEmpty() ? m_brushes.at(currentBrushIndex()) : 0;
-    }
-
-    int brushIndex(const KisPaintInformation& info) {
-        return chooseNextBrush(info);
     }
 
     qint32 maskWidth(KisDabShape const& shape, double subPixelX, double subPixelY, const KisPaintInformation& info) {
@@ -111,11 +95,8 @@ public:
         }
     }
 
-    void notifyCachedDabPainted(const KisPaintInformation& info) {
-        updateBrushIndexes(info, -1);
-    }
-
     void prepareForSeqNo(const KisPaintInformation& info, int seqNo) {
+        chooseNextBrush(info);
         updateBrushIndexes(info, seqNo);
     }
 
@@ -130,7 +111,6 @@ public:
 
 
         brush->generateMaskAndApplyMaskOrCreateDab(dst, coloringInformation, shape, info, subPixelX, subPixelY, softnessFactor, lightnessStrength);
-        notifyCachedDabPainted(info);
     }
 
     KisFixedPaintDeviceSP paintDevice(const KoColorSpace * colorSpace,
@@ -142,7 +122,6 @@ public:
         if (!brush) return 0;
 
         KisFixedPaintDeviceSP device = brush->paintDevice(colorSpace, shape, info, subPixelX, subPixelY);
-        notifyCachedDabPainted(info);
         return device;
     }
 
@@ -152,7 +131,7 @@ public:
 
     void testingSelectNextBrush(const KisPaintInformation& info) {
         (void) chooseNextBrush(info);
-        notifyCachedDabPainted(info);
+        updateBrushIndexes(info, -1);
     }
 
     /**

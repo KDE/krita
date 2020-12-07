@@ -1,19 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) Julian Thijssen <julianthijssen@gmail.com>, (C) 2016
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_opengl_shader_loader.h"
@@ -215,9 +203,14 @@ KisShaderProgram *KisOpenGLShaderLoader::loadOverlayInvertedShader()
     QString vertPath, fragPath;
 
     // Select appropriate shader files
-    if ((KisOpenGL::hasOpenGL3()  || KisOpenGL::hasOpenGLES()) && KisOpenGL::supportsRenderToFBO()) {
+    if (KisOpenGL::supportsLoD() || KisOpenGL::hasOpenGLES()) {
         vertPath = "matrix_transform.vert";
-        fragPath = "overlay_inverted.frag";
+
+        if (KisOpenGL::useFBOForToolOutlineRendering()) {
+            fragPath = "overlay_inverted.frag";
+        } else {
+            fragPath = "solid_color.frag";
+        }
     } else {
         vertPath = "matrix_transform_legacy.vert";
         fragPath = "solid_color_legacy.frag";

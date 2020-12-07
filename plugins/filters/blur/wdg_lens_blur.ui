@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgLensBlur</class>
  <widget class="QWidget" name="WdgLensBlur">
   <property name="geometry">
@@ -23,7 +27,7 @@
       <string>Iris</string>
      </property>
      <layout class="QFormLayout" name="formLayout">
-      <item row="0" column="0">
+      <item column="0" row="0">
        <widget class="QLabel" name="label">
         <property name="text">
          <string>Shape:</string>
@@ -33,7 +37,7 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="1">
+      <item column="1" row="0">
        <widget class="QComboBox" name="irisShapeCombo">
         <item>
          <property name="text">
@@ -67,14 +71,14 @@
         </item>
        </widget>
       </item>
-      <item row="1" column="0">
+      <item column="0" row="1">
        <widget class="QLabel" name="label_2">
         <property name="text">
          <string>Radius:</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="1">
+      <item column="1" row="1">
        <widget class="KisIntParseSpinBox" name="irisRadiusSlider">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -96,14 +100,14 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="0">
+      <item column="0" row="2">
        <widget class="QLabel" name="label_3">
         <property name="text">
          <string>Rotation:</string>
         </property>
        </widget>
       </item>
-      <item row="2" column="1">
+      <item column="1" row="2">
        <widget class="KisIntParseSpinBox" name="irisRotationSlider">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">

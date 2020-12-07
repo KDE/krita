@@ -2,19 +2,7 @@
  *  Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
  *  Copyright (c) 2012 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_node_filter_interface.h"
@@ -36,7 +24,7 @@
 
 #define SANITY_RELEASE_FILTER(filter)                           \
     do {                                                        \
-        if (m_filter && m_filter->sanityDerefUsageCounter()) {  \
+        if (m_filterConfiguration && m_filterConfiguration->sanityDerefUsageCounter()) {  \
             warnKrita;                                                 \
             warnKrita << "WARNING: filter configuration has more than one user! Krita will probably crash soon!"; \
             warnKrita << "WARNING:" << ppVar(this);                    \
@@ -53,36 +41,36 @@
 #endif /* SANITY_CHECK_FILTER_CONFIGURATION_OWNER*/
 
 KisNodeFilterInterface::KisNodeFilterInterface(KisFilterConfigurationSP filterConfig)
-    : m_filter(filterConfig)
+    : m_filterConfiguration(filterConfig)
 {
-    SANITY_ACQUIRE_FILTER(m_filter);
+    SANITY_ACQUIRE_FILTER(m_filterConfiguration);
     KIS_SAFE_ASSERT_RECOVER_NOOP(!filterConfig || filterConfig->hasLocalResourcesSnapshot());
 }
 
 KisNodeFilterInterface::KisNodeFilterInterface(const KisNodeFilterInterface &rhs)
-    : m_filter(rhs.m_filter->clone())
+    : m_filterConfiguration(rhs.m_filterConfiguration->clone())
 
 {
-    SANITY_ACQUIRE_FILTER(m_filter);
+    SANITY_ACQUIRE_FILTER(m_filterConfiguration);
 }
 
 KisNodeFilterInterface::~KisNodeFilterInterface()
 {
-    SANITY_RELEASE_FILTER(m_filter);
+    SANITY_RELEASE_FILTER(m_filterConfiguration);
 }
 
 KisFilterConfigurationSP KisNodeFilterInterface::filter() const
 {
-    return m_filter;
+    return m_filterConfiguration;
 }
 
 void KisNodeFilterInterface::setFilter(KisFilterConfigurationSP filterConfig)
 {
-    SANITY_RELEASE_FILTER(m_filter);
+    SANITY_RELEASE_FILTER(m_filterConfiguration);
 
     KIS_SAFE_ASSERT_RECOVER_RETURN(filterConfig);
     KIS_SAFE_ASSERT_RECOVER_NOOP(filterConfig->hasLocalResourcesSnapshot());
-    m_filter = filterConfig;
+    m_filterConfiguration = filterConfig;
 
-    SANITY_ACQUIRE_FILTER(m_filter);
+    SANITY_ACQUIRE_FILTER(m_filterConfiguration);
 }

@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2012 Sven Langkamp <sven.langkamp@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_layer_composition.h"
@@ -68,6 +56,10 @@ public:
     bool visit(KisColorizeMask* mask) override { return process(mask); }
 
     bool process(KisNode* node) {
+        if (node->isFakeNode()) {
+            dbgKrita << "Compositions: Skipping over Fake Node" << node->uuid() << node->name();
+            return true;
+        }
         if(m_mode == STORE) {
             m_layerComposition->m_visibilityMap[node->uuid()] = node->visible();
             m_layerComposition->m_collapsedMap[node->uuid()] = node->collapsed();
@@ -198,6 +190,7 @@ void KisLayerComposition::save(QDomDocument& doc, QDomElement& element)
     while (iter.hasNext()) {
         iter.next();
         QDomElement valueElement = doc.createElement("value");
+        dbgKrita << "uuid" << iter.key().toString() << "visible" <<  iter.value();
         valueElement.setAttribute("uuid", iter.key().toString());
         valueElement.setAttribute("visible", iter.value());
         dbgKrita << "contains" << m_collapsedMap.contains(iter.key());

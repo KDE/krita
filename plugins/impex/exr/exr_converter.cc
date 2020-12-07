@@ -2,10 +2,7 @@
  *  Copyright (c) 2005 Adrian Page <adrian@pagenet.plus.com>
  *  Copyright (c) 2010 Cyrille Berger <cberger@cberger.net>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -467,8 +464,7 @@ void EXRConverter::Private::decodeData1(Imf::InputFile& file, ExrPaintLayerInfo&
 
     QRect paintRegion(xstart, ystart, width, height);
     KisSequentialIterator it(layer->paintDevice(), paintRegion);
-    do {
-
+    while (it.nextPixel()) {
         if (hasAlpha) {
             unmultiplyAlpha<GrayPixelWrapper<_T_> >(srcPtr);
         }
@@ -479,7 +475,7 @@ void EXRConverter::Private::decodeData1(Imf::InputFile& file, ExrPaintLayerInfo&
         dstPtr->alpha = hasAlpha ? srcPtr->alpha : channel_type(1.0);
 
         ++srcPtr;
-    } while (it.nextPixel());
+    } ;
 }
 
 bool recCheckGroup(const ExrGroupLayerInfo& group, QStringList list, int idx1, int idx2)
@@ -567,7 +563,7 @@ bool EXRConverter::Private::checkExtraLayersInfoConsistent(const QDomDocument &d
 KisImportExportErrorCode EXRConverter::decode(const QString &filename)
 {
     try {
-        Imf::InputFile file(QFile::encodeName(filename));
+        Imf::InputFile file(filename.toUtf8());
 
         Imath::Box2i dw = file.header().dataWindow();
         Imath::Box2i displayWindow = file.header().displayWindow();
@@ -808,8 +804,12 @@ KisImportExportErrorCode EXRConverter::decode(const QString &filename)
         /**
          * EXR semi-transparent images are expected to be rendered on
          * black to ensure correctness of the light model
+         *
+         * NOTE: We cannot do that automatically, because the EXR may be imported
+         * into the image as a layer, in which case the default color will create
+         * major issues. See https://bugs.kde.org/show_bug.cgi?id=427720
          */
-        d->image->setDefaultProjectionColor(KoColor(Qt::black, colorSpace));
+        //d->image->setDefaultProjectionColor(KoColor(Qt::black, colorSpace));
 
         // Create group layers
         for (int i = 0; i < groups.size(); ++i) {
@@ -885,8 +885,6 @@ KisImportExportErrorCode EXRConverter::decode(const QString &filename)
                 dbgFile << "No decoding " << info.name << " with " << info.channelMap.size() << " channels, and lack of a color space";
             }
         }
-        // Set projectionColor to opaque
-        d->image->setDefaultProjectionColor(KoColor(Qt::transparent, colorSpace));
 
         // After reading the image, notify the user about changed alpha.
         if (d->alphaWasModified) {
@@ -899,7 +897,7 @@ KisImportExportErrorCode EXRConverter::decode(const QString &filename)
                           "<br/><br/>"
                           "This will hardly make any visual difference just keep it in mind.");
             if (d->showNotifications) {
-                QMessageBox::information(0, i18nc("@title:window", "EXR image has been modified"), msg);
+                QMessageBox::information(qApp->activeWindow(), i18nc("@title:window", "EXR image has been modified"), msg);
             } else {
                 warnKrita << "WARNING:" << msg;
             }
@@ -1077,7 +1075,7 @@ KisPaintDeviceSP wrapLayerDevice(KisPaintDeviceSP device)
             cs->colorModelId() == GrayAColorModelID ?
                 GrayAColorModelID.id() : RGBAColorModelID.id(),
             Float16BitsColorDepthID.id());
-    } else if (cs->colorModelId() != GrayColorModelID &&
+    } else if (cs->colorModelId() != GrayAColorModelID &&
                cs->colorModelId() != RGBAColorModelID) {
         cs = KoColorSpaceRegistry::instance()->colorSpace(
             RGBAColorModelID.id(),
@@ -1128,7 +1126,7 @@ KisImportExportErrorCode EXRConverter::buildFile(const QString &filename, KisPai
 
     // Open file for writing
     try {
-        Imf::OutputFile file(QFile::encodeName(filename), header);
+        Imf::OutputFile file(filename.toUtf8(), header);
 
         QList<ExrPaintLayerSaveInfo> informationObjects;
         informationObjects.push_back(info);
@@ -1137,7 +1135,7 @@ KisImportExportErrorCode EXRConverter::buildFile(const QString &filename, KisPai
 
     } catch(std::exception &e) {
         dbgFile << "Exception while writing to exr file: " << e.what();
-        if (!KisImportExportAdditionalChecks::isFileWritable(QFile::encodeName(filename))) {
+        if (!KisImportExportAdditionalChecks::isFileWritable(filename)) {
             return ImportExportCodes::NoAccessToWrite;
         }
         return ImportExportCodes::ErrorWhileWriting;
@@ -1233,20 +1231,20 @@ void EXRConverter::Private::recBuildPaintLayerSaveInfo(QList<ExrPaintLayerSaveIn
             }
             else {
 
-                if (paintLayer->colorSpace()->colorModelId() == RGBAColorModelID) {
+                if (info.layerDevice->colorSpace()->colorModelId() == RGBAColorModelID) {
                     info.channels.push_back(info.name + remap(current2original, "R"));
                     info.channels.push_back(info.name + remap(current2original, "G"));
                     info.channels.push_back(info.name + remap(current2original, "B"));
                     info.channels.push_back(info.name + remap(current2original, "A"));
                 }
-                else if (paintLayer->colorSpace()->colorModelId() == GrayAColorModelID) {
+                else if (info.layerDevice->colorSpace()->colorModelId() == GrayAColorModelID) {
                     info.channels.push_back(info.name + remap(current2original, "G"));
                     info.channels.push_back(info.name + remap(current2original, "A"));
                 }
-                else if (paintLayer->colorSpace()->colorModelId() == GrayColorModelID) {
+                else if (info.layerDevice->colorSpace()->colorModelId() == GrayColorModelID) {
                     info.channels.push_back(info.name + remap(current2original, "G"));
                 }
-                else if (paintLayer->colorSpace()->colorModelId() == XYZAColorModelID) {
+                else if (info.layerDevice->colorSpace()->colorModelId() == XYZAColorModelID) {
                     info.channels.push_back(info.name + remap(current2original, "X"));
                     info.channels.push_back(info.name + remap(current2original, "Y"));
                     info.channels.push_back(info.name + remap(current2original, "Z"));
@@ -1255,10 +1253,10 @@ void EXRConverter::Private::recBuildPaintLayerSaveInfo(QList<ExrPaintLayerSaveIn
 
             }
 
-            if (paintLayer->colorSpace()->colorDepthId() == Float16BitsColorDepthID) {
+            if (info.layerDevice->colorSpace()->colorDepthId() == Float16BitsColorDepthID) {
                 info.pixelType = Imf::HALF;
             }
-            else if (paintLayer->colorSpace()->colorDepthId() == Float32BitsColorDepthID) {
+            else if (info.layerDevice->colorSpace()->colorDepthId() == Float32BitsColorDepthID) {
                 info.pixelType = Imf::FLOAT;
             }
             else {
@@ -1380,12 +1378,12 @@ KisImportExportErrorCode EXRConverter::buildFile(const QString &filename, KisGro
 
         // Open file for writing
         try {
-            Imf::OutputFile file(QFile::encodeName(filename), header);
+            Imf::OutputFile file(filename.toUtf8(), header);
             encodeData(file, informationObjects, width, height);
             return ImportExportCodes::OK;
         } catch(std::exception &e) {
             dbgFile << "Exception while writing to exr file: " << e.what();
-            if (!KisImportExportAdditionalChecks::isFileWritable(QFile::encodeName(filename))) {
+            if (!KisImportExportAdditionalChecks::isFileWritable(filename.toUtf8())) {
                 return ImportExportCodes::NoAccessToWrite;
             }
             return ImportExportCodes::ErrorWhileWriting;

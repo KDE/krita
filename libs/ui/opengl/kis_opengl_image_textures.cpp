@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2005-2007 Adrian Page <adrian@pagenet.plus.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "opengl/kis_opengl_image_textures.h"
@@ -68,7 +56,6 @@ KisOpenGLImageTextures::KisOpenGLImageTextures()
     : m_image(0)
     , m_monitorProfile(0)
     , m_internalColorManagementActive(true)
-    , m_checkerTexture(0)
     , m_glFuncs(0)
     , m_useOcio(false)
     , m_initialized(false)
@@ -91,7 +78,6 @@ KisOpenGLImageTextures::KisOpenGLImageTextures(KisImageWSP image,
     , m_renderingIntent(renderingIntent)
     , m_conversionFlags(conversionFlags)
     , m_internalColorManagementActive(true)
-    , m_checkerTexture(0)
     , m_glFuncs(0)
     , m_useOcio(false)
     , m_initialized(false)
@@ -114,7 +100,8 @@ void KisOpenGLImageTextures::initGL(QOpenGLFunctions *f)
     static KisTextureTileInfoPoolRegistry s_poolRegistry;
     m_updateInfoBuilder.setTextureInfoPool(s_poolRegistry.getPool(m_texturesInfo.width, m_texturesInfo.height));
 
-    m_glFuncs->glGenTextures(1, &m_checkerTexture);
+    m_checkerTexture = GLuint();
+    m_glFuncs->glGenTextures(1, &(*m_checkerTexture));
     recreateImageTextureTiles();
 
     KisOpenGLUpdateInfoSP info = updateCache(m_image->bounds(), m_image);
@@ -133,7 +120,9 @@ KisOpenGLImageTextures::~KisOpenGLImageTextures()
     }
 
     destroyImageTextureTiles();
-    m_glFuncs->glDeleteTextures(1, &m_checkerTexture);
+    if (m_checkerTexture) {
+        m_glFuncs->glDeleteTextures(1, &(*m_checkerTexture));
+    }
 }
 
 KisImageSP KisOpenGLImageTextures::image() const
@@ -338,10 +327,11 @@ void KisOpenGLImageTextures::generateCheckerTexture(const QImage &checkImage)
 GLuint KisOpenGLImageTextures::checkerTexture()
 {
     if (m_glFuncs) {
-        if (m_checkerTexture == 0) {
-            m_glFuncs->glGenTextures(1, &m_checkerTexture);
+        if (!m_checkerTexture) {
+            m_checkerTexture = GLuint();
+            m_glFuncs->glGenTextures(1, &(*m_checkerTexture));
         }
-        return m_checkerTexture;
+        return *m_checkerTexture;
     }
     else {
         dbgUI << "Tried to access checker texture before OpenGL was initialized";
@@ -357,6 +347,22 @@ void KisOpenGLImageTextures::updateConfig(bool useBuffer, int NumMipmapLevels)
         tile->setUseBuffer(useBuffer);
         tile->setNumMipmapLevels(NumMipmapLevels);
     }
+}
+
+void KisOpenGLImageTextures::testingForceInitialized()
+{
+    m_initialized = true;
+    m_updateInfoBuilder.setTextureInfoPool(toQShared(new KisTextureTileInfoPool(256, 256)));
+
+    ConversionOptions options;
+    options.m_destinationColorSpace = KoColorSpaceRegistry::instance()->rgb8();
+    options.m_conversionFlags = KoColorConversionTransformation::internalConversionFlags();
+    options.m_renderingIntent = KoColorConversionTransformation::internalRenderingIntent();
+    options.m_needsConversion = false;
+    m_updateInfoBuilder.setConversionOptions(options);
+
+    m_updateInfoBuilder.setTextureBorder(4);
+    m_updateInfoBuilder.setEffectiveTextureSize(QSize(248, 248));
 }
 
 void KisOpenGLImageTextures::slotImageSizeChanged(qint32 /*w*/, qint32 /*h*/)

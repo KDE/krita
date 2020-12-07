@@ -3,19 +3,7 @@
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 #ifndef KIS_BRUSH_
 #define KIS_BRUSH_
@@ -198,10 +186,12 @@ public:
     double maskAngle(double angle = 0) const;
 
     /**
-     * @return the index of the brush
+     * @return the currently selected index of the brush
      *         if the brush consists of multiple images
+     *
+     * @see prepareForSeqNo()
      */
-    virtual quint32 brushIndex(const KisPaintInformation& info) const;
+    virtual quint32 brushIndex() const;
 
     /**
      * The brush type defines how the brush is used.
@@ -226,22 +216,10 @@ public:
     virtual void notifyStrokeStarted();
 
     /**
-     * Is called by the cache, when cache hit has happened.
-     * Having got this notification the brush can update the counters
-     * of dabs, generate some new random values if needed.
-     *
-     * * NOTE: one should use **either** notifyCachedDabPainted() or prepareForSeqNo()
-     *
-     * Currently, this is used by pipe'd brushes to implement
-     * incremental and random parasites
-     */
-    virtual void notifyCachedDabPainted(const KisPaintInformation& info);
-
-    /**
      * Is called by the multithreaded queue to prepare a specific brush
      * tip for the particular seqNo.
      *
-     * NOTE: one should use **either** notifyCachedDabPainted() or prepareForSeqNo()
+     * NOTE: one should use always call prepareForSeqNo() before using the brush
      *
      * Currently, this is used by pipe'd brushes to implement
      * incremental and random parasites
@@ -289,8 +267,6 @@ public:
               qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR, qreal lightnessStrength = DEFAULT_LIGHTNESS_STRENGTH) const;
 
 
-    virtual bool hasColor() const;
-
     virtual enumBrushApplication brushApplication() const;
 
     virtual void setBrushApplication(enumBrushApplication brushApplication);
@@ -329,7 +305,7 @@ public:
             double subPixelX, double subPixelY,
             qreal softnessFactor, qreal lightnessStrength) const;
 
-    virtual void generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
+    void generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
         ColoringInformation* coloringInfo,
         KisDabShape const&,
         const KisPaintInformation& info,
@@ -368,8 +344,6 @@ protected:
      * XXX
      */
     virtual void setBrushType(enumBrushType type);
-
-    virtual void setHasColor(bool hasColor);
 
 public:
 

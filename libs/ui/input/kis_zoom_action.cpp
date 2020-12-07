@@ -1,19 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2012 Arjen Hiemstra <ahiemstra@heimr.nl>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_zoom_action.h"
@@ -127,6 +115,7 @@ KisZoomAction::KisZoomAction()
     shortcuts.insert(i18n("Reset Zoom to 100%"), ZoomResetShortcut);
     shortcuts.insert(i18n("Fit to Page"), ZoomToPageShortcut);
     shortcuts.insert(i18n("Fit to Width"), ZoomToWidthShortcut);
+    shortcuts.insert(i18n("Fit to Height"), ZoomToHeightShortcut);
     setShortcutIndexes(shortcuts);
 }
 
@@ -190,6 +179,9 @@ void KisZoomAction::begin(int shortcut, QEvent *event)
             break;
         case ZoomToWidthShortcut:
             inputManager()->canvas()->viewManager()->zoomController()->setZoom(KoZoomMode::ZOOM_WIDTH, 1.0);
+            break;
+        case ZoomToHeightShortcut:
+            inputManager()->canvas()->viewManager()->zoomController()->setZoom(KoZoomMode::ZOOM_HEIGHT, 1.0);
             break;
     }
 }

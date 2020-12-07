@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2007 Boudewijn Rempt boud@valdyas.org
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_clone_layer_test.h"
@@ -30,8 +18,8 @@
 #include "kis_clone_layer.h"
 #include "kis_image.h"
 
+#include "kistest.h"
 #include "testutil.h"
-
 
 void KisCloneLayerTest::testCreation()
 {
@@ -249,6 +237,8 @@ void KisCloneLayerTest::testUndoingRemovingSource()
     cmd1->redo();
     image->unlock();
 
+    image->waitForDone();
+
     QCOMPARE(image->root()->lastChild()->name(), QString("clone_of_p1"));
     QVERIFY(image->root()->lastChild() != KisNodeSP(cloneLayer1));
 
@@ -272,11 +262,15 @@ void KisCloneLayerTest::testUndoingRemovingSource()
     cmd1->redo();
     image->unlock();
 
+    image->waitForDone();
+
     QCOMPARE(image->root()->lastChild()->name(), QString("clone_of_p1"));
     QCOMPARE(image->root()->lastChild(), reincarnatedLayer);
     QVERIFY(image->root()->lastChild() != KisNodeSP(cloneLayer1));
 
+    image->barrierLock();
     cmd2->redo();
+    image->unlock();
 }
 
 void KisCloneLayerTest::testDuplicateGroup()
@@ -387,4 +381,4 @@ void KisCloneLayerTest::testCyclingGroupLayer()
     testCyclingCase(t, t.cloneOfGroup2, t.cloneOfGroup1, false);
 }
 
-QTEST_MAIN(KisCloneLayerTest)
+KISTEST_MAIN(KisCloneLayerTest)

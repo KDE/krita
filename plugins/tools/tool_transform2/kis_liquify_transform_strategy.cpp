@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2014 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_liquify_transform_strategy.h"
@@ -108,10 +96,11 @@ QPainterPath KisLiquifyTransformStrategy::getCursorOutline() const
     return m_d->helper.brushOutline(*m_d->currentArgs.liquifyProperties());
 }
 
-void KisLiquifyTransformStrategy::setTransformFunction(const QPointF &mousePos, bool perspectiveModifierActive)
+void KisLiquifyTransformStrategy::setTransformFunction(const QPointF &mousePos, bool perspectiveModifierActive, bool shiftModifierActive)
 {
     Q_UNUSED(mousePos);
     Q_UNUSED(perspectiveModifierActive);
+    Q_UNUSED(shiftModifierActive);
 }
 
 QCursor KisLiquifyTransformStrategy::getCurrentCursor() const
@@ -206,7 +195,7 @@ void KisLiquifyTransformStrategy::deactivateAlternateAction(KisTool::AlternateAc
 
 bool KisLiquifyTransformStrategy::beginAlternateAction(KoPointerEvent *event, KisTool::AlternateAction action)
 {
-    if (action == KisTool::ChangeSize) {
+    if (action == KisTool::ChangeSize || action == KisTool::ChangeSizeSnap) {
         QPointF widgetPoint = m_d->converter->documentToWidget(event->point);
         m_d->lastMouseWidgetPos = widgetPoint;
         m_d->startResizeImagePos = m_d->converter->documentToImage(event->point);
@@ -218,13 +207,12 @@ bool KisLiquifyTransformStrategy::beginAlternateAction(KoPointerEvent *event, Ki
         return beginPrimaryAction(event);
     }
 
-
     return false;
 }
 
 void KisLiquifyTransformStrategy::continueAlternateAction(KoPointerEvent *event, KisTool::AlternateAction action)
 {
-    if (action == KisTool::ChangeSize) {
+    if (action == KisTool::ChangeSize || action == KisTool::ChangeSizeSnap) {
         QPointF widgetPoint = m_d->converter->documentToWidget(event->point);
 
         QPointF diff = widgetPoint - m_d->lastMouseWidgetPos;
@@ -232,7 +220,11 @@ void KisLiquifyTransformStrategy::continueAlternateAction(KoPointerEvent *event,
         KisLiquifyProperties *props = m_d->currentArgs.liquifyProperties();
         const qreal linearizedOffset = diff.x() / KisTransformUtils::scaleFromAffineMatrix(m_d->converter->imageToWidgetTransform());
         const qreal newSize = qBound(props->minSize(), props->size() + linearizedOffset, props->maxSize());
-        props->setSize(newSize);
+        if (action == KisTool::ChangeSizeSnap) {
+            props->setSize(floor(newSize));
+        } else {
+            props->setSize(newSize);
+        }
         m_d->currentArgs.saveLiquifyTransformMode();
 
         m_d->lastMouseWidgetPos = widgetPoint;
@@ -249,7 +241,7 @@ bool KisLiquifyTransformStrategy::endAlternateAction(KoPointerEvent *event, KisT
 {
     Q_UNUSED(event);
 
-    if (action == KisTool::ChangeSize) {
+    if (action == KisTool::ChangeSize || action == KisTool::ChangeSizeSnap) {
         QCursor::setPos(m_d->startResizeGlobalCursorPos);
         return true;
     } else if (action == KisTool::PickFgNode || action == KisTool::PickBgNode ||

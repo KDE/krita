@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2009 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_walkers_test.h"
@@ -37,7 +25,7 @@
 #include "filter/kis_filter_registry.h"
 #include "kis_filter_mask.h"
 #include "kis_transparency_mask.h"
-#include <sdk/tests/kistest.h>
+#include <sdk/tests/testimage.h>
 
 //#define DEBUG_VISITORS
 
@@ -329,7 +317,7 @@ void KisWalkersTest::testVisitingWithTopmostMask()
     KisLayerSP adjustmentLayer = new KisAdjustmentLayer(image, "adj", 0, 0);
 
 
-    KisFilterMaskSP filterMask1 = new KisFilterMask();
+    KisFilterMaskSP filterMask1 = new KisFilterMask(image, "mask1");
     filterMask1->initSelection(groupLayer);
     KisFilterSP filter = KisFilterRegistry::instance()->value("blur");
     KIS_ASSERT(filter);
@@ -906,9 +894,9 @@ void KisWalkersTest::testMasksVisiting()
     image->addNode(paintLayer1, image->rootLayer());
     image->addNode(paintLayer2, image->rootLayer());
 
-    KisFilterMaskSP filterMask1 = new KisFilterMask();
-    KisFilterMaskSP filterMask2 = new KisFilterMask();
-    KisTransparencyMaskSP transparencyMask = new KisTransparencyMask();
+    KisFilterMaskSP filterMask1 = new KisFilterMask(image, "fmask1");
+    KisFilterMaskSP filterMask2 = new KisFilterMask(image, "fmask2");
+    KisTransparencyMaskSP transparencyMask = new KisTransparencyMask(image, "tmask");
 
     KisFilterSP filter = KisFilterRegistry::instance()->value("blur");
     Q_ASSERT(filter);
@@ -979,9 +967,9 @@ void KisWalkersTest::testMasksVisitingNoFilthy()
     image->addNode(paintLayer1, image->rootLayer());
     image->addNode(paintLayer2, image->rootLayer());
 
-    KisFilterMaskSP filterMask1 = new KisFilterMask();
-    KisFilterMaskSP filterMask2 = new KisFilterMask();
-    KisTransparencyMaskSP transparencyMask = new KisTransparencyMask();
+    KisFilterMaskSP filterMask1 = new KisFilterMask(image, "fmask1");
+    KisFilterMaskSP filterMask2 = new KisFilterMask(image, "fmask2");
+    KisTransparencyMaskSP transparencyMask = new KisTransparencyMask(image, "tmask");
 
     KisFilterSP filter = KisFilterRegistry::instance()->value("blur");
     Q_ASSERT(filter);
@@ -1054,9 +1042,9 @@ void KisWalkersTest::testMasksOverlapping()
     image->addNode(paintLayer1, image->rootLayer());
     image->addNode(paintLayer2, image->rootLayer());
 
-    KisFilterMaskSP filterMask1 = new KisFilterMask();
-    KisFilterMaskSP filterMask2 = new KisFilterMask();
-    KisTransparencyMaskSP transparencyMask = new KisTransparencyMask();
+    KisFilterMaskSP filterMask1 = new KisFilterMask(image, "fmask1");
+    KisFilterMaskSP filterMask2 = new KisFilterMask(image, "fmask2");
+    KisTransparencyMaskSP transparencyMask = new KisTransparencyMask(image, "tmask");
 
     KisFilterSP blurFilter = KisFilterRegistry::instance()->value("blur");
     KisFilterSP invertFilter = KisFilterRegistry::instance()->value("invert");

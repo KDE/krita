@@ -3,19 +3,7 @@
  *
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 #ifndef __KIS_CLIPBOARD_H_
 #define __KIS_CLIPBOARD_H_
@@ -27,7 +15,7 @@
 
 class QRect;
 class QMimeData;
-class KisTimeRange;
+class KisTimeSpan;
 class KisBlockUntilOperationsFinishedMediator;
 
 enum enumPasteBehaviour {
@@ -62,12 +50,12 @@ public:
      */
     void setClip(KisPaintDeviceSP dev, const QPoint& topLeft);
 
-    void setClip(KisPaintDeviceSP dev, const QPoint& topLeft, const KisTimeRange &range);
+    void setClip(KisPaintDeviceSP dev, const QPoint& topLeft, const KisTimeSpan &range);
 
     /**
      * Get the contents of the clipboard in the form of a paint device.
      */
-    KisPaintDeviceSP clip(const QRect &imageBounds, bool showPopup, KisTimeRange *clipRange = 0);
+    KisPaintDeviceSP clip(const QRect &imageBounds, bool showPopup, KisTimeSpan *clipRange = 0);
 
     bool hasClip() const;
 

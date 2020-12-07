@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 #ifndef KISTYPES_H_
 #define KISTYPES_H_
@@ -288,6 +276,14 @@ class KisKeyframe;
 typedef QSharedPointer<KisKeyframe> KisKeyframeSP;
 typedef QWeakPointer<KisKeyframe> KisKeyframeWSP;
 
+class KisScalarKeyframe;
+typedef QSharedPointer<KisScalarKeyframe> KisScalarKeyframeSP;
+typedef QWeakPointer<KisScalarKeyframe> KisScalarKeyframeWSP;
+
+class KisRasterKeyframe;
+typedef QSharedPointer<KisRasterKeyframe> KisRasterKeyframeSP;
+typedef QWeakPointer<KisRasterKeyframe> KisRasterKeyframeWSP;
+
 class KisFilterChain;
 typedef KisSharedPtr<KisFilterChain> KisFilterChainSP;
 
@@ -303,6 +299,9 @@ class KisMirrorAxis;
 typedef KisSharedPtr<KisMirrorAxis> KisMirrorAxisSP;
 typedef KisWeakSharedPtr<KisMirrorAxis> KisMirrorAxisWSP;
 
+class StoryboardItem;
+typedef QSharedPointer<StoryboardItem> StoryboardItemSP;
+typedef QVector<StoryboardItemSP> StoryboardItemList;
 
 #include <QSharedPointer>
 #include <QWeakPointer>

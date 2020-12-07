@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 #ifndef _KIS_NODE_H
 #define _KIS_NODE_H
@@ -39,7 +27,7 @@ class KisBusyProgressIndicator;
 class KisAbstractProjectionPlane;
 class KisProjectionLeaf;
 class KisKeyframeChannel;
-class KisTimeRange;
+class KisTimeSpan;
 class KisUndoAdapter;
 
 
@@ -153,11 +141,13 @@ public:
     void setDirtyDontResetAnimationCache(const QVector<QRect> &rects);
 
     /**
-     * Informs that the frames in the given range are no longer valid
-     * and need to be recached.
+     * Informs animation cache that the frames in the given range are
+     * no longer valid and need to be recached.
      * @param range frames to invalidate
      */
-    void invalidateFrames(const KisTimeRange &range, const QRect &rect);
+    void invalidateFrames(const KisTimeSpan &range, const QRect &rect);
+
+    void handleKeyframeChannelUpdate(const KisTimeSpan &range, const QRect &rect);
 
     /**
      * Informs that the current world time should be changed.
@@ -198,7 +188,7 @@ public:
     virtual KisProjectionLeafSP projectionLeaf() const;
 
 
-    void setImage(KisImageWSP image) override;
+    void setImage(KisImageWSP newImage) override;
 
 protected:
 

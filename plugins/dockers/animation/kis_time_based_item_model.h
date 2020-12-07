@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2016 Jouni Pentikäinen <joupent@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #ifndef _KIS_TIME_BASED_ITEM_MODEL_H
@@ -27,7 +15,7 @@
 
 #include "kis_types.h"
 
-class KisTimeRange;
+class KisTimeSpan;
 class KisAnimationPlayer;
 class KisKeyframeChannel;
 
@@ -52,6 +40,8 @@ public:
     QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
     bool setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role) override;
 
+    void scrubHorizontalHeaderUpdate(int activeHeader);
+
     bool removeFrames(const QModelIndexList &indexes);
 
     bool removeFramesAndOffset(QModelIndexList indicesToRemove);
@@ -62,7 +52,7 @@ public:
     bool isScrubbing();
     void scrubTo(int time, bool preview);
 
-    void setPlaybackRange(const KisTimeRange &range);
+    void setPlaybackRange(const KisTimeSpan &range);
     bool isPlaybackActive() const;
     bool isPlaybackPaused() const;
     void stopPlayback() const;
@@ -71,24 +61,30 @@ public:
     enum ItemDataRole
     {
         ActiveFrameRole = Qt::UserRole + 101,
+        CloneOfActiveFrame,
+        CloneCount,
         FrameExistsRole,
         SpecialKeyframeExists,
         FrameCachedRole,
         FrameEditableRole,
         FramesPerSecondRole,
         UserRole,
-        FrameHasContent // is it an empty frame with nothing in it?
+        FrameHasContent,
+        WithinClipRange
     };
 
 protected:
     virtual KisNodeSP nodeAt(QModelIndex index) const = 0;
     virtual QMap<QString, KisKeyframeChannel *> channelsAt(QModelIndex index) const = 0;
+    virtual KisKeyframeChannel* channelByID(QModelIndex index, const QString &id) const = 0;
     KisImageWSP image() const;
 
     KUndo2Command* createOffsetFramesCommand(QModelIndexList srcIndexes, const QPoint &offset,
                                              bool copyFrames, bool moveEmptyFrames,
                                              KUndo2Command *parentCommand = 0);
 
+    bool cloneOfActiveFrame(const QModelIndex &index) const;
+    int cloneCount(const QModelIndex &index) const;
 
 protected Q_SLOTS:
     void slotCurrentTimeChanged(int time);

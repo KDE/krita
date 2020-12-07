@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2016 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_colorize_mask.h"
@@ -51,7 +39,7 @@ using namespace KisLazyFillTools;
 
 struct KisColorizeMask::Private
 {
-    Private(KisColorizeMask *_q)
+    Private(KisColorizeMask *_q, KisImageWSP image)
         : q(_q),
           coloringProjection(new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8())),
           fakePaintDevice(new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8())),
@@ -68,6 +56,11 @@ struct KisColorizeMask::Private
           filteringOptions(false, 4.0, 15, 0.7),
           limitToDeviceBounds(false)
     {
+        KisDefaultBoundsSP bounds(new KisDefaultBounds(image));
+
+        coloringProjection->setDefaultBounds(bounds);
+        fakePaintDevice->setDefaultBounds(bounds);
+        filteredSource->setDefaultBounds(bounds);
     }
 
     Private(const Private &rhs, KisColorizeMask *_q)
@@ -137,9 +130,9 @@ struct KisColorizeMask::Private
     bool shouldShowColoring() const;
 };
 
-KisColorizeMask::KisColorizeMask(const QString name)
-    : KisEffectMask(name)
-    , m_d(new Private(this))
+KisColorizeMask::KisColorizeMask(KisImageWSP image, const QString &name)
+    : KisEffectMask(image, name)
+    , m_d(new Private(this, image))
 {
     connect(&m_d->updateCompressor,
             SIGNAL(timeout()),

@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2012 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_shortcut_matcher.h"
@@ -370,7 +358,7 @@ void KisShortcutMatcher::leaveEvent()
 
 bool KisShortcutMatcher::touchBeginEvent( QTouchEvent* event )
 {
-    Q_UNUSED(event)
+    Q_UNUSED(event);
 
     Private::RecursionNotifier notifier(this);
 
@@ -408,9 +396,15 @@ bool KisShortcutMatcher::touchEndEvent( QTouchEvent* event )
     return false;
 }
 
+void KisShortcutMatcher::touchCancelEvent(const QPointF &localPos)
+{
+    m_d->usingTouch = false;
+    forceEndRunningShortcut(localPos);
+}
+
 bool KisShortcutMatcher::nativeGestureBeginEvent(QNativeGestureEvent *event)
 {
-    Q_UNUSED(event)
+    Q_UNUSED(event);
 
     Private::RecursionNotifier notifier(this);
 
@@ -488,6 +482,26 @@ void KisShortcutMatcher::recoveryModifiersWithoutFocus(const QVector<Qt::Key> &k
     }
 
     DEBUG_ACTION("recoverySyncModifiers");
+}
+
+bool KisShortcutMatcher::sanityCheckModifiersCorrectness(Qt::KeyboardModifiers modifiers) const
+{
+    auto checkKey = [this, modifiers] (Qt::Key key, Qt::KeyboardModifier modifier) {
+        return m_d->keys.contains(key) == bool(modifiers & modifier);
+    };
+
+    return checkKey(Qt::Key_Shift, Qt::ShiftModifier) &&
+        checkKey(Qt::Key_Control, Qt::ControlModifier) &&
+        checkKey(Qt::Key_Alt, Qt::AltModifier) &&
+        checkKey(Qt::Key_Meta, Qt::MetaModifier);
+
+}
+
+QVector<Qt::Key> KisShortcutMatcher::debugPressedKeys() const
+{
+    QVector<Qt::Key> keys;
+    std::copy(m_d->keys.begin(), m_d->keys.end(), std::back_inserter(keys));
+    return keys;
 }
 
 void KisShortcutMatcher::lostFocusEvent(const QPointF &localPos)

@@ -1,3 +1,7 @@
+/*
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
 #include "KisSelectionBasedProcessingHelper.h"
 
 #include "kis_paint_device.h"
@@ -81,7 +85,6 @@ void KisSelectionBasedProcessingHelper::transformPaintDevice(KisPaintDeviceSP de
             device->clearSelection(m_cutSelection);
             KisPainter::copyAreaOptimized(pasteBounds.topLeft(), tempDev, device, pasteBounds, m_selection);
             transaction.commit(undoAdapter);
-
         }
     } else {
         KisTransaction transaction(device);

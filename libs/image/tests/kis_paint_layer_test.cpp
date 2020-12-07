@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_paint_layer_test.h"
@@ -32,7 +20,7 @@
 #include "kis_image.h"
 #include "kis_paint_device.h"
 #include "kis_transparency_mask.h"
-#include "testutil.h"
+#include <testutil.h>
 #include "kis_selection.h"
 #include "kis_fill_painter.h"
 #include "kis_pixel_selection.h"
@@ -57,7 +45,7 @@ void KisPaintLayerTest::testProjection()
     // Make sure the projection and the paint device are the same -- we don't have masks yet
     QVERIFY(layer->paintDevice().data() == layer->projection().data());
 
-    KisTransparencyMaskSP transparencyMask = new KisTransparencyMask();
+    KisTransparencyMaskSP transparencyMask = new KisTransparencyMask(image, "tmask");
     transparencyMask->initSelection(layer);
     transparencyMask->selection()->pixelSelection()->invert();
     image->addNode(transparencyMask.data(), layer.data());
@@ -114,7 +102,7 @@ void KisPaintLayerTest::testKeyframing()
     KisPaintLayerSP layer = new KisPaintLayer(image, "", OPACITY_OPAQUE_U8);
     KisPaintDeviceSP dev = layer->paintDevice();
 
-    KisKeyframeChannel *contentChannel = layer->getKeyframeChannel(KisKeyframeChannel::Content.id());
+    KisKeyframeChannel *contentChannel = layer->getKeyframeChannel(KisKeyframeChannel::Raster.id());
     QVERIFY(!contentChannel);
 
     layer->enableAnimation();
@@ -169,7 +157,7 @@ void KisPaintLayerTest::testLayerStyles()
     image->waitForDone();
     KIS_DUMP_DEVICE_2(image->projection(), imageRect, "02P_styled", "dd");
 
-    KisTransparencyMaskSP transparencyMask = new KisTransparencyMask();
+    KisTransparencyMaskSP transparencyMask = new KisTransparencyMask(image, "tmask");
 
     KisSelectionSP selection = new KisSelection();
     selection->pixelSelection()->select(tMaskRect, OPACITY_OPAQUE_U8);

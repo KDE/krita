@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2011 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "move_stroke_strategy.h"
@@ -30,6 +18,7 @@
 #include "KisRunnableStrokeJobUtils.h"
 #include "KisRunnableStrokeJobsInterface.h"
 #include "kis_abstract_projection_plane.h"
+#include "kis_image.h"
 
 
 MoveStrokeStrategy::MoveStrokeStrategy(KisNodeSelectionRecipe nodeSelection,
@@ -147,7 +136,7 @@ void MoveStrokeStrategy::initStrokeCallback()
         KisStrokeStrategyUndoCommandBased::initStrokeCallback();
 
         if (m_updatesEnabled) {
-            KisLodTransform t(m_nodes.first()->projection());
+            KisLodTransform t(m_nodes.first()->image()->currentLevelOfDetail());
             handlesRect = t.mapInverted(handlesRect);
 
             emit this->sigHandlesRectCalculated(handlesRect);
@@ -357,4 +346,52 @@ KisStrokeStrategy* MoveStrokeStrategy::createLodClone(int levelOfDetail)
     m_sharedNodes.reset(new KisNodeList());
     clone->m_sharedNodes = m_sharedNodes;
     return clone;
+}
+
+MoveStrokeStrategy::Data::Data(QPoint _offset)
+    : KisStrokeJobData(SEQUENTIAL, NORMAL),
+      offset(_offset)
+{
+}
+
+KisStrokeJobData *MoveStrokeStrategy::Data::createLodClone(int levelOfDetail)
+{
+    return new Data(*this, levelOfDetail);
+}
+
+MoveStrokeStrategy::Data::Data(const MoveStrokeStrategy::Data &rhs, int levelOfDetail)
+    : KisStrokeJobData(rhs)
+{
+    KisLodTransform t(levelOfDetail);
+    offset = t.map(rhs.offset);
+}
+
+MoveStrokeStrategy::PickLayerData::PickLayerData(QPoint _pos)
+    : KisStrokeJobData(SEQUENTIAL, NORMAL),
+      pos(_pos)
+{
+}
+
+KisStrokeJobData *MoveStrokeStrategy::PickLayerData::createLodClone(int levelOfDetail) {
+    return new PickLayerData(*this, levelOfDetail);
+}
+
+MoveStrokeStrategy::PickLayerData::PickLayerData(const MoveStrokeStrategy::PickLayerData &rhs, int levelOfDetail)
+    : KisStrokeJobData(rhs)
+{
+    KisLodTransform t(levelOfDetail);
+    pos = t.map(rhs.pos);
+}
+
+MoveStrokeStrategy::BarrierUpdateData::BarrierUpdateData(bool _forceUpdate)
+    : KisAsyncronousStrokeUpdateHelper::UpdateData(_forceUpdate, BARRIER, EXCLUSIVE)
+{}
+
+KisStrokeJobData *MoveStrokeStrategy::BarrierUpdateData::createLodClone(int levelOfDetail) {
+    return new BarrierUpdateData(*this, levelOfDetail);
+}
+
+MoveStrokeStrategy::BarrierUpdateData::BarrierUpdateData(const MoveStrokeStrategy::BarrierUpdateData &rhs, int levelOfDetail)
+    : KisAsyncronousStrokeUpdateHelper::UpdateData(rhs, levelOfDetail)
+{
 }

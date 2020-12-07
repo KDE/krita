@@ -1,20 +1,7 @@
 /*
  * Copyright (C) 2014 Boudewijn Rempt <boud@valdyas.org>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #include "KisView.h"
@@ -50,6 +37,7 @@
 #include <QStatusBar>
 #include <QMoveEvent>
 #include <QMdiSubWindow>
+#include <QFileInfo>
 
 #include <kis_image.h>
 #include <kis_node.h>
@@ -109,8 +97,6 @@ public:
         , canvas(&viewConverter, viewManager->canvasResourceProvider()->resourceManager(), viewManager->mainWindow(), _q, document->shapeController())
         , zoomManager(_q, &this->viewConverter, &this->canvasController)
         , viewManager(viewManager)
-        , paintingAssistantsDecoration(new KisPaintingAssistantsDecoration(_q))
-        , referenceImagesDecoration(new KisReferenceImagesDecoration(_q, document))
         , floatingMessageCompressor(100, KisSignalCompressor::POSTPONE)
     {
     }
@@ -234,9 +220,11 @@ KisView::KisView(KisDocument *document, KisViewManager *viewManager, QWidget *pa
     connect(d->document, SIGNAL(sigLoadingFinished()), this, SLOT(slotLoadingFinished()));
     connect(d->document, SIGNAL(sigSavingFinished()), this, SLOT(slotSavingFinished()));
 
+    d->referenceImagesDecoration = new KisReferenceImagesDecoration(this, document, /* viewReady = */ false);
     d->canvas.addDecoration(d->referenceImagesDecoration);
     d->referenceImagesDecoration->setVisible(true);
 
+    d->paintingAssistantsDecoration = new KisPaintingAssistantsDecoration(this);
     d->canvas.addDecoration(d->paintingAssistantsDecoration);
     d->paintingAssistantsDecoration->setVisible(true);
 
@@ -576,8 +564,9 @@ void KisView::dropEvent(QDropEvent *event)
                         }
                         else if (action == insertAsNewFileLayer || action == insertManyFileLayers) {
                             KisNodeCommandsAdapter adapter(viewManager());
+                            QFileInfo fileInfo(url.toLocalFile());
                             KisFileLayer *fileLayer = new KisFileLayer(image(), "", url.toLocalFile(),
-                                                                       KisFileLayer::None, image()->nextLayerName(i18n("File Layer")), OPACITY_OPAQUE_U8);
+                                                                       KisFileLayer::None, fileInfo.fileName(), OPACITY_OPAQUE_U8);
                             adapter.addNode(fileLayer, viewManager()->activeNode()->parent(), viewManager()->activeNode());
                         }
                         else if (action == openInNewDocument || action == openManyDocuments) {
@@ -705,11 +694,7 @@ bool KisView::queryClose()
 
     if (document()->isModified()) {
         QString name;
-        if (document()->documentInfo()) {
-            name = document()->documentInfo()->aboutInfo("title");
-        }
-        if (name.isEmpty())
-            name = document()->url().fileName();
+        name = document()->url().fileName();
 
         if (name.isEmpty())
             name = i18n("Untitled");

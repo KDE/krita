@@ -1,3 +1,7 @@
+#
+# SPDX-License-Identifier: BSD-3-Clause
+#
+
 include(CMakeParseArguments)
 include(ECMMarkAsTest)
 include(ECMMarkNonGuiExecutable)

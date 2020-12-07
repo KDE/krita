@@ -10,19 +10,7 @@
               (C) 2003 Andras Mantia <amantia@kde.org>
               (C) 2005-2006 Hamish Rodda <rodda@kde.org>
 
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Library General Public
-    License version 2 as published by the Free Software Foundation.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Library General Public License for more details.
-
-    You should have received a copy of the GNU Library General Public License
-    along with this library; see the file COPYING.LIB.  If not, write to
-    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-    Boston, MA 02110-1301, USA.
+    SPDX-License-Identifier: LGPL-2.0-only
 */
 
 #include "krecentfilesaction.h"
@@ -283,7 +271,11 @@ void KRecentFilesAction::loadEntries(const KConfigGroup &_config)
     // read file list
     for (int i = 1; i <= d->m_maxItems; i++) {
         key = QString("File%1").arg(i);
+#ifdef Q_OS_ANDROID
+        value = cg.readEntry(key, QString());
+#else
         value = cg.readPathEntry(key, QString());
+#endif
         if (value.isEmpty()) {
             continue;
         }
@@ -341,11 +333,20 @@ void KRecentFilesAction::saveEntries(const KConfigGroup &_cg)
     for (int i = 1; i <= selectableActionGroup()->actions().count(); i++) {
         key = QString("File%1").arg(i);
         // i - 1 because we started from 1
+#ifdef Q_OS_ANDROID
+        value = d->m_urls[ selectableActionGroup()->actions()[ i - 1 ] ].toDisplayString();
+        cg.writeEntry(key, value);
+#else
         value = d->m_urls[ selectableActionGroup()->actions()[ i - 1 ] ].toDisplayString(QUrl::PreferLocalFile);
         cg.writePathEntry(key, value);
+#endif
         key = QString("Name%1").arg(i);
         value = d->m_shortNames[ selectableActionGroup()->actions()[ i - 1 ] ];
+#ifdef Q_OS_ANDROID
+        cg.writeEntry(key, value);
+#else
         cg.writePathEntry(key, value);
+#endif
     }
 
 }

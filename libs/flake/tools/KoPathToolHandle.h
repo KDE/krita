@@ -4,20 +4,7 @@
  * Copyright (C) 2007,2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007 Boudewijn Rempt <boud@valdyas.org>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #ifndef KOPATHTOOLHANDLE_H
@@ -44,7 +31,7 @@ public:
     explicit KoPathToolHandle(KoPathTool *tool);
     virtual ~KoPathToolHandle();
     virtual void paint(QPainter &painter, const KoViewConverter &converter, qreal handleRadius) = 0;
-    virtual void repaint() const = 0;
+    virtual QRectF boundingRect() const = 0;
     virtual KoInteractionStrategy * handleMousePress(KoPointerEvent *event) = 0;
     // test if handle is still valid
     virtual bool check(const QList<KoPathShape*> &selectedShapes) = 0;
@@ -61,7 +48,7 @@ class PointHandle : public KoPathToolHandle
 public:
     PointHandle(KoPathTool *tool, KoPathPoint *activePoint, KoPathPoint::PointType activePointType);
     void paint(QPainter &painter, const KoViewConverter &converter, qreal handleRadius) override;
-    void repaint() const override;
+    QRectF boundingRect() const override;
     KoInteractionStrategy *handleMousePress(KoPointerEvent *event) override;
     bool check(const QList<KoPathShape*> &selectedShapes) override;
     KoPathPoint *activePoint() const;
@@ -78,7 +65,7 @@ class ParameterHandle : public KoPathToolHandle
 public:
     ParameterHandle(KoPathTool *tool, KoParameterShape *parameterShape, int handleId);
     void paint(QPainter &painter, const KoViewConverter &converter, qreal handleRadius) override;
-    void repaint() const override;
+    QRectF boundingRect() const override;
     KoInteractionStrategy *handleMousePress(KoPointerEvent *event) override;
     bool check(const QList<KoPathShape*> &selectedShapes) override;
 protected:

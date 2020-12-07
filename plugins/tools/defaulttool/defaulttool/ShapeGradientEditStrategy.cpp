@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2017 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "ShapeGradientEditStrategy.h"
@@ -85,8 +73,6 @@ void ShapeGradientEditStrategy::handleMouseMove(const QPointF &mouseLocation, Qt
     const QPointF diff = snappedPosition- m_d->start;
     m_d->intermediateCommand.reset(m_d->gradientHandles.moveGradientHandle(m_d->handleType, diff));
     m_d->intermediateCommand->redo();
-
-    tool()->canvas()->updateCanvas(tool()->canvas()->snapGuide()->boundingRect());
 }
 
 KUndo2Command *ShapeGradientEditStrategy::createCommand()
@@ -97,10 +83,7 @@ KUndo2Command *ShapeGradientEditStrategy::createCommand()
 void ShapeGradientEditStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
 {
     Q_UNUSED(modifiers);
-
-    const QRectF dirtyRect = tool()->canvas()->snapGuide()->boundingRect();
     tool()->canvas()->snapGuide()->reset();
-    tool()->canvas()->updateCanvas(dirtyRect);
 }
 
 void ShapeGradientEditStrategy::paint(QPainter &painter, const KoViewConverter &converter)

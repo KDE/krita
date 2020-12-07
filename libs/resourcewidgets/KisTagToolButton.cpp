@@ -8,20 +8,7 @@
  *    Copyright (c) 2013 Sascha Suelzer <s.suelzer@gmail.com>
  *    Copyright (c) 2020 Agata Cacko <cacko.azh@gmail.com>
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Library General Public
- *    License as published by the Free Software Foundation; either
- *    version 2 of the License, or (at your option) any later version.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Library General Public License for more details.
- *
- *    You should have received a copy of the GNU Library General Public License
- *    along with this library; see the file COPYING.LIB.  If not, write to
- *    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- *    Boston, MA 02110-1301, USA.
+ *    SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #include "KisTagToolButton.h"
@@ -33,23 +20,31 @@
 
 #include <KoIcon.h>
 
+#include <kis_debug.h>
+#include <KisTagModel.h>
+
 #include "KisResourceItemChooserContextMenu.h"
-#include "kis_debug.h"
+
 
 class KisTagToolButton::Private
 {
 public:
-    QToolButton* tagToolButton;
-    QAction* action_undeleteTag;
-    QAction* action_deleteTag;
-    KoLineEditAction* action_renameTag;
+    QToolButton *tagToolButton {0};
+
+    QAction *undeleteTagAction {0};
+    QAction *deleteTagAction {0};
+    UserInputTagAction *renameTagAction {0};
+    UserInputTagAction *addTagAction {0};
+
     KisTagSP undeleteCandidate;
+    KisTagSP currentTag;
+
 };
 
 KisTagToolButton::KisTagToolButton(QWidget* parent)
-    :QWidget(parent), d(new Private())
+    : QWidget(parent)
+    , d(new Private())
 {
-
     QGridLayout* buttonLayout = new QGridLayout(this);
     buttonLayout->setMargin(0);
     buttonLayout->setSpacing(0);
@@ -64,46 +59,41 @@ KisTagToolButton::KisTagToolButton(QWidget* parent)
 
     QMenu* popup = new QMenu(this);
 
-    KoLineEditAction*  addTagAction = new KoLineEditAction(popup);
-    addTagAction->setPlaceholderText(i18n("New tag"));
-    addTagAction->setIcon(koIcon("document-new"));
-    addTagAction->closeParentOnTrigger(true);
-    popup->addAction(addTagAction);
+    d->addTagAction = new UserInputTagAction(popup);
+    d->addTagAction->setPlaceholderText(i18n("New tag"));
+    d->addTagAction->setIcon(koIcon("document-new"));
+    d->addTagAction->setCloseParentOnTrigger(true);
+    popup->addAction(d->addTagAction);
 
-    connect(addTagAction, SIGNAL(triggered(KisTagSP)),
-            this, SIGNAL(newTagRequested(KisTagSP)));
+    connect(d->addTagAction, SIGNAL(triggered(QString)), this, SIGNAL(newTagRequested(QString)));
 
-    d->action_renameTag = new KoLineEditAction(popup);
-    d->action_renameTag->setPlaceholderText(i18n("Rename tag"));
-    d->action_renameTag->setIcon(koIcon("edit-rename"));
-    d->action_renameTag->closeParentOnTrigger(true);
-    popup->addAction(d->action_renameTag);
+    d->renameTagAction = new UserInputTagAction(popup);
+    d->renameTagAction->setPlaceholderText(i18n("Rename tag"));
+    d->renameTagAction->setIcon(koIcon("edit-rename"));
+    d->renameTagAction->setCloseParentOnTrigger(true);
+    popup->addAction(d->renameTagAction);
 
-    connect(d->action_renameTag, SIGNAL(triggered(KisTagSP)),
-            this, SIGNAL(renamingOfCurrentTagRequested(KisTagSP)));
+    connect(d->renameTagAction, SIGNAL(triggered(QString)), this, SIGNAL(renamingOfCurrentTagRequested(QString)));
 
     popup->addSeparator();
 
-    d->action_deleteTag = new QAction(popup);
-    d->action_deleteTag->setText(i18n("Delete this tag"));
-    d->action_deleteTag->setIcon(koIcon("edit-delete"));
-    popup->addAction(d->action_deleteTag);
+    d->deleteTagAction = new QAction(popup);
+    d->deleteTagAction->setText(i18n("Delete this tag"));
+    d->deleteTagAction->setIcon(koIcon("edit-delete"));
+    popup->addAction(d->deleteTagAction);
 
-    connect(d->action_deleteTag, SIGNAL(triggered()),
-            this, SIGNAL(deletionOfCurrentTagRequested()));
+    connect(d->deleteTagAction, SIGNAL(triggered()), this, SIGNAL(deletionOfCurrentTagRequested()));
 
     popup->addSeparator();
 
-    d->action_undeleteTag = new QAction(popup);
-    d->action_undeleteTag->setIcon(koIcon("edit-redo"));
-    d->action_undeleteTag->setVisible(false);
-    popup->addAction(d->action_undeleteTag);
+    d->undeleteTagAction = new QAction(popup);
+    d->undeleteTagAction->setIcon(koIcon("edit-redo"));
+    d->undeleteTagAction->setVisible(false);
+    popup->addAction(d->undeleteTagAction);
 
-    connect(d->action_undeleteTag, SIGNAL(triggered()),
-            this, SLOT(onTagUndeleteClicked()));
+    connect(d->undeleteTagAction, SIGNAL(triggered()), this, SLOT(onTagUndeleteClicked()));
 
-    connect(popup, SIGNAL(aboutToShow()),
-            this, SIGNAL(popupMenuAboutToShow()));
+    connect(popup, SIGNAL(aboutToShow()), this, SIGNAL(popupMenuAboutToShow()));
 
     d->tagToolButton->setMenu(popup);
     buttonLayout->addWidget(d->tagToolButton);
@@ -117,20 +107,26 @@ KisTagToolButton::~KisTagToolButton()
 void KisTagToolButton::readOnlyMode(bool activate)
 {
     activate = !activate;
-    d->action_renameTag->setVisible(activate);
-    d->action_deleteTag->setVisible(activate);
+    d->renameTagAction->setVisible(activate);
+    d->deleteTagAction->setVisible(activate);
 }
 
 void KisTagToolButton::setUndeletionCandidate(const KisTagSP deletedTag)
 {
     if (deletedTag.isNull() || deletedTag->name().isEmpty()) {
-        d->action_undeleteTag->setVisible(false);
+        d->undeleteTagAction->setVisible(false);
         return;
     } else {
         d->undeleteCandidate = deletedTag;
-        d->action_undeleteTag->setText(i18n("Undelete") +" "+ deletedTag->name());
-        d->action_undeleteTag->setVisible(true);
+        d->undeleteTagAction->setText(i18n("Undelete") +" "+ deletedTag->name());
+        d->undeleteTagAction->setVisible(true);
     }
+}
+
+void KisTagToolButton::setCurrentTag(const KisTagSP tag)
+{
+    d->currentTag = tag;
+    d->deleteTagAction->setProperty("currentTag", QVariant::fromValue<KisTagSP>(tag));
 }
 
 void KisTagToolButton::onTagUndeleteClicked()

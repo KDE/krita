@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2014 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_cage_transform_worker_test.h"
@@ -23,7 +11,8 @@
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>
 
-#include "testutil.h"
+#include <testutil.h>
+#include <kistest.h>
 
 #include <kis_cage_transform_worker.h>
 #include <algorithm>
@@ -114,11 +103,11 @@ void testCage(bool clockwise, bool unityTransform, bool benchmarkPrepareOnly = f
         .arg(unityTransform ? "unity" : "normal");
 
     if (testQImage) {
-        QVERIFY(TestUtil::checkQImage(result, "cage_transform_test", "cage_qimage", testName));
+        QVERIFY(TestUtil::checkQImage(result, "cage_transform_test", "cage_qimage", testName, 1, 1));
     } else if (!benchmarkPrepareOnly && pixelPrecision == 8) {
 
         result = dev->convertToQImage(0);
-        QVERIFY(TestUtil::checkQImage(result, "cage_transform_test", "cage", testName));
+        QVERIFY(TestUtil::checkQImage(result, "cage_transform_test", "cage", testName, 1, 1));
     }
 }
 
@@ -327,4 +316,4 @@ void KisCageTransformWorkerTest::testAngleBetweenVectors()
     QCOMPARE(t.map(b1), b2);
 }
 
-QTEST_MAIN(KisCageTransformWorkerTest)
+KISTEST_MAIN(KisCageTransformWorkerTest)

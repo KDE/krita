@@ -6,23 +6,10 @@
  *  Copyright (c) 2007,2008,2010 Cyrille Berger <cberger@cberger.net>
  *  Copyright (c) 2009 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_tool_freehand.h"
-
 #include <QPainter>
 #include <QRect>
 #include <QThreadPool>
@@ -206,6 +193,11 @@ void KisToolFreehand::beginPrimaryAction(KoPointerEvent *event)
             QString message = i18n("The brush tool cannot paint on this layer.  Please select a paint layer or mask.");
             kiscanvas->viewManager()->showFloatingMessage(message, koIcon("object-locked"));
         }
+        else if (paintability == MYPAINTBRUSH_UNPAINTABLE) {
+            KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
+            QString message = i18n("The MyPaint Brush Engine is not available for this colorspace");
+            kiscanvas->viewManager()->showFloatingMessage(message, koIcon("object-locked"));
+        }
         event->ignore();
 
         return;
@@ -290,7 +282,7 @@ bool KisToolFreehand::tryPickByPaintOp(KoPointerEvent *event, AlternateAction ac
 
 void KisToolFreehand::activateAlternateAction(AlternateAction action)
 {
-    if (action != ChangeSize) {
+    if (action != ChangeSize && action != ChangeSizeSnap) {
         KisToolPaint::activateAlternateAction(action);
         return;
     }
@@ -301,7 +293,7 @@ void KisToolFreehand::activateAlternateAction(AlternateAction action)
 
 void KisToolFreehand::deactivateAlternateAction(AlternateAction action)
 {
-    if (action != ChangeSize) {
+    if (action != ChangeSize && action != ChangeSizeSnap) {
         KisToolPaint::deactivateAlternateAction(action);
         return;
     }
@@ -317,7 +309,7 @@ void KisToolFreehand::beginAlternateAction(KoPointerEvent *event, AlternateActio
         return;
     }
 
-    if (action != ChangeSize) {
+    if (action != ChangeSize && action != ChangeSizeSnap) {
         KisToolPaint::beginAlternateAction(event, action);
         return;
     }
@@ -334,7 +326,7 @@ void KisToolFreehand::continueAlternateAction(KoPointerEvent *event, AlternateAc
 {
     if (tryPickByPaintOp(event, action) || m_paintopBasedPickingInAction) return;
 
-    if (action != ChangeSize) {
+    if (action != ChangeSize && action != ChangeSizeSnap) {
         KisToolPaint::continueAlternateAction(event, action);
         return;
     }
@@ -360,9 +352,17 @@ void KisToolFreehand::continueAlternateAction(KoPointerEvent *event, AlternateAc
 
     if (qAbs(sizeDiff) > 0.01) {
         KisPaintOpSettingsSP settings = currentPaintOpPreset()->settings();
-        const qreal newSize = qBound(0.01, m_lastPaintOpSize + sizeDiff, maxBrushSize);
+
+        qreal newSize = m_lastPaintOpSize + sizeDiff;
+
+        if (action == ChangeSizeSnap) {
+            newSize = qRound(newSize);
+        }
+
+        newSize = qBound(0.01, newSize, maxBrushSize);
 
         settings->setPaintOpSize(newSize);
+
         requestUpdateOutline(m_initialGestureDocPoint, 0);
         //m_brushResizeCompressor.start(newSize);
 
@@ -378,7 +378,7 @@ void KisToolFreehand::endAlternateAction(KoPointerEvent *event, AlternateAction 
         return;
     }
 
-    if (action != ChangeSize) {
+    if (action != ChangeSize && action != ChangeSizeSnap) {
         KisToolPaint::endAlternateAction(event, action);
         return;
     }

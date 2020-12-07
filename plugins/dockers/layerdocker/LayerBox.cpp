@@ -7,19 +7,7 @@
  *  Copyright (C) 2007 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2011 José Luis Vergara <pentalis@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "LayerBox.h"
@@ -53,6 +41,7 @@
 #include <KoColorSpace.h>
 #include <KoCompositeOpRegistry.h>
 #include <KisDocument.h>
+#include <kis_time_span.h>
 
 #include <kis_types.h>
 #include <kis_image.h>
@@ -228,6 +217,9 @@ LayerBox::LayerBox()
     connect(m_nodeModel, SIGNAL(rowsMoved(QModelIndex,int,int,QModelIndex,int)), SLOT(slotForgetAboutSavedNodeBeforeEditSelectionMode()));
     connect(m_nodeModel, SIGNAL(modelReset()), SLOT(slotForgetAboutSavedNodeBeforeEditSelectionMode()));
 
+    // we should update expanded state of the nodes on adding the nodes
+    connect(m_nodeModel, SIGNAL(rowsInserted(QModelIndex,int,int)), SLOT(slotNodeCollapsedChanged()));
+    connect(m_nodeModel, SIGNAL(modelReset()), SLOT(slotNodeCollapsedChanged()));
 
     KisAction *showGlobalSelectionMask = new KisAction(i18n("&Show Global Selection Mask"), this);
     showGlobalSelectionMask->setObjectName("show-global-selection-mask");
@@ -252,8 +244,8 @@ LayerBox::LayerBox()
     m_wdgLayerBox->listLayers->setModel(m_filteringModel);
     // this connection should be done *after* the setModel() call to
     // happen later than the internal selection model
-    connect(m_filteringModel.data(), &KisNodeFilterProxyModel::rowsAboutToBeRemoved,
-            this, &LayerBox::slotAboutToRemoveRows);
+    connect(m_filteringModel.data(), &KisNodeFilterProxyModel::sigBeforeBeginRemoveRows,
+            this, &LayerBox::slotAdjustCurrentBeforeRemoveRows);
 
 
     //LayerFilter Menu
@@ -540,17 +532,26 @@ void LayerBox::updateUI()
     KisNodeSP activeNode = m_nodeManager->activeNode();
 
     if (activeNode != m_activeNode) {
-        if( !m_activeNode.isNull() )
-            m_activeNode->disconnect(this);
+        m_activeNodeConnections.clear();
         m_activeNode = activeNode;
 
         if (activeNode) {
+            KisPaintDeviceSP parentLayerDevice = activeNode->parent() ? activeNode->parent()->original() : 0;
+            if (parentLayerDevice) {
+                // update blending modes availability
+                m_activeNodeConnections.addConnection(
+                     parentLayerDevice, SIGNAL(colorSpaceChanged(const KoColorSpace*)),
+                     this, SLOT(updateUI()));
+            }
+
             KisKeyframeChannel *opacityChannel = activeNode->getKeyframeChannel(KisKeyframeChannel::Opacity.id(), false);
             if (opacityChannel) {
                 watchOpacityChannel(opacityChannel);
             } else {
                 watchOpacityChannel(0);
-                connect(activeNode.data(), &KisNode::keyframeChannelAdded, this, &LayerBox::slotKeyframeChannelAdded);
+                m_activeNodeConnections.addConnection(
+                    activeNode, SIGNAL(keyframeChannelAdded(KisKeyframeChannel*)),
+                    this, SLOT(slotKeyframeChannelAdded(KisKeyframeChannel*)));
             }
         }
     }
@@ -563,7 +564,6 @@ void LayerBox::updateUI()
     m_wdgLayerBox->doubleOpacity->setEnabled(activeNode && activeNode->isEditable(false));
 
     m_wdgLayerBox->cmbComposite->setEnabled(activeNode && activeNode->isEditable(false));
-    m_wdgLayerBox->cmbComposite->validate(m_image->colorSpace());
 
     if (activeNode) {
         if (activeNode->inherits("KisColorizeMask") || activeNode->inherits("KisLayer")) {
@@ -576,6 +576,9 @@ void LayerBox::updateUI()
 
             const KoCompositeOp* compositeOp = activeNode->compositeOp();
             if (compositeOp) {
+                /// the composite op works in the color space of the parent layer,
+                /// not the active one.
+                m_wdgLayerBox->cmbComposite->validate(compositeOp->colorSpace());
                 slotSetCompositeOp(compositeOp);
             } else {
                 m_wdgLayerBox->cmbComposite->setEnabled(false);
@@ -850,7 +853,9 @@ void LayerBox::slotSelectOpaque()
 
 void LayerBox::slotNodeCollapsedChanged()
 {
-    expandNodesRecursively(m_image->rootLayer(), m_filteringModel, m_wdgLayerBox->listLayers);
+    if (m_nodeModel->hasDummiesFacade()) {
+        expandNodesRecursively(m_image->rootLayer(), m_filteringModel, m_wdgLayerBox->listLayers);
+    }
 }
 
 inline bool isSelectionMask(KisNodeSP node)
@@ -1002,17 +1007,17 @@ void LayerBox::selectionChanged(const QModelIndexList selection)
     updateUI();
 }
 
-void LayerBox::slotAboutToRemoveRows(const QModelIndex &parent, int start, int end)
+void LayerBox::slotAdjustCurrentBeforeRemoveRows(const QModelIndex &parent, int start, int end)
 {
     /**
      * Qt has changed its behavior when deleting an item. Previously
      * the selection priority was on the next item in the list, and
      * now it has shanged to the previous item. Here we just adjust
-     * the selected item after the node removal. Please take care that
-     * this method overrides what was done by the corresponding method
-     * of QItemSelectionModel, which *has already done* its work. That
-     * is why we use (start - 1) and (end + 1) in the activation
-     * condition.
+     * the selected item after the node removal.
+     *
+     * This method is called right before the Qt's beginRemoveRows()
+     * is called, that is we make sure that Qt will never have to
+     * adjust the position of the removed cursor.
      *
      * See bug: https://bugs.kde.org/show_bug.cgi?id=345601
      */
@@ -1021,7 +1026,7 @@ void LayerBox::slotAboutToRemoveRows(const QModelIndex &parent, int start, int e
     QAbstractItemModel *model = m_filteringModel;
 
     if (currentIndex.isValid() && parent == currentIndex.parent()
-            && currentIndex.row() >= start - 1 && currentIndex.row() <= end + 1) {
+            && currentIndex.row() >= start && currentIndex.row() <= end) {
         QModelIndex old = currentIndex;
 
         if (model && end < model->rowCount(parent) - 1) // there are rows left below the change
@@ -1113,32 +1118,20 @@ void LayerBox::slotKeyframeChannelAdded(KisKeyframeChannel *channel)
     }
 }
 
-void LayerBox::watchOpacityChannel(KisKeyframeChannel *channel)
+void LayerBox::watchOpacityChannel(KisKeyframeChannel *newChannel)
 {
-    if (m_opacityChannel) {
-        m_opacityChannel->disconnect(this);
+    if (newChannel) {
+        if (m_opacityChannel) {
+            m_opacityChannel->disconnect(this);
+        }
+
+        m_opacityChannel = newChannel;
+        connect(m_opacityChannel, &KisKeyframeChannel::sigChannelUpdated, [this](const KisTimeSpan &affectedTimeSpan, const QRect &affectedArea){
+            if (!m_blockOpacityUpdate) {
+                updateUI(); // TODO: Make sure this is doing something useful.
+            }
+        });
     }
-
-    m_opacityChannel = channel;
-    if (m_opacityChannel) {
-        connect(m_opacityChannel, SIGNAL(sigKeyframeAdded(KisKeyframeSP)), this, SLOT(slotOpacityKeyframeChanged(KisKeyframeSP)));
-        connect(m_opacityChannel, SIGNAL(sigKeyframeRemoved(KisKeyframeSP)), this, SLOT(slotOpacityKeyframeChanged(KisKeyframeSP)));
-        connect(m_opacityChannel, SIGNAL(sigKeyframeMoved(KisKeyframeSP)), this, SLOT(slotOpacityKeyframeMoved(KisKeyframeSP)));
-        connect(m_opacityChannel, SIGNAL(sigKeyframeChanged(KisKeyframeSP)), this, SLOT(slotOpacityKeyframeChanged(KisKeyframeSP)));
-    }
-}
-
-void LayerBox::slotOpacityKeyframeChanged(KisKeyframeSP keyframe)
-{
-    Q_UNUSED(keyframe);
-    if (m_blockOpacityUpdate) return;
-    updateUI();
-}
-
-void LayerBox::slotOpacityKeyframeMoved(KisKeyframeSP keyframe, int fromTime)
-{
-    Q_UNUSED(fromTime);
-    slotOpacityKeyframeChanged(keyframe);
 }
 
 void LayerBox::slotImageTimeChanged(int time)

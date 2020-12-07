@@ -2,26 +2,30 @@
  *  Copyright (c) 2006 Cyrille Berger <cberger@cberger.net>
  *  Copyright (c) 2007 Emanuele Tamponi <emanuele@valinor.it>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.1-or-later
 */
 
 #ifndef KOMIXCOLORSOPIMPL_H
 #define KOMIXCOLORSOPIMPL_H
 
 #include "KoMixColorsOp.h"
+
+#include <type_traits>
+#include <KisCppQuirks.h>
+
+template <typename T>
+static inline T safeDivideWithRound(T dividend,
+                                    std::enable_if_t<std::is_floating_point<T>::value, T> divisor) {
+    return dividend / divisor;
+}
+
+template <typename T>
+static inline T safeDivideWithRound(T dividend,
+                                    std::enable_if_t<std::is_integral<T>::value, T> divisor) {
+    return (dividend + divisor / 2) / divisor;
+}
+
+
 
 template<class _CSTrait>
 class KoMixColorsOpImpl : public KoMixColorsOp
@@ -168,7 +172,7 @@ private:
         }
 
         // set totalAlpha to the minimum between its value and the unit value of the channels
-        const int sumOfWeights = weightsWrapper.normalizeFactor();
+        const typename KoColorSpaceMathsTraits<typename _CSTrait::channels_type>::compositetype sumOfWeights = weightsWrapper.normalizeFactor();
 
         if (totalAlpha > KoColorSpaceMathsTraits<typename _CSTrait::channels_type>::unitValue * sumOfWeights) {
             totalAlpha = KoColorSpaceMathsTraits<typename _CSTrait::channels_type>::unitValue * sumOfWeights;
@@ -186,10 +190,7 @@ private:
             for (int i = 0; i < (int)_CSTrait::channels_nb; i++) {
                 if (i != _CSTrait::alpha_pos) {
 
-                    typename KoColorSpaceMathsTraits<typename _CSTrait::channels_type>::compositetype v = (totals[i] + totalAlpha / 2) / totalAlpha;
-                    if (KoColorSpaceMathsTraits<typename _CSTrait::channels_type>::unitValue == 1.0) {
-                        v = totals[i] / totalAlpha;
-                    }
+                    typename KoColorSpaceMathsTraits<typename _CSTrait::channels_type>::compositetype v = safeDivideWithRound(totals[i], totalAlpha);
 
                     if (v > KoColorSpaceMathsTraits<typename _CSTrait::channels_type>::max) {
                         v = KoColorSpaceMathsTraits<typename _CSTrait::channels_type>::max;
@@ -202,11 +203,7 @@ private:
             }
 
             if (_CSTrait::alpha_pos != -1) {
-                if (KoColorSpaceMathsTraits<typename _CSTrait::channels_type>::unitValue == 1.0) {
-                    dstColor[ _CSTrait::alpha_pos ] = totalAlpha / sumOfWeights;
-                } else {
-                    dstColor[ _CSTrait::alpha_pos ] = (totalAlpha + sumOfWeights / 2) / sumOfWeights;
-                }
+                dstColor[ _CSTrait::alpha_pos ] = safeDivideWithRound(totalAlpha, sumOfWeights);
             }
         } else {
             memset(dst, 0, sizeof(typename _CSTrait::channels_type) * _CSTrait::channels_nb);

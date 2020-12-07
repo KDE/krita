@@ -1,16 +1,4 @@
-# This script is licensed CC 0 1.0, so that you can learn from it.
-
-# ------ CC 0 1.0 ---------------
-
-# The person who associated a work with this deed has dedicated the
-# work to the public domain by waiving all of his or her rights to the
-# work worldwide under copyright law, including all related and
-# neighboring rights, to the extent allowed by law.
-
-# You can copy, modify, distribute and perform the work, even for
-# commercial purposes, all without asking permission.
-
-# https://creativecommons.org/publicdomain/zero/1.0/legalcode
+# SPDX-License-Identifier: CC0-1.0
 
 from . import filtermanagerdialog
 from .components import (filtercombobox, filtermanagertreemodel)
@@ -51,7 +39,7 @@ class UIFilterManager(object):
         self.documentsTreeView.resizeColumnToContents(1)
         self.documentsTreeView.resizeColumnToContents(2)
 
-        self.formLayout.addRow(i18n("Filters:"), self.filterComboBox)
+        self.formLayout.addRow(i18nc("Python filters", "Filters:"), self.filterComboBox)
 
         self.line = QFrame()
         self.line.setFrameShape(QFrame.HLine)

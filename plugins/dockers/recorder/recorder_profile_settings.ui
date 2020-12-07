@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
+ <class>RecorderProfileSettings</class>
+ <widget class="QDialog" name="RecorderProfileSettings">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>617</width>
+    <height>454</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Edit profile</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item column="0" row="0">
+    <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,0">
+     <item>
+      <widget class="QLabel" name="labelTitleProfileSettings">
+       <property name="text">
+        <string>Profile settings</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="buttonPresetRevert">
+       <property name="toolTip">
+        <string comment="Cancel any changes and restore initial value">Revert</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset theme="reload">
+         <normaloff>.</normaloff>
+         .
+        </iconset>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item column="0" row="1">
+    <widget class="Line" name="line1">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item column="0" row="4">
+    <widget class="QStackedWidget" name="stackedWidget">
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="pageArguments">
+      <layout class="QGridLayout" name="gridLayout_3">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item column="0" row="0">
+        <widget class="QPlainTextEdit" name="editFfmpegArguments">
+         <property name="documentTitle">
+          <string notr="true"/>
+         </property>
+         <property name="plainText">
+          <string notr="true"/>
+         </property>
+        </widget>
+       </item>
+       <item column="0" row="1">
+        <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,1">
+         <item>
+          <widget class="QLabel" name="labelTitleSupportedVariables">
+           <property name="text">
+            <string comment="Title: variables for FFMpeg arguments">Insert variable:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="labelSupportedVariables">
+           <property name="text">
+            <string notr="true">&lt;a href=&quot;$IN_FPS&quot;&gt;$IN_FPS&lt;/a&gt;
+&lt;a href=&quot;$OUT_FPS&quot;&gt;$OUT_FPS&lt;/a&gt;
+&lt;a href=&quot;$WIDTH&quot;&gt;$WIDTH&lt;/a&gt;
+&lt;a href=&quot;$HEIGHT&quot;&gt;$HEIGHT&lt;/a&gt;
+&lt;a href=&quot;$FRAMES&quot;&gt;$FRAMES&lt;/a&gt;
+&lt;a href=&quot;$INPUT_DIR&quot;&gt;$INPUT_DIR&lt;/a&gt;
+</string>
+           </property>
+           <property name="wordWrap">
+            <bool>true</bool>
+           </property>
+           <property name="textInteractionFlags">
+            <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="pagePreview">
+      <layout class="QGridLayout" name="gridLayout_4">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item column="0" row="0">
+        <widget class="QPlainTextEdit" name="editPreview">
+         <property name="textInteractionFlags">
+          <set>Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item column="0" row="6">
+    <widget class="Line" name="line2_2">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item column="0" row="7">
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+   <item column="0" row="3">
+    <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,0">
+     <item>
+      <widget class="QLabel" name="labelTitleFFMpegArguments">
+       <property name="text">
+        <string>FFMpeg arguments:</string>
+       </property>
+       <property name="buddy">
+        <cstring>editFfmpegArguments</cstring>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="checkPreview">
+       <property name="text">
+        <string>Preview</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item column="0" row="2">
+    <layout class="QGridLayout" name="gridLayout_2">
+     <property name="leftMargin">
+      <number>9</number>
+     </property>
+     <property name="rightMargin">
+      <number>9</number>
+     </property>
+     <item column="0" row="0">
+      <widget class="QLabel" name="labelProfileName">
+       <property name="text">
+        <string>Profile name:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+       <property name="buddy">
+        <cstring>editProfileName</cstring>
+       </property>
+      </widget>
+     </item>
+     <item column="1" row="0">
+      <widget class="QLineEdit" name="editProfileName">
+       <property name="maxLength">
+        <number>64</number>
+       </property>
+      </widget>
+     </item>
+     <item column="0" row="1">
+      <widget class="QLabel" name="labelFileExt">
+       <property name="text">
+        <string>File extension:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+       <property name="buddy">
+        <cstring>editFileExtension</cstring>
+       </property>
+      </widget>
+     </item>
+     <item column="1" row="1">
+      <widget class="QLineEdit" name="editFileExtension">
+       <property name="maxLength">
+        <number>15</number>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <tabstops>
+  <tabstop>editProfileName</tabstop>
+  <tabstop>editFileExtension</tabstop>
+ </tabstops>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>RecorderProfileSettings</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>266</x>
+     <y>428</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>157</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>RecorderProfileSettings</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>334</x>
+     <y>428</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>286</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>editProfileName</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>RecorderProfileSettings</receiver>
+   <slot>onInputChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>160</x>
+     <y>62</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>404</x>
+     <y>65</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>editFileExtension</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>RecorderProfileSettings</receiver>
+   <slot>onInputChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>314</x>
+     <y>93</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>397</x>
+     <y>104</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>editFfmpegArguments</sender>
+   <signal>textChanged()</signal>
+   <receiver>RecorderProfileSettings</receiver>
+   <slot>onInputChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>227</x>
+     <y>188</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>403</x>
+     <y>193</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>onInputChanged()</slot>
+ </slots>
+</ui>

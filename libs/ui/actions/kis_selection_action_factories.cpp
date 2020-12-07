@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2012 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_selection_action_factories.h"
@@ -61,9 +49,9 @@
 #include "kis_shape_layer.h"
 #include <kis_shape_controller.h>
 #include "kis_image_animation_interface.h"
-#include "kis_time_range.h"
+#include "kis_time_span.h"
 #include "kis_keyframe_channel.h"
-
+#include "kis_node_manager.h"
 
 #include <processing/fill_processing_visitor.h>
 #include <kis_selection_tool_helper.h>
@@ -76,7 +64,7 @@ namespace ActionHelper {
     void copyFromDevice(KisViewManager *view,
                         KisPaintDeviceSP device,
                         bool makeSharpClip = false,
-                        const KisTimeRange &range = KisTimeRange())
+                        const KisTimeSpan &range = KisTimeSpan())
     {
         KisImageWSP image = view->image();
         if (!image) return;
@@ -269,9 +257,12 @@ void KisCutCopyActionFactory::run(bool willCut, bool makeSharpClip, KisViewManag
     KisImageSP image = view->image();
     if (!image) return;
 
-    bool haveShapesSelected = view->selectionManager()->haveShapesSelected();
+    const bool haveShapesSelected = view->selectionManager()->haveShapesSelected();
 
-    if (haveShapesSelected) {
+    KisNodeSP node = view->activeNode();
+    KisSelectionSP selection = view->selection();
+
+    if (!makeSharpClip && haveShapesSelected) {
         // XXX: "Add saving of XML data for Cut/Copy of shapes"
 
         KisImageBarrierLocker locker(image);
@@ -280,13 +271,7 @@ void KisCutCopyActionFactory::run(bool willCut, bool makeSharpClip, KisViewManag
         } else {
             view->canvasBase()->toolProxy()->copy();
         }
-    } else {
-        KisNodeSP node = view->activeNode();
-        if (!node) return;
-
-        KisSelectionSP selection = view->selection();
-        if (selection.isNull()) return;
-
+    } else if (node && selection) {
         {
             KisImageBarrierLocker locker(image);
             KisPaintDeviceSP dev = node->paintDevice();
@@ -312,9 +297,9 @@ void KisCutCopyActionFactory::run(bool willCut, bool makeSharpClip, KisViewManag
                 return;
             }
 
-            KisTimeRange range;
+            KisTimeSpan range;
 
-            KisKeyframeChannel *channel = node->getKeyframeChannel(KisKeyframeChannel::Content.id());
+            KisKeyframeChannel *channel = node->getKeyframeChannel(KisKeyframeChannel::Raster.id());
             if (channel) {
                 const int currentTime = image->animationInterface()->currentTime();
                 range = channel->affectedFrames(currentTime);
@@ -375,6 +360,12 @@ void KisCutCopyActionFactory::run(bool willCut, bool makeSharpClip, KisViewManag
         KisOperationConfiguration config(id());
         config.setProperty("will-cut", willCut);
         endAction(ap, config.toXML());
+    } else if (!makeSharpClip) {
+        if (willCut) {
+            view->nodeManager()->cutLayersToClipboard();
+        } else {
+            view->nodeManager()->copyLayersToClipboard();
+        }
     }
 }
 
@@ -523,7 +514,7 @@ void KisSelectionToShapeActionFactory::run(KisViewManager *view)
     KisProcessingApplicator::runSingleCommandStroke(view->image(), cmd);
 }
 
-void KisStrokeSelectionActionFactory::run(KisViewManager *view, StrokeSelectionOptions params)
+void KisStrokeSelectionActionFactory::run(KisViewManager *view, const StrokeSelectionOptions& params)
 {
     KisImageWSP image = view->image();
     if (!image) {
@@ -585,7 +576,7 @@ void KisStrokeSelectionActionFactory::run(KisViewManager *view, StrokeSelectionO
     image->setModified();
 }
 
-void KisStrokeBrushSelectionActionFactory::run(KisViewManager *view, StrokeSelectionOptions params)
+void KisStrokeBrushSelectionActionFactory::run(KisViewManager *view, const StrokeSelectionOptions& params)
 {
     KisImageWSP image = view->image();
     if (!image) {

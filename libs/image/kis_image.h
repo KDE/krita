@@ -2,19 +2,7 @@
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *  Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 #ifndef KIS_IMAGE_H_
 #define KIS_IMAGE_H_
@@ -92,9 +80,12 @@ public: // KisNodeGraphListener implementation
     void invalidateAllFrames() override;
     void notifySelectionChanged() override;
     void requestProjectionUpdate(KisNode *node, const QVector<QRect> &rects, bool resetAnimationCache) override;
-    void invalidateFrames(const KisTimeRange &range, const QRect &rect) override;
+    void invalidateFrames(const KisTimeSpan &range, const QRect &rect) override;
     void requestTimeSwitch(int time) override;
     KisNode* graphOverlayNode() const override;
+
+    void keyframeChannelHasBeenAdded(KisNode *node, KisKeyframeChannel *channel) override;
+    void keyframeChannelAboutToBeRemoved(KisNode *node, KisKeyframeChannel *channel) override;
 
 public: // KisProjectionUpdateListener implementation
     void notifyProjectionUpdated(const QRect &rc) override;
@@ -225,11 +216,6 @@ public:
     QString nextLayerName(const QString &baseName = "") const;
 
     /**
-     * Set the automatic layer name counter one back.
-     */
-    void rollBackLayerName();
-
-    /**
      * @brief start asynchronous operation on resizing the image
      *
      * The method will resize the image to fit the new size without
@@ -279,12 +265,13 @@ public:
      *
      * @param node node to crop
      * @param newRect the rectangle of the layer which will be cut-out
+     * @param activeFrameOnly whether to crop every animation frame or just the current one.
      *
      * Please note that the actual operation starts asynchronously in
      * a background, so you cannot expect the image having new size
      * right after this call.
      */
-    void cropNode(KisNodeSP node, const QRect& newRect);
+    void cropNode(KisNodeSP node, const QRect& newRect, const bool activeFrameOnly = false);
 
     /**
      * @brief start asynchronous operation on scaling the image
@@ -663,6 +650,16 @@ public:
      * Remove the layer compostion
      */
     void removeComposition(KisLayerCompositionSP composition);
+
+    /**
+     * Move a composition up in the composition list
+     */
+    void moveCompositionUp(KisLayerCompositionSP composition);
+
+    /**
+     * Move a composition down in the composition list
+     */
+    void moveCompositionDown(KisLayerCompositionSP composition);
 
     /**
      * Permit or deny the wrap-around mode for all the paint devices

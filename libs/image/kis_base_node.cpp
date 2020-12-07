@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_base_node.h"
@@ -26,6 +14,7 @@
 #include <KoCompositeOpRegistry.h>
 #include "kis_paint_device.h"
 #include "kis_layer_properties_icons.h"
+#include "kis_default_bounds_node_wrapper.h"
 
 #include "kis_scalar_keyframe_channel.h"
 
@@ -106,7 +95,7 @@ KisBaseNode::KisBaseNode(const KisBaseNode & rhs)
 
                 KisScalarKeyframeChannel* channelNew = new KisScalarKeyframeChannel(*pchannel, nullptr);
                 KIS_ASSERT(channelNew);
-                m_d->keyframeChannels.insert(channelNew->id(), channelNew);
+                addKeyframeChannel(channelNew);
 
                 if (KoID(key) == KisKeyframeChannel::Opacity) {
                     m_d->opacityChannel.reset(channelNew);
@@ -143,10 +132,11 @@ quint8 KisBaseNode::opacity() const
 void KisBaseNode::setOpacity(quint8 val)
 {
     if (m_d->opacityChannel) {
-        KisKeyframeSP activeKeyframe = m_d->opacityChannel->currentlyActiveKeyframe();
+        int activeKeyframeTime = m_d->opacityChannel->activeKeyframeTime();
+        KisScalarKeyframeSP scalarKey = m_d->opacityChannel->keyframeAt<KisScalarKeyframe>(activeKeyframeTime);
 
-        if (activeKeyframe) {
-            m_d->opacityChannel->setScalarValue(activeKeyframe, val);
+        if (scalarKey) {
+            scalarKey->setValue(val);
         }
     }
 
@@ -248,7 +238,7 @@ QImage KisBaseNode::createThumbnail(qint32 w, qint32 h, Qt::AspectRatioMode aspe
 
 QImage KisBaseNode::createThumbnailForFrame(qint32 w, qint32 h, int time, Qt::AspectRatioMode aspectRatioMode)
 {
-    Q_UNUSED(time)
+    Q_UNUSED(time);
     Q_UNUSED(aspectRatioMode);
     return createThumbnail(w, h);
 }
@@ -391,6 +381,11 @@ bool KisBaseNode::supportsLodMoves() const
     return m_d->supportsLodMoves;
 }
 
+bool KisBaseNode::supportsLodPainting() const
+{
+    return true;
+}
+
 void KisBaseNode::setImage(KisImageWSP image)
 {
     m_d->image = image;
@@ -482,10 +477,12 @@ KisKeyframeChannel *KisBaseNode::requestKeyframeChannel(const QString &id)
             KisNode* node = dynamic_cast<KisNode*>(this);
             KisScalarKeyframeChannel * channel = new KisScalarKeyframeChannel(
                 KisKeyframeChannel::Opacity,
-                0, 255,
-                KisNodeWSP( node ),
-                KisKeyframe::Linear
+                node
             );
+
+            channel->setLimits(0, 255);
+            channel->setDefaultInterpolationMode(KisScalarKeyframe::Linear);
+            channel->setDefaultValue(255);
 
             m_d->opacityChannel.reset(channel);
 

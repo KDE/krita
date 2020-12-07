@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgColorSettings</class>
  <widget class="QWidget" name="WdgColorSettings">
   <property name="geometry">
@@ -14,7 +18,7 @@
    <string>Color Settings</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
+   <item column="0" row="0">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
       <number>0</number>
@@ -277,9 +281,9 @@
        <string>Soft Proofing</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_3">
-       <item row="2" column="0">
+       <item column="0" row="2">
         <layout class="QGridLayout" name="gridLayout_2">
-         <item row="0" column="1">
+         <item column="1" row="0">
           <widget class="QComboBox" name="cmbProofingIntent">
            <item>
             <property name="text">
@@ -303,7 +307,7 @@
            </item>
           </widget>
          </item>
-         <item row="1" column="0">
+         <item column="0" row="1">
           <widget class="QLabel" name="lblAdaptationState">
            <property name="text">
             <string>Adaptation State:</string>
@@ -313,14 +317,14 @@
            </property>
           </widget>
          </item>
-         <item row="0" column="0">
+         <item column="0" row="0">
           <widget class="QLabel" name="lblProofingIntent">
            <property name="text">
             <string>Proofing Rendering Intent:</string>
            </property>
           </widget>
          </item>
-         <item row="2" column="0">
+         <item column="0" row="2">
           <widget class="QLabel" name="lblGamutWarning">
            <property name="text">
             <string>Gamut Warning:</string>
@@ -330,21 +334,21 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="1">
+         <item column="1" row="1">
           <widget class="QSlider" name="sldAdaptationState">
            <property name="orientation">
             <enum>Qt::Horizontal</enum>
            </property>
           </widget>
          </item>
-         <item row="2" column="1">
+         <item column="1" row="2">
           <widget class="KisColorButton" name="gamutAlarm">
            <property name="text">
             <string/>
            </property>
           </widget>
          </item>
-         <item row="3" column="1">
+         <item column="1" row="3">
           <widget class="QCheckBox" name="ckbProofBlackPoint">
            <property name="text">
             <string>Black Point Compensation</string>
@@ -353,7 +357,7 @@
          </item>
         </layout>
        </item>
-       <item row="3" column="0">
+       <item column="0" row="3">
         <spacer name="verticalSpacer_4">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -366,7 +370,7 @@
          </property>
         </spacer>
        </item>
-       <item row="1" column="0">
+       <item column="0" row="1">
         <widget class="KisColorSpaceSelector" name="proofingSpaceSelector" native="true">
          <property name="minimumSize">
           <size>
@@ -376,7 +380,7 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="0">
+       <item column="0" row="0">
         <widget class="QLabel" name="label">
          <property name="text">
           <string>Note: these are the default proofing settings for new images.</string>
@@ -387,7 +391,7 @@
      </widget>
     </widget>
    </item>
-   <item row="1" column="0">
+   <item column="0" row="1">
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>

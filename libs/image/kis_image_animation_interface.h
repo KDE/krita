@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2015 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #ifndef __KIS_IMAGE_ANIMATION_INTERFACE_H
@@ -26,7 +14,8 @@
 #include "kritaimage_export.h"
 
 class KisUpdatesFacade;
-class KisTimeRange;
+class KisTimeSpan;
+class KisKeyframeChannel;
 class KoColor;
 class KisRegion;
 
@@ -104,7 +93,7 @@ public:
 
     void notifyNodeChanged(const KisNode *node, const QRect &rect, bool recursive);
     void notifyNodeChanged(const KisNode *node, const QVector<QRect> &rects, bool recursive);
-    void invalidateFrames(const KisTimeRange &range, const QRect &rect);
+    void invalidateFrames(const KisTimeSpan &range, const QRect &rect);
 
     /**
      * Changes the default color of the "external frame" projection of
@@ -117,15 +106,15 @@ public:
      * The current time range selected by user.
      * @return current time range
      */
-    const KisTimeRange& fullClipRange() const;
-    void setFullClipRange(const KisTimeRange range);
+    const KisTimeSpan& fullClipRange() const;
+    void setFullClipRange(const KisTimeSpan range);
 
     void setFullClipRangeStartTime(int column);
     void setFullClipRangeEndTime(int column);
 
 
-    const KisTimeRange &playbackRange() const;
-    void setPlaybackRange(const KisTimeRange range);
+    const KisTimeSpan &playbackRange() const;
+    void setPlaybackRange(const KisTimeSpan range);
 
     int framerate() const;
 
@@ -188,7 +177,7 @@ Q_SIGNALS:
     void sigFrameReady(int time);
     void sigFrameCancelled();
     void sigUiTimeChanged(int newTime);
-    void sigFramesChanged(const KisTimeRange &range, const QRect &rect);
+    void sigFramesChanged(const KisTimeSpan &range, const QRect &rect);
 
     void sigInternalRequestTimeSwitch(int frameId, bool useUndo);
 
@@ -206,6 +195,9 @@ Q_SIGNALS:
      * when you mute the channel! When muting, sigAudioChannelChanged() is used instead!
      */
     void sigAudioVolumeChanged();
+
+    void sigKeyframeAdded(const KisKeyframeChannel* channel, int time);
+    void sigKeyframeRemoved(const KisKeyframeChannel* channel, int time);
 
 private:
     struct Private;

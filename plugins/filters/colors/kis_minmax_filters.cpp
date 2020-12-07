@@ -3,19 +3,7 @@
  *
  * Copyright (c) 2006 Cyrille Berger <cberger@cberger.net>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_minmax_filters.h"
@@ -34,8 +22,8 @@ typedef void (*funcMaxMin)(const quint8* , quint8* , uint);
 template<typename _TYPE>
 void maximize(const quint8* s, quint8* d, uint nbpixels)
 {
-    const _TYPE* sT = (_TYPE*)(s);
-    _TYPE* dT = (_TYPE*)(d);
+    const _TYPE* sT = reinterpret_cast<const _TYPE*>(s);
+    _TYPE* dT = reinterpret_cast<_TYPE*>(d);
     _TYPE vmax = *sT;
     for (uint i = 1; i < nbpixels; i ++) {
         if (sT[i] > vmax) {
@@ -52,8 +40,8 @@ void maximize(const quint8* s, quint8* d, uint nbpixels)
 template<typename _TYPE>
 void minimize(const quint8* s, quint8* d, uint nbpixels)
 {
-    const _TYPE* sT = (_TYPE*)(s);
-    _TYPE* dT = (_TYPE*)(d);
+    const _TYPE* sT = reinterpret_cast<const _TYPE*>(s);
+    _TYPE* dT = reinterpret_cast<_TYPE*>(d);
     _TYPE vmin = *sT;
     for (uint i = 1; i < nbpixels; i ++) {
         if (sT[i] < vmin) {

@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2011 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #ifndef __MOVE_STROKE_STRATEGY_H
@@ -38,58 +26,36 @@ class KRITAUI_EXPORT MoveStrokeStrategy : public QObject, public KisStrokeStrate
 {
     Q_OBJECT
 public:
-    class Data : public KisStrokeJobData {
+    class KRITAUI_EXPORT Data : public KisStrokeJobData {
     public:
-        Data(QPoint _offset)
-            : KisStrokeJobData(SEQUENTIAL, NORMAL),
-              offset(_offset)
-        {
-        }
-
-        KisStrokeJobData* createLodClone(int levelOfDetail) override {
-            return new Data(*this, levelOfDetail);
-        }
+        Data(QPoint _offset);
+        KisStrokeJobData* createLodClone(int levelOfDetail) override;
 
         QPoint offset;
 
     private:
-        Data(const Data &rhs, int levelOfDetail)
-            : KisStrokeJobData(rhs)
-        {
-            KisLodTransform t(levelOfDetail);
-            offset = t.map(rhs.offset);
-        }
+        Data(const Data &rhs, int levelOfDetail);
     };
 
-    class PickLayerData : public KisStrokeJobData {
+    class KRITAUI_EXPORT PickLayerData : public KisStrokeJobData {
     public:
-        PickLayerData(QPoint _pos)
-            : KisStrokeJobData(SEQUENTIAL, NORMAL),
-              pos(_pos)
-        {
-        }
+        PickLayerData(QPoint _pos);
 
-        KisStrokeJobData* createLodClone(int levelOfDetail) override {
-            return new PickLayerData(*this, levelOfDetail);
-        }
+        KisStrokeJobData* createLodClone(int levelOfDetail) override;
 
         QPoint pos;
 
     private:
-        PickLayerData(const PickLayerData &rhs, int levelOfDetail)
-            : KisStrokeJobData(rhs)
-        {
-            KisLodTransform t(levelOfDetail);
-            pos = t.map(rhs.pos);
-        }
+        PickLayerData(const PickLayerData &rhs, int levelOfDetail);
     };
 
 
-    struct BarrierUpdateData : public KisAsyncronousStrokeUpdateHelper::UpdateData
+    struct KRITAUI_EXPORT BarrierUpdateData : public KisAsyncronousStrokeUpdateHelper::UpdateData
     {
-        BarrierUpdateData(bool forceUpdate)
-            : KisAsyncronousStrokeUpdateHelper::UpdateData(forceUpdate, BARRIER, EXCLUSIVE)
-        {}
+        BarrierUpdateData(bool forceUpdate);
+        KisStrokeJobData* createLodClone(int levelOfDetail) override;
+    protected:
+        BarrierUpdateData(const BarrierUpdateData &rhs, int levelOfDetail);
     };
 
 public:

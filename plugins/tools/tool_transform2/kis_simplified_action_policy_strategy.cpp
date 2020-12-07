@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2014 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_simplified_action_policy_strategy.h"
@@ -28,12 +16,14 @@ struct KisSimplifiedActionPolicyStrategy::Private
     Private(const KisCoordinatesConverter *_converter, KoSnapGuide *_snapGuide)
         : converter(_converter),
           snapGuide(_snapGuide),
+          pickFromNodeModifierActive(false),
           changeSizeModifierActive(false),
           anyPickerModifierActive(false) {}
 
     const KisCoordinatesConverter *converter;
     KoSnapGuide *snapGuide;
 
+    bool pickFromNodeModifierActive;
     bool changeSizeModifierActive;
     bool anyPickerModifierActive;
     QPointF dragOffset;
@@ -129,20 +119,22 @@ bool KisSimplifiedActionPolicyStrategy::endPrimaryAction(KoPointerEvent *event)
 
 void KisSimplifiedActionPolicyStrategy::activatePrimaryAction()
 {
-    setTransformFunction(m_d->lastImagePos, m_d->anyPickerModifierActive);
+    setTransformFunction(m_d->lastImagePos, m_d->anyPickerModifierActive && !m_d->pickFromNodeModifierActive, m_d->changeSizeModifierActive, m_d->pickFromNodeModifierActive);
 }
 
 void KisSimplifiedActionPolicyStrategy::activateAlternateAction(KisTool::AlternateAction action)
 {
     if (action == KisTool::ChangeSize) {
         m_d->changeSizeModifierActive = true;
-    } else if (action == KisTool::PickFgNode || action == KisTool::PickBgNode ||
-               action == KisTool::PickFgImage || action == KisTool::PickBgImage) {
-
+    } else if (action == KisTool::PickFgNode || action == KisTool::PickBgNode) {
         m_d->anyPickerModifierActive = true;
+        m_d->pickFromNodeModifierActive = true;
+    } else if (action == KisTool::PickFgImage || action == KisTool::PickBgImage) {
+        m_d->anyPickerModifierActive = true;
+        m_d->pickFromNodeModifierActive = false;
     }
 
-    setTransformFunction(m_d->lastImagePos, m_d->anyPickerModifierActive);
+    setTransformFunction(m_d->lastImagePos, m_d->anyPickerModifierActive && !m_d->pickFromNodeModifierActive, m_d->changeSizeModifierActive, m_d->pickFromNodeModifierActive);
 }
 
 void KisSimplifiedActionPolicyStrategy::deactivateAlternateAction(KisTool::AlternateAction action)
@@ -153,6 +145,7 @@ void KisSimplifiedActionPolicyStrategy::deactivateAlternateAction(KisTool::Alter
                action == KisTool::PickFgImage || action == KisTool::PickBgImage) {
 
         m_d->anyPickerModifierActive = false;
+        m_d->pickFromNodeModifierActive = false;
     }
 }
 
@@ -195,6 +188,6 @@ bool KisSimplifiedActionPolicyStrategy::endAlternateAction(KoPointerEvent *event
 
 void KisSimplifiedActionPolicyStrategy::hoverActionCommon(const QPointF &pt)
 {
-    setTransformFunction(pt, m_d->anyPickerModifierActive);
+    setTransformFunction(pt, m_d->anyPickerModifierActive && !m_d->pickFromNodeModifierActive, m_d->changeSizeModifierActive, m_d->pickFromNodeModifierActive);
 }
 

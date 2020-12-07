@@ -3,19 +3,7 @@
  *  Copyright (c) 2007 Sven Langkamp <sven.langkamp@gmail.com>
  *
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_selection.h"
@@ -85,25 +73,30 @@ void KisSelection::Private::safeDeleteShapeSelection(KisSelectionComponent *shap
     };
 
 
+    if (selection) {
+        KisImageSP image = 0;
 
-    KisImageSP image = 0;
+        KisNodeSP parentNode = selection->parentNode();
+        if (parentNode) {
+            image = parentNode->image();
+        }
 
-    KisNodeSP parentNode = selection->parentNode();
-    if (parentNode) {
-        image = parentNode->image();
+        if (image) {
+            KisStrokeId strokeId = image->startStroke(new ShapeSelectionReleaseStroke(shapeSelection));
+            image->endStroke(strokeId);
+            shapeSelection = 0;
+        }
     }
 
-    if (image) {
-        KisStrokeId strokeId = image->startStroke(new ShapeSelectionReleaseStroke(shapeSelection));
-        image->endStroke(strokeId);
-    } else {
+    if (shapeSelection) {
         makeKisDeleteLaterWrapper(shapeSelection)->deleteLater();
+        shapeSelection = 0;
     }
 }
 
 struct KisSelection::ChangeShapeSelectionCommand : public KUndo2Command
 {
-    ChangeShapeSelectionCommand(KisSelection *selection, KisSelectionComponent *shapeSelection)
+    ChangeShapeSelectionCommand(KisSelectionWSP selection, KisSelectionComponent *shapeSelection)
         : m_selection(selection),
           m_shapeSelection(shapeSelection)
     {
@@ -112,12 +105,14 @@ struct KisSelection::ChangeShapeSelectionCommand : public KUndo2Command
 
     ~ChangeShapeSelectionCommand() {
         if (m_shapeSelection) {
-            Private::safeDeleteShapeSelection(m_shapeSelection, m_selection);
+            Private::safeDeleteShapeSelection(m_shapeSelection, m_selection ? m_selection.data() : 0);
         }
     }
 
     void undo() override
     {
+        KIS_SAFE_ASSERT_RECOVER_RETURN(m_selection);
+
         if (m_reincarnationCommand) {
             m_reincarnationCommand->undo();
         }
@@ -131,6 +126,8 @@ struct KisSelection::ChangeShapeSelectionCommand : public KUndo2Command
 
     void redo() override
     {
+        KIS_SAFE_ASSERT_RECOVER_RETURN(m_selection);
+
         if (m_firstRedo) {
             if (bool(m_selection->m_d->shapeSelection) != bool(m_shapeSelection)) {
                 m_reincarnationCommand.reset(
@@ -152,7 +149,7 @@ struct KisSelection::ChangeShapeSelectionCommand : public KUndo2Command
     }
 
 private:
-    KisSelection *m_selection = 0;
+    KisSelectionWSP m_selection;
     KisSelectionComponent *m_shapeSelection = 0;
     QScopedPointer<KUndo2Command> m_reincarnationCommand;
     bool m_firstRedo = true;

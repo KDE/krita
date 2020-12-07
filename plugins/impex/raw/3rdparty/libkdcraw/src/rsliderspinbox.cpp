@@ -155,7 +155,7 @@ void RAbstractSliderSpinBox::hideEdit()
 void RAbstractSliderSpinBox::paintEvent(QPaintEvent* e)
 {
     Q_D(RAbstractSliderSpinBox);
-    Q_UNUSED(e)
+    Q_UNUSED(e);
 
     QPainter painter(this);
 

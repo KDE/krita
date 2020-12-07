@@ -1,20 +1,7 @@
 /* This file is part of the KDE project
    Copyright (c) 2007 C. Boemann <cbo@boemann.dk>
 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
-
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
-
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   SPDX-License-Identifier: LGPL-2.0-or-later
 */
 #include "KoSliderCombo.h"
 #include "KoSliderCombo_p.h"
@@ -61,11 +48,10 @@ KoSliderCombo::KoSliderCombo(QWidget *parent)
     // When set to true, causes flicker on Qt 4.6. Any reason to keep it?
     d->firstShowOfSlider = false; //true;
 
-    QHBoxLayout * l = new QHBoxLayout();
-    l->setMargin(2);
-    l->setSpacing(2);
-    l->addWidget(d->slider);
-    d->container->setLayout(l);
+    QHBoxLayout *layout = new QHBoxLayout(d->container);
+    layout->setMargin(2);
+    layout->setSpacing(2);
+    layout->addWidget(d->slider);
     d->container->resize(200, 30);
 
     setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);

@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2014 Boudewijn Rempt <boud@valdyas.org>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 #include "kis_about_application.h"
 
@@ -32,6 +20,7 @@
 #include <QApplication>
 #include <QFile>
 #include <QDesktopServices>
+#include <kaboutdata.h>
 
 #include <klocalizedstring.h>
 
@@ -91,6 +80,21 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
     authors.append(".</p></body></html>");
     lblAuthors->setText(authors);
     wdgTab->addTab(lblAuthors, i18nc("Heading for the list of Krita authors/developers", "Authors"));
+
+
+    // Translators
+    KAboutData aboutData(KAboutData::applicationData());
+    if (aboutData.translators().isEmpty()) {
+        aboutData.setTranslator(i18nc("NAME OF TRANSLATORS", "Your names"),
+                                i18nc("EMAIL OF TRANSLATORS", "Your emails"));
+
+    }
+
+    if (!aboutData.translators().isEmpty()) {
+        wdgTab->addTab(createTranslatorsWidget(aboutData.translators(), aboutData.ocsProviderUrl()),
+                       i18nc("@title:tab", "Translators"));
+    }
+
 
     QTextEdit *lblKickstarter = new QTextEdit();
     lblKickstarter->setReadOnly(true);
@@ -198,6 +202,7 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
     }
     wdgTab->addTab(lblThirdParty, i18n("Third-party libraries"));
 
+
     QPushButton *bnClose = new QPushButton(i18n("Close"));
     bnClose->setIcon(QIcon::fromTheme(QStringLiteral("dialog-close")));
     connect(bnClose, SIGNAL(clicked()), SLOT(close()));
@@ -210,3 +215,37 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
     vlayout->addLayout(hlayout);
 
 }
+
+QWidget *KisAboutApplication::createTranslatorsWidget(const QList<KAboutPerson> &translators, const QString &ocsProviderUrl)
+{
+    QString aboutTranslationTeam = KAboutData::aboutTranslationTeam();
+
+    qDebug() << aboutTranslationTeam << ocsProviderUrl;
+
+    QTextBrowser *lblTranslators = new QTextBrowser();
+
+    lblTranslators->setOpenExternalLinks(true);
+
+    QString translatorHtml = i18n("<html>"
+                                  "<head/>"
+                                  "<body>"
+                                  "<h1 align=\"center\"><b>Translators</b></h1>"
+                                  "<p><ul>");
+
+
+    Q_FOREACH(const KAboutPerson &person, translators) {
+        translatorHtml.append(QString("<li>%1</li>").arg(person.name()));
+    }
+
+    translatorHtml.append("<ul></p>");
+    translatorHtml.append("<p>KDE is translated into many languages thanks to the work of the "
+                          "translation teams all over the world.</p><p>For more information on KDE "
+                          "internationalization visit <a href=\"http://l10n.kde.org\">http://l10n."
+                          "kde.org</a></p>");
+    translatorHtml.append("</body></html>");
+
+    lblTranslators->setText(translatorHtml);
+
+    return lblTranslators;
+}
+

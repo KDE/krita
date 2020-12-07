@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2011 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_saved_commands.h"
@@ -22,6 +10,7 @@
 
 #include "kis_image_interfaces.h"
 #include "kis_stroke_strategy_undo_command_based.h"
+#include <KisAsynchronouslyMergeableCommandInterface.h>
 
 
 KisSavedCommandBase::KisSavedCommandBase(const KUndo2MagicString &name,
@@ -221,8 +210,11 @@ bool KisSavedMacroCommand::mergeWith(const KUndo2Command* command)
 
     bool sameCommands = true;
     while (it != end && otherIt != otherEnd) {
-        if (it->command->id() < 0 ||
-            otherIt->command->id() < 0 ||
+        KisAsynchronouslyMergeableCommandInterface *iface1 =
+            dynamic_cast<KisAsynchronouslyMergeableCommandInterface*>(it->command.data());
+
+        if (!iface1 || !iface1->canMergeWith(otherIt->command.data()) ||
+            it->command->id() < 0 || otherIt->command->id() < 0 ||
             it->command->id() != otherIt->command->id() ||
             it->sequentiality != otherIt->sequentiality ||
             it->exclusivity != otherIt->exclusivity) {

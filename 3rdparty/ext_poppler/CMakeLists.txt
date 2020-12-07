@@ -1,17 +1,20 @@
 SET(PREFIX_ext_poppler "${EXTPREFIX}" )
 
 list(APPEND _PopplerPatch_COMMAND
-        ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/no_tests.diff
+        ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-No-tests.patch
     )
 if(APPLE)
     list(APPEND _PopplerPatch_COMMAND
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/mac_popplerIconv.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0002-Use-system-libiconv-in-macOS.patch
     )
 endif(APPLE)
+list(APPEND _PopplerPatch_COMMAND
+    COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0003-poppler-qt5-also-needs-poppler_LIBS-on-MinGW.patch
+)
 ExternalProject_Add( ext_poppler
 	DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-	URL https://poppler.freedesktop.org/poppler-0.82.0.tar.xz
-	URL_MD5 4d6106c2382c5e66072e0b355acc3640
+	URL https://poppler.freedesktop.org/poppler-20.11.0.tar.xz
+	URL_HASH SHA256=021557074516492375c2bb4226a413aad431159e9177f9f14dff4159d2723b14
 	
     PATCH_COMMAND ${_PopplerPatch_COMMAND}
 

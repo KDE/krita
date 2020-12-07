@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2007 Boudewijn Rempt boud@valdyas.org
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include <compositeops/KoVcMultiArchBuildSupport.h> //MSVC requires that Vc come first
@@ -34,7 +22,9 @@
 #include "kis_convolution_kernel.h"
 #include <kis_gaussian_kernel.h>
 #include <kis_mask_generator.h>
+#include <kistest.h>
 #include "testutil.h"
+#include "testing_timed_default_bounds.h"
 
 KisPaintDeviceSP initAsymTestDevice(QRect &imageRect, int &pixelSize, QByteArray &initialData)
 {
@@ -114,7 +104,10 @@ void KisConvolutionPainterTest::testIdentityConvolution()
 {
     QImage qimage(QString(FILES_DATA_DIR) + '/' + "hakonepa.png");
 
+    KisDefaultBoundsBaseSP bounds = new TestUtil::TestingTimedDefaultBounds(qimage.rect());
+
     KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
+    dev->setDefaultBounds(bounds);
     dev->convertFromQImage(qimage, 0, 0, 0);
 
     KisConvolutionKernelSP kernel = new KisConvolutionKernel(3, 3, 0, 0);
@@ -152,6 +145,8 @@ void KisConvolutionPainterTest::testSymmConvolution()
     QByteArray initialData;
     KisPaintDeviceSP dev = initAsymTestDevice(imageRect, pixelSize, initialData);
 
+    KisDefaultBoundsBaseSP bounds = new TestUtil::TestingTimedDefaultBounds(dev->exactBounds());
+    dev->setDefaultBounds(bounds);
 
     KisConvolutionKernelSP kernel =
         KisConvolutionKernel::fromMatrix(filter, offset, factor);
@@ -179,6 +174,9 @@ void KisConvolutionPainterTest::testAsymmConvolutionImp(QBitArray channelFlags)
     int pixelSize = -1;
     QByteArray initialData;
     KisPaintDeviceSP dev = initAsymTestDevice(imageRect, pixelSize, initialData);
+
+    KisDefaultBoundsBaseSP bounds = new TestUtil::TestingTimedDefaultBounds(dev->exactBounds());
+    dev->setDefaultBounds(bounds);
 
     KisConvolutionKernelSP kernel =
         KisConvolutionKernel::fromMatrix(filter, offset, factor);
@@ -279,6 +277,10 @@ void KisConvolutionPainterTest::benchmarkConvolution()
     KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
     dev->convertFromQImage(referenceImage, 0, 0, 0);
 
+    KisDefaultBoundsBaseSP bounds = new TestUtil::TestingTimedDefaultBounds(referenceImage.rect());
+    dev->setDefaultBounds(bounds);
+
+
     int diameter = 1;
 
     for (int i = 0; i < 4; i++) {
@@ -328,13 +330,14 @@ void KisConvolutionPainterTest::testGaussianBase(KisPaintDeviceSP dev, bool useF
 
        if (( horizontalRadius > 0 ) && ( verticalRadius > 0 )) {
            KisPaintDeviceSP interm = new KisPaintDevice(dev->colorSpace());
+           interm->setDefaultBounds(dev->defaultBounds());
 
            KisConvolutionKernelSP kernelHoriz = KisGaussianKernel::createHorizontalKernel(horizontalRadius);
            KisConvolutionKernelSP kernelVertical = KisGaussianKernel::createVerticalKernel(verticalRadius);
 
            const QRect applyRect = dev->exactBounds();
 
-           KisConvolutionPainter::TestingEnginePreference enginePreference =
+           KisConvolutionPainter::EnginePreference enginePreference =
                useFftw ?
                KisConvolutionPainter::FFTW :
                KisConvolutionPainter::SPATIAL;
@@ -377,6 +380,10 @@ void KisConvolutionPainterTest::testGaussian(bool useFftw)
     KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
     dev->convertFromQImage(referenceImage, 0, 0, 0);
 
+    // TODO: fix the bounding rect to the rect of the reference image
+    KisDefaultBoundsBaseSP bounds = new TestUtil::TestingTimedDefaultBounds(dev->exactBounds());
+    dev->setDefaultBounds(bounds);
+
     testGaussianBase(dev, useFftw, "");
 }
 
@@ -406,6 +413,9 @@ void KisConvolutionPainterTest::testGaussianSmall(bool useFftw)
         }
     }
 
+    KisDefaultBoundsBaseSP bounds = new TestUtil::TestingTimedDefaultBounds(dev->exactBounds());
+    dev->setDefaultBounds(bounds);
+
     testGaussianBase(dev, useFftw, "reduced");
 }
 
@@ -424,6 +434,9 @@ void KisConvolutionPainterTest::testGaussianDetails(bool useFftw)
     QImage referenceImage(TestUtil::fetchDataFileLazy("resolution_test.png"));
     KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
     dev->convertFromQImage(referenceImage, 0, 0, 0);
+
+    KisDefaultBoundsBaseSP bounds = new TestUtil::TestingTimedDefaultBounds(dev->exactBounds());
+    dev->setDefaultBounds(bounds);
 
     testGaussianBase(dev, useFftw, "details");
 }
@@ -449,6 +462,9 @@ void KisConvolutionPainterTest::testDilate()
     dev->fill(QRect(50,50,100,20), KoColor(Qt::white, cs));
     dev->fill(QRect(150,50,20,100), KoColor(Qt::white, cs));
 
+    KisDefaultBoundsBaseSP bounds = new TestUtil::TestingTimedDefaultBounds(dev->exactBounds());
+    dev->setDefaultBounds(bounds);
+
     TestUtil::checkQImage(dev->convertToQImage(0, imageRect), "convolution_painter_test", "dilate", "initial");
 
     KisGaussianKernel::applyDilate(dev, imageRect, 10, QBitArray(), 0);
@@ -465,6 +481,9 @@ void KisConvolutionPainterTest::testErode()
     dev->fill(QRect(50,50,100,20), KoColor(Qt::white, cs));
     dev->fill(QRect(150,50,20,100), KoColor(Qt::white, cs));
 
+    KisDefaultBoundsBaseSP bounds = new TestUtil::TestingTimedDefaultBounds(dev->exactBounds());
+    dev->setDefaultBounds(bounds);
+
     TestUtil::checkQImage(dev->convertToQImage(0, imageRect), "convolution_painter_test", "dilate", "initial");
 
     KisGaussianKernel::applyErodeU8(dev, imageRect, 5, QBitArray(), 0);
@@ -472,4 +491,95 @@ void KisConvolutionPainterTest::testErode()
     TestUtil::checkQImage(dev->convertToQImage(0, imageRect), "convolution_painter_test", "dilate", "erode5");
 }
 
-QTEST_MAIN(KisConvolutionPainterTest)
+#include "kis_edge_detection_kernel.h"
+
+void KisConvolutionPainterTest::testNormalMap(KisPaintDeviceSP dev, bool useFftw, const QString &prefix)
+{
+   QBitArray channelFlags =
+       KoColorSpaceRegistry::instance()->rgb8()->channelFlags(true, true);
+
+   KisPainter gc(dev);
+
+
+   qreal horizontalRadius = 0.5, verticalRadius = 0.5;
+
+   for(int i = 0; i < 3 ; i++, horizontalRadius+=0.5, verticalRadius+=0.5)
+   {
+       QTime timer;
+       timer.start();
+
+       gc.beginTransaction();
+
+       if (( horizontalRadius > 0 ) && ( verticalRadius > 0 )) {
+
+           const QRect applyRect = dev->exactBounds();
+
+           //KisGaussianKernel::applyLoG(dev, applyRect, horizontalRadius, 1.0, channelFlags, 0);
+
+           QVector<int> channelOrder(3);
+           QVector<bool> channelFlip(3);
+           channelFlip.fill(false);
+
+           channelOrder[0] = 0;
+           channelOrder[1] = 1;
+           channelOrder[2] = 2;
+
+           KisEdgeDetectionKernel::convertToNormalMap(dev, applyRect,
+                                                      5.67, 5.67,
+                                                      KisEdgeDetectionKernel::Simple,
+                                                      0,
+                                                      channelOrder,
+                                                      channelFlip,
+                                                      channelFlags,
+                                                      0,
+                                                      useFftw);
+
+           QImage result = dev->convertToQImage(0, applyRect.x(), applyRect.y(), applyRect.width(), applyRect.height());
+
+           QString engine = useFftw ? "fftw" : "spatial";
+           QString testCaseName = QString("test_%1_%2_%3.png").arg(horizontalRadius).arg(verticalRadius).arg(engine);
+
+           QVERIFY(TestUtil::checkQImage(result,
+                                         "convolution_painter_test",
+                                         QString("normalmap_") + prefix,
+                                         testCaseName, 1));
+
+           gc.revertTransaction();
+       }
+       qDebug() << "Elapsed time:" << timer.elapsed() << "ms";
+    }
+}
+
+void KisConvolutionPainterTest::testNormalMap(bool useFftw)
+{
+    KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
+
+    KoColor c(Qt::yellow, dev->colorSpace());
+
+    for (int i = 0; i < 50; i++) {
+        quint8 baseOpacity = 75;
+        KoColor c(Qt::magenta, dev->colorSpace());
+
+        for (int j = 0; j <= 6; j++) {
+            c.setOpacity(static_cast<quint8>(baseOpacity + 30 * j));
+            dev->setPixel(i + j, i, c);
+        }
+    }
+
+    KisDefaultBoundsBaseSP bounds = new TestUtil::TestingTimedDefaultBounds(dev->exactBounds());
+    dev->setDefaultBounds(bounds);
+
+    testNormalMap(dev, useFftw, "reduced");
+}
+
+void KisConvolutionPainterTest::testNormalMapSpatial()
+{
+    testNormalMap(false);
+}
+
+void KisConvolutionPainterTest::testNormalMapFFTW()
+{
+    testNormalMap(true);
+}
+
+KISTEST_MAIN(KisConvolutionPainterTest)

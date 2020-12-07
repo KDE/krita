@@ -3,19 +3,7 @@
  *  Copyright (c) 2004 Bart Coppens <kde@bartcoppens.be>
  *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_fill_painter.h"
@@ -135,7 +123,7 @@ void KisFillPainter::fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const Ko
     fillRect(x1, y1, w, h, patternLayer, QRect(offset.x(), offset.y(), pattern->width(), pattern->height()));
 }
 
-void KisFillPainter::fillRect(const QRect &rc, const KoPatternSP pattern, const QTransform transform)
+void KisFillPainter::fillRectNoCompose(const QRect &rc, const KoPatternSP pattern, const QTransform transform)
 {
     if (!pattern) return;
     if (!pattern->valid()) return;
@@ -143,14 +131,22 @@ void KisFillPainter::fillRect(const QRect &rc, const KoPatternSP pattern, const 
     if (rc.width() < 1) return;
     if (rc.height() < 1) return;
 
-    KisPaintDeviceSP patternLayer = new KisPaintDevice(device()->compositionSourceColorSpace(), pattern->name());
+    KisPaintDeviceSP patternLayer = new KisPaintDevice(device()->colorSpace(), pattern->name());
     patternLayer->convertFromQImage(pattern->pattern(), 0);
 
-    fillRect(rc.x(), rc.y(), rc.width(), rc.height(), patternLayer, QRect(0, 0, pattern->width(), pattern->height()), transform);
+    fillRectNoCompose(rc.x(), rc.y(), rc.width(), rc.height(), patternLayer, QRect(0, 0, pattern->width(), pattern->height()), transform);
 }
 
-void KisFillPainter::fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const KisPaintDeviceSP device, const QRect& deviceRect, const QTransform transform)
+void KisFillPainter::fillRectNoCompose(qint32 x1, qint32 y1, qint32 w, qint32 h, const KisPaintDeviceSP device, const QRect& deviceRect, const QTransform transform)
 {
+    /**
+     * Since this function doesn't do any kind of compostiting, so the pixel size
+     * of the source and destination devices must be exactly the same. The color
+     * space should ideally be also the same.
+     */
+    KIS_SAFE_ASSERT_RECOVER_RETURN(device->pixelSize() == this->device()->pixelSize());
+    KIS_SAFE_ASSERT_RECOVER_NOOP(*device->colorSpace() == *this->device()->colorSpace());
+
     KisPaintDeviceSP wrapped = device;
     KisDefaultBoundsBaseSP oldBounds = wrapped->defaultBounds();
     wrapped->setDefaultBounds(new KisWrapAroundBoundsWrapper(oldBounds, deviceRect));
@@ -262,7 +258,7 @@ void KisFillPainter::fillPattern(int startX, int startY, KisPaintDeviceSP source
     KisPaintDeviceSP filled = device()->createCompositionSourceDevice();
     Q_CHECK_PTR(filled);
     KisFillPainter painter(filled);
-    painter.fillRect(QRect(0, 0, m_width, m_height), pattern(), patternTransform);
+    painter.fillRectNoCompose(QRect(0, 0, m_width, m_height), pattern(), patternTransform);
     painter.end();
 
     genericFillEnd(filled);

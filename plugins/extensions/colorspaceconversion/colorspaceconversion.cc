@@ -3,19 +3,7 @@
  *
  * Copyright (c) 2004 Boudewijn Rempt (boud@valdyas.org)
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "colorspaceconversion.h"
@@ -76,7 +64,7 @@ void ColorSpaceConversion::slotImageColorSpaceConversion()
     Q_CHECK_PTR(dlgColorSpaceConversion);
 
     dlgColorSpaceConversion->setCaption(i18n("Convert All Layers From %1", image->colorSpace()->name()));
-    dlgColorSpaceConversion->setInitialColorSpace(image->colorSpace());
+    dlgColorSpaceConversion->setInitialColorSpace(image->colorSpace(), image);
 
     if (dlgColorSpaceConversion->exec() == QDialog::Accepted) {
 
@@ -105,7 +93,7 @@ void ColorSpaceConversion::slotLayerColorSpaceConversion()
     Q_CHECK_PTR(dlgColorSpaceConversion);
 
     dlgColorSpaceConversion->setCaption(i18n("Convert Current Layer From %1", layer->colorSpace()->name()));
-    dlgColorSpaceConversion->setInitialColorSpace(layer->colorSpace());
+    dlgColorSpaceConversion->setInitialColorSpace(layer->colorSpace(), 0);
 
     if (dlgColorSpaceConversion->exec() == QDialog::Accepted) {
         const KoColorSpace * cs = dlgColorSpaceConversion->m_page->colorSpaceSelector->currentColorSpace();

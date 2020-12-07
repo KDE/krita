@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2006 Boudewijn Rempt <boud@valdyas.org>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #ifndef KIS_TOOL_H_
@@ -135,6 +123,7 @@ public:
     enum ToolAction {
         Primary,
         AlternateChangeSize,
+        AlternateChangeSizeSnap,
         AlternatePickFgNode,
         AlternatePickBgNode,
         AlternatePickFgImage,
@@ -150,6 +139,7 @@ public:
     // So these can basically be thought of as aliases to ctrl+click, etc.
     enum AlternateAction {
         ChangeSize = AlternateChangeSize, // Default: Shift+Left click
+        ChangeSizeSnap = AlternateChangeSizeSnap, // Default: Shift+Z+Left click
         PickFgNode = AlternatePickFgNode, // Default: Ctrl+Alt+Left click
         PickBgNode = AlternatePickBgNode, // Default: Ctrl+Alt+Right click
         PickFgImage = AlternatePickFgImage, // Default: Ctrl+Left click
@@ -165,7 +155,8 @@ public:
         VECTOR,
         CLONE,
         PAINT,
-        UNPAINTABLE
+        UNPAINTABLE,
+        MYPAINTBRUSH_UNPAINTABLE
     };
     Q_ENUMS(NodePaintAbility)
 

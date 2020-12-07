@@ -2,19 +2,7 @@
  *  Copyright (c) 2006 Boudewijn Rempt <boud@valdyas.org>
  *            (c) 2009 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_mask.h"
@@ -73,13 +61,13 @@ struct Q_DECL_HIDDEN KisMask::Private {
     void initSelectionImpl(KisSelectionSP copyFrom, KisLayerSP parentLayer, KisPaintDeviceSP copyFromDevice);
 };
 
-KisMask::KisMask(const QString & name)
-        : KisNode(nullptr)
+KisMask::KisMask(KisImageWSP image, const QString &name)
+        : KisNode(image)
         , m_d(new Private(this))
 {
     setName(name);
     m_d->safeProjection = new KisSafeSelectionNodeProjectionStore();
-    m_d->safeProjection->setImage(image());
+    m_d->safeProjection->setImage(image);
 }
 
 KisMask::KisMask(const KisMask& rhs)
@@ -485,12 +473,17 @@ void KisMask::testingInitSelection(const QRect &rect, KisLayerSP parentLayer)
     m_d->selection->setParentNode(this);
 }
 
+bool KisMask::supportsLodPainting() const
+{
+    return !m_d->selection || !m_d->selection->hasShapeSelection();
+}
+
 KisKeyframeChannel *KisMask::requestKeyframeChannel(const QString &id)
 {
-    if (id == KisKeyframeChannel::Content.id()) {
+    if (id == KisKeyframeChannel::Raster.id()) {
         KisPaintDeviceSP device = paintDevice();
         if (device) {
-            KisRasterKeyframeChannel *contentChannel = device->createKeyframeChannel(KisKeyframeChannel::Content);
+            KisRasterKeyframeChannel *contentChannel = device->createKeyframeChannel(KisKeyframeChannel::Raster);
             contentChannel->setFilenameSuffix(".pixelselection");
             return contentChannel;
        }
@@ -501,7 +494,7 @@ KisKeyframeChannel *KisMask::requestKeyframeChannel(const QString &id)
 
 bool KisMask::supportsKeyframeChannel(const QString &id)
 {
-    if (id == KisKeyframeChannel::Content.id() && paintDevice()) {
+    if (id == KisKeyframeChannel::Raster.id() && paintDevice()) {
         return true;
     }
 

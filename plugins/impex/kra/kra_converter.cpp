@@ -1,20 +1,7 @@
 /*
  * Copyright (C) 2016 Boudewijn Rempt <boud@valdyas.org>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #include "kra_converter.h"
@@ -138,6 +125,16 @@ QList<KisPaintingAssistantSP> KraConverter::assistants()
     return m_assistants;
 }
 
+StoryboardItemList KraConverter::storyboardItemList()
+{
+    return m_storyboardItemList;
+}
+
+QVector<StoryboardComment> KraConverter::storyboardCommentList()
+{
+    return m_storyboardCommentList;
+}
+
 KisImportExportErrorCode KraConverter::buildFile(QIODevice *io, const QString &filename)
 {
     setProgress(5);
@@ -174,6 +171,11 @@ KisImportExportErrorCode KraConverter::buildFile(QIODevice *io, const QString &f
     result = m_kraSaver->savePalettes(m_store, m_image, m_doc->url().toLocalFile());
     if (!result) {
         qWarning() << "saving palettes data failed";
+    }
+
+    result = m_kraSaver->saveStoryboard(m_store, m_image, m_doc->url().toLocalFile());
+    if (!result) {
+        qWarning() << "Saving storyboard data failed";
     }
 
     setProgress(80);
@@ -403,6 +405,7 @@ bool KraConverter::completeLoading(KoStore* store)
 
     m_kraLoader->loadBinaryData(store, m_image, m_doc->localFilePath(), true);
     m_kraLoader->loadPalettes(store, m_doc);
+    m_kraLoader->loadStoryboards(store, m_doc);
 
     if (!m_kraLoader->errorMessages().isEmpty()) {
         m_doc->setErrorMessage(m_kraLoader->errorMessages().join("\n"));
@@ -418,6 +421,8 @@ bool KraConverter::completeLoading(KoStore* store)
 
     m_activeNodes = m_kraLoader->selectedNodes();
     m_assistants = m_kraLoader->assistants();
+    m_storyboardItemList = m_kraLoader->storyboardItemList();
+    m_storyboardCommentList = m_kraLoader->storyboardCommentList();
 
     return true;
 }

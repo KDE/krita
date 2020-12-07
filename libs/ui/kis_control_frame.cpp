@@ -6,10 +6,7 @@
  *  Copyright (c) 2004 Sven Langkamp  <sven.langkamp@gmail.com>
  *  Copyright (c) 2006 Boudewijn Rempt <boud@valdyas.org>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -115,8 +112,8 @@ void KisControlFrame::setup(QWidget *parent)
     action->setDefaultWidget(m_dual);
     connect(m_dual, SIGNAL(foregroundColorChanged(KoColor)), m_viewManager->canvasResourceProvider(), SLOT(slotSetFGColor(KoColor)));
     connect(m_dual, SIGNAL(backgroundColorChanged(KoColor)), m_viewManager->canvasResourceProvider(), SLOT(slotSetBGColor(KoColor)));
-    connect(m_viewManager->canvasResourceProvider(), SIGNAL(sigFGColorChanged(KoColor)), m_dual, SLOT(setForegroundColor(KoColor)));
     connect(m_viewManager->canvasResourceProvider(), SIGNAL(sigBGColorChanged(KoColor)), m_dual, SLOT(setBackgroundColor(KoColor)));
+    connect(m_viewManager->canvasResourceProvider(), SIGNAL(sigFGColorChanged(KoColor)), m_dual, SLOT(setForegroundColor(KoColor)));
     connect(m_viewManager->canvasResourceProvider(), SIGNAL(sigFGColorChanged(KoColor)), m_gradientWidget, SLOT(update()));
     connect(m_viewManager->canvasResourceProvider(), SIGNAL(sigBGColorChanged(KoColor)), m_gradientWidget, SLOT(update()));
     m_dual->setFixedSize(28, 28);
@@ -235,8 +232,8 @@ void KisControlFrame::createGradientsChooser(KisViewManager * view)
     m_gradientChooser->setFont(m_font);
     m_gradientTab->addTab(m_gradientChooser, i18n("Gradients"));
 
-    connect(m_gradientChooser, SIGNAL(resourceSelected(KoResourceSP )),
-            view->canvasResourceProvider(), SLOT(slotGradientActivated(KoResourceSP )));
+    connect(m_gradientChooser, SIGNAL(resourceSelected(KoResourceSP)),
+            view->canvasResourceProvider(), SLOT(slotGradientActivated(KoResourceSP)));
 
     connect (view->mainWindow(), SIGNAL(themeChanged()), m_gradientChooser, SLOT(slotUpdateIcons()));
 
@@ -250,9 +247,6 @@ void KisControlFrame::createGradientsChooser(KisViewManager * view)
 
     connect(view->canvasResourceProvider(), SIGNAL(sigGradientChanged(KoAbstractGradientSP)),
             this, SLOT(slotSetGradient(KoAbstractGradientSP)));
-
-    connect(view->canvasResourceProvider(), SIGNAL(sigFGColorChanged(KoColor)), m_gradientChooser, SLOT(setForegroundColor(KoColor)));
-    connect(view->canvasResourceProvider(), SIGNAL(sigBGColorChanged(KoColor)), m_gradientChooser, SLOT(setBackgroundColor(KoColor)));
 
     m_gradientChooser->setCurrentItem(0);
 

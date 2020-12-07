@@ -1,20 +1,7 @@
 /*
  * Copyright (C) 2017 Boudewijn Rempt <boud@valdyas.org>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #include "TestResourceLocator.h"
@@ -35,7 +22,6 @@
 #include <KisResourceLocator.h>
 #include <KisResourceLoaderRegistry.h>
 #include <KisMemoryStorage.h>
-#include <KisResourceModelProvider.h>
 #include <KisResourceModel.h>
 #include <KisResourceTypes.h>
 
@@ -141,16 +127,10 @@ void TestResourceLocator::testResource()
 void TestResourceLocator::testResourceForId()
 {
     KoResourceSP res = m_locator->resource("", ResourceType::PaintOpPresets, "test0.kpp");
-    int resourceId = KisResourceCacheDb::resourceIdForResource("test0.kpp", ResourceType::PaintOpPresets, "");
+    int resourceId = KisResourceCacheDb::resourceIdForResource("test0.kpp", "test0.kpp", ResourceType::PaintOpPresets, "");
     QVERIFY(resourceId > -1);
     KoResourceSP res2 = m_locator->resourceForId(resourceId);
     QCOMPARE(res, res2);
-}
-
-void TestResourceLocator::testStorageContainsResourceByFile()
-{
-    QVERIFY(m_locator->storageContainsResourceByFile("", "paintoppresets", "test0.kpp") > 0);
-    QVERIFY(m_locator->storageContainsResourceByFile("", "paintoppresets", "XSLKDJSADLKSAJDA") == 0);
 }
 
 
@@ -158,8 +138,8 @@ void TestResourceLocator::testDocumentStorage()
 {
     const QString &documentName("document");
 
-    KisResourceModel *model = KisResourceModelProvider::resourceModel(ResourceType::PaintOpPresets);
-    int rowcount = model->rowCount();
+    KisResourceModel model(ResourceType::PaintOpPresets);
+    int rowcount = model.rowCount();
 
     KisResourceStorageSP documentStorage = QSharedPointer<KisResourceStorage>::create(documentName);
     KoResourceSP resource(new DummyResource("test"));
@@ -167,11 +147,13 @@ void TestResourceLocator::testDocumentStorage()
 
     m_locator->addStorage(documentName, documentStorage);
 
-    QVERIFY(model->rowCount() > rowcount);
     QVERIFY(m_locator->hasStorage(documentName));
+    QVERIFY(model.rowCount() > rowcount);
+
     m_locator->removeStorage(documentName);
     QVERIFY(!m_locator->hasStorage(documentName));
-    QVERIFY(model->rowCount() == rowcount);
+
+    QVERIFY(model.rowCount() == rowcount);
 }
 
 

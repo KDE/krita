@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>KisEditProfilesDialog</class>
  <widget class="QWidget" name="KisEditProfilesDialog">
   <property name="geometry">
@@ -11,10 +15,10 @@
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="2" column="0" colspan="4">
+   <item colspan="4" column="0" row="2">
     <widget class="QListView" name="profileList"/>
    </item>
-   <item row="1" column="0">
+   <item column="0" row="1">
     <widget class="QPushButton" name="duplicateButton">
      <property name="text">
       <string>Duplicate</string>
@@ -24,7 +28,7 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="3">
+   <item column="3" row="1">
     <widget class="QPushButton" name="resetButton">
      <property name="text">
       <string>Reset All</string>
@@ -34,14 +38,14 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="1">
+   <item column="1" row="1">
     <widget class="QPushButton" name="removeButton">
      <property name="text">
       <string>Remove</string>
      </property>
     </widget>
    </item>
-   <item row="1" column="2">
+   <item column="2" row="1">
     <widget class="QPushButton" name="renameButton">
      <property name="text">
       <string>Rename</string>

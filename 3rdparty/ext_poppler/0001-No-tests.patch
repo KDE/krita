@@ -1,0 +1,52 @@
+From 05db3ba3a038037a28dbe2af1d88f3a04f6182b5 Mon Sep 17 00:00:00 2001
+From: "L. E. Segovia" <amy@amyspark.me>
+Date: Wed, 4 Nov 2020 13:27:57 +0000
+Subject: [PATCH 1/2] No tests
+
+---
+ CMakeLists.txt     | 2 +-
+ cpp/CMakeLists.txt | 2 +-
+ qt5/CMakeLists.txt | 4 ++--
+ 3 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 96b7d0aa..0c3d0e65 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -748,7 +748,7 @@ endif()
+ if(ENABLE_GLIB)
+   add_subdirectory(glib)
+ endif()
+-add_subdirectory(test)
++#add_subdirectory(test)
+ if(ENABLE_QT5)
+   add_subdirectory(qt5)
+ endif()
+diff --git a/cpp/CMakeLists.txt b/cpp/CMakeLists.txt
+index 5d351979..05058f5a 100644
+--- a/cpp/CMakeLists.txt
++++ b/cpp/CMakeLists.txt
+@@ -6,7 +6,7 @@ include_directories(
+ 
+ configure_file(poppler-version.h.in ${CMAKE_CURRENT_BINARY_DIR}/poppler-version.h @ONLY)
+ 
+-add_subdirectory(tests)
++# add_subdirectory(tests)
+ 
+ set(poppler_cpp_SRCS
+   poppler-destination.cpp
+diff --git a/qt5/CMakeLists.txt b/qt5/CMakeLists.txt
+index 58b42f5e..2c543adf 100644
+--- a/qt5/CMakeLists.txt
++++ b/qt5/CMakeLists.txt
+@@ -9,5 +9,5 @@ add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x050500)
+ add_definitions(-DQT_NO_DEPRECATED_WARNINGS)
+ 
+ add_subdirectory(src)
+-add_subdirectory(tests)
+-add_subdirectory(demos)
++# add_subdirectory(tests)
++# add_subdirectory(demos)
+-- 
+2.28.0
+

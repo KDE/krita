@@ -1,24 +1,13 @@
 /*
  * Copyright (C) 2017 Jouni Pentikäinen <joupent@gmail.com>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #include <KoShapeCreateCommand.h>
 #include <KoShapeDeleteCommand.h>
+#include <KoKeepShapesSelectedCommand.h>
+#include <KoSelection.h>
 #include <kis_node_visitor.h>
 #include <kis_processing_visitor.h>
 #include <kis_shape_layer_canvas.h>
@@ -29,8 +18,8 @@
 
 struct AddReferenceImagesCommand : KoShapeCreateCommand
 {
-    AddReferenceImagesCommand(KisDocument *document, KisSharedPtr<KisReferenceImagesLayer> layer, const QList<KoShape*> referenceImages)
-        : KoShapeCreateCommand(layer->shapeController(), referenceImages, layer.data(), nullptr, kundo2_i18n("Add reference image"))
+    AddReferenceImagesCommand(KisDocument *document, KisSharedPtr<KisReferenceImagesLayer> layer, const QList<KoShape*> referenceImages, KUndo2Command *parent = nullptr)
+        : KoShapeCreateCommand(layer->shapeController(), referenceImages, layer.data(), parent, kundo2_i18n("Add reference image"))
         , m_document(document)
         , m_layer(layer)
     {}
@@ -61,8 +50,8 @@ private:
 
 struct RemoveReferenceImagesCommand : KoShapeDeleteCommand
 {
-    RemoveReferenceImagesCommand(KisDocument *document, KisSharedPtr<KisReferenceImagesLayer> layer, QList<KoShape *> referenceImages)
-        : KoShapeDeleteCommand(layer->shapeController(), referenceImages)
+    RemoveReferenceImagesCommand(KisDocument *document, KisSharedPtr<KisReferenceImagesLayer> layer, QList<KoShape *> referenceImages, KUndo2Command *parent = nullptr)
+        : KoShapeDeleteCommand(layer->shapeController(), referenceImages, parent)
         , m_document(document)
         , m_layer(layer)
     {}
@@ -146,7 +135,14 @@ KUndo2Command * KisReferenceImagesLayer::addReferenceImages(KisDocument *documen
         layer = new KisReferenceImagesLayer(document->shapeController(), document->image());
     }
 
-    return new AddReferenceImagesCommand(document, layer, referenceImages);
+    KUndo2Command *parentCommand = new KUndo2Command();
+
+    new KoKeepShapesSelectedCommand(layer->shapeManager()->selection()->selectedShapes(), {}, layer->selectedShapesProxy(), KisCommandUtils::FlipFlopCommand::State::INITIALIZING, parentCommand);
+    AddReferenceImagesCommand *cmd = new AddReferenceImagesCommand(document, layer, referenceImages, parentCommand);
+    parentCommand->setText(cmd->text());
+    new KoKeepShapesSelectedCommand({}, referenceImages, layer->selectedShapesProxy(), KisCommandUtils::FlipFlopCommand::State::FINALIZING, parentCommand);
+
+    return parentCommand;
 }
 
 KUndo2Command * KisReferenceImagesLayer::removeReferenceImages(KisDocument *document, QList<KoShape*> referenceImages)

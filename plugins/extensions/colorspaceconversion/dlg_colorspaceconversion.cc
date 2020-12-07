@@ -3,19 +3,7 @@
  *
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "dlg_colorspaceconversion.h"
@@ -35,6 +23,9 @@
 
 #include "widgets/kis_cmb_idlist.h"
 #include <KisSqueezedComboBox.h>// TODO: add a label that would display if there isn't a good color conversion path (use KoColorConversionSystem::isGoodPath), all color spaces shipped with Calligra are expected to have a good path, but better warn the user in case
+
+#include "kis_image.h"
+#include "kis_layer_utils.h"
 
 DlgColorSpaceConversion::DlgColorSpaceConversion(QWidget *  parent,
         const char * name)
@@ -60,6 +51,7 @@ DlgColorSpaceConversion::DlgColorSpaceConversion(QWidget *  parent,
 
 
     connect(m_page->colorSpaceSelector, SIGNAL(selectionChanged(bool)), this, SLOT(selectionChanged(bool)));
+    connect(m_page->colorSpaceSelector, SIGNAL(colorSpaceChanged(const KoColorSpace*)), this, SLOT(slotColorSpaceChanged(const KoColorSpace*)));
 
 }
 
@@ -70,7 +62,7 @@ DlgColorSpaceConversion::~DlgColorSpaceConversion()
     delete m_page;
 }
 
-void DlgColorSpaceConversion::setInitialColorSpace(const KoColorSpace *cs)
+void DlgColorSpaceConversion::setInitialColorSpace(const KoColorSpace *cs, KisImageSP entireImage)
 {
     if (!cs) {
         return;
@@ -83,6 +75,8 @@ void DlgColorSpaceConversion::setInitialColorSpace(const KoColorSpace *cs)
         m_page->chkAllowLCMSOptimization->setCheckState(Qt::Checked);
     }
     m_page->colorSpaceSelector->setCurrentColorSpace(cs);
+
+    m_image = entireImage;
 }
 
 void DlgColorSpaceConversion::selectionChanged(bool valid)
@@ -97,5 +91,19 @@ void DlgColorSpaceConversion::selectionChanged(bool valid)
 void DlgColorSpaceConversion::okClicked()
 {
     accept();
+}
+
+void DlgColorSpaceConversion::slotColorSpaceChanged(const KoColorSpace *cs)
+{
+    if (m_image &&
+        *m_image->profile() != *cs->profile() &&
+        !KisLayerUtils::canChangeImageProfileInvisibly(m_image)) {
+
+        m_page->wdgWarningNotice->setVisible(true);
+        m_page->wdgWarningNotice->setText(
+                    m_page->wdgWarningNotice->changeImageProfileWarningText());
+    } else {
+        m_page->wdgWarningNotice->setVisible(false);
+    }
 }
 

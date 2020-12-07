@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>ExceptHookDialog</class>
  <widget class="QDialog" name="ExceptHookDialog">
   <property name="geometry">
@@ -19,14 +23,14 @@
      <property name="spacing">
       <number>10</number>
      </property>
-     <item row="0" column="0">
+     <item column="0" row="0">
       <widget class="QLabel" name="label">
        <property name="text">
         <string>An exception occurred while running the script.</string>
        </property>
       </widget>
      </item>
-     <item row="1" column="0">
+     <item column="0" row="1">
       <widget class="QLabel" name="exceptionLabel">
        <property name="font">
         <font>

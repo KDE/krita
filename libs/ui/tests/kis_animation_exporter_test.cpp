@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2015 Jouni Pentikäinen <joupent@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_animation_exporter_test.h"
@@ -28,9 +16,9 @@
 #include "kis_image_animation_interface.h"
 #include "KoColor.h"
 #include <KoUpdater.h>
-#include "kis_time_range.h"
+#include "kis_time_span.h"
 #include "kis_keyframe_channel.h"
-#include <kistest.h>
+#include <testui.h>
 
 void KisAnimationExporterTest::testAnimationExport()
 {
@@ -44,11 +32,11 @@ void KisAnimationExporterTest::testAnimationExport()
     KUndo2Command parentCommand;
 
     p.layer->enableAnimation();
-    KisKeyframeChannel *rasterChannel = p.layer->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
+    KisKeyframeChannel *rasterChannel = p.layer->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true);
 
     rasterChannel->addKeyframe(1, &parentCommand);
     rasterChannel->addKeyframe(2, &parentCommand);
-    p.image->animationInterface()->setFullClipRange(KisTimeRange::fromTime(0, 2));
+    p.image->animationInterface()->setFullClipRange(KisTimeSpan::fromTimeToTime(0, 2));
 
     KisPaintDeviceSP dev = p.layer->paintDevice();
 
@@ -66,7 +54,7 @@ void KisAnimationExporterTest::testAnimationExport()
     QImage frame2 = dev->convertToQImage(0, rect);
 
     KisAsyncAnimationFramesSaveDialog exporter(document->image(),
-                                               KisTimeRange::fromTime(0,2),
+                                               KisTimeSpan::fromTimeToTime(0,2),
                                                "export-test.png",
                                                0,
                                                false,

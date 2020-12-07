@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2017 Laurent Valentin Jospin <laurent.valentin@famillejospin.ch>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_document_aware_spin_box_unit_manager.h"
@@ -25,7 +13,7 @@
 #include "kis_types.h"
 #include "kis_image.h"
 #include "kis_image_animation_interface.h"
-#include "kis_time_range.h"
+#include "kis_time_span.h"
 
 
 KisSpinBoxUnitManager* KisDocumentAwareSpinBoxUnitManagerBuilder::buildUnitManager(QObject* parent)
@@ -147,7 +135,7 @@ qreal KisDocumentAwareSpinBoxUnitManager::getConversionFactor(int dim, QString p
 
             factor = 1/fps;
         } else if (symbol == "%") {
-            const KisTimeRange & time_range = img->animationInterface()->fullClipRange();
+            const KisTimeSpan & time_range = img->animationInterface()->fullClipRange();
             qreal n_frame = time_range.end() - time_range.start();
 
             factor = 100/n_frame;
@@ -167,7 +155,7 @@ qreal KisDocumentAwareSpinBoxUnitManager::getConversionConstant(int dim, QString
 {
     if (dim == TIME && symbol == "%") {
         KisImage* img = KisPart::instance()->currentMainwindow()->activeView()->document()->image().data();
-        const KisTimeRange & time_range = img->animationInterface()->fullClipRange();
+        const KisTimeSpan & time_range = img->animationInterface()->fullClipRange();
         qreal n_frame = time_range.end() - time_range.start();
 
         return -time_range.start()*100.0/n_frame;

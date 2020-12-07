@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2015 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "timeline_model_test.h"
@@ -46,15 +34,15 @@
 #include "kis_double_parse_spin_box.h"
 #include "kis_int_parse_spin_box.h"
 
-#include  <sdk/tests/kistest.h>
 #include <sdk/tests/testutil.h>
+#include <sdk/tests/testui.h>
 
 void TimelineModelTest::init()
 {
     m_doc = KisPart::instance()->createDocument();
 
     m_nameServer = new KisNameServer();
-    m_shapeController = new KisShapeController(m_doc, m_nameServer);
+    m_shapeController = new KisShapeController(m_nameServer, m_doc->undoStack());
     m_displayModeAdapter = new KisNodeDisplayModeAdapter();
     //m_nodeModel = new KisNodeModel(0);
 
@@ -83,6 +71,14 @@ void TimelineModelTest::testConverter()
     m_shapeController->setImage(m_image);
 
     m_layer1->enableAnimation();
+
+    // all nodes are visible in timeline by default, so
+    // we should hide the ones we don't expect to see
+    m_mask1->setPinnedToTimeline(false);
+    m_sel1->setPinnedToTimeline(false);
+    m_sel2->setPinnedToTimeline(false);
+    m_layer3->setPinnedToTimeline(false);
+    m_layer4->setPinnedToTimeline(false);
 
     m_layer1->setPinnedToTimeline(true);
     m_layer2->setPinnedToTimeline(true);
@@ -301,8 +297,6 @@ void TimelineModelTest::testOnionSkins()
     connect(w, SIGNAL(sigConfigChanged()), SLOT(slotBang()));
 
     layout->addWidget(w);
-
-    dlg.setLayout(layout);
 
     dlg.resize(600, 400);
     dlg.exec();

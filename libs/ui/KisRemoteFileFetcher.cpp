@@ -1,10 +1,7 @@
 /*
  *  Copyright (c) 2016 Boudewijn Rempt <boud@valdyas.org>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -51,7 +48,7 @@ bool KisRemoteFileFetcher::fetchFile(const QUrl &remote, QIODevice *io)
     m_loop.exec();
 
     if (m_reply->error() != QNetworkReply::NoError) {
-        QMessageBox::critical(0, i18nc("@title:window", "Krita"), QString("Could not download %1: %2").arg(remote.toDisplayString()).arg(m_reply->errorString()), QMessageBox::Ok);
+        QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"), QString("Could not download %1: %2").arg(remote.toDisplayString()).arg(m_reply->errorString()), QMessageBox::Ok);
         return false;
     }
 

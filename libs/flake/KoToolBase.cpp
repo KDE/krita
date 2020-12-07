@@ -2,20 +2,7 @@
  * Copyright (C) 2006, 2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2011 Jan Hambrecht <jaham@gmx.net>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #include <QDebug>
@@ -253,7 +240,7 @@ void KoToolBase::setStatusText(const QString &statusText)
     emit statusTextChanged(statusText);
 }
 
-uint KoToolBase::handleRadius() const
+int KoToolBase::handleRadius() const
 {
     Q_D(const KoToolBase);
     if (d->canvas
@@ -268,7 +255,15 @@ uint KoToolBase::handleRadius() const
     }
 }
 
-uint KoToolBase::grabSensitivity() const
+qreal KoToolBase::handleDocRadius() const
+{
+    Q_D(const KoToolBase);
+    const KoViewConverter * converter = d->canvas->viewConverter();
+    const QPointF doc = converter->viewToDocument(QPointF(handleRadius(), handleRadius()));
+    return qMax(doc.x(), doc.y());
+}
+
+int KoToolBase::grabSensitivity() const
 {
     Q_D(const KoToolBase);
     if(d->canvas->shapeController()->resourceManager())
@@ -344,6 +339,20 @@ KoToolSelection *KoToolBase::selection()
 
 void KoToolBase::repaintDecorations()
 {
+    Q_D(KoToolBase);
+
+    QRectF dirtyRect = d->lastDecorationsRect;
+    d->lastDecorationsRect = decorationsRect();
+    dirtyRect |= d->lastDecorationsRect;
+
+    if (!dirtyRect.isEmpty()) {
+        canvas()->updateCanvas(dirtyRect);
+    }
+}
+
+QRectF KoToolBase::decorationsRect() const
+{
+    return QRectF();
 }
 
 bool KoToolBase::isInTextMode() const

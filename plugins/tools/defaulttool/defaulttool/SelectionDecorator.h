@@ -3,20 +3,7 @@
    Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
-
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
-
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
 #ifndef SELECTIONDECORATOR_H
@@ -24,6 +11,8 @@
 
 #include <KoViewConverter.h>
 #include <KoFlake.h>
+
+#include "KoShapeMeshGradientHandles.h"
 
 #include <QPainter>
 #include <QPointer>
@@ -81,18 +70,27 @@ public:
      */
     void setShowStrokeFillGradientHandles(bool value);
 
+    void setShowFillMeshGradientHandles(bool value);
+    void setCurrentMeshGradientHandles(const KoShapeMeshGradientHandles::Handle &selectedHandle,
+                                       const KoShapeMeshGradientHandles::Handle &hoveredHandle);
+
     void setForceShapeOutlines(bool value);
 
 private:
     void paintGradientHandles(KoShape *shape, KoFlake::FillVariant fillVariant, QPainter &painter, const KoViewConverter &converter);
 
+    void paintMeshGradientHandles(KoShape *shape, KoFlake::FillVariant fillVariant, QPainter &painter, const KoViewConverter &converter);
+
 private:
     KoFlake::AnchorPosition m_hotPosition;
     KoSelection *m_selection;
+    KoShapeMeshGradientHandles::Handle m_currentHoveredMeshHandle;
+    KoShapeMeshGradientHandles::Handle m_selectedMeshHandle;
     int m_handleRadius;
     int m_lineWidth;
     bool m_showFillGradientHandles;
     bool m_showStrokeFillGradientHandles;
+    bool m_showFillMeshGradientHandles;
     bool m_forceShapeOutlines;
 };
 

@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2017 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "KoSvgTextShape.h"
@@ -549,9 +537,12 @@ void KoSvgTextShape::relayout() const
                      *
                      * BUG: 389528
                      * BUG: 392068
+                     * BUG: 420408 (vertically)
                      */
                     rect.setLeft(qMin(rect.left(), lastGlyphRect.left()) - 0.5 * firstGlyphRect.width());
                     rect.setRight(qMax(rect.right(), lastGlyphRect.right()) + 0.5 * lastGlyphRect.width());
+
+                    rect.adjust(0, -0.5*rect.height(), 0, 0.5*rect.height()); // add some vertical margin too
 
                     wrapper.addCharacterRect(rect.translated(layoutOffset));
                 }

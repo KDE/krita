@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2016 Boudewijn Rempt <boud@valdyas.org>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
 #include "Krita.h"
 
@@ -54,7 +42,6 @@
 #include <kis_icon_utils.h>
 
 #include <KisResourceModel.h>
-#include <KisResourceModelProvider.h>
 #include <KisGlobalResourcesInterface.h>
 
 #include "View.h"
@@ -272,14 +259,14 @@ QList<Window*>  Krita::windows() const
 QMap<QString, Resource*> Krita::resources(const QString &type) const
 {
     QMap<QString, Resource*> resources;
-    KisResourceModel *resourceModel = KisResourceModelProvider::resourceModel(type);
-    for (int i = 0; i < resourceModel->rowCount(); ++i) {
+    KisResourceModel resourceModel(type);
+    for (int i = 0; i < resourceModel.rowCount(); ++i) {
 
-        QModelIndex idx = resourceModel->index(i, 0);
-        int id = resourceModel->data(idx, Qt::UserRole + KisResourceModel::Id).toInt();
-        QString name  = resourceModel->data(idx, Qt::UserRole + KisResourceModel::Name).toString();
-        QString filename  = resourceModel->data(idx, Qt::UserRole + KisResourceModel::Filename).toString();
-        QImage image = resourceModel->data(idx, Qt::UserRole + KisResourceModel::Thumbnail).value<QImage>();
+        QModelIndex idx = resourceModel.index(i, 0);
+        int id = resourceModel.data(idx, Qt::UserRole + KisAbstractResourceModel::Id).toInt();
+        QString name  = resourceModel.data(idx, Qt::UserRole + KisAbstractResourceModel::Name).toString();
+        QString filename  = resourceModel.data(idx, Qt::UserRole + KisAbstractResourceModel::Filename).toString();
+        QImage image = resourceModel.data(idx, Qt::UserRole + KisAbstractResourceModel::Thumbnail).value<QImage>();
 
         resources[name] = new Resource(id, type, name, filename, image, 0);
     }

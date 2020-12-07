@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2017 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "KisAsyncAnimationFramesSavingRenderer.h"
@@ -23,13 +11,13 @@
 #include "KisImportExportFilter.h"
 #include "KisPart.h"
 #include "KisDocument.h"
-#include "kis_time_range.h"
+#include "kis_time_span.h"
 #include "kis_paint_layer.h"
 
 
 struct KisAsyncAnimationFramesSavingRenderer::Private
 {
-    Private(KisImageSP image, const KisTimeRange &_range, int _sequenceNumberingOffset, bool _onlyNeedsUniqueFrames, KisPropertiesConfigurationSP _exportConfiguration)
+    Private(KisImageSP image, const KisTimeSpan &_range, int _sequenceNumberingOffset, bool _onlyNeedsUniqueFrames, KisPropertiesConfigurationSP _exportConfiguration)
         : savingDoc(KisPart::instance()->createDocument()),
           range(_range),
           sequenceNumberingOffset(_sequenceNumberingOffset),
@@ -58,7 +46,7 @@ struct KisAsyncAnimationFramesSavingRenderer::Private
     QScopedPointer<KisDocument> savingDoc;
     KisPaintDeviceSP savingDevice;
 
-    KisTimeRange range;
+    KisTimeSpan range;
     int sequenceNumberingOffset = 0;
 
     bool onlyNeedsUniqueFrames;
@@ -74,7 +62,7 @@ KisAsyncAnimationFramesSavingRenderer::KisAsyncAnimationFramesSavingRenderer(Kis
                                                                              const QString &fileNamePrefix,
                                                                              const QString &fileNameSuffix,
                                                                              const QByteArray &outputMimeType,
-                                                                             const KisTimeRange &range,
+                                                                             const KisTimeSpan &range,
                                                                              const int sequenceNumberingOffset,
                                                                              const bool onlyNeedsUniqueFrames,
                                                                              KisPropertiesConfigurationSP exportConfiguration)
@@ -117,7 +105,7 @@ void KisAsyncAnimationFramesSavingRenderer::frameCompletedCallback(int frame, co
     }
 
     //Get all identical frames to this one and either copy or symlink based on settings.
-    KisTimeRange identicals = KisTimeRange::calculateIdenticalFramesRecursive(image->root(), frame);
+    KisTimeSpan identicals = KisTimeSpan::calculateIdenticalFramesRecursive(image->root(), frame);
     identicals &= m_d->range;
     if( !m_d->onlyNeedsUniqueFrames && identicals.start() < identicals.end() ) {
         for (int identicalFrame = (identicals.start() + 1); identicalFrame <= identicals.end(); identicalFrame++) {

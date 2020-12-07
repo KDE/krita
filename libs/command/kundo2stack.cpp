@@ -2,19 +2,7 @@
  *  Copyright (c) 2014 Dmitry Kazakov <dimula73@gmail.com>
  *  Copyright (c) 2014 Mohit Goyal <mohit.bits2011@gmail.com>
  *
- *  This library is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; either version 2.1 of the License, or
- *  (at your option) any later version.
- *
- *  This library is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU Lesser General Public License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: LGPL-2.1-or-later
  */
 /****************************************************************************
 **
@@ -131,10 +119,9 @@
     \sa ~KUndo2Command()
 */
 
-KUndo2Command::KUndo2Command(const KUndo2MagicString &text, KUndo2Command *parent):
-    m_hasParent(parent != 0),
-    m_timedID(-1),
-    m_endOfCommand(QTime::currentTime())
+KUndo2Command::KUndo2Command(const KUndo2MagicString &text, KUndo2Command *parent)
+    : m_hasParent(parent != 0)
+    , m_endOfCommand(QTime::currentTime())
 {
     d = new KUndo2CommandPrivate;
     if (parent != 0) {
@@ -154,9 +141,8 @@ KUndo2Command::KUndo2Command(const KUndo2MagicString &text, KUndo2Command *paren
     \sa ~KUndo2Command()
 */
 
-KUndo2Command::KUndo2Command(KUndo2Command *parent):
-    m_hasParent(parent != 0),
-    m_timedID(-1)
+KUndo2Command::KUndo2Command(KUndo2Command *parent)
+    : m_hasParent(parent != 0)
 {
     d = new KUndo2CommandPrivate;
     if (parent != 0)

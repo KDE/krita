@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 #ifndef _KIS_TRANSFORM_MASK_
 #define _KIS_TRANSFORM_MASK_
@@ -37,7 +25,7 @@ public:
     /**
      * Create an empty transform mask.
      */
-    KisTransformMask(const QString &name = QString());
+    KisTransformMask(KisImageWSP image, const QString &name);
 
     ~KisTransformMask() override;
 
@@ -72,6 +60,9 @@ public:
     void recaclulateStaticImage();
     KisPaintDeviceSP buildPreviewDevice();
 
+    qint32 x() const override;
+    qint32 y() const override;
+
     void setX(qint32 x) override;
     void setY(qint32 y) override;
 
@@ -79,6 +70,8 @@ public:
     bool hasPendingTimedUpdates() const override;
 
     void threadSafeForceStaticImageUpdate();
+
+    void syncLodCache() override;
 
 protected:
     KisKeyframeChannel *requestKeyframeChannel(const QString &id) override;

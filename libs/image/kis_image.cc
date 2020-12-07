@@ -2,19 +2,7 @@
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *  Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_image.h"
@@ -47,7 +35,6 @@
 #include "commands/kis_image_commands.h"
 #include "kis_layer.h"
 #include "kis_meta_data_merge_strategy_registry.h"
-#include "kis_name_server.h"
 #include "kis_paint_layer.h"
 #include "kis_projection_leaf.h"
 #include "kis_painter.h"
@@ -62,6 +49,7 @@
 #include "kis_update_scheduler.h"
 #include "kis_image_signal_router.h"
 #include "kis_image_animation_interface.h"
+#include "kis_keyframe_channel.h"
 #include "kis_stroke_strategy.h"
 #include "kis_simple_stroke_strategy.h"
 #include "kis_image_barrier_locker.h"
@@ -98,13 +86,13 @@
 #include "kis_layer_projection_plane.h"
 
 #include "kis_update_time_monitor.h"
-#include "tiles3/kis_lockless_stack.h"
+#include "kis_lockless_stack.h"
 
 #include <QtCore>
 
 #include <functional>
 
-#include "kis_time_range.h"
+#include "kis_time_span.h"
 
 #include "KisRunnableBasedStrokeStrategy.h"
 #include "KisRunnableStrokeJobData.h"
@@ -131,7 +119,7 @@ struct KisImageSPStaticRegistrar {
         qRegisterMetaType<KisImageSP>("KisImageSP");
     }
 };
-static KisImageSPStaticRegistrar __registrar;
+static KisImageSPStaticRegistrar __registrar1;
 
 class KisImage::KisImagePrivate
 {
@@ -147,7 +135,6 @@ public:
         , colorSpace(c ? c : KoColorSpaceRegistry::instance()->rgb8())
         , isolateLayer(false)
         , isolateGroup(false)
-        , nserver(1)
         , undoStore(undo ? undo : new KisDumbUndoStore())
         , legacyUndoAdapter(undoStore.data(), _q)
         , postExecutionUndoAdapter(undoStore.data(), _q)
@@ -224,8 +211,6 @@ public:
     bool isolateGroup;
 
     bool wrapAroundModePermitted = false;
-
-    KisNameServer nserver;
 
     QScopedPointer<KisUndoStore> undoStore;
     KisLegacyUndoAdapter legacyUndoAdapter;
@@ -459,8 +444,6 @@ void KisImage::copyFromImageImpl(const KisImage &rhs, int policy)
 
     EMIT_IF_NEEDED sigLayersChangedAsync();
 
-    m_d->nserver = rhs.m_d->nserver;
-
     vKisAnnotationSP newAnnotations;
     Q_FOREACH (KisAnnotationSP annotation, rhs.m_d->annotations) {
         newAnnotations << annotation->clone();
@@ -503,6 +486,13 @@ void KisImage::nodeHasBeenAdded(KisNode *parent, int index)
 {
     KisNodeGraphListener::nodeHasBeenAdded(parent, index);
 
+    KisLayerUtils::recursiveApplyNodes(KisSharedPtr<KisNode>(parent), [this](KisNodeSP node){
+       QMap<QString, KisKeyframeChannel*> chans = node->keyframeChannels();
+       Q_FOREACH(KisKeyframeChannel* chan, chans.values()) {
+           this->keyframeChannelHasBeenAdded(node.data(), chan);
+       }
+    });
+
     SANITY_CHECK_LOCKED("nodeHasBeenAdded");
     m_d->signalRouter.emitNodeHasBeenAdded(parent, index);
 }
@@ -515,6 +505,13 @@ void KisImage::aboutToRemoveANode(KisNode *parent, int index)
 
         emit sigInternalStopIsolatedModeRequested();
     }
+
+    KisLayerUtils::recursiveApplyNodes(KisSharedPtr<KisNode>(parent), [this](KisNodeSP node){
+       QMap<QString, KisKeyframeChannel*> chans = node->keyframeChannels();
+       Q_FOREACH(KisKeyframeChannel* chan, chans.values()) {
+           this->keyframeChannelAboutToBeRemoved(node.data(), chan);
+       }
+    });
 
     KisNodeGraphListener::aboutToRemoveANode(parent, index);
 
@@ -531,7 +528,7 @@ void KisImage::nodeChanged(KisNode* node)
 
 void KisImage::invalidateAllFrames()
 {
-    invalidateFrames(KisTimeRange::infinite(0), QRect());
+    invalidateFrames(KisTimeSpan::infinite(0), QRect());
 }
 
 void KisImage::setOverlaySelectionMask(KisSelectionMaskSP mask)
@@ -655,8 +652,23 @@ QString KisImage::nextLayerName(const QString &_baseName) const
 {
     QString baseName = _baseName;
 
-    if (m_d->nserver.currentSeed() == 0) {
-        m_d->nserver.number();
+    int numLayers = 0;
+    int maxLayerIndex = 0;
+    QRegularExpression numberedLayerRegexp(".* (\\d+)$");
+    KisLayerUtils::recursiveApplyNodes(root(),
+        [&numLayers, &maxLayerIndex, &numberedLayerRegexp] (KisNodeSP node) {
+            if (node->inherits("KisLayer")) {
+                QRegularExpressionMatch match = numberedLayerRegexp.match(node->name());
+
+                if (match.hasMatch()) {
+                    maxLayerIndex = qMax(maxLayerIndex, match.captured(1).toInt());
+                }
+                numLayers++;
+            }
+        });
+
+    // special case if there is only root node
+    if (numLayers == 1) {
         return i18n("background");
     }
 
@@ -664,12 +676,7 @@ QString KisImage::nextLayerName(const QString &_baseName) const
         baseName = i18n("Paint Layer");
     }
 
-    return QString("%1 %2").arg(baseName).arg(m_d->nserver.number());
-}
-
-void KisImage::rollBackLayerName()
-{
-    m_d->nserver.rollback();
+    return QString("%1 %2").arg(baseName).arg(maxLayerIndex + 1);
 }
 
 KisCompositeProgressProxy* KisImage::compositeProgressProxy()
@@ -853,9 +860,9 @@ void KisImage::purgeUnusedData(bool isCancellable)
     endStroke(id);
 }
 
-void KisImage::cropNode(KisNodeSP node, const QRect& newRect)
+void KisImage::cropNode(KisNodeSP node, const QRect& newRect, const bool activeFrameOnly)
 {
-    bool isLayer = qobject_cast<KisLayer*>(node.data());
+    const bool isLayer = qobject_cast<KisLayer*>(node.data());
     KUndo2MagicString actionName = isLayer ?
         kundo2_i18n("Crop Layer") :
         kundo2_i18n("Crop Mask");
@@ -873,7 +880,14 @@ void KisImage::cropNode(KisNodeSP node, const QRect& newRect)
 
     KisProcessingVisitorSP visitor =
         new KisCropProcessingVisitor(newRect, true, false);
-    applicator.applyVisitorAllFrames(visitor, KisStrokeJobData::CONCURRENT);
+
+    if (node->isAnimated() && activeFrameOnly) {
+        // Crop active frame..
+        applicator.applyVisitor(visitor, KisStrokeJobData::CONCURRENT);
+    } else {
+        // Crop all frames..
+        applicator.applyVisitorAllFrames(visitor, KisStrokeJobData::CONCURRENT);
+    }
     applicator.end();
 }
 
@@ -1856,7 +1870,7 @@ void KisImage::stopIsolatedMode()
             setClearsRedoOnStart(false);
         }
 
-        void initStrokeCallback() {
+        void initStrokeCallback() override {
             if (!m_image->m_d->isolationRootNode)  return;
 
             m_oldRootNode = m_image->m_d->isolationRootNode;
@@ -2230,7 +2244,7 @@ void KisImage::requestProjectionUpdate(KisNode *node, const QVector<QRect> &rect
     KisNodeGraphListener::requestProjectionUpdate(node, rects, resetAnimationCache);
 }
 
-void KisImage::invalidateFrames(const KisTimeRange &range, const QRect &rect)
+void KisImage::invalidateFrames(const KisTimeSpan &range, const QRect &rect)
 {
     m_d->animationInterface->invalidateFrames(range, rect);
 }
@@ -2243,6 +2257,21 @@ void KisImage::requestTimeSwitch(int time)
 KisNode *KisImage::graphOverlayNode() const
 {
     return m_d->overlaySelectionMask.data();
+}
+
+void KisImage::keyframeChannelHasBeenAdded(KisNode *node, KisKeyframeChannel *channel)
+{
+    Q_UNUSED(node);
+    channel->connect(channel, SIGNAL(sigAddedKeyframe(const KisKeyframeChannel*, int)), m_d->animationInterface, SIGNAL(sigKeyframeAdded(const KisKeyframeChannel*, int)), Qt::UniqueConnection);
+    channel->connect(channel, SIGNAL(sigRemovingKeyframe(const KisKeyframeChannel*,int)), m_d->animationInterface, SIGNAL(sigKeyframeRemoved(const KisKeyframeChannel*, int)), Qt::UniqueConnection);
+}
+
+void KisImage::keyframeChannelAboutToBeRemoved(KisNode *node, KisKeyframeChannel *channel)
+{
+    Q_UNUSED(node);
+
+    channel->disconnect(channel, SIGNAL(sigAddedKeyframe(const KisKeyframeChannel*, int)), m_d->animationInterface, SIGNAL(sigKeyframeAdded(const KisKeyframeChannel*, int)));
+    channel->disconnect(channel, SIGNAL(sigRemovingKeyframe(const KisKeyframeChannel*, int)), m_d->animationInterface, SIGNAL(sigKeyframeRemoved(const KisKeyframeChannel*, int)));
 }
 
 QList<KisLayerCompositionSP> KisImage::compositions()
@@ -2258,6 +2287,24 @@ void KisImage::addComposition(KisLayerCompositionSP composition)
 void KisImage::removeComposition(KisLayerCompositionSP composition)
 {
     m_d->compositions.removeAll(composition);
+}
+
+void KisImage::moveCompositionUp(KisLayerCompositionSP composition)
+{
+    int index = m_d->compositions.indexOf(composition);
+    if (index <= 0) {
+        return;
+    }
+    m_d->compositions.move(index, index - 1);
+}
+
+void KisImage::moveCompositionDown(KisLayerCompositionSP composition)
+{
+    int index = m_d->compositions.indexOf(composition);
+    if (index >= m_d->compositions.size() -1) {
+        return;
+    }
+    m_d->compositions.move(index, index + 1);
 }
 
 bool checkMasksNeedConversion(KisNodeSP root, const QRect &bounds)

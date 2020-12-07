@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>EllipseShapeConfigWidget</class>
  <widget class="QWidget" name="EllipseShapeConfigWidget">
   <property name="geometry">
@@ -29,24 +33,24 @@
    <property name="verticalSpacing">
     <number>3</number>
    </property>
-   <item row="0" column="0">
+   <item column="0" row="0">
     <widget class="QLabel" name="label_3">
      <property name="text">
       <string>Type:</string>
      </property>
     </widget>
    </item>
-   <item row="0" column="1">
+   <item column="1" row="0">
     <widget class="QComboBox" name="ellipseType"/>
    </item>
-   <item row="1" column="0">
+   <item column="0" row="1">
     <widget class="QLabel" name="label">
      <property name="text">
       <string>Start angle:</string>
      </property>
     </widget>
    </item>
-   <item row="1" column="1">
+   <item column="1" row="1">
     <widget class="KisDoubleParseSpinBox" name="startAngle">
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -56,14 +60,14 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="0">
+   <item column="0" row="2">
     <widget class="QLabel" name="label_2">
      <property name="text">
       <string>End angle:</string>
      </property>
     </widget>
    </item>
-   <item row="2" column="1">
+   <item column="1" row="2">
     <widget class="KisDoubleParseSpinBox" name="endAngle">
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -73,14 +77,14 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="0" colspan="2">
+   <item colspan="2" column="0" row="3">
     <widget class="QPushButton" name="closeEllipse">
      <property name="text">
       <string>Close ellipse</string>
      </property>
     </widget>
    </item>
-   <item row="4" column="0">
+   <item column="0" row="4">
     <spacer>
      <property name="orientation">
       <enum>Qt::Vertical</enum>

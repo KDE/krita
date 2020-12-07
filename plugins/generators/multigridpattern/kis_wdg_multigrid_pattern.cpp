@@ -3,19 +3,7 @@
  *
  * Copyright (c) 2020 Wolthera van Hövell tot Westerflier <griffinvalley@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_wdg_multigrid_pattern.h"
@@ -54,10 +42,10 @@ KisWdgMultigridPattern::KisWdgMultigridPattern(QWidget* parent, const KoColorSpa
     widget()->sldOffset->setPrefix(i18n("Offset:"));
 
     widget()->sldColorRatio->setRange(-2.0, 2.0, 2);
-    widget()->sldColorRatio->setPrefix(i18n("Ratio:"));
+    widget()->sldColorRatio->setPrefix(i18nc("Ratio as in fill layer options", "Ratio:"));
 
     widget()->sldColorIndex->setRange(-2.0, 2.0, 2);
-    widget()->sldColorIndex->setPrefix(i18n("Index:"));
+    widget()->sldColorIndex->setPrefix(i18nc("Index number of how far away from center", "Index:"));
 
     widget()->sldColorIntersect->setRange(-2.0, 2.0, 2);
     widget()->sldColorIntersect->setPrefix(i18n("Intersect:"));
@@ -66,6 +54,8 @@ KisWdgMultigridPattern::KisWdgMultigridPattern(QWidget* parent, const KoColorSpa
     widget()->cmbConnectorType->addItem(i18n("Acute Angles"));
     widget()->cmbConnectorType->addItem(i18n("Obtuse Angles"));
     widget()->cmbConnectorType->addItem(i18n("Cross Shape"));
+    widget()->cmbConnectorType->addItem(i18n("Center Dot"));
+    widget()->cmbConnectorType->addItem(i18n("Corner Dot"));
 
     connect(m_widget->sldDivisions, SIGNAL(valueChanged(int)), this, SIGNAL(sigConfigurationUpdated()));
     connect(m_widget->sldDimensions, SIGNAL(valueChanged(int)), this, SIGNAL(sigConfigurationUpdated()));

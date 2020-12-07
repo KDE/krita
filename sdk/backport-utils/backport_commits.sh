@@ -1,4 +1,7 @@
 #!/bin/bash
+#
+#  SPDX-License-Identifier: GPL-3.0-or-later
+#
 
 # A POSIX variable
 # Reset in case getopts has been used previously in the shell.

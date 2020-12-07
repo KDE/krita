@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2020 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "KisColorfulBrush.h"
@@ -24,46 +12,12 @@ KisColorfulBrush::KisColorfulBrush(const QString &filename)
 {
 }
 
-void KisColorfulBrush::setUseColorAsMask(bool useColorAsMask)
-{
-    /**
-     * WARNING: There is a problem in the brush server, since it
-     * returns not copies of brushes, but direct pointers to them. It
-     * means that the brushes are shared among all the currently
-     * present paintops, which might be a problem for e.g. Multihand
-     * Brush Tool.
-     *
-     * Right now, all the instances of Multihand Brush Tool share the
-     * same brush, so there is no problem in this sharing, unless we
-     * reset the internal state of the brush on our way.
-     */
-
-    if (!hasColor()) { //should already be ALPHAMASK, and shouldn't be able to change this
-        return;
-    }
-
-    if (useColorAsMask && brushApplication() == IMAGESTAMP) {
-        setBrushApplication(ALPHAMASK);
-        resetBoundary();
-        clearBrushPyramid();
-    } else if (!useColorAsMask && brushApplication() != IMAGESTAMP) {
-        setBrushApplication(IMAGESTAMP);
-        resetBoundary();
-        clearBrushPyramid();
-    }
-}
-
-bool KisColorfulBrush::useColorAsMask() const
-{
-    return brushApplication() != IMAGESTAMP;
-}
-
 #include <KoColorSpaceMaths.h>
 
 QImage KisColorfulBrush::brushTipImage() const
 {
     QImage image = KisBrush::brushTipImage();
-    if (hasColor() && useColorAsMask()) {
+    if (hasColor() && brushApplication() != IMAGESTAMP) {
         if (m_adjustmentMidPoint != 127 ||
             !qFuzzyIsNull(m_brightnessAdjustment) ||
             !qFuzzyIsNull(m_contrastAdjustment)) {
@@ -145,6 +99,11 @@ void KisColorfulBrush::setContrastAdjustment(qreal value)
     }
 }
 
+bool KisColorfulBrush::hasColor() const
+{
+    return brushType() == IMAGE || brushType() == PIPE_IMAGE;
+}
+
 quint8 KisColorfulBrush::adjustmentMidPoint() const
 {
     return m_adjustmentMidPoint;
@@ -164,7 +123,9 @@ qreal KisColorfulBrush::contrastAdjustment() const
 
 void KisColorfulBrush::toXML(QDomDocument& d, QDomElement& e) const
 {
-    e.setAttribute("ColorAsMask", QString::number((int)useColorAsMask()));
+    // legacy setting, now 'brushApplication' is used instead
+    e.setAttribute("ColorAsMask", QString::number((int)(brushApplication() != IMAGESTAMP)));
+
     e.setAttribute("AdjustmentMidPoint", QString::number(m_adjustmentMidPoint));
     e.setAttribute("BrightnessAdjustment", QString::number(m_brightnessAdjustment));
     e.setAttribute("ContrastAdjustment", QString::number(m_contrastAdjustment));

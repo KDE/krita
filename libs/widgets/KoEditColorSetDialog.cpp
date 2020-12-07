@@ -1,20 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Fredy Yanardi <fyanardi@gmail.com>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #include "KoEditColorSetDialog.h"
@@ -80,10 +67,9 @@ KoEditColorSetWidget::KoEditColorSetWidget(const QList<KoColorSet *> &palettes, 
     }
     m_scrollArea->setMinimumWidth(columns*(12+2));
 
-    QHBoxLayout *layout = new QHBoxLayout();
+    QHBoxLayout *layout = new QHBoxLayout(widget.patchesFrame);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->addWidget(m_scrollArea);
-    widget.patchesFrame->setLayout(layout);
 
     widget.add->setIcon(koIcon("list-add"));
     widget.remove->setIcon(koIcon("list-remove"));
@@ -123,7 +109,7 @@ void KoEditColorSetWidget::setActiveColorSet(int index)
     }
 
     QWidget *wdg = new QWidget(m_scrollArea);
-    m_gridLayout = new QGridLayout();
+    m_gridLayout = new QGridLayout(wdg);
     m_gridLayout->setMargin(0);
     m_gridLayout->setSpacing(2);
 
@@ -144,9 +130,8 @@ void KoEditColorSetWidget::setActiveColorSet(int index)
             m_gridLayout->addWidget(patch, i/columns, i%columns);
         }
     }
-    m_scrollArea->setMinimumWidth(columns*(12+2));
 
-    wdg->setLayout(m_gridLayout);
+    m_scrollArea->setMinimumWidth(columns*(12+2));
     m_scrollArea->setWidget(wdg);
 }
 

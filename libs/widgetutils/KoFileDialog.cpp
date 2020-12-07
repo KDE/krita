@@ -1,20 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2013 - 2014 Yue Liu <yue.liu@mail.com>
 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
-
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
-
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
 #include "KoFileDialog.h"
@@ -60,6 +47,7 @@ public:
     QString caption;
     QString defaultDirectory;
     QString proposedFileName;
+    QUrl defaultUri;
     QStringList filterList;
     QString defaultFilter;
     QScopedPointer<QFileDialog> fileDialog;
@@ -100,6 +88,11 @@ void KoFileDialog::setDefaultDir(const QString &defaultDir, bool force)
             d->proposedFileName = QFileInfo(defaultDir).fileName();
         }
     }
+}
+
+void KoFileDialog::setDirectoryUrl(const QUrl &defaultUri)
+{
+    d->defaultUri = defaultUri;
 }
 
 void KoFileDialog::setImageFilters()
@@ -147,9 +140,15 @@ QString KoFileDialog::selectedMimeType() const
 void KoFileDialog::createFileDialog()
 {
     d->fileDialog.reset(new QFileDialog(d->parent, d->caption, d->defaultDirectory + "/" + d->proposedFileName));
+    if (!d->defaultUri.isEmpty()) {
+        d->fileDialog->setDirectoryUrl(d->defaultUri);
+    }
     KConfigGroup group = KSharedConfig::openConfig()->group("File Dialogs");
 
     bool dontUseNative = true;
+#ifdef Q_OS_ANDROID
+    dontUseNative = false;
+#endif
 #ifdef Q_OS_UNIX
     if (qgetenv("XDG_CURRENT_DESKTOP") == "KDE") {
         dontUseNative = false;
@@ -177,6 +176,11 @@ void KoFileDialog::createFileDialog()
     if (d->type == SaveFile) {
         d->fileDialog->setAcceptMode(QFileDialog::AcceptSave);
         d->fileDialog->setFileMode(QFileDialog::AnyFile);
+
+#ifdef Q_OS_ANDROID
+        // HACK: discovered by looking into the code
+        d->fileDialog->setWindowTitle(d->proposedFileName.isEmpty() ? "Untitled.kra" : d->proposedFileName);
+#endif
     }
     else { // open / import
 
@@ -198,6 +202,7 @@ void KoFileDialog::createFileDialog()
         }
     }
 
+#ifndef Q_OS_ANDROID
     d->fileDialog->setNameFilters(d->filterList);
 
     if (!d->proposedFileName.isEmpty()) {
@@ -214,6 +219,7 @@ void KoFileDialog::createFileDialog()
     else if (!d->defaultFilter.isEmpty()) {
         d->fileDialog->selectNameFilter(d->defaultFilter);
     }
+#endif
 
     if (d->type == ImportDirectory ||
             d->type == ImportFile || d->type == ImportFiles ||
@@ -260,7 +266,10 @@ QString KoFileDialog::filename()
             if (!(extension.contains(".") || url.endsWith("."))) {
                 extension = "." + extension;
             }
+// We can only write to the Uri that was returned, we don't have permission to change the Uri.
+#ifndef Q_OS_ANDROID
             url = url + extension;
+#endif
         }
 
         d->mimeType = KisMimeDatabase::mimeTypeForFile(url, d->type == KoFileDialog::SaveFile ? false : true);

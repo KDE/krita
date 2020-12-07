@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2011 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #ifndef __QIMAGE_BASED_TEST_H
@@ -23,7 +11,7 @@
 #define USE_DOCUMENT 1
 #endif /* USE_DOCUMENT */
 
-#include "testutil.h"
+#include <testutil.h>
 
 
 #include <KoColorSpace.h>
@@ -91,6 +79,14 @@ protected:
         KisFilterConfigurationSP configuration = filter->defaultConfiguration(KisGlobalResourcesInterface::instance());
         Q_ASSERT(configuration);
 
+        /**
+         * HACK ALERT: before this commit a07ef143f6 the meaning of
+         * 'strength' was different. After that, to make the tests
+         * run correctly we should manually set the old value (it is
+         * not available via GUI anymore).
+         */
+        configuration->setProperty("strength", 500);
+
         KisAdjustmentLayerSP blur1 = new KisAdjustmentLayer(image, "blur1", configuration->cloneWithResourcesSnapshot(), 0);
         blur1->internalSelection()->clear();
         blur1->internalSelection()->pixelSelection()->select(blurRect);
@@ -109,8 +105,7 @@ protected:
         image->addNode(blur1);
         image->addNode(paintLayer1);
 
-        KisTransparencyMaskSP transparencyMask1 = new KisTransparencyMask();
-        transparencyMask1->setName("tmask1");
+        KisTransparencyMaskSP transparencyMask1 = new KisTransparencyMask(image, "tmask1");
         transparencyMask1->testingInitSelection(transpRect, paintLayer1);
 
         image->addNode(transparencyMask1, paintLayer1);

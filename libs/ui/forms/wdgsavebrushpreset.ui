@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgSaveBrushPreset</class>
  <widget class="QWidget" name="WdgSaveBrushPreset">
   <property name="geometry">
@@ -150,7 +154,7 @@
          <item>
           <widget class="QPushButton" name="loadImageIntoThumbnailButton">
            <property name="text">
-            <string>Load Image</string>
+            <string comment="Load Image as Thumbnail button">Load Image</string>
            </property>
           </widget>
          </item>

@@ -1,25 +1,10 @@
 /*
  *  Copyright (c) 2019 Boudewijn Rempt <boud@valdyas.org>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 #ifndef KISRESOURCETYPES_H
 #define KISRESOURCETYPES_H
-
-#include <QString>
 
 /**
  * These namespaces define the type keys and sub-type keys for resource types.
@@ -37,6 +22,7 @@ namespace ResourceType {
     static const QString WindowLayouts {"windowlayouts"};
     static const QString Sessions {"sessions"};
     static const QString GamutMasks {"gamutmasks"};
+    static const QString SeExprScripts {"seexpr_scripts"};
     static const QString FilterEffects {"ko_effects"};
     static const QString TaskSets {"tasksets"};
     static const QString LayerStyles {"layerstyles"};
@@ -50,6 +36,9 @@ namespace ResourceSubType {
     static const QString PngBrushes {"png_brushes"};
     static const QString SegmentedGradients {"segmented_gradients"};
     static const QString StopGradients {"stop_gradients"};
+    static const QString KritaPaintOpPresets {"krita_paintop_presets"};
+    static const QString MyPaintPaintOpPresets {"mypaint_paintop_presets"};
 }
+
 
 #endif // KISRESOURCETYPES_H

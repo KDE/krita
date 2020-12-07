@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2014 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_free_transform_strategy_gsl_helpers.h"
@@ -22,11 +10,14 @@
 #include "kis_transform_utils.h"
 
 #include <QMessageBox>
+#include <kis_algebra_2d.h>
 
 #include <config-gsl.h>
 
 #ifdef HAVE_GSL
 #include <gsl/gsl_multimin.h>
+
+
 
 namespace GSL
 {
@@ -54,9 +45,8 @@ namespace GSL
     struct Params1D {
         QPointF staticPointSrc;
         QPointF staticPointDst;
-
         QPointF movingPointSrc;
-        qreal viewDistance;
+        QPointF movingPointDst;
 
         const ToolTransformArgs *srcArgs;
     };
@@ -82,11 +72,8 @@ namespace GSL
         QPointF transformedMovingPoint = t.map(params->movingPointSrc);
 
         qreal result =
-            qAbs(kisDistance(transformedStaticPoint, transformedMovingPoint)
-                 - params->viewDistance) +
-            qAbs(transformedStaticPoint.x() - params->staticPointDst.x()) +
-            qAbs(transformedStaticPoint.y() - params->staticPointDst.y());
-
+            qAbs((transformedMovingPoint - params->movingPointDst).manhattanLength()) +
+            qAbs((transformedStaticPoint - params->staticPointDst).manhattanLength());
 
         return result;
     }
@@ -96,7 +83,7 @@ namespace GSL
                                        const QPointF &staticPointSrc,
                                        const QPointF &staticPointDst,
                                        const QPointF &movingPointSrc,
-                                       qreal viewDistance)
+                                       const QPointF &movingPointDst)
     {
         const gsl_multimin_fminimizer_type *T =
             gsl_multimin_fminimizer_nmsimplex2;
@@ -114,18 +101,29 @@ namespace GSL
         gsl_vector_set (x, 1, args.transformedCenter().x());
         gsl_vector_set (x, 2, args.transformedCenter().y());
 
+        KisTransformUtils::MatricesPack m(args);
+        QTransform t = m.finalTransform();
+
+        /**
+         * Approximate initial offset step by 10% of the moving point
+         * offset. It means that the destination point will be reached
+         * in at most 10 steps.
+         */
+        const QPointF transformedMovingPoint = t.map(movingPointSrc);
+        const qreal initialStep = 0.1 * kisDistance(transformedMovingPoint, movingPointDst);
+
         /* Set initial step sizes to 0.1 */
         ss = gsl_vector_alloc (3);
         gsl_vector_set (ss, 0, 0.1);
-        gsl_vector_set (ss, 1, 10);
-        gsl_vector_set (ss, 2, 10);
+        gsl_vector_set (ss, 1, initialStep);
+        gsl_vector_set (ss, 2, initialStep);
 
         Params1D p;
 
         p.staticPointSrc = staticPointSrc;
         p.staticPointDst = staticPointDst;
         p.movingPointSrc = movingPointSrc;
-        p.viewDistance = viewDistance;
+        p.movingPointDst = movingPointDst;
         p.srcArgs = &args;
 
         /* Initialize method and iterate */
@@ -151,6 +149,15 @@ namespace GSL
             size = gsl_multimin_fminimizer_size (s);
             status = gsl_multimin_test_size (size, 1e-6);
 
+            /**
+             * Sometimes the algorithm may converge to a wrond point,
+             * they just try to force it search better or return invalid
+             * result.
+             */
+            if (status == GSL_SUCCESS && scaleError1D<Strategy>(s->x, &p) > 0.5) {
+                status = GSL_CONTINUE;
+            }
+
             if (status == GSL_SUCCESS)
             {
                 // dbgKrita << "*******Converged to minimum";
@@ -162,6 +169,7 @@ namespace GSL
                 result.transformedCenter =
                     QPointF(gsl_vector_get (s->x, 1),
                             gsl_vector_get (s->x, 2));
+                result.isValid = true;
             }
         }
         while (status == GSL_CONTINUE && iter < 10000);
@@ -303,26 +311,26 @@ namespace GSL
                                   const QPointF &staticPointSrc,
                                   const QPointF &staticPointDst,
                                   const QPointF &movingPointSrc,
-                                  qreal viewDistance)
+                                  const QPointF &movingPointDst)
     {
         return calculateScale1D<XScaleStrategy>(args,
                                                 staticPointSrc,
                                                 staticPointDst,
                                                 movingPointSrc,
-                                                viewDistance);
+                                                movingPointDst);
     }
 
     ScaleResult1D calculateScaleY(const ToolTransformArgs &args,
                                   const QPointF &staticPointSrc,
                                   const QPointF &staticPointDst,
                                   const QPointF &movingPointSrc,
-                                  qreal viewDistance)
+                                  const QPointF &movingPointDst)
     {
         return calculateScale1D<YScaleStrategy>(args,
                                                 staticPointSrc,
                                                 staticPointDst,
                                                 movingPointSrc,
-                                                viewDistance);
+                                                movingPointDst);
     }
 
 }
@@ -334,7 +342,7 @@ namespace GSL
 
     void warnNoGSL()
     {
-        QMessageBox::warning(0,
+        QMessageBox::warning(qApp->activeWindow(),
                              i18nc("@title:window", "Krita"),
                              i18n("Sorry, Krita was built without the support "
                                   "of GNU Scientific Library, so you cannot scale "
@@ -362,7 +370,7 @@ namespace GSL
                                   const QPointF &staticPointSrc,
                                   const QPointF &staticPointDst,
                                   const QPointF &movingPointSrc,
-                                  qreal viewDistance)
+                                  const QPointF &movingPointDst)
     {
         warnNoGSL();
 
@@ -376,7 +384,7 @@ namespace GSL
                                   const QPointF &staticPointSrc,
                                   const QPointF &staticPointDst,
                                   const QPointF &movingPointSrc,
-                                  qreal viewDistance)
+                                  const QPointF &movingPointDst)
     {
         warnNoGSL();
 

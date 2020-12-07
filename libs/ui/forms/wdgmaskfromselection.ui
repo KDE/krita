@@ -1,7 +1,12 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="utf-8"?>
+<ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgMaskFromSelection</class>
- <widget class="QWidget" name="WdgMaskFromSelection" >
-  <property name="geometry" >
+ <widget class="QWidget" name="WdgMaskFromSelection">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
@@ -9,23 +14,23 @@
     <height>240</height>
    </rect>
   </property>
-  <layout class="QGridLayout" >
-   <item row="0" column="0" >
-    <widget class="QGroupBox" name="grpSelectionSource" >
-     <property name="title" >
+  <layout class="QGridLayout">
+   <item column="0" row="0">
+    <widget class="QGroupBox" name="grpSelectionSource">
+     <property name="title">
       <string>Source Selection</string>
      </property>
-     <layout class="QGridLayout" >
-      <item row="0" column="0" >
-       <widget class="QCheckBox" name="chkLocal" >
-        <property name="text" >
+     <layout class="QGridLayout">
+      <item column="0" row="0">
+       <widget class="QCheckBox" name="chkLocal">
+        <property name="text">
          <string>&amp;Layer Selection</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="0" >
-       <widget class="QCheckBox" name="chkImage" >
-        <property name="text" >
+      <item column="0" row="1">
+       <widget class="QCheckBox" name="chkImage">
+        <property name="text">
          <string>&amp;Image Selection</string>
         </property>
        </widget>
@@ -33,35 +38,35 @@
      </layout>
     </widget>
    </item>
-   <item row="1" column="0" >
-    <widget class="QGroupBox" name="groupBox" >
-     <property name="title" >
+   <item column="0" row="1">
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
       <string>Combination method</string>
      </property>
-     <layout class="QGridLayout" >
-      <item row="0" column="0" >
-       <widget class="QRadioButton" name="radioButton" >
-        <property name="text" >
+     <layout class="QGridLayout">
+      <item column="0" row="0">
+       <widget class="QRadioButton" name="radioButton">
+        <property name="text">
          <string>&amp;Combined area</string>
         </property>
-        <property name="checked" >
+        <property name="checked">
          <bool>true</bool>
         </property>
        </widget>
       </item>
-      <item row="1" column="0" >
-       <widget class="QRadioButton" name="radioButton_2" >
-        <property name="text" >
+      <item column="0" row="1">
+       <widget class="QRadioButton" name="radioButton_2">
+        <property name="text">
          <string>&amp;Shared area</string>
         </property>
        </widget>
       </item>
-      <item row="2" column="0" >
+      <item column="0" row="2">
        <spacer>
-        <property name="orientation" >
+        <property name="orientation">
          <enum>Qt::Vertical</enum>
         </property>
-        <property name="sizeHint" >
+        <property name="sizeHint">
          <size>
           <width>20</width>
           <height>40</height>

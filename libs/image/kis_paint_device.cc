@@ -2,19 +2,7 @@
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_paint_device.h"
@@ -213,7 +201,7 @@ public:
             return -1;
         }
         return !defaultBounds->currentLevelOfDetail() ?
-               contentChannel->frameIdAt(defaultBounds->currentTime()) :
+               contentChannel->activeKeyframeAt<KisRasterKeyframe>(defaultBounds->currentTime())->frameID() :
                -1;
     }
 
@@ -286,10 +274,6 @@ public:
 
     int createFrame(bool copy, int copySrc, const QPoint &offset, KUndo2Command *parentCommand)
     {
-        KIS_ASSERT_RECOVER(parentCommand) {
-            return -1;
-        }
-
         DataSP data;
         bool initialFrame = false;
 
@@ -319,30 +303,36 @@ public:
 
         int frameId = getNextFrameId();
 
-        KUndo2Command *cmd =
-            new FrameInsertionCommand(&m_frames,
-                                      data,
-                                      frameId, true,
-                                      parentCommand);
+        if (parentCommand) {
+            KUndo2Command *cmd =
+                new FrameInsertionCommand(&m_frames,
+                                          data,
+                                          frameId, true,
+                                          parentCommand);
 
-        cmd->redo();
+            cmd->redo();
+        } else {
+            m_frames.insert(frameId, data);
+        }
 
         return frameId;
     }
 
-    void deleteFrame(int frame, KUndo2Command *parentCommand)
+    void deleteFrame(int frameID, KUndo2Command *parentCommand)
     {
-        KIS_ASSERT_RECOVER_RETURN(m_frames.contains(frame));
-        KIS_ASSERT_RECOVER_RETURN(parentCommand);
+        KIS_SAFE_ASSERT_RECOVER_RETURN(m_frames.contains(frameID));
+        DataSP deletedData = m_frames[frameID];
 
-        DataSP deletedData = m_frames[frame];
-
-        KUndo2Command *cmd =
-            new FrameInsertionCommand(&m_frames,
-                                      deletedData,
-                                      frame, false,
-                                      parentCommand);
-        cmd->redo();
+        if(parentCommand) {
+            KUndo2Command *cmd =
+                new FrameInsertionCommand(&m_frames,
+                                          deletedData,
+                                          frameID, false,
+                                          parentCommand);
+            cmd->redo();
+        } else {
+            m_frames.take(frameID);
+        }
     }
 
     QRect frameBounds(int frameId)
@@ -351,6 +341,12 @@ public:
 
         QRect extent = data->dataManager()->extent();
         extent.translate(data->x(), data->y());
+
+        quint8 defaultOpacity = data->colorSpace()->opacityU8(data->dataManager()->defaultPixel());
+
+        if (defaultOpacity != OPACITY_TRANSPARENT_U8) {
+            extent |= defaultBounds->bounds();
+        }
 
         return extent;
     }
@@ -403,7 +399,7 @@ public:
                        data->colorSpace());
     }
 
-    void fetchFrame(int frameId, KisPaintDeviceSP targetDevice);
+    void writeFrameToDevice(int frameId, KisPaintDeviceSP targetDevice);
     void uploadFrame(int srcFrameId, int dstFrameId, KisPaintDeviceSP srcDevice);
     void uploadFrame(int dstFrameId, KisPaintDeviceSP srcDevice);
     void uploadFrameData(DataSP srcData, DataSP dstData);
@@ -460,21 +456,20 @@ private:
     {
         DataSP data;
 
-        const int numberOfFrames = contentChannel->keyframeCount();
+        const int vFramesCount = contentChannel->keyframeCount();
 
-        if (numberOfFrames > 1) {
-            int frameId = contentChannel->frameIdAt(defaultBounds->currentTime());
-
-            if (frameId == -1) {
-                data = m_data;
-            } else {
-                KIS_ASSERT_RECOVER(m_frames.contains(frameId)) {
-                    return m_frames.begin().value();
-                }
-                data = m_frames[frameId];
+        if (vFramesCount >= 1) {
+            KisRasterKeyframeSP keyframe =  contentChannel->activeKeyframeAt<KisRasterKeyframe>(defaultBounds->currentTime());
+            if (!keyframe || keyframe->frameID() < 0) {
+                return m_data;
             }
-        } else if (numberOfFrames == 1) {
-            data = m_frames.begin().value();
+
+            const int frameID = keyframe->frameID();
+            KIS_ASSERT_RECOVER(m_frames.contains(frameID)) {
+                return m_data;
+            }
+
+            data = m_frames[frameID];
         } else {
             data = m_data;
         }
@@ -536,10 +531,20 @@ private:
          * default bounds object, and only after that ask
          * currentData() to start cloning.
          */
-        q->setDefaultPixel(KoColor(srcData->dataManager()->defaultPixel(), colorSpace()));
         q->setDefaultBounds(src->defaultBounds());
 
         currentData()->prepareClone(srcData);
+
+
+        /**
+         * Default pixel must be updated **after** the color space
+         * of the device has been adjusted in prpareClone(). Otherwise,
+         * colorSpace() of the resulting KoColor object will be
+         * incorrect.
+         */
+        KIS_SAFE_ASSERT_RECOVER_RETURN(*colorSpace() == *src->colorSpace());
+        q->setDefaultPixel(KoColor(srcData->dataManager()->defaultPixel(), colorSpace()));
+
     }
 
     bool fastBitBltPossibleImpl(Data *srcData)
@@ -599,6 +604,7 @@ KisPaintDevice::Private::Private(KisPaintDevice *paintDevice)
 
 KisPaintDevice::Private::~Private()
 {
+    contentChannel.reset();
     m_frames.clear();
 }
 
@@ -849,7 +855,7 @@ void KisPaintDevice::Private::transferFromData(Data *data, KisPaintDeviceSP targ
     targetDevice->m_d->currentStrategy()->fastBitBltRough(data->dataManager(), extent);
 }
 
-void KisPaintDevice::Private::fetchFrame(int frameId, KisPaintDeviceSP targetDevice)
+void KisPaintDevice::Private::writeFrameToDevice(int frameId, KisPaintDeviceSP targetDevice)
 {
     DataSP data = m_frames[frameId];
     transferFromData(data.data(), targetDevice);
@@ -889,6 +895,18 @@ void KisPaintDevice::Private::uploadFrameData(DataSP srcData, DataSP dstData)
                                        KoColorConversionTransformation::internalRenderingIntent(),
                                        KoColorConversionTransformation::internalConversionFlags(),
                                        &tempCommand);
+    }
+
+    /* If the destination data doesn't share a default pixel value
+     * with src, we should make sure that the default pixel is set
+     * properly before clearing and writing contents.
+     */
+    const int defaultPixelcmp =
+            memcmp(srcData->dataManager()->defaultPixel(),
+                   dstData->dataManager()->defaultPixel(),
+                   dstData->dataManager()->pixelSize());
+    if (defaultPixelcmp != 0) {
+        dstData->dataManager()->setDefaultPixel(srcData->dataManager()->defaultPixel());
     }
 
     dstData->dataManager()->clear();
@@ -2017,13 +2035,12 @@ KisRasterKeyframeChannel *KisPaintDevice::createKeyframeChannel(const KoID &id)
         m_d->contentChannel.reset(new KisRasterKeyframeChannel(id, this, m_d->parent));
     } else {
         //fallback when paint device is isolated / does not belong to a node.
-        ENTER_FUNCTION() << ppVar(this) << ppVar(m_d->defaultBounds);
         m_d->contentChannel.reset(new KisRasterKeyframeChannel(id, this, m_d->defaultBounds));
     }
 
     // Raster channels always have at least one frame (representing a static image)
     KUndo2Command tempParentCommand;
-    m_d->contentChannel->addKeyframe(0, &tempParentCommand);
+    m_d->contentChannel->addKeyframe(0);
 
     return m_d->contentChannel.data();
 }
@@ -2161,9 +2178,9 @@ void KisPaintDeviceFramesInterface::deleteFrame(int frame, KUndo2Command *parent
     return q->m_d->deleteFrame(frame, parentCommand);
 }
 
-void KisPaintDeviceFramesInterface::fetchFrame(int frameId, KisPaintDeviceSP targetDevice)
+void KisPaintDeviceFramesInterface::writeFrameToDevice(int frameId, KisPaintDeviceSP targetDevice)
 {
-    q->m_d->fetchFrame(frameId, targetDevice);
+    q->m_d->writeFrameToDevice(frameId, targetDevice);
 }
 
 void KisPaintDeviceFramesInterface::uploadFrame(int srcFrameId, int dstFrameId, KisPaintDeviceSP srcDevice)

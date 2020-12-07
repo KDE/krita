@@ -3,19 +3,7 @@
  *
  * Copyright (c) 2020 Wolthera van Hövell tot Westerflier <griffinvalley@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "multigridpatterngenerator.h"
@@ -260,8 +248,24 @@ void KisMultigridPatternGenerator::generate(KisProcessingInformation dstInfo,
                         pConnect.lineTo(cl);
                         pConnect.closeSubpath();
 
-                        gc.fillPainterPath(pConnect);
-
+                    } else if (connectorType == Connector::CornerDot) {
+                        QPointF cW(connectorWidth, connectorWidth);
+                        
+                        QRectF dot (shape.at(0)-cW, shape.at(0)+cW);
+                        pConnect.addEllipse(dot);
+                        dot = QRectF(shape.at(1)-cW, shape.at(1)+cW);
+                        pConnect.addEllipse(dot);
+                        dot = QRectF(shape.at(2)-cW, shape.at(2)+cW);
+                        pConnect.addEllipse(dot);
+                        dot = QRectF(shape.at(3)-cW, shape.at(3)+cW);
+                        pConnect.addEllipse(dot);
+                        pConnect = pConnect.intersected(p);
+                        
+                    } else if (connectorType == Connector::CenterDot) {
+                        
+                        QRectF dot (center-QPointF(connectorWidth, connectorWidth), center+QPointF(connectorWidth, connectorWidth));
+                        pConnect.addEllipse(dot);
+                        
                     } else {
                         for (int i=1; i<shape.size(); i++) {
                             QPainterPath pAngle;

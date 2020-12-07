@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2010 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_update_scheduler.h"
@@ -470,13 +458,11 @@ void KisUpdateScheduler::spareThreadAppeared()
 KisTestableUpdateScheduler::KisTestableUpdateScheduler(KisProjectionUpdateListener *projectionUpdateListener,
                                                        qint32 threadCount)
 {
-    Q_UNUSED(threadCount);
     updateSettings();
     m_d->projectionUpdateListener = projectionUpdateListener;
 
-    // The queue will update settings in a constructor itself
-    // m_d->updatesQueue = new KisTestableSimpleUpdateQueue();
-    // m_d->strokesQueue = new KisStrokesQueue();
+    setThreadsLimit(threadCount);
+    m_d->updaterContext.setTestingMode(true);
 
     connectSignals();
 }
@@ -484,9 +470,4 @@ KisTestableUpdateScheduler::KisTestableUpdateScheduler(KisProjectionUpdateListen
 KisUpdaterContext *KisTestableUpdateScheduler::updaterContext()
 {
     return &m_d->updaterContext;
-}
-
-KisTestableSimpleUpdateQueue* KisTestableUpdateScheduler::updateQueue()
-{
-    return dynamic_cast<KisTestableSimpleUpdateQueue*>(&m_d->updatesQueue);
 }

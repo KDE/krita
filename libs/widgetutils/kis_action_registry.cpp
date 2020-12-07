@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2015 Michael Abrahams <miabraha@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 
@@ -26,6 +14,7 @@
 #include <klocalizedstring.h>
 #include <KisShortcutsDialog.h>
 #include <KConfigGroup>
+#include <qdom.h>
 
 #include "kis_debug.h"
 #include "KoResourcePaths.h"
@@ -80,24 +69,72 @@ namespace {
         bool m_explicitlyReset = false;
     };
 
+    // Convenience macros to extract a child node.
+    QDomElement getChild(QDomElement xml, QString node) {
+        return xml.firstChildElement(node);
+    }
+
     // Convenience macros to extract text of a child node.
     QString getChildContent(QDomElement xml, QString node) {
         return xml.firstChildElement(node).text();
     }
 
+    QString getChildContentForOS(QDomElement xml, QString tagName, QString os = QString()) {
+        bool found = false;
+
+        QDomElement node = xml.firstChildElement(tagName);
+        QDomElement nodeElse;
+
+        while(!found && !node.isNull()) {
+            if (node.attribute("operatingSystem") == os) {
+                found = true;
+                break;
+            }
+            else if (node.hasAttribute("operatingSystemElse")) {
+                nodeElse = node;
+            }
+            else if (nodeElse.isNull()) {
+                nodeElse = node;
+            }
+
+            node = node.nextSiblingElement(tagName);
+        }
+
+        if (!found && !nodeElse.isNull()) {
+            return nodeElse.text();
+        }
+        return node.text();
+    }
+
     // Use Krita debug logging categories instead of KDE's default qDebug() for
     // harmless empty strings and translations
-    QString quietlyTranslate(const QString &s) {
-        if (s.isEmpty()) {
-            return s;
+    QString quietlyTranslate(const QDomElement &s) {
+        if (s.isNull() || s.text().isEmpty()) {
+            return QString();
         }
-        QString translatedString = i18nc("action", s.toUtf8());
-        if (translatedString == s) {
-            translatedString = i18n(s.toUtf8());
+        QString translatedString;
+        const QString attrContext = QStringLiteral("context");
+        const QString attrDomain = QStringLiteral("translationDomain");
+        QString context = QStringLiteral("action");
+
+        if (!s.attribute(attrContext).isEmpty()) {
+            context = s.attribute(attrContext);
+        }
+
+        QByteArray domain = s.attribute(attrDomain).toUtf8();
+        if (domain.isEmpty()) {
+            domain = s.ownerDocument().documentElement().attribute(attrDomain).toUtf8();
+            if (domain.isEmpty()) {
+                domain = KLocalizedString::applicationDomain();
+            }
+        }
+        translatedString = i18ndc(domain.constData(), context.toUtf8().constData(), s.text().toUtf8().constData());
+        if (translatedString == s.text()) {
+            translatedString = i18n(s.text().toUtf8().constData());
         }
         if (translatedString.isEmpty()) {
-            dbgAction << "No translation found for" << s;
-            return s;
+            dbgAction << "No translation found for" << s.text();
+            return s.text();
         }
 
         return translatedString;
@@ -268,7 +305,7 @@ bool KisActionRegistry::propertizeAction(const QString &name, QAction * a)
     QDomElement actionXml = info.xmlData;
     if (!actionXml.text().isEmpty()) {
         // i18n requires converting format from QString.
-        auto getChildContent_i18n = [=](QString node){return quietlyTranslate(getChildContent(actionXml, node));};
+        auto getChildContent_i18n = [=](QString node){return quietlyTranslate(getChild(actionXml, node));};
 
         // Note: the fields in the .action documents marked for translation are determined by extractrc.
         QString icon      = getChildContent(actionXml, "icon");
@@ -340,7 +377,7 @@ void KisActionRegistry::Private::loadActionFiles()
 
             // <text> field
             QDomElement categoryTextNode = actions.firstChild().toElement();
-            QString categoryName         = quietlyTranslate(categoryTextNode.text());
+            QString categoryName         = quietlyTranslate(categoryTextNode);
 
             // <action></action> tags
             QDomElement actionXml  = categoryTextNode.nextSiblingElement();
@@ -369,7 +406,11 @@ void KisActionRegistry::Private::loadActionFiles()
                         info.xmlData         = actionXml;
 
                         // Use empty list to signify no shortcut
-                        QString shortcutText = getChildContent(actionXml, "shortcut");
+#ifdef Q_OS_MACOS
+                        QString shortcutText = getChildContentForOS(actionXml, "shortcut", "macos");
+#else
+                        QString shortcutText = getChildContentForOS(actionXml, "shortcut");
+#endif
                         if (!shortcutText.isEmpty()) {
                             info.setDefaultShortcuts(QKeySequence::listFromString(shortcutText));
                         }

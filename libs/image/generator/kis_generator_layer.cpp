@@ -1,19 +1,8 @@
 /*
  *  Copyright (c) 2008 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2020 L. E. Segovia <amy@amyspark.me>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include <QMutex>
@@ -34,8 +23,9 @@
 #include "generator/kis_generator.h"
 #include "kis_node_visitor.h"
 #include "kis_thread_safe_signal_compressor.h"
-#include "kis_recalculate_generator_layer_job.h"
-#include "kis_generator_stroke_strategy.h"
+#include <kis_generator_stroke_strategy.h>
+#include <KisRunnableStrokeJobData.h>
+
 
 #define UPDATE_DELAY 100 /*ms */
 
@@ -48,6 +38,7 @@ struct Q_DECL_HIDDEN KisGeneratorLayer::Private
 
     KisThreadSafeSignalCompressor updateSignalCompressor;
     QRect preparedRect;
+    QRect preparedImageBounds;
     KisFilterConfigurationSP preparedForFilter;
     QWeakPointer<bool> updateCookie;
     QMutex mutex;
@@ -77,12 +68,19 @@ KisGeneratorLayer::~KisGeneratorLayer()
 
 void KisGeneratorLayer::setFilter(KisFilterConfigurationSP filterConfig)
 {
-    KisSelectionBasedLayer::setFilter(filterConfig);
-    {
-        QMutexLocker(&m_d->mutex);
-        m_d->preparedRect = QRect();
-    }
+    setFilterWithoutUpdate(filterConfig);
     m_d->updateSignalCompressor.start();
+}
+
+void KisGeneratorLayer::setFilterWithoutUpdate(KisFilterConfigurationSP filterConfig)
+{
+    if (filter().isNull() || !filter()->compareTo(filterConfig.constData())) {
+        KisSelectionBasedLayer::setFilter(filterConfig);
+        {
+            QMutexLocker(&m_d->mutex);
+            m_d->preparedRect = QRect();
+        }
+    }
 }
 
 void KisGeneratorLayer::slotDelayedStaticUpdate()
@@ -105,52 +103,70 @@ void KisGeneratorLayer::slotDelayedStaticUpdate()
     }
 }
 
-void KisGeneratorLayer::update()
+void KisGeneratorLayer::requestUpdateJobsWithStroke(KisStrokeId strokeId, KisFilterConfigurationSP filterConfig)
 {
     QMutexLocker locker(&m_d->mutex);
-
+    
     KisImageSP image = this->image().toStrongRef();
     const QRect updateRect = extent() | image->bounds();
 
-    KisFilterConfigurationSP filterConfig = filter();
-    KIS_SAFE_ASSERT_RECOVER_RETURN(filterConfig);
-
     if (filterConfig != m_d->preparedForFilter) {
         locker.unlock();
-        resetCache();
+        resetCacheWithoutUpdate();
         locker.relock();
     }
 
+    if (m_d->preparedImageBounds != image->bounds()) {
+        m_d->preparedRect = QRect();
+    }
+
     const QRegion processRegion(QRegion(updateRect) - m_d->preparedRect);
-    if (processRegion.isEmpty()) return;
+    if (processRegion.isEmpty())
+        return;
 
     KisGeneratorSP f = KisGeneratorRegistry::instance()->value(filterConfig->name());
     KIS_SAFE_ASSERT_RECOVER_RETURN(f);
 
+    KisProcessingVisitor::ProgressHelper helper(this);
+
     KisPaintDeviceSP originalDevice = original();
-
-    KisGeneratorStrokeStrategy *stroke = new KisGeneratorStrokeStrategy(image);
-
-    KisStrokeId strokeId = image->startStroke(stroke);
 
     QSharedPointer<bool> cookie(new bool(true));
 
-    auto rc = processRegion.begin();
-    while (rc != processRegion.end()) {
-        QList<KisStrokeJobData *> jobs = KisGeneratorStrokeStrategy::createJobsData(this, cookie, f, originalDevice, *rc, filterConfig);
+    auto jobs = KisGeneratorStrokeStrategy::createJobsData(this, cookie, f, originalDevice, processRegion, filterConfig);
 
-        Q_FOREACH (KisStrokeJobData *job, jobs) {
-            image->addJob(strokeId, job);
-        }
-
-        rc++;
+    Q_FOREACH (auto job, jobs) {
+        image->addJob(strokeId, job);
     }
-
-    image->endStroke(strokeId);
 
     m_d->updateCookie = cookie;
     m_d->preparedRect = updateRect;
+    m_d->preparedImageBounds = image->bounds();
     m_d->preparedForFilter = filterConfig;
+}
+
+void KisGeneratorLayer::previewWithStroke(const KisStrokeId strokeId)
+{
+    KisFilterConfigurationSP filterConfig = filter();
+    KIS_SAFE_ASSERT_RECOVER_RETURN(filterConfig);
+
+    requestUpdateJobsWithStroke(strokeId, filterConfig);
+}
+
+void KisGeneratorLayer::update()
+{
+    KisImageSP image = this->image().toStrongRef();
+
+    KisFilterConfigurationSP filterConfig = filter();
+    KIS_SAFE_ASSERT_RECOVER_RETURN(filterConfig);
+
+    KisGeneratorStrokeStrategy *stroke = new KisGeneratorStrokeStrategy();
+
+    KisStrokeId strokeId = image->startStroke(stroke);
+
+    requestUpdateJobsWithStroke(strokeId, filterConfig);
+
+    image->endStroke(strokeId);
 }
 
 bool KisGeneratorLayer::accept(KisNodeVisitor & v)
@@ -202,17 +218,41 @@ void KisGeneratorLayer::setY(qint32 y)
 
 void KisGeneratorLayer::resetCache()
 {
+    resetCacheWithoutUpdate();
+    m_d->updateSignalCompressor.start();
+}
+
+void KisGeneratorLayer::forceUpdateTimedNode()
+{
+    if (hasPendingTimedUpdates()) {
+        m_d->updateSignalCompressor.stop();
+        m_d->updateCookie.clear();
+
+        slotDelayedStaticUpdate();
+    }
+}
+
+bool KisGeneratorLayer::hasPendingTimedUpdates() const
+{
+    return m_d->updateSignalCompressor.isActive();
+}
+
+void KisGeneratorLayer::resetCacheWithoutUpdate()
+{
     KisSelectionBasedLayer::resetCache();
     {
         QMutexLocker(&m_d->mutex);
         m_d->preparedRect = QRect();
     }
-    m_d->updateSignalCompressor.start();
 }
 
 void KisGeneratorLayer::setDirty(const QVector<QRect> &rects)
 {
-    KisSelectionBasedLayer::setDirty(rects);
+    setDirtyWithoutUpdate(rects);
     m_d->updateSignalCompressor.start();
 }
 
+void KisGeneratorLayer::setDirtyWithoutUpdate(const QVector<QRect> &rects)
+{
+    KisSelectionBasedLayer::setDirty(rects);
+}

@@ -1,20 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2017 Scott Petrovic <scottpetrovic@gmail.com>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #include "widgets/kis_paintop_presets_save.h"
@@ -133,19 +120,19 @@ void KisPresetSaveWidget::loadExistingThumbnail()
 void KisPresetSaveWidget::loadImageFromLibrary()
 {
     //add dialog code here.
-    QDialog *dlg = new QDialog(this);
-    dlg->setWindowTitle(i18n("Preset Icon Library"));
-    QVBoxLayout *layout = new QVBoxLayout();
-    dlg->setLayout(layout);
-    KisPaintopPresetIconLibrary *libWidget = new KisPaintopPresetIconLibrary(dlg);
+    QDialog dialog;
+    dialog.setWindowTitle(i18n("Preset Icon Library"));
+    QVBoxLayout *layout = new QVBoxLayout(&dialog);
+
+    KisPaintopPresetIconLibrary *libWidget = new KisPaintopPresetIconLibrary(&dialog);
     layout->addWidget(libWidget);
-    QDialogButtonBox *buttons = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel, dlg);
-    connect(buttons, SIGNAL(accepted()), dlg, SLOT(accept()));
-    connect(buttons, SIGNAL(rejected()), dlg, SLOT(reject()));
+    QDialogButtonBox *buttons = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
+    connect(buttons, SIGNAL(accepted()), &dialog, SLOT(accept()));
+    connect(buttons, SIGNAL(rejected()), &dialog, SLOT(reject()));
     layout->addWidget(buttons);
 
     //if dialog accepted, get image.
-    if (dlg->exec()==QDialog::Accepted) {
+    if (dialog.exec() == QDialog::Accepted) {
 
         QImage presetImage = libWidget->getImage();
         brushPresetThumbnailWidget->paintCustomImage(presetImage);
@@ -172,6 +159,11 @@ void KisPresetSaveWidget::savePreset()
     // We don't want dots or spaces in the filenames
     presetFileName = presetFileName.replace(' ', '_').replace('.', '_');
     QString extension = curPreset->defaultFileExtension();
+
+    // Make sure of the extension
+    if (!presetFileName.endsWith(".kpp")) {
+        presetFileName += ".kpp";
+    }
 
     if (m_useNewBrushDialog) {
         KisPaintOpPresetSP newPreset = curPreset->clone().dynamicCast<KisPaintOpPreset>();

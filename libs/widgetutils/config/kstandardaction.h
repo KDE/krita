@@ -2,19 +2,7 @@
    Copyright (C) 1999,2000 Kurt Granroth <granroth@kde.org>
    Copyright (C) 2001,2002 Ellis Whitehead <ellis@kde.org>
 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License version 2 as published by the Free Software Foundation.
-
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
-
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+   SPDX-License-Identifier: LGPL-2.0-only
 */
 #ifndef KSTANDARDACTION_H
 #define KSTANDARDACTION_H
@@ -323,7 +311,7 @@ KRITAWIDGETUTILS_EXPORT QAction *paste(QObject *parent);
  * class MyListView : public K3ListView {
  *   Q_OBJECT
  * public:
- *   MyListView( QWidget * parent = 0, const char * name = 0, WFlags f = 0 ) : K3ListView( parent, name, f ) {}
+ *   MyListView( QWidget * parent = 0, const char * name = 0, WFlags f = Qt::WindowFlags() ) : K3ListView( parent, name, f ) {}
  *   virtual ~MyListView() {}
  * public Q_SLOTS:
  *   virtual void clear() {}

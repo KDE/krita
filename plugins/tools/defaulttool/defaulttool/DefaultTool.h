@@ -3,20 +3,7 @@
    Copyright (C) 2006-2008 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2006-2008 Thomas Zander <zander@kde.org>
 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
-
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
-
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
 #ifndef DEFAULTTOOL_H
@@ -27,6 +14,7 @@
 #include <commands/KoShapeAlignCommand.h>
 #include <commands/KoShapeReorderCommand.h>
 #include "SelectionDecorator.h"
+#include "KoShapeMeshGradientHandles.h"
 
 #include <QPolygonF>
 #include <QTime>
@@ -67,7 +55,7 @@ public:
     bool wantsAutoScroll() const override;
     void paint(QPainter &painter, const KoViewConverter &converter) override;
 
-    void repaintDecorations() override;
+    QRectF decorationsRect() const override;
 
     ///reimplemented
     void copy() const override;
@@ -97,6 +85,9 @@ public Q_SLOTS:
     void activate(ToolActivation activation, const QSet<KoShape *> &shapes) override;
     void deactivate() override;
 
+Q_SIGNALS:
+    void meshgradientHandleSelected(KoShapeMeshGradientHandles::Handle);
+
 private Q_SLOTS:
     void selectionAlign(int _align);
     void selectionDistribute(int _distribute);
@@ -115,6 +106,9 @@ private Q_SLOTS:
 
     void slotActivateEditFillGradient(bool value);
     void slotActivateEditStrokeGradient(bool value);
+
+    void slotActivateEditFillMeshGradient(bool value);
+    void slotResetMeshGradientState();
 
 protected Q_SLOTS:
     /// Update actions on selection change
@@ -151,6 +145,7 @@ protected:
 
 private:
     class MoveGradientHandleInteractionFactory;
+    class MoveMeshGradientHandleInteractionFactory;
 
 private:
     void setupActions();
@@ -177,7 +172,10 @@ private:
     QPolygonF m_selectionOutline;
     QPointF m_lastPoint;
 
-    SelectionDecorator *m_decorator;
+    QScopedPointer<SelectionDecorator> m_decorator;
+
+    KoShapeMeshGradientHandles::Handle m_selectedMeshHandle;
+    KoShapeMeshGradientHandles::Handle m_hoveredMeshHandle;
 
     // TODO alter these 3 arrays to be static const instead
     QCursor m_sizeCursors[8];

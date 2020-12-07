@@ -3,19 +3,7 @@
  *  Copyright (c) 2005 C. Boemann <cbo@boemann.dk>
  *  Copyright (c) 2007-2008 Boudewijn Rempt <boud@valdyas.org>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_kra_save_visitor.h"
@@ -95,7 +83,9 @@ bool KisKraSaveVisitor::visit(KisExternalLayer * layer)
     bool result = false;
     if (auto* referencesLayer = dynamic_cast<KisReferenceImagesLayer*>(layer)) {
         result = true;
-        Q_FOREACH(KoShape *shape, referencesLayer->shapes()) {
+        QList <KoShape *> shapes = referencesLayer->shapes();
+        std::sort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
+        Q_FOREACH(KoShape *shape, shapes) {
             auto *reference = dynamic_cast<KisReferenceImage*>(shape);
             KIS_ASSERT_RECOVER_RETURN_VALUE(reference, false);
             bool saved = reference->saveImage(m_store);
@@ -304,6 +294,7 @@ bool KisKraSaveVisitor::visit(KisColorizeMask *mask)
     }
 
     savePaintDevice(mask->coloringProjection(), COLORIZE_COLORING_DEVICE);
+    saveIccProfile(mask, mask->colorSpace()->profile());
 
     m_store->popDirectory();
 
@@ -405,7 +396,15 @@ bool KisKraSaveVisitor::saveAnnotations(KisLayer* layer)
     if (!layer->paintDevice()->colorSpace()) return false;
 
     if (layer->paintDevice()->colorSpace()->profile()) {
-        const KoColorProfile *profile = layer->paintDevice()->colorSpace()->profile();
+        return saveIccProfile(layer, layer->paintDevice()->colorSpace()->profile());
+    }
+    return true;
+
+}
+
+bool KisKraSaveVisitor::saveIccProfile(KisNode *node, const KoColorProfile *profile)
+{
+    if (profile) {
         KisAnnotationSP annotation;
         if (profile) {
             QByteArray profileRawData = profile->rawData();
@@ -420,7 +419,7 @@ bool KisKraSaveVisitor::saveAnnotations(KisLayer* layer)
 
         if (annotation) {
             // save layer profile
-            if (m_store->open(getLocation(layer, DOT_ICC))) {
+            if (m_store->open(getLocation(node, DOT_ICC))) {
                 m_store->write(annotation->annotation());
                 m_store->close();
             } else {
@@ -429,8 +428,8 @@ bool KisKraSaveVisitor::saveAnnotations(KisLayer* layer)
         }
     }
     return true;
-
 }
+
 bool KisKraSaveVisitor::saveSelection(KisNode* node)
 {
     KisSelectionSP selection;

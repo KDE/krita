@@ -9,6 +9,8 @@ apps:
   krita:
     common-id: org.kde.krita
     command: usr/bin/krita
+    command-chain:
+      - snap/command-chain/add-qt-shortcuts
     extensions:
       - kde-neon
     plugs:
@@ -17,6 +19,7 @@ apps:
       - network
       - network-bind
       - removable-media
+      - audio-playback
     environment:
       QT_QPA_PLATFORMTHEME: gtk3
 
@@ -45,7 +48,7 @@ parts:
   krita:
     after:
       - libheif
-    source: https://download.kde.org/stable/krita/4.3.0/krita-4.3.0.tar.xz
+    source: https://download.kde.org/stable/krita/4.4.1/krita-4.4.1.tar.xz
     # # Use these instead to build from the git source
     # source: https://anongit.kde.org/krita.git
     # source-type: git
@@ -80,6 +83,7 @@ parts:
       - libx11-dev
       - libxi-dev
       - vc-dev
+      - libmypaint-dev
     parse-info: [usr/share/metainfo/org.kde.krita.appdata.xml]
 
 
@@ -101,6 +105,7 @@ parts:
       - libxi6
       - libyaml-cpp0.5v5
       - zlib1g
+      - libmypaint-1.5-1
       # Required for rendering animations
       - ffmpeg
       - libglu1-mesa
@@ -112,6 +117,19 @@ parts:
       # kde-kf5 platform snap.
       - "-usr/lib/x86_64-linux-gnu/libQt5*"
       - "-usr/lib/x86_64-linux-gnu/libqt5*"
+
+  launcher:
+    source: scripts
+    plugin: dump
+    organize:
+      add-qt-shortcuts: snap/command-chain/add-qt-shortcuts
+    stage-packages:
+      - xdg-user-dirs
+
+  qtctl:
+    source: https://github.com/snapcrafters/qtctl.git
+    plugin: cmake
+    build-snaps: [kde-frameworks-5-core18-sdk]
 
   # This part removes all the files in this snap which already exist in
   # connected content and base snaps. Since these files will be available

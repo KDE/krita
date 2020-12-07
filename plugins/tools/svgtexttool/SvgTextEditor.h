@@ -2,20 +2,7 @@
  *
  * Copyright 2017 Boudewijn Rempt <boud@valdyas.org>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #ifndef TEXTNGSHAPECONFIGWIDGET_H
@@ -40,7 +27,7 @@ class SvgTextEditor : public KXmlGuiWindow
 {
     Q_OBJECT
 public:
-    SvgTextEditor(QWidget *parent = 0, Qt::WindowFlags flags = 0);
+    SvgTextEditor(QWidget *parent = 0, Qt::WindowFlags f = Qt::WindowFlags());
     ~SvgTextEditor();
 
     //tiny enum to keep track of the tab on which editor something happens while keeping the code readable.
@@ -56,7 +43,7 @@ public:
         Both
     };
 
-    void setShape(KoSvgTextShape *shape);
+    void setInitialShape(KoSvgTextShape *shape);
 
 private Q_SLOTS:
     /**
@@ -122,6 +109,7 @@ private Q_SLOTS:
     void setFont(const QString &fontName);
     void setFontSize(qreal size);
     void setBaseline(KoSvgText::BaselineShiftMode baseline);
+    void setKerning(bool enable);
 
     void setSettings();
     void slotToolbarToggled(bool);
@@ -152,8 +140,11 @@ private:
     void createActions();
     void enableRichTextActions(bool enable);
     void enableSvgTextActions(bool enable);
+    bool isRichTextEditorTabActive();
+    bool isSvgSourceEditorTabActive();
 
     Ui_WdgSvgTextEditor m_textEditorWidget;
+    EditorMode m_currentEditorMode {EditorMode::Both};
     QTextEdit *m_currentEditor {0};
     QWidget *m_page {0};
     QList<QAction*> m_richTextActions;
@@ -166,6 +157,9 @@ private:
     BasicXMLSyntaxHighlighter *m_syntaxHighlighter;
 
     QString m_searchKey;
+
+    class Private;
+    QScopedPointer<Private> d;
 };
 
 #endif //TEXTNGSHAPECONFIGWIDGET_H

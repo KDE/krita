@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2015 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #ifndef __TIMELINE_FRAMES_MODEL_H
@@ -35,6 +23,21 @@ class KisAnimationPlayer;
 class KisNodeDisplayModeAdapter;
 
 
+struct TimelineSelectionEntry {
+    KisRasterKeyframeChannel* channel;
+    int time;
+    KisRasterKeyframeSP keyframe;
+};
+
+inline bool operator==(const TimelineSelectionEntry& lhs, const TimelineSelectionEntry& rhs){
+    return (lhs.time == rhs.time) && (lhs.channel == rhs.channel) && (lhs.keyframe == rhs.keyframe);
+}
+
+inline uint qHash(const TimelineSelectionEntry &key)
+{
+    return reinterpret_cast<quint64>(key.channel) * reinterpret_cast<quint64>(key.keyframe.data()) * key.time;
+}
+
 class KRITAANIMATIONDOCKER_EXPORT TimelineFramesModel : public TimelineNodeListKeeper::ModelWithExternalNotifications
 {
     Q_OBJECT
@@ -43,7 +46,8 @@ public:
     enum MimeCopyPolicy {
         UndefinedPolicy = 0,
         MoveFramesPolicy,
-        CopyFramesPolicy
+        CopyFramesPolicy,
+        CloneFramesPolicy
     };
 
 public:
@@ -62,10 +66,11 @@ public:
 
     bool createFrame(const QModelIndex &dstIndex);
     bool copyFrame(const QModelIndex &dstIndex);
+    void makeClonesUnique(const QModelIndexList &indices);
 
     bool insertFrames(int dstColumn, const QList<int> &dstRows, int count, int timing = 1);
 
-    bool insertHoldFrames(QModelIndexList selectedIndexes, int count);
+    bool insertHoldFrames(const QModelIndexList &selectedIndexes, int count);
 
     QString audioChannelFileName() const;
     void setAudioChannelFileName(const QString &fileName);
@@ -134,6 +139,7 @@ public:
 
 protected:
     QMap<QString, KisKeyframeChannel *> channelsAt(QModelIndex index) const override;
+    KisKeyframeChannel* channelByID(QModelIndex index, const QString &id) const;
 
 private Q_SLOTS:
     void slotDummyChanged(KisNodeDummy *dummy);

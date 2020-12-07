@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2017 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #ifndef KISTEXTUREMASKINFO_H
@@ -35,7 +23,7 @@ class KisResourcesInterface;
 class KisTextureMaskInfo : public boost::equality_comparable<KisTextureMaskInfo>
 {
 public:
-    KisTextureMaskInfo(int levelOfDetail);
+    KisTextureMaskInfo(int levelOfDetail, bool preserveAlpha);
     KisTextureMaskInfo(const KisTextureMaskInfo &rhs);
 
     ~KisTextureMaskInfo();
@@ -60,6 +48,7 @@ public:
 
 private:
     int m_levelOfDetail = 0;
+    bool m_preserveAlpha = false;
 
     KoPatternSP m_pattern = 0;
 

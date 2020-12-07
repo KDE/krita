@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2011 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_processing_applicator.h"
@@ -27,9 +15,13 @@
 #include "kis_stroke_strategy_undo_command_based.h"
 #include "kis_layer_utils.h"
 #include "kis_command_utils.h"
+#include "kis_time_span.h"
+#include "kis_node.h"
 #include "kis_image_signal_router.h"
+#include "KisAsynchronouslyMergeableCommandInterface.h"
+#include "kis_command_ids.h"
 
-class DisableUIUpdatesCommand : public KisCommandUtils::FlipFlopCommand
+class DisableUIUpdatesCommand : public KisCommandUtils::FlipFlopCommand, public KisAsynchronouslyMergeableCommandInterface
 {
 public:
     DisableUIUpdatesCommand(KisImageWSP image,
@@ -47,12 +39,27 @@ public:
         m_image->enableUIUpdates();
     }
 
+    int id() const override {
+        return KisCommandUtils::DisableUIUpdatesCommandId;
+    }
+
+    bool mergeWith(const KUndo2Command *command) override {
+        return canMergeWith(command);
+    }
+
+    bool canMergeWith(const KUndo2Command *command) const override {
+        const DisableUIUpdatesCommand *other =
+            dynamic_cast<const DisableUIUpdatesCommand*>(command);
+
+        return other && other->m_image == m_image;
+    }
+
 private:
     KisImageWSP m_image;
 };
 
 
-class UpdateCommand : public KisCommandUtils::FlipFlopCommand
+class UpdateCommand : public KisCommandUtils::FlipFlopCommand, public KisAsynchronouslyMergeableCommandInterface
 {
 public:
     UpdateCommand(KisImageWSP image, KisNodeSP node,
@@ -90,6 +97,8 @@ private:
             });
         }
 
+        m_image->root()->graphListener()->invalidateFrames(KisTimeSpan::infinite(0), m_node->exactBounds());
+
         if (!m_flags.testFlag(KisProcessingApplicator::NO_IMAGE_UPDATES)) {
             if(m_flags.testFlag(KisProcessingApplicator::RECURSIVE)) {
                 m_image->refreshGraphAsync(m_node);
@@ -124,6 +133,26 @@ private:
         }
     }
 
+    int id() const override {
+        return KisCommandUtils::UpdateCommandId;
+    }
+
+    bool mergeWith(const KUndo2Command *command) override {
+        return canMergeWith(command);
+    }
+
+    bool canMergeWith(const KUndo2Command *command) const override {
+        const UpdateCommand *other =
+            dynamic_cast<const UpdateCommand*>(command);
+
+        return other &&
+            other->m_image == m_image &&
+            other->m_node == m_node &&
+            other->m_flags == m_flags &&
+            bool(other->m_sharedAllFramesToken) == bool(m_sharedAllFramesToken) &&
+            (!m_sharedAllFramesToken || *m_sharedAllFramesToken == *other->m_sharedAllFramesToken);
+    }
+
 private:
     KisImageWSP m_image;
     KisNodeSP m_node;
@@ -131,7 +160,7 @@ private:
     QSharedPointer<bool> m_sharedAllFramesToken;
 };
 
-class EmitImageSignalsCommand : public KisCommandUtils::FlipFlopCommand
+class EmitImageSignalsCommand : public KisCommandUtils::FlipFlopCommand, public KisAsynchronouslyMergeableCommandInterface
 {
 public:
     EmitImageSignalsCommand(KisImageWSP image,
@@ -157,6 +186,25 @@ public:
 
             doUpdate(reverseSignals);
         }
+    }
+
+    int id() const override {
+        return KisCommandUtils::EmitImageSignalsCommandId;
+    }
+
+    bool mergeWith(const KUndo2Command *command) override {
+        return canMergeWith(command);
+    }
+
+    bool canMergeWith(const KUndo2Command *command) const override {
+        const EmitImageSignalsCommand *other =
+            dynamic_cast<const EmitImageSignalsCommand*>(command);
+
+        return other &&
+            other->m_image == m_image;
+
+            // TODO: implement proper comparison for emitted signals
+            // other->m_emitSignals == m_emitSignals;
     }
 
 private:
@@ -219,6 +267,10 @@ KisProcessingApplicator::~KisProcessingApplicator()
 {
 }
 
+const KisStrokeId KisProcessingApplicator::getStroke() const
+{
+    return m_strokeId;
+}
 
 void KisProcessingApplicator::applyVisitor(KisProcessingVisitorSP visitor,
                                            KisStrokeJobData::Sequentiality sequentiality,

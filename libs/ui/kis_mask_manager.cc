@@ -1,19 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) Boudewijn Rempt <boud@valdyas.org>, (C) 2006
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_mask_manager.h"
@@ -52,6 +40,8 @@
 #include "commands/kis_deselect_global_selection_command.h"
 #include "kis_iterator_ng.h"
 #include <KisGlobalResourcesInterface.h>
+#include "kis_node_manager.h"
+
 
 KisMaskManager::KisMaskManager(KisViewManager * view)
     : m_view(view)
@@ -196,9 +186,7 @@ void KisMaskManager::createMaskCommon(KisMaskSP mask,
 
 KisNodeSP KisMaskManager::createSelectionMask(KisNodeSP activeNode, KisPaintDeviceSP copyFrom, bool convertActiveNode)
 {
-    if (!activeNode->isEditable()) {
-        return 0;
-    }
+    if (!m_view->nodeManager()->canModifyLayer(activeNode)) return 0;
 
     KisSelectionMaskSP mask = new KisSelectionMask(m_view->image());
 
@@ -212,11 +200,9 @@ KisNodeSP KisMaskManager::createSelectionMask(KisNodeSP activeNode, KisPaintDevi
 
 KisNodeSP KisMaskManager::createTransparencyMask(KisNodeSP activeNode, KisPaintDeviceSP copyFrom, bool convertActiveNode)
 {
-    if (!activeNode->isEditable()) {
-        return 0;
-    }
+    if (!m_view->nodeManager()->canModifyLayer(activeNode)) return 0;
 
-    KisMaskSP mask = new KisTransparencyMask();
+    KisMaskSP mask = new KisTransparencyMask(m_view->image(), "");
     createMaskCommon(mask, activeNode, copyFrom, kundo2_i18n("Add Transparency Mask"), "KisTransparencyMask", i18n("Transparency Mask"), false, convertActiveNode);
     if (convertActiveNode) {
         m_commandsAdapter->removeNode(activeNode);
@@ -227,11 +213,9 @@ KisNodeSP KisMaskManager::createTransparencyMask(KisNodeSP activeNode, KisPaintD
 
 KisNodeSP KisMaskManager::createFilterMask(KisNodeSP activeNode, KisPaintDeviceSP copyFrom, bool quiet, bool convertActiveNode)
 {
-    if (!activeNode->isEditable()) {
-        return 0;
-    }
+    if (!m_view->nodeManager()->canModifyLayer(activeNode)) return 0;
 
-    KisFilterMaskSP mask = new KisFilterMask();
+    KisFilterMaskSP mask = new KisFilterMask(m_view->image(), "");
     createMaskCommon(mask, activeNode, copyFrom, kundo2_i18n("Add Filter Mask"), "KisFilterMask", i18n("Filter Mask"), false, convertActiveNode);
 
     if (convertActiveNode) {
@@ -280,13 +264,10 @@ KisNodeSP KisMaskManager::createFilterMask(KisNodeSP activeNode, KisPaintDeviceS
 
 KisNodeSP KisMaskManager::createColorizeMask(KisNodeSP activeNode)
 {
-    if (!activeNode->isEditable()) {
-        return 0;
-    }
+    if (!m_view->nodeManager()->canModifyLayer(activeNode)) return 0;
 
-    KisColorizeMaskSP mask = new KisColorizeMask();
+    KisColorizeMaskSP mask = new KisColorizeMask(m_view->image(), "");
     createMaskCommon(mask, activeNode, 0, kundo2_i18n("Add Colorize Mask"), "KisColorizeMask", i18n("Colorize Mask"), true, false);
-    mask->setImage(m_view->image());
     mask->initializeCompositeOp();
     delete mask->setColorSpace(mask->parent()->colorSpace());
     return mask;
@@ -295,11 +276,9 @@ KisNodeSP KisMaskManager::createColorizeMask(KisNodeSP activeNode)
 
 KisNodeSP KisMaskManager::createTransformMask(KisNodeSP activeNode)
 {
-    if (!activeNode->isEditable()) {
-        return 0;
-    }
+    if (!m_view->nodeManager()->canModifyLayer(activeNode)) return 0;
 
-    KisTransformMaskSP mask = new KisTransformMask();
+    KisTransformMaskSP mask = new KisTransformMask(m_view->image(), "");
     createMaskCommon(mask, activeNode, 0, kundo2_i18n("Add Transform Mask"), "KisTransformMask", i18n("Transform Mask"), true, false);
     return mask;
 }
@@ -307,6 +286,8 @@ KisNodeSP KisMaskManager::createTransformMask(KisNodeSP activeNode)
 void KisMaskManager::maskProperties()
 {
     if (!activeMask()) return;
+
+    if (!m_view->nodeManager()->canModifyLayer(activeMask())) return;
 
     if (activeMask()->inherits("KisFilterMask")) {
         KisFilterMask *mask = static_cast<KisFilterMask*>(activeMask().data());

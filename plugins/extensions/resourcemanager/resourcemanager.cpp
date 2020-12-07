@@ -3,19 +3,7 @@
  *
  * Copyright (c) 2004 Boudewijn Rempt (boud@valdyas.org)
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "resourcemanager.h"
@@ -46,10 +34,13 @@
 #include <brushengine/kis_paintop_preset.h>
 #include <KisBrushServerProvider.h>
 #include <kis_paintop_settings.h>
+#include <KisPaintopSettingsIds.h>
+#include <krita_container_utils.h>
+
+#include "config-seexpr.h"
+
 #include "dlg_bundle_manager.h"
 #include "dlg_create_bundle.h"
-#include <KisPaintopSettingsIds.h>
-#include "krita_container_utils.h"
 
 class ResourceManager::Private {
 
@@ -64,6 +55,9 @@ public:
         paletteServer = KoResourceServerProvider::instance()->paletteServer();
         workspaceServer = KisResourceServerProvider::instance()->workspaceServer();
         gamutMaskServer = KoResourceServerProvider::instance()->gamutMaskServer();
+#if defined HAVE_SEEXPR
+        seExprScriptServer = KoResourceServerProvider::instance() ->seExprScriptServer();
+#endif
     }
 
     KoResourceServer<KisBrush>* brushServer;
@@ -73,6 +67,9 @@ public:
     KoResourceServer<KoColorSet>* paletteServer;
     KoResourceServer<KisWorkspaceResource>* workspaceServer;
     KoResourceServer<KoGamutMask>* gamutMaskServer;
+#if defined HAVE_SEEXPR
+    KoResourceServer<KisSeExprScript>* seExprScriptServer;
+#endif
 };
 
 K_PLUGIN_FACTORY_WITH_JSON(ResourceManagerFactory, "kritaresourcemanager.json", registerPlugin<ResourceManager>();)
@@ -203,6 +200,14 @@ KoResourceBundleSP ResourceManager::saveBundle(const DlgCreateBundle &dlgCreateB
         KoResourceSP res = d->gamutMaskServer->resourceByFilename(r);
         newBundle->addResource(ResourceType::GamutMasks, res->filename(), d->gamutMaskServer->assignedTagsList(res), res->md5());
     }
+
+#if defined HAVE_SEEXPR
+    res = dlgCreateBundle.selectedSeExprScripts();
+    Q_FOREACH (const QString &r, res) {
+        KoResourceSP *res = d->seExprScriptServer->resourceByFilename(r);
+        newBundle->addResource(ResourceType::SeExprScripts, res->filename(), d->gamutMaskServer->assignedTagsList(res), res->md5());
+    }
+#endif
     */
 
     newBundle->setMetaData("fileName", bundlePath);
@@ -278,11 +283,11 @@ void ResourceManager::slotImportBundles()
 //        bundle->load();
 //        if (bundle->valid()) {
 //            if (!bundle->install()) {
-//                QMessageBox::warning(0, i18nc("@title:window", "Krita"), i18n("Could not install the resources for bundle %1.", res));
+//                QMessageBox::warning(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Could not install the resources for bundle %1.", res));
 //            }
 //        }
 //        else {
-//            QMessageBox::warning(0, i18nc("@title:window", "Krita"), i18n("Could not load bundle %1.", res));
+//            QMessageBox::warning(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Could not load bundle %1.", res));
 //        }
 
 //        QFileInfo fi(res);

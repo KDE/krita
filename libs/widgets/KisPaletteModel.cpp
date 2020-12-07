@@ -2,19 +2,7 @@
  *  Copyright (c) 2013 Sven Langkamp <sven.langkamp@gmail.com>
  *  Copyright (c) 2018 Michael Zhou <simeirxh@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "KisPaletteModel.h"
@@ -31,7 +19,6 @@
 #include <resources/KoColorSet.h>
 #include <KoColorDisplayRendererInterface.h>
 #include <KisResourceModel.h>
-#include <KisResourceModelProvider.h>
 
 KisPaletteModel::KisPaletteModel(QObject* parent)
     : QAbstractTableModel(parent)
@@ -93,7 +80,7 @@ Qt::ItemFlags KisPaletteModel::flags(const QModelIndex& index) const
 
 QModelIndex KisPaletteModel::index(int row, int column, const QModelIndex& parent) const
 {
-    Q_UNUSED(parent)
+    Q_UNUSED(parent);
     Q_ASSERT(m_colorSet);
     if (m_rowGroupNameMap.isEmpty()) {
         return {};
@@ -467,8 +454,8 @@ void KisPaletteModel::setDisplayRenderer(const KoColorDisplayRendererInterface *
 void KisPaletteModel::saveModification()
 {
     qDebug() << "saving modification in palette model" << m_colorSet->filename() << m_colorSet->storageLocation();
-    KisResourceModel *model = KisResourceModelProvider::resourceModel(m_colorSet->resourceType().first);
-    model->updateResource(m_colorSet);
+    KisResourceModel model(m_colorSet->resourceType().first);
+    model.updateResource(m_colorSet);
 }
 
 void KisPaletteModel::slotDisplayConfigurationChanged()

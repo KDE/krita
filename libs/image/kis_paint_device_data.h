@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2015 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #ifndef __KIS_PAINT_DEVICE_DATA_H
@@ -94,19 +82,11 @@ public:
         {
         }
 
-        virtual void forcedRedo() {
+        void redo() override {
+            KUndo2Command::redo();
+
             m_data->m_colorSpace = m_newCs;
             m_data->m_cache.setupCache();
-        }
-
-        void redo() override {
-            if (m_firstRun) {
-                m_firstRun = false;
-                return;
-            }
-
-            KUndo2Command::redo();
-            forcedRedo();
         }
 
         void undo() override {
@@ -138,9 +118,9 @@ public:
         {
         }
 
-        void forcedRedo() override {
+        void redo() override {
+            ChangeProfileCommand::redo();
             m_data->m_dataManager = m_newDm;
-            ChangeProfileCommand::forcedRedo();
         }
 
         void undo() override {
@@ -162,7 +142,11 @@ public:
             new ChangeProfileCommand(this,
                                      m_colorSpace, dstColorSpace,
                                      parentCommand);
-        cmd->forcedRedo();
+
+        // NOTE: first redo is skipped on a higher level,
+        //       at DeviceChangeColorSpaceCommand
+        cmd->redo();
+
         if (!parentCommand) {
             delete cmd;
         }
@@ -216,7 +200,11 @@ public:
                                         m_dataManager, dstDataManager,
                                         m_colorSpace, dstColorSpace,
                                         parentCommand);
-        cmd->forcedRedo();
+
+        // NOTE: first redo is skipped on a higher level,
+        //       at DeviceChangeColorSpaceCommand
+        cmd->redo();
+
         if (!parentCommand) {
             delete cmd;
         }

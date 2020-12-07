@@ -1,3 +1,7 @@
+/*
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
 #include "kis_animation_utils_test.h"
 
 #include <KoColor.h>
@@ -76,8 +80,8 @@ void KisAnimationUtilsTest::test()
     KisPaintDeviceSP dev1 = layer1->paintDevice();
     KisPaintDeviceSP dev2 = layer2->paintDevice();
 
-    KisKeyframeChannel *channel1 = layer1->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
-    KisKeyframeChannel *channel2 = layer2->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
+    KisKeyframeChannel *channel1 = layer1->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true);
+    KisKeyframeChannel *channel2 = layer2->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true);
 
     channel1->addKeyframe(0);
     channel2->addKeyframe(0);

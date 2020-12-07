@@ -2,19 +2,7 @@
  *  Copyright (c) 2011 Lukáš Tvrdý <lukast.dev@gmail.com>
  *  Copyright (c) 2011 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 #include "kis_tool_multihand.h"
 
@@ -120,7 +108,7 @@ void KisToolMultihand::endPrimaryAction(KoPointerEvent *event)
 
 void KisToolMultihand::beginAlternateAction(KoPointerEvent* event, AlternateAction action)
 {
-    if (action != ChangeSize || m_transformMode != COPYTRANSLATE || !m_addSubbrushesMode) {
+    if ((action != ChangeSize && action != ChangeSizeSnap) || m_transformMode != COPYTRANSLATE || !m_addSubbrushesMode) {
         KisToolBrush::beginAlternateAction(event, action);
         return;
     }
@@ -132,7 +120,7 @@ void KisToolMultihand::beginAlternateAction(KoPointerEvent* event, AlternateActi
 
 void KisToolMultihand::continueAlternateAction(KoPointerEvent* event, AlternateAction action)
 {
-    if (action != ChangeSize || m_transformMode != COPYTRANSLATE || !m_addSubbrushesMode) {
+    if ((action != ChangeSize && action != ChangeSizeSnap) || m_transformMode != COPYTRANSLATE || !m_addSubbrushesMode) {
         KisToolBrush::continueAlternateAction(event, action);
         return;
     }
@@ -145,7 +133,7 @@ void KisToolMultihand::continueAlternateAction(KoPointerEvent* event, AlternateA
 
 void KisToolMultihand::endAlternateAction(KoPointerEvent* event, AlternateAction action)
 {
-    if (action != ChangeSize || m_transformMode != COPYTRANSLATE || !m_addSubbrushesMode) {
+    if ((action != ChangeSize && action != ChangeSizeSnap) || m_transformMode != COPYTRANSLATE || !m_addSubbrushesMode) {
         KisToolBrush::endAlternateAction(event, action);
         return;
     }

@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2013 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_predefined_brush_factory.h"
@@ -42,6 +30,7 @@ KisBrushSP KisPredefinedBrushFactory::createBrush(const QDomElement& brushDefini
     const QString brushFileName = brushDefinition.attribute("filename", "");
     KisBrushSP brush = resourceSourceAdapter.resourceForFilename(brushFileName);
 
+    bool brushtipFound = true;
     //Fallback for files that still use the old format
     if (!brush) {
         QFileInfo info(brushFileName);
@@ -50,6 +39,7 @@ KisBrushSP KisPredefinedBrushFactory::createBrush(const QDomElement& brushDefini
 
     if (!brush) {
         brush = resourceSourceAdapter.fallbackResource();
+        brushtipFound = false;
     }
 
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(brush, 0);
@@ -70,30 +60,36 @@ KisBrushSP KisPredefinedBrushFactory::createBrush(const QDomElement& brushDefini
     double scale = KisDomUtils::toDouble(brushDefinition.attribute("scale", "1.0"));
     brush->setScale(scale);
 
-    bool useColorAsMask = true;
     KisColorfulBrush *colorfulBrush = dynamic_cast<KisColorfulBrush*>(brush.data());
     if (colorfulBrush) {
         /**
          * WARNING: see comment in KisColorfulBrush::setUseColorAsMask()
          */
-        useColorAsMask = (bool)brushDefinition.attribute("ColorAsMask", "1").toInt();
-        colorfulBrush->setUseColorAsMask(useColorAsMask);
         colorfulBrush->setAdjustmentMidPoint(brushDefinition.attribute("AdjustmentMidPoint", "127").toInt());
         colorfulBrush->setBrightnessAdjustment(brushDefinition.attribute("BrightnessAdjustment").toDouble());
         colorfulBrush->setContrastAdjustment(brushDefinition.attribute("ContrastAdjustment").toDouble());
     }
+    if (!brushtipFound) {
+        brush->setBrushApplication(ALPHAMASK);
+    } 
+    else if (brushDefinition.hasAttribute("preserveLightness")) {
+        const int preserveLightness = KisDomUtils::toInt(brushDefinition.attribute("preserveLightness", "0"));
+        const bool useColorAsMask = (bool)brushDefinition.attribute("ColorAsMask", "1").toInt();
 
-    if (brushDefinition.hasAttribute("preserveLightness")) {
-        int preserveLightness = KisDomUtils::toInt(brushDefinition.attribute("preserveLightness", "0"));
         brush->setBrushApplication(preserveLightness ? LIGHTNESSMAP : 
-                    colorfulBrush && !useColorAsMask ? IMAGESTAMP : ALPHAMASK);
+                    colorfulBrush && colorfulBrush->hasColor() && !useColorAsMask ? IMAGESTAMP : ALPHAMASK);
     }
     else if (brushDefinition.hasAttribute("brushApplication")) {
         enumBrushApplication brushApplication = static_cast<enumBrushApplication>(KisDomUtils::toInt(brushDefinition.attribute("brushApplication", "0")));
         brush->setBrushApplication(brushApplication);
     }
-    else {
-        brush->setBrushApplication(colorfulBrush && !useColorAsMask ? IMAGESTAMP : ALPHAMASK);
+    else if (brushDefinition.hasAttribute("ColorAsMask")) {
+        KIS_SAFE_ASSERT_RECOVER_NOOP(colorfulBrush);
+
+        const bool useColorAsMask = (bool)brushDefinition.attribute("ColorAsMask", "1").toInt();
+        brush->setBrushApplication(colorfulBrush && colorfulBrush->hasColor() && !useColorAsMask ? IMAGESTAMP : ALPHAMASK);
+    } else {
+        brush->setBrushApplication(ALPHAMASK);
     }
 
     return brush;

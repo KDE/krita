@@ -3,9 +3,9 @@
   <Actions category="Scripts">
     <text>Python Plugin Importer</text>
 
-    <Action name="plugin_importer">
+    <Action name="plugin_importer_file">
       <icon></icon>
-      <text>Import Python Plugin...</text>
+      <text>Import Python Plugin from File...</text>
       <whatsThis></whatsThis>
       <toolTip></toolTip>
       <iconText></iconText>
@@ -15,5 +15,18 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
-  </Actions>
+
+    <Action name="plugin_importer_web">
+      <icon></icon>
+      <text>Import Python Plugin from Web...</text>
+      <whatsThis></whatsThis>
+      <toolTip></toolTip>
+      <iconText></iconText>
+      <activationFlags>0</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+</Actions>
 </ActionCollection>

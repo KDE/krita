@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2015 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_file_layer_test.h"
@@ -27,6 +15,7 @@
 #include <kis_transform_mask_params_interface.h>
 
 #include <testutil.h>
+#include <testui.h>
 
 #include "config-limit-long-tests.h"
 
@@ -55,10 +44,8 @@ void KisFileLayerTest::testFileLayerPlusTransformMaskOffImage()
     waitForMaskUpdates(p.image->root());
     p.image->waitForDone();
 
-    KisTransformMaskSP mask1 = new KisTransformMask();
+    KisTransformMaskSP mask1 = new KisTransformMask(p.image, "mask1");
     p.image->addNode(mask1, flayer);
-
-    mask1->setName("mask1");
 
     flayer->setDirty(refRect);
     p.image->waitForDone();
@@ -123,10 +110,8 @@ void KisFileLayerTest::testFileLayerPlusTransformMaskSmallFileBigOffset()
     // initialized properly
     QCOMPARE(flayer->original()->defaultBounds()->bounds(), p.image->bounds());
 
-    KisTransformMaskSP mask1 = new KisTransformMask();
+    KisTransformMaskSP mask1 = new KisTransformMask(p.image, "mask1");
     p.image->addNode(mask1, flayer);
-
-    mask1->setName("mask1");
 
     flayer->setDirty(refRect);
     p.image->waitForDone();

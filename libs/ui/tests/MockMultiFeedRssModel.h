@@ -1,3 +1,7 @@
+/*
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
 #ifndef MOCKMULTIFEEDRSSMODEL_H
 #define MOCKMULTIFEEDRSSMODEL_H
 
@@ -12,7 +16,7 @@ class MockMultiFeedRssModel : public MultiFeedRssModel
 public:
     explicit MockMultiFeedRssModel(QObject *parent = 0);
 
-    void addFeed(const QString& feed);
+    void addFeed(const QString& feed) override;
 
     /**
      * @brief to be called in the setup phase of the unittest, before call to addFeed

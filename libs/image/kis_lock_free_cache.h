@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2013 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #ifndef __KIS_CACHE_STATE_VALUE_H
@@ -55,11 +43,7 @@ public:
     }
 
     inline bool endRead(int seq) const {
-        bool result =
-            seq == m_value &&
-            (seq & IsValidMask) &&
-            !(seq & WritersCountMask);
-
+        bool result = seq == m_value;
         return result;
     }
 
@@ -129,20 +113,20 @@ public:
     T getValue() const {
         KisCacheStateValue::SeqValue seqValue;
         bool isValid = false;
-        T newValue;
+        T savedValue;
 
         if (m_state.startRead(&seqValue)) {
-            newValue = m_value;
+            savedValue = m_value;
             isValid = m_state.endRead(seqValue);
         }
 
         if (isValid) {
-            return newValue;
+            return savedValue;
         } else if (m_state.startWrite(&seqValue)) {
-            newValue = calculateNewValue();
-            m_value = newValue;
+            savedValue = calculateNewValue();
+            m_value = savedValue;
             m_state.endWrite(seqValue);
-            return newValue;
+            return savedValue;
         } else {
             return calculateNewValue();
         }
@@ -151,11 +135,87 @@ public:
     bool tryGetValue(T &result) const {
         KisCacheStateValue::SeqValue seqValue;
         bool isValid = false;
+        T savedValue;
+
+        if (m_state.startRead(&seqValue)) {
+            savedValue = m_value;
+            isValid = m_state.endRead(seqValue);
+        }
+
+        if (isValid) {
+            result = savedValue;
+        }
+
+        return isValid;
+    }
+
+protected:
+    /**
+     * Calculate the value. Used by the cache
+     * internally. Reimplemented by the user.
+     */
+    virtual T calculateNewValue() const = 0;
+
+private:
+    mutable KisCacheStateValue m_state;
+    mutable T m_value;
+};
+
+template <typename T, typename Mode>
+class KisLockFreeCacheWithModeConsistency
+{
+public:
+    virtual ~KisLockFreeCacheWithModeConsistency()
+    {
+    }
+
+    /**
+     * Notify the cache that the value has changed
+     */
+    void invalidate() {
+        m_state.invalidate();
+    }
+
+    /**
+     * Calculate the value or fetch it from the cache
+     */
+    T getValue(Mode mode) const {
+        KisCacheStateValue::SeqValue seqValue;
+        bool isValid = false;
+        T savedValue;
+        Mode savedMode;
+
+        if (m_state.startRead(&seqValue)) {
+            savedValue = m_value;
+            savedMode = m_mode;
+            isValid = m_state.endRead(seqValue);
+            isValid &= savedMode == mode;
+        }
+
+        if (isValid) {
+            return savedValue;
+        } else if (m_state.startWrite(&seqValue)) {
+            savedValue = calculateNewValue();
+            m_value = savedValue;
+            m_mode = mode;
+            m_state.endWrite(seqValue);
+            return savedValue;
+        } else {
+            return calculateNewValue();
+        }
+    }
+
+    bool tryGetValue(T &result, Mode mode) const {
+        KisCacheStateValue::SeqValue seqValue;
+        bool isValid = false;
         T newValue;
+        Mode savedMode;
 
         if (m_state.startRead(&seqValue)) {
             newValue = m_value;
+            savedMode = m_mode;
             isValid = m_state.endRead(seqValue);
+            isValid &= savedMode == mode;
         }
 
         if (isValid) {
@@ -175,6 +235,7 @@ protected:
 private:
     mutable KisCacheStateValue m_state;
     mutable T m_value;
+    mutable Mode m_mode;
 };
 
 

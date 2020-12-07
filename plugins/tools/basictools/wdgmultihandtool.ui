@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgMultiHandTool</class>
  <widget class="QWidget" name="WdgMultiHandTool">
   <property name="geometry">
@@ -45,7 +49,7 @@
      <property name="verticalSpacing">
       <number>7</number>
      </property>
-     <item row="4" column="0">
+     <item column="0" row="4">
       <widget class="QLabel" name="brushesLabel">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -61,17 +65,17 @@
        </property>
       </widget>
      </item>
-     <item row="7" column="1">
+     <item column="1" row="7">
       <widget class="KisSliderSpinBox" name="translationRadiusSpinbox" native="true"/>
      </item>
-     <item row="8" column="0">
+     <item column="0" row="8">
       <widget class="QLabel" name="subbrushLabel">
        <property name="text">
         <string>Subbrushes:</string>
        </property>
       </widget>
      </item>
-     <item row="7" column="0">
+     <item column="0" row="7">
       <widget class="QLabel" name="radiusLabel">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -87,7 +91,7 @@
        </property>
       </widget>
      </item>
-     <item row="6" column="1">
+     <item column="1" row="6">
       <widget class="QCheckBox" name="horizontalCheckbox">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -100,7 +104,7 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="1">
+     <item column="1" row="1">
       <widget class="QCheckBox" name="showAxesCheckbox">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -113,7 +117,7 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="0">
+     <item column="0" row="3">
       <widget class="QLabel" name="axisRotationLabel">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -129,7 +133,7 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="1">
+     <item column="1" row="3">
       <widget class="KisDoubleSliderSpinBox" name="axisRotationSpinbox" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -145,14 +149,14 @@
        </property>
       </widget>
      </item>
-     <item row="5" column="1">
+     <item column="1" row="5">
       <widget class="QCheckBox" name="verticalCheckbox">
        <property name="text">
         <string>Vertical</string>
        </property>
       </widget>
      </item>
-     <item row="0" column="0">
+     <item column="0" row="0">
       <widget class="QLabel" name="axisTypeLabel">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -168,7 +172,7 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="1">
+     <item column="1" row="2">
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
         <widget class="QPushButton" name="moveOriginButton">
@@ -210,10 +214,10 @@
        </item>
       </layout>
      </item>
-     <item row="4" column="1">
+     <item column="1" row="4">
       <widget class="KisSliderSpinBox" name="brushCountSpinBox" native="true"/>
      </item>
-     <item row="2" column="0">
+     <item column="0" row="2">
       <widget class="QLabel" name="label">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -232,7 +236,7 @@
        </property>
       </widget>
      </item>
-     <item row="8" column="1">
+     <item column="1" row="8">
       <layout class="QHBoxLayout" name="horizontalLayout_2">
        <item>
         <widget class="QPushButton" name="addSubbrushButton">
@@ -256,7 +260,7 @@
        </item>
       </layout>
      </item>
-     <item row="0" column="1">
+     <item column="1" row="0">
       <widget class="QComboBox" name="multihandTypeCombobox"/>
      </item>
     </layout>

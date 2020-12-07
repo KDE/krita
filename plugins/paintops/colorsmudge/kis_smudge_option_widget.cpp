@@ -2,20 +2,7 @@
  *
  * Copyright (C) 2011 Silvio Heinrich <plassy@web.de>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #include <klocalizedstring.h>
@@ -41,7 +28,7 @@ KisSmudgeOptionWidget::KisSmudgeOptionWidget()
     mCbSmudgeMode->addItem("dulling-placeholder" , KisSmudgeOption::DULLING_MODE);
 
     mChkSmearAlpha = new QCheckBox();
-    
+
     // the text for the second item is initialized here
     updateBrushPierced(false);
 
@@ -49,15 +36,15 @@ KisSmudgeOptionWidget::KisSmudgeOptionWidget()
     formLayout->addRow(i18n("Smudge mode:"), mCbSmudgeMode);
     formLayout->addRow(i18n("Smear alpha:"), mChkSmearAlpha);
 
-    QVBoxLayout* v = new QVBoxLayout();
-    v->setMargin(0);
-    QWidget*     w = new QWidget();
+    QWidget     *page = new QWidget();
+    QVBoxLayout *pageLayout = new QVBoxLayout(page);
+    pageLayout->setMargin(0);
 
-    v->addLayout(formLayout);
-    v->addWidget(curveWidget());
-    w->setLayout(v);
+    pageLayout->addLayout(formLayout);
+    pageLayout->addWidget(curveWidget());
 
-    KisCurveOptionWidget::setConfigurationPage(w);
+
+    KisCurveOptionWidget::setConfigurationPage(page);
 
     connect(mCbSmudgeMode, SIGNAL(currentIndexChanged(int)), this, SLOT(slotCurrentIndexChanged(int)));
     connect(mChkSmearAlpha, SIGNAL(toggled(bool)), SLOT(slotSmearAlphaChanged(bool)));

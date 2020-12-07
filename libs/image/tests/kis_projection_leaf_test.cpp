@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2015 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_projection_leaf_test.h"
@@ -26,6 +14,7 @@
 #include "kis_projection_leaf.h"
 #include "kis_group_layer.h"
 
+#include "kistest.h"
 
 
 struct TestImage : TestUtil::QImageBasedTest {
@@ -304,28 +293,14 @@ void KisProjectionLeafTest::testSkippedSelectionMasks()
 
     KisGroupLayerSP group1 = new KisGroupLayer(t.image, "group1", OPACITY_OPAQUE_U8);
     KisPaintLayerSP paint2 = new KisPaintLayer(t.image, "paint2", OPACITY_OPAQUE_U8);
-    KisSelectionMaskSP selection3 = new KisSelectionMask(t.image);
-    selection3->setName("selection3");
-
+    KisSelectionMaskSP selection3 = new KisSelectionMask(t.image, "selection3");
     KisPaintLayerSP paint4 = new KisPaintLayer(t.image, "paint4", OPACITY_OPAQUE_U8);
-
-    KisTransparencyMaskSP tmask5 = new KisTransparencyMask();
-    tmask5->setName("tmask5");
-
-    KisSelectionMaskSP selection6 = new KisSelectionMask(t.image);
-    selection6->setName("selection6");
-
-    KisTransparencyMaskSP tmask7 = new KisTransparencyMask();
-    tmask7->setName("tmask7");
-
+    KisTransparencyMaskSP tmask5 = new KisTransparencyMask(t.image, "tmask5");
+    KisSelectionMaskSP selection6 = new KisSelectionMask(t.image, "selection6");
+    KisTransparencyMaskSP tmask7 = new KisTransparencyMask(t.image, "tmask7");
     KisPaintLayerSP paint8 = new KisPaintLayer(t.image, "paint8", OPACITY_OPAQUE_U8);
-
-    KisSelectionMaskSP selection9 = new KisSelectionMask(t.image);
-    selection9->setName("selection9");
-
-    KisTransparencyMaskSP tmask10 = new KisTransparencyMask();
-    tmask10->setName("tmask10");
-
+    KisSelectionMaskSP selection9 = new KisSelectionMask(t.image, "selection9");
+    KisTransparencyMaskSP tmask10 = new KisTransparencyMask(t.image, "tmask10");
 
     t.image->addNode(group1, t.image->root(), t.findBlur1());
 
@@ -465,4 +440,4 @@ void KisProjectionLeafTest::testSelectionMaskOverlay()
     }
 }
 
-QTEST_MAIN(KisProjectionLeafTest)
+KISTEST_MAIN(KisProjectionLeafTest)

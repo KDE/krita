@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2007 Boudewijn Rempt boud@valdyas.org
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_mask_test.h"
@@ -27,7 +15,7 @@
 #include "kis_selection.h"
 #include "kis_image.h"
 #include "kis_group_layer.h"
-#include "testutil.h"
+#include <testutil.h>
 
 
 class TestMask : public KisMask
@@ -35,7 +23,7 @@ class TestMask : public KisMask
 public:
     using KisMask::apply;
 
-    TestMask() : KisMask("TestMask") {
+    TestMask(KisImageWSP image) : KisMask(image, "TestMask") {
     }
 
     KisNodeSP clone() const override {
@@ -54,7 +42,7 @@ typedef KisSharedPtr<TestMask> TestMaskSP;
 void KisMaskTest::testCreation()
 {
     TestUtil::MaskParent p;
-    TestMaskSP mask = new TestMask;
+    TestMaskSP mask = new TestMask(p.image);
     mask->initSelection(p.layer);
 
     QCOMPARE(mask->extent(), QRect(0,0,512,512));
@@ -64,7 +52,7 @@ void KisMaskTest::testCreation()
 void KisMaskTest::testSelection()
 {
     TestUtil::MaskParent p;
-    TestMaskSP mask = new TestMask;
+    TestMaskSP mask = new TestMask(p.image);
 
     KisSelectionSP sel = new KisSelection();
     sel->pixelSelection()->select(QRect(0,0,100,100), MAX_SELECTED);
@@ -91,7 +79,7 @@ void KisMaskTest::testCropUpdateBySelection()
     QRect selectionRect(10, 10, 20, 20);
     QRect updateRect(64, 64, 20, 20);
 
-    TestMaskSP mask = new TestMask;
+    TestMaskSP mask = new TestMask(p.image);
 
     KisSelectionSP sel = new KisSelection();
     sel->pixelSelection()->select(selectionRect, MAX_SELECTED);
@@ -114,14 +102,17 @@ void KisMaskTest::testSelectionParent()
         const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
         KisImageSP image = new KisImage(0, 100, 100, cs, "stest");
 
-        KisMaskSP mask = new TestMask;
+        KisMaskSP mask = new TestMask(image);
         mask->initSelection(image->rootLayer());
         KisSelectionSP selection = mask->selection();
         QCOMPARE(selection->parentNode(), KisNodeWSP(mask));
     }
 
     {
-        KisMaskSP mask = new TestMask;
+        const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+        KisImageSP image = new KisImage(0, 100, 100, cs, "stest");
+
+        KisMaskSP mask = new TestMask(image);
         mask->setSelection(new KisSelection());
         KisSelectionSP selection = mask->selection();
         QCOMPARE(selection->parentNode(), KisNodeWSP(mask));
@@ -133,7 +124,7 @@ void KisMaskTest::testDeferredOffsetInitialization()
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(0, 100, 100, cs, "stest");
 
-    KisMaskSP mask = new TestMask;
+    KisMaskSP mask = new TestMask(image);
 
     QCOMPARE(mask->x(), 0);
     QCOMPARE(mask->y(), 0);

@@ -6,20 +6,7 @@
  *  Copyright (c) 2007 Thomas Zander <zander@kde.org>
  *  Copyright (c) 2007 Adrian Page <adrian@pagenet.plus.com>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
 #include "LcmsColorProfileContainer.h"
@@ -159,14 +146,22 @@ bool LcmsColorProfileContainer::init()
         //This is where obtain the whitepoint, and convert it to the actual white point of the profile in the case a Chromatic adaption tag is
         //present. This is necessary for profiles following the v4 spec.
         cmsCIEXYZ baseMediaWhitePoint;//dummy to hold copy of mediawhitepoint if this is modified by chromatic adaption.
-        if (cmsIsTag(d->profile, cmsSigMediaWhitePointTag)) {
-            d->mediaWhitePoint = *((cmsCIEXYZ *)cmsReadTag(d->profile, cmsSigMediaWhitePointTag));
+        cmsCIEXYZ *mediaWhitePointPtr;
+        // Possible bug in profiles: there are in fact some that says they contain that tag
+        //    but in fact the pointer is null.
+        //    Let's not crash on it anyway, and assume there is no white point instead.
+        //    BUG:423685
+        if (cmsIsTag(d->profile, cmsSigMediaWhitePointTag)
+                && (mediaWhitePointPtr = (cmsCIEXYZ *)cmsReadTag(d->profile, cmsSigMediaWhitePointTag))) {
+
+            d->mediaWhitePoint = *(mediaWhitePointPtr);
             baseMediaWhitePoint = d->mediaWhitePoint;
             cmsXYZ2xyY(&d->whitePoint, &d->mediaWhitePoint);
-
-            if (cmsIsTag(d->profile, cmsSigChromaticAdaptationTag)) {
+            cmsCIEXYZ *CAM1;
+            if (cmsIsTag(d->profile, cmsSigChromaticAdaptationTag)
+                    && (CAM1 = (cmsCIEXYZ *)cmsReadTag(d->profile, cmsSigChromaticAdaptationTag))) {
                 //the chromatic adaption tag represent a matrix from the actual white point of the profile to D50.
-                cmsCIEXYZ *CAM1 = (cmsCIEXYZ *)cmsReadTag(d->profile, cmsSigChromaticAdaptationTag);
+
                 //We first put all our data into structures we can manipulate.
                 double d3dummy [3] = {d->mediaWhitePoint.X, d->mediaWhitePoint.Y, d->mediaWhitePoint.Z};
                 QGenericMatrix<1, 3, double> whitePointMatrix(d3dummy);
@@ -192,11 +187,17 @@ bool LcmsColorProfileContainer::init()
             }
         }
         //This is for RGB profiles, but it only works for matrix profiles. Need to design it to work with non-matrix profiles.
-        if (cmsIsTag(d->profile, cmsSigRedColorantTag)) {
+        cmsCIEXYZ *tempColorantsRed, *tempColorantsGreen, *tempColorantsBlue;
+        // Note: don't assume that cmsIsTag is enough to check for errors; check the pointers, too
+        // BUG:423685
+        if (cmsIsTag(d->profile, cmsSigRedColorantTag) && cmsIsTag(d->profile, cmsSigRedColorantTag) && cmsIsTag(d->profile, cmsSigRedColorantTag)
+                && (tempColorantsRed = (cmsCIEXYZ *)cmsReadTag(d->profile, cmsSigRedColorantTag))
+                && (tempColorantsGreen = (cmsCIEXYZ *)cmsReadTag(d->profile, cmsSigGreenColorantTag))
+                && (tempColorantsBlue = (cmsCIEXYZ *)cmsReadTag(d->profile, cmsSigBlueColorantTag))) {
             cmsCIEXYZTRIPLE tempColorants;
-            tempColorants.Red = *((cmsCIEXYZ *)cmsReadTag(d->profile, cmsSigRedColorantTag));
-            tempColorants.Green = *((cmsCIEXYZ *)cmsReadTag(d->profile, cmsSigGreenColorantTag));
-            tempColorants.Blue = *((cmsCIEXYZ *)cmsReadTag(d->profile, cmsSigBlueColorantTag));
+            tempColorants.Red = *tempColorantsRed;
+            tempColorants.Green = *tempColorantsGreen;
+            tempColorants.Blue = *tempColorantsBlue;
             //convert to d65, this is useless.
             cmsAdaptToIlluminant(&d->colorants.Red, &baseMediaWhitePoint, &d->mediaWhitePoint, &tempColorants.Red);
             cmsAdaptToIlluminant(&d->colorants.Green, &baseMediaWhitePoint, &d->mediaWhitePoint, &tempColorants.Green);

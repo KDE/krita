@@ -1,25 +1,14 @@
 /*
  *  Copyright (c) 2014 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_tablet_debugger.h"
 
 #include <QEvent>
 #include <QMessageBox>
+#include <QApplication>
 
 #include <kis_debug.h>
 #include <kis_config.h>
@@ -81,6 +70,10 @@ QString KisTabletDebugger::exTypeToString(QEvent::Type type) {
         type == QTabletEvent::TabletMove ? "TabletMove" :
         type == QTabletEvent::TabletPress ? "TabletPress" :
         type == QTabletEvent::TabletRelease ? "TabletRelease" :
+        type == QTouchEvent::TouchBegin ? "TouchBegin" :
+        type == QTouchEvent::TouchUpdate ? "TouchUpdate" :
+        type == QTouchEvent::TouchEnd ? "TouchEnd" :
+        type == QTouchEvent::TouchCancel ? "TouchCancel" :
         "unknown";
 }
 
@@ -100,7 +93,7 @@ KisTabletDebugger* KisTabletDebugger::instance()
 void KisTabletDebugger::toggleDebugging()
 {
     m_debugEnabled = !m_debugEnabled;
-    QMessageBox::information(0, i18nc("@title:window", "Krita"), m_debugEnabled ?
+    QMessageBox::information(qApp->activeWindow(), i18nc("@title:window", "Krita"), m_debugEnabled ?
                              i18n("Tablet Event Logging Enabled") :
                              i18n("Tablet Event Logging Disabled"));
     if (m_debugEnabled) {
@@ -170,6 +163,24 @@ QString KisTabletDebugger::eventToString(const QWheelEvent &ev, const QString &p
 
     s << "delta: " << ev.delta() << " ";
     s << "orientation: " << (ev.orientation() == Qt::Horizontal ? "H" : "V") << " ";
+
+    return string;
+}
+
+QString KisTabletDebugger::eventToString(const QTouchEvent &ev, const QString &prefix)
+{
+    QString string;
+    QTextStream s(&string);
+
+    dumpBaseParams(s, ev, prefix);
+
+    s << (ev.device()->type() ? "TouchPad" : "TouchScreen") << " ";
+    for (const auto& touchpoint: ev.touchPoints()) {
+        s << "id: " << touchpoint.id() << " ";
+        s << "hires: " << qSetFieldWidth(8) << touchpoint.screenPos().x() << qSetFieldWidth(0) << "," << qSetFieldWidth(8) << touchpoint.screenPos().y() << qSetFieldWidth(0) << " ";
+        s << "prs: " << touchpoint.pressure() << " ";
+        s << "rot: "<< touchpoint.rotation() << "; ";
+    }
 
     return string;
 }

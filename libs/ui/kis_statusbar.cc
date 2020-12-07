@@ -2,19 +2,7 @@
  *
  *  Copyright (c) 2006 Boudewijn Rempt <boud@valdyas.org>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_statusbar.h"
@@ -35,6 +23,7 @@
 #include <KoColorSpace.h>
 #include <KoToolManager.h>
 #include <KoViewConverter.h>
+#include <QHBoxLayout>
 
 #include <KisUsageLogger.h>
 
@@ -125,6 +114,15 @@ void KisStatusBar::setup()
 
     m_progressUpdater.reset(new KisProgressUpdater(m_progress, m_progress->progressProxy()));
     m_progressUpdater->setAutoNestNames(true);
+
+    m_extraWidgetsParent = new QFrame;
+    m_extraWidgetsParent->setMinimumWidth(100);
+    m_extraWidgetsParent->setObjectName("Extra Widgets Parent");
+    m_extraWidgetsLayout = new QHBoxLayout;
+    m_extraWidgetsLayout->setContentsMargins(0, 0, 0, 0);
+    m_extraWidgetsLayout->setObjectName("Extra Widgets Layout");
+    m_extraWidgetsParent->setLayout(m_extraWidgetsLayout);
+    addStatusBarItem(m_extraWidgetsParent);
 
     m_memoryReportBox = new KisMemoryReportButton();
     m_memoryReportBox->setObjectName("memoryReportBox");
@@ -422,6 +420,16 @@ void KisStatusBar::updateStatusBarProfileLabel()
 KoProgressUpdater *KisStatusBar::progressUpdater()
 {
     return m_progressUpdater.data();
+}
+
+void KisStatusBar::addExtraWidget(QWidget *widget)
+{
+    m_extraWidgetsLayout->addWidget(widget);
+}
+
+void KisStatusBar::removeExtraWidget(QWidget *widget)
+{
+    m_extraWidgetsLayout->removeWidget(widget);
 }
 
 

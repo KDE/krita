@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+#
+#  SPDX-License-Identifier: GPL-3.0-or-later
+#
 
 # osxbuild.sh automates building and installing of krita and krita dependencies
 # for OSX, the script only needs you to set BUILDROOT environment to work
@@ -96,7 +99,7 @@ fi
 
 # configure max core for make compile
 ((MAKE_THREADS=1))
-if test ${OSTYPE} == "darwin*"; then
+if [[ "${OSTYPE}" == "darwin"* ]]; then
     ((MAKE_THREADS = $(sysctl -n hw.logicalcpu)))
 fi
 
@@ -182,7 +185,7 @@ cmake_3rdparty () {
         fi
         print_msg "Building ${package}"
         log_cmd cmake --build . --config RelWithDebInfo --target ${package}
-        
+
         print_if_error "Failed build ${package}"
         if [[ ! ${osxbuild_error} -ne 0 ]]; then
             print_msg "Build Success! ${package}"
@@ -269,7 +272,7 @@ build_3rdparty () {
         # -DLDFLAGS=-L${KIS_INSTALL_DIR}/lib
 
     print_msg "finished 3rdparty build setup"
-    
+
     if [[ -n ${1} ]]; then
         cmake_3rdparty "${@}"
         # log "Syncing install backup..."
@@ -289,7 +292,6 @@ build_3rdparty () {
         ext_eigen3 \
         ext_exiv2 \
         ext_fftw3 \
-        ext_ilmbase \
         ext_jpeg \
         ext_lcms2 \
         ext_ocio \
@@ -343,6 +345,8 @@ build_3rdparty () {
         ext_kwindowsystem \
         ext_quazip
 
+    cmake_3rdparty ext_seexpr
+    cmake_3rdparty ext_mypaint
 
     ## All builds done, creating a new install onlydeps install dir
     dir_clean "${KIS_INSTALL_DIR}.onlydeps"
@@ -391,12 +395,10 @@ rebuild_3rdparty () {
         ext_expat \
         ext_exiv2 \
         ext_fftw3 \
-        ext_ilmbase \
         ext_jpeg \
         ext_patch \
         ext_lcms2 \
         ext_ocio \
-        ext_ilmbase \
         ext_openexr
         #ext_openjpeg
 
@@ -434,6 +436,9 @@ rebuild_3rdparty () {
         ext_kimageformats \
         ext_kwindowsystem \
         ext_quazip
+
+    build_install_ext \
+        ext_seexpr
 }
 
 #not tested
@@ -542,7 +547,7 @@ install_krita () {
 
     # compile integrations
     if test ${OSTYPE} == "darwin*"; then
-        cd ${KIS_BUILD_DIR}/krita/integration/kritaquicklook
+        cd ${KIS_BUILD_DIR}/krita/integration
         make install
     fi
 }
@@ -663,7 +668,7 @@ osxbuild.sh install ${KIS_BUILD_DIR}"
             log "File not a tarball tar.gz file"
         fi
 
-        
+
 
     elif [[ ${1} = "clean" ]]; then
         # remove all build and install directories to start

@@ -1,19 +1,7 @@
 /*
  * Copyright (C) 2007 Cyrille Berger <cberger@cberger.net>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_tiff_test.h"
@@ -28,7 +16,7 @@
 #include <KoColor.h>
 
 #include "kisexiv2/kis_exiv2.h"
-#include  <sdk/tests/kistest.h>
+#include  <sdk/tests/testui.h>
 #include <KoColorModelStandardIdsUtils.h>
 
 #ifndef FILES_DATA_DIR
@@ -122,7 +110,7 @@ void KisTiffTest::testSaveTiffColorSpace(QString colorModel, QString colorDepth,
 {
     const KoColorSpace *space = KoColorSpaceRegistry::instance()->colorSpace(colorModel, colorDepth, colorProfile);
     if (space) {
-        TestUtil::testExportToColorSpace(QString(FILES_DATA_DIR), TiffMimetype, space, ImportExportCodes::OK, true);
+        TestUtil::testExportToColorSpace(QString(FILES_DATA_DIR), TiffMimetype, space, ImportExportCodes::OK);
     }
 }
 
@@ -187,7 +175,7 @@ void KisTiffTest::testImportFromWriteonly()
 
 void KisTiffTest::testExportToReadonly()
 {
-    TestUtil::testExportToReadonly(QString(FILES_DATA_DIR), TiffMimetype, true);
+    TestUtil::testExportToReadonly(QString(FILES_DATA_DIR), TiffMimetype);
 }
 
 

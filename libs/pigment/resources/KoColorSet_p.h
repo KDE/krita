@@ -1,3 +1,7 @@
+/*
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
 #ifndef KOCOLORSET_P_H
 #define KOCOLORSET_P_H
 

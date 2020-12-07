@@ -2,20 +2,7 @@
  * Copyright (C) Boudewijn Rempt <boud@valdyas.org>, (C) 2012
  * Copyright (C) Mohit Goyal <mohit.bits2011@gmail.com>, (C) 2014
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 #include "kis_texture_option.h"
 
@@ -214,8 +201,8 @@ void KisTextureOption::resetGUI(KoResourceSP res)
 
 
 KisTextureProperties::KisTextureProperties(int levelOfDetail)
-    : m_levelOfDetail(levelOfDetail),
-      m_gradient(0)
+    : m_gradient(0)
+    , m_levelOfDetail(levelOfDetail)
 {
 }
 
@@ -226,7 +213,10 @@ void KisTextureProperties::fillProperties(const KisPropertiesConfigurationSP set
         return;
     }
 
-    m_maskInfo = toQShared(new KisTextureMaskInfo(m_levelOfDetail));
+    m_texturingMode = (TexturingMode)setting->getInt("Texture/Pattern/TexturingMode", MULTIPLY);
+    bool preserveAlpha = m_texturingMode == LIGHTNESS || m_texturingMode == GRADIENT;
+
+    m_maskInfo = toQShared(new KisTextureMaskInfo(m_levelOfDetail, preserveAlpha));
     if (!m_maskInfo->fillProperties(setting, resourcesInterface)) {
         warnKrita << "WARNING: Couldn't load the pattern for a stroke";
         m_enabled = false;
@@ -238,7 +228,6 @@ void KisTextureProperties::fillProperties(const KisPropertiesConfigurationSP set
     m_enabled = setting->getBool("Texture/Pattern/Enabled", false);
     m_offsetX = setting->getInt("Texture/Pattern/OffsetX");
     m_offsetY = setting->getInt("Texture/Pattern/OffsetY");
-    m_texturingMode = (TexturingMode) setting->getInt("Texture/Pattern/TexturingMode", MULTIPLY);
 
     if (m_texturingMode == GRADIENT && canvasResourcesInterface) {
         KoAbstractGradientSP gradient = canvasResourcesInterface->resource(KoCanvasResource::CurrentGradient).value<KoAbstractGradientSP>();
@@ -308,7 +297,7 @@ void KisTextureProperties::applyGradient(KisFixedPaintDeviceSP dab, const QPoint
 
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_gradient && m_gradient->valid());
 
-    KisPaintDeviceSP fillDevice = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
+    KisPaintDeviceSP fillDevice = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
     QRect rect = dab->bounds();
 
     KisPaintDeviceSP mask = m_maskInfo->mask();
@@ -339,10 +328,12 @@ void KisTextureProperties::applyGradient(KisFixedPaintDeviceSP dab, const QPoint
     for (int row = 0; row < rect.height(); ++row) {
         for (int col = 0; col < rect.width(); ++col) {
 
-            qreal gradientvalue = qreal(*iter->oldRawData()) / 255.0;
+            const QRgb* maskQRgb = reinterpret_cast<const QRgb*>(iter->oldRawData());
+            qreal gradientvalue = qreal(qGray(*maskQRgb))/255.0;//qreal(*iter->oldRawData()) / 255.0;
             KoColor paintcolor;
             paintcolor.setColor(m_cachedGradient.cachedAt(gradientvalue), dab->colorSpace());
-            paintcolor.setOpacity(qMin(paintcolor.opacityF(), dab->colorSpace()->opacityF(dabData)));
+            qreal paintOpacity = paintcolor.opacityF() * (qreal(qAlpha(*maskQRgb)) / 255.0);
+            paintcolor.setOpacity(qMin(paintOpacity, dab->colorSpace()->opacityF(dabData)));
             colors[0] = paintcolor.data();
             KoColor dabColor(dabData, dab->colorSpace());
             colors[1] = dabColor.data();

@@ -1,3 +1,7 @@
+/*
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
 #include "TestKoColorSpaceAbstract.h"
 
 #include "KoColorSpaceAbstract.h"
@@ -10,18 +14,25 @@
 template <class T>
 T mixOpExpectedAlpha(T alpha1, T alpha2, const qint16 *weights)
 {
+    using compositetype = typename KoColorSpaceMathsTraits<T>::compositetype;
+
     const int sumOfWeights = 255;
-    return (weights[0] * alpha1 + weights[1] * alpha2) / sumOfWeights;
+    return safeDivideWithRound<compositetype>(weights[0] * alpha1 + weights[1] * alpha2, sumOfWeights);
 }
 
 template <class T>
 T mixOpExpectedColor(T color1, T alpha1, T color2, T alpha2, const qint16 *weights)
 {
+    using compositetype = typename KoColorSpaceMathsTraits<T>::compositetype;
+
     const int sumOfWeights = 255;
     const T newAlpha = mixOpExpectedAlpha(alpha1, alpha2, weights);
 
     if (newAlpha > 0) {
-        return (((weights[0] * color1 * alpha1) + (weights[1] * color2 * alpha2)) / sumOfWeights) / newAlpha;
+        return safeDivideWithRound<compositetype>(
+                safeDivideWithRound<compositetype>(
+                    (weights[0] * color1 * alpha1) + (weights[1] * color2 * alpha2), sumOfWeights),
+                newAlpha);
     } else {
         return 0;
     }
@@ -30,8 +41,10 @@ T mixOpExpectedColor(T color1, T alpha1, T color2, T alpha2, const qint16 *weigh
 template <class T>
 T mixOpNoAlphaExpectedColor(T color1, T color2, const qint16 *weights)
 {
+    using compositetype = typename KoColorSpaceMathsTraits<T>::compositetype;
+
     const int sumOfWeights = 255;
-    return ((weights[0] * color1) + (weights[1] * color2)) / sumOfWeights;
+    return safeDivideWithRound<compositetype>((weights[0] * color1) + (weights[1] * color2), sumOfWeights);
 }
 
 void TestKoColorSpaceAbstract::testMixColorsOpU8()

@@ -1,19 +1,7 @@
 /*
  * Copyright (c) 2017 Boudewijn Rempt <boud@valdyas.org>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "QMic.h"
@@ -123,7 +111,7 @@ void QMic::slotQMic(bool again)
     // find the krita-gmic-qt plugin
     QString pluginPath = PluginSettings::gmicQtPath();
     if (pluginPath.isEmpty() || !QFileInfo(pluginPath).exists() || !QFileInfo(pluginPath).isFile()) {
-        QMessageBox::warning(0, i18nc("@title:window", "Krita"), i18n("Krita cannot find the gmic-qt plugin. You can set the location of the gmic-qt plugin in Settings/Configure Krita."));
+        QMessageBox::warning(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Krita cannot find the gmic-qt plugin. You can set the location of the gmic-qt plugin in Settings/Configure Krita."));
         return;
     }
 
@@ -324,7 +312,7 @@ void QMic::slotGmicFinished(bool successfully, int milliseconds, const QString &
     }
     else {
         m_gmicApplicator->cancel();
-        QMessageBox::warning(0, i18nc("@title:window", "Krita"), i18n("G'Mic failed, reason:") + msg);
+        QMessageBox::warning(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("G'Mic failed, reason:") + msg);
     }
 }
 

@@ -1,20 +1,7 @@
 /*
  *  Copyright (c) 2011 Boudewijn Rempt <boud@valdyas.org>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.1-or-later
  */
 
 #include "kis_mimedata.h"
@@ -144,7 +131,7 @@ QVariant KisMimeData::retrieveData(const QString &mimetype, QVariant::Type prefe
     if (mimetype == "application/x-qt-image") {
         KisConfig cfg(true);
 
-        KisDocument *doc = createDocument(m_nodes, m_image);
+        QScopedPointer<KisDocument> doc(createDocument(m_nodes, m_image));
 
         return doc->image()->projection()->convertToQImage(cfg.displayProfile(QApplication::desktop()->screenNumber(qApp->activeWindow())),
                                                            KoColorConversionTransformation::internalRenderingIntent(),
@@ -315,7 +302,7 @@ QList<KisNodeSP> KisMimeData::loadNodes(const QMimeData *data,
         bool result = tempDoc->openUrl(QUrl::fromEncoded(ba));
 
         if (result) {
-            KisImageWSP tempImage = tempDoc->image();
+            KisImageSP tempImage = tempDoc->image();
             Q_FOREACH (KisNodeSP node, tempImage->root()->childNodes(QStringList(), KoProperties())) {
                 tempImage->removeNode(node);
                 initializeExternalNode(&node, image, shapeController);
@@ -383,7 +370,7 @@ bool nodeAllowsAsChild(KisNodeSP parent, KisNodeList nodes)
 {
     bool result = true;
     Q_FOREACH (KisNodeSP node, nodes) {
-        if (!parent->allowAsChild(node)) {
+        if (!parent->allowAsChild(node) || !parent->isEditable(false)) {
             result = false;
             break;
         }

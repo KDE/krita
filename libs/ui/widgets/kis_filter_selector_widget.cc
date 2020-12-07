@@ -2,10 +2,7 @@
      *  Copyright (c) 2007-2008 Cyrille Berger <cberger@cberger.net>
      *  Copyright (c) 2009 Boudewijn Rempt <boud@valdyas.org>
      *
-     *  This program is free software; you can redistribute it and/or modify
-     *  it under the terms of the GNU General Public License as published by
-     *  the Free Software Foundation; either version 2 of the License, or
-     *  (at your option) any later version.
+     *  SPDX-License-Identifier: GPL-2.0-or-later
      *
      *  This program is distributed in the hope that it will be useful,
      *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -162,7 +159,7 @@
     void KisFilterSelectorWidget::showXMLdialog()
     {
         if (currentFilter()->showConfigurationWidget()) {
-            QDialog *xmlDialog = new QDialog();
+            QDialog *xmlDialog = new QDialog(qApp->activeWindow());
             xmlDialog->setMinimumWidth(500);
             xmlDialog->setWindowTitle(i18n("Filter configuration XML"));
             QVBoxLayout *xmllayout = new QVBoxLayout(xmlDialog);

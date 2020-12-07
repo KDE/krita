@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2015 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_node_juggler_compressed.h"
@@ -346,6 +334,16 @@ struct LowerRaiseLayer : public KisCommandUtils::AggregateCommand {
             AllMasks;
     }
 
+    bool allowsAsChildren(KisNodeSP parent, KisNodeList nodes) {
+        if (!parent->isEditable(false)) return false;
+
+        Q_FOREACH (KisNodeSP node, nodes) {
+            if (!parent->allowAsChild(node)) return false;
+        }
+
+        return true;
+    }
+
     void populateChildCommands() override {
         KisNodeList sortedNodes = KisLayerUtils::sortAndFilterAnyMergableNodesSafe(m_nodes, m_image);
         KisNodeSP headNode = m_lower ? sortedNodes.first() : sortedNodes.last();
@@ -354,6 +352,8 @@ struct LowerRaiseLayer : public KisCommandUtils::AggregateCommand {
         KisNodeSP parent = headNode->parent();
         KisNodeSP grandParent = parent ? parent->parent() : 0;
 
+        if (!parent->isEditable(false)) return;
+
         KisNodeSP newAbove;
         KisNodeSP newParent;
 
@@ -361,11 +361,8 @@ struct LowerRaiseLayer : public KisCommandUtils::AggregateCommand {
             KisNodeSP prevNode = headNode->prevSibling();
 
             if (prevNode) {
-                if ((prevNode->inherits("KisGroupLayer") &&
-                     !prevNode->collapsed())
-                    ||
-                    (nodesType == AllMasks &&
-                     prevNode->inherits("KisLayer"))) {
+                if (allowsAsChildren(prevNode, sortedNodes) &&
+                    !prevNode->collapsed()) {
 
                     newAbove = prevNode->lastChild();
                     newParent = prevNode;
@@ -390,12 +387,8 @@ struct LowerRaiseLayer : public KisCommandUtils::AggregateCommand {
             KisNodeSP nextNode = headNode->nextSibling();
 
             if (nextNode) {
-                if ((nextNode->inherits("KisGroupLayer") &&
-                     !nextNode->collapsed())
-                    ||
-                    (nodesType == AllMasks &&
-                     nextNode->inherits("KisLayer"))) {
-
+                if (allowsAsChildren(nextNode, sortedNodes) &&
+                        !nextNode->collapsed()) {
                     newAbove = 0;
                     newParent = nextNode;
                 } else {
@@ -476,6 +469,12 @@ struct DuplicateLayers : public KisCommandUtils::AggregateCommand {
         if (filteredNodes.isEmpty()) return;
 
         KisNodeSP newAbove = filteredNodes.last();
+
+        // make sure we don't add the new layer into a locked group
+        while (newAbove->parent() && !newAbove->parent()->isEditable(false)) {
+            newAbove = newAbove->parent();
+        }
+
         KisNodeSP newParent = newAbove->parent();
 
         // override parent if provided externally
@@ -683,10 +682,6 @@ struct KisNodeJugglerCompressed::Private
 KisNodeJugglerCompressed::KisNodeJugglerCompressed(const KUndo2MagicString &actionName, KisImageSP image, KisNodeManager *nodeManager, int timeout)
     : m_d(new Private(this, actionName, image, nodeManager, timeout))
 {
-    connect(m_d->image, SIGNAL(sigStrokeCancellationRequested()), SLOT(slotEndStrokeRequested()));
-    connect(m_d->image, SIGNAL(sigUndoDuringStrokeRequested()), SLOT(slotCancelStrokeRequested()));
-    connect(m_d->image, SIGNAL(sigStrokeEndRequestedActiveNodeFiltered()), SLOT(slotEndStrokeRequested()));
-    connect(m_d->image, SIGNAL(sigAboutToBeDeleted()), SLOT(slotImageAboutToBeDeleted()));
 
     KisImageSignalVector emitSignals;
     emitSignals << ModifiedSignal;
@@ -698,6 +693,11 @@ KisNodeJugglerCompressed::KisNodeJugglerCompressed(const KUndo2MagicString &acti
                                     actionName));
     connect(this, SIGNAL(requestUpdateAsyncFromCommand()), SLOT(startTimers()));
     connect(&m_d->compressor, SIGNAL(timeout()), SLOT(slotUpdateTimeout()));
+
+    connect(m_d->image, SIGNAL(sigStrokeCancellationRequested()), SLOT(slotEndStrokeRequested()));
+    connect(m_d->image, SIGNAL(sigUndoDuringStrokeRequested()), SLOT(slotCancelStrokeRequested()));
+    connect(m_d->image, SIGNAL(sigStrokeEndRequestedActiveNodeFiltered()), SLOT(slotEndStrokeRequested()));
+    connect(m_d->image, SIGNAL(sigAboutToBeDeleted()), SLOT(slotImageAboutToBeDeleted()));
 
     m_d->applicator->applyCommand(
         new UpdateMovedNodesCommand(m_d->updateData, false));
@@ -820,6 +820,11 @@ void KisNodeJugglerCompressed::startTimers()
 
 void KisNodeJugglerCompressed::slotUpdateTimeout()
 {
+    // The juggler could have been already finished explicitly
+    // by slotEndStrokeRequested(). In such a case the final updates
+    // will be issued by the last command of the stroke.
+
+    if (!m_d->updateData) return;
     m_d->updateData->processUnhandledUpdates();
 }
 
@@ -838,6 +843,8 @@ void KisNodeJugglerCompressed::cleanup()
 {
     m_d->applicator.reset();
     m_d->compressor.stop();
+    m_d->image.clear();
+    m_d->updateData.clear();
     m_d->isStarted = false;
 
     if (m_d->autoDelete) {

@@ -8,19 +8,7 @@
  *  Copyright (C) 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
  *  Copyright (c) 2014 Mohit Goyal <mohit.bits2011@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_paintop_box.h"
@@ -208,6 +196,12 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     m_vMirrorButton->setMenu(toolbarMenuYMirror);
     m_vMirrorButton->setPopupMode(QToolButton::MenuButtonPopup);
 
+    QAction *wrapAroundAction = m_viewManager->actionManager()->createAction("wrap_around_mode");
+
+    m_wrapAroundButton = new QToolButton(this);
+    m_wrapAroundButton->setFixedSize(iconsize, iconsize);
+    m_wrapAroundButton->setDefaultAction(wrapAroundAction);
+    m_wrapAroundButton->setCheckable(true);
 
     // add connections for horizontal and mirrror buttons
     connect(lockActionX, SIGNAL(toggled(bool)), this, SLOT(slotLockXMirrorToggle(bool)));
@@ -298,9 +292,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
 
     m_cmbCompositeOp = new KisCompositeOpComboBox();
     m_cmbCompositeOp->setFixedHeight(iconsize);
-    Q_FOREACH (KisAction * a, m_cmbCompositeOp->createBlendmodeActions()) {
-        m_viewManager->actionManager()->addAction(a->text(), a);
-    }
+    m_cmbCompositeOp->connectBlendmodeActions(m_viewManager->actionManager());
 
     m_workspaceWidget = new KisPopupButton(this);
     m_workspaceWidget->setIcon(KisIconUtils::loadIcon("view-choose"));
@@ -405,6 +397,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     QHBoxLayout* mirrorLayout = new QHBoxLayout(mirrorActions);
     mirrorLayout->addWidget(m_hMirrorButton);
     mirrorLayout->addWidget(m_vMirrorButton);
+    mirrorLayout->addWidget(m_wrapAroundButton);
     mirrorLayout->setSpacing(4);
     mirrorLayout->setContentsMargins(0, 0, 0, 0);
 
@@ -580,7 +573,7 @@ void KisPaintopBox::resourceSelected(KoResourceSP resource)
         //        }
         //        if (!m_dirtyPresetsEnabled) {
         //            KisSignalsBlocker blocker(m_optionWidget);
-        //            Q_UNUSED(blocker)
+        //            Q_UNUSED(blocker);
         //            if (!preset->load()) {
         //                qWarning() << "failed to load the preset.";
         //            }
@@ -1450,8 +1443,8 @@ void KisPaintopBox::findDefaultPresets()
 
         QModelIndex idx = resourceModel->index(i, 0);
 
-        QString resourceName = idx.data(Qt::UserRole + KisResourceModel::Name).toString().toLower();
-        QString fileName = idx.data(Qt::UserRole + KisResourceModel::Filename).toString().toLower();
+        QString resourceName = idx.data(Qt::UserRole + KisAbstractResourceModel::Name).toString().toLower();
+        QString fileName = idx.data(Qt::UserRole + KisAbstractResourceModel::Filename).toString().toLower();
 
         if (resourceName.contains("eraser_circle")) {
             m_eraserName = resourceName;

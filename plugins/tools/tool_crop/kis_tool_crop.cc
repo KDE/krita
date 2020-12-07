@@ -6,19 +6,7 @@
  *  Copyright (c) 2006 Cyrille Berger <cberger@cberger.net>
  *  Copyright (C) 2007 Adrian Page <adrian@pagenet.plus.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_tool_crop.h"
@@ -433,7 +421,9 @@ void KisToolCrop::crop()
     KIS_ASSERT_RECOVER_RETURN(currentImage());
     if (m_finalRect.rect().isEmpty()) return;
 
-    if (m_cropType == LayerCropType) {
+    const bool imageCrop = m_cropType == ImageCropType;
+
+    if (!imageCrop) {
         //Cropping layer
         if (!nodeEditable()) {
             return;
@@ -446,16 +436,16 @@ void KisToolCrop::crop()
     QRect cropRect = m_finalRect.rect();
 
     // The visitor adds the undo steps to the macro
-    if (m_cropType == LayerCropType && currentNode()->paintDevice()) {
-        currentImage()->cropNode(currentNode(), cropRect);
-    } else {
+    if (imageCrop || !currentNode()->paintDevice()) {
         currentImage()->cropImage(cropRect);
+    } else {
+        currentImage()->cropNode(currentNode(), cropRect, m_cropType == FrameCropType);
     }
 }
 
 void KisToolCrop::setCropTypeLegacy(int cropType)
 {
-    setCropType(cropType == 0 ? LayerCropType : ImageCropType);
+    setCropType(static_cast<KisToolCrop::CropToolType>(cropType));
 }
 
 void KisToolCrop::setCropType(KisToolCrop::CropToolType cropType)
@@ -464,8 +454,7 @@ void KisToolCrop::setCropType(KisToolCrop::CropToolType cropType)
         return;
     m_cropType = cropType;
 
-    // can't save LayerCropType, so have to convert it to int for saving
-    configGroup.writeEntry("cropType", cropType == LayerCropType ? 0 : 1);
+    configGroup.writeEntry("cropType", static_cast<int>(cropType));
 
     emit cropTypeChanged(m_cropType);
 }

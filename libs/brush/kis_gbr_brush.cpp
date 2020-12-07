@@ -7,19 +7,7 @@
  *  Copyright (c) 2007 Cyrille Berger <cberger@cberger.net>
  *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 #include <sys/types.h>
 #include <QtEndian>
@@ -74,7 +62,6 @@ struct KisGbrBrush::Private {
     quint32 version;      /*  brush file version #  */
     quint32 bytes;        /*  depth of brush in bytes */
     quint32 magic_number; /*  GIMP brush magic number  */
-
 };
 
 #define DEFAULT_SPACING 0.25
@@ -83,7 +70,6 @@ KisGbrBrush::KisGbrBrush(const QString& filename)
     : KisColorfulBrush(filename)
     , d(new Private)
 {
-    setHasColor(false);
     setSpacing(DEFAULT_SPACING);
 }
 
@@ -93,7 +79,6 @@ KisGbrBrush::KisGbrBrush(const QString& filename,
     : KisColorfulBrush(filename)
     , d(new Private)
 {
-    setHasColor(false);
     setSpacing(DEFAULT_SPACING);
 
     d->data = QByteArray::fromRawData(data.data() + dataPos, data.size() - dataPos);
@@ -106,7 +91,6 @@ KisGbrBrush::KisGbrBrush(KisPaintDeviceSP image, int x, int y, int w, int h)
     : KisColorfulBrush()
     , d(new Private)
 {
-    setHasColor(false);
     setSpacing(DEFAULT_SPACING);
     initFromPaintDev(image, x, y, w, h);
 }
@@ -115,7 +99,6 @@ KisGbrBrush::KisGbrBrush(const QImage& image, const QString& name)
     : KisColorfulBrush()
     , d(new Private)
 {
-    setHasColor(false);
     setSpacing(DEFAULT_SPACING);
 
     setBrushTipImage(image);
@@ -243,8 +226,8 @@ bool KisGbrBrush::init()
             return false;
         }
 
-        setHasColor(false);
         setBrushApplication(ALPHAMASK);
+        setBrushType(MASK);
 
         for (quint32 y = 0; y < bh.height; y++) {
             uchar *pixel = reinterpret_cast<uchar *>(image.scanLine(y));
@@ -263,8 +246,8 @@ bool KisGbrBrush::init()
             return false;
         }
 
-        setHasColor(true);
-        setBrushApplication(useColorAsMask() ? ALPHAMASK : IMAGESTAMP);
+        setBrushApplication(IMAGESTAMP);
+        setBrushType(IMAGE);
 
         for (quint32 y = 0; y < bh.height; y++) {
             QRgb *pixel = reinterpret_cast<QRgb *>(image.scanLine(y));
@@ -296,8 +279,8 @@ bool KisGbrBrush::initFromPaintDev(KisPaintDeviceSP image, int x, int y, int w, 
     setBrushTipImage(image->convertToQImage(0, x, y, w, h, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags()));
     setName(image->objectName());
 
-    setHasColor(true);
-    setBrushApplication(useColorAsMask() ? ALPHAMASK : IMAGESTAMP);
+    setBrushType(IMAGE);
+    setBrushApplication(IMAGESTAMP);
 
     return true;
 }
@@ -379,17 +362,6 @@ bool KisGbrBrush::saveToDevice(QIODevice* dev) const
     return true;
 }
 
-enumBrushType KisGbrBrush::brushType() const
-{
-    return !hasColor() || useColorAsMask() ? MASK : IMAGE;
-}
-
-void KisGbrBrush::setBrushType(enumBrushType type)
-{
-    Q_UNUSED(type);
-    qFatal("FATAL: protected member setBrushType has no meaning for KisGbrBrush");
-}
-
 void KisGbrBrush::setBrushTipImage(const QImage& image)
 {
     KisBrush::setBrushTipImage(image);
@@ -401,11 +373,12 @@ void KisGbrBrush::makeMaskImage(bool preserveAlpha)
     if (!hasColor()) {
         return;
     }
+
     QImage brushTip = brushTipImage();
 
-    if (!preserveAlpha && brushTip.width() == width() && brushTip.height() == height()) {
-        int imageWidth = width();
-        int imageHeight = height();
+    if (!preserveAlpha) {
+        const int imageWidth = brushTip.width();
+        const int imageHeight = brushTip.height();
         QImage image(imageWidth, imageHeight, QImage::Format_Indexed8);
         QVector<QRgb> table;
         for (int i = 0; i < 256; ++i) {
@@ -427,13 +400,13 @@ void KisGbrBrush::makeMaskImage(bool preserveAlpha)
             }
         }
         setBrushTipImage(image);
+        setBrushType(MASK);
     }
     else {
         setBrushTipImage(brushTip);
+        setBrushType(IMAGE);
     }
 
-    setHasColor(preserveAlpha);
-    setUseColorAsMask(preserveAlpha);
     setBrushApplication(ALPHAMASK);
     resetBoundary();
     clearBrushPyramid();

@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2014 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_free_transform_strategy.h"
@@ -163,8 +151,11 @@ void KisFreeTransformStrategy::Private::recalculateTransformedHandles()
     transformedHandles.bottomRight = transform.map(transaction.originalBottomRight());
 }
 
-void KisFreeTransformStrategy::setTransformFunction(const QPointF &mousePos, bool perspectiveModifierActive)
+void KisFreeTransformStrategy::setTransformFunction(const QPointF &mousePos, bool perspectiveModifierActive, bool shiftModifierActive, bool altModifierActive)
 {
+    Q_UNUSED(shiftModifierActive);
+    Q_UNUSED(altModifierActive);
+
     if (perspectiveModifierActive && !m_d->transaction.shouldAvoidPerspectiveTransform()) {
         m_d->function = PERSPECTIVE;
         return;
@@ -482,40 +473,44 @@ void KisFreeTransformStrategy::continuePrimaryAction(const QPointF &mousePos,
     case BOTTOMSCALE: {
         QPointF staticPoint;
         QPointF movingPoint;
-        qreal extraSign;
 
         if (m_d->function == TOPSCALE) {
             staticPoint = m_d->transaction.originalMiddleBottom();
             movingPoint = m_d->transaction.originalMiddleTop();
-            extraSign = -1.0;
         } else {
             staticPoint = m_d->transaction.originalMiddleTop();
             movingPoint = m_d->transaction.originalMiddleBottom();
-            extraSign = 1.0;
         }
+
+        QPointF staticPointInView = m_d->transform.map(staticPoint);
+        const QPointF movingPointInView = m_d->transform.map(movingPoint);
+
+        const QPointF projNormVector =
+            KisAlgebra2D::normalize(movingPointInView - staticPointInView);
+
+        const qreal projLength =
+            KisAlgebra2D::dotProduct(mousePos - staticPointInView, projNormVector);
+
+        const QPointF targetMovingPointInView = staticPointInView + projNormVector * projLength;
 
         // override scale static point if it is locked
         if ((m_d->currentArgs.transformAroundRotationCenter() ^ altModifierActive) &&
             !qFuzzyCompare(anchorPoint.y(), movingPoint.y())) {
 
             staticPoint = anchorPoint;
+            staticPointInView = m_d->transform.map(staticPoint);
         }
-
-        QPointF mouseImagePos = m_d->transform.inverted().map(mousePos);
-
-        qreal sign = mouseImagePos.y() <= staticPoint.y() ? -extraSign : extraSign;
-        m_d->currentArgs.setScaleY(sign * m_d->currentArgs.scaleY());
-
-        QPointF staticPointInView = m_d->transform.map(staticPoint);
-
-        qreal dist = kisDistance(staticPointInView, mousePos);
 
         GSL::ScaleResult1D result =
             GSL::calculateScaleY(m_d->currentArgs,
                                  staticPoint,
                                  staticPointInView,
                                  movingPoint,
-                                 dist);
+                                 targetMovingPointInView);
+
+        if (!result.isValid) {
+            break;
+        }
 
         if (shiftModifierActive ||  m_d->currentArgs.keepAspectRatio()) {
             qreal aspectRatio = m_d->clickArgs.scaleX() / m_d->clickArgs.scaleY();
@@ -531,41 +526,44 @@ void KisFreeTransformStrategy::continuePrimaryAction(const QPointF &mousePos,
     case RIGHTSCALE: {
         QPointF staticPoint;
         QPointF movingPoint;
-        qreal extraSign;
 
         if (m_d->function == LEFTSCALE) {
-
             staticPoint = m_d->transaction.originalMiddleRight();
             movingPoint = m_d->transaction.originalMiddleLeft();
-            extraSign = -1.0;
         } else {
             staticPoint = m_d->transaction.originalMiddleLeft();
             movingPoint = m_d->transaction.originalMiddleRight();
-            extraSign = 1.0;
         }
+
+        QPointF staticPointInView = m_d->transform.map(staticPoint);
+        const QPointF movingPointInView = m_d->transform.map(movingPoint);
+
+        const QPointF projNormVector =
+            KisAlgebra2D::normalize(movingPointInView - staticPointInView);
+
+        const qreal projLength =
+            KisAlgebra2D::dotProduct(mousePos - staticPointInView, projNormVector);
+
+        const QPointF targetMovingPointInView = staticPointInView + projNormVector * projLength;
 
         // override scale static point if it is locked
         if ((m_d->currentArgs.transformAroundRotationCenter() ^ altModifierActive) &&
             !qFuzzyCompare(anchorPoint.x(), movingPoint.x())) {
 
             staticPoint = anchorPoint;
+            staticPointInView = m_d->transform.map(staticPoint);
         }
-
-        QPointF mouseImagePos = m_d->transform.inverted().map(mousePos);
-
-        qreal sign = mouseImagePos.x() <= staticPoint.x() ? -extraSign : extraSign;
-        m_d->currentArgs.setScaleX(sign * m_d->currentArgs.scaleX());
-
-        QPointF staticPointInView = m_d->transform.map(staticPoint);
-
-        qreal dist = kisDistance(staticPointInView, mousePos);
 
         GSL::ScaleResult1D result =
             GSL::calculateScaleX(m_d->currentArgs,
                                  staticPoint,
                                  staticPointInView,
                                  movingPoint,
-                                 dist);
+                                 targetMovingPointInView);
+
+        if (!result.isValid) {
+            break;
+        }
 
         if (shiftModifierActive  ||  m_d->currentArgs.keepAspectRatio()) {
             qreal aspectRatio = m_d->clickArgs.scaleY() / m_d->clickArgs.scaleX();

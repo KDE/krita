@@ -2,19 +2,7 @@
  *  Copyright (c) 2013 Sven Langkamp <sven.langkamp@gmail.com>
  *  Copyright (c) 2018 Michael Zhou <simeirxh@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include <QPointer>
@@ -73,8 +61,8 @@ KisPaletteChooser::KisPaletteChooser(QWidget *parent)
     m_d->itemChooser->itemView()->setViewMode(QListView::ListMode);
     m_d->itemChooser->showButtons(false);
     m_d->itemChooser->showTaggingBar(true);
-    m_ui->viewPalette->setLayout(new QHBoxLayout(m_ui->viewPalette));
-    m_ui->viewPalette->layout()->addWidget(m_d->itemChooser.data());
+    QHBoxLayout *paletteLayout = new QHBoxLayout(m_ui->viewPalette);
+    paletteLayout->addWidget(m_d->itemChooser.data());
 
     connect(m_d->itemChooser.data(), SIGNAL(resourceSelected(KoResourceSP )), SLOT(slotPaletteResourceSelected(KoResourceSP )));
 }
@@ -162,8 +150,8 @@ void KisPaletteChooserPrivate::Delegate::paint(QPainter *painter,
     if (!index.isValid())
         return;
 
-    QImage preview = index.data(Qt::UserRole + KisResourceModel::Thumbnail).value<QImage>();
-    QString name = index.data(Qt::UserRole + KisResourceModel::Name).toString();
+    QImage preview = index.data(Qt::UserRole + KisAbstractResourceModel::Thumbnail).value<QImage>();
+    QString name = index.data(Qt::UserRole + KisAbstractResourceModel::Name).toString();
 
     QRect previewRect(option.rect.x() + 2,
                       option.rect.y() + 2,

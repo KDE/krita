@@ -6,19 +6,7 @@
  *  Copyright (C) 2007 Thomas Zander <zander@kde.org>
  *  Copyright (C) 2007-2009 Boudewijn Rempt <boud@valdyas.org>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 #ifndef KIS_LAYERBOX_H
 #define KIS_LAYERBOX_H
@@ -41,6 +29,7 @@
 #include "kis_mainwindow_observer.h"
 #include "kis_signal_compressor.h"
 #include "kis_layer_filter_widget.h"
+#include "kis_signal_auto_connection.h"
 #include <QSlider>
 
 class QModelIndex;
@@ -119,7 +108,7 @@ private Q_SLOTS:
     void slotEditGlobalSelection(bool showSelections);
     void slotRenameCurrentNode();
 
-    void slotAboutToRemoveRows(const QModelIndex &parent, int first, int last);
+    void slotAdjustCurrentBeforeRemoveRows(const QModelIndex &parent, int first, int last);
     void selectionChanged(const QModelIndexList selection);
     void slotNodeManagerChangedSelection(const QList<KisNodeSP> &nodes);
     void slotColorLabelChanged(int index);
@@ -137,8 +126,6 @@ private Q_SLOTS:
 
     // Opacity keyframing
     void slotKeyframeChannelAdded(KisKeyframeChannel *channel);
-    void slotOpacityKeyframeChanged(KisKeyframeSP keyframe);
-    void slotOpacityKeyframeMoved(KisKeyframeSP keyframe, int fromTime);
     void slotImageTimeChanged(int time);
     void slotForgetAboutSavedNodeBeforeEditSelectionMode();
 
@@ -148,7 +135,7 @@ Q_SIGNALS:
 private:
     inline void connectActionToButton(KisViewManager* view, QAbstractButton *button, const QString &id);
     inline void addActionToMenu(QMenu *menu, const QString &id);
-    void watchOpacityChannel(KisKeyframeChannel *channel);
+    void watchOpacityChannel(KisKeyframeChannel *newChannel);
 
     KisNodeSP findNonHidableNode(KisNodeSP startNode);
 private:
@@ -182,6 +169,7 @@ private:
     KisNodeWSP m_savedNodeBeforeEditSelectionMode;
     QPointer<KisKeyframeChannel> m_opacityChannel;
     bool m_blockOpacityUpdate {false};
+    KisSignalAutoConnectionsStore m_activeNodeConnections;
 };
 
 class LayerBoxFactory : public KoDockFactoryBase

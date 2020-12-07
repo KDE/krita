@@ -1,20 +1,7 @@
 /*
  * Copyright (C) 2016 Boudewijn Rempt <boud@valdyas.org>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #include "KisReferenceImagesDecoration.h"
@@ -67,6 +54,7 @@ private:
         KisCoordinatesConverter *viewConverter = q->view()->viewConverter();
         QTransform transform = viewConverter->imageToWidgetTransform();
 
+        qreal devicePixelRatioF = q->view()->devicePixelRatioF();
         if (buffer.image.isNull() || !buffer.bounds().contains(widgetRect)) {
             const QRectF boundingImageRect = layer->boundingImageRect();
             const QRectF boundingWidgetRect = q->view()->viewConverter()->imageToWidget(boundingImageRect);
@@ -75,10 +63,13 @@ private:
             if (widgetRect.isNull()) return;
 
             buffer.position = widgetRect.topLeft();
-            buffer.image = QImage(widgetRect.size().toSize(), QImage::Format_ARGB32);
-            buffer.image.fill(Qt::transparent);
+            // to ensure that buffor is big enough for all the pixels on high dpi displays
+            // BUG 411118
+            buffer.image = QImage((widgetRect.size()*devicePixelRatioF).toSize(), QImage::Format_ARGB32);
+            buffer.image.setDevicePixelRatio(devicePixelRatioF);
 
             imageRect = q->view()->viewConverter()->widgetToImage(widgetRect);
+
         }
 
         QPainter gc(&buffer.image);
@@ -91,12 +82,14 @@ private:
         gc.fillRect(imageRect, Qt::transparent);
         gc.restore();
 
-        gc.setClipRect(imageRect);
+        // to ensure that clipping rect is also big enough for all the pixels
+        // BUG 411118
+        gc.setClipRect(QRectF(imageRect.topLeft(), imageRect.size()*devicePixelRatioF));
         layer->paintReferences(gc);
     }
 };
 
-KisReferenceImagesDecoration::KisReferenceImagesDecoration(QPointer<KisView> parent, KisDocument *document)
+KisReferenceImagesDecoration::KisReferenceImagesDecoration(QPointer<KisView> parent, KisDocument *document, bool viewReady)
     : KisCanvasDecoration("referenceImagesDecoration", parent)
     , d(new Private(this))
 {
@@ -105,7 +98,7 @@ KisReferenceImagesDecoration::KisReferenceImagesDecoration(QPointer<KisView> par
 
     auto referenceImageLayer = document->referenceImagesLayer();
     if (referenceImageLayer) {
-        setReferenceImageLayer(referenceImageLayer);
+        setReferenceImageLayer(referenceImageLayer, /* updateCanvas = */ viewReady);
     }
 }
 
@@ -152,7 +145,7 @@ void KisReferenceImagesDecoration::slotNodeAdded(KisNodeSP node)
     auto *referenceImagesLayer = dynamic_cast<KisReferenceImagesLayer*>(node.data());
 
     if (referenceImagesLayer) {
-        setReferenceImageLayer(referenceImagesLayer);
+        setReferenceImageLayer(referenceImagesLayer, /* updateCanvas = */ true);
     }
 }
 
@@ -164,17 +157,27 @@ void KisReferenceImagesDecoration::slotReferenceImagesChanged(const QRectF &dirt
     view()->canvasBase()->updateCanvas(documentRect);
 }
 
-void KisReferenceImagesDecoration::setReferenceImageLayer(KisSharedPtr<KisReferenceImagesLayer> layer)
+void KisReferenceImagesDecoration::setReferenceImageLayer(KisSharedPtr<KisReferenceImagesLayer> layer, bool updateCanvas)
 {
-    if (d->layer.data() != layer.data()) {
+    if (d->layer != layer.data()) {
         if (d->layer) {
-            d->layer->disconnect(this);
+            d->layer.toStrongRef()->disconnect(this);
         }
+
         d->layer = layer;
-        connect(layer.data(), SIGNAL(sigUpdateCanvas(QRectF)),
-                this, SLOT(slotReferenceImagesChanged(QRectF)));
-        if (layer->extent() != QRectF()) { // in case the reference layer is just being loaded from the .kra file
-            slotReferenceImagesChanged(layer->extent());
+
+        if (layer) {
+            connect(layer.data(), SIGNAL(sigUpdateCanvas(QRectF)),
+                    this, SLOT(slotReferenceImagesChanged(QRectF)));
+
+            const QRectF dirtyRect = layer->boundingImageRect();
+
+            // If the view is not ready yet (because this is being constructed
+            // from view.d's ctor and thus view.d is not available now),
+            // do not update canvas because it will lead to a crash.
+            if (updateCanvas && !dirtyRect.isEmpty()) { // in case the reference layer is just being loaded from the .kra file
+                slotReferenceImagesChanged(dirtyRect);
+            }
         }
     }
 }

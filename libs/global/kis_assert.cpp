@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2013 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_assert.h"
@@ -23,11 +11,13 @@
 #include <QThread>
 #include <QProcessEnvironment>
 #include <QCoreApplication>
+#include <QApplication>
+
 #include <klocalizedstring.h>
 #include <kis_assert_exception.h>
 #include <KisUsageLogger.h>
 #include <string>
-#include "config-hide-safe-asserts.h"
+#include "config-safe-asserts.h"
 
 /**
  * TODO: Add automatic saving of the documents
@@ -70,20 +60,26 @@ void kis_assert_common(const char *assertion, const char *file, int line, bool t
         disableAssertMsg = true;
     }
 
+    bool shouldIgnoreAsserts = false;
+    bool forceCrashOnSafeAsserts = false;
+
 #ifdef HIDE_SAFE_ASSERTS
-    const bool shouldIgnoreAsserts = HIDE_SAFE_ASSERTS;
-#else
-    const bool shouldIgnoreAsserts = false;
+    shouldIgnoreAsserts |= HIDE_SAFE_ASSERTS;
 #endif
 
-    disableAssertMsg |= shouldIgnoreAsserts;
+#ifdef CRASH_ON_SAFE_ASSERTS
+    forceCrashOnSafeAsserts |= CRASH_ON_SAFE_ASSERTS;
+#endif
+
+    disableAssertMsg |= shouldIgnoreAsserts || forceCrashOnSafeAsserts;
 
     QMessageBox::StandardButton button =
-        isIgnorable ? QMessageBox::Ignore : QMessageBox::Abort;
+        isIgnorable && !forceCrashOnSafeAsserts ?
+            QMessageBox::Ignore : QMessageBox::Abort;
 
     if (!disableAssertMsg) {
         button =
-            QMessageBox::critical(0, i18nc("@title:window", "Krita: Internal Error"),
+            QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita: Internal Error"),
                                   longMessage,
                                   QMessageBox::Ignore | QMessageBox::Abort,
                                   QMessageBox::Ignore);

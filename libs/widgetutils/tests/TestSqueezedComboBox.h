@@ -1,3 +1,7 @@
+/*
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
 #ifndef SQUEEZEDCOMBOBOX_TEST_H
 #define SQUEEZEDCOMBOBOX_TEST_H
 

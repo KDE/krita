@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2013 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #ifndef __KIS_CATEGORIZED_LIST_MODEL_H
@@ -220,8 +208,23 @@ public:
     }
 
     QModelIndex indexOf(const Entry_Type& entry) const {
-        QModelIndex srcIndex = m_model->indexOf(entry);
-        return mapFromSource(srcIndex);
+        /**
+         * We don't use the source model's indexOf(), because
+         * the items might be duplicated and we need to return the
+         * topmost one in the sorted order.
+         */
+
+        Entry_Type e;
+
+        for (int i = 0; i < rowCount(); i++) {
+            QModelIndex index = this->index(i, 0);
+
+            if (entryAt(e, index) && e == entry) {
+                return index;
+            }
+        }
+
+        return QModelIndex();
     }
 
     bool entryAt(Entry_Type &entry, QModelIndex index) const {

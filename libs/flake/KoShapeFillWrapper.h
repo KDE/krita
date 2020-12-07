@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2017 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #ifndef KOSHAPEFILLWRAPPER_H
@@ -29,6 +17,7 @@ class KoShape;
 class QColor;
 class QTransform;
 class QGradient;
+class SvgMeshGradient;
 
 class KRITAFLAKE_EXPORT KoShapeFillWrapper
 {
@@ -45,6 +34,7 @@ public:
     const QGradient* gradient() const;
     QTransform gradientTransform() const;
     bool hasZeroLineWidth() const;
+    const SvgMeshGradient* meshgradient() const;
 
     KUndo2Command* setColor(const QColor &color);
     KUndo2Command* setLineWidth(const float &lineWidth);
@@ -52,6 +42,8 @@ public:
     KUndo2Command* setGradient(const QGradient *gradient, const QTransform &transform);
     KUndo2Command* applyGradient(const QGradient *gradient);
     KUndo2Command* applyGradientStopsOnly(const QGradient *gradient);
+
+    KUndo2Command* setMeshGradient(const SvgMeshGradient *gradient, const QTransform &transform);
 
 private:
     struct Private;

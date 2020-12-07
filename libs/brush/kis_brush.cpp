@@ -6,19 +6,7 @@
  *  Copyright (c) 2005 Bart Coppens <kde@bartcoppens.be>
  *  Copyright (c) 2007 Cyrille Berger <cberger@cberger.net>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_brush.h"
@@ -273,17 +261,6 @@ QPointF KisBrush::hotSpot(KisDabShape const& shape, const KisPaintInformation& i
     return p;
 }
 
-
-bool KisBrush::hasColor() const
-{
-    return d->hasColor;
-}
-
-void KisBrush::setHasColor(bool hasColor)
-{
-    d->hasColor = hasColor;
-}
-
 void KisBrush::setBrushApplication(enumBrushApplication brushApplication)
 {
     d->brushApplication = brushApplication;
@@ -449,9 +426,8 @@ double KisBrush::maskAngle(double angle) const
     return normalizeAngle(angle + d->angle);
 }
 
-quint32 KisBrush::brushIndex(const KisPaintInformation& info) const
+quint32 KisBrush::brushIndex() const
 {
-    Q_UNUSED(info);
     return 0;
 }
 
@@ -484,11 +460,6 @@ qreal KisBrush::autoSpacingCoeff() const
 
 void KisBrush::notifyStrokeStarted()
 {
-}
-
-void KisBrush::notifyCachedDabPainted(const KisPaintInformation& info)
-{
-    Q_UNUSED(info);
 }
 
 void KisBrush::prepareForSeqNo(const KisPaintInformation &info, int seqNo)
@@ -676,7 +647,7 @@ void KisBrush::generateBoundary() const
     KisFixedPaintDeviceSP dev;
     KisDabShape inverseTransform(1.0 / scale(), 1.0, -angle());
 
-    if (brushType() == IMAGE || brushType() == PIPE_IMAGE) {
+    if (brushApplication() == IMAGESTAMP) {
         dev = paintDevice(KoColorSpaceRegistry::instance()->rgb8(),
                           inverseTransform, KisPaintInformation());
     }

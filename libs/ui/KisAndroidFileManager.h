@@ -2,24 +2,13 @@
   * This file is part of the KDE project
   * Copyright (C) 2019 Sharaf Zaman <sharafzaz121@gmail.com>
   *
-  * This program is free software; you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation; either version 2 of the License, or
-  * (at your option) any later version.
-  *
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with this program; if not, write to the Free Software
-  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+  * SPDX-License-Identifier: GPL-2.0-or-later
   */
 
 #ifndef KISANDROIDFILEMANAGER_H
 #define KISANDROIDFILEMANAGER_H
 
+#include <QUrl>
 #include <QtAndroid>
 #include <QtAndroidExtras/QAndroidActivityResultReceiver>
 
@@ -34,12 +23,18 @@ public:
 
     void openImportFile();
 
+    static void takePersistableUriPermission(const QUrl &url);
+
+    static QString mimeType(const QString& uri);
+
 Q_SIGNALS:
-    void sigFileSelected(QString path);
+    void sigFileSelected(QUrl path);
     void sigEmptyFilePath();
     void cancelled();
 
 private:
+    static void takePersistableUriPermission(const QAndroidJniObject &uri);
+
     // Request codes
     const static int FILE_PICK_RC = 1;   /// to import a file
     const static int FILE_SAVE_RC = 2;   /// to save/export a file

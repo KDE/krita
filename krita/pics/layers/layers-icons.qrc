@@ -1,4 +1,8 @@
 <!DOCTYPE RCC>
+<!--
+  SPDX-FileCopyrightText: none
+  SPDX-License-Identifier: CC0-1.0
+-->
 <RCC version="1.0">
     <qresource>
     <file>dark_cloneLayer.svg</file>
@@ -29,6 +33,6 @@
     <file>light_transformMask.svg</file>
     <file>light_transparencyMask.svg</file>
     <file>light_vectorLayer.svg</file>
- 
+
     </qresource>
 </RCC>

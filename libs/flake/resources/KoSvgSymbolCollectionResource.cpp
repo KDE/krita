@@ -3,19 +3,7 @@
    Copyright (c) 2017 L. E. Segovia <amy@amyspark.me>
 
 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Lesser General Public
-   License as published by the Free Software Foundation; either
-   version 2.1 of the License, or (at your option) any later version.
-
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Lesser General Public License for more details.
-
-   You should have received a copy of the GNU Lesser General Public
-   License along with this library; if not, write to the Free Software
-   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+   SPDX-License-Identifier: LGPL-2.1-or-later
  */
 #include <resources/KoSvgSymbolCollectionResource.h>
 
@@ -92,6 +80,13 @@ KoSvgSymbolCollectionResource::KoSvgSymbolCollectionResource(const KoSvgSymbolCo
     : KoResource(QString())
     , d(new Private(*rhs.d))
 {
+    setFilename(rhs.filename());
+
+    Q_FOREACH(KoSvgSymbol *symbol, rhs.d->symbols) {
+        d->symbols << new KoSvgSymbol(*symbol);
+    }
+
+    setValid(true);
 }
 
 KoResourceSP KoSvgSymbolCollectionResource::clone() const
@@ -101,6 +96,7 @@ KoResourceSP KoSvgSymbolCollectionResource::clone() const
 
 KoSvgSymbolCollectionResource::~KoSvgSymbolCollectionResource()
 {
+    qDeleteAll(d->symbols);
 }
 
 bool KoSvgSymbolCollectionResource::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface)

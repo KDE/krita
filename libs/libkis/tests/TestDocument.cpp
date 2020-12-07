@@ -1,19 +1,6 @@
 /* Copyright (C) 2017 Boudewijn Rempt <boud@valdyas.org>
 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
-
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
-
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   SPDX-License-Identifier: LGPL-2.0-or-later
 */
 #include "TestDocument.h"
 #include <QTest>
@@ -37,17 +24,17 @@
 #include <kis_paint_layer.h>
 #include <KisPart.h>
 
-#include <sdk/tests/kistest.h>
+#include <sdk/tests/testui.h>
 
 void TestDocument::testSetColorSpace()
 {
-    KisDocument *kisdoc = KisPart::instance()->createDocument();
+    QScopedPointer<KisDocument> kisdoc(KisPart::instance()->createDocument());
     KisImageSP image = new KisImage(0, 100, 100, KoColorSpaceRegistry::instance()->rgb8(), "test");
     KisNodeSP layer = new KisPaintLayer(image, "test1", 255);
     image->addNode(layer);
     kisdoc->setCurrentImage(image);
 
-    Document d(kisdoc, false);
+    Document d(kisdoc.data(), false);
     QStringList profiles = Krita().profiles("GRAYA", "U16");
     d.setColorSpace("GRAYA", "U16", profiles.first());
 
@@ -55,30 +42,35 @@ void TestDocument::testSetColorSpace()
     QVERIFY(layer->colorSpace()->colorDepthId().id() == "U16");
     QVERIFY(layer->colorSpace()->profile()->name() == profiles.first());
 
-    KisPart::instance()->removeDocument(kisdoc);
+    KisPart::instance()->removeDocument(kisdoc.data(), false);
 }
 
 void TestDocument::testSetColorProfile()
 {
-    KisDocument *kisdoc = KisPart::instance()->createDocument();
+    QScopedPointer<KisDocument> kisdoc(KisPart::instance()->createDocument());
     KisImageSP image = new KisImage(0, 100, 100, KoColorSpaceRegistry::instance()->rgb8(), "test");
     KisNodeSP layer = new KisPaintLayer(image, "test1", 255);
     image->addNode(layer);
     kisdoc->setCurrentImage(image);
 
-    Document d(kisdoc, false);
+    Document d(kisdoc.data(), false);
 
     QStringList profiles = Krita().profiles("RGBA", "U8");
-    Q_FOREACH(const QString &profile, profiles) {
-        d.setColorProfile(profile);
-        QVERIFY(image->colorSpace()->profile()->name() == profile);
+    Q_FOREACH(const QString &profileName, profiles) {
+        const KoColorProfile *profile = KoColorSpaceRegistry::instance()->profileByName(profileName);
+
+        // skip input-only profiles (e.g. for scanners)
+        if (!profile->isSuitableForOutput()) continue;
+
+        d.setColorProfile(profileName);
+        QVERIFY(image->colorSpace()->profile()->name() == profileName);
     }
-    KisPart::instance()->removeDocument(kisdoc);
+    KisPart::instance()->removeDocument(kisdoc.data(), false);
 }
 
 void TestDocument::testPixelData()
 {
-    KisDocument *kisdoc = KisPart::instance()->createDocument();
+    QScopedPointer<KisDocument> kisdoc(KisPart::instance()->createDocument());
     KisImageSP image = new KisImage(0, 100, 100, KoColorSpaceRegistry::instance()->rgb8(), "test");
     KisNodeSP layer = new KisPaintLayer(image, "test1", 255);
     KisFillPainter gc(layer->paintDevice());
@@ -86,7 +78,7 @@ void TestDocument::testPixelData()
     image->addNode(layer);
     kisdoc->setCurrentImage(image);
 
-    Document d(kisdoc, false);
+    Document d(kisdoc.data(), false);
     d.refreshProjection();
 
     QByteArray ba = d.pixelData(0, 0, 100, 100);
@@ -103,12 +95,12 @@ void TestDocument::testPixelData()
         QVERIFY(channelvalue == 255);
     } while (!ds.atEnd());
 
-    KisPart::instance()->removeDocument(kisdoc);
+    KisPart::instance()->removeDocument(kisdoc.data(), false);
 }
 
 void TestDocument::testThumbnail()
 {
-    KisDocument *kisdoc = KisPart::instance()->createDocument();
+    QScopedPointer<KisDocument> kisdoc(KisPart::instance()->createDocument());
     KisImageSP image = new KisImage(0, 100, 100, KoColorSpaceRegistry::instance()->rgb8(), "test");
     KisNodeSP layer = new KisPaintLayer(image, "test1", 255);
     KisFillPainter gc(layer->paintDevice());
@@ -116,7 +108,7 @@ void TestDocument::testThumbnail()
     image->addNode(layer);
     kisdoc->setCurrentImage(image);
 
-    Document d(kisdoc, false);
+    Document d(kisdoc.data(), false);
     d.refreshProjection();
 
     QImage thumb = d.thumbnail(10, 10);
@@ -130,16 +122,15 @@ void TestDocument::testThumbnail()
             QVERIFY(thumb.pixelColor(i, j) == QColor(Qt::red));
         }
     }
-    KisPart::instance()->removeDocument(kisdoc);
-
+    KisPart::instance()->removeDocument(kisdoc.data(), false);
 }
 
 void TestDocument::testCreateFillLayer()
 {
-    KisDocument *kisdoc = KisPart::instance()->createDocument();
+    QScopedPointer<KisDocument> kisdoc(KisPart::instance()->createDocument());
     KisImageSP image = new KisImage(0, 50, 50, KoColorSpaceRegistry::instance()->rgb16(), "test");
     kisdoc->setCurrentImage(image);
-    Document d(kisdoc, false);
+    Document d(kisdoc.data(), false);
 
     const QString pattern("pattern");
     const QString color("color");
@@ -176,8 +167,7 @@ void TestDocument::testCreateFillLayer()
 
     QVERIFY(d.createFillLayer("test1", "xxx", info, sel) == 0);
 
-    KisPart::instance()->removeDocument(kisdoc);
-
+    KisPart::instance()->removeDocument(kisdoc.data(), false);
 }
 
 

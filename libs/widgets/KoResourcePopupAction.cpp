@@ -3,27 +3,13 @@
  * Copyright (C) 2012 Jean-Nicolas Artaud <jeannicolasartaud@gmail.com>
  * Copyright (C) 2019 Boudewijn Rempt <boud@valdyas.org>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #include "KoResourcePopupAction.h"
 
 #include <KisResourceItemListView.h>
 #include <KisResourceModel.h>
-#include <KisResourceModelProvider.h>
 #include <KisResourceItemDelegate.h>
 #include <KoResource.h>
 
@@ -68,7 +54,7 @@ KoResourcePopupAction::KoResourcePopupAction(const QString &resourceType, KoCanv
 
     d->resourceList = new KisResourceItemListView(widget);
 
-    d->model = KisResourceModelProvider::resourceModel(resourceType);
+    d->model = new KisResourceModel(resourceType, this);
     d->resourceList->setModel(d->model);
     d->resourceList->setItemDelegate(new KisResourceItemDelegate(widget));
     d->resourceList->setCurrentIndex(d->model->index(0, 0));
@@ -78,7 +64,6 @@ KoResourcePopupAction::KoResourcePopupAction(const QString &resourceType, KoCanv
     indexChanged(d->resourceList->currentIndex());
     QHBoxLayout *layout = new QHBoxLayout(widget);
     layout->addWidget(d->resourceList);
-    widget->setLayout(layout);
 
     wdgAction->setDefaultWidget(widget);
     d->menu->addAction(wdgAction);
@@ -122,7 +107,7 @@ void KoResourcePopupAction::setCurrentBackground(QSharedPointer<KoShapeBackgroun
 
 void KoResourcePopupAction::setCurrentResource(KoResourceSP resource)
 {
-    QModelIndex index = d->model->indexFromResource(resource);
+    QModelIndex index = d->model->indexForResource(resource);
     if (index.isValid()) {
         d->resourceList->setCurrentIndex(index);
         indexChanged(index);

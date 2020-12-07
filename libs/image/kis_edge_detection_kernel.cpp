@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2017 Wolthera van Hövell tot Westerflier <griffinvalley@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_edge_detection_kernel.h"
@@ -347,7 +335,8 @@ void KisEdgeDetectionKernel::convertToNormalMap(KisPaintDeviceSP device,
                                                 QVector<int> channelOrder,
                                                 QVector<bool> channelFlip,
                                                 const QBitArray &channelFlags,
-                                                KoUpdater *progressUpdater)
+                                                KoUpdater *progressUpdater,
+                                                boost::optional<bool> useFftw)
 {
     QPoint srcTopLeft = rect.topLeft();
     KisPainter finalPainter(device);
@@ -362,6 +351,11 @@ void KisEdgeDetectionKernel::convertToNormalMap(KisPaintDeviceSP device,
     KisConvolutionKernelSP kernelVerticalTopBottom = KisEdgeDetectionKernel::createVerticalKernel(xRadius, type, true, !channelFlip[0]);
 
     KisConvolutionPainter horizPainterLR(y_denormalised);
+
+    if (useFftw) {
+        horizPainterLR.setEnginePreference(*useFftw ? KisConvolutionPainter::FFTW : KisConvolutionPainter::SPATIAL);
+    }
+
     horizPainterLR.setChannelFlags(channelFlags);
     horizPainterLR.setProgress(progressUpdater);
     horizPainterLR.applyMatrix(kernelHorizLeftRight, device,
@@ -370,6 +364,11 @@ void KisEdgeDetectionKernel::convertToNormalMap(KisPaintDeviceSP device,
 
 
     KisConvolutionPainter verticalPainterTB(x_denormalised);
+
+    if (useFftw) {
+        verticalPainterTB.setEnginePreference(*useFftw ? KisConvolutionPainter::FFTW : KisConvolutionPainter::SPATIAL);
+    }
+
     verticalPainterTB.setChannelFlags(channelFlags);
     verticalPainterTB.setProgress(progressUpdater);
     verticalPainterTB.applyMatrix(kernelVerticalTopBottom, device,

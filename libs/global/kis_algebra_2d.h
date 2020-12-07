@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2014 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #ifndef __KIS_ALGEBRA_2D_H
@@ -79,6 +67,12 @@ Point normalize(const Point &a)
 {
     const qreal length = norm(a);
     return (1.0 / length) * a;
+}
+
+template <typename Point>
+Point lerp(const Point &pt1, const Point &pt2, qreal t)
+{
+    return pt1 + (pt2 - pt1) * t;
 }
 
 /**
@@ -552,6 +546,22 @@ inline qreal relativeToAbsolute(qreal value, const QRectF &rc) {
 inline qreal absoluteToRelative(const qreal value, const QRectF &rc) {
     const qreal coeff = std::sqrt(pow2(rc.width()) + pow2(rc.height())) / std::sqrt(2.0);
     return coeff != 0 ? value / coeff : 0;
+}
+
+/**
+ * Scales relative isotropic value from relative to absolute coordinate system
+ * using SVG 1.1 rules (see chapter 7.10)
+ */
+inline QRectF relativeToAbsolute(const QRectF &rel, const QRectF &rc) {
+    return QRectF(relativeToAbsolute(rel.topLeft(), rc), relativeToAbsolute(rel.bottomRight(), rc));
+}
+
+/**
+ * Scales absolute isotropic value from absolute to relative coordinate system
+ * using SVG 1.1 rules (see chapter 7.10)
+ */
+inline QRectF absoluteToRelative(const QRectF &rel, const QRectF &rc) {
+    return QRectF(absoluteToRelative(rel.topLeft(), rc), absoluteToRelative(rel.bottomRight(), rc));
 }
 
 /**

@@ -1,19 +1,7 @@
 /*
  *  Copyright (c) 2013 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_tool_transform_config_widget.h"
@@ -293,12 +281,22 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     // Connect Apply/Reset buttons
     connect(buttonBox, SIGNAL(clicked(QAbstractButton*)), this, SLOT(slotButtonBoxClicked(QAbstractButton*)));
 
+    // Mesh. First set up, then connect.
+    intNumRows->setRange(1, 999);
+    intNumColumns->setRange(1, 999);
+
+    connect(chkShowControlPoints, SIGNAL(toggled(bool)), this, SLOT(slotMeshShowHandlesChanged()));
+    connect(intNumColumns, SIGNAL(valueChanged(int)), this, SLOT(slotMeshSizeChanged()));
+    connect(intNumRows, SIGNAL(valueChanged(int)), this, SLOT(slotMeshSizeChanged()));
+
     // Mode switch buttons
     connect(freeTransformButton, SIGNAL(clicked(bool)), this, SLOT(slotSetFreeTransformModeButtonClicked(bool)));
     connect(warpButton, SIGNAL(clicked(bool)), this, SLOT(slotSetWarpModeButtonClicked(bool)));
     connect(cageButton, SIGNAL(clicked(bool)), this, SLOT(slotSetCageModeButtonClicked(bool)));
     connect(perspectiveTransformButton, SIGNAL(clicked(bool)), this, SLOT(slotSetPerspectiveModeButtonClicked(bool)));
     connect(liquifyButton, SIGNAL(clicked(bool)), this, SLOT(slotSetLiquifyModeButtonClicked(bool)));
+    connect(meshButton, SIGNAL(clicked(bool)), this, SLOT(slotSetMeshModeButtonClicked(bool)));
+
 
     tooBigLabelWidget->hide();
 
@@ -313,6 +311,7 @@ void KisToolTransformConfigWidget::slotUpdateIcons()
     cageButton->setIcon(KisIconUtils::loadIcon("transform_icons_cage"));
     perspectiveTransformButton->setIcon(KisIconUtils::loadIcon("transform_icons_perspective"));
     liquifyButton->setIcon(KisIconUtils::loadIcon("transform_icons_liquify_main"));
+    meshButton->setIcon(KisIconUtils::loadIcon("transform_icons_mesh"));
 
     liquifyMove->setIcon(KisIconUtils::loadIcon("transform_icons_liquify_move"));
     liquifyScale->setIcon(KisIconUtils::loadIcon("transform_icons_liquify_resize"));
@@ -337,31 +336,6 @@ void KisToolTransformConfigWidget::slotUpdateIcons()
     // pressure icons
     liquifySizePressureBox->setIcon(KisIconUtils::loadIcon("transform_icons_penPressure"));
     liquifyAmountPressureBox->setIcon(KisIconUtils::loadIcon("transform_icons_penPressure"));
-}
-
-double KisToolTransformConfigWidget::radianToDegree(double rad)
-{
-    double piX2 = 2 * M_PI;
-
-    if (rad < 0 || rad >= piX2) {
-        rad = fmod(rad, piX2);
-        if (rad < 0) {
-            rad += piX2;
-        }
-    }
-
-    return (rad * 360. / piX2);
-}
-
-double KisToolTransformConfigWidget::degreeToRadian(double degree)
-{
-    if (degree < 0. || degree >= 360.) {
-        degree = fmod(degree, 360.);
-        if (degree < 0)
-            degree += 360.;
-    }
-
-    return (degree * M_PI / 180.);
 }
 
 void KisToolTransformConfigWidget::updateLiquifyControls()
@@ -564,9 +538,9 @@ void KisToolTransformConfigWidget::updateConfig(const ToolTransformArgs &config)
         translateXBox->setValue(anchorPointView.x());
         translateYBox->setValue(anchorPointView.y());
 
-        aXBox->setValue(radianToDegree(config.aX()));
-        aYBox->setValue(radianToDegree(config.aY()));
-        aZBox->setValue(radianToDegree(config.aZ()));
+        aXBox->setValue(normalizeAngleDegrees(kisRadiansToDegrees(config.aX())));
+        aYBox->setValue(normalizeAngleDegrees(kisRadiansToDegrees(config.aY())));
+        aZBox->setValue(normalizeAngleDegrees(kisRadiansToDegrees(config.aZ())));
         aspectButton->setKeepAspectRatio(config.keepAspectRatio());
         cmbFilter->setCurrent(config.filterId());
 
@@ -654,6 +628,11 @@ void KisToolTransformConfigWidget::updateConfig(const ToolTransformArgs &config)
         }
 
         updateLiquifyControls();
+    } else if (config.mode() == ToolTransformArgs::MESH) {
+        stackedWidget->setCurrentIndex(4);
+        intNumColumns->setValue(config.meshTransform()->size().width() - 1);
+        intNumRows->setValue(config.meshTransform()->size().height() - 1);
+        chkShowControlPoints->setChecked(config.meshShowHandles());
     }
 
     unblockUiSlots();
@@ -769,9 +748,18 @@ void KisToolTransformConfigWidget::slotButtonBoxClicked(QAbstractButton *button)
         emit sigApplyTransform();
     }
     else if (button == resetButton) {
-        emit sigResetTransform();
+        emit sigCancelTransform();
     }
 
+}
+
+void KisToolTransformConfigWidget::slotSetMeshModeButtonClicked(bool value)
+{
+    if (!value) return;
+
+    lblTransformType->setText(meshButton->toolTip());
+
+    emit sigResetTransform(ToolTransformArgs::MESH);
 }
 
 void KisToolTransformConfigWidget::slotSetFreeTransformModeButtonClicked(bool value)
@@ -780,9 +768,7 @@ void KisToolTransformConfigWidget::slotSetFreeTransformModeButtonClicked(bool va
 
     lblTransformType->setText(freeTransformButton->toolTip());
 
-    ToolTransformArgs *config = m_transaction->currentConfig();
-    config->setMode(ToolTransformArgs::FREE_TRANSFORM);
-    emit sigResetTransform();
+    emit sigResetTransform(ToolTransformArgs::FREE_TRANSFORM);
 }
 
 void KisToolTransformConfigWidget::slotSetWarpModeButtonClicked(bool value)
@@ -791,10 +777,7 @@ void KisToolTransformConfigWidget::slotSetWarpModeButtonClicked(bool value)
 
     lblTransformType->setText(warpButton->toolTip());
 
-    ToolTransformArgs *config = m_transaction->currentConfig();
-    config->setMode(ToolTransformArgs::WARP);
-    config->setWarpCalculation(KisWarpTransformWorker::WarpCalculation::GRID);
-    emit sigResetTransform();
+    emit sigResetTransform(ToolTransformArgs::WARP);
 }
 
 void KisToolTransformConfigWidget::slotSetCageModeButtonClicked(bool value)
@@ -803,9 +786,7 @@ void KisToolTransformConfigWidget::slotSetCageModeButtonClicked(bool value)
 
     lblTransformType->setText(cageButton->toolTip());
 
-    ToolTransformArgs *config = m_transaction->currentConfig();
-    config->setMode(ToolTransformArgs::CAGE);
-    emit sigResetTransform();
+    emit sigResetTransform(ToolTransformArgs::CAGE);
 }
 
 void KisToolTransformConfigWidget::slotSetLiquifyModeButtonClicked(bool value)
@@ -814,9 +795,7 @@ void KisToolTransformConfigWidget::slotSetLiquifyModeButtonClicked(bool value)
 
     lblTransformType->setText(liquifyButton->toolTip());
 
-    ToolTransformArgs *config = m_transaction->currentConfig();
-    config->setMode(ToolTransformArgs::LIQUIFY);
-    emit sigResetTransform();
+    emit sigResetTransform(ToolTransformArgs::LIQUIFY);
 }
 
 void KisToolTransformConfigWidget::slotSetPerspectiveModeButtonClicked(bool value)
@@ -825,9 +804,7 @@ void KisToolTransformConfigWidget::slotSetPerspectiveModeButtonClicked(bool valu
 
     lblTransformType->setText(perspectiveTransformButton->toolTip());
 
-    ToolTransformArgs *config = m_transaction->currentConfig();
-    config->setMode(ToolTransformArgs::PERSPECTIVE_4POINT);
-    emit sigResetTransform();
+    emit sigResetTransform(ToolTransformArgs::PERSPECTIVE_4POINT);
 }
 
 void KisToolTransformConfigWidget::slotFilterChanged(const KoID &filterId)
@@ -994,7 +971,7 @@ void KisToolTransformConfigWidget::slotSetAX(qreal value)
     ToolTransformArgs *config = m_transaction->currentConfig();
     {
         KisTransformUtils::AnchorHolder keeper(config->transformAroundRotationCenter(), config);
-        config->setAX(degreeToRadian((double)value));
+        config->setAX(normalizeAngle(kisDegreesToRadians(value)));
     }
     notifyConfigChanged();
     notifyEditingFinished();
@@ -1008,7 +985,7 @@ void KisToolTransformConfigWidget::slotSetAY(qreal value)
 
     {
         KisTransformUtils::AnchorHolder keeper(config->transformAroundRotationCenter(), config);
-        config->setAY(degreeToRadian((double)value));
+        config->setAY(normalizeAngle(kisDegreesToRadians(value)));
     }
 
     notifyConfigChanged();
@@ -1023,7 +1000,7 @@ void KisToolTransformConfigWidget::slotSetAZ(qreal value)
 
     {
         KisTransformUtils::AnchorHolder keeper(config->transformAroundRotationCenter(), config);
-        config->setAZ(degreeToRadian((double)value));
+        config->setAZ(normalizeAngle(kisDegreesToRadians(value)));
     }
 
     notifyConfigChanged();
@@ -1285,5 +1262,31 @@ void KisToolTransformConfigWidget::slotPreviewGranularityChanged(QString value)
     KIS_SAFE_ASSERT_RECOVER_RETURN(value.toInt() > 1);
     ToolTransformArgs *config = m_transaction->currentConfig();
     config->setPreviewPixelPrecision(value.toInt());
+    notifyConfigChanged();
+}
+
+void KisToolTransformConfigWidget::slotMeshSizeChanged()
+{
+    if (m_uiSlotsBlocked) return;
+
+    ToolTransformArgs *config = m_transaction->currentConfig();
+    KisBezierTransformMesh &mesh = *config->meshTransform();
+
+    if (mesh.size().width() != intNumColumns->value() + 1) {
+        mesh.reshapeMeshHorizontally(intNumColumns->value() + 1);
+    }
+
+    if (mesh.size().height() != intNumRows->value() + 1) {
+        mesh.reshapeMeshVertically(intNumRows->value() + 1);
+    }
+
+    notifyConfigChanged();
+}
+
+void KisToolTransformConfigWidget::slotMeshShowHandlesChanged()
+{
+    if (m_uiSlotsBlocked) return;
+    ToolTransformArgs *config = m_transaction->currentConfig();
+    config->setMeshShowHandles(this->chkShowControlPoints->isChecked());
     notifyConfigChanged();
 }

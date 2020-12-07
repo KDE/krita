@@ -2,10 +2,7 @@
    Copyright (C) 2001 Ian Reinhart Geiser <geiseri@yahoo.com>
    Copyright (C) 2006 Thiago Macieira <thiago@kde.org>
 
-   This program is free software; you can redistribute it and/or
-   modify it under the terms of the Lesser GNU General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
+   SPDX-License-Identifier: LGPL-2.0-or-later
 
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of

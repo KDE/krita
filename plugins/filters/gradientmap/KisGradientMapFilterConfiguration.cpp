@@ -11,32 +11,66 @@
 
 #include <KoStopGradient.h>
 #include <KoAbstractGradient.h>
-#include <KisResourcesInterface.h>
 #include <KisDitherWidget.h>
 
 #include "KisGradientMapFilterConfiguration.h"
 
-KisGradientMapFilterConfiguration::KisGradientMapFilterConfiguration(const QString & name, qint32 version, KisResourcesInterfaceSP resourcesInterface)
-    : KisFilterConfiguration(name, version, resourcesInterface)
-{
-}
+KisGradientMapFilterConfiguration::KisGradientMapFilterConfiguration(KisResourcesInterfaceSP resourcesInterface)
+    : KisFilterConfiguration(defaultName(), defaultVersion(), resourcesInterface)
+{}
+
+KisGradientMapFilterConfiguration::KisGradientMapFilterConfiguration(qint32 version, KisResourcesInterfaceSP resourcesInterface)
+    : KisFilterConfiguration(defaultName(), version, resourcesInterface)
+{}
 
 KisGradientMapFilterConfiguration::KisGradientMapFilterConfiguration(const KisGradientMapFilterConfiguration &rhs)
     : KisFilterConfiguration(rhs)
-{
-}
+{}
 
 KisFilterConfigurationSP KisGradientMapFilterConfiguration::clone() const
 {
     return new KisGradientMapFilterConfiguration(*this);
 }
 
-KoStopGradientSP KisGradientMapFilterConfiguration::gradientImpl(KisResourcesInterfaceSP resourcesInterface) const
+QList<KoResourceSP> KisGradientMapFilterConfiguration::linkedResources(KisResourcesInterfaceSP globalResourcesInterface) const
+{
+    QList<KoResourceSP> resources;
+
+    // only the first version of the filter loaded the gradient by name
+    if (this->version() == 1) {
+        KoStopGradientSP gradient = this->gradient();
+        if (gradient) {
+            resources << gradient;
+        }
+    }
+
+    resources << KisDitherWidget::prepareLinkedResources(*this, "dither/", globalResourcesInterface);
+
+    return resources;
+}
+
+QList<KoResourceSP> KisGradientMapFilterConfiguration::embeddedResources(KisResourcesInterfaceSP) const
+{
+    QList<KoResourceSP> resources;
+
+    // the second version of the filter embeds the gradient
+    if (this->version() > 1) {
+        KoStopGradientSP gradient = this->gradient();
+
+        if (gradient) {
+            resources << gradient;
+        }
+    }
+
+    return resources;
+}
+
+KoStopGradientSP KisGradientMapFilterConfiguration::gradient() const
 {
     KoStopGradientSP gradient;
 
     if (this->version() == 1) {
-        auto source = resourcesInterface->source<KoAbstractGradient>(ResourceType::Gradients);
+        auto source = resourcesInterface()->source<KoAbstractGradient>(ResourceType::Gradients);
 
         KoAbstractGradientSP gradientAb = source.resourceForName(this->getString("gradientName"));
         if (!gradientAb) {
@@ -69,40 +103,36 @@ KoStopGradientSP KisGradientMapFilterConfiguration::gradientImpl(KisResourcesInt
     return gradient;
 }
 
-KoStopGradientSP KisGradientMapFilterConfiguration::gradient() const
+int KisGradientMapFilterConfiguration::colorMode() const
 {
-    return gradientImpl(resourcesInterface());
+    return getInt("colorMode", defaultColorMode());
 }
 
-QList<KoResourceSP> KisGradientMapFilterConfiguration::linkedResources(KisResourcesInterfaceSP globalResourcesInterface) const
+void KisGradientMapFilterConfiguration::setGradient(KoStopGradientSP newGradient)
 {
-    QList<KoResourceSP> resources;
-
-    // only the first version of the filter loaded the gradient by name
-    if (this->version() == 1) {
-        KoStopGradientSP gradient = gradientImpl(globalResourcesInterface);
-        if (gradient) {
-            resources << gradient;
-        }
+    if (!newGradient) {
+        setProperty("gradientXML", "");
+        return;
     }
 
-    resources << KisDitherWidget::prepareLinkedResources(*this, "dither/", globalResourcesInterface);
+    QDomDocument document;
+    QDomElement gradientElement = document.createElement("gradient");
+    gradientElement.setAttribute("name", newGradient->name());
 
-    return resources;
+    newGradient->toXML(document, gradientElement);
+
+    document.appendChild(gradientElement);
+    setProperty("gradientXML", document.toString());
 }
 
-QList<KoResourceSP> KisGradientMapFilterConfiguration::embeddedResources(KisResourcesInterfaceSP globalResourcesInterface) const
+void KisGradientMapFilterConfiguration::setColorMode(int newColorMode)
 {
-    QList<KoResourceSP> resources;
+    setProperty("colorMode", newColorMode);
+}
 
-    // the second version of the filter embeds the gradient
-    if (this->version() > 1) {
-        KoStopGradientSP gradient = gradientImpl(globalResourcesInterface);
-
-        if (gradient) {
-            resources << gradient;
-        }
-    }
-
-    return resources;
+void KisGradientMapFilterConfiguration::setDefaults()
+{
+    setGradient(defaultGradient(resourcesInterface()));
+    setColorMode(defaultColorMode());
+    KisDitherWidget::factoryConfiguration(*this, "dither/");
 }

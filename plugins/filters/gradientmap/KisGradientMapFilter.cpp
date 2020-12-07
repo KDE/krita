@@ -7,8 +7,6 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include <QDomDocument>
-
 #include <KoColorSpace.h>
 #include <KoColor.h>
 #include <kis_paint_device.h>
@@ -259,32 +257,17 @@ void KisGradientMapFilter::processImpl(KisPaintDeviceSP device,
 KisFilterConfigurationSP KisGradientMapFilter::factoryConfiguration(KisResourcesInterfaceSP resourcesInterface) const
 {
 
-    return new KisGradientMapFilterConfiguration(id().id(), 2, resourcesInterface);
+    return new KisGradientMapFilterConfiguration(resourcesInterface);
 }
 
 KisFilterConfigurationSP KisGradientMapFilter::defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const
 {
-    KisFilterConfigurationSP config = factoryConfiguration(resourcesInterface);
-
-    auto source = resourcesInterface->source<KoAbstractGradient>(ResourceType::Gradients);
-    KoAbstractGradientSP gradient = source.fallbackResource();
-
-    KoStopGradient stopGradient;
-    QScopedPointer<QGradient> qGradient(gradient->toQGradient());
-    stopGradient.fromQGradient(qGradient.data());
-    QDomDocument doc;
-    QDomElement elt = doc.createElement("gradient");
-    stopGradient.toXML(doc, elt);
-    doc.appendChild(elt);
-    config->setProperty("gradientXML", doc.toString());
-
-    config->setProperty("colorMode", false);
-    KisDitherWidget::factoryConfiguration(*config, "dither/");
-
+    KisGradientMapFilterConfigurationSP config = new KisGradientMapFilterConfiguration(resourcesInterface);
+    config->setDefaults();
     return config;
 }
 
-KisConfigWidget* KisGradientMapFilter::createConfigurationWidget(QWidget * parent, const KisPaintDeviceSP dev, bool) const
+KisConfigWidget* KisGradientMapFilter::createConfigurationWidget(QWidget * parent, const KisPaintDeviceSP, bool) const
 {
-    return new KisGradientMapFilterConfigWidget(parent, dev);
+    return new KisGradientMapFilterConfigWidget(parent);
 }

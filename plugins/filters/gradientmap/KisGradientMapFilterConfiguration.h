@@ -11,6 +11,8 @@
 #define KIS_GRADIENT_MAP_FILTER_CONFIGURATION_H
 
 #include <kis_filter_configuration.h>
+#include <KisGradientConversion.h>
+#include <KisResourcesInterface.h>
 
 class KisGradientMapFilterConfiguration;
 typedef KisPinnedSharedPtr<KisGradientMapFilterConfiguration> KisGradientMapFilterConfigurationSP;
@@ -18,18 +20,55 @@ typedef KisPinnedSharedPtr<KisGradientMapFilterConfiguration> KisGradientMapFilt
 class KisGradientMapFilterConfiguration : public KisFilterConfiguration
 {
 public:
-    KisGradientMapFilterConfiguration(const QString & name, qint32 version, KisResourcesInterfaceSP resourcesInterface);
+   enum ColorMode {
+        ColorMode_Blend,
+        ColorMode_Nearest,
+        ColorMode_Dither
+    };
+
+    KisGradientMapFilterConfiguration(KisResourcesInterfaceSP resourcesInterface);
+    KisGradientMapFilterConfiguration(qint32 version, KisResourcesInterfaceSP resourcesInterface);
     KisGradientMapFilterConfiguration(const KisGradientMapFilterConfiguration &rhs);
     
     virtual KisFilterConfigurationSP clone() const override;
 
-    KoStopGradientSP gradient() const;
-
     QList<KoResourceSP> linkedResources(KisResourcesInterfaceSP globalResourcesInterface) const override;
     QList<KoResourceSP> embeddedResources(KisResourcesInterfaceSP globalResourcesInterface) const override;
+    
+    static inline QString defaultName()
+    {
+        return "gradientmap";
+    }
+    
+    static constexpr qint32 defaultVersion()
+    {
+        return 2;
+    }
 
-private:
-    KoStopGradientSP gradientImpl(KisResourcesInterfaceSP resourcesInterface) const;
+    static inline KoStopGradientSP defaultGradient(KisResourcesInterfaceSP resourcesInterface)
+    {
+        KoStopGradientSP gradient =
+            KoStopGradientSP(
+                KisGradientConversion::toStopGradient(
+                    resourcesInterface->source<KoAbstractGradient>(ResourceType::Gradients).fallbackResource()
+                )
+            );
+        gradient->setName(i18nc("Default gradient name for the gradient generator", "Unnamed"));
+        gradient->setValid(true);
+        return gradient;
+    }
+
+    static constexpr int defaultColorMode()
+    {
+        return ColorMode_Blend;
+    }
+
+    KoStopGradientSP gradient() const;
+    int colorMode() const;
+
+    void setGradient(KoStopGradientSP newGradient);
+    void setColorMode(int newColorMode);
+    void setDefaults();
 };
 
 #endif

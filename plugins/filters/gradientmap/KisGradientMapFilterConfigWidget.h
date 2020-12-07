@@ -7,29 +7,28 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef KIS_GRADIENT_MAP_CONFIG_WIDGET_H
-#define KIS_GRADIENT_MAP_CONFIG_WIDGET_H
+#ifndef KIS_GRADIENT_MAP_FILTER_CONFIG_WIDGET_H
+#define KIS_GRADIENT_MAP_FILTER_CONFIG_WIDGET_H
 
-//#include <filter/kis_color_transformation_configuration.h>
 #include <kis_config_widget.h>
 #include <KoResourcePopupAction.h>
 #include <kis_signal_compressor.h>
 #include <KoStopGradient.h>
 
-#include "ui_KisGradientMapConfigWidget.h"
+#include "ui_KisGradientMapFilterConfigWidget.h"
 
-class KisGradientMapConfigWidget : public KisConfigWidget
+class KisGradientMapFilterConfigWidget : public KisConfigWidget
 {
     Q_OBJECT
 public:
-    KisGradientMapConfigWidget(QWidget *parent, KisPaintDeviceSP dev, Qt::WindowFlags f = Qt::WindowFlags());
-    ~KisGradientMapConfigWidget() override;
+    KisGradientMapFilterConfigWidget(QWidget *parent, KisPaintDeviceSP dev, Qt::WindowFlags f = Qt::WindowFlags());
+    ~KisGradientMapFilterConfigWidget() override;
 
     KisPropertiesConfigurationSP configuration() const override;
     void setConfiguration(const KisPropertiesConfigurationSP config) override;
 
 private:
-    Ui_GradientMapConfigWidget m_ui;
+    Ui_GradientMapFilterConfigWidget m_ui;
     KoResourcePopupAction *m_gradientPopUp;
     KisSignalCompressor *m_gradientChangedCompressor;
     KoStopGradientSP m_activeGradient;

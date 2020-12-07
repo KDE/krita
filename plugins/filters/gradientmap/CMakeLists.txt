@@ -1,11 +1,11 @@
 set(kritagradientmap_SOURCES
     KisGradientMapFilter.cpp
-    KisGradientMapConfigWidget.cpp
+    KisGradientMapFilterConfigWidget.cpp
     KisGradientMapFilterConfiguration.cpp
 )
 
 ki18n_wrap_ui(kritagradientmap_SOURCES
-    KisGradientMapConfigWidget.ui
+    KisGradientMapFilterConfigWidget.ui
 )
 
 add_library(kritagradientmap MODULE ${kritagradientmap_SOURCES})

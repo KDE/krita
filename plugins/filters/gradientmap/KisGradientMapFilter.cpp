@@ -27,17 +27,18 @@
 #include <KoCachedGradient.h>
 
 #include "KisGradientMapFilter.h"
-#include "KisGradientMapConfigWidget.h"
+#include "KisGradientMapFilterConfigWidget.h"
+#include "KisGradientMapFilterConfiguration.h"
 
-K_PLUGIN_FACTORY_WITH_JSON(KritaGradientMapFactory, "KritaGradientMap.json", registerPlugin<KritaGradientMap>();)
+K_PLUGIN_FACTORY_WITH_JSON(KritaGradientMapFilterFactory, "KritaGradientMapFilter.json", registerPlugin<KritaGradientMapFilterPlugin>();)
 
-KritaGradientMap::KritaGradientMap(QObject *parent, const QVariantList &)
+KritaGradientMapFilterPlugin::KritaGradientMapFilterPlugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {
     KisFilterRegistry::instance()->add(new KisGradientMapFilter());
 }
 
-KritaGradientMap::~KritaGradientMap()
+KritaGradientMapFilterPlugin::~KritaGradientMapFilterPlugin()
 {}
 
 KisGradientMapFilter::KisGradientMapFilter()
@@ -298,7 +299,7 @@ KisFilterConfigurationSP KisGradientMapFilter::defaultConfiguration(KisResources
 
 KisConfigWidget* KisGradientMapFilter::createConfigurationWidget(QWidget * parent, const KisPaintDeviceSP dev, bool) const
 {
-    return new KisGradientMapConfigWidget(parent, dev);
+    return new KisGradientMapFilterConfigWidget(parent, dev);
 }
 
 #include "KisGradientMapFilter.moc"

@@ -4,8 +4,8 @@
     SPDX-FileCopyrightText: none
     SPDX-License-Identifier: GPL-3.0-or-later
   </author>
- <class>GradientMapConfigWidget</class>
- <widget class="QWidget" name="GradientMapConfigWidget">
+ <class>GradientMapFilterConfigWidget</class>
+ <widget class="QWidget" name="GradientMapFilterConfigWidget">
   <property name="geometry">
    <rect>
     <x>0</x>

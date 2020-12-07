@@ -18,14 +18,6 @@
 
 class KisConfigWidget;
 
-class KritaGradientMapFilterPlugin : public QObject
-{
-    Q_OBJECT
-public:
-    KritaGradientMapFilterPlugin(QObject *parent, const QVariantList &);
-    ~KritaGradientMapFilterPlugin() override;
-};
-
 class KisGradientMapFilter : public KisFilter
 {
 public:

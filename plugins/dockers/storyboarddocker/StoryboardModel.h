@@ -208,6 +208,14 @@ public:
 
     int lastKeyframeGlobal() const;
     void slotUpdateThumbnailsForItems(QModelIndexList indices);
+
+    /**
+     * @brief must be called after a first level index is inserted. Adds child nodes to the
+     * first level indices
+     * @param position Index of the first level node.
+     */
+    void insertChildRows(int position);
+
 private Q_SLOTS:
     /**
      * @brief called when currentUiTime changes
@@ -258,14 +266,6 @@ private Q_SLOTS:
     void slotCommentRowMoved(const QModelIndex &sourceParent, int sourceRow, int count,
                             const QModelIndex &destinationParent, int destinationChild);
 
-    /**
-     * @brief called when a first level index is inserted. Adds child nodes to the
-     * first level indices
-     * @param parent The parent of the inseted first level indices.
-     * @param first index of the first item inseted.
-     * @param last index of the last itme inserted.
-     */
-    void slotInsertChildRows(const QModelIndex parent, int first, int last);
 
 public Q_SLOTS:
     void slotSetActiveNode(KisNodeSP);
@@ -292,7 +292,6 @@ private:
     KisNodeSP m_activeNode;
     KisStoryboardThumbnailRenderScheduler *m_renderScheduler;
     KisSignalCompressor m_renderSchedulingCompressor;
-    KisImageSP cloneImage;
 };
 
 #endif

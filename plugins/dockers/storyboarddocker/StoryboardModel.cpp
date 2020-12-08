@@ -364,48 +364,30 @@ bool StoryboardModel::removeRows(int position, int rows, const QModelIndex &pare
 
         beginRemoveRows(QModelIndex(), position, position+rows-1);
 
-        const bool needsDurationUpdate = position > 0 && position < m_items.count();
-
         for (int row = position + rows - 1; row >= position; row--) {
+            const bool needsDurationUpdate = row > 0 && row < m_items.count();
+            const int durationDeletedFrame = getTotalDurationInFrame(index(row, 0));
+
             m_items.removeAt(row);
+
+            if (m_items.count() == 0) {
+                break;
+            }
+
+            if (needsDurationUpdate) {
+
+                StoryboardItemSP boardA = m_items.at(row - 1);
+                QModelIndex boardAIndex = index(row - 1, 0);
+
+                KIS_ASSERT( boardA );
+                KIS_ASSERT( boardAIndex.isValid() );
+                const int duration = getTotalDurationInFrame(boardAIndex) + durationDeletedFrame ;
+                const int durationFrames = duration % getFramesPerSecond();
+                const int durationSeconds = duration / getFramesPerSecond();
+                boardA->child(StoryboardItem::DurationFrame)->setData(QVariant::fromValue<int>(durationFrames));
+                boardA->child(StoryboardItem::DurationSecond)->setData(QVariant::fromValue<int>(durationSeconds));
+            }
         }
-
-        if (m_items.count() == 0) {
-            return true;
-        }
-
-        const bool removedLastItems = (position == m_items.count());
-
-        if (needsDurationUpdate && !removedLastItems) {
-
-            StoryboardItemSP boardA = m_items.at(position - 1);
-            QModelIndex boardAIndex = index(position - 1, 0);
-            StoryboardItemSP boardB = m_items.at(position);
-            QModelIndex boardBIndex = index(position, 0);
-
-            KIS_ASSERT( boardA && boardB );
-            KIS_ASSERT( boardAIndex.isValid() && boardBIndex.isValid() );
-            const int duration = index(StoryboardItem::FrameNumber, 0, boardBIndex).data().toInt()
-                               - index(StoryboardItem::FrameNumber, 0, boardAIndex).data().toInt();
-            const int durationFrames = duration % getFramesPerSecond();
-            const int durationSeconds = duration / getFramesPerSecond();
-            boardA->child(StoryboardItem::DurationFrame)->setData(QVariant::fromValue<int>(durationFrames));
-            boardA->child(StoryboardItem::DurationSecond)->setData(QVariant::fromValue<int>(durationSeconds));
-        } else if (removedLastItems) {
-
-            KIS_ASSERT(position == m_items.count());
-            StoryboardItemSP board = m_items.at(position - 1);
-            QModelIndex boardIndex = index(position - 1, 0);
-
-            KIS_ASSERT(board && boardIndex.isValid());
-            const int duration = lastKeyframeGlobal() + 1 - index(StoryboardItem::FrameNumber, 0, boardIndex).data().toInt();
-            const int durationFrames = duration % getFramesPerSecond();
-            const int durationSeconds = duration / getFramesPerSecond();
-
-            board->child(StoryboardItem::DurationFrame)->setData(QVariant::fromValue<int>(durationFrames));
-            board->child(StoryboardItem::DurationSecond)->setData(QVariant::fromValue<int>(durationSeconds));
-        }
-
         endRemoveRows();
         emit(sigStoryboardItemListChanged());
         return true;

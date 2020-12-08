@@ -37,7 +37,7 @@ QList<KoResourceSP> KisGradientMapFilterConfiguration::linkedResources(KisResour
     QList<KoResourceSP> resources;
 
     // only the first version of the filter loaded the gradient by name
-    if (this->version() == 1) {
+    if (version() == 1) {
         KoStopGradientSP gradient = this->gradient();
         if (gradient) {
             resources << gradient;
@@ -54,7 +54,7 @@ QList<KoResourceSP> KisGradientMapFilterConfiguration::embeddedResources(KisReso
     QList<KoResourceSP> resources;
 
     // the second version of the filter embeds the gradient
-    if (this->version() > 1) {
+    if (version() > 1) {
         KoStopGradientSP gradient = this->gradient();
 
         if (gradient) {
@@ -67,40 +67,34 @@ QList<KoResourceSP> KisGradientMapFilterConfiguration::embeddedResources(KisReso
 
 KoStopGradientSP KisGradientMapFilterConfiguration::gradient() const
 {
-    KoStopGradientSP gradient;
-
-    if (this->version() == 1) {
-        auto source = resourcesInterface()->source<KoAbstractGradient>(ResourceType::Gradients);
-
-        KoAbstractGradientSP gradientAb = source.resourceForName(this->getString("gradientName"));
-        if (!gradientAb) {
-            qWarning() << "Could not find gradient" << this->getString("gradientName");
-            gradientAb = source.fallbackResource();
+    if (version() == 1) {
+        KoAbstractGradientSP resourceGradient = 
+            resourcesInterface()->source<KoAbstractGradient>(ResourceType::Gradients).resourceForName(this->getString("gradientName"));
+        if (resourceGradient) {
+            KoStopGradientSP gradient = KisGradientConversion::toStopGradient(resourceGradient);
+            gradient->setValid(true);
+            return gradient;
+        } else {
+            qWarning() << "Could not find gradient" << getString("gradientName");
         }
-
-        gradient = gradientAb.dynamicCast<KoStopGradient>();
-
-        if (!gradient) {
-            QScopedPointer<QGradient> qGradient(gradientAb->toQGradient());
-
-            QDomDocument doc;
-            QDomElement elt = doc.createElement("gradient");
-            KoStopGradient::fromQGradient(qGradient.data())->toXML(doc, elt);
-            doc.appendChild(elt);
-
-            gradient = KoStopGradient::fromXML(doc.firstChildElement())
+    } else if (version() == 2) {
+        QDomDocument document;
+        if (document.setContent(getString("gradientXML", ""))) {
+            const QDomElement gradientElement = document.firstChildElement();
+            if (!gradientElement.isNull()) {
+                KoStopGradientSP gradient =
+                    KoStopGradient::fromXML(gradientElement)
                     .clone()
                     .dynamicCast<KoStopGradient>();
+                if (gradient) {
+                    gradient->setName(gradientElement.attribute("name", ""));
+                    gradient->setValid(true);
+                    return gradient;
+                }
+            }
         }
-    } else {
-        QDomDocument doc;
-        doc.setContent(this->getString("gradientXML", ""));
-        gradient = KoStopGradient::fromXML(doc.firstChildElement())
-                .clone()
-                .dynamicCast<KoStopGradient>();
-
     }
-    return gradient;
+    return defaultGradient(resourcesInterface());
 }
 
 int KisGradientMapFilterConfiguration::colorMode() const

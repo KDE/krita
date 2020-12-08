@@ -208,6 +208,7 @@ public:
      */
     int getTotalDurationInFrame(QModelIndex parentIndex) const;
 
+    void pushUndoCommand(KUndo2Command *command);
 
     void shiftKeyframes(KisTimeSpan affected, int offset);
 
@@ -220,6 +221,12 @@ public:
      * @param position Index of the first level node.
      */
     void insertChildRows(int position);
+
+    /**
+     * @brief Adds child nodes from the item provided
+     * @param position Index of the first level node.
+     */
+    void insertChildRows(int position, StoryboardItemSP item);
 
 private Q_SLOTS:
     /**

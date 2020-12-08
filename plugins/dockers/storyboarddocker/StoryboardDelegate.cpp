@@ -21,6 +21,7 @@
 
 #include <kis_icon.h>
 #include <kis_image_animation_interface.h>
+#include "KisAddRemoveStoryboardCommand.h"
 
 StoryboardDelegate::StoryboardDelegate(QObject *parent)
     : QStyledItemDelegate(parent)
@@ -383,7 +384,10 @@ bool StoryboardDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, c
                 return true;
             }
             else if (leftButton && deleteItemButtonClicked) {
-                model->removeRows(index.parent().row(), 1);
+                int row = index.parent().row();
+                KisRemoveStoryboardCommand *command = new KisRemoveStoryboardCommand(row, sbModel->getData().at(row), sbModel);
+                sbModel->pushUndoCommand(command);
+                model->removeRows(row, 1);
                 return true;
             }
         }

@@ -17,9 +17,11 @@
 #include <kis_layer_utils.h>
 #include <kis_pointer_utils.h>
 #include <kis_group_layer.h>
+#include <kis_post_execution_undo_adapter.h>
 #include "kis_time_span.h"
 #include "kis_raster_keyframe_channel.h"
 #include "KisStoryboardThumbnailRenderScheduler.h"
+#include "KisAddRemoveStoryboardCommand.h"
 
 StoryboardModel::StoryboardModel(QObject *parent)
         : QAbstractItemModel(parent)
@@ -157,7 +159,7 @@ bool StoryboardModel::setData(const QModelIndex & index, const QVariant & value,
 
         QSharedPointer<StoryboardChild> child = m_items.at(index.parent().row())->child(index.row());
         if (child) {
-            if (index.row() == StoryboardItem::FrameNumber) {
+            if (index.row() == StoryboardItem::FrameNumber && !value.canConvert<ThumbnailData>()) {
                 if (value.toInt() < 0) {
                     return false;
                 }
@@ -217,7 +219,7 @@ bool StoryboardModel::setData(const QModelIndex & index, const QVariant & value,
                 durationFrames->setData(QVariant::fromValue<int>(implicitSceneDuration % fps));
 
             }
-            else if (index.row() >= StoryboardItem::Comments) {
+            else if (index.row() >= StoryboardItem::Comments && !value.canConvert<CommentBox>()) {
                 CommentBox commentBox = qvariant_cast<CommentBox>(child->data());
                 commentBox.content = value.toString();
                 child->setData(QVariant::fromValue<CommentBox>(commentBox));
@@ -986,15 +988,16 @@ bool StoryboardModel::insertItem(QModelIndex index, bool after)
         return false;
     }
 
+    int desiredIndex;
     if (!index.isValid()) {
-        int pos = rowCount();
-        insertRow(pos);
-        insertChildRows(pos);
+        desiredIndex = rowCount();
     } else {
-        const int desiredIndex = after ? index.row() + 1 : index.row();
-        insertRow(desiredIndex);
-        insertChildRows(desiredIndex);
+        desiredIndex = after ? index.row() + 1 : index.row();    
     }
+    insertRow(desiredIndex);
+    insertChildRows(desiredIndex);
+    KisAddStoryboardCommand *command = new KisAddStoryboardCommand(desiredIndex, m_items.at(desiredIndex), this);
+    pushUndoCommand(command);
 
     // Let's start rendering after adding new storyboard items.
     slotUpdateThumbnails();
@@ -1023,6 +1026,12 @@ int StoryboardModel::getTotalDurationInFrame(QModelIndex parentIndex) const
     return duration;
 }
 
+
+void StoryboardModel::pushUndoCommand(KUndo2Command* command)
+{
+    
+    m_image->postExecutionUndoAdapter()->addCommand(toQShared(command));
+}
 
 void StoryboardModel::slotCurrentFrameChanged(int frameId)
 {
@@ -1299,4 +1308,22 @@ void StoryboardModel::insertChildRows(int position)
     if (m_image) {
         m_image->animationInterface()->switchCurrentTimeAsync(frameToSwitch);
     }
+}
+
+void StoryboardModel::insertChildRows(int position, StoryboardItemSP item)
+{
+    QModelIndex parentIndex = index(position, 0);
+    insertRows(0, 4 + m_commentList.count(), parentIndex);
+
+    setFreeze(true);
+    for (int i = 0; i < item->childCount(); i++) {   
+        QVariant data = item->child(i)->data();
+        if ((i != StoryboardItem::DurationSecond && i != StoryboardItem::DurationFrame) || position + 1 == rowCount()){
+            setData(index(i, 0, index(position, 0)), data);
+        }
+    }
+
+    updateDurationData(parentIndex);
+    updateDurationData(index(parentIndex.row() - 1, 0));
+    setFreeze(false);
 }

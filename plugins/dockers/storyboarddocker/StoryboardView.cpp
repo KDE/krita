@@ -12,6 +12,7 @@
 
 #include "StoryboardView.h"
 #include "StoryboardModel.h"
+#include "KisAddRemoveStoryboardCommand.h"
 
 class StoryboardStyle : public QProxyStyle
 {
@@ -277,7 +278,10 @@ void StoryboardView::slotContextMenuRequested(const QPoint &point)
         if (index.row() > 0) {
             contextMenu.addAction(i18nc("Add scene before active scene", "Add Scene Before"), [this, index, Model] {Model->insertItem(index, false); });
         }
-        contextMenu.addAction(i18nc("Remove current scene from storyboards", "Remove Scene"), [this, index] {model()->removeRows(index.row(), 1); });
+        contextMenu.addAction(i18nc("Remove current scene from storyboards", "Remove Scene"), [this, index, Model] {
+                KisRemoveStoryboardCommand *command = new KisRemoveStoryboardCommand(index.row(), Model->getData().at(index.row()), Model);
+                Model->pushUndoCommand(command);
+                model()->removeRows(index.row(), 1); });
     }
     contextMenu.exec(viewport()->mapToGlobal(point));
 }

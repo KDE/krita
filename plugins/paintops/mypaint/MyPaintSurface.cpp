@@ -15,7 +15,9 @@
 #include <kis_image.h>
 #include <kis_node.h>
 #include <kis_sequential_iterator.h>
+#include <kis_selection.h>
 #include <qmath.h>
+#include <KoCompositeOpRegistry.h>
 
 using namespace std;
 
@@ -29,8 +31,16 @@ KisMyPaintSurface::KisMyPaintSurface(KisPainter *painter, KisPaintDeviceSP paint
     : m_painter(painter)
     , m_imageDevice(paintNode)
     , m_image(image)
-    , m_dab(painter->device()->createCompositionSourceDevice())
+    , m_precisePainterWrapper(painter->device())
+    , m_tempPainter(new KisPainter(m_precisePainterWrapper.preciseDevice()))
+    , m_backgroundPainter(new KisPainter(m_precisePainterWrapper.preciseDevice()))
+    , m_dab(m_precisePainterWrapper.createPreciseCompositionSourceDevice())
 {
+    m_backgroundPainter->setCompositeOp(COMPOSITE_COPY);
+    m_backgroundPainter->setOpacity(OPACITY_OPAQUE_U8);
+    m_tempPainter->setSelection(painter->selection());
+    m_tempPainter->setChannelFlags(painter->channelFlags());
+    m_tempPainter->copyMirrorInformationFrom(painter);
     m_surface = new MyPaintSurfaceInternal();
     mypaint_surface_init(m_surface);
     m_surface->m_owner = this;
@@ -38,7 +48,12 @@ KisMyPaintSurface::KisMyPaintSurface(KisPainter *painter, KisPaintDeviceSP paint
     m_surface->draw_dab = this->draw_dab;
     m_surface->get_color = this->get_color;
     m_surface->destroy = destroy_internal_surface_callback;
-    m_surface->bitDepth = painter->device()->colorSpace()->channels()[0]->channelValueType();
+    m_surface->bitDepth = m_precisePainterWrapper.preciseColorSpace()->channels()[0]->channelValueType();
+    if (m_image) {
+        m_preciseImageDeviceWrapper.reset(new KisPrecisePaintDeviceWrapper(m_image->projection()));
+    } else if(m_imageDevice) {
+        m_preciseImageDeviceWrapper.reset(new KisPrecisePaintDeviceWrapper(paintNode));
+    }
 }
 
 KisMyPaintSurface::~KisMyPaintSurface()
@@ -131,6 +146,8 @@ int KisMyPaintSurface::drawDabImpl(MyPaintSurface *self, float x, float y, float
     const QPointF center = QPointF(x, y);
 
     KisAlgebra2D::OuterCircle outer(center, radius);
+    m_dab->clear(dabRectAligned);
+    m_precisePainterWrapper.readRect(dabRectAligned);
 
     KisSequentialIterator it(m_dab, dabRectAligned);
 
@@ -208,16 +225,16 @@ int KisMyPaintSurface::drawDabImpl(MyPaintSurface *self, float x, float y, float
         if (unitValue == 1.0f) {
             swap(b, r);
         }
-
         nativeArray[0] = qBound(minValue, b * unitValue, maxValue);
         nativeArray[1] = qBound(minValue, g * unitValue, maxValue);
         nativeArray[2] = qBound(minValue, r * unitValue, maxValue);
         nativeArray[3] = qBound(minValue, a * unitValue, maxValue);
     }
-
-    painter()->setOpacity(opaque*OPACITY_OPAQUE_U8);
-    painter()->bitBlt(dabRectAligned.topLeft(), m_dab, dabRectAligned);
-    painter()->addDirtyRect(dabRectAligned);
+    m_tempPainter->setCompositeOp(painter()->compositeOp()->id());
+    m_tempPainter->bitBlt(dabRectAligned.topLeft(), m_dab, dabRectAligned);
+    const QVector<QRect> dirtyRects = m_tempPainter->takeDirtyRegion();
+    m_precisePainterWrapper.writeRects(dirtyRects);
+    painter()->addDirtyRects(dirtyRects);
     return 1;
 }
 
@@ -233,13 +250,17 @@ void KisMyPaintSurface::getColorImpl(MyPaintSurface *self, float x, float y, flo
     *color_b = 0.0f;
     *color_a = 0.0f;
 
-    const KoColorSpace *colorSpace = painter()->device()->colorSpace();
     const QPoint pt = QPoint(x - radius, y - radius);
     const QSize sz = QSize(2 * radius, 2 * radius);
+
 
     const QRect dabRectAligned = QRect(pt, sz);
     const QPointF center = QPointF(x, y);
     KisAlgebra2D::OuterCircle outer(center, radius);
+
+    QRect srcDabRect = dabRectAligned.translated((m_lastPaintPos - center).toPoint());
+
+    m_lastPaintPos = center;
 
     const float one_over_radius2 = 1.0f / (radius * radius);
     float sum_weight = 0.0f;
@@ -248,18 +269,24 @@ void KisMyPaintSurface::getColorImpl(MyPaintSurface *self, float x, float y, flo
     float sum_b = 0.0f;
     float sum_a = 0.0f;
 
-    KisPaintDeviceSP targetDevice;
+    KisPaintDeviceSP activeDev = m_precisePainterWrapper.preciseDevice();
+
 
     if(m_image) {
         m_image->blockUpdates();
-        targetDevice = m_image->projection();
+        m_preciseImageDeviceWrapper->readRect(srcDabRect);
+        m_backgroundPainter->bitBlt(QPoint(), m_preciseImageDeviceWrapper->preciseDevice(), srcDabRect);
+        activeDev = m_backgroundPainter->device();
+        m_image->unblockUpdates();
     } else if (m_imageDevice) {
-        targetDevice = m_imageDevice;
+        m_preciseImageDeviceWrapper->readRect(srcDabRect);
+        m_backgroundPainter->bitBlt(QPoint(), m_preciseImageDeviceWrapper->preciseDevice(), srcDabRect);
+        activeDev = m_backgroundPainter->device();
     } else {
-        targetDevice = m_painter->device();
+        m_precisePainterWrapper.readRect(srcDabRect);
     }
 
-    KisSequentialIterator it(targetDevice, dabRectAligned);
+    KisSequentialIterator it(activeDev, srcDabRect);
     QVector<float> surface_color_vec = {0,0,0,0};
 
     while(it.nextPixel()) {
@@ -315,10 +342,6 @@ void KisMyPaintSurface::getColorImpl(MyPaintSurface *self, float x, float y, flo
         *color_g = CLAMP(sum_g, 0.0f, 1.0f);
         *color_b = CLAMP(sum_b, 0.0f, 1.0f);
         *color_a = CLAMP(sum_a, 0.0f, 1.0f);
-    }
-
-    if(m_image) {
-        m_image->unblockUpdates();
     }
 }
 

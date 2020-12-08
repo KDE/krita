@@ -23,7 +23,7 @@ KisGradientMapFilterConfigWidget::KisGradientMapFilterConfigWidget(QWidget *pare
 {
     m_ui.setupUi(this);
 
-    m_gradientChangedCompressor = new KisSignalCompressor(100, KisSignalCompressor::FIRST_ACTIVE);
+    m_gradientChangedCompressor = new KisSignalCompressor(50, KisSignalCompressor::FIRST_ACTIVE);
     
     m_ui.widgetGradientEditor->setContentsMargins(10, 10, 10, 10);
     m_ui.widgetGradientEditor->loadUISettings();
@@ -43,7 +43,7 @@ KisPropertiesConfigurationSP KisGradientMapFilterConfigWidget::configuration() c
 {
     KisGradientMapFilterConfiguration *config = new KisGradientMapFilterConfiguration(KisGlobalResourcesInterface::instance());
     
-    KoStopGradientSP gradient = KisGradientConversion::toStopGradient(m_ui.widgetGradientEditor->gradient());
+    KoAbstractGradientSP gradient = m_ui.widgetGradientEditor->gradient();
     if (gradient && m_view) {
         KoCanvasResourcesInterfaceSP canvasResourcesInterface =
             m_view->canvasResourceProvider()->resourceManager()->canvasResourcesInterface();

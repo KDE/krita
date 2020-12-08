@@ -14,18 +14,33 @@
 
 #include "KisGradientMapFilterDitherCachedGradient.h"
 
-KisGradientMapFilterDitherCachedGradient::KisGradientMapFilterDitherCachedGradient(const KoStopGradientSP gradient, qint32 steps, const KoColorSpace *cs)
+KisGradientMapFilterDitherCachedGradient::KisGradientMapFilterDitherCachedGradient(const KoAbstractGradientSP gradient, qint32 steps, const KoColorSpace *cs)
     : m_max(steps - 1)
     , m_nullEntry(CachedEntry{KoColor(cs), KoColor(cs), 0.0})
 {
-    for (qint32 i = 0; i < steps; i++) {
-        qreal t = static_cast<qreal>(i) / m_max;
-        KoGradientStop leftStop, rightStop;
-        if (!gradient->stopsAt(leftStop, rightStop, t)) {
-            m_cachedEntries << m_nullEntry;
-        } else {
-            const qreal localT = (t - leftStop.position) / (rightStop.position - leftStop.position);
-            m_cachedEntries << CachedEntry{leftStop.color.convertedTo(cs), rightStop.color.convertedTo(cs), localT};
+    if (gradient.dynamicCast<KoStopGradient>()) {
+        KoStopGradient *stopGradient = static_cast<KoStopGradient*>(gradient.data());
+        for (qint32 i = 0; i < steps; i++) {
+            qreal t = static_cast<qreal>(i) / m_max;
+            KoGradientStop leftStop, rightStop;
+            if (!stopGradient->stopsAt(leftStop, rightStop, t)) {
+                m_cachedEntries << m_nullEntry;
+            } else {
+                const qreal localT = (t - leftStop.position) / (rightStop.position - leftStop.position);
+                m_cachedEntries << CachedEntry{leftStop.color.convertedTo(cs), rightStop.color.convertedTo(cs), localT};
+            }
+        }
+    } else if (gradient.dynamicCast<KoSegmentGradient>()) {
+        KoSegmentGradient *segmentGradient = static_cast<KoSegmentGradient*>(gradient.data());
+        for (qint32 i = 0; i < steps; i++) {
+            qreal t = static_cast<qreal>(i) / m_max;
+            KoGradientSegment *segment = segmentGradient->segmentAt(t);
+            if (!segment) {
+                m_cachedEntries << m_nullEntry;
+            } else {
+                const qreal localT = (t - segment->startOffset()) / (segment->endOffset() - segment->startOffset());
+                m_cachedEntries << CachedEntry{segment->startColor().convertedTo(cs), segment->endColor().convertedTo(cs), localT};
+            }
         }
     }
 }

@@ -13,6 +13,10 @@
 #include <kis_filter_configuration.h>
 #include <KisGradientConversion.h>
 #include <KisResourcesInterface.h>
+#include <KoColorSpaceRegistry.h>
+#include <KoAbstractGradient.h>
+#include <KoStopGradient.h>
+
 
 class KisGradientMapFilterConfiguration;
 typedef KisPinnedSharedPtr<KisGradientMapFilterConfiguration> KisGradientMapFilterConfigurationSP;
@@ -20,7 +24,8 @@ typedef KisPinnedSharedPtr<KisGradientMapFilterConfiguration> KisGradientMapFilt
 class KisGradientMapFilterConfiguration : public KisFilterConfiguration
 {
 public:
-   enum ColorMode {
+    enum ColorMode
+    {
         ColorMode_Blend,
         ColorMode_Nearest,
         ColorMode_Dither
@@ -45,16 +50,25 @@ public:
         return 2;
     }
 
-    static inline KoStopGradientSP defaultGradient(KisResourcesInterfaceSP resourcesInterface)
+    static inline KoAbstractGradientSP defaultGradient(KisResourcesInterfaceSP resourcesInterface)
     {
-        KoStopGradientSP gradient =
-            KoStopGradientSP(
-                KisGradientConversion::toStopGradient(
-                    resourcesInterface->source<KoAbstractGradient>(ResourceType::Gradients).fallbackResource()
-                )
+        KoAbstractGradientSP gradient;
+        KoAbstractGradientSP resourceGradient = resourcesInterface->source<KoAbstractGradient>(ResourceType::Gradients).fallbackResource();
+        if (resourceGradient) {
+            gradient = resourceGradient->clone().dynamicCast<KoAbstractGradient>();
+        } else {
+            KoStopGradientSP stopGradient(new KoStopGradient);
+            stopGradient->setStops(
+                QList<KoGradientStop>()
+                << KoGradientStop(0.0, KoColor(Qt::black, KoColorSpaceRegistry::instance()->rgb8(0)), FOREGROUNDSTOP)
+                << KoGradientStop(1.0, KoColor(Qt::white, KoColorSpaceRegistry::instance()->rgb8(0)), BACKGROUNDSTOP)
             );
-        gradient->setName(i18nc("Default gradient name for the gradient generator", "Unnamed"));
-        gradient->setValid(true);
+            gradient = stopGradient.staticCast<KoAbstractGradient>();
+        }
+        if (gradient) {
+            gradient->setName(i18nc("Default gradient name for the gradient generator", "Unnamed"));
+            gradient->setValid(true);
+        }
         return gradient;
     }
 
@@ -63,10 +77,10 @@ public:
         return ColorMode_Blend;
     }
 
-    KoStopGradientSP gradient() const;
+    KoAbstractGradientSP gradient() const;
     int colorMode() const;
 
-    void setGradient(KoStopGradientSP newGradient);
+    void setGradient(KoAbstractGradientSP newGradient);
     void setColorMode(int newColorMode);
     void setDefaults();
 };

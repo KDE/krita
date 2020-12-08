@@ -147,7 +147,7 @@ int KisMyPaintSurface::drawDabImpl(MyPaintSurface *self, float x, float y, float
 
     KisAlgebra2D::OuterCircle outer(center, radius);
     m_dab->clear(dabRectAligned);
-    m_precisePainterWrapper.readRect(dabRectAligned);
+    m_precisePainterWrapper.readRects(m_tempPainter->calculateAllMirroredRects(dabRectAligned));
 
     KisSequentialIterator it(m_dab, dabRectAligned);
 
@@ -232,6 +232,7 @@ int KisMyPaintSurface::drawDabImpl(MyPaintSurface *self, float x, float y, float
     }
     m_tempPainter->setCompositeOp(painter()->compositeOp()->id());
     m_tempPainter->bitBlt(dabRectAligned.topLeft(), m_dab, dabRectAligned);
+    m_tempPainter->renderMirrorMask(dabRectAligned, m_dab);
     const QVector<QRect> dirtyRects = m_tempPainter->takeDirtyRegion();
     m_precisePainterWrapper.writeRects(dirtyRects);
     painter()->addDirtyRects(dirtyRects);
@@ -270,8 +271,6 @@ void KisMyPaintSurface::getColorImpl(MyPaintSurface *self, float x, float y, flo
     float sum_a = 0.0f;
 
     KisPaintDeviceSP activeDev = m_precisePainterWrapper.preciseDevice();
-
-
     if(m_image) {
         m_image->blockUpdates();
         m_preciseImageDeviceWrapper->readRect(srcDabRect);

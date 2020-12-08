@@ -203,6 +203,11 @@ public:
      */
     StoryboardItemList getData();
 
+    /**
+     * @return The total duration in frame.
+     */
+    int getTotalDurationInFrame(QModelIndex parentIndex) const;
+
 
     void shiftKeyframes(KisTimeSpan affected, int offset);
 

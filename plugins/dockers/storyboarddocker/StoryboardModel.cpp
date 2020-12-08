@@ -204,9 +204,7 @@ bool StoryboardModel::setData(const QModelIndex & index, const QVariant & value,
                 while (nextScene.isValid()) {
                     const int lastSceneStartFrame = this->index(StoryboardItem::FrameNumber, 0, lastScene).data().toInt();
                     const int lastSceneDuration = lastScene == index.parent() ? implicitSceneDuration
-                                                                              : this->index(StoryboardItem::DurationFrame, 0, lastScene).data().toInt()
-                                                                              + this->index(StoryboardItem::DurationSecond, 0, lastScene).data().toInt()
-                                                                              * getFramesPerSecond();
+                                                                              : getTotalDurationInFrame(lastScene);
                     setData( this->index(StoryboardItem::FrameNumber, 0, nextScene), lastSceneStartFrame + lastSceneDuration);
                     lastScene = nextScene;
                     nextScene = this->index(lastScene.row() + 1, 0);
@@ -822,9 +820,7 @@ int StoryboardModel::lastKeyframeWithin(QModelIndex sceneIndex)
     if (!m_image)
         return sceneFrame;
 
-    const int nextSceneFrame = sceneFrame + index(StoryboardItem::DurationFrame, 0, sceneIndex).data().toInt()
-                                            + index(StoryboardItem::DurationSecond, 0, sceneIndex).data().toInt()
-                                            * getFramesPerSecond();
+    const int nextSceneFrame = sceneFrame + getTotalDurationInFrame(sceneIndex);
 
     int lastFrameOfScene = sceneFrame;
     for (int frame = sceneFrame; frame < nextSceneFrame; frame = nextKeyframeGlobal(frame)) {
@@ -850,9 +846,7 @@ void StoryboardModel::reorderKeyframes()
         frameAssociates.insert(sceneIndex, 0);
 
         const int lastFrameOfScene = index(StoryboardItem::FrameNumber, 0, sceneIndex).data().toInt()
-                                     + index(StoryboardItem::DurationFrame, 0, sceneIndex).data().toInt()
-                                     + index(StoryboardItem::DurationSecond, 0, sceneIndex).data().toInt()
-                                     * getFramesPerSecond();
+                                     + getTotalDurationInFrame(sceneIndex);
 
         for( int i = sceneFrame; i < lastFrameOfScene; i++) {
             frameAssociates.insert(sceneIndex, i - sceneFrame);
@@ -902,8 +896,7 @@ void StoryboardModel::reorderKeyframes()
                                                originalKeyframes.value(srcFrame + associateFrameOffset));
                 }
 
-                intendedSceneFrameTime += index(StoryboardItem::DurationFrame, 0, sceneIndex).data().toInt()
-                                        + index(StoryboardItem::DurationSecond, 0, sceneIndex).data().toInt() * getFramesPerSecond();
+                intendedSceneFrameTime += getTotalDurationInFrame(sceneIndex);
             }
         });
     }
@@ -914,9 +907,7 @@ void StoryboardModel::reorderKeyframes()
         QModelIndex sceneIndex = index(i, 0);
         setData(index(StoryboardItem::FrameNumber, 0, sceneIndex), intendedFrameValue);
         slotUpdateThumbnailForFrame(intendedFrameValue);
-        intendedFrameValue += index(StoryboardItem::DurationFrame, 0, sceneIndex).data().toInt()
-                            + index(StoryboardItem::DurationSecond, 0, sceneIndex).data().toInt()
-                            * getFramesPerSecond();
+        intendedFrameValue += getTotalDurationInFrame(sceneIndex);
     }
 
     m_renderScheduler->slotStartFrameRendering();
@@ -931,9 +922,7 @@ bool StoryboardModel::changeSceneHoldLength(int newDuration, QModelIndex itemInd
         return false;
     }
 
-    const int origLengthFrames = index(StoryboardItem::DurationFrame, 0, itemIndex).data().toInt();
-    const int origLengthSeconds = index(StoryboardItem::DurationSecond, 0, itemIndex).data().toInt();
-    const int origSceneFrameLength = origLengthSeconds * getFramesPerSecond() + origLengthFrames;
+    const int origSceneFrameLength = getTotalDurationInFrame(itemIndex);
     const int lastFrameOfScene = lastKeyframeWithin(itemIndex);
 
     int durationChange = newDuration - origSceneFrameLength;
@@ -1037,6 +1026,15 @@ StoryboardItemList StoryboardModel::getData()
     return m_items;
 }
 
+int StoryboardModel::getTotalDurationInFrame(QModelIndex parentIndex) const
+{
+    int duration = index(StoryboardItem::DurationFrame, 0, parentIndex).data().toInt()
+                + index(StoryboardItem::DurationSecond, 0, parentIndex).data().toInt()
+                * getFramesPerSecond();
+    return duration;
+}
+
+
 void StoryboardModel::slotCurrentFrameChanged(int frameId)
 {
     m_view->setCurrentItem(frameId);
@@ -1065,9 +1063,7 @@ void StoryboardModel::slotKeyframeAdded(const KisKeyframeChannel* channel, int t
     if (extendsLastScene) {
         const int sceneStartFrame = index(StoryboardItem::FrameNumber, 0, lastScene).data().toInt();
         const int desiredDuration = time - sceneStartFrame + 1;
-        const int actualDuration = index(StoryboardItem::DurationFrame, 0, lastScene).data().toInt()
-                                 + index(StoryboardItem::DurationSecond, 0, lastScene).data().toInt()
-                                 * getFramesPerSecond();
+        const int actualDuration = getTotalDurationInFrame(lastScene);
         const int duration = qMax(actualDuration, desiredDuration);
         KIS_ASSERT(duration > 0);
         const QSharedPointer<StoryboardChild> frameElement = m_items.at(lastScene.row())->child(StoryboardItem::DurationFrame);
@@ -1298,9 +1294,7 @@ void StoryboardModel::insertChildRows(int position)
         setData( index(StoryboardItem::DurationFrame, 0, index(position, 0)), lastKeyframeGlobal() - 0 + 1);
     } else {
         const int targetFrame = index(StoryboardItem::FrameNumber, 0, index(position - 1,0)).data().toInt()
-                                + index(StoryboardItem::DurationFrame, 0, index(position - 1,0)).data().toInt()
-                                + index(StoryboardItem::DurationSecond, 0, index(position - 1,0)).data().toInt()
-                                * getFramesPerSecond();
+                                + getTotalDurationInFrame(index(position - 1,0));
         setData (index (StoryboardItem::FrameNumber, 0, index(position, 0)), targetFrame);
 
         if (!m_freezeKeyframePosition && m_activeNode) {

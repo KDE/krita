@@ -26,11 +26,11 @@ void destroy_internal_surface_callback(MyPaintSurface *surface)
 }
 
 KisMyPaintSurface::KisMyPaintSurface(KisPainter *painter, KisPaintDeviceSP paintNode, KisImageSP image)
+    : m_painter(painter)
+    , m_imageDevice(paintNode)
+    , m_image(image)
+    , m_dab(painter->device()->createCompositionSourceDevice())
 {
-    m_painter = painter;
-    m_imageDevice = paintNode;
-    m_image = image;
-
     m_surface = new MyPaintSurfaceInternal();
     mypaint_surface_init(m_surface);
     m_surface->m_owner = this;
@@ -124,7 +124,6 @@ int KisMyPaintSurface::drawDabImpl(MyPaintSurface *self, float x, float y, float
     normal_mode = opaque * (1.0f - colorize);
     colorize = opaque * colorize;
 
-    const KoColorSpace *colorSpace = painter()->device()->colorSpace();
     const QPoint pt = QPoint(x - radius - 1, y - radius - 1);
     const QSize sz = QSize(2 * (radius+1), 2 * (radius+1));
 
@@ -133,7 +132,7 @@ int KisMyPaintSurface::drawDabImpl(MyPaintSurface *self, float x, float y, float
 
     KisAlgebra2D::OuterCircle outer(center, radius);
 
-    KisSequentialIterator it(painter()->device(), dabRectAligned);
+    KisSequentialIterator it(m_dab, dabRectAligned);
 
     while(it.nextPixel()) {
 
@@ -143,7 +142,6 @@ int KisMyPaintSurface::drawDabImpl(MyPaintSurface *self, float x, float y, float
             continue;
 
         float rr, base_alpha, alpha, dst_alpha, r, g, b, a;
-        float opacity;
 
         if (radius < 3.0) {
             rr = calculate_rr_antialiased (it.x(), it.y(), x, y, aspect_ratio, sn, cs, one_over_radius2, r_aa_start);
@@ -217,6 +215,8 @@ int KisMyPaintSurface::drawDabImpl(MyPaintSurface *self, float x, float y, float
         nativeArray[3] = qBound(minValue, a * unitValue, maxValue);
     }
 
+    painter()->setOpacity(opaque*OPACITY_OPAQUE_U8);
+    painter()->bitBlt(dabRectAligned.topLeft(), m_dab, dabRectAligned);
     painter()->addDirtyRect(dabRectAligned);
     return 1;
 }

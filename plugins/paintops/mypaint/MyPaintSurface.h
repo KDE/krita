@@ -79,6 +79,7 @@ private:
     KisPaintDeviceSP m_imageDevice;
     MyPaintSurfaceInternal *m_surface;
     KisImageSP m_image;
+    KisPaintDeviceSP m_dab;
 };
 
 #endif // KIS_MYPAINT_SURFACE_H

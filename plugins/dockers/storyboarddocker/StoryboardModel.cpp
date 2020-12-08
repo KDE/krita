@@ -801,8 +801,15 @@ int StoryboardModel::lastKeyframeWithin(QModelIndex sceneIndex)
 
     if (!m_image)
         return sceneFrame;
-
-    const int nextSceneFrame = sceneFrame + getTotalDurationInFrame(sceneIndex);
+    
+    QModelIndex nextScene = index(sceneIndex.row() + 1, 0);
+    int nextSceneFrame;
+    if (nextScene.isValid()) {
+        nextSceneFrame = data(index(StoryboardItem::FrameNumber, 0, nextScene)).toInt();
+    }
+    else {
+        nextSceneFrame = sceneFrame + getTotalDurationInFrame(sceneIndex);
+    }
 
     int lastFrameOfScene = sceneFrame;
     for (int frame = sceneFrame; frame < nextSceneFrame; frame = nextKeyframeGlobal(frame)) {

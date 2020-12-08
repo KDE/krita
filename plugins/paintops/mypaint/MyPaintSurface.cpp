@@ -157,6 +157,8 @@ int KisMyPaintSurface::drawDabImpl(MyPaintSurface *self, float x, float y, float
 
         channelType* nativeArray = reinterpret_cast<channelType*>(it.rawData());
         float unitValue = KoColorSpaceMathsTraits<channelType>::unitValue;
+        float minValue = KoColorSpaceMathsTraits<channelType>::min;
+        float maxValue = KoColorSpaceMathsTraits<channelType>::max;
 
         b = nativeArray[0]/unitValue;
         g = nativeArray[1]/unitValue;
@@ -209,10 +211,10 @@ int KisMyPaintSurface::drawDabImpl(MyPaintSurface *self, float x, float y, float
             swap(b, r);
         }
 
-        nativeArray[0] = b * unitValue;
-        nativeArray[1] = g * unitValue;
-        nativeArray[2] = r * unitValue;
-        nativeArray[3] = a * unitValue;
+        nativeArray[0] = qBound(minValue, b * unitValue, maxValue);
+        nativeArray[1] = qBound(minValue, g * unitValue, maxValue);
+        nativeArray[2] = qBound(minValue, r * unitValue, maxValue);
+        nativeArray[3] = qBound(minValue, a * unitValue, maxValue);
     }
 
     painter()->addDirtyRect(dabRectAligned);
@@ -280,6 +282,7 @@ void KisMyPaintSurface::getColorImpl(MyPaintSurface *self, float x, float y, flo
 
         channelType* nativeArray = reinterpret_cast<channelType*>(it.rawData());
         float unitValue = KoColorSpaceMathsTraits<channelType>::unitValue;
+
 
         b = nativeArray[0]/unitValue;
         g = nativeArray[1]/unitValue;

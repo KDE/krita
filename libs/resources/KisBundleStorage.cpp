@@ -31,6 +31,7 @@ public:
                     tag->setName(tagname);
                     tag->setComment(tagname);
                     tag->setUrl(tagname);
+                    tag->setResourceType(resourceType);
                     m_tags[tagname] = tag;
                 }
                 KoResourceSP resource = m_bundle->resource(resourceType, resourceReference.resourcePath);
@@ -58,6 +59,7 @@ public:
     QString name() const override { return m_tag ? m_tag->name() : QString(); }
     QString comment() const override {return m_tag ? m_tag->comment() : QString(); }
     KisTagSP tag() const override { return m_tag; }
+    QString resourceType() const override { return m_resourceType; } // Tags in bundles are still lists, not KisTag files.
 
 private:
     QHash<QString, KisTagSP> m_tags;

@@ -292,6 +292,7 @@ void TestTagModel::testAddTagWithResources()
     tag->setComment("A tag for testing");
     tag->setValid(true);
     tag->setActive(true);
+    tag->setResourceType("paintoppresets");
 
     tagModel.addTag(tag, {resource});
     QVERIFY(tag->id() >= 0);

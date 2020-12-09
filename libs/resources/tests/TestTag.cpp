@@ -78,6 +78,7 @@ void TestTag::testSaveTag()
     tag2.load(buf);
     QVERIFY(tag2.url() == tag1.url());
     QVERIFY(tag2.name() == tag1.name());
+    QVERIFY(tag2.resourceType() == tag1.resourceType());
     QVERIFY(tag2.comment() == tag1.comment());
     QVERIFY(tag2.defaultResources() == tag1.defaultResources());
 

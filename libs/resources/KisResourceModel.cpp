@@ -386,14 +386,17 @@ QVector<KisTagSP> KisAllResourcesModel::tagsForResource(int resourceId) const
     QSqlQuery q;
 
     r = q.prepare("SELECT tags.id\n"
-              ",      tags.url\n"
-              ",      tags.name\n"
-              ",      tags.comment\n"
-              "FROM   tags\n"
-              ",      resource_tags\n"
-              "WHERE  tags.active > 0\n"                               // make sure the tag is active
-              "AND    tags.id = resource_tags.tag_id\n"                // join tags + resource_tags by tag_id
-              "AND    resource_tags.resource_id = :resource_id\n");    // make sure we're looking for tags for a specific resource
+                  ",      tags.url\n"
+                  ",      tags.name\n"
+                  ",      tags.comment\n"
+                  ",      resource_types.name as resource_type\n"
+                  "FROM   tags\n"
+                  ",      resource_tags\n"
+                  ",      resource_types\n"
+                  "WHERE  tags.active > 0\n"                               // make sure the tag is active
+                  "AND    tags.id = resource_tags.tag_id\n"                // join tags + resource_tags by tag_id
+                  "AND    resource_tags.resource_id = :resource_id\n"
+                  "AND    resource_types.id = tags.resource_type_id\n");    // make sure we're looking for tags for a specific resource
     if (!r)  {
         qWarning() << "Could not prepare TagsForResource query" << q.lastError();
     }
@@ -411,6 +414,7 @@ QVector<KisTagSP> KisAllResourcesModel::tagsForResource(int resourceId) const
         tag->setUrl(q.value("url").toString());
         tag->setName(q.value("name").toString());
         tag->setComment(q.value("comment").toString());
+        tag->setResourceType(q.value("resource_type").toString());
         tag->setValid(true);
         tag->setActive(true);
         tags << tag;

@@ -44,6 +44,7 @@ void TestMemoryStorage::testTagIterator()
     tag->setComment("comment");
     tag->setUrl("url");
     tag->setName("name");
+    tag->setResourceType("paintoppresets");
     memoryStorage.addTag("paintoppresets", tag);
     QSharedPointer<KisResourceStorage::TagIterator> iter = memoryStorage.tags(ResourceType::PaintOpPresets);
     QVERIFY(iter->hasNext());

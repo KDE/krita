@@ -98,6 +98,7 @@ QVariant KisAllTagResourceModel::data(const QModelIndex &index, int role) const
         tag->setComment(d->query.value("tag_comment").toString());
         tag->setId(d->query.value("tag_id").toInt());
         tag->setActive(d->query.value("tag_active").toBool());
+        tag->setResourceType(d->resourceType);
         tag->setValid(true);
 
         v = QVariant::fromValue(tag);
@@ -231,6 +232,7 @@ bool KisAllTagResourceModel::resetQuery()
                               ",      tags\n"
                               ",      resource_tags\n"
                               "WHERE  tags.id                    = resource_tags.tag_id\n"
+                              "AND    tags.resource_type_id      = resource_types.id\n"
                               "AND    resources.id               = resource_tags.resource_id\n"
                               "AND    resources.resource_type_id = resource_types.id\n"
                               "AND    resources.storage_id       = storages.id\n"

@@ -395,7 +395,7 @@ QModelIndex KisTagResourceModel::indexForResource(KoResourceSP resource) const
     if (!resource || !resource->valid() || resource->resourceId() < 0) return QModelIndex();
 
     for (int i = 0; i < rowCount(); ++i)  {
-        QModelIndex idx = createIndex(i, Qt::UserRole + KisAllTagResourceModel::ResourceId);
+        QModelIndex idx = index(i, Qt::UserRole + KisAllTagResourceModel::ResourceId);
         Q_ASSERT(idx.isValid());
         if (idx.data(Qt::UserRole + KisAllTagResourceModel::ResourceId).toInt() == resource->resourceId()) {
             return idx;

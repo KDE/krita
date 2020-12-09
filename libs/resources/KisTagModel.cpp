@@ -215,7 +215,7 @@ QModelIndex KisAllTagsModel::indexForTag(KisTagSP tag) const
     do {
         if (tag->id() >= 0) {
             if (d->query.value("id").toInt() == tag->id()) {
-                return createIndex(d->query.at() + s_fakeRowsCount, 0);
+                return index(d->query.at() + s_fakeRowsCount, 0);
             }
         }
         else {
@@ -223,7 +223,7 @@ QModelIndex KisAllTagsModel::indexForTag(KisTagSP tag) const
             // database.
             if (d->query.value("url").toString() == tag->url()
                     && d->query.value("resource_type") == d->resourceType) {
-                return createIndex(d->query.at() + s_fakeRowsCount, 0);
+                return index(d->query.at() + s_fakeRowsCount, 0);
             }
         }
     } while (d->query.next());

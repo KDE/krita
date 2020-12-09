@@ -1,5 +1,6 @@
 [Desktop Entry]
 Type=Tag
+ResourceType=paintoppreset
 Name=* Favorites
 Name[nl]=* Favorieten
 Comment=Your favorite brush presets

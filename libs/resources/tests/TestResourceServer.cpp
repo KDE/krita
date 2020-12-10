@@ -24,7 +24,9 @@
 #include <KisResourceLoaderRegistry.h>
 #include <KisResourceModel.h>
 
-#include <DummyResource.h>
+#include <KoSegmentGradient.h>
+#include <KoStopGradient.h>
+
 #include <ResourceTestHelper.h>
 
 #ifndef FILES_DATA_DIR
@@ -40,6 +42,11 @@ void TestResourceServer::initTestCase()
 {
     ResourceTestHelper::initTestDb();
     ResourceTestHelper::createDummyLoaderRegistry();
+
+    // Replace the dummy loaders with real gradient loaders
+    KisResourceLoaderRegistry *reg = KisResourceLoaderRegistry::instance();
+    reg->add(new KisResourceLoader<KoSegmentGradient>(ResourceSubType::SegmentedGradients, ResourceType::Gradients, i18n("Gradients"), QStringList() << "application/x-gimp-gradient"));
+    reg->add(new KisResourceLoader<KoStopGradient>(ResourceSubType::StopGradients, ResourceType::Gradients, i18n("Gradients"), QStringList() << "application/x-karbon-gradient" << "image/svg+xml"));
 
     m_srcLocation = QString(FILES_DATA_DIR);
     QVERIFY2(QDir(m_srcLocation).exists(), m_srcLocation.toUtf8());

@@ -18,7 +18,6 @@
 #include "KisResourceTypes.h"
 #include <DummyResource.h>
 
-
 #ifndef FILES_DATA_DIR
 #error "FILES_DATA_DIR not set. A directory with the data used for testing installing resources"
 #endif

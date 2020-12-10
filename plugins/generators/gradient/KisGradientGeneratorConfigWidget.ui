@@ -174,7 +174,7 @@
          <item column="0" row="0">
           <widget class="QLabel" name="labelStartPosition">
            <property name="text">
-            <string>Start:</string>
+            <string comment="Start position of the gradient">Start:</string>
            </property>
           </widget>
          </item>
@@ -246,7 +246,7 @@
          <item column="0" row="1">
           <widget class="QLabel" name="labelEndPosition">
            <property name="text">
-            <string>End:</string>
+            <string comment="End position of the gradient">End:</string>
            </property>
           </widget>
          </item>

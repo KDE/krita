@@ -304,6 +304,9 @@ public:
     bool meshShowHandles() const;
     void setMeshShowHandles(bool value);
 
+    bool meshSymmetricalHandles() const;
+    void setMeshSymmetricalHandles(bool meshSymmetricalHandles);
+
 private:
     void clear();
     void init(const ToolTransformArgs& args);
@@ -349,6 +352,7 @@ private:
 
     KisBezierTransformMesh m_meshTransform;
     bool m_meshShowHandles = true;
+    bool m_meshSymmetricalHandles = true;
 
     /**
      * When we continue a transformation, m_continuedTransformation

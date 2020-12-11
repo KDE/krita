@@ -386,8 +386,8 @@ bool StoryboardDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, c
             else if (leftButton && deleteItemButtonClicked) {
                 int row = index.parent().row();
                 KisRemoveStoryboardCommand *command = new KisRemoveStoryboardCommand(row, sbModel->getData().at(row), sbModel);
+                sbModel->removeItem(index.parent(), command);
                 sbModel->pushUndoCommand(command);
-                model->removeRows(row, 1);
                 return true;
             }
         }

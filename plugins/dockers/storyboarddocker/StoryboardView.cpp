@@ -279,9 +279,11 @@ void StoryboardView::slotContextMenuRequested(const QPoint &point)
             contextMenu.addAction(i18nc("Add scene before active scene", "Add Scene Before"), [this, index, Model] {Model->insertItem(index, false); });
         }
         contextMenu.addAction(i18nc("Remove current scene from storyboards", "Remove Scene"), [this, index, Model] {
-                KisRemoveStoryboardCommand *command = new KisRemoveStoryboardCommand(index.row(), Model->getData().at(index.row()), Model);
-                Model->pushUndoCommand(command);
-                model()->removeRows(index.row(), 1); });
+            int row = index.row();
+            KisRemoveStoryboardCommand *command = new KisRemoveStoryboardCommand(row, Model->getData().at(row), Model);
+            Model->removeItem(index, command);
+            Model->pushUndoCommand(command);
+        });
     }
     contextMenu.exec(viewport()->mapToGlobal(point));
 }

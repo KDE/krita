@@ -21,6 +21,7 @@
 class StoryboardView;
 class KisTimeSpan;
 class KisStoryboardThumbnailRenderScheduler;
+class KUndo2Command;
 
 /**
  * @class StoryboardModel
@@ -193,6 +194,14 @@ public:
     bool insertItem(QModelIndex index, bool after);
 
     /**
+     * @brief removes item, deletes keyframes within and shifts keyframe after
+     * the scene to fill in the gap
+     * @param index The index of the item to be removed
+     * @return true if item was removed
+     */
+    bool removeItem(QModelIndex index, KUndo2Command *command = nullptr);
+
+    /**
      * @brief resets @c m_items to @c list
      * @param list The new list of StoryboardItem*
      */
@@ -210,7 +219,7 @@ public:
 
     void pushUndoCommand(KUndo2Command *command);
 
-    void shiftKeyframes(KisTimeSpan affected, int offset);
+    void shiftKeyframes(KisTimeSpan affected, int offset, KUndo2Command *cmd = nullptr);
 
     int lastKeyframeGlobal() const;
     void slotUpdateThumbnailsForItems(QModelIndexList indices);
@@ -220,7 +229,7 @@ public:
      * first level indices
      * @param position Index of the first level node.
      */
-    void insertChildRows(int position);
+    void insertChildRows(int position, KUndo2Command* cmd = nullptr);
 
     /**
      * @brief Adds child nodes from the item provided

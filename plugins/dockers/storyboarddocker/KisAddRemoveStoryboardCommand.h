@@ -7,35 +7,41 @@
 #ifndef KISADDREMOVESTORYBOARDCOMMAND_H
 #define KISADDREMOVESTORYBOARDCOMMAND_H
 
-#include "kis_command_utils.h"
+#include "kundo2command.h"
 
 class StoryboardModel;
 
-//this class should handle undo/redo for deletion and addition of Storyboardds.
-
-class KisAddRemoveStoryboardCommand : public KisCommandUtils::FlipFlopCommand
+//For addition of Storyboardds.
+class KisAddStoryboardCommand : public KUndo2Command
 {
 public:
-    KisAddRemoveStoryboardCommand(int position, StoryboardItemSP item, StoryboardModel *model, KisCommandUtils::FlipFlopCommand::State state, KUndo2Command *parent = 0);
-    ~KisAddRemoveStoryboardCommand();
+    KisAddStoryboardCommand(int position, StoryboardItemSP item, StoryboardModel *model, KUndo2Command *parent = 0);
+    ~KisAddStoryboardCommand();
 
-    void partA() override;
-    void partB() override;
+    void redo() override;
+    void undo() override;
+    void updateItem();
+
+private:
+    int m_position;
+    StoryboardItemSP m_item;
+    StoryboardItemSP m_modelItem;
+    StoryboardModel *m_model;
+};
+
+//For removal of Storyboardds.
+class KisRemoveStoryboardCommand : public KUndo2Command
+{
+public:
+    KisRemoveStoryboardCommand(int position, StoryboardItemSP item, StoryboardModel *model, KUndo2Command *parent = 0);
+    ~KisRemoveStoryboardCommand();
+    void redo() override;
+    void undo() override;
 
 private:
     int m_position;
     StoryboardItemSP m_item;
     StoryboardModel *m_model;
-};
-
-struct KisAddStoryboardCommand : KisAddRemoveStoryboardCommand
-{
-    KisAddStoryboardCommand(int position, StoryboardItemSP item, StoryboardModel *model, KUndo2Command *parent = 0);
-};
-
-struct KisRemoveStoryboardCommand : KisAddRemoveStoryboardCommand
-{
-    KisRemoveStoryboardCommand(int position, StoryboardItemSP item, StoryboardModel *model, KUndo2Command *parent = 0);
 };
 
 #endif

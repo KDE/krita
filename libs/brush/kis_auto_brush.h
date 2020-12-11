@@ -70,6 +70,8 @@ public:
 
     void lodLimitations(KisPaintopLodLimitations *l) const override;
 
+    bool supportsCaching() const override;
+
 private:
 
     QImage createBrushPreview();

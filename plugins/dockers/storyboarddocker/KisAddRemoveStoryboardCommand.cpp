@@ -89,3 +89,30 @@ void KisRemoveStoryboardCommand::undo()
     m_model->insertRow(m_position);
     m_model->insertChildRows(m_position, m_item);
 }
+
+KisMoveStoryboardCommand::KisMoveStoryboardCommand(int from,
+                                                    int count,
+                                                    int to,
+                                                    StoryboardModel *model,
+                                                    KUndo2Command *parent)
+    : KUndo2Command(kundo2_i18n("Move Storyboard Scene"), parent)
+    , m_from(from)
+    , m_count(count)
+    , m_to(to)
+    , m_model(model)
+{
+}
+
+KisMoveStoryboardCommand::~KisMoveStoryboardCommand()
+{
+}
+
+void KisMoveStoryboardCommand::redo()
+{
+    m_model->moveRows(QModelIndex(), m_from, m_count, QModelIndex(), m_to);
+}
+
+void KisMoveStoryboardCommand::undo()
+{
+    m_model->moveRows(QModelIndex(), m_to, m_count, QModelIndex(), m_from + 1);      
+}

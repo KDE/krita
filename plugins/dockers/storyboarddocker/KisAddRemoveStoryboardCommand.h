@@ -44,4 +44,20 @@ private:
     StoryboardModel *m_model;
 };
 
+//For moving of Storyboardds.
+class KisMoveStoryboardCommand : public KUndo2Command
+{
+public:
+    KisMoveStoryboardCommand(int from, int to, int count, StoryboardModel *model, KUndo2Command *parent = 0);
+    ~KisMoveStoryboardCommand();
+    void redo() override;
+    void undo() override;
+
+private:
+    int m_from;
+    int m_count;
+    int m_to;
+    StoryboardModel *m_model;
+};
+
 #endif

@@ -532,7 +532,9 @@ bool StoryboardModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
             QModelIndex index = this->index(sourceRow, 0);
             moveRowIndexes.append(index);
         }
+        KisMoveStoryboardCommand *command = new KisMoveStoryboardCommand(moveRowIndexes.at(0).row(), moveRowIndexes.count(), row, this);
         moveRows(QModelIndex(), moveRowIndexes.at(0).row(), moveRowIndexes.count(), parent, row);
+        pushUndoCommand(command);
         //returning true deletes the source row
         return false;
     }

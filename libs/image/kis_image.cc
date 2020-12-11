@@ -1792,9 +1792,8 @@ bool KisImage::startIsolatedMode(KisNodeSP node)
         StartIsolatedModeStroke(KisNodeSP node, KisImageSP image)
             : KisRunnableBasedStrokeStrategy(QLatin1String("start-isolated-mode"),
                                              kundo2_noi18n("start-isolated-mode")),
-              m_node(node),
-              m_image(image),
-              m_needsFullRefresh(false)
+              m_newRoot(node),
+              m_image(image)
         {
             this->enableJob(JOB_INIT, true, KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
             this->enableJob(JOB_DOSTROKE, true);
@@ -1805,23 +1804,36 @@ bool KisImage::startIsolatedMode(KisNodeSP node)
         void initStrokeCallback() override {
             // pass-though node don't have any projection prepared, so we should
             // explicitly regenerate it before activating isolated mode.
-            m_node->projectionLeaf()->explicitlyRegeneratePassThroughProjection();
+            m_newRoot->projectionLeaf()->explicitlyRegeneratePassThroughProjection();
 
-            const bool beforeVisibility = m_node->projectionLeaf()->visible();
-            m_image->m_d->isolatedRootNode = m_node;
+            m_prevRoot = m_image->m_d->isolatedRootNode;
+
+            const bool beforeVisibility = m_newRoot->projectionLeaf()->visible();
+            const bool prevRootBeforeVisibility = m_prevRoot ? m_prevRoot->projectionLeaf()->visible() : false;
+
+            m_image->m_d->isolatedRootNode = m_newRoot;
             emit m_image->sigIsolatedModeChanged();
-            const bool afterVisibility = m_node->projectionLeaf()->visible();
 
-            m_needsFullRefresh = (beforeVisibility != afterVisibility);
+            const bool afterVisibility = m_newRoot->projectionLeaf()->visible();
+            const bool prevRootAfterVisibility = m_prevRoot ? m_prevRoot->projectionLeaf()->visible() : false;
+
+            m_newRootNeedsFullRefresh = beforeVisibility != afterVisibility;
+            m_prevRootNeedsFullRefresh = prevRootBeforeVisibility != prevRootAfterVisibility;
         }
 
         void finishStrokeCallback() override {
             // the GUI uses our thread to do the color space conversion so we
             // need to emit this signal in multiple threads
 
-            if (m_needsFullRefresh) {
-                m_image->refreshGraphAsync(m_node);
-            } else {
+            if (m_prevRoot && m_prevRootNeedsFullRefresh) {
+                m_image->refreshGraphAsync(m_prevRoot);
+            }
+
+            if (m_newRootNeedsFullRefresh) {
+                m_image->refreshGraphAsync(m_newRoot);
+            }
+
+            if (!m_prevRootNeedsFullRefresh && !m_newRootNeedsFullRefresh) {
                 QVector<KisRunnableStrokeJobData*> jobs;
                 m_image->m_d->notifyProjectionUpdatedInPatches(m_image->bounds(), jobs);
                 this->runnableJobsInterface()->addRunnableJobs(jobs);
@@ -1831,9 +1843,11 @@ bool KisImage::startIsolatedMode(KisNodeSP node)
         }
 
     private:
-        KisNodeSP m_node;
+        KisNodeSP m_newRoot;
+        KisNodeSP m_prevRoot;
         KisImageSP m_image;
-        bool m_needsFullRefresh;
+        bool m_newRootNeedsFullRefresh = false;
+        bool m_prevRootNeedsFullRefresh = false;
     };
 
     KisStrokeId id = startStroke(new StartIsolatedModeStroke(node, this));

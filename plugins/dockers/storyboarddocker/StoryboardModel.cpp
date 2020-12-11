@@ -122,6 +122,18 @@ QVariant StoryboardModel::data(const QModelIndex &index, int role) const
     }
     //return data only for the storyboardChild i.e. 2nd level nodes
     if (!index.parent().isValid()) {
+        if (role == TotalSceneDurationInFrames) {
+            int duration = this->index(StoryboardItem::DurationFrame, 0, index).data().toInt()
+                + this->index(StoryboardItem::DurationSecond, 0, index).data().toInt()
+                * getFramesPerSecond();
+            return duration;
+        }
+        else if (role == TotalSceneDurationInSeconds) {
+            qreal duration = this->index(StoryboardItem::DurationSecond, 0, index).data().toInt()
+                + this->index(StoryboardItem::DurationFrame, 0, index).data().toInt()
+                / getFramesPerSecond();
+            return duration;
+        }
         return QVariant();
     }
 
@@ -206,7 +218,7 @@ bool StoryboardModel::setData(const QModelIndex & index, const QVariant & value,
                 while (nextScene.isValid()) {
                     const int lastSceneStartFrame = this->index(StoryboardItem::FrameNumber, 0, lastScene).data().toInt();
                     const int lastSceneDuration = lastScene == index.parent() ? implicitSceneDuration
-                                                                              : getTotalDurationInFrame(lastScene);
+                                                                              : data(lastScene, TotalSceneDurationInFrames).toInt();
                     setData( this->index(StoryboardItem::FrameNumber, 0, nextScene), lastSceneStartFrame + lastSceneDuration);
                     lastScene = nextScene;
                     nextScene = this->index(lastScene.row() + 1, 0);
@@ -367,11 +379,7 @@ bool StoryboardModel::removeRows(int position, int rows, const QModelIndex &pare
         beginRemoveRows(QModelIndex(), position, position+rows-1);
 
         for (int row = position + rows - 1; row >= position; row--) {
-            const bool needsDurationUpdate = row > 0 && row < m_items.count();
-            const int durationDeletedFrame = getTotalDurationInFrame(index(row, 0));
-
             m_items.removeAt(row);
-
             if (m_items.count() == 0) {
                 break;
             }
@@ -796,7 +804,7 @@ int StoryboardModel::lastKeyframeWithin(QModelIndex sceneIndex)
         nextSceneFrame = data(index(StoryboardItem::FrameNumber, 0, nextScene)).toInt();
     }
     else {
-        nextSceneFrame = sceneFrame + getTotalDurationInFrame(sceneIndex);
+        nextSceneFrame = sceneFrame + data(sceneIndex, TotalSceneDurationInFrames).toInt();
     }
 
     int lastFrameOfScene = sceneFrame;
@@ -823,7 +831,7 @@ void StoryboardModel::reorderKeyframes()
         frameAssociates.insert(sceneIndex, 0);
 
         const int lastFrameOfScene = index(StoryboardItem::FrameNumber, 0, sceneIndex).data().toInt()
-                                     + getTotalDurationInFrame(sceneIndex);
+                                     + data(sceneIndex, TotalSceneDurationInFrames).toInt();
 
         for( int i = sceneFrame; i < lastFrameOfScene; i++) {
             frameAssociates.insert(sceneIndex, i - sceneFrame);
@@ -873,7 +881,7 @@ void StoryboardModel::reorderKeyframes()
                                                originalKeyframes.value(srcFrame + associateFrameOffset));
                 }
 
-                intendedSceneFrameTime += getTotalDurationInFrame(sceneIndex);
+                intendedSceneFrameTime += data(sceneIndex, TotalSceneDurationInFrames).toInt();
             }
         });
     }
@@ -884,7 +892,7 @@ void StoryboardModel::reorderKeyframes()
         QModelIndex sceneIndex = index(i, 0);
         setData(index(StoryboardItem::FrameNumber, 0, sceneIndex), intendedFrameValue);
         slotUpdateThumbnailForFrame(intendedFrameValue);
-        intendedFrameValue += getTotalDurationInFrame(sceneIndex);
+        intendedFrameValue += data(sceneIndex, TotalSceneDurationInFrames).toInt();
     }
 
     m_renderScheduler->slotStartFrameRendering();
@@ -899,7 +907,7 @@ bool StoryboardModel::changeSceneHoldLength(int newDuration, QModelIndex itemInd
         return false;
     }
 
-    const int origSceneFrameLength = getTotalDurationInFrame(itemIndex);
+    const int origSceneFrameLength = data(itemIndex, TotalSceneDurationInFrames).toInt();
     const int lastFrameOfScene = lastKeyframeWithin(itemIndex);
 
     int durationChange = newDuration - origSceneFrameLength;
@@ -996,7 +1004,7 @@ bool StoryboardModel::insertItem(QModelIndex index, bool after)
 bool StoryboardModel::removeItem(QModelIndex index, KUndo2Command *command)
  {
     const int row = index.row();
-    const int durationDeletedScene = getTotalDurationInFrame(index);
+    const int durationDeletedScene = data(index, TotalSceneDurationInFrames).toInt();
 
 
     //remove all keyframes within the scene with command as parent
@@ -1049,15 +1057,6 @@ StoryboardItemList StoryboardModel::getData()
     return m_items;
 }
 
-int StoryboardModel::getTotalDurationInFrame(QModelIndex parentIndex) const
-{
-    int duration = index(StoryboardItem::DurationFrame, 0, parentIndex).data().toInt()
-                + index(StoryboardItem::DurationSecond, 0, parentIndex).data().toInt()
-                * getFramesPerSecond();
-    return duration;
-}
-
-
 void StoryboardModel::pushUndoCommand(KUndo2Command* command)
 {
     
@@ -1092,7 +1091,7 @@ void StoryboardModel::slotKeyframeAdded(const KisKeyframeChannel* channel, int t
     if (extendsLastScene) {
         const int sceneStartFrame = index(StoryboardItem::FrameNumber, 0, lastScene).data().toInt();
         const int desiredDuration = time - sceneStartFrame + 1;
-        const int actualDuration = getTotalDurationInFrame(lastScene);
+        const int actualDuration = data(lastScene, TotalSceneDurationInFrames).toInt();
         const int duration = qMax(actualDuration, desiredDuration);
         KIS_ASSERT(duration > 0);
         const QSharedPointer<StoryboardChild> frameElement = m_items.at(lastScene.row())->child(StoryboardItem::DurationFrame);
@@ -1323,7 +1322,7 @@ void StoryboardModel::insertChildRows(int position, KUndo2Command *cmd)
         setData( index(StoryboardItem::DurationFrame, 0, index(position, 0)), lastKeyframeGlobal() - 0 + 1);
     } else {
         const int targetFrame = index(StoryboardItem::FrameNumber, 0, index(position - 1,0)).data().toInt()
-                                + getTotalDurationInFrame(index(position - 1,0));
+                                + data(index(position - 1, 0), TotalSceneDurationInFrames).toInt();
         setData (index (StoryboardItem::FrameNumber, 0, index(position, 0)), targetFrame);
 
         if (!m_freezeKeyframePosition && m_activeNode) {

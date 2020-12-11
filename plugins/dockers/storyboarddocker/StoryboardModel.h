@@ -34,6 +34,10 @@ class KRITASTORYBOARDDOCKER_EXPORT StoryboardModel : public QAbstractItemModel
     Q_OBJECT
 
 public:
+    enum AdditionalRoles {
+        TotalSceneDurationInFrames = Qt::UserRole + 1,
+        TotalSceneDurationInSeconds = Qt::UserRole + 2,
+    };
     StoryboardModel(QObject *parent);
     ~StoryboardModel() override;
 
@@ -211,11 +215,6 @@ public:
      * @return The list of StoryboardItem* stored in the model.
      */
     StoryboardItemList getData();
-
-    /**
-     * @return The total duration in frame.
-     */
-    int getTotalDurationInFrame(QModelIndex parentIndex) const;
 
     void pushUndoCommand(KUndo2Command *command);
 

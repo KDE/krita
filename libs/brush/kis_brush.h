@@ -359,6 +359,8 @@ public:
 
     virtual KisBrush* clone() const = 0;
 
+    virtual bool supportsCaching() const;
+
 protected:
 
     KisBrush(const KisBrush& rhs);

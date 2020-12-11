@@ -391,3 +391,8 @@ void KisAutoBrush::lodLimitations(KisPaintopLodLimitations *l) const
         l->limitations << KoID("auto-brush-randomness", i18nc("PaintOp instant preview limitation", "Brush Randomness recommended value 0.0"));
     }
 }
+
+bool KisAutoBrush::supportsCaching() const
+{
+    return qFuzzyCompare(density(), 1.0) && qFuzzyCompare(randomness(), 0.0);
+}

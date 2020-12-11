@@ -707,3 +707,8 @@ void KisBrush::lodLimitations(KisPaintopLodLimitations *l) const
         l->limitations << KoID("huge-spacing", i18nc("PaintOp instant preview limitation", "Spacing > 0.5, consider disabling Instant Preview"));
     }
 }
+
+bool KisBrush::supportsCaching() const
+{
+    return true;
+}

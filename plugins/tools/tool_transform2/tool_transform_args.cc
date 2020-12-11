@@ -263,7 +263,6 @@ void ToolTransformArgs::translate(const QPointF &offset)
 {
     if (m_mode == FREE_TRANSFORM || m_mode == PERSPECTIVE_4POINT) {
         m_originalCenter += offset;
-        m_rotationCenterOffset += offset;
         m_transformedCenter += offset;
     } else if(m_mode == WARP || m_mode == CAGE) {
         for (auto &pt : m_origPoints) {

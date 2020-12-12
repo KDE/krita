@@ -54,6 +54,7 @@
 #include <kis_paintop_settings.h>
 #include <kis_categorized_list_view.h>
 #include <kis_categorized_item_delegate.h>
+#include <KisResourceServerProvider.h>
 
 #include "ToolPresetModel.h"
 
@@ -166,24 +167,21 @@ void ToolPresetDocker::bnAddPressed()
             KConfig cfg(createConfigFileName(m_currentToolId));
             KConfigGroup grp = cfg.group(dlg.name());
             KisPaintOpSettingsSP settings = m_resourceProvider->currentPreset()->settings();
-            grp.writeEntry("execute_on_activate", dlg.executeOnSelection());
-            grp.writeEntry("store_resources", dlg.saveResourcesWithPreset());
+            grp.writeEntry("execute_on_select", dlg.executeOnSelection());
+            grp.writeEntry("save_resources", dlg.saveResourcesWithPreset());
             if (dlg.saveResourcesWithPreset()) {
-                KisPaintOpSettingsSP settings = m_resourceProvider->currentPreset()->settings();
-                grp.writeEntry("brush_size", settings->paintOpSize());
-                grp.writeEntry("paintop_preset", m_resourceProvider->currentPreset()->paintOp().id());
+                grp.writeEntry("brush_size", m_resourceProvider->size());
+                grp.writeEntry("preset",  m_resourceProvider->currentPreset()->filename());
                 grp.writeEntry("opacity", m_resourceProvider->opacity());
                 grp.writeEntry("flow", m_resourceProvider->flow());
                 grp.writeEntry("compositeop", m_resourceProvider->currentCompositeOp());
                 grp.writeEntry("eraser", m_resourceProvider->eraserMode());
-                grp.writeEntry("disablePressure", m_resourceProvider->disablePressure());
+                grp.writeEntry("disable_pressure", m_resourceProvider->disablePressure());
             }
 
         }
-
         m_toolPresetModel->addToolPreset(m_currentToolId, dlg.name());
     }
-
 }
 
 void ToolPresetDocker::bnDeletePressed()
@@ -207,25 +205,38 @@ void ToolPresetDocker::presetSelected(QModelIndex idx)
         KoToolManager::instance()->switchToolRequested(info->toolId);
     }
 
-    //    QString text = info->presetName;
-    //    txtName->setText(text);
+    Q_FOREACH (QPointer<QWidget> widget, m_currentOptionWidgets) {
+        if (widget) {
+            KisDialogStateSaver::restoreState(widget, info->presetName, QMap<QString, QVariant>(), createConfigFileName(m_currentToolId));
+        }
+    }
 
-    //    Q_FOREACH (QPointer<QWidget> widget, m_currentOptionWidgets) {
-    //        if (widget) {
-    //            KisDialogStateSaver::restoreState(widget, text, QMap<QString, QVariant>(), createConfigFileName(m_currentToolId));
-    //        }
-    //    }
+    KConfig cfg(createConfigFileName(m_currentToolId));
+    KConfigGroup grp = cfg.group(info->presetName);
 
-    //    KConfig cfg(createConfigFileName(m_currentToolId));
-    //    KConfigGroup grp = cfg.group(text);
+    bool restoreResources = grp.readEntry("save_resources", false);
 
-    //    chkExecuteToolOnSelection->setChecked(grp.readEntry("execute_on_select", false));
-    //    chkSaveBrushPresetInformation->setChecked(grp.readEntry("save_resources", false));
+    if (restoreResources) {
+        if (grp.hasKey("preset")) {
+            KisPaintOpPresetSP preset =
+                    KisResourceServerProvider::instance()->paintOpPresetServer()->resourceByFilename(grp.readEntry("preset", "").toLatin1());
+            if (preset) {
+                m_resourceProvider->setPaintOpPreset(preset);
+            }
+        }
+        KisPaintOpSettingsSP settings = m_resourceProvider->currentPreset()->settings();
+        m_resourceProvider->setSize(grp.readEntry("brush_size", m_resourceProvider->size()));
+        m_resourceProvider->setOpacity(grp.readEntry("opacity", m_resourceProvider->opacity()));
+        m_resourceProvider->setFlow(grp.readEntry("flow", m_resourceProvider->flow()));
+        m_resourceProvider->setCurrentCompositeOp(grp.readEntry("compositeop", m_resourceProvider->currentCompositeOp()));
+        m_resourceProvider->setEraserMode(grp.readEntry("eraser", m_resourceProvider->eraserMode()));
+        m_resourceProvider->setDisablePressure(grp.readEntry("disable_pressure", m_resourceProvider->disablePressure()));
+    }
 
-    //    KoToolBase *tool = KoToolManager::instance()->toolById(m_canvas, m_currentToolId);
-    //    if (tool && tool->inherits("KisToolPaint")) {
-    //        m_resourceProvider->setSize(grp.readEntry("brush_size", m_resourceProvider->size()));
-    //    }
+    bool executeToolOnSelection = grp.readEntry("execute_on_select", false);
+    if (executeToolOnSelection) {
+
+    }
 
 }
 

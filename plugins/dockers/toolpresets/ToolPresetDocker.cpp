@@ -57,7 +57,6 @@
 
 #include "ToolPresetModel.h"
 
-
 DlgNewPreset::DlgNewPreset()
     : KoDialog(KisPart::instance()->currentMainwindow())
 {
@@ -140,23 +139,12 @@ void ToolPresetDocker::unsetCanvas()
 
 void ToolPresetDocker::optionWidgetsChanged(KoCanvasController */*canvasController*/, QList<QPointer<QWidget> > optionWidgets)
 {
-
     m_currentOptionWidgets = optionWidgets;
 }
 
 void ToolPresetDocker::toolChanged(KoCanvasController *canvasController, int /*toolId*/)
 {
-    qDebug() << "ToolPresetDocker::toolChanged";
-
     m_currentToolId = KoToolManager::instance()->activeToolId();
-
-    //    if (chkExecuteToolOnSelection->isChecked()) {
-    //        m_toolPresetModel->setFilter(m_currentToolId);
-    //    }
-    //    else {
-    //        m_toolPresetModel->setFilter(QString());
-    //    }
-
 }
 
 void ToolPresetDocker::bnAddPressed()
@@ -178,7 +166,19 @@ void ToolPresetDocker::bnAddPressed()
             KConfig cfg(createConfigFileName(m_currentToolId));
             KConfigGroup grp = cfg.group(dlg.name());
             KisPaintOpSettingsSP settings = m_resourceProvider->currentPreset()->settings();
-            grp.writeEntry("brush_size", settings->paintOpSize());
+            grp.writeEntry("execute_on_activate", dlg.executeOnSelection());
+            grp.writeEntry("store_resources", dlg.saveResourcesWithPreset());
+            if (dlg.saveResourcesWithPreset()) {
+                KisPaintOpSettingsSP settings = m_resourceProvider->currentPreset()->settings();
+                grp.writeEntry("brush_size", settings->paintOpSize());
+                grp.writeEntry("paintop_preset", m_resourceProvider->currentPreset()->paintOp().id());
+                grp.writeEntry("opacity", m_resourceProvider->opacity());
+                grp.writeEntry("flow", m_resourceProvider->flow());
+                grp.writeEntry("compositeop", m_resourceProvider->currentCompositeOp());
+                grp.writeEntry("eraser", m_resourceProvider->eraserMode());
+                grp.writeEntry("disablePressure", m_resourceProvider->disablePressure());
+            }
+
         }
 
         m_toolPresetModel->addToolPreset(m_currentToolId, dlg.name());

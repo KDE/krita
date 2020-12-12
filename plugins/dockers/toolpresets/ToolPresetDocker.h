@@ -78,7 +78,8 @@ private Q_SLOTS:
     void presetSelected(QModelIndex);
 
 private:
-    KisCanvasResourceProvider *m_resourceProvider;
+    KoCanvasController *m_canvasController {0};
+    KisCanvasResourceProvider *m_resourceProvider {0};
     KoCanvasBase *m_canvas {0};
     QList<QPointer<QWidget> > m_currentOptionWidgets;
     QString m_currentToolId;

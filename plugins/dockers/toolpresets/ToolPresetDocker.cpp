@@ -55,6 +55,7 @@
 #include <kis_categorized_list_view.h>
 #include <kis_categorized_item_delegate.h>
 #include <KisResourceServerProvider.h>
+#include <kis_tool.h>
 
 #include "ToolPresetModel.h"
 
@@ -138,12 +139,13 @@ void ToolPresetDocker::unsetCanvas()
     setEnabled(false);
 }
 
-void ToolPresetDocker::optionWidgetsChanged(KoCanvasController */*canvasController*/, QList<QPointer<QWidget> > optionWidgets)
+void ToolPresetDocker::optionWidgetsChanged(KoCanvasController *canvasController, QList<QPointer<QWidget> > optionWidgets)
 {
+    m_canvasController = canvasController;
     m_currentOptionWidgets = optionWidgets;
 }
 
-void ToolPresetDocker::toolChanged(KoCanvasController *canvasController, int /*toolId*/)
+void ToolPresetDocker::toolChanged(KoCanvasController */*canvasController*/, int /*toolId*/)
 {
     m_currentToolId = KoToolManager::instance()->activeToolId();
 }
@@ -201,6 +203,10 @@ void ToolPresetDocker::presetSelected(QModelIndex idx)
 {
     ToolPresetInfo *info = m_toolPresetModel->toolPresetInfo(idx.row());
 
+    if (info->toolId != m_currentToolId) {
+        KoToolManager::instance()->switchToolRequested(info->toolId);
+    }
+
     Q_FOREACH (QPointer<QWidget> widget, m_currentOptionWidgets) {
         if (widget) {
             KisDialogStateSaver::restoreState(widget, info->presetName, QMap<QString, QVariant>(), createConfigFileName(m_currentToolId));
@@ -231,10 +237,14 @@ void ToolPresetDocker::presetSelected(QModelIndex idx)
 
     bool executeToolOnSelection = grp.readEntry("execute_on_select", false);
     if (executeToolOnSelection) {
-        if (info->toolId != m_currentToolId) {
-            KoToolManager::instance()->switchToolRequested(info->toolId);
+        KoCanvasBase *canvas = m_canvasController->canvas();
+        if (canvas) {
+            KoToolBase *tool = KoToolManager::instance()->toolById(canvas, info->toolId);
+            if (tool) {
+                KisTool *kisTool = dynamic_cast<KisTool*>(tool);
+                kisTool->activatePrimaryAction();
+            }
         }
     }
-
 }
 

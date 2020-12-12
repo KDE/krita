@@ -201,10 +201,6 @@ void ToolPresetDocker::presetSelected(QModelIndex idx)
 {
     ToolPresetInfo *info = m_toolPresetModel->toolPresetInfo(idx.row());
 
-    if (info->toolId != m_currentToolId) {
-        KoToolManager::instance()->switchToolRequested(info->toolId);
-    }
-
     Q_FOREACH (QPointer<QWidget> widget, m_currentOptionWidgets) {
         if (widget) {
             KisDialogStateSaver::restoreState(widget, info->presetName, QMap<QString, QVariant>(), createConfigFileName(m_currentToolId));
@@ -235,7 +231,9 @@ void ToolPresetDocker::presetSelected(QModelIndex idx)
 
     bool executeToolOnSelection = grp.readEntry("execute_on_select", false);
     if (executeToolOnSelection) {
-
+        if (info->toolId != m_currentToolId) {
+            KoToolManager::instance()->switchToolRequested(info->toolId);
+        }
     }
 
 }

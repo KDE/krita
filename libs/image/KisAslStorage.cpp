@@ -34,6 +34,7 @@ public:
 
     QString url() const override { return QString(); }
     QString name() const override { return QString(); }
+    QString resourceType() const override { return QString(); }
     QString comment() const override {return QString(); }
     KisTagSP tag() const override { return 0; }
 

@@ -215,7 +215,7 @@ QModelIndex KisAllTagsModel::indexForTag(KisTagSP tag) const
     do {
         if (tag->id() >= 0) {
             if (d->query.value("id").toInt() == tag->id()) {
-                return createIndex(d->query.at() + s_fakeRowsCount, 0);
+                return index(d->query.at() + s_fakeRowsCount, 0);
             }
         }
         else {
@@ -223,7 +223,7 @@ QModelIndex KisAllTagsModel::indexForTag(KisTagSP tag) const
             // database.
             if (d->query.value("url").toString() == tag->url()
                     && d->query.value("resource_type") == d->resourceType) {
-                return createIndex(d->query.at() + s_fakeRowsCount, 0);
+                return index(d->query.at() + s_fakeRowsCount, 0);
             }
         }
     } while (d->query.next());
@@ -242,14 +242,17 @@ KisTagSP KisAllTagsModel::tagForIndex(QModelIndex index) const
         if (index.row() == KisAllTagsModel::All + s_fakeRowsCount) {
             tag.reset(new KisTag());
             tag->setName(i18n("All"));
+            tag->setResourceType(d->resourceType);
             tag->setUrl("All"); // XXX: make this a static string
             tag->setComment(i18n("All Resources"));
             tag->setId(KisAllTagsModel::All);
             tag->setActive(true);
             tag->setValid(true);
-        } else if (index.row() == KisAllTagsModel::AllUntagged + s_fakeRowsCount) {
+        }
+        else if (index.row() == KisAllTagsModel::AllUntagged + s_fakeRowsCount) {
             tag.reset(new KisTag());
             tag->setName(i18n("All Untagged"));
+            tag->setResourceType(d->resourceType);
             tag->setUrl("All Untagged"); // XXX: make this a static string
             tag->setComment(i18n("All Untagged Resources"));
             tag->setId(KisAllTagsModel::AllUntagged);
@@ -264,6 +267,7 @@ KisTagSP KisAllTagsModel::tagForIndex(QModelIndex index) const
             tag->setUrl(d->query.value("url").toString());
             tag->setName(d->query.value("name").toString());
             tag->setComment(d->query.value("comment").toString());
+            tag->setResourceType(d->resourceType);
             tag->setId(d->query.value("id").toInt());
             tag->setActive(d->query.value("active").toBool());
             tag->setValid(true);
@@ -280,6 +284,7 @@ KisTagSP KisAllTagsModel::addTag(const QString& tagName, QVector<KoResourceSP> t
     tag->setUrl(tagName);
     tag->setValid(true);
     tag->setActive(true);
+    tag->setResourceType(d->resourceType);
 
     if (addTag(tag, taggedResources)) {
         return tag;
@@ -432,6 +437,7 @@ KisTagSP KisAllTagsModel::tagByUrl(const QString& tagUrl) const
 
     tag->setUrl(query.value("url").toString());
     tag->setName(query.value("name").toString());
+    tag->setResourceType(d->resourceType);
     tag->setComment(query.value("comment").toString());
     tag->setId(query.value("id").toInt());
     tag->setActive(query.value("active").toBool());

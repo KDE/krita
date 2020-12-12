@@ -673,16 +673,7 @@ bool KisInputManager::Private::handleCompressedTabletEvent(QEvent *event)
      */
     QWidget *recievingWidget = dynamic_cast<QWidget*>(eventsReceiver);
     if (recievingWidget && !recievingWidget->hasFocus()) {
-        QVector<Qt::Key> guessedKeys;
-
-        KisExtendedModifiersMapper mapper;
-        Qt::KeyboardModifiers modifiers = mapper.queryStandardModifiers();
-        Q_FOREACH (Qt::Key key, mapper.queryExtendedModifiers()) {
-            QKeyEvent kevent(QEvent::ShortcutOverride, key, modifiers);
-            guessedKeys << KisExtendedModifiersMapper::workaroundShiftAltMetaHell(&kevent);
-        }
-
-        matcher.recoveryModifiersWithoutFocus(guessedKeys);
+        fixShortcutMatcherModifiersState();
     }
 
     if (!matcher.pointerMoved(event) && toolProxy) {
@@ -692,6 +683,19 @@ bool KisInputManager::Private::handleCompressedTabletEvent(QEvent *event)
     event->setAccepted(true);
 
     return retval;
+}
+
+void KisInputManager::Private::fixShortcutMatcherModifiersState()
+{
+    QVector<Qt::Key> guessedKeys;
+    KisExtendedModifiersMapper mapper;
+    Qt::KeyboardModifiers modifiers = mapper.queryStandardModifiers();
+    Q_FOREACH (Qt::Key key, mapper.queryExtendedModifiers()) {
+        QKeyEvent kevent(QEvent::ShortcutOverride, key, modifiers);
+        guessedKeys << KisExtendedModifiersMapper::workaroundShiftAltMetaHell(&kevent);
+    }
+
+    matcher.recoveryModifiersWithoutFocus(guessedKeys);
 }
 
 qint64 KisInputManager::Private::TabletLatencyTracker::currentTimestamp() const

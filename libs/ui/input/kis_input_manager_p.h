@@ -41,6 +41,7 @@ public:
     bool processUnhandledEvent(QEvent *event);
     void setupActions();
     bool handleCompressedTabletEvent(QEvent *event);
+    void fixShortcutMatcherModifiersState();
 
     KisInputManager *q;
 

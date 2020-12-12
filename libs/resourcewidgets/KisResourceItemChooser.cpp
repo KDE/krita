@@ -435,6 +435,11 @@ void KisResourceItemChooser::contextMenuRequested(const QPoint &pos)
     d->tagManager->contextMenuRequested(currentResource(), pos);
 }
 
+void KisResourceItemChooser::setStoragePopupButtonVisible(bool visible)
+{
+    d->storagePopupButton->setVisible(visible);
+}
+
 void KisResourceItemChooser::setViewModeButtonVisible(bool visible)
 {
     d->viewModeButton->setVisible(visible);

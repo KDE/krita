@@ -541,7 +541,7 @@ bool StoryboardModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
     }
 
     if (action == Qt::MoveAction && data->hasFormat("application/x-krita-storyboard")) {
-        QByteArray bytes = data->data("application/x-krita-storyboardboard");
+        QByteArray bytes = data->data("application/x-krita-storyboard");
         QDataStream stream(&bytes, QIODevice::ReadOnly);
 
         if (parent.isValid()) {

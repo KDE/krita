@@ -281,6 +281,15 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     // Connect Apply/Reset buttons
     connect(buttonBox, SIGNAL(clicked(QAbstractButton*)), this, SLOT(slotButtonBoxClicked(QAbstractButton*)));
 
+    // Mesh. First set up, then connect.
+    intNumRows->setRange(1, 999);
+    intNumColumns->setRange(1, 999);
+
+    connect(chkShowControlPoints, SIGNAL(toggled(bool)), this, SLOT(slotMeshShowHandlesChanged()));
+    connect(chkSymmetricalHandles, SIGNAL(toggled(bool)), this, SLOT(slotMeshSymmetricalHandlesChanged()));
+    connect(intNumColumns, SIGNAL(valueChanged(int)), this, SLOT(slotMeshSizeChanged()));
+    connect(intNumRows, SIGNAL(valueChanged(int)), this, SLOT(slotMeshSizeChanged()));
+
     // Mode switch buttons
     connect(freeTransformButton, SIGNAL(clicked(bool)), this, SLOT(slotSetFreeTransformModeButtonClicked(bool)));
     connect(warpButton, SIGNAL(clicked(bool)), this, SLOT(slotSetWarpModeButtonClicked(bool)));
@@ -622,6 +631,10 @@ void KisToolTransformConfigWidget::updateConfig(const ToolTransformArgs &config)
         updateLiquifyControls();
     } else if (config.mode() == ToolTransformArgs::MESH) {
         stackedWidget->setCurrentIndex(4);
+        intNumColumns->setValue(config.meshTransform()->size().width() - 1);
+        intNumRows->setValue(config.meshTransform()->size().height() - 1);
+        chkShowControlPoints->setChecked(config.meshShowHandles());
+        chkSymmetricalHandles->setChecked(config.meshSymmetricalHandles());
     }
 
     unblockUiSlots();
@@ -748,8 +761,6 @@ void KisToolTransformConfigWidget::slotSetMeshModeButtonClicked(bool value)
 
     lblTransformType->setText(meshButton->toolTip());
 
-    ToolTransformArgs *config = m_transaction->currentConfig();
-    config->setMode(ToolTransformArgs::MESH);
     emit sigResetTransform(ToolTransformArgs::MESH);
 }
 
@@ -1253,5 +1264,39 @@ void KisToolTransformConfigWidget::slotPreviewGranularityChanged(QString value)
     KIS_SAFE_ASSERT_RECOVER_RETURN(value.toInt() > 1);
     ToolTransformArgs *config = m_transaction->currentConfig();
     config->setPreviewPixelPrecision(value.toInt());
+    notifyConfigChanged();
+}
+
+void KisToolTransformConfigWidget::slotMeshSizeChanged()
+{
+    if (m_uiSlotsBlocked) return;
+
+    ToolTransformArgs *config = m_transaction->currentConfig();
+    KisBezierTransformMesh &mesh = *config->meshTransform();
+
+    if (mesh.size().width() != intNumColumns->value() + 1) {
+        mesh.reshapeMeshHorizontally(intNumColumns->value() + 1);
+    }
+
+    if (mesh.size().height() != intNumRows->value() + 1) {
+        mesh.reshapeMeshVertically(intNumRows->value() + 1);
+    }
+
+    notifyConfigChanged();
+}
+
+void KisToolTransformConfigWidget::slotMeshShowHandlesChanged()
+{
+    if (m_uiSlotsBlocked) return;
+    ToolTransformArgs *config = m_transaction->currentConfig();
+    config->setMeshShowHandles(this->chkShowControlPoints->isChecked());
+    notifyConfigChanged();
+}
+
+void KisToolTransformConfigWidget::slotMeshSymmetricalHandlesChanged()
+{
+    if (m_uiSlotsBlocked) return;
+    ToolTransformArgs *config = m_transaction->currentConfig();
+    config->setMeshSymmetricalHandles(this->chkSymmetricalHandles->isChecked());
     notifyConfigChanged();
 }

@@ -132,11 +132,15 @@ if (APPLE)
 endif ()
 
 if (ANDROID)
+  # HACK: copied from ECM, this makes sure that we don't build an executable (kf5s do that), but a DSO.
+  set(CMAKE_CXX_LINK_EXECUTABLE "<CMAKE_CXX_COMPILER> <CMAKE_SHARED_LIBRARY_CXX_FLAGS> <LINK_FLAGS> <CMAKE_SHARED_LIBRARY_CREATE_CXX_FLAGS> <SONAME_FLAG><TARGET_SONAME> -o <TARGET> <OBJECTS> <LINK_LIBRARIES>")
+
   set (GLOBAL_PROFILE ${GLOBAL_PROFILE}
                      -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}
                      -DANDROID_PLATFORM=${ANDROID_PLATFORM}
                      -DANDROID_ABI=${ANDROID_ABI}
-                     -DCMAKE_FIND_ROOT_PATH=${CMAKE_FIND_ROOT_PATH})
+                     -DCMAKE_FIND_ROOT_PATH=${CMAKE_FIND_ROOT_PATH}
+                     -DCMAKE_CXX_LINK_EXECUTABLE=${CMAKE_CXX_LINK_EXECUTABLE})
 
   # see: https://github.com/android/ndk/issues/929
   unset (CMAKE_SYSROOT)
@@ -236,6 +240,11 @@ endif ()
 
 if(UNIX)
     add_subdirectory( ext_pkgconfig )
+endif()
+
+if (ANDROID)
+  # gettext replacement
+  add_subdirectory(ext_libintl-lite)
 endif()
 
 add_subdirectory( ext_heif )

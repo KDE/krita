@@ -804,8 +804,12 @@ KisImportExportErrorCode EXRConverter::decode(const QString &filename)
         /**
          * EXR semi-transparent images are expected to be rendered on
          * black to ensure correctness of the light model
+         *
+         * NOTE: We cannot do that automatically, because the EXR may be imported
+         * into the image as a layer, in which case the default color will create
+         * major issues. See https://bugs.kde.org/show_bug.cgi?id=427720
          */
-        d->image->setDefaultProjectionColor(KoColor(Qt::black, colorSpace));
+        //d->image->setDefaultProjectionColor(KoColor(Qt::black, colorSpace));
 
         // Create group layers
         for (int i = 0; i < groups.size(); ++i) {

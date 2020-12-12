@@ -1,5 +1,6 @@
 [Desktop Entry]
 Type=Tag
+ResourceType=paintoppreset
 Name=Erasers
 Comment=Eraser Brush Presets
 URL=Erasers

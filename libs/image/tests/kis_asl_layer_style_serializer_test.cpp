@@ -177,7 +177,7 @@ void KisAslLayerStyleSerializerTest::testReading()
     CMP(patternOverlay, verticalPhase, 162);
 
     CMP(patternOverlay, pattern()->name, QString("$$$/Presets/Patterns/Patterns_pat/Bubbles=Bubbles"));
-    CMP(patternOverlay, pattern()->filename, QString("b7334da0-122f-11d4-8bb5-e27e45023b5f.pat"));
+    CMP(patternOverlay, pattern()->filename, QString("b7334da0-122f-11d4-8bb5-e27e45023b5f_pattern"));
 
 }
 
@@ -250,9 +250,10 @@ void KisAslLayerStyleSerializerTest::testWritingGlobalPatterns()
 {
     KisPSDLayerStyleSP style(new KisPSDLayerStyle());
 
-    KoResourceServer<KoPattern> *server = KoResourceServerProvider::instance()->patternServer();
-    KoPatternSP pattern = server->firstResource();
-    Q_ASSERT(pattern);
+    QImage dumbImage(32, 32, QImage::Format_ARGB32);
+    dumbImage.fill(Qt::red);
+    KoPatternSP pattern(new KoPattern(dumbImage, "test_pattern", ""));
+
 
     dbgKrita << ppVar(pattern->name());
     dbgKrita << ppVar(pattern->filename());

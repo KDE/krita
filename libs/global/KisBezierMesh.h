@@ -235,6 +235,9 @@ private:
     class segment_iterator_impl;
 
     template<bool is_const>
+    class control_point_iterator_impl;
+
+    template<bool is_const>
     class patch_iterator_impl :
         public boost::iterator_facade <patch_iterator_impl<is_const>,
                                        Patch,
@@ -244,6 +247,7 @@ private:
         using PointType = std::add_const_if_t<is_const, QPointF>;
         using MeshType = std::add_const_if_t<is_const, Mesh>;
         using SegmentIteratorType = segment_iterator_impl<is_const>;
+        using ControlPointIteratorType = control_point_iterator_impl<is_const>;
 
     public:
         patch_iterator_impl()
@@ -266,6 +270,11 @@ private:
         SegmentIteratorType segmentQ() const;
         SegmentIteratorType segmentR() const;
         SegmentIteratorType segmentS() const;
+
+        ControlPointIteratorType nodeTopLeft() const;
+        ControlPointIteratorType nodeTopRight() const;
+        ControlPointIteratorType nodeBottomLeft() const;
+        ControlPointIteratorType nodeBottomRight() const;
 
         bool isValid() const {
             return
@@ -588,7 +597,7 @@ private:
         }
 
         ControlPointIteratorType itP0() const {
-            return m_mesh->find(firstNodeIndex());
+            return m_mesh->find(ControlPointIndex(firstNodeIndex(), Mesh::ControlType::Node));
         }
 
         ControlPointIteratorType itP1() const {
@@ -606,7 +615,7 @@ private:
         }
 
         ControlPointIteratorType itP3() const {
-            return m_mesh->find(secondNodeIndex());
+            return m_mesh->find(ControlPointIndex(secondNodeIndex(), Mesh::ControlType::Node));
         }
 
         int degree() const {
@@ -753,19 +762,24 @@ public:
     }
 
 
-    void subdivideRow(qreal proportionalT) {
-        if (qFuzzyCompare(proportionalT, 0.0) || qFuzzyCompare(proportionalT, 1.0)) return;
+    int subdivideRow(qreal proportionalT) {
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(proportionalT >= 0.0 && proportionalT <= 1.0, -1);
 
-        KIS_SAFE_ASSERT_RECOVER_RETURN(proportionalT > 0.0 && proportionalT < 1.0);
+        {
+            auto existing = std::find(m_rows.begin(), m_rows.end(), proportionalT);
+            if (existing != m_rows.end()) {
+                return distance(m_rows.begin(), existing);
+            }
+        }
 
         const auto it = prev(upper_bound(m_rows.begin(), m_rows.end(), proportionalT));
         const int topRow = distance(m_rows.begin(), it);
         const qreal relT = (proportionalT - *it) / (*next(it) - *it);
 
-        subdivideRow(topRow, relT);
+        return subdivideRow(topRow, relT);
     }
 
-    void subdivideRow(int topRow, qreal relProportionalT) {
+    int subdivideRow(int topRow, qreal relProportionalT) {
         const auto it = m_rows.begin() + topRow;
         const int bottomRow = topRow + 1;
         const qreal absProportionalT = KisAlgebra2D::lerp(*it, *next(it), relProportionalT);
@@ -788,23 +802,29 @@ public:
                        newRow.begin(), newRow.end());
 
         m_size.rheight()++;
-        m_rows.insert(next(it), absProportionalT);
+        auto insertedIt = m_rows.insert(next(it), absProportionalT);
+        return distance(m_rows.begin(), insertedIt);
     }
 
-    void subdivideColumn(qreal proportionalT) {
-        if (qFuzzyCompare(proportionalT, 0.0) || qFuzzyCompare(proportionalT, 1.0)) return;
+    int subdivideColumn(qreal proportionalT) {
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(proportionalT >= 0.0 && proportionalT <= 1.0, -1);
 
-        KIS_SAFE_ASSERT_RECOVER_RETURN(proportionalT > 0.0 && proportionalT < 1.0);
+        {
+            auto existing = std::find(m_columns.begin(), m_columns.end(), proportionalT);
+            if (existing != m_columns.end()) {
+                return distance(m_columns.begin(), existing);
+            }
+        }
 
         const auto it = prev(upper_bound(m_columns.begin(), m_columns.end(), proportionalT));
         const int leftColumn = distance(m_columns.begin(), it);
 
         const qreal relT = (proportionalT - *it) / (*next(it) - *it);
 
-        subdivideColumn(leftColumn, relT);
+        return subdivideColumn(leftColumn, relT);
     }
 
-    void subdivideColumn(int leftColumn, qreal relProportionalT) {
+    int subdivideColumn(int leftColumn, qreal relProportionalT) {
         const auto it = m_columns.begin() + leftColumn;
         const int rightColumn = leftColumn + 1;
         const qreal absProportinalT = KisAlgebra2D::lerp(*it, *next(it), relProportionalT);
@@ -830,7 +850,8 @@ public:
         }
 
         m_size.rwidth()++;
-        m_columns.insert(next(it), absProportinalT);
+        auto insertedIt = m_columns.insert(next(it), absProportinalT);
+        return distance(m_columns.begin(), insertedIt);
     }
 
     void removeColumn(int column) {
@@ -1045,6 +1066,46 @@ public:
         return find(index).isValid();
     }
 
+    void reshapeMeshHorizontally(int numColumns) {
+        KIS_SAFE_ASSERT_RECOVER_RETURN(numColumns >= 2);
+
+        std::vector<int> insertedIndexes;
+
+        for (int i = 1; i < numColumns - 1; i++) {
+            const qreal pos = qreal(i) / (numColumns - 1);
+            int inserted = subdivideColumn(pos);
+            KIS_SAFE_ASSERT_RECOVER(inserted >= 0) { continue; }
+
+            insertedIndexes.push_back(inserted);
+        }
+
+        for (int i = m_columns.size() - 2; i >= 1; i--) {
+            if (std::find(insertedIndexes.begin(), insertedIndexes.end(), i) == insertedIndexes.end()) {
+                removeColumn(i);
+            }
+        }
+    }
+
+    void reshapeMeshVertically(int numRows) {
+        KIS_SAFE_ASSERT_RECOVER_RETURN(numRows >= 2);
+
+        std::vector<int> insertedIndexes;
+
+        for (int i = 1; i < numRows - 1; i++) {
+            const qreal pos = qreal(i) / (numRows - 1);
+            int inserted = subdivideRow(pos);
+            KIS_SAFE_ASSERT_RECOVER(inserted >= 0) { continue; }
+
+            insertedIndexes.push_back(inserted);
+        }
+
+        for (int i = m_rows.size() - 2; i >= 1; i--) {
+            if (std::find(insertedIndexes.begin(), insertedIndexes.end(), i) == insertedIndexes.end()) {
+                removeRow(i);
+            }
+        }
+    }
+
 private:
     void splitCurveHorizontally(Node &left, Node &right, qreal t, Node &newNode) {
         using KisBezierUtils::deCasteljau;
@@ -1251,6 +1312,43 @@ Mesh<NodeArg, PatchArg>::patch_iterator_impl<is_const>::segmentS() const
 
 template<typename NodeArg, typename PatchArg>
 template<bool is_const>
+typename Mesh<NodeArg, PatchArg>::template patch_iterator_impl<is_const>::ControlPointIteratorType
+Mesh<NodeArg, PatchArg>::patch_iterator_impl<is_const>::nodeTopLeft() const
+{
+    using ControlPointIteratorType = typename Mesh<NodeArg, PatchArg>::template patch_iterator_impl<is_const>::ControlPointIteratorType;
+    return ControlPointIteratorType(const_cast<Mesh<NodeArg, PatchArg>*>(m_mesh), m_col, m_row, Mesh::ControlType::Node);
+}
+
+template<typename NodeArg, typename PatchArg>
+template<bool is_const>
+typename Mesh<NodeArg, PatchArg>::template patch_iterator_impl<is_const>::ControlPointIteratorType
+Mesh<NodeArg, PatchArg>::patch_iterator_impl<is_const>::nodeTopRight() const
+{
+    using ControlPointIteratorType = typename Mesh<NodeArg, PatchArg>::template patch_iterator_impl<is_const>::ControlPointIteratorType;
+    return ControlPointIteratorType(const_cast<Mesh<NodeArg, PatchArg>*>(m_mesh), m_col + 1, m_row, Mesh::ControlType::Node);
+}
+
+template<typename NodeArg, typename PatchArg>
+template<bool is_const>
+typename Mesh<NodeArg, PatchArg>::template patch_iterator_impl<is_const>::ControlPointIteratorType
+Mesh<NodeArg, PatchArg>::patch_iterator_impl<is_const>::nodeBottomLeft() const
+{
+    using ControlPointIteratorType = typename Mesh<NodeArg, PatchArg>::template patch_iterator_impl<is_const>::ControlPointIteratorType;
+    return ControlPointIteratorType(const_cast<Mesh<NodeArg, PatchArg>*>(m_mesh), m_col, m_row + 1, Mesh::ControlType::Node);
+}
+
+template<typename NodeArg, typename PatchArg>
+template<bool is_const>
+typename Mesh<NodeArg, PatchArg>::template patch_iterator_impl<is_const>::ControlPointIteratorType
+Mesh<NodeArg, PatchArg>::patch_iterator_impl<is_const>::nodeBottomRight() const
+{
+    using ControlPointIteratorType = typename Mesh<NodeArg, PatchArg>::template patch_iterator_impl<is_const>::ControlPointIteratorType;
+    return ControlPointIteratorType(const_cast<Mesh<NodeArg, PatchArg>*>(m_mesh), m_col + 1, m_row + 1, Mesh::ControlType::Node);
+}
+
+
+template<typename NodeArg, typename PatchArg>
+template<bool is_const>
 typename Mesh<NodeArg, PatchArg>::template control_point_iterator_impl<is_const>::SegmentIteratorType
 Mesh<NodeArg, PatchArg>::control_point_iterator_impl<is_const>::topSegment() const
 {
@@ -1305,11 +1403,17 @@ Mesh<NodeArg, PatchArg>::control_point_iterator_impl<is_const>::rightSegment() c
     return SegmentIteratorType(m_mesh, m_col, m_row, true);
 }
 
+enum SmartMoveMeshControlMode {
+    MoveFree,
+    MoveSymmetricLock,
+    MoveRotationLock
+};
+
 template<typename NodeArg, typename PatchArg>
 void smartMoveControl(Mesh<NodeArg, PatchArg> &mesh,
                       typename Mesh<NodeArg, PatchArg>::ControlPointIndex index,
                       const QPointF &move,
-                      bool lockNodes)
+                      SmartMoveMeshControlMode mode)
 {
     using ControlType = typename Mesh<NodeArg, PatchArg>::ControlType;
     using ControlPointIndex = typename Mesh<NodeArg, PatchArg>::ControlPointIndex;
@@ -1322,7 +1426,7 @@ void smartMoveControl(Mesh<NodeArg, PatchArg> &mesh,
     } else {
         const QPointF newPos = *it + move;
 
-        if (lockNodes) {
+        if (mode == MoveRotationLock || mode == MoveSymmetricLock) {
             const qreal rotation = KisAlgebra2D::angleBetweenVectors(*it - it.node().node,
                                                                      newPos - it.node().node);
             QTransform R;
@@ -1333,19 +1437,26 @@ void smartMoveControl(Mesh<NodeArg, PatchArg> &mesh,
                     R *
                     QTransform::fromTranslate(it.node().node.x(), it.node().node.y());
 
-            for (int intType = 0; intType < 4; intType++) {
-                ControlType type = static_cast<ControlType>(intType);
+            if (mode == MoveRotationLock) {
+                for (int intType = 0; intType < 4; intType++) {
+                    ControlType type = static_cast<ControlType>(intType);
 
-                if (type == ControlType::Node ||
-                    type == index.controlType) {
+                    if (type == ControlType::Node ||
+                            type == index.controlType) {
 
-                    continue;
+                        continue;
+                    }
+
+                    auto neighbourIt = mesh.find(ControlPointIndex(index.nodeIndex, type));
+                    if (neighbourIt == mesh.endControlPoints()) continue;
+
+                    *neighbourIt = t.map(*neighbourIt);
                 }
-
-                auto neighbourIt = mesh.find(ControlPointIndex(index.nodeIndex, type));
-                if (neighbourIt == mesh.endControlPoints()) continue;
-
-                *neighbourIt = t.map(*neighbourIt);
+            } else {
+                auto neighbourIt = it.symmetricControl();
+                if (neighbourIt != mesh.endControlPoints()) {
+                    *neighbourIt = t.map(*neighbourIt);
+                }
             }
         }
 
@@ -1372,6 +1483,7 @@ using KisBezierMeshDetails::saveValue;
 template <typename Node, typename Patch>
 using KisBezierMeshBase = KisBezierMeshDetails::Mesh<Node, Patch>;
 
+using KisSmartMoveMeshControlMode = KisBezierMeshDetails::SmartMoveMeshControlMode;
 using KisBezierMesh = KisBezierMeshDetails::Mesh<KisBezierMeshDetails::BaseMeshNode, KisBezierPatch>;
 
 

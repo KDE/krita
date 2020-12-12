@@ -43,7 +43,7 @@ public:
     QString url() const override { return m_tag ? m_tag->url() : QString(); }
     QString name() const override { return m_tag ? m_tag->name() : QString(); }
     QString comment() const override {return m_tag ? m_tag->comment() : QString(); }
-
+    QString resourceType() const override { return  m_tag ? m_tag->resourceType() : resourceType(); }
     KisTagSP tag() const override
     {
         return m_tag;

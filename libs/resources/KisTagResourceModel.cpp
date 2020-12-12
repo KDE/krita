@@ -98,6 +98,7 @@ QVariant KisAllTagResourceModel::data(const QModelIndex &index, int role) const
         tag->setComment(d->query.value("tag_comment").toString());
         tag->setId(d->query.value("tag_id").toInt());
         tag->setActive(d->query.value("tag_active").toBool());
+        tag->setResourceType(d->resourceType);
         tag->setValid(true);
 
         v = QVariant::fromValue(tag);
@@ -231,6 +232,7 @@ bool KisAllTagResourceModel::resetQuery()
                               ",      tags\n"
                               ",      resource_tags\n"
                               "WHERE  tags.id                    = resource_tags.tag_id\n"
+                              "AND    tags.resource_type_id      = resource_types.id\n"
                               "AND    resources.id               = resource_tags.resource_id\n"
                               "AND    resources.resource_type_id = resource_types.id\n"
                               "AND    resources.storage_id       = storages.id\n"
@@ -395,7 +397,7 @@ QModelIndex KisTagResourceModel::indexForResource(KoResourceSP resource) const
     if (!resource || !resource->valid() || resource->resourceId() < 0) return QModelIndex();
 
     for (int i = 0; i < rowCount(); ++i)  {
-        QModelIndex idx = createIndex(i, Qt::UserRole + KisAllTagResourceModel::ResourceId);
+        QModelIndex idx = index(i, Qt::UserRole + KisAllTagResourceModel::ResourceId);
         Q_ASSERT(idx.isValid());
         if (idx.data(Qt::UserRole + KisAllTagResourceModel::ResourceId).toInt() == resource->resourceId()) {
             return idx;

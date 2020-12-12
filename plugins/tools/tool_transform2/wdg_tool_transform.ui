@@ -10,7 +10,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>499</width>
+    <width>515</width>
     <height>751</height>
    </rect>
   </property>
@@ -258,7 +258,7 @@
       <enum>QFrame::Raised</enum>
      </property>
      <property name="currentIndex">
-      <number>4</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="freeTransformWidget">
       <layout class="QVBoxLayout" name="verticalLayout">
@@ -2152,7 +2152,66 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="meshTransformPage"/>
+     <widget class="QWidget" name="meshTransformPage">
+      <layout class="QVBoxLayout" name="verticalLayout_14">
+       <item>
+        <widget class="QGroupBox" name="groupBox_2">
+         <property name="title">
+          <string>Mesh size</string>
+         </property>
+         <layout class="QFormLayout" name="formLayout_2">
+          <item row="0" column="0">
+           <widget class="QLabel" name="lblNumColumns">
+            <property name="text">
+             <string>Columns:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QSpinBox" name="intNumColumns"/>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="lblNumRows">
+            <property name="text">
+             <string>Rows:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QSpinBox" name="intNumRows"/>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="chkShowControlPoints">
+         <property name="text">
+          <string>Show control points</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="chkSymmetricalHandles">
+         <property name="text">
+          <string>Lock handles symmetrically</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_4">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
     </widget>
    </item>
    <item>
@@ -2254,8 +2313,8 @@
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="buttonGroup"/>
-  <buttongroup name="cageTransformButtonGroup"/>
   <buttongroup name="freeTransformRadioGroup"/>
+  <buttongroup name="cageTransformButtonGroup"/>
+  <buttongroup name="buttonGroup"/>
  </buttongroups>
 </ui>

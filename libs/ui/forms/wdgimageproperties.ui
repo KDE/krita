@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <author>
     SPDX-FileCopyrightText: none
@@ -36,7 +36,7 @@
          <property name="verticalSpacing">
           <number>12</number>
          </property>
-         <item column="0" row="0">
+         <item row="0" column="0">
           <widget class="QLabel" name="lblWidth">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -52,14 +52,14 @@
            </property>
           </widget>
          </item>
-         <item column="1" row="0">
+         <item row="0" column="1">
           <widget class="QLabel" name="lblWidthValue">
            <property name="text">
             <string comment="KDE::DoNotExtract">TextLabel</string>
            </property>
           </widget>
          </item>
-         <item column="0" row="1">
+         <item row="1" column="0">
           <widget class="QLabel" name="lblHeight">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -75,14 +75,14 @@
            </property>
           </widget>
          </item>
-         <item column="1" row="1">
+         <item row="1" column="1">
           <widget class="QLabel" name="lblHeightValue">
            <property name="text">
             <string comment="KDE::DoNotExtract">TextLabel</string>
            </property>
           </widget>
          </item>
-         <item column="0" row="2">
+         <item row="2" column="0">
           <widget class="QLabel" name="lblResolution">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -98,7 +98,7 @@
            </property>
           </widget>
          </item>
-         <item column="1" row="2">
+         <item row="2" column="1">
           <layout class="QHBoxLayout" name="horizontalLayout">
            <item>
             <widget class="QLabel" name="lblResolutionValue">
@@ -138,7 +138,7 @@
            </item>
           </layout>
          </item>
-         <item column="0" row="3">
+         <item row="3" column="0">
           <widget class="QLabel" name="lblBgColor">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -154,14 +154,14 @@
            </property>
           </widget>
          </item>
-         <item column="1" row="3">
+         <item row="3" column="1">
           <widget class="KisColorButton" name="bnBackgroundColor">
            <property name="text">
             <string/>
            </property>
           </widget>
          </item>
-         <item column="1" row="4">
+         <item row="4" column="1">
           <widget class="KisDoubleSliderSpinBox" name="sldBackgroundColor" native="true">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
@@ -177,7 +177,7 @@
            </property>
           </widget>
          </item>
-         <item column="0" row="4">
+         <item row="4" column="0">
           <widget class="QLabel" name="label_4">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -190,6 +190,20 @@
            </property>
            <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="0">
+          <widget class="QLabel" name="label_2">
+           <property name="text">
+            <string>Number of Layers:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="1">
+          <widget class="QLabel" name="lblLayerCount">
+           <property name="text">
+            <string/>
            </property>
           </widget>
          </item>
@@ -274,7 +288,7 @@
           <string>Rendering Intent</string>
          </property>
          <layout class="QFormLayout" name="formLayout_2">
-          <item colspan="2" column="0" row="0">
+          <item row="0" column="0" colspan="2">
            <widget class="QComboBox" name="cmbIntent">
             <property name="currentIndex">
              <number>0</number>

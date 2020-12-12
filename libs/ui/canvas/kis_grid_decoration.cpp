@@ -124,6 +124,10 @@ void KisGridDecoration::drawDecoration(QPainter& gc, const QRectF& updateArea, c
 
     if (gridType == KisGridConfig::GRID_ISOMETRIC)  {
 
+        // get true coordinates, not just the updateArea
+        QRectF trueImageRect = converter->imageRectInImagePixels();
+        trueImageRect.getCoords(&x1, &y1, &x2, &y2);
+
         const int offset = m_d->config.offset().x();
         const int offsetY = m_d->config.offset().y();
         const int step = scaleCoeff * m_d->config.spacing().y();
@@ -140,7 +144,6 @@ void KisGridDecoration::drawDecoration(QPainter& gc, const QRectF& updateArea, c
         // left angle
         {
             int gridXAngle = m_d->config.angleLeft();
-            int counter = lineIndexFirst;
             int bottomRightOfImageY = y2; // this should be the height of the image
             int finalY = 0;
 
@@ -153,10 +156,11 @@ void KisGridDecoration::drawDecoration(QPainter& gc, const QRectF& updateArea, c
 
             }
 
+            int counter = qFloor((-(offset + offsetY))/(qreal)correctedAngleSpacing);
 
             while (finalY < bottomRightOfImageY) {
 
-                int w = (counter * correctedAngleSpacing) - offsetY;
+                int w = (counter * correctedAngleSpacing) + offsetY + offset;
                 gc.setPen(mainPen);
 
                 // calculate where the ending point will be based off the angle
@@ -176,9 +180,7 @@ void KisGridDecoration::drawDecoration(QPainter& gc, const QRectF& updateArea, c
         // right angle (almost the same thing, except starting the lines on the right side)
         {
             int gridXAngle = m_d->config.angleRight(); // TODO: add another angle property
-            int counter = lineIndexFirst;
             int bottomLeftOfImageY = y2;
-            int finalY = 0;
 
 
             // figure out the spacing based off the angle
@@ -187,17 +189,25 @@ void KisGridDecoration::drawDecoration(QPainter& gc, const QRectF& updateArea, c
                 correctedAngleSpacing = cellSpacing / qCos( qDegreesToRadians((float)gridXAngle));
             }
 
+            int horizontalDistance = x2; // distance is the same (width of the image)
+            int length2 = qTan( qDegreesToRadians((float)gridXAngle)) * horizontalDistance; // qTan takes radians, so convert first before sending it
+
+            // let's get x, y of the line that starts in the top right corder
+            int yLower = 0;
+            int yHigher = yLower - length2;
+
+            int yLeftFirst = qCeil(qreal(yHigher)/correctedAngleSpacing)*correctedAngleSpacing;
+            int additionalOffset = yLeftFirst - yHigher;
+            int finalY = 0;
+            int counter = qFloor((-(offsetY - offset))/(qreal)correctedAngleSpacing);
 
             while (finalY < bottomLeftOfImageY) {
 
-                int w = (counter * correctedAngleSpacing) - offsetY - offset;
+                int w = (counter * correctedAngleSpacing) + offsetY - offset + additionalOffset;
                 gc.setPen(mainPen);
 
                 // calculate where the ending point will be based off the angle
                 int startingY = w;
-                int horizontalDistance = x2; // distance is the same (width of the image)
-
-                int length2 = qTan( qDegreesToRadians((float)gridXAngle)) * horizontalDistance; // qTan takes radians, so convert first before sending it
 
                 finalY = startingY - length2;
                 gc.drawLine(QPointF(x2, w),QPointF(0, finalY));

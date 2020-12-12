@@ -46,6 +46,7 @@ void StoryboardDelegate::paint(QPainter *p, const QStyleOptionViewItem &option, 
         }
         if (!index.parent().isValid()) {
             QRect parentRect = option.rect;
+            p->setPen(QPen(option.palette.background(), 2));
             p->drawRect(parentRect);
 
             parentRect.setTopLeft(parentRect.topLeft() + QPoint(4, 4));
@@ -74,8 +75,7 @@ void StoryboardDelegate::paint(QPainter *p, const QStyleOptionViewItem &option, 
 #if QT_VERSION >= QT_VERSION_CHECK(5,11,0)
                     frameNumRect.setWidth(3 * m_view->fontMetrics().horizontalAdvance("0") + 2);
 #else
-                    frameNumRect.setWidth(3 * m_view->fontMetrics().width() + 2);
-                    int numericFontWidth = p.fontMetrics().width("0");
+                    frameNumRect.setWidth(3 * m_view->fontMetrics().width('0') + 2);
 #endif
                     frameNumRect.moveBottom(option.rect.top()-1);
                     p->setPen(QPen(option.palette.dark(), 2));
@@ -249,7 +249,7 @@ QSize StoryboardDelegate::sizeHint(const QStyleOptionViewItem &option,
             int numComments = model->visibleCommentCount();
             int numItem = width/250;
             if (numItem <= 0) {
-                return QSize(0, 0);
+                numItem = 1;
             }
 
             int thumbnailheight = m_view->thumbnailIsVisible() ? 120 : 0;

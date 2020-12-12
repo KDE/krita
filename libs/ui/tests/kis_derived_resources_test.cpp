@@ -95,6 +95,8 @@ void KisDerivedResourcesTest::test()
 
     preset->settings()->setPaintOpOpacity(0.8);
 
+    QTest::qWait(200);
+
     QCOMPARE(spy.size(), 1);
     QCOMPARE(spy[0][0].toInt(), (int)KoCanvasResource::Opacity);
     QCOMPARE(spy[0][1].toDouble(), 0.8);

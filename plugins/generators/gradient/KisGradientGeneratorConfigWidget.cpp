@@ -21,7 +21,6 @@
 KisGradientGeneratorConfigWidget::KisGradientGeneratorConfigWidget(QWidget* parent)
     : KisConfigWidget(parent)
     , m_view(nullptr)
-    , m_gradient(nullptr)
 {
     QStringList shapeNames =
         QStringList()
@@ -68,6 +67,9 @@ KisGradientGeneratorConfigWidget::KisGradientGeneratorConfigWidget(QWidget* pare
     m_ui.sliderEndPositionAngle->setRange(0, 360, 3);
     m_ui.comboBoxEndPositionDistanceUnits->addItems(spatialUnitsNames);
 
+    m_ui.widgetGradientEditor->setContentsMargins(10, 10, 10, 10);
+    m_ui.widgetGradientEditor->loadUISettings();
+
     connect(m_ui.comboBoxShape, SIGNAL(currentIndexChanged(int)), this, SIGNAL(sigConfigurationUpdated()));
     connect(m_ui.comboBoxRepeat, SIGNAL(currentIndexChanged(int)), this, SIGNAL(sigConfigurationUpdated()));
     connect(m_ui.sliderAntiAliasThreshold, SIGNAL(valueChanged(qreal)), this, SIGNAL(sigConfigurationUpdated()));
@@ -100,11 +102,13 @@ KisGradientGeneratorConfigWidget::KisGradientGeneratorConfigWidget(QWidget* pare
     connect(m_ui.spinBoxEndPositionDistance, SIGNAL(valueChanged(double)), this, SIGNAL(sigConfigurationUpdated()));
     connect(m_ui.comboBoxEndPositionDistanceUnits, SIGNAL(currentIndexChanged(int)), this, SIGNAL(sigConfigurationUpdated()));
 
-    connect(m_ui.widgetGradientChooser, SIGNAL(resourceSelected(KoResourceSP)), this, SLOT(slot_widgetGradientChooser_resourceSelected(KoResourceSP)));
+    connect(m_ui.widgetGradientEditor, SIGNAL(sigGradientChanged()), this, SIGNAL(sigConfigurationUpdated()));
 }
 
 KisGradientGeneratorConfigWidget::~KisGradientGeneratorConfigWidget()
-{}
+{
+    m_ui.widgetGradientEditor->saveUISettings();
+}
 
 void KisGradientGeneratorConfigWidget::setConfiguration(const KisPropertiesConfigurationSP config)
 {
@@ -138,11 +142,7 @@ void KisGradientGeneratorConfigWidget::setConfiguration(const KisPropertiesConfi
         m_ui.spinBoxEndPositionDistance->setValue(generatorConfig->endPositionDistance());
         m_ui.comboBoxEndPositionDistanceUnits->setCurrentIndex(generatorConfig->endPositionDistanceUnits());
 
-        m_gradient = generatorConfig->gradient();
-        if (m_view) {
-            KoCanvasResourcesInterfaceSP canvasResourcesInterface = m_view->canvasResourceProvider()->resourceManager()->canvasResourcesInterface();
-            m_gradient->bakeVariableColors(canvasResourcesInterface);
-        }
+        m_ui.widgetGradientEditor->setGradient(generatorConfig->gradient());
     }
 
     emit sigConfigurationUpdated();
@@ -176,7 +176,13 @@ KisPropertiesConfigurationSP KisGradientGeneratorConfigWidget::configuration() c
     config->setEndPositionDistance(m_ui.spinBoxEndPositionDistance->value());
     config->setEndPositionDistanceUnits(static_cast<KisGradientGeneratorConfiguration::SpatialUnits>(m_ui.comboBoxEndPositionDistanceUnits->currentIndex()));
 
-    config->setGradient(m_gradient);
+    KoAbstractGradientSP gradient = m_ui.widgetGradientEditor->gradient();
+    if (gradient && m_view) {
+        KoCanvasResourcesInterfaceSP canvasResourcesInterface =
+            m_view->canvasResourceProvider()->resourceManager()->canvasResourcesInterface();
+        gradient->bakeVariableColors(canvasResourcesInterface);
+    }
+    config->setGradient(gradient);
 
     return config;
 }
@@ -186,20 +192,10 @@ void KisGradientGeneratorConfigWidget::setView(KisViewManager *view)
     m_view = view;
     if (view) {
         KoCanvasResourcesInterfaceSP canvasResourcesInterface = m_view->canvasResourceProvider()->resourceManager()->canvasResourcesInterface();
-        m_ui.widgetGradientChooser->setCanvasResourcesInterface(canvasResourcesInterface);
+        m_ui.widgetGradientEditor->setCanvasResourcesInterface(canvasResourcesInterface);
     } else {
-        m_ui.widgetGradientChooser->setCanvasResourcesInterface(nullptr);
+        m_ui.widgetGradientEditor->setCanvasResourcesInterface(nullptr);
     }
-}
-
-void KisGradientGeneratorConfigWidget::slot_widgetGradientChooser_resourceSelected(KoResourceSP resource)
-{
-    m_gradient = resource->clone().dynamicCast<KoAbstractGradient>();
-    if (m_view) {
-        KoCanvasResourcesInterfaceSP canvasResourcesInterface = m_view->canvasResourceProvider()->resourceManager()->canvasResourcesInterface();
-        m_gradient->bakeVariableColors(canvasResourcesInterface);
-    }
-    emit sigConfigurationUpdated();
 }
 
 void KisGradientGeneratorConfigWidget::slot_radioButtonEndPositionCartesianCoordinates_toggled(bool enabled)

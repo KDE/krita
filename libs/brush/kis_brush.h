@@ -332,6 +332,8 @@ public:
 
     virtual void lodLimitations(KisPaintopLodLimitations *l) const;
 
+    virtual bool supportsCaching() const;
+
 protected:
 
     void setWidth(qint32 width);

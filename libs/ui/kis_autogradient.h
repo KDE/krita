@@ -8,18 +8,32 @@
 #ifndef _KIS_AUTOGRADIENT_H_
 #define _KIS_AUTOGRADIENT_H_
 
+#include <kritaui_export.h>
+#include <KoSegmentGradient.h>
+
 #include "ui_wdgautogradient.h"
 
 class KoGradientSegment;
-#include<KoSegmentGradient.h>
 
-class KisAutogradientEditor : public QWidget, public Ui::KisWdgAutogradient
+class KRITAUI_EXPORT KisAutogradientEditor : public QWidget, public Ui::KisWdgAutogradient
 {
     Q_OBJECT
 
 public:
+    KisAutogradientEditor(QWidget *parent);
     KisAutogradientEditor(KoSegmentGradientSP gradient, QWidget *parent, const char* name, const QString& caption, KoCanvasResourcesInterfaceSP canvasResourcesInterface);
+    
     void activate();
+
+    void setCompactMode(bool value);
+
+    void setGradient(KoSegmentGradientSP gradient);
+
+    void setCanvasResourcesInterface(KoCanvasResourcesInterfaceSP canvasResourcesInterface);
+    KoCanvasResourcesInterfaceSP canvasResourcesInterface() const;
+
+Q_SIGNALS:
+    void sigGradientChanged();
 
 private:
     void disableTransparentCheckboxes();

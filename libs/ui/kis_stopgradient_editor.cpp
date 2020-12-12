@@ -76,7 +76,7 @@ KisStopGradientEditor::KisStopGradientEditor(KoStopGradientSP gradient, QWidget 
 
 void KisStopGradientEditor::setCompactMode(bool value)
 {
-    //lblName->setVisible(!value);
+    lblName->setVisible(!value);
     buttonReverse->setVisible(!value);
     nameedit->setVisible(!value);
     foregroundRadioButton->setVisible(!value);
@@ -144,12 +144,20 @@ void KisStopGradientEditor::stopChanged(int stop)
         if (type == FOREGROUNDSTOP) {
             foregroundRadioButton->setChecked(true);
             opacitySlider->setEnabled(false);
-            color = m_canvasResourcesInterface->resource(KoCanvasResource::ForegroundColor).value<KoColor>();
+            if (m_canvasResourcesInterface) {
+                color = m_canvasResourcesInterface->resource(KoCanvasResource::ForegroundColor).value<KoColor>();
+            } else {
+                color = m_gradient->stops()[stop].color;
+            }
         }
         else if (type == BACKGROUNDSTOP) {
             backgroundRadioButton->setChecked(true);
             opacitySlider->setEnabled(false);
-            color = m_canvasResourcesInterface->resource(KoCanvasResource::BackgroundColor).value<KoColor>();;
+            if (m_canvasResourcesInterface) {
+                color = m_canvasResourcesInterface->resource(KoCanvasResource::BackgroundColor).value<KoColor>();
+            } else {
+                color = m_gradient->stops()[stop].color;
+            }
         }
         else {
             colorRadioButton->setChecked(true);
@@ -176,12 +184,15 @@ void KisStopGradientEditor::stopTypeChanged() {
     KoGradientStopType type;    
     if (foregroundRadioButton->isChecked()) {
         type = FOREGROUNDSTOP;
-        color = m_canvasResourcesInterface->resource(KoCanvasResource::ForegroundColor).value<KoColor>().convertedTo(color.colorSpace());
+        if (m_canvasResourcesInterface) {
+            color = m_canvasResourcesInterface->resource(KoCanvasResource::ForegroundColor).value<KoColor>().convertedTo(color.colorSpace());
+        }
         opacitySlider->setEnabled(false);
     } else if (backgroundRadioButton->isChecked()) {
         type = BACKGROUNDSTOP;
-        color = m_canvasResourcesInterface->resource(KoCanvasResource::BackgroundColor).value<KoColor>().convertedTo(color.colorSpace());
-
+        if (m_canvasResourcesInterface) {
+            color = m_canvasResourcesInterface->resource(KoCanvasResource::BackgroundColor).value<KoColor>().convertedTo(color.colorSpace());
+        }
         opacitySlider->setEnabled(false);
     }
     else {

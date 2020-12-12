@@ -208,6 +208,20 @@ public:
     void recoveryModifiersWithoutFocus(const QVector<Qt::Key> &keys);
 
     /**
+     * Sanity check correctness of the internal state of the matcher
+     * by comparing it to the standard modifiers that we get with
+     * every input event. Right now this sanity check is used on Windows
+     * only.
+     */
+    bool sanityCheckModifiersCorrectness(Qt::KeyboardModifiers modifiers) const;
+
+    /**
+     * Return the internal state of the tracked modifiers. Used for debugging
+     * and error reporting only.
+     */
+    QVector<Qt::Key> debugPressedKeys() const;
+
+    /**
      * Kirta lost focus, it means that all the running actions should be ended
      * forcefully.
      */

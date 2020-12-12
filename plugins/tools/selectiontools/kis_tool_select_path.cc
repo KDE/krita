@@ -45,13 +45,13 @@ bool KisToolSelectPath::eventFilter(QObject *obj, QEvent *event)
     if (event->type() == QEvent::MouseButtonPress ||
             event->type() == QEvent::MouseButtonDblClick) {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
-        if (mouseEvent->button() == Qt::RightButton) {
+        if (mouseEvent->button() == Qt::RightButton && hasUserInteractionRunning()) {
             localTool()->removeLastPoint();
             return true;
         }
     } else if (event->type() == QEvent::TabletPress) {
         QTabletEvent *tabletEvent = static_cast<QTabletEvent*>(event);
-        if (tabletEvent->button() == Qt::RightButton) {
+        if (tabletEvent->button() == Qt::RightButton && hasUserInteractionRunning()) {
             localTool()->removeLastPoint();
             return true;
         }

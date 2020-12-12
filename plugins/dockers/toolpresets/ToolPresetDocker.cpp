@@ -25,6 +25,8 @@
 #include <QMessageBox>
 #include <QStandardPaths>
 
+#include <KoDialog.h>
+
 #include <klocalizedstring.h>
 #include <kactioncollection.h>
 #include <ksharedconfig.h>
@@ -39,6 +41,7 @@
 #include <KisMainWindow.h>
 #include "kis_signal_compressor.h"
 
+#include <KisPart.h>
 #include <kis_types.h>
 #include <KisViewManager.h>
 #include <KoToolManager.h>
@@ -55,6 +58,41 @@
 #include "ToolPresetModel.h"
 
 
+DlgNewPreset::DlgNewPreset()
+    : KoDialog(KisPart::instance()->currentMainwindow())
+{
+    setButtons(KoDialog::Ok | KoDialog::Cancel);
+
+    QWidget *page = new QWidget;
+    m_ui.setupUi(page);
+    setMainWidget(page);
+}
+
+QString DlgNewPreset::name()
+{
+    return m_ui.txtName->text();
+}
+
+bool DlgNewPreset::executeOnSelection()
+{
+    return m_ui.chkExecuteToolOnSelection->isChecked();
+}
+
+bool DlgNewPreset::saveResourcesWithPreset()
+{
+    return m_ui.chkSaveBrushPresetInformation->isChecked();
+}
+
+void DlgNewPreset::accept()
+{
+    if (m_ui.txtName->text().isEmpty()) {
+        QMessageBox::warning(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Please enter a name for the tool preset."));
+    }
+    else {
+        KoDialog::accept();
+    }
+}
+
 ToolPresetDocker::ToolPresetDocker()
     : QDockWidget(i18n("Tool Option Presets"))
 {
@@ -67,7 +105,7 @@ ToolPresetDocker::ToolPresetDocker()
     bnAdd->setIcon(koIcon("document-new"));
     bnDelete->setIcon(koIcon("edit-delete"));
 
-    m_toolPresetModel = new ToolPresetFilterProxyModel(0);
+    m_toolPresetModel = new ToolPresetModel();
     lstPresets->setModel(m_toolPresetModel);
     lstPresets->setItemDelegate(new KisCategorizedItemDelegate(this));
 
@@ -112,80 +150,82 @@ void ToolPresetDocker::toolChanged(KoCanvasController *canvasController, int /*t
 
     m_currentToolId = KoToolManager::instance()->activeToolId();
 
-    if (chkExecuteToolOnSelection->isChecked()) {
-        m_toolPresetModel->setFilter(m_currentToolId);
-    }
-    else {
-        m_toolPresetModel->setFilter(QString());
-    }
+    //    if (chkExecuteToolOnSelection->isChecked()) {
+    //        m_toolPresetModel->setFilter(m_currentToolId);
+    //    }
+    //    else {
+    //        m_toolPresetModel->setFilter(QString());
+    //    }
 
 }
 
 void ToolPresetDocker::bnAddPressed()
 {
-//    if (txtName->text().isEmpty()) {
-//        QMessageBox::warning(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Please enter a name for the tool preset."));
-//        return;
-//    }
+    DlgNewPreset dlg;
+    QDialog::DialogCode result = (QDialog::DialogCode) dlg.exec();
+    if (result == QDialog::Accepted) {
 
-//    QString section = txtName->text();
-//    QString optionFile = createConfigFileName(m_currentToolId);
-//    Q_FOREACH (QPointer<QWidget> widget, m_currentOptionWidgets) {
-//        if (widget) {
-//            KisDialogStateSaver::saveState(widget, section, optionFile);
-//        }
-//    }
+        QString section = dlg.name();
+        QString optionFile = createConfigFileName(m_currentToolId);
+        Q_FOREACH (QPointer<QWidget> widget, m_currentOptionWidgets) {
+            if (widget) {
+                KisDialogStateSaver::saveState(widget, section, optionFile);
+            }
+        }
 
-//    KoToolBase *tool = KoToolManager::instance()->toolById(m_canvas, m_currentToolId);
-//    if (tool && tool->inherits("KisToolPaint")) {
-//        KConfig cfg(createConfigFileName(m_currentToolId));
-//        KConfigGroup grp = cfg.group(txtName->text());
-//        KisPaintOpSettingsSP settings = m_resourceProvider->currentPreset()->settings();
-//        grp.writeEntry("brush_size",settings->paintOpSize());
-//    }
-//    QListWidgetItem *item = new QListWidgetItem(toolIcon(m_currentToolId), section);
-//    lstPresets->addItem(item);
-//    lstPresets->blockSignals(true);
-//    lstPresets->setCurrentItem(item);
-//    lstPresets->blockSignals(false);
+        KoToolBase *tool = KoToolManager::instance()->toolById(m_canvas, m_currentToolId);
+        if (tool && tool->inherits("KisToolPaint")) {
+            KConfig cfg(createConfigFileName(m_currentToolId));
+            KConfigGroup grp = cfg.group(dlg.name());
+            KisPaintOpSettingsSP settings = m_resourceProvider->currentPreset()->settings();
+            grp.writeEntry("brush_size", settings->paintOpSize());
+        }
+
+        m_toolPresetModel->addToolPreset(m_currentToolId, dlg.name());
+    }
+
 }
 
 void ToolPresetDocker::bnDeletePressed()
 {
-//    if (!lstPresets->count()) return;
+    QModelIndex idx = lstPresets->currentIndex();
+    if (idx.isValid()) {
+        QString presetName = m_toolPresetModel->data(idx).toString();
 
-//    KConfig cfg(createConfigFileName(m_currentToolId), KConfig::SimpleConfig);
-//    cfg.deleteGroup(lstPresets->currentItem()->text());
-//    txtName->clear();
-    //    delete lstPresets->takeItem(lstPresets->currentRow());
+        KConfig cfg(createConfigFileName(m_currentToolId), KConfig::SimpleConfig);
+        cfg.deleteGroup(presetName);
+
+        m_toolPresetModel->removeToolPreset(m_currentToolId, presetName);
+    }
 }
 
-void ToolPresetDocker::presetSelected(const QModelIndex *idx)
+void ToolPresetDocker::presetSelected(QModelIndex idx)
 {
-    ToolPresetInfo *info = m_toolPresetModel->toolPresetInfo(idx->row());
+    ToolPresetInfo *info = m_toolPresetModel->toolPresetInfo(idx.row());
 
     if (info->toolId != m_currentToolId) {
         KoToolManager::instance()->switchToolRequested(info->toolId);
     }
 
-//    QString text = info->presetName;
-//    txtName->setText(text);
+    //    QString text = info->presetName;
+    //    txtName->setText(text);
 
-//    Q_FOREACH (QPointer<QWidget> widget, m_currentOptionWidgets) {
-//        if (widget) {
-//            KisDialogStateSaver::restoreState(widget, text, QMap<QString, QVariant>(), createConfigFileName(m_currentToolId));
-//        }
-//    }
+    //    Q_FOREACH (QPointer<QWidget> widget, m_currentOptionWidgets) {
+    //        if (widget) {
+    //            KisDialogStateSaver::restoreState(widget, text, QMap<QString, QVariant>(), createConfigFileName(m_currentToolId));
+    //        }
+    //    }
 
-//    KConfig cfg(createConfigFileName(m_currentToolId));
-//    KConfigGroup grp = cfg.group(text);
+    //    KConfig cfg(createConfigFileName(m_currentToolId));
+    //    KConfigGroup grp = cfg.group(text);
 
-//    chkExecuteToolOnSelection->setChecked(grp.readEntry("execute_on_select", false));
-//    chkSaveBrushPresetInformation->setChecked(grp.readEntry("save_resources", false));
+    //    chkExecuteToolOnSelection->setChecked(grp.readEntry("execute_on_select", false));
+    //    chkSaveBrushPresetInformation->setChecked(grp.readEntry("save_resources", false));
 
-    KoToolBase *tool = KoToolManager::instance()->toolById(m_canvas, m_currentToolId);
-    if (tool && tool->inherits("KisToolPaint")) {
-        m_resourceProvider->setSize(grp.readEntry("brush_size", m_resourceProvider->size()));
-    }
+    //    KoToolBase *tool = KoToolManager::instance()->toolById(m_canvas, m_currentToolId);
+    //    if (tool && tool->inherits("KisToolPaint")) {
+    //        m_resourceProvider->setSize(grp.readEntry("brush_size", m_resourceProvider->size()));
+    //    }
 
 }
+

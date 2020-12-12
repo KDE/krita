@@ -6,6 +6,7 @@ set(KRITA_TOOLPRESETSDOCKER_SOURCES
 
 ki18n_wrap_ui(KRITA_TOOLPRESETSDOCKER_SOURCES
     WdgToolPresets.ui
+    WdgNewToolPreset.ui
 )
 
 

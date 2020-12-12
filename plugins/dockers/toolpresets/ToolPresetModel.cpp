@@ -147,38 +147,20 @@ bool operator==(const ToolPresetInfo &a, const ToolPresetInfo &b)
     return ((a.toolId == b.toolId) && (a.presetName == b.presetName));
 }
 
-ToolPresetInfo *ToolPresetFilterProxyModel::toolPresetInfo(int row) const
+
+void ToolPresetModel::addToolPreset(const QString &toolId, const QString &presetName)
 {
-    QModelIndex idx = index(row, 0);
-    QModelIndex sourceIdx = mapToSource(idx);
-
-    ToolPresetModel *presetModel = dynamic_cast<ToolPresetModel*>(sourceModel());
-
-    if (!presetModel) return 0;
-
-    return presetModel->toolPresetInfo(sourceIdx.row());
+    beginResetModel();
+    auto item = categoriesMapper()->addEntry(toolId, ToolPresetInfo(toolId, presetName));
+    item->setCheckable(true);
+    endResetModel();
 }
 
-void ToolPresetFilterProxyModel::setFilter(const QString &toolId)
+void ToolPresetModel::removeToolPreset(const QString &toolId, const QString &presetName)
 {
-    m_toolIdFilter = toolId;
-    invalidateFilter();
+    beginResetModel();
+    removeFavoriteEntry(ToolPresetInfo(toolId, presetName));
+    categoriesMapper()->removeEntry(toolId, ToolPresetInfo(toolId, presetName));
+    endResetModel();
 }
-
-bool ToolPresetFilterProxyModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
-{
-    if (m_toolIdFilter.isEmpty()) return true;
-
-    QModelIndex idx = sourceModel()->index(source_row, 0, source_parent);
-    if (!idx.isValid()) return false;
-
-    ToolPresetModel *presetModel = dynamic_cast<ToolPresetModel*>(sourceModel());
-    if (!presetModel) return false;
-
-    ToolPresetInfo *info = presetModel->toolPresetInfo(idx.row());
-
-    return (info->toolId == m_toolIdFilter);
-}
-
-
 

@@ -79,6 +79,9 @@ public:
 
     ToolPresetInfo *toolPresetInfo(int row) const;
 
+    void addToolPreset(const QString &toolId, const QString &presetName);
+    void removeToolPreset(const QString &toolId, const QString &presetName);
+
 private:
 
     friend class ToolPresetFilterProxyModel;
@@ -87,40 +90,6 @@ private:
 
     void addFavoriteEntry(const ToolPresetInfo &entry);
     void removeFavoriteEntry(const ToolPresetInfo &entry);
-};
-
-class ToolPresetFilterProxyModel : public KisSortedCategorizedListModel<ToolPresetModel>
-{
-public:
-    ToolPresetFilterProxyModel(QObject *parent = 0)
-        : KisSortedCategorizedListModel<ToolPresetModel>(parent)
-    {
-        m_model = new ToolPresetModel(0);
-        initializeModel(m_model);
-    }
-
-    ~ToolPresetFilterProxyModel()
-    {
-        delete m_model;
-    }
-
-    ToolPresetInfo *toolPresetInfo(int row) const;
-
-    void setFilter(const QString &toolId);
-
-protected:
-
-    bool lessThan(const QModelIndex &left, const QModelIndex &right) const override {
-        return lessThanPriority(left, right, ToolPresetModel::favoriteCategory().presetName);
-    }
-
-    bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const override;
-
-private:
-
-    ToolPresetModel *m_model;
-    QString m_toolIdFilter;
-
 };
 
 

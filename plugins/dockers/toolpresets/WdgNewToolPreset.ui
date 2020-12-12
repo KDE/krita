@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Form</class>
- <widget class="QWidget" name="Form">
+ <class>WdgNewToolPreset</class>
+ <widget class="QWidget" name="WdgNewToolPreset">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -29,14 +29,14 @@
     </layout>
    </item>
    <item>
-    <widget class="QCheckBox" name="chkSaveBrushPresetInformation_2">
+    <widget class="QCheckBox" name="chkSaveBrushPresetInformation">
      <property name="text">
       <string>Save Current Resources with Preset</string>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="QCheckBox" name="chkExecuteToolOnSelection_2">
+    <widget class="QCheckBox" name="chkExecuteToolOnSelection">
      <property name="text">
       <string>Execute Tool on Selecting this Preset</string>
      </property>

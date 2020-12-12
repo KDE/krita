@@ -22,8 +22,10 @@
 #include <QDockWidget>
 #include <kis_mainwindow_observer.h>
 #include <QWidget>
+#include <KoDialog.h>
 
 #include <ui_WdgToolPresets.h>
+#include <ui_WdgNewToolPreset.h>
 
 class QLabel;
 class QListWidgetItem;
@@ -31,8 +33,26 @@ class KoCanvasBase;
 class KisCanvas2;
 class KoCanvasController;
 class KisCanvasResourceProvider;
-class ToolPresetFilterProxyModel;
+class ToolPresetModel;
 class ToolPresets;
+
+class DlgNewPreset : public KoDialog
+{
+    Q_OBJECT
+public:
+    DlgNewPreset();
+    QString name();
+    bool executeOnSelection();
+    bool saveResourcesWithPreset();
+
+    void accept() override;
+
+private:
+
+    Ui_WdgNewToolPreset m_ui;
+};
+
+
 
 class ToolPresetDocker : public QDockWidget, public KisMainwindowObserver , public Ui_WdgToolPresets
 {
@@ -55,17 +75,14 @@ private Q_SLOTS:
     void bnAddPressed();
     void bnDeletePressed();
 
-    void presetSelected(const QModelIndex*);
-
-    void toggleCurrentToolOnly(bool toggle);
-
+    void presetSelected(QModelIndex);
 
 private:
     KisCanvasResourceProvider *m_resourceProvider;
     KoCanvasBase *m_canvas {0};
     QList<QPointer<QWidget> > m_currentOptionWidgets;
     QString m_currentToolId;
-    ToolPresetFilterProxyModel *m_toolPresetModel {0};
+    ToolPresetModel *m_toolPresetModel {0};
 };
 
 

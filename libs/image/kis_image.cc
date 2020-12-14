@@ -254,7 +254,7 @@ public:
     struct SetImageProjectionColorSpace;
 };
 
-KisImage::KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const KoColorSpace * colorSpace, const QString& name)
+KisImage::KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const KoColorSpace *colorSpace, const QString& name)
         : QObject(0)
         , KisShared()
         , m_d(new KisImagePrivate(this, width, height,

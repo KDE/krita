@@ -310,9 +310,11 @@ QList<KisNodeSP> KisMimeData::loadNodes(const QMimeData *data,
 
     if (nodes.isEmpty() && data->hasFormat("application/x-krita-node-url")) {
         QByteArray ba = data->data("application/x-krita-node-url");
+        QUrl url = QUrl::fromEncoded(ba);
+        Q_ASSERT(url.isLocalFile());
+
         KisDocument *tempDoc = KisPart::instance()->createDocument();
-        Q_ASSERT(QUrl::fromEncoded(ba).isLocalFile());
-        bool result = tempDoc->openUrl(QUrl::fromEncoded(ba));
+        bool result = tempDoc->openUrl(url);
 
         if (result) {
             KisImageSP tempImage = tempDoc->image();
@@ -322,8 +324,9 @@ QList<KisNodeSP> KisMimeData::loadNodes(const QMimeData *data,
                 nodes << node;
             }
         }
+
         delete tempDoc;
-        QFile::remove(QUrl::fromEncoded(ba).toLocalFile());
+        QFile::remove(url.toLocalFile());
     }
 
     if (nodes.isEmpty() && data->hasImage()) {

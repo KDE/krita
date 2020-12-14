@@ -182,6 +182,7 @@ private:
     void blockFrameInvalidation(bool value);
 
     friend class KisSwitchTimeStrokeStrategy;
+    friend class TransformStrokeStrategy;
     void explicitlySetCurrentTime(int frameId);
 
 Q_SIGNALS:

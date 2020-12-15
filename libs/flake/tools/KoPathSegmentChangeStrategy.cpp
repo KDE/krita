@@ -89,9 +89,6 @@ void KoPathSegmentChangeStrategy::handleMouseMove(const QPointF &mouseLocation, 
         QPointF lastLocalPos = m_path->documentToShape(m_lastPosition);
         QPointF delta = localPos - lastLocalPos;
 
-        QPointF move2;
-        QPointF move1;
-
         std::tie(move2, move1) =
             KisBezierUtils::offsetSegment(m_segmentParam, delta);
     }

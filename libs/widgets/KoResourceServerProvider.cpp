@@ -146,16 +146,6 @@ KoResourceServerProvider *KoResourceServerProvider::instance()
     return s_instance;
 }
 
-QStringList KoResourceServerProvider::blacklistFileNames(QStringList fileNames, const QStringList &blacklistedFileNames)
-{
-    if (!blacklistedFileNames.isEmpty()) {
-        foreach (const QString &s, blacklistedFileNames) {
-            fileNames.removeAll(s);
-        }
-    }
-    return fileNames;
-}
-
 KoResourceServer<KoPattern> *KoResourceServerProvider::patternServer()
 {
     return d->patternServer;

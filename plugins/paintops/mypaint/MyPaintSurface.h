@@ -81,11 +81,9 @@ private:
     MyPaintSurfaceInternal *m_surface;
     KisImageSP m_image;
     KisPrecisePaintDeviceWrapper m_precisePainterWrapper;
-    QScopedPointer<KisPrecisePaintDeviceWrapper> m_preciseImageDeviceWrapper;
-    KisPaintDeviceSP m_tempDev;
+    KisPaintDeviceSP m_dab;
     KisPainter *m_tempPainter;
     KisPainter *m_backgroundPainter;
-    KisPaintDeviceSP m_dab;
     QPointF m_lastPaintPos;
 
 };

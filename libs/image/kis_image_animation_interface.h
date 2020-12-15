@@ -104,11 +104,6 @@ public:
 
     const KisTimeSpan &playbackRange() const;
     void setPlaybackRange(const KisTimeSpan range);
-
-    void setFullClipRangeStartTime(int column);
-    void setFullClipRangeEndTime(int column);
-
-    void setFramerate(int fps);
     int framerate() const;
 
     /**
@@ -152,6 +147,11 @@ public Q_SLOTS:
      * asynchronous regeneration of the entire image.
      */
     void switchCurrentTimeAsync(int frameId, bool useUndo = false);
+
+    void setFullClipRangeStartTime(int column);
+    void setFullClipRangeEndTime(int column);
+
+    void setFramerate(int fps);
 
 Q_SIGNALS:
     void sigFrameReady(int time);

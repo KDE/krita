@@ -33,8 +33,22 @@ QIcon createIcon(const QImage &source, const QSize &iconSize)
 {
     QImage result;
     const int maxIconSize = qMax(iconSize.width(), iconSize.height());
+    QSize iconSizeSquare = QSize(maxIconSize, maxIconSize);
 
-    result = source.scaled(maxIconSize, maxIconSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    QSize scaled = source.size().scaled(iconSize, Qt::KeepAspectRatio);
+    qreal scale = scaled.width()/source.width();
+
+    if (scale >= 2) {
+        // it can be treated like pixel art
+        // first scale with NN
+        int scaleInt = qRound(scale);
+        result = source.scaled(scaleInt*source.size(), Qt::KeepAspectRatio, Qt::FastTransformation);
+        // them with smooth transformation to make sure the whole icon is filled in
+        result = result.scaled(iconSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    } else {
+        result = source.scaled(iconSizeSquare, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    }
+
     result = result.convertToFormat(QImage::Format_ARGB32) // add transparency
         .copy((result.width() - maxIconSize) / 2, (result.height() - maxIconSize) / 2, maxIconSize, maxIconSize);
 

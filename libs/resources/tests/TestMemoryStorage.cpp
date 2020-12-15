@@ -37,6 +37,20 @@ void TestMemoryStorage ::testStorage()
     QCOMPARE(count, 1);
 }
 
+void TestMemoryStorage ::testStorageRetrieval()
+{
+    KisMemoryStorage memoryStorage;
+    KoResourceSP resource1(new DummyResource("test1"));
+    memoryStorage.addResource("brushes", resource1);
+    KoResourceSP resource2(new DummyResource("test2"));
+    memoryStorage.addResource("brushes", resource2);
+
+    QString url = QString("brushes/test1");
+    KoResourceSP resource = memoryStorage.resource(url);
+
+    QCOMPARE(resource->filename(), "test1");
+}
+
 void TestMemoryStorage::testTagIterator()
 {
     KisMemoryStorage memoryStorage;

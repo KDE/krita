@@ -148,32 +148,32 @@ KoResourceServerProvider *KoResourceServerProvider::instance()
 
 KoResourceServer<KoPattern> *KoResourceServerProvider::patternServer()
 {
-    return d->patternServer;
+    return KoResourceServerProvider::instance()->d->patternServer;
 }
 
 KoResourceServer<KoAbstractGradient> *KoResourceServerProvider::gradientServer()
 {
-    return d->gradientServer;
+    return KoResourceServerProvider::instance()->d->gradientServer;
 }
 
 KoResourceServer<KoColorSet> *KoResourceServerProvider::paletteServer()
 {
-    return d->paletteServer;
+    return KoResourceServerProvider::instance()->d->paletteServer;
 }
 
 KoResourceServer<KoSvgSymbolCollectionResource> *KoResourceServerProvider::svgSymbolCollectionServer()
 {
-    return d->svgSymbolCollectionServer;
+    return KoResourceServerProvider::instance()->d->svgSymbolCollectionServer;
 }
 
 KoResourceServer<KoGamutMask> *KoResourceServerProvider::gamutMaskServer()
 {
-    return d->gamutMaskServer;
+    return KoResourceServerProvider::instance()->d->gamutMaskServer;
 }
 
 #if defined HAVE_SEEXPR
 KoResourceServer<KisSeExprScript> *KoResourceServerProvider::seExprScriptServer()
 {
-    return d->seExprScriptServer;
+    return KoResourceServerProvider::instance()->d->seExprScriptServer;
 }
 #endif

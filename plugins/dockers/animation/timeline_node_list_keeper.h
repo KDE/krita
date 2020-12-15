@@ -14,7 +14,7 @@
 
 #include "kritaanimationdocker_export.h"
 
-#include "kis_time_based_item_model.h"
+#include "KisTimeBasedItemModel.h"
 
 class KisNodeDummy;
 class KisDummiesFacadeBase;

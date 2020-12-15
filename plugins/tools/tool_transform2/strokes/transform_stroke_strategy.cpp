@@ -27,6 +27,7 @@
 #include "kis_projection_leaf.h"
 #include "kis_modify_transform_mask_command.h"
 
+#include "kis_image_animation_interface.h"
 #include "kis_sequential_iterator.h"
 #include "kis_selection_mask.h"
 #include "kis_image_config.h"
@@ -167,12 +168,18 @@ void TransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 
             } else if (KisGroupLayer *group = dynamic_cast<KisGroupLayer*>(rootNode.data())) {
                 const QRect bounds = group->image()->bounds();
+                const int desiredAnimTime = group->image()->animationInterface()->currentTime();
 
                 KisImageSP clonedImage = new KisImage(0,
                                                       bounds.width(),
                                                       bounds.height(),
                                                       group->colorSpace(),
                                                       "transformed_image");
+
+                // BUG: 413968
+                // Workaround: Group layers wouldn't properly render the right frame
+                // since `clonedImage` would always have a time value of 0.
+                clonedImage->animationInterface()->explicitlySetCurrentTime(desiredAnimTime);
 
                 KisGroupLayerSP clonedGroup = dynamic_cast<KisGroupLayer*>(group->clone().data());
 

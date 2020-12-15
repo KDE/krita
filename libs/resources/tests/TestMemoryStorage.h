@@ -14,6 +14,7 @@ class TestMemoryStorage : public QObject
     Q_OBJECT
 private Q_SLOTS:
     void testStorage();
+    void testStorageRetrieval();
     void testTagIterator();
 private:
 };

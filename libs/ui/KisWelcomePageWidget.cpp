@@ -293,11 +293,19 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
 void KisWelcomePageWidget::populateRecentDocuments()
 {
 
+    constexpr const int maxItemsCount = 5;
+
     m_recentFilesModel.clear(); // clear existing data before it gets re-populated
 
     // grab recent files data
-    int numRecentFiles = m_mainWindow->recentFilesUrls().length() > 5 ? 5 : m_mainWindow->recentFilesUrls().length(); // grab at most 5
+    int numRecentFiles = m_mainWindow->recentFilesUrls().length() > maxItemsCount ? maxItemsCount : m_mainWindow->recentFilesUrls().length(); // grab at most 5
     KisFileIconCreator iconCreator;
+
+    const int itemHeight = recentDocumentsListView->height() / maxItemsCount
+            - recentDocumentsListView->spacing() * 2;
+
+    QSize iconSize(itemHeight, itemHeight);
+
 
     for (int i = 0; i < numRecentFiles; i++ ) {
 
@@ -315,7 +323,7 @@ void KisWelcomePageWidget::populateRecentDocuments()
             recentItem->setIcon(m_thumbnailMap[recentFileUrlPath]);
         } else {
             QIcon icon;
-            bool success = iconCreator.createFileIcon(recentFileUrlPath, icon, devicePixelRatioF());
+            bool success = iconCreator.createFileIcon(recentFileUrlPath, icon, devicePixelRatioF(), iconSize);
             if (success) {
                 recentItem->setIcon(icon);
                 m_thumbnailMap[recentFileUrlPath] = recentItem->icon();

@@ -26,20 +26,39 @@
 
 #include <kis_debug.h>
 
+namespace
+{
+
+QIcon createIcon(const QImage &source, const QSize &iconSize)
+{
+    QImage result;
+    const int maxIconSize = qMax(iconSize.width(), iconSize.height());
+
+    result = source.scaled(maxIconSize, maxIconSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    result = result.convertToFormat(QImage::Format_ARGB32) // add transparency
+        .copy((result.width() - maxIconSize) / 2, (result.height() - maxIconSize) / 2, maxIconSize, maxIconSize);
+
+    return QIcon(QPixmap::fromImage(result));
+}
+
+}
+
+
 
 KisFileIconCreator::KisFileIconCreator()
 {
 }
 
-bool KisFileIconCreator::createFileIcon(QString recentFileUrlPath, QIcon &icon, qreal devicePixelRatioF)
+bool KisFileIconCreator::createFileIcon(QString path, QIcon &icon, qreal devicePixelRatioF, QSize iconSize)
 {
-    QFileInfo fi(recentFileUrlPath);
+    iconSize *= devicePixelRatioF;
+    QFileInfo fi(path);
     if (fi.exists()) {
-        QString mimeType = KisMimeDatabase::mimeTypeForFile(recentFileUrlPath);
+        QString mimeType = KisMimeDatabase::mimeTypeForFile(path);
         if (mimeType == KisDocument::nativeFormatMimeType()
                || mimeType == "image/openraster") {
 
-            QScopedPointer<KoStore> store(KoStore::createStore(recentFileUrlPath, KoStore::Read));
+            QScopedPointer<KoStore> store(KoStore::createStore(path, KoStore::Read));
             if (store) {
                 QString thumbnailpath;
                 if (store->hasFile(QString("Thumbnails/thumbnail.png"))){
@@ -59,7 +78,7 @@ bool KisFileIconCreator::createFileIcon(QString recentFileUrlPath, QIcon &icon, 
                     img.loadFromData(bytes);
                     img.setDevicePixelRatio(devicePixelRatioF);
 
-                    icon = QIcon(QPixmap::fromImage(img));
+                    icon = createIcon(img, iconSize);
                     return true;
 
                 } else {
@@ -73,23 +92,25 @@ bool KisFileIconCreator::createFileIcon(QString recentFileUrlPath, QIcon &icon, 
             QScopedPointer<KisDocument> doc;
             doc.reset(KisPart::instance()->createDocument());
             doc->setFileBatchMode(true);
-            bool r = doc->openUrl(QUrl::fromLocalFile(recentFileUrlPath), KisDocument::DontAddToRecent);
+            bool r = doc->openUrl(QUrl::fromLocalFile(path), KisDocument::DontAddToRecent);
             if (r) {
                 KisPaintDeviceSP projection = doc->image()->projection();
-                QImage image = projection->createThumbnail(48*devicePixelRatioF, 48*devicePixelRatioF, projection->exactBounds());
-                image.setDevicePixelRatio(devicePixelRatioF);
-                icon = QIcon(QPixmap::fromImage(image));
+                const QRect bounds = projection->exactBounds();
+                const float ratio = static_cast<float>(bounds.width()) / bounds.height();
+                const int maxWidth = qMax(iconSize.width(), iconSize.height());
+                const int maxHeight = static_cast<int>(maxWidth * ratio);
+                const QImage &thumbnail = projection->createThumbnail(maxWidth, maxHeight, bounds);
+                icon = createIcon(thumbnail, iconSize);
                 return true;
-
             } else {
                 return false;
             }
         } else {
             QImage img;
             img.setDevicePixelRatio(devicePixelRatioF);
-            img.load(recentFileUrlPath);
+            img.load(path);
             if (!img.isNull()) {
-                icon = QIcon(QPixmap::fromImage(img.scaledToWidth(48*devicePixelRatioF)));
+                icon = createIcon(img, iconSize);
                 return true;
             } else {
                 return false;

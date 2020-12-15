@@ -33,8 +33,8 @@ KisMyPaintSurface::KisMyPaintSurface(KisPainter *painter, KisPaintDeviceSP paint
     , m_imageDevice(paintNode)
     , m_image(image)
     , m_precisePainterWrapper(painter->device())
-    , m_dab(m_precisePainterWrapper.preciseDevice())
-    , m_tempPainter(new KisPainter(m_dab))
+    , m_dab(m_precisePainterWrapper.createPreciseCompositionSourceDevice())
+    , m_tempPainter(new KisPainter(m_precisePainterWrapper.preciseDevice()))
     , m_backgroundPainter(new KisPainter(m_precisePainterWrapper.createPreciseCompositionSourceDevice()))
 
 {
@@ -146,6 +146,7 @@ int KisMyPaintSurface::drawDabImpl(MyPaintSurface *self, float x, float y, float
 
     KisAlgebra2D::OuterCircle outer(center, radius);
     m_precisePainterWrapper.readRects(m_tempPainter->calculateAllMirroredRects(dabRectAligned));
+    m_tempPainter->copyAreaOptimized(dabRectAligned.topLeft(), m_tempPainter->device(), m_dab, dabRectAligned);
 
     KisSequentialIterator it(m_dab, dabRectAligned);
     float unitValue = KoColorSpaceMathsTraits<channelType>::unitValue;
@@ -170,6 +171,7 @@ int KisMyPaintSurface::drawDabImpl(MyPaintSurface *self, float x, float y, float
         }
 
         base_alpha = calculate_alpha_for_rr (rr, hardness, segment1_slope, segment2_slope);
+        m_tempPainter->selection();
         alpha = base_alpha * normal_mode;
 
         channelType* nativeArray = reinterpret_cast<channelType*>(it.rawData());
@@ -261,9 +263,6 @@ void KisMyPaintSurface::getColorImpl(MyPaintSurface *self, float x, float y, flo
     const QPointF center = QPointF(x, y);
     KisAlgebra2D::OuterCircle outer(center, radius);
 
-
-    m_lastPaintPos = center;
-
     const float one_over_radius2 = 1.0f / (radius * radius);
     quint32 sum_weight = 0.0f;
 
@@ -285,7 +284,6 @@ void KisMyPaintSurface::getColorImpl(MyPaintSurface *self, float x, float y, flo
     KisSequentialIterator it(activeDev, dabRectAligned);
     QVector<float> surface_color_vec = {0,0,0,0};
     float unitValue = KoColorSpaceMathsTraits<channelType>::unitValue;
-    float minValue = KoColorSpaceMathsTraits<channelType>::min;
     float maxValue = KoColorSpaceMathsTraits<channelType>::max;
 
     quint32 size = dabRectAligned.width() * dabRectAligned.height();

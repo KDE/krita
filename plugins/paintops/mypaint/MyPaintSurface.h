@@ -82,9 +82,8 @@ private:
     KisImageSP m_image;
     KisPrecisePaintDeviceWrapper m_precisePainterWrapper;
     KisPaintDeviceSP m_dab;
-    KisPainter *m_tempPainter;
-    KisPainter *m_backgroundPainter;
-    QPointF m_lastPaintPos;
+    QScopedPointer<KisPainter> m_tempPainter;
+    QScopedPointer<KisPainter> m_backgroundPainter;
 
 };
 

@@ -675,66 +675,73 @@ std::pair<QRectF,QRectF> KisToolPaint::colorPreviewDocRect(const QPointF &outlin
 
 void KisToolPaint::requestUpdateOutline(const QPointF &outlineDocPoint, const KoPointerEvent *event)
 {
-    if (!m_supportOutline) return;
-
-    KisConfig cfg(true);
-    KisPaintOpSettings::OutlineMode outlineMode;
-
-    if (isOutlineEnabled() &&
-        (mode() == KisTool::GESTURE_MODE ||
-         ((cfg.newOutlineStyle() == OUTLINE_FULL ||
-           cfg.newOutlineStyle() == OUTLINE_CIRCLE ||
-           cfg.newOutlineStyle() == OUTLINE_TILT) &&
-          ((mode() == HOVER_MODE) ||
-           (mode() == PAINT_MODE && cfg.showOutlineWhilePainting()))))) { // lisp forever!
-
-        outlineMode.isVisible = true;
-
-        if (cfg.newOutlineStyle() == OUTLINE_CIRCLE) {
-            outlineMode.forceCircle = true;
-        } else if(cfg.newOutlineStyle() == OUTLINE_TILT) {
-            outlineMode.forceCircle = true;
-            outlineMode.showTiltDecoration = true;
-        } else {
-            // noop
-        }
-    }
-
-    outlineMode.forceFullSize = cfg.forceAlwaysFullSizedOutline();
-
-    m_outlineDocPoint = outlineDocPoint;
-    m_currentOutline = getOutlinePath(m_outlineDocPoint, event, outlineMode);
-
-    QRectF outlinePixelRect = tryFixBrushOutline(m_currentOutline).boundingRect();
-    QRectF outlineDocRect = currentImage()->pixelToDocument(outlinePixelRect);
-
-    // This adjusted call is needed as we paint with a 3 pixel wide brush and the pen is outside the bounds of the path
-    // Pen uses view coordinates so we have to zoom the document value to match 2 pixel in view coordinates
-    // See BUG 275829
-    qreal zoomX;
-    qreal zoomY;
-    canvas()->viewConverter()->zoom(&zoomX, &zoomY);
-    qreal xoffset = 2.0/zoomX;
-    qreal yoffset = 2.0/zoomY;
-
-    if (!outlineDocRect.isEmpty()) {
-        outlineDocRect.adjust(-xoffset,-yoffset,xoffset,yoffset);
-    }
+    QRectF outlinePixelRect;
+    QRectF outlineDocRect;
 
     QRectF colorPreviewDocRect;
     QRectF colorPreviewBaseColorDocRect;
+    QRectF colorPreviewDocUpdateRect;
 
-    std::tie(colorPreviewDocRect, colorPreviewBaseColorDocRect) =
-        this->colorPreviewDocRect(m_outlineDocPoint);
+    if (m_supportOutline) {
+        KisConfig cfg(true);
+        KisPaintOpSettings::OutlineMode outlineMode;
 
-    QRectF colorPreviewDocUpdateRect = colorPreviewDocRect | colorPreviewBaseColorDocRect;
+        if (isOutlineEnabled() &&
+                (mode() == KisTool::GESTURE_MODE ||
+                 ((cfg.newOutlineStyle() == OUTLINE_FULL ||
+                   cfg.newOutlineStyle() == OUTLINE_CIRCLE ||
+                   cfg.newOutlineStyle() == OUTLINE_TILT) &&
+                  ((mode() == HOVER_MODE) ||
+                   (mode() == PAINT_MODE && cfg.showOutlineWhilePainting()))))) { // lisp forever!
 
-    if (!colorPreviewDocUpdateRect.isEmpty()) {
-        colorPreviewDocUpdateRect = colorPreviewDocUpdateRect.adjusted(-xoffset,-yoffset,xoffset,yoffset);
+            outlineMode.isVisible = true;
+
+            if (cfg.newOutlineStyle() == OUTLINE_CIRCLE) {
+                outlineMode.forceCircle = true;
+            } else if(cfg.newOutlineStyle() == OUTLINE_TILT) {
+                outlineMode.forceCircle = true;
+                outlineMode.showTiltDecoration = true;
+            } else {
+                // noop
+            }
+        }
+
+        outlineMode.forceFullSize = cfg.forceAlwaysFullSizedOutline();
+
+        m_outlineDocPoint = outlineDocPoint;
+        m_currentOutline = getOutlinePath(m_outlineDocPoint, event, outlineMode);
+
+        outlinePixelRect = tryFixBrushOutline(m_currentOutline).boundingRect();
+        outlineDocRect = currentImage()->pixelToDocument(outlinePixelRect);
+
+        // This adjusted call is needed as we paint with a 3 pixel wide brush and the pen is outside the bounds of the path
+        // Pen uses view coordinates so we have to zoom the document value to match 2 pixel in view coordinates
+        // See BUG 275829
+        qreal zoomX;
+        qreal zoomY;
+        canvas()->viewConverter()->zoom(&zoomX, &zoomY);
+        qreal xoffset = 2.0/zoomX;
+        qreal yoffset = 2.0/zoomY;
+
+        if (!outlineDocRect.isEmpty()) {
+            outlineDocRect.adjust(-xoffset,-yoffset,xoffset,yoffset);
+        }
+
+        std::tie(colorPreviewDocRect, colorPreviewBaseColorDocRect) =
+                this->colorPreviewDocRect(m_outlineDocPoint);
+
+        QRectF colorPreviewDocUpdateRect = colorPreviewDocRect | colorPreviewBaseColorDocRect;
+
+        if (!colorPreviewDocUpdateRect.isEmpty()) {
+            colorPreviewDocUpdateRect = colorPreviewDocUpdateRect.adjusted(-xoffset,-yoffset,xoffset,yoffset);
+        }
+
     }
 
     // DIRTY HACK ALERT: we should fetch the assistant's dirty rect when requesting
     //                   the update, instead of just dumbly update the entire canvas!
+
+    // WARNING: assistants code is also duplicated in KisDelegatedSelectPathWrapper::mouseMoveEvent
 
     KisCanvas2 * kiscanvas = dynamic_cast<KisCanvas2*>(canvas());
     KisPaintingAssistantsDecorationSP decoration = kiscanvas->paintingAssistantsDecoration();

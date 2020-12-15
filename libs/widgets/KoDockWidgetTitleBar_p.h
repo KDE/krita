@@ -27,31 +27,23 @@ class Q_DECL_HIDDEN KoDockWidgetTitleBar::Private
 public:
     Private(KoDockWidgetTitleBar* thePublic)
         : thePublic(thePublic),
-            collapsable(true),
-            collapsableSet(true),
             lockable(true),
             textVisibilityMode(KoDockWidgetTitleBar::FullTextAlwaysVisible),
-            preCollapsedWidth(-1),
             locked(false)
     {
     }
 
     KoDockWidgetTitleBar* thePublic;
-    QIcon openIcon, closeIcon, lockIcon, floatIcon, removeIcon; // close/open are for collapsing
+    QIcon lockIcon, floatIcon, removeIcon; 
     QAbstractButton* closeButton;
     QAbstractButton* floatButton;
-    QAbstractButton* collapseButton;
-    bool collapsable;
-    bool collapsableSet;
     QAbstractButton* lockButton;
     bool lockable;
     KoDockWidgetTitleBar::TextVisibilityMode textVisibilityMode;
-    int preCollapsedWidth;
     bool locked;
     QDockWidget::DockWidgetFeatures features;
 
     void toggleFloating();
-    void toggleCollapsed();
     void topLevelChanged(bool topLevel);
     void featuresChanged(QDockWidget::DockWidgetFeatures features);
     void updateIcons();

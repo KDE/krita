@@ -6,7 +6,7 @@
  */
 
 #include "timeline_insert_keyframe_dialog.h"
-#include "timeline_frames_view.h"
+#include "KisAnimTimelineFramesView.h"
 
 #include <QLabel>
 #include <QGroupBox>

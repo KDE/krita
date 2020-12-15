@@ -51,7 +51,7 @@ public:
     QRect relDecorationRect() const;
     QRect relExpandButtonRect() const;
 
-    QColor colorLabel(int index) const;
+    QColor colorFromLabelIndex(int index) const;
     QVector<QColor> allColorLabels() const;
 
 private:

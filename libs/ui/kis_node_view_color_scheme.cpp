@@ -166,7 +166,7 @@ QRect KisNodeViewColorScheme::relExpandButtonRect() const
     return rc;
 }
 
-QColor KisNodeViewColorScheme::colorLabel(int index) const
+QColor KisNodeViewColorScheme::colorFromLabelIndex(int index) const
 {
     /**
      * We should ensure that the index of the overflowing range

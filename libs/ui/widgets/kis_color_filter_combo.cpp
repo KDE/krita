@@ -310,7 +310,7 @@ void KisColorFilterCombo::paintColorPie(QStylePainter &painter, const QPalette& 
 
     if (selectedColors.size() == 1) {
         const int currentLabel = selectedColors.first();
-        const QColor currentColor = scm.colorLabel(currentLabel);
+        const QColor currentColor = scm.colorFromLabelIndex(currentLabel);
         const QBrush brush = QBrush(currentColor);
         painter.setBrush(brush);
         painter.setPen(QPen(shadowColor, 1));
@@ -343,7 +343,7 @@ void KisColorFilterCombo::paintColorPie(QStylePainter &painter, const QPalette& 
         painter.setRenderHint(QPainter::Antialiasing);
         painter.drawEllipse(rect);
         for (int i = 0; i < numColors; i++) {
-            QColor color = scm.colorLabel(selectedColors[i]);
+            QColor color = scm.colorFromLabelIndex(selectedColors[i]);
             QBrush brush = color.alpha() > 0 ? QBrush(color) : QBrush(Qt::black, Qt::Dense4Pattern);
             painter.setPen(Qt::NoPen);
             painter.setBrush(brush);
@@ -392,7 +392,7 @@ void KisColorFilterCombo::paintEvent(QPaintEvent *event)
                 int oneColorWidth = editRect.width()/numColors;
                 int currentWidth = 0;
                 for (int i = 0; i < numColors; i++) {
-                    QColor color = scm.colorLabel(selectedColors[i]);
+                    QColor color = scm.colorFromLabelIndex(selectedColors[i]);
                     QBrush brush = color.alpha() > 0 ? QBrush(color) : QBrush(Qt::black, Qt::Dense4Pattern);
                     painter.setPen(color);
                     painter.setBrush(brush);

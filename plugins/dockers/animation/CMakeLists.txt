@@ -1,46 +1,45 @@
 add_subdirectory(tests)
 
 set(KRITA_ANIMATIONDOCKER_SOURCES
-    animation_dockers.cpp
-    timeline_docker.cpp
-    onion_skins_docker.cpp
+    KisAnimDockers.cpp
+    KisAnimUtils.cpp
+    
+    KisTimeBasedItemModel.cpp
 
-    timeline_layers_header.cpp
-    timeline_ruler_header.cpp
+    KisAnimTimelineDocker.cpp
+    KisAnimTimelineFramesModel.cpp
+    KisAnimTimelineFramesView.cpp
+    KisAnimTimelineFrameDelegate.cpp
+    KisAnimTimelineLayersHeader.cpp
+    KisAnimTimelineTimeHeader.cpp
+    KisAnimTimelineColors.cpp
 
-    kis_time_based_item_model.cpp
-    timeline_frames_model.cpp
-    timeline_frames_view.cpp
-    timeline_frames_item_delegate.cpp
+    KisAnimCurvesDocker.cpp
+    KisAnimCurvesModel.cpp
+    KisAnimCurvesView.cpp
+    KisAnimCurvesKeyDelegate.cpp
+    KisAnimCurvesChannelsModel.cpp
+    KisAnimCurvesChannelDelegate.cpp
+    KisAnimCurvesValuesHeader.cpp
 
-    timeline_frames_index_converter.cpp
-    timeline_node_list_keeper.cpp
-
-    timeline_color_scheme.cpp
-    timeline_insert_keyframe_dialog.cpp
-
-    kis_draggable_tool_button.cpp
-    kis_zoom_button.cpp
-    kis_animation_utils.cpp
-    kis_custom_modifiers_catcher.cpp
+    KisOnionSkinsDocker.cpp
 
     kis_equalizer_column.cpp
     kis_equalizer_slider.cpp
     kis_equalizer_button.cpp
     kis_equalizer_widget.cpp
 
-    kis_animation_curve_docker.cpp
-    kis_animation_curves_model.cpp
-    kis_animation_curves_view.cpp
-    kis_animation_curves_value_ruler.cpp
-    kis_animation_curves_keyframe_delegate.cpp
-    kis_animation_curve_channel_list_model.cpp
-    kis_animation_curve_channel_list_delegate.cpp
+    timeline_insert_keyframe_dialog.cpp
+    timeline_frames_index_converter.cpp
+    timeline_node_list_keeper.cpp
+
+    kis_draggable_tool_button.cpp
+    kis_zoom_button.cpp
+    kis_custom_modifiers_catcher.cpp
 )
 
 ki18n_wrap_ui(KRITA_ANIMATIONDOCKER_SOURCES
-    onion_skins_docker.ui
-    wdg_animation_curves.ui
+    KisOnionSkinsDocker.ui
 )
 
 add_library(kritaanimationdocker MODULE ${KRITA_ANIMATIONDOCKER_SOURCES})

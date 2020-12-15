@@ -20,17 +20,21 @@ public:
     void mousePressEvent(QMouseEvent *e) override;
     void mouseMoveEvent(QMouseEvent *e) override;
 
-    static int unitRadius();
-
     void beginDrag(const QPoint &pos);
     int continueDrag(const QPoint &pos);
+    int movementDelta(const QPoint &pos);
+
+private:
+    qreal tangent();
 
 Q_SIGNALS:
-    void valueChanged(int value);
+    void offsetChanged(int offset);
+    void valueChanged(int delta);
 
 private:
     Qt::Orientation m_orientation;
     QPoint m_startPoint;
+    QPoint m_lastPosition;
 };
 
 #endif /* __KIS_DRAGGABLE_TOOL_BUTTON_H */

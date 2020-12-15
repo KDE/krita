@@ -201,7 +201,7 @@ void NodeDelegate::drawColorLabel(QPainter *p, const QStyleOptionViewItem &optio
 {
     KisNodeViewColorScheme scm;
     const int label = index.data(KisNodeModel::ColorLabelIndexRole).toInt();
-    QColor color = scm.colorLabel(label);
+    QColor color = scm.colorFromLabelIndex(label);
     if (color.alpha() <= 0) return;
 
     QColor bgColor = qApp->palette().color(QPalette::Base);

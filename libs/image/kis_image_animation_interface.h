@@ -67,14 +67,6 @@ public:
 
     void requestTimeSwitchNonGUI(int time, bool useUndo = false);
 
-public Q_SLOTS:
-    /**
-     * Switches current frame (synchronously) and starts an
-     * asynchronous regeneration of the entire image.
-     */
-    void switchCurrentTimeAsync(int frameId, bool useUndo = false);
-public:
-
     /**
      * Start a background thread that will recalculate some extra frame.
      * The result will be reported using two types of signals:
@@ -109,13 +101,14 @@ public:
     const KisTimeSpan& fullClipRange() const;
     void setFullClipRange(const KisTimeSpan range);
 
-    void setFullClipRangeStartTime(int column);
-    void setFullClipRangeEndTime(int column);
-
 
     const KisTimeSpan &playbackRange() const;
     void setPlaybackRange(const KisTimeSpan range);
 
+    void setFullClipRangeStartTime(int column);
+    void setFullClipRangeEndTime(int column);
+
+    void setFramerate(int fps);
     int framerate() const;
 
     /**
@@ -149,30 +142,16 @@ public:
      */
     void setAudioVolume(qreal value);
 
-public Q_SLOTS:
-    void setFramerate(int fps);
-public:
-
     KisImageWSP image() const;
 
     int totalLength();
-private:
-    // interface for:
-    friend class KisRegenerateFrameStrokeStrategy;
-    friend class KisAnimationFrameCacheTest;
-    friend struct KisLayerUtils::SwitchFrameCommand;
-    friend class KisImageTest;
-    void saveAndResetCurrentTime(int frameId, int *savedValue);
-    void restoreCurrentTime(int *savedValue);
-    void notifyFrameReady();
-    void notifyFrameCancelled();
-    KisUpdatesFacade* updatesFacade() const;
 
-    void blockFrameInvalidation(bool value);
-
-    friend class KisSwitchTimeStrokeStrategy;
-    friend class TransformStrokeStrategy;
-    void explicitlySetCurrentTime(int frameId);
+public Q_SLOTS:
+    /**
+     * Switches current frame (synchronously) and starts an
+     * asynchronous regeneration of the entire image.
+     */
+    void switchCurrentTimeAsync(int frameId, bool useUndo = false);
 
 Q_SIGNALS:
     void sigFrameReady(int time);
@@ -201,6 +180,23 @@ Q_SIGNALS:
     void sigKeyframeRemoved(const KisKeyframeChannel* channel, int time);
 
 private:
+    // interface for:
+    friend class KisRegenerateFrameStrokeStrategy;
+    friend class KisAnimationFrameCacheTest;
+    friend struct KisLayerUtils::SwitchFrameCommand;
+    friend class KisImageTest;
+    void saveAndResetCurrentTime(int frameId, int *savedValue);
+    void restoreCurrentTime(int *savedValue);
+    void notifyFrameReady();
+    void notifyFrameCancelled();
+
+    KisUpdatesFacade* updatesFacade() const;
+
+    void blockFrameInvalidation(bool value);
+
+    friend class KisSwitchTimeStrokeStrategy;
+    friend class TransformStrokeStrategy;
+    void explicitlySetCurrentTime(int frameId);
     struct Private;
     const QScopedPointer<Private> m_d;
 };

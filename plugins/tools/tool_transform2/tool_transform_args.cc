@@ -26,6 +26,7 @@ ToolTransformArgs::ToolTransformArgs()
     setFilterId(savedFilterId);
     m_transformAroundRotationCenter = configGroup.readEntry("transformAroundRotationCenter", "0").toInt();
     m_meshShowHandles = configGroup.readEntry("meshShowHandles", true);
+    m_meshSymmetricalHandles = configGroup.readEntry("meshSymmetricalHandles", true);
 }
 
 void ToolTransformArgs::setFilterId(const QString &id) {
@@ -78,6 +79,7 @@ void ToolTransformArgs::init(const ToolTransformArgs& args)
 
     m_meshTransform = args.m_meshTransform;
     m_meshShowHandles = args.m_meshShowHandles;
+    m_meshSymmetricalHandles = args.m_meshSymmetricalHandles;
 
     m_continuedTransformation.reset(args.m_continuedTransformation ? new ToolTransformArgs(*args.m_continuedTransformation) : 0);
 }
@@ -249,7 +251,6 @@ void ToolTransformArgs::translate(const QPointF &offset)
 {
     if (m_mode == FREE_TRANSFORM || m_mode == PERSPECTIVE_4POINT) {
         m_originalCenter += offset;
-        m_rotationCenterOffset += offset;
         m_transformedCenter += offset;
     } else if(m_mode == WARP || m_mode == CAGE) {
         for (auto &pt : m_origPoints) {
@@ -526,4 +527,17 @@ void ToolTransformArgs::setMeshShowHandles(bool value)
 
     KConfigGroup configGroup =  KSharedConfig::openConfig()->group("KisToolTransform");
     configGroup.writeEntry("meshShowHandles", value);
+}
+
+bool ToolTransformArgs::meshSymmetricalHandles() const
+{
+    return m_meshSymmetricalHandles;
+}
+
+void ToolTransformArgs::setMeshSymmetricalHandles(bool value)
+{
+    m_meshSymmetricalHandles = value;
+
+    KConfigGroup configGroup =  KSharedConfig::openConfig()->group("KisToolTransform");
+    configGroup.writeEntry("meshSymmetricalHandles", value);
 }

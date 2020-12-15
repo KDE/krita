@@ -108,6 +108,7 @@ public Q_SLOTS:
 
     void slotMeshSizeChanged();
     void slotMeshShowHandlesChanged();
+    void slotMeshSymmetricalHandlesChanged();
 
 private:
 

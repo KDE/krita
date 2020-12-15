@@ -26,7 +26,7 @@
 
 #include <KoSegmentGradient.h>
 #include <KoStopGradient.h>
-
+#include <KoResourceServerProvider.h>
 #include <ResourceTestHelper.h>
 
 #ifndef FILES_DATA_DIR
@@ -75,7 +75,9 @@ void TestResourceServer::initTestCase()
 
 void TestResourceServer::testFirstResource()
 {
-
+    KoResourceServer<KoAbstractGradient> *gradientServer = KoResourceServerProvider::gradientServer();
+    KoAbstractGradientSP gradient = gradientServer->firstResource();
+    QVERIFY(gradient);
 }
 
 void TestResourceServer::testResourceModel()

@@ -574,6 +574,10 @@ endif()
 add_definitions(-DBOOST_ALL_NO_LIB)
 find_package(Boost 1.55 REQUIRED COMPONENTS system)
 include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
+if(${Boost_VERSION} VERSION_GREATER_EQUAL "1.75")
+    message(WARNING "Boost 1.75 or higher detected, upgrading to C++14.")
+    set(CMAKE_CXX_STANDARD 14)
+endif()
 ##
 ## Test for GNU Scientific Library
 ##

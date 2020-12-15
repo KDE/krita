@@ -294,7 +294,7 @@ bool KisKraLoadVisitor::visit(KisGeneratorLayer *layer)
     // HACK ALERT: we set the same filter again to ensure the layer
     // is correctly updated
     result = loadFilterConfiguration(layer, getLocation(layer, DOT_FILTERCONFIG));
-    layer->setFilter(layer->filter());
+    layer->resetCache();
 
     result = visitAll(layer);
     return result;

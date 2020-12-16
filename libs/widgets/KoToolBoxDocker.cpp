@@ -21,7 +21,6 @@ KoToolBoxDocker::KoToolBoxDocker(KoToolBox *toolBox)
     , m_toolBox(toolBox)
     , m_scrollArea(new KoToolBoxScrollArea(toolBox, this))
 {
-    setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
     setWidget(m_scrollArea);
 
     KoDockWidgetTitleBar* titleBar = new KoDockWidgetTitleBar(this);

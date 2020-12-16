@@ -363,7 +363,6 @@ KisMainWindow::KisMainWindow(QUuid uuid)
 
     KoToolBoxFactory toolBoxFactory;
     QDockWidget *toolbox = createDockWidget(&toolBoxFactory);
-    toolbox->setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable | QDockWidget::DockWidgetClosable);
 
     KisConfig cfg(true);
     if (cfg.toolOptionsInDocker()) {

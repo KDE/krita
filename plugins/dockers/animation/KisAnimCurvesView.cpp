@@ -554,12 +554,12 @@ void KisAnimCurvesView::mouseMoveEvent(QMouseEvent *e)
         }
 
         if (m_d->dragZooming) {
-            const qreal zoomScale = 25.0f;
+            const qreal zoomScale = 50.0f;
             const qreal updown = ((m_d->zoomAnchor.y() - e->pos().y())) / zoomScale;
             const qreal leftright = (m_d->zoomAnchor.x() - e->pos().x()) / zoomScale;
 
             changeZoom(Qt::Vertical, updown);
-            changeZoom(Qt::Horizontal, leftright);
+            changeZoom(Qt::Horizontal, leftright * -0.5);
 
             m_d->zoomAnchor = e->pos();
             viewport()->update();

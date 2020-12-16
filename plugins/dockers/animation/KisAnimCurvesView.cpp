@@ -848,12 +848,8 @@ void KisAnimCurvesView::zoomToFitCurve()
 
     qreal min, max;
     findExtremes(&min, &max);
-    if (min == max) {
-        zoomToFitChannel();
-        return;
-    }
 
-    const qreal padding = (max - min) * 0.1;
+    const qreal padding = (min != max) ? (max - min) * 0.1 : 10.0f;
     m_d->verticalHeader->zoomToFitRange(min - padding, max + padding);
     viewport()->update();
 }
@@ -862,9 +858,12 @@ void KisAnimCurvesView::zoomToFitChannel()
 {
     if (!model()) return;
 
+    const int channels = model()->rowCount();
+
     qreal min = 0;
     qreal max = min;
-    for (int channel = 0; channel < model()->rowCount(); channel++) {
+
+    for (int channel = 0; channel < channels; channel++) {
         QModelIndex index = m_d->model->index(channel, 0);
         QVariant variant = m_d->model->data(index, KisAnimCurvesModel::ChannelLimits);
 
@@ -877,7 +876,10 @@ void KisAnimCurvesView::zoomToFitChannel()
     }
 
     if (min == max)
+    {
+        zoomToFitCurve();
         return;
+    }
 
     const qreal padding = (max - min) * 0.1;
     m_d->verticalHeader->zoomToFitRange(min - padding, max + padding);

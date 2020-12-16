@@ -195,7 +195,6 @@ void KoDockWidgetTitleBar::resizeEvent(QResizeEvent*)
     d->lockButton->setGeometry(lockRect);
 }
 
-
 void KoDockWidgetTitleBar::setLocked(bool locked)
 {
     QDockWidget *q = qobject_cast<QDockWidget*>(parentWidget());
@@ -220,7 +219,6 @@ void KoDockWidgetTitleBar::setLocked(bool locked)
 
     d->updateIcons();
     q->setProperty("Locked", locked);
-    resizeEvent(0);
 }
 
 

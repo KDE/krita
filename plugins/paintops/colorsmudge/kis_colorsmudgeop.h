@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2011 Silvio Heinrich <plassy@web.de>
+ *  SPDX-FileCopyrightText: 2011 Silvio Heinrich <plassy@web.de>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

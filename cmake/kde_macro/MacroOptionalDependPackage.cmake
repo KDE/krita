@@ -3,7 +3,7 @@
 # add as previously name of cmake module "_name" and define package needed "_module_needed"
 # if return DEPEND_PACKAGE_${_name}
 
-# Copyright (c) 2007, Montel Laurent <montel@kde.org>
+# SPDX-FileCopyrightText: 2007 Montel Laurent <montel@kde.org>
 #
 # SPDX-License-Identifier: BSD-3-Clause
 #

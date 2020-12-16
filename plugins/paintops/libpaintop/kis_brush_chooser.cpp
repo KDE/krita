@@ -1,9 +1,9 @@
 /*
- *  Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
- *  Copyright (c) 2009 Sven Langkamp <sven.langkamp@gmail.com>
- *  Copyright (c) 2010 Cyrille Berger <cberger@cberger.net>
- *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
- *  Copyright (C) 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
+ *  SPDX-FileCopyrightText: 2004 Adrian Page <adrian@pagenet.plus.com>
+ *  SPDX-FileCopyrightText: 2009 Sven Langkamp <sven.langkamp@gmail.com>
+ *  SPDX-FileCopyrightText: 2010 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  SPDX-FileCopyrightText: 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

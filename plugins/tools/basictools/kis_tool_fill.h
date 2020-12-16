@@ -1,7 +1,7 @@
 /*
  *  kis_tool_fill.h - part of Krayon^Krita
  *
- *  Copyright (c) 2004 Bart Coppens <kde@bartcoppens.be>
+ *  SPDX-FileCopyrightText: 2004 Bart Coppens <kde@bartcoppens.be>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

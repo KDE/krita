@@ -1,6 +1,6 @@
 /**
- *  Copyright (c) 1982 - 1989 Donald H. House <x@unknown.com>
- *  Copyright (c) 1989 Robert Allen <x@unknown.com>
+ *  SPDX-FileCopyrightText: 1982-1989 Donald H. House <x@unknown.com>
+ *  SPDX-FileCopyrightText: 1989 Robert Allen <x@unknown.com>
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 

@@ -1,7 +1,7 @@
 /*
- *  Copyright (c) 2004 Michael Thaler <michael.thaler@physik.tu-muenchen.de>
- *  Copyright (c) 2005 C. Boemann <cbo@boemann.dk>
- *  Copyright (c) 2013 Juan Palacios <jpalaciosdev@gmail.com>
+ *  SPDX-FileCopyrightText: 2004 Michael Thaler <michael.thaler@physik.tu-muenchen.de>
+ *  SPDX-FileCopyrightText: 2005 C. Boemann <cbo@boemann.dk>
+ *  SPDX-FileCopyrightText: 2013 Juan Palacios <jpalaciosdev@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

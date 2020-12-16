@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 Dominik Seichter <domseichter@web.de>
-   Copyright (C) 2004 Ignacio Castaño <castano@ludicon.com>
+   SPDX-FileCopyrightText: 2003 Dominik Seichter <domseichter@web.de>
+   SPDX-FileCopyrightText: 2004 Ignacio Castaño <castano@ludicon.com>
 
    SPDX-License-Identifier: LGPL-2.0-or-later
 */

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2019 Kuntal Majumder <hellozee@disroot.org>
+ *  SPDX-FileCopyrightText: 2019 Kuntal Majumder <hellozee@disroot.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

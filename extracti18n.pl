@@ -2,7 +2,7 @@
 
 # This file is part of Krita
 #
-#  Copyright (c) 2005 Sven Langkamp <sven.langkamp@gmail.com>
+#  SPDX-FileCopyrightText: 2005 Sven Langkamp <sven.langkamp@gmail.com>
 #
 #  SPDX-License-Identifier: GPL-2.0-or-later
 

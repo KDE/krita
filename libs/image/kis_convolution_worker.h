@@ -1,6 +1,6 @@
 /*
- *  Copyright (c) 2005, 2008 Cyrille Berger <cberger@cberger.net>
- *  Copyright (c) 2010 Edward Apap <schumifer@hotmail.com>
+ *  SPDX-FileCopyrightText: 2005, 2008 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2010 Edward Apap <schumifer@hotmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

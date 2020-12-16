@@ -1,7 +1,7 @@
 /* This file is part of the KDE libraries
-    Copyright (C) 2006,2007 Andreas Hartmetz (ahartmetz@gmail.com)
-    Copyright (C) 2008 Michael Jansen <kde@michael-jansen.biz>
-    Copyright (C) 2008 Alexander Dymo <adymo@kdevelop.org>
+    SPDX-FileCopyrightText: 2006, 2007 Andreas Hartmetz (ahartmetz@gmail.com)
+    SPDX-FileCopyrightText: 2008 Michael Jansen <kde@michael-jansen.biz>
+    SPDX-FileCopyrightText: 2008 Alexander Dymo <adymo@kdevelop.org>
 
     SPDX-License-Identifier: LGPL-2.0-or-later
 */

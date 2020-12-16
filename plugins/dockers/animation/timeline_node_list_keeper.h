@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2015 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2015 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -14,7 +14,7 @@
 
 #include "kritaanimationdocker_export.h"
 
-#include "kis_time_based_item_model.h"
+#include "KisTimeBasedItemModel.h"
 
 class KisNodeDummy;
 class KisDummiesFacadeBase;

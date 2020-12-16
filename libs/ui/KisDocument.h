@@ -1,6 +1,6 @@
 /* This file is part of the Krita project
  *
- * Copyright (C) 2014 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2014 Boudewijn Rempt <boud@valdyas.org>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */

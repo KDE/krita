@@ -1,7 +1,7 @@
 /*
  * selection_tools.cc -- Part of Krita
  *
- * Copyright (c) 2004 Boudewijn Rempt (boud@valdyas.org)
+ * SPDX-FileCopyrightText: 2004 Boudewijn Rempt (boud@valdyas.org)
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

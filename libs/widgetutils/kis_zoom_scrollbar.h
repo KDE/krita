@@ -1,6 +1,6 @@
 /*
- *  Copyright (c) 2020 Eoin O'Neill <eoinoneill1991@gmail.com>
- *  Copyright (c) 2020 Emmet O'Neill <emmetoneill.pdx@gmail.com>
+ *  SPDX-FileCopyrightText: 2020 Eoin O 'Neill <eoinoneill1991@gmail.com>
+ *  SPDX-FileCopyrightText: 2020 Emmet O 'Neill <emmetoneill.pdx@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -24,6 +24,7 @@ private:
     QVector2D accelerationAccumulator;
     qreal scrollSubPixelAccumulator;
     qreal zoomThreshold;
+    qreal wheelOverscrollSensitivity;
     bool catchTeleportCorrection = false;
 
 public:
@@ -51,10 +52,11 @@ public:
     virtual void wheelEvent(QWheelEvent *event) override;
 
     void setZoomDeadzone(float value);
+    void setWheelOverscrollSensitivity(float sensitivity);
 
 Q_SIGNALS:
     void zoom(qreal delta);
-    void overscroll(int delta);
+    void overscroll(qreal delta);
 };
 
 #endif // KIS_ZOOM_SCROLLBAR_H

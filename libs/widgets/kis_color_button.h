@@ -1,7 +1,7 @@
 /*
- *  Copyright (C) Wolthera van Hovell tot Westerflier <griffinvalley@gmail.com>, (C) 2016
+ *  SPDX-FileCopyrightText: 2016 Wolthera van Hovell tot Westerflier <griffinvalley@gmail.com>
  *  This file is forked from the KF5 KColorButton
-    Copyright (C) 1997 Martin Jones (mjones@kde.org)
+    SPDX-FileCopyrightText: 1997 Martin Jones (mjones@kde.org)
 
     SPDX-License-Identifier: LGPL-2.0-or-later
 */

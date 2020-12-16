@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007 Thomas Zander <zander@kde.org>
+ *  SPDX-FileCopyrightText: 2007 Thomas Zander <zander@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

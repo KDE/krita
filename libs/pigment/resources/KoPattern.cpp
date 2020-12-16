@@ -1,7 +1,7 @@
 /*  This file is part of the KDE project
 
-    Copyright (c) 2000 Matthias Elter <elter@kde.org>
-    Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
+    SPDX-FileCopyrightText: 2000 Matthias Elter <elter@kde.org>
+    SPDX-FileCopyrightText: 2004 Boudewijn Rempt <boud@valdyas.org>
 
     SPDX-License-Identifier: LGPL-2.1-or-later
  */

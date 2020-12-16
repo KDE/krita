@@ -1,7 +1,7 @@
 /*
- *  Copyright (c) 2015 Jouni Pentikäinen <joupent@gmail.com>
- *  Copyright (c) 2020 Emmet O'Neill <emmetoneill.pdx@gmail.com>
- *  Copyright (c) 2020 Eoin O'Neill <eoinoneill1991@gmail.com>
+ *  SPDX-FileCopyrightText: 2015 Jouni Pentikäinen <joupent@gmail.com>
+ *  SPDX-FileCopyrightText: 2020 Emmet O 'Neill <emmetoneill.pdx@gmail.com>
+ *  SPDX-FileCopyrightText: 2020 Eoin O 'Neill <eoinoneill1991@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -282,7 +282,7 @@ void KisKeyframeChannel::setNode(KisNodeWSP node)
     }
 
     m_d->parentNode = node;
-    m_d->bounds = KisDefaultBoundsNodeWrapperSP( new KisDefaultBoundsNodeWrapper( node ));
+    m_d->bounds = KisDefaultBoundsNodeWrapperSP(new KisDefaultBoundsNodeWrapper(node));
 
     if (m_d->parentNode) { // Connect new..
         connect(this, &KisKeyframeChannel::sigChannelUpdated, m_d->parentNode, &KisNode::handleKeyframeChannelUpdate);

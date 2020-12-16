@@ -1,7 +1,7 @@
 // This file is part of PyKrita, Krita' Python scripting plugin.
 //
-// Copyright (C) 2006 Paul Giannaros <paul@giannaros.org>
-// Copyright (C) 2012, 2013 Shaheed Haque <srhaque@theiet.org>
+// SPDX-FileCopyrightText: 2006 Paul Giannaros <paul@giannaros.org>
+// SPDX-FileCopyrightText: 2012, 2013 Shaheed Haque <srhaque@theiet.org>
 //
 // SPDX-License-Identifier: LGPL-2.1-only OR LGPL-3.0-only OR LicenseRef-KDE-Accepted-LGPL
 //

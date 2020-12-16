@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2019 Shi Yan <billconan@gmail.net>
+ *  SPDX-FileCopyrightText: 2019 Shi Yan <billconan@gmail.net>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */

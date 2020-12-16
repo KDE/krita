@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2016 Eugene Ingerman <geneing at gmail dot com>
+ *  SPDX-FileCopyrightText: 2016 Eugene Ingerman <geneing at gmail dot com>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */

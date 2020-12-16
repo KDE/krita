@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2018 boud <boud@valdyas.org>
- * Copyright (c) 2020 Agata Cacko <cacko.azh@gmail.com>
+ * SPDX-FileCopyrightText: 2018 boud <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2020 Agata Cacko <cacko.azh@gmail.com>
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  */

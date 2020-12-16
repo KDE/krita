@@ -1,8 +1,8 @@
 /*
  * This file is part of Krita
  *
- * Copyright (c) 2018 Jouni Pentikainen <joupent@gmail.com>
- * Copyright (c) 2020 L. E. Segovia <amy@amyspark.me>
+ * SPDX-FileCopyrightText: 2018 Jouni Pentikainen <joupent@gmail.com>
+ * SPDX-FileCopyrightText: 2020 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
 */

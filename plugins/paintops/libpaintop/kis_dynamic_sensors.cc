@@ -1,6 +1,6 @@
 /*
- *  Copyright (c) 2007,2010 Cyrille Berger <cberger@cberger.net>
- *  Copyright (c) 2011 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  SPDX-FileCopyrightText: 2007, 2010 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2011 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  SPDX-License-Identifier: LGPL-2.1-only
  */

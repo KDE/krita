@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2015 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2015 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -13,7 +13,7 @@
 #include "kis_equalizer_column.h"
 #include "kis_signal_compressor.h"
 
-#include "timeline_color_scheme.h"
+#include "KisAnimTimelineColors.h"
 
 #include "kis_debug.h"
 
@@ -100,7 +100,7 @@ void KisEqualizerWidget::resizeEvent(QResizeEvent *event)
     const QSize newSize = m_d->columns[1]->size();
 
     QFont font =
-        TimelineColorScheme::instance()->getOnionSkinsFont(
+        KisAnimTimelineColors::instance()->getOnionSkinsFont(
             QString::number(100), newSize);
 
     if (font.pointSize() != this->font().pointSize()) {

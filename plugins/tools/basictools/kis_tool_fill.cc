@@ -1,20 +1,11 @@
 /*
 *  kis_tool_fill.cc - part of Krayon
 *
-*  Copyright (c) 2000 John Califf <jcaliff@compuzone.net>
-*  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
-*  Copyright (c) 2004 Bart Coppens <kde@bartcoppens.be>
+*  SPDX-FileCopyrightText: 2000 John Califf <jcaliff@compuzone.net>
+*  SPDX-FileCopyrightText: 2004 Boudewijn Rempt <boud@valdyas.org>
+*  SPDX-FileCopyrightText: 2004 Bart Coppens <kde@bartcoppens.be>
 *
 *  SPDX-License-Identifier: GPL-2.0-or-later
-*
-*  This program is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*  GNU General Public License for more details.
-*
-*  You should have received a copy of the GNU General Public License
-*  along with this program; if not, write to the Free Software
-*  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
 
 #include "kis_tool_fill.h"

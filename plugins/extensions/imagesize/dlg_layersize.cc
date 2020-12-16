@@ -1,9 +1,9 @@
 /*
  *  dlg_layersize.cc - part of Krita
  *
- *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2005 Sven Langkamp <sven.langkamp@gmail.com>
- *  Copyright (c) 2013 Juan Palacios <jpalaciosdev@gmail.com>
+ *  SPDX-FileCopyrightText: 2004 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2005 Sven Langkamp <sven.langkamp@gmail.com>
+ *  SPDX-FileCopyrightText: 2013 Juan Palacios <jpalaciosdev@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

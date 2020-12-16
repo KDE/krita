@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2016 Alexey Kapustin <akapust1n@yandex.ru>
+ *  SPDX-FileCopyrightText: 2016 Alexey Kapustin <akapust1n@yandex.ru>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

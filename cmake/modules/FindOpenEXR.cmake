@@ -1,5 +1,5 @@
 #
-# Copyright 2016 Pixar
+# SPDX-FileCopyrightText: 2016 Pixar
 #
 # SPDX-License-Identifier: Apache-2.0
 #

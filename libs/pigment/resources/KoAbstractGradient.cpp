@@ -1,7 +1,7 @@
 /*
-    Copyright (c) 2007 Sven Langkamp <sven.langkamp@gmail.com>
-    Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
-    Copyright (c) 2009 Jan Hambrecht <jaham@gmx.net>
+    SPDX-FileCopyrightText: 2007 Sven Langkamp <sven.langkamp@gmail.com>
+    SPDX-FileCopyrightText: 2004 Adrian Page <adrian@pagenet.plus.com>
+    SPDX-FileCopyrightText: 2009 Jan Hambrecht <jaham@gmx.net>
 
     SPDX-License-Identifier: LGPL-2.1-or-later
  */

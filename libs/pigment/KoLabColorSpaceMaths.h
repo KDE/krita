@@ -1,6 +1,6 @@
 /*
- *  Copyright (c) 2006,2007,2010 Cyrille Berger <cberger@cberger.net>
- *  Copyright (c) 2017,2020 L. E. Segovia <amy@amyspark.me>
+ *  SPDX-FileCopyrightText: 2006, 2007, 2010 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2017, 2020 L. E. Segovia <amy@amyspark.me>
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
 */

@@ -1,6 +1,6 @@
 # - MACRO_ADD_LINK_FLAGS(<_target> "flags...")
 
-# Copyright (c) 2006, Oswald Buddenhagen, <ossi@kde.org>
+# SPDX-FileCopyrightText: 2006 Oswald Buddenhagen <ossi@kde.org>
 #
 # SPDX-License-Identifier: BSD-3-Clause
 #

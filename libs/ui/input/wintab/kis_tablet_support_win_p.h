@@ -1,7 +1,7 @@
 /*
- *  Copyright (C) 2015 The Qt Company Ltd.
+ *  SPDX-FileCopyrightText: 2015 The Qt Company Ltd.
  *  Contact: https://www.qt.io/licensing/
- *  Copyright (C) 2015 Michael Abrahms <miabraha@gmail.com>
+ *  SPDX-FileCopyrightText: 2015 Michael Abrahms <miabraha@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-3.0-or-later
  */

@@ -1,6 +1,6 @@
 /*
-    Copyright (C) 2010 by BetterInbox <contact@betterinbox.com>
-    Copyright 2013 by Sebastian Kügler <sebas@kde.org>
+    SPDX-FileCopyrightText: 2010 BetterInbox <contact@betterinbox.com>
+    SPDX-FileCopyrightText: 2013 Sebastian Kügler <sebas@kde.org>
     Original author: Gregory Schlomoff <greg@betterinbox.com>
 
     SPDX-License-Identifier: MIT

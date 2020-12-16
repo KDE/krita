@@ -1,6 +1,6 @@
 /*
- *  Copyright (c) 2005 C. Boemann <cbo@boemann.dk>
- *  Copyright (c) 2007,2008 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2005 C. Boemann <cbo@boemann.dk>
+ *  SPDX-FileCopyrightText: 2007, 2008 Boudewijn Rempt <boud@valdyas.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

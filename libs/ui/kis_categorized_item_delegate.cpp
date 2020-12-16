@@ -1,7 +1,7 @@
 /*
- *  Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
- *  Copyright (c) 2011 Silvio Heinrich <plassy@web.de>
- *  Copyright (c) 2014 Mohit Goyal <mohit.bits2011@gmail.com>
+ *  SPDX-FileCopyrightText: 2009 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2011 Silvio Heinrich <plassy@web.de>
+ *  SPDX-FileCopyrightText: 2014 Mohit Goyal <mohit.bits2011@gmail.com>
  *
  *  SPDX-License-Identifier: LGPL-2.1-or-later
  */

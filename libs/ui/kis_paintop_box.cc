@@ -1,12 +1,12 @@
 /*
  *  kis_paintop_box.cc - part of KImageShop/Krayon/Krita
  *
- *  Copyright (c) 2004 Boudewijn Rempt (boud@valdyas.org)
- *  Copyright (c) 2009-2011 Sven Langkamp (sven.langkamp@gmail.com)
- *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
- *  Copyright (C) 2011 Silvio Heinrich <plassy@web.de>
- *  Copyright (C) 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
- *  Copyright (c) 2014 Mohit Goyal <mohit.bits2011@gmail.com>
+ *  SPDX-FileCopyrightText: 2004 Boudewijn Rempt (boud@valdyas.org)
+ *  SPDX-FileCopyrightText: 2009-2011 Sven Langkamp (sven.langkamp@gmail.com)
+ *  SPDX-FileCopyrightText: 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  SPDX-FileCopyrightText: 2011 Silvio Heinrich <plassy@web.de>
+ *  SPDX-FileCopyrightText: 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
+ *  SPDX-FileCopyrightText: 2014 Mohit Goyal <mohit.bits2011@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

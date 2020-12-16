@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2016 Eugene Ingerman
+ *  SPDX-FileCopyrightText: 2016 Eugene Ingerman
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

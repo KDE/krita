@@ -1,6 +1,6 @@
 /*
- *  Copyright (c) 2010 Sven Langkamp <sven.langkamp@gmail.com>
- *  Copyright (c) 2011 Jan Hambrecht <jaham@gmx.net>
+ *  SPDX-FileCopyrightText: 2010 Sven Langkamp <sven.langkamp@gmail.com>
+ *  SPDX-FileCopyrightText: 2011 Jan Hambrecht <jaham@gmx.net>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

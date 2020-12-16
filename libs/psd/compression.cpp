@@ -1,6 +1,6 @@
 /*
- *  Copyright (c) 2007 by John Marshall
- *  Copyright (c) 2010 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2007 John Marshall
+ *  SPDX-FileCopyrightText: 2010 Boudewijn Rempt <boud@valdyas.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

@@ -1,6 +1,6 @@
 /*
- *  Copyright (c) 2010 Dmitry Kazakov <dimula73@gmail.com>
- *  Copyright (c) 2011 Silvio Heinrich <plassy@web.de>
+ *  SPDX-FileCopyrightText: 2010 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2011 Silvio Heinrich <plassy@web.de>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

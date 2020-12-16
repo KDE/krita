@@ -2,7 +2,7 @@
 **
 ** This file is part of Qt Creator
 **
-** Copyright (c) 2011 Nokia Corporation and/or its subsidiary(-ies).
+** SPDX-FileCopyrightText: 2011 Nokia Corporation and /or its subsidiary(-ies).
 **
 ** Contact: Nokia Corporation (qt-info@nokia.com)
 **

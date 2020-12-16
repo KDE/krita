@@ -167,5 +167,7 @@
         <file>light_python.svg</file>
         <file>dark_hamburger_menu_dots.svg</file>
         <file>light_hamburger_menu_dots.svg</file>
+        <file>dark_zoom-fit-curve.svg</file>
+        <file>light_zoom-fit-curve.svg</file>
     </qresource>
 </RCC>

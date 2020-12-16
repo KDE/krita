@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2015 Michael Abrahams <miabraha@gmail.com>
+ *  SPDX-FileCopyrightText: 2015 Michael Abrahams <miabraha@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-3.0-or-later
  */

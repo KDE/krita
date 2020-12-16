@@ -1,9 +1,9 @@
 /*
  *  kis_tool_gradient.cc - part of Krita
  *
- *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *  Copyright (c) 2003 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2004-2007 Adrian Page <adrian@pagenet.plus.com>
+ *  SPDX-FileCopyrightText: 2002 Patrick Julien <freak@codepimps.org>
+ *  SPDX-FileCopyrightText: 2003 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2004-2007 Adrian Page <adrian@pagenet.plus.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

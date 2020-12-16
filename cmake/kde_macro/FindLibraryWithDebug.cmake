@@ -5,7 +5,7 @@
 #     to CMAKE_DEBUG_POSTFIX when creating a shared lib
 #     it has to be the second and third argument
 
-# Copyright (c) 2007, Christian Ehrlicher, <ch.ehrlicher@gmx.de>
+# SPDX-FileCopyrightText: 2007 Christian Ehrlicher <ch.ehrlicher@gmx.de>
 #
 # SPDX-License-Identifier: BSD-3-Clause
 #

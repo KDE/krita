@@ -1,6 +1,6 @@
 /*
- * Copyright (C) Wolthera van Hovell tot Westerflier <griffinvalley@gmail.com>, (C) 2016
- * Copyright (C) 2020 L. E. Segovia <amy@amyspark.me>
+ * SPDX-FileCopyrightText: 2016 Wolthera van Hovell tot Westerflier <griffinvalley@gmail.com>
+ * SPDX-FileCopyrightText: 2020 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

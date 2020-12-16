@@ -1,7 +1,7 @@
 /*
-  Copyright (c) 2006 Gábor Lehel <illissius@gmail.com>
-  Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
-  Copyright (c) 2011 José Luis Vergara <pentalis@gmail.com>
+  SPDX-FileCopyrightText: 2006 Gábor Lehel <illissius@gmail.com>
+  SPDX-FileCopyrightText: 2008 Cyrille Berger <cberger@cberger.net>
+  SPDX-FileCopyrightText: 2011 José Luis Vergara <pentalis@gmail.com>
 
   SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -201,7 +201,7 @@ void NodeDelegate::drawColorLabel(QPainter *p, const QStyleOptionViewItem &optio
 {
     KisNodeViewColorScheme scm;
     const int label = index.data(KisNodeModel::ColorLabelIndexRole).toInt();
-    QColor color = scm.colorLabel(label);
+    QColor color = scm.colorFromLabelIndex(label);
     if (color.alpha() <= 0) return;
 
     QColor bgColor = qApp->palette().color(QPalette::Base);

@@ -1,9 +1,9 @@
 /*
  *  dlg_imagesize.cc - part of KimageShop^WKrayon^WKrita
  *
- *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2009 C. Boemann <cbo@boemann.dk>
- *  Copyright (c) 2013 Juan Palacios <jpalaciosdev@gmail.com>
+ *  SPDX-FileCopyrightText: 2004 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2009 C. Boemann <cbo@boemann.dk>
+ *  SPDX-FileCopyrightText: 2013 Juan Palacios <jpalaciosdev@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

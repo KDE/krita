@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 Ashwin Dhakaita <ashwingpdhakaita@gmail.com>
+ * SPDX-FileCopyrightText: 2020 Ashwin Dhakaita <ashwingpdhakaita@gmail.com>
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -81,12 +81,9 @@ private:
     MyPaintSurfaceInternal *m_surface;
     KisImageSP m_image;
     KisPrecisePaintDeviceWrapper m_precisePainterWrapper;
-    QScopedPointer<KisPrecisePaintDeviceWrapper> m_preciseImageDeviceWrapper;
-    KisPaintDeviceSP m_tempDev;
-    KisPainter *m_tempPainter;
-    KisPainter *m_backgroundPainter;
     KisPaintDeviceSP m_dab;
-    QPointF m_lastPaintPos;
+    QScopedPointer<KisPainter> m_tempPainter;
+    QScopedPointer<KisPainter> m_backgroundPainter;
 
 };
 

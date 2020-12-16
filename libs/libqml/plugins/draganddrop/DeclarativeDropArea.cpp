@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2010 by BetterInbox <contact@betterinbox.com>
+    SPDX-FileCopyrightText: 2010 BetterInbox <contact@betterinbox.com>
     Original author: Gregory Schlomoff <greg@betterinbox.com>
 
     SPDX-License-Identifier: MIT

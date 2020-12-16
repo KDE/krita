@@ -1,8 +1,8 @@
 /*
- *  Copyright (c) 2002 Patrick Julien  <freak@codepimps.org>
- *  Copyright (c) 2005-2006 C. Boemann <cbo@boemann.dk>
- *  Copyright (c) 2004,2006-2007 Cyrille Berger <cberger@cberger.net>
- * Copyright (c) 2020 L. E. Segovia <amy@amyspark.me>
+ *  SPDX-FileCopyrightText: 2002 Patrick Julien <freak@codepimps.org>
+ *  SPDX-FileCopyrightText: 2005-2006 C. Boemann <cbo@boemann.dk>
+ *  SPDX-FileCopyrightText: 2004, 2006-2007 Cyrille Berger <cberger@cberger.net>
+ * SPDX-FileCopyrightText: 2020 L. E. Segovia <amy@amyspark.me>
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
  */

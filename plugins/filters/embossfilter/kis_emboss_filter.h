@@ -1,10 +1,10 @@
 /*
  * This file is part of the KDE project
  *
- *  Copyright (c) Michael Thaler <michael.thaler@physik.tu-muenchen.de>
+ * SPDX-FileCopyrightText: Michael Thaler <michael.thaler@physik.tu-muenchen.de>
  *
- *  SPDX-License-Identifier: GPL-2.0-or-later
-*/
+ * SPDX-License-Identifier: GPL-2.0-or-later
+ */
 
 #ifndef _KIS_EMBOSS_FILTER_H_
 #define _KIS_EMBOSS_FILTER_H_

@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2006 Peter Simonsson <peter.simonsson@gmail.com>
- * Copyright (c) 2007 Thomas Zander <zander@kde.org>
+ * SPDX-FileCopyrightText: 2006 Peter Simonsson <peter.simonsson@gmail.com>
+ * SPDX-FileCopyrightText: 2007 Thomas Zander <zander@kde.org>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -28,7 +28,6 @@ public:
     QString id() const override;
     KoDockFactoryBase::DockPosition defaultDockPosition() const override;
     QDockWidget* createDockWidget() override;
-    bool isCollapsable() const override { return false; }
 };
 
 #endif

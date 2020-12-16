@@ -1,6 +1,6 @@
 /*
- *  Copyright (c) 2005 Bart Coppens <kde@bartcoppens.be>
- *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  SPDX-FileCopyrightText: 2005 Bart Coppens <kde@bartcoppens.be>
+ *  SPDX-FileCopyrightText: 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

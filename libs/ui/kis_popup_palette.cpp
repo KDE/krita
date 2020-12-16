@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
-   Copyright 2009 Vera Lukman <shicmap@gmail.com>
-   Copyright 2011 Sven Langkamp <sven.langkamp@gmail.com>
-   Copyright 2016 Scott Petrovic <scottpetrovic@gmail.com>
+   SPDX-FileCopyrightText: 2009 Vera Lukman <shicmap@gmail.com>
+   SPDX-FileCopyrightText: 2011 Sven Langkamp <sven.langkamp@gmail.com>
+   SPDX-FileCopyrightText: 2016 Scott Petrovic <scottpetrovic@gmail.com>
 
    SPDX-License-Identifier: LGPL-2.0-only
 

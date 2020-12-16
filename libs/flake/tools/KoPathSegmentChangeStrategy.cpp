@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2009 Jan Hambrecht <jaham@gmx.net>
+ * SPDX-FileCopyrightText: 2009 Jan Hambrecht <jaham@gmx.net>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -73,9 +73,6 @@ void KoPathSegmentChangeStrategy::handleMouseMove(const QPointF &mouseLocation, 
     else if (m_segment.degree() == 3) {
         QPointF lastLocalPos = m_path->documentToShape(m_lastPosition);
         QPointF delta = localPos - lastLocalPos;
-
-        QPointF move2;
-        QPointF move1;
 
         std::tie(move2, move1) =
             KisBezierUtils::offsetSegment(m_segmentParam, delta);

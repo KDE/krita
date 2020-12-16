@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2018 Victor Wåhlström <victor.wahlstrom@initiali.se>
+ *  SPDX-FileCopyrightText: 2018 Victor Wåhlström <victor.wahlstrom@initiali.se>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

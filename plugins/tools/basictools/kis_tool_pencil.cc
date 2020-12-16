@@ -1,6 +1,6 @@
 /*
- *  Copyright (c) 2012 Sven Langkamp <sven.langkamp@gmail.com>
- *  Copyright (c) 2010 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2012 Sven Langkamp <sven.langkamp@gmail.com>
+ *  SPDX-FileCopyrightText: 2010 Cyrille Berger <cberger@cberger.net>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

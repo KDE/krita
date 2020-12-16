@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2019 Wolthera van Hövell tot Westerflier<griffinvalley@gmail.com>
+ * SPDX-FileCopyrightText: 2019 Wolthera van Hövell tot Westerflier <griffinvalley@gmail.com>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */

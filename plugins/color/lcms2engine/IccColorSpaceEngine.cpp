@@ -1,6 +1,6 @@
 /*
- *  Copyright (c) 2007-2008 Cyrille Berger <cberger@cberger.net>
- *  Copyright (c) 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
+ *  SPDX-FileCopyrightText: 2007-2008 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
  */

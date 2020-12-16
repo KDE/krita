@@ -7,8 +7,8 @@
 #  LCMS2_FOUND, If false, do not try to use LCMS2.
 
 
-# Copyright (c) 2008, Adrian Page, <adrian@pagenet.plus.com>
-# Copyright (c) 2009, Cyrille Berger, <cberger@cberger.net>
+# SPDX-FileCopyrightText: 2008 Adrian Page <adrian@pagenet.plus.com>
+# SPDX-FileCopyrightText: 2009 Cyrille Berger <cberger@cberger.net>
 #
 # SPDX-License-Identifier: BSD-3-Clause
 

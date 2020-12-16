@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2000 Matthias Elter  <elter@kde.org>
+    SPDX-FileCopyrightText: 2000 Matthias Elter <elter@kde.org>
 
     SPDX-License-Identifier: LGPL-2.1-or-later
  */

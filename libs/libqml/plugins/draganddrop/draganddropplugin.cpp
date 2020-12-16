@@ -1,5 +1,5 @@
 /*
-    Copyright 2011 by Marco Martin <mart@kde.org>
+    SPDX-FileCopyrightText: 2011 Marco Martin <mart@kde.org>
 
     SPDX-License-Identifier: MIT
 */

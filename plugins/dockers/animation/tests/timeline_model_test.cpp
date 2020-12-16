@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2015 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2015 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -23,8 +23,8 @@
 #include "flake/kis_shape_controller.h"
 #include "kis_undo_adapter.h"
 
-#include "timeline_frames_view.h"
-#include "timeline_frames_model.h"
+#include "KisAnimTimelineFramesView.h"
+#include "KisAnimTimelineFramesModel.h"
 
 #include "kis_node_dummies_graph.h"
 
@@ -116,10 +116,10 @@ void TimelineModelTest::testConverter()
 
 void TimelineModelTest::testModel()
 {
-    QScopedPointer<TimelineFramesModel> model(new TimelineFramesModel(0));
+    QScopedPointer<KisAnimTimelineFramesModel> model(new KisAnimTimelineFramesModel(0));
 }
 
-struct TestingInterface : TimelineFramesModel::NodeManipulationInterface
+struct TestingInterface : KisAnimTimelineFramesModel::NodeManipulationInterface
 {
     TestingInterface(KisImageSP image) : m_image(image) {}
 
@@ -180,9 +180,9 @@ void TimelineModelTest::testView()
     intLayer->setValue(0);
     intLayer->setMaximum(100);
 
-    TimelineFramesView *framesTable = new TimelineFramesView(&dlg);
+    KisAnimTimelineFramesView *framesTable = new KisAnimTimelineFramesView(&dlg);
 
-    TimelineFramesModel *model = new TimelineFramesModel(&dlg);
+    KisAnimTimelineFramesModel *model = new KisAnimTimelineFramesModel(&dlg);
 
     constructImage();
     addSelectionMasks();

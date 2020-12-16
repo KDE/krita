@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright 2004 Nicolas GOUTTE <goutte@kde.org>
+   SPDX-FileCopyrightText: 2004 Nicolas GOUTTE <goutte@kde.org>
    
    SPDX-License-Identifier: LGPL-2.0-or-later
 */

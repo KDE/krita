@@ -1,9 +1,9 @@
 /*
- *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *  Copyright (c) 2009 Sven Langkamp <sven.langkamp@gmail.com>
- *  Copyright (C) 2011 Silvio Heinrich <plassy@web.de>
- *  Copyright (C) 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
- *  Copyright (c) 2011 José Luis Vergara <pentalis@gmail.com>
+ *  SPDX-FileCopyrightText: 2002 Patrick Julien <freak@codepimps.org>
+ *  SPDX-FileCopyrightText: 2009 Sven Langkamp <sven.langkamp@gmail.com>
+ *  SPDX-FileCopyrightText: 2011 Silvio Heinrich <plassy@web.de>
+ *  SPDX-FileCopyrightText: 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
+ *  SPDX-FileCopyrightText: 2011 José Luis Vergara <pentalis@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

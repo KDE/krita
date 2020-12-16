@@ -1,7 +1,7 @@
 /*
- *  Copyright (c) 2003 Patrick Julien  <freak@codepimps.org>
- *  Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
- *  Copyright (c) 2004-2008 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2003 Patrick Julien <freak@codepimps.org>
+ *  SPDX-FileCopyrightText: 2004 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2004-2008 Boudewijn Rempt <boud@valdyas.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

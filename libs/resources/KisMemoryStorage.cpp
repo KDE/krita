@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2018 Boudewijn Rempt <boud@valdyas.org>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -200,10 +200,12 @@ KisResourceStorage::ResourceItem KisMemoryStorage::resourceItem(const QString &u
 KoResourceSP KisMemoryStorage::resource(const QString &url)
 {
     KoResourceSP resource;
-    QFileInfo fi(location() + '/' + url);
-    const QString resourceType = fi.path().split("/").last();
+
+    QStringList splitUrl = url.split("/");
+    const QString resourceType = splitUrl.first();
+    const QString resourceFilename = splitUrl.last();
     Q_FOREACH(resource, d->resources[resourceType]) {
-        if (resource->filename() == url) {
+        if (resource->filename() == resourceFilename) {
             break;
         }
     }

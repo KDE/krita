@@ -1,7 +1,7 @@
 
 /*
- *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2007 Sven Langkamp <sven.langkamp@gmail.com>
+ *  SPDX-FileCopyrightText: 2004 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2007 Sven Langkamp <sven.langkamp@gmail.com>
  *
  *  The outline algorithm uses the limn algorithm of fontutils by
  *  Karl Berry <karl@cs.umb.edu> and Kathryn Hargreaves <letters@cs.umb.edu>

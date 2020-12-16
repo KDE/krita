@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Peter Simonsson <peter.simonsson@gmail.com>
+   SPDX-FileCopyrightText: 2006 Peter Simonsson <peter.simonsson@gmail.com>
 
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -37,19 +37,6 @@ public:
 
     /// @return the dock widget area the widget should appear in by default
     virtual DockPosition defaultDockPosition() const = 0;
-
-    /// Returns true if the dock widget should get a collapsible header.
-    virtual bool isCollapsable() const {
-        return true;
-    }
-
-    /**
-     * In case the docker is collapsible, returns true if the dock widget
-     * will start collapsed by default.
-     */
-    virtual bool defaultCollapsed() const {
-        return false;
-    }
 
     /// Creates the dock widget
     /// @return the created dock widget

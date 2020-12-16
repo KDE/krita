@@ -1,7 +1,7 @@
 /*
-* Copyright (c) 1999 Matthias Elter <me@kde.org>
-* Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
-* Copyright (c) 2015 Boudewijn Rempt <boud@valdyas.org>
+* SPDX-FileCopyrightText: 1999 Matthias Elter <me@kde.org>
+* SPDX-FileCopyrightText: 2002 Patrick Julien <freak@codepimps.org>
+* SPDX-FileCopyrightText: 2015 Boudewijn Rempt <boud@valdyas.org>
 *
 *  SPDX-License-Identifier: GPL-2.0-or-later
 *
@@ -455,6 +455,12 @@ extern "C" int main(int argc, char **argv)
 
     // first create the application so we can create a pixmap
     KisApplication app(key, argc, argv);
+
+    if (app.platformName() == "wayland") {
+        QMessageBox::critical(0, i18nc("@title:window", "Fatal Error"), i18n("Krita does not support the Wayland platform. Use XWayland to run Krita on Wayland. Krita will close now."));
+        return -1;
+    }
+
     KisUsageLogger::writeHeader();
     KisOpenGL::initialize();
 

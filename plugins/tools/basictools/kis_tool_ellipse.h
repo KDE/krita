@@ -1,9 +1,9 @@
 /*
  *  kis_tool_ellipse.h - part of Krayon
  *
- *  Copyright (c) 2000 John Califf <jcaliff@compuzone.net>
- *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *  Copyright (c) 2004 Clarence Dang <dang@kde.org>
+ *  SPDX-FileCopyrightText: 2000 John Califf <jcaliff@compuzone.net>
+ *  SPDX-FileCopyrightText: 2002 Patrick Julien <freak@codepimps.org>
+ *  SPDX-FileCopyrightText: 2004 Clarence Dang <dang@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

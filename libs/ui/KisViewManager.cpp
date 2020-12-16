@@ -1,14 +1,14 @@
 /*
  *  This file is part of KimageShop^WKrayon^WKrita
  *
- *  Copyright (c) 1999 Matthias Elter  <me@kde.org>
- *                1999 Michael Koch    <koch@kde.org>
- *                1999 Carsten Pfeiffer <pfeiffer@kde.org>
- *                2002 Patrick Julien <freak@codepimps.org>
- *                2003-2011 Boudewijn Rempt <boud@valdyas.org>
- *                2004 Clarence Dang <dang@kde.org>
- *                2011 José Luis Vergara <pentalis@gmail.com>
- *                2017 L. E. Segovia <amy@amyspark.me>
+ *  SPDX-FileCopyrightText: 1999 Matthias Elter <me@kde.org>
+ *  SPDX-FileCopyrightText: 1999 Michael Koch <koch@kde.org>
+ *  SPDX-FileCopyrightText: 1999 Carsten Pfeiffer <pfeiffer@kde.org>
+ *  SPDX-FileCopyrightText: 2002 Patrick Julien <freak@codepimps.org>
+ *  SPDX-FileCopyrightText: 2003-2011 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2004 Clarence Dang <dang@kde.org>
+ *  SPDX-FileCopyrightText: 2011 José Luis Vergara <pentalis@gmail.com>
+ *  SPDX-FileCopyrightText: 2017 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

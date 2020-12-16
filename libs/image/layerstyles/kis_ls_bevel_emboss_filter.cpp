@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2014 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2014 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  See LayerFX plugin for Gimp as a reference implementation of this style:
  *  http://registry.gimp.org/node/186

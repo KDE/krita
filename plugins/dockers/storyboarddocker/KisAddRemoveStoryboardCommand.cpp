@@ -114,5 +114,36 @@ void KisMoveStoryboardCommand::redo()
 
 void KisMoveStoryboardCommand::undo()
 {
-    m_model->moveRows(QModelIndex(), m_to, m_count, QModelIndex(), m_from + 1);      
+    if (m_to > m_from) {
+        m_to--;
+    }
+    else {
+        m_from++;
+    }
+    m_model->moveRows(QModelIndex(), m_to, m_count, QModelIndex(), m_from);      
+}
+
+KisStoryboardChildEditCommand::KisStoryboardChildEditCommand(QVariant oldValue,
+                                QVariant newValue,
+                                int parentRow,
+                                int childRow,
+                                StoryboardModel *model,
+                                KUndo2Command *parent)
+    : KUndo2Command(kundo2_i18n("Edit Storyboard Child"), parent)
+    , m_oldValue(oldValue)
+    , m_newValue(newValue)
+    , m_parentRow(parentRow)
+    , m_childRow(childRow)
+    , m_model(model)
+{
+}
+
+void KisStoryboardChildEditCommand::redo()
+{
+    m_model->setData(m_model->index(m_childRow, 0, m_model->index(m_parentRow, 0)), m_newValue);
+}
+
+void KisStoryboardChildEditCommand::undo()
+{
+    m_model->setData(m_model->index(m_childRow, 0, m_model->index(m_parentRow, 0)), m_oldValue);
 }

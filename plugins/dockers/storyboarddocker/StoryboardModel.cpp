@@ -209,7 +209,9 @@ bool StoryboardModel::setData(const QModelIndex & index, const QVariant & value,
                 if (value.toInt() < 0 && secondIndex.data().toInt() == 0) {
                     return false;
                 }
-
+                if (implicitSceneDuration == data(index.parent(), TotalSceneDurationInFrames).toInt()) {
+                    return false;
+                }
                 const int fps = m_image.isValid() ? m_image->animationInterface()->framerate() : 24;
 
                 QModelIndex lastScene = index.parent();
@@ -533,8 +535,9 @@ bool StoryboardModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
             moveRowIndexes.append(index);
         }
         KisMoveStoryboardCommand *command = new KisMoveStoryboardCommand(moveRowIndexes.at(0).row(), moveRowIndexes.count(), row, this);
-        moveRows(QModelIndex(), moveRowIndexes.at(0).row(), moveRowIndexes.count(), parent, row);
-        pushUndoCommand(command);
+        if (moveRows(QModelIndex(), moveRowIndexes.at(0).row(), moveRowIndexes.count(), parent, row)) {
+            pushUndoCommand(command);
+        }
         //returning true deletes the source row
         return false;
     }

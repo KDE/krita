@@ -333,13 +333,25 @@ bool StoryboardDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, c
 
             StoryboardModel* sbModel = dynamic_cast<StoryboardModel*>(model);
             if (leftButton && upButtonClicked) {
-                sbModel->setData(index, index.data().toInt() + 1);
-                //                return sbModel->insertHoldFramesAfter(index.data().toInt() + 1, index.data().toInt(), index);
+                KisStoryboardChildEditCommand *cmd = new KisStoryboardChildEditCommand(index.data(),
+                                                                                    index.data().toInt() + 1,
+                                                                                    index.parent().row(),
+                                                                                    index.row(),
+                                                                                    sbModel);
+                if (sbModel->setData(index, index.data().toInt() + 1)) {
+                    sbModel->pushUndoCommand(cmd);
+                }
                 return true;
             }
             else if (leftButton && downButtonClicked) {
-                sbModel->setData(index, index.data().toInt() - 1);
-                //                return sbModel->insertHoldFramesAfter(std::max(-1, index.data().toInt() - 1), index.data().toInt(), index);
+                KisStoryboardChildEditCommand *cmd = new KisStoryboardChildEditCommand(index.data(),
+                                                                                    index.data().toInt() - 1,
+                                                                                    index.parent().row(),
+                                                                                    index.row(),
+                                                                                    sbModel);
+                if (sbModel->setData(index, index.data().toInt() - 1)) {
+                    sbModel->pushUndoCommand(cmd);
+                }
                 return true;
             }
         }
@@ -482,7 +494,14 @@ void StoryboardDelegate::setModelData(QWidget *editor, QAbstractItemModel *model
             int value = spinbox->value();
 
             StoryboardModel* sbModel = dynamic_cast<StoryboardModel*>(model);
-            sbModel->setData(index, value);
+            KisStoryboardChildEditCommand *cmd = new KisStoryboardChildEditCommand(index.data(),
+                                                                                    value,
+                                                                                    index.parent().row(),
+                                                                                    index.row(),
+                                                                                    sbModel);
+            if (sbModel->setData(index, value)) {
+                sbModel->pushUndoCommand(cmd);
+            }
             return;
         }
         default:             // for comments

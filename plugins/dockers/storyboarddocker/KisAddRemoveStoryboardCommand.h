@@ -60,4 +60,19 @@ private:
     StoryboardModel *m_model;
 };
 
+class KisStoryboardChildEditCommand : public KUndo2Command
+{
+public:
+    KisStoryboardChildEditCommand(QVariant oldValue, QVariant newValue, int parentRow, int childRow, StoryboardModel *model, KUndo2Command *parent = 0);
+    ~KisStoryboardChildEditCommand(){}
+    void redo() override;
+    void undo() override;
+
+private:
+    QVariant m_oldValue;
+    QVariant m_newValue;
+    int m_parentRow;
+    int m_childRow;
+    StoryboardModel *m_model;
+};
 #endif

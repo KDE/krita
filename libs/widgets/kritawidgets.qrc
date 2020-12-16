@@ -19,8 +19,5 @@
         <file>pics/light_docker_lock_a.svg</file>
         <file>pics/light_docker_lock_b.svg</file>
         <file>pics/light_zoom-pixels.svg</file>
-        <file>pics/zoom-draw.png</file>
-        <file>pics/zoom-pixels.png</file>
-        <file>pics/zoom-select.png</file>
     </qresource>
 </RCC>

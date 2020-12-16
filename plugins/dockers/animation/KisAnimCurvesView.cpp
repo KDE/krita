@@ -510,6 +510,8 @@ void KisAnimCurvesView::mousePressEvent(QMouseEvent *e)
     } else if (e->button() == Qt::LeftButton) {
         m_d->dragStart = e->pos();
 
+        const int handleClickRadius = 16;
+
         Q_FOREACH(QModelIndex index, selectedIndexes()) {
             QPointF center = m_d->itemDelegate->nodeCenter(index, false);
             bool hasLeftHandle = m_d->itemDelegate->hasHandle(index, 0);
@@ -518,12 +520,12 @@ void KisAnimCurvesView::mousePressEvent(QMouseEvent *e)
             QPointF leftHandle = center + m_d->itemDelegate->leftHandle(index, false);
             QPointF rightHandle = center + m_d->itemDelegate->rightHandle(index, false);
 
-            if (hasLeftHandle && (e->localPos() - leftHandle).manhattanLength() < 8) {
+            if (hasLeftHandle && (e->localPos() - leftHandle).manhattanLength() < handleClickRadius) {
                 m_d->isAdjustingHandle = true;
                 m_d->adjustedHandle = 0;
                 setCurrentIndex(index);
                 return;
-            } else if (hasRightHandle && (e->localPos() - rightHandle).manhattanLength() < 8) {
+            } else if (hasRightHandle && (e->localPos() - rightHandle).manhattanLength() < handleClickRadius) {
                 m_d->isAdjustingHandle = true;
                 m_d->adjustedHandle = 1;
                 setCurrentIndex(index);

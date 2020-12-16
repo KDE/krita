@@ -20,6 +20,8 @@ public:
 
 private:
     void paintNodeBackground( const QStyleOptionViewItem &option, QPainter *painter, const QColor& nodeColor) const;
+    void soloChannelVisibility( QAbstractItemModel *model,  const QModelIndex &index );
+    void showAllChannels(QAbstractItemModel *model , const QModelIndex &nodeIndex);
 };
 
 #endif

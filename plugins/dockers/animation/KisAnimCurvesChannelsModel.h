@@ -39,6 +39,7 @@ public:
         CurveRole = Qt::UserRole,
         CurveColorRole,
         CurveVisibilityRole,
+        CurveIsIsolatedRole,
         NodeColorRole
     };
 

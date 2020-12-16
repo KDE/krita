@@ -42,8 +42,18 @@ bool KisAnimCurvesChannelDelegate::editorEvent(QEvent *event, QAbstractItemModel
                 const QRect visibilityIcon = option.rect.adjusted(option.rect.width() - CHANNEL_ICON_SIZE, 0, 0, 0);
 
                 if (visibilityIcon.contains(me->pos())) {
-                    bool visible = index.data(KisAnimCurvesChannelsModel::CurveVisibilityRole).toBool();
-                    model->setData(index, !visible, KisAnimCurvesChannelsModel::CurveVisibilityRole);
+                    if (me->modifiers() & Qt::ShiftModifier) {
+                        bool currentlyIsolated = index.data(KisAnimCurvesChannelsModel::CurveIsIsolatedRole).toBool();
+                        if (currentlyIsolated) {
+                            showAllChannels(model, index.parent());
+                        } else {
+                            soloChannelVisibility(model, index);
+                        }
+                    } else {
+                        bool visible = index.data(KisAnimCurvesChannelsModel::CurveVisibilityRole).toBool();
+                        model->setData(index, !visible, KisAnimCurvesChannelsModel::CurveVisibilityRole);
+                    }
+
                     return true;
                 }
             }
@@ -144,5 +154,35 @@ void KisAnimCurvesChannelDelegate::paintNodeBackground(const QStyleOptionViewIte
     { // Center "Neutral" Band
         viewArea -= QMargins(0, 2, 0, 2);
         painter->fillRect(viewArea, nodeColor);
+    }
+}
+
+void KisAnimCurvesChannelDelegate::soloChannelVisibility(QAbstractItemModel *model, const QModelIndex &channelIndex)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(channelIndex.parent().isValid()); //We need to have a parent "node" to isolate.
+
+    const int numCurves = model->rowCount(channelIndex.parent());
+    const int clickedCurve = channelIndex.row();
+    const QModelIndex& nodeIndex = channelIndex.parent();
+
+    for (int i = 0; i < numCurves; i++) {
+        if (i == clickedCurve) {
+            model->setData(channelIndex, true, KisAnimCurvesChannelsModel::CurveVisibilityRole);
+        } else {
+            QModelIndex indexToToggle = model->index(i, channelIndex.column(), nodeIndex);
+            model->setData(indexToToggle, false, KisAnimCurvesChannelsModel::CurveVisibilityRole);
+        }
+    }
+}
+
+void KisAnimCurvesChannelDelegate::showAllChannels(QAbstractItemModel *model, const QModelIndex &nodeIndex )
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(nodeIndex.isValid() && !nodeIndex.parent().isValid()); //We should have no parent node here.
+
+    const int numCurves = model->rowCount(nodeIndex);
+
+    for (int i = 0; i < numCurves; i++) {
+        QModelIndex curveIndex = model->index(i, 0, nodeIndex);
+        model->setData(curveIndex, true, KisAnimCurvesChannelsModel::CurveVisibilityRole);
     }
 }

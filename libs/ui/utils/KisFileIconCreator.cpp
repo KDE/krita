@@ -10,12 +10,23 @@
 #include <KisMimeDatabase.h>
 #include <KisDocument.h>
 #include <KisPart.h>
+#include <KisPreviewFileDialog.h>
 #include <QFileInfo>
 
 #include <kis_debug.h>
 
 namespace
 {
+
+struct KisFileIconRegistrar {
+    KisFileIconRegistrar() {
+        KisPreviewFileDialog::s_iconCreator = new KisFileIconCreator();
+    }
+};
+
+
+static KisFileIconRegistrar s_registrar;
+
 
 QIcon createIcon(const QImage &source, const QSize &iconSize)
 {
@@ -36,10 +47,6 @@ QIcon createIcon(const QImage &source, const QSize &iconSize)
 
 }
 
-
-KisFileIconCreator::KisFileIconCreator()
-{
-}
 
 bool KisFileIconCreator::createFileIcon(QString path, QIcon &icon, qreal devicePixelRatioF, QSize iconSize)
 {

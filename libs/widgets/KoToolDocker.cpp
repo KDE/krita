@@ -8,30 +8,13 @@
  */
 #include "KoToolDocker.h"
 
-#include <KoDockWidgetTitleBarButton.h>
-#include <KoDockWidgetTitleBar.h>
-#include <KoIcon.h>
-
 #include <klocalizedstring.h>
-#include <kconfiggroup.h>
-#include <ksharedconfig.h>
 
-#include <QIcon>
 #include <QApplication>
-#include <QPointer>
 #include <QGridLayout>
 #include <QScrollArea>
-#include <QScrollBar>
 #include <QScroller>
 #include <QLabel>
-#include <QSet>
-#include <QAction>
-#include <QStyleOptionFrame>
-#include <QToolButton>
-#include <KisKineticScroller.h>
-
-#include <WidgetsDebug.h>
-#include <kis_debug.h>
 
 class Q_DECL_HIDDEN KoToolDocker::Private
 {

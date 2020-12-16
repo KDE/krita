@@ -154,8 +154,7 @@ KoToolDocker::KoToolDocker(QWidget *parent)
     : QDockWidget(i18n("Tool Options"), parent),
       d(new Private(this))
 {
-    setFeatures(DockWidgetMovable|DockWidgetFloatable);
-    setTitleBarWidget(new KoDockWidgetTitleBar(this));
+    setFeatures(DockWidgetMovable | DockWidgetFloatable);
 
     connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(locationChanged(Qt::DockWidgetArea)));
 

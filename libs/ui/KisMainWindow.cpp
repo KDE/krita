@@ -2095,12 +2095,10 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
             dockWidget->hide();
         }
 
-        bool locked = false;
-        group =  KSharedConfig::openConfig()->group("krita").group("DockWidget " + factory->id());
-        locked = group.readEntry("Locked", locked);
-
-        if (titleBar && locked)
+        bool locked = group.readEntry("Locked", false);
+        if (titleBar && locked) {
             titleBar->setLocked(true);
+        }
 
         d->dockWidgetsMap.insert(factory->id(), dockWidget);
     }

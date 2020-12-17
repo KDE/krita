@@ -404,9 +404,9 @@ void KisAnimCurvesView::findExtremes(qreal *minimum, qreal *maximum)
     qreal min = qInf();
     qreal max = -qInf();
 
-    int rows = model()->rowCount();
-    for (int row = 0; row < rows; row++) {
-        QModelIndex index = model()->index(row, 0);
+    int curveCount = model()->rowCount();
+    for (int curveIndex = 0; curveIndex < curveCount; curveIndex++) {
+        QModelIndex index = model()->index(curveIndex, 0);
         if (isIndexHidden(index)) continue;
 
         QVariant nextTime;
@@ -416,8 +416,8 @@ void KisAnimCurvesView::findExtremes(qreal *minimum, qreal *maximum)
             if (value < min) min = value;
             if (value > max) max = value;
 
-            const int NUM_TANGENTS = 2;
-            for (int i = 0; i < NUM_TANGENTS; i++)  {
+            const int MAX_NUM_TANGENTS = 2;
+            for (int i = 0; i < MAX_NUM_TANGENTS; i++)  {
                 QVariant tangent = index.data(KisAnimCurvesModel::LeftTangentRole + i);
                 if (!tangent.isValid())
                     continue;
@@ -428,7 +428,7 @@ void KisAnimCurvesView::findExtremes(qreal *minimum, qreal *maximum)
             }
 
             nextTime = index.data(KisAnimCurvesModel::NextKeyframeTime);
-            if (nextTime.isValid()) index = model()->index(row, nextTime.toInt());
+            if (nextTime.isValid()) index = model()->index(curveIndex, nextTime.toInt());
         } while (nextTime.isValid());
     }
 

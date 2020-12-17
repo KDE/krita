@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2016 Jouni Pentikäinen <joupent@gmail.com>
+ *  SPDX-FileCopyrightText: 2016 Jouni Pentikäinen <joupent@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -510,6 +510,8 @@ void KisAnimCurvesView::mousePressEvent(QMouseEvent *e)
     } else if (e->button() == Qt::LeftButton) {
         m_d->dragStart = e->pos();
 
+        const int handleClickRadius = 16;
+
         Q_FOREACH(QModelIndex index, selectedIndexes()) {
             QPointF center = m_d->itemDelegate->nodeCenter(index, false);
             bool hasLeftHandle = m_d->itemDelegate->hasHandle(index, 0);
@@ -518,12 +520,12 @@ void KisAnimCurvesView::mousePressEvent(QMouseEvent *e)
             QPointF leftHandle = center + m_d->itemDelegate->leftHandle(index, false);
             QPointF rightHandle = center + m_d->itemDelegate->rightHandle(index, false);
 
-            if (hasLeftHandle && (e->localPos() - leftHandle).manhattanLength() < 8) {
+            if (hasLeftHandle && (e->localPos() - leftHandle).manhattanLength() < handleClickRadius) {
                 m_d->isAdjustingHandle = true;
                 m_d->adjustedHandle = 0;
                 setCurrentIndex(index);
                 return;
-            } else if (hasRightHandle && (e->localPos() - rightHandle).manhattanLength() < 8) {
+            } else if (hasRightHandle && (e->localPos() - rightHandle).manhattanLength() < handleClickRadius) {
                 m_d->isAdjustingHandle = true;
                 m_d->adjustedHandle = 1;
                 setCurrentIndex(index);
@@ -554,12 +556,12 @@ void KisAnimCurvesView::mouseMoveEvent(QMouseEvent *e)
         }
 
         if (m_d->dragZooming) {
-            const qreal zoomScale = 25.0f;
+            const qreal zoomScale = 50.0f;
             const qreal updown = ((m_d->zoomAnchor.y() - e->pos().y())) / zoomScale;
             const qreal leftright = (m_d->zoomAnchor.x() - e->pos().x()) / zoomScale;
 
             changeZoom(Qt::Vertical, updown);
-            changeZoom(Qt::Horizontal, leftright);
+            changeZoom(Qt::Horizontal, leftright * -0.5);
 
             m_d->zoomAnchor = e->pos();
             viewport()->update();

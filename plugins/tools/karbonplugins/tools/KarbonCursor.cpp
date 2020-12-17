@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006,2008 Jan Hambrecht <jaham@gmx.net>
-   Copyright (C) 2006 Laurent Montel <montel@kde.org>
-   Copyright (C) 2006 Tim Beaulen <tbscope@gmail.com>
+   SPDX-FileCopyrightText: 2006, 2008 Jan Hambrecht <jaham@gmx.net>
+   SPDX-FileCopyrightText: 2006 Laurent Montel <montel@kde.org>
+   SPDX-FileCopyrightText: 2006 Tim Beaulen <tbscope@gmail.com>
 
    SPDX-License-Identifier: LGPL-2.0-or-later
 */

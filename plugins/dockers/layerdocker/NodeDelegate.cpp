@@ -1,7 +1,7 @@
 /*
-  Copyright (c) 2006 Gábor Lehel <illissius@gmail.com>
-  Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
-  Copyright (c) 2011 José Luis Vergara <pentalis@gmail.com>
+  SPDX-FileCopyrightText: 2006 Gábor Lehel <illissius@gmail.com>
+  SPDX-FileCopyrightText: 2008 Cyrille Berger <cberger@cberger.net>
+  SPDX-FileCopyrightText: 2011 José Luis Vergara <pentalis@gmail.com>
 
   SPDX-License-Identifier: LGPL-2.0-or-later
 */

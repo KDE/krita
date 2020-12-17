@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2016 Jouni Pentikäinen <joupent@gmail.com>
+ *  SPDX-FileCopyrightText: 2016 Jouni Pentikäinen <joupent@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -240,7 +240,23 @@ QVariant KisAnimCurvesChannelsModel::data(const QModelIndex &index, int role) co
     case CurveVisibilityRole:
         return indexIsNode ? QVariant() : item->curves.at(index.row())->visible();
 
-    case NodeColorRole:
+    case CurveIsIsolatedRole: {
+        const bool isVisible = item->curves.at(index.row())->visible();
+        if (!isVisible)
+            return false;
+
+        int numVisible = 0;
+        for (int i = 0; i < item->curves.size(); i++) {
+            if ( numVisible > 1)
+                return false;
+
+            if (item->curves.at(i)->visible())
+                numVisible++;
+        }
+
+        return (numVisible == 1);
+    }
+    case NodeColorRole: {
 
         if (!indexIsNode)
             return QVariant();
@@ -250,6 +266,9 @@ QVariant KisAnimCurvesChannelsModel::data(const QModelIndex &index, int role) co
         const int colorLabelIndex = item->dummy->node()->colorLabelIndex();
         const QColor nodeColor = nodeColorScheme.colorFromLabelIndex(colorLabelIndex);
         return colorLabelIndex > 0 ? KritaUtils::blendColors(nodeColor, backgroundColor, 0.3) : backgroundColor;
+    }
+    default:
+        break;
     }
 
     return QVariant();
@@ -265,7 +284,8 @@ bool KisAnimCurvesChannelsModel::setData(const QModelIndex &index, const QVarian
     case CurveVisibilityRole:
         KIS_ASSERT_RECOVER_BREAK(!indexIsNode);
         m_d->curvesModel->setCurveVisible(item->curves.at(index.row()), value.toBool());
-        break;
+        this->dataChanged(index, index);
+        return true;
     }
 
     return false;

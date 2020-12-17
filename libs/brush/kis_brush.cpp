@@ -1,10 +1,10 @@
 /*
- *  Copyright (c) 1999 Matthias Elter  <me@kde.org>
- *  Copyright (c) 2003 Patrick Julien  <freak@codepimps.org>
- *  Copyright (c) 2004-2008 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
- *  Copyright (c) 2005 Bart Coppens <kde@bartcoppens.be>
- *  Copyright (c) 2007 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 1999 Matthias Elter <me@kde.org>
+ *  SPDX-FileCopyrightText: 2003 Patrick Julien <freak@codepimps.org>
+ *  SPDX-FileCopyrightText: 2004-2008 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2004 Adrian Page <adrian@pagenet.plus.com>
+ *  SPDX-FileCopyrightText: 2005 Bart Coppens <kde@bartcoppens.be>
+ *  SPDX-FileCopyrightText: 2007 Cyrille Berger <cberger@cberger.net>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

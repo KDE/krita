@@ -1,6 +1,6 @@
 /*
- *  Copyright (c) 2004 Boudewijn Rempt
- *            (c) 2005 Bart Coppens <kde@bartcoppens.be>
+ *  SPDX-FileCopyrightText: 2004 Boudewijn Rempt
+ *  SPDX-FileCopyrightText: 2005 Bart Coppens <kde@bartcoppens.be>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

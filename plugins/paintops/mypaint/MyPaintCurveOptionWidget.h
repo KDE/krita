@@ -1,8 +1,8 @@
 /*
- * Copyright (C) 2008 Boudewijn Rempt <boud@valdyas.org>
- * Copyright (C) 2009 Sven Langkamp   <sven.langkamp@gmail.com>
- * Copyright (C) 2011 Silvio Heinrich <plassy@web.de>
- * Copyright (c) 2020 Ashwin Dhakaita <ashwingpdhakaita@gmail.com>
+ * SPDX-FileCopyrightText: 2008 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2009 Sven Langkamp <sven.langkamp@gmail.com>
+ * SPDX-FileCopyrightText: 2011 Silvio Heinrich <plassy@web.de>
+ * SPDX-FileCopyrightText: 2020 Ashwin Dhakaita <ashwingpdhakaita@gmail.com>
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  */

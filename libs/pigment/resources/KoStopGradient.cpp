@@ -1,7 +1,7 @@
 /*
-    Copyright (C) 2005 Tim Beaulen <tbscope@gmail.org>
-    Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
-    Copyright (c) 2007 Sven Langkamp <sven.langkamp@gmail.com>
+    SPDX-FileCopyrightText: 2005 Tim Beaulen <tbscope@gmail.org>
+    SPDX-FileCopyrightText: 2007 Jan Hambrecht <jaham@gmx.net>
+    SPDX-FileCopyrightText: 2007 Sven Langkamp <sven.langkamp@gmail.com>
 
     SPDX-License-Identifier: LGPL-2.1-or-later
  */

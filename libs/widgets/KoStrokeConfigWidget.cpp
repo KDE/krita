@@ -1,16 +1,16 @@
 /* This file is part of the KDE project
  * Made by Tomislav Lukman (tomislav.lukman@ck.tel.hr)
- * Copyright (C) 2002 Tomislav Lukman <tomislav.lukman@ck.t-com.hr>
- * Copyright (C) 2002-2003 Rob Buis <buis@kde.org>
- * Copyright (C) 2005-2006 Tim Beaulen <tbscope@gmail.com>
- * Copyright (C) 2005-2007 Thomas Zander <zander@kde.org>
- * Copyright (C) 2005-2006, 2011 Inge Wallin <inge@lysator.liu.se>
- * Copyright (C) 2005-2008 Jan Hambrecht <jaham@gmx.net>
- * Copyright (C) 2006 C. Boemann <cbo@boemann.dk>
- * Copyright (C) 2006 Peter Simonsson <psn@linux.se>
- * Copyright (C) 2006 Laurent Montel <montel@kde.org>
- * Copyright (C) 2007,2011 Thorsten Zachmann <t.zachmann@zagge.de>
- * Copyright (C) 2011 Jean-Nicolas Artaud <jeannicolasartaud@gmail.com>
+ * SPDX-FileCopyrightText: 2002 Tomislav Lukman <tomislav.lukman@ck.t-com.hr>
+ * SPDX-FileCopyrightText: 2002-2003 Rob Buis <buis@kde.org>
+ * SPDX-FileCopyrightText: 2005-2006 Tim Beaulen <tbscope@gmail.com>
+ * SPDX-FileCopyrightText: 2005-2007 Thomas Zander <zander@kde.org>
+ * SPDX-FileCopyrightText: 2005-2006, 2011 Inge Wallin <inge@lysator.liu.se>
+ * SPDX-FileCopyrightText: 2005-2008 Jan Hambrecht <jaham@gmx.net>
+ * SPDX-FileCopyrightText: 2006 C. Boemann <cbo@boemann.dk>
+ * SPDX-FileCopyrightText: 2006 Peter Simonsson <psn@linux.se>
+ * SPDX-FileCopyrightText: 2006 Laurent Montel <montel@kde.org>
+ * SPDX-FileCopyrightText: 2007, 2011 Thorsten Zachmann <t.zachmann@zagge.de>
+ * SPDX-FileCopyrightText: 2011 Jean-Nicolas Artaud <jeannicolasartaud@gmail.com>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */

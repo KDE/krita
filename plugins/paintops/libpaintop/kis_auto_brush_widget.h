@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2004,2007 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2004, 2007 Cyrille Berger <cberger@cberger.net>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

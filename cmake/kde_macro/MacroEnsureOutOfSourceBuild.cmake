@@ -5,7 +5,7 @@
 #    This macro works in any of the CMakeLists.txt of your project, but the recommended
 #    location to call this is close to the beginning of the top level CMakeLists.txt
 
-# Copyright (c) 2006, Alexander Neundorf, <neundorf@kde.org>
+# SPDX-FileCopyrightText: 2006 Alexander Neundorf <neundorf@kde.org>
 #
 # SPDX-License-Identifier: BSD-3-Clause
 #

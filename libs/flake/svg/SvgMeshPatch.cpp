@@ -1,6 +1,6 @@
 /*
- *  Copyright (c) 2007 Jan Hambrecht <jaham@gmx.net>
- *  Copyright (c) 2020 Sharaf Zaman <sharafzaz121@gmail.com>
+ *  SPDX-FileCopyrightText: 2007 Jan Hambrecht <jaham@gmx.net>
+ *  SPDX-FileCopyrightText: 2020 Sharaf Zaman <sharafzaz121@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

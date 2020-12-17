@@ -1,10 +1,10 @@
 /*
  *  kis_tool_transform.cc -- part of Krita
  *
- *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2005 C. Boemann <cbo@boemann.dk>
- *  Copyright (c) 2010 Marc Pegon <pe.marc@free.fr>
- *  Copyright (c) 2013 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2004 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2005 C. Boemann <cbo@boemann.dk>
+ *  SPDX-FileCopyrightText: 2010 Marc Pegon <pe.marc@free.fr>
+ *  SPDX-FileCopyrightText: 2013 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

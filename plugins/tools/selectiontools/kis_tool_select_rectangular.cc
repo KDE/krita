@@ -1,11 +1,11 @@
 /*
  *  kis_tool_select_rectangular.cc -- part of Krita
  *
- *  Copyright (c) 1999 Michael Koch <koch@kde.org>
- *  Copyright (c) 2001 John Califf <jcaliff@compuzone.net>
- *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *  Copyright (c) 2007 Sven Langkamp <sven.langkamp@gmail.com>
- *  Copyright (c) 2015 Michael Abrahams <miabraha@gmail.com>
+ *  SPDX-FileCopyrightText: 1999 Michael Koch <koch@kde.org>
+ *  SPDX-FileCopyrightText: 2001 John Califf <jcaliff@compuzone.net>
+ *  SPDX-FileCopyrightText: 2002 Patrick Julien <freak@codepimps.org>
+ *  SPDX-FileCopyrightText: 2007 Sven Langkamp <sven.langkamp@gmail.com>
+ *  SPDX-FileCopyrightText: 2015 Michael Abrahams <miabraha@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

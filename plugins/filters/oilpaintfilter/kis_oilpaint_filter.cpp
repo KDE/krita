@@ -1,8 +1,8 @@
 /*
  * This file is part of Krita
  *
- * Copyright (c) 2004 Michael Thaler <michael.thaler@physik.tu-muenchen.de>
- * Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
+ * SPDX-FileCopyrightText: 2004 Michael Thaler <michael.thaler@physik.tu-muenchen.de>
+ * SPDX-FileCopyrightText: 2008 Cyrille Berger <cberger@cberger.net>
  *
  * ported from digikam, Copyrighted by Gilles Caulier,
  * Original Oilpaint algorithm copyrighted 2004 by

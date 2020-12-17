@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
- * Copyright (C) 2012 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2012 Boudewijn Rempt <boud@valdyas.org>
  *
- *  SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "RecentImageImageProvider.h"

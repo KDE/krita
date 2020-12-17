@@ -1,11 +1,11 @@
 /* This file is part of the KDE project
- * Copyright (C) 2002-2005,2007 Rob Buis <buis@kde.org>
- * Copyright (C) 2002-2004 Nicolas Goutte <nicolasg@snafu.de>
- * Copyright (C) 2005-2006 Tim Beaulen <tbscope@gmail.com>
- * Copyright (C) 2005-2009 Jan Hambrecht <jaham@gmx.net>
- * Copyright (C) 2005,2007 Thomas Zander <zander@kde.org>
- * Copyright (C) 2006-2007 Inge Wallin <inge@lysator.liu.se>
- * Copyright (C) 2007-2008,2010 Thorsten Zachmann <zachmann@kde.org>
+ * SPDX-FileCopyrightText: 2002-2005, 2007 Rob Buis <buis@kde.org>
+ * SPDX-FileCopyrightText: 2002-2004 Nicolas Goutte <nicolasg@snafu.de>
+ * SPDX-FileCopyrightText: 2005-2006 Tim Beaulen <tbscope@gmail.com>
+ * SPDX-FileCopyrightText: 2005-2009 Jan Hambrecht <jaham@gmx.net>
+ * SPDX-FileCopyrightText: 2005, 2007 Thomas Zander <zander@kde.org>
+ * SPDX-FileCopyrightText: 2006-2007 Inge Wallin <inge@lysator.liu.se>
+ * SPDX-FileCopyrightText: 2007-2008, 2010 Thorsten Zachmann <zachmann@kde.org>
 
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */

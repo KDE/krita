@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2016 Laurent Valentin Jospin <laurent.valentin@famillejospin.ch>
+ *  SPDX-FileCopyrightText: 2016 Laurent Valentin Jospin <laurent.valentin@famillejospin.ch>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

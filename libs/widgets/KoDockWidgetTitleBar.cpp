@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (c) 2007 Marijn Kruisselbrink <mkruisselbrink@kde.org>
-   Copyright (C) 2007 Thomas Zander <zander@kde.org>
+   SPDX-FileCopyrightText: 2007 Marijn Kruisselbrink <mkruisselbrink@kde.org>
+   SPDX-FileCopyrightText: 2007 Thomas Zander <zander@kde.org>
 
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -48,16 +48,6 @@ KoDockWidgetTitleBar::KoDockWidgetTitleBar(QDockWidget* dockWidget)
     d->closeButton->setVisible(true);
     d->closeButton->setToolTip(i18nc("@info:tooltip", "Close Docker"));   
     d->closeButton->setStyleSheet("border: 0"); // border makes the header busy looking (appears on some OSs)
-
-    d->openIcon = kisIcon("docker_collapse_a");
-    d->closeIcon = kisIcon("docker_collapse_b");
-    d->collapseButton = new KoDockWidgetTitleBarButton(this);
-    d->collapseButton->setIcon(d->openIcon);
-    connect(d->collapseButton, SIGNAL(clicked()), SLOT(toggleCollapsed()));
-    d->collapseButton->setVisible(false);
-    d->collapsable = false;
-    d->collapseButton->setToolTip(i18nc("@info:tooltip", "Collapse Docker"));
-    d->collapseButton->setStyleSheet("border: 0");
 
     d->lockIcon = kisIcon("docker_lock_a");
     d->lockButton = new KoDockWidgetTitleBarButton(this);
@@ -107,18 +97,13 @@ QSize KoDockWidgetTitleBar::sizeHint() const
         floatSize = d->floatButton->sizeHint();
     }
 
-    QSize hideSize(0, 0);
-    if (d->collapseButton && d->collapsable) {
-        hideSize = d->collapseButton->sizeHint();
-    }
-
     QSize lockSize(0, 0);
     if (d->lockButton && d->lockable) {
         lockSize = d->lockButton->sizeHint();
     }
 
-    int buttonHeight = qMax(qMax(qMax(closeSize.height(), floatSize.height()), hideSize.height()), lockSize.height()) + 2;
-    int buttonWidth = closeSize.width() + floatSize.width() + hideSize.width() + lockSize.width();
+    int buttonHeight = qMax(qMax(closeSize.height(), floatSize.height()), lockSize.height()) + 2;
+    int buttonWidth = closeSize.width() + lockSize.width() + floatSize.width();
 
     int height = buttonHeight;
     if (d->textVisibilityMode == FullTextAlwaysVisible) {
@@ -129,28 +114,13 @@ QSize KoDockWidgetTitleBar::sizeHint() const
         height = qMax(height, fontHeight);
     }
 
-    /*
-     * Calculate the width of title and add to the total width of the docker window when collapsed.
-     */
-    const int titleWidth =
-        (d->textVisibilityMode == FullTextAlwaysVisible) ? (q->fontMetrics().width(q->windowTitle()) + 2*mw) :
-                                                           0;
-
-    if (d->preCollapsedWidth > 0) {
-        return QSize(d->preCollapsedWidth, height);
-    }
-    else {
-        if (d->textVisibilityMode == FullTextAlwaysVisible) {
-            return QSize(buttonWidth /*+ height*/ + 2*mw + 2*fw + titleWidth, height);
-        }
-        else {
-            if (q->widget()) {
-                return QSize(qMin(q->widget()->minimumSizeHint().width(), buttonWidth), height);
-            }
-            else {
-                return QSize(buttonWidth, height);
-            }
-        }
+    if (d->textVisibilityMode == FullTextAlwaysVisible) {
+        const int titleWidth = q->fontMetrics().width(q->windowTitle()) + 2*mw;
+        return QSize(buttonWidth /*+ height*/ + 2*mw + 2*fw + titleWidth, height);
+    } else if (q->widget()) {
+        return QSize(qMin(q->widget()->minimumSizeHint().width(), buttonWidth), height);
+    } else {
+        return QSize(buttonWidth, height);
     }
 }
 
@@ -166,18 +136,13 @@ void KoDockWidgetTitleBar::paintEvent(QPaintEvent*)
     QStyleOptionDockWidget titleOpt;
     titleOpt.initFrom(q);
 
-    QSize collapseButtonSize(0,0);
-    if (d->collapsable && d->collapseButton->isVisible()) {
-        collapseButtonSize = d->collapseButton->size();
-    }
-
     QSize lockButtonSize(0,0);
     if (d->lockable && d->lockButton->isVisible()) {
         lockButtonSize = d->lockButton->size();
     }
 
-    titleOpt.rect = QRect(QPoint(fw + mw + collapseButtonSize.width() + lockButtonSize.width(), 0),
-                          QSize(geometry().width() - (fw * 2) -  mw - collapseButtonSize.width() - lockButtonSize.width(), geometry().height()));
+    titleOpt.rect = QRect(QPoint(fw + mw + lockButtonSize.width(), 0),
+                          QSize(geometry().width() - (fw * 2) -  mw - lockButtonSize.width(), geometry().height()));
     titleOpt.title = q->windowTitle();
     titleOpt.closable = hasFeature(q, QDockWidget::DockWidgetClosable);
     titleOpt.floatable = hasFeature(q, QDockWidget::DockWidgetFloatable);
@@ -211,14 +176,12 @@ void KoDockWidgetTitleBar::resizeEvent(QResizeEvent*)
     else if (!closeRect.isNull())
         top = closeRect.y();
 
-    QSize size = d->collapseButton->size();
+    QSize size(0, 0);
     if (!closeRect.isNull()) {
         size = d->closeButton->size();
     } else if (!floatRect.isNull()) {
         size = d->floatButton->size();
     }
-    QRect collapseRect = QRect(QPoint(fw, top), size);
-    d->collapseButton->setGeometry(collapseRect);
 
     size = d->lockButton->size();
 
@@ -231,32 +194,19 @@ void KoDockWidgetTitleBar::resizeEvent(QResizeEvent*)
     const QSize lockRectSize = size;
 
     if (q->isFloating() || (width() < (closeRect.width() + lockRectSize.width()) + 50)) {
-        d->collapsable = false;
-        d->collapseButton->setVisible(false);
         d->lockButton->setVisible(false);
         d->lockable = false;
     } else {
-        d->collapsable = false;
-        d->collapseButton->setVisible(false);
         d->lockButton->setVisible(true);
         d->lockable = true;
     }
 
     int offset = 0;
 
-    if (d->collapsable) {
-        offset = collapseRect.width();
-    }
     QRect lockRect = QRect(QPoint(fw + 2 + offset, top), lockRectSize);
     d->lockButton->setGeometry(lockRect);
 }
 
-void KoDockWidgetTitleBar::setCollapsed(bool collapsed)
-{
-//    QDockWidget *q = qobject_cast<QDockWidget*>(parentWidget());
-//    if (q && q->widget() && q->widget()->isHidden() != collapsed)
-//        d->toggleCollapsed();
-}
 
 void KoDockWidgetTitleBar::setLocked(bool locked)
 {
@@ -266,8 +216,6 @@ void KoDockWidgetTitleBar::setLocked(bool locked)
     d->lockButton->blockSignals(true);
     d->lockButton->setChecked(locked);
     d->lockButton->blockSignals(false);
-
-    //qDebug() << "setlocked" << q << d->locked << locked;
 
     if (locked) {
         d->features = q->features();
@@ -280,22 +228,13 @@ void KoDockWidgetTitleBar::setLocked(bool locked)
     q->toggleViewAction()->setEnabled(!locked);
     d->closeButton->setEnabled(!locked);
     d->floatButton->setEnabled(!locked);
-    d->collapseButton->setVisible(false);
-    d->collapsableSet = false;
-    d->collapsable = false;
+    d->floatButton->setVisible(!locked);
 
     d->updateIcons();
     q->setProperty("Locked", locked);
     resizeEvent(0);
 }
 
-
-void KoDockWidgetTitleBar::setCollapsable(bool collapsable)
-{
-    d->collapsableSet = false;
-    d->collapsable = false;
-    d->collapseButton->setVisible(false);
-}
 
 void KoDockWidgetTitleBar::setTextVisibilityMode(TextVisibilityMode textVisibilityMode)
 {
@@ -321,20 +260,6 @@ void KoDockWidgetTitleBar::Private::topLevelChanged(bool topLevel)
     updateIcons();
 }
 
-void KoDockWidgetTitleBar::Private::toggleCollapsed()
-{
-    QDockWidget *q = qobject_cast<QDockWidget*>(thePublic->parentWidget());
-    if (q == 0) // there does not *have* to be anything on the dockwidget.
-        return;
-
-    preCollapsedWidth = q->widget()->isHidden() ? -1 : thePublic->width();
-    q->setMaximumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX); // will be overwritten again next
-    if (q->widget()) {
-        q->widget()->setVisible(q->widget()->isHidden());
-        collapseButton->setIcon(q->widget()->isHidden() ? kisIcon("docker_collapse_b") : kisIcon("docker_collapse_a"));
-    }
-}
-
 void KoDockWidgetTitleBar::Private::featuresChanged(QDockWidget::DockWidgetFeatures)
 {
     QDockWidget *q = qobject_cast<QDockWidget*>(thePublic->parentWidget());
@@ -354,14 +279,10 @@ void KoDockWidgetTitleBar::Private::updateIcons()
     lockButton->setIcon(lockIcon);
 
     // this method gets called when switching themes, so update all of the themed icons now
-   floatButton->setIcon(kisIcon("docker_float"));
-   closeButton->setIcon(kisIcon("docker_close"));
+    floatButton->setIcon(kisIcon("docker_float"));
+    closeButton->setIcon(kisIcon("docker_close"));
 
-    if (q->widget()) {
-        collapseButton->setIcon(q->widget()->isHidden() ? kisIcon("docker_collapse_b") : kisIcon("docker_collapse_a"));
-    }
     thePublic->resizeEvent(0);
-
 }
 
 //have to include this because of Q_PRIVATE_SLOT

@@ -1,10 +1,10 @@
 /*
  *  kis_tool_freehand.cc - part of Krita
  *
- *  Copyright (c) 2003-2007 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2004 Bart Coppens <kde@bartcoppens.be>
- *  Copyright (c) 2007,2008,2010 Cyrille Berger <cberger@cberger.net>
- *  Copyright (c) 2009 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  SPDX-FileCopyrightText: 2003-2007 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2004 Bart Coppens <kde@bartcoppens.be>
+ *  SPDX-FileCopyrightText: 2007, 2008, 2010 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2009 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

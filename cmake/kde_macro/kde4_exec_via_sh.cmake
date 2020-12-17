@@ -1,5 +1,5 @@
 
-# Copyright (c) 2006, Alexander Neundorf, <neundorf@kde.org>
+# SPDX-FileCopyrightText: 2006 Alexander Neundorf <neundorf@kde.org>
 #
 # SPDX-License-Identifier: BSD-3-Clause
 #

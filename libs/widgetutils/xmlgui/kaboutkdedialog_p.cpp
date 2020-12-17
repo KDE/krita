@@ -1,8 +1,8 @@
 /* This file is part of the KDE libraries
-   Copyright (C) 2007 Urs Wolfer <uwolfer at kde.org>
+   SPDX-FileCopyrightText: 2007 Urs Wolfer <uwolfer at kde.org>
 
    Parts of this class have been take from the KAboutKDE class, which was
-   Copyright (C) 2000 Espen Sand <espen@kde.org>
+   SPDX-FileCopyrightText: 2000 Espen Sand <espen@kde.org>
 
    SPDX-License-Identifier: LGPL-2.0-only
 */

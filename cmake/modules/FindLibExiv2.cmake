@@ -30,9 +30,9 @@
 # Since 5.53.0.
 #
 #=============================================================================
-# Copyright (c) 2018, Christophe Giboudeaux, <christophe@krop.fr>
-# Copyright (c) 2010, Alexander Neundorf, <neundorf@kde.org>
-# Copyright (c) 2008, Gilles Caulier, <caulier.gilles@gmail.com>
+# SPDX-FileCopyrightText: 2018 Christophe Giboudeaux <christophe@krop.fr>
+# SPDX-FileCopyrightText: 2010 Alexander Neundorf <neundorf@kde.org>
+# SPDX-FileCopyrightText: 2008 Gilles Caulier <caulier.gilles@gmail.com>
 #
 #
 # Redistribution and use in source and binary forms, with or without

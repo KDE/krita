@@ -1,6 +1,6 @@
 # Locate the Vc template library. Vc can be found at http://gitorious.org/Vc/
 #
-# Copyright 2009-2012   Matthias Kretz <kretz@kde.org>
+# SPDX-FileCopyrightText: 2009-2012 Matthias Kretz <kretz@kde.org>
 #
 # This file is meant to be copied into projects that want to use Vc. It will
 # search for VcConfig.cmake, which ships with Vc and will provide up-to-date

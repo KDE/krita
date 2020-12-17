@@ -1,7 +1,7 @@
 /*
  * KDE. Krita Project.
  *
- * Copyright (c) 2020 Deif Lou <ginoba@gmail.com>
+ * SPDX-FileCopyrightText: 2020 Deif Lou <ginoba@gmail.com>
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -149,7 +149,7 @@ namespace KisGradientConversion
      * @param gradient A QGradient with the stops of the gradient
      * @return KoAbstractGradientSP containing stops with the positions and colors of the gradient
      */
-    KRITAPIGMENT_EXPORT KoAbstractGradientSP toAbstractGradient(const QGradient &gradient);
+    KRITAPIGMENT_EXPORT KoAbstractGradientSP toAbstractGradient(const QGradient *gradient);
     
     /**
      * @brief Create a clone of a KoStopGradientSP and return it casted to a
@@ -183,7 +183,7 @@ namespace KisGradientConversion
      * @param gradient A QGradient with the stops of the gradient
      * @return KoStopGradientSP containing stops with the positions and colors of the gradient
      */
-    KRITAPIGMENT_EXPORT KoStopGradientSP toStopGradient(const QGradient &gradient);
+    KRITAPIGMENT_EXPORT KoStopGradientSP toStopGradient(const QGradient *gradient);
     
     /**
      * @brief Convert a KoAbstractGradientSP to a KoStopGradientSP
@@ -249,7 +249,7 @@ namespace KisGradientConversion
      * @param gradient A QGradient with the stops of the gradient
      * @return KoSegmentGradientSP containing segments with the positions and colors of the gradient
      */
-    KRITAPIGMENT_EXPORT KoSegmentGradientSP toSegmentGradient(const QGradient &gradient);
+    KRITAPIGMENT_EXPORT KoSegmentGradientSP toSegmentGradient(const QGradient *gradient);
     
     /**
      * @brief Convert a krita abstract gradient to a krita segment gradient

@@ -1,7 +1,7 @@
 /*
  * This file is part of Krita
  *
- * Copyright (c) 2005 C. Boemann <cbo@boemann.dk>
+ * SPDX-FileCopyrightText: 2005 C. Boemann <cbo@boemann.dk>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2014 Stuart Dickson <stuartmd@kogmbh.com>
+ *  SPDX-FileCopyrightText: 2014 Stuart Dickson <stuartmd@kogmbh.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

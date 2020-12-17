@@ -1,7 +1,7 @@
 /*
  * KDE. Krita Project.
  *
- * Copyright (c) 2020 Deif Lou <ginoba@gmail.com>
+ * SPDX-FileCopyrightText: 2020 Deif Lou <ginoba@gmail.com>
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -18,6 +18,9 @@ namespace KisGradientConversion
     QGradientStops toQGradientStops(KoAbstractGradientSP gradient,
                                     KoCanvasResourcesInterfaceSP canvasResourcesInterface)
     {
+        if (!gradient) {
+            return QGradientStops();
+        }
         if (gradient.dynamicCast<KoStopGradient>()) {
             return toQGradientStops(gradient.dynamicCast<KoStopGradient>(), canvasResourcesInterface);
         } else if (gradient.dynamicCast<KoSegmentGradient>()) {
@@ -52,8 +55,26 @@ namespace KisGradientConversion
                                     KoCanvasResourcesInterfaceSP canvasResourcesInterface)
     {
         QGradientStops stops;
+
+        if (!gradient) {
+            return stops;
+        }
+
+        qreal lastStopPosition = -1.0;
         for (const KoGradientStop &stopGradientStop : gradient->stops()) {
-            stops << toQGradientStop(stopGradientStop.color, stopGradientStop.type, stopGradientStop.position, canvasResourcesInterface);
+            if (qFuzzyCompare(stopGradientStop.position, lastStopPosition)) {
+                stops << toQGradientStop(
+                    stopGradientStop.color, stopGradientStop.type, stopGradientStop.position + 0.000001,
+                    canvasResourcesInterface
+                );
+                lastStopPosition = stopGradientStop.position + 0.000001;
+            } else {
+                stops << toQGradientStop(
+                    stopGradientStop.color, stopGradientStop.type, stopGradientStop.position,
+                    canvasResourcesInterface
+                );
+                lastStopPosition = stopGradientStop.position;
+            }
         }
         return stops;
     }
@@ -97,20 +118,42 @@ namespace KisGradientConversion
     {
         QGradientStops stops;
 
+        if (!gradient) {
+            return stops;
+        }
+
         QGradientStop lastStop;
         lastStop.first = -1.0;
 
         for (KoGradientSegment *segment : gradient->segments()) {
             QGradientStop stop;
             
-            stop = toQGradientStop(segment->startColor(), segment->startType(), segment->startOffset(), canvasResourcesInterface);
-            if (!qFuzzyCompare(stop.first, lastStop.first) || stop.second != lastStop.second) {
+            stop = toQGradientStop(
+                segment->startColor(), segment->startType(), segment->startOffset(),
+                canvasResourcesInterface
+            );
+            if (qFuzzyCompare(stop.first, lastStop.first)) {
+                if (stop.second != lastStop.second) {
+                    stop.first = stop.first + 0.000001;
+                    stops << stop;
+                    lastStop = stop;
+                }
+            } else {
                 stops << stop;
                 lastStop = stop;
             }
             
-            stop = toQGradientStop(segment->endColor(), segment->endType(), segment->endOffset(), canvasResourcesInterface);
-            if (!qFuzzyCompare(stop.first, lastStop.first) || stop.second != lastStop.second) {
+            stop = toQGradientStop(
+                segment->endColor(), segment->endType(), segment->endOffset(),
+                canvasResourcesInterface
+            );
+            if (qFuzzyCompare(stop.first, lastStop.first)) {
+                if (stop.second != lastStop.second) {
+                    stop.first = stop.first + 0.000001;
+                    stops << stop;
+                    lastStop = stop;
+                }
+            } else {
                 stops << stop;
                 lastStop = stop;
             }
@@ -121,6 +164,9 @@ namespace KisGradientConversion
     
     QGradient* toQGradient(KoAbstractGradientSP gradient, KoCanvasResourcesInterfaceSP canvasResourcesInterface)
     {
+        if (!gradient) {
+            return nullptr;
+        }
         if (gradient.dynamicCast<KoStopGradient>()) {
             return toQGradient(gradient.dynamicCast<KoStopGradient>(), canvasResourcesInterface);
         } else if (gradient.dynamicCast<KoSegmentGradient>()) {
@@ -131,6 +177,9 @@ namespace KisGradientConversion
 
     QGradient* toQGradient(KoStopGradientSP gradient, KoCanvasResourcesInterfaceSP canvasResourcesInterface)
     {
+        if (!gradient) {
+            return nullptr;
+        }
         QGradient *qGradient = new QLinearGradient;
         qGradient->setStops(toQGradientStops(gradient, canvasResourcesInterface));
         return qGradient;
@@ -138,6 +187,9 @@ namespace KisGradientConversion
 
     QGradient* toQGradient(KoSegmentGradientSP gradient, KoCanvasResourcesInterfaceSP canvasResourcesInterface)
     {
+        if (!gradient) {
+            return nullptr;
+        }
         QGradient *qGradient = new QLinearGradient;
         qGradient->setStops(toQGradientStops(gradient, canvasResourcesInterface));
         return qGradient;
@@ -148,18 +200,27 @@ namespace KisGradientConversion
         return toStopGradient(gradient).dynamicCast<KoAbstractGradient>();
     }
 
-    KoAbstractGradientSP toAbstractGradient(const QGradient &gradient)
+    KoAbstractGradientSP toAbstractGradient(const QGradient *gradient)
     {
+        if (!gradient) {
+            return nullptr;
+        }
         return toStopGradient(gradient).dynamicCast<KoAbstractGradient>();
     }
 
     KoAbstractGradientSP toAbstractGradient(KoStopGradientSP gradient)
     {
+        if (!gradient) {
+            return nullptr;
+        }
         return gradient->clone().dynamicCast<KoAbstractGradient>();
     }
 
     KoAbstractGradientSP toAbstractGradient(KoSegmentGradientSP gradient)
     {
+        if (!gradient) {
+            return nullptr;
+        }
         return gradient->clone().dynamicCast<KoAbstractGradient>();
     }
 
@@ -177,20 +238,29 @@ namespace KisGradientConversion
         }
 
         stopGradient->setStops(stops);
-        
+        stopGradient->setType(QGradient::LinearGradient);
         stopGradient->setValid(true);
 
         return stopGradient;
     }
 
-    KoStopGradientSP toStopGradient(const QGradient &gradient)
+    KoStopGradientSP toStopGradient(const QGradient *gradient)
     {
-        return toStopGradient(gradient.stops());
+        if (!gradient || gradient->type() == QGradient::NoGradient) {
+            return nullptr;
+        }
+        KoStopGradientSP stopGradient = toStopGradient(gradient->stops());
+        stopGradient->setType(gradient->type());
+        stopGradient->setSpread(gradient->spread());
+        return stopGradient;
     }
 
     KoStopGradientSP toStopGradient(KoAbstractGradientSP gradient,
                                     KoCanvasResourcesInterfaceSP canvasResourcesInterface)
     {
+        if (!gradient) {
+            return nullptr;
+        }
         if (gradient.dynamicCast<KoStopGradient>()) {
             return gradient->clone().dynamicCast<KoStopGradient>();
         } else if (gradient.dynamicCast<KoSegmentGradient>()) {
@@ -238,6 +308,10 @@ namespace KisGradientConversion
 
     KoStopGradientSP toStopGradient(KoSegmentGradientSP gradient, KoCanvasResourcesInterfaceSP canvasResourcesInterface)
     {
+        if (!gradient) {
+            return nullptr;
+        }
+
         KoStopGradientSP stopGradient(new KoStopGradient);
         QList<KoGradientStop> stops;
 
@@ -247,7 +321,10 @@ namespace KisGradientConversion
         for (KoGradientSegment *segment : gradient->segments()) {
             KoGradientStop stop;
             
-            stop = toKoGradientStop(segment->startColor(), segment->startType(), segment->startOffset(), canvasResourcesInterface);
+            stop = toKoGradientStop(
+                segment->startColor(), segment->startType(), segment->startOffset(),
+                canvasResourcesInterface
+            );
             stop.color.convertTo(stopGradient->colorSpace());
             if (!qFuzzyCompare(stop.position, lastStop.position) || stop.type != lastStop.type || stop.color != lastStop.color) {
                 stops << stop;
@@ -256,7 +333,10 @@ namespace KisGradientConversion
                 lastStop.position = stop.position;
             }
             
-            stop = toKoGradientStop(segment->endColor(), segment->endType(), segment->endOffset(), canvasResourcesInterface);
+            stop = toKoGradientStop(
+                segment->endColor(), segment->endType(), segment->endOffset(),
+                canvasResourcesInterface
+            );
             stop.color.convertTo(stopGradient->colorSpace());
             if (!qFuzzyCompare(stop.position, lastStop.position) || stop.type != lastStop.type || stop.color != lastStop.color) {
                 stops << stop;
@@ -298,13 +378,22 @@ namespace KisGradientConversion
         return segmentGradient;
     }
 
-    KoSegmentGradientSP toSegmentGradient(const QGradient &gradient)
+    KoSegmentGradientSP toSegmentGradient(const QGradient *gradient)
     {
-        return toSegmentGradient(gradient.stops());
+        if (!gradient || gradient->type() == QGradient::NoGradient) {
+            return nullptr;
+        }
+        KoSegmentGradientSP segmentGradient = toSegmentGradient(gradient->stops());
+        segmentGradient->setType(gradient->type());
+        segmentGradient->setSpread(gradient->spread());
+        return segmentGradient;
     }
 
     KoSegmentGradientSP toSegmentGradient(KoAbstractGradientSP gradient)
     {
+        if (!gradient) {
+            return nullptr;
+        }
         if (gradient.dynamicCast<KoSegmentGradient>()) {
             return gradient->clone().dynamicCast<KoSegmentGradient>();
         } else if (gradient.dynamicCast<KoStopGradient>()) {
@@ -315,6 +404,10 @@ namespace KisGradientConversion
 
     KoSegmentGradientSP toSegmentGradient(KoStopGradientSP gradient)
     {
+        if (!gradient) {
+            return nullptr;
+        }
+
         KoSegmentGradientSP segmentGradient(new KoSegmentGradient);
         QList<KoGradientStop> stops = gradient->stops();
 
@@ -350,6 +443,9 @@ namespace KisGradientConversion
                 startType, endType
             );
         }
+
+        segmentGradient->setType(gradient->type());
+        segmentGradient->setSpread(gradient->spread());
 
         segmentGradient->setName(gradient->name());
         segmentGradient->setFilename(gradient->filename());

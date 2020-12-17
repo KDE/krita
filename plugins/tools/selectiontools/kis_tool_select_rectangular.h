@@ -1,8 +1,8 @@
 /*
  *  kis_tool_select_rectangular.h - part of Krita
  *
- *  Copyright (c) 1999 Michael Koch <koch@kde.org>
- *                2002 Patrick Julien <freak@codepimps.org>
+ *  SPDX-FileCopyrightText: 1999 Michael Koch <koch@kde.org>
+ *  SPDX-FileCopyrightText: 2002 Patrick Julien <freak@codepimps.org>
  *
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later

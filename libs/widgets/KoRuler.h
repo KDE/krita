@@ -1,8 +1,8 @@
 /* This file is part of the KDE project
-   Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
-   Copyright (C) 2006 Peter Simonsson <peter.simonsson@gmail.com>
-   Copyright (C) 2007 C. Boemann <cbo@boemann.dk>
-   Copyright (C) 2007 Thomas Zander <zander@kde.org>
+   SPDX-FileCopyrightText: 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+   SPDX-FileCopyrightText: 2006 Peter Simonsson <peter.simonsson@gmail.com>
+   SPDX-FileCopyrightText: 2007 C. Boemann <cbo@boemann.dk>
+   SPDX-FileCopyrightText: 2007 Thomas Zander <zander@kde.org>
 
    SPDX-License-Identifier: LGPL-2.0-or-later
 */

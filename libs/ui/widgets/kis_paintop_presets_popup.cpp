@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
- * Copyright (C) 2008 Boudewijn Rempt <boud@valdyas.org>
- * Copyright (C) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
- * Copyright (C) 2011 Silvio Heinrich <plassy@web.de>
+ * SPDX-FileCopyrightText: 2008 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
+ * SPDX-FileCopyrightText: 2011 Silvio Heinrich <plassy@web.de>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */

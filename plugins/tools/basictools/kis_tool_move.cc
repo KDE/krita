@@ -1,9 +1,9 @@
 /*
- *  Copyright (c) 1999 Matthias Elter  <me@kde.org>
- *                1999 Michael Koch    <koch@kde.org>
- *                2002 Patrick Julien <freak@codepimps.org>
- *                2004 Boudewijn Rempt <boud@valdyas.org>
- *                2016 Michael Abrahams <miabraha@gmail.com>
+ *  SPDX-FileCopyrightText: 1999 Matthias Elter <me@kde.org>
+ *  SPDX-FileCopyrightText: 1999 Michael Koch <koch@kde.org>
+ *  SPDX-FileCopyrightText: 2002 Patrick Julien <freak@codepimps.org>
+ *  SPDX-FileCopyrightText: 2004 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2016 Michael Abrahams <miabraha@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

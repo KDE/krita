@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
+ * SPDX-FileCopyrightText: 2009 Cyrille Berger <cberger@cberger.net>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */

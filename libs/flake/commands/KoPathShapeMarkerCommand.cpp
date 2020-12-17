@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
- * Copyright (C) 2010 Jeremy Lugagne <lugagne.jeremy@gmail.com>
- * Copyright (C) 2011 Jean-Nicolas Artaud <jeannicolasartaud@gmail.com>
+ * SPDX-FileCopyrightText: 2010 Jeremy Lugagne <lugagne.jeremy@gmail.com>
+ * SPDX-FileCopyrightText: 2011 Jean-Nicolas Artaud <jeannicolasartaud@gmail.com>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */

@@ -1,6 +1,6 @@
 /*
- *  Copyright (c) 2015 Jouni Pentikäinen <joupent@gmail.com>
- *  Copyright (c) 2015 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2015 Jouni Pentikäinen <joupent@gmail.com>
+ *  SPDX-FileCopyrightText: 2015 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

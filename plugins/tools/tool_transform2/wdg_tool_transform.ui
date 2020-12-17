@@ -2186,7 +2186,7 @@
        <item>
         <widget class="QCheckBox" name="chkShowControlPoints">
          <property name="text">
-          <string>Show control points</string>
+          <string>Show handles</string>
          </property>
         </widget>
        </item>

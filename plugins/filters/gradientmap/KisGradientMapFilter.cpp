@@ -1,16 +1,12 @@
 /*
  * This file is part of the KDE project
  *
- * Copyright (c) 2016 Spencer Brown <sbrown655@gmail.com>
- * Copyright (c) 2020 Deif Lou <ginoba@gmail.com>
+ * SPDX-FileCopyrightText: 2016 Spencer Brown <sbrown655@gmail.com>
+ * SPDX-FileCopyrightText: 2020 Deif Lou <ginoba@gmail.com>
  * 
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include <QDomDocument>
-
-#include <kpluginfactory.h>
-#include <kis_filter_registry.h>
 #include <KoColorSpace.h>
 #include <KoColor.h>
 #include <kis_paint_device.h>
@@ -27,113 +23,15 @@
 #include <KoCachedGradient.h>
 
 #include "KisGradientMapFilter.h"
-#include "KisGradientMapConfigWidget.h"
-
-K_PLUGIN_FACTORY_WITH_JSON(KritaGradientMapFactory, "KritaGradientMap.json", registerPlugin<KritaGradientMap>();)
-
-KritaGradientMap::KritaGradientMap(QObject *parent, const QVariantList &)
-    : QObject(parent)
-{
-    KisFilterRegistry::instance()->add(new KisGradientMapFilter());
-}
-
-KritaGradientMap::~KritaGradientMap()
-{}
+#include "KisGradientMapFilterConfigWidget.h"
+#include "KisGradientMapFilterConfiguration.h"
+#include "KisGradientMapFilterNearestCachedGradient.h"
+#include "KisGradientMapFilterDitherCachedGradient.h"
 
 KisGradientMapFilter::KisGradientMapFilter()
     : KisFilter(id(), FiltersCategoryMapId, i18n("&Gradient Map..."))
 {
     setSupportsPainting(true);
-}
-
-class NearestCachedGradient
-{
-public:
-    NearestCachedGradient(const KoStopGradientSP gradient, qint32 steps, const KoColorSpace *cs);
-
-    /// gets the color data at position 0 <= t <= 1
-    const quint8* cachedAt(qreal t) const;
-
-private:
-    const qint32 m_max;
-    QVector<KoColor> m_colors;
-    const KoColor m_black;
-};
-
-NearestCachedGradient::NearestCachedGradient(const KoStopGradientSP gradient, qint32 steps, const KoColorSpace *cs)
-    : m_max(steps - 1)
-    , m_black(KoColor(cs))
-{
-    for (qint32 i = 0; i < steps; i++) {
-        qreal t = static_cast<qreal>(i) / m_max;
-        KoGradientStop leftStop, rightStop;
-        if (!gradient->stopsAt(leftStop, rightStop, t)) {
-            m_colors << m_black;
-        } else {
-            if (std::abs(t - leftStop.position) < std::abs(t - rightStop.position)) {
-                m_colors << leftStop.color.convertedTo(cs);
-            } else {
-                m_colors << rightStop.color.convertedTo(cs);
-            }
-        }
-    }
-}
-
-const quint8* NearestCachedGradient::cachedAt(qreal t) const
-{
-    qint32 tInt = t * m_max + 0.5;
-    if (m_colors.size() > tInt) {
-        return m_colors[tInt].data();
-    } else {
-        return m_black.data();
-    }
-}
-
-class DitherCachedGradient
-{
-public:
-    struct CachedEntry
-    {
-        KoColor leftStop;
-        KoColor rightStop;
-        qreal localT;
-    };
-
-    DitherCachedGradient(const KoStopGradientSP gradient, qint32 steps, const KoColorSpace *cs);
-
-    /// gets the color data at position 0 <= t <= 1
-    const CachedEntry& cachedAt(qreal t) const;
-
-private:
-    const qint32 m_max;
-    QVector<CachedEntry> m_cachedEntries;
-    const CachedEntry m_nullEntry;
-};
-
-DitherCachedGradient::DitherCachedGradient(const KoStopGradientSP gradient, qint32 steps, const KoColorSpace *cs)
-    : m_max(steps - 1)
-    , m_nullEntry(CachedEntry{KoColor(cs), KoColor(cs), 0.0})
-{
-    for (qint32 i = 0; i < steps; i++) {
-        qreal t = static_cast<qreal>(i) / m_max;
-        KoGradientStop leftStop, rightStop;
-        if (!gradient->stopsAt(leftStop, rightStop, t)) {
-            m_cachedEntries << m_nullEntry;
-        } else {
-            const qreal localT = (t - leftStop.position) / (rightStop.position - leftStop.position);
-            m_cachedEntries << CachedEntry{leftStop.color.convertedTo(cs), rightStop.color.convertedTo(cs), localT};
-        }
-    }
-}
-
-const DitherCachedGradient::CachedEntry& DitherCachedGradient::cachedAt(qreal t) const
-{
-    qint32 tInt = t * m_max + 0.5;
-    if (m_cachedEntries.size() > tInt) {
-        return m_cachedEntries[tInt];
-    } else {
-        return m_nullEntry;
-    }
 }
 
 class BlendColorModePolicy
@@ -162,15 +60,15 @@ const quint8* BlendColorModePolicy::colorAt(qreal t, int x, int y) const
 class NearestColorModePolicy
 {
 public:
-    NearestColorModePolicy(const NearestCachedGradient *cachedGradient);
+    NearestColorModePolicy(const KisGradientMapFilterNearestCachedGradient *cachedGradient);
 
     const quint8* colorAt(qreal t, int x, int y) const;
 
 private:
-    const NearestCachedGradient *m_cachedGradient;
+    const KisGradientMapFilterNearestCachedGradient *m_cachedGradient;
 };
 
-NearestColorModePolicy::NearestColorModePolicy(const NearestCachedGradient *cachedGradient)
+NearestColorModePolicy::NearestColorModePolicy(const KisGradientMapFilterNearestCachedGradient *cachedGradient)
     : m_cachedGradient(cachedGradient)
 {}
 
@@ -185,23 +83,23 @@ const quint8* NearestColorModePolicy::colorAt(qreal t, int x, int y) const
 class DitherColorModePolicy
 {
 public:
-    DitherColorModePolicy(const DitherCachedGradient *cachedGradient, KisDitherUtil *ditherUtil);
+    DitherColorModePolicy(const KisGradientMapFilterDitherCachedGradient *cachedGradient, KisDitherUtil *ditherUtil);
 
     const quint8* colorAt(qreal t, int x, int y) const;
 
 private:
-    const DitherCachedGradient *m_cachedGradient;
+    const KisGradientMapFilterDitherCachedGradient *m_cachedGradient;
     KisDitherUtil *m_ditherUtil;
 };
 
-DitherColorModePolicy::DitherColorModePolicy(const DitherCachedGradient *cachedGradient, KisDitherUtil *ditherUtil)
+DitherColorModePolicy::DitherColorModePolicy(const KisGradientMapFilterDitherCachedGradient *cachedGradient, KisDitherUtil *ditherUtil)
     : m_cachedGradient(cachedGradient)
     , m_ditherUtil(ditherUtil)
 {}
 
 const quint8* DitherColorModePolicy::colorAt(qreal t, int x, int y) const
 {
-    const DitherCachedGradient::CachedEntry &cachedEntry = m_cachedGradient->cachedAt(t);
+    const KisGradientMapFilterDitherCachedGradient::CachedEntry &cachedEntry = m_cachedGradient->cachedAt(t);
     if (cachedEntry.localT < m_ditherUtil->threshold(QPoint(x, y))) {
         return cachedEntry.leftStop.data();
     }
@@ -222,21 +120,22 @@ void KisGradientMapFilter::processImpl(KisPaintDeviceSP device,
 
     KIS_SAFE_ASSERT_RECOVER_RETURN(filterConfig);
 
-    KoStopGradientSP gradient = filterConfig->gradient();
-    const ColorMode colorMode = ColorMode(filterConfig->getInt("colorMode"));
+    KoAbstractGradientSP gradient = filterConfig->gradient();
+    const int colorMode = filterConfig->colorMode();
     const KoColorSpace *colorSpace = device->colorSpace();
+    const int cachedGradientSize = qMax(device->extent().width(), device->extent().height());
 
-    if (colorMode == ColorMode::Blend) {
-        KoCachedGradient cachedGradient(gradient, qMax(device->extent().width(), device->extent().height()), colorSpace);
+    if (colorMode == KisGradientMapFilterConfiguration::ColorMode_Blend) {
+        KoCachedGradient cachedGradient(gradient, cachedGradientSize, colorSpace);
         BlendColorModePolicy colorModePolicy(&cachedGradient);
         processImpl(device, applyRect, config, progressUpdater, colorModePolicy);
-    } else if (colorMode == ColorMode::Nearest) {
-        NearestCachedGradient cachedGradient(gradient, qMax(device->extent().width(), device->extent().height()), colorSpace);
+    } else if (colorMode == KisGradientMapFilterConfiguration::ColorMode_Nearest) {
+        KisGradientMapFilterNearestCachedGradient cachedGradient(gradient, cachedGradientSize, colorSpace);
         NearestColorModePolicy colorModePolicy(&cachedGradient);
         processImpl(device, applyRect, config, progressUpdater, colorModePolicy);
-    } else /* if colorMode == ColorMode::Dither */ {
+    } else /* if colorMode == KisGradientMapFilterConfiguration::ColorMode_Dither */ {
         KisDitherUtil ditherUtil;
-        DitherCachedGradient cachedGradient(gradient, qMax(device->extent().width(), device->extent().height()), colorSpace);
+        KisGradientMapFilterDitherCachedGradient cachedGradient(gradient, cachedGradientSize, colorSpace);
         ditherUtil.setConfiguration(*filterConfig, "dither/");
         DitherColorModePolicy colorModePolicy(&cachedGradient, &ditherUtil);
         processImpl(device, applyRect, config, progressUpdater, colorModePolicy);
@@ -270,35 +169,17 @@ void KisGradientMapFilter::processImpl(KisPaintDeviceSP device,
 
 KisFilterConfigurationSP KisGradientMapFilter::factoryConfiguration(KisResourcesInterfaceSP resourcesInterface) const
 {
-
-    return new KisGradientMapFilterConfiguration(id().id(), 2, resourcesInterface);
+    return new KisGradientMapFilterConfiguration(resourcesInterface);
 }
 
 KisFilterConfigurationSP KisGradientMapFilter::defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const
 {
-    KisFilterConfigurationSP config = factoryConfiguration(resourcesInterface);
-
-    auto source = resourcesInterface->source<KoAbstractGradient>(ResourceType::Gradients);
-    KoAbstractGradientSP gradient = source.fallbackResource();
-
-    KoStopGradient stopGradient;
-    QScopedPointer<QGradient> qGradient(gradient->toQGradient());
-    stopGradient.fromQGradient(qGradient.data());
-    QDomDocument doc;
-    QDomElement elt = doc.createElement("gradient");
-    stopGradient.toXML(doc, elt);
-    doc.appendChild(elt);
-    config->setProperty("gradientXML", doc.toString());
-
-    config->setProperty("colorMode", false);
-    KisDitherWidget::factoryConfiguration(*config, "dither/");
-
+    KisGradientMapFilterConfigurationSP config = new KisGradientMapFilterConfiguration(resourcesInterface);
+    config->setDefaults();
     return config;
 }
 
-KisConfigWidget* KisGradientMapFilter::createConfigurationWidget(QWidget * parent, const KisPaintDeviceSP dev, bool) const
+KisConfigWidget* KisGradientMapFilter::createConfigurationWidget(QWidget * parent, const KisPaintDeviceSP, bool) const
 {
-    return new KisGradientMapConfigWidget(parent, dev);
+    return new KisGradientMapFilterConfigWidget(parent);
 }
-
-#include "KisGradientMapFilter.moc"

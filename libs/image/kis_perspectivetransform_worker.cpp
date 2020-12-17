@@ -1,9 +1,9 @@
 /*
  * This file is part of Krita
  *
- *  Copyright (c) 2006 Cyrille Berger <cberger@cberger.net>
- *  Copyright (c) 2009 Edward Apap <schumifer@hotmail.com>
- *  Copyright (c) 2010 Marc Pegon <pe.marc@free.fr>
+ *  SPDX-FileCopyrightText: 2006 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2009 Edward Apap <schumifer@hotmail.com>
+ *  SPDX-FileCopyrightText: 2010 Marc Pegon <pe.marc@free.fr>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

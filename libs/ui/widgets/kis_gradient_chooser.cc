@@ -1,6 +1,6 @@
 /*
- *  Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
- *  Copyright (C) 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
+ *  SPDX-FileCopyrightText: 2004 Adrian Page <adrian@pagenet.plus.com>
+ *  SPDX-FileCopyrightText: 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

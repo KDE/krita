@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2016 Jouni Pentikäinen <joupent@gmail.com>
+ *  SPDX-FileCopyrightText: 2016 Jouni Pentikäinen <joupent@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -39,6 +39,7 @@ public:
         CurveRole = Qt::UserRole,
         CurveColorRole,
         CurveVisibilityRole,
+        CurveIsIsolatedRole,
         NodeColorRole
     };
 

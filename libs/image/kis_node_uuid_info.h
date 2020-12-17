@@ -1,6 +1,6 @@
 /*
  *  Clone info stores information about clone layer's target
- *  Copyright (C) 2011 Torio Mlshi <mlshi@lavabit.com>
+ *  SPDX-FileCopyrightText: 2011 Torio Mlshi <mlshi@lavabit.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

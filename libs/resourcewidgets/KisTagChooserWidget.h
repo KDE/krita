@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2019 Boudewijn Rempt <boud@valdyas.org>
- * Copyright (c) 2020 Agata Cacko <cacko.azh@gmail.com>
+ * SPDX-FileCopyrightText: 2019 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2020 Agata Cacko <cacko.azh@gmail.com>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */

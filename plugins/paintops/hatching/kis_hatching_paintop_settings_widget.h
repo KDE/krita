@@ -1,6 +1,6 @@
 /*
- *  Copyright (c) 2008 Lukas Tvrdy <lukast.dev@gmail.com>
- *  Copyright (c) 2010 José Luis Vergara <pentalis@gmail.com>
+ *  SPDX-FileCopyrightText: 2008 Lukas Tvrdy <lukast.dev@gmail.com>
+ *  SPDX-FileCopyrightText: 2010 José Luis Vergara <pentalis@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

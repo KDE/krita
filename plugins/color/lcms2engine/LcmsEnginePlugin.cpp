@@ -1,7 +1,7 @@
 /*
- *  Copyright (c) 2003 Patrick Julien  <freak@codepimps.org>
- *  Copyright (c) 2004,2010 Cyrille Berger <cberger@cberger.net>
- *  Copyright (c) 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
+ *  SPDX-FileCopyrightText: 2003 Patrick Julien <freak@codepimps.org>
+ *  SPDX-FileCopyrightText: 2004, 2010 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
 */

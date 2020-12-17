@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2005 Adrian Page <adrian@pagenet.plus.com>
+ *  SPDX-FileCopyrightText: 2005 Adrian Page <adrian@pagenet.plus.com>
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
 */

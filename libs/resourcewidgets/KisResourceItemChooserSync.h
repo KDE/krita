@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
 
-   Copyright (c) 2014 Sven Langkamp <sven.langkamp@gmail.com>
-   Copyright (c) 2019 Boudewijn Rempt <boud@valdyas.org>   
+   SPDX-FileCopyrightText: 2014 Sven Langkamp <sven.langkamp@gmail.com>
+   SPDX-FileCopyrightText: 2019 Boudewijn Rempt <boud@valdyas.org>
 
    SPDX-License-Identifier: LGPL-2.0-or-later
 */

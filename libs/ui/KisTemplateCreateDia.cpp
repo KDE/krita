@@ -1,8 +1,8 @@
 /*
    This file is part of the KDE project
-   Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
-                 2000 Werner Trobin <trobin@kde.org>
-   Copyright (C) 2004 Nicolas GOUTTE <goutte@kde.org>
+   SPDX-FileCopyrightText: 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+   SPDX-FileCopyrightText: 2000 Werner Trobin <trobin@kde.org>
+   SPDX-FileCopyrightText: 2004 Nicolas GOUTTE <goutte@kde.org>
 
    SPDX-License-Identifier: LGPL-2.0-or-later
 */

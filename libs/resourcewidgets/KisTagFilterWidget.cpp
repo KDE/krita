@@ -1,7 +1,7 @@
 /*
- *    Copyright (C) 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
- *    Copyright (c) 2011 José Luis Vergara <pentalis@gmail.com>
- *    Copyright (c) 2013 Sascha Suelzer <s.suelzer@gmail.com>
+ *    SPDX-FileCopyrightText: 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
+ *    SPDX-FileCopyrightText: 2011 José Luis Vergara <pentalis@gmail.com>
+ *    SPDX-FileCopyrightText: 2013 Sascha Suelzer <s.suelzer@gmail.com>
  *
  *    SPDX-License-Identifier: LGPL-2.0-or-later
  */

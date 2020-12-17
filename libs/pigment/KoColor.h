@@ -1,6 +1,6 @@
 /*
- *  Copyright (c) 2005 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ *  SPDX-FileCopyrightText: 2005 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2007 Thomas Zander <zander@kde.org>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
 */

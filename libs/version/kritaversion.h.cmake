@@ -1,8 +1,8 @@
 /* This file is part of the Krita libraries
-    Copyright (c) 2003 David Faure <faure@kde.org>
-    Copyright (c) 2003 Lukas Tinkl <lukas@kde.org>
-    Copyright (c) 2004 Nicolas Goutte <goutte@kde.org>
-    Copyright (C) 2015 Jarosław Staniek <staniek@kde.org>
+    SPDX-FileCopyrightText: 2003 David Faure <faure@kde.org>
+    SPDX-FileCopyrightText: 2003 Lukas Tinkl <lukas@kde.org>
+    SPDX-FileCopyrightText: 2004 Nicolas Goutte <goutte@kde.org>
+    SPDX-FileCopyrightText: 2015 Jarosław Staniek <staniek@kde.org>
 
     SPDX-License-Identifier: LGPL-2.0-or-later
 */

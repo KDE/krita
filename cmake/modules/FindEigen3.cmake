@@ -10,9 +10,9 @@
 #  EIGEN3_INCLUDE_DIR - the eigen include directory
 #  EIGEN3_VERSION - eigen version
 
-# Copyright (c) 2006, 2007 Montel Laurent, <montel@kde.org>
-# Copyright (c) 2008, 2009 Gael Guennebaud, <g.gael@free.fr>
-# Copyright (c) 2009 Benoit Jacob <jacob.benoit.1@gmail.com>
+# SPDX-FileCopyrightText: 2006, 2007 Montel Laurent <montel@kde.org>
+# SPDX-FileCopyrightText: 2008, 2009 Gael Guennebaud <g.gael@free.fr>
+# SPDX-FileCopyrightText: 2009 Benoit Jacob <jacob.benoit.1@gmail.com>
 #
 # SPDX-License-Identifier: BSD-2-Clause
 #

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (c) 2010 Justin Noel <justin@ics.com>
+ * SPDX-FileCopyrightText: 2010 Justin Noel <justin@ics.com>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */

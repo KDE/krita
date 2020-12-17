@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 Ashwin Dhakaita <ashwingpdhakaita@gmail.com>
+ * SPDX-FileCopyrightText: 2020 Ashwin Dhakaita <ashwingpdhakaita@gmail.com>
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -18,6 +18,7 @@
 #include <kis_selection.h>
 #include <qmath.h>
 #include <KoCompositeOpRegistry.h>
+#include <KoMixColorsOp.h>
 
 using namespace std;
 
@@ -32,12 +33,14 @@ KisMyPaintSurface::KisMyPaintSurface(KisPainter *painter, KisPaintDeviceSP paint
     , m_imageDevice(paintNode)
     , m_image(image)
     , m_precisePainterWrapper(painter->device())
-    , m_tempPainter(new KisPainter(m_precisePainterWrapper.preciseDevice()))
-    , m_backgroundPainter(new KisPainter(m_precisePainterWrapper.preciseDevice()))
     , m_dab(m_precisePainterWrapper.createPreciseCompositionSourceDevice())
+    , m_tempPainter(new KisPainter(m_precisePainterWrapper.preciseDevice()))
+    , m_backgroundPainter(new KisPainter(m_precisePainterWrapper.createPreciseCompositionSourceDevice()))
+
 {
     m_backgroundPainter->setCompositeOp(COMPOSITE_COPY);
     m_backgroundPainter->setOpacity(OPACITY_OPAQUE_U8);
+    m_tempPainter->setCompositeOp(COMPOSITE_COPY);
     m_tempPainter->setSelection(painter->selection());
     m_tempPainter->setChannelFlags(painter->channelFlags());
     m_tempPainter->copyMirrorInformationFrom(painter);
@@ -49,11 +52,6 @@ KisMyPaintSurface::KisMyPaintSurface(KisPainter *painter, KisPaintDeviceSP paint
     m_surface->get_color = this->get_color;
     m_surface->destroy = destroy_internal_surface_callback;
     m_surface->bitDepth = m_precisePainterWrapper.preciseColorSpace()->channels()[0]->channelValueType();
-    if (m_image) {
-        m_preciseImageDeviceWrapper.reset(new KisPrecisePaintDeviceWrapper(m_image->projection()));
-    } else if(m_imageDevice) {
-        m_preciseImageDeviceWrapper.reset(new KisPrecisePaintDeviceWrapper(paintNode));
-    }
 }
 
 KisMyPaintSurface::~KisMyPaintSurface()
@@ -118,6 +116,7 @@ int KisMyPaintSurface::drawDabImpl(MyPaintSurface *self, float x, float y, float
                                 float color_b, float opaque, float hardness, float color_a,
                                 float aspect_ratio, float angle, float lock_alpha, float colorize) {
 
+    Q_UNUSED(self);
     const float one_over_radius2 = 1.0f / (radius * radius);
     const double angle_rad = kisDegreesToRadians(angle);
     const float cs = cos(angle_rad);
@@ -146,10 +145,14 @@ int KisMyPaintSurface::drawDabImpl(MyPaintSurface *self, float x, float y, float
     const QPointF center = QPointF(x, y);
 
     KisAlgebra2D::OuterCircle outer(center, radius);
-    m_dab->clear(dabRectAligned);
     m_precisePainterWrapper.readRects(m_tempPainter->calculateAllMirroredRects(dabRectAligned));
+    m_tempPainter->copyAreaOptimized(dabRectAligned.topLeft(), m_tempPainter->device(), m_dab, dabRectAligned);
 
     KisSequentialIterator it(m_dab, dabRectAligned);
+    float unitValue = KoColorSpaceMathsTraits<channelType>::unitValue;
+    float minValue = KoColorSpaceMathsTraits<channelType>::min;
+    float maxValue = KoColorSpaceMathsTraits<channelType>::max;
+    bool eraser = painter()->compositeOp()->id() == COMPOSITE_ERASE;
 
     while(it.nextPixel()) {
 
@@ -168,12 +171,10 @@ int KisMyPaintSurface::drawDabImpl(MyPaintSurface *self, float x, float y, float
         }
 
         base_alpha = calculate_alpha_for_rr (rr, hardness, segment1_slope, segment2_slope);
+        m_tempPainter->selection();
         alpha = base_alpha * normal_mode;
 
         channelType* nativeArray = reinterpret_cast<channelType*>(it.rawData());
-        float unitValue = KoColorSpaceMathsTraits<channelType>::unitValue;
-        float minValue = KoColorSpaceMathsTraits<channelType>::min;
-        float maxValue = KoColorSpaceMathsTraits<channelType>::max;
 
         b = nativeArray[0]/unitValue;
         g = nativeArray[1]/unitValue;
@@ -186,39 +187,43 @@ int KisMyPaintSurface::drawDabImpl(MyPaintSurface *self, float x, float y, float
 
         a = alpha * (color_a - dst_alpha) + dst_alpha;
 
-        if (a > 0.0f) {
-
-            float src_term = (alpha * color_a) / a;
-            float dst_term = 1.0f - src_term;
-            r = color_r * src_term + r * dst_term;
-            g = color_g * src_term + g * dst_term;
-            b = color_b * src_term + b * dst_term;
-        }
-
-        if (colorize > 0.0f && base_alpha > 0.0f) {
-
-            alpha = base_alpha * colorize;
-            a = alpha + dst_alpha - alpha * dst_alpha;
-
+        if (eraser) {
+            alpha = 1 - (opaque*base_alpha);
+            a = dst_alpha * alpha ;
+        } else {
             if (a > 0.0f) {
-
-                float pixel_h, pixel_s, pixel_l, out_h, out_s, out_l;
-                float out_r = r, out_g = g, out_b = b;
-
-                float src_term = alpha / a;
+                float src_term = (alpha * color_a) / a;
                 float dst_term = 1.0f - src_term;
+                r = color_r * src_term + r * dst_term;
+                g = color_g * src_term + g * dst_term;
+                b = color_b * src_term + b * dst_term;
+            }
 
-                RGBToHSL(color_r, color_g, color_b, &pixel_h, &pixel_s, &pixel_l);
-                RGBToHSL(out_r, out_g, out_b, &out_h, &out_s, &out_l);
+            if (colorize > 0.0f && base_alpha > 0.0f) {
 
-                out_h = pixel_h;
-                out_s = pixel_s;
+                alpha = base_alpha * colorize;
+                a = alpha + dst_alpha - alpha * dst_alpha;
 
-                HSLToRGB(out_h, out_s, out_l, &out_r, &out_g, &out_b);
+                if (a > 0.0f) {
 
-                r = (float)out_r * src_term + r * dst_term;
-                g = (float)out_g * src_term + g * dst_term;
-                b = (float)out_b * src_term + b * dst_term;
+                    float pixel_h, pixel_s, pixel_l, out_h, out_s, out_l;
+                    float out_r = r, out_g = g, out_b = b;
+
+                    float src_term = alpha / a;
+                    float dst_term = 1.0f - src_term;
+
+                    RGBToHSL(color_r, color_g, color_b, &pixel_h, &pixel_s, &pixel_l);
+                    RGBToHSL(out_r, out_g, out_b, &out_h, &out_s, &out_l);
+
+                    out_h = pixel_h;
+                    out_s = pixel_s;
+
+                    HSLToRGB(out_h, out_s, out_l, &out_r, &out_g, &out_b);
+
+                    r = (float)out_r * src_term + r * dst_term;
+                    g = (float)out_g * src_term + g * dst_term;
+                    b = (float)out_b * src_term + b * dst_term;
+                }
             }
         }
 
@@ -230,9 +235,8 @@ int KisMyPaintSurface::drawDabImpl(MyPaintSurface *self, float x, float y, float
         nativeArray[2] = qBound(minValue, r * unitValue, maxValue);
         nativeArray[3] = qBound(minValue, a * unitValue, maxValue);
     }
-    m_tempPainter->setCompositeOp(painter()->compositeOp()->id());
     m_tempPainter->bitBlt(dabRectAligned.topLeft(), m_dab, dabRectAligned);
-    m_tempPainter->renderMirrorMask(dabRectAligned, m_dab);
+    // Mirror mode is missing because I cannot figure out how to make a mask for the fixed paintdevice.
     const QVector<QRect> dirtyRects = m_tempPainter->takeDirtyRegion();
     m_precisePainterWrapper.writeRects(dirtyRects);
     painter()->addDirtyRects(dirtyRects);
@@ -242,7 +246,7 @@ int KisMyPaintSurface::drawDabImpl(MyPaintSurface *self, float x, float y, float
 template <typename channelType>
 void KisMyPaintSurface::getColorImpl(MyPaintSurface *self, float x, float y, float radius,
                             float * color_r, float * color_g, float * color_b, float * color_a) {
-
+    Q_UNUSED(self);
     if (radius < 1.0f)
         radius = 1.0f;
 
@@ -259,88 +263,75 @@ void KisMyPaintSurface::getColorImpl(MyPaintSurface *self, float x, float y, flo
     const QPointF center = QPointF(x, y);
     KisAlgebra2D::OuterCircle outer(center, radius);
 
-    QRect srcDabRect = dabRectAligned.translated((m_lastPaintPos - center).toPoint());
-
-    m_lastPaintPos = center;
-
     const float one_over_radius2 = 1.0f / (radius * radius);
-    float sum_weight = 0.0f;
-    float sum_r = 0.0f;
-    float sum_g = 0.0f;
-    float sum_b = 0.0f;
-    float sum_a = 0.0f;
+    quint32 sum_weight = 0.0f;
 
+    m_precisePainterWrapper.readRect(dabRectAligned);
     KisPaintDeviceSP activeDev = m_precisePainterWrapper.preciseDevice();
     if(m_image) {
-        m_image->blockUpdates();
-        m_preciseImageDeviceWrapper->readRect(srcDabRect);
-        m_backgroundPainter->bitBlt(QPoint(), m_preciseImageDeviceWrapper->preciseDevice(), srcDabRect);
+        //m_image->blockUpdates();
+        m_backgroundPainter->device()->clear();
+        m_backgroundPainter->bitBlt(dabRectAligned.topLeft(), activeDev, dabRectAligned);
         activeDev = m_backgroundPainter->device();
-        m_image->unblockUpdates();
+        //m_image->unblockUpdates();
     } else if (m_imageDevice) {
-        m_preciseImageDeviceWrapper->readRect(srcDabRect);
-        m_backgroundPainter->bitBlt(QPoint(), m_preciseImageDeviceWrapper->preciseDevice(), srcDabRect);
+        m_backgroundPainter->bitBlt(dabRectAligned.topLeft(), m_imageDevice, dabRectAligned);
         activeDev = m_backgroundPainter->device();
     } else {
-        m_precisePainterWrapper.readRect(srcDabRect);
+        m_precisePainterWrapper.readRect(dabRectAligned);
     }
 
-    KisSequentialIterator it(activeDev, srcDabRect);
+    KisSequentialIterator it(activeDev, dabRectAligned);
     QVector<float> surface_color_vec = {0,0,0,0};
+    float unitValue = KoColorSpaceMathsTraits<channelType>::unitValue;
+    float maxValue = KoColorSpaceMathsTraits<channelType>::max;
+
+    quint32 size = dabRectAligned.width() * dabRectAligned.height();
+    qint16 weights[size];
+    const quint8* buffer[size];
+    quint32 num_colors = 0;
 
     while(it.nextPixel()) {
 
         QPointF pt(it.x(), it.y());
 
-        if(outer.fadeSq(pt) > 1.0)
-            continue;
+        float rr = 0.0;
+        if(outer.fadeSq(pt) <= 1.0) {
+            /* pixel_weight == a standard dab with hardness = 0.5, aspect_ratio = 1.0, and angle = 0.0 */
+            float yy = (it.y() + 0.5f - y);
+            float xx = (it.x() + 0.5f - x);
 
-        /* pixel_weight == a standard dab with hardness = 0.5, aspect_ratio = 1.0, and angle = 0.0 */
-        float yy = (it.y() + 0.5f - y);
-        float xx = (it.x() + 0.5f - x);
-
-        float rr = (yy * yy + xx * xx) * one_over_radius2;
-        float pixel_weight = 0.0f;
-        if (rr <= 1.0f)
-            pixel_weight = 1.0f - rr;
-
-        qreal r, g, b, a;
-
-        channelType* nativeArray = reinterpret_cast<channelType*>(it.rawData());
-        float unitValue = KoColorSpaceMathsTraits<channelType>::unitValue;
-
-
-        b = nativeArray[0]/unitValue;
-        g = nativeArray[1]/unitValue;
-        r = nativeArray[2]/unitValue;
-        a = nativeArray[3]/unitValue;
-
-        if (unitValue == 1.0f) {
-            swap(b, r);
+            rr = qMax((yy * yy + xx * xx) * one_over_radius2, 0.0f);
         }
 
-        sum_r += pixel_weight * r;
-        sum_g += pixel_weight * g;
-        sum_b += pixel_weight * b;
-        sum_a += pixel_weight * a;
-        sum_weight += pixel_weight;
+        weights[num_colors] = qRound((1.0f - rr) * 255);
+        buffer[num_colors] = it.oldRawData();
+        sum_weight += weights[num_colors];
+        num_colors += 1;
     }
 
-    if (sum_a > 0.0f && sum_weight > 0.0f) {
+    KoColor color(Qt::transparent, activeDev->colorSpace());
+    activeDev->colorSpace()->mixColorsOp()->mixColors(buffer, weights, size, color.data(), sum_weight);
 
-        sum_r /= sum_weight;
-        sum_g /= sum_weight;
-        sum_b /= sum_weight;
-        sum_a /= sum_weight;
+    if (sum_weight > 0.0f) {
+        qreal r, g, b, a;
+        channelType* nativeArray = reinterpret_cast<channelType*>(color.data());
 
-        sum_r /= sum_a;
-        sum_g /= sum_a;
-        sum_b /= sum_a;
-
-        *color_r = CLAMP(sum_r, 0.0f, 1.0f);
-        *color_g = CLAMP(sum_g, 0.0f, 1.0f);
-        *color_b = CLAMP(sum_b, 0.0f, 1.0f);
-        *color_a = CLAMP(sum_a, 0.0f, 1.0f);
+        if (unitValue == 1.0f) {
+            *color_r = nativeArray[0];
+            *color_g = nativeArray[1];
+            *color_b = nativeArray[2];
+            *color_a = nativeArray[3];
+        } else {
+            b = nativeArray[0]/maxValue;
+            g = nativeArray[1]/maxValue;
+            r = nativeArray[2]/maxValue;
+            a = nativeArray[3]/maxValue;
+            *color_r = CLAMP(r, 0.0f, 1.0f);
+            *color_g = CLAMP(g, 0.0f, 1.0f);
+            *color_b = CLAMP(b, 0.0f, 1.0f);
+            *color_a = CLAMP(a, 0.0f, 1.0f);
+        }
     }
 }
 

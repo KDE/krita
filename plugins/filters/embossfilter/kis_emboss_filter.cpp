@@ -1,7 +1,7 @@
 /*
  * This file is part of Krita
  *
- * Copyright (c) 2004 Michael Thaler <michael.thaler@physik.tu-muenchen.de>
+ * SPDX-FileCopyrightText: 2004 Michael Thaler <michael.thaler@physik.tu-muenchen.de>
  *
  * ported from digikam, Copyrighted 2004 Gilles Caulier,
  * Original Emboss algorithm copyrighted 2004 by

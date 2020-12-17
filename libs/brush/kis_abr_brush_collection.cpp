@@ -1,7 +1,7 @@
 /*
- *  Copyright (c) 2010 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
- *  Copyright (c) 2007 Eric Lamarque <eric.lamarque@free.fr>
+ *  SPDX-FileCopyrightText: 2010 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  SPDX-FileCopyrightText: 2007 Eric Lamarque <eric.lamarque@free.fr>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

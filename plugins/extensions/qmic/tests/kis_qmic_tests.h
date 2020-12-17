@@ -1,5 +1,5 @@
 /*ls
- *  Copyright (c) 2013 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  SPDX-FileCopyrightText: 2013 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  SPDX-License-Identifier: LGPL-2.1-or-later
  */

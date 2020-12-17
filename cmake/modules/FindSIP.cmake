@@ -20,7 +20,7 @@
 # SIP_DEFAULT_SIP_DIR - Default directory where .sip files should be installed
 #     into.
 
-# Copyright (c) 2007, Simon Edwards <simon@simonzone.com>
+# SPDX-FileCopyrightText: 2007 Simon Edwards <simon@simonzone.com>
 #
 # SPDX-License-Identifier: BSD-3-Clause
 #

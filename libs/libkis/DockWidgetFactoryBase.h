@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2015 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2015 Cyrille Berger <cberger@cberger.net>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -36,16 +36,13 @@
 class KRITALIBKIS_EXPORT DockWidgetFactoryBase : public KoDockFactoryBase
 {
 public:
-    DockWidgetFactoryBase(const QString& _id, DockPosition _dockPosition, bool _isCollapsable = true, bool _defaultCollapsed = false);
+    DockWidgetFactoryBase(const QString& _id, DockPosition _dockPosition);
     ~DockWidgetFactoryBase() override;
     QString id() const override;
     DockPosition defaultDockPosition() const override;
-    bool isCollapsable() const override;
-    bool defaultCollapsed() const override;
 private:
     QString m_id;
     DockPosition m_dockPosition;
-    bool m_isCollapsable, m_defaultCollapsed;
 };
 
 #endif

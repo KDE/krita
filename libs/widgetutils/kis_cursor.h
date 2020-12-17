@@ -1,8 +1,8 @@
 /*
  *  kis_cursor.h - part of KImageShop
  *
- *  Copyright (c) 1999 Matthias Elter <elter@kde.org>
- *  Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
+ *  SPDX-FileCopyrightText: 1999 Matthias Elter <elter@kde.org>
+ *  SPDX-FileCopyrightText: 2004 Adrian Page <adrian@pagenet.plus.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

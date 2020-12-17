@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 1999-2003 Hans Petter Bieker <bieker@kde.org>
- *           (c) 2007      David Jarvie <software@astrojar.org.uk>
+ * SPDX-FileCopyrightText: 1999-2003 Hans Petter Bieker <bieker@kde.org>
+ * SPDX-FileCopyrightText: 2007 David Jarvie <software@astrojar.org.uk>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */

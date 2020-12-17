@@ -1,9 +1,9 @@
 /*
-   Copyright (c) 2000 Matthias Elter <elter@kde.org>
-                 2001 John Califf
-                 2004 Boudewijn Rempt <boud@valdyas.org>
-                 2004 Adrian Page <adrian@pagenet.plus.com>
-                 2004, 2007 Sven Langkamp <sven.langkamp@gmail.com>
+    SPDX-FileCopyrightText: 2000 Matthias Elter <elter@kde.org>
+    SPDX-FileCopyrightText: 2001 John Califf
+    SPDX-FileCopyrightText: 2004 Boudewijn Rempt <boud@valdyas.org>
+    SPDX-FileCopyrightText: 2004 Adrian Page <adrian@pagenet.plus.com>
+    SPDX-FileCopyrightText: 2004, 2007 Sven Langkamp <sven.langkamp@gmail.com>
 
     SPDX-License-Identifier: LGPL-2.1-or-later
  */
@@ -202,7 +202,7 @@ bool KoSegmentGradient::saveToDevice(QIODevice *dev) const
                     << QString::number(endColor.blueF(), 'f') << " " << QString::number(endColor.alphaF(), 'f') << " ";
 
         fileContent << (int)segment->interpolation() << " " << (int)segment->colorInterpolation() << " ";
-        
+
         fileContent << (int)segment->startType() << " " << (int)segment->endType() << "\n";
 
     }
@@ -351,7 +351,7 @@ KoGradientSegment::KoGradientSegment(int interpolationType, int colorInterpolati
         m_start.offset = 0;
     } else if (m_start.offset > 1 - DBL_EPSILON) {
         m_start.offset = 1;
-    } 
+    }
 
     if (middleOffset < m_start.offset + DBL_EPSILON) {
         m_middleOffset = m_start.offset;
@@ -1051,6 +1051,35 @@ bool KoSegmentGradient::removeSegmentPossible() const
 const QList<KoGradientSegment *>& KoSegmentGradient::segments() const
 {
     return m_segments;
+}
+
+void KoSegmentGradient::setSegments(const QList<KoGradientSegment*> &segments)
+{
+    for (int i = 0; i < m_segments.count(); i++) {
+        delete m_segments[i];
+    }
+    m_segments.clear();
+    KoColor color;
+    for (const KoGradientSegment *segment : segments) {
+        KoGradientSegment *newSegment =
+            new KoGradientSegment(
+                segment->interpolation(),
+                segment->colorInterpolation(),
+                KoGradientSegmentEndpoint(
+                    segment->startOffset(),
+                    segment->startColor().convertedTo(colorSpace()),
+                    segment->startType()
+                ),
+                KoGradientSegmentEndpoint(
+                    segment->endOffset(),
+                    segment->endColor().convertedTo(colorSpace()),
+                    segment->endType()
+                ),
+                segment->middleOffset()
+            );
+        m_segments.append(newSegment);
+    }
+    updatePreview();
 }
 
 QList<int> KoSegmentGradient::requiredCanvasResources() const

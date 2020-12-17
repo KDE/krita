@@ -1,8 +1,8 @@
 /*
  *  dlg_imagesplit.cc - part of KimageShop^WKrayon^WKrita
  *
- *  Copyright (c) 2009 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
+ *  SPDX-FileCopyrightText: 2009 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

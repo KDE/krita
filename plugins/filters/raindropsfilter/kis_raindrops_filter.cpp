@@ -1,7 +1,7 @@
 /*
  * This file is part of the KDE project
  *
- * Copyright (c) 2004 Michael Thaler <michael.thaler@physik.tu-muenchen.de>
+ * SPDX-FileCopyrightText: 2004 Michael Thaler <michael.thaler@physik.tu-muenchen.de>
  *
  * ported from digikam, copyrighted 2004 by Gilles Caulier,
  * Original RainDrops algorithm copyrighted 2004 by

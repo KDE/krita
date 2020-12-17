@@ -1,6 +1,6 @@
 /*
- *  Copyright (c) 2000 Matthias Elter  <elter@kde.org>
- *  Copyright (c) 2003 Patrick Julien  <freak@codepimps.org>
+ *  SPDX-FileCopyrightText: 2000 Matthias Elter <elter@kde.org>
+ *  SPDX-FileCopyrightText: 2003 Patrick Julien <freak@codepimps.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

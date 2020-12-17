@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2018 Andrey Kamakin <a.kamakin@icloud.com>
+ *  SPDX-FileCopyrightText: 2018 Andrey Kamakin <a.kamakin@icloud.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

@@ -1,8 +1,8 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Martin Pfeiffer <hubipete@gmx.net>
- * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
- * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
- * Copyright (C) 2008 C. Boemann <cbo@boemann.dk>
+ * SPDX-FileCopyrightText: 2007 Martin Pfeiffer <hubipete@gmx.net>
+ * SPDX-FileCopyrightText: 2007 Jan Hambrecht <jaham@gmx.net>
+ * SPDX-FileCopyrightText: 2008 Thorsten Zachmann <zachmann@kde.org>
+ * SPDX-FileCopyrightText: 2008 C. Boemann <cbo@boemann.dk>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */

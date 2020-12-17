@@ -1,7 +1,7 @@
 /*
  *  kis_warptransform_worker.h - part of Krita
  *
- *  Copyright (c) 2010 Marc Pegon <pe.marc@free.fr>
+ *  SPDX-FileCopyrightText: 2010 Marc Pegon <pe.marc@free.fr>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

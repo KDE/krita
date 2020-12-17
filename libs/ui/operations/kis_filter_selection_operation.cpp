@@ -1,6 +1,6 @@
 /*
- *  Copyright (c) 2012 Dmitry Kazakov <dimula73@gmail.com>
- *  Copyright (c) 2013 Sven Langkamp <sven.langkamp@gmail.com>
+ *  SPDX-FileCopyrightText: 2012 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2013 Sven Langkamp <sven.langkamp@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

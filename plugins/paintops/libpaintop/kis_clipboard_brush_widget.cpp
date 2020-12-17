@@ -113,10 +113,8 @@ void KisClipboardBrushWidget::slotUpdateUseColorAsMask(bool useColorAsMask)
 
 void KisClipboardBrushWidget::slotAddPredefined()
 {
-    if(!m_brush)
-        return;
+    if(!m_brush) return;
 
-    QString dir = KoResourcePaths::saveLocation("data", ResourceType::Brushes);
     QString extension = ".gbr";
     QString name = nameEdit->text();
 

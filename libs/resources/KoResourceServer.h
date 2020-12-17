@@ -30,6 +30,7 @@
 #include "KoResourcePaths.h"
 #include "ksharedconfig.h"
 
+#include <KisResourceLocator.h>
 #include <KisResourceModel.h>
 #include <KisTagModel.h>
 #include <kis_assert.h>
@@ -154,7 +155,7 @@ public:
 
     /// Returns path where to save user defined and imported resources to
     QString saveLocation() {
-        return KoResourcePaths::saveLocation(m_type.toLatin1());
+        return KisResourceLocator::instance()->resourceLocationBase() + '/' + m_type;
     }
 
     /**

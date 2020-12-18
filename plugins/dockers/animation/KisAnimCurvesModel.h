@@ -70,6 +70,7 @@ public:
         CurveVisibleRole,
         PreviousKeyframeTime,
         NextKeyframeTime,
+        ChannelIdentifier,
         ChannelLimits
     };
 

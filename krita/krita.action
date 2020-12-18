@@ -2256,25 +2256,25 @@ Enable to preserve playback timing.</text>
       <isCheckable>false</isCheckable>
       <statusTip/>
     </Action>
-    <Action name="insert_opacity_keyframe">
-      <icon/>
-      <text>Add opacity keyframe</text>
-      <whatsThis/>
+    <Action name="add_scalar_keyframes">
+      <icon></icon>
+      <text>Add scalar keyframes</text>
+      <whatsThis></whatsThis>
       <toolTip>Adds keyframe to control layer opacity</toolTip>
-      <iconText/>
-      <activationFlags>100000</activationFlags>
+      <iconText></iconText>
+      <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut/>
       <isCheckable>false</isCheckable>
       <statusTip/>
     </Action>
-    <Action name="remove_opacity_keyframe">
-      <icon/>
-      <text>Remove opacity keyframe</text>
-      <whatsThis/>
-      <toolTip>Removes keyframe to control layer opacity</toolTip>
-      <iconText/>
-      <activationFlags>100000</activationFlags>
+    <Action name="remove_scalar_keyframe">
+      <icon></icon>
+      <text>Remove scalar keyframe</text>
+      <whatsThis></whatsThis>
+      <toolTip>Removes the selected scalar keyframe</toolTip>
+      <iconText></iconText>
+      <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut/>
       <isCheckable>false</isCheckable>

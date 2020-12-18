@@ -418,16 +418,16 @@ void KisAnimCurvesDocker::setViewManager(KisViewManager *view)
 
     KisActionManager* actionManager = view->actionManager();
 
-    KisAction* action = actionManager->createAction("insert_opacity_keyframe");
+    KisAction* action = actionManager->createAction("add_scalar_keyframes");
     action->setIcon(KisIconUtils::loadIcon("keyframe-add"));
     connect(action, SIGNAL(triggered(bool)),
-            this, SLOT(slotAddOpacityKey()));
+            this, SLOT(slotAddAllEnabledKeys()));
     m_d->titlebar->btnAddKey->setDefaultAction(action);
 
-    action = actionManager->createAction("remove_opacity_keyframe");
+    action = actionManager->createAction("remove_scalar_keyframe");
     action->setIcon(KisIconUtils::loadIcon("keyframe-remove"));
     connect(action, SIGNAL(triggered(bool)),
-            this, SLOT(slotRemoveOpacityKey()));
+            this, SLOT(slotRemoveSelectedKeys()));
     m_d->titlebar->btnRemoveKey->setDefaultAction(action);
 
     action = actionManager->createAction("interpolation_constant");
@@ -535,15 +535,15 @@ void KisAnimCurvesDocker::slotScrollerStateChanged(QScroller::State state)
 void KisAnimCurvesDocker::slotNodeActivated(KisNodeSP node)
 {
     if (!node) return;
-    bool supported = node->supportsKeyframeChannel(KisKeyframeChannel::Opacity.id()) |
-            node->supportsKeyframeChannel(KisKeyframeChannel::PositionX.id()) |
-            node->supportsKeyframeChannel(KisKeyframeChannel::PositionY.id()) |
-            node->supportsKeyframeChannel(KisKeyframeChannel::ScaleX.id()) |
-            node->supportsKeyframeChannel(KisKeyframeChannel::ScaleY.id()) |
-            node->supportsKeyframeChannel(KisKeyframeChannel::ShearX.id()) |
-            node->supportsKeyframeChannel(KisKeyframeChannel::ShearY.id()) |
-            node->supportsKeyframeChannel(KisKeyframeChannel::RotationX.id()) |
-            node->supportsKeyframeChannel(KisKeyframeChannel::RotationY.id()) |
+    bool supported = node->supportsKeyframeChannel(KisKeyframeChannel::Opacity.id()) ||
+            node->supportsKeyframeChannel(KisKeyframeChannel::PositionX.id()) ||
+            node->supportsKeyframeChannel(KisKeyframeChannel::PositionY.id()) ||
+            node->supportsKeyframeChannel(KisKeyframeChannel::ScaleX.id()) ||
+            node->supportsKeyframeChannel(KisKeyframeChannel::ScaleY.id()) ||
+            node->supportsKeyframeChannel(KisKeyframeChannel::ShearX.id()) ||
+            node->supportsKeyframeChannel(KisKeyframeChannel::ShearY.id()) ||
+            node->supportsKeyframeChannel(KisKeyframeChannel::RotationX.id()) ||
+            node->supportsKeyframeChannel(KisKeyframeChannel::RotationY.id()) ||
             node->supportsKeyframeChannel(KisKeyframeChannel::RotationZ.id());
     m_d->titlebar->btnAddKey->setEnabled(supported);
 }
@@ -651,12 +651,54 @@ void KisAnimCurvesDocker::slotAddOpacityKey()
     }
 }
 
+
+void KisAnimCurvesDocker::slotRemoveSelectedKeys()
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->canvas && m_d->canvas->viewManager());
+
+    KisNodeSP node = m_d->canvas->viewManager()->activeNode();
+    KIS_SAFE_ASSERT_RECOVER_RETURN(node);
+
+
+    QItemSelectionModel* selectionModel = m_d->curvesView->selectionModel();
+    QModelIndexList selected = selectionModel ? selectionModel->selectedIndexes() : QModelIndexList();
+
+
+    if (selected.count() > 0) {
+        Q_FOREACH(const QModelIndex& selection, selected) {
+            QVariant data = selection.data(KisAnimCurvesModel::ChannelIdentifier);
+
+            if (!data.isValid())
+                continue;
+
+            const QString identifier = data.toString();
+            const int time = selection.column();
+            KisAnimUtils::removeKeyframe(m_d->canvas->image(), node, identifier, time);
+        }
+    } else {
+        const int time = m_d->canvas->image()->animationInterface()->currentTime();
+        for(int channelIndex = 0; channelIndex < m_d->curvesModel->rowCount(); channelIndex++) {
+            QModelIndex chanIndex = m_d->curvesModel->index(channelIndex, time);
+            if (!chanIndex.isValid())
+                continue;
+
+            QVariant data = chanIndex.data(KisAnimCurvesModel::ChannelIdentifier);
+            if (!data.isValid())
+                continue;
+
+            const QString identifier = data.toString();
+            KisAnimUtils::removeKeyframe(m_d->canvas->image(), node, identifier, time);
+        }
+    }
+}
+
 void KisAnimCurvesDocker::slotRemoveOpacityKey()
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->canvas && m_d->canvas->viewManager());
 
     KisNodeSP node = m_d->canvas->viewManager()->activeNode();
     KIS_SAFE_ASSERT_RECOVER_RETURN(node);
+
     if (node->supportsKeyframeChannel(KisKeyframeChannel::Opacity.id())) {
         removeKeyframe(KisKeyframeChannel::Opacity.id());
     }

@@ -194,6 +194,11 @@ QVariant KisAnimCurvesModel::data(const QModelIndex &index, int role) const
             if (!channel->keyframeAt(nextKeyframeIndex)) return QVariant();
             return nextKeyframeIndex;
         }
+        case ChannelIdentifier:
+            if (!channel)
+                return QVariant();
+
+            return channel->id();
         case ChannelLimits:
         {
             if (!channel)

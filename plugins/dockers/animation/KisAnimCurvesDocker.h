@@ -108,6 +108,7 @@ private Q_SLOTS:
 
     void slotAddAllEnabledKeys();
     void slotAddOpacityKey();
+    void slotRemoveSelectedKeys();
     void slotRemoveOpacityKey();
 
     void slotListRowsInserted(const QModelIndex &parentIndex, int first, int last);

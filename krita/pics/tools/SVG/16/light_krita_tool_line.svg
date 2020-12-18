@@ -5,11 +5,11 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
-   version="1.1"
-   id="svg2"
-   viewBox="0 0 32 32.000001"
+   width="34.133335"
    height="34.133335"
-   width="34.133335">
+   viewBox="0 0 32 32.000001"
+   id="svg2"
+   version="1.1">
   <defs
      id="defs4" />
   <metadata
@@ -47,20 +47,20 @@
     </rdf:RDF>
   </metadata>
   <g
-     style="display:inline"
-     id="layer3">
+     id="layer3"
+     style="display:inline">
     <g
-       transform="rotate(-90,15,15)"
+       style="display:inline"
        id="g4171-7"
-       style="display:inline" />
+       transform="rotate(-90,15,15)" />
     <g
-       style="stroke:#c8c8c8;stroke-opacity:1"
+       id="g862"
        transform="translate(-79.852532,8.423701)"
-       id="g862">
+       style="stroke:#cacaca;stroke-opacity:1">
       <path
-         style="display:inline;fill:none;stroke:#c8c8c8;stroke-width:4.03125;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         id="path843"
          d="m 81.62514,21.472235 28,-28.0000005"
-         id="path843" />
+         style="display:inline;fill:none;stroke:#cacaca;stroke-width:4.03125;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
     </g>
   </g>
 </svg>

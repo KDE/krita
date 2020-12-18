@@ -5,11 +5,11 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
-   version="1.1"
-   id="svg2"
-   viewBox="0 0 32 32.000001"
+   width="32"
    height="32"
-   width="32">
+   viewBox="0 0 32 32.000001"
+   id="svg2"
+   version="1.1">
   <defs
      id="defs4" />
   <metadata
@@ -47,53 +47,53 @@
     </rdf:RDF>
   </metadata>
   <g
-     style="display:inline"
-     id="g4179">
+     id="g4179"
+     style="display:inline;fill:#373737;fill-opacity:1">
     <rect
-       transform="matrix(0.71454329,-0.69959123,0.7119611,0.70221891,0,0)"
-       y="19.611259"
-       x="-2.0718551"
-       height="21.826818"
-       width="3.6923356"
+       style="opacity:1;fill:#373737;fill-opacity:1;stroke:none;stroke-width:3.5999999;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect4224"
-       style="opacity:1;fill:#323232;fill-opacity:1;stroke:none;stroke-width:3.5999999;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+       width="3.6923356"
+       height="21.826818"
+       x="-2.0718551"
+       y="19.611259"
+       transform="matrix(0.71454329,-0.69959123,0.7119611,0.70221891,0,0)" />
     <ellipse
-       ry="5.8444347"
-       rx="6.0866914"
-       cy="11.338273"
-       cx="10.980621"
+       style="opacity:1;fill:#373737;fill-opacity:1;stroke:none;stroke-width:3.5999999;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="path4226"
-       style="opacity:1;fill:#323232;fill-opacity:1;stroke:none;stroke-width:3.5999999;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+       cx="10.980621"
+       cy="11.338273"
+       rx="6.0866914"
+       ry="5.8444347" />
     <rect
-       y="1.6783007"
-       x="9.0728531"
-       height="19.138254"
-       width="3.8761017"
+       style="opacity:1;fill:#373737;fill-opacity:1;stroke:none;stroke-width:3.5999999;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect4232"
-       style="opacity:1;fill:#323232;fill-opacity:1;stroke:none;stroke-width:3.5999999;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
-    <rect
-       transform="matrix(0,1,-1,0,0,0)"
-       y="-20.640593"
-       x="9.2488127"
-       height="19.138254"
        width="3.8761017"
+       height="19.138254"
+       x="9.0728531"
+       y="1.6783007" />
+    <rect
+       style="display:inline;opacity:1;fill:#373737;fill-opacity:1;stroke:none;stroke-width:3.5999999;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect4232-3"
-       style="display:inline;opacity:1;fill:#323232;fill-opacity:1;stroke:none;stroke-width:3.5999999;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
-    <rect
-       transform="matrix(-0.67902953,0.73411096,-0.73411096,-0.67902953,0,0)"
-       y="-20.630276"
-       x="-1.4681063"
-       height="15.359143"
-       width="3.6805413"
-       id="rect4232-3-6"
-       style="display:inline;opacity:1;fill:#323232;fill-opacity:1;stroke:none;stroke-width:3.5999999;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
-    <rect
-       transform="matrix(0.70710678,0.70710678,-0.70710678,0.70710678,0,0)"
-       y="-9.2734003"
-       x="13.75814"
-       height="19.138254"
        width="3.8761017"
+       height="19.138254"
+       x="9.2488127"
+       y="-20.640593"
+       transform="rotate(90)" />
+    <rect
+       style="display:inline;opacity:1;fill:#373737;fill-opacity:1;stroke:none;stroke-width:3.5999999;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect4232-3-6"
+       width="3.6805413"
+       height="15.359143"
+       x="-1.4681063"
+       y="-20.630276"
+       transform="rotate(132.76785)" />
+    <rect
+       style="display:inline;opacity:1;fill:#373737;fill-opacity:1;stroke:none;stroke-width:3.5999999;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect4232-7"
-       style="display:inline;opacity:1;fill:#323232;fill-opacity:1;stroke:none;stroke-width:3.5999999;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+       width="3.8761017"
+       height="19.138254"
+       x="13.75814"
+       y="-9.2734003"
+       transform="rotate(45)" />
   </g>
 </svg>

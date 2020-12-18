@@ -56,14 +56,10 @@
   </g>
   <g
      id="layer1">
-    <rect
-       transform="matrix(0.69975369,0.71438419,-0.66216925,0.74935431,0,0)"
-       y="-6.801537"
-       x="14.830898"
-       height="3.0593331"
-       width="16.764055"
-       id="rect933"
-       style="display:inline;opacity:0.98999999;fill:#323232;fill-opacity:1;stroke:#c8c8c8;stroke-width:3.07752299;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    <path
+       style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#cacaca;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:3.07352996;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 14.824192,3.246789 -1.01912,1.1533032 -3.044426,3.4452735 13.883003,14.1732703 4.063547,-4.598577 z"
+       id="rect933" />
     <rect
        ry="0"
        transform="matrix(0.69975369,0.71438419,-0.66216925,0.74935431,0,0)"
@@ -72,14 +68,14 @@
        height="10.123693"
        width="7.3118258"
        id="rect933-7"
-       style="display:inline;opacity:0.98000004;fill:#c8c8c8;fill-opacity:1;stroke:#c8c8c8;stroke-width:3.07752299;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+       style="display:inline;opacity:0.98000004;fill:#cacaca;fill-opacity:1;stroke:#cacaca;stroke-width:3.07752299;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
     <path
-       id="path965"
-       d="M 19.833235,16.204305 6.5386281,29.498912 1.6278291,30.128424 2.7401681,25.700452 16.034776,12.405846"
-       style="display:inline;fill:none;stroke:#c8c8c8;stroke-width:2.67079163;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+       style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#cacaca;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2.67079163;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="M 15.089844,11.460938 1.5351562,25.017578 -0.14453125,31.701172 7.1601562,30.765625 20.777344,17.148438 18.888672,15.259766 5.9160156,28.232422 3.4003906,28.554688 3.9453125,26.382812 16.978516,13.349609 Z"
+       id="path965" />
     <path
        id="path969"
        d="M 6.5386281,21.901995 H 14.135546 L 6.0414431,30.32091 2.7401681,31.398143 V 25.700452 Z"
-       style="display:inline;fill:#c8c8c8;fill-opacity:1;stroke:none;stroke-width:0.8902638px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+       style="display:inline;fill:#cacaca;fill-opacity:1;stroke:none;stroke-width:0.8902638px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
   </g>
 </svg>

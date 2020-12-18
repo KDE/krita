@@ -203,6 +203,8 @@ void ToolPresetDocker::presetSelected(QModelIndex idx)
 {
     ToolPresetInfo *info = m_toolPresetModel->toolPresetInfo(idx.row());
 
+    if (!info) return;
+
     if (info->toolId != m_currentToolId) {
         KoToolManager::instance()->switchToolRequested(info->toolId);
     }

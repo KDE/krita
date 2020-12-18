@@ -222,7 +222,7 @@ void KisAnimCurvesView::paintGrid(QPainter &painter)
     const int visibleFrames = m_d->horizontalHeader->estimateLastVisibleColumn() - m_d->horizontalHeader->estimateFirstVisibleColumn() + 1;
     const int firstVisibleFrame = qMax( m_d->horizontalHeader->estimateFirstVisibleColumn() - 1, 0);
     for (int time = 0; time <= visibleFrames; time++) {
-        const QVariant data = m_d->model->headerData(time, Qt::Horizontal, KisTimeBasedItemModel::ActiveFrameRole);
+        const QVariant data = m_d->model->headerData(firstVisibleFrame + time, Qt::Horizontal, KisTimeBasedItemModel::ActiveFrameRole);
         const bool activeFrame = data.isValid() && data.toBool();
 
         const int offsetHori = m_d->horizontalHeader ? m_d->horizontalHeader->offset() : 0;

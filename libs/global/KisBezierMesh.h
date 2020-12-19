@@ -618,6 +618,15 @@ private:
             return m_mesh->find(ControlPointIndex(secondNodeIndex(), Mesh::ControlType::Node));
         }
 
+        QPointF pointAtParam(qreal t) const {
+            return KisBezierUtils::bezierCurve(p0(), p1(), p2(), p3(), t);
+        }
+
+        qreal length() const {
+            const qreal eps = 1e-3;
+            return KisBezierUtils::curveLength(p0(), p1(), p2(), p3(), eps);
+        }
+
         int degree() const {
             return KisBezierUtils::bezierDegree(p0(), p1(), p2(), p3());
         }
@@ -985,6 +994,10 @@ public:
     control_point_const_iterator find(const ControlPointIndex &index) const { return find(*this, index); }
     control_point_const_iterator constFind(const ControlPointIndex &index) const { return find(*this, index); }
 
+    control_point_iterator find(const NodeIndex &index) { return find(*this, index); }
+    control_point_const_iterator find(const NodeIndex &index) const { return find(*this, index); }
+    control_point_const_iterator constFind(const NodeIndex &index) const { return find(*this, index); }
+
     segment_iterator find(const SegmentIndex &index) { return find(*this, index); }
     segment_const_iterator find(const SegmentIndex &index) const { return find(*this, index); }
     segment_const_iterator constFind(const SegmentIndex &index) const { return find(*this, index); }
@@ -1190,6 +1203,14 @@ private:
     static
     IteratorType find(MeshType &mesh, const ControlPointIndex &index) {
         IteratorType it(&mesh, index.nodeIndex.x(), index.nodeIndex.y(), index.controlType);
+        return it.isValid() ? it : mesh.endControlPoints();
+    }
+
+    template <class MeshType,
+              class IteratorType = control_point_iterator_impl<std::is_const<MeshType>::value>>
+    static
+    IteratorType find(MeshType &mesh, const NodeIndex &index) {
+        IteratorType it(&mesh, index.x(), index.y(), Mesh::ControlType::Node);
         return it.isValid() ? it : mesh.endControlPoints();
     }
 

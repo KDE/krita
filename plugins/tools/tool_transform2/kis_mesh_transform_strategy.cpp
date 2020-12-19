@@ -60,6 +60,7 @@ struct KisMeshTransformStrategy::Private
         OVER_SEGMENT,
         OVER_SEGMENT_SYMMETRIC,
         OVER_PATCH,
+        OVER_PATCH_LOCKED,
         SPLIT_SEGMENT,
         MULTIPLE_POINT_SELECTION,
         MOVE_MODE,
@@ -165,7 +166,7 @@ void KisMeshTransformStrategy::setTransformFunction(const QPointF &mousePos, boo
         auto index = m_d->currentArgs.meshTransform()->hitTestPatch(mousePos, &localPatchPos);
         if (m_d->currentArgs.meshTransform()->isIndexValid(index)) {
             hoveredPatch = index;
-            mode = !shiftModifierActive ? Private::OVER_PATCH : Private::MOVE_MODE;
+            mode = !shiftModifierActive ? Private::OVER_PATCH : Private::OVER_PATCH_LOCKED;
         }
     }
 
@@ -330,6 +331,7 @@ QCursor KisMeshTransformStrategy::getCurrentCursor() const
     case Private::OVER_POINT_SYMMETRIC:
     case Private::OVER_SEGMENT_SYMMETRIC:
     case Private::OVER_PATCH:
+    case Private::OVER_PATCH_LOCKED:
         cursor = KisCursor::meshCursorLocked();
         break;
     case Private::SPLIT_SEGMENT: {
@@ -523,7 +525,7 @@ bool KisMeshTransformStrategy::beginPrimaryAction(const QPointF &pt)
 
         retval = true;
 
-    } else if (m_d->mode == Private::OVER_PATCH) {
+    } else if (m_d->mode == Private::OVER_PATCH || m_d->mode == Private::OVER_PATCH_LOCKED) {
         retval = true;
 
     } else if (m_d->mode == Private::SPLIT_SEGMENT) {
@@ -609,36 +611,121 @@ void KisMeshTransformStrategy::continuePrimaryAction(const QPointF &pt, bool shi
         smartMoveControl(*m_d->currentArgs.meshTransform(), it.itP1().controlIndex(), offsetP1, mode);
         smartMoveControl(*m_d->currentArgs.meshTransform(), it.itP2().controlIndex(), offsetP2, mode);
 
-    } else if (m_d->mode == Private::OVER_PATCH) {
+    } else if (m_d->mode == Private::OVER_PATCH || m_d->mode == Private::OVER_PATCH_LOCKED) {
         KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->hoveredPatch);
 
-        *m_d->currentArgs.meshTransform() = m_d->initialMeshState;
+        using KisAlgebra2D::linearReshapeFunc;
+        using Mesh = KisBezierTransformMesh;
+
+        KisBezierTransformMesh &mesh = *m_d->currentArgs.meshTransform();
+        mesh = m_d->initialMeshState;
 
         auto patchIt = m_d->currentArgs.meshTransform()->find(*m_d->hoveredPatch);
 
-        const QPointF offset = pt - m_d->mouseClickPos;
+        QPointF offset = pt - m_d->mouseClickPos;
 
         auto offsetSegment =
             [this] (KisBezierTransformMesh::segment_iterator it,
                     qreal t,
-                    qreal distance,
                     const QPointF &offset) {
 
             QPointF offsetP1;
             QPointF offsetP2;
 
             std::tie(offsetP1, offsetP2) =
-                KisBezierUtils::offsetSegment(t, (1.0 - distance) * offset);
+                KisBezierUtils::offsetSegment(t, offset);
 
 
             smartMoveControl(*m_d->currentArgs.meshTransform(), it.itP1().controlIndex(), offsetP1, KisSmartMoveMeshControlMode::MoveSymmetricLock);
             smartMoveControl(*m_d->currentArgs.meshTransform(), it.itP2().controlIndex(), offsetP2, KisSmartMoveMeshControlMode::MoveSymmetricLock);
         };
 
-        offsetSegment(patchIt.segmentP(), m_d->localPatchPosition.x(), m_d->localPatchPosition.y(), offset);
-        offsetSegment(patchIt.segmentQ(), m_d->localPatchPosition.x(), 1.0 - m_d->localPatchPosition.y(), offset);
-        offsetSegment(patchIt.segmentR(), m_d->localPatchPosition.y(), m_d->localPatchPosition.x(), offset);
-        offsetSegment(patchIt.segmentS(), m_d->localPatchPosition.y(), 1.0 - m_d->localPatchPosition.x(), offset);
+
+        const QPointF center = patchIt->localToGlobal(QPointF(0.5, 0.5));
+        const qreal centerDistance = kisDistance(m_d->mouseClickPos, center);
+
+        KisBezierTransformMesh::segment_iterator nearestSegment = mesh.endSegments();
+        qreal nearestSegmentSignificance = 0;
+        qreal nearestSegmentDistance = std::numeric_limits<qreal>::max();
+        qreal nearestSegmentDistanceSignificance = 0.0;
+        qreal nearestSegmentParam = 0.5;
+
+        auto testSegment =
+                [&nearestSegment,
+                 &nearestSegmentSignificance,
+                 &nearestSegmentDistance,
+                 &nearestSegmentDistanceSignificance,
+                 &nearestSegmentParam,
+                 centerDistance,
+                 this] (KisBezierTransformMesh::segment_iterator it, qreal param) {
+
+            const QPointF movedPoint = KisBezierUtils::bezierCurve(it.p0(), it.p1(), it.p2(), it.p3(), param);
+            const qreal distance = kisDistance(m_d->mouseClickPos, movedPoint);
+
+            if (distance < nearestSegmentDistance) {
+                const qreal proportion = KisBezierUtils::curveProportionByParam(it.p0(), it.p1(), it.p2(), it.p3(), param, 0.1);
+
+                qreal distanceSignificance =
+                    centerDistance / (centerDistance + distance);
+
+                if (distanceSignificance > 0.6) {
+                    distanceSignificance = std::min(1.0, linearReshapeFunc(distanceSignificance, 0.6, 0.75, 0.6, 1.0));
+                }
+
+                const qreal directionSignificance =
+                    1.0 - std::min(1.0, std::abs(proportion - 0.5) / 0.4);
+
+                nearestSegmentDistance = distance;
+                nearestSegment = it;
+                nearestSegmentParam = param;
+                nearestSegmentSignificance = m_d->mode != Private::OVER_PATCH_LOCKED ? distanceSignificance * directionSignificance : 0;
+                nearestSegmentDistanceSignificance = distanceSignificance;
+            }
+        };
+
+        testSegment(patchIt.segmentP(), m_d->localPatchPosition.x());
+        testSegment(patchIt.segmentQ(), m_d->localPatchPosition.x());
+        testSegment(patchIt.segmentR(), m_d->localPatchPosition.y());
+        testSegment(patchIt.segmentS(), m_d->localPatchPosition.y());
+
+        KIS_SAFE_ASSERT_RECOVER_RETURN(nearestSegment != mesh.endSegments());
+
+        const qreal translationOffsetCoeff =
+            qBound(0.0,
+                   linearReshapeFunc(1.0 - nearestSegmentDistanceSignificance,
+                                     0.95, 0.75, 1.0, 0.0),
+                   1.0);
+        const QPointF translationOffset = translationOffsetCoeff * offset;
+        offset -= translationOffset;
+
+        QPointF segmentOffset;
+
+        if (nearestSegmentSignificance > 0) {
+            segmentOffset = nearestSegmentSignificance * offset;
+            offset -= segmentOffset;
+        }
+
+        const qreal alpha =
+            1.0 - KisBezierUtils::curveProportionByParam(nearestSegment.p0(),
+                                                         nearestSegment.p1(),
+                                                         nearestSegment.p2(),
+                                                         nearestSegment.p3(),
+                                                         nearestSegmentParam, 0.1);
+
+        const qreal coeffN1 =
+            alpha > 0.5 ? std::max(0.0, linearReshapeFunc(alpha, 0.6, 0.75, 1.0, 0.0)) : 1.0;
+        const qreal coeffN0 =
+            alpha < 0.5 ? std::max(0.0, linearReshapeFunc(alpha, 0.25, 0.4, 0.0, 1.0)) : 1.0;
+
+        nearestSegment.itP0().node().translate(offset * coeffN0);
+        nearestSegment.itP3().node().translate(offset * coeffN1);
+
+        patchIt.nodeTopLeft().node().translate(translationOffset);
+        patchIt.nodeTopRight().node().translate(translationOffset);
+        patchIt.nodeBottomLeft().node().translate(translationOffset);
+        patchIt.nodeBottomRight().node().translate(translationOffset);
+
+        offsetSegment(nearestSegment, nearestSegmentParam, segmentOffset);
 
     } else if (m_d->mode == Private::SPLIT_SEGMENT) {
         *m_d->currentArgs.meshTransform() = m_d->initialMeshState;

@@ -683,6 +683,16 @@ std::pair<QPointF, QTransform> KRITAGLOBAL_EXPORT transformEllipse(const QPointF
 QPointF KRITAGLOBAL_EXPORT alignForZoom(const QPointF &pt, qreal zoom);
 
 
+/**
+ * Linearly reshape function \p x so that in range [x0, x1]
+ * it would cross points (x0, y0) and (x1, y1).
+ */
+template <typename T>
+inline T linearReshapeFunc(T x, T x0, T x1, T y0, T y1)
+{
+    return y0 + (y1 - y0) * (x - x0) / (x1 - x0);
+}
+
 }
 
 

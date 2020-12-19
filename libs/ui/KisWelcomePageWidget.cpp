@@ -135,7 +135,7 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
 #ifdef Q_OS_ANDROID
     // enabling this widgets crashes the app, so it is better for it to be hidden for now
     newsWidget->hide();
-    helpTitleLabel_2->hide();
+    helpTitleLabel->hide();
     btnNewsOptions->hide();
 
     donationLink = new QPushButton(dropFrameBorder);
@@ -147,15 +147,15 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
 
     connect(donationLink, SIGNAL(clicked(bool)), this, SLOT(slotStartDonationFlow()));
 
-    verticalLayout_3->addWidget(donationLink);
-    verticalLayout_3->setAlignment(donationLink, Qt::AlignTop);
-    verticalLayout_3->setSpacing(20);
+    verticalLayout->addWidget(donationLink);
+    verticalLayout->setAlignment(donationLink, Qt::AlignTop);
+    verticalLayout->setSpacing(20);
 
     donationBannerImage = new QLabel(dropFrameBorder);
     QString bannerPath = QStandardPaths::locate(QStandardPaths::AppDataLocation, "share/krita/donation/banner.png");
     donationBannerImage->setPixmap(QPixmap(bannerPath));
 
-    verticalLayout_3->addWidget(donationBannerImage);
+    verticalLayout->addWidget(donationBannerImage);
 
     jboolean bannerPurchased = QAndroidJniObject::callStaticMethod<jboolean>("org/krita/android/DonationHelper", "isBadgePurchased", "()Z");
     if (bannerPurchased) {

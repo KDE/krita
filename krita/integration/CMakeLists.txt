@@ -7,5 +7,6 @@ install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/Build/Release/kritaquicklook.qlgen
 
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/Build/Release/kritaspotlight.mdimporter DESTINATION ${PLUGIN_INSTALL_DIR})
 
-install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/Build/Release/kritaquicklookng.appex DESTINATION ${PLUGIN_INSTALL_DIR})
+# TODO fix and reenable - https://bugs.kde.org/show_bug.cgi?id=430553
+# install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/Build/Release/kritaquicklookng.appex DESTINATION ${PLUGIN_INSTALL_DIR})
 endif(APPLE)

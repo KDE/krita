@@ -515,8 +515,9 @@ krita_deploy () {
     echo "Copying Spotlight plugin..."
     mkdir -p ${KRITA_DMG}/krita.app/Contents/Library/Spotlight
     rsync -prul ${KIS_INSTALL_DIR}/plugins/kritaspotlight.mdimporter ${KRITA_DMG}/krita.app/Contents/Library/Spotlight
-    echo "Copying QuickLook Thumbnailing extension..."
-    rsync -prul ${KIS_INSTALL_DIR}/plugins/kritaquicklookng.appex ${KRITA_DMG}/krita.app/Contents/PlugIns
+    # TODO fix and reenable - https://bugs.kde.org/show_bug.cgi?id=430553
+    # echo "Copying QuickLook Thumbnailing extension..."
+    # rsync -prul ${KIS_INSTALL_DIR}/plugins/kritaquicklookng.appex ${KRITA_DMG}/krita.app/Contents/PlugIns
 
     cd ${KRITA_DMG}/krita.app/Contents
     ln -shF Resources share

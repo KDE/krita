@@ -113,7 +113,7 @@ QVector<KisQMicImageSP> KisImageInterface::gmic_qt_get_cropped_images(int inputM
             p->m_sharedMemorySegments << m;
 
             {
-                QMutexLocker(&m->m_mutex);
+                QMutexLocker lock(&m->m_mutex);
 
                 gmic_image<float> img;
                 img.assign(resultRect.width(), resultRect.height(), 1, 4);
@@ -174,7 +174,7 @@ void KisImageInterface::slotStartApplicator(QVector<KisQMicImageSP> gmicImages)
         gmic_image<float> *gimg = nullptr;
 
         {
-            QMutexLocker(&image->m_mutex);
+            QMutexLocker lock(&image->m_mutex);
 
             dbgPlugins << "Memory segment" << (quintptr)image.data() << image->size() << (quintptr)image->constData() << (quintptr)image->m_data;
             gimg = new gmic_image<float>();

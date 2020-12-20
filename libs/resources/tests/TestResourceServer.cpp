@@ -82,67 +82,70 @@ void TestResourceServer::testFirstResource()
 
 void TestResourceServer::testResourceModel()
 {
-
+    KoResourceServer<KoAbstractGradient> *gradientServer = KoResourceServerProvider::gradientServer();
+    QVERIFY(gradientServer->resourceModel());
 }
 
 void TestResourceServer::testResourceCount()
 {
-
+    KoResourceServer<KoAbstractGradient> *gradientServer = KoResourceServerProvider::gradientServer();
+    QCOMPARE(gradientServer->resourceCount(), 3);
 }
 
 void TestResourceServer::testRemoveResourceFromServer()
 {
-
+    KoResourceServer<KoAbstractGradient> *gradientServer = KoResourceServerProvider::gradientServer();
 }
 
 void TestResourceServer::testSaveLocation()
 {
-
+    KoResourceServer<KoAbstractGradient> *gradientServer = KoResourceServerProvider::gradientServer();
+    qDebug() << gradientServer->saveLocation();
 }
 
 void TestResourceServer::testImportResourceFile()
 {
-
+    KoResourceServer<KoAbstractGradient> *gradientServer = KoResourceServerProvider::gradientServer();
 }
 
 void TestResourceServer::testRemoveResourceFile()
 {
-
+    KoResourceServer<KoAbstractGradient> *gradientServer = KoResourceServerProvider::gradientServer();
 }
 
 void TestResourceServer::testAddObserver()
 {
-
+    KoResourceServer<KoAbstractGradient> *gradientServer = KoResourceServerProvider::gradientServer();
 }
 
 void TestResourceServer::testRemoveObserver()
 {
-
+    KoResourceServer<KoAbstractGradient> *gradientServer = KoResourceServerProvider::gradientServer();
 }
 
 void TestResourceServer::testResourceByFileName()
 {
-
+    KoResourceServer<KoAbstractGradient> *gradientServer = KoResourceServerProvider::gradientServer();
 }
 
 void TestResourceServer::testResourceByName()
 {
-
+    KoResourceServer<KoAbstractGradient> *gradientServer = KoResourceServerProvider::gradientServer();
 }
 
 void TestResourceServer::testResourceByMD5()
 {
-
+    KoResourceServer<KoAbstractGradient> *gradientServer = KoResourceServerProvider::gradientServer();
 }
 
 void TestResourceServer::testUpdateResource()
 {
-
+    KoResourceServer<KoAbstractGradient> *gradientServer = KoResourceServerProvider::gradientServer();
 }
 
 void TestResourceServer::testAssignedTagsList()
 {
-
+    KoResourceServer<KoAbstractGradient> *gradientServer = KoResourceServerProvider::gradientServer();
 }
 
 void TestResourceServer::cleanupTestCase()

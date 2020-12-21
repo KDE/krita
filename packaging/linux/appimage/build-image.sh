@@ -236,8 +236,11 @@ linuxdeployqt $APPDIR/usr/share/applications/org.kde.krita.desktop \
 # Currently, we're skipping linuxdeployqt's automatic image building because it's choosing to ignore the inclusion of QtMultimedia.
 # I have an issue pending on linuxdeployqt's github page, but for the time being, manually bundling with appimagetool after linuxdeployqt
 # seems to work without any regressions.
-appimagetool -u "${ZSYNC_URL}" $APPDIR $BUILD_PREFIX/Krita-$VERSION-$ARCH.AppImage
-
+if [ -z "$ZSYNC_URL"]; then
+    appimagetool $APPDIR $BUILD_PREFIX/Krita-$VERSION-$ARCH.AppImage
+else
+    appimagetool -u "${ZSYNC_URL}" $APPDIR $BUILD_PREFIX/Krita-$VERSION-$ARCH.AppImage
+fi
 
 # Generate a new name for the Appimage file and rename it accordingly
 

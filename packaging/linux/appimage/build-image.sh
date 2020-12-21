@@ -53,7 +53,8 @@ cd $BUILD_PREFIX
 
 # Step 0: place the translations where ki18n and Qt look for them
 if [ -d $APPDIR/usr/share/locale ] ; then
-    mv $APPDIR/usr/share/locale $APPDIR/usr/share/krita
+    rsync -prul $APPDIR/usr/share/locale/ $APPDIR/usr/share/krita/
+    rm -rf $APPDIR/usr/share/locale
 fi
 
 # Step 1: Copy over all the resources provided by dependencies that we need
@@ -66,7 +67,7 @@ cp -r $DEPS_INSTALL_PREFIX/translations $APPDIR/usr/
 
 # Step 2: Relocate binaries from the architecture specific directory as required for Appimages
 if [[ -d "$APPDIR/usr/lib/$TRIPLET" ]] ; then
-  mv $APPDIR/usr/lib/$TRIPLET/*  $APPDIR/usr/lib
+  rsync -prul $APPDIR/usr/lib/$TRIPLET/ $APPDIR/usr/lib/
   rm -rf $APPDIR/usr/lib/$TRIPLET/
 fi
 

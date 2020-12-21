@@ -361,9 +361,8 @@ void KisViewManager::slotViewAdded(KisView *view)
 {
     // WARNING: this slot is called even when a view from another main windows is added!
     //          Don't expect \p view be a child of this view manager!
-    Q_UNUSED(view);
 
-    if (viewCount() == 0) {
+    if (view->viewManager() == this && viewCount() == 0) {
         d->statusBar.showAllStatusBarItems();
     }
 }
@@ -372,9 +371,8 @@ void KisViewManager::slotViewRemoved(KisView *view)
 {
     // WARNING: this slot is called even when a view from another main windows is removed!
     //          Don't expect \p view be a child of this view manager!
-    Q_UNUSED(view);
 
-    if (viewCount() == 0) {
+    if (view->viewManager() == this && viewCount() == 0) {
         d->statusBar.hideAllStatusBarItems();
     }
 

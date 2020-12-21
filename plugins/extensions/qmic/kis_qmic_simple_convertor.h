@@ -17,6 +17,9 @@ class QImage;
 class KisQmicSimpleConvertor
 {
 public:
+    static QString blendingModeToString(QString blendMode);
+    static QString stringToBlendingMode(QString str);
+
     static QImage convertToQImage(gmic_image<float>& gmicImage, float gmicMaxChannelValue = 255.0);
     static void convertFromQImage(const QImage &image, gmic_image<float> *gmicImage, float gmicUnitValue = 1.0);
 

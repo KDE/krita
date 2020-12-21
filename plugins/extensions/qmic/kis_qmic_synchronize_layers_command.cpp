@@ -52,7 +52,10 @@ void KisQmicSynchronizeLayersCommand::redo()
                     KisNodeSP aboveThis = m_nodes->last();
                     KisNodeSP parent = m_nodes->at(0)->parent();
 
-                    dbgPlugins << "Adding paint layer " << (i - nodesCount + 1) << " to parent " << parent->name();
+                    // HACK! Where is the last layer being removed?
+                    paintLayer->setName(m_nodes->last()->name());
+
+                    dbgPlugins << "Adding paint layer " << (i - nodesCount + 1) << " to parent " << parent->name() << " above" << m_nodes->last()->name();
                     KisImageLayerAddCommand *addLayerCmd = new KisImageLayerAddCommand(m_image, paintLayer, parent, aboveThis, false, true);
                     addLayerCmd->redo();
                     m_imageCommands.append(addLayerCmd);

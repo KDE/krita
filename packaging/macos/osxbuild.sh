@@ -104,6 +104,8 @@ if [[ "${OSTYPE}" == "darwin"* ]]; then
     ((MAKE_THREADS = $(sysctl -n hw.logicalcpu)))
 fi
 
+OSXBUILD_ARM_BUILD=$(sysctl -n hw.optional.arm64)
+
 # Prints stderr and stdout to log files
 # >(tee) works but breaks sigint
 log_cmd () {
@@ -265,7 +267,11 @@ build_3rdparty_fixes(){
         log "fixing rpath on fc-cache"
         log_cmd install_name_tool -add_rpath ${KIS_INSTALL_DIR}/lib ${KIS_TBUILD_DIR}/ext_fontconfig/ext_fontconfig-prefix/src/ext_fontconfig-build/fc-cache/.libs/fc-cache
         # rerun rebuild
-        cmake_3rdparty ext_fontconfig "1"
+        if [[ ${OSXBUILD_ARM_BUILD} -eq 1 && ${osxbuild_error} -ne 0 ]]; then
+            print_msg "Build Success! ${pkg}"
+        else
+            cmake_3rdparty ext_fontconfig "1"
+        fi
         error="false"
 
     elif [[ "${pkg}" = "ext_poppler" && "${error}" = "true" ]]; then
@@ -352,12 +358,14 @@ build_3rdparty () {
     fi
 
     # for python
+    if [[ ${OSXBUILD_ARM_BUILD} -ne 1 ]]; then
     cmake_3rdparty \
         ext_python \
         ext_sip \
         ext_pyqt
 
     cmake_3rdparty ext_libheif
+    fi
 
     cmake_3rdparty \
         ext_extra_cmake_modules \
@@ -374,7 +382,11 @@ build_3rdparty () {
         ext_quazip
 
     cmake_3rdparty ext_seexpr
+    
+    if [[ ${OSXBUILD_ARM_BUILD} -ne 1 ]]; then
     cmake_3rdparty ext_mypaint
+    fi
+
 
     ## All builds done, creating a new install onlydeps install dir
     dir_clean "${KIS_INSTALL_DIR}.onlydeps"
@@ -726,8 +738,7 @@ osxbuild.sh install ${KIS_BUILD_DIR}"
         else
             log "File not a tarball tar.gz file"
         fi
-
-
+        
 
     elif [[ ${1} = "clean" ]]; then
         # remove all build and install directories to start

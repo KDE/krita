@@ -317,6 +317,10 @@ else( APPLE )
         set(PARALLEL_MAKE "make")
       endif()
 
+      if(${CMAKE_SYSTEM_PROCESSOR} STREQUAL "arm64")
+        set(QT_DEVICE_OPTION "-device-option" "QMAKE_APPLE_DEVICE_ARCHS=arm64")
+      endif()
+
 
       ExternalProject_Add(
         ext_qt
@@ -330,8 +334,8 @@ else( APPLE )
         LOG_INSTALL         ON
         BUILD_IN_SOURCE     ON
 
-        URL http://download.qt.io/archive/qt/5.12/5.12.9/single/qt-everywhere-src-5.12.9.tar.xz
-        URL_MD5 fa2646280cf38180689c29c393cddd05
+        URL http://download.qt.io/official_releases/qt/5.12/5.12.10/single/qt-everywhere-src-5.12.10.tar.xz
+        URL_MD5 a781a0e247400e764c0730b8fb54226f
 
         CMAKE_ARGS -DOPENSSL_LIBS='-L${EXTPREFIX_qt}/lib -lssl -lcrypto'
 
@@ -343,6 +347,7 @@ else( APPLE )
             -skip qtpurchasing -skip qtremoteobjects -skip qtscxml -skip qtserialbus -skip qtspeech -skip qtvirtualkeyboard -nomake examples -nomake tools -no-compile-examples
             -no-dbus -no-iconv -no-qml-debug -no-libproxy -no-system-proxies -no-icu -no-mtdev -system-zlib -qt-pcre -qt-sqlite
             -opensource -confirm-license  -openssl-linked -prefix ${EXTPREFIX_qt}
+            ${QT_DEVICE_OPTION}
         BUILD_COMMAND ${PARALLEL_MAKE}
         INSTALL_COMMAND make install
         UPDATE_COMMAND ""

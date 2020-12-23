@@ -8,8 +8,11 @@
 
 #include <QApplication>
 #include <QDesktopWidget>
+#include <QFile>
 #include <QScreen>
 #include <QPainter>
+
+#include <cmath>
 
 WGColorPreviewPopup::WGColorPreviewPopup(QWidget *parent)
     : QWidget(parent)
@@ -20,6 +23,14 @@ WGColorPreviewPopup::WGColorPreviewPopup(QWidget *parent)
     setWindowFlags(Qt::ToolTip | Qt::NoDropShadowWindowHint);
     setAttribute(Qt::WA_TranslucentBackground);
     resize(100, 150);
+    QString iconFile(":/dark_krita_tool_freehand.svg");
+    if (QFile(iconFile).exists()) {
+        m_brushIcon.addFile(iconFile, QSize(16, 16));
+    }
+    iconFile = ":/light_krita_tool_freehand.svg";
+    if (QFile(iconFile).exists()) {
+        m_brushIcon.addFile(iconFile, QSize(16, 16), QIcon::Normal, QIcon::On);
+    }
 }
 
 void WGColorPreviewPopup::updatePosition(const QWidget *focus)
@@ -44,10 +55,29 @@ void WGColorPreviewPopup::updatePosition(const QWidget *focus)
     move(targetPos);
 }
 
+qreal WGColorPreviewPopup::estimateBrightness(QColor col)
+{
+    // a cheap approximation of luma assuming sRGB with gamma = 2.0
+    return std::sqrt(col.redF() * col.redF() * 0.21 +
+                     col.greenF() * col.greenF() * 0.71 +
+                     col.blueF() * col.blueF() * 0.08);
+}
+
 void WGColorPreviewPopup::paintEvent(QPaintEvent *e) {
     Q_UNUSED(e)
     QPainter painter(this);
     painter.fillRect(0, 0, width(), width(), m_color);
-    painter.fillRect(50, width(), width(), height(), m_previousColor);
-    painter.fillRect(0, width(), 50, height(), m_lastUsedColor);
+    painter.fillRect(0, width(), width()/2, height(), m_previousColor);
+    painter.fillRect(width()/2, width(), width(), height(), m_lastUsedColor);
+
+    QPixmap icon;
+    QWindow *window = windowHandle();
+    if (window && m_lastUsedColor.alpha() > 0) {
+        QIcon::State iconState;
+        iconState = estimateBrightness(m_lastUsedColor) > 0.5 ? QIcon::Off : QIcon::On;
+        icon = m_brushIcon.pixmap(window, QSize(16, 16), QIcon::Normal, iconState);
+    }
+    if (!icon.isNull()) {
+        painter.drawPixmap(width() - 18, height() - 18, icon);
+    }
 }

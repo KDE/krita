@@ -7,6 +7,7 @@
 #ifndef WGCOLORPREVIEWPOPUP_H
 #define WGCOLORPREVIEWPOPUP_H
 
+#include <QIcon>
 #include <QWidget>
 
 /* Code based on KisColorPreviewPopup in kis_color_selector_base.cpp
@@ -44,6 +45,7 @@ public:
         m_lastUsedColor = color;
         update();
     }
+    static qreal estimateBrightness(QColor col);
 
 protected:
     void paintEvent(QPaintEvent *e) override;
@@ -52,6 +54,7 @@ private:
     QColor m_color;
     QColor m_previousColor;
     QColor m_lastUsedColor;
+    QIcon m_brushIcon;
 };
 
 #endif // WGCOLORPREVIEWPOPUP_H

@@ -358,12 +358,12 @@ build_3rdparty () {
     fi
 
     # for python
-    if [[ ${OSXBUILD_ARM_BUILD} -ne 1 ]]; then
     cmake_3rdparty \
         ext_python \
         ext_sip \
         ext_pyqt
 
+    if [[ ${OSXBUILD_ARM_BUILD} -ne 1 ]]; then
     cmake_3rdparty ext_libheif
     fi
 

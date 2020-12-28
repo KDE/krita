@@ -328,7 +328,7 @@ void KisLayerManager::layerProperties()
         Qt::WindowFlags flags = dialog->windowFlags();
         dialog->setWindowFlags(flags | Qt::Tool | Qt::Dialog);
         dialog->show();
-
+        dialog->activateWindow();
     }
 }
 
@@ -361,6 +361,7 @@ void KisLayerManager::changeCloneSource()
     Qt::WindowFlags flags = dialog->windowFlags();
     dialog->setWindowFlags(flags | Qt::Tool | Qt::Dialog);
     dialog->show();
+    dialog->activateWindow();
 }
 
 void KisLayerManager::convertNodeToPaintLayer(KisNodeSP source)

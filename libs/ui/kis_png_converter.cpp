@@ -432,6 +432,13 @@ KisImportExportErrorCode KisPNGConverter::buildImage(QIODevice* iod)
         iod->close();
     }
 
+#ifdef PNG_SET_USER_LIMITS_SUPPORTED
+      /* Remove the user limits, if any */
+      png_set_user_limits(png_ptr, 0x7fffffff, 0x7fffffff);
+      png_set_chunk_cache_max(png_ptr, 0);
+      png_set_chunk_malloc_max(png_ptr, 0);
+#endif
+
     png_set_error_fn(png_ptr, nullptr, nullptr, kis_png_warning);
     #ifdef PNG_BENIGN_ERRORS_SUPPORTED
         png_set_benign_errors(png_ptr, 1);
@@ -967,6 +974,13 @@ KisImportExportErrorCode KisPNGConverter::buildFile(QIODevice* iodevice, const Q
     if (!png_ptr) {
         return (ImportExportCodes::Failure);
     }
+
+#ifdef PNG_SET_USER_LIMITS_SUPPORTED
+      /* Remove the user limits, if any */
+      png_set_user_limits(png_ptr, 0x7fffffff, 0x7fffffff);
+      png_set_chunk_cache_max(png_ptr, 0);
+      png_set_chunk_malloc_max(png_ptr, 0);
+#endif
 
     png_set_error_fn(png_ptr, nullptr, nullptr, kis_png_warning);
     #ifdef PNG_BENIGN_ERRORS_SUPPORTED

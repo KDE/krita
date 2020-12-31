@@ -611,7 +611,7 @@ void KisWelcomePageWidget::setupNewsLangSelection(QMenu *newsOptionsMenu)
             } else {
                 enabledNewsLangs->remove(QString(code));
             }
-            cfg.writeList(newsLangConfigName, enabledNewsLangs->toList());
+            cfg.writeList(newsLangConfigName, enabledNewsLangs->values());
         });
     }
 }

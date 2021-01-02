@@ -14,6 +14,7 @@
 #include <QActionGroup>
 #include <QGridLayout>
 #include <QIcon>
+#include <QPainter>
 #include <QString>
 #include <QToolButton>
 
@@ -42,7 +43,7 @@ WGSelectorConfigGrid::WGSelectorConfigGrid(QWidget *parent, bool multiSelect)
     connect(m_actionGroup, SIGNAL(triggered(QAction*)), SLOT(slotActionTriggered(QAction*)));
 
     m_selector->setMinimumSliderWidth(10);
-    m_selector->setGeometry(0, 0, m_iconSize, m_iconSize);
+    m_selector->setGeometry(0, 0, m_iconSize, m_iconSize - 2);
     m_selector->setVisible(false);
     m_selector->setEnabled(false);
     m_selector->slotSetColorSpace(KoColorSpaceRegistry::instance()->rgb8());
@@ -109,7 +110,7 @@ void WGSelectorConfigGrid::setConfigurations(const QVector<KisColorSelectorConfi
         const KisColorSelectorConfiguration &config = configurations.at(i);
         SelectorConfigAction *action = new SelectorConfigAction(config, m_actionGroup);
         //action->setText(QString("TBD %1").arg(i));
-        action->setIcon(generateIcon(config, devicePixelRatioF()));
+        action->setIcon(generateIcon(config, devicePixelRatioF(), true));
 
         QToolButton *button = new QToolButton(this);
         button->setAutoRaise(true);
@@ -134,15 +135,29 @@ void WGSelectorConfigGrid::setChecked(const KisColorSelectorConfiguration &confi
     m_currentAction = m_dummyAction;
 }
 
-QIcon WGSelectorConfigGrid::generateIcon(const KisColorSelectorConfiguration &configuration, qreal pixelRatio) const
+QIcon WGSelectorConfigGrid::generateIcon(const KisColorSelectorConfiguration &configuration, qreal pixelRatio, bool dualState) const
 {
     QSize sz(m_selector->width() * pixelRatio, m_selector->height() * pixelRatio);
     QPixmap pixmap(sz);
     pixmap.setDevicePixelRatio(pixelRatio);
     pixmap.fill(Qt::transparent);
     m_selector->setConfiguration(&configuration);
-    m_selector->render(&pixmap, QPoint(), QRegion(), RenderFlag::DrawChildren);
-    return QIcon(pixmap);
+    QPoint offset(0, dualState ? 2 : 1);
+    m_selector->render(&pixmap, offset, QRegion(), RenderFlag::DrawChildren);
+    QIcon icon(pixmap);
+
+    if (!dualState) {
+        return icon;
+    }
+
+    // highlight bar for on-icon
+    QPainter painter(&pixmap);
+    painter.setRenderHint(QPainter::Antialiasing);
+    painter.setPen(QPen(palette().highlight(), 2.0,  Qt::SolidLine, Qt::RoundCap));
+    painter.drawLine(1, 1, m_iconSize-1, 1);
+    painter.end();
+    icon.addPixmap(pixmap, QIcon::Normal, QIcon::On);
+    return icon;
 }
 
 QVector<KisColorSelectorConfiguration> WGSelectorConfigGrid::hueBasedConfigurations()
@@ -181,7 +196,7 @@ void WGSelectorConfigGrid::updateIcons() {
     for (QAction *action: actions) {
         SelectorConfigAction *sa = dynamic_cast<SelectorConfigAction *>(action);
         if (sa) {
-            sa->setIcon(generateIcon(sa->configuration(), devicePixelRatioF()));
+            sa->setIcon(generateIcon(sa->configuration(), devicePixelRatioF(), true));
         }
     }
 }

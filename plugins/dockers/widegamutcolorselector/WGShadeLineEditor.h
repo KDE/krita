@@ -33,6 +33,8 @@ protected:
 
 private Q_SLOTS:
     void slotValueChanged();
+    void slotPatchCountChanged(int value);
+    void slotSliderModeChanged(bool enabled);
 
 Q_SIGNALS:
     void sigEditorClosed(int lineIndex);

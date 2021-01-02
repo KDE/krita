@@ -41,6 +41,10 @@ WGShadeLineEditor::WGShadeLineEditor(QWidget *parent)
     connect(m_ui->sbOffsetHue, SIGNAL(valueChanged(double)), SLOT(slotValueChanged()));
     connect(m_ui->sbOffsetSaturation, SIGNAL(valueChanged(double)), SLOT(slotValueChanged()));
     connect(m_ui->sbOffsetValue, SIGNAL(valueChanged(double)), SLOT(slotValueChanged()));
+    connect(m_ui->sbPatchCount, SIGNAL(valueChanged(int)), SLOT(slotPatchCountChanged(int)));
+    connect(m_ui->rbSlider, SIGNAL(toggled(bool)), SLOT(slotSliderModeChanged(bool)));
+    // disable spinBox when slider mode set
+    connect(m_ui->rbColorPatches, SIGNAL(toggled(bool)), m_ui->sbPatchCount, SLOT(setEnabled(bool)));
 }
 
 WGShadeLineEditor::~WGShadeLineEditor()
@@ -59,6 +63,7 @@ WGConfig::ShadeLine WGShadeLineEditor::configuration() const
                            m_ui->sbOffsetSaturation->value(),
                            m_ui->sbOffsetValue->value(),
                            0);
+    cfg.patchCount = m_ui->rbSlider->isChecked() ? -1 : m_ui->sbPatchCount->value();
     return cfg;
 }
 
@@ -70,12 +75,20 @@ void WGShadeLineEditor::setConfiguration(const WGConfig::ShadeLine &cfg, int lin
     m_ui->sbOffsetHue->setValue(cfg.offset.x());
     m_ui->sbOffsetSaturation->setValue(cfg.offset.y());
     m_ui->sbOffsetValue->setValue(cfg.offset.z());
+    if (cfg.patchCount > 0) {
+        m_ui->rbColorPatches->setChecked(true);
+        m_ui->sbPatchCount->setValue(cfg.patchCount);
+    }
+    else {
+        m_ui->rbSlider->setChecked(true);
+    }
     m_lineIndex = lineIndex;
 }
 
 QIcon WGShadeLineEditor::generateIcon(const WGConfig::ShadeLine &cfg)
 {
     m_iconSlider->setGradient(cfg.gradient, cfg.offset);
+    m_iconSlider->setDisplayMode(cfg.patchCount < 0, cfg.patchCount);
     return QIcon(QPixmap::fromImage(*m_iconSlider->background()));
 }
 
@@ -89,4 +102,14 @@ void WGShadeLineEditor::slotValueChanged()
 {
     WGConfig::ShadeLine cfg = configuration();
     m_ui->previewLine->setGradient(cfg.gradient, cfg.offset);
+}
+
+void WGShadeLineEditor::slotPatchCountChanged(int value)
+{
+    m_ui->previewLine->setDisplayMode(false, value);
+}
+
+void WGShadeLineEditor::slotSliderModeChanged(bool enabled)
+{
+    m_ui->previewLine->setDisplayMode(enabled, m_ui->sbPatchCount->value());
 }

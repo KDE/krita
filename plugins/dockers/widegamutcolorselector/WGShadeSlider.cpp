@@ -55,7 +55,8 @@ void WGShadeSlider::setGradient(const QVector4D &range, const QVector4D &offset)
 
 void WGShadeSlider::setDisplayMode(bool slider, int numPatches)
 {
-    if (slider != m_d->sliderMode) {
+    if (slider != m_d->sliderMode ||
+        (!slider && numPatches != m_d->numPatches)) {
         m_d->sliderMode = slider;
         if (!slider && numPatches > 2) {
             m_d->numPatches = numPatches;

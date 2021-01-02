@@ -19,9 +19,11 @@ class WGConfig
 public:
     struct ShadeLine {
         ShadeLine() = default;
-        ShadeLine(QVector4D grad, QVector4D offs=QVector4D()): gradient(grad), offset(offs) {}
+        ShadeLine(QVector4D grad, QVector4D offs=QVector4D(), int patchC=-1)
+            : gradient(grad), offset(offs), patchCount(patchC) {}
         QVector4D gradient;
         QVector4D offset;
+        int patchCount {-1}; // negative value means slider mode
     };
 
     WGConfig(bool readOnly = true);

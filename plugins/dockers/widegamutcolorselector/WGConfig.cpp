@@ -114,6 +114,7 @@ QVector<WGConfig::ShadeLine> WGConfig::shadeSelectorLines() const
     QStringList shadeLineList(configString.split('|'));
     for (QString &line: shadeLineList) {
         QVector4D gradient, offset;
+        int patchCount = -1;
         QStringList values = line.split(';');
         if (values.size() >= 4) {
             for (int i = 0; i < 4; i++) {
@@ -125,7 +126,10 @@ QVector<WGConfig::ShadeLine> WGConfig::shadeSelectorLines() const
                 offset[i] = qBound(-1.0f, values.at(i + 4).toFloat(), 1.0f);
             }
         }
-        shadeLines.append(ShadeLine(gradient, offset));
+        if (values.size() >= 9) {
+            patchCount = qBound(-1, values.at(8).toInt(), 99);
+        }
+        shadeLines.append(ShadeLine(gradient, offset, patchCount));
     }
     return shadeLines;
 }
@@ -139,10 +143,10 @@ void WGConfig::setShadeSelectorLines(const QVector<WGConfig::ShadeLine> &shadeLi
         for (int i = 0; i < 4; i++) {
             stream << line.gradient[i] << ';';
         }
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 4; i++) {
             stream << line.offset[i] << ';';
         }
-        stream << line.offset[3];
+        stream << line.patchCount;
         shadeLineList.append(lineString);
     }
     m_cfg.writeEntry("minimalShadeSelectorLines", shadeLineList.join('|'));

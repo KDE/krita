@@ -35,14 +35,14 @@ Q_SIGNALS:
     void cropXChanged(int newX);
     void cropYChanged(int newY);
     void cropWidthChanged(int newWidth);
-    void forceWidthChanged(bool newForce);
+    void lockWidthChanged(bool newLock);
     void cropHeightChanged(int newHeight);
-    void forceHeightChanged(bool newForce);
+    void lockHeightChanged(bool newLock);
     void ratioChanged(double newRatio);
-    void forceRatioChanged(bool newForce);
+    void lockRatioChanged(bool newLock);
     void decorationChanged(int newDecoration);
-    void allowGrowChanged(bool newForce);
-    void growCenterChanged(bool newForce);
+    void allowGrowChanged(bool newLock);
+    void growCenterChanged(bool newLock);
 
 public Q_SLOTS:
     void cropTypeSelectableChanged();

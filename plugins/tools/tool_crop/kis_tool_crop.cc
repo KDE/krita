@@ -124,11 +124,12 @@ KisToolCrop::KisToolCrop(KoCanvasBase * canvas)
     // context menu options (mirrors tool options)
     m_contextMenu.reset(new QMenu());
     applyCrop = new KisAction(i18n("Crop"));
-    growToggleOption = new KisAction(i18n("Grow"));
-    growToggleOption->setCheckable(true);
 
     centerToggleOption = new KisAction(i18n("Center"));
     centerToggleOption->setCheckable(true);
+    
+    growToggleOption = new KisAction(i18n("Grow"));
+    growToggleOption->setCheckable(true);
 }
 
 KisToolCrop::~KisToolCrop()
@@ -220,23 +221,21 @@ void KisToolCrop::paint(QPainter &painter, const KoViewConverter &converter)
 QMenu *KisToolCrop::popupActionsMenu()
 {
     if (m_contextMenu) {
+        // Sync state of context menu toggles with state of Tool Options toggles
+        centerToggleOption->setChecked(growCenter());
+        growToggleOption->setChecked(allowGrow());
         m_contextMenu->clear();
 
         m_contextMenu->addSection(i18n("Crop Tool Actions"));
         m_contextMenu->addSeparator();
-
-        // keeps in sync with tool options
-        growToggleOption->setChecked(allowGrow());
-        centerToggleOption->setChecked(growCenter());
-
 
         if (m_haveCropSelection) {         // can't crop if there is no selection
             m_contextMenu->addAction(applyCrop);
             m_contextMenu->addSeparator();
         }
 
-        m_contextMenu->addAction(growToggleOption);
         m_contextMenu->addAction(centerToggleOption);
+        m_contextMenu->addAction(growToggleOption);
     }
 
     return m_contextMenu.data();
@@ -710,11 +709,9 @@ QWidget* KisToolCrop::createOptionWidget()
 
     optionsWidget->setFixedHeight(optionsWidget->sizeHint().height());
 
-
     connect(applyCrop, SIGNAL(triggered(bool)), this, SLOT(crop()));
-    connect(growToggleOption, SIGNAL(triggered(bool)), this, SLOT(setAllowGrow(bool)));
     connect(centerToggleOption, SIGNAL(triggered(bool)), this, SLOT(setGrowCenter(bool)));
-
+    connect(growToggleOption, SIGNAL(triggered(bool)), this, SLOT(setAllowGrow(bool)));
 
     return optionsWidget;
 }

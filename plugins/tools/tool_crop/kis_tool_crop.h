@@ -178,6 +178,9 @@ private:
     KisAction* applyCrop;
     KisAction* centerToggleOption;
     KisAction* growToggleOption;
+    KisAction* lockWidthToggleOption;
+    KisAction* lockHeightToggleOption;
+    KisAction* lockRatioToggleOption;
 
     enum handleType {
         None = 0,

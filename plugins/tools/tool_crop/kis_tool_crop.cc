@@ -118,6 +118,15 @@ KisToolCrop::KisToolCrop(KoCanvasBase * canvas)
     
     growToggleOption = new KisAction(i18n("Grow"));
     growToggleOption->setCheckable(true);
+    
+    lockWidthToggleOption = new KisAction(i18n("Lock Width"));
+    lockWidthToggleOption->setCheckable(true);
+    
+    lockHeightToggleOption = new KisAction(i18n("Lock Height"));
+    lockHeightToggleOption->setCheckable(true);
+    
+    lockRatioToggleOption = new KisAction(i18n("Lock Ratio"));
+    lockRatioToggleOption->setCheckable(true);
 }
 
 KisToolCrop::~KisToolCrop()
@@ -212,6 +221,10 @@ QMenu *KisToolCrop::popupActionsMenu()
         // Sync state of context menu toggles with state of Tool Options toggles
         centerToggleOption->setChecked(growCenter());
         growToggleOption->setChecked(allowGrow());
+        lockWidthToggleOption->setChecked(lockWidth());
+        lockHeightToggleOption->setChecked(lockHeight());
+        lockRatioToggleOption->setChecked(lockRatio());
+      
         m_contextMenu->clear();
 
         m_contextMenu->addSection(i18n("Crop Tool Actions"));
@@ -224,6 +237,12 @@ QMenu *KisToolCrop::popupActionsMenu()
 
         m_contextMenu->addAction(centerToggleOption);
         m_contextMenu->addAction(growToggleOption);
+        
+        m_contextMenu->addSeparator();
+        
+        m_contextMenu->addAction(lockWidthToggleOption);
+        m_contextMenu->addAction(lockHeightToggleOption);
+        m_contextMenu->addAction(lockRatioToggleOption);
     }
 
     return m_contextMenu.data();
@@ -701,6 +720,9 @@ QWidget* KisToolCrop::createOptionWidget()
     connect(applyCrop, SIGNAL(triggered(bool)), this, SLOT(crop()));
     connect(centerToggleOption, SIGNAL(triggered(bool)), this, SLOT(setGrowCenter(bool)));
     connect(growToggleOption, SIGNAL(triggered(bool)), this, SLOT(setAllowGrow(bool)));
+    connect(lockWidthToggleOption, SIGNAL(triggered(bool)), this, SLOT(setLockWidth(bool)));
+    connect(lockHeightToggleOption, SIGNAL(triggered(bool)), this, SLOT(setLockHeight(bool)));
+    connect(lockRatioToggleOption, SIGNAL(triggered(bool)), this, SLOT(setLockRatio(bool)));
 
     return optionsWidget;
 }

@@ -119,7 +119,7 @@
     <p xml:lang="ko">Krita는 디지털 예술 스튜디오입니다.</p>
     <p xml:lang="nl">Krita is de digitale kunststudio vol mogelijkheden.</p>
     <p xml:lang="nn">Krita er ei funksjonsrik digital teiknestove.</p>
-    <p xml:lang="pl">Krita jest pełnowymiarowym, cyfrowym studiem artystycznym</p>
+    <p xml:lang="pl">Krita jest pełnowartościowym, cyfrowym studiem artystycznym.</p>
     <p xml:lang="pt">O Krita é o estúdio de arte digital completo.</p>
     <p xml:lang="pt-BR">O Krita é o estúdio de arte digital completo.</p>
     <p xml:lang="ru">Krita — полнофункциональный инструмент для создания цифровой графики.</p>
@@ -245,6 +245,7 @@
       <caption xml:lang="ko">Krita는 다기능 디지털 예술 스튜디오입니다</caption>
       <caption xml:lang="nl">Krita is een digitale schilderstudio vol mogelijkheden</caption>
       <caption xml:lang="nn">Krita er ei funksjonsrik digital teiknestove.</caption>
+      <caption xml:lang="pl">Krita jest pełnowartościowym, cyfrowym studiem artystycznym</caption>
       <caption xml:lang="pt">O Krita é um estúdio de arte digital completo</caption>
       <caption xml:lang="pt-BR">O Krita é um estúdio de pintura digital completo</caption>
       <caption xml:lang="sk">Krita je plnohodnotné digitálne maliarske štúdio</caption>
@@ -269,6 +270,7 @@
       <caption xml:lang="ko">시작 창에서 Krita의 최신 소식을 볼 수 있습니다</caption>
       <caption xml:lang="nl">Het opstartvenster geeft u nu ook you het laatste nieuws over Krita</caption>
       <caption xml:lang="nn">Oppstartsvindauget viser no siste nytt om Krita.</caption>
+      <caption xml:lang="pl">Okno początkowe pokazuje teraz najnowsze wieści o Kricie</caption>
       <caption xml:lang="pt">A janela inicial agora também lhe dá as últimas notícias sobre o Krita</caption>
       <caption xml:lang="pt-BR">A janela de inicialização agora também mostra as últimas notícias sobre o Krita</caption>
       <caption xml:lang="sk">V úvodnom okne sa tiež nachádzajú najnovšie správy o Krita</caption>
@@ -293,6 +295,7 @@
       <caption xml:lang="ko">10가지 종류의 강력한 브러시 엔진을 사용할 수 있습니다</caption>
       <caption xml:lang="nl">Er zijn meer dan tien immens krachtige penseelengines</caption>
       <caption xml:lang="nn">Det finst meir enn ti enormt kraftige penselmotorar.</caption>
+      <caption xml:lang="pl">Istnieje ponad dziesięć zaawansowanych silników pędzli</caption>
       <caption xml:lang="pt">Existem mais de dez motores de pincéis extremamente poderosos</caption>
       <caption xml:lang="pt-BR">Mais de dez engines de pincéis incrivelmente poderosos disponíveis</caption>
       <caption xml:lang="sk">Existuje viac ako desať nesmierne výkonných štetcových enginov</caption>
@@ -316,6 +319,7 @@
       <caption xml:lang="ko">색역 마스크를 만들고 사용할 수 있습니다</caption>
       <caption xml:lang="nl">Maak en gebruik gamut-maskers om uw afbeeldingen een coherent gevoel te geven</caption>
       <caption xml:lang="nn">Bruk fargeområde-masker for å gje bileta eit heilsleg uttrykk.</caption>
+      <caption xml:lang="pl">Twórz i używaj masek gamut, aby nadać swoim obrazom spójny wygląd</caption>
       <caption xml:lang="pt">Crie e use máscaras de gamute para dar às suas imagens uma aparência coerente</caption>
       <caption xml:lang="pt-BR">Crie e use máscaras de gama para dar um senso de coerência às suas imagens</caption>
       <caption xml:lang="sk">Vytvorte a používajte gamutové masky, aby vašim obrázkom poskytli ucelený pocit</caption>
@@ -339,6 +343,7 @@
       <caption xml:lang="ko">애니메이션을 만들 계획이 있으신가요? Krita를 통해서 수작업 애니메이션을 작업할 수 있습니다</caption>
       <caption xml:lang="nl">Naar animatie? Krita biedt alles wat u nodig hebt voor traditionele, met de hand getekende animatie</caption>
       <caption xml:lang="nn">Interessert i animasjon? Krita har alt du treng for tradisjonelle, handteikna animasjonar.</caption>
+      <caption xml:lang="pl">Zajmujesz się animacjami? Krita zapewnia wszystko czego potrzebujesz do tworzenia tradycyjnych, ręcznie rysowanych animacji</caption>
       <caption xml:lang="pt">Gosta de animação? O Krita oferece tudo o que precisa para o desenho animado tradicional e desenhado à mão</caption>
       <caption xml:lang="pt-BR">Curte animação? O Krita fornece tudo necessário para você poder trabalhar com animação tradicional ou feita à mão</caption>
       <caption xml:lang="sk">Ste do animácie? Krita poskytuje všetko, čo potrebujete pre tradičné ručne kreslené animácie</caption>
@@ -363,6 +368,7 @@
       <caption xml:lang="ko">디지털 페인팅을 처음 시작하시거나, Krita의 기능을 더 알아 보려면 사용 설명서를 참조하십시오</caption>
       <caption xml:lang="nl">Als u nieuw bent in digitaal schilderen, dan is er een uitgebreide, bijgewerkte handleiding.</caption>
       <caption xml:lang="nn">Viss du er nybegynnar innan digital teikning, finst det ei omfattande og oppdatert brukarhandbok.</caption>
+      <caption xml:lang="pl">Jeśli malowanie cyfrowe to dla ciebie nowość, to dostępny jest podręcznik</caption>
       <caption xml:lang="pt">Se é novo na pintura digital, ou deseja saber mais sobre as possibilidades do Krita, existe um manual extenso e actualizado</caption>
       <caption xml:lang="pt-BR">Se você for iniciante em pintura digital, há um extenso e atualizado manual</caption>
       <caption xml:lang="sk">Ak ste v oblasti digitálnej maľby nováčikom alebo sa chcete dozvedieť viac o možnostiach programu Krita, existuje o tom rozsiahla a aktuálna príručka</caption>

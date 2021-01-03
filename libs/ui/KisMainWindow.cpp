@@ -641,6 +641,11 @@ KisMainWindow::~KisMainWindow()
 
 }
 
+QMenu *KisMainWindow::createPopupMenu()
+{
+    return 0;
+}
+
 QUuid KisMainWindow::id() const {
     return d->id;
 }

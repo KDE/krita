@@ -88,7 +88,6 @@ public:
     bool growCenter() const;
     bool allowGrow() const;
 
-
 Q_SIGNALS:
     void cropTypeSelectableChanged();
     void cropTypeChanged(int value);
@@ -177,9 +176,8 @@ private:
 
     QScopedPointer<QMenu> m_contextMenu;
     KisAction* applyCrop;
-    KisAction* growToggleOption;
     KisAction* centerToggleOption;
-
+    KisAction* growToggleOption;
 
     enum handleType {
         None = 0,

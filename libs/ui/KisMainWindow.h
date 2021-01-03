@@ -83,6 +83,9 @@ public:
      */
     ~KisMainWindow() override;
 
+    QMenu *createPopupMenu() override;
+
+
     QUuid id() const;
 
     /**

@@ -518,9 +518,9 @@ void KisToolCrop::slotRectChanged()
     emit cropXChanged(cropX());
     emit cropYChanged(cropY());
     emit ratioChanged(ratio());
-    emit forceHeightChanged(forceHeight());
-    emit forceWidthChanged(forceWidth());
-    emit forceRatioChanged(forceRatio());
+    emit lockHeightChanged(lockHeight());
+    emit lockWidthChanged(lockWidth());
+    emit lockRatioChanged(lockRatio());
 
     emit canGrowChanged(allowGrow());
     emit isCenteredChanged(growCenter());
@@ -586,12 +586,12 @@ int KisToolCrop::cropWidth() const
     return m_finalRect.rect().width();
 }
 
-void KisToolCrop::setForceWidth(bool force)
+void KisToolCrop::setLockWidth(bool lock)
 {
-    m_finalRect.setWidthLocked(force);
+    m_finalRect.setWidthLocked(lock);
 }
 
-bool KisToolCrop::forceWidth() const
+bool KisToolCrop::lockWidth() const
 {
     return m_finalRect.widthLocked();
 }
@@ -614,12 +614,12 @@ int KisToolCrop::cropHeight() const
     return m_finalRect.rect().height();
 }
 
-void KisToolCrop::setForceHeight(bool force)
+void KisToolCrop::setLockHeight(bool lock)
 {
-    m_finalRect.setHeightLocked(force);
+    m_finalRect.setHeightLocked(lock);
 }
 
-bool KisToolCrop::forceHeight() const
+bool KisToolCrop::lockHeight() const
 {
     return m_finalRect.heightLocked();
 }
@@ -671,12 +671,12 @@ double KisToolCrop::ratio() const
     return m_finalRect.ratio();
 }
 
-void KisToolCrop::setForceRatio(bool force)
+void KisToolCrop::setLockRatio(bool lock)
 {
-    m_finalRect.setRatioLocked(force);
+    m_finalRect.setRatioLocked(lock);
 }
 
-bool KisToolCrop::forceRatio() const
+bool KisToolCrop::lockRatio() const
 {
     return m_finalRect.ratioLocked();
 }
@@ -699,11 +699,11 @@ QWidget* KisToolCrop::createOptionWidget()
     connect(optionsWidget, SIGNAL(cropXChanged(int)), this, SLOT(setCropX(int)));
     connect(optionsWidget, SIGNAL(cropYChanged(int)), this, SLOT(setCropY(int)));
     connect(optionsWidget, SIGNAL(cropHeightChanged(int)), this, SLOT(setCropHeight(int)));
-    connect(optionsWidget, SIGNAL(forceHeightChanged(bool)), this, SLOT(setForceHeight(bool)));
+    connect(optionsWidget, SIGNAL(lockHeightChanged(bool)), this, SLOT(setLockHeight(bool)));
     connect(optionsWidget, SIGNAL(cropWidthChanged(int)), this, SLOT(setCropWidth(int)));
-    connect(optionsWidget, SIGNAL(forceWidthChanged(bool)), this, SLOT(setForceWidth(bool)));
+    connect(optionsWidget, SIGNAL(lockWidthChanged(bool)), this, SLOT(setLockWidth(bool)));
     connect(optionsWidget, SIGNAL(ratioChanged(double)), this, SLOT(setRatio(double)));
-    connect(optionsWidget, SIGNAL(forceRatioChanged(bool)), this, SLOT(setForceRatio(bool)));
+    connect(optionsWidget, SIGNAL(lockRatioChanged(bool)), this, SLOT(setLockRatio(bool)));
     connect(optionsWidget, SIGNAL(decorationChanged(int)), this, SLOT(setDecoration(int)));
     connect(optionsWidget, SIGNAL(allowGrowChanged(bool)), this, SLOT(setAllowGrow(bool)));
     connect(optionsWidget, SIGNAL(growCenterChanged(bool)), this, SLOT(setGrowCenter(bool)));

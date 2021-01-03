@@ -55,11 +55,11 @@ class KisToolCrop : public KisTool
     Q_PROPERTY(int cropX READ cropX WRITE setCropX NOTIFY cropXChanged);
     Q_PROPERTY(int cropY READ cropY WRITE setCropY NOTIFY cropYChanged);
     Q_PROPERTY(int cropWidth READ cropWidth WRITE setCropWidth NOTIFY cropWidthChanged);
-    Q_PROPERTY(bool forceWidth READ forceWidth WRITE setForceWidth NOTIFY forceWidthChanged);
+    Q_PROPERTY(bool lockWidth READ lockWidth WRITE setLockWidth NOTIFY lockWidthChanged);
     Q_PROPERTY(int cropHeight READ cropHeight WRITE setCropHeight NOTIFY cropHeightChanged);
-    Q_PROPERTY(bool forceHeight READ forceHeight WRITE setForceHeight NOTIFY forceHeightChanged);
+    Q_PROPERTY(bool lockHeight READ lockHeight WRITE setLockHeight NOTIFY lockHeightChanged);
     Q_PROPERTY(double ratio READ ratio WRITE setRatio NOTIFY ratioChanged);
-    Q_PROPERTY(bool forceRatio READ forceRatio WRITE setForceRatio NOTIFY forceRatioChanged);
+    Q_PROPERTY(bool lockRatio READ lockRatio WRITE setLockRatio NOTIFY lockRatioChanged);
     Q_PROPERTY(int decoration READ decoration WRITE setDecoration NOTIFY decorationChanged);
 
 public:
@@ -89,11 +89,11 @@ public:
     int cropX() const;
     int cropY() const;
     int cropWidth() const;
-    bool forceWidth() const;
+    bool lockWidth() const;
     int cropHeight() const;
-    bool forceHeight() const;
+    bool lockHeight() const;
     double ratio() const;
-    bool forceRatio() const;
+    bool lockRatio() const;
     int decoration() const;
     bool growCenter() const;
     bool allowGrow() const;
@@ -111,9 +111,9 @@ Q_SIGNALS:
 
     void ratioChanged(double value);
 
-    void forceWidthChanged(bool value);
-    void forceHeightChanged(bool value);
-    void forceRatioChanged(bool value);
+    void lockWidthChanged(bool value);
+    void lockHeightChanged(bool value);
+    void lockRatioChanged(bool value);
 
     void canGrowChanged(bool value);
     void isCenteredChanged(bool value);
@@ -134,11 +134,11 @@ public Q_SLOTS:
     void setCropX(int x);
     void setCropY(int y);
     void setCropWidth(int x);
-    void setForceWidth(bool force);
+    void setLockWidth(bool lock);
     void setCropHeight(int y);
-    void setForceHeight(bool force);
+    void setLockHeight(bool lock);
     void setRatio(double ratio);
-    void setForceRatio(bool force);
+    void setLockRatio(bool lock);
     void setDecoration(int i);
     void setAllowGrow(bool g);
     void setGrowCenter(bool g);

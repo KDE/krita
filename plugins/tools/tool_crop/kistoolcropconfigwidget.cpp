@@ -41,27 +41,27 @@ KisToolCropConfigWidget::KisToolCropConfigWidget(QWidget* parent, KisToolCrop* c
     boolGrow->setChecked(m_cropTool->allowGrow());
     boolCenter->setChecked(m_cropTool->growCenter());
 
-    lockRatioButton->setChecked(m_cropTool->forceRatio());
+    lockRatioButton->setChecked(m_cropTool->lockRatio());
     lockRatioButton->setIcon(KisIconUtils::loadIcon("layer-locked"));
 
-    lockHeightButton->setChecked(m_cropTool->forceHeight());
+    lockHeightButton->setChecked(m_cropTool->lockHeight());
     lockHeightButton->setIcon(KisIconUtils::loadIcon("layer-locked"));
-    lockWidthButton->setChecked(m_cropTool->forceWidth());
+    lockWidthButton->setChecked(m_cropTool->lockWidth());
     lockWidthButton->setIcon(KisIconUtils::loadIcon("layer-locked"));
 
 
     KisAcyclicSignalConnector *connector;
     connector = new KisAcyclicSignalConnector(this);
-    connector->connectForwardBool(lockRatioButton, SIGNAL(toggled(bool)), this, SIGNAL(forceRatioChanged(bool)));
-    connector->connectBackwardBool(cropTool, SIGNAL(forceRatioChanged(bool)), lockRatioButton, SLOT(setChecked(bool)));
+    connector->connectForwardBool(lockRatioButton, SIGNAL(toggled(bool)), this, SIGNAL(lockRatioChanged(bool)));
+    connector->connectBackwardBool(cropTool, SIGNAL(lockRatioChanged(bool)), lockRatioButton, SLOT(setChecked(bool)));
 
     connector = new KisAcyclicSignalConnector(this);
-    connector->connectForwardBool(lockHeightButton, SIGNAL(toggled(bool)), this, SIGNAL(forceHeightChanged(bool)));
-    connector->connectBackwardBool(cropTool, SIGNAL(forceHeightChanged(bool)), lockHeightButton, SLOT(setChecked(bool)));
+    connector->connectForwardBool(lockHeightButton, SIGNAL(toggled(bool)), this, SIGNAL(lockHeightChanged(bool)));
+    connector->connectBackwardBool(cropTool, SIGNAL(lockHeightChanged(bool)), lockHeightButton, SLOT(setChecked(bool)));
 
     connector = new KisAcyclicSignalConnector(this);
-    connector->connectForwardBool(lockWidthButton, SIGNAL(toggled(bool)), this, SIGNAL(forceWidthChanged(bool)));
-    connector->connectBackwardBool(cropTool, SIGNAL(forceWidthChanged(bool)), lockWidthButton, SLOT(setChecked(bool)));
+    connector->connectForwardBool(lockWidthButton, SIGNAL(toggled(bool)), this, SIGNAL(lockWidthChanged(bool)));
+    connector->connectBackwardBool(cropTool, SIGNAL(lockWidthChanged(bool)), lockWidthButton, SLOT(setChecked(bool)));
 
     connector = new KisAcyclicSignalConnector(this);
     connector->connectForwardDouble(doubleRatio, SIGNAL(valueChanged(double)), this, SIGNAL(ratioChanged(double)));

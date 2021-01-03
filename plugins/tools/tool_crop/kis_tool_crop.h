@@ -44,10 +44,6 @@ struct DecorationLine;
 
 /**
  * Crop tool
- *
- * TODO: - crop from selection -- i.e, set crop outline to the exact bounds of the selection.
- *       - (when moving to Qt 4: replace rectangle with  darker, dimmer overlay layer
- *         like we have for selections right now)
  */
 class KisToolCrop : public KisTool
 {

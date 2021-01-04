@@ -34,6 +34,8 @@ public:
     QIcon generateIcon(const KisColorSelectorConfiguration &configuration, qreal pixelRatio = 1.0, bool dualState = false) const;
 
     static QVector<KisColorSelectorConfiguration> hueBasedConfigurations();
+protected:
+    bool event(QEvent *event) override;
 private Q_SLOTS:
     void slotActionTriggered(QAction *action);
 Q_SIGNALS:

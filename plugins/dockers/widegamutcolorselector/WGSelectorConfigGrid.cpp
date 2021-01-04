@@ -12,6 +12,7 @@
 
 #include <QAction>
 #include <QActionGroup>
+#include <QEvent>
 #include <QGridLayout>
 #include <QIcon>
 #include <QPainter>
@@ -172,6 +173,17 @@ QVector<KisColorSelectorConfiguration> WGSelectorConfigGrid::hueBasedConfigurati
     configs.push_back(KCSC(KCSC::Square, KCSC::Slider, KCSC::VH, KCSC::hsvS));
     configs.push_back(KCSC(KCSC::Square, KCSC::Slider, KCSC::hsvSH, KCSC::V));
     return configs;
+}
+
+bool WGSelectorConfigGrid::event(QEvent *event)
+{
+    bool handled = QWidget::event(event);
+    if (event->type() == QEvent::PaletteChange) {
+        updateIcons();
+        event->accept();
+        handled = true;
+    }
+    return handled;
 }
 
 void WGSelectorConfigGrid::slotActionTriggered(QAction *action)

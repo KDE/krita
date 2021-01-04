@@ -13,8 +13,6 @@
 
 #include <KoID.h>
 
-#include <functional>
-
 #include "kis_shared.h"
 #include "kis_paint_device.h"
 #include "kis_processing_visitor.h" // included, not forward declared for msvc

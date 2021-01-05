@@ -70,6 +70,12 @@ QPushButton* KisWelcomePageWidget::donationLink;
 QLabel* KisWelcomePageWidget::donationBannerImage;
 #endif
 
+// Used for triggering a QAction::setChecked signal from a QLabel::linkActivated signal
+void ShowNewsAction::enableFromLink(QString unused_url)
+{
+    Q_UNUSED(unused_url);
+    emit setChecked(true);
+}
 
 // class to override item height for Breeze since qss seems to not work
 class RecentItemDelegate : public QStyledItemDelegate
@@ -113,7 +119,8 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
 
     QMenu *newsOptionsMenu = new QMenu(this);
     newsOptionsMenu->setToolTipsVisible(true);
-    QAction *showNewsAction = newsOptionsMenu->addAction(i18n("Check for updates"));
+    ShowNewsAction *showNewsAction = new ShowNewsAction(i18n("Enable news and check for new releases"));
+    newsOptionsMenu->addAction(showNewsAction);
     showNewsAction->setToolTip(i18n("Show news about Krita: this needs internet to retrieve information from the krita.org website"));
     showNewsAction->setCheckable(true);
 
@@ -127,6 +134,7 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
     connect(showNewsAction, SIGNAL(toggled(bool)), newsWidget, SLOT(setVisible(bool)));
     connect(showNewsAction, SIGNAL(toggled(bool)), labelNoFeed, SLOT(setHidden(bool)));
     connect(showNewsAction, SIGNAL(toggled(bool)), newsWidget, SLOT(toggleNews(bool)));
+    connect(labelNoFeed, SIGNAL(linkActivated(QString)), showNewsAction, SLOT(enableFromLink(QString)));
 
 #ifdef ENABLE_UPDATERS
     connect(showNewsAction, SIGNAL(toggled(bool)), this, SLOT(slotToggleUpdateChecks(bool)));
@@ -354,6 +362,9 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
 
     poweredByKDELink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://userbase.kde.org/What_is_KDE\">")
                               .append(i18n("Powered by KDE")).append("</a>"));
+
+    QString translationNoFeed = i18n("You can <a href=\"ignored\" style=\"color: COLOR_PLACEHOLDER; text-decoration: underline;\">enable news</a> from krita.org in various languages in the menu above");
+    labelNoFeed->setText(translationNoFeed.replace("COLOR_PLACEHOLDER", blendedColor.name()));
 
     const QColor faintTextColor = KritaUtils::blendColors(textColor, backgroundColor, 0.4);
     const QString &faintTextStyle = "QWidget{color: " + faintTextColor.name() + "}";

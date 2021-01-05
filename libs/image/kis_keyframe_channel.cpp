@@ -276,7 +276,7 @@ void KisKeyframeChannel::setNode(KisNodeWSP node)
     }
 
     m_d->parentNode = node;
-//    m_d->bounds = KisDefaultBoundsNodeWrapperSP( new KisDefaultBoundsNodeWrapper( node ));
+    m_d->bounds = KisDefaultBoundsNodeWrapperSP( new KisDefaultBoundsNodeWrapper( node ));
 
     if (m_d->parentNode) { // Connect new..
         connect(this, &KisKeyframeChannel::sigChannelUpdated, m_d->parentNode, &KisNode::handleKeyframeChannelUpdate);

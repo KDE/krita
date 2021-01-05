@@ -436,21 +436,6 @@ void KisImage::copyFromImageImpl(const KisImage &rhs, int policy)
                                            dbgImage << "Node: " << (void *)node.data();
                                        });
 
-    // Keyframe channel boundary and node connections
-    // Previously, this was done in the copy constructors, but was error prone
-    // due to the construction of node 'tree' being incomplete when the constructors
-    // ran.
-    KisLayerUtils::recursiveApplyNodes(newRoot,
-                                       [this](KisNodeSP node) {
-                                            using KeyframeChannelContainer = QMap<QString, KisKeyframeChannel*>;
-                                            KeyframeChannelContainer keyframeChannels = node->keyframeChannels();
-                                            for (KeyframeChannelContainer::iterator i = keyframeChannels.begin();
-                                                 i != keyframeChannels.end(); i++) {
-                                                keyframeChannels[i.key()]->setBounds(new KisDefaultBounds(this));
-                                                keyframeChannels[i.key()]->setNode(node);
-                                            }
-                                       });
-
     m_d->compositions.clear();
 
     Q_FOREACH (KisLayerCompositionSP comp, rhs.m_d->compositions) {

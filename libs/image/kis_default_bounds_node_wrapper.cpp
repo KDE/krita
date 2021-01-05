@@ -3,7 +3,8 @@
  */
 
 #include "kis_default_bounds_node_wrapper.h"
-#include "kis_mask.h"
+#include "kis_image.h"
+#include "kis_image_animation_interface.h"
 #include "kis_global.h"
 
 struct Q_DECL_HIDDEN KisDefaultBoundsNodeWrapper::Private {
@@ -37,24 +38,22 @@ QRect KisDefaultBoundsNodeWrapper::bounds() const
 
 QRect KisDefaultBoundsNodeWrapper::imageBorderRect() const
 {
-    return m_d->node->original() ? m_d->node->original()->defaultBounds()->imageBorderRect() : KisDefaultBoundsNodeWrapper::infiniteRect;
+    return m_d->node && m_d->node->image() ? m_d->node->image()->bounds() : KisDefaultBoundsNodeWrapper::infiniteRect;
 }
 
 bool KisDefaultBoundsNodeWrapper::wrapAroundMode() const
 {
-    return m_d->node->original() ? m_d->node->original()->defaultBounds()->wrapAroundMode() : false;
+    return m_d->node && m_d->node->image() ? m_d->node->image()->wrapAroundModeActive() : false;
 }
 
 int KisDefaultBoundsNodeWrapper::currentLevelOfDetail() const
 {
-    return m_d->node->original() ? m_d->node->original()->defaultBounds()->currentLevelOfDetail() : 0;
+    return m_d->node && m_d->node->image() ? m_d->node->image()->currentLevelOfDetail() : 0;
 }
 
 int KisDefaultBoundsNodeWrapper::currentTime() const
-{   
-    KisMaskWSP mask = dynamic_cast<KisMask*>(m_d->node.data());
-    KisNodeWSP toSample = !mask.isNull() ? mask->parent().data() : m_d->node;
-    const int time = toSample->original() ? toSample->original()->defaultBounds()->currentTime() : 0;
+{
+    const int time = m_d->node && m_d->node->image() ? m_d->node->image()->animationInterface()->currentTime() : 0;
     return time;
 }
 

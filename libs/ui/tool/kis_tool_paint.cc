@@ -718,7 +718,7 @@ void KisToolPaint::requestUpdateOutline(const QPointF &outlineDocPoint, const Ko
         std::tie(colorPreviewDocRect, colorPreviewBaseColorDocRect) =
                 this->colorPreviewDocRect(m_outlineDocPoint);
 
-        QRectF colorPreviewDocUpdateRect = colorPreviewDocRect | colorPreviewBaseColorDocRect;
+        colorPreviewDocUpdateRect = colorPreviewDocRect | colorPreviewBaseColorDocRect;
 
         if (!colorPreviewDocUpdateRect.isEmpty()) {
             colorPreviewDocUpdateRect = colorPreviewDocUpdateRect.adjusted(-xoffset,-yoffset,xoffset,yoffset);

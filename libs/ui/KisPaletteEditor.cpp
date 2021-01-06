@@ -138,9 +138,7 @@ void KisPaletteEditor::importPalette()
         storageLocation = m_d->view->document()->uniqueID();
     }
 
-    KoColorSetSP colorSet(new KoColorSet(filename));
-    colorSet->load(KisGlobalResourcesInterface::instance());
-    m_d->rServer->resourceModel()->addResource(colorSet, storageLocation);
+    m_d->rServer->resourceModel()->importResourceFile(filename);
 }
 
 void KisPaletteEditor::removePalette(KoColorSetSP cs)

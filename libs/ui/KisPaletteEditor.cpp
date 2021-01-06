@@ -312,7 +312,8 @@ void KisPaletteEditor::setEntry(const KoColor &color, const QModelIndex &index)
 
 void KisPaletteEditor::slotSetDocumentModified()
 {
-    m_d->rServer->resourceModel()->addResource(m_d->model->colorSet(), m_d->model->colorSet()->storageLocation());
+    // XXX: I'm not sure if we need to update the resource here // tiar
+    m_d->rServer->resourceModel()->updateResource(m_d->model->colorSet());
     m_d->view->document()->setModified(true);
 }
 
@@ -468,7 +469,7 @@ void KisPaletteEditor::updatePalette()
         m_d->model->addGroup(modified.groups[newGroupName]);
     }
     m_d->newGroupNames.clear();
-    m_d->rServer->resourceModel()->addResource(m_d->model->colorSet(), resourceLocation);
+    m_d->rServer->resourceModel()->updateResource(m_d->model->colorSet());
 }
 
 void KisPaletteEditor::slotPaletteChanged()

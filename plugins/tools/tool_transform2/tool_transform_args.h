@@ -207,21 +207,21 @@ public:
     void setTransformAroundRotationCenter(bool value);
 
     inline void setAX(double aX) {
-        KIS_SAFE_ASSERT_RECOVER(qFuzzyCompare(aX, normalizeAngle(aX))) {
+        if(qFuzzyCompare(aX, normalizeAngle(aX))) {
             aX = normalizeAngle(aX);
         }
 
         m_aX = aX;
     }
     inline void setAY(double aY) {
-        KIS_SAFE_ASSERT_RECOVER(qFuzzyCompare(aY, normalizeAngle(aY))) {
+        if(qFuzzyCompare(aY, normalizeAngle(aY))) {
             aY = normalizeAngle(aY);
         }
 
         m_aY = aY;
     }
     inline void setAZ(double aZ) {
-        KIS_SAFE_ASSERT_RECOVER(qFuzzyCompare(aZ, normalizeAngle(aZ))) {
+        if(qFuzzyCompare(aZ, normalizeAngle(aZ))) {
             aZ = normalizeAngle(aZ);
         }
 

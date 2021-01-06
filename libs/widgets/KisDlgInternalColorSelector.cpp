@@ -53,7 +53,7 @@ struct KisDlgInternalColorSelector::Private
     KisPaletteModel *paletteModel = 0;
     KisPaletteChooser *paletteChooser = 0;
     KisScreenColorSamplerBase *screenColorSampler = 0;
-    KisVisualColorModel *selectorModel {0};
+    KisVisualColorModelSP selectorModel;
 };
 
 KisDlgInternalColorSelector::KisDlgInternalColorSelector(QWidget *parent, KoColor color, Config config, const QString &caption, const KoColorDisplayRendererInterface *displayRenderer)
@@ -81,8 +81,8 @@ KisDlgInternalColorSelector::KisDlgInternalColorSelector(QWidget *parent, KoColo
     m_ui->visualSelector->setDisplayRenderer(displayRenderer);
     m_ui->visualSelector->setConfig(false, config.modal);
     if (config.visualColorSelector) {
-        connect(m_d->selectorModel, SIGNAL(sigNewColor(KoColor)), this, SLOT(slotColorUpdated(KoColor)));
-        connect(m_d->selectorModel, SIGNAL(sigColorModelChanged()), this, SLOT(slotSelectorModelChanged()));
+        connect(m_d->selectorModel.data(), SIGNAL(sigNewColor(KoColor)), this, SLOT(slotColorUpdated(KoColor)));
+        connect(m_d->selectorModel.data(), SIGNAL(sigColorModelChanged()), this, SLOT(slotSelectorModelChanged()));
         connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), m_ui->visualSelector, SLOT(slotConfigurationChanged()));
     } else {
         m_ui->visualSelector->hide();

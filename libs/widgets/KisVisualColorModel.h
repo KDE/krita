@@ -18,13 +18,23 @@
 class KoColorSpace;
 class KoColorDisplayRendererInterface;
 
+/**
+ * @brief The KisVisualColorModel class allows manipulating a KoColor using various color models
+ *
+ * This enables different widgets to easily manipulate the same color representation
+ * (like HSV channels of an RGB color etc.) in a synchronized way without having to know
+ * the details of the underlying color space.
+ * NOTE: This class is meant to be shared between GUI classes using KisVisualColorModelSP,
+ * so DO NOT SET a QObject parent in this case.
+ */
+
 class KRITAWIDGETS_EXPORT KisVisualColorModel : public QObject
 {
     Q_OBJECT
 public:
     enum ColorModel { None, Channel, HSV, HSL, HSI, HSY, YUV };
 
-    explicit KisVisualColorModel(QObject *parent = 0);
+    KisVisualColorModel();
     ~KisVisualColorModel() override;
 
     KoColor currentColor() const;
@@ -86,5 +96,7 @@ private:
     const QScopedPointer<Private> m_d;
 
 };
+
+typedef QSharedPointer<KisVisualColorModel> KisVisualColorModelSP;
 
 #endif // KIS_VISUAL_COLOR_MODEL_H

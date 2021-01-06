@@ -38,12 +38,17 @@ public:
         CompositeBackground
     };
 
-    explicit KisVisualColorSelector(QWidget *parent = 0);
+    /**
+     * @brief KisVisualColorSelector constructor.
+     * @param parent The parent widget.
+     * @param model The color model to work with. If not provided, a new one will be created.
+     */
+    explicit KisVisualColorSelector(QWidget *parent = 0, KisVisualColorModelSP model = KisVisualColorModelSP());
     ~KisVisualColorSelector() override;
 
     QSize minimumSizeHint() const override;
-    void setSelectorModel(KisVisualColorModel *model);
-    KisVisualColorModel *selectorModel() const;
+    void setSelectorModel(KisVisualColorModelSP model);
+    KisVisualColorModelSP selectorModel() const;
     /**
      * @brief setConfig
      * @param forceCircular

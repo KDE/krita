@@ -6,7 +6,6 @@
 
 #include "WGShadeSlider.h"
 
-#include "KisVisualColorModel.h"
 #include "KoColorDisplayRendererInterface.h"
 
 #include <QImage>
@@ -27,7 +26,7 @@ struct WGShadeSlider::Private
     qreal leftEnd;
     qreal rightStart;
     qreal rightEnd;
-    KisVisualColorModel *selectorModel {0};
+    KisVisualColorModelSP selectorModel;
     int cursorWidth {11};
     int lineWidth {1};
     int numPatches {9};
@@ -35,7 +34,7 @@ struct WGShadeSlider::Private
     bool imageNeedsUpdate {true};
 };
 
-WGShadeSlider::WGShadeSlider(QWidget *parent, KisVisualColorModel *model)
+WGShadeSlider::WGShadeSlider(QWidget *parent, KisVisualColorModelSP model)
     : QWidget(parent)
     , m_d(new Private)
 {
@@ -66,7 +65,7 @@ void WGShadeSlider::setDisplayMode(bool slider, int numPatches)
     }
 }
 
-void WGShadeSlider::setModel(KisVisualColorModel *model)
+void WGShadeSlider::setModel(KisVisualColorModelSP model)
 {
     m_d->selectorModel = model;
     m_d->imageNeedsUpdate = true;

@@ -48,8 +48,8 @@ struct KisVisualColorModel::Private
     KisColorSelectorConfiguration acs_config;
 };
 
-KisVisualColorModel::KisVisualColorModel(QObject *parent)
-    : QObject(parent)
+KisVisualColorModel::KisVisualColorModel()
+    : QObject(0)
     , m_d(new Private)
 {
     KConfigGroup cfg =  KSharedConfig::openConfig()->group("advancedColorSelector");

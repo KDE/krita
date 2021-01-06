@@ -7,12 +7,13 @@
 #ifndef WGSHADESELECTOR_H
 #define WGSHADESELECTOR_H
 
+#include <KisVisualColorModel.h>
+
 #include <QObject>
 #include <QWidget>
 #include <QVector>
 #include <QVector4D>
 
-class KisVisualColorModel;
 class WGShadeSlider;
 
 class WGShadeSelector : public QWidget
@@ -20,7 +21,7 @@ class WGShadeSelector : public QWidget
     Q_OBJECT
 
 public:
-    explicit WGShadeSelector(KisVisualColorModel *selector, QWidget *parent = nullptr);
+    explicit WGShadeSelector(KisVisualColorModelSP selector, QWidget *parent = nullptr);
 
     void updateSettings();
 protected:
@@ -38,7 +39,7 @@ Q_SIGNALS:
     void sigColorInteraction(bool active);
 
 private:
-    KisVisualColorModel *m_model;
+    KisVisualColorModelSP m_model;
     QVector<WGShadeSlider *> m_sliders;
     int m_lineHeight {10};
     bool m_resetOnExternalUpdate {true};

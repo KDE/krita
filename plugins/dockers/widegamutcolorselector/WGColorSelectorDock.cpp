@@ -67,14 +67,13 @@ WGColorSelectorDock::WGColorSelectorDock()
     mainWidget->layout()->addWidget(headerWidget);
     mainWidget->layout()->addWidget(m_selector);
 
-
-    KisVisualColorModel *model = m_selector->selectorModel();
+    KisVisualColorModelSP model = m_selector->selectorModel();
     m_shadeSelector = new WGShadeSelector(model, this);
     mainWidget->layout()->addWidget(m_shadeSelector);
-    connect(model, SIGNAL(sigChannelValuesChanged(QVector4D)),
+    connect(model.data(), SIGNAL(sigChannelValuesChanged(QVector4D)),
             m_shadeSelector, SLOT(slotChannelValuesChanged(QVector4D)));
     connect(m_shadeSelector, SIGNAL(sigChannelValuesChanged(QVector4D)),
-            model, SLOT(slotSetChannelValues(QVector4D)));
+            model.data(), SLOT(slotSetChannelValues(QVector4D)));
     connect(m_shadeSelector, SIGNAL(sigColorInteraction(bool)), SLOT(slotColorInteraction(bool)));
 
     m_history = new WGColorPatches(mainWidget);

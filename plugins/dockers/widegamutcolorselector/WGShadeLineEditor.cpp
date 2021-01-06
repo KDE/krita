@@ -9,14 +9,12 @@
 
 #include "ui_WdgWGShadeLineEditor.h"
 
-#include <KisVisualColorModel.h>
-
 #include <QCoreApplication>
 #include <QResizeEvent>
 
 WGShadeLineEditor::WGShadeLineEditor(QWidget *parent)
     : QFrame(parent, Qt::Popup)
-    , m_model(new KisVisualColorModel(this))
+    , m_model(new KisVisualColorModel)
     , m_ui(new Ui_WGShadeLineEditor)
     , m_iconSlider(new WGShadeSlider(this, m_model))
 {

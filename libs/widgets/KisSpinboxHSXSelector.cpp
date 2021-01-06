@@ -11,14 +11,13 @@
 #include <QList>
 #include <QSignalBlocker>
 #include "kis_double_parse_spin_box.h"
-#include "KisVisualColorModel.h"
 
 struct KisSpinboxHSXSelector::Private
 {
     QList <QLabel*> labels;
     QList <KisDoubleParseSpinBox*> spinBoxes;
     QFormLayout *layout {0};
-    KisVisualColorModel *selectorModel {0};
+    KisVisualColorModelSP selectorModel;
 };
 
 KisSpinboxHSXSelector::KisSpinboxHSXSelector(QWidget *parent)
@@ -47,15 +46,15 @@ KisSpinboxHSXSelector::~KisSpinboxHSXSelector()
 {
 }
 
-void KisSpinboxHSXSelector::setModel(KisVisualColorModel *model)
+void KisSpinboxHSXSelector::setModel(KisVisualColorModelSP model)
 {
     if (m_d->selectorModel) {
         m_d->selectorModel->disconnect(this);
-        disconnect(m_d->selectorModel);
+        disconnect(m_d->selectorModel.data());
     }
     m_d->selectorModel = model;
     if (model) {
-        connect(model, SIGNAL(sigColorModelChanged()), this, SLOT(slotColorModelChanged()));
+        connect(model.data(), SIGNAL(sigColorModelChanged()), this, SLOT(slotColorModelChanged()));
         slotColorModelChanged();
         if (model->isHSXModel()) {
             slotChannelValuesChanged(model->channelValues());
@@ -86,10 +85,10 @@ void KisSpinboxHSXSelector::slotColorModelChanged()
         default:
             break;
         }
-        connect(m_d->selectorModel, SIGNAL(sigChannelValuesChanged(QVector4D)),
+        connect(m_d->selectorModel.data(), SIGNAL(sigChannelValuesChanged(QVector4D)),
                 this, SLOT(slotChannelValuesChanged(QVector4D)), Qt::UniqueConnection);
         connect(this, SIGNAL(sigChannelValuesChanged(QVector4D)),
-                m_d->selectorModel, SLOT(slotSetChannelValues(QVector4D)), Qt::UniqueConnection);
+                m_d->selectorModel.data(), SLOT(slotSetChannelValues(QVector4D)), Qt::UniqueConnection);
     } else {
         m_d->selectorModel->disconnect(SIGNAL(sigChannelValuesChanged(QVector4D)), this);
         disconnect(SIGNAL(sigChannelValuesChanged(QVector4D)));

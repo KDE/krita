@@ -144,7 +144,7 @@ KisVisualColorModel *KisVisualColorSelectorShape::selectorModel() const
 {
     KisVisualColorSelector* selectorWidget = qobject_cast<KisVisualColorSelector*>(parent());
     KIS_ASSERT(selectorWidget);
-    return selectorWidget->selectorModel();
+    return selectorWidget->selectorModel().data();
 }
 
 const QImage& KisVisualColorSelectorShape::getImageMap()

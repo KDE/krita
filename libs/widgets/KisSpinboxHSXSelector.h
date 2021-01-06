@@ -7,12 +7,12 @@
 #ifndef KISSPINBOXHSXSELECTOR_H
 #define KISSPINBOXHSXSELECTOR_H
 
+#include "kritawidgets_export.h"
+#include "KisVisualColorModel.h"
+
 #include <QWidget>
 #include <QVector4D>
-#include "kritawidgets_export.h"
 #include <QScopedPointer>
-
-class KisVisualColorModel;
 
 /**
  * A set of spinboxes to adjust HSV, HSL, HSI or HSY' values.
@@ -34,7 +34,7 @@ public:
      * it needs to be deactivated or hidden manually since it will
      * not synchronize values for other selector models.
      */
-    void setModel(KisVisualColorModel *model);
+    void setModel(KisVisualColorModelSP model);
 
 Q_SIGNALS:
     void sigChannelValuesChanged(const QVector4D &values);

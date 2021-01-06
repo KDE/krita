@@ -9,11 +9,11 @@
 
 #include <WGConfig.h>
 
+#include <KisVisualColorModel.h>
 #include <QIcon>
 #include <QFrame>
 #include <QScopedPointer>
 
-class KisVisualColorModel;
 class Ui_WGShadeLineEditor;
 class WGShadeSlider;
 
@@ -40,7 +40,7 @@ Q_SIGNALS:
     void sigEditorClosed(int lineIndex);
 
 private:
-    KisVisualColorModel *m_model;
+    KisVisualColorModelSP m_model;
     QScopedPointer<Ui_WGShadeLineEditor> m_ui;
     WGShadeSlider *m_iconSlider;
     int m_lineIndex {0};

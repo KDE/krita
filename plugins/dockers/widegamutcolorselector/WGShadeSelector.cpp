@@ -9,12 +9,10 @@
 #include "WGConfig.h"
 #include "WGShadeSlider.h"
 
-#include <KisVisualColorModel.h>
-
 #include <QVBoxLayout>
 #include <QMouseEvent>
 
-WGShadeSelector::WGShadeSelector(KisVisualColorModel *selector, QWidget *parent)
+WGShadeSelector::WGShadeSelector(KisVisualColorModelSP selector, QWidget *parent)
     : QWidget(parent)
     , m_model(selector)
 {
@@ -22,8 +20,8 @@ WGShadeSelector::WGShadeSelector(KisVisualColorModel *selector, QWidget *parent)
     l->setSpacing(1);
     l->setMargin(0);
 
-    connect(m_model, SIGNAL(sigColorModelChanged()), SLOT(slotReset()));
-    connect(m_model, SIGNAL(sigColorSpaceChanged()), SLOT(slotReset()));
+    connect(m_model.data(), SIGNAL(sigColorModelChanged()), SLOT(slotReset()));
+    connect(m_model.data(), SIGNAL(sigColorSpaceChanged()), SLOT(slotReset()));
     updateSettings();
 }
 

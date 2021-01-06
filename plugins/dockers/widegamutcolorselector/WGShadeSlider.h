@@ -7,23 +7,24 @@
 #ifndef WGSHADESLIDER_H
 #define WGSHADESLIDER_H
 
+#include <KisVisualColorModel.h>
+
 #include <QWidget>
 #include <QScopedPointer>
 #include <QVector4D>
 
-class KisVisualColorModel;
 class QImage;
 
 class WGShadeSlider : public QWidget
 {
     Q_OBJECT
 public:
-    explicit WGShadeSlider(QWidget *parent = nullptr, KisVisualColorModel *model = nullptr);
+    explicit WGShadeSlider(QWidget *parent = nullptr, KisVisualColorModelSP model = nullptr);
     ~WGShadeSlider() override;
 
-    void setGradient(const QVector4D &range, const QVector4D &offset = QVector4D());
+    void setGradient(const QVector4D &range, const QVector4D &offset);
     void setDisplayMode(bool slider, int numPatches = -1);
-    void setModel(KisVisualColorModel *model);
+    void setModel(KisVisualColorModelSP model);
     QVector4D channelValues() const;
     const QImage* background();
 

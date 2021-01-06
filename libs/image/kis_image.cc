@@ -428,6 +428,19 @@ void KisImage::copyFromImageImpl(const KisImage &rhs, int policy)
                                                    m_d->overlaySelectionMask = m_d->targetOverlaySelectionMask;
                                                    m_d->rootLayer->notifyChildMaskChanged();
                                                }
+
+
+                                               // Re-establish Keyframe Channel and Node Connections
+                                               // This is a workaround for copy-constructors failing to pass
+                                               // proper DefaultBounds due to either lacking image data on construction
+                                               // We should change the way "DefaultBounds" works to try to make it
+                                               // safer for threading races.
+                                               using KeyframeChannelContainer = QMap<QString, KisKeyframeChannel*>;
+                                               KeyframeChannelContainer keyframeChannels = node->keyframeChannels();
+                                               for (KeyframeChannelContainer::iterator i = keyframeChannels.begin();
+                                                    i != keyframeChannels.end(); i++) {
+                                                   keyframeChannels[i.key()]->setNode(node);
+                                               }
                                            });
     }
 
@@ -435,6 +448,8 @@ void KisImage::copyFromImageImpl(const KisImage &rhs, int policy)
                                        [](KisNodeSP node) {
                                            dbgImage << "Node: " << (void *)node.data();
                                        });
+
+
 
     m_d->compositions.clear();
 

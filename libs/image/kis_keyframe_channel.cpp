@@ -288,7 +288,7 @@ KisNodeWSP KisKeyframeChannel::node() const
     return m_d->parentNode;
 }
 
-void KisKeyframeChannel::setBounds(KisDefaultBoundsBaseSP bounds) {
+void KisKeyframeChannel::setDefaultBounds(KisDefaultBoundsBaseSP bounds) {
     m_d->bounds = bounds;
 }
 

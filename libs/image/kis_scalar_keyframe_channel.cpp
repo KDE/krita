@@ -186,6 +186,14 @@ KisScalarKeyframeChannel::KisScalarKeyframeChannel(const KisScalarKeyframeChanne
     Q_FOREACH (int time, rhs.constKeys().keys()) {
         KisKeyframeChannel::copyKeyframe(&rhs, time, this, time);
     }
+
+    connect(this, &KisScalarKeyframeChannel::sigKeyframeChanged, [](const KisKeyframeChannel *channel, int time) {
+        const KisScalarKeyframeChannel* chan = dynamic_cast<const KisScalarKeyframeChannel*>(channel);
+        chan->sigChannelUpdated(
+                    chan->affectedFrames(time),
+                    chan->affectedRect(time)
+                    );
+    });
 }
 
 KisScalarKeyframeChannel::~KisScalarKeyframeChannel()

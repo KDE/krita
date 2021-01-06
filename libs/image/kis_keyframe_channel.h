@@ -115,7 +115,7 @@ public:
 
     void setNode(KisNodeWSP node);
     KisNodeWSP node() const;
-    void setBounds(KisDefaultBoundsBaseSP bounds);
+    void setDefaultBounds(KisDefaultBoundsBaseSP bounds);
 
     /** @brief Calculates a pseudo-unique hash based on
      * the relevant internal state of the channel. */

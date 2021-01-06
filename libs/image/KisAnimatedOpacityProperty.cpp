@@ -55,7 +55,7 @@ void KisAnimatedOpacityProperty::makeAnimated(KisNode *parentNode) {
                          ));
 
     m_channel->setNode(parentNode);
-    m_channel->setBounds(new KisDefaultBoundsNodeWrapper(parentNode));
+    m_channel->setDefaultBounds(new KisDefaultBoundsNodeWrapper(parentNode));
     m_channel->setLimits(0, 100);
     m_channel->setDefaultInterpolationMode(KisScalarKeyframe::Linear);
     m_channel->setDefaultValue(100);

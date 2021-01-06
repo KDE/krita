@@ -594,7 +594,7 @@ KisKeyframeChannel *KisTransformMask::requestKeyframeChannel(const QString &id)
 
         KisKeyframeChannel *channel = animatedParams->requestKeyframeChannel(id, this);
         channel->setNode(this);
-        channel->setBounds(new KisDefaultBounds(this->image()));
+        channel->setDefaultBounds(new KisDefaultBounds(this->image()));
         if (channel) return channel;
     }
 

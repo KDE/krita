@@ -430,7 +430,7 @@ void KisImage::copyFromImageImpl(const KisImage &rhs, int policy)
                                                }
 
 
-                                               // Re-establish Keyframe Channel and Node Connections
+                                               // Re-establish DefaultBounds Instances for Existing Nodes
                                                // This is a workaround for copy-constructors failing to pass
                                                // proper DefaultBounds due to either lacking image data on construction
                                                // We should change the way "DefaultBounds" works to try to make it
@@ -502,6 +502,7 @@ void KisImage::nodeHasBeenAdded(KisNode *parent, int index)
     KisLayerUtils::recursiveApplyNodes(KisSharedPtr<KisNode>(parent), [this](KisNodeSP node){
        QMap<QString, KisKeyframeChannel*> chans = node->keyframeChannels();
        Q_FOREACH(KisKeyframeChannel* chan, chans.values()) {
+           chan->setNode(node);
            this->keyframeChannelHasBeenAdded(node.data(), chan);
        }
     });

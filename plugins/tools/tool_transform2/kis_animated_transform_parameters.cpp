@@ -21,15 +21,15 @@ struct KisAnimatedTransformMaskParameters::Private
         hidden(false),
         hash()
     {
-        transformChannels.insert(KisKeyframeChannel::PositionX.name(), nullptr);
-        transformChannels.insert(KisKeyframeChannel::PositionY.name(), nullptr);
-        transformChannels.insert(KisKeyframeChannel::ScaleX.name(), nullptr);
-        transformChannels.insert(KisKeyframeChannel::ScaleY.name(), nullptr);
-        transformChannels.insert(KisKeyframeChannel::ShearX.name(), nullptr);
-        transformChannels.insert(KisKeyframeChannel::ShearY.name(), nullptr);
-        transformChannels.insert(KisKeyframeChannel::RotationX.name(), nullptr);
-        transformChannels.insert(KisKeyframeChannel::RotationY.name(), nullptr);
-        transformChannels.insert(KisKeyframeChannel::RotationZ.name(), nullptr);
+        transformChannels.insert(KisKeyframeChannel::PositionX.id(), nullptr);
+        transformChannels.insert(KisKeyframeChannel::PositionY.id(), nullptr);
+        transformChannels.insert(KisKeyframeChannel::ScaleX.id(), nullptr);
+        transformChannels.insert(KisKeyframeChannel::ScaleY.id(), nullptr);
+        transformChannels.insert(KisKeyframeChannel::ShearX.id(), nullptr);
+        transformChannels.insert(KisKeyframeChannel::ShearY.id(), nullptr);
+        transformChannels.insert(KisKeyframeChannel::RotationX.id(), nullptr);
+        transformChannels.insert(KisKeyframeChannel::RotationY.id(), nullptr);
+        transformChannels.insert(KisKeyframeChannel::RotationZ.id(), nullptr);
     }
 
     TransformChannels transformChannels;
@@ -41,23 +41,23 @@ struct KisAnimatedTransformMaskParameters::Private
 KoID chanNameToKoID(const QString &name) {
     KoID channelId;
 
-    if (name == KisKeyframeChannel::PositionX.name()) {
+    if (name == KisKeyframeChannel::PositionX.id()) {
         channelId = KisKeyframeChannel::PositionX;
-    } else if (name == KisKeyframeChannel::PositionY.name()) {
+    } else if (name == KisKeyframeChannel::PositionY.id()) {
         channelId = KisKeyframeChannel::PositionY;
-    } else if (name == KisKeyframeChannel::ScaleX.name()) {
+    } else if (name == KisKeyframeChannel::ScaleX.id()) {
         channelId = KisKeyframeChannel::ScaleX;
-    } else if (name == KisKeyframeChannel::ScaleY.name()) {
+    } else if (name == KisKeyframeChannel::ScaleY.id()) {
         channelId = KisKeyframeChannel::ScaleY;
-    } else if (name == KisKeyframeChannel::ShearX.name()) {
+    } else if (name == KisKeyframeChannel::ShearX.id()) {
         channelId = KisKeyframeChannel::ShearX;
-    } else if (name == KisKeyframeChannel::ShearY.name()) {
+    } else if (name == KisKeyframeChannel::ShearY.id()) {
         channelId = KisKeyframeChannel::ShearY;
-    } else if (name == KisKeyframeChannel::RotationX.name()) {
+    } else if (name == KisKeyframeChannel::RotationX.id()) {
         channelId = KisKeyframeChannel::RotationX;
-    } else if (name == KisKeyframeChannel::RotationY.name()) {
+    } else if (name == KisKeyframeChannel::RotationY.id()) {
         channelId = KisKeyframeChannel::RotationY;
-    } else if (name == KisKeyframeChannel::RotationZ.name()) {
+    } else if (name == KisKeyframeChannel::RotationZ.id()) {
         channelId = KisKeyframeChannel::RotationZ;
     } else {
         channelId = KoID();
@@ -122,25 +122,25 @@ const QSharedPointer<ToolTransformArgs> KisAnimatedTransformMaskParameters::tran
 {
     QSharedPointer<ToolTransformArgs> args = KisTransformMaskAdapter::transformArgs();
 
-    if (m_d->transformChannels[KisKeyframeChannel::PositionX.name()] || m_d->transformChannels[KisKeyframeChannel::PositionY.name()]) {
+    if (m_d->transformChannels[KisKeyframeChannel::PositionX.id()] || m_d->transformChannels[KisKeyframeChannel::PositionY.id()]) {
 
-        bool hasXKeys = m_d->transformChannels[KisKeyframeChannel::PositionX.name()] ? m_d->transformChannels[KisKeyframeChannel::PositionX.name()]->keyframeCount() > 0 : false;
-        bool hasYKeys = m_d->transformChannels[KisKeyframeChannel::PositionY.name()] ? m_d->transformChannels[KisKeyframeChannel::PositionY.name()]->keyframeCount() > 0 : false;
+        bool hasXKeys = m_d->transformChannels[KisKeyframeChannel::PositionX.id()] ? m_d->transformChannels[KisKeyframeChannel::PositionX.id()]->keyframeCount() > 0 : false;
+        bool hasYKeys = m_d->transformChannels[KisKeyframeChannel::PositionY.id()] ? m_d->transformChannels[KisKeyframeChannel::PositionY.id()]->keyframeCount() > 0 : false;
 
 
-        qreal xPosition = hasXKeys ? m_d->transformChannels[KisKeyframeChannel::PositionX.name()]->currentValue() : args->transformedCenter().x();
-        qreal yPosition = hasYKeys ? m_d->transformChannels[KisKeyframeChannel::PositionY.name()]->currentValue() : args->transformedCenter().y();
+        qreal xPosition = hasXKeys ? m_d->transformChannels[KisKeyframeChannel::PositionX.id()]->currentValue() : args->transformedCenter().x();
+        qreal yPosition = hasYKeys ? m_d->transformChannels[KisKeyframeChannel::PositionY.id()]->currentValue() : args->transformedCenter().y();
 
         args->setTransformedCenter(QPointF(xPosition, yPosition));
     }
 
     {
 
-        bool hasXKeys = m_d->transformChannels[KisKeyframeChannel::ScaleX.name()] ? m_d->transformChannels[KisKeyframeChannel::ScaleX.name()]->keyframeCount() > 0 : false;
-        bool hasYKeys = m_d->transformChannels[KisKeyframeChannel::ScaleY.name()] ? m_d->transformChannels[KisKeyframeChannel::ScaleY.name()]->keyframeCount() > 0 : false;
+        bool hasXKeys = m_d->transformChannels[KisKeyframeChannel::ScaleX.id()] ? m_d->transformChannels[KisKeyframeChannel::ScaleX.id()]->keyframeCount() > 0 : false;
+        bool hasYKeys = m_d->transformChannels[KisKeyframeChannel::ScaleY.id()] ? m_d->transformChannels[KisKeyframeChannel::ScaleY.id()]->keyframeCount() > 0 : false;
 
-        qreal xScale = hasXKeys ? m_d->transformChannels[KisKeyframeChannel::ScaleX.name()]->currentValue() : args->scaleX();
-        qreal yScale = hasYKeys ? m_d->transformChannels[KisKeyframeChannel::ScaleY.name()]->currentValue() : args->scaleY();
+        qreal xScale = hasXKeys ? m_d->transformChannels[KisKeyframeChannel::ScaleX.id()]->currentValue() : args->scaleX();
+        qreal yScale = hasYKeys ? m_d->transformChannels[KisKeyframeChannel::ScaleY.id()]->currentValue() : args->scaleY();
 
         args->setScaleX(xScale);
         args->setScaleY(yScale);
@@ -148,11 +148,11 @@ const QSharedPointer<ToolTransformArgs> KisAnimatedTransformMaskParameters::tran
 
     {
 
-        bool hasXKeys = m_d->transformChannels[KisKeyframeChannel::ShearX.name()] ? m_d->transformChannels[KisKeyframeChannel::ShearX.name()]->keyframeCount() > 0 : false;
-        bool hasYKeys = m_d->transformChannels[KisKeyframeChannel::ShearY.name()] ? m_d->transformChannels[KisKeyframeChannel::ShearY.name()]->keyframeCount() > 0 : false;
+        bool hasXKeys = m_d->transformChannels[KisKeyframeChannel::ShearX.id()] ? m_d->transformChannels[KisKeyframeChannel::ShearX.id()]->keyframeCount() > 0 : false;
+        bool hasYKeys = m_d->transformChannels[KisKeyframeChannel::ShearY.id()] ? m_d->transformChannels[KisKeyframeChannel::ShearY.id()]->keyframeCount() > 0 : false;
 
-        qreal xShear = hasXKeys ? m_d->transformChannels[KisKeyframeChannel::ShearX.name()]->currentValue() : args->shearX();
-        qreal yShear = hasYKeys ? m_d->transformChannels[KisKeyframeChannel::ShearY.name()]->currentValue() : args->shearY();
+        qreal xShear = hasXKeys ? m_d->transformChannels[KisKeyframeChannel::ShearX.id()]->currentValue() : args->shearX();
+        qreal yShear = hasYKeys ? m_d->transformChannels[KisKeyframeChannel::ShearY.id()]->currentValue() : args->shearY();
 
         args->setShearX(xShear);
         args->setShearY(yShear);
@@ -160,13 +160,13 @@ const QSharedPointer<ToolTransformArgs> KisAnimatedTransformMaskParameters::tran
 
     {
 
-        bool hasXKeys = m_d->transformChannels[KisKeyframeChannel::RotationX.name()] ? m_d->transformChannels[KisKeyframeChannel::RotationX.name()]->keyframeCount() > 0 : false;
-        bool hasYKeys = m_d->transformChannels[KisKeyframeChannel::RotationY.name()] ? m_d->transformChannels[KisKeyframeChannel::RotationY.name()]->keyframeCount() > 0 : false;
-        bool hasZKeys = m_d->transformChannels[KisKeyframeChannel::RotationZ.name()] ? m_d->transformChannels[KisKeyframeChannel::RotationZ.name()]->keyframeCount() > 0 : false;
+        bool hasXKeys = m_d->transformChannels[KisKeyframeChannel::RotationX.id()] ? m_d->transformChannels[KisKeyframeChannel::RotationX.id()]->keyframeCount() > 0 : false;
+        bool hasYKeys = m_d->transformChannels[KisKeyframeChannel::RotationY.id()] ? m_d->transformChannels[KisKeyframeChannel::RotationY.id()]->keyframeCount() > 0 : false;
+        bool hasZKeys = m_d->transformChannels[KisKeyframeChannel::RotationZ.id()] ? m_d->transformChannels[KisKeyframeChannel::RotationZ.id()]->keyframeCount() > 0 : false;
 
-        qreal xRot = hasXKeys ? m_d->transformChannels[KisKeyframeChannel::RotationX.name()]->currentValue() : args->aX();
-        qreal yRot = hasYKeys ? m_d->transformChannels[KisKeyframeChannel::RotationY.name()]->currentValue() : args->aY();
-        qreal zRot = hasZKeys ? m_d->transformChannels[KisKeyframeChannel::RotationZ.name()]->currentValue() : args->aZ();
+        qreal xRot = hasXKeys ? m_d->transformChannels[KisKeyframeChannel::RotationX.id()]->currentValue() : args->aX();
+        qreal yRot = hasYKeys ? m_d->transformChannels[KisKeyframeChannel::RotationY.id()]->currentValue() : args->aY();
+        qreal zRot = hasZKeys ? m_d->transformChannels[KisKeyframeChannel::RotationZ.id()]->currentValue() : args->aZ();
 
         args->setAX(xRot);
         args->setAY(yRot);
@@ -194,13 +194,12 @@ void KisAnimatedTransformMaskParameters::translate(const QPointF &offset)
 KisKeyframeChannel *KisAnimatedTransformMaskParameters::requestKeyframeChannel(const QString &id, KisNodeWSP parent)
 {
     KoID channelId = chanIdToKoID(id);
-
-    if (m_d->transformChannels[channelId.name()].isNull()) {
-        setKeyframeChannel(channelId.name(), toQShared(new KisScalarKeyframeChannel(channelId, new KisDefaultBoundsNodeWrapper(parent))));
-        m_d->transformChannels[channelId.name()]->setNode(parent);
+    if (m_d->transformChannels[channelId.id()].isNull()) {
+        setKeyframeChannel(channelId.id(), toQShared(new KisScalarKeyframeChannel(channelId, new KisDefaultBoundsNodeWrapper(parent))));
+        m_d->transformChannels[channelId.id()]->setNode(parent);
     }
 
-    return m_d->transformChannels[channelId.name()].data();
+    return m_d->transformChannels[channelId.id()].data();
 }
 
 void KisAnimatedTransformMaskParameters::setKeyframeChannel(const QString &name, QSharedPointer<KisKeyframeChannel> kcsp) {
@@ -216,7 +215,7 @@ void KisAnimatedTransformMaskParameters::setKeyframeChannel(const QString &name,
 
 KisKeyframeChannel *KisAnimatedTransformMaskParameters::getKeyframeChannel(const KoID &koid) const
 {
-    return m_d->transformChannels[koid.name()].data();
+    return m_d->transformChannels[koid.id()].data();
 }
 
 QList<KisKeyframeChannel *> KisAnimatedTransformMaskParameters::copyChannelsFrom(const KisAnimatedTransformParamsInterface *other)
@@ -232,7 +231,7 @@ QList<KisKeyframeChannel *> KisAnimatedTransformMaskParameters::copyChannelsFrom
 
         if (!src) continue;
 
-        setKeyframeChannel(channelId.name(), toQShared(new KisScalarKeyframeChannel(*src)));
+        setKeyframeChannel(channelId.id(), toQShared(new KisScalarKeyframeChannel(*src)));
         chans.append(getKeyframeChannel(channelId));
     }
 

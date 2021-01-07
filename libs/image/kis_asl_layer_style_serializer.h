@@ -26,6 +26,8 @@ public:
     void readFromDevice(QIODevice *device);
     bool readFromFile(const QString& filename);
 
+    void assignAllLayerStylesToLayers(KisNodeSP root);
+
     QVector<KisPSDLayerStyleSP> styles() const;
     void setStyles(const QVector<KisPSDLayerStyleSP> &styles);
 

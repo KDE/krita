@@ -461,15 +461,6 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageSP image, const QStri
     location += m_d->imageName + LAYER_STYLES_PATH;
     if (store->hasFile(location)) {
 
-        warnKrita << "WARNING: Asl Layer Styles cannot be read (part of resource rewrite).";
-        // TODO: RESOURCES: needs implementing of creation of the storage and linking it to the database etc.
-
-        // Question: do we need to use KisAslStorage or the document storage?
-        // see: QSharedPointer<KoResourceServer> storage = KisResourceServerProvider::instance()->storageByName(m_d->document->uniqueID());
-        // and then: storage->addResource(aslStyle);
-        // or through the server: get the server, add everything directly to the server
-        // but I believe it should go through the KisAslStorage? // tiar
-
         KisAslLayerStyleSerializer serializer;
         store->open(location);
         {
@@ -493,8 +484,8 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageSP image, const QStri
             Q_FOREACH(KisPSDLayerStyleSP layerStyle, serializer.styles()) {
                 model.addResource(layerStyle, resourceLocation);
             }
-            // TODO: this weird thing needs to be done:
-            // collection->assignAllLayerStyles(image->root());
+            serializer.assignAllLayerStylesToLayers(image->root());
+
         } else {
             warnKrita << "WARNING: Couldn't load layer styles library from .kra!";
         }

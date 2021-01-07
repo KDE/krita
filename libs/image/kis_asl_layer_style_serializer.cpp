@@ -16,6 +16,8 @@
 
 #include "kis_dom_utils.h"
 
+#include <kis_layer.h>
+
 
 #include "psd.h"
 #include "kis_global.h"
@@ -1210,6 +1212,36 @@ bool KisAslLayerStyleSerializer::readFromFile(const QString& filename)
     file.close();
 
     return true;
+}
+
+void KisAslLayerStyleSerializer::assignAllLayerStylesToLayers(KisNodeSP root)
+{
+    KisLayer* layer = qobject_cast<KisLayer*>(root.data());
+
+    if (layer && layer->layerStyle()) {
+        QUuid uuid = layer->layerStyle()->uuid();
+
+        bool found = false;
+
+        Q_FOREACH (KisPSDLayerStyleSP style, m_stylesVector) {
+            if (style->uuid() == uuid) {
+                layer->setLayerStyle(style);
+                found = true;
+                break;
+            }
+        }
+
+        if (!found) {
+            warnKrita << "WARNING: loading layer style for" << layer->name() << "failed! It requests inexistent style:" << uuid;
+        }
+    }
+
+    KisNodeSP child = root->firstChild();
+    while (child) {
+        assignAllLayerStylesToLayers(child);
+        child = child->nextSibling();
+    }
+
 }
 
 void KisAslLayerStyleSerializer::readFromDevice(QIODevice *device)

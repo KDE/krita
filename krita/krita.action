@@ -3524,18 +3524,6 @@ Enable to preserve playback timing.</text>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
-    <Action name="rasterize_layer">
-      <icon></icon>
-      <text>Ras&amp;terize Layer</text>
-      <whatsThis></whatsThis>
-      <toolTip>Rasterize Layer</toolTip>
-      <iconText>Rasterize Layer</iconText>
-      <activationFlags>10000000</activationFlags>
-      <activationConditions>1</activationConditions>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
     <Action name="flatten_image">
       <icon></icon>
       <text>Flatten ima&amp;ge</text>

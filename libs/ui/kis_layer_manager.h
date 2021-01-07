@@ -69,7 +69,6 @@ private Q_SLOTS:
     void flattenImage();
 
     void flattenLayer();
-    void rasterizeLayer();
 
     void layersUpdated();
 

@@ -150,9 +150,6 @@ void KisLayerManager::setup(KisActionManager* actionManager)
     m_flattenLayer = actionManager->createAction("flatten_layer");
     connect(m_flattenLayer, SIGNAL(triggered()), this, SLOT(flattenLayer()));
 
-    m_rasterizeLayer = actionManager->createAction("rasterize_layer");
-    connect(m_rasterizeLayer, SIGNAL(triggered()), this, SLOT(rasterizeLayer()));
-
     m_groupLayersSave = actionManager->createAction("save_groups_as_images");
     connect(m_groupLayersSave, SIGNAL(triggered()), this, SLOT(saveGroupLayers()));
 
@@ -879,35 +876,6 @@ void KisLayerManager::flattenLayer()
     convertNodeToPaintLayer(layer);
     m_view->updateGUI();
 }
-
-void KisLayerManager::rasterizeLayer()
-{
-    KisImageSP image = m_view->image();
-    if (!image) return;
-
-    KisLayerSP layer = activeLayer();
-    if (!layer) return;
-
-    if (!m_view->blockUntilOperationsFinished(image)) return;
-    if (!m_view->nodeManager()->canModifyLayer(layer)) return;
-
-    KisPaintLayerSP paintLayer = new KisPaintLayer(image, layer->name(), layer->opacity());
-    KisPainter gc(paintLayer->paintDevice());
-    QRect rc = layer->projection()->exactBounds();
-    gc.bitBlt(rc.topLeft(), layer->projection(), rc);
-
-    m_commandsAdapter->beginMacro(kundo2_i18n("Rasterize Layer"));
-    m_commandsAdapter->addNode(paintLayer.data(), layer->parent().data(), layer.data());
-
-    int childCount = layer->childCount();
-    for (int i = 0; i < childCount; i++) {
-        m_commandsAdapter->moveNode(layer->firstChild(), paintLayer, paintLayer->lastChild());
-    }
-    m_commandsAdapter->removeNode(layer);
-    m_commandsAdapter->endMacro();
-    updateGUI();
-}
-
 
 void KisLayerManager::layersUpdated()
 {

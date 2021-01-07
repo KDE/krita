@@ -280,6 +280,10 @@ void KisPaintOpPreset::fromXML(const QDomElement& presetElt, KisResourcesInterfa
     setName(presetElt.attribute("name"));
     QString paintopid = presetElt.attribute("paintopid");
 
+    if (!metadata().contains("paintopid")) {
+        addMetaData("paintopid", paintopid);
+    }
+
     if (paintopid.isEmpty()) {
         dbgImage << "No paintopid attribute";
         setValid(false);

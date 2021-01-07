@@ -550,6 +550,8 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
         qWarning() << "Could not execute initial addResourceVersion statement" << q.boundValues() << q.lastError();
     }
 
+    r = addMetaDataForId(resource->metadata(), resource->resourceId(), "resources");
+
     return r;
 }
 

@@ -731,6 +731,20 @@ void KisAslLayerStyleSerializer::saveToDevice(QIODevice *device)
     writer.writeFile(device, doc);
 }
 
+bool KisAslLayerStyleSerializer::saveToFile(const QString& filename)
+{
+    QFile file(filename);
+
+    if (!file.open(QIODevice::WriteOnly)) {
+        dbgKrita << "Can't open file " << filename;
+        return false;
+    }
+    saveToDevice(&file);
+    file.close();
+
+    return true;
+}
+
 void convertAndSetBlendMode(const QString &mode,
                             boost::function<void (const QString &)> setBlendMode)
 {

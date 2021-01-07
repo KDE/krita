@@ -124,7 +124,7 @@ const QString CANVASPROJECTIONCOLOR = "ProjectionBackgroundColor";
 const QString COLORBYTEDATA = "ColorData";
 const QString SIMPLECOLORDATA = "SimpleColorData"; // easier 8-bit color data that works well with XML
 const QString GLOBALASSISTANTSCOLOR = "GlobalAssistantsColor";
-const QString PALETTES = ResourceType::Palettes;
+const QString PALETTES = "Palettes"; // ResourceType::Palettes is lowercase, while the tag is uppercase
 const QString MIRROR_AXIS = "MirrorAxis";
 }
 

@@ -27,6 +27,7 @@ public:
     bool readFromFile(const QString& filename);
 
     void assignAllLayerStylesToLayers(KisNodeSP root);
+    static QVector<KisPSDLayerStyleSP> collectAllLayerStyles(KisNodeSP root);
 
     QVector<KisPSDLayerStyleSP> styles() const;
     void setStyles(const QVector<KisPSDLayerStyleSP> &styles);

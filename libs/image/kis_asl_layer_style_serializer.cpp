@@ -1214,6 +1214,27 @@ bool KisAslLayerStyleSerializer::readFromFile(const QString& filename)
     return true;
 }
 
+QVector<KisPSDLayerStyleSP> KisAslLayerStyleSerializer::collectAllLayerStyles(KisNodeSP root)
+{
+    KisLayer* layer = qobject_cast<KisLayer*>(root.data());
+    QVector<KisPSDLayerStyleSP> layerStyles;
+
+    if (layer && layer->layerStyle()) {
+        KisPSDLayerStyleSP clone = layer->layerStyle()->clone().dynamicCast<KisPSDLayerStyle>();
+        clone->setName(i18nc("Auto-generated layer style name for embedded styles (style itself)", "<%1> (embedded)", layer->name()));
+        layerStyles << clone;
+    }
+
+    KisNodeSP child = root->firstChild();
+    while (child) {
+        layerStyles += collectAllLayerStyles(child);
+        child = child->nextSibling();
+    }
+
+    return layerStyles;
+}
+
+
 void KisAslLayerStyleSerializer::assignAllLayerStylesToLayers(KisNodeSP root)
 {
     KisLayer* layer = qobject_cast<KisLayer*>(root.data());

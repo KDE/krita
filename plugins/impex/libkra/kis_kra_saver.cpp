@@ -49,6 +49,7 @@
 #include "kis_grid_config.h"
 #include "kis_guides_config.h"
 #include "KisProofingConfiguration.h"
+#include "kis_asl_layer_style_serializer.h"
 
 #include <KisMirrorAxisConfig.h>
 
@@ -359,28 +360,23 @@ bool KisKraSaver::saveBinaryData(KoStore* store, KisImageSP image, const QString
     }
 
     {
-        warnKrita << "WARNING: Asl Layer Styles cannot be written (part of resource rewrite).";
-        // TODO: RESOURCES: needs implementation
-
-        /*
-        KisPSDLayerStyleCollectionResource collection("not-nexists.asl");
-        KIS_ASSERT_RECOVER_NOOP(!collection.valid());
-        collection.collectAllLayerStyles(image->root());
-        if (collection.valid()) {
+        KisAslLayerStyleSerializer serializer;
+        QVector<KisPSDLayerStyleSP> stylesClones = serializer.collectAllLayerStyles(image->root());
+        if (stylesClones.size() > 0) {
             location = external ? QString() : uri;
             location += m_d->imageName + LAYER_STYLES_PATH;
 
             if (store->open(location)) {
                 QBuffer aslBuffer;
                 aslBuffer.open(QIODevice::WriteOnly);
-                collection.saveToDevice(&aslBuffer);
+                serializer.setStyles(stylesClones);
+                serializer.saveToDevice(&aslBuffer);
                 aslBuffer.close();
 
                 store->write(aslBuffer.buffer());
                 store->close();
             }
         }
-        */
     }
 
     if (!autosave) {

@@ -270,9 +270,25 @@ void KisDlgLayerStyle::slotNewStyle()
                               QLineEdit::Normal, i18nc("Default name for a new style", "New Style"));
 
     KisPSDLayerStyleSP style = this->style();
-    style->setName(selectAvailableStyleName(styleName));
+    KisPSDLayerStyleSP clone = style->clone().dynamicCast<KisPSDLayerStyle>();
+    style->setName(styleName);
+    m_stylesSelector->addNewStyle(clone);
+    const QString customStylesStorageLocation = "asl/CustomStyles.asl";
+    KisConfig cfg(true);
+    QString resourceDir = cfg.readEntry<QString>(KisResourceLocator::resourceLocationKey,
+                                            QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
+    QString storagePath = resourceDir + "/" + customStylesStorageLocation;
 
-    m_stylesSelector->addNewStyle(style->clone().dynamicCast<KisPSDLayerStyle>());
+    if (KisResourceLocator::instance()->hasStorage(storagePath)) {
+
+    } else {
+        KisAslLayerStyleSerializer serializer;
+        serializer.setStyles(QVector<KisPSDLayerStyleSP>() << clone);
+        serializer.saveToFile(storagePath);
+        QSharedPointer<KisResourceStorage> storage = QSharedPointer<KisResourceStorage>(new KisResourceStorage(storagePath));
+        KisResourceLocator::instance()->addStorage(customStylesStorageLocation, storage);
+    }
+
 }
 
 QString createNewAslPath(QString resourceFolderPath, QString filename)
@@ -646,8 +662,6 @@ void StylesSelector::slotResourceModelReset()
 
 void StylesSelector::addNewStyle(KisPSDLayerStyleSP style)
 {
-    KoResourceServer<KisPSDLayerStyle> *server = KisResourceServerProvider::instance()->layerStyleServer();
-    server->addResource(style);
 
     // TODO: RESOURCES: what about adding only to CustomStyles.asl
 

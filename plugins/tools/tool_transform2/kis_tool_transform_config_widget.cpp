@@ -287,6 +287,7 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
 
     connect(chkShowControlPoints, SIGNAL(toggled(bool)), this, SLOT(slotMeshShowHandlesChanged()));
     connect(chkSymmetricalHandles, SIGNAL(toggled(bool)), this, SLOT(slotMeshSymmetricalHandlesChanged()));
+    connect(chkScaleHandles, SIGNAL(toggled(bool)), this, SLOT(slotMeshScaleHandlesChanged()));
     connect(intNumColumns, SIGNAL(valueChanged(int)), this, SLOT(slotMeshSizeChanged()));
     connect(intNumRows, SIGNAL(valueChanged(int)), this, SLOT(slotMeshSizeChanged()));
 
@@ -635,6 +636,7 @@ void KisToolTransformConfigWidget::updateConfig(const ToolTransformArgs &config)
         intNumRows->setValue(config.meshTransform()->size().height() - 1);
         chkShowControlPoints->setChecked(config.meshShowHandles());
         chkSymmetricalHandles->setChecked(config.meshSymmetricalHandles());
+        chkScaleHandles->setChecked(config.meshScaleHandles());
     }
 
     unblockUiSlots();
@@ -1298,5 +1300,13 @@ void KisToolTransformConfigWidget::slotMeshSymmetricalHandlesChanged()
     if (m_uiSlotsBlocked) return;
     ToolTransformArgs *config = m_transaction->currentConfig();
     config->setMeshSymmetricalHandles(this->chkSymmetricalHandles->isChecked());
+    notifyConfigChanged();
+}
+
+void KisToolTransformConfigWidget::slotMeshScaleHandlesChanged()
+{
+    if (m_uiSlotsBlocked) return;
+    ToolTransformArgs *config = m_transaction->currentConfig();
+    config->setMeshScaleHandles(this->chkScaleHandles->isChecked());
     notifyConfigChanged();
 }

@@ -16,7 +16,9 @@
 class KisCanvas2;
 class KisColorSourceToggle;
 class KisSignalCompressor;
+class KisVisualColorModel;
 class KisVisualColorSelector;
+class WGActionManager;
 class WGColorPatches;
 class WGColorPreviewPopup;
 class WGQuickSettingsWidget;
@@ -30,6 +32,16 @@ class WGColorSelectorDock : public QDockWidget, public KoCanvasObserverBase // p
     Q_OBJECT
 public:
     WGColorSelectorDock();
+    const KisVisualColorModel& colorModel() const;
+
+    /**
+     * @brief Set new channel values; takes effect immediately!
+     *
+     * This is intended for synchronization when color gets
+     * adjusted outside of the docker, like in WGActionManager
+     * @param values
+     */
+    void setChannelValues(const QVector4D &values);
 protected:
     void leaveEvent(QEvent *event) override;
     void setCanvas(KoCanvasBase *canvas) override;
@@ -52,6 +64,7 @@ private:
     KisVisualColorSelector *m_selector {0};
     KisColorSourceToggle *m_toggle {0};
     KisSignalCompressor *m_colorChangeCompressor;
+    WGActionManager *m_actionManager {0};
     WGColorPreviewPopup *m_previewPopup {0};
     WGShadeSelector *m_shadeSelector {0};
     WGColorPatches *m_history {0};

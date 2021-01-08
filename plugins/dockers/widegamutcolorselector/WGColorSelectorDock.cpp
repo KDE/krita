@@ -4,10 +4,12 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include "WGColorPreviewPopup.h"
 #include "WGColorSelectorDock.h"
+
+#include "WGActionManager.h"
 #include "WGColorSelectorSettings.h"
 #include "WGColorPatches.h"
+#include "WGColorPreviewPopup.h"
 #include "WGConfig.h"
 #include "WGQuickSettingsWidget.h"
 #include "WGShadeSelector.h"
@@ -36,6 +38,7 @@
 WGColorSelectorDock::WGColorSelectorDock()
 	: QDockWidget()
     , m_colorChangeCompressor(new KisSignalCompressor(100 /* ms */, KisSignalCompressor::POSTPONE, this))
+    , m_actionManager(new WGActionManager(this))
     , m_previewPopup(new WGColorPreviewPopup(this))
 {
     setWindowTitle(i18n("Wide Gamut Color Selector"));
@@ -88,6 +91,27 @@ WGColorSelectorDock::WGColorSelectorDock()
     setEnabled(false);
 }
 
+const KisVisualColorModel &WGColorSelectorDock::colorModel() const
+{
+    // TODO: store locally;
+    return *(m_selector->selectorModel());
+}
+
+void WGColorSelectorDock::setChannelValues(const QVector4D &values)
+{
+    if (!isEnabled()) {
+        return;
+    }
+    // TODO: store locally;
+    m_selector->selectorModel()->slotSetChannelValues(values);
+
+    if (m_toggle->isChecked()) {
+        m_canvas->resourceManager()->setBackgroundColor(m_bgColor);
+    } else {
+        m_canvas->resourceManager()->setForegroundColor(m_fgColor);
+    }
+}
+
 void WGColorSelectorDock::leaveEvent(QEvent *event)
 {
     Q_UNUSED(event)
@@ -104,6 +128,7 @@ void WGColorSelectorDock::setCanvas(KoCanvasBase *canvas)
     if (m_canvas) {
         disconnectFromCanvas();
     }
+    m_actionManager->setCanvas(qobject_cast<KisCanvas2*>(canvas), m_canvas);
     m_canvas = qobject_cast<KisCanvas2*>(canvas);
     if (m_canvas) {
         KoColorDisplayRendererInterface *dri = m_canvas->displayColorConverter()->displayRendererInterface();

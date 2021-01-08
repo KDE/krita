@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ActionCollection version="2" name="Krita">
+  <Actions category="Krita">
+    <text>WG Color Selector Actions</text>
+    <Action name="show_wg_color_selector">
+      <icon></icon>
+      <text>Show wide-gamut color selector</text>
+      <whatsThis></whatsThis>
+      <toolTip>Show color selector</toolTip>
+      <iconText>Show color selector</iconText>
+      <shortcut>Shift+O</shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+	</Action>
+	<Action name="show_wg_shade_selector">
+      <icon></icon>
+      <text>Show wide-gamut shade selector</text>
+      <whatsThis></whatsThis>
+      <toolTip>Show color selector</toolTip>
+      <iconText>Show color selector</iconText>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+  </Actions>
+</ActionCollection>

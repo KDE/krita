@@ -315,4 +315,45 @@ void KisAlgebra2DTest::testNullRectProcessing()
     QCOMPARE(QPolygonF(lineRect).boundingRect(), lineRect);
 }
 
+void KisAlgebra2DTest::testLineIntersections()
+{
+    using KisAlgebra2D::intersectLines;
+
+
+    {
+        boost::optional<QPointF> p =
+                intersectLines(QLineF(QPointF(50,50), QPointF(100,50)),
+                               QLineF(QPointF(75,0), QPointF(75,1)));
+        QVERIFY(p);
+        QCOMPARE(*p, QPointF(75, 50));
+    }
+
+    {
+        boost::optional<QPointF> p =
+                intersectLines(QLineF(QPointF(50,50), QPointF(100,50)),
+                               QLineF(QPointF(75,0), QPointF(76,1)));
+        QVERIFY(!p);
+    }
+
+    {
+        boost::optional<QPointF> p =
+                intersectLines(QLineF(QPointF(50,50), QPointF(100,50)),
+                               QLineF(QPointF(50,51), QPointF(100,51)));
+        QVERIFY(!p);
+    }
+
+    {
+        boost::optional<QPointF> p =
+                intersectLines(QLineF(QPointF(51,50), QPointF(51,100)),
+                               QLineF(QPointF(50,50), QPointF(50,100)));
+        QVERIFY(!p);
+    }
+
+    {
+        boost::optional<QPointF> p =
+                intersectLines(QLineF(QPointF(50,50), QPointF(51,51)),
+                               QLineF(QPointF(51,50), QPointF(52,51)));
+        QVERIFY(!p);
+    }
+}
 QTEST_MAIN(KisAlgebra2DTest)

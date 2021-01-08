@@ -678,4 +678,42 @@ QPointF alignForZoom(const QPointF &pt, qreal zoom)
     return QPointF((pt * zoom).toPoint()) / zoom;
 }
 
+boost::optional<QPointF> intersectLines(const QLineF &boundedLine, const QLineF &unboundedLine)
+{
+    const QPointF B1 = unboundedLine.p1();
+    const QPointF A1 = unboundedLine.p2() - unboundedLine.p1();
+
+    const QPointF B2 = boundedLine.p1();
+    const QPointF A2 = boundedLine.p2() - boundedLine.p1();
+
+    Eigen::Matrix<float, 2, 2> A;
+    A << A1.x(), -A2.x(),
+         A1.y(), -A2.y();
+
+    Eigen::Matrix<float, 2, 1> B;
+    B << B2.x() - B1.x(),
+         B2.y() - B1.y();
+
+    if (qFuzzyIsNull(A.determinant())) {
+        return boost::none;
+    }
+
+    Eigen::Matrix<float, 2, 1> T;
+
+    T = A.inverse() * B;
+
+    const qreal t2 = T(1,0);
+
+    if (t2 < 0 || t2 > 1.0) {
+        return boost::none;
+    }
+
+    return t2 * A2 + B2;
+}
+
+boost::optional<QPointF> intersectLines(const QPointF &p1, const QPointF &p2,
+                                        const QPointF &q1, const QPointF &q2)
+{
+    return intersectLines(QLineF(p1, p2), QLineF(q1, q2));
+}
 }

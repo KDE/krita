@@ -28,6 +28,7 @@
 #include <kis_global.h>
 #include <kritaglobal_export.h>
 #include <functional>
+#include <boost/optional.hpp>
 
 class QPainterPath;
 class QTransform;
@@ -699,6 +700,23 @@ inline T linearReshapeFunc(T x, T x0, T x1, T y0, T y1)
 {
     return y0 + (y1 - y0) * (x - x0) / (x1 - x0);
 }
+
+
+/**
+ * Find intersection of a bounded line \p boundedLine with unbounded
+ * line \p unboundedLine (if an intersection exists)
+ */
+KRITAGLOBAL_EXPORT
+boost::optional<QPointF> intersectLines(const QLineF &boundedLine, const QLineF &unboundedLine);
+
+
+/**
+ * Find intersection of a bounded line \p p1, \p p2 with unbounded
+ * line \p q1, \p q2 (if an intersection exists)
+ */
+KRITAGLOBAL_EXPORT
+boost::optional<QPointF> intersectLines(const QPointF &p1, const QPointF &p2,
+                                        const QPointF &q1, const QPointF &q2);
 
 }
 

@@ -141,6 +141,17 @@ KisVisualColorModel::ColorModel KisVisualColorModel::colorModel() const
     return m_d->model;
 }
 
+void KisVisualColorModel::copyState(const KisVisualColorModel &other)
+{
+    switchDisplayRenderer(other.m_d->displayRenderer);
+    m_d->channelMaxValues = other.m_d->channelMaxValues;
+    setRGBColorModel(other.m_d->modelRGB);
+    if (other.colorSpace()) {
+        slotSetColorSpace(other.colorSpace());
+        slotSetChannelValues(other.channelValues());
+    }
+}
+
 void KisVisualColorModel::setRGBColorModel(KisVisualColorModel::ColorModel model)
 {
     if (model == m_d->modelRGB) {
@@ -417,6 +428,20 @@ void KisVisualColorModel::loadColorSpace(const KoColorSpace *cs)
     }
 }
 
+void KisVisualColorModel::switchDisplayRenderer(const KoColorDisplayRendererInterface *displayRenderer)
+{
+    if (displayRenderer != m_d->displayRenderer) {
+        if (m_d->displayRenderer) {
+            m_d->displayRenderer->disconnect(this);
+        }
+        if (displayRenderer) {
+            connect(displayRenderer, SIGNAL(displayConfigurationChanged()),
+                    SLOT(slotDisplayConfigurationChanged()), Qt::UniqueConnection);
+        }
+        m_d->displayRenderer = displayRenderer;
+    }
+}
+
 void KisVisualColorModel::emitChannelValues()
 {
     bool updatesAllowed = m_d->allowUpdates;
@@ -432,13 +457,6 @@ const KoColorDisplayRendererInterface* KisVisualColorModel::displayRenderer() co
 
 void KisVisualColorModel::setDisplayRenderer (const KoColorDisplayRendererInterface *displayRenderer)
 {
-    if (m_d->displayRenderer) {
-        m_d->displayRenderer->disconnect(this);
-    }
-    if (displayRenderer) {
-        connect(displayRenderer, SIGNAL(displayConfigurationChanged()),
-                SLOT(slotDisplayConfigurationChanged()), Qt::UniqueConnection);
-    }
-    m_d->displayRenderer = displayRenderer;
+    switchDisplayRenderer(displayRenderer);
     slotDisplayConfigurationChanged();
 }

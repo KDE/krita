@@ -42,6 +42,15 @@ public:
     int colorChannelCount() const;
     ColorModel colorModel() const;
     /**
+     * @brief Copy the internal state of another KisVisualColorModel
+     *
+     * This will emit all necessary signals to update widgets so they
+     * can reflect the new state correctly.
+     *
+     * @param other the model to copy
+     */
+    void copyState(const KisVisualColorModel &other);
+    /**
      * @brief Set the HSX color model used for RGB color spaces.
      */
     void setRGBColorModel(ColorModel model);
@@ -67,6 +76,7 @@ private Q_SLOTS:
 
 private:
     void loadColorSpace(const KoColorSpace *cs);
+    void switchDisplayRenderer(const KoColorDisplayRendererInterface *displayRenderer);
     void emitChannelValues();
 
 Q_SIGNALS:

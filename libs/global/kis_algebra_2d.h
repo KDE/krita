@@ -733,6 +733,41 @@ QVector<QPointF> KRITAGLOBAL_EXPORT findTrianglePoint(const QPointF &p1, const Q
  */
 boost::optional<QPointF> KRITAGLOBAL_EXPORT findTrianglePointNearest(const QPointF &p1, const QPointF &p2, qreal a, qreal b, const QPointF &nearest);
 
+/**
+ * @brief moveElasticPoint moves point \p pt based on the model of elasticity
+ * @param pt point in question, tied to points \p base, \p wingA and \p wingB
+ *           using springs
+ * @param base initial position of the dragged point
+ * @param newBase final position of tht dragged point
+ * @param wingA first anchor point
+ * @param wingB second anchor point
+ * @return the new position of \p pt
+ *
+ * The function requires (\p newBase - \p base) be much smaller than any
+ * of the distances between other points. If larger distances are necessary,
+ * then use integration.
+ */
+QPointF KRITAGLOBAL_EXPORT moveElasticPoint(const QPointF &pt,
+                                            const QPointF &base, const QPointF &newBase,
+                                            const QPointF &wingA, const QPointF &wingB);
+
+/**
+ * @brief moveElasticPoint moves point \p pt based on the model of elasticity
+ * @param pt point in question, tied to points \p base, \p anchorPoints
+ *           using springs
+ * @param base initial position of the dragged point
+ * @param newBase final position of tht dragged point
+ * @param anchorPoints anchor points
+ * @return the new position of \p pt
+ *
+ * The function expects (\p newBase - \p base) be much smaller than any
+ * of the distances between other points. If larger distances are necessary,
+ * then use integration.
+ */
+QPointF KRITAGLOBAL_EXPORT moveElasticPoint(const QPointF &pt,
+                                            const QPointF &base, const QPointF &newBase,
+                                            const QVector<QPointF> &anchorPoints);
+
 }
 
 

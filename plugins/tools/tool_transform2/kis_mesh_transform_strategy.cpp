@@ -583,7 +583,8 @@ void KisMeshTransformStrategy::continuePrimaryAction(const QPointF &pt, bool shi
         smartMoveControl(*m_d->currentArgs.meshTransform(),
                          *m_d->hoveredControl,
                          pt - m_d->lastMousePos,
-                         mode);
+                         mode,
+                         m_d->currentArgs.meshScaleHandles());
 
     } else if (m_d->mode == Private::OVER_SEGMENT || m_d->mode == Private::OVER_SEGMENT_SYMMETRIC) {
         KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->hoveredSegment);
@@ -608,8 +609,8 @@ void KisMeshTransformStrategy::continuePrimaryAction(const QPointF &pt, bool shi
             KisSmartMoveMeshControlMode::MoveSymmetricLock :
             KisSmartMoveMeshControlMode::MoveFree;
 
-        smartMoveControl(*m_d->currentArgs.meshTransform(), it.itP1().controlIndex(), offsetP1, mode);
-        smartMoveControl(*m_d->currentArgs.meshTransform(), it.itP2().controlIndex(), offsetP2, mode);
+        smartMoveControl(*m_d->currentArgs.meshTransform(), it.itP1().controlIndex(), offsetP1, mode, m_d->currentArgs.meshScaleHandles());
+        smartMoveControl(*m_d->currentArgs.meshTransform(), it.itP2().controlIndex(), offsetP2, mode, m_d->currentArgs.meshScaleHandles());
 
     } else if (m_d->mode == Private::OVER_PATCH || m_d->mode == Private::OVER_PATCH_LOCKED) {
         KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->hoveredPatch);
@@ -636,8 +637,8 @@ void KisMeshTransformStrategy::continuePrimaryAction(const QPointF &pt, bool shi
                 KisBezierUtils::offsetSegment(t, offset);
 
 
-            smartMoveControl(*m_d->currentArgs.meshTransform(), it.itP1().controlIndex(), offsetP1, KisSmartMoveMeshControlMode::MoveSymmetricLock);
-            smartMoveControl(*m_d->currentArgs.meshTransform(), it.itP2().controlIndex(), offsetP2, KisSmartMoveMeshControlMode::MoveSymmetricLock);
+            smartMoveControl(*m_d->currentArgs.meshTransform(), it.itP1().controlIndex(), offsetP1, KisSmartMoveMeshControlMode::MoveSymmetricLock, m_d->currentArgs.meshScaleHandles());
+            smartMoveControl(*m_d->currentArgs.meshTransform(), it.itP2().controlIndex(), offsetP2, KisSmartMoveMeshControlMode::MoveSymmetricLock, m_d->currentArgs.meshScaleHandles());
         };
 
 
@@ -717,13 +718,13 @@ void KisMeshTransformStrategy::continuePrimaryAction(const QPointF &pt, bool shi
         const qreal coeffN0 =
             alpha < 0.5 ? std::max(0.0, linearReshapeFunc(alpha, 0.25, 0.4, 0.0, 1.0)) : 1.0;
 
-        nearestSegment.itP0().node().translate(offset * coeffN0);
-        nearestSegment.itP3().node().translate(offset * coeffN1);
+        smartMoveControl(*m_d->currentArgs.meshTransform(), nearestSegment.itP0().controlIndex(), offset * coeffN0, KisSmartMoveMeshControlMode::MoveSymmetricLock, m_d->currentArgs.meshScaleHandles());
+        smartMoveControl(*m_d->currentArgs.meshTransform(), nearestSegment.itP3().controlIndex(), offset * coeffN1, KisSmartMoveMeshControlMode::MoveSymmetricLock, m_d->currentArgs.meshScaleHandles());
 
-        patchIt.nodeTopLeft().node().translate(translationOffset);
-        patchIt.nodeTopRight().node().translate(translationOffset);
-        patchIt.nodeBottomLeft().node().translate(translationOffset);
-        patchIt.nodeBottomRight().node().translate(translationOffset);
+        smartMoveControl(*m_d->currentArgs.meshTransform(), patchIt.nodeTopLeft().controlIndex(), translationOffset, KisSmartMoveMeshControlMode::MoveSymmetricLock, m_d->currentArgs.meshScaleHandles());
+        smartMoveControl(*m_d->currentArgs.meshTransform(), patchIt.nodeTopRight().controlIndex(), translationOffset, KisSmartMoveMeshControlMode::MoveSymmetricLock, m_d->currentArgs.meshScaleHandles());
+        smartMoveControl(*m_d->currentArgs.meshTransform(), patchIt.nodeBottomLeft().controlIndex(), translationOffset, KisSmartMoveMeshControlMode::MoveSymmetricLock, m_d->currentArgs.meshScaleHandles());
+        smartMoveControl(*m_d->currentArgs.meshTransform(), patchIt.nodeBottomRight().controlIndex(), translationOffset, KisSmartMoveMeshControlMode::MoveSymmetricLock, m_d->currentArgs.meshScaleHandles());
 
         offsetSegment(nearestSegment, nearestSegmentParam, segmentOffset);
 

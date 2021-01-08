@@ -39,6 +39,7 @@ ToolTransformArgs::ToolTransformArgs()
     m_transformAroundRotationCenter = configGroup.readEntry("transformAroundRotationCenter", "0").toInt();
     m_meshShowHandles = configGroup.readEntry("meshShowHandles", true);
     m_meshSymmetricalHandles = configGroup.readEntry("meshSymmetricalHandles", true);
+    m_meshScaleHandles = configGroup.readEntry("meshScaleHandles", false);
 }
 
 void ToolTransformArgs::setFilterId(const QString &id) {
@@ -92,8 +93,22 @@ void ToolTransformArgs::init(const ToolTransformArgs& args)
     m_meshTransform = args.m_meshTransform;
     m_meshShowHandles = args.m_meshShowHandles;
     m_meshSymmetricalHandles = args.m_meshSymmetricalHandles;
+    m_meshScaleHandles = args.m_meshScaleHandles;
 
     m_continuedTransformation.reset(args.m_continuedTransformation ? new ToolTransformArgs(*args.m_continuedTransformation) : 0);
+}
+
+bool ToolTransformArgs::meshScaleHandles() const
+{
+    return m_meshScaleHandles;
+}
+
+void ToolTransformArgs::setMeshScaleHandles(bool meshScaleHandles)
+{
+    m_meshScaleHandles = meshScaleHandles;
+
+    KConfigGroup configGroup =  KSharedConfig::openConfig()->group("KisToolTransform");
+    configGroup.writeEntry("meshScaleHandles", meshScaleHandles);
 }
 
 void ToolTransformArgs::clear()

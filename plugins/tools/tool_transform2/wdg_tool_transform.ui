@@ -2213,5 +2213,6 @@
   <buttongroup name="cageTransformButtonGroup"/>
   <buttongroup name="freeTransformRadioGroup"/>
   <buttongroup name="buttonGroup"/>
+  <buttongroup name="freeTransformRadioGroup"/>
  </buttongroups>
 </ui>

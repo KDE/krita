@@ -1434,16 +1434,54 @@ template<typename NodeArg, typename PatchArg>
 void smartMoveControl(Mesh<NodeArg, PatchArg> &mesh,
                       typename Mesh<NodeArg, PatchArg>::ControlPointIndex index,
                       const QPointF &move,
-                      SmartMoveMeshControlMode mode)
+                      SmartMoveMeshControlMode mode,
+                      bool scaleNodeMoves)
 {
     using ControlType = typename Mesh<NodeArg, PatchArg>::ControlType;
     using ControlPointIndex = typename Mesh<NodeArg, PatchArg>::ControlPointIndex;
+    using ControlPointIterator = typename Mesh<NodeArg, PatchArg>::control_point_iterator;
+    using SegmentIterator = typename Mesh<NodeArg, PatchArg>::segment_iterator;
 
     auto it = mesh.find(index);
     KIS_SAFE_ASSERT_RECOVER_RETURN(it != mesh.endControlPoints());
 
     if (it.isNode()) {
+        auto preAdjustSegment = [] (Mesh<NodeArg, PatchArg> &mesh,
+                                    SegmentIterator it,
+                                    const QPointF &normalizedOffset) {
+
+            if (it == mesh.endSegments()) return;
+
+            const QPointF base1 = it.p3() - it.p0();
+            const QPointF base2 = it.p3() - it.p0() - normalizedOffset;
+
+            {
+                const QPointF control = it.p1() - it.p0();
+                const qreal dist0 = KisAlgebra2D::norm(base1);
+                const qreal dist1 = KisAlgebra2D::dotProduct(base2, base1) / dist0;
+                const qreal coeff = dist1 / dist0;
+
+                it.p1() = it.p0() + coeff * (control);
+            }
+            {
+                const QPointF control = it.p2() - it.p3();
+                const qreal dist0 = KisAlgebra2D::norm(base1);
+                const qreal dist1 = KisAlgebra2D::dotProduct(base2, base1) / dist0;
+                const qreal coeff = dist1 / dist0;
+
+                it.p2() = it.p3() + coeff * (control);
+            }
+        };
+
+        if (scaleNodeMoves) {
+            preAdjustSegment(mesh, it.topSegment(), -move);
+            preAdjustSegment(mesh, it.leftSegment(), -move);
+            preAdjustSegment(mesh, it.bottomSegment(), move);
+            preAdjustSegment(mesh, it.rightSegment(), move);
+        }
+
         it.node().translate(move);
+
     } else {
         const QPointF newPos = *it + move;
 

@@ -718,6 +718,21 @@ KRITAGLOBAL_EXPORT
 boost::optional<QPointF> intersectLines(const QPointF &p1, const QPointF &p2,
                                         const QPointF &q1, const QPointF &q2);
 
+/**
+ * Find possible positions for point p3, such that points \p1, \p2 and p3 form
+ * a triangle, such that the distance between p1 ad p3 is \p a and the distance
+ * between p2 and p3 is b. There might be 0, 1 or 2 such positions.
+ */
+QVector<QPointF> KRITAGLOBAL_EXPORT findTrianglePoint(const QPointF &p1, const QPointF &p2, qreal a, qreal b);
+
+/**
+ * Find a point p3 that forms a triangle with \p1 and \p2 and is the nearest
+ * possible point to \p nearest
+ *
+ * \see findTrianglePoint
+ */
+boost::optional<QPointF> KRITAGLOBAL_EXPORT findTrianglePointNearest(const QPointF &p1, const QPointF &p2, qreal a, qreal b, const QPointF &nearest);
+
 }
 
 

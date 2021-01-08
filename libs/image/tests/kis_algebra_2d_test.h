@@ -41,6 +41,8 @@ private Q_SLOTS:
     void testNullRectProcessing();
 
     void testLineIntersections();
+
+    void testFindTrianglePoint();
 };
 
 #endif /* __KIS_ALGEBRA_2D_TEST_H */

@@ -716,4 +716,83 @@ boost::optional<QPointF> intersectLines(const QPointF &p1, const QPointF &p2,
 {
     return intersectLines(QLineF(p1, p2), QLineF(q1, q2));
 }
+
+QVector<QPointF> findTrianglePoint(const QPointF &p1, const QPointF &p2, qreal a, qreal b)
+{
+    using KisAlgebra2D::norm;
+    using KisAlgebra2D::dotProduct;
+
+    QVector<QPointF> result;
+
+    const QPointF p = p2 - p1;
+
+    const qreal pSq = dotProduct(p, p);
+
+    const qreal T =  0.5 * (-pow2(b) + pow2(a) + pSq);
+
+    if (p.isNull()) return result;
+
+    if (qAbs(p.x()) > qAbs(p.y())) {
+        const qreal A = 1.0;
+        const qreal B2 = -T * p.y() / pSq;
+        const qreal C = pow2(T) / pSq - pow2(a * p.x()) / pSq;
+
+        const qreal D4 = pow2(B2) - A * C;
+
+        if (D4 > 0 || qFuzzyIsNull(D4)) {
+            if (qFuzzyIsNull(D4)) {
+                const qreal y = -B2 / A;
+                const qreal x = (T - y * p.y()) / p.x();
+                result << p1 + QPointF(x, y);
+            } else {
+                const qreal y1 = (-B2 + std::sqrt(D4)) / A;
+                const qreal x1 = (T - y1 * p.y()) / p.x();
+                result << p1 + QPointF(x1, y1);
+
+                const qreal y2 = (-B2 - std::sqrt(D4)) / A;
+                const qreal x2 = (T - y2 * p.y()) / p.x();
+                result << p1 + QPointF(x2, y2);
+            }
+        }
+    } else {
+        const qreal A = 1.0;
+        const qreal B2 = -T * p.x() / pSq;
+        const qreal C = pow2(T) / pSq - pow2(a * p.y()) / pSq;
+
+        const qreal D4 = pow2(B2) - A * C;
+
+        if (D4 > 0 || qFuzzyIsNull(D4)) {
+            if (qFuzzyIsNull(D4)) {
+                const qreal x = -B2 / A;
+                const qreal y = (T - x * p.x()) / p.y();
+                result << p1 + QPointF(x, y);
+            } else {
+                const qreal x1 = (-B2 + std::sqrt(D4)) / A;
+                const qreal y1 = (T - x1 * p.x()) / p.y();
+                result << p1 + QPointF(x1, y1);
+
+                const qreal x2 = (-B2 - std::sqrt(D4)) / A;
+                const qreal y2 = (T - x2 * p.x()) / p.y();
+                result << p1 + QPointF(x2, y2);
+            }
+        }
+    }
+
+    return result;
+}
+
+boost::optional<QPointF> findTrianglePointNearest(const QPointF &p1, const QPointF &p2, qreal a, qreal b, const QPointF &nearest)
+{
+    const QVector<QPointF> points = findTrianglePoint(p1, p2, a, b);
+
+    boost::optional<QPointF> result;
+
+    if (points.size() == 1) {
+        result = points.first();
+    } else if (points.size() > 1) {
+        result = kisDistance(points.first(), nearest) < kisDistance(points.last(), nearest) ? points.first() : points.last();
+    }
+
+    return result;
+}
 }

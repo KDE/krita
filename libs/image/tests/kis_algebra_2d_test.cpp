@@ -368,4 +368,29 @@ void KisAlgebra2DTest::testLineIntersections()
         QVERIFY(!p);
     }
 }
+
+void KisAlgebra2DTest::testFindTrianglePoint()
+{
+    using KisAlgebra2D::findTrianglePoint;
+    using KisAlgebra2D::findTrianglePointNearest;
+
+    findTrianglePoint(QPointF(100, 900), QPointF(900, 100), 810, 800);
+
+    findTrianglePoint(QPointF(), QPointF(10, 0), 5, 5);
+    findTrianglePoint(QPointF(), QPointF(10, 0), 4, 6);
+    findTrianglePoint(QPointF(), QPointF(10, 0), 4, 4);
+    findTrianglePoint(QPointF(), QPointF(10, 0), 4, 6 + 1e-3);
+    findTrianglePoint(QPointF(), QPointF(10, 0), 4, 6 - 1e-3);
+    findTrianglePoint(QPointF(), QPointF(10, 0), 6, 6);
+    findTrianglePoint(QPointF(), QPointF(10, 0), 7, 6);
+
+    findTrianglePoint(QPointF(), QPointF(0, 10), 5, 5);
+    findTrianglePoint(QPointF(), QPointF(0, 10), 4, 6);
+    findTrianglePoint(QPointF(), QPointF(0, 10), 4, 4);
+    findTrianglePoint(QPointF(), QPointF(0, 10), 4, 6 + 1e-3);
+    findTrianglePoint(QPointF(), QPointF(0, 10), 4, 6 - 1e-3);
+    findTrianglePoint(QPointF(), QPointF(0, 10), 6, 6);
+    findTrianglePoint(QPointF(), QPointF(0, 10), 7, 6);
+}
+
 QTEST_MAIN(KisAlgebra2DTest)

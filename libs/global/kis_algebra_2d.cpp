@@ -19,6 +19,12 @@
 #include <QVector2D>
 #include <QVector3D>
 
+#include <config-gsl.h>
+
+#ifdef HAVE_GSL
+#include <gsl/gsl_multimin.h>
+#endif /*HAVE_GSL*/
+
 #include <Eigen/Eigenvalues>
 
 #define SANITY_CHECKS
@@ -782,5 +788,201 @@ boost::optional<QPointF> findTrianglePointNearest(const QPointF &p1, const QPoin
     }
 
     return result;
+}
+
+QPointF moveElasticPoint(const QPointF &pt, const QPointF &base, const QPointF &newBase, const QPointF &wingA, const QPointF &wingB)
+{
+    using KisAlgebra2D::norm;
+    using KisAlgebra2D::dotProduct;
+    using KisAlgebra2D::crossProduct;
+
+    const QPointF vecL = base - pt;
+    const QPointF vecLa = wingA - pt;
+    const QPointF vecLb = wingB - pt;
+
+    const qreal L = norm(vecL);
+    const qreal La = norm(vecLa);
+    const qreal Lb = norm(vecLb);
+
+    const qreal sinMuA = crossProduct(vecLa, vecL) / (La * L);
+    const qreal sinMuB = crossProduct(vecL, vecLb) / (Lb * L);
+
+    const qreal cosMuA = dotProduct(vecLa, vecL) / (La * L);
+    const qreal cosMuB = dotProduct(vecLb, vecL) / (Lb * L);
+
+    const qreal dL = dotProduct(newBase - base, -vecL) / L;
+
+
+    const qreal divB = (cosMuB + La / Lb * sinMuB * cosMuA / sinMuA) / L +
+            (cosMuB + sinMuB * cosMuA / sinMuA) / Lb;
+    const qreal dLb = dL / ( L * divB);
+
+    const qreal divA = (cosMuA + Lb / La * sinMuA * cosMuB / sinMuB) / L +
+            (cosMuA + sinMuA * cosMuB / sinMuB) / La;
+    const qreal dLa = dL / ( L * divA);
+
+    boost::optional<QPointF> result =
+        KisAlgebra2D::findTrianglePointNearest(wingA, wingB, La + dLa, Lb + dLb, pt);
+
+    const QPointF resultPoint = result ? *result : pt;
+
+    return resultPoint;
+}
+
+#ifdef HAVE_GSL
+
+struct ElasticMotionData
+{
+    QPointF oldBasePos;
+    QPointF newBasePos;
+    QVector<QPointF> anchorPoints;
+
+    QPointF oldResultPoint;
+};
+
+double elasticMotionError(const gsl_vector * x, void *paramsPtr)
+{
+    using KisAlgebra2D::norm;
+    using KisAlgebra2D::dotProduct;
+    using KisAlgebra2D::crossProduct;
+
+    const QPointF newResultPoint(gsl_vector_get(x, 0), gsl_vector_get(x, 1));
+
+    const ElasticMotionData *p = static_cast<const ElasticMotionData*>(paramsPtr);
+
+    const QPointF vecL = newResultPoint - p->newBasePos;
+    const qreal L = norm(vecL);
+
+    const qreal deltaL = L - kisDistance(p->oldBasePos, p->oldResultPoint);
+
+    QVector<qreal> deltaLi;
+    QVector<qreal> Li;
+    QVector<qreal> cosMuI;
+    QVector<qreal> sinMuI;
+    Q_FOREACH (const QPointF &anchorPoint, p->anchorPoints) {
+        const QPointF vecLi = newResultPoint - anchorPoint;
+        const qreal _Li = norm(vecLi);
+
+        Li << _Li;
+        deltaLi << _Li - kisDistance(p->oldResultPoint, anchorPoint);
+        cosMuI << dotProduct(vecLi, vecL) / (_Li * L);
+        sinMuI << crossProduct(vecL, vecLi) / (_Li * L);
+    }
+
+    qreal finalError = 0;
+
+    qreal tangentialForceSum = 0;
+    for (int i = 0; i < p->anchorPoints.size(); i++) {
+        const qreal sum = deltaLi[i] * sinMuI[i] / Li[i];
+        tangentialForceSum += sum;
+    }
+
+    finalError += pow2(tangentialForceSum);
+
+    qreal normalForceSum = 0;
+    {
+        qreal sum = 0;
+        for (int i = 0; i < p->anchorPoints.size(); i++) {
+            sum += deltaLi[i] * cosMuI[i] / Li[i];
+        }
+        normalForceSum = (-deltaL) / L - sum;
+    }
+
+    finalError += pow2(normalForceSum);
+
+    return finalError;
+}
+
+
+#endif /* HAVE_GSL */
+
+QPointF moveElasticPoint(const QPointF &pt,
+                         const QPointF &base, const QPointF &newBase,
+                         const QVector<QPointF> &anchorPoints)
+{
+    const QPointF offset = newBase - base;
+
+    QPointF newResultPoint = pt + offset;
+
+#ifdef HAVE_GSL
+
+    ElasticMotionData data;
+    data.newBasePos = newBase;
+    data.oldBasePos = base;
+    data.anchorPoints = anchorPoints;
+    data.oldResultPoint = pt;
+
+    const gsl_multimin_fminimizer_type *T =
+        gsl_multimin_fminimizer_nmsimplex2;
+    gsl_multimin_fminimizer *s = 0;
+    gsl_vector *ss, *x;
+    gsl_multimin_function minex_func;
+
+    size_t iter = 0;
+    int status;
+    double size;
+
+    /* Starting point */
+    x = gsl_vector_alloc (2);
+    gsl_vector_set (x, 0, newResultPoint.x());
+    gsl_vector_set (x, 1, newResultPoint.y());
+
+    /* Set initial step sizes to 0.1 */
+    ss = gsl_vector_alloc (2);
+    gsl_vector_set (ss, 0, 0.1 * offset.x());
+    gsl_vector_set (ss, 1, 0.1 * offset.y());
+
+    /* Initialize method and iterate */
+    minex_func.n = 2;
+    minex_func.f = elasticMotionError;
+    minex_func.params = (void*)&data;
+
+    s = gsl_multimin_fminimizer_alloc (T, 2);
+    gsl_multimin_fminimizer_set (s, &minex_func, x, ss);
+
+    do
+    {
+        iter++;
+        status = gsl_multimin_fminimizer_iterate(s);
+
+        if (status)
+            break;
+
+        size = gsl_multimin_fminimizer_size (s);
+        status = gsl_multimin_test_size (size, 1e-6);
+
+        /**
+         * Sometimes the algorithm may converge to a wrond point,
+         * then just try to force it search better or return invalid
+         * result.
+         */
+        if (status == GSL_SUCCESS && elasticMotionError(s->x, &data) > 0.5) {
+            status = GSL_CONTINUE;
+        }
+
+        if (status == GSL_SUCCESS)
+        {
+//             qDebug() << "*******Converged to minimum";
+//             qDebug() << gsl_vector_get (s->x, 0)
+//                      << gsl_vector_get (s->x, 1)
+//                      << "|" << s->fval << size;
+//             qDebug() << ppVar(iter);
+
+             newResultPoint.rx() = gsl_vector_get (s->x, 0);
+             newResultPoint.ry() = gsl_vector_get (s->x, 1);
+        }
+    }
+    while (status == GSL_CONTINUE && iter < 10000);
+
+    if (status != GSL_SUCCESS) {
+        ENTER_FUNCTION() << "failed to find point" << ppVar(pt) << ppVar(base) << ppVar(newBase);
+    }
+
+    gsl_vector_free(x);
+    gsl_vector_free(ss);
+    gsl_multimin_fminimizer_free (s);
+#endif
+
+    return newResultPoint;
 }
 }

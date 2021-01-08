@@ -381,4 +381,36 @@ void KisAlgebra2DTest::testFindTrianglePoint()
     findTrianglePoint(QPointF(), QPointF(0, 10), 7, 6);
 }
 
+void KisAlgebra2DTest::testTriangularMotion()
+{
+    using KisAlgebra2D::moveElasticPoint;
+
+    moveElasticPoint(QPointF(0,10),
+                     QPointF(0,0), QPointF(0, 0.1),
+                     QPointF(-5, 10), QPointF(5, 11));
+}
+
+void KisAlgebra2DTest::testElasticMotion()
+{
+    using KisAlgebra2D::norm;
+    using KisAlgebra2D::dotProduct;
+    using KisAlgebra2D::crossProduct;
+
+    const QPointF oldBasePos(70,70);
+    QPointF oldResultPoint(100,100);
+    const QPointF offset(-2,4);
+
+    QVector<QPointF> anchorPoints;
+    anchorPoints << QPointF(0,0);
+    anchorPoints << QPointF(100,0);
+    anchorPoints << QPointF(0,100);
+    anchorPoints << QPointF(50,0);
+    anchorPoints << QPointF(0,50);
+
+    const QPointF newBasePos = oldBasePos + offset;
+    QPointF newResultPoint = KisAlgebra2D::moveElasticPoint(oldResultPoint, oldBasePos, newBasePos, anchorPoints);
+
+    ENTER_FUNCTION() << ppVar(newResultPoint);
+}
+
 QTEST_MAIN(KisAlgebra2DTest)

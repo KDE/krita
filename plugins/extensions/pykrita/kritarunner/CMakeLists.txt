@@ -6,11 +6,6 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../plugin
 
 set(kritarunner_SRCS main.cpp)
 
-ki18n_wrap_ui(kritarunner_SRCS
-    ../plugin/info.ui
-    ../plugin/manager.ui
-)
-
 add_executable(kritarunner ${kritarunner_SRCS})
 
 target_include_directories(kritarunner SYSTEM PUBLIC "${PYTHON_INCLUDE_DIRS}")

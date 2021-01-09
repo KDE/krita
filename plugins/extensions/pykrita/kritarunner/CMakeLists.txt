@@ -13,11 +13,6 @@ set(kritarunner_SRCS main.cpp
     ../plugin/PythonPluginsModel.cpp
 )
 
-ki18n_wrap_ui(kritarunner_SRCS
-    ../plugin/info.ui
-    ../plugin/manager.ui
-)
-
 add_executable(kritarunner ${kritarunner_SRCS})
 target_link_libraries(kritarunner 
                     PRIVATE

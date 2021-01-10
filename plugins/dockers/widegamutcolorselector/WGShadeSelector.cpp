@@ -23,6 +23,9 @@ WGShadeSelector::WGShadeSelector(KisVisualColorModelSP selector, QWidget *parent
     connect(m_model.data(), SIGNAL(sigColorModelChanged()), SLOT(slotReset()));
     connect(m_model.data(), SIGNAL(sigColorSpaceChanged()), SLOT(slotReset()));
     updateSettings();
+    if (m_model->colorModel() != KisVisualColorModel::None) {
+        slotChannelValuesChanged(m_model->channelValues());
+    }
 }
 
 void WGShadeSelector::updateSettings()

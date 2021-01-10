@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include "WGColorPreviewPopup.h"
+#include "WGColorPreviewToolTip.h"
 
 #include <QApplication>
 #include <QDesktopWidget>
@@ -14,7 +14,7 @@
 
 #include <cmath>
 
-WGColorPreviewPopup::WGColorPreviewPopup(QWidget *parent)
+WGColorPreviewToolTip::WGColorPreviewToolTip(QWidget *parent)
     : QWidget(parent)
     , m_color(0, 0, 0)
     , m_previousColor(0, 0, 0, 0)
@@ -33,7 +33,7 @@ WGColorPreviewPopup::WGColorPreviewPopup(QWidget *parent)
     }
 }
 
-void WGColorPreviewPopup::updatePosition(const QWidget *focus)
+void WGColorPreviewToolTip::updatePosition(const QWidget *focus)
 {
     const QWidget *parent = focus ? focus : parentWidget();
     if (!parent) {
@@ -55,7 +55,7 @@ void WGColorPreviewPopup::updatePosition(const QWidget *focus)
     move(targetPos);
 }
 
-qreal WGColorPreviewPopup::estimateBrightness(QColor col)
+qreal WGColorPreviewToolTip::estimateBrightness(QColor col)
 {
     // a cheap approximation of luma assuming sRGB with gamma = 2.0
     return std::sqrt(col.redF() * col.redF() * 0.21 +
@@ -63,7 +63,7 @@ qreal WGColorPreviewPopup::estimateBrightness(QColor col)
                      col.blueF() * col.blueF() * 0.08);
 }
 
-void WGColorPreviewPopup::paintEvent(QPaintEvent *e) {
+void WGColorPreviewToolTip::paintEvent(QPaintEvent *e) {
     Q_UNUSED(e)
     QPainter painter(this);
     painter.fillRect(0, 0, width(), width(), m_color);

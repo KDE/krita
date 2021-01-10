@@ -9,7 +9,7 @@
 #include "WGActionManager.h"
 #include "WGColorSelectorSettings.h"
 #include "WGColorPatches.h"
-#include "WGColorPreviewPopup.h"
+#include "WGColorPreviewToolTip.h"
 #include "WGConfig.h"
 #include "WGQuickSettingsWidget.h"
 #include "WGShadeSelector.h"
@@ -39,7 +39,7 @@ WGColorSelectorDock::WGColorSelectorDock()
 	: QDockWidget()
     , m_colorChangeCompressor(new KisSignalCompressor(100 /* ms */, KisSignalCompressor::POSTPONE, this))
     , m_actionManager(new WGActionManager(this))
-    , m_previewPopup(new WGColorPreviewPopup(this))
+    , m_colorTooltip(new WGColorPreviewToolTip(this))
 {
     setWindowTitle(i18n("Wide Gamut Color Selector"));
 
@@ -115,7 +115,7 @@ void WGColorSelectorDock::setChannelValues(const QVector4D &values)
 void WGColorSelectorDock::leaveEvent(QEvent *event)
 {
     Q_UNUSED(event)
-    m_previewPopup->hide();
+    m_colorTooltip->hide();
 }
 
 void WGColorSelectorDock::setCanvas(KoCanvasBase *canvas)
@@ -235,7 +235,7 @@ void WGColorSelectorDock::slotColorSelected(const KoColor &color)
 {
     bool selectingBg = m_toggle->isChecked();
     QColor displayCol = m_canvas->displayColorConverter()->toQColor(color);
-    m_previewPopup->setCurrentColor(displayCol);
+    m_colorTooltip->setCurrentColor(displayCol);
     if (selectingBg) {
         m_toggle->setBackgroundColor(displayCol);
         m_pendingBgUpdate = true;
@@ -267,12 +267,12 @@ void WGColorSelectorDock::slotColorInteraction(bool active)
 {
     if (active) {
         QColor baseCol = m_selector->selectorModel()->displayRenderer()->toQColor(m_selector->getCurrentColor());
-        m_previewPopup->setCurrentColor(baseCol);
-        m_previewPopup->setPreviousColor(baseCol);
+        m_colorTooltip->setCurrentColor(baseCol);
+        m_colorTooltip->setPreviousColor(baseCol);
         if (sender() == m_shadeSelector) {
-            m_previewPopup->show(m_shadeSelector);
+            m_colorTooltip->show(m_shadeSelector);
         } else {
-            m_previewPopup->show(this);
+            m_colorTooltip->show(this);
         }
     }
 }
@@ -280,7 +280,7 @@ void WGColorSelectorDock::slotColorInteraction(bool active)
 void WGColorSelectorDock::slotFGColorUsed(const KoColor &color)
 {
     QColor lastCol = m_selector->selectorModel()->displayRenderer()->toQColor(color);
-    m_previewPopup->setLastUsedColor(lastCol);
+    m_colorTooltip->setLastUsedColor(lastCol);
     m_history->addUniqueColor(color);
 }
 

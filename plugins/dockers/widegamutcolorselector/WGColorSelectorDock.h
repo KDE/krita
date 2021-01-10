@@ -20,7 +20,7 @@ class KisVisualColorModel;
 class KisVisualColorSelector;
 class WGActionManager;
 class WGColorPatches;
-class WGColorPreviewPopup;
+class WGColorPreviewToolTip;
 class WGQuickSettingsWidget;
 class WGShadeSelector;
 class QToolButton;
@@ -65,7 +65,7 @@ private:
     KisColorSourceToggle *m_toggle {0};
     KisSignalCompressor *m_colorChangeCompressor;
     WGActionManager *m_actionManager {0};
-    WGColorPreviewPopup *m_previewPopup {0};
+    WGColorPreviewToolTip *m_colorTooltip {0};
     WGShadeSelector *m_shadeSelector {0};
     WGColorPatches *m_history {0};
     QWidgetAction *m_quickSettingAction {0};

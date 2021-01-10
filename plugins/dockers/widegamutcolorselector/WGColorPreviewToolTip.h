@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#ifndef WGCOLORPREVIEWPOPUP_H
-#define WGCOLORPREVIEWPOPUP_H
+#ifndef WGCOLORPREVIEWTOOLTIP_H
+#define WGCOLORPREVIEWTOOLTIP_H
 
 #include <QIcon>
 #include <QWidget>
@@ -14,11 +14,11 @@
  * from Advanced Color Selector.
  * Copyright (c) 2010 Adam Celarek <kdedev at xibo dot at> */
 
-class WGColorPreviewPopup : public QWidget
+class WGColorPreviewToolTip : public QWidget
 {
     Q_OBJECT
 public:
-    explicit WGColorPreviewPopup(QWidget *parent = nullptr);
+    explicit WGColorPreviewToolTip(QWidget *parent = nullptr);
 
     void show(const QWidget *focus = nullptr)
     {
@@ -57,4 +57,4 @@ private:
     QIcon m_brushIcon;
 };
 
-#endif // WGCOLORPREVIEWPOPUP_H
+#endif // WGCOLORPREVIEWTOOLTIP_H

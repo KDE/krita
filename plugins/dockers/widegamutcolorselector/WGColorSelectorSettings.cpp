@@ -99,6 +99,8 @@ void WGColorSelectorSettings::savePreferences() const
     lineConfig.resize(m_ui->sbShadeLineCount->value());
     cfg.setShadeSelectorLines(lineConfig);
     cfg.setShadeSelectorLineHeight(m_ui->sbShadeLineHeight->value());
+
+    WGConfig::notifier()->notifyConfigChanged();
 }
 
 void WGColorSelectorSettings::loadPreferences()

@@ -10,9 +10,12 @@
 #include <kis_debug.h>
 
 #include <QApplication>
+#include <QGlobalStatic>
 #include <QStringList>
 #include <QTextStream>
 #include <QThread>
+
+Q_GLOBAL_STATIC(WGConfigNotifier, s_notifier_instance)
 
 WGConfig::WGConfig(bool readOnly)
     : m_cfg( KSharedConfig::openConfig()->group(configGroupName()))
@@ -192,6 +195,11 @@ void WGConfig::setShadeSelectorUpdateOnRightClick(bool enabled)
     m_cfg.writeEntry("shadeSelectorUpdateOnRightClick", enabled);
 }
 
+WGConfigNotifier *WGConfig::notifier()
+{
+    return s_notifier_instance;
+}
+
 const KisColorSelectorConfiguration WGConfig::defaultColorSelectorConfiguration =
         KisColorSelectorConfiguration(KisColorSelectorConfiguration::Triangle,
                                       KisColorSelectorConfiguration::Ring,
@@ -202,3 +210,8 @@ const int WGConfig::defaultShadeSelectorLineHeight = 10;
 const bool WGConfig::defaultShadeSelectorUpdateOnExternalChanges = true;
 const bool WGConfig::defaultShadeSelectorUpdateOnInteractionEnd = false;
 const bool WGConfig::defaultShadeSelectorUpdateOnRightClick = true;
+
+void WGConfigNotifier::notifyConfigChanged()
+{
+    emit configChanged();
+}

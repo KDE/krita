@@ -84,7 +84,7 @@ WGColorSelectorDock::WGColorSelectorDock()
     connect(m_history, SIGNAL(sigColorChanged(KoColor)), SLOT(slotColorSelected(KoColor)));
     connect(m_history, SIGNAL(sigInteraction(bool)), SLOT(slotColorInteraction(bool)));
 
-    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigurationChanged()));
+    connect(WGConfig::notifier(), SIGNAL(configChanged()), SLOT(slotConfigurationChanged()));
 
     setWidget(mainWidget);
     slotConfigurationChanged();
@@ -329,6 +329,6 @@ void WGColorSelectorDock::slotOpenSettings()
 
     WGColorSelectorSettingsDialog settings;
     if (settings.exec() == QDialog::Accepted) {
-        KisConfigNotifier::instance()->notifyConfigChanged();
+        //WGConfig::notifier()->notifyConfigChanged();
     }
 }

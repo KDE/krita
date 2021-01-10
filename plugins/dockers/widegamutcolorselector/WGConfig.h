@@ -14,6 +14,8 @@
 
 #include <QVector4D>
 
+class WGConfigNotifier;
+
 class WGConfig
 {
 public:
@@ -67,6 +69,11 @@ public:
         return m_cfg.readEntry(name, defaultValue);
     }
 
+    /**
+     * @return the WGConfigNotifier singleton
+     */
+    static WGConfigNotifier* notifier();
+
     static const KisColorSelectorConfiguration defaultColorSelectorConfiguration;
     static const bool defaultQuickSettingsEnabled;
     static const int defaultShadeSelectorLineHeight;
@@ -76,6 +83,29 @@ public:
 private:
     /*mutable*/ KConfigGroup m_cfg;
     bool m_readOnly;
+};
+
+class WGConfigNotifier : public QObject
+{
+    Q_OBJECT
+public:
+    WGConfigNotifier() = default;
+    WGConfigNotifier(const WGConfigNotifier&) = delete;
+    ~WGConfigNotifier() override = default;
+
+    WGConfigNotifier operator=(const WGConfigNotifier&) = delete;
+
+    /**
+     * Notify that the configuration has changed. This will cause the
+     * configChanged() signal to be emitted.
+     */
+    void notifyConfigChanged();
+
+Q_SIGNALS:
+    /**
+     * This signal is emitted whenever notifyConfigChanged() is called.
+     */
+    void configChanged(void);
 };
 
 #endif // WGCONFIG_H

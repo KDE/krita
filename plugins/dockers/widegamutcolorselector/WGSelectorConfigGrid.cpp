@@ -17,6 +17,7 @@
 #include <QIcon>
 #include <QPainter>
 #include <QString>
+#include <QTimer>
 #include <QToolButton>
 
 
@@ -154,7 +155,8 @@ QIcon WGSelectorConfigGrid::generateIcon(const KisColorSelectorConfiguration &co
     // highlight bar for on-icon
     QPainter painter(&pixmap);
     painter.setRenderHint(QPainter::Antialiasing);
-    painter.setPen(QPen(palette().highlight(), 2.0,  Qt::SolidLine, Qt::RoundCap));
+    QBrush highlight(palette().brush(QPalette::Active, QPalette::Highlight));
+    painter.setPen(QPen(highlight, 2.0,  Qt::SolidLine, Qt::RoundCap));
     painter.drawLine(1, 1, m_iconSize-1, 1);
     painter.end();
     icon.addPixmap(pixmap, QIcon::Normal, QIcon::On);
@@ -179,7 +181,9 @@ bool WGSelectorConfigGrid::event(QEvent *event)
 {
     bool handled = QWidget::event(event);
     if (event->type() == QEvent::PaletteChange) {
-        updateIcons();
+        // For some reason, Qt doesn't like if we recreate the icons from this
+        // even handler and randomly crashes somewhere after this function returns
+        QTimer::singleShot(10, this, &WGSelectorConfigGrid::updateIcons);
         event->accept();
         handled = true;
     }

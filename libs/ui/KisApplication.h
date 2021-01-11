@@ -62,6 +62,8 @@ public:
      */
     virtual bool start(const KisApplicationArguments &args);
 
+    bool event(QEvent *event) override;
+
     /**
      * Checks if user is holding ctrl+alt+shift keys and asks if the settings file should be cleared.
      *

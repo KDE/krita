@@ -35,6 +35,7 @@ class KisViewManager;
 class KisProgressWidget;
 class KoProgressUpdater;
 class KisMemoryReportButton;
+class KisAngleSelector;
 
 #include "kritaui_export.h"
 
@@ -100,6 +101,8 @@ public Q_SLOTS:
 private Q_SLOTS:
     void updateSelectionIcon();
     void showMemoryInfoToolTip();
+    void slotCanvasAngleSelectorAngleChanged(qreal angle);
+    void slotCanvasRotationChanged();
 
 Q_SIGNALS:
     void sigCancellationRequested();
@@ -125,7 +128,7 @@ private:
     QToolButton *m_selectionStatus;
     KisMemoryReportButton *m_memoryReportBox;
     QLabel *m_pointerPositionLabel;
-    QToolButton *m_resetAngleButton;
+    KisAngleSelector *m_canvasAngleSelector;
     QToolButton *m_fullscreenToggle;
 
     KSqueezedTextLabel *m_statusBarStatusLabel;

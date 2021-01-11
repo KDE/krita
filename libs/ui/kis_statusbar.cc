@@ -53,6 +53,9 @@
 #include "canvas/kis_canvas2.h"
 #include "kis_progress_widget.h"
 #include "kis_zoom_manager.h"
+#include <KisAngleSelector.h>
+#include <kis_canvas_controller.h>
+#include <kis_signals_blocker.h>
 
 #include "KisMainWindow.h"
 #include "kis_config.h"
@@ -148,17 +151,16 @@ void KisStatusBar::setup()
             SIGNAL(sigUpdateMemoryStatistics()),
             SLOT(imageSizeChanged()));
 
-    m_resetAngleButton = new QToolButton;
-    m_resetAngleButton->setObjectName("Reset Rotation");
-    m_resetAngleButton->setCheckable(false);
-    m_resetAngleButton->setToolTip(i18n("Reset Rotation"));
-    m_resetAngleButton->setAutoRaise(true);
-    m_resetAngleButton->setIcon(KisIconUtils::loadIcon("rotate-canvas-left"));
-    addStatusBarItem(m_resetAngleButton);
+    m_canvasAngleSelector = new KisAngleSelector;
+    m_canvasAngleSelector->setRange(-179.99, 180.0);
+    m_canvasAngleSelector->setIncreasingDirection(KisAngleGauge::IncreasingDirection_Clockwise);
+    m_canvasAngleSelector->setFlipOptionsMode(KisAngleSelector::FlipOptionsMode_ContextMenu);
+    m_canvasAngleSelector->useFlatSpinBox(true);
+    m_canvasAngleSelector->setFixedWidth(110);
+    addStatusBarItem(m_canvasAngleSelector);
 
-    connect(m_resetAngleButton, SIGNAL(clicked()), m_viewManager, SLOT(slotResetRotation()));
-    m_resetAngleButton->setVisible(false);
-
+    connect(m_canvasAngleSelector, SIGNAL(angleChanged(qreal)), SLOT(slotCanvasAngleSelectorAngleChanged(qreal)));
+    m_canvasAngleSelector->setVisible(false);
 }
 
 KisStatusBar::~KisStatusBar()
@@ -167,11 +169,10 @@ KisStatusBar::~KisStatusBar()
 
 void KisStatusBar::setView(QPointer<KisView> imageView)
 {
-    if (m_imageView == imageView) {
-        return;
-    }
-
     if (m_imageView) {
+        if (m_imageView->canvasBase()) {
+            m_imageView->canvasBase()->canvasController()->proxyObject->disconnect(this);
+        }
         m_imageView->disconnect(this);
         removeStatusBarItem(m_imageView->zoomManager()->zoomActionWidget());
         m_imageView = 0;
@@ -179,18 +180,21 @@ void KisStatusBar::setView(QPointer<KisView> imageView)
 
     if (imageView) {
         m_imageView = imageView;
-        m_resetAngleButton->setVisible(true);
+        m_canvasAngleSelector->setVisible(true);
         connect(m_imageView, SIGNAL(sigColorSpaceChanged(const KoColorSpace*)),
                 this, SLOT(updateStatusBarProfileLabel()));
         connect(m_imageView, SIGNAL(sigProfileChanged(const KoColorProfile*)),
                 this, SLOT(updateStatusBarProfileLabel()));
         connect(m_imageView, SIGNAL(sigSizeChanged(QPointF,QPointF)),
                 this, SLOT(imageSizeChanged()));
+        connect(m_imageView->canvasController()->proxyObject, SIGNAL(canvasOffsetXChanged(int)),
+                this, SLOT(slotCanvasRotationChanged()));
         updateStatusBarProfileLabel();
+        slotCanvasRotationChanged();
         addStatusBarItem(m_imageView->zoomManager()->zoomActionWidget());
     }
     else {
-        m_resetAngleButton->setVisible(false);
+        m_canvasAngleSelector->setVisible(false);
     }
 
     imageSizeChanged();
@@ -358,6 +362,26 @@ void KisStatusBar::updateMemoryStatus()
 void KisStatusBar::showMemoryInfoToolTip()
 {
     QToolTip::showText(QCursor::pos(), m_memoryReportBox->toolTip(), m_memoryReportBox);
+}
+
+void KisStatusBar::slotCanvasAngleSelectorAngleChanged(qreal angle)
+{
+    KisCanvas2 *canvas = m_viewManager->canvasBase();
+    if (!canvas) return;
+
+    KisCanvasController *canvasController = dynamic_cast<KisCanvasController*>(canvas->canvasController());
+    if (canvasController) {
+        canvasController->rotateCanvas(angle - canvas->rotationAngle());
+    }
+}
+
+void KisStatusBar::slotCanvasRotationChanged()
+{
+    KisCanvas2 *canvas = m_viewManager->canvasBase();
+    if (!canvas) return;
+
+    KisSignalsBlocker l(m_canvasAngleSelector);
+    m_canvasAngleSelector->setAngle(canvas->rotationAngle());
 }
 
 void KisStatusBar::updateSelectionToolTip()

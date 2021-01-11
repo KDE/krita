@@ -21,7 +21,7 @@
 class KisDoubleSliderSpinBox;
 class QCheckBox;
 class QGridLayout;
-
+class KisAngleSelector;
 
 class KoCanvasBase;
 
@@ -89,7 +89,7 @@ private:
     QCheckBox * m_chkFixedAngle;
     KisDoubleSliderSpinBox * m_massSPBox;
     KisDoubleSliderSpinBox * m_dragSPBox;
-    KisDoubleSliderSpinBox * m_angleDSSBox;
+    KisAngleSelector * m_angleSelector;
 
     // dyna algorithm
     QVector<QPointF> m_prevPosition;

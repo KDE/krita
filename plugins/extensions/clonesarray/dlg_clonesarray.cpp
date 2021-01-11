@@ -37,6 +37,11 @@ DlgClonesArray::DlgClonesArray(KisViewManager *viewManager, QWidget *parent)
     Q_CHECK_PTR(m_page);
     m_page->setObjectName("clones_array");
 
+    m_page->columnAngle->setRange(-360, 360);
+    m_page->columnAngle->setFlipOptionsMode(KisAngleSelector::FlipOptionsMode_NoFlipOptions);
+    m_page->rowAngle->setRange(-360, 360);
+    m_page->rowAngle->setFlipOptionsMode(KisAngleSelector::FlipOptionsMode_NoFlipOptions);
+
     setMainWidget(m_page);
     resize(m_page->sizeHint());
 
@@ -50,9 +55,9 @@ DlgClonesArray::DlgClonesArray(KisViewManager *viewManager, QWidget *parent)
     connect(m_page->rowYOffset, SIGNAL(valueChanged(int)), SLOT(syncOrthogonalToAngular()));
 
     connect(m_page->columnDistance, SIGNAL(valueChanged(double)), SLOT(syncAngularToOrthogonal()));
-    connect(m_page->columnAngle, SIGNAL(valueChanged(double)), SLOT(syncAngularToOrthogonal()));
+    connect(m_page->columnAngle, SIGNAL(angleChanged(qreal)), SLOT(syncAngularToOrthogonal()));
     connect(m_page->rowDistance, SIGNAL(valueChanged(double)), SLOT(syncAngularToOrthogonal()));
-    connect(m_page->rowAngle, SIGNAL(valueChanged(double)), SLOT(syncAngularToOrthogonal()));
+    connect(m_page->rowAngle, SIGNAL(angleChanged(qreal)), SLOT(syncAngularToOrthogonal()));
 
     connect(m_page->numNegativeColumns, SIGNAL(valueChanged(int)), SLOT(setDirty()));
     connect(m_page->numPositiveColumns, SIGNAL(valueChanged(int)), SLOT(setDirty()));
@@ -112,12 +117,12 @@ void DlgClonesArray::syncOrthogonalToAngular()
     x = m_page->columnXOffset->value();
     y = m_page->columnYOffset->value();
     m_page->columnDistance->setValue((float)sqrt(pow2(x) + pow2(y)));
-    m_page->columnAngle->setValue(kisRadiansToDegrees(atan2((double) y, (double) x)));
+    m_page->columnAngle->setAngle(kisRadiansToDegrees(atan2((double) y, (double) x)));
 
     x = m_page->rowXOffset->value();
     y = m_page->rowYOffset->value();
     m_page->rowDistance->setValue((float)sqrt(pow2(x) + pow2(y)));
-    m_page->rowAngle->setValue(kisRadiansToDegrees(atan2((double) y, (double) x)));
+    m_page->rowAngle->setAngle(kisRadiansToDegrees(atan2((double) y, (double) x)));
 
     setAngularSignalsEnabled(true);
     setDirty();
@@ -130,12 +135,12 @@ void DlgClonesArray::syncAngularToOrthogonal()
     qreal a, d;
 
     d = m_page->columnDistance->value();
-    a = kisDegreesToRadians(m_page->columnAngle->value());
+    a = kisDegreesToRadians(m_page->columnAngle->angle());
     m_page->columnXOffset->setValue(qRound(d * cos(a)));
     m_page->columnYOffset->setValue(qRound(d * sin(a)));
 
     d = m_page->rowDistance->value();
-    a = kisDegreesToRadians(m_page->rowAngle->value());
+    a = kisDegreesToRadians(m_page->rowAngle->angle());
     m_page->rowXOffset->setValue(qRound(d * cos(a)));
     m_page->rowYOffset->setValue(qRound(d * sin(a)));
 

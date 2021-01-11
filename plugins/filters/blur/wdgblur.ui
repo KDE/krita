@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <author>
     SPDX-FileCopyrightText: none
@@ -27,98 +27,7 @@
    <property name="bottomMargin">
     <number>0</number>
    </property>
-   <item column="0" row="0">
-    <widget class="QLabel" name="textLabel1">
-     <property name="text">
-      <string>Horizontal Radius:</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-     <property name="wordWrap">
-      <bool>false</bool>
-     </property>
-    </widget>
-   </item>
-   <item column="1" row="0">
-    <widget class="KisIntParseSpinBox" name="intHalfWidth">
-     <property name="suffix">
-      <string> px</string>
-     </property>
-     <property name="minimum">
-      <number>1</number>
-     </property>
-     <property name="maximum">
-      <number>1000</number>
-     </property>
-    </widget>
-   </item>
-   <item column="3" row="0" rowspan="2">
-    <spacer>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Expanding</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>0</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item column="0" row="1">
-    <widget class="QLabel" name="textLabel2">
-     <property name="text">
-      <string>Vertical Radius:</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-     <property name="wordWrap">
-      <bool>false</bool>
-     </property>
-    </widget>
-   </item>
-   <item column="1" row="1">
-    <widget class="KisIntParseSpinBox" name="intHalfHeight">
-     <property name="suffix">
-      <string> px</string>
-     </property>
-     <property name="minimum">
-      <number>1</number>
-     </property>
-     <property name="maximum">
-      <number>1000</number>
-     </property>
-    </widget>
-   </item>
-   <item column="0" row="2">
-    <widget class="QLabel" name="textLabel3">
-     <property name="text">
-      <string>Strength:</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-     <property name="wordWrap">
-      <bool>false</bool>
-     </property>
-    </widget>
-   </item>
-   <item column="1" row="2">
-    <widget class="KisIntParseSpinBox" name="intStrength">
-     <property name="maximum">
-      <number>100</number>
-     </property>
-     <property name="value">
-      <number>100</number>
-     </property>
-    </widget>
-   </item>
-   <item column="0" row="3">
+   <item row="3" column="0">
     <widget class="QLabel" name="textLabel5">
      <property name="toolTip">
       <string/>
@@ -134,20 +43,20 @@
      </property>
     </widget>
    </item>
-   <item column="1" row="3">
-    <widget class="KisIntParseSpinBox" name="intAngle">
-     <property name="suffix">
-      <string>°</string>
-     </property>
+   <item row="2" column="1">
+    <widget class="KisIntParseSpinBox" name="intStrength">
      <property name="maximum">
-      <number>360</number>
+      <number>100</number>
+     </property>
+     <property name="value">
+      <number>100</number>
      </property>
     </widget>
    </item>
-   <item column="0" row="4">
-    <widget class="QLabel" name="textLabel4">
+   <item row="1" column="0">
+    <widget class="QLabel" name="textLabel2">
      <property name="text">
-      <string>Shape:</string>
+      <string>Vertical Radius:</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -157,21 +66,20 @@
      </property>
     </widget>
    </item>
-   <item column="1" row="4">
-    <widget class="KComboBox" name="cbShape">
-     <item>
-      <property name="text">
-       <string>Circle</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Rectangle</string>
-      </property>
-     </item>
+   <item row="1" column="1">
+    <widget class="KisIntParseSpinBox" name="intHalfHeight">
+     <property name="suffix">
+      <string> px</string>
+     </property>
+     <property name="minimum">
+      <number>1</number>
+     </property>
+     <property name="maximum">
+      <number>1000</number>
+     </property>
     </widget>
    </item>
-   <item column="3" row="4">
+   <item row="0" column="3" rowspan="2">
     <spacer>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -187,7 +95,63 @@
      </property>
     </spacer>
    </item>
-   <item colspan="2" column="0" row="5">
+   <item row="0" column="0">
+    <widget class="QLabel" name="textLabel1">
+     <property name="text">
+      <string>Horizontal Radius:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="wordWrap">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0">
+    <widget class="QLabel" name="textLabel4">
+     <property name="text">
+      <string>Shape:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="wordWrap">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="KisIntParseSpinBox" name="intHalfWidth">
+     <property name="suffix">
+      <string> px</string>
+     </property>
+     <property name="minimum">
+      <number>1</number>
+     </property>
+     <property name="maximum">
+      <number>1000</number>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="1">
+    <widget class="KComboBox" name="cbShape">
+     <item>
+      <property name="text">
+       <string>Circle</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Rectangle</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="0" column="2" rowspan="2">
+    <widget class="KoAspectButton" name="aspectButton" native="true"/>
+   </item>
+   <item row="6" column="0" colspan="2">
     <spacer>
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -203,8 +167,37 @@
      </property>
     </spacer>
    </item>
-   <item column="2" row="0" rowspan="2">
-    <widget class="KoAspectButton" name="aspectButton" native="true"/>
+   <item row="2" column="0">
+    <widget class="QLabel" name="textLabel3">
+     <property name="text">
+      <string>Strength:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="wordWrap">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="3">
+    <spacer>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Expanding</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>0</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="3" column="1">
+    <widget class="KisAngleSelector" name="angleSelector" native="true"/>
    </item>
   </layout>
  </widget>
@@ -224,6 +217,12 @@
    <class>KisIntParseSpinBox</class>
    <extends>QSpinBox</extends>
    <header>kis_int_parse_spin_box.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KisAngleSelector</class>
+   <extends>QWidget</extends>
+   <header location="global">KisAngleSelector.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

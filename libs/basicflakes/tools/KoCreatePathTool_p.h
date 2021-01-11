@@ -401,8 +401,8 @@ public:
         activePoint = 0;
     }
 
-    void angleDeltaChanged(int value) {
-        angleSnappingDelta = value;
+    void angleDeltaChanged(qreal value) {
+        angleSnappingDelta = static_cast<int>(value);
         if (angleSnapStrategy)
             angleSnapStrategy->setAngleStep(angleSnappingDelta);
     }

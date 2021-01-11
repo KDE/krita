@@ -75,6 +75,9 @@ set(kritawidgets_LIB_SRCS
     KisPaletteComboBox.cpp
 
     kis_color_button.cpp
+    
+    KisAngleGauge.cpp
+    KisAngleSelector.cpp
 )
 
 ki18n_wrap_ui( kritawidgets_LIB_SRCS

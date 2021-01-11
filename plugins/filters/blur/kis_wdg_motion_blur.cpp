@@ -36,10 +36,10 @@ KisWdgMotionBlur::KisWdgMotionBlur(QWidget * parent) : KisConfigWidget(parent)
     m_widget = new Ui_WdgMotionBlur();
     m_widget->setupUi(this);
 
-    connect(m_widget->blurAngleSlider, SIGNAL(valueChanged(int)), SLOT(angleSliderChanged(int)));
-    connect(m_widget->blurAngleDial, SIGNAL(valueChanged(int)), SLOT(angleDialChanged(int)));
+    m_widget->blurAngleSelector->setDecimals(0);
+    m_widget->blurAngleSelector->setIncreasingDirection(KisAngleGauge::IncreasingDirection_Clockwise);
 
-    connect(m_widget->blurAngleSlider, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
+    connect(m_widget->blurAngleSelector, SIGNAL(angleChanged(qreal)), SIGNAL(sigConfigurationItemChanged()));
     connect(m_widget->blurLength, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
 }
 
@@ -51,7 +51,7 @@ KisWdgMotionBlur::~KisWdgMotionBlur()
 KisPropertiesConfigurationSP KisWdgMotionBlur::configuration() const
 {
     KisFilterConfigurationSP config = new KisFilterConfiguration("motion blur", 1);
-    config->setProperty("blurAngle", m_widget->blurAngleSlider->value());
+    config->setProperty("blurAngle", static_cast<int>(m_widget->blurAngleSelector->angle()));
     config->setProperty("blurLength", m_widget->blurLength->value());
     return config;
 }
@@ -60,37 +60,9 @@ void KisWdgMotionBlur::setConfiguration(const KisPropertiesConfigurationSP confi
 {
     QVariant value;
     if (config->getProperty("blurAngle", value)) {
-        m_widget->blurAngleSlider->setValue(value.toInt());
+        m_widget->blurAngleSelector->setAngle(static_cast<qreal>(value.toInt()));
     }
     if (config->getProperty("blurLength", value)) {
         m_widget->blurLength->setValue(value.toInt());
     }
 }
-
-void KisWdgMotionBlur::angleSliderChanged(int v)
-{
-    int absoluteValue = -v + 270;
-    if (absoluteValue < 0) {
-        absoluteValue += 360;
-    }
-    else if (absoluteValue > 360) {
-        absoluteValue = absoluteValue - 360;
-    }
-
-    m_widget->blurAngleDial->setValue(absoluteValue);
-}
-
-void KisWdgMotionBlur::angleDialChanged(int v)
-{
-    int absoluteValue = v - 270;
-    if (absoluteValue < 0) {
-        absoluteValue = 360 + absoluteValue;
-    }
-    absoluteValue = -absoluteValue;
-    if (absoluteValue < 0) {
-        absoluteValue += 360;
-    }
-
-    m_widget->blurAngleSlider->setValue(absoluteValue);
-}
-

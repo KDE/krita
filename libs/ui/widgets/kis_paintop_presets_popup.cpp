@@ -366,29 +366,26 @@ void KisPaintOpPresetsPopup::slotSaveRenameCurrentBrush()
     if (!curPreset)
         return;
 
-    KisPaintOpPresetResourceServer * rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
+    // in case the preset is dirty, we need an id to get the actual non-dirty preset to save just the name change
+    // into the database
+    int currentPresetResourceId = curPreset->resourceId();
+
 
     QString originalPresetName = curPreset->name();
     QString renamedPresetName = m_d->uiWdgPaintOpPresetSettings.renameBrushNameTextField->text();
-    QString renamedPresetPathAndFile = renamedPresetName + curPreset->defaultFileExtension();
 
 
     // create a new brush preset with the name specified and add to resource provider
-    KisPaintOpPresetSP newPreset = curPreset->clone().dynamicCast<KisPaintOpPreset>();
-    newPreset->setFilename(renamedPresetPathAndFile); // this also contains the path
-    newPreset->setName(renamedPresetName);
-    newPreset->setImage(curPreset->image()); // use existing thumbnail (might not need to do this)
-    newPreset->setDirty(false);
-    newPreset->setValid(true);
-    rServer->addResource(newPreset);
+    KisResourceModel model(ResourceType::PaintOpPresets);
+    KoResourceSP properCleanResource = model.resourceForId(currentPresetResourceId);
+    model.renameResource(properCleanResource, renamedPresetName);
 
-    resourceSelected(newPreset); // refresh and select our freshly renamed resource
+
+
+    resourceSelected(curPreset); // refresh and select our freshly renamed resource
 
 
     // Now blacklist the original file
-    if (rServer->resourceByName(originalPresetName)) {
-        rServer->removeResourceFromServer(curPreset);
-    }
 
     m_d->favoriteResManager->updateFavoritePresets();
 

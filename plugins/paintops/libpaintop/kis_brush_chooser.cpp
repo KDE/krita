@@ -121,10 +121,8 @@ KisPredefinedBrushChooser::KisPredefinedBrushChooser(QWidget *parent, const char
 
     QObject::connect(brushSizeSpinBox, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetItemSize(qreal)));
 
-    brushRotationSpinBox->setRange(0, 360, 0);
-    brushRotationSpinBox->setValue(0);
-    brushRotationSpinBox->setSuffix(QChar(Qt::Key_degree));
-    QObject::connect(brushRotationSpinBox, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetItemRotation(qreal)));
+    brushRotationAngleSelector->setDecimals(0);
+    QObject::connect(brushRotationAngleSelector, SIGNAL(angleChanged(qreal)), this, SLOT(slotSetItemRotation(qreal)));
 
     brushSpacingSelectionWidget->setSpacing(true, 1.0);
     connect(brushSpacingSelectionWidget, SIGNAL(sigSpacingChanged()), SLOT(slotSpacingChanged()));
@@ -395,7 +393,7 @@ void KisPredefinedBrushChooser::updateBrushTip(KoResource * resource, bool isCha
         // this will set the brush's model data to keep what it currently has for size, spacing, etc.
         if (preserveBrushPresetSettings->isChecked() && !isChangingBrushPresets) {
             m_brush->setAutoSpacing(brushSpacingSelectionWidget->autoSpacingActive(), brushSpacingSelectionWidget->autoSpacingCoeff());
-            m_brush->setAngle(brushRotationSpinBox->value() * M_PI / 180);
+            m_brush->setAngle(brushRotationAngleSelector->angle() * M_PI / 180);
             m_brush->setSpacing(brushSpacingSelectionWidget->spacing());
             m_brush->setUserEffectiveSize(brushSizeSpinBox->value());
         }
@@ -404,7 +402,7 @@ void KisPredefinedBrushChooser::updateBrushTip(KoResource * resource, bool isCha
                                 m_brush->autoSpacingActive() ?
                                 m_brush->autoSpacingCoeff() : m_brush->spacing());
 
-        brushRotationSpinBox->setValue(m_brush->angle() * 180 / M_PI);
+        brushRotationAngleSelector->setAngle(m_brush->angle() * 180 / M_PI);
         brushSizeSpinBox->setValue(m_brush->width() * m_brush->scale());
 
         emit sigBrushChanged();

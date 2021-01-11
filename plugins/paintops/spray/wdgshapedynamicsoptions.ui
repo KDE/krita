@@ -26,6 +26,19 @@
    </size>
   </property>
   <layout class="QGridLayout" name="gridLayout">
+   <item row="3" column="0">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>37</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
    <item row="0" column="0">
     <widget class="QCheckBox" name="randomSizeCHBox">
      <property name="text">
@@ -69,14 +82,11 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="1" colspan="2">
-       <widget class="KisDoubleSliderSpinBox" name="fixedAngleBox" />
-      </item>
       <item row="1" column="1" colspan="2">
-       <widget class="KisDoubleSliderSpinBox" name="randomAngleWeight" />
+       <widget class="KisDoubleSliderSpinBox" name="randomAngleWeight" native="true"/>
       </item>
       <item row="2" column="1" colspan="2">
-       <widget class="KisDoubleSliderSpinBox" name="followCursorWeight" />
+       <widget class="KisDoubleSliderSpinBox" name="followCursorWeight" native="true"/>
       </item>
       <item row="3" column="0">
        <widget class="QCheckBox" name="drawingAngle">
@@ -86,31 +96,41 @@
        </widget>
       </item>
       <item row="3" column="1" colspan="2">
-       <widget class="KisDoubleSliderSpinBox" name="drawingAngleWeight" />
+       <widget class="KisDoubleSliderSpinBox" name="drawingAngleWeight" native="true"/>
+      </item>
+      <item row="0" column="1" colspan="2">
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="KisAngleSelector" name="fixedAngleBox" native="true"/>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </spacer>
+        </item>
+       </layout>
       </item>
      </layout>
     </widget>
    </item>
-   <item row="2" column="0">
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>37</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
   </layout>
  </widget>
  <customwidgets>
- <customwidget>
+  <customwidget>
    <class>KisDoubleSliderSpinBox</class>
    <extends>QWidget</extends>
    <header>kis_slider_spin_box.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisAngleSelector</class>
+   <extends>QWidget</extends>
+   <header location="global">KisAngleSelector.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

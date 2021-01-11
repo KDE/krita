@@ -16,7 +16,7 @@
     <height>0</height>
    </size>
   </property>
-  <layout class="QGridLayout" name="gridLayout_3" columnstretch="0,1">
+  <layout class="QGridLayout" name="gridLayout_3" columnstretch="0,0">
    <property name="leftMargin">
     <number>0</number>
    </property>
@@ -127,24 +127,54 @@
      </item>
     </layout>
    </item>
-   <item row="1" column="1">
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Expanding</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>17</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
    <item row="0" column="1">
-    <layout class="QGridLayout" name="gridLayout_2" columnstretch="0,0,1">
+    <layout class="QGridLayout" name="gridLayout_2" columnstretch="0,0,0">
+     <item row="7" column="0">
+      <widget class="QLabel" name="lblDensity">
+       <property name="text">
+        <string>Density:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="lblRatio">
+       <property name="text">
+        <string>Ratio:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="8" column="0">
+      <widget class="QLabel" name="lblSpacing">
+       <property name="text">
+        <string>Spacing:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="0">
+      <widget class="QLabel" name="lblSpikes">
+       <property name="text">
+        <string>Spikes:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="1" colspan="2">
+      <widget class="KisDoubleSliderSpinBox" name="density" native="true"/>
+     </item>
+     <item row="8" column="1" colspan="2">
+      <widget class="KisSpacingSelectionWidget" name="spacingWidget" native="true"/>
+     </item>
      <item row="0" column="1" colspan="2">
       <widget class="KisDoubleSliderSpinBox" name="inputRadius" native="true">
        <property name="minimumSize">
@@ -154,6 +184,9 @@
         </size>
        </property>
       </widget>
+     </item>
+     <item row="6" column="1" colspan="2">
+      <widget class="KisDoubleSliderSpinBox" name="inputRandomness" native="true"/>
      </item>
      <item row="3" column="0">
       <widget class="QLabel" name="lblAngle">
@@ -175,18 +208,18 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="lblRatio">
+     <item row="1" column="1" colspan="2">
+      <widget class="KisDoubleSliderSpinBox" name="inputRatio" native="true"/>
+     </item>
+     <item row="6" column="0">
+      <widget class="QLabel" name="lblRandomness">
        <property name="text">
-        <string>Ratio:</string>
+        <string>Randomness:</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
        </property>
       </widget>
-     </item>
-     <item row="1" column="1" colspan="2">
-      <widget class="KisDoubleSliderSpinBox" name="inputRatio" native="true"/>
      </item>
      <item row="2" column="0" colspan="3">
       <widget class="QStackedWidget" name="stackedWidget">
@@ -332,69 +365,50 @@
        </widget>
       </widget>
      </item>
-     <item row="5" column="0">
-      <widget class="QLabel" name="lblRandomness">
-       <property name="text">
-        <string>Randomness:</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="0">
-      <widget class="QLabel" name="lblSpikes">
-       <property name="text">
-        <string>Spikes:</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="1" colspan="2">
-      <widget class="KisSliderSpinBox" name="inputAngle" native="true">
-       <property name="minimumSize">
-        <size>
-         <width>200</width>
-         <height>0</height>
-        </size>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="1" colspan="2">
+     <item row="5" column="1" colspan="2">
       <widget class="KisSliderSpinBox" name="inputSpikes" native="true"/>
      </item>
-     <item row="6" column="1" colspan="2">
-      <widget class="KisDoubleSliderSpinBox" name="density" native="true"/>
-     </item>
-     <item row="5" column="1" colspan="2">
-      <widget class="KisDoubleSliderSpinBox" name="inputRandomness" native="true"/>
-     </item>
-     <item row="6" column="0">
-      <widget class="QLabel" name="lblDensity">
-       <property name="text">
-        <string>Density:</string>
+     <item row="3" column="1">
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <property name="spacing">
+        <number>0</number>
        </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="7" column="1" colspan="2">
-      <widget class="KisSpacingSelectionWidget" name="spacingWidget" native="true"/>
-     </item>
-     <item row="7" column="0">
-      <widget class="QLabel" name="lblSpacing">
-       <property name="text">
-        <string>Spacing:</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
+       <item>
+        <widget class="KisAngleSelector" name="inputAngle" native="true">
+         <property name="minimumSize">
+          <size>
+           <width>200</width>
+           <height>0</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </spacer>
+       </item>
+      </layout>
      </item>
     </layout>
+   </item>
+   <item row="1" column="1">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Expanding</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>17</height>
+      </size>
+     </property>
+    </spacer>
    </item>
   </layout>
  </widget>
@@ -427,6 +441,12 @@
    <class>KisSpacingSelectionWidget</class>
    <extends>QWidget</extends>
    <header>kis_spacing_selection_widget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisAngleSelector</class>
+   <extends>QWidget</extends>
+   <header location="global">KisAngleSelector.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

@@ -35,13 +35,15 @@ EllipseShapeConfigWidget::EllipseShapeConfigWidget()
 
     widget.startAngle->setMinimum(0.0);
     widget.startAngle->setMaximum(360.0);
+    widget.startAngle->setFlipOptionsMode(KisAngleSelector::FlipOptionsMode_MenuButton);
 
     widget.endAngle->setMinimum(0.0);
     widget.endAngle->setMaximum(360.0);
+    widget.endAngle->setFlipOptionsMode(KisAngleSelector::FlipOptionsMode_MenuButton);
 
     connect(widget.ellipseType, SIGNAL(currentIndexChanged(int)), this, SIGNAL(propertyChanged()));
-    connect(widget.startAngle, SIGNAL(valueChanged(double)), this, SIGNAL(propertyChanged()));
-    connect(widget.endAngle, SIGNAL(valueChanged(double)), this, SIGNAL(propertyChanged()));
+    connect(widget.startAngle, SIGNAL(angleChanged(qreal)), this, SIGNAL(propertyChanged()));
+    connect(widget.endAngle, SIGNAL(angleChanged(qreal)), this, SIGNAL(propertyChanged()));
     connect(widget.closeEllipse, SIGNAL(clicked(bool)), this, SLOT(closeEllipse()));
 }
 
@@ -64,8 +66,8 @@ void EllipseShapeConfigWidget::loadPropertiesFromShape(EllipseShape *shape)
     KisSignalsBlocker b(widget.ellipseType, widget.startAngle, widget.endAngle);
 
     widget.ellipseType->setCurrentIndex(shape->type());
-    widget.startAngle->setValue(shape->startAngle());
-    widget.endAngle->setValue(shape->endAngle());
+    widget.startAngle->setAngle(shape->startAngle());
+    widget.endAngle->setAngle(shape->endAngle());
 }
 
 
@@ -76,8 +78,8 @@ void EllipseShapeConfigWidget::save()
     }
 
     m_ellipse->setType(static_cast<EllipseShape::EllipseType>(widget.ellipseType->currentIndex()));
-    m_ellipse->setStartAngle(widget.startAngle->value());
-    m_ellipse->setEndAngle(widget.endAngle->value());
+    m_ellipse->setStartAngle(widget.startAngle->angle());
+    m_ellipse->setEndAngle(widget.endAngle->angle());
 }
 
 KUndo2Command *EllipseShapeConfigWidget::createCommand()
@@ -86,7 +88,7 @@ KUndo2Command *EllipseShapeConfigWidget::createCommand()
         return 0;
     } else {
         EllipseShape::EllipseType type = static_cast<EllipseShape::EllipseType>(widget.ellipseType->currentIndex());
-        return new EllipseShapeConfigCommand(m_ellipse, type, widget.startAngle->value(), widget.endAngle->value());
+        return new EllipseShapeConfigCommand(m_ellipse, type, widget.startAngle->angle(), widget.endAngle->angle());
     }
 }
 
@@ -104,8 +106,8 @@ void EllipseShapeConfigWidget::closeEllipse()
     widget.startAngle->blockSignals(true);
     widget.endAngle->blockSignals(true);
 
-    widget.startAngle->setValue(0.0);
-    widget.endAngle->setValue(360.0);
+    widget.startAngle->setAngle(0.0);
+    widget.endAngle->setAngle(360.0);
 
     widget.startAngle->blockSignals(false);
     widget.endAngle->blockSignals(false);

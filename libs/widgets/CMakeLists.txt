@@ -94,6 +94,9 @@ set(kritawidgets_LIB_SRCS
 
     kis_popup_button.cc
     kis_color_button.cpp
+
+    KisAngleGauge.cpp
+    KisAngleSelector.cpp
 )
 
 ki18n_wrap_ui( kritawidgets_LIB_SRCS

@@ -159,5 +159,11 @@
         <file>light_python.svg</file>
         <file>dark_hamburger_menu_dots.svg</file>
         <file>light_hamburger_menu_dots.svg</file>
+        <file>dark_flip_angle_h.svg</file>
+        <file>dark_flip_angle_v.svg</file>
+        <file>dark_flip_angle_hv.svg</file>
+        <file>light_flip_angle_h.svg</file>
+        <file>light_flip_angle_v.svg</file>
+        <file>light_flip_angle_hv.svg</file>
     </qresource>
 </RCC>

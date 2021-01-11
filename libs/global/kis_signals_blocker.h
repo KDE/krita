@@ -7,6 +7,7 @@
 #ifndef __KIS_SIGNALS_BLOCKER_H
 #define __KIS_SIGNALS_BLOCKER_H
 
+#include <QObject>
 #include <QVector>
 
 /**

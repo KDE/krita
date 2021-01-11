@@ -156,8 +156,7 @@ struct KisSuspendProjectionUpdatesStrokeStrategy::Private
                     for (; reqIt != fullRefreshRequests.end(); ++reqIt) {
                         const QVector<QRect> simplifiedRects = KisRegion::fromOverlappingRects(reqIt.value(), step).rects();
 
-                        // FIXME: constness: port rPU to SP
-                        image->refreshGraphAsync(const_cast<KisNode*>(node.data()), simplifiedRects, reqIt.key());
+                        image->refreshGraphAsync(node, simplifiedRects, reqIt.key());
                     }
                 }
             }
@@ -179,7 +178,7 @@ struct KisSuspendProjectionUpdatesStrokeStrategy::Private
 
                     const QVector<QRect> simplifiedRects = KisRegion::fromOverlappingRects(dirtyRects, step).rects();
 
-                    // FIXME: constness: port rPU to SP
+                    // FIXME: constness: port requestProjectionUpdate to shared pointers
                     image->requestProjectionUpdate(const_cast<KisNode*>(node.data()), simplifiedRects, resetAnimationCache);
                 }
             }
@@ -203,8 +202,7 @@ struct KisSuspendProjectionUpdatesStrokeStrategy::Private
                     for (; reqIt != noFilthyRequests.end(); ++reqIt) {
                         const QVector<QRect> simplifiedRects = KisRegion::fromOverlappingRects(reqIt.value().first, step).rects();
 
-                        // FIXME: constness: port rPU to SP
-                        image->requestProjectionUpdateNoFilthy(const_cast<KisNode*>(node.data()), simplifiedRects, reqIt.key(), reqIt.value().second);
+                        image->requestProjectionUpdateNoFilthy(node, simplifiedRects, reqIt.key(), reqIt.value().second);
                     }
                 }
             }

@@ -28,9 +28,9 @@
 #include <kconfig.h>
 #include <QDebug>
 #include <kmessagebox.h>
+#include <KisAngleSelector.h>
 
 #include <QInputDialog>
-#include <QSpinBox>
 #include <QCheckBox>
 #include <QDoubleSpinBox>
 #include <QLabel>
@@ -110,9 +110,11 @@ KarbonCalligraphyOptionWidget::KarbonCalligraphyOptionWidget()
 
     QLabel *angleLabel = new QLabel(i18n("Angle:"), this);
     angleLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-    m_angleBox = new KisIntParseSpinBox(this);
+    m_angleBox = new KisAngleSelector(this);
     m_angleBox->setRange(0, 179);
-    m_angleBox->setWrapping(true);
+    m_angleBox->setDecimals(0);
+    m_angleBox->setResetAngle(30);
+    m_angleBox->setFlipOptionsMode(KisAngleSelector::FlipOptionsMode_ContextMenu);
     angleLabel->setBuddy(m_angleBox);
     detailsLayout->addWidget(angleLabel, 4, 0);
     detailsLayout->addWidget(m_angleBox, 4, 1);
@@ -173,7 +175,7 @@ void KarbonCalligraphyOptionWidget::emitAll()
     emit useAngleChanged(m_useAngle->isChecked());
     emit widthChanged(m_widthBox->value());
     emit thinningChanged(m_thinningBox->value());
-    emit angleChanged(m_angleBox->value());
+    emit angleChanged(static_cast<int>(m_angleBox->angle()));
     emit fixationChanged(m_fixationBox->value());
     emit capsChanged(m_capsBox->value());
     emit massChanged(m_massBox->value());
@@ -272,12 +274,12 @@ void KarbonCalligraphyOptionWidget::decreaseWidth()
 
 void KarbonCalligraphyOptionWidget::increaseAngle()
 {
-    m_angleBox->setValue((m_angleBox->value() + 3) % 180);
+    m_angleBox->setAngle(static_cast<int>(m_angleBox->angle() + 3) % 180);
 }
 
 void KarbonCalligraphyOptionWidget::decreaseAngle()
 {
-    m_angleBox->setValue((m_angleBox->value() - 3) % 180);
+    m_angleBox->setAngle(static_cast<int>(m_angleBox->angle() - 3) % 180);
 }
 
 /******************************************************************************
@@ -305,8 +307,8 @@ void KarbonCalligraphyOptionWidget::createConnections()
     connect(m_thinningBox, SIGNAL(valueChanged(double)),
             SIGNAL(thinningChanged(double)));
 
-    connect(m_angleBox, SIGNAL(valueChanged(int)),
-            SIGNAL(angleChanged(int)));
+    connect(m_angleBox, SIGNAL(angleChanged(qreal)),
+            SLOT(on_m_angleBox_angleChanged(qreal)));
 
     connect(m_fixationBox, SIGNAL(valueChanged(double)),
             SIGNAL(fixationChanged(double)));
@@ -464,7 +466,7 @@ void KarbonCalligraphyOptionWidget::loadCurrentProfile()
     m_useAngle->setChecked(profile->useAngle);
     m_widthBox->setValue(profile->width);
     m_thinningBox->setValue(profile->thinning);
-    m_angleBox->setValue(profile->angle);
+    m_angleBox->setAngle(profile->angle);
     m_fixationBox->setValue(profile->fixation);
     m_capsBox->setValue(profile->caps);
     m_massBox->setValue(profile->mass);
@@ -481,7 +483,7 @@ void KarbonCalligraphyOptionWidget::saveProfile(const QString &name)
     profile->useAngle = m_useAngle->isChecked();
     profile->width = m_widthBox->value();
     profile->thinning = m_thinningBox->value();
-    profile->angle = m_angleBox->value();
+    profile->angle = static_cast<int>(m_angleBox->angle());
     profile->fixation = m_fixationBox->value();
     profile->caps = m_capsBox->value();
     profile->mass = m_massBox->value();
@@ -611,4 +613,9 @@ int KarbonCalligraphyOptionWidget::profilePosition(const QString &profileName)
 void KarbonCalligraphyOptionWidget::setUsePathEnabled(bool enabled)
 {
     m_usePath->setEnabled(enabled);
+}
+
+void KarbonCalligraphyOptionWidget::on_m_angleBox_angleChanged(qreal angle)
+{
+    emit angleChanged(static_cast<int>(angle));
 }

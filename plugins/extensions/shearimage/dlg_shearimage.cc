@@ -41,6 +41,15 @@ DlgShearImage::DlgShearImage(QWidget *  parent,
     m_page->layout()->setMargin(0);
     m_page->setObjectName("shear_image");
 
+    m_page->shearAngleX->setDecimals(0);
+    m_page->shearAngleX->setRange(-45, 45);
+    m_page->shearAngleX->setWrapping(false);
+    m_page->shearAngleX->setFlipOptionsMode(KisAngleSelector::FlipOptionsMode_NoFlipOptions);
+    m_page->shearAngleY->setDecimals(0);
+    m_page->shearAngleY->setRange(-45, 45);
+    m_page->shearAngleY->setWrapping(false);
+    m_page->shearAngleY->setFlipOptionsMode(KisAngleSelector::FlipOptionsMode_NoFlipOptions);
+
     setMainWidget(m_page);
     resize(m_page->sizeHint());
 
@@ -56,26 +65,24 @@ DlgShearImage::~DlgShearImage()
 
 void DlgShearImage::setAngleX(quint32 angle)
 {
-    m_page->shearAngleX->setValue(angle);
+    m_page->shearAngleX->setAngle(angle);
     m_oldAngle = angle;
-
 }
 
 void DlgShearImage::setAngleY(quint32 angle)
 {
-    m_page->shearAngleY->setValue(angle);
+    m_page->shearAngleY->setAngle(angle);
     m_oldAngle = angle;
-
 }
 
 qint32 DlgShearImage::angleX()
 {
-    return m_page->shearAngleX->value();
+    return static_cast<qint32>(m_page->shearAngleX->angle());
 }
 
 qint32 DlgShearImage::angleY()
 {
-    return m_page->shearAngleY->value();
+    return static_cast<qint32>(m_page->shearAngleY->angle());
 }
 
 // SLOTS

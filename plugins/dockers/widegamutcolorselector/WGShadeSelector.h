@@ -21,7 +21,7 @@ class WGShadeSelector : public QWidget
     Q_OBJECT
 
 public:
-    explicit WGShadeSelector(KisVisualColorModelSP selector, QWidget *parent = nullptr);
+    explicit WGShadeSelector(KisVisualColorModelSP colorModel, QWidget *parent = nullptr);
 
     void updateSettings();
 protected:

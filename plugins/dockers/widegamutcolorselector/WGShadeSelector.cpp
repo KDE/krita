@@ -12,9 +12,9 @@
 #include <QVBoxLayout>
 #include <QMouseEvent>
 
-WGShadeSelector::WGShadeSelector(KisVisualColorModelSP selector, QWidget *parent)
+WGShadeSelector::WGShadeSelector(KisVisualColorModelSP colorModel, QWidget *parent)
     : QWidget(parent)
-    , m_model(selector)
+    , m_model(colorModel)
 {
     QVBoxLayout* l = new QVBoxLayout(this);
     l->setSpacing(1);
@@ -22,6 +22,10 @@ WGShadeSelector::WGShadeSelector(KisVisualColorModelSP selector, QWidget *parent
 
     connect(m_model.data(), SIGNAL(sigColorModelChanged()), SLOT(slotReset()));
     connect(m_model.data(), SIGNAL(sigColorSpaceChanged()), SLOT(slotReset()));
+    connect(m_model.data(), SIGNAL(sigChannelValuesChanged(QVector4D)),
+            SLOT(slotChannelValuesChanged(QVector4D)));
+    connect(this, SIGNAL(sigChannelValuesChanged(QVector4D)),
+            m_model.data(), SLOT(slotSetChannelValues(QVector4D)));
     updateSettings();
     if (m_model->colorModel() != KisVisualColorModel::None) {
         slotChannelValuesChanged(m_model->channelValues());

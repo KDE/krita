@@ -40,6 +40,7 @@ class KisDoubleSliderSpinBox;
 class KoCanvasBase;
 class KisColorFilterCombo;
 class KisDummiesFacadeBase;
+class KisAngleSelector;
 
 class KisToolFill : public KisToolPaint
 {
@@ -114,7 +115,7 @@ private:
     KisSliderSpinBox *m_slThreshold;
     KisSliderSpinBox *m_sizemodWidget;
     KisSliderSpinBox *m_featherWidget;
-    KisDoubleSliderSpinBox *m_sldPatternRotate;
+    KisAngleSelector *m_angleSelectorPatternRotate;
     KisDoubleSliderSpinBox *m_sldPatternScale;
     QCheckBox *m_checkUsePattern;
     QCheckBox *m_checkFillSelection;

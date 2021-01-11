@@ -20,6 +20,7 @@ KisCmbGradient::KisCmbGradient(QWidget *parent)
     , m_gradientChooser(new KisGradientChooser(this))
     , m_checkersPainter(4)
 {
+    m_gradientChooser->setContentsMargins(10, 10, 10, 10);
     connect(m_gradientChooser, SIGNAL(resourceSelected(KoResourceSP )), SLOT(gradientSelected(KoResourceSP )));
     setPopupWidget(m_gradientChooser);
 }

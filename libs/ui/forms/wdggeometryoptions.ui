@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>287</width>
-    <height>167</height>
+    <width>296</width>
+    <height>240</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -125,7 +125,7 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="KisDoubleSliderSpinBox" name="sldRotation" native="true"/>
+       <widget class="KisAngleSelector" name="angleSelectorRotation" native="true"/>
       </item>
       <item row="1" column="1">
        <widget class="KisDoubleSliderSpinBox" name="sldScale" native="true"/>
@@ -140,6 +140,12 @@
    <class>KisDoubleSliderSpinBox</class>
    <extends>QWidget</extends>
    <header location="global">kis_slider_spin_box.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisAngleSelector</class>
+   <extends>QWidget</extends>
+   <header location="global">KisAngleSelector.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

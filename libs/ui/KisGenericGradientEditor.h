@@ -41,46 +41,6 @@ class KRITAUI_EXPORT KisGenericGradientEditor : public QWidget
     Q_OBJECT
 public:
     /**
-     * @brief View modes for the gradient preset chooser
-     */
-    enum GradientPresetChooserViewMode
-    {
-        /**
-         * @brief Show the items in the gradient preset chooser as a grid of icons
-         */
-        GradientPresetChooserViewMode_Icon,
-        /**
-         * @brief Show the items in the gradient preset chooser as a list
-         */
-        GradientPresetChooserViewMode_List
-    };
-
-    /**
-     * @brief Item sizes for the gradient preset chooser
-     */
-    enum GradientPresetChooserItemSize
-    {
-        /**
-         * @brief Show small items in the gradient preset chooser
-         */
-        GradientPresetChooserItemSize_Small,
-        /**
-         * @brief Show medium size items in the gradient preset chooser
-         */
-        GradientPresetChooserItemSize_Medium,
-        /**
-         * @brief Show large items in the gradient preset chooser
-         */
-        GradientPresetChooserItemSize_Large,
-        /**
-         * @brief Show items in the gradient preset chooser with a custom size
-         * @see gradientPresetChooserItemSizeCustom()
-         * @see setGradientPresetChooserItemSizeCustom(int)
-         */
-        GradientPresetChooserItemSize_Custom
-    };
-
-    /**
      * @brief Construct a new KisGenericGradientEditor widget
      * @param parent the parent widget
      */
@@ -172,80 +132,6 @@ public:
      * @see setCompactGradientPresetChooserMode(bool)
      */
     bool compactGradientPresetChooserMode() const;
-    /**
-     * @brief Tell if the gradient preset chooser is showing the items as a
-     *        grid of icons or as a list
-     * @return KisGenericGradientEditor::GradientPresetChooserViewMode_Icon if the gradient preset
-     *         chooser is showing the items as a grid of icons
-     * @return KisGenericGradientEditor::GradientPresetChooserViewMode_List if the gradient preset
-     *         chooser is showing the items as a list
-     * @see GradientPresetChooserViewMode
-     * @see setGradientPresetChooserViewMode(GradientPresetChooserViewMode)
-     */
-    GradientPresetChooserViewMode gradientPresetChooserViewMode() const;
-    /**
-     * @brief Tell the size of the gradient preset chooser items
-     * @return KisGenericGradientEditor::GradientPresetChooserItemSize_Small
-     *         if the items are being shown with the small size
-     * @return KisGenericGradientEditor::GradientPresetChooserItemSize_Medium 
-     *         if the items are being shown with the medium size
-     * @return KisGenericGradientEditor::GradientPresetChooserItemSize_Large 
-     *         if the items are being shown with the large size
-     * @return KisGenericGradientEditor::GradientPresetChooserItemSize_Custom
-     *         if the items are being shown with the custom size
-     * @see GradientPresetChooserItemSize
-     * @see setGradientPresetChooserItemSize(GradientPresetChooserItemSize)
-     */
-    GradientPresetChooserItemSize gradientPresetChooserItemSize() const;
-    /**
-     * @brief Tell the underlying size (height) in pixels used when
-     *        KisGenericGradientEditor::GradientPresetChooserItemSize_Small is
-     *        used as the item size
-     * 
-     *        The default value is 32
-     * @return the underlying small size in pixels
-     * @see setGradientPresetChooserItemSizeSmall(int)
-     */
-    int gradientPresetChooserItemSizeSmall() const;
-    /**
-     * @brief Tell the underlying size (height) in pixels used when
-     *        KisGenericGradientEditor::GradientPresetChooserItemSize_Medium is
-     *        used as the item size
-     * 
-     *        The default value is 48
-     * @return the underlying medium size in pixels
-     * @see setGradientPresetChooserItemSizeMedium(int)
-     */
-    int gradientPresetChooserItemSizeMedium() const;
-    /**
-     * @brief Tell the underlying size (height) in pixels used when
-     *        KisGenericGradientEditor::GradientPresetChooserItemSize_Large is
-     *        used as the item size
-     * 
-     *        The default value is 64
-     * @return the underlying large size in pixels
-     * @see setGradientPresetChooserItemSizeLarge(int)
-     */
-    int gradientPresetChooserItemSizeLarge() const;
-    /**
-     * @brief Tell the size (height) in pixels used when
-     *        KisGenericGradientEditor::GradientPresetChooserItemSize_Custom is
-     *        used as the item size
-     * 
-     *        The default value is 32
-     * @return the custom size in pixels
-     * @see setGradientPresetChooserItemSizeCustom(int)
-     */
-    int gradientPresetChooserItemSizeCustom() const;
-    /**
-     * @brief Tell the factor used to obtain the width of the items icons from
-     *        the current item size
-     * 
-     *        The default value is 2.0
-     * @return the factor used to obtain the width of the items
-     * @see setGradientPresetChooserItemSizeWidthFactor(qreal)
-     */
-    qreal gradientPresetChooserItemSizeWidthFactor() const;
     /**
      * @brief Tell if the internal gradient editor is using the compact mode
      * @return true if the internal gradient editor is using the compact mode, false otherwise
@@ -339,63 +225,6 @@ public Q_SLOTS:
      */
     void setCompactGradientPresetChooserMode(bool compact);
     /**
-     * @brief Set if the gradient preset chooser must show the items as a
-     *        grid of icons or as a list
-     * @param newViewMode GradientPresetChooserViewMode field indicating
-     *        if the gradient preset chooser must show the items as a
-     *        grid of icons or as a list
-     * @see GradientPresetChooserViewMode
-     * @see gradientPresetChooserViewMode()
-     */
-    void setGradientPresetChooserViewMode(GradientPresetChooserViewMode newViewMode);
-    /**
-     * @brief Set the size of the gradient preset chooser items
-     * @param newItemSize GradientPresetChooserItemSize field indicating
-     *        the size of the gradient preset chooser items
-     * @see GradientPresetChooserItemSize
-     * @see gradientPresetChooserItemSize()
-     */
-    void setGradientPresetChooserItemSize(GradientPresetChooserItemSize newItemSize);
-    /**
-     * @brief Set the underlying size (height) in pixels used when
-     *        KisGenericGradientEditor::GradientPresetChooserItemSize_Small is
-     *        used as the item size
-     * @param newSize the new underlying small size
-     * @see gradientPresetChooserItemSizeSmall()
-     */
-    void setGradientPresetChooserItemSizeSmall(int newSize);
-    /**
-     * @brief Set the underlying size (height) in pixels used when
-     *        KisGenericGradientEditor::GradientPresetChooserItemSize_Medium is
-     *        used as the item size
-     * @param newSize the new underlying medium size
-     * @see gradientPresetChooserItemSizeMedium()
-     */
-    void setGradientPresetChooserItemSizeMedium(int newSize);
-    /**
-     * @brief Set the underlying size (height) in pixels used when
-     *        KisGenericGradientEditor::GradientPresetChooserItemSize_Large is
-     *        used as the item size
-     * @param newSize the new underlying large size
-     * @see gradientPresetChooserItemSizeLarge()
-     */
-    void setGradientPresetChooserItemSizeLarge(int newSize);
-    /**
-     * @brief Set the size (height) in pixels used when
-     *        KisGenericGradientEditor::GradientPresetChooserItemSize_Custom is
-     *        used as the item size
-     * @param newSize the new custom size
-     * @see gradientPresetChooserItemSizeCustom()
-     */
-    void setGradientPresetChooserItemSizeCustom(int newSize);
-    /**
-     * @brief Set the factor used to obtain the width of the items icons from
-     *        the current item size
-     * @param newFactor the factor used to obtain the width of the items
-     * @see gradientPresetChooserItemSizeWidthFactor()
-     */
-    void setGradientPresetChooserItemSizeWidthFactor(qreal newFactor);
-    /**
      * @brief Set if the internal gradient editor must use the compact mode
      * @param compact true if the internal gradient editor must use the compact mode, false otherwise
      * @see compactGradientEditorMode()
@@ -412,25 +241,17 @@ private:
     class Private;
     QScopedPointer<Private> m_d;
 
-    bool event(QEvent *e) override;
-
     void updateConvertGradientButton();
     void updateUpdateGradientButton();
     void updateAddGradientButton();
     void updateGradientPresetChooser();
-    void updateGradientPresetChooserIcons();
     void updateGradientEditor();
-    void updateWidgetSliderGradientPresetChooserItemSizeCustom();
 
 private Q_SLOTS:
     void on_buttonConvertGradient_clicked();
     void on_buttonUpdateGradient_clicked();
     void on_buttonAddGradient_clicked();
-    void on_widgetGradientPresetChooser_resourceClicked(KoResource *resoure);
-    void on_widgetGradientPresetChooserItemView_sigSizeChanged();
-    void on_actionGroupGradientPresetChooserViewMode_triggered(QAction *triggeredAction);
-    void on_actionGroupGradientPresetChooserItemSize_triggered(QAction *triggeredAction);
-    void on_sliderGradientPresetChooserItemSizeCustom_valueChanged(int newValue);
+    void on_widgetGradientPresetChooser_resourceClicked(KoResource *resource);
     void on_widgetGradientEditor_sigGradientChanged();
 };
 

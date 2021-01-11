@@ -31,15 +31,15 @@
 #include <KoSegmentGradient.h>
 #include <kis_stopgradient_editor.h>
 #include <kis_autogradient.h>
-#include <KoResourceItemChooser.h>
+#include <kis_gradient_chooser.h>
 #include <kis_icon_utils.h>
 #include <KisGradientConversion.h>
-#include <KoResourceItemView.h>
 #include <kis_signals_blocker.h>
 #include <KoResourceServerProvider.h>
 #include <kis_canvas_resource_provider.h>
 #include <KoResourceServerProvider.h>
 #include <KoResourceServerAdapter.h>
+#include <KoResourceItemChooser.h>
 
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
@@ -56,20 +56,12 @@ public:
     QPushButton *buttonUpdateGradient;
     QPushButton *buttonAddGradient;
     QLabel *labelConvertGradientWarning;
-    KoResourceItemChooser *widgetGradientPresetChooser;
+    KisGradientChooser *widgetGradientPresetChooser;
     QToolButton *toolButtonGradientPresetChooser;
     QWidget *widgetToolButtonGradientPresetChooser;
     QToolButton *toolButtonGradientPresetChooserOptions;
     QAction *actionUseGradientPresetChooserPopUp;
     QAction *actionCompactGradientPresetChooserMode;
-    QAction *actionGradientPresetChooserViewModeIcon;
-    QAction *actionGradientPresetChooserViewModeList;
-    QAction *actionGradientPresetChooserItemSizeSmall;
-    QAction *actionGradientPresetChooserItemSizeMedium;
-    QAction *actionGradientPresetChooserItemSizeLarge;
-    QAction *actionGradientPresetChooserItemSizeCustom;
-    QSlider *sliderGradientPresetChooserItemSizeCustom;
-    QWidget *widgetSliderGradientPresetChooserItemSizeCustom;
     QWidget *widgetGradientEditor;
 
     bool compactMode;
@@ -80,13 +72,6 @@ public:
     bool isGradientPresetChooserOptionsButtonVisible;
     bool useGradientPresetChooserPopUp;
     bool compactGradientPresetChooserMode;
-    GradientPresetChooserViewMode gradientPresetChooserViewMode;
-    GradientPresetChooserItemSize gradientPresetChooserItemSize;
-    int gradientPresetChooserItemSizeSmall;
-    int gradientPresetChooserItemSizeMedium;
-    int gradientPresetChooserItemSizeLarge;
-    int gradientPresetChooserItemSizeCustom;
-    qreal gradientPresetChooserItemSizeWidthFactor;
     bool compactGradientEditorMode;
 };
 
@@ -117,13 +102,9 @@ KisGenericGradientEditor::KisGenericGradientEditor(QWidget* parent)
         )
     );
 
-    KoResourceServer<KoAbstractGradient> *rserver = KoResourceServerProvider::instance()->gradientServer();
-    QSharedPointer<KoAbstractResourceServerAdapter> adapter (new KoResourceServerAdapter<KoAbstractGradient>(rserver));
-    m_d->widgetGradientPresetChooser = new KoResourceItemChooser(adapter, this);
-    m_d->widgetGradientPresetChooser->itemView()->keepAspectRatio(false);
-    m_d->widgetGradientPresetChooser->itemView()->setShowGrid(false);
-    m_d->widgetGradientPresetChooser->itemView()->horizontalHeader()->setMinimumSectionSize(0);
-    m_d->widgetGradientPresetChooser->itemView()->verticalHeader()->setMinimumSectionSize(0);
+    m_d->widgetGradientPresetChooser = new KisGradientChooser(this);
+    m_d->widgetGradientPresetChooser->setNameLabelVisible(false);
+    m_d->widgetGradientPresetChooser->setEditOptionsVisible(false);
 
     m_d->toolButtonGradientPresetChooser = new QToolButton(this);
     m_d->toolButtonGradientPresetChooser->setText(
@@ -181,84 +162,6 @@ KisGenericGradientEditor::KisGenericGradientEditor(QWidget* parent)
     m_d->toolButtonGradientPresetChooserOptions->addAction(m_d->actionUseGradientPresetChooserPopUp);
     m_d->toolButtonGradientPresetChooserOptions->addAction(m_d->actionCompactGradientPresetChooserMode);
 
-    QActionGroup *actionGroupGradientPresetChooserViewMode = new QActionGroup(this);
-    m_d->actionGradientPresetChooserViewModeIcon = new QAction(this);
-    m_d->actionGradientPresetChooserViewModeIcon->setCheckable(true);
-    m_d->actionGradientPresetChooserViewModeIcon->setActionGroup(actionGroupGradientPresetChooserViewMode);
-    m_d->actionGradientPresetChooserViewModeIcon->setText(
-        i18nc(
-            "Set the gradient preset chooser to show icons instead of a list",
-            "Icon view"
-        )
-    );
-    m_d->actionGradientPresetChooserViewModeList = new QAction(this);
-    m_d->actionGradientPresetChooserViewModeList->setCheckable(true);
-    m_d->actionGradientPresetChooserViewModeList->setActionGroup(actionGroupGradientPresetChooserViewMode);
-    m_d->actionGradientPresetChooserViewModeList->setText(
-        i18nc(
-            "Set the gradient preset chooser to show a list instead of icons",
-            "List view"
-        )
-    );
-    QAction *separatorGradientPresetChooserViewMode1 = new QAction(this);
-    separatorGradientPresetChooserViewMode1->setSeparator(true);
-    QActionGroup *actionGroupGradientPresetChooserItemSize = new QActionGroup(this);
-    m_d->actionGradientPresetChooserItemSizeSmall = new QAction(this);
-    m_d->actionGradientPresetChooserItemSizeSmall->setCheckable(true);
-    m_d->actionGradientPresetChooserItemSizeSmall->setActionGroup(actionGroupGradientPresetChooserItemSize);
-    m_d->actionGradientPresetChooserItemSizeSmall->setText(
-        i18nc(
-            "Set the gradient preset chooser to show small items",
-            "Small items"
-        )
-    );
-    m_d->actionGradientPresetChooserItemSizeMedium = new QAction(this);
-    m_d->actionGradientPresetChooserItemSizeMedium->setCheckable(true);
-    m_d->actionGradientPresetChooserItemSizeMedium->setActionGroup(actionGroupGradientPresetChooserItemSize);
-    m_d->actionGradientPresetChooserItemSizeMedium->setText(
-        i18nc(
-            "Set the gradient preset chooser to show medium size items",
-            "Medium size items"
-        )
-    );
-    m_d->actionGradientPresetChooserItemSizeLarge = new QAction(this);
-    m_d->actionGradientPresetChooserItemSizeLarge->setCheckable(true);
-    m_d->actionGradientPresetChooserItemSizeLarge->setActionGroup(actionGroupGradientPresetChooserItemSize);
-    m_d->actionGradientPresetChooserItemSizeLarge->setText(
-        i18nc(
-            "Set the gradient preset chooser to show large items",
-            "Large items"
-        )
-    );
-    m_d->actionGradientPresetChooserItemSizeCustom = new QAction(this);
-    m_d->actionGradientPresetChooserItemSizeCustom->setCheckable(true);
-    m_d->actionGradientPresetChooserItemSizeCustom->setActionGroup(actionGroupGradientPresetChooserItemSize);
-    m_d->actionGradientPresetChooserItemSizeCustom->setText(
-        i18nc(
-            "Set the gradient preset chooser to show custom size items",
-            "Custom size items"
-        )
-    );
-    m_d->sliderGradientPresetChooserItemSizeCustom = new QSlider(this);
-    m_d->sliderGradientPresetChooserItemSizeCustom->setRange(16, 128);
-    m_d->sliderGradientPresetChooserItemSizeCustom->setOrientation(Qt::Horizontal);
-    m_d->widgetSliderGradientPresetChooserItemSizeCustom = new QWidget(this);
-    QVBoxLayout *layoutWidgetSliderGradientPresetChooserItemSizeCustom = new QVBoxLayout;
-    layoutWidgetSliderGradientPresetChooserItemSizeCustom->addWidget(m_d->sliderGradientPresetChooserItemSizeCustom);
-    m_d->widgetSliderGradientPresetChooserItemSizeCustom->setLayout(
-        layoutWidgetSliderGradientPresetChooserItemSizeCustom
-    );
-    QWidgetAction *widgetActionSliderGradientPresetChooserItemSizeCustom = new QWidgetAction(this);
-    widgetActionSliderGradientPresetChooserItemSizeCustom->setDefaultWidget(
-        m_d->widgetSliderGradientPresetChooserItemSizeCustom
-    );
-    QToolButton *toolButtonWidgetGradientPresetChooserViewMode =
-        m_d->widgetGradientPresetChooser->viewModeButton();
-    toolButtonWidgetGradientPresetChooserViewMode->addActions(actionGroupGradientPresetChooserViewMode->actions());
-    toolButtonWidgetGradientPresetChooserViewMode->addAction(separatorGradientPresetChooserViewMode1);
-    toolButtonWidgetGradientPresetChooserViewMode->addActions(actionGroupGradientPresetChooserItemSize->actions());
-    toolButtonWidgetGradientPresetChooserViewMode->addAction(widgetActionSliderGradientPresetChooserItemSizeCustom);
-
     layoutButtons->addWidget(m_d->buttonAddGradient, 0);
     layoutButtons->addWidget(m_d->buttonUpdateGradient, 0);
     layoutButtons->addWidget(m_d->buttonConvertGradient, 0);
@@ -281,13 +184,6 @@ KisGenericGradientEditor::KisGenericGradientEditor(QWidget* parent)
     m_d->isGradientPresetChooserOptionsButtonVisible = true;
     m_d->useGradientPresetChooserPopUp = true;
     m_d->compactGradientPresetChooserMode = false;
-    m_d->gradientPresetChooserViewMode = GradientPresetChooserViewMode_Icon;
-    m_d->gradientPresetChooserItemSize = GradientPresetChooserItemSize_Medium;
-    m_d->gradientPresetChooserItemSizeSmall = 32;
-    m_d->gradientPresetChooserItemSizeMedium = 48;
-    m_d->gradientPresetChooserItemSizeLarge = 64;
-    m_d->gradientPresetChooserItemSizeCustom = 32;
-    m_d->gradientPresetChooserItemSizeWidthFactor = 2.0;
     m_d->compactGradientEditorMode = false;
 
     updateConvertGradientButton();
@@ -295,7 +191,6 @@ KisGenericGradientEditor::KisGenericGradientEditor(QWidget* parent)
     updateAddGradientButton();
     updateGradientPresetChooser();
     updateGradientEditor();
-    updateWidgetSliderGradientPresetChooserItemSizeCustom();
 
     connect(
         m_d->buttonConvertGradient,
@@ -333,13 +228,6 @@ KisGenericGradientEditor::KisGenericGradientEditor(QWidget* parent)
     );
 
     connect(
-        m_d->widgetGradientPresetChooser->itemView(),
-        SIGNAL(sigSizeChanged()),
-        this,
-        SLOT(on_widgetGradientPresetChooserItemView_sigSizeChanged())
-    );
-
-    connect(
         m_d->actionUseGradientPresetChooserPopUp,
         SIGNAL(toggled(bool)),
         this,
@@ -351,27 +239,6 @@ KisGenericGradientEditor::KisGenericGradientEditor(QWidget* parent)
         SIGNAL(toggled(bool)),
         this,
         SLOT(setCompactGradientPresetChooserMode(bool))
-    );
-
-    connect(
-        actionGroupGradientPresetChooserViewMode,
-        SIGNAL(triggered(QAction*)),
-        this,
-        SLOT(on_actionGroupGradientPresetChooserViewMode_triggered(QAction*))
-    );
-
-    connect(
-        actionGroupGradientPresetChooserItemSize,
-        SIGNAL(triggered(QAction*)),
-        this,
-        SLOT(on_actionGroupGradientPresetChooserItemSize_triggered(QAction*))
-    );
-
-    connect(
-        m_d->sliderGradientPresetChooserItemSizeCustom,
-        SIGNAL(valueChanged(int)),
-        this,
-        SLOT(on_sliderGradientPresetChooserItemSizeCustom_valueChanged(int))
     );
 }
 
@@ -385,26 +252,8 @@ void KisGenericGradientEditor::loadUISettings(const QString &prefix)
 
     m_d->useGradientPresetChooserPopUp = configGroup.readEntry(pfx + "useGradientPresetChooserPopUp", m_d->useGradientPresetChooserPopUp);
     m_d->compactGradientPresetChooserMode = configGroup.readEntry(pfx + "compactGradientPresetChooserMode", m_d->compactGradientPresetChooserMode);
-    QString strGradientPresetChooserViewMode = configGroup.readEntry(pfx + "gradientPresetChooserViewMode", QString());
-    if (strGradientPresetChooserViewMode == "icon") {
-        m_d->gradientPresetChooserViewMode = GradientPresetChooserViewMode_Icon;
-    } else if (strGradientPresetChooserViewMode == "list") {
-        m_d->gradientPresetChooserViewMode = GradientPresetChooserViewMode_List;
-    }
-    QString strGradientPresetChooserItemSize = configGroup.readEntry(pfx + "gradientPresetChooserItemSize", QString());
-    if (strGradientPresetChooserItemSize == "small") {
-        m_d->gradientPresetChooserItemSize = GradientPresetChooserItemSize_Small;
-    } else if (strGradientPresetChooserItemSize == "medium") {
-        m_d->gradientPresetChooserItemSize = GradientPresetChooserItemSize_Medium;
-    } else if (strGradientPresetChooserItemSize == "large") {
-        m_d->gradientPresetChooserItemSize = GradientPresetChooserItemSize_Large;
-    } else if (strGradientPresetChooserItemSize == "custom") {
-        m_d->gradientPresetChooserItemSize = GradientPresetChooserItemSize_Custom;
-    }
-    m_d->gradientPresetChooserItemSizeCustom = configGroup.readEntry(pfx + "gradientPresetChooserItemSizeCustom", m_d->gradientPresetChooserItemSizeCustom);
 
     updateGradientPresetChooser();
-    updateWidgetSliderGradientPresetChooserItemSizeCustom();
 }
 
 void KisGenericGradientEditor::saveUISettings(const QString &prefix)
@@ -414,21 +263,6 @@ void KisGenericGradientEditor::saveUISettings(const QString &prefix)
 
     configGroup.writeEntry(pfx + "useGradientPresetChooserPopUp", m_d->useGradientPresetChooserPopUp);
     configGroup.writeEntry(pfx + "compactGradientPresetChooserMode", m_d->compactGradientPresetChooserMode);
-    if (m_d->gradientPresetChooserViewMode == GradientPresetChooserViewMode_Icon) {
-        configGroup.writeEntry(pfx + "gradientPresetChooserViewMode", "icon");
-    } else {
-        configGroup.writeEntry(pfx + "gradientPresetChooserViewMode", "list");
-    }
-    if (m_d->gradientPresetChooserItemSize == GradientPresetChooserItemSize_Small) {
-        configGroup.writeEntry(pfx + "gradientPresetChooserItemSize", "small");
-    } else if (m_d->gradientPresetChooserItemSize == GradientPresetChooserItemSize_Medium) {
-        configGroup.writeEntry(pfx + "gradientPresetChooserItemSize", "medium");
-    } else if (m_d->gradientPresetChooserItemSize == GradientPresetChooserItemSize_Large) {
-        configGroup.writeEntry(pfx + "gradientPresetChooserItemSize", "large");
-    } else {
-        configGroup.writeEntry(pfx + "gradientPresetChooserItemSize", "custom");
-    }
-    configGroup.writeEntry(pfx + "gradientPresetChooserItemSizeCustom", m_d->gradientPresetChooserItemSizeCustom);
 }
 
 KoAbstractGradientSP KisGenericGradientEditor::gradient() const
@@ -487,41 +321,6 @@ bool KisGenericGradientEditor::useGradientPresetChooserPopUp() const
 bool KisGenericGradientEditor::compactGradientPresetChooserMode() const
 {
     return m_d->compactGradientPresetChooserMode;
-}
-
-KisGenericGradientEditor::GradientPresetChooserViewMode KisGenericGradientEditor::gradientPresetChooserViewMode() const
-{
-    return m_d->gradientPresetChooserViewMode;
-}
-
-KisGenericGradientEditor::GradientPresetChooserItemSize KisGenericGradientEditor::gradientPresetChooserItemSize() const
-{
-    return m_d->gradientPresetChooserItemSize;
-}
-
-int KisGenericGradientEditor::gradientPresetChooserItemSizeSmall() const
-{
-    return m_d->gradientPresetChooserItemSizeSmall;
-}
-
-int KisGenericGradientEditor::gradientPresetChooserItemSizeMedium() const
-{
-    return m_d->gradientPresetChooserItemSizeMedium;
-}
-
-int KisGenericGradientEditor::gradientPresetChooserItemSizeLarge() const
-{
-    return m_d->gradientPresetChooserItemSizeLarge;
-}
-
-int KisGenericGradientEditor::gradientPresetChooserItemSizeCustom() const
-{
-    return m_d->gradientPresetChooserItemSizeCustom;
-}
-
-qreal KisGenericGradientEditor::gradientPresetChooserItemSizeWidthFactor() const
-{
-    return m_d->gradientPresetChooserItemSizeWidthFactor;
 }
 
 bool KisGenericGradientEditor::compactGradientEditorMode() const
@@ -616,6 +415,7 @@ void KisGenericGradientEditor::setForegroundColor(const KoColor &newForegroundCo
     if (m_d->gradient) {
         m_d->gradient->setVariableColors(m_d->foregroundColor, m_d->backgroundColor);
     }
+    m_d->widgetGradientPresetChooser->setForegroundColor(newForegroundColor);
 }
 
 void KisGenericGradientEditor::setBackgroundColor(const KoColor &newBackgroundColor)
@@ -624,6 +424,7 @@ void KisGenericGradientEditor::setBackgroundColor(const KoColor &newBackgroundCo
     if (m_d->gradient) {
         m_d->gradient->setVariableColors(m_d->foregroundColor, m_d->backgroundColor);
     }
+    m_d->widgetGradientPresetChooser->setBackgroundColor(newBackgroundColor);
 }
 
 void KisGenericGradientEditor::setVariableColors(const KoColor &newForegroundColor,
@@ -688,80 +489,10 @@ void KisGenericGradientEditor::setCompactGradientPresetChooserMode(bool compact)
     updateGradientPresetChooser();
 }
 
-void KisGenericGradientEditor::setGradientPresetChooserViewMode(GradientPresetChooserViewMode newViewMode)
-{
-    m_d->gradientPresetChooserViewMode = newViewMode;
-    updateGradientPresetChooser();
-}
-
-void KisGenericGradientEditor::setGradientPresetChooserItemSize(GradientPresetChooserItemSize newItemSize)
-{
-    m_d->gradientPresetChooserItemSize = newItemSize;
-    updateGradientPresetChooser();
-}
-
-void KisGenericGradientEditor::setGradientPresetChooserItemSizeSmall(int newSize)
-{
-    if (newSize == m_d->gradientPresetChooserItemSizeSmall) {
-        return;
-    }
-
-    m_d->gradientPresetChooserItemSizeSmall = newSize;
-    updateGradientPresetChooser();
-}
-
-void KisGenericGradientEditor::setGradientPresetChooserItemSizeMedium(int newSize)
-{
-    if (newSize == m_d->gradientPresetChooserItemSizeMedium) {
-        return;
-    }
-
-    m_d->gradientPresetChooserItemSizeMedium = newSize;
-    updateGradientPresetChooser();
-}
-
-void KisGenericGradientEditor::setGradientPresetChooserItemSizeLarge(int newSize)
-{
-    if (newSize == m_d->gradientPresetChooserItemSizeLarge) {
-        return;
-    }
-
-    m_d->gradientPresetChooserItemSizeLarge = newSize;
-    updateGradientPresetChooser();
-}
-
-void KisGenericGradientEditor::setGradientPresetChooserItemSizeCustom(int newSize)
-{
-    if (newSize == m_d->gradientPresetChooserItemSizeCustom) {
-        return;
-    }
-
-    m_d->gradientPresetChooserItemSizeCustom = newSize;
-    updateGradientPresetChooser();
-}
-
-void KisGenericGradientEditor::setGradientPresetChooserItemSizeWidthFactor(qreal newFactor)
-{
-    if (newFactor == m_d->gradientPresetChooserItemSizeWidthFactor) {
-        return;
-    }
-
-    m_d->gradientPresetChooserItemSizeWidthFactor = newFactor;
-    updateGradientPresetChooser();
-}
-
 void KisGenericGradientEditor::setCompactGradientEditorMode(bool compact)
 {
     m_d->compactGradientEditorMode = compact;
     updateGradientEditor();
-}
-
-bool KisGenericGradientEditor::event(QEvent *e)
-{
-    if (e->type() == QEvent::StyleChange) {
-        updateWidgetSliderGradientPresetChooserItemSizeCustom();
-    }
-    return false;
 }
 
 void KisGenericGradientEditor::updateConvertGradientButton()
@@ -803,11 +534,9 @@ void KisGenericGradientEditor::updateAddGradientButton()
 
 void KisGenericGradientEditor::updateGradientPresetChooser()
 {
-    m_d->widgetGradientPresetChooser->showButtons(!m_d->compactGradientPresetChooserMode);
-    m_d->widgetGradientPresetChooser->showTaggingBar(!m_d->compactGradientPresetChooserMode);
-    m_d->widgetGradientPresetChooser->setViewModeButtonVisible(!m_d->compactGradientPresetChooserMode);
-
-    updateGradientPresetChooserIcons();
+    m_d->widgetGradientPresetChooser->resourceItemChooser()->showButtons(!m_d->compactGradientPresetChooserMode);
+    m_d->widgetGradientPresetChooser->resourceItemChooser()->showTaggingBar(!m_d->compactGradientPresetChooserMode);
+    m_d->widgetGradientPresetChooser->resourceItemChooser()->setViewModeButtonVisible(!m_d->compactGradientPresetChooserMode);
 
     {
         int margin = !m_d->useGradientPresetChooserPopUp || m_d->compactGradientPresetChooserMode ? 0 : 10;
@@ -832,6 +561,7 @@ void KisGenericGradientEditor::updateGradientPresetChooser()
                 0,
                 m_d->compactGradientPresetChooserMode ? 100 : 200
             );
+            m_d->widgetGradientPresetChooser->show();
         }
     }
 
@@ -847,54 +577,6 @@ void KisGenericGradientEditor::updateGradientPresetChooser()
     );
     m_d->actionUseGradientPresetChooserPopUp->setChecked(m_d->useGradientPresetChooserPopUp);
     m_d->actionCompactGradientPresetChooserMode->setChecked(m_d->compactGradientPresetChooserMode);
-    if (m_d->gradientPresetChooserViewMode == GradientPresetChooserViewMode_Icon) {
-        m_d->actionGradientPresetChooserViewModeIcon->setChecked(true);
-    } else {
-        m_d->actionGradientPresetChooserViewModeList->setChecked(true);
-    }
-    if (m_d->gradientPresetChooserItemSize == GradientPresetChooserItemSize_Small) {
-        m_d->actionGradientPresetChooserItemSizeSmall->setChecked(true);
-    } else if (m_d->gradientPresetChooserItemSize == GradientPresetChooserItemSize_Medium) {
-        m_d->actionGradientPresetChooserItemSizeMedium->setChecked(true);
-    } else if (m_d->gradientPresetChooserItemSize == GradientPresetChooserItemSize_Large) {
-        m_d->actionGradientPresetChooserItemSizeLarge->setChecked(true);
-    } else {
-        m_d->actionGradientPresetChooserItemSizeCustom->setChecked(true);
-    }
-    {
-        KisSignalsBlocker signalsBlocker(m_d->sliderGradientPresetChooserItemSizeCustom);
-        m_d->sliderGradientPresetChooserItemSizeCustom->setValue(m_d->gradientPresetChooserItemSizeCustom);
-    }
-}
-
-void KisGenericGradientEditor::updateGradientPresetChooserIcons()
-{
-    int rowHeight, columnWidth;
-    if (m_d->gradientPresetChooserItemSize == GradientPresetChooserItemSize_Small) {
-        rowHeight = m_d->gradientPresetChooserItemSizeSmall;
-    } else if (m_d->gradientPresetChooserItemSize == GradientPresetChooserItemSize_Medium) {
-        rowHeight = m_d->gradientPresetChooserItemSizeMedium;
-    } else if (m_d->gradientPresetChooserItemSize == GradientPresetChooserItemSize_Large) {
-        rowHeight = m_d->gradientPresetChooserItemSizeLarge;
-    } else {
-        rowHeight = m_d->gradientPresetChooserItemSizeCustom;
-    }
-
-    int nColumns;
-    const int scrollbarWidth = style()->pixelMetric(QStyle::PM_ScrollBarExtent);
-    const int frameWidth = m_d->widgetGradientPresetChooser->itemView()->frameWidth();
-    const int itemViewWidth = m_d->widgetGradientPresetChooser->itemView()->width();
-    if (m_d->gradientPresetChooserViewMode == GradientPresetChooserViewMode_Icon) {
-        columnWidth = static_cast<int>(qRound(rowHeight * m_d->gradientPresetChooserItemSizeWidthFactor));
-        nColumns = (itemViewWidth - frameWidth - scrollbarWidth) / columnWidth;
-    } else {
-        columnWidth = itemViewWidth - frameWidth - scrollbarWidth;
-        nColumns = 1;
-    }
-
-    m_d->widgetGradientPresetChooser->setRowHeight(rowHeight);
-    m_d->widgetGradientPresetChooser->setColumnWidth(columnWidth);
-    m_d->widgetGradientPresetChooser->setColumnCount(nColumns);
 }
 
 void KisGenericGradientEditor::updateGradientEditor()
@@ -904,16 +586,6 @@ void KisGenericGradientEditor::updateGradientEditor()
     } else if (dynamic_cast<KisAutogradientEditor*>(m_d->widgetGradientEditor)) {
         dynamic_cast<KisAutogradientEditor*>(m_d->widgetGradientEditor)->setCompactMode(m_d->compactGradientEditorMode);
     }
-}
-
-void KisGenericGradientEditor::updateWidgetSliderGradientPresetChooserItemSizeCustom()
-{
-    const int marginSize = style()->pixelMetric(QStyle::PM_ButtonMargin);
-    const int indicatorSize = style()->pixelMetric(QStyle::PM_ExclusiveIndicatorWidth);
-    const int spacingSize = style()->pixelMetric(QStyle::PM_RadioButtonLabelSpacing);
-    m_d->widgetSliderGradientPresetChooserItemSizeCustom->layout()->setContentsMargins(
-        indicatorSize + spacingSize, marginSize, marginSize, marginSize
-    );
 }
 
 void KisGenericGradientEditor::on_buttonConvertGradient_clicked()
@@ -996,39 +668,6 @@ void KisGenericGradientEditor::on_widgetGradientPresetChooser_resourceClicked(Ko
 {
     // Make a clone to prevent changing the resource
     setGradient(KoAbstractGradientSP(static_cast<KoAbstractGradient*>(resource)->clone()));
-}
-
-void KisGenericGradientEditor::on_widgetGradientPresetChooserItemView_sigSizeChanged()
-{
-    updateGradientPresetChooserIcons();
-}
-
-void KisGenericGradientEditor::on_actionGroupGradientPresetChooserViewMode_triggered(QAction *triggeredAction)
-{
-    if (triggeredAction == m_d->actionGradientPresetChooserViewModeIcon) {
-        setGradientPresetChooserViewMode(GradientPresetChooserViewMode_Icon);
-    } else {
-        setGradientPresetChooserViewMode(GradientPresetChooserViewMode_List);
-    }
-}
-
-void KisGenericGradientEditor::on_actionGroupGradientPresetChooserItemSize_triggered(QAction *triggeredAction)
-{
-    if (triggeredAction == m_d->actionGradientPresetChooserItemSizeSmall) {
-        setGradientPresetChooserItemSize(GradientPresetChooserItemSize_Small);
-    } else if (triggeredAction == m_d->actionGradientPresetChooserItemSizeMedium) {
-        setGradientPresetChooserItemSize(GradientPresetChooserItemSize_Medium);
-    } else if (triggeredAction == m_d->actionGradientPresetChooserItemSizeLarge) {
-        setGradientPresetChooserItemSize(GradientPresetChooserItemSize_Large);
-    } else {
-        setGradientPresetChooserItemSize(GradientPresetChooserItemSize_Custom);
-    }
-}
-
-void KisGenericGradientEditor::on_sliderGradientPresetChooserItemSizeCustom_valueChanged(int newValue)
-{
-    m_d->gradientPresetChooserItemSize = GradientPresetChooserItemSize_Custom;
-    setGradientPresetChooserItemSizeCustom(newValue);
 }
 
 void KisGenericGradientEditor::on_widgetGradientEditor_sigGradientChanged()

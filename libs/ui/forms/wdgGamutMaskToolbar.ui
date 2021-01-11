@@ -71,7 +71,7 @@
     </widget>
    </item>
    <item>
-    <widget class="KisSliderSpinBox" name="rotationSlider" native="true">
+    <widget class="KisAngleSelector" name="rotationAngleSelector" native="true">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
        <horstretch>0</horstretch>
@@ -86,13 +86,20 @@
      </property>
     </widget>
    </item>
+   <item>
+    <spacer name="horizontalSpacer">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </spacer>
+   </item>
   </layout>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KisSliderSpinBox</class>
+   <class>KisAngleSelector</class>
    <extends>QWidget</extends>
-   <header location="global">kis_slider_spin_box.h</header>
+   <header location="global">KisAngleSelector.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

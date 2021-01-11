@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <author>
     SPDX-FileCopyrightText: none
@@ -27,12 +27,12 @@
    </size>
   </property>
   <layout class="QGridLayout" name="gridLayout_4">
-   <item column="0" row="0">
+   <item row="0" column="0">
     <layout class="QGridLayout" name="gridLayout_2">
      <property name="bottomMargin">
       <number>15</number>
      </property>
-     <item column="0" row="0">
+     <item row="0" column="0">
       <widget class="QLabel" name="diameterLabel">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -48,8 +48,8 @@
        </property>
       </widget>
      </item>
-     <item column="1" row="0">
-      <widget class="KisDoubleSliderSpinBox" name="diameterSpinBox">
+     <item row="0" column="1">
+      <widget class="KisDoubleSliderSpinBox" name="diameterSpinBox" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -58,7 +58,7 @@
        </property>
       </widget>
      </item>
-     <item column="0" row="1">
+     <item row="1" column="0">
       <widget class="QLabel" name="aspectLabel">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -74,8 +74,8 @@
        </property>
       </widget>
      </item>
-     <item column="1" row="1">
-      <widget class="KisDoubleSliderSpinBox" name="aspectSPBox">
+     <item row="1" column="1">
+      <widget class="KisDoubleSliderSpinBox" name="aspectSPBox" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -84,7 +84,7 @@
        </property>
       </widget>
      </item>
-     <item column="0" row="2">
+     <item row="2" column="0">
       <widget class="QLabel" name="rotationLbl">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -100,17 +100,7 @@
        </property>
       </widget>
      </item>
-     <item column="1" row="2">
-      <widget class="KisDoubleSliderSpinBox" name="rotationSPBox">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-      </widget>
-     </item>
-     <item column="0" row="3">
+     <item row="3" column="0">
       <widget class="QLabel" name="scaleLbl">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -126,8 +116,8 @@
        </property>
       </widget>
      </item>
-     <item column="1" row="3">
-      <widget class="KisDoubleSliderSpinBox" name="scaleSpin">
+     <item row="3" column="1">
+      <widget class="KisDoubleSliderSpinBox" name="scaleSpin" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -136,7 +126,7 @@
        </property>
       </widget>
      </item>
-     <item column="0" row="4">
+     <item row="4" column="0">
       <widget class="QLabel" name="spacingLabel">
        <property name="text">
         <string>Spacing:</string>
@@ -146,8 +136,8 @@
        </property>
       </widget>
      </item>
-     <item column="1" row="4">
-      <widget class="KisDoubleSliderSpinBox" name="spacingSpin">
+     <item row="4" column="1">
+      <widget class="KisDoubleSliderSpinBox" name="spacingSpin" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -156,9 +146,32 @@
        </property>
       </widget>
      </item>
+     <item row="2" column="1">
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="KisAngleSelector" name="rotationAngleSelector" native="true"/>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </item>
     </layout>
    </item>
-   <item column="0" row="1">
+   <item row="1" column="0">
     <widget class="QGroupBox" name="groupBox">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -179,15 +192,15 @@
       <property name="bottomMargin">
        <number>15</number>
       </property>
-      <item column="0" row="1">
+      <item row="1" column="0">
        <widget class="QRadioButton" name="densityRadioButton">
         <property name="text">
          <string>Density</string>
         </property>
        </widget>
       </item>
-      <item column="1" row="1">
-       <widget class="KisDoubleSliderSpinBox" name="coverageSpin">
+      <item row="1" column="1">
+       <widget class="KisDoubleSliderSpinBox" name="coverageSpin" native="true">
         <property name="enabled">
          <bool>false</bool>
         </property>
@@ -199,7 +212,7 @@
         </property>
        </widget>
       </item>
-      <item column="0" row="0">
+      <item row="0" column="0">
        <widget class="QRadioButton" name="countRadioButton">
         <property name="text">
          <string>Count</string>
@@ -209,8 +222,8 @@
         </property>
        </widget>
       </item>
-      <item column="1" row="0">
-       <widget class="KisDoubleSliderSpinBox" name="particlesSpinBox">
+      <item row="0" column="1">
+       <widget class="KisDoubleSliderSpinBox" name="particlesSpinBox" native="true">
         <property name="enabled">
          <bool>true</bool>
         </property>
@@ -219,9 +232,9 @@
      </layout>
     </widget>
    </item>
-   <item column="0" row="2">
-    <layout class="QGridLayout" columnstretch="0,1" name="gridLayout_3" rowstretch="0,0">
-     <item column="0" row="0">
+   <item row="2" column="0">
+    <layout class="QGridLayout" name="gridLayout_3" rowstretch="0,0" columnstretch="0,1">
+     <item row="0" column="0">
       <widget class="QCheckBox" name="jitterMoveBox">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -234,8 +247,8 @@
        </property>
       </widget>
      </item>
-     <item column="1" row="0">
-      <widget class="KisDoubleSliderSpinBox" name="jitterMovementSpin">
+     <item row="0" column="1">
+      <widget class="KisDoubleSliderSpinBox" name="jitterMovementSpin" native="true">
        <property name="enabled">
         <bool>false</bool>
        </property>
@@ -247,7 +260,7 @@
        </property>
       </widget>
      </item>
-     <item colspan="2" column="0" row="1">
+     <item row="1" column="0" colspan="2">
       <widget class="QCheckBox" name="gaussianBox">
        <property name="text">
         <string>Gaussian distribution</string>
@@ -256,7 +269,7 @@
      </item>
     </layout>
    </item>
-   <item column="0" row="3">
+   <item row="3" column="0">
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -276,6 +289,12 @@
    <class>KisDoubleSliderSpinBox</class>
    <extends>QWidget</extends>
    <header>kis_slider_spin_box.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisAngleSelector</class>
+   <extends>QWidget</extends>
+   <header location="global">KisAngleSelector.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

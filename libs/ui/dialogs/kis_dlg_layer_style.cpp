@@ -991,6 +991,8 @@ GradientOverlay::GradientOverlay(KisCanvasResourceProvider *resourceProvider, QW
     ui.intScale->setRange(0, 100);
     ui.intScale->setSuffix(i18n(" %"));
 
+    ui.angleSelector->angleSelector()->setResetAngle(90.0);
+
     connect(ui.angleSelector, SIGNAL(configChanged()), SIGNAL(configChanged()));
 
     connect(ui.cmbCompositeOp, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));

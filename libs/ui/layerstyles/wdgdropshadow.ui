@@ -17,30 +17,151 @@
       <string>Drop Shadow</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
-      <item row="3" column="0">
-       <spacer name="verticalSpacer">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
+      <item row="0" column="0">
+       <widget class="QGroupBox" name="groupBox_3">
+        <property name="title">
+         <string>Structure</string>
         </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>20</width>
-          <height>40</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="2" column="0">
-       <widget class="QCheckBox" name="chkLayerKnocksOutDropShadow">
-        <property name="toolTip">
-         <string>Use to obscure the shadow when fill is transparent</string>
-        </property>
-        <property name="text">
-         <string>Layer knocks O&amp;ut Drop Shadow</string>
-        </property>
+        <layout class="QFormLayout" name="formLayout">
+         <item row="0" column="0">
+          <widget class="QLabel" name="label_13">
+           <property name="text">
+            <string>&amp;Blend Mode:</string>
+           </property>
+           <property name="buddy">
+            <cstring>cmbCompositeOp</cstring>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <layout class="QHBoxLayout" name="horizontalLayout">
+           <item>
+            <widget class="KisLayerStyleCompositeOpComboBox" name="cmbCompositeOp">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="toolTip">
+              <string>Set the blend mode for the layer</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="KisColorButton" name="bnColor"/>
+           </item>
+          </layout>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="label_14">
+           <property name="text">
+            <string>Opaci&amp;ty:</string>
+           </property>
+           <property name="buddy">
+            <cstring>intOpacity</cstring>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="KisSliderSpinBox" name="intOpacity" native="true">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>10</width>
+             <height>15</height>
+            </size>
+           </property>
+           <property name="toolTip">
+            <string>Set the master opacity for the layer</string>
+           </property>
+           <property name="whatsThis">
+            <string>Adjust the transparency of the layer</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="label">
+           <property name="text">
+            <string>An&amp;gle:</string>
+           </property>
+           <property name="buddy">
+            <cstring>angleSelector</cstring>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="KisLayerStyleAngleSelector" name="angleSelector" native="true"/>
+         </item>
+         <item row="3" column="0">
+          <widget class="QLabel" name="label_2">
+           <property name="text">
+            <string>&amp;Distance:</string>
+           </property>
+           <property name="buddy">
+            <cstring>intDistance</cstring>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <widget class="KisSliderSpinBox" name="intDistance" native="true">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="0">
+          <widget class="QLabel" name="lblSpread">
+           <property name="text">
+            <string>Sp&amp;read:</string>
+           </property>
+           <property name="buddy">
+            <cstring>intSpread</cstring>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="1">
+          <widget class="KisSliderSpinBox" name="intSpread" native="true">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="0">
+          <widget class="QLabel" name="label_4">
+           <property name="text">
+            <string>S&amp;ize:</string>
+           </property>
+           <property name="buddy">
+            <cstring>intSize</cstring>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="1">
+          <widget class="KisSliderSpinBox" name="intSize" native="true">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </widget>
       </item>
-      <item row="1" column="0">
+      <item row="2" column="0">
        <widget class="QGroupBox" name="groupBox_2">
         <property name="title">
          <string>Quality</string>
@@ -103,145 +224,28 @@
         </layout>
        </widget>
       </item>
-      <item row="0" column="0">
-       <widget class="QGroupBox" name="groupBox_3">
-        <property name="title">
-         <string>Structure</string>
+      <item row="3" column="0">
+       <widget class="QCheckBox" name="chkLayerKnocksOutDropShadow">
+        <property name="toolTip">
+         <string>Use to obscure the shadow when fill is transparent</string>
         </property>
-        <layout class="QGridLayout" name="gridLayout_3">
-         <item row="0" column="1">
-          <widget class="KisLayerStyleCompositeOpComboBox" name="cmbCompositeOp">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="toolTip">
-            <string>Set the blend mode for the layer</string>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="1" colspan="2">
-          <widget class="KisSliderSpinBox" name="intDistance" native="true">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="2">
-          <widget class="KisColorButton" name="bnColor"/>
-         </item>
-         <item row="1" column="1" colspan="2">
-          <widget class="KisSliderSpinBox" name="intOpacity" native="true">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>10</width>
-             <height>15</height>
-            </size>
-           </property>
-           <property name="toolTip">
-            <string>Set the master opacity for the layer</string>
-           </property>
-           <property name="whatsThis">
-            <string>Adjust the transparency of the layer</string>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="0">
-          <widget class="QLabel" name="label_2">
-           <property name="text">
-            <string>&amp;Distance:</string>
-           </property>
-           <property name="buddy">
-            <cstring>intDistance</cstring>
-           </property>
-          </widget>
-         </item>
-         <item row="6" column="1" colspan="2">
-          <widget class="KisSliderSpinBox" name="intSize" native="true">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="label_14">
-           <property name="text">
-            <string>Opaci&amp;ty:</string>
-           </property>
-           <property name="buddy">
-            <cstring>intOpacity</cstring>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="0">
-          <widget class="QLabel" name="label">
-           <property name="text">
-            <string>An&amp;gle:</string>
-           </property>
-           <property name="buddy">
-            <cstring>angleSelector</cstring>
-           </property>
-          </widget>
-         </item>
-         <item row="5" column="0">
-          <widget class="QLabel" name="lblSpread">
-           <property name="text">
-            <string>Sp&amp;read:</string>
-           </property>
-           <property name="buddy">
-            <cstring>intSpread</cstring>
-           </property>
-          </widget>
-         </item>
-         <item row="5" column="1" colspan="2">
-          <widget class="KisSliderSpinBox" name="intSpread" native="true">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-          </widget>
-         </item>
-         <item row="6" column="0">
-          <widget class="QLabel" name="label_4">
-           <property name="text">
-            <string>S&amp;ize:</string>
-           </property>
-           <property name="buddy">
-            <cstring>intSize</cstring>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="0">
-          <widget class="QLabel" name="label_13">
-           <property name="text">
-            <string>&amp;Blend Mode:</string>
-           </property>
-           <property name="buddy">
-            <cstring>cmbCompositeOp</cstring>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="1" colspan="2">
-          <widget class="KisLayerStyleAngleSelector" name="angleSelector" native="true"/>
-         </item>
-        </layout>
+        <property name="text">
+         <string>Layer knocks O&amp;ut Drop Shadow</string>
+        </property>
        </widget>
+      </item>
+      <item row="4" column="0">
+       <spacer name="verticalSpacer">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>40</height>
+         </size>
+        </property>
+       </spacer>
       </item>
      </layout>
     </widget>

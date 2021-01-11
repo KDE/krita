@@ -14,6 +14,7 @@
 
 #include <kis_global.h>
 #include <KisVisualColorSelector.h>
+#include <WGShadeSelector.h>
 
 WGSelectorPopup::WGSelectorPopup(QWidget *parent)
     : QWidget(parent, Qt::Popup | Qt::FramelessWindowHint)
@@ -27,15 +28,14 @@ WGSelectorPopup::WGSelectorPopup(QWidget *parent)
 
 void WGSelectorPopup::setSelectorWidget(KisVisualColorSelector *selector)
 {
-    selector->setParent(this);
-    while (QLayoutItem *child = layout()->takeAt(0)) {
-        delete child->widget();
-        delete child;
-    }
-    layout()->addWidget(selector);
+    replaceCentranWidget(selector);
     connect(selector, SIGNAL(sigInteraction(bool)), SLOT(slotInteraction(bool)));
-    layout()->update();
-    adjustSize();
+}
+
+void WGSelectorPopup::setSelectorWidget(WGShadeSelector *selector)
+{
+    replaceCentranWidget(selector);
+    connect(selector, SIGNAL(sigColorInteraction(bool)), SLOT(slotInteraction(bool)));
 }
 
 void WGSelectorPopup::slotShowPopup()
@@ -88,4 +88,17 @@ void WGSelectorPopup::slotInteraction(bool active)
     if (!active && !underMouse()) {
         hide();
     }
+}
+
+void WGSelectorPopup::replaceCentranWidget(QWidget *widget)
+{
+    widget->setParent(this);
+    while (QLayoutItem *child = layout()->takeAt(0)) {
+        delete child->widget();
+        delete child;
+    }
+    layout()->addWidget(widget);
+    widget->show();
+    layout()->update();
+    adjustSize();
 }

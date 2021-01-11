@@ -9,6 +9,7 @@
 #include <QWidget>
 
 class KisVisualColorSelector;
+class WGShadeSelector;
 
 class WGSelectorPopup : public QWidget
 {
@@ -16,6 +17,7 @@ class WGSelectorPopup : public QWidget
 public:
     explicit WGSelectorPopup(QWidget *parent = nullptr);
     void setSelectorWidget(KisVisualColorSelector *selector);
+    void setSelectorWidget(WGShadeSelector *selector);
 public Q_SLOTS:
     void slotShowPopup();
 protected:
@@ -28,6 +30,8 @@ Q_SIGNALS:
 private Q_SLOTS:
     void slotInteraction(bool active);
 private:
+    void replaceCentranWidget(QWidget *widget);
+
     int m_margin {10};
     bool m_isInteracting {false};
 };

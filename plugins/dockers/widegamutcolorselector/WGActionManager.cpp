@@ -8,6 +8,7 @@
 
 #include "WGColorSelectorDock.h"
 #include "WGSelectorPopup.h"
+#include "WGShadeSelector.h"
 
 #include <kactioncollection.h>
 #include <kis_action_registry.h>
@@ -30,7 +31,7 @@ WGActionManager::WGActionManager(WGColorSelectorDock *parentDock)
     m_colorSelectorPopupAction = actionRegistry->makeQAction("show_wg_color_selector", this);
     connect(m_colorSelectorPopupAction, SIGNAL(triggered()), SLOT(slotShowColorSelectorPopup()));
     m_shadeSelectorPopupAction = actionRegistry->makeQAction("show_wg_shade_selector", this);
-    //connect(m_shadeSelectorPopupAction, SIGNAL(triggered()), SLOT(???));
+    connect(m_shadeSelectorPopupAction, SIGNAL(triggered()), SLOT(slotShowShadeSelectorPopup()));
 }
 
 void WGActionManager::setCanvas(KisCanvas2 *canvas, KisCanvas2 *oldCanvas)
@@ -48,22 +49,38 @@ void WGActionManager::setCanvas(KisCanvas2 *canvas, KisCanvas2 *oldCanvas)
     }
 }
 
-void WGActionManager::slotShowColorSelectorPopup()
+void WGActionManager::preparePopup()
 {
-    if (!m_colorSelectorPopup) {
-        m_colorSelectorPopup = new WGSelectorPopup();
-        KisVisualColorSelector *selector = new KisVisualColorSelector(m_colorSelectorPopup, m_colorModel);
-        selector->setFixedSize(300, 300);
-        m_colorSelectorPopup->setSelectorWidget(selector);
-    }
-
-    // TODO: make generic sync function
     m_isSynchronizing = true;
     const KisVisualColorModel &dockerModel = m_docker->colorModel();
     m_colorModel->copyState(dockerModel);
     m_isSynchronizing = false;
+}
+
+void WGActionManager::slotShowColorSelectorPopup()
+{
+    if (!m_colorSelectorPopup) {
+        m_colorSelectorPopup = new WGSelectorPopup();
+        m_colorSelector = new KisVisualColorSelector(m_colorSelectorPopup, m_colorModel);
+        m_colorSelector->setFixedSize(300, 300);
+        m_colorSelectorPopup->setSelectorWidget(m_colorSelector);
+    }
+
+    preparePopup();
 
     m_colorSelectorPopup->slotShowPopup();
+}
+
+void WGActionManager::slotShowShadeSelectorPopup()
+{
+    if (!m_shadeSelectorPopup) {
+        m_shadeSelectorPopup = new WGSelectorPopup();
+        m_shadeSelector = new WGShadeSelector(m_colorModel, m_shadeSelectorPopup);
+        m_shadeSelector->setFixedWidth(300);
+        m_shadeSelectorPopup->setSelectorWidget(m_shadeSelector);
+    }
+    preparePopup();
+    m_shadeSelectorPopup->slotShowPopup();
 }
 
 void WGActionManager::slotChannelValuesChanged()

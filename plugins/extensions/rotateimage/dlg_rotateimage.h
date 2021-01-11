@@ -63,6 +63,8 @@ private Q_SLOTS:
     void okClicked();
     void resetPreview();
     void slotAngleValueChanged(double);
+    void slotRadioCCWToggled(bool toggled);
+    void slotRadioCWToggled(bool toggled);
 
 private:
 

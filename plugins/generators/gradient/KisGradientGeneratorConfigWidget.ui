@@ -162,7 +162,7 @@
           <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
          </property>
          <property name="horizontalSpacing">
-          <number>5</number>
+          <number>10</number>
          </property>
          <property name="verticalSpacing">
           <number>10</number>
@@ -393,8 +393,11 @@
               </layout>
              </widget>
              <widget class="QWidget" name="stackedWidgetPageEndPositionPolar">
-              <layout class="QVBoxLayout" name="verticalLayout_3">
-               <property name="spacing">
+              <layout class="QFormLayout" name="formLayout_3">
+               <property name="horizontalSpacing">
+                <number>5</number>
+               </property>
+               <property name="verticalSpacing">
                 <number>5</number>
                </property>
                <property name="leftMargin">
@@ -409,24 +412,18 @@
                <property name="bottomMargin">
                 <number>0</number>
                </property>
-               <item>
-                <widget class="KisDoubleSliderSpinBox" name="sliderEndPositionAngle" native="true"/>
+               <item row="0" column="0">
+                <widget class="QLabel" name="label_6">
+                 <property name="text">
+                  <string>Angle:</string>
+                 </property>
+                </widget>
                </item>
-               <item>
-                <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,0,1">
+               <item row="1" column="1">
+                <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,1">
                  <property name="spacing">
                   <number>5</number>
                  </property>
-                 <item>
-                  <widget class="QLabel" name="label_5">
-                   <property name="text">
-                    <string>Distance:</string>
-                   </property>
-                   <property name="alignment">
-                    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                   </property>
-                  </widget>
-                 </item>
                  <item>
                   <widget class="QDoubleSpinBox" name="spinBoxEndPositionDistance">
                    <property name="alignment">
@@ -447,6 +444,26 @@
                   <widget class="QComboBox" name="comboBoxEndPositionDistanceUnits"/>
                  </item>
                 </layout>
+               </item>
+               <item row="0" column="1">
+                <widget class="KisAngleSelector" name="angleSelectorEndPositionAngle" native="true">
+                 <property name="minimumSize">
+                  <size>
+                   <width>0</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="0">
+                <widget class="QLabel" name="label_5">
+                 <property name="text">
+                  <string>Distance:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
                </item>
               </layout>
              </widget>
@@ -537,6 +554,12 @@
    <class>KisGenericGradientEditor</class>
    <extends>QWidget</extends>
    <header location="global">KisGenericGradientEditor.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisAngleSelector</class>
+   <extends>QWidget</extends>
+   <header location="global">KisAngleSelector.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

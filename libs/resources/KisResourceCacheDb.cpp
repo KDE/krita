@@ -317,14 +317,47 @@ int KisResourceCacheDb::resourceIdForResource(const QString &resourceName, const
         qWarning() << "Could not query resourceIdForResource" << q.boundValues() << q.lastError();
         return -1;
     }
-    if (!q.first()) {
-        //qWarning() << "Could not find resource" << resourceName << resourceFileName << resourceType << storageLocation;
+
+    if (q.first()) {
+        return q.value(0).toInt();
+    }
+
+    // couldn't be found in the `resources` table, but can still be in versioned_resources
+
+
+    if (!q.prepare("SELECT versioned_resources.resource_id\n"
+                   "FROM   resources\n"
+                   ",      resource_types\n"
+                   ",      versioned_resources\n"
+                   ",      storages\n"
+                   "WHERE  resources.resource_type_id = resource_types.id\n"    // join resources and resource_types by resource id
+                   "AND    versioned_resources.resource_id = resources.id\n"   // join versioned_resources and resources by resource id
+                   "AND    storages.id = versioned_resources.storage_id\n"      // join storages and versioned_resources by storage id
+                   "AND    storages.location = :storage_location\n"             // storage location must be the same as asked for
+                   "AND    resource_types.name = :resource_type\n"              // resource type must be the same as asked for
+                   "AND    versioned_resources.location = :filename\n")) {       // location must be the same as asked for
+        qWarning() << "Could not read and prepare resourceIdForResource (in versioned resources)" << q.lastError();
         return -1;
     }
 
-    //qDebug() << "Found resource" << q.value(0).toInt();
+    q.bindValue(":filename", resourceFileName);
+    q.bindValue(":resource_type", resourceType);
+    q.bindValue(":storage_location", storageLocation);
 
-    return q.value(0).toInt();
+    if (!q.exec()) {
+        qWarning() << "Could not query resourceIdForResource (in versioned resources)" << q.boundValues() << q.lastError();
+        return -1;
+    }
+
+    if (q.first()) {
+        return q.value(0).toInt();
+    }
+
+
+
+
+    qWarning() << "Could not find resource" << resourceName << resourceFileName << resourceType << storageLocation;
+    return -1;
 
 }
 

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <author>
     SPDX-FileCopyrightText: none
@@ -33,58 +33,38 @@
    <property name="verticalSpacing">
     <number>3</number>
    </property>
-   <item column="0" row="0">
+   <item row="0" column="0">
     <widget class="QLabel" name="label_3">
      <property name="text">
       <string>Type:</string>
      </property>
     </widget>
    </item>
-   <item column="1" row="0">
+   <item row="0" column="1">
     <widget class="QComboBox" name="ellipseType"/>
    </item>
-   <item column="0" row="1">
+   <item row="1" column="0">
     <widget class="QLabel" name="label">
      <property name="text">
       <string>Start angle:</string>
      </property>
     </widget>
    </item>
-   <item column="1" row="1">
-    <widget class="KisDoubleParseSpinBox" name="startAngle">
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-     <property name="suffix">
-      <string>°</string>
-     </property>
-    </widget>
-   </item>
-   <item column="0" row="2">
+   <item row="2" column="0">
     <widget class="QLabel" name="label_2">
      <property name="text">
       <string>End angle:</string>
      </property>
     </widget>
    </item>
-   <item column="1" row="2">
-    <widget class="KisDoubleParseSpinBox" name="endAngle">
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-     <property name="suffix">
-      <string>°</string>
-     </property>
-    </widget>
-   </item>
-   <item colspan="2" column="0" row="3">
+   <item row="3" column="0" colspan="2">
     <widget class="QPushButton" name="closeEllipse">
      <property name="text">
       <string>Close ellipse</string>
      </property>
     </widget>
    </item>
-   <item column="0" row="4">
+   <item row="4" column="0">
     <spacer>
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -97,13 +77,20 @@
      </property>
     </spacer>
    </item>
+   <item row="1" column="1">
+    <widget class="KisAngleSelector" name="startAngle" native="true"/>
+   </item>
+   <item row="2" column="1">
+    <widget class="KisAngleSelector" name="endAngle" native="true"/>
+   </item>
   </layout>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KisDoubleParseSpinBox</class>
-   <extends>QDoubleSpinBox</extends>
-   <header>kis_double_parse_spin_box.h</header>
+   <class>KisAngleSelector</class>
+   <extends>QWidget</extends>
+   <header location="global">KisAngleSelector.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

@@ -31,6 +31,7 @@ KisCmbGradient::KisCmbGradient(QWidget *parent)
     : KisPopupButton(parent)
     , m_gradientChooser(new KisGradientChooser(this))
 {
+    m_gradientChooser->setContentsMargins(10, 10, 10, 10);
     connect(m_gradientChooser, SIGNAL(resourceSelected(KoResource*)), SLOT(gradientSelected(KoResource*)));
     setPopupWidget(m_gradientChooser);
 }

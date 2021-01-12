@@ -258,8 +258,7 @@ KisGradientChooser::KisGradientChooser(QWidget *parent, const char *name, bool u
             this, SIGNAL(resourceSelected(KoResourceSP)));
     connect(m_d->itemChooser, SIGNAL(resourceClicked(KoResourceSP)),
             this, SIGNAL(resourceClicked(KoResourceSP)));
-    connect(m_d->itemChooser->itemView(), SIGNAL(sigSizeChanged()),
-            m_d.data(), SLOT(on_itemChooserItemView_sigSizeChanged()));
+
     // View menu
     connect(actionGroupViewMode, SIGNAL(triggered(QAction*)),
             m_d.data(), SLOT(on_actionGroupViewMode_triggered(QAction*)));

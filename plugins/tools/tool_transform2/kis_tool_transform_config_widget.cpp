@@ -1313,4 +1313,5 @@ void KisToolTransformConfigWidget::slotMeshScaleHandlesChanged()
     ToolTransformArgs *config = m_transaction->currentConfig();
     config->setMeshScaleHandles(this->chkScaleHandles->isChecked());
     notifyConfigChanged();
+    notifyEditingFinished();
 }

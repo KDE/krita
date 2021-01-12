@@ -190,3 +190,21 @@ QSharedPointer<KisResourceStorage::TagIterator> KisAslStorage::tags(const QStrin
 {
     return QSharedPointer<KisResourceStorage::TagIterator>(new AslTagIterator(location(), resourceType));
 }
+
+bool KisAslStorage::addResource(const QString &resourceType, KoResourceSP resource)
+{
+    if (!resource) {
+        warnKrita << "Trying to add a null resource to KisAslStorage";
+        return false;
+    }
+    KisPSDLayerStyleSP layerStyle = resource.dynamicCast<KisPSDLayerStyle>();
+    if (!layerStyle) {
+        warnKrita << "Trying to add a resource that is not a layer style to KisAslStorage";
+        return false;
+    }
+
+    QVector<KisPSDLayerStyleSP> styles = m_aslSerializer->styles();
+    styles << layerStyle;
+    m_aslSerializer->setStyles(styles);
+    return m_aslSerializer->saveToFile(location());
+}

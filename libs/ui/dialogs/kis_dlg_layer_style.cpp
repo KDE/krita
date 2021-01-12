@@ -272,6 +272,9 @@ void KisDlgLayerStyle::slotNewStyle()
     KisPSDLayerStyleSP style = this->style();
     KisPSDLayerStyleSP clone = style->clone().dynamicCast<KisPSDLayerStyle>();
     style->setName(styleName);
+    clone->setName(styleName);
+    clone->setFilename(styleName);
+    clone->setUuid(QUuid::createUuid());
     m_stylesSelector->addNewStyle(clone);
     const QString customStylesStorageLocation = "asl/CustomStyles.asl";
     KisConfig cfg(true);
@@ -279,7 +282,10 @@ void KisDlgLayerStyle::slotNewStyle()
                                             QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
     QString storagePath = resourceDir + "/" + customStylesStorageLocation;
 
+
     if (KisResourceLocator::instance()->hasStorage(storagePath)) {
+        KisResourceModel model(ResourceType::LayerStyles);
+        model.addResource(clone, storagePath);
 
     } else {
         KisAslLayerStyleSerializer serializer;

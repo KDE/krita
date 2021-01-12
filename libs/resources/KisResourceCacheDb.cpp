@@ -493,12 +493,6 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
     // Check whether it already exists
     int resourceId = resourceIdForResource(resource->name(), resource->filename(), resourceType, KisResourceLocator::instance()->makeStorageLocationRelative(storage->location()));
     if (resourceId > -1) {
-        if (resourceNeedsUpdating(resourceId, timestamp)) {
-            if (addResourceVersion(resourceId, timestamp, storage, resource)) {
-                return true;
-            }
-            return false;
-        }
         return true;
     }
 

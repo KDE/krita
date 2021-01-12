@@ -353,10 +353,8 @@ int KisResourceCacheDb::resourceIdForResource(const QString &resourceName, const
         return q.value(0).toInt();
     }
 
-
-
-
-    qWarning() << "Could not find resource" << resourceName << resourceFileName << resourceType << storageLocation;
+    // commenting out, because otherwise it spams the console on every new resource in the local resources folder
+    //qWarning() << "Could not find resource" << resourceName << resourceFileName << resourceType << storageLocation;
     return -1;
 
 }

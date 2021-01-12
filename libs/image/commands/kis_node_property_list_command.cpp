@@ -215,10 +215,9 @@ void KisNodePropertyListCommand::setNodePropertiesAutoUndo(KisNodeSP node, KisIm
          */
 
         struct SimpleLodResettingStroke : public KisSimpleStrokeStrategy {
-            SimpleLodResettingStroke(KUndo2Command *cmd, KisImageSP image)
+            SimpleLodResettingStroke(KUndo2Command *cmd)
                 : KisSimpleStrokeStrategy(QLatin1String("SimpleLodResettingStroke")),
-                  m_cmd(cmd),
-                  m_image(image)
+                  m_cmd(cmd)
             {
                 setClearsRedoOnStart(false);
                 this->enableJob(JOB_INIT, true);
@@ -226,15 +225,13 @@ void KisNodePropertyListCommand::setNodePropertiesAutoUndo(KisNodeSP node, KisIm
 
             void initStrokeCallback() override {
                 m_cmd->redo();
-                m_image->setModifiedWithoutUndo();
             }
 
         private:
             QScopedPointer<KUndo2Command> m_cmd;
-            KisImageSP m_image;
         };
 
-        KisStrokeId strokeId = image->startStroke(new SimpleLodResettingStroke(cmd.take(), image));
+        KisStrokeId strokeId = image->startStroke(new SimpleLodResettingStroke(cmd.take()));
         image->endStroke(strokeId);
     }
 

@@ -17,6 +17,11 @@
 #include "kis_shape_controller.h"
 #include "KisPart.h"
 #include "kis_layer_utils.h"
+#include "kis_generator_registry.h"
+#include "KisGlobalResourcesInterface.h"
+#include "kis_filter_configuration.h"
+#include "kis_generator_layer.h"
+#include "kis_selection.h"
 #include "kis_node_insertion_adapter.h"
 #include "kis_dummies_facade_base.h"
 #include "kis_node_dummies_graph.h"
@@ -302,6 +307,20 @@ QList<KisNodeSP> KisMimeData::loadNodes(const QMimeData *data,
         }
         delete filter;
         delete tempDoc;
+    }
+
+    if (data->hasFormat("application/x-color")) {
+        QColor color = data->hasColor() ? qvariant_cast<QColor>(data->colorData()) : QColor(255, 0, 255);
+        KisGeneratorSP generator = KisGeneratorRegistry::instance()->value("color");
+        KisFilterConfigurationSP defaultConfig = generator->factoryConfiguration(KisGlobalResourcesInterface::instance());
+        defaultConfig->createLocalResourcesSnapshot(KisGlobalResourcesInterface::instance());
+        defaultConfig->setProperty("color", color);
+
+        if (image) {
+            KisSelectionSP selection = image->globalSelection();
+            KisGeneratorLayerSP fillLayer = new KisGeneratorLayer(image, image->nextLayerName("Fill Layer"), defaultConfig, selection);
+            nodes << fillLayer;
+        }
     }
 
     if (nodes.isEmpty() && data->hasFormat("application/x-krita-node-url")) {

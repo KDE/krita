@@ -457,6 +457,15 @@ public:
     void setModified();
 
     /**
+     * Tell the image it's modified without creation of an undo command.
+     * It may happen when e.g. layer visibility has changed.
+     *
+     * This function emits both, sigImageModified() and
+     * sigImageModifiedWithoutUndo()
+     */
+    void setModifiedWithoutUndo();
+
+    /**
      * The default colorspace of this image: new layers will have this
      * colorspace and the projection will have this colorspace.
      */
@@ -793,6 +802,12 @@ Q_SIGNALS:
        doesn't match with the version saved on disk.
      */
     void sigImageModified();
+
+    /**
+       Emitted whenever the image has been modified without creation
+       of an undo command
+     */
+    void sigImageModifiedWithoutUndo();
 
     /**
      * The signal is emitted when the size of the image is changed.

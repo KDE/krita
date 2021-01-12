@@ -337,6 +337,7 @@ public:
 
     StdLockableWrapper<QMutex> savingLock;
 
+    bool imageModifiedWithoutUndo = false;
     bool modifiedWhileSaving = false;
     QScopedPointer<KisDocument> backgroundSaveDocument;
     QPointer<KoUpdater> savingUpdater;
@@ -440,6 +441,7 @@ void KisDocument::Private::copyFromImpl(const Private &rhs, KisDocument *q, KisD
         assistants = KisPaintingAssistant::cloneAssistantList(rhs.assistants);
         gridConfig = rhs.gridConfig;
     }
+    imageModifiedWithoutUndo = rhs.imageModifiedWithoutUndo;
     m_bAutoDetectedMime = rhs.m_bAutoDetectedMime;
     m_url = rhs.m_url;
     m_file = rhs.m_file;
@@ -810,6 +812,7 @@ void KisDocument::slotCompleteSavingDocument(const KritaUtils::ExportFileJob &jo
                 if (d->undoStack->isClean()) {
                     setModified(false);
                 } else {
+                    d->imageModifiedWithoutUndo = false;
                     d->undoStack->setClean();
                 }
             }
@@ -1689,6 +1692,10 @@ void KisDocument::setModified(bool mod)
     d->modifiedAfterAutosave = mod;
     d->modifiedWhileSaving = mod;
 
+    if (!mod) {
+        d->imageModifiedWithoutUndo = mod;
+    }
+
     if (mod == isModified())
         return;
 
@@ -1883,7 +1890,7 @@ void KisDocument::endMacro()
 
 void KisDocument::slotUndoStackCleanChanged(bool value)
 {
-    setModified(!value);
+    setModified(!value || d->imageModifiedWithoutUndo);
 }
 
 void KisDocument::slotConfigChanged()
@@ -2106,6 +2113,7 @@ bool KisDocument::newImage(const QString& name,
     Q_CHECK_PTR(image);
 
     connect(image, SIGNAL(sigImageModified()), this, SLOT(setImageModified()), Qt::UniqueConnection);
+    connect(image, SIGNAL(sigImageModifiedWithoutUndo()), this, SLOT(setImageModifiedWithoutUndo()), Qt::UniqueConnection);
     image->setResolution(imageResolution, imageResolution);
 
     image->assignImageProfile(cs->profile());
@@ -2294,6 +2302,7 @@ void KisDocument::setCurrentImage(KisImageSP image, bool forceInitialUpdate)
     d->shapeController->setImage(image);
     setModified(false);
     connect(d->image, SIGNAL(sigImageModified()), this, SLOT(setImageModified()), Qt::UniqueConnection);
+    connect(d->image, SIGNAL(sigImageModifiedWithoutUndo()), this, SLOT(setImageModifiedWithoutUndo()), Qt::UniqueConnection);
     connect(d->image, SIGNAL(sigLayersChangedAsync()), this, SLOT(slotImageRootChanged()));
 
     if (forceInitialUpdate) {
@@ -2314,7 +2323,13 @@ void KisDocument::hackPreliminarySetImage(KisImageSP image)
 void KisDocument::setImageModified()
 {
     // we only set as modified if undo stack is not at clean state
-    setModified(!d->undoStack->isClean());
+    setModified(d->imageModifiedWithoutUndo || !d->undoStack->isClean());
+}
+
+void KisDocument::setImageModifiedWithoutUndo()
+{
+    d->imageModifiedWithoutUndo = true;
+    setImageModified();
 }
 
 

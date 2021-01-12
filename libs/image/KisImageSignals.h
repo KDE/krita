@@ -27,6 +27,7 @@
 enum KisImageSignalTypeEnum {
     LayersChangedSignal,
     ModifiedSignal,
+    ModifiedWithoutUndoSignal,
     SizeChangedSignal,
     ProfileChangedSignal,
     ColorSpaceChangedSignal,

@@ -1536,6 +1536,12 @@ void KisImage::setModified()
     m_d->signalRouter.emitNotification(ModifiedSignal);
 }
 
+void KisImage::setModifiedWithoutUndo()
+{
+    m_d->signalRouter.emitNotification(ModifiedWithoutUndoSignal);
+    m_d->signalRouter.emitNotification(ModifiedSignal);
+}
+
 QImage KisImage::convertToQImage(QRect imageRect,
                                  const KoColorProfile * profile)
 {

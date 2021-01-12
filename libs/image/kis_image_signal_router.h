@@ -85,6 +85,7 @@ Q_SIGNALS:
 
     // Notifications
     void sigImageModified();
+    void sigImageModifiedWithoutUndo();
 
     void sigSizeChanged(const QPointF &oldStillPoint, const QPointF &newStillPoint);
     void sigProfileChanged(const KoColorProfile *  profile);

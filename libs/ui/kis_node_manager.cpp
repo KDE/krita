@@ -1412,7 +1412,7 @@ void KisNodeManager::toggleLock()
     bool isLocked = active->userLocked();
 
     for (auto &node : nodes) {
-        node->setUserLocked(!isLocked);
+        KisLayerPropertiesIcons::setNodePropertyAutoUndo(node, KisLayerPropertiesIcons::locked, !isLocked, m_d->view->image());
     }
 }
 
@@ -1425,8 +1425,7 @@ void KisNodeManager::toggleVisibility()
     bool isVisible = active->visible();
 
     for (auto &node : nodes) {
-        node->setVisible(!isVisible);
-        node->setDirty();
+        KisLayerPropertiesIcons::setNodePropertyAutoUndo(node, KisLayerPropertiesIcons::visible, !isVisible, m_d->view->image());
     }
 }
 
@@ -1445,7 +1444,7 @@ void KisNodeManager::toggleAlphaLock()
     for (auto &node : nodes) {
         auto layer = qobject_cast<KisPaintLayer*>(node.data());
         if (layer) {
-            layer->setAlphaLocked(!isAlphaLocked);
+            KisLayerPropertiesIcons::setNodePropertyAutoUndo(node, KisLayerPropertiesIcons::alphaLocked, !isAlphaLocked, m_d->view->image());
         }
     }
 }
@@ -1465,8 +1464,7 @@ void KisNodeManager::toggleInheritAlpha()
     for (auto &node : nodes) {
         auto layer = qobject_cast<KisLayer*>(node.data());
         if (layer) {
-            layer->disableAlphaChannel(!isAlphaDisabled);
-            node->setDirty();
+            KisLayerPropertiesIcons::setNodePropertyAutoUndo(node, KisLayerPropertiesIcons::inheritAlpha, !isAlphaDisabled, m_d->view->image());
         }
     }
 }

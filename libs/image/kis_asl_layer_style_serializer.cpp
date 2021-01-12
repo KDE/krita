@@ -16,6 +16,8 @@
 
 #include "kis_dom_utils.h"
 
+#include <kis_layer.h>
+
 
 #include "psd.h"
 #include "kis_global.h"
@@ -731,6 +733,20 @@ void KisAslLayerStyleSerializer::saveToDevice(QIODevice *device)
     writer.writeFile(device, doc);
 }
 
+bool KisAslLayerStyleSerializer::saveToFile(const QString& filename)
+{
+    QFile file(filename);
+
+    if (!file.open(QIODevice::WriteOnly)) {
+        dbgKrita << "Can't open file " << filename;
+        return false;
+    }
+    saveToDevice(&file);
+    file.close();
+
+    return true;
+}
+
 void convertAndSetBlendMode(const QString &mode,
                             boost::function<void (const QString &)> setBlendMode)
 {
@@ -1196,6 +1212,57 @@ bool KisAslLayerStyleSerializer::readFromFile(const QString& filename)
     file.close();
 
     return true;
+}
+
+QVector<KisPSDLayerStyleSP> KisAslLayerStyleSerializer::collectAllLayerStyles(KisNodeSP root)
+{
+    KisLayer* layer = qobject_cast<KisLayer*>(root.data());
+    QVector<KisPSDLayerStyleSP> layerStyles;
+
+    if (layer && layer->layerStyle()) {
+        KisPSDLayerStyleSP clone = layer->layerStyle()->clone().dynamicCast<KisPSDLayerStyle>();
+        clone->setName(i18nc("Auto-generated layer style name for embedded styles (style itself)", "<%1> (embedded)", layer->name()));
+        layerStyles << clone;
+    }
+
+    KisNodeSP child = root->firstChild();
+    while (child) {
+        layerStyles += collectAllLayerStyles(child);
+        child = child->nextSibling();
+    }
+
+    return layerStyles;
+}
+
+
+void KisAslLayerStyleSerializer::assignAllLayerStylesToLayers(KisNodeSP root)
+{
+    KisLayer* layer = qobject_cast<KisLayer*>(root.data());
+
+    if (layer && layer->layerStyle()) {
+        QUuid uuid = layer->layerStyle()->uuid();
+
+        bool found = false;
+
+        Q_FOREACH (KisPSDLayerStyleSP style, m_stylesVector) {
+            if (style->uuid() == uuid) {
+                layer->setLayerStyle(style);
+                found = true;
+                break;
+            }
+        }
+
+        if (!found) {
+            warnKrita << "WARNING: loading layer style for" << layer->name() << "failed! It requests inexistent style:" << uuid;
+        }
+    }
+
+    KisNodeSP child = root->firstChild();
+    while (child) {
+        assignAllLayerStylesToLayers(child);
+        child = child->nextSibling();
+    }
+
 }
 
 void KisAslLayerStyleSerializer::readFromDevice(QIODevice *device)

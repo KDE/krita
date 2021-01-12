@@ -1093,7 +1093,7 @@ void StoryboardModel::slotKeyframeRemoved(const KisKeyframeChannel *channel, int
 
 void StoryboardModel::slotNodeRemoved(KisNodeSP node)
 { 
-    if (node->isAnimated() && node->paintDevice()) {
+    if (node->isAnimated() && node->paintDevice() && node->paintDevice()->keyframeChannel()) {
         KisKeyframeChannel *channel = node->paintDevice()->keyframeChannel();
         int keyframeTime = channel->firstKeyframeTime();
         while (channel->keyframeAt(keyframeTime)) {

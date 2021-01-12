@@ -307,6 +307,11 @@ public:
     bool meshSymmetricalHandles() const;
     void setMeshSymmetricalHandles(bool meshSymmetricalHandles);
 
+    bool meshScaleHandles() const;
+    void setMeshScaleHandles(bool meshScaleHandles);
+
+    void transformSrcAndDst(const QTransform &t);
+
 private:
     void clear();
     void init(const ToolTransformArgs& args);
@@ -353,6 +358,7 @@ private:
     KisBezierTransformMesh m_meshTransform;
     bool m_meshShowHandles = true;
     bool m_meshSymmetricalHandles = true;
+    bool m_meshScaleHandles = false;
 
     /**
      * When we continue a transformation, m_continuedTransformation

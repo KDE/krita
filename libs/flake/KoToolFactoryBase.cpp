@@ -45,16 +45,19 @@ KoToolFactoryBase::~KoToolFactoryBase()
 
 QList<QAction *> KoToolFactoryBase::createActions(KActionCollection *actionCollection)
 {
-//    qDebug() << "creating actions for" << id();
     QList<QAction *> toolActions;
-    Q_FOREACH(QAction *action, createActionsImpl()) {
+
+    KisActionRegistry *actionRegistry = KisActionRegistry::instance();
+    QList<QAction*> actions = createActionsImpl();
+    actions << actionRegistry->makeQAction(id());
+
+    Q_FOREACH(QAction *action, actions) {
         if (action->objectName().isEmpty()) {
             qWarning() << "Tool" << id() << "tries to add an action without a name";
             continue;
         }
         QAction *existingAction = actionCollection->action(action->objectName());
         if (existingAction) {
-//            qDebug() << "\tFound existing action" << action->objectName() << existingAction->property("tool_action");
             delete action;
             action = existingAction;
         }
@@ -66,7 +69,6 @@ QList<QAction *> KoToolFactoryBase::createActions(KActionCollection *actionColle
         tools << id();
         action->setProperty("tool_action", tools);
         if (!existingAction) {
-//            qDebug() << "\tAdding new action" << action->objectName() << "Associated with" << tools;
             actionCollection->addAction(action->objectName(), action);
         }
         toolActions << action;

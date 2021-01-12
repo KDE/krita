@@ -27,6 +27,13 @@ private Q_SLOTS:
     void testDrawEllipse();
 
     void testNullRectProcessing();
+
+    void testLineIntersections();
+
+    void testFindTrianglePoint();
+    void testTriangularMotion();
+
+    void testElasticMotion();
 };
 
 #endif /* __KIS_ALGEBRA_2D_TEST_H */

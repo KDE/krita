@@ -221,7 +221,10 @@ void KisControlFrame::createGradientsChooser(KisViewManager * view)
     m_gradientChooser = new KisGradientChooser(m_gradientChooserPopup);
     m_gradientChooser->setCanvasResourcesInterface(view->canvasResourceProvider()->resourceManager()->canvasResourcesInterface());
     m_gradientChooser->setFont(m_font);
-    m_gradientTab->addTab(m_gradientChooser, i18n("Gradients"));
+    QWidget *gradientChooserPage = new QWidget(m_gradientChooserPopup);
+    QHBoxLayout *gradientChooserPageLayout  = new QHBoxLayout(gradientChooserPage);
+    gradientChooserPageLayout->addWidget(m_gradientChooser);
+    m_gradientTab->addTab(gradientChooserPage, i18n("Gradients"));
 
     connect(m_gradientChooser, SIGNAL(resourceSelected(KoResourceSP)),
             view->canvasResourceProvider(), SLOT(slotGradientActivated(KoResourceSP)));

@@ -52,7 +52,8 @@ public:
     }
 
     int levelOfDetail() const {
-        return m_levelOfDetail;
+        return m_dabData && m_dabData->levelOfDetailOverride() >= 0 ?
+            m_dabData->levelOfDetailOverride() : m_levelOfDetail;
     }
 
     bool isCancellable() const {

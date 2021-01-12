@@ -33,9 +33,8 @@ KisSprayOpOption::KisSprayOpOption()
     m_options->aspectSPBox->setRange(0.0, 2.0, 2);
     m_options->aspectSPBox->setValue(1.0);
 
-    m_options->rotationSPBox->setRange(0.0, 360.0, 0);
-    m_options->rotationSPBox->setValue(0.0);
-    m_options->rotationSPBox->setSuffix(QChar(Qt::Key_degree));
+    m_options->rotationAngleSelector->setDecimals(0);
+    m_options->rotationAngleSelector->setIncreasingDirection(KisAngleGauge::IncreasingDirection_Clockwise);
 
     m_options->scaleSpin->setRange(0.0, 10.0, 2);
     m_options->scaleSpin->setValue(1.0);
@@ -65,7 +64,7 @@ KisSprayOpOption::KisSprayOpOption()
     connect(m_options->densityRadioButton, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
     connect(m_options->gaussianBox, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
     connect(m_options->aspectSPBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
-    connect(m_options->rotationSPBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_options->rotationAngleSelector, SIGNAL(angleChanged(qreal)), SLOT(emitSettingChanged()));
     connect(m_options->jitterMoveBox, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
 
     connect(m_options->countRadioButton, SIGNAL(toggled(bool)), m_options->particlesSpinBox, SLOT(setEnabled(bool)));
@@ -91,7 +90,7 @@ void KisSprayOpOption::writeOptionSetting(KisPropertiesConfigurationSP setting) 
     op.amount = m_options->jitterMovementSpin->value();
     op.spacing = m_options->spacingSpin->value();
     op.scale = m_options->scaleSpin->value();
-    op.brushRotation = m_options->rotationSPBox->value();
+    op.brushRotation = m_options->rotationAngleSelector->angle();
     op.jitterMovement = m_options->jitterMoveBox->isChecked();
     op.useDensity = m_options->densityRadioButton->isChecked();
     op.gaussian = m_options->gaussianBox->isChecked();
@@ -108,7 +107,7 @@ void KisSprayOpOption::readOptionSetting(const KisPropertiesConfigurationSP sett
     m_options->aspectSPBox->setValue(op.aspect);
     m_options->coverageSpin->setValue(op.coverage);
     m_options->scaleSpin->setValue(op.scale);
-    m_options->rotationSPBox->setValue(op.brushRotation);
+    m_options->rotationAngleSelector->setAngle(op.brushRotation);
     m_options->particlesSpinBox->setValue(op.particleCount);
     m_options->jitterMovementSpin->setValue(op.amount);
     m_options->jitterMoveBox->setChecked(op.jitterMovement);

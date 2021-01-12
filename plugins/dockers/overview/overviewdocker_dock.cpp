@@ -12,9 +12,9 @@
 #include <QHBoxLayout>
 #include <QToolButton>
 #include <QStatusBar>
-#include <kis_slider_spin_box.h>
-#include <klocalizedstring.h>
 
+#include <KisAngleSelector.h>
+#include <klocalizedstring.h>
 #include "kis_canvas2.h"
 #include <KisViewManager.h>
 #include <kactioncollection.h>
@@ -30,12 +30,16 @@
 OverviewDockerDock::OverviewDockerDock( )
     : QDockWidget(i18n("Overview"))
     , m_zoomSlider(nullptr)
-    , m_rotateSlider(nullptr)
+    , m_rotateAngleSelector(nullptr)
     , m_mirrorCanvas(nullptr)
     , m_canvas(nullptr)
 {
     QWidget *page = new QWidget(this);
     m_layout = new QVBoxLayout(page);
+    m_layout->setSpacing(2);
+    m_bottomLayout = new QVBoxLayout();
+    m_bottomLayout->setContentsMargins(2, 2, 2, 2);
+    m_bottomLayout->setSpacing(2);
     m_horizontalLayout = new QHBoxLayout();
 
     m_overviewWidget = new OverviewWidget(this);
@@ -44,6 +48,7 @@ OverviewDockerDock::OverviewDockerDock( )
     m_overviewWidget->setAutoFillBackground(true); // paints background role before paint()
 
     m_layout->addWidget(m_overviewWidget, 1);
+    m_layout->addLayout(m_bottomLayout);
 
     setWidget(page);
 }
@@ -61,15 +66,15 @@ void OverviewDockerDock::setCanvas(KoCanvasBase * canvas)
     }
 
     if (m_zoomSlider) {
-        m_layout->removeWidget(m_zoomSlider);
+        m_bottomLayout->removeWidget(m_zoomSlider);
         delete m_zoomSlider;
         m_zoomSlider = nullptr;
     }
 
-    if (m_rotateSlider) {
-        m_horizontalLayout->removeWidget(m_rotateSlider);
-        delete m_rotateSlider;
-        m_rotateSlider = nullptr;
+    if (m_rotateAngleSelector) {
+        m_horizontalLayout->removeWidget(m_rotateAngleSelector);
+        delete m_rotateAngleSelector;
+        m_rotateAngleSelector = nullptr;
     }
 
     if (m_mirrorCanvas) {
@@ -78,21 +83,21 @@ void OverviewDockerDock::setCanvas(KoCanvasBase * canvas)
         m_mirrorCanvas = nullptr;
     }
 
-    m_layout->removeItem(m_horizontalLayout);
+    m_bottomLayout->removeItem(m_horizontalLayout);
 
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
 
     m_overviewWidget->setCanvas(canvas);
     if (m_canvas && m_canvas->viewManager() && m_canvas->viewManager()->zoomController() && m_canvas->viewManager()->zoomController()->zoomAction()) {
         m_zoomSlider = m_canvas->viewManager()->zoomController()->zoomAction()->createWidget(m_canvas->imageView()->KisView::statusBar());
-        m_layout->addWidget(m_zoomSlider);
-
-        m_rotateSlider = new KisDoubleSliderSpinBox();
-        m_rotateSlider->setRange(-180, 180, 2);
-        m_rotateSlider->setValue(m_canvas->rotationAngle());
-        m_rotateSlider->setPrefix(i18n("Rotation: "));
-        m_rotateSlider->setSuffix("°");
-        connect(m_rotateSlider, SIGNAL(valueChanged(qreal)), this, SLOT(rotateCanvasView(qreal)), Qt::UniqueConnection);
+        m_bottomLayout->addWidget(m_zoomSlider);
+        
+        m_rotateAngleSelector = new KisAngleSelector();
+        m_rotateAngleSelector->setRange(-179.99, 180.0);
+        m_rotateAngleSelector->setAngle(m_canvas->rotationAngle());
+        m_rotateAngleSelector->setIncreasingDirection(KisAngleGauge::IncreasingDirection_Clockwise);
+        m_rotateAngleSelector->setFlipOptionsMode(KisAngleSelector::FlipOptionsMode_ContextMenu);
+        connect(m_rotateAngleSelector, SIGNAL(angleChanged(qreal)), this, SLOT(rotateCanvasView(qreal)), Qt::UniqueConnection);
         connect(m_canvas->canvasController()->proxyObject, SIGNAL(canvasOffsetXChanged(int)), this, SLOT(updateSlider()));
 
         m_mirrorCanvas = new QToolButton();
@@ -102,9 +107,12 @@ void OverviewDockerDock::setCanvas(KoCanvasBase * canvas)
                 m_mirrorCanvas->setDefaultAction(action);
             }
         }
+        
+        m_horizontalLayout->addWidget(m_rotateAngleSelector);
+        m_horizontalLayout->addStretch();
         m_horizontalLayout->addWidget(m_mirrorCanvas);
-        m_horizontalLayout->addWidget(m_rotateSlider);
-        m_layout->addLayout(m_horizontalLayout);
+        m_bottomLayout->addLayout(m_horizontalLayout);
+        m_rotateAngleSelector->setVisible(true);
     }
 }
 
@@ -128,7 +136,7 @@ void OverviewDockerDock::rotateCanvasView(qreal rotation)
 void OverviewDockerDock::updateSlider()
 {
     if (!m_canvas) return;
-    KisSignalsBlocker l(m_rotateSlider);
+    KisSignalsBlocker l(m_rotateAngleSelector);
 
     qreal rotation = m_canvas->rotationAngle();
     if (rotation > 180) {
@@ -136,9 +144,7 @@ void OverviewDockerDock::updateSlider()
     } else if (rotation < -180) {
         rotation = rotation + 360;
     }
-    if (m_rotateSlider->value() != rotation) {
-        m_rotateSlider->setValue(rotation);
-    }
+    m_rotateAngleSelector->setAngle(rotation);
 }
 
 

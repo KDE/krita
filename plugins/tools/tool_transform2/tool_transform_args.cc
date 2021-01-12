@@ -27,6 +27,7 @@ ToolTransformArgs::ToolTransformArgs()
     m_transformAroundRotationCenter = configGroup.readEntry("transformAroundRotationCenter", "0").toInt();
     m_meshShowHandles = configGroup.readEntry("meshShowHandles", true);
     m_meshSymmetricalHandles = configGroup.readEntry("meshSymmetricalHandles", true);
+    m_meshScaleHandles = configGroup.readEntry("meshScaleHandles", false);
 }
 
 void ToolTransformArgs::setFilterId(const QString &id) {
@@ -80,8 +81,22 @@ void ToolTransformArgs::init(const ToolTransformArgs& args)
     m_meshTransform = args.m_meshTransform;
     m_meshShowHandles = args.m_meshShowHandles;
     m_meshSymmetricalHandles = args.m_meshSymmetricalHandles;
+    m_meshScaleHandles = args.m_meshScaleHandles;
 
     m_continuedTransformation.reset(args.m_continuedTransformation ? new ToolTransformArgs(*args.m_continuedTransformation) : 0);
+}
+
+bool ToolTransformArgs::meshScaleHandles() const
+{
+    return m_meshScaleHandles;
+}
+
+void ToolTransformArgs::setMeshScaleHandles(bool meshScaleHandles)
+{
+    m_meshScaleHandles = meshScaleHandles;
+
+    KConfigGroup configGroup =  KSharedConfig::openConfig()->group("KisToolTransform");
+    configGroup.writeEntry("meshScaleHandles", meshScaleHandles);
 }
 
 void ToolTransformArgs::clear()
@@ -540,4 +555,34 @@ void ToolTransformArgs::setMeshSymmetricalHandles(bool value)
 
     KConfigGroup configGroup =  KSharedConfig::openConfig()->group("KisToolTransform");
     configGroup.writeEntry("meshSymmetricalHandles", value);
+}
+
+void ToolTransformArgs::transformSrcAndDst(const QTransform &t)
+{
+    if (m_mode == FREE_TRANSFORM) {
+        m_transformedCenter = t.map(m_transformedCenter);
+        m_originalCenter = t.map(m_originalCenter);
+
+    } else if (m_mode == PERSPECTIVE_4POINT) {
+        m_transformedCenter = t.map(m_transformedCenter);
+        m_originalCenter = t.map(m_originalCenter);
+
+        m_flattenedPerspectiveTransform = t.inverted() * m_flattenedPerspectiveTransform * t;
+
+
+    } else if(m_mode == WARP || m_mode == CAGE) {
+        for (auto it = m_origPoints.begin(); it != m_origPoints.end(); ++it) {
+            *it = t.map(*it);
+        }
+
+        for (auto it = m_transfPoints.begin(); it != m_transfPoints.end(); ++it) {
+            *it = t.map(*it);
+        }
+    } else if (m_mode == LIQUIFY) {
+        m_liquifyWorker->transformSrcAndDst(t);
+    } else if (m_mode == MESH) {
+        m_meshTransform.transformSrcAndDst(t);
+    } else {
+        KIS_ASSERT_RECOVER_NOOP(0 && "unknown transform mode");
+    }
 }

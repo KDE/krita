@@ -137,6 +137,10 @@ public:
         return divideSafe(x, lod);
     }
 
+    QTransform transform() const {
+        return m_transform;
+    }
+
 private:
     /**
      * Aligns @value to the lowest integer not smaller than @value and

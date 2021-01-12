@@ -29,6 +29,8 @@ void testCage(bool clockwise, bool unityTransform, bool benchmarkPrepareOnly = f
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     dev->convertFromQImage(image, 0);
 
+    KisPaintDeviceSP srcDev = new KisPaintDevice(*dev);
+
     QVector<QPointF> origPoints;
     QVector<QPointF> transfPoints;
 
@@ -62,7 +64,7 @@ void testCage(bool clockwise, bool unityTransform, bool benchmarkPrepareOnly = f
         }
     }
 
-    KisCageTransformWorker worker(dev,
+    KisCageTransformWorker worker(dev->region().boundingRect(),
                                   origPoints,
                                   updater,
                                   pixelPrecision);
@@ -76,7 +78,7 @@ void testCage(bool clockwise, bool unityTransform, bool benchmarkPrepareOnly = f
             worker.prepareTransform();
             if (!benchmarkPrepareOnly) {
                 worker.setTransformedCage(transfPoints);
-                worker.run();
+                worker.run(srcDev, dev);
 
             }
         } else {
@@ -172,6 +174,8 @@ void KisCageTransformWorkerTest::stressTestRandomCages()
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     dev->convertFromQImage(image, 0);
 
+    KisPaintDeviceSP dstDev = new KisPaintDevice(cs);
+
     const int pixelPrecision = 8;
     QRectF bounds(dev->exactBounds());
 
@@ -190,13 +194,13 @@ void KisCageTransformWorkerTest::stressTestRandomCages()
             }
 
             // no just hope it doesn't crash ;)
-            KisCageTransformWorker worker(dev,
+            KisCageTransformWorker worker(dev->region().boundingRect(),
                                           origPoints,
                                           updater,
                                           pixelPrecision);
             worker.prepareTransform();
             worker.setTransformedCage(transfPoints);
-            worker.run();
+            worker.run(dev, dstDev);
         }
     }
 }

@@ -1013,6 +1013,8 @@ PerformanceTab::PerformanceTab(QWidget *parent, const char *name)
     connect(chkCachedFramesSizeLimit, SIGNAL(toggled(bool)), intCachedFramesSizeLimit, SLOT(setEnabled(bool)));
     connect(chkUseRegionOfInterest, SIGNAL(toggled(bool)), intRegionOfInterestMargin, SLOT(setEnabled(bool)));
 
+    connect(chkTransformToolUseInStackPreview, SIGNAL(toggled(bool)), chkTransformToolForceLodMode, SLOT(setEnabled(bool)));
+
 #ifndef Q_OS_WIN
     // AVX workaround is needed on Windows+GCC only
     chkDisableAVXOptimizations->setVisible(false);
@@ -1072,6 +1074,23 @@ void PerformanceTab::load(bool requestDefault)
     chkUseRegionOfInterest->setChecked(cfg.useAnimationCacheRegionOfInterest(requestDefault));
     intRegionOfInterestMargin->setValue(cfg.animationCacheRegionOfInterestMargin(requestDefault) * 100.0);
     intRegionOfInterestMargin->setEnabled(chkUseRegionOfInterest->isChecked());
+
+    {
+        KConfigGroup group = KSharedConfig::openConfig()->group("KisToolTransform");
+        chkTransformToolUseInStackPreview->setChecked(!group.readEntry("useOverlayPreviewStyle", false));
+        chkTransformToolForceLodMode->setChecked(group.readEntry("forceLodMode", true));
+        chkTransformToolForceLodMode->setEnabled(chkTransformToolUseInStackPreview->isChecked());
+    }
+
+    {
+        KConfigGroup group = KSharedConfig::openConfig()->group("KritaTransform/KisToolMove");
+        chkMoveToolForceLodMode->setChecked(group.readEntry("forceLodMode", true));
+    }
+
+    {
+        KConfigGroup group( KSharedConfig::openConfig(), "filterdialog");
+        chkFiltersForceLodMode->setChecked(group.readEntry("forceLodMode", true));
+    }
 }
 
 void PerformanceTab::save()
@@ -1111,6 +1130,22 @@ void PerformanceTab::save()
 
     cfg.setUseAnimationCacheRegionOfInterest(chkUseRegionOfInterest->isChecked());
     cfg.setAnimationCacheRegionOfInterestMargin(intRegionOfInterestMargin->value() / 100.0);
+
+    {
+        KConfigGroup group = KSharedConfig::openConfig()->group("KisToolTransform");
+        group.writeEntry("useOverlayPreviewStyle", !chkTransformToolUseInStackPreview->isChecked());
+        group.writeEntry("forceLodMode", chkTransformToolForceLodMode->isChecked());
+    }
+
+    {
+        KConfigGroup group = KSharedConfig::openConfig()->group("KritaTransform/KisToolMove");
+        group.writeEntry("forceLodMode", chkMoveToolForceLodMode->isChecked());
+    }
+
+    {
+        KConfigGroup group( KSharedConfig::openConfig(), "filterdialog");
+        group.writeEntry("forceLodMode", chkFiltersForceLodMode->isChecked());
+    }
 
 }
 

@@ -22,8 +22,12 @@ public:
     ~KisAslLayerStyleSerializer();
 
     void saveToDevice(QIODevice *device);
+    bool saveToFile(const QString& filename);
     void readFromDevice(QIODevice *device);
     bool readFromFile(const QString& filename);
+
+    void assignAllLayerStylesToLayers(KisNodeSP root);
+    static QVector<KisPSDLayerStyleSP> collectAllLayerStyles(KisNodeSP root);
 
     QVector<KisPSDLayerStyleSP> styles() const;
     void setStyles(const QVector<KisPSDLayerStyleSP> &styles);

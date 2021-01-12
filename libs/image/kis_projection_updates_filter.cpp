@@ -31,3 +31,13 @@ bool KisDropAllProjectionUpdatesFilter::filterRefreshGraph(KisImage *image, KisN
     Q_UNUSED(cropRect);
     return true;
 }
+
+bool KisDropAllProjectionUpdatesFilter::filterProjectionUpdateNoFilthy(KisImage *image, KisNode *pseudoFilthy, const QVector<QRect> &rects, const QRect &cropRect, const bool resetAnimationCache)
+{
+    Q_UNUSED(image);
+    Q_UNUSED(pseudoFilthy);
+    Q_UNUSED(rects);
+    Q_UNUSED(cropRect);
+    Q_UNUSED(resetAnimationCache);
+    return true;
+}

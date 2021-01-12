@@ -124,6 +124,7 @@ public:
     QPointer<KisMainWindow> mainWindow; // The first mainwindow we create on startup
     bool batchRun {false};
     QVector<QByteArray> earlyRemoteArguments;
+    QVector<QString> earlyFileOpenEvents;
 };
 
 class KisApplication::ResetStarting
@@ -266,6 +267,25 @@ void KisApplication::addResourceTypes()
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/preset_icons/tool_icons/");
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/preset_icons/emblem_icons/");
 }
+
+
+bool KisApplication::event(QEvent *event)
+{
+
+    #ifdef Q_OS_MACOS
+    if (event->type() == QEvent::FileOpen) {
+        QFileOpenEvent *openEvent = static_cast<QFileOpenEvent *>(event);
+        if (d->mainWindow) {
+            emit fileOpenRequest(openEvent->file());
+        } else {
+            d->earlyFileOpenEvents.append(openEvent->file());
+        }
+        return true;
+    }
+    #endif
+    return QApplication::event(event);
+}
+
 
 bool KisApplication::registerResources()
 {
@@ -650,6 +670,13 @@ bool KisApplication::start(const KisApplicationArguments &args)
 
     KisUsageLogger::writeSysInfo(KisUsageLogger::screenInformation());
 
+    // process File open event files
+    if (!d->earlyFileOpenEvents.isEmpty()) {
+        hideSplashScreen();
+        Q_FOREACH(QString fileName, d->earlyFileOpenEvents) {
+            d->mainWindow->openDocument(QUrl::fromLocalFile(fileName), 0);
+        }
+    }
 
     // not calling this before since the program will quit there.
     return true;

@@ -5,20 +5,19 @@
 -->
 <RCC version="1.0">
     <qresource>
-        <file>pics/dark_docker_close.png</file>
-        <file>pics/dark_docker_collapse_a.png</file>
-        <file>pics/dark_docker_collapse_b.png</file>
-        <file>pics/dark_docker_float.png</file>
-        <file>pics/dark_docker_lock_a.png</file>
-        <file>pics/dark_docker_lock_b.png</file>
-        <file>pics/light_docker_close.png</file>
-        <file>pics/light_docker_collapse_a.png</file>
-        <file>pics/light_docker_collapse_b.png</file>
-        <file>pics/light_docker_float.png</file>
-        <file>pics/light_docker_lock_a.png</file>
-        <file>pics/light_docker_lock_b.png</file>
-        <file>pics/zoom-draw.png</file>
-        <file>pics/zoom-pixels.png</file>
-        <file>pics/zoom-select.png</file>
+        <file>pics/dark_docker_close.svg</file>
+        <file>pics/dark_docker_collapse_a.svg</file>
+        <file>pics/dark_docker_collapse_b.svg</file>
+        <file>pics/dark_docker_float.svg</file>
+        <file>pics/dark_docker_lock_a.svg</file>
+        <file>pics/dark_docker_lock_b.svg</file>
+        <file>pics/dark_zoom-pixels.svg</file>
+        <file>pics/light_docker_close.svg</file>
+        <file>pics/light_docker_collapse_a.svg</file>
+        <file>pics/light_docker_collapse_b.svg</file>
+        <file>pics/light_docker_float.svg</file>
+        <file>pics/light_docker_lock_a.svg</file>
+        <file>pics/light_docker_lock_b.svg</file>
+        <file>pics/light_zoom-pixels.svg</file>
     </qresource>
 </RCC>

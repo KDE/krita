@@ -54,6 +54,7 @@ Q_SIGNALS:
     void requestCanvasUpdate();
     void requestUpdateOptionWidget();
     void requestCursorOutlineUpdate(const QPointF &imagePoint);
+    void requestImageRecalculation();
 
 private:
     struct Private;

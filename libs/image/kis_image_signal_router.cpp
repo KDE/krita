@@ -34,6 +34,7 @@ KisImageSignalRouter::KisImageSignalRouter(KisImageWSP image)
             SLOT(slotNotification(KisImageSignalType)));
 
     CONNECT_TO_IMAGE(sigImageModified());
+    CONNECT_TO_IMAGE(sigImageModifiedWithoutUndo());
     CONNECT_TO_IMAGE(sigSizeChanged(const QPointF&, const QPointF&));
     CONNECT_TO_IMAGE(sigResolutionChanged(double, double));
     CONNECT_TO_IMAGE(sigRequestNodeReselection(KisNodeSP, const KisNodeList&));
@@ -145,6 +146,9 @@ void KisImageSignalRouter::slotNotification(KisImageSignalType type)
         break;
     case ModifiedSignal:
         emit sigImageModified();
+        break;
+    case ModifiedWithoutUndoSignal:
+        emit sigImageModifiedWithoutUndo();
         break;
     case SizeChangedSignal:
         image->invalidateAllFrames();

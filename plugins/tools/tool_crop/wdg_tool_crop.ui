@@ -503,9 +503,17 @@
  <tabstops>
   <tabstop>intX</tabstop>
   <tabstop>intY</tabstop>
+  <tabstop>boolCenter</tabstop>
+  <tabstop>boolGrow</tabstop>
   <tabstop>intWidth</tabstop>
+  <tabstop>lockWidthButton</tabstop>
   <tabstop>intHeight</tabstop>
+  <tabstop>lockHeightButton</tabstop>
+  <tabstop>doubleRatio</tabstop>
+  <tabstop>lockRatioButton</tabstop>
   <tabstop>cmbType</tabstop>
+  <tabstop>cmbDecor</tabstop>
+  <tabstop>bnCrop</tabstop>
  </tabstops>
  <resources/>
  <connections/>

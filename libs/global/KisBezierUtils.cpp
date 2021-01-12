@@ -1205,5 +1205,63 @@ std::pair<QPointF, QPointF> removeBezierNode(const QPointF &p0,
 
     return std::make_pair(resultP0, resultP1);
 }
+QVector<qreal> intersectWithLineImpl(const QPointF &p0, const QPointF &p1, const QPointF &p2, const QPointF &p3, const QLineF &line, qreal eps, qreal alpha, qreal beta)
+{
+    using KisAlgebra2D::intersectLines;
+
+    QVector<qreal> result;
+
+    const qreal length =
+            kisDistance(p0, p1) +
+            kisDistance(p1, p2) +
+            kisDistance(p2, p3);
+
+    if (length < eps) {
+        if (intersectLines(p0, p3, line.p1(), line.p2())) {
+            result << alpha * 0.5 + beta;
+        }
+    } else {
+
+        const bool hasIntersections =
+                intersectLines(p0, p1, line.p1(), line.p2()) ||
+                intersectLines(p1, p2, line.p1(), line.p2()) ||
+                intersectLines(p2, p3, line.p1(), line.p2());
+
+        if (hasIntersections) {
+            QPointF q0, q1, q2, q3, q4;
+
+            deCasteljau(p0, p1, p2, p3, 0.5, &q0, &q1, &q2, &q3, &q4);
+
+            result << intersectWithLineImpl(p0, q0, q1, q2, line, eps, 0.5 * alpha, beta);
+            result << intersectWithLineImpl(q2, q3, q4, p3, line, eps, 0.5 * alpha, beta + 0.5 * alpha);
+        }
+    }
+    return result;
+}
+
+QVector<qreal> intersectWithLine(const QPointF &p0, const QPointF &p1, const QPointF &p2, const QPointF &p3, const QLineF &line, qreal eps)
+{
+    return intersectWithLineImpl(p0, p1, p2, p3, line, eps, 1.0, 0.0);
+}
+
+boost::optional<qreal> intersectWithLineNearest(const QPointF &p0, const QPointF &p1, const QPointF &p2, const QPointF &p3, const QLineF &line, const QPointF &nearestAnchor, qreal eps)
+{
+    QVector<qreal> result = intersectWithLine(p0, p1, p2, p3, line, eps);
+
+    qreal minDistance = std::numeric_limits<qreal>::max();
+    boost::optional<qreal> nearestRoot;
+
+    Q_FOREACH (qreal root, result) {
+        const QPointF pt = bezierCurve(p0, p1, p2, p3, root);
+        const qreal distance = kisDistance(pt, nearestAnchor);
+
+        if (distance < minDistance) {
+            minDistance = distance;
+            nearestRoot = root;
+        }
+    }
+
+    return nearestRoot;
+}
 
 }

@@ -70,6 +70,12 @@ QPushButton* KisWelcomePageWidget::donationLink;
 QLabel* KisWelcomePageWidget::donationBannerImage;
 #endif
 
+// Used for triggering a QAction::setChecked signal from a QLabel::linkActivated signal
+void ShowNewsAction::enableFromLink(QString unused_url)
+{
+    Q_UNUSED(unused_url);
+    emit setChecked(true);
+}
 
 // class to override item height for Breeze since qss seems to not work
 class RecentItemDelegate : public QStyledItemDelegate
@@ -113,7 +119,8 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
 
     QMenu *newsOptionsMenu = new QMenu(this);
     newsOptionsMenu->setToolTipsVisible(true);
-    QAction *showNewsAction = newsOptionsMenu->addAction(i18n("Check for updates"));
+    ShowNewsAction *showNewsAction = new ShowNewsAction(i18n("Enable news and check for new releases"));
+    newsOptionsMenu->addAction(showNewsAction);
     showNewsAction->setToolTip(i18n("Show news about Krita: this needs internet to retrieve information from the krita.org website"));
     showNewsAction->setCheckable(true);
 
@@ -127,6 +134,7 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
     connect(showNewsAction, SIGNAL(toggled(bool)), newsWidget, SLOT(setVisible(bool)));
     connect(showNewsAction, SIGNAL(toggled(bool)), labelNoFeed, SLOT(setHidden(bool)));
     connect(showNewsAction, SIGNAL(toggled(bool)), newsWidget, SLOT(toggleNews(bool)));
+    connect(labelNoFeed, SIGNAL(linkActivated(QString)), showNewsAction, SLOT(enableFromLink(QString)));
 
 #ifdef ENABLE_UPDATERS
     connect(showNewsAction, SIGNAL(toggled(bool)), this, SLOT(slotToggleUpdateChecks(bool)));
@@ -135,7 +143,7 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
 #ifdef Q_OS_ANDROID
     // enabling this widgets crashes the app, so it is better for it to be hidden for now
     newsWidget->hide();
-    helpTitleLabel_2->hide();
+    helpTitleLabel->hide();
     btnNewsOptions->hide();
 
     donationLink = new QPushButton(dropFrameBorder);
@@ -147,15 +155,15 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
 
     connect(donationLink, SIGNAL(clicked(bool)), this, SLOT(slotStartDonationFlow()));
 
-    verticalLayout_3->addWidget(donationLink);
-    verticalLayout_3->setAlignment(donationLink, Qt::AlignTop);
-    verticalLayout_3->setSpacing(20);
+    verticalLayout->addWidget(donationLink);
+    verticalLayout->setAlignment(donationLink, Qt::AlignTop);
+    verticalLayout->setSpacing(20);
 
     donationBannerImage = new QLabel(dropFrameBorder);
     QString bannerPath = QStandardPaths::locate(QStandardPaths::AppDataLocation, "share/krita/donation/banner.png");
     donationBannerImage->setPixmap(QPixmap(bannerPath));
 
-    verticalLayout_3->addWidget(donationBannerImage);
+    verticalLayout->addWidget(donationBannerImage);
 
     jboolean bannerPurchased = QAndroidJniObject::callStaticMethod<jboolean>("org/krita/android/DonationHelper", "isBadgePurchased", "()Z");
     if (bannerPurchased) {
@@ -337,10 +345,10 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
     userCommunityLink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://krita-artists.org\">")
                                .append(i18n("User Community")).append("</a>"));
 
-    gettingStartedLink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://docs.krita.org/en/user_manual/getting_started.html?" + analyticsString + "getting-started" + "\">")
+    gettingStartedLink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://docs.krita.org/en/user_manual/getting_started.html\">")
                                 .append(i18n("Getting Started")).append("</a>"));
 
-    manualLink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://docs.krita.org?" + analyticsString + "documentation-site" + "\">")
+    manualLink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://docs.krita.org\">")
                         .append(i18n("User Manual")).append("</a>"));
 
     supportKritaLink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://krita.org/en/support-us/donations?" + analyticsString + "donations" + "\">")
@@ -349,11 +357,14 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
     kritaWebsiteLink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://www.krita.org?" + analyticsString + "marketing-site" + "\">")
                               .append(i18n("Krita Website")).append("</a>"));
 
-    sourceCodeLink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://invent.kde.org/graphics/krita.git?" + analyticsString + "source-code" + "\">")
+    sourceCodeLink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://invent.kde.org/graphics/krita\">")
                             .append(i18n("Source Code")).append("</a>"));
 
-    poweredByKDELink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://userbase.kde.org/What_is_KDE?" + analyticsString + "what-is-kde" + "\">")
+    poweredByKDELink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://userbase.kde.org/What_is_KDE\">")
                               .append(i18n("Powered by KDE")).append("</a>"));
+
+    QString translationNoFeed = i18n("You can <a href=\"ignored\" style=\"color: COLOR_PLACEHOLDER; text-decoration: underline;\">enable news</a> from krita.org in various languages in the menu above");
+    labelNoFeed->setText(translationNoFeed.replace("COLOR_PLACEHOLDER", blendedColor.name()));
 
     const QColor faintTextColor = KritaUtils::blendColors(textColor, backgroundColor, 0.4);
     const QString &faintTextStyle = "QWidget{color: " + faintTextColor.name() + "}";
@@ -611,7 +622,7 @@ void KisWelcomePageWidget::setupNewsLangSelection(QMenu *newsOptionsMenu)
             } else {
                 enabledNewsLangs->remove(QString(code));
             }
-            cfg.writeList(newsLangConfigName, enabledNewsLangs->toList());
+            cfg.writeList(newsLangConfigName, enabledNewsLangs->values());
         });
     }
 }

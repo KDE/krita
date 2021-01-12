@@ -16,7 +16,7 @@ class QImage;
 class KRITAIMAGE_EXPORT KisCageTransformWorker
 {
 public:
-    KisCageTransformWorker(KisPaintDeviceSP dev,
+    KisCageTransformWorker(const QRect &deviceNonDefaultRegion,
                            const QVector<QPointF> &origCage,
                            KoUpdater *progress,
                            int pixelPrecision = 8);
@@ -31,7 +31,7 @@ public:
 
     void prepareTransform();
     void setTransformedCage(const QVector<QPointF> &transformedCage);
-    void run();
+    void run(KisPaintDeviceSP srcDevice, KisPaintDeviceSP dstDevice);
 
     QRect approxChangeRect(const QRect &rc);
     QRect approxNeedRect(const QRect &rc, const QRect &fullBounds);

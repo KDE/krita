@@ -14,7 +14,7 @@ class KisAnimatedTransformMaskParameters;
 
 class KRITATOOLTRANSFORM_EXPORT KisModifyTransformMaskCommand : public KUndo2Command {
 public:
-    KisModifyTransformMaskCommand(KisTransformMaskSP mask, KisTransformMaskParamsInterfaceSP params);
+    KisModifyTransformMaskCommand(KisTransformMaskSP mask, KisTransformMaskParamsInterfaceSP params, bool skipUpdate = false);
 
     void redo() override;
     void undo() override;
@@ -24,6 +24,7 @@ private:
     KisTransformMaskParamsInterfaceSP m_params;
     KisTransformMaskParamsInterfaceSP m_oldParams;
     bool m_wasHidden;
+    bool m_skipUpdate;
 };
 
 #endif

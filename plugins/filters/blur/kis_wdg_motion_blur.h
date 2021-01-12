@@ -24,9 +24,7 @@ public:
     }
     void setConfiguration(const KisPropertiesConfigurationSP) override;
     KisPropertiesConfigurationSP configuration() const override;
-public Q_SLOTS:
-    void angleSliderChanged(int);
-    void angleDialChanged(int);
+    
 private:
     Ui_WdgMotionBlur* m_widget;
 };

@@ -9,8 +9,6 @@
         <file>dark_addcolor.svg</file>
         <file>dark_addduplicateframe.svg</file>
         <file>dark_deletekeyframe.svg</file>
-        <file>dark_docker_lock_a.svg</file>
-        <file>dark_docker_lock_b.svg</file>
         <file>dark_layer-locked.svg</file>
         <file>dark_layer-unlocked.svg</file>
         <file>dark_nextframe.svg</file>
@@ -37,8 +35,6 @@
         <file>light_addcolor.svg</file>
         <file>light_addduplicateframe.svg</file>
         <file>light_deletekeyframe.svg</file>
-        <file>light_docker_lock_a.svg</file>
-        <file>light_docker_lock_b.svg</file>
         <file>light_layer-locked.svg</file>
         <file>light_layer-unlocked.svg</file>
         <file>light_nextframe.svg</file>
@@ -169,5 +165,11 @@
         <file>light_hamburger_menu_dots.svg</file>
         <file>dark_zoom-fit-curve.svg</file>
         <file>light_zoom-fit-curve.svg</file>
+        <file>dark_flip_angle_h.svg</file>
+        <file>dark_flip_angle_v.svg</file>
+        <file>dark_flip_angle_hv.svg</file>
+        <file>light_flip_angle_h.svg</file>
+        <file>light_flip_angle_v.svg</file>
+        <file>light_flip_angle_hv.svg</file>
     </qresource>
 </RCC>

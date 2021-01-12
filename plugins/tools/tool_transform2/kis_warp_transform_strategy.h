@@ -58,6 +58,7 @@ private:
 
 Q_SIGNALS:
     void requestCanvasUpdate();
+    void requestImageRecalculation();
 
 protected:
     // default is true

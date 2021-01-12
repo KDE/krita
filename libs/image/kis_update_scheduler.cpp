@@ -150,6 +150,12 @@ void KisUpdateScheduler::updateProjection(KisNodeSP node, const QRect &rc, const
     processQueues();
 }
 
+void KisUpdateScheduler::updateProjectionNoFilthy(KisNodeSP node, const QVector<QRect>& rects, const QRect &cropRect)
+{
+    m_d->updatesQueue.addUpdateNoFilthyJob(node, rects, cropRect, currentLevelOfDetail());
+    processQueues();
+}
+
 void KisUpdateScheduler::updateProjectionNoFilthy(KisNodeSP node, const QRect& rc, const QRect &cropRect)
 {
     m_d->updatesQueue.addUpdateNoFilthyJob(node, rc, cropRect, currentLevelOfDetail());
@@ -239,9 +245,9 @@ bool KisUpdateScheduler::wrapAroundModeSupported() const
     return m_d->strokesQueue.wrapAroundModeSupported();
 }
 
-void KisUpdateScheduler::setDesiredLevelOfDetail(int lod)
+void KisUpdateScheduler::setLodPreferences(const KisLodPreferences &value)
 {
-    m_d->strokesQueue.setDesiredLevelOfDetail(lod);
+    m_d->strokesQueue.setLodPreferences(value);
 
     /**
      * The queue might have started an internal stroke for
@@ -249,6 +255,11 @@ void KisUpdateScheduler::setDesiredLevelOfDetail(int lod)
      * it if needed.
      */
     processQueues();
+}
+
+KisLodPreferences KisUpdateScheduler::lodPreferences() const
+{
+    return m_d->strokesQueue.lodPreferences();
 }
 
 void KisUpdateScheduler::explicitRegenerateLevelOfDetail()
@@ -264,6 +275,7 @@ int KisUpdateScheduler::currentLevelOfDetail() const
     int levelOfDetail = m_d->updaterContext.currentLevelOfDetail();
 
     if (levelOfDetail < 0) {
+        // it is safe, because is called iff updaterContext has no running jobs at all
         levelOfDetail = m_d->updatesQueue.overrideLevelOfDetail();
     }
 

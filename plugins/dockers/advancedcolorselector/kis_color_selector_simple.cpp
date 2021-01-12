@@ -40,6 +40,9 @@ KoColor KisColorSelectorSimple::selectColor(int x, int y)
     case KisColorSelectorConfiguration::H:
         emit paramChanged(relPos, -1, -1, -1, -1, -1, -1, -1, -1);
         break;
+    case KisColorSelectorConfiguration::Hluma:
+        emit paramChanged(relPos, -1, -1, -1, -1, -1, -1, -1, -1);
+        break;
     case KisColorSelectorConfiguration::hsvS:
         emit paramChanged(-1, relPos, -1, -1, -1, -1, -1, -1, -1);
         break;
@@ -113,7 +116,7 @@ void KisColorSelectorSimple::setColor(const KoColor &color)
     qreal hslH, hslS, hslL;
     qreal hsiH, hsiS, hsiI;
     qreal hsyH, hsyS, hsyY;
-    KConfigGroup cfg =  KSharedConfig::openConfig()->group("advancedColorSelector");
+    KConfigGroup cfg = KSharedConfig::openConfig()->group("advancedColorSelector");
     R = cfg.readEntry("lumaR", 0.2126);
     G = cfg.readEntry("lumaG", 0.7152);
     B = cfg.readEntry("lumaB", 0.0722);
@@ -123,10 +126,6 @@ void KisColorSelectorSimple::setColor(const KoColor &color)
     //here we add our converter options
     m_parent->converter()->getHsiF(color, &hsiH, &hsiS, &hsiI);
     m_parent->converter()->getHsyF(color, &hsyH, &hsyS, &hsyY, R, G, B, Gamma);
-
-    //workaround, for some reason the HSI and HSY algorithms are fine, but they don't seem to update the selectors properly.
-    hsiH=hslH;
-    hsyH=hslH;
 
     switch (m_parameter) {
     case KisColorSelectorConfiguration::SL:
@@ -239,6 +238,10 @@ void KisColorSelectorSimple::setColor(const KoColor &color)
         m_lastClickPos.setX(qBound<qreal>(0., hsvH, 1.));
         emit paramChanged(hsvH, -1, -1, -1, -1, -1, -1, -1, -1);
         break;
+    case KisColorSelectorConfiguration::Hluma:
+        m_lastClickPos.setX(qBound<qreal>(0., hsyH, 1.));
+        emit paramChanged(hsyH, -1, -1, -1, -1, -1, -1, -1, -1);
+        break;
     default:
         Q_ASSERT(false);
         break;
@@ -273,6 +276,7 @@ void KisColorSelectorSimple::paint(QPainter* painter)
     if(m_lastClickPos!=QPointF(-1,-1) && m_parent->displayBlip()) {
         switch (m_parameter) {
         case KisColorSelectorConfiguration::H:
+        case KisColorSelectorConfiguration::Hluma:
         case KisColorSelectorConfiguration::hsvS:
         case KisColorSelectorConfiguration::hslS:
         case KisColorSelectorConfiguration::hsiS:
@@ -371,6 +375,9 @@ KoColor KisColorSelectorSimple::colorAt(float x, float y)
         break;
     case KisColorSelectorConfiguration::H:
         color = m_parent->converter()->fromHsvF(relPos, 1, 1);
+        break;
+    case KisColorSelectorConfiguration::Hluma:
+        color = m_parent->converter()->fromHsyF(relPos, 1, m_luma, R, G, B, Gamma);
         break;
     case KisColorSelectorConfiguration::hsvS:
         color = m_parent->converter()->fromHsvF(m_hue, relPos, m_value);

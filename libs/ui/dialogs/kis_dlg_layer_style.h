@@ -235,6 +235,8 @@ public:
     void addNewStyle(KisPSDLayerStyleSP style);
     void loadCollection(const QString &fileName);
 
+    void refillCollections();
+
 private Q_SLOTS:
 
     void slotResourceModelReset();
@@ -244,8 +246,6 @@ private Q_SLOTS:
 Q_SIGNALS:
     void styleSelected(KisPSDLayerStyleSP style);
 
-private:
-    void refillCollections();
 
 
 

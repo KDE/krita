@@ -228,7 +228,10 @@ bool KoPattern::init(QByteArray& bytes)
     }
 
     // size -1 so we don't add the end 0 to the QString...
-    setName(QString::fromLatin1(name, size -1));
+    QString newName = QString::fromLatin1(name, size -1);
+    if (!newName.isEmpty()) { // if it's empty, it's better to leave the name that was there before (based on filename)
+        setName(newName);
+    }
     delete[] name;
 
     if (bh.width == 0 || bh.height == 0) {

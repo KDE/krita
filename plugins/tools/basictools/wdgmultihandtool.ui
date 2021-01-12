@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <author>
     SPDX-FileCopyrightText: none
@@ -11,7 +11,7 @@
     <x>0</x>
     <y>0</y>
     <width>200</width>
-    <height>290</height>
+    <height>321</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -49,7 +49,7 @@
      <property name="verticalSpacing">
       <number>7</number>
      </property>
-     <item column="0" row="4">
+     <item row="4" column="0">
       <widget class="QLabel" name="brushesLabel">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -65,17 +65,17 @@
        </property>
       </widget>
      </item>
-     <item column="1" row="7">
+     <item row="7" column="1">
       <widget class="KisSliderSpinBox" name="translationRadiusSpinbox" native="true"/>
      </item>
-     <item column="0" row="8">
+     <item row="8" column="0">
       <widget class="QLabel" name="subbrushLabel">
        <property name="text">
         <string>Subbrushes:</string>
        </property>
       </widget>
      </item>
-     <item column="0" row="7">
+     <item row="7" column="0">
       <widget class="QLabel" name="radiusLabel">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -91,7 +91,7 @@
        </property>
       </widget>
      </item>
-     <item column="1" row="6">
+     <item row="6" column="1">
       <widget class="QCheckBox" name="horizontalCheckbox">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -104,7 +104,7 @@
        </property>
       </widget>
      </item>
-     <item column="1" row="1">
+     <item row="1" column="1">
       <widget class="QCheckBox" name="showAxesCheckbox">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -117,7 +117,7 @@
        </property>
       </widget>
      </item>
-     <item column="0" row="3">
+     <item row="3" column="0">
       <widget class="QLabel" name="axisRotationLabel">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -133,30 +133,14 @@
        </property>
       </widget>
      </item>
-     <item column="1" row="3">
-      <widget class="KisDoubleSliderSpinBox" name="axisRotationSpinbox" native="true">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>0</width>
-         <height>15</height>
-        </size>
-       </property>
-      </widget>
-     </item>
-     <item column="1" row="5">
+     <item row="5" column="1">
       <widget class="QCheckBox" name="verticalCheckbox">
        <property name="text">
         <string>Vertical</string>
        </property>
       </widget>
      </item>
-     <item column="0" row="0">
+     <item row="0" column="0">
       <widget class="QLabel" name="axisTypeLabel">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -172,7 +156,7 @@
        </property>
       </widget>
      </item>
-     <item column="1" row="2">
+     <item row="2" column="1">
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
         <widget class="QPushButton" name="moveOriginButton">
@@ -214,10 +198,10 @@
        </item>
       </layout>
      </item>
-     <item column="1" row="4">
+     <item row="4" column="1">
       <widget class="KisSliderSpinBox" name="brushCountSpinBox" native="true"/>
      </item>
-     <item column="0" row="2">
+     <item row="2" column="0">
       <widget class="QLabel" name="label">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -236,7 +220,7 @@
        </property>
       </widget>
      </item>
-     <item column="1" row="8">
+     <item row="8" column="1">
       <layout class="QHBoxLayout" name="horizontalLayout_2">
        <item>
         <widget class="QPushButton" name="addSubbrushButton">
@@ -260,8 +244,28 @@
        </item>
       </layout>
      </item>
-     <item column="1" row="0">
+     <item row="0" column="1">
       <widget class="QComboBox" name="multihandTypeCombobox"/>
+     </item>
+     <item row="3" column="1">
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <item>
+        <widget class="KisAngleSelector" name="axisRotationAngleSelector" native="true"/>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
      </item>
     </layout>
    </item>
@@ -288,9 +292,9 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>KisDoubleSliderSpinBox</class>
+   <class>KisAngleSelector</class>
    <extends>QWidget</extends>
-   <header>kis_slider_spin_box.h</header>
+   <header location="global">KisAngleSelector.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

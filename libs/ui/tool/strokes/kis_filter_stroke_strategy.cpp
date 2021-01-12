@@ -123,6 +123,7 @@ void KisFilterStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
     Data *d = dynamic_cast<Data*>(data);
     CancelSilentlyMarker *cancelJob =
         dynamic_cast<CancelSilentlyMarker*>(data);
+    ExtraCleanUpUpdates *cleanup = dynamic_cast<ExtraCleanUpUpdates*>(data);
 
     if (d) {
         const QRect rc = d->processRect;
@@ -147,6 +148,8 @@ void KisFilterStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
         m_d->node->setDirty(rc);
     } else if (cancelJob) {
         m_d->cancelSilently = true;
+    } else if (cleanup) {
+        m_d->node->setDirty(cleanup->rects);
     } else {
         qFatal("KisFilterStrokeStrategy: job type is not known");
     }

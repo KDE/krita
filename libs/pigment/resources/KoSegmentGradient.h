@@ -452,6 +452,7 @@ public:
     bool removeSegmentPossible() const;
 
     const QList<KoGradientSegment *>& segments() const;
+    void setSegments(const QList<KoGradientSegment*> &segments);
 
 protected:
 

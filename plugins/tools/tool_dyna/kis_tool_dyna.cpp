@@ -20,6 +20,7 @@
 
 #include "kis_cursor.h"
 #include <kis_slider_spin_box.h>
+#include <KisAngleSelector.h>
 
 
 #define MAXIMUM_SMOOTHNESS 1000
@@ -257,7 +258,7 @@ void KisToolDyna::slotSetWidthRange(double widthRange)
 void KisToolDyna::slotSetFixedAngle(bool fixedAngle)
 {
     m_mouse.fixedangle = fixedAngle;
-    m_angleDSSBox->setEnabled(fixedAngle);
+    m_angleSelector->setEnabled(fixedAngle);
     m_configGroup.writeEntry("useFixedAngle", fixedAngle);
 }
 
@@ -291,19 +292,20 @@ QWidget * KisToolDyna::createOptionWidget()
     m_chkFixedAngle->setEnabled(false);
     connect(m_chkFixedAngle, SIGNAL(toggled(bool)), this, SLOT(slotSetFixedAngle(bool)));
 
-    m_angleDSSBox = new KisDoubleSliderSpinBox(optionsWidget);
-    m_angleDSSBox->setRange(0,360,0);
-    m_angleDSSBox->setSuffix(QChar(Qt::Key_degree));
-    m_angleDSSBox->setEnabled(false);
-    connect(m_angleDSSBox, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetAngle(qreal)));
+    m_angleSelector = new KisAngleSelector(optionsWidget);
+    m_angleSelector->setDecimals(0);
+    m_angleSelector->setFlipOptionsMode(KisAngleSelector::FlipOptionsMode_MenuButton);
+    m_angleSelector->setIncreasingDirection(KisAngleGauge::IncreasingDirection_Clockwise);
+    m_angleSelector->setEnabled(false);
+    connect(m_angleSelector, SIGNAL(angleChanged(qreal)), this, SLOT(slotSetAngle(qreal)));
 
-    KisToolFreehand::addOptionWidgetOption(m_angleDSSBox,m_chkFixedAngle);
+    KisToolFreehand::addOptionWidgetOption(m_angleSelector,m_chkFixedAngle);
 
     // read settings in from config
     m_massSPBox->setValue(m_configGroup.readEntry("massAmount", 0.01));
     m_dragSPBox->setValue(m_configGroup.readEntry("dragAmount", .98));
     m_chkFixedAngle->setChecked((bool)m_configGroup.readEntry("useFixedAngle", false));
-    m_angleDSSBox->setValue(m_configGroup.readEntry("angleAmount", 20));
+    m_angleSelector->setAngle(m_configGroup.readEntry("angleAmount", 20));
 
 
 #if 0

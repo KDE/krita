@@ -220,7 +220,10 @@ bool KisTagFilterResourceProxyModel::filterAcceptsRow(int source_row, const QMod
     QMap<QString, QVariant> resourceMetaData = sourceModel()->data(idx, Qt::UserRole + KisAbstractResourceModel::MetaData).toMap();
     Q_FOREACH(const QString &key, d->metaDataMapFilter.keys()) {
         if (resourceMetaData.contains(key)) {
-            metaDataMatches = (resourceMetaData[key] != d->metaDataMapFilter[key]);
+            metaDataMatches = (resourceMetaData[key] == d->metaDataMapFilter[key]);
+            if (!metaDataMatches) {
+                return false;
+            }
         }
     }
 

@@ -26,12 +26,14 @@ KisWdgBlur::KisWdgBlur(QWidget * parent) : KisConfigWidget(parent)
     m_widget->setupUi(this);
     linkSpacingToggled(true);
 
+    widget()->angleSelector->setDecimals(0);
+
     connect(widget()->aspectButton, SIGNAL(keepAspectRatioChanged(bool)), this, SLOT(linkSpacingToggled(bool)));
     connect(widget()->intHalfWidth, SIGNAL(valueChanged(int)), this, SLOT(spinBoxHalfWidthChanged(int)));
     connect(widget()->intHalfHeight, SIGNAL(valueChanged(int)), this, SLOT(spinBoxHalfHeightChanged(int)));
 
     connect(widget()->intStrength, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
-    connect(widget()->intAngle, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
+    connect(widget()->angleSelector, SIGNAL(angleChanged(qreal)), SIGNAL(sigConfigurationItemChanged()));
     connect(widget()->cbShape, SIGNAL(activated(int)), SIGNAL(sigConfigurationItemChanged()));
 }
 
@@ -46,7 +48,7 @@ KisPropertiesConfigurationSP KisWdgBlur::configuration() const
     config->setProperty("lockAspect", widget()->aspectButton->keepAspectRatio());
     config->setProperty("halfWidth", widget()->intHalfWidth->value());
     config->setProperty("halfHeight", widget()->intHalfHeight->value());
-    config->setProperty("rotate", widget()->intAngle->value());
+    config->setProperty("rotate", static_cast<int>(widget()->angleSelector->angle()));
     config->setProperty("strength", widget()->intStrength->value());
     config->setProperty("shape", widget()->cbShape->currentIndex());
     return config;
@@ -68,7 +70,7 @@ void KisWdgBlur::setConfiguration(const KisPropertiesConfigurationSP config)
         widget()->intHalfHeight->setValue(value.toUInt());
     }
     if (config->getProperty("rotate", value)) {
-        widget()->intAngle->setValue(value.toUInt());
+        widget()->angleSelector->setAngle(static_cast<qreal>(value.toUInt()));
     }
     if (config->getProperty("strength", value)) {
         widget()->intStrength->setValue(value.toUInt());

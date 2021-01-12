@@ -16,27 +16,11 @@
 #include <filter/kis_filter.h>
 #include <kis_filter_configuration.h>
 
-#include "KisGradientMapFilterConfiguration.h"
-
 class KisConfigWidget;
-
-class KritaGradientMap : public QObject
-{
-    Q_OBJECT
-public:
-    KritaGradientMap(QObject *parent, const QVariantList &);
-    ~KritaGradientMap() override;
-};
 
 class KisGradientMapFilter : public KisFilter
 {
 public:
-    enum ColorMode {
-        Blend,
-        Nearest,
-        Dither,
-    };
-
     KisGradientMapFilter();
 
     static inline KoID id() {

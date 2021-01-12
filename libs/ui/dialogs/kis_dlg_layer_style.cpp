@@ -316,14 +316,11 @@ void KisDlgLayerStyle::slotLoadStyle()
     KisResourceStorageSP storage = QSharedPointer<KisResourceStorage>::create(newLocation);
     KIS_ASSERT(!storage.isNull());
     KisResourceLocator::instance()->addStorage(newLocation, storage);
+    m_stylesSelector->refillCollections();
 }
 
 void KisDlgLayerStyle::slotSaveStyle()
 {
-    // TODO RESOURCES: needs figuring out
-    warnKrita << "Layer style cannot be saved; needs figuring out what to do here";
-
-    /*
     QString filename; // default value?
 
     KoFileDialog dialog(this, KoFileDialog::SaveFile, "layerstyle");
@@ -331,17 +328,14 @@ void KisDlgLayerStyle::slotSaveStyle()
     dialog.setMimeTypeFilters(QStringList() << "application/x-photoshop-style-library", "application/x-photoshop-style-library");
     filename = dialog.filename();
 
-    QScopedPointer<KisPSDLayerStyleCollectionResource> collection(
-        new KisPSDLayerStyleCollectionResource(filename));
+    QSharedPointer<KisAslLayerStyleSerializer> serializer = QSharedPointer<KisAslLayerStyleSerializer>(new KisAslLayerStyleSerializer());
 
     KisPSDLayerStyleSP newStyle = style()->clone().dynamicCast<KisPSDLayerStyle>();
     newStyle->setName(QFileInfo(filename).completeBaseName());
-
-    KisPSDLayerStyleCollectionResource::StylesVector vector = collection->layerStyles();
-    vector << newStyle;
-    collection->setLayerStyles(vector);
-    collection->save();
-    */
+    QVector<KisPSDLayerStyleSP> styles;
+    styles << newStyle;
+    serializer->setStyles(styles);
+    serializer->saveToFile(filename);
 }
 
 void KisDlgLayerStyle::changePage(QListWidgetItem *current, QListWidgetItem *previous)
@@ -1079,6 +1073,8 @@ GradientOverlay::GradientOverlay(KisCanvasResourceProvider *resourceProvider, QW
 
     ui.intScale->setRange(0, 100);
     ui.intScale->setSuffix(i18n(" %"));
+    
+    ui.angleSelector->angleSelector()->setResetAngle(90.0);
 
     ui.cmbGradient->setCanvasResourcesInterface(resourceProvider->resourceManager()->canvasResourcesInterface());
 

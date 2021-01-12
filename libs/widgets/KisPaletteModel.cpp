@@ -413,7 +413,7 @@ QVariant KisPaletteModel::dataForSwatch(const QModelIndex &idx, int role) const
     switch (role) {
     case Qt::ToolTipRole:
     case Qt::DisplayRole: {
-        return entryPresent ? entry.name() : i18n("Empty slot");
+        return entryPresent ? entry.name() + "\n(" + KoColor::toQString(entry.color()) + ")" : i18n("Empty slot");
     }
     case Qt::BackgroundRole: {
         QColor color(0, 0, 0, 0);

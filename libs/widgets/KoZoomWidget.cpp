@@ -60,8 +60,7 @@ KoZoomWidget::KoZoomWidget(QWidget* parent, int maxZoom )
     layout->setStretch(1, 1);
 
     d->aspectButton = new QToolButton(this);
-    d->aspectButton->setIcon(koIcon("zoom-pixels"));
-    d->aspectButton->setIconSize(QSize(16,16));
+    d->aspectButton->setIcon(kisIcon("zoom-pixels"));
     d->aspectButton->setCheckable(true);
     d->aspectButton->setChecked(true);
     d->aspectButton->setAutoRaise(true);

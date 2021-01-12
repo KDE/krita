@@ -514,6 +514,12 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
     }
 
     resourceId = resourceIdForResource(resource->name(), resource->filename(), resourceType, KisResourceLocator::instance()->makeStorageLocationRelative(storage->location()));
+    if (resourceId < 0) {
+        qWarning() << "Adding to database failed, resource id after adding is " << resourceId << "! (Probable reason: the same name and MD5 as some other resource). Resource is: " << resource->name() << resource->filename()
+                   << resourceType << KisResourceLocator::instance()->makeStorageLocationRelative(storage->location());
+        return false;
+    }
+
     resource->setResourceId(resourceId);
 
     // Then add a new version
@@ -549,6 +555,8 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
     if (!r) {
         qWarning() << "Could not execute initial addResourceVersion statement" << q.boundValues() << q.lastError();
     }
+
+    r = addMetaDataForId(resource->metadata(), resource->resourceId(), "resources");
 
     return r;
 }

@@ -80,7 +80,6 @@ KisFileLayer::KisFileLayer(const KisFileLayer &rhs)
 {
     m_basePath = rhs.m_basePath;
     m_filename = rhs.m_filename;
-    KIS_SAFE_ASSERT_RECOVER_NOOP(QFile::exists(path()));
 
     m_scalingMethod = rhs.m_scalingMethod;
 

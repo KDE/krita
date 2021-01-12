@@ -12,6 +12,7 @@
 #include <kritawidgetutils_export.h>
 
 class QLabel;
+class QToolButton;
 
 class KisFileIconProvider : public QFileIconProvider
 {
@@ -53,12 +54,13 @@ public:
 public Q_SLOTS:
 
     void onCurrentChanged(const QString &path);
+    void previewToggled(bool showPreview);
 
 private:
 
     KisFileIconProvider *m_iconProvider {0};
     QLabel *m_preview {0};
-
+    QToolButton *m_previewToggle {0};
 };
 
 #endif // KISPREVIEWFILEDIALOG_H

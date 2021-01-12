@@ -117,6 +117,15 @@ bool KisNodePropertyListCommand::canMergeWith(const KUndo2Command *command) cons
              changedProperties(other->m_oldPropertyList, other->m_newPropertyList));
 }
 
+bool KisNodePropertyListCommand::annihilateWith(const KUndo2Command *command)
+{
+    const KisNodePropertyListCommand *other =
+        dynamic_cast<const KisNodePropertyListCommand*>(command);
+
+    return other && other->m_node == m_node &&
+            changedProperties(m_oldPropertyList, other->m_newPropertyList).isEmpty();
+}
+
 bool checkOnionSkinChanged(const KisBaseNode::PropertyList &oldPropertyList,
                            const KisBaseNode::PropertyList &newPropertyList)
 {

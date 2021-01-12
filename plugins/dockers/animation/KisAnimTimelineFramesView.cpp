@@ -1215,7 +1215,14 @@ void KisAnimTimelineFramesView::dragMoveEvent(QDragMoveEvent *event)
     m_d->dragInProgress = true;
     m_d->model->setScrubState(true);
 
-    QTableView::dragMoveEvent(event);
+    QAbstractItemView::dragMoveEvent(event);
+
+    // Let's check for moving within a selection --
+    // We want to override the built in qt behavior that
+    // denies drag events when dragging within a selection...
+    if (!event->isAccepted() && selectionModel()->isSelected(indexAt(event->pos()))) {
+        event->setAccepted(true);
+    }
 
     if (event->isAccepted()) {
         QModelIndex index = indexAt(event->pos());
@@ -1248,6 +1255,19 @@ void KisAnimTimelineFramesView::dropEvent(QDropEvent *event)
     }
 
     QAbstractItemView::dropEvent(event);
+
+    // Override drop event to accept drops within selected range.0
+    QModelIndex index = indexAt(event->pos());
+    if (!event->isAccepted() &&  selectionModel()->isSelected(index)) {
+        event->setAccepted(true);
+        const Qt::DropAction action = event->dropAction();
+        const int row = event->pos().y();
+        const int column = event->pos().x();
+        if (m_d->model->dropMimeData(event->mimeData(), action, row, column, index)) {
+            event->acceptProposedAction();
+        }
+    }
+
     m_d->dragWasSuccessful = event->isAccepted();
 }
 

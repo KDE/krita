@@ -1018,17 +1018,33 @@ void KisAnimTimelineFramesView::mousePressEvent(QMouseEvent *event)
                 QPoint(horizontalOffset(), verticalOffset()) + event->pos();
         m_d->lastPressedModifier = event->modifiers();
 
+        m_d->initialDragPanPos = event->pos();
+
         QAbstractItemView::mousePressEvent(event);
     }
 }
 
 void KisAnimTimelineFramesView::mouseMoveEvent(QMouseEvent *e)
 {
+    // Custom keyframe dragging distance based on zoom level.
+    if (state() == DraggingState &&
+        (horizontalHeader()->defaultSectionSize() / 2) < QApplication::startDragDistance() ) {
+
+        const QPoint dragVector = e->pos() - m_d->initialDragPanPos;
+        if (dragVector.manhattanLength() >= (horizontalHeader()->defaultSectionSize() / 2)) {
+            startDrag(model()->supportedDragActions());
+            setState(NoState);
+            stopAutoScroll();
+        }
+    }
+
     if (m_d->modifiersCatcher->modifierPressed("pan-zoom")) {
 
         if (e->buttons() & Qt::RightButton) {
+
 //            m_d->zoomDragButton->continueZoom(e->pos());
         } else if (e->buttons() & Qt::LeftButton) {
+
             QPoint diff = e->pos() - m_d->initialDragPanPos;
             QPoint offset = QPoint(m_d->initialDragPanValue.x() - diff.x(),
                                    m_d->initialDragPanValue.y() - diff.y());

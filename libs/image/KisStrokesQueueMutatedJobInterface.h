@@ -8,6 +8,7 @@
 #define KISSTROKESQUEUEMUTATEDJOBINTERFACE_H
 
 #include "kis_types.h"
+#include "KisLodPreferences.h"
 
 class KisStrokeJobData;
 
@@ -17,6 +18,7 @@ public:
     virtual ~KisStrokesQueueMutatedJobInterface();
 
     virtual void addMutatedJobs(KisStrokeId strokeId, const QVector<KisStrokeJobData*> list) = 0;
+    virtual KisLodPreferences lodPreferences() const = 0;
 };
 
 #endif // KISSTROKESQUEUEMUTATEDJOBINTERFACE_H

@@ -408,9 +408,7 @@ void KisUpdateSchedulerTest::testLodSync()
 
     QCOMPARE(paintLayer1->name(), QString("paint1"));
 
-
-    image->setLevelOfDetailBlocked(false);
-    image->setDesiredLevelOfDetail(2);
+    image->setLodPreferences(KisLodPreferences(2));
 
     image->explicitRegenerateLevelOfDetail();
 

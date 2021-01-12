@@ -17,6 +17,7 @@ KisStrokeStrategy::KisStrokeStrategy(const QLatin1String &id, const KUndo2MagicS
       m_requestsOtherStrokesToEnd(true),
       m_canForgetAboutMe(false),
       m_needsExplicitCancel(false),
+      m_forceLodModeIfPossible(false),
       m_balancingRatioOverride(-1.0),
       m_id(id),
       m_name(name),
@@ -31,6 +32,7 @@ KisStrokeStrategy::KisStrokeStrategy(const KisStrokeStrategy &rhs)
       m_requestsOtherStrokesToEnd(rhs.m_requestsOtherStrokesToEnd),
       m_canForgetAboutMe(rhs.m_canForgetAboutMe),
       m_needsExplicitCancel(rhs.m_needsExplicitCancel),
+      m_forceLodModeIfPossible(rhs.m_forceLodModeIfPossible),
       m_balancingRatioOverride(rhs.m_balancingRatioOverride),
       m_id(rhs.m_id),
       m_name(rhs.m_name),
@@ -38,6 +40,16 @@ KisStrokeStrategy::KisStrokeStrategy(const KisStrokeStrategy &rhs)
 {
     KIS_ASSERT_RECOVER_NOOP(!rhs.m_strokeId && !m_mutatedJobsInterface &&
                             "After the stroke has been started, no copying must happen");
+}
+
+bool KisStrokeStrategy::forceLodModeIfPossible() const
+{
+    return m_forceLodModeIfPossible;
+}
+
+void KisStrokeStrategy::setForceLodModeIfPossible(bool value)
+{
+    m_forceLodModeIfPossible = value;
 }
 
 KisStrokeStrategy::~KisStrokeStrategy()
@@ -131,6 +143,12 @@ QString KisStrokeStrategy::id() const
 KUndo2MagicString KisStrokeStrategy::name() const
 {
     return m_name;
+}
+
+KisLodPreferences KisStrokeStrategy::currentLodPreferences() const
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(m_mutatedJobsInterface, KisLodPreferences());
+    return m_mutatedJobsInterface->lodPreferences();
 }
 
 void KisStrokeStrategy::setMutatedJobsInterface(KisStrokesQueueMutatedJobInterface *mutatedJobsInterface, KisStrokeId strokeId)

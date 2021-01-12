@@ -835,6 +835,7 @@ void KisMeshTransformStrategy::Private::recalculateTransformations()
     }
 
     Q_EMIT q->requestCanvasUpdate();
+    Q_EMIT q->requestImageRecalculation();
 }
 
 #include "moc_kis_mesh_transform_strategy.cpp"

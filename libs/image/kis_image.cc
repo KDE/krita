@@ -231,8 +231,6 @@ public:
 
     KisCompositeProgressProxy compositeProgressProxy;
 
-    bool blockLevelOfDetail = false;
-
     QPointF axesCenter;
     bool allowMasksOnRootNode = false;
 
@@ -453,8 +451,6 @@ void KisImage::copyFromImageImpl(const KisImage &rhs, int policy)
     KIS_ASSERT_RECOVER_NOOP(rhs.m_d->projectionUpdatesFilters.isEmpty());
     KIS_ASSERT_RECOVER_NOOP(!rhs.m_d->disableUIUpdateSignals);
     KIS_ASSERT_RECOVER_NOOP(!rhs.m_d->disableDirtyRequests);
-
-    m_d->blockLevelOfDetail = rhs.m_d->blockLevelOfDetail;
 
 #undef EMIT_IF_NEEDED
 }
@@ -2062,12 +2058,33 @@ void KisImage::requestProjectionUpdateNoFilthy(KisNodeSP pseudoFilthy, const QRe
 
 void KisImage::requestProjectionUpdateNoFilthy(KisNodeSP pseudoFilthy, const QRect &rc, const QRect &cropRect, const bool resetAnimationCache)
 {
+    requestProjectionUpdateNoFilthy(pseudoFilthy, QVector<QRect>({rc}), cropRect, resetAnimationCache);
+}
+
+void KisImage::requestProjectionUpdateNoFilthy(KisNodeSP pseudoFilthy, const QVector<QRect> &rects, const QRect &cropRect, const bool resetAnimationCache)
+{
     KIS_ASSERT_RECOVER_RETURN(pseudoFilthy);
 
-    if (resetAnimationCache) {
-        m_d->animationInterface->notifyNodeChanged(pseudoFilthy.data(), rc, false);
+    /**
+     * We iterate through the filters in a reversed way. It makes the most nested filters
+     * to execute first.
+     */
+    for (auto it = m_d->projectionUpdatesFilters.rbegin();
+         it != m_d->projectionUpdatesFilters.rend();
+         ++it) {
+
+        KIS_SAFE_ASSERT_RECOVER(*it) { continue; }
+
+        if ((*it)->filterProjectionUpdateNoFilthy(this, pseudoFilthy.data(), rects, cropRect, resetAnimationCache)) {
+            return;
+        }
     }
-    m_d->scheduler.updateProjectionNoFilthy(pseudoFilthy, rc, cropRect);
+
+    if (resetAnimationCache) {
+        m_d->animationInterface->notifyNodeChanged(pseudoFilthy.data(), rects, false);
+    }
+
+    m_d->scheduler.updateProjectionNoFilthy(pseudoFilthy, rects, cropRect);
 }
 
 void KisImage::addSpontaneousJob(KisSpontaneousJob *spontaneousJob)
@@ -2379,47 +2396,28 @@ bool KisImage::wrapAroundModeActive() const
         m_d->scheduler.wrapAroundModeSupported();
 }
 
-void KisImage::setDesiredLevelOfDetail(int lod)
-{
-    if (m_d->blockLevelOfDetail) {
-        qWarning() << "WARNING: KisImage::setDesiredLevelOfDetail()"
-                   << "was called while LoD functionality was being blocked!";
-        return;
-    }
-
-    m_d->scheduler.setDesiredLevelOfDetail(lod);
-}
-
 int KisImage::currentLevelOfDetail() const
 {
-    if (m_d->blockLevelOfDetail) {
-        return 0;
-    }
-
     return m_d->scheduler.currentLevelOfDetail();
-}
-
-void KisImage::setLevelOfDetailBlocked(bool value)
-{
-    KisImageBarrierLockerRaw l(this);
-
-    if (value && !m_d->blockLevelOfDetail) {
-        m_d->scheduler.setDesiredLevelOfDetail(0);
-    }
-
-    m_d->blockLevelOfDetail = value;
 }
 
 void KisImage::explicitRegenerateLevelOfDetail()
 {
-    if (!m_d->blockLevelOfDetail) {
+    const KisLodPreferences pref = m_d->scheduler.lodPreferences();
+
+    if (pref.lodSupported() && pref.lodPreferred()) {
         m_d->scheduler.explicitRegenerateLevelOfDetail();
     }
 }
 
-bool KisImage::levelOfDetailBlocked() const
+void KisImage::setLodPreferences(const KisLodPreferences &value)
 {
-    return m_d->blockLevelOfDetail;
+    m_d->scheduler.setLodPreferences(value);
+}
+
+KisLodPreferences KisImage::lodPreferences() const
+{
+    return m_d->scheduler.lodPreferences();
 }
 
 void KisImage::nodeCollapsedChanged(KisNode * node)

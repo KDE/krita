@@ -556,3 +556,33 @@ void ToolTransformArgs::setMeshSymmetricalHandles(bool value)
     KConfigGroup configGroup =  KSharedConfig::openConfig()->group("KisToolTransform");
     configGroup.writeEntry("meshSymmetricalHandles", value);
 }
+
+void ToolTransformArgs::transformSrcAndDst(const QTransform &t)
+{
+    if (m_mode == FREE_TRANSFORM) {
+        m_transformedCenter = t.map(m_transformedCenter);
+        m_originalCenter = t.map(m_originalCenter);
+
+    } else if (m_mode == PERSPECTIVE_4POINT) {
+        m_transformedCenter = t.map(m_transformedCenter);
+        m_originalCenter = t.map(m_originalCenter);
+
+        m_flattenedPerspectiveTransform = t.inverted() * m_flattenedPerspectiveTransform * t;
+
+
+    } else if(m_mode == WARP || m_mode == CAGE) {
+        for (auto it = m_origPoints.begin(); it != m_origPoints.end(); ++it) {
+            *it = t.map(*it);
+        }
+
+        for (auto it = m_transfPoints.begin(); it != m_transfPoints.end(); ++it) {
+            *it = t.map(*it);
+        }
+    } else if (m_mode == LIQUIFY) {
+        m_liquifyWorker->transformSrcAndDst(t);
+    } else if (m_mode == MESH) {
+        m_meshTransform.transformSrcAndDst(t);
+    } else {
+        KIS_ASSERT_RECOVER_NOOP(0 && "unknown transform mode");
+    }
+}

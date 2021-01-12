@@ -38,7 +38,7 @@ void MoveSelectionStrokeTest::test()
     QScopedPointer<KoCanvasResourceProvider> manager(
         utils::createResourceManager(image));
 
-    image->setDesiredLevelOfDetail(2);
+    image->setLodPreferences(KisLodPreferences(2));
     image->waitForDone();
 
     KisResourcesSnapshotSP resources =

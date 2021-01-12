@@ -298,5 +298,6 @@ void KisLiquifyTransformStrategy::Private::recalculateTransformations()
     }
 
     handlesTransform = scaleTransform;
+    emit q->requestImageRecalculation();
 }
 

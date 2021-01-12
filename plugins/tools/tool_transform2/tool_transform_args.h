@@ -310,6 +310,8 @@ public:
     bool meshScaleHandles() const;
     void setMeshScaleHandles(bool meshScaleHandles);
 
+    void transformSrcAndDst(const QTransform &t);
+
 private:
     void clear();
     void init(const ToolTransformArgs& args);

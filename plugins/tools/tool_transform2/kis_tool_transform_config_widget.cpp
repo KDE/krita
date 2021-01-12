@@ -301,6 +301,8 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     connect(chkSymmetricalHandles, SIGNAL(toggled(bool)), this, SLOT(slotMeshSymmetricalHandlesChanged()));
     connect(intNumColumns, SIGNAL(valueChanged(int)), this, SLOT(slotMeshSizeChanged()));
     connect(intNumRows, SIGNAL(valueChanged(int)), this, SLOT(slotMeshSizeChanged()));
+    connect(intNumColumns, SIGNAL(editingFinished()), this, SLOT(notifyEditingFinished()));
+    connect(intNumRows, SIGNAL(editingFinished()), this, SLOT(notifyEditingFinished()));
 
     // Mode switch buttons
     connect(freeTransformButton, SIGNAL(clicked(bool)), this, SLOT(slotSetFreeTransformModeButtonClicked(bool)));
@@ -1303,6 +1305,7 @@ void KisToolTransformConfigWidget::slotMeshShowHandlesChanged()
     ToolTransformArgs *config = m_transaction->currentConfig();
     config->setMeshShowHandles(this->chkShowControlPoints->isChecked());
     notifyConfigChanged();
+    notifyEditingFinished();
 }
 
 void KisToolTransformConfigWidget::slotMeshSymmetricalHandlesChanged()
@@ -1311,4 +1314,5 @@ void KisToolTransformConfigWidget::slotMeshSymmetricalHandlesChanged()
     ToolTransformArgs *config = m_transaction->currentConfig();
     config->setMeshSymmetricalHandles(this->chkSymmetricalHandles->isChecked());
     notifyConfigChanged();
+    notifyEditingFinished();
 }

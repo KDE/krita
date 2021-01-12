@@ -63,6 +63,9 @@ KisPreviewFileDialog::KisPreviewFileDialog(QWidget *parent, const QString &capti
 
 void KisPreviewFileDialog::resetIconProvider()
 {
+
+    qDebug() << mimeTypeFilters();
+
     QSplitter *splitter = findChild<QSplitter*>();
     if (splitter) {
         splitter->addWidget(m_preview);
@@ -84,7 +87,7 @@ void KisPreviewFileDialog::onCurrentChanged(const QString &path)
 {
     if (m_preview) {
         QIcon icon;
-        if (s_iconCreator && s_iconCreator->createFileIcon(path, icon, devicePixelRatioF(), QSize(512, 512))) {
+        if (s_iconCreator && s_iconCreator->createFileIcon(path, icon, devicePixelRatioF(), QSize(512, 512), true)) {
             m_preview->setPixmap(icon.pixmap(m_preview->width(), m_preview->height()));
         }
         else {

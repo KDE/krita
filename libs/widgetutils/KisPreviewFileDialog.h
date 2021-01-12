@@ -34,7 +34,7 @@ public:
     KisAbstractFileIconCreator();
     virtual ~KisAbstractFileIconCreator();
 
-    virtual bool createFileIcon(QString path, QIcon &icon, qreal devicePixelRatioF, QSize iconSize) = 0;
+    virtual bool createFileIcon(QString path, QIcon &icon, qreal devicePixelRatioF, QSize iconSize, bool dontUpsize = false) = 0;
 
 };
 

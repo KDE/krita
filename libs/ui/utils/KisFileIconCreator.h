@@ -35,7 +35,7 @@ public:
      * @param iconSize size of the icon
      * @return true if icon was created successfully, false if not (for example the file doesn't exist)
      */
-    bool createFileIcon(QString path, QIcon &icon, qreal devicePixelRatioF, QSize iconSize) override;
+    bool createFileIcon(QString path, QIcon &icon, qreal devicePixelRatioF, QSize iconSize, bool dontUpsize = false) override;
 };
 
 #endif // KIS_FILE_ICON_CREATOR_H

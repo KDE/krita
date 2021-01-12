@@ -15,7 +15,6 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-
 #include "kis_small_color_widget.h"
 #include <QTimer>
 #include "kis_slider_spin_box.h"
@@ -79,13 +78,13 @@ struct KisSmallColorWidget::Private {
 
         if (!result || result->colorModelId() != RGBAColorModelID) {
             result = outputColorSpace();
-        } else if (result->colorDepthId() != Float32BitsColorDepthID) {
+        } else if (result && result->colorDepthId() != Float32BitsColorDepthID) {
             result = KoColorSpaceRegistry::instance()->
                 colorSpace(RGBAColorModelID.id(), Float32BitsColorDepthID.id(), result->profile());
         }
 
         // PQ color space we deliniearize into linear one
-        if (result->colorModelId() == RGBAColorModelID &&
+        if (result && result->colorModelId() == RGBAColorModelID &&
             result->profile()->uniqueId() == KoColorSpaceRegistry::instance()->p2020PQProfile()->uniqueId()) {
 
             result = KoColorSpaceRegistry::instance()->

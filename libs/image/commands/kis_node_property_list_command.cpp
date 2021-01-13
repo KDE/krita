@@ -117,6 +117,15 @@ bool KisNodePropertyListCommand::canMergeWith(const KUndo2Command *command) cons
              changedProperties(other->m_oldPropertyList, other->m_newPropertyList));
 }
 
+bool KisNodePropertyListCommand::annihilateWith(const KUndo2Command *command)
+{
+    const KisNodePropertyListCommand *other =
+        dynamic_cast<const KisNodePropertyListCommand*>(command);
+
+    return other && other->m_node == m_node &&
+            changedProperties(m_oldPropertyList, other->m_newPropertyList).isEmpty();
+}
+
 bool checkOnionSkinChanged(const KisBaseNode::PropertyList &oldPropertyList,
                            const KisBaseNode::PropertyList &newPropertyList)
 {
@@ -184,15 +193,7 @@ void KisNodePropertyListCommand::doUpdate(const KisBaseNode::PropertyList &oldPr
 
 void KisNodePropertyListCommand::setNodePropertiesAutoUndo(KisNodeSP node, KisImageSP image, PropertyList proplist)
 {
-    QSet<QString> changedProps = changedProperties(node->sectionModelProperties(),
-                                                         proplist);
-
-    changedProps.remove(KisLayerPropertiesIcons::visible.id());
-    changedProps.remove(KisLayerPropertiesIcons::locked.id());
-    changedProps.remove(KisLayerPropertiesIcons::selectionActive.id());
-    changedProps.remove(KisLayerPropertiesIcons::alphaLocked.id());
-    changedProps.remove(KisLayerPropertiesIcons::colorizeNeedsUpdate.id());
-    const bool undo = !changedProps.isEmpty();
+    const bool undo = !changedProperties(node->sectionModelProperties(), proplist).isEmpty();
 
     QScopedPointer<KUndo2Command> cmd(new KisNodePropertyListCommand(node, proplist));
 
@@ -214,10 +215,9 @@ void KisNodePropertyListCommand::setNodePropertiesAutoUndo(KisNodeSP node, KisIm
          */
 
         struct SimpleLodResettingStroke : public KisSimpleStrokeStrategy {
-            SimpleLodResettingStroke(KUndo2Command *cmd, KisImageSP image)
+            SimpleLodResettingStroke(KUndo2Command *cmd)
                 : KisSimpleStrokeStrategy(QLatin1String("SimpleLodResettingStroke")),
-                  m_cmd(cmd),
-                  m_image(image)
+                  m_cmd(cmd)
             {
                 setClearsRedoOnStart(false);
                 this->enableJob(JOB_INIT, true);
@@ -225,15 +225,13 @@ void KisNodePropertyListCommand::setNodePropertiesAutoUndo(KisNodeSP node, KisIm
 
             void initStrokeCallback() override {
                 m_cmd->redo();
-                m_image->setModifiedWithoutUndo();
             }
 
         private:
             QScopedPointer<KUndo2Command> m_cmd;
-            KisImageSP m_image;
         };
 
-        KisStrokeId strokeId = image->startStroke(new SimpleLodResettingStroke(cmd.take(), image));
+        KisStrokeId strokeId = image->startStroke(new SimpleLodResettingStroke(cmd.take()));
         image->endStroke(strokeId);
     }
 

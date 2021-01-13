@@ -10,6 +10,7 @@
 #include <kactioncollection.h>
 
 #include <kis_action_registry.h>
+#include <KoToolManager.h>
 
 #include <QKeySequence>
 #include <QAction>
@@ -49,7 +50,11 @@ QList<QAction *> KoToolFactoryBase::createActions(KActionCollection *actionColle
 
     KisActionRegistry *actionRegistry = KisActionRegistry::instance();
     QList<QAction*> actions = createActionsImpl();
-    actions << actionRegistry->makeQAction(id());
+    QAction *action = actionRegistry->makeQAction(id());
+    actionCollection->addAction(id(), action);
+    connect(action, SIGNAL(triggered()), SLOT(activateTool()));
+    //qDebug() << action << action->shortcut();
+
 
     Q_FOREACH(QAction *action, actions) {
         if (action->objectName().isEmpty()) {
@@ -198,5 +203,10 @@ void KoToolFactoryBase::setShortcut(const QKeySequence &shortcut)
 QList<QAction *> KoToolFactoryBase::createActionsImpl()
 {
     return QList<QAction *>();
+}
+
+void KoToolFactoryBase::activateTool()
+{
+    KoToolManager::instance()->switchToolRequested(sender()->objectName());
 }
 

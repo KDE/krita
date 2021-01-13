@@ -10,6 +10,7 @@
 
 #include "kis_transform_mask_adapter.h"
 #include "kritatooltransform_export.h"
+#include <qmath.h>
 
 class KisKeyframeChannel;
 
@@ -51,7 +52,8 @@ public:
     static KisTransformMaskParamsInterfaceSP makeAnimated(KisTransformMaskParamsInterfaceSP params, const KisTransformMaskSP mask);
     static void makeScalarKeyframeOnMask(KisTransformMaskSP mask, const KoID &channelId, int time, qreal value, KUndo2Command *parentCommand);
     static void addKeyframes(KisTransformMaskSP mask, int time, KisTransformMaskParamsInterfaceSP params, KUndo2Command *parentCommand);
-    
+    static qreal degToRad(qreal degrees) {return degrees / 360 * 2 * M_PI;}
+
 private:
     struct Private;
     const QScopedPointer<Private> m_d;

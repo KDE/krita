@@ -29,7 +29,7 @@
 
 #define INFO_DEBUG 0
 
-template<typename channels_type, typename pixel_type, bool alphaLocked, bool allChannelsFlag>
+template<typename channels_type, bool alphaLocked, bool allChannelsFlag>
 struct OverCompositor128 {
     struct ParamsWrapper {
         ParamsWrapper(const KoCompositeOp::ParameterInfo& params)
@@ -266,7 +266,7 @@ public:
         if (params.channelFlags.isEmpty() ||
             params.channelFlags == QBitArray(4, true)) {
 
-            KoStreamedMath<_impl>::template genericComposite128<haveMask, false, OverCompositor128<float, quint32, false, true> >(params);
+            KoStreamedMath<_impl>::template genericComposite128<haveMask, false, OverCompositor128<float, false, true> >(params);
         } else {
             const bool allChannelsFlag =
                 params.channelFlags.at(0) &&
@@ -277,11 +277,11 @@ public:
                 !params.channelFlags.at(3);
 
             if (allChannelsFlag && alphaLocked) {
-                KoStreamedMath<_impl>::template genericComposite128_novector<haveMask, false, OverCompositor128<float, quint32, true, true> >(params);
+                KoStreamedMath<_impl>::template genericComposite128_novector<haveMask, false, OverCompositor128<float, true, true> >(params);
             } else if (!allChannelsFlag && !alphaLocked) {
-                KoStreamedMath<_impl>::template genericComposite128_novector<haveMask, false, OverCompositor128<float, quint32, false, false> >(params);
+                KoStreamedMath<_impl>::template genericComposite128_novector<haveMask, false, OverCompositor128<float, false, false> >(params);
             } else /*if (!allChannelsFlag && alphaLocked) */{
-                KoStreamedMath<_impl>::template genericComposite128_novector<haveMask, false, OverCompositor128<float, quint32, true, false> >(params);
+                KoStreamedMath<_impl>::template genericComposite128_novector<haveMask, false, OverCompositor128<float, true, false> >(params);
             }
         }
     }

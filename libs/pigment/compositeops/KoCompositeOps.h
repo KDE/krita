@@ -94,19 +94,9 @@ template<>
 struct OptimizedOpsSelector<KoRgbF32Traits>
 {
     static KoCompositeOp* createAlphaDarkenOp(const KoColorSpace *cs) {
-
-        // TODO: optimized code is disabled for 4.2 release,
-        // because it causes bug https://bugs.kde.org/show_bug.cgi?id=404133
-        if (useCreamyAlphaDarken()) {
-            return new KoCompositeOpAlphaDarken<KoRgbF32Traits, KoAlphaDarkenParamsWrapperCreamy>(cs);
-        } else {
-            return new KoCompositeOpAlphaDarken<KoRgbF32Traits, KoAlphaDarkenParamsWrapperHard>(cs);
-        }
-
-        // TODO: please restore this optimized version when the bug is fixed
-        //        return useCreamyAlphaDarken() ?
-        //            KoOptimizedCompositeOpFactory::createAlphaDarkenOpCreamy128(cs) :
-        //            KoOptimizedCompositeOpFactory::createAlphaDarkenOpHard128(cs);
+        return useCreamyAlphaDarken() ?
+            KoOptimizedCompositeOpFactory::createAlphaDarkenOpCreamy128(cs) :
+            KoOptimizedCompositeOpFactory::createAlphaDarkenOpHard128(cs);
 
     }
     static KoCompositeOp* createOverOp(const KoColorSpace *cs) {

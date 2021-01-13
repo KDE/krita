@@ -398,7 +398,7 @@ Q_SIGNALS:
      * Emitted when this tool wants itself to temporarily be replaced by another tool.
      * For instance, a paint tool could desire to be
      * temporarily replaced by a pan tool which could be temporarily
-     * replaced by a colorpicker.
+     * replaced by a color sampler.
      * @param id the identification of the desired tool
      */
     void activateTemporary(const QString &id);

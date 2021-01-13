@@ -231,7 +231,7 @@ void KisShadeSelectorLine::mouseMoveEvent(QMouseEvent *e)
     if ((m_isDown) && (e->buttons() & Qt::LeftButton)) {
         m_mouseX=e->x();
         const QPoint mouseEv ((qBound(5.0,m_mouseX,m_width-5)),5);
-        KoColor color(Acs::pickColor(m_realPixelCache, mouseEv));
+        KoColor color(Acs::sampleColor(m_realPixelCache, mouseEv));
         m_parentProxy->updateColorPreview(color);
         update();
     }
@@ -245,7 +245,7 @@ void KisShadeSelectorLine::mouseReleaseEvent(QMouseEvent * e)
     }
     m_mouseX=e->x();
     const QPoint mouseEv ((qBound(5.0,m_mouseX,m_width-5)),5);
-    KoColor color(Acs::pickColor(m_realPixelCache, mouseEv));
+    KoColor color(Acs::sampleColor(m_realPixelCache, mouseEv));
     m_parentProxy->updateColorPreview(color);
     Acs::ColorRole role = Acs::buttonToRole(e->button());
 

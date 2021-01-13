@@ -128,7 +128,7 @@ void KisSPenSettings::loadDefaultPreferences()
     mUi->cmbGestureSwipeUp->setCurrentIndex(indexFromActionName(QString("make_brush_color_lighter")));
     mUi->cmbGestureSwipeDown->setCurrentIndex(indexFromActionName(QString("make_brush_color_darker")));
     mUi->cmbGestureSwipeLeft->setCurrentIndex(indexFromActionName(QString("KritaShape/KisToolBrush")));
-    mUi->cmbGestureSwipeRight->setCurrentIndex(indexFromActionName(QString("KritaSelected/KisToolColorPicker")));
+    mUi->cmbGestureSwipeRight->setCurrentIndex(indexFromActionName(QString("KritaSelected/KisToolColorSampler")));
     mUi->cmbGestureCircleCW->setCurrentIndex(indexFromActionName(QString("shift_brush_color_clockwise")));
     mUi->cmbGestureCircleCCW->setCurrentIndex(indexFromActionName(QString("shift_brush_color_counter_clockwise")));
 }

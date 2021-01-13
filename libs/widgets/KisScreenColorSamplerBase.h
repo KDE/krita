@@ -5,23 +5,23 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef KISSCREENCOLORPICKERBASE_H
-#define KISSCREENCOLORPICKERBASE_H
+#ifndef KISSCREENCOLORSAMPLERBASE_H
+#define KISSCREENCOLORSAMPLERBASE_H
 #include <QWidget>
 #include "kritawidgets_export.h"
 
 class KoColor;
 
-class KRITAWIDGETS_EXPORT KisScreenColorPickerBase : public QWidget
+class KRITAWIDGETS_EXPORT KisScreenColorSamplerBase : public QWidget
 {
     Q_OBJECT
 public:
-    KisScreenColorPickerBase(QWidget *parent = 0) : QWidget(parent) { }
-    virtual ~KisScreenColorPickerBase() { }
+    KisScreenColorSamplerBase(QWidget *parent = 0) : QWidget(parent) { }
+    virtual ~KisScreenColorSamplerBase() { }
     /// reloads icon(s) when theme is updated
     virtual void updateIcons() = 0;
 Q_SIGNALS:
-    void sigNewColorPicked(KoColor);
+    void sigNewColorSampled(KoColor);
 };
 
-#endif // KISSCREENCOLORPICKERBASE_H
+#endif // KISSCREENCOLORSAMPLERBASE_H

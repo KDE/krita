@@ -65,7 +65,7 @@ set(kritawidgets_LIB_SRCS
     KisVisualEllipticalSelectorShape.cpp
     KisVisualRectangleSelectorShape.cpp
     KisVisualTriangleSelectorShape.cpp
-    KisScreenColorPickerBase.cpp
+    KisScreenColorSamplerBase.cpp
     KisDlgInternalColorSelector.cpp
 
     KisPaletteModel.cpp

@@ -1,5 +1,5 @@
 /* XPM */
-static char * color_picker_image_background_xpm[] = {
+static char * color_sampler_image_background_xpm[] = {
 "33 31 3 1",
 " 	c None",
 ".	c #FFFFFF",

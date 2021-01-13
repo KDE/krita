@@ -61,14 +61,14 @@
 #include <brushengine/kis_paintop_preset.h>
 #include <kis_action_manager.h>
 #include <kis_action.h>
-#include "strokes/kis_color_picker_stroke_strategy.h"
+#include "strokes/kis_color_sampler_stroke_strategy.h"
 
 
 KisToolPaint::KisToolPaint(KoCanvasBase *canvas, const QCursor &cursor)
     : KisTool(canvas, cursor),
       m_showColorPreview(false),
       m_colorPreviewShowComparePlate(false),
-      m_colorPickerDelayTimer(),
+      m_colorSamplerDelayTimer(),
       m_isOutlineEnabled(true)
 {
     m_specialHoverModifier = false;
@@ -95,14 +95,14 @@ KisToolPaint::KisToolPaint(KoCanvasBase *canvas, const QCursor &cursor)
 
     connect(this, SIGNAL(sigPaintingFinished()), kiscanvas->viewManager()->canvasResourceProvider(), SLOT(slotPainting()));
 
-    m_colorPickerDelayTimer.setSingleShot(true);
-    connect(&m_colorPickerDelayTimer, SIGNAL(timeout()), this, SLOT(activatePickColorDelayed()));
+    m_colorSamplerDelayTimer.setSingleShot(true);
+    connect(&m_colorSamplerDelayTimer, SIGNAL(timeout()), this, SLOT(activateSampleColorDelayed()));
 
     using namespace std::placeholders; // For _1 placeholder
-    std::function<void(PickingJob)> callback =
-        std::bind(&KisToolPaint::addPickerJob, this, _1);
-    m_colorPickingCompressor.reset(
-        new PickingCompressor(100, callback, KisSignalCompressor::FIRST_ACTIVE));
+    std::function<void(SamplingJob)> callback =
+        std::bind(&KisToolPaint::addSamplerJob, this, _1);
+    m_colorSamplingCompressor.reset(
+        new SamplingCompressor(100, callback, KisSignalCompressor::FIRST_ACTIVE));
 }
 
 
@@ -232,7 +232,7 @@ void KisToolPaint::setMode(ToolMode mode)
     KisTool::setMode(mode);
 }
 
-void KisToolPaint::activatePickColor(AlternateAction action)
+void KisToolPaint::activateSampleColor(AlternateAction action)
 {
     m_showColorPreview = true;
 
@@ -251,7 +251,7 @@ void KisToolPaint::activatePickColor(AlternateAction action)
     }
 }
 
-void KisToolPaint::deactivatePickColor(AlternateAction action)
+void KisToolPaint::deactivateSampleColor(AlternateAction action)
 {
     Q_UNUSED(action);
 
@@ -260,7 +260,7 @@ void KisToolPaint::deactivatePickColor(AlternateAction action)
     m_colorPreviewCurrentColor = QColor();
 }
 
-void KisToolPaint::pickColorWasOverridden()
+void KisToolPaint::sampleColorWasOverridden()
 {
     m_colorPreviewShowComparePlate = false;
     m_colorPreviewBaseColor = QColor();
@@ -269,40 +269,40 @@ void KisToolPaint::pickColorWasOverridden()
 void KisToolPaint::activateAlternateAction(AlternateAction action)
 {
     switch (action) {
-    case PickFgNode:
+    case SampleFgNode:
         Q_FALLTHROUGH();
-    case PickBgNode:
+    case SampleBgNode:
         Q_FALLTHROUGH();
-    case PickFgImage:
+    case SampleFgImage:
         Q_FALLTHROUGH();
-    case PickBgImage:
+    case SampleBgImage:
         delayedAction = action;
-        m_colorPickerDelayTimer.start(100);
+        m_colorSamplerDelayTimer.start(100);
         Q_FALLTHROUGH();
     default:
-        pickColorWasOverridden();
+        sampleColorWasOverridden();
         KisTool::activateAlternateAction(action);
     };
 }
 
-void KisToolPaint::activatePickColorDelayed()
+void KisToolPaint::activateSampleColorDelayed()
 {
     switch (delayedAction) {
-        case PickFgNode:
-        useCursor(KisCursor::pickerLayerForegroundCursor());
-        activatePickColor(delayedAction);
+        case SampleFgNode:
+        useCursor(KisCursor::samplerLayerForegroundCursor());
+        activateSampleColor(delayedAction);
         break;
-    case PickBgNode:
-        useCursor(KisCursor::pickerLayerBackgroundCursor());
-        activatePickColor(delayedAction);
+    case SampleBgNode:
+        useCursor(KisCursor::samplerLayerBackgroundCursor());
+        activateSampleColor(delayedAction);
         break;
-    case PickFgImage:
-        useCursor(KisCursor::pickerImageForegroundCursor());
-        activatePickColor(delayedAction);
+    case SampleFgImage:
+        useCursor(KisCursor::samplerImageForegroundCursor());
+        activateSampleColor(delayedAction);
         break;
-    case PickBgImage:
-        useCursor(KisCursor::pickerImageBackgroundCursor());
-        activatePickColor(delayedAction);
+    case SampleBgImage:
+        useCursor(KisCursor::samplerImageBackgroundCursor());
+        activateSampleColor(delayedAction);
         break;
     default:
         break;
@@ -311,40 +311,40 @@ void KisToolPaint::activatePickColorDelayed()
     repaintDecorations();
 }
 
-bool KisToolPaint::isPickingAction(AlternateAction action) {
-    return action == PickFgNode ||
-        action == PickBgNode ||
-        action == PickFgImage ||
-        action == PickBgImage;
+bool KisToolPaint::isSamplingAction(AlternateAction action) {
+    return action == SampleFgNode ||
+        action == SampleBgNode ||
+        action == SampleFgImage ||
+        action == SampleBgImage;
 }
 
 void KisToolPaint::deactivateAlternateAction(AlternateAction action)
 {
-    if (!isPickingAction(action)) {
+    if (!isSamplingAction(action)) {
         KisTool::deactivateAlternateAction(action);
         return;
     }
 
     delayedAction = KisTool::NONE;
-    m_colorPickerDelayTimer.stop();
+    m_colorSamplerDelayTimer.stop();
 
     resetCursorStyle();
-    deactivatePickColor(action);
+    deactivateSampleColor(action);
 }
 
-void KisToolPaint::addPickerJob(const PickingJob &pickingJob)
+void KisToolPaint::addSamplerJob(const SamplingJob &samplingJob)
 {
     /**
-     * The actual picking is delayed by a compressor, so we can get this
+     * The actual sampling is delayed by a compressor, so we can get this
      * event when the stroke is already closed
      */
-    if (!m_pickerStrokeId) return;
+    if (!m_samplerStrokeId) return;
 
-    KIS_ASSERT_RECOVER_RETURN(isPickingAction(pickingJob.action));
+    KIS_ASSERT_RECOVER_RETURN(isSamplingAction(samplingJob.action));
 
-    const QPoint imagePoint = image()->documentToImagePixelFloored(pickingJob.documentPixel);
-    const bool fromCurrentNode = pickingJob.action == PickFgNode || pickingJob.action == PickBgNode;
-    m_pickingResource = colorPreviewResourceId(pickingJob.action);
+    const QPoint imagePoint = image()->documentToImagePixelFloored(samplingJob.documentPixel);
+    const bool fromCurrentNode = samplingJob.action == SampleFgNode || samplingJob.action == SampleBgNode;
+    m_samplingResource = colorPreviewResourceId(samplingJob.action);
 
     if (!fromCurrentNode) {
         auto *kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
@@ -353,37 +353,37 @@ void KisToolPaint::addPickerJob(const PickingJob &pickingJob)
         if (referencesLayer && kisCanvas->referenceImagesDecoration()->visible()) {
             QColor color = referencesLayer->getPixel(imagePoint);
             if (color.isValid() && color.alpha() != 0) {
-                slotColorPickingFinished(KoColor(color, image()->colorSpace()));
+                slotColorSamplingFinished(KoColor(color, image()->colorSpace()));
                 return;
             }
         }
     }
 
     KisPaintDeviceSP device = fromCurrentNode ?
-        currentNode()->colorPickSourceDevice() : image()->projection();
+        currentNode()->colorSampleSourceDevice() : image()->projection();
 
-    // Used for color picker blending.
+    // Used for color sampler blending.
     KoColor currentColor = canvas()->resourceManager()->foregroundColor();
-    if( pickingJob.action == PickBgNode || pickingJob.action == PickBgImage ){
+    if( samplingJob.action == SampleBgNode || samplingJob.action == SampleBgImage ){
         currentColor = canvas()->resourceManager()->backgroundColor();
     }
 
-    image()->addJob(m_pickerStrokeId,
-                    new KisColorPickerStrokeStrategy::Data(device, imagePoint, currentColor));
+    image()->addJob(m_samplerStrokeId,
+                    new KisColorSamplerStrokeStrategy::Data(device, imagePoint, currentColor));
 }
 
 void KisToolPaint::beginAlternateAction(KoPointerEvent *event, AlternateAction action)
 {
-    if (isPickingAction(action)) {
-        KIS_ASSERT_RECOVER_RETURN(!m_pickerStrokeId);
+    if (isSamplingAction(action)) {
+        KIS_ASSERT_RECOVER_RETURN(!m_samplerStrokeId);
         setMode(SECONDARY_PAINT_MODE);
 
-        KisColorPickerStrokeStrategy *strategy = new KisColorPickerStrokeStrategy();
-        connect(strategy, &KisColorPickerStrokeStrategy::sigColorUpdated,
-                this, &KisToolPaint::slotColorPickingFinished);
+        KisColorSamplerStrokeStrategy *strategy = new KisColorSamplerStrokeStrategy();
+        connect(strategy, &KisColorSamplerStrokeStrategy::sigColorUpdated,
+                this, &KisToolPaint::slotColorSamplingFinished);
 
-        m_pickerStrokeId = image()->startStroke(strategy);
-        m_colorPickingCompressor->start(PickingJob(event->point, action));
+        m_samplerStrokeId = image()->startStroke(strategy);
+        m_colorSamplingCompressor->start(SamplingJob(event->point, action));
         requestUpdateOutline(event->point, event);
     } else {
         KisTool::beginAlternateAction(event, action);
@@ -392,9 +392,9 @@ void KisToolPaint::beginAlternateAction(KoPointerEvent *event, AlternateAction a
 
 void KisToolPaint::continueAlternateAction(KoPointerEvent *event, AlternateAction action)
 {
-    if (isPickingAction(action)) {
-        KIS_ASSERT_RECOVER_RETURN(m_pickerStrokeId);
-        m_colorPickingCompressor->start(PickingJob(event->point, action));
+    if (isSamplingAction(action)) {
+        KIS_ASSERT_RECOVER_RETURN(m_samplerStrokeId);
+        m_colorSamplingCompressor->start(SamplingJob(event->point, action));
         requestUpdateOutline(event->point, event);
     } else {
         KisTool::continueAlternateAction(event, action);
@@ -403,10 +403,10 @@ void KisToolPaint::continueAlternateAction(KoPointerEvent *event, AlternateActio
 
 void KisToolPaint::endAlternateAction(KoPointerEvent *event, AlternateAction action)
 {
-    if (isPickingAction(action)) {
-        KIS_ASSERT_RECOVER_RETURN(m_pickerStrokeId);
-        image()->endStroke(m_pickerStrokeId);
-        m_pickerStrokeId.clear();
+    if (isSamplingAction(action)) {
+        KIS_ASSERT_RECOVER_RETURN(m_samplerStrokeId);
+        image()->endStroke(m_samplerStrokeId);
+        m_samplerStrokeId.clear();
         requestUpdateOutline(event->point, event);
         setMode(HOVER_MODE);
     } else {
@@ -416,17 +416,17 @@ void KisToolPaint::endAlternateAction(KoPointerEvent *event, AlternateAction act
 
 int KisToolPaint::colorPreviewResourceId(AlternateAction action)
 {
-    bool toForegroundColor = action == PickFgNode || action == PickFgImage;
+    bool toForegroundColor = action == SampleFgNode || action == SampleFgImage;
     int resource = toForegroundColor ?
         KoCanvasResource::ForegroundColor : KoCanvasResource::BackgroundColor;
 
     return resource;
 }
 
-void KisToolPaint::slotColorPickingFinished(KoColor color)
+void KisToolPaint::slotColorSamplingFinished(KoColor color)
 {
     color.setOpacity(OPACITY_OPAQUE_U8);
-    canvas()->resourceManager()->setResource(m_pickingResource, color);
+    canvas()->resourceManager()->setResource(m_samplingResource, color);
 
     if (!m_showColorPreview) return;
 
@@ -587,7 +587,7 @@ void KisToolPaint::slotPopupQuickHelp()
 
 void KisToolPaint::activatePrimaryAction()
 {
-    pickColorWasOverridden();
+    sampleColorWasOverridden();
     setOutlineEnabled(true);
     KisTool::activatePrimaryAction();
 }

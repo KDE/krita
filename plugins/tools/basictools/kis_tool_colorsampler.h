@@ -7,12 +7,12 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef KIS_TOOL_COLOR_PICKER_H_
-#define KIS_TOOL_COLOR_PICKER_H_
+#ifndef KIS_TOOL_COLOR_SAMPLER_H_
+#define KIS_TOOL_COLOR_SAMPLER_H_
 
 #include <QTimer>
 #include "KoToolFactoryBase.h"
-#include "ui_wdgcolorpicker.h"
+#include "ui_wdgcolorsampler.h"
 #include "kis_tool.h"
 #include <kis_icon.h>
 #include <KoColorSet.h>
@@ -20,27 +20,27 @@
 class KisResourceModel;
 
 namespace KisToolUtils {
-struct ColorPickerConfig;
+struct ColorSamplerConfig;
 }
 
-class ColorPickerOptionsWidget : public QWidget, public Ui::ColorPickerOptionsWidget
+class ColorSamplerOptionsWidget : public QWidget, public Ui::ColorSamplerOptionsWidget
 {
     Q_OBJECT
 
 public:
-    ColorPickerOptionsWidget(QWidget *parent) : QWidget(parent) {
+    ColorSamplerOptionsWidget(QWidget *parent) : QWidget(parent) {
         setupUi(this);
     }
 };
 
-class KisToolColorPicker : public KisTool
+class KisToolColorSampler : public KisTool
 {
     Q_OBJECT
     Q_PROPERTY(bool toForeground READ toForeground WRITE setToForeground NOTIFY toForegroundChanged)
 
 public:
-    KisToolColorPicker(KoCanvasBase *canvas);
-    ~KisToolColorPicker() override;
+    KisToolColorSampler(KoCanvasBase *canvas);
+    ~KisToolColorSampler() override;
 
 public:
     struct Configuration {
@@ -86,43 +86,43 @@ public Q_SLOTS:
     void slotSetColorSource(int value);
 
 private:
-    void displayPickedColor();
-    bool pickColor(const QPointF& pos);
+    void displaySampledColor();
+    bool sampleColor(const QPointF& pos);
     void updateOptionWidget();
 
     // Configuration
-    QScopedPointer<KisToolUtils::ColorPickerConfig> m_config;
+    QScopedPointer<KisToolUtils::ColorSamplerConfig> m_config;
 
     ToolActivation m_toolActivationSource {ToolActivation::DefaultActivation};
     bool m_isActivated {false};
 
-    KoColor m_pickedColor;
+    KoColor m_sampledColor;
 
     // Used to skip some tablet events and update color less often
-    QTimer m_colorPickerDelayTimer;
+    QTimer m_colorSamplerDelayTimer;
 
-    ColorPickerOptionsWidget *m_optionsWidget {0};
+    ColorSamplerOptionsWidget *m_optionsWidget {0};
     KisResourceModel *m_resourceModel {0};
 };
 
-class KisToolColorPickerFactory : public KoToolFactoryBase
+class KisToolColorSamplerFactory : public KoToolFactoryBase
 {
 public:
-    KisToolColorPickerFactory()
-            : KoToolFactoryBase("KritaSelected/KisToolColorPicker") {
-        setToolTip(i18n("Color Selector Tool"));
+    KisToolColorSamplerFactory()
+            : KoToolFactoryBase("KritaSelected/KisToolColorSampler") {
+        setToolTip(i18n("Color Sampler Tool"));
         setSection(TOOL_TYPE_FILL);
         setPriority(2);
-        setIconName(koIconNameCStr("krita_tool_color_picker"));
+        setIconName(koIconNameCStr("krita_tool_color_sampler"));
         setShortcut(QKeySequence(Qt::Key_P));
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
     }
 
-    ~KisToolColorPickerFactory() override {}
+    ~KisToolColorSamplerFactory() override {}
 
     KoToolBase *createTool(KoCanvasBase *canvas) override {
-        return new KisToolColorPicker(canvas);
+        return new KisToolColorSampler(canvas);
     }
 };
 
-#endif // KIS_TOOL_COLOR_PICKER_H_
+#endif // KIS_TOOL_COLOR_SAMPLER_H_

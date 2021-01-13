@@ -98,7 +98,7 @@
 #include <KisSessionResource.h>
 #include <resources/KoSvgSymbolCollectionResource.h>
 
-#include "widgets/KisScreenColorPicker.h"
+#include "widgets/KisScreenColorSampler.h"
 #include "KisDlgInternalColorSelector.h"
 
 #include <dialogs/KisAsyncAnimationFramesSaveDialog.h>

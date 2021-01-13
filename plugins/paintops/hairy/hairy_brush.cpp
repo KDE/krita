@@ -17,7 +17,7 @@
 
 #include <kis_types.h>
 #include <kis_random_accessor_ng.h>
-#include <kis_cross_device_color_picker.h>
+#include <kis_cross_device_color_sampler.h>
 #include <kis_fixed_paint_device.h>
 
 
@@ -419,7 +419,7 @@ double HairyBrush::computeMousePressure(double distance)
 void HairyBrush::colorifyBristles(KisPaintDeviceSP source, QPointF point)
 {
     KoColor bristleColor(m_dab->colorSpace());
-    KisCrossDeviceColorPickerInt colorPicker(source, bristleColor);
+    KisCrossDeviceColorSamplerInt colorSampler(source, bristleColor);
 
     Bristle *b = 0;
     int size = m_bristles.size();
@@ -428,7 +428,7 @@ void HairyBrush::colorifyBristles(KisPaintDeviceSP source, QPointF point)
         int x = qRound(b->x() + point.x());
         int y = qRound(b->y() + point.y());
 
-        colorPicker.pickOldColor(x, y, bristleColor.data());
+        colorSampler.sampleOldColor(x, y, bristleColor.data());
         b->setColor(bristleColor);
     }
 

@@ -4,7 +4,7 @@ endif ()
 
 set(kritadefaulttools_SOURCES
     default_tools.cc
-    kis_tool_colorpicker.cc
+    kis_tool_colorsampler.cc
     kis_tool_brush.cc
     kis_tool_line.cc
     kis_tool_line_helper.cpp
@@ -24,7 +24,7 @@ set(kritadefaulttools_SOURCES
     kis_tool_pan.cpp
     )
 
-ki18n_wrap_ui(kritadefaulttools_SOURCES wdgcolorpicker.ui wdgmovetool.ui wdgmultihandtool.ui)
+ki18n_wrap_ui(kritadefaulttools_SOURCES wdgcolorsampler.ui wdgmovetool.ui wdgmultihandtool.ui)
 qt5_add_resources(kritadefaulttools_SOURCES defaulttools.qrc )
 
 add_library(kritadefaulttools MODULE ${kritadefaulttools_SOURCES})

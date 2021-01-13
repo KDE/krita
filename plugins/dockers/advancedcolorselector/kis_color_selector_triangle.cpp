@@ -28,7 +28,7 @@ bool KisColorSelectorTriangle::containsPointInComponentCoords(int x, int y) cons
     QPoint triangleCoords = widgetToTriangleCoordinates(QPoint(x, y))*m_cacheDevicePixelRatioF;
 
     if (!m_realPixelCache) return false;
-    KoColor pixel = Acs::pickColor(m_realPixelCache, triangleCoords);
+    KoColor pixel = Acs::sampleColor(m_realPixelCache, triangleCoords);
     return pixel.opacityU8() == OPACITY_OPAQUE_U8;
 }
 

@@ -4,14 +4,14 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef __KIS_CROSS_DEVICE_COLOR_PICKER_H
-#define __KIS_CROSS_DEVICE_COLOR_PICKER_H
+#ifndef __KIS_CROSS_DEVICE_COLOR_SAMPLER_H
+#define __KIS_CROSS_DEVICE_COLOR_SAMPLER_H
 
 #include "KoColorSpace.h"
 #include "kis_random_sub_accessor.h"
 
 
-struct PickerTraitReal {
+struct SamplerTraitReal {
     typedef qreal coord_type;
     typedef KisRandomSubAccessorSP accessor_type;
     static inline accessor_type createAccessor(KisPaintDeviceSP dev) {
@@ -28,7 +28,7 @@ struct PickerTraitReal {
     }
 };
 
-struct PickerTraitInt {
+struct SamplerTraitInt {
     typedef int coord_type;
     typedef KisRandomConstAccessorSP accessor_type;
     static inline accessor_type createAccessor(KisPaintDeviceSP dev) {
@@ -46,11 +46,11 @@ struct PickerTraitInt {
 };
 
 /**
- * The picker class is supposed to help to pick color from one device
+ * The sampler class is supposed to help to sample color from one device
  * and automatically convert it to the color space of another device
  *
  * WARNING: Please note, that if you want to access correct rawData(),
- *          you shouldn't store the picker class (as well as any
+ *          you shouldn't store the sampler class (as well as any
  *          random accessor class) across different calls to
  *          paintAt. This is related to the fact that
  *          KisRandomAccessor has an internal cache of the tiles, but
@@ -59,35 +59,35 @@ struct PickerTraitInt {
  */
 
 template <class Traits>
-class KisCrossDeviceColorPickerImpl
+class KisCrossDeviceColorSamplerImpl
 {
 public:
-    KisCrossDeviceColorPickerImpl(KisPaintDeviceSP src, KisPaintDeviceSP dst) {
+    KisCrossDeviceColorSamplerImpl(KisPaintDeviceSP src, KisPaintDeviceSP dst) {
         init(src, dst);
     }
 
-    KisCrossDeviceColorPickerImpl(KisPaintDeviceSP src, KisFixedPaintDeviceSP dst) {
+    KisCrossDeviceColorSamplerImpl(KisPaintDeviceSP src, KisFixedPaintDeviceSP dst) {
         init(src, dst);
     }
 
-    KisCrossDeviceColorPickerImpl(KisPaintDeviceSP src, const KoColor &dst) {
+    KisCrossDeviceColorSamplerImpl(KisPaintDeviceSP src, const KoColor &dst) {
         init(src, &dst);
     }
 
-    ~KisCrossDeviceColorPickerImpl() {
+    ~KisCrossDeviceColorSamplerImpl() {
         delete[] m_data;
     }
 
-    inline void pickColor(typename Traits::coord_type x,
+    inline void sampleColor(typename Traits::coord_type x,
                           typename Traits::coord_type y,
                           quint8 *dst) {
-        pickColorImpl<false>(x, y, dst);
+        sampleColorImpl<false>(x, y, dst);
     }
 
-    inline void pickOldColor(typename Traits::coord_type x,
+    inline void sampleOldColor(typename Traits::coord_type x,
                              typename Traits::coord_type y,
                              quint8 *dst) {
-        pickColorImpl<true>(x, y, dst);
+        sampleColorImpl<true>(x, y, dst);
     }
 
 private:
@@ -101,7 +101,7 @@ private:
     }
 
     template <bool useOldData>
-    inline void pickColorImpl(typename Traits::coord_type x,
+    inline void sampleColorImpl(typename Traits::coord_type x,
                               typename Traits::coord_type y,
                               quint8 *dst) {
         m_accessor->moveTo(x, y);
@@ -120,7 +120,7 @@ private:
     quint8 *m_data;
 };
 
-typedef KisCrossDeviceColorPickerImpl<PickerTraitReal> KisCrossDeviceColorPicker;
-typedef KisCrossDeviceColorPickerImpl<PickerTraitInt> KisCrossDeviceColorPickerInt;
+typedef KisCrossDeviceColorSamplerImpl<SamplerTraitReal> KisCrossDeviceColorSampler;
+typedef KisCrossDeviceColorSamplerImpl<SamplerTraitInt> KisCrossDeviceColorSamplerInt;
 
-#endif /* __KIS_CROSS_DEVICE_COLOR_PICKER_H */
+#endif /* __KIS_CROSS_DEVICE_COLOR_SAMPLER_H */

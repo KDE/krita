@@ -4,15 +4,15 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef __KIS_COLOR_PICKER_STROKE_STRATEGY_H
-#define __KIS_COLOR_PICKER_STROKE_STRATEGY_H
+#ifndef __KIS_COLOR_SAMPLER_STROKE_STRATEGY_H
+#define __KIS_COLOR_SAMPLER_STROKE_STRATEGY_H
 
 #include <QObject>
 #include "kis_simple_stroke_strategy.h"
 #include "kis_lod_transform.h"
 #include "KoColor.h"
 
-class KisColorPickerStrokeStrategy : public QObject, public KisSimpleStrokeStrategy
+class KisColorSamplerStrokeStrategy : public QObject, public KisSimpleStrokeStrategy
 {
     Q_OBJECT
 public:
@@ -31,11 +31,11 @@ public:
 
         KisPaintDeviceSP dev;
         QPoint pt;
-        KoColor currentColor; // Used for color picker blending.
+        KoColor currentColor; // Used for color sampler blending.
     };
 public:
-    KisColorPickerStrokeStrategy(int lod = 0);
-    ~KisColorPickerStrokeStrategy() override;
+    KisColorSamplerStrokeStrategy(int lod = 0);
+    ~KisColorSamplerStrokeStrategy() override;
 
     void doStrokeCallback(KisStrokeJobData *data) override;
     KisStrokeStrategy* createLodClone(int levelOfDetail) override;
@@ -48,4 +48,4 @@ private:
     const QScopedPointer<Private> m_d;
 };
 
-#endif /* __KIS_COLOR_PICKER_STROKE_STRATEGY_H */
+#endif /* __KIS_COLOR_SAMPLER_STROKE_STRATEGY_H */

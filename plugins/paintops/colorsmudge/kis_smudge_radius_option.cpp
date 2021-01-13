@@ -22,7 +22,7 @@
 #include <resources/KoColorSet.h>
 #include <KoChannelInfo.h>
 #include <KoMixColorsOp.h>
-#include <kis_cross_device_color_picker.h>
+#include <kis_cross_device_color_sampler.h>
 
 
 

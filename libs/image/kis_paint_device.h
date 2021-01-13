@@ -665,13 +665,13 @@ public:
      * 2) Do *not* expect that the color spaces of the destination and
      *    the temporary device would coincide. If you need to copy a
      *    single pixel from one device to another, you can use
-     *    KisCrossDeviceColorPicker class, that will handle all the
+     *    KisCrossDeviceColorSampler class, that will handle all the
      *    necessary conversions for you.
      *
      * \see createCompositionSourceDeviceFixed()
      * \see compositionSourceColorSpace()
-     * \see KisCrossDeviceColorPicker
-     * \see KisCrossDeviceColorPickerInt
+     * \see KisCrossDeviceColorSampler
+     * \see KisCrossDeviceColorSamplerInt
      */
     KisPaintDeviceSP createCompositionSourceDevice() const;
 

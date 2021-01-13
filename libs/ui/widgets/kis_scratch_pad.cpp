@@ -102,7 +102,7 @@ KisScratchPad::KisScratchPad(QWidget *parent)
     setMouseTracking(true);
 
     m_cursor = KisCursor::load("tool_freehand_cursor.png", 5, 5);
-    m_colorPickerCursor = KisCursor::load("tool_color_picker_cursor.png", 5, 5);
+    m_colorSamplerCursor = KisCursor::load("tool_color_sampler_cursor.png", 5, 5);
     setCursor(m_cursor);
 
 
@@ -143,7 +143,7 @@ KisScratchPad::Mode KisScratchPad::modeFromButton(Qt::MouseButton button) const
     return
         button == Qt::NoButton ? HOVERING :
         button == Qt::MidButton ? PANNING :
-        button == Qt::RightButton ? PICKING :
+        button == Qt::RightButton ? SAMPLING :
         PAINTING;
 }
 
@@ -174,8 +174,8 @@ void KisScratchPad::pointerPress(KoPointerEvent *event)
             beginPan(event);
             event->accept();
         }
-        else if (m_toolMode == PICKING) {
-            pick(event);
+        else if (m_toolMode == SAMPLING) {
+            sample(event);
             event->accept();
         }
     }
@@ -200,7 +200,7 @@ void KisScratchPad::pointerRelease(KoPointerEvent *event)
             m_toolMode = HOVERING;
             event->accept();
         }
-        else if (m_toolMode == PICKING) {
+        else if (m_toolMode == SAMPLING) {
             event->accept();
             m_toolMode = HOVERING;
         }
@@ -237,8 +237,8 @@ void KisScratchPad::pointerMove(KoPointerEvent *event)
             doPan(event);
             event->accept();
         }
-        else if (m_toolMode == PICKING) {
-            pick(event);
+        else if (m_toolMode == SAMPLING) {
+            sample(event);
             event->accept();
         }
     }
@@ -297,10 +297,10 @@ void KisScratchPad::endPan(KoPointerEvent *event)
 
 }
 
-void KisScratchPad::pick(KoPointerEvent *event)
+void KisScratchPad::sample(KoPointerEvent *event)
 {
     KoColor color;
-    if (KisToolUtils::pickColor(color, m_paintLayer->projection(), event->point.toPoint())) {
+    if (KisToolUtils::sampleColor(color, m_paintLayer->projection(), event->point.toPoint())) {
         emit colorSelected(color);
     }
 }
@@ -445,9 +445,9 @@ void KisScratchPad::setModeType(QString mode)
         m_toolMode = PANNING;
         setCursor(Qt::OpenHandCursor);
     }
-    else if (mode.toLower() == "colorpicking") {
-        m_toolMode = PICKING;
-        setCursor(m_colorPickerCursor);
+    else if (mode.toLower() == "colorsampling") {
+        m_toolMode = SAMPLING;
+        setCursor(m_colorSamplerCursor);
     }
 }
 

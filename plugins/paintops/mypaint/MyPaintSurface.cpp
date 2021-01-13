@@ -11,7 +11,7 @@
 #include <KoColorSpaceMaths.h>
 #include <QtMath>
 #include <kis_algebra_2d.h>
-#include <kis_cross_device_color_picker.h>
+#include <kis_cross_device_color_sampler.h>
 #include <kis_image.h>
 #include <kis_node.h>
 #include <kis_sequential_iterator.h>

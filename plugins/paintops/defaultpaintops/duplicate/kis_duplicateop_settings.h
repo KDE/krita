@@ -34,7 +34,7 @@ public:
      * This function is called by a tool when the mouse is pressed.
      * Returns false if picking new origin is in action,
      * and returns true otherwise (i.e. if brush is starting a new stroke).
-     * See kis_tool_freehand:tryPickByPaintOp()
+     * See kis_tool_freehand:trySampleByPaintOp()
      */
     bool mousePressEvent(const KisPaintInformation& pos, Qt::KeyboardModifiers modifiers, KisNodeWSP currentNode) override;
     /**

@@ -15,7 +15,7 @@
  * \brief Alternate Invocation implementation of KisAbstractInputAction.
  *
  * The Alternate Invocation action performs an alternate action with the
- * current tool. For example, using the brush tool it picks a color from
+ * current tool. For example, using the brush tool it samples a color from
  * the canvas.
  */
 class KisAlternateInvocationAction : public KisAbstractInputAction
@@ -27,10 +27,10 @@ public:
     enum Shortcut {
         PrimaryAlternateModeShortcut, ///< Toggle Primary mode.
         SecondaryAlternateModeShortcut, ///< Toggle Secondary mode.
-        PickColorFgLayerModeShortcut,
-        PickColorBgLayerModeShortcut,
-        PickColorFgImageModeShortcut,
-        PickColorBgImageModeShortcut,
+        SampleColorFgLayerModeShortcut,
+        SampleColorBgLayerModeShortcut,
+        SampleColorFgImageModeShortcut,
+        SampleColorBgImageModeShortcut,
         TertiaryAlternateModeShortcut ///< Warning: don't reorder the items of this enum, it breaks user configs!
     };
 

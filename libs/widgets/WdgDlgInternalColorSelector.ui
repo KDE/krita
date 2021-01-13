@@ -243,7 +243,7 @@
         </layout>
        </item>
        <item>
-        <widget class="QWidget" name="screenColorPickerWidget" native="true">
+        <widget class="QWidget" name="screenColorSamplerWidget" native="true">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
            <horstretch>0</horstretch>

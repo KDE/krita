@@ -16,8 +16,8 @@ class KoColor;
 
 namespace KisToolUtils {
 
-struct KRITAUI_EXPORT ColorPickerConfig {
-    ColorPickerConfig();
+struct KRITAUI_EXPORT ColorSamplerConfig {
+    ColorSamplerConfig();
 
     bool toForegroundColor;
     bool updateColor;
@@ -34,21 +34,21 @@ private:
 };
 
 /**
- * Pick a color based on the given position on the given paint device.
+ * Sample a color based on the given position on the given paint device.
  *
- * out_color   - Output parameter returning newly picked color.
- * dev         - Paint device to pick from.
- * pos         - Position to pick from.
+ * out_color   - Output parameter returning newly sampled color.
+ * dev         - Paint device to sample from.
+ * pos         - Position to sample from.
  * blendColor  - Optional color to be blended with.
- * radius      - Picking area radius in pixels.
- * blend       - Blend percentage. 100% all picked, 0% all blendColor.
- * pure        - Whether to bypass radius, blending, and active layer settings for pure picking.
+ * radius      - Sampling area radius in pixels.
+ * blend       - Blend percentage. 100% all sampled, 0% all blendColor.
+ * pure        - Whether to bypass radius, blending, and active layer settings for pure sampling.
  *
- * RETURN      - Returns TRUE whenever a valid color is picked.
+ * RETURN      - Returns TRUE whenever a valid color is sampled.
  */
-bool KRITAUI_EXPORT pickColor(KoColor &out_color, KisPaintDeviceSP dev, const QPoint &pos,
-                              KoColor const *const blendColor = nullptr, int radius = 1,
-                              int blend = 100, bool pure = false);
+bool KRITAUI_EXPORT sampleColor(KoColor &out_color, KisPaintDeviceSP dev, const QPoint &pos,
+                                KoColor const *const blendColor = nullptr, int radius = 1,
+                                int blend = 100, bool pure = false);
 
 /**
  * Recursively search a node with a non-transparent pixel

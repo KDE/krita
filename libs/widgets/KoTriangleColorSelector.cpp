@@ -170,8 +170,8 @@ void KoTriangleColorSelector::paintEvent( QPaintEvent * event )
 }
 
 
-// make sure to always use get/set functions when managing HSV properties( don't call directly like d->hue)
-// these  settings get updated A LOT when the color picker is being used. You might get unexpected results
+// make sure to always use get/set functions when managing HSV properties (don't call directly like d->hue)
+// these settings get updated A LOT when the color sampler is being used. You might get unexpected results
 int KoTriangleColorSelector::hue() const
 {
     return d->hue;

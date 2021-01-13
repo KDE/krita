@@ -16,7 +16,7 @@
 
 #include <kis_types.h>
 #include <kis_iterator_ng.h>
-#include <kis_cross_device_color_picker.h>
+#include <kis_cross_device_color_sampler.h>
 
 #include <cmath>
 #include <ctime>
@@ -152,7 +152,7 @@ KisFixedPaintDeviceSP DeformBrush::paintMask(KisFixedPaintDeviceSP dab,
         QPointF pos, qreal subPixelX, qreal subPixelY, int dabX, int dabY)
 {
     KisFixedPaintDeviceSP mask = new KisFixedPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
-    KisCrossDeviceColorPicker colorPicker(layer, dab);
+    KisCrossDeviceColorSampler colorSampler(layer, dab);
 
     qreal fWidth = maskWidth(scale);
     qreal fHeight = maskHeight(scale);
@@ -204,7 +204,7 @@ KisFixedPaintDeviceSP DeformBrush::paintMask(KisFixedPaintDeviceSP dab,
             if (distance > 1.0) {
                 // leave there OPACITY TRANSPARENT pixel (default pixel)
 
-                colorPicker.pickOldColor(x + dabX, y + dabY, dabPointer);
+                colorSampler.sampleOldColor(x + dabX, y + dabY, dabPointer);
                 dabPointer += dabPixelSize;
 
                 *maskPointer = OPACITY_TRANSPARENT_U8;
@@ -233,10 +233,10 @@ KisFixedPaintDeviceSP DeformBrush::paintMask(KisFixedPaintDeviceSP dab,
             }
 
             if (m_properties->deform_use_old_data) {
-                colorPicker.pickOldColor(maskX, maskY, dabPointer);
+                colorSampler.sampleOldColor(maskX, maskY, dabPointer);
             }
             else {
-                colorPicker.pickColor(maskX, maskY, dabPointer);
+                colorSampler.sampleColor(maskX, maskY, dabPointer);
             }
 
             dabPointer += dabPixelSize;

@@ -24,18 +24,18 @@
 #include "KisDocument.h"
 #include "KisPart.h"
 #include "KisReferenceImagesLayer.h"
-#include "KisScreenColorPicker.h"
+#include "KisScreenColorSampler.h"
 #include "KisDlgInternalColorSelector.h"
 
-struct KisScreenColorPicker::Private
+struct KisScreenColorSampler::Private
 {
-    QPushButton *screenColorPickerButton = 0;
+    QPushButton *screenColorSamplerButton = 0;
     QLabel *lblScreenColorInfo = 0;
 
     KoColor currentColor = KoColor();
-    KoColor beforeScreenColorPicking = KoColor();
+    KoColor beforeScreenColorSampling = KoColor();
 
-    KisScreenColorPickingEventFilter *colorPickingEventFilter = 0;
+    KisScreenColorSamplingEventFilter *colorSamplingEventFilter = 0;
 
 #ifdef Q_OS_WIN32
     QTimer *updateTimer = 0;
@@ -43,20 +43,20 @@ struct KisScreenColorPicker::Private
 #endif
 };
 
-KisScreenColorPicker::KisScreenColorPicker(bool showInfoLabel, QWidget *parent) : KisScreenColorPickerBase(parent), m_d(new Private)
+KisScreenColorSampler::KisScreenColorSampler(bool showInfoLabel, QWidget *parent) : KisScreenColorSamplerBase(parent), m_d(new Private)
 {
     QVBoxLayout *layout = new QVBoxLayout(this);
-    m_d->screenColorPickerButton = new QPushButton();
+    m_d->screenColorSamplerButton = new QPushButton();
 
-    m_d->screenColorPickerButton->setMinimumHeight(25);
-    layout->addWidget(m_d->screenColorPickerButton);
+    m_d->screenColorSamplerButton->setMinimumHeight(25);
+    layout->addWidget(m_d->screenColorSamplerButton);
 
     if (showInfoLabel) {
         m_d->lblScreenColorInfo = new QLabel(QLatin1String("\n"));
         layout->addWidget(m_d->lblScreenColorInfo);
     }
 
-    connect(m_d->screenColorPickerButton, SIGNAL(clicked()), SLOT(pickScreenColor()));
+    connect(m_d->screenColorSamplerButton, SIGNAL(clicked()), SLOT(sampleScreenColor()));
 
     updateIcons();
 
@@ -64,31 +64,31 @@ KisScreenColorPicker::KisScreenColorPicker(bool showInfoLabel, QWidget *parent) 
     m_d->updateTimer = new QTimer(this);
     m_d->dummyTransparentWindow.resize(1, 1);
     m_d->dummyTransparentWindow.setFlags(Qt::Tool | Qt::FramelessWindowHint);
-    connect(m_d->updateTimer, SIGNAL(timeout()), SLOT(updateColorPicking()));
+    connect(m_d->updateTimer, SIGNAL(timeout()), SLOT(updateColorSampling()));
 #endif
 }
 
-KisScreenColorPicker::~KisScreenColorPicker()
+KisScreenColorSampler::~KisScreenColorSampler()
 {
 }
 
-void KisScreenColorPicker::updateIcons()
+void KisScreenColorSampler::updateIcons()
 {
-    m_d->screenColorPickerButton->setIcon(kisIcon("krita_tool_color_picker"));
+    m_d->screenColorSamplerButton->setIcon(kisIcon("krita_tool_color_sampler"));
 }
 
-KoColor KisScreenColorPicker::currentColor()
+KoColor KisScreenColorSampler::currentColor()
 {
     return m_d->currentColor;
 }
 
-void KisScreenColorPicker::pickScreenColor()
+void KisScreenColorSampler::sampleScreenColor()
 {
-    if (!m_d->colorPickingEventFilter)
-        m_d->colorPickingEventFilter = new KisScreenColorPickingEventFilter(this);
-    this->installEventFilter(m_d->colorPickingEventFilter);
-    // If user pushes Escape, the last color before picking will be restored.
-    m_d->beforeScreenColorPicking = currentColor();
+    if (!m_d->colorSamplingEventFilter)
+        m_d->colorSamplingEventFilter = new KisScreenColorSamplingEventFilter(this);
+    this->installEventFilter(m_d->colorSamplingEventFilter);
+    // If user pushes Escape, the last color before sampling will be restored.
+    m_d->beforeScreenColorSampling = currentColor();
     grabMouse(Qt::CrossCursor);
 
 #ifdef Q_OS_WIN32 // excludes WinCE and WinRT
@@ -101,26 +101,26 @@ void KisScreenColorPicker::pickScreenColor()
     m_d->dummyTransparentWindow.show();
 #endif
     grabKeyboard();
-    /* With setMouseTracking(true) the desired color can be more precisely picked up,
+    /* With setMouseTracking(true) the desired color can be more precisely sampled,
      * and continuously pushing the mouse button is not necessary.
      */
     setMouseTracking(true);
 
-    m_d->screenColorPickerButton->setDisabled(true);
+    m_d->screenColorSamplerButton->setDisabled(true);
 
     const QPoint globalPos = QCursor::pos();
     setCurrentColor(grabScreenColor(globalPos));
     updateColorLabelText(globalPos);
 }
 
-void KisScreenColorPicker::setCurrentColor(KoColor c)
+void KisScreenColorSampler::setCurrentColor(KoColor c)
 {
     m_d->currentColor = c;
 }
 
-KoColor KisScreenColorPicker::grabScreenColor(const QPoint &p)
+KoColor KisScreenColorSampler::grabScreenColor(const QPoint &p)
 {
-    // First check whether we're clicking on a Krita window for some real color picking
+    // First check whether we're clicking on a Krita window for some real color sampling
     Q_FOREACH(KisView *view, KisPart::instance()->views()) {
         const KisCanvas2 *canvas = view->canvasBase();
         const QWidget *canvasWidget = canvas->canvasWidget();
@@ -131,7 +131,7 @@ KoColor KisScreenColorPicker::grabScreenColor(const QPoint &p)
 
             if (image) {
                 QPointF imagePoint = canvas->coordinatesConverter()->widgetToImage(widgetPoint);
-                // pick from reference images first
+                // sample from reference images first
                 KisSharedPtr<KisReferenceImagesLayer> referenceImageLayer = view->document()->referenceImagesLayer();
 
                 if (referenceImageLayer && canvas->referenceImagesDecoration()->visible()) {
@@ -144,9 +144,9 @@ KoColor KisScreenColorPicker::grabScreenColor(const QPoint &p)
                 if (image->wrapAroundModePermitted()) {
                     imagePoint = KisWrappedRect::ptToWrappedPt(imagePoint.toPoint(), image->bounds());
                 }
-                KoColor pickedColor = KoColor();
-                image->projection()->pixel(imagePoint.x(), imagePoint.y(), &pickedColor);
-                return pickedColor;
+                KoColor sampledColor = KoColor();
+                image->projection()->pixel(imagePoint.x(), imagePoint.y(), &sampledColor);
+                return sampledColor;
             }
         }
     }
@@ -161,7 +161,7 @@ KoColor KisScreenColorPicker::grabScreenColor(const QPoint &p)
     return col;
 }
 
-void KisScreenColorPicker::updateColorLabelText(const QPoint &globalPos)
+void KisScreenColorSampler::updateColorLabelText(const QPoint &globalPos)
 {
     if (m_d->lblScreenColorInfo) {
         KoColor col = grabScreenColor(globalPos);
@@ -172,40 +172,40 @@ void KisScreenColorPicker::updateColorLabelText(const QPoint &globalPos)
     }
 }
 
-bool KisScreenColorPicker::handleColorPickingMouseMove(QMouseEvent *e)
+bool KisScreenColorSampler::handleColorSamplingMouseMove(QMouseEvent *e)
 {
     // If the cross is visible the grabbed color will be black most of the times
     //cp->setCrossVisible(!cp->geometry().contains(e->pos()));
 
-    continueUpdateColorPicking(e->globalPos());
+    continueUpdateColorSampling(e->globalPos());
     return true;
 }
 
-bool KisScreenColorPicker::handleColorPickingMouseButtonRelease(QMouseEvent *e)
+bool KisScreenColorSampler::handleColorSamplingMouseButtonRelease(QMouseEvent *e)
 {
     setCurrentColor(grabScreenColor(e->globalPos()));
-    Q_EMIT sigNewColorPicked(currentColor());
-    releaseColorPicking();
+    Q_EMIT sigNewColorSampled(currentColor());
+    releaseColorSampling();
     return true;
 }
 
-bool KisScreenColorPicker::handleColorPickingKeyPress(QKeyEvent *e)
+bool KisScreenColorSampler::handleColorSamplingKeyPress(QKeyEvent *e)
 {
     if (e->matches(QKeySequence::Cancel)) {
-        releaseColorPicking();
-        setCurrentColor(m_d->beforeScreenColorPicking);
+        releaseColorSampling();
+        setCurrentColor(m_d->beforeScreenColorSampling);
     } else if (e->key() == Qt::Key_Return || e->key() == Qt::Key_Enter) {
         setCurrentColor(grabScreenColor(QCursor::pos()));
-        releaseColorPicking();
+        releaseColorSampling();
     }
     e->accept();
     return true;
 }
 
-void KisScreenColorPicker::releaseColorPicking()
+void KisScreenColorSampler::releaseColorSampling()
 {
 
-    removeEventFilter(m_d->colorPickingEventFilter);
+    removeEventFilter(m_d->colorSamplingEventFilter);
     releaseMouse();
 #ifdef Q_OS_WIN32
     m_d->updateTimer->stop();
@@ -218,15 +218,15 @@ void KisScreenColorPicker::releaseColorPicking()
         m_d->lblScreenColorInfo->setText(QLatin1String("\n"));
     }
 
-    m_d->screenColorPickerButton->setDisabled(false);
+    m_d->screenColorSamplerButton->setDisabled(false);
 }
 
-void KisScreenColorPicker::changeEvent(QEvent *e)
+void KisScreenColorSampler::changeEvent(QEvent *e)
 {
     QWidget::changeEvent(e);
 }
 
-void KisScreenColorPicker::updateColorPicking()
+void KisScreenColorSampler::updateColorSampling()
 {
     static QPoint lastGlobalPos;
     QPoint newGlobalPos = QCursor::pos();
@@ -234,15 +234,15 @@ void KisScreenColorPicker::updateColorPicking()
         return;
     lastGlobalPos = newGlobalPos;
 
-    if (!rect().contains(mapFromGlobal(newGlobalPos))) { // Inside the dialog mouse tracking works, handleColorPickingMouseMove will be called
-        continueUpdateColorPicking(newGlobalPos);
+    if (!rect().contains(mapFromGlobal(newGlobalPos))) { // Inside the dialog mouse tracking works, handleColorSamplingMouseMove will be called
+        continueUpdateColorSampling(newGlobalPos);
 #ifdef Q_OS_WIN32
         m_d->dummyTransparentWindow.setPosition(newGlobalPos);
 #endif
     }
 }
 
-void KisScreenColorPicker::continueUpdateColorPicking(const QPoint &globalPos)
+void KisScreenColorSampler::continueUpdateColorSampling(const QPoint &globalPos)
 {
     const KoColor color = grabScreenColor(globalPos);
     // QTBUG-39792, do not change standard, custom color selectors while moving as
@@ -251,34 +251,34 @@ void KisScreenColorPicker::continueUpdateColorPicking(const QPoint &globalPos)
     updateColorLabelText(globalPos);
 }
 
-// Event filter to be installed on the dialog while in color-picking mode.
-KisScreenColorPickingEventFilter::KisScreenColorPickingEventFilter(KisScreenColorPicker *w, QObject *parent)
+// Event filter to be installed on the dialog while in color-sampling mode.
+KisScreenColorSamplingEventFilter::KisScreenColorSamplingEventFilter(KisScreenColorSampler *w, QObject *parent)
     : QObject(parent)
     , m_w(w)
 {}
 
-bool KisScreenColorPickingEventFilter::eventFilter(QObject *, QEvent *event)
+bool KisScreenColorSamplingEventFilter::eventFilter(QObject *, QEvent *event)
 {
     switch (event->type()) {
     case QEvent::MouseMove:
-        return m_w->handleColorPickingMouseMove(static_cast<QMouseEvent *>(event));
+        return m_w->handleColorSamplingMouseMove(static_cast<QMouseEvent *>(event));
     case QEvent::MouseButtonRelease:
-        return m_w->handleColorPickingMouseButtonRelease(static_cast<QMouseEvent *>(event));
+        return m_w->handleColorSamplingMouseButtonRelease(static_cast<QMouseEvent *>(event));
     case QEvent::KeyPress:
-        return m_w->handleColorPickingKeyPress(static_cast<QKeyEvent *>(event));
+        return m_w->handleColorSamplingKeyPress(static_cast<QKeyEvent *>(event));
     default:
         break;
     }
     return false;
 }
 
-// Register the color picker factory with the internal color selector
-struct ColorPickerRegistrar {
-    ColorPickerRegistrar()
+// Register the color sampler factory with the internal color selector
+struct ColorSamplerRegistrar {
+    ColorSamplerRegistrar()
     {
-        KisDlgInternalColorSelector::setScreenColorPickerFactory(KisScreenColorPicker::createScreenColorPicker);
+        KisDlgInternalColorSelector::setScreenColorSamplerFactory(KisScreenColorSampler::createScreenColorSampler);
     }
 };
 
-static ColorPickerRegistrar s_colorPickerRegistrar;
+static ColorSamplerRegistrar s_colorSamplerRegistrar;
 

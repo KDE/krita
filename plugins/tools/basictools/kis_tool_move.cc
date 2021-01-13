@@ -479,7 +479,7 @@ void KisToolMove::endPrimaryAction(KoPointerEvent *event)
 void KisToolMove::beginAlternateAction(KoPointerEvent *event, AlternateAction action)
 {
     // Ctrl+Right click toggles between moving current layer and moving layer w/ content
-    if (action == PickFgNode || action == PickBgImage) {
+    if (action == SampleFgNode || action == SampleBgImage) {
         MoveToolMode mode = moveToolMode();
 
         if (mode == MoveSelectedLayer) {

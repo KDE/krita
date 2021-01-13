@@ -93,7 +93,7 @@ void KisVisualColorSelector::slotSetColorSpace(const KoColorSpace *cs)
     if (!m_d->currentCS || *m_d->currentCS != *cs) {
         const KoColorSpace *csNew = cs;
 
-        // PQ color space is not very suitable for color picking, substitute with linear one
+        // PQ color space is not very suitable for selecting colors, substitute with linear one
         if (cs->colorModelId() == RGBAColorModelID &&
             cs->profile()->uniqueId() == KoColorSpaceRegistry::instance()->p2020PQProfile()->uniqueId()) {
 

@@ -27,7 +27,7 @@
 #include <kis_painter.h>
 #include <brushengine/kis_paint_information.h>
 #include <kis_fixed_paint_device.h>
-#include <kis_cross_device_color_picker.h>
+#include <kis_cross_device_color_sampler.h>
 
 #include "kis_spray_paintop_settings.h"
 
@@ -125,7 +125,7 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
 
     Q_ASSERT(color.colorSpace()->pixelSize() == dab->pixelSize());
     m_inkColor = color;
-    KisCrossDeviceColorPicker colorPicker(source, m_inkColor);
+    KisCrossDeviceColorSampler colorSampler(source, m_inkColor);
 
     // apply size sensor
     m_radius = m_properties->radius() * scale * additionalScale;
@@ -212,7 +212,7 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
 
         if (shouldColor) {
             if (m_colorProperties->sampleInputColor) {
-                colorPicker.pickOldColor(nx + x, ny + y, m_inkColor.data());
+                colorSampler.sampleOldColor(nx + x, ny + y, m_inkColor.data());
             }
 
             // mix the color with background color

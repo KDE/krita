@@ -18,7 +18,7 @@
 #include <kis_types.h>
 #include <brushengine/kis_paintop.h>
 #include <brushengine/kis_paint_information.h>
-#include <kis_cross_device_color_picker.h>
+#include <kis_cross_device_color_sampler.h>
 #include <kis_spacing_information.h>
 
 #include <KoColor.h>
@@ -102,9 +102,9 @@ KisSpacingInformation KisGridPaintOp::paintAt(const KisPaintInformation& info)
     QRectF tile;
     KoColor color(painter()->paintColor());
 
-    QScopedPointer<KisCrossDeviceColorPicker> colorPicker;
+    QScopedPointer<KisCrossDeviceColorSampler> colorSampler;
     if (m_node) {
-        colorPicker.reset(new KisCrossDeviceColorPicker(m_node->paintDevice(), color));
+        colorSampler.reset(new KisCrossDeviceColorSampler(m_node->paintDevice(), color));
     }
 
     qreal vertBorder = m_properties.vertBorder * additionalScale;
@@ -134,8 +134,8 @@ KisSpacingInformation KisGridPaintOp::paintAt(const KisPaintInformation& info)
 
             // do color transformation
             if (shouldColor) {
-                if (colorPicker && m_colorProperties.sampleInputColor) {
-                    colorPicker->pickOldColor(tile.center().x(), tile.center().y(), color.data());
+                if (colorSampler && m_colorProperties.sampleInputColor) {
+                    colorSampler->sampleOldColor(tile.center().x(), tile.center().y(), color.data());
                 }
 
                 // mix the color with background color

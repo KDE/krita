@@ -19,17 +19,17 @@ Panel {
             height: parent.height;
             width: height;
             onChooseBGChanged: {
-                if (toolManager.currentTool !== null && toolManager.currentTool.toolId() === "KritaSelected/KisToolColorPicker") {
+                if (toolManager.currentTool !== null && toolManager.currentTool.toolId() === "KritaSelected/KisToolColorSampler") {
                     toolManager.currentTool.toForeground = !swatch.chooseBG;
                 }
             }
         },
         Button {
-            id: colorPicker;
+            id: colorSampler;
             width: height;
             height: Constants.ToolbarButtonSize;
-            image: Settings.theme.icon("colorpicker");
-            onClicked: toolManager.requestToolChange("KritaSelected/KisToolColorPicker");
+            image: Settings.theme.icon("colorsampler");
+            onClicked: toolManager.requestToolChange("KritaSelected/KisToolColorSampler");
         },
         Item {
             width: base.width - Constants.DefaultMargin - (Constants.ToolbarButtonSize * 3);
@@ -47,7 +47,7 @@ Panel {
     Connections {
         target: toolManager;
         onCurrentToolChanged: {
-            if (toolManager.currentTool !== null && toolManager.currentTool.toolId() === "KritaSelected/KisToolColorPicker") {
+            if (toolManager.currentTool !== null && toolManager.currentTool.toolId() === "KritaSelected/KisToolColorSampler") {
                 toolManager.currentTool.toForeground = !swatch.chooseBG;
             }
         }

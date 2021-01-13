@@ -52,7 +52,7 @@ using namespace std::placeholders; // For _1 placeholder
 
 KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, const KUndo2MagicString &transactionText)
     : KisToolPaint(canvas, cursor),
-      m_paintopBasedPickingInAction(false),
+      m_paintopBasedSamplingInAction(false),
       m_brushResizeCompressor(200, std::bind(&KisToolFreehand::slotDoResizeBrush, this, _1))
 {
     m_assistant = false;
@@ -181,7 +181,7 @@ bool KisToolFreehand::primaryActionSupportsHiResEvents() const
 void KisToolFreehand::beginPrimaryAction(KoPointerEvent *event)
 {
     // FIXME: workaround for the Duplicate Op
-    tryPickByPaintOp(event, PickFgImage);
+    trySampleByPaintOp(event, SampleFgImage);
 
     requestUpdateOutline(event->point, event);
 
@@ -247,9 +247,9 @@ void KisToolFreehand::endPrimaryAction(KoPointerEvent *event)
     setMode(KisTool::HOVER_MODE);
 }
 
-bool KisToolFreehand::tryPickByPaintOp(KoPointerEvent *event, AlternateAction action)
+bool KisToolFreehand::trySampleByPaintOp(KoPointerEvent *event, AlternateAction action)
 {
-    if (action != PickFgNode && action != PickFgImage) return false;
+    if (action != SampleFgNode && action != SampleFgImage) return false;
 
     /**
      * FIXME: we need some better way to implement modifiers
@@ -275,7 +275,7 @@ bool KisToolFreehand::tryPickByPaintOp(KoPointerEvent *event, AlternateAction ac
                                             perspective, 0, 0),
                         event->modifiers(),
                         currentNode());
-    // DuplicateOP during the picking of new source point (origin)
+    // DuplicateOP during the sampling of new source point (origin)
     // is the only paintop that returns "false" here
     return !paintOpIgnoredEvent;
 }
@@ -304,8 +304,8 @@ void KisToolFreehand::deactivateAlternateAction(AlternateAction action)
 
 void KisToolFreehand::beginAlternateAction(KoPointerEvent *event, AlternateAction action)
 {
-    if (tryPickByPaintOp(event, action)) {
-        m_paintopBasedPickingInAction = true;
+    if (trySampleByPaintOp(event, action)) {
+        m_paintopBasedSamplingInAction = true;
         return;
     }
 
@@ -324,7 +324,7 @@ void KisToolFreehand::beginAlternateAction(KoPointerEvent *event, AlternateActio
 
 void KisToolFreehand::continueAlternateAction(KoPointerEvent *event, AlternateAction action)
 {
-    if (tryPickByPaintOp(event, action) || m_paintopBasedPickingInAction) return;
+    if (trySampleByPaintOp(event, action) || m_paintopBasedSamplingInAction) return;
 
     if (action != ChangeSize && action != ChangeSizeSnap) {
         KisToolPaint::continueAlternateAction(event, action);
@@ -373,8 +373,8 @@ void KisToolFreehand::continueAlternateAction(KoPointerEvent *event, AlternateAc
 
 void KisToolFreehand::endAlternateAction(KoPointerEvent *event, AlternateAction action)
 {
-    if (tryPickByPaintOp(event, action) || m_paintopBasedPickingInAction) {
-        m_paintopBasedPickingInAction = false;
+    if (trySampleByPaintOp(event, action) || m_paintopBasedSamplingInAction) {
+        m_paintopBasedSamplingInAction = false;
         return;
     }
 

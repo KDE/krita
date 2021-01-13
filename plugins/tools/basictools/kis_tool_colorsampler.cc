@@ -7,7 +7,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include "kis_tool_colorpicker.h"
+#include "kis_tool_colorsampler.h"
 
 #include <boost/thread/locks.hpp>
 #include <QMessageBox>
@@ -31,27 +31,27 @@ namespace
 const int SAMPLE_MERGED = 0;
 }
 
-KisToolColorPicker::KisToolColorPicker(KoCanvasBase *canvas)
-    : KisTool(canvas, KisCursor::pickerCursor()),
-      m_config(new KisToolUtils::ColorPickerConfig)
+KisToolColorSampler::KisToolColorSampler(KoCanvasBase *canvas)
+    : KisTool(canvas, KisCursor::samplerCursor()),
+      m_config(new KisToolUtils::ColorSamplerConfig)
 {
-    setObjectName("tool_colorpicker");
+    setObjectName("tool_colorsampler");
 }
 
-KisToolColorPicker::~KisToolColorPicker()
+KisToolColorSampler::~KisToolColorSampler()
 {
     if (m_isActivated) {
         m_config->save(m_toolActivationSource == KisTool::DefaultActivation);
     }
 }
 
-void KisToolColorPicker::paint(QPainter &gc, const KoViewConverter &converter)
+void KisToolColorSampler::paint(QPainter &gc, const KoViewConverter &converter)
 {
     Q_UNUSED(gc);
     Q_UNUSED(converter);
 }
 
-void KisToolColorPicker::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
+void KisToolColorSampler::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
 {
     m_isActivated = true;
     m_toolActivationSource = activation;
@@ -61,29 +61,29 @@ void KisToolColorPicker::activate(ToolActivation activation, const QSet<KoShape*
     KisTool::activate(activation, shapes);
 }
 
-void KisToolColorPicker::deactivate()
+void KisToolColorSampler::deactivate()
 {
     m_config->save(m_toolActivationSource == KisTool::DefaultActivation);
     m_isActivated = false;
     KisTool::deactivate();
 }
 
-bool KisToolColorPicker::pickColor(const QPointF &pos)
+bool KisToolColorSampler::sampleColor(const QPointF &pos)
 {
     // Timer check.
-    if (m_colorPickerDelayTimer.isActive()) {
+    if (m_colorSamplerDelayTimer.isActive()) {
         return false;
     }
     else {
-        m_colorPickerDelayTimer.setSingleShot(true);
-        m_colorPickerDelayTimer.start(100);
+        m_colorSamplerDelayTimer.setSingleShot(true);
+        m_colorSamplerDelayTimer.start(100);
     }
 
     QScopedPointer<boost::lock_guard<KisImage>> imageLocker;
 
-    m_pickedColor.setOpacity(0.0);
+    m_sampledColor.setOpacity(0.0);
 
-    // Pick from reference images.
+    // Sample from reference images.
     if (m_optionsWidget->cmbSources->currentIndex() == SAMPLE_MERGED) {
         auto *kisCanvas = dynamic_cast<KisCanvas2 *>(canvas());
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(kisCanvas, false);
@@ -93,12 +93,12 @@ bool KisToolColorPicker::pickColor(const QPointF &pos)
         if (referenceImageLayer && kisCanvas->referenceImagesDecoration()->visible()) {
             QColor color = referenceImageLayer->getPixel(pos);
             if (color.isValid()) {
-                m_pickedColor.fromQColor(color);
+                m_sampledColor.fromQColor(color);
             }
         }
     }
 
-    if (m_pickedColor.opacityU8() == OPACITY_TRANSPARENT_U8) {
+    if (m_sampledColor.opacityU8() == OPACITY_TRANSPARENT_U8) {
         if (!currentImage()->bounds().contains(pos.toPoint()) &&
             !currentImage()->wrapAroundModePermitted()) {
             return false;
@@ -107,8 +107,8 @@ bool KisToolColorPicker::pickColor(const QPointF &pos)
         KisPaintDeviceSP dev;
 
         if (m_optionsWidget->cmbSources->currentIndex() != SAMPLE_MERGED &&
-            currentNode() && currentNode()->colorPickSourceDevice()) {
-            dev = currentNode()->colorPickSourceDevice();
+            currentNode() && currentNode()->colorSampleSourceDevice()) {
+            dev = currentNode()->colorSampleSourceDevice();
         }
         else {
             imageLocker.reset(new boost::lock_guard<KisImage>(*currentImage()));
@@ -117,13 +117,13 @@ bool KisToolColorPicker::pickColor(const QPointF &pos)
 
         KoColor previousColor = canvas()->resourceManager()->foregroundColor();
 
-        KisToolUtils::pickColor(m_pickedColor, dev, pos.toPoint(), &previousColor, m_config->radius, m_config->blend);
+        KisToolUtils::sampleColor(m_sampledColor, dev, pos.toPoint(), &previousColor, m_config->radius, m_config->blend);
     }
 
     if (m_config->updateColor &&
-        m_pickedColor.opacityU8() != OPACITY_TRANSPARENT_U8) {
+        m_sampledColor.opacityU8() != OPACITY_TRANSPARENT_U8) {
 
-        KoColor publicColor = m_pickedColor;
+        KoColor publicColor = m_sampledColor;
         publicColor.setOpacity(OPACITY_OPAQUE_U8); // Alpha is unwanted for FG and BG colors.
 
         if (m_config->toForegroundColor) {
@@ -137,17 +137,17 @@ bool KisToolColorPicker::pickColor(const QPointF &pos)
     return true;
 }
 
-void KisToolColorPicker::beginPrimaryAction(KoPointerEvent *event)
+void KisToolColorSampler::beginPrimaryAction(KoPointerEvent *event)
 {
     bool sampleMerged = m_optionsWidget->cmbSources->currentIndex() == SAMPLE_MERGED;
     if (!sampleMerged) {
         if (!currentNode()) {
-            QMessageBox::information(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Cannot pick a color as no layer is active."));
+            QMessageBox::information(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Cannot sample a color as no layer is active."));
             event->ignore();
             return;
         }
         if (!currentNode()->visible()) {
-            QMessageBox::information(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Cannot pick a color as the active layer is not visible."));
+            QMessageBox::information(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Cannot sample a color as the active layer is not visible."));
             event->ignore();
             return;
         }
@@ -157,35 +157,35 @@ void KisToolColorPicker::beginPrimaryAction(KoPointerEvent *event)
 
     setMode(KisTool::PAINT_MODE);
 
-    bool picked = pickColor(pos);
-    if (!picked) {
-        // Color picking has to start in the visible part of the layer
+    bool sampled = sampleColor(pos);
+    if (!sampled) {
+        // Color sampling has to start in the visible part of the layer
         event->ignore();
         return;
     }
 
-    displayPickedColor();
+    displaySampledColor();
 }
 
-void KisToolColorPicker::continuePrimaryAction(KoPointerEvent *event)
+void KisToolColorSampler::continuePrimaryAction(KoPointerEvent *event)
 {
     CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
 
     QPoint pos = convertToImagePixelCoordFloored(event);
-    pickColor(pos);
-    displayPickedColor();
+    sampleColor(pos);
+    displaySampledColor();
 }
 
 #include "kis_display_color_converter.h"
 
-void KisToolColorPicker::endPrimaryAction(KoPointerEvent *event)
+void KisToolColorSampler::endPrimaryAction(KoPointerEvent *event)
 {
     Q_UNUSED(event);
     CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
 
     if (m_config->addColorToCurrentPalette) {
         KisSwatch swatch;
-        swatch.setColor(m_pickedColor);
+        swatch.setColor(m_sampledColor);
         // We don't ask for a name, too intrusive here
 
         QModelIndex idx = m_resourceModel->index(m_optionsWidget->cmbPalette->currentIndex(), 0);
@@ -202,46 +202,46 @@ void KisToolColorPicker::endPrimaryAction(KoPointerEvent *event)
 
 }
 
-struct PickedChannel {
+struct SampledChannel {
     QString name;
     QString valueText;
 };
 
-void KisToolColorPicker::displayPickedColor()
+void KisToolColorSampler::displaySampledColor()
 {
-    if (m_pickedColor.data() && m_optionsWidget) {
+    if (m_sampledColor.data() && m_optionsWidget) {
 
-        QList<KoChannelInfo *> channels = m_pickedColor.colorSpace()->channels();
+        QList<KoChannelInfo *> channels = m_sampledColor.colorSpace()->channels();
         m_optionsWidget->listViewChannels->clear();
 
-        QVector<PickedChannel> pickedChannels;
+        QVector<SampledChannel> sampledChannels;
         for (int i = 0; i < channels.count(); ++i) {
-            pickedChannels.append(PickedChannel());
+            sampledChannels.append(SampledChannel());
         }
 
         for (int i = 0; i < channels.count(); ++i) {
 
-            PickedChannel pc;
+            SampledChannel pc;
             pc.name = channels[i]->name();
 
             if (m_config->normaliseValues) {
-                pc.valueText = m_pickedColor.colorSpace()->normalisedChannelValueText(m_pickedColor.data(), i);
+                pc.valueText = m_sampledColor.colorSpace()->normalisedChannelValueText(m_sampledColor.data(), i);
             } else {
-                pc.valueText = m_pickedColor.colorSpace()->channelValueText(m_pickedColor.data(), i);
+                pc.valueText = m_sampledColor.colorSpace()->channelValueText(m_sampledColor.data(), i);
             }
 
-            pickedChannels[channels[i]->displayPosition()] = pc;
+            sampledChannels[channels[i]->displayPosition()] = pc;
 
         }
 
-        Q_FOREACH (const PickedChannel &pc, pickedChannels) {
+        Q_FOREACH (const SampledChannel &pc, sampledChannels) {
             QTreeWidgetItem *item = new QTreeWidgetItem(m_optionsWidget->listViewChannels);
             item->setText(0, pc.name);
             item->setText(1, pc.valueText);
         }
 
         KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(canvas());
-        KoColor newColor = kritaCanvas->displayColorConverter()->applyDisplayFiltering(m_pickedColor, Float32BitsColorDepthID);
+        KoColor newColor = kritaCanvas->displayColorConverter()->applyDisplayFiltering(m_sampledColor, Float32BitsColorDepthID);
         QVector<float> values(4);
         newColor.colorSpace()->normalisedChannelsValue(newColor.data(), values);
 
@@ -253,9 +253,9 @@ void KisToolColorPicker::displayPickedColor()
     }
 }
 
-QWidget* KisToolColorPicker::createOptionWidget()
+QWidget* KisToolColorSampler::createOptionWidget()
 {
-    m_optionsWidget = new ColorPickerOptionsWidget(0);
+    m_optionsWidget = new ColorSamplerOptionsWidget(0);
     m_optionsWidget->setObjectName(toolId() + " option widget");
     m_optionsWidget->listViewChannels->setSortingEnabled(false);
 
@@ -295,7 +295,7 @@ QWidget* KisToolColorPicker::createOptionWidget()
     return m_optionsWidget;
 }
 
-void KisToolColorPicker::updateOptionWidget()
+void KisToolColorSampler::updateOptionWidget()
 {
     if (!m_optionsWidget) return;
 
@@ -307,44 +307,44 @@ void KisToolColorPicker::updateOptionWidget()
     m_optionsWidget->blend->setValue(m_config->blend);
 }
 
-void KisToolColorPicker::setToForeground(bool newValue)
+void KisToolColorSampler::setToForeground(bool newValue)
 {
     m_config->toForegroundColor = newValue;
     emit toForegroundChanged();
 }
 
-bool KisToolColorPicker::toForeground() const
+bool KisToolColorSampler::toForeground() const
 {
     return m_config->toForegroundColor;
 }
 
-void KisToolColorPicker::slotSetUpdateColor(bool state)
+void KisToolColorSampler::slotSetUpdateColor(bool state)
 {
     m_config->updateColor = state;
 }
 
-void KisToolColorPicker::slotSetNormaliseValues(bool state)
+void KisToolColorSampler::slotSetNormaliseValues(bool state)
 {
     m_config->normaliseValues = state;
-    displayPickedColor();
+    displaySampledColor();
 }
 
-void KisToolColorPicker::slotSetAddPalette(bool state)
+void KisToolColorSampler::slotSetAddPalette(bool state)
 {
     m_config->addColorToCurrentPalette = state;
 }
 
-void KisToolColorPicker::slotChangeRadius(int value)
+void KisToolColorSampler::slotChangeRadius(int value)
 {
     m_config->radius = value;
 }
 
-void KisToolColorPicker::slotChangeBlend(int value)
+void KisToolColorSampler::slotChangeBlend(int value)
 {
     m_config->blend = value;
 }
 
-void KisToolColorPicker::slotSetColorSource(int value)
+void KisToolColorSampler::slotSetColorSource(int value)
 {
     m_config->sampleMerged = value == SAMPLE_MERGED;
 }

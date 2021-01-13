@@ -25,8 +25,8 @@ public:
     KisCursorCache();
 
     QCursor selectCursor;
-    QCursor pickerPlusCursor;
-    QCursor pickerMinusCursor;
+    QCursor samplerPlusCursor;
+    QCursor samplerMinusCursor;
     QCursor penCursor;
     QCursor brushCursor;
     QCursor airbrushCursor;

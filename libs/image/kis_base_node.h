@@ -146,11 +146,11 @@ public:
     virtual KisPaintDeviceSP projection() const = 0;
 
     /**
-     * @return a special device from where the color picker tool should pick
+     * @return a special device from where the color sampler tool should sample
      * color when in layer-only mode. For most of the nodes just shortcuts
      * to projection() device. TODO: can it be null?
      */
-    virtual KisPaintDeviceSP colorPickSourceDevice() const;
+    virtual KisPaintDeviceSP colorSampleSourceDevice() const;
 
     virtual const KoColorSpace *colorSpace() const = 0;
 

@@ -54,7 +54,7 @@ public:
     void setCutoutOverlayRect(const QRect&rc);
 
     /**
-     * keep track of if our scratchpad is in paint, pan, or color pick mode
+     * keep track of if our scratchpad is in paint, pan, or color sample mode
      * Set to true if there is a GUI controlling current mode
      * If this is false, the modes are only changed with various mouse click shortcuts
      */
@@ -146,7 +146,7 @@ private:
     void doPan(KoPointerEvent *event);
     void endPan(KoPointerEvent *event);
 
-    void pick(KoPointerEvent *event);
+    void sample(KoPointerEvent *event);
 
     void updateTransformations();
 
@@ -158,7 +158,7 @@ private:
         PAINTING,
         HOVERING,
         PANNING,
-        PICKING
+        SAMPLING
     };
 
     Mode modeFromButton(Qt::MouseButton button) const;
@@ -173,7 +173,7 @@ private:
     KisPaintLayerSP m_paintLayer;
     const KoColorProfile* m_displayProfile;
     QCursor m_cursor;
-    QCursor m_colorPickerCursor;
+    QCursor m_colorSamplerCursor;
     QRect m_cutoutOverlay;
     QBrush m_checkBrush;
     KisCanvasResourceProvider* m_resourceProvider;

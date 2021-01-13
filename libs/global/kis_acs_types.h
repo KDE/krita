@@ -38,7 +38,7 @@ namespace Acs {
     }
 
     template <class PaintDeviceSP>
-    KoColor pickColor(PaintDeviceSP device, const QPoint &pt) {
+    KoColor sampleColor(PaintDeviceSP device, const QPoint &pt) {
         KoColor color;
         if (device) {
             (void) device->pixel(pt.x(), pt.y(), &color);

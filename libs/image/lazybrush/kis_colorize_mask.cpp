@@ -464,7 +464,7 @@ KisPaintDeviceSP KisColorizeMask::coloringProjection() const
     return m_d->coloringProjection;
 }
 
-KisPaintDeviceSP KisColorizeMask::colorPickSourceDevice() const
+KisPaintDeviceSP KisColorizeMask::colorSampleSourceDevice() const
 {
     return
         m_d->shouldShowColoring() && !m_d->coloringProjection->extent().isEmpty() ?

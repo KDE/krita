@@ -41,7 +41,7 @@ public Q_SLOTS:
     void deactivate() override;
 
 protected:
-    bool tryPickByPaintOp(KoPointerEvent *event, AlternateAction action);
+    bool trySampleByPaintOp(KoPointerEvent *event, AlternateAction action);
 
     bool primaryActionSupportsHiResEvents() const override;
     void beginPrimaryAction(KoPointerEvent *event) override;
@@ -110,7 +110,7 @@ private:
     qreal m_lastPaintOpSize;
     QPoint m_initialGestureGlobalPoint;
 
-    bool m_paintopBasedPickingInAction;
+    bool m_paintopBasedSamplingInAction;
     KisSignalCompressorWithParam<qreal> m_brushResizeCompressor;
 };
 

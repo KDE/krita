@@ -4,12 +4,12 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include "kis_color_picker_stroke_strategy.h"
+#include "kis_color_sampler_stroke_strategy.h"
 
 #include "kis_tool_utils.h"
 #include "kis_paint_device.h"
 
-struct KisColorPickerStrokeStrategy::Private
+struct KisColorSamplerStrokeStrategy::Private
 {
     Private() : shouldSkipWork(false) {}
 
@@ -18,25 +18,25 @@ struct KisColorPickerStrokeStrategy::Private
     int blend = 100;
 };
 
-KisColorPickerStrokeStrategy::KisColorPickerStrokeStrategy(int lod)
-    : KisSimpleStrokeStrategy(QLatin1String("KisColorPickerStrokeStrategy")),
+KisColorSamplerStrokeStrategy::KisColorSamplerStrokeStrategy(int lod)
+    : KisSimpleStrokeStrategy(QLatin1String("KisColorSamplerStrokeStrategy")),
       m_d(new Private)
 {
     setSupportsWrapAroundMode(true);
     enableJob(KisSimpleStrokeStrategy::JOB_DOSTROKE);
 
-    KisToolUtils::ColorPickerConfig config;
+    KisToolUtils::ColorSamplerConfig config;
     config.load();
 
     m_d->radius = qMax(1, qRound(config.radius * KisLodTransform::lodToScale(lod)));
     m_d->blend = config.blend;
 }
 
-KisColorPickerStrokeStrategy::~KisColorPickerStrokeStrategy()
+KisColorSamplerStrokeStrategy::~KisColorSamplerStrokeStrategy()
 {
 }
 
-void KisColorPickerStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
+void KisColorSamplerStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 {
     if (m_d->shouldSkipWork) return;
 
@@ -45,18 +45,18 @@ void KisColorPickerStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 
     KoColor color;
     KoColor previous = d->currentColor;
-    if (KisToolUtils::pickColor(color, d->dev, d->pt, &previous, m_d->radius, m_d->blend) == true) {
+    if (KisToolUtils::sampleColor(color, d->dev, d->pt, &previous, m_d->radius, m_d->blend) == true) {
         emit sigColorUpdated(color);
     }
 }
 
-KisStrokeStrategy* KisColorPickerStrokeStrategy::createLodClone(int levelOfDetail)
+KisStrokeStrategy* KisColorSamplerStrokeStrategy::createLodClone(int levelOfDetail)
 {
     m_d->shouldSkipWork = true;
 
-    KisColorPickerStrokeStrategy *lodStrategy = new KisColorPickerStrokeStrategy(levelOfDetail);
-    connect(lodStrategy, &KisColorPickerStrokeStrategy::sigColorUpdated,
-            this, &KisColorPickerStrokeStrategy::sigColorUpdated,
+    KisColorSamplerStrokeStrategy *lodStrategy = new KisColorSamplerStrokeStrategy(levelOfDetail);
+    connect(lodStrategy, &KisColorSamplerStrokeStrategy::sigColorUpdated,
+            this, &KisColorSamplerStrokeStrategy::sigColorUpdated,
             Qt::DirectConnection);
     return lodStrategy;
 }

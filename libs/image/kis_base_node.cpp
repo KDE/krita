@@ -111,7 +111,7 @@ KisBaseNode::~KisBaseNode()
     delete m_d;
 }
 
-KisPaintDeviceSP KisBaseNode::colorPickSourceDevice() const
+KisPaintDeviceSP KisBaseNode::colorSampleSourceDevice() const
 {
     return projection();
 }

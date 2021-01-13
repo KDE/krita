@@ -727,4 +727,5 @@ void KisFreeTransformStrategy::Private::recalculateTransformations()
     recalculateTransformedHandles();
 
     emit q->requestShowImageTooBig(imageTooBig);
+    emit q->requestImageRecalculation();
 }

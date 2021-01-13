@@ -270,9 +270,31 @@ void KisDlgLayerStyle::slotNewStyle()
                               QLineEdit::Normal, i18nc("Default name for a new style", "New Style"));
 
     KisPSDLayerStyleSP style = this->style();
-    style->setName(selectAvailableStyleName(styleName));
+    KisPSDLayerStyleSP clone = style->clone().dynamicCast<KisPSDLayerStyle>();
+    style->setName(styleName);
+    clone->setName(styleName);
+    clone->setFilename(styleName);
+    clone->setUuid(QUuid::createUuid());
+    m_stylesSelector->addNewStyle(clone);
+    const QString customStylesStorageLocation = "asl/CustomStyles.asl";
+    KisConfig cfg(true);
+    QString resourceDir = cfg.readEntry<QString>(KisResourceLocator::resourceLocationKey,
+                                            QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
+    QString storagePath = resourceDir + "/" + customStylesStorageLocation;
 
-    m_stylesSelector->addNewStyle(style->clone().dynamicCast<KisPSDLayerStyle>());
+
+    if (KisResourceLocator::instance()->hasStorage(storagePath)) {
+        KisResourceModel model(ResourceType::LayerStyles);
+        model.addResource(clone, storagePath);
+
+    } else {
+        KisAslLayerStyleSerializer serializer;
+        serializer.setStyles(QVector<KisPSDLayerStyleSP>() << clone);
+        serializer.saveToFile(storagePath);
+        QSharedPointer<KisResourceStorage> storage = QSharedPointer<KisResourceStorage>(new KisResourceStorage(storagePath));
+        KisResourceLocator::instance()->addStorage(customStylesStorageLocation, storage);
+    }
+
 }
 
 QString createNewAslPath(QString resourceFolderPath, QString filename)
@@ -316,14 +338,11 @@ void KisDlgLayerStyle::slotLoadStyle()
     KisResourceStorageSP storage = QSharedPointer<KisResourceStorage>::create(newLocation);
     KIS_ASSERT(!storage.isNull());
     KisResourceLocator::instance()->addStorage(newLocation, storage);
+    m_stylesSelector->refillCollections();
 }
 
 void KisDlgLayerStyle::slotSaveStyle()
 {
-    // TODO RESOURCES: needs figuring out
-    warnKrita << "Layer style cannot be saved; needs figuring out what to do here";
-
-    /*
     QString filename; // default value?
 
     KoFileDialog dialog(this, KoFileDialog::SaveFile, "layerstyle");
@@ -331,17 +350,14 @@ void KisDlgLayerStyle::slotSaveStyle()
     dialog.setMimeTypeFilters(QStringList() << "application/x-photoshop-style-library", "application/x-photoshop-style-library");
     filename = dialog.filename();
 
-    QScopedPointer<KisPSDLayerStyleCollectionResource> collection(
-        new KisPSDLayerStyleCollectionResource(filename));
+    QSharedPointer<KisAslLayerStyleSerializer> serializer = QSharedPointer<KisAslLayerStyleSerializer>(new KisAslLayerStyleSerializer());
 
     KisPSDLayerStyleSP newStyle = style()->clone().dynamicCast<KisPSDLayerStyle>();
     newStyle->setName(QFileInfo(filename).completeBaseName());
-
-    KisPSDLayerStyleCollectionResource::StylesVector vector = collection->layerStyles();
-    vector << newStyle;
-    collection->setLayerStyles(vector);
-    collection->save();
-    */
+    QVector<KisPSDLayerStyleSP> styles;
+    styles << newStyle;
+    serializer->setStyles(styles);
+    serializer->saveToFile(filename);
 }
 
 void KisDlgLayerStyle::changePage(QListWidgetItem *current, QListWidgetItem *previous)
@@ -652,8 +668,6 @@ void StylesSelector::slotResourceModelReset()
 
 void StylesSelector::addNewStyle(KisPSDLayerStyleSP style)
 {
-    KoResourceServer<KisPSDLayerStyle> *server = KisResourceServerProvider::instance()->layerStyleServer();
-    server->addResource(style);
 
     // TODO: RESOURCES: what about adding only to CustomStyles.asl
 
@@ -1079,6 +1093,8 @@ GradientOverlay::GradientOverlay(KisCanvasResourceProvider *resourceProvider, QW
 
     ui.intScale->setRange(0, 100);
     ui.intScale->setSuffix(i18n(" %"));
+    
+    ui.angleSelector->angleSelector()->setResetAngle(90.0);
 
     ui.cmbGradient->setCanvasResourcesInterface(resourceProvider->resourceManager()->canvasResourcesInterface());
 

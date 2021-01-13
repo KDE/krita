@@ -117,6 +117,15 @@ bool KisNodePropertyListCommand::canMergeWith(const KUndo2Command *command) cons
              changedProperties(other->m_oldPropertyList, other->m_newPropertyList));
 }
 
+bool KisNodePropertyListCommand::annihilateWith(const KUndo2Command *command)
+{
+    const KisNodePropertyListCommand *other =
+        dynamic_cast<const KisNodePropertyListCommand*>(command);
+
+    return other && other->m_node == m_node &&
+            changedProperties(m_oldPropertyList, other->m_newPropertyList).isEmpty();
+}
+
 bool checkOnionSkinChanged(const KisBaseNode::PropertyList &oldPropertyList,
                            const KisBaseNode::PropertyList &newPropertyList)
 {
@@ -184,15 +193,7 @@ void KisNodePropertyListCommand::doUpdate(const KisBaseNode::PropertyList &oldPr
 
 void KisNodePropertyListCommand::setNodePropertiesAutoUndo(KisNodeSP node, KisImageSP image, PropertyList proplist)
 {
-    QSet<QString> changedProps = changedProperties(node->sectionModelProperties(),
-                                                         proplist);
-
-    changedProps.remove(KisLayerPropertiesIcons::visible.id());
-    changedProps.remove(KisLayerPropertiesIcons::locked.id());
-    changedProps.remove(KisLayerPropertiesIcons::selectionActive.id());
-    changedProps.remove(KisLayerPropertiesIcons::alphaLocked.id());
-    changedProps.remove(KisLayerPropertiesIcons::colorizeNeedsUpdate.id());
-    const bool undo = !changedProps.isEmpty();
+    const bool undo = !changedProperties(node->sectionModelProperties(), proplist).isEmpty();
 
     QScopedPointer<KUndo2Command> cmd(new KisNodePropertyListCommand(node, proplist));
 

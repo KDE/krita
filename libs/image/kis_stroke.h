@@ -63,6 +63,8 @@ public:
 
     KisStrokeJobData::Sequentiality nextJobSequentiality() const;
 
+    int nextJobLevelOfDetail() const;
+
     void setLodBuddy(KisStrokeSP buddy);
     KisStrokeSP lodBuddy() const;
 

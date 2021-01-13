@@ -25,6 +25,10 @@ private Q_SLOTS:
     void testOpenedStrokeCounter();
     void testAsyncCancelWhileOpenedStroke();
     void testStrokesLevelOfDetail();
+    void testStrokeWithMixedLodJobs();
+    void testMultipleLevelOfDetailStrokes();
+    void testMultipleLevelOfDetailAfterLegacy();
+    void testMultipleLevelOfDetailMixedLegacy();
     void testLodUndoBase();
     void testLodUndoBase2();
     void testMutatedJobs();

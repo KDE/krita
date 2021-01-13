@@ -12,6 +12,7 @@
 #include "KisMainWindow.h"
 #include <KisUpdaterBase.h>
 
+#include <QAction>
 #include <QWidget>
 #include "ui_KisWelcomePage.h"
 #include <QStandardItemModel>
@@ -19,6 +20,16 @@
 
 #include "config-updaters.h"
 class RecentItemDelegate;
+
+// Custom QAction to bridge a QLabel::linkActivated signal to a QAction::setChecked signal
+class ShowNewsAction : public QAction
+{
+  Q_OBJECT
+public:
+    using QAction::QAction;
+private Q_SLOTS:
+    void enableFromLink(QString unused_url);
+};
 
 /// A widget for displaying if no documents are open. This will display in the MDI area
 class KRITAUI_EXPORT KisWelcomePageWidget : public QWidget, public Ui::KisWelcomePage

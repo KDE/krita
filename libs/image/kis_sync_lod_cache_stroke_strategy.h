@@ -7,11 +7,12 @@
 #ifndef __KIS_SYNC_LOD_CACHE_STROKE_STRATEGY_H
 #define __KIS_SYNC_LOD_CACHE_STROKE_STRATEGY_H
 
-#include <kis_simple_stroke_strategy.h>
+#include "kritaimage_export.h"
+#include <KisRunnableBasedStrokeStrategy.h>
 
 #include <QScopedPointer>
 
-class KisSyncLodCacheStrokeStrategy : public KisSimpleStrokeStrategy
+class KRITAIMAGE_EXPORT KisSyncLodCacheStrokeStrategy : public KisRunnableBasedStrokeStrategy
 {
 public:
     KisSyncLodCacheStrokeStrategy(KisImageWSP image, bool forgettable);
@@ -19,10 +20,10 @@ public:
 
     static QList<KisStrokeJobData*> createJobsData(KisImageWSP image);
 
+    static void createJobsData(QVector<KisStrokeJobData *> &jobs, KisNodeSP imageRoot, int levelOfDetail, KisPaintDeviceList extraDevices = {});
+
 private:
-    void doStrokeCallback(KisStrokeJobData *data) override;
-    void finishStrokeCallback() override;
-    void cancelStrokeCallback() override;
+    void initStrokeCallback() override;
 
 private:
     struct Private;

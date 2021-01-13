@@ -62,9 +62,6 @@ KisGradientGeneratorConfigWidget::KisGradientGeneratorConfigWidget(QWidget* pare
     m_ui.comboBoxEndPositionYUnits->addItems(spatialUnitsNames);
     m_ui.comboBoxEndPositionXPositioning->addItems(positioningNames);
     m_ui.comboBoxEndPositionYPositioning->addItems(positioningNames);
-    m_ui.sliderEndPositionAngle->setPrefix(i18nc("Angle for the gradient", "Angle: "));
-    m_ui.sliderEndPositionAngle->setSuffix(i18nc("Degrees symbol", "˚"));
-    m_ui.sliderEndPositionAngle->setRange(0, 360, 3);
     m_ui.comboBoxEndPositionDistanceUnits->addItems(spatialUnitsNames);
 
     m_ui.widgetGradientEditor->setContentsMargins(10, 10, 10, 10);
@@ -98,7 +95,7 @@ KisGradientGeneratorConfigWidget::KisGradientGeneratorConfigWidget(QWidget* pare
     connect(m_ui.comboBoxEndPositionYUnits, SIGNAL(currentIndexChanged(int)), this, SIGNAL(sigConfigurationUpdated()));
     connect(m_ui.comboBoxEndPositionXPositioning, SIGNAL(currentIndexChanged(int)), this, SIGNAL(sigConfigurationUpdated()));
     connect(m_ui.comboBoxEndPositionYPositioning, SIGNAL(currentIndexChanged(int)), this, SIGNAL(sigConfigurationUpdated()));
-    connect(m_ui.sliderEndPositionAngle, SIGNAL(valueChanged(qreal)), this, SIGNAL(sigConfigurationUpdated()));
+    connect(m_ui.angleSelectorEndPositionAngle, SIGNAL(angleChanged(qreal)), this, SIGNAL(sigConfigurationUpdated()));
     connect(m_ui.spinBoxEndPositionDistance, SIGNAL(valueChanged(double)), this, SIGNAL(sigConfigurationUpdated()));
     connect(m_ui.comboBoxEndPositionDistanceUnits, SIGNAL(currentIndexChanged(int)), this, SIGNAL(sigConfigurationUpdated()));
 
@@ -138,7 +135,7 @@ void KisGradientGeneratorConfigWidget::setConfiguration(const KisPropertiesConfi
         m_ui.comboBoxEndPositionYUnits->setCurrentIndex(generatorConfig->endPositionYUnits());
         m_ui.comboBoxEndPositionXPositioning->setCurrentIndex(generatorConfig->endPositionXPositioning());
         m_ui.comboBoxEndPositionYPositioning->setCurrentIndex(generatorConfig->endPositionYPositioning());
-        m_ui.sliderEndPositionAngle->setValue(generatorConfig->endPositionAngle());
+        m_ui.angleSelectorEndPositionAngle->setAngle(generatorConfig->endPositionAngle());
         m_ui.spinBoxEndPositionDistance->setValue(generatorConfig->endPositionDistance());
         m_ui.comboBoxEndPositionDistanceUnits->setCurrentIndex(generatorConfig->endPositionDistanceUnits());
 
@@ -172,7 +169,7 @@ KisPropertiesConfigurationSP KisGradientGeneratorConfigWidget::configuration() c
     config->setEndPositionYUnits(static_cast<KisGradientGeneratorConfiguration::SpatialUnits>(m_ui.comboBoxEndPositionYUnits->currentIndex()));
     config->setEndPositionXPositioning(static_cast<KisGradientGeneratorConfiguration::Positioning>(m_ui.comboBoxEndPositionXPositioning->currentIndex()));
     config->setEndPositionYPositioning(static_cast<KisGradientGeneratorConfiguration::Positioning>(m_ui.comboBoxEndPositionYPositioning->currentIndex()));
-    config->setEndPositionAngle(m_ui.sliderEndPositionAngle->value());
+    config->setEndPositionAngle(m_ui.angleSelectorEndPositionAngle->angle());
     config->setEndPositionDistance(m_ui.spinBoxEndPositionDistance->value());
     config->setEndPositionDistanceUnits(static_cast<KisGradientGeneratorConfiguration::SpatialUnits>(m_ui.comboBoxEndPositionDistanceUnits->currentIndex()));
 

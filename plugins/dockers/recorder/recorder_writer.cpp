@@ -62,7 +62,7 @@ public:
                     recordIndex = index;
             }
         }
-        qDebug() << "findLastPartNumber for" << directory << ": " << timer.elapsed() << "ms";
+        dbgTools << "findLastPartNumber for" << directory << ": " << timer.elapsed() << "ms";
 
         return recordIndex;
     }

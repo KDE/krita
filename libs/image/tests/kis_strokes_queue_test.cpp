@@ -500,7 +500,7 @@ void KisStrokesQueueTest::testStrokesLevelOfDetail()
     KisStrokesQueue &queue = t.queue;
 
     // create a stroke with LOD0 + LOD2
-    queue.setDesiredLevelOfDetail(2);
+    queue.setLodPreferences(KisLodPreferences(2));
 
     // process sync-lodn-planes stroke
     t.processQueue();
@@ -570,6 +570,207 @@ void KisStrokesQueueTest::testStrokesLevelOfDetail()
     context.clear();
 }
 
+void KisStrokesQueueTest::testStrokeWithMixedLodJobs()
+{
+    LodStrokesQueueTester t;
+    KisStrokesQueue &queue = t.queue;
+
+    // create a stroke with LOD0 + LOD2
+    queue.setLodPreferences(KisLodPreferences(2));
+
+    // process sync-lodn-planes stroke
+    t.processQueue();
+    t.checkOnlyJob("sync_u_init");
+
+    KisStrokeId id2 = queue.startStroke(new KisTestingStrokeStrategy(QLatin1String("lod_"), false, true, false, false, true));
+
+    KisStrokeJobData *data = 0;
+    data = new KisTestingStrokeJobData(KisStrokeJobData::CONCURRENT,
+                                       KisStrokeJobData::NORMAL,
+                                       false, "job0_l0");
+    queue.addJob(id2, data);
+
+    data = new KisTestingStrokeJobData(KisStrokeJobData::CONCURRENT,
+                                       KisStrokeJobData::NORMAL,
+                                       false, "job1_l0");
+    queue.addJob(id2, data);
+
+    data = new KisTestingStrokeJobData(KisStrokeJobData::CONCURRENT,
+                                       KisStrokeJobData::NORMAL,
+                                       false, "job2_l0");
+    queue.addJob(id2, data);
+
+    data = new KisTestingStrokeJobData(KisStrokeJobData::CONCURRENT,
+                                       KisStrokeJobData::NORMAL,
+                                       false, "job3_l2");
+    data->setLevelOfDetailOverride(2);
+    queue.addJob(id2, data);
+
+    data = new KisTestingStrokeJobData(KisStrokeJobData::CONCURRENT,
+                                       KisStrokeJobData::NORMAL,
+                                       false, "job4_l0");
+    queue.addJob(id2, data);
+
+    queue.endStroke(id2);
+
+    t.processQueue();
+    t.checkJobs({"lod_dab_job0_l0", "lod_dab_job1_l0"});
+    QCOMPARE(t.context.currentLevelOfDetail(), 0);
+
+    t.processQueue();
+    t.checkOnlyJob("lod_dab_job2_l0");
+    QCOMPARE(t.context.currentLevelOfDetail(), 0);
+
+    t.processQueue();
+    t.checkOnlyJob("lod_dab_job3_l2");
+    QCOMPARE(t.context.currentLevelOfDetail(), 2);
+
+    t.processQueue();
+    t.checkOnlyJob("lod_dab_job4_l0");
+    QCOMPARE(t.context.currentLevelOfDetail(), 0);
+}
+
+void KisStrokesQueueTest::testMultipleLevelOfDetailStrokes()
+{
+    LodStrokesQueueTester t;
+    KisStrokesQueue &queue = t.queue;
+
+    // create a stroke with LOD0 + LOD2
+    queue.setLodPreferences(KisLodPreferences(2));
+
+    KisStrokeId id1 = queue.startStroke(new KisTestingStrokeStrategy(QLatin1String("lod1_"), false, true));
+    queue.addJob(id1, new KisTestingStrokeJobData(KisStrokeJobData::CONCURRENT));
+    queue.endStroke(id1);
+
+    KisStrokeId id2 = queue.startStroke(new KisTestingStrokeStrategy(QLatin1String("lod2_"), false, true));
+    queue.addJob(id2, new KisTestingStrokeJobData(KisStrokeJobData::CONCURRENT));
+    queue.endStroke(id2);
+
+    t.processQueue();
+    t.checkOnlyJob("sync_u_init");
+
+    t.processQueue();
+    t.checkOnlyJob("clone2_lod1_dab");
+
+    t.processQueue();
+    t.checkOnlyJob("clone2_lod2_dab");
+
+    t.processQueue();
+    t.checkOnlyJob("susp_u_init");
+
+    t.processQueue();
+    t.checkOnlyJob("lod1_dab");
+
+    t.processQueue();
+    t.checkOnlyJob("lod2_dab");
+
+    t.processQueue();
+    t.checkOnlyJob("resu_u_init");
+}
+
+void KisStrokesQueueTest::testMultipleLevelOfDetailAfterLegacy()
+{
+    LodStrokesQueueTester t;
+    KisStrokesQueue &queue = t.queue;
+
+    // create a stroke with LOD0 + LOD2
+    queue.setLodPreferences(KisLodPreferences(2));
+
+    KisStrokeId id0 = queue.startStroke(new KisTestingStrokeStrategy(QLatin1String("leg0_"), false, true, false, false, true));
+    queue.addJob(id0, new KisTestingStrokeJobData(KisStrokeJobData::CONCURRENT));
+    queue.endStroke(id0);
+
+    KisStrokeId id1 = queue.startStroke(new KisTestingStrokeStrategy(QLatin1String("lod1_"), false, true));
+    queue.addJob(id1, new KisTestingStrokeJobData(KisStrokeJobData::CONCURRENT));
+    queue.endStroke(id1);
+
+    KisStrokeId id2 = queue.startStroke(new KisTestingStrokeStrategy(QLatin1String("lod2_"), false, true));
+    queue.addJob(id2, new KisTestingStrokeJobData(KisStrokeJobData::CONCURRENT));
+    queue.endStroke(id2);
+
+    t.processQueue();
+    t.checkOnlyJob("sync_u_init");
+
+    t.processQueue();
+    t.checkOnlyJob("leg0_dab");
+
+    t.processQueue();
+    t.checkOnlyJob("sync_u_init");
+
+    t.processQueue();
+    t.checkOnlyJob("clone2_lod1_dab");
+
+    t.processQueue();
+    t.checkOnlyJob("clone2_lod2_dab");
+
+    t.processQueue();
+    t.checkOnlyJob("susp_u_init");
+
+    t.processQueue();
+    t.checkOnlyJob("lod1_dab");
+
+    t.processQueue();
+    t.checkOnlyJob("lod2_dab");
+
+    t.processQueue();
+    t.checkOnlyJob("resu_u_init");
+
+}
+
+void KisStrokesQueueTest::testMultipleLevelOfDetailMixedLegacy()
+{
+    LodStrokesQueueTester t;
+    KisStrokesQueue &queue = t.queue;
+
+    // create a stroke with LOD0 + LOD2
+    queue.setLodPreferences(KisLodPreferences(2));
+
+    KisStrokeId id0 = queue.startStroke(new KisTestingStrokeStrategy(QLatin1String("lod0_"), false, true));
+    queue.addJob(id0, new KisTestingStrokeJobData(KisStrokeJobData::CONCURRENT));
+    queue.endStroke(id0);
+
+    KisStrokeId id1 = queue.startStroke(new KisTestingStrokeStrategy(QLatin1String("leg1_"), false, true, false, false, true));
+    queue.addJob(id1, new KisTestingStrokeJobData(KisStrokeJobData::CONCURRENT));
+    queue.endStroke(id1);
+
+    KisStrokeId id2 = queue.startStroke(new KisTestingStrokeStrategy(QLatin1String("lod2_"), false, true));
+    queue.addJob(id2, new KisTestingStrokeJobData(KisStrokeJobData::CONCURRENT));
+    queue.endStroke(id2);
+
+    t.processQueue();
+    t.checkOnlyJob("sync_u_init");
+
+    t.processQueue();
+    t.checkOnlyJob("clone2_lod0_dab");
+
+    t.processQueue();
+    t.checkOnlyJob("susp_u_init");
+
+    t.processQueue();
+    t.checkOnlyJob("lod0_dab");
+
+    t.processQueue();
+    t.checkOnlyJob("resu_u_init");
+
+    t.processQueue();
+    t.checkOnlyJob("leg1_dab");
+
+    t.processQueue();
+    t.checkOnlyJob("sync_u_init");
+
+    t.processQueue();
+    t.checkOnlyJob("clone2_lod2_dab");
+
+    t.processQueue();
+    t.checkOnlyJob("susp_u_init");
+
+    t.processQueue();
+    t.checkOnlyJob("lod2_dab");
+
+    t.processQueue();
+    t.checkOnlyJob("resu_u_init");
+}
+
 #include <kundo2command.h>
 #include <kis_post_execution_undo_adapter.h>
 struct TestUndoCommand : public KUndo2Command
@@ -596,7 +797,7 @@ void KisStrokesQueueTest::testLodUndoBase()
     KisStrokesQueue &queue = t.queue;
 
     // create a stroke with LOD0 + LOD2
-    queue.setDesiredLevelOfDetail(2);
+    queue.setLodPreferences(KisLodPreferences(2));
 
     // process sync-lodn-planes stroke
     t.processQueue();
@@ -642,7 +843,7 @@ void KisStrokesQueueTest::testLodUndoBase2()
     KisStrokesQueue &queue = t.queue;
 
     // create a stroke with LOD0 + LOD2
-    queue.setDesiredLevelOfDetail(2);
+    queue.setLodPreferences(KisLodPreferences(2));
     KisStrokeId id1 = queue.startStroke(new KisTestingStrokeStrategy(QLatin1String("str1_"), false, true, false, true));
     queue.addJob(id1, new KisTestingStrokeJobData(KisStrokeJobData::CONCURRENT));
     queue.endStroke(id1);

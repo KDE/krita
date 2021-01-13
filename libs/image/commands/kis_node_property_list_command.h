@@ -30,6 +30,7 @@ public:
     int id() const override;
     bool mergeWith(const KUndo2Command *command) override;
     bool canMergeWith(const KUndo2Command *command) const override;
+    bool annihilateWith(const KUndo2Command *other) override;
 
     typedef KisBaseNode::PropertyList PropertyList;
     static void setNodePropertiesAutoUndo(KisNodeSP node, KisImageSP image, PropertyList proplist);

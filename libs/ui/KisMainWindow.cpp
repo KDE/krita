@@ -363,7 +363,6 @@ KisMainWindow::KisMainWindow(QUuid uuid)
 
     KoToolBoxFactory toolBoxFactory;
     QDockWidget *toolbox = createDockWidget(&toolBoxFactory);
-    toolbox->setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable | QDockWidget::DockWidgetClosable);
 
     KisConfig cfg(true);
     if (cfg.toolOptionsInDocker()) {
@@ -640,6 +639,11 @@ KisMainWindow::~KisMainWindow()
     delete d->viewManager;
     delete d;
 
+}
+
+QMenu *KisMainWindow::createPopupMenu()
+{
+    return 0;
 }
 
 QUuid KisMainWindow::id() const {
@@ -2095,12 +2099,10 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
             dockWidget->hide();
         }
 
-        bool locked = false;
-        group =  KSharedConfig::openConfig()->group("krita").group("DockWidget " + factory->id());
-        locked = group.readEntry("Locked", locked);
-
-        if (titleBar && locked)
+        bool locked = group.readEntry("Locked", false);
+        if (titleBar && locked) {
             titleBar->setLocked(true);
+        }
 
         d->dockWidgetsMap.insert(factory->id(), dockWidget);
     }

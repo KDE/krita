@@ -31,8 +31,6 @@ static inline bool hasFeature(const QDockWidget *dockwidget, QDockWidget::DockWi
 KoDockWidgetTitleBar::KoDockWidgetTitleBar(QDockWidget* dockWidget)
         : QWidget(dockWidget), d(new Private(this))
 {
-    QDockWidget *q = dockWidget;
-
     d->floatIcon = kisIcon("docker_float");
     d->floatButton = new KoDockWidgetTitleBarButton(this);
     d->floatButton->setIcon(d->floatIcon);
@@ -44,7 +42,7 @@ KoDockWidgetTitleBar::KoDockWidgetTitleBar(QDockWidget* dockWidget)
     d->removeIcon = kisIcon("docker_close");
     d->closeButton = new KoDockWidgetTitleBarButton(this);
     d->closeButton->setIcon(d->removeIcon);
-    connect(d->closeButton, SIGNAL(clicked()), q, SLOT(close()));
+    connect(d->closeButton, SIGNAL(clicked()), dockWidget, SLOT(close()));
     d->closeButton->setVisible(true);
     d->closeButton->setToolTip(i18nc("@info:tooltip", "Close Docker"));   
     d->closeButton->setStyleSheet("border: 0"); // border makes the header busy looking (appears on some OSs)
@@ -62,7 +60,7 @@ KoDockWidgetTitleBar::KoDockWidgetTitleBar(QDockWidget* dockWidget)
     connect(dockWidget, SIGNAL(featuresChanged(QDockWidget::DockWidgetFeatures)), SLOT(featuresChanged(QDockWidget::DockWidgetFeatures)));
     connect(dockWidget, SIGNAL(topLevelChanged(bool)), SLOT(topLevelChanged(bool)));
 
-    d->featuresChanged(0);
+    d->featuresChanged(QDockWidget::NoDockWidgetFeatures);
 }
 
 KoDockWidgetTitleBar::~KoDockWidgetTitleBar()
@@ -176,22 +174,12 @@ void KoDockWidgetTitleBar::resizeEvent(QResizeEvent*)
     else if (!closeRect.isNull())
         top = closeRect.y();
 
-    QSize size(0, 0);
+    QSize lockRectSize = d->lockButton->size();
     if (!closeRect.isNull()) {
-        size = d->closeButton->size();
+        lockRectSize = d->closeButton->size();
     } else if (!floatRect.isNull()) {
-        size = d->floatButton->size();
+        lockRectSize = d->floatButton->size();
     }
-
-    size = d->lockButton->size();
-
-    if (!closeRect.isNull()) {
-        size = d->closeButton->size();
-    } else if (!floatRect.isNull()) {
-        size = d->floatButton->size();
-    }
-
-    const QSize lockRectSize = size;
 
     if (q->isFloating() || (width() < (closeRect.width() + lockRectSize.width()) + 50)) {
         d->lockButton->setVisible(false);
@@ -206,7 +194,6 @@ void KoDockWidgetTitleBar::resizeEvent(QResizeEvent*)
     QRect lockRect = QRect(QPoint(fw + 2 + offset, top), lockRectSize);
     d->lockButton->setGeometry(lockRect);
 }
-
 
 void KoDockWidgetTitleBar::setLocked(bool locked)
 {
@@ -232,7 +219,6 @@ void KoDockWidgetTitleBar::setLocked(bool locked)
 
     d->updateIcons();
     q->setProperty("Locked", locked);
-    resizeEvent(0);
 }
 
 
@@ -273,8 +259,6 @@ void KoDockWidgetTitleBar::Private::featuresChanged(QDockWidget::DockWidgetFeatu
 
 void KoDockWidgetTitleBar::Private::updateIcons()
 {    
-    QDockWidget *q = qobject_cast<QDockWidget*>(thePublic->parentWidget());
-
     lockIcon = (!locked) ? kisIcon("docker_lock_a") : kisIcon("docker_lock_b");
     lockButton->setIcon(lockIcon);
 

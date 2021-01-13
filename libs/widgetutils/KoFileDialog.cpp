@@ -7,6 +7,7 @@
 #include "KoFileDialog.h"
 #include <QDebug>
 #include <QFileDialog>
+#include <KisPreviewFileDialog.h>
 #include <QApplication>
 #include <QImageReader>
 #include <QClipboard>
@@ -50,7 +51,7 @@ public:
     QUrl defaultUri;
     QStringList filterList;
     QString defaultFilter;
-    QScopedPointer<QFileDialog> fileDialog;
+    QScopedPointer<KisPreviewFileDialog> fileDialog;
     QString mimeType;
     bool swapExtensionOrder;
 };
@@ -139,7 +140,7 @@ QString KoFileDialog::selectedMimeType() const
 
 void KoFileDialog::createFileDialog()
 {
-    d->fileDialog.reset(new QFileDialog(d->parent, d->caption, d->defaultDirectory + "/" + d->proposedFileName));
+    d->fileDialog.reset(new KisPreviewFileDialog(d->parent, d->caption, d->defaultDirectory + "/" + d->proposedFileName));
     if (!d->defaultUri.isEmpty()) {
         d->fileDialog->setDirectoryUrl(d->defaultUri);
     }
@@ -234,6 +235,7 @@ void KoFileDialog::createFileDialog()
             d->fileDialog->setWindowModality(Qt::WindowModal);
         }
     }
+    d->fileDialog->resetIconProvider();
 }
 
 QString KoFileDialog::filename()

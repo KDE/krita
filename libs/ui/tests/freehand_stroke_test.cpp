@@ -46,7 +46,7 @@ protected:
         Q_UNUSED(activeNode);
 
         if (m_useLod) {
-            image->setDesiredLevelOfDetail(1);
+            image->setLodPreferences(KisLodPreferences(1));
         }
     }
 

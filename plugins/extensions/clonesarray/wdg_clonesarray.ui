@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <author>
     SPDX-FileCopyrightText: none
@@ -20,7 +20,7 @@
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <layout class="QGridLayout" name="gridLayout">
-     <item column="2" row="0">
+     <item row="0" column="2">
       <widget class="QLabel" name="label_6">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
@@ -36,7 +36,7 @@
        </property>
       </widget>
      </item>
-     <item column="3" row="0">
+     <item row="0" column="3">
       <widget class="QLabel" name="label_5">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
@@ -52,7 +52,7 @@
        </property>
       </widget>
      </item>
-     <item column="5" row="0">
+     <item row="0" column="5">
       <widget class="QLabel" name="label">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
@@ -68,7 +68,7 @@
        </property>
       </widget>
      </item>
-     <item column="6" row="0">
+     <item row="0" column="6">
       <widget class="QLabel" name="label_2">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
@@ -84,7 +84,7 @@
        </property>
       </widget>
      </item>
-     <item column="8" row="0">
+     <item row="0" column="8">
       <widget class="QLabel" name="label_8">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
@@ -100,7 +100,7 @@
        </property>
       </widget>
      </item>
-     <item column="9" row="0">
+     <item row="0" column="9">
       <widget class="QLabel" name="label_7">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
@@ -116,7 +116,7 @@
        </property>
       </widget>
      </item>
-     <item column="0" row="1">
+     <item row="1" column="0">
       <widget class="QLabel" name="label_3">
        <property name="text">
         <string>Columns:</string>
@@ -126,7 +126,7 @@
        </property>
       </widget>
      </item>
-     <item column="1" row="1" rowspan="2">
+     <item row="1" column="1" rowspan="2">
       <spacer name="horizontalSpacer_4">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
@@ -142,10 +142,10 @@
        </property>
       </spacer>
      </item>
-     <item column="2" row="1">
+     <item row="1" column="2">
       <widget class="KisIntParseSpinBox" name="numNegativeColumns"/>
      </item>
-     <item column="3" row="1">
+     <item row="1" column="3">
       <widget class="KisIntParseSpinBox" name="numPositiveColumns">
        <property name="minimum">
         <number>1</number>
@@ -155,7 +155,7 @@
        </property>
       </widget>
      </item>
-     <item column="4" row="1" rowspan="2">
+     <item row="1" column="4" rowspan="2">
       <spacer name="horizontalSpacer_2">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
@@ -171,7 +171,7 @@
        </property>
       </spacer>
      </item>
-     <item column="5" row="1">
+     <item row="1" column="5">
       <widget class="KisIntParseSpinBox" name="columnXOffset">
        <property name="suffix">
         <string>px</string>
@@ -184,7 +184,7 @@
        </property>
       </widget>
      </item>
-     <item column="6" row="1">
+     <item row="1" column="6">
       <widget class="KisIntParseSpinBox" name="columnYOffset">
        <property name="suffix">
         <string>px</string>
@@ -197,7 +197,7 @@
        </property>
       </widget>
      </item>
-     <item column="7" row="1" rowspan="2">
+     <item row="1" column="7" rowspan="2">
       <spacer name="horizontalSpacer">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
@@ -213,7 +213,7 @@
        </property>
       </spacer>
      </item>
-     <item column="0" row="2">
+     <item row="2" column="0">
       <widget class="QLabel" name="label_4">
        <property name="text">
         <string>Rows:</string>
@@ -223,10 +223,10 @@
        </property>
       </widget>
      </item>
-     <item column="2" row="2">
+     <item row="2" column="2">
       <widget class="KisIntParseSpinBox" name="numNegativeRows"/>
      </item>
-     <item column="3" row="2">
+     <item row="2" column="3">
       <widget class="KisIntParseSpinBox" name="numPositiveRows">
        <property name="minimum">
         <number>1</number>
@@ -236,7 +236,7 @@
        </property>
       </widget>
      </item>
-     <item column="5" row="2">
+     <item row="2" column="5">
       <widget class="KisIntParseSpinBox" name="rowXOffset">
        <property name="suffix">
         <string>px</string>
@@ -249,7 +249,7 @@
        </property>
       </widget>
      </item>
-     <item column="6" row="2">
+     <item row="2" column="6">
       <widget class="KisIntParseSpinBox" name="rowYOffset">
        <property name="suffix">
         <string>px</string>
@@ -262,33 +262,7 @@
        </property>
       </widget>
      </item>
-     <item column="9" row="1">
-      <widget class="KisDoubleParseSpinBox" name="columnAngle">
-       <property name="suffix">
-        <string notr="true">°</string>
-       </property>
-       <property name="minimum">
-        <double>-360.000000000000000</double>
-       </property>
-       <property name="maximum">
-        <double>360.000000000000000</double>
-       </property>
-      </widget>
-     </item>
-     <item column="9" row="2">
-      <widget class="KisDoubleParseSpinBox" name="rowAngle">
-       <property name="suffix">
-        <string notr="true">°</string>
-       </property>
-       <property name="minimum">
-        <double>-360.000000000000000</double>
-       </property>
-       <property name="maximum">
-        <double>360.000000000000000</double>
-       </property>
-      </widget>
-     </item>
-     <item column="8" row="1">
+     <item row="1" column="8">
       <widget class="KisDoubleParseSpinBox" name="columnDistance">
        <property name="suffix">
         <string>px</string>
@@ -298,7 +272,7 @@
        </property>
       </widget>
      </item>
-     <item column="8" row="2">
+     <item row="2" column="8">
       <widget class="KisDoubleParseSpinBox" name="rowDistance">
        <property name="suffix">
         <string>px</string>
@@ -307,6 +281,12 @@
         <double>10000.000000000000000</double>
        </property>
       </widget>
+     </item>
+     <item row="1" column="9">
+      <widget class="KisAngleSelector" name="columnAngle" native="true"/>
+     </item>
+     <item row="2" column="9">
+      <widget class="KisAngleSelector" name="rowAngle" native="true"/>
      </item>
     </layout>
    </item>
@@ -363,6 +343,12 @@
    <extends>QDoubleSpinBox</extends>
    <header>kis_double_parse_spin_box.h</header>
   </customwidget>
+  <customwidget>
+   <class>KisAngleSelector</class>
+   <extends>QWidget</extends>
+   <header location="global">KisAngleSelector.h</header>
+   <container>1</container>
+  </customwidget>
  </customwidgets>
  <tabstops>
   <tabstop>numNegativeColumns</tabstop>
@@ -375,8 +361,6 @@
   <tabstop>rowYOffset</tabstop>
   <tabstop>columnDistance</tabstop>
   <tabstop>rowDistance</tabstop>
-  <tabstop>columnAngle</tabstop>
-  <tabstop>rowAngle</tabstop>
   <tabstop>columnPreference</tabstop>
  </tabstops>
  <resources/>

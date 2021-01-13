@@ -98,13 +98,29 @@ void notifyVar(bool *value) {
     *value = true;
 }
 
+void testingSetOldDesiredLevelOfDetail(KisImageSP image, int lod)
+{
+    KisLodPreferences pref(lod);
+    image->setLodPreferences(pref);
+}
+
+void testingSetOldLevelOfDetailBlocked(KisImageSP image, bool value)
+{
+    if (value) {
+        testingSetOldDesiredLevelOfDetail(image, 0);
+    } else {
+        KisLodPreferences pref(KisLodPreferences::None, 0);
+        image->setLodPreferences(pref);
+    }
+}
+
 void KisImageTest::testBlockLevelOfDetail()
 {
     TestUtil::MaskParent p;
 
     QCOMPARE(p.image->currentLevelOfDetail(), 0);
 
-    p.image->setDesiredLevelOfDetail(1);
+    testingSetOldDesiredLevelOfDetail(p.image, 1);
     p.image->waitForDone();
 
     QCOMPARE(p.image->currentLevelOfDetail(), 0);
@@ -120,7 +136,7 @@ void KisImageTest::testBlockLevelOfDetail()
         QVERIFY(lodCreated);
     }
 
-    p.image->setLevelOfDetailBlocked(true);
+    testingSetOldLevelOfDetailBlocked(p.image, true);
 
     {
         bool lodCreated = false;
@@ -133,8 +149,8 @@ void KisImageTest::testBlockLevelOfDetail()
         QVERIFY(!lodCreated);
     }
 
-    p.image->setLevelOfDetailBlocked(false);
-    p.image->setDesiredLevelOfDetail(1);
+    testingSetOldLevelOfDetailBlocked(p.image, false);
+    testingSetOldDesiredLevelOfDetail(p.image, 1);
 
     {
         bool lodCreated = false;

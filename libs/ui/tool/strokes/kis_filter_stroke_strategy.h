@@ -48,6 +48,33 @@ public:
         }
     };
 
+
+    class ExtraCleanUpUpdates : public KisStrokeJobData {
+    public:
+        ExtraCleanUpUpdates(const QVector<QRect> &_rects)
+            : KisStrokeJobData(SEQUENTIAL),
+              rects(_rects)
+        {}
+
+        ExtraCleanUpUpdates(const ExtraCleanUpUpdates &rhs, int levelOfDetail)
+            : KisStrokeJobData(rhs)
+        {
+            KisLodTransform t(levelOfDetail);
+
+            Q_FOREACH (const QRect &rc, rhs.rects) {
+                rects << t.map(rc);
+            }
+        }
+
+        KisStrokeJobData* createLodClone(int levelOfDetail) override {
+            return new ExtraCleanUpUpdates(*this, levelOfDetail);
+        }
+
+        QVector<QRect> rects;
+    };
+
+
+
 public:
     KisFilterStrokeStrategy(KisFilterSP filter,
                             KisFilterConfigurationSP filterConfig,

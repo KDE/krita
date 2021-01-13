@@ -133,10 +133,32 @@ QVariant KisAnimCurvesModel::data(const QModelIndex &index, int role) const
             return !keyframe.isNull();
         case ScalarValueRole:
             return channel->valueAt(time);
-        case LeftTangentRole:
-            return (keyframe.isNull()) ? QVariant() : keyframe->leftTangent();
-        case RightTangentRole:
-            return (keyframe.isNull()) ? QVariant() : keyframe->rightTangent();
+        case LeftTangentRole: {
+            if (keyframe.isNull())
+                return QVariant();
+
+            const int previousKeyTime = channel->previousKeyframeTime(time);
+            KisScalarKeyframeSP previousKeyframe = channel->keyframeAt(previousKeyTime).dynamicCast<KisScalarKeyframe>();
+
+            //Tangent null whenever there's no previous keyframe.
+            if (!previousKeyframe)
+                return QVariant();
+
+            //Tangent should be null if previous keyframe not set to bezier.
+            if (previousKeyframe->interpolationMode() != KisScalarKeyframe::Bezier)
+                return QVariant();
+
+            return keyframe->leftTangent();
+        }
+        case RightTangentRole: {
+            if (keyframe.isNull())
+                return QVariant();
+
+            if (keyframe->interpolationMode() != KisScalarKeyframe::Bezier)
+                return QVariant();
+
+            return keyframe->rightTangent();
+        }
         case InterpolationModeRole:
             return (keyframe.isNull()) ? QVariant() : keyframe->interpolationMode();
         case TangentsModeRole:

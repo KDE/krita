@@ -226,6 +226,12 @@ bool KisToolMove::startStrokeImpl(MoveToolMode mode, const QPoint *pos)
         nodes = nodeSelection.selectedNodes;
     }
 
+    {
+        KConfigGroup group = KSharedConfig::openConfig()->group(toolId());
+        const bool forceLodMode = group.readEntry("forceLodMode", true);
+        strategy->setForceLodModeIfPossible(forceLodMode);
+    }
+
     // disable outline feedback until the stroke calcualtes
     // correct bounding rect
     m_handlesRect = QRect();

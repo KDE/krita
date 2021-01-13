@@ -1,0 +1,28 @@
+From d3b15422158bcc39e8ad4cac44c4efbe413652e9 Mon Sep 17 00:00:00 2001
+From: Sharaf Zaman <sharafzaz121@gmail.com>
+Date: Wed, 6 Jan 2021 12:12:09 +0000
+Subject: [PATCH] Android: prevent out-of-order events
+
+QPlatformWindow::setVisible() flushes internal event queue which then
+sends events to widgets out-of-order fashion, which can make some
+widgets hidden thus freezing the entire app.
+---
+ src/plugins/platforms/android/qandroidplatformwindow.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/plugins/platforms/android/qandroidplatformwindow.cpp b/src/plugins/platforms/android/qandroidplatformwindow.cpp
+index c095f51fa3..f9972ee4e1 100644
+--- a/src/plugins/platforms/android/qandroidplatformwindow.cpp
++++ b/src/plugins/platforms/android/qandroidplatformwindow.cpp
+@@ -94,7 +94,7 @@ void QAndroidPlatformWindow::setVisible(bool visible)
+ 
+     QRect availableGeometry = screen()->availableGeometry();
+     if (geometry().width() > 0 && geometry().height() > 0 && availableGeometry.width() > 0 && availableGeometry.height() > 0)
+-        QPlatformWindow::setVisible(visible);
++        QWindowSystemInterface::handleExposeEvent(window(), QRect(QPoint(), geometry().size()));
+ }
+ 
+ void QAndroidPlatformWindow::setWindowState(Qt::WindowStates state)
+-- 
+2.29.2
+

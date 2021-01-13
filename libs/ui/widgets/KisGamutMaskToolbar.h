@@ -36,7 +36,7 @@ public Q_SLOTS:
 
 private Q_SLOTS:
     void slotGamutMaskToggle(bool state);
-    void slotGamutMaskRotate(int angle);
+    void slotGamutMaskRotate(qreal angle);
 
 private:
     QScopedPointer<Ui_wdgGamutMaskToolbar> m_ui;

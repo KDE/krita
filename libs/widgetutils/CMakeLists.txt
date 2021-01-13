@@ -21,6 +21,7 @@ set(kritawidgetutils_LIB_SRCS
     KoUpdaterPrivate_p.cpp
     KoProperties.cpp
     KoFileDialog.cpp
+    KisPreviewFileDialog.cpp
     KisKineticScroller.cpp
     KoCheckerBoardPainter.cpp
     KoItemToolTip.cpp

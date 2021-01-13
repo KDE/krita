@@ -7,9 +7,9 @@
    xmlns="http://www.w3.org/2000/svg"
    version="1.1"
    id="svg2"
-   viewBox="0 0 32 32.000001"
-   height="34.133335"
-   width="34.133335">
+   viewBox="0 0 29.999998 29.999999"
+   height="32"
+   width="32">
   <defs
      id="defs4" />
   <metadata
@@ -23,11 +23,12 @@
         <dc:title></dc:title>
         <dc:creator>
           <cc:Agent>
-            <dc:title>Andrei Rudenko</dc:title>
+            <dc:title>Timothée Giet</dc:title>
           </cc:Agent>
         </dc:creator>
         <cc:license
            rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+        <dc:date>2020</dc:date>
       </cc:Work>
       <cc:License
          rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
@@ -46,39 +47,9 @@
       </cc:License>
     </rdf:RDF>
   </metadata>
-  <g
-     id="layer2">
-    <path
-       id="path842"
-       d="m 12.380342,3.2697394 c 4.29949,-0.6253802 4.143145,-0.5472077 7.03553,0.078173"
-       style="fill:none;stroke:#323232;stroke-width:3.23634243;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
-    <path
-       id="path842-4"
-       d="m 21.667173,4.7850859 c 3.924451,1.8642431 3.751,1.8425771 5.810892,3.9671545"
-       style="fill:none;stroke:#323232;stroke-width:3.23634243;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
-    <path
-       id="path842-4-2"
-       d="m 29.276034,12.587905 c 0.634092,4.298213 0.555602,4.142028 -0.06391,7.035673"
-       style="fill:none;stroke:#323232;stroke-width:3.23634243;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
-    <path
-       id="path842-4-2-0"
-       d="m 28.470061,22.812124 c -2.455439,3.584344 -2.406896,3.416421 -4.827661,5.118443"
-       style="fill:none;stroke:#323232;stroke-width:3.23634243;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
-    <path
-       id="path842-4-2-0-7"
-       d="m 19.289204,29.285236 c -4.299742,0.623633 -4.143366,0.545525 -7.035496,-0.08103"
-       style="fill:none;stroke:#323232;stroke-width:3.23634243;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
-    <path
-       id="path842-4-2-0-7-5"
-       d="M 8.5851341,28.144033 C 5.2497564,25.359799 5.4123196,25.424046 3.9474962,22.852806"
-       style="fill:none;stroke:#323232;stroke-width:3.23634243;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
-    <path
-       id="path842-4-2-0-7-5-2"
-       d="M 2.8692907,20.135324 C 2.2603328,15.83348 2.3379072,15.990121 2.9743256,13.100146"
-       style="fill:none;stroke:#323232;stroke-width:3.23634243;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
-    <path
-       id="path842-4-2-0-7-5-2-3"
-       d="M 4.6199632,10.065917 C 6.5890692,6.1930213 6.562746,6.3658263 8.7419486,4.3638117"
-       style="fill:none;stroke:#323232;stroke-width:3.23634243;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
-  </g>
+  <path
+     id="path816"
+     transform="scale(0.93749995)"
+     d="M 16 0 A 16 16 0 0 0 12.736328 0.33984375 L 13.554688 4.265625 A 12 12 0 0 1 16 4 A 12 12 0 0 1 18.962891 4.3867188 L 19.951172 0.50976562 A 16 16 0 0 0 16 0 z M 7.8417969 2.2578125 A 16 16 0 0 0 2.6230469 7.2363281 L 5.9707031 9.4296875 A 12 12 0 0 1 9.8808594 5.6914062 L 7.8417969 2.2578125 z M 24.763672 2.6230469 L 22.570312 5.9707031 A 12 12 0 0 1 26.308594 9.8808594 L 29.742188 7.8417969 A 16 16 0 0 0 24.763672 2.6230469 z M 0.50976562 12.048828 A 16 16 0 0 0 0 16 A 16 16 0 0 0 0.33984375 19.263672 L 4.265625 18.445312 A 12 12 0 0 1 4 16 A 12 12 0 0 1 4.3867188 13.037109 L 0.50976562 12.048828 z M 31.660156 12.736328 L 27.734375 13.554688 A 12 12 0 0 1 28 16 A 12 12 0 0 1 27.613281 18.962891 L 31.490234 19.951172 A 16 16 0 0 0 32 16 A 16 16 0 0 0 31.660156 12.736328 z M 5.6914062 22.119141 L 2.2578125 24.158203 A 16 16 0 0 0 7.2363281 29.376953 L 9.4296875 26.029297 A 12 12 0 0 1 5.6914062 22.119141 z M 26.029297 22.570312 A 12 12 0 0 1 22.119141 26.308594 L 24.158203 29.742188 A 16 16 0 0 0 29.376953 24.763672 L 26.029297 22.570312 z M 13.037109 27.613281 L 12.048828 31.490234 A 16 16 0 0 0 16 32 A 16 16 0 0 0 19.263672 31.660156 L 18.445312 27.734375 A 12 12 0 0 1 16 28 A 12 12 0 0 1 13.037109 27.613281 z "
+     style="opacity:1;vector-effect:none;fill:#373737;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:3.99999998, 7.99999994;stroke-dashoffset:3.20000005;stroke-opacity:1" />
 </svg>

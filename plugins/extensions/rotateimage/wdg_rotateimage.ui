@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <author>
     SPDX-FileCopyrightText: none
@@ -18,13 +18,13 @@
    <string>Rotate Image</string>
   </property>
   <layout class="QGridLayout">
-   <item column="0" row="0">
+   <item row="0" column="0">
     <widget class="QGroupBox" name="grpDirection">
      <property name="title">
       <string>Orientation</string>
      </property>
      <layout class="QGridLayout">
-      <item column="1" row="0">
+      <item row="0" column="1">
        <widget class="QRadioButton" name="radioCW">
         <property name="text">
          <string>&amp;Right</string>
@@ -34,7 +34,7 @@
         </property>
        </widget>
       </item>
-      <item column="0" row="0">
+      <item row="0" column="0">
        <widget class="QRadioButton" name="radioCCW">
         <property name="text">
          <string>&amp;Left</string>
@@ -44,7 +44,7 @@
      </layout>
     </widget>
    </item>
-   <item column="0" row="1">
+   <item row="1" column="0">
     <widget class="QGroupBox" name="grpAngle">
      <property name="title">
       <string>Angle</string>
@@ -96,21 +96,27 @@
          </widget>
         </item>
         <item>
-         <widget class="KisDoubleParseSpinBox" name="doubleCustom">
-          <property name="maximum">
-           <double>360.000000000000000</double>
+         <widget class="KisAngleSelector" name="angleSelectorCustom" native="true"/>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
           </property>
-          <property name="singleStep">
-           <double>1.000000000000000</double>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
           </property>
-         </widget>
+         </spacer>
         </item>
        </layout>
       </item>
      </layout>
     </widget>
    </item>
-   <item column="0" row="2">
+   <item row="2" column="0">
     <spacer name="spacer4">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -130,9 +136,10 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KisDoubleParseSpinBox</class>
-   <extends>QDoubleSpinBox</extends>
-   <header>kis_double_parse_spin_box.h</header>
+   <class>KisAngleSelector</class>
+   <extends>QWidget</extends>
+   <header location="global">KisAngleSelector.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

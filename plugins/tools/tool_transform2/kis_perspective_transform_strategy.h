@@ -46,6 +46,7 @@ public:
 Q_SIGNALS:
     void requestCanvasUpdate();
     void requestShowImageTooBig(bool value);
+    void requestImageRecalculation();
 
 private:
     struct Private;

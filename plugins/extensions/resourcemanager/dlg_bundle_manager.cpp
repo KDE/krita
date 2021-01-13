@@ -242,6 +242,7 @@ void DlgBundleManager::updateBundleInformation(QModelIndex currentInProxy)
     QModelIndex idx = m_proxyModel->mapToSource(currentInProxy);
 
     KisResourceStorageSP storage = KisStorageModel::instance()->storageForIndex(idx);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(storage);
 
     m_ui->lblAuthor->setText(storage->metaData(KisResourceStorage::s_meta_author).toString());
     QString date = storage->metaData(KisResourceStorage::s_meta_creation_date).toString();

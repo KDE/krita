@@ -9,7 +9,6 @@
 
 #include <QPointer>
 #include <QDockWidget>
-#include <kis_slider_spin_box.h>
 #include <KoCanvasObserverBase.h>
 
 #include <kis_canvas2.h>
@@ -18,6 +17,7 @@ class QVBoxLayout;
 class QHBoxLayout;
 class QToolButton;
 class OverviewWidget;
+class KisAngleSelector;
 
 class OverviewDockerDock : public QDockWidget, public KoCanvasObserverBase {
     Q_OBJECT
@@ -33,10 +33,11 @@ public Q_SLOTS:
 
 private:
     QVBoxLayout *m_layout;
+    QVBoxLayout *m_bottomLayout;
     QHBoxLayout *m_horizontalLayout;
     OverviewWidget *m_overviewWidget;
     QWidget *m_zoomSlider;
-    KisDoubleSliderSpinBox *m_rotateSlider;
+    KisAngleSelector *m_rotateAngleSelector;
     QToolButton *m_mirrorCanvas;
     QPointer<KisCanvas2> m_canvas;
 };

@@ -197,17 +197,17 @@ void KisConfig::setStackN(int N)
 
 qint32 KisConfig::defImageWidth(bool defaultValue) const
 {
-    return (defaultValue ? 1600 : m_cfg.readEntry("imageWidthDef", 1600));
+    return (defaultValue ? 2480 : m_cfg.readEntry("imageWidthDef", 2480));
 }
 
 qint32 KisConfig::defImageHeight(bool defaultValue) const
 {
-    return (defaultValue ? 1200 : m_cfg.readEntry("imageHeightDef", 1200));
+    return (defaultValue ? 3508 : m_cfg.readEntry("imageHeightDef", 3508));
 }
 
 qreal KisConfig::defImageResolution(bool defaultValue) const
 {
-    return (defaultValue ? 100.0 : m_cfg.readEntry("imageResolutionDef", 100.0)) / 72.0;
+    return (defaultValue ? 300.0 : m_cfg.readEntry("imageResolutionDef", 300.0)) / 72.0;
 }
 
 QString KisConfig::defColorModel(bool defaultValue) const

@@ -10,7 +10,6 @@
 
 #include <QDockWidget>
 #include <QPointer>
-#include <QScroller>
 #include <KisKineticScroller.h>
 
 class QWidget;

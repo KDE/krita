@@ -50,10 +50,10 @@ public:
                                   QPointF *newOffset);
 
     // Prepare the transformation on dev
-    KisWarpTransformWorker(WarpType warpType, KisPaintDeviceSP dev, QVector<QPointF> origPoint, QVector<QPointF> transfPoint, qreal alpha, KoUpdater *progress);
+    KisWarpTransformWorker(WarpType warpType, QVector<QPointF> origPoint, QVector<QPointF> transfPoint, qreal alpha, KoUpdater *progress);
     ~KisWarpTransformWorker() override;
     // Perform the prepared transformation
-    void run();
+    void run(KisPaintDeviceSP srcDev, KisPaintDeviceSP dstDev);
 
     QRect approxChangeRect(const QRect &rc);
     QRect approxNeedRect(const QRect &rc, const QRect &fullBounds);
@@ -68,7 +68,6 @@ private:
     QVector<QPointF> m_origPoint;
     QVector<QPointF> m_transfPoint;
     qreal m_alpha;
-    KisPaintDeviceSP m_dev;
     KoUpdater *m_progress;
 };
 

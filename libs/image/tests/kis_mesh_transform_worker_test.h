@@ -31,6 +31,8 @@ private Q_SLOTS:
     void testSerialization();
 
     void testIteratorConstness();
+
+    void testLineCurveIntersections();
 };
 
 #endif /* __KIS_MESH_TRANSFORM_WORKER_TEST_H */

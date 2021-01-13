@@ -37,6 +37,7 @@ void KisRecalculateTransformMaskJob::run()
     if (!m_mask->parent()) return;
     if (!m_mask->visible()) return;
 
+    const QRect oldMaskExtent = m_mask->extent();
     m_mask->recaclulateStaticImage();
 
     KisLayerSP layer = qobject_cast<KisLayer*>(m_mask->parent().data());
@@ -57,7 +58,7 @@ void KisRecalculateTransformMaskJob::run()
      * KisRecalculateTransformMaskJob.
      */
     if (m_mask->transformParams()->isHidden()) {
-        QRect updateRect = m_mask->extent();
+        QRect updateRect = m_mask->extent() | oldMaskExtent;
 
         if (layer->original()) {
             updateRect |= layer->original()->defaultBounds()->bounds();
@@ -76,7 +77,9 @@ void KisRecalculateTransformMaskJob::run()
          * rect manually to get the correct update
          */
 
-        QRect updateRect = layer->projectionPlane()->changeRect(layer->extent(), KisLayer::N_FILTHY);
+        QRect updateRect = oldMaskExtent |
+            layer->projectionPlane()->changeRect(layer->extent(), KisLayer::N_FILTHY);
+
         image->requestProjectionUpdateNoFilthy(layer, updateRect, image->bounds(),layer->isAnimated());
     }
 }

@@ -301,10 +301,12 @@ KisResourceItemChooser *KisPresetChooser::itemChooser()
 
 void KisPresetChooser::setPresetFilter(const QString& paintOpId)
 {
-   QMap<QString, QVariant> metaDataFilter;
-   metaDataFilter["paintopid"] = paintOpId;
-   m_chooser->tagFilterModel()->setMetaDataFilter(metaDataFilter);
-   updateViewSettings();
+    QMap<QString, QVariant> metaDataFilter;
+    if (!paintOpId.isEmpty()) { // empty means "all"
+        metaDataFilter["paintopid"] = paintOpId;
+    }
+    m_chooser->tagFilterModel()->setMetaDataFilter(metaDataFilter);
+    updateViewSettings();
 }
 
 void KisPresetChooser::setIconSize(int newSize)

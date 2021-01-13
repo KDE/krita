@@ -21,18 +21,16 @@
 
 struct Q_DECL_HIDDEN KisCageTransformWorker::Private
 {
-    Private(KisPaintDeviceSP _dev,
-            const QVector<QPointF> &_origCage,
+    Private(const QVector<QPointF> &_origCage,
             KoUpdater *_progress,
             int _pixelPrecision)
-        : dev(_dev),
-          origCage(_origCage),
+        : origCage(_origCage),
           progress(_progress),
           pixelPrecision(_pixelPrecision)
     {
     }
 
-    KisPaintDeviceSP dev;
+    QRect srcBounds;
 
     QImage srcImage;
     QPointF srcImageOffset;
@@ -70,12 +68,13 @@ struct Q_DECL_HIDDEN KisCageTransformWorker::Private
     struct MapIndexesOp;
 };
 
-KisCageTransformWorker::KisCageTransformWorker(KisPaintDeviceSP dev,
+KisCageTransformWorker::KisCageTransformWorker(const QRect &deviceNonDefaultRegion,
                                                const QVector<QPointF> &origCage,
                                                KoUpdater *progress,
                                                int pixelPrecision)
-    : m_d(new Private(dev, origCage, progress, pixelPrecision))
+    : m_d(new Private(origCage, progress, pixelPrecision))
 {
+    m_d->srcBounds = deviceNonDefaultRegion;
 }
 
 KisCageTransformWorker::KisCageTransformWorker(const QImage &srcImage,
@@ -83,10 +82,11 @@ KisCageTransformWorker::KisCageTransformWorker(const QImage &srcImage,
                                                const QVector<QPointF> &origCage,
                                                KoUpdater *progress,
                                                int pixelPrecision)
-    : m_d(new Private(0, origCage, progress, pixelPrecision))
+    : m_d(new Private(origCage, progress, pixelPrecision))
 {
     m_d->srcImage = srcImage;
     m_d->srcImageOffset = srcImageOffset;
+    m_d->srcBounds = QRectF(m_d->srcImageOffset, m_d->srcImage.size()).toAlignedRect();
 }
 
 KisCageTransformWorker::~KisCageTransformWorker()
@@ -146,8 +146,7 @@ void KisCageTransformWorker::prepareTransform()
 
     const QPolygonF srcPolygon(m_d->origCage);
 
-    QRect srcBounds = m_d->dev ? m_d->dev->region().boundingRect() :
-        QRectF(m_d->srcImageOffset, m_d->srcImage.size()).toAlignedRect();
+    QRect srcBounds = m_d->srcBounds;
     srcBounds &= srcPolygon.boundingRect().toAlignedRect();
 
     // no need to process empty devices
@@ -329,17 +328,17 @@ QRect KisCageTransformWorker::approxNeedRect(const QRect &rc, const QRect &fullB
     return fullBounds;
 }
 
-void KisCageTransformWorker::run()
+void KisCageTransformWorker::run(KisPaintDeviceSP srcDevice, KisPaintDeviceSP dstDevice)
 {
     if (m_d->isGridEmpty()) return;
 
-    KIS_ASSERT_RECOVER_RETURN(m_d->origCage.size() >= 3);
-    KIS_ASSERT_RECOVER_RETURN(m_d->origCage.size() == m_d->transfCage.size());
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->origCage.size() >= 3);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->origCage.size() == m_d->transfCage.size());
+    KIS_SAFE_ASSERT_RECOVER_RETURN(*srcDevice->colorSpace() == *dstDevice->colorSpace());
 
     QVector<QPointF> transformedPoints = m_d->calculateTransformedPoints();
 
-    KisPaintDeviceSP srcDev = new KisPaintDevice(*m_d->dev.data());
-    KisPaintDeviceSP tempDevice = new KisPaintDevice(m_d->dev->colorSpace());
+    KisPaintDeviceSP tempDevice = new KisPaintDevice(dstDevice->colorSpace());
 
     {
         KisSelectionSP selection = new KisSelection();
@@ -352,10 +351,10 @@ void KisCageTransformWorker::run()
 
         painter.paintPolygon(m_d->origCage);
 
-        m_d->dev->clearSelection(selection);
+        dstDevice->clearSelection(selection);
     }
 
-    GridIterationTools::PaintDevicePolygonOp polygonOp(srcDev, tempDevice);
+    GridIterationTools::PaintDevicePolygonOp polygonOp(srcDevice, tempDevice);
     Private::MapIndexesOp indexesOp(m_d.data());
     GridIterationTools::iterateThroughGrid
         <GridIterationTools::IncompletePolygonPolicy>(polygonOp, indexesOp,
@@ -364,7 +363,7 @@ void KisCageTransformWorker::run()
                                                       transformedPoints);
 
     QRect rect = tempDevice->extent();
-    KisPainter gc(m_d->dev);
+    KisPainter gc(dstDevice);
     gc.bitBlt(rect.topLeft(), tempDevice, rect);
 }
 

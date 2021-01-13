@@ -302,8 +302,8 @@ public:
     void setWrapAroundViewingMode(bool value);
     bool wrapAroundViewingMode() const;
 
-    void setLodAllowedInCanvas(bool value);
-    bool lodAllowedInCanvas() const;
+    void setLodPreferredInCanvas(bool value);
+    bool lodPreferredInCanvas() const;
 
     void initializeImage();
 

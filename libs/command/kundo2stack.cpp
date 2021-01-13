@@ -339,6 +339,29 @@ bool KUndo2Command::timedMergeWith(KUndo2Command *other)
         return false;
     return true;
 }
+/*!
+    Attempts to merge this command with \a command and checks if the two commands
+    compensate each other. If the function returns true, both commands are removed
+    from the stack.
+
+    If this function returns true, calling this command's redo() followed by
+    \p other redo() must have no effect.
+
+    The function itself shouln't do any changes to the command, because
+    after returning true, the command will be deleted as a "noop"
+
+    KUndo2QStack will only try to merge two commands if they have the same id, and
+    the id is not -1.
+
+    The default implementation returns false.
+
+    \sa id() KUndo2QStack::push()
+*/
+bool KUndo2Command::annihilateWith(const KUndo2Command *other)
+{
+    Q_UNUSED(other)
+    return false;
+}
 void KUndo2Command::setTime()
 {
     m_timeOfCreation = QTime::currentTime();
@@ -823,7 +846,27 @@ void KUndo2QStack::push(KUndo2Command *cmd)
         }
         m_index = m_command_list.size();
     }
-    if (try_merge && cur->mergeWith(cmd)) {
+
+    if (try_merge && !macro && cur->annihilateWith(cmd)) {
+        delete cmd;
+        if (!macro) {
+            // this condition must be ruled out by try_merge check
+            // otherwise we would have to do cleanup for the clean state
+            Q_ASSERT(m_clean_index != m_index);
+
+            delete m_command_list.takeLast();
+            m_index--;
+
+            emit indexChanged(m_index);
+            emit canUndoChanged(canUndo());
+            emit undoTextChanged(undoText());
+            emit canRedoChanged(canRedo());
+            emit redoTextChanged(redoText());
+        } else {
+            delete m_macro_stack.takeLast();
+        }
+
+    } else if (try_merge && cur->mergeWith(cmd)) {
         delete cmd;
         if (!macro) {
             emit indexChanged(m_index);

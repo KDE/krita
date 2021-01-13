@@ -27,6 +27,7 @@
 #include <KoResourceServer.h>
 #include <KisResourceStorage.h>
 #include <KisGlobalResourcesInterface.h>
+#include <KisResourceLocator.h>
 
 
 #include <filter/kis_filter.h>
@@ -56,6 +57,7 @@
 #include <kis_layer_composition.h>
 #include <kis_file_layer.h>
 #include <kis_psd_layer_style.h>
+#include <kis_asl_layer_style_serializer.h>
 #include "kis_keyframe_channel.h"
 #include <kis_filter_configuration.h>
 #include "KisReferenceImagesLayer.h"
@@ -459,51 +461,34 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageSP image, const QStri
     location += m_d->imageName + LAYER_STYLES_PATH;
     if (store->hasFile(location)) {
 
+        KisAslLayerStyleSerializer serializer;
+        store->open(location);
+        {
+            KoStoreDevice device(store);
+            device.open(QIODevice::ReadOnly);
 
+            /**
+             * ASL loading code cannot work with non-sequential IO devices,
+             * so convert the device beforehand!
+             */
+            QByteArray buf = device.readAll();
+            QBuffer raDevice(&buf);
+            raDevice.open(QIODevice::ReadOnly);
+            serializer.readFromDevice(&raDevice);
+        }
+        store->close();
 
+        if (serializer.isValid()) {
+            QString resourceLocation = m_d->document->uniqueID();
+            KisResourceModel model(ResourceType::LayerStyles);
+            Q_FOREACH(KisPSDLayerStyleSP layerStyle, serializer.styles()) {
+                model.addResource(layerStyle, resourceLocation);
+            }
+            serializer.assignAllLayerStylesToLayers(image->root());
 
-        warnKrita << "WARNING: Asl Layer Styles cannot be read (part of resource rewrite).";
-        // TODO: RESOURCES: needs implementing of creation of the storage and linking it to the database etc.
-
-        // Question: do we need to use KisAslStorage or the document storage?
-        // see: QSharedPointer<KoResourceServer> storage = KisResourceServerProvider::instance()->storageByName(m_d->document->uniqueID());
-        // and then: storage->addResource(aslStyle);
-        // or through the server: get the server, add everything directly to the server
-        // but I believe it should go through the KisAslStorage? // tiar
-
-
-
-//        //KisPSDLayerStyleSP collection(new KisPSDLayerStyle("Embedded Styles.asl"));
-
-//        collection->setName(i18nc("Auto-generated layer style collection name for embedded styles (collection)", "<%1> (embedded)", m_d->imageName));
-
-//        KIS_ASSERT_RECOVER_NOOP(!collection->valid());
-
-//        store->open(location);
-//        {
-//            KoStoreDevice device(store);
-//            device.open(QIODevice::ReadOnly);
-
-//            /**
-//             * ASL loading code cannot work with non-sequential IO devices,
-//             * so convert the device beforehand!
-//             */
-//            QByteArray buf = device.readAll();
-//            QBuffer raDevice(&buf);
-//            raDevice.open(QIODevice::ReadOnly);
-//            collection->loadFromDevice(&raDevice);
-//        }
-//        store->close();
-
-//        if (collection->valid()) {
-//            KoResourceServer<KisPSDLayerStyleCollectionResource> *server = KisResourceServerProvider::instance()->layerStyleCollectionServer();
-//            server->addResource(collection, false);
-
-//            collection->assignAllLayerStyles(image->root());
-//        } else {
-//            warnKrita << "WARNING: Couldn't load layer styles library from .kra!";
-//        }
-
+        } else {
+            warnKrita << "WARNING: Couldn't load layer styles library from .kra!";
+        }
     }
 
     if (m_d->document && m_d->document->documentInfo()->aboutInfo("title").isNull())

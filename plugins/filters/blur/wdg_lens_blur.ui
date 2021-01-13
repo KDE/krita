@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <author>
     SPDX-FileCopyrightText: none
@@ -27,7 +27,7 @@
       <string>Iris</string>
      </property>
      <layout class="QFormLayout" name="formLayout">
-      <item column="0" row="0">
+      <item row="0" column="0">
        <widget class="QLabel" name="label">
         <property name="text">
          <string>Shape:</string>
@@ -37,7 +37,7 @@
         </property>
        </widget>
       </item>
-      <item column="1" row="0">
+      <item row="0" column="1">
        <widget class="QComboBox" name="irisShapeCombo">
         <item>
          <property name="text">
@@ -71,21 +71,15 @@
         </item>
        </widget>
       </item>
-      <item column="0" row="1">
+      <item row="1" column="0">
        <widget class="QLabel" name="label_2">
         <property name="text">
          <string>Radius:</string>
         </property>
        </widget>
       </item>
-      <item column="1" row="1">
+      <item row="1" column="1">
        <widget class="KisIntParseSpinBox" name="irisRadiusSlider">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
         <property name="minimum">
          <number>0</number>
         </property>
@@ -100,37 +94,15 @@
         </property>
        </widget>
       </item>
-      <item column="0" row="2">
+      <item row="2" column="0">
        <widget class="QLabel" name="label_3">
         <property name="text">
          <string>Rotation:</string>
         </property>
        </widget>
       </item>
-      <item column="1" row="2">
-       <widget class="KisIntParseSpinBox" name="irisRotationSlider">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="suffix">
-         <string>°</string>
-        </property>
-        <property name="minimum">
-         <number>0</number>
-        </property>
-        <property name="maximum">
-         <number>360</number>
-        </property>
-        <property name="label" stdset="0">
-         <string>Rotation:</string>
-        </property>
-        <property name="sliderEnabled" stdset="0">
-         <bool>true</bool>
-        </property>
-       </widget>
+      <item row="2" column="1">
+       <widget class="KisAngleSelector" name="irisRotationSelector" native="true"/>
       </item>
      </layout>
     </widget>
@@ -156,11 +128,16 @@
    <extends>QSpinBox</extends>
    <header>kis_int_parse_spin_box.h</header>
   </customwidget>
+  <customwidget>
+   <class>KisAngleSelector</class>
+   <extends>QWidget</extends>
+   <header location="global">KisAngleSelector.h</header>
+   <container>1</container>
+  </customwidget>
  </customwidgets>
  <tabstops>
   <tabstop>irisShapeCombo</tabstop>
   <tabstop>irisRadiusSlider</tabstop>
-  <tabstop>irisRotationSlider</tabstop>
  </tabstops>
  <resources/>
  <connections/>

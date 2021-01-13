@@ -135,7 +135,10 @@ protected:
             QString mimeType = KisMimeDatabase::mimeTypeForFile(m_dirIterator->filePath());
             if (!m_resourceLoaders.contains(mimeType)) {
                 KisResourceLoaderBase *resourceLoader = KisResourceLoaderRegistry::instance()->loader(m_resourceType, KisMimeDatabase::mimeTypeForFile(m_dirIterator->filePath()));
-                Q_ASSERT(resourceLoader);
+                if (!resourceLoader) { // cannot be an assert, because for an unknown file there won't be a loader, so let's not crash here
+                    warnKrita << "Couldn't find a resource loader for " << m_dirIterator->filePath() << "mimetype = " << mimeType;
+                    return false;
+                }
                 const_cast<FolderIterator*>(this)->m_resourceLoaders[mimeType] = resourceLoader;
             }
             const_cast<FolderIterator*>(this)->m_resource = m_resourceLoaders[mimeType]->load(m_dirIterator->fileName(), f, KisGlobalResourcesInterface::instance());

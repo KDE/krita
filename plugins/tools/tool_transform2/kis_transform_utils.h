@@ -24,6 +24,9 @@
 class ToolTransformArgs;
 class KisTransformWorker;
 class TransformTransactionProperties;
+class KisSavedMacroCommand;
+class KisStrokeUndoFacade;
+class KisStrokeJobData;
 
 class KisTransformUtils
 {
@@ -85,6 +88,11 @@ public:
 
     static void transformDevice(const ToolTransformArgs &config,
                                 KisPaintDeviceSP device,
+                                KisProcessingVisitor::ProgressHelper *helper);
+
+    static void transformDevice(const ToolTransformArgs &config,
+                                KisPaintDeviceSP srcDevice,
+                                KisPaintDeviceSP dstDevice,
                                 KisProcessingVisitor::ProgressHelper *helper);
 
     static QRect needRect(const ToolTransformArgs &config,
@@ -151,6 +159,32 @@ public:
     static ToolTransformArgs resetArgsForMode(ToolTransformArgs::TransformMode mode,
                                               const QString &filterId,
                                               const TransformTransactionProperties &transaction);
+
+    static bool shouldRestartStrokeOnModeChange(ToolTransformArgs::TransformMode oldMode,
+                                                ToolTransformArgs::TransformMode newMode,
+                                                KisNodeList processedNodes);
+
+    static void transformAndMergeDevice(const ToolTransformArgs &config,
+                                        KisPaintDeviceSP src,
+                                        KisPaintDeviceSP dst,
+                                        KisProcessingVisitor::ProgressHelper *helper);
+
+    static void postProcessToplevelCommand(KUndo2Command *command,
+                                           const ToolTransformArgs &args,
+                                           KisNodeSP rootNode,
+                                           KisNodeList processedNodes,
+                                           const KisSavedMacroCommand *overriddenCommand);
+
+    static bool fetchArgsFromCommand(const KUndo2Command *command,
+                                     ToolTransformArgs *args,
+                                     KisNodeSP *rootNode,
+                                     KisNodeList *transformedNodes);
+
+    static KisNodeSP tryOverrideRootToTransformMask(KisNodeSP root);
+
+    static QList<KisNodeSP> fetchNodesList(ToolTransformArgs::TransformMode mode, KisNodeSP root, bool recursive);
+    static bool tryInitArgsFromNode(KisNodeSP node, ToolTransformArgs *args);
+    static bool tryFetchArgsFromCommandAndUndo(ToolTransformArgs *outArgs, ToolTransformArgs::TransformMode mode, KisNodeSP currentNode, KisNodeList selectedNodes, KisStrokeUndoFacade *undoFacade, QVector<KisStrokeJobData *> *undoJobs, const KisSavedMacroCommand **overriddenCommand);
 
 };
 

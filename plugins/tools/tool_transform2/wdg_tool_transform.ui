@@ -2198,6 +2198,13 @@
         </widget>
        </item>
        <item>
+        <widget class="QCheckBox" name="chkScaleHandles">
+         <property name="text">
+          <string>Scale handles proportionally</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <spacer name="verticalSpacer_4">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -2313,8 +2320,8 @@
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="freeTransformRadioGroup"/>
   <buttongroup name="cageTransformButtonGroup"/>
   <buttongroup name="buttonGroup"/>
+  <buttongroup name="freeTransformRadioGroup"/>
  </buttongroups>
 </ui>

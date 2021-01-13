@@ -91,21 +91,28 @@ public:
 
         QMap<QKeySequence, QStringList> shortcutMap;
 
-        //qDebug() << "................... activating tool" << activeToolId;
+//        qDebug() << "................... activating tool" << activeToolId;
 
         Q_FOREACH(QAction *action, windowActionCollection->actions()) {
 
-            //qDebug() << "Action" << action->objectName() << "shortcuts" << action->shortcuts();
             if (action->property("tool_action").isValid()) {
                 QStringList tools = action->property("tool_action").toStringList();
-                //qDebug() << "\tassociated with" << tools;
-                if (tools.contains(activeToolId)) {
-                    //qDebug() << "\t\tenabling";
+
+                if (KoToolRegistry::instance()->keys().contains(action->objectName())) {
+                    //qDebug() << "This action needs to be enabled!";
                     action->setEnabled(true);
                     toolActions << action->objectName();
                 }
                 else {
-                    action->setDisabled(true);
+                    if (tools.contains(activeToolId) || action->property("always_enabled").toBool()) {
+                        //qDebug() << "\t\tenabling";
+                        action->setEnabled(true);
+                        toolActions << action->objectName();
+                    }
+                    else {
+                        //qDebug() << "\t\tDISabling";
+                        action->setDisabled(true);
+                    }
                 }
             }
             else {
@@ -236,14 +243,14 @@ void KoToolManager::registerToolActions(KActionCollection *ac, KoCanvasControlle
         return;
     }
 
-    // Actions used to switch tools via shortcuts
-    Q_FOREACH (ToolHelper * th, d->tools) {
-        if (ac->action(th->id())) {
-            continue;
-        }
-        ShortcutToolAction* action = th->createShortcutToolAction(ac);
-        ac->addCategorizedAction(th->id(), action, "tool-shortcuts");
-    }
+//    // Actions used to switch tools via shortcuts
+//    Q_FOREACH (ToolHelper * th, d->tools) {
+//        if (ac->action(th->id())) {
+//            continue;
+//        }
+//        //ShortcutToolAction* action = th->createShortcutToolAction(ac);
+//        ac->addCategorizedAction(th->id(), action, "tool-shortcuts");
+//    }
 }
 
 void KoToolManager::addController(KoCanvasController *controller)

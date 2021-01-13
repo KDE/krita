@@ -36,6 +36,11 @@ private:
     qreal m_lastHue;
     QList<QRgb> m_cachedColors;
     qreal m_innerRingRadiusFraction;
+
+    qreal R;
+    qreal G;
+    qreal B;
+    qreal Gamma;
 };
 
 #endif // KIS_COLOR_SELECTOR_RING_H

@@ -30,12 +30,6 @@ ToolHelper::ToolHelper(KoToolFactoryBase *tool)
       m_hasCustomShortcut(false),
       m_toolAction(0)
 {
-    // TODO: how to get an existing custom shortcut in the beginning here?
-    // Once the first ShortcutToolAction is added to the actionCollection,
-    // it will get any custom shortcut set by the actionCollection and
-    // by that trigger shortcutToolActionUpdated().
-    // But until then shortcut() will report a wrong shortcut and e.g. show
-    // that in the tooltips of the KoToolBox.
 }
 
 KoToolAction *ToolHelper::toolAction()
@@ -84,25 +78,6 @@ void ToolHelper::activate()
     emit toolActivated(this);
 }
 
-void ToolHelper::shortcutToolActionUpdated()
-{
-    ShortcutToolAction *action = static_cast<ShortcutToolAction*>(sender());
-    // check if shortcut changed
-    const QKeySequence actionShortcut = action->shortcut();
-    const QKeySequence currentShortcut = shortcut();
-    if (actionShortcut != currentShortcut) {
-        m_hasCustomShortcut = true;
-        m_customShortcut = actionShortcut;
-        if (m_toolAction) {
-            emit m_toolAction->changed();
-        }
-        // no need to forward the new shortcut to the other ShortcutToolAction objects,
-        // they are synchronized behind the scenes
-        // Thus they will also trigger this method, but due to them having
-        // the same shortcut not result in any further action.
-    }
-}
-
 KoToolBase *ToolHelper::createTool(KoCanvasBase *canvas) const
 {
     KoToolBase *tool = m_toolFactory->createTool(canvas);
@@ -110,17 +85,6 @@ KoToolBase *ToolHelper::createTool(KoCanvasBase *canvas) const
         tool->setToolId(id());
     }
     return tool;
-}
-
-ShortcutToolAction* ToolHelper::createShortcutToolAction(QObject *parent)
-{
-    ShortcutToolAction* action = new ShortcutToolAction(id(), text(), parent);
-
-    KisActionRegistry::instance()->propertizeAction(id(), action);
-
-    connect(action, SIGNAL(changed()), SLOT(shortcutToolActionUpdated()));
-
-    return action;
 }
 
 QString ToolHelper::section() const
@@ -229,23 +193,3 @@ void Connector::selectionChanged()
 {
     emit selectionChanged(m_shapeManager->selection()->selectedShapes());
 }
-
-//   ************ ShortcutToolAction **********
-ShortcutToolAction::ShortcutToolAction(const QString &id, const QString &name, QObject *parent)
-    : QAction(name, parent)
-    , m_toolID(id)
-{
-    connect(this, SIGNAL(triggered(bool)), this, SLOT(actionTriggered()));
-}
-
-ShortcutToolAction::~ShortcutToolAction()
-{
-}
-
-void ShortcutToolAction::actionTriggered()
-{
-    // todo: why not ToolHelper::activate(); and thus a slightly different behaviour?
-    // Answering the todo item: switchToolRequested
-    KoToolManager::instance()->switchToolRequested(m_toolID);
-}
-

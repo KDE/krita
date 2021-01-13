@@ -37,3 +37,8 @@ void KisSwatch::setSpotColor(bool spotColor)
     m_spotColor = spotColor;
     m_valid = true;
 }
+
+KisSwatch KisSwatch::fromByteArray(QByteArray &data)
+{
+
+}

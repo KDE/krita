@@ -290,6 +290,7 @@ QMimeData *KisPaletteModel::mimeData(const QModelIndexList &indexes) const
         QString mimeTypeName = "krita/x-colorsetentry";
         if (qvariant_cast<bool>(index.data(IsGroupNameRole))==false) {
             KisSwatch entry = getEntry(index);
+            entry.writeToStream(stream);
 
             QDomDocument doc;
             QDomElement root = doc.createElement("Color");

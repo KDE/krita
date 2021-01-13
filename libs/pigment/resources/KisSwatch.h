@@ -34,6 +34,10 @@ public:
 
     bool isValid() const { return m_valid; }
 
+
+    void writeToStream(QDataStream& stream);
+    static KisSwatch fromByteArray(QByteArray& data);
+
 public:
     bool operator==(const KisSwatch& rhs) const {
         return m_color == rhs.m_color && m_name == rhs.m_name;

@@ -287,6 +287,7 @@ QList<KisNodeSP> KisMimeData::loadNodes(const QMimeData *data,
                                         KisShapeController *shapeController)
 {
     bool alwaysRecenter = false;
+    bool skipRecenter = false;
     QList<KisNodeSP> nodes;
 
     if (data->hasFormat("application/x-krita-node")) {
@@ -309,17 +310,17 @@ QList<KisNodeSP> KisMimeData::loadNodes(const QMimeData *data,
         delete tempDoc;
     }
 
-    if (data->hasFormat("application/x-color")) {
+    if (nodes.isEmpty() && (data->hasFormat("application/x-color") || data->hasFormat("krita/x-colorsetentry"))) {
         QColor color = data->hasColor() ? qvariant_cast<QColor>(data->colorData()) : QColor(255, 0, 255);
         KisGeneratorSP generator = KisGeneratorRegistry::instance()->value("color");
         KisFilterConfigurationSP defaultConfig = generator->factoryConfiguration(KisGlobalResourcesInterface::instance());
-        defaultConfig->createLocalResourcesSnapshot(KisGlobalResourcesInterface::instance());
         defaultConfig->setProperty("color", color);
+        defaultConfig->createLocalResourcesSnapshot(KisGlobalResourcesInterface::instance());
 
         if (image) {
-            KisSelectionSP selection = image->globalSelection();
-            KisGeneratorLayerSP fillLayer = new KisGeneratorLayer(image, image->nextLayerName("Fill Layer"), defaultConfig, selection);
+            KisGeneratorLayerSP fillLayer = new KisGeneratorLayer(image, image->nextLayerName("Fill Layer"), defaultConfig, image->globalSelection());
             nodes << fillLayer;
+            skipRecenter = true;
         }
     }
 
@@ -357,13 +358,13 @@ QList<KisNodeSP> KisMimeData::loadNodes(const QMimeData *data,
         alwaysRecenter = true;
     }
 
-    if (!nodes.isEmpty()) {
+    if (!nodes.isEmpty() && !skipRecenter) {
         Q_FOREACH (KisNodeSP node, nodes) {
             QRect bounds = node->projection()->exactBounds();
+
             if (alwaysRecenter || forceRecenter ||
                     (!imageBounds.contains(bounds) &&
                      !imageBounds.intersects(bounds))) {
-
                 QPoint pt = preferredCenter - bounds.center();
                 node->setX(pt.x());
                 node->setY(pt.y());

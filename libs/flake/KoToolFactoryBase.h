@@ -25,6 +25,7 @@
 
 #include <QString>
 #include <QList>
+#include <QObject>
 
 class KoCanvasBase;
 class KoToolBase;
@@ -55,8 +56,11 @@ class QAction;
 </pre>
 
  */
-class KRITAFLAKE_EXPORT KoToolFactoryBase
+class KRITAFLAKE_EXPORT KoToolFactoryBase : public QObject
 {
+
+    Q_OBJECT
+
 public:
     /**
      * Create the new factory
@@ -204,7 +208,6 @@ public:
 
 protected:
 
-
     /**
      * Set the default shortcut for activation of this tool.
      */
@@ -254,6 +257,9 @@ protected:
      */
     virtual QList<QAction *> createActionsImpl();
 
+private Q_SLOTS:
+
+    void activateTool();
 
 private:
     class Private;

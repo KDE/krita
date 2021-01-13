@@ -120,6 +120,7 @@ struct KisAngleSelector::Private
     QMenu *menuFlip;
 
     KisAngleSelector::FlipOptionsMode flipOptionsMode;
+    int angleGaugeSize;
 
     void on_angleGauge_angleChanged(qreal angle);
     void on_angleGauge_customContextMenuRequested(const QPoint &point);
@@ -128,6 +129,8 @@ struct KisAngleSelector::Private
     void on_actionFlipVertically_triggered();
     void on_actionFlipHorizontallyAndVertically_triggered();
     void on_actionResetAngle_triggered();
+
+    void resizeAngleGauge();
 };
 
 KisAngleSelector::KisAngleSelector(QWidget* parent)
@@ -236,7 +239,7 @@ KisAngleSelector::KisAngleSelector(QWidget* parent)
     setTabOrder(m_d->toolButtonFlipVertically, m_d->toolButtonFlipHorizontallyAndVertically);
 
     setFlipOptionsMode(FlipOptionsMode_Buttons);
-    setGaugeSize(m_d->spinBox->sizeHint().height());
+    setGaugeSize(0);
     
     using namespace std::placeholders;
     connect(
@@ -320,7 +323,7 @@ KisAngleSelector::FlipOptionsMode KisAngleSelector::flipOptionsMode() const
 
 int KisAngleSelector::gaugeSize() const
 {
-    return m_d->angleGauge->width();
+    return m_d->angleGaugeSize;
 }
 
 KisAngleGauge::IncreasingDirection KisAngleSelector::increasingDirection() const
@@ -404,10 +407,11 @@ void KisAngleSelector::setFlipOptionsMode(FlipOptionsMode newMode)
 
 void KisAngleSelector::setGaugeSize(int newGaugeSize)
 {
-    if (newGaugeSize < 1) {
+    if (newGaugeSize < 0) {
         return;
     }
-    m_d->angleGauge->setFixedSize(newGaugeSize, newGaugeSize);
+    m_d->angleGaugeSize = newGaugeSize;
+    m_d->resizeAngleGauge();
 }
 
 void KisAngleSelector::setIncreasingDirection(KisAngleGauge::IncreasingDirection newIncreasingDirection)
@@ -516,6 +520,17 @@ bool KisAngleSelector::event(QEvent *e)
         KisIconUtils::updateIcon(m_d->toolButtonFlipHorizontally);
         KisIconUtils::updateIcon(m_d->toolButtonFlipVertically);
         KisIconUtils::updateIcon(m_d->toolButtonFlipHorizontallyAndVertically);
+        // For some reason the spinbox, that uses stylesheets, doesn't update
+        // on palette changes, so we reset the stylesheet to force an update.
+        // Calling m_d->spinBox->update() doesn't work
+        m_d->spinBox->setStyleSheet(m_d->spinBox->styleSheet());
+    } else if (e->type() == QEvent::StyleChange) {
+        // Temporarily reset the spin box style so that we can get its
+        // height size hint
+        QString ss = m_d->spinBox->styleSheet();
+        m_d->spinBox->setStyleSheet("");
+        m_d->resizeAngleGauge();
+        m_d->spinBox->setStyleSheet(ss);
     }
     return false;
 }
@@ -552,4 +567,13 @@ void KisAngleSelector::Private::on_actionFlipVertically_triggered()
 void KisAngleSelector::Private::on_actionFlipHorizontallyAndVertically_triggered()
 {
     q->flip(Qt::Horizontal | Qt::Vertical);
+}
+
+void KisAngleSelector::Private::resizeAngleGauge()
+{
+    if (angleGaugeSize == 0) {
+        angleGauge->setFixedSize(spinBox->sizeHint().height(), spinBox->sizeHint().height());
+    } else {
+        angleGauge->setFixedSize(angleGaugeSize, angleGaugeSize);
+    }
 }

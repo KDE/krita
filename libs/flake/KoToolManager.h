@@ -32,6 +32,7 @@ class KoShapeControllerBase;
 class KoToolFactoryBase;
 class KoCanvasBase;
 class KoToolBase;
+class KoCreateShapesTool;
 class KActionCollection;
 class KoShape;
 class KoInputDeviceHandlerEvent;

@@ -770,8 +770,10 @@ void KisNodeManager::slotUiActivatedNode(KisNodeSP node)
     if (node) {
         QStringList vectorTools = QStringList()
                 << "InteractionTool"
+                << "KarbonPatternTool"
                 << "KarbonGradientTool"
                 << "KarbonCalligraphyTool"
+                << "CreateShapesTool"
                 << "PathTool";
 
         QStringList pixelTools = QStringList()

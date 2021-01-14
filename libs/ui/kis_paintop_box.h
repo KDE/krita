@@ -220,6 +220,7 @@ private:
             if (dev.pointer() == QTabletEvent::Eraser) {
                 pointer = QTabletEvent::Eraser;
             }
+            uniqueTabletId = dev.uniqueTabletId();
         }
 
         bool operator == (const TabletToolID& id) const {
@@ -231,6 +232,7 @@ private:
         }
 
         QTabletEvent::PointerType  pointer;
+        qint64 uniqueTabletId;
     };
 
     struct TabletToolData {

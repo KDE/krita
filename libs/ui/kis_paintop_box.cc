@@ -518,10 +518,10 @@ KisPaintopBox::~KisPaintopBox()
     while (iter.hasNext()) {
         iter.next();
         if ((iter.key().pointer) == QTabletEvent::Eraser) {
-            cfg.writeEntry(QString("LastEraser") , iter.value().preset->name());
+            cfg.writeEntry(QString("LastEraser_%1").arg(iter.key().uniqueTabletId), iter.value().preset->name());
         }
         else {
-            cfg.writeEntry(QString("LastPreset"), iter.value().preset->name());
+            cfg.writeEntry(QString("LastPreset_%1").arg(iter.key().uniqueTabletId), iter.value().preset->name());
         }
     }
     // Do not delete the widget, since it is global to the application, not owned by the view

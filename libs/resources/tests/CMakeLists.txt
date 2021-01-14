@@ -1,11 +1,9 @@
-add_definitions(-DFILES_DEST_DIR="${CMAKE_CURRENT_BINARY_DIR}/data/")
-
-set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
-
 include(ECMAddTests)
 include(KritaAddBrokenUnitTest)
 
 macro_add_unittest_definitions()
+
+add_definitions(-DFILES_DEST_DIR="${CMAKE_CURRENT_BINARY_DIR}/data/")
 
 ecm_add_tests(
     TestResourceCacheDb

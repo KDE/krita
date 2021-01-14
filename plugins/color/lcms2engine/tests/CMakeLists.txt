@@ -1,6 +1,5 @@
-add_definitions(-DFILES_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/data/")
+macro_add_unittest_definitions()
 
-set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 include_directories( ../colorspaces/cmyk_u16
     ../colorspaces/cmyk_u8
     ../colorspaces/gray_u16

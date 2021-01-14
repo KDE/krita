@@ -50,7 +50,7 @@ macro (KRITA_ADD_BENCHMARK _test_NAME)
       set(_executable "${loc}.bat")
     else()
       if (Q_OS_MACOS AND NOT _nogui)
-        set(_executable ${EXECUTABLE_OUTPUT_PATH}/${_test_NAME}.app/Contents/MacOS/${_test_NAME})
+        set(_executable ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${_test_NAME}.app/Contents/MacOS/${_test_NAME})
       else ()
         # .shell because of rpath handling
         set(_executable "${loc}.shell")
@@ -66,7 +66,7 @@ macro (KRITA_ADD_BENCHMARK _test_NAME)
     endif ()
 
     add_dependencies(benchmark ${_targetName} )
-#    add_test( ${_targetName} ${EXECUTABLE_OUTPUT_PATH}/${_test_NAME} -xml -o ${_test_NAME}.tml )
+#    add_test( ${_targetName} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${_test_NAME} -xml -o ${_test_NAME}.tml )
 
     if (NOT MSVC_IDE)   #not needed for the ide
         # if the tests are EXCLUDE_FROM_ALL, add a target "buildtests" to build all tests

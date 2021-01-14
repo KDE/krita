@@ -124,7 +124,7 @@ void WGColorSelectorDock::setCanvas(KoCanvasBase *canvas)
     if (m_canvas) {
         disconnectFromCanvas();
     }
-    m_actionManager->setCanvas(qobject_cast<KisCanvas2*>(canvas), m_canvas);
+    //m_actionManager->setCanvas(qobject_cast<KisCanvas2*>(canvas), m_canvas);
     m_canvas = qobject_cast<KisCanvas2*>(canvas);
     if (m_canvas) {
         KoColorDisplayRendererInterface *dri = m_canvas->displayColorConverter()->displayRendererInterface();
@@ -160,6 +160,11 @@ void WGColorSelectorDock::unsetCanvas()
     m_selector->setDisplayRenderer(0);
     m_history->setDisplayRenderer(0);
     m_canvas = 0;
+}
+
+void WGColorSelectorDock::setViewManager(KisViewManager *viewManager)
+{
+    m_actionManager->registerActions(viewManager);
 }
 
 void WGColorSelectorDock::disconnectFromCanvas()

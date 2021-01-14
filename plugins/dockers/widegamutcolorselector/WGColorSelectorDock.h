@@ -9,7 +9,7 @@
 
 #include <QPointer>
 #include <QDockWidget>
-#include <KoCanvasObserverBase.h>
+#include <kis_mainwindow_observer.h>
 
 #include <KoColor.h>
 
@@ -27,7 +27,7 @@ class QToolButton;
 class QVariant;
 class QWidgetAction;
 
-class WGColorSelectorDock : public QDockWidget, public KoCanvasObserverBase // public KisMainwindowObserver ?
+class WGColorSelectorDock : public QDockWidget, public KisMainwindowObserver
 {
     Q_OBJECT
 public:
@@ -46,6 +46,7 @@ protected:
     void leaveEvent(QEvent *event) override;
     void setCanvas(KoCanvasBase *canvas) override;
     void unsetCanvas() override;
+    void setViewManager(KisViewManager* viewManager) override;
 
     void disconnectFromCanvas();
 

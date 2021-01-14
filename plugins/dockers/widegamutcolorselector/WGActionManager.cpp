@@ -10,8 +10,8 @@
 #include "WGSelectorPopup.h"
 #include "WGShadeSelector.h"
 
-#include <kactioncollection.h>
-#include <kis_action_registry.h>
+#include <kis_action.h>
+#include <kis_action_manager.h>
 #include <kis_canvas2.h>
 #include <kis_signal_compressor.h>
 #include <KisViewManager.h>
@@ -27,26 +27,32 @@ WGActionManager::WGActionManager(WGColorSelectorDock *parentDock)
 {
     connect(m_colorChangeCompressor, SIGNAL(timeout()), SLOT(slotUpdateDocker()));
     connect(m_colorModel.data(), SIGNAL(sigChannelValuesChanged(QVector4D)), SLOT(slotChannelValuesChanged()));
-    KisActionRegistry *actionRegistry = KisActionRegistry::instance();
-    m_colorSelectorPopupAction = actionRegistry->makeQAction("show_wg_color_selector", this);
-    connect(m_colorSelectorPopupAction, SIGNAL(triggered()), SLOT(slotShowColorSelectorPopup()));
-    m_shadeSelectorPopupAction = actionRegistry->makeQAction("show_wg_shade_selector", this);
-    connect(m_shadeSelectorPopupAction, SIGNAL(triggered()), SLOT(slotShowShadeSelectorPopup()));
 }
 
-void WGActionManager::setCanvas(KisCanvas2 *canvas, KisCanvas2 *oldCanvas)
+/* void WGActionManager::setCanvas(KisCanvas2 *canvas, KisCanvas2 *oldCanvas)
 {
-    if (oldCanvas) {
-        KisKActionCollection *ac = oldCanvas->viewManager()->actionCollection();
-        ac->takeAction(ac->action("show_wg_color_selector"));
-        ac->takeAction(ac->action("show_wg_shade_selector"));
-    }
+} */
 
-    if (canvas) {
-        KisKActionCollection* actionCollection = canvas->viewManager()->actionCollection();
-        actionCollection->addAction("show_wg_color_selector", m_colorSelectorPopupAction);
-        actionCollection->addAction("show_wg_shade_selector", m_shadeSelectorPopupAction);
-    }
+void WGActionManager::registerActions(KisViewManager *viewManager)
+{
+    KisActionManager *actionManager = viewManager->actionManager();
+    KisAction *action;
+    action = actionManager->createAction("show_wg_color_selector");
+    connect(action, SIGNAL(triggered()), SLOT(slotShowColorSelectorPopup()));
+    action = actionManager->createAction("show_wg_shade_selector");
+    connect(action, SIGNAL(triggered()), SLOT(slotShowShadeSelectorPopup()));
+    action = actionManager->createAction("wgcs_lighten_color");
+    connect(action, SIGNAL(triggered(bool)), SLOT(slotIncreaseLightness()));
+    action = actionManager->createAction("wgcs_darken_color");
+    connect(action, SIGNAL(triggered(bool)), SLOT(slotDecreaseLightness()));
+    action = actionManager->createAction("wgcs_increase_saturation");
+    connect(action, SIGNAL(triggered(bool)), SLOT(slotIncreaseSaturation()));
+    action = actionManager->createAction("wgcs_decrease_saturation");
+    connect(action, SIGNAL(triggered(bool)), SLOT(slotDecreaseSaturation()));
+    action = actionManager->createAction("wgcs_shift_hue_clockwise");
+    connect(action, SIGNAL(triggered(bool)), SLOT(slotShiftHueCW()));
+    action = actionManager->createAction("wgcs_shift_hue_counterclockwise");
+    connect(action, SIGNAL(triggered(bool)), SLOT(slotShiftHueCCW()));
 }
 
 void WGActionManager::preparePopup()
@@ -55,6 +61,18 @@ void WGActionManager::preparePopup()
     const KisVisualColorModel &dockerModel = m_docker->colorModel();
     m_colorModel->copyState(dockerModel);
     m_isSynchronizing = false;
+}
+
+void WGActionManager::modifyHSX(int channel, float amount)
+{
+    if (channel < 0 || channel > 2) {
+        return;
+    }
+    if (m_docker->colorModel().isHSXModel()) {
+        QVector4D channelValues = m_docker->colorModel().channelValues();
+        channelValues[channel] = qBound(0.0f, channelValues[channel] + amount, 1.0f);
+        m_docker->setChannelValues(channelValues);
+    }
 }
 
 void WGActionManager::slotShowColorSelectorPopup()
@@ -81,6 +99,36 @@ void WGActionManager::slotShowShadeSelectorPopup()
     }
     preparePopup();
     m_shadeSelectorPopup->slotShowPopup();
+}
+
+void WGActionManager::slotIncreaseLightness()
+{
+    modifyHSX(2, 0.1f);
+}
+
+void WGActionManager::slotDecreaseLightness()
+{
+    modifyHSX(2, -0.1f);
+}
+
+void WGActionManager::slotIncreaseSaturation()
+{
+    modifyHSX(1, 0.1f);
+}
+
+void WGActionManager::slotDecreaseSaturation()
+{
+    modifyHSX(1, -0.1f);
+}
+
+void WGActionManager::slotShiftHueCW()
+{
+    modifyHSX(0, 0.1f);
+}
+
+void WGActionManager::slotShiftHueCCW()
+{
+    modifyHSX(0, -0.1f);
 }
 
 void WGActionManager::slotChannelValuesChanged()

@@ -13,6 +13,7 @@
 class QAction;
 class KisCanvas2;
 class KisSignalCompressor;
+class KisViewManager;
 class KisVisualColorSelector;
 
 class WGColorSelectorDock;
@@ -25,21 +26,27 @@ class WGActionManager : public QObject
 public:
     explicit WGActionManager(WGColorSelectorDock *parentDock = nullptr);
 
-    void setCanvas(KisCanvas2* canvas, KisCanvas2* oldCanvas);
+    //void setCanvas(KisCanvas2* canvas, KisCanvas2* oldCanvas);
+    void registerActions(KisViewManager *viewManager);
 private:
     void preparePopup();
+    void modifyHSX(int channel, float amount);
 private Q_SLOTS:
     void slotShowColorSelectorPopup();
     void slotShowShadeSelectorPopup();
+    void slotIncreaseLightness();
+    void slotDecreaseLightness();
+    void slotIncreaseSaturation();
+    void slotDecreaseSaturation();
+    void slotShiftHueCW();
+    void slotShiftHueCCW();
+
     void slotChannelValuesChanged();
     void slotUpdateDocker();
 Q_SIGNALS:
 private:
     WGColorSelectorDock *m_docker {0};
     KisSignalCompressor *m_colorChangeCompressor;
-    QAction *m_colorSelectorPopupAction {0};
-    QAction *m_shadeSelectorPopupAction;
-    QAction *m_colorHistoryPopupAction;
     WGSelectorPopup *m_colorSelectorPopup {0};
     WGSelectorPopup *m_shadeSelectorPopup {0};
     KisVisualColorSelector *m_colorSelector {0};

@@ -626,7 +626,7 @@ void KisCompositionBenchmark::checkRoundingAlphaDarkenF32_05_10_08()
 void KisCompositionBenchmark::checkRoundingOver()
 {
 #ifdef HAVE_VC
-    checkRounding<OverCompositor32<quint8, false, true> >(0.5, 0.3);
+    checkRounding<OverCompositor32<quint8, quint32, false, true> >(0.5, 0.3);
 #endif
 }
 

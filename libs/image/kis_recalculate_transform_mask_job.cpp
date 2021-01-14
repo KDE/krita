@@ -69,19 +69,17 @@ void KisRecalculateTransformMaskJob::run()
         } else {
             m_mask->setDirtyDontResetAnimationCache(updateRect);
         }
-    } else {
+    } else if (!m_mask->isAnimated()) {
         /**
          * When we call requestProjectionUpdateNoFilthy() on a layer,
          * its masks' change rect is not counted, because it is considered
          * to be N_ABOVE_FILTHY. Therefore, we should expand the dirty
          * rect manually to get the correct update
          */
-
         QRect updateRect = oldMaskExtent |
             layer->projectionPlane()->changeRect(layer->extent(), KisLayer::N_FILTHY);
 
         image->requestProjectionUpdateNoFilthy(layer, updateRect, image->bounds(), false); // Should there be a case where this is flushed?
-        // TODO: Check if layer-isAnimated() should be past into requestProjectionUpdateNoFilthy...
     }
 }
 

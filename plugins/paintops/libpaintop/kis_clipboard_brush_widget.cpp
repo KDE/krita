@@ -104,7 +104,6 @@ void KisClipboardBrushWidget::slotUpdateUseColorAsMask(bool useColorAsMask)
 {
     preserveAlpha->setEnabled(useColorAsMask);
     if (m_brush) {
-        // TODO: test if it works correctly
         static_cast<KisGbrBrush*>(m_brush.data())->setBrushApplication(useColorAsMask ? ALPHAMASK : IMAGESTAMP);
         int w = preview->size().width()-10;
         preview->setPixmap(QPixmap::fromImage(m_brush->image().scaled(w, w, Qt::KeepAspectRatio)));

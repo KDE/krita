@@ -49,6 +49,8 @@ namespace KisAnimUtils
 
     void removeKeyframes(KisImageSP image, const FrameItemList &frames);
     void removeKeyframe(KisImageSP image, KisNodeSP node, const QString &channel, int time);
+    void resetChannels(KisImageSP image, KisNodeSP node, const QList<QString> &channelIDs);
+    void resetChannel(KisImageSP image, KisNodeSP node, const QString &channelID);
 
     void sortPointsForSafeMove(QModelIndexList *points, const QPoint &offset);
 

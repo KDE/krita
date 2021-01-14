@@ -46,6 +46,7 @@
 #include "kis_zoom_button.h"
 #include "kis_signals_blocker.h"
 #include "kis_time_span.h"
+#include <QItemSelection>
 
 KisAnimCurvesDockerTitlebar::KisAnimCurvesDockerTitlebar(QWidget* parent) :
     KisUtilityTitleBar(new QLabel(i18n("Animation Curves"), parent), parent)
@@ -238,6 +239,9 @@ struct KisAnimCurvesDocker::Private
     KisAnimCurvesChannelsModel *channelTreeModel;
     QTreeView *channelTreeView;
 
+    QMenu *channelTreeMenuChannels; //Menu for channels
+    QMenu *channelTreeMenuLayers; //Menu for layers
+
     KisMainWindow *mainWindow;
     QPointer<KisCanvas2> canvas;
     KisSignalAutoConnectionsStore canvasConnections;
@@ -260,6 +264,27 @@ KisAnimCurvesDocker::KisAnimCurvesDocker()
         m_d->channelTreeView->setHeaderHidden(true);
         KisAnimCurvesChannelDelegate *listDelegate = new KisAnimCurvesChannelDelegate(this);
         m_d->channelTreeView->setItemDelegate(listDelegate);
+
+        //Right click menu configuration for Channel Tree
+        m_d->channelTreeView->setContextMenuPolicy(Qt::CustomContextMenu);
+        connect(m_d->channelTreeView, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(requestChannelMenuAt(QPoint)));
+
+        m_d->channelTreeMenuChannels = new QMenu(this);
+        m_d->channelTreeMenuChannels->addSection(i18n("Channel Operations"));
+        m_d->channelTreeMenuLayers = new QMenu(this);
+        m_d->channelTreeMenuLayers->addSection(i18n("Layer Operations"));
+
+        { //Channels Menu
+            QAction* action = new QAction(i18n("Reset Channel"), this);
+            connect(action, SIGNAL(triggered(bool)), this, SLOT(resetChannelTreeSelection()));
+            m_d->channelTreeMenuChannels->addAction(action);
+        }
+
+        { //Layers Menu
+            QAction* action = new QAction(i18n("Reset All Channels"), this);
+            connect(action, SIGNAL(triggered(bool)), this, SLOT(resetChannelTreeSelection()));
+            m_d->channelTreeMenuLayers->addAction(action);
+        }
     }
 
     {   // Curves View..
@@ -731,5 +756,24 @@ void KisAnimCurvesDocker::slotActiveNodeUpdate(const QModelIndex index)
         m_d->titlebar->sbValueRegister->setValue(variant.isValid() ? variant.toReal() : 0.0);
     } else {
         m_d->titlebar->sbValueRegister->setEnabled(false);
+    }
+}
+
+void KisAnimCurvesDocker::requestChannelMenuAt(const QPoint &point)
+{
+    QModelIndex selected = m_d->channelTreeView->selectionModel()->selectedIndexes().first();
+
+    if (selected.data(KisAnimCurvesChannelsModel::CurveRole).toBool()) {
+        m_d->channelTreeMenuChannels->popup(m_d->channelTreeView->mapToGlobal(point));
+    } else {
+        m_d->channelTreeMenuLayers->popup(m_d->channelTreeView->mapToGlobal(point));
+    }
+}
+
+void KisAnimCurvesDocker::resetChannelTreeSelection()
+{
+    QList<QModelIndex> selected = m_d->channelTreeView->selectionModel()->selectedIndexes();
+    Q_FOREACH( const QModelIndex& index, selected) {
+        m_d->channelTreeModel->reset(index);
     }
 }

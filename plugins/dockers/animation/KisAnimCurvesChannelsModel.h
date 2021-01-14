@@ -45,6 +45,7 @@ public:
 
 public Q_SLOTS:
     void selectedNodesChanged(const KisNodeList &nodes);
+    void reset(const QModelIndex& index);
     void clear();
     void keyframeChannelAddedToNode(KisKeyframeChannel *channel);
 

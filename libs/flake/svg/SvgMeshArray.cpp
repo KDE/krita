@@ -196,7 +196,7 @@ SvgMeshStop SvgMeshArray::getStop(const SvgMeshPatch::Type edge, const int row, 
         else if (edge == SvgMeshPatch::Left)
             return getStop(SvgMeshPatch::Bottom, row, col - 1);
     }
-    assert(false);
+    Q_ASSERT(false);
     return SvgMeshStop();
 }
 

@@ -59,6 +59,8 @@ struct KisFilterManager::Private {
     KisFilterConfigurationSP lastConfiguration;
     KisFilterConfigurationSP currentlyAppliedConfiguration;
     KisStrokeId currentStrokeId;
+    QSharedPointer<QAtomicInt> cancelSilentlyHandle;
+    KisFilterStrokeStrategy::IdleBarrierData::IdleBarrierCookie idleBarrierCookie;
     QRect initialApplyRect;
     QRect currentProcessRect;
 
@@ -270,9 +272,12 @@ void KisFilterManager::apply(KisFilterConfigurationSP _filterConfig)
     KisImageWSP image = d->view->image();
 
     if (d->currentStrokeId) {
-        image->addJob(d->currentStrokeId, new KisFilterStrokeStrategy::CancelSilentlyMarker);
+        d->cancelSilentlyHandle->ref();
         image->cancelStroke(d->currentStrokeId);
+
         d->currentStrokeId.clear();
+        d->cancelSilentlyHandle.clear();
+        d->idleBarrierCookie.clear();
     } else {
         image->waitForDone();
         d->initialApplyRect = d->view->activeNode()->exactBounds();
@@ -295,13 +300,14 @@ void KisFilterManager::apply(KisFilterConfigurationSP _filterConfig)
                                  d->view->activeNode(),
                                  resourceManager);
 
-    KisStrokeStrategy *strategy = new KisFilterStrokeStrategy(filter,
+    KisFilterStrokeStrategy *strategy = new KisFilterStrokeStrategy(filter,
                                                               KisFilterConfigurationSP(filterConfig),
                                                               resources);
     {
         KConfigGroup group( KSharedConfig::openConfig(), "filterdialog");
         strategy->setForceLodModeIfPossible(group.readEntry("forceLodMode", true));
     }
+    d->cancelSilentlyHandle = strategy->cancelSilentlyHandle();
 
     d->currentStrokeId =
         image->startStroke(strategy);
@@ -320,6 +326,13 @@ void KisFilterManager::apply(KisFilterConfigurationSP _filterConfig)
     } else {
         image->addJob(d->currentStrokeId,
                       new KisFilterStrokeStrategy::Data(processRect, false));
+    }
+
+    {
+        KisFilterStrokeStrategy::IdleBarrierData *data =
+            new KisFilterStrokeStrategy::IdleBarrierData();
+        d->idleBarrierCookie = data->idleBarrierCookie();
+        image->addJob(d->currentStrokeId, data);
     }
 
     QRegion extraUpdateRegion(d->currentProcessRect);
@@ -355,6 +368,8 @@ void KisFilterManager::finish()
     d->reapplyAction->setText(i18n("Apply Filter Again: %1", filter->name()));
 
     d->currentStrokeId.clear();
+    d->cancelSilentlyHandle.clear();
+    d->idleBarrierCookie.clear();
     d->currentlyAppliedConfiguration.clear();
     d->currentProcessRect = QRect();
 }
@@ -366,6 +381,8 @@ void KisFilterManager::cancel()
     d->view->image()->cancelStroke(d->currentStrokeId);
 
     d->currentStrokeId.clear();
+    d->cancelSilentlyHandle.clear();
+    d->idleBarrierCookie.clear();
     d->currentlyAppliedConfiguration.clear();
     d->currentProcessRect = QRect();
 }
@@ -373,6 +390,11 @@ void KisFilterManager::cancel()
 bool KisFilterManager::isStrokeRunning() const
 {
     return d->currentStrokeId;
+}
+
+bool KisFilterManager::isIdle() const
+{
+    return !d->idleBarrierCookie;
 }
 
 void KisFilterManager::slotStrokeEndRequested()

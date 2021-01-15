@@ -11,6 +11,7 @@
 #include "kritaglobal_export.h"
 
 #include <QElapsedTimer>
+#include <functional>
 
 class QTimer;
 
@@ -71,6 +72,8 @@ public:
 
     int delay() const;
 
+    void setIdleCallback();
+    void setDelay(std::function<bool()> idleCallback, int idleDelay, int timeout);
 
 public Q_SLOTS:
     void setDelay(int delay);
@@ -86,6 +89,7 @@ Q_SIGNALS:
 private:
     bool tryEmitOnTick(bool isFromTimer);
     bool tryEmitSignalSafely();
+    void setDelayImpl(int delay);
 
 private:
     QTimer *m_timer = 0;
@@ -94,6 +98,8 @@ private:
     bool m_signalsPending = false;
     QElapsedTimer m_lastEmittedTimer;
     int m_isEmitting = 0;
+    int m_timeout = 0;
+    std::function<bool()> m_idleCallback;
 };
 
 #endif /* __KIS_SIGNAL_COMPRESSOR_H */

@@ -39,6 +39,8 @@ public:
     void cancel();
     bool isStrokeRunning() const;
 
+    bool isIdle() const;
+
 private Q_SLOTS:
 
     void insertFilter(const QString &name);

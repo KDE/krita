@@ -46,10 +46,11 @@ public Q_SLOTS:
 private:
     void startApplyingFilter(KisFilterConfigurationSP config);
     void setDialogTitle(KisFilterSP f);
-    void updatePreview();
+
 
 private Q_SLOTS:
     void slotFilterWidgetSizeChanged();
+    void updatePreview();
 
 private:
     struct Private;

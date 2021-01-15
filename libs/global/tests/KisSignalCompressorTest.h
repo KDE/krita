@@ -18,6 +18,7 @@ private Q_SLOTS:
     void test();
     void testSlowHandlerPrecise();
     void testSlowHandlerAdditive();
+    void testIdleChecks();
 };
 
 #endif // KISSIGNALCOMPRESSORTEST_H

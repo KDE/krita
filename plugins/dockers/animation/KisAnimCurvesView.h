@@ -32,7 +32,7 @@ Q_SIGNALS:
     void activeDataChanged(const QModelIndex& index);
 
 protected:
-    void paintEvent(QPaintEvent *) override;
+    void paintEvent(QPaintEvent *event) override;
     QModelIndex moveCursor(CursorAction cursorAction, Qt::KeyboardModifiers modifiers) override;
     int horizontalOffset() const override;
     int verticalOffset() const override;

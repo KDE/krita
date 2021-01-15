@@ -75,8 +75,11 @@ struct KisTimeBasedItemModel::Private
         return image->animationInterface()->framerate();
     }
 
-    bool withinClipRange(const QModelIndex& index) {
-        const int time = index.column();
+    bool withinClipRange(const int time) {
+        if (!image) {
+            return true;
+        }
+
         KisTimeSpan clipRange = image->animationInterface()->fullClipRange();
         return clipRange.contains(time);
     }
@@ -198,7 +201,7 @@ QVariant KisTimeBasedItemModel::data(const QModelIndex &index, int role) const
             return cloneCount(index);
         }
         case WithinClipRange:
-            return m_d->withinClipRange(index);
+            return m_d->withinClipRange(index.column());
         }
 
     return QVariant();
@@ -228,6 +231,8 @@ QVariant KisTimeBasedItemModel::headerData(int section, Qt::Orientation orientat
             return m_d->cachedFrames.size() > section ? m_d->cachedFrames[section] : false;
         case FramesPerSecondRole:
             return m_d->framesPerSecond();
+        case WithinClipRange:
+            return m_d->withinClipRange(section);
         }
     }
 
@@ -552,6 +557,8 @@ void KisTimeBasedItemModel::slotClipRangeChanged()
             m_d->numFramesOverride = interface->playbackRange().end();
             endInsertColumns();
         }
+
+        dataChanged(index(0,0), index(rowCount(), columnCount()));
     }
 }
 

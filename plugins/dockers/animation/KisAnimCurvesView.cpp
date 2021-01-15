@@ -194,15 +194,15 @@ QModelIndex KisAnimCurvesView::indexAt(const QPoint &point) const
     return QModelIndex();
 }
 
-void KisAnimCurvesView::paintEvent(QPaintEvent *e)
+void KisAnimCurvesView::paintEvent(QPaintEvent *event)
 {
     QPainter painter(viewport());
 
-    QRect r = e->rect();
-    r.translate(dirtyRegionOffset());
+    QRect rect = event->rect();
+    rect.translate(dirtyRegionOffset());
 
-    int firstFrame = m_d->horizontalHeader->logicalIndexAt(r.left());
-    int lastFrame = m_d->horizontalHeader->logicalIndexAt(r.right());
+    int firstFrame = m_d->horizontalHeader->logicalIndexAt(rect.left());
+    int lastFrame = m_d->horizontalHeader->logicalIndexAt(rect.right());
     if (lastFrame == -1) lastFrame = model()->columnCount();
 
     paintGrid(painter);
@@ -222,8 +222,11 @@ void KisAnimCurvesView::paintGrid(QPainter &painter)
     const int visibleFrames = m_d->horizontalHeader->estimateLastVisibleColumn() - m_d->horizontalHeader->estimateFirstVisibleColumn() + 1;
     const int firstVisibleFrame = qMax( m_d->horizontalHeader->estimateFirstVisibleColumn() - 1, 0);
     for (int time = 0; time <= visibleFrames; time++) {
-        const QVariant data = m_d->model->headerData(firstVisibleFrame + time, Qt::Horizontal, KisTimeBasedItemModel::ActiveFrameRole);
+        QVariant data = m_d->model->headerData(firstVisibleFrame + time, Qt::Horizontal, KisTimeBasedItemModel::ActiveFrameRole);
         const bool activeFrame = data.isValid() && data.toBool();
+
+        data = m_d->model->headerData(firstVisibleFrame + time, Qt::Horizontal, KisTimeBasedItemModel::WithinClipRange);
+        const bool withinClipRange = data.isValid() && data.toBool();
 
         const int offsetHori = m_d->horizontalHeader ? m_d->horizontalHeader->offset() : 0;
         const int stepHori = m_d->horizontalHeader->defaultSectionSize();
@@ -234,7 +237,13 @@ void KisAnimCurvesView::paintGrid(QPainter &painter)
         const QPoint top = frameRect.topLeft() + 0.5 * (frameRect.topRight() - frameRect.topLeft());
         const QPoint bottom = frameRect.bottomLeft() + 0.5 * (frameRect.bottomRight() - frameRect.bottomLeft());
 
-        painter.setPen(activeFrame ? activeFrameColor : lineColor);
+        QColor fadedLineColor = lineColor;
+        fadedLineColor.setAlphaF(0.33);
+
+        QColor finalColor = withinClipRange ? lineColor : fadedLineColor;
+        finalColor = activeFrame ? activeFrameColor : finalColor;
+
+        painter.setPen(finalColor);
         painter.drawLine(top, bottom);
     }
 

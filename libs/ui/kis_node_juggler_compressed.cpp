@@ -684,7 +684,6 @@ KisNodeJugglerCompressed::KisNodeJugglerCompressed(const KUndo2MagicString &acti
 {
 
     KisImageSignalVector emitSignals;
-    emitSignals << ModifiedSignal;
 
     m_d->applicator.reset(
         new KisProcessingApplicator(m_d->image, 0,

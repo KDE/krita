@@ -21,7 +21,7 @@ void KisSelectionDecorationTest::testConcurrentSelectionFetches()
         KisProcessingApplicator applicator(image,
                                            0 /* we need no automatic updates */,
                                            KisProcessingApplicator::SUPPORTS_WRAPAROUND_MODE,
-                                           KisImageSignalVector() << ModifiedSignal,
+                                           KisImageSignalVector(),
                                            kundo2_noi18n("test stroke"));
 
 

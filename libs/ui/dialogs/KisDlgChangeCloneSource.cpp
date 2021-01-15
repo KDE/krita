@@ -24,7 +24,7 @@ struct KisDlgChangeCloneSource::Private
         , image(view->image())
         , applicator(new KisProcessingApplicator(image, 0,
                                                  KisProcessingApplicator::NONE,
-                                                 /* emitSignals = */ KisImageSignalVector() << ModifiedSignal,
+                                                 /* emitSignals = */ KisImageSignalVector(),
                                                  kundo2_i18n("Change Clone Layers")))
         , modified(false) {}
 

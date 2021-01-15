@@ -42,7 +42,6 @@ void KisImageSignalRouterTest::testSignalForwarding()
 {
 
     checkNotification(LayersChangedSignal, SIGNAL(sigLayersChangedAsync()));
-    checkNotification(ModifiedSignal, SIGNAL(sigImageModified()));
     checkNotification(SizeChangedSignal, SIGNAL(sigSizeChanged(QPointF,QPointF)));
     checkNotification(ComplexSizeChangedSignal(), SIGNAL(sigSizeChanged(QPointF,QPointF)));
 // These cannot be checked because KoColorProfile and KoColorSpace are not registered metatypes,

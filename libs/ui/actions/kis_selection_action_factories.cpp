@@ -202,7 +202,7 @@ void KisFillActionFactory::run(const QString &fillSource, KisViewManager *view)
 
     KisProcessingApplicator applicator(view->image(), node,
                                        KisProcessingApplicator::NONE,
-                                       KisImageSignalVector() << ModifiedSignal,
+                                       KisImageSignalVector(),
                                        kundo2_i18n("Flood Fill Layer"));
 
     KisResourcesSnapshotSP resources =

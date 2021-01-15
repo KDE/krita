@@ -124,7 +124,7 @@ void KisToolSelectSimilar::beginPrimaryAction(KoPointerEvent *event)
 
     KisProcessingApplicator applicator(currentImage(), currentNode(),
                                        KisProcessingApplicator::NONE,
-                                       KisImageSignalVector() << ModifiedSignal,
+                                       KisImageSignalVector(),
                                        kundo2_i18n("Select Contiguous Area"));
 
 

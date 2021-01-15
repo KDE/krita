@@ -62,7 +62,7 @@ KisImageSignalRouter::~KisImageSignalRouter()
 
 void KisImageSignalRouter::emitImageModifiedNotification()
 {
-    emitNotification(ModifiedSignal);
+    emit sigImageModified();
 }
 
 void KisImageSignalRouter::emitNotifications(KisImageSignalVector notifications)
@@ -148,9 +148,6 @@ void KisImageSignalRouter::slotNotification(KisImageSignalType type)
     case LayersChangedSignal:
         image->invalidateAllFrames();
         emit sigLayersChangedAsync();
-        break;
-    case ModifiedSignal:
-        emit sigImageModified();
         break;
     case ModifiedWithoutUndoSignal:
         emit sigImageModifiedWithoutUndo();

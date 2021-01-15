@@ -411,7 +411,7 @@ void KisProcessingApplicator::runSingleCommandStroke(KisImageSP image, KUndo2Com
 {
     KisProcessingApplicator applicator(image, 0,
                                        KisProcessingApplicator::NONE,
-                                       KisImageSignalVector() << ModifiedSignal,
+                                       KisImageSignalVector(),
                                        cmd->text());
     applicator.applyCommand(cmd, sequentiality, exclusivity);
     applicator.end();

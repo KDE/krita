@@ -96,7 +96,6 @@ void OffsetImage::slotOffsetLayer()
 void OffsetImage::offsetImpl(const KUndo2MagicString& actionName, KisNodeSP node, const QPoint& offsetPoint)
 {
     KisImageSignalVector emitSignals;
-    emitSignals << ModifiedSignal;
 
     KisProcessingApplicator applicator(viewManager()->image(), node,
                                        KisProcessingApplicator::RECURSIVE,

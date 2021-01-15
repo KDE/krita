@@ -41,7 +41,7 @@ void KisQmicApplicator::apply()
     cancel();
 
     KisImageSignalVector emitSignals;
-    emitSignals << ComplexSizeChangedSignal() << ModifiedSignal;
+    emitSignals << ComplexSizeChangedSignal();
 
     m_applicator.reset(
         new KisProcessingApplicator(m_image, m_node,

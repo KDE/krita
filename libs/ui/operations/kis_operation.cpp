@@ -36,7 +36,6 @@ KisProcessingApplicator* KisOperation::beginAction(KisViewManager *view, const K
     Q_ASSERT(image);
 
     KisImageSignalVector emitSignals;
-    emitSignals << ModifiedSignal;
 
     return new KisProcessingApplicator(image, 0,
                                         KisProcessingApplicator::NONE,

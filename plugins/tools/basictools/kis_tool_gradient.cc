@@ -160,7 +160,7 @@ void KisToolGradient::endPrimaryAction(KoPointerEvent *event)
         KUndo2MagicString actionName = kundo2_i18n("Gradient");
         KisProcessingApplicator applicator(image, resources->currentNode(),
                                            KisProcessingApplicator::NONE,
-                                           KisImageSignalVector() << ModifiedSignal,
+                                           KisImageSignalVector(),
                                            actionName);
 
         applicator.applyCommand(

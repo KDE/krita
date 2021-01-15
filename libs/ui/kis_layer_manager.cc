@@ -661,7 +661,7 @@ KisNodeSP KisLayerManager::addAdjustmentLayer(KisNodeSP activeNode)
     KisSelectionSP selection = m_view->selection();
 
     KisProcessingApplicator applicator(image, 0, KisProcessingApplicator::NONE,
-                                       KisImageSignalVector() << ModifiedSignal,
+                                       KisImageSignalVector(),
                                        kundo2_i18n("Add Layer"));
 
 
@@ -714,7 +714,7 @@ KisNodeSP KisLayerManager::addGeneratorLayer(KisNodeSP activeNode)
     KisSelectionSP selection = m_view->selection();
     QColor currentForeground = m_view->canvasResourceProvider()->fgColor().toQColor();
 
-    KisProcessingApplicator applicator(image, 0, KisProcessingApplicator::NONE, KisImageSignalVector() << ModifiedSignal, kundo2_i18n("Add Layer"));
+    KisProcessingApplicator applicator(image, 0, KisProcessingApplicator::NONE, KisImageSignalVector(), kundo2_i18n("Add Layer"));
 
     KisGeneratorLayerSP node = addGeneratorLayer(activeNode, QString(), nullptr, selection, &applicator);
 

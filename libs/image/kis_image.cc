@@ -774,7 +774,6 @@ void KisImage::resizeImageImpl(const QRect& newRect, bool cropLayers)
 
     KisImageSignalVector emitSignals;
     emitSignals << ComplexSizeChangedSignal(newRect, newRect.size());
-    emitSignals << ModifiedSignal;
 
     KisCropSavedExtraData *extraData =
         new KisCropSavedExtraData(cropLayers ?
@@ -865,7 +864,6 @@ void KisImage::cropNode(KisNodeSP node, const QRect& newRect, const bool activeF
         kundo2_i18n("Crop Mask");
 
     KisImageSignalVector emitSignals;
-    emitSignals << ModifiedSignal;
 
     KisCropSavedExtraData *extraData =
         new KisCropSavedExtraData(KisCropSavedExtraData::CROP_LAYER,
@@ -898,7 +896,6 @@ void KisImage::scaleImage(const QSize &size, qreal xres, qreal yres, KisFilterSt
     KisImageSignalVector emitSignals;
     if (resolutionChanged) emitSignals << ResolutionChangedSignal;
     if (sizeChanged) emitSignals << ComplexSizeChangedSignal(bounds(), size);
-    emitSignals << ModifiedSignal;
 
     KUndo2MagicString actionName = sizeChanged ?
         kundo2_i18n("Scale Image") :
@@ -951,7 +948,6 @@ void KisImage::scaleNode(KisNodeSP node, const QPointF &center, qreal scaleX, qr
 {
     KUndo2MagicString actionName(kundo2_i18n("Scale Layer"));
     KisImageSignalVector emitSignals;
-    emitSignals << ModifiedSignal;
 
     QPointF offset;
     {
@@ -1036,7 +1032,6 @@ void KisImage::rotateImpl(const KUndo2MagicString &actionName,
     // These signals will be emitted after processing is done
     KisImageSignalVector emitSignals;
     if (sizeChanged) emitSignals << ComplexSizeChangedSignal(baseBounds, newSize);
-    emitSignals << ModifiedSignal;
 
     // These flags determine whether updates are transferred to the UI during processing
     KisProcessingApplicator::ProcessingFlags signalFlags =
@@ -1127,7 +1122,6 @@ void KisImage::shearImpl(const KUndo2MagicString &actionName,
 
     KisImageSignalVector emitSignals;
     if (resizeImage) emitSignals << ComplexSizeChangedSignal(baseBounds, newSize);
-    emitSignals << ModifiedSignal;
 
     KisProcessingApplicator::ProcessingFlags signalFlags =
         KisProcessingApplicator::RECURSIVE;
@@ -1195,7 +1189,6 @@ void KisImage::convertLayerColorSpace(KisNodeSP node,
         kundo2_i18n("Convert Layer Color Space");
 
     KisImageSignalVector emitSignals;
-    emitSignals << ModifiedSignal;
 
     KisProcessingApplicator applicator(this, node,
                                        KisProcessingApplicator::RECURSIVE,
@@ -1249,7 +1242,6 @@ void KisImage::KisImagePrivate::convertImageColorSpaceImpl(const KoColorSpace *d
 
     KisImageSignalVector emitSignals;
     emitSignals << ColorSpaceChangedSignal;
-    emitSignals << ModifiedSignal;
 
     KisProcessingApplicator applicator(q, this->rootLayer,
                                        KisProcessingApplicator::RECURSIVE |
@@ -1314,7 +1306,6 @@ bool KisImage::assignLayerProfile(KisNodeSP node, const KoColorProfile *profile)
     KUndo2MagicString actionName = kundo2_i18n("Assign Profile to Layer");
 
     KisImageSignalVector emitSignals;
-    emitSignals << ModifiedSignal;
 
     const KoColorSpace *dstColorSpace = KoColorSpaceRegistry::instance()->colorSpace(colorSpace()->colorModelId().id(), colorSpace()->colorDepthId().id(), profile);
     if (!dstColorSpace) return false;
@@ -1357,7 +1348,6 @@ bool KisImage::assignImageProfile(const KoColorProfile *profile, bool blockAllUp
 
     KisImageSignalVector emitSignals;
     emitSignals << ProfileChangedSignal;
-    emitSignals << ModifiedSignal;
 
     const KoColorSpace *dstColorSpace = KoColorSpaceRegistry::instance()->colorSpace(colorSpace()->colorModelId().id(), colorSpace()->colorDepthId().id(), profile);
     if (!dstColorSpace) return false;
@@ -1529,7 +1519,7 @@ void KisImage::flattenLayer(KisLayerSP layer)
 void KisImage::setModifiedWithoutUndo()
 {
     m_d->signalRouter.emitNotification(ModifiedWithoutUndoSignal);
-    m_d->signalRouter.emitNotification(ModifiedSignal);
+    emit sigImageModified();
 }
 
 QImage KisImage::convertToQImage(QRect imageRect,
@@ -2375,7 +2365,7 @@ void KisImage::setWrapAroundModePermitted(bool value)
 
         KisProcessingApplicator applicator(this, root(),
                                            KisProcessingApplicator::RECURSIVE,
-                                           KisImageSignalVector() << ModifiedSignal,
+                                           KisImageSignalVector(),
                                            kundo2_i18n("Crop Selections"));
 
         KisProcessingVisitorSP visitor =

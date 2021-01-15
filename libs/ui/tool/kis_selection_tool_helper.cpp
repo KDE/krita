@@ -65,7 +65,7 @@ void KisSelectionToolHelper::selectPixelSelection(KisPixelSelectionSP selection,
     KisProcessingApplicator applicator(view->image(),
                                        0 /* we need no automatic updates */,
                                        KisProcessingApplicator::SUPPORTS_WRAPAROUND_MODE,
-                                       KisImageSignalVector() << ModifiedSignal,
+                                       KisImageSignalVector(),
                                        m_name);
 
     selectPixelSelection(applicator, selection, action);
@@ -181,7 +181,7 @@ void KisSelectionToolHelper::addSelectionShapes(QList< KoShape* > shapes, Select
     KisProcessingApplicator applicator(view->image(),
                                        0 /* we need no automatic updates */,
                                        KisProcessingApplicator::NONE,
-                                       KisImageSignalVector() << ModifiedSignal,
+                                       KisImageSignalVector(),
                                        m_name);
 
     applicator.applyCommand(new LazyInitGlobalSelection(view));

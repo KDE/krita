@@ -202,7 +202,7 @@ void DlgClonesArray::reapplyClones()
     m_applicator =
             new KisProcessingApplicator(image, 0,
                                         KisProcessingApplicator::NONE,
-                                        KisImageSignalVector() << ModifiedSignal);
+                                        KisImageSignalVector());
 
     int columnXOffset = m_page->columnXOffset->value();
     int columnYOffset = m_page->columnYOffset->value();

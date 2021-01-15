@@ -986,8 +986,6 @@ namespace KisLayerUtils {
         }
 
         KisImageSignalVector emitSignals;
-        emitSignals << ModifiedSignal;
-
         KisProcessingApplicator applicator(image, 0,
                                            KisProcessingApplicator::NONE,
                                            emitSignals,
@@ -1284,8 +1282,6 @@ namespace KisLayerUtils {
     void changeImageDefaultProjectionColor(KisImageSP image, const KoColor &color)
     {
         KisImageSignalVector emitSignals;
-        emitSignals << ModifiedSignal;
-
         KisProcessingApplicator applicator(image,
                                            image->root(),
                                            KisProcessingApplicator::RECURSIVE,
@@ -1341,7 +1337,6 @@ namespace KisLayerUtils {
             (!flattenSingleLayer && mergedNodes.size() == 1)) return;
 
         KisImageSignalVector emitSignals;
-        emitSignals << ModifiedSignal;
         emitSignals << ComplexNodeReselectionSignal(KisNodeSP(), KisNodeList(), KisNodeSP(), mergedNodes);
 
 
@@ -1533,7 +1528,6 @@ namespace KisLayerUtils {
         KIS_ASSERT_RECOVER(parentLayer) { return 0; }
 
         KisImageSignalVector emitSignals;
-        emitSignals << ModifiedSignal;
 
         KisProcessingApplicator applicator(image, 0,
                                            KisProcessingApplicator::NONE,

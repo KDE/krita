@@ -947,7 +947,7 @@ void LayerBox::slotEditGlobalSelection(bool showSelections)
     if (showSelections && !globalSelectionMask) {
         KisProcessingApplicator applicator(m_image, 0,
                                            KisProcessingApplicator::NONE,
-                                           KisImageSignalVector() << ModifiedSignal,
+                                           KisImageSignalVector(),
                                            kundo2_i18n("Quick Selection Mask"));
 
         applicator.applyCommand(
@@ -969,7 +969,7 @@ void LayerBox::slotEditGlobalSelection(bool showSelections)
 
         KisProcessingApplicator applicator(m_image, 0,
                                            KisProcessingApplicator::NONE,
-                                           KisImageSignalVector() << ModifiedSignal,
+                                           KisImageSignalVector(),
                                            kundo2_i18n("Cancel Quick Selection Mask"));
         applicator.applyCommand(new KisSetGlobalSelectionCommand(m_image, 0), KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
         applicator.end();

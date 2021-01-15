@@ -1146,7 +1146,6 @@ void KisNodeManager::mirrorNode(KisNodeSP node,
     if (!canModifyLayer(node)) return;
 
     KisImageSignalVector emitSignals;
-    emitSignals << ModifiedSignal;
 
     KisProcessingApplicator applicator(m_d->view->image(), node,
                                        KisProcessingApplicator::RECURSIVE,

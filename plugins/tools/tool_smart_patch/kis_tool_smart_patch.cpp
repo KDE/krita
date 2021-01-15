@@ -168,7 +168,7 @@ void KisToolSmartPatch::endPrimaryAction(KoPointerEvent *event)
     KisResourcesSnapshotSP resources =
         new KisResourcesSnapshot(image(), currentNode(), this->canvas()->resourceManager());
 
-    KisProcessingApplicator applicator( image(), currentNode(), KisProcessingApplicator::NONE, KisImageSignalVector() << ModifiedSignal,
+    KisProcessingApplicator applicator( image(), currentNode(), KisProcessingApplicator::NONE, KisImageSignalVector(),
                                         kundo2_i18n("Smart Patch"));
 
     //actual inpaint operation. filling in areas masked by user

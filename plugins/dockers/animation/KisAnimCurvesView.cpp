@@ -459,7 +459,7 @@ bool KisAnimCurvesView::isIndexHidden(const QModelIndex &index) const
     return !index.data(KisAnimCurvesModel::CurveVisibleRole).toBool();
 }
 
-void KisAnimCurvesView::setSelection(const QRect &rect, QItemSelectionModel::SelectionFlags command)
+void KisAnimCurvesView::setSelection(const QRect &rect, QItemSelectionModel::SelectionFlags flags)
 {
     int timeFrom = m_d->horizontalHeader->logicalIndexAt(rect.left());
     int timeTo = m_d->horizontalHeader->logicalIndexAt(rect.right());
@@ -469,7 +469,10 @@ void KisAnimCurvesView::setSelection(const QRect &rect, QItemSelectionModel::Sel
     int rows = model()->rowCount();
     for (int row=0; row < rows; row++) {
         for (int time = timeFrom; time <= timeTo; time++) {
+
             QModelIndex index = model()->index(row, time);
+
+            if (isIndexHidden(index)) continue;
 
             if (index.data(KisTimeBasedItemModel::SpecialKeyframeExists).toBool()) {
                 QRect itemRect = m_d->itemDelegate->itemRect(index);
@@ -481,7 +484,11 @@ void KisAnimCurvesView::setSelection(const QRect &rect, QItemSelectionModel::Sel
         }
     }
 
-    selectionModel()->select(selection, command);
+    if (!selection.contains(selectionModel()->currentIndex())) {
+        selectionModel()->setCurrentIndex(selection.first().topLeft(), flags);
+    }
+
+    selectionModel()->select(selection, flags);
     activated(selectionModel()->currentIndex());
 }
 
@@ -507,12 +514,15 @@ void KisAnimCurvesView::mousePressEvent(QMouseEvent *e)
             m_d->dragZooming = true;
             m_d->zoomAnchor = e->pos();
         }
-    } else if (e->button() == Qt::LeftButton) {
+    } else if (e->button() == Qt::LeftButton) { // SELECT
         m_d->dragStart = e->pos();
 
         const int handleClickRadius = 16;
 
         Q_FOREACH(QModelIndex index, selectedIndexes()) {
+
+            if (isIndexHidden(index)) continue;
+
             QPointF center = m_d->itemDelegate->nodeCenter(index, false);
             bool hasLeftHandle = m_d->itemDelegate->hasHandle(index, 0);
             bool hasRightHandle = m_d->itemDelegate->hasHandle(index, 1);
@@ -524,12 +534,12 @@ void KisAnimCurvesView::mousePressEvent(QMouseEvent *e)
                 m_d->isAdjustingHandle = true;
                 m_d->adjustedHandle = 0;
                 setCurrentIndex(index);
-                return;
+                continue;
             } else if (hasRightHandle && (e->localPos() - rightHandle).manhattanLength() < handleClickRadius) {
                 m_d->isAdjustingHandle = true;
                 m_d->adjustedHandle = 1;
                 setCurrentIndex(index);
-                return;
+                continue;
             }
         }
     }

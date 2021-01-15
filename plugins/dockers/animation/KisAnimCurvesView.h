@@ -37,7 +37,7 @@ protected:
     int horizontalOffset() const override;
     int verticalOffset() const override;
     bool isIndexHidden(const QModelIndex &index) const override;
-    void setSelection(const QRect &rect, QItemSelectionModel::SelectionFlags command) override;
+    void setSelection(const QRect &rect, QItemSelectionModel::SelectionFlags flags) override;
     QRegion visualRegionForSelection(const QItemSelection &selection) const override;
     void scrollContentsBy(int dx, int dy) override;
 

@@ -743,6 +743,7 @@ void KisAnimCurvesDocker::slotValueRegisterChanged(double value){
         return;
 
     QModelIndex current = m_d->curvesView->currentIndex();
+
     if (current.isValid() && m_d->curvesView->indexHasKey(current)) {
         m_d->curvesModel->setData(current, value, KisAnimCurvesModel::ScalarValueRole);
     }

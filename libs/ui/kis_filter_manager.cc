@@ -62,7 +62,8 @@ struct KisFilterManager::Private {
     QSharedPointer<QAtomicInt> cancelSilentlyHandle;
     KisFilterStrokeStrategy::IdleBarrierData::IdleBarrierCookie idleBarrierCookie;
     QRect initialApplyRect;
-    QRect currentProcessRect;
+    QRect lastProcessRect;
+    QRect lastExtendedUpdateRect;
 
     KisSignalMapper actionsMapper;
 
@@ -272,6 +273,10 @@ void KisFilterManager::apply(KisFilterConfigurationSP _filterConfig)
     KisImageWSP image = d->view->image();
 
     if (d->currentStrokeId) {
+        if (isIdle()) {
+            d->lastExtendedUpdateRect = d->lastProcessRect;
+        }
+
         d->cancelSilentlyHandle->ref();
         image->cancelStroke(d->currentStrokeId);
 
@@ -335,7 +340,7 @@ void KisFilterManager::apply(KisFilterConfigurationSP _filterConfig)
         image->addJob(d->currentStrokeId, data);
     }
 
-    QRegion extraUpdateRegion(d->currentProcessRect);
+    QRegion extraUpdateRegion(d->lastExtendedUpdateRect);
     extraUpdateRegion -= processRect;
 
     if (!extraUpdateRegion.isEmpty()) {
@@ -346,9 +351,9 @@ void KisFilterManager::apply(KisFilterConfigurationSP _filterConfig)
                       new KisFilterStrokeStrategy::ExtraCleanUpUpdates(rects));
     }
 
-
     d->currentlyAppliedConfiguration = filterConfig;
-    d->currentProcessRect = processRect;
+    d->lastExtendedUpdateRect |= processRect;
+    d->lastProcessRect = processRect;
 }
 
 void KisFilterManager::finish()
@@ -371,7 +376,8 @@ void KisFilterManager::finish()
     d->cancelSilentlyHandle.clear();
     d->idleBarrierCookie.clear();
     d->currentlyAppliedConfiguration.clear();
-    d->currentProcessRect = QRect();
+    d->lastProcessRect = QRect();
+    d->lastExtendedUpdateRect = QRect();
 }
 
 void KisFilterManager::cancel()
@@ -384,7 +390,8 @@ void KisFilterManager::cancel()
     d->cancelSilentlyHandle.clear();
     d->idleBarrierCookie.clear();
     d->currentlyAppliedConfiguration.clear();
-    d->currentProcessRect = QRect();
+    d->lastProcessRect = QRect();
+    d->lastExtendedUpdateRect = QRect();
 }
 
 bool KisFilterManager::isStrokeRunning() const

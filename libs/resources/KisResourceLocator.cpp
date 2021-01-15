@@ -407,6 +407,8 @@ void KisResourceLocator::purge()
 
 bool KisResourceLocator::addStorage(const QString &storageLocation, KisResourceStorageSP storage)
 {
+    qDebug() << "addStorage" << storageLocation << storage;
+
     Q_ASSERT(!d->storages.contains(storageLocation));
 
     d->storages[storageLocation] = storage;
@@ -416,7 +418,6 @@ bool KisResourceLocator::addStorage(const QString &storageLocation, KisResourceS
         return false;
     }
     emit storageAdded(storage->location());
-
     return true;
 }
 

@@ -16,7 +16,10 @@
 #include <KisResourceCacheDb.h>
 
 #include <KisResourceModelProvider.h>
+#include <KisStorageModel.h>
 #include <KisTagModel.h>
+
+#include <kis_debug.h>
 
 #include "KisResourceQueryMapper.h"
 
@@ -34,6 +37,8 @@ KisAllResourcesModel::KisAllResourcesModel(const QString &resourceType, QObject 
 
     connect(KisResourceLocator::instance(), SIGNAL(storageAdded(const QString&)), this, SLOT(addStorage(const QString&)));
     connect(KisResourceLocator::instance(), SIGNAL(storageRemoved(const QString&)), this, SLOT(removeStorage(const QString&)));
+    connect(KisStorageModel::instance(), SIGNAL(storageEnabled(const QString&)), this, SLOT(addStorage(const QString&)));
+    connect(KisStorageModel::instance(), SIGNAL(storageDisabled(const QString&)), this, SLOT(removeStorage(const QString&)));
 
     d->resourceType = resourceType;
     
@@ -443,7 +448,7 @@ int KisAllResourcesModel::rowCount(const QModelIndex &) const
 }
 
 
-void KisAllResourcesModel::addStorage(const QString &/*location*/)
+void KisAllResourcesModel::addStorage(const QString &location)
 {
     beginResetModel();
     resetQuery();
@@ -451,7 +456,7 @@ void KisAllResourcesModel::addStorage(const QString &/*location*/)
 }
 
 
-void KisAllResourcesModel::removeStorage(const QString &/*location*/)
+void KisAllResourcesModel::removeStorage(const QString &location)
 {
     beginResetModel();
     resetQuery();

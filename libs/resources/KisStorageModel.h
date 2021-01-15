@@ -52,6 +52,11 @@ public:
 
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 
+Q_SIGNALS:
+
+    void storageEnabled(const QString &storage);
+    void storageDisabled(const QString &storage);
+
 private Q_SLOTS:
 
     /// Called whenever a storage is added

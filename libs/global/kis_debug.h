@@ -141,6 +141,8 @@ extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41017();
  */
 KRITAGLOBAL_EXPORT QString kisBacktrace();
 
+KRITAGLOBAL_EXPORT void printBacktrace();
+
 /**
  * Please pretty print my variable
  *

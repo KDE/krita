@@ -100,3 +100,11 @@ QString __methodName(const char *_prettyFunction)
 
     return QString(std::string(prettyFunction.substr(begin,end) + "()").c_str());
 }
+
+void printBacktrace()
+{
+    QString bt = kisBacktrace();
+    Q_FOREACH(const QString &line, bt.split('\n')) {
+        qDebug() << line;
+    }
+}

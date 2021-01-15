@@ -130,6 +130,16 @@ KoResourceSP KisAbrStorage::resource(const QString &url)
     return m_brushCollection->brushByName(url);
 }
 
+bool KisAbrStorage::loadVersionedResource(KoResourceSP resource)
+{
+    return false;
+}
+
+bool KisAbrStorage::supportsVersioning() const
+{
+    return false;
+}
+
 QSharedPointer<KisResourceStorage::ResourceIterator> KisAbrStorage::resources(const QString &/*resourceType*/)
 {
     return QSharedPointer<KisResourceStorage::ResourceIterator>(new AbrIterator(m_brushCollection));

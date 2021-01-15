@@ -194,6 +194,16 @@ bool KisResourceStorage::addResource(KoResourceSP resource)
     return d->storagePlugin->addResource(resource->resourceType().first, resource);
 }
 
+bool KisResourceStorage::supportsVersioning() const
+{
+    return d->storagePlugin->supportsVersioning();
+}
+
+bool KisResourceStorage::loadVersionedResource(KoResourceSP resource)
+{
+    return d->storagePlugin->loadVersionedResource(resource);
+}
+
 void KisResourceStorage::setMetaData(const QString &key, const QVariant &value)
 {
     d->storagePlugin->setMetaData(key, value);

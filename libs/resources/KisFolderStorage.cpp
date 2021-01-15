@@ -191,21 +191,17 @@ KisResourceStorage::ResourceItem KisFolderStorage::resourceItem(const QString &u
     return item;
 }
 
-KoResourceSP KisFolderStorage::resource(const QString &url)
+bool KisFolderStorage::loadVersionedResource(KoResourceSP resource)
 {
-    QFileInfo fi(location() + '/' + url);
-    const QString resourceType = fi.path().split("/").last();
-    KisResourceLoaderBase *loader = KisResourceLoaderRegistry::instance()->loader(resourceType, KisMimeDatabase::mimeTypeForFile(fi.absoluteFilePath(), false));
-    Q_ASSERT(loader);
+    QFileInfo fi(location() + '/' + resource->resourceType().first + '/' + resource->filename());
+
     QFile f(fi.absoluteFilePath());
     if (!f.open(QFile::ReadOnly)) {
         qWarning() << "Could not open" << fi.absoluteFilePath() << "for reading";
-        return 0;
+        return false;
     }
 
-    KoResourceSP res = loader->load(fi.fileName(), f, KisGlobalResourcesInterface::instance());
-    f.close();
-    return res;
+    return resource->loadFromDevice(&f, KisGlobalResourcesInterface::instance());
 }
 
 QSharedPointer<KisResourceStorage::ResourceIterator> KisFolderStorage::resources(const QString &resourceType)

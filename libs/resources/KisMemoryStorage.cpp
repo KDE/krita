@@ -14,7 +14,15 @@
 #include <KisTag.h>
 #include <KisResourceLoaderRegistry.h>
 #include <KisResourceStorage.h>
+#include <QBuffer>
+#include <KisGlobalResourcesInterface.h>
 
+struct StoredResource
+{
+    int version = 0;
+    QDateTime timestamp;
+    QSharedPointer<QByteArray> data;
+};
 
 class MemoryTagIterator : public KisResourceStorage::TagIterator
 {
@@ -65,8 +73,8 @@ public:
 class MemoryIterator : public KisResourceStorage::ResourceIterator
 {
 public:
-    MemoryIterator(QVector<KoResourceSP> resources, const QString &resourceType)
-        : m_resources(resources)
+    MemoryIterator(QHash<QString, QVector<StoredResource>> &resources, const QString &resourceType)
+        : m_iterator(resources)
         , m_resourceType(resourceType)
     {
     }
@@ -75,20 +83,17 @@ public:
 
     bool hasNext() const override
     {
-        return m_currentPosition < m_resources.size();
+        return m_iterator.hasNext();
     }
 
     void next() override
     {
-        const_cast<MemoryIterator*>(this)->m_currentPosition++;
+        m_iterator.next();
     }
 
     QString url() const override
     {
-        if (resource()) {
-            return resource()->filename();
-        }
-        return QString();
+        return m_iterator.peekNext().key();
     }
 
     QString type() const override
@@ -98,27 +103,52 @@ public:
 
     QDateTime lastModified() const override
     {
-        return QDateTime::fromMSecsSinceEpoch(0);
+        const QVector<StoredResource> &storedVersions =
+            m_iterator.peekNext().value();
+
+        Q_ASSERT(!storedVersions.isEmpty());
+        return storedVersions.last().timestamp;
     }
 
     KoResourceSP resource() const override
     {
-        if (m_currentPosition > m_resources.size()) return 0;
-        return m_resources.at(m_currentPosition - 1);
+        const QVector<StoredResource> &storedVersions =
+            m_iterator.peekNext().value();
+
+        Q_ASSERT(!storedVersions.isEmpty());
+
+        const StoredResource &storedResource = storedVersions.last();
+        const QString filename = m_iterator.peekNext().key();
+
+        QString mime = KisMimeDatabase::mimeTypeForSuffix(filename);
+        KisResourceLoaderBase *loader = KisResourceLoaderRegistry::instance()->loader(m_resourceType, mime);
+        if (!loader) {
+            qWarning() << "Could not create loader for" << m_resourceType << filename << mime;
+            return 0;
+        }
+
+        KoResourceSP resource = loader->create(filename);
+        QBuffer buffer(storedResource.data.data());
+        buffer.open(QIODevice::ReadOnly);
+        bool result =
+            resource->loadFromDevice(&buffer, KisGlobalResourcesInterface::instance());
+
+        buffer.close();
+
+        return result ? resource : 0;
     }
 
 private:
-
-    int m_currentPosition {0};
-    QVector<KoResourceSP> m_resources;
+    QHashIterator<QString, QVector<StoredResource>> m_iterator;
     QString m_resourceType;
-
 };
+
+
 
 class KisMemoryStorage::Private {
 public:
-    QHash<QString, QVector<KoResourceSP> > resources;
-    QHash<QString, QVector<KisTagSP> > tags;
+    QHash<QString, QHash<QString, QVector<StoredResource>>> resourcesNew;
+    QHash<QString, QVector<KisTagSP>> tags;
     QMap<QString, QVariant> metadata;
 };
 
@@ -143,14 +173,8 @@ KisMemoryStorage::KisMemoryStorage(const KisMemoryStorage &rhs)
 KisMemoryStorage &KisMemoryStorage::operator=(const KisMemoryStorage &rhs)
 {
     if (this != &rhs) {
-        Q_FOREACH(const QString &key, rhs.d->resources.keys()) {
-            Q_FOREACH(const KoResourceSP resource, rhs.d->resources[key]) {
-                if (!d->resources.contains(key)) {
-                    d->resources[key] = QVector<KoResourceSP>();
-                }
-                d->resources[key] << resource->clone();
-            }
-        }
+        d->resourcesNew = rhs.d->resourcesNew;
+
         Q_FOREACH(const QString &key, rhs.d->tags.keys()) {
             Q_FOREACH(const KisTagSP tag, rhs.d->tags[key]) {
                 if (!d->tags.contains(key)) {
@@ -176,15 +200,27 @@ bool KisMemoryStorage::addTag(const QString &resourceType, KisTagSP tag)
 
 bool KisMemoryStorage::addResource(const QString &resourceType, KoResourceSP resource)
 {
-    if (!d->resources.contains(resourceType)) {
-        d->resources[resourceType] = QVector<KoResourceSP>();
-    }
-    if (!d->resources[resourceType].contains(resource)) {
-        d->resources[resourceType].append(resource);
-    }
-    else {
+    QVector<StoredResource> &storedVersions =
+        d->resourcesNew[resourceType][resource->filename()];
+
+    Q_ASSERT(storedVersions.isEmpty() ||
+             resource->version() >= storedVersions.last().version);
+
+    if (!storedVersions.isEmpty()) {
         resource->setVersion(resource->version() + 1);
     }
+
+    StoredResource storedResource;
+    storedResource.version = resource->version();
+    storedResource.timestamp = QDateTime::currentDateTime();
+    storedResource.data.reset(new QByteArray());
+    QBuffer buffer(storedResource.data.data());
+    buffer.open(QIODevice::WriteOnly);
+    resource->saveToDevice(&buffer);
+    buffer.close();
+
+    storedVersions.append(storedResource);
+
     return true;
 }
 
@@ -197,24 +233,35 @@ KisResourceStorage::ResourceItem KisMemoryStorage::resourceItem(const QString &u
     return item;
 }
 
-KoResourceSP KisMemoryStorage::resource(const QString &url)
+bool KisMemoryStorage::loadVersionedResource(KoResourceSP resource)
 {
-    KoResourceSP resource;
+    const QString resourceType = resource->resourceType().first;
+    const QString resourceFilename = resource->filename();
 
-    QStringList splitUrl = url.split("/");
-    const QString resourceType = splitUrl.first();
-    const QString resourceFilename = splitUrl.last();
-    Q_FOREACH(resource, d->resources[resourceType]) {
-        if (resource->filename() == resourceFilename) {
-            break;
+    bool retval = false;
+
+    if (d->resourcesNew.contains(resourceType) &&
+        d->resourcesNew[resourceType].contains(resourceFilename)) {
+
+        const QVector<StoredResource> &storedVersions =
+            d->resourcesNew[resourceType][resourceFilename];
+
+        Q_ASSERT(!storedVersions.isEmpty());
+
+        if (!storedVersions.isEmpty()) {
+            const StoredResource &storedResource = storedVersions.last();
+            QBuffer buffer(storedResource.data.data());
+            buffer.open(QIODevice::ReadOnly);
+            resource->loadFromDevice(&buffer, KisGlobalResourcesInterface::instance());
         }
     }
-    return resource;
+
+    return retval;
 }
 
 QSharedPointer<KisResourceStorage::ResourceIterator> KisMemoryStorage::resources(const QString &resourceType)
 {
-    return QSharedPointer<KisResourceStorage::ResourceIterator>(new MemoryIterator(d->resources[resourceType], resourceType));
+    return QSharedPointer<KisResourceStorage::ResourceIterator>(new MemoryIterator(d->resourcesNew[resourceType], resourceType));
 }
 
 QSharedPointer<KisResourceStorage::TagIterator> KisMemoryStorage::tags(const QString &resourceType)

@@ -241,6 +241,7 @@ bool KisPaintOpPreset::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP re
         return false;
     }
     setValid(true);
+    setDirty(false);
     setImage(img);
 
     return true;

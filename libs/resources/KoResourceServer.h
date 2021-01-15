@@ -269,7 +269,7 @@ public:
     }
 
     /**
-     * Call after changing the content of a resource;
+     * Call after changing the content of a resource and saving it;
      * Notifies the connected views.
      */
     void updateResource(QSharedPointer<T> resource)
@@ -284,6 +284,23 @@ public:
         }
         m_resourceModel->updateResource(resource);
         notifyResourceChanged(resource);
+    }
+
+    /**
+     * Reloads the resource from the persistent storage
+     */
+    bool reloadResource(QSharedPointer<T> resource)
+    {
+        KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == qApp->thread());
+        if (QThread::currentThread() != qApp->thread()) {
+            Q_FOREACH(const QString &s, kisBacktrace().split('\n')) {
+                qDebug() << s;
+            }
+        }
+        bool result = m_resourceModel->reloadResource(resource);
+        notifyResourceChanged(resource);
+
+        return result;
     }
 
     QVector<KisTagSP> assignedTagsList(KoResourceSP resource) const

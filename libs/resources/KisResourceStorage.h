@@ -200,6 +200,13 @@ public:
     /// Adds the given resource to the storage.
     bool addResource(KoResourceSP resource);
 
+    /// Returns true if the storage supports versioning of the resources.
+    /// It enables loadVersionedResource() call.
+    bool supportsVersioning() const;
+
+    /// Reloads the given resource from the persistent storage
+    bool loadVersionedResource(KoResourceSP resource);
+
     static const QString s_meta_generator;
     static const QString s_meta_author;
     static const QString s_meta_title;

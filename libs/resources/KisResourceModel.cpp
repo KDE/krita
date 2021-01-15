@@ -348,6 +348,23 @@ bool KisAllResourcesModel::updateResource(KoResourceSP resource)
     return r;
 }
 
+bool KisAllResourcesModel::reloadResource(KoResourceSP resource)
+{
+    if (!resource || !resource->valid()) {
+        qWarning() << "Cannot reload resource. Resource is null or not valid";
+        return false;
+    }
+
+    if (!KisResourceLocator::instance()->reloadResource(d->resourceType, resource)) {
+        qWarning() << "Failed to reload resource" << resource;
+        return false;
+    }
+    bool r = resetQuery();
+    QModelIndex index = indexForResource(resource);
+    emit dataChanged(index, index, {Qt::EditRole});
+    return r;
+}
+
 bool KisAllResourcesModel::renameResource(KoResourceSP resource, const QString &name)
 {
     if (!resource || !resource->valid() || name.isEmpty()) {
@@ -555,6 +572,15 @@ bool KisResourceModel::updateResource(KoResourceSP resource)
     KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
     if (source) {
         return source->updateResource(resource);
+    }
+    return false;
+}
+
+bool KisResourceModel::reloadResource(KoResourceSP resource)
+{
+    KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
+    if (source) {
+        return source->reloadResource(resource);
     }
     return false;
 }

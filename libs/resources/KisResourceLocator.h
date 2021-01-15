@@ -184,6 +184,15 @@ private:
     bool updateResource(const QString &resourceType, const KoResourceSP resource);
 
     /**
+     * @brief Reloads the resource from its persistent storage
+     * @param resourceType the type of the resource
+     * @param resource the actual resource object
+     * @return true if reloading was successful. When returned false,
+     *         \p resource is kept unchanged
+     */
+    bool reloadResource(const QString &resourceType, const KoResourceSP resource);
+
+    /**
      * @brief metaDataForResource
      * @param id
      * @return

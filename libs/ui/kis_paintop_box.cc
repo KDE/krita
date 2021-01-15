@@ -589,17 +589,17 @@ void KisPaintopBox::resourceSelected(KoResourceSP resource)
     KisPaintOpPresetSP preset = resource.dynamicCast<KisPaintOpPreset>();
 
     if (preset && preset->valid() && preset != m_resourceProvider->currentPreset()) {
-        qWarning() << "Preset reloading if presets are dirty is broken";
-        //        if (!preset->settings()->isLoadable()) {
-        //            return;
-        //        }
-        //        if (!m_dirtyPresetsEnabled) {
-        //            KisSignalsBlocker blocker(m_optionWidget);
-        //            Q_UNUSED(blocker);
-        //            if (!preset->load()) {
-        //                qWarning() << "failed to load the preset.";
-        //            }
-        //        }
+        if (!m_dirtyPresetsEnabled) {
+            KisSignalsBlocker blocker(m_optionWidget);
+            Q_UNUSED(blocker);
+
+            KisPaintOpPresetResourceServer *rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
+
+            if (!rserver->reloadResource(preset)) {
+                qWarning() << "failed to load the preset.";
+            }
+        }
+
         dbgResources << "resourceSelected: preset" << preset << (preset ? QString("%1").arg(preset->valid()) : "");
         setCurrentPaintop(preset);
 
@@ -1291,8 +1291,9 @@ void KisPaintopBox::slotReloadPreset()
     // Here using the name and fetching the preset from the server was the only way the load was working. Otherwise it was not loading.
     KisPaintOpPresetResourceServer *rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
     QSharedPointer<KisPaintOpPreset> preset = rserver->resourceByName(m_resourceProvider->currentPreset()->name());
+
     if (preset) {
-        preset->load(KisGlobalResourcesInterface::instance());
+        rserver->reloadResource(preset);
     }
 
     if (m_resourceProvider->currentPreset() != preset) {

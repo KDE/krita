@@ -401,36 +401,43 @@ KoResourceBundleManifest &KoResourceBundle::manifest()
 
 KoResourceSP KoResourceBundle::resource(const QString &resourceType, const QString &filepath)
 {
-    if (m_filename.isEmpty()) return 0;
-
-
-    QScopedPointer<KoStore> resourceStore(KoStore::createStore(m_filename, KoStore::Read, "application/x-krita-resourcebundle", KoStore::Zip));
-
-    if (!resourceStore || resourceStore->bad()) {
-        qWarning() << "Could not open store on bundle" << m_filename;
-        return 0;
-    }
-
-    if (!resourceStore->open(filepath)) {
-        qWarning() << "Could not open file in bundle" << filepath;
-        return 0;
-    }
-
     QString mime = KisMimeDatabase::mimeTypeForSuffix(filepath);
     KisResourceLoaderBase *loader = KisResourceLoaderRegistry::instance()->loader(resourceType, mime);
     if (!loader) {
         qWarning() << "Could not create loader for" << resourceType << filepath << mime;
         return 0;
     }
-    KoResourceSP res = loader->load(filepath, *resourceStore->device(), KisGlobalResourcesInterface::instance());
-    QString filename = QFileInfo(filepath).fileName();
-    if (!res.isNull()) {
-        // Note that res will be null for Special_dyna_dots.kpp which is a brush preset based on a deleted engine
-        res->setFilename(filename);
+
+    KoResourceSP resource = loader->create(filepath);
+    return loadResource(resource) ? resource : 0;
+}
+
+bool KoResourceBundle::loadResource(KoResourceSP resource)
+{
+    if (m_filename.isEmpty()) return false;
+
+    const QString resourceType = resource->resourceType().first;
+
+    QScopedPointer<KoStore> resourceStore(KoStore::createStore(m_filename, KoStore::Read, "application/x-krita-resourcebundle", KoStore::Zip));
+
+    if (!resourceStore || resourceStore->bad()) {
+        qWarning() << "Could not open store on bundle" << m_filename;
+        return false;
+    }
+    const QString fileName = QString("%1/%2").arg(resourceType).arg(resource->filename());
+    if (!resourceStore->open(fileName)) {
+        qWarning() << "Could not open file in bundle" << fileName;
+        return false;
+    }
+
+    if (!resource->loadFromDevice(resourceStore->device(),
+                                  KisGlobalResourcesInterface::instance())) {
+        qWarning() << "Could not reload the resource from the bundle" << resourceType << fileName << m_filename;
+        return false;
     }
     resourceStore->close();
 
-    return res;
+    return true;
 }
 
 QImage KoResourceBundle::image() const

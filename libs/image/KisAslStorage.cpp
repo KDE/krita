@@ -181,6 +181,16 @@ KoResourceSP KisAslStorage::resource(const QString &url)
     return 0;
 }
 
+bool KisAslStorage::loadVersionedResource(KoResourceSP resource)
+{
+    return false;
+}
+
+bool KisAslStorage::supportsVersioning() const
+{
+    return false;
+}
+
 QSharedPointer<KisResourceStorage::ResourceIterator> KisAslStorage::resources(const QString &/*resourceType*/)
 {
     return QSharedPointer<KisResourceStorage::ResourceIterator>(new AslIterator(m_aslSerializer, location()));

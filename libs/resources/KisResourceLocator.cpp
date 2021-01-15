@@ -332,6 +332,9 @@ bool KisResourceLocator::updateResource(const QString &resourceType, const KoRes
     Q_ASSERT(resource->resourceId() > -1);
 
     KisResourceStorageSP storage = d->storages[storageLocation];
+
+    if (!storage->supportsVersioning()) return false;
+
     resource->updateThumbnail();
     int version = resource->version();
 
@@ -358,6 +361,27 @@ bool KisResourceLocator::updateResource(const QString &resourceType, const KoRes
     // Update the resource in the cache
     QPair<QString, QString> key = QPair<QString, QString> (storageLocation, resourceType + "/" + QFileInfo(resource->filename()).fileName());
     d->resourceCache[key] = resource;
+
+    return true;
+}
+
+bool KisResourceLocator::reloadResource(const QString &resourceType, const KoResourceSP resource)
+{
+    QString storageLocation = makeStorageLocationAbsolute(resource->storageLocation());
+
+    Q_ASSERT(d->storages.contains(storageLocation));
+    Q_ASSERT(resource->resourceId() > -1);
+
+    KisResourceStorageSP storage = d->storages[storageLocation];
+
+    if (!storage->loadVersionedResource(resource)) {
+        qWarning() << "Failed to reload the resource" << resource->name() << "from storage" << storageLocation;
+        return false;
+    }
+
+    // We haven't changed the version of the resource, so the cache must be still valid
+    QPair<QString, QString> key = QPair<QString, QString> (storageLocation, resourceType + "/" + QFileInfo(resource->filename()).fileName());
+    Q_ASSERT(d->resourceCache[key] == resource);
 
     return true;
 }

@@ -23,9 +23,12 @@ class WGShadeSelector : public QWidget
 public:
     explicit WGShadeSelector(KisVisualColorModelSP colorModel, QWidget *parent = nullptr);
 
+    void setModel(KisVisualColorModelSP colorModel);
     void updateSettings();
 protected:
     void mousePressEvent(QMouseEvent *event) override;
+
+    void connectToModel();
 
 public Q_SLOTS:
     void slotChannelValuesChanged(const QVector4D &values);

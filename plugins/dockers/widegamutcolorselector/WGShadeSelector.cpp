@@ -20,13 +20,20 @@ WGShadeSelector::WGShadeSelector(KisVisualColorModelSP colorModel, QWidget *pare
     l->setSpacing(1);
     l->setMargin(0);
 
-    connect(m_model.data(), SIGNAL(sigColorModelChanged()), SLOT(slotReset()));
-    connect(m_model.data(), SIGNAL(sigColorSpaceChanged()), SLOT(slotReset()));
-    connect(m_model.data(), SIGNAL(sigChannelValuesChanged(QVector4D)),
-            SLOT(slotChannelValuesChanged(QVector4D)));
-    connect(this, SIGNAL(sigChannelValuesChanged(QVector4D)),
-            m_model.data(), SLOT(slotSetChannelValues(QVector4D)));
+    connectToModel();
     updateSettings();
+}
+
+void WGShadeSelector::setModel(KisVisualColorModelSP colorModel)
+{
+    if (m_model) {
+        m_model->disconnect(this);
+    }
+    m_model = colorModel;
+    for (WGShadeSlider *slider: m_sliders) {
+        slider->setModel(m_model);
+    }
+    connectToModel();
     if (m_model->colorModel() != KisVisualColorModel::None) {
         slotChannelValuesChanged(m_model->channelValues());
     }
@@ -58,6 +65,11 @@ void WGShadeSelector::updateSettings()
     m_resetOnExternalUpdate = cfg.shadeSelectorUpdateOnExternalChanges();
     m_resetOnInteractions = cfg.shadeSelectorUpdateOnInteractionEnd();
     m_resetOnRightClick = cfg.shadeSelectorUpdateOnRightClick();
+
+    if (m_model->colorModel() != KisVisualColorModel::None) {
+        slotReset();
+        slotChannelValuesChanged(m_model->channelValues());
+    }
 }
 
 void WGShadeSelector::mousePressEvent(QMouseEvent *event)
@@ -67,6 +79,16 @@ void WGShadeSelector::mousePressEvent(QMouseEvent *event)
             m_sliders[i]->slotSetChannelValues(m_model->channelValues());
         }
     }
+}
+
+void WGShadeSelector::connectToModel()
+{
+    connect(m_model.data(), SIGNAL(sigColorModelChanged()), SLOT(slotReset()));
+    connect(m_model.data(), SIGNAL(sigColorSpaceChanged()), SLOT(slotReset()));
+    connect(m_model.data(), SIGNAL(sigChannelValuesChanged(QVector4D)),
+            SLOT(slotChannelValuesChanged(QVector4D)));
+    connect(this, SIGNAL(sigChannelValuesChanged(QVector4D)),
+            m_model.data(), SLOT(slotSetChannelValues(QVector4D)));
 }
 
 void WGShadeSelector::slotChannelValuesChanged(const QVector4D &values)

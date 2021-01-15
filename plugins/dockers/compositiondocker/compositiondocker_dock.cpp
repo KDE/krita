@@ -197,7 +197,7 @@ void CompositionDockerDock::saveClicked()
     saveNameEdit->clear();
     updateModel();
     compositionView->setCurrentIndex(m_model->index(image->compositions().count()-1, 0));
-    image->setModified();
+    image->setModifiedWithoutUndo();
 }
 
 void CompositionDockerDock::moveCompositionUp()
@@ -402,7 +402,7 @@ void CompositionDockerDock::updateComposition()
     if (m_canvas && m_canvas->viewManager() && m_canvas->viewManager()->image() && index.isValid()) {
         KisLayerCompositionSP composition = m_model->compositionFromIndex(index);
         composition->store();
-        m_canvas->image()->setModified();
+        m_canvas->image()->setModifiedWithoutUndo();
     }
 }
 
@@ -418,7 +418,7 @@ void CompositionDockerDock::renameComposition()
                                              composition->name(), &ok);
         if (ok && !name.isEmpty()) {
             composition->setName(name);
-            m_canvas->image()->setModified();
+            m_canvas->image()->setModifiedWithoutUndo();
         }
     }
 }

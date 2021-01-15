@@ -60,6 +60,11 @@ KisImageSignalRouter::~KisImageSignalRouter()
 {
 }
 
+void KisImageSignalRouter::emitImageModifiedNotification()
+{
+    emitNotification(ModifiedSignal);
+}
+
 void KisImageSignalRouter::emitNotifications(KisImageSignalVector notifications)
 {
     Q_FOREACH (const KisImageSignalType &type, notifications) {

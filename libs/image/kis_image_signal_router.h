@@ -33,6 +33,9 @@ public:
     void emitNotifyBatchUpdateStarted();
     void emitNotifyBatchUpdateEnded();
 
+public Q_SLOTS:
+    void emitImageModifiedNotification();
+
 private Q_SLOTS:
     void slotNotification(KisImageSignalType type);
 

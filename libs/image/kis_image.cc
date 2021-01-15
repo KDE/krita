@@ -171,6 +171,7 @@ public:
         }
 
         connect(q, SIGNAL(sigImageModified()), KisMemoryStatisticsServer::instance(), SLOT(notifyImageChanged()));
+        connect(undoStore.data(), SIGNAL(historyStateChanged()), &signalRouter, SLOT(emitImageModifiedNotification()));
     }
 
     ~KisImagePrivate() {
@@ -1523,12 +1524,6 @@ void KisImage::mergeDown(KisLayerSP layer, const KisMetaData::MergeStrategy* str
 void KisImage::flattenLayer(KisLayerSP layer)
 {
     KisLayerUtils::flattenLayer(this, layer);
-}
-
-
-void KisImage::setModified()
-{
-    m_d->signalRouter.emitNotification(ModifiedSignal);
 }
 
 void KisImage::setModifiedWithoutUndo()

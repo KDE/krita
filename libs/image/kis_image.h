@@ -443,17 +443,14 @@ public:
     KisUndoStore* undoStore();
 
     /**
-     * Tell the image it's modified; this emits the sigImageModified
-     * signal. This happens when the image needs to be saved
-     */
-    void setModified();
-
-    /**
      * Tell the image it's modified without creation of an undo command.
      * It may happen when e.g. layer visibility has changed.
      *
      * This function emits both, sigImageModified() and
      * sigImageModifiedWithoutUndo()
+     *
+     * For normal modifications with undo information the signal
+     * emission is triggered by the undo stack
      */
     void setModifiedWithoutUndo();
 

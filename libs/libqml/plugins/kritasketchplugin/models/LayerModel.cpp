@@ -959,7 +959,7 @@ void LayerModel::updateActiveLayerWithNewFilterConfig()
     }
     d->newConfig = 0;
     d->activeNode->setDirty(d->activeNode->extent());
-    d->image->setModified();
+    d->image->setModifiedWithoutUndo();
     QTimer::singleShot(100, this, SIGNAL(activeFilterConfigChanged()));
 }
 

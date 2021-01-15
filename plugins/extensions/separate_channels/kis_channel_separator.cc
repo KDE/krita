@@ -216,7 +216,6 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
         }
 
         adapter.endMacro();
-        image->setModified();
     }
 
     progressUpdater->setProgress(100);

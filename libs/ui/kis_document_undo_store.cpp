@@ -17,6 +17,7 @@
 KisDocumentUndoStore::KisDocumentUndoStore(KisDocument *doc)
     : m_doc(doc)
 {
+    connect(doc->undoStack(), SIGNAL(indexChanged(int)), this, SIGNAL(historyStateChanged()));
 }
 
 const KUndo2Command* KisDocumentUndoStore::presentCommand()

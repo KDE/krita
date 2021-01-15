@@ -218,7 +218,7 @@ bool Document::setBackgroundColor(const QColor &color)
     KoColor background = KoColor(color, d->document->image()->colorSpace());
     d->document->image()->setDefaultProjectionColor(background);
 
-    d->document->image()->setModified();
+    d->document->image()->setModifiedWithoutUndo();
     d->document->image()->initialRefreshGraph();
 
     return true;

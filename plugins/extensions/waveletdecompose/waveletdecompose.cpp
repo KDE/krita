@@ -136,7 +136,6 @@ void WaveletDecompose::slotWaveletDecompose()
         undo->endMacro();
         updater->setProgress(100);
         image->unlock();
-        image->setModified();
     }
         
     QApplication::restoreOverrideCursor();

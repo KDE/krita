@@ -225,7 +225,6 @@ void LayerSplit::slotLayerSplit()
         }
 
         undo->endMacro();
-        image->setModified();
    }
 
     QApplication::restoreOverrideCursor();

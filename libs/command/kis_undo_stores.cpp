@@ -16,6 +16,7 @@
 KisSurrogateUndoStore::KisSurrogateUndoStore()
     : m_undoStack(new KUndo2Stack)
 {
+    connect(m_undoStack, SIGNAL(indexChanged(int)), this, SIGNAL(historyStateChanged()));
 }
 
 KisSurrogateUndoStore::~KisSurrogateUndoStore()
@@ -98,6 +99,8 @@ void KisDumbUndoStore::undoLastCommand()
     /**
      * Ermm.. Do we actually have one? We are dumb! ;)
      */
+
+    emit historyStateChanged();
 }
 
 void KisDumbUndoStore::addCommand(KUndo2Command *command)
@@ -107,6 +110,8 @@ void KisDumbUndoStore::addCommand(KUndo2Command *command)
      */
     command->redo();
     delete command;
+
+    emit historyStateChanged();
 }
 
 void KisDumbUndoStore::beginMacro(const KUndo2MagicString& macroName)
@@ -122,6 +127,8 @@ void KisDumbUndoStore::endMacro()
     /**
      * Roger that! :)
      */
+
+    emit historyStateChanged();
 }
 
 void KisDumbUndoStore::purgeRedoState()

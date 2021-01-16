@@ -115,27 +115,34 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
         m_toolOptionsPopupButton->setIcon(KisIconUtils::loadIcon("hamburger_menu_dots"));
         m_toolOptionsPopupButton->setToolTip(i18n("Tool Settings"));
         m_toolOptionsPopupButton->setFixedSize(iconsize, iconsize);
+        m_toolOptionsPopupButton->setFlat(true);
     }
 
     m_brushEditorPopupButton = new KisIconWidget(this);
     m_brushEditorPopupButton->setIcon(KisIconUtils::loadIcon("paintop_settings_02"));
     m_brushEditorPopupButton->setToolTip(i18n("Edit brush settings"));
     m_brushEditorPopupButton->setFixedSize(iconsize, iconsize);
+    m_brushEditorPopupButton->setFlat(true);
 
     m_presetSelectorPopupButton = new KisPopupButton(this);
     m_presetSelectorPopupButton->setIcon(KisIconUtils::loadIcon("paintop_settings_01"));
     m_presetSelectorPopupButton->setToolTip(i18n("Choose brush preset"));
     m_presetSelectorPopupButton->setFixedSize(iconsize, iconsize);
+    m_presetSelectorPopupButton->setFlat(true);
 
     m_eraseModeButton = new KisHighlightedToolButton(this);
     m_eraseModeButton->setFixedSize(iconsize, iconsize);
     m_eraseModeButton->setCheckable(true);
+    m_eraseModeButton->setAutoRaise(true);
+
 
     m_eraseAction = m_viewManager->actionManager()->createAction("erase_action");
     m_eraseModeButton->setDefaultAction(m_eraseAction);
 
     m_reloadButton = new QToolButton(this);
     m_reloadButton->setFixedSize(iconsize, iconsize);
+    m_reloadButton->setAutoRaise(true); // make button flat
+
 
     m_reloadAction = m_viewManager->actionManager()->createAction("reload_preset_action");
     m_reloadButton->setDefaultAction(m_reloadAction);
@@ -143,6 +150,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     m_alphaLockButton = new KisHighlightedToolButton(this);
     m_alphaLockButton->setFixedSize(iconsize, iconsize);
     m_alphaLockButton->setCheckable(true);
+    m_alphaLockButton->setAutoRaise(true);
 
     KisAction* alphaLockAction = m_viewManager->actionManager()->createAction("preserve_alpha");
     m_alphaLockButton->setDefaultAction(alphaLockAction);
@@ -187,6 +195,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     m_hMirrorButton->setDefaultAction(m_hMirrorAction);
     m_hMirrorButton->setMenu(toolbarMenuXMirror);
     m_hMirrorButton->setPopupMode(QToolButton::MenuButtonPopup);
+    m_hMirrorButton->setAutoRaise(true);
 
     m_vMirrorButton = new KisHighlightedToolButton(this);
     m_vMirrorButton->setFixedSize(iconsize + menuPadding, iconsize);
@@ -195,6 +204,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     m_vMirrorButton->setDefaultAction(m_vMirrorAction);
     m_vMirrorButton->setMenu(toolbarMenuYMirror);
     m_vMirrorButton->setPopupMode(QToolButton::MenuButtonPopup);
+    m_vMirrorButton->setAutoRaise(true);
 
     QAction *wrapAroundAction = m_viewManager->actionManager()->createAction("wrap_around_mode");
 
@@ -202,6 +212,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     m_wrapAroundButton->setFixedSize(iconsize, iconsize);
     m_wrapAroundButton->setDefaultAction(wrapAroundAction);
     m_wrapAroundButton->setCheckable(true);
+    m_wrapAroundButton->setAutoRaise(true);
 
     // add connections for horizontal and mirrror buttons
     connect(lockActionX, SIGNAL(toggled(bool)), this, SLOT(slotLockXMirrorToggle(bool)));
@@ -299,6 +310,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     m_workspaceWidget->setToolTip(i18n("Choose workspace"));
     m_workspaceWidget->setFixedSize(iconsize, iconsize);
     m_workspaceWidget->setPopupWidget(new KisWorkspaceChooser(view));
+    m_workspaceWidget->setFlat(true);
 
     QHBoxLayout* baseLayout = new QHBoxLayout(this);
     m_paintopWidget = new QWidget(this);
@@ -396,10 +408,20 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     QWidget* mirrorActions = new QWidget(this);
     QHBoxLayout* mirrorLayout = new QHBoxLayout(mirrorActions);
     mirrorLayout->addWidget(m_hMirrorButton);
+
+    // add separator line to keep drop-down contained
+    QFrame* line = new QFrame();
+    line->setFrameShape(QFrame::VLine);
+    line->setFrameShadow(QFrame::Sunken);
+    mirrorLayout->addWidget(line);
+
+
     mirrorLayout->addWidget(m_vMirrorButton);
     mirrorLayout->addWidget(m_wrapAroundButton);
     mirrorLayout->setSpacing(4);
     mirrorLayout->setContentsMargins(0, 0, 0, 0);
+
+
 
     action = new QWidgetAction(this);
     KisActionRegistry::instance()->propertizeAction("mirror_actions", action);

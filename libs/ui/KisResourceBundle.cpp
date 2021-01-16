@@ -703,7 +703,7 @@ bool KisResourceBundle::install()
                 if (resourceStore->isOpen()) resourceStore->close();
 
                 dbgResources << "\tInstalling" << ref.resourcePath;
-                KisPaintOpPresetSP res = paintoppresetServer->createResource(QString("bundle://%1:%2").arg(filename()).arg(ref.resourcePath));
+                KisPaintOpPresetSP res = paintoppresetServer->createResource(QString("bundle://%1:%2").arg(filename(), ref.resourcePath));
 
                 if (!res) {
                     warnKrita << "Could not create resource for" << ref.resourcePath;

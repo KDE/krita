@@ -40,6 +40,7 @@ WGColorSelectorDock::WGColorSelectorDock()
     , m_colorChangeCompressor(new KisSignalCompressor(100 /* ms */, KisSignalCompressor::POSTPONE, this))
     , m_actionManager(new WGActionManager(this))
     , m_colorTooltip(new WGColorPreviewToolTip(this))
+    , m_colorModelBG(new KisVisualColorModel)
 {
     setWindowTitle(i18n("Wide Gamut Color Selector"));
 
@@ -51,6 +52,7 @@ WGColorSelectorDock::WGColorSelectorDock()
     connect(m_selector, SIGNAL(sigNewColor(KoColor)), SLOT(slotColorSelected(KoColor)));
     connect(m_selector, SIGNAL(sigInteraction(bool)), SLOT(slotColorInteraction(bool)));
     connect(m_colorChangeCompressor, SIGNAL(timeout()), SLOT(slotSetNewColors()));
+    m_colorModelFG = m_selector->selectorModel();
 
     // Header
     QWidget *headerWidget = new QWidget(mainWidget);
@@ -89,23 +91,33 @@ WGColorSelectorDock::WGColorSelectorDock()
 
 const KisVisualColorModel &WGColorSelectorDock::colorModel() const
 {
-    // TODO: store locally;
-    return *(m_selector->selectorModel());
+    // currently always return foreground model;
+    // do lazy conversion to current HSX model if required
+    if (selectingBackground() && m_colorModelBG->isHSXModel()) {
+        m_colorModelFG->setRGBColorModel(m_colorModelBG->colorModel());
+    }
+    return *(m_colorModelFG);
+}
+
+bool WGColorSelectorDock::selectingBackground() const
+{
+    return m_toggle->isChecked();
 }
 
 void WGColorSelectorDock::setChannelValues(const QVector4D &values)
 {
-    if (!isEnabled()) {
+    // currently always set foreground color
+    if (!m_canvas) {
         return;
     }
-    // TODO: store locally;
-    m_selector->selectorModel()->slotSetChannelValues(values);
 
-    if (m_toggle->isChecked()) {
-        m_canvas->resourceManager()->setBackgroundColor(m_bgColor);
-    } else {
-        m_canvas->resourceManager()->setForegroundColor(m_fgColor);
-    }
+    // This could be nicer...if setting active model, this triggers slotColorSelected()
+    // and leaves timer running with NOP, otherwise the resource update is detected as
+    // external event and updates UI.
+    m_colorModelFG->slotSetChannelValues(values);
+
+    m_canvas->resourceManager()->setForegroundColor(m_colorModelFG->currentColor());
+    m_pendingFgUpdate = false;
 }
 
 void WGColorSelectorDock::leaveEvent(QEvent *event)
@@ -129,7 +141,8 @@ void WGColorSelectorDock::setCanvas(KoCanvasBase *canvas)
     if (m_canvas) {
         KoColorDisplayRendererInterface *dri = m_canvas->displayColorConverter()->displayRendererInterface();
         KisCanvasResourceProvider *resourceProvider = m_canvas->imageView()->resourceProvider();
-        m_selector->setDisplayRenderer(dri);
+        m_colorModelFG->setDisplayRenderer(dri);
+        m_colorModelBG->setDisplayRenderer(dri);
         m_history->setDisplayRenderer(dri);
         //m_toggle->setBackgroundColor(dri->toQColor(color));
         connect(dri, SIGNAL(displayConfigurationChanged()), this, SLOT(slotDisplayConfigurationChanged()));
@@ -221,32 +234,31 @@ void WGColorSelectorDock::slotConfigurationChanged()
 
 void WGColorSelectorDock::slotDisplayConfigurationChanged()
 {
-    bool selectingBg = m_toggle->isChecked();
-    m_selector->slotSetColorSpace(m_canvas->displayColorConverter()->paintingColorSpace());
+    m_colorModelFG->slotSetColorSpace(m_canvas->displayColorConverter()->paintingColorSpace());
+    m_colorModelBG->slotSetColorSpace(m_canvas->displayColorConverter()->paintingColorSpace());
     // TODO: use m_viewManager->canvasResourceProvider()->fgColor();
     KoColor fgColor = m_canvas->resourceManager()->foregroundColor();
     KoColor bgColor = m_canvas->resourceManager()->backgroundColor();
     // TODO: use painting color space?
     m_toggle->setForegroundColor(m_canvas->displayColorConverter()->toQColor(fgColor));
     m_toggle->setBackgroundColor(m_canvas->displayColorConverter()->toQColor(bgColor));
-    m_selector->slotSetColor(selectingBg ? bgColor : fgColor);
+    // TODO: don't overwrite color when colorspace didn't change
+    m_colorModelFG->slotSetColor(fgColor);
+    m_colorModelBG->slotSetColor(bgColor);
 }
 
 void WGColorSelectorDock::slotColorSelected(const KoColor &color)
 {
-    bool selectingBg = m_toggle->isChecked();
     QColor displayCol = m_canvas->displayColorConverter()->toQColor(color);
     m_colorTooltip->setCurrentColor(displayCol);
-    if (selectingBg) {
+    if (selectingBackground()) {
         m_toggle->setBackgroundColor(displayCol);
         m_pendingBgUpdate = true;
-        m_bgColor = color;
         m_colorChangeCompressor->start();
     }
     else {
         m_toggle->setForegroundColor(displayCol);
         m_pendingFgUpdate = true;
-        m_fgColor = color;
         m_colorChangeCompressor->start();
     }
     if (sender() != m_selector) {
@@ -257,10 +269,18 @@ void WGColorSelectorDock::slotColorSelected(const KoColor &color)
 void WGColorSelectorDock::slotColorSourceToggled(bool selectingBg)
 {
     if (selectingBg) {
-        m_selector->slotSetColor(m_canvas->resourceManager()->backgroundColor());
+        if (m_colorModelFG->isHSXModel()) {
+            m_colorModelBG->setRGBColorModel(m_colorModelFG->colorModel());
+        }
+        m_selector->setSelectorModel(m_colorModelBG);
+        m_shadeSelector->setModel(m_colorModelBG);
     }
     else {
-        m_selector->slotSetColor(m_canvas->resourceManager()->foregroundColor());
+        if (m_colorModelBG->isHSXModel()) {
+            m_colorModelFG->setRGBColorModel(m_colorModelBG->colorModel());
+        }
+        m_selector->setSelectorModel(m_colorModelFG);
+        m_shadeSelector->setModel(m_colorModelFG);
     }
 }
 
@@ -287,37 +307,32 @@ void WGColorSelectorDock::slotFGColorUsed(const KoColor &color)
 
 void WGColorSelectorDock::slotSetNewColors()
 {
-    KIS_SAFE_ASSERT_RECOVER_RETURN(m_pendingFgUpdate || m_pendingBgUpdate);
+    //KIS_SAFE_ASSERT_RECOVER_RETURN(m_pendingFgUpdate || m_pendingBgUpdate);
     if (m_pendingFgUpdate) {
-        m_canvas->resourceManager()->setForegroundColor(m_fgColor);
+        m_canvas->resourceManager()->setForegroundColor(m_colorModelFG->currentColor());
         m_pendingFgUpdate = false;
     }
     if (m_pendingBgUpdate) {
-        m_canvas->resourceManager()->setBackgroundColor(m_bgColor);
+        m_canvas->resourceManager()->setBackgroundColor(m_colorModelBG->currentColor());
         m_pendingBgUpdate = false;
     }
 }
 
 void WGColorSelectorDock::slotCanvasResourceChanged(int key, const QVariant &value)
 {
-    bool selectingBg = m_toggle->isChecked();
     switch (key) {
     case KoCanvasResource::ForegroundColor:
         if (!m_pendingFgUpdate) {
             KoColor color = value.value<KoColor>();
             m_toggle->setForegroundColor(m_canvas->displayColorConverter()->toQColor(color));
-            if (!selectingBg) {
-                m_selector->slotSetColor(color);
-            }
+            m_colorModelFG->slotSetColor(color);
         }
         break;
     case KoCanvasResource::BackgroundColor:
         if (!m_pendingBgUpdate) {
             KoColor color = value.value<KoColor>();
             m_toggle->setBackgroundColor(m_canvas->displayColorConverter()->toQColor(color));
-            if (selectingBg) {
-                m_selector->slotSetColor(color);
-            }
+            m_colorModelBG->slotSetColor(color);
         }
     default:
         break;

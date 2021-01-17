@@ -10,13 +10,13 @@
 #include <QPointer>
 #include <QDockWidget>
 #include <kis_mainwindow_observer.h>
+#include <KisVisualColorModel.h>
 
 #include <KoColor.h>
 
 class KisCanvas2;
 class KisColorSourceToggle;
 class KisSignalCompressor;
-class KisVisualColorModel;
 class KisVisualColorSelector;
 class WGActionManager;
 class WGColorPatches;
@@ -34,6 +34,7 @@ public:
     WGColorSelectorDock();
     const KisVisualColorModel& colorModel() const;
 
+    bool selectingBackground() const;
     /**
      * @brief Set new channel values; takes effect immediately!
      *
@@ -72,10 +73,10 @@ private:
     QWidgetAction *m_quickSettingAction {0};
     WGQuickSettingsWidget *m_quickSettings {0};
     QToolButton *m_configButton {0};
+    KisVisualColorModelSP m_colorModelFG;
+    KisVisualColorModelSP m_colorModelBG;
     bool m_pendingFgUpdate {false};
     bool m_pendingBgUpdate {false};
-    KoColor m_fgColor;
-    KoColor m_bgColor;
 };
 
 #endif // WG_COLOR_SELECTOR_DOCKER_H

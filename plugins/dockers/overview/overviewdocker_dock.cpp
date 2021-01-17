@@ -83,6 +83,11 @@ void OverviewDockerDock::setCanvas(KoCanvasBase * canvas)
         m_mirrorCanvas = nullptr;
     }
 
+    // Delete the stretch
+    if (m_horizontalLayout->count() && m_horizontalLayout->itemAt(0)->spacerItem()) {
+        delete m_horizontalLayout->takeAt(0);
+    }
+
     m_bottomLayout->removeItem(m_horizontalLayout);
 
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);

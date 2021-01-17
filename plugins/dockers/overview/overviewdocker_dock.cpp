@@ -96,12 +96,8 @@ void OverviewDockerDock::setCanvas(KoCanvasBase * canvas)
     }
 
     // Delete the stretch
-    if (m_horizontalLayout->count() > 0) {
-        QLayoutItem *stretch = m_horizontalLayout->takeAt(0);
-        if (stretch->widget()) {
-            delete stretch->widget();
-        }
-        delete stretch;
+    if (m_horizontalLayout->count() && m_horizontalLayout->itemAt(0)->spacerItem()) {
+        delete m_horizontalLayout->takeAt(0);
     }
 
     m_bottomLayout->removeItem(m_horizontalLayout);

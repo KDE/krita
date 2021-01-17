@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <author>
     SPDX-FileCopyrightText: none
@@ -11,10 +11,10 @@
     <x>0</x>
     <y>0</y>
     <width>174</width>
-    <height>66</height>
+    <height>76</height>
    </rect>
   </property>
-  <layout class="QGridLayout">
+  <layout class="QFormLayout" name="formLayout">
    <property name="leftMargin">
     <number>0</number>
    </property>
@@ -27,20 +27,7 @@
    <property name="bottomMargin">
     <number>0</number>
    </property>
-   <item column="0" row="1">
-    <widget class="QLabel" name="textLabel2">
-     <property name="text">
-      <string>Opacity:</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-     <property name="wordWrap">
-      <bool>false</bool>
-     </property>
-    </widget>
-   </item>
-   <item column="0" row="0">
+   <item row="0" column="0">
     <widget class="QLabel" name="textLabel1">
      <property name="text">
       <string>Level:</string>
@@ -53,29 +40,30 @@
      </property>
     </widget>
    </item>
-   <item column="1" row="1">
-    <widget class="KisIntParseSpinBox" name="intOpacity"/>
-   </item>
-   <item column="1" row="0">
-    <widget class="KisIntParseSpinBox" name="intLevel"/>
-   </item>
-   <item column="2" row="1">
-    <spacer>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
+   <item row="0" column="1">
+    <widget class="KisSliderSpinBox" name="intLevel" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
      </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Expanding</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>21</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
+    </widget>
    </item>
-   <item column="1" row="2">
+   <item row="1" column="0">
+    <widget class="QLabel" name="textLabel2">
+     <property name="text">
+      <string>Opacity:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="wordWrap">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1">
     <spacer>
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -91,13 +79,24 @@
      </property>
     </spacer>
    </item>
+   <item row="1" column="1">
+    <widget class="KisSliderSpinBox" name="intOpacity" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KisIntParseSpinBox</class>
-   <extends>QSpinBox</extends>
-   <header>kis_int_parse_spin_box.h</header>
+   <class>KisSliderSpinBox</class>
+   <extends>QWidget</extends>
+   <header>kis_slider_spin_box.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

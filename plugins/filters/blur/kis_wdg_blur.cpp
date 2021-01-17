@@ -29,8 +29,8 @@ KisWdgBlur::KisWdgBlur(QWidget * parent) : KisConfigWidget(parent)
     widget()->angleSelector->setDecimals(0);
 
     connect(widget()->aspectButton, SIGNAL(keepAspectRatioChanged(bool)), this, SLOT(linkSpacingToggled(bool)));
-    connect(widget()->intHalfWidth, SIGNAL(valueChanged(int)), this, SLOT(spinBoxHalfWidthChanged(int)));
-    connect(widget()->intHalfHeight, SIGNAL(valueChanged(int)), this, SLOT(spinBoxHalfHeightChanged(int)));
+    connect(widget()->intHalfWidth, SIGNAL(valueChanged(int)), this, SLOT(sldHalfWidthChanged(int)));
+    connect(widget()->intHalfHeight, SIGNAL(valueChanged(int)), this, SLOT(sldHalfHeightChanged(int)));
 
     connect(widget()->intStrength, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
     connect(widget()->angleSelector, SIGNAL(angleChanged(qreal)), SIGNAL(sigConfigurationItemChanged()));
@@ -83,10 +83,12 @@ void KisWdgBlur::linkSpacingToggled(bool b)
     widget()->intHalfHeight->setValue(widget()->intHalfWidth->value());
 }
 
-void KisWdgBlur::spinBoxHalfWidthChanged(int v)
+void KisWdgBlur::sldHalfWidthChanged(int v)
 {
     if (m_halfSizeLink) {
+        widget()->intHalfHeight->blockSignals(true);
         widget()->intHalfHeight->setValue(v);
+        widget()->intHalfHeight->blockSignals(false);
     }
     /*    if( widget()->intHalfHeight->value() == v && widget()->cbShape->currentItem() != 1)
             widget()->intAngle->setEnabled(false);
@@ -95,10 +97,12 @@ void KisWdgBlur::spinBoxHalfWidthChanged(int v)
     emit sigConfigurationItemChanged();
 }
 
-void KisWdgBlur::spinBoxHalfHeightChanged(int v)
+void KisWdgBlur::sldHalfHeightChanged(int v)
 {
     if (m_halfSizeLink) {
+        widget()->intHalfWidth->blockSignals(true);
         widget()->intHalfWidth->setValue(v);
+        widget()->intHalfWidth->blockSignals(false);
     }
     /*    if( widget()->intHalfWidth->value() == v && widget()->cbShape->currentItem() != 1)
             widget()->intAngle->setEnabled(false);

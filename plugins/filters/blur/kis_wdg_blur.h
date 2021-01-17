@@ -28,8 +28,8 @@ public:
 private Q_SLOTS:
 
     void linkSpacingToggled(bool);
-    void spinBoxHalfWidthChanged(int);
-    void spinBoxHalfHeightChanged(int);
+    void sldHalfWidthChanged(int);
+    void sldHalfHeightChanged(int);
 
 private:
 

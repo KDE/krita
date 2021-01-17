@@ -31,18 +31,18 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="1">
-      <widget class="KisIntParseSpinBox" name="blurLength">
-       <property name="minimum">
-        <number>0</number>
-       </property>
-       <property name="maximum">
-        <number>256</number>
-       </property>
-      </widget>
-     </item>
      <item row="0" column="1">
       <widget class="KisAngleSelector" name="blurAngleSelector" native="true"/>
+     </item>
+     <item row="1" column="1">
+      <widget class="KisSliderSpinBox" name="blurLength" native="true">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
@@ -66,9 +66,10 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KisIntParseSpinBox</class>
-   <extends>QSpinBox</extends>
-   <header>kis_int_parse_spin_box.h</header>
+   <class>KisSliderSpinBox</class>
+   <extends>QWidget</extends>
+   <header>kis_slider_spin_box.h</header>
+   <container>1</container>
   </customwidget>
   <customwidget>
    <class>KisAngleSelector</class>
@@ -77,9 +78,6 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
- <tabstops>
-  <tabstop>blurLength</tabstop>
- </tabstops>
  <resources/>
  <connections/>
 </ui>

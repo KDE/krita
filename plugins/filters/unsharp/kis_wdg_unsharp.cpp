@@ -22,6 +22,11 @@ KisWdgUnsharp::KisWdgUnsharp(QWidget * parent) : KisConfigWidget(parent)
     m_widget = new Ui_WdgUnsharp();
     m_widget->setupUi(this);
 
+    widget()->doubleHalfSize->setRange(0.0, 99.99, 2);
+    widget()->doubleHalfSize->setSingleStep(1.0);
+    widget()->doubleAmount->setRange(0.0, 99.99, 2);
+    widget()->doubleAmount->setSingleStep(0.2);
+
     connect(widget()->doubleHalfSize, SIGNAL(valueChanged(double)), SIGNAL(sigConfigurationItemChanged()));
     connect(widget()->doubleAmount, SIGNAL(valueChanged(double)), SIGNAL(sigConfigurationItemChanged()));
     connect(widget()->intThreshold, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));

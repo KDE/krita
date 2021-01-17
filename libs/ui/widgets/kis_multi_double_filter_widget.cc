@@ -17,7 +17,7 @@
 #include <KisGlobalResourcesInterface.h>
 
 KisDelayedActionDoubleInput::KisDelayedActionDoubleInput(QWidget * parent, const QString & name)
-    : KisDoubleParseSpinBox(parent)
+    : KisDoubleSliderSpinBox(parent)
 {
     setObjectName(name);
     m_timer = new QTimer(this);

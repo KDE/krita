@@ -21,7 +21,8 @@ KisWdgGaussianHighPass::KisWdgGaussianHighPass(QWidget * parent) : KisConfigWidg
 {
     m_widget = new Ui_WdgGaussianHighPass();
     m_widget->setupUi(this);
-
+    widget()->doubleblurAmount->setRange(0.0, 250.0, 2);
+    widget()->doubleblurAmount->setSingleStep(1.00);
     connect(widget()->doubleblurAmount, SIGNAL(valueChanged(double)), SIGNAL(sigConfigurationItemChanged()));
 }
 

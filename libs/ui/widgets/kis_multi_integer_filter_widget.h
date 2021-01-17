@@ -12,12 +12,12 @@
 #include <kis_debug.h>
 #include <QVector>
 #include <QSpinBox>
-
+#include "kis_slider_spin_box.h"
 #include "kis_int_parse_spin_box.h"
 
 #include <vector>
 
-class KisDelayedActionIntegerInput : public KisIntParseSpinBox
+class KisDelayedActionIntegerInput : public KisSliderSpinBox
 {
     Q_OBJECT
 

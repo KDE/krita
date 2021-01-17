@@ -16,7 +16,7 @@
 #include <KisGlobalResourcesInterface.h>
 
 KisDelayedActionIntegerInput::KisDelayedActionIntegerInput(QWidget * parent, const QString & name)
-    : KisIntParseSpinBox(parent)
+    : KisSliderSpinBox(parent)
 {
     setObjectName(name);
     m_timer = new QTimer(this);

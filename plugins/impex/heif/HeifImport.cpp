@@ -131,36 +131,51 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
         }
 
 
-        heif_color_profile_type profileType = heifimage.get_color_profile_type();
+        heif_color_profile_type profileType = heif_image_handle_get_color_profile_type(handle.get_raw_image_handle());
         const QString colorSpaceId = KoColorSpaceRegistry::instance()->colorSpaceId(colorModel, colorDepth);
         QString profileName = KoColorSpaceRegistry::instance()->defaultProfileForColorSpace(colorSpaceId);
 
-        std::vector<uint8_t> rawProfile = heifimage.get_raw_color_profile();
-        qDebug() << "profile" << profileType << rawProfile.empty();
+        qDebug() << "profile" << profileType;
+        struct heif_error err;
         if (profileType == heif_color_profile_type_prof || profileType == heif_color_profile_type_rICC) {
             // rICC are 'restricted' icc profiles, and are matrix shaper profiles
             // that are either RGB or Grayscale, and are of the input or display types.
             // They are from the JPEG2000 spec.
 
-            QByteArray ba = QByteArray(*rawProfile.data(), rawProfile.size());
-            const KoColorProfile *profile = KoColorSpaceRegistry::instance()->createColorProfile(colorModel.id(), colorDepth.id(), ba);
-            KoColorSpaceRegistry::instance()->addProfile(profile);
-            profileName = profile->name();
-            qDebug() << "icc profile found" << profileName;
+            int rawProfileSize = (int) heif_image_handle_get_raw_color_profile_size(handle.get_raw_image_handle());
+            if (rawProfileSize > 0) {
+                QByteArray ba(rawProfileSize, 0);
+                err = heif_image_handle_get_raw_color_profile(handle.get_raw_image_handle(), ba.data());
+                if (err.code) {
+                    qDebug() << "icc profile loading failed";
+                } else {
+                    const KoColorProfile *profile = KoColorSpaceRegistry::instance()->createColorProfile(colorModel.id(), colorDepth.id(), ba);
+                    KoColorSpaceRegistry::instance()->addProfile(profile);
+                    profileName = profile->name();
+                    qDebug() << "icc profile found" << profileName;
+                }
+            } else {
+                qDebug() << "icc profile is empty";
+            }
         } else if (profileType == heif_color_profile_type_nclx) {
             // NCLX parameters is a colorspace description used for videofiles.
             // We will need to generate a profile based on nclx parameters. We can use lcms for this, but code doesn't exist yet.
 
             //For now, we can try to get the profile we always have on hand...
 
-            heif::ColorProfile_nclx nclx = heifimage.get_nclx_color_profile();
+            struct heif_color_profile_nclx *nclx = nullptr;
+            err = heif_image_handle_get_nclx_color_profile(handle.get_raw_image_handle(), &nclx);
+            if (err.code || !nclx) {
+                qDebug() << "nclx profile loading failed";
+            } else {
+                if (nclx->color_primaries == heif_color_primaries_ITU_R_BT_2020_2_and_2100_0 &&
+                        nclx->transfer_characteristics == heif_transfer_characteristic_ITU_R_BT_2100_0_PQ) {
+                    profileName = KoColorSpaceRegistry::instance()->p2020PQProfile()->name();
+                }
 
-            if (nclx.get_color_primaries() == heif_color_primaries_ITU_R_BT_2020_2_and_2100_0 &&
-                    nclx.get_transfer_characteristics() == heif_transfer_characteristic_ITU_R_BT_2100_0_PQ) {
-                profileName = KoColorSpaceRegistry::instance()->p2020PQProfile()->name();
+                heif_nclx_color_profile_free(nclx);
+                qDebug() << "nclx profile found";
             }
-
-            qDebug() << "nclx profile found";
         } else {
             qDebug() << "no profile found";
         }

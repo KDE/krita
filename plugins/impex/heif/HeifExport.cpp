@@ -74,7 +74,7 @@ HeifExport::~HeifExport()
 KisPropertiesConfigurationSP HeifExport::defaultConfiguration(const QByteArray &/*from*/, const QByteArray &/*to*/) const
 {
     KisPropertiesConfigurationSP cfg = new KisPropertiesConfiguration();
-    cfg->setProperty("quality", 50);
+    cfg->setProperty("quality", 100);
     cfg->setProperty("lossless", true);
     cfg->setProperty("chroma", "444");
     return cfg;
@@ -318,7 +318,9 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
                 QByteArray data = buffer.data();
 
                 // Write the data to the file
-                ctx.add_exif_metadata(handle, data.constData(), data.size());
+                if (data.size() > 4) {
+                    ctx.add_exif_metadata(handle, data.constData(), data.size());
+                }
             }
             {
                 KisMetaData::IOBackend* xmpIO = KisMetaData::IOBackendRegistry::instance()->value("xmp");
@@ -327,7 +329,9 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
                 QByteArray data = buffer.data();
 
                 // Write the data to the file
-                ctx.add_XMP_metadata(handle, data.constData(), data.size());
+                if (data.size() > 0) {
+                    ctx.add_XMP_metadata(handle, data.constData(), data.size());
+                }
             }
         }
 

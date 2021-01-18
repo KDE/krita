@@ -112,7 +112,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
 
     if (!cfg.toolOptionsInDocker()) {
         m_toolOptionsPopupButton = new KisPopupButton(this);
-        m_toolOptionsPopupButton->setIcon(KisIconUtils::loadIcon("configure"));
+        m_toolOptionsPopupButton->setIcon(KisIconUtils::loadIcon("hamburger_menu_dots"));
         m_toolOptionsPopupButton->setToolTip(i18n("Tool Settings"));
         m_toolOptionsPopupButton->setFixedSize(iconsize, iconsize);
     }
@@ -295,7 +295,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     m_cmbCompositeOp->connectBlendmodeActions(m_viewManager->actionManager());
 
     m_workspaceWidget = new KisPopupButton(this);
-    m_workspaceWidget->setIcon(KisIconUtils::loadIcon("view-choose"));
+    m_workspaceWidget->setIcon(KisIconUtils::loadIcon("configure"));
     m_workspaceWidget->setToolTip(i18n("Choose workspace"));
     m_workspaceWidget->setFixedSize(iconsize, iconsize);
     m_workspaceWidget->setPopupWidget(new KisWorkspaceChooser(view));
@@ -1395,7 +1395,7 @@ void KisPaintopBox::slotUpdateSelectionIcon()
 
     m_presetSelectorPopupButton->setIcon(KisIconUtils::loadIcon("paintop_settings_01"));
     m_brushEditorPopupButton->setIcon(KisIconUtils::loadIcon("paintop_settings_02"));
-    m_workspaceWidget->setIcon(KisIconUtils::loadIcon("view-choose"));
+    m_workspaceWidget->setIcon(KisIconUtils::loadIcon("configure"));
 
     m_eraseAction->setIcon(KisIconUtils::loadIcon("draw-eraser"));
     m_reloadAction->setIcon(KisIconUtils::loadIcon("view-refresh"));

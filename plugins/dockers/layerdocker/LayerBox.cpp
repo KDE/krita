@@ -290,8 +290,8 @@ LayerBox::LayerBox()
     configureMenu->addSection(i18n("Thumbnail Size"));
 
     m_wdgLayerBox->configureLayerDockerToolbar->setMenu(configureMenu);
-    m_wdgLayerBox->configureLayerDockerToolbar->setIcon(KisIconUtils::loadIcon("configure"));
-
+    m_wdgLayerBox->configureLayerDockerToolbar->setIcon(KisIconUtils::loadIcon("hamburger_menu_dots"));
+    m_wdgLayerBox->configureLayerDockerToolbar->setIconSize(QSize(15, 15));
     m_wdgLayerBox->configureLayerDockerToolbar->setPopupMode(QToolButton::InstantPopup);
 
 

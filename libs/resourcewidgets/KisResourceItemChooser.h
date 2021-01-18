@@ -116,13 +116,14 @@ Q_SIGNALS:
 public Q_SLOTS:
     void slotButtonClicked(int button);
     void slotScrollerStateChanged(QScroller::State state){ KisKineticScroller::updateCursor(this, state); }
+    void updateView();
 
 private Q_SLOTS:
     void activated(const QModelIndex &index);
     void clicked(const QModelIndex &index);
     void contextMenuRequested(const QPoint &pos);
     void baseLengthChanged(int length);
-    void updateView();
+
 
 protected:
     void showEvent(QShowEvent *event) override;

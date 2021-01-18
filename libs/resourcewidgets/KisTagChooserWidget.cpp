@@ -187,6 +187,11 @@ KisTagSP KisTagChooserWidget::currentlySelectedTag()
     return tag;
 }
 
+void KisTagChooserWidget::updateIcons()
+{
+    d->tagToolButton->loadIcon();
+}
+
 void KisTagChooserWidget::tagToolContextMenuAboutToShow()
 {
     /* only enable the save button if the selected tag set is editable */

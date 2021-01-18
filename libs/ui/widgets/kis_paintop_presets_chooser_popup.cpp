@@ -80,7 +80,7 @@ KisPaintOpPresetsChooserPopup::KisPaintOpPresetsChooserPopup(QWidget * parent)
     m_d->uiWdgPaintOpPresets.wdgPresetChooser->itemChooser()->setViewModeButtonVisible(true);
     m_d->viewModeButton = m_d->uiWdgPaintOpPresets.wdgPresetChooser->itemChooser()->viewModeButton();
     m_d->viewModeButton->setMenu(menu);
-    m_d->viewModeButton->setIcon(KisIconUtils::loadIcon("configure"));
+    m_d->viewModeButton->setIconSize(QSize(10,10));
 
 
     connect(m_d->uiWdgPaintOpPresets.wdgPresetChooser, SIGNAL(resourceSelected(KoResourceSP )),
@@ -143,7 +143,8 @@ void KisPaintOpPresetsChooserPopup::canvasResourceChanged(KisPaintOpPresetSP  pr
 
 void KisPaintOpPresetsChooserPopup::slotThemeChanged()
 {
-    m_d->viewModeButton->setIcon(KisIconUtils::loadIcon("configure"));
+   m_d->viewModeButton->setIcon(KisIconUtils::loadIcon("hamburger_menu_dots"));
+   m_d->uiWdgPaintOpPresets.wdgPresetChooser->itemChooser()->updateView(); // updates other icons
 }
 
 void KisPaintOpPresetsChooserPopup::updateViewSettings()

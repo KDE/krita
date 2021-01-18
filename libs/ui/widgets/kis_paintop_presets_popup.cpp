@@ -159,7 +159,6 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
 
     // configure the button and assign menu
     m_d->uiWdgPaintOpPresetSettings.presetChangeViewToolButton->setMenu(menu);
-
     m_d->uiWdgPaintOpPresetSettings.presetChangeViewToolButton->setPopupMode(QToolButton::InstantPopup);
 
 
@@ -778,7 +777,7 @@ void KisPaintOpPresetsPopup::updateThemedIcons()
 
     m_d->uiWdgPaintOpPresetSettings.newPresetEngineButton->setIcon(KisIconUtils::loadIcon("addlayer"));
     m_d->uiWdgPaintOpPresetSettings.bnBlacklistPreset->setIcon(KisIconUtils::loadIcon("deletelayer"));
-    m_d->uiWdgPaintOpPresetSettings.presetChangeViewToolButton->setIcon(KisIconUtils::loadIcon("configure"));
+    m_d->uiWdgPaintOpPresetSettings.presetChangeViewToolButton->setIcon(KisIconUtils::loadIcon("hamburger_menu_dots"));
 
     // if we cannot see the "Preset label", we know it is not visible
     // maybe this can also be stored in the config like the scratchpad?

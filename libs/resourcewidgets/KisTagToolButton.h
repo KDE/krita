@@ -58,6 +58,11 @@ private:
 
     void setCurrentTag(const KisTagSP tag);
 
+    ///
+    /// \brief updates icon file when loading and changing themes
+    ///
+    void loadIcon();
+
 Q_SIGNALS:
     ///
     /// \brief newTagRequested signals to the KisTagChooserWidget to create a new tag

@@ -50,7 +50,7 @@ KisTagToolButton::KisTagToolButton(QWidget* parent)
     buttonLayout->setSpacing(0);
 
     d->tagToolButton = new QToolButton(this);
-    d->tagToolButton->setIcon(koIcon("bookmarks"));
+    loadIcon();
     d->tagToolButton->setText(i18n("Tag"));
     d->tagToolButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     d->tagToolButton->setToolTip(i18nc("@info:tooltip", "<qt>Show the tag box options.</qt>"));
@@ -129,8 +129,14 @@ void KisTagToolButton::setCurrentTag(const KisTagSP tag)
     d->deleteTagAction->setProperty("currentTag", QVariant::fromValue<KisTagSP>(tag));
 }
 
+void KisTagToolButton::loadIcon()
+{
+    d->tagToolButton->setIcon(koIcon("bookmarks"));
+}
+
 void KisTagToolButton::onTagUndeleteClicked()
 {
     emit undeletionOfTagRequested(d->undeleteCandidate);
 }
+
 

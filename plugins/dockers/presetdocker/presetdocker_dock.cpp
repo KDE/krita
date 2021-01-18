@@ -54,6 +54,7 @@ void PresetDockerDock::setCanvas(KoCanvasBase *canvas)
 
 
     connect(m_canvas->viewManager()->mainWindow(), SIGNAL(themeChanged()), m_presetChooser, SLOT(slotThemeChanged()));
+    m_presetChooser->slotThemeChanged();
 
     canvasResourceChanged();
 }

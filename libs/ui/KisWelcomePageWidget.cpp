@@ -329,7 +329,7 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
     openFileLink->setIcon(KisIconUtils::loadIcon("document-open"));
     newFileLink->setIcon(KisIconUtils::loadIcon("document-new"));
 
-    btnNewsOptions->setIcon(KisIconUtils::loadIcon("configure"));
+    btnNewsOptions->setIcon(KisIconUtils::loadIcon("hamburger_menu_dots"));
 
     supportKritaIcon->setIcon(KisIconUtils::loadIcon(QStringLiteral("support-krita")));
     const QIcon &linkIcon = KisIconUtils::loadIcon(QStringLiteral("bookmarks"));

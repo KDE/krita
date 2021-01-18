@@ -446,7 +446,7 @@ void KisGradientChooser::slotUpdateIcons()
 {
     if (m_d->buttonAddGradient && m_d->buttonEditGradient) {
         m_d->buttonAddGradient->setIcon(KisIconUtils::loadIcon("list-add"));
-        m_d->buttonEditGradient->setIcon(KisIconUtils::loadIcon("configure"));
+        m_d->buttonEditGradient->setIcon(KisIconUtils::loadIcon("hamburger_menu_dots"));
     }
 }
 

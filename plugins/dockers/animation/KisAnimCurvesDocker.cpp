@@ -166,7 +166,7 @@ KisAnimCurvesDockerTitlebar::KisAnimCurvesDockerTitlebar(QWidget* parent) :
 
         {   // Settings menu..
             btnSettingsMenu = new QToolButton(this);
-            btnSettingsMenu->setIcon(KisIconUtils::loadIcon("configure"));
+            btnSettingsMenu->setIcon(KisIconUtils::loadIcon("hamburger_menu_dots"));
             btnSettingsMenu->setToolTip(i18n("Animation settings menu"));
 
             QWidget *settingsMenuWidget = new QWidget(this);

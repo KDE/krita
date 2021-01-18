@@ -181,7 +181,7 @@ StoryboardDockerDock::StoryboardDockerDock( )
 
     m_ui->btnArrange->setMenu(m_arrangeMenu);
     m_ui->btnArrange->setPopupMode(QToolButton::InstantPopup);
-    m_ui->btnArrange->setIcon(KisIconUtils::loadIcon("view-choose"));
+    m_ui->btnArrange->setIcon(KisIconUtils::loadIcon("hamburger_menu_dots"));
     m_ui->btnArrange->setIconSize(QSize(22, 22));
 
     m_modeGroup = m_arrangeMenu->getModeGroup();

@@ -502,7 +502,7 @@ bool KisNode::add(KisNodeSP newNode, KisNodeSP aboveThis)
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!newNode->parent(), false);
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(index(newNode) < 0, false);
 
-    int idx = aboveThis ? qMax(this->index(aboveThis) - 1, 0) : 0;
+    int idx = aboveThis ? this->index(aboveThis) + 1 : 0;
 
     // threoretical race condition may happen here ('idx' may become
     // deprecated until the write lock will be held). But we ignore

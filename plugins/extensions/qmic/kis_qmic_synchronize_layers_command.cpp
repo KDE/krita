@@ -49,14 +49,15 @@ void KisQmicSynchronizeLayersCommand::redo()
                     KisLayerSP paintLayer = new KisPaintLayer(m_image, "New layer from gmic filter", OPACITY_OPAQUE_U8, device);
                     KisImportQmicProcessingVisitor::gmicImageToPaintDevice(*m_images[i], device);
 
-                    KisNodeSP aboveThis = m_nodes->last();
+                    KisNodeSP belowThisLayer = m_nodes->last()->prevSibling();
                     KisNodeSP parent = m_nodes->at(0)->parent();
 
-                    // HACK! Where is the last layer being removed?
-                    paintLayer->setName(m_nodes->last()->name());
-
-                    dbgPlugins << "Adding paint layer " << (i - nodesCount + 1) << " to parent " << parent->name() << " above" << m_nodes->last()->name();
-                    KisImageLayerAddCommand *addLayerCmd = new KisImageLayerAddCommand(m_image, paintLayer, parent, aboveThis, false, true);
+                    dbgPlugins << "Adding paint layer " << (i - nodesCount + 1)
+                               << " to parent " << parent->name() << " below"
+                               << belowThisLayer;
+                    auto *addLayerCmd = new KisImageLayerAddCommand(
+                        m_image, paintLayer, parent, belowThisLayer, false,
+                        true);
                     addLayerCmd->redo();
                     m_imageCommands.append(addLayerCmd);
                     m_nodes->append(paintLayer);

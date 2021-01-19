@@ -235,7 +235,7 @@ KoResourceSP KisResourceLocator::resource(QString storageLocation, const QString
         resource->setResourceId(q.value(0).toInt());
         Q_ASSERT(resource->resourceId() >= 0);
 
-        resource->setVersion(q.value(1).toInt());
+        resource->setVersion(q.value(0).toInt());
         Q_ASSERT(resource->version() >= 0);
     }
 

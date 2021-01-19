@@ -48,12 +48,17 @@ class KisSinusoidalWaveCurve : public KisWaveCurve
 {
 public:
 
-    KisSinusoidalWaveCurve(int amplitude, int wavelength, int shift) : m_amplitude(amplitude), m_wavelength(wavelength), m_shift(shift) {
+    KisSinusoidalWaveCurve(int amplitude, int wavelength, int shift)
+        : m_amplitude(amplitude)
+        , m_shift(shift)
+    {
+        m_wavelength = wavelength == 0 ? 1 : wavelength;
     }
 
     ~KisSinusoidalWaveCurve() override {}
 
     double valueAt(int x, int y) override {
+        KIS_ASSERT(m_wavelength != 0);
         return y + m_amplitude * cos((double)(m_shift + x) / m_wavelength);
     }
 private:
@@ -64,12 +69,17 @@ class KisTriangleWaveCurve : public KisWaveCurve
 {
 public:
 
-    KisTriangleWaveCurve(int amplitude, int wavelength, int shift) :  m_amplitude(amplitude), m_wavelength(wavelength), m_shift(shift) {
+    KisTriangleWaveCurve(int amplitude, int wavelength, int shift)
+        :  m_amplitude(amplitude)
+        , m_shift(shift)
+    {
+        m_wavelength = wavelength == 0 ? 1 : wavelength;
     }
 
     ~KisTriangleWaveCurve() override {}
 
     double valueAt(int x, int y) override {
+        KIS_ASSERT(m_wavelength != 0);
         return y +  m_amplitude * pow(-1.0, (m_shift + x) / m_wavelength)  *(0.5 - (double)((m_shift + x) % m_wavelength) / m_wavelength);
     }
 private:
@@ -89,7 +99,6 @@ KisFilterWave::KisFilterWave() : KisFilter(id(), FiltersCategoryOtherId, i18n("&
     setColorSpaceIndependence(FULLY_INDEPENDENT);
     setSupportsPainting(false);
     setSupportsAdjustmentLayers(false);
-
 }
 
 KisFilterConfigurationSP KisFilterWave::defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const
@@ -129,16 +138,17 @@ void KisFilterWave::processImpl(KisPaintDeviceSP device,
     int verticalamplitude = (config && config->getProperty("verticalamplitude", value)) ? value.toInt() : 4;
     int verticalshape = (config && config->getProperty("verticalshape", value)) ? value.toInt() : 0;
 
-    KisWaveCurve* verticalcurve;
-    if (verticalshape == 1)
-        verticalcurve = new KisTriangleWaveCurve(verticalamplitude, verticalwavelength, verticalshift);
-    else
-        verticalcurve = new KisSinusoidalWaveCurve(verticalamplitude, verticalwavelength, verticalshift);
     KisWaveCurve* horizontalcurve;
     if (horizontalshape == 1)
         horizontalcurve = new KisTriangleWaveCurve(horizontalamplitude, horizontalwavelength, horizontalshift);
     else
         horizontalcurve = new KisSinusoidalWaveCurve(horizontalamplitude, horizontalwavelength, horizontalshift);
+
+    KisWaveCurve* verticalcurve;
+    if (verticalshape == 1)
+        verticalcurve = new KisTriangleWaveCurve(verticalamplitude, verticalwavelength, verticalshift);
+    else
+        verticalcurve = new KisSinusoidalWaveCurve(verticalamplitude, verticalwavelength, verticalshift);
     
     KisSequentialIteratorProgress dstIt(device, applyRect, progressUpdater);
     KisRandomSubAccessorSP srcRSA = device->createRandomSubAccessor();
@@ -148,6 +158,7 @@ void KisFilterWave::processImpl(KisPaintDeviceSP device,
         srcRSA->moveTo(QPointF(xv, yv));
         srcRSA->sampledOldRawData(dstIt.rawData());
     }
+
     delete horizontalcurve;
     delete verticalcurve;
 }

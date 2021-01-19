@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
@@ -13,8 +11,8 @@
    height="22"
    id="svg3760"
    version="1.1"
-   inkscape:version="0.48+devel r"
-   sodipodi:docname="list-add.svg">
+   inkscape:version="1.0.1 (0767f8302a, 2020-10-17)"
+   sodipodi:docname="light_list-add.svg">
   <defs
      id="defs3762" />
   <sodipodi:namedview
@@ -34,12 +32,13 @@
      fit-margin-left="0"
      fit-margin-right="0"
      fit-margin-bottom="0"
-     inkscape:window-width="1366"
-     inkscape:window-height="668"
-     inkscape:window-x="-2"
-     inkscape:window-y="23"
-     inkscape:window-maximized="1"
-     inkscape:showpageshadow="false">
+     inkscape:window-width="1515"
+     inkscape:window-height="1199"
+     inkscape:window-x="1728"
+     inkscape:window-y="402"
+     inkscape:window-maximized="0"
+     inkscape:showpageshadow="false"
+     inkscape:document-rotation="0">
     <sodipodi:guide
        position="4.1796875e-06,21.999997"
        orientation="22,0"
@@ -96,7 +95,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -106,19 +105,19 @@
      id="layer1"
      transform="translate(-553.72253,-583.11926)">
     <rect
-       style="opacity:1;fill:#cacaca;fill-opacity:1;stroke:none"
-       id="rect4189"
-       width="0.99999732"
-       height="15.000004"
-       x="594.11926"
-       y="-571.72253"
-       transform="matrix(0,1,-1,0,0,0)" />
+       y="586.21179"
+       x="563.76721"
+       height="16.000002"
+       width="2.2"
+       id="rect4119-6"
+       style="opacity:1;fill:#cacaca;fill-opacity:1;stroke:none;stroke-width:1.36997" />
     <rect
-       y="587.11926"
-       x="563.72253"
-       height="15.000003"
-       width="1.0000042"
-       id="rect4119"
-       style="opacity:1;fill:#cacaca;fill-opacity:1;stroke:none" />
+       y="-572.72253"
+       x="592.91925"
+       height="15.977538"
+       width="2.2"
+       id="rect4119-9"
+       style="opacity:1;fill:#cacaca;fill-opacity:1;stroke:none;stroke-width:1.36901"
+       transform="rotate(90)" />
   </g>
 </svg>

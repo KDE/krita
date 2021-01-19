@@ -54,7 +54,8 @@ KisDlgGeneratorLayer::KisDlgGeneratorLayer(const QString & defaultName, KisViewM
 
     dlgWidget.filterGalleryToggle->setIcon(QPixmap(":/pics/sidebaricon.png"));
     dlgWidget.filterGalleryToggle->setChecked(true);
-    connect(dlgWidget.filterGalleryToggle, &QCheckBox::toggled, dlgWidget.wdgGenerator, &KisWdgGenerator::showFilterGallery);
+    connect(dlgWidget.filterGalleryToggle, SIGNAL(toggled(bool)), dlgWidget.wdgGenerator, SLOT(showFilterGallery(bool)));
+
     connect(dlgWidget.btnBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(dlgWidget.btnBox, SIGNAL(rejected()), this, SLOT(reject()));
     connect(this, SIGNAL(accepted()), this, SLOT(saveLayer()));
@@ -63,6 +64,7 @@ KisDlgGeneratorLayer::KisDlgGeneratorLayer(const QString & defaultName, KisViewM
     if (layer && !isEditing) {
         slotDelayedPreviewGenerator();
     }
+
     restoreGeometry(KisConfig(true).readEntry("generatordialog/geometry", QByteArray()));
 }
 
@@ -123,23 +125,22 @@ void KisDlgGeneratorLayer::slotDelayedPreviewGenerator()
     if (!m_stroke.isNull()) {
         layer->setFilterWithoutUpdate(configuration()->cloneWithResourcesSnapshot());
         layer->previewWithStroke(m_stroke);
-    }
-}
-
-void KisDlgGeneratorLayer::previewGenerator()
-{
-    if (!m_stroke.isNull()) {
-        m_compressor.start();
-    }
-    else {
+    } else {
         KIS_ASSERT_RECOVER_RETURN(layer);
         layer->setFilter(configuration()->cloneWithResourcesSnapshot());
     }
 }
 
+void KisDlgGeneratorLayer::previewGenerator()
+{
+    m_compressor.start();
+}
+
 void KisDlgGeneratorLayer::setConfiguration(const KisFilterConfigurationSP  config)
 {
     dlgWidget.wdgGenerator->setConfiguration(config);
+    // hack! forcibly re-render the layer
+    slotDelayedPreviewGenerator();
 }
 
 KisFilterConfigurationSP  KisDlgGeneratorLayer::configuration() const

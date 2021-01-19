@@ -35,6 +35,8 @@ KisAnimTimelineFrameDelegate::~KisAnimTimelineFrameDelegate()
 
 void KisAnimTimelineFrameDelegate::paintActiveFrameSelector(QPainter *painter, const QRect &rc, bool isCurrentFrame)
 {
+    painter->save();
+
     QColor lineColor = KisAnimTimelineColors::instance()->selectorColor();
     const int lineWidth = rc.width() > 20 ? 4 : 2;
 
@@ -64,10 +66,14 @@ void KisAnimTimelineFrameDelegate::paintActiveFrameSelector(QPainter *painter, c
         painter->setBrush(oldBrush);
         painter->setPen(oldPen);
     }
+
+    painter->restore();
 }
 
 void KisAnimTimelineFrameDelegate::paintSpecialKeyframeIndicator(QPainter *painter, const QModelIndex &index, const QRect &rc) const
 {
+    painter->save();
+
     bool doesFrameExist = index.data(KisAnimTimelineFramesModel::FrameExistsRole).toBool();   /// does normal keyframe exist
     bool isEditable = index.data(KisAnimTimelineFramesModel::FrameEditableRole).toBool();
     bool hasContent = index.data(KisAnimTimelineFramesModel::FrameHasContent).toBool();     /// find out if frame is empty
@@ -109,10 +115,14 @@ void KisAnimTimelineFrameDelegate::paintSpecialKeyframeIndicator(QPainter *paint
 
     painter->setBrush(oldBrush);
     painter->setPen(oldPen);
+
+    painter->restore();
 }
 
 void KisAnimTimelineFrameDelegate::drawBackground(QPainter *painter, const QModelIndex &index, const QRect &rc) const
 {
+    painter->save();
+
     /// is the current layer actively selected (this is not the same as visibility)
     bool hasActiveLayerRole = index.data(KisAnimTimelineFramesModel::ActiveLayerRole).toBool();
     bool doesFrameExist = index.data(KisAnimTimelineFramesModel::FrameExistsRole).toBool();   /// does keyframe exist
@@ -128,6 +138,9 @@ void KisAnimTimelineFrameDelegate::drawBackground(QPainter *painter, const QMode
     // pass for filling in the active row with slightly color difference
     if (hasActiveLayerRole) {
         color = KritaUtils::blendColors(baseColor, highlightColor, 0.8);
+        painter->fillRect(rc, color);
+    } else {
+        color = KritaUtils::blendColors(baseColor, highlightColor, 0.95);
         painter->fillRect(rc, color);
     }
 
@@ -190,6 +203,7 @@ void KisAnimTimelineFrameDelegate::drawBackground(QPainter *painter, const QMode
         painter->drawLine(QLine(lineStart, lineEnd));
     }
 
+    painter->restore();
 }
 
 void KisAnimTimelineFrameDelegate::drawFocus(QPainter *painter,
@@ -197,9 +211,12 @@ void KisAnimTimelineFrameDelegate::drawFocus(QPainter *painter,
                                            const QRect &rect) const
 {
     // copied from Qt 4.8!
-
     if ((option.state & QStyle::State_HasFocus) == 0 || !rect.isValid())
         return;
+
+    painter->save();
+
+
     QStyleOptionFocusRect o;
     o.QStyleOption::operator=(option);
     o.rect = rect;
@@ -212,6 +229,8 @@ void KisAnimTimelineFrameDelegate::drawFocus(QPainter *painter,
     const QWidget *widget = qobject_cast<QWidget*>(parent());
     QStyle *style = widget ? widget->style() : QApplication::style();
     style->drawPrimitive(QStyle::PE_FrameFocusRect, &o, painter, widget);
+
+    painter->restore();
 }
 
 void KisAnimTimelineFrameDelegate::drawCloneGraphics(QPainter *painter, const QRect &rect) const
@@ -244,17 +263,17 @@ void KisAnimTimelineFrameDelegate::paint(QPainter *painter,
     // creates a semi transparent orange rectangle in the frame that is actively selected on the active row
     if (option.showDecorationSelected &&
         (option.state & QStyle::State_Selected)) {
-        QPalette::ColorGroup cg = option.state & QStyle::State_Enabled
-            ? QPalette::Normal : QPalette::Disabled;
-        if (cg == QPalette::Normal && !(option.state & QStyle::State_Active))
-            cg = QPalette::Inactive;
+        painter->save();
 
-        QBrush brush = KisAnimTimelineColors::instance()->selectionColor();
+        const QVariant data = index.data(KisAnimTimelineFramesModel::FrameEditableRole);
+        bool isEditable = data.isValid() ? data.toBool() : true;
 
-        int oldOpacity = painter->opacity();
-        painter->setOpacity(0.5);
+        QColor highlightColor = KisAnimTimelineColors::instance()->selectionColor();
+        highlightColor.setAlpha(isEditable ? 128 : 64);
+        QBrush brush = highlightColor;
         painter->fillRect(option.rect, brush);
-        painter->setOpacity(oldOpacity);
+
+        painter->restore();
     }
 
     // not sure what this is drawing

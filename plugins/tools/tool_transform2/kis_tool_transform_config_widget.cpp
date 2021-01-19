@@ -128,20 +128,13 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
 
     m_scaleRatio = 1.0;
 
-    aXBox->setSuffix(QChar(Qt::Key_degree));
-    aYBox->setSuffix(QChar(Qt::Key_degree));
-    aZBox->setSuffix(QChar(Qt::Key_degree));
-    aXBox->setRange(0.0, 360.0, 2);
-    aYBox->setRange(0.0, 360.0, 2);
-    aZBox->setRange(0.0, 360.0, 2);
-    aXBox->setValue(0.0);
-    aYBox->setValue(0.0);
-    aZBox->setValue(0.0);
-    aXBox->setSingleStep(1.0);
-    aYBox->setSingleStep(1.0);
-    aZBox->setSingleStep(1.0);
 
-
+    aXBox->setIncreasingDirection(KisAngleGauge::IncreasingDirection_Clockwise);
+    aYBox->setIncreasingDirection(KisAngleGauge::IncreasingDirection_Clockwise);
+    aZBox->setIncreasingDirection(KisAngleGauge::IncreasingDirection_Clockwise);
+    aXBox->setFlipOptionsMode(KisAngleSelector::FlipOptionsMode_MenuButton);
+    aYBox->setFlipOptionsMode(KisAngleSelector::FlipOptionsMode_MenuButton);
+    aZBox->setFlipOptionsMode(KisAngleSelector::FlipOptionsMode_MenuButton);
 
 
     connect(m_rotationCenterButtons, SIGNAL(buttonPressed(int)), this, SLOT(slotRotationCenterChanged(int)));
@@ -154,9 +147,9 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     connect(shearYBox, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetShearY(qreal)));
     connect(translateXBox, SIGNAL(valueChanged(int)), this, SLOT(slotSetTranslateX(int)));
     connect(translateYBox, SIGNAL(valueChanged(int)), this, SLOT(slotSetTranslateY(int)));
-    connect(aXBox, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetAX(qreal)));
-    connect(aYBox, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetAY(qreal)));
-    connect(aZBox, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetAZ(qreal)));
+    connect(aXBox, SIGNAL(angleChanged(qreal)), this, SLOT(slotSetAX(qreal)));
+    connect(aYBox, SIGNAL(angleChanged(qreal)), this, SLOT(slotSetAY(qreal)));
+    connect(aZBox, SIGNAL(angleChanged(qreal)), this, SLOT(slotSetAZ(qreal)));
     connect(aspectButton, SIGNAL(keepAspectRatioChanged(bool)), this, SLOT(slotSetKeepAspectRatio(bool)));
     connect(flipXButton, SIGNAL(clicked(bool)), this, SLOT(slotFlipX()));
     connect(flipYButton, SIGNAL(clicked(bool)), this, SLOT(slotFlipY()));
@@ -542,9 +535,9 @@ void KisToolTransformConfigWidget::updateConfig(const ToolTransformArgs &config)
         translateXBox->setValue(anchorPointView.x());
         translateYBox->setValue(anchorPointView.y());
 
-        aXBox->setValue(normalizeAngleDegrees(kisRadiansToDegrees(config.aX())));
-        aYBox->setValue(normalizeAngleDegrees(kisRadiansToDegrees(config.aY())));
-        aZBox->setValue(normalizeAngleDegrees(kisRadiansToDegrees(config.aZ())));
+        aXBox->setAngle(normalizeAngleDegrees(kisRadiansToDegrees(config.aX())));
+        aYBox->setAngle(normalizeAngleDegrees(kisRadiansToDegrees(config.aY())));
+        aZBox->setAngle(normalizeAngleDegrees(kisRadiansToDegrees(config.aZ())));
         aspectButton->setKeepAspectRatio(config.keepAspectRatio());
         cmbFilter->setCurrent(config.filterId());
 

@@ -568,7 +568,7 @@ if (ANDROID)
     set (KF5_LIBRARIES              ${CMAKE_CURRENT_BINARY_DIR}/i/lib)
 endif()
 
-find_package(PNG REQUIRED)
+find_package(PNG REQUIRED "1.2.6")
 list (APPEND ANDROID_EXTRA_LIBS ${PNG_LIBRARY})
 
 if (APPLE)

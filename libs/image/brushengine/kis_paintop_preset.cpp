@@ -72,7 +72,6 @@ KisPaintOpPreset::KisPaintOpPreset(const KisPaintOpPreset &rhs)
     setPaintOp(rhs.paintOp());
     setName(rhs.name());
     setImage(rhs.image());
-    settings()->setUpdateProxy(rhs.updateProxy());
 }
 
 KoResourceSP KisPaintOpPreset::clone() const
@@ -116,7 +115,7 @@ void KisPaintOpPreset::setSettings(KisPaintOpSettingsSP settings)
     if (d->settings) {
         oldOptionsWidget = d->settings->optionsWidget();
         d->settings->setOptionsWidget(0);
-        d->settings->setUpdateProxy(updateProxy());
+        d->settings->setUpdateProxy(0);
         d->settings = 0;
     }
 

@@ -581,11 +581,6 @@ void KisPaintopBox::resourceSelected(KoResourceSP resource)
 
     m_presetsPopup->setCreatingBrushFromScratch(false); // show normal UI elements when we are not creating
 
-    //    qDebug() << ">>>>>>>>>>>>>>>" << resource
-    //             << (resource ? resource->name() : "")
-    //             << (resource ? QString("%1").arg(resource->valid()) : "")
-    //             << (resource ? QString("%1").arg(resource->filename()) : "");
-
     KisPaintOpPresetSP preset = resource.dynamicCast<KisPaintOpPreset>();
 
     if (preset && preset->valid() && preset != m_resourceProvider->currentPreset()) {
@@ -596,7 +591,7 @@ void KisPaintopBox::resourceSelected(KoResourceSP resource)
             KisPaintOpPresetResourceServer *rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
 
             if (!rserver->reloadResource(preset)) {
-                qWarning() << "failed to load the preset.";
+                qWarning() << "failed to reload the preset.";
             }
         }
 
@@ -1292,23 +1287,21 @@ void KisPaintopBox::slotReloadPreset()
     KisPaintOpPresetResourceServer *rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
     QSharedPointer<KisPaintOpPreset> preset = rserver->resourceByName(m_resourceProvider->currentPreset()->name());
 
-    if (preset) {
-        rserver->reloadResource(preset);
-    }
+    if (preset && rserver->reloadResource(preset)) {
+        if (m_resourceProvider->currentPreset() != preset) {
+            m_resourceProvider->setPaintOpPreset(preset);
+        } else {
+            /**
+             * HACK ALERT: here we emit a private signal from the resource manager to
+             * ensure that all the subscribers of resource-changed signal got the
+             * notification. That is especially important for
+             * KisPaintopTransformationConnector. See bug 392622.
+             */
 
-    if (m_resourceProvider->currentPreset() != preset) {
-        m_resourceProvider->setPaintOpPreset(preset);
-    } else {
-        /**
-         * HACK ALERT: here we emit a private signal from the resource manager to
-         * ensure that all the subscribers of resource-changed signal got the
-         * notification. That is especially important for
-         * KisPaintopTransformationConnector. See bug 392622.
-         */
-
-        emit m_resourceProvider->resourceManager()->canvasResourceChanged(
-                    KoCanvasResource::CurrentPaintOpPreset,
-                    QVariant::fromValue(preset));
+            emit m_resourceProvider->resourceManager()->canvasResourceChanged(
+                        KoCanvasResource::CurrentPaintOpPreset,
+                        QVariant::fromValue(preset));
+        }
     }
 }
 void KisPaintopBox::slotGuiChangedCurrentPreset() // Called only when UI is changed and not when preset is changed

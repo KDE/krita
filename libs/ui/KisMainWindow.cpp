@@ -441,10 +441,8 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     d->mdiArea->setTabPosition(QTabWidget::North);
     d->mdiArea->setTabsClosable(true);
 
-    // Tab close button override
-    // Windows just has a black X, and Ubuntu has a dark x that is hard to read
-    // just switch this icon out for all OSs so it is easier to see
-    d->mdiArea->setStyleSheet("QTabBar::close-button { image: url(:/pics/broken-preset.png) }");
+    themeChanged(); // updates icon styles
+
 
     setCentralWidget(d->widgetStack);
     d->widgetStack->setCurrentIndex(0);
@@ -815,6 +813,19 @@ void KisMainWindow::slotThemeChanged()
             }
         }
     }
+
+    // update MDI area theme
+    // Tab close button override
+    // just switch this icon out for all OSs so it is easier to see
+    QString themeName = d->themeManager->currentThemeName();
+    bool isDarkTheme = themeName.toLower().contains("dark");
+    if(isDarkTheme) {
+        d->mdiArea->setStyleSheet("QTabBar::close-button { image: url(:/pics/light_close-tab.png) }");
+    } else {
+        d->mdiArea->setStyleSheet("QTabBar::close-button { image: url(:/pics/dark_close-tab.png) }");
+    }
+
+
 
     emit themeChanged();
 }

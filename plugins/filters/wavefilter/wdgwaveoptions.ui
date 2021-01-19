@@ -152,7 +152,7 @@
         </property>
         <item>
          <property name="text">
-          <string>Sinusoidale</string>
+          <string>Sinusoidal</string>
          </property>
         </item>
         <item>
@@ -261,7 +261,7 @@
         </property>
         <item>
          <property name="text">
-          <string>Sinusoidale</string>
+          <string>Sinusoidal</string>
          </property>
         </item>
         <item>

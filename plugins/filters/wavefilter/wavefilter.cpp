@@ -138,29 +138,30 @@ void KisFilterWave::processImpl(KisPaintDeviceSP device,
     int verticalamplitude = (config && config->getProperty("verticalamplitude", value)) ? value.toInt() : 4;
     int verticalshape = (config && config->getProperty("verticalshape", value)) ? value.toInt() : 0;
 
-    KisWaveCurve* horizontalcurve;
-    if (horizontalshape == 1)
-        horizontalcurve = new KisTriangleWaveCurve(horizontalamplitude, horizontalwavelength, horizontalshift);
-    else
-        horizontalcurve = new KisSinusoidalWaveCurve(horizontalamplitude, horizontalwavelength, horizontalshift);
-
-    KisWaveCurve* verticalcurve;
+    KisWaveCurve* verticalWave;
     if (verticalshape == 1)
-        verticalcurve = new KisTriangleWaveCurve(verticalamplitude, verticalwavelength, verticalshift);
+        verticalWave = new KisTriangleWaveCurve(verticalamplitude, verticalwavelength, verticalshift);
     else
-        verticalcurve = new KisSinusoidalWaveCurve(verticalamplitude, verticalwavelength, verticalshift);
+        verticalWave = new KisSinusoidalWaveCurve(verticalamplitude, verticalwavelength, verticalshift);
+
+    KisWaveCurve* horizontalWave;
+    if (horizontalshape == 1)
+        horizontalWave = new KisTriangleWaveCurve(horizontalamplitude, horizontalwavelength, horizontalshift);
+    else
+        horizontalWave = new KisSinusoidalWaveCurve(horizontalamplitude, horizontalwavelength, horizontalshift);
     
-    KisSequentialIteratorProgress dstIt(device, applyRect, progressUpdater);
-    KisRandomSubAccessorSP srcRSA = device->createRandomSubAccessor();
-    while (dstIt.nextPixel()) {
-        double xv = horizontalcurve->valueAt(dstIt.y(), dstIt.x());
-        double yv = verticalcurve->valueAt(dstIt.x(), dstIt.y());
-        srcRSA->moveTo(QPointF(xv, yv));
-        srcRSA->sampledOldRawData(dstIt.rawData());
+    KisSequentialIteratorProgress destination(device, applyRect, progressUpdater);
+    KisRandomSubAccessorSP source = device->createRandomSubAccessor();
+
+    while (destination.nextPixel()) {
+        double xv = verticalWave->valueAt(destination.y(), destination.x());
+        double yv = horizontalWave->valueAt(destination.x(), destination.y());
+        source->moveTo(QPointF(xv, yv));
+        source->sampledOldRawData(destination.rawData());
     }
 
-    delete horizontalcurve;
-    delete verticalcurve;
+    delete verticalWave;
+    delete horizontalWave;
 }
 
 QRect KisFilterWave::neededRect(const QRect& rect, const KisFilterConfigurationSP config, int lod) const

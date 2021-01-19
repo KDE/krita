@@ -596,7 +596,8 @@ void KisAnimCurvesView::mouseMoveEvent(QMouseEvent *e)
             viewport()->update();
             return;
         } else if (m_d->isDraggingKeyframe) {
-            m_d->itemDelegate->setSelectedItemVisualOffset(m_d->dragOffset);
+            const bool axisSnap = (e->modifiers() & Qt::ShiftModifier);
+            m_d->itemDelegate->setSelectedItemVisualOffset(m_d->dragOffset, axisSnap);
             viewport()->update();
             return;
         } else if (selectionModel()->hasSelection()) {
@@ -617,9 +618,10 @@ void KisAnimCurvesView::mouseReleaseEvent(QMouseEvent *e)
         m_d->dragZooming = false;
 
         if (m_d->isDraggingKeyframe) {
-            QModelIndexList indices = selectedIndexes();
-            int timeOffset = qRound( qreal(m_d->dragOffset.x()) / m_d->horizontalHeader->defaultSectionSize() );
-            qreal valueOffset = m_d->verticalHeader->pixelsToValueOffset(m_d->dragOffset.y());
+            const QModelIndexList indices = selectedIndexes();
+            const QPointF offset = qAbs(m_d->dragOffset.y()) > qAbs(m_d->dragOffset.x()) ? QPointF(0.0f, m_d->dragOffset.y()) : QPointF(m_d->dragOffset.x(), 0.0f);
+            const int timeOffset = qRound( qreal(offset.x()) / m_d->horizontalHeader->defaultSectionSize() );
+            const qreal valueOffset = m_d->verticalHeader->pixelsToValueOffset(offset.y());
 
             KisAnimCurvesModel *curvesModel = dynamic_cast<KisAnimCurvesModel*>(model());
             curvesModel->adjustKeyframes(indices, timeOffset, valueOffset);

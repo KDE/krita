@@ -27,7 +27,7 @@ public:
     bool hasHandle(const QModelIndex index, int handle) const;
     QPointF leftHandle(const QModelIndex index, bool active) const;
     QPointF rightHandle(const QModelIndex index, bool active) const;
-    void setSelectedItemVisualOffset(QPointF offset);
+    void setSelectedItemVisualOffset(QPointF offset, bool axisSnap = false);
     void setHandleAdjustment(QPointF offset, int handle);
     QPointF unscaledTangent(QPointF handlePosition) const;
 

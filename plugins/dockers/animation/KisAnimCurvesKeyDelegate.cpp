@@ -150,8 +150,11 @@ QPointF KisAnimCurvesKeyDelegate::handlePosition(const QModelIndex index, bool a
     return handlePos;
 }
 
-void KisAnimCurvesKeyDelegate::setSelectedItemVisualOffset(QPointF offset)
+void KisAnimCurvesKeyDelegate::setSelectedItemVisualOffset(QPointF offset, bool axisSnap)
 {
+    if (axisSnap) {
+        offset = qAbs(offset.y()) >= qAbs(offset.x()) ? QPointF(0.0f, offset.y()) : QPointF(offset.x(), 0.0f);
+    }
     m_d->selectionOffset = offset;
 }
 

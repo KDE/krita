@@ -67,6 +67,7 @@ KisAnimTimelineDocker::KisAnimTimelineDocker(QWidget* parent) :
 
     {   // Drop Frames..
         btnDropFrames = new QToolButton(this);
+        btnDropFrames->setAutoRaise(true);
         widgetAreaLayout->addWidget(btnDropFrames);
 
         // Playback Speed..
@@ -89,12 +90,15 @@ KisAnimTimelineDocker::KisAnimTimelineDocker(QWidget* parent) :
         layout->setContentsMargins(0,0,0,0);
 
         btnAddKeyframe = new QToolButton(this);
+        btnAddKeyframe->setAutoRaise(true);
         layout->addWidget(btnAddKeyframe);
 
         btnDuplicateKeyframe = new QToolButton(this);
+        btnDuplicateKeyframe->setAutoRaise(true);
         layout->addWidget(btnDuplicateKeyframe);
 
         btnRemoveKeyframe = new QToolButton(this);
+        btnRemoveKeyframe->setAutoRaise(true);
         layout->addWidget(btnRemoveKeyframe);
 
         widgetAreaLayout->addWidget(widget);
@@ -112,11 +116,12 @@ KisAnimTimelineDocker::KisAnimTimelineDocker(QWidget* parent) :
         // Onion skins menu.
         btnOnionSkinsMenu = new QPushButton(KisIconUtils::loadIcon("onion_skin_options"), "", this);
         btnOnionSkinsMenu->setToolTip(i18n("Onion skins menu"));
+        btnOnionSkinsMenu->setFlat(true);
         layout->addWidget(btnOnionSkinsMenu);
 
         // Audio menu..
         btnAudioMenu = new QPushButton(KisIconUtils::loadIcon("audio-none"), "", this);
-        btnOnionSkinsMenu->setToolTip(i18n("Audio menu"));
+        btnAudioMenu->setToolTip(i18n("Audio menu"));
         btnAudioMenu->hide(); // (NOTE: Hidden for now while audio features develop.)
         layout->addWidget(btnAudioMenu);
 
@@ -124,6 +129,7 @@ KisAnimTimelineDocker::KisAnimTimelineDocker(QWidget* parent) :
             btnSettingsMenu = new QToolButton(this);
             btnSettingsMenu->setIcon(KisIconUtils::loadIcon("hamburger_menu_dots"));
             btnSettingsMenu->setToolTip(i18n("Animation settings menu"));
+            btnSettingsMenu->setAutoRaise(true);
 
             QWidget *settingsMenuWidget = new QWidget(this);
             QHBoxLayout *settingsMenuLayout = new QHBoxLayout(settingsMenuWidget);

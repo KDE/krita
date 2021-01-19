@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <author>
     SPDX-FileCopyrightText: none
@@ -18,7 +18,7 @@
    <string>Brush Editor</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item colspan="3" column="0" row="0">
+   <item row="0" column="0" colspan="3">
     <layout class="QHBoxLayout" name="brushEditorDashboard">
      <property name="spacing">
       <number>9</number>
@@ -368,7 +368,7 @@
      </item>
     </layout>
    </item>
-   <item column="0" row="1">
+   <item row="1" column="0">
     <widget class="QGroupBox" name="presetsContainer">
      <property name="title">
       <string/>
@@ -513,6 +513,9 @@
             <height>22</height>
            </size>
           </property>
+          <property name="autoRaise">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
         <item>
@@ -555,7 +558,7 @@
            <bool>false</bool>
           </property>
           <property name="flat">
-           <bool>false</bool>
+           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -577,7 +580,7 @@
      </layout>
     </widget>
    </item>
-   <item column="1" row="1">
+   <item row="1" column="1">
     <widget class="QGroupBox" name="brushEditorSettingsControls">
      <property name="title">
       <string/>
@@ -744,7 +747,7 @@
      </layout>
     </widget>
    </item>
-   <item column="2" row="1">
+   <item row="1" column="2">
     <widget class="QGroupBox" name="scratchpadControls">
      <property name="title">
       <string/>
@@ -860,6 +863,9 @@
           <property name="text">
            <string/>
           </property>
+          <property name="flat">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
         <item>
@@ -869,6 +875,9 @@
           </property>
           <property name="text">
            <string/>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -880,6 +889,9 @@
           <property name="text">
            <string/>
           </property>
+          <property name="flat">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
         <item>
@@ -890,6 +902,9 @@
           <property name="text">
            <string/>
           </property>
+          <property name="flat">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
         <item>
@@ -899,6 +914,9 @@
           </property>
           <property name="text">
            <string/>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
           </property>
          </widget>
         </item>

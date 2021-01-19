@@ -59,16 +59,21 @@ SnapshotDocker::SnapshotDocker()
     m_d->view->setModel(m_d->model.data());
     mainLayout->addWidget(m_d->view);
     QHBoxLayout *buttonsLayout = new QHBoxLayout(widget);
-    m_d->bnAdd->setIcon(KisIconUtils::loadIcon("addlayer"));
+    m_d->bnAdd->setIcon(KisIconUtils::loadIcon("list-add"));
     m_d->bnAdd->setToolTip(i18nc("@info:tooltip", "Create snapshot"));
+    m_d->bnAdd->setAutoRaise(true);
+
     connect(m_d->bnAdd, &QToolButton::clicked, this, &SnapshotDocker::slotBnAddClicked);
     buttonsLayout->addWidget(m_d->bnAdd);
     m_d->bnSwitchTo->setIcon(KisIconUtils::loadIcon("snapshot-load"));
     m_d->bnSwitchTo->setToolTip(i18nc("@info:tooltip", "Switch to selected snapshot"));
+    m_d->bnSwitchTo->setAutoRaise(true);
     connect(m_d->bnSwitchTo, &QToolButton::clicked, this, &SnapshotDocker::slotBnSwitchToClicked);
+
     buttonsLayout->addWidget(m_d->bnSwitchTo);
     m_d->bnRemove->setIcon(KisIconUtils::loadIcon("deletelayer"));
     m_d->bnRemove->setToolTip(i18nc("@info:tooltip", "Remove selected snapshot"));
+    m_d->bnRemove->setAutoRaise(true);
     connect(m_d->bnRemove, &QToolButton::clicked, this, &SnapshotDocker::slotBnRemoveClicked);
     buttonsLayout->addWidget(m_d->bnRemove);
     mainLayout->addLayout(buttonsLayout);

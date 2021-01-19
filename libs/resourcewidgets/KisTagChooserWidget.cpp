@@ -56,6 +56,7 @@ KisTagChooserWidget::KisTagChooserWidget(KisTagModel *model, QWidget* parent)
     comboLayout->addWidget(d->comboBox, 0, 0);
 
     d->tagToolButton = new KisTagToolButton(this);
+    d->tagToolButton->setToolTip(i18n("Tag options"));
     comboLayout->addWidget(d->tagToolButton, 0, 1);
 
     comboLayout->setSpacing(0);

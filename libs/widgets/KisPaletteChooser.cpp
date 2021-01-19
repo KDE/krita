@@ -47,9 +47,13 @@ KisPaletteChooser::KisPaletteChooser(QWidget *parent)
     m_ui->bnExport->setDefaultAction(m_d->actExport.data());
 
     m_ui->bnAdd->setEnabled(false);
+    m_ui->bnAdd->setAutoRaise(true);
     m_ui->bnRemove->setEnabled(false);
+    m_ui->bnRemove->setAutoRaise(true);
     m_ui->bnImport->setEnabled(false);
+    m_ui->bnImport->setAutoRaise(true);
     m_ui->bnExport->setEnabled(false);
+    m_ui->bnExport->setAutoRaise(true);
 
     connect(m_d->actAdd.data(), SIGNAL(triggered()), SLOT(slotAdd()));
     connect(m_d->actRemove.data(), SIGNAL(triggered()), SLOT(slotRemove()));

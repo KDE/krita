@@ -90,27 +90,34 @@ KisAnimCurvesDockerTitlebar::KisAnimCurvesDockerTitlebar(QWidget* parent) :
 
         // Add/Remove Key..
         btnAddKey = new QToolButton(this);
+        btnAddKey->setAutoRaise(true);
         layout->addWidget(btnAddKey);
 
         btnRemoveKey = new QToolButton(this);
+        btnRemoveKey->setAutoRaise(true);
         layout->addWidget(btnRemoveKey);
 
         layout->addSpacing(SPACING_UNIT);
 
         // Interpolation Modes..
         btnInterpConstant = new QToolButton(this);
+        btnInterpConstant->setAutoRaise(true);
         layout->addWidget(btnInterpConstant);
         btnInterpLinear = new QToolButton(this);
+        btnInterpLinear->setAutoRaise(true);
         layout->addWidget(btnInterpLinear);
         btnInterpBezier = new QToolButton(this);
+        btnInterpBezier->setAutoRaise(true);
         layout->addWidget(btnInterpBezier);
 
         layout->addSpacing(SPACING_UNIT);
 
         // Tangent Modes..
         btnTangentSharp = new QToolButton(this);
+        btnTangentSharp->setAutoRaise(true);
         layout->addWidget(btnTangentSharp);
         btnTangentSmooth = new QToolButton(this);
+        btnTangentSmooth->setAutoRaise(true);
         layout->addWidget(btnTangentSmooth);
 
         widgetAreaLayout->addWidget(widget);
@@ -127,9 +134,11 @@ KisAnimCurvesDockerTitlebar::KisAnimCurvesDockerTitlebar(QWidget* parent) :
 
     // Zoom buttons..
     btnZoomFitRange = new QToolButton(this);
+    btnZoomFitRange->setAutoRaise(true);
     widgetAreaLayout->addWidget(btnZoomFitRange);
 
     btnZoomFitCurve = new QToolButton(this);
+    btnZoomFitCurve->setAutoRaise(true);
     widgetAreaLayout->addWidget(btnZoomFitCurve);
 
     btnZoomHori = new KisZoomButton(this);
@@ -156,11 +165,13 @@ KisAnimCurvesDockerTitlebar::KisAnimCurvesDockerTitlebar(QWidget* parent) :
         // Onion skins menu.
         btnOnionSkinsMenu = new QPushButton(KisIconUtils::loadIcon("onion_skin_options"), "", this);
         btnOnionSkinsMenu->setToolTip(i18n("Onion skins menu"));
+        btnOnionSkinsMenu->setFlat(true);
         layout->addWidget(btnOnionSkinsMenu);
 
         // Audio menu..
         btnAudioMenu = new QPushButton(KisIconUtils::loadIcon("audio-none"), "", this);
-        btnOnionSkinsMenu->setToolTip(i18n("Audio menu"));
+        btnAudioMenu->setToolTip(i18n("Audio menu"));
+        btnAudioMenu->setFlat(true);
         btnAudioMenu->hide(); // (NOTE: Hidden for now while audio features develop.)
         layout->addWidget(btnAudioMenu);
 
@@ -168,6 +179,7 @@ KisAnimCurvesDockerTitlebar::KisAnimCurvesDockerTitlebar(QWidget* parent) :
             btnSettingsMenu = new QToolButton(this);
             btnSettingsMenu->setIcon(KisIconUtils::loadIcon("hamburger_menu_dots"));
             btnSettingsMenu->setToolTip(i18n("Animation settings menu"));
+            btnSettingsMenu->setAutoRaise(true);
 
             QWidget *settingsMenuWidget = new QWidget(this);
             QHBoxLayout *settingsMenuLayout = new QHBoxLayout(settingsMenuWidget);

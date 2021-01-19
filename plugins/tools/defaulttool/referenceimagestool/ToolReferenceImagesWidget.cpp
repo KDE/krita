@@ -58,7 +58,7 @@ ToolReferenceImagesWidget::ToolReferenceImagesWidget(ToolReferenceImages *tool, 
     );
 
     d->ui->bnAddReferenceImage->setToolTip(i18n("Add Reference Image"));
-    d->ui->bnAddReferenceImage->setIcon(KisIconUtils::loadIcon("addlayer"));
+    d->ui->bnAddReferenceImage->setIcon(KisIconUtils::loadIcon("list-add"));
 
 
     d->ui->bnDelete->setToolTip(i18n("Delete all Reference Images"));

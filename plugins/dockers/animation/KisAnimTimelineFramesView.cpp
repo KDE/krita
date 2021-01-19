@@ -190,7 +190,7 @@ KisAnimTimelineFramesView::KisAnimTimelineFramesView(QWidget *parent)
 
     m_d->addLayersButton = new QToolButton(this);
     m_d->addLayersButton->setAutoRaise(true);
-    m_d->addLayersButton->setIcon(KisIconUtils::loadIcon("addlayer"));
+    m_d->addLayersButton->setIcon(KisIconUtils::loadIcon("list-add"));
     m_d->addLayersButton->setIconSize(QSize(20, 20));
     m_d->addLayersButton->setPopupMode(QToolButton::InstantPopup);
     m_d->addLayersButton->setMenu(m_d->layerEditingMenu);
@@ -453,7 +453,7 @@ void KisAnimTimelineFramesView::slotCanvasUpdate(KoCanvasBase *canvas)
 
 void KisAnimTimelineFramesView::slotUpdateIcons()
 {
-    m_d->addLayersButton->setIcon(KisIconUtils::loadIcon("addlayer"));
+    m_d->addLayersButton->setIcon(KisIconUtils::loadIcon("list-add"));
     m_d->audioOptionsButton->setIcon(KisIconUtils::loadIcon("audio-none"));
     m_d->zoomDragButton->setIcon(KisIconUtils::loadIcon("zoom-horizontal"));
 }

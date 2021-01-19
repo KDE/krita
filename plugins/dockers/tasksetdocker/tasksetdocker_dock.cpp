@@ -80,11 +80,17 @@ TasksetDockerDock::TasksetDockerDock( ) : QDockWidget(i18n("Task Sets")), m_canv
     tasksetView->setItemDelegate(new KisTasksetDelegate(this));
     recordButton->setIcon(KisIconUtils::loadIcon("media-record"));
     recordButton->setCheckable(true);
+    recordButton->setFlat(true);
+
     clearButton->setIcon(KisIconUtils::loadIcon("edit-delete"));
+    clearButton->setFlat(true);
+
     saveButton->setIcon(KisIconUtils::loadIcon("document-save"));
     saveButton->setEnabled(false);
+    saveButton->setFlat(true);
 
     chooserButton->setIcon(KisIconUtils::loadIcon("edit-copy"));
+    chooserButton->setFlat(true);
 
     m_rserver = new KoResourceServer<TasksetResource>(ResourceType::TaskSets);
     KisResourceLoaderRegistry::instance()->registerLoader(new KisResourceLoader<TasksetResource>(ResourceType::TaskSets, ResourceType::TaskSets, i18n("Task sets"), QStringList() << "application/x-krita-taskset"));

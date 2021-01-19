@@ -80,6 +80,7 @@ KisPaintOpPresetsChooserPopup::KisPaintOpPresetsChooserPopup(QWidget * parent)
     m_d->uiWdgPaintOpPresets.wdgPresetChooser->itemChooser()->setViewModeButtonVisible(true);
     m_d->viewModeButton = m_d->uiWdgPaintOpPresets.wdgPresetChooser->itemChooser()->viewModeButton();
     m_d->viewModeButton->setMenu(menu);
+    m_d->viewModeButton->setAutoRaise(true);
     m_d->viewModeButton->setIconSize(QSize(10,10));
 
 

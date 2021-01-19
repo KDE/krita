@@ -29,6 +29,7 @@ HistoryDock::HistoryDock()
     hl->addSpacerItem(new QSpacerItem(10, 1,  QSizePolicy::Expanding, QSizePolicy::Fixed));
     m_bnConfigure = new QToolButton(page);
     m_bnConfigure->setIcon(KisIconUtils::loadIcon("configure"));
+    m_bnConfigure->setAutoRaise(true);
     connect(m_bnConfigure, SIGNAL(clicked(bool)), SLOT(configure()));
     hl->addWidget(m_bnConfigure);
     vl->addLayout(hl);

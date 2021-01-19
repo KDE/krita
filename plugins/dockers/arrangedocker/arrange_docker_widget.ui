@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <author>
     SPDX-FileCopyrightText: none
@@ -65,8 +65,8 @@
        <number>0</number>
       </property>
       <item>
-       <layout class="QGridLayout" columnstretch="0,0,0,0,0,0,0" name="gridLayout">
-        <item colspan="7" column="0" row="0">
+       <layout class="QGridLayout" name="gridLayout" columnstretch="0,0,0,0,0,0,0">
+        <item row="0" column="0" colspan="7">
          <widget class="QLabel" name="label_3">
           <property name="text">
            <string>Align</string>
@@ -76,7 +76,7 @@
           </property>
          </widget>
         </item>
-        <item column="5" row="11">
+        <item row="11" column="5">
          <widget class="QToolButton" name="group">
           <property name="focusPolicy">
            <enum>Qt::NoFocus</enum>
@@ -90,9 +90,12 @@
             <height>22</height>
            </size>
           </property>
+          <property name="autoRaise">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
-        <item column="2" row="5">
+        <item row="5" column="2">
          <widget class="QToolButton" name="hDistributeRight">
           <property name="focusPolicy">
            <enum>Qt::NoFocus</enum>
@@ -106,9 +109,12 @@
             <height>22</height>
            </size>
           </property>
+          <property name="autoRaise">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
-        <item column="0" row="5">
+        <item row="5" column="0">
          <widget class="QToolButton" name="hDistributeLeft">
           <property name="focusPolicy">
            <enum>Qt::NoFocus</enum>
@@ -122,9 +128,12 @@
             <height>22</height>
            </size>
           </property>
+          <property name="autoRaise">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
-        <item column="4" row="5">
+        <item row="5" column="4">
          <widget class="QToolButton" name="vDistributeTop">
           <property name="focusPolicy">
            <enum>Qt::NoFocus</enum>
@@ -138,9 +147,12 @@
             <height>22</height>
            </size>
           </property>
+          <property name="autoRaise">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
-        <item column="1" row="5">
+        <item row="5" column="1">
          <widget class="QToolButton" name="hDistributeCenter">
           <property name="focusPolicy">
            <enum>Qt::NoFocus</enum>
@@ -154,9 +166,12 @@
             <height>22</height>
            </size>
           </property>
+          <property name="autoRaise">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
-        <item colspan="4" column="0" row="10">
+        <item row="10" column="0" colspan="4">
          <widget class="QLabel" name="label_5">
           <property name="text">
            <string>Order</string>
@@ -166,7 +181,7 @@
           </property>
          </widget>
         </item>
-        <item column="6" row="5">
+        <item row="5" column="6">
          <widget class="QToolButton" name="vDistributeBottom">
           <property name="focusPolicy">
            <enum>Qt::NoFocus</enum>
@@ -180,9 +195,12 @@
             <height>22</height>
            </size>
           </property>
+          <property name="autoRaise">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
-        <item column="1" row="8">
+        <item row="8" column="1">
          <widget class="QToolButton" name="vDistributeGaps">
           <property name="focusPolicy">
            <enum>Qt::NoFocus</enum>
@@ -196,9 +214,12 @@
             <height>22</height>
            </size>
           </property>
+          <property name="autoRaise">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
-        <item column="0" row="8">
+        <item row="8" column="0">
          <widget class="QToolButton" name="hDistributeGaps">
           <property name="focusPolicy">
            <enum>Qt::NoFocus</enum>
@@ -212,9 +233,12 @@
             <height>22</height>
            </size>
           </property>
+          <property name="autoRaise">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
-        <item colspan="7" column="0" row="7">
+        <item row="7" column="0" colspan="7">
          <widget class="QLabel" name="label_4">
           <property name="text">
            <string>Spacing</string>
@@ -224,7 +248,7 @@
           </property>
          </widget>
         </item>
-        <item colspan="2" column="5" row="10">
+        <item row="10" column="5" colspan="2">
          <widget class="QLabel" name="label_6">
           <property name="text">
            <string>Group</string>
@@ -234,7 +258,7 @@
           </property>
          </widget>
         </item>
-        <item column="2" row="1">
+        <item row="1" column="2">
          <widget class="QToolButton" name="rightAlign">
           <property name="focusPolicy">
            <enum>Qt::NoFocus</enum>
@@ -248,9 +272,12 @@
             <height>22</height>
            </size>
           </property>
+          <property name="autoRaise">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
-        <item column="1" row="11">
+        <item row="11" column="1">
          <widget class="QToolButton" name="raiseLevel">
           <property name="focusPolicy">
            <enum>Qt::NoFocus</enum>
@@ -264,9 +291,12 @@
             <height>22</height>
            </size>
           </property>
+          <property name="autoRaise">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
-        <item column="6" row="1">
+        <item row="1" column="6">
          <widget class="QToolButton" name="bottomAlign">
           <property name="focusPolicy">
            <enum>Qt::NoFocus</enum>
@@ -280,9 +310,12 @@
             <height>22</height>
            </size>
           </property>
+          <property name="autoRaise">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
-        <item column="5" row="5">
+        <item row="5" column="5">
          <widget class="QToolButton" name="vDistributeCenter">
           <property name="focusPolicy">
            <enum>Qt::NoFocus</enum>
@@ -296,9 +329,12 @@
             <height>22</height>
            </size>
           </property>
+          <property name="autoRaise">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
-        <item column="5" row="1">
+        <item row="1" column="5">
          <widget class="QToolButton" name="vCenterAlign">
           <property name="focusPolicy">
            <enum>Qt::NoFocus</enum>
@@ -312,9 +348,12 @@
             <height>22</height>
            </size>
           </property>
+          <property name="autoRaise">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
-        <item column="4" row="1">
+        <item row="1" column="4">
          <widget class="QToolButton" name="topAlign">
           <property name="focusPolicy">
            <enum>Qt::NoFocus</enum>
@@ -328,9 +367,12 @@
             <height>22</height>
            </size>
           </property>
+          <property name="autoRaise">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
-        <item column="3" row="11">
+        <item row="11" column="3">
          <widget class="QToolButton" name="sendBack">
           <property name="focusPolicy">
            <enum>Qt::NoFocus</enum>
@@ -344,9 +386,12 @@
             <height>22</height>
            </size>
           </property>
+          <property name="autoRaise">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
-        <item column="2" row="11">
+        <item row="11" column="2">
          <widget class="QToolButton" name="lowerLevel">
           <property name="focusPolicy">
            <enum>Qt::NoFocus</enum>
@@ -360,9 +405,12 @@
             <height>22</height>
            </size>
           </property>
+          <property name="autoRaise">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
-        <item column="0" row="1">
+        <item row="1" column="0">
          <widget class="QToolButton" name="leftAlign">
           <property name="focusPolicy">
            <enum>Qt::NoFocus</enum>
@@ -376,9 +424,12 @@
             <height>22</height>
            </size>
           </property>
+          <property name="autoRaise">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
-        <item column="0" row="11">
+        <item row="11" column="0">
          <widget class="QToolButton" name="bringToFront">
           <property name="focusPolicy">
            <enum>Qt::NoFocus</enum>
@@ -392,9 +443,12 @@
             <height>22</height>
            </size>
           </property>
+          <property name="autoRaise">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
-        <item column="1" row="1">
+        <item row="1" column="1">
          <widget class="QToolButton" name="hCenterAlign">
           <property name="focusPolicy">
            <enum>Qt::NoFocus</enum>
@@ -408,9 +462,12 @@
             <height>22</height>
            </size>
           </property>
+          <property name="autoRaise">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
-        <item column="6" row="11">
+        <item row="11" column="6">
          <widget class="QToolButton" name="ungroup">
           <property name="focusPolicy">
            <enum>Qt::NoFocus</enum>
@@ -424,9 +481,12 @@
             <height>22</height>
            </size>
           </property>
+          <property name="autoRaise">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
-        <item colspan="7" column="0" row="3">
+        <item row="3" column="0" colspan="7">
          <widget class="QLabel" name="label_2">
           <property name="text">
            <string>Distribute</string>
@@ -436,7 +496,7 @@
           </property>
          </widget>
         </item>
-        <item colspan="7" column="0" row="9">
+        <item row="9" column="0" colspan="7">
          <widget class="Line" name="line_3">
           <property name="minimumSize">
            <size>
@@ -449,7 +509,7 @@
           </property>
          </widget>
         </item>
-        <item colspan="7" column="0" row="6">
+        <item row="6" column="0" colspan="7">
          <widget class="Line" name="line_2">
           <property name="minimumSize">
            <size>
@@ -462,7 +522,7 @@
           </property>
          </widget>
         </item>
-        <item colspan="7" column="0" row="2">
+        <item row="2" column="0" colspan="7">
          <widget class="Line" name="line">
           <property name="minimumSize">
            <size>

@@ -255,6 +255,7 @@ LayerBox::LayerBox()
 
     const QIcon filterIcon = KisIconUtils::loadIcon("view-filter");
     m_wdgLayerBox->bnLayerFilters->setIcon(filterIcon);
+    m_wdgLayerBox->bnLayerFilters->setAutoRaise(true);
     QPixmap filterEnabledPixmap = filterIcon.pixmap(64,64);
     const QBitmap filterEnabledBitmask = filterEnabledPixmap.mask();
     filterEnabledPixmap.fill(palette().color(QPalette::Highlight));
@@ -293,6 +294,7 @@ LayerBox::LayerBox()
     m_wdgLayerBox->configureLayerDockerToolbar->setIcon(KisIconUtils::loadIcon("hamburger_menu_dots"));
     m_wdgLayerBox->configureLayerDockerToolbar->setIconSize(QSize(15, 15));
     m_wdgLayerBox->configureLayerDockerToolbar->setPopupMode(QToolButton::InstantPopup);
+    m_wdgLayerBox->configureLayerDockerToolbar->setAutoRaise(true);
 
 
     // add horizontal slider
@@ -1146,7 +1148,7 @@ void LayerBox::slotForgetAboutSavedNodeBeforeEditSelectionMode()
 }
 
 void LayerBox::slotUpdateIcons() {
-    m_wdgLayerBox->bnAdd->setIcon(KisIconUtils::loadIcon("addlayer"));
+    m_wdgLayerBox->bnAdd->setIcon(KisIconUtils::loadIcon("list-add"));
     m_wdgLayerBox->bnRaise->setIcon(KisIconUtils::loadIcon("arrowupblr"));
     m_wdgLayerBox->bnDelete->setIcon(KisIconUtils::loadIcon("deletelayer"));
     m_wdgLayerBox->bnLower->setIcon(KisIconUtils::loadIcon("arrowdown"));

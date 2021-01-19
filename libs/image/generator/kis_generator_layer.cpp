@@ -89,7 +89,7 @@ void KisGeneratorLayer::setFilterWithoutUpdate(KisFilterConfigurationSP filterCo
     if (filter().isNull() || !filter()->compareTo(filterConfig.constData())) {
         KisSelectionBasedLayer::setFilter(filterConfig);
         {
-            QMutexLocker(&m_d->mutex);
+            QMutexLocker locker(&m_d->mutex);
             m_d->preparedRect = QRect();
         }
     }
@@ -209,10 +209,9 @@ KisBaseNode::PropertyList KisGeneratorLayer::sectionModelProperties() const
 
 void KisGeneratorLayer::setX(qint32 x)
 {
-
     KisSelectionBasedLayer::setX(x);
     {
-        QMutexLocker(&m_d->mutex);
+        QMutexLocker locker(&m_d->mutex);
         m_d->preparedRect = QRect();
     }
     m_d->updateSignalCompressor.start();
@@ -222,7 +221,7 @@ void KisGeneratorLayer::setY(qint32 y)
 {
     KisSelectionBasedLayer::setY(y);
     {
-        QMutexLocker(&m_d->mutex);
+        QMutexLocker locker(&m_d->mutex);
         m_d->preparedRect = QRect();
     }
     m_d->updateSignalCompressor.start();
@@ -253,7 +252,7 @@ void KisGeneratorLayer::resetCacheWithoutUpdate()
 {
     KisSelectionBasedLayer::resetCache();
     {
-        QMutexLocker(&m_d->mutex);
+        QMutexLocker locker(&m_d->mutex);
         m_d->preparedRect = QRect();
     }
 }

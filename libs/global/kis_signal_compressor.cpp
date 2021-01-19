@@ -51,7 +51,8 @@ KisSignalCompressor::KisSignalCompressor(int delay, Mode mode, SlowHandlerMode s
     : QObject(parent),
       m_timer(new QTimer(this)),
       m_mode(mode),
-      m_slowHandlerMode(slowHandlerMode)
+      m_slowHandlerMode(slowHandlerMode),
+      m_timeout(delay)
 {
     m_timer->setSingleShot(false);
     m_timer->setInterval(delay);

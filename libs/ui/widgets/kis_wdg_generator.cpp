@@ -174,3 +174,8 @@ void KisWdgGenerator::slotGeneratorActivated(int row)
     d->widgetLayout->addWidget(d->centralWidget, 0 , 0);
     d->uiWdgGenerators.centralWidgetHolder->setMinimumSize(d->centralWidget->minimumSize());
 }
+
+void KisWdgGenerator::showFilterGallery(bool visible)
+{
+    d->uiWdgGenerators.lstGenerators->setVisible(visible);
+}

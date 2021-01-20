@@ -586,7 +586,7 @@ bool KisResourceModel::filterAcceptsRow(int source_row, const QModelIndex &sourc
 {
     QModelIndex idx = sourceModel()->index(source_row, 0, source_parent);
     if (idx.isValid()) {
-        int id = idx.data(Qt::DisplayRole + KisAbstractResourceModel::Id).toInt();
+        int id = idx.data(Qt::UserRole + KisAbstractResourceModel::Id).toInt();
 
         if (d->showOnlyUntaggedResources) {
 

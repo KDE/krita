@@ -336,7 +336,7 @@ bool KisResourceLocator::updateResource(const QString &resourceType, const KoRes
     if (!storage->supportsVersioning()) return false;
 
     resource->updateThumbnail();
-    int version = resource->version();
+    resource->setVersion(resource->version() + 1);
 
     // This increments the version in the resource
     if (!storage->addResource(resource)) {
@@ -348,9 +348,6 @@ bool KisResourceLocator::updateResource(const QString &resourceType, const KoRes
     if (storage->type() == KisResourceStorage::StorageType::Memory) {
         return true;
     }
-
-    // It's the storages that keep track of the version
-    Q_ASSERT(resource->version() == version + 1);
 
     // The version needs already to have been incremented
     if (!KisResourceCacheDb::addResourceVersion(resource->resourceId(), QDateTime::currentDateTime(), storage, resource)) {

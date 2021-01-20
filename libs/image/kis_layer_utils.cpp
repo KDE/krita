@@ -43,6 +43,9 @@
 #include <KisCroppedOriginalLayerInterface.h>
 #include "krita_utils.h"
 #include "kis_image_signal_router.h"
+#include "kis_sequential_iterator.h"
+#include "kis_transparency_mask.h"
+#include "kis_paint_device_frames_interface.h"
 
 
 namespace KisLayerUtils {
@@ -85,6 +88,38 @@ namespace KisLayerUtils {
         KisLayerSP dstLayer() {
             return qobject_cast<KisLayer*>(dstNode.data());
         }
+    };
+
+    struct SplitAlphaToMaskInfo {
+        SplitAlphaToMaskInfo(KisImageSP _image, KisNodeSP _node, const QString& maskName)
+            : image(_image)
+            , node(_node)
+            , storage(new SwitchFrameCommand::SharedStorage())
+        {
+            frames = fetchLayerFramesRecursive(_node);
+            mask = new KisTransparencyMask(image, maskName);
+        }
+
+        KisImageWSP image;
+        KisNodeSP node;
+        SwitchFrameCommand::SharedStorageSP storage;
+        QSet<int> frames;
+
+        KisPaintDeviceSP getMaskDevice() {
+            return mask->paintDevice();
+        }
+
+        KisMaskSP getMask() {
+            return mask;
+        }
+
+        KisLayerSP getLayer() {
+            return qobject_cast<KisLayer*>(node.data());
+        }
+
+    private:
+        KisTransparencyMaskSP mask;
+
     };
 
     struct MergeDownInfo : public MergeDownInfoBase {
@@ -147,6 +182,7 @@ namespace KisLayerUtils {
     typedef QSharedPointer<MergeDownInfoBase> MergeDownInfoBaseSP;
     typedef QSharedPointer<MergeDownInfo> MergeDownInfoSP;
     typedef QSharedPointer<MergeMultipleInfo> MergeMultipleInfoSP;
+    typedef QSharedPointer<SplitAlphaToMaskInfo> SplitAlphaToMaskInfoSP;
 
     struct FillSelectionMasks : public KUndo2Command {
         FillSelectionMasks(MergeDownInfoBaseSP info) : m_info(info) {}
@@ -514,6 +550,76 @@ namespace KisLayerUtils {
         const KisMetaData::MergeStrategy *m_strategy;
     };
 
+    struct InitSplitAlphaSelectionMask : public KisCommandUtils::AggregateCommand  {
+        InitSplitAlphaSelectionMask(SplitAlphaToMaskInfoSP info)
+            : m_info(info) {}
+
+        void populateChildCommands() override {
+            m_info->getMask()->initSelection(m_info->getLayer());
+        }
+
+    private:
+        SplitAlphaToMaskInfoSP m_info;
+    };
+
+    struct SplitAlphaCommand : public KUndo2Command  {
+        SplitAlphaCommand(SplitAlphaToMaskInfoSP info)
+            : m_info(info) {
+            m_cached = new KisPaintDevice(*m_info->node->paintDevice(), KritaUtils::CopyAllFrames);
+        }
+
+        void redo() override {
+            KisPaintDeviceSP srcDevice = m_info->node->paintDevice();
+            const KoColorSpace *srcCS = srcDevice->colorSpace();
+            const QRect processRect =
+                    srcDevice->exactBounds() |
+                    srcDevice->defaultBounds()->bounds();
+
+            KisSequentialIterator srcIt(srcDevice, processRect);
+            KisSequentialIterator dstIt(m_info->getMaskDevice(), processRect);
+
+            while (srcIt.nextPixel() && dstIt.nextPixel()) {
+                quint8 *srcPtr = srcIt.rawData();
+                quint8 *alpha8Ptr = dstIt.rawData();
+
+                *alpha8Ptr = srcCS->opacityU8(srcPtr);
+                srcCS->setOpacity(srcPtr, OPACITY_OPAQUE_U8, 1);
+            }
+        }
+
+        void undo() override {
+            KisPaintDeviceSP srcDevice = m_info->node->paintDevice();
+
+            if (srcDevice->framesInterface()) { //Swap contents of all frames to reflect the pre-operation state.
+                KisPaintDeviceSP tempPD = new KisPaintDevice(*m_cached, KritaUtils::CopySnapshot);
+                Q_FOREACH(const int& frame, srcDevice->framesInterface()->frames() ) {
+                    if (m_cached->framesInterface()->frames().contains(frame)) {
+                        m_cached->framesInterface()->writeFrameToDevice(frame, tempPD);
+                        srcDevice->framesInterface()->uploadFrame(frame, tempPD);
+                    }
+                }
+            } else {
+                const QRect processRect =
+                        srcDevice->exactBounds() |
+                        srcDevice->defaultBounds()->bounds();
+
+                const KoColorSpace *srcCS = srcDevice->colorSpace();
+                KisSequentialIterator srcIt(m_cached, processRect);
+                KisSequentialIterator dstIt(srcDevice, processRect);
+
+                while (srcIt.nextPixel() && dstIt.nextPixel()) {
+                    quint8 *srcPtr = srcIt.rawData();
+                    quint8 *dstPtr = dstIt.rawData();
+                    srcCS->setOpacity(dstPtr, srcCS->opacityU8(srcPtr), 1);
+                }
+            }
+        }
+
+    private:
+        SplitAlphaToMaskInfoSP m_info;
+        KisPaintDeviceSP m_cached;
+    };
+
     KeepNodesSelectedCommand::KeepNodesSelectedCommand(const KisNodeList &selectedBefore,
                                                        const KisNodeList &selectedAfter,
                                                        KisNodeSP activeBefore,
@@ -674,9 +780,41 @@ namespace KisLayerUtils {
             addCommand(cmd);
         }
 
-    private:
         MergeDownInfoBaseSP m_info;
         KisNodeSP m_putAfter;
+    };
+
+    struct SimpleAddNode : public KisCommandUtils::AggregateCommand {
+        SimpleAddNode(KisImageSP image, KisNodeSP toAdd, KisNodeSP parent = 0, KisNodeSP putAfter = 0)
+            : m_image(image)
+            , m_toAdd(toAdd)
+            , m_parent(parent)
+            , m_putAfter(putAfter)
+        {
+            if (!m_parent) {
+                m_parent = m_image->root();
+            }
+        }
+
+
+        void populateChildCommands() override {
+            addCommand(new KisImageLayerAddCommand(m_image,
+                                                       m_toAdd,
+                                                       m_parent,
+                                                       m_putAfter,
+                                                       true, false));
+        }
+
+    private:
+        virtual void addCommandImpl(KUndo2Command *cmd) {
+            addCommand(cmd);
+        }
+
+        KisImageWSP m_image;
+        KisNodeSP m_toAdd;
+        KisNodeSP m_parent;
+        KisNodeSP m_putAfter;
+
     };
 
 
@@ -896,20 +1034,24 @@ namespace KisLayerUtils {
     }
 
     struct AddNewFrame : public KisCommandUtils::AggregateCommand {
-        AddNewFrame(MergeDownInfoBaseSP info, int frame) : m_info(info), m_frame(frame) {}
+        AddNewFrame(KisNodeSP node, int frame) : m_node(node), m_frame(frame) {}
+        AddNewFrame(MergeDownInfoBaseSP info, int frame) : m_frame(frame), m_mergeInfo(info) {}
 
         void populateChildCommands() override {
             KUndo2Command *cmd = new KisCommandUtils::SkipFirstRedoWrapper();
-            KisKeyframeChannel *channel = m_info->dstNode->getKeyframeChannel(KisKeyframeChannel::Raster.id());
+            KisNodeSP node = m_node ? m_node : m_mergeInfo->dstNode;
+            KisKeyframeChannel *channel = node->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true);
             channel->addKeyframe(m_frame, cmd);
 
-            applyKeyframeColorLabel(channel->keyframeAt(m_frame));
+            if (m_mergeInfo) {
+                applyKeyframeColorLabel(channel->keyframeAt(m_frame), m_mergeInfo->allSrcNodes());
+            }
 
             addCommand(cmd);
         }
 
-        void applyKeyframeColorLabel(KisKeyframeSP dstKeyframe) {
-            Q_FOREACH(KisNodeSP srcNode, m_info->allSrcNodes()) {
+        void applyKeyframeColorLabel(KisKeyframeSP dstKeyframe, KisNodeList srcNodes) {
+            Q_FOREACH(KisNodeSP srcNode, srcNodes) {
                 Q_FOREACH(KisKeyframeChannel *channel, srcNode->keyframeChannels().values()) {
                     KisKeyframeSP keyframe = channel->keyframeAt(m_frame);
                     if (!keyframe.isNull() && keyframe->colorLabel() != 0) {
@@ -923,8 +1065,9 @@ namespace KisLayerUtils {
         }
 
     private:
-        MergeDownInfoBaseSP m_info;
+        KisNodeSP m_node;
         int m_frame;
+        MergeDownInfoBaseSP m_mergeInfo;
     };
 
     QSet<int> fetchLayerFrames(KisNodeSP node) {
@@ -1746,4 +1889,30 @@ namespace KisLayerUtils {
 
         return numLayers == 1 || (!hasNonNormalLayers && !hasTransparentLayer);
     }
+
+    void splitAlphaToMask(KisImageSP image, KisNodeSP node, const QString& maskName)
+    {
+        SplitAlphaToMaskInfoSP info( new SplitAlphaToMaskInfo(node->image(), node, maskName) );
+
+        KisImageSignalVector emitSignals;
+        KisProcessingApplicator applicator(image, 0,
+                                           KisProcessingApplicator::NONE,
+                                           emitSignals,
+                                           kundo2_i18n("Split Alpha into a Mask"));
+
+        applicator.applyCommand(new SimpleAddNode(info->image, info->getMask(), info->node), KisStrokeJobData::BARRIER);
+        applicator.applyCommand(new InitSplitAlphaSelectionMask(info));
+        if (info->frames.count() > 0) {
+            Q_FOREACH(const int& frame, info->frames) {
+                applicator.applyCommand(new SwitchFrameCommand(info->image, frame, false, info->storage));
+                applicator.applyCommand(new AddNewFrame(info->getMask(), frame));
+                applicator.applyCommand(new SplitAlphaCommand(info), KisStrokeJobData::BARRIER);
+                applicator.applyCommand(new SwitchFrameCommand(info->image, frame, true, info->storage));
+            }
+        } else {
+            applicator.applyCommand(new SplitAlphaCommand(info), KisStrokeJobData::BARRIER);
+        }
+        applicator.end();
+    }
+
 }

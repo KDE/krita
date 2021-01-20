@@ -51,6 +51,8 @@ namespace KisLayerUtils
 
     KRITAIMAGE_EXPORT void mergeDown(KisImageSP image, KisLayerSP layer, const KisMetaData::MergeStrategy* strategy);
 
+    KRITAIMAGE_EXPORT void splitAlphaToMask(KisImageSP image, KisNodeSP node, const QString& maskName);
+
     KRITAIMAGE_EXPORT QSet<int> fetchLayerFrames(KisNodeSP node);
     KRITAIMAGE_EXPORT QSet<int> fetchLayerFramesRecursive(KisNodeSP rootNode);
 
@@ -156,7 +158,6 @@ namespace KisLayerUtils
         KisNodeList m_selectedNodes;
         KisNodeSP m_activeNode;
     };
-
 
     class KRITAIMAGE_EXPORT KisSimpleUpdateCommand : public KisCommandUtils::FlipFlopCommand
     {

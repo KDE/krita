@@ -67,6 +67,10 @@
 #include "kis_layer_utils.h"
 #include "krita_utils.h"
 #include "kis_shape_layer.h"
+#include "kis_keyframe_channel.h"
+#include "kis_raster_keyframe_channel.h"
+#include "kis_paint_device_frames_interface.h"
+#include "kis_layer_utils.h"
 
 #include "processing/kis_mirror_processing_visitor.h"
 #include "KisView.h"
@@ -1277,39 +1281,14 @@ void KisNodeManager::saveVectorLayerAsImage()
 
 void KisNodeManager::slotSplitAlphaIntoMask()
 {
+
     KisNodeSP node = activeNode();
     if (!canModifyLayer(node)) return;
 
     // guaranteed by KisActionManager
     KIS_ASSERT_RECOVER_RETURN(node->hasEditablePaintDevice());
 
-    KisPaintDeviceSP srcDevice = node->paintDevice();
-    const KoColorSpace *srcCS = srcDevice->colorSpace();
-    const QRect processRect =
-            srcDevice->exactBounds() |
-            srcDevice->defaultBounds()->bounds();
-
-    KisPaintDeviceSP selectionDevice =
-            new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
-
-    m_d->commandsAdapter.beginMacro(kundo2_i18n("Split Alpha into a Mask"));
-    KisTransaction transaction(kundo2_noi18n("__split_alpha_channel__"), srcDevice);
-
-    KisSequentialIterator srcIt(srcDevice, processRect);
-    KisSequentialIterator dstIt(selectionDevice, processRect);
-
-    while (srcIt.nextPixel() && dstIt.nextPixel()) {
-        quint8 *srcPtr = srcIt.rawData();
-        quint8 *alpha8Ptr = dstIt.rawData();
-
-        *alpha8Ptr = srcCS->opacityU8(srcPtr);
-        srcCS->setOpacity(srcPtr, OPACITY_OPAQUE_U8, 1);
-    }
-
-    m_d->commandsAdapter.addExtraCommand(transaction.endAndTake());
-
-    createNode("KisTransparencyMask", false, selectionDevice);
-    m_d->commandsAdapter.endMacro();
+    KisLayerUtils::splitAlphaToMask(node->image(), node, m_d->maskManager.createMaskNameCommon(node, "KisTransparencyMask",  i18n("Transparency Mask")));
 }
 
 void KisNodeManager::Private::mergeTransparencyMaskAsAlpha(bool writeToLayers)

@@ -30,9 +30,13 @@ class KRITAWIDGETS_EXPORT KisAngleSelectorSpinBox : public KisDoubleParseSpinBox
 public:
     KisAngleSelectorSpinBox(QWidget *parent = 0);
     ~KisAngleSelectorSpinBox() override;
+    void setRange(double min, double max);
     double valueFromText(const QString & text) const override;
     bool isFlat() const;
     void setFlat(bool newFlat);
+    QSize minimumSizeHint() const override;
+    QSize sizeHint() const override;
+    void refreshStyle();
 protected:
     void enterEvent(QEvent *e) override;
     void leaveEvent(QEvent *e) override;

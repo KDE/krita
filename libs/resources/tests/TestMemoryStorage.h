@@ -16,6 +16,8 @@ private Q_SLOTS:
     void testStorage();
     void testStorageRetrieval();
     void testTagIterator();
+    void testAddResource();
+    void initTestCase();
 private:
 };
 

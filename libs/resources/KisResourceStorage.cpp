@@ -15,6 +15,14 @@
 #include "KisBundleStorage.h"
 #include "KisMemoryStorage.h"
 
+#include <cmath>
+#include <QtMath>
+#include "kis_debug.h"
+
+#include <QRegularExpression>
+#include <boost/optional.hpp>
+
+
 const QString KisResourceStorage::s_meta_generator("meta:generator");
 const QString KisResourceStorage::s_meta_author("dc:author");
 const QString KisResourceStorage::s_meta_title("dc:title");
@@ -273,5 +281,115 @@ bool KisStorageVersioningHelper::addVersionedResource(const QString &filename, c
         f.close();
     }
     return true;
+}
+
+struct VersionedFileParts
+{
+    QString basename;
+    int version = 0;
+    QString suffix;
 };
+
+boost::optional<VersionedFileParts> guessFilenameParts(const QString &filename)
+{
+    QRegularExpression exp("^(.*)\\.(\\d\\d*)\\.(.+)$");
+
+    QRegularExpressionMatch res = exp.match(filename);
+
+    if (res.hasMatch()) {
+        return VersionedFileParts({res.captured(1), res.captured(2).toInt(), res.captured(3)});
+    }
+
+    return boost::none;
+}
+
+VersionedFileParts guessFileNamePartsLazy(const QString &filename, int minVersion)
+{
+    boost::optional<VersionedFileParts> guess = guessFilenameParts(filename);
+    if (guess) {
+        guess->version = qMax(guess->version, minVersion);
+    } else {
+        QFileInfo info(filename);
+        guess = VersionedFileParts();
+        guess->basename = info.baseName();
+        guess->version = minVersion;
+        guess->suffix = info.completeSuffix();
+    }
+
+    return *guess;
+}
+
+QString KisStorageVersioningHelper::chooseUniqueName(KoResourceSP resource,
+                                                     int minVersion,
+                                                     std::function<bool(QString)> checkExists)
+{
+    int version = qMax(resource->version(), minVersion);
+
+    VersionedFileParts parts = guessFileNamePartsLazy(resource->filename(), version);
+    version = parts.version;
+
+    QString newFilename;
+
+    while (1) {
+        int numPlaceholders = 4;
+
+        if (version > 9999) {
+            numPlaceholders = qFloor(std::log10(version)) + 1;
+        }
+
+        newFilename = parts.basename +
+                "."
+                + QString("%1").arg(version, numPlaceholders, 10, QChar('0'))
+                + "."
+                + parts.suffix;
+
+        if (checkExists(newFilename)) {
+            version++;
+            if (version == std::numeric_limits<int>::max()) {
+                return QString();
+            }
+            continue;
+        }
+
+        break;
+    }
+
+    return newFilename;
+}
+
+bool KisStorageVersioningHelper::addVersionedResource(const QString &saveLocation,
+                                                      KoResourceSP resource,
+                                                      int minVersion)
+{
+    int version = qMax(resource->version(), minVersion);
+
+    VersionedFileParts parts = guessFileNamePartsLazy(resource->filename(), version);
+    version = parts.version;
+
+    QString newFilename =
+        chooseUniqueName(resource, minVersion,
+                         [saveLocation] (const QString &filename) {
+                             return QFileInfo(saveLocation + "/" + filename).exists();
+                         });
+
+    if (newFilename.isEmpty()) return false;
+
+    QFile file(saveLocation + "/" + newFilename);
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!file.exists(), false);
+
+    if (!file.open(QFile::WriteOnly)) {
+        qWarning() << "Could not open resource file for writing" << newFilename;
+        return false;
+    }
+
+    if (!resource->saveToDevice(&file)) {
+        qWarning() << "Could not save resource file" << newFilename;
+        return false;
+    }
+
+    resource->setFilename(newFilename);
+    file.close();
+
+    return true;
+}
 

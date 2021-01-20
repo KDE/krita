@@ -8,6 +8,8 @@
 
 #include <QObject>
 
+class KisResourceLocator;
+
 class TestBundleStorage : public QObject
 {
     Q_OBJECT
@@ -18,6 +20,8 @@ private Q_SLOTS:
     void testTagIterator();
     void testResourceItem();
     void testResource();
+    void testAddResource();
+    void cleanupTestCase();
 };
 
 #endif // TESTBUNDLESTORAGE_H

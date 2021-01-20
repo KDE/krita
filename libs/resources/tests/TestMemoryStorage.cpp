@@ -13,18 +13,26 @@
 #include <KisResourceLoaderRegistry.h>
 
 #include "DummyResource.h"
+#include "ResourceTestHelper.h"
 
 #ifndef FILES_DATA_DIR
 #error "FILES_DATA_DIR not set. A directory with the data used for testing installing resources"
 #endif
 
+#ifndef FILES_DEST_DIR
+#error "FILES_DEST_DIR not set. A directory where data will be written to for testing installing resources"
+#endif
+
+void TestMemoryStorage::initTestCase()
+{
+    ResourceTestHelper::createDummyLoaderRegistry();
+}
+
 void TestMemoryStorage ::testStorage()
 {
     KisMemoryStorage memoryStorage;
-    KoResourceSP resource(new DummyResource("test"));
+    KoResourceSP resource(new DummyResource("test.gbr", "brushes"));
     memoryStorage.addResource("brushes", resource);
-
-    KisResourceLoaderRegistry::instance()->add(ResourceType::Brushes, new KisResourceLoader<DummyResource>("dummy", ResourceType::Brushes, i18n("Brush tips"), QStringList() << "image/x-gimp-brush"));
 
     QSharedPointer<KisResourceStorage::ResourceIterator> iter = memoryStorage.resources(ResourceType::Brushes);
     QVERIFY(iter->hasNext());
@@ -40,15 +48,15 @@ void TestMemoryStorage ::testStorage()
 void TestMemoryStorage ::testStorageRetrieval()
 {
     KisMemoryStorage memoryStorage;
-    KoResourceSP resource1(new DummyResource("test1"));
+    KoResourceSP resource1(new DummyResource("test1.gbr", "brushes"));
     memoryStorage.addResource("brushes", resource1);
-    KoResourceSP resource2(new DummyResource("test2"));
+    KoResourceSP resource2(new DummyResource("test2.gbr", "brushes"));
     memoryStorage.addResource("brushes", resource2);
 
-    QString url = QString("brushes/test1");
+    QString url = QString("brushes/test1.0000.gbr");
     KoResourceSP resource = memoryStorage.resource(url);
-
-    QCOMPARE(resource->filename(), "test1");
+    QVERIFY(resource);
+    QCOMPARE(resource->filename(), "test1.0000.gbr");
 }
 
 void TestMemoryStorage::testTagIterator()
@@ -68,6 +76,15 @@ void TestMemoryStorage::testTagIterator()
         count++;
     }
     QVERIFY(count == 1);
+}
+
+void TestMemoryStorage::testAddResource()
+{
+    KisMemoryStorage memoryStorage;
+    KoResourceSP res1(new DummyResource("test1.gbr", "brushes"));
+    memoryStorage.addResource("brushes", res1);
+
+    ResourceTestHelper::testVersionedStorage(memoryStorage, "brushes", "brushes/test1.0000.gbr");
 }
 
 QTEST_MAIN(TestMemoryStorage)

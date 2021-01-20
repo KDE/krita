@@ -71,7 +71,6 @@ private:
     KisTagSP m_tag;
 };
 
-
 class BundleIterator : public KisResourceStorage::ResourceIterator
 {
 public:
@@ -114,7 +113,7 @@ public:
     {
         const QStringList parts = m_resourceReference.resourcePath.split('/', QString::SkipEmptyParts);
         Q_ASSERT(parts.size() == 2);
-        return q->resource(parts[1]);
+        return q->resource(m_resourceReference.resourcePath);
     }
 
 private:
@@ -242,12 +241,5 @@ bool KisBundleStorage::addResource(const QString &resourceType, KoResourceSP res
         QDir().mkpath(bundleSaveLocation);
     }
 
-    QString fn = bundleSaveLocation  + "/" + resource->filename();
-    if (!QFileInfo(fn).exists()) {
-        resource->setFilename(fn);
-    }
-    else {
-        resource->setVersion(resource->version() + 1);
-    }
-    return KisStorageVersioningHelper::addVersionedResource(fn, bundleSaveLocation, resource);
+    return KisStorageVersioningHelper::addVersionedResource(bundleSaveLocation, resource, 1);
 }

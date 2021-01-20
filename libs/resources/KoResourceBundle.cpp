@@ -408,7 +408,10 @@ KoResourceSP KoResourceBundle::resource(const QString &resourceType, const QStri
         return 0;
     }
 
-    KoResourceSP resource = loader->create(filepath);
+    QStringList parts = filepath.split('/', QString::SkipEmptyParts);
+    Q_ASSERT(parts.size() == 2);
+
+    KoResourceSP resource = loader->create(parts[1]);
     return loadResource(resource) ? resource : 0;
 }
 

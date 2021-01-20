@@ -172,13 +172,7 @@ bool KisFolderStorage::addTag(const QString &/*resourceType*/, KisTagSP /*tag*/)
 bool KisFolderStorage::addResource(const QString &resourceType, KoResourceSP _resource)
 {
     QString fn = location() + "/" + resourceType + "/" + _resource->filename();
-    bool update = QFileInfo(fn).exists();
-    bool r = KisStorageVersioningHelper::addVersionedResource(fn, location() + "/" + resourceType, _resource);
-    if (update) {
-        _resource->setVersion(_resource->version() + 1);
-    }
-    return r;
-
+    return KisStorageVersioningHelper::addVersionedResource(location() + "/" + resourceType, _resource, 0);
 }
 
 KisResourceStorage::ResourceItem KisFolderStorage::resourceItem(const QString &url)

@@ -154,7 +154,6 @@ void KisStatusBar::setup()
     m_canvasAngleSelector->setIncreasingDirection(KisAngleGauge::IncreasingDirection_Clockwise);
     m_canvasAngleSelector->setFlipOptionsMode(KisAngleSelector::FlipOptionsMode_ContextMenu);
     m_canvasAngleSelector->useFlatSpinBox(true);
-    m_canvasAngleSelector->setFixedWidth(110);
     addStatusBarItem(m_canvasAngleSelector);
 
     connect(m_canvasAngleSelector, SIGNAL(angleChanged(qreal)), SLOT(slotCanvasAngleSelectorAngleChanged(qreal)));

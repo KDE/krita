@@ -15,6 +15,8 @@
 #include <QEvent>
 #include <QMenu>
 #include <QLineEdit>
+#include <QStyleOptionSpinBox>
+#include <QStyle>
 
 #include <kis_icon_utils.h>
 #include <kis_signals_blocker.h>
@@ -29,6 +31,7 @@ struct KisAngleSelectorSpinBox::Private
     bool isFlat;
     bool hasFocus;
     bool isHovered;
+    QSize cachedSizeHint;
 
     void updateStyleSheet()
     {
@@ -58,6 +61,12 @@ KisAngleSelectorSpinBox::KisAngleSelectorSpinBox(QWidget *parent)
 
 KisAngleSelectorSpinBox::~KisAngleSelectorSpinBox()
 {}
+
+void KisAngleSelectorSpinBox::setRange(double min, double max)
+{
+    m_d->cachedSizeHint = QSize();
+    KisDoubleParseSpinBox::setRange(min, max);
+}
 
 double KisAngleSelectorSpinBox::valueFromText(const QString & text) const
 {
@@ -102,6 +111,52 @@ void KisAngleSelectorSpinBox::focusOutEvent(QFocusEvent *e)
     m_d->hasFocus = false;
     m_d->updateStyleSheet();
     KisDoubleParseSpinBox::focusOutEvent(e);
+}
+
+QSize KisAngleSelectorSpinBox::minimumSizeHint() const
+{
+    if (m_d->cachedSizeHint.isEmpty()) {
+        ensurePolished();
+
+        const QFontMetrics fm(fontMetrics());
+        int h = lineEdit()->minimumSizeHint().height();
+        int w = 0;
+
+        QString s;
+        QString fixedContent =  prefix() + suffix() + QLatin1Char(' ');
+        s = textFromValue(minimum());
+        s.truncate(18);
+        s += fixedContent;
+        w = qMax(w, fm.horizontalAdvance(s));
+        s = textFromValue(maximum());
+        s.truncate(18);
+        s += fixedContent;
+        w = qMax(w, fm.horizontalAdvance(s));
+
+        w += 2; // cursor blinking space
+
+        QStyleOptionSpinBox option;
+        initStyleOption(&option);
+
+        QSize hint(w, h);
+
+        KisDoubleParseSpinBox tmp;
+        m_d->cachedSizeHint = style()->sizeFromContents(QStyle::CT_SpinBox, &option, hint, &tmp);
+    }
+
+    return m_d->cachedSizeHint;
+}
+
+QSize KisAngleSelectorSpinBox::sizeHint() const
+{
+    return minimumSizeHint();
+}
+
+void KisAngleSelectorSpinBox::refreshStyle()
+{
+    m_d->cachedSizeHint = QSize();
+    updateGeometry();
+    m_d->updateStyleSheet();
 }
 
 struct KisAngleSelector::Private
@@ -523,14 +578,12 @@ bool KisAngleSelector::event(QEvent *e)
         // For some reason the spinbox, that uses stylesheets, doesn't update
         // on palette changes, so we reset the stylesheet to force an update.
         // Calling m_d->spinBox->update() doesn't work
-        m_d->spinBox->setStyleSheet(m_d->spinBox->styleSheet());
-    } else if (e->type() == QEvent::StyleChange) {
+        m_d->spinBox->refreshStyle();
+    } else if (e->type() == QEvent::StyleChange || e->type() == QEvent::FontChange) {
         // Temporarily reset the spin box style so that we can get its
         // height size hint
-        QString ss = m_d->spinBox->styleSheet();
-        m_d->spinBox->setStyleSheet("");
+        m_d->spinBox->refreshStyle();
         m_d->resizeAngleGauge();
-        m_d->spinBox->setStyleSheet(ss);
     }
     return false;
 }

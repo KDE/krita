@@ -48,7 +48,7 @@ parts:
   krita:
     after:
       - libheif
-    source: https://download.kde.org/stable/krita/4.4.1/krita-4.4.1.tar.xz
+    source: https://download.kde.org/stable/krita/4.4.2/krita-4.4.2.tar.xz
     # # Use these instead to build from the git source
     # source: https://anongit.kde.org/krita.git
     # source-type: git
@@ -105,7 +105,7 @@ parts:
       - libxi6
       - libyaml-cpp0.5v5
       - zlib1g
-      - libmypaint-1.5-1
+      - libmypaint-1.3-0
       # Required for rendering animations
       - ffmpeg
       - libglu1-mesa

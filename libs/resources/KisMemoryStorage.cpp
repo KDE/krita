@@ -72,8 +72,9 @@ public:
 class MemoryIterator : public KisResourceStorage::ResourceIterator
 {
 public:
-    MemoryIterator(QHash<QString, StoredResource> &resources, const QString &resourceType)
-        : m_iterator(resources)
+    MemoryIterator(KisMemoryStorage *_q, QHash<QString, StoredResource> &resources, const QString &resourceType)
+        : q(_q)
+        , m_iterator(resources)
         , m_resourceType(resourceType)
     {
     }
@@ -110,30 +111,11 @@ public:
 
     KoResourceSP resourceImpl() const override
     {
-        const StoredResource &storedResource =
-            m_iterator.value();
-
-        const QString filename = m_iterator.key();
-
-        QString mime = KisMimeDatabase::mimeTypeForSuffix(filename);
-        KisResourceLoaderBase *loader = KisResourceLoaderRegistry::instance()->loader(m_resourceType, mime);
-        if (!loader) {
-            qWarning() << "Could not create loader for" << m_resourceType << filename << mime;
-            return 0;
-        }
-
-        KoResourceSP resource = loader->create(filename);
-        QBuffer buffer(storedResource.data.data());
-        buffer.open(QIODevice::ReadOnly);
-        bool result =
-            resource->loadFromDevice(&buffer, KisGlobalResourcesInterface::instance());
-
-        buffer.close();
-
-        return result ? resource : 0;
+        return q->resource(m_resourceType + "/" + m_iterator.key());
     }
 
 private:
+    KisMemoryStorage *q;
     QHashIterator<QString, StoredResource> m_iterator;
     QString m_resourceType;
 };
@@ -256,7 +238,7 @@ bool KisMemoryStorage::loadVersionedResource(KoResourceSP resource)
 
 QSharedPointer<KisResourceStorage::ResourceIterator> KisMemoryStorage::resources(const QString &resourceType)
 {
-    return QSharedPointer<KisResourceStorage::ResourceIterator>(new MemoryIterator(d->resourcesNew[resourceType], resourceType));
+    return QSharedPointer<KisResourceStorage::ResourceIterator>(new MemoryIterator(this, d->resourcesNew[resourceType], resourceType));
 }
 
 QSharedPointer<KisResourceStorage::TagIterator> KisMemoryStorage::tags(const QString &resourceType)

@@ -42,8 +42,8 @@ GridConfigWidget::GridConfigWidget(QWidget *parent) :
 
     ui->angleLeftAngleSelector->setRange(0, 89);
     ui->angleRightAngleSelector->setRange(0, 89);
-    ui->angleLeftAngleSelector->setDecimals(0);
-    ui->angleRightAngleSelector->setDecimals(0);
+    ui->angleLeftAngleSelector->setDecimals(4);
+    ui->angleRightAngleSelector->setDecimals(4);
     ui->angleLeftAngleSelector->setFlipOptionsMode(KisAngleSelector::FlipOptionsMode_NoFlipOptions);
     ui->angleRightAngleSelector->setFlipOptionsMode(KisAngleSelector::FlipOptionsMode_NoFlipOptions);
     ui->cellSpacingSpinbox->setSuffix(i18n(" px"));
@@ -215,8 +215,8 @@ KisGridConfig GridConfigWidget::fetchGuiGridConfig() const
     config.setOffset(pt);
 
     config.setSubdivision(ui->intSubdivision->value());
-    config.setAngleLeft(static_cast<int>(ui->angleLeftAngleSelector->angle()));
-    config.setAngleRight(static_cast<int>(ui->angleRightAngleSelector->angle()));
+    config.setAngleLeft(ui->angleLeftAngleSelector->angle());
+    config.setAngleRight(ui->angleRightAngleSelector->angle());
     config.setCellSpacing(ui->cellSpacingSpinbox->value());
     config.setGridType(KisGridConfig::GridType(ui->gridTypeCombobox->currentIndex()));
 

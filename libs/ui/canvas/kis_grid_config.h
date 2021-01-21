@@ -106,18 +106,18 @@ public:
         m_subdivision = value;
     }
 
-    int angleLeft() const {
+    qreal angleLeft() const {
         return m_angleLeft;
     }
-    void setAngleLeft(int angle) {
+    void setAngleLeft(qreal angle) {
         m_angleLeft = angle;
     }
 
-    int angleRight() const {
+    qreal angleRight() const {
         return m_angleRight;
     }
 
-    void setAngleRight(int angle) {
+    void setAngleRight(qreal angle) {
         m_angleRight = angle;
     }
 
@@ -220,8 +220,8 @@ private:
     QPoint m_spacing;
     bool m_offsetAspectLocked;
     bool m_spacingAspectLocked;
-    int m_angleLeft;
-    int m_angleRight;
+    qreal m_angleLeft;
+    qreal m_angleRight;
     int m_cellSpacing;
 
 

@@ -1283,14 +1283,12 @@ void KisPaintopBox::slotReloadPreset()
 {
     KisSignalsBlocker blocker(m_optionWidget);
 
-    // Here using the name and fetching the preset from the server was the only way the load was working. Otherwise it was not loading.
     KisPaintOpPresetResourceServer *rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
-    QSharedPointer<KisPaintOpPreset> preset = rserver->resourceByName(m_resourceProvider->currentPreset()->name());
+    QSharedPointer<KisPaintOpPreset> preset = m_resourceProvider->currentPreset();
 
-    if (preset && rserver->reloadResource(preset)) {
-        if (m_resourceProvider->currentPreset() != preset) {
-            m_resourceProvider->setPaintOpPreset(preset);
-        }
+    if (preset) {
+        const bool result = rserver->reloadResource(preset);
+        KIS_SAFE_ASSERT_RECOVER_NOOP(result && "couldn't reload preset");
     }
 }
 void KisPaintopBox::slotGuiChangedCurrentPreset() // Called only when UI is changed and not when preset is changed

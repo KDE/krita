@@ -393,3 +393,15 @@ bool KisStorageVersioningHelper::addVersionedResource(const QString &saveLocatio
     return true;
 }
 
+
+KoResourceSP KisResourceStorage::ResourceIterator::resource() const
+{
+    if (m_cachedResource && m_cachedResourceUrl == url()) {
+        return m_cachedResource;
+    }
+
+    m_cachedResource = resourceImpl();
+    m_cachedResourceUrl = url();
+
+    return m_cachedResource;
+}

@@ -108,7 +108,7 @@ public:
         return storedVersions.timestamp;
     }
 
-    KoResourceSP resource() const override
+    KoResourceSP resourceImpl() const override
     {
         const StoredResource &storedResource =
             m_iterator.value();

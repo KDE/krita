@@ -89,7 +89,7 @@ public:
     QString type() const override { return ResourceType::Brushes; }
     QDateTime lastModified() const override { return m_brushCollection->lastModified(); }
 
-    KoResourceSP resource() const override
+    KoResourceSP resourceImpl() const override
     {
         return m_currentResource;
     }

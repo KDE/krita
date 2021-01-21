@@ -62,7 +62,7 @@ public:
         QDateTime lastModified;
     };
 
-    class TagIterator
+    class KRITARESOURCES_EXPORT TagIterator
     {
     public:
         virtual ~TagIterator() {}
@@ -84,7 +84,7 @@ public:
         virtual KisTagSP tag() const = 0;
     };
 
-    class ResourceIterator
+    class KRITARESOURCES_EXPORT ResourceIterator
     {
     public:
 
@@ -97,8 +97,16 @@ public:
         virtual QString url() const = 0;
         virtual QString type() const = 0;
         virtual QDateTime lastModified() const = 0;
+
+        KoResourceSP resource() const;
+
+    protected:
         /// This only loads the resource when called
-        virtual KoResourceSP resource() const = 0;
+        virtual KoResourceSP resourceImpl() const = 0;
+
+    private:
+        mutable KoResourceSP m_cachedResource;
+        mutable QString m_cachedResourceUrl;
     };
 
     enum class StorageType : int {

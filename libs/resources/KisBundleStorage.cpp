@@ -119,10 +119,8 @@ public:
     }
 
     /// This only loads the resource when called
-    KoResourceSP resource() const override
+    KoResourceSP resourceImpl() const override
     {
-        const QStringList parts = m_resourceReference.resourcePath.split('/', QString::SkipEmptyParts);
-        Q_ASSERT(parts.size() == 2);
         return q->resource(m_resourceReference.resourcePath);
     }
 

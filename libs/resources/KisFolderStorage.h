@@ -38,6 +38,9 @@ public:
     QStringList metaDataKeys() const override;
     QVariant metaData(const QString &key) const override;
 
+private:
+    friend class FolderIterator;
+
 };
 
 #endif // KISFOLDERSTORAGE_H

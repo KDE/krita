@@ -127,7 +127,7 @@ public:
 
 
     /// This only loads the resource when called
-    KoResourceSP resource() const override
+    KoResourceSP resourceImpl() const override
     {
         return m_currentResource;
     }

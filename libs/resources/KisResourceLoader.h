@@ -115,7 +115,7 @@ public:
     {
     }
 
-    virtual KoResourceSP create(const QString &name)
+    virtual KoResourceSP create(const QString &name) override
     {
         QSharedPointer<T> resource = QSharedPointer<T>::create(name);
         return resource;

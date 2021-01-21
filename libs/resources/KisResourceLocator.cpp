@@ -324,15 +324,9 @@ bool KisResourceLocator::updateResource(const QString &resourceType, const KoRes
     resource->updateThumbnail();
     resource->setVersion(resource->version() + 1);
 
-    // This increments the version in the resource
     if (!storage->addResource(resource)) {
         qWarning() << "Failed to save the new version of " << resource->name() << "to storage" << storageLocation;
         return false;
-    }
-
-    // Memory storages don't store versioned resources
-    if (storage->type() == KisResourceStorage::StorageType::Memory) {
-        return true;
     }
 
     // The version needs already to have been incremented

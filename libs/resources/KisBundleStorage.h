@@ -39,6 +39,10 @@ public:
     /// put these tags in a place in the file system
     bool addResource(const QString &resourceType, KoResourceSP resource) override;
 
+
+private:
+    friend class BundleIterator;
+
 private:
     class Private;
     QScopedPointer<Private> d;

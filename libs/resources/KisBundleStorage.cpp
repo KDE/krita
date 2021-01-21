@@ -17,6 +17,15 @@
 #include <KisGlobalResourcesInterface.h>
 #include <kis_debug.h>
 
+class KisBundleStorage::Private {
+public:
+    Private(KisBundleStorage *_q) : q(_q) {}
+
+    KisBundleStorage *q;
+    QScopedPointer<KoResourceBundle> bundle;
+};
+
+
 class BundleTagIterator : public KisResourceStorage::TagIterator
 {
 public:
@@ -74,12 +83,13 @@ private:
 class BundleIterator : public KisResourceStorage::ResourceIterator
 {
 public:
-    BundleIterator(KisBundleStorage *_q, KoResourceBundle *bundle, const QString &resourceType)
-        : q(_q),
-          m_bundle(bundle)
+    BundleIterator(KisBundleStorage *_q, const QString &resourceType)
+        : q(_q)
         , m_resourceType(resourceType)
     {
-        m_entriesIterator.reset(new QListIterator<KoResourceBundleManifest::ResourceReference>(m_bundle->manifest().files(resourceType)));
+        m_entriesIterator.reset(
+            new QListIterator<KoResourceBundleManifest::ResourceReference>(
+                        q->d->bundle->manifest().files(resourceType)));
     }
 
     bool hasNext() const override
@@ -105,7 +115,7 @@ public:
 
     QDateTime lastModified() const override
     {
-        return QFileInfo(m_bundle->filename()).lastModified();
+        return QFileInfo(q->location()).lastModified();
     }
 
     /// This only loads the resource when called
@@ -118,20 +128,10 @@ public:
 
 private:
     KisBundleStorage *q {0};
-    KoResourceBundle *m_bundle {0};
     QString m_resourceType;
     QScopedPointer<QListIterator<KoResourceBundleManifest::ResourceReference> > m_entriesIterator;
     KoResourceBundleManifest::ResourceReference m_resourceReference;
 
-};
-
-
-class KisBundleStorage::Private {
-public:
-    Private(KisBundleStorage *_q) : q(_q) {}
-
-    KisBundleStorage *q;
-    QScopedPointer<KoResourceBundle> bundle;
 };
 
 
@@ -197,7 +197,7 @@ bool KisBundleStorage::loadVersionedResource(KoResourceSP resource)
 
 QSharedPointer<KisResourceStorage::ResourceIterator> KisBundleStorage::resources(const QString &resourceType)
 {
-    return QSharedPointer<KisResourceStorage::ResourceIterator>(new BundleIterator(this, d->bundle.data(), resourceType));
+    return QSharedPointer<KisResourceStorage::ResourceIterator>(new BundleIterator(this, resourceType));
 }
 
 QSharedPointer<KisResourceStorage::TagIterator> KisBundleStorage::tags(const QString &resourceType)

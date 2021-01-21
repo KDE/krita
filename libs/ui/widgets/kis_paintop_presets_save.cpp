@@ -173,7 +173,6 @@ void KisPresetSaveWidget::savePreset()
         newPreset->setFilename(presetFileName);
         newPreset->setName(m_useNewBrushDialog ? newBrushNameTexField->text() : curPreset->name());
         newPreset->setImage(brushPresetThumbnailWidget->cutoutOverlay());
-        newPreset->setDirty(false);
         newPreset->setValid(true);
 
         rServer->addResource(newPreset);

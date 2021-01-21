@@ -304,6 +304,8 @@ bool KisResourceLocator::addResource(const QString &resourceType, const KoResour
         return false;
     }
 
+    resource->setDirty(false);
+
     // And the database
     return KisResourceCacheDb::addResource(storage,
                                            storage->timeStampForResource(resourceType, resource->filename()),
@@ -333,6 +335,8 @@ bool KisResourceLocator::updateResource(const QString &resourceType, const KoRes
         return false;
     }
 
+    resource->setDirty(false);
+
     // The version needs already to have been incremented
     if (!KisResourceCacheDb::addResourceVersion(resource->resourceId(), QDateTime::currentDateTime(), storage, resource)) {
         qWarning() << "Failed to add a new version of the resource to the database" << resource->name();
@@ -359,6 +363,8 @@ bool KisResourceLocator::reloadResource(const QString &resourceType, const KoRes
         qWarning() << "Failed to reload the resource" << resource->name() << "from storage" << storageLocation;
         return false;
     }
+
+    resource->setDirty(false);
 
     // We haven't changed the version of the resource, so the cache must be still valid
     QPair<QString, QString> key = QPair<QString, QString> (storageLocation, resourceType + "/" + QFileInfo(resource->filename()).fileName());

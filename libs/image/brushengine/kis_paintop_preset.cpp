@@ -65,7 +65,7 @@ KisPaintOpPreset::KisPaintOpPreset(const KisPaintOpPreset &rhs)
     if (rhs.settings()) {
         setSettings(rhs.settings()); // the settings are cloned inside!
     }
-    setDirty(isDirty());
+    KIS_SAFE_ASSERT_RECOVER_NOOP(isDirty() == rhs.isDirty());
     // only valid if we could clone the settings
     setValid(rhs.settings());
 
@@ -200,7 +200,6 @@ bool KisPaintOpPreset::load(KisResourcesInterfaceSP resourcesInterface)
     delete dev;
 
     setValid(res);
-    setDirty(false);
     return res;
 
 }
@@ -240,7 +239,6 @@ bool KisPaintOpPreset::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP re
         return false;
     }
     setValid(true);
-    setDirty(false);
     setImage(img);
 
     return true;
@@ -338,8 +336,6 @@ bool KisPaintOpPreset::saveToDevice(QIODevice *dev) const
     } else {
         img = image();
     }
-
-    const_cast<KisPaintOpPreset*>(this)->setDirty(false);
 
     KoResource::saveToDevice(dev);
 

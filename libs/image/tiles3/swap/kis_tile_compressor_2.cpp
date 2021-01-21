@@ -43,7 +43,7 @@ bool KisTileCompressor2::writeTile(KisTileSP tile, KisPaintDeviceWriter &store)
     }
     retval = store.write(m_streamingBuffer.data(), bytesWritten);
     if (!retval) {
-        warnFile << "Failed to write the tile datak";
+        warnFile << "Failed to write the tile data";
     }
     return retval;
 }

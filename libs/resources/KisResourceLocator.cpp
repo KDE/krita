@@ -294,6 +294,10 @@ bool KisResourceLocator::addResource(const QString &resourceType, const KoResour
         resource->setFilename(resource->name().split(" ").join("_") + resource->defaultFileExtension());
     }
 
+    if (resource->version() < 0) {
+        resource->setVersion(0);
+    }
+
     // Save the resource to the storage storage
     if (!storage->addResource(resource)) {
         qWarning() << "Could not add resource" << resource->filename() << "to the folder storage";

@@ -81,13 +81,18 @@ QStringList KisMimeData::formats () const
 
 KisDocument *createDocument(QList<KisNodeSP> nodes, KisImageSP srcImage)
 {
+    qDebug() << nodes;
+    qDebug() << srcImage;
+
     KisDocument *doc = KisPart::instance()->createDocument();
     QRect rc;
     Q_FOREACH (KisNodeSP node, nodes) {
-        rc |= node->exactBounds();
+        if (node) {
+            rc |= node->exactBounds();
+        }
     }
 
-    if (rc.isEmpty()) {
+    if (rc.isEmpty() && srcImage) {
         rc = srcImage->bounds();
     }
 

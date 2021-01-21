@@ -275,7 +275,6 @@ private:
 
 class KisStorageVersioningHelper {
 public:
-    static bool addVersionedResource(const QString &filename, const QString &saveLocation, KoResourceSP resource);
     static bool addVersionedResource(const QString &saveLocation, KoResourceSP resource, int minVersion);
     static QString chooseUniqueName(KoResourceSP resource,
                                     int minVersion,

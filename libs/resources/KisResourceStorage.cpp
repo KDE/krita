@@ -242,47 +242,6 @@ int KisResourceStorage::storageId()
     return d->storageId;
 }
 
-bool KisStorageVersioningHelper::addVersionedResource(const QString &filename, const QString &saveLocation, KoResourceSP resource)
-{
-    // Find a new filename for the resource if it already exists: we do not rename old resources, but rename updated resources
-    if (!QFileInfo(filename).exists()) {
-        // Simply save it
-        QFile f(filename);
-        if (!f.open(QFile::WriteOnly)) {
-            qWarning() << "Could not open resource file for writing" << filename;
-            return false;
-        }
-        if (!resource->saveToDevice(&f)) {
-            qWarning() << "Could not save resource file" << filename;
-            return false;
-        }
-        f.close();
-    }
-    else {
-        QFileInfo fi(filename);
-
-        // Save the new resource
-        QString newFilename = fi.baseName() +
-                "."
-                + QString("%1").arg(resource->version() + 1, 4, 10, QChar('0'))
-                + "."
-                + fi.suffix();
-        QFile f(saveLocation + "/" + newFilename);
-
-        if (!f.open(QFile::WriteOnly)) {
-            qWarning() << "Could not open resource file for writing" << newFilename;
-            return false;
-        }
-        if (!resource->saveToDevice(&f)) {
-            qWarning() << "Could not save resource file" << newFilename;
-            return false;
-        }
-        resource->setFilename(newFilename);
-        f.close();
-    }
-    return true;
-}
-
 struct VersionedFileParts
 {
     QString basename;

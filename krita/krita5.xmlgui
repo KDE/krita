@@ -347,6 +347,7 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <text>Setti&amp;ngs</text>
       <Action name="options_configure"/>
       <Action name="manage_bundles"/>
+      <Action name="manage_resources"/>
       <Action name="dbexplorer"/>
       <Separator/>
       <Action name="options_configure_toolbars"/>

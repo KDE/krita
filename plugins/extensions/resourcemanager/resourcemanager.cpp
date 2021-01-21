@@ -41,6 +41,7 @@
 
 #include "dlg_bundle_manager.h"
 #include "dlg_create_bundle.h"
+#include "DlgResourceManager.h"
 
 class ResourceManager::Private {
 
@@ -110,10 +111,13 @@ ResourceManager::ResourceManager(QObject *parent, const QVariantList &)
     addAction("create_bundle", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotCreateBundle()));
 
-    action = new KisAction(i18n("Manage Resources..."), this);
+    action = new KisAction(i18n("Manage Resources Libraries..."), this);
     addAction("manage_bundles", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotManageBundles()));
 
+    action = new KisAction(i18n("Manage Resources..."), this);
+    addAction("manage_resources", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(slotManageResources()));
 }
 
 ResourceManager::~ResourceManager()
@@ -235,6 +239,12 @@ void ResourceManager::slotManageBundles()
 {
     QPointer<DlgBundleManager> dlg = new DlgBundleManager(KisPart::instance()->currentMainwindow());
     dlg->exec();
+}
+
+void ResourceManager::slotManageResources()
+{
+    DlgResourceManager dlg;
+    dlg.exec();
 }
 
 QStringList ResourceManager::importResources(const QString &title, const QStringList &mimes) const

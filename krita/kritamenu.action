@@ -1582,7 +1582,19 @@
     </Action>
     <Action name="manage_bundles">
       <icon></icon>
-      <text>&amp;Manage Resources...</text>
+      <text>&amp;Manage Resource Libraries...</text>
+      <whatsThis></whatsThis>
+      <toolTip>Manage Resource Libraries</toolTip>
+      <iconText>Manage Resources Libraries</iconText>
+      <activationFlags>0</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="manage_resources">
+      <icon></icon>
+      <text>Manage Resources...</text>
       <whatsThis></whatsThis>
       <toolTip>Manage Resources</toolTip>
       <iconText>Manage Resources</iconText>

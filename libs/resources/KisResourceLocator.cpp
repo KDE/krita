@@ -177,16 +177,7 @@ KoResourceSP KisResourceLocator::resource(QString storageLocation, const QString
         }
 
         resource = storage->resource(resourceType + "/" + filename);
-        // Try to locate bundle in bundle modificated resources location.
-        if (QFileInfo(storage->location() + "_modified" + "/" + resourceType + "/" + filename).exists()) {
-            QFileInfo bundleLoc(storage->location());
-            storage = d->storages[bundleLoc.path() + "/"];
-            QString bundleFolderLocation(bundleLoc.fileName() + "_modified" + "/" + resourceType + "/" + filename);
-            resource = storage->resource(bundleFolderLocation);
-            key = QPair<QString, QString> (storageLocation, bundleFolderLocation);
-        } else {
-            resource = storage->resource(resourceType + "/" + filename);
-        }
+
         if (resource) {
             KIS_SAFE_ASSERT_RECOVER(!resource->filename().startsWith(resourceType)) {};
             d->resourceCache[key] = resource;
@@ -300,12 +291,7 @@ bool KisResourceLocator::addResource(const QString &resourceType, const KoResour
 
     //If we have gotten this far and the resource still doesn't have a filename to save to, we should generate one.
     if (resource->filename().isEmpty()) {
-        if (storageLocation == "memory") {
-            resource->setFilename("memory/" + resourceType + "/" + resource->name());
-        }
-        else {
-            resource->setFilename(resource->name().split(" ").join("_") + resource->defaultFileExtension());
-        }
+        resource->setFilename(resource->name().split(" ").join("_") + resource->defaultFileExtension());
     }
 
     // Save the resource to the storage storage

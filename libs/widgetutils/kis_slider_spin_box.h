@@ -93,7 +93,6 @@ protected:
     // QWidget interface
 protected:
     void changeEvent(QEvent *e) override;
-    void paint(QPainter& painter);
     void paintSlider(QPainter& painter);
 
 private:

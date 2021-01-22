@@ -101,7 +101,7 @@ KisAbstractSliderSpinBox::KisAbstractSliderSpinBox(QWidget* parent, KisAbstractS
     setFocusPolicy(Qt::StrongFocus);
     setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
 
-    //dummy needed to fix a bug in the polyester theme
+    // Used to draw spinbox controls
     d->dummySpinBox = new QSpinBox(this);
     d->dummySpinBox->hide();
 }
@@ -142,42 +142,6 @@ void KisAbstractSliderSpinBox::paintEvent(QPaintEvent* e)
     painter.end();
 }
 
-void KisAbstractSliderSpinBox::paint(QPainter &painter)
-{
-    Q_D(KisAbstractSliderSpinBox);
-
-    //Create options to draw spin box parts
-    QStyleOptionSpinBox spinOpts = spinBoxOptions();
-    spinOpts.rect.adjust(0, 2, 0, -2);
-
-    //Draw "SpinBox".Clip off the area of the lineEdit to avoid double
-    //borders being drawn
-    painter.save();
-    painter.setClipping(true);
-
-    QRect eraseRect(QPoint(rect().x(), rect().y()),
-                    QPoint(progressRect(spinOpts).right(), rect().bottom()));
-
-    painter.setClipRegion(QRegion(rect()).subtracted(eraseRect));
-    style()->drawComplexControl(QStyle::CC_SpinBox, &spinOpts, &painter, d->dummySpinBox);
-    painter.setClipping(false);
-    painter.restore();
-
-
-    QStyleOptionProgressBar progressOpts = progressBarOptions();
-    progressOpts.rect.adjust(0, 2, 0, -2);
-    style()->drawControl(QStyle::CE_ProgressBar, &progressOpts, &painter, 0);
-
-    //Draw focus if necessary
-    if (hasFocus() &&
-            d->edit->hasFocus()) {
-        QStyleOptionFocusRect focusOpts;
-        focusOpts.initFrom(this);
-        focusOpts.rect = progressOpts.rect;
-        focusOpts.backgroundColor = palette().color(QPalette::Window);
-        style()->drawPrimitive(QStyle::PE_FrameFocusRect, &focusOpts, &painter, this);
-    }
-}
 
 void KisAbstractSliderSpinBox::paintSlider(QPainter &painter)
 {
@@ -244,6 +208,19 @@ void KisAbstractSliderSpinBox::paintSlider(QPainter &painter)
     }
 
     painter.restore();
+
+
+
+    // Draw focus if necessary
+    if (hasFocus() &&
+            d->edit->hasFocus()) {
+        QStyleOptionFocusRect focusOpts;
+        focusOpts.initFrom(this);
+        focusOpts.rect = progressOpts.rect;
+        focusOpts.backgroundColor = palette().color(QPalette::Window);
+        style()->drawPrimitive(QStyle::PE_FrameFocusRect, &focusOpts, &painter, this);
+    }
+
 }
 
 void KisAbstractSliderSpinBox::mousePressEvent(QMouseEvent* e)
@@ -468,9 +445,9 @@ QSize KisAbstractSliderSpinBox::sizeHint() const
         break;
     }
 
-    //Getting the size of the buttons is a pain as the calcs require a rect
-    //that is "big enough". We run the calc twice to get the "smallest" buttons
-    //This code was inspired by QAbstractSpinBox
+    // Getting the size of the buttons is a pain as the calcs require a rect
+    // that is "big enough". We run the calc twice to get the "smallest" buttons
+    // This code was inspired by QAbstractSpinBox
     QSize extra(1000, 0);
     spinOpts.rect.setSize(hint + extra);
     extra += hint - style()->subControlRect(QStyle::CC_SpinBox, &spinOpts,
@@ -504,6 +481,7 @@ QStyleOptionSpinBox KisAbstractSliderSpinBox::spinBoxOptions() const
     opts.initFrom(this);
     opts.frame = false;
     opts.buttonSymbols = QAbstractSpinBox::UpDownArrows;
+
     opts.subControls = QStyle::SC_SpinBoxUp | QStyle::SC_SpinBoxDown;
 
     //Disable non-logical buttons
@@ -579,17 +557,7 @@ int KisAbstractSliderSpinBox::valueForX(int x, Qt::KeyboardModifiers modifiers) 
     const Q_D(KisAbstractSliderSpinBox);
     QStyleOptionSpinBox spinOpts = spinBoxOptions();
 
-    QRect correctedProgRect;
-    if (d->style == KisAbstractSliderSpinBoxPrivate::STYLE_FUSION) {
-        correctedProgRect = progressRect(spinOpts).adjusted(2, 0, -2, 0);
-    }
-    else if (d->style == KisAbstractSliderSpinBoxPrivate::STYLE_BREEZE) {
-        correctedProgRect = progressRect(spinOpts);
-    }
-    else {
-        //Adjust for magic number in style code (margins)
-        correctedProgRect = progressRect(spinOpts).adjusted(2, 2, -2, -2);
-    }
+    QRect correctedProgRect = progressRect(spinOpts).adjusted(2, 2, -2, -2);
 
     //Compute the distance of the progress bar, in pixel
     qreal leftDbl = correctedProgRect.left();

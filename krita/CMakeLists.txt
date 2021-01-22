@@ -66,6 +66,8 @@ set(krita_QRCS
     ${CMAKE_SOURCE_DIR}/krita/data/aboutdata/aboutdata.qrc
     ${CMAKE_SOURCE_DIR}/krita/data/shaders/shaders.qrc
     ${CMAKE_SOURCE_DIR}/krita/data/cursors/cursors.qrc
+    ${CMAKE_SOURCE_DIR}/krita/data/gamutmasks/gamutmasks.qrc
+    ${CMAKE_SOURCE_DIR}/plugins/paintops/defaultpresets/defaultpresets.qrc
     CACHE INTERNAL "krita_QRCS"
 )
 

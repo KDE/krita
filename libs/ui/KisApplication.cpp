@@ -243,7 +243,6 @@ void KisApplication::addResourceTypes()
     KoResourcePaths::addResourceType("kis_images", "data", "/images/");
     KoResourcePaths::addResourceType("metadata_schema", "data", "/metadata/schemas/");
     KoResourcePaths::addResourceType("gmic_definitions", "data", "/gmic/");
-    KoResourcePaths::addResourceType("kis_defaultpresets", "data", "/defaultpresets/");
     KoResourcePaths::addResourceType("kis_shortcuts", "data", "/shortcuts/");
     KoResourcePaths::addResourceType("kis_actions", "data", "/actions");
     KoResourcePaths::addResourceType("kis_actions", "data", "/pykrita");

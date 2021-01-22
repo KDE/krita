@@ -295,13 +295,14 @@ QString KoResourcePaths::findResourceInternal(const QString &type, const QString
 {
     QStringList aliases = d->aliases(type);
     dbgResources<< "aliases" << aliases << getApplicationRoot();
+    qDebug() << "type" << type << "aliases" << aliases << getApplicationRoot();
     QString resource = QStandardPaths::locate(QStandardPaths::AppDataLocation, fileName, QStandardPaths::LocateFile);
 
     if (resource.isEmpty()) {
         Q_FOREACH (const QString &alias, aliases) {
             resource = QStandardPaths::locate(d->mapTypeToQStandardPaths(type), alias + '/' + fileName, QStandardPaths::LocateFile);
             if (QFile::exists(resource)) {
-                continue;
+                break;
             }
         }
     }
@@ -310,7 +311,7 @@ QString KoResourcePaths::findResourceInternal(const QString &type, const QString
         Q_FOREACH (const QString &alias, aliases) {
             resource = approot + "/share/" + alias + '/' + fileName;
             if (QFile::exists(resource)) {
-                continue;
+                break;
             }
         }
     }
@@ -319,7 +320,7 @@ QString KoResourcePaths::findResourceInternal(const QString &type, const QString
         Q_FOREACH (const QString &alias, aliases) {
             resource = approot + "/share/krita/" + alias + '/' + fileName;
             if (QFile::exists(resource)) {
-                continue;
+                break;
             }
         }
     }
@@ -332,7 +333,7 @@ QString KoResourcePaths::findResourceInternal(const QString &type, const QString
                     resource = extraResourceDir + '/' + fileName;
                     dbgResources<< "\t4" << resource;
                     if (QFile::exists(resource)) {
-                        continue;
+                        break;
                     }
                 }
                 else {
@@ -340,7 +341,7 @@ QString KoResourcePaths::findResourceInternal(const QString &type, const QString
                         resource = extraResourceDir + '/' + alias + '/' + fileName;
                         dbgResources<< "\t4" << resource;
                         if (QFile::exists(resource)) {
-                            continue;
+                            break;
                         }
                     }
                 }
@@ -349,6 +350,7 @@ QString KoResourcePaths::findResourceInternal(const QString &type, const QString
     }
 
     dbgResources<< "findResource: type" << type << "filename" << fileName << "resource" << resource;
+    qDebug() << "findResource: type" << type << "filename" << fileName << "resource" << resource;
     Q_ASSERT(!resource.isEmpty());
     return resource;
 }

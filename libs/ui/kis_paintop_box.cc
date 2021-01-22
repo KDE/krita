@@ -693,8 +693,8 @@ void KisPaintopBox::slotUpdateOptionsWidgetPopup()
 
 KisPaintOpPresetSP KisPaintopBox::defaultPreset(const KoID& paintOp)
 {
-    QString defaultName = paintOp.id() + ".kpp";
-    QString path = KoResourcePaths::findResource("kis_defaultpresets", defaultName);
+    QString path = ":/presets/" + paintOp.id() + ".kpp";
+    dbgResources << "Getting default presets from qrc resources" << path;
 
     KisPaintOpPresetSP preset(new KisPaintOpPreset(path));
 

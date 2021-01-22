@@ -295,7 +295,6 @@ QString KoResourcePaths::findResourceInternal(const QString &type, const QString
 {
     QStringList aliases = d->aliases(type);
     dbgResources<< "aliases" << aliases << getApplicationRoot();
-    qDebug() << "type" << type << "aliases" << aliases << getApplicationRoot();
     QString resource = QStandardPaths::locate(QStandardPaths::AppDataLocation, fileName, QStandardPaths::LocateFile);
 
     if (resource.isEmpty()) {
@@ -350,7 +349,6 @@ QString KoResourcePaths::findResourceInternal(const QString &type, const QString
     }
 
     dbgResources<< "findResource: type" << type << "filename" << fileName << "resource" << resource;
-    qDebug() << "findResource: type" << type << "filename" << fileName << "resource" << resource;
     Q_ASSERT(!resource.isEmpty());
     return resource;
 }

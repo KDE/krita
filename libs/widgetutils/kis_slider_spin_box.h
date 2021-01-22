@@ -94,8 +94,7 @@ protected:
 protected:
     void changeEvent(QEvent *e) override;
     void paint(QPainter& painter);
-    void paintFusion(QPainter& painter);
-    void paintBreeze(QPainter& painter);
+    void paintSlider(QPainter& painter);
 
 private:
     void setInternalValue(int value);

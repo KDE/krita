@@ -138,19 +138,7 @@ void KisAbstractSliderSpinBox::paintEvent(QPaintEvent* e)
     Q_UNUSED(e);
 
     QPainter painter(this);
-
-    switch (d->style) {
-    case KisAbstractSliderSpinBoxPrivate::STYLE_FUSION:
-        paintFusion(painter);
-        break;
-    case KisAbstractSliderSpinBoxPrivate::STYLE_BREEZE:
-        paintBreeze(painter);
-        break;
-    default:
-        paint(painter);
-        break;
-    }
-
+    paintSlider(painter);
     painter.end();
 }
 
@@ -191,56 +179,63 @@ void KisAbstractSliderSpinBox::paint(QPainter &painter)
     }
 }
 
-void KisAbstractSliderSpinBox::paintFusion(QPainter &painter)
+void KisAbstractSliderSpinBox::paintSlider(QPainter &painter)
 {
     Q_D(KisAbstractSliderSpinBox);
 
+    // paint up/down increment arrows
     QStyleOptionSpinBox spinOpts = spinBoxOptions();
     spinOpts.frame = true;
     spinOpts.rect.adjust(0, -1, 0, 1);
-    //spinOpts.palette().setBrush(QPalette::Base, palette().highlight());
-    QStyleOptionProgressBar progressOpts = progressBarOptions();
-
     style()->drawComplexControl(QStyle::CC_SpinBox, &spinOpts, &painter, d->dummySpinBox);
 
     painter.save();
 
-    QRect rect = progressOpts.rect.adjusted(1,2,-4,-2);
-    QRect leftRect;
+    // draw the colored slider bar that is really a progress indicator
+    QStyleOptionProgressBar progressOpts = progressBarOptions();
+    QRect rect = progressOpts.rect.adjusted(2,2,-2,-2); // this helps when at 100%, it doesn't clear the progress
+    QRect progressBarRect;
+
+
+    // This displays a background color/container, or "groove", for the progress bar
+    style()->drawControl(QStyle::CE_ProgressBarGroove, &progressOpts, &painter, this);
+
 
     int progressIndicatorPos = (progressOpts.progress - qreal(progressOpts.minimum)) / qMax(qreal(1.0),
                                qreal(progressOpts.maximum) - progressOpts.minimum) * rect.width();
 
     if (progressIndicatorPos >= 0 && progressIndicatorPos <= rect.width()) {
-        leftRect = QRect(rect.left(), rect.top(), progressIndicatorPos, rect.height());
+        progressBarRect = QRect(rect.left(), rect.top(), progressIndicatorPos, rect.height());
     } else if (progressIndicatorPos > rect.width()) {
         painter.setPen(palette().highlightedText().color());
     } else {
         painter.setPen(palette().buttonText().color());
     }
 
+    bool isNotEditingValues = !(d->edit && d->edit->isVisible());
     QRegion rightRect = rect;
-    rightRect = rightRect.subtracted(leftRect);
+    rightRect = rightRect.subtracted(progressBarRect);
 
     QTextOption textOption(Qt::AlignAbsolute | Qt::AlignHCenter | Qt::AlignVCenter);
     textOption.setWrapMode(QTextOption::NoWrap);
 
-    if (!(d->edit && d->edit->isVisible())) {
+    // setup is done... now determine what things we actually need to paint
+    if (isNotEditingValues) {
         painter.setClipRegion(rightRect);
         painter.setClipping(true);
         painter.drawText(rect.adjusted(-2,0,2,0), progressOpts.text, textOption);
         painter.setClipping(false);
     }
 
-    if (!leftRect.isNull()) {
-        painter.setClipRect(leftRect.adjusted(0, -1, 1, 1));
+    if (!progressBarRect.isNull()) {
+        painter.setClipRect(progressBarRect.adjusted(0, -1, 1, 1));
         painter.setPen(palette().highlight().color());
         painter.setBrush(palette().highlight());
 
         spinOpts.palette.setBrush(QPalette::Base, palette().highlight());
-        style()->drawComplexControl(QStyle::CC_SpinBox, &spinOpts, &painter, d->dummySpinBox);
+        style()->drawControl(QStyle::CE_ProgressBarContents, &progressOpts, &painter, this);
 
-        if (!(d->edit && d->edit->isVisible())) {
+        if (isNotEditingValues) {
             painter.setPen(palette().highlightedText().color());
             painter.setClipping(true);
             painter.drawText(rect.adjusted(-2,0,2,0), progressOpts.text, textOption);
@@ -249,58 +244,6 @@ void KisAbstractSliderSpinBox::paintFusion(QPainter &painter)
     }
 
     painter.restore();
-}
-
-void KisAbstractSliderSpinBox::paintBreeze(QPainter &painter)
-{
-    Q_D(KisAbstractSliderSpinBox);
-
-    QStyleOptionSpinBox spinOpts = spinBoxOptions();
-    QStyleOptionProgressBar progressOpts = progressBarOptions();
-    QString valueText = progressOpts.text;
-    progressOpts.text = "";
-    progressOpts.rect.adjust(0, 1, 0, -1);
-
-    style()->drawComplexControl(QStyle::CC_SpinBox, &spinOpts, &painter, this);
-    style()->drawControl(QStyle::CE_ProgressBarGroove, &progressOpts, &painter, this);
-
-    painter.save();
-
-    QRect leftRect;
-
-    int progressIndicatorPos = (progressOpts.progress - qreal(progressOpts.minimum)) / qMax(qreal(1.0),
-                               qreal(progressOpts.maximum) - progressOpts.minimum) * progressOpts.rect.width();
-
-    if (progressIndicatorPos >= 0 && progressIndicatorPos <= progressOpts.rect.width()) {
-        leftRect = QRect(progressOpts.rect.left(), progressOpts.rect.top(), progressIndicatorPos, progressOpts.rect.height());
-    } else if (progressIndicatorPos > progressOpts.rect.width()) {
-        painter.setPen(palette().highlightedText().color());
-    } else {
-        painter.setPen(palette().buttonText().color());
-    }
-
-    QRegion rightRect = progressOpts.rect;
-    rightRect = rightRect.subtracted(leftRect);
-    painter.setClipRegion(rightRect);
-
-    QTextOption textOption(Qt::AlignAbsolute | Qt::AlignHCenter | Qt::AlignVCenter);
-    textOption.setWrapMode(QTextOption::NoWrap);
-
-    if (!(d->edit && d->edit->isVisible())) {
-        painter.drawText(progressOpts.rect, valueText, textOption);
-    }
-
-    if (!leftRect.isNull()) {
-        painter.setPen(palette().highlightedText().color());
-        painter.setClipRect(leftRect);
-        style()->drawControl(QStyle::CE_ProgressBarContents, &progressOpts, &painter, this);
-        if (!(d->edit && d->edit->isVisible())) {
-            painter.drawText(progressOpts.rect, valueText, textOption);
-        }
-    }
-
-    painter.restore();
-
 }
 
 void KisAbstractSliderSpinBox::mousePressEvent(QMouseEvent* e)
@@ -615,14 +558,6 @@ QRect KisAbstractSliderSpinBox::progressRect(const QStyleOptionSpinBox& spinBoxO
     const Q_D(KisAbstractSliderSpinBox);
     QRect ret = style()->subControlRect(QStyle::CC_SpinBox, &spinBoxOptions,
                                         QStyle::SC_SpinBoxEditField);
-
-    switch (d->style) {
-    case KisAbstractSliderSpinBoxPrivate::STYLE_BREEZE:
-        ret.adjust(1, 0, 0, 0);
-        break;
-    default:
-        break;
-    }
 
     return ret;
 }

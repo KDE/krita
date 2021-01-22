@@ -118,7 +118,7 @@ void KoGroupButton::paintEvent(QPaintEvent* event)
     painter.setOpacity(1.0);
 
     // Separator
-    //! @todo make specific fixes for styles such as Plastique, Cleanlooks if there's practical no alternative
+    //! @todo make specific fixes for styles such as Cleanlooks if there's practical no alternative
     const int y1 = opt.rect.top() + 1;
     const int y2 = opt.rect.bottom() - 1;
     painter.setOpacity(0.4);

@@ -95,7 +95,6 @@ protected:
     void changeEvent(QEvent *e) override;
     void paint(QPainter& painter);
     void paintFusion(QPainter& painter);
-    void paintPlastique(QPainter& painter);
     void paintBreeze(QPainter& painter);
 
 private:

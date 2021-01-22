@@ -2771,13 +2771,10 @@ void KisMainWindow::createActions()
 
 void KisMainWindow::applyToolBarLayout()
 {
-    const bool isPlastiqueStyle = style()->objectName() == "plastique";
 
     Q_FOREACH (KToolBar *toolBar, toolBars()) {
         toolBar->layout()->setSpacing(4);
-        if (isPlastiqueStyle) {
-            toolBar->setContentsMargins(0, 0, 0, 2);
-        }
+
         //Hide text for buttons with an icon in the toolbar
         Q_FOREACH (QAction *ac, toolBar->actions()){
             if (ac->icon().pixmap(QSize(1,1)).isNull() == false){

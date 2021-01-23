@@ -142,7 +142,7 @@ bool Filter::startFilter(Node *node, int x, int y, int w, int h)
 
     const int frameID = paintDevice ? paintDevice->framesInterface()->currentFrameId() : -1;
 
-    image->addJob(currentStrokeId, new KisFilterStrokeStrategy::Data(frameID));
+    image->addJob(currentStrokeId, new KisFilterStrokeStrategy::FilterFrameData(frameID));
 
 
     image->endStroke(currentStrokeId);

@@ -321,10 +321,9 @@ void KisFilterManager::apply(KisFilterConfigurationSP _filterConfig)
 
     const int NULL_FRAME = -1;
     const int frameID = paintDevice && paintDevice->framesInterface() ? paintDevice->framesInterface()->currentFrameId() : NULL_FRAME;
-    ENTER_FUNCTION();
 
-    image->addJob(d->currentStrokeId,
-                  new KisFilterStrokeStrategy::Data(frameID));
+    // Apply filter preview to active, visible frame only.
+    image->addJob(d->currentStrokeId, new KisFilterStrokeStrategy::FilterFrameData(frameID));
 
     {
         KisFilterStrokeStrategy::IdleBarrierData *data =
@@ -334,7 +333,6 @@ void KisFilterManager::apply(KisFilterConfigurationSP _filterConfig)
     }
 
     QRegion extraUpdateRegion(d->lastExtendedUpdateRect);
-    extraUpdateRegion -= processRect;
 
     if (!extraUpdateRegion.isEmpty()) {
         QVector<QRect> rects;
@@ -345,17 +343,13 @@ void KisFilterManager::apply(KisFilterConfigurationSP _filterConfig)
     }
 
     d->currentlyAppliedConfiguration = filterConfig;
-    d->lastExtendedUpdateRect |= processRect;
-    d->lastProcessRect = processRect;
 }
 
 void KisFilterManager::finish()
 {
-    ENTER_FUNCTION();
     Q_ASSERT(d->currentStrokeId);
 
-    {// Do other frames...
-
+    {   // Apply filter to the other non-active frames...
         KisImageWSP image = d->view->image();
         KisPaintDeviceSP paintDevice = d->view->activeNode()->paintDevice();
         const int NULL_FRAME = -1;
@@ -364,8 +358,7 @@ void KisFilterManager::finish()
 
         frames.removeAll(frameID);
         Q_FOREACH(const int& frame, frames) {
-            image->addJob(d->currentStrokeId,
-                          new KisFilterStrokeStrategy::Data(frame));
+            image->addJob(d->currentStrokeId, new KisFilterStrokeStrategy::FilterFrameData(frame));
         }
     }
 

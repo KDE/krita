@@ -23,21 +23,21 @@ public:
      * and after that a set of "mutated jobs" should be generated" - Dmitry
      *
      */
-    class Data : public KisStrokeJobData {
+    class FilterFrameData : public KisStrokeJobData {
     public:
-        Data(int frameID)
+        FilterFrameData(int frameID)
             : KisStrokeJobData(CONCURRENT),
               m_frameID(frameID)
         {}
 
         KisStrokeJobData* createLodClone(int levelOfDetail) override {
-            return new Data(*this, levelOfDetail);
+            return new FilterFrameData(*this, levelOfDetail);
         }
 
         int m_frameID;
 
     private:
-        Data(const Data &rhs, int levelOfDetail)
+        FilterFrameData(const FilterFrameData &rhs, int levelOfDetail)
             : KisStrokeJobData(rhs)
             , m_frameID(rhs.m_frameID)
          {

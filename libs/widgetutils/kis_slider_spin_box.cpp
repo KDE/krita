@@ -151,6 +151,7 @@ void KisAbstractSliderSpinBox::paintSlider(QPainter &painter)
     QStyleOptionSpinBox spinOpts = spinBoxOptions();
     spinOpts.frame = true;
     spinOpts.rect.adjust(0, -1, 0, 1);
+
     style()->drawComplexControl(QStyle::CC_SpinBox, &spinOpts, &painter, d->dummySpinBox);
 
     painter.save();
@@ -417,48 +418,21 @@ bool KisAbstractSliderSpinBox::eventFilter(QObject* recv, QEvent* e)
 QSize KisAbstractSliderSpinBox::sizeHint() const
 {
     const Q_D(KisAbstractSliderSpinBox);
+
     QStyleOptionSpinBox spinOpts = spinBoxOptions();
 
-    QFont ft(font());
-    if (d->style == KisAbstractSliderSpinBoxPrivate::STYLE_NOQUIRK) {
-        // Some styles use bold font in progressbars
-        // unfortunately there is no reliable way to check for that
-        ft.setBold(true);
-    }
-
-    QFontMetrics fm(ft);
+    QFontMetrics fm(font());
     QSize hint(fm.boundingRect(d->prefix + QString::number(d->maximum) + d->suffix).size());
-    hint += QSize(0, 2);
-
-    switch (d->style) {
-    case KisAbstractSliderSpinBoxPrivate::STYLE_FUSION:
-        hint += QSize(8, 8);
-        break;
-    case KisAbstractSliderSpinBoxPrivate::STYLE_BREEZE:
-        hint += QSize(2, 0);
-        break;
-    case KisAbstractSliderSpinBoxPrivate::STYLE_NOQUIRK:
-        // almost all "modern" styles have a margin around controls
-        hint += QSize(6, 6);
-        break;
-    default:
-        break;
-    }
 
     // Getting the size of the buttons is a pain as the calcs require a rect
-    // that is "big enough". We run the calc twice to get the "smallest" buttons
+    // that is "big enough". We run the calc to get the "smallest" buttons
     // This code was inspired by QAbstractSpinBox
     QSize extra(1000, 0);
     spinOpts.rect.setSize(hint + extra);
     extra += hint - style()->subControlRect(QStyle::CC_SpinBox, &spinOpts,
                                             QStyle::SC_SpinBoxEditField, this).size();
-    spinOpts.rect.setSize(hint + extra);
-    extra += hint - style()->subControlRect(QStyle::CC_SpinBox, &spinOpts,
-                                            QStyle::SC_SpinBoxEditField, this).size();
     hint += extra;
 
-
-    spinOpts.rect.setSize(hint);
     return style()->sizeFromContents(QStyle::CT_SpinBox, &spinOpts, hint)
             .expandedTo(QApplication::globalStrut());
 

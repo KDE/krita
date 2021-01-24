@@ -426,7 +426,7 @@ QWidget * KisToolBrush::createOptionWidget()
     // add a line spacer so we know that the next set of options are for different settings
     QFrame* line = new QFrame(optionsWidget);
     line->setObjectName(QString::fromUtf8("line"));
-    line->setFrameShape(QFrame::HLine);
+    line->setFrameStyle(QFrame::HLine | QFrame::Sunken);
     addOptionWidgetOption(line);
 
     // Drawing assistant configuration

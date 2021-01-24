@@ -127,11 +127,20 @@ QSize KisAngleSelectorSpinBox::minimumSizeHint() const
         s = textFromValue(minimum());
         s.truncate(18);
         s += fixedContent;
+#if QT_VERSION >= QT_VERSION_CHECK(5,11,0)
         w = qMax(w, fm.horizontalAdvance(s));
+#else
+        w = qMax(w, fm.width(s));
+#endif
         s = textFromValue(maximum());
         s.truncate(18);
         s += fixedContent;
+#if QT_VERSION >= QT_VERSION_CHECK(5,11,0)
         w = qMax(w, fm.horizontalAdvance(s));
+#else
+        w = qMax(w, fm.width(s));
+#endif
+
 
         w += 2; // cursor blinking space
 

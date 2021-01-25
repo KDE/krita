@@ -410,6 +410,14 @@ set_package_properties(Qt5Quick PROPERTIES
         PURPOSE "Optionally used for the touch gui for Krita")
 
 macro_bool_to_01(Qt5Quick_FOUND HAVE_QT_QUICK)
+if (Qt5Quick_FOUND)
+    get_target_property(Qt5Quick_LIBRARY Qt5::Quick "LOCATION")
+    list (APPEND ANDROID_EXTRA_LIBS ${Qt5Quick_LIBRARY})
+
+    get_target_property(Qt5Qml_LIBRARY Qt5::Qml "LOCATION")
+    list (APPEND ANDROID_EXTRA_LIBS ${Qt5Qml_LIBRARY})
+endif()
+
 
 find_package(Qt5QuickWidgets ${MIN_QT_VERSION})
 set_package_properties(Qt5QuickWidgets PROPERTIES
@@ -417,6 +425,11 @@ set_package_properties(Qt5QuickWidgets PROPERTIES
         URL "https://www.qt.io/"
         TYPE OPTIONAL
         PURPOSE "Optionally used for the touch gui for Krita")
+endif()
+
+if (Qt5QuickWidgets_FOUND)
+    get_target_property(Qt5QuickWidgets_LIBRARY Qt5::QuickWidgets "LOCATION")
+    list (APPEND ANDROID_EXTRA_LIBS ${Qt5QuickWidgets_LIBRARY})
 endif()
 
 if (NOT WIN32 AND NOT APPLE AND NOT ANDROID)

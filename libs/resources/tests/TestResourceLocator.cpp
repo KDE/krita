@@ -28,6 +28,8 @@
 #include <DummyResource.h>
 #include <ResourceTestHelper.h>
 
+#include <kis_debug.h>
+
 
 #ifndef FILES_DATA_DIR
 #error "FILES_DATA_DIR not set. A directory with the data used for testing installing resources"
@@ -133,7 +135,6 @@ void TestResourceLocator::testResourceForId()
     QCOMPARE(res, res2);
 }
 
-
 void TestResourceLocator::testDocumentStorage()
 {
     const QString &documentName("document");
@@ -142,7 +143,7 @@ void TestResourceLocator::testDocumentStorage()
     int rowcount = model.rowCount();
 
     KisResourceStorageSP documentStorage = QSharedPointer<KisResourceStorage>::create(documentName);
-    KoResourceSP resource(new DummyResource("test"));
+    KoResourceSP resource(new DummyResource("test.kpp", ResourceType::PaintOpPresets));
     documentStorage->addResource(resource);
 
     m_locator->addStorage(documentName, documentStorage);

@@ -98,6 +98,9 @@ void TestFolderStorage::testAddResource()
                                              "paintoppresets",
                                              "paintoppresets/anewresource.0000.kpp",
                                              QString(FILES_DEST_DIR));
+    ResourceTestHelper::testVersionedStorageIterator(folderStorage,
+                                                     "paintoppresets",
+                                                     "paintoppresets/anewresource.0000.kpp");
 }
 
 void TestFolderStorage::cleanupTestCase()

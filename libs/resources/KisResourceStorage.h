@@ -97,6 +97,8 @@ public:
         virtual QString url() const = 0;
         virtual QString type() const = 0;
         virtual QDateTime lastModified() const = 0;
+        virtual int guessedVersion() const { return 0; }
+        virtual QSharedPointer<KisResourceStorage::ResourceIterator> versions() const;
 
         KoResourceSP resource() const;
 
@@ -273,13 +275,72 @@ private:
 
 };
 
-class KisStorageVersioningHelper {
+struct VersionedResourceEntry
+{
+    QString resourceType;
+    QString filename;
+    QList<QString> tagList;
+    QDateTime lastModified;
+    int guessedVersion = -1;
+    QString guessedKey;
+
+    struct KeyVersionLess {
+        bool operator()(const VersionedResourceEntry &lhs, const VersionedResourceEntry &rhs) const {
+            return lhs.guessedKey < rhs.guessedKey ||
+                (lhs.guessedKey == rhs.guessedKey && lhs.guessedVersion < rhs.guessedVersion);
+        }
+    };
+
+    struct KeyLess {
+        bool operator()(const VersionedResourceEntry &lhs, const VersionedResourceEntry &rhs) const {
+            return lhs.guessedKey < rhs.guessedKey;
+        }
+    };
+};
+
+class KRITARESOURCES_EXPORT KisStorageVersioningHelper {
 public:
+
     static bool addVersionedResource(const QString &saveLocation, KoResourceSP resource, int minVersion);
     static QString chooseUniqueName(KoResourceSP resource,
                                     int minVersion,
                                     std::function<bool(QString)> checkExists);
 
+    static void detectFileVersions(QVector<VersionedResourceEntry> &allFiles);
+
+
+};
+
+class KisVersionedStorageIterator : public KisResourceStorage::ResourceIterator
+{
+public:
+    KisVersionedStorageIterator(const QVector<VersionedResourceEntry> &entries,
+                                KisStoragePlugin *_q);
+
+    bool hasNext() const override;
+    void next() override;
+    QString url() const override;
+    QString type() const override;
+    QDateTime lastModified() const override;
+    KoResourceSP resourceImpl() const override;
+
+    int guessedVersion() const override;
+
+    QSharedPointer<KisResourceStorage::ResourceIterator> versions() const override;
+
+protected:
+    KisVersionedStorageIterator(const QVector<VersionedResourceEntry> &entries,
+                                QVector<VersionedResourceEntry>::const_iterator begin,
+                                QVector<VersionedResourceEntry>::const_iterator end,
+                                KisStoragePlugin *_q);
+protected:
+    KisStoragePlugin *q = 0;
+    const QVector<VersionedResourceEntry> m_entries;
+    QVector<VersionedResourceEntry>::const_iterator m_it;
+    QVector<VersionedResourceEntry>::const_iterator m_chunkStart;
+    QVector<VersionedResourceEntry>::const_iterator m_begin;
+    QVector<VersionedResourceEntry>::const_iterator m_end;
+    bool m_isStarted = false;
 };
 
 

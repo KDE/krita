@@ -199,6 +199,46 @@ void testVersionedStorage(KisStoragePlugin &storage, const QString &resourceType
     verifyFileExists(res4);
 }
 
+void testVersionedStorageIterator(KisStoragePlugin &storage, const QString &resourceType, const QString &resourceUrl)
+{
+    const QString basename = QFileInfo(resourceUrl).baseName();
+
+    QSharedPointer<KisResourceStorage::ResourceIterator> iter = storage.resources(resourceType);
+    QVERIFY(iter->hasNext());
+    int count = 0;
+    int numVersions = 0;
+    while (iter->hasNext()) {
+        iter->next();
+
+        //qDebug() << iter->url() << ppVar(iter->guessedVersion()) << ppVar(iter->lastModified());
+
+        if (iter->url().contains(basename)) {
+
+            // because of versioning, the URL should have been changed
+            QVERIFY(iter->url() != resourceUrl);
+
+            //qDebug() << iter->url() << ppVar(iter->guessedVersion()) << ppVar(iter->lastModified());
+
+            count++;
+
+            auto verIt = iter->versions();
+            while (verIt->hasNext()) {
+                verIt->next();
+
+                qDebug() << verIt->url() << ppVar(verIt->guessedVersion());
+                numVersions++;
+                QVERIFY(verIt->url().contains(basename));
+            }
+        }
+
+        KoResourceSP res = iter->resource();
+        QVERIFY(res);
+    }
+
+    QCOMPARE(count, 1);
+    QCOMPARE(numVersions, 4);
+};
+
 }
 
 #endif // RESOURCETESTHELPER_H

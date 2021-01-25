@@ -85,6 +85,7 @@ void TestMemoryStorage::testAddResource()
     memoryStorage.addResource("brushes", res1);
 
     ResourceTestHelper::testVersionedStorage(memoryStorage, "brushes", "brushes/test1.0000.gbr");
+    ResourceTestHelper::testVersionedStorageIterator(memoryStorage, "brushes", "brushes/test1.0000.gbr");
 }
 
 QTEST_MAIN(TestMemoryStorage)

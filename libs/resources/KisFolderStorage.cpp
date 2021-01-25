@@ -13,6 +13,8 @@
 #include <KisResourceLoaderRegistry.h>
 #include <kbackup.h>
 #include <KisGlobalResourcesInterface.h>
+#include <kis_pointer_utils.h>
+
 
 class FolderTagIterator : public KisResourceStorage::TagIterator
 {
@@ -77,58 +79,6 @@ public:
     ~FolderItem() override {}
 };
 
-class FolderIterator : public KisResourceStorage::ResourceIterator
-{
-public:
-    FolderIterator(KisFolderStorage *_q, const QString &resourceType)
-        : q(_q)
-        , m_resourceType(resourceType)
-    {
-        m_dirIterator.reset(new QDirIterator(q->location() + '/' + resourceType,
-                                             KisResourceLoaderRegistry::instance()->filters(resourceType),
-                                             QDir::Files | QDir::Readable,
-                                             QDirIterator::Subdirectories));
-    }
-
-    ~FolderIterator() override {}
-
-    bool hasNext() const override
-    {
-        return m_dirIterator->hasNext();
-    }
-
-    void next() override
-    {
-        m_dirIterator->next();
-    }
-
-    QString url() const override
-    {
-        return m_dirIterator->filePath();
-    }
-
-    QString type() const override
-    {
-        return m_resourceType;
-    }
-
-    QDateTime lastModified() const override
-    {
-        return m_dirIterator->fileInfo().lastModified();
-    }
-
-    KoResourceSP resourceImpl() const override
-    {
-        return q->resource(m_resourceType + "/" + m_dirIterator->fileName());
-    }
-
-protected:
-
-    KisFolderStorage *q;
-    QScopedPointer<QDirIterator> m_dirIterator;
-    const QString m_resourceType;
-};
-
 
 KisFolderStorage::KisFolderStorage(const QString &location)
     : KisStoragePlugin(location)
@@ -175,7 +125,30 @@ bool KisFolderStorage::loadVersionedResource(KoResourceSP resource)
 
 QSharedPointer<KisResourceStorage::ResourceIterator> KisFolderStorage::resources(const QString &resourceType)
 {
-    return QSharedPointer<KisResourceStorage::ResourceIterator>(new FolderIterator(this, resourceType));
+    QVector<VersionedResourceEntry> entries;
+
+    const QString bundleSaveLocation = location() + "/" + resourceType;
+
+    QDirIterator it(bundleSaveLocation,
+                    KisResourceLoaderRegistry::instance()->filters(resourceType),
+                    QDir::Files | QDir::Readable,
+                    QDirIterator::Subdirectories);;
+
+    while (it.hasNext()) {
+        it.next();
+        QFileInfo info(it.fileInfo());
+
+        VersionedResourceEntry entry;
+        entry.filename = info.fileName();
+        entry.lastModified = info.lastModified();
+        entry.tagList = {}; // TODO
+        entry.resourceType = resourceType;
+        entries.append(entry);
+    }
+
+    KisStorageVersioningHelper::detectFileVersions(entries);
+
+    return toQShared(new KisVersionedStorageIterator(entries, this));
 }
 
 QSharedPointer<KisResourceStorage::TagIterator> KisFolderStorage::tags(const QString &resourceType)

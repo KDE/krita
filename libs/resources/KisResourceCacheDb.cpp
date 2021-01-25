@@ -592,13 +592,32 @@ bool KisResourceCacheDb::addResources(KisResourceStorageSP storage, QString reso
     QSharedPointer<KisResourceStorage::ResourceIterator> iter = storage->resources(resourceType);
     while (iter->hasNext()) {
         iter->next();
-        KoResourceSP resource = iter->resource();
-        if (resource && resource->valid()) {
-            if (resource->version() == -1) {
-                resource->setVersion(0);
-            }
-            if (!addResource(storage, iter->lastModified(), resource, iter->type())) {
-                qWarning() << "Could not add resource" << QFileInfo(resource->filename()).fileName() << "to the database";
+
+        QSharedPointer<KisResourceStorage::ResourceIterator> verIt =
+            iter->versions();
+
+        int resourceId = -1;
+
+        while (verIt->hasNext()) {
+            verIt->next();
+
+            KoResourceSP resource = verIt->resource();
+            if (resource && resource->valid()) {
+                if (resource->version() == -1) {
+                    resource->setVersion(verIt->guessedVersion());
+                }
+
+                if (resourceId < 0) {
+                    if (addResource(storage, iter->lastModified(), resource, iter->type())) {
+                        resourceId = resource->resourceId();
+                    } else {
+                        qWarning() << "Could not add resource" << QFileInfo(resource->filename()).fileName() << "to the database";
+                    }
+                } else {
+                    if (!addResourceVersion(resourceId, iter->lastModified(), storage, resource)) {
+                        qWarning() << "Could not add resource version" << QFileInfo(resource->filename()).fileName() << "to the database";
+                    }
+                }
             }
         }
     }

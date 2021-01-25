@@ -9,12 +9,16 @@
 #include <QDebug>
 #include <QFileInfo>
 #include <QDir>
+#include <QDirIterator>
 
 #include <KisTag.h>
 #include "KisResourceStorage.h"
 #include "KoResourceBundle.h"
 #include "KoResourceBundleManifest.h"
 #include <KisGlobalResourcesInterface.h>
+
+#include <KisResourceLoaderRegistry.h>
+#include <kis_pointer_utils.h>
 #include <kis_debug.h>
 
 class KisBundleStorage::Private {
@@ -80,58 +84,6 @@ private:
     KisTagSP m_tag;
 };
 
-class BundleIterator : public KisResourceStorage::ResourceIterator
-{
-public:
-    BundleIterator(KisBundleStorage *_q, const QString &resourceType)
-        : q(_q)
-        , m_resourceType(resourceType)
-    {
-        m_entriesIterator.reset(
-            new QListIterator<KoResourceBundleManifest::ResourceReference>(
-                        q->d->bundle->manifest().files(resourceType)));
-    }
-
-    bool hasNext() const override
-    {
-        return m_entriesIterator->hasNext();
-    }
-
-    void next() override
-    {
-        KoResourceBundleManifest::ResourceReference ref = m_entriesIterator->next();
-        const_cast<BundleIterator*>(this)->m_resourceReference = ref;
-    }
-
-    QString url() const override
-    {
-        return m_resourceReference.resourcePath;
-    }
-
-    QString type() const override
-    {
-        return m_resourceType;
-    }
-
-    QDateTime lastModified() const override
-    {
-        return QFileInfo(q->location()).lastModified();
-    }
-
-    /// This only loads the resource when called
-    KoResourceSP resourceImpl() const override
-    {
-        return q->resource(m_resourceReference.resourcePath);
-    }
-
-private:
-    KisBundleStorage *q {0};
-    QString m_resourceType;
-    QScopedPointer<QListIterator<KoResourceBundleManifest::ResourceReference> > m_entriesIterator;
-    KoResourceBundleManifest::ResourceReference m_resourceReference;
-
-};
-
 
 KisBundleStorage::KisBundleStorage(const QString &location)
     : KisStoragePlugin(location)
@@ -195,7 +147,42 @@ bool KisBundleStorage::loadVersionedResource(KoResourceSP resource)
 
 QSharedPointer<KisResourceStorage::ResourceIterator> KisBundleStorage::resources(const QString &resourceType)
 {
-    return QSharedPointer<KisResourceStorage::ResourceIterator>(new BundleIterator(this, resourceType));
+    QVector<VersionedResourceEntry> entries;
+
+    QList<KoResourceBundleManifest::ResourceReference> references =
+        d->bundle->manifest().files(resourceType);
+
+    for (auto it = references.begin(); it != references.end(); ++it) {
+        VersionedResourceEntry entry;
+        entry.filename = QFileInfo(it->resourcePath).fileName();
+        entry.lastModified = QFileInfo(location()).lastModified();
+        entry.tagList = it->tagList;
+        entry.resourceType = resourceType;
+        entries.append(entry);
+    }
+
+    const QString bundleSaveLocation = location() + "_modified" + "/" + resourceType;
+
+    QDirIterator it(bundleSaveLocation,
+                    KisResourceLoaderRegistry::instance()->filters(resourceType),
+                    QDir::Files | QDir::Readable,
+                    QDirIterator::Subdirectories);;
+
+    while (it.hasNext()) {
+        it.next();
+        QFileInfo info(it.fileInfo());
+
+        VersionedResourceEntry entry;
+        entry.filename = info.fileName();
+        entry.lastModified = info.lastModified();
+        entry.tagList = {}; // TODO
+        entry.resourceType = resourceType;
+        entries.append(entry);
+    }
+
+    KisStorageVersioningHelper::detectFileVersions(entries);
+
+    return toQShared(new KisVersionedStorageIterator(entries, this));
 }
 
 QSharedPointer<KisResourceStorage::TagIterator> KisBundleStorage::tags(const QString &resourceType)

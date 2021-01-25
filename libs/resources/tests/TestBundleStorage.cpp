@@ -117,8 +117,9 @@ void TestBundleStorage::testAddResource()
     ResourceTestHelper::testVersionedStorage(storage, resourceType, resourceUrl,
                                             FILES_DEST_DIR +
                                              QString("/bundles/Krita_4_Default_Resources.bundle_modified"));
-}
 
+    ResourceTestHelper::testVersionedStorageIterator(storage, resourceType, resourceUrl);
+}
 
 QTEST_MAIN(TestBundleStorage)
 

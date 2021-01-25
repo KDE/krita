@@ -16,6 +16,7 @@
 #include <KisResourceStorage.h>
 #include <QBuffer>
 #include <KisGlobalResourcesInterface.h>
+#include <kis_pointer_utils.h>
 
 struct StoredResource
 {
@@ -68,58 +69,6 @@ class MemoryItem : public KisResourceStorage::ResourceItem
 public:
     ~MemoryItem() override {}
 };
-
-class MemoryIterator : public KisResourceStorage::ResourceIterator
-{
-public:
-    MemoryIterator(KisMemoryStorage *_q, QHash<QString, StoredResource> &resources, const QString &resourceType)
-        : q(_q)
-        , m_iterator(resources)
-        , m_resourceType(resourceType)
-    {
-    }
-
-    ~MemoryIterator() override {}
-
-    bool hasNext() const override
-    {
-        return m_iterator.hasNext();
-    }
-
-    void next() override
-    {
-        m_iterator.next();
-    }
-
-    QString url() const override
-    {
-        return m_iterator.key();
-    }
-
-    QString type() const override
-    {
-        return m_resourceType;
-    }
-
-    QDateTime lastModified() const override
-    {
-        const StoredResource &storedVersions =
-            m_iterator.value();
-
-        return storedVersions.timestamp;
-    }
-
-    KoResourceSP resourceImpl() const override
-    {
-        return q->resource(m_resourceType + "/" + m_iterator.key());
-    }
-
-private:
-    KisMemoryStorage *q;
-    QHashIterator<QString, StoredResource> m_iterator;
-    QString m_resourceType;
-};
-
 
 
 class KisMemoryStorage::Private {
@@ -238,7 +187,25 @@ bool KisMemoryStorage::loadVersionedResource(KoResourceSP resource)
 
 QSharedPointer<KisResourceStorage::ResourceIterator> KisMemoryStorage::resources(const QString &resourceType)
 {
-    return QSharedPointer<KisResourceStorage::ResourceIterator>(new MemoryIterator(this, d->resourcesNew[resourceType], resourceType));
+    QVector<VersionedResourceEntry> entries;
+
+
+    QHash<QString, StoredResource> &typedResources =
+        d->resourcesNew[resourceType];
+
+    for (auto it = typedResources.begin(); it != typedResources.end(); ++it) {
+        VersionedResourceEntry entry;
+        entry.filename = it.key();
+        entry.lastModified = it.value().timestamp;
+        entry.tagList = {}; // TODO
+        entry.resourceType = resourceType;
+        entries.append(entry);
+
+    }
+
+    KisStorageVersioningHelper::detectFileVersions(entries);
+
+    return toQShared(new KisVersionedStorageIterator(entries, this));
 }
 
 QSharedPointer<KisResourceStorage::TagIterator> KisMemoryStorage::tags(const QString &resourceType)

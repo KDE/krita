@@ -127,9 +127,9 @@ QSharedPointer<KisResourceStorage::ResourceIterator> KisFolderStorage::resources
 {
     QVector<VersionedResourceEntry> entries;
 
-    const QString bundleSaveLocation = location() + "/" + resourceType;
+    const QString resourcesSaveLocation = location() + "/" + resourceType;
 
-    QDirIterator it(bundleSaveLocation,
+    QDirIterator it(resourcesSaveLocation,
                     KisResourceLoaderRegistry::instance()->filters(resourceType),
                     QDir::Files | QDir::Readable,
                     QDirIterator::Subdirectories);;

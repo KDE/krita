@@ -990,8 +990,6 @@ bool KisResourceCacheDb::deleteStorage(KisResourceStorageSP storage)
 
 bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
 {
-    qDebug() << "Going to synchronize" << storage->location();
-
     QElapsedTimer t;
     t.start();
 

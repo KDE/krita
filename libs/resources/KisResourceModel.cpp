@@ -450,17 +450,26 @@ int KisAllResourcesModel::rowCount(const QModelIndex &) const
 
 void KisAllResourcesModel::addStorage(const QString &/*location*/)
 {
+    qDebug() << "KisAllResourcesModel::addStorage" << rowCount();
+
     beginResetModel();
     resetQuery();
     endResetModel();
+
+    qDebug() << "\t\t" << rowCount();
 }
+
 
 
 void KisAllResourcesModel::removeStorage(const QString &/*location*/)
 {
+    qDebug() << "KisAllResourcesModel::removeStorage" << rowCount();
+
     beginResetModel();
     resetQuery();
     endResetModel();
+
+    qDebug() << "\t\t" << rowCount();
 }
 
 struct KisResourceModel::Private

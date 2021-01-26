@@ -207,6 +207,7 @@ QVariant KisStorageModel::data(const QModelIndex &index, int role) const
 bool KisStorageModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
     if (index.isValid()) {
+
         if (role == Qt::CheckStateRole) {
             QSqlQuery query;
             bool r = query.prepare("UPDATE storages\n"
@@ -228,17 +229,17 @@ bool KisStorageModel::setData(const QModelIndex &index, const QVariant &value, i
             }
 
         }
-    }
 
-    emit dataChanged(index, index, {role});
+        emit dataChanged(index, index, {role});
 
-    if (value.toBool()) {
-        emit storageEnabled(data(index, Qt::UserRole + Location).toString());
-    }
-    else {
-        emit storageDisabled(data(index, Qt::UserRole + Location).toString());
-    }
+        if (value.toBool()) {
+            emit storageEnabled(data(index, Qt::UserRole + Location).toString());
+        }
+        else {
+            emit storageDisabled(data(index, Qt::UserRole + Location).toString());
+        }
 
+    }
     return true;
 }
 
@@ -303,9 +304,9 @@ void KisStorageModel::addStorage(const QString &location)
 
 void KisStorageModel::removeStorage(const QString &location)
 {
-    int index = d->storages.indexOf(location);
-    beginRemoveRows(QModelIndex(), index, index);
-    d->storages.removeAt(index);
+    int row = d->storages.indexOf(location);
+    beginRemoveRows(QModelIndex(), row, row);
+    d->storages.removeAt(row);
     endRemoveRows();
 }
 

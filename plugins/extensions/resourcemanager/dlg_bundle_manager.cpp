@@ -262,15 +262,13 @@ void DlgBundleManager::updateBundleInformation(QModelIndex currentInProxy)
 
 QString createNewBundlePath(QString resourceFolder, QString filename)
 {
-    return resourceFolder + '/' + "bundles" + '/' + filename;
+    return resourceFolder + '/' + filename;
 }
 
 void DlgBundleManager::addBundleToActiveResources(QString filename)
 {
-    warnKrita << "DlgBundleManager::addBundle(): Loading a bundle is not implemented yet.";
     Q_UNUSED(filename);
     // 1. Copy the bundle to the resource folder
-    // 2. Add the bundle as a storage/update database
     QFileInfo oldFileInfo(filename);
 
     KisConfig cfg(true);
@@ -296,8 +294,10 @@ void DlgBundleManager::addBundleToActiveResources(QString filename)
     }
 
     QFile::copy(filename, newLocation);
-    KisResourceStorageSP storage = QSharedPointer<KisResourceStorage>::create(newLocation);
+
+    // 2. Add the bundle as a storage/update database
+    KisResourceStorageSP storage = QSharedPointer<KisResourceStorage>::create(QFileInfo(newLocation).fileName());
     KIS_ASSERT(!storage.isNull());
-    KisResourceLocator::instance()->addStorage(newLocation, storage);
+    KisResourceLocator::instance()->addStorage(QFileInfo(newLocation).fileName(), storage);
 }
 

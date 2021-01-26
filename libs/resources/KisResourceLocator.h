@@ -89,7 +89,7 @@ public:
 
     /**
      * @brief removeStorage removes the temporary storage from the database
-     * @param document the unique name of the document
+     * @param storageLocation the unique name of the storage
      * @return true is successful.
      */
     bool removeStorage(const QString &storageLocation);

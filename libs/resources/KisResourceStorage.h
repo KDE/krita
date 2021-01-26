@@ -212,6 +212,8 @@ public:
     static const QString s_meta_name;
     static const QString s_meta_value;
     static const QString s_meta_version;
+    static const QString s_meta_license;
+    static const QString s_meta_email;
 
     void setMetaData(const QString &key, const QVariant &value);
     QStringList metaDataKeys() const;

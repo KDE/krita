@@ -27,6 +27,8 @@ const QString KisResourceStorage::s_meta_user_defined("meta:meta-userdefined");
 const QString KisResourceStorage::s_meta_name("meta:name");
 const QString KisResourceStorage::s_meta_value("meta:value");
 const QString KisResourceStorage::s_meta_version("meta:bundle-version");
+const QString KisResourceStorage::s_meta_email("meta:email");
+const QString KisResourceStorage::s_meta_license("meta:license");
 
 Q_GLOBAL_STATIC(KisStoragePluginRegistry, s_instance);
 

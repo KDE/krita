@@ -99,7 +99,7 @@ protected:
 private:
     Q_DECLARE_PRIVATE(KoCreatePathTool)
     Q_PRIVATE_SLOT(d_func(), void angleDeltaChanged(int))
-    Q_PRIVATE_SLOT(d_func(), void angleDeltaChanged(qreal))
+    Q_PRIVATE_SLOT(d_func(), void angleSnapChanged(qreal))
     Q_PRIVATE_SLOT(d_func(), void autoSmoothCurvesChanged(bool))
 };
 #endif

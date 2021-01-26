@@ -28,6 +28,8 @@ private Q_SLOTS:
 
     void cleanupTestCase();
 
+    void testSyncVersions();
+
 private:
 
     QString m_srcLocation;

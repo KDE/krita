@@ -61,3 +61,16 @@ KisAllTagResourceModel *KisResourceModelProvider::tagResourceModel(const QString
     }
     return s_instance->d->tagResourceModels[resourceType];
 }
+
+void KisResourceModelProvider::testingResetAllModels()
+{
+    for (auto it = s_instance->d->tagModels.begin(); it != s_instance->d->tagModels.end(); ++it) {
+        it.value()->resetQuery();
+    }
+    for (auto it = s_instance->d->resourceModels.begin(); it != s_instance->d->resourceModels.end(); ++it) {
+        it.value()->resetQuery();
+    }
+    for (auto it = s_instance->d->tagResourceModels.begin(); it != s_instance->d->tagResourceModels.end(); ++it) {
+        it.value()->resetQuery();
+    }
+}

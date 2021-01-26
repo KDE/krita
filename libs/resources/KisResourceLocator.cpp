@@ -226,7 +226,7 @@ KoResourceSP KisResourceLocator::resource(QString storageLocation, const QString
         resource->setResourceId(q.value(0).toInt());
         Q_ASSERT(resource->resourceId() >= 0);
 
-        resource->setVersion(q.value(0).toInt());
+        resource->setVersion(q.value(1).toInt());
         Q_ASSERT(resource->version() >= 0);
     }
 
@@ -536,6 +536,7 @@ bool KisResourceLocator::initializeDb()
 void KisResourceLocator::findStorages()
 {
     d->storages.clear();
+    d->resourceCache.clear();
 
     // Add the folder
     KisResourceStorageSP storage = QSharedPointer<KisResourceStorage>::create(d->resourceLocation);
@@ -659,6 +660,7 @@ bool KisResourceLocator::synchronizeDb()
             d->errorMessages.append(i18n("Could not synchronize %1 with the database", storage->location()));
         }
     }
+    d->resourceCache.clear();
     return d->errorMessages.isEmpty();
 }
 

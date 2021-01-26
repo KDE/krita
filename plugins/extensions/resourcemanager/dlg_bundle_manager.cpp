@@ -167,9 +167,10 @@ DlgBundleManager::DlgBundleManager(QWidget *parent)
 
 void DlgBundleManager::addBundle()
 {
-    KoFileDialog* dlg = new KoFileDialog(this, KoFileDialog::OpenFile, i18n("Choose the bundle to import"));
-    dlg->setCaption(i18n("Select the bundle"));
-    QString filename = dlg->filename();
+    KoFileDialog dlg(this, KoFileDialog::OpenFile, i18n("Choose the bundle to import"));
+    dlg.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::DownloadLocation));
+    dlg.setCaption(i18n("Select the bundle"));
+    QString filename = dlg.filename();
     if (!filename.isEmpty()) {
         addBundleToActiveResources(filename);
     }
@@ -251,11 +252,8 @@ void DlgBundleManager::updateBundleInformation(QModelIndex currentInProxy)
     m_ui->lblDescription->setPlainText(storage->metaData(KisResourceStorage::s_meta_description).toString());
     m_ui->lblName->setText(storage->name());
     m_ui->lblType->setText(KisResourceStorage::storageTypeToString(storage->type()));
-
-
-
-    //m_ui->lblEmail->setText(storage->metaData(KisResourceStorage::s_meta_).toString());
-    //m_ui->lblLicense->setText(storage->metaData(KisResourceStorage::s_meta_).toString());
+    m_ui->lblEmail->setText(storage->metaData(KisResourceStorage::s_meta_email).toString());
+    m_ui->lblLicense->setText(storage->metaData(KisResourceStorage::s_meta_license).toString());
 
     QImage thumbnail = KisStorageModel::instance()->data(idx, Qt::UserRole + KisStorageModel::Thumbnail).value<QImage>();
     m_ui->lblPreview->setPixmap(QPixmap::fromImage(thumbnail));

@@ -357,7 +357,8 @@ bool KisTagResourceModel::filterAcceptsRow(int source_row, const QModelIndex &so
     bool resourceStorageActive = idx.data(Qt::UserRole + KisAllTagResourceModel::ResourceStorageActive).toBool();
 
     if (d->tagFilter == ShowAllTags && d->resourceFilter == ShowAllResources && d->storageFilter == ShowAllStorages) {
-        return (d->tagIds.contains(tagId) && d->resourceIds.contains(resourceId));
+        return ((d->tagIds.contains(tagId) || d->tagIds.isEmpty()) &&
+                (d->resourceIds.contains(resourceId) || d->resourceIds.isEmpty()));
     }
 
     if ((d->tagFilter == ShowActiveTags && !tagActive)

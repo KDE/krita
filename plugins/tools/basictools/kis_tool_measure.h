@@ -59,6 +59,7 @@ public:
     void beginPrimaryAction(KoPointerEvent *event) override;
     void continuePrimaryAction(KoPointerEvent *event) override;
     void endPrimaryAction(KoPointerEvent *event) override;
+    void showDistanceAngleOnCanvas();
 
     void paint(QPainter& gc, const KoViewConverter &converter) override;
 

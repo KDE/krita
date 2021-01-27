@@ -1419,7 +1419,7 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
 
             KoResourceSP res = storage->resource(itA->url);
             res->setVersion(itA->version);
-            KIS_SAFE_ASSERT_RECOVER(res->valid()) {
+            if (!res->valid()) {
                 ++itA;
                 continue;
             }
@@ -1440,7 +1440,7 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
             for (auto it = std::next(itA); it != nextResource; ++it) {
                 KoResourceSP res = storage->resource(it->url);
                 res->setVersion(it->version);
-                KIS_SAFE_ASSERT_RECOVER(res->valid()) {
+                if (!res->valid()) {
                     continue;
                 }
 

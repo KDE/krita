@@ -1419,18 +1419,35 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
 
             KoResourceSP res = storage->resource(itA->url);
             res->setVersion(itA->version);
+            KIS_SAFE_ASSERT_RECOVER(res->valid()) {
+                ++itA;
+                continue;
+            }
+
             const bool retval = addResource(storage, itA->timestamp, res, resourceType);
-            KIS_ASSERT_RECOVER(retval) { continue; }
+            KIS_SAFE_ASSERT_RECOVER(retval) {
+                ++itA;
+                continue;
+            }
 
             const int resourceId = res->resourceId();
-            KIS_ASSERT_RECOVER(resourceId >= 0) { continue; }
+            KIS_SAFE_ASSERT_RECOVER(resourceId >= 0) {
+                ++itA;
+                continue;
+            }
 
             auto nextResource = std::upper_bound(itA, endA, *itA, ResourceVersion::CompareByResourceId());
             for (auto it = std::next(itA); it != nextResource; ++it) {
                 KoResourceSP res = storage->resource(it->url);
                 res->setVersion(it->version);
+                KIS_SAFE_ASSERT_RECOVER(res->valid()) {
+                    continue;
+                }
+
                 const bool retval = addResourceVersion(resourceId, it->timestamp, storage, res);
-                KIS_ASSERT_RECOVER(retval) { continue; }
+                KIS_SAFE_ASSERT_RECOVER(retval) {
+                    continue;
+                }
             }
 
             itA = nextResource;

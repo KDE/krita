@@ -444,7 +444,7 @@ bool KisResourceCacheDb::addResourceVersionImpl(int resourceId, QDateTime timest
     q.bindValue(":version", resource->version());
     q.bindValue(":location", QFileInfo(resource->filename()).fileName());
     q.bindValue(":timestamp", timestamp.toSecsSinceEpoch());
-    Q_ASSERT(!resource->md5().isEmpty());
+    KIS_SAFE_ASSERT_RECOVER_NOOP(!resource->md5().isEmpty());
     q.bindValue(":md5sum", resource->md5().toHex());
     r = q.exec();
     if (!r) {
@@ -573,9 +573,11 @@ bool KisResourceCacheDb::updateResourceTableForResourceIfNeeded(int resourceId, 
     }
 
     if (currentVersion != maxVersion) {
-        KoResourceSP resource = storage->resource(resourceType + "/" + maxVersionFilename);
+        const QString url = resourceType + "/" + maxVersionFilename;
+        KoResourceSP resource = storage->resource(url);
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(resource, false);
         resource->setVersion(maxVersion);
+        resource->setMD5(storage->resourceMd5(url));
         r = makeResourceTheCurrentVersion(resourceId, resource);
     }
 
@@ -815,9 +817,8 @@ bool KisResourceCacheDb::addResources(KisResourceStorageSP storage, QString reso
 
             KoResourceSP resource = verIt->resource();
             if (resource && resource->valid()) {
-                if (resource->version() == -1) {
-                    resource->setVersion(verIt->guessedVersion());
-                }
+                resource->setVersion(verIt->guessedVersion());
+                resource->setMD5(storage->resourceMd5(verIt->url()));
 
                 if (resourceId < 0) {
                     if (addResource(storage, iter->lastModified(), resource, iter->type())) {
@@ -1417,6 +1418,7 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
 
             KoResourceSP res = storage->resource(itA->url);
             res->setVersion(itA->version);
+            res->setMD5(storage->resourceMd5(itA->url));
             if (!res->valid()) {
                 ++itA;
                 continue;
@@ -1438,6 +1440,7 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
             for (auto it = std::next(itA); it != nextResource; ++it) {
                 KoResourceSP res = storage->resource(it->url);
                 res->setVersion(it->version);
+                res->setMD5(storage->resourceMd5(it->url));
                 if (!res->valid()) {
                     continue;
                 }
@@ -1467,6 +1470,8 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
 
                 KoResourceSP res = storage->resource(itA->url);
                 res->setVersion(itA->version);
+                res->setMD5(storage->resourceMd5(itA->url));
+
                 const bool result = addResourceVersionImpl(itA->resourceId, itA->timestamp, storage, res);
                 KIS_SAFE_ASSERT_RECOVER_NOOP(result);
 

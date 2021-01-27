@@ -34,13 +34,13 @@ public:
 
     KisResourceStorage::ResourceItem resourceItem(const QString &url) override;
     bool loadVersionedResource(KoResourceSP resource) override;
+    QByteArray resourceMd5(const QString &url) override;
     QSharedPointer<KisResourceStorage::ResourceIterator> resources(const QString &resourceType) override;
     QSharedPointer<KisResourceStorage::TagIterator> tags(const QString &resourceType) override;
 
     void setMetaData(const QString &key, const QVariant &value) override;
     QStringList metaDataKeys() const override;
     QVariant metaData(const QString &key) const override;
-
 
 private:
     class Private;

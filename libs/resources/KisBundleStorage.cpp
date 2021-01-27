@@ -13,6 +13,7 @@
 
 #include <KisTag.h>
 #include "KisResourceStorage.h"
+#include <KoMD5Generator.h>
 #include "KoResourceBundle.h"
 #include "KoResourceBundleManifest.h"
 #include <KisGlobalResourcesInterface.h>
@@ -143,6 +144,20 @@ bool KisBundleStorage::loadVersionedResource(KoResourceSP resource)
     }
 
     return true;
+}
+
+QByteArray KisBundleStorage::resourceMd5(const QString &url)
+{
+    QByteArray result;
+
+    QFile modifiedFile(location() + "_modified" + "/" + url);
+    if (modifiedFile.exists() && modifiedFile.open(QIODevice::ReadOnly)) {
+        result = KoMD5Generator::generateHash(modifiedFile.readAll());
+    } else {
+        result = d->bundle->resourceMd5(url);
+    }
+
+    return result;
 }
 
 QSharedPointer<KisResourceStorage::ResourceIterator> KisBundleStorage::resources(const QString &resourceType)

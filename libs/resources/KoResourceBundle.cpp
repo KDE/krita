@@ -30,7 +30,7 @@
 #include "KisResourceLoaderRegistry.h"
 #include <KisResourceModelProvider.h>
 #include <KisResourceModel.h>
-
+#include <KoMD5Generator.h>
 
 #include <KritaVersionWrapper.h>
 
@@ -441,6 +441,29 @@ bool KoResourceBundle::loadResource(KoResourceSP resource)
     resourceStore->close();
 
     return true;
+}
+
+QByteArray KoResourceBundle::resourceMd5(const QString &url)
+{
+    QByteArray result;
+
+    if (m_filename.isEmpty()) return result;
+
+    QScopedPointer<KoStore> resourceStore(KoStore::createStore(m_filename, KoStore::Read, "application/x-krita-resourcebundle", KoStore::Zip));
+
+    if (!resourceStore || resourceStore->bad()) {
+        qWarning() << "Could not open store on bundle" << m_filename;
+        return result;
+    }
+    if (!resourceStore->open(url)) {
+        qWarning() << "Could not open file in bundle" << url;
+        return result;
+    }
+
+    result = KoMD5Generator::generateHash(resourceStore->device()->readAll());
+    resourceStore->close();
+
+    return result;
 }
 
 QImage KoResourceBundle::image() const

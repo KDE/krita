@@ -199,14 +199,18 @@ KoResourceSP KisResourceLocator::resource(QString storageLocation, const QString
         QSqlQuery q;
         if (!q.prepare("SELECT resources.id\n"
                        ",      resources.version\n"
+                       ",      versioned_resources.md5sum\n"
                        "FROM   resources\n"
                        ",      storages\n"
                        ",      resource_types\n"
+                       ",      versioned_resources\n"
                        "WHERE  storages.id = resources.storage_id\n"
                        "AND    storages.location = :storage_location\n"
                        "AND    resource_types.id = resources.resource_type_id\n"
                        "AND    resource_types.name = :resource_type\n"
-                       "AND    resources.filename  = :filename")) {
+                       "AND    resources.filename  = :filename\n"
+                       "AND    versioned_resources.resource_id = resources.id\n"
+                       "AND    versioned_resources.version = resources.version")) {
             qWarning() << "Could not prepare id/version query" << q.lastError();
 
         }
@@ -228,6 +232,9 @@ KoResourceSP KisResourceLocator::resource(QString storageLocation, const QString
 
         resource->setVersion(q.value(1).toInt());
         Q_ASSERT(resource->version() >= 0);
+
+        resource->setMD5(QByteArray::fromHex(q.value(2).toByteArray()));
+        Q_ASSERT(!resource->md5().isEmpty());
     }
 
     if (!resource) {
@@ -304,6 +311,7 @@ bool KisResourceLocator::addResource(const QString &resourceType, const KoResour
         return false;
     }
 
+    resource->setMD5(storage->resourceMd5(resourceType + "/" + resource->filename()));
     resource->setDirty(false);
 
     // And the database
@@ -335,6 +343,7 @@ bool KisResourceLocator::updateResource(const QString &resourceType, const KoRes
         return false;
     }
 
+    resource->setMD5(storage->resourceMd5(resourceType + "/" + resource->filename()));
     resource->setDirty(false);
 
     // The version needs already to have been incremented
@@ -364,6 +373,7 @@ bool KisResourceLocator::reloadResource(const QString &resourceType, const KoRes
         return false;
     }
 
+    resource->setMD5(storage->resourceMd5(resourceType + "/" + resource->filename()));
     resource->setDirty(false);
 
     // We haven't changed the version of the resource, so the cache must be still valid

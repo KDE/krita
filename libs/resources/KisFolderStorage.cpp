@@ -14,6 +14,7 @@
 #include <kbackup.h>
 #include <KisGlobalResourcesInterface.h>
 #include <kis_pointer_utils.h>
+#include <KoMD5Generator.h>
 
 
 class FolderTagIterator : public KisResourceStorage::TagIterator
@@ -121,6 +122,18 @@ bool KisFolderStorage::loadVersionedResource(KoResourceSP resource)
     }
 
     return resource->loadFromDevice(&f, KisGlobalResourcesInterface::instance());
+}
+
+QByteArray KisFolderStorage::resourceMd5(const QString &url)
+{
+    QByteArray result;
+
+    QFile file(location() + "/" + url);
+    if (file.exists() && file.open(QIODevice::ReadOnly)) {
+        result = KoMD5Generator::generateHash(file.readAll());
+    }
+
+    return result;
 }
 
 QSharedPointer<KisResourceStorage::ResourceIterator> KisFolderStorage::resources(const QString &resourceType)

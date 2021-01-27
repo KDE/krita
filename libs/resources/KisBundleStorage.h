@@ -25,6 +25,7 @@ public:
 
     /// Note: this should find resources in a folder that override a resource in the bundle first
     bool loadVersionedResource(KoResourceSP resource) override;
+    QByteArray resourceMd5(const QString &url) override;
     QSharedPointer<KisResourceStorage::ResourceIterator> resources(const QString &resourceType) override;
     QSharedPointer<KisResourceStorage::TagIterator> tags(const QString &resourceType) override;
     QImage thumbnail() const override;

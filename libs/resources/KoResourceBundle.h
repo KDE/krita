@@ -105,6 +105,7 @@ public:
 
     QString filename() const;
 
+    QByteArray resourceMd5(const QString &url);
 private:
 
     void writeMeta(const QString &metaTag, KoXmlWriter *writer);

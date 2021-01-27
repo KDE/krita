@@ -50,6 +50,13 @@ KoResourceSP KisStoragePlugin::resource(const QString &url)
     return loadVersionedResource(resource) ? resource : 0;
 }
 
+QByteArray KisStoragePlugin::resourceMd5(const QString &url)
+{
+    // a fallback implementation for the storages with
+    // ephemeral resources
+    return resource(url)->md5();
+}
+
 bool KisStoragePlugin::supportsVersioning() const
 {
     return true;

@@ -184,6 +184,11 @@ KoResourceSP KisResourceStorage::resource(const QString &url)
     return d->storagePlugin->resource(url);
 }
 
+QByteArray KisResourceStorage::resourceMd5(const QString &url)
+{
+    return d->storagePlugin->resourceMd5(url);
+}
+
 QSharedPointer<KisResourceStorage::ResourceIterator> KisResourceStorage::resources(const QString &resourceType) const
 {
     return d->storagePlugin->resources(resourceType);

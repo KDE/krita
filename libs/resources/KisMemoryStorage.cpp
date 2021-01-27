@@ -17,6 +17,8 @@
 #include <QBuffer>
 #include <KisGlobalResourcesInterface.h>
 #include <kis_pointer_utils.h>
+#include <KoMD5Generator.h>
+
 
 struct StoredResource
 {
@@ -183,6 +185,28 @@ bool KisMemoryStorage::loadVersionedResource(KoResourceSP resource)
     }
 
     return retval;
+}
+
+QByteArray KisMemoryStorage::resourceMd5(const QString &url)
+{
+    QStringList parts = url.split('/', QString::SkipEmptyParts);
+    Q_ASSERT(parts.size() == 2);
+
+    const QString resourceType = parts[0];
+    const QString resourceFilename = parts[1];
+
+    QByteArray result;
+
+    if (d->resourcesNew.contains(resourceType) &&
+        d->resourcesNew[resourceType].contains(resourceFilename)) {
+
+        const StoredResource &storedResource =
+            d->resourcesNew[resourceType][resourceFilename];
+
+        result = KoMD5Generator::generateHash(*storedResource.data);
+    }
+
+    return result;
 }
 
 QSharedPointer<KisResourceStorage::ResourceIterator> KisMemoryStorage::resources(const QString &resourceType)

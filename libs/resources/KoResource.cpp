@@ -35,7 +35,7 @@ KoResource::KoResource(const QString& filename)
     : d(new Private)
 {
     d->filename = filename;
-    d->name = QFileInfo(filename).baseName().replace('_', ' ');
+    d->name = QFileInfo(filename).fileName();
 }
 
 KoResource::~KoResource()

@@ -103,6 +103,7 @@ protected:
     void resizeEvent(QResizeEvent *) override;
 
 private:
+    bool useHorizontalSlider();
     void rebuildSelector();
     void loadACSConfig();
     static KisColorSelectorConfiguration validatedConfiguration(const KisColorSelectorConfiguration &cfg);

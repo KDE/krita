@@ -450,11 +450,23 @@ void KisVisualColorSelector::resizeEvent(QResizeEvent *)
             m_d->widgetlist.at(0)->resize(sizeValue, sizeValue);
         }
         else {
-            // vertical only currently
-            int sliderWidth = qMax(height()/10, 20);
-            sliderWidth = qMin(sliderWidth, width());
-            int x = (width() - sliderWidth)/2;
-            m_d->widgetlist.at(0)->setGeometry(x, 0, sliderWidth, height());
+            KisVisualRectangleSelectorShape *slider = qobject_cast<KisVisualRectangleSelectorShape *>(m_d->widgetlist.at(0));
+            KIS_SAFE_ASSERT_RECOVER_RETURN(slider);
+            if (useHorizontalSlider()) {
+                int sliderWidth = qMax(width()/10, m_d->minimumSliderWidth);
+                sliderWidth = qMin(sliderWidth, height());
+                int y = (height() - sliderWidth)/2;
+                slider->setOneDimensionalType(KisVisualRectangleSelectorShape::horizontal);
+                slider->setGeometry(0, y, width(), sliderWidth);
+            }
+            else {
+                // vertical slider
+                int sliderWidth = qMax(height()/10, m_d->minimumSliderWidth);
+                sliderWidth = qMin(sliderWidth, width());
+                int x = (width() - sliderWidth)/2;
+                slider->setOneDimensionalType(KisVisualRectangleSelectorShape::vertical);
+                slider->setGeometry(x, 0, sliderWidth, height());
+            }
         }
     }
     else if (m_d->colorChannelCount == 3) {
@@ -497,6 +509,12 @@ void KisVisualColorSelector::resizeEvent(QResizeEvent *)
         m_d->widgetlist.at(0)->setGeometry(0, 0, sizeBlock, sizeBlock);
         m_d->widgetlist.at(1)->setGeometry(sizeBlock + 8, 0, sizeBlock, sizeBlock);
     }
+}
+
+bool KisVisualColorSelector::useHorizontalSlider()
+{
+    // TODO: configurable logic
+    return width() > height();
 }
 
 void KisVisualColorSelector::loadACSConfig()

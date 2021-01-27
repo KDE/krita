@@ -36,6 +36,15 @@ void KisVisualRectangleSelectorShape::setBorderWidth(int width)
     m_barWidth = width;
 }
 
+void KisVisualRectangleSelectorShape::setOneDimensionalType(KisVisualRectangleSelectorShape::singelDTypes type)
+{
+    if (type != m_type) {
+        m_type = type;
+        forceImageUpdate();
+        update();
+    }
+}
+
 QRect KisVisualRectangleSelectorShape::getSpaceForSquare(QRect geom)
 {
     return getAvailableSpace(geom, true);

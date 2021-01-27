@@ -21,6 +21,7 @@ public:
     ~KisVisualRectangleSelectorShape() override;
 
     void setBorderWidth(int width) override;
+    void setOneDimensionalType(singelDTypes type);
 
     /**
      * @brief getSpaceForSquare

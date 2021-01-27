@@ -784,7 +784,7 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
     q.bindValue(":version", resource->version());
     q.bindValue(":location", QFileInfo(resource->filename()).fileName());
     q.bindValue(":timestamp", timestamp.toSecsSinceEpoch());
-    //Q_ASSERT(!resource->md5().isEmpty());
+    KIS_SAFE_ASSERT_RECOVER_NOOP(!resource->md5().isEmpty());
     if (resource->md5().isEmpty()) {
         qWarning() << "No md5 for resource" << resource->name() << resourceType << storage->location();
     }

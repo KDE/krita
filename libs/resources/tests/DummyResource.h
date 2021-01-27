@@ -24,6 +24,9 @@ public:
             quint64 v = qrg.generate64();
             ba[i] = v;
         }
+
+        m_something = QString::fromUtf8(ba);
+
         QByteArray hash = KoMD5Generator::generateHash(ba);
         setMD5(hash);
 

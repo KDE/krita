@@ -90,7 +90,7 @@ void TestTagResourceModel::testData()
      QCOMPARE(tagId, 1);
 
      int resourceId = tagResourceModel.data(idx, Qt::UserRole + KisAllTagResourceModel::ResourceId).toInt();
-     QCOMPARE(resourceId, 4);
+     QCOMPARE(resourceId, 3);
 
      KisTagSP tag = tagResourceModel.data(idx, Qt::UserRole + KisAllTagResourceModel::Tag).value<KisTagSP>();
      QVERIFY(tag);
@@ -101,8 +101,8 @@ void TestTagResourceModel::testData()
      KoResourceSP resource = tagResourceModel.data(idx, Qt::UserRole + KisAllTagResourceModel::Resource).value<KoResourceSP>();
      QVERIFY(resource);
      QVERIFY(resource->valid());
-     QCOMPARE(resource->name(), "test0");
-     QCOMPARE(resource->resourceId(), 4);
+     QCOMPARE(resource->name(), "test0.kpp");
+     QCOMPARE(resource->resourceId(), 3);
 
      bool tagActive = tagResourceModel.data(idx, Qt::UserRole + KisAllTagResourceModel::TagActive).toBool();
      QVERIFY(tagActive);
@@ -117,7 +117,7 @@ void TestTagResourceModel::testData()
 void TestTagResourceModel::testTagResource()
 {
     KisResourceModel resourceModel(ResourceType::PaintOpPresets);
-    KoResourceSP resource = resourceModel.resourceForName("test2");
+    KoResourceSP resource = resourceModel.resourceForName("test2.kpp");
     Q_ASSERT(resource);
 
     KisTagModel tagModel(ResourceType::PaintOpPresets);
@@ -135,12 +135,12 @@ void TestTagResourceModel::testTagResource()
 void TestTagResourceModel::testUntagResource()
 {
     KisResourceModel resourceModel(ResourceType::PaintOpPresets);
-    KoResourceSP resource = resourceModel.resourceForName("test1");
-    Q_ASSERT(resource);
+    KoResourceSP resource = resourceModel.resourceForName("test1.kpp");
+    QVERIFY(resource);
 
     KisTagModel tagModel(ResourceType::PaintOpPresets);
     KisTagSP tag = tagModel.tagForIndex(tagModel.index(2, 0));
-    Q_ASSERT(tag);
+    QVERIFY(tag);
 
     KisAllTagResourceModel tagResourceModel(ResourceType::PaintOpPresets);
     int rowCount = tagResourceModel.rowCount();
@@ -152,7 +152,7 @@ void TestTagResourceModel::testUntagResource()
 void TestTagResourceModel::testFilterTagResource()
 {
     KisResourceModel resourceModel(ResourceType::PaintOpPresets);
-    KoResourceSP resource = resourceModel.resourceForName("test2");
+    KoResourceSP resource = resourceModel.resourceForName("test2.kpp");
     Q_ASSERT(resource);
 
     KisTagModel tagModel(ResourceType::PaintOpPresets);

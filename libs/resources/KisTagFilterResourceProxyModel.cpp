@@ -179,8 +179,11 @@ void KisTagFilterResourceProxyModel::updateTagFilter()
                                          d->currentTagFilter->url() != "All Untagged");
         }
         d->tagResourceModel->setTagsFilter(filter);
+        d->tagResourceModel->setResourcesFilter({d->currentResourceFilter});
         desiredModel = d->tagResourceModel;
     } else {
+        d->tagResourceModel->setResourcesFilter(QVector<KoResourceSP>());
+
         if (ignoreTagFiltering ||
                 !d->currentTagFilter ||
                 d->currentTagFilter->url() == "All") {

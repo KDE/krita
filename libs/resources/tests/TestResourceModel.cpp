@@ -95,9 +95,9 @@ void TestResourceModel::testData()
         resourceNames << v.toString();
     }
 
-    QVERIFY(resourceNames.contains("test0"));
-    QVERIFY(resourceNames.contains("test1"));
-    QVERIFY(resourceNames.contains("test2"));
+    QVERIFY(resourceNames.contains("test0.kpp"));
+    QVERIFY(resourceNames.contains("test1.kpp"));
+    QVERIFY(resourceNames.contains("test2.kpp"));
 }
 
 
@@ -174,7 +174,6 @@ void TestResourceModel::testUpdateResource()
         KisResourceModel resourceModel(m_resourceType);
         KoResourceSP resource = resourceModel.resourceForIndex(resourceModel.index(0, 0));
         QVERIFY(resource);
-        QVERIFY(resource.dynamicCast<DummyResource>()->something().isEmpty());
         resource.dynamicCast<DummyResource>()->setSomething("It's changed");
         resourceId = resource->resourceId();
         bool r = resourceModel.updateResource(resource);
@@ -187,7 +186,7 @@ void TestResourceModel::testUpdateResource()
         KoResourceSP resource = KisResourceLocator::instance()->resourceForId(resourceId);
 
         QVERIFY(resource);
-        QVERIFY(!resource.dynamicCast<DummyResource>()->something().isEmpty());
+        QCOMPARE(resource.dynamicCast<DummyResource>()->something(), "It's changed");
         QVERIFY(resource->resourceId() == resourceId);
 
         // Check the versions in the database
@@ -216,7 +215,7 @@ void TestResourceModel::testResourceForId()
 void TestResourceModel::testResourceForName()
 {
     KisResourceModel resourceModel(m_resourceType);
-    KoResourceSP resource = resourceModel.resourceForIndex(resourceModel.index(0, 0));
+    KoResourceSP resource = resourceModel.resourceForIndex(resourceModel.index(1, 0));
     QVERIFY(!resource.isNull());
     KoResourceSP resource2 = resourceModel.resourceForName(resource->name());
     QVERIFY(!resource2.isNull());

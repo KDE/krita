@@ -13,6 +13,7 @@
 #include <kis_action.h>
 #include <kis_action_manager.h>
 #include <kis_canvas2.h>
+#include <kis_canvas_resource_provider.h>
 #include <kis_signal_compressor.h>
 #include <KisViewManager.h>
 #include <KisVisualColorSelector.h>
@@ -82,6 +83,18 @@ void WGActionManager::slotShowColorSelectorPopup()
         m_colorSelector = new KisVisualColorSelector(m_colorSelectorPopup, m_colorModel);
         m_colorSelector->setFixedSize(300, 300);
         m_colorSelectorPopup->setSelectorWidget(m_colorSelector);
+    }
+
+    // update gamut mask
+    KisCanvas2 *canvas = qobject_cast<KisCanvas2*>(m_docker->observedCanvas());
+    if (canvas) {
+        KisCanvasResourceProvider *resourceProvider = canvas->imageView()->resourceProvider();
+        if (resourceProvider->gamutMaskActive()) {
+            m_colorSelector->slotGamutMaskChanged(resourceProvider->currentGamutMask());
+        }
+        else {
+            m_colorSelector->slotGamutMaskUnset();
+        }
     }
 
     preparePopup();

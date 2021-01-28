@@ -179,9 +179,7 @@ KoResourceSP KisResourceLocator::resource(QString storageLocation, const QString
         resource = storage->resource(resourceType + "/" + filename);
 
         if (resource) {
-            KIS_SAFE_ASSERT_RECOVER(!resource->filename().startsWith(resourceType)) {};
             d->resourceCache[key] = resource;
-
             // load all the embedded resources into temporary "memory" storage
             loadRequiredResources(resource);
         }

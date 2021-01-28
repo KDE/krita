@@ -61,6 +61,7 @@ struct KoSvgSymbolCollectionResource::Private {
     QVector<KoSvgSymbol*> symbols;
     QString title;
     QString description;
+    QByteArray data;
 };
 
 
@@ -107,8 +108,8 @@ bool KoSvgSymbolCollectionResource::loadFromDevice(QIODevice *dev, KisResourcesI
         dev->open(QIODevice::ReadOnly);
     }
 
-    QByteArray ba = dev->readAll();
-    setMD5(KoMD5Generator::generateHash(ba));
+    d->data = dev->readAll();
+    setMD5(KoMD5Generator::generateHash(d->data));
 
     dev->seek(0);
 
@@ -156,12 +157,10 @@ bool KoSvgSymbolCollectionResource::loadFromDevice(QIODevice *dev, KisResourcesI
 
 bool KoSvgSymbolCollectionResource::saveToDevice(QIODevice *dev) const
 {
-    bool res = false;
-    // XXX
-    if (res) {
-        KoResource::saveToDevice(dev);
-    }
-    return res;
+    dev->open(QIODevice::WriteOnly);
+    dev->write(d->data);
+    dev->close();
+    return true;
 }
 
 QString KoSvgSymbolCollectionResource::defaultFileExtension() const

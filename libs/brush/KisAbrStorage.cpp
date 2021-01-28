@@ -89,7 +89,7 @@ public:
     QString type() const override { return ResourceType::Brushes; }
     QDateTime lastModified() const override { return m_brushCollection->lastModified(); }
 
-    KoResourceSP resource() const override
+    KoResourceSP resourceImpl() const override
     {
         return m_currentResource;
     }
@@ -128,6 +128,16 @@ KoResourceSP KisAbrStorage::resource(const QString &url)
         m_brushCollection->load();
     }
     return m_brushCollection->brushByName(url);
+}
+
+bool KisAbrStorage::loadVersionedResource(KoResourceSP resource)
+{
+    return false;
+}
+
+bool KisAbrStorage::supportsVersioning() const
+{
+    return false;
 }
 
 QSharedPointer<KisResourceStorage::ResourceIterator> KisAbrStorage::resources(const QString &/*resourceType*/)

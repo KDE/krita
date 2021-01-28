@@ -442,6 +442,19 @@ bool KisTagResourceModel::updateResource(KoResourceSP resource)
     return r;
 }
 
+bool KisTagResourceModel::reloadResource(KoResourceSP resource)
+{
+    KisResourceModel resourceModel(d->resourceType);
+    bool r = resourceModel.reloadResource(resource);
+    if (r) {
+        QModelIndex index = indexForResource(resource);
+        if (index.isValid()) {
+            emit dataChanged(index, index, {Qt::EditRole});
+        }
+    }
+    return r;
+}
+
 bool KisTagResourceModel::renameResource(KoResourceSP resource, const QString &name)
 {
     KisResourceModel resourceModel(d->resourceType);

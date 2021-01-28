@@ -127,7 +127,7 @@ public:
 
 
     /// This only loads the resource when called
-    KoResourceSP resource() const override
+    KoResourceSP resourceImpl() const override
     {
         return m_currentResource;
     }
@@ -179,6 +179,16 @@ KoResourceSP KisAslStorage::resource(const QString &url)
         }
     }
     return 0;
+}
+
+bool KisAslStorage::loadVersionedResource(KoResourceSP resource)
+{
+    return false;
+}
+
+bool KisAslStorage::supportsVersioning() const
+{
+    return false;
 }
 
 QSharedPointer<KisResourceStorage::ResourceIterator> KisAslStorage::resources(const QString &/*resourceType*/)

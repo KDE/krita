@@ -7,6 +7,9 @@
 #include "KisStoragePlugin.h"
 #include <QFileInfo>
 
+#include <KisMimeDatabase.h>
+#include "KisResourceLoaderRegistry.h"
+
 class KisStoragePlugin::Private
 {
 public:
@@ -26,6 +29,30 @@ KisStoragePlugin::KisStoragePlugin(const QString &location)
 
 KisStoragePlugin::~KisStoragePlugin()
 {
+}
+
+KoResourceSP KisStoragePlugin::resource(const QString &url)
+{
+    QStringList parts = url.split('/', QString::SkipEmptyParts);
+    Q_ASSERT(parts.size() == 2);
+
+    const QString resourceType = parts[0];
+    const QString resourceFilename = parts[1];
+    const QString mime = KisMimeDatabase::mimeTypeForSuffix(resourceFilename);
+
+    KisResourceLoaderBase *loader = KisResourceLoaderRegistry::instance()->loader(resourceType, mime);
+    if (!loader) {
+        qWarning() << "Could not create loader for" << resourceType << resourceFilename << mime;
+        return 0;
+    }
+
+    KoResourceSP resource = loader->create(resourceFilename);
+    return loadVersionedResource(resource) ? resource : 0;
+}
+
+bool KisStoragePlugin::supportsVersioning() const
+{
+    return true;
 }
 
 QDateTime KisStoragePlugin::timestamp()

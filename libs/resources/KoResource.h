@@ -27,6 +27,10 @@ typedef QSharedPointer<KoResource> KoResourceSP;
 class KisResourcesInterface;
 typedef QSharedPointer<KisResourcesInterface> KisResourcesInterfaceSP;
 
+namespace ResourceTestHelper {
+void overrideResourceVesion(KoResourceSP resource, int version);
+}
+
 /**
  * The KoResource class provides a representation of resources.  This
  * includes, but not limited to, brushes and patterns.
@@ -183,10 +187,13 @@ private:
     friend class TestResourceModel;
     friend class TestResourceLocator;
     friend class TestFolderStorage;
+    friend class TestBundleStorage;
     friend class KisFolderStorage;
     friend class KisBundleStorage;
     friend class KisStorageVersioningHelper;
     friend class KisMemoryStorage;
+
+    friend void ResourceTestHelper::overrideResourceVesion(KoResourceSP resource, int version);
 
     void setVersion(int version);
     void setResourceId(int id);

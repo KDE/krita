@@ -177,16 +177,7 @@ KoResourceSP KisResourceLocator::resource(QString storageLocation, const QString
         }
 
         resource = storage->resource(resourceType + "/" + filename);
-        // Try to locate bundle in bundle modificated resources location.
-        if (QFileInfo(storage->location() + "_modified" + "/" + resourceType + "/" + filename).exists()) {
-            QFileInfo bundleLoc(storage->location());
-            storage = d->storages[bundleLoc.path() + "/"];
-            QString bundleFolderLocation(bundleLoc.fileName() + "_modified" + "/" + resourceType + "/" + filename);
-            resource = storage->resource(bundleFolderLocation);
-            key = QPair<QString, QString> (storageLocation, bundleFolderLocation);
-        } else {
-            resource = storage->resource(resourceType + "/" + filename);
-        }
+
         if (resource) {
             KIS_SAFE_ASSERT_RECOVER(!resource->filename().startsWith(resourceType)) {};
             d->resourceCache[key] = resource;
@@ -300,12 +291,11 @@ bool KisResourceLocator::addResource(const QString &resourceType, const KoResour
 
     //If we have gotten this far and the resource still doesn't have a filename to save to, we should generate one.
     if (resource->filename().isEmpty()) {
-        if (storageLocation == "memory") {
-            resource->setFilename("memory/" + resourceType + "/" + resource->name());
-        }
-        else {
-            resource->setFilename(resource->name().split(" ").join("_") + resource->defaultFileExtension());
-        }
+        resource->setFilename(resource->name().split(" ").join("_") + resource->defaultFileExtension());
+    }
+
+    if (resource->version() < 0) {
+        resource->setVersion(0);
     }
 
     // Save the resource to the storage storage
@@ -313,6 +303,8 @@ bool KisResourceLocator::addResource(const QString &resourceType, const KoResour
         qWarning() << "Could not add resource" << resource->filename() << "to the folder storage";
         return false;
     }
+
+    resource->setDirty(false);
 
     // And the database
     return KisResourceCacheDb::addResource(storage,
@@ -332,22 +324,18 @@ bool KisResourceLocator::updateResource(const QString &resourceType, const KoRes
     Q_ASSERT(resource->resourceId() > -1);
 
     KisResourceStorageSP storage = d->storages[storageLocation];
-    resource->updateThumbnail();
-    int version = resource->version();
 
-    // This increments the version in the resource
+    if (!storage->supportsVersioning()) return false;
+
+    resource->updateThumbnail();
+    resource->setVersion(resource->version() + 1);
+
     if (!storage->addResource(resource)) {
         qWarning() << "Failed to save the new version of " << resource->name() << "to storage" << storageLocation;
         return false;
     }
 
-    // Memory storages don't store versioned resources
-    if (storage->type() == KisResourceStorage::StorageType::Memory) {
-        return true;
-    }
-
-    // It's the storages that keep track of the version
-    Q_ASSERT(resource->version() == version + 1);
+    resource->setDirty(false);
 
     // The version needs already to have been incremented
     if (!KisResourceCacheDb::addResourceVersion(resource->resourceId(), QDateTime::currentDateTime(), storage, resource)) {
@@ -358,6 +346,29 @@ bool KisResourceLocator::updateResource(const QString &resourceType, const KoRes
     // Update the resource in the cache
     QPair<QString, QString> key = QPair<QString, QString> (storageLocation, resourceType + "/" + QFileInfo(resource->filename()).fileName());
     d->resourceCache[key] = resource;
+
+    return true;
+}
+
+bool KisResourceLocator::reloadResource(const QString &resourceType, const KoResourceSP resource)
+{
+    QString storageLocation = makeStorageLocationAbsolute(resource->storageLocation());
+
+    Q_ASSERT(d->storages.contains(storageLocation));
+    Q_ASSERT(resource->resourceId() > -1);
+
+    KisResourceStorageSP storage = d->storages[storageLocation];
+
+    if (!storage->loadVersionedResource(resource)) {
+        qWarning() << "Failed to reload the resource" << resource->name() << "from storage" << storageLocation;
+        return false;
+    }
+
+    resource->setDirty(false);
+
+    // We haven't changed the version of the resource, so the cache must be still valid
+    QPair<QString, QString> key = QPair<QString, QString> (storageLocation, resourceType + "/" + QFileInfo(resource->filename()).fileName());
+    Q_ASSERT(d->resourceCache[key] == resource);
 
     return true;
 }
@@ -523,6 +534,7 @@ bool KisResourceLocator::initializeDb()
 void KisResourceLocator::findStorages()
 {
     d->storages.clear();
+    d->resourceCache.clear();
 
     // Add the folder
     KisResourceStorageSP storage = QSharedPointer<KisResourceStorage>::create(d->resourceLocation);
@@ -646,6 +658,7 @@ bool KisResourceLocator::synchronizeDb()
             d->errorMessages.append(i18n("Could not synchronize %1 with the database", storage->location()));
         }
     }
+    d->resourceCache.clear();
     return d->errorMessages.isEmpty();
 }
 

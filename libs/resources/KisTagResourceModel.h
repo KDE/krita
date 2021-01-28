@@ -134,6 +134,7 @@ public:
     bool importResourceFile(const QString &filename) override;
     bool addResource(KoResourceSP resource, const QString &storageId) override;
     bool updateResource(KoResourceSP resource) override;
+    bool reloadResource(KoResourceSP resource) override;
     bool renameResource(KoResourceSP resource, const QString &name) override;
     bool setResourceMetaData(KoResourceSP resource, QMap<QString, QVariant> metadata) override;
 

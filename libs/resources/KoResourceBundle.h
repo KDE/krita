@@ -99,6 +99,7 @@ public:
     KoResourceBundleManifest &manifest();
 
     KoResourceSP resource(const QString &resourceType, const QString &filepath);
+    bool loadResource(KoResourceSP resource);
 
     QImage image() const;
 

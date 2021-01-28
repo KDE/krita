@@ -581,25 +581,20 @@ void KisPaintopBox::resourceSelected(KoResourceSP resource)
 
     m_presetsPopup->setCreatingBrushFromScratch(false); // show normal UI elements when we are not creating
 
-    //    qDebug() << ">>>>>>>>>>>>>>>" << resource
-    //             << (resource ? resource->name() : "")
-    //             << (resource ? QString("%1").arg(resource->valid()) : "")
-    //             << (resource ? QString("%1").arg(resource->filename()) : "");
-
     KisPaintOpPresetSP preset = resource.dynamicCast<KisPaintOpPreset>();
 
     if (preset && preset->valid() && preset != m_resourceProvider->currentPreset()) {
-        qWarning() << "Preset reloading if presets are dirty is broken";
-        //        if (!preset->settings()->isLoadable()) {
-        //            return;
-        //        }
-        //        if (!m_dirtyPresetsEnabled) {
-        //            KisSignalsBlocker blocker(m_optionWidget);
-        //            Q_UNUSED(blocker);
-        //            if (!preset->load()) {
-        //                qWarning() << "failed to load the preset.";
-        //            }
-        //        }
+        if (!m_dirtyPresetsEnabled) {
+            KisSignalsBlocker blocker(m_optionWidget);
+            Q_UNUSED(blocker);
+
+            KisPaintOpPresetResourceServer *rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
+
+            if (!rserver->reloadResource(preset)) {
+                qWarning() << "failed to reload the preset.";
+            }
+        }
+
         dbgResources << "resourceSelected: preset" << preset << (preset ? QString("%1").arg(preset->valid()) : "");
         setCurrentPaintop(preset);
 
@@ -1288,26 +1283,12 @@ void KisPaintopBox::slotReloadPreset()
 {
     KisSignalsBlocker blocker(m_optionWidget);
 
-    // Here using the name and fetching the preset from the server was the only way the load was working. Otherwise it was not loading.
     KisPaintOpPresetResourceServer *rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
-    QSharedPointer<KisPaintOpPreset> preset = rserver->resourceByName(m_resourceProvider->currentPreset()->name());
+    QSharedPointer<KisPaintOpPreset> preset = m_resourceProvider->currentPreset();
+
     if (preset) {
-        preset->load(KisGlobalResourcesInterface::instance());
-    }
-
-    if (m_resourceProvider->currentPreset() != preset) {
-        m_resourceProvider->setPaintOpPreset(preset);
-    } else {
-        /**
-         * HACK ALERT: here we emit a private signal from the resource manager to
-         * ensure that all the subscribers of resource-changed signal got the
-         * notification. That is especially important for
-         * KisPaintopTransformationConnector. See bug 392622.
-         */
-
-        emit m_resourceProvider->resourceManager()->canvasResourceChanged(
-                    KoCanvasResource::CurrentPaintOpPreset,
-                    QVariant::fromValue(preset));
+        const bool result = rserver->reloadResource(preset);
+        KIS_SAFE_ASSERT_RECOVER_NOOP(result && "couldn't reload preset");
     }
 }
 void KisPaintopBox::slotGuiChangedCurrentPreset() // Called only when UI is changed and not when preset is changed

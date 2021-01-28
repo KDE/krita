@@ -8,6 +8,8 @@
 
 #include <qglobal.h>
 
+#include "kritaresources_export.h"
+
 class KisAllResourcesModel;
 class KisAllTagsModel;
 class KisAllTagResourceModel;
@@ -17,7 +19,7 @@ class KisAllTagResourceModel;
  * For every resource type, there is only one instance of the resource model,
  * so all views on these models show the same state.
  */ 
-class KisResourceModelProvider
+class KRITARESOURCES_EXPORT KisResourceModelProvider
 {
 public:
     KisResourceModelProvider();
@@ -26,6 +28,8 @@ public:
     static KisAllResourcesModel *resourceModel(const QString &resourceType);
     static KisAllTagsModel *tagModel(const QString& resourceType);
     static KisAllTagResourceModel *tagResourceModel(const QString& resourceType);
+
+    static void testingResetAllModels();
 
 private:
 

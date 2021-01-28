@@ -96,16 +96,22 @@ public:
     WGConfigNotifier operator=(const WGConfigNotifier&) = delete;
 
     /**
-     * Notify that the configuration has changed. This will cause the
+     * Notify that the plugin configuration has changed. This will cause the
      * configChanged() signal to be emitted.
      */
     void notifyConfigChanged();
+    /**
+     * Notify that a setting which affects KisVisualColorSelector or the
+     * KisVisualColorModel it uses has changed.
+     */
+    void notifySelectorConfigChanged();
 
 Q_SIGNALS:
     /**
      * This signal is emitted whenever notifyConfigChanged() is called.
      */
-    void configChanged(void);
+    void configChanged();
+    void selectorConfigChanged();
 };
 
 #endif // WGCONFIG_H

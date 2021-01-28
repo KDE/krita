@@ -17,6 +17,7 @@ class KisViewManager;
 class KisVisualColorSelector;
 
 class WGColorSelectorDock;
+class WGConfig;
 class WGSelectorPopup;
 class WGShadeSelector;
 
@@ -30,8 +31,11 @@ public:
     void registerActions(KisViewManager *viewManager);
 private:
     void preparePopup(WGSelectorPopup *popup);
+    void loadColorSelectorSettings(WGConfig &cfg);
     void modifyHSX(int channel, float amount);
 private Q_SLOTS:
+    void slotConfigChanged();
+    void slotSelectorConfigChanged();
     void slotPopupClosed(WGSelectorPopup *popup);
     void slotShowColorSelectorPopup();
     void slotShowShadeSelectorPopup();

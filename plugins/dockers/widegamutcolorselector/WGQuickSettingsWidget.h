@@ -30,7 +30,7 @@ protected:
 
 private Q_SLOTS:
     void slotColorGroupToggled(int id, bool checked);
-    void slotConfigSelected(const KisColorSelectorConfiguration &cfg);
+    void slotConfigSelected(const KisColorSelectorConfiguration &config);
 
 private:
     Ui_QuickSettingsWidget *m_ui;

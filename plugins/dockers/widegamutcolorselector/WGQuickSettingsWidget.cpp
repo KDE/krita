@@ -73,12 +73,17 @@ void WGQuickSettingsWidget::slotColorGroupToggled(int id, bool checked)
     KisVisualColorModel::ColorModel model = static_cast<KisVisualColorModel::ColorModel>(id);
     m_selector->selectorModel()->setRGBColorModel(model);
     m_selectorConf->setColorModel(model);
-    // TODO: write to config once there is one...
+
+    WGConfig cfg(false);
+    cfg.writeEntry("rgbColorModel", id);
 }
 
-void WGQuickSettingsWidget::slotConfigSelected(const KisColorSelectorConfiguration &cfg)
+void WGQuickSettingsWidget::slotConfigSelected(const KisColorSelectorConfiguration &config)
 {
     if (m_selector) {
-        m_selector->setConfiguration(&cfg);
+        m_selector->setConfiguration(&config);
     }
+    WGConfig cfg(false);
+    cfg.setColorSelectorConfiguration(config);
+    cfg.notifier()->notifySelectorConfigChanged();
 }

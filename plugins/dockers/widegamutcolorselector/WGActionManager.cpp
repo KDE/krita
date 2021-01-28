@@ -7,6 +7,7 @@
 #include "WGActionManager.h"
 
 #include "WGColorSelectorDock.h"
+#include "WGConfig.h"
 #include "WGSelectorPopup.h"
 #include "WGShadeSelector.h"
 
@@ -28,6 +29,8 @@ WGActionManager::WGActionManager(WGColorSelectorDock *parentDock)
 {
     connect(m_colorChangeCompressor, SIGNAL(timeout()), SLOT(slotUpdateDocker()));
     connect(m_colorModel.data(), SIGNAL(sigChannelValuesChanged(QVector4D)), SLOT(slotChannelValuesChanged()));
+    connect(WGConfig::notifier(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
+    connect(WGConfig::notifier(), SIGNAL(selectorConfigChanged()), SLOT(slotSelectorConfigChanged()));
 }
 
 /* void WGActionManager::setCanvas(KisCanvas2 *canvas, KisCanvas2 *oldCanvas)
@@ -69,6 +72,14 @@ void WGActionManager::preparePopup(WGSelectorPopup *popup)
     m_currentPopup = popup;
 }
 
+void WGActionManager::loadColorSelectorSettings(WGConfig &cfg)
+{
+    int renderMode = qBound(int(KisVisualColorSelector::StaticBackground), cfg.readEntry("renderMode", 1),
+                            int(KisVisualColorSelector::CompositeBackground));
+    m_colorSelector->setRenderMode(static_cast<KisVisualColorSelector::RenderMode>(renderMode));
+    slotSelectorConfigChanged();
+}
+
 void WGActionManager::modifyHSX(int channel, float amount)
 {
     if (channel < 0 || channel > 2) {
@@ -78,6 +89,27 @@ void WGActionManager::modifyHSX(int channel, float amount)
         QVector4D channelValues = m_docker->colorModel().channelValues();
         channelValues[channel] = qBound(0.0f, channelValues[channel] + amount, 1.0f);
         m_docker->setChannelValues(channelValues);
+    }
+}
+
+void WGActionManager::slotConfigChanged()
+{
+    WGConfig cfg;
+
+    if (m_colorSelector) {
+        loadColorSelectorSettings(cfg);
+    }
+    if (m_shadeSelector) {
+        m_shadeSelector->updateSettings();
+    }
+}
+
+void WGActionManager::slotSelectorConfigChanged()
+{
+    if (m_colorSelector) {
+        WGConfig cfg;
+        KisColorSelectorConfiguration selectorConf = cfg.colorSelectorConfiguration();
+        m_colorSelector->setConfiguration(&selectorConf);
     }
 }
 
@@ -97,6 +129,8 @@ void WGActionManager::slotShowColorSelectorPopup()
         m_colorSelectorPopup->setSelectorWidget(m_colorSelector);
         connect(m_colorSelectorPopup, SIGNAL(sigPopupClosed(WGSelectorPopup*)),
                 SLOT(slotPopupClosed(WGSelectorPopup*)));
+        WGConfig cfg;
+        loadColorSelectorSettings(cfg);
     }
 
     // update gamut mask

@@ -215,3 +215,8 @@ void WGConfigNotifier::notifyConfigChanged()
 {
     emit configChanged();
 }
+
+void WGConfigNotifier::notifySelectorConfigChanged()
+{
+    emit selectorConfigChanged();
+}

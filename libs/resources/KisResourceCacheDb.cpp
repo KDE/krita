@@ -290,7 +290,7 @@ bool KisResourceCacheDb::initialize(const QString &location)
     return s_valid;
 }
 
-int KisResourceCacheDb::resourceIdForResource(const QString &resourceName, const QString &resourceFileName, const QString &resourceType, const QString &storageLocation)
+int KisResourceCacheDb::resourceIdForResource(const QString &/*resourceName*/, const QString &resourceFileName, const QString &resourceType, const QString &storageLocation)
 {
     //qDebug() << "resourceIdForResource" << resourceName << resourceFileName << resourceType << storageLocation;
 
@@ -594,7 +594,6 @@ bool KisResourceCacheDb::makeResourceTheCurrentVersion(int resourceId, KoResourc
                   ", filename  = :filename\n"
                   ", tooltip   = :tooltip\n"
                   ", thumbnail = :thumbnail\n"
-                  ", version   = :version\n"
                   "WHERE id    = :id");
     if (!r) {
         qWarning() << "Could not prepare updateResource statement" << q.lastError();
@@ -604,7 +603,6 @@ bool KisResourceCacheDb::makeResourceTheCurrentVersion(int resourceId, KoResourc
     q.bindValue(":name", resource->name());
     q.bindValue(":filename", QFileInfo(resource->filename()).fileName());
     q.bindValue(":tooltip", i18n(resource->name().toUtf8()));
-    q.bindValue(":version", resource->version());
 
     QByteArray ba;
     QBuffer buf(&ba);
@@ -612,7 +610,6 @@ bool KisResourceCacheDb::makeResourceTheCurrentVersion(int resourceId, KoResourc
     resource->thumbnail().save(&buf, "PNG");
     buf.close();
     q.bindValue(":thumbnail", ba);
-
     q.bindValue(":id", resourceId);
 
     r = q.exec();

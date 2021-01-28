@@ -542,10 +542,14 @@ void KisKraLoader::loadPalettes(KoStore *store, KisDocument *doc)
         KoColorSetSP newPalette(new KoColorSet(filename));
         store->open(m_d->imageName + PALETTE_PATH + filename);
         QByteArray data = store->read(store->size());
-        newPalette->fromByteArray(data, KisGlobalResourcesInterface::instance());
-        newPalette->setIsEditable(true);
-        store->close();
-        list.append(newPalette);
+        if (data.size() > 0) {
+            newPalette->fromByteArray(data, KisGlobalResourcesInterface::instance());
+            newPalette->setIsEditable(true);
+            store->close();
+            list.append(newPalette);
+        } else {
+            m_d->warningMessages.append(i18nc("Warning message on loading a .kra file", "Embedded palette is empty and cannot be loaded. The name of the palette: %1", filename));
+        }
     }
     doc->setPaletteList(list);
 }

@@ -516,11 +516,12 @@ void KisKraLoader::loadPalettes(KoStore *store, KisDocument *doc)
         KoColorSet *newPalette = new KoColorSet(filename);
         store->open(m_d->imageName + PALETTE_PATH + filename);
         QByteArray data = store->read(store->size());
-        newPalette->fromByteArray(data);
-        newPalette->setIsGlobal(false);
-        newPalette->setIsEditable(true);
-        store->close();
-        list.append(newPalette);
+        if (data.size() > 0) {
+            newPalette->fromByteArray(data);
+            newPalette->setIsEditable(true);
+            store->close();
+            list.append(newPalette);
+        }
     }
     doc->setPaletteList(list);
 }

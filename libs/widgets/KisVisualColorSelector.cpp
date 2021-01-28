@@ -112,14 +112,18 @@ const KisColorSelectorConfiguration &KisVisualColorSelector::configuration() con
 void KisVisualColorSelector::setConfiguration(const KisColorSelectorConfiguration *config)
 {
     m_d->useACSConfig = !config;
-    m_d->initialized = false;
     if (config) {
         // applies immediately, while signalled rebuilds from krita configuration changes
         // are queued, so make sure we cancel queued updates
         m_d->updateTimer->stop();
-        m_d->acs_config = validatedConfiguration(*config);
-        rebuildSelector();
+        KisColorSelectorConfiguration configNew = validatedConfiguration(*config);
+        if (configNew != m_d->acs_config) {
+            m_d->acs_config = configNew;
+            m_d->initialized = false;
+            rebuildSelector();
+        }
     } else {
+        m_d->initialized = false;
         m_d->updateTimer->start();
     }
 }

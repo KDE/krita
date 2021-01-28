@@ -2774,6 +2774,7 @@ void KisMainWindow::applyToolBarLayout()
 
     Q_FOREACH (KToolBar *toolBar, toolBars()) {
         toolBar->layout()->setSpacing(4);
+        toolBar->setStyleSheet("QToolBar { border: none }"); // has a border in "Fusion" style that people don't like
 
         //Hide text for buttons with an icon in the toolbar
         Q_FOREACH (QAction *ac, toolBar->actions()){

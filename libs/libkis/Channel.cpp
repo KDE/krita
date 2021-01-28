@@ -73,11 +73,15 @@ void Channel::setVisible(bool value)
     if (!d->node || !d->channel) return;
     if (!d->node->inherits("KisLayer")) return;
 
+    KisLayerSP layer = qobject_cast<KisLayer*>(d->node.data());
+    QBitArray flags = layer->channelFlags();
+    if (flags.isEmpty()) {
+        flags.fill(1, d->node->colorSpace()->channelCount());
+    }
+
     for (uint i = 0; i < d->node->colorSpace()->channelCount(); ++i) {
         if (d->node->colorSpace()->channels()[i] == d->channel) {
-            QBitArray flags = d->node->colorSpace()->channelFlags(true, true);
             flags.setBit(i, value);
-            KisLayerSP layer = qobject_cast<KisLayer*>(d->node.data());
             layer->setChannelFlags(flags);
             break;
         }

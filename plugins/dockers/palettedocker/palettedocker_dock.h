@@ -71,6 +71,7 @@ private Q_SLOTS:
     void slotRemoveColor();
     void slotEditEntry();
     void slotEditPalette();
+    void slotSavePalette();
 
     void slotPaletteIndexSelected(const QModelIndex &index);
     void slotPaletteIndexClicked(const QModelIndex &index);
@@ -107,6 +108,7 @@ private /* member variables */:
     QScopedPointer<QAction> m_actRemove;
     QScopedPointer<QAction> m_actModify;
     QScopedPointer<QAction> m_actEditPalette;
+    QScopedPointer<QAction> m_actSavePalette;
     QMenu m_viewContextMenu;
 
     bool m_colorSelfUpdate;

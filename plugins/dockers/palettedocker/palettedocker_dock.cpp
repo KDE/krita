@@ -63,8 +63,9 @@ PaletteDockerDock::PaletteDockerDock( )
     , m_paletteEditor(new KisPaletteEditor)
     , m_actAdd(new QAction(KisIconUtils::loadIcon("list-add"), i18n("Add a color")))
     , m_actRemove(new QAction(KisIconUtils::loadIcon("edit-delete"), i18n("Delete color")))
-    , m_actModify(new QAction(KisIconUtils::loadIcon("document-edit"), i18n("Modify this spot")))
-    , m_actEditPalette(new QAction(KisIconUtils::loadIcon("palette-edit"), i18n("Edit this palette")))
+    , m_actModify(new QAction(KisIconUtils::loadIcon("edit-rename"), i18n("Modify this spot")))
+    , m_actSavePalette(new QAction(KisIconUtils::loadIcon("document-save"), i18n("Save this palette")))
+    , m_actEditPalette(new QAction(KisIconUtils::loadIcon("groupLayer"), i18n("Edit this palette")))
     , m_colorSelfUpdate(false)
 {
     QWidget *mainWidget = new QWidget(this);
@@ -77,12 +78,16 @@ PaletteDockerDock::PaletteDockerDock( )
     m_ui->bnRemove->setDefaultAction(m_actRemove.data());
     m_ui->bnRename->setDefaultAction(m_actModify.data());
     m_ui->bnEditPalette->setDefaultAction(m_actEditPalette.data());
+    m_ui->bnSavePalette->setDefaultAction(m_actSavePalette.data());
+
 
     // to make sure their icons have the same size
     m_ui->bnRemove->setIconSize(QSize(16, 16));
     m_ui->bnRename->setIconSize(QSize(16, 16));
     m_ui->bnAdd->setIconSize(QSize(16, 16));
     m_ui->bnEditPalette->setIconSize(QSize(16, 16));
+    m_ui->bnSavePalette->setIconSize(QSize(16, 16));
+
 
     m_ui->paletteView->setPaletteModel(m_model);
     m_ui->paletteView->setAllowModification(true);
@@ -94,6 +99,7 @@ PaletteDockerDock::PaletteDockerDock( )
     connect(m_actRemove.data(), SIGNAL(triggered()), SLOT(slotRemoveColor()));
     connect(m_actModify.data(), SIGNAL(triggered()), SLOT(slotEditEntry()));
     connect(m_actEditPalette.data(), SIGNAL(triggered()), SLOT(slotEditPalette()));
+    connect(m_actSavePalette.data(), SIGNAL(triggered()), SLOT(slotSavePalette()));
     connect(m_ui->paletteView, SIGNAL(sigIndexSelected(QModelIndex)),
             SLOT(slotPaletteIndexSelected(QModelIndex)));
     connect(m_ui->paletteView, SIGNAL(clicked(QModelIndex)),
@@ -127,6 +133,7 @@ PaletteDockerDock::PaletteDockerDock( )
         m_ui->bnRename->setEnabled(false);
         m_ui->bnRemove->setEnabled(false);
         m_ui->bnEditPalette->setEnabled(false);
+        m_ui->bnSavePalette->setEnabled(false);
         m_ui->paletteView->setAllowModification(false);
     }
 
@@ -255,12 +262,14 @@ void PaletteDockerDock::slotSetColorSet(KoColorSetSP colorSet)
         m_ui->bnRename->setEnabled(true);
         m_ui->bnRemove->setEnabled(true);
         m_ui->bnEditPalette->setEnabled(true);
+        m_ui->bnSavePalette->setEnabled(true);
         m_ui->paletteView->setAllowModification(true);
     } else {
         m_ui->bnAdd->setEnabled(false);
         m_ui->bnRename->setEnabled(false);
         m_ui->bnRemove->setEnabled(false);
         m_ui->bnEditPalette->setEnabled(false);
+        m_ui->bnSavePalette->setEnabled(false);
         m_ui->paletteView->setAllowModification(false);
     }
 
@@ -285,6 +294,11 @@ void PaletteDockerDock::slotEditPalette()
     if (dlg.exec() != QDialog::Accepted){ return; }
 
     slotSetColorSet(m_currentColorSet); // update GUI
+}
+
+void PaletteDockerDock::slotSavePalette()
+{
+    m_paletteEditor->saveNewPaletteVersion();
 }
 
 

@@ -375,7 +375,75 @@ void KisLayerManager::convertNodeToPaintLayer(KisNodeSP source)
         return;
     }
 
-    KisLayerUtils::convertToPaintLayer(image, source);
+    KisPaintDeviceSP srcDevice =
+            source->paintDevice() ? source->projection() : source->original();
+
+    bool putBehind = false;
+
+    QString newCompositeOp =
+        source->projectionLeaf()->isLayer() ?
+            source->compositeOpId() : COMPOSITE_OVER;
+
+    KisColorizeMask *colorizeMask = dynamic_cast<KisColorizeMask*>(source.data());
+    if (colorizeMask) {
+        srcDevice = colorizeMask->coloringProjection();
+        putBehind = colorizeMask->compositeOpId() == COMPOSITE_BEHIND;
+        if (putBehind) {
+            newCompositeOp = COMPOSITE_OVER;
+        }
+    }
+
+    if (!srcDevice) return;
+
+    KisPaintDeviceSP clone;
+
+    if (*srcDevice->colorSpace() !=
+            *srcDevice->compositionSourceColorSpace()) {
+
+        clone = new KisPaintDevice(srcDevice->compositionSourceColorSpace());
+        clone->setDefaultPixel(
+            srcDevice->defaultPixel().convertedTo(
+                srcDevice->compositionSourceColorSpace()));
+
+        QRect rc(srcDevice->extent());
+        KisPainter::copyAreaOptimized(rc.topLeft(), srcDevice, clone, rc);
+    } else {
+        clone = new KisPaintDevice(*srcDevice);
+    }
+
+    KisLayerSP layer = new KisPaintLayer(image,
+                                         source->name(),
+                                         source->opacity(),
+                                         clone);
+
+    if (srcDevice->framesInterface()) {
+        KisKeyframeChannel *cloneKeyChannel = layer->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true);
+        layer->enableAnimation();
+        KisKeyframeChannel *sourceKeyChannel = srcDevice->keyframeChannel();
+
+        foreach (const int &index, sourceKeyChannel->allKeyframeTimes()) {
+            KisKeyframeChannel::copyKeyframe(sourceKeyChannel, index, cloneKeyChannel, index);
+        }
+    }
+
+    layer->setCompositeOpId(newCompositeOp);
+
+    KisNodeSP parent = source->parent();
+    KisNodeSP above = source->prevSibling();
+
+    while (parent && !parent->allowAsChild(layer)) {
+        above = above ? above->parent() : source->parent();
+        parent = above ? above->parent() : 0;
+    }
+
+    if (putBehind && above == source->parent()) {
+        above = above->prevSibling();
+    }
+
+    m_commandsAdapter->beginMacro(kundo2_i18n("Convert to a Paint Layer"));
+    m_commandsAdapter->removeNode(source);
+    m_commandsAdapter->addNode(layer, parent, above);
+    m_commandsAdapter->endMacro();
 }
 
 void KisLayerManager::convertGroupToAnimated()

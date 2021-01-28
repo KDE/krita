@@ -415,7 +415,7 @@ bool KisResourceCacheDb::addResourceVersionImpl(int resourceId, QDateTime timest
     // Create the new version. The resource is expected to have an updated version number, or
     // this will fail on the unique index on resource_id, storage_id and version.
     //
-    // This function **only** removed data from the versioned_resources table.
+    // This function **only** adds to the versioned_resources table.
     // The resources table should be updated by the caller manually using
     // updateResourceTableForResourceIfNeeded()
 
@@ -460,7 +460,7 @@ bool KisResourceCacheDb::removeResourceVersionImpl(int resourceId, int version, 
 {
     bool r = false;
 
-    // Remove a version of the resource. This function **only** removed data from
+    // Remove a version of the resource. This function **only** removes data from
     // the versioned_resources table. The resources table should be updated by
     // the caller manually using updateResourceTableForResourceIfNeeded()
 
@@ -469,8 +469,8 @@ bool KisResourceCacheDb::removeResourceVersionImpl(int resourceId, int version, 
                   "WHERE resource_id = :resource_id\n"
                   "AND version = :version\n"
                   "AND storage_id = (SELECT id \n"
-                  "   FROM   storages \n"
-                  "   WHERE  location = :storage_location);");
+                  "                  FROM   storages \n"
+                  "                  WHERE  location = :storage_location);");
 
     if (!r) {
         qWarning() << "Could not prepare removeResourceVersionImpl statement" << q.lastError();

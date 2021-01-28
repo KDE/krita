@@ -128,7 +128,7 @@ public:
             return false;
         }
 
-        if (m_resourceModel->addResource(resource, save ? resource->storageLocation() : "memory")) {
+        if (m_resourceModel->addResource(resource, save ? QString() : "memory")) {
             notifyResourceAdded(resource);
             return true;
         }

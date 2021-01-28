@@ -311,6 +311,7 @@ bool KisResourceLocator::addResource(const QString &resourceType, const KoResour
         return false;
     }
 
+    resource->setStorageLocation(storageLocation);
     resource->setMD5(storage->resourceMd5(resourceType + "/" + resource->filename()));
     resource->setDirty(false);
 

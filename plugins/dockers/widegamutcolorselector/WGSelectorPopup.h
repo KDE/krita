@@ -25,8 +25,10 @@ protected:
     //void enterEvent(QEvent *event) override;
     void leaveEvent(QEvent *event) override;
     void keyPressEvent(QKeyEvent *event);
+    void hideEvent(QHideEvent *event) override;
 
 Q_SIGNALS:
+    void sigPopupClosed(WGSelectorPopup *popup);
 private Q_SLOTS:
     void slotInteraction(bool active);
 private:

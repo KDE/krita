@@ -56,12 +56,17 @@ void WGActionManager::registerActions(KisViewManager *viewManager)
     connect(action, SIGNAL(triggered(bool)), SLOT(slotShiftHueCCW()));
 }
 
-void WGActionManager::preparePopup()
+void WGActionManager::preparePopup(WGSelectorPopup *popup)
 {
     m_isSynchronizing = true;
+    if (m_currentPopup) {
+        m_currentPopup->hide();
+        m_currentPopup = 0;
+    }
     const KisVisualColorModel &dockerModel = m_docker->colorModel();
     m_colorModel->copyState(dockerModel);
     m_isSynchronizing = false;
+    m_currentPopup = popup;
 }
 
 void WGActionManager::modifyHSX(int channel, float amount)
@@ -76,6 +81,13 @@ void WGActionManager::modifyHSX(int channel, float amount)
     }
 }
 
+void WGActionManager::slotPopupClosed(WGSelectorPopup *popup)
+{
+    if (popup == m_currentPopup) {
+        m_currentPopup = 0;
+    }
+}
+
 void WGActionManager::slotShowColorSelectorPopup()
 {
     if (!m_colorSelectorPopup) {
@@ -83,6 +95,8 @@ void WGActionManager::slotShowColorSelectorPopup()
         m_colorSelector = new KisVisualColorSelector(m_colorSelectorPopup, m_colorModel);
         m_colorSelector->setFixedSize(300, 300);
         m_colorSelectorPopup->setSelectorWidget(m_colorSelector);
+        connect(m_colorSelectorPopup, SIGNAL(sigPopupClosed(WGSelectorPopup*)),
+                SLOT(slotPopupClosed(WGSelectorPopup*)));
     }
 
     // update gamut mask
@@ -97,7 +111,7 @@ void WGActionManager::slotShowColorSelectorPopup()
         }
     }
 
-    preparePopup();
+    preparePopup(m_colorSelectorPopup);
 
     m_colorSelectorPopup->slotShowPopup();
 }
@@ -109,8 +123,10 @@ void WGActionManager::slotShowShadeSelectorPopup()
         m_shadeSelector = new WGShadeSelector(m_colorModel, m_shadeSelectorPopup);
         m_shadeSelector->setFixedWidth(300);
         m_shadeSelectorPopup->setSelectorWidget(m_shadeSelector);
+        connect(m_shadeSelectorPopup, SIGNAL(sigPopupClosed(WGSelectorPopup*)),
+                SLOT(slotPopupClosed(WGSelectorPopup*)));
     }
-    preparePopup();
+    preparePopup(m_shadeSelectorPopup);
     m_shadeSelectorPopup->slotShowPopup();
 }
 
@@ -146,7 +162,11 @@ void WGActionManager::slotShiftHueCCW()
 
 void WGActionManager::slotChannelValuesChanged()
 {
-    if (!m_isSynchronizing) {
+    // FIXME: KoColorDisplayRendererInterface's displayConfigurationChanged()
+    // signal (e.g. layer switches) makes the color model emit new channel values
+    // and this would overwrite the color resources with outdated data!
+    // so make sure a popup is actually active
+    if (!m_isSynchronizing && m_currentPopup) {
         m_colorChangeCompressor->start();
     }
 }

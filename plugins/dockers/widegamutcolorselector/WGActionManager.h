@@ -29,9 +29,10 @@ public:
     //void setCanvas(KisCanvas2* canvas, KisCanvas2* oldCanvas);
     void registerActions(KisViewManager *viewManager);
 private:
-    void preparePopup();
+    void preparePopup(WGSelectorPopup *popup);
     void modifyHSX(int channel, float amount);
 private Q_SLOTS:
+    void slotPopupClosed(WGSelectorPopup *popup);
     void slotShowColorSelectorPopup();
     void slotShowShadeSelectorPopup();
     void slotIncreaseLightness();
@@ -47,6 +48,7 @@ Q_SIGNALS:
 private:
     WGColorSelectorDock *m_docker {0};
     KisSignalCompressor *m_colorChangeCompressor;
+    WGSelectorPopup *m_currentPopup {0};
     WGSelectorPopup *m_colorSelectorPopup {0};
     WGSelectorPopup *m_shadeSelectorPopup {0};
     KisVisualColorSelector *m_colorSelector {0};

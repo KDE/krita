@@ -111,6 +111,12 @@ public:
      */
     void updatePalette();
 
+    /**
+     * @brief savePalette
+     *
+     */
+    void saveNewPaletteVersion();
+
 private Q_SLOTS:
     void slotGroupNameChanged(const QString &newName);
     void slotPaletteChanged();

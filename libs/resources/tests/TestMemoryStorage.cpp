@@ -31,8 +31,8 @@ void TestMemoryStorage::initTestCase()
 void TestMemoryStorage ::testStorage()
 {
     KisMemoryStorage memoryStorage;
-    KoResourceSP resource(new DummyResource("test.gbr", "brushes"));
-    memoryStorage.addResource("brushes", resource);
+    KoResourceSP resource(new DummyResource("test.gbr", ResourceType::Brushes));
+    memoryStorage.addResource(ResourceType::Brushes, resource);
 
     QSharedPointer<KisResourceStorage::ResourceIterator> iter = memoryStorage.resources(ResourceType::Brushes);
     QVERIFY(iter->hasNext());
@@ -48,10 +48,10 @@ void TestMemoryStorage ::testStorage()
 void TestMemoryStorage ::testStorageRetrieval()
 {
     KisMemoryStorage memoryStorage;
-    KoResourceSP resource1(new DummyResource("test1.gbr", "brushes"));
-    memoryStorage.addResource("brushes", resource1);
-    KoResourceSP resource2(new DummyResource("test2.gbr", "brushes"));
-    memoryStorage.addResource("brushes", resource2);
+    KoResourceSP resource1(new DummyResource("test1.gbr", ResourceType::Brushes));
+    memoryStorage.addResource(ResourceType::Brushes, resource1);
+    KoResourceSP resource2(new DummyResource("test2.gbr", ResourceType::Brushes));
+    memoryStorage.addResource(ResourceType::Brushes, resource2);
 
     QString url = QString("brushes/test1.0000.gbr");
     KoResourceSP resource = memoryStorage.resource(url);
@@ -66,8 +66,8 @@ void TestMemoryStorage::testTagIterator()
     tag->setComment("comment");
     tag->setUrl("url");
     tag->setName("name");
-    tag->setResourceType("paintoppresets");
-    memoryStorage.addTag("paintoppresets", tag);
+    tag->setResourceType(ResourceType::PaintOpPresets);
+    memoryStorage.addTag(ResourceType::PaintOpPresets, tag);
     QSharedPointer<KisResourceStorage::TagIterator> iter = memoryStorage.tags(ResourceType::PaintOpPresets);
     QVERIFY(iter->hasNext());
     int count = 0;
@@ -81,11 +81,11 @@ void TestMemoryStorage::testTagIterator()
 void TestMemoryStorage::testAddResource()
 {
     KisMemoryStorage memoryStorage;
-    KoResourceSP res1(new DummyResource("test1.gbr", "brushes"));
-    memoryStorage.addResource("brushes", res1);
+    KoResourceSP res1(new DummyResource("test1.gbr", ResourceType::Brushes));
+    memoryStorage.addResource(ResourceType::Brushes, res1);
 
-    ResourceTestHelper::testVersionedStorage(memoryStorage, "brushes", "brushes/test1.0000.gbr");
-    ResourceTestHelper::testVersionedStorageIterator(memoryStorage, "brushes", "brushes/test1.0000.gbr");
+    ResourceTestHelper::testVersionedStorage(memoryStorage, ResourceType::Brushes, "brushes/test1.0000.gbr");
+    ResourceTestHelper::testVersionedStorageIterator(memoryStorage, ResourceType::Brushes, "brushes/test1.0000.gbr");
 }
 
 QTEST_MAIN(TestMemoryStorage)

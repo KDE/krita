@@ -112,7 +112,7 @@ void TestBundleStorage::testAddResource()
     KisBundleStorage storage(FILES_DEST_DIR + QString("/bundles/Krita_4_Default_Resources.bundle"));
 
     const QString resourceUrl = "paintoppresets/g)_Dry_Brushing.kpp";
-    const QString resourceType = "paintoppresets";
+    const QString resourceType = ResourceType::PaintOpPresets;
 
     ResourceTestHelper::testVersionedStorage(storage, resourceType, resourceUrl,
                                             FILES_DEST_DIR +

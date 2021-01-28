@@ -86,20 +86,20 @@ void TestFolderStorage::testTagIterator()
 
 void TestFolderStorage::testAddResource()
 {
-    KoResourceSP resource(new DummyResource("anewresource.kpp", "paintoppresets"));
+    KoResourceSP resource(new DummyResource("anewresource.kpp", ResourceType::PaintOpPresets));
     resource->setValid(true);
     resource->setVersion(0);
 
     KisFolderStorage folderStorage(QString(FILES_DEST_DIR));
-    bool r = folderStorage.addResource("paintoppresets", resource);
+    bool r = folderStorage.addResource(ResourceType::PaintOpPresets, resource);
     QVERIFY(r);
 
     ResourceTestHelper::testVersionedStorage(folderStorage,
-                                             "paintoppresets",
+                                             ResourceType::PaintOpPresets,
                                              "paintoppresets/anewresource.0000.kpp",
                                              QString(FILES_DEST_DIR));
     ResourceTestHelper::testVersionedStorageIterator(folderStorage,
-                                                     "paintoppresets",
+                                                     ResourceType::PaintOpPresets,
                                                      "paintoppresets/anewresource.0000.kpp");
 }
 

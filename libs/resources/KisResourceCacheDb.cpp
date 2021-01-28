@@ -33,7 +33,7 @@ const QString dbDriver = "QSQLITE";
 
 const QString KisResourceCacheDb::dbLocationKey { "ResourceCacheDbDirectory" };
 const QString KisResourceCacheDb::resourceCacheDbFilename { "resourcecache.sqlite" };
-const QString KisResourceCacheDb::databaseVersion { "0.0.4" };
+const QString KisResourceCacheDb::databaseVersion { "0.0.5" };
 QStringList KisResourceCacheDb::storageTypes { QStringList() };
 QStringList KisResourceCacheDb::disabledBundles { QStringList() << "Krita_3_Default_Resources.bundle" };
 
@@ -331,11 +331,11 @@ int KisResourceCacheDb::resourceIdForResource(const QString &resourceName, const
                    ",      versioned_resources\n"
                    ",      storages\n"
                    "WHERE  resources.resource_type_id = resource_types.id\n"    // join resources and resource_types by resource id
-                   "AND    versioned_resources.resource_id = resources.id\n"   // join versioned_resources and resources by resource id
+                   "AND    versioned_resources.resource_id = resources.id\n"    // join versioned_resources and resources by resource id
                    "AND    storages.id = versioned_resources.storage_id\n"      // join storages and versioned_resources by storage id
                    "AND    storages.location = :storage_location\n"             // storage location must be the same as asked for
                    "AND    resource_types.name = :resource_type\n"              // resource type must be the same as asked for
-                   "AND    versioned_resources.location = :filename\n")) {       // location must be the same as asked for
+                   "AND    versioned_resources.filename = :filename\n")) {      // filename must be the same as asked for
         qWarning() << "Could not read and prepare resourceIdForResource (in versioned resources)" << q.lastError();
         return -1;
     }
@@ -422,14 +422,14 @@ bool KisResourceCacheDb::addResourceVersionImpl(int resourceId, QDateTime timest
 
     QSqlQuery q;
     r = q.prepare("INSERT INTO versioned_resources \n"
-                  "(resource_id, storage_id, version, location, timestamp, md5sum)\n"
+                  "(resource_id, storage_id, version, filename, timestamp, md5sum)\n"
                   "VALUES\n"
                   "( :resource_id\n"
                   ", (SELECT id \n"
                   "   FROM   storages \n"
                   "   WHERE  location = :storage_location)\n"
                   ", :version\n"
-                  ", :location\n"
+                  ", :filename\n"
                   ", :timestamp\n"
                   ", :md5sum\n"
                   ");");
@@ -442,7 +442,7 @@ bool KisResourceCacheDb::addResourceVersionImpl(int resourceId, QDateTime timest
     q.bindValue(":resource_id", resourceId);
     q.bindValue(":storage_location", KisResourceLocator::instance()->makeStorageLocationRelative(storage->location()));
     q.bindValue(":version", resource->version());
-    q.bindValue(":location", QFileInfo(resource->filename()).fileName());
+    q.bindValue(":filename", QFileInfo(resource->filename()).fileName());
     q.bindValue(":timestamp", timestamp.toSecsSinceEpoch());
     KIS_SAFE_ASSERT_RECOVER_NOOP(!resource->md5().isEmpty());
     q.bindValue(":md5sum", resource->md5().toHex());
@@ -522,7 +522,7 @@ bool KisResourceCacheDb::updateResourceTableForResourceIfNeeded(int resourceId, 
     QString maxVersionFilename;
     {
         QSqlQuery q;
-        r = q.prepare("SELECT location\n"
+        r = q.prepare("SELECT filename\n"
                       "FROM   versioned_resources\n"
                       "WHERE  resource_id = :resource_id\n"
                       "AND    version = :version;");
@@ -550,9 +550,9 @@ bool KisResourceCacheDb::updateResourceTableForResourceIfNeeded(int resourceId, 
     int currentVersion = -1;
     {
         QSqlQuery q;
-        r = q.prepare("SELECT version\n"
-                      "FROM   resources\n"
-                      "WHERE  id = :resource_id;");
+        r = q.prepare("SELECT MAX(versioned_resources.version)\n"
+                      "FROM   versioned_resources\n"
+                      "WHERE  versioned_resources.id = :resource_id;");
         if (!r) {
             qWarning() << "Could not prepare findMaxVersion statement" << q.lastError();
             return r;
@@ -708,7 +708,7 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
 
     QSqlQuery q;
     r = q.prepare("INSERT INTO resources \n"
-                  "(storage_id, resource_type_id, name, filename, tooltip, thumbnail, status, temporary, version) \n"
+                  "(storage_id, resource_type_id, name, filename, tooltip, thumbnail, status, temporary) \n"
                   "VALUES \n"
                   "((SELECT id "
                   "  FROM storages "
@@ -721,8 +721,7 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
                   ", :tooltip\n"
                   ", :thumbnail\n"
                   ", :status\n"
-                  ", :temporary\n"
-                  ", :version);");
+                  ", :temporary)\n");
 
     if (!r) {
         qWarning() << "Could not prepare addResource statement" << q.lastError();
@@ -734,7 +733,6 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
     q.bindValue(":name", resource->name());
     q.bindValue(":filename", QFileInfo(resource->filename()).fileName());
     q.bindValue(":tooltip", i18n(resource->name().toUtf8()));
-    q.bindValue(":version", resource->version());
 
     QByteArray ba;
     QBuffer buf(&ba);
@@ -763,13 +761,13 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
 
     // Then add a new version
     r = q.prepare("INSERT INTO versioned_resources\n"
-                  "(resource_id, storage_id, version, location, timestamp, md5sum)\n"
+                  "(resource_id, storage_id, version, filename, timestamp, md5sum)\n"
                   "VALUES\n"
                   "(:resource_id\n"
                   ",    (SELECT id FROM storages\n"
                   "      WHERE location = :storage_location)\n"
                   ", :version\n"
-                  ", :location\n"
+                  ", :filename\n"
                   ", :timestamp\n"
                   ", :md5sum\n"
                   ");");
@@ -782,7 +780,7 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
     q.bindValue(":resource_id", resourceId);
     q.bindValue(":storage_location", KisResourceLocator::instance()->makeStorageLocationRelative(storage->location()));
     q.bindValue(":version", resource->version());
-    q.bindValue(":location", QFileInfo(resource->filename()).fileName());
+    q.bindValue(":filename", QFileInfo(resource->filename()).fileName());
     q.bindValue(":timestamp", timestamp.toSecsSinceEpoch());
     KIS_SAFE_ASSERT_RECOVER_NOOP(!resource->md5().isEmpty());
     if (resource->md5().isEmpty()) {
@@ -1364,7 +1362,7 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
 
         QSqlQuery q;
         q.setForwardOnly(true);
-        if (!q.prepare("SELECT versioned_resources.resource_id, versioned_resources.location, versioned_resources.version, versioned_resources.timestamp\n"
+        if (!q.prepare("SELECT versioned_resources.resource_id, versioned_resources.filename, versioned_resources.version, versioned_resources.timestamp\n"
                        "FROM   versioned_resources\n"
                        ",      resource_types\n"
                        ",      resources\n"

@@ -50,7 +50,6 @@ KisAllResourcesModel::KisAllResourcesModel(const QString &resourceType, QObject 
                                        ",      resources.thumbnail\n"
                                        ",      resources.status\n"
                                        ",      storages.location\n"
-                                       ",      resources.version\n"
                                        ",      resource_types.name as resource_type\n"
                                        ",      resources.status as resource_active\n"
                                        ",      storages.active as storage_active\n"
@@ -467,26 +466,18 @@ int KisAllResourcesModel::rowCount(const QModelIndex &) const
 
 void KisAllResourcesModel::addStorage(const QString &/*location*/)
 {
-    qDebug() << "KisAllResourcesModel::addStorage" << rowCount();
-
     beginResetModel();
     resetQuery();
     endResetModel();
-
-    qDebug() << "\t\t" << rowCount();
 }
 
 
 
 void KisAllResourcesModel::removeStorage(const QString &/*location*/)
 {
-    qDebug() << "KisAllResourcesModel::removeStorage" << rowCount();
-
     beginResetModel();
     resetQuery();
     endResetModel();
-
-    qDebug() << "\t\t" << rowCount();
 }
 
 struct KisResourceModel::Private

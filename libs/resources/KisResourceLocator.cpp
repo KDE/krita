@@ -198,7 +198,7 @@ KoResourceSP KisResourceLocator::resource(QString storageLocation, const QString
     if (resource->resourceId() < 0 || resource->version() < 0) {
         QSqlQuery q;
         if (!q.prepare("SELECT resources.id\n"
-                       ",      resources.version\n"
+                       ",      versioned_resources.version\n"
                        ",      versioned_resources.md5sum\n"
                        "FROM   resources\n"
                        ",      storages\n"
@@ -210,7 +210,7 @@ KoResourceSP KisResourceLocator::resource(QString storageLocation, const QString
                        "AND    resource_types.name = :resource_type\n"
                        "AND    resources.filename  = :filename\n"
                        "AND    versioned_resources.resource_id = resources.id\n"
-                       "AND    versioned_resources.version = resources.version")) {
+                       "AND    versioned_resources.version = (SELECT MAX(version) FROM versioned_resources WHERE versioned_resources.resource_id = resources.id)")) {
             qWarning() << "Could not prepare id/version query" << q.lastError();
 
         }
@@ -220,7 +220,7 @@ KoResourceSP KisResourceLocator::resource(QString storageLocation, const QString
         q.bindValue(":filename", filename);
 
         if (!q.exec()) {
-            qWarning() << "Could not execute id/version quert" << q.lastError() << q.boundValues();
+            qWarning() << "Could not execute id/version query" << q.lastError() << q.boundValues();
         }
 
         if (!q.first()) {

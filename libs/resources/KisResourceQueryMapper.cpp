@@ -155,21 +155,24 @@ QVariant KisResourceQueryMapper::variantFromResourceQueryById(int resourceId, in
 
     QSqlQuery q;
     if (!q.prepare("SELECT resources.id\n"
-              ",      resources.storage_id\n"
-              ",      resources.name\n"
-              ",      resources.filename\n"
-              ",      resources.tooltip\n"
-              ",      resources.thumbnail\n"
-              ",      resources.status\n"
-              ",      storages.location\n"
-              ",      resources.version\n"
-              ",      resource_types.name as resource_type\n"
-              ",      resources.status as resource_active\n"
-              ",      storages.active as storage_active\n"
-              "FROM   resources\n"
-              ",      resource_types\n"
-              ",      storages\n"
-             "WHERE  resources.id = :resource_id"))
+                   ",      resources.storage_id\n"
+                   ",      resources.name\n"
+                   ",      resources.filename\n"
+                   ",      resources.tooltip\n"
+                   ",      resources.thumbnail\n"
+                   ",      resources.status\n"
+                   ",      storages.location\n"
+                   ",      versioned_resources.version\n"
+                   ",      resource_types.name as resource_type\n"
+                   ",      resources.status as resource_active\n"
+                   ",      storages.active as storage_active\n"
+                   "FROM   resources\n"
+                   ",      resource_types\n"
+                   ",      storages\n"
+                   ",      versioned_resources\n"
+                   "WHERE  resources.id = :resource_id\n"
+                   "AND    versioned_resources.resource_id = resources.id\n"
+                   "AND    versioned_resources.version = (SELECT MAX(version) FROM versioned_resources WHERE versioned_resources.resource_id = resources.id)"))
     {
         qWarning() << "Could not prepare variantFromResourceQueryById query" << q.lastError();
         return v;

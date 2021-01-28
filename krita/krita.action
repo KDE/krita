@@ -1402,7 +1402,7 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
-    <Action>
+    <Action name="KritaSelected/KisToolColorSampler">
       <icon>krita_tool_color_sampler</icon>
       <text>Color Sampler</text>
       <whatsThis></whatsThis>

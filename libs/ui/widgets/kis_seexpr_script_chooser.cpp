@@ -31,6 +31,7 @@ KisSeExprScriptChooser::KisSeExprScriptChooser(QWidget *parent)
 {
     m_lblName = new KSqueezedTextLabel(this);
     m_lblName->setTextElideMode(Qt::ElideLeft);
+    m_lblName->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Fixed);
 
     m_itemChooser = new KisResourceItemChooser(ResourceType::SeExprScripts, true, this);
     m_itemChooser->setPreviewTiled(true);
@@ -87,7 +88,6 @@ void KisSeExprScriptChooser::setPreviewOrientation(Qt::Orientation orientation)
 
 void KisSeExprScriptChooser::update(KoResourceSP resource)
 {
-    m_lblName->setFixedWidth(m_itemChooser->width());
     KisSeExprScriptSP pattern = resource.staticCast<KisSeExprScript>();
     m_lblName->setText(QString("%1").arg(i18n(pattern->name().toUtf8().replace("_", " "))));
 }

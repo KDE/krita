@@ -33,7 +33,7 @@ const QString dbDriver = "QSQLITE";
 
 const QString KisResourceCacheDb::dbLocationKey { "ResourceCacheDbDirectory" };
 const QString KisResourceCacheDb::resourceCacheDbFilename { "resourcecache.sqlite" };
-const QString KisResourceCacheDb::databaseVersion { "0.0.5" };
+const QString KisResourceCacheDb::databaseVersion { "0.0.6" };
 QStringList KisResourceCacheDb::storageTypes { QStringList() };
 QStringList KisResourceCacheDb::disabledBundles { QStringList() << "Krita_3_Default_Resources.bundle" };
 
@@ -324,7 +324,6 @@ int KisResourceCacheDb::resourceIdForResource(const QString &/*resourceName*/, c
 
     // couldn't be found in the `resources` table, but can still be in versioned_resources
 
-
     if (!q.prepare("SELECT versioned_resources.resource_id\n"
                    "FROM   resources\n"
                    ",      resource_types\n"
@@ -354,7 +353,7 @@ int KisResourceCacheDb::resourceIdForResource(const QString &/*resourceName*/, c
     }
 
     // commenting out, because otherwise it spams the console on every new resource in the local resources folder
-    //qWarning() << "Could not find resource" << resourceName << resourceFileName << resourceType << storageLocation;
+    // qWarning() << "Could not find resource" << resourceName << resourceFileName << resourceType << storageLocation;
     return -1;
 
 }
@@ -748,9 +747,13 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
     }
 
     resourceId = resourceIdForResource(resource->name(), resource->filename(), resourceType, KisResourceLocator::instance()->makeStorageLocationRelative(storage->location()));
+
     if (resourceId < 0) {
-        qWarning() << "Adding to database failed, resource id after adding is " << resourceId << "! (Probable reason: the same name and MD5 as some other resource). Resource is: " << resource->name() << resource->filename()
-                   << resourceType << KisResourceLocator::instance()->makeStorageLocationRelative(storage->location());
+        qWarning() << "Adding to database failed, resource id after adding is " << resourceId << "! (Probable reason: the resource has the same filename, storage, resource type as an existing resource). Resource is: "
+                   << resource->name()
+                   << resource->filename()
+                   << resourceType
+                   << KisResourceLocator::instance()->makeStorageLocationRelative(storage->location());
         return false;
     }
 

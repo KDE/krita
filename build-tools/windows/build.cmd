@@ -609,24 +609,24 @@ echo Krita build dir: %KRITA_BUILD_DIR%
 
 @REM Plugins also need the download dir
 if not "%ARG_DOWNLOAD_DIR%" == "" (
-    set "DEPS_DOWNLOAD_DIR=%ARG_DOWNLOAD_DIR%"
+    set "PLUGINS_DOWNLOAD_DIR=%ARG_DOWNLOAD_DIR%"
 )
-if "%DEPS_DOWNLOAD_DIR%" == "" (
-    set DEPS_DOWNLOAD_DIR=%CD%\d\
-    echo Using default deps download dir: !DEPS_DOWNLOAD_DIR!
+if "%PLUGINS_DOWNLOAD_DIR%" == "" (
+    set PLUGINS_DOWNLOAD_DIR=%CD%\d\
+    echo Using default deps download dir: !PLUGINS_DOWNLOAD_DIR!
     if not "%ARG_NO_INTERACTIVE%" == "1" (
         choice /c ny /n /m "Is this ok? [y/n] "
         if errorlevel 3 exit 255
         if not errorlevel 2 (
-            call :prompt_for_dir DEPS_DOWNLOAD_DIR "Provide path of depps download dir"
+            call :prompt_for_dir PLUGINS_DOWNLOAD_DIR "Provide path of plugins download dir"
         )
     )
-    if "!DEPS_DOWNLOAD_DIR!" == "" (
-        echo ERROR: Deps download dir not set! 1>&2
+    if "!PLUGINS_DOWNLOAD_DIR!" == "" (
+        echo ERROR: Plugins download dir not set! 1>&2
         exit /b 102
     )
 )
-echo Deps download dir: %DEPS_DOWNLOAD_DIR%
+echo Plugins download dir: %PLUGINS_DOWNLOAD_DIR%
 
 if not "%ARG_PLUGINS_BUILD_DIR%" == "" (
     set "PLUGINS_BUILD_DIR=%ARG_PLUGINS_BUILD_DIR%"
@@ -718,6 +718,13 @@ if NOT "%ARG_SKIP_KRITA%" == "1" (
             exit /b 103
         )
     )
+    mkdir %PLUGINS_DOWNLOAD_DIR%
+    if errorlevel 1 (
+        if not exist "%PLUGINS_DOWNLOAD_DIR%\" (
+            echo ERROR: Cannot create plugins download dir! 1>&2
+            exit /b 103
+        )
+    )
     mkdir %PLUGINS_BUILD_DIR%
     if errorlevel 1 (
         if not exist "%PLUGINS_BUILD_DIR%\" (
@@ -743,6 +750,8 @@ set QT_ENABLE_DEBUG_INFO=OFF
 :: Paths for CMake
 set "BUILDDIR_DOWNLOAD_CMAKE=%DEPS_DOWNLOAD_DIR:\=/%"
 set "BUILDDIR_DOWNLOAD_CMAKE=%BUILDDIR_DOWNLOAD_CMAKE: =\ %"
+set "BUILDDIR_PLUGINS_DOWNLOAD_CMAKE=%PLUGINS_DOWNLOAD_DIR:\=/%"
+set "BUILDDIR_PLUGINS_DOWNLOAD_CMAKE=%BUILDDIR_PLUGINS_DOWNLOAD_CMAKE: =\ %"
 set "BUILDDIR_DEPS_INSTALL_CMAKE=%DEPS_INSTALL_DIR:\=/%"
 set "BUILDDIR_DEPS_INSTALL_CMAKE=%BUILDDIR_DEPS_INSTALL_CMAKE: =\ %"
 set "BUILDDIR_KRITA_INSTALL_CMAKE=%KRITA_INSTALL_DIR:\=/%"
@@ -764,7 +773,6 @@ set CMDLINE_CMAKE_DEPS="%CMAKE_EXE%" "%KRITA_SRC_DIR%\3rdparty" ^
     -DEXTERNALS_DOWNLOAD_DIR=%BUILDDIR_DOWNLOAD_CMAKE% ^
     -DINSTALL_ROOT=%BUILDDIR_DEPS_INSTALL_CMAKE% ^
     -G "MinGW Makefiles" ^
-    -DUSE_QT_TABLET_WINDOWS=ON ^
     -DCMAKE_BUILD_TYPE=%CMAKE_BUILD_TYPE%
     
 set CMDLINE_CMAKE_KRITA="%CMAKE_EXE%" "%KRITA_SRC_DIR%\." ^
@@ -780,16 +788,16 @@ set CMDLINE_CMAKE_KRITA="%CMAKE_EXE%" "%KRITA_SRC_DIR%\." ^
     -DUSE_QT_TABLET_WINDOWS=ON ^
     -DHIDE_SAFE_ASSERTS=ON ^
     -Wno-dev ^
+    -G "MinGW Makefiles" ^
     -DCMAKE_BUILD_TYPE=%CMAKE_BUILD_TYPE%
 
 set CMDLINE_CMAKE_PLUGINS="%CMAKE_EXE%" "%KRITA_SRC_DIR%\3rdparty_plugins" ^
     -DSUBMAKE_JOBS=%PARALLEL_JOBS% ^
     -DQT_ENABLE_DEBUG_INFO=%QT_ENABLE_DEBUG_INFO% ^
     -DQT_ENABLE_DYNAMIC_OPENGL=%QT_ENABLE_DYNAMIC_OPENGL% ^
-    -DEXTERNALS_DOWNLOAD_DIR=%BUILDDIR_DOWNLOAD_CMAKE% ^
+    -DEXTERNALS_DOWNLOAD_DIR=%BUILDDIR_PLUGINS_DOWNLOAD_CMAKE% ^
     -DINSTALL_ROOT=%BUILDDIR_PLUGINS_INSTALL_CMAKE% ^
     -G "MinGW Makefiles" ^
-    -DUSE_QT_TABLET_WINDOWS=ON ^
     -DCMAKE_BUILD_TYPE=%CMAKE_BUILD_TYPE%
 
 :: Launch CMD prompt if requested

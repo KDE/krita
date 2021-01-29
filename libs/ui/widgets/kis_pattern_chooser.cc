@@ -31,6 +31,7 @@ KisPatternChooser::KisPatternChooser(QWidget *parent)
 {
     m_lblName = new KSqueezedTextLabel(this);
     m_lblName->setTextElideMode(Qt::ElideLeft);
+    m_lblName->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Fixed);
 
     m_itemChooser = new KisResourceItemChooser(ResourceType::Patterns, true, this);
     m_itemChooser->setPreviewTiled(true);
@@ -87,7 +88,6 @@ void KisPatternChooser::setPreviewOrientation(Qt::Orientation orientation)
 
 void KisPatternChooser::update(KoResourceSP resource)
 {
-    m_lblName->setFixedWidth(m_itemChooser->width());
     KoPatternSP pattern = resource.staticCast<KoPattern>();
     m_lblName->setText(QString("%1 (%2 x %3)").arg(i18n(pattern->name().toUtf8().data())).arg(pattern->width()).arg(pattern->height()));
 }

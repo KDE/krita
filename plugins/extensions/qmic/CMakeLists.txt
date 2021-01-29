@@ -1,5 +1,5 @@
 # GMic bindings exposure.
-set(kisqmicinterface_SOURCES
+set(kritaqmicinterface_SOURCES
     kis_import_qmic_processing_visitor.cpp
     kis_input_output_mapper.cpp
     kis_qmic_applicator.cpp
@@ -11,26 +11,26 @@ set(kisqmicinterface_SOURCES
     kis_qmic_synchronize_layers_command.cpp
 )
 
-add_library(kisqmicinterface SHARED ${kisqmicinterface_SOURCES})
-generate_export_header(kisqmicinterface)
-target_link_libraries(kisqmicinterface kritaui)
+add_library(kritaqmicinterface SHARED ${kritaqmicinterface_SOURCES})
+generate_export_header(kritaqmicinterface)
+target_link_libraries(kritaqmicinterface kritaui)
 
-set(kisqmicinterface_HEADERS
+set(kritaqmicinterface_HEADERS
     kis_qmic_interface.h
     kis_qmic_plugin_interface.h
-    ${CMAKE_CURRENT_BINARY_DIR}/kisqmicinterface_export.h
+    ${CMAKE_CURRENT_BINARY_DIR}/kritaqmicinterface_export.h
 )
 
-set_target_properties(kisqmicinterface
+set_target_properties(kritaqmicinterface
     PROPERTIES
-    PUBLIC_HEADER "${kisqmicinterface_HEADERS}"
+    PUBLIC_HEADER "${kritaqmicinterface_HEADERS}"
 )
 
-set_target_properties(kisqmicinterface PROPERTIES
+set_target_properties(kritaqmicinterface PROPERTIES
     VERSION ${GENERIC_KRITA_LIB_VERSION} SOVERSION ${GENERIC_KRITA_LIB_SOVERSION}
 )
 
-install(TARGETS kisqmicinterface ${INSTALL_TARGETS_DEFAULT_ARGS}
+install(TARGETS kritaqmicinterface ${INSTALL_TARGETS_DEFAULT_ARGS}
     PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
 
@@ -43,7 +43,7 @@ ki18n_wrap_ui (
 )
 
 add_library(kritaqmic MODULE ${kritaqmic_SOURCES})
-target_link_libraries(kritaqmic kisqmicinterface)
+target_link_libraries(kritaqmic kritaqmicinterface)
 
 install(TARGETS kritaqmic LIBRARY DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 

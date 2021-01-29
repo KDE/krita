@@ -154,6 +154,7 @@ KisGradientChooser::KisGradientChooser(QWidget *parent, const char *name, bool u
 
     // Name label
     m_d->labelName = new KSqueezedTextLabel;
+    m_d->labelName->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Fixed);
 
     // Resource Item Chooser
     m_d->itemChooser = new KisResourceItemChooser(ResourceType::Gradients, false, this);
@@ -455,10 +456,6 @@ bool KisGradientChooser::event(QEvent *e)
 {
     if (e->type() == QEvent::StyleChange) {
         m_d->updateContainerSliderItemSizeCustom();
-    } else if (e->type() == QEvent::Resize) {
-        QFrame::resizeEvent(static_cast<QResizeEvent*>(e));
-        m_d->labelName->setMaximumWidth(width());
-        return true;
     }
     return false;
 }
@@ -466,7 +463,6 @@ bool KisGradientChooser::event(QEvent *e)
 void KisGradientChooser::Private::update(KoResourceSP resource)
 {
     KoAbstractGradientSP gradient = resource.staticCast<KoAbstractGradient>();
-    labelName->setFixedWidth(itemChooser->width());
     labelName->setText(gradient ? i18n(gradient->name().toUtf8().data()) : "");
     buttonEditGradient->setEnabled(true);
 }

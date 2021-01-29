@@ -63,6 +63,10 @@ KisDlgGeneratorLayer::KisDlgGeneratorLayer(const QString & defaultName, KisViewM
             this, SLOT(slotNameChanged(QString)));
     connect(dlgWidget.wdgGenerator, SIGNAL(previewConfiguration()), this, SLOT(previewGenerator()));
     connect(&m_compressor, SIGNAL(timeout()), this, SLOT(slotDelayedPreviewGenerator()));
+
+    dlgWidget.filterGalleryToggle->setIcon(QPixmap(":/pics/sidebaricon.png"));
+    dlgWidget.filterGalleryToggle->setChecked(true);
+    connect(dlgWidget.filterGalleryToggle, &QCheckBox::toggled, dlgWidget.wdgGenerator, &KisWdgGenerator::showFilterGallery);
     connect(dlgWidget.btnBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(dlgWidget.btnBox, SIGNAL(rejected()), this, SLOT(reject()));
     connect(this, SIGNAL(accepted()), this, SLOT(saveLayer()));

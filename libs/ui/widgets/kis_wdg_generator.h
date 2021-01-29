@@ -58,6 +58,9 @@ Q_SIGNALS:
 private Q_SLOTS:
     void slotGeneratorActivated(int);
 
+public Q_SLOTS:
+    void showFilterGallery(bool);
+
 private:
 
     struct Private;

@@ -1,10 +1,17 @@
 SET(PREFIX_ext_vc "${EXTPREFIX}" )
 
 if(APPLE)
+    exec_program("sysctl -n hw.optional.arm64" OUTPUT_VARIABLE x86_on_arm)
+    if(${x86_on_arm} STREQUAL "1")
+        set(EXTRA_X86_ON_ARM_PATCHES ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/macos_VcOnARM.patch)
+    endif()
+
     ExternalProject_Add( ext_vc
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
         URL https://github.com/VcDevel/Vc/releases/download/1.4.1/Vc-1.4.1.tar.gz
         URL_HASH SHA1=46e852ab69192cf017a31d7c6d0b35d8aa8fea2d
+
+        PATCH_COMMAND ${EXTRA_X86_ON_ARM_PATCHES}
 
         INSTALL_DIR ${PREFIX_ext_vc}
 

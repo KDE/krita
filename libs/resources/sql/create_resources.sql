@@ -9,5 +9,5 @@ CREATE TABLE IF NOT EXISTS resources (
 ,   status INTEGER           /* active resources are visible in the UI, inactive resources are considered "deleted" */
 ,   temporary INTEGER        /* temporary resources are removed from the database on startup */
 ,   FOREIGN KEY(resource_type_id) REFERENCES resource_types(id)
-,   UNIQUE(storage_id, resource_type_id, name, filename)
+,   UNIQUE(storage_id, resource_type_id, filename)
 );

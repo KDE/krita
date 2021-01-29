@@ -778,7 +778,7 @@ void KisPaintOpPresetsPopup::updateThemedIcons()
 
     m_d->uiWdgPaintOpPresetSettings.newPresetEngineButton->setIcon(KisIconUtils::loadIcon("list-add"));
     m_d->uiWdgPaintOpPresetSettings.bnBlacklistPreset->setIcon(KisIconUtils::loadIcon("deletelayer"));
-    m_d->uiWdgPaintOpPresetSettings.presetChangeViewToolButton->setIcon(KisIconUtils::loadIcon("hamburger_menu_dots"));
+    m_d->uiWdgPaintOpPresetSettings.presetChangeViewToolButton->setIcon(KisIconUtils::loadIcon("view-choose"));
 
     // if we cannot see the "Preset label", we know it is not visible
     // maybe this can also be stored in the config like the scratchpad?

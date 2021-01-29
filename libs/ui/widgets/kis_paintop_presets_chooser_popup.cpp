@@ -144,7 +144,7 @@ void KisPaintOpPresetsChooserPopup::canvasResourceChanged(KisPaintOpPresetSP  pr
 
 void KisPaintOpPresetsChooserPopup::slotThemeChanged()
 {
-   m_d->viewModeButton->setIcon(KisIconUtils::loadIcon("hamburger_menu_dots"));
+   m_d->viewModeButton->setIcon(KisIconUtils::loadIcon("view-choose"));
    m_d->uiWdgPaintOpPresets.wdgPresetChooser->itemChooser()->updateView(); // updates other icons
 }
 

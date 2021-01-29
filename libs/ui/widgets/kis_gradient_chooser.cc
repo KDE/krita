@@ -239,7 +239,6 @@ KisGradientChooser::KisGradientChooser(QWidget *parent, const char *name, bool u
     m_d->buttonEditGradient = new QPushButton();
     m_d->buttonEditGradient->setText(i18n("Edit..."));
     m_d->buttonEditGradient->setEnabled(false);
-    m_d->buttonEditGradient->setFlat(true);
     layoutEditWidgets->addWidget(m_d->buttonEditGradient);
 
     m_d->containerEditWidgets->setLayout(layoutEditWidgets);
@@ -448,7 +447,6 @@ void KisGradientChooser::slotUpdateIcons()
 {
     if (m_d->buttonAddGradient && m_d->buttonEditGradient) {
         m_d->buttonAddGradient->setIcon(KisIconUtils::loadIcon("list-add"));
-        m_d->buttonEditGradient->setIcon(KisIconUtils::loadIcon("hamburger_menu_dots"));
     }
 }
 

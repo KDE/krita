@@ -329,7 +329,7 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
     openFileLink->setIcon(KisIconUtils::loadIcon("document-open"));
     newFileLink->setIcon(KisIconUtils::loadIcon("document-new"));
 
-    btnNewsOptions->setIcon(KisIconUtils::loadIcon("hamburger_menu_dots"));
+    btnNewsOptions->setIcon(KisIconUtils::loadIcon("view-choose"));
     btnNewsOptions->setFlat(true);
 
     supportKritaIcon->setIcon(KisIconUtils::loadIcon(QStringLiteral("support-krita")));

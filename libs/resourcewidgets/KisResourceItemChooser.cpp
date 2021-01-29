@@ -513,7 +513,7 @@ void KisResourceItemChooser::updateView()
     }
 
     /// helps to set icons here in case the theme is changed
-    d->viewModeButton->setIcon(KisIconUtils::loadIcon("hamburger_menu_dots"));
+    d->viewModeButton->setIcon(KisIconUtils::loadIcon("view-choose"));
     d->viewModeButton->setAutoRaise(true);
     d->importButton->setIcon(koIcon("document-open"));
     d->deleteButton->setIcon(koIcon("trash-empty"));

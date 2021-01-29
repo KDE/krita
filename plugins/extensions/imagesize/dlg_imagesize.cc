@@ -47,6 +47,10 @@ DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolu
     setButtons(Ok | Cancel);
     setDefaultButton(Ok);
 
+    // Store original size.
+    m_originalSize.setWidth(width);
+    m_originalSize.setHeight(height);
+
     m_page = new WdgImageSize(this);
 
     Q_CHECK_PTR(m_page);
@@ -54,8 +58,14 @@ DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolu
     m_page->setObjectName("image_size");
 
     m_page->pixelFilterCmb->setIDList(KisFilterStrategyRegistry::instance()->listKeys());
+    m_page->pixelFilterCmb->allowAuto(true);
     m_page->pixelFilterCmb->setToolTip(KisFilterStrategyRegistry::instance()->formattedDescriptions());
-    m_page->pixelFilterCmb->setCurrent("Bicubic");
+    m_page->pixelFilterCmb->setCurrent(KisCmbIDList::AutoOptionID);
+
+    connect(this, &DlgImageSize::sigDesiredSizeChanged, [this](qint32 width, qint32 height, double){
+        KisFilterStrategy *filterStrategy = KisFilterStrategyRegistry::instance()->autoFilterStrategy(m_originalSize, QSize(width, height));
+        m_page->pixelFilterCmb->setAutoHint(filterStrategy->name());
+    });
 
     /**
      * Initialize Pixel Width and Height fields
@@ -82,6 +92,13 @@ DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolu
     m_page->pixelHeightDouble->changeValue(height);
     m_page->pixelWidthDouble->setDisplayUnit(false);
     m_page->pixelHeightDouble->setDisplayUnit(false);
+
+    connect(m_page->pixelWidthDouble, qOverload<double>(&KisDoubleParseUnitSpinBox::valueChanged), [this](){
+        emit sigDesiredSizeChanged(desiredWidth(), desiredHeight(), desiredResolution());
+    });
+    connect(m_page->pixelHeightDouble, qOverload<double>(&KisDoubleParseUnitSpinBox::valueChanged), [this](){
+        emit sigDesiredSizeChanged(desiredWidth(), desiredHeight(), desiredResolution());
+    });
 
     /// add custom units
 
@@ -265,17 +282,17 @@ DlgImageSize::~DlgImageSize()
     delete m_page;
 }
 
-qint32 DlgImageSize::width()
+qint32 DlgImageSize::desiredWidth()
 {
     return int(m_page->pixelWidthDouble->value());
 }
 
-qint32 DlgImageSize::height()
+qint32 DlgImageSize::desiredHeight()
 {
     return int(m_page->pixelHeightDouble->value());
 }
 
-double DlgImageSize::resolution()
+double DlgImageSize::desiredResolution()
 {
     return currentResolutionPPI();
 }
@@ -283,8 +300,12 @@ double DlgImageSize::resolution()
 KisFilterStrategy *DlgImageSize::filterType()
 {
     KoID filterID = m_page->pixelFilterCmb->currentItem();
-    KisFilterStrategy *filter = KisFilterStrategyRegistry::instance()->value(filterID.id());
-    return filter;
+
+    if (filterID == KisCmbIDList::AutoOptionID) {
+        return KisFilterStrategyRegistry::instance()->autoFilterStrategy(m_originalSize, QSize(desiredWidth(), desiredHeight()));
+    } else {
+        return KisFilterStrategyRegistry::instance()->value(filterID.id());
+    }
 }
 
 void DlgImageSize::slotSyncPrintToPixelSize()

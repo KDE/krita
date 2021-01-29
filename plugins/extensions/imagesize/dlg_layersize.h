@@ -45,10 +45,13 @@ public:
                  int width, int height, double resolution);
     ~DlgLayerSize() override;
 
-    qint32 width();
-    qint32 height();
+    qint32 desiredWidth();
+    qint32 desiredHeight();
 
     KisFilterStrategy *filterType();
+
+Q_SIGNALS:
+    void sigDesiredSizeChanged(qint32 width, qint32 height, double resolution);
 
 private Q_SLOTS:
     void slotWidthChanged(double w);

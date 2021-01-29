@@ -25,6 +25,7 @@
 #include <QLayout>
 #include <QGridLayout>
 #include <QPushButton>
+#include <QCheckBox>
 
 #include <klocalizedstring.h>
 

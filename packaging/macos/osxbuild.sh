@@ -300,7 +300,8 @@ build_3rdparty () {
         -DCMAKE_INSTALL_PREFIX=${KIS_INSTALL_DIR} \
         -DCMAKE_PREFIX_PATH:PATH=${KIS_INSTALL_DIR} \
         -DEXTERNALS_DOWNLOAD_DIR=${KIS_DOWN_DIR} \
-        -DINSTALL_ROOT=${KIS_INSTALL_DIR}
+        -DINSTALL_ROOT=${KIS_INSTALL_DIR} \
+        -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64"
 
         # -DCPPFLAGS=-I${KIS_INSTALL_DIR}/include \
         # -DLDFLAGS=-L${KIS_INSTALL_DIR}/lib
@@ -317,6 +318,7 @@ build_3rdparty () {
     # build 3rdparty tools
     # The order must not be changed!
     cmake_3rdparty \
+        ext_iconv \
         ext_pkgconfig \
         ext_gettext \
         ext_openssl \
@@ -329,12 +331,12 @@ build_3rdparty () {
         ext_jpeg \
         ext_lcms2 \
         ext_ocio \
-        ext_openexr \
-        ext_openjpeg
+        ext_openexr
 
     cmake_3rdparty \
         ext_png \
         ext_tiff \
+        ext_openjpeg \
         ext_gsl \
         ext_vc \
         ext_libraw \
@@ -424,8 +426,8 @@ rebuild_3rdparty () {
     fi
 
     build_install_ext \
-        ext_pkgconfig \
         ext_iconv \
+        ext_pkgconfig \
         ext_gettext \
         ext_openssl \
         ext_qt \
@@ -520,7 +522,8 @@ build_krita () {
         -DPYQT_SIP_DIR_OVERRIDE=${KIS_INSTALL_DIR}/share/sip/ \
         -DCMAKE_BUILD_TYPE=${OSXBUILD_TYPE} \
         -DCMAKE_OSX_DEPLOYMENT_TARGET=10.12 \
-        -DPYTHON_INCLUDE_DIR=${KIS_INSTALL_DIR}/lib/Python.framework/Headers
+        -DPYTHON_INCLUDE_DIR=${KIS_INSTALL_DIR}/lib/Python.framework/Headers \
+        -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64"
 
     # copiling phase
     make -j${MAKE_THREADS}

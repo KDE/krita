@@ -826,6 +826,12 @@ void KisMainWindow::slotThemeChanged()
     }
 
 
+    // all global styles can be set here. Build them out line by line so it is easier to read/manage
+    QString stylesBuilder;
+    QString tableHeaderSpacing = "QHeaderView::section {padding: 7px; }";
+    stylesBuilder.append(tableHeaderSpacing);
+    qApp->setStyleSheet(stylesBuilder);
+
 
     emit themeChanged();
 }

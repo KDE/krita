@@ -208,7 +208,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
 
     QAction *wrapAroundAction = m_viewManager->actionManager()->createAction("wrap_around_mode");
 
-    m_wrapAroundButton = new QToolButton(this);
+    m_wrapAroundButton = new KisHighlightedToolButton(this);
     m_wrapAroundButton->setFixedSize(iconsize, iconsize);
     m_wrapAroundButton->setDefaultAction(wrapAroundAction);
     m_wrapAroundButton->setCheckable(true);

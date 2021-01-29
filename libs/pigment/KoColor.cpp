@@ -11,6 +11,7 @@
 #include <QColor>
 
 #include <QDomDocument>
+#include <QRegExp>
 
 #include "DebugPigment.h"
 
@@ -383,11 +384,128 @@ KoColor KoColor::fromXML(const QString &xml)
     QDomDocument doc;
     if (doc.setContent(xml)) {
         QDomElement e = doc.documentElement().firstChild().toElement();
-        QString channelDepthID = e.attribute("channeldepth", Integer16BitsColorDepthID.id());
+        QString channelDepthID = doc.documentElement().attribute("channeldepth", Integer16BitsColorDepthID.id());
         bool ok;
         c = KoColor::fromXML(e, channelDepthID, &ok);
     }
     return c;
+}
+
+QString KoColor::toSVG11(QMap<QString, const KoColorSpace *> *csList)
+{
+    QStringList colorDefinitions;
+    colorDefinitions.append(toQColor().name());
+
+    QVector<float> channelValues(colorSpace()->channelCount());
+    channelValues.fill(0.0);
+    colorSpace()->normalisedChannelsValue(data(), channelValues);
+
+    if (!(colorSpace()->profile() == KoColorSpaceRegistry::instance()->p709SRGBProfile()
+            && colorSpace()->colorDepthId() == Integer8BitsColorDepthID)) {
+        QStringList iccColor;
+        QString csName = colorSpace()->profile()->name();
+        // remove forbidden characters
+        // https://www.w3.org/TR/SVG11/types.html#DataTypeName
+        csName.remove(QRegExp("[\\(\\),\\s]"));
+
+        //reuse existing name if possible. We're looking for the color profile, because svg doesn't care about depth.
+        for (const KoColorSpace *cs: csList->values()) {
+            if (cs->profile() == colorSpace()->profile()) {
+                csName = csList->key(cs, csName);
+            }
+        }
+
+        iccColor.append(csName);
+        for (float i : channelValues) {
+            iccColor.append(QString::number(i, 'g', 10));
+        }
+        colorDefinitions.append(QString("icc-color(%1)").arg(iccColor.join(", ")));
+        csList->insert(csName, colorSpace());
+    }
+
+    return colorDefinitions.join(" ");
+}
+
+KoColor KoColor::fromSVG11(const QString value, QMap<QString, const KoColorSpace *> csList, KoColor current)
+{
+    KoColor parsed;
+
+    if (value.toLower() == "none") {
+        return parsed;
+    }
+
+    // add the sRGB default name.
+    csList.insert("sRGB", KoColorSpaceRegistry::instance()->rgb8());
+
+    // first, try to split at \w\d\) space.
+    // we want to split up a string like... colorcolor none rgb(0.8, 0.1, 200%) #ff0000 icc-color(blah, 0.0, 1.0, 1.0, 0.0);
+    QRegExp splitDefinitions("(#?\\w+|[\\w\\-]*\\(.+\\))\\s");
+    int pos = 0;
+    int pos2 = 0;
+    QStringList colorDefinitions;
+    while ((pos2 = splitDefinitions.indexIn(value, pos)) != -1) {
+        colorDefinitions.append(splitDefinitions.cap(1).trimmed());
+        pos = pos2 + splitDefinitions.matchedLength();
+    }
+    if (pos < value.length()) {
+        QString remainder = value.right(value.length()-pos);
+        remainder.remove(";");
+        colorDefinitions.append(remainder);
+    }
+    dbgPigment << "Color definitions found during svg11parsing" << colorDefinitions;
+
+    for (QString def : colorDefinitions) {
+        if (def.toLower() == "currentcolor") {
+            parsed = current;
+        } else if (QColor::isValidColor(def)) {
+            parsed.fromQColor(QColor(def));
+        } else if (def.toLower().startsWith("rgb")) {
+            QString parse = def.trimmed();
+            QStringList colors = parse.split(',');
+            QString r = colors[0].right((colors[0].length() - 4));
+            QString g = colors[1];
+            QString b = colors[2].left((colors[2].length() - 1));
+
+            if (r.contains('%')) {
+                r = r.left(r.length() - 1);
+                r = QString::number(int((double(255 * r.toDouble()) / 100.0)));
+            }
+
+            if (g.contains('%')) {
+                g = g.left(g.length() - 1);
+                g = QString::number(int((double(255 * g.toDouble()) / 100.0)));
+            }
+
+            if (b.contains('%')) {
+                b = b.left(b.length() - 1);
+                b = QString::number(int((double(255 * b.toDouble()) / 100.0)));
+            }
+            parsed.fromQColor(QColor(r.toInt(), g.toInt(), b.toInt()));
+
+        } else if (def.toLower().startsWith("icc-color")) {
+            QStringList values = def.split(",");
+            QString iccprofilename = values.first().split("(").last();
+            values.removeFirst();
+
+            // svg11 docs say that searching the name should be caseinsentive.
+            QStringList entry = QStringList(csList.keys()).filter(iccprofilename, Qt::CaseInsensitive);
+            if (!entry.empty()) {
+                parsed = KoColor(csList.value(entry.first()));
+                QVector<float> channelValues(parsed.colorSpace()->channelCount());
+                channelValues.fill(0.0);
+                channelValues[parsed.colorSpace()->alphaPos()] = 1.0;
+                for (int channel = 0; channel < values.size(); channel++) {
+                    int location = KoChannelInfo::displayPositionToChannelIndex(channel, parsed.colorSpace()->channels());
+                    QString entry = values.at(channel);
+                    entry = entry.split(")").first();
+                    channelValues[location] = entry.toFloat();
+                }
+                parsed.colorSpace()->fromNormalisedChannelsValue(parsed.data(), channelValues);
+            }
+        }
+    }
+
+    return parsed;
 }
 
 QString KoColor::toQString(const KoColor &color)

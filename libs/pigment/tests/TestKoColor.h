@@ -22,6 +22,8 @@ private Q_SLOTS:
 
     void testComparison();
     void testComparisonQVariant();
+
+    void testSVGParsing();
 };
 
 #endif

@@ -110,4 +110,54 @@ void TestKoColor::testComparisonQVariant()
     QVERIFY(v2 != v3);
 }
 
+void TestKoColor::testSVGParsing()
+{
+    QMap <QString, const KoColorSpace *> csList;
+
+    //1. Testing case with fallback hexvalue and nonsense icc-color that we cannot parse
+
+    KoColor p1 = KoColor::fromSVG11("#ff0000 icc-color(blah, 0.0, 1.0, 1.0, 0.0);", csList);
+    KoColor c1;
+    c1.fromQColor(QColor("#ff0000"));
+
+    //2. testing case with fallback colorname and nonsense icc-color that we cannot parse
+
+    KoColor p2 = KoColor::fromSVG11("#ff0000 silver icc-color(blah, 0.0, 1.0, 1.0, 0.0);", csList);
+    KoColor c2;
+    c2.fromQColor(QColor("silver"));
+
+    //3. testing case with fallback color and useful icc-color
+
+    const KoColorSpace *cmyk = KoColorSpaceRegistry::instance()->colorSpace(CMYKAColorModelID.id(), Integer8BitsColorDepthID.id());
+    QString cmykName = "sillyCMYKName";
+    csList.insert(cmykName, cmyk);
+
+    KoColor p3 = KoColor::fromSVG11("#ff0000 silver icc-color("+cmykName+", 0.0, 0.0, 1.0, 1.0);", csList);
+    KoColor c3 = KoColor::fromXML("<color channeldepth='U8'><CMYK c='0.0' m='0.0' y='1.0' k='1.0' space='"+cmyk->name()+"'/></color>");
+
+    //4. Roundtrip
+
+    KoColor c4(KoColorSpaceRegistry::instance()->lab16());
+    c4.fromQColor(QColor("#426471"));
+    QString value = c4.toSVG11(&csList);
+    dbgPigment << value;
+    KoColor p4 = KoColor::fromSVG11(value, csList);
+
+    //5. Testing rgb...
+    KoColor p5 = KoColor::fromSVG11("#ff0000 rgb(100, 50, 50%)", csList);
+    KoColor c5;
+    c5.fromQColor(QColor(100, 50, 127));
+
+    //6. Testing special srgb definition... especially the part where it can be defined case-insensitive.
+    KoColor p6 = KoColor::fromSVG11("#ff0000 icc-color(srgb, 1.0, 1.0, 0.0)", csList);
+    KoColor c6 = KoColor::fromXML("<color channeldepth='U8'><sRGB r='1.0' g='1.0' b='0.0'/></color>");
+
+    QVERIFY(p1 == c1);
+    QVERIFY(p2 == c2);
+    QVERIFY(p3 == c3);
+    QVERIFY(p4 == c4);
+    QVERIFY(p5 == c5);
+    QVERIFY(p6 == c6);
+}
+
 KISTEST_MAIN(TestKoColor)

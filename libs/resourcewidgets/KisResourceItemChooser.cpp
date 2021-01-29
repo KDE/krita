@@ -73,8 +73,8 @@ public:
     QSplitter *splitter {0};
     QGridLayout *buttonLayout {0};
 
-    QPushButton *importButton {0};
-    QPushButton *deleteButton {0};
+    QToolButton *importButton {0};
+    QToolButton *deleteButton {0};
 
     bool usePreview {false};
     bool tiledPreview {false};
@@ -148,18 +148,17 @@ KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool
 
     d->buttonLayout = new QGridLayout();
 
-    d->importButton = new QPushButton(this);
-
+    d->importButton = new QToolButton(this);
     d->importButton->setToolTip(i18nc("@info:tooltip", "Import resource"));
-    d->importButton->setFlat(true);
+    d->importButton->setAutoRaise(true);
     d->importButton->setEnabled(true);
     d->buttonGroup->addButton(d->importButton, Button_Import);
     d->buttonLayout->addWidget(d->importButton, 0, 0);
 
-    d->deleteButton = new QPushButton(this);
+    d->deleteButton = new QToolButton(this);
     d->deleteButton->setToolTip(i18nc("@info:tooltip", "Delete resource"));
     d->deleteButton->setEnabled(false);
-    d->deleteButton->setFlat(true);
+    d->deleteButton->setAutoRaise(true);
     d->buttonGroup->addButton(d->deleteButton, Button_Remove);
     d->buttonLayout->addWidget(d->deleteButton, 0, 1);
 

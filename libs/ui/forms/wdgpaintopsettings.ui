@@ -458,6 +458,9 @@
           <property name="text">
            <string/>
           </property>
+          <property name="autoRaise">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
        </layout>
@@ -532,13 +535,7 @@
          </spacer>
         </item>
         <item>
-         <widget class="QPushButton" name="bnBlacklistPreset">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
+         <widget class="QToolButton" name="bnBlacklistPreset">
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -554,10 +551,7 @@
             <height>22</height>
            </size>
           </property>
-          <property name="autoDefault">
-           <bool>false</bool>
-          </property>
-          <property name="flat">
+          <property name="autoRaise">
            <bool>true</bool>
           </property>
          </widget>

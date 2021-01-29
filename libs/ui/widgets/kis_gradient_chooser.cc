@@ -241,6 +241,8 @@ KisGradientChooser::KisGradientChooser(QWidget *parent, const char *name, bool u
     m_d->buttonEditGradient->setEnabled(false);
     layoutEditWidgets->addWidget(m_d->buttonEditGradient);
 
+    layoutEditWidgets->addStretch(0);
+
     m_d->containerEditWidgets->setLayout(layoutEditWidgets);
 
     // Layout

@@ -409,12 +409,6 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     QHBoxLayout* mirrorLayout = new QHBoxLayout(mirrorActions);
     mirrorLayout->addWidget(m_hMirrorButton);
 
-    // add separator line to keep drop-down contained
-    QFrame* line = new QFrame();
-    line->setFrameShape(QFrame::VLine);
-    line->setFrameShadow(QFrame::Sunken);
-    mirrorLayout->addWidget(line);
-
 
     mirrorLayout->addWidget(m_vMirrorButton);
     mirrorLayout->addWidget(m_wrapAroundButton);

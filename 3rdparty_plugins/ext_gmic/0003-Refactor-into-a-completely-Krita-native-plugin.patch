@@ -42,7 +42,7 @@ index b9423ab..4873808 100644
  
      find_library(KIS_IMAGE_INTERFACE_LIBRARY
 -      NAMES kisimageinterface
-+      NAMES kisqmicinterface
++      NAMES kritaqmicinterface
        REQUIRED)
  
      find_path(KIS_IMAGE_INTERFACE_DIR
@@ -51,7 +51,7 @@ index b9423ab..4873808 100644
        REQUIRED)
  
 -    set_package_properties(kisimageinterface PROPERTIES
-+    set_package_properties(kisqmicinterface PROPERTIES
++    set_package_properties(kritaqmicinterface PROPERTIES
                             URL "http://www.krita.org"
                             DESCRIPTION "Krita GMic core library"
      )

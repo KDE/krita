@@ -81,6 +81,7 @@ public:
     QByteArray rawData() const override;
     bool valid() const override;
     float version() const override;
+    QString colorModelID() const override;
     bool isSuitableForOutput() const override;
     bool isSuitableForPrinting() const override;
     bool isSuitableForDisplay() const override;

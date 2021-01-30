@@ -14,6 +14,7 @@
 
 #include "KoColor.h"
 #include "KoColorSpace.h"
+#include "KoColorProfile.h"
 #include "KoColorSpaceRegistry.h"
 #include "DebugPigment.h"
 
@@ -129,6 +130,7 @@ void TestKoColor::testSVGParsing()
     //3. testing case with fallback color and useful icc-color
 
     const KoColorSpace *cmyk = KoColorSpaceRegistry::instance()->colorSpace(CMYKAColorModelID.id(), Integer8BitsColorDepthID.id());
+    qDebug() << cmyk->profile()->colorModelID();
     QString cmykName = "sillyCMYKName";
     csList.insert(cmykName, cmyk);
 

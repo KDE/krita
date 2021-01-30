@@ -125,6 +125,37 @@ float IccColorProfile::version() const
     }
     return 0.0;
 }
+
+QString IccColorProfile::colorModelID() const
+{
+    QString model;
+
+    switch (d->shared->lcmsProfile->colorSpaceSignature()) {
+    case cmsSigRgbData:
+        model = "RGBA";
+        break;
+    case cmsSigLabData:
+        model = "LABA";
+        break;
+    case cmsSigCmykData:
+        model = "CMYKA";
+        break;
+    case cmsSigGrayData:
+        model = "GRAYA";
+        break;
+    case cmsSigXYZData:
+        model = "XYZA";
+        break;
+    case cmsSigYCbCrData:
+        model = "YCrCbA";
+        break;
+    default:
+        // In theory we should be able to interpret the colorspace signature as a 4 char array...
+        model = QString();
+    }
+
+    return model;
+}
 bool IccColorProfile::isSuitableForOutput() const
 {
     if (d->shared->lcmsProfile) {

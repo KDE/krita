@@ -112,7 +112,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
 
     if (!cfg.toolOptionsInDocker()) {
         m_toolOptionsPopupButton = new KisPopupButton(this);
-        m_toolOptionsPopupButton->setIcon(KisIconUtils::loadIcon("hamburger_menu_dots"));
+        m_toolOptionsPopupButton->setIcon(KisIconUtils::loadIcon("view-choose"));
         m_toolOptionsPopupButton->setToolTip(i18n("Tool Settings"));
         m_toolOptionsPopupButton->setFixedSize(iconsize, iconsize);
         m_toolOptionsPopupButton->setFlat(true);

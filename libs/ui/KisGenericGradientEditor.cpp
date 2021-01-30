@@ -124,7 +124,7 @@ KisGenericGradientEditor::KisGenericGradientEditor(QWidget* parent)
     m_d->toolButtonGradientPresetChooserOptions = new QToolButton(this);
     m_d->toolButtonGradientPresetChooserOptions->setPopupMode(QToolButton::InstantPopup);
     m_d->toolButtonGradientPresetChooserOptions->setAutoRaise(true);
-    m_d->toolButtonGradientPresetChooserOptions->setIcon(KisIconUtils::loadIcon("hamburger_menu_dots"));
+    m_d->toolButtonGradientPresetChooserOptions->setIcon(KisIconUtils::loadIcon("view-choose"));
     m_d->toolButtonGradientPresetChooserOptions->setStyleSheet("QToolButton::menu-indicator { image: none; }");
     m_d->actionUseGradientPresetChooserPopUp = new QAction(this);
     m_d->actionUseGradientPresetChooserPopUp->setCheckable(true);

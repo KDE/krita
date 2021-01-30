@@ -25,11 +25,11 @@
 #include <qobject.h>
 
 #include "kis_qmic_interface.h"
-#include "kisqmicinterface_export.h"
+#include "kritaqmicinterface_export.h"
 
 #define KRITA_GMIC_PLUGIN_INTERFACE_IID "org.kde.krita.KritaGmicPluginInterface"
 
-class KISQMICINTERFACE_EXPORT KisQmicPluginInterface
+class KRITAQMICINTERFACE_EXPORT KisQmicPluginInterface
 {
 public:
   virtual ~KisQmicPluginInterface() = default;

@@ -178,7 +178,7 @@ SvgSymbolCollectionDocker::SvgSymbolCollectionDocker(QWidget *parent)
     // thumbnail icon changer
     QMenu* configureMenu = new QMenu(this);
     configureMenu->setStyleSheet("margin: 6px");
-    m_wdgSvgCollection->vectorPresetsConfigureButton->setIcon(KisIconUtils::loadIcon("hamburger_menu_dots"));
+    m_wdgSvgCollection->vectorPresetsConfigureButton->setIcon(KisIconUtils::loadIcon("view-choose"));
     m_wdgSvgCollection->vectorPresetsConfigureButton->setPopupMode(QToolButton::InstantPopup);
     m_wdgSvgCollection->vectorPresetsConfigureButton->setAutoRaise(true);
 

@@ -259,7 +259,7 @@ KisAngleSelector::KisAngleSelector(QWidget* parent)
     m_d->toolButtonFlipOptions = new QToolButton(this);
     m_d->toolButtonFlipOptions->setPopupMode(QToolButton::InstantPopup);
     m_d->toolButtonFlipOptions->setAutoRaise(true);
-    m_d->toolButtonFlipOptions->setIcon(KisIconUtils::loadIcon("hamburger_menu_dots"));
+    m_d->toolButtonFlipOptions->setIcon(KisIconUtils::loadIcon("view-choose"));
     m_d->toolButtonFlipOptions->setStyleSheet("QToolButton::menu-indicator { image: none; }");
     m_d->toolButtonFlipOptions->setMenu(m_d->menuFlip);
     m_d->toolButtonFlipOptions->setFocusPolicy(Qt::StrongFocus);

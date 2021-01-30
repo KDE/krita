@@ -826,6 +826,12 @@ void KisMainWindow::slotThemeChanged()
     }
 
 
+    // all global styles can be set here. Build them out line by line so it is easier to read/manage
+    QString stylesBuilder;
+    QString tableHeaderSpacing = "QHeaderView::section {padding: 7px; }";
+    stylesBuilder.append(tableHeaderSpacing);
+    qApp->setStyleSheet(stylesBuilder);
+
 
     emit themeChanged();
 }
@@ -2774,6 +2780,7 @@ void KisMainWindow::applyToolBarLayout()
 
     Q_FOREACH (KToolBar *toolBar, toolBars()) {
         toolBar->layout()->setSpacing(4);
+        toolBar->setStyleSheet("QToolBar { border: none }"); // has a border in "Fusion" style that people don't like
 
         //Hide text for buttons with an icon in the toolbar
         Q_FOREACH (QAction *ac, toolBar->actions()){

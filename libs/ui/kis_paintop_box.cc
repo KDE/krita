@@ -112,7 +112,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
 
     if (!cfg.toolOptionsInDocker()) {
         m_toolOptionsPopupButton = new KisPopupButton(this);
-        m_toolOptionsPopupButton->setIcon(KisIconUtils::loadIcon("hamburger_menu_dots"));
+        m_toolOptionsPopupButton->setIcon(KisIconUtils::loadIcon("view-choose"));
         m_toolOptionsPopupButton->setToolTip(i18n("Tool Settings"));
         m_toolOptionsPopupButton->setFixedSize(iconsize, iconsize);
         m_toolOptionsPopupButton->setFlat(true);
@@ -208,7 +208,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
 
     QAction *wrapAroundAction = m_viewManager->actionManager()->createAction("wrap_around_mode");
 
-    m_wrapAroundButton = new QToolButton(this);
+    m_wrapAroundButton = new KisHighlightedToolButton(this);
     m_wrapAroundButton->setFixedSize(iconsize, iconsize);
     m_wrapAroundButton->setDefaultAction(wrapAroundAction);
     m_wrapAroundButton->setCheckable(true);
@@ -408,12 +408,6 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     QWidget* mirrorActions = new QWidget(this);
     QHBoxLayout* mirrorLayout = new QHBoxLayout(mirrorActions);
     mirrorLayout->addWidget(m_hMirrorButton);
-
-    // add separator line to keep drop-down contained
-    QFrame* line = new QFrame();
-    line->setFrameShape(QFrame::VLine);
-    line->setFrameShadow(QFrame::Sunken);
-    mirrorLayout->addWidget(line);
 
 
     mirrorLayout->addWidget(m_vMirrorButton);

@@ -7,6 +7,7 @@
 #include "WGActionManager.h"
 
 #include "WGColorSelectorDock.h"
+#include "WGColorPreviewToolTip.h"
 #include "WGConfig.h"
 #include "WGSelectorPopup.h"
 #include "WGShadeSelector.h"
@@ -15,6 +16,7 @@
 #include <kis_action_manager.h>
 #include <kis_canvas2.h>
 #include <kis_canvas_resource_provider.h>
+#include <kis_display_color_converter.h>
 #include <kis_signal_compressor.h>
 #include <KisViewManager.h>
 #include <KisVisualColorSelector.h>
@@ -24,9 +26,11 @@
 WGActionManager::WGActionManager(WGColorSelectorDock *parentDock)
     : QObject(parentDock)
     , m_docker(parentDock)
+    , m_colorTooltip(new WGColorPreviewToolTip)
     , m_colorChangeCompressor(new KisSignalCompressor(100 /* ms */, KisSignalCompressor::POSTPONE, this))
     , m_colorModel(new KisVisualColorModel)
 {
+    m_lastUsedColor.setOpacity(quint8(0));
     connect(m_colorChangeCompressor, SIGNAL(timeout()), SLOT(slotUpdateDocker()));
     connect(m_colorModel.data(), SIGNAL(sigChannelValuesChanged(QVector4D)), SLOT(slotChannelValuesChanged()));
     connect(WGConfig::notifier(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
@@ -59,8 +63,14 @@ void WGActionManager::registerActions(KisViewManager *viewManager)
     connect(action, SIGNAL(triggered(bool)), SLOT(slotShiftHueCCW()));
 }
 
-void WGActionManager::preparePopup(WGSelectorPopup *popup)
+void WGActionManager::setLastUsedColor(const KoColor &col)
 {
+    m_lastUsedColor = col;
+}
+
+void WGActionManager::showPopup(WGSelectorPopup *popup)
+{
+    // preparations
     m_isSynchronizing = true;
     if (m_currentPopup) {
         m_currentPopup->hide();
@@ -68,8 +78,15 @@ void WGActionManager::preparePopup(WGSelectorPopup *popup)
     }
     const KisVisualColorModel &dockerModel = m_docker->colorModel();
     m_colorModel->copyState(dockerModel);
+    m_colorTooltip->setLastUsedColor(m_colorModel->displayRenderer()->toQColor(m_lastUsedColor));
+    QColor baseCol = m_colorModel->displayRenderer()->toQColor(m_colorModel->currentColor());
+    m_colorTooltip->setCurrentColor(baseCol);
+    m_colorTooltip->setPreviousColor(baseCol);
     m_isSynchronizing = false;
+
     m_currentPopup = popup;
+    popup->slotShowPopup();
+    m_colorTooltip->show(popup);
 }
 
 void WGActionManager::loadColorSelectorSettings(WGConfig &cfg)
@@ -117,6 +134,7 @@ void WGActionManager::slotPopupClosed(WGSelectorPopup *popup)
 {
     if (popup == m_currentPopup) {
         m_currentPopup = 0;
+        m_colorTooltip->hide();
     }
 }
 
@@ -129,6 +147,7 @@ void WGActionManager::slotShowColorSelectorPopup()
         m_colorSelectorPopup->setSelectorWidget(m_colorSelector);
         connect(m_colorSelectorPopup, SIGNAL(sigPopupClosed(WGSelectorPopup*)),
                 SLOT(slotPopupClosed(WGSelectorPopup*)));
+        connect(m_colorSelector, SIGNAL(sigInteraction(bool)), SLOT(slotColorInteraction(bool)));
         WGConfig cfg;
         loadColorSelectorSettings(cfg);
     }
@@ -145,9 +164,7 @@ void WGActionManager::slotShowColorSelectorPopup()
         }
     }
 
-    preparePopup(m_colorSelectorPopup);
-
-    m_colorSelectorPopup->slotShowPopup();
+    showPopup(m_colorSelectorPopup);
 }
 
 void WGActionManager::slotShowShadeSelectorPopup()
@@ -159,9 +176,10 @@ void WGActionManager::slotShowShadeSelectorPopup()
         m_shadeSelectorPopup->setSelectorWidget(m_shadeSelector);
         connect(m_shadeSelectorPopup, SIGNAL(sigPopupClosed(WGSelectorPopup*)),
                 SLOT(slotPopupClosed(WGSelectorPopup*)));
+        connect(m_shadeSelector, SIGNAL(sigColorInteraction(bool)), SLOT(slotColorInteraction(bool)));
     }
-    preparePopup(m_shadeSelectorPopup);
-    m_shadeSelectorPopup->slotShowPopup();
+
+    showPopup(m_shadeSelectorPopup);
 }
 
 void WGActionManager::slotIncreaseLightness()
@@ -202,6 +220,17 @@ void WGActionManager::slotChannelValuesChanged()
     // so make sure a popup is actually active
     if (!m_isSynchronizing && m_currentPopup) {
         m_colorChangeCompressor->start();
+        QColor color = m_colorModel->displayRenderer()->toQColor(m_colorModel->currentColor());
+        m_colorTooltip->setCurrentColor(color);
+    }
+}
+
+void WGActionManager::slotColorInteraction(bool active)
+{
+    if (active) {
+        QColor baseCol = m_colorModel->displayRenderer()->toQColor(m_colorModel->currentColor());
+        m_colorTooltip->setCurrentColor(baseCol);
+        m_colorTooltip->setPreviousColor(baseCol);
     }
 }
 

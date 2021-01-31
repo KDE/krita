@@ -16,6 +16,7 @@ class KisSignalCompressor;
 class KisViewManager;
 class KisVisualColorSelector;
 
+class WGColorPreviewToolTip;
 class WGColorSelectorDock;
 class WGConfig;
 class WGSelectorPopup;
@@ -29,8 +30,9 @@ public:
 
     //void setCanvas(KisCanvas2* canvas, KisCanvas2* oldCanvas);
     void registerActions(KisViewManager *viewManager);
+    void setLastUsedColor(const KoColor &col);
 private:
-    void preparePopup(WGSelectorPopup *popup);
+    void showPopup(WGSelectorPopup *popup);
     void loadColorSelectorSettings(WGConfig &cfg);
     void modifyHSX(int channel, float amount);
 private Q_SLOTS:
@@ -47,10 +49,12 @@ private Q_SLOTS:
     void slotShiftHueCCW();
 
     void slotChannelValuesChanged();
+    void slotColorInteraction(bool active);
     void slotUpdateDocker();
 Q_SIGNALS:
 private:
     WGColorSelectorDock *m_docker {0};
+    WGColorPreviewToolTip *m_colorTooltip;
     KisSignalCompressor *m_colorChangeCompressor;
     WGSelectorPopup *m_currentPopup {0};
     WGSelectorPopup *m_colorSelectorPopup {0};
@@ -58,6 +62,7 @@ private:
     KisVisualColorSelector *m_colorSelector {0};
     WGShadeSelector *m_shadeSelector {0};
     KisVisualColorModelSP m_colorModel;
+    KoColor m_lastUsedColor;
     bool m_isSynchronizing {false};
 };
 

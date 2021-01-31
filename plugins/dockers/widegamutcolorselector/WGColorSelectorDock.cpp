@@ -302,6 +302,7 @@ void WGColorSelectorDock::slotFGColorUsed(const KoColor &color)
 {
     QColor lastCol = m_selector->selectorModel()->displayRenderer()->toQColor(color);
     m_colorTooltip->setLastUsedColor(lastCol);
+    m_actionManager->setLastUsedColor(color);
     m_history->addUniqueColor(color);
 }
 

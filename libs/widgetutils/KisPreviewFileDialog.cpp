@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2020 Halla Rempt <halla@valdyas.org>
+ *  SPDX-FileCopyrightText: 2020 Halla Rempt <halla@valdyas.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

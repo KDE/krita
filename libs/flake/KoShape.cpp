@@ -3,7 +3,7 @@
    SPDX-FileCopyrightText: 2006-2010 Thomas Zander <zander@kde.org>
    SPDX-FileCopyrightText: 2006-2010 Thorsten Zachmann <zachmann@kde.org>
    SPDX-FileCopyrightText: 2007-2009, 2011 Jan Hambrecht <jaham@gmx.net>
-   CopyRight (C) 2010 Boudewijn Rempt <boud@valdyas.org>
+   SPDX-FileCopyrightText: 2010 Boudewijn Rempt <boud@valdyas.org>
 
    SPDX-License-Identifier: LGPL-2.0-or-later
 */

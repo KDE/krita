@@ -1,6 +1,6 @@
 /* This file is part of KimageShop^WKrayon^WKrita
  *
- *  Copyright (c) 2003-200^ Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2003-200^ Boudewijn Rempt <boud@valdyas.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

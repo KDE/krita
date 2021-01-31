@@ -96,6 +96,7 @@ KisAbstractSliderSpinBox::KisAbstractSliderSpinBox(QWidget* parent, KisAbstractS
 
     setExponentRatio(1.0);
     setMouseTracking(true);
+    setMinimumHeight(28); // anything smaller than this and text gets hard to read
 
     //Set sane defaults
     setFocusPolicy(Qt::StrongFocus);

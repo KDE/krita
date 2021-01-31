@@ -14,7 +14,7 @@
 
 [General]
 name=Tablet Pro (for use with the Tablet Pro application on Windows)
-version=4
+version=5
 
 [Pan Canvas]
 0={4;1;[];0;0;0}
@@ -67,3 +67,6 @@ version=4
 7={0;2;[1000021,20];1;0;0}
 8={3;1;[2d];0;0;0}
 9={2;1;[3d];0;0;0}
+
+[Toggle Canvas Only]
+0={0;4;[];0;0;6}

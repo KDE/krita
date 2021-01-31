@@ -315,6 +315,7 @@ set(kritaui_LIB_SRCS
     input/KisQtWidgetsTweaker.cpp
     input/KisInputActionGroup.cpp
     input/kis_zoom_and_rotate_action.cpp
+    input/KisCanvasOnlyAction.cpp
 
     operations/kis_operation.cpp
     operations/kis_operation_configuration.cpp

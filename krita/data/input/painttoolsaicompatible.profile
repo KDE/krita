@@ -14,7 +14,7 @@
 
 [General]
 name=Paint Tool Sai Compatible
-version=4
+version=5
 
 [Pan Canvas]
 0={4;1;[];0;0;0}
@@ -66,3 +66,6 @@ version=4
 7={3;3;[];0;2;0}
 8={2;1;[1000021,20];0;0;0}
 9={3;1;[1000021,1000023,20];0;0;0}
+
+[Toggle Canvas Only]
+0={0;4;[];0;0;6}

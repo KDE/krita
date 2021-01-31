@@ -30,8 +30,9 @@
 #include "kis_gamma_exposure_action.h"
 #include "kis_change_frame_action.h"
 #include "kis_zoom_and_rotate_action.h"
+#include "KisCanvasOnlyAction.h"
 
-#define PROFILE_VERSION 4
+#define PROFILE_VERSION 5
 
 
 class Q_DECL_HIDDEN KisInputProfileManager::Private
@@ -364,6 +365,7 @@ void KisInputProfileManager::Private::createActions()
     actions.append(new KisGammaExposureAction());
     actions.append(new KisChangeFrameAction());
     actions.append(new KisZoomAndRotateAction());
+    actions.append(new KisCanvasOnlyAction());
 }
 
 QString KisInputProfileManager::Private::profileFileName(const QString &profileName)

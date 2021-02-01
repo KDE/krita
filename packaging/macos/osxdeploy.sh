@@ -577,12 +577,17 @@ krita_deploy () {
     rm -rf ${KRITA_DMG}/krita.app/Contents/PlugIns/kf5/org.kde.kwindowsystem.platforms
 
     # Fix permissions
-    find "${KRITA_DMG}/krita.app/Contents" -type f -name "*.dylib" -or -name "*.so" | xargs -P4 -I FILE chmod a+x FILE
+    find "${KRITA_DMG}/krita.app/Contents" -type f -name "*.dylib" -or -name "*.so" -or -path "*/Contents/MacOS/*" | xargs -P4 -I FILE chmod a+x FILE
     find "${KRITA_DMG}/krita.app/Contents/Resources/applications" -name "*.desktop" | xargs -P4 -I FILE chmod a-x FILE
 
     # repair krita for plugins
     printf "Searching for missing libraries\n"
     krita_findmissinglibs $(find ${KRITA_DMG}/krita.app/Contents -type f -perm 755 -or -name "*.dylib" -or -name "*.so")
+
+    # Fix rpath for plugins
+    # Uncomment if the Finder plugins (kritaquicklook, kritaspotlight) lack the rpath below
+    # printf "Repairing rpath for Finder plugins\n"
+    # find "${KRITA_DMG}/krita.app/Contents/Library" -type f -path "*/Contents/MacOS/*" -perm 755 | xargs -I FILE install_name_tool -add_rpath @loader_path/../../../../../Frameworks FILE
 
     printf "removing absolute or broken linksys, if any\n"
     find "${KRITA_DMG}/krita.app/Contents" -type l \( -lname "/*" -or -not -exec test -e {} \; \) -print | xargs rm

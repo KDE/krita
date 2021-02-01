@@ -153,6 +153,12 @@ QSharedPointer<KisResourceStorage::ResourceIterator> KisFolderStorage::resources
 
         VersionedResourceEntry entry;
         entry.filename = info.fileName();
+
+        // Don't load 4.x backup resources
+        if (entry.filename.contains("backup")) {
+            continue;
+        }
+
         entry.lastModified = info.lastModified();
         entry.tagList = {}; // TODO
         entry.resourceType = resourceType;

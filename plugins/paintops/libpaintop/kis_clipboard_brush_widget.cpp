@@ -138,10 +138,6 @@ void KisClipboardBrushWidget::slotAddPredefined()
 
         resource->setFilename(resource->name().split(" ").join("_") + extension);
 
-
-        if (colorAsmask->isChecked()) {
-            resource->makeMaskImage(preserveAlpha->isChecked());
-        }
         m_rServer->addResource(resource.dynamicCast<KisBrush>());
         emit sigNewPredefinedBrush(resource);
     }

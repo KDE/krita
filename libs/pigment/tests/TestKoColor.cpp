@@ -17,7 +17,7 @@
 #include "KoColorProfile.h"
 #include "KoColorSpaceRegistry.h"
 #include "DebugPigment.h"
-
+#include "kis_debug.h"
 #include "sdk/tests/testpigment.h"
 
 bool nearEqualValue(int a, int b)
@@ -137,6 +137,10 @@ void TestKoColor::testSVGParsing()
     KoColor p3 = KoColor::fromSVG11("#ff0000 silver icc-color("+cmykName+", 0.0, 0.0, 1.0, 1.0);", csList);
     KoColor c3 = KoColor::fromXML("<color channeldepth='U8'><CMYK c='0.0' m='0.0' y='1.0' k='1.0' space='"+cmyk->name()+"'/></color>");
 
+    QCOMPARE(csList.size(), 1);
+    QString newColor = p2.toSVG11(&csList);
+    QCOMPARE(csList.size(), 1);
+
     //4. Roundtrip
 
     KoColor c4(KoColorSpaceRegistry::instance()->lab16());
@@ -153,6 +157,10 @@ void TestKoColor::testSVGParsing()
     //6. Testing special srgb definition... especially the part where it can be defined case-insensitive.
     KoColor p6 = KoColor::fromSVG11("#ff0000 icc-color(srgb, 1.0, 1.0, 0.0)", csList);
     KoColor c6 = KoColor::fromXML("<color channeldepth='U8'><sRGB r='1.0' g='1.0' b='0.0'/></color>");
+
+    KoColor c7 = KoColor::fromXML("<RGB b=\"17\" space=\"sRGB-elle-V2-srgbtrc.icc\" r=\"10\" g=\"11\"/>");
+    qDebug() << ppVar(c7);
+
 
     QVERIFY(p1 == c1);
     QVERIFY(p2 == c2);

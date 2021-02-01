@@ -10,7 +10,12 @@ project (krita-and-all-its-deps)
 
 
 iF(APPLE)
-	cmake_minimum_required(VERSION 3.18.0)
+	exec_program("sysctl -n hw.optional.arm64" OUTPUT_VARIABLE APPLE_ON_ARM)
+	if(${APPLE_ON_ARM} EQUAL 1)
+		cmake_minimum_required(VERSION 3.19.3)
+	else()
+		cmake_minimum_required(VERSION 2.8.6)
+	endif()
 else(APPLE)
 	cmake_minimum_required(VERSION 2.8.6)
 endif()

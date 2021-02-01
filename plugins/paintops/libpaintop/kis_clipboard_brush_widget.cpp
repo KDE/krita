@@ -161,9 +161,6 @@ void KisClipboardBrushWidget::slotAddPredefined()
             resource->setName(name);
         }
 
-        if (colorAsmask->isChecked()) {
-            resource->makeMaskImage(preserveAlpha->isChecked());
-        }
         m_rServerAdapter->addResource(resource);
         emit sigNewPredefinedBrush(resource);
     }

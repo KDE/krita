@@ -175,10 +175,6 @@ void KisCustomBrushWidget::slotAddPredefined()
             resource->setName(name);
         }
 
-        if (colorAsMask->isChecked()) {
-            resource->makeMaskImage(preserveAlpha->isChecked());
-        }
-
         m_rServerAdapter->addResource(resource);
         emit sigNewPredefinedBrush(resource);
     }

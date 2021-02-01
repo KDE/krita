@@ -616,7 +616,8 @@ signBundle() {
     cd ${KRITA_DMG}/krita.app/Contents/Frameworks
     # remove debug version as both versions can't be signed.
     rm ${KRITA_DMG}/krita.app/Contents/Frameworks/QtScript.framework/Versions/Current/QtScript_debug
-    find . -type f -perm 755 -or -name "*.dylib" -or -name "*.so" | batch_codesign
+    find . -type f -name "*.o" | batch_codesign
+    find . -type f -perm +111 -or -name "*.dylib" -or -name "*.so" | batch_codesign
     find . -type d -name "*.framework" | xargs printf "%s/Versions/Current\n" | batch_codesign
 
     # Sign all other files in Framework (needed)
@@ -634,9 +635,9 @@ signBundle() {
     cd ${KRITA_DMG}/krita.app/Contents/Library/Spotlight
     printf "kritaspotlight.mdimporter" | batch_codesign
 
-    # It is recommended to sign every Resource file
+    # It is necessary to sign every binary Resource file
     cd ${KRITA_DMG}/krita.app/Contents/Resources
-    find . -type f | batch_codesign
+    find . -perm +111 -type f | batch_codesign
 
     #Finally sign krita and krita.app
     printf "${KRITA_DMG}/krita.app/Contents/MacOS/krita" | batch_codesign
@@ -671,7 +672,7 @@ notarize_build() {
         local uuid="$(grep 'RequestUUID' <<< ${altoolResponse} | awk '{ print $NF }')"
         echo "RequestUUID = ${uuid}" # Display identifier string
 
-        waiting_fixed "Waiting to retrieve notarize status" 60
+        waiting_fixed "Waiting to retrieve notarize status" 120
 
         while true ; do
             fullstatus=$(xcrun altool --notarization-info "${uuid}" --username "${NOTARIZE_ACC}" --password "${NOTARIZE_PASS}" ${ASC_PROVIDER_OP} 2>&1)  # get the status
@@ -683,7 +684,7 @@ notarize_build() {
                 print_msg "Notarization success!"
                 break
             elif [[ "${notarize_status}" = "in" ]]; then
-                waiting_fixed "Notarization still in progress, sleeping for 60 seconds and trying again" 60
+                waiting_fixed "Notarization still in progress, wait before checking again" 60
             else
                 echo "Notarization failed! full status below"
                 echo "${fullstatus}"
@@ -696,7 +697,7 @@ notarize_build() {
 createDMG () {
     printf "Creating of dmg with contents of %s...\n" "${KRITA_DMG}"
     cd ${BUILDROOT}
-    DMG_size=700
+    DMG_size=1500
 
     if [[ -z "${DMG_NAME}" ]]; then
         # Add git version number
@@ -710,8 +711,8 @@ createDMG () {
 
     # create dmg on local system
     # usage of -fsargs minimze gaps at front of filesystem (reduce size)
-    hdiutil create -srcfolder "${KRITA_DMG}" -volname "${DMG_title}" -fs HFS+ \
-        -fsargs "-c c=64,a=16,e=16" -format UDRW -size ${DMG_size}m krita.temp.dmg
+    hdiutil create -srcfolder "${KRITA_DMG}" -volname "${DMG_title}" -fs APFS \
+        -format UDIF -verbose -size ${DMG_size}m krita.temp.dmg
 
     # Next line is only useful if we have a dmg as a template!
     # previous hdiutil must be uncommented
@@ -755,7 +756,7 @@ createDMG () {
         printf "${DMG_NAME}" | batch_codesign
     fi
 
-    notarize_build "${BUILDROOT}" "${DMG_NAME}"
+    # notarize_build "${BUILDROOT}" "${DMG_NAME}"
 
     echo "dmg done!"
 }
@@ -771,7 +772,7 @@ if [[ -n "${CODE_SIGNATURE}" ]]; then
     signBundle
 fi
 
-# notarize app
+# notarize apple
 notarize_build "${KRITA_DMG}" krita.app
 
 # Create DMG from files inside ${KRITA_DMG} folder

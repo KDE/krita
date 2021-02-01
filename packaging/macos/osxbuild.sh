@@ -104,7 +104,7 @@ if [[ "${OSTYPE}" == "darwin"* ]]; then
     ((MAKE_THREADS = $(sysctl -n hw.logicalcpu)))
 fi
 
-OSXBUILD_ARM_BUILD=$(sysctl -n hw.optional.arm64)
+OSXBUILD_X86_64_BUILD=$(sysctl -n hw.optional.x86_64)
 
 # Prints stderr and stdout to log files
 # >(tee) works but breaks sigint
@@ -267,7 +267,7 @@ build_3rdparty_fixes(){
         log "fixing rpath on fc-cache"
         log_cmd install_name_tool -add_rpath ${KIS_INSTALL_DIR}/lib ${KIS_TBUILD_DIR}/ext_fontconfig/ext_fontconfig-prefix/src/ext_fontconfig-build/fc-cache/.libs/fc-cache
         # rerun rebuild
-        if [[ ${OSXBUILD_ARM_BUILD} -eq 1 && ${osxbuild_error} -ne 0 ]]; then
+        if [[ ${OSXBUILD_X86_64_BUILD} -ne 1 && ${osxbuild_error} -ne 0 ]]; then
             print_msg "Build Success! ${pkg}"
         else
             cmake_3rdparty ext_fontconfig "1"
@@ -365,9 +365,7 @@ build_3rdparty () {
         ext_sip \
         ext_pyqt
 
-    if [[ ${OSXBUILD_ARM_BUILD} -ne 1 ]]; then
     cmake_3rdparty ext_libheif
-    fi
 
     cmake_3rdparty \
         ext_extra_cmake_modules \
@@ -384,10 +382,7 @@ build_3rdparty () {
         ext_quazip
 
     cmake_3rdparty ext_seexpr
-    
-    if [[ ${OSXBUILD_ARM_BUILD} -ne 1 ]]; then
     cmake_3rdparty ext_mypaint
-    fi
 
 
     ## All builds done, creating a new install onlydeps install dir

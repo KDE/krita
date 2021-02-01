@@ -158,7 +158,7 @@ void KisAbstractSliderSpinBox::paintSlider(QPainter &painter)
 
     // draw the colored slider bar that is really a progress indicator
     QStyleOptionProgressBar progressOpts = progressBarOptions();
-    QRect rect = progressOpts.rect.adjusted(0,2,0,-2); // this helps when at 100%, it doesn't clear the progress
+    QRect rect = progressOpts.rect; // this helps when at 100%, it doesn't clear the progress
     QRect progressBarRect;
 
 

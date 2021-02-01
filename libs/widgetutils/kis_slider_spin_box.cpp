@@ -96,7 +96,6 @@ KisAbstractSliderSpinBox::KisAbstractSliderSpinBox(QWidget* parent, KisAbstractS
 
     setExponentRatio(1.0);
     setMouseTracking(true);
-    setMinimumHeight(25); // anything smaller than this and text gets hard to read
 
     //Set sane defaults
     setFocusPolicy(Qt::StrongFocus);
@@ -423,7 +422,7 @@ QSize KisAbstractSliderSpinBox::sizeHint() const
     QStyleOptionSpinBox spinOpts = spinBoxOptions();
 
     QFontMetrics fm(font());
-    QSize hint(fm.boundingRect(d->prefix + QString::number(d->maximum) + d->suffix).size());
+    QSize hint(fm.width(d->prefix + QString::number(d->maximum) + d->suffix), d->dummySpinBox->minimumSizeHint().height());
 
     // Getting the size of the buttons is a pain as the calcs require a rect
     // that is "big enough". We run the calc to get the "smallest" buttons

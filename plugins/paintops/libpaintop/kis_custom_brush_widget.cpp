@@ -65,6 +65,7 @@ KisCustomBrushWidget::KisCustomBrushWidget(QWidget *parent, const QString& capti
     connect(this, SIGNAL(accepted()), SLOT(slotAddPredefined()));
     connect(brushStyle, SIGNAL(activated(int)), this, SLOT(slotUpdateCurrentBrush(int)));
     connect(colorAsMask, SIGNAL(toggled(bool)), this, SLOT(slotUpdateUseColorAsMask(bool)));
+    connect(preserveAlpha, SIGNAL(toggled(bool)), this, SLOT(slotUpdateCurrentBrush()));
     connect(comboBox2, SIGNAL(currentIndexChanged(int)), this, SLOT(slotUpdateCurrentBrush(int)));
 
 
@@ -129,10 +130,7 @@ void KisCustomBrushWidget::slotSpacingChanged()
 void KisCustomBrushWidget::slotUpdateUseColorAsMask(bool useColorAsMask)
 {
     preserveAlpha->setEnabled(useColorAsMask);
-    if (m_brush) {
-        static_cast<KisGbrBrush*>(m_brush.data())->setBrushApplication(ALPHAMASK);
-        updatePreviewImage();
-    }
+    slotUpdateCurrentBrush();
 }
 
 
@@ -260,6 +258,9 @@ void KisCustomBrushWidget::createBrush()
     }
 
     static_cast<KisGbrBrush*>(m_brush.data())->setBrushApplication(colorAsMask->isChecked() ? ALPHAMASK : IMAGESTAMP);
+    if (colorAsMask->isChecked()) {
+        static_cast<KisGbrBrush*>(m_brush.data())->makeMaskImage(preserveAlpha->isChecked());
+    }
     m_brush->setSpacing(spacingWidget->spacing());
     m_brush->setAutoSpacing(spacingWidget->autoSpacingActive(), spacingWidget->autoSpacingCoeff());
     m_brush->setFilename(TEMPORARY_FILENAME);

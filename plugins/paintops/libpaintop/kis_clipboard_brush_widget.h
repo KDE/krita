@@ -60,6 +60,7 @@ private Q_SLOTS:
     void slotSpacingChanged();
     void slotUpdateUseColorAsMask(bool useColorAsMask);
     void slotAddPredefined();
+    void slotClipboardContentChanged();
 
 protected:
     void showEvent(QShowEvent *);

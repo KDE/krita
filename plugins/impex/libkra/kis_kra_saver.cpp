@@ -61,17 +61,22 @@ using namespace KRA;
 
 struct KisKraSaver::Private
 {
-public:
     KisDocument* doc;
     QMap<const KisNode*, QString> nodeFileNames;
     QMap<const KisNode*, QString> keyframeFilenames;
     QString imageName;
     QString filename;
     QStringList errorMessages;
+    QStringList specialAnnotations;
+
+    Private() {
+        specialAnnotations << "exif" << "icc";
+    }
+
 };
 
 KisKraSaver::KisKraSaver(KisDocument* document, const QString &filename)
-        : m_d(new Private)
+    : m_d(new Private)
 {
     m_d->doc = document;
     m_d->filename = filename;
@@ -142,6 +147,33 @@ QDomElement KisKraSaver::saveXML(QDomDocument& doc,  KisImageSP image)
     KisDomUtils::saveValue(&animationElement, "range", image->animationInterface()->fullClipRange());
     KisDomUtils::saveValue(&animationElement, "currentTime", image->animationInterface()->currentUITime());
     imageElement.appendChild(animationElement);
+
+    vKisAnnotationSP_it beginIt = image->beginAnnotations();
+    vKisAnnotationSP_it endIt = image->endAnnotations();
+
+    if (beginIt != endIt) {
+        QDomElement annotationsElement = doc.createElement(ANNOTATIONS);
+        vKisAnnotationSP_it it = beginIt;
+        while (it != endIt) {
+            if (!(*it) || (*it)->type().isEmpty()) {
+                it++;
+                continue;
+            }
+            QString type = (*it)->type();
+
+            if (!m_d->specialAnnotations.contains(type)) {
+                QString description = (*it)->description();
+
+                QDomElement annotationElement = doc.createElement(ANNOTATION);
+                annotationsElement.appendChild(annotationElement);
+                annotationElement.setAttribute("type", type);
+                annotationElement.setAttribute("description", description);
+            }
+            it++;
+        }
+        imageElement.appendChild(annotationsElement);
+    }
+
 
     return imageElement;
 }
@@ -342,9 +374,6 @@ bool KisKraSaver::saveBinaryData(KoStore* store, KisImageSP image, const QString
     }
 
     // saving annotations
-    // XXX this only saves EXIF and ICC info. This would probably need
-    // a redesign of the dtd of the krita file to do this more generally correct
-    // e.g. have <ANNOTATION> tags or so.
     KisAnnotationSP annotation = image->annotation("exif");
     if (annotation) {
         location = external ? QString() : uri;
@@ -378,6 +407,7 @@ bool KisKraSaver::saveBinaryData(KoStore* store, KisImageSP image, const QString
         }
     }
 
+
     //This'll embed the profile used for proofing into the kra file.
     if (image->proofingConfiguration()) {
         if (image->proofingConfiguration()->storeSoftproofingInsideImage) {
@@ -396,6 +426,31 @@ bool KisKraSaver::saveBinaryData(KoStore* store, KisImageSP image, const QString
                     store->close();
                 }
             }
+        }
+    }
+
+    // Save the remaining annotations
+    vKisAnnotationSP_it beginIt = image->beginAnnotations();
+    vKisAnnotationSP_it endIt = image->endAnnotations();
+
+    if (beginIt != endIt) {
+        vKisAnnotationSP_it it = beginIt;
+        while (it != endIt) {
+            if (!(*it) || (*it)->type().isEmpty()) {
+                it++;
+                continue;
+            }
+            QString type = (*it)->type();
+
+            if (!m_d->specialAnnotations.contains(type)) {
+                location = external ? QString() : uri;
+                location += m_d->imageName + ANNOTATIONS_PATH + type;
+                if (store->open(location)) {
+                    store->write((*it)->annotation());
+                    store->close();
+                }
+            }
+            it++;
         }
     }
 

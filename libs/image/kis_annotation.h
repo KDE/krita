@@ -52,9 +52,9 @@ public:
      * @param data a binary blob containing the annotation data
      */
     KisAnnotation(const QString & type, const QString & description, const QByteArray & data)
-        : m_type(type),
-          m_description(description),
-          m_annotation(data) {}
+        : m_type(type)
+        , m_description(description)
+        , m_annotation(data) {}
 
     virtual ~KisAnnotation() {}
 
@@ -88,6 +88,10 @@ public:
      */
     const QByteArray & annotation() const {
         return m_annotation;
+    }
+
+    void setAnnotation(const QByteArray ba) {
+        m_annotation = ba;
     }
 
     /**

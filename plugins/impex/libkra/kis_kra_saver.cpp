@@ -163,7 +163,6 @@ QDomElement KisKraSaver::saveXML(QDomDocument& doc,  KisImageSP image)
 
             if (!m_d->specialAnnotations.contains(type)) {
                 QString description = (*it)->description();
-
                 QDomElement annotationElement = doc.createElement(ANNOTATION);
                 annotationsElement.appendChild(annotationElement);
                 annotationElement.setAttribute("type", type);

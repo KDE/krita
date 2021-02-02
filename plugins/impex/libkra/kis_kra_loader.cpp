@@ -135,6 +135,7 @@ public:
     QVector<QString> paletteFilenames;
     QStringList errorMessages;
     QStringList warningMessages;
+    QList<KisAnnotationSP> annotations;
 };
 
 void convertColorSpaceNames(QString &colorspacename, QString &profileProductName) {
@@ -177,7 +178,7 @@ void convertColorSpaceNames(QString &colorspacename, QString &profileProductName
 }
 
 KisKraLoader::KisKraLoader(KisDocument * document, int syntaxVersion)
-        : m_d(new Private())
+    : m_d(new Private())
 {
     m_d->document = document;
     m_d->syntaxVersion = syntaxVersion;
@@ -201,7 +202,6 @@ KisImageSP KisKraLoader::loadXML(const KoXmlElement& element)
     double yres;
     QString colorspacename;
     const KoColorSpace * cs;
-
 
     if ((attr = element.attribute(MIME)) == NATIVE_MIMETYPE) {
 
@@ -338,7 +338,7 @@ KisImageSP KisKraLoader::loadXML(const KoXmlElement& element)
 
         for (child = element.lastChild(); !child.isNull(); child = child.previousSibling()) {
             KoXmlElement e = child.toElement();
-            if(e.tagName() == "compositions") {
+            if (e.tagName() == "compositions") {
                 loadCompositions(e, image);
             }
         }
@@ -374,6 +374,23 @@ KisImageSP KisKraLoader::loadXML(const KoXmlElement& element)
         }
     }
 
+    // reading the extra annotations from XML
+    for (child = element.lastChild(); !child.isNull(); child = child.previousSibling()) {
+        QDomElement e = child.toElement();
+        if (e.tagName() == ANNOTATIONS) {
+            for (QDomElement annotationElement = e.lastChildElement();
+                 !annotationElement.isNull();
+                 annotationElement = annotationElement.previousSiblingElement())
+            {
+                QString type = annotationElement.attribute("type");
+                QString description = annotationElement.attribute("description");
+
+                KisAnnotationSP annotation = new KisAnnotation(type, description, QByteArray());
+                m_d->annotations << annotation;
+            }
+            break;
+        }
+    }
 
     return image;
 }
@@ -498,13 +515,30 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageSP image, const QStri
         m_d->document->documentInfo()->setAboutInfo("comment", m_d->imageComment);
 
     loadAssistants(store, uri, external);
+
+    // Annotations
+    Q_FOREACH(KisAnnotationSP annotation, m_d->annotations) {
+
+        QByteArray ba;
+        location = external ? QString() : uri;
+        location += m_d->imageName + ANNOTATIONS_PATH + annotation->type();
+        if (store->hasFile(location)) {
+            store->open(location);
+            KoStoreDevice device(store);
+            device.open(QIODevice::ReadOnly);
+            ba = device.readAll();
+            device.close();
+            annotation->setAnnotation(ba);
+            m_d->document->image()->addAnnotation(annotation);
+        }
+    }
+
 }
 
 void KisKraLoader::loadPalettes(KoStore *store, KisDocument *doc)
 {
     QList<KoColorSetSP> list;
     Q_FOREACH (const QString &filename, m_d->paletteFilenames) {
-        qDebug() << "loading palettes" << filename;
         KoColorSetSP newPalette(new KoColorSet(filename));
         store->open(m_d->imageName + PALETTE_PATH + filename);
         QByteArray data = store->read(store->size());
@@ -886,7 +920,7 @@ KisNodeSP KisKraLoader::loadNode(const KoXmlElement& element, KisImageSP image)
 
 
 KisNodeSP KisKraLoader::loadPaintLayer(const KoXmlElement& element, KisImageSP image,
-                                      const QString& name, const KoColorSpace* cs, quint32 opacity)
+                                       const QString& name, const KoColorSpace* cs, quint32 opacity)
 {
     Q_UNUSED(element);
     KisPaintLayer* layer;
@@ -928,11 +962,11 @@ KisNodeSP KisKraLoader::loadFileLayer(const KoXmlElement& element, KisImageSP im
 
         qApp->setOverrideCursor(Qt::ArrowCursor);
         QString msg = i18nc(
-            "@info",
-            "The file associated to a file layer with the name \"%1\" is not found.\n\n"
-            "Expected path:\n"
-            "%2\n\n"
-            "Do you want to locate it manually?", name, fullPath);
+                    "@info",
+                    "The file associated to a file layer with the name \"%1\" is not found.\n\n"
+                    "Expected path:\n"
+                    "%2\n\n"
+                    "Do you want to locate it manually?", name, fullPath);
 
         int result = QMessageBox::warning(qApp->activeWindow(), i18nc("@title:window", "File not found"), msg, QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
 
@@ -961,7 +995,7 @@ KisNodeSP KisKraLoader::loadFileLayer(const KoXmlElement& element, KisImageSP im
 }
 
 KisNodeSP KisKraLoader::loadGroupLayer(const KoXmlElement& element, KisImageSP image,
-                                      const QString& name, const KoColorSpace* cs, quint32 opacity)
+                                       const QString& name, const KoColorSpace* cs, quint32 opacity)
 {
     Q_UNUSED(element);
     Q_UNUSED(cs);
@@ -976,7 +1010,7 @@ KisNodeSP KisKraLoader::loadGroupLayer(const KoXmlElement& element, KisImageSP i
 }
 
 KisNodeSP KisKraLoader::loadAdjustmentLayer(const KoXmlElement& element, KisImageSP image,
-        const QString& name, const KoColorSpace* cs, quint32 opacity)
+                                            const QString& name, const KoColorSpace* cs, quint32 opacity)
 {
     // XXX: do something with filterversion?
     Q_UNUSED(cs);
@@ -1029,7 +1063,7 @@ KisNodeSP KisKraLoader::loadAdjustmentLayer(const KoXmlElement& element, KisImag
 
 
 KisNodeSP KisKraLoader::loadShapeLayer(const KoXmlElement& element, KisImageSP image,
-                                      const QString& name, const KoColorSpace* cs, quint32 opacity)
+                                       const QString& name, const KoColorSpace* cs, quint32 opacity)
 {
 
     Q_UNUSED(element);
@@ -1049,7 +1083,7 @@ KisNodeSP KisKraLoader::loadShapeLayer(const KoXmlElement& element, KisImageSP i
 
 
 KisNodeSP KisKraLoader::loadGeneratorLayer(const KoXmlElement& element, KisImageSP image,
-        const QString& name, const KoColorSpace* cs, quint32 opacity)
+                                           const QString& name, const KoColorSpace* cs, quint32 opacity)
 {
     Q_UNUSED(cs);
     // XXX: do something with generator version?
@@ -1082,7 +1116,7 @@ KisNodeSP KisKraLoader::loadGeneratorLayer(const KoXmlElement& element, KisImage
 }
 
 KisNodeSP KisKraLoader::loadCloneLayer(const KoXmlElement& element, KisImageSP image,
-                                      const QString& name, const KoColorSpace* cs, quint32 opacity)
+                                       const QString& name, const KoColorSpace* cs, quint32 opacity)
 {
     Q_UNUSED(cs);
 
@@ -1298,11 +1332,11 @@ void KisKraLoader::loadAudio(const KoXmlElement& elem, KisImageSP image)
         if (!info.exists()) {
             qApp->setOverrideCursor(Qt::ArrowCursor);
             QString msg = i18nc(
-                "@info",
-                "Audio channel file \"%1\" doesn't exist!\n\n"
-                "Expected path:\n"
-                "%2\n\n"
-                "Do you want to locate it manually?", info.fileName(), info.absoluteFilePath());
+                        "@info",
+                        "Audio channel file \"%1\" doesn't exist!\n\n"
+                        "Expected path:\n"
+                        "%2\n\n"
+                        "Do you want to locate it manually?", info.fileName(), info.absoluteFilePath());
 
             int result = QMessageBox::warning(qApp->activeWindow(), i18nc("@title:window", "File not found"), msg, QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
 
@@ -1342,7 +1376,6 @@ void KisKraLoader::loadStoryboardItemList(const KoXmlElement& elem)
             m_d->storyboardItemList.append(item);
         }
     }
-    qDebug()<<"found "<<count<<" storyboards";
 }
 
 void KisKraLoader::loadStoryboardCommentList(const KoXmlElement& elem)
@@ -1368,7 +1401,7 @@ void KisKraLoader::loadStoryboardCommentList(const KoXmlElement& elem)
 KisNodeSP KisKraLoader::loadReferenceImagesLayer(const KoXmlElement &elem, KisImageSP image)
 {
     KisSharedPtr<KisReferenceImagesLayer> layer =
-        new KisReferenceImagesLayer(m_d->document->shapeController(), image);
+            new KisReferenceImagesLayer(m_d->document->shapeController(), image);
 
     m_d->document->setReferenceImagesLayer(layer, false);
 

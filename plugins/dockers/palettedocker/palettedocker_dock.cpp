@@ -262,7 +262,7 @@ void PaletteDockerDock::unsetCanvas()
 void PaletteDockerDock::slotSetColorSet(KoColorSetSP colorSet)
 {
     // needs to save the palette before switching to another one
-    if (m_paletteEditor->isModified()) {
+    if (m_paletteEditor->isModified() && m_currentColorSet != colorSet) {
         m_paletteEditor->saveNewPaletteVersion();
     }
 

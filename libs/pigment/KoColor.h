@@ -240,10 +240,10 @@ public:
 
     /**
      * @brief toSVG11
-     * @param csList list of colorspaces, this will add the colorspace name, so it may be embedded.
+     * @param profileList list of profiles, this will map the profile to a name, so it may be embedded.
      * @return a color definiton string with both a srgb hexcode fallback as well as a icc-color definition.
      */
-    QString toSVG11(QMap<QString, const KoColorSpace *> *csList);
+    QString toSVG11(QHash<QString, const KoColorProfile *> *profileList);
 
     /**
      * @brief fromSVG11
@@ -251,18 +251,19 @@ public:
      * in the file, so this function expects you to first figure out the profiles and which colorspaces
      * these match to, and it will then use those colorspaces to generate the kocolor. If it cannot find
      * the appropriate colorspace, it will return the color fallback. If that doesn't work, an empty KoColor.
-     * This function ignores url() values;
+     * This function ignores url() values. Colors will be F32 unless they are lab and cmyk, in which case they'll
+     * be U16.
      *
      * https://www.w3.org/TR/SVG11/types.html#DataTypeColor for hex, rgb() and colornames
      * https://www.w3.org/TR/SVG11/types.html#DataTypeICCColor for icc-color()
      * https://www.w3.org/TR/SVG11/painting.html#SpecifyingPaint
      *
      * @param value the content of the svg color value
-     * @param csList list of KoColorSpaces that were found inside the svg file, with the reference names.
-     * @param current the current color. If
+     * @param profileList list of KoColorProfiles that were found inside the svg file, with the reference names.
+     * @param current the current color.
      * @return a KoColor as parsed from the value string.
      */
-    static KoColor fromSVG11(const QString value, QMap<QString, const KoColorSpace*> csList, KoColor current = KoColor());
+    static KoColor fromSVG11(const QString value, QHash<QString, const KoColorProfile*> profileList, KoColor current = KoColor());
 
     /**
      * @brief toQString create a user-visible string of the channel names and the channel values

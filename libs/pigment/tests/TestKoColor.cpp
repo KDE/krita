@@ -18,6 +18,7 @@
 #include "KoColorSpaceRegistry.h"
 #include "DebugPigment.h"
 #include "kis_debug.h"
+
 #include "sdk/tests/testpigment.h"
 
 bool nearEqualValue(int a, int b)
@@ -113,53 +114,62 @@ void TestKoColor::testComparisonQVariant()
 
 void TestKoColor::testSVGParsing()
 {
-    QMap <QString, const KoColorSpace *> csList;
+    QHash <QString, const KoColorProfile *> profileList;
 
     //1. Testing case with fallback hexvalue and nonsense icc-color that we cannot parse
 
-    KoColor p1 = KoColor::fromSVG11("#ff0000 icc-color(blah, 0.0, 1.0, 1.0, 0.0);", csList);
+    KoColor p1 = KoColor::fromSVG11("#ff0000 icc-color(blah, 0.0, 1.0, 1.0, 0.0);", profileList);
     KoColor c1;
     c1.fromQColor(QColor("#ff0000"));
 
     //2. testing case with fallback colorname and nonsense icc-color that we cannot parse
 
-    KoColor p2 = KoColor::fromSVG11("#ff0000 silver icc-color(blah, 0.0, 1.0, 1.0, 0.0);", csList);
+    KoColor p2 = KoColor::fromSVG11("#ff0000 silver icc-color(blah, 0.0, 1.0, 1.0, 0.0);", profileList);
     KoColor c2;
     c2.fromQColor(QColor("silver"));
 
     //3. testing case with fallback color and useful icc-color
 
     const KoColorSpace *cmyk = KoColorSpaceRegistry::instance()->colorSpace(CMYKAColorModelID.id(), Integer8BitsColorDepthID.id());
-    qDebug() << cmyk->profile()->colorModelID();
     QString cmykName = "sillyCMYKName";
-    csList.insert(cmykName, cmyk);
+    profileList.insert(cmykName, cmyk->profile());
 
-    KoColor p3 = KoColor::fromSVG11("#ff0000 silver icc-color("+cmykName+", 0.0, 0.0, 1.0, 1.0);", csList);
-    KoColor c3 = KoColor::fromXML("<color channeldepth='U8'><CMYK c='0.0' m='0.0' y='1.0' k='1.0' space='"+cmyk->name()+"'/></color>");
-
-    QCOMPARE(csList.size(), 1);
-    QString newColor = p2.toSVG11(&csList);
-    QCOMPARE(csList.size(), 1);
+    KoColor p3 = KoColor::fromSVG11("#ff0000 silver icc-color("+cmykName+", 0.0, 0.0, 1.0, 1.0);", profileList);
+    KoColor c3 = KoColor::fromXML("<color channeldepth='U16'><CMYK c='0.0' m='0.0' y='1.0' k='1.0' space='"+cmyk->name()+"'/></color>");
 
     //4. Roundtrip
 
     KoColor c4(KoColorSpaceRegistry::instance()->lab16());
     c4.fromQColor(QColor("#426471"));
-    QString value = c4.toSVG11(&csList);
+    QString value = c4.toSVG11(&profileList);
     dbgPigment << value;
-    KoColor p4 = KoColor::fromSVG11(value, csList);
+    KoColor p4 = KoColor::fromSVG11(value, profileList);
+
+    //4.5 Check that the size stays the same even though we already added this profile to the stack before.
+    int profileListSize = profileList.size();
+    QString newColor = c4.toSVG11(&profileList);
+    QCOMPARE(profileList.size(), profileListSize);
 
     //5. Testing rgb...
-    KoColor p5 = KoColor::fromSVG11("#ff0000 rgb(100, 50, 50%)", csList);
+
+    KoColor p5 = KoColor::fromSVG11("#ff0000 rgb(100, 50, 50%)", profileList);
     KoColor c5;
     c5.fromQColor(QColor(100, 50, 127));
 
     //6. Testing special srgb definition... especially the part where it can be defined case-insensitive.
-    KoColor p6 = KoColor::fromSVG11("#ff0000 icc-color(srgb, 1.0, 1.0, 0.0)", csList);
-    KoColor c6 = KoColor::fromXML("<color channeldepth='U8'><sRGB r='1.0' g='1.0' b='0.0'/></color>");
 
-    KoColor c7 = KoColor::fromXML("<RGB b=\"17\" space=\"sRGB-elle-V2-srgbtrc.icc\" r=\"10\" g=\"11\"/>");
-    qDebug() << ppVar(c7);
+    KoColor p6 = KoColor::fromSVG11("#ff0000 icc-color(srgb, 1.0, 1.0, 0.0)", profileList);
+    KoColor c6 = KoColor::fromXML("<color channeldepth='F32'><sRGB r='1.0' g='1.0' b='0.0'/></color>");
+
+    //7. Testing out-of-bounds values...
+
+    KoColor p7 = KoColor::fromSVG11("#ff0000 icc-color(srgb, 2.0, 1.0, 0.0)", profileList);
+    KoColor c7 = KoColor::fromXML("<color channeldepth='F32'><sRGB r='2.0' g='1.0' b='0.0'/></color>");
+
+    //8. test unique way of defining colors?
+    // This is an improper way of using the api, but I guess someone might try?
+    KoColor c8 = KoColor::fromXML("<RGB b=\"0.7\" space=\"sRGB-elle-V2-srgbtrc.icc\" r=\"1.0\" g=\"0.1\"/>");
+    qDebug() << ppVar(c8);
 
 
     QVERIFY(p1 == c1);
@@ -168,6 +178,7 @@ void TestKoColor::testSVGParsing()
     QVERIFY(p4 == c4);
     QVERIFY(p5 == c5);
     QVERIFY(p6 == c6);
+    QVERIFY(p7 == c7);
 }
 
 KISTEST_MAIN(TestKoColor)

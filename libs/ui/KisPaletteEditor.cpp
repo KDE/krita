@@ -45,6 +45,7 @@ struct KisPaletteEditor::Private
 {
     bool isNameModified {false};
     bool isColumnCountModified {false};
+    bool isModified {false};
     QSet<QString> modifiedGroupNames; // key is original group name
     QSet<QString> newGroupNames;
     QSet<QString> keepColorGroups;
@@ -58,6 +59,7 @@ struct KisPaletteEditor::Private
 
     QPalette normalPalette;
     QPalette warnPalette;
+
 };
 
 KisPaletteEditor::KisPaletteEditor(QObject *parent)
@@ -314,6 +316,7 @@ void KisPaletteEditor::slotSetDocumentModified()
 {
     // XXX: I'm not sure if we need to update the resource here // tiar
     m_d->view->document()->setModified(true);
+    m_d->isModified = true;
 }
 
 void KisPaletteEditor::removeEntry(const QModelIndex &index)
@@ -424,6 +427,11 @@ void KisPaletteEditor::addEntry(const KoColor &color)
     m_d->modified.groups[groupName].addEntry(newEntry);
 }
 
+bool KisPaletteEditor::isModified() const
+{
+    return m_d->isModified;
+}
+
 void KisPaletteEditor::updatePalette()
 {
     Q_ASSERT(m_d->model);
@@ -471,12 +479,18 @@ void KisPaletteEditor::updatePalette()
 
 void KisPaletteEditor::saveNewPaletteVersion()
 {
-    m_d->rServer->resourceModel()->updateResource(m_d->model->colorSet());
+    if (!m_d->model || !m_d->model->colorSet()) { return; }
+
+    if (!m_d->modified.isGlobal) {
+        m_d->rServer->resourceModel()->updateResource(m_d->model->colorSet());
+        m_d->isModified = false;
+    }
 }
 
 void KisPaletteEditor::slotPaletteChanged()
 {
     Q_ASSERT(m_d->model);
+    KIS_SAFE_ASSERT_RECOVER_NOOP(!m_d->isModified);
     if (!m_d->model->colorSet()) { return; }
     KoColorSetSP palette = m_d->model->colorSet();
     m_d->modified.groups.clear();

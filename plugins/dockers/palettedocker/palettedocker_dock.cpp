@@ -40,6 +40,7 @@
 #include <kis_color_button.h>
 #include <KisDocument.h>
 #include <KisPart.h>
+#include <KisPaletteEditor.h>
 
 #include <KisPaletteModel.h>
 #include <KisPaletteDelegate.h>
@@ -257,6 +258,11 @@ void PaletteDockerDock::unsetCanvas()
 
 void PaletteDockerDock::slotSetColorSet(KoColorSetSP colorSet)
 {
+    // needs to save the palette before switching to another one
+    if (m_paletteEditor->isModified()) {
+        m_paletteEditor->saveNewPaletteVersion();
+    }
+
     if (colorSet && colorSet->isEditable()) {
         m_ui->bnAdd->setEnabled(true);
         m_ui->bnRename->setEnabled(true);
@@ -283,6 +289,7 @@ void PaletteDockerDock::slotSetColorSet(KoColorSetSP colorSet)
     } else {
         m_ui->lblPaletteName->setText("");
     }
+    updatePaletteName();
 }
 
 void PaletteDockerDock::slotEditPalette()
@@ -299,6 +306,7 @@ void PaletteDockerDock::slotEditPalette()
 void PaletteDockerDock::slotSavePalette()
 {
     m_paletteEditor->saveNewPaletteVersion();
+    updatePaletteName();
 }
 
 
@@ -307,6 +315,7 @@ void PaletteDockerDock::slotAddColor()
     if (m_resourceProvider) {
         m_paletteEditor->addEntry(m_resourceProvider->fgColor());
     }
+    updatePaletteName();
 }
 
 void PaletteDockerDock::slotRemoveColor()
@@ -317,6 +326,7 @@ void PaletteDockerDock::slotRemoveColor()
     }
     m_paletteEditor->removeEntry(index);
     m_ui->bnRemove->setEnabled(false);
+    updatePaletteName();
 }
 
 void PaletteDockerDock::setFGColorByPalette(const KisSwatch &entry)
@@ -325,6 +335,28 @@ void PaletteDockerDock::setFGColorByPalette(const KisSwatch &entry)
         m_colorSelfUpdate = true;
         m_resourceProvider->setFGColor(entry.color());
         m_colorSelfUpdate = false;
+    }
+}
+
+void PaletteDockerDock::updatePaletteName()
+{
+    if (m_currentColorSet) {
+        m_ui->lblPaletteName->setTextElideMode(Qt::ElideLeft);
+        QString name = m_currentColorSet->name();
+        if (m_paletteEditor->isModified()) {
+            name = "* " + name;
+            QFont font = m_ui->lblPaletteName->font();
+            font.setItalic(true);
+            m_ui->lblPaletteName->setFont(font);
+        } else {
+            QFont font = m_ui->lblPaletteName->font();
+            font.setItalic(false);
+            m_ui->lblPaletteName->setFont(font);
+        }
+
+        m_ui->lblPaletteName->setText(name);
+    } else {
+        m_ui->lblPaletteName->setText("");
     }
 }
 
@@ -378,6 +410,7 @@ void PaletteDockerDock::slotPaletteIndexSelected(const QModelIndex &index)
     }
     if (!m_currentColorSet->isEditable()) { return; }
     m_ui->bnRemove->setEnabled(occupied);
+    updatePaletteName();
 }
 
 void PaletteDockerDock::slotPaletteIndexClicked(const QModelIndex &index)
@@ -385,11 +418,13 @@ void PaletteDockerDock::slotPaletteIndexClicked(const QModelIndex &index)
     if (!(qvariant_cast<bool>(index.data(KisPaletteModel::CheckSlotRole)))) {
         setEntryByForeground(index);
     }
+    updatePaletteName();
 }
 
 void PaletteDockerDock::slotPaletteIndexDoubleClicked(const QModelIndex &index)
 {
     m_paletteEditor->modifyEntry(index);
+    updatePaletteName();
 }
 
 void PaletteDockerDock::setEntryByForeground(const QModelIndex &index)
@@ -398,6 +433,7 @@ void PaletteDockerDock::setEntryByForeground(const QModelIndex &index)
     if (m_currentColorSet->isEditable()) {
         m_ui->bnRemove->setEnabled(true);
     }
+    updatePaletteName();
 }
 
 void PaletteDockerDock::slotEditEntry()
@@ -407,6 +443,7 @@ void PaletteDockerDock::slotEditEntry()
         return;
     }
     m_paletteEditor->modifyEntry(index);
+    updatePaletteName();
 }
 
 void PaletteDockerDock::slotNameListSelection(const KoColor &color)

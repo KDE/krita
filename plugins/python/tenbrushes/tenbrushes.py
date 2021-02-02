@@ -40,8 +40,6 @@ class TenBrushesExtension(krita.Extension):
     def writeSettings(self):
         presets = []
 
-        print ("writeSettings")
-
         for index, button in enumerate(self.buttons):
             self.actions[index].preset = button.preset
             presets.append(button.preset)
@@ -58,9 +56,6 @@ class TenBrushesExtension(krita.Extension):
                 "activate_preset_" + item,
                 str(i18n("Activate Brush Preset {num}")).format(num=item), "")
             action.triggered.connect(self.activatePreset)
-
-
-            print (self, index, len(self.selectedPresets), (self.selectedPresets[index] in allPresets))
 
             if (index < len(self.selectedPresets)
                     and self.selectedPresets[index] in allPresets):

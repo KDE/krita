@@ -1563,7 +1563,16 @@ void KoColorSet::Private::saveKplGroup(QDomDocument &doc,
         const KoColorProfile *profile = info.swatch.color().colorSpace()->profile();
         // Only save non-builtin profiles.=
         if (!profile->fileName().isEmpty()) {
-            colorSetSet.insert(info.swatch.color().colorSpace());
+            bool alreadyIncluded = false;
+            Q_FOREACH(const KoColorSpace* colorSpace, colorSetSet) {
+                if (colorSpace->profile()->fileName() == profile->fileName()) {
+                    alreadyIncluded = true;
+                    break;
+                }
+            }
+            if(!alreadyIncluded) {
+                colorSetSet.insert(info.swatch.color().colorSpace());
+            }
         }
         QDomElement swatchEle = doc.createElement(KPL_SWATCH_TAG);
         swatchEle.setAttribute(KPL_SWATCH_NAME_ATTR, info.swatch.name());

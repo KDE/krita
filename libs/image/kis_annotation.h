@@ -46,7 +46,8 @@ public:
      * be changed later.
      *
      * @param type a non-localized string identifying the type of the
-     * annotation
+     * annotation. There can only be one annotation of a given type attached
+     * to an image.
      * @param description a localized string describing the annotation
      * @param data a binary blob containing the annotation data
      */

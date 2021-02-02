@@ -89,6 +89,8 @@ public:
         return QPair<QString, QString>(ResourceType::Palettes, "");
     }
 
+    void updateThumbnail() override;
+
     void setColumnCount(int columns);
     int columnCount() const;
 

@@ -144,6 +144,9 @@ PaletteDockerDock::PaletteDockerDock( )
 
 PaletteDockerDock::~PaletteDockerDock()
 {
+    if (m_paletteEditor->isModified()) {
+        m_paletteEditor->saveNewPaletteVersion();
+    }
     KoResourceServer<KoColorSet> *srv = KoResourceServerProvider::instance()->paletteServer();
     srv->removeObserver(this);
 }

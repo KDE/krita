@@ -766,7 +766,7 @@
               <number>2</number>
              </property>
              <property name="text">
-              <string>Drag Image in window to open</string>
+              <string>Drag an image into the window to open</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>
@@ -1272,8 +1272,8 @@
             <item>
              <widget class="QLabel" name="labelNoRecentDocs">
               <property name="text">
-               <string>You don't seem to have
- any opened document</string>
+               <string>You don't seem to have any
+ recently opened documents</string>
               </property>
               <property name="textFormat">
                <enum>Qt::PlainText</enum>
@@ -1713,7 +1713,7 @@
                </size>
               </property>
               <property name="text">
-               <string>You can &lt;a href=&quot;ignored&quot; style=&quot;color: COLOR_PLACEHOLDER; text-decoration: underline;&quot;&gt;enable news&lt;/a&gt; from krita.org in various languages in the menu above</string>
+               <string>You can &lt;a href=&quot;ignored&quot; style=&quot;color: COLOR_PLACEHOLDER; text-decoration: underline;&quot;&gt;enable news&lt;/a&gt; from krita.org in various languages with the menu above</string>
               </property>
               <property name="textFormat">
                <enum>Qt::RichText</enum>

@@ -516,7 +516,7 @@ void KisKraLoader::loadPalettes(KoStore *store, KisDocument *doc)
     doc->setPaletteList(list);
 }
 
-void KisKraLoader::loadStoryboards(KoStore *store, KisDocument *doc)
+void KisKraLoader::loadStoryboards(KoStore *store, KisDocument */*doc*/)
 {
     if (!store->hasFile(m_d->imageName + STORYBOARD_PATH + "index.xml")) return;
 

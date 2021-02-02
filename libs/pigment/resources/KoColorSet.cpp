@@ -1525,10 +1525,10 @@ bool KoColorSet::Private::saveKpl(QIODevice *dev) const
 
     for (const KoColorSpace *colorSpace : colorSpaces) {
         QString fn = QFileInfo(colorSpace->profile()->fileName()).fileName();
-        if (!store->open(fn)) { return false; }
+        if (!store->open(fn)) { qWarning() << "Could not open the store for profiles directory"; return false; }
         QByteArray profileRawData = colorSpace->profile()->rawData();
-        if (!store->write(profileRawData)) { return false; }
-        if (!store->close()) { return false; }
+        if (!store->write(profileRawData)) { qWarning() << "Could not write the profiles data into the store"; return false; }
+        if (!store->close()) { qWarning() << "Could not close the store for profiles directory"; return false; }
         QDomElement el = doc.createElement(KPL_PALETTE_PROFILE_TAG);
         el.setAttribute(KPL_PALETTE_FILENAME_ATTR, fn);
         el.setAttribute(KPL_PALETTE_NAME_ATTR, colorSpace->profile()->name());
@@ -1548,6 +1548,7 @@ bool KoColorSet::Private::saveKpl(QIODevice *dev) const
     if (!store->close()) { qWarning() << "Could not close the store"; return false; }
 
     bool r = store->finalize();
+    if (!r) { qWarning() << "Could not finalize the store"; }
     return r;
 }
 

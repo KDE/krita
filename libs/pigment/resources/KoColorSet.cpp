@@ -444,6 +444,33 @@ KisSwatchGroup::SwatchInfo KoColorSet::getClosestColorInfo(KoColor compare, bool
     return res;
 }
 
+void KoColorSet::updateThumbnail()
+{
+    int rows = 0;
+    for (QString groupName : d->groupNames) {
+        int lastRowGroup = 0;
+        for (const KisSwatchGroup::SwatchInfo &info : d->groups[groupName].infoList()) {
+            lastRowGroup = qMax(lastRowGroup, info.row);
+        }
+        rows += (lastRowGroup + 1);
+    }
+
+    QImage img(d->global().columnCount() * 4, rows*4, QImage::Format_ARGB32);
+    QPainter gc(&img);
+    int lastRow = 0;
+    gc.fillRect(img.rect(), Qt::darkGray);
+    for (QString groupName : d->groupNames) {
+        int lastRowGroup = 0;
+        for (const KisSwatchGroup::SwatchInfo &info : d->groups[groupName].infoList()) {
+            QColor c = info.swatch.color().toQColor();
+            gc.fillRect(info.column * 4, (lastRow + info.row) * 4, 4, 4, c);
+            lastRowGroup = qMax(lastRowGroup, info.row);
+        }
+        lastRow += (lastRowGroup + 1);
+    }
+    setImage(img);
+}
+
 /********************************KoColorSet::Private**************************/
 
 KoColorSet::Private::Private(KoColorSet *a_colorSet)
@@ -670,31 +697,7 @@ bool KoColorSet::Private::init()
         res = false;
     }
     colorSet->setValid(res);
-
-    int rows = 0;
-    for (QString groupName : groupNames) {
-        int lastRowGroup = 0;
-        for (const KisSwatchGroup::SwatchInfo &info : groups[groupName].infoList()) {
-            lastRowGroup = qMax(lastRowGroup, info.row);
-        }
-        rows += (lastRowGroup + 1);
-    }
-
-    QImage img(global().columnCount() * 4, rows*4, QImage::Format_ARGB32);
-    QPainter gc(&img);
-    int lastRow = 0;
-    gc.fillRect(img.rect(), Qt::darkGray);
-    for (QString groupName : groupNames) {
-        int lastRowGroup = 0;
-        for (const KisSwatchGroup::SwatchInfo &info : groups[groupName].infoList()) {
-            QColor c = info.swatch.color().toQColor();
-            gc.fillRect(info.column * 4, (lastRow + info.row) * 4, 4, 4, c);
-            lastRowGroup = qMax(lastRowGroup, info.row);
-        }
-        lastRow += (lastRowGroup + 1);
-    }
-    colorSet->setImage(img);
-    colorSet->setValid(res);
+    colorSet->updateThumbnail();
 
     data.clear();
     return res;

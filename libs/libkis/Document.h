@@ -849,7 +849,40 @@ print(root.childNodes())
      */
     void setCurrentTime(int time);
 
+    /**
+     * @brief annotationTypes returns the list of annotations present in the document.
+     * Each annotation type is unique.
+     */
+    QStringList annotationTypes() const;
 
+    /**
+     * @brief annotationDescription gets the pretty description for the current annotation
+     * @param type the type of the annotation
+     * @return a string that can be presented to the user
+     */
+    QString annotationDescription(const QString &type) const;
+
+    /**
+     * @brief annotation the actual data for the annotation for this type. It's a simple
+     * QByteArray, what's in it depends on the type of the annotation
+     * @param type the type of the annotation
+     * @return a bytearray, possibly empty if this type of annotation doesn't exist
+     */
+    QByteArray annotation(const QString &type);
+
+    /**
+     * @brief setAnnotation Add the given annotation to the document
+     * @param type the unique type of the annotation
+     * @param description the user-visible description of the annotation
+     * @param annotation the annotation itself
+     */
+    void setAnnotation(const QString &type, const QString &description, const QByteArray &annotation);
+
+    /**
+     * @brief removeAnnotation remove the specified annotation from the image
+     * @param type the type defining the annotation
+     */
+    void removeAnnotation(const QString &type);
 private:
 
     friend class Krita;

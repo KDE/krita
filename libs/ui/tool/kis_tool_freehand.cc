@@ -355,7 +355,7 @@ void KisToolFreehand::continueAlternateAction(KoPointerEvent *event, AlternateAc
         qreal newSize = m_lastPaintOpSize + sizeDiff;
 
         if (action == ChangeSizeSnap) {
-            newSize = qRound(newSize);
+            newSize = qMax(qRound(newSize), 1);
         }
 
         newSize = qBound(0.01, newSize, maxBrushSize);

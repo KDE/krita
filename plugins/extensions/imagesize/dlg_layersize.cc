@@ -31,6 +31,8 @@ const QString DlgLayerSize::PARAM_KEEP_PROP = DlgLayerSize::PARAM_PREFIX + "_kee
 static const QString pixelStr(KoUnit::unitDescription(KoUnit::Pixel));
 static const QString percentStr(i18n("Percent (%)"));
 
+static KisFilterStrategy *lastUsedFilter = nullptr;
+
 DlgLayerSize::DlgLayerSize(QWidget *  parent, const char * name,
                            int width, int height, double resolution)
     : KoDialog(parent)
@@ -74,7 +76,12 @@ DlgLayerSize::DlgLayerSize(QWidget *  parent, const char * name,
     m_page->filterCmb->setIDList(KisFilterStrategyRegistry::instance()->listKeys());
     m_page->filterCmb->setToolTip(KisFilterStrategyRegistry::instance()->formattedDescriptions());
     m_page->filterCmb->allowAuto(true);
-    m_page->filterCmb->setCurrent(KisCmbIDList::AutoOptionID);
+
+    if (lastUsedFilter) { // Restore or Init..
+        m_page->filterCmb->setCurrent(lastUsedFilter->id());
+    } else {
+        m_page->filterCmb->setCurrent(KisCmbIDList::AutoOptionID);
+    }
 
     m_page->newWidthUnit->setModel(_widthUnitManager);
     m_page->newHeightUnit->setModel(_heightUnitManager);
@@ -143,11 +150,15 @@ KisFilterStrategy *DlgLayerSize::filterType()
 {
     KoID filterID = m_page->filterCmb->currentItem();
 
+    KisFilterStrategy *filter;
     if (filterID == KisCmbIDList::AutoOptionID) {
-        return KisFilterStrategyRegistry::instance()->autoFilterStrategy(QSize(m_originalWidth, m_originalHeight), QSize(desiredWidth(), desiredHeight()));
+        filter = KisFilterStrategyRegistry::instance()->autoFilterStrategy(QSize(m_originalWidth, m_originalHeight), QSize(desiredWidth(), desiredHeight()));
     } else {
-        return KisFilterStrategyRegistry::instance()->value(filterID.id());
+        filter = KisFilterStrategyRegistry::instance()->value(filterID.id());
+        lastUsedFilter = filter;  // Save for next time!
     }
+
+    return filter;
 }
 
 // SLOTS

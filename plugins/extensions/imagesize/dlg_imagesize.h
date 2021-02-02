@@ -73,6 +73,7 @@ private:
     void updatePrintSizeMaximum();
 
     WdgImageSize *m_page;
+
     QSize m_originalSize;
 
     KisAspectRatioLocker *m_pixelSizeLocker;

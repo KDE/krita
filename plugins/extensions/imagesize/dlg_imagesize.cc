@@ -27,6 +27,7 @@
 #include "kis_document_aware_spin_box_unit_manager.h"
 
 static const int maxImagePixelSize = 100000000;
+static KisFilterStrategy *lastUsedFilter = nullptr;
 
 static const QString pixelStr(KoUnit::unitDescription(KoUnit::Pixel));
 static const QString percentStr(i18n("Percent (%)"));
@@ -60,7 +61,12 @@ DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolu
     m_page->pixelFilterCmb->setIDList(KisFilterStrategyRegistry::instance()->listKeys());
     m_page->pixelFilterCmb->allowAuto(true);
     m_page->pixelFilterCmb->setToolTip(KisFilterStrategyRegistry::instance()->formattedDescriptions());
-    m_page->pixelFilterCmb->setCurrent(KisCmbIDList::AutoOptionID);
+
+    if (lastUsedFilter) { // Restore or Init..
+        m_page->pixelFilterCmb->setCurrent(lastUsedFilter->id());
+    } else {
+        m_page->pixelFilterCmb->setCurrent(KisCmbIDList::AutoOptionID);
+    }
 
     connect(this, &DlgImageSize::sigDesiredSizeChanged, [this](qint32 width, qint32 height, double){
         KisFilterStrategy *filterStrategy = KisFilterStrategyRegistry::instance()->autoFilterStrategy(m_originalSize, QSize(width, height));
@@ -301,11 +307,15 @@ KisFilterStrategy *DlgImageSize::filterType()
 {
     KoID filterID = m_page->pixelFilterCmb->currentItem();
 
+    KisFilterStrategy *filter;
     if (filterID == KisCmbIDList::AutoOptionID) {
-        return KisFilterStrategyRegistry::instance()->autoFilterStrategy(m_originalSize, QSize(desiredWidth(), desiredHeight()));
+        filter = KisFilterStrategyRegistry::instance()->autoFilterStrategy(m_originalSize, QSize(desiredWidth(), desiredHeight()));
     } else {
-        return KisFilterStrategyRegistry::instance()->value(filterID.id());
+        filter = KisFilterStrategyRegistry::instance()->value(filterID.id());
+        lastUsedFilter = filter;  // Save for next time!
     }
+
+    return filter;
 }
 
 void DlgImageSize::slotSyncPrintToPixelSize()

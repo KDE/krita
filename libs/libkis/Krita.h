@@ -196,7 +196,7 @@ public Q_SLOTS:
      * <li>workspace</li>
      * </ul>
      */
-    QMap<QString, Resource*> resources(const QString &type) const;
+    QMap<QString, Resource*> resources(QString &type) const;
 
 
     /**

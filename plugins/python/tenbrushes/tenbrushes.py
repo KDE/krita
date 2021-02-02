@@ -32,15 +32,15 @@ class TenBrushesExtension(krita.Extension):
         self.uitenbrushes.initialize(self)
 
     def readSettings(self):
-        self.selectedPresets = Application.readSetting(
-            "", "tenbrushes", "").split(',')
-        setting = Application.readSetting(
-            "", "tenbrushesActivatePrev2ndPress", "True")
+        self.selectedPresets = Application.readSetting("", "tenbrushes", "").split(',')
+        setting = Application.readSetting("", "tenbrushesActivatePrev2ndPress", "True")
         # we should not get anything other than 'True' and 'False'
         self.activatePrev = setting == 'True'
 
     def writeSettings(self):
         presets = []
+
+        print ("writeSettings")
 
         for index, button in enumerate(self.buttons):
             self.actions[index].preset = button.preset
@@ -58,6 +58,9 @@ class TenBrushesExtension(krita.Extension):
                 "activate_preset_" + item,
                 str(i18n("Activate Brush Preset {num}")).format(num=item), "")
             action.triggered.connect(self.activatePreset)
+
+
+            print (self, index, len(self.selectedPresets), (self.selectedPresets[index] in allPresets))
 
             if (index < len(self.selectedPresets)
                     and self.selectedPresets[index] in allPresets):
@@ -78,8 +81,7 @@ class TenBrushesExtension(krita.Extension):
                 window.views()[0].activateResource(self.oldPreset)
             else:
                 self.oldPreset = window.views()[0].currentBrushPreset()
-                window.views()[0].activateResource(
-                    allPresets[self.sender().preset])
+                window.views()[0].activateResource(allPresets[self.sender().preset])
 
         preset = window.views()[0].currentBrushPreset()
         window.views()[0].showFloatingMessage(str(i18n("{}\nselected")).format(preset.name()),

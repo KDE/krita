@@ -65,7 +65,6 @@ set(kritawidgetutils_LIB_SRCS
     xmlgui/khelpmenu.cpp
     xmlgui/kkeysequencewidget.cpp
     xmlgui/kmainwindow.cpp
-    xmlgui/kmenumenuhandler_p.cpp
     xmlgui/kshortcutwidget.cpp
     xmlgui/kswitchlanguagedialog_p.cpp
     xmlgui/ktoggletoolbaraction.cpp

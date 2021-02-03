@@ -24,7 +24,6 @@
 #include "ktoolbar.h"
 #include "kmainwindow.h"
 #include "kxmlguiwindow.h"
-#include "kmenumenuhandler_p.h"
 
 #include <klocalizedstring.h>
 
@@ -74,8 +73,6 @@ public:
     QString attrIcon;
 
     KXMLGUIClient *m_client {0};
-
-    KMenuMenuHandler *m_menumenuhandler {0};
 };
 
 KXMLGUIBuilder::KXMLGUIBuilder(QWidget *widget)
@@ -102,13 +99,10 @@ KXMLGUIBuilder::KXMLGUIBuilder(QWidget *widget)
     d->attrContext = QStringLiteral("context");
 
     d->attrIcon = QStringLiteral("icon");
-
-    d->m_menumenuhandler = new KMenuMenuHandler(this);
 }
 
 KXMLGUIBuilder::~KXMLGUIBuilder()
 {
-    delete d->m_menumenuhandler;
     delete d;
 }
 
@@ -175,8 +169,6 @@ QWidget *KXMLGUIBuilder::createContainer(QWidget *parent, int index, const QDomE
 
         QMenu *popup = new QMenu(p);
         popup->setObjectName(name);
-
-        d->m_menumenuhandler->insertMenu(popup);
 
         QString i18nText;
         QDomElement textElem = element.namedItem(d->attrText1).toElement();

@@ -10,6 +10,7 @@
 #include <KoConfig.h>
 #include <QApplication>
 #include <QTest>
+#include <QStandardPaths>
 #include <QLoggingCategory>
 #include <QtTest/qtestsystem.h>
 #include <set>
@@ -271,6 +272,7 @@ void registerResources()
 int main(int argc, char *argv[]) \
 { \
     qputenv("QT_LOGGING_RULES", ""); \
+    QStandardPaths::setTestModeEnabled(true); \
     qputenv("EXTRA_RESOURCE_DIRS", QByteArray(KRITA_EXTRA_RESOURCE_DIRS)); \
     QApplication app(argc, argv); \
     app.setAttribute(Qt::AA_Use96Dpi, true); \
@@ -288,6 +290,7 @@ int main(int argc, char *argv[]) \
 { \
     qputenv("QT_LOGGING_RULES", ""); \
     qputenv("EXTRA_RESOURCE_DIRS", QByteArray(KRITA_EXTRA_RESOURCE_DIRS)); \
+    QStandardPaths::setTestModeEnabled(true); \
     QApplication app(argc, argv); \
     app.setAttribute(Qt::AA_Use96Dpi, true); \
     QTEST_DISABLE_KEYPAD_NAVIGATION \

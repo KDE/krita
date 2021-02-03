@@ -557,9 +557,15 @@ QString KoResourcePaths::saveLocationInternal(const QString &type, const QString
     }
     else {
         path = QStandardPaths::writableLocation(d->mapTypeToQStandardPaths(type));
+
+#ifndef Q_OS_ANDROID
+        // on Android almost all config locations we save to are app specific,
+        // and don't end with "krita".
         if (!path.endsWith("krita")) {
             path += "/krita";
         }
+#endif
+
         if (!suffix.isEmpty()) {
             path += "/" + suffix;
         }

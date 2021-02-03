@@ -167,12 +167,8 @@ public:
     }
 
     void setIndex(int idx) override {
-        KisImageWSP image = this->image();
-        image->requestStrokeCancellation();
-        if(image->tryBarrierLock()) {
-            KUndo2Stack::setIndex(idx);
-            image->unlock();
-        }
+        m_postponedJobs.append({PostponedJob::SetIndex, idx});
+        processPostponedJobs();
     }
 
     void notifySetIndexChangedOneCommand() override {
@@ -190,6 +186,33 @@ public:
     }
 
     void undo() override {
+        m_postponedJobs.append({PostponedJob::Undo, 0});
+        processPostponedJobs();
+    }
+
+
+    void redo() override {
+        m_postponedJobs.append({PostponedJob::Redo, 0});
+        processPostponedJobs();
+    }
+
+private:
+    KisImageWSP image() {
+        KisImageWSP currentImage = m_doc->image();
+        Q_ASSERT(currentImage);
+        return currentImage;
+    }
+
+    void setIndexImpl(int idx) {
+        KisImageWSP image = this->image();
+        image->requestStrokeCancellation();
+        if(image->tryBarrierLock()) {
+            KUndo2Stack::setIndex(idx);
+            image->unlock();
+        }
+    }
+
+    void undoImpl() {
         KisImageWSP image = this->image();
         image->requestUndoDuringStroke();
 
@@ -203,7 +226,7 @@ public:
         }
     }
 
-    void redo() override {
+    void redoImpl() {
         KisImageWSP image = this->image();
         if(image->tryBarrierLock()) {
             KUndo2Stack::redo();
@@ -211,14 +234,51 @@ public:
         }
     }
 
-private:
-    KisImageWSP image() {
-        KisImageWSP currentImage = m_doc->image();
-        Q_ASSERT(currentImage);
-        return currentImage;
+    void processPostponedJobs() {
+        /**
+         * Some undo commands may call QApplication::processEvents(),
+         * see notifySetIndexChangedOneCommand(). That may cause
+         * recursive calls to the undo stack methods when used from
+         * the Undo History docker. Here we try to handle that gracefully
+         * by accumulating all the requests and executing them at the
+         * topmost level of recursion.
+         */
+        if (m_recursionCounter > 0) return;
+
+        m_recursionCounter++;
+
+        while (!m_postponedJobs.isEmpty()) {
+            PostponedJob job = m_postponedJobs.dequeue();
+            switch (job.type) {
+            case PostponedJob::SetIndex:
+                setIndexImpl(job.index);
+                break;
+            case PostponedJob::Redo:
+                redoImpl();
+                break;
+            case PostponedJob::Undo:
+                undoImpl();
+                break;
+            }
+        }
+
+        m_recursionCounter--;
     }
 
 private:
+    int m_recursionCounter = 0;
+
+    struct PostponedJob {
+        enum Type {
+            Undo = 0,
+            Redo,
+            SetIndex
+        };
+        Type type = Undo;
+        int index = 0;
+    };
+    QQueue<PostponedJob> m_postponedJobs;
+
     KisDocument *m_doc;
 };
 

@@ -1050,7 +1050,12 @@ QByteArray Document::annotation(const QString &type)
 {
     KisImageSP image = d->document->image().toStrongRef();
     KisAnnotationSP annotation = image->annotation(type);
-    return annotation->annotation();
+    if (annotation) {
+        return annotation->annotation();
+    }
+    else {
+        return QByteArray();
+    }
 }
 
 void Document::setAnnotation(const QString &key, const QString &description, const QByteArray &annotation)

@@ -51,8 +51,9 @@ public:
      * set of parameters. Used by the transform mask and stroke respectively to update keyframe data. */
     static KisTransformMaskParamsInterfaceSP makeAnimated(KisTransformMaskParamsInterfaceSP params, const KisTransformMaskSP mask);
     static void makeScalarKeyframeOnMask(KisTransformMaskSP mask, const KoID &channelId, int time, qreal value, KUndo2Command *parentCommand);
-    static void addKeyframes(KisTransformMaskSP mask, int time, KisTransformMaskParamsInterfaceSP params, KUndo2Command *parentCommand);
-    static qreal degToRad(qreal degrees) {return degrees / 360 * 2 * M_PI;}
+    static void addKeyframes(KisTransformMaskSP mask, int currentTime, KisTransformMaskParamsInterfaceSP desiredParams, KUndo2Command *parentCommand);
+    static qreal degToRad(qreal degrees) {return degrees / 180 * M_PI;}
+    static qreal radToDeg(qreal rad) {return rad * 180 / M_PI;}
 
 private:
     struct Private;

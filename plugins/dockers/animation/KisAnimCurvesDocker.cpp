@@ -751,6 +751,8 @@ void KisAnimCurvesDocker::slotValueRegisterChanged(double value){
 
 void KisAnimCurvesDocker::slotActiveNodeUpdate(const QModelIndex index)
 {
+    KisSignalsBlocker blockSignal(m_d->titlebar->sbValueRegister);
+
     if (index.isValid() && m_d->curvesView->indexHasKey(index)) {
         QVariant variant = m_d->curvesModel->data(index, KisAnimCurvesModel::ScalarValueRole);
         m_d->titlebar->sbValueRegister->setEnabled(variant.isValid());

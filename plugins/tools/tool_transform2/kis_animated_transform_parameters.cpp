@@ -312,47 +312,53 @@ void KisAnimatedTransformMaskParameters::makeScalarKeyframeOnMask(KisTransformMa
 }
 
 
-void KisAnimatedTransformMaskParameters::addKeyframes(KisTransformMaskSP mask, int time, KisTransformMaskParamsInterfaceSP params, KUndo2Command *parentCommand)
+void KisAnimatedTransformMaskParameters::addKeyframes(KisTransformMaskSP mask, int currentTime, KisTransformMaskParamsInterfaceSP desiredParams, KUndo2Command *parentCommand)
 {
     KisTransformMaskParamsInterfaceSP currentParams = mask->transformParams();
     if (dynamic_cast<KisAnimatedTransformMaskParameters*>(currentParams.data()) == 0) {
         mask->setTransformParams(makeAnimated(currentParams, mask));
+        currentParams = mask->transformParams();
+        KIS_ASSERT(currentParams);
     }
 
-    if (params.isNull()) {
-        params = currentParams;
+    // If there's no desired param passed, use the current parameters.
+    if (desiredParams.isNull()) {
+        desiredParams = currentParams;
+        return;
     }
 
-    ToolTransformArgs args;
-    auto *adapterParams = dynamic_cast<KisTransformMaskAdapter*>(params.data());
+    ToolTransformArgs desiredArgs;
+    KisTransformMaskAdapter* desiredParamsAdapter = dynamic_cast<KisTransformMaskAdapter*>(desiredParams.data());
 
-    if (adapterParams) {
-        args = *adapterParams->transformArgs();
+    if (desiredParamsAdapter) {
+        desiredArgs = *desiredParamsAdapter->transformArgs();
     } else {
-        if (params->isHidden()) return;
-        args.setOriginalCenter(mask->exactBounds().center());
-        args.setTransformedCenter(args.originalCenter()); // offset?
+        if (desiredParams->isHidden()) return;
+        desiredArgs.setOriginalCenter(mask->exactBounds().center());
+        desiredArgs.setTransformedCenter(desiredArgs.originalCenter());
     }
 
     KisTransformMaskAdapter *tma = dynamic_cast<KisTransformMaskAdapter*>(mask->transformParams().data());
     if (tma) {
-        tma->setBaseArgs(args);
+        tma->setBaseArgs(desiredArgs);
     }
 
-//    makeScalarKeyframeOnMask(mask, KisKeyframeChannel::PositionX, time, args.transformedCenter().x() - args.originalCenter().x(), parentCommand);
-//    makeScalarKeyframeOnMask(mask, KisKeyframeChannel::PositionY, time, args.transformedCenter().y() - args.originalCenter().y(), parentCommand);
-    makeScalarKeyframeOnMask(mask, KisKeyframeChannel::PositionX, time, args.transformedCenter().x(), parentCommand);
-    makeScalarKeyframeOnMask(mask, KisKeyframeChannel::PositionY, time, args.transformedCenter().y(), parentCommand);
+    KisAnimatedTransformMaskParameters* animatedTransformMask = dynamic_cast<KisAnimatedTransformMaskParameters*>(currentParams.data());
+    if (animatedTransformMask) {
+    }
 
-    makeScalarKeyframeOnMask(mask, KisKeyframeChannel::ScaleX, time, args.scaleX(), parentCommand);
-    makeScalarKeyframeOnMask(mask, KisKeyframeChannel::ScaleY, time, args.scaleY(), parentCommand);
+    makeScalarKeyframeOnMask(mask, KisKeyframeChannel::PositionX, currentTime, desiredArgs.transformedCenter().x(), parentCommand);
+    makeScalarKeyframeOnMask(mask, KisKeyframeChannel::PositionY, currentTime, desiredArgs.transformedCenter().y(), parentCommand);
 
-    makeScalarKeyframeOnMask(mask, KisKeyframeChannel::ShearX, time, args.shearX(), parentCommand);
-    makeScalarKeyframeOnMask(mask, KisKeyframeChannel::ShearY, time, args.shearY(), parentCommand);
+    makeScalarKeyframeOnMask(mask, KisKeyframeChannel::ScaleX, currentTime, desiredArgs.scaleX(), parentCommand);
+    makeScalarKeyframeOnMask(mask, KisKeyframeChannel::ScaleY, currentTime, desiredArgs.scaleY(), parentCommand);
 
-    makeScalarKeyframeOnMask(mask, KisKeyframeChannel::RotationX, time, args.aX(), parentCommand);
-    makeScalarKeyframeOnMask(mask, KisKeyframeChannel::RotationY, time, args.aY(), parentCommand);
-    makeScalarKeyframeOnMask(mask, KisKeyframeChannel::RotationZ, time, args.aZ(), parentCommand);
+    makeScalarKeyframeOnMask(mask, KisKeyframeChannel::ShearX, currentTime, desiredArgs.shearX(), parentCommand);
+    makeScalarKeyframeOnMask(mask, KisKeyframeChannel::ShearY, currentTime, desiredArgs.shearY(), parentCommand);
+
+    makeScalarKeyframeOnMask(mask, KisKeyframeChannel::RotationX, currentTime, radToDeg(desiredArgs.aX()), parentCommand);
+    makeScalarKeyframeOnMask(mask, KisKeyframeChannel::RotationY, currentTime, radToDeg(desiredArgs.aY()), parentCommand);
+    makeScalarKeyframeOnMask(mask, KisKeyframeChannel::RotationZ, currentTime, radToDeg(desiredArgs.aZ()), parentCommand);
 }
 
 #include "kis_transform_mask_params_factory_registry.h"

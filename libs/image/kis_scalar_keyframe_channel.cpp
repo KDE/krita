@@ -201,8 +201,12 @@ KisScalarKeyframeChannel::~KisScalarKeyframeChannel()
 }
 
 void KisScalarKeyframeChannel::addScalarKeyframe(int time, qreal value, KUndo2Command *parentUndoCmd) {
-    addKeyframe(time, parentUndoCmd);
     KisScalarKeyframeSP scalarKey = keyframeAt<KisScalarKeyframe>(time);
+    if (!scalarKey) {
+        addKeyframe(time, parentUndoCmd);
+        scalarKey = keyframeAt<KisScalarKeyframe>(time);
+    }
+
     if (scalarKey) {
         scalarKey->setValue(value, parentUndoCmd);
     }

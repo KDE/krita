@@ -24,6 +24,11 @@
 #include "KisDeleteLaterWrapper.h"
 #include "kis_command_utils.h"
 
+#include <QReadWriteLock>
+#include <QReadLocker>
+#include <QWriteLocker>
+
+
 struct Q_DECL_HIDDEN KisSelection::Private {
     Private(KisSelection *q)
         : isVisible(true),
@@ -43,6 +48,12 @@ struct Q_DECL_HIDDEN KisSelection::Private {
     KisPixelSelectionSP pixelSelection;
     KisSelectionComponent *shapeSelection;
     KisLazyStorage<KisSelectionUpdateCompressor> updateCompressor;
+
+    /**
+     * This lock makes sure that the shape selection is not reincarnated,
+     * while some update jobs still access it via KisSelection::updateProjection().
+     */
+    QReadWriteLock shapeSelectionPointerLock;
 };
 
 void KisSelection::Private::safeDeleteShapeSelection(KisSelectionComponent *shapeSelection, KisSelection *selection)
@@ -117,7 +128,10 @@ struct KisSelection::ChangeShapeSelectionCommand : public KUndo2Command
             m_reincarnationCommand->undo();
         }
 
-        std::swap(m_selection->m_d->shapeSelection, m_shapeSelection);
+        {
+            QWriteLocker l(&m_selection->m_d->shapeSelectionPointerLock);
+            std::swap(m_selection->m_d->shapeSelection, m_shapeSelection);
+        }
 
         if (!m_isFlatten) {
             m_selection->requestCompressedProjectionUpdate(QRect());
@@ -129,6 +143,8 @@ struct KisSelection::ChangeShapeSelectionCommand : public KUndo2Command
         KIS_SAFE_ASSERT_RECOVER_RETURN(m_selection);
 
         if (m_firstRedo) {
+            QReadLocker l(&m_selection->m_d->shapeSelectionPointerLock);
+
             if (bool(m_selection->m_d->shapeSelection) != bool(m_shapeSelection)) {
                 m_reincarnationCommand.reset(
                     m_selection->m_d->pixelSelection->reincarnateWithDetachedHistory(m_isFlatten));
@@ -141,7 +157,10 @@ struct KisSelection::ChangeShapeSelectionCommand : public KUndo2Command
             m_reincarnationCommand->redo();
         }
 
-        std::swap(m_selection->m_d->shapeSelection, m_shapeSelection);
+        {
+            QWriteLocker l(&m_selection->m_d->shapeSelectionPointerLock);
+            std::swap(m_selection->m_d->shapeSelection, m_shapeSelection);
+        }
 
         if (!m_isFlatten) {
             m_selection->requestCompressedProjectionUpdate(QRect());
@@ -207,6 +226,9 @@ void KisSelection::copyFrom(const KisSelection &rhs)
     m_d->pixelSelection = new KisPixelSelection(*rhs.m_d->pixelSelection, KritaUtils::CopyAllFrames);
     m_d->pixelSelection->setParentSelection(this);
 
+    QReadLocker l1(&rhs.m_d->shapeSelectionPointerLock);
+    QWriteLocker l2(&m_d->shapeSelectionPointerLock);
+
     if (rhs.m_d->shapeSelection && !rhs.m_d->shapeSelection->isEmpty()) {
         m_d->shapeSelection = rhs.m_d->shapeSelection->clone(this);
         KIS_SAFE_ASSERT_RECOVER_NOOP(m_d->shapeSelection);
@@ -249,12 +271,15 @@ KisNodeWSP KisSelection::parentNode() const
 
 bool KisSelection::outlineCacheValid() const
 {
+    QReadLocker l(&m_d->shapeSelectionPointerLock);
     return m_d->shapeSelection ||
         m_d->pixelSelection->outlineCacheValid();
 }
 
 QPainterPath KisSelection::outlineCache() const
 {
+    QReadLocker l(&m_d->shapeSelectionPointerLock);
+
     QPainterPath outline;
 
     if (m_d->shapeSelection) {
@@ -268,6 +293,8 @@ QPainterPath KisSelection::outlineCache() const
 
 void KisSelection::recalculateOutlineCache()
 {
+    QReadLocker l(&m_d->shapeSelectionPointerLock);
+
     Q_ASSERT(m_d->pixelSelection);
 
     if (m_d->shapeSelection) {
@@ -304,11 +331,13 @@ bool KisSelection::hasNonEmptyPixelSelection() const
 
 bool KisSelection::hasNonEmptyShapeSelection() const
 {
+    QReadLocker l(&m_d->shapeSelectionPointerLock);
     return m_d->shapeSelection && !m_d->shapeSelection->isEmpty();
 }
 
 bool KisSelection::hasShapeSelection() const
 {
+    QReadLocker l(&m_d->shapeSelectionPointerLock);
     return m_d->shapeSelection;
 }
 
@@ -341,6 +370,8 @@ KisPixelSelectionSP KisSelection::projection() const
 
 void KisSelection::updateProjection(const QRect &rc)
 {
+    QReadLocker l(&m_d->shapeSelectionPointerLock);
+
     if(m_d->shapeSelection) {
         m_d->shapeSelection->renderToProjection(m_d->pixelSelection, rc);
         m_d->pixelSelection->setOutlineCache(m_d->shapeSelection->outlineCache());
@@ -349,6 +380,8 @@ void KisSelection::updateProjection(const QRect &rc)
 
 void KisSelection::updateProjection()
 {
+    QReadLocker l(&m_d->shapeSelectionPointerLock);
+
     if(m_d->shapeSelection) {
         m_d->pixelSelection->clear();
         m_d->shapeSelection->renderToProjection(m_d->pixelSelection);
@@ -399,6 +432,8 @@ qint32 KisSelection::y() const
 
 void KisSelection::setX(qint32 x)
 {
+    QReadLocker l(&m_d->shapeSelectionPointerLock);
+
     Q_ASSERT(m_d->pixelSelection);
 
     qint32 delta = x - m_d->pixelSelection->x();
@@ -410,6 +445,8 @@ void KisSelection::setX(qint32 x)
 
 void KisSelection::setY(qint32 y)
 {
+    QReadLocker l(&m_d->shapeSelectionPointerLock);
+
     Q_ASSERT(m_d->pixelSelection);
 
     qint32 delta = y - m_d->pixelSelection->y();
@@ -427,9 +464,15 @@ void KisSelection::setDefaultBounds(KisDefaultBoundsBaseSP bounds)
 
 void KisSelection::clear()
 {
+    QReadLocker readLocker(&m_d->shapeSelectionPointerLock);
+
     if (m_d->shapeSelection) {
-        Private::safeDeleteShapeSelection(m_d->shapeSelection, this);
-        m_d->shapeSelection = 0;
+        readLocker.unlock();
+        QWriteLocker writeLocker(&m_d->shapeSelectionPointerLock);
+        if (m_d->shapeSelection) {
+            Private::safeDeleteShapeSelection(m_d->shapeSelection, this);
+            m_d->shapeSelection = 0;
+        }
     }
 
     m_d->pixelSelection->clear();
@@ -437,10 +480,13 @@ void KisSelection::clear()
 
 KUndo2Command* KisSelection::flatten()
 {
+    QReadLocker readLocker(&m_d->shapeSelectionPointerLock);
+
     KUndo2Command *command = 0;
 
     if (m_d->shapeSelection) {
         command = m_d->shapeSelection->resetToEmpty();
+        readLocker.unlock();
 
         if (command) {
             KisCommandUtils::CompositeCommand *cmd = new KisCommandUtils::CompositeCommand();

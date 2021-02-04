@@ -68,15 +68,29 @@
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.EDIT" />
-
                 <category android:name="android.intent.category.DEFAULT" />
 
-                <data android:scheme="content" />
                 <data android:scheme="file" />
+                <data android:scheme="content" />
+                <data android:mimeType="*/*" />
 
-                <data android:mimeType="*/*"
-                      android:pathPattern=".*\\.kra.*" />
+                <!-- NOTE: if host and scheme aren't provided path attributes are ignored  -->
+                <data android:host="*"
+                      android:pathPattern=".*\\.kra.*"/>
+            </intent-filter>
 
+            <!-- without mimeType -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.EDIT" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:scheme="file" />
+                <data android:scheme="content" />
+
+                <!-- NOTE: if host and scheme aren't provided path attributes are ignored  -->
+                <data android:host="*"
+                      android:pathPattern=".*\\.kra.*"/>
             </intent-filter>
 
             <meta-data

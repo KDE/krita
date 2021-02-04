@@ -178,7 +178,7 @@
       <whatsThis/>
       <toolTip>Open the command bar to search through actions.</toolTip>
       <iconText>Search Actions.</iconText>
-      <shortcut>Ctrl+Enter</shortcut>
+      <shortcut>Ctrl+Return</shortcut>
       <isCheckable>false</isCheckable>
       <statusTip/>
     </Action>

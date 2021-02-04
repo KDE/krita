@@ -88,7 +88,7 @@ public:
         const QString nameColor = option.palette.color(QPalette::Link).name();
         kfts::to_fuzzy_matched_display_string(m_filterString, str, QStringLiteral("<b style=\"color:%1;\">").arg(nameColor), QStringLiteral("</b>"));
 
-        const QString component = QStringLiteral("<span style=\"color: gray;\">") + strs.at(0) + QStringLiteral(": </span>");
+        const QString component = QStringLiteral("<span style=\"color: %1;\"><b>").arg(nameColor) + strs.at(0) + QStringLiteral(":</b> </span>");
 
         doc.setHtml(component + str);
         doc.setDocumentMargin(2);

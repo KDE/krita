@@ -9,6 +9,7 @@
 #include <klocalizedstring.h>
 #include <kactioncollection.h>
 #include <QObject>
+#include <QRect>
 
 KisNodeActivationActionCreatorVisitor::KisNodeActivationActionCreatorVisitor(KActionCollection *actionCollection, KisNodeManager *nodeManager)
     : m_nodeManager(nodeManager)
@@ -26,6 +27,7 @@ bool KisNodeActivationActionCreatorVisitor::createAction(KisNode *node)
                                       m_actionCollection);
         action->setObjectName(QString("select_%1").arg(node->name()));
         action->setProperty("node", node->name());
+        action->setIcon(node->icon());
         QObject::connect(action, SIGNAL(triggered()), m_nodeManager, SLOT(slotUiActivateNode()));
         m_actionCollection->addAction(action->objectName(), action);
     }

@@ -83,6 +83,7 @@ public:
     bool switchSelectionCtrlAlt();
     bool convertToImageColorspaceOnImport();
     bool autopinLayersToTimeline();
+    bool adaptivePlaybackRange();
 
 private Q_SLOTS:
     void getBackgroundImage();

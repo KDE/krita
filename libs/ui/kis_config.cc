@@ -2004,6 +2004,16 @@ void KisConfig::setAutoPinLayersToTimeline(bool value)
     m_cfg.writeEntry("autoPinLayers", value);
 }
 
+bool KisConfig::adaptivePlaybackRange(bool defaultValue) const
+{
+    return (defaultValue ? true : m_cfg.readEntry("adaptivePlaybackRange", true));
+}
+
+void KisConfig::setAdaptivePlaybackRange(bool value)
+{
+    m_cfg.writeEntry("adaptivePlaybackRange", value);
+}
+
 qreal KisConfig::timelineZoom(bool defaultValue) const
 {
     return (defaultValue ? 1.0f : m_cfg.readEntry("timelineZoom", 1.0f));

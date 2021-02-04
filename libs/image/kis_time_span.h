@@ -60,6 +60,11 @@ public:
         return m_start <= time && time <= m_end;
     }
 
+    inline void include(int time) {
+        m_start = qMin(time, m_start);
+        m_end = qMax(time, m_end);
+    }
+
     inline bool overlaps(const KisTimeSpan& other) const {
         // If either are "invalid", we should probably return false.
         if (!isValid() || !other.isValid()) {

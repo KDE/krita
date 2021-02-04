@@ -1652,3 +1652,14 @@ void KisNodeManager::selectUnlockedNodes()
 
     selectLayersImpl(props, invertedProps);
 }
+
+void KisNodeManager::slotUiActivateNode()
+{
+    if (!sender()->property("node").isNull()) {
+        QString name = sender()->property("node").toString();
+        KisNodeSP node = m_d->imageView->image()->rootLayer()->findChildByName(name);
+        if (node) {
+            slotUiActivatedNode(node);
+        }
+    }
+}

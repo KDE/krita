@@ -418,6 +418,8 @@ set(kritaui_LIB_SRCS
     KoDocumentInfo.cpp
 
     StoryboardItem.cpp
+
+    KisNodeActivationActionCreatorVisitor.cpp
 )
 
 if (KSeExpr_FOUND)

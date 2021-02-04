@@ -375,17 +375,16 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
         }
         else {
             QPainter p;
-            QSvgGenerator *generator;
+            QSvgGenerator generator;
 
             if (dlg.format() == ExportFormat::SVG) {
-                generator = new QSvgGenerator();
-                generator->setFileName(dlg.saveFileName() + "/" + dlg.svgFileBaseName() + "0.svg");
+                generator.setFileName(dlg.saveFileName() + "/" + dlg.svgFileBaseName() + "0.svg");
                 QSize sz = printer.pageRect().size();
-                generator->setSize(sz);
-                generator->setViewBox(QRect(0, 0, sz.width(), sz.height()));
-                generator->setResolution(printer.resolution());
+                generator.setSize(sz);
+                generator.setViewBox(QRect(0, 0, sz.width(), sz.height()));
+                generator.setResolution(printer.resolution());
 
-                p.begin(generator);
+                p.begin(&generator);
             }
             else {
                 printer.setOutputFileName(dlg.saveFileName());
@@ -404,15 +403,12 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
                     if (dlg.format() == ExportFormat::SVG) {
                         p.end();
                         p.eraseRect(printer.pageRect());
-                        delete generator;
-
-                        generator = new QSvgGenerator();
-                        generator->setFileName(dlg.saveFileName() + "/" + dlg.svgFileBaseName() + QString::number(i / layoutCellRects.size()) + ".svg");
+                        generator.setFileName(dlg.saveFileName() + "/" + dlg.svgFileBaseName() + QString::number(i / layoutCellRects.size()) + ".svg");
                         QSize sz = printer.pageRect().size();
-                        generator->setSize(sz);
-                        generator->setViewBox(QRect(0, 0, sz.width(), sz.height()));
-                        generator->setResolution(printer.resolution());
-                        p.begin(generator);
+                        generator.setSize(sz);
+                        generator.setViewBox(QRect(0, 0, sz.width(), sz.height()));
+                        generator.setResolution(printer.resolution());
+                        p.begin(&generator);
                     }
                     else {
                         printer.newPage();

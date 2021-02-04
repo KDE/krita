@@ -65,7 +65,8 @@ WGColorSelectorDock::WGColorSelectorDock()
     headerLayout->setMargin(0);
 
     m_configButton = new QToolButton(this);
-    m_configButton->setIcon(KisIconUtils::loadIcon("configure"));
+    m_configButton->setIcon(KisIconUtils::loadIcon("view-choose"));
+    m_configButton->setAutoRaise(true);
     m_configButton->setPopupMode(QToolButton::InstantPopup);
     headerLayout->addWidget(m_configButton);
 

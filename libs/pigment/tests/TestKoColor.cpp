@@ -258,11 +258,19 @@ void TestKoColor::testSVGParsing()
     KoColor c1;
     c1.fromQColor(QColor("#ff0000"));
 
+    QVERIFY2(p1 == c1
+             , QString("SVG11 parser is not loading the sRGB hex fallback: \nresult: %1 \nexpected: %2")
+             .arg(KoColor::toQString(p1)).arg(KoColor::toQString(c1)).toLatin1());
+
     //2. testing case with fallback colorname and nonsense icc-color that we cannot parse
 
     KoColor p2 = KoColor::fromSVG11("#ff0000 silver icc-color(blah, 0.0, 1.0, 1.0, 0.0);", profileList);
     KoColor c2;
     c2.fromQColor(QColor("silver"));
+
+    QVERIFY2(p2 == c2
+             , QString("SVG11 parser is not loading the sRGB colorname fallback: \nresult: %1 \nexpected: %2")
+             .arg(KoColor::toQString(p2)).arg(KoColor::toQString(c2)).toLatin1());
 
     //3. testing case with fallback color and useful icc-color
 
@@ -273,6 +281,9 @@ void TestKoColor::testSVGParsing()
     KoColor p3 = KoColor::fromSVG11("#ff0000 silver icc-color("+cmykName+", 0.0, 0.0, 1.0, 1.0);", profileList);
     KoColor c3 = KoColor::fromXML("<color channeldepth='U16'><CMYK c='0.0' m='0.0' y='1.0' k='1.0' space='"+cmyk->name()+"'/></color>");
 
+    QVERIFY2(p3 == c3
+             , QString("SVG11 parsed cmyk incorrectly: \nresult: %1 \nexpected: %2")
+             .arg(KoColor::toQString(p3)).arg(KoColor::toQString(c3)).toLatin1());
     //4. Roundtrip
 
     KoColor c4(KoColorSpaceRegistry::instance()->lab16());
@@ -280,6 +291,10 @@ void TestKoColor::testSVGParsing()
     QString value = c4.toSVG11(&profileList);
     qDebug() << value;
     KoColor p4 = KoColor::fromSVG11(value, profileList);
+
+    QVERIFY2(c4.colorSpace()->difference(p4.data(), c4.data()) < 1.0
+             , QString("Difference between colors from serialization roundtrip above 1.0: %1")
+             .arg(c4.colorSpace()->difference(p4.data(), c4.data())).toLatin1());
 
     //4.5 Check that the size stays the same even though we already added this profile to the stack before.
     int profileListSize = profileList.size();
@@ -292,15 +307,24 @@ void TestKoColor::testSVGParsing()
     KoColor c5;
     c5.fromQColor(QColor(100, 50, 127));
 
+    QVERIFY2(p5 == c5, QString("the rgb() definition for SVG11 is not parsed correctly, \nresult: %1 \nexpected: %2")
+             .arg(KoColor::toQString(p5)).arg(KoColor::toQString(c5)).toLatin1());
+
     //6. Testing special srgb definition... especially the part where it can be defined case-insensitive.
 
     KoColor p6 = KoColor::fromSVG11("#ff0000 icc-color(srgb, 1.0, 1.0, 0.0)", profileList);
     KoColor c6 = KoColor::fromXML("<color channeldepth='F32'><sRGB r='1.0' g='1.0' b='0.0'/></color>");
 
+    QVERIFY2(p6 == c6
+             , QString("sRGB parsing is different between SVG11 and XML: \nresult: %1 \nexpected: %2")
+             .arg(KoColor::toQString(p6)).arg(KoColor::toQString(c6)).toLatin1());
     //7. Testing out-of-bounds values...
 
     KoColor p7 = KoColor::fromSVG11("#ff0000 icc-color(srgb, 2.0, 1.0, 0.0)", profileList);
     KoColor c7 = KoColor::fromXML("<color channeldepth='F32'><sRGB r='2.0' g='1.0' b='0.0'/></color>");
+
+    QVERIFY2(p7 == c7, QString("Out of bounds RGB is parsing differently for XML and SVG11: \nresult: %1 \nexpected: %2")
+             .arg(KoColor::toQString(p7)).arg(KoColor::toQString(c7)).toLatin1());
 
     //8. Check lab special case.
     KoColor p8 = KoColor::fromSVG11("#ff0000 icc-color(lab, 34.67, 54.1289, -90.3359)", profileList);
@@ -308,17 +332,16 @@ void TestKoColor::testSVGParsing()
     doc.setContent(QString("<Lab space='%1' L='34.67' a='54.1289' b='-90.3359' />").arg(c4.colorSpace()->profile()->name()));
     KoColor c8 = KoColor::fromXML(doc.documentElement(), "U16");
 
-    //9. Check xyz special case.
-    //Inkscape for some inexplicable reason decided to have X and Z range from 0 to 2... Maybe we should just... not parse that?
+    QVERIFY2(p8 == c8, QString("Lab parsing is giving different values for XML and SVG11: \nresult: %1 \nexpected: %2")
+                               .arg(KoColor::toQString(p8)).arg(KoColor::toQString(c8)).toLatin1());
+    //9. Check xyz loading
+    //We do not support XYZ because Inkscape decided that XYZ X and Z are 0-2, and I cannot figure out why.
 
-    QVERIFY(p1 == c1);
-    QVERIFY(p2 == c2);
-    QVERIFY(p3 == c3);
-    QVERIFY(c4.colorSpace()->difference(p4.data(), c4.data()) < 1.0);
-    QVERIFY(p5 == c5);
-    QVERIFY(p6 == c6);
-    QVERIFY(p7 == c7);
-    QVERIFY(p8 == c8);
+    //10. Check xyz saving
+
+    //11. Check gray loading.
+
+
 }
 
 KISTEST_MAIN(TestKoColor)

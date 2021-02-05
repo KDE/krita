@@ -271,7 +271,8 @@ bool KisTagFilterResourceProxyModel::filterAcceptsRow(int source_row, const QMod
     }
 
     QString resourceName = sourceModel()->data(idx, Qt::UserRole + KisAbstractResourceModel::Name).toString();
-    bool resourceNameMatches = d->filter->matchesResource(resourceName);
+    QStringList resourceTags = sourceModel()->data(idx, Qt::UserRole + KisAbstractResourceModel::Tags).toStringList();
+    bool resourceNameMatches = d->filter->matchesResource(resourceName, resourceTags);
 
 
     return (resourceNameMatches && metaDataMatches);

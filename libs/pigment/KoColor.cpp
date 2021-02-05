@@ -420,9 +420,20 @@ QString KoColor::toSVG11(QHash<QString, const KoColorProfile *> *profileList)
         csName = profileList->key(colorSpace()->profile(), csName);
 
         iccColor.append(csName);
-        for (int i = 0; i < channelValues.size(); i++) {
-            if (i != int(colorSpace()->alphaPos())) {
-                iccColor.append(QString::number(channelValues.at(i), 'g', 10));
+
+        if (colorSpace()->colorModelId() == LABAColorModelID) {
+            QDomDocument doc;
+            QDomElement el = doc.createElement("color");
+            toXML(doc, el);
+            QDomElement lab = el.firstChildElement();
+            iccColor.append(lab.attribute("L", "0.0"));
+            iccColor.append(lab.attribute("a", "0.0"));
+            iccColor.append(lab.attribute("b", "0.0"));
+        } else {
+            for (int i = 0; i < channelValues.size(); i++) {
+                if (i != int(colorSpace()->alphaPos())) {
+                    iccColor.append(QString::number(channelValues.at(i), 'g', 10));
+                }
             }
         }
         colorDefinitions.append(QString("icc-color(%1)").arg(iccColor.join(", ")));
@@ -505,8 +516,26 @@ KoColor KoColor::fromSVG11(const QString value, QHash<QString, const KoColorProf
             }
             QString colormodel = profile->colorModelID();
             QString depth = "F32";
-            if (colormodel == LABAColorModelID.id() ||
-                    colormodel == CMYKAColorModelID.id()) {
+            if (colormodel == LABAColorModelID.id()) {
+                // let our xml handling deal with lab
+                QVector<float> labV(3);
+                for (int i = 0; i < values.size(); i++) {
+                    if (i<labV.size()) {
+                        QString entry = values.at(i);
+                        entry = entry.split(")").first();
+                        labV[i] = entry.toDouble();
+                    }
+                }
+                QString lab = QString("<Lab space='%1' L='%2' a='%3' b='%4' />")
+                        .arg(profile->name())
+                        .arg(labV[0])
+                        .arg(labV[1])
+                        .arg(labV[2]);
+                QDomDocument doc;
+                doc.setContent(lab);
+                parsed = KoColor::fromXML(doc.documentElement(), "U16");
+                continue;
+            } else if (colormodel == CMYKAColorModelID.id()) {
                 depth = "U16";
             }
             const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace(colormodel, depth, profile);

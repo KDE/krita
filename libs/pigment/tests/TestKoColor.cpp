@@ -303,16 +303,22 @@ void TestKoColor::testSVGParsing()
     KoColor c7 = KoColor::fromXML("<color channeldepth='F32'><sRGB r='2.0' g='1.0' b='0.0'/></color>");
 
     //8. Check lab special case.
+    KoColor p8 = KoColor::fromSVG11("#ff0000 icc-color(lab, 34.67, 54.1289, -90.3359)", profileList);
+    QDomDocument doc;
+    doc.setContent(QString("<Lab space='%1' L='34.67' a='54.1289' b='-90.3359' />").arg(c4.colorSpace()->profile()->name()));
+    KoColor c8 = KoColor::fromXML(doc.documentElement(), "U16");
 
     //9. Check xyz special case.
+    //Inkscape for some inexplicable reason decided to have X and Z range from 0 to 2... Maybe we should just... not parse that?
 
     QVERIFY(p1 == c1);
     QVERIFY(p2 == c2);
     QVERIFY(p3 == c3);
-    QVERIFY(p4 == c4);
+    QVERIFY(c4.colorSpace()->difference(p4.data(), c4.data()) < 1.0);
     QVERIFY(p5 == c5);
     QVERIFY(p6 == c6);
     QVERIFY(p7 == c7);
+    QVERIFY(p8 == c8);
 }
 
 KISTEST_MAIN(TestKoColor)

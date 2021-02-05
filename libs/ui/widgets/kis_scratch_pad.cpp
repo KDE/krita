@@ -410,6 +410,16 @@ void KisScratchPad::paintEvent ( QPaintEvent * event ) {
     gc.end();
 }
 
+void KisScratchPad::resetState()
+{
+    if (m_helper->isRunning()) {
+        m_helper->endPaint();
+    }
+
+    m_toolMode = HOVERING;
+    setCursor(m_cursor);
+}
+
 void KisScratchPad::setupScratchPad(KisCanvasResourceProvider* resourceProvider,
                                     const QColor &defaultColor)
 {

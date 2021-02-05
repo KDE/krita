@@ -100,6 +100,7 @@ public:
     void pointerPress(KoPointerEvent *event);
     void pointerRelease(KoPointerEvent *event);
     void pointerMove(KoPointerEvent *event);
+    void resetState();
 
 public Q_SLOTS:
     void fillDefault();

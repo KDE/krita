@@ -46,6 +46,8 @@ private:
 private:
     QTransform m_widgetToDocument;
     bool m_tabletPressed;
+
+    Qt::MouseButton m_pressedButton;
     KisScratchPad *m_scratchPad;
 };
 

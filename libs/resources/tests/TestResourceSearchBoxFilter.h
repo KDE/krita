@@ -33,12 +33,6 @@ private Q_SLOTS:
     void testMultipleExactMatches_data();
     void testMultipleExactMatches();
 
-    void testOneTag_data();
-    void testOneTag();
-
-    void testMultipleTags_data();
-    void testMultipleTags();
-
 private:
     bool filterMatches(QString resourceName, QString filter);
     void runNameTest();

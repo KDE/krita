@@ -127,27 +127,6 @@ void TestResourceSearchBoxFilter::testMultipleExactMatches()
     runNameTest();
 }
 
-void TestResourceSearchBoxFilter::testOneTag_data()
-{
-    // tag filtering not implemented yet
-}
-
-void TestResourceSearchBoxFilter::testOneTag()
-{
-    // tag filtering not implemented yet
-}
-
-void TestResourceSearchBoxFilter::testMultipleTags_data()
-{
-    // tag filtering not implemented yet
-}
-
-void TestResourceSearchBoxFilter::testMultipleTags()
-{
-    // tag filtering not implemented yet
-}
-
-
 
 
 QTEST_MAIN(TestResourceSearchBoxFilter)

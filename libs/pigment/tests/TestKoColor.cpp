@@ -279,7 +279,7 @@ void TestKoColor::testSVGParsing()
     profileList.insert(cmykName, cmyk->profile());
 
     KoColor p3 = KoColor::fromSVG11("#ff0000 silver icc-color("+cmykName+", 0.0, 0.0, 1.0, 1.0);", profileList);
-    KoColor c3 = KoColor::fromXML("<color channeldepth='U16'><CMYK c='0.0' m='0.0' y='1.0' k='1.0' space='"+cmyk->name()+"'/></color>");
+    KoColor c3 = KoColor::fromXML("<color channeldepth='U16'><CMYK c='0.0' m='0.0' y='1.0' k='1.0' space='"+cmyk->profile()->name()+"'/></color>");
 
     QVERIFY2(p3 == c3
              , QString("SVG11 parsed cmyk incorrectly: \nresult: %1 \nexpected: %2")
@@ -336,11 +336,33 @@ void TestKoColor::testSVGParsing()
                                .arg(KoColor::toQString(p8)).arg(KoColor::toQString(c8)).toLatin1());
     //9. Check xyz loading
     //We do not support XYZ because Inkscape decided that XYZ X and Z are 0-2, and I cannot figure out why.
+    const KoColorSpace *xyzSpace = KoColorSpaceRegistry::instance()->colorSpace(XYZAColorModelID.id(), Integer16BitsColorDepthID.id());
+    profileList.insert("XYZ", xyzSpace->profile());
+    KoColor p9 = KoColor::fromSVG11("#0077FF icc-color(XYZ, 1.0, 0.0, 0.5)", profileList);
+    KoColor c9;
+    c9.fromQColor(QColor("#0077FF"));
+    QVERIFY2(p9 == c9
+             , QString("SVG11 parser is not loading the sRGB hex fallback for XYZ: \nresult: %1 \nexpected: %2")
+             .arg(KoColor::toQString(p9)).arg(KoColor::toQString(c9)).toLatin1());
 
     //10. Check xyz saving
+    KoColor p10;
+    QString c10 = "#0077FF";
+    p10.fromQColor(QColor(c10));
+    p10.convertTo(xyzSpace);
+
+    QVERIFY2(p10.toSVG11(&profileList) != c10, QString("XYZ values are being saved: \nresult: %1 \nexpected: %2")
+             .arg(KoColor::toQString(p10)).arg(c10).toLatin1());
 
     //11. Check gray loading.
+    const KoColorSpace *gray = KoColorSpaceRegistry::instance()->graya8();
+    profileList.insert("grayName", gray->profile());
+    KoColor p11 = KoColor::fromSVG11("#ff0000 icc-color(grayName, 0.21);", profileList);
+    KoColor c11 = KoColor::fromXML("<color channeldepth='F32'><Gray g='0.21' space='"+gray->profile()->name()+"'/></color>");
 
+    QVERIFY2(p11 == c11
+             , QString("SVG11 parsed gray incorrectly: \nresult: %1 \nexpected: %2")
+             .arg(KoColor::toQString(p11)).arg(KoColor::toQString(c11)).toLatin1());
 
 }
 

@@ -408,8 +408,10 @@ QString KoColor::toSVG11(QHash<QString, const KoColorProfile *> *profileList)
     channelValues.fill(0.0);
     colorSpace()->normalisedChannelsValue(data(), channelValues);
 
+    // We don't write a icc-color definition for XYZ and 8bit sRGB.
     if (!(colorSpace()->profile() == KoColorSpaceRegistry::instance()->p709SRGBProfile()
-            && colorSpace()->colorDepthId() == Integer8BitsColorDepthID)) {
+            && colorSpace()->colorDepthId() == Integer8BitsColorDepthID) &&
+            colorSpace()->colorModelId() != XYZAColorModelID) {
         QStringList iccColor;
         QString csName = colorSpace()->profile()->name();
         // remove forbidden characters
@@ -537,6 +539,10 @@ KoColor KoColor::fromSVG11(const QString value, QHash<QString, const KoColorProf
                 continue;
             } else if (colormodel == CMYKAColorModelID.id()) {
                 depth = "U16";
+            } else if (colormodel == XYZAColorModelID.id()) {
+                // Inkscape decided to have X and Z go from 0 to 2, and I can't for the live of me figure out why.
+                // So we're just not parsing XYZ.
+                continue;
             }
             const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace(colormodel, depth, profile);
             if (!cs) {

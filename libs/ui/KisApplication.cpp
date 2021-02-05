@@ -224,11 +224,7 @@ bool KisApplication::event(QEvent *event)
     #ifdef Q_OS_MACOS
     if (event->type() == QEvent::FileOpen) {
         QFileOpenEvent *openEvent = static_cast<QFileOpenEvent *>(event);
-        if (d->mainWindow) {
-            emit fileOpenRequest(openEvent->file());
-        } else {
-            d->earlyFileOpenEvents.append(openEvent->file());
-        }
+        emit fileOpenRequest(openEvent->file());
         return true;
     }
     #endif
@@ -803,11 +799,13 @@ void KisApplication::remoteArguments(QByteArray message, QObject *socket)
 
 void KisApplication::fileOpenRequested(const QString &url)
 {
-    KisMainWindow *mainWindow = KisPart::instance()->mainWindows().first();
-    if (mainWindow) {
-        KisMainWindow::OpenFlags flags = d->batchRun ? KisMainWindow::BatchMode : KisMainWindow::None;
-        mainWindow->openDocument(QUrl::fromLocalFile(url), flags);
+    if (!d->mainWindow) {
+        d->earlyFileOpenEvents.append(url);
+        return;
     }
+
+    KisMainWindow::OpenFlags flags = d->batchRun ? KisMainWindow::BatchMode : KisMainWindow::None;
+    d->mainWindow->openDocument(QUrl::fromLocalFile(url), flags);
 }
 
 

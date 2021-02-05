@@ -10,7 +10,20 @@
 #include "LcmsColorSpace.h"
 #include "KoColorModelStandardIds.h"
 
-// XXX: implement normalizedChannelValues?
+/**
+ * 32-bit floating point LAB is different from the other two instances of LAB.
+ * in particular, where the integer versions of LAB go from 0 to the integer maximum,
+ * this floating point version of lab will have lightness from 0 to 100, and a/b at
+ * -127 to 127.
+ *
+ * With this, it's also super different from the other floating point
+ * spaces, which assume that everything in-gamut is between 0 and 1.
+ *
+ * This is because LAB doesn't have a gamut, but rather it is a perceptual model
+ * for all possible colors.
+ * So, L goes from 0 to infinity, a/b go from -infinity to infinity, and
+ * [50, 0, 0] is perfect gray.
+ */
 
 struct KoLabF32Traits;
 

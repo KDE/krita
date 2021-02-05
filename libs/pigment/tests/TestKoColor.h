@@ -17,6 +17,7 @@ private:
 
 private Q_SLOTS:
     void testSerialization();
+    void testExistingSerializations();
     void testConversion();
     void testSimpleSerialization();
 

@@ -71,7 +71,7 @@ private:
 
     void saveKplGroup(QDomDocument &doc, QDomElement &groupEle,
                       const KisSwatchGroup *group, QSet<const KoColorSpace *> &colorSetSet) const;
-    void loadKplGroup(const QDomDocument &doc, const QDomElement &parentElement, KisSwatchGroup *group);
+    void loadKplGroup(const QDomDocument &doc, const QDomElement &parentElement, KisSwatchGroup *group, QString version);
 };
 
 #endif // KOCOLORSET_P_H

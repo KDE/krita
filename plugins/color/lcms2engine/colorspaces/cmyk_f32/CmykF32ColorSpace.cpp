@@ -61,10 +61,10 @@ void CmykF32ColorSpace::colorToXML(const quint8 *pixel, QDomDocument &doc, QDomE
 
     // XML expects 0-1, we need 0-100
     // Get the bounds from the channels and adjust the calculations
-    labElt.setAttribute("c", KisDomUtils::toString(KoColorSpaceMaths< KoCmykF32Traits::channels_type, qreal>::scaleToA(1.f / this->channels()[0]->getUIUnitValue() * (p->cyan - this->channels()[0]->getUIMin()))));
-    labElt.setAttribute("m", KisDomUtils::toString(KoColorSpaceMaths< KoCmykF32Traits::channels_type, qreal>::scaleToA(1.f / this->channels()[1]->getUIUnitValue() * (p->magenta - this->channels()[1]->getUIMin()))));
-    labElt.setAttribute("y", KisDomUtils::toString(KoColorSpaceMaths< KoCmykF32Traits::channels_type, qreal>::scaleToA(1.f / this->channels()[2]->getUIUnitValue() * (p->yellow - this->channels()[2]->getUIMin()))));
-    labElt.setAttribute("k", KisDomUtils::toString(KoColorSpaceMaths< KoCmykF32Traits::channels_type, qreal>::scaleToA(1.f / this->channels()[3]->getUIUnitValue() * (p->black - this->channels()[3]->getUIMin()))));
+    labElt.setAttribute("c", KisDomUtils::toString(KoColorSpaceMaths< KoCmykF32Traits::channels_type, qreal>::scaleToA((1.f / this->channels()[0]->getUIUnitValue()) * (p->cyan - this->channels()[0]->getUIMin()))));
+    labElt.setAttribute("m", KisDomUtils::toString(KoColorSpaceMaths< KoCmykF32Traits::channels_type, qreal>::scaleToA((1.f / this->channels()[1]->getUIUnitValue()) * (p->magenta - this->channels()[1]->getUIMin()))));
+    labElt.setAttribute("y", KisDomUtils::toString(KoColorSpaceMaths< KoCmykF32Traits::channels_type, qreal>::scaleToA((1.f / this->channels()[2]->getUIUnitValue()) * (p->yellow - this->channels()[2]->getUIMin()))));
+    labElt.setAttribute("k", KisDomUtils::toString(KoColorSpaceMaths< KoCmykF32Traits::channels_type, qreal>::scaleToA((1.f / this->channels()[3]->getUIUnitValue()) * (p->black - this->channels()[3]->getUIMin()))));
     labElt.setAttribute("space", profile()->name());
     colorElt.appendChild(labElt);
 }

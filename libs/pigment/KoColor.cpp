@@ -388,9 +388,9 @@ KoColor KoColor::fromXML(const QString &xml)
         QDomElement e = doc.documentElement().firstChild().toElement();
         QString channelDepthID = doc.documentElement().attribute("channeldepth", Integer16BitsColorDepthID.id());
         bool ok;
-        if (e.hasAttribute("space") || e.tagName() == "sRGB") {
+        if (e.hasAttribute("space") || e.tagName().toLower() == "srgb") {
             c = KoColor::fromXML(e, channelDepthID, &ok);
-        } else if (doc.documentElement().hasAttribute("space")){
+        } else if (doc.documentElement().hasAttribute("space") || doc.documentElement().tagName().toLower() == "srgb"){
             c = KoColor::fromXML(doc.documentElement(), channelDepthID, &ok);
         } else {
             qWarning() << "Cannot parse color from xml" << xml;

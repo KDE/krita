@@ -64,6 +64,142 @@ void TestKoColor::testSerialization()
     //testForModel(YCbCrAColorModelID.id());
 }
 
+void TestKoColor::testExistingSerializations()
+{
+
+
+
+    QString main;
+    QDomDocument doc;
+
+    QColor c;
+    // Test sRGB.
+    main = "<sRGB r='0' g='0' b='1' />";
+    doc.setContent(main);
+    KoColor sRGB = KoColor::fromXML(doc.documentElement(), Integer8BitsColorDepthID.id());
+    sRGB.toQColor(&c);
+    QVERIFY(c == QColor("#0000FF"));
+
+    // Test wide gamut RGB -- We can only check that the values deserialize properly, which is fine in this case.
+    QString Rec2020profile = KoColorSpaceRegistry::instance()->p2020G10Profile()->name();
+    main = QString("<RGB r='3.0' g='0' b='1' space='%1'/>").arg(Rec2020profile);
+    doc.setContent(main);
+    KoColor rec2020color = KoColor::fromXML(doc.documentElement(), Float32BitsColorDepthID.id());
+
+    QVector<float> rec2020ChannelValues(4);
+    rec2020color.colorSpace()->normalisedChannelsValue(rec2020color.data(), rec2020ChannelValues);
+    QCOMPARE(rec2020ChannelValues[0], 3);
+    QCOMPARE(rec2020ChannelValues[1], 0);
+    QCOMPARE(rec2020ChannelValues[2], 1);
+    QCOMPARE(rec2020ChannelValues[3], 1);
+
+
+    // Test cmyk, we can only check that the channels deserialize properly here.
+    // NOTE: 32bit float gives wildly different values here, so I am unsure what is going on still...
+    const KoColorSpace *cmykSpace = KoColorSpaceRegistry::instance()->colorSpace(CMYKAColorModelID.id(), Integer8BitsColorDepthID.id());
+    main = QString("<CMYK c='0.2' m='0.5' y='1.0' k='0.0' space='%1'/>").arg(cmykSpace->profile()->name());
+    doc.setContent(main);
+    KoColor cmykColorU8 = KoColor::fromXML(doc.documentElement(), Integer8BitsColorDepthID.id());
+    KoColor cmykColorU16 = KoColor::fromXML(doc.documentElement(), Integer16BitsColorDepthID.id());
+    KoColor cmykColorF32 = KoColor::fromXML(doc.documentElement(), Float32BitsColorDepthID.id());
+
+    QVector<QDomElement> elements;
+
+    elements.append(doc.documentElement());
+
+    doc.setContent(cmykColorU8.toXML());
+    elements.append(doc.documentElement().firstChild().toElement());
+    doc.setContent(cmykColorU16.toXML());
+    elements.append(doc.documentElement().firstChild().toElement());
+    doc.setContent(cmykColorF32.toXML());
+    elements.append(doc.documentElement().firstChild().toElement());
+
+    QStringList attributes;
+    attributes << "c" << "m" << "y" << "k";
+
+    for (QString attr : attributes) {
+        double mainValue = elements.first().attribute(attr).toDouble();
+        for (QDomElement el: elements) {
+            double compare = el.attribute(attr).toDouble();
+            QVERIFY(fabs(mainValue - compare) < 0.01);
+        }
+    }
+
+    // CMYK has wildly different values in F32 than in U8. Avoid F32 CMYK!
+    //cmykColorU8.convertTo(cmykColorF32.colorSpace());
+    //qDebug() << ppVar(cmykColorU8);
+    //qDebug() << cmykColorU8.toXML();
+    //qDebug() << cmykColorF32.colorSpace()->difference(cmykColorF32.data(), cmykColorU8.data());
+
+    // Test XYZ - check channels.
+    const KoColorSpace *xyzSpace = KoColorSpaceRegistry::instance()->colorSpace(XYZAColorModelID.id(), Integer8BitsColorDepthID.id());
+    main = QString("<XYZ x='0.0' y='0.0' z='1.0' space='%1'/>").arg(xyzSpace->profile()->name());
+    doc.setContent(main);
+    KoColor xyzColor = KoColor::fromXML(doc.documentElement(), Integer8BitsColorDepthID.id());
+    quint8 *xyzData = xyzColor.data();
+    QCOMPARE(xyzData[0], 0);
+    QCOMPARE(xyzData[1], 0);
+    QCOMPARE(xyzData[2], 255);
+
+
+    // Test LAB
+    // Lab has a different way of handling floating point from the rest of the colorspaces.
+    const KoColorSpace *labSpace = KoColorSpaceRegistry::instance()->lab16();
+    main = QString("<Lab space='%1' L='34.67' a='54.1289' b='-90.3359' />").arg(labSpace->profile()->name());
+    doc.setContent(main);
+    KoColor LABcolorU8 = KoColor::fromXML(doc.documentElement(), Integer8BitsColorDepthID.id());
+    KoColor LABcolorU16 = KoColor::fromXML(doc.documentElement(), Integer16BitsColorDepthID.id());
+    KoColor LABcolorF32 = KoColor::fromXML(doc.documentElement(), Float32BitsColorDepthID.id());
+
+    // Check that there isn't too much of a discrepancy between the XML values of the different bitdepths.
+
+    elements.clear();
+    elements.append(doc.documentElement());
+
+    doc.setContent(LABcolorU8.toXML());
+    elements.append(doc.documentElement().firstChild().toElement());
+    doc.setContent(LABcolorU16.toXML());
+    elements.append(doc.documentElement().firstChild().toElement());
+    doc.setContent(LABcolorF32.toXML());
+    elements.append(doc.documentElement().firstChild().toElement());
+
+    attributes.clear();
+    attributes << "L" << "a" << "b";
+
+    for (QString attr : attributes) {
+        double mainValue = elements.first().attribute(attr).toDouble();
+        for (QDomElement el: elements) {
+            double compare = el.attribute(attr).toDouble();
+            QVERIFY(fabs(mainValue - compare) < 1.0);
+        }
+    }
+
+    /*
+    KoColor p2 = purpleCompare;
+    p2.convertTo(LABcolorF32.colorSpace());
+    qDebug() << ppVar(p2);
+    qDebug() << ppVar(LABcolorU8);
+    qDebug() << ppVar(LABcolorF32);
+    LABcolorF32.convertTo(LABcolorU8.colorSpace());
+    qDebug() << ppVar(LABcolorF32);
+    qDebug() << LABcolorU8.toXML();
+    */
+
+    // The following is the known sRGB color that the test value matches with.
+    // Let's make sure that all the labvalues roughly convert to this sRGB value.
+    KoColor purpleCompare = KoColor(QColor("#442de9"), sRGB.colorSpace());
+
+    LABcolorU8.convertTo(sRGB.colorSpace());
+    QVERIFY(sRGB.colorSpace()->difference(LABcolorU8.data(), purpleCompare.data()) <= 1);
+    LABcolorU16.convertTo(sRGB.colorSpace());
+    QVERIFY(sRGB.colorSpace()->difference(LABcolorU16.data(), purpleCompare.data()) <= 1);
+    LABcolorF32.convertTo(sRGB.colorSpace());
+    QVERIFY(sRGB.colorSpace()->difference(LABcolorF32.data(), purpleCompare.data()) <= 1);
+
+
+
+}
+
 void TestKoColor::testConversion()
 {
     QColor c = Qt::red;
@@ -142,7 +278,7 @@ void TestKoColor::testSVGParsing()
     KoColor c4(KoColorSpaceRegistry::instance()->lab16());
     c4.fromQColor(QColor("#426471"));
     QString value = c4.toSVG11(&profileList);
-    dbgPigment << value;
+    qDebug() << value;
     KoColor p4 = KoColor::fromSVG11(value, profileList);
 
     //4.5 Check that the size stays the same even though we already added this profile to the stack before.
@@ -166,11 +302,9 @@ void TestKoColor::testSVGParsing()
     KoColor p7 = KoColor::fromSVG11("#ff0000 icc-color(srgb, 2.0, 1.0, 0.0)", profileList);
     KoColor c7 = KoColor::fromXML("<color channeldepth='F32'><sRGB r='2.0' g='1.0' b='0.0'/></color>");
 
-    //8. test unique way of defining colors?
-    // This is an improper way of using the api, but I guess someone might try?
-    KoColor c8 = KoColor::fromXML("<RGB b=\"0.7\" space=\"sRGB-elle-V2-srgbtrc.icc\" r=\"1.0\" g=\"0.1\"/>");
-    qDebug() << ppVar(c8);
+    //8. Check lab special case.
 
+    //9. Check xyz special case.
 
     QVERIFY(p1 == c1);
     QVERIFY(p2 == c2);

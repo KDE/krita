@@ -155,15 +155,22 @@ Java_org_krita_android_JNIWrappers_saveState(JNIEnv* /*env*/,
     kritarc.setValue("canvasState", "OPENGL_SUCCESS");
 }
 
-extern "C" JNIEXPORT void JNICALL
+extern "C" JNIEXPORT jboolean JNICALL
 Java_org_krita_android_JNIWrappers_exitFullScreen(JNIEnv* /*env*/,
                                                   jobject /*obj*/,
                                                   jint    /*n*/)
 {
-    if (!KisPart::exists()) return;
+    if (!KisPart::exists()) {
+        return false;
+    }
 
     KisMainWindow *mainWindow = KisPart::instance()->currentMainwindow();
-    mainWindow->viewFullscreen(false);
+    if (mainWindow) {
+        mainWindow->viewFullscreen(false);
+        return true;
+    } else {
+        return false;
+    }
 }
 
 extern "C" JNIEXPORT void JNICALL

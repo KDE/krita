@@ -468,7 +468,7 @@ bool KisResourceBundle::install()
                 if (resourceStore->isOpen()) resourceStore->close();
 
                 dbgResources << "\tInstalling" << ref.resourcePath;
-                QScopedPointer<KoAbstractGradient> res(gradientServer->createResource(QString("bundle://%1:%2").arg(filename()).arg(ref.resourcePath)));
+                QScopedPointer<KoAbstractGradient> res(gradientServer->createResource(QString("bundle://%1:%2").arg(filename(), ref.resourcePath)));
                 if (!res) {
                     warnKrita << "Could not create resource for" << ref.resourcePath;
                     continue;
@@ -514,7 +514,7 @@ bool KisResourceBundle::install()
                 if (resourceStore->isOpen()) resourceStore->close();
 
                 dbgResources << "\tInstalling" << ref.resourcePath;
-                QScopedPointer<KoPattern> res(patternServer->createResource(QString("bundle://%1:%2").arg(filename()).arg(ref.resourcePath)));
+                QScopedPointer<KoPattern> res(patternServer->createResource(QString("bundle://%1:%2").arg(filename(), ref.resourcePath)));
                 if (!res) {
                     warnKrita << "Could not create resource for" << ref.resourcePath;
                     continue;
@@ -557,7 +557,7 @@ bool KisResourceBundle::install()
                 if (resourceStore->isOpen()) resourceStore->close();
 
                 dbgResources << "\tInstalling" << ref.resourcePath;
-                KisBrushSP res = brushServer->createResource(QString("bundle://%1:%2").arg(filename()).arg(ref.resourcePath));
+                KisBrushSP res = brushServer->createResource(QString("bundle://%1:%2").arg(filename(), ref.resourcePath));
                 if (!res) {
                     warnKrita << "Could not create resource for" << ref.resourcePath;
                     continue;
@@ -609,7 +609,7 @@ bool KisResourceBundle::install()
                 if (resourceStore->isOpen()) resourceStore->close();
 
                 dbgResources << "\tInstalling" << ref.resourcePath;
-                QScopedPointer<KoColorSet> res(paletteServer->createResource(QString("bundle://%1:%2").arg(filename()).arg(ref.resourcePath)));
+                QScopedPointer<KoColorSet> res(paletteServer->createResource(QString("bundle://%1:%2").arg(filename(), ref.resourcePath)));
 
                 if (!res) {
                     warnKrita << "Could not create resource for" << ref.resourcePath;
@@ -656,7 +656,7 @@ bool KisResourceBundle::install()
                 if (resourceStore->isOpen()) resourceStore->close();
 
                 dbgResources << "\tInstalling" << ref.resourcePath;
-                QScopedPointer<KisWorkspaceResource> res(workspaceServer->createResource(QString("bundle://%1:%2").arg(filename()).arg(ref.resourcePath)));
+                QScopedPointer<KisWorkspaceResource> res(workspaceServer->createResource(QString("bundle://%1:%2").arg(filename(), ref.resourcePath)));
                 if (!res) {
                     warnKrita << "Could not create resource for" << ref.resourcePath;
                     continue;
@@ -752,7 +752,7 @@ bool KisResourceBundle::install()
                 if (resourceStore->isOpen()) resourceStore->close();
 
                 dbgResources << "\tInstalling" << ref.resourcePath;
-                QScopedPointer<KoGamutMask> res(gamutMaskServer->createResource(QString("bundle://%1:%2").arg(filename()).arg(ref.resourcePath)));
+                QScopedPointer<KoGamutMask> res(gamutMaskServer->createResource(QString("bundle://%1:%2").arg(filename(), ref.resourcePath)));
 
                 if (!res) {
                     warnKrita << "Could not create resource for" << ref.resourcePath;
@@ -803,7 +803,7 @@ bool KisResourceBundle::install()
                     resourceStore->close();
 
                 dbgResources << "\tInstalling" << ref.resourcePath;
-                QScopedPointer<KisSeExprScript> res(seExprScriptServer->createResource(QString("bundle://%1:%2").arg(filename()).arg(ref.resourcePath)));
+                QScopedPointer<KisSeExprScript> res(seExprScriptServer->createResource(QString("bundle://%1:%2").arg(filename(), ref.resourcePath)));
 
                 if (!res)
                 {

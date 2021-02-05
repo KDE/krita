@@ -483,8 +483,8 @@ void KisPaletteEditor::saveNewPaletteVersion()
 
     if (!m_d->modified.isGlobal) {
         m_d->rServer->resourceModel()->updateResource(m_d->model->colorSet());
-        m_d->isModified = false;
     }
+    m_d->isModified = false;
 }
 
 void KisPaletteEditor::slotPaletteChanged()

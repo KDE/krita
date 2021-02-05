@@ -128,8 +128,14 @@ public class MainActivity extends QtActivity {
 	public boolean onKeyUp(final int keyCode, final KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK && getActionBar() != null &&
 		    !getActionBar().isShowing()) {
-			JNIWrappers.exitFullScreen();
-			return true;
+            if (JNIWrappers.exitFullScreen()) {
+                return true;
+            } else {
+                // back button was pressed during splash screen, letting this
+                // propagate leaves native side in an undefined state. So, it's
+                // best we finish the activity here.
+                finish();
+            }
 		}
 
 		return super.onKeyUp(keyCode, event);

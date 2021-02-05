@@ -67,8 +67,6 @@ void TestKoColor::testSerialization()
 void TestKoColor::testExistingSerializations()
 {
 
-
-
     QString main;
     QDomDocument doc;
 
@@ -78,7 +76,9 @@ void TestKoColor::testExistingSerializations()
     doc.setContent(main);
     KoColor sRGB = KoColor::fromXML(doc.documentElement(), Integer8BitsColorDepthID.id());
     sRGB.toQColor(&c);
-    QVERIFY(c == QColor("#0000FF"));
+    QString blue = "#0000FF";
+    QVERIFY2(c == QColor(blue), QString("XML parser is not loading the sRGB properly: \nresult: %1 \nexpected: %2")
+             .arg(c.name()).arg(blue).toLatin1());
 
     // Test wide gamut RGB -- We can only check that the values deserialize properly, which is fine in this case.
     QString Rec2020profile = KoColorSpaceRegistry::instance()->p2020G10Profile()->name();
@@ -121,7 +121,9 @@ void TestKoColor::testExistingSerializations()
         double mainValue = elements.first().attribute(attr).toDouble();
         for (QDomElement el: elements) {
             double compare = el.attribute(attr).toDouble();
-            QVERIFY(fabs(mainValue - compare) < 0.01);
+            QVERIFY2(fabs(mainValue - compare) < 0.01
+                     , QString("XML CMYK parsing has too high of a difference when roundtripping channel %1: %2")
+                     .arg(attr).arg(mainValue - compare).toLatin1());
         }
     }
 
@@ -170,33 +172,37 @@ void TestKoColor::testExistingSerializations()
         double mainValue = elements.first().attribute(attr).toDouble();
         for (QDomElement el: elements) {
             double compare = el.attribute(attr).toDouble();
-            QVERIFY(fabs(mainValue - compare) < 1.0);
+            QVERIFY2(fabs(mainValue - compare) < 1.0
+                    , QString("XML LAB parsing has too high of a difference when roundtripping channel %1: %2")
+                     .arg(attr).arg(mainValue - compare).toLatin1());
         }
     }
 
-    /*
-    KoColor p2 = purpleCompare;
-    p2.convertTo(LABcolorF32.colorSpace());
-    qDebug() << ppVar(p2);
-    qDebug() << ppVar(LABcolorU8);
-    qDebug() << ppVar(LABcolorF32);
-    LABcolorF32.convertTo(LABcolorU8.colorSpace());
-    qDebug() << ppVar(LABcolorF32);
-    qDebug() << LABcolorU8.toXML();
-    */
 
     // The following is the known sRGB color that the test value matches with.
     // Let's make sure that all the labvalues roughly convert to this sRGB value.
     KoColor purpleCompare = KoColor(QColor("#442de9"), sRGB.colorSpace());
 
     LABcolorU8.convertTo(sRGB.colorSpace());
-    QVERIFY(sRGB.colorSpace()->difference(LABcolorU8.data(), purpleCompare.data()) <= 1);
+    QVERIFY2(sRGB.colorSpace()->difference(LABcolorU8.data(), purpleCompare.data()) <= 1
+             , QString("LAB U8 has too high a difference to it's sRGB reference: %1")
+             .arg(sRGB.colorSpace()->difference(LABcolorU8.data(), purpleCompare.data())).toLatin1());
     LABcolorU16.convertTo(sRGB.colorSpace());
-    QVERIFY(sRGB.colorSpace()->difference(LABcolorU16.data(), purpleCompare.data()) <= 1);
+    QVERIFY2(sRGB.colorSpace()->difference(LABcolorU16.data(), purpleCompare.data()) <= 1
+             , QString("LAB U16 has too high a difference to it's sRGB reference: %1")
+             .arg(sRGB.colorSpace()->difference(LABcolorU16.data(), purpleCompare.data())).toLatin1());
     LABcolorF32.convertTo(sRGB.colorSpace());
-    QVERIFY(sRGB.colorSpace()->difference(LABcolorF32.data(), purpleCompare.data()) <= 1);
+    QVERIFY2(sRGB.colorSpace()->difference(LABcolorF32.data(), purpleCompare.data()) <= 1
+            , QString("LAB F32 has too high a difference to it's sRGB reference: %1")
+            .arg(sRGB.colorSpace()->difference(LABcolorF32.data(), purpleCompare.data())).toLatin1());
 
-
+    // Test Gray - check channels.
+    const KoColorSpace *graySpace = KoColorSpaceRegistry::instance()->colorSpace(GrayAColorModelID.id(), Integer8BitsColorDepthID.id());
+    main = QString("<Gray g='0.5' space='%1'/>").arg(graySpace->profile()->name());
+    doc.setContent(main);
+    KoColor grayColor = KoColor::fromXML(doc.documentElement(), Integer8BitsColorDepthID.id());
+    quint8 *grayData = grayColor.data();
+    QCOMPARE(grayData[0], 128);
 
 }
 

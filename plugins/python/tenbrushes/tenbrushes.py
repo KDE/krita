@@ -36,7 +36,7 @@ class TenBrushesExtension(krita.Extension):
 
     def readSettings(self):
         self.selectedPresets = Application.readSetting("", "tenbrushes", "").split(',')
-        
+
         setting = Application.readSetting("", "tenbrushesActivatePrev2ndPress", "True")
         # we should not get anything other than 'True' and 'False'
         self.activatePrev = setting == 'True'
@@ -94,7 +94,7 @@ class TenBrushesExtension(krita.Extension):
                 window.views()[0].activateResource(allPresets[self.sender().preset])
 
         preset = window.views()[0].currentBrushPreset()
-        window.views()[0].showFloatingMessage(str(i18n("{}\nselected")).format(preset.name()),
+        window.activeView().showFloatingMessage(str(i18n("{}\nselected")).format(preset.name()),
                                               QIcon(QPixmap.fromImage(preset.image())),
                                               1000, 1)
 

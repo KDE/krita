@@ -22,7 +22,15 @@ public:
         ActivateShortcut,
         ConfirmShortcut,
         CancelShortcut,
-        LineToolShortcut
+        LineToolShortcut,
+        EllipseToolShortcut,
+        RectToolShortcut,
+        MoveToolShortcut,
+        FillToolShortcut,
+        EllipseSelToolShortcut,
+        ContigSelToolShortcut,
+        FreehandSelToolShortcut,
+        RectSelToolShortcut
     };
     explicit KisToolInvocationAction();
     ~KisToolInvocationAction() override;

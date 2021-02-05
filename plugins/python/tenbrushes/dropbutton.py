@@ -17,7 +17,7 @@ class DropButton(QPushButton):
         self.setIconSize(QSize(64, 64))
 
     def selectPreset(self):
-        if self.presetChooser.currentPreset:
+        if self.presetChooser.currentPreset():
             self.preset = self.presetChooser.currentPreset().name()
             current_preset = self.presetChooser.currentPreset()
             self.setIcon(QIcon(QPixmap.fromImage(current_preset.image())))

@@ -42,6 +42,8 @@
 #include <KisPart.h>
 #include <KisPaletteEditor.h>
 
+#include <KisStorageModel.h>
+
 #include <KisPaletteModel.h>
 #include <KisPaletteDelegate.h>
 #include <kis_palette_view.h>
@@ -346,7 +348,22 @@ void PaletteDockerDock::updatePaletteName()
     if (m_currentColorSet) {
         m_ui->lblPaletteName->setTextElideMode(Qt::ElideLeft);
         QString name = m_currentColorSet->name();
-        if (m_paletteEditor->isModified()) {
+
+        bool isGlobal = true;
+        KisResourceModel model(ResourceType::Palettes);
+        QModelIndex index = model.indexForResource(m_currentColorSet);
+        if (index.isValid()) {
+            bool ok;
+            int storageId = model.data(index, Qt::UserRole + KisAllResourcesModel::StorageId).toInt(&ok);
+            if (ok) {
+                KisStorageModel storageModel;
+                KisResourceStorageSP storage = storageModel.storageForId(storageId);
+                isGlobal = storage->type() != KisResourceStorage::StorageType::Memory;
+            }
+        }
+        // if the palette is not global, then let's not indicate that the changes has been made
+        // (it's easier than tracking whether the document has been saved or maybe exported etc.)
+        if (m_paletteEditor->isModified() && isGlobal) {
             name = "* " + name;
             QFont font = m_ui->lblPaletteName->font();
             font.setItalic(true);

@@ -106,7 +106,9 @@ bool KisPngBrush::loadFromDevice(QIODevice *dev)
         }
     }
 
-    if (image.allGray() && !hasAlpha) {
+    const bool isAllGray = image.allGray();
+
+    if (isAllGray && !hasAlpha) {
         // Make sure brush tips all have a white background
         // NOTE: drawing it over white background can probably be skipped now...
         //       Any images with an Alpha channel should be loaded as RGBA so
@@ -123,6 +125,7 @@ bool KisPngBrush::loadFromDevice(QIODevice *dev)
         setBrushTipImage(converted);
         setBrushType(MASK);
         setBrushApplication(ALPHAMASK);
+        setHasColorAndTransparency(false);
     }
     else {
         if ((int)image.format() < (int)QImage::Format_RGB32) {
@@ -130,7 +133,8 @@ bool KisPngBrush::loadFromDevice(QIODevice *dev)
         }
         setBrushTipImage(image);
         setBrushType(IMAGE);
-        setBrushApplication(image.allGray() ? ALPHAMASK : IMAGESTAMP);
+        setBrushApplication(isAllGray ? ALPHAMASK : IMAGESTAMP);
+        setHasColorAndTransparency(!isAllGray);
     }
 
     setWidth(brushTipImage().width());

@@ -417,7 +417,7 @@ void KisPredefinedBrushChooser::slotUpdateBrushModeButtonsState()
 {
     KisColorfulBrush *colorfulBrush = dynamic_cast<KisColorfulBrush*>(m_brush.data());
     const bool modeSwitchEnabled =
-        m_hslBrushTipEnabled && colorfulBrush && colorfulBrush->hasColor();
+        m_hslBrushTipEnabled && colorfulBrush && colorfulBrush->isImageType();
 
     if (modeSwitchEnabled) {
         cmbBrushMode->setCurrentIndex(int(colorfulBrush->brushApplication()));

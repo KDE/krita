@@ -35,7 +35,7 @@ public:
     virtual void setBrightnessAdjustment(qreal value);
     virtual void setContrastAdjustment(qreal value);
 
-    virtual bool hasColor() const;
+    virtual bool isImageType() const;
 
     quint8 adjustmentMidPoint() const;
     qreal brightnessAdjustment() const;
@@ -43,10 +43,14 @@ public:
 
     void toXML(QDomDocument& d, QDomElement& e) const override;
 
+    void setHasColorAndTransparency(bool value);
+    bool hasColorAndTransparency() const;
+
 private:
     quint8 m_adjustmentMidPoint = 127;
     qreal m_brightnessAdjustment = 0.0;
     qreal m_contrastAdjustment = 0.0;
+    bool m_hasColorAndTransparency = false;
 };
 
 #endif // KISCOLORFULBRUSH_H

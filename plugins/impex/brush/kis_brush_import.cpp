@@ -80,7 +80,7 @@ KisImportExportErrorCode KisBrushImport::convert(KisDocument *document, QIODevic
     }
 
     const KoColorSpace *colorSpace = 0;
-    if (brush->hasColor()) {
+    if (brush->isImageType()) {
         colorSpace = KoColorSpaceRegistry::instance()->rgb8();
     }
     else {
@@ -96,7 +96,7 @@ KisImportExportErrorCode KisBrushImport::convert(KisDocument *document, QIODevic
         for(int i = brushes.size(); i > 0; i--) {
             KisGbrBrush *subbrush = brushes.at(i - 1);
             const KoColorSpace *subColorSpace = 0;
-            if (brush->hasColor()) {
+            if (brush->isImageType()) {
                 subColorSpace = KoColorSpaceRegistry::instance()->rgb8();
             }
             else {

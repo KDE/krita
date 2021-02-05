@@ -339,7 +339,8 @@ bool KisImagePipeBrush::initFromData(const QByteArray &data)
         setHeight(m_d->brushesPipe.firstBrush()->height());
         setBrushTipImage(m_d->brushesPipe.firstBrush()->brushTipImage());
         setBrushApplication(m_d->brushesPipe.firstBrush()->brushApplication());
-        setBrushType(m_d->brushesPipe.hasColor() ? PIPE_IMAGE : PIPE_MASK);
+        setBrushType(m_d->brushesPipe.isImageType() ? PIPE_IMAGE : PIPE_MASK);
+        setHasColorAndTransparency(m_d->brushesPipe.hasColorAndTransparency());
     }
 
     return true;

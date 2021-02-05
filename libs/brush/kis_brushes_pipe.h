@@ -89,13 +89,19 @@ public:
         }
     }
 
-    bool hasColor() const {
+    bool isImageType() const {
         Q_FOREACH (BrushType * brush, m_brushes) {
-            if (brush->hasColor()) return true;
+            if (brush->isImageType()) return true;
         }
         return false;
     }
 
+    bool hasColorAndTransparency() const {
+        Q_FOREACH (BrushType * brush, m_brushes) {
+            if (brush->hasColorAndTransparency()) return true;
+        }
+        return false;
+    }
 
     void setBrushApplication(enumBrushApplication brushApplication) const {
         Q_FOREACH(BrushType * brush, m_brushes) {

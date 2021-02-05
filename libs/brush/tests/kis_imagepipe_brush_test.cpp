@@ -168,28 +168,28 @@ void KisImagePipeBrushTest::testColoredDab()
     checkConsistency(brush.data());
 
     QCOMPARE(brush->brushType(), PIPE_IMAGE);
-    QCOMPARE(brush->hasColor(), true);
+    QCOMPARE(brush->isImageType(), true);
 
     // let it be the mask (should be revertible)
     brush->setBrushApplication(ALPHAMASK);
 
     QCOMPARE(brush->brushApplication(), ALPHAMASK);
     QCOMPARE(brush->brushType(), PIPE_IMAGE);
-    QCOMPARE(brush->hasColor(), true);
+    QCOMPARE(brush->isImageType(), true);
 
     // revert back
     brush->setBrushApplication(IMAGESTAMP);
 
     QCOMPARE(brush->brushApplication(), IMAGESTAMP);
     QCOMPARE(brush->brushType(), PIPE_IMAGE);
-    QCOMPARE(brush->hasColor(), true);
+    QCOMPARE(brush->isImageType(), true);
 
     // convert to the mask (irreversible)
     brush->makeMaskImage(false);
 
     QCOMPARE(brush->brushApplication(), ALPHAMASK);
     QCOMPARE(brush->brushType(), PIPE_MASK);
-    QCOMPARE(brush->hasColor(), false);
+    QCOMPARE(brush->isImageType(), false);
 
     checkConsistency(brush.data());
 }

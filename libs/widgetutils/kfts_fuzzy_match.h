@@ -22,21 +22,21 @@ namespace kfts
 /**
  * @brief simple fuzzy matching of chars in @a pattern with chars in @a str sequentially
  */
-Q_DECL_UNUSED static bool fuzzy_match_simple(const QStringView pattern, const QStringView str);
+Q_DECL_UNUSED static bool fuzzy_match_simple(const QString pattern, const QString str);
 
 /**
  * @brief This should be the main function you should use. @a outscore is the score
  * of this match and should be used to sort the results later. Without sorting of the
  * results this function won't be as effective.
  */
-Q_DECL_UNUSED static bool fuzzy_match(const QStringView pattern, const QStringView str, int &outScore);
-Q_DECL_UNUSED static bool fuzzy_match(const QStringView pattern, const QStringView str, int &outScore, uint8_t *matches, int maxMatches);
+Q_DECL_UNUSED static bool fuzzy_match(const QString pattern, const QString str, int &outScore);
+Q_DECL_UNUSED static bool fuzzy_match(const QString pattern, const QString str, int &outScore, uint8_t *matches, int maxMatches);
 
 /**
  * @brief This is a special case function which doesn't score separator matches higher than sequential matches.
  * This is currently used in Kate's command bar where the string items are usually space separated names.
  */
-Q_DECL_UNUSED static bool fuzzy_match_sequential(const QStringView pattern, const QStringView str, int &outScore);
+Q_DECL_UNUSED static bool fuzzy_match_sequential(const QString pattern, const QString str, int &outScore);
 /**
  * @brief get string for display in treeview / listview. This should be used from style delegate.
  * For example: with @a pattern = "kate", @a str = "kateapp" and @htmlTag = "<b>
@@ -46,7 +46,7 @@ Q_DECL_UNUSED static bool fuzzy_match_sequential(const QStringView pattern, cons
  * TODO: improve this so that we don't have to put html tags on every char probably using some kind
  * of interval container
  */
-Q_DECL_UNUSED static QString to_fuzzy_matched_display_string(const QStringView pattern, QString &str, const QString &htmlTag, const QString &htmlTagClose);
+Q_DECL_UNUSED static QString to_fuzzy_matched_display_string(const QString pattern, QString &str, const QString &htmlTag, const QString &htmlTagClose);
 }
 
 namespace kfts
@@ -54,12 +54,12 @@ namespace kfts
 // Forward declarations for "private" implementation
 namespace fuzzy_internal
 {
-static bool fuzzy_match_recursive(QStringView::const_iterator pattern,
-                                  QStringView::const_iterator str,
+static bool fuzzy_match_recursive(QString::const_iterator pattern,
+                                  QString::const_iterator str,
                                   int &outScore,
-                                  const QStringView::const_iterator strBegin,
-                                  const QStringView::const_iterator strEnd,
-                                  const QStringView::const_iterator patternEnd,
+                                  const QString::const_iterator strBegin,
+                                  const QString::const_iterator strEnd,
+                                  const QString::const_iterator patternEnd,
                                   uint8_t const *srcMatches,
                                   uint8_t *newMatches,
                                   int maxMatches,
@@ -69,7 +69,7 @@ static bool fuzzy_match_recursive(QStringView::const_iterator pattern,
 }
 
 // Public interface
-static bool fuzzy_match_simple(const QStringView pattern, const QStringView str)
+static bool fuzzy_match_simple(const QString pattern, const QString str)
 {
     auto patternIt = pattern.cbegin();
     for (auto strIt = str.cbegin(); strIt != str.cend() && patternIt != pattern.cend(); ++strIt) {
@@ -80,13 +80,13 @@ static bool fuzzy_match_simple(const QStringView pattern, const QStringView str)
     return patternIt == pattern.cend();
 }
 
-static bool fuzzy_match(const QStringView pattern, const QStringView str, int &outScore)
+static bool fuzzy_match(const QString pattern, const QString str, int &outScore)
 {
     uint8_t matches[256];
     return fuzzy_match(pattern, str, outScore, matches, sizeof(matches));
 }
 
-static bool fuzzy_match(const QStringView pattern, const QStringView str, int &outScore, uint8_t *matches, int maxMatches)
+static bool fuzzy_match(const QString pattern, const QString str, int &outScore, uint8_t *matches, int maxMatches)
 {
     int recursionCount = 0;
 
@@ -98,7 +98,7 @@ static bool fuzzy_match(const QStringView pattern, const QStringView str, int &o
     return fuzzy_internal::fuzzy_match_recursive(patternIt, strIt, outScore, strIt, strEnd, patternEnd, nullptr, matches, maxMatches, 0, recursionCount);
 }
 
-static bool fuzzy_match_sequential(const QStringView pattern, const QStringView str, int &outScore)
+static bool fuzzy_match_sequential(const QString pattern, const QString str, int &outScore)
 {
     int recursionCount = 0;
     uint8_t matches[256];
@@ -112,12 +112,12 @@ static bool fuzzy_match_sequential(const QStringView pattern, const QStringView 
 }
 
 // Private implementation
-static bool fuzzy_internal::fuzzy_match_recursive(QStringView::const_iterator pattern,
-                                                  QStringView::const_iterator str,
+static bool fuzzy_internal::fuzzy_match_recursive(QString::const_iterator pattern,
+                                                  QString::const_iterator str,
                                                   int &outScore,
-                                                  const QStringView::const_iterator strBegin,
-                                                  const QStringView::const_iterator strEnd,
-                                                  const QStringView::const_iterator patternEnd,
+                                                  const QString::const_iterator strBegin,
+                                                  const QString::const_iterator strEnd,
+                                                  const QString::const_iterator patternEnd,
                                                   const uint8_t *srcMatches,
                                                   uint8_t *matches,
                                                   int maxMatches,
@@ -270,7 +270,7 @@ static bool fuzzy_internal::fuzzy_match_recursive(QStringView::const_iterator pa
     }
 }
 
-static QString to_fuzzy_matched_display_string(const QStringView pattern, QString &str, const QString &htmlTag, const QString &htmlTagClose)
+static QString to_fuzzy_matched_display_string(const QString pattern, QString &str, const QString &htmlTag, const QString &htmlTagClose)
 {
     /**
      * FIXME Don't do so many appends. Instead consider using some interval based solution to wrap a range

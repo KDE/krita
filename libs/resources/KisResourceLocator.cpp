@@ -353,7 +353,7 @@ bool KisResourceLocator::updateResource(const QString &resourceType, const KoRes
     }
 
     // Update the resource in the cache
-    QPair<QString, QString> key = QPair<QString, QString> (storageLocation, resourceType + "/" + QFileInfo(resource->filename()).fileName());
+    QPair<QString, QString> key = QPair<QString, QString> (storageLocation, resourceType + "/" + resource->filename());
     d->resourceCache[key] = resource;
 
     return true;
@@ -377,7 +377,7 @@ bool KisResourceLocator::reloadResource(const QString &resourceType, const KoRes
     resource->setDirty(false);
 
     // We haven't changed the version of the resource, so the cache must be still valid
-    QPair<QString, QString> key = QPair<QString, QString> (storageLocation, resourceType + "/" + QFileInfo(resource->filename()).fileName());
+    QPair<QString, QString> key = QPair<QString, QString> (storageLocation, resourceType + "/" + resource->filename());
     Q_ASSERT(d->resourceCache[key] == resource);
 
     return true;

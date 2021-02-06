@@ -441,7 +441,7 @@ bool KisResourceCacheDb::addResourceVersionImpl(int resourceId, QDateTime timest
     q.bindValue(":resource_id", resourceId);
     q.bindValue(":storage_location", KisResourceLocator::instance()->makeStorageLocationRelative(storage->location()));
     q.bindValue(":version", resource->version());
-    q.bindValue(":filename", QFileInfo(resource->filename()).fileName());
+    q.bindValue(":filename", resource->filename());
     q.bindValue(":timestamp", timestamp.toSecsSinceEpoch());
     KIS_SAFE_ASSERT_RECOVER_NOOP(!resource->md5().isEmpty());
     q.bindValue(":md5sum", resource->md5().toHex());
@@ -600,7 +600,7 @@ bool KisResourceCacheDb::makeResourceTheCurrentVersion(int resourceId, KoResourc
     }
 
     q.bindValue(":name", resource->name());
-    q.bindValue(":filename", QFileInfo(resource->filename()).fileName());
+    q.bindValue(":filename", resource->filename());
     q.bindValue(":tooltip", i18n(resource->name().toUtf8()));
 
     QByteArray ba;
@@ -780,7 +780,7 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
     q.bindValue(":resource_id", resourceId);
     q.bindValue(":storage_location", KisResourceLocator::instance()->makeStorageLocationRelative(storage->location()));
     q.bindValue(":version", resource->version());
-    q.bindValue(":filename", QFileInfo(resource->filename()).fileName());
+    q.bindValue(":filename", resource->filename());
     q.bindValue(":timestamp", timestamp.toSecsSinceEpoch());
     KIS_SAFE_ASSERT_RECOVER_NOOP(!resource->md5().isEmpty());
     if (resource->md5().isEmpty()) {
@@ -822,11 +822,11 @@ bool KisResourceCacheDb::addResources(KisResourceStorageSP storage, QString reso
                     if (addResource(storage, iter->lastModified(), resource, iter->type())) {
                         resourceId = resource->resourceId();
                     } else {
-                        qWarning() << "Could not add resource" << QFileInfo(resource->filename()).fileName() << "to the database";
+                        qWarning() << "Could not add resource" << resource->filename() << "to the database";
                     }
                 } else {
                     if (!addResourceVersion(resourceId, iter->lastModified(), storage, resource)) {
-                        qWarning() << "Could not add resource version" << QFileInfo(resource->filename()).fileName() << "to the database";
+                        qWarning() << "Could not add resource version" << resource->filename() << "to the database";
                     }
                 }
             }

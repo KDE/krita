@@ -161,6 +161,7 @@ void KisResourceLocator::loadRequiredResources(KoResourceSP resource)
 
 KoResourceSP KisResourceLocator::resource(QString storageLocation, const QString &resourceType, const QString &filename)
 {
+
     storageLocation = makeStorageLocationAbsolute(storageLocation);
 
     QPair<QString, QString> key = QPair<QString, QString> (storageLocation, resourceType + "/" + filename);

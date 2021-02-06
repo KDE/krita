@@ -727,7 +727,7 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
     q.bindValue(":storage_location", KisResourceLocator::instance()->makeStorageLocationRelative(storage->location()));
     q.bindValue(":resource_type", resourceType);
     q.bindValue(":name", resource->name());
-    q.bindValue(":filename", QFileInfo(resource->filename()).fileName());
+    q.bindValue(":filename", resource->filename());
     q.bindValue(":tooltip", i18n(resource->name().toUtf8()));
 
     QByteArray ba;
@@ -742,13 +742,13 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
 
     r = q.exec();
     if (!r) {
-        qWarning() << "Could not execute addResource statement" << q.lastError() << resourceId << storage->name() << storage->location() << resource->name() << resource->filename() << "version" << resource->version();;
+        qWarning() << "Could not execute addResource statement" << q.lastError() << q.boundValues();
         return r;
     }
-
     resourceId = resourceIdForResource(resource->name(), resource->filename(), resourceType, KisResourceLocator::instance()->makeStorageLocationRelative(storage->location()));
 
     if (resourceId < 0) {
+
         qWarning() << "Adding to database failed, resource id after adding is " << resourceId << "! (Probable reason: the resource has the same filename, storage, resource type as an existing resource). Resource is: "
                    << resource->name()
                    << resource->filename()

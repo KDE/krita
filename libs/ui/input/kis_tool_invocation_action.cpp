@@ -144,48 +144,31 @@ void KisToolInvocationAction::deactivate(int shortcut)
     if (shortcut == LineToolShortcut && d->lineToolActivated) {
         d->lineToolActivated = false;
         KoToolManager::instance()->switchBackRequested();
-    }
-
-    if (shortcut == EllipseToolShortcut && d->ellipseToolActivated) {
+    } else if (shortcut == EllipseToolShortcut && d->ellipseToolActivated) {
         d->ellipseToolActivated = false;
         KoToolManager::instance()->switchBackRequested();
-    }
-
-    if (shortcut == RectToolShortcut && d->rectToolActivated) {
+    } else if (shortcut == RectToolShortcut && d->rectToolActivated) {
         d->rectToolActivated = false;
         KoToolManager::instance()->switchBackRequested();
-    }
-
-    if (shortcut == MoveToolShortcut && d->moveToolActivated) {
+    } else if (shortcut == MoveToolShortcut && d->moveToolActivated) {
         d->moveToolActivated = false;
         KoToolManager::instance()->switchBackRequested();
-    }
-
-    if (shortcut == FillToolShortcut && d->fillToolActivated) {
+    } else if (shortcut == FillToolShortcut && d->fillToolActivated) {
         d->fillToolActivated = false;
         KoToolManager::instance()->switchBackRequested();
-    }
-
-    if (shortcut == EllipseSelToolShortcut && d->ellipseSelToolActivated) {
+    } else if (shortcut == EllipseSelToolShortcut && d->ellipseSelToolActivated) {
         d->ellipseSelToolActivated = false;
         KoToolManager::instance()->switchBackRequested();
-    }
-
-    if (shortcut == ContigSelToolShortcut && d->contigSelToolActivated) {
+    } else if (shortcut == ContigSelToolShortcut && d->contigSelToolActivated) {
         d->contigSelToolActivated = false;
         KoToolManager::instance()->switchBackRequested();
-    }
-
-    if (shortcut == FreehandSelToolShortcut && d->freehandSelToolActivated) {
+    } else if (shortcut == FreehandSelToolShortcut && d->freehandSelToolActivated) {
         d->freehandSelToolActivated = false;
         KoToolManager::instance()->switchBackRequested();
-    }
-
-    if (shortcut == RectSelToolShortcut && d->rectSelToolActivated) {
+    } else if (shortcut == RectSelToolShortcut && d->rectSelToolActivated) {
         d->rectSelToolActivated = false;
         KoToolManager::instance()->switchBackRequested();
     }
-
 }
 
 int KisToolInvocationAction::priority() const

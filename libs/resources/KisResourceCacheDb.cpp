@@ -1415,6 +1415,13 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
             if (itA->resourceId >= 0) break;
 
             KoResourceSP res = storage->resource(itA->url);
+
+            if (!res) {
+                // resource cannot be loaded, the file is probably broken
+                ++itA;
+                continue;
+            }
+
             res->setVersion(itA->version);
             res->setMD5(storage->resourceMd5(itA->url));
             if (!res->valid()) {

@@ -69,15 +69,25 @@ KisBrushSP KisPredefinedBrushFactory::createBrush(const QDomElement& brushDefini
         colorfulBrush->setBrightnessAdjustment(brushDefinition.attribute("BrightnessAdjustment").toDouble());
         colorfulBrush->setContrastAdjustment(brushDefinition.attribute("ContrastAdjustment").toDouble());
     }
+
+    auto legacyBrushApplication = [] (KisColorfulBrush *colorfulBrush, bool forceColorToAlpha) {
+        /**
+         * In Krita versions before 4.4 series "ColorAsMask" could
+         * be overridden to false when the brush had no **color**
+         * inside. That changed in Krita 4.4.x series, when
+         * "brushApplication" replaced all the automatic heuristics
+         */
+        return colorfulBrush && colorfulBrush->hasColorAndTransparency() && !forceColorToAlpha ? IMAGESTAMP : ALPHAMASK;
+    };
+
+
     if (!brushtipFound) {
         brush->setBrushApplication(ALPHAMASK);
     } 
     else if (brushDefinition.hasAttribute("preserveLightness")) {
         const int preserveLightness = KisDomUtils::toInt(brushDefinition.attribute("preserveLightness", "0"));
         const bool useColorAsMask = (bool)brushDefinition.attribute("ColorAsMask", "1").toInt();
-
-        brush->setBrushApplication(preserveLightness ? LIGHTNESSMAP : 
-                    colorfulBrush && colorfulBrush->hasColorAndTransparency() && !useColorAsMask ? IMAGESTAMP : ALPHAMASK);
+        brush->setBrushApplication(preserveLightness ? LIGHTNESSMAP : legacyBrushApplication(colorfulBrush, useColorAsMask));
     }
     else if (brushDefinition.hasAttribute("brushApplication")) {
         enumBrushApplication brushApplication = static_cast<enumBrushApplication>(KisDomUtils::toInt(brushDefinition.attribute("brushApplication", "0")));
@@ -87,9 +97,14 @@ KisBrushSP KisPredefinedBrushFactory::createBrush(const QDomElement& brushDefini
         KIS_SAFE_ASSERT_RECOVER_NOOP(colorfulBrush);
 
         const bool useColorAsMask = (bool)brushDefinition.attribute("ColorAsMask", "1").toInt();
-        brush->setBrushApplication(colorfulBrush && colorfulBrush->hasColorAndTransparency() && !useColorAsMask ? IMAGESTAMP : ALPHAMASK);
+        brush->setBrushApplication(legacyBrushApplication(colorfulBrush, useColorAsMask));
     } else {
-        brush->setBrushApplication(ALPHAMASK);
+        /**
+         * In Krita versions before 4.4 series we used to automatrically select
+         * the brush application depending on the presence of the color in the
+         * brush, even when there was no "ColorAsMask" field.
+         */
+        brush->setBrushApplication(legacyBrushApplication(colorfulBrush, false));
     }
 
     return brush;

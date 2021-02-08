@@ -1474,20 +1474,21 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
                 // add a version to the database
 
                 KoResourceSP res = storage->resource(itA->url);
-                res->setVersion(itA->version);
-                res->setMD5(storage->resourceMd5(itA->url));
+                if (res) {
+                    res->setVersion(itA->version);
+                    res->setMD5(storage->resourceMd5(itA->url));
 
-                const bool result = addResourceVersionImpl(itA->resourceId, itA->timestamp, storage, res);
-                KIS_SAFE_ASSERT_RECOVER_NOOP(result);
+                    const bool result = addResourceVersionImpl(itA->resourceId, itA->timestamp, storage, res);
+                    KIS_SAFE_ASSERT_RECOVER_NOOP(result);
 
-                resourceIdForUpdate.insert(itA->resourceId);
+                    resourceIdForUpdate.insert(itA->resourceId);
+                }
                 ++itA;
 
             } else if ((itA != endA && itB != endB && *itA > *itB) ||
                        itA == endA) {
 
                 // remove a version from the database
-
                 const bool result = removeResourceVersionImpl(itB->resourceId, itB->version, storage);
                 KIS_SAFE_ASSERT_RECOVER_NOOP(result);
                 resourceIdForUpdate.insert(itB->resourceId);

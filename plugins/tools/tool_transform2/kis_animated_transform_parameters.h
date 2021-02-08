@@ -43,6 +43,8 @@ public:
     bool hasChanged() const override;
     bool isAnimated() const;
 
+    QPointF getRotationalTranslationOffset(const ToolTransformArgs& args) const;
+
     KisTransformMaskParamsInterfaceSP clone() const override;
 
     static KisTransformMaskParamsInterfaceSP fromXML(const QDomElement &e);

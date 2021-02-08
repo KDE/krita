@@ -171,16 +171,9 @@ const QSharedPointer<ToolTransformArgs> KisAnimatedTransformMaskParameters::tran
         args->setAZ(zRotRad);
     }
 
+    // Translate image to accommodate for rotation offset.
     if (args->mode() == ToolTransformArgs::FREE_TRANSFORM) {
-        KisTransformUtils::MatricesPack m(*args);
-        QPointF pos = args->transformedCenter();
-
-        QTransform t1 = m.TS * m.SC * m.S;
-        QTransform t2 = m.projectedP;
-
-        QPointF orig1 = t1.map(args->originalCenter() - args->rotationCenterOffset());
-        QPointF translationOffset = t2.map(orig1) - orig1;
-        pos += translationOffset;
+        QPointF pos = args->transformedCenter() + getRotationalTranslationOffset(*args);
         args->setTransformedCenter(pos);
     }
 
@@ -289,6 +282,19 @@ bool KisAnimatedTransformMaskParameters::isAnimated() const
     return true;
 }
 
+QPointF KisAnimatedTransformMaskParameters::getRotationalTranslationOffset(const ToolTransformArgs &args) const {
+    KisTransformUtils::MatricesPack m(args);
+    QPointF pos = args.transformedCenter();
+
+    QTransform t1 = m.TS * m.SC * m.S;
+    QTransform t2 = m.projectedP;
+
+    QPointF orig1 = t1.map(args.originalCenter() - args.rotationCenterOffset());
+    QPointF translationOffset = t2.map(orig1) - orig1;
+
+    return translationOffset;
+}
+
 KisTransformMaskParamsInterfaceSP KisAnimatedTransformMaskParameters::clone() const
 {
     return toQShared(new KisAnimatedTransformMaskParameters(*this));
@@ -358,8 +364,11 @@ void KisAnimatedTransformMaskParameters::addKeyframes(KisTransformMaskSP mask, i
         tma->setBaseArgs(desiredArgs);
     }
 
+    // Undo any translation offset intended for origin-offset based rotation.
     KisAnimatedTransformMaskParameters* animatedTransformMask = dynamic_cast<KisAnimatedTransformMaskParameters*>(currentParams.data());
-    if (animatedTransformMask) {
+    if (animatedTransformMask && desiredArgs.mode() == ToolTransformArgs::FREE_TRANSFORM) {
+        QPointF pos = desiredArgs.transformedCenter() - animatedTransformMask->getRotationalTranslationOffset(desiredArgs);
+        desiredArgs.setTransformedCenter(pos);
     }
 
     makeScalarKeyframeOnMask(mask, KisKeyframeChannel::PositionX, currentTime, desiredArgs.transformedCenter().x(), parentCommand);

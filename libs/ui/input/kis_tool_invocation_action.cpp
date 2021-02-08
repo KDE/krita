@@ -269,7 +269,11 @@ bool KisToolInvocationAction::supportsHiResInputEvents() const
 
 bool KisToolInvocationAction::isShortcutRequired(int shortcut) const
 {
-    //These really all are pretty important for basic user interaction.
-    Q_UNUSED(shortcut);
-    return true;
+    // These three shortcuts are pretty important for basic user interaction,
+    // so they should always exist.
+    if (shortcut == ActivateShortcut || shortcut == ConfirmShortcut || shortcut == CancelShortcut) {
+        return true;
+    } else {
+        return false;
+    }
 }

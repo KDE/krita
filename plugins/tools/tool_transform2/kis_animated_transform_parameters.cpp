@@ -11,6 +11,7 @@
 #include "kis_time_span.h"
 #include "kis_transform_mask.h"
 #include "kis_image.h"
+#include "kis_transform_utils.h"
 #include <QHash>
 
 struct KisAnimatedTransformMaskParameters::Private
@@ -169,6 +170,20 @@ const QSharedPointer<ToolTransformArgs> KisAnimatedTransformMaskParameters::tran
         args->setAY(yRotRad);
         args->setAZ(zRotRad);
     }
+
+    if (args->mode() == ToolTransformArgs::FREE_TRANSFORM) {
+        KisTransformUtils::MatricesPack m(*args);
+        QPointF pos = args->transformedCenter();
+
+        QTransform t1 = m.TS * m.SC * m.S;
+        QTransform t2 = m.projectedP;
+
+        QPointF orig1 = t1.map(args->originalCenter() - args->rotationCenterOffset());
+        QPointF translationOffset = t2.map(orig1) - orig1;
+        pos += translationOffset;
+        args->setTransformedCenter(pos);
+    }
+
     return args;
 }
 

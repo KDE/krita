@@ -271,9 +271,5 @@ bool KisToolInvocationAction::isShortcutRequired(int shortcut) const
 {
     // These three shortcuts are pretty important for basic user interaction,
     // so they should always exist.
-    if (shortcut == ActivateShortcut || shortcut == ConfirmShortcut || shortcut == CancelShortcut) {
-        return true;
-    } else {
-        return false;
-    }
+    return (shortcut == ActivateShortcut || shortcut == ConfirmShortcut || shortcut == CancelShortcut);
 }

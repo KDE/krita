@@ -490,7 +490,7 @@ KisTagModel::KisTagModel(const QString &type, QObject *parent)
     : QSortFilterProxyModel(parent)
     , d(new Private())
 {
-    setSourceModel(new KisAllTagsModel(type));
+    setSourceModel(KisResourceModelProvider::tagModel(type));
 
 }
 

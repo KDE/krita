@@ -8,6 +8,7 @@
 #include <QtSql>
 #include <KisResourceLocator.h>
 #include <KisResourceModel.h>
+#include <KisResourceModelProvider.h>
 #include <KisResourceQueryMapper.h>
 
 struct KisAllTagResourceModel::Private {
@@ -273,7 +274,7 @@ KisTagResourceModel::KisTagResourceModel(const QString &resourceType, QObject *p
     , d(new Private())
 {
     d->resourceType = resourceType;
-    d->sourceModel = new KisAllTagResourceModel(resourceType, parent);
+    d->sourceModel = KisResourceModelProvider::tagResourceModel(resourceType);
     setSourceModel(d->sourceModel);
 }
 

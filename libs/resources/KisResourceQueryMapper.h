@@ -6,6 +6,9 @@
 #define KISRESOURCEQUERYMAPPER_H
 
 #include <QSqlQuery>
+#include <QMap>
+
+class QImage;
 
 class KisResourceQueryMapper
 {
@@ -17,6 +20,9 @@ public:
     static QVariant variantFromResourceQuery(const QSqlQuery &query, int column, int role);
 
     static QVariant variantFromResourceQueryById(int resourceId, int column, int role);
+
+private:
+    static QImage getThumbnailFromQuery(const QSqlQuery &query);
 };
 
 #endif // KISRESOURCEQUERYMAPPER_H

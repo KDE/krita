@@ -127,6 +127,12 @@ private:
     /// @return true if the resource is present in the cache, false if it hasn't been loaded
     bool resourceCached(QString storageLocation, const QString &resourceType, const QString &filename) const;
 
+    /// add the thumbnail associated with resouceId to cache
+    void cacheThumbnail(QString storageLocation, const QString &resourceType, const QString &filename, const QImage &img);
+
+    /// @return a valid image if the thumbnail is present in the cache, an invalid image otherwise
+    QImage thumbnailCached(QString storageLocation, const QString &resourceType, const QString &filename);
+
     /**
      * @brief resource finds a physical resource in one of the storages
      * @param storageLocation the storage containing the resource. If empty,

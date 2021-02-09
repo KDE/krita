@@ -456,6 +456,7 @@ QString KoColor::toSVG11(QHash<QString, const KoColorProfile *> *profileList) co
 KoColor KoColor::fromSVG11(const QString value, QHash<QString, const KoColorProfile *> profileList, KoColor current)
 {
     KoColor parsed(KoColorSpaceRegistry::instance()->rgb16(KoColorSpaceRegistry::instance()->p709SRGBProfile()));
+    parsed.setOpacity(1.0);
 
     if (value.toLower() == "none") {
         return parsed;
@@ -469,7 +470,9 @@ KoColor KoColor::fromSVG11(const QString value, QHash<QString, const KoColorProf
     int pos = 0;
     int pos2 = 0;
     QStringList colorDefinitions;
-    while ((pos2 = splitDefinitions.indexIn(value, pos)) != -1) {
+    QString valueAdjust = value.split(";").first();
+    valueAdjust.append(" ");
+    while ((pos2 = splitDefinitions.indexIn(valueAdjust, pos)) != -1) {
         colorDefinitions.append(splitDefinitions.cap(1).trimmed());
         pos = pos2 + splitDefinitions.matchedLength();
     }
@@ -488,9 +491,9 @@ KoColor KoColor::fromSVG11(const QString value, QHash<QString, const KoColorProf
         } else if (def.toLower().startsWith("rgb")) {
             QString parse = def.trimmed();
             QStringList colors = parse.split(',');
-            QString r = colors[0].right((colors[0].length() - 4));
-            QString g = colors[1];
-            QString b = colors[2].left((colors[2].length() - 1));
+            QString r = colors[0].right((colors[0].length() - 4)).trimmed();
+            QString g = colors[1].trimmed();
+            QString b = colors[2].left((colors[2].length() - 1)).trimmed();
 
             if (r.contains('%')) {
                 r = r.left(r.length() - 1);

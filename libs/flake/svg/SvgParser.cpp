@@ -183,13 +183,17 @@ void SvgParser::setXmlBaseDir(const QString &baseDir)
 
     setFileFetcher(
         [this](const QString &name) {
-            const QString fileName = m_context.xmlBaseDir() + '/' + name;
-            QFile file(fileName);
-            if (!file.exists()) {
-                return QByteArray();
+            QStringList possibleNames;
+            possibleNames << name;
+            possibleNames << QDir::cleanPath(QDir(m_context.xmlBaseDir()).absoluteFilePath(name));
+            for (QString fileName : possibleNames) {
+                QFile file(fileName);
+                if (file.exists()) {
+                    file.open(QIODevice::ReadOnly);
+                    return file.readAll();
+                }
             }
-            file.open(QIODevice::ReadOnly);
-            return file.readAll();
+            return QByteArray();
         });
 }
 

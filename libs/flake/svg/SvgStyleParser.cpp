@@ -23,6 +23,7 @@
 #include <QStringList>
 #include <QColor>
 #include <QGradientStops>
+#include <KoColor.h>
 
 class Q_DECL_HIDDEN SvgStyleParser::Private
 {
@@ -318,35 +319,10 @@ bool SvgStyleParser::parseColor(QColor &color, const QString &s)
     if (s.isEmpty() || s == "none")
         return false;
 
-    if (s.startsWith(QLatin1String("rgb("))) {
-        QString parse = s.trimmed();
-        QStringList colors = parse.split(',');
-        QString r = colors[0].right((colors[0].length() - 4));
-        QString g = colors[1];
-        QString b = colors[2].left((colors[2].length() - 1));
-
-        if (r.contains('%')) {
-            r = r.left(r.length() - 1);
-            r = QString::number(int((double(255 * KisDomUtils::toDouble(r)) / 100.0)));
-        }
-
-        if (g.contains('%')) {
-            g = g.left(g.length() - 1);
-            g = QString::number(int((double(255 * KisDomUtils::toDouble(g)) / 100.0)));
-        }
-
-        if (b.contains('%')) {
-            b = b.left(b.length() - 1);
-            b = QString::number(int((double(255 * KisDomUtils::toDouble(b)) / 100.0)));
-        }
-
-        color = QColor(r.toInt(), g.toInt(), b.toInt());
-    } else if (s == "currentColor") {
-        color = d->context.currentGC()->currentColor;
-    } else {
-        // QColor understands #RRGGBB and svg color names
-        color.setNamedColor(s.trimmed());
-    }
+    KoColor current = KoColor();
+    current.fromQColor(d->context.currentGC()->currentColor);
+    KoColor c = KoColor::fromSVG11(s, d->context.profiles(), current);
+    c.toQColor(&color);
 
     return true;
 }

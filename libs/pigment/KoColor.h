@@ -243,7 +243,7 @@ public:
      * @param profileList list of profiles, this will map the profile to a name, so it may be embedded.
      * @return a color definiton string with both a srgb hexcode fallback as well as a icc-color definition.
      */
-    QString toSVG11(QHash<QString, const KoColorProfile *> *profileList);
+    QString toSVG11(QHash<QString, const KoColorProfile *> *profileList) const;
 
     /**
      * @brief fromSVG11

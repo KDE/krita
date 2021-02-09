@@ -399,7 +399,7 @@ KoColor KoColor::fromXML(const QString &xml)
     return c;
 }
 
-QString KoColor::toSVG11(QHash<QString, const KoColorProfile *> *profileList)
+QString KoColor::toSVG11(QHash<QString, const KoColorProfile *> *profileList) const
 {
     QStringList colorDefinitions;
     colorDefinitions.append(toQColor().name());
@@ -408,9 +408,10 @@ QString KoColor::toSVG11(QHash<QString, const KoColorProfile *> *profileList)
     channelValues.fill(0.0);
     colorSpace()->normalisedChannelsValue(data(), channelValues);
 
+    bool sRGB = colorSpace()->profile()->uniqueId() == KoColorSpaceRegistry::instance()->p709SRGBProfile()->uniqueId();
+
     // We don't write a icc-color definition for XYZ and 8bit sRGB.
-    if (!(colorSpace()->profile() == KoColorSpaceRegistry::instance()->p709SRGBProfile()
-            && colorSpace()->colorDepthId() == Integer8BitsColorDepthID) &&
+    if (!(sRGB && colorSpace()->colorDepthId() == Integer8BitsColorDepthID) &&
             colorSpace()->colorModelId() != XYZAColorModelID) {
         QStringList iccColor;
         QString csName = colorSpace()->profile()->name();
@@ -420,6 +421,10 @@ QString KoColor::toSVG11(QHash<QString, const KoColorProfile *> *profileList)
 
         //reuse existing name if possible. We're looking for the color profile, because svg doesn't care about depth.
         csName = profileList->key(colorSpace()->profile(), csName);
+
+        if (sRGB) {
+            csName = "sRGB";
+        }
 
         iccColor.append(csName);
 
@@ -433,13 +438,14 @@ QString KoColor::toSVG11(QHash<QString, const KoColorProfile *> *profileList)
             iccColor.append(lab.attribute("b", "0.0"));
         } else {
             for (int i = 0; i < channelValues.size(); i++) {
+                int location = KoChannelInfo::displayPositionToChannelIndex(i, colorSpace()->channels());
                 if (i != int(colorSpace()->alphaPos())) {
-                    iccColor.append(QString::number(channelValues.at(i), 'g', 10));
+                    iccColor.append(QString::number(channelValues.at(location), 'g', 10));
                 }
             }
         }
         colorDefinitions.append(QString("icc-color(%1)").arg(iccColor.join(", ")));
-        if (!profileList->contains(csName)) {
+        if (!profileList->contains(csName) && !sRGB) {
             profileList->insert(csName, colorSpace()->profile());
         }
     }
@@ -449,7 +455,7 @@ QString KoColor::toSVG11(QHash<QString, const KoColorProfile *> *profileList)
 
 KoColor KoColor::fromSVG11(const QString value, QHash<QString, const KoColorProfile *> profileList, KoColor current)
 {
-    KoColor parsed;
+    KoColor parsed(KoColorSpaceRegistry::instance()->rgb16(KoColorSpaceRegistry::instance()->p709SRGBProfile()));
 
     if (value.toLower() == "none") {
         return parsed;

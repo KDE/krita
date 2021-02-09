@@ -261,8 +261,8 @@ void TestKoColor::testSVGParsing()
     //1. Testing case with fallback hexvalue and nonsense icc-color that we cannot parse
 
     KoColor p1 = KoColor::fromSVG11("#ff0000 icc-color(blah, 0.0, 1.0, 1.0, 0.0);", profileList);
-    KoColor c1;
-    c1.fromQColor(QColor("#ff0000"));
+    const KoColorSpace *sRGB = KoColorSpaceRegistry::instance()->rgb16(KoColorSpaceRegistry::instance()->p709SRGBProfile());
+    KoColor c1 = KoColor(QColor("#ff0000"), sRGB);
 
     QVERIFY2(p1 == c1
              , QString("SVG11 parser is not loading the sRGB hex fallback: \nresult: %1 \nexpected: %2")
@@ -271,8 +271,7 @@ void TestKoColor::testSVGParsing()
     //2. testing case with fallback colorname and nonsense icc-color that we cannot parse
 
     KoColor p2 = KoColor::fromSVG11("#ff0000 silver icc-color(blah, 0.0, 1.0, 1.0, 0.0);", profileList);
-    KoColor c2;
-    c2.fromQColor(QColor("silver"));
+    KoColor c2 = KoColor(QColor("silver"), sRGB);
 
     QVERIFY2(p2 == c2
              , QString("SVG11 parser is not loading the sRGB colorname fallback: \nresult: %1 \nexpected: %2")
@@ -310,8 +309,7 @@ void TestKoColor::testSVGParsing()
     //5. Testing rgb...
 
     KoColor p5 = KoColor::fromSVG11("#ff0000 rgb(100, 50, 50%)", profileList);
-    KoColor c5;
-    c5.fromQColor(QColor(100, 50, 127));
+    KoColor c5 = KoColor(QColor(100, 50, 127), sRGB);
 
     QVERIFY2(p5 == c5, QString("the rgb() definition for SVG11 is not parsed correctly, \nresult: %1 \nexpected: %2")
              .arg(KoColor::toQString(p5)).arg(KoColor::toQString(c5)).toLatin1());
@@ -345,14 +343,13 @@ void TestKoColor::testSVGParsing()
     const KoColorSpace *xyzSpace = KoColorSpaceRegistry::instance()->colorSpace(XYZAColorModelID.id(), Integer16BitsColorDepthID.id());
     profileList.insert("XYZ", xyzSpace->profile());
     KoColor p9 = KoColor::fromSVG11("#0077FF icc-color(XYZ, 1.0, 0.0, 0.5)", profileList);
-    KoColor c9;
-    c9.fromQColor(QColor("#0077FF"));
+    KoColor c9 = KoColor(QColor("#0077FF"), sRGB);
     QVERIFY2(p9 == c9
              , QString("SVG11 parser is not loading the sRGB hex fallback for XYZ: \nresult: %1 \nexpected: %2")
              .arg(KoColor::toQString(p9)).arg(KoColor::toQString(c9)).toLatin1());
 
     //10. Check xyz saving
-    KoColor p10;
+    KoColor p10 = KoColor(sRGB);
     QString c10 = "#0077FF";
     p10.fromQColor(QColor(c10));
     p10.convertTo(xyzSpace);
@@ -369,6 +366,11 @@ void TestKoColor::testSVGParsing()
     QVERIFY2(p11 == c11
              , QString("SVG11 parsed gray incorrectly: \nresult: %1 \nexpected: %2")
              .arg(KoColor::toQString(p11)).arg(KoColor::toQString(c11)).toLatin1());
+
+    //12. check sRGB is not saved.
+    profileListSize = profileList.size();
+    QString colorDef = c1.toSVG11(&profileList);
+    QCOMPARE(profileList.size(), profileListSize);
 
 }
 

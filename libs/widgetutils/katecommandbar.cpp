@@ -57,7 +57,7 @@ protected:
         int score = 0;
         const auto idx = sourceModel()->index(sourceRow, 0, sourceParent);
         const auto actionName = idx.data().toString().splitRef(QLatin1Char(':')).at(1);
-        const bool res = kfts::fuzzy_match_sequential(m_pattern, actionName, score);
+        const bool res = kfts::fuzzy_match_sequential(m_pattern, actionName.toString(), score);
         sourceModel()->setData(idx, score, CommandModel::Score);
         return res;
     }
@@ -86,9 +86,9 @@ public:
         const auto strs = index.data().toString().split(QLatin1Char(':'));
         QString str = strs.at(1);
         const QString nameColor = option.palette.color(QPalette::Link).name();
-        kfts::to_fuzzy_matched_display_string(m_filterString, str, QStringLiteral("<b style=\"color:%1;\">").arg(nameColor), QStringLiteral("</b>"));
+        kfts::to_fuzzy_matched_display_string(m_filterString, str, QString("<b style=\"color:%1;\">").arg(nameColor), QString("</b>"));
 
-        const QString component = QStringLiteral("<span style=\"color: %1;\"><b>").arg(nameColor) + strs.at(0) + QStringLiteral(":</b> </span>");
+        const QString component = QString("<span style=\"color: %1;\"><b>").arg(nameColor) + strs.at(0) + QString(":</b> </span>");
 
         doc.setHtml(component + str);
         doc.setDocumentMargin(2);
@@ -172,12 +172,21 @@ public:
         if (!shortcutString.isEmpty()) {
             // collect rects for each word
             QVector<QPair<QRect, QString>> btns;
-            const auto list = shortcutString.split(QLatin1Char('+'));
+            const auto list = [&shortcutString] {
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
+                auto list = shortcutString.split(QLatin1Char('+'), QString::SkipEmptyParts);
+#else
+                auto list = shortcutString.split(QLatin1Char('+'), Qt::SkipEmptyParts);
+#endif
+                if (shortcutString.endsWith(QLatin1String("+"))) {
+                    list.append(QStringLiteral("+"));
+                }
+                return list;
+            }();
             btns.reserve(list.size());
             for (const QString &text : list) {
                 QRect r = option.fontMetrics.boundingRect(text);
                 r.setWidth(r.width() + 8);
-                r.setHeight(r.height() + 4);
                 btns.append({r, text});
             }
 
@@ -188,6 +197,10 @@ public:
             const int y = option.rect.y();
             const int plusY = option.rect.y() + plusRect.height() / 2;
             const int total = btns.size();
+
+            // make sure our rects are nicely V-center aligned in the row
+            painter->translate(QPoint(0, (option.rect.height() - btns.at(0).first.height()) / 2));
+
             int i = 0;
             painter->setRenderHint(QPainter::Antialiasing);
             for (const auto &btn : btns) {
@@ -211,9 +224,9 @@ public:
 
                 // draw '+'
                 if (i + 1 < total) {
-                    x += rect.width() + 8;
-                    painter->drawText(QPoint(x, plusY + (rect.height() / 2)), QStringLiteral("+"));
-                    x += plusRect.width() + 8;
+                    x += rect.width() + 5;
+                    painter->drawText(QPoint(x, plusY + (rect.height() / 2)), QString("+"));
+                    x += plusRect.width() + 5;
                 }
                 i++;
             }

@@ -34,10 +34,11 @@ KisStoragePlugin::~KisStoragePlugin()
 KoResourceSP KisStoragePlugin::resource(const QString &url)
 {
     QStringList parts = url.split('/', QString::SkipEmptyParts);
-    Q_ASSERT(parts.size() == 2);
 
     const QString resourceType = parts[0];
-    const QString resourceFilename = parts[1];
+    parts.removeFirst();
+    const QString resourceFilename = parts.join('/');
+
     const QString mime = KisMimeDatabase::mimeTypeForSuffix(resourceFilename);
 
     KisResourceLoaderBase *loader = KisResourceLoaderRegistry::instance()->loader(resourceType, mime);

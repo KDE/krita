@@ -10,9 +10,9 @@
 #include "kis_image.h"
 #include "KoProperties.h"
 
-#include "kritawidgetutils_export.h"
+#include "kritaimage_export.h"
 
-class KRITAWIDGETUTILS_EXPORT KisAnimatedOpacityProperty : public QObject {
+class KRITAIMAGE_EXPORT KisAnimatedOpacityProperty : public QObject {
     Q_OBJECT
 public:
     KisAnimatedOpacityProperty(KoProperties* const props, quint8 defaultValue, QObject *parent = nullptr);

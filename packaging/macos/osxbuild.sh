@@ -48,6 +48,8 @@ for arg in "${@}"; do
         OSXBUILD_TESTING="ON"
     elif [[ "${arg}" = --install_tarball ]]; then
         OSXBUILD_TARBALLINSTALL="TRUE"
+    elif [[ "${arg}" = --universal ]]; then
+        OSXBUILD_UNIVERSAL="TRUE"
     else
         parsed_args="${parsed_args} ${arg}"
     fi
@@ -585,6 +587,111 @@ print_usage () {
     printf "\n"
 }
 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+####      Universal ARM x86_64 build functions and paramterers    #####
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+DEPBUILD_X86_64_DIR="${BUILDROOT}/i.x86_64"
+DEPBUILD_ARM64_DIR="${BUILDROOT}/i.arm64"
+DEPBUILD_FATBIN_DIR="${BUILDROOT}/i.universal"
+
+build_x86_64 () {
+    log "building builddeps_x86"
+    # first set terminal to arch
+    if [[ ${#@} > 0 ]]; then
+        for pkg in ${@:1:${#@}}; do
+            env /usr/bin/arch -x86_64 /bin/zsh -c "${BUILDROOT}/krita/packaging/macos/osxbuild.sh builddeps --dirty ${pkg}"
+        done
+    else
+        env /usr/bin/arch -x86_64 /bin/zsh -c "${BUILDROOT}/krita/packaging/macos/osxbuild.sh builddeps"
+    fi
+
+    rsync -aq "${KIS_INSTALL_DIR}/" "${DEPBUILD_X86_64_DIR}"
+}
+
+
+build_arm64 () {
+    log "building builddeps_arm64"
+
+    ${BUILDROOT}/krita/packaging/macos/osxbuild.sh builddeps "${@:1}"
+
+    rsync -aq "${KIS_INSTALL_DIR}/" "${DEPBUILD_ARM64_DIR}"
+}
+
+consolidate_universal_binaries () {
+    for f in "${@}"; do
+        # Abort if file is not a Mach-O executable file
+        if [[ -z $(file ${f} | grep "Mach-O") ]]; then
+            continue
+        fi
+        # echo "${BUILDROOT}/${DEPBUILD_X86_64_DIR}/${f##*test-i/}"
+        LIPO_OUTPUT=$(lipo -info ${f} | grep Non-fat 2> /dev/null)
+        if [[ -n ${LIPO_OUTPUT} ]]; then
+            if [[ -f "${BUILDROOT}/${DEPBUILD_X86_64_DIR}/${f##*${DEPBUILD_FATBIN_DIR}/}" ]]; then
+                log "creating universal binary -- ${f##*${DEPBUILD_FATBIN_DIR}/}"
+                lipo -create "${f}" "${BUILDROOT}/${DEPBUILD_X86_64_DIR}/${f##*${DEPBUILD_FATBIN_DIR}/}" -output "${f}" 2> /dev/null
+            else
+                log "removing... ${f}"
+                rm "${f}"
+            fi
+        fi
+    done
+
+}
+
+prebuild_cleanup() {
+    # asume if an argument is given is a package name, do not erase install dir
+    if [[ ${#@} > 0 ]]; then
+        rsync -aq "${KIS_INSTALL_DIR}/" "${BUILDROOT}/i.temp"
+    fi
+    rm -rf "${DEPBUILD_FATBIN_DIR}" "${DEPBUILD_X86_64_DIR}" "${DEPBUILD_ARM64_DIR}"
+}
+
+postbuild_cleanup() {
+    rsync -rlptgoq --ignore-existing "${DEPBUILD_X86_64_DIR}/" "${DEPBUILD_FATBIN_DIR}"
+    rm -rf "${KIS_INSTALL_DIR}"
+    rsync -aq "${DEPBUILD_FATBIN_DIR}/" "${KIS_INSTALL_DIR}"
+}
+
+universal_plugin_build() {
+    DEPBUILD_X86_64_DIR="${BUILDROOT}/i_plug.x86_64"
+    DEPBUILD_ARM64_DIR="${BUILDROOT}/i_plug.arm64"
+    # DEPBUILD_FATBIN_DIR="${BUILDROOT}/i.universal"
+
+    # asume i is universal but i.universal has to exist
+    if [[ -d "${DEPBUILD_FATBIN_DIR}" ]]; then
+        rm -rf "${KIS_INSTALL_DIR}"
+        mkdir "${KIS_INSTALL_DIR}"
+        rsync -aq --exclude "${DEPBUILD_FATBIN_DIR}/translations" --exclude "${DEPBUILD_FATBIN_DIR}/share/locale" "${DEPBUILD_FATBIN_DIR}/" "${KIS_INSTALL_DIR}"
+
+        log "building plugins_x86"
+        env /usr/bin/arch -x86_64 /bin/zsh -c "${BUILDROOT}/krita/packaging/macos/osxbuild.sh buildplugins"
+        rsync -aq "${KIS_INSTALL_DIR}/" "${DEPBUILD_X86_64_DIR}"
+
+        log "building plugins_arm64"
+        build_plugins
+        rsync -aq "${KIS_INSTALL_DIR}/" "${DEPBUILD_ARM64_DIR}"
+
+        # sync files to universal install dir.
+        rsync -aq "${DEPBUILD_ARM64_DIR}/" "${DEPBUILD_FATBIN_DIR}"
+        consolidate_universal_binaries $(find "${DEPBUILD_FATBIN_DIR}" -type f)
+        postbuild_cleanup
+
+    else
+        log "no universal install found! Make sure universal build finished properly"
+        log "doing nothing, and exiting!"
+    fi
+}
+
+
+# # # # # # # # # # # # # # # # # # #
+
+####     Script main routine    #####
+
+# # # # # # # # # # # # # # # # # # #
+
 script_run() {
     if [[ ${#} -eq 0 ]]; then
         echo "ERROR: No option given!"
@@ -593,12 +700,25 @@ script_run() {
     fi
 
     if [[ ${1} = "builddeps" ]]; then
-        if [[ -z ${OSXBUILD_CLEAN} ]]; then
-            dir_clean "${KIS_INSTALL_DIR}"
-            dir_clean "${KIS_TBUILD_DIR}"
+        if [[ ${OSXBUILD_UNIVERSAL} ]]; then
+            prebuild_cleanup ${@:2}
+            build_x86_64 ${@:2}
+
+            build_arm64 "${@:2}"
+
+            rsync -aq ${DEPBUILD_ARM64_DIR}/ ${DEPBUILD_FATBIN_DIR}
+            consolidate_universal_binaries $(find "${DEPBUILD_FATBIN_DIR}" -type f)
+
+            postbuild_cleanup
+
+        else
+            if [[ -z ${OSXBUILD_CLEAN} ]]; then
+                dir_clean "${KIS_INSTALL_DIR}"
+                dir_clean "${KIS_TBUILD_DIR}"
+            fi
+            build_3rdparty "${@:2}"
+
         fi
-        build_3rdparty "${@:2}"
-        exit
 
     elif [[ ${1} = "fixboost" ]]; then
         if [[ -d ${1} ]]; then
@@ -616,7 +736,12 @@ script_run() {
         if [[ -z ${OSXBUILD_CLEAN} ]]; then
             dir_clean "${KIS_PLUGIN_BUILD_DIR}"
         fi
-        build_plugins "${@:2}"
+
+        if [[ ${OSXBUILD_UNIVERSAL} ]]; then
+            universal_plugin_build "${@:2}"
+        else
+            build_plugins "${@:2}"
+        fi
         exit
 
     elif [[ ${1} = "buildtarball" ]]; then

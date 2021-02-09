@@ -46,11 +46,14 @@ public:
     DlgImageSize(QWidget * parent, int width, int height, double resolution);
     ~DlgImageSize() override;
 
-    qint32 width();
-    qint32 height();
-    double resolution();
+    qint32 desiredWidth();
+    qint32 desiredHeight();
+    double desiredResolution();
 
     KisFilterStrategy *filterType();
+
+Q_SIGNALS:
+    void sigDesiredSizeChanged(qint32 width, qint32 height, double resolution);
 
 private Q_SLOTS:
     void slotSyncPrintToPixelSize();
@@ -70,6 +73,8 @@ private:
     void updatePrintSizeMaximum();
 
     WdgImageSize *m_page;
+
+    QSize m_originalSize;
 
     KisAspectRatioLocker *m_pixelSizeLocker;
     KisAspectRatioLocker *m_printSizeLocker;

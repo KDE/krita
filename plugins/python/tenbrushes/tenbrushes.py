@@ -16,6 +16,9 @@ class TenBrushesExtension(krita.Extension):
         # Indicates whether we want to activate the previous-selected brush
         # on the second press of the shortcut
         self.activatePrev = True
+        # Indicates whether we want to select the freehand brush tool
+        # on the press of a preset shortcut
+        self.autoBrush = False
         self.oldPreset = None
 
     def setup(self):
@@ -32,12 +35,15 @@ class TenBrushesExtension(krita.Extension):
         self.uitenbrushes.initialize(self)
 
     def readSettings(self):
-        self.selectedPresets = Application.readSetting(
-            "", "tenbrushes", "").split(',')
-        setting = Application.readSetting(
-            "", "tenbrushesActivatePrev2ndPress", "True")
+        self.selectedPresets = Application.readSetting("", "tenbrushes", "").split(',')
+
+        setting = Application.readSetting("", "tenbrushesActivatePrev2ndPress", "True")
         # we should not get anything other than 'True' and 'False'
         self.activatePrev = setting == 'True'
+
+        setting = Application.readSetting(
+            "", "tenbrushesAutoBrushOnPress", "False")
+        self.autoBrush = setting == 'True'
 
     def writeSettings(self):
         presets = []
@@ -45,9 +51,12 @@ class TenBrushesExtension(krita.Extension):
         for index, button in enumerate(self.buttons):
             self.actions[index].preset = button.preset
             presets.append(button.preset)
+
         Application.writeSetting("", "tenbrushes", ','.join(map(str, presets)))
         Application.writeSetting("", "tenbrushesActivatePrev2ndPress",
                                  str(self.activatePrev))
+        Application.writeSetting("", "tenbrushesAutoBrushOnPress",
+                                 str(self.autoBrush))
 
     def loadActions(self, window):
         allPresets = Application.resources("preset")
@@ -73,16 +82,19 @@ class TenBrushesExtension(krita.Extension):
         if (window and len(window.views()) > 0
                 and self.sender().preset in allPresets):
             currentPreset = window.views()[0].currentBrushPreset()
+
+            if self.autoBrush:
+                Krita.instance().action('KritaShape/KisToolBrush').trigger()
+
             if (self.activatePrev
                     and self.sender().preset == currentPreset.name()):
                 window.views()[0].activateResource(self.oldPreset)
             else:
                 self.oldPreset = window.views()[0].currentBrushPreset()
-                window.views()[0].activateResource(
-                    allPresets[self.sender().preset])
+                window.views()[0].activateResource(allPresets[self.sender().preset])
 
         preset = window.views()[0].currentBrushPreset()
-        window.views()[0].showFloatingMessage(str(i18n("{}\nselected")).format(preset.name()),
+        window.activeView().showFloatingMessage(str(i18n("{}\nselected")).format(preset.name()),
                                               QIcon(QPixmap.fromImage(preset.image())),
                                               1000, 1)
 

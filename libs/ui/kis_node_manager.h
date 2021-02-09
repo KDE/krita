@@ -251,6 +251,15 @@ public Q_SLOTS:
     void selectInvisibleNodes();
     void selectUnlockedNodes();
 
+private Q_SLOTS:
+
+    friend class KisNodeActivationActionCreatorVisitor;
+    /**
+     * @brief slotUiActivateNode inspects the sender to see which node needs to be activated.
+     */
+    void slotUiActivateNode();
+
+
 public:
     void removeSingleNode(KisNodeSP node);
     KisLayerSP createPaintLayer();

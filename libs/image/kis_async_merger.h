@@ -1,4 +1,4 @@
-/* Copyright (c) Dmitry Kazakov <dimula73@gmail.com>, 2009
+/* SPDX-FileCopyrightText: 2009 Dmitry Kazakov <dimula73@gmail.com>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */

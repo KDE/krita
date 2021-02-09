@@ -19,7 +19,7 @@ bool TestResourceSearchBoxFilter::filterMatches(QString resourceName, QString fi
 {
     KisResourceSearchBoxFilter filter;
     filter.setFilter(filterText);
-    return filter.matchesResource(resourceName);
+    return filter.matchesResource(resourceName, QStringList());
 }
 
 void addNameDataColumns()
@@ -40,6 +40,17 @@ void TestResourceSearchBoxFilter::runNameTest()
     QFETCH(QString, filter);
     QFETCH(bool, matches);
     QCOMPARE(filterMatches(resourceName, filter), matches);
+}
+
+QList<MockResource> TestResourceSearchBoxFilter::filterResourceList(QList<MockResource> &resources, KisResourceSearchBoxFilter &filter)
+{
+    QList<MockResource> matches;
+    Q_FOREACH(const MockResource& resource, resources) {
+        if (filter.matchesResource(resource.m_name, resource.m_tags)) {
+            matches.append(resource);
+        }
+    }
+    return matches;
 }
 
 void TestResourceSearchBoxFilter::testOnePartialName_data()
@@ -127,26 +138,121 @@ void TestResourceSearchBoxFilter::testMultipleExactMatches()
     runNameTest();
 }
 
-void TestResourceSearchBoxFilter::testOneTag_data()
+void TestResourceSearchBoxFilter::testResourceSearch()
 {
-    // tag filtering not implemented yet
-}
+    // Define some tags to be reused later
+    const QString tagPencil = "Pencil";
+    const QString tagPen = "Pen";
+    const QString tagEraser = "Eraser";
+    const QString tagHard = "Hard";
+    const QString tagSoft = "Soft";
+    const QString tagTexture = "Texture";
+    const QString tagPaint = "Paint";
 
-void TestResourceSearchBoxFilter::testOneTag()
-{
-    // tag filtering not implemented yet
-}
 
-void TestResourceSearchBoxFilter::testMultipleTags_data()
-{
-    // tag filtering not implemented yet
-}
+    // Define a list of resources that make up our "database" that we wish to filter.
+    QList<MockResource> resources;
 
-void TestResourceSearchBoxFilter::testMultipleTags()
-{
-    // tag filtering not implemented yet
-}
+    MockResource hbPencil("HB Pencil", QStringList() << tagPencil << tagTexture << tagHard);
+    resources.append( hbPencil );
 
+    MockResource dullLeadHolder("Dull Leadholder", QStringList() << tagPencil << tagTexture << tagSoft);
+    resources.append(dullLeadHolder);
+
+    MockResource watercolorFlat("Watercolor Flat Brush", QStringList() << tagHard << tagPaint);
+    resources.append(watercolorFlat);
+
+    MockResource watercolorDry("Watercolor Round Dry Brush", QStringList() << tagSoft << tagTexture);
+    resources.append(watercolorDry);
+
+    MockResource pixel("Single Pixel Brush", QStringList() << tagHard);
+    resources.append(pixel);
+
+    MockResource ink("David's Inking Brush", QStringList() << tagPen << tagHard);
+    resources.append(ink);
+
+    MockResource impasto("Ramon's Oil Impasto Round Brush", QStringList() << tagHard << tagTexture << tagPaint);
+    resources.append(impasto);
+
+    MockResource oilKnife("Ramon's Oil Palette Knife", QStringList() << tagPaint << tagHard);
+    resources.append(oilKnife);
+
+    MockResource rubber("Kneaded Rubber Eraser", QStringList() << tagEraser << tagSoft);
+    resources.append(rubber);
+
+    MockResource polymer("Polymer Eraser", QStringList() << tagHard << tagEraser);
+    resources.append(polymer);
+
+
+    // Create filter instance, check initialization and basic API test.
+    KisResourceSearchBoxFilter filter;
+    QVERIFY(filter.isEmpty());
+
+    filter.setFilter("Pen");
+    QVERIFY(!filter.isEmpty());
+    QVERIFY(filter.matchesResource("Pen", QStringList()));
+    QVERIFY(filter.matchesResource("pEn", QStringList())); //Test case insensitivity
+
+    filter.setFilter(QString());
+    QVERIFY(filter.isEmpty());
+
+
+    {   // Find all pencils
+        filter.setFilter("Pencil");
+        QList<MockResource> results = filterResourceList(resources, filter);
+        QVERIFY(results.size() == 2);
+        QVERIFY(results.contains(hbPencil));
+        QVERIFY(results.contains(dullLeadHolder));
+        QVERIFY(!results.contains(impasto));
+        QVERIFY(!results.contains(rubber));
+    }
+
+    {   // Find all Ramon's brushes using partial search
+        filter.setFilter("Ramo");
+        QList<MockResource> results = filterResourceList(resources, filter);
+        QVERIFY(results.size() == 2);
+        QVERIFY(results.contains(impasto));
+        QVERIFY(results.contains(oilKnife));
+        QVERIFY(!results.contains(polymer));
+    }
+
+    {   // Find only the brushes with a specific tag
+        filter.setFilter("[" + tagTexture + "]");
+        QList<MockResource> results = filterResourceList(resources, filter);
+        QVERIFY(results.size() == 4);
+        QVERIFY(results.contains(hbPencil));
+        QVERIFY(results.contains(dullLeadHolder));
+        QVERIFY(results.contains(watercolorDry));
+        QVERIFY(results.contains(impasto));
+        QVERIFY(!results.contains(polymer));
+
+        filter.setFilter("![" + tagTexture + "]");
+        results = filterResourceList(resources, filter);
+        QVERIFY(results.size() == resources.size() - 4);
+        QVERIFY(!results.contains(hbPencil));
+        QVERIFY(!results.contains(dullLeadHolder));
+        QVERIFY(!results.contains(watercolorDry));
+        QVERIFY(!results.contains(impasto));
+        QVERIFY(results.contains(polymer));
+    }
+
+    {   // Find with a very short partial search...
+        filter.setFilter("er");
+        QList<MockResource> results = filterResourceList(resources, filter);
+        QVERIFY(results.size() == 5);
+        QVERIFY(results.contains(dullLeadHolder));
+        QVERIFY(results.contains(watercolorFlat));
+        QVERIFY(results.contains(watercolorDry));
+        QVERIFY(results.contains(rubber));
+        QVERIFY(results.contains(polymer));
+    }
+
+    {   // Set filter to be empty, should show everything.
+        filter.setFilter(QString());
+        QList<MockResource> results = filterResourceList(resources, filter);
+        QVERIFY(results.size() == resources.size());
+    }
+}
 
 
 

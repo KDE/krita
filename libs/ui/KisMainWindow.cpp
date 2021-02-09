@@ -142,6 +142,8 @@
 #include <kritaversion.h>
 #include "KisCanvasWindow.h"
 #include "kis_action.h"
+#include <katecommandbar.h>
+#include "KisNodeActivationActionCreatorVisitor.h"
 
 #include <mutex>
 
@@ -198,6 +200,8 @@ public:
         mdiArea->setTabsMovable(true);
         mdiArea->setActivationOrder(QMdiArea::ActivationHistoryOrder);
         mdiArea->setDocumentMode(true);
+
+        commandBar = new KateCommandBar(parent);
     }
 
     ~Private() {
@@ -240,7 +244,7 @@ public:
     KisAction *toggleDetachCanvas {0};
     KisAction *fullScreenMode {0};
     KisAction *showSessionManager {0};
-
+    KisAction *commandBarAction {0};
     KisAction *expandingSpacers[2];
 
     KActionMenu *styleMenu;
@@ -289,6 +293,8 @@ public:
 
     QUuid workspaceBorrowedBy;
     KisSignalAutoConnectionsStore screenConnectionsStore;
+
+    KateCommandBar *commandBar {0};
 
 #ifdef Q_OS_ANDROID
     KisAndroidFileManager *fileManager;
@@ -1803,6 +1809,35 @@ void KisMainWindow::restoreWorkspace()
     restoreWorkspace(resourceId);
 }
 
+void KisMainWindow::openCommandBar()
+{
+    QList<KActionCollection *> actionCollections;
+
+    auto clients = guiFactory()->clients();
+    int actionsCount = 0;
+    for (const KXMLGUIClient *c : clients) {
+        if (!c) {
+            continue;
+        }
+        if (auto collection = c->actionCollection()) {
+            actionCollections.append(collection);
+            actionsCount += collection->count();
+        }
+    }
+
+    if (activeKisView()) {
+        KActionCollection *layerActionCollection = new KActionCollection(0, "layeractions");
+        layerActionCollection->setComponentDisplayName(i18n("Layers/Masks"));
+        KisNodeActivationActionCreatorVisitor v(layerActionCollection, viewManager()->nodeManager());
+        activeKisView()->image()->rootLayer()->accept(v);
+        actionCollections.append(layerActionCollection);
+        actionsCount += layerActionCollection->count();
+    }
+
+    d->commandBar->updateBar(actionCollections, actionsCount);
+    centralWidget()->setFocusProxy(d->commandBar);
+}
+
 bool KisMainWindow::restoreWorkspace(int workspaceId)
 {
     KisWorkspaceResourceSP workspace =
@@ -2764,6 +2799,9 @@ void KisMainWindow::createActions()
 
     d->showSessionManager = actionManager->createAction("file_sessions");
     connect(d->showSessionManager, SIGNAL(triggered(bool)), this, SLOT(slotShowSessionManager()));
+
+    d->commandBarAction = actionManager->createAction("command_bar_open");
+    connect(d->commandBarAction, SIGNAL(triggered(bool)), this, SLOT(openCommandBar()));
 
     actionManager->createStandardAction(KStandardAction::Preferences, this, SLOT(slotPreferences()));
 

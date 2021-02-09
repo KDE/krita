@@ -12,6 +12,24 @@
 
 #include <KisResourceSearchBoxFilter.h>
 
+//Define mockup of a resource based on what we will be filtering for (tags, names, etc..)
+struct MockResource {
+    MockResource(QString name, QStringList tags)
+        : m_name(name)
+        , m_tags(tags){
+    }
+
+    ~MockResource(){}
+
+    bool operator==(const MockResource& rhs){
+        return (m_name == rhs.m_name) && (m_tags == rhs.m_tags);
+    }
+
+    QString m_name;
+    QStringList m_tags;
+};
+
+
 class TestResourceSearchBoxFilter : public QObject
 {
     Q_OBJECT
@@ -33,15 +51,13 @@ private Q_SLOTS:
     void testMultipleExactMatches_data();
     void testMultipleExactMatches();
 
-    void testOneTag_data();
-    void testOneTag();
-
-    void testMultipleTags_data();
-    void testMultipleTags();
+    void testResourceSearch();
 
 private:
     bool filterMatches(QString resourceName, QString filter);
     void runNameTest();
+
+    QList<MockResource> filterResourceList(QList<MockResource> &resources, KisResourceSearchBoxFilter& filter);
 
 };
 

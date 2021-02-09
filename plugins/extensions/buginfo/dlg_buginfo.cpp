@@ -69,8 +69,9 @@ void DlgBugInfo::initializeText()
     int target_height = fm.height() * info.split('\n').size() + wheight;
 
     QRect screen_rect = QGuiApplication::primaryScreen()->availableGeometry();
+    int frame_height = parentWidget()->frameGeometry().height() - parentWidget()->size().height();
 
-    resize(m_page->size().width(), target_height > screen_rect.height() ? screen_rect.height() : target_height);
+    resize(m_page->size().width(), target_height > screen_rect.height() ? screen_rect.height() - frame_height : target_height);
 }
 
 void DlgBugInfo::saveToFile()

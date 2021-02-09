@@ -43,6 +43,18 @@ void TestAbrStorage::testResourceIterator()
         count++;
     }
     QVERIFY(count > 0);
+
+    QSharedPointer<KisResourceStorage::ResourceIterator> iter2(storage.resources(ResourceType::LayerStyles));
+    QVERIFY(!iter2->hasNext());
+    count = 0;
+    while (iter2->hasNext()) {
+        iter2->next();
+        KoResourceSP res(iter2->resource());
+        QVERIFY(res);
+        count++;
+    }
+    QVERIFY(count == 0);
+
 }
 
 void TestAbrStorage::testTagIterator()

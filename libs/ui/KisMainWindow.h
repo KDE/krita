@@ -450,6 +450,9 @@ private Q_SLOTS:
     void orientationChanged();
 
     void restoreWorkspace();
+
+    void openCommandBar();
+
 protected:
 
     void closeEvent(QCloseEvent * e) override;

@@ -557,6 +557,9 @@ public:
     bool autoPinLayersToTimeline(bool defaultValue = false) const;
     void setAutoPinLayersToTimeline(bool value);
 
+    bool adaptivePlaybackRange(bool defaultValue = false) const;
+    void setAdaptivePlaybackRange(bool value);
+
     qreal timelineZoom(bool defaultValue = false) const;
     void setTimelineZoom(qreal value);
 

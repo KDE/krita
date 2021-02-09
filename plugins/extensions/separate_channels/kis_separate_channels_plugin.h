@@ -1,7 +1,7 @@
 /*
  * This file is part of Krita
  *
- * Copyright (c) Michael Thaler <michael.thaler@physik.tu-muenchen.de>
+ * SPDX-FileCopyrightText: Michael Thaler <michael.thaler@physik.tu-muenchen.de>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

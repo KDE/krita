@@ -158,7 +158,7 @@ void KisAbstractSliderSpinBox::paintSlider(QPainter &painter)
 
     // draw the colored slider bar that is really a progress indicator
     QStyleOptionProgressBar progressOpts = progressBarOptions();
-    QRect rect = progressOpts.rect.adjusted(2,2,-2,-2); // this helps when at 100%, it doesn't clear the progress
+    QRect rect = progressOpts.rect; // this helps when at 100%, it doesn't clear the progress
     QRect progressBarRect;
 
 
@@ -422,7 +422,7 @@ QSize KisAbstractSliderSpinBox::sizeHint() const
     QStyleOptionSpinBox spinOpts = spinBoxOptions();
 
     QFontMetrics fm(font());
-    QSize hint(fm.boundingRect(d->prefix + QString::number(d->maximum) + d->suffix).size());
+    QSize hint(fm.width(d->prefix + QString::number(d->maximum) + d->suffix), d->dummySpinBox->minimumSizeHint().height());
 
     // Getting the size of the buttons is a pain as the calcs require a rect
     // that is "big enough". We run the calc to get the "smallest" buttons

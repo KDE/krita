@@ -1,9 +1,8 @@
 # SPDX-License-Identifier: CC0-1.0
 
 import sys
-
-from PyQt5.QtWidgets import QMessageBox
 import krita
+from PyQt5.QtGui import QIcon
 from . import uitenscripts
 
 if sys.version_info[0] > 2:
@@ -63,6 +62,7 @@ class TenScriptsExtension(krita.Extension):
 
     def _executeScript(self):
         script = self.sender().script
+        window = Application.activeWindow()
         if script:
             try:
                 if sys.version_info[0] > 2:
@@ -77,15 +77,11 @@ class TenScriptsExtension(krita.Extension):
                         and callable(users_module.main)):
                     users_module.main()
 
-                self.showMessage(
-                    str(i18n("Script {0} executed")).format(script))
-            except Exception as e:
-                self.showMessage(str(e))
-        else:
-            self.showMessage(
-                i18n("You did not assign a script to that action"))
+                window.activeView().showFloatingMessage(
+                    str(i18n("Script {0} executed")).format(script), QIcon(), 1500, 2)
 
-    def showMessage(self, message):
-        self.msgBox = QMessageBox(Application.activeWindow().qwindow())
-        self.msgBox.setText(message)
-        self.msgBox.exec_()
+            except Exception as e:
+                window.activeView().showFloatingMessage(str(e), QIcon(), 2000, 1)
+        else:
+            window.activeView().showFloatingMessage(
+                str(i18n(("You did not assign a script to that action"))), QIcon(), 1500, 2)

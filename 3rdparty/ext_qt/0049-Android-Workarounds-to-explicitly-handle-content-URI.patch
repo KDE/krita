@@ -1,4 +1,4 @@
-From a496dc76a95a406ea75749b0e19bc2a16f6ea518 Mon Sep 17 00:00:00 2001
+From bcd7cd5b0a3ce8099ca8ffdeb92e4b4a854466cf Mon Sep 17 00:00:00 2001
 From: Sharaf Zaman <sharafzaz121@gmail.com>
 Date: Mon, 21 Sep 2020 12:05:19 +0000
 Subject: [PATCH] Android: Workarounds to explicitly handle content URIs
@@ -79,7 +79,7 @@ index 189b704b51..2c427b5d0d 100644
      return d->fileEntry.suffix();
  }
 diff --git a/src/corelib/io/qurl.cpp b/src/corelib/io/qurl.cpp
-index 6d82981fd6..8f1d147834 100644
+index 6d82981fd6..d834ffe225 100644
 --- a/src/corelib/io/qurl.cpp
 +++ b/src/corelib/io/qurl.cpp
 @@ -445,6 +445,11 @@ static inline QString webDavScheme()
@@ -109,31 +109,31 @@ index 6d82981fd6..8f1d147834 100644
  QString QUrl::fileName(ComponentFormattingOptions options) const
  {
 +#ifdef Q_OS_ANDROID
-+    if (d->scheme == contentScheme()) {
++    if (scheme() == contentScheme()) {
 +        return QFileInfo(toString()).fileName();
 +    }
 +#endif
      const QString ourPath = path(options);
      const int slash = ourPath.lastIndexOf(QLatin1Char('/'));
      if (slash == -1)
-@@ -3842,6 +3855,11 @@ bool QUrl::isDetached() const
- */
- QUrl QUrl::fromLocalFile(const QString &localFile)
- {
+@@ -3845,6 +3858,11 @@ QUrl QUrl::fromLocalFile(const QString &localFile)
+     QUrl url;
+     if (localFile.isEmpty())
+         return url;
 +#ifdef Q_OS_ANDROID
 +    if (localFile.startsWith(QLatin1String("content://"))) {
 +        return localFile;
 +    }
 +#endif
-     QUrl url;
-     if (localFile.isEmpty())
-         return url;
+     QString scheme = fileScheme();
+     QString deslashified = QDir::fromNativeSeparators(localFile);
+ 
 @@ -3895,6 +3913,10 @@ QString QUrl::toLocalFile() const
      if (!isLocalFile())
          return QString();
  
 +#ifdef Q_OS_ANDROID
-+    if (d->scheme == contentScheme())
++    if (scheme() == contentScheme())
 +        return toString();
 +#endif
      return d->toLocalFile(QUrl::FullyDecoded);

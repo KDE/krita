@@ -76,9 +76,16 @@ public:
         }
     }
 
-    bool hasColor() const {
+    bool isImageType() const {
         Q_FOREACH (QSharedPointer<BrushType> brush, m_brushes) {
-            if (brush->hasColor()) return true;
+            if (brush->isImageType()) return true;
+        }
+        return false;
+    }
+
+    bool hasColorAndTransparency() const {
+        Q_FOREACH (QSharedPointer<BrushType> brush, m_brushes) {
+            if (brush->hasColorAndTransparency()) return true;
         }
         return false;
     }

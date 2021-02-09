@@ -228,6 +228,7 @@ bool KisGbrBrush::init()
 
         setBrushApplication(ALPHAMASK);
         setBrushType(MASK);
+        setHasColorAndTransparency(false);
 
         for (quint32 y = 0; y < bh.height; y++) {
             uchar *pixel = reinterpret_cast<uchar *>(image.scanLine(y));
@@ -256,6 +257,8 @@ bool KisGbrBrush::init()
                 ++pixel;
             }
         }
+
+        setHasColorAndTransparency(!image.allGray());
     }
     else {
         warnKrita << filename()  << "WARNING: loading of GBR brushes with" << bh.bytes << "bytes per pixel is not supported";
@@ -302,7 +305,7 @@ bool KisGbrBrush::saveToDevice(QIODevice* dev) const
     bh.width = qToBigEndian((quint32)width());
     bh.height = qToBigEndian((quint32)height());
     // Hardcoded, 4 bytes RGBA or 1 byte GREY
-    if (!hasColor()) {
+    if (!isImageType()) {
         bh.bytes = qToBigEndian((quint32)1);
     }
     else {
@@ -330,7 +333,7 @@ bool KisGbrBrush::saveToDevice(QIODevice* dev) const
 
     QImage image = brushTipImage();
 
-    if (!hasColor()) {
+    if (!isImageType()) {
         bytes.resize(width() * height());
         for (qint32 y = 0; y < height(); y++) {
             for (qint32 x = 0; x < width(); x++) {
@@ -370,7 +373,7 @@ void KisGbrBrush::setBrushTipImage(const QImage& image)
 
 void KisGbrBrush::makeMaskImage(bool preserveAlpha)
 {
-    if (!hasColor()) {
+    if (!isImageType()) {
         return;
     }
 

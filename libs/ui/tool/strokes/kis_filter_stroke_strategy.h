@@ -57,7 +57,7 @@ public:
 
 
     private:
-        IdleBarrierData(IdleBarrierData &rhs, int levelOfDetail)
+        IdleBarrierData(IdleBarrierData &rhs, int /*levelOfDetail*/)
             : KisStrokeJobData(rhs)
          {
             // the cookie is used for preview only, therefore in

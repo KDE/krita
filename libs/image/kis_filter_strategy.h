@@ -14,6 +14,7 @@
 #include "KoGenericRegistry.h"
 #include "KoID.h"
 #include "kritaimage_export.h"
+#include <QSize>
 
 class KRITAIMAGE_EXPORT KisFilterStrategy
 {
@@ -187,6 +188,11 @@ public:
      * (with a non empty description) stored in the registry.
      */
     QString formattedDescriptions() const;
+
+    /**
+     * Try to select an appropriate image filtering strategy based on original and desired parameters.
+     */
+    KisFilterStrategy* autoFilterStrategy(QSize originalSize, QSize desiredSize) const;
 
 private:
 

@@ -116,7 +116,9 @@ void Resource::setImage(QImage image)
 
 KoResourceSP Resource::resource() const
 {
-    return KisResourceLocator::instance()->resourceForId(d->id);
+    KoResourceSP res = KisResourceLocator::instance()->resourceForId(d->id);
+    Q_ASSERT(res);
+    return res;
 }
 
 

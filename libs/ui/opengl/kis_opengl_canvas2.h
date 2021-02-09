@@ -1,6 +1,6 @@
 /*
- * Copyright (C) Boudewijn Rempt <boud@valdyas.org>, (C) 2006
- * Copyright (C) Michael Abrahams <miabraha@gmail.com>, (C) 2015
+ * SPDX-FileCopyrightText: 2006 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2015 Michael Abrahams <miabraha@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

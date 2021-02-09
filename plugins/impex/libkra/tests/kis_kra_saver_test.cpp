@@ -400,8 +400,6 @@ void KisKraSaverTest::testRoundTripColorizeMask()
 
     QList<KisLazyFillTools::KeyStroke> strokes = mask->fetchKeyStrokesDirect();
 
-    qDebug() << ppVar(strokes.size());
-
     QCOMPARE(strokes[0].dev->exactBounds(), QRect(50,50,10,20));
     QCOMPARE(strokes[0].isTransparent, false);
     QCOMPARE(strokes[0].color.colorSpace(), weirdCS);

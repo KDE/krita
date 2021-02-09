@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) Boudewijn Rempt <boud@valdyas.org>, (C) 2006-2013
+ * SPDX-FileCopyrightText: 2006-2013 Boudewijn Rempt <boud@valdyas.org>
  * SPDX-FileCopyrightText: 2015 Michael Abrahams <miabraha@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later

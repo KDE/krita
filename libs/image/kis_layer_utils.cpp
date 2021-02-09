@@ -274,7 +274,7 @@ namespace KisLayerUtils {
     private:
         KisNodeSP m_sourceNode;
         KisNodeSP m_targetNode;
-        KisImageSP m_image;
+        KisImageWSP m_image;
         KisPaintDeviceSP m_sourcePaintDevice;
         QSet<int> m_frames;
         bool m_putBehind;
@@ -463,7 +463,7 @@ namespace KisLayerUtils {
         }
 
     private:
-        KisImageSP m_image;
+        KisImageWSP m_image;
         KisNodeList m_nodes;
     };
 

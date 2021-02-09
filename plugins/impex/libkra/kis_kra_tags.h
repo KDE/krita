@@ -22,6 +22,7 @@ const QString NATIVE_MIMETYPE = "application/x-kra";
 const QString SEPARATOR = "/";
 const QString SHAPE_LAYER_PATH = "/shapelayers/";
 const QString EXIF_PATH = "/annotations/exif";
+const QString ANNOTATIONS_PATH = "/annotations/";
 const QString ICC_PATH = "/annotations/icc";
 const QString ICC_PROOFING_PATH = "/annotations/proofing/icc";
 const QString LAYER_STYLES_PATH = "/annotations/layerstyles.asl";
@@ -127,6 +128,8 @@ const QString SIMPLECOLORDATA = "SimpleColorData"; // easier 8-bit color data th
 const QString GLOBALASSISTANTSCOLOR = "GlobalAssistantsColor";
 const QString PALETTES = "Palettes"; // ResourceType::Palettes is lowercase, while the tag is uppercase
 const QString MIRROR_AXIS = "MirrorAxis";
+const QString ANNOTATIONS = "Annotations";
+const QString ANNOTATION = "Annotation";
 }
 
 

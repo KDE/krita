@@ -295,6 +295,7 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     chkShowRootLayer->setChecked(cfg.showRootLayer());
 
     m_chkAutoPin->setChecked(cfg.autoPinLayersToTimeline());
+    m_chkAdaptivePlaybackRange->setChecked(cfg.adaptivePlaybackRange());
 
     KConfigGroup group = KSharedConfig::openConfig()->group("File Dialogs");
     bool dontUseNative = true;
@@ -389,6 +390,7 @@ void GeneralTab::setDefault()
     cursorColorBtutton->setColor(cursorColor);
 
     m_chkAutoPin->setChecked(cfg.autoPinLayersToTimeline(true));
+    m_chkAdaptivePlaybackRange->setChecked(cfg.adaptivePlaybackRange(false));
 
     m_urlCacheDbLocation->setFileName(cfg.readEntry<QString>(KisResourceCacheDb::dbLocationKey, QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)));
     m_urlResourceFolder->setFileName(cfg.readEntry<QString>(KisResourceLocator::resourceLocationKey, QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)));
@@ -503,6 +505,11 @@ bool GeneralTab::convertToImageColorspaceOnImport()
 bool GeneralTab::autopinLayersToTimeline()
 {
     return m_chkAutoPin->isChecked();
+}
+
+bool GeneralTab::adaptivePlaybackRange()
+{
+    return m_chkAdaptivePlaybackRange->isChecked();
 }
 
 void GeneralTab::getBackgroundImage()
@@ -1813,6 +1820,7 @@ bool KisDlgPreferences::editPreferences()
         cfg.setFavoritePresets(m_general->favoritePresets());
 
         cfg.setAutoPinLayersToTimeline(m_general->autopinLayersToTimeline());
+        cfg.setAdaptivePlaybackRange(m_general->adaptivePlaybackRange());
 
         cfg.writeEntry(KisResourceCacheDb::dbLocationKey, m_general->m_urlCacheDbLocation->fileName());
         cfg.writeEntry(KisResourceLocator::resourceLocationKey, m_general->m_urlResourceFolder->fileName());

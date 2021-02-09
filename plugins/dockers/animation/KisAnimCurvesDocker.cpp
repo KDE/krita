@@ -53,7 +53,6 @@ KisAnimCurvesDockerTitlebar::KisAnimCurvesDockerTitlebar(QWidget* parent) :
     // Transport Controls...
     transport = new KisTransportControls(this);
     widgetAreaLayout->addWidget(transport);
-
     widgetAreaLayout->addSpacing(SPACING_UNIT);
 
     // Frame Register...
@@ -62,7 +61,6 @@ KisAnimCurvesDockerTitlebar::KisAnimCurvesDockerTitlebar(QWidget* parent) :
     sbFrameRegister->setPrefix("#  ");
     sbFrameRegister->setRange(0, MAX_FRAMES);
     widgetAreaLayout->addWidget(sbFrameRegister);
-
     widgetAreaLayout->addSpacing(SPACING_UNIT);
 
     {   // Drop Frames..
@@ -249,8 +247,8 @@ KisAnimCurvesDocker::KisAnimCurvesDocker()
     : QDockWidget(i18n("Animation Curves"))
     , m_d(new Private(this))
 {
-    QWidget *mainWidget = new QWidget(this);
-    mainWidget->setLayout(new QVBoxLayout(this));
+    QWidget *mainWidget = new QWidget(0);
+    mainWidget->setLayout(new QVBoxLayout());
     setWidget(mainWidget);
 
     QSplitter *mainSplitter = new QSplitter(this);

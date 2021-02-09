@@ -364,7 +364,7 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
     poweredByKDELink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://userbase.kde.org/What_is_KDE\">")
                               .append(i18n("Powered by KDE")).append("</a>"));
 
-    QString translationNoFeed = i18n("You can <a href=\"ignored\" style=\"color: COLOR_PLACEHOLDER; text-decoration: underline;\">enable news</a> from krita.org in various languages in the menu above");
+    QString translationNoFeed = i18n("You can <a href=\"ignored\" style=\"color: COLOR_PLACEHOLDER; text-decoration: underline;\">enable news</a> from krita.org in various languages with the menu above");
     labelNoFeed->setText(translationNoFeed.replace("COLOR_PLACEHOLDER", blendedColor.name()));
 
     const QColor faintTextColor = KritaUtils::blendColors(textColor, backgroundColor, 0.4);

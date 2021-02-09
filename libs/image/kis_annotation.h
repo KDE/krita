@@ -46,14 +46,15 @@ public:
      * be changed later.
      *
      * @param type a non-localized string identifying the type of the
-     * annotation
+     * annotation. There can only be one annotation of a given type attached
+     * to an image.
      * @param description a localized string describing the annotation
      * @param data a binary blob containing the annotation data
      */
     KisAnnotation(const QString & type, const QString & description, const QByteArray & data)
-        : m_type(type),
-          m_description(description),
-          m_annotation(data) {}
+        : m_type(type)
+        , m_description(description)
+        , m_annotation(data) {}
 
     virtual ~KisAnnotation() {}
 
@@ -87,6 +88,10 @@ public:
      */
     const QByteArray & annotation() const {
         return m_annotation;
+    }
+
+    void setAnnotation(const QByteArray ba) {
+        m_annotation = ba;
     }
 
     /**

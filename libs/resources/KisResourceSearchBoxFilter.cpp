@@ -11,7 +11,7 @@
 #include <QRegularExpression>
 #include <QList>
 #include <QSet>
-
+#include <kis_debug.h>
 
 class Q_DECL_HIDDEN KisResourceSearchBoxFilter::Private
 {
@@ -41,7 +41,6 @@ public:
 KisResourceSearchBoxFilter::KisResourceSearchBoxFilter()
     : d(new Private())
 {
-
 }
 
 KisResourceSearchBoxFilter::~KisResourceSearchBoxFilter()
@@ -57,6 +56,15 @@ QString cutOutDelimeters(QString text)
     return response;
 }
 
+bool checkInclusionAndCut(QString& part) {
+    bool included = true;
+    if (part.startsWith('!')) {
+        part.remove(0, 1);
+        included = false;
+    }
+    return included;
+}
+
 void KisResourceSearchBoxFilter::setFilter(const QString& filter)
 {
     d->filter = QString(filter);
@@ -64,7 +72,7 @@ void KisResourceSearchBoxFilter::setFilter(const QString& filter)
 }
 
 
-bool KisResourceSearchBoxFilter::matchesResource(const QString &_resourceName)
+bool KisResourceSearchBoxFilter::matchesResource(const QString &_resourceName, const QStringList &tagList)
 {
     // exact matches
     QString resourceName = _resourceName.toLower();
@@ -75,17 +83,36 @@ bool KisResourceSearchBoxFilter::matchesResource(const QString &_resourceName)
     if (d->resourceExactMatchesExcluded.contains(resourceName)) {
         return false;
     }
+
     // partial name matches
     if (d->resourceNamesPartsIncluded.count() > 0) {
         Q_FOREACH(const QString& partialName, d->resourceNamesPartsIncluded) {
-            if (!resourceName.contains(partialName)) {
+            if (!resourceName.contains(partialName) && tagList.filter(partialName, Qt::CaseInsensitive).isEmpty()) {
                 return false;
             }
         }
     }
+
     Q_FOREACH(const QString& partialName, d->resourceNamesPartsExcluded) {
-        if (resourceName.contains(partialName)) {
+        if (resourceName.contains(partialName) || tagList.filter(partialName, Qt::CaseInsensitive).size() > 0) {
             return false;
+        }
+    }
+
+    // Tag exact matches
+    if (d->tagNamesIncluded.count() > 0) {
+        Q_FOREACH(const QString& tagName, d->tagNamesIncluded) {
+            if (!tagList.contains(tagName, Qt::CaseInsensitive)) {
+                return false;
+            }
+        }
+    }
+
+    if (d->tagNamesExcluded.count() > 0) {
+        Q_FOREACH(const QString excludedTag, d->tagNamesExcluded) {
+            if (tagList.contains(excludedTag, Qt::CaseInsensitive)) {
+                return false;
+            }
         }
     }
 
@@ -120,12 +147,7 @@ void KisResourceSearchBoxFilter::initializeFilterData()
         QString part(partFor);
         part = part.toLower();
 
-        bool included = true;
-        if (part.startsWith('!')) {
-            part.remove(0, 1);
-            included = false;
-        }
-
+        const bool included = checkInclusionAndCut(part);
         if (part.startsWith(d->tagBegin) && part.endsWith(d->tagEnd)) {
             QString tagMatchCaptured = cutOutDelimeters(part);
             if (included) {
@@ -148,5 +170,4 @@ void KisResourceSearchBoxFilter::initializeFilterData()
             }
         }
     }
-
 }

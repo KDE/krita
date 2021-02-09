@@ -27,11 +27,14 @@ public:
         RectToolShortcut,
         MoveToolShortcut,
         FillToolShortcut,
+        GradientToolShortcut,
+        MeasureToolShortcut,
         EllipseSelToolShortcut,
+        RectSelToolShortcut,
         ContigSelToolShortcut,
         FreehandSelToolShortcut,
-        RectSelToolShortcut
     };
+
     explicit KisToolInvocationAction();
     ~KisToolInvocationAction() override;
 

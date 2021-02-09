@@ -30,10 +30,12 @@ public:
           rectToolActivated(false),
           moveToolActivated(false),
           fillToolActivated(false),
+          gradientToolActivated(false),
+          measureToolActivated(false),
           ellipseSelToolActivated(false),
+          rectSelToolActivated(false),
           contigSelToolActivated(false),
-          freehandSelToolActivated(false),
-          rectSelToolActivated(false)
+          freehandSelToolActivated(false)
     {
     }
 
@@ -43,10 +45,13 @@ public:
     bool rectToolActivated;
     bool moveToolActivated;
     bool fillToolActivated;
+    bool gradientToolActivated;
+    bool measureToolActivated;
     bool ellipseSelToolActivated;
+    bool rectSelToolActivated;
     bool contigSelToolActivated;
     bool freehandSelToolActivated;
-    bool rectSelToolActivated;
+
     QPointer<KisToolProxy> activatedToolProxy;
     QPointer<KisToolProxy> runningToolProxy;
 };
@@ -67,10 +72,13 @@ KisToolInvocationAction::KisToolInvocationAction()
     indexes.insert(i18n("Activate Rectangle Tool"), RectToolShortcut);
     indexes.insert(i18n("Activate Move Tool"), MoveToolShortcut);
     indexes.insert(i18n("Activate Fill Tool"), FillToolShortcut);
+    indexes.insert(i18n("Activate Gradient Tool"), GradientToolShortcut);
+    indexes.insert(i18n("Activate Measure Tool"), MeasureToolShortcut);
     indexes.insert(i18n("Activate Elliptical Selection Tool"), EllipseSelToolShortcut);
+    indexes.insert(i18n("Activate Rectangular Selection Tool"), RectSelToolShortcut);
     indexes.insert(i18n("Activate Contiguous Selection Tool"), ContigSelToolShortcut);
     indexes.insert(i18n("Activate Freehand Selection Tool"), FreehandSelToolShortcut);
-    indexes.insert(i18n("Activate Retangular Selection Tool"), RectSelToolShortcut);
+
     setShortcutIndexes(indexes);
 }
 
@@ -105,9 +113,21 @@ void KisToolInvocationAction::activate(int shortcut)
             KoToolManager::instance()->switchToolTemporaryRequested("KritaFill/KisToolFill");
             d->fillToolActivated = true;
             break;
+        case GradientToolShortcut:
+            KoToolManager::instance()->switchToolTemporaryRequested("KritaFill/KisToolGradient");
+            d->gradientToolActivated = true;
+            break;
+        case MeasureToolShortcut:
+            KoToolManager::instance()->switchToolTemporaryRequested("KritaShape/KisToolMeasure");
+            d->measureToolActivated = true;
+            break;
         case EllipseSelToolShortcut:
             KoToolManager::instance()->switchToolTemporaryRequested("KisToolSelectElliptical");
             d->ellipseSelToolActivated = true;
+            break;
+        case RectSelToolShortcut:
+            KoToolManager::instance()->switchToolTemporaryRequested("KisToolSelectRectangular");
+            d->rectSelToolActivated = true;
             break;
         case ContigSelToolShortcut:
             KoToolManager::instance()->switchToolTemporaryRequested("KisToolSelectContiguous");
@@ -116,10 +136,6 @@ void KisToolInvocationAction::activate(int shortcut)
         case FreehandSelToolShortcut:
             KoToolManager::instance()->switchToolTemporaryRequested("KisToolSelectOutline");
             d->freehandSelToolActivated = true;
-            break;
-        case RectSelToolShortcut:
-            KoToolManager::instance()->switchToolTemporaryRequested("KisToolSelectRectangular");
-            d->rectSelToolActivated = true;
             break;
     }
 
@@ -156,17 +172,23 @@ void KisToolInvocationAction::deactivate(int shortcut)
     } else if (shortcut == FillToolShortcut && d->fillToolActivated) {
         d->fillToolActivated = false;
         KoToolManager::instance()->switchBackRequested();
+    } else if (shortcut == GradientToolShortcut && d->gradientToolActivated) {
+        d->gradientToolActivated = false;
+        KoToolManager::instance()->switchBackRequested();
+    } else if (shortcut == MeasureToolShortcut && d->measureToolActivated) {
+        d->measureToolActivated = false;
+        KoToolManager::instance()->switchBackRequested();
     } else if (shortcut == EllipseSelToolShortcut && d->ellipseSelToolActivated) {
         d->ellipseSelToolActivated = false;
+        KoToolManager::instance()->switchBackRequested();
+    } else if (shortcut == RectSelToolShortcut && d->rectSelToolActivated) {
+        d->rectSelToolActivated = false;
         KoToolManager::instance()->switchBackRequested();
     } else if (shortcut == ContigSelToolShortcut && d->contigSelToolActivated) {
         d->contigSelToolActivated = false;
         KoToolManager::instance()->switchBackRequested();
     } else if (shortcut == FreehandSelToolShortcut && d->freehandSelToolActivated) {
         d->freehandSelToolActivated = false;
-        KoToolManager::instance()->switchBackRequested();
-    } else if (shortcut == RectSelToolShortcut && d->rectSelToolActivated) {
-        d->rectSelToolActivated = false;
         KoToolManager::instance()->switchBackRequested();
     }
 }

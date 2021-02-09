@@ -15,11 +15,6 @@
 #     packages midway is also managed. Order goes from top to bottom, to add
 #     new steps just place them in the proper place.
 
-# rebuilddeps: This re-runs all make and make install of dependencies 3rdparty
-#     this was needed as deleting the entire install directory an rerunning build
-#     step for dependencies does not install if they are already built. This step
-#     forces installation. Have not tested it lately so it might not be needed anymore
-
 # build: Runs cmake build and make step for krita sources. It always run cmake step, so
 #     it might take a bit longer than a pure <make> on the source tree. The script tries
 #     to set the make flag -jN to a proper N.
@@ -392,91 +387,6 @@ build_3rdparty () {
     print_msg "Build Finished!"
 }
 
-# Recall cmake for all 3rd party packages
-# make is only on target first run
-# subsequent runs only call make install
-rebuild_3rdparty () {
-    print_msg "starting rebuild of 3rdparty packages"
-    build_install_ext() {
-        for pkg in ${@:1:${#@}}; do
-            {
-                cd ${KIS_TBUILD_DIR}/${pkg}/${pkg}-prefix/src/${pkg}-stamp
-            } || {
-                cd ${KIS_TBUILD_DIR}/ext_frameworks/${pkg}-prefix/src/${pkg}-stamp
-            } || {
-                cd ${KIS_TBUILD_DIR}/ext_heif/${pkg}-prefix/src/${pkg}-stamp
-            }
-            log "Installing ${pkg} files..."
-            rm ${pkg}-configure ${pkg}-build ${pkg}-install
-
-            cmake_3rdparty ${pkg}
-
-            cd ${KIS_TBUILD_DIR}
-        done
-    }
-    # Do not process complete list only pkgs given.
-    if ! test -z ${1}; then
-        build_install_ext ${@}
-        exit
-    fi
-
-    build_install_ext \
-        ext_iconv \
-        ext_pkgconfig \
-        ext_gettext \
-        ext_openssl \
-        ext_qt \
-        ext_zlib \
-        ext_boost \
-        ext_eigen3 \
-        ext_expat \
-        ext_exiv2 \
-        ext_fftw3 \
-        ext_jpeg \
-        ext_patch \
-        ext_lcms2 \
-        ext_ocio \
-        ext_openexr
-        #ext_openjpeg
-
-    build_install_ext \
-        ext_png \
-        ext_tiff \
-        ext_gsl \
-        ext_vc \
-        ext_libraw \
-        ext_giflib \
-        ext_fontconfig \
-        ext_freetype \
-        ext_poppler \
-        ext_python \
-        ext_sip \
-        ext_pyqt \
-
-    build_install_ext \
-        ext_nasm \
-        ext_libx265 \
-        ext_libde265 \
-        ext_libheif
-
-    # Build kde_frameworks
-    build_install_ext \
-        ext_extra_cmake_modules \
-        ext_kconfig \
-        ext_kwidgetsaddons \
-        ext_kcompletion \
-        ext_kcoreaddons \
-        ext_kguiaddons \
-        ext_ki18n \
-        ext_kitemmodels \
-        ext_kitemviews \
-        ext_kimageformats \
-        ext_kwindowsystem \
-        ext_quazip
-
-    build_install_ext \
-        ext_seexpr
-}
 
 #not tested
 set_krita_dirs() {
@@ -662,8 +572,6 @@ print_usage () {
     printf "USAGE: osxbuild.sh <buildstep> [pkg|file]\n"
     printf "BUILDSTEPS:\t\t"
     printf "\n builddeps \t\t Run cmake step for 3rd party dependencies, optionally takes a [pkg] arg"
-    printf "\n rebuilddeps \t\t Rerun make and make install step for 3rd party deps, optionally takes a [pkg] arg
-    \t\t\t useful for cleaning install directory and quickly reinstall all deps."
     printf "\n fixboost \t\t Fixes broken boost \@rpath on OSX"
     printf "\n build \t\t\t Builds krita"
     printf "\n buildtarball \t\t Builds krita from provided [file] tarball"
@@ -690,10 +598,6 @@ script_run() {
             dir_clean "${KIS_TBUILD_DIR}"
         fi
         build_3rdparty "${@:2}"
-        exit
-
-    elif [[ ${1} = "rebuilddeps" ]]; then
-        rebuild_3rdparty "${@:2}"
         exit
 
     elif [[ ${1} = "fixboost" ]]; then

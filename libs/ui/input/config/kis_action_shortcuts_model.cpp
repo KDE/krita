@@ -327,7 +327,7 @@ bool KisActionShortcutsModel::removeRows(int row, int count, const QModelIndex &
     for (int i = row; i < d->shortcuts.count() && count > 0; ++i, count--) {
         KisShortcutConfiguration *s = d->shortcuts.at(i);
 
-        if (!d->action->isShortcutRequired(s->mode()) && d->shortcutModeCount(s->mode()) < 2) {
+        if (!canRemoveRow(i)) {
             QMessageBox shortcutMessage;
             shortcutMessage.setText(i18n("Deleting last shortcut for this action!"));
             shortcutMessage.setInformativeText(i18n("It is not allowed to erase some default shortcuts. Modify it instead."));

@@ -22,13 +22,12 @@ public:
 
     QRegularExpression searchTokenizer;
 
-    QChar tagBegin {'['};
-    QChar tagEnd {']'};
+    QChar excludeBegin {'!'};
+    QChar tagBegin {'#'};
     QChar exactMatchBeginEnd {'"'};
 
     QSet<QString> tagNamesIncluded;
     QSet<QString> tagNamesExcluded;
-
     QList<QString> resourceNamesPartsIncluded;
     QList<QString> resourceNamesPartsExcluded;
     QSet<QString> resourceExactMatchesIncluded;
@@ -39,7 +38,7 @@ public:
 
 
 KisResourceSearchBoxFilter::KisResourceSearchBoxFilter()
-    : d(new Private())
+    : m_d(new Private())
 {
 }
 
@@ -48,26 +47,28 @@ KisResourceSearchBoxFilter::~KisResourceSearchBoxFilter()
 
 }
 
-QString cutOutDelimeters(QString text)
-{
-    QString response(text);
-    response = response.remove(0, 1);
-    response = response.left(response.length() - 1);
-    return response;
+bool checkDelimetersAndCut(const QChar& begin, const QChar& end, QString& token) {
+    if (token.startsWith(begin) && token.endsWith(end)) {
+        token.remove(0, 1);
+        token = token.left(token.length() - 1);
+        return true;
+    } else {
+        return false;
+    }
 }
 
-bool checkInclusionAndCut(QString& part) {
-    bool included = true;
-    if (part.startsWith('!')) {
-        part.remove(0, 1);
-        included = false;
+bool checkPrefixAndCut(QChar& prefix, QString& token) {
+    if (token.startsWith(prefix)) {
+        token.remove(0, 1);
+        return true;
+    } else {
+        return false;
     }
-    return included;
 }
 
 void KisResourceSearchBoxFilter::setFilter(const QString& filter)
 {
-    d->filter = QString(filter);
+    m_d->filter = QString(filter);
     initializeFilterData();
 }
 
@@ -76,40 +77,40 @@ bool KisResourceSearchBoxFilter::matchesResource(const QString &_resourceName, c
 {
     // exact matches
     QString resourceName = _resourceName.toLower();
-    if (d->resourceExactMatchesIncluded.count() > 0
-            && !d->resourceExactMatchesIncluded.contains(resourceName)) {
+    if (m_d->resourceExactMatchesIncluded.count() > 0
+            && !m_d->resourceExactMatchesIncluded.contains(resourceName)) {
         return false;
     }
-    if (d->resourceExactMatchesExcluded.contains(resourceName)) {
+    if (m_d->resourceExactMatchesExcluded.contains(resourceName)) {
         return false;
     }
 
     // partial name matches
-    if (d->resourceNamesPartsIncluded.count() > 0) {
-        Q_FOREACH(const QString& partialName, d->resourceNamesPartsIncluded) {
+    if (m_d->resourceNamesPartsIncluded.count() > 0) {
+        Q_FOREACH(const QString& partialName, m_d->resourceNamesPartsIncluded) {
             if (!resourceName.contains(partialName) && tagList.filter(partialName, Qt::CaseInsensitive).isEmpty()) {
                 return false;
             }
         }
     }
 
-    Q_FOREACH(const QString& partialName, d->resourceNamesPartsExcluded) {
+    Q_FOREACH(const QString& partialName, m_d->resourceNamesPartsExcluded) {
         if (resourceName.contains(partialName) || tagList.filter(partialName, Qt::CaseInsensitive).size() > 0) {
             return false;
         }
     }
 
     // Tag exact matches
-    if (d->tagNamesIncluded.count() > 0) {
-        Q_FOREACH(const QString& tagName, d->tagNamesIncluded) {
+    if (m_d->tagNamesIncluded.count() > 0) {
+        Q_FOREACH(const QString& tagName, m_d->tagNamesIncluded) {
             if (!tagList.contains(tagName, Qt::CaseInsensitive)) {
                 return false;
             }
         }
     }
 
-    if (d->tagNamesExcluded.count() > 0) {
-        Q_FOREACH(const QString excludedTag, d->tagNamesExcluded) {
+    if (m_d->tagNamesExcluded.count() > 0) {
+        Q_FOREACH(const QString excludedTag, m_d->tagNamesExcluded) {
             if (tagList.contains(excludedTag, Qt::CaseInsensitive)) {
                 return false;
             }
@@ -121,18 +122,18 @@ bool KisResourceSearchBoxFilter::matchesResource(const QString &_resourceName, c
 
 bool KisResourceSearchBoxFilter::isEmpty()
 {
-    return d->filter.isEmpty();
+    return m_d->filter.isEmpty();
 }
 
 void KisResourceSearchBoxFilter::clearFilterData()
 {
 
-    d->tagNamesIncluded.clear();
-    d->tagNamesExcluded.clear();
-    d->resourceNamesPartsIncluded.clear();
-    d->resourceNamesPartsExcluded.clear();
-    d->resourceExactMatchesIncluded.clear();
-    d->resourceExactMatchesExcluded.clear();
+    m_d->tagNamesIncluded.clear();
+    m_d->tagNamesExcluded.clear();
+    m_d->resourceNamesPartsIncluded.clear();
+    m_d->resourceNamesPartsExcluded.clear();
+    m_d->resourceExactMatchesIncluded.clear();
+    m_d->resourceExactMatchesExcluded.clear();
 
 }
 
@@ -140,33 +141,32 @@ void KisResourceSearchBoxFilter::initializeFilterData()
 {
     clearFilterData();
 
-    QString tempFilter(d->filter);
+    QString tempFilter(m_d->filter);
 
-    QStringList parts = tempFilter.split(d->searchTokenizer, QString::SkipEmptyParts);
-    Q_FOREACH(const QString& partFor, parts) {
-        QString part(partFor);
-        part = part.toLower();
+    QStringList tokens = tempFilter.split(m_d->searchTokenizer, QString::SkipEmptyParts);
+    Q_FOREACH(const QString& token, tokens) {
+        QString workingToken(token.toLower());
+        const bool included = !checkPrefixAndCut(m_d->excludeBegin, workingToken);
 
-        const bool included = checkInclusionAndCut(part);
-        if (part.startsWith(d->tagBegin) && part.endsWith(d->tagEnd)) {
-            QString tagMatchCaptured = cutOutDelimeters(part);
+        if (checkPrefixAndCut(m_d->tagBegin, workingToken)) {
             if (included) {
-                d->tagNamesIncluded.insert(tagMatchCaptured);
+                m_d->tagNamesIncluded.insert(workingToken);
             } else {
-                d->tagNamesExcluded.insert(tagMatchCaptured);
+                m_d->tagNamesExcluded.insert(workingToken);
             }
-        } else if (part.startsWith(d->exactMatchBeginEnd) && part.endsWith(d->exactMatchBeginEnd)) {
-            QString exactMatchCaptured = cutOutDelimeters(part);
+
+        } else if (checkDelimetersAndCut(m_d->exactMatchBeginEnd, m_d->exactMatchBeginEnd, workingToken)) {
             if (included) {
-                d->resourceExactMatchesIncluded.insert(exactMatchCaptured);
+                m_d->resourceExactMatchesIncluded.insert(workingToken);
             } else {
-                d->resourceExactMatchesExcluded.insert(exactMatchCaptured);
+                m_d->resourceExactMatchesExcluded.insert(workingToken);
             }
+
         } else {
             if (included) {
-                d->resourceNamesPartsIncluded.append(part);
+                m_d->resourceNamesPartsIncluded.append(workingToken);
             } else {
-                d->resourceNamesPartsExcluded.append(part);
+                m_d->resourceNamesPartsExcluded.append(workingToken);
             }
         }
     }

@@ -252,7 +252,6 @@ void KoStopGradient::setStops(QList< KoGradientStop > stops)
     KoColor color;
     Q_FOREACH(const KoGradientStop & stop, stops) {
         color = stop.color;
-        color.convertTo(colorSpace());
         m_stops.append(KoGradientStop(stop.position, color, stop.type));
         if (stop.type != COLORSTOP) {
             m_hasVariableStops = true;

@@ -19,6 +19,7 @@ ecm_add_tests(
     TestFallBackColorTransformation.cpp
     TestKoChannelInfo.cpp
 
+
     NAME_PREFIX "libs-pigment-"
     LINK_LIBRARIES kritapigment KF5::I18n Qt5::Test)
 
@@ -27,6 +28,7 @@ ecm_add_tests(
     TestKoColorSpaceMaths.cpp
     TestKisSwatchGroup.cpp
     # TestKoColorSet.cpp
+    TestKoStopGradient.cpp
 
     NAME_PREFIX "libs-pigment-"
     LINK_LIBRARIES kritapigment Qt5::Test)

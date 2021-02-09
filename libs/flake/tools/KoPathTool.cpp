@@ -967,9 +967,6 @@ void KoPathTool::initializeWithShapes(const QList<KoShape*> shapes)
         }
     }
 
-    const QRectF oldBoundingRect =
-            KoShape::boundingRect(implicitCastList<KoShape*>(m_pointSelection.selectedShapes()));
-
     if (selectedShapes != m_pointSelection.selectedShapes()) {
         clearActivePointSelectionReferences();
         m_pointSelection.setSelectedShapes(selectedShapes);
@@ -1127,7 +1124,7 @@ void KoPathTool::deactivate()
     KoToolBase::deactivate();
 }
 
-void KoPathTool::documentResourceChanged(int key, const QVariant & res)
+void KoPathTool::documentResourceChanged(int key, const QVariant & /*res*/)
 {
     if (key == KoDocumentResourceManager::HandleRadius) {
         repaintDecorations();

@@ -137,6 +137,7 @@ class KRITARESOURCES_EXPORT KisAllResourcesModel : public QAbstractTableModel, p
 private:
     friend class KisResourceModelProvider;
     friend class KisResourceModel;
+    friend class KisResourceQueryMapper;
     KisAllResourcesModel(const QString &resourceType, QObject *parent = 0);
 
 public:

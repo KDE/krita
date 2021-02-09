@@ -441,7 +441,7 @@ bool KisResourceCacheDb::addResourceVersionImpl(int resourceId, QDateTime timest
     q.bindValue(":resource_id", resourceId);
     q.bindValue(":storage_location", KisResourceLocator::instance()->makeStorageLocationRelative(storage->location()));
     q.bindValue(":version", resource->version());
-    q.bindValue(":filename", QFileInfo(resource->filename()).fileName());
+    q.bindValue(":filename", resource->filename());
     q.bindValue(":timestamp", timestamp.toSecsSinceEpoch());
     KIS_SAFE_ASSERT_RECOVER_NOOP(!resource->md5().isEmpty());
     q.bindValue(":md5sum", resource->md5().toHex());
@@ -600,7 +600,7 @@ bool KisResourceCacheDb::makeResourceTheCurrentVersion(int resourceId, KoResourc
     }
 
     q.bindValue(":name", resource->name());
-    q.bindValue(":filename", QFileInfo(resource->filename()).fileName());
+    q.bindValue(":filename", resource->filename());
     q.bindValue(":tooltip", i18n(resource->name().toUtf8()));
 
     QByteArray ba;
@@ -727,7 +727,7 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
     q.bindValue(":storage_location", KisResourceLocator::instance()->makeStorageLocationRelative(storage->location()));
     q.bindValue(":resource_type", resourceType);
     q.bindValue(":name", resource->name());
-    q.bindValue(":filename", QFileInfo(resource->filename()).fileName());
+    q.bindValue(":filename", resource->filename());
     q.bindValue(":tooltip", i18n(resource->name().toUtf8()));
 
     QByteArray ba;
@@ -742,13 +742,13 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
 
     r = q.exec();
     if (!r) {
-        qWarning() << "Could not execute addResource statement" << q.lastError() << resourceId << storage->name() << storage->location() << resource->name() << resource->filename() << "version" << resource->version();;
+        qWarning() << "Could not execute addResource statement" << q.lastError() << q.boundValues();
         return r;
     }
-
     resourceId = resourceIdForResource(resource->name(), resource->filename(), resourceType, KisResourceLocator::instance()->makeStorageLocationRelative(storage->location()));
 
     if (resourceId < 0) {
+
         qWarning() << "Adding to database failed, resource id after adding is " << resourceId << "! (Probable reason: the resource has the same filename, storage, resource type as an existing resource). Resource is: "
                    << resource->name()
                    << resource->filename()
@@ -780,7 +780,7 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
     q.bindValue(":resource_id", resourceId);
     q.bindValue(":storage_location", KisResourceLocator::instance()->makeStorageLocationRelative(storage->location()));
     q.bindValue(":version", resource->version());
-    q.bindValue(":filename", QFileInfo(resource->filename()).fileName());
+    q.bindValue(":filename", resource->filename());
     q.bindValue(":timestamp", timestamp.toSecsSinceEpoch());
     KIS_SAFE_ASSERT_RECOVER_NOOP(!resource->md5().isEmpty());
     if (resource->md5().isEmpty()) {
@@ -822,11 +822,11 @@ bool KisResourceCacheDb::addResources(KisResourceStorageSP storage, QString reso
                     if (addResource(storage, iter->lastModified(), resource, iter->type())) {
                         resourceId = resource->resourceId();
                     } else {
-                        qWarning() << "Could not add resource" << QFileInfo(resource->filename()).fileName() << "to the database";
+                        qWarning() << "Could not add resource" << resource->filename() << "to the database";
                     }
                 } else {
                     if (!addResourceVersion(resourceId, iter->lastModified(), storage, resource)) {
-                        qWarning() << "Could not add resource version" << QFileInfo(resource->filename()).fileName() << "to the database";
+                        qWarning() << "Could not add resource version" << resource->filename() << "to the database";
                     }
                 }
             }
@@ -1415,6 +1415,13 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
             if (itA->resourceId >= 0) break;
 
             KoResourceSP res = storage->resource(itA->url);
+
+            if (!res) {
+                // resource cannot be loaded, the file is probably broken
+                ++itA;
+                continue;
+            }
+
             res->setVersion(itA->version);
             res->setMD5(storage->resourceMd5(itA->url));
             if (!res->valid()) {
@@ -1467,20 +1474,21 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
                 // add a version to the database
 
                 KoResourceSP res = storage->resource(itA->url);
-                res->setVersion(itA->version);
-                res->setMD5(storage->resourceMd5(itA->url));
+                if (res) {
+                    res->setVersion(itA->version);
+                    res->setMD5(storage->resourceMd5(itA->url));
 
-                const bool result = addResourceVersionImpl(itA->resourceId, itA->timestamp, storage, res);
-                KIS_SAFE_ASSERT_RECOVER_NOOP(result);
+                    const bool result = addResourceVersionImpl(itA->resourceId, itA->timestamp, storage, res);
+                    KIS_SAFE_ASSERT_RECOVER_NOOP(result);
 
-                resourceIdForUpdate.insert(itA->resourceId);
+                    resourceIdForUpdate.insert(itA->resourceId);
+                }
                 ++itA;
 
             } else if ((itA != endA && itB != endB && *itA > *itB) ||
                        itA == endA) {
 
                 // remove a version from the database
-
                 const bool result = removeResourceVersionImpl(itB->resourceId, itB->version, storage);
                 KIS_SAFE_ASSERT_RECOVER_NOOP(result);
                 resourceIdForUpdate.insert(itB->resourceId);

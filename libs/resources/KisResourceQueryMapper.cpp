@@ -106,9 +106,9 @@ QVariant KisResourceQueryMapper::variantFromResourceQuery(const QSqlQuery &query
         return query.value("resource_type");
     case Qt::UserRole + KisAbstractResourceModel::Tags:
     {
-        KisResourceModel resourceModel(resourceType);
+        KisAllResourcesModel *resourceModel = KisResourceModelProvider::resourceModel(resourceType);
         QStringList tagNames;
-        Q_FOREACH(const KisTagSP tag, resourceModel.tagsForResource(query.value("id").toInt())) {
+        Q_FOREACH(const KisTagSP tag, resourceModel->tagsForResource(query.value("id").toInt())) {
             tagNames << tag->name();
         }
         return tagNames;
@@ -124,8 +124,7 @@ QVariant KisResourceQueryMapper::variantFromResourceQuery(const QSqlQuery &query
         }
         else {
             // Now we have to check the resource, but that's cheap since it's been loaded in any case
-            KisResourceModel resourceModel(resourceType);
-            KoResourceSP resource = resourceModel.resourceForId(query.value("id").toInt());
+            KoResourceSP resource = KisResourceLocator::instance()->resourceForId(query.value("id").toInt());
             return resource->isDirty();
         }
     }

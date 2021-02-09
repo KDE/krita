@@ -60,19 +60,21 @@ private:
     QString m_currentType;
     KoResourceSP m_currentResource;
     QString m_currentUuid;
+    QString m_resourceType;
 
 public:
 
-    AslIterator(QSharedPointer<KisAslLayerStyleSerializer> aslSerializer, const QString& filename)
+    AslIterator(QSharedPointer<KisAslLayerStyleSerializer> aslSerializer, const QString& filename, const QString& resourceType)
         : m_filename(filename)
         , m_aslSerializer(aslSerializer)
         , m_isLoaded(false)
+        , m_resourceType(resourceType)
     {
     }
 
     bool hasNext() const override
     {
-        if (!m_isLoaded) {
+        if (!m_isLoaded && (m_resourceType == ResourceType::Patterns || m_resourceType == ResourceType::LayerStyles)) {
             if (!m_aslSerializer->isInitialized()) {
                 m_aslSerializer->readFromFile(m_filename);
             }
@@ -83,30 +85,37 @@ public:
 
             const_cast<AslIterator*>(this)->m_patternsIterator.reset(new QHashIterator<QString, KoPatternSP>(m_patterns));
             const_cast<AslIterator*>(this)->m_stylesIterator.reset(new QVectorIterator<KisPSDLayerStyleSP>(m_styles));
-
-            QHash<QString, KisPSDLayerStyleSP> layerStyles = const_cast<AslIterator*>(this)->m_aslSerializer->stylesHash();
         }
         if (!m_aslSerializer->isValid()) {
             return false;
         }
-        return m_patternsIterator->hasNext() ? true : m_stylesIterator->hasNext();
+
+        if (m_resourceType == ResourceType::Patterns) {
+            return m_patternsIterator->hasNext();
+        } else if (m_resourceType == ResourceType::LayerStyles) {
+            return m_stylesIterator->hasNext();
+        }
+        return false;
     }
     void next() override
     {
-        if (m_patternsIterator->hasNext()) {
-            m_currentType = ResourceType::Patterns;
-            m_patternsIterator->next();
-            KoPatternSP currentPattern = m_patternsIterator->value();
-            m_currentResource = currentPattern;
-            KIS_ASSERT(currentPattern);
-            m_currentUuid = currentPattern->filename();
-        }
-        else if (m_stylesIterator->hasNext()) {
-            m_currentType = ResourceType::LayerStyles;
-            KisPSDLayerStyleSP currentLayerStyle = m_stylesIterator->next();
-            m_currentResource = currentLayerStyle;
-            KIS_ASSERT(currentLayerStyle);
-            m_currentUuid = currentLayerStyle->filename();
+        if (m_resourceType == ResourceType::Patterns) {
+            if (m_patternsIterator->hasNext()) {
+                m_currentType = ResourceType::Patterns;
+                m_patternsIterator->next();
+                KoPatternSP currentPattern = m_patternsIterator->value();
+                m_currentResource = currentPattern;
+                KIS_ASSERT(currentPattern);
+                m_currentUuid = currentPattern->filename();
+            }
+        } else if (m_resourceType == ResourceType::LayerStyles) {
+            if (m_stylesIterator->hasNext()) {
+                m_currentType = ResourceType::LayerStyles;
+                KisPSDLayerStyleSP currentLayerStyle = m_stylesIterator->next();
+                m_currentResource = currentLayerStyle;
+                KIS_ASSERT(currentLayerStyle);
+                m_currentUuid = currentLayerStyle->filename();
+            }
         }
     }
 
@@ -126,7 +135,7 @@ public:
     QDateTime lastModified() const override { return QDateTime(); }
 
 
-    /// This only loads the resource when called
+    /// This only loads the resource when called (but not in case of asl...)
     KoResourceSP resourceImpl() const override
     {
         return m_currentResource;
@@ -191,9 +200,9 @@ bool KisAslStorage::supportsVersioning() const
     return false;
 }
 
-QSharedPointer<KisResourceStorage::ResourceIterator> KisAslStorage::resources(const QString &/*resourceType*/)
+QSharedPointer<KisResourceStorage::ResourceIterator> KisAslStorage::resources(const QString &resourceType)
 {
-    return QSharedPointer<KisResourceStorage::ResourceIterator>(new AslIterator(m_aslSerializer, location()));
+    return QSharedPointer<KisResourceStorage::ResourceIterator>(new AslIterator(m_aslSerializer, location(), resourceType));
 }
 
 QSharedPointer<KisResourceStorage::TagIterator> KisAslStorage::tags(const QString &resourceType)

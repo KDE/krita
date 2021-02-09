@@ -503,6 +503,10 @@ install_krita () {
 }
 
 build_plugins () {
+    if [[ -z ${OSXBUILD_CLEAN} ]]; then
+        dir_clean "${KIS_PLUGIN_BUILD_DIR}"
+    fi
+
     print_msg "building in ${KIS_PLUGIN_BUILD_DIR}"
 
     log "$(check_dir_path ${KIS_PLUGIN_BUILD_DIR})"
@@ -733,10 +737,6 @@ script_run() {
         exit
 
     elif [[ ${1} = "buildplugins" ]]; then
-        if [[ -z ${OSXBUILD_CLEAN} ]]; then
-            dir_clean "${KIS_PLUGIN_BUILD_DIR}"
-        fi
-
         if [[ ${OSXBUILD_UNIVERSAL} ]]; then
             universal_plugin_build "${@:2}"
         else

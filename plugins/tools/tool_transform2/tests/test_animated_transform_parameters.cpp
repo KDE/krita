@@ -26,21 +26,31 @@ void KisAnimatedTransformParametersTest::testTransformKeyframing()
     mask->setTransformParams(toQShared(new KisTransformMaskAdapter(args)));
 
     // Make mask animated
-    mask->getKeyframeChannel(KisKeyframeChannel::TransformArguments.id(), true);
+    mask->getKeyframeChannel(KisKeyframeChannel::ScaleX.id(), true);
+    QVERIFY(mask->getKeyframeChannel(KisKeyframeChannel::ScaleX.id(), false));
 
-    args.setMode(ToolTransformArgs::FREE_TRANSFORM);
-    args.setScaleX(0.75);
-    QScopedPointer<KisModifyTransformMaskCommand> command1(
-        new KisModifyTransformMaskCommand(mask, toQShared(new KisTransformMaskAdapter(args))));
-    command1->redo();
+    {
+        p.image->animationInterface()->switchCurrentTimeAsync(0);
+        p.image->waitForDone();
 
-    p.image->animationInterface()->switchCurrentTimeAsync(10);
-    p.image->waitForDone();
+        args.setMode(ToolTransformArgs::FREE_TRANSFORM);
+        args.setScaleX(0.75);
 
-    args.setScaleX(0.5);
-    QScopedPointer<KisModifyTransformMaskCommand> command2(
-        new KisModifyTransformMaskCommand(mask, toQShared(new KisTransformMaskAdapter(args))));
-    command2->redo();
+        QScopedPointer<KisModifyTransformMaskCommand> command1(
+            new KisModifyTransformMaskCommand(mask, toQShared(new KisTransformMaskAdapter(args))));
+        command1->redo();
+    }
+
+    {
+        p.image->animationInterface()->switchCurrentTimeAsync(10);
+        p.image->waitForDone();
+
+        args.setScaleX(0.5);
+
+        QScopedPointer<KisModifyTransformMaskCommand> command2(
+            new KisModifyTransformMaskCommand(mask, toQShared(new KisTransformMaskAdapter(args))));
+        command2->redo();
+    }
 
     KisAnimatedTransformMaskParameters *params_out = 0;
 
@@ -50,10 +60,12 @@ void KisAnimatedTransformParametersTest::testTransformKeyframing()
 
     p.image->animationInterface()->switchCurrentTimeAsync(0);
     p.image->waitForDone();
+
+    QVERIFY(p.image->animationInterface()->currentTime() == 0);
+
     params_out = dynamic_cast<KisAnimatedTransformMaskParameters*>(mask->transformParams().data());
     QVERIFY(params_out != 0);
     QCOMPARE(params_out->transformArgs()->scaleX(), 0.75);
-
 }
 
 

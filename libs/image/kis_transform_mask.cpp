@@ -572,8 +572,7 @@ void KisTransformMask::slotInternalForceStaticImageUpdate()
 
 KisKeyframeChannel *KisTransformMask::requestKeyframeChannel(const QString &id)
 {
-    if (id == KisKeyframeChannel::TransformArguments.id() ||
-        id == KisKeyframeChannel::PositionX.id() ||
+    if (id == KisKeyframeChannel::PositionX.id() ||
         id == KisKeyframeChannel::PositionY.id() ||
         id == KisKeyframeChannel::ScaleX.id() ||
         id == KisKeyframeChannel::ScaleY.id() ||
@@ -603,8 +602,7 @@ KisKeyframeChannel *KisTransformMask::requestKeyframeChannel(const QString &id)
 
 bool KisTransformMask::supportsKeyframeChannel(const QString &id)
 {
-    if (id == KisKeyframeChannel::TransformArguments.id() ||
-        id == KisKeyframeChannel::PositionX.id() ||
+    if (id == KisKeyframeChannel::PositionX.id() ||
         id == KisKeyframeChannel::PositionY.id() ||
         id == KisKeyframeChannel::ScaleX.id() ||
         id == KisKeyframeChannel::ScaleY.id() ||

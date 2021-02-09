@@ -24,7 +24,6 @@
 
 const KoID KisKeyframeChannel::Raster = KoID("content", ki18n("Content"));
 const KoID KisKeyframeChannel::Opacity = KoID("opacity", ki18n("Opacity"));
-const KoID KisKeyframeChannel::TransformArguments = KoID("transform_arguments", ki18n("Transform"));
 const KoID KisKeyframeChannel::PositionX = KoID("transform_pos_x", ki18n("Position (X)"));
 const KoID KisKeyframeChannel::PositionY = KoID("transform_pos_y", ki18n("Position (Y)"));
 const KoID KisKeyframeChannel::ScaleX = KoID("transform_scale_x", ki18n("Scale (X)"));

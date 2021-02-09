@@ -153,7 +153,6 @@ protected:
     typedef QMap<int, KisKeyframeSP> TimeKeyframeMap;
     TimeKeyframeMap &keys();
     const TimeKeyframeMap &constKeys() const;
-
     int currentTime() const;
 
     /**

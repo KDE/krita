@@ -1229,8 +1229,7 @@ struct ResourceVersion : public boost::less_than_comparable<ResourceVersion>
 
     bool operator<(const ResourceVersion &rhs) const {
         return resourceId < rhs.resourceId ||
-                (resourceId == rhs.resourceId && version < rhs.version) ||
-                (resourceId == rhs.resourceId && version == rhs.version && timestamp < rhs.timestamp);
+                (resourceId == rhs.resourceId && version < rhs.version);
     }
 
     struct CompareByResourceId {

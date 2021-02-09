@@ -1051,7 +1051,7 @@ void KisViewManager::slotSaveIncrementalBackup()
             if (!letter.isNull()) newVersion.append(letter);
             newVersion.append(".");
             backupFileName.replace(regex, newVersion);
-            fileAlreadyExists = QFile(backupFileName).exists();
+            fileAlreadyExists = QFile(path + '/' + backupFileName).exists();
             if (fileAlreadyExists) {
                 if (!letter.isNull()) {
                     char letterCh = letter.at(0).toLatin1();
@@ -1091,7 +1091,7 @@ void KisViewManager::slotSaveIncrementalBackup()
             newVersion.prepend("~");
             newVersion.append(".");
             backupFileName.replace(regex, newVersion);
-            fileAlreadyExists = QFile(backupFileName).exists();
+            fileAlreadyExists = QFile(path + '/' + backupFileName).exists();
             if (fileAlreadyExists) {
                 // Prepare the base for new version filename, increment by 1
                 int intVersion = baseNewVersion.toInt(0);

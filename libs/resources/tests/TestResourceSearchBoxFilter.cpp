@@ -217,7 +217,7 @@ void TestResourceSearchBoxFilter::testResourceSearch()
     }
 
     {   // Find only the brushes with a specific tag
-        filter.setFilter("#" + tagTexture);
+        filter.setFilter("#\"" + tagTexture + "\"");
         QList<MockResource> results = filterResourceList(resources, filter);
         QVERIFY(results.size() == 4);
         QVERIFY(results.contains(hbPencil));
@@ -226,7 +226,7 @@ void TestResourceSearchBoxFilter::testResourceSearch()
         QVERIFY(results.contains(impasto));
         QVERIFY(!results.contains(polymer));
 
-        filter.setFilter("!#" + tagTexture);
+        filter.setFilter("!#\"" + tagTexture + "\"");
         results = filterResourceList(resources, filter);
         QVERIFY(results.size() == resources.size() - 4);
         QVERIFY(!results.contains(hbPencil));

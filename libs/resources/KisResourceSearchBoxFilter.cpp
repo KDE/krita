@@ -26,12 +26,15 @@ public:
     QChar tagBegin {'#'};
     QChar exactMatchBeginEnd {'"'};
 
-    QSet<QString> tagNamesIncluded;
-    QSet<QString> tagNamesExcluded;
-    QList<QString> resourceNamesPartsIncluded;
-    QList<QString> resourceNamesPartsExcluded;
+    QSet<QString> tagExactMatchesIncluded;
+    QSet<QString> tagExactMatchesExcluded;
     QSet<QString> resourceExactMatchesIncluded;
     QSet<QString> resourceExactMatchesExcluded;
+
+    QList<QString> resourceNamesPartialIncluded;
+    QList<QString> resourceNamesPartialExcluded;
+    QList<QString> tagsPartialIncluded;
+    QList<QString> tagsPartialExcluded;
 
     QString filter;
 };
@@ -55,6 +58,10 @@ bool checkDelimetersAndCut(const QChar& begin, const QChar& end, QString& token)
     } else {
         return false;
     }
+}
+
+bool checkDelimetersAndCut(const QChar& beginEnd, QString& token) {
+    return checkDelimetersAndCut(beginEnd, beginEnd, token);
 }
 
 bool checkPrefixAndCut(QChar& prefix, QString& token) {
@@ -86,31 +93,48 @@ bool KisResourceSearchBoxFilter::matchesResource(const QString &_resourceName, c
     }
 
     // partial name matches
-    if (m_d->resourceNamesPartsIncluded.count() > 0) {
-        Q_FOREACH(const QString& partialName, m_d->resourceNamesPartsIncluded) {
+    if (m_d->resourceNamesPartialIncluded.count() > 0) {
+        Q_FOREACH(const QString& partialName, m_d->resourceNamesPartialIncluded) {
             if (!resourceName.contains(partialName) && tagList.filter(partialName, Qt::CaseInsensitive).isEmpty()) {
                 return false;
             }
         }
     }
 
-    Q_FOREACH(const QString& partialName, m_d->resourceNamesPartsExcluded) {
+    Q_FOREACH(const QString& partialName, m_d->resourceNamesPartialExcluded) {
         if (resourceName.contains(partialName) || tagList.filter(partialName, Qt::CaseInsensitive).size() > 0) {
             return false;
         }
     }
 
+    // Tag partial matches
+    if (m_d->tagsPartialIncluded.count() > 0 ) {
+        Q_FOREACH(const QString& partialTag, m_d->tagsPartialIncluded) {
+            if (tagList.filter(partialTag, Qt::CaseInsensitive).isEmpty()) {
+                return false;
+            }
+        }
+    }
+
+    if (m_d->tagsPartialExcluded.count() > 0) {
+        Q_FOREACH(const QString& partialTag, m_d->tagsPartialExcluded) {
+            if (tagList.filter(partialTag, Qt::CaseInsensitive).size() > 0) {
+                return false;
+            }
+        }
+    }
+
     // Tag exact matches
-    if (m_d->tagNamesIncluded.count() > 0) {
-        Q_FOREACH(const QString& tagName, m_d->tagNamesIncluded) {
+    if (m_d->tagExactMatchesIncluded.count() > 0) {
+        Q_FOREACH(const QString& tagName, m_d->tagExactMatchesIncluded) {
             if (!tagList.contains(tagName, Qt::CaseInsensitive)) {
                 return false;
             }
         }
     }
 
-    if (m_d->tagNamesExcluded.count() > 0) {
-        Q_FOREACH(const QString excludedTag, m_d->tagNamesExcluded) {
+    if (m_d->tagExactMatchesExcluded.count() > 0) {
+        Q_FOREACH(const QString excludedTag, m_d->tagExactMatchesExcluded) {
             if (tagList.contains(excludedTag, Qt::CaseInsensitive)) {
                 return false;
             }
@@ -127,14 +151,15 @@ bool KisResourceSearchBoxFilter::isEmpty()
 
 void KisResourceSearchBoxFilter::clearFilterData()
 {
-
-    m_d->tagNamesIncluded.clear();
-    m_d->tagNamesExcluded.clear();
-    m_d->resourceNamesPartsIncluded.clear();
-    m_d->resourceNamesPartsExcluded.clear();
     m_d->resourceExactMatchesIncluded.clear();
     m_d->resourceExactMatchesExcluded.clear();
+    m_d->tagExactMatchesIncluded.clear();
+    m_d->tagExactMatchesExcluded.clear();
 
+    m_d->resourceNamesPartialIncluded.clear();
+    m_d->resourceNamesPartialExcluded.clear();
+    m_d->tagsPartialIncluded.clear();
+    m_d->tagsPartialExcluded.clear();
 }
 
 void KisResourceSearchBoxFilter::initializeFilterData()
@@ -149,24 +174,39 @@ void KisResourceSearchBoxFilter::initializeFilterData()
         const bool included = !checkPrefixAndCut(m_d->excludeBegin, workingToken);
 
         if (checkPrefixAndCut(m_d->tagBegin, workingToken)) {
-            if (included) {
-                m_d->tagNamesIncluded.insert(workingToken);
-            } else {
-                m_d->tagNamesExcluded.insert(workingToken);
-            }
+            if (checkDelimetersAndCut(m_d->exactMatchBeginEnd, workingToken)) {
+                if (included) {
 
-        } else if (checkDelimetersAndCut(m_d->exactMatchBeginEnd, m_d->exactMatchBeginEnd, workingToken)) {
+                    m_d->tagExactMatchesIncluded.insert(workingToken);
+                } else {
+
+                    m_d->tagExactMatchesExcluded.insert(workingToken);
+                }
+            } else {
+                if (included) {
+
+                    m_d->tagsPartialIncluded.append(workingToken);
+                } else {
+
+                    m_d->tagsPartialExcluded.append(workingToken);
+                }
+            }
+        } else if (checkDelimetersAndCut(m_d->exactMatchBeginEnd, workingToken)) {
             if (included) {
+
                 m_d->resourceExactMatchesIncluded.insert(workingToken);
             } else {
+
                 m_d->resourceExactMatchesExcluded.insert(workingToken);
             }
 
         } else {
             if (included) {
-                m_d->resourceNamesPartsIncluded.append(workingToken);
+
+                m_d->resourceNamesPartialIncluded.append(workingToken);
             } else {
-                m_d->resourceNamesPartsExcluded.append(workingToken);
+
+                m_d->resourceNamesPartialExcluded.append(workingToken);
             }
         }
     }

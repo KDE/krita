@@ -172,12 +172,21 @@ public:
         if (!shortcutString.isEmpty()) {
             // collect rects for each word
             QVector<QPair<QRect, QString>> btns;
-            const auto list = shortcutString.split(QLatin1Char('+'));
+            const auto list = [&shortcutString] {
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
+                auto list = shortcutString.split(QLatin1Char('+'), QString::SkipEmptyParts);
+#else
+                auto list = shortcutString.split(QLatin1Char('+'), Qt::SkipEmptyParts);
+#endif
+                if (shortcutString.endsWith(QLatin1String("+"))) {
+                    list.append(QStringLiteral("+"));
+                }
+                return list;
+            }();
             btns.reserve(list.size());
             for (const QString &text : list) {
                 QRect r = option.fontMetrics.boundingRect(text);
                 r.setWidth(r.width() + 8);
-                r.setHeight(r.height() + 4);
                 btns.append({r, text});
             }
 
@@ -188,6 +197,10 @@ public:
             const int y = option.rect.y();
             const int plusY = option.rect.y() + plusRect.height() / 2;
             const int total = btns.size();
+
+            // make sure our rects are nicely V-center aligned in the row
+            painter->translate(QPoint(0, (option.rect.height() - btns.at(0).first.height()) / 2));
+
             int i = 0;
             painter->setRenderHint(QPainter::Antialiasing);
             for (const auto &btn : btns) {
@@ -211,9 +224,9 @@ public:
 
                 // draw '+'
                 if (i + 1 < total) {
-                    x += rect.width() + 8;
+                    x += rect.width() + 5;
                     painter->drawText(QPoint(x, plusY + (rect.height() / 2)), QString("+"));
-                    x += plusRect.width() + 8;
+                    x += plusRect.width() + 5;
                 }
                 i++;
             }

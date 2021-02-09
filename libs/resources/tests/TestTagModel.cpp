@@ -138,6 +138,23 @@ void TestTagModel::testTagForIndex()
     QCOMPARE(tag->url(), m_tag->url());
 }
 
+void TestTagModel::testTagForUrl()
+{
+    KisTagModel tagModel(resourceType);
+
+    KisTagSP tag = tagModel.tagForUrl("All");
+    QVERIFY(tag);
+    QCOMPARE(tag->url(), "All");
+
+    tag = tagModel.tagForUrl("All Untagged");
+    QVERIFY(tag);
+    QCOMPARE(tag->url(), "All Untagged");
+
+    tag = tagModel.tagForUrl(m_tag->url());
+    QVERIFY(tag);
+    QCOMPARE(tag->url(), m_tag->url());
+}
+
 void TestTagModel::testAddEmptyTag()
 {
     KisTagModel tagModel(resourceType);

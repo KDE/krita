@@ -318,7 +318,7 @@ bool KisAllTagsModel::addTag(const KisTagSP tag, QVector<KoResourceSP> taggedRes
     tag->setId(data(indexForTag(tag), Qt::UserRole + KisAllTagsModel::Id).toInt());
 
     if (!taggedResouces.isEmpty()) {
-        KisTagSP tagFromDb = tagByUrl(tag->url());
+        KisTagSP tagFromDb = tagForUrl(tag->url());
         Q_FOREACH(const KoResourceSP resource, taggedResouces) {
 
             if (!resource) continue;
@@ -401,10 +401,16 @@ bool KisAllTagsModel::changeTagActive(const KisTagSP tag, bool active)
 
 }
 
-KisTagSP KisAllTagsModel::tagByUrl(const QString& tagUrl) const
+KisTagSP KisAllTagsModel::tagForUrl(const QString& tagUrl) const
 {
     if (tagUrl.isEmpty()) {
         return KisTagSP();
+    }
+
+    if (tagUrl == "All") {
+        return tagForIndex(index(Ids::All + s_fakeRowsCount, 0));
+    } else if (tagUrl == "All Untagged") {
+        return tagForIndex(index(Ids::AllUntagged + s_fakeRowsCount, 0));
     }
 
     QSqlQuery query;
@@ -421,7 +427,8 @@ KisTagSP KisAllTagsModel::tagByUrl(const QString& tagUrl) const
                            "AND    tags.url = :tag_url\n");
 
     if (!r) {
-        qWarning() << "Could not prepare KisAllTagsModel::tagByUrl query" << query.lastError();
+        qWarning() << "Could not prepare KisAllTagsModel::tagForUrl query" << query.lastError();
+        return KisTagSP();
     }
 
     query.bindValue(":resource_type", d->resourceType);
@@ -430,10 +437,14 @@ KisTagSP KisAllTagsModel::tagByUrl(const QString& tagUrl) const
 
     r = query.exec();
     if (!r) {
-        qWarning() << "Could not execute KisAllTagsModel::tagByUrl query" << query.lastError();
+        qWarning() << "Could not execute KisAllTagsModel::tagForUrl query" << query.lastError();
+        return KisTagSP();
     }
     KisTagSP tag(new KisTag());
-    query.first();
+    r = query.first();
+    if (!r) {
+        return KisTagSP();
+    }
 
     tag->setUrl(query.value("url").toString());
     tag->setName(query.value("name").toString());
@@ -540,6 +551,15 @@ KisTagSP KisTagModel::addTag(const QString &tagName, QVector<KoResourceSP> tagge
     KisAbstractTagModel *source = dynamic_cast<KisAbstractTagModel*>(sourceModel());
     if (source) {
         return source->addTag(tagName, taggedResources);
+    }
+    return 0;
+}
+
+KisTagSP KisTagModel::tagForUrl(const QString& url) const
+{
+    KisAbstractTagModel *source = dynamic_cast<KisAbstractTagModel*>(sourceModel());
+    if (source) {
+        return source->tagForUrl(url);
     }
     return 0;
 }

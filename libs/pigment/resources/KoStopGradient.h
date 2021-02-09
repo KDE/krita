@@ -145,8 +145,8 @@ protected:
 private:
 
     void loadSvgGradient(QIODevice *file);
-    void parseSvgGradient(const QDomElement& element);
-    void parseSvgColor(QColor &color, const QString &s);
+    QString saveSvgGradient() const;
+    void parseSvgGradient(const QDomElement& element, QHash<QString, const KoColorProfile*> profiles);
 };
 
 typedef QSharedPointer<KoStopGradient> KoStopGradientSP;

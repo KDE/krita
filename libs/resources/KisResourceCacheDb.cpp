@@ -130,14 +130,13 @@ QSqlError createDatabase(const QString &location)
             QVersionNumber schemaVersionNumber = QVersionNumber::fromString(schemaVersion);
             QVersionNumber currentSchemaVersionNumber = QVersionNumber::fromString(KisResourceCacheDb::databaseVersion);
 
-            if (QVersionNumber::compare(schemaVersionNumber, currentSchemaVersionNumber) < 0) {
+            if (QVersionNumber::compare(schemaVersionNumber, currentSchemaVersionNumber) != 0) {
                 // XXX: Implement migration
                 schemaIsOutDated = true;
                 QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("The resource database scheme is changed. Krita will backup your database and create a new database. Your local tags will be lost."));
                 db.close();
-                KBackup::numberedBackupFile(location + "/" + KisResourceCacheDb::resourceCacheDbFilename); {
+                KBackup::numberedBackupFile(location + "/" + KisResourceCacheDb::resourceCacheDbFilename);
                 QFile::remove(location + "/" + KisResourceCacheDb::resourceCacheDbFilename);
-                }
                 db.open();
             }
 

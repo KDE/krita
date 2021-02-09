@@ -1293,6 +1293,8 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
         return true;
     }
 
+    storage->setStorageId(q.value("id").toInt());
+
     /// We compare resource versions one-by-one because the storage may have multiple
     /// versions of them
 
@@ -1369,16 +1371,14 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
                        "WHERE  resources.resource_type_id = resource_types.id\n"
                        "AND    resources.id = versioned_resources.resource_id\n"
                        "AND    resource_types.name = :resource_type\n"
-                       "AND    versioned_resources.storage_id in (SELECT id\n"
-                       "                      FROM   storages\n"
-                       "                      WHERE  storage_type_id  == :storage_type)")) {
+                       "AND    versioned_resources.storage_id == :storage_id")) {
             qWarning() << "Could not prepare resource by type query" << q.lastError();
             success = false;
             continue;
         }
 
         q.bindValue(":resource_type", resourceType);
-        q.bindValue(":storage_type", int(storage->type()));
+        q.bindValue(":storage_id", int(storage->storageId()));
 
         if (!q.exec()) {
             qWarning() << "Could not exec resource by type query" << q.boundValues() << q.lastError();

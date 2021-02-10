@@ -436,7 +436,7 @@ bool KisResourceLocator::addStorage(const QString &storageLocation, KisResourceS
         d->errorMessages.append(i18n("Could not add %1 to the database", storage->location()));
         return false;
     }
-    emit storageAdded(storage->location());
+    emit storageAdded(makeStorageLocationRelative(storage->location()));
     return true;
 }
 

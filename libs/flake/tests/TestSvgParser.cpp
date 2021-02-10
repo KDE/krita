@@ -10,11 +10,11 @@
 #include <QPainterPath>
 #include <QTest>
 #include <svg/SvgUtil.h>
-#include <KoShapeStrokeModel.h>
+#include <KoColorBackground.h>
 
 
 #include "SvgParserTestingUtils.h"
-
+#include <sdk/tests/testflake.h>
 #include "../../sdk/tests/qimage_test_util.h"
 
 #ifdef USE_ROUND_TRIP
@@ -1107,6 +1107,8 @@ void TestSvgParser::testRenderStrokeWithInlineStyle()
 
 void TestSvgParser::testIccColor()
 {
+    // This test works because the icc-color won't be loaded unless there's a profile for it,
+    // and the fill will be red if the icc-color is not loaded (it should be cyan).
     const QString data =
             "<svg width=\"30px\" height=\"30px\""
             "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
@@ -1119,7 +1121,7 @@ void TestSvgParser::testIccColor()
             "        local=\"133a66607cffeebdd64dd433ada9bf4e\" name=\"some-other-name\"/>"
 
             "    <rect id=\"testRect\" x=\"5\" y=\"5\" width=\"10\" height=\"20\""
-            "        style = \"fill: cyan; stroke :blue; stroke-width:2;\"/>"
+            "        style = \"fill: red icc-color(default-profile, 0, 1, 1); stroke :blue; stroke-width:2;\"/>"
             "</g>"
 
             "</svg>";
@@ -1127,6 +1129,8 @@ void TestSvgParser::testIccColor()
     SvgRenderTester t (data);
 
     int numFetches = 0;
+
+
 
     t.parser.setFileFetcher(
         [&numFetches](const QString &name) {
@@ -1139,7 +1143,12 @@ void TestSvgParser::testIccColor()
         });
 
     t.test_standard_30px_72ppi("stroke_blue_width_2");
-    QCOMPARE(numFetches, 1);
+
+    KoShape *shape = t.findShape("testRect");
+    if (shape) {
+        QSharedPointer<KoColorBackground>  bg = qSharedPointerDynamicCast<KoColorBackground>(shape->background());
+        QVERIFY2(bg->color() == QColor("#00FFFF"), "icc-color is not being loaded during parsing");
+    }
 }
 
 void TestSvgParser::testRenderFillLinearGradientRelativePercent()
@@ -4027,4 +4036,4 @@ void TestSvgParser::testSodipodiChordShape()
 }
 
 
-QTEST_MAIN(TestSvgParser)
+KISTEST_MAIN(TestSvgParser)

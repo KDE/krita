@@ -574,23 +574,6 @@ get_directory_fromargs() {
     echo "${OSXBUILD_DIR}"
 }
 
-print_usage () {
-    printf "USAGE: osxbuild.sh <buildstep> [pkg|file]\n"
-    printf "BUILDSTEPS:\t\t"
-    printf "\n builddeps \t\t Run cmake step for 3rd party dependencies, optionally takes a [pkg] arg"
-    printf "\n fixboost \t\t Fixes broken boost \@rpath on OSX"
-    printf "\n build \t\t\t Builds krita"
-    printf "\n buildtarball \t\t Builds krita from provided [file] tarball"
-    printf "\n clean \t\t\t Removes build and install directories to start fresh"
-    printf "\n install \t\t Installs krita. Optionally accepts a [build dir] as argument
-    \t\t\t this will install krita from given directory"
-    printf "\n buildinstall \t\t Build and Installs krita, running fixboost after installing"
-    printf "\n"
-    printf "OPTIONS:\t\t"
-    printf "\n \t --dirty \t [build] (old default) Keep old build directories before build to start fresh"
-    printf "\n"
-}
-
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 ####      Universal ARM x86_64 build functions and paramterers    #####
@@ -669,9 +652,7 @@ universal_plugin_build() {
 
     # asume i is universal but i.universal has to exist
     if [[ -d "${DEPBUILD_FATBIN_DIR}" ]]; then
-        rm -rf "${KIS_INSTALL_DIR}"
-        mkdir "${KIS_INSTALL_DIR}"
-        rsync -aq "${DEPBUILD_FATBIN_DIR}/" "${KIS_INSTALL_DIR}"
+        rsync --rlptgoq --ignore-existing "${KIS_INSTALL_DIR}/" "${DEPBUILD_FATBIN_DIR}/"
 
         log "building plugins_x86"
         env /usr/bin/arch -x86_64 /bin/zsh -c "${BUILDROOT}/krita/packaging/macos/osxbuild.sh buildplugins"
@@ -698,6 +679,26 @@ universal_plugin_build() {
 ####     Script main routine    #####
 
 # # # # # # # # # # # # # # # # # # #
+print_usage () {
+    printf "USAGE: osxbuild.sh <buildstep> [pkg|file]\n"
+    printf "BUILDSTEPS:\t\t"
+    printf "\n builddeps \t\t Run cmake step for 3rd party dependencies, optionally takes a [pkg] arg"
+    printf "\n fixboost \t\t Fixes broken boost \@rpath on OSX"
+    printf "\n build \t\t\t Builds krita"
+    printf "\n buildtarball \t\t Builds krita from provided [file] tarball"
+    printf "\n clean \t\t\t Removes build and install directories to start fresh"
+    printf "\n install \t\t Installs krita. Optionally accepts a [build dir] as argument
+    \t\t\t this will install krita from given directory"
+    printf "\n buildinstall \t\t Build and Installs krita, running fixboost after installing"
+    printf "\n"
+    printf "OPTIONS:\t\t"
+    printf "\n \t --dirty \t [build/install] (old default) Keep old build directories before build to start fresh"
+    printf "\n \t --debug \t [build] Build in Debug mode"
+    printf "\n \t --universal \t [build] (arm only) Build universal binary files."
+    printf "\n"
+    printf "\n \t --install_tarball \n \t\t\t [buildtarball] Install just built tarball file."
+    printf "\n"
+}
 
 script_run() {
     if [[ ${#} -eq 0 ]]; then
@@ -791,7 +792,13 @@ osxbuild.sh install ${KIS_BUILD_DIR}"
 
         build_krita "${OSXBUILD_DIR}"
         install_krita "${OSXBUILD_DIR}"
-        build_plugins "${OSXBUILD_DIR}"
+
+        if [[ ${OSXBUILD_UNIVERSAL} ]]; then
+            universal_plugin_build "${@:2}"
+        else
+            build_plugins "${OSXBUILD_DIR}"
+        fi
+
         fix_boost_rpath "${OSXBUILD_DIR}"
 
     elif [[ ${1} = "test" ]]; then

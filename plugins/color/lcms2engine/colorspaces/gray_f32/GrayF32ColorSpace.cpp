@@ -1,5 +1,6 @@
 /*
  *  SPDX-FileCopyrightText: 2006 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -15,6 +16,7 @@
 #include <KoColorSpaceRegistry.h>
 
 #include "compositeops/KoCompositeOps.h"
+#include "dithering/KisGrayDitherOpFactory.h"
 #include <kis_dom_utils.h>
 
 GrayF32ColorSpace::GrayF32ColorSpace(const QString &name, KoColorProfile *p)
@@ -31,6 +33,7 @@ GrayF32ColorSpace::GrayF32ColorSpace(const QString &name, KoColorProfile *p)
     init();
 
     addStandardCompositeOps<KoGrayF32Traits>(this);
+    addStandardDitherOps<KoGrayF32Traits>(this);
 }
 
 KoColorSpace *GrayF32ColorSpace::clone() const

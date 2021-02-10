@@ -1,6 +1,6 @@
 /*
  *  SPDX-FileCopyrightText: 2006 Cyrille Berger <cberger@cberger.net>
- *  SPDX-FileCopyrightText: 2020 L. E. Segovia <amy@amyspark.me>
+ *  SPDX-FileCopyrightText: 2020-2021 L. E. Segovia <amy@amyspark.me>
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
 */
@@ -12,6 +12,7 @@
 #include <klocalizedstring.h>
 
 #include "../compositeops/KoCompositeOps.h"
+#include "dithering/KisLabDitherOpFactory.h"
 #include <KoColorConversions.h>
 #include <kis_dom_utils.h>
 
@@ -31,6 +32,7 @@ LabF32ColorSpace::LabF32ColorSpace(const QString &name, KoColorProfile *p)
     init();
 
     addStandardCompositeOps<KoLabF32Traits>(this);
+    addStandardDitherOps<KoLabF32Traits>(this);
 
     dbgPlugins << "La*b* (float) channel bounds for: " << icc_p->name();
     dbgPlugins << "L: " << uiRanges[0].minVal << uiRanges[0].maxVal;

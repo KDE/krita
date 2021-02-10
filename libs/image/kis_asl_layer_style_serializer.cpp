@@ -1,5 +1,6 @@
 /*
  *  SPDX-FileCopyrightText: 2015 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -605,8 +606,7 @@ QDomDocument KisAslLayerStyleSerializer::formXmlDocument() const
 
             w.writeOffsetPoint("Ofst", gradientOverlay->gradientOffset());
 
-            // FIXME: Krita doesn't support dithering
-            w.writeBoolean("Dthr", true/*gradientOverlay->dither()*/);
+            w.writeBoolean("Dthr", gradientOverlay->dither());
 
             w.leaveDescriptor();
         }
@@ -667,8 +667,7 @@ QDomDocument KisAslLayerStyleSerializer::formXmlDocument() const
                 w.writeBoolean("Algn", stroke->alignWithLayer());
                 w.writeOffsetPoint("Ofst", stroke->gradientOffset());
 
-                // FIXME: Krita doesn't support dithering
-                w.writeBoolean("Dthr", true/*stroke->dither()*/);
+                w.writeBoolean("Dthr", stroke->dither());
 
             } else if (stroke->fillType() == psd_fill_pattern) {
                 w.writePatternRef("Ptrn", stroke->pattern(), fetchPatternUuidSafe(stroke->pattern(), patternToUuidMap));
@@ -1056,7 +1055,7 @@ void KisAslLayerStyleSerializer::connectCatcherToStyle(KisPSDLayerStyle *style, 
     CONN_UNITF("/GrFl/Scl ", "#Prc", setScale, gradientOverlay, psd_layer_effects_gradient_overlay, prefix);
     CONN_UNITF("/GrFl/Angl", "#Ang", setAngle, gradientOverlay, psd_layer_effects_gradient_overlay, prefix);
     CONN_BOOL("/GrFl/enab", setEffectEnabled, gradientOverlay, psd_layer_effects_gradient_overlay, prefix);
-    // CONN_BOOL("/GrFl/Dthr", setDitherNotImplemented, gradientOverlay, psd_layer_effects_gradient_overlay, prefix);
+    CONN_BOOL("/GrFl/Dthr", setDither, gradientOverlay, psd_layer_effects_gradient_overlay, prefix);
     CONN_BOOL("/GrFl/Rvrs", setReverse, gradientOverlay, psd_layer_effects_gradient_overlay, prefix);
     CONN_BOOL("/GrFl/Algn", setAlignWithLayer, gradientOverlay, psd_layer_effects_gradient_overlay, prefix);
     CONN_POINT("/GrFl/Ofst", setGradientOffset, gradientOverlay, psd_layer_effects_gradient_overlay, prefix);
@@ -1111,7 +1110,7 @@ void KisAslLayerStyleSerializer::connectCatcherToStyle(KisPSDLayerStyle *style, 
     CONN_BOOL("/FrFX/Rvrs", setReverse, stroke, psd_layer_effects_stroke, prefix);
     CONN_BOOL("/FrFX/Algn", setAlignWithLayer, stroke, psd_layer_effects_stroke, prefix);
     CONN_POINT("/FrFX/Ofst", setGradientOffset, stroke, psd_layer_effects_stroke, prefix);
-    // CONN_BOOL("/FrFX/Dthr", setDitherNotImplemented, stroke, psd_layer_effects_stroke, prefix);
+    CONN_BOOL("/FrFX/Dthr", setDither, stroke, psd_layer_effects_stroke, prefix);
 
     // Pattern type
 

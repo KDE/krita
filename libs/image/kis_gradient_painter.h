@@ -1,5 +1,6 @@
 /*
  *  SPDX-FileCopyrightText: 2004 Adrian Page <adrian@pagenet.plus.com>
+ *  SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -63,7 +64,8 @@ public:
                        qint32 startx,
                        qint32 starty,
                        qint32 width,
-                       qint32 height);
+                       qint32 height,
+                       bool useDithering = false);
 
     // convenience overload
     bool paintGradient(const QPointF& gradientVectorStart,
@@ -71,7 +73,8 @@ public:
                        enumGradientRepeat repeat,
                        double antiAliasThreshold,
                        bool reverseGradient,
-                       const QRect &applyRect);
+                       const QRect &applyRect,
+                       bool useDithering = false);
 
     template <class T> 
     bool paintGradient(const QPointF& gradientVectorStart,
@@ -79,6 +82,7 @@ public:
                        enumGradientRepeat repeat,
                        double antiAliasThreshold,
                        bool reverseGradient,
+                       bool useDithering,
                        const QRect &applyRect,
                        T & paintPolicy);
 

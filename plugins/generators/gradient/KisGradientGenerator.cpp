@@ -2,6 +2,7 @@
  * KDE. Krita Project.
  *
  * SPDX-FileCopyrightText: 2020 Deif Lou <ginoba@gmail.com>
+ * SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -48,7 +49,8 @@ void KisGradientGenerator::generate(KisProcessingInformation dst,
         generatorConfiguration->repeat(),
         generatorConfiguration->antiAliasThreshold(),
         generatorConfiguration->reverse(),
-        QRect(dst.topLeft(), size)
+        QRect(dst.topLeft(), size),
+        generatorConfiguration->dither()
     );
 }
 

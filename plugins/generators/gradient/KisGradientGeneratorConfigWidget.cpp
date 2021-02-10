@@ -2,6 +2,7 @@
  * KDE. Krita Project.
  *
  * SPDX-FileCopyrightText: 2020 Deif Lou <ginoba@gmail.com>
+ * SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -70,6 +71,7 @@ KisGradientGeneratorConfigWidget::KisGradientGeneratorConfigWidget(QWidget* pare
     connect(m_ui.comboBoxShape, SIGNAL(currentIndexChanged(int)), this, SIGNAL(sigConfigurationUpdated()));
     connect(m_ui.comboBoxRepeat, SIGNAL(currentIndexChanged(int)), this, SIGNAL(sigConfigurationUpdated()));
     connect(m_ui.sliderAntiAliasThreshold, SIGNAL(valueChanged(qreal)), this, SIGNAL(sigConfigurationUpdated()));
+    connect(m_ui.checkBoxDither, SIGNAL(toggled(bool)), this, SIGNAL(sigConfigurationUpdated()));
     connect(m_ui.checkBoxReverse, SIGNAL(toggled(bool)), this, SIGNAL(sigConfigurationUpdated()));
 
     connect(m_ui.spinBoxStartPositionX, SIGNAL(valueChanged(double)), this, SIGNAL(sigConfigurationUpdated()));
@@ -118,6 +120,7 @@ void KisGradientGeneratorConfigWidget::setConfiguration(const KisPropertiesConfi
         m_ui.comboBoxShape->setCurrentIndex(generatorConfig->shape());
         m_ui.comboBoxRepeat->setCurrentIndex(generatorConfig->repeat());
         m_ui.sliderAntiAliasThreshold->setValue(generatorConfig->antiAliasThreshold());
+        m_ui.checkBoxDither->setChecked(generatorConfig->dither());
         m_ui.checkBoxReverse->setChecked(generatorConfig->reverse());
 
         m_ui.spinBoxStartPositionX->setValue(generatorConfig->startPositionX());
@@ -152,6 +155,7 @@ KisPropertiesConfigurationSP KisGradientGeneratorConfigWidget::configuration() c
     config->setShape(static_cast<KisGradientPainter::enumGradientShape>(m_ui.comboBoxShape->currentIndex()));
     config->setRepeat(static_cast<KisGradientPainter::enumGradientRepeat>(m_ui.comboBoxRepeat->currentIndex()));
     config->setAntiAliasThreshold(m_ui.sliderAntiAliasThreshold->value());
+    config->setDither(m_ui.checkBoxDither->isChecked());
     config->setReverse(m_ui.checkBoxReverse->isChecked());
 
     config->setStartPositionX(m_ui.spinBoxStartPositionX->value());

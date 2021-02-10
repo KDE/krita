@@ -1,6 +1,7 @@
 /*
  *  SPDX-FileCopyrightText: 2002 Patrick Julien <freak@codepimps.org>
  *  SPDX-FileCopyrightText: 2004 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: LGPL-2.1-or-later
  */
@@ -12,13 +13,14 @@
 
 #include <klocalizedstring.h>
 
-#include <KoIntegerMaths.h>
-#include <KoColorSpaceRegistry.h>
-#include <KoColorConversions.h>
 #include "compositeops/KoCompositeOps.h"
 #include "compositeops/RgbCompositeOps.h"
-#include <kis_dom_utils.h>
+#include "dithering/KisRgbDitherOpFactory.h"
+#include <KoColorConversions.h>
 #include <KoColorSpacePreserveLightnessUtils.h>
+#include <KoColorSpaceRegistry.h>
+#include <KoIntegerMaths.h>
+#include <kis_dom_utils.h>
 
 #define downscale(quantum)  (quantum) //((unsigned char) ((quantum)/257UL))
 #define upscale(value)  (value) // ((quint8) (257UL*(value)))
@@ -34,6 +36,7 @@ RgbU8ColorSpace::RgbU8ColorSpace(const QString &name, KoColorProfile *p) :
     init();
 
     addStandardCompositeOps<KoBgrU8Traits>(this);
+    addStandardDitherOps<KoBgrU8Traits>(this);
 
     addCompositeOp(new RgbCompositeOpIn<KoBgrU8Traits>(this));
     addCompositeOp(new RgbCompositeOpOut<KoBgrU8Traits>(this));

@@ -1,6 +1,7 @@
 /*
  *  SPDX-FileCopyrightText: 2004-2009 Boudewijn Rempt <boud@valdyas.org>
  *  SPDX-FileCopyrightText: 2006 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: LGPL-2.1-or-later
  */
@@ -21,6 +22,7 @@
 #include "KoColorConversions.h"
 
 #include "../compositeops/KoCompositeOps.h"
+#include "dithering/KisLabDitherOpFactory.h"
 
 KoLabColorSpace::KoLabColorSpace() :
         KoSimpleColorSpace<KoLabU16Traits>(colorSpaceId(),
@@ -35,7 +37,7 @@ KoLabColorSpace::KoLabColorSpace() :
 
     // ADD, ALPHA_DARKEN, BURN, DIVIDE, DODGE, ERASE, MULTIPLY, OVER, OVERLAY, SCREEN, SUBTRACT
     addStandardCompositeOps<KoLabU16Traits>(this);
-
+    addStandardDitherOps<KoLabU16Traits>(this);
 }
 
 KoLabColorSpace::~KoLabColorSpace()

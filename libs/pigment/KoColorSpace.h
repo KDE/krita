@@ -1,13 +1,14 @@
 /*
  *  SPDX-FileCopyrightText: 2005 Boudewijn Rempt <boud@valdyas.org>
  *  SPDX-FileCopyrightText: 2006-2007 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
  */
 #ifndef KOCOLORSPACE_H
 #define KOCOLORSPACE_H
 
-#include <limits.h>
+#include <climits>
 
 #include <QImage>
 #include <QHash>
@@ -19,6 +20,7 @@
 #include "KoColorConversionTransformation.h"
 #include "KoColorProofingConversionTransformation.h"
 #include "KoCompositeOp.h"
+#include "KisDitherOp.h"
 #include <KoID.h>
 #include "kritapigment_export.h"
 
@@ -83,7 +85,7 @@ protected:
 public:
 
     /// Should be called by real color spaces
-    KoColorSpace(const QString &id, const QString &name, KoMixColorsOp* mixColorsOp, KoConvolutionOp* convolutionOp);
+    KoColorSpace(const QString &id, const QString &name, KoMixColorsOp *mixColorsOp, KoConvolutionOp *convolutionOp);
 
     virtual bool operator==(const KoColorSpace& rhs) const;
 protected:
@@ -255,7 +257,6 @@ public:
      */
     virtual bool hasHighDynamicRange() const = 0;
 
-
 //========== Display profiles =============================================//
 
     /**
@@ -348,6 +349,13 @@ public:
     virtual KoColorConversionTransformation* createColorConverter(const KoColorSpace * dstColorSpace,
                                                                   KoColorConversionTransformation::Intent renderingIntent,
                                                                   KoColorConversionTransformation::ConversionFlags conversionFlags) const;
+
+    /**
+     * Retrieve the elevate-to-normalized floating point dithering op.
+     */
+    virtual const KisDitherOp *ditherOp(const QString &depth, DitherType type) const;
+
+    virtual void addDitherOp(KisDitherOp *op);
 
     /**
      * Convert a byte array of srcLen pixels *src to the specified color space

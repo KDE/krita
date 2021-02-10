@@ -1,8 +1,9 @@
 /*
  *  SPDX-FileCopyrightText: 2006 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
-*/
+ */
 
 #include "RgbF32ColorSpace.h"
 
@@ -11,12 +12,12 @@
 #include <klocalizedstring.h>
 
 #include "compositeops/KoCompositeOps.h"
-
 #include "compositeops/RgbCompositeOps.h"
-#include <kis_dom_utils.h>
+#include "dithering/KisRgbDitherOpFactory.h"
 #include <KoColorConversions.h>
 #include <KoColorSpaceMaths.h>
 #include <KoColorSpacePreserveLightnessUtils.h>
+#include <kis_dom_utils.h>
 
 RgbF32ColorSpace::RgbF32ColorSpace(const QString &name, KoColorProfile *p) :
     LcmsColorSpace<KoRgbF32Traits>(colorSpaceId(), name, TYPE_RGBA_FLT, cmsSigRgbData, p)
@@ -34,6 +35,7 @@ RgbF32ColorSpace::RgbF32ColorSpace(const QString &name, KoColorProfile *p) :
     init();
 
     addStandardCompositeOps<KoRgbF32Traits>(this);
+    addStandardDitherOps<KoRgbF32Traits>(this);
 
     addCompositeOp(new RgbCompositeOpIn<KoRgbF32Traits>(this));
     addCompositeOp(new RgbCompositeOpOut<KoRgbF32Traits>(this));

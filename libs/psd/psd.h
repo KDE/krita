@@ -1,5 +1,6 @@
 /*
  *  SPDX-FileCopyrightText: 2010 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -884,6 +885,7 @@ struct psd_layer_effects_overlay_base : public psd_layer_effects_shadow_base
     psd_layer_effects_overlay_base()
         : m_scale(100),
           m_alignWithLayer(true),
+          m_dither(false),
           m_reverse(false),
           m_style(psd_gradient_style_linear),
           m_gradientXOffset(0),
@@ -908,6 +910,10 @@ struct psd_layer_effects_overlay_base : public psd_layer_effects_shadow_base
 
     bool alignWithLayer() const {
         return m_alignWithLayer;
+    }
+
+    bool dither() const {
+        return m_dither;
     }
 
     bool reverse() const {
@@ -947,6 +953,10 @@ public:
 
     void setAlignWithLayer(bool value) {
         m_alignWithLayer = value;
+    }
+
+    void setDither(bool value) {
+        m_dither = value;
     }
 
     void setReverse(bool value) {
@@ -991,6 +1001,7 @@ private:
     bool m_alignWithLayer;
 
     // Gradient
+    bool m_dither;
     bool m_reverse;
     psd_gradient_style m_style;
     int m_gradientXOffset; // 0..100%

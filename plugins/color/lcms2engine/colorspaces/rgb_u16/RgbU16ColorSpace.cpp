@@ -1,8 +1,9 @@
 /*
  *  SPDX-FileCopyrightText: 2006 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
-*/
+ */
 
 #include "RgbU16ColorSpace.h"
 
@@ -12,6 +13,7 @@
 
 #include "compositeops/KoCompositeOps.h"
 #include "compositeops/RgbCompositeOps.h"
+#include "dithering/KisRgbDitherOpFactory.h"
 #include "kis_dom_utils.h"
 #include <KoColorConversions.h>
 #include <KoColorSpacePreserveLightnessUtils.h>
@@ -26,6 +28,7 @@ RgbU16ColorSpace::RgbU16ColorSpace(const QString &name, KoColorProfile *p) :
     init();
 
     addStandardCompositeOps<KoBgrU16Traits>(this);
+    addStandardDitherOps<KoBgrU16Traits>(this);
 
     addCompositeOp(new RgbCompositeOpIn<KoBgrU16Traits>(this));
     addCompositeOp(new RgbCompositeOpOut<KoBgrU16Traits>(this));

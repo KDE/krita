@@ -1,8 +1,9 @@
 /*
  *  SPDX-FileCopyrightText: 2007 Cyrille Berger (cberger@cberger.net)
+ *  SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
-*/
+ */
 
 #include "YCbCrF32ColorSpace.h"
 #include <QDomElement>
@@ -11,6 +12,7 @@
 #include <klocalizedstring.h>
 
 #include "compositeops/KoCompositeOps.h"
+#include "dithering/KisYCbCrDitherOpFactory.h"
 #include <KoColorConversions.h>
 #include <kis_dom_utils.h>
 
@@ -30,6 +32,7 @@ YCbCrF32ColorSpace::YCbCrF32ColorSpace(const QString &name, KoColorProfile *p)
     init();
 
     addStandardCompositeOps<KoYCbCrF32Traits>(this);
+    addStandardDitherOps<KoYCbCrF32Traits>(this);
 }
 
 bool YCbCrF32ColorSpace::willDegrade(ColorSpaceIndependence independence) const

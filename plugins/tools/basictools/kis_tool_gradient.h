@@ -5,6 +5,7 @@
  *  SPDX-FileCopyrightText: 2002 Patrick Julien <freak@codepimps.org>
  *  SPDX-FileCopyrightText: 2004 Boudewijn Rempt <boud@valdyas.org>
  *  SPDX-FileCopyrightText: 2004 Adrian Page <adrian@pagenet.plus.com>
+ *  SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -56,6 +57,7 @@ private Q_SLOTS:
     void slotSetShape(int);
     void slotSetRepeat(int);
     void slotSetReverse(bool);
+    void slotSetDither(bool);
     void slotSetAntiAliasThreshold(qreal);
     void setOpacity(qreal opacity);
 protected Q_SLOTS:
@@ -80,11 +82,13 @@ private:
     KisGradientPainter::enumGradientShape m_shape;
     KisGradientPainter::enumGradientRepeat m_repeat;
 
+    bool m_dither;
     bool m_reverse;
     double m_antiAliasThreshold;
 
     QLabel *m_lbShape;
     QLabel *m_lbRepeat;
+    QCheckBox *m_ckDither;
     QCheckBox *m_ckReverse;
     KComboBox *m_cmbShape;
     KComboBox *m_cmbRepeat;

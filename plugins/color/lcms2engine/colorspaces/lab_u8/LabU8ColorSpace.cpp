@@ -1,8 +1,9 @@
 /*
  *  SPDX-FileCopyrightText: 2006 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
-*/
+ */
 
 #include "LabU8ColorSpace.h"
 
@@ -11,6 +12,7 @@
 #include <klocalizedstring.h>
 
 #include "../compositeops/KoCompositeOps.h"
+#include "dithering/KisLabDitherOpFactory.h"
 #include <KoColorConversions.h>
 #include <kis_dom_utils.h>
 
@@ -23,6 +25,7 @@ LabU8ColorSpace::LabU8ColorSpace(const QString &name, KoColorProfile *p) :
     addChannel(new KoChannelInfo(i18n("Alpha"),     3 * sizeof(quint8), 3, KoChannelInfo::ALPHA, KoChannelInfo::UINT8, sizeof(quint8)));
     init();
     addStandardCompositeOps<KoLabU8Traits>(this);
+    addStandardDitherOps<KoLabU8Traits>(this);
 }
 
 bool LabU8ColorSpace::willDegrade(ColorSpaceIndependence /*independence*/) const

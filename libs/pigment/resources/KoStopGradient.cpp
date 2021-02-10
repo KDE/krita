@@ -2,13 +2,16 @@
     SPDX-FileCopyrightText: 2005 Tim Beaulen <tbscope@gmail.org>
     SPDX-FileCopyrightText: 2007 Jan Hambrecht <jaham@gmx.net>
     SPDX-FileCopyrightText: 2007 Sven Langkamp <sven.langkamp@gmail.com>
+    SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
 
     SPDX-License-Identifier: LGPL-2.1-or-later
  */
 
 #include <resources/KoStopGradient.h>
 
+#include <array>
 #include <cfloat>
+#include <cmath>
 
 #include <QColor>
 #include <QFile>
@@ -26,7 +29,6 @@
 
 #include "kis_dom_utils.h"
 
-#include <math.h>
 #include <KoColorModelStandardIds.h>
 #include <KoXmlNS.h>
 
@@ -154,48 +156,31 @@ bool KoStopGradient::stopsAt(KoGradientStop& leftStop, KoGradientStop& rightStop
 
 void KoStopGradient::colorAt(KoColor& dst, qreal t) const
 {
-    KoColor buffer;
-
     KoGradientStop leftStop, rightStop;
     if (!stopsAt(leftStop, rightStop, t)) return;
 
-    const KoColorSpace* mixSpace = KoColorSpaceRegistry::instance()->rgb8(dst.colorSpace()->profile());
+    const KoColorSpace *mixSpace = dst.colorSpace();
 
-    KoColor startDummy, endDummy;
-    if (mixSpace) {
-        startDummy = KoColor(leftStop.color, mixSpace);
-        endDummy = KoColor(rightStop.color, mixSpace);
-    } else {
-        startDummy = leftStop.color;
-        endDummy = rightStop.color;
-    }
-    const quint8* colors[2];
-    colors[0] = startDummy.data();
-    colors[1] = endDummy.data();
+    KoColor buffer(mixSpace);
+    KoColor startDummy(leftStop.color, mixSpace);
+    KoColor endDummy(rightStop.color, mixSpace);
 
-    qreal localT;
+    const std::array<quint8 *, 2> colors = {{startDummy.data(), endDummy.data()}};
+
+    qreal localT = NAN;
     qreal stopDistance = rightStop.position - leftStop.position;
     if (stopDistance < DBL_EPSILON) {
         localT = 0.5;
     } else {
         localT = (t - leftStop.position) / stopDistance;
     }
-    qint16 colorWeights[2];
-    colorWeights[0] = static_cast<quint8>((1.0 - localT) * 255 + 0.5);
-    colorWeights[1] = 255 - colorWeights[0];
+    std::array<qint16, 2> colorWeights {};
+    colorWeights[0] = std::lround((1.0 - localT) * qint16_MAX);
+    colorWeights[1] = qint16_MAX - colorWeights[0];
 
-    //check if our mixspace exists, it doesn't at startup.
-    if (mixSpace) {
-        if (*buffer.colorSpace() != *mixSpace) {
-            buffer = KoColor(mixSpace);
-        }
-        mixSpace->mixColorsOp()->mixColors(colors, colorWeights, 2, buffer.data());
-    } else {
-        buffer = KoColor(colorSpace());
-        colorSpace()->mixColorsOp()->mixColors(colors, colorWeights, 2, buffer.data());
-    }
+    mixSpace->mixColorsOp()->mixColors(colors.data(), colorWeights.data(), 2, buffer.data(), qint16_MAX);
 
-    dst.fromKoColor(buffer);
+    dst = buffer;
 }
 
 QSharedPointer<KoStopGradient> KoStopGradient::fromQGradient(const QGradient *gradient)
@@ -537,7 +522,7 @@ void KoStopGradient::parseSvgGradient(const QDomElement& element, QHash<QString,
             if (!colorstop.attribute("stop-opacity").isEmpty())
                 opacity = colorstop.attribute("stop-opacity").toDouble();
 
-            color.setOpacity(static_cast<quint8>(opacity * OPACITY_OPAQUE_U8 + 0.5));
+            color.setOpacity(static_cast<quint8>(std::lround(opacity * OPACITY_OPAQUE_U8)));
             QString stopTypeStr = colorstop.attribute("krita:stop-type", "color-stop");
             KoGradientStopType stopType = KoGradientStop::typeFromString(stopTypeStr);
             if (stopType != COLORSTOP) {

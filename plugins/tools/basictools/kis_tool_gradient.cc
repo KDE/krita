@@ -4,6 +4,7 @@
  *  SPDX-FileCopyrightText: 2002 Patrick Julien <freak@codepimps.org>
  *  SPDX-FileCopyrightText: 2003 Boudewijn Rempt <boud@valdyas.org>
  *  SPDX-FileCopyrightText: 2004-2007 Adrian Page <adrian@pagenet.plus.com>
+ *  SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -58,6 +59,7 @@ KisToolGradient::KisToolGradient(KoCanvasBase * canvas)
     m_startPos = QPointF(0, 0);
     m_endPos = QPointF(0, 0);
 
+    m_dither = false;
     m_reverse = false;
     m_shape = KisGradientPainter::GradientShapeLinear;
     m_repeat = KisGradientPainter::GradientRepeatNone;
@@ -156,6 +158,7 @@ void KisToolGradient::endPrimaryAction(KoPointerEvent *event)
         KisGradientPainter::enumGradientRepeat repeat = m_repeat;
         bool reverse = m_reverse;
         double antiAliasThreshold = m_antiAliasThreshold;
+        bool dither = m_dither;
 
         KUndo2MagicString actionName = kundo2_i18n("Gradient");
         KisProcessingApplicator applicator(image, resources->currentNode(),
@@ -166,7 +169,7 @@ void KisToolGradient::endPrimaryAction(KoPointerEvent *event)
         applicator.applyCommand(
             new KisCommandUtils::LambdaCommand(
                 [resources, startPos, endPos,
-                 shape, repeat, reverse, antiAliasThreshold] () mutable {
+                 shape, repeat, reverse, antiAliasThreshold, dither] () mutable {
 
                     KisNodeSP node = resources->currentNode();
                     KisPaintDeviceSP device = node->paintDevice();
@@ -183,7 +186,8 @@ void KisToolGradient::endPrimaryAction(KoPointerEvent *event)
                     painter.paintGradient(startPos, endPos,
                                           repeat, antiAliasThreshold,
                                           reverse, 0, 0,
-                                          bounds.width(), bounds.height());
+                                          bounds.width(), bounds.height(),
+                                          dither);
 
                     return painter.endAndTakeTransaction();
                 }));
@@ -266,11 +270,16 @@ QWidget* KisToolGradient::createOptionWidget()
     connect(m_ckReverse, SIGNAL(toggled(bool)), this, SLOT(slotSetReverse(bool)));
     addOptionWidgetOption(m_ckReverse);
 
+    m_ckDither = new QCheckBox(i18nc("the gradient will be dithered", "Dither"), widget);
+    m_ckDither->setObjectName("dither_check");
+    connect(m_ckDither, SIGNAL(toggled(bool)), this, SLOT(slotSetDither(bool)));
+    addOptionWidgetOption(m_ckDither);
 
     widget->setFixedHeight(widget->sizeHint().height());
 
 
     // load configuration settings into widget (updating UI will update internal variables from signals/slots)
+    m_ckDither->setChecked(m_configGroup.readEntry<bool>("dither", false));
     m_ckReverse->setChecked((bool)m_configGroup.readEntry("reverse", false));
     m_cmbShape->setCurrentIndex((int)m_configGroup.readEntry("shape", 0));
     m_cmbRepeat->setCurrentIndex((int)m_configGroup.readEntry("repeat", 0));
@@ -295,6 +304,12 @@ void KisToolGradient::slotSetReverse(bool state)
 {
     m_reverse = state;
     m_configGroup.writeEntry("reverse", state);
+}
+
+void KisToolGradient::slotSetDither(bool state)
+{
+    m_dither = state;
+    m_configGroup.writeEntry("dither", state);
 }
 
 void KisToolGradient::slotSetAntiAliasThreshold(qreal value)

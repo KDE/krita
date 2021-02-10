@@ -1107,6 +1107,7 @@ GradientOverlay::GradientOverlay(KisCanvasResourceProvider *resourceProvider, QW
     connect(ui.cmbStyle, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
     connect(ui.chkAlignWithLayer, SIGNAL(toggled(bool)), SIGNAL(configChanged()));
     connect(ui.intScale, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
+    connect(ui.chkDither, SIGNAL(toggled(bool)), SIGNAL(configChanged()));
 }
 
 void GradientOverlay::setGradientOverlay(const psd_layer_effects_gradient_overlay *config)
@@ -1125,6 +1126,7 @@ void GradientOverlay::setGradientOverlay(const psd_layer_effects_gradient_overla
     ui.chkAlignWithLayer->setCheckable(config->alignWithLayer());
     ui.angleSelector->setValue(config->angle());
     ui.intScale->setValue(config->scale());
+    ui.chkDither->setChecked(config->dither());
 }
 
 void GradientOverlay::fetchGradientOverlay(psd_layer_effects_gradient_overlay *config) const
@@ -1137,6 +1139,7 @@ void GradientOverlay::fetchGradientOverlay(psd_layer_effects_gradient_overlay *c
     config->setAlignWithLayer(ui.chkAlignWithLayer->isChecked());
     config->setAngle(ui.angleSelector->value());
     config->setScale(ui.intScale->value());
+    config->setDither(ui.chkDither->isChecked());
 }
 
 

@@ -1,8 +1,9 @@
 /*
  *  SPDX-FileCopyrightText: 2007 Cyrille Berger (cberger@cberger.net)
+ *  SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
-*/
+ */
 
 #include "YCbCrU16ColorSpace.h"
 #include <QDomElement>
@@ -11,6 +12,7 @@
 #include <klocalizedstring.h>
 
 #include "compositeops/KoCompositeOps.h"
+#include "dithering/KisYCbCrDitherOpFactory.h"
 #include <KoColorConversions.h>
 #include <kis_dom_utils.h>
 
@@ -25,6 +27,7 @@ YCbCrU16ColorSpace::YCbCrU16ColorSpace(const QString &name, KoColorProfile *p)
     init();
 
     addStandardCompositeOps<KoYCbCrU16Traits>(this);
+    addStandardDitherOps<KoYCbCrU16Traits>(this);
 }
 
 bool YCbCrU16ColorSpace::willDegrade(ColorSpaceIndependence independence) const

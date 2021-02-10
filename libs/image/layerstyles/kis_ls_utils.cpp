@@ -1,5 +1,6 @@
 /*
  *  SPDX-FileCopyrightText: 2015 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -522,7 +523,8 @@ namespace KisLsUtils
             gc.paintGradient(gradStart, gradEnd,
                              repeat, 0.0,
                              config->reverse(),
-                             applyRect);
+                             applyRect,
+                             config->dither());
         }
     }
 

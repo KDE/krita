@@ -2,6 +2,7 @@
  * KDE. Krita Project.
  *
  * SPDX-FileCopyrightText: 2020 Deif Lou <ginoba@gmail.com>
+ * SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -80,6 +81,11 @@ public:
     static constexpr qreal defaultAntiAliasThreshold()
     {
         return 0.0;
+    }
+
+    static constexpr bool defaultDither()
+    {
+        return false;
     }
 
     static constexpr bool defaultReverse()
@@ -173,6 +179,7 @@ public:
     KisGradientPainter::enumGradientShape shape() const;
     KisGradientPainter::enumGradientRepeat repeat() const;
     qreal antiAliasThreshold() const;
+    bool dither() const;
     bool reverse() const;
     qreal startPositionX() const;
     qreal startPositionY() const;
@@ -195,6 +202,7 @@ public:
     void setShape(KisGradientPainter::enumGradientShape newShape);
     void setRepeat(KisGradientPainter::enumGradientRepeat newRepeat);
     void setAntiAliasThreshold(qreal newAntiAliasThreshold);
+    void setDither(bool newDither);
     void setReverse(bool newReverse);
     void setStartPositionX(qreal newStartPositionX);
     void setStartPositionY(qreal newStartPositionY);

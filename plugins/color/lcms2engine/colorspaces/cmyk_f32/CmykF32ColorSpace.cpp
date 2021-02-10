@@ -1,6 +1,6 @@
 /*
  *  SPDX-FileCopyrightText: 2006 Cyrille Berger <cberger@cberger.net>
- *  SPDX-FileCopyrightText: 2020 L. E. Segovia <amy@amyspark.me>
+ *  SPDX-FileCopyrightText: 2020-2021 L. E. Segovia <amy@amyspark.me>
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
 */
@@ -12,6 +12,7 @@
 #include <klocalizedstring.h>
 
 #include "compositeops/KoCompositeOps.h"
+#include "dithering/KisCmykDitherOpFactory.h"
 #include <KoColorConversions.h>
 #include <kis_dom_utils.h>
 
@@ -38,6 +39,7 @@ CmykF32ColorSpace::CmykF32ColorSpace(const QString &name, KoColorProfile *p)
     dbgPlugins << "K: " << uiRanges[3].minVal << uiRanges[3].maxVal;
 
     addStandardCompositeOps<KoCmykF32Traits>(this);
+    addStandardDitherOps<KoCmykF32Traits>(this);
 }
 
 bool CmykF32ColorSpace::willDegrade(ColorSpaceIndependence independence) const

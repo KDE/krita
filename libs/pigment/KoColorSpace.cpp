@@ -1,8 +1,9 @@
 /*
  *  SPDX-FileCopyrightText: 2005 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
-*/
+ */
 
 #include "KoColorSpace.h"
 #include "KoColorSpace_p.h"
@@ -26,6 +27,9 @@
 #include "KoColorSpaceEngine.h"
 #include <KoColorSpaceTraits.h>
 #include <KoColorSpacePreserveLightnessUtils.h>
+#include "KisDitherOp.h"
+
+#include <cmath>
 
 #include <QThreadStorage>
 #include <QByteArray>
@@ -33,14 +37,13 @@
 #include <QPolygonF>
 #include <QPointF>
 
-#include <math.h>
 
 KoColorSpace::KoColorSpace()
     : d(new Private())
 {
 }
 
-KoColorSpace::KoColorSpace(const QString &id, const QString &name, KoMixColorsOp* mixColorsOp, KoConvolutionOp* convolutionOp)
+KoColorSpace::KoColorSpace(const QString &id, const QString &name, KoMixColorsOp *mixColorsOp, KoConvolutionOp *convolutionOp)
     : d(new Private())
 {
     d->id = id;
@@ -65,6 +68,9 @@ KoColorSpace::~KoColorSpace()
     Q_ASSERT(d->deletability != OwnedByRegistryDoNotDelete);
 
     qDeleteAll(d->compositeOps);
+    for (const auto& map: d->ditherOps) {
+        qDeleteAll(map);
+    }
     Q_FOREACH (KoChannelInfo * channel, d->channels) {
         delete channel;
     }
@@ -317,6 +323,37 @@ KoMixColorsOp* KoColorSpace::mixColorsOp() const
     return d->mixColorsOp;
 }
 
+const KisDitherOp *KoColorSpace::ditherOp(const QString &depth, DitherType type) const
+{
+    const auto it = d->ditherOps.constFind(depth);
+    if (it != d->ditherOps.constEnd()) {
+        switch (type) {
+        case DITHER_FAST:
+        case DITHER_BAYER:
+            return it->constFind(DITHER_BAYER).value();
+        case DITHER_BEST:
+        case DITHER_BLUE_NOISE:
+            return it->constFind(DITHER_BLUE_NOISE).value();
+        case DITHER_NONE:
+        default:
+            return it->constFind(DITHER_NONE).value();
+        }
+    } else {
+        warnPigment << "Asking for dither op from " << colorDepthId() << "to an unsupported depth" << depth << "!";
+        return nullptr;
+    }
+}
+
+void KoColorSpace::addDitherOp(KisDitherOp *op)
+{
+    if (op->sourceDepthId() == colorDepthId()) {
+        if (!d->ditherOps.contains(op->destinationDepthId().id())) {
+            d->ditherOps.insert(op->destinationDepthId().id(), {{op->type(), op}});
+        } else {
+            d->ditherOps[op->destinationDepthId().id()].insert(op->type(), op);
+        }
+    }
+}
 
 KoConvolutionOp* KoColorSpace::convolutionOp() const
 {

@@ -1,13 +1,14 @@
 /*
  *  SPDX-FileCopyrightText: 2000 Matthias Elter <elter@kde.org>
  *  SPDX-FileCopyrightText: 2002 Patrick Julien <freak@codepimps.org>
+ *  SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 #ifndef KISGLOBAL_H_
 #define KISGLOBAL_H_
 
-#include <limits.h>
+#include <limits>
 
 #include <KoConfig.h>
 #include "kis_assert.h"
@@ -15,14 +16,16 @@
 #include <QPoint>
 #include <QPointF>
 
-const quint8 quint8_MAX = UCHAR_MAX;
-const quint16 quint16_MAX = 65535;
+const quint8 quint8_MAX = std::numeric_limits<quint8>::max();
+const quint16 quint16_MAX = std::numeric_limits<quint16>::max();
 
-const qint32 qint32_MAX = (2147483647);
-const qint32 qint32_MIN = (-2147483647 - 1);
+const qint16 qint16_MIN = std::numeric_limits<qint16>::min();
+const qint16 qint16_MAX = std::numeric_limits<qint16>::max();
+const qint32 qint32_MAX = std::numeric_limits<qint32>::max();
+const qint32 qint32_MIN = std::numeric_limits<qint32>::min();
 
-const quint8 MAX_SELECTED = UCHAR_MAX;
-const quint8 MIN_SELECTED = 0;
+const quint8 MAX_SELECTED = std::numeric_limits<quint8>::max();
+const quint8 MIN_SELECTED = std::numeric_limits<quint8>::min();
 const quint8 SELECTION_THRESHOLD = 1;
 
 enum OutlineStyle {

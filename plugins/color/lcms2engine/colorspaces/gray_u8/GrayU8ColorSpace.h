@@ -11,9 +11,7 @@
 #include <KoColorSpaceTraits.h>
 #include "KoColorModelStandardIds.h"
 
-typedef KoColorSpaceTrait<quint8, 2, 1> GrayAU8Traits;
-
-class GrayAU8ColorSpace : public LcmsColorSpace<GrayAU8Traits>
+class GrayAU8ColorSpace : public LcmsColorSpace<KoGrayU8Traits>
 {
 public:
 

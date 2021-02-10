@@ -1,8 +1,9 @@
 /*
  *  SPDX-FileCopyrightText: 2006 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
-*/
+ */
 
 #include "LabColorSpace.h"
 
@@ -11,6 +12,7 @@
 #include <klocalizedstring.h>
 
 #include "../compositeops/KoCompositeOps.h"
+#include "dithering/KisLabDitherOpFactory.h"
 #include <KoColorConversions.h>
 #include <kis_dom_utils.h>
 
@@ -25,6 +27,7 @@ LabU16ColorSpace::LabU16ColorSpace(const QString &name, KoColorProfile *p)
     init();
 
     addStandardCompositeOps<KoLabU16Traits>(this);
+    addStandardDitherOps<KoLabU16Traits>(this);
 }
 
 bool LabU16ColorSpace::willDegrade(ColorSpaceIndependence independence) const

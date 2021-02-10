@@ -633,14 +633,15 @@ consolidate_universal_binaries () {
         # echo "${BUILDROOT}/${DEPBUILD_X86_64_DIR}/${f##*test-i/}"
         LIPO_OUTPUT=$(lipo -info ${f} | grep Non-fat 2> /dev/null)
         if [[ -n ${LIPO_OUTPUT} ]]; then
-            if [[ -f "${BUILDROOT}/${DEPBUILD_X86_64_DIR}/${f##*${DEPBUILD_FATBIN_DIR}/}" ]]; then
+            if [[ -f "${DEPBUILD_X86_64_DIR}/${f##*${DEPBUILD_FATBIN_DIR}/}" ]]; then
                 log "creating universal binary -- ${f##*${DEPBUILD_FATBIN_DIR}/}"
-                lipo -create "${f}" "${BUILDROOT}/${DEPBUILD_X86_64_DIR}/${f##*${DEPBUILD_FATBIN_DIR}/}" -output "${f}" 2> /dev/null
+                lipo -create "${f}" "${DEPBUILD_X86_64_DIR}/${f##*${DEPBUILD_FATBIN_DIR}/}" -output "${f}"
             else
                 log "removing... ${f}"
                 rm "${f}"
             fi
         fi
+            # log "ignoring ${f}"
     done
 
 }
@@ -654,9 +655,11 @@ prebuild_cleanup() {
 }
 
 postbuild_cleanup() {
+    log "consolidating non-fat binaries and files"
     rsync -rlptgoq --ignore-existing "${DEPBUILD_X86_64_DIR}/" "${DEPBUILD_FATBIN_DIR}"
     rm -rf "${KIS_INSTALL_DIR}"
     rsync -aq "${DEPBUILD_FATBIN_DIR}/" "${KIS_INSTALL_DIR}"
+    log "consolitating done! Build installed to ${KIS_INSTALL_DIR}"
 }
 
 universal_plugin_build() {
@@ -668,7 +671,7 @@ universal_plugin_build() {
     if [[ -d "${DEPBUILD_FATBIN_DIR}" ]]; then
         rm -rf "${KIS_INSTALL_DIR}"
         mkdir "${KIS_INSTALL_DIR}"
-        rsync -aq --exclude "${DEPBUILD_FATBIN_DIR}/translations" --exclude "${DEPBUILD_FATBIN_DIR}/share/locale" "${DEPBUILD_FATBIN_DIR}/" "${KIS_INSTALL_DIR}"
+        rsync -aq "${DEPBUILD_FATBIN_DIR}/" "${KIS_INSTALL_DIR}"
 
         log "building plugins_x86"
         env /usr/bin/arch -x86_64 /bin/zsh -c "${BUILDROOT}/krita/packaging/macos/osxbuild.sh buildplugins"

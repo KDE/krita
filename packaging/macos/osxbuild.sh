@@ -693,10 +693,9 @@ script_run() {
         fix_boost_rpath
 
     elif [[ ${1} = "build" ]]; then
-        OSXBUILD_DIR=$(get_directory_fromargs "${@}")
+        OSXBUILD_DIR=$(get_directory_fromargs "${@:2}")
 
         build_krita "${OSXBUILD_DIR}"
-        build_plugins "${OSXBUILD_DIR}"
         exit
 
     elif [[ ${1} = "buildplugins" ]]; then
@@ -739,13 +738,15 @@ osxbuild.sh install ${KIS_BUILD_DIR}"
         exit
 
     elif [[ ${1} = "install" ]]; then
-        OSXBUILD_DIR=$(get_directory_fromargs "${@}")
+        OSXBUILD_DIR=$(get_directory_fromargs "${@:2}")
 
         install_krita "${OSXBUILD_DIR}"
+        build_plugins "${OSXBUILD_DIR}"
+
         fix_boost_rpath
 
     elif [[ ${1} = "buildinstall" ]]; then
-        OSXBUILD_DIR=$(get_directory_fromargs "${@}")
+        OSXBUILD_DIR=$(get_directory_fromargs "${@:2}")
 
         build_krita "${OSXBUILD_DIR}"
         install_krita "${OSXBUILD_DIR}"

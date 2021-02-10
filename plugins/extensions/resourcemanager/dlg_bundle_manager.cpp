@@ -147,8 +147,7 @@ DlgBundleManager::DlgBundleManager(QWidget *parent)
     m_proxyModel->setSourceModel(KisStorageModel::instance());
     m_proxyModel->setFilter(KisStorageFilterProxyModel::ByStorageType,
                           QStringList()
-                          << KisResourceStorage::storageTypeToUntranslatedString(KisResourceStorage::StorageType::Bundle)
-                          << KisResourceStorage::storageTypeToUntranslatedString(KisResourceStorage::StorageType::Folder));
+                          << KisResourceStorage::storageTypeToUntranslatedString(KisResourceStorage::StorageType::Bundle));
 
     m_ui->listView->setModel(m_proxyModel);
     m_ui->listView->setItemDelegate(new ItemDelegate(this, m_proxyModel));
@@ -157,18 +156,15 @@ DlgBundleManager::DlgBundleManager(QWidget *parent)
     connect(selectionModel, &QItemSelectionModel::currentChanged, this, &DlgBundleManager::currentCellSelectedChanged);
     //connect(m_ui->listView, &QItemSelectionModel::currentChanged, this, &DlgBundleManager::currentCellSelectedChanged);
 
-
     connect(KisStorageModel::instance(), &KisStorageModel::modelAboutToBeReset, this, &DlgBundleManager::slotModelAboutToBeReset);
     connect(KisStorageModel::instance(), &KisStorageModel::modelReset, this, &DlgBundleManager::slotModelReset);
-
-
-
 }
 
 void DlgBundleManager::addBundle()
 {
     KoFileDialog dlg(this, KoFileDialog::OpenFile, i18n("Choose the bundle to import"));
     dlg.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::DownloadLocation));
+    dlg.setMimeTypeFilters(QStringList() << "application/x-krita-bundle", "application/x-krita-bundle");
     dlg.setCaption(i18n("Select the bundle"));
     QString filename = dlg.filename();
     if (!filename.isEmpty()) {
@@ -267,8 +263,7 @@ QString createNewBundlePath(QString resourceFolder, QString filename)
 
 void DlgBundleManager::addBundleToActiveResources(QString filename)
 {
-    Q_UNUSED(filename);
-    // 1. Copy the bundle to the resource folder
+        // 1. Copy the bundle to the resource folder
     QFileInfo oldFileInfo(filename);
 
     KisConfig cfg(true);
@@ -296,7 +291,7 @@ void DlgBundleManager::addBundleToActiveResources(QString filename)
     QFile::copy(filename, newLocation);
 
     // 2. Add the bundle as a storage/update database
-    KisResourceStorageSP storage = QSharedPointer<KisResourceStorage>::create(QFileInfo(newLocation).fileName());
+    KisResourceStorageSP storage = QSharedPointer<KisResourceStorage>::create(newLocation);
     KIS_ASSERT(!storage.isNull());
     KisResourceLocator::instance()->addStorage(QFileInfo(newLocation).fileName(), storage);
 }

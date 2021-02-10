@@ -62,7 +62,6 @@ DlgDbExplorer::DlgDbExplorer(QWidget *parent)
     {
         TableModel *tagsModel = new TableModel(this, QSqlDatabase::database());
         TableDelegate *tagsDelegate = new TableDelegate(m_page->tableStorages);
-        tagsDelegate->setEditable(true);
         tagsModel->setTable("tags");
         tagsModel->setHeaderData(0, Qt::Horizontal, i18n("Id"));
         tagsModel->setHeaderData(1, Qt::Horizontal, i18n("Type"));

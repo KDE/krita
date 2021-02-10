@@ -756,7 +756,7 @@ createDMG () {
         printf "${DMG_NAME}" | batch_codesign
     fi
 
-    # notarize_build "${BUILDROOT}" "${DMG_NAME}"
+    notarize_build "${BUILDROOT}" "${DMG_NAME}"
 
     echo "dmg done!"
 }

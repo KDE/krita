@@ -184,7 +184,7 @@ bool KisAllTagResourceModel::untagResource(const KisTagSP tag, const KoResourceS
 
     } while (d->query.next());
 
-    beginRemoveRows(QModelIndex(), d->query.at(), d->query.at() + 1);
+    beginRemoveRows(QModelIndex(), d->query.at(), d->query.at());
 
     {
         QSqlQuery q;

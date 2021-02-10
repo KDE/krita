@@ -616,8 +616,9 @@ signBundle() {
     cd ${KRITA_DMG}/krita.app/Contents/Frameworks
     # remove debug version as both versions can't be signed.
     rm ${KRITA_DMG}/krita.app/Contents/Frameworks/QtScript.framework/Versions/Current/QtScript_debug
-    find . -type f -name "*.o" | batch_codesign
-    find . -type f -perm +111 -or -name "*.dylib" -or -name "*.so" | batch_codesign
+    # Do not sign binaries inside frameworks except for Python's
+    find . -type d -path "*.framework" -prune -false -o -perm +111 -not -type d | batch_codesign
+    find Python.framework -type f -name "*.o" -or -name "*.so" -or -perm +111 -not -type d -not -type l | batch_codesign
     find . -type d -name "*.framework" | xargs printf "%s/Versions/Current\n" | batch_codesign
 
     # Sign all other files in Framework (needed)
@@ -642,6 +643,23 @@ signBundle() {
     #Finally sign krita and krita.app
     printf "${KRITA_DMG}/krita.app/Contents/MacOS/krita" | batch_codesign
     printf "${KRITA_DMG}/krita.app" | batch_codesign
+}
+
+sign_hasError() {
+    local CODESIGN_STATUS=0
+    for f in $(find "${KRITA_DMG}" -type f); do
+        if [[ -z $(file ${f} | grep "Mach-O") ]]; then
+            continue
+        fi
+
+        CODESIGN_RESULT=$(codesign -vvv --strict ${f} 2>&1 | grep "not signed")
+
+        if [[ -n "${CODESIGN_RESULT}" ]]; then
+            CODESIGN_STATUS=1
+            printf "${f} not signed\n" >&2
+        fi
+    done
+    echo ${CODESIGN_STATUS}
 }
 
 # Notarize build on macOS servers
@@ -771,6 +789,15 @@ krita_deploy
 if [[ -n "${CODE_SIGNATURE}" ]]; then
     signBundle
 fi
+
+# Manually check every single Mach-O file for signature status
+print_msg "Checking if all files are signed before sending for notarization..."
+if [[ $(sign_hasError) -eq 1 ]]; then
+    print_error "CodeSign errors cannot send to notarize!"
+    echo "krita.app not sent to notarization, stopping...."
+    exit
+fi
+print_msg "Done! all files appear to be correct."
 
 # notarize apple
 notarize_build "${KRITA_DMG}" krita.app

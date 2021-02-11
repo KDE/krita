@@ -310,7 +310,7 @@ public:
     bool meshScaleHandles() const;
     void setMeshScaleHandles(bool meshScaleHandles);
 
-    void transformSrcAndDst(const QTransform &t);
+    void scaleSrcAndDst(qreal scale);
 
 private:
     void clear();

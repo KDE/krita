@@ -16,6 +16,7 @@
 
 #include "kis_liquify_transform_worker.h"
 #include "kis_dom_utils.h"
+#include <QMatrix4x4>
 
 
 ToolTransformArgs::ToolTransformArgs()
@@ -557,11 +558,17 @@ void ToolTransformArgs::setMeshSymmetricalHandles(bool value)
     configGroup.writeEntry("meshSymmetricalHandles", value);
 }
 
-void ToolTransformArgs::transformSrcAndDst(const QTransform &t)
+void ToolTransformArgs::scaleSrcAndDst(qreal scale)
 {
+    const QTransform t = QTransform::fromScale(scale, scale);
+
     if (m_mode == FREE_TRANSFORM) {
         m_transformedCenter = t.map(m_transformedCenter);
         m_originalCenter = t.map(m_originalCenter);
+
+        QMatrix4x4 m;
+        m.scale(scale);
+        m_cameraPos = m * m_cameraPos;
 
     } else if (m_mode == PERSPECTIVE_4POINT) {
         m_transformedCenter = t.map(m_transformedCenter);

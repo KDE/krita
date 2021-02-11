@@ -10,6 +10,7 @@
 
 class KisVisualColorSelector;
 class WGShadeSelector;
+class WGSelectorWidgetBase;
 
 class WGSelectorPopup : public QWidget
 {
@@ -17,7 +18,7 @@ class WGSelectorPopup : public QWidget
 public:
     explicit WGSelectorPopup(QWidget *parent = nullptr);
     void setSelectorWidget(KisVisualColorSelector *selector);
-    void setSelectorWidget(WGShadeSelector *selector);
+    void setSelectorWidget(WGSelectorWidgetBase *selector);
 public Q_SLOTS:
     void slotShowPopup();
 protected:

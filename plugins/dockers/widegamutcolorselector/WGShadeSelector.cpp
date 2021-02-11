@@ -13,7 +13,7 @@
 #include <QMouseEvent>
 
 WGShadeSelector::WGShadeSelector(KisVisualColorModelSP colorModel, QWidget *parent)
-    : QWidget(parent)
+    : WGSelectorWidgetBase(parent)
     , m_model(colorModel)
 {
     QVBoxLayout* l = new QVBoxLayout(this);
@@ -28,6 +28,7 @@ void WGShadeSelector::setModel(KisVisualColorModelSP colorModel)
 {
     if (m_model) {
         m_model->disconnect(this);
+        disconnect(m_model.data());
     }
     m_model = colorModel;
     for (WGShadeSlider *slider: m_sliders) {

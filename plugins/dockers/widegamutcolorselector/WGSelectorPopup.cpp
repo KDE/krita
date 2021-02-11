@@ -14,6 +14,7 @@
 
 #include <kis_global.h>
 #include <KisVisualColorSelector.h>
+#include <WGSelectorWidgetBase.h>
 #include <WGShadeSelector.h>
 
 WGSelectorPopup::WGSelectorPopup(QWidget *parent)
@@ -32,7 +33,7 @@ void WGSelectorPopup::setSelectorWidget(KisVisualColorSelector *selector)
     connect(selector, SIGNAL(sigInteraction(bool)), SLOT(slotInteraction(bool)));
 }
 
-void WGSelectorPopup::setSelectorWidget(WGShadeSelector *selector)
+void WGSelectorPopup::setSelectorWidget(WGSelectorWidgetBase *selector)
 {
     replaceCentranWidget(selector);
     connect(selector, SIGNAL(sigColorInteraction(bool)), SLOT(slotInteraction(bool)));

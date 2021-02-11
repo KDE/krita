@@ -7,7 +7,7 @@
 #ifndef WGSHADESELECTOR_H
 #define WGSHADESELECTOR_H
 
-#include <KisVisualColorModel.h>
+#include <WGSelectorWidgetBase.h>
 
 #include <QObject>
 #include <QWidget>
@@ -16,15 +16,15 @@
 
 class WGShadeSlider;
 
-class WGShadeSelector : public QWidget
+class WGShadeSelector : public WGSelectorWidgetBase
 {
     Q_OBJECT
 
 public:
     explicit WGShadeSelector(KisVisualColorModelSP colorModel, QWidget *parent = nullptr);
 
-    void setModel(KisVisualColorModelSP colorModel);
-    void updateSettings();
+    void setModel(KisVisualColorModelSP colorModel) override;
+    void updateSettings() override;
 protected:
     void mousePressEvent(QMouseEvent *event) override;
 
@@ -36,10 +36,6 @@ private Q_SLOTS:
     void slotSliderValuesChanged(const QVector4D &values);
     void slotSliderInteraction(bool active);
     void slotReset();
-
-Q_SIGNALS:
-    void sigChannelValuesChanged(const QVector4D &values);
-    void sigColorInteraction(bool active);
 
 private:
     KisVisualColorModelSP m_model;

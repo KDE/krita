@@ -9,6 +9,7 @@ set(KRITA_WGCOLORSELECTOR_SOURCES
     WGQuickSettingsWidget.cpp
     WGSelectorConfigGrid.cpp
     WGSelectorPopup.cpp
+    WGSelectorWidgetBase.cpp
     WGShadeLineEditor.cpp
     WGShadeSelector.cpp
     WGShadeSlider.cpp

@@ -22,6 +22,7 @@
 #include <KisResourceLoaderRegistry.h>
 #include <KisResourceModel.h>
 #include <KisTagFilterResourceProxyModel.h>
+#include <KisStorageModel.h>
 
 #include <DummyResource.h>
 #include <ResourceTestHelper.h>
@@ -178,6 +179,23 @@ void TestTagFilterResourceProxyModel::testFilterByString()
     QCOMPARE(proxyModel.rowCount(), 1);
 }
 
+void TestTagFilterResourceProxyModel::testFilterByStorage()
+{
+    KisResourceModel resourceModel(ResourceType::PaintOpPresets);
+    KisTagModel tagModel(ResourceType::PaintOpPresets);
+
+    KisTagFilterResourceProxyModel proxyModel(resourceType);
+
+    proxyModel.setFilterInCurrentTag(false);
+    proxyModel.setStorageFilter(true, 1);
+    proxyModel.setSearchText("");
+    proxyModel.setMetaDataFilter(QMap<QString, QVariant>());
+    proxyModel.setResourceFilter(0);
+
+    QCOMPARE(proxyModel.rowCount(), 3);
+
+}
+
 
 void TestTagFilterResourceProxyModel::testDataWhenSwitchingBetweenTagAllAllUntagged()
 {
@@ -246,6 +264,6 @@ void TestTagFilterResourceProxyModel::cleanupTestCase()
     ResourceTestHelper::cleanDstLocation(m_dstLocation);
 }
 
-
-QTEST_MAIN(TestTagFilterResourceProxyModel)
+#include <sdk/tests/kistest.h>
+KISTEST_MAIN(TestTagFilterResourceProxyModel)
 

@@ -34,6 +34,9 @@ struct KisTagFilterResourceProxyModel::Private
     KisTagSP currentTagFilter;
     KoResourceSP currentResourceFilter;
 
+    int storageId {-1};
+    bool useStorageIdFilter {false};
+
 };
 
 KisTagFilterResourceProxyModel::KisTagFilterResourceProxyModel(const QString &resourceType, QObject *parent)
@@ -157,6 +160,15 @@ void KisTagFilterResourceProxyModel::setTagFilter(const KisTagSP tag)
     updateTagFilter();
 }
 
+void KisTagFilterResourceProxyModel::setStorageFilter(bool useFilter, int storageId)
+{
+    d->useStorageIdFilter = useFilter;
+    if (useFilter) {
+        d->storageId = storageId;
+    }
+    invalidateFilter();
+}
+
 void KisTagFilterResourceProxyModel::updateTagFilter()
 {
     const bool ignoreTagFiltering =
@@ -247,7 +259,7 @@ bool KisTagFilterResourceProxyModel::filterAcceptsColumn(int /*source_column*/, 
 bool KisTagFilterResourceProxyModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
 {
     // if both filters are empty, just accept everything
-    if (d->filter->isEmpty() && d->metaDataMapFilter.isEmpty()) {
+    if (d->filter->isEmpty() && d->metaDataMapFilter.isEmpty() && !d->useStorageIdFilter) {
         return true;
     }
 
@@ -257,6 +269,14 @@ bool KisTagFilterResourceProxyModel::filterAcceptsRow(int source_row, const QMod
 
     if (!idx.isValid()) {
         return false;
+    }
+
+    // checking the storage filter
+    if (d->useStorageIdFilter) {
+        int storageId = sourceModel()->data(idx, Qt::UserRole + KisAbstractResourceModel::StorageId).toInt();
+        if (storageId != d->storageId) {
+            return false;
+        }
     }
 
     bool metaDataMatches = true;

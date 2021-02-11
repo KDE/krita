@@ -20,6 +20,7 @@
 #include "kis_layer_utils.h"
 #include "kis_node_manager.h"
 #include "kis_layer.h"
+#include "kis_generator_layer.h"
 #include "kis_selection_mask.h"
 
 
@@ -543,6 +544,7 @@ struct DuplicateLayers : public KisCommandUtils::AggregateCommand {
                                                        newParent,
                                                        currentAbove,
                                                        false, false));
+
                 currentAbove = newNode;
             } else if (m_mode == MOVE) {
                 KisNodeSP newNode = node;

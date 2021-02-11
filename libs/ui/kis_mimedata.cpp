@@ -312,6 +312,11 @@ QList<KisNodeSP> KisMimeData::loadNodes(const QMimeData *data,
 
     if (nodes.isEmpty() && (data->hasFormat("application/x-color") || data->hasFormat("krita/x-colorsetentry"))) {
         QColor color = data->hasColor() ? qvariant_cast<QColor>(data->colorData()) : QColor(255, 0, 255);
+        if (!data->hasColor() && data->hasFormat("krita/x-colorsetentry")) {
+            QByteArray byteData = data->data("krita/x-colorsetentry");
+            KisSwatch s = KisSwatch::fromByteArray(byteData);
+            color = s.color().toQColor();
+        }
         KisGeneratorSP generator = KisGeneratorRegistry::instance()->value("color");
         KisFilterConfigurationSP defaultConfig = generator->factoryConfiguration(KisGlobalResourcesInterface::instance());
         defaultConfig->setProperty("color", color);

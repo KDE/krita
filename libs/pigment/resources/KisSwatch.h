@@ -10,8 +10,9 @@
 #define KISSWATCH_H
 
 #include "kritapigment_export.h"
-#include <QString>
 #include "KoColor.h"
+#include "KoColorModelStandardIds.h"
+#include <QString>
 
 class KRITAPIGMENT_EXPORT KisSwatch
 {
@@ -35,8 +36,9 @@ public:
     bool isValid() const { return m_valid; }
 
 
-    void writeToStream(QDataStream& stream);
-    static KisSwatch fromByteArray(QByteArray& data);
+    void writeToStream(QDataStream& stream, const QString& groupName, int originalRow , int originalColumn);
+    static KisSwatch fromByteArray(QByteArray& data, QString &groupName, int &originalRow, int &originalColumn);
+    static KisSwatch fromByteArray(QByteArray &data);
 
 public:
     bool operator==(const KisSwatch& rhs) const {

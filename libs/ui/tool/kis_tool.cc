@@ -355,7 +355,13 @@ KoAbstractGradientSP KisTool::currentGradient()
 
 KisPaintOpPresetSP KisTool::currentPaintOpPreset()
 {
-    return canvas()->resourceManager()->resource(KoCanvasResource::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
+    QVariant v = canvas()->resourceManager()->resource(KoCanvasResource::CurrentPaintOpPreset);
+    if (v.isNull()) {
+        return 0;
+    }
+    else {
+        return v.value<KisPaintOpPresetSP>();
+    }
 }
 
 KisNodeSP KisTool::currentNode() const
@@ -520,6 +526,10 @@ KisTool::NodePaintAbility KisTool::nodePaintAbility()
 {
     KisNodeSP node = currentNode();
 
+    if (canvas()->resourceManager()->resource(KoCanvasResource::CurrentPaintOpPreset).isNull()) {
+        return NodePaintAbility::UNPAINTABLE;
+    }
+
     if (!node) {
         return NodePaintAbility::UNPAINTABLE;
     }
@@ -616,6 +626,10 @@ bool KisTool::nodeEditable()
 {
     KisNodeSP node = currentNode();
     if (!node) {
+        return false;
+    }
+
+    if (!currentPaintOpPreset()) {
         return false;
     }
 

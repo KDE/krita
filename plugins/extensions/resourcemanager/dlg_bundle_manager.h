@@ -1,4 +1,4 @@
-/*
+﻿/*
  *  SPDX-FileCopyrightText: 2014 Victor Lafon metabolic.ewilan @hotmail.fr
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
@@ -40,19 +40,22 @@ public:
 
     explicit DlgBundleManager(QWidget *parent = 0);
 
+public Q_SLOTS:
+    void done(int res) override;
+
 private Q_SLOTS:
 
     void addBundle();
     void createBundle();
-    void deleteBundle();
+    void toggleBundle();
 
     void slotModelAboutToBeReset();
     void slotModelReset();
     void currentCellSelectedChanged(QModelIndex current, QModelIndex previous);
 
-
 private:
 
+    void updateToggleButton(bool active);
     void updateBundleInformation(QModelIndex current);
     void addBundleToActiveResources(QString filename);
 

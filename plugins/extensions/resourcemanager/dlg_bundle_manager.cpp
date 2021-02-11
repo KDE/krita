@@ -33,7 +33,8 @@
 #include <kis_config.h>
 #include <KisResourceLocator.h>
 
-
+#include <KisMainWindow.h>
+#include <KisPart.h>
 
 DlgBundleManager::ItemDelegate::ItemDelegate(QObject *parent, KisStorageFilterProxyModel* proxy)
     : QStyledItemDelegate(parent)
@@ -61,30 +62,29 @@ void DlgBundleManager::ItemDelegate::paint(QPainter *painter, const QStyleOption
     int minMargin = 3;
     int textMargin = 10;
 
-
     painter->save();
 
     // paint background
     QColor bgColor = option.state & QStyle::State_Selected ?
-        qApp->palette().color(QPalette::Highlight) :
-        qApp->palette().color(QPalette::Base);
+                qApp->palette().color(QPalette::Highlight) :
+                qApp->palette().color(QPalette::Base);
+
     QBrush oldBrush(painter->brush());
     QPen oldPen = painter->pen();
+
     painter->setBrush(QBrush(bgColor));
     painter->setPen(Qt::NoPen);
     painter->drawRect(option.rect);
-    painter->setBrush(oldBrush);
-    painter->setPen(oldPen);
-
 
     QRect paintRect = kisGrowRect(option.rect, -minMargin);
     int height = paintRect.height();
 
-
     // make border around active ones
     bool active = KisStorageModel::instance()->data(sourceIndex, Qt::UserRole + KisStorageModel::Active).toBool();
 
-    QColor borderColor = qApp->palette().color(QPalette::Text);
+    QColor borderColor = option.state & QStyle::State_Selected ?
+                qApp->palette().color(QPalette::HighlightedText) :
+                qApp->palette().color(QPalette::Text);
     painter->setBrush(Qt::NoBrush);
     painter->setPen(QPen(borderColor));
 
@@ -95,10 +95,8 @@ void DlgBundleManager::ItemDelegate::paint(QPainter *painter, const QStyleOption
     painter->setBrush(oldBrush);
     painter->setPen(oldPen);
 
-
     // paint the image
     QImage thumbnail = KisStorageModel::instance()->data(sourceIndex, Qt::UserRole + KisStorageModel::Thumbnail).value<QImage>();
-
 
     QRect iconRect = paintRect;
     iconRect.setWidth(height);
@@ -107,6 +105,11 @@ void DlgBundleManager::ItemDelegate::paint(QPainter *painter, const QStyleOption
     QRect nameRect = paintRect;
     nameRect.setX(paintRect.x() + height + textMargin);
     nameRect.setWidth(paintRect.width() - height - textMargin);
+
+    QColor textColor = option.state & QStyle::State_Selected ?
+                qApp->palette().color(QPalette::HighlightedText) :
+                qApp->palette().color(QPalette::Text);
+    painter->setPen(QPen(textColor));
 
     QTextOption textCenterOption;
     textCenterOption.setAlignment(Qt::AlignVCenter);
@@ -136,18 +139,18 @@ DlgBundleManager::DlgBundleManager(QWidget *parent)
     m_ui->bnNew->setText(i18nc("In bundle manager; press button to create a new bundle", "Create"));
     connect(m_ui->bnNew, SIGNAL(clicked(bool)), SLOT(createBundle()));
 
-    m_ui->bnDelete->setIcon(KisIconUtils::loadIcon("edit-delete"));
-    m_ui->bnDelete->setText(i18nc("In bundle manager; press button to deactivate the bundle "
-                                  "(remove resources from the bundle from the available resources)","Deactivate"));
-    connect(m_ui->bnDelete, SIGNAL(clicked(bool)), SLOT(deleteBundle()));
+    m_ui->bnToggle->setIcon(KisIconUtils::loadIcon("edit-delete"));
+    m_ui->bnToggle->setText(i18nc("In bundle manager; press button to deactivate the bundle "
+                                  "(remove resources from the bundle from the available resources)", "Deactivate"));
+    connect(m_ui->bnToggle, SIGNAL(clicked(bool)), SLOT(toggleBundle()));
 
     setButtons(Close);
 
     m_proxyModel = new KisStorageFilterProxyModel(this);
     m_proxyModel->setSourceModel(KisStorageModel::instance());
     m_proxyModel->setFilter(KisStorageFilterProxyModel::ByStorageType,
-                          QStringList()
-                          << KisResourceStorage::storageTypeToUntranslatedString(KisResourceStorage::StorageType::Bundle));
+                            QStringList()
+                            << KisResourceStorage::storageTypeToUntranslatedString(KisResourceStorage::StorageType::Bundle));
 
     m_ui->listView->setModel(m_proxyModel);
     m_ui->listView->setItemDelegate(new ItemDelegate(this, m_proxyModel));
@@ -158,6 +161,30 @@ DlgBundleManager::DlgBundleManager(QWidget *parent)
 
     connect(KisStorageModel::instance(), &KisStorageModel::modelAboutToBeReset, this, &DlgBundleManager::slotModelAboutToBeReset);
     connect(KisStorageModel::instance(), &KisStorageModel::modelReset, this, &DlgBundleManager::slotModelReset);
+
+    updateToggleButton(m_proxyModel->data(m_ui->listView->currentIndex(), Qt::UserRole + KisStorageModel::Active).toBool());
+}
+
+void DlgBundleManager::done(int res)
+{
+    KisMainWindow *mw = KisPart::instance()->currentMainwindow();
+    if (mw) {
+        QString warning;
+        if (!mw->checkActiveBundlesAvailable()) {
+            warning = i18n("You don't have any resource bundles enabled.");
+        }
+
+        if (!mw->checkPaintOpAvailable()) {
+            warning += i18n("\nThere are no brush presets available. Please enable a bundle that has presets before continuing.\nIf there are no bundles, please import a bundle before continuing.");
+            QMessageBox::critical(this, i18nc("@title:window", "Krita"), warning);
+            return;
+        }
+
+        if (!mw->checkActiveBundlesAvailable()) {
+            QMessageBox::warning(this, i18nc("@title:window", "Krita"), warning + i18n("\nOnly your local resources are available."));
+        }
+    }
+    KoDialog::done(res);
 }
 
 void DlgBundleManager::addBundle()
@@ -178,17 +205,42 @@ void DlgBundleManager::createBundle()
     dlg->exec();
 }
 
-void DlgBundleManager::deleteBundle()
+void DlgBundleManager::toggleBundle()
 {
     QModelIndex idx = m_ui->listView->currentIndex();
     KIS_ASSERT(m_proxyModel);
+
     if (!idx.isValid()) {
         ENTER_FUNCTION() << "Index is invalid\n";
         return;
     }
+
     bool active = m_proxyModel->data(idx, Qt::UserRole + KisStorageModel::Active).toBool();
     idx = m_proxyModel->index(idx.row(), 0);
     m_proxyModel->setData(idx, QVariant(!active), Qt::CheckStateRole);
+
+    currentCellSelectedChanged(idx, idx);
+
+    KisMainWindow *mw = KisPart::instance()->currentMainwindow();
+    if (mw) {
+        QString warning;
+        if (!mw->checkActiveBundlesAvailable()) {
+            warning = i18n("You don't have any resource bundles enabled.");
+        }
+
+        if (!mw->checkPaintOpAvailable()) {
+            button(KoDialog::Close)->setEnabled(false);
+
+            warning += i18n("\nThere are no brush presets available. Please enable a bundle that has presets before continuing.\nIf there are no bundles, please import a bundle before continuing.");
+            QMessageBox::critical(this, i18nc("@title:window", "Krita"), warning);
+            return;
+        }
+
+        if (!mw->checkActiveBundlesAvailable()) {
+            QMessageBox::warning(this, i18nc("@title:window", "Krita"), warning + i18n("\nOnly your local resources are available."));
+        }
+    }
+    button(KoDialog::Close)->setEnabled(true);
 }
 
 void DlgBundleManager::slotModelAboutToBeReset()
@@ -221,17 +273,21 @@ void DlgBundleManager::currentCellSelectedChanged(QModelIndex current, QModelInd
         return;
     }
     bool active = m_proxyModel->data(idx, Qt::UserRole + KisStorageModel::Active).toBool();
+    updateToggleButton(active);
+    updateBundleInformation(current);
+}
 
+void DlgBundleManager::updateToggleButton(bool active)
+{
     if (active) {
-        m_ui->bnDelete->setIcon(KisIconUtils::loadIcon("edit-delete"));
-        m_ui->bnDelete->setText(i18nc("In bundle manager; press button to deactivate the bundle "
+        m_ui->bnToggle->setIcon(KisIconUtils::loadIcon("edit-delete"));
+        m_ui->bnToggle->setText(i18nc("In bundle manager; press button to deactivate the bundle "
                                       "(remove resources from the bundle from the available resources)","Deactivate"));
     } else {
-        m_ui->bnDelete->setIcon(QIcon());
-        m_ui->bnDelete->setText(i18nc("In bundle manager; press button to activate the bundle "
+        m_ui->bnToggle->setIcon(QIcon());
+        m_ui->bnToggle->setText(i18nc("In bundle manager; press button to activate the bundle "
                                       "(add resources from the bundle to the available resources)","Activate"));
     }
-    updateBundleInformation(current);
 }
 
 void DlgBundleManager::updateBundleInformation(QModelIndex currentInProxy)
@@ -263,7 +319,7 @@ QString createNewBundlePath(QString resourceFolder, QString filename)
 
 void DlgBundleManager::addBundleToActiveResources(QString filename)
 {
-        // 1. Copy the bundle to the resource folder
+    // 1. Copy the bundle to the resource folder
     QFileInfo oldFileInfo(filename);
 
     KisConfig cfg(true);
@@ -280,7 +336,7 @@ void DlgBundleManager::addBundleToActiveResources(QString filename)
             // ask for new filename
             bool ok;
             newName = QInputDialog::getText(this, i18n("New name for the bundle"), i18n("The old filename %1 is taken.\nNew name:", newName),
-                                                    QLineEdit::Normal, newName, &ok);
+                                            QLineEdit::Normal, newName, &ok);
             newLocation = createNewBundlePath(newDir, newName);
             newFileInfo.setFile(newLocation);
             done = !newFileInfo.exists();
@@ -295,4 +351,6 @@ void DlgBundleManager::addBundleToActiveResources(QString filename)
     KIS_ASSERT(!storage.isNull());
     KisResourceLocator::instance()->addStorage(QFileInfo(newLocation).fileName(), storage);
 }
+
+
 

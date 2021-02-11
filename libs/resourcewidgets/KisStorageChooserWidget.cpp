@@ -9,13 +9,16 @@
 #include <QApplication>
 #include <QStyle>
 #include <QDebug>
+#include <QMessageBox>
 
 #include <QListView>
 
+#include "KisResourceTypes.h"
+#include "KisResourceModel.h"
 #include "KisStorageChooserWidget.h"
 #include "KisStorageModel.h"
+#include "KisStorageFilterProxyModel.h"
 #include <KoIcon.h>
-
 
 KisStorageChooserDelegate::KisStorageChooserDelegate(QObject *parent)
     : QAbstractItemDelegate(parent)
@@ -98,7 +101,13 @@ QSize KisStorageChooserDelegate::sizeHint(const QStyleOptionViewItem &option, co
 KisStorageChooserWidget::KisStorageChooserWidget(QWidget *parent) : KisPopupButton(parent)
 {
     QListView *view = new QListView(this);
-    view->setModel(KisStorageModel::instance());
+
+    KisStorageFilterProxyModel *proxyModel = new KisStorageFilterProxyModel(this);
+    proxyModel->setSourceModel(KisStorageModel::instance());
+    proxyModel->setFilter(KisStorageFilterProxyModel::ByStorageType,
+                          QStringList()
+                          << KisResourceStorage::storageTypeToUntranslatedString(KisResourceStorage::StorageType::Bundle));
+    view->setModel(proxyModel);
     view->setIconSize(QSize(64, 64));
     view->setItemDelegate(new KisStorageChooserDelegate(this));
     view->setSelectionMode(QAbstractItemView::SingleSelection);
@@ -112,6 +121,24 @@ void KisStorageChooserWidget::activated(const QModelIndex &index)
 
     bool active = index.data(Qt::UserRole + KisStorageModel::Active).value<bool>();
     KisStorageModel::instance()->setData(index, !active, Qt::CheckStateRole);
+
+    KisStorageFilterProxyModel proxy;
+    proxy.setSourceModel(KisStorageModel::instance());
+    proxy.setFilter(KisStorageFilterProxyModel::ByStorageType,
+                    QStringList()
+                    << KisResourceStorage::storageTypeToUntranslatedString(KisResourceStorage::StorageType::Bundle));
+
+    QString warning;
+    if (!proxy.rowCount()) {
+        warning = i18n("All bundles have been deactivated.");
+    }
+
+    KisResourceModel resourceModel(ResourceType::PaintOpPresets);
+    resourceModel.setResourceFilter(KisResourceModel::ShowActiveResources);
+    if (!resourceModel.rowCount()) {
+        warning += i18n("\nThere are no brush presets available. Please re-enable a bundle that provides brusb presets.");
+        QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"), warning);
+    }
 }
 
 KisStorageChooserWidget::~KisStorageChooserWidget()

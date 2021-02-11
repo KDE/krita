@@ -36,7 +36,7 @@
 #include <kis_paintop_settings.h>
 #include <KisPaintopSettingsIds.h>
 #include <krita_container_utils.h>
-
+#include <KisPart.h>
 #include "config-seexpr.h"
 
 #include "dlg_bundle_manager.h"
@@ -233,7 +233,7 @@ KoResourceBundleSP ResourceManager::saveBundle(const DlgCreateBundle &dlgCreateB
 
 void ResourceManager::slotManageBundles()
 {
-    QPointer<DlgBundleManager> dlg = new DlgBundleManager();
+    QPointer<DlgBundleManager> dlg = new DlgBundleManager(KisPart::instance()->currentMainwindow());
     dlg->exec();
 }
 

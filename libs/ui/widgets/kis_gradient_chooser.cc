@@ -537,8 +537,8 @@ void KisGradientChooser::Private::addGradient(KoAbstractGradientSP gradient, boo
         gradient->setFilename(gradient->name() + gradient->defaultFileExtension());
         gradient->setValid(true);
         rserver->addResource(gradient);
-        // TODO: select the right gradient from the resource server. Right now this is not possible :(
-        itemChooser->setCurrentItem(0);
+        // We added a new gradient, so it's the last item in the list
+        itemChooser->setCurrentItem(rserver->resourceCount());
     } else {
         // TODO: revert the changes made to the resource
     }

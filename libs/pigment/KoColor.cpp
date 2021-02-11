@@ -408,7 +408,7 @@ QString KoColor::toSVG11(QHash<QString, const KoColorProfile *> *profileList) co
     channelValues.fill(0.0);
     colorSpace()->normalisedChannelsValue(data(), channelValues);
 
-    bool sRGB = colorSpace()->profile()->uniqueId() == KoColorSpaceRegistry::instance()->p709SRGBProfile()->uniqueId();
+    bool sRGB = (colorSpace()->profile()->uniqueId() == KoColorSpaceRegistry::instance()->p709SRGBProfile()->uniqueId());
 
     // We don't write a icc-color definition for XYZ and 8bit sRGB.
     if (!(sRGB && colorSpace()->colorDepthId() == Integer8BitsColorDepthID) &&

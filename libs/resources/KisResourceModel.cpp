@@ -464,8 +464,9 @@ int KisAllResourcesModel::rowCount(const QModelIndex &) const
 }
 
 
-void KisAllResourcesModel::addStorage(const QString &/*location*/)
+void KisAllResourcesModel::addStorage(const QString &location)
 {
+    Q_UNUSED(location)
     beginResetModel();
     resetQuery();
     endResetModel();
@@ -473,8 +474,9 @@ void KisAllResourcesModel::addStorage(const QString &/*location*/)
 
 
 
-void KisAllResourcesModel::removeStorage(const QString &/*location*/)
+void KisAllResourcesModel::removeStorage(const QString &location)
 {
+    Q_UNUSED(location)
     beginResetModel();
     resetQuery();
     endResetModel();

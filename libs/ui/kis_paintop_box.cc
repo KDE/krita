@@ -571,7 +571,12 @@ void KisPaintopBox::newOptionWidgets(const QList<QPointer<QWidget> > &optionWidg
 
 void KisPaintopBox::resourceSelected(KoResourceSP resource)
 {
-    KIS_SAFE_ASSERT_RECOVER_RETURN(m_optionWidget);
+    // This happens if no storages were available on startup
+    if (!m_optionWidget) {
+        KisPaintOpPresetSP preset = resource.dynamicCast<KisPaintOpPreset>();
+        setCurrentPaintop(preset);
+        return;
+    }
 
     m_presetsPopup->setCreatingBrushFromScratch(false); // show normal UI elements when we are not creating
 
@@ -606,7 +611,6 @@ void KisPaintopBox::setCurrentPaintop(const KoID& paintop)
 
 void KisPaintopBox::setCurrentPaintop(KisPaintOpPresetSP preset)
 {
-
     if (preset == m_resourceProvider->currentPreset()) {
 
         if (preset == m_tabletToolMap[m_currTabletToolID].preset) {
@@ -658,7 +662,7 @@ void KisPaintopBox::setCurrentPaintop(KisPaintOpPresetSP preset)
     m_presetsPopup->setCurrentPaintOpId(paintop.id());
 
 
-    ////qDebug() << "\tsetting the new preset for" << m_currTabletToolID.uniqueID << "to" << preset->name();
+    //o() << "\tsetting the new preset for" << m_currTabletToolID.uniqueID << "to" << preset->name();
     m_paintOpPresetMap[m_resourceProvider->currentPreset()->paintOp()] = preset;
     m_tabletToolMap[m_currTabletToolID].preset = preset;
     m_tabletToolMap[m_currTabletToolID].paintOpID = preset->paintOp();

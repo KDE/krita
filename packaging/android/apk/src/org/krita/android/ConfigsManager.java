@@ -29,57 +29,37 @@ import java.io.OutputStream;
 class ConfigsManager {
 
 	private final String LOG_TAG = "krita.ConfigsManager";
-	private final String FIRST_RUN_COOKIE = "ORG_KRITA_FIRST_RUN";
-	private final String VERSION_CODE = "ORG_KRITA_VERSIONCODE";
-	private long mVersionCode;
+	private final String LAST_UPDATE_TIME = "ORG_KRITA_LASTUPDATETIME";
+	private long mLastUpdateTime;
 	private Activity mActivity;
 
-	private boolean isFirstRun() {
-		return mActivity.getPreferences(Context.MODE_PRIVATE)
-		               .getBoolean(FIRST_RUN_COOKIE, true);
-	}
-
-	private void setFirstRunCookie() {
+	private void updateLastUpdateTime() {
 		SharedPreferences sharedPref = mActivity.getPreferences(Context.MODE_PRIVATE);
-
 		SharedPreferences.Editor editor = sharedPref.edit();
-		editor.putBoolean(FIRST_RUN_COOKIE, false);
+		editor.putLong(LAST_UPDATE_TIME, mLastUpdateTime);
 		editor.apply();
 	}
 
-	private void updateVersionCode() {
-		SharedPreferences sharedPref = mActivity.getPreferences(Context.MODE_PRIVATE);
-		SharedPreferences.Editor editor = sharedPref.edit();
-		editor.putLong(VERSION_CODE, mVersionCode);
-		editor.apply();
-	}
-
-	private boolean isVersionUpdated() {
+	private boolean isAppUpdated() {
 		return mActivity.getPreferences(Context.MODE_PRIVATE)
-		                .getLong(VERSION_CODE, 0) < mVersionCode;
+		                .getLong(LAST_UPDATE_TIME, 0) != mLastUpdateTime;
 	}
 
 	void handleAssets(Activity activity) {
 		mActivity = activity;
 		try {
 			PackageInfo info = mActivity.getPackageManager().getPackageInfo(mActivity.getPackageName(), 0);
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-				mVersionCode = info.getLongVersionCode();
-			}
-			else {
-				mVersionCode = info.versionCode;
-			}
+			mLastUpdateTime = info.lastUpdateTime;
 		} catch (PackageManager.NameNotFoundException e) {
 			Log.e(LOG_TAG, "handleAssets(): packageName not found: ", e);
 		}
-		if (!isFirstRun() && !isVersionUpdated()) {
+		if (!isAppUpdated()) {
 			return;
 		}
 
 		Log.d(LOG_TAG, mActivity.getFilesDir().getPath());
 		copyAssets();
-		setFirstRunCookie();
-		updateVersionCode();
+		updateLastUpdateTime();
 	}
 
 	private void copyAssets() {

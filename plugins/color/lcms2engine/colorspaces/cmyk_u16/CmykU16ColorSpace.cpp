@@ -28,7 +28,7 @@ CmykU16ColorSpace::CmykU16ColorSpace(const QString &name, KoColorProfile *p)
     init();
 
     addStandardCompositeOps<KoCmykU16Traits>(this);
-    addStandardDitherOps<KoCmykF32Traits>(this);
+    addStandardDitherOps<KoCmykU16Traits>(this);
 }
 
 bool CmykU16ColorSpace::willDegrade(ColorSpaceIndependence independence) const

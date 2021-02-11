@@ -103,7 +103,7 @@ private:
         quint8 *nativeDst = dstRowStart;
 
         for (int y = 0; y < rows; ++y) {
-            memcpy(nativeDst, nativeSrc, columns);
+            memcpy(nativeDst, nativeSrc, srcCSTraits::pixelSize * columns);
 
             nativeSrc += srcRowStride;
             nativeDst += dstRowStride;

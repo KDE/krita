@@ -34,7 +34,7 @@
         <widget class="QComboBox" name="cmbResourceType"/>
        </item>
        <item>
-        <widget class="QComboBox" name="cmbSotrage"/>
+        <widget class="QComboBox" name="cmbStorage"/>
        </item>
        <item>
         <widget class="QComboBox" name="cmbTag"/>
@@ -97,7 +97,7 @@
             </widget>
            </item>
            <item row="0" column="1">
-            <widget class="QLabel" name="ldlId">
+            <widget class="QLabel" name="lblId">
              <property name="text">
               <string>TextLabel</string>
              </property>
@@ -114,7 +114,7 @@
             </widget>
            </item>
            <item row="1" column="1">
-            <widget class="QLabel" name="ldlMetadata">
+            <widget class="QLabel" name="lblMetadata">
              <property name="text">
               <string>TextLabel</string>
              </property>
@@ -256,7 +256,7 @@
  </customwidgets>
  <tabstops>
   <tabstop>cmbResourceType</tabstop>
-  <tabstop>cmbSotrage</tabstop>
+  <tabstop>cmbStorage</tabstop>
   <tabstop>cmbTag</tabstop>
   <tabstop>chkShowDeleted</tabstop>
   <tabstop>resourceItemView</tabstop>

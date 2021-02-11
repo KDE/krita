@@ -41,7 +41,7 @@ KisBrushSelectionWidget::KisBrushSelectionWidget(QWidget * parent)
     m_layout = new QGridLayout(uiWdgBrushChooser.settingsFrame);
     m_autoBrushWidget = new KisAutoBrushWidget(this, "autobrush");
     connect(m_autoBrushWidget, SIGNAL(sigBrushChanged()), SIGNAL(sigBrushChanged()));
-    addChooser(i18n("Auto"), m_autoBrushWidget, AUTOBRUSH, KoGroupButton::GroupLeft);
+    addChooser(i18nc("Autobrush Label", "Auto"), m_autoBrushWidget, AUTOBRUSH, KoGroupButton::GroupLeft);
 
     m_predefinedBrushWidget = new KisPredefinedBrushChooser(this);
     connect(m_predefinedBrushWidget, SIGNAL(sigBrushChanged()), SIGNAL(sigBrushChanged()));

@@ -5,8 +5,8 @@
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
-#ifndef KIS_ITEM_CHOOSER_H_
-#define KIS_ITEM_CHOOSER_H_
+#ifndef KIS_PRESET_CHOOSER_H_
+#define KIS_PRESET_CHOOSER_H_
 
 #include <QWidget>
 #include <QScroller>
@@ -91,5 +91,5 @@ private:
     KisSignalAutoConnectionsStore m_currentPresetConnections;
 };
 
-#endif // KIS_ITEM_CHOOSER_H_
+#endif
 

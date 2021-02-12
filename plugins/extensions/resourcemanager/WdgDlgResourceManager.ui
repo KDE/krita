@@ -96,16 +96,6 @@
              </property>
             </widget>
            </item>
-           <item row="0" column="1">
-            <widget class="QLabel" name="lblId">
-             <property name="text">
-              <string>TextLabel</string>
-             </property>
-             <property name="textInteractionFlags">
-              <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
-             </property>
-            </widget>
-           </item>
            <item row="1" column="0">
             <widget class="QLabel" name="label_6">
              <property name="text">
@@ -113,11 +103,15 @@
              </property>
             </widget>
            </item>
-           <item row="1" column="1">
-            <widget class="QLabel" name="lblMetadata">
-             <property name="text">
-              <string>TextLabel</string>
+           <item row="0" column="1">
+            <widget class="KSqueezedTextLabel" name="lblId">
+             <property name="textInteractionFlags">
+              <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
              </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="KSqueezedTextLabel" name="lblMetadata">
              <property name="textInteractionFlags">
               <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
              </property>
@@ -160,20 +154,26 @@
          <item row="1" column="1">
           <widget class="QLineEdit" name="lneName"/>
          </item>
-         <item row="0" column="1">
-          <widget class="QLabel" name="lblFilename">
-           <property name="text">
-            <string>TextLabel</string>
+         <item row="2" column="1">
+          <widget class="KSqueezedTextLabel" name="lblLocation">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
            </property>
            <property name="textInteractionFlags">
             <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
            </property>
           </widget>
          </item>
-         <item row="2" column="1">
-          <widget class="QLabel" name="lblLocation">
-           <property name="text">
-            <string>TextLabel</string>
+         <item row="0" column="1">
+          <widget class="KSqueezedTextLabel" name="lblFilename">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
            </property>
            <property name="textInteractionFlags">
             <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
@@ -251,6 +251,11 @@
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>KSqueezedTextLabel</class>
+   <extends>QLabel</extends>
+   <header>ksqueezedtextlabel.h</header>
+  </customwidget>
   <customwidget>
    <class>KisResourceItemListView</class>
    <extends>QListView</extends>

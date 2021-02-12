@@ -68,6 +68,7 @@ struct KisKraSaver::Private
     QString filename;
     QStringList errorMessages;
     QStringList specialAnnotations;
+    bool addMergedImage;
 
     Private() {
         specialAnnotations << "exif" << "icc";
@@ -75,11 +76,12 @@ struct KisKraSaver::Private
 
 };
 
-KisKraSaver::KisKraSaver(KisDocument* document, const QString &filename)
+KisKraSaver::KisKraSaver(KisDocument* document, const QString &filename, bool addMergedImage)
     : m_d(new Private)
 {
     m_d->doc = document;
     m_d->filename = filename;
+    m_d->addMergedImage = addMergedImage;
 
     m_d->imageName = m_d->doc->documentInfo()->aboutInfo("title");
     if (m_d->imageName.isEmpty()) {
@@ -355,7 +357,7 @@ bool KisKraSaver::saveNodeKeyframes(KoStore *store, QString location, const KisN
     return true;
 }
 
-bool KisKraSaver::saveBinaryData(KoStore* store, KisImageSP image, const QString &uri, bool external, bool autosave)
+bool KisKraSaver::saveBinaryData(KoStore* store, KisImageSP image, const QString &uri, bool external, bool addMergedImage)
 {
     QString location;
 
@@ -473,7 +475,7 @@ bool KisKraSaver::saveBinaryData(KoStore* store, KisImageSP image, const QString
         }
     }
 
-    if (!autosave) {
+    if (addMergedImage) {
         KisPaintDeviceSP dev = image->projection();
         store->setCompressionEnabled(false);
         KisPNGConverter::saveDeviceToStore("mergedimage.png", image->bounds(), image->xRes(), image->yRes(), dev, store);

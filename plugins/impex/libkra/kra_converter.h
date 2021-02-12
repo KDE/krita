@@ -21,10 +21,11 @@
 #include <QPointer>
 #include <KoUpdater.h>
 
+#include "kritalibkra_export.h"
 
 class KisDocument;
 
-class KraConverter : public QObject
+class KRITALIBKRA_EXPORT KraConverter : public QObject
 {
     Q_OBJECT
 
@@ -35,7 +36,7 @@ public:
     ~KraConverter() override;
 
     KisImportExportErrorCode buildImage(QIODevice *io);
-    KisImportExportErrorCode buildFile(QIODevice *io, const QString &filename);
+    KisImportExportErrorCode buildFile(QIODevice *io, const QString &filename, bool addMergedImage = true);
     /**
      * Retrieve the constructed image
      */

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
-#include "kra_export.h"
+#include "krz_export.h"
 
 #include <QCheckBox>
 #include <QSlider>
@@ -25,33 +25,38 @@
 #include <kis_paint_layer.h>
 #include <kis_shape_layer.h>
 #include <KoProperties.h>
-
+#include <kis_config.h>
 #include "kra_converter.h"
 
 class KisExternalLayer;
 
-K_PLUGIN_FACTORY_WITH_JSON(ExportFactory, "krita_kra_export.json", registerPlugin<KraExport>();)
+K_PLUGIN_FACTORY_WITH_JSON(KrzExportFactory, "krita_krz_export.json", registerPlugin<KrzExport>();)
 
-KraExport::KraExport(QObject *parent, const QVariantList &) : KisImportExportFilter(parent)
+KrzExport::KrzExport(QObject *parent, const QVariantList &)
+    : KisImportExportFilter(parent)
 {
 }
 
-KraExport::~KraExport()
+KrzExport::~KrzExport()
 {
 }
 
-KisImportExportErrorCode KraExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
+KisImportExportErrorCode KrzExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
     KisImageSP image = document->savingImage();
     KIS_ASSERT_RECOVER_RETURN_VALUE(image, ImportExportCodes::InternalError);
 
-    KraConverter kraConverter(document, updater());
-    KisImportExportErrorCode res = kraConverter.buildFile(io, filename(), !document->isAutosaving());
-    dbgFile << "KraExport::convert result =" << res;
+    KisConfig cfg(true);
+    bool compress = cfg.compressKra();
+    cfg.setCompressKra(true);
+    KraConverter krzConverter(document, updater());
+    KisImportExportErrorCode res = krzConverter.buildFile(io, filename(), false);
+    cfg.setCompressKra(compress);
+    dbgFile << "KrzExport::convert result =" << res;
     return res;
 }
 
-void KraExport::initializeCapabilities()
+void KrzExport::initializeCapabilities()
 {
     // Kra supports everything, by definition
     KisExportCheckFactory *factory = 0;
@@ -61,7 +66,7 @@ void KraExport::initializeCapabilities()
     }
 }
 
-QString KraExport::verify(const QString &fileName) const
+QString KrzExport::verify(const QString &fileName) const
 {
     QString error = KisImportExportFilter::verify(fileName);
     if (error.isEmpty()) {
@@ -76,5 +81,5 @@ QString KraExport::verify(const QString &fileName) const
 }
 
 
-#include <kra_export.moc>
+#include <krz_export.moc>
 

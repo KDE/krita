@@ -21,7 +21,7 @@ class KRITALIBKRA_EXPORT KisKraSaver
 {
 public:
 
-    KisKraSaver(KisDocument* document, const QString &filename);
+    KisKraSaver(KisDocument* document, const QString &filename, bool addMergedImage = true);
 
     ~KisKraSaver();
 
@@ -29,7 +29,7 @@ public:
 
     bool saveKeyframes(KoStore *store, const QString &uri, bool external);
 
-    bool saveBinaryData(KoStore* store, KisImageSP image, const QString & uri, bool external, bool includeMerge);
+    bool saveBinaryData(KoStore* store, KisImageSP image, const QString & uri, bool external, bool addMergedImage);
 
     bool savePalettes(KoStore *store, KisImageSP image, const QString &uri);
 

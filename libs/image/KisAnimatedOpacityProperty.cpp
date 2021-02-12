@@ -1,3 +1,10 @@
+/*
+ *  SPDX-FileCopyrightText: 2021 Eoin O 'Neill <eoinoneill1991@gmail.com>
+ *  SPDX-FileCopyrightText: 2021 Emmet O 'Neill <emmetoneill.pdx@gmail.com>
+ *
+ *  SPDX-License-Identifier: GPL-2.0-or-later
+ */
+
 #include "KisAnimatedOpacityProperty.h"
 
 KisAnimatedOpacityProperty::KisAnimatedOpacityProperty(KoProperties * const props, quint8 defaultValue, QObject *parent)

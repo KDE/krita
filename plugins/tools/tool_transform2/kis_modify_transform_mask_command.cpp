@@ -10,7 +10,6 @@
 #include "kis_transform_mask_params_interface.h"
 #include "tool_transform_args.h"
 #include "kis_scalar_keyframe_channel.h"
-#include "kis_transform_args_keyframe_channel.h"
 #include "kis_animated_transform_parameters.h"
 
 KisModifyTransformMaskCommand::KisModifyTransformMaskCommand(KisTransformMaskSP mask, KisTransformMaskParamsInterfaceSP params, bool skipUpdate)

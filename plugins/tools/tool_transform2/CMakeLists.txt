@@ -25,7 +25,6 @@ set(kritatooltransform_SOURCES
     kis_modify_transform_mask_command.cpp
     strokes/transform_stroke_strategy.cpp
     strokes/inplace_transform_stroke_strategy.cpp
-    kis_transform_args_keyframe_channel.cpp
     )
 
 qt5_add_resources(kritatooltransform_SOURCES tool_transform.qrc)

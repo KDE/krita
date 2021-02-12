@@ -6,7 +6,6 @@
 
 #include "kis_animated_transform_parameters.h"
 #include "kis_scalar_keyframe_channel.h"
-#include "kis_transform_args_keyframe_channel.h"
 #include "tool_transform_args.h"
 #include "kis_time_span.h"
 #include "kis_transform_mask.h"

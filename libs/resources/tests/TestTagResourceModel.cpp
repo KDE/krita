@@ -127,7 +127,7 @@ void TestTagResourceModel::testTagResource()
     KisAllTagResourceModel tagResourceModel(ResourceType::PaintOpPresets);
     int rowCount = tagResourceModel.rowCount();
 
-    QVERIFY(tagResourceModel.tagResource(tag, resource));
+    QVERIFY(tagResourceModel.tagResource(tag, resource->resourceId()));
 
     QCOMPARE(tagResourceModel.rowCount(), rowCount + 1);
 }
@@ -144,7 +144,7 @@ void TestTagResourceModel::testUntagResource()
 
     KisAllTagResourceModel tagResourceModel(ResourceType::PaintOpPresets);
     int rowCount = tagResourceModel.rowCount();
-    tagResourceModel.untagResource(tag, resource);
+    tagResourceModel.untagResource(tag, resource->resourceId());
 
     QCOMPARE(tagResourceModel.rowCount(), rowCount - 1);
 }

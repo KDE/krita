@@ -73,8 +73,8 @@ public:
 
     void setFilterInCurrentTag(bool filterInCurrentTag);
 
-    bool tagResource(KisTagSP tag, KoResourceSP resource);
-    bool untagResource(const KisTagSP tag, const KoResourceSP resource);
+    bool tagResource(const KisTagSP tag, const int resourceId);
+    bool untagResource(const KisTagSP tag, const int resourceId);
 
 protected:
 

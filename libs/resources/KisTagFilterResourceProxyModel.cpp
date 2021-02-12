@@ -241,14 +241,14 @@ void KisTagFilterResourceProxyModel::setFilterInCurrentTag(bool filterInCurrentT
     updateTagFilter();
 }
 
-bool KisTagFilterResourceProxyModel::tagResource(KisTagSP tag, KoResourceSP resource)
+bool KisTagFilterResourceProxyModel::tagResource(const KisTagSP tag, const int resourceId)
 {
-    return d->tagResourceModel->tagResource(tag, resource);
+    return d->tagResourceModel->tagResource(tag, resourceId);
 }
 
-bool KisTagFilterResourceProxyModel::untagResource(const KisTagSP tag, const KoResourceSP resource)
+bool KisTagFilterResourceProxyModel::untagResource(const KisTagSP tag, const int resourceId)
 {
-    return d->tagResourceModel->untagResource(tag, resource);
+    return d->tagResourceModel->untagResource(tag, resourceId);
 }
 
 bool KisTagFilterResourceProxyModel::filterAcceptsColumn(int /*source_column*/, const QModelIndex &/*source_parent*/) const

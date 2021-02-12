@@ -18,6 +18,7 @@
 #include <QMouseEvent>
 #include <QMenu>
 #include <QPair>
+#include <QTimer>
 
 #include <KisImportExportManager.h>
 #include <KoDocumentInfo.h>
@@ -33,7 +34,7 @@
 
 #include "kis_icon.h"
 
-KisWdgTagSelectionControllerOneResource::KisWdgTagSelectionControllerOneResource(WdgTagSelection *widget, bool editable)
+KisWdgTagSelectionControllerOneResource::KisWdgTagSelectionControllerOneResource(KisTagSelectionWidget *widget, bool editable)
     : QObject(widget)
     , m_tagSelectionWidget(widget)
     , m_editable(editable)
@@ -97,6 +98,10 @@ void KisWdgTagSelectionControllerOneResource::updateView()
     QList<KoID> toSelect;
     for (int i = 0; i < m_tagModel->rowCount(); i++) {
         QModelIndex idx = m_tagModel->index(i, 0);
+        int id = m_tagModel->data(idx, Qt::UserRole + KisAllTagsModel::Id).toInt();
+        if (id < 0) {
+            continue;
+        }
         QString tagUrl = m_tagModel->data(idx, Qt::UserRole + KisAllTagsModel::Url).toString();
         bool isSelected = false;
         for (int j = 0; j < selected.count(); j++) {
@@ -106,17 +111,16 @@ void KisWdgTagSelectionControllerOneResource::updateView()
                 break;
             }
         }
-        QString tagName = m_tagModel->data(idx, Qt::UserRole + KisAllTagsModel::Name).toString();
         if (!isSelected) {
+            QString tagName = m_tagModel->data(idx, Qt::UserRole + KisAllTagsModel::Name).toString();
             KoID custom = KoID(tagUrl, tagName);
             toSelect << custom;
         }
     }
     m_tagSelectionWidget->setTagList(m_editable, selected, toSelect);
-
 }
 
-KisWdgTagSelectionControllerBundleTags::KisWdgTagSelectionControllerBundleTags(WdgTagSelection *widget, bool editable)
+KisWdgTagSelectionControllerBundleTags::KisWdgTagSelectionControllerBundleTags(KisTagSelectionWidget *widget, bool editable)
     : QObject(widget)
     , m_tagSelectionWidget(widget)
     , m_editable(editable)

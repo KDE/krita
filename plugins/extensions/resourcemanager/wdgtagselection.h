@@ -24,7 +24,7 @@ class KisWdgTagSelectionControllerOneResource : public QObject
     Q_OBJECT
 
 public:
-    KisWdgTagSelectionControllerOneResource(WdgTagSelection* widget, bool editable);
+    KisWdgTagSelectionControllerOneResource(KisTagSelectionWidget* widget, bool editable);
     ~KisWdgTagSelectionControllerOneResource() override;
 
 
@@ -39,7 +39,7 @@ private:
     void updateView();
 
 private:
-    WdgTagSelection* m_tagSelectionWidget {0};
+    KisTagSelectionWidget* m_tagSelectionWidget {0};
     bool m_editable {true};
     KoResourceSP m_resource;
 
@@ -53,7 +53,7 @@ class KisWdgTagSelectionControllerBundleTags : public QObject
     Q_OBJECT
 
 public:
-    KisWdgTagSelectionControllerBundleTags(WdgTagSelection* widget, bool editable);
+    KisWdgTagSelectionControllerBundleTags(KisTagSelectionWidget* widget, bool editable);
     ~KisWdgTagSelectionControllerBundleTags() override;
 
     QList<int> getSelectedTagIds() const;
@@ -74,7 +74,7 @@ private:
     };
 
 private:
-    WdgTagSelection* m_tagSelectionWidget {0};
+    KisTagSelectionWidget* m_tagSelectionWidget {0};
     bool m_editable {true};
     QString m_resourceType {""};
 

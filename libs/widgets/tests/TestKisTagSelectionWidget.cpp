@@ -18,7 +18,7 @@
 
 void TestKisTagSelectionWidget::test()
 {
-    WdgTagSelection* widget = new WdgTagSelection();
+    KisTagSelectionWidget* widget = new KisTagSelectionWidget();
     QList<KoID> selected = createSelectedTags();
     QList<KoID> rest = createAvailableTags();
     widget->setTagList(true, selected, rest);

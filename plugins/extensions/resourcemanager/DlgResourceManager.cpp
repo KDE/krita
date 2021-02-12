@@ -16,11 +16,13 @@
 #include <kis_assert.h>
 #include <KisResourceItemDelegate.h>
 #include <QItemSelection>
+#include <wdgtagselection.h>
 
 
 DlgResourceManager::DlgResourceManager(QWidget *parent)
     : KoDialog(parent)
     , m_ui(new Ui::WdgDlgResourceManager)
+    , m_tagsController(0)
 {
     setCaption(i18n("Manage Resources"));
     m_page = new QWidget(this);
@@ -44,10 +46,10 @@ DlgResourceManager::DlgResourceManager(QWidget *parent)
 
     QString selectedResourceType = getCurrentResourceType();
 
-    m_tagModel = new KisTagModel(selectedResourceType);
-    m_tagModelsForResourceType.insert(selectedResourceType, m_tagModel);
+    KisTagModel* tagModel = new KisTagModel(selectedResourceType);
+    m_tagModelsForResourceType.insert(selectedResourceType, tagModel);
 
-    m_ui->cmbTag->setModel(m_tagModel);
+    m_ui->cmbTag->setModel(tagModel);
     m_ui->cmbTag->setModelColumn(KisAllTagsModel::Name);
     connect(m_ui->cmbTag, SIGNAL(activated(int)), SLOT(slotTagSelected(int)));
 
@@ -72,6 +74,8 @@ DlgResourceManager::DlgResourceManager(QWidget *parent)
     connect(m_ui->btnOpenResourceFolder, SIGNAL(clicked(bool)), SLOT(slotOpenResourceFolder()));
     connect(m_ui->btnImportResources, SIGNAL(clicked(bool)), SLOT(slotImportResources()));
     connect(m_ui->btnDeleteBackupFiles, SIGNAL(clicked(bool)), SLOT(slotDeleteBackupFiles()));
+
+    m_tagsController.reset(new KisWdgTagSelectionControllerOneResource(m_ui->wdgResourcesTags, true));
 
 }
 
@@ -151,6 +155,11 @@ void DlgResourceManager::slotResourcesSelectionChanged(QModelIndex index)
         m_ui->lblThumbnail->setDisabled(false);
         m_ui->lneName->setDisabled(false);
         m_ui->lblId->setDisabled(false);
+
+        // TODO: needs to be changed to resource Id; which needs to be changed in the KisAllTagsResourcesModel...
+        KoResourceSP resource = m_resourceModelsForResourceType[getCurrentResourceType()]
+                ->resourceForId(model->data(idx, Qt::UserRole + KisAllResourcesModel::Id).toInt());
+        m_tagsController->setResource(resource);
 
     } else {
         QString multipleSelectedText = i18nc("In Resource manager, this is text shown instead of filename, name or location, "

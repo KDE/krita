@@ -19,6 +19,7 @@ class KisTagModel;
 class KisResourceModel;
 class KisTagFilterResourceProxyModel;
 class KisTag;
+class KisWdgTagSelectionControllerOneResource;
 
 namespace Ui
 {
@@ -57,12 +58,13 @@ private:
     QScopedPointer<Ui::WdgDlgResourceManager> m_ui;
     KisResourceTypeModel *m_resourceTypeModel {0};
     KisStorageModel *m_storageModel {0};
-    KisTagModel *m_tagModel {0};
     QMap<QString, KisTagModel*> m_tagModelsForResourceType;
 
     KisResourceModel *m_resourceModel;
     QMap<QString, KisResourceModel*> m_resourceModelsForResourceType;
     QMap<QString, KisTagFilterResourceProxyModel*> m_resourceProxyModelsForResourceType;
+
+    QScopedPointer<KisWdgTagSelectionControllerOneResource> m_tagsController;
 
 };
 

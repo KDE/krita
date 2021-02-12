@@ -25,6 +25,7 @@
 #include <KoID.h>
 
 #include <kis_debug.h>
+#include <kis_global.h>
 
 #include<KisWrappableHBoxLayout.h>
 
@@ -164,12 +165,15 @@ void WdgCloseableLabel::mousePressEvent(QMouseEvent *event)
     }
 
     ENTER_FUNCTION() << "pressed on something!" << ppVar(event->pos()) << ppVar(this->rect()) << ppVar(m_closeIconLabel->rect());
+    QRect closeRect = kisGrowRect(m_closeIconLabel->rect(), 5);
+
     //layout()->
     m_closeIconLabel->pos();
-    if (m_closeIconLabel->rect().contains(event->pos() - m_closeIconLabel->pos())) {
+    if (closeRect.contains(event->pos() - m_closeIconLabel->pos())) {
         // working, just add a signal
         ENTER_FUNCTION() << "YES PRESSED!";
         emit sigRemoveTagFromSelection(m_tag);
+    } else {
     }
 }
 
@@ -306,7 +310,7 @@ void WdgAddTagsCategoriesButton::paintEvent(QPaintEvent *event)
 
 
 
-WdgTagSelection::WdgTagSelection(QWidget *parent)
+KisTagSelectionWidget::KisTagSelectionWidget(QWidget *parent)
     : QWidget(parent)
 {
     m_layout = new KisWrappableHBoxLayout(this);
@@ -319,12 +323,12 @@ WdgTagSelection::WdgTagSelection(QWidget *parent)
 
 }
 
-WdgTagSelection::~WdgTagSelection()
+KisTagSelectionWidget::~KisTagSelectionWidget()
 {
 
 }
 
-void WdgTagSelection::setTagList(bool editable, QList<KoID> &selected, QList<KoID> &notSelected)
+void KisTagSelectionWidget::setTagList(bool editable, QList<KoID> &selected, QList<KoID> &notSelected)
 {
 
     ENTER_FUNCTION() << "void WdgTagSelection::setTagList(bool editable, QList<CustomTagSP> &selected, QList<CustomTagsCategorySP> &notSelected)";
@@ -369,12 +373,15 @@ void WdgTagSelection::setTagList(bool editable, QList<KoID> &selected, QList<KoI
     if (m_layout) {
         m_layout->invalidate();
     }
+    if (layout()) {
+        layout()->invalidate();
+    }
 
     ENTER_FUNCTION() << "(5)";
 
 }
 
-void WdgTagSelection::setTagList(bool editable, QList<KoID> &selected, QList<CustomTagsCategorySP> &notSelected)
+void KisTagSelectionWidget::setTagList(bool editable, QList<KoID> &selected, QList<CustomTagsCategorySP> &notSelected)
 {
     return;
 
@@ -424,13 +431,17 @@ void WdgTagSelection::setTagList(bool editable, QList<KoID> &selected, QList<Cus
         connect(m_addTagButton, SIGNAL(triggered(QAction*)), this, SLOT(slotAddTagToSelection(QAction*)));
     }
 
-    if (m_layout) {
-        m_layout->invalidate();
+    //if (m_layout) {
+//        m_layout->invalidate();
+    //}
+
+    if (layout()) {
+        layout()->invalidate();
     }
 
 }
 
-void WdgTagSelection::slotAddTagToSelection(QAction *action)
+void KisTagSelectionWidget::slotAddTagToSelection(QAction *action)
 {
     ENTER_FUNCTION();
 
@@ -447,9 +458,10 @@ void WdgTagSelection::slotAddTagToSelection(QAction *action)
     emit sigAddTagToSelection(custom);
 }
 
-void WdgTagSelection::slotRemoveTagFromSelection(KoID tag)
+void KisTagSelectionWidget::slotRemoveTagFromSelection(KoID tag)
 {
     ENTER_FUNCTION() << "Removing tag" << ppVar(tag.name());
+
 
     emit sigRemoveTagFromSelection(tag);
 }

@@ -125,13 +125,13 @@ protected:
 };
 
 
-class KRITAWIDGETS_EXPORT WdgTagSelection : public QWidget
+class KRITAWIDGETS_EXPORT KisTagSelectionWidget : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit WdgTagSelection(QWidget *parent = 0);
-    ~WdgTagSelection() override;
+    explicit KisTagSelectionWidget(QWidget *parent = 0);
+    ~KisTagSelectionWidget() override;
 
     void setTagList(bool editable, QList<KoID> &selected, QList<KoID> &notSelected);
     void setTagList(bool editable, QList<KoID> &selected, QList<CustomTagsCategorySP> &notSelected);

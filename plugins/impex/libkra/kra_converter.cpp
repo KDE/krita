@@ -263,7 +263,7 @@ QDomDocument KraConverter::createDomDocument()
     QDomElement root = doc.documentElement();
 
     root.setAttribute("editor", "Krita");
-    root.setAttribute("syntaxVersion", "2");
+    root.setAttribute("syntaxVersion", CURRENT_DTD_VERSION);
     root.setAttribute("kritaVersion", KritaVersionWrapper::versionString(false));
 
     root.appendChild(m_kraSaver->saveXML(doc, m_image));

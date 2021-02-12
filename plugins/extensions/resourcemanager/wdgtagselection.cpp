@@ -48,46 +48,53 @@ KisWdgTagSelectionControllerOneResource::~KisWdgTagSelectionControllerOneResourc
 
 }
 
-void KisWdgTagSelectionControllerOneResource::setResource(KoResourceSP resource)
+void KisWdgTagSelectionControllerOneResource::setResourceId(QString resourceType, int resourceId)
 {
-    m_resource = resource;
-    if (resource.isNull()) {
-        m_tagModel = 0;
-        m_tagResourceModel = 0;
+    QString oldResourceType = m_resourceType;
+    m_resourceId = resourceId;
+    m_resourceType = resourceType;
+
+    if (resourceId < 0) {
         QList<KoID> list;
         m_tagSelectionWidget->setTagList(m_editable, list, list);
-
     } else {
-        m_tagResourceModel.reset(new KisTagResourceModel(resource->resourceType().first));
-        m_tagResourceModel->setResourcesFilter(QVector<int>() << resource->resourceId());
-        m_tagModel.reset(new KisTagModel(resource->resourceType().first));
-
+        if (oldResourceType != resourceType || !m_tagResourceModel || !m_tagModel) {
+            m_tagResourceModel.reset(new KisTagResourceModel(resourceType));
+            m_tagModel.reset(new KisTagModel(resourceType));
+        }
+        if (m_tagResourceModel) {
+            m_tagResourceModel->setResourcesFilter(QVector<int>() << resourceId);
+        }
         updateView();
     }
 }
 
 void KisWdgTagSelectionControllerOneResource::slotRemoveTag(KoID tag)
 {
-    if (m_resource.isNull()) return;
+    if (m_resourceId < 0) return;
 
     KisTagSP tagsp = m_tagModel->tagForUrl(tag.id());
-    m_tagResourceModel->untagResource(tagsp, m_resource->resourceId());
+    m_tagResourceModel->untagResource(tagsp, m_resourceId);
     updateView();
 }
 
 void KisWdgTagSelectionControllerOneResource::slotAddTag(KoID tag)
 {
-    if (m_resource.isNull()) return;
+    if (m_resourceId < 0) return;
+
 
     KisTagSP tagsp = m_tagModel->tagForUrl(tag.id());
-    m_tagResourceModel->tagResource(tagsp, m_resource->resourceId());
+    m_tagResourceModel->tagResource(tagsp, m_resourceId);
     updateView();
 }
 
 void KisWdgTagSelectionControllerOneResource::updateView()
 {
-    if (m_resource.isNull()) return;
+if (m_resourceId < 0) return;
+    if (m_resourceId < 0) return;
 
+
+   
     QList<KoID> selected;
     for (int i = 0; i < m_tagResourceModel->rowCount(); i++) {
         QModelIndex idx = m_tagResourceModel->index(i, 0);

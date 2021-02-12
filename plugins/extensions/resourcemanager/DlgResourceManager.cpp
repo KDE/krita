@@ -156,10 +156,8 @@ void DlgResourceManager::slotResourcesSelectionChanged(QModelIndex index)
         m_ui->lneName->setDisabled(false);
         m_ui->lblId->setDisabled(false);
 
-        // TODO: needs to be changed to resource Id; which needs to be changed in the KisAllTagsResourcesModel...
-        KoResourceSP resource = m_resourceModelsForResourceType[getCurrentResourceType()]
-                ->resourceForId(model->data(idx, Qt::UserRole + KisAllResourcesModel::Id).toInt());
-        m_tagsController->setResource(resource);
+        int resourceId = model->data(idx, Qt::UserRole + KisAllResourcesModel::Id).toInt();
+        m_tagsController->setResourceId(getCurrentResourceType(), resourceId);
 
     } else {
         QString multipleSelectedText = i18nc("In Resource manager, this is text shown instead of filename, name or location, "
@@ -176,6 +174,8 @@ void DlgResourceManager::slotResourcesSelectionChanged(QModelIndex index)
         m_ui->lblThumbnail->setDisabled(true);
         m_ui->lneName->setDisabled(true);
         m_ui->lblId->setDisabled(false);
+
+        m_tagsController->setResourceId(getCurrentResourceType(), -1);
     }
     Q_FOREACH(QModelIndex index, list) {
 

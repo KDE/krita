@@ -270,12 +270,12 @@ void KisAnimatedTransformMaskParameters::setHidden(bool hidden)
 
 void KisAnimatedTransformMaskParameters::clearChangedFlag()
 {
-    m_d->hash = qHash(*transformArgs());
+    m_d->hash = generateStateHash();
 }
 
 bool KisAnimatedTransformMaskParameters::hasChanged() const
 {
-    return m_d->hash != qHash(*transformArgs());
+    return m_d->hash != generateStateHash();
 }
 
 bool KisAnimatedTransformMaskParameters::isAnimated() const
@@ -384,6 +384,22 @@ void KisAnimatedTransformMaskParameters::addKeyframes(KisTransformMaskSP mask, i
     makeScalarKeyframeOnMask(mask, KisKeyframeChannel::RotationX, currentTime, radToDeg(desiredArgs.aX()), parentCommand);
     makeScalarKeyframeOnMask(mask, KisKeyframeChannel::RotationY, currentTime, radToDeg(desiredArgs.aY()), parentCommand);
     makeScalarKeyframeOnMask(mask, KisKeyframeChannel::RotationZ, currentTime, radToDeg(desiredArgs.aZ()), parentCommand);
+}
+
+quint64 KisAnimatedTransformMaskParameters::generateStateHash() const
+{
+    return qHash(transformArgs()->transformedCenter().x())
+            ^ qHash(transformArgs()->transformedCenter().y())
+            ^ qHash(transformArgs()->originalCenter().x())
+            ^ qHash(transformArgs()->originalCenter().y())
+            ^ qHash(transformArgs()->rotationCenterOffset().x())
+            ^ qHash(transformArgs()->rotationCenterOffset().y())
+            ^ qHash(transformArgs()->scaleX())
+            ^ qHash(transformArgs()->scaleY())
+            ^ qHash(transformArgs()->aX())
+            ^ qHash(transformArgs()->aY())
+            ^ qHash(transformArgs()->aZ())
+            ^ qHash(transformArgs()->alpha());
 }
 
 #include "kis_transform_mask_params_factory_registry.h"

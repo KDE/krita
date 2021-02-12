@@ -372,19 +372,4 @@ private:
     int m_previewPixelPrecision {16};
 };
 
-inline uint qHash(const ToolTransformArgs &toolArgs) {
-    return ::qHash(toolArgs.transformedCenter().x())
-         ^ ::qHash(toolArgs.transformedCenter().y())
-         ^ ::qHash(toolArgs.originalCenter().x())
-         ^ ::qHash(toolArgs.originalCenter().y())
-         ^ ::qHash(toolArgs.rotationCenterOffset().x())
-         ^ ::qHash(toolArgs.rotationCenterOffset().y())
-         ^ ::qHash(toolArgs.scaleX())
-         ^ ::qHash(toolArgs.scaleY())
-         ^ ::qHash(toolArgs.aX())
-         ^ ::qHash(toolArgs.aY())
-         ^ ::qHash(toolArgs.aZ())
-         ^ ::qHash(toolArgs.alpha());
-}
-
 #endif // TOOL_TRANSFORM_ARGS_H_

@@ -60,6 +60,8 @@ public:
     static qreal radToDeg(qreal rad) {return rad * 180 / M_PI;}
 
 private:
+    quint64 generateStateHash() const;
+
     struct Private;
     const QScopedPointer<Private> m_d;
 };

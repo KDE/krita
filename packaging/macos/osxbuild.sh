@@ -783,7 +783,12 @@ osxbuild.sh install ${KIS_BUILD_DIR}"
         OSXBUILD_DIR=$(get_directory_fromargs "${@:2}")
 
         install_krita "${OSXBUILD_DIR}"
-        build_plugins "${OSXBUILD_DIR}"
+        
+        if [[ ${OSXBUILD_UNIVERSAL} ]]; then
+            universal_plugin_build "${@:2}"
+        else
+            build_plugins "${OSXBUILD_DIR}"
+        fi
 
         fix_boost_rpath
 

@@ -354,7 +354,7 @@ void KisToolTransform::endActionImpl(KoPointerEvent *event, bool usePrimaryActio
     updateApplyResetAvailability();
 }
 
-QMenu*  KisToolTransform::popupActionsMenu()
+QMenu* KisToolTransform::popupActionsMenu()
 {
     if (m_contextMenu) {
         m_contextMenu->clear();

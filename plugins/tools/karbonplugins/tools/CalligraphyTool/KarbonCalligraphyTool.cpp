@@ -377,7 +377,7 @@ void KarbonCalligraphyTool::deactivate()
     KoToolBase::deactivate();
 }
 
-QList<QPointer<QWidget> > KarbonCalligraphyTool::createOptionWidgets()
+QList<QPointer<QWidget>> KarbonCalligraphyTool::createOptionWidgets()
 {
     // if the widget don't exists yet create it
     QList<QPointer<QWidget> > widgets;
@@ -427,6 +427,12 @@ QList<QPointer<QWidget> > KarbonCalligraphyTool::createOptionWidgets()
     widgets.append(m_widget);
 
     return widgets;
+}
+
+QWidget *KarbonCalligraphyTool::popupWidget()
+{
+    /**** HACK PROOF OF CONCEPT, DONT WORRY 'BOUT IT! ****/
+    return new KarbonCalligraphyOptionWidget();
 }
 
 void KarbonCalligraphyTool::setStrokeWidth(double width)

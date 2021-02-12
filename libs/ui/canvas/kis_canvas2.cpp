@@ -1001,6 +1001,11 @@ QRect KisCanvas2::renderingLimit() const
     return m_d->renderingLimit;
 }
 
+KisPopupPalette *KisCanvas2::popupPalette()
+{
+    return m_d->popupPalette;
+}
+
 void KisCanvas2::slotTrySwitchShapeManager()
 {
     KisNodeSP node = m_d->view->currentNode();
@@ -1168,7 +1173,7 @@ void KisCanvas2::setFavoriteResourceManager(KisFavoriteResourceManager* favorite
     connect(m_d->popupPalette, SIGNAL(sigUpdateCanvas()), this, SLOT(updateCanvas()));
     connect(m_d->view->mainWindow(), SIGNAL(themeChanged()), m_d->popupPalette, SLOT(slotUpdateIcons()));
 
-    m_d->popupPalette->showPopupPalette(false);
+    m_d->popupPalette->setVisible(false);
 }
 
 void KisCanvas2::slotPopupPaletteRequestedZoomChange(int zoom ) {
@@ -1202,15 +1207,6 @@ void KisCanvas2::slotSelectionChanged()
         m_d->shapeManager.selection()->select(shape);
     }
 }
-
-bool KisCanvas2::isPopupPaletteVisible() const
-{
-    if (!m_d->popupPalette) {
-        return false;
-    }
-    return m_d->popupPalette->isVisible();
-}
-
 
 void KisCanvas2::setWrapAroundViewingMode(bool value)
 {
@@ -1255,15 +1251,6 @@ void KisCanvas2::setLodPreferredInCanvas(bool value)
 bool KisCanvas2::lodPreferredInCanvas() const
 {
     return m_d->lodPreferredInImage;
-}
-
-void KisCanvas2::slotShowPopupPalette(const QPoint &p)
-{
-    if (!m_d->popupPalette) {
-        return;
-    }
-
-    m_d->popupPalette->showPopupPalette(p);
 }
 
 KisPaintingAssistantsDecorationSP KisCanvas2::paintingAssistantsDecoration() const

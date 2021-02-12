@@ -14,49 +14,8 @@
 #include <kis_favorite_resource_manager.h>
 #include <kis_canvas2.h>
 #include "kis_tool_proxy.h"
-
+#include "kis_popup_palette.h"
 #include "kis_input_manager.h"
-
-KisShowPaletteAction::KisShowPaletteAction()
-    : KisAbstractInputAction("Show Popup Palette"),
-      m_requestedWithStylus(false)
-{
-    setName(i18n("Show Popup Palette"));
-    setDescription(i18n("The <i>Show Popup Palette</i> displays the popup palette."));
-}
-
-KisShowPaletteAction::~KisShowPaletteAction()
-{
-
-}
-
-int KisShowPaletteAction::priority() const
-{
-    return 1;
-}
-
-void KisShowPaletteAction::begin(int, QEvent *event)
-{
-    m_menu = inputManager()->toolProxy()->popupActionsMenu();
-
-    if (m_menu) {
-        m_requestedWithStylus = event && event->type() == QEvent::TabletPress;
-
-        /**
-         * Opening a menu changes the focus of the windows, so we should not open it
-         * inside the filtering loop. Just raise it using the timer.
-         */
-        QTimer::singleShot(0, this, SLOT(slotShowMenu()));
-
-    } else {
-        QPoint pos = eventPos(event);
-        if (pos.isNull()) {
-            pos = inputManager()->canvas()->canvasWidget()->mapFromGlobal(QCursor::pos());
-        }
-
-        inputManager()->canvas()->slotShowPopupPalette(pos);
-    }
-}
 
 struct SinglePressEventEater : public QObject
 {
@@ -73,20 +32,57 @@ private:
     bool hungry = true;
 };
 
-void KisShowPaletteAction::slotShowMenu()
+
+//=================================================================
+
+KisPopupWidgetAction::KisPopupWidgetAction()
+    : KisAbstractInputAction("Show Popup Widget"),
+      m_requestedWithStylus(false)
 {
-    if (m_menu) {
+    setName(i18n("Show Popup Widget"));
+    setDescription(i18n("Show the current tool's popup widget."));
+}
 
-        QPoint stylusOffset;
-        QScopedPointer<SinglePressEventEater> eater;
+KisPopupWidgetAction::~KisPopupWidgetAction()
+{
+}
 
-        if (m_requestedWithStylus) {
-            eater.reset(new SinglePressEventEater());
-            m_menu->installEventFilter(eater.data());
-            stylusOffset += QPoint(10,10);
+void KisPopupWidgetAction::begin(int, QEvent *event)
+{
+    QMenu *popupMenu = inputManager()->toolProxy()->popupActionsMenu();
+    QWidget *popupWidget = inputManager()->toolProxy()->popupWidget();
+
+    if (popupMenu) { // Handle popup menus...
+        m_requestedWithStylus = event && event->type() == QEvent::TabletPress;
+
+        /**
+         * Opening a menu changes the focus of the windows, so we should not open it
+         * inside the filtering loop. Just raise it using the timer.
+         */
+        QTimer::singleShot(0, this, [this, popupMenu](){
+            if (popupMenu) {
+                QPoint stylusOffset;
+                QScopedPointer<SinglePressEventEater> eventEater;
+
+                if (m_requestedWithStylus) {
+                    eventEater.reset(new SinglePressEventEater());
+                    popupMenu->installEventFilter(eventEater.data());
+                    stylusOffset += QPoint(10,10);
+                }
+
+                popupMenu->exec(QCursor::pos() + stylusOffset);
+                popupMenu->clear();
+            }
+        });
+    } else if (popupWidget) { // Handle other popup widgets...
+        QPoint pos = eventPos(event);
+
+        if (pos.isNull()) {
+            pos = inputManager()->canvas()->canvasWidget()->mapFromGlobal(QCursor::pos());
         }
 
-        m_menu->exec(QCursor::pos() + stylusOffset);
-        m_menu.clear();
+        m_activePopup.reset(new PopupWidgetHolder(popupWidget, inputManager()));
+
+        m_activePopup->popup(pos);
     }
 }

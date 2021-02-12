@@ -1872,8 +1872,6 @@ QMenu* DefaultTool::popupActionsMenu()
             m_contextMenu->addAction(action("object_group"));
             m_contextMenu->addAction(action("object_ungroup"));
         }
-
-
     }
 
     return m_contextMenu.data();

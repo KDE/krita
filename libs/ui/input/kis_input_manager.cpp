@@ -14,6 +14,7 @@
 #include <QApplication>
 #include <QTouchEvent>
 #include <QElapsedTimer>
+#include <QWidget>
 
 #include <KoToolManager.h>
 
@@ -94,6 +95,11 @@ void KisInputManager::addTrackedCanvas(KisCanvas2 *canvas)
 void KisInputManager::removeTrackedCanvas(KisCanvas2 *canvas)
 {
     d->canvasSwitcher.removeCanvas(canvas);
+}
+
+void KisInputManager::registerPopupWidget(QWidget *popup)
+{
+    d->popupWidget = popup;
 }
 
 void KisInputManager::toggleTabletLogger()
@@ -331,6 +337,27 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
 {
     bool retval = false;
 
+    // Try closing any open popup widget and
+    // consume input if possible.
+    if (d->popupWidget) {
+        QEvent::Type type = event->type();
+        bool wasVisible = d->popupWidget->isVisible();
+
+        if (type == QEvent::MouseButtonPress
+         || type == QEvent::MouseButtonDblClick
+         || type == QEvent::TabletPress
+         || type == QEvent::TouchBegin
+         || type == QEvent::NativeGesture) {
+            d->popupWidget->setVisible(false);
+            d->popupWidget = nullptr;
+
+            if (wasVisible) {
+                return true;
+            }
+        }
+    }
+
+
     if (shouldResetWheelDelta(event)) {
         d->accumulatedScrollDelta = 0;
     }
@@ -343,7 +370,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
 
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
 
-        if (d->tryHidePopupPalette()) {
+        if (d->popupWidget) {
             retval = true;
         } else {
             //Make sure the input actions know we are active.
@@ -532,9 +559,8 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
     case QEvent::TabletPress: {
         d->debugEvent<QTabletEvent, false>(event);
         QTabletEvent *tabletEvent = static_cast<QTabletEvent*>(event);
-        if (d->tryHidePopupPalette()) {
-            retval = true;
-        } else {
+
+        {
             //Make sure the input actions know we are active.
             KisAbstractInputAction::setInputManager(this);
             retval = d->matcher.buttonPressed(tabletEvent->button(), tabletEvent);
@@ -543,6 +569,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
                 d->touchHasBlockedPressEvents = false;
             }
         }
+
         event->setAccepted(true);
         retval = true;
         d->blockMouseEvents();
@@ -769,16 +796,14 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
 
 bool KisInputManager::startTouch(bool &retval)
 {
+    Q_UNUSED(retval);
+
     // Touch rejection: if touch is disabled on canvas, no need to block mouse press events
     if (KisConfig(true).disableTouchOnCanvas()) {
         d->eatOneMousePress();
     }
-    if (d->tryHidePopupPalette()) {
-        retval = true;
-        return false;
-    } else {
-        return true;
-    }
+
+    return true;
 }
 
 void KisInputManager::endTouch()

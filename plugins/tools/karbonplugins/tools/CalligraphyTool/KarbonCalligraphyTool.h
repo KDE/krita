@@ -30,7 +30,9 @@ public:
     void mouseMoveEvent(KoPointerEvent *event) override;
     void mouseReleaseEvent(KoPointerEvent *event) override;
 
-    QList<QPointer<QWidget> > createOptionWidgets() override;
+    QList<QPointer<QWidget>> createOptionWidgets() override;
+
+    QWidget *popupWidget() override;
 
     void activate(const QSet<KoShape *> &shapes) override;
     void deactivate() override;

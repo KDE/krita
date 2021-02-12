@@ -43,9 +43,7 @@ public:
                     KisCanvasResourceProvider *provider, QWidget *parent = 0);
     ~KisPopupPalette() override;
     QSize sizeHint() const override;
-
-    void showPopupPalette(const QPoint&);
-    void showPopupPalette(bool b);
+    QSize calculateSize() const;
 
     //functions to set up selectedBrush
     void setSelectedBrush(int x);
@@ -61,7 +59,7 @@ protected:
 
     void showEvent(QShowEvent *event) override;
     void paintEvent(QPaintEvent*) override;
-    void resizeEvent(QResizeEvent*) override;
+    void resizeEvent(QResizeEvent*) override {}
     void mouseReleaseEvent(QMouseEvent*) override;
     void mouseMoveEvent(QMouseEvent*) override;
     void mousePressEvent(QMouseEvent*) override;
@@ -80,8 +78,6 @@ protected:
     int hoveredColor() const;
 
 private:
-    void setVisible(bool b) override;
-
     QPainterPath drawDonutPathFull(int, int, int, int);
     QPainterPath drawDonutPathAngle(int, int, int);
     QPainterPath drawRotationIndicator(qreal rotationAngle, bool canDrag);
@@ -90,7 +86,6 @@ private:
     QPainterPath createPathFromPresetIndex(int index);
 
     int numSlots();
-    void adjustLayout(const QPoint &p);
 
 private:
     int m_hoveredPreset {0};
@@ -154,7 +149,7 @@ private Q_SLOTS:
     void slotEmitColorChanged();
     void slotSetSelectedColor(int x) { setSelectedColor(x); update(); }
     void slotUpdate() { update(); }
-    void slotHide() { showPopupPalette(false); }
+    void slotHide() { setVisible(false); }
     void slotShowTagsPopup();
     void showHudWidget(bool visible);
     void slotZoomToOneHundredPercentClicked();

@@ -360,7 +360,7 @@ void KisInputProfileManager::Private::createActions()
     actions.append(new KisPanAction());
     actions.append(new KisRotateCanvasAction());
     actions.append(new KisZoomAction());
-    actions.append(new KisShowPaletteAction());
+    actions.append(new KisPopupWidgetAction());
     actions.append(new KisSelectLayerAction());
     actions.append(new KisGammaExposureAction());
     actions.append(new KisChangeFrameAction());

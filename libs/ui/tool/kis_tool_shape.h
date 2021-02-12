@@ -78,8 +78,6 @@ protected:
     void addPathShape(KoPathShape* pathShape, const KUndo2MagicString& name);
 
     KConfigGroup m_configGroup;
-
-
 };
 
 #endif // KIS_TOOL_SHAPE_H_

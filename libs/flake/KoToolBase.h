@@ -297,7 +297,13 @@ public:
      * @return a menu with context-aware actions for the current selection. If
      *         the returned value is null, no context menu is shown.
      */
-    virtual QMenu* popupActionsMenu();
+    virtual QMenu* popupActionsMenu() {return nullptr;}
+
+    /**
+     * @return a widget with useful controls to be popped up on top of the canvas.
+     *         Will not be called if `popupActionsMenu()` does not return null.
+     */
+    virtual QWidget* popupWidget() {return nullptr;}
 
     /// Returns the canvas the tool is working on
     KoCanvasBase *canvas() const;

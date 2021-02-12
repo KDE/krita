@@ -73,7 +73,7 @@ public:
 
     void paint(QPainter &painter, const KoViewConverter &converter) override;
 
-    QMenu* popupActionsMenu() override;
+    QMenu *popupActionsMenu() override;
 
     CropToolType cropType() const;
     bool cropTypeSelectable() const;

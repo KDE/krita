@@ -459,6 +459,17 @@ void KisToolPaint::mouseMoveEvent(KoPointerEvent *event)
     }
 }
 
+QWidget *KisToolPaint::popupWidget()
+{
+    KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+
+    if (kisCanvas) {
+        return (QWidget*)kisCanvas->popupPalette();
+    } else {
+        return nullptr;
+    }
+}
+
 void KisToolPaint::mouseReleaseEvent(KoPointerEvent *event)
 {
     KisTool::mouseReleaseEvent(event);
@@ -467,7 +478,7 @@ void KisToolPaint::mouseReleaseEvent(KoPointerEvent *event)
     }
 }
 
-QWidget * KisToolPaint::createOptionWidget()
+QWidget *KisToolPaint::createOptionWidget()
 {
     QWidget *optionWidget = new QWidget();
     optionWidget->setObjectName(toolId());

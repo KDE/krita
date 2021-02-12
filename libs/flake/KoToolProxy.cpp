@@ -349,6 +349,11 @@ QMenu *KoToolProxy::popupActionsMenu()
     return d->activeTool ? d->activeTool->popupActionsMenu() : 0;
 }
 
+QWidget* KoToolProxy::popupWidget()
+{
+    return d->activeTool ? d->activeTool->popupWidget() : nullptr;
+}
+
 void KoToolProxy::setActiveTool(KoToolBase *tool)
 {
     if (d->activeTool)

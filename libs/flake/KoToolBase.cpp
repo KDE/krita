@@ -56,7 +56,6 @@ bool KoToolBase::isActivated() const
     return d->isActivated;
 }
 
-
 void KoToolBase::activate(const QSet<KoShape *> &shapes)
 {
     Q_UNUSED(shapes);
@@ -228,11 +227,6 @@ void KoToolBase::cut()
 {
     copy();
     deleteSelection();
-}
-
-QMenu *KoToolBase::popupActionsMenu()
-{
-    return 0;
 }
 
 KoCanvasBase * KoToolBase::canvas() const

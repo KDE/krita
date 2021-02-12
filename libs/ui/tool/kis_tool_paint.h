@@ -44,6 +44,8 @@ public:
     void mouseReleaseEvent(KoPointerEvent *event) override;
     void mouseMoveEvent(KoPointerEvent *event) override;
 
+    QWidget* popupWidget() override;
+
 protected:
 
     void setMode(ToolMode mode) override;

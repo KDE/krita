@@ -99,6 +99,9 @@ public:
     QMenu* popupActionsMenu();
 
     /// Forwarded to the current KoToolBase
+    QWidget* popupWidget();
+
+    /// Forwarded to the current KoToolBase
     void deleteSelection();
 
     /// This method gives the proxy a chance to do things. for example it is need to have working singlekey

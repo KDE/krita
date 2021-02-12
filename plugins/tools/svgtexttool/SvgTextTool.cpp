@@ -111,6 +111,11 @@ void SvgTextTool::deactivate()
     canvas()->updateCanvas(updateRect);
 }
 
+QWidget *SvgTextTool::popupWidget()
+{
+    return m_editor;
+}
+
 QWidget *SvgTextTool::createOptionWidget()
 {
     QWidget *optionWidget = new QWidget();

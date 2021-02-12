@@ -45,6 +45,7 @@ class KisShapeController;
 class KisCoordinatesConverter;
 class KoViewConverter;
 class KisAbstractCanvasWidget;
+class KisPopupPalette;
 
 /**
  * KisCanvas2 is not an actual widget class, but rather an adapter for
@@ -220,6 +221,8 @@ public: // KisCanvas2 methods
      */
     QRect renderingLimit() const;
 
+    KisPopupPalette* popupPalette();
+
 Q_SIGNALS:
     void sigCanvasEngineChanged();
 
@@ -293,11 +296,8 @@ private Q_SLOTS:
     void slotReferenceImagesChanged();
 
     void slotImageColorSpaceChanged();
+
 public:
-
-    bool isPopupPaletteVisible() const;
-    void slotShowPopupPalette(const QPoint& = QPoint(0,0));
-
     // interface for KisCanvasController only
     void setWrapAroundViewingMode(bool value);
     bool wrapAroundViewingMode() const;

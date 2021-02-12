@@ -4,38 +4,79 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef KIS_SHOW_PALETTE_ACTION_H
-#define KIS_SHOW_PALETTE_ACTION_H
+#ifndef KIS_POPUP_WIDGET_ACTION_H
+#define KIS_POPUP_WIDGET_ACTION_H
 
 #include "kis_abstract_input_action.h"
 
 #include <QObject>
 #include <QPointer>
+#include <QWidget>
+#include <QMainWindow>
+
+#include "kis_global.h"
+#include "kis_debug.h"
+#include "kis_input_manager.h"
+#include "kis_canvas2.h"
 class QMenu;
 
+class PopupWidgetHolder : public QObject
+{
+public:
+    PopupWidgetHolder(QWidget* toPopUp, KisInputManager* inputManager)
+        : m_toPopUp(toPopUp)
+        , m_inputManager(inputManager)
+    {
+        m_toPopUp->setParent(m_inputManager->canvas()->canvasWidget());
+    }
+
+    ~PopupWidgetHolder(){
+    }
+
+    void popup(QPoint& p) {
+        m_toPopUp->setVisible(!m_toPopUp->isVisible());
+        m_inputManager->registerPopupWidget(m_toPopUp);
+        adjustPopupLayout(p);
+    }
+
+private:
+    void adjustPopupLayout(QPoint& p) {
+        if (m_toPopUp->isVisible() && m_toPopUp->parentWidget())  {
+            const float widgetMargin = -20.0f;
+            const QRect fitRect = kisGrowRect(m_toPopUp->parentWidget()->rect(), widgetMargin);
+            const QPoint paletteCenterOffset(m_toPopUp->sizeHint().width() / 2, m_toPopUp->sizeHint().height() / 2);
+
+            QRect paletteRect = m_toPopUp->rect();
+
+            paletteRect.moveTo(p - paletteCenterOffset);
+
+            paletteRect = kisEnsureInRect(paletteRect, fitRect);
+            m_toPopUp->move(paletteRect.topLeft());
+        }
+    }
+
+    QWidget* m_toPopUp;
+    KisInputManager* m_inputManager;
+};
+
 /**
- * \brief Show Palette implementation of KisAbstractInputAction.
- *
- * The Show Palette action shows the popup palette.
+ * \brief Get the current tool's popup widget and display it.
  */
-class KisShowPaletteAction : public QObject, public KisAbstractInputAction
+class KisPopupWidgetAction : public QObject, public KisAbstractInputAction
 {
     Q_OBJECT
 
 public:
-    explicit KisShowPaletteAction();
-    ~KisShowPaletteAction() override;
+    explicit KisPopupWidgetAction();
+    ~KisPopupWidgetAction() override;
 
-    int priority() const override;
+    int priority() const override {return 1;}
 
     void begin(int, QEvent *) override;
 
-private Q_SLOTS:
-    void slotShowMenu();
-
 private:
-    QPointer<QMenu> m_menu;
+    QScopedPointer<PopupWidgetHolder> m_activePopup;
     bool m_requestedWithStylus;
 };
 
-#endif // KIS_SHOW_PALETTE_ACTION_H
+#endif // KIS_POPUP_WIDGET_ACTION_H

@@ -68,7 +68,7 @@ public:
     ///reimplemented
     KoToolSelection *selection() override;
 
-    QMenu* popupActionsMenu() override;
+    QMenu *popupActionsMenu() override;
 
     /**
      * Returns which selection handle is at params point (or NoHandle if none).

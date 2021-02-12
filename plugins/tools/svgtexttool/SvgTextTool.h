@@ -43,6 +43,8 @@ public:
     /// reimplemented from KoToolBase
     void deactivate() override;
 
+    QWidget* popupWidget() override;
+
 protected:
     /// reimplemented from KoToolBase
     virtual QWidget *createOptionWidget() override;

@@ -329,7 +329,7 @@ bool KisApplication::registerResources()
 
     reg->add(new KisResourceLoader<KisPSDLayerStyle>(ResourceType::LayerStyles,
                                                      ResourceType::LayerStyles,
-                                                     ResourceType::LayerStyles,
+                                                     i18nc("Resource type name", "Layer styles"),
                                                      QStringList() << "application/x-photoshop-style"));
 
     if (!KisResourceCacheDb::initialize(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation))) {

@@ -1,0 +1,26 @@
+From 217bed0c6b4b2bab93f9b3597c99487b099ddccd Mon Sep 17 00:00:00 2001
+From: Halla Rempt <halla@valdyas.org>
+Date: Sat, 13 Feb 2021 14:09:53 +0100
+Subject: [PATCH] Check whether there is a QGestureRecognizer at all
+
+See https://bugs.kde.org/show_bug.cgi?id=421707
+---
+ qtbase/src/widgets/kernel/qgesturerecognizer.cpp | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/qtbase/src/widgets/kernel/qgesturerecognizer.cpp b/qtbase/src/widgets/kernel/qgesturerecognizer.cpp
+index 75d091ce4..4f3df2464 100644
+--- a/qtbase/src/widgets/kernel/qgesturerecognizer.cpp
++++ b/qtbase/src/widgets/kernel/qgesturerecognizer.cpp
+@@ -237,6 +237,8 @@ void QGestureRecognizer::unregisterRecognizer(Qt::GestureType type)
+         return;
+     if (!qAppPriv->gestureManager)
+         return;
++    if (!QGestureManager::instance()
++        return;
+     QGestureManager::instance()->unregisterGestureRecognizer(type);
+ }
+ 
+-- 
+2.25.1
+

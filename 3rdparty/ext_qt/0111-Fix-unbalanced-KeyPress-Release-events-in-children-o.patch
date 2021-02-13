@@ -1,0 +1,43 @@
+From 7bac78a0d0ab6ee0a66440cd654672d946b4e758 Mon Sep 17 00:00:00 2001
+From: Dmitry Kazakov <dimula73@gmail.com>
+Date: Sat, 13 Feb 2021 16:46:55 +0300
+Subject: [PATCH] Fix unbalanced KeyPress/Release events in children of
+ QMdiArea
+
+When the user presses Ctrl+Tab, QMdiArea is supposed to switch
+the active child window. When doing so, it eats the event. The
+problem is that is doesn't eat the ShortcutOverride event,
+which is kept unbalanced with the absent KeyRelease event.
+
+See https://bugs.kde.org/show_bug.cgi?id=424319
+---
+ src/widgets/widgets/qmdiarea.cpp | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/src/widgets/widgets/qmdiarea.cpp b/src/widgets/widgets/qmdiarea.cpp
+index f32cd264..d493a32b 100644
+--- a/src/widgets/widgets/qmdiarea.cpp
++++ b/src/widgets/widgets/qmdiarea.cpp
+@@ -2555,7 +2555,9 @@ bool QMdiArea::eventFilter(QObject *object, QEvent *event)
+ 
+     Q_D(QMdiArea);
+     // Global key events with Ctrl modifier.
+-    if (event->type() == QEvent::KeyPress || event->type() == QEvent::KeyRelease) {
++    if (event->type() == QEvent::KeyPress ||
++        event->type() == QEvent::KeyRelease ||
++        event->type() == QEvent::ShortcutOverride) {
+ 
+         QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+         // Ingore key events without a Ctrl modifier (except for press/release on the modifier itself).
+@@ -2571,7 +2573,7 @@ bool QMdiArea::eventFilter(QObject *object, QEvent *event)
+         if (!area)
+             return QAbstractScrollArea::eventFilter(object, event);
+ 
+-        const bool keyPress = (event->type() == QEvent::KeyPress);
++        const bool keyPress = event->type() == QEvent::ShortcutOverride || event->type() == QEvent::KeyPress;
+ 
+         // 1) Ctrl-Tab once -> activate the previously active window.
+         // 2) Ctrl-Tab (Tab, Tab, ...) -> iterate through all windows (activateNextSubWindow()).
+-- 
+2.20.1.windows.1
+

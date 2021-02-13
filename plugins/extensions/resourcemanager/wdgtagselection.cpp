@@ -54,14 +54,15 @@ void KisWdgTagSelectionControllerOneResource::setResourceIds(QString resourceTyp
     m_resourceIds = resourceIds;
     m_resourceType = resourceType;
 
+    if (resourceType != "" && (oldResourceType != resourceType || !m_tagResourceModel || !m_tagModel)) {
+        m_tagResourceModel.reset(new KisTagResourceModel(resourceType));
+        m_tagModel.reset(new KisTagModel(resourceType));
+    }
+
     if (resourceIds.count() == 0) {
         QList<KoID> list;
         m_tagSelectionWidget->setTagList(m_editable, list, list);
     } else {
-        if (oldResourceType != resourceType || !m_tagResourceModel || !m_tagModel) {
-            m_tagResourceModel.reset(new KisTagResourceModel(resourceType));
-            m_tagModel.reset(new KisTagModel(resourceType));
-        }
         if (m_tagResourceModel) {
             m_tagResourceModel->setResourcesFilter(resourceIds.toVector());
         }

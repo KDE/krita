@@ -159,9 +159,6 @@ void DlgResourceManager::slotResourcesSelectionChanged(QModelIndex index)
         m_ui->lneName->setDisabled(false);
         m_ui->lblId->setDisabled(false);
 
-        int resourceId = model->data(idx, Qt::UserRole + KisAllResourcesModel::Id).toInt();
-        m_tagsController->setResourceId(getCurrentResourceType(), resourceId);
-
     } else {
         QString multipleSelectedText = i18nc("In Resource manager, this is text shown instead of filename, name or location, "
                                              "when multiple resources are shown so there is no one specific filename", "(Multiple selected)");
@@ -177,12 +174,15 @@ void DlgResourceManager::slotResourcesSelectionChanged(QModelIndex index)
         m_ui->lblThumbnail->setDisabled(true);
         m_ui->lneName->setDisabled(true);
         m_ui->lblId->setDisabled(false);
-
-        m_tagsController->setResourceId(getCurrentResourceType(), -1);
     }
+
+    QList<int> resourceIds;
     Q_FOREACH(QModelIndex index, list) {
-
+        int resourceId = model->data(index, Qt::UserRole + KisAllResourcesModel::Id).toInt();
+        resourceIds << resourceId;
     }
+    qCritical() << "setting the list of " << resourceIds;
+    m_tagsController->setResourceIds(getCurrentResourceType(), resourceIds);
 }
 
 void DlgResourceManager::slotFilterTextChanged(const QString &filterText)

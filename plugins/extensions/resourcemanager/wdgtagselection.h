@@ -27,7 +27,7 @@ public:
     KisWdgTagSelectionControllerOneResource(KisTagSelectionWidget* widget, bool editable);
     ~KisWdgTagSelectionControllerOneResource() override;
 
-    void setResourceId(QString resourceType, int resourceId);
+    void setResourceIds(QString resourceType, QList<int> resourceIds);
 
 private Q_SLOTS:
     void slotRemoveTag(KoID tag);
@@ -39,7 +39,7 @@ private:
 private:
     KisTagSelectionWidget* m_tagSelectionWidget {0};
     bool m_editable {true};
-    int m_resourceId {-1};
+    QList<int> m_resourceIds;
     QString m_resourceType {""};
 
     QSharedPointer<KisTagModel> m_tagModel;

@@ -48,13 +48,13 @@ KisWdgTagSelectionControllerOneResource::~KisWdgTagSelectionControllerOneResourc
 
 }
 
-void KisWdgTagSelectionControllerOneResource::setResourceId(QString resourceType, int resourceId)
+void KisWdgTagSelectionControllerOneResource::setResourceIds(QString resourceType, QList<int> resourceIds)
 {
     QString oldResourceType = m_resourceType;
-    m_resourceId = resourceId;
+    m_resourceIds = resourceIds;
     m_resourceType = resourceType;
 
-    if (resourceId < 0) {
+    if (resourceIds.count() == 0) {
         QList<KoID> list;
         m_tagSelectionWidget->setTagList(m_editable, list, list);
     } else {
@@ -63,7 +63,7 @@ void KisWdgTagSelectionControllerOneResource::setResourceId(QString resourceType
             m_tagModel.reset(new KisTagModel(resourceType));
         }
         if (m_tagResourceModel) {
-            m_tagResourceModel->setResourcesFilter(QVector<int>() << resourceId);
+            m_tagResourceModel->setResourcesFilter(resourceIds.toVector());
         }
         updateView();
     }
@@ -71,38 +71,29 @@ void KisWdgTagSelectionControllerOneResource::setResourceId(QString resourceType
 
 void KisWdgTagSelectionControllerOneResource::slotRemoveTag(KoID tag)
 {
-    if (m_resourceId < 0) return;
+    if (m_resourceIds.count() == 0) return;
 
     KisTagSP tagsp = m_tagModel->tagForUrl(tag.id());
-    m_tagResourceModel->untagResource(tagsp, m_resourceId);
+    Q_FOREACH(int resourceId, m_resourceIds) {
+        m_tagResourceModel->untagResource(tagsp, resourceId);
+    }
     updateView();
 }
 
 void KisWdgTagSelectionControllerOneResource::slotAddTag(KoID tag)
 {
-    if (m_resourceId < 0) return;
-
+    if (m_resourceIds.count() == 0) return;
 
     KisTagSP tagsp = m_tagModel->tagForUrl(tag.id());
-    m_tagResourceModel->tagResource(tagsp, m_resourceId);
+    Q_FOREACH(int resourceId, m_resourceIds) {
+        m_tagResourceModel->tagResource(tagsp, resourceId);
+    }
     updateView();
 }
 
 void KisWdgTagSelectionControllerOneResource::updateView()
 {
-if (m_resourceId < 0) return;
-    if (m_resourceId < 0) return;
-
-
-   
-    QList<KoID> selected;
-    for (int i = 0; i < m_tagResourceModel->rowCount(); i++) {
-        QModelIndex idx = m_tagResourceModel->index(i, 0);
-        KisTagSP tag = m_tagResourceModel->data(idx, Qt::UserRole + KisAllTagResourceModel::Tag).value<KisTagSP>();
-        KoID custom = KoID(tag->url(), tag->name());
-        selected << custom;
-    }
-    QList<KoID> toSelect;
+    QMap<QString, int> tagsCounts;
     for (int i = 0; i < m_tagModel->rowCount(); i++) {
         QModelIndex idx = m_tagModel->index(i, 0);
         int id = m_tagModel->data(idx, Qt::UserRole + KisAllTagsModel::Id).toInt();
@@ -110,21 +101,43 @@ if (m_resourceId < 0) return;
             continue;
         }
         QString tagUrl = m_tagModel->data(idx, Qt::UserRole + KisAllTagsModel::Url).toString();
-        bool isSelected = false;
-        for (int j = 0; j < selected.count(); j++) {
-            KoID other = (selected[j]);
-            if (other.id() == tagUrl) {
-                isSelected = true;
-                break;
-            }
-        }
-        if (!isSelected) {
-            QString tagName = m_tagModel->data(idx, Qt::UserRole + KisAllTagsModel::Name).toString();
-            KoID custom = KoID(tagUrl, tagName);
-            toSelect << custom;
+        if (!tagsCounts.contains(tagUrl)) {
+            tagsCounts.insert(tagUrl, 0);
         }
     }
-    m_tagSelectionWidget->setTagList(m_editable, selected, toSelect);
+
+    Q_FOREACH(int resourceId, m_resourceIds) {
+        m_tagResourceModel->setResourcesFilter(QVector<int>() << resourceId);
+        for (int i = 0; i < m_tagResourceModel->rowCount(); i++) {
+            QModelIndex idx = m_tagResourceModel->index(i, 0);
+            KisTagSP tag = m_tagResourceModel->data(idx, Qt::UserRole + KisAllTagResourceModel::Tag).value<KisTagSP>();
+            tagsCounts[tag->url()] += 1;
+        }
+    }
+    QList<KoID> semiSelected;
+    QList<KoID> selected;
+    QList<KoID> toSelect;
+
+    for (int i = 0; i < m_tagModel->rowCount(); i++) {
+        QModelIndex idx = m_tagModel->index(i, 0);
+        int id = m_tagModel->data(idx, Qt::UserRole + KisAllTagsModel::Id).toInt();
+        if (id < 0) {
+            continue;
+        }
+        QString tagUrl = m_tagModel->data(idx, Qt::UserRole + KisAllTagsModel::Url).toString();
+        QString tagName = m_tagModel->data(idx, Qt::UserRole + KisAllTagsModel::Name).toString();
+        KoID tag(tagUrl, tagName);
+        if (tagsCounts[tagUrl] == m_resourceIds.count()) {
+            selected << tag;
+        } else if (tagsCounts[tagUrl] > 0) {
+            semiSelected << tag;
+            toSelect << tag; // we want to be able to add a tag to every resource even though some are already tagged
+        } else {
+            toSelect << tag;
+        }
+    }
+
+    m_tagSelectionWidget->setTagList(m_editable, selected, toSelect, semiSelected);
 }
 
 KisWdgTagSelectionControllerBundleTags::KisWdgTagSelectionControllerBundleTags(KisTagSelectionWidget *widget, bool editable)
@@ -132,7 +145,6 @@ KisWdgTagSelectionControllerBundleTags::KisWdgTagSelectionControllerBundleTags(K
     , m_tagSelectionWidget(widget)
     , m_editable(editable)
 {
-    ENTER_FUNCTION() << ppVar(widget);
     connect(widget, SIGNAL(sigAddTagToSelection(KoID)), this, SLOT(slotAddTag(KoID)));
     connect(widget, SIGNAL(sigRemoveTagFromSelection(KoID)), this, SLOT(slotRemoveTag(KoID)));
     updateView();
@@ -159,7 +171,6 @@ QList<int> KisWdgTagSelectionControllerBundleTags::getSelectedTagIds() const
 
 void KisWdgTagSelectionControllerBundleTags::slotRemoveTag(KoID custom)
 {
-    ENTER_FUNCTION();
     if (m_selectedTagsByResourceType.contains(m_resourceType)) {
         if (m_selectedTagsByResourceType[m_resourceType].contains(custom)) {
             m_selectedTagsByResourceType[m_resourceType].removeAll(custom);
@@ -181,9 +192,6 @@ void KisWdgTagSelectionControllerBundleTags::slotAddTag(KoID custom)
 
 void KisWdgTagSelectionControllerBundleTags::updateView()
 {
-
-    ENTER_FUNCTION() << ppVar(m_tagSelectionWidget);
-
     typedef QPair<QString, QString> resourceTypePair;
     QList<QPair<QString, QString>> resourceTypes = {
         resourceTypePair(i18n("Brush presets"), ResourceType::PaintOpPresets),
@@ -226,8 +234,6 @@ void KisWdgTagSelectionControllerBundleTags::updateView()
     // m_selectedTags is already categorized correctly and is in KoID form
 
     m_tagSelectionWidget->setTagList(m_editable, selected, notSelected);
-
-
 
 }
 

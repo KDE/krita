@@ -66,7 +66,7 @@ class KRITAWIDGETS_EXPORT WdgCloseableLabel : public QWidget
     Q_OBJECT
 
 public:
-    explicit WdgCloseableLabel(KoID tag, bool editable, QWidget *parent = 0);
+    explicit WdgCloseableLabel(KoID tag, bool editable, bool semiSelected = false, QWidget *parent = 0);
     ~WdgCloseableLabel() override;
 
 Q_SIGNALS:
@@ -81,6 +81,7 @@ private:
     QLabel* m_closeIconLabel;
 
     bool m_editble;
+    bool m_semiSelected;
     KoID m_tag;
 
     friend class TestKisTagSelectionWidget;
@@ -102,28 +103,12 @@ public:
 protected:
     void paintEvent(QPaintEvent *event);
 
-    friend class TestKisTagSelectionWidget;
-
-};
-
-class WdgAddTagsCategoriesButton : public QToolButton
-{
-
-    Q_OBJECT
-
-public:
-    explicit WdgAddTagsCategoriesButton(QWidget* parent);
-    ~WdgAddTagsCategoriesButton() override;
-
-    void setAvailableTagsList(QList<CustomTagsCategorySP> &notSelected);
-
-protected:
-    void paintEvent(QPaintEvent *event);
+private:
+    int m_size { 21 };
 
     friend class TestKisTagSelectionWidget;
 
 };
-
 
 class KRITAWIDGETS_EXPORT KisTagSelectionWidget : public QWidget
 {
@@ -134,7 +119,8 @@ public:
     ~KisTagSelectionWidget() override;
 
     void setTagList(bool editable, QList<KoID> &selected, QList<KoID> &notSelected);
-    void setTagList(bool editable, QList<KoID> &selected, QList<CustomTagsCategorySP> &notSelected);
+    void setTagList(bool editable, QList<KoID> &selected, QList<KoID> &notSelected, QList<KoID> &semitSelected);
+
 
 Q_SIGNALS:
     void sigAddTagToSelection(KoID tag);

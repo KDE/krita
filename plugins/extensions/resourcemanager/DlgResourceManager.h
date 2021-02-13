@@ -42,6 +42,7 @@ private Q_SLOTS:
     void slotTagSelected(int);
 
     void slotResourcesSelectionChanged(QModelIndex selected);
+    void slotFilterTextChanged(const QString& filterText);
 
     void slotImportResources();
     void slotOpenResourceFolder();

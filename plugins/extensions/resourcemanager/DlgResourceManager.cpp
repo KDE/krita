@@ -75,6 +75,8 @@ DlgResourceManager::DlgResourceManager(QWidget *parent)
     connect(m_ui->btnImportResources, SIGNAL(clicked(bool)), SLOT(slotImportResources()));
     connect(m_ui->btnDeleteBackupFiles, SIGNAL(clicked(bool)), SLOT(slotDeleteBackupFiles()));
 
+    connect(m_ui->lneFilterText, SIGNAL(textChanged(const QString&)), SLOT(slotFilterTextChanged(const QString&)));
+
     m_tagsController.reset(new KisWdgTagSelectionControllerOneResource(m_ui->wdgResourcesTags, true));
 
 }
@@ -179,6 +181,13 @@ void DlgResourceManager::slotResourcesSelectionChanged(QModelIndex index)
     }
     Q_FOREACH(QModelIndex index, list) {
 
+    }
+}
+
+void DlgResourceManager::slotFilterTextChanged(const QString &filterText)
+{
+    if (m_resourceProxyModelsForResourceType.contains(getCurrentResourceType())) {
+        m_resourceProxyModelsForResourceType[getCurrentResourceType()]->setSearchText(filterText);
     }
 }
 

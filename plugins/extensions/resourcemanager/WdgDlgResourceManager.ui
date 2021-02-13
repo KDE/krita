@@ -69,14 +69,14 @@
           <widget class="QLabel" name="lblThumbnail">
            <property name="minimumSize">
             <size>
-             <width>128</width>
-             <height>128</height>
+             <width>100</width>
+             <height>100</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>128</width>
-             <height>128</height>
+             <width>100</width>
+             <height>100</height>
             </size>
            </property>
            <property name="frameShape">

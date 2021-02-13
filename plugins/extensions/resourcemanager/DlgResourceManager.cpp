@@ -8,6 +8,8 @@
 
 #include "ui_WdgDlgResourceManager.h"
 
+#include <kis_action.h>
+#include <kis_action_manager.h>
 #include <KisResourceTypeModel.h>
 #include <KisStorageModel.h>
 #include <KisTagModel.h>
@@ -19,9 +21,10 @@
 #include <wdgtagselection.h>
 
 
-DlgResourceManager::DlgResourceManager(QWidget *parent)
+DlgResourceManager::DlgResourceManager(KisActionManager *actionMgr, QWidget *parent)
     : KoDialog(parent)
     , m_ui(new Ui::WdgDlgResourceManager)
+    , m_actionManager(actionMgr)
     , m_tagsController(0)
 {
     setCaption(i18n("Manage Resources"));
@@ -208,7 +211,10 @@ void DlgResourceManager::slotImportResources()
 
 void DlgResourceManager::slotOpenResourceFolder()
 {
-
+    if (m_actionManager) {
+        KisAction *action = m_actionManager->actionByName("open_resources_directory");
+        action->trigger();
+    }
 }
 
 void DlgResourceManager::slotImportBundle()

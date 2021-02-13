@@ -243,7 +243,7 @@ void ResourceManager::slotManageBundles()
 
 void ResourceManager::slotManageResources()
 {
-    DlgResourceManager dlg;
+    DlgResourceManager dlg(viewManager()->actionManager());
     dlg.exec();
 }
 

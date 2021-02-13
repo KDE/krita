@@ -13,6 +13,7 @@
 #include <QSharedPointer>
 #include <QItemSelection>
 
+class KisActionManager;
 class KisResourceTypeModel;
 class KisStorageModel;
 class KisTagModel;
@@ -30,7 +31,7 @@ class DlgResourceManager : public KoDialog
 {
     Q_OBJECT
 public:
-    DlgResourceManager(QWidget *parent = 0);
+    DlgResourceManager(KisActionManager* actionMgr, QWidget *parent = 0);
     ~DlgResourceManager() override;
 
 
@@ -58,6 +59,7 @@ private:
 private:
     QWidget *m_page;
     QScopedPointer<Ui::WdgDlgResourceManager> m_ui;
+    KisActionManager *m_actionManager;
     KisResourceTypeModel *m_resourceTypeModel {0};
     KisStorageModel *m_storageModel {0};
     QMap<QString, KisTagModel*> m_tagModelsForResourceType;

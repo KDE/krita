@@ -45,7 +45,7 @@ DlgCreateBundle::DlgCreateBundle(KoResourceBundleSP bundle, QWidget *parent)
     m_page = new QWidget();
     m_ui->setupUi(m_page);
     setMainWidget(m_page);
-    //setFixedSize(m_page->sizeHint());
+    setFixedSize(m_page->sizeHint());
     setButtons(Ok | Cancel);
     setDefaultButton(Ok);
     setButtonText(Ok, i18n("Save"));
@@ -183,23 +183,8 @@ DlgCreateBundle::DlgCreateBundle(KoResourceBundleSP bundle, QWidget *parent)
     m_ui->tableSelected->setIconSize(QSize(ICON_SIZE, ICON_SIZE));
     m_ui->tableSelected->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
-    KisTagModel* model = new KisTagModel(ResourceType::PaintOpPresets);
-    QList<KisTagSP> tags;
-    QList<KisTagSP> tagsSec;
-    for(int i = 0; i < model->rowCount(); i++) {
-        QModelIndex idx = model->index(i, 0);
-        KisTagSP tag = model->tagForIndex(idx);
-        if (i%2 && tags.count() < 2) {
-            tags << tag;
-        } else /* if (tagsSec.count() < 2) */ {
-            tagsSec << tag;
-        }
-    }
-    //m_ui->tagsTempCombo->setTagList(true, tagsSec, tags);
-    m_tagSelectionWidgetController = new KisWdgTagSelectionControllerBundleTags(m_ui->tagsTempCombo, true);
-    m_tagSelectionWidgetController->updateView();
-
     connect(m_ui->bnGetPreview, SIGNAL(clicked()), SLOT(getPreviewImage()));
+    connect(m_ui->bnEmbedTags, SIGNAL(clicked()), SLOT(slotEmbedTags()));
 
     resourceTypeSelected(0);
 }
@@ -249,13 +234,12 @@ QString DlgCreateBundle::previewImage() const
     return m_previewImage;
 }
 
-QVector<KisTagSP> DlgCreateBundle::getTagsForEmbeddingInResource(QVector<KisTagSP> resourceTags, QList<int> selectedTagIds) const
+QVector<KisTagSP> DlgCreateBundle::getTagsForEmbeddingInResource(QVector<KisTagSP> resourceTags) const
 {
     QVector<KisTagSP> tagsToEmbed;
     Q_FOREACH(KisTagSP tag, resourceTags) {
-        if (selectedTagIds.contains(tag->id())) {
+        if (m_selectedTagIds.contains(tag->id())) {
             tagsToEmbed << tag;
-            ENTER_FUNCTION() << "Adding " << tag->id() << tag->name() << "to embedded tags";
         }
     }
     return tagsToEmbed;
@@ -269,8 +253,6 @@ void DlgCreateBundle::putResourcesInTheBundle() const
         allResourcesIds << id;
     }
 
-    QList<int> selectedTagIds = m_tagSelectionWidgetController->getSelectedTagIds();
-
     // note: if there are repetitions, it's fine; the bundle will filter them out
     while(!allResourcesIds.isEmpty()) {
         int id = allResourcesIds.takeFirst();
@@ -280,7 +262,7 @@ void DlgCreateBundle::putResourcesInTheBundle() const
             continue;
         }
         KisResourceModel resModel(res->resourceType().first);
-        QVector<KisTagSP> tags = getTagsForEmbeddingInResource(resModel.tagsForResource(id), selectedTagIds);
+        QVector<KisTagSP> tags = getTagsForEmbeddingInResource(resModel.tagsForResource(id));
         m_bundle->addResource(res->resourceType().first, res->filename(), tags, res->md5());
 
         QList<KoResourceSP> linkedResources = res->linkedResources(KisGlobalResourcesInterface::instance());
@@ -354,6 +336,15 @@ void DlgCreateBundle::saveToConfiguration(bool full)
     cfg.writeEntry<QString>("BundleLicense", license());
 }
 
+void DlgCreateBundle::slotEmbedTags()
+{
+    DlgEmbedTags* dlg = new DlgEmbedTags(m_selectedTagIds);
+    int response = dlg->exec();
+    if (response == KoDialog::Accepted) {
+        m_selectedTagIds = dlg->selectedTagIds();
+    }
+}
+
 void DlgCreateBundle::reject()
 {
     saveToConfiguration(true);
@@ -407,10 +398,7 @@ QPixmap imageToIcon(const QImage &img) {
 
 void DlgCreateBundle::resourceTypeSelected(int idx)
 {
-
     QString resourceType = m_ui->cmbResourceTypes->itemData(idx).toString();
-
-    m_tagSelectionWidgetController->setResourceType(resourceType);
 
     m_ui->tableAvailable->clear();
     m_ui->tableSelected->clear();

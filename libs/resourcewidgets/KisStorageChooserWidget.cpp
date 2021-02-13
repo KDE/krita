@@ -136,7 +136,7 @@ void KisStorageChooserWidget::activated(const QModelIndex &index)
     KisResourceModel resourceModel(ResourceType::PaintOpPresets);
     resourceModel.setResourceFilter(KisResourceModel::ShowActiveResources);
     if (!resourceModel.rowCount()) {
-        warning += i18n("\nThere are no brush presets available. Please re-enable a bundle that provides brusb presets.");
+        warning += i18n("\nThere are no brush presets available. Please re-enable a bundle that provides brush presets.");
         QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"), warning);
     }
 }

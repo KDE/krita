@@ -148,7 +148,7 @@ bool KoDualColorButton::popDialog() const
 
 QSize KoDualColorButton::sizeHint() const
 {
-    return QSize( 34, 34 );
+    return QSize(34, 34);
 }
 
 void KoDualColorButton::setForegroundColor(const KoColor &color)
@@ -162,13 +162,13 @@ void KoDualColorButton::setForegroundColor(const KoColor &color)
         KisSignalsBlocker b(d->colorSelectorDialog);
         d->colorSelectorDialog->slotColorUpdated(color);
     }
-    repaint();
+    update();
 }
 
 void KoDualColorButton::setBackgroundColor( const KoColor &color )
 {
     d->backgroundColor = color;
-    repaint();
+    update();
 }
 
 void KoDualColorButton::setDisplayRenderer(const KoColorDisplayRendererInterface *displayRenderer)
@@ -254,7 +254,7 @@ void KoDualColorButton::dropEvent( QDropEvent *event )
       emit backgroundColorChanged( color );
     }
 
-    repaint();
+    update();
   }
 */
 }
@@ -262,7 +262,7 @@ void KoDualColorButton::dropEvent( QDropEvent *event )
 void KoDualColorButton::slotSetForeGroundColorFromDialog(const KoColor color)
 {
     d->foregroundColor = color;
-    repaint();
+    update();
     emit foregroundColorChanged(d->foregroundColor);
 }
 
@@ -307,7 +307,7 @@ void KoDualColorButton::mousePressEvent( QMouseEvent *event )
 
         d->miniCtlFlag = true;
     }
-    repaint();
+    update();
 }
 
 
@@ -385,7 +385,7 @@ void KoDualColorButton::mouseReleaseEvent( QMouseEvent *event )
         }
     }
 
-    repaint();
+    update();
 }
 
 void KoDualColorButton::changeEvent(QEvent *event)

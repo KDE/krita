@@ -1,0 +1,42 @@
+From 5f5ccba65e77862f5555a071c20e8849f0e06191 Mon Sep 17 00:00:00 2001
+From: Dmitry Kazakov <dimula73@gmail.com>
+Date: Mon, 15 Feb 2021 10:54:35 +0300
+Subject: [PATCH 113/113] Fix multiple shortcuts match from different keyboard
+ layouts
+
+One key may have different meanings on different layout. Therefore
+the key may match to several shortcuts when the user presses one key.
+In Qt, latin layout has a priority over the current user layout.
+Therefore, if we managed to find a exact match, we shouldn't search
+for more possible shortcuts. It'll make them ambiguous.
+
+See https://bugs.kde.org/show_bug.cgi?id=430479
+---
+ src/gui/kernel/qshortcutmap.cpp | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/src/gui/kernel/qshortcutmap.cpp b/src/gui/kernel/qshortcutmap.cpp
+index 3bb42c1c..32bb175a 100644
+--- a/src/gui/kernel/qshortcutmap.cpp
++++ b/src/gui/kernel/qshortcutmap.cpp
+@@ -498,9 +498,16 @@ QKeySequence::SequenceMatch QShortcutMap::find(QKeyEvent *e, int ignoredModifier
+         if (oneKSResult && oneKSResult >= result) {
+             okEntries << d->newEntries.at(i);
+ #if defined(DEBUG_QSHORTCUTMAP)
+-            qDebug() << "Added ok key sequence" << d->newEntries;
++            qDebug() << "Added ok key sequence" << d->newEntries.at(i);
+ #endif
+         }
++
++        // If we managed to match some shortcuts from the background
++        // layers, there is no need to try upper layers. Different
++        // layouts may overlap and we consider latin as a priority.
++        if (oneKSResult == QKeySequence::ExactMatch) {
++            break;
++        }
+     }
+ 
+     if (d->identicals.size()) {
+-- 
+2.20.1.windows.1
+

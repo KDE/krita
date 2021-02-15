@@ -1,0 +1,75 @@
+From faa06787420de0e11e4cc96b5b0aeeb5fd9313e1 Mon Sep 17 00:00:00 2001
+From: Dmitry Kazakov <dimula73@gmail.com>
+Date: Mon, 15 Feb 2021 10:43:53 +0300
+Subject: [PATCH 112/113] Fix shortcuts assigned to special keys on non-latin
+ layouts
+
+When the user has non-latin layout we still consider latin
+meaning of the keys to be a priorty. This behavior is already
+in Qt (and is disputable), but this patch doesn't change that.
+The patch only adds proper handling of special keys:
+
+* '\' --- backslash/bar key
+* '/' --- slash/question key
+* ';' --- semicolon/colon key
+* '`' --- backqoute/tilde key
+* ''' --- quote/doublequote key
+* '[' --- left bracket key
+* ']' --- right bracket key
+* ',' --- comma/< key
+* '.' --- period/> key
+* '-' --- minus/underscore key
+* '=' --- equal/plus key
+
+See https://bugs.kde.org/show_bug.cgi?id=430479
+---
+ .../platforms/windows/qwindowskeymapper.cpp   | 31 +++++++++++++++++--
+ 1 file changed, 28 insertions(+), 3 deletions(-)
+
+diff --git a/src/plugins/platforms/windows/qwindowskeymapper.cpp b/src/plugins/platforms/windows/qwindowskeymapper.cpp
+index c5af4d80..b392894d 100644
+--- a/src/plugins/platforms/windows/qwindowskeymapper.cpp
++++ b/src/plugins/platforms/windows/qwindowskeymapper.cpp
+@@ -753,11 +753,36 @@ void QWindowsKeyMapper::updatePossibleKeyCodes(unsigned char *kbdBuffer, quint32
+     keyLayout[vk_key].deadkeys |= isDeadKey ? 0x80 : 0;
+     // Add a fall back key for layouts which don't do composition and show non-latin1 characters
+     quint32 fallbackKey = winceKeyBend(vk_key);
++
+     if (!fallbackKey || fallbackKey == Qt::Key_unknown) {
+         fallbackKey = 0;
+-        if (vk_key != keyLayout[vk_key].qtKey[0] && vk_key != keyLayout[vk_key].qtKey[1]
+-            && vk_key < 0x5B && vk_key > 0x2F)
+-            fallbackKey = vk_key;
++        if (vk_key != keyLayout[vk_key].qtKey[0] && vk_key != keyLayout[vk_key].qtKey[1]) {
++            if (vk_key < 0x5B && vk_key > 0x2F) {
++                fallbackKey = vk_key;
++            } else if (vk_key == VK_OEM_1) {
++                fallbackKey = Qt::Key_Semicolon;
++            } else if (vk_key == VK_OEM_2) {
++                fallbackKey = Qt::Key_Slash;
++            } else if (vk_key == VK_OEM_3) {
++                fallbackKey = Qt::Key_QuoteLeft;
++            } else if (vk_key == VK_OEM_4) {
++                fallbackKey = Qt::Key_BracketLeft;
++            } else if (vk_key == VK_OEM_5) {
++                fallbackKey = Qt::Key_Backslash;
++            } else if (vk_key == VK_OEM_6) {
++                fallbackKey = Qt::Key_BracketRight;
++            } else if (vk_key == VK_OEM_7) {
++                fallbackKey = Qt::Key_Apostrophe;
++            } else if (vk_key == VK_OEM_PLUS) {
++                fallbackKey = Qt::Key_Plus;
++            } else if (vk_key == VK_OEM_COMMA) {
++                fallbackKey = Qt::Key_Comma;
++            } else if (vk_key == VK_OEM_MINUS) {
++                fallbackKey = Qt::Key_Minus;
++            } else if (vk_key == VK_OEM_PERIOD) {
++                fallbackKey = Qt::Key_Period;
++            }
++        }
+     }
+     keyLayout[vk_key].qtKey[8] = fallbackKey;
+ 
+-- 
+2.20.1.windows.1
+

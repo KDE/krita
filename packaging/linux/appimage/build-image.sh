@@ -203,9 +203,9 @@ export GSTREAMER_TARGET=$APPDIR/usr/lib/gstreamer-1.0
 # First, lets get the GSTREAMER plugins installed.
 # For now, I'm just going to install all plugins. Once it's working, I'll start picking individual libs that Krita actually needs.
 mkdir -p $GSTREAMER_TARGET
-install -Dm 755 /usr/lib/x86_64-linux-gnu/gstreamer-1.0/*.so $GSTREAMER_TARGET/
-install -Dm 755 /usr/lib/x86_64-linux-gnu/gstreamer1.0/gstreamer-1.0/gst-plugin-scanner $GSTREAMER_TARGET/gst-plugin-scanner
-install -Dm 755 /usr/lib/x86_64-linux-gnu/libgstreamer-1.0.so $APPDIR/usr/lib/
+install -Dm 755 /usr/lib/$TRIPLET/gstreamer-1.0/*.so $GSTREAMER_TARGET/
+install -Dm 755 /usr/lib/$TRIPLET/gstreamer1.0/gstreamer-1.0/gst-plugin-scanner $GSTREAMER_TARGET/gst-plugin-scanner
+install -Dm 755 /usr/lib/$TRIPLET/libgstreamer-1.0.so $APPDIR/usr/lib/
 
 GSTREAMER_BINARIES="-executable=${GSTREAMER_TARGET}/gst-plugin-scanner -executable=${APPDIR}/usr/lib/libgstreamer-1.0.so"
 for plugin in alsa app audioconvert audioparsers audioresample autodetect \

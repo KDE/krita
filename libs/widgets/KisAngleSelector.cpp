@@ -17,6 +17,7 @@
 #include <QLineEdit>
 #include <QStyleOptionSpinBox>
 #include <QStyle>
+#include <QContextMenuEvent>
 
 #include <kis_icon_utils.h>
 #include <kis_signals_blocker.h>
@@ -187,7 +188,6 @@ struct KisAngleSelector::Private
     int angleGaugeSize;
 
     void on_angleGauge_angleChanged(qreal angle);
-    void on_angleGauge_customContextMenuRequested(const QPoint &point);
     void on_spinBox_valueChanged(double value);
     void on_actionFlipHorizontally_triggered();
     void on_actionFlipVertically_triggered();
@@ -208,7 +208,7 @@ KisAngleSelector::KisAngleSelector(QWidget* parent)
     mainLayout->setContentsMargins(0, 0, 0, 0);
 
     m_d->angleGauge = new KisAngleGauge(this);
-    m_d->angleGauge->setContextMenuPolicy(Qt::CustomContextMenu);
+    m_d->angleGauge->installEventFilter(this);
 
     m_d->spinBox = new KisAngleSelectorSpinBox(this);
     m_d->spinBox->setSuffix(i18nc("Degrees symbol", "˚"));
@@ -310,11 +310,6 @@ KisAngleSelector::KisAngleSelector(QWidget* parent)
         m_d->angleGauge,
         &KisAngleGauge::angleChanged,
         std::bind(&Private::on_angleGauge_angleChanged, m_d.data(), _1)
-    );
-    connect(
-        m_d->angleGauge,
-        &KisAngleGauge::customContextMenuRequested,
-        std::bind(&Private::on_angleGauge_customContextMenuRequested, m_d.data(), _1)
     );
     connect(
         m_d->spinBox,
@@ -594,17 +589,24 @@ bool KisAngleSelector::event(QEvent *e)
         m_d->spinBox->refreshStyle();
         m_d->resizeAngleGauge();
     }
-    return false;
+    return QWidget::event(e);
+}
+
+bool KisAngleSelector::eventFilter(QObject *o, QEvent *e)
+{
+    QWidget *w = qobject_cast<QWidget*>(o);
+    if (w != m_d->angleGauge || !w->isEnabled() || !e || e->type() != QEvent::ContextMenu) {
+        return false;
+    }
+    QContextMenuEvent *cme = static_cast<QContextMenuEvent*>(e);
+
+    m_d->menuFlip->exec(cme->globalPos());
+    return true;
 }
 
 void KisAngleSelector::Private::on_angleGauge_angleChanged(qreal angle)
 {
     q->setAngle(q->closestCoterminalAngleInRange(angle));
-}
-
-void KisAngleSelector::Private::on_angleGauge_customContextMenuRequested(const QPoint &point)
-{
-    menuFlip->exec(angleGauge->mapToGlobal(point));
 }
 
 void KisAngleSelector::Private::on_spinBox_valueChanged(double value)

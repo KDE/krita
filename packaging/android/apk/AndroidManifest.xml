@@ -59,6 +59,7 @@
 
                 <data android:mimeType="text/csv" />
                 <data android:mimeType="application/x-krita" />
+                <data android:mimeType="application/x-krita-archive" />
                 <data android:mimeType="application/x-extension-exr" />
                 <data android:mimeType="application/x-krita-paintoppreset" />
                 <data android:mimeType="application/pdf" />
@@ -75,8 +76,8 @@
                 <data android:mimeType="*/*" />
 
                 <!-- NOTE: if host and scheme aren't provided path attributes are ignored  -->
-                <data android:host="*"
-                      android:pathPattern=".*\\.kra.*"/>
+                <data android:host="*" android:pathPattern=".*\\.kra.*"/>
+                <data android:host="*" android:pathPattern=".*\\.krz.*"/>
             </intent-filter>
 
             <!-- without mimeType -->
@@ -89,8 +90,8 @@
                 <data android:scheme="content" />
 
                 <!-- NOTE: if host and scheme aren't provided path attributes are ignored  -->
-                <data android:host="*"
-                      android:pathPattern=".*\\.kra.*"/>
+                <data android:host="*" android:pathPattern=".*\\.kra.*"/>
+                <data android:host="*" android:pathPattern=".*\\.krz.*"/>
             </intent-filter>
 
             <meta-data

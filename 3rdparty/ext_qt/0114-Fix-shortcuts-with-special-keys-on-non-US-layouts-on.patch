@@ -1,0 +1,93 @@
+From 04dc4790ab91d904dcafb767762592a4c8de6f86 Mon Sep 17 00:00:00 2001
+From: Dmitry Kazakov <dimula73@gmail.com>
+Date: Tue, 16 Feb 2021 09:03:52 +0300
+Subject: [PATCH] Fix shortcuts with special keys on non-US layouts on Linux
+
+---
+ src/plugins/platforms/xcb/qxcbkeyboard.cpp | 34 +++++++++++++++++++++++++++---
+ 1 file changed, 31 insertions(+), 3 deletions(-)
+
+diff --git a/src/plugins/platforms/xcb/qxcbkeyboard.cpp b/src/plugins/platforms/xcb/qxcbkeyboard.cpp
+index c5dc7b2..48d1793 100644
+--- a/src/plugins/platforms/xcb/qxcbkeyboard.cpp
++++ b/src/plugins/platforms/xcb/qxcbkeyboard.cpp
+@@ -83,6 +83,22 @@ struct Xkb2Qt
+ 
+ static constexpr const auto KeyTbl = qMakeArray(
+     QSortedData<
++
++        // isUSKeyboardShortcut()-positive data
++
++        Xkb2Qt<'.',                  Qt::Key_Period>,
++        Xkb2Qt<',',                  Qt::Key_Comma>,
++        Xkb2Qt<';',                  Qt::Key_Semicolon>,
++        Xkb2Qt<'|',                  Qt::Key_Bar>,
++        Xkb2Qt<'/',                  Qt::Key_Slash>,
++        Xkb2Qt<'\\',                 Qt::Key_Backslash>,
++        Xkb2Qt<'-',                  Qt::Key_Minus>,
++        Xkb2Qt<'=',                  Qt::Key_Equal>,
++        Xkb2Qt<'`',                  Qt::Key_QuoteLeft>,
++        Xkb2Qt<'\'',                 Qt::Key_Apostrophe>,
++        Xkb2Qt<'[',                  Qt::Key_BracketLeft>,
++        Xkb2Qt<']',                  Qt::Key_BracketRight>,
++
+         // misc keys
+ 
+         Xkb2Qt<XKB_KEY_Escape,                  Qt::Key_Escape>,
+@@ -923,6 +939,16 @@ static bool isLatin(xkb_keysym_t sym)
+     return ((sym >= 'a' && sym <= 'z') || (sym >= 'A' && sym <= 'Z'));
+ }
+ 
++static bool isUSKeyboardShortcut(xkb_keysym_t sym)
++{
++    return sym == '.' || sym == ',' ||
++           sym == ';' || sym == '|' ||
++           sym == '/' || sym == '\\' ||
++           sym == '-' || sym == '=' ||
++           sym == '`' || sym == '\'' ||
++           sym == '[' || sym == ']';
++}
++
+ void QXcbKeyboard::checkForLatinLayout() const
+ {
+     const xkb_layout_index_t layoutCount = xkb_keymap_num_layouts(m_xkbKeymap.get());
+@@ -966,7 +992,7 @@ xkb_keysym_t QXcbKeyboard::lookupLatinKeysym(xkb_keycode_t keycode) const
+         xkb_level_index_t level = xkb_state_key_get_level(m_xkbState.get(), keycode, layout);
+         if (xkb_keymap_key_get_syms_by_level(m_xkbKeymap.get(), keycode, layout, level, &syms) != 1)
+             continue;
+-        if (isLatin(syms[0])) {
++        if (isLatin(syms[0]) || isUSKeyboardShortcut(syms[0])) {
+             sym = syms[0];
+             break;
+         }
+@@ -1067,8 +1093,9 @@ QList<int> QXcbKeyboard::possibleKeys(const QKeyEvent *event) const
+         Qt::KeyboardModifiers neededMods = ModsTbl[i];
+         if ((modifiers & neededMods) == neededMods) {
+             if (i == 8) {
+-                if (isLatin(baseQtKey))
++                if (isLatin(baseQtKey) || isUSKeyboardShortcut(baseQtKey))
+                     continue;
++
+                 // add a latin key as a fall back key
+                 sym = lookupLatinKeysym(keycode);
+             } else {
+@@ -1127,6 +1154,7 @@ int QXcbKeyboard::keysymToQtKey(xcb_keysym_t keysym, Qt::KeyboardModifiers modif
+         qtKey = xkbcommon_xkb_keysym_to_upper(keysym);
+     } else {
+         // check if we have a direct mapping
++        // isUSKeyboardShortcut(keysym) is handled by the map
+         xkb2qt_t searchKey{keysym, 0};
+         auto it = std::lower_bound(KeyTbl.cbegin(), KeyTbl.cend(), searchKey);
+         if (it != KeyTbl.end() && !(searchKey < *it))
+@@ -1564,7 +1592,7 @@ void QXcbKeyboard::handleKeyEvent(xcb_window_t sourceWindow, QEvent::Type type,
+     if (modifiers & Qt::ControlModifier) {
+         // With standard shortcuts we should prefer a latin character, this is
+         // in checks like "event == QKeySequence::Copy".
+-        if (!isLatin(sym))
++        if (!isLatin(sym) && !isUSKeyboardShortcut(sym))
+             latinKeysym = lookupLatinKeysym(code);
+     }
+ 
+-- 
+2.7.4
+

@@ -73,6 +73,7 @@ DlgResourceManager::DlgResourceManager(KisActionManager *actionMgr, QWidget *par
 
     connect(m_ui->resourceItemView, SIGNAL(currentResourceChanged(QModelIndex)), SLOT(slotResourcesSelectionChanged(QModelIndex)));
 
+    connect(m_ui->btnDeleteResource, SIGNAL(clicked(bool)), SLOT(slotDeleteResources()));
     connect(m_ui->btnImportBundle, SIGNAL(clicked(bool)), SLOT(slotImportBundle()));
     connect(m_ui->btnOpenResourceFolder, SIGNAL(clicked(bool)), SLOT(slotOpenResourceFolder()));
     connect(m_ui->btnImportResources, SIGNAL(clicked(bool)), SLOT(slotImportResources()));
@@ -184,6 +185,7 @@ void DlgResourceManager::slotResourcesSelectionChanged(QModelIndex index)
         int resourceId = model->data(index, Qt::UserRole + KisAllResourcesModel::Id).toInt();
         resourceIds << resourceId;
     }
+    updateDeleteButtonState(list);
     qCritical() << "setting the list of " << resourceIds;
     m_tagsController->setResourceIds(getCurrentResourceType(), resourceIds);
 }
@@ -202,6 +204,33 @@ void DlgResourceManager::slotShowDeletedChanged(int newState)
         m_resourceModelsForResourceType[getCurrentResourceType()]->setResourceFilter(
                     m_ui->chkShowDeleted->isChecked() ? KisResourceModel::ShowAllResources : KisResourceModel::ShowActiveResources);
     }
+}
+
+void DlgResourceManager::slotDeleteResources()
+{
+    QModelIndexList list = m_ui->resourceItemView->selectionModel()->selection().indexes();
+    if (!m_resourceProxyModelsForResourceType.contains(getCurrentResourceType()) || list.empty()) {
+        return;
+    }
+    KisTagFilterResourceProxyModel *model = m_resourceProxyModelsForResourceType[getCurrentResourceType()];
+    KisAllResourcesModel *allModel = KisResourceModelProvider::resourceModel(getCurrentResourceType());
+
+    if (static_cast<QAbstractItemModel*>(model) != m_ui->resourceItemView->model()) {
+        qCritical() << "wrong item model!";
+        return;
+    }
+
+    Q_FOREACH(QModelIndex index, list) {
+        if (m_undeleteMode) {
+            // FIXME: There is currently no nicer way to set an inactive resource active again...
+            KoResourceSP resource = model->resourceForIndex(index);
+            allModel->setData(allModel->indexForResource(resource), true, Qt::CheckStateRole);
+        } else {
+            model->setResourceInactive(index);
+        }
+    }
+
+    updateDeleteButtonState(list);
 }
 
 void DlgResourceManager::slotImportResources()
@@ -240,4 +269,31 @@ int DlgResourceManager::getCurrentStorageId()
 QSharedPointer<KisTag> DlgResourceManager::getCurrentTag()
 {
     return m_ui->cmbTag->currentData(Qt::UserRole + KisAllTagsModel::KisTagRole).value<KisTagSP>();
+}
+
+void DlgResourceManager::updateDeleteButtonState(const QModelIndexList &list)
+{
+    bool allActive = true;
+    bool allInactive = true;
+
+    for(QModelIndex index: list) {
+        bool active = index.data(Qt::UserRole + KisAllResourcesModel::ResourceActive).toBool();
+        allActive = allActive && active;
+        allInactive = allInactive && !active;
+    }
+
+    // if nothing selected or selected are mixed active/inactive state
+    if (allActive == allInactive) {
+        m_ui->btnDeleteResource->setEnabled(false);
+    }
+    // either all are active or all are inactive
+    else {
+        m_undeleteMode = allInactive;
+        m_ui->btnDeleteResource->setEnabled(true);
+        if (m_undeleteMode) {
+            m_ui->btnDeleteResource->setText(i18n("Undelete Resources"));
+        } else {
+            m_ui->btnDeleteResource->setText(i18n("Delete Resources"));
+        }
+    }
 }

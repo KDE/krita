@@ -46,6 +46,7 @@ private Q_SLOTS:
     void slotFilterTextChanged(const QString& filterText);
     void slotShowDeletedChanged(int newState);
 
+    void slotDeleteResources();
     void slotImportResources();
     void slotOpenResourceFolder();
     void slotImportBundle();
@@ -54,6 +55,7 @@ private:
     QString getCurrentResourceType();
     int getCurrentStorageId();
     QSharedPointer<KisTag> getCurrentTag();
+    void updateDeleteButtonState(const QModelIndexList &list);
 
 
 private:
@@ -70,6 +72,7 @@ private:
 
     QScopedPointer<KisWdgTagSelectionControllerOneResource> m_tagsController;
 
+    bool m_undeleteMode {false};
 };
 
 #endif // DLGRESOURCEMANAGER_H

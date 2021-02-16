@@ -1,38 +1,15 @@
 SET(EXTPREFIX_heif "${EXTPREFIX}" )
-if ("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
-
-if(APPLE AND ${CMAKE_SYSTEM_PROCESSOR} STREQUAL "arm64")
-    set(SSE_OPTIMIZATIONS_STRING "-DDISABLE_SSE=TRUE" "-DSUPPORTS_SSE4_1=OFF")
-else()
-    set(SSE_OPTIMIZATIONS_STRING "")
-endif()
 
 ExternalProject_Add(
     ext_libde265
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL https://github.com/strukturag/libde265/releases/download/v1.0.5/libde265-1.0.5.tar.gz
-    URL_MD5 385c88166cb255a068a8c936d0ab23ef
+    URL https://github.com/strukturag/libde265/releases/download/v1.0.8/libde265-1.0.8.tar.gz
+    URL_HASH SHA1=db8fa137a4681ec092e7546d9155bbaa95938e5e
 
-    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/01-fix-sse41.diff
-
-    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_heif} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE} ${SSE_OPTIMIZATIONS_STRING}
+    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_heif} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE}
 
     UPDATE_COMMAND ""
 )
-else ("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
-ExternalProject_Add(
-    ext_libde265
-    DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL https://github.com/strukturag/libde265/releases/download/v1.0.5/libde265-1.0.5.tar.gz
-    URL_MD5 385c88166cb255a068a8c936d0ab23ef
-
-    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/01-fix-sse41.diff
-
-    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_heif} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE} -DDISABLE_SSE=TRUE
-
-    UPDATE_COMMAND ""
-)
-endif ("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
 
 if (WIN32)
     if ("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
@@ -146,10 +123,8 @@ endif ()
 ExternalProject_Add(
     ext_libheif
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL https://github.com/strukturag/libheif/releases/download/v1.6.2/libheif-1.6.2.tar.gz
-    URL_HASH SHA256=bb229e855621deb374f61bee95c4642f60c2a2496bded35df3d3c42cc6d8eefc
-
-    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/03-fix-build-macos-windows.diff
+    URL https://github.com/strukturag/libheif/releases/download/v1.11.0/libheif-1.11.0.tar.gz
+    URL_HASH SHA1=def98b8c83861b6e4f3cdf6d3b57c9aaf3408923
 
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_heif} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} -DBUILD_EXAMPLES=OFF ${GLOBAL_PROFILE}
 

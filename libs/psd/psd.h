@@ -244,8 +244,7 @@ public:
         }
     }
 
-    virtual ~psd_layer_effects_shadow_base() {
-    }
+    virtual ~psd_layer_effects_shadow_base();
 
     QPoint calculateOffset(const psd_layer_effects_context *context) const;
 
@@ -419,10 +418,7 @@ public:
         m_gradient = value;
     }
 
-    virtual void scaleLinearSizes(qreal scale) {
-        m_distance *= scale;
-        m_size *= scale;
-    }
+    virtual void scaleLinearSizes(qreal scale);
 
 private:
     // internal
@@ -474,6 +470,8 @@ public:
     // using psd_layer_effects_shadow_base::setContourLookupTable;
     // using psd_layer_effects_shadow_base::setAntiAliased;
     // using psd_layer_effects_shadow_base::setNoise;
+
+    ~psd_layer_effects_shadow_common() override;
 };
 
 class KRITAPSD_EXPORT psd_layer_effects_drop_shadow : public psd_layer_effects_shadow_common
@@ -484,6 +482,7 @@ public:
     ///        in the classes we don't want
 
     //using psd_layer_effects_shadow_base::setKnocksOut;
+    ~psd_layer_effects_drop_shadow();
 };
 
 // isdw: https://www.adobe.com/devnet-apps/photoshop/fileformatashtml/PhotoshopFileFormats.htm#50577409_22203
@@ -495,6 +494,8 @@ public:
         setInvertsSelection(true);
         setEdgeHidden(false);
     }
+
+    ~psd_layer_effects_inner_shadow() override;
 };
 
 class KRITAPSD_EXPORT psd_layer_effects_glow_common : public psd_layer_effects_shadow_base
@@ -506,7 +507,7 @@ public:
         setBlendMode(COMPOSITE_LINEAR_DODGE);
         setColor(Qt::white);
     }
-
+    ~psd_layer_effects_glow_common() override;
     /// FIXME: 'using' is not supported by MSVC, so please refactor in
     ///        some other way to ensure that the setters are not used
     ///        in the classes we don't want
@@ -531,6 +532,8 @@ public:
 // oglw: https://www.adobe.com/devnet-apps/photoshop/fileformatashtml/PhotoshopFileFormats.htm#50577409_25738
 class KRITAPSD_EXPORT psd_layer_effects_outer_glow : public psd_layer_effects_glow_common
 {
+public:
+    ~psd_layer_effects_outer_glow() override;
 };
 
 // iglw: https://www.adobe.com/devnet-apps/photoshop/fileformatashtml/PhotoshopFileFormats.htm#50577409_27692
@@ -550,6 +553,7 @@ public:
     void setSource(psd_glow_source value) {
         m_source = value;
     }
+    ~psd_layer_effects_inner_glow() override;
 
 private:
     psd_glow_source m_source;

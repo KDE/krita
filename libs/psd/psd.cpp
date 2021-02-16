@@ -197,3 +197,38 @@ QPoint psd_layer_effects_shadow_base::calculateOffset(const psd_layer_effects_co
 
     return QPoint(distanceX, distanceY);
 }
+
+// key functions
+psd_layer_effects_shadow_base::~psd_layer_effects_shadow_base()
+{
+}
+
+void psd_layer_effects_shadow_base::scaleLinearSizes(qreal scale)
+{
+    m_distance *= scale;
+    m_size *= scale;
+}
+
+psd_layer_effects_shadow_common::~psd_layer_effects_shadow_common()
+{
+}
+
+psd_layer_effects_drop_shadow::~psd_layer_effects_drop_shadow()
+{
+}
+
+psd_layer_effects_glow_common::~psd_layer_effects_glow_common()
+{
+}
+
+psd_layer_effects_inner_glow::~psd_layer_effects_inner_glow()
+{
+}
+
+psd_layer_effects_outer_glow::~psd_layer_effects_outer_glow()
+{
+}
+
+psd_layer_effects_inner_shadow::~psd_layer_effects_inner_shadow()
+{
+}

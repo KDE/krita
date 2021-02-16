@@ -16,7 +16,7 @@ index 75d091ce4..4f3df2464 100644
          return;
      if (!qAppPriv->gestureManager)
          return;
-+    if (!QGestureManager::instance()
++    if (!QGestureManager::instance())
 +        return;
      QGestureManager::instance()->unregisterGestureRecognizer(type);
  }

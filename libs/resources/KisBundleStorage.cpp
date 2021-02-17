@@ -50,12 +50,9 @@ public:
                     tag->setResourceType(resourceType);
                     m_tags[tagname] = tag;
                 }
-                KoResourceSP resource = m_bundle->resource(resourceType, resourceReference.resourcePath);
-                if (resource) {
-                    m_tags[tagname]->setDefaultResources(m_tags[tagname]->defaultResources() << resource->filename());
-                } else {
-                    qWarning() << tagname << "The following resource could not be tagged:" << resourceReference.resourcePath << "from" << bundle->filename();
-                }
+
+                m_tags[tagname]->setDefaultResources(m_tags[tagname]->defaultResources()
+                                                     << QFileInfo(resourceReference.resourcePath).fileName());
             }
         }
         m_tagIterator.reset(new QListIterator<KisTagSP>(m_tags.values()));

@@ -75,6 +75,8 @@ public:
 
     bool tagResource(const KisTagSP tag, const int resourceId);
     bool untagResource(const KisTagSP tag, const int resourceId);
+    bool isResourceTagged(const KisTagSP tag, const int resourceId);
+
 
 protected:
 

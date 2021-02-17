@@ -251,6 +251,11 @@ bool KisTagFilterResourceProxyModel::untagResource(const KisTagSP tag, const int
     return d->tagResourceModel->untagResource(tag, resourceId);
 }
 
+bool KisTagFilterResourceProxyModel::isResourceTagged(const KisTagSP tag, const int resourceId)
+{
+    return d->tagResourceModel->isResourceTagged(tag, resourceId);
+}
+
 bool KisTagFilterResourceProxyModel::filterAcceptsColumn(int /*source_column*/, const QModelIndex &/*source_parent*/) const
 {
     return true;

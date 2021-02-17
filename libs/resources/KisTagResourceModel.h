@@ -23,6 +23,7 @@ public:
 
     virtual bool tagResource(const KisTagSP tag, const int resourceId) = 0;
     virtual bool untagResource(const KisTagSP tag, const int resourceId) = 0;
+    virtual bool isResourceTagged(const KisTagSP tag, const int resourceId) = 0;
 };
 
 class KRITARESOURCES_EXPORT KisAllTagResourceModel
@@ -65,6 +66,7 @@ public:
     // Abstract Tag API
     bool tagResource(const KisTagSP tag, const int resourceId) override;
     bool untagResource(const KisTagSP tag, const int resourceId) override;
+    bool isResourceTagged(const KisTagSP tag, const int resourceId) override;
 
 private:
 
@@ -125,6 +127,7 @@ public:
 
     bool tagResource(const KisTagSP tag, const int resourceId) override;
     bool untagResource(const KisTagSP tag, const int resourceId) override;
+    bool isResourceTagged(const KisTagSP tag, const int resourceId) override;
 
     // KisAbstractResourceModel interface
 

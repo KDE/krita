@@ -41,9 +41,10 @@ private:
     void updateDistance();
 
     double m_resolution;
-    QLabel* m_distanceLabel;
     QLabel* m_angleLabel;
     double m_distance;
+public:
+    QLabel* m_distanceLabel;
     KoUnit m_unit;
 };
 

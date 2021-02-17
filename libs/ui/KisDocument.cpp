@@ -176,7 +176,7 @@ public:
     }
 
     void setIndex(int idx) override {
-        m_postponedJobs.append({PostponedJob::SetIndex, idx});
+        m_postponedJobs.append(PostponedJob(PostponedJob::SetIndex, idx));
         processPostponedJobs();
     }
 
@@ -195,13 +195,13 @@ public:
     }
 
     void undo() override {
-        m_postponedJobs.append({PostponedJob::Undo, 0});
+        m_postponedJobs.append(PostponedJob(PostponedJob::Undo, 0));
         processPostponedJobs();
     }
 
 
     void redo() override {
-        m_postponedJobs.append({PostponedJob::Redo, 0});
+        m_postponedJobs.append(PostponedJob(PostponedJob::Redo, 0));
         processPostponedJobs();
     }
 
@@ -283,6 +283,14 @@ private:
             Redo,
             SetIndex
         };
+
+        PostponedJob() {}
+        PostponedJob(Type _type, int _index)
+         : type(_type),
+           index(_index)
+        {
+        }
+
         Type type = Undo;
         int index = 0;
     };

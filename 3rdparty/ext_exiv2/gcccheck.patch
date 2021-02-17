@@ -1,13 +1,13 @@
 diff --git a/cmake/compilerFlags.cmake b/cmake/compilerFlags.cmake
-index af82d56..21e1963 100644
+index 12caf42..fe13818 100644
 --- a/cmake/compilerFlags.cmake
 +++ b/cmake/compilerFlags.cmake
-@@ -30,7 +30,7 @@ if ( MINGW OR UNIX OR MSYS ) # MINGW, Linux, APPLE, CYGWIN
-             set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --coverage")
+@@ -49,7 +49,7 @@ if ( MINGW OR UNIX OR MSYS ) # MINGW, Linux, APPLE, CYGWIN
+             set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} --coverage")
          endif()
- 
--        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wcast-align -Wpointer-arith -Wformat-security -Wmissing-format-attribute -Woverloaded-virtual -W")
-+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wcast-align -Wpointer-arith -Wformat-security -Wmissing-format-attribute -Woverloaded-virtual -W -std=c++98")
- 
-         if ( EXIV2_TEAM_USE_SANITIZERS )
-             # ASAN is available in gcc from 4.8 and UBSAN from 4.9
+
+-        add_compile_options(-Wall -Wcast-align -Wpointer-arith -Wformat-security -Wmissing-format-attribute -Woverloaded-virtual -W)
++        add_compile_options(-Wall -Wcast-align -Wpointer-arith -Wformat-security -Wmissing-format-attribute -Woverloaded-virtual -W -std=c++98)
+
+         # This seems to be causing issues in the Fedora_MinGW GitLab job
+         #add_compile_options(-fasynchronous-unwind-tables)

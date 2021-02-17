@@ -1,7 +1,7 @@
-From 85123eba545b8094f30342e764dcadfccf0f235d Mon Sep 17 00:00:00 2001
+From 7f99aec7447d3c21ada17b093f7956c6dbced641 Mon Sep 17 00:00:00 2001
 From: "L. E. Segovia" <amy@amyspark.me>
 Date: Wed, 11 Nov 2020 17:05:57 +0000
-Subject: [PATCH 3/4] Refactor into a completely Krita native plugin
+Subject: [PATCH 3/5] Refactor into a completely Krita native plugin
 
 ---
  CMakeLists.txt                             | 33 +++++++++++++++++-----
@@ -13,10 +13,10 @@ Subject: [PATCH 3/4] Refactor into a completely Krita native plugin
  create mode 100644 src/Host/KritaPlugin/gmicqttoolplugin.json
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index b9423ab..4873808 100644
+index ce0ccff..30aa10d 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -534,17 +534,35 @@ elseif (${GMIC_QT_HOST} STREQUAL "krita")
+@@ -546,17 +546,35 @@ elseif (${GMIC_QT_HOST} STREQUAL "krita")
      install(TARGETS gmic_krita_qt RUNTIME DESTINATION bin)
  
  elseif (${GMIC_QT_HOST} STREQUAL "krita-plugin")
@@ -55,7 +55,7 @@ index b9423ab..4873808 100644
                             URL "http://www.krita.org"
                             DESCRIPTION "Krita GMic core library"
      )
-@@ -552,19 +570,20 @@ elseif (${GMIC_QT_HOST} STREQUAL "krita-plugin")
+@@ -564,19 +582,20 @@ elseif (${GMIC_QT_HOST} STREQUAL "krita-plugin")
      set (gmic_qt_SRCS ${gmic_qt_SRCS} src/Host/KritaPlugin/host.cpp src/Host/KritaPlugin/gmicqttoolplugin.cpp)
      set (gmic_qt_SRCS ${gmic_qt_SRCS} )
      add_definitions(-DGMIC_HOST=krita-plugin)
@@ -166,5 +166,5 @@ index ffa5283..4ff84e6 100644
  /*
   * No messages are sent in the plugin version of GMic.
 -- 
-2.29.2
+2.30.0
 

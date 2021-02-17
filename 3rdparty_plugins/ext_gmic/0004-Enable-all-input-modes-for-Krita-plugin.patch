@@ -1,7 +1,7 @@
-From 647345ef8016141ac42a158885a24895f309b991 Mon Sep 17 00:00:00 2001
+From 12b4fd37e373ddfcc22589c73d07fd82146181a7 Mon Sep 17 00:00:00 2001
 From: "L. E. Segovia" <amy@amyspark.me>
 Date: Sun, 20 Dec 2020 23:01:29 +0000
-Subject: [PATCH 4/4] Enable all input modes for Krita (plugin)
+Subject: [PATCH 4/5] Enable all input modes for Krita (plugin)
 
 ---
  src/Host/KritaPlugin/gmicqttoolplugin.cpp | 6 +++---
@@ -29,5 +29,5 @@ index ad1e912..d62e76b 100644
    // disableOutputMode(GmicQt::InPlace);
    disableOutputMode(GmicQt::NewImage);
 -- 
-2.29.2
+2.30.0
 

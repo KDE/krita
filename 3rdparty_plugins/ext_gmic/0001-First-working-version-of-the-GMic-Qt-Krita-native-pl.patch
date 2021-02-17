@@ -1,7 +1,7 @@
-From 198f62a942e4f6476f46f473412b3e7e79f97ee5 Mon Sep 17 00:00:00 2001
+From 83c8de29d911807d025a7f657b511e04ebed9fab Mon Sep 17 00:00:00 2001
 From: "L. E. Segovia" <amy@amyspark.me>
 Date: Sun, 8 Nov 2020 15:39:36 +0000
-Subject: [PATCH 1/4] First working version of the GMic-Qt Krita native plugin
+Subject: [PATCH 1/5] First working version of the GMic-Qt Krita native plugin
 
 ---
  CMakeLists.txt                            |  33 +++
@@ -14,10 +14,10 @@ Subject: [PATCH 1/4] First working version of the GMic-Qt Krita native plugin
  create mode 100644 src/Host/KritaPlugin/host.cpp
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 32506b7..b9423ab 100644
+index 3b61d54..ce0ccff 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -533,6 +533,39 @@ elseif (${GMIC_QT_HOST} STREQUAL "krita")
+@@ -545,6 +545,39 @@ elseif (${GMIC_QT_HOST} STREQUAL "krita")
        )
      install(TARGETS gmic_krita_qt RUNTIME DESTINATION bin)
  
@@ -525,5 +525,5 @@ index 0000000..e814385
 +#endif // DRMINGW
 +#endif // Q_OS_WIN
 -- 
-2.29.2
+2.30.0
 

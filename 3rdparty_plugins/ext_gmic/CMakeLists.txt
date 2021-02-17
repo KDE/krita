@@ -3,8 +3,8 @@ SET(PREFIX_ext_gmic "${EXTPREFIX}" )
 # Download the gmic sources
 ExternalProject_Add( ext_gmic_base
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL https://gmic.eu/files/source/gmic_2.9.2.tar.gz
-    URL_HASH SHA256=385db1ef3ef5805bc7bcb65255e188e349fc5e0ae35687b1b914291212bc4c91
+    URL https://gmic.eu/files/source/gmic_2.9.6.tar.gz
+    URL_HASH SHA256=d22fe8515af16dcd050d09a0bc7127ec29f4795ce732a0c6c3eaf839356bc11a
 
     SOURCE_DIR gmic
 
@@ -18,12 +18,13 @@ ExternalProject_Add( ext_gmic_base
 # Download and build gmic-qt
 ExternalProject_Add( ext_gmic_qt
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL https://github.com/c-koi/gmic-qt/archive/v.2.9.2.tar.gz
-    URL_HASH SHA256=50b401f999ddaff7ef86657ef115a7bfa844e9c465c8a7e878dd5b6b8bba99be
+    URL https://github.com/c-koi/gmic-qt/archive/v.2.9.6.tar.gz
+    URL_HASH SHA256=40712fb8b2e8d39a5a2c6349bc14277444db25c81b1cf51fde1c159ef622942b
     PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-First-working-version-of-the-GMic-Qt-Krita-native-pl.patch
         COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0002-Remove-shared-segment-infrastructure.patch
         COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0003-Refactor-into-a-completely-Krita-native-plugin.patch
         COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0004-Enable-all-input-modes-for-Krita-plugin.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0005-Update-function-signatures-to-2.9.6.patch
 
     SOURCE_DIR gmic-qt
     INSTALL_DIR ${PREFIX_ext_gmic}

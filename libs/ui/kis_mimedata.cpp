@@ -491,5 +491,20 @@ bool KisMimeData::insertMimeLayers(const QMimeData *data,
         nodeInsertionAdapter->moveNodes(nodes, parentDummy->node(), aboveThisNode);
     }
 
+    const bool hasDelayedNodes =
+        std::find_if(nodes.begin(), nodes.end(),
+                     [] (KisNodeSP node) {
+                         return bool(dynamic_cast<KisDelayedUpdateNodeInterface*>(node.data()));
+                     }) != nodes.end();
+
+    if (hasDelayedNodes) {
+        /**
+         * We have the node juggler running, so it will delay the update of the
+         * generator layers that might be included into the paste. To avoid
+         * that we should forcefully to make it stop
+         */
+        image->requestStrokeEnd();
+    }
+
     return result;
 }

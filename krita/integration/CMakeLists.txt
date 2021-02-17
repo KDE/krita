@@ -1,7 +1,11 @@
 if (APPLE)
 project(kritaintegration)
 
-add_custom_target( kritaintegration ALL xcodebuild -project "${CMAKE_CURRENT_SOURCE_DIR}/integration.xcodeproj" -alltargets -configuration Release COMMENT build all macOS plugins )
+if (${CMAKE_SYSTEM_PROCESSOR} STREQUAL "x86_64")
+    set(XCODEBUILD_ARCHS "-arch" "x86_64")
+endif()
+
+add_custom_target( kritaintegration ALL xcodebuild -project "${CMAKE_CURRENT_SOURCE_DIR}/integration.xcodeproj" ${XCODEBUILD_ARCHS} -alltargets -configuration Release COMMENT build all macOS plugins )
 
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/Build/Release/kritaquicklook.qlgenerator DESTINATION ${PLUGIN_INSTALL_DIR})
 

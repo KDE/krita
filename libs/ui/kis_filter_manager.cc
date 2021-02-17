@@ -185,7 +185,6 @@ void KisFilterManager::reapplyLastFilterReprompt()
     if (!d->lastConfiguration) return;
 
     showFilterDialog(d->lastConfiguration->name(), d->lastConfiguration);
-    finish();
 }
 
 void KisFilterManager::showFilterDialog(const QString &filterId, KisFilterConfigurationSP overrideDefaultConfig)

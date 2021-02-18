@@ -602,6 +602,11 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     connect(window, SIGNAL(screenChanged(QScreen *)), this, SLOT(windowScreenChanged(QScreen *)));
 
 #ifdef Q_OS_ANDROID
+    // HACK: This prevents the mainWindow from going beyond the screen with no
+    // way to bring it back. Apparently the size doesn't matter here as long as
+    // it remains fixed?
+    setFixedSize(KisApplication::primaryScreen()->availableGeometry().size());
+
     connect(d->fileManager, SIGNAL(sigFileSelected(QUrl)), this, SLOT(slotFileSelected(QUrl)));
     connect(d->fileManager, SIGNAL(sigEmptyFilePath()), this, SLOT(slotEmptyFilePath()));
 

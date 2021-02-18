@@ -60,10 +60,8 @@ public class MainActivity extends QtActivity {
         if (intent != null) {
             Uri fileUri = intent.getData();
             if (fileUri != null) {
-                int modeFlags = Intent.FLAG_GRANT_READ_URI_PERMISSION;
-                if ((intent.getFlags() & Intent.FLAG_GRANT_WRITE_URI_PERMISSION) != 0) {
-                    modeFlags |= Intent.FLAG_GRANT_WRITE_URI_PERMISSION;
-                }
+                int modeFlags = (intent.getFlags() & Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                modeFlags    |= (intent.getFlags() & Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                 QtNative.addToKnownUri(fileUri, modeFlags);
                 return fileUri.toString();
             }

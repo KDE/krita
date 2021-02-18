@@ -1,0 +1,87 @@
+From df7e453e92efd22a1c2b0a230f98c88415033c5b Mon Sep 17 00:00:00 2001
+From: Sharaf Zaman <sharafzaz121@gmail.com>
+Date: Thu, 18 Feb 2021 09:46:45 +0000
+Subject: [PATCH] Android: check if the Uri is writable
+
+We check if we have "w" permission on the Uri or not. We check both the
+explictly persisted permissions and implicity granted ones.
+---
+ .../org/qtproject/qt5/android/QtNative.java   | 19 +++++++++++++++++--
+ .../android/androidcontentfileengine.cpp      | 11 ++++++++++-
+ 2 files changed, 27 insertions(+), 3 deletions(-)
+
+diff --git a/src/android/jar/src/org/qtproject/qt5/android/QtNative.java b/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
+index 561403a823..3ca8cfb033 100644
+--- a/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
++++ b/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
+@@ -178,13 +178,16 @@ public class QtNative
+             return false;
+         }
+ 
+-        int modeFlags = Intent.FLAG_GRANT_READ_URI_PERMISSION;
++        int modeFlags = 0;
++        if (openMode.startsWith("r")) {
++            modeFlags = Intent.FLAG_GRANT_READ_URI_PERMISSION;
++        }
+ 
+         if (!"r".equals(openMode)) {
+             modeFlags |= Intent.FLAG_GRANT_WRITE_URI_PERMISSION;
+         }
+ 
+-        return (m_uriPermissions.get(uri) & modeFlags) != 0;
++        return (m_uriPermissions.get(uri) & modeFlags) == modeFlags;
+     }
+ 
+     private static Uri getUriWithValidPermission(Context context, String uri, String openMode)
+@@ -346,6 +349,18 @@ public class QtNative
+         }
+     }
+ 
++    public static boolean canWriteToUri(Context context, String contentUrl)
++    {
++        Uri uri = getUriWithValidPermission(context, contentUrl, "w");
++
++        if (uri == null) {
++            Log.e(QtTAG, "canWriteToUri(): No permissions to open Uri in \"w\" mode");
++            return false;
++        } else {
++            return true;
++        }
++    }
++
+     public static String getFileNameFromUri(Context context, String contentUrl)
+     {
+         Uri uri = getUriWithValidPermission(context, contentUrl, "r");
+diff --git a/src/plugins/platforms/android/androidcontentfileengine.cpp b/src/plugins/platforms/android/androidcontentfileengine.cpp
+index ffda6592f4..ba11a50e85 100644
+--- a/src/plugins/platforms/android/androidcontentfileengine.cpp
++++ b/src/plugins/platforms/android/androidcontentfileengine.cpp
+@@ -108,7 +108,7 @@ qint64 AndroidContentFileEngine::size() const
+ 
+ AndroidContentFileEngine::FileFlags AndroidContentFileEngine::fileFlags(FileFlags type) const
+ {
+-    FileFlags commonFlags(ReadOwnerPerm|ReadUserPerm|ReadGroupPerm|ReadOtherPerm|ExistsFlag);
++    const FileFlags commonFlags(ReadOwnerPerm|ReadUserPerm|ReadGroupPerm|ReadOtherPerm|ExistsFlag);
+     FileFlags flags;
+     const bool exists = QJNIObjectPrivate::callStaticMethod<jboolean>(
+             "org/qtproject/qt5/android/QtNative", "checkFileExists",
+@@ -116,7 +116,16 @@ AndroidContentFileEngine::FileFlags AndroidContentFileEngine::fileFlags(FileFlag
+             QJNIObjectPrivate::fromString(m_file).object());
+     if (!exists)
+         return flags;
++
+     flags = FileType | commonFlags;
++
++    const bool canWrite = QJNIObjectPrivate::callStaticMethod<jboolean>(
++            "org/qtproject/qt5/android/QtNative", "canWriteToUri",
++            "(Landroid/content/Context;Ljava/lang/String;)Z", QtAndroidPrivate::context(),
++            QJNIObjectPrivate::fromString(m_file).object());
++    if (canWrite) {
++        flags |= (WriteOwnerPerm|WriteUserPerm|WriteGroupPerm|WriteOtherPerm);
++    }
+     return type & flags;
+ }
+ 
+-- 
+2.30.0
+

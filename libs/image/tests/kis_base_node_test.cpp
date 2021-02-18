@@ -113,17 +113,27 @@ void KisBaseNodeTest::testOpacityKeyframing()
 
     const int timeA = 7;
     const int timeB = 15;
-    const int half_offset = (timeB - timeA) / 2;
+    const int halfTimeOffset = (timeB - timeA) / 2;
 
-    const qreal valueA = 128;
-    const qreal valueB = 64;
+    // Keyframe values are stored in percent,
+    // but opacity values are stored as bytes
+    // Therefore, we should convert all percentage
+    // values to bytes for comparison testing.
+    const qreal valueA = 50;
+    const quint8 valueAU8 = (valueA / 100) * 255;
+    const qreal valueB = 25;
+    const quint8 valueBU8 = (valueB / 100) * 255;
+
     // Interpolated value lands on frame edge, so value isn't quite in the middle..
     const qreal valueDeltaPerFrame = (valueA - valueB) / qreal(timeB - timeA);
-    const qreal interpolatedValueAB = valueB + valueDeltaPerFrame * half_offset;
+    const qreal interpolatedValueAB = valueB + valueDeltaPerFrame * halfTimeOffset;
+    const quint8 interpValueABU8 = (interpolatedValueAB / 100) * 255;
 
     // Add frames..
-    opacityChannel->addScalarKeyframe(timeA, 128);
-    opacityChannel->addScalarKeyframe(timeB, 64);
+    opacityChannel->addScalarKeyframe(timeA, valueA);
+    opacityChannel->addScalarKeyframe(timeB, valueB);
+
+    QVERIFY(opacityChannel->keyframeCount() == 2);
 
     // Paint starting color..
     const KoColorSpace *colorSpace = context.layer->paintDevice()->colorSpace();
@@ -139,7 +149,8 @@ void KisBaseNodeTest::testOpacityKeyframing()
 
         KoColor sample(colorSpace);
         context.image->projection()->pixel(16, 16, &sample);
-        QCOMPARE(sample.opacityU8(), valueA);
+        QCOMPARE(opacityChannel->valueAt(0), valueA);
+        QCOMPARE(sample.opacityU8(), valueAU8);
     }
 
     {   // A
@@ -148,16 +159,19 @@ void KisBaseNodeTest::testOpacityKeyframing()
 
         KoColor sample;
         context.image->projection()->pixel(16, 16, &sample);
-        QCOMPARE(sample.opacityU8(), valueA);
+        QCOMPARE(opacityChannel->valueAt(timeA), valueA);
+        QCOMPARE(sample.opacityU8(), valueAU8);
     }
 
     {   // Between A-B (Opacity interpolated)
-        context.image->animationInterface()->switchCurrentTimeAsync(timeA + half_offset);
+        context.image->animationInterface()->switchCurrentTimeAsync(timeA + halfTimeOffset);
         context.image->waitForDone();
+
+        QCOMPARE(opacityChannel->valueAt(timeA + halfTimeOffset), interpolatedValueAB);
 
         KoColor sample;
         context.image->projection()->pixel(16, 16, &sample);
-        QCOMPARE(sample.opacityU8(), interpolatedValueAB);
+        QCOMPARE(sample.opacityU8(), interpValueABU8);
 
         // Restore opacity and double check color continuity..
         sample.setOpacity(originalColor.opacityU8());
@@ -168,18 +182,22 @@ void KisBaseNodeTest::testOpacityKeyframing()
         context.image->animationInterface()->switchCurrentTimeAsync(timeB);
         context.image->waitForDone();
 
+        QCOMPARE(opacityChannel->valueAt(timeB), valueB);
+
         KoColor sample;
         context.image->projection()->pixel(16, 16, &sample);
-        QCOMPARE(sample.opacityU8(), valueB);
+        QCOMPARE(sample.opacityU8(), valueBU8);
     }
 
     {   // After B (Opacity should be the same as B!)
-        context.image->animationInterface()->switchCurrentTimeAsync(timeB + half_offset);
+        context.image->animationInterface()->switchCurrentTimeAsync(timeB + halfTimeOffset);
         context.image->waitForDone();
+
+        QCOMPARE(opacityChannel->valueAt(timeB + halfTimeOffset), valueB);
 
         KoColor sample;
         context.image->projection()->pixel(16, 16, &sample);
-        QCOMPARE(sample.opacityU8(), valueB);
+        QCOMPARE(sample.opacityU8(), valueBU8);
     }
 }
 

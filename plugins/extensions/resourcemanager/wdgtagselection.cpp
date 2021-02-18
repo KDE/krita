@@ -42,6 +42,7 @@ KisWdgTagSelectionControllerOneResource::KisWdgTagSelectionControllerOneResource
     connect(widget, SIGNAL(sigAddTagToSelection(KoID)), this, SLOT(slotAddTag(KoID)));
     connect(widget, SIGNAL(sigRemoveTagFromSelection(KoID)), this, SLOT(slotRemoveTag(KoID)));
     connect(widget, SIGNAL(sigCreateNewTag(QString)), this, SLOT(slotCreateNewTag(QString)));
+    m_tagSelectionWidget->setEnabled(false); // because there is no resource selected yet
 
 }
 
@@ -64,10 +65,12 @@ void KisWdgTagSelectionControllerOneResource::setResourceIds(QString resourceTyp
     if (resourceIds.count() == 0) {
         QList<KoID> list;
         m_tagSelectionWidget->setTagList(m_editable, list, list);
+        m_tagSelectionWidget->setEnabled(false);
     } else {
         if (m_tagResourceModel) {
             m_tagResourceModel->setResourcesFilter(resourceIds.toVector());
         }
+        m_tagSelectionWidget->setEnabled(true);
         updateView();
     }
 }

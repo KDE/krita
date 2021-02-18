@@ -238,7 +238,9 @@ void WdgAddTagButton::paintEvent(QPaintEvent *event)
     QPixmap pix = icon.pixmap(size);
     QSize realSize = iconSize.scaled(size, Qt::KeepAspectRatio);//pix.rect().size();
     QPoint p = this->rect().topLeft() + QPoint(this->rect().width()/2 - realSize.width()/2, this->rect().height()/2 - realSize.height()/2);
+    painter.setOpacity(!isEnabled() ? 0.3 : 1.0);
     painter.drawPixmap(p, pix);
+    painter.setOpacity(1.0);
 }
 
 KisTagSelectionWidget::KisTagSelectionWidget(QWidget *parent)

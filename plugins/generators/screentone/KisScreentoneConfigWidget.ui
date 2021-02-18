@@ -171,7 +171,7 @@
          <item row="0" column="0">
           <widget class="QLabel" name="labelTranslation">
            <property name="text">
-            <string>Position:</string>
+            <string comment="Geometric Position">Position:</string>
            </property>
           </widget>
          </item>

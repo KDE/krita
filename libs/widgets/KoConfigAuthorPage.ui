@@ -62,7 +62,7 @@
      <item column="2" row="3">
       <widget class="QLabel" name="lblPositionDesc">
        <property name="text">
-        <string>Position:</string>
+        <string comment="Job Position">Position:</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>

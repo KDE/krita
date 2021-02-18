@@ -1200,7 +1200,7 @@
                 <enum>Qt::NoFocus</enum>
                </property>
                <property name="text">
-                <string>Clear</string>
+                <string comment="Welcome Screen Recent Document List's Clear link Label">Clear</string>
                </property>
                <property name="checkable">
                 <bool>false</bool>

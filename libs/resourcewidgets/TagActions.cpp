@@ -91,6 +91,8 @@ bool LineEditAction::closeParentOnTrigger()
 
 void LineEditAction::slotActionTriggered()
 {
+    setData(userText());
+    QAction::trigger();
     onTriggered();
     if (!m_editBox->text().isEmpty()) {
         if (m_closeParentOnTrigger) {

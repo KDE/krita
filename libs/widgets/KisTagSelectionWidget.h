@@ -16,6 +16,8 @@
 #include <KoID.h>
 
 #include <kritawidgets_export.h>
+#include <TagActions.h>
+#include <kis_signal_compressor.h>
 
 struct CustomTag
 {
@@ -99,12 +101,41 @@ public:
     ~WdgAddTagButton() override;
 
     void setAvailableTagsList(QList<KoID> &notSelected);
+    void setAddNewTagAvailable(bool addNewTagAvailable);
+
+Q_SIGNALS:
+    void sigCreateNewTag(QString tagName);
+    void sigAddNewTag(KoID tag);
+
+public Q_SLOTS:
+    void slotFinishLastAction();
+
+
+
+private Q_SLOTS:
+    void slotAddNewTag(QAction* action);
+    void slotCreateNewTag(QString tagName);
 
 protected:
     void paintEvent(QPaintEvent *event);
 
+    enum LastAction {
+        AddNewTag,
+        CreateNewTag,
+    };
+
+
 private:
     int m_size { 21 };
+    bool m_addNewTagAvailable { true };
+
+    LastAction m_lastAction { CreateNewTag };
+    KoID m_lastTagToAdd;
+    QString m_lastTagToCreate {""};
+
+    UserInputTagAction* m_createNewTagAction {0};
+
+    KisSignalCompressor m_compressor;
 
     friend class TestKisTagSelectionWidget;
 
@@ -125,6 +156,7 @@ public:
 Q_SIGNALS:
     void sigAddTagToSelection(KoID tag);
     void sigRemoveTagFromSelection(KoID tag);
+    void sigCreateNewTag(QString tag);
 
 private Q_SLOTS:
 

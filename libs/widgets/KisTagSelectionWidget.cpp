@@ -19,6 +19,7 @@
 #include <QMenu>
 #include <QPair>
 #include <QApplication>
+#include <QInputDialog>
 
 #include <KoFileDialog.h>
 #include <kis_icon.h>
@@ -26,8 +27,10 @@
 
 #include <kis_debug.h>
 #include <kis_global.h>
+#include <TagActions.h>
 
-#include<KisWrappableHBoxLayout.h>
+#include <KisWrappableHBoxLayout.h>
+#include <kis_signals_blocker.h>
 
 
 #include "kis_icon.h"
@@ -123,14 +126,28 @@ void WdgCloseableLabel::mousePressEvent(QMouseEvent *event)
     }
 }
 
+
+
+
 WdgAddTagButton::WdgAddTagButton(QWidget *parent)
     : QToolButton(parent)
+    , m_compressor(10, KisSignalCompressor::FIRST_ACTIVE)
 {
     setPopupMode(QToolButton::InstantPopup);
     setContentsMargins(0, 0, 0, 0);
     QSize defaultSize = QSize(1, 1)*m_size;
     setMinimumSize(defaultSize);
     setMaximumSize(defaultSize);
+
+    connect(&m_compressor, SIGNAL(timeout()), this, SLOT(slotFinishLastAction()), Qt::UniqueConnection);
+    connect(this, SIGNAL(triggered(QAction*)), SLOT(slotAddNewTag(QAction*)));
+
+    UserInputTagAction *newTag = new UserInputTagAction(this);
+    newTag->setCloseParentOnTrigger(false);
+
+    connect(newTag, SIGNAL(triggered(QString)), this, SLOT(slotCreateNewTag(QString)), Qt::UniqueConnection);
+    m_createNewTagAction = newTag;
+
 }
 
 WdgAddTagButton::~WdgAddTagButton()
@@ -151,11 +168,63 @@ void WdgAddTagButton::setAvailableTagsList(QList<KoID> &notSelected)
         addAction(action);
     }
 
+    QAction *separator = new QAction(this);
+    separator->setSeparator(true);
+    addAction(separator);
+
+    addAction(m_createNewTagAction);
     setDefaultAction(0);
+}
+
+void WdgAddTagButton::slotFinishLastAction()
+{
+    if (m_lastAction == CreateNewTag) {
+        emit sigCreateNewTag(m_lastTagToCreate);
+    } else {
+        emit sigAddNewTag(m_lastTagToAdd);
+    }
+
+
+}
+
+void WdgAddTagButton::slotAddNewTag(QAction *action)
+{
+    if (action == m_createNewTagAction) {
+        m_lastTagToCreate = action->data().toString();
+        m_lastAction = CreateNewTag;
+        m_compressor.start();
+        KisSignalsBlocker b(m_createNewTagAction);
+        m_createNewTagAction->setText("");
+    } else if (!action->data().isNull() && action->data().canConvert<KoID>()) {
+        m_lastTagToAdd = action->data().value<KoID>();
+        m_lastAction = AddNewTag;
+        m_compressor.start();
+    }
+
+
+    if (this->menu()) {
+        this->menu()->close();
+    }
+}
+
+void WdgAddTagButton::slotCreateNewTag(QString tagName)
+{
+    m_lastTagToCreate = tagName;
+    m_lastAction = CreateNewTag;
+    m_compressor.start();
+    KisSignalsBlocker b(m_createNewTagAction);
+    m_createNewTagAction->setText("");
+
+
+    if (this->menu()) {
+        this->menu()->close();
+    }
 }
 
 void WdgAddTagButton::paintEvent(QPaintEvent *event)
 {
+    Q_UNUSED(event);
+
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
     QPainterPath path;
@@ -179,7 +248,9 @@ KisTagSelectionWidget::KisTagSelectionWidget(QWidget *parent)
     m_addTagButton = new WdgAddTagButton(this);
 
     m_layout->addWidget(m_addTagButton);
-    connect(m_addTagButton, SIGNAL(triggered(QAction*)), this, SLOT(slotAddTagToSelection(QAction*)));
+    connect(m_addTagButton, SIGNAL(sigCreateNewTag(QString)), this, SIGNAL(sigCreateNewTag(QString)), Qt::UniqueConnection);
+    connect(m_addTagButton, SIGNAL(sigAddNewTag(KoID)), this, SIGNAL(sigAddTagToSelection(KoID)), Qt::UniqueConnection);
+
 
     setLayout(m_layout);
 
@@ -201,6 +272,9 @@ void KisTagSelectionWidget::setTagList(bool editable, QList<KoID> &selected, QLi
     m_editable = editable;
     QLayoutItem *item;
 
+    disconnect(m_addTagButton, SIGNAL(sigCreateNewTag(QString)), this, SIGNAL(sigCreateNewTag(QString)));
+    disconnect(m_addTagButton, SIGNAL(sigAddNewTag(KoID)), this, SIGNAL(sigAddTagToSelection(KoID)));
+
     while((item = m_layout->takeAt(0))) {
         if (item->widget()) {
             if (!dynamic_cast<WdgAddTagButton*>(item->widget())) {
@@ -210,18 +284,19 @@ void KisTagSelectionWidget::setTagList(bool editable, QList<KoID> &selected, QLi
         delete item;
     }
 
+
     WdgAddTagButton* addTagButton = dynamic_cast<WdgAddTagButton*>(m_addTagButton);
     addTagButton->setAvailableTagsList(notSelected);
 
     Q_FOREACH(KoID tag, selected) {
         WdgCloseableLabel* label = new WdgCloseableLabel(tag, m_editable, false, this);
-        connect(label, SIGNAL(sigRemoveTagFromSelection(KoID)), this, SLOT(slotRemoveTagFromSelection(KoID)));
+        connect(label, SIGNAL(sigRemoveTagFromSelection(KoID)), this, SLOT(slotRemoveTagFromSelection(KoID)), Qt::UniqueConnection);
         m_layout->addWidget(label);
     }
 
     Q_FOREACH(KoID tag, semiSelected) {
         WdgCloseableLabel* label = new WdgCloseableLabel(tag, m_editable, true, this);
-        connect(label, SIGNAL(sigRemoveTagFromSelection(KoID)), this, SLOT(slotRemoveTagFromSelection(KoID)));
+        connect(label, SIGNAL(sigRemoveTagFromSelection(KoID)), this, SLOT(slotRemoveTagFromSelection(KoID)), Qt::UniqueConnection);
         m_layout->addWidget(label);
     }
 
@@ -229,8 +304,10 @@ void KisTagSelectionWidget::setTagList(bool editable, QList<KoID> &selected, QLi
     m_addTagButton->setVisible(m_editable);
 
 
+    connect(m_addTagButton, SIGNAL(sigCreateNewTag(QString)), this, SIGNAL(sigCreateNewTag(QString)), Qt::UniqueConnection);
+    connect(m_addTagButton, SIGNAL(sigAddNewTag(KoID)), this, SIGNAL(sigAddTagToSelection(KoID)), Qt::UniqueConnection);
+
     if (m_editable) {
-        connect(m_addTagButton, SIGNAL(triggered(QAction*)), this, SLOT(slotAddTagToSelection(QAction*)));
     }
 
     if (layout()) {
@@ -240,9 +317,12 @@ void KisTagSelectionWidget::setTagList(bool editable, QList<KoID> &selected, QLi
 
 void KisTagSelectionWidget::slotAddTagToSelection(QAction *action)
 {
-    if (!action || action->data().isNull()) return;
-    KoID custom = action->data().value <KoID>();
-    emit sigAddTagToSelection(custom);
+    if (!action) return;
+    if (action->data().isNull()) {
+    } else {
+        KoID custom = action->data().value <KoID>();
+        emit sigAddTagToSelection(custom);
+    }
 }
 
 void KisTagSelectionWidget::slotRemoveTagFromSelection(KoID tag)

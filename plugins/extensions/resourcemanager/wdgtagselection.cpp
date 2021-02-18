@@ -41,6 +41,8 @@ KisWdgTagSelectionControllerOneResource::KisWdgTagSelectionControllerOneResource
 {
     connect(widget, SIGNAL(sigAddTagToSelection(KoID)), this, SLOT(slotAddTag(KoID)));
     connect(widget, SIGNAL(sigRemoveTagFromSelection(KoID)), this, SLOT(slotRemoveTag(KoID)));
+    connect(widget, SIGNAL(sigCreateNewTag(QString)), this, SLOT(slotCreateNewTag(QString)));
+
 }
 
 KisWdgTagSelectionControllerOneResource::~KisWdgTagSelectionControllerOneResource()
@@ -86,6 +88,23 @@ void KisWdgTagSelectionControllerOneResource::slotAddTag(KoID tag)
     if (m_resourceIds.count() == 0) return;
 
     KisTagSP tagsp = m_tagModel->tagForUrl(tag.id());
+    Q_FOREACH(int resourceId, m_resourceIds) {
+        m_tagResourceModel->tagResource(tagsp, resourceId);
+    }
+    updateView();
+}
+
+void KisWdgTagSelectionControllerOneResource::slotCreateNewTag(QString tag)
+{
+    if (m_resourceIds.count() == 0 || m_resourceType == "" || tag == "") return;
+
+    KisTagSP tagsp = m_tagModel->tagForUrl(tag);
+    if (tagsp.isNull()) {
+        QVector<KoResourceSP> vec;
+        m_tagModel->addTag(tag, vec);
+        tagsp = m_tagModel->tagForUrl(tag);
+    }
+    KIS_ASSERT_RECOVER_RETURN(tagsp);
     Q_FOREACH(int resourceId, m_resourceIds) {
         m_tagResourceModel->tagResource(tagsp, resourceId);
     }

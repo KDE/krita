@@ -32,6 +32,7 @@ public:
 private Q_SLOTS:
     void slotRemoveTag(KoID tag);
     void slotAddTag(KoID tag);
+    void slotCreateNewTag(QString tag);
 
 private:
     void updateView();

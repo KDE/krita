@@ -141,6 +141,7 @@ void DlgResourceManager::slotTagSelected(int)
 
 void DlgResourceManager::slotResourcesSelectionChanged(QModelIndex index)
 {
+    Q_UNUSED(index);
     QModelIndexList list = m_ui->resourceItemView->selectionModel()->selection().indexes();
     KisTagFilterResourceProxyModel* model = m_resourceProxyModelsForResourceType[getCurrentResourceType()];
     if (list.size() == 1) {
@@ -163,13 +164,40 @@ void DlgResourceManager::slotResourcesSelectionChanged(QModelIndex index)
         m_ui->lneName->setDisabled(false);
         m_ui->lblId->setDisabled(false);
 
-    } else {
+    } else if (list.size() > 1) {
+
+        QString commonLocation = model->data(list.first(), Qt::UserRole + KisAllResourcesModel::Location).toString();
+        bool commonLocationFound = true;
+        Q_FOREACH(QModelIndex idx, list) {
+            QString location = model->data(idx, Qt::UserRole + KisAllResourcesModel::Location).toString();
+            if (location != commonLocation) {
+                commonLocationFound = false;
+            }
+        }
+
         QString multipleSelectedText = i18nc("In Resource manager, this is text shown instead of filename, name or location, "
                                              "when multiple resources are shown so there is no one specific filename", "(Multiple selected)");
+
         m_ui->lblFilename->setText(multipleSelectedText);
-        m_ui->lblLocation->setText(multipleSelectedText);
+        m_ui->lblLocation->setText(commonLocationFound ? commonLocation : multipleSelectedText);
         m_ui->lneName->setText(multipleSelectedText);
         m_ui->lblThumbnail->setText(multipleSelectedText);
+        QPixmap pix;
+        m_ui->lblThumbnail->setPixmap(pix);
+
+        m_ui->lblFilename->setDisabled(true);
+        m_ui->lblLocation->setDisabled(!commonLocationFound);
+        m_ui->lblThumbnail->setDisabled(true);
+        m_ui->lneName->setDisabled(true);
+        m_ui->lblId->setDisabled(false);
+    } else {
+        QString noneSelectedText = i18nc("In Resource manager, this is text shown instead of filename, name or location, "
+                                             "when no resource is shown so there is no specific filename", "(None selected)");
+
+        m_ui->lblFilename->setText(noneSelectedText);
+        m_ui->lblLocation->setText(noneSelectedText);
+        m_ui->lneName->setText(noneSelectedText);
+        m_ui->lblThumbnail->setText(noneSelectedText);
         QPixmap pix;
         m_ui->lblThumbnail->setPixmap(pix);
 
@@ -181,8 +209,8 @@ void DlgResourceManager::slotResourcesSelectionChanged(QModelIndex index)
     }
 
     QList<int> resourceIds;
-    Q_FOREACH(QModelIndex index, list) {
-        int resourceId = model->data(index, Qt::UserRole + KisAllResourcesModel::Id).toInt();
+    Q_FOREACH(QModelIndex idx, list) {
+        int resourceId = model->data(idx, Qt::UserRole + KisAllResourcesModel::Id).toInt();
         resourceIds << resourceId;
     }
     updateDeleteButtonState(list);

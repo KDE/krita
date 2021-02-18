@@ -1,8 +1,8 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 5d8a5cc..d53548a 100644
+index ed96b33..2f31edc 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -54,7 +54,11 @@ endif(UNIX OR MINGW)
+@@ -49,7 +49,11 @@ find_package(ZLIB REQUIRED)
  set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})
  
  set(LIB_SUFFIX "" CACHE STRING "Define suffix of directory name (32/64)")
@@ -12,6 +12,6 @@ index 5d8a5cc..d53548a 100644
 +else()
 +    set(LIB_DESTINATION "${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}" CACHE STRING "Library directory name" FORCE)
 +endif()
+ set(INSTALL_PKGCONFIG_DIR "${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}/pkgconfig" CACHE STRING "Installation directory for pkgconfig (.pc) files" FORCE)
  set(QUAZIP_LIB_TARGET_NAME quazip${QUAZIP_LIB_VERSION_SUFFIX} CACHE
      INTERNAL "Target name of libquazip" FORCE)
- 

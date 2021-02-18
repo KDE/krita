@@ -81,12 +81,12 @@ private:
 };
 
 
-class KisToolMultiBrushFactory : public KisToolPaintFactoryBase
+class KisToolMultiBrushFactory : public KisToolBrushFactory
 {
 
 public:
     KisToolMultiBrushFactory()
-        : KisToolPaintFactoryBase("KritaShape/KisToolMultiBrush") {
+        : KisToolBrushFactory("KritaShape/KisToolMultiBrush") {
 
         setToolTip(i18n("Multibrush Tool"));
 

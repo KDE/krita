@@ -143,6 +143,11 @@ public:
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
     }
 
+    KisToolBrushFactory(const QString &id)
+        : KisToolPaintFactoryBase(id)
+    {
+    }
+
     ~KisToolBrushFactory() override {}
 
     KoToolBase * createTool(KoCanvasBase *canvas) override {

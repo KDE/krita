@@ -858,12 +858,61 @@ KoSvgTextChunkShape::SharedData::~SharedData()
 #include <QBrush>
 #include <KoColorBackground.h>
 #include <KoShapeStroke.h>
+#include <ksharedconfig.h>
+#include <kconfiggroup.h>
+
+/**
+ * HACK ALERT: this is a function from a private Qt's header qfont_p.h,
+ * we don't include the whole header, because it is painful in the
+ * environments we don't fully control, e.g. in distribution packages.
+ */
+Q_GUI_EXPORT int qt_defaultDpi();
+
+namespace {
+int forcedDpiForQtFontBugWorkaround() {
+    KConfigGroup cfg(KSharedConfig::openConfig(), "");
+    return cfg.readEntry("forcedDpiForQtFontBugWorkaround", -1);
+}
+}
 
 KoSvgText::KoSvgCharChunkFormat KoSvgTextChunkShape::fetchCharFormat() const
 {
     KoSvgText::KoSvgCharChunkFormat format;
 
-    format.setFont(s->font);
+    QFont font(s->font);
+
+    /**
+     * HACK ALERT: Qt has a bug. When requesting font from the font
+     * database (in QFontDatabase::load()), Qt scales its size by the
+     * current primary display DPI. The only official way to disable
+     * that is to assign QTextDocument to QTextLayout, which is not
+     * something we would like to do. So we do the hackish way, we
+     * just prescale the font with inverted value.
+     *
+     * This hack changes only the rendering process without touching
+     * the way how the text is saved into .kra or .svg. That is nice,
+     * but it means it also affects how old files are renderred. To
+     * let the user open older files we provide a preference option
+     * to enable this scaling again.
+     *
+     * NOTE:  the hack is not needed for pixel-measured fonts, they
+     *        seem to render correctly. Pity we don't use them in
+     *        our SVG code (partially because they don't allow
+     *        fractional-sized fonts).
+     */
+    if (font.pointSizeF() > 0) {
+        const int forcedFontDPI = forcedDpiForQtFontBugWorkaround();
+
+        qreal adjustedFontSize = 72.0 / qt_defaultDpi() * font.pointSizeF();
+
+        if (forcedFontDPI > 0) {
+            adjustedFontSize *= qreal(forcedFontDPI) / 72.0;
+        }
+
+        font.setPointSizeF(adjustedFontSize);
+    }
+
+    format.setFont(font);
     format.setTextAnchor(KoSvgText::TextAnchor(s->properties.propertyOrDefault(KoSvgTextProperties::TextAnchorId).toInt()));
 
     KoSvgText::Direction direction =

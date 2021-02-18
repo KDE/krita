@@ -924,18 +924,12 @@
          </item>
         </layout>
        </item>
-       <item row="16" column="1">
-        <spacer name="verticalSpacer_4">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
+       <item row="14" column="0">
+        <widget class="QLabel" name="label_16">
+         <property name="text">
+          <string>Animation:</string>
          </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>504</width>
-           <height>13</height>
-          </size>
-         </property>
-        </spacer>
+        </widget>
        </item>
        <item row="14" column="1">
         <widget class="QCheckBox" name="m_chkAutoPin">
@@ -950,19 +944,59 @@
          </property>
         </widget>
        </item>
-       <item row="14" column="0">
-        <widget class="QLabel" name="label_16">
-         <property name="text">
-          <string>Animation:</string>
-         </property>
-        </widget>
-       </item>
        <item row="15" column="1">
         <widget class="QCheckBox" name="m_chkAdaptivePlaybackRange">
          <property name="text">
           <string>Adapt playback range to keyframes</string>
          </property>
         </widget>
+       </item>
+       <item row="17" column="0">
+        <widget class="QLabel" name="label_17">
+         <property name="toolTip">
+          <string>In some versions of Krita before 4.4.3 text size could be dependent on the current display DPI (which was a bug). In Krita 4.4.3 this bug has been fixed, which may cause files created in previous versions look different. To restore the old behavior you can force Krita to use Display DPI for fonts by entering it in this field.</string>
+         </property>
+         <property name="text">
+          <string>Font DPI workaround</string>
+         </property>
+        </widget>
+       </item>
+       <item row="17" column="1">
+        <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="0,1">
+         <item>
+          <widget class="QCheckBox" name="chkForcedFontDPI">
+           <property name="toolTip">
+            <string>In some versions of Krita before 4.4.3 text size could be dependent on the current display DPI (which was a bug). In Krita 4.4.3 this bug has been fixed, which may cause files created in previous versions look different. To restore the old behavior you can force Krita to use Display DPI for fonts by entering it in this field.</string>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QSpinBox" name="intForcedFontDPI">
+           <property name="toolTip">
+            <string>In some versions of Krita before 4.4.3 text size could be dependent on the current display DPI (which was a bug). In Krita 4.4.3 this bug has been fixed, which may cause files created in previous versions look different. To restore the old behavior you can force Krita to use Display DPI for fonts by entering it in this field.</string>
+           </property>
+           <property name="maximum">
+            <number>1000</number>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="18" column="1">
+        <spacer name="verticalSpacer_4">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>504</width>
+           <height>13</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </widget>

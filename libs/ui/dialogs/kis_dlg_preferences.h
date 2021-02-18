@@ -85,6 +85,8 @@ public:
     bool autopinLayersToTimeline();
     bool adaptivePlaybackRange();
 
+    int forcedFontDpi();
+
 private Q_SLOTS:
     void getBackgroundImage();
     void clearBackgroundImage();

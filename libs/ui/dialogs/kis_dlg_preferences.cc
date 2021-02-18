@@ -42,6 +42,7 @@
 #include <KisDocument.h>
 #include <kis_icon.h>
 #include <KisPart.h>
+#include <KoColorModelStandardIds.h>
 #include <KoColorProfile.h>
 #include <KoColorSpaceEngine.h>
 #include <KoConfigAuthorPage.h>
@@ -609,8 +610,19 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
     m_page->chkUseSystemMonitorProfile->setChecked(cfg.useSystemMonitorProfile());
     connect(m_page->chkUseSystemMonitorProfile, SIGNAL(toggled(bool)), this, SLOT(toggleAllowMonitorProfileSelection(bool)));
 
-    m_page->cmbWorkingColorSpace->setIDList(KoColorSpaceRegistry::instance()->listKeys());
+    m_page->useDefColorSpace->setChecked(cfg.useDefaultColorSpace());
+    connect(m_page->useDefColorSpace, SIGNAL(toggled(bool)), this, SLOT(toggleUseDefaultColorSpace(bool)));
+    QList<KoID> colorSpaces = KoColorSpaceRegistry::instance()->listKeys();
+    for (QList<KoID>::iterator id = colorSpaces.begin(); id != colorSpaces.end(); /* nop */) {
+        if (KoColorSpaceRegistry::instance()->colorSpaceColorModelId(id->id()) == AlphaColorModelID) {
+            id = colorSpaces.erase(id);
+        } else {
+            ++id;
+        }
+    }
+    m_page->cmbWorkingColorSpace->setIDList(colorSpaces);
     m_page->cmbWorkingColorSpace->setCurrent(cfg.workingColorSpace());
+    m_page->cmbWorkingColorSpace->setEnabled(cfg.useDefaultColorSpace());
 
     m_page->bnAddColorProfile->setIcon(KisIconUtils::loadIcon("document-open"));
     m_page->bnAddColorProfile->setToolTip( i18n("Open Color Profile") );
@@ -746,6 +758,11 @@ void ColorSettingsTab::toggleAllowMonitorProfileSelection(bool useSystemProfile)
             }
         }
     }
+}
+
+void ColorSettingsTab::toggleUseDefaultColorSpace(bool useDefColorSpace)
+{
+    m_page->cmbWorkingColorSpace->setEnabled(useDefColorSpace);
 }
 
 void ColorSettingsTab::setDefault()
@@ -1839,7 +1856,14 @@ bool KisDlgPreferences::editPreferences()
                                       m_colorSettings->m_page->chkUseSystemMonitorProfile->isChecked());
             }
         }
-        cfg.setWorkingColorSpace(m_colorSettings->m_page->cmbWorkingColorSpace->currentItem().id());
+        cfg.setUseDefaultColorSpace(m_colorSettings->m_page->useDefColorSpace->isChecked());
+        if (cfg.useDefaultColorSpace())
+        {
+            KoID currentWorkingColorSpace = m_colorSettings->m_page->cmbWorkingColorSpace->currentItem();
+            cfg.setWorkingColorSpace(currentWorkingColorSpace.id());
+            cfg.defColorModel(KoColorSpaceRegistry::instance()->colorSpaceColorModelId(currentWorkingColorSpace.id()).id());
+            cfg.setDefaultColorDepth(KoColorSpaceRegistry::instance()->colorSpaceColorDepthId(currentWorkingColorSpace.id()).id());
+        }
 
         KisImageConfig cfgImage(false);
         cfgImage.setDefaultProofingConfig(m_colorSettings->m_page->proofingSpaceSelector->currentColorSpace(),

@@ -269,6 +269,16 @@ void KisConfig::setPreferredVectorImportResolutionPPI(int value) const
     m_cfg.writeEntry("preferredVectorImportResolution", value);
 }
 
+bool KisConfig::useDefaultColorSpace(bool defaultvalue) const
+{
+    return (defaultvalue?   false:  m_cfg.readEntry("useDefaultColorSpace", false));
+}
+
+void KisConfig::setUseDefaultColorSpace(bool value) const
+{
+    m_cfg.writeEntry("useDefaultColorSpace", value);
+}
+
 void cleanOldCursorStyleKeys(KConfigGroup &cfg)
 {
     if (cfg.hasKey("newCursorStyle") &&
@@ -1940,8 +1950,6 @@ void KisConfig::setCustomColorSelectorColorSpace(const KoColorSpace *cs)
         cfg.writeEntry("customColorSpaceDepthID", cs->colorDepthId().id());
         cfg.writeEntry("customColorSpaceProfile", cs->profile()->name());
     }
-
-    KisConfigNotifier::instance()->notifyConfigChanged();
 }
 
 bool KisConfig::enableOpenGLFramerateLogging(bool defaultValue) const

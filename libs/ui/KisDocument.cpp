@@ -2252,9 +2252,12 @@ bool KisDocument::newImage(const QString& name,
     cfg.defImageWidth(width);
     cfg.defImageHeight(height);
     cfg.defImageResolution(imageResolution);
-    cfg.defColorModel(image->colorSpace()->colorModelId().id());
-    cfg.setDefaultColorDepth(image->colorSpace()->colorDepthId().id());
-    cfg.defColorProfile(image->colorSpace()->profile()->name());
+    if (!cfg.useDefaultColorSpace())
+    {
+        cfg.defColorModel(image->colorSpace()->colorModelId().id());
+        cfg.setDefaultColorDepth(image->colorSpace()->colorDepthId().id());
+        cfg.defColorProfile(image->colorSpace()->profile()->name());
+    }
 
     bool autopin = cfg.autoPinLayersToTimeline();
 

@@ -82,6 +82,8 @@ public:
     int preferredVectorImportResolutionPPI(bool defaultValue = false) const;
     void setPreferredVectorImportResolutionPPI(int value) const;
 
+    bool useDefaultColorSpace(bool defaultvalue = false) const;
+    void setUseDefaultColorSpace(bool value) const;
     /**
      * @return the id of the default color model used for creating new images.
      */

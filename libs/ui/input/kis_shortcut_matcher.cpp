@@ -511,6 +511,8 @@ void KisShortcutMatcher::lostFocusEvent(const QPointF &localPos)
     if (m_d->runningShortcut) {
         forceEndRunningShortcut(localPos);
     }
+
+    forceDeactivateAllActions();
 }
 
 void KisShortcutMatcher::reset()

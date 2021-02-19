@@ -49,6 +49,9 @@
 /* Defines if we use lcms2.4 */
 #cmakedefine HAVE_LCMS24 1
 
+/* Defines if we can use LittleCMS's fast float plugin. (GPLv3) */
+#cmakedefine HAVE_LCMS_FAST_FLOAT_PLUGIN 1
+
 /* Defines if DBUS is present */
 #cmakedefine HAVE_DBUS 1
 

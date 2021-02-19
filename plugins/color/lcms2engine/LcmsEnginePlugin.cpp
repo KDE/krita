@@ -65,6 +65,10 @@
 #   endif
 #endif
 
+#if defined(HAVE_LCMS_FAST_FLOAT_PLUGIN)
+#include <lcms2_fast_float.h>
+#endif 
+
 void lcms2LogErrorHandlerFunction(cmsContext /*ContextID*/, cmsUInt32Number ErrorCode, const char *Text)
 {
     qCritical() << "Lcms2 error: " << ErrorCode << Text;
@@ -311,6 +315,10 @@ LcmsEnginePlugin::LcmsEnginePlugin(QObject *parent, const QVariantList &)
     registry->addProfileAlias("gray built-in - (lcms internal)", "gray built-in");
     registry->addProfileAlias("Lab identity built-in - (lcms internal)", "Lab identity built-in");
     registry->addProfileAlias("XYZ built-in - (lcms internal)", "XYZ identity built-in");
+
+#if defined(HAVE_LCMS_FAST_FLOAT_PLUGIN)
+    cmsPlugin(cmsFastFloatExtensions());
+#endif
 }
 
 #include <LcmsEnginePlugin.moc>

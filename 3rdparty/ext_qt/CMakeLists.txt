@@ -165,6 +165,7 @@ elseif (ANDROID)
       BUILD_COMMAND $(MAKE)
       INSTALL_COMMAND $(MAKE) install
       UPDATE_COMMAND ""
+      BUILD_IN_SOURCE 1
 )
 elseif (NOT APPLE)
   ExternalProject_Add(
@@ -194,6 +195,7 @@ elseif (NOT APPLE)
       BUILD_COMMAND $(MAKE)
       INSTALL_COMMAND $(MAKE) install
       UPDATE_COMMAND ""
+      BUILD_IN_SOURCE 1
   )
 else( APPLE )
 
@@ -347,6 +349,7 @@ else( APPLE )
         LOG_BUILD           ON
         LOG_TEST            ON
         LOG_INSTALL         ON
+        BUILD_IN_SOURCE     ON
 
         URL http://download.qt.io/official_releases/qt/5.12/5.12.10/single/qt-everywhere-src-5.12.10.tar.xz
         URL_MD5 a781a0e247400e764c0730b8fb54226f
@@ -365,5 +368,6 @@ else( APPLE )
         BUILD_COMMAND ${PARALLEL_MAKE}
         INSTALL_COMMAND make install
         UPDATE_COMMAND ""
+        BUILD_IN_SOURCE 1
       )
 endif()

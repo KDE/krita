@@ -48,6 +48,7 @@ bool KisCrashFilterTest::applyFilter(const KoColorSpace * cs,  KisFilterSP f)
     dbgKrita << f->id() << ", " << cs->id() << ", " << cs->profile()->name();// << kfc->toXML() << "\n";
 
     {
+        kfc->createLocalResourcesSnapshot(KisGlobalResourcesInterface::instance());
         KisTransaction t(kundo2_noi18n(f->name()), dev);
         f->process(dev, QRect(QPoint(0,0), qimage.size()), kfc);
     }

@@ -52,6 +52,7 @@ bool testFilterSrcNotIsDev(KisFilterSP f)
     }
     dbgKrita << f->id();// << "\n" << kfc->toXML() << "\n";
 
+    kfc->createLocalResourcesSnapshot(KisGlobalResourcesInterface::instance());
     f->process(dev, dstdev, 0, QRect(QPoint(0,0), qimage.size()), kfc);
 
     QPoint errpoint;
@@ -108,6 +109,7 @@ bool testFilter(KisFilterSP f)
         }
     }
     dbgKrita << f->id();// << "\n" << kfc->toXML() << "\n";
+    kfc->createLocalResourcesSnapshot(KisGlobalResourcesInterface::instance());
 
     f->process(dev, QRect(QPoint(0,0), qimage.size()), kfc);
 
@@ -161,6 +163,7 @@ bool testFilterWithSelections(KisFilterSP f)
     KisSelectionSP sel1 = new KisSelection(new KisSelectionDefaultBounds(dev));
     sel1->pixelSelection()->select(qimage.rect());
 
+    kfc->createLocalResourcesSnapshot(KisGlobalResourcesInterface::instance());
     f->process(dev, dev, sel1, QRect(QPoint(0,0), qimage.size()), kfc);
 
     QPoint errpoint;
@@ -274,4 +277,5 @@ void KisAllFilterTest::testAllFiltersWithSelections()
 
 
 
-QTEST_MAIN(KisAllFilterTest)
+#include <sdk/tests/testimage.h>
+KISTEST_MAIN(KisAllFilterTest)

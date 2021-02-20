@@ -18,8 +18,8 @@ if (WIN32)
         ExternalProject_Add(
             ext_nasm
             DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-            URL https://www.nasm.us/pub/nasm/releasebuilds/2.15/win64/nasm-2.15-win64.zip
-            URL_HASH SHA256=56075006baa00517ea4d5baaeb40af6bbe1c60e94f2198c4a888f6eaea9cda4e
+            URL https://www.nasm.us/pub/nasm/releasebuilds/2.14.03rc2/win64/nasm-2.14.03rc2-win64.zip
+            URL_MD5 f12d14ca46cf397a1d27ac0edde548fb
 
             BUILD_COMMAND ${CMAKE_COMMAND} -E echo Deploying nasm 64-bit dependencies
             CONFIGURE_COMMAND ""
@@ -33,10 +33,10 @@ if (WIN32)
         ExternalProject_Add(
             ext_nasm
             DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-            URL https://www.nasm.us/pub/nasm/releasebuilds/2.15/win32/nasm-2.15-win32.zip
-            URL_HASH SHA256=74193fca57a0cfcdcf1ed4977e7beffabf20759f39bb1316ac8353c755774920
+            URL https://www.nasm.us/pub/nasm/releasebuilds/2.14.03rc2/win32/nasm-2.14.03rc2-win32.zip
+            URL_MD5 9ec22ac06a6b9d993ef503ea2fe074ab
 
-            BUILD_COMMAND ${CMAKE_COMMAND} -E echo Deploying nasm 32-bit dependencies
+            BUILD_COMMAND ${CMAKE_COMMAND} -E echo Deploying nasm 64-bit dependencies
             CONFIGURE_COMMAND ""
             INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>/rdoff ${EXTPREFIX_heif}/bin/rdoff
                     COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/nasm.exe ${EXTPREFIX_heif}/bin/nasm.exe
@@ -49,8 +49,8 @@ else (WIN32)
 ExternalProject_Add(
     ext_nasm
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL https://www.nasm.us/pub/nasm/releasebuilds/2.15/nasm-2.15.tar.gz
-    URL_HASH SHA256=e9a501666c478c7337fe317bd5f2dd8ea6a8a9defcad1cafb51cf21123b1d1ef
+    URL https://www.nasm.us/pub/nasm/releasebuilds/2.14.03rc2/nasm-2.14.03rc2.tar.gz
+    URL_MD5 4cd1fe6788cd15d08c1a8f18b6d2428e
 
     CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${EXTPREFIX_heif} ${GLOBAL_AUTOMAKE_PROFILE}
     BUILD_COMMAND make

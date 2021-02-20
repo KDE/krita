@@ -1,23 +1,11 @@
 /*
  *  kis_tool_transform.h - part of Krita
  *
- *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2005 C. Boemann <cbo@boemann.dk>
- *  Copyright (c) 2010 Marc Pegon <pe.marc@free.fr>
+ *  SPDX-FileCopyrightText: 2004 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2005 C. Boemann <cbo@boemann.dk>
+ *  SPDX-FileCopyrightText: 2010 Marc Pegon <pe.marc@free.fr>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #ifndef KIS_TOOL_TRANSFORM_H_
@@ -53,6 +41,8 @@
 #include "transform_transaction_properties.h"
 #include "kis_signal_auto_connection.h"
 
+#include "strokes/inplace_transform_stroke_strategy.h"
+
 class QTouchEvent;
 class KisTransformStrategyBase;
 class KisWarpTransformStrategy;
@@ -60,6 +50,7 @@ class KisCageTransformStrategy;
 class KisLiquifyTransformStrategy;
 class KisFreeTransformStrategy;
 class KisPerspectiveTransformStrategy;
+class KisMeshTransformStrategy;
 
 
 /**
@@ -116,7 +107,8 @@ public:
         WarpTransformMode,
         CageTransformMode,
         LiquifyTransformMode,
-        PerspectiveTransformMode
+        PerspectiveTransformMode,
+        MeshTransformMode
     };
     Q_ENUMS(TransformToolMode)
 
@@ -191,6 +183,8 @@ public Q_SLOTS:
     // Applies the current transformation to the original paint device and commits it to the undo stack
     void applyTransform();
 
+    void requestImageRecalculation();
+
     void setTransformMode( KisToolTransform::TransformToolMode newMode );
 
     void setTranslateX(double translateX);
@@ -212,6 +206,7 @@ public Q_SLOTS:
 
 protected Q_SLOTS:
     void resetCursorStyle() override;
+    void slotGlobalConfigChanged();
 
 Q_SIGNALS:
     void transformModeChanged();
@@ -262,6 +257,9 @@ private:
     KisPaintDeviceSP m_selectedPortionCache;
     KisStrokeId m_strokeId;
     void *m_strokeStrategyCookie = 0;
+    bool m_currentlyUsingOverlayPreviewStyle = false;
+    bool m_preferOverlayPreviewStyle = false;
+    bool m_forceLodMode = false;
 
     bool m_workRecursively;
 
@@ -277,6 +275,7 @@ private:
 
     /// actions for the context click menu
     KisAction* warpAction;
+    KisAction* meshAction;
     KisAction* liquifyAction;
     KisAction* cageAction;
     KisAction* freeTransformAction;
@@ -303,11 +302,14 @@ private:
     QScopedPointer<KisWarpTransformStrategy> m_warpStrategy;
     QScopedPointer<KisCageTransformStrategy> m_cageStrategy;
     QScopedPointer<KisLiquifyTransformStrategy> m_liquifyStrategy;
+    QScopedPointer<KisMeshTransformStrategy> m_meshStrategy;
     QScopedPointer<KisFreeTransformStrategy> m_freeStrategy;
     QScopedPointer<KisPerspectiveTransformStrategy> m_perspectiveStrategy;
     KisTransformStrategyBase* currentStrategy() const;
 
     QPainterPath m_cursorOutline;
+
+    KisAsyncronousStrokeUpdateHelper m_asyncUpdateHelper;
 
 private Q_SLOTS:
     void slotTrackerChangedConfig(KisToolChangesTrackerDataSP status);
@@ -336,6 +338,7 @@ private Q_SLOTS:
     void slotUpdateToPerspectiveType();
     void slotUpdateToFreeTransformType();
     void slotUpdateToLiquifyType();
+    void slotUpdateToMeshType();
     void slotUpdateToCageType();
 };
 

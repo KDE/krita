@@ -1,22 +1,9 @@
 /* This file is part of the KDE project
  *
- * Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
- * Copyright (C) 2008-2010 Jan Hambrecht <jaham@gmx.net>
+ * SPDX-FileCopyrightText: 2006 Thorsten Zachmann <zachmann@kde.org>
+ * SPDX-FileCopyrightText: 2008-2010 Jan Hambrecht <jaham@gmx.net>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #include "KoCreatePathTool.h"
@@ -35,6 +22,7 @@
 #include "kis_canvas_resource_provider.h"
 #include <KisHandlePainterHelper.h>
 #include "KoPathPointTypeCommand.h"
+#include <KisAngleSelector.h>
 
 #include <klocalizedstring.h>
 
@@ -567,11 +555,11 @@ QList<QPointer<QWidget> > KoCreatePathTool::createOptionWidgets()
     angleWidget->setObjectName("Angle Constraints");
     QGridLayout *layout = new QGridLayout(angleWidget);
     layout->addWidget(new QLabel(i18n("Angle snapping delta:"), angleWidget), 0, 0);
-    QSpinBox *angleEdit = new KisIntParseSpinBox(angleWidget);
-    angleEdit->setValue(d->angleSnappingDelta);
+    KisAngleSelector *angleEdit = new KisAngleSelector(angleWidget);
+    angleEdit->setAngle(d->angleSnappingDelta);
     angleEdit->setRange(1, 360);
-    angleEdit->setSingleStep(1);
-    angleEdit->setSuffix(QChar(Qt::Key_degree));
+    angleEdit->setDecimals(0);
+    angleEdit->setFlipOptionsMode(KisAngleSelector::FlipOptionsMode_MenuButton);
     layout->addWidget(angleEdit, 0, 1);
     layout->addWidget(new QLabel(i18n("Activate angle snap:"), angleWidget), 1, 0);
     QCheckBox *angleSnap = new QCheckBox(angleWidget);
@@ -584,7 +572,7 @@ QList<QPointer<QWidget> > KoCreatePathTool::createOptionWidgets()
     angleWidget->setWindowTitle(i18n("Angle Constraints"));
     list.append(angleWidget);
 
-    connect(angleEdit, SIGNAL(valueChanged(int)), this, SLOT(angleDeltaChanged(int)));
+    connect(angleEdit, SIGNAL(angleChanged(qreal)), this, SLOT(angleDeltaChanged(qreal)));
     connect(angleSnap, SIGNAL(stateChanged(int)), this, SLOT(angleSnapChanged(int)));
 
     return list;

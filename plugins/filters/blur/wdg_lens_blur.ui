@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgLensBlur</class>
  <widget class="QWidget" name="WdgLensBlur">
   <property name="geometry">
@@ -74,28 +78,6 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="1">
-       <widget class="KisIntParseSpinBox" name="irisRadiusSlider">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimum">
-         <number>0</number>
-        </property>
-        <property name="maximum">
-         <number>256</number>
-        </property>
-        <property name="label" stdset="0">
-         <string>Radius:</string>
-        </property>
-        <property name="sliderEnabled" stdset="0">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
       <item row="2" column="0">
        <widget class="QLabel" name="label_3">
         <property name="text">
@@ -104,27 +86,15 @@
        </widget>
       </item>
       <item row="2" column="1">
-       <widget class="KisIntParseSpinBox" name="irisRotationSlider">
+       <widget class="KisAngleSelector" name="irisRotationSelector" native="true"/>
+      </item>
+      <item row="1" column="1">
+       <widget class="KisSliderSpinBox" name="irisRadiusSlider" native="true">
         <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
-        </property>
-        <property name="suffix">
-         <string>°</string>
-        </property>
-        <property name="minimum">
-         <number>0</number>
-        </property>
-        <property name="maximum">
-         <number>360</number>
-        </property>
-        <property name="label" stdset="0">
-         <string>Rotation:</string>
-        </property>
-        <property name="sliderEnabled" stdset="0">
-         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -148,15 +118,20 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KisIntParseSpinBox</class>
-   <extends>QSpinBox</extends>
-   <header>kis_int_parse_spin_box.h</header>
+   <class>KisSliderSpinBox</class>
+   <extends>QWidget</extends>
+   <header>kis_slider_spin_box.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisAngleSelector</class>
+   <extends>QWidget</extends>
+   <header location="global">KisAngleSelector.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <tabstops>
   <tabstop>irisShapeCombo</tabstop>
-  <tabstop>irisRadiusSlider</tabstop>
-  <tabstop>irisRotationSlider</tabstop>
  </tabstops>
  <resources/>
  <connections/>

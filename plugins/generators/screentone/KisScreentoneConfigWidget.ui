@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>ScreentoneConfigWidget</class>
  <widget class="QWidget" name="ScreentoneConfigWidget">
   <property name="geometry">
@@ -15,12 +19,6 @@
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
-  </property>
-  <property name="minimumSize">
-   <size>
-    <width>0</width>
-    <height>175</height>
-   </size>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
@@ -132,6 +130,12 @@
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
+         </property>
         </spacer>
        </item>
       </layout>
@@ -167,7 +171,7 @@
          <item row="0" column="0">
           <widget class="QLabel" name="labelTranslation">
            <property name="text">
-            <string>Position:</string>
+            <string comment="Geometric Position">Position:</string>
            </property>
           </widget>
          </item>
@@ -299,13 +303,7 @@
           </widget>
          </item>
          <item row="3" column="1">
-          <widget class="KisDoubleSliderSpinBox" name="sliderRotation" native="true">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
+          <widget class="KisAngleSelector" name="angleSelectorRotation" native="true">
            <property name="focusPolicy">
             <enum>Qt::WheelFocus</enum>
            </property>
@@ -317,6 +315,12 @@
         <spacer name="verticalSpacer_2">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
          </property>
         </spacer>
        </item>
@@ -447,12 +451,6 @@
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>0</height>
-            </size>
-           </property>
            <property name="focusPolicy">
             <enum>Qt::WheelFocus</enum>
            </property>
@@ -473,12 +471,6 @@
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>0</height>
-            </size>
-           </property>
            <property name="focusPolicy">
             <enum>Qt::WheelFocus</enum>
            </property>
@@ -490,6 +482,12 @@
         <spacer name="verticalSpacer_3">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
          </property>
         </spacer>
        </item>
@@ -522,6 +520,12 @@
    <class>KisColorButton</class>
    <extends>QPushButton</extends>
    <header>kis_color_button.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KisAngleSelector</class>
+   <extends>QWidget</extends>
+   <header location="global">KisAngleSelector.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <tabstops>

@@ -1,20 +1,8 @@
 /*
  * This file is part of the KDE project
- * Copyright (C) 2013 Arjen Hiemstra <ahiemstra@heimr.nl>
+ * SPDX-FileCopyrightText: 2013 Arjen Hiemstra <ahiemstra@heimr.nl>
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_input_profile_manager.h"
@@ -42,8 +30,9 @@
 #include "kis_gamma_exposure_action.h"
 #include "kis_change_frame_action.h"
 #include "kis_zoom_and_rotate_action.h"
+#include "KisCanvasOnlyAction.h"
 
-#define PROFILE_VERSION 4
+#define PROFILE_VERSION 5
 
 
 class Q_DECL_HIDDEN KisInputProfileManager::Private
@@ -376,6 +365,7 @@ void KisInputProfileManager::Private::createActions()
     actions.append(new KisGammaExposureAction());
     actions.append(new KisChangeFrameAction());
     actions.append(new KisZoomAndRotateAction());
+    actions.append(new KisCanvasOnlyAction());
 }
 
 QString KisInputProfileManager::Private::profileFileName(const QString &profileName)

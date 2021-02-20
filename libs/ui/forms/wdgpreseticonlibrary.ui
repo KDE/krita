@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>wdgpreseticonlibrary</class>
  <widget class="QWidget" name="wdgpreseticonlibrary">
   <property name="geometry">
@@ -11,7 +15,7 @@
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="1" column="1">
+   <item column="1" row="1">
     <widget class="KisDoubleSliderSpinBox" name="sldHue" native="true">
      <property name="minimumSize">
       <size>
@@ -21,7 +25,7 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="1">
+   <item column="1" row="3">
     <widget class="KisDoubleSliderSpinBox" name="sldLevels" native="true">
      <property name="minimumSize">
       <size>
@@ -31,14 +35,14 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="1">
+   <item column="1" row="0">
     <widget class="QLabel" name="label_3">
      <property name="text">
       <string>Color adjustment:</string>
      </property>
     </widget>
    </item>
-   <item row="4" column="1">
+   <item column="1" row="4">
     <widget class="QLabel" name="label">
      <property name="toolTip">
       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Choose the optional emblem icon that indicates extra information, such as the preset being a special effects brush, or just using tilt, or angled in some way.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -48,7 +52,7 @@
      </property>
     </widget>
    </item>
-   <item row="5" column="1">
+   <item column="1" row="5">
     <widget class="QListView" name="vwOptional">
      <property name="toolTip">
       <string>Upper left emblem indicating a special feature of the brush.</string>
@@ -76,7 +80,7 @@
      </property>
     </widget>
    </item>
-   <item row="6" column="1">
+   <item column="1" row="6">
     <layout class="QHBoxLayout" name="horizontalLayout_3">
      <item>
       <spacer name="horizontalSpacer">
@@ -119,7 +123,7 @@
      </item>
     </layout>
    </item>
-   <item row="1" column="0" rowspan="6">
+   <item column="0" row="1" rowspan="6">
     <widget class="QListView" name="vwBase">
      <property name="toolTip">
       <string>Base tool image to base this preset on.</string>
@@ -150,7 +154,7 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="1">
+   <item column="1" row="2">
     <widget class="KisDoubleSliderSpinBox" name="sldSat" native="true">
      <property name="minimumSize">
       <size>
@@ -160,14 +164,14 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="0">
+   <item column="0" row="0">
     <widget class="QLabel" name="label_2">
      <property name="text">
       <string>Tool image:</string>
      </property>
     </widget>
    </item>
-   <item row="7" column="0">
+   <item column="0" row="7">
     <spacer name="horizontalSpacer_3">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>

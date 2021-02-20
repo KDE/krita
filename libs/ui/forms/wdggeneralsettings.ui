@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgGeneralSettings</class>
  <widget class="QWidget" name="WdgGeneralSettings">
   <property name="geometry">
@@ -23,7 +27,7 @@
    </size>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="1" column="0">
+   <item row="0" column="0">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
       <number>0</number>
@@ -293,13 +297,50 @@
         </widget>
        </item>
        <item row="3" column="0">
+        <widget class="QCheckBox" name="chkUseCustomFont">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Use Custom Interface Font:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <item>
+          <widget class="KisFontComboBoxes" name="cmbCustomFont" native="true">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QSpinBox" name="intFontSize">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="4" column="0">
         <widget class="QLabel" name="lbl_window_general">
          <property name="text">
           <string>General:</string>
          </property>
         </widget>
        </item>
-       <item row="3" column="1">
+       <item row="4" column="1">
         <widget class="QCheckBox" name="m_chkRubberBand">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -312,28 +353,28 @@
          </property>
         </widget>
        </item>
-       <item row="4" column="1">
+       <item row="5" column="1">
         <widget class="QCheckBox" name="m_chkCanvasMessages">
          <property name="text">
           <string>Show on-canvas popup messages</string>
          </property>
         </widget>
        </item>
-       <item row="5" column="1">
+       <item row="6" column="1">
         <widget class="QCheckBox" name="m_chkHiDPI">
          <property name="text">
           <string>Enable Hi-DPI support</string>
          </property>
         </widget>
        </item>
-       <item row="6" column="1">
+       <item row="7" column="1">
         <widget class="QCheckBox" name="m_chkHiDPIFractionalScaling">
          <property name="text">
           <string>(Hi-DPI) Enable fractional scale factor</string>
          </property>
         </widget>
        </item>
-       <item row="7" column="0" colspan="2">
+       <item row="8" column="0">
         <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -883,7 +924,7 @@
          </item>
         </layout>
        </item>
-       <item row="15" column="1">
+       <item row="16" column="1">
         <spacer name="verticalSpacer_4">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -909,32 +950,63 @@
          </property>
         </widget>
        </item>
+       <item row="14" column="0">
+        <widget class="QLabel" name="label_16">
+         <property name="text">
+          <string>Animation:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="15" column="1">
+        <widget class="QCheckBox" name="m_chkAdaptivePlaybackRange">
+         <property name="text">
+          <string>Adapt playback range to keyframes</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="tab_4">
       <attribute name="title">
        <string>Resources</string>
       </attribute>
-      <layout class="QFormLayout" name="formLayout_7">
-       <item row="0" column="0">
-        <widget class="QLabel" name="label_14">
-         <property name="text">
-          <string>Cache Location:</string>
+      <layout class="QVBoxLayout" name="verticalLayout_5">
+       <item>
+        <layout class="QFormLayout" name="formLayout_7">
+         <item row="0" column="0">
+          <widget class="QLabel" name="label_14">
+           <property name="text">
+            <string>Cache Location:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="KisFileNameRequester" name="m_urlCacheDbLocation" native="true"/>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="label_15">
+           <property name="text">
+            <string>Resource Folder:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="KisFileNameRequester" name="m_urlResourceFolder" native="true"/>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_5">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
          </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="KisFileNameRequester" name="m_urlCacheDbLocation" native="true"/>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="label_15">
-         <property name="text">
-          <string>Resource Folder:</string>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>418</height>
+          </size>
          </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="KisFileNameRequester" name="m_urlResourceFolder" native="true"/>
+        </spacer>
        </item>
       </layout>
      </widget>
@@ -965,7 +1037,46 @@
    <header>kis_file_name_requester.h</header>
    <container>1</container>
   </customwidget>
+  <customwidget>
+   <class>KisFontComboBoxes</class>
+   <extends>QWidget</extends>
+   <header location="global">kis_font_family_combo_box.h</header>
+   <container>1</container>
+  </customwidget>
  </customwidgets>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>chkUseCustomFont</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>cmbCustomFont</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>194</x>
+     <y>160</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>315</x>
+     <y>158</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>chkUseCustomFont</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>intFontSize</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>83</x>
+     <y>160</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>569</x>
+     <y>161</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

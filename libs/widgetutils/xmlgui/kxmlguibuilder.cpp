@@ -1,21 +1,8 @@
 /* This file is part of the KDE project
-   Copyright (C) 2000 Simon Hausmann <hausmann@kde.org>
-                      David Faure <faure@kde.org>
+   SPDX-FileCopyrightText: 2000 Simon Hausmann <hausmann@kde.org>
+   SPDX-FileCopyrightText: 2000 David Faure <faure@kde.org>
 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
-
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
-
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+   SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
 #include "kxmlguibuilder.h"
@@ -24,9 +11,7 @@
 #include "ktoolbar.h"
 #include "kmainwindow.h"
 #include "kxmlguiwindow.h"
-#include "kmenumenuhandler_p.h"
 
-#include <kauthorized.h>
 #include <klocalizedstring.h>
 
 #include <QDomElement>
@@ -75,8 +60,6 @@ public:
     QString attrIcon;
 
     KXMLGUIClient *m_client {0};
-
-    KMenuMenuHandler *m_menumenuhandler {0};
 };
 
 KXMLGUIBuilder::KXMLGUIBuilder(QWidget *widget)
@@ -103,13 +86,10 @@ KXMLGUIBuilder::KXMLGUIBuilder(QWidget *widget)
     d->attrContext = QStringLiteral("context");
 
     d->attrIcon = QStringLiteral("icon");
-
-    d->m_menumenuhandler = new KMenuMenuHandler(this);
 }
 
 KXMLGUIBuilder::~KXMLGUIBuilder()
 {
-    delete d->m_menumenuhandler;
     delete d;
 }
 
@@ -174,14 +154,8 @@ QWidget *KXMLGUIBuilder::createContainer(QWidget *parent, int index, const QDomE
 
         QString name = element.attribute(d->attrName);
 
-        if (!KAuthorized::authorizeAction(name)) {
-            return 0;
-        }
-
         QMenu *popup = new QMenu(p);
         popup->setObjectName(name);
-
-        d->m_menumenuhandler->insertMenu(popup);
 
         QString i18nText;
         QDomElement textElem = element.namedItem(d->attrText1).toElement();

@@ -1,19 +1,7 @@
 /*
- * Copyright (c) 2019 boud <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2019 boud <boud@valdyas.org>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 #include "TestTagFilterResourceProxyModel.h"
 
@@ -34,7 +22,6 @@
 #include <KisResourceLoaderRegistry.h>
 #include <KisResourceModel.h>
 #include <KisTagFilterResourceProxyModel.h>
-#include <KisResourceModelProvider.h>
 
 #include <DummyResource.h>
 #include <ResourceTestHelper.h>
@@ -91,24 +78,22 @@ void TestTagFilterResourceProxyModel::testRowCount()
     int rowCount = q.value(0).toInt();
     QVERIFY(rowCount == 3);
 
-    KisResourceModel *resourceModel = KisResourceModelProvider::resourceModel(resourceType);
-    KisTagFilterResourceProxyModel proxyModel;
-    proxyModel.setSourceModel(resourceModel);
+    KisTagFilterResourceProxyModel proxyModel(resourceType);
+
 
     QCOMPARE(proxyModel.rowCount(), rowCount);
 }
 
 void TestTagFilterResourceProxyModel::testData()
 {
-    KisResourceModel *resourceModel = KisResourceModelProvider::resourceModel(resourceType);
-    KisTagFilterResourceProxyModel proxyModel;
-    proxyModel.setSourceModel(resourceModel);
+    KisTagFilterResourceProxyModel proxyModel(resourceType);
+    KisResourceModel *resourceModel = qobject_cast<KisResourceModel*>(proxyModel.sourceModel());
 
     QStringList names = QStringList() << "test0.kpp"
                                       << "test1.kpp"
                                       << "test2.kpp";
     for (int i = 0; i < proxyModel.rowCount(); ++i)  {
-        QVariant v = resourceModel->data(proxyModel.mapToSource(proxyModel.index(i, 0)), Qt::UserRole + KisResourceModel::Name);
+        QVariant v = resourceModel->data(proxyModel.mapToSource(proxyModel.index(i, 0)), Qt::UserRole + KisAbstractResourceModel::Name);
         QVERIFY(names.contains(v.toString()));
     }
 }
@@ -116,15 +101,145 @@ void TestTagFilterResourceProxyModel::testData()
 
 void TestTagFilterResourceProxyModel::testResource()
 {
-    KisResourceModel *resourceModel = KisResourceModelProvider::resourceModel(resourceType);
-    KisTagFilterResourceProxyModel proxyModel;
-    proxyModel.setSourceModel(resourceModel);
+    KisTagFilterResourceProxyModel proxyModel(resourceType);
+    KisResourceModel *resourceModel = qobject_cast<KisResourceModel*>(proxyModel.sourceModel());
 
     KoResourceSP resource = resourceModel->resourceForIndex(proxyModel.mapToSource(proxyModel.index(0, 0)));
     QVERIFY(resource);
 }
 
+void TestTagFilterResourceProxyModel::testFilterByTag()
+{
+    KisResourceModel resourceModel(ResourceType::PaintOpPresets);
+    KisTagModel tagModel(ResourceType::PaintOpPresets);
+    KisTagFilterResourceProxyModel proxyModel(resourceType);
 
+    KoResourceSP resource = resourceModel.resourceForName("test2.kpp");
+    QVERIFY(resource);
+
+    KisTagSP tag = tagModel.tagForIndex(tagModel.index(2, 0));
+    QVERIFY(tag);
+
+    proxyModel.setTagFilter(tag);
+    int rowCount = proxyModel.rowCount();
+
+    proxyModel.tagResource(tag, resource);
+    QCOMPARE(proxyModel.rowCount(), rowCount + 1);
+
+    proxyModel.untagResource(tag, resource);
+    QCOMPARE(proxyModel.rowCount(), rowCount);
+}
+
+void TestTagFilterResourceProxyModel::testFilterByResource()
+{
+    KisResourceModel resourceModel(ResourceType::PaintOpPresets);
+    KisTagModel tagModel(ResourceType::PaintOpPresets);
+
+    KisTagFilterResourceProxyModel proxyModel(resourceType);
+
+    KoResourceSP resource = resourceModel.resourceForName("test2.kpp");
+
+    QVERIFY(resource);
+
+    tagModel.addTag("testtag1", QVector<KoResourceSP>() << resource);
+    tagModel.addTag("testtag2", QVector<KoResourceSP>() << resource);
+
+    int rowCount = proxyModel.rowCount();
+
+    proxyModel.setResourceFilter(resource);
+    proxyModel.setFilterInCurrentTag(false);
+
+    QCOMPARE(proxyModel.rowCount(), 2);
+
+    proxyModel.setResourceFilter(0);
+    QCOMPARE(proxyModel.rowCount(), rowCount);
+
+}
+
+void TestTagFilterResourceProxyModel::testFilterByString()
+{
+    KisResourceModel resourceModel(ResourceType::PaintOpPresets);
+    KisTagModel tagModel(ResourceType::PaintOpPresets);
+
+    KisTagFilterResourceProxyModel proxyModel(resourceType);
+    proxyModel.setSearchText("test2");
+    QCOMPARE(proxyModel.rowCount(), 1);
+
+    KoResourceSP resource = resourceModel.resourceForName("test2.kpp");
+    QVERIFY(resource);
+
+    KisTagSP tag = tagModel.tagForIndex(tagModel.index(2, 0));
+    QVERIFY(tag);
+
+    proxyModel.tagResource(tag, resource);
+    proxyModel.setTagFilter(tag);
+    proxyModel.setFilterInCurrentTag(true);
+
+    QCOMPARE(proxyModel.rowCount(), 1);
+}
+
+
+void TestTagFilterResourceProxyModel::testDataWhenSwitchingBetweenTagAllAllUntagged()
+{
+    KisTagFilterResourceProxyModel proxyModel(resourceType);
+    KisResourceModel *resourceModel = qobject_cast<KisResourceModel*>(proxyModel.sourceModel());
+
+    KoResourceSP resource = resourceModel->resourceForName("test2.kpp");
+    QModelIndex idx = proxyModel.indexForResource(resource);
+
+    QVERIFY(idx.isValid());
+
+    QString name = proxyModel.data(idx, Qt::UserRole + KisAbstractResourceModel::Name).toString();
+    QCOMPARE(name, "test2.kpp");
+
+    QImage thumbnail = proxyModel.data(idx, Qt::UserRole + KisAbstractResourceModel::Thumbnail).value<QImage>();
+    QVERIFY(!thumbnail.isNull());
+
+    proxyModel.setSearchText("test2");
+    idx = proxyModel.indexForResource(resource);
+}
+
+void TestTagFilterResourceProxyModel::testResourceForIndex()
+{
+    KisTagModel tagModel(ResourceType::PaintOpPresets);
+    KisTagFilterResourceProxyModel proxyModel(resourceType);
+    KisResourceModel *resourceModel = qobject_cast<KisResourceModel*>(proxyModel.sourceModel());
+
+    KoResourceSP resource = resourceModel->resourceForName("test2.kpp");
+    QVERIFY(resource);
+
+    QModelIndex idx = proxyModel.indexForResource(resource);
+    QVERIFY(idx.isValid());
+
+    resource = proxyModel.resourceForIndex(idx);
+    QVERIFY(resource);
+
+
+    KisTagResourceModel tagResourceModel(ResourceType::PaintOpPresets);
+    tagResourceModel.setResourcesFilter(QVector<KoResourceSP>() << resource);
+    for (int i = 0; i < tagResourceModel.rowCount(); ++i) {
+        KisTagSP tag = tagResourceModel.index(i, 0).data(Qt::UserRole + KisAllTagResourceModel::Tag).value<KisTagSP>();
+        tagResourceModel.untagResource(tag, resource);
+    }
+
+    KisTagSP tag = tagModel.tagForIndex(tagModel.index(3, 0));
+    QVERIFY(tag);
+
+    proxyModel.setTagFilter(tag);
+    int rowCount = proxyModel.rowCount();
+
+    QCOMPARE(rowCount, 0);
+
+    proxyModel.tagResource(tag, resource);
+
+    QCOMPARE(proxyModel.rowCount(), 1);
+
+    idx = proxyModel.index(0, 0);
+    KoResourceSP resource2 = proxyModel.resourceForIndex(idx);
+
+    QVERIFY(resource2);
+
+}
 void TestTagFilterResourceProxyModel::cleanupTestCase()
 {
     ResourceTestHelper::rmTestDb();

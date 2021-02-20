@@ -1,19 +1,7 @@
 /*
- *  Copyright (c) 2018 Anna Medonosova <anna.medonosova@gmail.com>
+ *  SPDX-FileCopyrightText: 2018 Anna Medonosova <anna.medonosova@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include <kis_debug.h>
@@ -143,7 +131,7 @@ bool GamutMaskDock::openMaskEditor()
     }
 
     // find the template resource first, so we can abort the action early on
-    QString maskTemplateFile = KoResourcePaths::findResource(ResourceType::GamutMasks, "GamutMaskTemplate.kra");
+    QString maskTemplateFile = ":/gamutmasks/GamutMaskTemplate.kra";
     if (maskTemplateFile.isEmpty() || maskTemplateFile.isNull() || !QFile::exists(maskTemplateFile)) {
         dbgPlugins << "GamutMaskDock::openMaskEditor(): maskTemplateFile (" << maskTemplateFile << ") was not found on the system";
         getUserFeedback(i18n("Could not open gamut mask for editing."),
@@ -353,7 +341,7 @@ KoGamutMaskSP GamutMaskDock::createMaskResource(KoGamutMaskSP sourceMask, QStrin
     } else {
         newMask = KoGamutMaskSP(new KoGamutMask());
 
-        QString defaultPreviewPath = KoResourcePaths::findResource(ResourceType::GamutMasks, "empty_mask_preview.png");
+        QString defaultPreviewPath = ":/gamutmasks/empty_mask_preview.png";
         KIS_SAFE_ASSERT_RECOVER_NOOP(!(defaultPreviewPath.isEmpty() || defaultPreviewPath.isNull() || !QFile::exists(defaultPreviewPath)));
 
         newMask->setImage(QImage(defaultPreviewPath, "PNG"));

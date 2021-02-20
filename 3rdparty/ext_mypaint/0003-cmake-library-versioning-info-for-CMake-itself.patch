@@ -1,0 +1,73 @@
+From 4722ec81754db474d185a2d05c77ed7f7eed4e8b Mon Sep 17 00:00:00 2001
+From: "L. E. Segovia" <amy@amyspark.me>
+Date: Tue, 17 Nov 2020 22:57:09 +0000
+Subject: [PATCH 3/3] cmake: library versioning info for CMake itself
+
+---
+ CMakeLists.txt             | 20 +++++++++++++++++++-
+ libmypaint-Config.cmake.in | 11 +++++++++++
+ 2 files changed, 30 insertions(+), 1 deletion(-)
+ create mode 100644 libmypaint-Config.cmake.in
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index afba70b..882e20e 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -10,6 +10,7 @@ LIST (APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}")
+ find_package(ECM 5.22 REQUIRED NOMODULE)
+ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
+ include(CMakePackageConfigHelpers)
++include(KDEInstallDirs)
+ 
+ find_package(JsonC)
+ 
+@@ -63,7 +64,12 @@ set(mypaint_HEADERS
+ add_library(mypaint SHARED ${mypaint_SOURCES} ${mypaint_HEADERS})
+ target_link_libraries(mypaint ${JSONC_LIBRARIES})
+ set_property(TARGET mypaint PROPERTY C_STANDARD 11)
+-install(TARGETS mypaint RUNTIME DESTINATION bin LIBRARY DESTINATION lib ARCHIVE DESTINATION lib) 
++install(TARGETS mypaint
++    EXPORT libmypaintTargets
++    RUNTIME DESTINATION bin
++    LIBRARY DESTINATION lib
++    ARCHIVE DESTINATION lib
++) 
+ install(FILES ${mypaint_HEADERS} DESTINATION include)
+ 
+ if(JsonC_FOUND)
+@@ -74,3 +80,15 @@ endif()
+ configure_file("libmypaint.pc.in" "libmypaint.pc" @ONLY)
+ install(FILES "${CMAKE_CURRENT_BINARY_DIR}/libmypaint.pc"
+     DESTINATION lib/pkgconfig)
++
++configure_package_config_file(
++    "libmypaint-config.cmake.in" "libmypaint-config.cmake"
++    INSTALL_DESTINATION lib/cmake/libmypaint
++    PATH_VARS CMAKE_INSTALL_PREFIX CMAKE_INSTALL_LIBDIR CMAKE_INSTALL_INCLUDEDIR)
++write_basic_package_version_file(libmypaint-config-version.cmake
++    COMPATIBILITY SameMinorVersion)
++install(FILES "${CMAKE_CURRENT_BINARY_DIR}/libmypaint-config-version.cmake"
++    "${CMAKE_CURRENT_BINARY_DIR}/libmypaint-config.cmake"
++    DESTINATION lib/cmake/libmypaint)
++
++install(EXPORT libmypaintTargets DESTINATION lib/cmake/libmypaint)
+diff --git a/libmypaint-config.cmake.in b/libmypaint-config.cmake.in
+new file mode 100644
+index 0000000..752d388
+--- /dev/null
++++ b/libmypaint-config.cmake.in
+@@ -0,0 +1,11 @@
++@PACKAGE_INIT@
++
++set(libmypaint_VERSION @libmypaint_VERSION@)
++
++set_and_check(libmypaint_DIR @PACKAGE_CMAKE_INSTALL_PREFIX@)
++set_and_check(libmypaint_LIBRARY_DIRS @PACKAGE_CMAKE_INSTALL_LIBDIR@)
++set_and_check(libmypaint_INCLUDE_DIRS @PACKAGE_CMAKE_INSTALL_INCLUDEDIR@)
++
++include("${CMAKE_CURRENT_LIST_DIR}/libmypaintTargets.cmake")
++
++set(libmypaint_FOUND TRUE)
+-- 
+2.29.2.windows.1
+

@@ -1,19 +1,8 @@
 /*
- *  Copyright (c) 2015 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2015 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_asl_layer_style_serializer.h"
@@ -27,6 +16,8 @@
 #include <resources/KoPattern.h>
 
 #include "kis_dom_utils.h"
+
+#include <kis_layer.h>
 
 
 #include "psd.h"
@@ -615,8 +606,7 @@ QDomDocument KisAslLayerStyleSerializer::formXmlDocument() const
 
             w.writeOffsetPoint("Ofst", gradientOverlay->gradientOffset());
 
-            // FIXME: Krita doesn't support dithering
-            w.writeBoolean("Dthr", true/*gradientOverlay->dither()*/);
+            w.writeBoolean("Dthr", gradientOverlay->dither());
 
             w.leaveDescriptor();
         }
@@ -677,8 +667,7 @@ QDomDocument KisAslLayerStyleSerializer::formXmlDocument() const
                 w.writeBoolean("Algn", stroke->alignWithLayer());
                 w.writeOffsetPoint("Ofst", stroke->gradientOffset());
 
-                // FIXME: Krita doesn't support dithering
-                w.writeBoolean("Dthr", true/*stroke->dither()*/);
+                w.writeBoolean("Dthr", stroke->dither());
 
             } else if (stroke->fillType() == psd_fill_pattern) {
                 w.writePatternRef("Ptrn", stroke->pattern(), fetchPatternUuidSafe(stroke->pattern(), patternToUuidMap));
@@ -741,6 +730,20 @@ void KisAslLayerStyleSerializer::saveToDevice(QIODevice *device)
 
     KisAslWriter writer;
     writer.writeFile(device, doc);
+}
+
+bool KisAslLayerStyleSerializer::saveToFile(const QString& filename)
+{
+    QFile file(filename);
+
+    if (!file.open(QIODevice::WriteOnly)) {
+        dbgKrita << "Can't open file " << filename;
+        return false;
+    }
+    saveToDevice(&file);
+    file.close();
+
+    return true;
 }
 
 void convertAndSetBlendMode(const QString &mode,
@@ -1052,7 +1055,7 @@ void KisAslLayerStyleSerializer::connectCatcherToStyle(KisPSDLayerStyle *style, 
     CONN_UNITF("/GrFl/Scl ", "#Prc", setScale, gradientOverlay, psd_layer_effects_gradient_overlay, prefix);
     CONN_UNITF("/GrFl/Angl", "#Ang", setAngle, gradientOverlay, psd_layer_effects_gradient_overlay, prefix);
     CONN_BOOL("/GrFl/enab", setEffectEnabled, gradientOverlay, psd_layer_effects_gradient_overlay, prefix);
-    // CONN_BOOL("/GrFl/Dthr", setDitherNotImplemented, gradientOverlay, psd_layer_effects_gradient_overlay, prefix);
+    CONN_BOOL("/GrFl/Dthr", setDither, gradientOverlay, psd_layer_effects_gradient_overlay, prefix);
     CONN_BOOL("/GrFl/Rvrs", setReverse, gradientOverlay, psd_layer_effects_gradient_overlay, prefix);
     CONN_BOOL("/GrFl/Algn", setAlignWithLayer, gradientOverlay, psd_layer_effects_gradient_overlay, prefix);
     CONN_POINT("/GrFl/Ofst", setGradientOffset, gradientOverlay, psd_layer_effects_gradient_overlay, prefix);
@@ -1107,7 +1110,7 @@ void KisAslLayerStyleSerializer::connectCatcherToStyle(KisPSDLayerStyle *style, 
     CONN_BOOL("/FrFX/Rvrs", setReverse, stroke, psd_layer_effects_stroke, prefix);
     CONN_BOOL("/FrFX/Algn", setAlignWithLayer, stroke, psd_layer_effects_stroke, prefix);
     CONN_POINT("/FrFX/Ofst", setGradientOffset, stroke, psd_layer_effects_stroke, prefix);
-    // CONN_BOOL("/FrFX/Dthr", setDitherNotImplemented, stroke, psd_layer_effects_stroke, prefix);
+    CONN_BOOL("/FrFX/Dthr", setDither, stroke, psd_layer_effects_stroke, prefix);
 
     // Pattern type
 
@@ -1208,6 +1211,57 @@ bool KisAslLayerStyleSerializer::readFromFile(const QString& filename)
     file.close();
 
     return true;
+}
+
+QVector<KisPSDLayerStyleSP> KisAslLayerStyleSerializer::collectAllLayerStyles(KisNodeSP root)
+{
+    KisLayer* layer = qobject_cast<KisLayer*>(root.data());
+    QVector<KisPSDLayerStyleSP> layerStyles;
+
+    if (layer && layer->layerStyle()) {
+        KisPSDLayerStyleSP clone = layer->layerStyle()->clone().dynamicCast<KisPSDLayerStyle>();
+        clone->setName(i18nc("Auto-generated layer style name for embedded styles (style itself)", "<%1> (embedded)", layer->name()));
+        layerStyles << clone;
+    }
+
+    KisNodeSP child = root->firstChild();
+    while (child) {
+        layerStyles += collectAllLayerStyles(child);
+        child = child->nextSibling();
+    }
+
+    return layerStyles;
+}
+
+
+void KisAslLayerStyleSerializer::assignAllLayerStylesToLayers(KisNodeSP root)
+{
+    KisLayer* layer = qobject_cast<KisLayer*>(root.data());
+
+    if (layer && layer->layerStyle()) {
+        QUuid uuid = layer->layerStyle()->uuid();
+
+        bool found = false;
+
+        Q_FOREACH (KisPSDLayerStyleSP style, m_stylesVector) {
+            if (style->uuid() == uuid) {
+                layer->setLayerStyle(style);
+                found = true;
+                break;
+            }
+        }
+
+        if (!found) {
+            warnKrita << "WARNING: loading layer style for" << layer->name() << "failed! It requests inexistent style:" << uuid;
+        }
+    }
+
+    KisNodeSP child = root->firstChild();
+    while (child) {
+        assignAllLayerStylesToLayers(child);
+        child = child->nextSibling();
+    }
+
 }
 
 void KisAslLayerStyleSerializer::readFromDevice(QIODevice *device)

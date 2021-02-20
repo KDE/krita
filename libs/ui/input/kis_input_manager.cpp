@@ -1,21 +1,9 @@
 /* This file is part of the KDE project
  *
- *  Copyright (C) 2012 Arjen Hiemstra <ahiemstra@heimr.nl>
- *  Copyright (C) 2015 Michael Abrahams <miabraha@gmail.com>
+ *  SPDX-FileCopyrightText: 2012 Arjen Hiemstra <ahiemstra@heimr.nl>
+ *  SPDX-FileCopyrightText: 2015 Michael Abrahams <miabraha@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_input_manager.h"
@@ -260,6 +248,32 @@ bool KisInputManager::compressMoveEventCommon(Event *event)
                   std::is_same<Event, QTabletEvent>::value ||
                   std::is_same<Event, QTouchEvent>::value,
                   "event should be a mouse or a tablet event");
+
+#ifdef Q_OS_WIN32
+    /**
+     * On Windows, when the user presses some global window manager shortcuts,
+     * e.g. Alt+Space (to show window title menu), events for these key presses
+     * and releases are not delivered (see bug 424319). This code is a workaround
+     * for this problem. It checks consistency of standard modifiers and resets
+     * shortcut's matcher state in case of a trouble.
+     */
+    if (event->type() == QEvent::MouseButtonPress ||
+        event->type() == QEvent::MouseButtonRelease ||
+        event->type() == QEvent::MouseMove ||
+        event->type() == QEvent::TabletMove ||
+        event->type() == QEvent::TabletPress ||
+        event->type() == QEvent::TabletRelease) {
+
+        QInputEvent *inputEvent = static_cast<QInputEvent*>(event);
+        if (!d->matcher.sanityCheckModifiersCorrectness(inputEvent->modifiers())) {
+            qWarning() << "WARNING: modifiers state became inconsistent! Trying to fix that...";
+            qWarning() << "    " << ppVar(inputEvent->modifiers());
+            qWarning() << "    " << ppVar(d->matcher.debugPressedKeys());
+
+            d->fixShortcutMatcherModifiersState();
+        }
+    }
+#endif
 
     bool retval = false;
 
@@ -521,15 +535,6 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
         if (d->tryHidePopupPalette()) {
             retval = true;
         } else {
-#ifdef Q_OS_ANDROID
-            // this means S-Pen has entered the proximity. Hence the TouchEvents
-            // will be disabled by the OS, but we won't receive TouchEnd event.
-            if (d->touchHasBlockedPressEvents)
-            {
-                QTouchEvent *touchEvent = new QTouchEvent(QEvent::Type::TouchEnd);
-                retval = d->matcher.touchEndEvent(touchEvent);
-            }
-#endif
             //Make sure the input actions know we are active.
             KisAbstractInputAction::setInputManager(this);
             retval = d->matcher.buttonPressed(tabletEvent->button(), tabletEvent);
@@ -609,6 +614,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
 
     case QEvent::TouchBegin:
     {
+        d->debugEvent<QTouchEvent, false>(event);
         if (startTouch(retval)) {
             QTouchEvent *touchEvent = static_cast<QTouchEvent *> (event);
             KisAbstractInputAction::setInputManager(this);
@@ -618,6 +624,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
             {
                 d->previousPos = touchEvent->touchPoints().at(0).pos();
                 d->buttonPressed = false;
+                d->resetCompressor();
             }
             else {
                 retval = d->matcher.touchBeginEvent(touchEvent);
@@ -634,6 +641,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
     case QEvent::TouchUpdate:
     {
         QTouchEvent *touchEvent = static_cast<QTouchEvent*>(event);
+        d->debugEvent<QTouchEvent, false>(event);
 
 #ifdef Q_OS_MAC
         int count = 0;
@@ -669,7 +677,6 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
                 d->touchStrokeStarted = true;
                 retval = compressMoveEventCommon(touchEvent);
                 d->blockMouseEvents();
-                d->resetCompressor();
             }
             else if (!d->touchStrokeStarted){
                 KisAbstractInputAction::setInputManager(this);
@@ -690,6 +697,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
 
     case QEvent::TouchEnd:
     {
+        d->debugEvent<QTouchEvent, false>(event);
         endTouch();
         QTouchEvent *touchEvent = static_cast<QTouchEvent*>(event);
         retval = d->matcher.touchEndEvent(touchEvent);
@@ -705,6 +713,18 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
         if (!KisConfig(true).disableTouchOnCanvas())
             retval = true;
 
+        event->accept();
+        break;
+    }
+    case QEvent::TouchCancel:
+    {
+        d->debugEvent<QTouchEvent, false>(event);
+        endTouch();
+        d->matcher.touchCancelEvent(d->previousPos);
+        // reset state
+        d->previousPos = {0, 0};
+        d->touchStrokeStarted = false;
+        retval = true;
         event->accept();
         break;
     }

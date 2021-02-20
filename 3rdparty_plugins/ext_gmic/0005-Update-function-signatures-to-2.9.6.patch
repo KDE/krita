@@ -1,0 +1,82 @@
+From 344f7f9c40f32d0447159429c679814d502a0b11 Mon Sep 17 00:00:00 2001
+From: "L. E. Segovia" <amy@amyspark.me>
+Date: Tue, 16 Feb 2021 17:17:09 +0000
+Subject: [PATCH 5/5] Update function signatures to 2.9.6
+
+---
+ src/Host/KritaPlugin/gmicqttoolplugin.cpp | 26 ++++++-----------------
+ src/Host/KritaPlugin/host.cpp             |  3 +--
+ 2 files changed, 7 insertions(+), 22 deletions(-)
+
+diff --git a/src/Host/KritaPlugin/gmicqttoolplugin.cpp b/src/Host/KritaPlugin/gmicqttoolplugin.cpp
+index d62e76b..9b09c1c 100644
+--- a/src/Host/KritaPlugin/gmicqttoolplugin.cpp
++++ b/src/Host/KritaPlugin/gmicqttoolplugin.cpp
+@@ -28,14 +28,14 @@
+ #include <QSettings>
+ #include <QTranslator>
+ 
++#include "DialogSettings.h"
+ #include "HeadlessProcessor.h"
++#include "LanguageSettings.h"
+ #include "Logger.h"
+-#include "Widgets/ProgressInfoWindow.h"
+-#include "gmicqttoolplugin.h"
+-#include "DialogSettings.h"
+ #include "MainWindow.h"
+-#include "Widgets/LanguageSelectionWidget.h"
++#include "Widgets/ProgressInfoWindow.h"
+ #include "gmic_qt.h"
++#include "gmicqttoolplugin.h"
+ 
+ #include "kpluginfactory.h"
+ 
+@@ -64,13 +64,7 @@ int KritaGmicPlugin::launch(std::shared_ptr<KisImageInterface> i,
+   if (headless) {
+     DialogSettings::loadSettings(GmicQt::GuiApplication);
+     Logger::setMode(DialogSettings::outputMessageMode());
+-    // Translate according to current locale or configured language
+-    QString lang = LanguageSelectionWidget::configuredTranslator();
+-    if (!lang.isEmpty() && (lang != "en")) {
+-      auto translator = new QTranslator(qApp);
+-      translator->load(QString(":/translations/%1.qm").arg(lang));
+-      QCoreApplication::installTranslator(translator);
+-    }
++    LanguageSettings::installTranslators();
+ 
+     HeadlessProcessor processor;
+     QPointer<ProgressInfoWindow> progressWindow = new ProgressInfoWindow(&processor);
+@@ -86,15 +80,7 @@ int KritaGmicPlugin::launch(std::shared_ptr<KisImageInterface> i,
+ 
+   } else {
+     DialogSettings::loadSettings(GmicQt::GuiApplication);
+-
+-    // Translate according to current locale or configured language
+-    QString lang = LanguageSelectionWidget::configuredTranslator();
+-
+-    if (!lang.isEmpty() && (lang != "en")) {
+-      auto translator = new QTranslator(qApp);
+-      translator->load(QString(":/translations/%1.qm").arg(lang));
+-      QApplication::installTranslator(translator);
+-    }
++    LanguageSettings::installTranslators();
+ 
+     disableInputMode(GmicQt::NoInput);
+     // disableInputMode(GmicQt::Active);
+diff --git a/src/Host/KritaPlugin/host.cpp b/src/Host/KritaPlugin/host.cpp
+index 4ff84e6..058d923 100644
+--- a/src/Host/KritaPlugin/host.cpp
++++ b/src/Host/KritaPlugin/host.cpp
+@@ -129,8 +129,7 @@ void gmic_qt_get_cropped_images(gmic_list<float> &images,
+ 
+ void gmic_qt_output_images(gmic_list<float> &images,
+                            const gmic_list<char> &imageNames,
+-                           GmicQt::OutputMode mode,
+-                           const char * /*verboseLayersLabel*/) {
++                           GmicQt::OutputMode mode) {
+ 
+   // qDebug() << "qmic-qt-output-images";
+ 
+-- 
+2.30.0
+

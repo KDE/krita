@@ -1,25 +1,13 @@
 /*
  *  kis_tool_line.cc - part of Krayon
  *
- *  Copyright (c) 2000 John Califf <jwcaliff@compuzone.net>
- *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *  Copyright (c) 2003 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2009 Lukáš Tvrdý <lukast.dev@gmail.com>
- *  Copyright (c) 2007,2010 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2000 John Califf <jwcaliff@compuzone.net>
+ *  SPDX-FileCopyrightText: 2002 Patrick Julien <freak@codepimps.org>
+ *  SPDX-FileCopyrightText: 2003 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2009 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  SPDX-FileCopyrightText: 2007, 2010 Cyrille Berger <cberger@cberger.net>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_tool_line.h"
@@ -40,6 +28,7 @@
 #include <brushengine/kis_paintop_registry.h>
 #include <kis_figure_painting_tool_helper.h>
 #include <kis_canvas2.h>
+#include <KisViewManager.h>
 #include <kis_action_registry.h>
 #include <kis_painting_information_builder.h>
 
@@ -177,6 +166,14 @@ void KisToolLine::beginPrimaryAction(KoPointerEvent *event)
 {
     NodePaintAbility nodeAbility = nodePaintAbility();
     if (nodeAbility == UNPAINTABLE || !nodeEditable()) {
+        event->ignore();
+        return;
+    }
+
+    if (nodeAbility == MYPAINTBRUSH_UNPAINTABLE) {
+        KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
+        QString message = i18n("The MyPaint Brush Engine is not available for this colorspace");
+        kiscanvas->viewManager()->showFloatingMessage(message, koIcon("object-locked"));
         event->ignore();
         return;
     }

@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgNewImage</class>
  <widget class="QWidget" name="WdgNewImage">
   <property name="geometry">
@@ -54,7 +58,7 @@
        <string>Dimensions</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_3">
-       <item row="0" column="0">
+       <item column="0" row="0">
         <layout class="QHBoxLayout" name="horizontalLayout_3">
          <item>
           <widget class="QGroupBox" name="grpImage">
@@ -83,14 +87,14 @@
             <bool>false</bool>
            </property>
            <layout class="QGridLayout" name="gridLayout">
-            <item row="1" column="0">
+            <item column="0" row="1">
              <layout class="QHBoxLayout">
               <item>
                <layout class="QGridLayout" name="gridLayout_4">
-                <item row="2" column="2">
+                <item column="2" row="2">
                  <widget class="QComboBox" name="cmbHeightUnit"/>
                 </item>
-                <item row="0" column="1">
+                <item column="1" row="0">
                  <widget class="QComboBox" name="cmbPredefined">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -100,7 +104,7 @@
                   </property>
                  </widget>
                 </item>
-                <item row="2" column="1">
+                <item column="1" row="2">
                  <widget class="KisDoubleParseSpinBox" name="doubleHeight">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -116,7 +120,7 @@
                   </property>
                  </widget>
                 </item>
-                <item row="1" column="1">
+                <item column="1" row="1">
                  <widget class="KisDoubleParseSpinBox" name="doubleWidth">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -135,7 +139,7 @@
                   </property>
                  </widget>
                 </item>
-                <item row="2" column="0">
+                <item column="0" row="2">
                  <widget class="QLabel" name="lblHeight">
                   <property name="text">
                    <string>&amp;Height:</string>
@@ -148,7 +152,7 @@
                   </property>
                  </widget>
                 </item>
-                <item row="3" column="1">
+                <item column="1" row="3">
                  <widget class="KisDoubleParseSpinBox" name="doubleResolution">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -167,7 +171,7 @@
                   </property>
                  </widget>
                 </item>
-                <item row="3" column="0">
+                <item column="0" row="3">
                  <widget class="QLabel" name="lblResolution">
                   <property name="text">
                    <string>Resolution:</string>
@@ -177,7 +181,7 @@
                   </property>
                  </widget>
                 </item>
-                <item row="0" column="0">
+                <item column="0" row="0">
                  <widget class="QLabel" name="label_2">
                   <property name="text">
                    <string>P&amp;redefined:</string>
@@ -190,10 +194,10 @@
                   </property>
                  </widget>
                 </item>
-                <item row="1" column="2">
+                <item column="2" row="1">
                  <widget class="QComboBox" name="cmbWidthUnit"/>
                 </item>
-                <item row="1" column="0">
+                <item column="0" row="1">
                  <widget class="QLabel" name="lblWidth">
                   <property name="text">
                    <string>W&amp;idth:</string>
@@ -206,7 +210,7 @@
                   </property>
                  </widget>
                 </item>
-                <item row="3" column="2">
+                <item column="2" row="3">
                  <widget class="QLabel" name="label">
                   <property name="toolTip">
                    <string>pixels-per-inch</string>
@@ -216,7 +220,7 @@
                   </property>
                  </widget>
                 </item>
-                <item row="0" column="2">
+                <item column="2" row="0">
                  <layout class="QHBoxLayout" name="horizontalLayout">
                   <item>
                    <spacer name="horizontalSpacer">
@@ -327,7 +331,7 @@
          </item>
         </layout>
        </item>
-       <item row="2" column="0">
+       <item column="0" row="2">
         <widget class="QGroupBox" name="grpMode">
          <property name="sizePolicy">
           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
@@ -364,7 +368,7 @@
          </layout>
         </widget>
        </item>
-       <item row="1" column="0">
+       <item column="0" row="1">
         <layout class="QHBoxLayout" name="horizontalLayout_2">
          <item>
           <widget class="QLabel" name="label_3">
@@ -417,7 +421,7 @@
        <string>Content</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_2">
-       <item row="1" column="1">
+       <item column="1" row="1">
         <widget class="QLabel" name="label_4">
          <property name="text">
           <string>Layers:</string>
@@ -427,7 +431,7 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="1">
+       <item column="1" row="3">
         <widget class="QLabel" name="lblOpacity">
          <property name="text">
           <string>Background Opacity:</string>
@@ -440,7 +444,7 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="2">
+       <item column="2" row="1">
         <widget class="KisIntParseSpinBox" name="intNumLayers">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -468,7 +472,7 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="1">
+       <item column="1" row="2">
         <widget class="QLabel" name="lblColor">
          <property name="text">
           <string>Bac&amp;kground Color:</string>
@@ -481,7 +485,7 @@
          </property>
         </widget>
        </item>
-       <item row="4" column="1">
+       <item column="1" row="4">
         <widget class="QLabel" name="lblBackgroundStyle">
          <property name="text">
           <string>Background:</string>
@@ -491,7 +495,7 @@
          </property>
         </widget>
        </item>
-       <item row="5" column="1">
+       <item column="1" row="5">
         <widget class="QLabel" name="lblDescription">
          <property name="text">
           <string>&amp;Description:</string>
@@ -504,7 +508,7 @@
          </property>
         </widget>
        </item>
-       <item row="5" column="2">
+       <item column="2" row="5">
         <widget class="QTextEdit" name="txtDescription">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
@@ -520,7 +524,7 @@
          </property>
         </widget>
        </item>
-       <item row="4" column="2">
+       <item column="2" row="4">
         <layout class="QVBoxLayout" name="verticalLayout_3">
          <item>
           <widget class="QRadioButton" name="radioBackgroundAsRaster">
@@ -572,7 +576,7 @@
          </item>
         </layout>
        </item>
-       <item row="2" column="2">
+       <item column="2" row="2">
         <widget class="KisColorButton" name="cmbColor">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -591,7 +595,7 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="2">
+       <item column="2" row="3">
         <widget class="QFrame" name="opacityPanel">
          <property name="frameShape">
           <enum>QFrame::NoFrame</enum>
@@ -618,7 +622,7 @@
          </layout>
         </widget>
        </item>
-       <item row="6" column="2">
+       <item column="2" row="6">
         <spacer name="verticalSpacer_2">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -631,7 +635,7 @@
          </property>
         </spacer>
        </item>
-       <item row="0" column="1">
+       <item column="1" row="0">
         <widget class="QLabel" name="lblName">
          <property name="text">
           <string>&amp;Name:</string>
@@ -644,7 +648,7 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="2">
+       <item column="2" row="0">
         <widget class="QLineEdit" name="txtName">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">

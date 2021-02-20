@@ -1,19 +1,7 @@
 /*
- * Copyright (c) 2015 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2015 Boudewijn Rempt <boud@valdyas.org>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ * SPDX-License-Identifier: LGPL-2.1-or-later
  */
 #ifndef KORESOURCEPATHS_H
 #define KORESOURCEPATHS_H
@@ -38,6 +26,9 @@
  * There are many debug lines that can be uncommented for more specific installation
  * checks. In the future these should be converted to qloggingcategory to enable
  * convenient enable/disable functionality.
+ *
+ * Note: DO NOT USE THIS CLASS WHEN LOCATING RESOURCES LIKE BRUSHES OR GRADIENTS. Use
+ * KisResourceLocator instead.
  */
 class KRITARESOURCES_EXPORT KoResourcePaths
 {

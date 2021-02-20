@@ -8,11 +8,11 @@
 #  LibRaw_DEFINITIONS, the definitions needed to use LibRaw (non-thread-safe)
 #  LibRaw_r_DEFINITIONS, the definitions needed to use LibRaw (thread-safe)
 #
-# Copyright (c) 2013, Pino Toscano <pino at kde dot org>
-# Copyright (c) 2013, Gilles Caulier <caulier dot gilles at gmail dot com>
+# SPDX-FileCopyrightText: 2013 Pino Toscano <pino at kde dot org>
+# SPDX-FileCopyrightText: 2013 Gilles Caulier <caulier dot gilles at gmail dot com>
 #
-# Redistribution and use is allowed according to the terms of the BSD license.
-# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+# SPDX-License-Identifier: BSD-3-Clause
+#
 
 FIND_PACKAGE(PkgConfig)
 
@@ -21,7 +21,7 @@ IF(PKG_CONFIG_FOUND)
    SET(LibRaw_DEFINITIONS ${PC_LIBRAW_CFLAGS_OTHER})
 
    PKG_CHECK_MODULES(PC_LIBRAW_R libraw_r)
-   SET(LibRaw_r_DEFINITIONS ${PC_LIBRAW_R_CFLAGS_OTHER})   
+   SET(LibRaw_r_DEFINITIONS ${PC_LIBRAW_R_CFLAGS_OTHER})
 ENDIF()
 
 FIND_PATH(LibRaw_INCLUDE_DIR libraw.h
@@ -45,16 +45,16 @@ FIND_LIBRARY(LibRaw_r_LIBRARIES NAMES raw_r
 
 IF(LibRaw_INCLUDE_DIR)
    FILE(READ ${LibRaw_INCLUDE_DIR}/libraw_version.h _libraw_version_content)
-   
+
    STRING(REGEX MATCH "#define LIBRAW_MAJOR_VERSION[ \t]*([0-9]*)\n" _version_major_match ${_libraw_version_content})
    SET(_libraw_version_major "${CMAKE_MATCH_1}")
-   
+
    STRING(REGEX MATCH "#define LIBRAW_MINOR_VERSION[ \t]*([0-9]*)\n" _version_minor_match ${_libraw_version_content})
    SET(_libraw_version_minor "${CMAKE_MATCH_1}")
-   
+
    STRING(REGEX MATCH "#define LIBRAW_PATCH_VERSION[ \t]*([0-9]*)\n" _version_patch_match ${_libraw_version_content})
    SET(_libraw_version_patch "${CMAKE_MATCH_1}")
-   
+
    IF(_version_major_match AND _version_minor_match AND _version_patch_match)
       SET(LibRaw_VERSION_STRING "${_libraw_version_major}.${_libraw_version_minor}.${_libraw_version_patch}")
    ELSE()

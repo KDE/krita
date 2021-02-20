@@ -1,0 +1,9 @@
+{
+    "Id": "Gradient Generator",
+    "Type": "Service",
+    "X-KDE-Library": "KritaGradientGenerator",
+    "X-KDE-ServiceTypes": [
+        "Krita/Generator"
+    ],
+    "X-Krita-Version": "28"
+}

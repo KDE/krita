@@ -1,31 +1,18 @@
 /* This file is part of the KDE libraries
-    Copyright (C) 1998 Mark Donohoe <donohoe@kde.org>
-    Copyright (C) 1997 Nicolas Hadacek <hadacek@kde.org>
-    Copyright (C) 1998 Mark Donohoe <donohoe@kde.org>
-    Copyright (C) 1998 Matthias Ettrich <ettrich@kde.org>
-    Copyright (C) 1999 Espen Sand <espen@kde.org>
-    Copyright (C) 2001 Ellis Whitehead <ellis@kde.org>
-    Copyright (C) 2006 Hamish Rodda <rodda@kde.org>
-    Copyright (C) 2007 Roberto Raggi <roberto@kdevelop.org>
-    Copyright (C) 2007 Andreas Hartmetz <ahartmetz@gmail.com>
-    Copyright (C) 2008 Michael Jansen <kde@michael-jansen.biz>
-    Copyright (C) 2008 Alexander Dymo <adymo@kdevelop.org>
-    Copyright (C) 2009 Chani Armitage <chani@kde.org>
+    SPDX-FileCopyrightText: 1998 Mark Donohoe <donohoe@kde.org>
+    SPDX-FileCopyrightText: 1997 Nicolas Hadacek <hadacek@kde.org>
+    SPDX-FileCopyrightText: 1998 Mark Donohoe <donohoe@kde.org>
+    SPDX-FileCopyrightText: 1998 Matthias Ettrich <ettrich@kde.org>
+    SPDX-FileCopyrightText: 1999 Espen Sand <espen@kde.org>
+    SPDX-FileCopyrightText: 2001 Ellis Whitehead <ellis@kde.org>
+    SPDX-FileCopyrightText: 2006 Hamish Rodda <rodda@kde.org>
+    SPDX-FileCopyrightText: 2007 Roberto Raggi <roberto@kdevelop.org>
+    SPDX-FileCopyrightText: 2007 Andreas Hartmetz <ahartmetz@gmail.com>
+    SPDX-FileCopyrightText: 2008 Michael Jansen <kde@michael-jansen.biz>
+    SPDX-FileCopyrightText: 2008 Alexander Dymo <adymo@kdevelop.org>
+    SPDX-FileCopyrightText: 2009 Chani Armitage <chani@kde.org>
 
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Library General Public
-    License as published by the Free Software Foundation; either
-    version 2 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Library General Public License for more details.
-
-    You should have received a copy of the GNU Library General Public License
-    along with this library; see the file COPYING.LIB.  If not, write to
-    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-    Boston, MA 02110-1301, USA.
+    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
 #include "KisShortcutsDialog.h"

@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>KoConfigAuthorPage</class>
  <widget class="QWidget" name="KoConfigAuthorPage">
   <property name="geometry">
@@ -11,7 +15,7 @@
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
-   <item row="2" column="0">
+   <item column="0" row="2">
     <spacer>
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -24,12 +28,12 @@
      </property>
     </spacer>
    </item>
-   <item row="0" column="0">
+   <item column="0" row="0">
     <layout class="QGridLayout" name="gridLayout">
      <property name="spacing">
       <number>12</number>
      </property>
-     <item row="2" column="3">
+     <item column="3" row="2">
       <widget class="QLineEdit" name="leInitials">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -39,10 +43,10 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="1">
+     <item column="1" row="3">
       <widget class="QLineEdit" name="leCompany"/>
      </item>
-     <item row="2" column="2">
+     <item column="2" row="2">
       <widget class="QLabel" name="lblInitialsDesc">
        <property name="text">
         <string>Initials:</string>
@@ -55,10 +59,10 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="2">
+     <item column="2" row="3">
       <widget class="QLabel" name="lblPositionDesc">
        <property name="text">
-        <string>Position:</string>
+        <string comment="Job Position">Position:</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -68,13 +72,13 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="3">
+     <item column="3" row="1">
       <widget class="QLineEdit" name="leLastName"/>
      </item>
-     <item row="1" column="1">
+     <item column="1" row="1">
       <widget class="QLineEdit" name="leFirstName"/>
      </item>
-     <item row="1" column="0">
+     <item column="0" row="1">
       <widget class="QLabel" name="lblFirst">
        <property name="text">
         <string>Given Name:</string>
@@ -84,10 +88,10 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="3">
+     <item column="3" row="3">
       <widget class="QLineEdit" name="lePosition"/>
      </item>
-     <item row="0" column="1" colspan="3">
+     <item colspan="3" column="1" row="0">
       <widget class="QLineEdit" name="leNickName">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -97,7 +101,7 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="0">
+     <item column="0" row="2">
       <widget class="QLabel" name="lblTitleDesc">
        <property name="text">
         <string comment="Contact title">Title:</string>
@@ -110,10 +114,10 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="1">
+     <item column="1" row="2">
       <widget class="QLineEdit" name="leTitle"/>
      </item>
-     <item row="0" column="0">
+     <item column="0" row="0">
       <widget class="QLabel" name="fullNameLabel">
        <property name="text">
         <string>Nickname:</string>
@@ -123,7 +127,7 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="0">
+     <item column="0" row="3">
       <widget class="QLabel" name="lblCompanyDesc">
        <property name="text">
         <string>Co&amp;mpany:</string>
@@ -136,7 +140,7 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="2">
+     <item column="2" row="1">
       <widget class="QLabel" name="LabelFamily">
        <property name="text">
         <string>Family Name:</string>
@@ -146,21 +150,21 @@
        </property>
       </widget>
      </item>
-     <item row="5" column="1">
+     <item column="1" row="5">
       <widget class="QPushButton" name="btnAdd">
        <property name="text">
         <string>Add contact info</string>
        </property>
       </widget>
      </item>
-     <item row="5" column="2">
+     <item column="2" row="5">
       <widget class="QPushButton" name="btnRemove">
        <property name="text">
         <string>Remove contact info</string>
        </property>
       </widget>
      </item>
-     <item row="4" column="0">
+     <item column="0" row="4">
       <widget class="QLabel" name="label">
        <property name="text">
         <string>Contact:</string>
@@ -170,7 +174,7 @@
        </property>
       </widget>
      </item>
-     <item row="4" column="1" colspan="3">
+     <item colspan="3" column="1" row="4">
       <widget class="QTableView" name="tblContactInfo">
        <property name="dragDropOverwriteMode">
         <bool>false</bool>

@@ -1,19 +1,7 @@
 /*
- * Copyright (c) 2013 Lukáš Tvrdý <lukast.dev@gmail.com
+ * SPDX-FileCopyrightText: 2013 Lukáš Tvrdý <lukast.dev@gmail.com
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include <kis_qmic_synchronize_layers_command.h>
@@ -58,14 +46,23 @@ void KisQmicSynchronizeLayersCommand::redo()
                 for (int i = nodesCount; i < m_images.size(); i++) {
 
                     KisPaintDevice * device = new KisPaintDevice(m_image->colorSpace());
-                    KisLayerSP paintLayer = new KisPaintLayer(m_image, "New layer from gmic filter", OPACITY_OPAQUE_U8, device);
+                    KisLayerSP paintLayer = new KisPaintLayer(m_image, QString("New layer %1 from gmic filter").arg(i), OPACITY_OPAQUE_U8, device);
+
                     KisImportQmicProcessingVisitor::gmicImageToPaintDevice(*m_images[i], device);
 
-                    KisNodeSP aboveThis = m_nodes->last();
+                    // This node is a copy made by GMic of an existing node;
+                    // give it its name back (the existing node will be reused
+                    // by KisImportQmicProcessingVisitor)
+                    paintLayer->setName(m_nodes->at(i - nodesCount)->name());
+
+                    KisNodeSP aboveThis = m_nodes->last()->prevSibling();
                     KisNodeSP parent = m_nodes->at(0)->parent();
 
-                    dbgPlugins << "Adding paint layer " << (i - nodesCount + 1) << " to parent " << parent->name();
-                    KisImageLayerAddCommand *addLayerCmd = new KisImageLayerAddCommand(m_image, paintLayer, parent, aboveThis, false, true);
+                    dbgPlugins << "Adding paint layer" << (i - nodesCount + 1)
+                               << paintLayer << "to parent" << parent->name()
+                               << "above" << aboveThis;
+                    auto *addLayerCmd = new KisImageLayerAddCommand(
+                        m_image, paintLayer, parent, aboveThis, false, true);
                     addLayerCmd->redo();
                     m_imageCommands.append(addLayerCmd);
                     m_nodes->append(paintLayer);

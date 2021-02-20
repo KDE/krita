@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>ArrangeDockerWidget</class>
  <widget class="QWidget" name="ArrangeDockerWidget">
   <property name="geometry">
@@ -86,6 +90,9 @@
             <height>22</height>
            </size>
           </property>
+          <property name="autoRaise">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
         <item row="5" column="2">
@@ -101,6 +108,9 @@
             <width>22</width>
             <height>22</height>
            </size>
+          </property>
+          <property name="autoRaise">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -118,6 +128,9 @@
             <height>22</height>
            </size>
           </property>
+          <property name="autoRaise">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
         <item row="5" column="4">
@@ -134,6 +147,9 @@
             <height>22</height>
            </size>
           </property>
+          <property name="autoRaise">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
         <item row="5" column="1">
@@ -149,6 +165,9 @@
             <width>22</width>
             <height>22</height>
            </size>
+          </property>
+          <property name="autoRaise">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -176,6 +195,9 @@
             <height>22</height>
            </size>
           </property>
+          <property name="autoRaise">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
         <item row="8" column="1">
@@ -192,6 +214,9 @@
             <height>22</height>
            </size>
           </property>
+          <property name="autoRaise">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
         <item row="8" column="0">
@@ -207,6 +232,9 @@
             <width>22</width>
             <height>22</height>
            </size>
+          </property>
+          <property name="autoRaise">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -244,6 +272,9 @@
             <height>22</height>
            </size>
           </property>
+          <property name="autoRaise">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
         <item row="11" column="1">
@@ -259,6 +290,9 @@
             <width>22</width>
             <height>22</height>
            </size>
+          </property>
+          <property name="autoRaise">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -276,6 +310,9 @@
             <height>22</height>
            </size>
           </property>
+          <property name="autoRaise">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
         <item row="5" column="5">
@@ -291,6 +328,9 @@
             <width>22</width>
             <height>22</height>
            </size>
+          </property>
+          <property name="autoRaise">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -308,6 +348,9 @@
             <height>22</height>
            </size>
           </property>
+          <property name="autoRaise">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
         <item row="1" column="4">
@@ -323,6 +366,9 @@
             <width>22</width>
             <height>22</height>
            </size>
+          </property>
+          <property name="autoRaise">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -340,6 +386,9 @@
             <height>22</height>
            </size>
           </property>
+          <property name="autoRaise">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
         <item row="11" column="2">
@@ -355,6 +404,9 @@
             <width>22</width>
             <height>22</height>
            </size>
+          </property>
+          <property name="autoRaise">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -372,6 +424,9 @@
             <height>22</height>
            </size>
           </property>
+          <property name="autoRaise">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
         <item row="11" column="0">
@@ -387,6 +442,9 @@
             <width>22</width>
             <height>22</height>
            </size>
+          </property>
+          <property name="autoRaise">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -404,6 +462,9 @@
             <height>22</height>
            </size>
           </property>
+          <property name="autoRaise">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
         <item row="11" column="6">
@@ -419,6 +480,9 @@
             <width>22</width>
             <height>22</height>
            </size>
+          </property>
+          <property name="autoRaise">
+           <bool>true</bool>
           </property>
          </widget>
         </item>

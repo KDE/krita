@@ -1,31 +1,18 @@
 /* This file is part of the KDE project
  * Made by Tomislav Lukman (tomislav.lukman@ck.tel.hr)
- * Copyright (C) 2002 Tomislav Lukman <tomislav.lukman@ck.t-com.hr>
- * Copyright (C) 2002-2003 Rob Buis <buis@kde.org>
- * Copyright (C) 2005-2006 Tim Beaulen <tbscope@gmail.com>
- * Copyright (C) 2005-2007 Thomas Zander <zander@kde.org>
- * Copyright (C) 2005-2006, 2011 Inge Wallin <inge@lysator.liu.se>
- * Copyright (C) 2005-2008 Jan Hambrecht <jaham@gmx.net>
- * Copyright (C) 2006 C. Boemann <cbo@boemann.dk>
- * Copyright (C) 2006 Peter Simonsson <psn@linux.se>
- * Copyright (C) 2006 Laurent Montel <montel@kde.org>
- * Copyright (C) 2007,2011 Thorsten Zachmann <t.zachmann@zagge.de>
- * Copyright (C) 2011 Jean-Nicolas Artaud <jeannicolasartaud@gmail.com>
+ * SPDX-FileCopyrightText: 2002 Tomislav Lukman <tomislav.lukman@ck.t-com.hr>
+ * SPDX-FileCopyrightText: 2002-2003 Rob Buis <buis@kde.org>
+ * SPDX-FileCopyrightText: 2005-2006 Tim Beaulen <tbscope@gmail.com>
+ * SPDX-FileCopyrightText: 2005-2007 Thomas Zander <zander@kde.org>
+ * SPDX-FileCopyrightText: 2005-2006, 2011 Inge Wallin <inge@lysator.liu.se>
+ * SPDX-FileCopyrightText: 2005-2008 Jan Hambrecht <jaham@gmx.net>
+ * SPDX-FileCopyrightText: 2006 C. Boemann <cbo@boemann.dk>
+ * SPDX-FileCopyrightText: 2006 Peter Simonsson <psn@linux.se>
+ * SPDX-FileCopyrightText: 2006 Laurent Montel <montel@kde.org>
+ * SPDX-FileCopyrightText: 2007, 2011 Thorsten Zachmann <t.zachmann@zagge.de>
+ * SPDX-FileCopyrightText: 2011 Jean-Nicolas Artaud <jeannicolasartaud@gmail.com>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 // Own

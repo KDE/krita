@@ -1,19 +1,7 @@
 /*
- *  Copyright (c) 2014 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2014 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_recalculate_transform_mask_job.h"
@@ -47,7 +35,9 @@ void KisRecalculateTransformMaskJob::run()
      * such a case, don't try do update it.
      */
     if (!m_mask->parent()) return;
+    if (!m_mask->visible()) return;
 
+    const QRect oldMaskExtent = m_mask->extent();
     m_mask->recaclulateStaticImage();
 
     KisLayerSP layer = qobject_cast<KisLayer*>(m_mask->parent().data());
@@ -68,7 +58,7 @@ void KisRecalculateTransformMaskJob::run()
      * KisRecalculateTransformMaskJob.
      */
     if (m_mask->transformParams()->isHidden()) {
-        QRect updateRect = m_mask->extent();
+        QRect updateRect = m_mask->extent() | oldMaskExtent;
 
         if (layer->original()) {
             updateRect |= layer->original()->defaultBounds()->bounds();
@@ -79,16 +69,17 @@ void KisRecalculateTransformMaskJob::run()
         } else {
             m_mask->setDirtyDontResetAnimationCache(updateRect);
         }
-    } else {
+    } else if (!m_mask->isAnimated()) {
         /**
          * When we call requestProjectionUpdateNoFilthy() on a layer,
          * its masks' change rect is not counted, because it is considered
          * to be N_ABOVE_FILTHY. Therefore, we should expand the dirty
          * rect manually to get the correct update
          */
+        QRect updateRect = oldMaskExtent |
+            layer->projectionPlane()->changeRect(layer->extent(), KisLayer::N_FILTHY);
 
-        QRect updateRect = layer->projectionPlane()->changeRect(layer->extent(), KisLayer::N_FILTHY);
-        image->requestProjectionUpdateNoFilthy(layer, updateRect, image->bounds(),layer->isAnimated());
+        image->requestProjectionUpdateNoFilthy(layer, updateRect, image->bounds(), false); // Should there be a case where this is flushed?
     }
 }
 

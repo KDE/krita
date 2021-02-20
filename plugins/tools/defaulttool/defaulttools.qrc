@@ -1,4 +1,8 @@
 <!DOCTYPE RCC>
+<!--
+  SPDX-FileCopyrightText: none
+  SPDX-License-Identifier: CC0-1.0
+-->
 <RCC version="1.0">
     <qresource>
        <file alias="escape-direction-all.png">pics/16-actions-escape-direction-all.png</file>

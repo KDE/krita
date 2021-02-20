@@ -1,21 +1,9 @@
 /*
  * KDE. Krita Project.
  *
- * Copyright (c) 2020 Deif Lou <ginoba@gmail.com>
+ * SPDX-FileCopyrightText: 2020 Deif Lou <ginoba@gmail.com>
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include <KoColor.h>
@@ -73,9 +61,6 @@ KisScreentoneConfigWidget::KisScreentoneConfigWidget(QWidget* parent, const KoCo
     m_ui.sliderShearY->setRange(-10.0, 10.0, 2);
     m_ui.sliderShearY->setPrefix(i18n("Y: "));
     m_ui.sliderShearY->setSingleStep(0.1);
-    m_ui.sliderRotation->setRange(0.0, 360.0, 2);
-    m_ui.sliderRotation->setSuffix(i18n("˚"));
-    m_ui.sliderRotation->setSingleStep(1.0);
 
     connect(m_ui.comboBoxPattern, SIGNAL(currentIndexChanged(int)), this, SLOT(slot_comboBoxPattern_currentIndexChanged(int)));
     connect(m_ui.comboBoxShape, SIGNAL(currentIndexChanged(int)), this, SLOT(slot_comboBoxShape_currentIndexChanged(int)));
@@ -94,7 +79,7 @@ KisScreentoneConfigWidget::KisScreentoneConfigWidget(QWidget* parent, const KoCo
     connect(m_ui.buttonKeepSizeSquare, SIGNAL(keepAspectRatioChanged(bool)), this, SLOT(slot_buttonKeepSizeSquare_keepAspectRatioChanged(bool)));
     connect(m_ui.sliderShearX, SIGNAL(valueChanged(qreal)), this, SIGNAL(sigConfigurationUpdated()));
     connect(m_ui.sliderShearY, SIGNAL(valueChanged(qreal)), this, SIGNAL(sigConfigurationUpdated()));
-    connect(m_ui.sliderRotation, SIGNAL(valueChanged(qreal)), this, SIGNAL(sigConfigurationUpdated()));
+    connect(m_ui.angleSelectorRotation, SIGNAL(angleChanged(qreal)), this, SIGNAL(sigConfigurationUpdated()));
 }
 
 KisScreentoneConfigWidget::~KisScreentoneConfigWidget()
@@ -138,7 +123,7 @@ void KisScreentoneConfigWidget::setConfiguration(const KisPropertiesConfiguratio
     }
     m_ui.sliderShearX->setValue(config->getDouble("shear_x", KisScreentoneConfigDefaults::shearX()));
     m_ui.sliderShearY->setValue(config->getDouble("shear_y", KisScreentoneConfigDefaults::shearY()));
-    m_ui.sliderRotation->setValue(config->getDouble("rotation", KisScreentoneConfigDefaults::rotation()));
+    m_ui.angleSelectorRotation->setAngle(config->getDouble("rotation", KisScreentoneConfigDefaults::rotation()));
 
     blockSignals(false);
     emit sigConfigurationUpdated();
@@ -170,7 +155,7 @@ KisPropertiesConfigurationSP KisScreentoneConfigWidget::configuration() const
     config->setProperty("keep_size_square", m_ui.buttonKeepSizeSquare->keepAspectRatio());
     config->setProperty("shear_x", m_ui.sliderShearX->value());
     config->setProperty("shear_y", m_ui.sliderShearY->value());
-    config->setProperty("rotation", m_ui.sliderRotation->value());
+    config->setProperty("rotation", m_ui.angleSelectorRotation->angle());
     return config;
 }
 

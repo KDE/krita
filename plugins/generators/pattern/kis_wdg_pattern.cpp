@@ -1,21 +1,9 @@
 /*
  * This file is part of Krita
  *
- * Copyright (c) 2006 Cyrille Berger <cberger@cberger.net>
+ * SPDX-FileCopyrightText: 2006 Cyrille Berger <cberger@cberger.net>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_wdg_pattern.h"
@@ -49,24 +37,12 @@ KisWdgPattern::KisWdgPattern(QWidget* parent)
     m_widget->sldShearX->setValue(0.0);
     m_widget->sldShearY->setValue(0.0);
 
-
     m_widget->spbOffsetX->setSuffix(i18n(" px"));
     m_widget->spbOffsetY->setSuffix(i18n(" px"));
     m_widget->spbOffsetX->setRange(-10000, 10000);
     m_widget->spbOffsetY->setRange(-10000, 10000);
 
-    m_widget->sldRotationX->setSuffix(QChar(Qt::Key_degree));
-    m_widget->sldRotationY->setSuffix(QChar(Qt::Key_degree));
-    m_widget->sldRotationZ->setSuffix(QChar(Qt::Key_degree));
-    m_widget->sldRotationX->setRange(0.0, 360.0, 2);
-    m_widget->sldRotationY->setRange(0.0, 360.0, 2);
-    m_widget->sldRotationZ->setRange(0.0, 360.0, 2);
-    m_widget->sldRotationX->setValue(0.0);
-    m_widget->sldRotationY->setValue(0.0);
-    m_widget->sldRotationZ->setValue(0.0);
-    m_widget->sldRotationX->setSingleStep(1.0);
-    m_widget->sldRotationY->setSingleStep(1.0);
-    m_widget->sldRotationZ->setSingleStep(1.0);
+    m_widget->angleSelectorRotationZ->setIncreasingDirection(KisAngleGauge::IncreasingDirection_Clockwise);
 
     m_widget->gb3dRotation->setVisible(false);
 
@@ -81,9 +57,9 @@ KisWdgPattern::KisWdgPattern(QWidget* parent)
     connect(m_widget->spbScaleWidth, SIGNAL(valueChanged(double)), this, SLOT(slotWidthChanged(double)));
     connect(m_widget->spbScaleHeight, SIGNAL(valueChanged(double)), this, SLOT(slotHeightChanged(double)));
 
-    connect(m_widget->sldRotationX, SIGNAL(valueChanged(double)), this, SIGNAL(sigConfigurationUpdated()));
-    connect(m_widget->sldRotationY, SIGNAL(valueChanged(double)), this, SIGNAL(sigConfigurationUpdated()));
-    connect(m_widget->sldRotationZ, SIGNAL(valueChanged(double)), this, SIGNAL(sigConfigurationUpdated()));
+    connect(m_widget->angleSelectorRotationX, SIGNAL(angleChanged(qreal)), this, SIGNAL(sigConfigurationUpdated()));
+    connect(m_widget->angleSelectorRotationY, SIGNAL(angleChanged(qreal)), this, SIGNAL(sigConfigurationUpdated()));
+    connect(m_widget->angleSelectorRotationZ, SIGNAL(angleChanged(qreal)), this, SIGNAL(sigConfigurationUpdated()));
 }
 
 KisWdgPattern::~KisWdgPattern()
@@ -107,9 +83,9 @@ void KisWdgPattern::setConfiguration(const KisPropertiesConfigurationSP config)
     m_widget->sldShearX->setValue(config->getDouble("transform_shear_x", 0.0) * 100);
     m_widget->sldShearY->setValue(config->getDouble("transform_shear_y", 0.0) * 100);
 
-    widget()->sldRotationX->setValue(config->getDouble("transform_rotation_x", 0.0));
-    widget()->sldRotationY->setValue(config->getDouble("transform_rotation_y", 0.0));
-    widget()->sldRotationZ->setValue(config->getDouble("transform_rotation_z", 0.0));
+    widget()->angleSelectorRotationX->setAngle(config->getDouble("transform_rotation_x", 0.0));
+    widget()->angleSelectorRotationY->setAngle(config->getDouble("transform_rotation_y", 0.0));
+    widget()->angleSelectorRotationZ->setAngle(config->getDouble("transform_rotation_z", 0.0));
 }
 
 KisPropertiesConfigurationSP KisWdgPattern::configuration() const
@@ -134,9 +110,9 @@ KisPropertiesConfigurationSP KisWdgPattern::configuration() const
     config->setProperty("transform_shear_x", widget()->sldShearX->value() / 100);
     config->setProperty("transform_shear_y", widget()->sldShearY->value() / 100);
 
-    config->setProperty("transform_rotation_x", widget()->sldRotationX->value());
-    config->setProperty("transform_rotation_y", widget()->sldRotationY->value());
-    config->setProperty("transform_rotation_z", widget()->sldRotationZ->value());
+    config->setProperty("transform_rotation_x", widget()->angleSelectorRotationX->angle());
+    config->setProperty("transform_rotation_y", widget()->angleSelectorRotationY->angle());
+    config->setProperty("transform_rotation_z", widget()->angleSelectorRotationZ->angle());
 
     return config;
 }

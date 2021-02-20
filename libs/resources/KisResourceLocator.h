@@ -1,20 +1,7 @@
 /*
- * Copyright (C) 2018 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2018 Boudewijn Rempt <boud@valdyas.org>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #ifndef KISRESOURCELOCATOR_H
@@ -102,7 +89,7 @@ public:
 
     /**
      * @brief removeStorage removes the temporary storage from the database
-     * @param document the unique name of the document
+     * @param storageLocation the unique name of the storage
      * @return true is successful.
      */
     bool removeStorage(const QString &storageLocation);
@@ -119,24 +106,32 @@ Q_SIGNALS:
     void progressMessage(const QString&);
 
     /// Emitted whenever a storage is added
-    void storageAdded();
+    void storageAdded(const QString &location);
 
     /// Emitted whenever a storage is removed
-    void storageRemoved();
+    void storageRemoved(const QString &location);
 
 private:
 
-    friend class KisResourceModel;
-    friend class KisTagModel;
+    friend class KisTagResourceModel;
+    friend class KisAllResourcesModel;
+    friend class KisAllTagResourceModel;
     friend class KisStorageModel;
     friend class TestResourceLocator;
     friend class TestResourceModel;
     friend class Resource;
     friend class KisResourceCacheDb;
     friend class KisStorageFilterProxyModel;
+    friend class KisResourceQueryMapper;
 
     /// @return true if the resource is present in the cache, false if it hasn't been loaded
     bool resourceCached(QString storageLocation, const QString &resourceType, const QString &filename) const;
+
+    /// add the thumbnail associated with resouceId to cache
+    void cacheThumbnail(QString storageLocation, const QString &resourceType, const QString &filename, const QImage &img);
+
+    /// @return a valid image if the thumbnail is present in the cache, an invalid image otherwise
+    QImage thumbnailCached(QString storageLocation, const QString &resourceType, const QString &filename);
 
     /**
      * @brief resource finds a physical resource in one of the storages
@@ -166,7 +161,7 @@ private:
      * @param optional: the storage that contains the given resource
      * @return
      */
-    bool removeResource(int resourceId, const QString &storageLocation = QString());
+    bool setResourceActive(int resourceId, bool active = false);
 
     /**
      * @brief importResourceFromFile
@@ -193,6 +188,15 @@ private:
      * @return
      */
     bool updateResource(const QString &resourceType, const KoResourceSP resource);
+
+    /**
+     * @brief Reloads the resource from its persistent storage
+     * @param resourceType the type of the resource
+     * @param resource the actual resource object
+     * @return true if reloading was successful. When returned false,
+     *         \p resource is kept unchanged
+     */
+    bool reloadResource(const QString &resourceType, const KoResourceSP resource);
 
     /**
      * @brief metaDataForResource
@@ -222,14 +226,6 @@ private:
      * @param map
      */
     void setMetaDataForStorage(const QString &storageLocation, QMap<QString, QVariant> map) const;
-
-    /**
-     * @brief storageContainsResourceByFile
-     * @param storageLocation
-     * @param filename
-     * @return
-     */
-    bool storageContainsResourceByFile(const QString &storageLocation, const QString &resourceType, const QString &filename) const;
 
     /**
      * Loads all the resources required by \p resource into the cache
@@ -271,6 +267,8 @@ private:
         QString resourceType;
         QString resourceFileName;
      };
+
+    friend class KisMyPaintPaintOpPreset;
 
     ResourceStorage getResourceStorage(int resourceId) const;
     QString makeStorageLocationAbsolute(QString storageLocation) const;

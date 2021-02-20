@@ -1,19 +1,7 @@
 /*
- * Copyright (c) 2018 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2018 Boudewijn Rempt <boud@valdyas.org>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "DlgDbExplorer.h"
@@ -29,8 +17,6 @@
 #include <TableModel.h>
 #include <KisResourceModel.h>
 #include <KisTagFilterResourceProxyModel.h>
-#include <KisResourceModelProvider.h>
-#include <KisTagModelProvider.h>
 #include <KisResourceTypeModel.h>
 #include <KisTagModel.h>
 #include <KisStorageModel.h>
@@ -61,7 +47,7 @@ DlgDbExplorer::DlgDbExplorer(QWidget *parent)
     }
 
     {
-        KisResourceModel *resourcesModel = KisResourceModelProvider::resourceModel(ResourceType::Brushes);
+        KisResourceModel *resourcesModel = new KisResourceModel(ResourceType::Brushes, this);
         m_page->tableResources->setModel(resourcesModel);
         m_page->tableResources->hideColumn(0);
         m_page->tableResources->setSelectionMode(QAbstractItemView::SingleSelection);
@@ -76,7 +62,6 @@ DlgDbExplorer::DlgDbExplorer(QWidget *parent)
     {
         TableModel *tagsModel = new TableModel(this, QSqlDatabase::database());
         TableDelegate *tagsDelegate = new TableDelegate(m_page->tableStorages);
-        tagsDelegate->setEditable(true);
         tagsModel->setTable("tags");
         tagsModel->setHeaderData(0, Qt::Horizontal, i18n("Id"));
         tagsModel->setHeaderData(1, Qt::Horizontal, i18n("Type"));
@@ -90,8 +75,6 @@ DlgDbExplorer::DlgDbExplorer(QWidget *parent)
         tagsModel->addBooleanColumn(5);
         tagsDelegate->addBooleanColumn(5);
         tagsModel->select();
-
-        connect(tagsModel, SIGNAL(dataChanged(QModelIndex, QModelIndex)), this, SLOT(slotResetTagModel(QModelIndex, QModelIndex)));
 
         m_page->tableTags->setModel(tagsModel);
         m_page->tableTags->hideColumn(0);
@@ -121,7 +104,7 @@ DlgDbExplorer::DlgDbExplorer(QWidget *parent)
         m_page->cmbRvResourceTypes->setModelColumn(KisResourceTypeModel::Name);
         connect(m_page->cmbRvResourceTypes, SIGNAL(activated(int)), SLOT(slotRvResourceTypeSelected(int)));
 
-        m_page->cmbRvTags->setModelColumn(KisTagModel::Name);
+        m_page->cmbRvTags->setModelColumn(KisAllTagsModel::Name);
         m_page->cmbRvTags->setModel(m_tagModel);
         connect(m_page->cmbRvTags, SIGNAL(activated(int)), SLOT(slotRvTagSelected(int)));
 
@@ -140,32 +123,22 @@ DlgDbExplorer::~DlgDbExplorer()
 
 void DlgDbExplorer::updateTagModel(const QString& resourceType)
 {
-    m_tagModel = KisTagModelProvider::tagModel(resourceType);
-    m_page->cmbRvTags->setModelColumn(KisTagModel::Name);
+    m_tagModel = new KisTagModel(resourceType, this);
+    m_page->cmbRvTags->setModelColumn(KisAllTagsModel::Name);
     m_page->cmbRvTags->setModel(m_tagModel);
     m_page->cmbRvTags->update();
     qDebug() << "number of tags in " << resourceType << " tag model: " << m_tagModel->rowCount();
-}
-
-void DlgDbExplorer::slotResetTagModel(QModelIndex topLeft, QModelIndex bottomRight)
-{
-    Q_UNUSED(topLeft);
-    Q_UNUSED(bottomRight);
-    KisTagModelProvider::resetModels();
 }
 
 void DlgDbExplorer::slotRvResourceTypeSelected(int index)
 {
     QModelIndex idx = m_page->cmbResourceTypes->model()->index(index, KisResourceTypeModel::ResourceType);
     QString resourceType = idx.data(Qt::DisplayRole).toString();
-    qDebug() << resourceType;
 
     updateTagModel(resourceType);
 
-    KisResourceModel *resourceModel = KisResourceModelProvider::resourceModel(resourceType);
+    KisTagFilterResourceProxyModel *tagFilterModel = new KisTagFilterResourceProxyModel(resourceType, this);
 
-    KisTagFilterResourceProxyModel *tagFilterModel = new KisTagFilterResourceProxyModel(KisTagModelProvider::tagModel(resourceType), this);
-    tagFilterModel->setSourceModel(resourceModel);
     m_filterProxyModel = tagFilterModel;
 
     m_page->resourceItemView->setModel(tagFilterModel);
@@ -177,9 +150,9 @@ void DlgDbExplorer::slotTbResourceTypeSelected(int index)
     QString resourceType = idx.data(Qt::DisplayRole).toString();
     qDebug() << resourceType;
 
-    m_tagModel = KisTagModelProvider::tagModel(resourceType);
+    m_tagModel = new KisTagModel(resourceType, this);
 
-    KisResourceModel *resourceModel = KisResourceModelProvider::resourceModel(resourceType);
+    KisResourceModel *resourceModel = new KisResourceModel(resourceType, this);
     m_page->tableResources->setModel(resourceModel);
     m_page->tableResources->setCurrentIndex(m_page->tableResources->model()->index(0, 0));
     slotTbResourceItemSelected();
@@ -188,9 +161,11 @@ void DlgDbExplorer::slotTbResourceTypeSelected(int index)
 
 void DlgDbExplorer::slotTbResourceItemSelected()
 {
+    if (m_page->tableResources->selectionModel()->selectedIndexes().isEmpty()) return;
+
     QModelIndex idx = m_page->tableResources->selectionModel()->selectedIndexes().first();
 
-    QImage thumb = idx.data(Qt::UserRole + KisResourceModel::Thumbnail).value<QImage>();
+    QImage thumb = idx.data(Qt::UserRole + KisAbstractResourceModel::Thumbnail).value<QImage>();
     Qt::TransformationMode mode = Qt::SmoothTransformation;
     if (thumb.size().width() < 100 && thumb.size().height() < 100) {
         mode = Qt::FastTransformation;
@@ -207,6 +182,6 @@ void DlgDbExplorer::slotRvTagSelected(int index)
     KisTagSP tag = m_tagModel->tagForIndex(idx);
 
     if (m_filterProxyModel && !tag.isNull() && tag->valid()) {
-        m_filterProxyModel->setTag(tag);
+        m_filterProxyModel->setTagFilter(tag);
     }
 }

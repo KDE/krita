@@ -20,11 +20,10 @@
 # SIP_DEFAULT_SIP_DIR - Default directory where .sip files should be installed
 #     into.
 
-# Copyright (c) 2007, Simon Edwards <simon@simonzone.com>
-# Redistribution and use is allowed according to the terms of the BSD license.
-# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
-
-
+# SPDX-FileCopyrightText: 2007 Simon Edwards <simon@simonzone.com>
+#
+# SPDX-License-Identifier: BSD-3-Clause
+#
 
 IF(SIP_VERSION)
   # Already in cache, be silent
@@ -38,7 +37,7 @@ ELSE(SIP_VERSION)
   else (WIN32)
     EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} ${_find_sip_py} OUTPUT_VARIABLE sip_config)
   endif (WIN32)
-  
+
   IF(sip_config)
     STRING(REGEX REPLACE "^sip_version:([^\n]+).*$" "\\1" SIP_VERSION ${sip_config})
     STRING(REGEX REPLACE ".*\nsip_version_str:([^\n]+).*$" "\\1" SIP_VERSION_STR ${sip_config})
@@ -53,7 +52,7 @@ ELSE(SIP_VERSION)
         FIND_PROGRAM(SIP_MODULE_EXECUTABLE sip-module)
     ENDIF(${SIP_VERSION_STR} VERSION_LESS 5)
     FILE(TO_CMAKE_PATH ${SIP_DEFAULT_SIP_DIR} SIP_DEFAULT_SIP_DIR)
-    if (WIN32) 
+    if (WIN32)
         set(SIP_EXECUTABLE ${SIP_EXECUTABLE}.exe)
     endif()
     IF(EXISTS ${SIP_EXECUTABLE})

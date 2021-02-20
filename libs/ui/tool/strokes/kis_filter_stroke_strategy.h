@@ -1,19 +1,7 @@
 /*
- *  Copyright (c) 2013 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2013 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #ifndef __KIS_FILTER_STROKE_STRATEGY_H
@@ -49,16 +37,62 @@ public:
 
     };
 
-    class CancelSilentlyMarker : public KisStrokeJobData {
+    class IdleBarrierData : public KisStrokeJobData {
     public:
-        CancelSilentlyMarker()
-            : KisStrokeJobData(SEQUENTIAL)
+        IdleBarrierData()
+            : KisStrokeJobData(SEQUENTIAL),
+              m_idleBarrierCookie(new std::tuple<>())
+        {
+        }
+
+        KisStrokeJobData* createLodClone(int levelOfDetail) override {
+            return new IdleBarrierData(*this, levelOfDetail);
+        }
+
+        using IdleBarrierCookie = QWeakPointer<std::tuple<>>;
+
+        IdleBarrierCookie idleBarrierCookie() const {
+            return m_idleBarrierCookie;
+        }
+
+
+    private:
+        IdleBarrierData(IdleBarrierData &rhs, int /*levelOfDetail*/)
+            : KisStrokeJobData(rhs)
+         {
+            // the cookie is used for preview only, therefore in
+            // instant preview mode we pass it to the lodn stroke
+            rhs.m_idleBarrierCookie.swap(m_idleBarrierCookie);
+         }
+
+        QSharedPointer<std::tuple<>> m_idleBarrierCookie;
+    };
+
+    class ExtraCleanUpUpdates : public KisStrokeJobData {
+    public:
+        ExtraCleanUpUpdates(const QVector<QRect> &_rects)
+            : KisStrokeJobData(SEQUENTIAL),
+              rects(_rects)
         {}
 
-        KisStrokeJobData* createLodClone(int /*levelOfDetail*/) override {
-            return new CancelSilentlyMarker(*this);
+        ExtraCleanUpUpdates(const ExtraCleanUpUpdates &rhs, int levelOfDetail)
+            : KisStrokeJobData(rhs)
+        {
+            KisLodTransform t(levelOfDetail);
+
+            Q_FOREACH (const QRect &rc, rhs.rects) {
+                rects << t.map(rc);
+            }
         }
+
+        KisStrokeJobData* createLodClone(int levelOfDetail) override {
+            return new ExtraCleanUpUpdates(*this, levelOfDetail);
+        }
+
+        QVector<QRect> rects;
     };
+
+
 
 public:
     KisFilterStrokeStrategy(KisFilterSP filter,
@@ -75,6 +109,8 @@ public:
     void finishStrokeCallback() override;
 
     KisStrokeStrategy* createLodClone(int levelOfDetail) override;
+
+    QSharedPointer<QAtomicInt> cancelSilentlyHandle() const;
 
 private:
     struct Private;

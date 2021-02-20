@@ -1,3 +1,7 @@
+/*
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
 #ifndef HG_KIS_PAINTING_ASSISTANTS_DECORATION_TEST_H
 #define HG_KIS_PAINTING_ASSISTANTS_DECORATION_TEST_H
 

@@ -1,25 +1,13 @@
 /* This file is part of the KDE project
- * Copyright (C) Boudewijn Rempt <boud@valdyas.org>, (C) 2008
+ * SPDX-FileCopyrightText: 2008 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2020 L. E. Segovia <amy@amyspark.me>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 #ifndef KIS_DLG_GENERATORLAYER_H
 #define KIS_DLG_GENERATORLAYER_H
 
-#include <KoDialog.h>
+#include <QDialog>
 #include <QString>
 
 class KisFilterConfiguration;
@@ -32,7 +20,7 @@ class KisViewManager;
 /**
  * Create a new generator layer
  */
-class KisDlgGeneratorLayer : public KoDialog
+class KisDlgGeneratorLayer : public QDialog
 {
 public:
 
@@ -59,6 +47,8 @@ protected Q_SLOTS:
     void slotNameChanged(const QString &);
     void previewGenerator();
     void slotDelayedPreviewGenerator();
+    void saveLayer();
+    void restoreLayer();
 
 private:
     Ui_WdgDlgGeneratorLayer dlgWidget;

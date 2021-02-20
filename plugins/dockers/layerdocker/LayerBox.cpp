@@ -1,25 +1,13 @@
 /*
  *  LayerBox.cc - part of Krita aka Krayon aka KimageShop
  *
- *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *  Copyright (C) 2006 Gábor Lehel <illissius@gmail.com>
- *  Copyright (C) 2007 Thomas Zander <zander@kde.org>
- *  Copyright (C) 2007 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2011 José Luis Vergara <pentalis@gmail.com>
+ *  SPDX-FileCopyrightText: 2002 Patrick Julien <freak@codepimps.org>
+ *  SPDX-FileCopyrightText: 2006 Gábor Lehel <illissius@gmail.com>
+ *  SPDX-FileCopyrightText: 2007 Thomas Zander <zander@kde.org>
+ *  SPDX-FileCopyrightText: 2007 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2011 José Luis Vergara <pentalis@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "LayerBox.h"
@@ -267,6 +255,7 @@ LayerBox::LayerBox()
 
     const QIcon filterIcon = KisIconUtils::loadIcon("view-filter");
     m_wdgLayerBox->bnLayerFilters->setIcon(filterIcon);
+    m_wdgLayerBox->bnLayerFilters->setAutoRaise(true);
     QPixmap filterEnabledPixmap = filterIcon.pixmap(64,64);
     const QBitmap filterEnabledBitmask = filterEnabledPixmap.mask();
     filterEnabledPixmap.fill(palette().color(QPalette::Highlight));
@@ -302,9 +291,10 @@ LayerBox::LayerBox()
     configureMenu->addSection(i18n("Thumbnail Size"));
 
     m_wdgLayerBox->configureLayerDockerToolbar->setMenu(configureMenu);
-    m_wdgLayerBox->configureLayerDockerToolbar->setIcon(KisIconUtils::loadIcon("configure"));
-
+    m_wdgLayerBox->configureLayerDockerToolbar->setIcon(KisIconUtils::loadIcon("view-choose"));
+    m_wdgLayerBox->configureLayerDockerToolbar->setIconSize(QSize(15, 15));
     m_wdgLayerBox->configureLayerDockerToolbar->setPopupMode(QToolButton::InstantPopup);
+    m_wdgLayerBox->configureLayerDockerToolbar->setAutoRaise(true);
 
 
     // add horizontal slider
@@ -556,15 +546,9 @@ void LayerBox::updateUI()
                      this, SLOT(updateUI()));
             }
 
-            KisKeyframeChannel *opacityChannel = activeNode->getKeyframeChannel(KisKeyframeChannel::Opacity.id(), false);
-            if (opacityChannel) {
-                watchOpacityChannel(opacityChannel);
-            } else {
-                watchOpacityChannel(0);
-                m_activeNodeConnections.addConnection(
-                    activeNode, SIGNAL(keyframeChannelAdded(KisKeyframeChannel*)),
-                    this, SLOT(slotKeyframeChannelAdded(KisKeyframeChannel*)));
-            }
+            m_activeNodeConnections.addConnection(
+                    activeNode, SIGNAL(opacityChanged(quint8)),
+                    this, SLOT(slotUpdateOpacitySlider(quint8)));
         }
     }
 
@@ -654,6 +638,14 @@ void LayerBox::slotSetOpacity(double opacity)
     Q_ASSERT(opacity >= 0 && opacity <= 100);
     m_wdgLayerBox->doubleOpacity->blockSignals(true);
     m_wdgLayerBox->doubleOpacity->setValue(opacity);
+    m_wdgLayerBox->doubleOpacity->blockSignals(false);
+}
+
+void LayerBox::slotUpdateOpacitySlider(quint8 value) {
+    double percentage = value * 100 / 255;
+
+    m_wdgLayerBox->doubleOpacity->blockSignals(true);
+    m_wdgLayerBox->doubleOpacity->setValue(percentage);
     m_wdgLayerBox->doubleOpacity->blockSignals(false);
 }
 
@@ -959,7 +951,7 @@ void LayerBox::slotEditGlobalSelection(bool showSelections)
     if (showSelections && !globalSelectionMask) {
         KisProcessingApplicator applicator(m_image, 0,
                                            KisProcessingApplicator::NONE,
-                                           KisImageSignalVector() << ModifiedSignal,
+                                           KisImageSignalVector(),
                                            kundo2_i18n("Quick Selection Mask"));
 
         applicator.applyCommand(
@@ -981,7 +973,7 @@ void LayerBox::slotEditGlobalSelection(bool showSelections)
 
         KisProcessingApplicator applicator(m_image, 0,
                                            KisProcessingApplicator::NONE,
-                                           KisImageSignalVector() << ModifiedSignal,
+                                           KisImageSignalVector(),
                                            kundo2_i18n("Cancel Quick Selection Mask"));
         applicator.applyCommand(new KisSetGlobalSelectionCommand(m_image, 0), KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
         applicator.end();
@@ -1123,29 +1115,6 @@ void LayerBox::updateLayerFiltering()
     m_filteringModel->setTextFilter(layerFilterWidget->getTextFilter());
 }
 
-void LayerBox::slotKeyframeChannelAdded(KisKeyframeChannel *channel)
-{
-    if (channel->id() == KisKeyframeChannel::Opacity.id()) {
-        watchOpacityChannel(channel);
-    }
-}
-
-void LayerBox::watchOpacityChannel(KisKeyframeChannel *newChannel)
-{
-    if (newChannel) {
-        if (m_opacityChannel) {
-            m_opacityChannel->disconnect(this);
-        }
-
-        m_opacityChannel = newChannel;
-        connect(m_opacityChannel, &KisKeyframeChannel::sigChannelUpdated, [this](const KisTimeSpan &affectedTimeSpan, const QRect &affectedArea){
-            if (!m_blockOpacityUpdate) {
-                updateUI(); // TODO: Make sure this is doing something useful.
-            }
-        });
-    }
-}
-
 void LayerBox::slotImageTimeChanged(int time)
 {
     Q_UNUSED(time);
@@ -1158,7 +1127,7 @@ void LayerBox::slotForgetAboutSavedNodeBeforeEditSelectionMode()
 }
 
 void LayerBox::slotUpdateIcons() {
-    m_wdgLayerBox->bnAdd->setIcon(KisIconUtils::loadIcon("addlayer"));
+    m_wdgLayerBox->bnAdd->setIcon(KisIconUtils::loadIcon("list-add"));
     m_wdgLayerBox->bnRaise->setIcon(KisIconUtils::loadIcon("arrowupblr"));
     m_wdgLayerBox->bnDelete->setIcon(KisIconUtils::loadIcon("deletelayer"));
     m_wdgLayerBox->bnLower->setIcon(KisIconUtils::loadIcon("arrowdown"));

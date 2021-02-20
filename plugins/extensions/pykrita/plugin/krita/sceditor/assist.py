@@ -1,3 +1,7 @@
+#
+#  SPDX-License-Identifier: GPL-3.0-or-later
+#
+
 from PyQt5.QtCore import QTimer, Qt
 from PyQt5.QtWidgets import (qApp, QListWidget, QListWidgetItem, QTextBrowser,
                              QVBoxLayout, QWidget)

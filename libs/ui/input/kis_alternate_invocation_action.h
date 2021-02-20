@@ -1,19 +1,7 @@
 /* This file is part of the KDE project
- * Copyright (C) 2012 Arjen Hiemstra <ahiemstra@heimr.nl>
+ * SPDX-FileCopyrightText: 2012 Arjen Hiemstra <ahiemstra@heimr.nl>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #ifndef KIS_ALTERNATE_INVOCATION_ACTION_H
@@ -27,7 +15,7 @@
  * \brief Alternate Invocation implementation of KisAbstractInputAction.
  *
  * The Alternate Invocation action performs an alternate action with the
- * current tool. For example, using the brush tool it picks a color from
+ * current tool. For example, using the brush tool it samples a color from
  * the canvas.
  */
 class KisAlternateInvocationAction : public KisAbstractInputAction
@@ -39,10 +27,10 @@ public:
     enum Shortcut {
         PrimaryAlternateModeShortcut, ///< Toggle Primary mode.
         SecondaryAlternateModeShortcut, ///< Toggle Secondary mode.
-        PickColorFgLayerModeShortcut,
-        PickColorBgLayerModeShortcut,
-        PickColorFgImageModeShortcut,
-        PickColorBgImageModeShortcut,
+        SampleColorFgLayerModeShortcut,
+        SampleColorBgLayerModeShortcut,
+        SampleColorFgImageModeShortcut,
+        SampleColorBgImageModeShortcut,
         TertiaryAlternateModeShortcut ///< Warning: don't reorder the items of this enum, it breaks user configs!
     };
 

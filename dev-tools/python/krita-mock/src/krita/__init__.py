@@ -1,3 +1,7 @@
+#
+#  SPDX-License-Identifier: GPL-3.0-or-later
+#
+
 """This is a mock krita module for Python unit tests.
 
 This module returns a mock object for any attribute name and thus

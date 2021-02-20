@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgHairyShapeOptions</class>
  <widget class="QWidget" name="WdgHairyShapeOptions">
   <property name="geometry">
@@ -32,7 +36,7 @@
     </rect>
    </property>
    <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0">
+    <item column="0" row="0">
      <widget class="QLabel" name="radiusLabel">
       <property name="text">
        <string>radius</string>
@@ -42,14 +46,14 @@
       </property>
      </widget>
     </item>
-    <item row="0" column="1">
+    <item column="1" row="0">
      <widget class="KisIntParseSpinBox" name="radiusSpinBox">
       <property name="value">
        <number>5</number>
       </property>
      </widget>
     </item>
-    <item row="1" column="0">
+    <item column="0" row="1">
      <widget class="QLabel" name="sigmaLabel">
       <property name="text">
        <string>sigma</string>
@@ -59,7 +63,7 @@
       </property>
      </widget>
     </item>
-    <item row="1" column="1">
+    <item column="1" row="1">
      <widget class="KisDoubleParseSpinBox" name="sigmaSpinBox">
       <property name="value">
        <double>20.000000000000000</double>
@@ -78,13 +82,13 @@
     </rect>
    </property>
    <layout class="QGridLayout" name="gridLayout_2">
-    <item row="0" column="0">
+    <item column="0" row="0">
      <widget class="QGroupBox" name="shapeGroup">
       <property name="title">
        <string>Shape</string>
       </property>
       <layout class="QGridLayout" name="gridLayout_5">
-       <item row="0" column="0">
+       <item column="0" row="0">
         <widget class="QRadioButton" name="oneDimBrushBtn">
          <property name="text">
           <string>&amp;1D</string>
@@ -94,7 +98,7 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="0">
+       <item column="0" row="1">
         <widget class="QRadioButton" name="twoDimBrushBtn">
          <property name="text">
           <string>&amp;2D</string>
@@ -104,7 +108,7 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="0">
+       <item column="0" row="2">
         <spacer name="verticalSpacer_2">
          <property name="orientation">
           <enum>Qt::Vertical</enum>

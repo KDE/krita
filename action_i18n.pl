@@ -1,7 +1,10 @@
 #! /usr/bin/env perl
+#
+# SPDX-FileCopyrightText: 2004 Richard Evans <rich@ridas.com>
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
 
-### TODO: other copyrights, license?
-# Copyright (c) 2004 Richard Evans <rich@ridas.com>
 
 sub usage
 {

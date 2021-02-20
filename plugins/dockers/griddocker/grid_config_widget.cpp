@@ -1,19 +1,7 @@
 /*
- *  Copyright (c) 2016 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2016 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This library is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This library is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU Lesser General Public License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #include "grid_config_widget.h"
@@ -52,8 +40,12 @@ GridConfigWidget::GridConfigWidget(QWidget *parent) :
     ui->colorGuides->setAlphaChannelEnabled(true);
 
 
-    ui->angleLeftSpinbox->setSuffix(QChar(Qt::Key_degree));
-    ui->angleRightSpinbox->setSuffix(QChar(Qt::Key_degree));
+    ui->angleLeftAngleSelector->setRange(0, 89);
+    ui->angleRightAngleSelector->setRange(0, 89);
+    ui->angleLeftAngleSelector->setDecimals(4);
+    ui->angleRightAngleSelector->setDecimals(4);
+    ui->angleLeftAngleSelector->setFlipOptionsMode(KisAngleSelector::FlipOptionsMode_NoFlipOptions);
+    ui->angleRightAngleSelector->setFlipOptionsMode(KisAngleSelector::FlipOptionsMode_NoFlipOptions);
     ui->cellSpacingSpinbox->setSuffix(i18n(" px"));
 
 
@@ -91,8 +83,8 @@ GridConfigWidget::GridConfigWidget(QWidget *parent) :
     connect(ui->chkLockGuides, SIGNAL(stateChanged(int)), SLOT(slotGuidesGuiChanged()));
 
     connect(ui->intSubdivision, SIGNAL(valueChanged(int)), SLOT(slotGridGuiChanged()));
-    connect(ui->angleLeftSpinbox, SIGNAL(valueChanged(int)), SLOT(slotGridGuiChanged()));
-    connect(ui->angleRightSpinbox, SIGNAL(valueChanged(int)), SLOT(slotGridGuiChanged()));
+    connect(ui->angleLeftAngleSelector, SIGNAL(angleChanged(qreal)), SLOT(slotGridGuiChanged()));
+    connect(ui->angleRightAngleSelector, SIGNAL(angleChanged(qreal)), SLOT(slotGridGuiChanged()));
     connect(ui->cellSpacingSpinbox, SIGNAL(valueChanged(int)), SLOT(slotGridGuiChanged()));
 
     connect(ui->selectMainStyle, SIGNAL(currentIndexChanged(int)), SLOT(slotGridGuiChanged()));
@@ -162,8 +154,8 @@ void GridConfigWidget::setGridConfigImpl(const KisGridConfig &value)
     ui->intYOffset->setValue(m_d->gridConfig.offset().y());
     ui->intSubdivision->setValue(m_d->gridConfig.subdivision());
     ui->chkSnapToGrid->setChecked(m_d->gridConfig.snapToGrid());
-    ui->angleLeftSpinbox->setValue(m_d->gridConfig.angleLeft());
-    ui->angleRightSpinbox->setValue(m_d->gridConfig.angleRight());
+    ui->angleLeftAngleSelector->setAngle(m_d->gridConfig.angleLeft());
+    ui->angleRightAngleSelector->setAngle(m_d->gridConfig.angleRight());
     ui->cellSpacingSpinbox->setValue(m_d->gridConfig.cellSpacing());
 
     ui->selectMainStyle->setCurrentIndex(int(m_d->gridConfig.lineTypeMain()));
@@ -223,8 +215,8 @@ KisGridConfig GridConfigWidget::fetchGuiGridConfig() const
     config.setOffset(pt);
 
     config.setSubdivision(ui->intSubdivision->value());
-    config.setAngleLeft(ui->angleLeftSpinbox->value());
-    config.setAngleRight(ui->angleRightSpinbox->value());
+    config.setAngleLeft(ui->angleLeftAngleSelector->angle());
+    config.setAngleRight(ui->angleRightAngleSelector->angle());
     config.setCellSpacing(ui->cellSpacingSpinbox->value());
     config.setGridType(KisGridConfig::GridType(ui->gridTypeCombobox->currentIndex()));
 
@@ -303,8 +295,8 @@ void GridConfigWidget::slotGridTypeChanged() {
     // specific isometric UI controls
     ui->leftAngleLabel->setVisible(!showRectangleControls);
     ui->rightAngleLabel->setVisible(!showRectangleControls);
-    ui->angleLeftSpinbox->setVisible(!showRectangleControls);
-    ui->angleRightSpinbox->setVisible(!showRectangleControls);
+    ui->angleLeftAngleSelector->setVisible(!showRectangleControls);
+    ui->angleRightAngleSelector->setVisible(!showRectangleControls);
     ui->cellSpacingLabel->setVisible(!showRectangleControls);
     ui->cellSpacingSpinbox->setVisible(!showRectangleControls);
 

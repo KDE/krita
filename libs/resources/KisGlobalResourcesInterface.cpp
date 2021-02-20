@@ -1,24 +1,11 @@
 /*
- *  Copyright (c) 2020 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2020 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 #include "KisGlobalResourcesInterface.h"
 
 #include <QGlobalStatic>
-#include <KisResourceModelProvider.h>
 #include <KisResourceModel.h>
 
 #include <kis_debug.h>
@@ -30,7 +17,15 @@ namespace {
 class GlobalResourcesSource : public KisResourcesInterface::ResourceSourceAdapter
 {
 public:
-    GlobalResourcesSource(KisResourceModel *model) : m_model(model) {}
+    GlobalResourcesSource(KisResourceModel *model)
+        : m_model(model)
+    {}
+
+    ~GlobalResourcesSource() override
+    {
+        delete m_model;
+    }
+
 
     KoResourceSP resourceForFilename(const QString& filename) const override {
         return m_model->resourceForFilename(filename);
@@ -78,7 +73,7 @@ KisResourcesInterfaceSP KisGlobalResourcesInterface::instance()
 KisResourcesInterface::ResourceSourceAdapter *KisGlobalResourcesInterface::createSourceImpl(const QString &type) const
 {
     KisResourcesInterface::ResourceSourceAdapter *source =
-        new GlobalResourcesSource(KisResourceModelProvider::resourceModel(type));
+        new GlobalResourcesSource(new KisResourceModel(type));
 
     KIS_ASSERT(source);
     return source;

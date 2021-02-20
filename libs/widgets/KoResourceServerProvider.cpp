@@ -1,23 +1,11 @@
 /*  This file is part of the KDE project
 
-    Copyright (c) 1999 Matthias Elter <elter@kde.org>
-    Copyright (c) 2003 Patrick Julien <freak@codepimps.org>
-    Copyright (c) 2005 Sven Langkamp <sven.langkamp@gmail.com>
-    Copyright (C) 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
+    SPDX-FileCopyrightText: 1999 Matthias Elter <elter@kde.org>
+    SPDX-FileCopyrightText: 2003 Patrick Julien <freak@codepimps.org>
+    SPDX-FileCopyrightText: 2005 Sven Langkamp <sven.langkamp@gmail.com>
+    SPDX-FileCopyrightText: 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
 
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+    SPDX-License-Identifier: LGPL-2.1-or-later
  */
 
 #include "KoResourceServerProvider.h"
@@ -59,6 +47,7 @@ public:
         KoStopGradientSP gradient(new KoStopGradient());
         gradient->setType(QGradient::LinearGradient);
         gradient->setName(i18n("Foreground to Transparent"));
+        gradient->setFilename("Foreground to Transparent");
         stops << KoGradientStop(0.0, KoColor(Qt::black, cs), FOREGROUNDSTOP);
         stops << KoGradientStop(1.0, KoColor(QColor(0, 0, 0, 0), cs), COLORSTOP);
 
@@ -71,6 +60,7 @@ public:
         gradient.reset(new KoStopGradient());
         gradient->setType(QGradient::LinearGradient);
         gradient->setName(i18n("Foreground to Background"));
+        gradient->setFilename("Foreground to Background");
 
         stops.clear();
         stops << KoGradientStop(0.0, KoColor(Qt::black, cs), FOREGROUNDSTOP);
@@ -156,44 +146,34 @@ KoResourceServerProvider *KoResourceServerProvider::instance()
     return s_instance;
 }
 
-QStringList KoResourceServerProvider::blacklistFileNames(QStringList fileNames, const QStringList &blacklistedFileNames)
-{
-    if (!blacklistedFileNames.isEmpty()) {
-        foreach (const QString &s, blacklistedFileNames) {
-            fileNames.removeAll(s);
-        }
-    }
-    return fileNames;
-}
-
 KoResourceServer<KoPattern> *KoResourceServerProvider::patternServer()
 {
-    return d->patternServer;
+    return KoResourceServerProvider::instance()->d->patternServer;
 }
 
 KoResourceServer<KoAbstractGradient> *KoResourceServerProvider::gradientServer()
 {
-    return d->gradientServer;
+    return KoResourceServerProvider::instance()->d->gradientServer;
 }
 
 KoResourceServer<KoColorSet> *KoResourceServerProvider::paletteServer()
 {
-    return d->paletteServer;
+    return KoResourceServerProvider::instance()->d->paletteServer;
 }
 
 KoResourceServer<KoSvgSymbolCollectionResource> *KoResourceServerProvider::svgSymbolCollectionServer()
 {
-    return d->svgSymbolCollectionServer;
+    return KoResourceServerProvider::instance()->d->svgSymbolCollectionServer;
 }
 
 KoResourceServer<KoGamutMask> *KoResourceServerProvider::gamutMaskServer()
 {
-    return d->gamutMaskServer;
+    return KoResourceServerProvider::instance()->d->gamutMaskServer;
 }
 
 #if defined HAVE_SEEXPR
 KoResourceServer<KisSeExprScript> *KoResourceServerProvider::seExprScriptServer()
 {
-    return d->seExprScriptServer;
+    return KoResourceServerProvider::instance()->d->seExprScriptServer;
 }
 #endif

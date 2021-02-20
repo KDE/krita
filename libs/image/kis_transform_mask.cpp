@@ -1,20 +1,8 @@
 /*
- *  Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2007 Boudewijn Rempt <boud@valdyas.org>
  *
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include <KoIcon.h>
@@ -44,8 +32,11 @@
 #include "kis_algebra_2d.h"
 #include "kis_safe_transform.h"
 #include "kis_keyframe_channel.h"
+#include "kis_raster_keyframe_channel.h"
+#include "kis_scalar_keyframe_channel.h"
 
 #include "kis_image_config.h"
+#include "kis_lod_capable_layer_offset.h"
 
 //#include "kis_paint_device_debug_utils.h"
 //#define DEBUG_RENDERING
@@ -55,10 +46,11 @@
 
 struct Q_DECL_HIDDEN KisTransformMask::Private
 {
-    Private()
+    Private(KisImageSP image)
         : worker(0, QTransform(), 0),
           staticCacheValid(false),
           recalculatingStaticImage(false),
+          offset(new KisDefaultBounds(image)),
           updateSignalCompressor(UPDATE_DELAY, KisSignalCompressor::POSTPONE),
           offBoundsReadArea(0.5)
     {
@@ -66,9 +58,11 @@ struct Q_DECL_HIDDEN KisTransformMask::Private
 
     Private(const Private &rhs)
         : worker(rhs.worker),
-          params(rhs.params),
+          params(rhs.params->clone()),
           staticCacheValid(rhs.staticCacheValid),
           recalculatingStaticImage(rhs.recalculatingStaticImage),
+          staticCacheDevice(nullptr),
+          offset(rhs.offset),
           updateSignalCompressor(UPDATE_DELAY, KisSignalCompressor::POSTPONE),
           offBoundsReadArea(rhs.offBoundsReadArea)
     {
@@ -92,6 +86,9 @@ struct Q_DECL_HIDDEN KisTransformMask::Private
     bool staticCacheValid;
     bool recalculatingStaticImage;
     KisPaintDeviceSP staticCacheDevice;
+    bool staticCacheIsOverridden = false;
+
+    KisLodCapableLayerOffset offset;
 
     KisThreadSafeSignalCompressor updateSignalCompressor;
     qreal offBoundsReadArea;
@@ -100,7 +97,7 @@ struct Q_DECL_HIDDEN KisTransformMask::Private
 
 KisTransformMask::KisTransformMask(KisImageWSP image, const QString &name)
     : KisEffectMask(image, name),
-      m_d(new Private())
+      m_d(new Private(image))
 {
     setTransformParams(
         KisTransformMaskParamsInterfaceSP(
@@ -109,6 +106,7 @@ KisTransformMask::KisTransformMask(KisImageWSP image, const QString &name)
     connect(&m_d->updateSignalCompressor, SIGNAL(timeout()), SLOT(slotDelayedStaticUpdate()));
     connect(this, SIGNAL(sigInternalForceStaticImageUpdate()), SLOT(slotInternalForceStaticImageUpdate()));
     m_d->offBoundsReadArea = KisImageConfig(true).transformMaskOffBoundsReadArea();
+    setSupportsLodMoves(false);
 }
 
 KisTransformMask::~KisTransformMask()
@@ -120,6 +118,16 @@ KisTransformMask::KisTransformMask(const KisTransformMask& rhs)
       m_d(new Private(*rhs.m_d))
 {
     connect(&m_d->updateSignalCompressor, SIGNAL(timeout()), SLOT(slotDelayedStaticUpdate()));
+
+    KisAnimatedTransformParamsInterface* rhsAniTransform = dynamic_cast<KisAnimatedTransformParamsInterface*>(rhs.m_d->params.data());
+    KisAnimatedTransformParamsInterface* aniTransform = dynamic_cast<KisAnimatedTransformParamsInterface*>(m_d->params.data());
+    if(rhsAniTransform && aniTransform) {
+        QList<KisKeyframeChannel*> chans;
+        chans = aniTransform->copyChannelsFrom(rhsAniTransform);
+        foreach( KisKeyframeChannel* chan, chans) {
+            addKeyframeChannel(chan);
+        }
+    }
 }
 
 KisPaintDeviceSP KisTransformMask::paintDevice() const
@@ -140,6 +148,7 @@ void KisTransformMask::setTransformParams(KisTransformMaskParamsInterfaceSP para
     }
 
     m_d->params = params;
+
     m_d->reloadParameters();
 
     m_d->updateSignalCompressor.stop();
@@ -171,7 +180,8 @@ KisPaintDeviceSP KisTransformMask::buildPreviewDevice()
     /**
      * Note: this function must be called from within the scheduler's
      * context. We are accessing parent's updateProjection(), which
-     * is not entirely safe.
+     * is not entirely safe. The calling job must ensure it is the
+     * only job running.
      */
 
     KisLayerSP parentLayer = qobject_cast<KisLayer*>(parent().data());
@@ -179,11 +189,54 @@ KisPaintDeviceSP KisTransformMask::buildPreviewDevice()
 
     KisPaintDeviceSP device =
         new KisPaintDevice(parentLayer->original()->colorSpace());
+    device->setDefaultBounds(parentLayer->original()->defaultBounds());
 
     QRect requestedRect = parentLayer->original()->exactBounds();
     parentLayer->buildProjectionUpToNode(device, this, requestedRect);
 
     return device;
+}
+
+KisPaintDeviceSP KisTransformMask::buildSourcePreviewDevice()
+{
+    /**
+     * Note: this function must be called from within the scheduler's
+     * context. We are accessing parent's updateProjection(), which
+     * is not entirely safe. The calling job must ensure it is the
+     * only job running.
+     */
+
+    KisLayerSP parentLayer = qobject_cast<KisLayer*>(parent().data());
+    KIS_ASSERT_RECOVER(parentLayer) { return new KisPaintDevice(colorSpace()); }
+
+    KisPaintDeviceSP device =
+        new KisPaintDevice(parentLayer->original()->colorSpace());
+    device->setDefaultBounds(parentLayer->original()->defaultBounds());
+
+    QRect requestedRect = parentLayer->original()->exactBounds();
+
+    KisNodeSP prevSibling = this->prevSibling();
+    if (prevSibling) {
+        parentLayer->buildProjectionUpToNode(device, prevSibling, requestedRect);
+    } else {
+        requestedRect = parentLayer->outgoingChangeRect(requestedRect);
+        parentLayer->copyOriginalToProjection(parentLayer->original(), device, requestedRect);
+    }
+
+    return device;
+}
+
+void KisTransformMask::overrideStaticCacheDevice(KisPaintDeviceSP device)
+{
+    m_d->staticCacheDevice->clear();
+
+    if (device) {
+        const QRect rc = device->extent();
+        KisPainter::copyAreaOptimized(rc.topLeft(), device, m_d->staticCacheDevice, rc);
+    }
+
+    m_d->staticCacheValid = bool(device);
+    m_d->staticCacheIsOverridden = bool(device);
 }
 
 void KisTransformMask::recaclulateStaticImage()
@@ -195,13 +248,19 @@ void KisTransformMask::recaclulateStaticImage()
      */
 
     KisLayerSP parentLayer = qobject_cast<KisLayer*>(parent().data());
-    KIS_ASSERT_RECOVER_RETURN(parentLayer);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(parentLayer);
+
+    // It might happen that the mask became invisible in the meantime
+    // and the projection has become disabled. That mush be "impossible"
+    // situation, hence assert.
+    KIS_SAFE_ASSERT_RECOVER_RETURN(parentLayer->projection() != parentLayer->paintDevice());
 
     if (!m_d->staticCacheDevice ||
         *m_d->staticCacheDevice->colorSpace() != *parentLayer->original()->colorSpace()) {
 
         m_d->staticCacheDevice =
             new KisPaintDevice(parentLayer->original()->colorSpace());
+        m_d->staticCacheDevice->setDefaultBounds(parentLayer->original()->defaultBounds());
     }
 
     m_d->recalculatingStaticImage = true;
@@ -210,7 +269,12 @@ void KisTransformMask::recaclulateStaticImage()
      * into account all the change rects of all the masks. Usually,
      * this work is done by the walkers.
      */
-    QRect requestedRect = parentLayer->changeRect(parentLayer->original()->exactBounds());
+    QRect requestedRect =
+        parentLayer->changeRect(parentLayer->original()->exactBounds());
+
+    // force reset parent layer's projection, because we might have changed
+    // our mask parameters and going to write to some other area
+    parentLayer->projection()->clear();
 
     /**
      * Here we use updateProjection() to regenerate the projection of
@@ -241,7 +305,8 @@ QRect KisTransformMask::decorateRect(KisPaintDeviceSP &src,
 
     if (m_d->params->hasChanged()) m_d->reloadParameters();
 
-    if (!m_d->recalculatingStaticImage &&
+    if (!m_d->staticCacheIsOverridden &&
+        !m_d->recalculatingStaticImage &&
         (maskPos == N_FILTHY || maskPos == N_ABOVE_FILTHY)) {
 
         m_d->staticCacheValid = false;
@@ -260,7 +325,7 @@ QRect KisTransformMask::decorateRect(KisPaintDeviceSP &src,
         KIS_DUMP_DEVICE_2(dst, DUMP_RECT, "recalc_dst", "dd");
 #endif /* DEBUG_RENDERING */
 
-    } else if (!m_d->staticCacheValid && m_d->params->isAffine()) {
+    } else if (!m_d->staticCacheValid && !m_d->staticCacheIsOverridden && m_d->params->isAffine()) {
         m_d->worker.runPartialDst(src, dst, rc);
 
 #ifdef DEBUG_RENDERING
@@ -269,7 +334,7 @@ QRect KisTransformMask::decorateRect(KisPaintDeviceSP &src,
         KIS_DUMP_DEVICE_2(dst, DUMP_RECT, "partial_dst", "dd");
 #endif /* DEBUG_RENDERING */
 
-    } else if (m_d->staticCacheDevice && m_d->staticCacheValid) {
+    } else if ((m_d->staticCacheValid || m_d->staticCacheIsOverridden) && m_d->staticCacheDevice) {
         KisPainter::copyAreaOptimized(rc.topLeft(), m_d->staticCacheDevice, dst, rc);
 
 #ifdef DEBUG_RENDERING
@@ -409,6 +474,18 @@ QRect KisTransformMask::exactBounds() const
     KisLayerSP parentLayer = qobject_cast<KisLayer*>(parent().data());
     if (parentLayer) {
         existentProjection = parentLayer->projection()->exactBounds();
+
+        /* Take into account multiple keyframes... */
+        if (parentLayer->original() && parentLayer->original()->defaultBounds() && parentLayer->original()->keyframeChannel()) {
+            Q_FOREACH( const int& time, parentLayer->original()->keyframeChannel()->allKeyframeTimes() ) {
+                KisRasterKeyframeSP keyframe = parentLayer->original()->keyframeChannel()->keyframeAt<KisRasterKeyframe>(time);
+                existentProjection |= keyframe->contentBounds();
+            }
+        }
+    }
+
+    if (isAnimated()) {
+        existentProjection |= changeRect(image()->bounds());
     }
 
     return changeRect(sourceDataBounds()) | existentProjection;
@@ -427,18 +504,28 @@ QRect KisTransformMask::sourceDataBounds() const
     return partialChangeRect;
 }
 
+qint32 KisTransformMask::x() const
+{
+    return m_d->offset.x();
+}
+
+qint32 KisTransformMask::y() const
+{
+    return m_d->offset.y();
+}
+
 void KisTransformMask::setX(qint32 x)
 {
     m_d->params->translate(QPointF(x - this->x(), 0));
     setTransformParams(m_d->params);
-    KisEffectMask::setX(x);
+    m_d->offset.setX(x);
 }
 
 void KisTransformMask::setY(qint32 y)
 {
     m_d->params->translate(QPointF(0, y - this->y()));
     setTransformParams(m_d->params);
-    KisEffectMask::setY(y);
+    m_d->offset.setY(y);
 }
 
 void KisTransformMask::forceUpdateTimedNode()
@@ -461,6 +548,22 @@ void KisTransformMask::threadSafeForceStaticImageUpdate()
     emit sigInternalForceStaticImageUpdate();
 }
 
+void KisTransformMask::syncLodCache()
+{
+    m_d->offset.syncLodOffset();
+    KisEffectMask::syncLodCache();
+}
+
+KisPaintDeviceList KisTransformMask::getLodCapableDevices() const
+{
+    KisPaintDeviceList devices;
+    devices += KisEffectMask::getLodCapableDevices();
+    if (m_d->staticCacheDevice) {
+        devices << m_d->staticCacheDevice;
+    }
+    return devices;
+}
+
 void KisTransformMask::slotInternalForceStaticImageUpdate()
 {
     m_d->updateSignalCompressor.stop();
@@ -469,27 +572,28 @@ void KisTransformMask::slotInternalForceStaticImageUpdate()
 
 KisKeyframeChannel *KisTransformMask::requestKeyframeChannel(const QString &id)
 {
-    if (id == KisKeyframeChannel::TransformArguments.id() ||
-        id == KisKeyframeChannel::TransformPositionX.id() ||
-        id == KisKeyframeChannel::TransformPositionY.id() ||
-        id == KisKeyframeChannel::TransformScaleX.id() ||
-        id == KisKeyframeChannel::TransformScaleY.id() ||
-        id == KisKeyframeChannel::TransformShearX.id() ||
-        id == KisKeyframeChannel::TransformShearY.id() ||
-        id == KisKeyframeChannel::TransformRotationX.id() ||
-        id == KisKeyframeChannel::TransformRotationY.id() ||
-        id == KisKeyframeChannel::TransformRotationZ.id()) {
+    if (id == KisKeyframeChannel::PositionX.id() ||
+        id == KisKeyframeChannel::PositionY.id() ||
+        id == KisKeyframeChannel::ScaleX.id() ||
+        id == KisKeyframeChannel::ScaleY.id() ||
+        id == KisKeyframeChannel::ShearX.id() ||
+        id == KisKeyframeChannel::ShearY.id() ||
+        id == KisKeyframeChannel::RotationX.id() ||
+        id == KisKeyframeChannel::RotationY.id() ||
+        id == KisKeyframeChannel::RotationZ.id()) {
 
         KisAnimatedTransformParamsInterface *animatedParams = dynamic_cast<KisAnimatedTransformParamsInterface*>(m_d->params.data());
 
         if (!animatedParams) {
-            auto converted = KisTransformMaskParamsFactoryRegistry::instance()->animateParams(m_d->params);
+            auto converted = KisTransformMaskParamsFactoryRegistry::instance()->animateParams(m_d->params, this);
             if (converted.isNull()) return KisEffectMask::requestKeyframeChannel(id);
             m_d->params = converted;
             animatedParams = dynamic_cast<KisAnimatedTransformParamsInterface*>(converted.data());
         }
 
-        KisKeyframeChannel *channel = animatedParams->getKeyframeChannel(id, parent());
+        KisKeyframeChannel *channel = animatedParams->requestKeyframeChannel(id, this);
+        channel->setNode(this);
+        channel->setDefaultBounds(new KisDefaultBounds(this->image()));
         if (channel) return channel;
     }
 
@@ -498,16 +602,15 @@ KisKeyframeChannel *KisTransformMask::requestKeyframeChannel(const QString &id)
 
 bool KisTransformMask::supportsKeyframeChannel(const QString &id)
 {
-    if (id == KisKeyframeChannel::TransformArguments.id() ||
-        id == KisKeyframeChannel::TransformPositionX.id() ||
-        id == KisKeyframeChannel::TransformPositionY.id() ||
-        id == KisKeyframeChannel::TransformScaleX.id() ||
-        id == KisKeyframeChannel::TransformScaleY.id() ||
-        id == KisKeyframeChannel::TransformShearX.id() ||
-        id == KisKeyframeChannel::TransformShearY.id() ||
-        id == KisKeyframeChannel::TransformRotationX.id() ||
-        id == KisKeyframeChannel::TransformRotationY.id() ||
-            id == KisKeyframeChannel::TransformRotationZ.id()) {
+    if (id == KisKeyframeChannel::PositionX.id() ||
+        id == KisKeyframeChannel::PositionY.id() ||
+        id == KisKeyframeChannel::ScaleX.id() ||
+        id == KisKeyframeChannel::ScaleY.id() ||
+        id == KisKeyframeChannel::ShearX.id() ||
+        id == KisKeyframeChannel::ShearY.id() ||
+        id == KisKeyframeChannel::RotationX.id() ||
+        id == KisKeyframeChannel::RotationY.id() ||
+            id == KisKeyframeChannel::RotationZ.id()) {
         return true;
     }
     else if (id == KisKeyframeChannel::Opacity.id()) {

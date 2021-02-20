@@ -1,19 +1,7 @@
 /*
- *  Copyright (c) 2014 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2014 Boudewijn Rempt <boud@valdyas.org>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 #include "kis_dlg_layer_style.h"
 
@@ -282,9 +270,31 @@ void KisDlgLayerStyle::slotNewStyle()
                               QLineEdit::Normal, i18nc("Default name for a new style", "New Style"));
 
     KisPSDLayerStyleSP style = this->style();
-    style->setName(selectAvailableStyleName(styleName));
+    KisPSDLayerStyleSP clone = style->clone().dynamicCast<KisPSDLayerStyle>();
+    style->setName(styleName);
+    clone->setName(styleName);
+    clone->setFilename(styleName);
+    clone->setUuid(QUuid::createUuid());
+    m_stylesSelector->addNewStyle(clone);
+    const QString customStylesStorageLocation = "asl/CustomStyles.asl";
+    KisConfig cfg(true);
+    QString resourceDir = cfg.readEntry<QString>(KisResourceLocator::resourceLocationKey,
+                                            QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
+    QString storagePath = resourceDir + "/" + customStylesStorageLocation;
 
-    m_stylesSelector->addNewStyle(style->clone().dynamicCast<KisPSDLayerStyle>());
+
+    if (KisResourceLocator::instance()->hasStorage(storagePath)) {
+        KisResourceModel model(ResourceType::LayerStyles);
+        model.addResource(clone, storagePath);
+
+    } else {
+        KisAslLayerStyleSerializer serializer;
+        serializer.setStyles(QVector<KisPSDLayerStyleSP>() << clone);
+        serializer.saveToFile(storagePath);
+        QSharedPointer<KisResourceStorage> storage = QSharedPointer<KisResourceStorage>(new KisResourceStorage(storagePath));
+        KisResourceLocator::instance()->addStorage(customStylesStorageLocation, storage);
+    }
+
 }
 
 QString createNewAslPath(QString resourceFolderPath, QString filename)
@@ -328,14 +338,11 @@ void KisDlgLayerStyle::slotLoadStyle()
     KisResourceStorageSP storage = QSharedPointer<KisResourceStorage>::create(newLocation);
     KIS_ASSERT(!storage.isNull());
     KisResourceLocator::instance()->addStorage(newLocation, storage);
+    m_stylesSelector->refillCollections();
 }
 
 void KisDlgLayerStyle::slotSaveStyle()
 {
-    // TODO RESOURCES: needs figuring out
-    warnKrita << "Layer style cannot be saved; needs figuring out what to do here";
-
-    /*
     QString filename; // default value?
 
     KoFileDialog dialog(this, KoFileDialog::SaveFile, "layerstyle");
@@ -343,17 +350,14 @@ void KisDlgLayerStyle::slotSaveStyle()
     dialog.setMimeTypeFilters(QStringList() << "application/x-photoshop-style-library", "application/x-photoshop-style-library");
     filename = dialog.filename();
 
-    QScopedPointer<KisPSDLayerStyleCollectionResource> collection(
-        new KisPSDLayerStyleCollectionResource(filename));
+    QSharedPointer<KisAslLayerStyleSerializer> serializer = QSharedPointer<KisAslLayerStyleSerializer>(new KisAslLayerStyleSerializer());
 
     KisPSDLayerStyleSP newStyle = style()->clone().dynamicCast<KisPSDLayerStyle>();
     newStyle->setName(QFileInfo(filename).completeBaseName());
-
-    KisPSDLayerStyleCollectionResource::StylesVector vector = collection->layerStyles();
-    vector << newStyle;
-    collection->setLayerStyles(vector);
-    collection->save();
-    */
+    QVector<KisPSDLayerStyleSP> styles;
+    styles << newStyle;
+    serializer->setStyles(styles);
+    serializer->saveToFile(filename);
 }
 
 void KisDlgLayerStyle::changePage(QListWidgetItem *current, QListWidgetItem *previous)
@@ -511,9 +515,9 @@ bool StylesSelector::LocationProxyModel::filterAcceptsRow(int source_row, const 
     }
 
     QModelIndex idx = sourceModel()->index(source_row, 0);
-    QString location = sourceModel()->data(idx, Qt::UserRole + KisResourceModel::Location).toString();
-    qDebug() << sourceModel()->data(idx, Qt::UserRole + KisResourceModel::Location).toString()
-             << sourceModel()->data(idx, Qt::UserRole + KisResourceModel::Name).toString();
+    QString location = sourceModel()->data(idx, Qt::UserRole + KisAbstractResourceModel::Location).toString();
+    qDebug() << sourceModel()->data(idx, Qt::UserRole + KisAbstractResourceModel::Location).toString()
+             << sourceModel()->data(idx, Qt::UserRole + KisAbstractResourceModel::Name).toString();
     return location == m_locationToFilter;
 }
 
@@ -539,13 +543,13 @@ StylesSelector::StylesSelector(QWidget *parent)
     ui.setupUi(this);
 
     //ui.cmbStyleCollections->setModel();
-    m_resourceModel = KisResourceModelProvider::resourceModel(ResourceType::LayerStyles);
+    m_resourceModel = new KisResourceModel(ResourceType::LayerStyles, this);
     m_locationsProxyModel = new LocationProxyModel(this);
     m_locationsProxyModel->setSourceModel(m_resourceModel);
     m_locationsProxyModel->setEnableFiltering(false);
 
     ui.listStyles->setModel(m_locationsProxyModel);
-    ui.listStyles->setModelColumn(KisResourceModel::Name);
+    ui.listStyles->setModelColumn(KisAbstractResourceModel::Name);
 
     connect(ui.cmbStyleCollections, SIGNAL(activated(QString)), this, SLOT(loadStyles(QString)));
     connect(ui.listStyles, SIGNAL(clicked(QModelIndex)), this, SLOT(selectStyle(QModelIndex)));
@@ -565,7 +569,7 @@ void StylesSelector::refillCollections()
     QStringList locationsList;
     for (int i = 0; i < m_resourceModel->rowCount(); i++) {
         QModelIndex idx = m_resourceModel->index(i, 0);
-        QString location = m_resourceModel->data(idx, Qt::UserRole + KisResourceModel::Location).toString();
+        QString location = m_resourceModel->data(idx, Qt::UserRole + KisAbstractResourceModel::Location).toString();
         if (!locationsList.contains(location)) {
             locationsList << location;
         }
@@ -664,8 +668,6 @@ void StylesSelector::slotResourceModelReset()
 
 void StylesSelector::addNewStyle(KisPSDLayerStyleSP style)
 {
-    KoResourceServer<KisPSDLayerStyle> *server = KisResourceServerProvider::instance()->layerStyleServer();
-    server->addResource(style);
 
     // TODO: RESOURCES: what about adding only to CustomStyles.asl
 
@@ -1091,6 +1093,8 @@ GradientOverlay::GradientOverlay(KisCanvasResourceProvider *resourceProvider, QW
 
     ui.intScale->setRange(0, 100);
     ui.intScale->setSuffix(i18n(" %"));
+    
+    ui.angleSelector->angleSelector()->setResetAngle(90.0);
 
     ui.cmbGradient->setCanvasResourcesInterface(resourceProvider->resourceManager()->canvasResourcesInterface());
 
@@ -1103,6 +1107,7 @@ GradientOverlay::GradientOverlay(KisCanvasResourceProvider *resourceProvider, QW
     connect(ui.cmbStyle, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
     connect(ui.chkAlignWithLayer, SIGNAL(toggled(bool)), SIGNAL(configChanged()));
     connect(ui.intScale, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
+    connect(ui.chkDither, SIGNAL(toggled(bool)), SIGNAL(configChanged()));
 }
 
 void GradientOverlay::setGradientOverlay(const psd_layer_effects_gradient_overlay *config)
@@ -1121,6 +1126,7 @@ void GradientOverlay::setGradientOverlay(const psd_layer_effects_gradient_overla
     ui.chkAlignWithLayer->setCheckable(config->alignWithLayer());
     ui.angleSelector->setValue(config->angle());
     ui.intScale->setValue(config->scale());
+    ui.chkDither->setChecked(config->dither());
 }
 
 void GradientOverlay::fetchGradientOverlay(psd_layer_effects_gradient_overlay *config) const
@@ -1133,6 +1139,7 @@ void GradientOverlay::fetchGradientOverlay(psd_layer_effects_gradient_overlay *c
     config->setAlignWithLayer(ui.chkAlignWithLayer->isChecked());
     config->setAngle(ui.angleSelector->value());
     config->setScale(ui.intScale->value());
+    config->setDither(ui.chkDither->isChecked());
 }
 
 

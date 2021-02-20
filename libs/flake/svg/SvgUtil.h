@@ -1,20 +1,7 @@
 /* This file is part of the KDE project
- * Copyright (C) 2009 Jan Hambrecht <jaham@gmx.net>
+ * SPDX-FileCopyrightText: 2009 Jan Hambrecht <jaham@gmx.net>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #ifndef SVGUTIL_H
@@ -52,18 +39,19 @@ public:
     static QSizeF toUserSpace(const QSizeF &size);
 
     /**
-     * Parses the given string containing a percentage number.
-     * @param value the input number containing the percentage
-     * @return the percentage number normalized to 0..100
+     * Parses the given float percentage.
+     * @param value the input number containing float percentage (0..1)
+     * @return the percentage string (0%..100%), not normalized
      */
     static QString toPercentage(qreal value);
 
     /**
-     * Parses the given string containing a percentage number.
-     * @param s the input string containing the percentage
-     * @return the percentage number normalized to 0..1
+     * Parses the given string containing a percentage.
+     * @param s the input string containing the percentage, float (0..1) or integer (0%..100%)
+     * @param ok optional failure indicator
+     * @return the float percentage (0..1), not normalized
      */
-    static double fromPercentage(QString s);
+    static double fromPercentage(QString s, bool *ok=nullptr);
 
     /**
      * Converts position from objectBoundingBox units to userSpace units.

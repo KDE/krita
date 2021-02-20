@@ -1,21 +1,9 @@
 /*
  * This file is part of Krita
  *
- * Copyright (c) 2019 Miguel Lopez <reptillia39@live.com>
+ * SPDX-FileCopyrightText: 2019 Miguel Lopez <reptillia39@live.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "wdg_gaussianhighpass.h"
@@ -33,7 +21,8 @@ KisWdgGaussianHighPass::KisWdgGaussianHighPass(QWidget * parent) : KisConfigWidg
 {
     m_widget = new Ui_WdgGaussianHighPass();
     m_widget->setupUi(this);
-
+    widget()->doubleblurAmount->setRange(0.0, 250.0, 2);
+    widget()->doubleblurAmount->setSingleStep(1.00);
     connect(widget()->doubleblurAmount, SIGNAL(valueChanged(double)), SIGNAL(sigConfigurationItemChanged()));
 }
 

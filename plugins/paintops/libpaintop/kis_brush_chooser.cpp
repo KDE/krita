@@ -1,23 +1,11 @@
 /*
- *  Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
- *  Copyright (c) 2009 Sven Langkamp <sven.langkamp@gmail.com>
- *  Copyright (c) 2010 Cyrille Berger <cberger@cberger.net>
- *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
- *  Copyright (C) 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
+ *  SPDX-FileCopyrightText: 2004 Adrian Page <adrian@pagenet.plus.com>
+ *  SPDX-FileCopyrightText: 2009 Sven Langkamp <sven.langkamp@gmail.com>
+ *  SPDX-FileCopyrightText: 2010 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  SPDX-FileCopyrightText: 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_brush_chooser.h"
@@ -80,7 +68,7 @@ void KisBrushDelegate::paint(QPainter * painter, const QStyleOptionViewItem & op
     if (! index.isValid())
         return;
 
-    QImage thumbnail = index.data(Qt::UserRole + KisResourceModel::Thumbnail).value<QImage>();
+    QImage thumbnail = index.data(Qt::UserRole + KisAbstractResourceModel::Thumbnail).value<QImage>();
 
     QRect itemRect = option.rect;
 
@@ -122,10 +110,8 @@ KisPredefinedBrushChooser::KisPredefinedBrushChooser(QWidget *parent, const char
 
     QObject::connect(brushSizeSpinBox, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetItemSize(qreal)));
 
-    brushRotationSpinBox->setRange(0, 360, 0);
-    brushRotationSpinBox->setValue(0);
-    brushRotationSpinBox->setSuffix(QChar(Qt::Key_degree));
-    QObject::connect(brushRotationSpinBox, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetItemRotation(qreal)));
+    brushRotationAngleSelector->setDecimals(0);
+    QObject::connect(brushRotationAngleSelector, SIGNAL(angleChanged(qreal)), this, SLOT(slotSetItemRotation(qreal)));
 
     brushSpacingSelectionWidget->setSpacing(true, 1.0);
     connect(brushSpacingSelectionWidget, SIGNAL(sigSpacingChanged()), SLOT(slotSpacingChanged()));
@@ -392,7 +378,7 @@ void KisPredefinedBrushChooser::updateBrushTip(KoResourceSP resource, bool isCha
         // this will set the brush's model data to keep what it currently has for size, spacing, etc.
         if (preserveBrushPresetSettings->isChecked() && !isChangingBrushPresets) {
             m_brush->setAutoSpacing(brushSpacingSelectionWidget->autoSpacingActive(), brushSpacingSelectionWidget->autoSpacingCoeff());
-            m_brush->setAngle(brushRotationSpinBox->value() * M_PI / 180);
+            m_brush->setAngle(brushRotationAngleSelector->angle() * M_PI / 180);
             m_brush->setSpacing(brushSpacingSelectionWidget->spacing());
             m_brush->setUserEffectiveSize(brushSizeSpinBox->value());
         }
@@ -401,7 +387,7 @@ void KisPredefinedBrushChooser::updateBrushTip(KoResourceSP resource, bool isCha
                                 m_brush->autoSpacingActive() ?
                                 m_brush->autoSpacingCoeff() : m_brush->spacing());
 
-        brushRotationSpinBox->setValue(m_brush->angle() * 180 / M_PI);
+        brushRotationAngleSelector->setAngle(m_brush->angle() * 180 / M_PI);
         brushSizeSpinBox->setValue(m_brush->width() * m_brush->scale());
 
         emit sigBrushChanged();
@@ -416,7 +402,7 @@ void KisPredefinedBrushChooser::slotUpdateBrushModeButtonsState()
 {
     KisColorfulBrush *colorfulBrush = dynamic_cast<KisColorfulBrush*>(m_brush.data());
     const bool modeSwitchEnabled =
-        m_hslBrushTipEnabled && colorfulBrush && colorfulBrush->hasColor();
+        m_hslBrushTipEnabled && colorfulBrush && colorfulBrush->isImageType();
 
     if (modeSwitchEnabled) {
         cmbBrushMode->setCurrentIndex(int(colorfulBrush->brushApplication()));

@@ -1,3 +1,7 @@
+#
+#  SPDX-License-Identifier: GPL-3.0-or-later
+#
+
 from PyQt5.QtCore import pyqtSlot, Qt
 from PyQt5.QtGui import QCloseEvent
 from PyQt5.QtWidgets import (QApplication, QFileDialog, QMainWindow,

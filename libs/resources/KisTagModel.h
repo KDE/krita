@@ -1,40 +1,48 @@
 /*
- * Copyright (c) 2018 boud <boud@valdyas.org>
- * Copyright (c) 2020 Agata Cacko <cacko.azh@gmail.com>
+ * SPDX-FileCopyrightText: 2018 boud <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2020 Agata Cacko <cacko.azh@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: GPL-2.0-or-later
  */
-#ifndef KISTAGMODEL_H
-#define KISTAGMODEL_H
+#ifndef KisAllTagsModel_H
+#define KisAllTagsModel_H
 
 #include <QObject>
 #include <QAbstractTableModel>
+#include <QSortFilterProxyModel>
 
 #include <KisTag.h>
 #include <KoResource.h>
 
 #include "kritaresources_export.h"
 
+class KisAbstractTagModel
+{
+public:
 
-class KRITARESOURCES_EXPORT KisTagModel : public QAbstractTableModel
+    virtual ~KisAbstractTagModel() {}
+
+    virtual QModelIndex indexForTag(KisTagSP tag) const = 0;
+    virtual KisTagSP tagForIndex(QModelIndex index = QModelIndex()) const = 0;
+
+    /// Add a new tag with a possibly empty list of resources to tag
+    virtual KisTagSP addTag(const QString &tagName, QVector<KoResourceSP> taggedResouces)  = 0;
+
+    /// Add a tag, if it doesn't exist yet, with a possibly empty list of resources to tag
+    virtual bool addTag(const KisTagSP tag, QVector<KoResourceSP> taggedResouces = QVector<KoResourceSP>()) = 0;
+
+    virtual bool setTagActive(const KisTagSP tag) = 0;
+    virtual bool setTagInactive(const KisTagSP tag) = 0;
+    virtual bool renameTag(const KisTagSP tag) = 0;
+    virtual bool changeTagActive(const KisTagSP tag, bool active) = 0;
+};
+
+
+class KRITARESOURCES_EXPORT KisAllTagsModel
+        : public QAbstractTableModel
+        , public KisAbstractTagModel
 {
     Q_OBJECT
-
-private:
-
-    KisTagModel(const QString &resourceType, QObject *parent = 0);
 
 public:
 
@@ -53,52 +61,105 @@ public:
         AllUntagged = -1,
     };
 
-
-    ~KisTagModel() override;
+    ~KisAllTagsModel() override;
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
     QVariant data(const QModelIndex &index, int role) const override;
+    bool setData(const QModelIndex &index, const QVariant &value, int role) override;
+    Qt::ItemFlags flags(const QModelIndex &index) const override;
 
-// KisTagModel API
+// KisAllTagsModel API
 
-    KisTagSP tagForIndex(QModelIndex index = QModelIndex()) const;
-    QList<KisTagSP> allTags() const;
+    QModelIndex indexForTag(KisTagSP tag) const override;
+    KisTagSP tagForIndex(QModelIndex index = QModelIndex()) const override;
 
-    bool addEmptyTag(const QString &tagName, QVector<KoResourceSP> taggedResouces);
-    bool addEmptyTag(const KisTagSP tag, QVector<KoResourceSP> taggedResouces);
-    bool addTag(const KisTagSP tag, QVector<KoResourceSP> taggedResouces = QVector<KoResourceSP>());
-    bool removeTag(const KisTagSP tag);
-    bool tagResource(const KisTagSP tag, const KoResourceSP resource);
-    bool untagResource(const KisTagSP tag, const KoResourceSP resource);
-    bool renameTag(const KisTagSP tag, const QString &name);
-    bool changeTagActive(const KisTagSP tag, bool active);
-    QVector<KisTagSP> tagsForResource(int resourceId) const;
+    // TODO: replace ALL occurrences of KoResourceSP here with the resource id's.
+    KisTagSP addTag(const QString &tagName, QVector<KoResourceSP> taggedResouces) override;
+    bool addTag(const KisTagSP tag, QVector<KoResourceSP> taggedResouces = QVector<KoResourceSP>()) override;
+    bool setTagActive(const KisTagSP tag) override;
+    bool setTagInactive(const KisTagSP tag) override;
 
-    KisTagSP tagByUrl(const QString& tagUrl) const;
-
-
+    bool renameTag(const KisTagSP tag) override;
+    bool changeTagActive(const KisTagSP tag, bool active) override;
 
 private:
 
-    friend class DlgDbExplorer;
-    friend class KisTagModelProvider;
-    friend class TestTagModel;
+    friend class KisResourceModelProvider;
+    friend class TestTagResourceModel;
+    friend class KisTagModel;
 
-    void setResourceType(const QString &resourceType);
+    KisAllTagsModel(const QString &resourceType, QObject *parent = 0);
 
     bool tagResourceByUrl(const QString& tagUrl, const int resourceId);
     bool tagResourceById(const int tagId, const int resource);
 
+    KisTagSP tagByUrl(const QString& tagUrl) const;
 
-
-    bool prepareQuery();
+    bool resetQuery();
 
     struct Private;
     Private* const d;
 
 };
 
-typedef QSharedPointer<KisTagModel> KisTagModelSP;
+class KRITARESOURCES_EXPORT KisTagModel
+        : public QSortFilterProxyModel
+        , public KisAbstractTagModel
+{
 
-#endif // KISTAGMODEL_H
+    Q_OBJECT
+
+public:
+    KisTagModel(const QString &type, QObject *parent = 0);
+    ~KisTagModel() override;
+
+    enum TagFilter {
+        ShowInactiveTags = 0,
+        ShowActiveTags,
+        ShowAllTags
+    };
+
+    void setTagFilter(TagFilter filter);
+
+    enum StorageFilter {
+        ShowInactiveStorages = 0,
+        ShowActiveStorages,
+        ShowAllStorages
+    };
+
+    void setStorageFilter(StorageFilter filter);
+
+
+    // KisAllTagsModel API
+
+    QModelIndex indexForTag(KisTagSP tag) const override;
+    KisTagSP tagForIndex(QModelIndex index = QModelIndex()) const override;
+    KisTagSP addTag(const QString &tagName, QVector<KoResourceSP> taggedResouces) override;
+    bool addTag(const KisTagSP tag, QVector<KoResourceSP> taggedResouces = QVector<KoResourceSP>()) override;
+    bool setTagInactive(const KisTagSP tag) override;
+    bool setTagActive(const KisTagSP tag) override;
+    bool renameTag(const KisTagSP tag) override;
+    bool changeTagActive(const KisTagSP tag, bool active) override;
+
+protected:
+
+    bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const override;
+    bool lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const override;
+
+private:
+
+    friend class DlgDbExplorer;
+    friend class TestTagModel;
+
+
+    struct Private;
+    Private *const d;
+
+    Q_DISABLE_COPY(KisTagModel)
+
+};
+
+typedef QSharedPointer<KisAllTagsModel> KisAllTagsModelSP;
+
+#endif // KisAllTagsModel_H

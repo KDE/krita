@@ -5,11 +5,11 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
-   version="1.1"
-   id="svg2"
-   viewBox="0 0 32 32.000001"
+   width="32"
    height="32"
-   width="32">
+   viewBox="0 0 32 32.000001"
+   id="svg2"
+   version="1.1">
   <defs
      id="defs4" />
   <metadata
@@ -23,11 +23,12 @@
         <dc:title></dc:title>
         <dc:creator>
           <cc:Agent>
-            <dc:title>Andrei Rudenko</dc:title>
+            <dc:title>Timothée Giet</dc:title>
           </cc:Agent>
         </dc:creator>
         <cc:license
            rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+        <dc:date>2020</dc:date>
       </cc:Work>
       <cc:License
          rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
@@ -47,14 +48,15 @@
     </rdf:RDF>
   </metadata>
   <g
+     transform="translate(-0.375,0.036056)"
      id="layer4">
     <path
-       id="rect4502"
-       d="m 12.443835,9.3888263 -4.4465,1.5624997 9.8125,21.039062 4.693359,-2.27892 z"
-       style="opacity:1;fill:#323232;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:0.50196078" />
+       style="fill:#373737;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 6.375,27.963944 v -28 l 19,20 h -11 z"
+       id="path4148" />
     <path
-       id="path4148"
-       d="m 6.1875,28 0.125,-28.0625 20.25,19.5 -12.375,0.25 z"
-       style="fill:#323232;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+       id="path817"
+       d="m 21.375,29.963944 -5,2 -6,-15 5,-2"
+       style="fill:#373737;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
   </g>
 </svg>

@@ -1,19 +1,7 @@
 /* This file is part of the KDE libraries
-   Copyright (C) 2002 Simon Hausmann <hausmann@kde.org>
+   SPDX-FileCopyrightText: 2002 Simon Hausmann <hausmann@kde.org>
 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License version 2 as published by the Free Software Foundation.
-
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
-
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+   SPDX-License-Identifier: LGPL-2.0-only
 */
 
 #include "ktoolbarhandler_p.h"
@@ -23,7 +11,6 @@
 #include <QMenu>
 
 #include <kactionmenu.h>
-#include <kauthorized.h>
 #include <klocalizedstring.h>
 
 #include "kxmlguiwindow.h"
@@ -264,9 +251,7 @@ void ToolBarHandler::setupActions()
     // We have no XML file associated with our action collection, so load settings from KConfig
     actionCollection()->readSettings(); // #233712
 
-    if (KAuthorized::authorizeAction(QStringLiteral("options_show_toolbar"))) {
-        plugActionList(QLatin1String(actionListName), d->actions);
-    }
+    plugActionList(QLatin1String(actionListName), d->actions);
 
     d->connectToActionContainers();
 }

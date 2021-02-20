@@ -1,19 +1,7 @@
 /*
- *  Copyright (c) 2015 Jouni Pentikäinen <joupent@gmail.com>
+ *  SPDX-FileCopyrightText: 2015 Jouni Pentikäinen <joupent@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #ifndef KIS_ANIMATION_PLAYER_H
@@ -27,6 +15,12 @@
 
 class KisCanvas2;
 
+/**
+ * @brief The KisAnimationPlayer class is Krita's high-level
+ * animation playback and navigation interface.
+ * Its main clients are Krita's Timeline and Curves dockers.
+ * It makes heavy use of KisImageAnimationInterface.
+ */
 class KRITAUI_EXPORT KisAnimationPlayer : public QObject
 {
     Q_OBJECT
@@ -35,9 +29,6 @@ public:
     KisAnimationPlayer(KisCanvas2 *canvas);
     ~KisAnimationPlayer() override;
 
-    void play();
-    void pause();
-    void stop();
     void goToPlaybackOrigin();
     void goToStartFrame();
     void displayFrame(int time);
@@ -62,13 +53,31 @@ Q_SIGNALS:
     void sigPlaybackStateChanged(bool value);
     void sigPlaybackStatisticsUpdated();
     void sigFullClipRangeChanged();
+    void sigPlaybackSpeedChanged(double normalizedSpeed);
 
 public Q_SLOTS:
+    void play();
+    void pause();
+    void playPause();
+    void halt();
+    void stop();
+
+    void seek(int frameIndex);
+    void previousFrame();
+    void nextFrame();
+    void previousKeyframe();
+    void nextKeyframe();
+    void previousMatchingKeyframe();
+    void nextMatchingKeyframe();
+
     void slotUpdate();
     void slotCancelPlayback();
     void slotCancelPlaybackSafe();
-    void slotUpdatePlaybackSpeed(double value);
+
+    void setPlaybackSpeedPercent(int value);
+    void setPlaybackSpeedNormalized(double value);
     void slotUpdatePlaybackTimer();
+
     void slotUpdateDropFramesMode();
 
 private Q_SLOTS:

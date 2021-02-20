@@ -1,20 +1,8 @@
 /*
- *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *  Copyright (c) 2005 C. Boemann <cbo@boemann.dk>
+ *  SPDX-FileCopyrightText: 2002 Patrick Julien <freak@codepimps.org>
+ *  SPDX-FileCopyrightText: 2005 C. Boemann <cbo@boemann.dk>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_kra_load_visitor.h"
@@ -737,17 +725,7 @@ bool KisKraLoadVisitor::loadSelection(const QString& location, KisSelectionSP ds
         pixelSelection->setDefaultPixel(transparent);
     }
 
-    // Pixel selection
     bool result = true;
-    QString pixelSelectionLocation = location + DOT_PIXEL_SELECTION;
-    if (m_store->hasFile(pixelSelectionLocation)) {
-        KisPixelSelectionSP pixelSelection = dstSelection->pixelSelection();
-        result = loadPaintDevice(pixelSelection, pixelSelectionLocation);
-        if (!result) {
-            m_warningMessages << i18n("Could not load raster selection %1.", location);
-        }
-        pixelSelection->invalidateOutlineCache();
-    }
 
     // Shape selection
     QString shapeSelectionLocation = location + DOT_SHAPE_SELECTION;
@@ -760,11 +738,43 @@ bool KisKraLoadVisitor::loadSelection(const QString& location, KisSelectionSP ds
         KisShapeSelection* shapeSelection = new KisShapeSelection(m_shapeController, m_image, dstSelection);
         dstSelection->convertToVectorSelectionNoUndo(shapeSelection);
         result = shapeSelection->loadSelection(m_store);
+
+        /**
+         * We need to explicitly call updateProjection() here, because
+         * KisUpdateSelectionJob that is put into the queue will not update
+         * actual layers that own this selection. In normal situation,
+         * the setDirty() call is done explicitly while painting.
+         *
+         * TODO: consider adding a proper setDirty() call to
+         *       KisUpdateSelectionJob. Though it doesn't seem to be needed
+         *       until we allow modifying vector selections on non-selection
+         *       masks.
+         */
+        dstSelection->updateProjection();
         m_store->popDirectory();
         if (!result) {
             m_warningMessages << i18n("Could not load vector selection %1.", location);
         }
+    } else {
+        /**
+         * NOTE: since loading a vector selection discards all the contents
+         * of a raster projection by reincarnating the paint device, there is
+         * no need to load pixel selection in case any vector selection
+         * is present.
+         */
+
+        // Pixel selection
+        QString pixelSelectionLocation = location + DOT_PIXEL_SELECTION;
+        if (m_store->hasFile(pixelSelectionLocation)) {
+            KisPixelSelectionSP pixelSelection = dstSelection->pixelSelection();
+            result = loadPaintDevice(pixelSelection, pixelSelectionLocation);
+            if (!result) {
+                m_warningMessages << i18n("Could not load raster selection %1.", location);
+            }
+            pixelSelection->invalidateOutlineCache();
+        }
     }
+
     return true;
 }
 

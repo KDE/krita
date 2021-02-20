@@ -1,3 +1,7 @@
+<!--
+  SPDX-FileCopyrightText: none
+  SPDX-License-Identifier: CC0-1.0
+-->
 <RCC>
     <qresource prefix="/">
         <file>dark_calligraphy.svg</file>
@@ -5,7 +9,7 @@
         <file>dark_format-fill-color.svg</file>
         <file>dark_krita_draw_path.svg</file>
         <file>dark_krita_tool_color_fill.svg</file>
-        <file>dark_krita_tool_color_picker.svg</file>
+        <file>dark_krita_tool_color_sampler.svg</file>
         <file>dark_krita_tool_dyna.svg</file>
         <file>dark_krita_tool_ellipse.svg</file>
         <file>dark_krita_tool_freehand.svg</file>
@@ -39,7 +43,7 @@
         <file>light_format-fill-color.svg</file>
         <file>light_krita_draw_path.svg</file>
         <file>light_krita_tool_color_fill.svg</file>
-        <file>light_krita_tool_color_picker.svg</file>
+        <file>light_krita_tool_color_sampler.svg</file>
         <file>light_krita_tool_dyna.svg</file>
         <file>light_krita_tool_ellipse.svg</file>
         <file>light_krita_tool_freehand.svg</file>

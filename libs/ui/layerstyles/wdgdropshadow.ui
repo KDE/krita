@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgDropShadow</class>
  <widget class="QWidget" name="WdgDropShadow">
   <property name="geometry">
@@ -108,34 +112,48 @@
         <property name="title">
          <string>Structure</string>
         </property>
-        <layout class="QGridLayout" name="gridLayout_3">
+        <layout class="QFormLayout" name="formLayout">
+         <item row="0" column="0">
+          <widget class="QLabel" name="label_13">
+           <property name="text">
+            <string>&amp;Blend Mode:</string>
+           </property>
+           <property name="buddy">
+            <cstring>cmbCompositeOp</cstring>
+           </property>
+          </widget>
+         </item>
          <item row="0" column="1">
-          <widget class="KisLayerStyleCompositeOpComboBox" name="cmbCompositeOp">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
+          <layout class="QHBoxLayout" name="horizontalLayout">
+           <item>
+            <widget class="KisLayerStyleCompositeOpComboBox" name="cmbCompositeOp">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="toolTip">
+              <string>Set the blend mode for the layer</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="KisColorButton" name="bnColor"/>
+           </item>
+          </layout>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="label_14">
+           <property name="text">
+            <string>Opaci&amp;ty:</string>
            </property>
-           <property name="toolTip">
-            <string>Set the blend mode for the layer</string>
+           <property name="buddy">
+            <cstring>intOpacity</cstring>
            </property>
           </widget>
          </item>
-         <item row="4" column="1" colspan="2">
-          <widget class="KisSliderSpinBox" name="intDistance" native="true">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="2">
-          <widget class="KisColorButton" name="bnColor"/>
-         </item>
-         <item row="1" column="1" colspan="2">
+         <item row="1" column="1">
           <widget class="KisSliderSpinBox" name="intOpacity" native="true">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
@@ -157,37 +175,7 @@
            </property>
           </widget>
          </item>
-         <item row="4" column="0">
-          <widget class="QLabel" name="label_2">
-           <property name="text">
-            <string>&amp;Distance:</string>
-           </property>
-           <property name="buddy">
-            <cstring>intDistance</cstring>
-           </property>
-          </widget>
-         </item>
-         <item row="6" column="1" colspan="2">
-          <widget class="KisSliderSpinBox" name="intSize" native="true">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="label_14">
-           <property name="text">
-            <string>Opaci&amp;ty:</string>
-           </property>
-           <property name="buddy">
-            <cstring>intOpacity</cstring>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="0">
+         <item row="2" column="0">
           <widget class="QLabel" name="label">
            <property name="text">
             <string>An&amp;gle:</string>
@@ -197,7 +185,30 @@
            </property>
           </widget>
          </item>
-         <item row="5" column="0">
+         <item row="2" column="1">
+          <widget class="KisLayerStyleAngleSelector" name="angleSelector" native="true"/>
+         </item>
+         <item row="3" column="0">
+          <widget class="QLabel" name="label_2">
+           <property name="text">
+            <string>&amp;Distance:</string>
+           </property>
+           <property name="buddy">
+            <cstring>intDistance</cstring>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <widget class="KisSliderSpinBox" name="intDistance" native="true">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="0">
           <widget class="QLabel" name="lblSpread">
            <property name="text">
             <string>Sp&amp;read:</string>
@@ -207,7 +218,7 @@
            </property>
           </widget>
          </item>
-         <item row="5" column="1" colspan="2">
+         <item row="4" column="1">
           <widget class="KisSliderSpinBox" name="intSpread" native="true">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
@@ -217,7 +228,7 @@
            </property>
           </widget>
          </item>
-         <item row="6" column="0">
+         <item row="5" column="0">
           <widget class="QLabel" name="label_4">
            <property name="text">
             <string>S&amp;ize:</string>
@@ -227,18 +238,15 @@
            </property>
           </widget>
          </item>
-         <item row="0" column="0">
-          <widget class="QLabel" name="label_13">
-           <property name="text">
-            <string>&amp;Blend Mode:</string>
-           </property>
-           <property name="buddy">
-            <cstring>cmbCompositeOp</cstring>
+         <item row="5" column="1">
+          <widget class="KisSliderSpinBox" name="intSize" native="true">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
            </property>
           </widget>
-         </item>
-         <item row="3" column="1" colspan="2">
-          <widget class="KisLayerStyleAngleSelector" name="angleSelector" native="true"/>
          </item>
         </layout>
        </widget>

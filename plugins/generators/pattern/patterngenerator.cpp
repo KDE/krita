@@ -1,21 +1,9 @@
 /*
  * This file is part of the KDE project
  *
- * Copyright (c) 2008 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2008 Boudewijn Rempt <boud@valdyas.org>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "patterngenerator.h"
@@ -53,7 +41,7 @@ K_PLUGIN_FACTORY_WITH_JSON(KritaPatternGeneratorFactory, "kritapatterngenerator.
 KritaPatternGenerator::KritaPatternGenerator(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
-    KisGeneratorRegistry::instance()->add(new KoPatternGenerator());
+    KisGeneratorRegistry::instance()->add(new PatternGenerator());
 }
 
 KritaPatternGenerator::~KritaPatternGenerator()
@@ -64,21 +52,21 @@ KritaPatternGenerator::~KritaPatternGenerator()
 /*              KoPatternGeneratorConfiguration                             */
 /****************************************************************************/
 
-class KoPatternGeneratorConfiguration : public KisFilterConfiguration
+class PatternGeneratorConfiguration : public KisFilterConfiguration
 {
 public:
-    KoPatternGeneratorConfiguration(const QString & name, qint32 version, KisResourcesInterfaceSP resourcesInterface)
+    PatternGeneratorConfiguration(const QString & name, qint32 version, KisResourcesInterfaceSP resourcesInterface)
         : KisFilterConfiguration(name, version, resourcesInterface)
     {
     }
 
-    KoPatternGeneratorConfiguration(const KoPatternGeneratorConfiguration &rhs)
+    PatternGeneratorConfiguration(const PatternGeneratorConfiguration &rhs)
         : KisFilterConfiguration(rhs)
     {
     }
 
     virtual KisFilterConfigurationSP clone() const override {
-        return new KoPatternGeneratorConfiguration(*this);
+        return new PatternGeneratorConfiguration(*this);
     }
 
     KoPatternSP pattern(KisResourcesInterfaceSP resourcesInterface) const {
@@ -124,23 +112,28 @@ public:
 /*              KoPatternGenerator                                          */
 /****************************************************************************/
 
-KoPatternGenerator::KoPatternGenerator()
+PatternGenerator::PatternGenerator()
     : KisGenerator(id(), KoID("basic"), i18n("&Pattern..."))
 {
     setColorSpaceIndependence(FULLY_INDEPENDENT);
     setSupportsPainting(true);
 }
 
-KisFilterConfigurationSP KoPatternGenerator::factoryConfiguration(KisResourcesInterfaceSP resourcesInterface) const
+KisFilterConfigurationSP PatternGenerator::factoryConfiguration(KisResourcesInterfaceSP resourcesInterface) const
 {
-    return new KoPatternGeneratorConfiguration(id().id(), 1, resourcesInterface);
+    return new PatternGeneratorConfiguration(id().id(), 1, resourcesInterface);
 }
 
-KisFilterConfigurationSP KoPatternGenerator::defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const
+KisFilterConfigurationSP PatternGenerator::defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const
 {
     KisFilterConfigurationSP config = factoryConfiguration(resourcesInterface);
 
     auto source = resourcesInterface->source<KoPattern>(ResourceType::Patterns);
+
+    if (!source.fallbackResource()) {
+        return config;
+    }
+
     config->setProperty("pattern", QVariant::fromValue(source.fallbackResource()->name()));
 
 
@@ -162,13 +155,13 @@ KisFilterConfigurationSP KoPatternGenerator::defaultConfiguration(KisResourcesIn
     return config;
 }
 
-KisConfigWidget * KoPatternGenerator::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, bool) const
+KisConfigWidget * PatternGenerator::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, bool) const
 {
     Q_UNUSED(dev);
     return new KisWdgPattern(parent);
 }
 
-void KoPatternGenerator::generate(KisProcessingInformation dstInfo,
+void PatternGenerator::generate(KisProcessingInformation dstInfo,
                                  const QSize& size,
                                  const KisFilterConfigurationSP _config,
                                  KoUpdater* progressUpdater) const
@@ -177,8 +170,8 @@ void KoPatternGenerator::generate(KisProcessingInformation dstInfo,
 
     Q_ASSERT(!dst.isNull());
 
-    const KoPatternGeneratorConfiguration *config =
-        dynamic_cast<const KoPatternGeneratorConfiguration*>(_config.data());
+    const PatternGeneratorConfiguration *config =
+        dynamic_cast<const PatternGeneratorConfiguration*>(_config.data());
 
     KIS_SAFE_ASSERT_RECOVER_RETURN(config);
     KoPatternSP pattern = config->pattern();

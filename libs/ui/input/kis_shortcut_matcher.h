@@ -1,19 +1,7 @@
 /*
- *  Copyright (c) 2012 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2012 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #ifndef __KIS_SHORTCUT_MATCHER_H
@@ -188,6 +176,13 @@ public:
     bool touchUpdateEvent(QTouchEvent *event);
     bool touchEndEvent(QTouchEvent *event);
 
+    /**
+     * We received TouchCancel event, it means this event sequence has ended
+     * right here i.e without a valid TouchEnd, so we should immediately stop
+     * all running actions.
+     */
+    void touchCancelEvent(const QPointF &localPos);
+
 
     bool nativeGestureBeginEvent(QNativeGestureEvent *event);
     bool nativeGestureEvent(QNativeGestureEvent *event);
@@ -211,6 +206,20 @@ public:
      * get key press and release events).
      */
     void recoveryModifiersWithoutFocus(const QVector<Qt::Key> &keys);
+
+    /**
+     * Sanity check correctness of the internal state of the matcher
+     * by comparing it to the standard modifiers that we get with
+     * every input event. Right now this sanity check is used on Windows
+     * only.
+     */
+    bool sanityCheckModifiersCorrectness(Qt::KeyboardModifiers modifiers) const;
+
+    /**
+     * Return the internal state of the tracked modifiers. Used for debugging
+     * and error reporting only.
+     */
+    QVector<Qt::Key> debugPressedKeys() const;
 
     /**
      * Kirta lost focus, it means that all the running actions should be ended

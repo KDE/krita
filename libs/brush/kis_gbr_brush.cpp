@@ -1,25 +1,13 @@
 /*
- *  Copyright (c) 1999 Matthias Elter  <me@kde.org>
- *  Copyright (c) 2003 Patrick Julien  <freak@codepimps.org>
- *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
- *  Copyright (c) 2005 Bart Coppens <kde@bartcoppens.be>
- *  Copyright (c) 2007 Cyrille Berger <cberger@cberger.net>
- *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  SPDX-FileCopyrightText: 1999 Matthias Elter <me@kde.org>
+ *  SPDX-FileCopyrightText: 2003 Patrick Julien <freak@codepimps.org>
+ *  SPDX-FileCopyrightText: 2004 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2004 Adrian Page <adrian@pagenet.plus.com>
+ *  SPDX-FileCopyrightText: 2005 Bart Coppens <kde@bartcoppens.be>
+ *  SPDX-FileCopyrightText: 2007 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 #include <sys/types.h>
 #include <QtEndian>
@@ -240,6 +228,7 @@ bool KisGbrBrush::init()
 
         setBrushApplication(ALPHAMASK);
         setBrushType(MASK);
+        setHasColorAndTransparency(false);
 
         for (quint32 y = 0; y < bh.height; y++) {
             uchar *pixel = reinterpret_cast<uchar *>(image.scanLine(y));
@@ -268,6 +257,8 @@ bool KisGbrBrush::init()
                 ++pixel;
             }
         }
+
+        setHasColorAndTransparency(!image.allGray());
     }
     else {
         warnKrita << filename()  << "WARNING: loading of GBR brushes with" << bh.bytes << "bytes per pixel is not supported";
@@ -314,7 +305,7 @@ bool KisGbrBrush::saveToDevice(QIODevice* dev) const
     bh.width = qToBigEndian((quint32)width());
     bh.height = qToBigEndian((quint32)height());
     // Hardcoded, 4 bytes RGBA or 1 byte GREY
-    if (!hasColor()) {
+    if (!isImageType()) {
         bh.bytes = qToBigEndian((quint32)1);
     }
     else {
@@ -342,7 +333,7 @@ bool KisGbrBrush::saveToDevice(QIODevice* dev) const
 
     QImage image = brushTipImage();
 
-    if (!hasColor()) {
+    if (!isImageType()) {
         bytes.resize(width() * height());
         for (qint32 y = 0; y < height(); y++) {
             for (qint32 x = 0; x < width(); x++) {
@@ -382,7 +373,7 @@ void KisGbrBrush::setBrushTipImage(const QImage& image)
 
 void KisGbrBrush::makeMaskImage(bool preserveAlpha)
 {
-    if (!hasColor()) {
+    if (!isImageType()) {
         return;
     }
 

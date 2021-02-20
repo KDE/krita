@@ -1,20 +1,7 @@
 /*
- * Copyright (C) 2018 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2018 Boudewijn Rempt <boud@valdyas.org>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #ifndef KISRESOURCECACHEDB_H
@@ -71,7 +58,7 @@ private:
     friend class KisResourceLocator;
     friend class TestResourceLocator;
     friend class TestResourceCacheDb;
-    friend class KisTagModel;
+    friend class KisAllTagsModel;
     friend class KisResourceLoaderRegistry;
 
     explicit KisResourceCacheDb(); // Deleted
@@ -85,7 +72,7 @@ private:
      */
     static bool registerResourceType(const QString &resourceType);
 
-    static int resourceIdForResource(const QString &resourceName, const QString &resourceType, const QString &storageLocation);
+    static int resourceIdForResource(const QString &resourceName, const QString &resourceFileName, const QString &resourceType, const QString &storageLocation);
     static bool resourceNeedsUpdating(int resourceId, QDateTime timestamp);
 
     /**
@@ -98,19 +85,30 @@ private:
      * @return true if the database was successfully updated
      */
     static bool addResourceVersion(int resourceId, QDateTime timestamp, KisResourceStorageSP storage, KoResourceSP resource);
+
+    static bool addResourceVersionImpl(int resourceId, QDateTime timestamp, KisResourceStorageSP storage, KoResourceSP resource);
+    static bool removeResourceVersionImpl(int resourceId, int version, KisResourceStorageSP storage);
+
+    static bool updateResourceTableForResourceIfNeeded(int resourceId, const QString &resourceType, KisResourceStorageSP storage);
+    static bool makeResourceTheCurrentVersion(int resourceId, KoResourceSP resource);
+    static bool removeResourceCompletely(int resourceId);
+
+
     static bool addResource(KisResourceStorageSP storage, QDateTime timestamp, KoResourceSP resource, const QString &resourceType);
     static bool addResources(KisResourceStorageSP storage, QString resourceType);
 
-    /// Make this resource inactive; this does not remove the resource from disk or from the database
-    static bool removeResource(int resourceId);
+    /// Make this resource active or inactive; this does not remove the resource from disk or from the database
+    static bool setResourceActive(int resourceId, bool active = false);
 
-    static bool tagResource(KisResourceStorageSP storage, const QString resourceName, KisTagSP tag, const QString &resourceType);
+    static bool tagResource(KisResourceStorageSP storage, const QString &resourceName, const QString &resourceFileName, KisTagSP tag, const QString &resourceType);
     static bool hasTag(const QString &url, const QString &resourceType);
     static bool linkTagToStorage(const QString &url, const QString &resourceType, const QString &storageLocation);
     static bool addTag(const QString &resourceType, const QString storageLocation, const QString url, const QString name, const QString comment);
     static bool addTags(KisResourceStorageSP storage, QString resourceType);
 
     static bool addStorage(KisResourceStorageSP storage, bool preinstalled);
+
+    /// Actually delete the storage and all its resources from the database (i.e., nothing is set to inactive, it's deleted)
     static bool deleteStorage(KisResourceStorageSP storage);
     static bool synchronizeStorage(KisResourceStorageSP storage);
 

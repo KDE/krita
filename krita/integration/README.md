@@ -1,9 +1,44 @@
-# Krita-QuickLook
-QuickLook Generator plugin for .kra and .ora files.
+# Krita's macOS integration
 
-This generator takes the preview.png image and uses it as the thumbnail image and the mergedimage.png file as the preview image. On files created with older versions of Krita that do not have the mergedimage.png file, QuickLook will simply fall back to using the thumbnail image instead.
+This Xcode project generates QuickLook (macOS < 10.15), QuickLook Thumbnailing
+(macOS 10.15+) and Spotlight plugins for .kra and .ora files.
+
+The QuickLook plugins take the `preview.png` image in the root of the ZIP
+container and use it as the thumbnail image, and the `mergedimage.png` file as
+the preview image. On files created with older versions of Krita that do not
+have `mergedimage.png`, QuickLook will simply fall back to using the thumbnail
+image instead.
+
+The Spotlight plugin extracts the following metadata from the kra file, if
+available:
+- image dimensions, DPI, bit depth, and color space
+- color space profile name (not the actual name, as it's not embedded in the container; only the file path)
+- layer names
+- authors, image title and description
 
 # Installing
-Place the generator in the `/Library/QuickLook` folder.
 
-If you package Krita 3.0, you can include the generator file in the directory `krita.app/Contents/Library/QuickLook`. Be sure to reset QuickLook with `qlmanage -r` and `qlmanage -r cache`. If the changes don't happen right away, `killall Finder` and ensure that the app you put the generator in is the default app for opening .kra files.
+Compile the project using Xcode or the provided CMake file. Find the build
+output folder (depends on how you configured the project), and place:
+- `kritaquicklook.qlgenerator` inside `~/Library/QuickLook`
+- `kritaspotlight.mdimporter` inside `~/Library/Spotlight`.
+
+You can also place them in the system folders (`/Library/QuickLook` and
+`/Library/Spotlight` respectively). Test that they have been properly installed
+with:
+- QuickLook: `qlmanage -d2 -p <path to a kra file>; qlmanage -d2 -t <path to a kra file>`
+- Spotlight: `mdimport -d2 -t <path to a kra file>`
+
+Be sure to reset QuickLook with `qlmanage -r` and `qlmanage -r cache`. If the
+changes don't happen right away, `killall Finder`.
+
+**NOTE:** `kritaquicklookng.appex` **cannot be used standalone. You must bundle it with Krita (see below).**
+
+# Bundling
+
+If you package Krita, place:
+- `kritaquicklook.qlgenerator` inside `krita.app/Contents/Library/QuickLook`
+- `kritaspotlight.mdimporter` inside `krita.app/Contents/Library/Spotlight`
+- `kritaquicklookng.appex` inside `krita.app/Contents/Library/PlugIns`
+Ensure the app is defined as the default app for opening .kra and .ora files,
+and codesign it whole if necessary.

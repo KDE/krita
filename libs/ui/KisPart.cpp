@@ -1,25 +1,12 @@
 /* This file is part of the KDE project
- * Copyright (C) 1998-1999 Torben Weis       <weis@kde.org>
- * Copyright (C) 2000-2005 David Faure       <faure@kde.org>
- * Copyright (C) 2007-2008 Thorsten Zachmann <zachmann@kde.org>
- * Copyright (C) 2010-2012 Boudewijn Rempt   <boud@valdyas.org>
- * Copyright (C) 2011 Inge Wallin            <ingwa@kogmbh.com>
- * Copyright (C) 2015 Michael Abrahams       <miabraha@gmail.com>
+ * SPDX-FileCopyrightText: 1998-1999 Torben Weis <weis@kde.org>
+ * SPDX-FileCopyrightText: 2000-2005 David Faure <faure@kde.org>
+ * SPDX-FileCopyrightText: 2007-2008 Thorsten Zachmann <zachmann@kde.org>
+ * SPDX-FileCopyrightText: 2010-2012 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2011 Inge Wallin <ingwa@kogmbh.com>
+ * SPDX-FileCopyrightText: 2015 Michael Abrahams <miabraha@gmail.com>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #include "KisPart.h"
@@ -62,6 +49,7 @@
 #include <KisMimeDatabase.h>
 #include <dialogs/KisSessionManagerDialog.h>
 
+#include <kis_group_layer.h>
 #include "kis_config.h"
 #include "kis_shape_controller.h"
 #include "KisResourceServerProvider.h"
@@ -71,7 +59,7 @@
 #include "kis_idle_watcher.h"
 #include "kis_image.h"
 #include "KisOpenPane.h"
-
+#include "KisTranslateLayerNamesVisitor.h"
 #include "kis_color_manager.h"
 
 #include "kis_action.h"
@@ -554,6 +542,11 @@ void KisPart::openTemplate(const QUrl &url)
         delete document;
         return;
     }
+    QMap<QString, QString> dictionary;
+    // XXX: fill the dictionary from the desktop file
+    KisTranslateLayerNamesVisitor v(dictionary);
+    document->image()->rootLayer()->accept(v);
+
     addDocument(document);
 
     KisMainWindow *mw = currentMainwindow();

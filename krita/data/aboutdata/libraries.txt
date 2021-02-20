@@ -13,7 +13,6 @@ gmic,http://gmic.eu/,CeCILLv2.1
 gmic-qt,http://gmic.eu/,GPLv3
 GNU Scientific Library,http://www.gnu.org/software/gsl,GPLv3
 iconv,https://www.gnu.org/software/libiconv/,LGPLv2 or GPLv3
-ilmbase,http://www.openexr.com,Modified BSD
 KDE Frameworks 5,https://www.kde.org,LGPLv2.1+
 libheif,https://github.com/strukturag/libheif,LGPLv3
 libjpeg-turbo,http://www.libjpeg-turbo.org,BSD
@@ -28,7 +27,7 @@ PyQt,https://www.riverbankcomputing.com/software/pyqt/download5,GPLv3
 Python,http://www.python.org,Python Software Foundation License v2
 Qt,https://www.qt.io,GPLv2 + GPLv3 + LGPLv2.1 + LGPLv3
 Quazip,https://github.com/stachenov/quazip,LGPLv2.1
-SeExpr,https://wdas.github.io/SeExpr,Apache License Version 2.0
+KSeExpr,https://invent.kde.org/graphics/KSeExpr,Apache License Version 2.0
 SIP,https://www.riverbankcomputing.com/software/sip/download,GPLv3
 Vc,https://github.com/VcDevel/Vc,BSD
 zlib,http://www.zlib.net/,BSD

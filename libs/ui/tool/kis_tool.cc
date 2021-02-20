@@ -1,19 +1,7 @@
 /*
- *  Copyright (c) 2006, 2010 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2006, 2010 Boudewijn Rempt <boud@valdyas.org>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 #include "kis_tool.h"
 #include <QCursor>
@@ -29,6 +17,7 @@
 #include <kis_icon.h>
 #include <KoConfig.h>
 #include <KoColorSpaceRegistry.h>
+#include <KoColorModelStandardIds.h>
 #include <KoColor.h>
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
@@ -53,6 +42,7 @@
 #include <brushengine/kis_paintop_settings.h>
 #include <resources/KoPattern.h>
 #include <kis_floating_message.h>
+#include <KisResourceServerProvider.h>
 
 #include "opengl/kis_opengl_canvas2.h"
 #include "kis_canvas_resource_provider.h"
@@ -353,13 +343,6 @@ QCursor KisTool::cursor() const
     return d->cursor;
 }
 
-void KisTool::notifyModified() const
-{
-    if (image()) {
-        image()->setModified();
-    }
-}
-
 KoPatternSP KisTool::currentPattern()
 {
     return d->currentPattern;
@@ -372,7 +355,13 @@ KoAbstractGradientSP KisTool::currentGradient()
 
 KisPaintOpPresetSP KisTool::currentPaintOpPreset()
 {
-    return canvas()->resourceManager()->resource(KoCanvasResource::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
+    QVariant v = canvas()->resourceManager()->resource(KoCanvasResource::CurrentPaintOpPreset);
+    if (v.isNull()) {
+        return 0;
+    }
+    else {
+        return v.value<KisPaintOpPresetSP>();
+    }
 }
 
 KisNodeSP KisTool::currentNode() const
@@ -536,9 +525,15 @@ void KisTool::deleteSelection()
 KisTool::NodePaintAbility KisTool::nodePaintAbility()
 {
     KisNodeSP node = currentNode();
+
+    if (canvas()->resourceManager()->resource(KoCanvasResource::CurrentPaintOpPreset).isNull()) {
+        return NodePaintAbility::UNPAINTABLE;
+    }
+
     if (!node) {
         return NodePaintAbility::UNPAINTABLE;
     }
+
     if (node->inherits("KisShapeLayer")) {
         return NodePaintAbility::VECTOR;
     }
@@ -546,6 +541,15 @@ KisTool::NodePaintAbility KisTool::nodePaintAbility()
         return NodePaintAbility::CLONE;
     }
     if (node->paintDevice()) {
+
+        KisPaintOpPresetSP currentPaintOpPreset = canvas()->resourceManager()->resource(KoCanvasResource::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
+        if (currentPaintOpPreset->paintOp().id() == "mypaintbrush") {
+            const KoColorSpace *colorSpace = node->paintDevice()->colorSpace();
+            if (colorSpace->colorModelId() != RGBAColorModelID) {
+                return NodePaintAbility::MYPAINTBRUSH_UNPAINTABLE;
+            }
+        }
+
         return NodePaintAbility::PAINT;
     }
 
@@ -622,6 +626,10 @@ bool KisTool::nodeEditable()
 {
     KisNodeSP node = currentNode();
     if (!node) {
+        return false;
+    }
+
+    if (!currentPaintOpPreset()) {
         return false;
     }
 

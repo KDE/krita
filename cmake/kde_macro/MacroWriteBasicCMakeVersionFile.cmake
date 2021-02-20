@@ -7,10 +7,10 @@
 #    _patch is the patch version number of the project to be installed
 #
 
-# Copyright (c) 2008, Alexander Neundorf, <neundorf@kde.org>
+# SPDX-FileCopyrightText: 2008 Alexander Neundorf <neundorf@kde.org>
 #
-# Redistribution and use is allowed according to the terms of the BSD license.
-# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+# SPDX-License-Identifier: BSD-3-Clause
+#
 
 get_filename_component(_currentListFileDir ${CMAKE_CURRENT_LIST_FILE} PATH)
 

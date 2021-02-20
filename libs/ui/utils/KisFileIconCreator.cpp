@@ -1,50 +1,99 @@
 /*
- *  Copyright (c) 2019 2020 Agata Cacko <cacko.azh@gmail.com>
+ *  SPDX-FileCopyrightText: 2019-2020 Agata Cacko <cacko.azh@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-
 #include "KisFileIconCreator.h"
+
+#include <QFileInfo>
+#include <QApplication>
+
 #include <KoStore.h>
+
 #include <KisMimeDatabase.h>
 #include <KisDocument.h>
 #include <KisPart.h>
+#include <KisPreviewFileDialog.h>
 #include <QFileInfo>
 
+#include <krita_utils.h>
 #include <kis_debug.h>
 
-
-KisFileIconCreator::KisFileIconCreator()
+namespace
 {
+
+struct KisFileIconRegistrar {
+    KisFileIconRegistrar() {
+        KisPreviewFileDialog::s_iconCreator = new KisFileIconCreator();
+    }
+};
+
+
+static KisFileIconRegistrar s_registrar;
+
+
+QIcon createIcon(const QImage &source, const QSize &iconSize, bool dontUpsize = false)
+{
+    QImage result;
+    int maxIconSize = qMax(iconSize.width(), iconSize.height());
+    if (dontUpsize) {
+        if (source.width() < iconSize.width() || source.height() < iconSize.height()) {
+            maxIconSize = qMax(source.width(), source.height());
+        }
+    }
+    QSize iconSizeSquare = QSize(maxIconSize, maxIconSize);
+
+    QSize scaled = source.size().scaled(iconSize, Qt::KeepAspectRatio);
+    qreal scale = scaled.width()/source.width();
+
+    if (scale >= 2) {
+        // it can be treated like pixel art
+        // first scale with NN
+        int scaleInt = qRound(scale);
+        result = source.scaled(scaleInt*source.size(), Qt::KeepAspectRatio, Qt::FastTransformation);
+        // them with smooth transformation to make sure the whole icon is filled in
+        result = result.scaled(iconSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    } else {
+        result = source.scaled(iconSizeSquare, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    }
+
+    result = result.convertToFormat(QImage::Format_ARGB32) // add transparency
+        .copy((result.width() - maxIconSize) / 2, (result.height() - maxIconSize) / 2, maxIconSize, maxIconSize);
+
+    // draw faint outline
+    QPainter painter(&result);
+    QColor textColor = qApp->palette().color(QPalette::Text);
+    QColor backgroundColor = qApp->palette().color(QPalette::Background);
+    QColor blendedColor = KritaUtils::blendColors(textColor, backgroundColor, 0.2);
+    painter.setPen(blendedColor);
+    painter.drawRect(result.rect().adjusted(0, 0, -1, -1));
+
+    return QIcon(QPixmap::fromImage(result));
 }
 
-bool KisFileIconCreator::createFileIcon(QString recentFileUrlPath, QIcon &icon, qreal devicePixelRatioF)
+}
+
+
+bool KisFileIconCreator::createFileIcon(QString path, QIcon &icon, qreal devicePixelRatioF, QSize iconSize, bool dontUpsize)
 {
-    QFileInfo fi(recentFileUrlPath);
+    iconSize *= devicePixelRatioF;
+    QFileInfo fi(path);
     if (fi.exists()) {
-        QString mimeType = KisMimeDatabase::mimeTypeForFile(recentFileUrlPath);
+        QString mimeType = KisMimeDatabase::mimeTypeForFile(path);
         if (mimeType == KisDocument::nativeFormatMimeType()
                || mimeType == "image/openraster") {
 
-            QScopedPointer<KoStore> store(KoStore::createStore(recentFileUrlPath, KoStore::Read));
+            QScopedPointer<KoStore> store(KoStore::createStore(path, KoStore::Read));
             if (store) {
                 QString thumbnailpath;
                 if (store->hasFile(QString("Thumbnails/thumbnail.png"))){
                     thumbnailpath = QString("Thumbnails/thumbnail.png");
-                } else if (store->hasFile(QString("preview.png"))) {
+                }
+                else if (store->hasFile(QString("mergedimage.png"))) {
+                    thumbnailpath = QString("mergedimage.png");
+                }
+                else if (store->hasFile(QString("preview.png"))) {
                     thumbnailpath = QString("preview.png");
                 }
                 if (!thumbnailpath.isEmpty() && store->open(thumbnailpath)) {
@@ -55,7 +104,7 @@ bool KisFileIconCreator::createFileIcon(QString recentFileUrlPath, QIcon &icon, 
                     img.loadFromData(bytes);
                     img.setDevicePixelRatio(devicePixelRatioF);
 
-                    icon = QIcon(QPixmap::fromImage(img));
+                    icon = createIcon(img, iconSize, dontUpsize);
                     return true;
 
                 } else {
@@ -69,21 +118,25 @@ bool KisFileIconCreator::createFileIcon(QString recentFileUrlPath, QIcon &icon, 
             QScopedPointer<KisDocument> doc;
             doc.reset(KisPart::instance()->createTemporaryDocument());
             doc->setFileBatchMode(true);
-            bool r = doc->openUrl(QUrl::fromLocalFile(recentFileUrlPath), KisDocument::DontAddToRecent);
+            bool r = doc->openUrl(QUrl::fromLocalFile(path), KisDocument::DontAddToRecent);
             if (r) {
                 KisPaintDeviceSP projection = doc->image()->projection();
-                icon = QIcon(QPixmap::fromImage(projection->createThumbnail(48, 48, projection->exactBounds())));
+                const QRect bounds = projection->exactBounds();
+                const float ratio = static_cast<float>(bounds.width()) / bounds.height();
+                const int maxWidth = qMax(iconSize.width(), iconSize.height());
+                const int maxHeight = static_cast<int>(maxWidth * ratio);
+                const QImage &thumbnail = projection->createThumbnail(maxWidth, maxHeight, bounds);
+                icon = createIcon(thumbnail, iconSize, dontUpsize);
                 return true;
-
             } else {
                 return false;
             }
         } else {
             QImage img;
             img.setDevicePixelRatio(devicePixelRatioF);
-            img.load(recentFileUrlPath);
+            img.load(path);
             if (!img.isNull()) {
-                icon = QIcon(QPixmap::fromImage(img.scaledToWidth(48)));
+                icon = createIcon(img, iconSize, dontUpsize);
                 return true;
             } else {
                 return false;

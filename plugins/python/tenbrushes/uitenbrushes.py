@@ -1,16 +1,4 @@
-# This script is licensed CC 0 1.0, so that you can learn from it.
-
-# ------ CC 0 1.0 ---------------
-
-# The person who associated a work with this deed has dedicated the
-# work to the public domain by waiving all of his or her rights to the
-# work worldwide under copyright law, including all related and
-# neighboring rights, to the extent allowed by law.
-
-# You can copy, modify, distribute and perform the work, even for
-# commercial purposes, all without asking permission.
-
-# https://creativecommons.org/publicdomain/zero/1.0/legalcode
+# SPDX-License-Identifier: CC0-1.0
 
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap, QIcon
@@ -30,9 +18,14 @@ class UITenBrushes(object):
         self.buttonBox = QDialogButtonBox(self.mainDialog)
         self.vbox = QVBoxLayout(self.mainDialog)
         self.hbox = QHBoxLayout(self.mainDialog)
-        self.checkBox = QCheckBox(
-            i18n("&Activate previous brush when pressing the shortcut for the "
+
+        self.checkBoxActivatePrev = QCheckBox(
+            i18n("&Activate previous brush preset when pressing the shortcut for the "
                  "second time"),
+            self.mainDialog)
+
+        self.checkBoxAutoBrush = QCheckBox(
+            i18n("&Select freehand brush tool when pressing a shortcut"),
             self.mainDialog)
 
         self.buttonBox.accepted.connect(self.mainDialog.accept)
@@ -55,9 +48,13 @@ class UITenBrushes(object):
                         "you want to use to select the preset")))
         self.vbox.addWidget(self.presetChooser)
 
-        self.checkBox.setChecked(self.tenbrushes.activatePrev)
-        self.checkBox.toggled.connect(self.setActivatePrev)
-        self.vbox.addWidget(self.checkBox)
+        self.checkBoxActivatePrev.setChecked(self.tenbrushes.activatePrev)
+        self.checkBoxActivatePrev.toggled.connect(self.setActivatePrev)
+        self.vbox.addWidget(self.checkBoxActivatePrev)
+
+        self.checkBoxAutoBrush.setChecked(self.tenbrushes.autoBrush)
+        self.checkBoxAutoBrush.toggled.connect(self.setAutoBrush)
+        self.vbox.addWidget(self.checkBoxAutoBrush)
 
         self.vbox.addWidget(self.buttonBox)
 
@@ -67,6 +64,9 @@ class UITenBrushes(object):
 
     def setActivatePrev(self, checked):
         self.tenbrushes.activatePrev = checked
+
+    def setAutoBrush(self, checked):
+        self.tenbrushes.autoBrush = checked
 
     def loadButtons(self):
         self.tenbrushes.buttons = []

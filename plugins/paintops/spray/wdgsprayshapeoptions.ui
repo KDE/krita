@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgSprayShapeOptions</class>
  <widget class="QWidget" name="WdgSprayShapeOptions">
   <property name="enabled">
@@ -30,11 +34,11 @@
     <number>0</number>
    </property>
    <item>
-    <layout class="QGridLayout" name="gridLayout" columnstretch="0,0,0">
+    <layout class="QGridLayout" columnstretch="0,0,0" name="gridLayout">
      <property name="bottomMargin">
       <number>10</number>
      </property>
-     <item row="0" column="0">
+     <item column="0" row="0">
       <widget class="QLabel" name="widthInfoLbl_2">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
@@ -50,7 +54,7 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="1">
+     <item column="1" row="0">
       <widget class="QComboBox" name="shapeBox">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -88,7 +92,7 @@
        </item>
       </widget>
      </item>
-     <item row="1" column="0">
+     <item column="0" row="1">
       <widget class="QLabel" name="widthInfoLbl">
        <property name="text">
         <string>Width:</string>
@@ -98,7 +102,7 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="2" rowspan="2">
+     <item column="2" row="1" rowspan="2">
       <widget class="KoAspectButton" name="aspectButton">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -123,7 +127,7 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="0">
+     <item column="0" row="2">
       <widget class="QLabel" name="heightInfoLbl">
        <property name="text">
         <string>Height:</string>
@@ -133,10 +137,10 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="1">
+     <item column="1" row="2">
       <widget class="KisDoubleSliderSpinBox" name="heightSpin"/>
      </item>
-     <item row="1" column="1">
+     <item column="1" row="1">
       <widget class="KisDoubleSliderSpinBox" name="widthSpin">
        <property name="minimumSize">
         <size>

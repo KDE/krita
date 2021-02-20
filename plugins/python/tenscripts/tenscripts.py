@@ -1,21 +1,8 @@
-# This script is licensed CC 0 1.0, so that you can learn from it.
-
-# ------ CC 0 1.0 ---------------
-
-# The person who associated a work with this deed has dedicated the
-# work to the public domain by waiving all of his or her rights to the
-# work worldwide under copyright law, including all related and
-# neighboring rights, to the extent allowed by law.
-
-# You can copy, modify, distribute and perform the work, even for
-# commercial purposes, all without asking permission.
-
-# https://creativecommons.org/publicdomain/zero/1.0/legalcode
+# SPDX-License-Identifier: CC0-1.0
 
 import sys
-
-from PyQt5.QtWidgets import QMessageBox
 import krita
+from PyQt5.QtGui import QIcon
 from . import uitenscripts
 
 if sys.version_info[0] > 2:
@@ -75,6 +62,7 @@ class TenScriptsExtension(krita.Extension):
 
     def _executeScript(self):
         script = self.sender().script
+        window = Application.activeWindow()
         if script:
             try:
                 if sys.version_info[0] > 2:
@@ -89,15 +77,11 @@ class TenScriptsExtension(krita.Extension):
                         and callable(users_module.main)):
                     users_module.main()
 
-                self.showMessage(
-                    str(i18n("Script {0} executed")).format(script))
-            except Exception as e:
-                self.showMessage(str(e))
-        else:
-            self.showMessage(
-                i18n("You did not assign a script to that action"))
+                window.activeView().showFloatingMessage(
+                    str(i18n("Script {0} executed")).format(script), QIcon(), 1500, 2)
 
-    def showMessage(self, message):
-        self.msgBox = QMessageBox(Application.activeWindow().qwindow())
-        self.msgBox.setText(message)
-        self.msgBox.exec_()
+            except Exception as e:
+                window.activeView().showFloatingMessage(str(e), QIcon(), 2000, 1)
+        else:
+            window.activeView().showFloatingMessage(
+                str(i18n(("You did not assign a script to that action"))), QIcon(), 1500, 2)

@@ -1,19 +1,7 @@
 /*
- *  Copyright (c) 2015 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2015 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_draggable_tool_button.h"
@@ -33,14 +21,10 @@ KisDraggableToolButton::~KisDraggableToolButton()
 {
 }
 
-int KisDraggableToolButton::unitRadius()
-{
-    return 200;
-}
-
 void KisDraggableToolButton::beginDrag(const QPoint &pos)
 {
     m_startPoint = pos;
+    m_lastPosition = m_startPoint;
 }
 
 int KisDraggableToolButton::continueDrag(const QPoint &pos)
@@ -65,16 +49,26 @@ int KisDraggableToolButton::continueDrag(const QPoint &pos)
     return value;
 }
 
+int KisDraggableToolButton::movementDelta(const QPoint &pos)
+{
+    QPoint diff = pos - m_lastPosition;
+    m_lastPosition = pos;
+    return diff.x() - diff.y();
+
+}
+
 void KisDraggableToolButton::mousePressEvent(QMouseEvent *e)
 {
-    m_startPoint = e->pos();
+    beginDrag(e->pos());
     QToolButton::mousePressEvent(e);
 }
 
 void KisDraggableToolButton::mouseMoveEvent(QMouseEvent *e)
 {
-    int value = continueDrag(e->pos());
-    emit valueChanged(value);
+    int distance = continueDrag(e->pos());
+    emit offsetChanged(distance);
+    int delta = movementDelta(e->pos());
+    emit valueChanged(delta);
 
     QToolButton::mouseMoveEvent(e);
 }

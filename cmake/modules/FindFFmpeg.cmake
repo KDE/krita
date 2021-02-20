@@ -22,12 +22,11 @@
 #  <component>_DEFINITIONS  - Compiler switches required for using <component>
 #  <component>_VERSION      - The components version
 #
-# Copyright (c) 2006, Matthias Kretz, <kretz@kde.org>
-# Copyright (c) 2008, Alexander Neundorf, <neundorf@kde.org>
-# Copyright (c) 2011, Michael Jansen, <kde@michael-jansen.biz>
+# SPDX-FileCopyrightText: 2006 Matthias Kretz <kretz@kde.org>
+# SPDX-FileCopyrightText: 2008 Alexander Neundorf <neundorf@kde.org>
+# SPDX-FileCopyrightText: 2011 Michael Jansen <kde@michael-jansen.biz>
 #
-# Redistribution and use is allowed according to the terms of the BSD license.
-# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+# SPDX-License-Identifier: BSD-3-Clause
 
 include(FindPackageHandleStandardArgs)
 

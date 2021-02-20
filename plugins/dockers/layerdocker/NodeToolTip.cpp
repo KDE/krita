@@ -1,20 +1,7 @@
 /*
-  Copyright (c) 2006 Gábor Lehel <illissius@gmail.com>
+  SPDX-FileCopyrightText: 2006 Gábor Lehel <illissius@gmail.com>
 
-  This library is free software; you can redistribute it and/or
-  modify it under the terms of the GNU Library General Public
-  License as published by the Free Software Foundation; either
-  version 2 of the License, or (at your option) any later version.
-
-  This library is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-  Library General Public License for more details.
-
-  You should have received a copy of the GNU Library General Public License
-  along with this library; see the file COPYING.LIB.  If not, write to
-  the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-  Boston, MA 02110-1301, USA.
+  SPDX-License-Identifier: LGPL-2.0-or-later
 */
 #include "NodeToolTip.h"
 #include "kis_node_model.h"
@@ -39,7 +26,9 @@ QTextDocument *NodeToolTip::createDocument(const QModelIndex &index)
 {
     QTextDocument *doc = new QTextDocument(this);
 
-    QImage thumb = index.data(int(KisNodeModel::BeginThumbnailRole) + 250).value<QImage>();
+    int size = 250*devicePixelRatioF();
+    QImage thumb = index.data(int(KisNodeModel::BeginThumbnailRole) + size).value<QImage>();
+    thumb.setDevicePixelRatio(devicePixelRatioF());
     doc->addResource(QTextDocument::ImageResource, QUrl("data:thumbnail"), thumb);
 
     QString name = index.data(Qt::DisplayRole).toString();

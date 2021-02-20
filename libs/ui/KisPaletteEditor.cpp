@@ -1,19 +1,7 @@
 /*
- *  Copyright (c) 2018 Michael Zhou <simeirxh@gmail.com>
+ *  SPDX-FileCopyrightText: 2018 Michael Zhou <simeirxh@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include <QHash>
@@ -150,9 +138,7 @@ void KisPaletteEditor::importPalette()
         storageLocation = m_d->view->document()->uniqueID();
     }
 
-    KoColorSetSP colorSet(new KoColorSet(filename));
-    colorSet->load(KisGlobalResourcesInterface::instance());
-    m_d->rServer->resourceModel()->addResource(colorSet, storageLocation);
+    m_d->rServer->resourceModel()->importResourceFile(filename);
 }
 
 void KisPaletteEditor::removePalette(KoColorSetSP cs)
@@ -326,7 +312,8 @@ void KisPaletteEditor::setEntry(const KoColor &color, const QModelIndex &index)
 
 void KisPaletteEditor::slotSetDocumentModified()
 {
-    m_d->rServer->resourceModel()->addResource(m_d->model->colorSet(), m_d->model->colorSet()->storageLocation());
+    // XXX: I'm not sure if we need to update the resource here // tiar
+    m_d->rServer->resourceModel()->updateResource(m_d->model->colorSet());
     m_d->view->document()->setModified(true);
 }
 
@@ -482,8 +469,7 @@ void KisPaletteEditor::updatePalette()
         m_d->model->addGroup(modified.groups[newGroupName]);
     }
     m_d->newGroupNames.clear();
-    qDebug() << "updating palette from updatePalette" << m_d->model->colorSet()->filename() << resourceLocation;
-    m_d->rServer->resourceModel()->addResource(m_d->model->colorSet(), resourceLocation);
+    m_d->rServer->resourceModel()->updateResource(m_d->model->colorSet());
 }
 
 void KisPaletteEditor::slotPaletteChanged()

@@ -1,20 +1,7 @@
 /*
- * Copyright (c) 2015 Thorsten Zachmann <zachmann@kde.org>
+ * SPDX-FileCopyrightText: 2015 Thorsten Zachmann <zachmann@kde.org>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #ifndef KOOPTIMIZEDCOMPOSITEOPOVER128_H_
@@ -29,7 +16,7 @@
 
 #define INFO_DEBUG 0
 
-template<typename channels_type, typename pixel_type, bool alphaLocked, bool allChannelsFlag>
+template<typename channels_type, bool alphaLocked, bool allChannelsFlag>
 struct OverCompositor128 {
     struct ParamsWrapper {
         ParamsWrapper(const KoCompositeOp::ParameterInfo& params)
@@ -266,7 +253,7 @@ public:
         if (params.channelFlags.isEmpty() ||
             params.channelFlags == QBitArray(4, true)) {
 
-            KoStreamedMath<_impl>::template genericComposite128<haveMask, false, OverCompositor128<float, quint32, false, true> >(params);
+            KoStreamedMath<_impl>::template genericComposite128<haveMask, false, OverCompositor128<float, false, true> >(params);
         } else {
             const bool allChannelsFlag =
                 params.channelFlags.at(0) &&
@@ -277,11 +264,11 @@ public:
                 !params.channelFlags.at(3);
 
             if (allChannelsFlag && alphaLocked) {
-                KoStreamedMath<_impl>::template genericComposite128_novector<haveMask, false, OverCompositor128<float, quint32, true, true> >(params);
+                KoStreamedMath<_impl>::template genericComposite128_novector<haveMask, false, OverCompositor128<float, true, true> >(params);
             } else if (!allChannelsFlag && !alphaLocked) {
-                KoStreamedMath<_impl>::template genericComposite128_novector<haveMask, false, OverCompositor128<float, quint32, false, false> >(params);
+                KoStreamedMath<_impl>::template genericComposite128_novector<haveMask, false, OverCompositor128<float, false, false> >(params);
             } else /*if (!allChannelsFlag && alphaLocked) */{
-                KoStreamedMath<_impl>::template genericComposite128_novector<haveMask, false, OverCompositor128<float, quint32, true, false> >(params);
+                KoStreamedMath<_impl>::template genericComposite128_novector<haveMask, false, OverCompositor128<float, true, false> >(params);
             }
         }
     }

@@ -1,5 +1,7 @@
 /*
  * Vertex shader for handling scaling
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 uniform mat4 modelViewProjection;

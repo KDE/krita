@@ -1,22 +1,9 @@
 /* This file is part of the KDE project
- * Copyright (C) 2008 Boudewijn Rempt <boud@valdyas.org>
- * Copyright (C) 2009 Sven Langkamp   <sven.langkamp@gmail.com>
- * Copyright (C) 2011 Silvio Heinrich <plassy@web.de>
+ * SPDX-FileCopyrightText: 2008 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2009 Sven Langkamp <sven.langkamp@gmail.com>
+ * SPDX-FileCopyrightText: 2011 Silvio Heinrich <plassy@web.de>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #include "kis_curve_option_widget.h"
@@ -49,6 +36,9 @@ KisCurveOptionWidget::KisCurveOptionWidget(KisCurveOption* curveOption, const QS
 
     m_curveOptionWidget->setupUi(m_widget);
     setConfigurationPage(m_widget);
+
+    strengthToCurveOptionValueScale = 100.0;
+    hideRangeLabelsAndBoxes(true);
 
     m_curveOptionWidget->sensorSelector->setCurveOption(curveOption);
 
@@ -126,7 +116,8 @@ void KisCurveOptionWidget::readOptionSetting(const KisPropertiesConfigurationSP 
     disableWidgets(!m_curveOption->isCurveUsed());
 
     m_curveOptionWidget->sensorSelector->reload();
-    m_curveOptionWidget->sensorSelector->setCurrent(m_curveOption->activeSensors().first());
+    if(m_curveOption->activeSensors().size() > 0)
+        m_curveOptionWidget->sensorSelector->setCurrent(m_curveOption->activeSensors().first());
     updateSensorCurveLabels(m_curveOptionWidget->sensorSelector->currentHighlighted());
     updateCurve(m_curveOptionWidget->sensorSelector->currentHighlighted());
 }
@@ -190,15 +181,15 @@ void KisCurveOptionWidget::slotUseSameCurveChanged()
     emitSettingChanged();
 }
 
-void KisCurveOptionWidget::updateSensorCurveLabels(KisDynamicSensorSP sensor)
+void KisCurveOptionWidget::updateSensorCurveLabels(KisDynamicSensorSP sensor) const
 {
     if (sensor) {
-        m_curveOptionWidget->label_xmin->setText(KisDynamicSensor::minimumLabel(sensor->sensorType()));
-        m_curveOptionWidget->label_xmax->setText(KisDynamicSensor::maximumLabel(sensor->sensorType(), sensor->length()));
+        m_curveOptionWidget->label_xmin->setText(sensor->minimumLabel(sensor->sensorType()));
+        m_curveOptionWidget->label_xmax->setText(sensor->maximumLabel(sensor->sensorType(), sensor->length()));
 
-        int inMinValue = KisDynamicSensor::minimumValue(sensor->sensorType());
-        int inMaxValue = KisDynamicSensor::maximumValue(sensor->sensorType(), sensor->length());
-        QString inSuffix = KisDynamicSensor::valueSuffix(sensor->sensorType());
+        int inMinValue = sensor->minimumValue(sensor->sensorType());
+        int inMaxValue = sensor->maximumValue(sensor->sensorType(), sensor->length());
+        QString inSuffix = sensor->valueSuffix(sensor->sensorType());
 
         int outMinValue = m_curveOption->intMinValue();
         int outMaxValue = m_curveOption->intMaxValue();
@@ -230,7 +221,7 @@ void KisCurveOptionWidget::updateLabelsOfCurrentSensor()
 
 void KisCurveOptionWidget::updateValues()
 {
-    m_curveOption->setValue(m_curveOptionWidget->strengthSlider->value()/100.0); // convert back to 0-1 for data
+    m_curveOption->setValue(m_curveOptionWidget->strengthSlider->value()/strengthToCurveOptionValueScale); // convert back to 0-1 for data
     m_curveOption->setCurveUsed(m_curveOptionWidget->checkBoxUseCurve->isChecked());
     disableWidgets(!m_curveOptionWidget->checkBoxUseCurve->isChecked());
     emitSettingChanged();
@@ -351,8 +342,19 @@ void KisCurveOptionWidget::updateThemedIcons()
 
 }
 
+void KisCurveOptionWidget::hideRangeLabelsAndBoxes(bool isHidden) {
 
+    m_curveOptionWidget->xMaxBox->setHidden(isHidden);
+    m_curveOptionWidget->xMinBox->setHidden(isHidden);
+    m_curveOptionWidget->yMaxBox->setHidden(isHidden);
+    m_curveOptionWidget->yMinBox->setHidden(isHidden);
 
+    m_curveOptionWidget->xRangeLabel->setHidden(isHidden);
+    m_curveOptionWidget->yRangeLabel->setHidden(isHidden);
+    m_curveOptionWidget->toLabel1->setHidden(isHidden);
+    m_curveOptionWidget->toLabel2->setHidden(isHidden);
+
+}
 
 KisCubicCurve KisCurveOptionWidget::getWidgetCurve()
 {

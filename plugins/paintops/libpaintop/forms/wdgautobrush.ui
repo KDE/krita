@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>KisWdgAutoBrush</class>
  <widget class="QWidget" name="KisWdgAutoBrush">
   <property name="geometry">
@@ -147,12 +151,7 @@
     <layout class="QGridLayout" name="gridLayout_2" columnstretch="0,0,1">
      <item row="0" column="1" colspan="2">
       <widget class="KisDoubleSliderSpinBox" name="inputRadius" native="true">
-       <property name="minimumSize">
-        <size>
-         <width>200</width>
-         <height>0</height>
-        </size>
-       </property>
+
       </widget>
      </item>
      <item row="3" column="0">
@@ -352,16 +351,6 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="1" colspan="2">
-      <widget class="KisSliderSpinBox" name="inputAngle" native="true">
-       <property name="minimumSize">
-        <size>
-         <width>200</width>
-         <height>0</height>
-        </size>
-       </property>
-      </widget>
-     </item>
      <item row="4" column="1" colspan="2">
       <widget class="KisSliderSpinBox" name="inputSpikes" native="true"/>
      </item>
@@ -393,6 +382,30 @@
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
        </property>
       </widget>
+     </item>
+     <item row="3" column="1" colspan="2">
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="KisAngleSelector" name="inputAngle" native="true">
+         <property name="minimumSize">
+          <size>
+           <width>200</width>
+           <height>0</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </spacer>
+       </item>
+      </layout>
      </item>
     </layout>
    </item>
@@ -427,6 +440,12 @@
    <class>KisSpacingSelectionWidget</class>
    <extends>QWidget</extends>
    <header>kis_spacing_selection_widget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisAngleSelector</class>
+   <extends>QWidget</extends>
+   <header location="global">KisAngleSelector.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

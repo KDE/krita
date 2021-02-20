@@ -1,19 +1,7 @@
 /*
- *  Copyright (c) 2008 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2008 Boudewijn Rempt <boud@valdyas.org>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_all_filter_test.h"
@@ -64,6 +52,7 @@ bool testFilterSrcNotIsDev(KisFilterSP f)
     }
     dbgKrita << f->id();// << "\n" << kfc->toXML() << "\n";
 
+    kfc->createLocalResourcesSnapshot(KisGlobalResourcesInterface::instance());
     f->process(dev, dstdev, 0, QRect(QPoint(0,0), qimage.size()), kfc);
 
     QPoint errpoint;
@@ -120,6 +109,7 @@ bool testFilter(KisFilterSP f)
         }
     }
     dbgKrita << f->id();// << "\n" << kfc->toXML() << "\n";
+    kfc->createLocalResourcesSnapshot(KisGlobalResourcesInterface::instance());
 
     f->process(dev, QRect(QPoint(0,0), qimage.size()), kfc);
 
@@ -173,6 +163,7 @@ bool testFilterWithSelections(KisFilterSP f)
     KisSelectionSP sel1 = new KisSelection(new KisSelectionDefaultBounds(dev));
     sel1->pixelSelection()->select(qimage.rect());
 
+    kfc->createLocalResourcesSnapshot(KisGlobalResourcesInterface::instance());
     f->process(dev, dev, sel1, QRect(QPoint(0,0), qimage.size()), kfc);
 
     QPoint errpoint;
@@ -286,4 +277,5 @@ void KisAllFilterTest::testAllFiltersWithSelections()
 
 
 
-QTEST_MAIN(KisAllFilterTest)
+#include <sdk/tests/testimage.h>
+KISTEST_MAIN(KisAllFilterTest)

@@ -1,20 +1,8 @@
 /*  This file is part of the Krita project
 
-    Copyright (c) 2019 Agata Cacko <cacko.azh@gmail.com>
+    SPDX-FileCopyrightText: 2019 Agata Cacko <cacko.azh@gmail.com>
 
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+    SPDX-License-Identifier: LGPL-2.1-or-later
  */
 #ifndef TEST_RESOURCE_SEARCH_BOX_FILTER_H
 #define TEST_RESOURCE_SEARCH_BOX_FILTER_H
@@ -23,6 +11,24 @@
 #include <QScopedPointer>
 
 #include <KisResourceSearchBoxFilter.h>
+
+//Define mockup of a resource based on what we will be filtering for (tags, names, etc..)
+struct MockResource {
+    MockResource(QString name, QStringList tags)
+        : m_name(name)
+        , m_tags(tags){
+    }
+
+    ~MockResource(){}
+
+    bool operator==(const MockResource& rhs){
+        return (m_name == rhs.m_name) && (m_tags == rhs.m_tags);
+    }
+
+    QString m_name;
+    QStringList m_tags;
+};
+
 
 class TestResourceSearchBoxFilter : public QObject
 {
@@ -45,15 +51,13 @@ private Q_SLOTS:
     void testMultipleExactMatches_data();
     void testMultipleExactMatches();
 
-    void testOneTag_data();
-    void testOneTag();
-
-    void testMultipleTags_data();
-    void testMultipleTags();
+    void testResourceSearch();
 
 private:
     bool filterMatches(QString resourceName, QString filter);
     void runNameTest();
+
+    QList<MockResource> filterResourceList(QList<MockResource> &resources, KisResourceSearchBoxFilter& filter);
 
 };
 

@@ -1,21 +1,9 @@
 /*
  *  tool_transform_args.h - part of Krita
  *
- *  Copyright (c) 2010 Marc Pegon <pe.marc@free.fr>
+ *  SPDX-FileCopyrightText: 2010 Marc Pegon <pe.marc@free.fr>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #ifndef TOOL_TRANSFORM_ARGS_H_
@@ -29,6 +17,7 @@
 #include "kritatooltransform_export.h"
 #include "kis_global.h"
 #include "KisToolChangesTrackerData.h"
+#include "KisBezierTransformMesh.h"
 
 #include <QScopedPointer>
 class KisLiquifyTransformWorker;
@@ -49,6 +38,7 @@ public:
                         CAGE,
                         LIQUIFY,
                         PERSPECTIVE_4POINT,
+                        MESH,
                         N_MODES};
 
     /**
@@ -217,21 +207,21 @@ public:
     void setTransformAroundRotationCenter(bool value);
 
     inline void setAX(double aX) {
-        KIS_SAFE_ASSERT_RECOVER(qFuzzyCompare(aX, normalizeAngle(aX))) {
+        if(qFuzzyCompare(aX, normalizeAngle(aX))) {
             aX = normalizeAngle(aX);
         }
 
         m_aX = aX;
     }
     inline void setAY(double aY) {
-        KIS_SAFE_ASSERT_RECOVER(qFuzzyCompare(aY, normalizeAngle(aY))) {
+        if(qFuzzyCompare(aY, normalizeAngle(aY))) {
             aY = normalizeAngle(aY);
         }
 
         m_aY = aY;
     }
     inline void setAZ(double aZ) {
-        KIS_SAFE_ASSERT_RECOVER(qFuzzyCompare(aZ, normalizeAngle(aZ))) {
+        if(qFuzzyCompare(aZ, normalizeAngle(aZ))) {
             aZ = normalizeAngle(aZ);
         }
 
@@ -308,6 +298,20 @@ public:
     void restoreContinuedState();
     const ToolTransformArgs* continuedTransform() const;
 
+    const KisBezierTransformMesh* meshTransform() const;
+    KisBezierTransformMesh* meshTransform();
+
+    bool meshShowHandles() const;
+    void setMeshShowHandles(bool value);
+
+    bool meshSymmetricalHandles() const;
+    void setMeshSymmetricalHandles(bool meshSymmetricalHandles);
+
+    bool meshScaleHandles() const;
+    void setMeshScaleHandles(bool meshScaleHandles);
+
+    void scaleSrcAndDst(qreal scale);
+
 private:
     void clear();
     void init(const ToolTransformArgs& args);
@@ -350,6 +354,11 @@ private:
     bool m_editTransformPoints {false};
     QSharedPointer<KisLiquifyProperties> m_liquifyProperties;
     QScopedPointer<KisLiquifyTransformWorker> m_liquifyWorker;
+
+    KisBezierTransformMesh m_meshTransform;
+    bool m_meshShowHandles = true;
+    bool m_meshSymmetricalHandles = true;
+    bool m_meshScaleHandles = false;
 
     /**
      * When we continue a transformation, m_continuedTransformation

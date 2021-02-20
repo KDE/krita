@@ -5,9 +5,10 @@
 #     to CMAKE_DEBUG_POSTFIX when creating a shared lib
 #     it has to be the second and third argument
 
-# Copyright (c) 2007, Christian Ehrlicher, <ch.ehrlicher@gmx.de>
-# Redistribution and use is allowed according to the terms of the BSD license.
-# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+# SPDX-FileCopyrightText: 2007 Christian Ehrlicher <ch.ehrlicher@gmx.de>
+#
+# SPDX-License-Identifier: BSD-3-Clause
+#
 
 MACRO(FIND_LIBRARY_WITH_DEBUG var_name win32_dbg_postfix_name dgb_postfix libname)
 
@@ -100,7 +101,7 @@ MACRO(FIND_LIBRARY_WITH_DEBUG var_name win32_dbg_postfix_name dgb_postfix libnam
           SET(${var_name} ${${var_name}_DEBUG})
 
         ENDIF(${var_name}_RELEASE)
-       
+
       ENDIF(${var_name}_RELEASE AND ${var_name}_DEBUG)
 
       MARK_AS_ADVANCED(${var_name}_RELEASE)

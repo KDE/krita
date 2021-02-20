@@ -1,6 +1,9 @@
 /*
- * shader for handling scaling
+ *  shader for handling scaling
+ *
+ *  SPDX-License-Identifier: GPL-3.0-or-later
  */
+
 uniform sampler2D texture0;
 
 #ifdef USE_OCIO

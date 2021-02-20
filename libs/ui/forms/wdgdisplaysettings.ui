@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgDisplaySettings</class>
  <widget class="QWidget" name="WdgDisplaySettings">
   <property name="geometry">
@@ -33,7 +37,7 @@
        <string>Canvas Acceleration</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout">
-       <item row="0" column="0">
+       <item column="0" row="0">
         <widget class="QGroupBox" name="grpOpenGL">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -48,7 +52,7 @@
           <bool>true</bool>
          </property>
          <layout class="QGridLayout">
-          <item row="2" column="1">
+          <item column="1" row="2">
            <widget class="QComboBox" name="cmbFilterMode">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -81,14 +85,14 @@
             </item>
            </widget>
           </item>
-          <item row="0" column="0">
+          <item column="0" row="0">
            <widget class="QLabel" name="label_6">
             <property name="text">
              <string>Current Renderer:</string>
             </property>
            </widget>
           </item>
-          <item row="4" column="1">
+          <item column="1" row="4">
            <widget class="QCheckBox" name="chkDisableVsync">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -107,7 +111,7 @@
             </property>
            </widget>
           </item>
-          <item row="3" column="1">
+          <item column="1" row="3">
            <widget class="QCheckBox" name="chkUseTextureBuffer">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -123,7 +127,7 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="1">
+          <item column="1" row="1">
            <widget class="QComboBox" name="cmbPreferredRenderer">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -133,7 +137,7 @@
             </property>
            </widget>
           </item>
-          <item row="5" column="0" colspan="2">
+          <item colspan="2" column="0" row="5">
            <widget class="QLabel" name="lblOpenGLWarnings">
             <property name="text">
              <string notr="true">OpenGL Warnings</string>
@@ -146,7 +150,7 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="0">
+          <item column="0" row="1">
            <widget class="QLabel" name="lblPreferredRenderer">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
@@ -162,14 +166,14 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="1">
+          <item column="1" row="0">
            <widget class="QLabel" name="lblCurrentRenderer">
             <property name="text">
              <string>Unknown</string>
             </property>
            </widget>
           </item>
-          <item row="2" column="0">
+          <item column="0" row="2">
            <widget class="QLabel" name="label">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
@@ -185,7 +189,7 @@
             </property>
            </widget>
           </item>
-          <item row="6" column="0" colspan="2">
+          <item colspan="2" column="0" row="6">
            <spacer name="verticalSpacer_3">
             <property name="orientation">
              <enum>Qt::Vertical</enum>
@@ -208,7 +212,7 @@
        <string>HDR Settings</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_3">
-       <item row="0" column="0">
+       <item column="0" row="0">
         <widget class="QGroupBox" name="grpHDRSettings">
          <property name="title">
           <string/>
@@ -217,52 +221,52 @@
           <bool>false</bool>
          </property>
          <layout class="QGridLayout" name="gridLayout_2">
-          <item row="1" column="0">
+          <item column="0" row="1">
            <widget class="QLabel" name="label_5">
             <property name="text">
              <string>Current Output Format:</string>
             </property>
            </widget>
           </item>
-          <item row="1" column="1">
+          <item column="1" row="1">
            <widget class="QLabel" name="lblCurrentRootSurfaceFormat">
             <property name="text">
              <string>Current Surface Value</string>
             </property>
            </widget>
           </item>
-          <item row="0" column="1">
+          <item column="1" row="0">
            <widget class="QLabel" name="lblCurrentDisplayFormat">
             <property name="text">
              <string>Current Display Format</string>
             </property>
            </widget>
           </item>
-          <item row="2" column="0">
+          <item column="0" row="2">
            <widget class="QLabel" name="label_9">
             <property name="text">
              <string>Preferred Output Format:</string>
             </property>
            </widget>
           </item>
-          <item row="3" column="0" colspan="2">
+          <item colspan="2" column="0" row="3">
            <widget class="QLabel" name="lblHDRWarning">
             <property name="text">
              <string>HDR Warning..................................</string>
             </property>
            </widget>
           </item>
-          <item row="0" column="0">
+          <item column="0" row="0">
            <widget class="QLabel" name="label_7">
             <property name="text">
              <string>Display Format:</string>
             </property>
            </widget>
           </item>
-          <item row="2" column="1">
+          <item column="1" row="2">
            <widget class="QComboBox" name="cmbPreferedRootSurfaceFormat"/>
           </item>
-          <item row="4" column="0">
+          <item column="0" row="4">
            <spacer name="verticalSpacer_2">
             <property name="orientation">
              <enum>Qt::Vertical</enum>
@@ -285,7 +289,7 @@
        <string>Grid Settings</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_4">
-       <item row="0" column="0">
+       <item column="0" row="0">
         <layout class="QGridLayout" name="options2GridLayout">
          <property name="topMargin">
           <number>15</number>
@@ -293,7 +297,7 @@
          <property name="verticalSpacing">
           <number>7</number>
          </property>
-         <item row="0" column="2">
+         <item column="2" row="0">
           <layout class="QHBoxLayout" name="horizontalLayout">
            <item>
             <widget class="QLabel" name="lblCheckSize">
@@ -336,7 +340,7 @@
            </item>
           </layout>
          </item>
-         <item row="4" column="2">
+         <item column="2" row="4">
           <layout class="QHBoxLayout" name="horizontalLayout_2">
            <item>
             <widget class="QLabel" name="gridThresholdLabel">
@@ -379,7 +383,7 @@
            </item>
           </layout>
          </item>
-         <item row="2" column="2">
+         <item column="2" row="2">
           <layout class="QHBoxLayout" name="horizontalLayout_3">
            <item>
             <widget class="QLabel" name="label_3">
@@ -406,14 +410,14 @@
            </item>
           </layout>
          </item>
-         <item row="2" column="1">
+         <item column="1" row="2">
           <widget class="KisColorButton" name="btnSelectionOverlayColor">
            <property name="text">
             <string/>
            </property>
           </widget>
          </item>
-         <item row="4" column="0">
+         <item column="0" row="4">
           <widget class="QLabel" name="lblCanvasBorderColor_2">
            <property name="text">
             <string>Pixel Grid:</string>
@@ -423,7 +427,7 @@
            </property>
           </widget>
          </item>
-         <item row="2" column="0">
+         <item column="0" row="2">
           <widget class="QLabel" name="label_2">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -439,7 +443,7 @@
            </property>
           </widget>
          </item>
-         <item row="0" column="0">
+         <item column="0" row="0">
           <widget class="QLabel" name="label_4">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -455,14 +459,14 @@
            </property>
           </widget>
          </item>
-         <item row="4" column="1">
+         <item column="1" row="4">
           <widget class="KisColorButton" name="pixelGridColorButton">
            <property name="text">
             <string/>
            </property>
           </widget>
          </item>
-         <item row="0" column="1">
+         <item column="1" row="0">
           <layout class="QHBoxLayout" name="horizontalLayout_4">
            <item>
             <widget class="KisColorButton" name="colorChecks2"/>
@@ -472,7 +476,7 @@
            </item>
           </layout>
          </item>
-         <item row="1" column="0">
+         <item column="0" row="1">
           <widget class="QLabel" name="lblCanvasBorderColor">
            <property name="text">
             <string>Canvas Border Color:</string>
@@ -482,7 +486,7 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="1">
+         <item column="1" row="1">
           <widget class="KisColorButton" name="canvasBorder">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -494,7 +498,7 @@
          </item>
         </layout>
        </item>
-       <item row="1" column="0">
+       <item column="0" row="1">
         <spacer name="verticalSpacer_4">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -514,7 +518,7 @@
        <string>Miscellaneous</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_5">
-       <item row="0" column="0">
+       <item column="0" row="0">
         <layout class="QGridLayout" name="checkboxesLayout">
          <property name="topMargin">
           <number>20</number>
@@ -525,7 +529,7 @@
          <property name="verticalSpacing">
           <number>10</number>
          </property>
-         <item row="0" column="0">
+         <item column="0" row="0">
           <widget class="QCheckBox" name="hideScrollbars">
            <property name="text">
             <string>Hide Canvas Scrollbars</string>
@@ -535,21 +539,21 @@
            </property>
           </widget>
          </item>
-         <item row="2" column="0">
+         <item column="0" row="2">
           <widget class="QCheckBox" name="chkHidePopups">
            <property name="text">
             <string>Hide layer thumbnail popup</string>
            </property>
           </widget>
          </item>
-         <item row="1" column="0">
+         <item column="0" row="1">
           <widget class="QCheckBox" name="chkCurveAntialiasing">
            <property name="text">
             <string>Enable curve anti-aliasing</string>
            </property>
           </widget>
          </item>
-         <item row="0" column="1">
+         <item column="1" row="0">
           <widget class="QCheckBox" name="chkChannelsAsColor">
            <property name="text">
             <string>Color channels in color</string>
@@ -559,14 +563,14 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="1">
+         <item column="1" row="1">
           <widget class="QCheckBox" name="chkSelectionOutlineAntialiasing">
            <property name="text">
             <string>Enable selection outline anti-aliasing</string>
            </property>
           </widget>
          </item>
-         <item row="2" column="1">
+         <item column="1" row="2">
           <widget class="QCheckBox" name="chkMoving">
            <property name="toolTip">
             <string>If checked, the checkers will move when scrolling the canvas.</string>
@@ -584,7 +588,7 @@
          </item>
         </layout>
        </item>
-       <item row="1" column="0">
+       <item column="0" row="1">
         <spacer name="verticalSpacer_5">
          <property name="orientation">
           <enum>Qt::Vertical</enum>

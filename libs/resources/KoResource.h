@@ -1,20 +1,8 @@
-﻿/*  This file is part of the KDE project
-    Copyright (c) 2003 Patrick Julien <freak@codepimps.org>
-    Copyright (c) 2005 Boudewijn Rempt <boud@valdyas.org>
+/*  This file is part of the KDE project
+    SPDX-FileCopyrightText: 2003 Patrick Julien <freak@codepimps.org>
+    SPDX-FileCopyrightText: 2005 Boudewijn Rempt <boud@valdyas.org>
 
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+    SPDX-License-Identifier: LGPL-2.1-or-later
  */
 #ifndef KORESOURCE_H
 #define KORESOURCE_H
@@ -38,6 +26,10 @@ typedef QSharedPointer<KoResource> KoResourceSP;
 
 class KisResourcesInterface;
 typedef QSharedPointer<KisResourcesInterface> KisResourcesInterfaceSP;
+
+namespace ResourceTestHelper {
+void overrideResourceVesion(KoResourceSP resource, int version);
+}
 
 /**
  * The KoResource class provides a representation of resources.  This
@@ -109,7 +101,7 @@ public:
     /// @return the md5sum calculated over the contents of the resource.
     QByteArray md5() const;
 
-    /// @return the unique identifier of this resource within the container (folder, bundle, ...)
+    /// @return the filename of this resource within the container (folder, bundle, ...)
     QString filename() const;
     void setFilename(const QString& filename);
 
@@ -189,15 +181,19 @@ public:
 
 private:
 
+    friend class KisResourceCacheDb;
     friend class KisResourceModel;
     friend class KisResourceLocator;
     friend class TestResourceModel;
     friend class TestResourceLocator;
     friend class TestFolderStorage;
+    friend class TestBundleStorage;
     friend class KisFolderStorage;
     friend class KisBundleStorage;
     friend class KisStorageVersioningHelper;
     friend class KisMemoryStorage;
+
+    friend void ResourceTestHelper::overrideResourceVesion(KoResourceSP resource, int version);
 
     void setVersion(int version);
     void setResourceId(int id);

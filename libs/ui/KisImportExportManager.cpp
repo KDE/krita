@@ -1,20 +1,7 @@
 /*
- * Copyright (C) 2016 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2016 Boudewijn Rempt <boud@valdyas.org>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #include "KisImportExportManager.h"
@@ -280,6 +267,18 @@ QString KisImportExportManager::askForAudioFileName(const QString &defaultDir, Q
 
     dialog.setMimeTypeFilters(mimeTypes);
     dialog.setCaption(i18nc("@title:window", "Open Audio"));
+
+    return dialog.filename();
+}
+
+QString KisImportExportManager::getUriForAdditionalFile(const QString &defaultUri, QWidget *parent)
+{
+    KoFileDialog dialog(parent, KoFileDialog::SaveFile, "Save Kra");
+
+    KIS_SAFE_ASSERT_RECOVER_NOOP(!defaultUri.isEmpty());
+
+    dialog.setDirectoryUrl(QUrl(defaultUri));
+    dialog.setMimeTypeFilters(QStringList("application/x-krita"));
 
     return dialog.filename();
 }
@@ -647,7 +646,11 @@ KisImportExportErrorCode KisImportExportManager::doExport(const QString &locatio
             doExportImpl(location, filter, exportConfiguration);
 
     if (alsoAsKra && status.isOk()) {
+#ifdef Q_OS_ANDROID
+        QString kraLocation = getUriForAdditionalFile(location, nullptr);
+#else
         QString kraLocation = location + ".kra";
+#endif
         QByteArray mime = m_document->nativeFormatMimeType();
         QSharedPointer<KisImportExportFilter> filter(
                     filterForMimeType(QString::fromLatin1(mime), Export));

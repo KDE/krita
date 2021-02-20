@@ -1,21 +1,9 @@
 /*
  * imagesize.cc -- Part of Krita
  *
- * Copyright (c) 2004 Boudewijn Rempt (boud@valdyas.org)
+ * SPDX-FileCopyrightText: 2004 Boudewijn Rempt (boud@valdyas.org)
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "imagesize.h"
@@ -80,11 +68,9 @@ void ImageSize::slotImageSize()
     dlgImageSize->setObjectName("ImageSize");
 
     if (dlgImageSize->exec() == QDialog::Accepted) {
-        qint32 w = dlgImageSize->width();
-        qint32 h = dlgImageSize->height();
-        double res = dlgImageSize->resolution();
-
-        viewManager()->imageManager()->scaleCurrentImage(QSize(w, h), res, res, dlgImageSize->filterType());
+        const QSize desiredSize(dlgImageSize->desiredWidth(), dlgImageSize->desiredHeight());
+        double res = dlgImageSize->desiredResolution();
+        viewManager()->imageManager()->scaleCurrentImage(desiredSize, res, res, dlgImageSize->filterType());
     }
 
     delete dlgImageSize;
@@ -134,13 +120,12 @@ void ImageSize::scaleLayerImpl(KisNodeSP rootNode)
     dlgLayerSize->setCaption(i18n("Resize Layer"));
 
     if (dlgLayerSize->exec() == QDialog::Accepted) {
-        qint32 w = dlgLayerSize->width();
-        qint32 h = dlgLayerSize->height();
+        const QSize desiredSize(dlgLayerSize->desiredWidth(), dlgLayerSize->desiredHeight());
 
         viewManager()->image()->scaleNode(rootNode,
                                           QRectF(bounds).center(),
-                                          qreal(w) / bounds.width(),
-                                          qreal(h) / bounds.height(),
+                                          qreal(desiredSize.width()) / bounds.width(),
+                                          qreal(desiredSize.height()) / bounds.height(),
                                           dlgLayerSize->filterType(),
                                           selection);
     }
@@ -183,8 +168,8 @@ void ImageSize::slotSelectionScale()
     dlgSize->setCaption(i18n("Scale Selection"));
 
     if (dlgSize->exec() == QDialog::Accepted) {
-        qint32 w = dlgSize->width();
-        qint32 h = dlgSize->height();
+        qint32 w = dlgSize->desiredWidth();
+        qint32 h = dlgSize->desiredHeight();
 
         image->scaleNode(selectionMask,
                          QRectF(rc).center(),

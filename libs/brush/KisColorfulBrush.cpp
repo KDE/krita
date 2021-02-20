@@ -1,19 +1,7 @@
 /*
- *  Copyright (c) 2020 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2020 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "KisColorfulBrush.h"
@@ -29,7 +17,7 @@ KisColorfulBrush::KisColorfulBrush(const QString &filename)
 QImage KisColorfulBrush::brushTipImage() const
 {
     QImage image = KisBrush::brushTipImage();
-    if (hasColor() && brushApplication() != IMAGESTAMP) {
+    if (isImageType() && brushApplication() != IMAGESTAMP) {
         if (m_adjustmentMidPoint != 127 ||
             !qFuzzyIsNull(m_brightnessAdjustment) ||
             !qFuzzyIsNull(m_contrastAdjustment)) {
@@ -111,7 +99,7 @@ void KisColorfulBrush::setContrastAdjustment(qreal value)
     }
 }
 
-bool KisColorfulBrush::hasColor() const
+bool KisColorfulBrush::isImageType() const
 {
     return brushType() == IMAGE || brushType() == PIPE_IMAGE;
 }
@@ -142,4 +130,14 @@ void KisColorfulBrush::toXML(QDomDocument& d, QDomElement& e) const
     e.setAttribute("BrightnessAdjustment", QString::number(m_brightnessAdjustment));
     e.setAttribute("ContrastAdjustment", QString::number(m_contrastAdjustment));
     KisBrush::toXML(d, e);
+}
+
+void KisColorfulBrush::setHasColorAndTransparency(bool value)
+{
+    m_hasColorAndTransparency = value;
+}
+
+bool KisColorfulBrush::hasColorAndTransparency() const
+{
+    return m_hasColorAndTransparency;
 }

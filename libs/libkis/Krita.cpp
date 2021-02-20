@@ -1,19 +1,7 @@
 /*
- *  Copyright (c) 2016 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2016 Boudewijn Rempt <boud@valdyas.org>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
 #include "Krita.h"
 
@@ -50,11 +38,13 @@
 #include <kis_workspace_resource.h>
 #include <brushengine/kis_paintop_preset.h>
 #include <KisBrushServerProvider.h>
+#include <KoResourceServerProvider.h>
+#include <KisResourceServerProvider.h>
+#include <KisBrushServerProvider.h>
 #include <kis_action_registry.h>
 #include <kis_icon_utils.h>
 
 #include <KisResourceModel.h>
-#include <KisResourceModelProvider.h>
 #include <KisGlobalResourcesInterface.h>
 
 #include "View.h"
@@ -269,17 +259,42 @@ QList<Window*>  Krita::windows() const
     return ret;
 }
 
-QMap<QString, Resource*> Krita::resources(const QString &type) const
+QMap<QString, Resource*> Krita::resources(QString &type) const
 {
     QMap<QString, Resource*> resources;
-    KisResourceModel *resourceModel = KisResourceModelProvider::resourceModel(type);
+    KisResourceModel *resourceModel = 0;
+    if (type == "pattern") {
+        resourceModel = KisResourceServerProvider::instance()->paintOpPresetServer()->resourceModel();
+        type = ResourceType::Patterns;
+    }
+    else if (type == "gradient") {
+        type = ResourceType::Gradients;
+        resourceModel = KoResourceServerProvider::instance()->gradientServer()->resourceModel();
+    }
+    else if (type == "brush") {
+        resourceModel = KisBrushServerProvider::instance()->brushServer()->resourceModel();
+        type = ResourceType::Brushes;
+    }
+    else if (type == "palette") {
+        resourceModel = KoResourceServerProvider::instance()->paletteServer()->resourceModel();
+        type = ResourceType::Palettes;
+    }
+    else if (type == "workspace") {
+        resourceModel = KisResourceServerProvider::instance()->workspaceServer()->resourceModel();
+        type = ResourceType::Workspaces;
+    }
+    else if (type == "preset") {
+        resourceModel = KisResourceServerProvider::instance()->paintOpPresetServer()->resourceModel();
+    }
+
+
     for (int i = 0; i < resourceModel->rowCount(); ++i) {
 
         QModelIndex idx = resourceModel->index(i, 0);
-        int id = resourceModel->data(idx, Qt::UserRole + KisResourceModel::Id).toInt();
-        QString name  = resourceModel->data(idx, Qt::UserRole + KisResourceModel::Name).toString();
-        QString filename  = resourceModel->data(idx, Qt::UserRole + KisResourceModel::Filename).toString();
-        QImage image = resourceModel->data(idx, Qt::UserRole + KisResourceModel::Thumbnail).value<QImage>();
+        int id = resourceModel->data(idx, Qt::UserRole + KisAbstractResourceModel::Id).toInt();
+        QString name  = resourceModel->data(idx, Qt::UserRole + KisAbstractResourceModel::Name).toString();
+        QString filename  = resourceModel->data(idx, Qt::UserRole + KisAbstractResourceModel::Filename).toString();
+        QImage image = resourceModel->data(idx, Qt::UserRole + KisAbstractResourceModel::Thumbnail).value<QImage>();
 
         resources[name] = new Resource(id, type, name, filename, image, 0);
     }

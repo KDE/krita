@@ -1,0 +1,51 @@
+diff --git a/arm/arm_init.c b/arm/arm_init.c
+index a34ecdb..1afda36 100644
+--- a/arm/arm_init.c
++++ b/arm/arm_init.c
+@@ -36,6 +36,8 @@
+ #ifndef PNG_ARM_NEON_FILE
+ #  ifdef __linux__
+ #     define PNG_ARM_NEON_FILE "contrib/arm-neon/linux.c"
++#  elif __APPLE__
++#     define PNG_ARM_NEON_FILE "contrib/arm-neon/macos.c"
+ #  endif
+ #endif
+ 
+diff --git a/contrib/arm-neon/macos.c b/contrib/arm-neon/macos.c
+new file mode 100644
+index 0000000..0cdd427
+--- /dev/null
++++ b/contrib/arm-neon/macos.c
+@@ -0,0 +1,31 @@
++/* contrib/arm-neon/macos.c
++ *
++ * Last changed in libpng 1.6.317 [December 14, 2020]
++ * Copyright (c) 2020 Ivan Yossi Santa Maria
++ * Written by Ivan Yossi, 2020.
++ *
++*/
++
++#include <sys/types.h>
++
++#ifndef u_int
++	typedef	unsigned int	u_int;
++#endif
++#ifndef u_char
++	typedef	unsigned char	u_char;
++#endif
++#ifndef u_short
++	typedef	unsigned short	u_short;
++#endif
++
++#include <sys/sysctl.h>
++
++static int
++png_have_neon(png_structp png_ptr)
++{
++	uint32_t has_neon = 0;
++	size_t size = sizeof( has_neon );
++	sysctlbyname( "hw.optional.neon", &has_neon, &size, NULL, 0);
++	
++	return has_neon;
++}
+\ No newline at end of file

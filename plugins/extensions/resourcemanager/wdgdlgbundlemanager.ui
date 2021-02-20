@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgDlgBundleManager</class>
  <widget class="QWidget" name="WdgDlgBundleManager">
   <property name="geometry">
@@ -67,7 +71,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="bnDelete">
+        <widget class="QPushButton" name="bnToggle">
          <property name="toolTip">
           <string>Delete a resource library</string>
          </property>
@@ -380,7 +384,7 @@
   <tabstop>listView</tabstop>
   <tabstop>bnAdd</tabstop>
   <tabstop>bnNew</tabstop>
-  <tabstop>bnDelete</tabstop>
+  <tabstop>bnToggle</tabstop>
   <tabstop>lblDescription</tabstop>
  </tabstops>
  <resources/>

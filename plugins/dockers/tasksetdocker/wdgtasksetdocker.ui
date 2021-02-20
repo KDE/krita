@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgTasksetDocker</class>
  <widget class="QWidget" name="WdgTasksetDocker">
   <property name="geometry">
@@ -29,6 +33,9 @@
    </item>
    <item row="1" column="2">
     <widget class="QPushButton" name="recordButton">
+     <property name="toolTip">
+      <string>Start Recording</string>
+     </property>
      <property name="text">
       <string/>
      </property>
@@ -36,6 +43,9 @@
    </item>
    <item row="1" column="4">
     <widget class="QPushButton" name="clearButton">
+     <property name="toolTip">
+      <string>Delete the taskset</string>
+     </property>
      <property name="text">
       <string/>
      </property>
@@ -43,13 +53,16 @@
    </item>
    <item row="1" column="3">
     <widget class="QPushButton" name="saveButton">
+     <property name="toolTip">
+      <string>Save the taskset</string>
+     </property>
      <property name="text">
       <string/>
      </property>
     </widget>
    </item>
    <item row="1" column="0">
-    <widget class="KisPopupButton" name="chooserButton"/>
+    <widget class="KisPopupButton" name="chooserButton" native="true"/>
    </item>
   </layout>
  </widget>

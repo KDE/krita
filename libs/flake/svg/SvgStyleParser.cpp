@@ -1,26 +1,13 @@
 /* This file is part of the KDE project
- * Copyright (C) 2002-2005,2007 Rob Buis <buis@kde.org>
- * Copyright (C) 2002-2004 Nicolas Goutte <nicolasg@snafu.de>
- * Copyright (C) 2005-2006 Tim Beaulen <tbscope@gmail.com>
- * Copyright (C) 2005-2009 Jan Hambrecht <jaham@gmx.net>
- * Copyright (C) 2005,2007 Thomas Zander <zander@kde.org>
- * Copyright (C) 2006-2007 Inge Wallin <inge@lysator.liu.se>
- * Copyright (C) 2007-2008,2010 Thorsten Zachmann <zachmann@kde.org>
+ * SPDX-FileCopyrightText: 2002-2005, 2007 Rob Buis <buis@kde.org>
+ * SPDX-FileCopyrightText: 2002-2004 Nicolas Goutte <nicolasg@snafu.de>
+ * SPDX-FileCopyrightText: 2005-2006 Tim Beaulen <tbscope@gmail.com>
+ * SPDX-FileCopyrightText: 2005-2009 Jan Hambrecht <jaham@gmx.net>
+ * SPDX-FileCopyrightText: 2005, 2007 Thomas Zander <zander@kde.org>
+ * SPDX-FileCopyrightText: 2006-2007 Inge Wallin <inge@lysator.liu.se>
+ * SPDX-FileCopyrightText: 2007-2008, 2010 Thorsten Zachmann <zachmann@kde.org>
 
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #include "SvgStyleParser.h"
@@ -36,6 +23,7 @@
 #include <QStringList>
 #include <QColor>
 #include <QGradientStops>
+#include <KoColor.h>
 
 class Q_DECL_HIDDEN SvgStyleParser::Private
 {
@@ -331,35 +319,10 @@ bool SvgStyleParser::parseColor(QColor &color, const QString &s)
     if (s.isEmpty() || s == "none")
         return false;
 
-    if (s.startsWith(QLatin1String("rgb("))) {
-        QString parse = s.trimmed();
-        QStringList colors = parse.split(',');
-        QString r = colors[0].right((colors[0].length() - 4));
-        QString g = colors[1];
-        QString b = colors[2].left((colors[2].length() - 1));
-
-        if (r.contains('%')) {
-            r = r.left(r.length() - 1);
-            r = QString::number(int((double(255 * KisDomUtils::toDouble(r)) / 100.0)));
-        }
-
-        if (g.contains('%')) {
-            g = g.left(g.length() - 1);
-            g = QString::number(int((double(255 * KisDomUtils::toDouble(g)) / 100.0)));
-        }
-
-        if (b.contains('%')) {
-            b = b.left(b.length() - 1);
-            b = QString::number(int((double(255 * KisDomUtils::toDouble(b)) / 100.0)));
-        }
-
-        color = QColor(r.toInt(), g.toInt(), b.toInt());
-    } else if (s == "currentColor") {
-        color = d->context.currentGC()->currentColor;
-    } else {
-        // QColor understands #RRGGBB and svg color names
-        color.setNamedColor(s.trimmed());
-    }
+    KoColor current = KoColor();
+    current.fromQColor(d->context.currentGC()->currentColor);
+    KoColor c = KoColor::fromSVG11(s, d->context.profiles(), current);
+    c.toQColor(&color);
 
     return true;
 }

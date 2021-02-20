@@ -1,20 +1,7 @@
 /*
- *  Copyright (c) 2014 Victor Lafon metabolic.ewilan@hotmail.fr
+ *  SPDX-FileCopyrightText: 2014 Victor Lafon metabolic.ewilan @hotmail.fr
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #include "KoResourceBundle.h"
@@ -43,7 +30,7 @@
 #include "KisResourceLoaderRegistry.h"
 #include <KisResourceModelProvider.h>
 #include <KisResourceModel.h>
-
+#include <KoMD5Generator.h>
 
 #include <KritaVersionWrapper.h>
 
@@ -192,11 +179,10 @@ bool KoResourceBundle::save()
     if (!store || store->bad()) return false;
 
     Q_FOREACH (const QString &resType, m_manifest.types()) {
-        KisResourceModel* model = KisResourceModelProvider::resourceModel(resType);
+        KisResourceModel model(resType);
         Q_FOREACH (const KoResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
-            KoResourceSP res = model->resourceForMD5(ref.md5sum);
-            if (!res) res = model->resourceForFilename(QFileInfo(ref.resourcePath).fileName());
-            qDebug() << "res  is or isn't found: " << (res.isNull() ? "(null)" : res->name());
+            KoResourceSP res = model.resourceForMD5(ref.md5sum);
+            if (!res) res = model.resourceForFilename(QFileInfo(ref.resourcePath).fileName());
             if (!saveResourceToStore(res, store.data(), resType)) {
                 if (res) {
                     qWarning() << "Could not save resource" << resType << res->name();
@@ -414,36 +400,69 @@ KoResourceBundleManifest &KoResourceBundle::manifest()
 
 KoResourceSP KoResourceBundle::resource(const QString &resourceType, const QString &filepath)
 {
-    if (m_filename.isEmpty()) return 0;
-
-
-    QScopedPointer<KoStore> resourceStore(KoStore::createStore(m_filename, KoStore::Read, "application/x-krita-resourcebundle", KoStore::Zip));
-
-    if (!resourceStore || resourceStore->bad()) {
-        qWarning() << "Could not open store on bundle" << m_filename;
-        return 0;
-    }
-
-    if (!resourceStore->open(filepath)) {
-        qWarning() << "Could not open file in bundle" << filepath;
-        return 0;
-    }
-
     QString mime = KisMimeDatabase::mimeTypeForSuffix(filepath);
     KisResourceLoaderBase *loader = KisResourceLoaderRegistry::instance()->loader(resourceType, mime);
     if (!loader) {
         qWarning() << "Could not create loader for" << resourceType << filepath << mime;
         return 0;
     }
-    KoResourceSP res = loader->load(filepath, *resourceStore->device(), KisGlobalResourcesInterface::instance());
-    QString filename = QFileInfo(filepath).fileName();
-    if (!res.isNull()) {
-        // Note that res will be null for Special_dyna_dots.kpp which is a brush preset based on a deleted engine
-        res->setFilename(filename);
+
+    QStringList parts = filepath.split('/', QString::SkipEmptyParts);
+    Q_ASSERT(parts.size() == 2);
+
+    KoResourceSP resource = loader->create(parts[1]);
+    return loadResource(resource) ? resource : 0;
+}
+
+bool KoResourceBundle::loadResource(KoResourceSP resource)
+{
+    if (m_filename.isEmpty()) return false;
+
+    const QString resourceType = resource->resourceType().first;
+
+    QScopedPointer<KoStore> resourceStore(KoStore::createStore(m_filename, KoStore::Read, "application/x-krita-resourcebundle", KoStore::Zip));
+
+    if (!resourceStore || resourceStore->bad()) {
+        qWarning() << "Could not open store on bundle" << m_filename;
+        return false;
+    }
+    const QString fileName = QString("%1/%2").arg(resourceType).arg(resource->filename());
+    if (!resourceStore->open(fileName)) {
+        qWarning() << "Could not open file in bundle" << fileName;
+        return false;
+    }
+
+    if (!resource->loadFromDevice(resourceStore->device(),
+                                  KisGlobalResourcesInterface::instance())) {
+        qWarning() << "Could not reload the resource from the bundle" << resourceType << fileName << m_filename;
+        return false;
     }
     resourceStore->close();
 
-    return res;
+    return true;
+}
+
+QByteArray KoResourceBundle::resourceMd5(const QString &url)
+{
+    QByteArray result;
+
+    if (m_filename.isEmpty()) return result;
+
+    QScopedPointer<KoStore> resourceStore(KoStore::createStore(m_filename, KoStore::Read, "application/x-krita-resourcebundle", KoStore::Zip));
+
+    if (!resourceStore || resourceStore->bad()) {
+        qWarning() << "Could not open store on bundle" << m_filename;
+        return result;
+    }
+    if (!resourceStore->open(url)) {
+        qWarning() << "Could not open file in bundle" << url;
+        return result;
+    }
+
+    result = KoMD5Generator::generateHash(resourceStore->device()->readAll());
+    resourceStore->close();
+
+    return result;
 }
 
 QImage KoResourceBundle::image() const

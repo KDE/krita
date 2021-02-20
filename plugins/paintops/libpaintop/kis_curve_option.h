@@ -1,21 +1,8 @@
 /* This file is part of the KDE project
- * Copyright (C) 2008 Boudewijn Rempt <boud@valdyas.org>
- * Copyright (C) 2011 Silvio Heinrich <plassy@web.de>
+ * SPDX-FileCopyrightText: 2008 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2011 Silvio Heinrich <plassy@web.de>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #ifndef KIS_CURVE_OPTION_H
@@ -44,8 +31,9 @@ class KisDynamicSensor;
  * manage to read and write its settings directly.
  *
  */
-class PAINTOP_EXPORT KisCurveOption
+class PAINTOP_EXPORT KisCurveOption: public QObject
 {
+    Q_OBJECT
 public:
     KisCurveOption(const QString& name,
                    KisPaintOpOption::PaintopCategory category,
@@ -168,14 +156,19 @@ public:
      */
     KisCubicCurve emptyCurve();
 
+    virtual QList<KoID> sensorsIds();
+    virtual DynamicSensorType id2Type(const KoID &id);
+    virtual KisDynamicSensorSP id2Sensor(const KoID& id, const QString &parentOptionName);
+    virtual KisDynamicSensorSP type2Sensor(DynamicSensorType sensorType, const QString &parentOptionName);
+    virtual QList<DynamicSensorType> sensorsTypes();
+
 protected:
 
-    void setValueRange(qreal min, qreal max);
-
+    void setValueRange(qreal min, qreal max);    
     /**
      * Read the option using the prefix in argument
      */
-    void readNamedOptionSetting(const QString& prefix, const KisPropertiesConfigurationSP setting);
+    virtual void readNamedOptionSetting(const QString& prefix, const KisPropertiesConfigurationSP setting);
 
     QString m_name;
     KisPaintOpOption::PaintopCategory m_category;
@@ -196,11 +189,12 @@ protected:
 
     QMap<DynamicSensorType, KisDynamicSensorSP> m_sensorMap;
 
-private:
-
     qreal m_value;
     qreal m_minValue;
     qreal m_maxValue;
+
+Q_SIGNALS:
+    void unCheckUseCurve();
 };
 
 #endif

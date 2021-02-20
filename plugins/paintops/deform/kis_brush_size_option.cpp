@@ -1,19 +1,7 @@
 /*
- *  Copyright (c) 2009,2010 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  SPDX-FileCopyrightText: 2009, 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 #include "kis_brush_size_option.h"
 #include <klocalizedstring.h>
@@ -61,9 +49,7 @@ KisBrushSizeOption::KisBrushSizeOption()
     m_options->spacing->setValue(0.3);
 
 
-    m_options->rotationBox->setRange(0.0, 360.0, 0);
-    m_options->rotationBox->setValue(0.0);
-    m_options->rotationBox->setSuffix(QChar(Qt::Key_degree));
+    m_options->rotationBox->setDecimals(0);
 
 
     m_options->densityBox->setRange(0.0, 100.0, 0);
@@ -78,7 +64,7 @@ KisBrushSizeOption::KisBrushSizeOption()
     connect(m_options->scale, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
     connect(m_options->aspectBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
     connect(m_options->spacing, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
-    connect(m_options->rotationBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
+    connect(m_options->rotationBox, SIGNAL(angleChanged(qreal)), SLOT(emitSettingChanged()));
     connect(m_options->densityBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
     connect(m_options->jitterMove, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
     connect(m_options->jitterMoveBox, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
@@ -116,7 +102,7 @@ void KisBrushSizeOption::writeOptionSetting(KisPropertiesConfigurationSP setting
 
     op.brush_diameter = m_options->diameter->value();
     op.brush_aspect = m_options->aspectBox->value();
-    op.brush_rotation = m_options->rotationBox->value();
+    op.brush_rotation = m_options->rotationBox->angle();
     op.brush_scale = m_options->scale->value();
     op.brush_spacing = m_options->spacing->value();
     op.brush_density = m_options->densityBox->value() / 100.0;
@@ -133,7 +119,7 @@ void KisBrushSizeOption::readOptionSetting(const KisPropertiesConfigurationSP se
 
     m_options->diameter->setValue(op.brush_diameter);
     m_options->aspectBox->setValue(op.brush_aspect);
-    m_options->rotationBox->setValue(op.brush_rotation);
+    m_options->rotationBox->setAngle(op.brush_rotation);
     m_options->scale->setValue(op.brush_scale);
     m_options->spacing->setValue(op.brush_spacing);
     m_options->densityBox->setValue(op.brush_density * 100.0);

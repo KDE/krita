@@ -1,20 +1,7 @@
 /*
- *  Copyright (c) 2011 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2011 Boudewijn Rempt <boud@valdyas.org>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.1-or-later
  */
 
 #include "kis_mimedata.h"
@@ -30,6 +17,11 @@
 #include "kis_shape_controller.h"
 #include "KisPart.h"
 #include "kis_layer_utils.h"
+#include "kis_generator_registry.h"
+#include "KisGlobalResourcesInterface.h"
+#include "kis_filter_configuration.h"
+#include "kis_generator_layer.h"
+#include "kis_selection.h"
 #include "kis_node_insertion_adapter.h"
 #include "kis_dummies_facade_base.h"
 #include "kis_node_dummies_graph.h"
@@ -94,10 +86,19 @@ QStringList KisMimeData::formats () const
 
 KisDocument *createDocument(QList<KisNodeSP> nodes, KisImageSP srcImage)
 {
+    qDebug() << nodes;
+    qDebug() << srcImage;
+
     KisDocument *doc = KisPart::instance()->createDocument();
     QRect rc;
     Q_FOREACH (KisNodeSP node, nodes) {
-        rc |= node->exactBounds();
+        if (node) {
+            rc |= node->exactBounds();
+        }
+    }
+
+    if (rc.isEmpty() && srcImage) {
+        rc = srcImage->bounds();
     }
 
     KisImageSP image = new KisImage(0, rc.width(), rc.height(), nodes.first()->colorSpace(), nodes.first()->name());
@@ -286,6 +287,7 @@ QList<KisNodeSP> KisMimeData::loadNodes(const QMimeData *data,
                                         KisShapeController *shapeController)
 {
     bool alwaysRecenter = false;
+    bool skipRecenter = false;
     QList<KisNodeSP> nodes;
 
     if (data->hasFormat("application/x-krita-node")) {
@@ -308,11 +310,32 @@ QList<KisNodeSP> KisMimeData::loadNodes(const QMimeData *data,
         delete tempDoc;
     }
 
+    if (nodes.isEmpty() && (data->hasFormat("application/x-color") || data->hasFormat("krita/x-colorsetentry"))) {
+        QColor color = data->hasColor() ? qvariant_cast<QColor>(data->colorData()) : QColor(255, 0, 255);
+        if (!data->hasColor() && data->hasFormat("krita/x-colorsetentry")) {
+            QByteArray byteData = data->data("krita/x-colorsetentry");
+            KisSwatch s = KisSwatch::fromByteArray(byteData);
+            color = s.color().toQColor();
+        }
+        KisGeneratorSP generator = KisGeneratorRegistry::instance()->value("color");
+        KisFilterConfigurationSP defaultConfig = generator->factoryConfiguration(KisGlobalResourcesInterface::instance());
+        defaultConfig->setProperty("color", color);
+        defaultConfig->createLocalResourcesSnapshot(KisGlobalResourcesInterface::instance());
+
+        if (image) {
+            KisGeneratorLayerSP fillLayer = new KisGeneratorLayer(image, image->nextLayerName("Fill Layer"), defaultConfig, image->globalSelection());
+            nodes << fillLayer;
+            skipRecenter = true;
+        }
+    }
+
     if (nodes.isEmpty() && data->hasFormat("application/x-krita-node-url")) {
         QByteArray ba = data->data("application/x-krita-node-url");
+        QUrl url = QUrl::fromEncoded(ba);
+        Q_ASSERT(url.isLocalFile());
+
         KisDocument *tempDoc = KisPart::instance()->createDocument();
-        Q_ASSERT(QUrl::fromEncoded(ba).isLocalFile());
-        bool result = tempDoc->openUrl(QUrl::fromEncoded(ba));
+        bool result = tempDoc->openUrl(url);
 
         if (result) {
             KisImageSP tempImage = tempDoc->image();
@@ -322,8 +345,9 @@ QList<KisNodeSP> KisMimeData::loadNodes(const QMimeData *data,
                 nodes << node;
             }
         }
+
         delete tempDoc;
-        QFile::remove(QUrl::fromEncoded(ba).toLocalFile());
+        QFile::remove(url.toLocalFile());
     }
 
     if (nodes.isEmpty() && data->hasImage()) {
@@ -339,13 +363,13 @@ QList<KisNodeSP> KisMimeData::loadNodes(const QMimeData *data,
         alwaysRecenter = true;
     }
 
-    if (!nodes.isEmpty()) {
+    if (!nodes.isEmpty() && !skipRecenter) {
         Q_FOREACH (KisNodeSP node, nodes) {
             QRect bounds = node->projection()->exactBounds();
+
             if (alwaysRecenter || forceRecenter ||
                     (!imageBounds.contains(bounds) &&
                      !imageBounds.intersects(bounds))) {
-
                 QPoint pt = preferredCenter - bounds.center();
                 node->setX(pt.x());
                 node->setY(pt.y());
@@ -465,6 +489,21 @@ bool KisMimeData::insertMimeLayers(const QMimeData *data,
     else {
         Q_ASSERT(nodes.first()->graphListener() == image.data());
         nodeInsertionAdapter->moveNodes(nodes, parentDummy->node(), aboveThisNode);
+    }
+
+    const bool hasDelayedNodes =
+        std::find_if(nodes.begin(), nodes.end(),
+                     [] (KisNodeSP node) {
+                         return bool(dynamic_cast<KisDelayedUpdateNodeInterface*>(node.data()));
+                     }) != nodes.end();
+
+    if (hasDelayedNodes) {
+        /**
+         * We have the node juggler running, so it will delay the update of the
+         * generator layers that might be included into the paste. To avoid
+         * that we should forcefully to make it stop
+         */
+        image->requestStrokeEnd();
     }
 
     return result;

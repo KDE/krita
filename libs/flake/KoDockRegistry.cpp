@@ -1,20 +1,7 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+ * SPDX-FileCopyrightText: 2006-2007 Thomas Zander <zander@kde.org>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #include "KoDockRegistry.h"
@@ -22,6 +9,7 @@
 #include <QGlobalStatic>
 #include <QFontDatabase>
 #include <QDebug>
+#include <QApplication>
 
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
@@ -65,22 +53,41 @@ KoDockRegistry* KoDockRegistry::instance()
 
 QFont KoDockRegistry::dockFont()
 {
-    KConfigGroup group( KSharedConfig::openConfig(), "GUI");
+    KConfigGroup config(KSharedConfig::openConfig(), "");
+
     QFont dockWidgetFont = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
     QFont smallFont = QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont);
 
-    int pointSize = group.readEntry("palettefontsize", dockWidgetFont.pointSize());
 
-    // Not set by the user
-    if (pointSize == dockWidgetFont.pointSize()) {
-        // and there is no setting for the smallest readable font, calculate something small
-        if (smallFont.pointSize() >= pointSize) {
-            smallFont.setPointSizeF(pointSize * 0.9);
+    if (config.readEntry<bool>("use_custom_system_font", false)) {
+        QString fontName = config.readEntry<QString>("custom_system_font", "");
+        int smallFontSize = config.readEntry<int>("custom_font_size", -1);
+
+        if (smallFontSize <= 6) {
+            smallFontSize = dockWidgetFont.pointSize();
+        }
+
+        if (!fontName.isEmpty()) {
+            dockWidgetFont = QFont(fontName, dockWidgetFont.pointSize());
+            smallFont = QFont(fontName, smallFontSize * 0.9);
         }
     }
     else {
-        // paletteFontSize was set, use that
-        smallFont.setPointSize(pointSize);
+        int pointSize = config.readEntry("palettefontsize", dockWidgetFont.pointSize());
+
+        // Not set by the user
+        if (pointSize == dockWidgetFont.pointSize()) {
+            // and there is no setting for the smallest readable font, calculate something small
+            if (smallFont.pointSize() >= pointSize) {
+                smallFont.setPointSizeF(pointSize * 0.9);
+            }
+        }
+        else {
+            // paletteFontSize was set, use that
+            smallFont.setPointSize(pointSize);
+        }
+
     }
+
     return smallFont;
 }

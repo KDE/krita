@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>EllipseShapeConfigWidget</class>
  <widget class="QWidget" name="EllipseShapeConfigWidget">
   <property name="geometry">
@@ -46,30 +50,10 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="1">
-    <widget class="KisDoubleParseSpinBox" name="startAngle">
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-     <property name="suffix">
-      <string>°</string>
-     </property>
-    </widget>
-   </item>
    <item row="2" column="0">
     <widget class="QLabel" name="label_2">
      <property name="text">
       <string>End angle:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="1">
-    <widget class="KisDoubleParseSpinBox" name="endAngle">
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-     <property name="suffix">
-      <string>°</string>
      </property>
     </widget>
    </item>
@@ -93,13 +77,20 @@
      </property>
     </spacer>
    </item>
+   <item row="1" column="1">
+    <widget class="KisAngleSelector" name="startAngle" native="true"/>
+   </item>
+   <item row="2" column="1">
+    <widget class="KisAngleSelector" name="endAngle" native="true"/>
+   </item>
   </layout>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KisDoubleParseSpinBox</class>
-   <extends>QDoubleSpinBox</extends>
-   <header>kis_double_parse_spin_box.h</header>
+   <class>KisAngleSelector</class>
+   <extends>QWidget</extends>
+   <header location="global">KisAngleSelector.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

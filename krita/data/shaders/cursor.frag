@@ -1,3 +1,7 @@
+/*
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
 out vec4 fragColor;
 
 void main(void)

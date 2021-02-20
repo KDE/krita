@@ -134,7 +134,7 @@
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
-    </Action>
+    </Action>    
     <Action name="save_incremental_version">
       <icon></icon>
       <text>Save Incremental &amp;Version</text>
@@ -355,6 +355,18 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="paste_shape_style">
+      <icon></icon>
+      <text>Paste Shape Style</text>
+      <whatsThis></whatsThis>
+      <toolTip>Paste Shape Style</toolTip>
+      <iconText>Paste into New Image</iconText>
+      <activationFlags>1000000000000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
     <Action name="paste_as_reference">
       <icon></icon>
       <text>Paste as R&amp;eference Image</text>
@@ -375,7 +387,8 @@
       <iconText>Clear</iconText>
       <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>
-      <shortcut>Del</shortcut>
+      <shortcut operatingSystem="macos">Backspace</shortcut>
+      <shortcut operatingSystemElse="">Del</shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -399,7 +412,8 @@
       <iconText>Fill with Background Color</iconText>
       <activationFlags>10000</activationFlags>
       <activationConditions>1</activationConditions>
-      <shortcut>Backspace</shortcut>
+      <shortcut operatingSystem="macos">Del</shortcut>
+      <shortcut operatingSystemElse="">Backspace</shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -1582,6 +1596,18 @@
       <whatsThis></whatsThis>
       <toolTip>Show Dockers</toolTip>
       <iconText>Show Dockers</iconText>
+      <activationFlags>0</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>true</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="view_toggledockertitlebars">
+      <icon></icon>
+      <text>Sho&amp;w Docker Titlebars</text>
+      <whatsThis></whatsThis>
+      <toolTip>Show Docker Titlebars</toolTip>
+      <iconText>Show Docker Titlebars</iconText>
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>

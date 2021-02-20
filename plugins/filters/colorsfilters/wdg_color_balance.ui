@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>Form</class>
  <widget class="QWidget" name="Form">
   <property name="geometry">
@@ -79,14 +83,14 @@
      <property name="verticalSpacing">
       <number>3</number>
      </property>
-     <item row="0" column="2">
+     <item column="2" row="0">
       <widget class="QLabel" name="label_6">
        <property name="text">
         <string>Red    </string>
        </property>
       </widget>
      </item>
-     <item row="1" column="0">
+     <item column="0" row="1">
       <widget class="QLabel" name="label_4">
        <property name="text">
         <string>Magenta</string>
@@ -96,24 +100,24 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="1">
+     <item column="1" row="2">
       <widget class="QSlider" name="yellowBlueShadowsSlider">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
       </widget>
      </item>
-     <item row="1" column="2">
+     <item column="2" row="1">
       <widget class="QLabel" name="label_7">
        <property name="text">
         <string>Green</string>
        </property>
       </widget>
      </item>
-     <item row="1" column="3">
+     <item column="3" row="1">
       <widget class="KisIntParseSpinBox" name="magentaGreenShadowsSpinbox"/>
      </item>
-     <item row="2" column="0">
+     <item column="0" row="2">
       <widget class="QLabel" name="label_9">
        <property name="text">
         <string>Yellow</string>
@@ -123,21 +127,21 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="2">
+     <item column="2" row="2">
       <widget class="QLabel" name="label_8">
        <property name="text">
         <string>Blue  </string>
        </property>
       </widget>
      </item>
-     <item row="1" column="1">
+     <item column="1" row="1">
       <widget class="QSlider" name="magentaGreenShadowsSlider">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
       </widget>
      </item>
-     <item row="0" column="0">
+     <item column="0" row="0">
       <widget class="QLabel" name="label_5">
        <property name="text">
         <string>Cyan</string>
@@ -147,17 +151,17 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="1">
+     <item column="1" row="0">
       <widget class="QSlider" name="cyanRedShadowsSlider">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
       </widget>
      </item>
-     <item row="2" column="3">
+     <item column="3" row="2">
       <widget class="KisIntParseSpinBox" name="yellowBlueShadowsSpinbox"/>
      </item>
-     <item row="0" column="3">
+     <item column="3" row="0">
       <widget class="KisIntParseSpinBox" name="cyanRedShadowsSpinbox"/>
      </item>
     </layout>
@@ -209,37 +213,37 @@
      <property name="verticalSpacing">
       <number>3</number>
      </property>
-     <item row="0" column="3">
+     <item column="3" row="0">
       <widget class="KisIntParseSpinBox" name="cyanRedMidtonesSpinbox"/>
      </item>
-     <item row="2" column="3">
+     <item column="3" row="2">
       <widget class="KisIntParseSpinBox" name="yellowBlueMidtonesSpinbox"/>
      </item>
-     <item row="1" column="3">
+     <item column="3" row="1">
       <widget class="KisIntParseSpinBox" name="magentaGreenMidtonesSpinbox"/>
      </item>
-     <item row="0" column="1">
+     <item column="1" row="0">
       <widget class="QSlider" name="cyanRedMidtonesSlider">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
       </widget>
      </item>
-     <item row="1" column="2">
+     <item column="2" row="1">
       <widget class="QLabel" name="label_20">
        <property name="text">
         <string>Green</string>
        </property>
       </widget>
      </item>
-     <item row="2" column="1">
+     <item column="1" row="2">
       <widget class="QSlider" name="yellowBlueMidtonesSlider">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
       </widget>
      </item>
-     <item row="0" column="0">
+     <item column="0" row="0">
       <widget class="QLabel" name="label_17">
        <property name="text">
         <string>Cyan</string>
@@ -249,21 +253,21 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="1">
+     <item column="1" row="1">
       <widget class="QSlider" name="magentaGreenMidtonesSlider">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
       </widget>
      </item>
-     <item row="0" column="2">
+     <item column="2" row="0">
       <widget class="QLabel" name="label_18">
        <property name="text">
         <string>Red    </string>
        </property>
       </widget>
      </item>
-     <item row="1" column="0">
+     <item column="0" row="1">
       <widget class="QLabel" name="label_19">
        <property name="text">
         <string>Magenta</string>
@@ -273,7 +277,7 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="0">
+     <item column="0" row="2">
       <widget class="QLabel" name="label_21">
        <property name="text">
         <string>Yellow</string>
@@ -283,7 +287,7 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="2">
+     <item column="2" row="2">
       <widget class="QLabel" name="label_22">
        <property name="text">
         <string>Blue  </string>
@@ -342,27 +346,27 @@
      <property name="verticalSpacing">
       <number>3</number>
      </property>
-     <item row="2" column="2">
+     <item column="2" row="2">
       <widget class="QLabel" name="label_15">
        <property name="text">
         <string>Blue</string>
        </property>
       </widget>
      </item>
-     <item row="0" column="3">
+     <item column="3" row="0">
       <widget class="KisIntParseSpinBox" name="cyanRedHighlightsSpinbox"/>
      </item>
-     <item row="3" column="0" colspan="2">
+     <item colspan="2" column="0" row="3">
       <widget class="QCheckBox" name="chkPreserveLuminosity">
        <property name="text">
         <string>Preserve Luminosity</string>
        </property>
       </widget>
      </item>
-     <item row="1" column="3">
+     <item column="3" row="1">
       <widget class="KisIntParseSpinBox" name="magentaGreenHighlightsSpinbox"/>
      </item>
-     <item row="0" column="0">
+     <item column="0" row="0">
       <widget class="QLabel" name="label_10">
        <property name="text">
         <string>Cyan</string>
@@ -372,7 +376,7 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="0">
+     <item column="0" row="2">
       <widget class="QLabel" name="label_14">
        <property name="text">
         <string>Yellow</string>
@@ -382,45 +386,45 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="1">
+     <item column="1" row="1">
       <widget class="QSlider" name="magentaGreenHighlightsSlider">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
       </widget>
      </item>
-     <item row="0" column="2">
+     <item column="2" row="0">
       <widget class="QLabel" name="label_11">
        <property name="text">
         <string>Red    </string>
        </property>
       </widget>
      </item>
-     <item row="1" column="2">
+     <item column="2" row="1">
       <widget class="QLabel" name="label_13">
        <property name="text">
         <string>Green</string>
        </property>
       </widget>
      </item>
-     <item row="2" column="3">
+     <item column="3" row="2">
       <widget class="KisIntParseSpinBox" name="yellowBlueHighlightsSpinbox"/>
      </item>
-     <item row="0" column="1">
+     <item column="1" row="0">
       <widget class="QSlider" name="cyanRedHighlightsSlider">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
       </widget>
      </item>
-     <item row="2" column="1">
+     <item column="1" row="2">
       <widget class="QSlider" name="yellowBlueHighlightsSlider">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
       </widget>
      </item>
-     <item row="1" column="0">
+     <item column="0" row="1">
       <widget class="QLabel" name="label_12">
        <property name="text">
         <string>Magenta</string>

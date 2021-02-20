@@ -1,20 +1,7 @@
 /* This file is part of the KDE project
  * Copyright 2008 (C) Boudewijn Rempt <boud@valdyas.org>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 #include "kis_kra_saver.h"
 
@@ -62,6 +49,7 @@
 #include "kis_grid_config.h"
 #include "kis_guides_config.h"
 #include "KisProofingConfiguration.h"
+#include "kis_asl_layer_style_serializer.h"
 
 #include <KisMirrorAxisConfig.h>
 
@@ -73,20 +61,27 @@ using namespace KRA;
 
 struct KisKraSaver::Private
 {
-public:
     KisDocument* doc;
     QMap<const KisNode*, QString> nodeFileNames;
     QMap<const KisNode*, QString> keyframeFilenames;
     QString imageName;
     QString filename;
     QStringList errorMessages;
+    QStringList specialAnnotations;
+    bool addMergedImage;
+
+    Private() {
+        specialAnnotations << "exif" << "icc";
+    }
+
 };
 
-KisKraSaver::KisKraSaver(KisDocument* document, const QString &filename)
-        : m_d(new Private)
+KisKraSaver::KisKraSaver(KisDocument* document, const QString &filename, bool addMergedImage)
+    : m_d(new Private)
 {
     m_d->doc = document;
     m_d->filename = filename;
+    m_d->addMergedImage = addMergedImage;
 
     m_d->imageName = m_d->doc->documentInfo()->aboutInfo("title");
     if (m_d->imageName.isEmpty()) {
@@ -148,11 +143,38 @@ QDomElement KisKraSaver::saveXML(QDomDocument& doc,  KisImageSP image)
     saveAudio(doc, imageElement);
     savePalettesToXML(doc, imageElement);
 
+    // Redundancy -- Save animation metadata in XML to prevent data loss for the time being...
     QDomElement animationElement = doc.createElement("animation");
     KisDomUtils::saveValue(&animationElement, "framerate", image->animationInterface()->framerate());
     KisDomUtils::saveValue(&animationElement, "range", image->animationInterface()->fullClipRange());
     KisDomUtils::saveValue(&animationElement, "currentTime", image->animationInterface()->currentUITime());
     imageElement.appendChild(animationElement);
+
+    vKisAnnotationSP_it beginIt = image->beginAnnotations();
+    vKisAnnotationSP_it endIt = image->endAnnotations();
+
+    if (beginIt != endIt) {
+        QDomElement annotationsElement = doc.createElement(ANNOTATIONS);
+        vKisAnnotationSP_it it = beginIt;
+        while (it != endIt) {
+            if (!(*it) || (*it)->type().isEmpty()) {
+                it++;
+                continue;
+            }
+            QString type = (*it)->type();
+
+            if (!m_d->specialAnnotations.contains(type)) {
+                QString description = (*it)->description();
+                QDomElement annotationElement = doc.createElement(ANNOTATION);
+                annotationsElement.appendChild(annotationElement);
+                annotationElement.setAttribute("type", type);
+                annotationElement.setAttribute("description", description);
+            }
+            it++;
+        }
+        imageElement.appendChild(annotationsElement);
+    }
+
 
     return imageElement;
 }
@@ -162,21 +184,21 @@ bool KisKraSaver::savePalettes(KoStore *store, KisImageSP image, const QString &
     Q_UNUSED(image);
     Q_UNUSED(uri);
 
-    qDebug() << "saving palettes to document" << m_d->doc->paletteList().size();
-
     bool res = false;
     if (m_d->doc->paletteList().size() == 0) {
         return true;
     }
     for (const KoColorSetSP palette : m_d->doc->paletteList()) {
-        qDebug() << "saving palette..." << palette->storageLocation() << palette->filename();
         // Ensure stored palettes are KPL.
         palette->setPaletteType(KoColorSet::KPL);
+
         if (!store->open(m_d->imageName + PALETTE_PATH + palette->filename())) {
             m_d->errorMessages << i18n("could not save palettes");
             return false;
         }
+
         QByteArray ba = palette->toByteArray();
+
         if (!ba.isEmpty()) {
             store->write(ba);
         } else {
@@ -185,7 +207,62 @@ bool KisKraSaver::savePalettes(KoStore *store, KisImageSP image, const QString &
         store->close();
         res = true;
     }
+
     return res;
+}
+
+bool KisKraSaver::saveStoryboard(KoStore *store, KisImageSP image, const QString &uri)
+{
+    Q_UNUSED(image);
+    Q_UNUSED(uri);
+
+    if (m_d->doc->getStoryboardItemList().count() == 0) {
+        return true;
+    } else {
+        if (!store->open(m_d->imageName + STORYBOARD_PATH + "index.xml")) {
+            m_d->errorMessages << i18n("could not save storyboards");
+            return false;
+        }
+
+        QDomDocument storyboardDocument = m_d->doc->createDomDocument("storyboard-info", "1.1");
+        QDomElement root = storyboardDocument.documentElement();
+        saveStoryboardToXML(storyboardDocument, root);
+
+        QByteArray ba = storyboardDocument.toByteArray();
+        if (!ba.isEmpty()) {
+            store->write(ba);
+        } else {
+            qWarning() << "Could not save storyboard data to a byte array!";
+        }
+
+        store->close();
+    }
+
+    return true;
+}
+
+bool KisKraSaver::saveAnimationMetadata(KoStore *store, KisImageSP image, const QString &uri)
+{
+    Q_UNUSED(uri);
+
+    if (!store->open(m_d->imageName + ANIMATION_METADATA_PATH + "index.xml")) {
+        m_d->errorMessages << i18n("could not save animation meta data");
+        return false;
+    }
+
+    QDomDocument animationDocument = m_d->doc->createDomDocument("animation-metadata", "1.1");
+    QDomElement root = animationDocument.documentElement();
+    saveAnimationMetadataToXML(animationDocument, root, image);
+
+    QByteArray ba = animationDocument.toByteArray();
+    if (!ba.isEmpty()) {
+        store->write(ba);
+    } else {
+        qWarning() << "Could not save animation meta data to a byte array!";
+    }
+
+    store->close();
+    return true;
 }
 
 void KisKraSaver::savePalettesToXML(QDomDocument &doc, QDomElement &element)
@@ -199,6 +276,42 @@ void KisKraSaver::savePalettesToXML(QDomDocument &doc, QDomElement &element)
         ePalette.appendChild(eFile);
     }
     element.appendChild(ePalette);
+}
+
+void KisKraSaver::saveStoryboardToXML(QDomDocument& doc, QDomElement &element)
+{
+    //saving storyboard comments
+    QDomElement eCommentList = doc.createElement("StoryboardCommentList");
+    for (StoryboardComment comment: m_d->doc->getStoryboardCommentsList()) {
+        QDomElement commentElement = doc.createElement("storyboardcomment");
+        commentElement.setAttribute("name", comment.name);
+        commentElement.setAttribute("visibility", comment.visibility);
+        eCommentList.appendChild(commentElement);
+    }
+    element.appendChild(eCommentList);
+
+    //saving storyboard items
+    QDomElement eItemList = doc.createElement("StoryboardItemList");
+    for (StoryboardItemSP item : m_d->doc->getStoryboardItemList()) {
+        QDomElement eItem =  item->toXML(doc);
+        eItemList.appendChild(eItem);
+    }
+    element.appendChild(eItemList);
+}
+
+void KisKraSaver::saveAnimationMetadataToXML(QDomDocument &doc, QDomElement &element, KisImageSP image)
+{
+    KisDomUtils::saveValue(&element, "framerate", image->animationInterface()->framerate());
+    KisDomUtils::saveValue(&element, "range", image->animationInterface()->fullClipRange());
+    KisDomUtils::saveValue(&element, "currentTime", image->animationInterface()->currentUITime());
+
+    {
+        QDomElement exportItemElem = doc.createElement("export-settings");
+        KisDomUtils::saveValue(&exportItemElem, "sequenceFilePath", image->animationInterface()->exportSequenceFilePath());
+        KisDomUtils::saveValue(&exportItemElem, "sequenceBaseName", image->animationInterface()->exportSequenceBaseName());
+        KisDomUtils::saveValue(&exportItemElem, "sequenceInitialFrameNumber", image->animationInterface()->exportInitialFrameNumber());
+        element.appendChild(exportItemElem);
+    }
 }
 
 bool KisKraSaver::saveKeyframes(KoStore *store, const QString &uri, bool external)
@@ -244,7 +357,7 @@ bool KisKraSaver::saveNodeKeyframes(KoStore *store, QString location, const KisN
     return true;
 }
 
-bool KisKraSaver::saveBinaryData(KoStore* store, KisImageSP image, const QString &uri, bool external, bool autosave)
+bool KisKraSaver::saveBinaryData(KoStore* store, KisImageSP image, const QString &uri, bool external, bool addMergedImage)
 {
     QString location;
 
@@ -262,9 +375,6 @@ bool KisKraSaver::saveBinaryData(KoStore* store, KisImageSP image, const QString
     }
 
     // saving annotations
-    // XXX this only saves EXIF and ICC info. This would probably need
-    // a redesign of the dtd of the krita file to do this more generally correct
-    // e.g. have <ANNOTATION> tags or so.
     KisAnnotationSP annotation = image->annotation("exif");
     if (annotation) {
         location = external ? QString() : uri;
@@ -298,6 +408,7 @@ bool KisKraSaver::saveBinaryData(KoStore* store, KisImageSP image, const QString
         }
     }
 
+
     //This'll embed the profile used for proofing into the kra file.
     if (image->proofingConfiguration()) {
         if (image->proofingConfiguration()->storeSoftproofingInsideImage) {
@@ -319,32 +430,52 @@ bool KisKraSaver::saveBinaryData(KoStore* store, KisImageSP image, const QString
         }
     }
 
-    {
-        warnKrita << "WARNING: Asl Layer Styles cannot be written (part of resource rewrite).";
-        // TODO: RESOURCES: needs implementation
+    // Save the remaining annotations
+    vKisAnnotationSP_it beginIt = image->beginAnnotations();
+    vKisAnnotationSP_it endIt = image->endAnnotations();
 
-        /*
-        KisPSDLayerStyleCollectionResource collection("not-nexists.asl");
-        KIS_ASSERT_RECOVER_NOOP(!collection.valid());
-        collection.collectAllLayerStyles(image->root());
-        if (collection.valid()) {
+    if (beginIt != endIt) {
+        vKisAnnotationSP_it it = beginIt;
+        while (it != endIt) {
+            if (!(*it) || (*it)->type().isEmpty()) {
+                it++;
+                continue;
+            }
+            QString type = (*it)->type();
+
+            if (!m_d->specialAnnotations.contains(type)) {
+                location = external ? QString() : uri;
+                location += m_d->imageName + ANNOTATIONS_PATH + type;
+                if (store->open(location)) {
+                    store->write((*it)->annotation());
+                    store->close();
+                }
+            }
+            it++;
+        }
+    }
+
+    {
+        KisAslLayerStyleSerializer serializer;
+        QVector<KisPSDLayerStyleSP> stylesClones = serializer.collectAllLayerStyles(image->root());
+        if (stylesClones.size() > 0) {
             location = external ? QString() : uri;
             location += m_d->imageName + LAYER_STYLES_PATH;
 
             if (store->open(location)) {
                 QBuffer aslBuffer;
                 aslBuffer.open(QIODevice::WriteOnly);
-                collection.saveToDevice(&aslBuffer);
+                serializer.setStyles(stylesClones);
+                serializer.saveToDevice(&aslBuffer);
                 aslBuffer.close();
 
                 store->write(aslBuffer.buffer());
                 store->close();
             }
         }
-        */
     }
 
-    if (!autosave) {
+    if (addMergedImage) {
         KisPaintDeviceSP dev = image->projection();
         store->setCompressionEnabled(false);
         KisPNGConverter::saveDeviceToStore("mergedimage.png", image->bounds(), image->xRes(), image->yRes(), dev, store);

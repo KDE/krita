@@ -1,19 +1,7 @@
 /*
- *  Copyright (c) 2011 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2011 Cyrille Berger <cberger@cberger.net>
  *
- *  This library is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; either version 2.1 of the License, or
- *  (at your option) any later version.
- *
- *  This library is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU Lesser General Public License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: LGPL-2.1-or-later
  */
 
 #include "kis_multi_sensors_selector.h"
@@ -39,8 +27,9 @@ KisMultiSensorsSelector::KisMultiSensorsSelector(QWidget* parent)
     d->model = new KisMultiSensorsModel(this);
     connect(d->model, SIGNAL(sensorChanged(KisDynamicSensorSP)), SIGNAL(sensorChanged(KisDynamicSensorSP)));
     connect(d->model, SIGNAL(parametersChanged()), SIGNAL(parametersChanged()));
-    connect(d->form.sensorsList, SIGNAL(activated(QModelIndex)), SLOT(sensorActivated(QModelIndex)));
-    connect(d->form.sensorsList, SIGNAL(clicked(QModelIndex)), SLOT(sensorActivated(QModelIndex)));
+
+    connect(d->form.sensorsList, SIGNAL(activated(QModelIndex)), SLOT(setCurrent(QModelIndex)));
+    connect(d->form.sensorsList, SIGNAL(clicked(QModelIndex)), SLOT(setCurrent(QModelIndex)));
     d->form.sensorsList->setModel(d->model);
     d->layout = new QHBoxLayout(d->form.widgetConfiguration);
 }
@@ -53,6 +42,9 @@ KisMultiSensorsSelector::~KisMultiSensorsSelector()
 void KisMultiSensorsSelector::setCurveOption(KisCurveOption *curveOption)
 {
     d->model->setCurveOption(curveOption);
+
+    if(!(curveOption->activeSensors().size() > 0))
+        return ;
     KisDynamicSensorSP s = curveOption->activeSensors().first();
     if (!s) {
         s = curveOption->sensors().first();
@@ -66,6 +58,20 @@ void KisMultiSensorsSelector::setCurrent(KisDynamicSensorSP _sensor)
 
     // HACK ALERT: make sure the signal is delivered to us. Without this line it isn't.
     sensorActivated(d->model->sensorIndex(_sensor));
+
+    KisDynamicSensorSP sensor = currentHighlighted();
+    if (!sensor) {
+        sensor = d->model->getSensor(d->model->index(0, 0));
+    }
+    emit(highlightedSensorChanged(sensor));
+}
+
+void KisMultiSensorsSelector::setCurrent(const QModelIndex& index)
+{
+    d->form.sensorsList->setCurrentIndex(index); // make sure the first element is selected
+
+    // HACK ALERT: make sure the signal is delivered to us. Without this line it isn't.
+    sensorActivated(index);
 
     KisDynamicSensorSP sensor = currentHighlighted();
     if (!sensor) {

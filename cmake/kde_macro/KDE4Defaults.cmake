@@ -1,4 +1,6 @@
-
+#
+# SPDX-License-Identifier: BSD-3-Clause
+#
 # Always include srcdir and builddir in include path
 # This saves typing ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} in about every subdir
 # since cmake 2.4.0

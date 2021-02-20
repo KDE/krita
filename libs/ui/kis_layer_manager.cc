@@ -1,20 +1,8 @@
 /*
- *  Copyright (C) 2006 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2020 L. E. Segovia <amy@amyspark.me>
+ *  SPDX-FileCopyrightText: 2006 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2020 L. E. Segovia <amy@amyspark.me>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_layer_manager.h"
@@ -162,9 +150,6 @@ void KisLayerManager::setup(KisActionManager* actionManager)
     m_flattenLayer = actionManager->createAction("flatten_layer");
     connect(m_flattenLayer, SIGNAL(triggered()), this, SLOT(flattenLayer()));
 
-    m_rasterizeLayer = actionManager->createAction("rasterize_layer");
-    connect(m_rasterizeLayer, SIGNAL(triggered()), this, SLOT(rasterizeLayer()));
-
     m_groupLayersSave = actionManager->createAction("save_groups_as_images");
     connect(m_groupLayersSave, SIGNAL(triggered()), this, SLOT(saveGroupLayers()));
 
@@ -290,11 +275,10 @@ void KisLayerManager::layerProperties()
         Q_ASSERT(configBefore);
 
         KisDlgGeneratorLayer *dlg = new KisDlgGeneratorLayer(generatorLayer->name(), m_view, m_view->mainWindow(), generatorLayer, configBefore, KisStrokeId());
-        dlg->setCaption(i18n("Fill Layer Properties"));
+        dlg->setWindowTitle(i18n("Fill Layer Properties"));
         dlg->setAttribute(Qt::WA_DeleteOnClose);
 
         dlg->setConfiguration(configBefore.data());
-        dlg->resize(dlg->minimumSizeHint());
 
         Qt::WindowFlags flags = dlg->windowFlags();
         dlg->setWindowFlags(flags | Qt::Tool | Qt::Dialog);
@@ -341,7 +325,7 @@ void KisLayerManager::layerProperties()
         Qt::WindowFlags flags = dialog->windowFlags();
         dialog->setWindowFlags(flags | Qt::Tool | Qt::Dialog);
         dialog->show();
-
+        dialog->activateWindow();
     }
 }
 
@@ -374,6 +358,7 @@ void KisLayerManager::changeCloneSource()
     Qt::WindowFlags flags = dialog->windowFlags();
     dialog->setWindowFlags(flags | Qt::Tool | Qt::Dialog);
     dialog->show();
+    dialog->activateWindow();
 }
 
 void KisLayerManager::convertNodeToPaintLayer(KisNodeSP source)
@@ -390,75 +375,7 @@ void KisLayerManager::convertNodeToPaintLayer(KisNodeSP source)
         return;
     }
 
-    KisPaintDeviceSP srcDevice =
-            source->paintDevice() ? source->projection() : source->original();
-
-    bool putBehind = false;
-
-    QString newCompositeOp =
-        source->projectionLeaf()->isLayer() ?
-            source->compositeOpId() : COMPOSITE_OVER;
-
-    KisColorizeMask *colorizeMask = dynamic_cast<KisColorizeMask*>(source.data());
-    if (colorizeMask) {
-        srcDevice = colorizeMask->coloringProjection();
-        putBehind = colorizeMask->compositeOpId() == COMPOSITE_BEHIND;
-        if (putBehind) {
-            newCompositeOp = COMPOSITE_OVER;
-        }
-    }
-
-    if (!srcDevice) return;
-
-    KisPaintDeviceSP clone;
-
-    if (*srcDevice->colorSpace() !=
-            *srcDevice->compositionSourceColorSpace()) {
-
-        clone = new KisPaintDevice(srcDevice->compositionSourceColorSpace());
-        clone->setDefaultPixel(
-            srcDevice->defaultPixel().convertedTo(
-                srcDevice->compositionSourceColorSpace()));
-
-        QRect rc(srcDevice->extent());
-        KisPainter::copyAreaOptimized(rc.topLeft(), srcDevice, clone, rc);
-    } else {
-        clone = new KisPaintDevice(*srcDevice);
-    }
-
-    KisLayerSP layer = new KisPaintLayer(image,
-                                         source->name(),
-                                         source->opacity(),
-                                         clone);
-
-    if (srcDevice->framesInterface()) {
-        KisKeyframeChannel *cloneKeyChannel = layer->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true);
-        layer->enableAnimation();
-        KisKeyframeChannel *sourceKeyChannel = srcDevice->keyframeChannel();
-
-        foreach (const int &index, sourceKeyChannel->allKeyframeTimes()) {
-            KisKeyframeChannel::copyKeyframe(sourceKeyChannel, index, cloneKeyChannel, index);
-        }
-    }
-
-    layer->setCompositeOpId(newCompositeOp);
-
-    KisNodeSP parent = source->parent();
-    KisNodeSP above = source->prevSibling();
-
-    while (parent && !parent->allowAsChild(layer)) {
-        above = above ? above->parent() : source->parent();
-        parent = above ? above->parent() : 0;
-    }
-
-    if (putBehind && above == source->parent()) {
-        above = above->prevSibling();
-    }
-
-    m_commandsAdapter->beginMacro(kundo2_i18n("Convert to a Paint Layer"));
-    m_commandsAdapter->removeNode(source);
-    m_commandsAdapter->addNode(layer, parent, above);
-    m_commandsAdapter->endMacro();
+    KisLayerUtils::convertToPaintLayer(image, source);
 }
 
 void KisLayerManager::convertGroupToAnimated()
@@ -676,7 +593,7 @@ KisNodeSP KisLayerManager::addAdjustmentLayer(KisNodeSP activeNode)
     KisSelectionSP selection = m_view->selection();
 
     KisProcessingApplicator applicator(image, 0, KisProcessingApplicator::NONE,
-                                       KisImageSignalVector() << ModifiedSignal,
+                                       KisImageSignalVector(),
                                        kundo2_i18n("Add Layer"));
 
 
@@ -729,7 +646,7 @@ KisNodeSP KisLayerManager::addGeneratorLayer(KisNodeSP activeNode)
     KisSelectionSP selection = m_view->selection();
     QColor currentForeground = m_view->canvasResourceProvider()->fgColor().toQColor();
 
-    KisProcessingApplicator applicator(image, 0, KisProcessingApplicator::NONE, KisImageSignalVector() << ModifiedSignal, kundo2_i18n("Add Layer"));
+    KisProcessingApplicator applicator(image, 0, KisProcessingApplicator::NONE, KisImageSignalVector(), kundo2_i18n("Add Layer"));
 
     KisGeneratorLayerSP node = addGeneratorLayer(activeNode, QString(), nullptr, selection, &applicator);
 
@@ -737,7 +654,6 @@ KisNodeSP KisLayerManager::addGeneratorLayer(KisNodeSP activeNode)
     KisFilterConfigurationSP defaultConfig = dlg.configuration();
     defaultConfig->setProperty("color", currentForeground);
     dlg.setConfiguration(defaultConfig);
-    dlg.resize(dlg.minimumSizeHint());
 
     if (dlg.exec() == QDialog::Accepted) {
         node->setName(dlg.layerName());
@@ -892,35 +808,6 @@ void KisLayerManager::flattenLayer()
     convertNodeToPaintLayer(layer);
     m_view->updateGUI();
 }
-
-void KisLayerManager::rasterizeLayer()
-{
-    KisImageSP image = m_view->image();
-    if (!image) return;
-
-    KisLayerSP layer = activeLayer();
-    if (!layer) return;
-
-    if (!m_view->blockUntilOperationsFinished(image)) return;
-    if (!m_view->nodeManager()->canModifyLayer(layer)) return;
-
-    KisPaintLayerSP paintLayer = new KisPaintLayer(image, layer->name(), layer->opacity());
-    KisPainter gc(paintLayer->paintDevice());
-    QRect rc = layer->projection()->exactBounds();
-    gc.bitBlt(rc.topLeft(), layer->projection(), rc);
-
-    m_commandsAdapter->beginMacro(kundo2_i18n("Rasterize Layer"));
-    m_commandsAdapter->addNode(paintLayer.data(), layer->parent().data(), layer.data());
-
-    int childCount = layer->childCount();
-    for (int i = 0; i < childCount; i++) {
-        m_commandsAdapter->moveNode(layer->firstChild(), paintLayer, paintLayer->lastChild());
-    }
-    m_commandsAdapter->removeNode(layer);
-    m_commandsAdapter->endMacro();
-    updateGUI();
-}
-
 
 void KisLayerManager::layersUpdated()
 {

@@ -1,19 +1,7 @@
 /*
- *  Copyright (C) 2011 Silvio Heinrich <plassy@web.de>
+ *  SPDX-FileCopyrightText: 2011 Silvio Heinrich <plassy@web.de>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_colorsmudgeop.h"
@@ -34,7 +22,7 @@
 #include <kis_image.h>
 #include <kis_selection.h>
 #include <kis_brush_based_paintop_settings.h>
-#include <kis_cross_device_color_picker.h>
+#include <kis_cross_device_color_sampler.h>
 #include <kis_fixed_paint_device.h>
 #include <kis_lod_transform.h>
 #include <kis_spacing_information.h>
@@ -279,8 +267,8 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
             // get the pixel on the canvas that lies beneath the hot spot
             // of the dab and fill  the temporary paint device with that color
             activeWrapper.readRect(QRect(canvasLocalSamplePoint, QSize(1,1)));
-            KisCrossDeviceColorPickerInt colorPicker(activeWrapper.preciseDevice(), dullingFillColor);
-            colorPicker.pickColor(canvasLocalSamplePoint.x(), canvasLocalSamplePoint.y(), dullingFillColor.data());
+            KisCrossDeviceColorSamplerInt colorSampler(activeWrapper.preciseDevice(), dullingFillColor);
+            colorSampler.sampleColor(canvasLocalSamplePoint.x(), canvasLocalSamplePoint.y(), dullingFillColor.data());
             KIS_SAFE_ASSERT_RECOVER_NOOP(*dullingFillColor.colorSpace() == *m_tempDev->colorSpace());
         }
     }

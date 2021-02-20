@@ -1,20 +1,8 @@
 /*
- *  Copyright (c) 2005-2007 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2005-2007 Cyrille Berger <cberger@cberger.net>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
  */
 
 #include "kis_png_converter.h"
@@ -443,6 +431,13 @@ KisImportExportErrorCode KisPNGConverter::buildImage(QIODevice* iod)
     if (!png_ptr) {
         iod->close();
     }
+
+#ifdef PNG_SET_USER_LIMITS_SUPPORTED
+      /* Remove the user limits, if any */
+      png_set_user_limits(png_ptr, 0x7fffffff, 0x7fffffff);
+      png_set_chunk_cache_max(png_ptr, 0);
+      png_set_chunk_malloc_max(png_ptr, 0);
+#endif
 
     png_set_error_fn(png_ptr, nullptr, nullptr, kis_png_warning);
     #ifdef PNG_BENIGN_ERRORS_SUPPORTED
@@ -979,6 +974,13 @@ KisImportExportErrorCode KisPNGConverter::buildFile(QIODevice* iodevice, const Q
     if (!png_ptr) {
         return (ImportExportCodes::Failure);
     }
+
+#ifdef PNG_SET_USER_LIMITS_SUPPORTED
+      /* Remove the user limits, if any */
+      png_set_user_limits(png_ptr, 0x7fffffff, 0x7fffffff);
+      png_set_chunk_cache_max(png_ptr, 0);
+      png_set_chunk_malloc_max(png_ptr, 0);
+#endif
 
     png_set_error_fn(png_ptr, nullptr, nullptr, kis_png_warning);
     #ifdef PNG_BENIGN_ERRORS_SUPPORTED

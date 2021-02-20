@@ -1,23 +1,11 @@
 /*
- *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *  Copyright (c) 2009 Sven Langkamp <sven.langkamp@gmail.com>
- *  Copyright (C) 2011 Silvio Heinrich <plassy@web.de>
- *  Copyright (C) 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
- *  Copyright (c) 2011 José Luis Vergara <pentalis@gmail.com>
+ *  SPDX-FileCopyrightText: 2002 Patrick Julien <freak@codepimps.org>
+ *  SPDX-FileCopyrightText: 2009 Sven Langkamp <sven.langkamp@gmail.com>
+ *  SPDX-FileCopyrightText: 2011 Silvio Heinrich <plassy@web.de>
+ *  SPDX-FileCopyrightText: 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
+ *  SPDX-FileCopyrightText: 2011 José Luis Vergara <pentalis@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_preset_chooser.h"
@@ -47,15 +35,22 @@
 #include "kis_slider_spin_box.h"
 #include "kis_config_notifier.h"
 #include <kis_icon.h>
+#include <KisTagFilterResourceProxyModel.h>
 
 /// The resource item delegate for rendering the resource preview
 class KisPresetDelegate : public QAbstractItemDelegate
 {
 public:
-    KisPresetDelegate(QObject * parent = 0) : QAbstractItemDelegate(parent), m_showText(false), m_useDirtyPresets(false) {}
+    KisPresetDelegate(QObject * parent = 0)
+        : QAbstractItemDelegate(parent)
+        , m_showText(false)
+        , m_useDirtyPresets(false) {}
+
     ~KisPresetDelegate() override {}
+
     /// reimplemented
     void paint(QPainter *, const QStyleOptionViewItem &, const QModelIndex &) const override;
+
     /// reimplemented
     QSize sizeHint(const QStyleOptionViewItem & option, const QModelIndex &) const override {
         return option.decorationSize;
@@ -85,27 +80,30 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
         return;
     }
 
-    bool dirty = index.data(Qt::UserRole + KisResourceModel::Dirty).toBool();
+    bool dirty = index.data(Qt::UserRole + KisAbstractResourceModel::Dirty).toBool();
 
-    QImage preview = index.data(Qt::UserRole + KisResourceModel::Thumbnail).value<QImage>();
+    QImage preview = index.data(Qt::UserRole + KisAbstractResourceModel::Thumbnail).value<QImage>();
 
     if (preview.isNull()) {
-        qDebug() << "KisPresetDelegate::paint:  Preview is null";
-        painter->restore();
-        return;
+        preview = QImage(512, 512, QImage::Format_RGB32);
+        preview.fill(Qt::red);
     }
 
-    QMap<QString, QVariant> metaData = index.data(Qt::UserRole + KisResourceModel::MetaData).value<QMap<QString, QVariant>>();
+    QMap<QString, QVariant> metaData = index.data(Qt::UserRole + KisAbstractResourceModel::MetaData).value<QMap<QString, QVariant>>();
+
+    qreal devicePixelRatioF = painter->device()->devicePixelRatioF();
 
     QRect paintRect = option.rect.adjusted(1, 1, -1, -1);
     if (!m_showText) {
-        painter->drawImage(paintRect.x(), paintRect.y(),
-                           preview.scaled(paintRect.size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+        QImage previewHighDpi = preview.scaled(paintRect.size()*devicePixelRatioF, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+        previewHighDpi.setDevicePixelRatio(devicePixelRatioF);
+        painter->drawImage(paintRect.x(), paintRect.y(), previewHighDpi);
     }
     else {
         QSize pixSize(paintRect.height(), paintRect.height());
-        painter->drawImage(paintRect.x(), paintRect.y(),
-                           preview.scaled(pixSize, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        QImage previewHighDpi = preview.scaled(pixSize*devicePixelRatioF, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        previewHighDpi.setDevicePixelRatio(devicePixelRatioF);
+        painter->drawImage(paintRect.x(), paintRect.y(), previewHighDpi);
 
         // Put an asterisk after the preset if it is dirty. This will help in case the pixmap icon is too small
 
@@ -126,7 +124,7 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
 
 //        painter->drawText(pixSize.width() + 10, option.rect.y() + option.rect.height() - 10, brushSizeText); // brush size
 
-        QString presetDisplayName = index.data(Qt::UserRole + KisResourceModel::Name).toString().replace("_", " "); // don't need underscores that might be part of the file name
+        QString presetDisplayName = index.data(Qt::UserRole + KisAbstractResourceModel::Name).toString().replace("_", " "); // don't need underscores that might be part of the file name
         painter->drawText(pixSize.width() + 40, option.rect.y() + option.rect.height() - 10, presetDisplayName.append(dirtyPresetIndicator));
 
     }
@@ -158,151 +156,6 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
 
 }
 
-class KisPresetChooser::PaintOpFilterModel : public QSortFilterProxyModel, public KisAbstractResourceModel
-{
-    Q_OBJECT
-public:
-
-    PaintOpFilterModel(QObject *parent = 0)
-        : QSortFilterProxyModel(parent)
-    {
-    }
-
-    ~PaintOpFilterModel() override
-    {
-    }
-
-    void setPaintOpId(const QString &id)
-    {
-        m_id = id;
-    }
-
-    QString currentPaintOpId() const
-    {
-        return m_id;
-    }
-    // KisAbstractResourceModel interface
-public:
-    KoResourceSP resourceForIndex(QModelIndex index) const override
-    {
-        KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
-        if (source) {
-            return source->resourceForIndex(mapToSource(index));
-        }
-        return 0;
-    }
-
-    QModelIndex indexFromResource(KoResourceSP resource) const override
-    {
-        KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
-        if (source) {
-            return mapFromSource(source->indexFromResource(resource));
-        }
-        return QModelIndex();
-    }
-
-    bool removeResource(const QModelIndex &index) override
-    {
-        KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
-        if (source) {
-            return source->removeResource(mapToSource(index));
-        }
-        return false;
-    }
-
-    bool importResourceFile(const QString &filename) override
-    {
-        KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
-        if (source) {
-            return source->importResourceFile(filename);
-        }
-        return false;
-    }
-
-    bool addResource(KoResourceSP resource, const QString &storageId = QString()) override
-    {
-        KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
-        if (source) {
-            return source->addResource(resource, storageId);
-        }
-        return false;
-    }
-
-    bool updateResource(KoResourceSP resource) override
-    {
-        KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
-        if (source) {
-            return source->updateResource(resource);
-        }
-        return false;
-    }
-
-    bool renameResource(KoResourceSP resource, const QString &name) override
-    {
-        KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
-        if (source) {
-            return source->renameResource(resource, name);
-        }
-        return false;
-    }
-
-    bool removeResource(KoResourceSP resource) override
-    {
-        KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
-        if (source) {
-            return source->removeResource(resource);
-        }
-        return false;
-    }
-
-    bool setResourceMetaData(KoResourceSP resource, QMap<QString, QVariant> metadata) override
-    {
-        KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
-        if (source) {
-            return source->setResourceMetaData(resource, metadata);
-        }
-        return false;
-    }
-
-
-    // QSortFilterProxyModel interface
-protected:
-
-    QVariant data(const QModelIndex &index, int role) const override
-    {
-        return sourceModel()->data(mapToSource(index), role);
-    }
-
-    bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const override
-    {
-        if (m_id.isEmpty()) return true;
-
-        QModelIndex idx = sourceModel()->index(source_row, 0, source_parent);
-        QMap<QString, QVariant> metadata = sourceModel()->data(idx, Qt::UserRole + KisResourceModel::MetaData).toMap();
-        if (metadata.contains("paintopid")) {
-            return (metadata["paintopid"].toString() == m_id);
-        }
-
-        return false;
-    }
-
-    bool filterAcceptsColumn(int /*source_column*/, const QModelIndex &/*source_parent*/) const override
-    {
-        return true;
-    }
-
-    bool lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const override
-    {
-        QString nameLeft = sourceModel()->data(source_left, Qt::UserRole + KisResourceModel::Name).toString();
-        QString nameRight = sourceModel()->data(source_right, Qt::UserRole + KisResourceModel::Name).toString();
-        return nameLeft < nameRight;
-    }
-
-private:
-
-    QString m_id;
-};
-
 KisPresetChooser::KisPresetChooser(QWidget *parent, const char *name)
     : QWidget(parent)
 {
@@ -310,9 +163,7 @@ KisPresetChooser::KisPresetChooser(QWidget *parent, const char *name)
     QVBoxLayout * layout = new QVBoxLayout(this);
     layout->setMargin(0);
 
-    m_paintOpFilterModel = new PaintOpFilterModel();
-
-    m_chooser = new KisResourceItemChooser(ResourceType::PaintOpPresets, false, this, m_paintOpFilterModel);
+    m_chooser = new KisResourceItemChooser(ResourceType::PaintOpPresets, false, this);
     m_chooser->setObjectName("ResourceChooser");
     m_chooser->setRowHeight(50);
     m_delegate = new KisPresetDelegate(this);
@@ -393,10 +244,10 @@ void KisPresetChooser::slotCurrentPresetChanged()
     KoResourceSP currentResource = m_chooser->currentResource();
     if (!currentResource) return;
 
-    QModelIndex index = m_paintOpFilterModel->indexFromResource(currentResource);
-    emit m_paintOpFilterModel->dataChanged(index,
-                                           index,
-                                           {Qt::UserRole + KisResourceModel::Thumbnail});
+    QModelIndex index = m_chooser->tagFilterModel()->indexForResource(currentResource);
+    emit m_chooser->tagFilterModel()->dataChanged(index,
+                                               index,
+                                               {Qt::UserRole + KisAbstractResourceModel::Thumbnail});
 }
 
 void KisPresetChooser::updateViewSettings()
@@ -450,10 +301,12 @@ KisResourceItemChooser *KisPresetChooser::itemChooser()
 
 void KisPresetChooser::setPresetFilter(const QString& paintOpId)
 {
-    if (m_paintOpFilterModel && m_paintOpFilterModel->currentPaintOpId() != paintOpId) {
-        m_paintOpFilterModel->setPaintOpId(paintOpId);
-        updateViewSettings();
+    QMap<QString, QVariant> metaDataFilter;
+    if (!paintOpId.isEmpty()) { // empty means "all"
+        metaDataFilter["paintopid"] = paintOpId;
     }
+    m_chooser->tagFilterModel()->setMetaDataFilter(metaDataFilter);
+    updateViewSettings();
 }
 
 void KisPresetChooser::setIconSize(int newSize)

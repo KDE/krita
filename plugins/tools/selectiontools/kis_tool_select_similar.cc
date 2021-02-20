@@ -1,22 +1,10 @@
 /*
- *  Copyright (c) 1999 Matthias Elter <me@kde.org>
- *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *  Copyright (c) 2005 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2015 Michael Abrahams <miabraha@gmail.com>
+ *  SPDX-FileCopyrightText: 1999 Matthias Elter <me@kde.org>
+ *  SPDX-FileCopyrightText: 2002 Patrick Julien <freak@codepimps.org>
+ *  SPDX-FileCopyrightText: 2005 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2015 Michael Abrahams <miabraha@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_tool_select_similar.h"
@@ -39,6 +27,9 @@
 #include "kis_slider_spin_box.h"
 #include "kis_iterator_ng.h"
 #include "kis_image.h"
+#include "commands_new/KisMergeLabeledLayersCommand.h"
+#include "kis_command_utils.h"
+#include "krita_utils.h"
 
 void selectByColor(KisPaintDeviceSP dev, KisPixelSelectionSP selection, const quint8 *c, int fuzziness, const QRect & rc)
 {
@@ -57,17 +48,20 @@ void selectByColor(KisPaintDeviceSP dev, KisPixelSelectionSP selection, const qu
     KisHLineConstIteratorSP hiter = dev->createHLineConstIteratorNG(x, y, w);
     KisHLineIteratorSP selIter = selection->createHLineIteratorNG(x, y, w);
 
+    quint8 wantedOpacity = cs->opacityU8(c);
+
     for (int row = y; row < y + h; ++row) {
         do {
-            //if (dev->colorSpace()->hasAlpha())
-            //    opacity = dev->colorSpace()->alpha(hiter->rawData());
             if (fuzziness == 1) {
-                if (memcmp(c, hiter->oldRawData(), cs->pixelSize()) == 0) {
+                if (wantedOpacity == 0 && cs->opacityU8(hiter->rawDataConst()) == 0) {
+                    *(selIter->rawData()) = MAX_SELECTED;
+                }
+                else if (memcmp(c, hiter->rawDataConst(), cs->pixelSize()) == 0) {
                     *(selIter->rawData()) = MAX_SELECTED;
                 }
             }
             else {
-                quint8 match = cs->difference(c, hiter->oldRawData());
+                quint8 match = cs->difference(c, hiter->rawDataConst());
                 if (match <= fuzziness) {
                     *(selIter->rawData()) = MAX_SELECTED;
                 }
@@ -121,29 +115,199 @@ void KisToolSelectSimilar::beginPrimaryAction(KoPointerEvent *event)
     QPointF pos = convertToPixelCoord(event);
 
     KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
-    KIS_ASSERT_RECOVER_RETURN(kisCanvas);
+    KIS_SAFE_ASSERT_RECOVER(kisCanvas) {
+        QApplication::restoreOverrideCursor();
+        return;
+    };
 
     QApplication::setOverrideCursor(KisCursor::waitCursor());
 
-    KoColor c;
-    dev->pixel(pos.x(), pos.y(), &c);
+    KisProcessingApplicator applicator(currentImage(), currentNode(),
+                                       KisProcessingApplicator::NONE,
+                                       KisImageSignalVector(),
+                                       kundo2_i18n("Select Contiguous Area"));
+
+
+    KisImageSP imageSP = currentImage();
+    KisPaintDeviceSP sourceDevice;
+    QRect areaToCheck;
+
+    if (sampleLayersMode() == SampleAllLayers) {
+        sourceDevice = imageSP->projection();
+    } else if (sampleLayersMode() == SampleColorLabeledLayers) {
+        KisImageSP refImage = KisMergeLabeledLayersCommand::createRefImage(imageSP, "Similar Colors Selection Tool Reference Image");
+        sourceDevice = KisMergeLabeledLayersCommand::createRefPaintDevice(
+                    imageSP, "Similar Colors Selection Tool Reference Result Paint Device");
+
+        KisMergeLabeledLayersCommand* command = new KisMergeLabeledLayersCommand(refImage, sourceDevice, imageSP->root(), colorLabelsSelected());
+        applicator.applyCommand(command,
+                                KisStrokeJobData::SEQUENTIAL,
+                                KisStrokeJobData::EXCLUSIVE);
+
+    } else { // Sample Current Layer
+        sourceDevice = dev;
+    }
+
+    if (sampleLayersMode() == SampleColorLabeledLayers) {
+        // source device is not ready to get a pixel out of it, let's assume image bounds
+        areaToCheck = imageSP->bounds();
+    } else {
+        KoColor pixelColor;
+        sourceDevice->pixel(pos.x(), pos.y(), &pixelColor);
+        if (sourceDevice->colorSpace()->difference(pixelColor.data(), sourceDevice->defaultPixel().data()) <= m_fuzziness) {
+            areaToCheck = imageSP->bounds() | sourceDevice->exactBounds();
+        } else {
+            areaToCheck = sourceDevice->exactBounds();
+        }
+    }
+
 
     // XXX we should make this configurable: "allow to select transparent"
     // if (opacity > OPACITY_TRANSPARENT)
     KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection());
 
-    QRect rc;
-    if (dev->colorSpace()->difference(c.data(), dev->defaultPixel().data()) <= m_fuzziness) {
-        rc = image()->bounds();
-    } else {
-        rc = dev->exactBounds();
+
+    int fuzziness = m_fuzziness;
+    // new stroke
+
+    QSharedPointer<KoColor> color = QSharedPointer<KoColor>(new KoColor(sourceDevice->colorSpace()));
+    QSharedPointer<bool> isDefaultPixel = QSharedPointer<bool>(new bool(true));
+
+    KUndo2Command* cmdPickColor = new KisCommandUtils::LambdaCommand(
+                [pos, sourceDevice, color, isDefaultPixel, fuzziness] () mutable -> KUndo2Command* {
+
+                    sourceDevice->pixel(pos.x(), pos.y(), color.data());
+                    *isDefaultPixel.data() = sourceDevice->colorSpace()->difference(color.data()->data(), sourceDevice->defaultPixel().data()) < fuzziness;
+
+                    return 0;
+    });
+
+    applicator.applyCommand(cmdPickColor, KisStrokeJobData::SEQUENTIAL);
+
+    QVector<QRect> patches = KritaUtils::splitRectIntoPatches(areaToCheck, KritaUtils::optimalPatchSize());
+
+    for (int i = 0; i < patches.count(); i++) {
+        QSharedPointer<QRect> patch = QSharedPointer<QRect>(new QRect(patches[i]));
+        KUndo2Command* patchCmd = new KisCommandUtils::LambdaCommand(
+                    [fuzziness, tmpSel, sourceDevice, patch, color, isDefaultPixel] () mutable -> KUndo2Command* {
+
+                        QRect patchRect = *patch.data();
+                        QRect finalRect = patchRect;
+                        if (!isDefaultPixel) {
+                            finalRect = patchRect.intersected(sourceDevice->exactBounds());
+                        }
+                        if (!finalRect.isEmpty()) {
+                            selectByColor(sourceDevice, tmpSel, color->data(), fuzziness, patchRect);
+                        }
+                        return 0;
+        });
+
+        applicator.applyCommand(patchCmd, KisStrokeJobData::CONCURRENT);
     }
-    selectByColor(dev, tmpSel, c.data(), m_fuzziness, rc);
 
-    tmpSel->invalidateOutlineCache();
+
+
+    /*
+     * Division of out-of-the-image-bounds areas
+     * into different commands
+     *
+     * i---i------------------i
+     * |   |       top        |
+     * | l |--------------i---|
+     * | e |              |   |
+     * | f |              | r |
+     * | t |    image     | i |
+     * |   |              | g |
+     * |   |              | h |
+     * |___|______________| t |
+     * |      bottom      |   |
+     * |__________________|___|
+     */
+
+    if (sampleLayersMode() == SampleColorLabeledLayers) {
+        QRect imageRect = image()->bounds();
+
+        KUndo2Command* topCmd = new KisCommandUtils::LambdaCommand(
+                    [fuzziness, tmpSel, sourceDevice, color, imageRect, isDefaultPixel] () mutable -> KUndo2Command* {
+
+                        QRect contentRect = sourceDevice->exactBounds();
+                        QRect patchRect = QRect(QPoint(0, contentRect.top()), QPoint(qMax(contentRect.right(), imageRect.right()), 0));
+                        QRect finalRect = patchRect;
+                        if (!*isDefaultPixel) {
+                            finalRect = patchRect.intersected(contentRect);
+                        }
+                        if (!finalRect.isEmpty()) {
+                            selectByColor(sourceDevice, tmpSel, color->data(), fuzziness, finalRect);
+                        }
+                        return 0;
+        });
+
+        KUndo2Command* rightCmd = new KisCommandUtils::LambdaCommand(
+                    [fuzziness, tmpSel, sourceDevice, color, imageRect, isDefaultPixel] () mutable -> KUndo2Command* {
+
+                        QRect contentRect = sourceDevice->exactBounds();
+                        QRect patchRect = QRect(QPoint(imageRect.width(), 0), QPoint(contentRect.right(), qMax(contentRect.bottom(), imageRect.bottom())));
+                        QRect finalRect = patchRect;
+                        if (!*isDefaultPixel) {
+                            finalRect = patchRect.intersected(contentRect);
+                        }
+                        if (!finalRect.isEmpty()) {
+                            selectByColor(sourceDevice, tmpSel, color->data(), fuzziness, finalRect);
+                        }
+                        return 0;
+        });
+
+        KUndo2Command* bottomCmd = new KisCommandUtils::LambdaCommand(
+                    [fuzziness, tmpSel, sourceDevice, color, imageRect, isDefaultPixel] () mutable -> KUndo2Command* {
+
+                        QRect contentRect = sourceDevice->exactBounds();
+                        QRect patchRect = QRect(QPoint(qMin(contentRect.left(), imageRect.left()), imageRect.bottom()), QPoint(imageRect.right(), contentRect.bottom()));
+                        QRect finalRect = patchRect;
+                        if (!*isDefaultPixel) {
+                            finalRect = patchRect.intersected(contentRect);
+                        }
+                        if (!finalRect.isEmpty()) {
+                            selectByColor(sourceDevice, tmpSel, color->data(), fuzziness, finalRect);
+                        }
+                        return 0;
+        });
+
+        KUndo2Command* leftCmd = new KisCommandUtils::LambdaCommand(
+                    [fuzziness, tmpSel, sourceDevice, color, imageRect, isDefaultPixel] () mutable -> KUndo2Command* {
+
+                        QRect contentRect = sourceDevice->exactBounds();
+                        QRect patchRect = QRect(QPoint(contentRect.left(), qMin(contentRect.top(), imageRect.top())), QPoint(0, imageRect.bottom()));
+                        QRect finalRect = patchRect;
+                        if (!*isDefaultPixel) {
+                            finalRect = patchRect.intersected(contentRect);
+                        }
+                        if (!finalRect.isEmpty()) {
+                            selectByColor(sourceDevice, tmpSel, color->data(), fuzziness, finalRect);
+                        }
+                        return 0;
+        });
+
+
+        applicator.applyCommand(topCmd, KisStrokeJobData::CONCURRENT);
+        applicator.applyCommand(rightCmd, KisStrokeJobData::CONCURRENT);
+        applicator.applyCommand(bottomCmd, KisStrokeJobData::CONCURRENT);
+        applicator.applyCommand(leftCmd, KisStrokeJobData::CONCURRENT);
+
+    }
+
+
+    KUndo2Command* cmdInvalidateCache = new KisCommandUtils::LambdaCommand(
+                [tmpSel] () mutable -> KUndo2Command* {
+
+                    tmpSel->invalidateOutlineCache();
+                    return 0;
+    });
+    applicator.applyCommand(cmdInvalidateCache, KisStrokeJobData::SEQUENTIAL);
+
     KisSelectionToolHelper helper(kisCanvas, kundo2_i18n("Select Similar Color"));
-    helper.selectPixelSelection(tmpSel, selectionAction());
+    helper.selectPixelSelection(applicator, tmpSel, selectionAction());
 
+    applicator.end();
     QApplication::restoreOverrideCursor();
 
 }
@@ -172,6 +336,10 @@ QWidget* KisToolSelectSimilar::createOptionWidget()
     input->setSingleStep(10);
     fl->addWidget(input);
     connect(input, SIGNAL(valueChanged(int)), this, SLOT(slotSetFuzziness(int)));
+
+
+    selectionWidget->attachToImage(image(), dynamic_cast<KisCanvas2*>(canvas()));
+    m_widgetHelper.setConfigGroupForExactTool(toolId());
 
     QVBoxLayout* l = dynamic_cast<QVBoxLayout*>(selectionWidget->layout());
     Q_ASSERT(l);

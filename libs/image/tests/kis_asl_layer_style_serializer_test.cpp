@@ -1,19 +1,7 @@
 /*
- *  Copyright (c) 2015 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2015 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_asl_layer_style_serializer_test.h"
@@ -189,7 +177,7 @@ void KisAslLayerStyleSerializerTest::testReading()
     CMP(patternOverlay, verticalPhase, 162);
 
     CMP(patternOverlay, pattern()->name, QString("$$$/Presets/Patterns/Patterns_pat/Bubbles=Bubbles"));
-    CMP(patternOverlay, pattern()->filename, QString("b7334da0-122f-11d4-8bb5-e27e45023b5f.pat"));
+    CMP(patternOverlay, pattern()->filename, QString("b7334da0-122f-11d4-8bb5-e27e45023b5f_pattern"));
 
 }
 
@@ -262,9 +250,10 @@ void KisAslLayerStyleSerializerTest::testWritingGlobalPatterns()
 {
     KisPSDLayerStyleSP style(new KisPSDLayerStyle());
 
-    KoResourceServer<KoPattern> *server = KoResourceServerProvider::instance()->patternServer();
-    KoPatternSP pattern = server->firstResource();
-    Q_ASSERT(pattern);
+    QImage dumbImage(32, 32, QImage::Format_ARGB32);
+    dumbImage.fill(Qt::red);
+    KoPatternSP pattern(new KoPattern(dumbImage, "test_pattern", ""));
+
 
     dbgKrita << ppVar(pattern->name());
     dbgKrita << ppVar(pattern->filename());

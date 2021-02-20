@@ -1,20 +1,7 @@
 /*
- * Copyright (C) 2018 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2018 Boudewijn Rempt <boud@valdyas.org>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 #include "KisStorageFilterProxyModel.h"
 
@@ -67,20 +54,24 @@ bool KisStorageFilterProxyModel::filterAcceptsRow(int source_row, const QModelIn
 {
     if (d->filter.isNull()) return true;
 
-    QModelIndex idx = sourceModel()->index(source_row, KisResourceModel::Name, source_parent);
+    QModelIndex idx = sourceModel()->index(source_row, KisAbstractResourceModel::Name, source_parent);
 
     switch (d->filterType) {
     case ByFileName:
     {
-        QMap<QString, QVariant> v = d->filter.toMap();
-        return KisResourceLocator::instance()->storageContainsResourceByFile(sourceModel()->data(idx, Qt::UserRole + KisStorageModel::Location).toString()
-                                                                             , v["resourcetype"].toString()
-                                                                             , v["filename"].toString());
+        QString filename = d->filter.toString();
+        return (sourceModel()->data(idx, Qt::UserRole + KisStorageModel::Location).toString().contains(filename));
     }
     case ByStorageType:
     {
         QString storageType = sourceModel()->data(idx, Qt::UserRole + KisStorageModel::StorageType).toString();
         return (d->filter.toStringList().contains(storageType));
+    }
+    case ByActive:
+    {
+        bool active = d->filter.toBool();
+        bool isActive = sourceModel()->data(idx, Qt::UserRole + KisStorageModel::Active).toBool();
+        return (active == isActive);
     }
     default:
         ;
@@ -91,8 +82,8 @@ bool KisStorageFilterProxyModel::filterAcceptsRow(int source_row, const QModelIn
 
 bool KisStorageFilterProxyModel::lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const
 {
-    QString nameLeft = sourceModel()->data(source_left, Qt::UserRole + KisResourceModel::Name).toString();
-    QString nameRight = sourceModel()->data(source_right, Qt::UserRole + KisResourceModel::Name).toString();
+    QString nameLeft = sourceModel()->data(source_left, Qt::UserRole + KisAbstractResourceModel::Name).toString();
+    QString nameRight = sourceModel()->data(source_right, Qt::UserRole + KisAbstractResourceModel::Name).toString();
     return nameLeft < nameRight;
 }
 

@@ -1,12 +1,9 @@
 /*
-* Copyright (c) 1999 Matthias Elter <me@kde.org>
-* Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
-* Copyright (c) 2015 Boudewijn Rempt <boud@valdyas.org>
+* SPDX-FileCopyrightText: 1999 Matthias Elter <me@kde.org>
+* SPDX-FileCopyrightText: 2002 Patrick Julien <freak@codepimps.org>
+* SPDX-FileCopyrightText: 2015 Boudewijn Rempt <boud@valdyas.org>
 *
-*  This program is free software; you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation; either version 2 of the License, or
-*  (at your option) any later version.
+*  SPDX-License-Identifier: GPL-2.0-or-later
 *
 *  This program is distributed in the hope that it will be useful,
 *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -158,15 +155,35 @@ Java_org_krita_android_JNIWrappers_saveState(JNIEnv* /*env*/,
     kritarc.setValue("canvasState", "OPENGL_SUCCESS");
 }
 
-extern "C" JNIEXPORT void JNICALL
+extern "C" JNIEXPORT jboolean JNICALL
 Java_org_krita_android_JNIWrappers_exitFullScreen(JNIEnv* /*env*/,
                                                   jobject /*obj*/,
                                                   jint    /*n*/)
 {
-    if (!KisPart::exists()) return;
+    if (!KisPart::exists()) {
+        return false;
+    }
 
     KisMainWindow *mainWindow = KisPart::instance()->currentMainwindow();
-    mainWindow->viewFullscreen(false);
+    if (mainWindow) {
+        mainWindow->viewFullscreen(false);
+        return true;
+    } else {
+        return false;
+    }
+}
+
+extern "C" JNIEXPORT void JNICALL
+Java_org_krita_android_JNIWrappers_openFileFromIntent(JNIEnv* /*env*/,
+                                                      jobject /*obj*/,
+                                                      jstring str)
+{
+    QAndroidJniObject jUri(str);
+    if (jUri.isValid()) {
+        QString uri = jUri.toString();
+        QMetaObject::invokeMethod(KisApplication::instance(), "fileOpenRequested",
+                                  Qt::QueuedConnection, Q_ARG(QString, uri));
+    }
 }
 
 __attribute__ ((visibility ("default")))
@@ -366,6 +383,23 @@ extern "C" int main(int argc, char **argv)
 
         // And if there isn't one, check the one set by the system.
         QLocale locale = QLocale::system();
+
+#ifdef Q_OS_ANDROID
+        // QLocale::uiLanguages() fails on Android, so if the fallback locale is being
+        // used we, try to fetch the device's default locale.
+        if (locale.name() == QLocale::c().name()) {
+            QAndroidJniObject localeJniObj = QAndroidJniObject::callStaticObjectMethod(
+                "java/util/Locale", "getDefault", "()Ljava/util/Locale;");
+
+            if (localeJniObj.isValid()) {
+                QAndroidJniObject tag = localeJniObj.callObjectMethod("toLanguageTag",
+                                                                      "()Ljava/lang/String;");
+                if (tag.isValid()) {
+                    locale = QLocale(tag.toString());
+                }
+            }
+        }
+#endif
         if (locale.name() != QStringLiteral("en")) {
             QStringList uiLanguages = locale.uiLanguages();
             for (QString &uiLanguage : uiLanguages) {
@@ -428,6 +462,12 @@ extern "C" int main(int argc, char **argv)
 
     // first create the application so we can create a pixmap
     KisApplication app(key, argc, argv);
+
+    if (app.platformName() == "wayland") {
+        QMessageBox::critical(0, i18nc("@title:window", "Fatal Error"), i18n("Krita does not support the Wayland platform. Use XWayland to run Krita on Wayland. Krita will close now."));
+        return -1;
+    }
+
     KisUsageLogger::writeHeader();
     KisOpenGL::initialize();
 
@@ -446,6 +486,12 @@ extern "C" int main(int argc, char **argv)
             app.setLayoutDirection(Qt::LeftToRight);
         }
     }
+#ifdef Q_OS_ANDROID
+    // TODO: remove "share" - sh_zam
+    // points to /data/data/org.krita/files/share/locale
+    KLocalizedString::addDomainLocaleDir("krita", QStandardPaths::writableLocation(QStandardPaths::HomeLocation) + "/share/locale");
+#endif
+
     KLocalizedString::setApplicationDomain("krita");
 
     dbgKrita << "Available translations" << KLocalizedString::availableApplicationTranslations();

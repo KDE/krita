@@ -1,19 +1,7 @@
 /*
- *  Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2007 Boudewijn Rempt <boud@valdyas.org>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 #ifndef _KIS_BASE_NODE_H
 #define _KIS_BASE_NODE_H
@@ -37,8 +25,6 @@ class KisUndoAdapter;
 class KisKeyframeChannel;
 
 #include "kritaimage_export.h"
-
-
 
 /**
  * A KisBaseNode is the base class for all components of an image:
@@ -158,11 +144,11 @@ public:
     virtual KisPaintDeviceSP projection() const = 0;
 
     /**
-     * @return a special device from where the color picker tool should pick
+     * @return a special device from where the color sampler tool should sample
      * color when in layer-only mode. For most of the nodes just shortcuts
      * to projection() device. TODO: can it be null?
      */
-    virtual KisPaintDeviceSP colorPickSourceDevice() const;
+    virtual KisPaintDeviceSP colorSampleSourceDevice() const;
 
     virtual const KoColorSpace *colorSpace() const = 0;
 
@@ -491,6 +477,12 @@ public:
     bool supportsLodMoves() const;
 
     /**
+     * Returns true if the node can be painted via KisPaintDevice. Notable
+     * exceptions are selection-based layers and masks.
+     */
+    virtual bool supportsLodPainting() const;
+
+    /**
      * Return the keyframe channels associated with this node
      * @return list of keyframe channels
      */
@@ -604,6 +596,7 @@ public:
 
 Q_SIGNALS:
     void keyframeChannelAdded(KisKeyframeChannel *channel);
+    void opacityChanged(quint8 value);
 
 private:
 

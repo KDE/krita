@@ -1,23 +1,11 @@
 /*
-   Copyright (c) 2000 Matthias Elter  <elter@kde.org>
-                 2004 Boudewijn Rempt <boud@valdyas.org>
-                 2004 Adrian Page <adrian@pagenet.plus.com>
-                 2004, 2007 Sven Langkamp <sven.langkamp@gmail.com>
-                 2017 Wolthera van Hövell tot Westerflier <griffinvalley@gmail.com>
+    SPDX-FileCopyrightText: 2000 Matthias Elter <elter@kde.org>
+    SPDX-FileCopyrightText: 2004 Boudewijn Rempt <boud@valdyas.org>
+    SPDX-FileCopyrightText: 2004 Adrian Page <adrian@pagenet.plus.com>
+    SPDX-FileCopyrightText: 2004, 2007 Sven Langkamp <sven.langkamp@gmail.com>
+    SPDX-FileCopyrightText: 2017 Wolthera van Hövell tot Westerflier <griffinvalley@gmail.com>
 
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+    SPDX-License-Identifier: LGPL-2.1-or-later
  */
 
 #ifndef KOSEGMENTGRADIENT_H
@@ -66,7 +54,7 @@ struct KoGradientSegmentEndpoint {
     qreal offset;
     KoColor color;
     KoGradientSegmentEndpointType type;
-    
+
 
 };
 
@@ -361,8 +349,8 @@ public:
      * @param rightType
      * @return void
      */
-    void createSegment(int interpolation, int colorInterpolation, double startOffset, double endOffset, double middleOffset, 
-                       const QColor & leftColor, const QColor & rightColor, 
+    void createSegment(int interpolation, int colorInterpolation, double startOffset, double endOffset, double middleOffset,
+                       const QColor & leftColor, const QColor & rightColor,
                        KoGradientSegmentEndpointType leftType = COLOR_ENDPOINT, KoGradientSegmentEndpointType rightType = COLOR_ENDPOINT);
 
     /**
@@ -464,6 +452,7 @@ public:
     bool removeSegmentPossible() const;
 
     const QList<KoGradientSegment *>& segments() const;
+    void setSegments(const QList<KoGradientSegment*> &segments);
 
 protected:
 

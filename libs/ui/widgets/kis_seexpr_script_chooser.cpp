@@ -1,21 +1,9 @@
 /*
  * This file is part of Krita
  *
- * Copyright (c) 2020 L. E. Segovia <amy@amyspark.me>
+ * SPDX-FileCopyrightText: 2020 L. E. Segovia <amy@amyspark.me>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_seexpr_script_chooser.h"
@@ -43,6 +31,7 @@ KisSeExprScriptChooser::KisSeExprScriptChooser(QWidget *parent)
 {
     m_lblName = new KSqueezedTextLabel(this);
     m_lblName->setTextElideMode(Qt::ElideLeft);
+    m_lblName->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Fixed);
 
     m_itemChooser = new KisResourceItemChooser(ResourceType::SeExprScripts, true, this);
     m_itemChooser->setPreviewTiled(true);
@@ -71,9 +60,9 @@ KoResourceSP KisSeExprScriptChooser::currentResource()
 {
     if (!m_itemChooser->currentResource()) {
         KoResourceServer<KisSeExprScript> *rserver = KoResourceServerProvider::instance()->seExprScriptServer();
-        if (rserver->resources().size() > 0) {
+        if (rserver->resourceCount() > 0) {
             KisSignalsBlocker blocker(m_itemChooser);
-            m_itemChooser->setCurrentResource(rserver->resources().first());
+            m_itemChooser->setCurrentResource(rserver->firstResource());
         }
     }
     return m_itemChooser->currentResource();
@@ -99,7 +88,6 @@ void KisSeExprScriptChooser::setPreviewOrientation(Qt::Orientation orientation)
 
 void KisSeExprScriptChooser::update(KoResourceSP resource)
 {
-    m_lblName->setFixedWidth(m_itemChooser->width());
     KisSeExprScriptSP pattern = resource.staticCast<KisSeExprScript>();
     m_lblName->setText(QString("%1").arg(i18n(pattern->name().toUtf8().replace("_", " "))));
 }

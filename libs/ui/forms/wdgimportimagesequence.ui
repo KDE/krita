@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgImportImageSequence</class>
  <widget class="QWidget" name="WdgImportImageSequence">
   <property name="geometry">
@@ -68,14 +72,14 @@
           <string>Timing</string>
          </property>
          <layout class="QFormLayout" name="formLayout">
-          <item row="1" column="0">
+          <item column="0" row="1">
            <widget class="QLabel" name="label">
             <property name="text">
              <string>Start at</string>
             </property>
            </widget>
           </item>
-          <item row="1" column="1">
+          <item column="1" row="1">
            <widget class="KisIntParseSpinBox" name="spinFirstFrame">
             <property name="toolTip">
              <string>The frame number for the first image</string>
@@ -85,14 +89,14 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="0">
+          <item column="0" row="2">
            <widget class="QLabel" name="label_2">
             <property name="text">
              <string>Step</string>
             </property>
            </widget>
           </item>
-          <item row="2" column="1">
+          <item column="1" row="2">
            <widget class="KisIntParseSpinBox" name="spinStep">
             <property name="toolTip">
              <string>Number of frames between images</string>
@@ -105,7 +109,7 @@
             </property>
            </widget>
           </item>
-          <item row="3" column="0" colspan="2">
+          <item colspan="2" column="0" row="3">
            <widget class="QLabel" name="lblFramerate">
             <property name="text">
              <string>Source FPS:</string>

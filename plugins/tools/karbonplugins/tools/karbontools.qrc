@@ -1,3 +1,7 @@
+<!--
+  SPDX-FileCopyrightText: none
+  SPDX-License-Identifier: CC0-1.0
+-->
 <RCC>
     <qresource prefix="/">
         <file alias="calligraphy.png">22-actions-calligraphy.png</file>

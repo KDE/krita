@@ -1,3 +1,7 @@
+/*
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
 #ifndef KIS_SPACING_INFORMATION_H
 #define KIS_SPACING_INFORMATION_H
 

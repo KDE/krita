@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WidgetEdgeDetection</class>
  <widget class="QWidget" name="WidgetEdgeDetection">
   <property name="geometry">
@@ -11,14 +15,14 @@
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="3" column="1">
+   <item column="1" row="3">
     <widget class="QComboBox" name="cmbOutput">
      <property name="toolTip">
       <string>Output decides what type of information you want from the lines.</string>
      </property>
     </widget>
    </item>
-   <item row="1" column="1">
+   <item column="1" row="1">
     <widget class="QComboBox" name="cmbType">
      <property name="toolTip">
       <string>The formula decides how the kernel is created, so different formulas choose different values in the kernel, and thus give subtly different results.</string>
@@ -28,10 +32,10 @@
      </property>
     </widget>
    </item>
-   <item row="5" column="0" colspan="2">
+   <item colspan="2" column="0" row="5">
     <widget class="KisDoubleSliderSpinBox" name="sldHorizontalRadius" native="true"/>
    </item>
-   <item row="8" column="1">
+   <item column="1" row="8">
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -44,7 +48,7 @@
      </property>
     </spacer>
    </item>
-   <item row="7" column="0" colspan="2">
+   <item colspan="2" column="0" row="7">
     <widget class="QCheckBox" name="chkTransparent">
      <property name="toolTip">
       <string>This will take a desaturated result and use it to determine what is transparent. This is useful for creating edge and fringe effects.</string>
@@ -54,24 +58,24 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="0" alignment="Qt::AlignRight">
+   <item alignment="Qt::AlignRight" column="0" row="1">
     <widget class="QLabel" name="label_3">
      <property name="text">
       <string>Formula:</string>
      </property>
     </widget>
    </item>
-   <item row="6" column="0" colspan="2">
+   <item colspan="2" column="0" row="6">
     <widget class="KisDoubleSliderSpinBox" name="sldVerticalRadius" native="true"/>
    </item>
-   <item row="3" column="0" alignment="Qt::AlignRight">
+   <item alignment="Qt::AlignRight" column="0" row="3">
     <widget class="QLabel" name="label_4">
      <property name="text">
       <string>Output:</string>
      </property>
     </widget>
    </item>
-   <item row="4" column="2" rowspan="3" alignment="Qt::AlignVCenter">
+   <item alignment="Qt::AlignVCenter" column="2" row="4" rowspan="3">
     <widget class="KoAspectButton" name="btnAspect" native="true">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -87,7 +91,7 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="1">
+   <item column="1" row="0">
     <spacer name="horizontalSpacer">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>

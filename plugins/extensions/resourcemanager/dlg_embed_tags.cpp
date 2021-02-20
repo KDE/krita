@@ -1,20 +1,7 @@
 /*
- *  Copyright (c) 2020 Agata Cacko cacko.azh@gmail.com
+ *  SPDX-FileCopyrightText: 2020 Agata Cacko cacko.azh @gmail.com
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #include "ui_wdgdlgembedtags.h"
@@ -35,6 +22,7 @@
 #include <KoResource.h>
 #include <KoResourceServer.h>
 #include <KoResourceServerProvider.h>
+#include <KisTagModel.h>
 
 #include <kis_workspace_resource.h>
 #include <brushengine/kis_paintop_preset.h>
@@ -131,13 +119,13 @@ void DlgEmbedTags::resourceTypeSelected(int idx)
 
     QString standarizedResourceType = (resourceType == "presets" ? ResourceType::PaintOpPresets : resourceType);
 
-    KisTagModel* model = KisTagModelProvider::tagModel(standarizedResourceType);
+    KisTagModel model(standarizedResourceType);
 
-    for (int i = 0; i < model->rowCount(); i++) {
+    for (int i = 0; i < model.rowCount(); i++) {
 
-        QModelIndex idx = model->index(i, 0);
-        QString name = model->data(idx, Qt::DisplayRole).toString();
-        int id = model->data(idx, Qt::UserRole + KisTagModel::Id).toInt();
+        QModelIndex idx = model.index(i, 0);
+        QString name = model.data(idx, Qt::DisplayRole).toString();
+        int id = model.data(idx, Qt::UserRole + KisAllTagsModel::Id).toInt();
 
         if (id < 0) {
             // skip automated tags

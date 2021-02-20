@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgDlgCreateBundle</class>
  <widget class="QWidget" name="WdgDlgCreateBundle">
   <property name="geometry">
@@ -38,12 +42,12 @@
    <property name="horizontalSpacing">
     <number>20</number>
    </property>
-   <item row="0" column="1">
+   <item column="1" row="0">
     <layout class="QGridLayout" name="gridLayout_4">
      <property name="verticalSpacing">
       <number>12</number>
      </property>
-     <item row="0" column="0">
+     <item column="0" row="0">
       <layout class="QHBoxLayout" name="horizontalLayout_2">
        <property name="spacing">
         <number>12</number>
@@ -70,7 +74,7 @@
        </item>
       </layout>
      </item>
-     <item row="1" column="0">
+     <item column="0" row="1">
       <layout class="QHBoxLayout" name="horizontalLayout_3">
        <property name="spacing">
         <number>12</number>
@@ -83,7 +87,7 @@
          <property name="spacing">
           <number>12</number>
          </property>
-         <item row="1" column="1">
+         <item column="1" row="1">
           <widget class="QListWidget" name="tableAvailable">
            <property name="minimumSize">
             <size>
@@ -96,14 +100,14 @@
            </property>
           </widget>
          </item>
-         <item row="0" column="1">
+         <item column="1" row="0">
           <widget class="QLabel" name="label_4">
            <property name="text">
             <string>Available</string>
            </property>
           </widget>
          </item>
-         <item row="2" column="1">
+         <item column="1" row="2">
           <spacer name="verticalSpacer">
            <property name="orientation">
             <enum>Qt::Vertical</enum>
@@ -170,7 +174,7 @@
          <property name="spacing">
           <number>12</number>
          </property>
-         <item row="1" column="0">
+         <item column="0" row="1">
           <widget class="QListWidget" name="tableSelected">
            <property name="minimumSize">
             <size>
@@ -183,14 +187,14 @@
            </property>
           </widget>
          </item>
-         <item row="0" column="0">
+         <item column="0" row="0">
           <widget class="QLabel" name="label_6">
            <property name="text">
             <string>Selected</string>
            </property>
           </widget>
          </item>
-         <item row="2" column="0">
+         <item column="0" row="2">
           <spacer name="verticalSpacer_2">
            <property name="orientation">
             <enum>Qt::Vertical</enum>
@@ -209,7 +213,7 @@
      </item>
     </layout>
    </item>
-   <item row="0" column="0">
+   <item column="0" row="0">
     <layout class="QFormLayout" name="formLayout">
      <property name="fieldGrowthPolicy">
       <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
@@ -223,24 +227,24 @@
      <property name="verticalSpacing">
       <number>8</number>
      </property>
-     <item row="0" column="0">
+     <item column="0" row="0">
       <widget class="QLabel" name="bundleName">
        <property name="text">
         <string>Bundle Name:</string>
        </property>
       </widget>
      </item>
-     <item row="0" column="1">
+     <item column="1" row="0">
       <widget class="QLineEdit" name="editBundleName"/>
      </item>
-     <item row="1" column="0">
+     <item column="0" row="1">
       <widget class="QLabel" name="description">
        <property name="text">
         <string>Description:</string>
        </property>
       </widget>
      </item>
-     <item row="1" column="1">
+     <item column="1" row="1">
       <widget class="QPlainTextEdit" name="editDescription">
        <property name="maximumSize">
         <size>
@@ -250,7 +254,7 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="0">
+     <item column="0" row="3">
       <widget class="QLabel" name="author">
        <property name="text">
         <string>Author:</string>
@@ -263,52 +267,52 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="1">
+     <item column="1" row="3">
       <widget class="QLineEdit" name="editAuthor">
        <property name="text">
         <string/>
        </property>
       </widget>
      </item>
-     <item row="4" column="0">
+     <item column="0" row="4">
       <widget class="QLabel" name="label">
        <property name="text">
         <string>Email:</string>
        </property>
       </widget>
      </item>
-     <item row="4" column="1">
+     <item column="1" row="4">
       <widget class="QLineEdit" name="editEmail"/>
      </item>
-     <item row="5" column="0">
+     <item column="0" row="5">
       <widget class="QLabel" name="website">
        <property name="text">
         <string>Website:</string>
        </property>
       </widget>
      </item>
-     <item row="5" column="1">
+     <item column="1" row="5">
       <widget class="QLineEdit" name="editWebsite">
        <property name="text">
         <string>http://</string>
        </property>
       </widget>
      </item>
-     <item row="6" column="0">
+     <item column="0" row="6">
       <widget class="QLabel" name="license">
        <property name="text">
         <string>License:</string>
        </property>
       </widget>
      </item>
-     <item row="6" column="1">
+     <item column="1" row="6">
       <widget class="QLineEdit" name="editLicense">
        <property name="text">
         <string/>
        </property>
       </widget>
      </item>
-     <item row="7" column="0">
+     <item column="0" row="7">
       <widget class="QLabel" name="label_5">
        <property name="minimumSize">
         <size>
@@ -324,7 +328,7 @@
        </property>
       </widget>
      </item>
-     <item row="7" column="1">
+     <item column="1" row="7">
       <layout class="QHBoxLayout" name="horizontalLayout_4">
        <property name="spacing">
         <number>2</number>
@@ -410,14 +414,14 @@
        </item>
       </layout>
      </item>
-     <item row="9" column="0">
+     <item column="0" row="9">
       <widget class="QLabel" name="label_2">
        <property name="text">
         <string>Save to:</string>
        </property>
       </widget>
      </item>
-     <item row="9" column="1">
+     <item column="1" row="9">
       <layout class="QHBoxLayout" name="horizontalLayout">
        <property name="spacing">
         <number>8</number>
@@ -471,7 +475,7 @@
        </item>
       </layout>
      </item>
-     <item row="10" column="1">
+     <item column="1" row="10">
       <widget class="QPushButton" name="bnEmbedTags">
        <property name="text">
         <string>Embed tags...</string>

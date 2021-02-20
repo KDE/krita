@@ -1,20 +1,8 @@
 /*
- *  Copyright (c) 2012 Dmitry Kazakov <dimula73@gmail.com>
- *  Copyright (c) 2015 Thorsten Zachmann <zachmann@kde.org>
+ *  SPDX-FileCopyrightText: 2012 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2015 Thorsten Zachmann <zachmann@kde.org>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 // for calculation of the needed alignment
@@ -592,35 +580,35 @@ void KisCompositionBenchmark::checkRoundingAlphaDarken_05_10_08()
 void KisCompositionBenchmark::checkRoundingAlphaDarkenF32_05_03()
 {
 #ifdef HAVE_VC
-    checkRounding<OverCompositor128<float, float, false, true> >(0.5, 0.3, -1, 16);
+    checkRounding<OverCompositor128<float, false, true> >(0.5, 0.3, -1, 16);
 #endif
 }
 
 void KisCompositionBenchmark::checkRoundingAlphaDarkenF32_05_05()
 {
 #ifdef HAVE_VC
-    checkRounding<OverCompositor128<float, float, false, true> >(0.5, 0.5, -1, 16);
+    checkRounding<OverCompositor128<float, false, true> >(0.5, 0.5, -1, 16);
 #endif
 }
 
 void KisCompositionBenchmark::checkRoundingAlphaDarkenF32_05_07()
 {
 #ifdef HAVE_VC
-    checkRounding<OverCompositor128<float, float, false, true> >(0.5, 0.7, -1, 16);
+    checkRounding<OverCompositor128<float, false, true> >(0.5, 0.7, -1, 16);
 #endif
 }
 
 void KisCompositionBenchmark::checkRoundingAlphaDarkenF32_05_10()
 {
 #ifdef HAVE_VC
-    checkRounding<OverCompositor128<float, float, false, true> >(0.5, 1.0, -1, 16);
+    checkRounding<OverCompositor128<float, false, true> >(0.5, 1.0, -1, 16);
 #endif
 }
 
 void KisCompositionBenchmark::checkRoundingAlphaDarkenF32_05_10_08()
 {
 #ifdef HAVE_VC
-    checkRounding<OverCompositor128<float, float, false, true> >(0.5, 1.0, 0.8, 16);
+    checkRounding<OverCompositor128<float, false, true> >(0.5, 1.0, 0.8, 16);
 #endif
 }
 
@@ -634,7 +622,7 @@ void KisCompositionBenchmark::checkRoundingOver()
 void KisCompositionBenchmark::checkRoundingOverRgbaF32()
 {
 #ifdef HAVE_VC
-    checkRounding<OverCompositor128<float, float, false, true> >(0.5, 0.3, -1, 16);
+    checkRounding<OverCompositor128<float, false, true> >(0.5, 0.3, -1, 16);
 #endif
 }
 

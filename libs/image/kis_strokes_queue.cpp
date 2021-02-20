@@ -1,19 +1,7 @@
 /*
- *  Copyright (c) 2011 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2011 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_strokes_queue.h"
@@ -27,6 +15,7 @@
 #include "kis_stroke_strategy.h"
 #include "kis_undo_stores.h"
 #include "kis_post_execution_undo_adapter.h"
+#include "KisCppQuirks.h"
 
 typedef QQueue<KisStrokeSP> StrokesQueue;
 typedef QQueue<KisStrokeSP>::iterator StrokesQueueIterator;
@@ -101,14 +90,16 @@ struct Q_DECL_HIDDEN KisStrokesQueue::Private {
     KisSurrogateUndoStore lodNUndoStore;
     LodNUndoStrokesFacade lodNStrokesFacade;
     KisPostExecutionUndoAdapter lodNPostExecutionUndoAdapter;
+    KisLodPreferences lodPreferences;
 
     void cancelForgettableStrokes();
     void startLod0ToNStroke(int levelOfDetail, bool forgettable);
 
-    bool canUseLodN() const;
+
+    std::pair<StrokesQueueIterator, StrokesQueueIterator> currentLodRange();
     StrokesQueueIterator findNewLod0Pos();
     StrokesQueueIterator findNewLodNPos(KisStrokeSP lodN);
-    bool shouldWrapInSuspendUpdatesStroke() const;
+    bool shouldWrapInSuspendUpdatesStroke();
 
     void switchDesiredLevelOfDetail(bool forced);
     bool hasUnfinishedStrokes() const;
@@ -153,6 +144,14 @@ void KisStrokesQueue::Private::startLod0ToNStroke(int levelOfDetail, bool forget
     // precondition: lod > 0
     KIS_ASSERT_RECOVER_RETURN(levelOfDetail);
 
+    {
+        // sanity check: there should be no open LoD range now!
+        StrokesQueueIterator it;
+        StrokesQueueIterator end;
+        std::tie(it, end) = currentLodRange();
+        KIS_SAFE_ASSERT_RECOVER_NOOP(it == end);
+    }
+
     if (!this->lod0ToNStrokeStrategyFactory) return;
 
     KisLodSyncPair syncPair = this->lod0ToNStrokeStrategyFactory(forgettable);
@@ -174,20 +173,35 @@ void KisStrokesQueue::Private::cancelForgettableStrokes()
     }
 }
 
-bool KisStrokesQueue::Private::canUseLodN() const
+std::pair<StrokesQueueIterator, StrokesQueueIterator> KisStrokesQueue::Private::currentLodRange()
 {
-    Q_FOREACH (KisStrokeSP stroke, strokesQueue) {
-        if (stroke->type() == KisStroke::LEGACY) {
-            return false;
+    /**
+     * LoD-capable strokes should live in the range after the last
+     * legacy stroke of the queue
+     */
+
+    for (auto it = std::make_reverse_iterator(strokesQueue.end());
+         it != std::make_reverse_iterator(strokesQueue.begin());
+         ++it) {
+
+        if ((*it)->type() == KisStroke::LEGACY) {
+            // it.base() returns the next element after the one we found
+            return std::make_pair(it.base(), strokesQueue.end());
         }
     }
 
-    return true;
+    return std::make_pair(strokesQueue.begin(), strokesQueue.end());
 }
 
-bool KisStrokesQueue::Private::shouldWrapInSuspendUpdatesStroke() const
+bool KisStrokesQueue::Private::shouldWrapInSuspendUpdatesStroke()
 {
-    Q_FOREACH (KisStrokeSP stroke, strokesQueue) {
+    StrokesQueueIterator it;
+    StrokesQueueIterator end;
+    std::tie(it, end) = currentLodRange();
+
+    for (; it != end; ++it) {
+        KisStrokeSP stroke = *it;
+
         if (stroke->isCancelled()) continue;
 
         if (stroke->type() == KisStroke::RESUME) {
@@ -200,8 +214,9 @@ bool KisStrokesQueue::Private::shouldWrapInSuspendUpdatesStroke() const
 
 StrokesQueueIterator KisStrokesQueue::Private::findNewLod0Pos()
 {
-    StrokesQueueIterator it = strokesQueue.begin();
-    StrokesQueueIterator end = strokesQueue.end();
+    StrokesQueueIterator it;
+    StrokesQueueIterator end;
+    std::tie(it, end) = currentLodRange();
 
     for (; it != end; ++it) {
         if ((*it)->isCancelled()) continue;
@@ -216,8 +231,9 @@ StrokesQueueIterator KisStrokesQueue::Private::findNewLod0Pos()
 
 StrokesQueueIterator KisStrokesQueue::Private::findNewLodNPos(KisStrokeSP lodN)
 {
-    StrokesQueueIterator it = strokesQueue.begin();
-    StrokesQueueIterator end = strokesQueue.end();
+    StrokesQueueIterator it;
+    StrokesQueueIterator end;
+    std::tie(it, end) = currentLodRange();
 
     for (; it != end; ++it) {
         if ((*it)->isCancelled()) continue;
@@ -271,7 +287,7 @@ KisStrokeId KisStrokesQueue::startStroke(KisStrokeStrategy *strokeStrategy)
     }
 
     if (m_d->desiredLevelOfDetail &&
-        m_d->canUseLodN() &&
+        (m_d->lodPreferences.lodPreferred() || strokeStrategy->forceLodModeIfPossible()) &&
         (lodBuddyStrategy =
          strokeStrategy->createLodClone(m_d->desiredLevelOfDetail))) {
 
@@ -439,14 +455,14 @@ UndoResult KisStrokesQueue::tryUndoLastStrokeAsync()
 
     QMutexLocker locker(&m_d->mutex);
 
-    std::reverse_iterator<StrokesQueue::ConstIterator> it(m_d->strokesQueue.constEnd());
-    std::reverse_iterator<StrokesQueue::ConstIterator> end(m_d->strokesQueue.constBegin());
-
     KisStrokeSP lastStroke;
     KisStrokeSP lastBuddy;
     bool buddyFound = false;
 
-    for (; it != end; ++it) {
+    for (auto it = std::make_reverse_iterator(m_d->strokesQueue.constEnd());
+         it != std::make_reverse_iterator(m_d->strokesQueue.constBegin());
+         ++it) {
+
         if ((*it)->type() == KisStroke::LEGACY) {
             break;
         }
@@ -514,8 +530,13 @@ void KisStrokesQueue::Private::tryClearUndoOnStrokeCompletion(KisStrokeSP finish
     bool hasResumeStrokes = false;
     bool hasLod0Strokes = false;
 
-    Q_FOREACH (KisStrokeSP stroke, strokesQueue) {
-        if (stroke == finishingStroke) continue;
+    auto it = std::find(strokesQueue.begin(), strokesQueue.end(), finishingStroke);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(it != strokesQueue.end());
+    ++it;
+
+    for (; it != strokesQueue.end(); ++it) {
+        KisStrokeSP stroke = *it;
+        if (stroke->type() == KisStroke::LEGACY) break;
 
         hasLod0Strokes |= stroke->type() == KisStroke::LOD0;
         hasResumeStrokes |= stroke->type() == KisStroke::RESUME;
@@ -557,6 +578,31 @@ qreal KisStrokesQueue::balancingRatioOverride() const
     return m_d->balancingRatioOverride;
 }
 
+KisLodPreferences KisStrokesQueue::lodPreferences() const
+{
+    QMutexLocker locker(&m_d->mutex);
+
+    /**
+     * The desired level of detail might have not been activated due to
+     * multi-stage activation process
+     */
+    return KisLodPreferences(m_d->lodPreferences.flags(), m_d->desiredLevelOfDetail);
+}
+
+void KisStrokesQueue::setLodPreferences(const KisLodPreferences &value)
+{
+    QMutexLocker locker(&m_d->mutex);
+
+    m_d->lodPreferences = value;
+
+    if (m_d->lodPreferences.desiredLevelOfDetail() != m_d->nextDesiredLevelOfDetail ||
+            (m_d->lodPreferences.lodPreferred() && m_d->lodNNeedsSynchronization)) {
+
+        m_d->nextDesiredLevelOfDetail = m_d->lodPreferences.desiredLevelOfDetail();
+        m_d->switchDesiredLevelOfDetail(false);
+    }
+}
+
 bool KisStrokesQueue::isEmpty() const
 {
     QMutexLocker locker(&m_d->mutex);
@@ -587,7 +633,7 @@ void KisStrokesQueue::Private::switchDesiredLevelOfDetail(bool forced)
         desiredLevelOfDetail = nextDesiredLevelOfDetail;
         lodNNeedsSynchronization |= !forgettable;
 
-        if (desiredLevelOfDetail) {
+        if (desiredLevelOfDetail && lodPreferences.lodPreferred()) {
             startLod0ToNStroke(desiredLevelOfDetail, forgettable);
         }
     }
@@ -597,16 +643,6 @@ void KisStrokesQueue::explicitRegenerateLevelOfDetail()
 {
     QMutexLocker locker(&m_d->mutex);
     m_d->switchDesiredLevelOfDetail(true);
-}
-
-void KisStrokesQueue::setDesiredLevelOfDetail(int lod)
-{
-    QMutexLocker locker(&m_d->mutex);
-
-    if (lod == m_d->nextDesiredLevelOfDetail) return;
-
-    m_d->nextDesiredLevelOfDetail = lod;
-    m_d->switchDesiredLevelOfDetail(false);
 }
 
 void KisStrokesQueue::notifyUFOChangedImage()
@@ -804,5 +840,5 @@ bool KisStrokesQueue::checkLevelOfDetailProperty(int runningLevelOfDetail)
     KisStrokeSP stroke = m_d->strokesQueue.head();
 
     return runningLevelOfDetail < 0 ||
-        stroke->worksOnLevelOfDetail() == runningLevelOfDetail;
+        stroke->nextJobLevelOfDetail() == runningLevelOfDetail;
 }

@@ -10,10 +10,10 @@
 # becomes:
 # MACRO_APPEND_IF(SOMELIB_FOUND  my_sources  somefile.c someotherfile.c)
 
-# Copyright (c) 2006, Alexander Neundorf, <neundorf@kde.org>
+# SPDX-FileCopyrightText: 2006 Alexander Neundorf <neundorf@kde.org>
 #
-# Redistribution and use is allowed according to the terms of the BSD license.
-# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+# SPDX-License-Identifier: BSD-3-Clause
+#
 
 macro(macro_append_if _cond _list)
   if(${_cond})

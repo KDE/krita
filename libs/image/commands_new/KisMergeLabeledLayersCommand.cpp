@@ -1,19 +1,7 @@
 /*
- *  Copyright (c) 2020 Agata Cacko <cacko.azh@gmail.com>
+ *  SPDX-FileCopyrightText: 2020 Agata Cacko <cacko.azh@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "KisMergeLabeledLayersCommand.h"
@@ -99,6 +87,8 @@ void KisMergeLabeledLayersCommand::mergeLabeledLayers()
 
     nodesList = KisLayerUtils::sortAndFilterAnyMergableNodesSafe(nodesList, m_refImage);
     m_refImage->initialRefreshGraph();
+    KisLayerUtils::refreshHiddenAreaAsync(m_refImage, m_refImage->root(), m_refImage->bounds());
+    m_refImage->waitForDone();
 
     if (m_refImage->root()->childCount() == 0) {
         return;
@@ -108,7 +98,8 @@ void KisMergeLabeledLayersCommand::mergeLabeledLayers()
     m_refImage->mergeMultipleLayers(nodesList, 0);
     m_refImage->waitForDone();
 
-    KisPainter::copyAreaOptimized(QPoint(), m_refImage->projection(), m_refPaintDevice, m_refImage->bounds());
+
+    KisPainter::copyAreaOptimized(m_refImage->projection()->exactBounds().topLeft(), m_refImage->projection(), m_refPaintDevice, m_refImage->projection()->exactBounds());
 
     // release resources: they are still owned by the caller
     // (or by some other object the caller passed them to)

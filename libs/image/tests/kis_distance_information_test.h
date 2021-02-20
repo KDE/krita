@@ -1,3 +1,7 @@
+/*
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
 #ifndef KIS_DISTANCE_INFORMATION_TEST_H
 #define KIS_DISTANCE_INFORMATION_TEST_H
 

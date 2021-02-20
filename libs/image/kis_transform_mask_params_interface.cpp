@@ -1,19 +1,7 @@
 /*
- *  Copyright (c) 2014 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2014 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_transform_mask_params_interface.h"
@@ -138,7 +126,13 @@ KisTransformMaskParamsInterfaceSP KisDumbTransformMaskParams::fromXML(const QDom
 
 void KisDumbTransformMaskParams::translate(const QPointF &offset)
 {
-    m_d->transform *= QTransform::fromTranslate(offset.x(), offset.y());
+    Q_UNUSED(offset);
+
+    /**
+     * Normal translation doesn't change affine transformations
+     * in full-featured KisTransformMaskAdapter, so we should resemble
+     * this behavior in the dumb one
+     */
 }
 
 QRect KisDumbTransformMaskParams::nonAffineChangeRect(const QRect &rc)
@@ -168,6 +162,11 @@ void KisDumbTransformMaskParams::clearChangedFlag()
 bool KisDumbTransformMaskParams::hasChanged() const
 {
     return false;
+}
+
+KisTransformMaskParamsInterfaceSP KisDumbTransformMaskParams::clone() const
+{
+    return toQShared(new KisDumbTransformMaskParams(m_d->transform));
 }
 
 QTransform KisDumbTransformMaskParams::testingGetTransform() const

@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>KoDocumentInfoAuthorWidget</class>
  <widget class="QWidget" name="KoDocumentInfoAuthorWidget">
   <property name="geometry">
@@ -11,7 +15,7 @@
    </rect>
   </property>
   <layout class="QFormLayout" name="formLayout">
-   <item row="0" column="0">
+   <item column="0" row="0">
     <widget class="QLabel" name="fullNameLabel">
      <property name="text">
       <string>Nickname:</string>
@@ -21,42 +25,42 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="1">
+   <item column="1" row="0">
     <widget class="QLabel" name="nickName">
      <property name="text">
       <string/>
      </property>
     </widget>
    </item>
-   <item row="1" column="0">
+   <item column="0" row="1">
     <widget class="QLabel" name="lblfirstname">
      <property name="text">
       <string>First Name:</string>
      </property>
     </widget>
    </item>
-   <item row="1" column="1">
+   <item column="1" row="1">
     <widget class="QLabel" name="firstName">
      <property name="text">
       <string/>
      </property>
     </widget>
    </item>
-   <item row="2" column="0">
+   <item column="0" row="2">
     <widget class="QLabel" name="lblLastName">
      <property name="text">
       <string>Last Name:</string>
      </property>
     </widget>
    </item>
-   <item row="2" column="1">
+   <item column="1" row="2">
     <widget class="QLabel" name="lastName">
      <property name="text">
       <string/>
      </property>
     </widget>
    </item>
-   <item row="3" column="0">
+   <item column="0" row="3">
     <widget class="QLabel" name="lblInitialsDesc">
      <property name="text">
       <string>Initials:</string>
@@ -66,7 +70,7 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="1">
+   <item column="1" row="3">
     <widget class="QLabel" name="initials">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
@@ -79,7 +83,7 @@
      </property>
     </widget>
    </item>
-   <item row="4" column="0">
+   <item column="0" row="4">
     <widget class="QLabel" name="lblTitleDesc">
      <property name="text">
       <string>Title:</string>
@@ -89,31 +93,31 @@
      </property>
     </widget>
    </item>
-   <item row="4" column="1">
+   <item column="1" row="4">
     <widget class="QLabel" name="title">
      <property name="text">
       <string/>
      </property>
     </widget>
    </item>
-   <item row="5" column="0">
+   <item column="0" row="5">
     <widget class="QLabel" name="lblPositionDesc">
      <property name="text">
-      <string>Position:</string>
+      <string comment="Job Position">Position:</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>
-   <item row="5" column="1">
+   <item column="1" row="5">
     <widget class="QLabel" name="position">
      <property name="text">
       <string/>
      </property>
     </widget>
    </item>
-   <item row="6" column="0">
+   <item column="0" row="6">
     <widget class="QLabel" name="lblCompanyDesc">
      <property name="text">
       <string>Company:</string>
@@ -123,17 +127,17 @@
      </property>
     </widget>
    </item>
-   <item row="6" column="1">
+   <item column="1" row="6">
     <widget class="QLabel" name="company">
      <property name="text">
       <string/>
      </property>
     </widget>
    </item>
-   <item row="7" column="1">
+   <item column="1" row="7">
     <widget class="QListWidget" name="leContact"/>
    </item>
-   <item row="8" column="1">
+   <item column="1" row="8">
     <spacer>
      <property name="orientation">
       <enum>Qt::Vertical</enum>

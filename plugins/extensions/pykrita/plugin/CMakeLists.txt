@@ -18,8 +18,10 @@ ki18n_wrap_ui(SOURCES
 )
 
 add_library(kritapykrita MODULE ${SOURCES})
+add_library(pykrita STATIC ${SOURCES})
 
 target_include_directories(kritapykrita SYSTEM PUBLIC "${PYTHON_INCLUDE_DIRS}")
+target_include_directories(pykrita SYSTEM PUBLIC "${PYTHON_INCLUDE_DIRS}")
 
 target_link_libraries(
     kritapykrita
@@ -28,8 +30,16 @@ target_link_libraries(
     kritalibkis
   )
 
+target_link_libraries(
+    pykrita
+    ${PYTHON_LIBRARY}
+    kritaui
+    kritalibkis
+  )
+
 if (MINGW)
     target_compile_definitions(kritapykrita PRIVATE _hypot=hypot)
+    target_compile_definitions(pykrita PRIVATE _hypot=hypot)
 endif (MINGW)
 
 install(TARGETS kritapykrita DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})

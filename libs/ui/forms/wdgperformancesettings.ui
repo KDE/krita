@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgPerformanceSettings</class>
  <widget class="QWidget" name="WdgPerformanceSettings">
   <property name="geometry">
@@ -40,14 +44,14 @@
           <string>RAM</string>
          </property>
          <layout class="QFormLayout" name="formLayout">
-          <item row="0" column="0">
+          <item column="0" row="0">
            <widget class="QLabel" name="label_2">
             <property name="text">
              <string>Memory available:</string>
             </property>
            </widget>
           </item>
-          <item row="0" column="1">
+          <item column="1" row="0">
            <widget class="QLabel" name="lblTotalMemory">
             <property name="sizePolicy">
              <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
@@ -63,7 +67,7 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="0">
+          <item column="0" row="1">
            <widget class="QLabel" name="label">
             <property name="toolTip">
              <string>Krita will not use more memory than this limit.</string>
@@ -73,7 +77,7 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="1">
+          <item column="1" row="1">
            <layout class="QHBoxLayout" name="horizontalLayout">
             <item>
              <widget class="KisDoubleSliderSpinBox" name="sliderMemoryLimit" native="true">
@@ -97,14 +101,14 @@
             </item>
            </layout>
           </item>
-          <item row="2" column="0">
+          <item column="0" row="2">
            <widget class="QLabel" name="label_5">
             <property name="text">
              <string>Internal Pool:</string>
             </property>
            </widget>
           </item>
-          <item row="2" column="1">
+          <item column="1" row="2">
            <layout class="QHBoxLayout" name="horizontalLayout_3">
             <item>
              <widget class="KisDoubleSliderSpinBox" name="sliderPoolLimit" native="true">
@@ -125,7 +129,7 @@
             </item>
            </layout>
           </item>
-          <item row="3" column="0">
+          <item column="0" row="3">
            <widget class="QLabel" name="label_4">
             <property name="toolTip">
              <string>When undo information reaches this limit, it will be stored in a temporary file and memory will be freed. Undo will be slower.</string>
@@ -135,7 +139,7 @@
             </property>
            </widget>
           </item>
-          <item row="3" column="1">
+          <item column="1" row="3">
            <layout class="QHBoxLayout" name="horizontalLayout_2">
             <item>
              <widget class="KisDoubleSliderSpinBox" name="sliderUndoLimit" native="true">
@@ -171,7 +175,7 @@
           <property name="bottomMargin">
            <number>6</number>
           </property>
-          <item row="0" column="0">
+          <item column="0" row="0">
            <widget class="QLabel" name="label_6">
             <property name="toolTip">
              <string>The swap file will not be bigger than this limit.</string>
@@ -181,7 +185,7 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="1">
+          <item column="1" row="0">
            <layout class="QHBoxLayout" name="horizontalLayout_4">
             <item>
              <widget class="KisSliderSpinBox" name="sliderSwapSize" native="true">
@@ -205,14 +209,14 @@
             </item>
            </layout>
           </item>
-          <item row="1" column="0">
+          <item column="0" row="1">
            <widget class="QLabel" name="label_3">
             <property name="text">
              <string>Swap File Location:</string>
             </property>
            </widget>
           </item>
-          <item row="1" column="1">
+          <item column="1" row="1">
            <layout class="QHBoxLayout" name="horizontalLayout_5">
             <item>
              <widget class="QLabel" name="lblSwapFileLocation">
@@ -271,14 +275,14 @@
           <string>Multithreading</string>
          </property>
          <layout class="QFormLayout" name="formLayout_3">
-          <item row="0" column="0">
+          <item column="0" row="0">
            <widget class="QLabel" name="label_8">
             <property name="text">
              <string>CPU Limit:</string>
             </property>
            </widget>
           </item>
-          <item row="0" column="1">
+          <item column="1" row="0">
            <widget class="KisSliderSpinBox" name="sliderThreadsLimit" native="true">
             <property name="sizePolicy">
              <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
@@ -291,14 +295,14 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="0">
+          <item column="0" row="1">
            <widget class="QLabel" name="label_9">
             <property name="text">
              <string>Frame Rendering Clones Limit</string>
             </property>
            </widget>
           </item>
-          <item row="1" column="1">
+          <item column="1" row="1">
            <widget class="KisSliderSpinBox" name="sliderFrameClonesLimit" native="true">
             <property name="sizePolicy">
              <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
@@ -316,14 +320,14 @@
        </item>
        <item>
         <layout class="QFormLayout" name="formLayout_limitFps">
-         <item row="0" column="0">
+         <item column="0" row="0">
           <widget class="QLabel" name="label_fps">
            <property name="text">
             <string>Limit frames per second while painting:</string>
            </property>
           </widget>
          </item>
-         <item row="0" column="1">
+         <item column="1" row="0">
           <widget class="KisSliderSpinBox" name="sliderFpsLimit" native="true">
            <property name="sizePolicy">
             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
@@ -448,7 +452,7 @@
           <string>Cache Generation Options</string>
          </property>
          <layout class="QFormLayout" name="formLayout_4">
-          <item row="0" column="0">
+          <item column="0" row="0">
            <widget class="QCheckBox" name="chkCachedFramesSizeLimit">
             <property name="toolTip">
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Render scaled down version of the frame if the image is bigger than the provided limit. Make sure you enable this option when using on-disk storage backend.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -458,7 +462,7 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="1">
+          <item column="1" row="0">
            <widget class="KisSliderSpinBox" name="intCachedFramesSizeLimit" native="true">
             <property name="sizePolicy">
              <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
@@ -471,7 +475,7 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="0">
+          <item column="0" row="1">
            <widget class="QCheckBox" name="chkUseRegionOfInterest">
             <property name="toolTip">
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When the image is too big, render only currently visible part of it&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -481,7 +485,7 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="1">
+          <item column="1" row="1">
            <widget class="KisSliderSpinBox" name="intRegionOfInterestMargin" native="true">
             <property name="sizePolicy">
              <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
@@ -494,7 +498,7 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="0">
+          <item column="0" row="2">
            <widget class="QCheckBox" name="chkBackgroundCacheGeneration">
             <property name="toolTip">
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Automatically prerender animation cache in background when the user is idle&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -506,6 +510,86 @@
           </item>
          </layout>
         </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_4">
+      <attribute name="title">
+       <string>Instant Preview</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_6">
+       <item>
+        <widget class="QCheckBox" name="chkTransformToolUseInStackPreview">
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="text">
+          <string>Use in-stack preview in Transform Tool</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_6">
+         <item>
+          <spacer name="horizontalSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Fixed</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="chkTransformToolForceLodMode">
+           <property name="toolTip">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The transform tool preview will always use instant preview, even if instant preview is disabled in the &amp;quot;View&amp;quot; menu&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="text">
+            <string>Force Instant Preview in Transform Tool</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="chkMoveToolForceLodMode">
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The move tool preview will always use instant preview, even if instant preview is disabled in the &amp;quot;View&amp;quot; menu&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string>Force Instant Preview in Move Tool</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="chkFiltersForceLodMode">
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The filter dialog will always use instant preview, even if instant preview is disabled in the &amp;quot;View&amp;quot; menu&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string>Force Instant Preview in Filters</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_4">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>233</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </widget>

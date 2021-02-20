@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgPatternOverlay</class>
  <widget class="QWidget" name="WdgPatternOverlay">
   <property name="geometry">
@@ -11,7 +15,7 @@
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
+   <item column="0" row="0">
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
       <string>Pattern Overlay</string>
@@ -26,7 +30,7 @@
          <property name="fieldGrowthPolicy">
           <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
          </property>
-         <item row="0" column="0">
+         <item column="0" row="0">
           <widget class="QLabel" name="label_13">
            <property name="text">
             <string>Ble&amp;nd Mode:</string>
@@ -36,7 +40,7 @@
            </property>
           </widget>
          </item>
-         <item row="0" column="1">
+         <item column="1" row="0">
           <widget class="KisLayerStyleCompositeOpComboBox" name="cmbCompositeOp">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -49,7 +53,7 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="0">
+         <item column="0" row="1">
           <widget class="QLabel" name="label_14">
            <property name="text">
             <string>&amp;Opacity:</string>
@@ -59,7 +63,7 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="1">
+         <item column="1" row="1">
           <widget class="KisSliderSpinBox" name="intOpacity" native="true">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
@@ -81,14 +85,14 @@
            </property>
           </widget>
          </item>
-         <item row="2" column="0">
+         <item column="0" row="2">
           <widget class="QLabel" name="label">
            <property name="text">
             <string>Pattern:</string>
            </property>
           </widget>
          </item>
-         <item row="2" column="1">
+         <item column="1" row="2">
           <layout class="QVBoxLayout" name="verticalLayout">
            <item>
             <widget class="KisPatternChooser" name="patternChooser">
@@ -121,7 +125,7 @@
            </item>
           </layout>
          </item>
-         <item row="5" column="0">
+         <item column="0" row="5">
           <widget class="QLabel" name="label_8">
            <property name="text">
             <string>S&amp;cale:</string>
@@ -131,14 +135,14 @@
            </property>
           </widget>
          </item>
-         <item row="5" column="1">
+         <item column="1" row="5">
           <widget class="KisSliderSpinBox" name="intScale" native="true">
            <property name="toolTip">
             <string>Set size of gradation</string>
            </property>
           </widget>
          </item>
-         <item row="4" column="1">
+         <item column="1" row="4">
           <widget class="QCheckBox" name="chkLinkWithLayer">
            <property name="text">
             <string>Li&amp;nk with layer</string>

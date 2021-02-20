@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgPredefinedBrushChooser</class>
  <widget class="QWidget" name="WdgPredefinedBrushChooser">
   <property name="geometry">
@@ -158,8 +162,8 @@
        <property name="verticalSpacing">
         <number>10</number>
        </property>
-       <item row="2" column="1">
-        <widget class="KisSpacingSelectionWidget" name="brushSpacingSelectionWidget" native="true">
+       <item row="0" column="1">
+        <widget class="KisDoubleSliderSpinBox" name="brushSizeSpinBox" native="true">
          <property name="sizePolicy">
           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -175,23 +179,6 @@
          </property>
         </widget>
        </item>
-       <item row="6" column="1">
-        <widget class="QPushButton" name="resetBrushButton">
-         <property name="text">
-          <string>Reset Predefined Tip</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="KisDoubleSliderSpinBox" name="brushRotationSpinBox" native="true">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-        </widget>
-       </item>
        <item row="0" column="0">
         <widget class="QLabel" name="brushSizeLabel">
          <property name="text">
@@ -199,13 +186,30 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="1">
-        <widget class="KisDoubleSliderSpinBox" name="brushSizeSpinBox" native="true">
+       <item row="4" column="0" colspan="2">
+        <widget class="QCheckBox" name="preserveBrushPresetSettings">
+         <property name="text">
+          <string>Preserve Brush Preset Settings</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="KisSpacingSelectionWidget" name="brushSpacingSelectionWidget" native="true">
          <property name="sizePolicy">
           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="1">
+        <widget class="QPushButton" name="resetBrushButton">
+         <property name="text">
+          <string>Reset Predefined Tip</string>
          </property>
         </widget>
        </item>
@@ -268,15 +272,28 @@
          </layout>
         </widget>
        </item>
-       <item row="4" column="0" colspan="2">
-        <widget class="QCheckBox" name="preserveBrushPresetSettings">
-         <property name="text">
-          <string>Preserve Brush Preset Settings</string>
+       <item row="1" column="1">
+        <layout class="QHBoxLayout" name="horizontalLayout_4">
+         <property name="spacing">
+          <number>0</number>
          </property>
-         <property name="checked">
-          <bool>true</bool>
-         </property>
-        </widget>
+         <item>
+          <widget class="KisAngleSelector" name="brushRotationAngleSelector" native="true"/>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>0</width>
+             <height>0</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
        </item>
       </layout>
      </item>
@@ -314,6 +331,12 @@
    <class>KisSpacingSelectionWidget</class>
    <extends>QWidget</extends>
    <header>kis_spacing_selection_widget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisAngleSelector</class>
+   <extends>QWidget</extends>
+   <header location="global">KisAngleSelector.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

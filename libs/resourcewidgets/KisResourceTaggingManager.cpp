@@ -1,26 +1,13 @@
 /*
   *   This file is part of the KDE project
-  *   Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
-  *   Copyright (c) 2007 Jan Hambrecht <jaham@gmx.net>
-  *   Copyright (c) 2007 Sven Langkamp <sven.langkamp@gmail.com>
-  *   Copyright (C) 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
-  *   Copyright (c) 2011 José Luis Vergara <pentalis@gmail.com>
-  *   Copyright (c) 2013 Sascha Suelzer <s.suelzer@gmail.com>
-  *   Copyright (c) 2020 Agata Cacko <cacko.azh@gmail.com>
-  *   This library is free software; you can redistribute it and/or
-  *   modify it under the terms of the GNU Library General Public
-  *   License as published by the Free Software Foundation; either
-  *   version 2 of the License, or (at your option) any later version.
- *
-  *   This library is distributed in the hope that it will be useful,
-  *   but WITHOUT ANY WARRANTY; without even the implied warranty of
-  *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-  *   Library General Public License for more details.
- *
-  *   You should have received a copy of the GNU Library General Public License
-  *   along with this library; see the file COPYING.LIB.  If not, write to
-  *   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-  *   Boston, MA 02110-1301, USA.
+  *   SPDX-FileCopyrightText: 2002 Patrick Julien <freak@codepimps.org>
+  *   SPDX-FileCopyrightText: 2007 Jan Hambrecht <jaham@gmx.net>
+  *   SPDX-FileCopyrightText: 2007 Sven Langkamp <sven.langkamp@gmail.com>
+  *   SPDX-FileCopyrightText: 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
+  *   SPDX-FileCopyrightText: 2011 José Luis Vergara <pentalis@gmail.com>
+  *   SPDX-FileCopyrightText: 2013 Sascha Suelzer <s.suelzer@gmail.com>
+  *   SPDX-FileCopyrightText: 2020 Agata Cacko <cacko.azh@gmail.com>
+  *   SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #include "KisResourceTaggingManager.h"
@@ -37,10 +24,8 @@
 #include <KoResource.h>
 
 #include <KisResourceModel.h>
-#include <KisResourceModelProvider.h>
 #include <KisTagFilterResourceProxyModel.h>
 #include <KisTagModel.h>
-#include <KisTagModelProvider.h>
 
 #include "KisTagFilterWidget.h"
 #include "KisTagChooserWidget.h"
@@ -51,24 +36,18 @@
 class KisResourceTaggingManager::Private
 {
 public:
-    ///
     /// \brief tagChooser tag chooser widget (tags combobox + tag tool button with the popup)
-    ///
     KisTagChooserWidget *tagChooser;
-    ///
+
     /// \brief tagFilter resources filter widget (resources filter box + "filter by tag" checkbox)
-    ///
     KisTagFilterWidget *tagFilter;
 
-    ///
     /// \brief model main data model for resources in the item chooser that the Tagging Manager is taking care of
-    ///
     QPointer<KisTagFilterResourceProxyModel> model;
 
-    ///
+
     /// \brief tagModel main tag model for tags in the tags combobox
-    ///
-    KisTagModel* tagModel;
+    KisTagModel *tagModel;
 };
 
 
@@ -79,7 +58,7 @@ KisResourceTaggingManager::KisResourceTaggingManager(QString resourceType, KisTa
 {
     d->model = model;
 
-    d->tagModel = KisTagModelProvider::tagModel(resourceType);
+    d->tagModel = new KisTagModel(resourceType);
     d->tagChooser = new KisTagChooserWidget(d->tagModel, parent);
     d->tagFilter = new KisTagFilterWidget(d->tagModel, parent);
 
@@ -91,6 +70,7 @@ KisResourceTaggingManager::KisResourceTaggingManager(QString resourceType, KisTa
 
 KisResourceTaggingManager::~KisResourceTaggingManager()
 {
+    delete d->tagModel;
     delete d;
 }
 
@@ -102,17 +82,17 @@ void KisResourceTaggingManager::showTaggingBar(bool show)
 
 void KisResourceTaggingManager::tagChooserIndexChanged(const KisTagSP tag)
 {
-    d->model->setTag(tag);
+    d->model->setTagFilter(tag);
 }
 
 void KisResourceTaggingManager::tagSearchLineEditTextChanged(const QString& lineEditText)
 {
-    d->model->setSearchBoxText(lineEditText);
+    d->model->setSearchText(lineEditText);
 }
 
 void KisResourceTaggingManager::slotFilterByTagChanged(const bool filterByTag)
 {
-    d->model->setFilterByCurrentTag(filterByTag);
+    d->model->setFilterInCurrentTag(filterByTag);
 }
 
 void KisResourceTaggingManager::contextMenuRequested(KoResourceSP resource, QPoint pos)
@@ -122,8 +102,9 @@ void KisResourceTaggingManager::contextMenuRequested(KoResourceSP resource, QPoi
     if (!resource || !d->tagChooser->isVisible())
         return;
 
-    KisResourceItemChooserContextMenu menu(resource, d->tagChooser->currentlySelectedTag());
+    KisResourceItemChooserContextMenu menu(resource, d->tagChooser->currentlySelectedTag(), d->tagChooser);
     menu.exec(pos);
+
 }
 
 KisTagChooserWidget *KisResourceTaggingManager::tagChooserWidget()

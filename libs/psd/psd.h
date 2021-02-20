@@ -1,19 +1,8 @@
 /*
- *  Copyright (c) 2010 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2010 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 /*
  * Constants and defines taken from gimp and psdparse
@@ -255,8 +244,7 @@ public:
         }
     }
 
-    virtual ~psd_layer_effects_shadow_base() {
-    }
+    virtual ~psd_layer_effects_shadow_base();
 
     QPoint calculateOffset(const psd_layer_effects_context *context) const;
 
@@ -430,10 +418,7 @@ public:
         m_gradient = value;
     }
 
-    virtual void scaleLinearSizes(qreal scale) {
-        m_distance *= scale;
-        m_size *= scale;
-    }
+    virtual void scaleLinearSizes(qreal scale);
 
 private:
     // internal
@@ -485,6 +470,8 @@ public:
     // using psd_layer_effects_shadow_base::setContourLookupTable;
     // using psd_layer_effects_shadow_base::setAntiAliased;
     // using psd_layer_effects_shadow_base::setNoise;
+
+    ~psd_layer_effects_shadow_common() override;
 };
 
 class KRITAPSD_EXPORT psd_layer_effects_drop_shadow : public psd_layer_effects_shadow_common
@@ -495,6 +482,7 @@ public:
     ///        in the classes we don't want
 
     //using psd_layer_effects_shadow_base::setKnocksOut;
+    ~psd_layer_effects_drop_shadow();
 };
 
 // isdw: https://www.adobe.com/devnet-apps/photoshop/fileformatashtml/PhotoshopFileFormats.htm#50577409_22203
@@ -506,6 +494,8 @@ public:
         setInvertsSelection(true);
         setEdgeHidden(false);
     }
+
+    ~psd_layer_effects_inner_shadow() override;
 };
 
 class KRITAPSD_EXPORT psd_layer_effects_glow_common : public psd_layer_effects_shadow_base
@@ -517,7 +507,7 @@ public:
         setBlendMode(COMPOSITE_LINEAR_DODGE);
         setColor(Qt::white);
     }
-
+    ~psd_layer_effects_glow_common() override;
     /// FIXME: 'using' is not supported by MSVC, so please refactor in
     ///        some other way to ensure that the setters are not used
     ///        in the classes we don't want
@@ -542,6 +532,8 @@ public:
 // oglw: https://www.adobe.com/devnet-apps/photoshop/fileformatashtml/PhotoshopFileFormats.htm#50577409_25738
 class KRITAPSD_EXPORT psd_layer_effects_outer_glow : public psd_layer_effects_glow_common
 {
+public:
+    ~psd_layer_effects_outer_glow() override;
 };
 
 // iglw: https://www.adobe.com/devnet-apps/photoshop/fileformatashtml/PhotoshopFileFormats.htm#50577409_27692
@@ -561,6 +553,7 @@ public:
     void setSource(psd_glow_source value) {
         m_source = value;
     }
+    ~psd_layer_effects_inner_glow() override;
 
 private:
     psd_glow_source m_source;
@@ -896,6 +889,7 @@ struct psd_layer_effects_overlay_base : public psd_layer_effects_shadow_base
     psd_layer_effects_overlay_base()
         : m_scale(100),
           m_alignWithLayer(true),
+          m_dither(false),
           m_reverse(false),
           m_style(psd_gradient_style_linear),
           m_gradientXOffset(0),
@@ -920,6 +914,10 @@ struct psd_layer_effects_overlay_base : public psd_layer_effects_shadow_base
 
     bool alignWithLayer() const {
         return m_alignWithLayer;
+    }
+
+    bool dither() const {
+        return m_dither;
     }
 
     bool reverse() const {
@@ -959,6 +957,10 @@ public:
 
     void setAlignWithLayer(bool value) {
         m_alignWithLayer = value;
+    }
+
+    void setDither(bool value) {
+        m_dither = value;
     }
 
     void setReverse(bool value) {
@@ -1003,6 +1005,7 @@ private:
     bool m_alignWithLayer;
 
     // Gradient
+    bool m_dither;
     bool m_reverse;
     psd_gradient_style m_style;
     int m_gradientXOffset; // 0..100%

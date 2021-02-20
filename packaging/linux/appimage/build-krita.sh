@@ -1,4 +1,7 @@
 #!/bin/bash
+#
+#  SPDX-License-Identifier: GPL-3.0-or-later
+#
 
 # Halt on errors and be verbose about what we are doing
 set -e
@@ -9,7 +12,7 @@ export BUILD_PREFIX=$1
 export KRITA_SOURCES=$2
 export BRANDING="${3}"
 
-# qjsonparser, used to add metadata to the plugins needs to work in a en_US.UTF-8 environment. 
+# qjsonparser, used to add metadata to the plugins needs to work in a en_US.UTF-8 environment.
 # That's not always the case, so make sure it is
 export LC_ALL=en_US.UTF-8
 export LANG=en_us.UTF-8
@@ -43,10 +46,10 @@ if [ -z "${BRANDING}" ]; then
         #if KRITA_BETA is set, set channel to Beta, otherwise set it to stable
         grep "define KRITA_BETA 1" libs/version/kritaversion.h;
         is_beta=$?
-        
+
         grep "define KRITA_RC 1" libs/version/kritaversion.h;
         is_rc=$?
-    
+
         if [ is_beta -eq 0 -o is_rc -eq 0 ]; then
             BRANDING="Beta"
         else
@@ -80,7 +83,40 @@ cmake $KRITA_SOURCES \
     -DHAVE_MEMORY_LEAK_TRACKER=FALSE \
     -DBRANDING="${BRANDING}"
 
-    
+
 # Build and Install Krita (ready for the next phase)
 make -j$CPU_COUNT install
 
+# We add Krita's AppImage location for plugins (GMic)
+export PLUGINS_INSTALL_PREFIX=$BUILD_PREFIX/krita.appdir/usr
+
+# Setup variables needed to help everything find what we build
+ARCH=`dpkg --print-architecture`
+export LD_LIBRARY_PATH=$PLUGINS_INSTALL_PREFIX/lib:$LD_LIBRARY_PATH
+export CMAKE_PREFIX_PATH=$PLUGINS_INSTALL_PREFIX:$CMAKE_PREFIX_PATH
+
+# Make sure our build directory exists
+if [ ! -d $BUILD_PREFIX/plugins-build/ ] ; then
+    mkdir -p $BUILD_PREFIX/plugins-build/
+fi
+
+# The 3rdparty dependency handling in Krita also requires the install directory to be pre-created
+if [ ! -d $DOWNLOADS_DIR ] ; then
+    mkdir -p $DOWNLOADS_DIR
+fi
+
+# Switch to our build directory as we're basically ready to start building...
+cd $BUILD_PREFIX/plugins-build/
+
+# Determine how many CPUs we have
+CPU_COUNT=`grep processor /proc/cpuinfo | wc -l`
+
+# Configure the dependencies for building
+cmake $KRITA_SOURCES/3rdparty_plugins \
+    -DCMAKE_INSTALL_PREFIX=$PLUGINS_INSTALL_PREFIX \
+    -DINSTALL_ROOT=$PLUGINS_INSTALL_PREFIX \
+    -DEXTERNALS_DOWNLOAD_DIR=$DOWNLOADS_DIR \
+    -DSUBMAKE_JOBS=$CPU_COUNT
+
+# Now start building everything we need, in the appropriate order
+cmake --build . --target ext_gmic -- -j$CPU_COUNT

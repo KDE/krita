@@ -1,19 +1,7 @@
 /*
- * Copyright (C) Wolthera van Hovell tot Westerflier <griffinvalley@gmail.com>, (C) 2016
+ * SPDX-FileCopyrightText: 2016 Wolthera van Hovell tot Westerflier <griffinvalley@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include <QList>
@@ -47,7 +35,7 @@
 #include "kis_icon_utils.h"
 #include "KisSqueezedComboBox.h"
 
-std::function<KisScreenColorPickerBase *(QWidget *)> KisDlgInternalColorSelector::s_screenColorPickerFactory = 0;
+std::function<KisScreenColorSamplerBase *(QWidget *)> KisDlgInternalColorSelector::s_screenColorSamplerFactory = 0;
 
 struct KisDlgInternalColorSelector::Private
 {
@@ -63,7 +51,7 @@ struct KisDlgInternalColorSelector::Private
     KisHexColorInput *hexColorInput = 0;
     KisPaletteModel *paletteModel = 0;
     KisPaletteChooser *paletteChooser = 0;
-    KisScreenColorPickerBase *screenColorPicker = 0;
+    KisScreenColorSamplerBase *screenColorSampler = 0;
 };
 
 KisDlgInternalColorSelector::KisDlgInternalColorSelector(QWidget *parent, KoColor color, Config config, const QString &caption, const KoColorDisplayRendererInterface *displayRenderer)
@@ -153,15 +141,15 @@ KisDlgInternalColorSelector::KisDlgInternalColorSelector(QWidget *parent, KoColo
         m_d->hexColorInput->setToolTip(i18n("This is a hexcode input, for webcolors. It can only get colors in the sRGB space."));
     }
 
-    // KisScreenColorPicker is in the kritaui module, so dependency inversion is used to access it.
-    m_ui->screenColorPickerWidget->setLayout(new QHBoxLayout());
-    if (s_screenColorPickerFactory) {
-        m_d->screenColorPicker = s_screenColorPickerFactory(m_ui->screenColorPickerWidget);
-        m_ui->screenColorPickerWidget->layout()->addWidget(m_d->screenColorPicker);
-        if (config.screenColorPicker) {
-            connect(m_d->screenColorPicker, SIGNAL(sigNewColorPicked(KoColor)),this, SLOT(slotColorUpdated(KoColor)));
+    // KisScreenColorSampler is in the kritaui module, so dependency inversion is used to access it.
+    m_ui->screenColorSamplerWidget->setLayout(new QHBoxLayout());
+    if (s_screenColorSamplerFactory) {
+        m_d->screenColorSampler = s_screenColorSamplerFactory(m_ui->screenColorSamplerWidget);
+        m_ui->screenColorSamplerWidget->layout()->addWidget(m_d->screenColorSampler);
+        if (config.screenColorSampler) {
+            connect(m_d->screenColorSampler, SIGNAL(sigNewColorSampled(KoColor)),this, SLOT(slotColorUpdated(KoColor)));
         } else {
-            m_d->screenColorPicker->hide();
+            m_d->screenColorSampler->hide();
         }
     }
 
@@ -304,8 +292,8 @@ void KisDlgInternalColorSelector::updateAllElements(QObject *source)
         m_d->compressColorChanges->start();
     }
 
-    if (m_d->screenColorPicker) {
-        m_d->screenColorPicker->updateIcons();
+    if (m_d->screenColorSampler) {
+        m_d->screenColorSampler->updateIcons();
     }
 }
 

@@ -1,20 +1,7 @@
-/*
- *  Copyright (c) 2014 Victor Lafon metabolic.ewilan@hotmail.fr
+﻿/*
+ *  SPDX-FileCopyrightText: 2014 Victor Lafon metabolic.ewilan @hotmail.fr
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 #ifndef DLG_BUNDLE_MANAGER_H
 #define DLG_BUNDLE_MANAGER_H
@@ -46,29 +33,29 @@ public:
         QSize sizeHint(const QStyleOptionViewItem & option, const QModelIndex & index) const override;
         void paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) const override;
 
-
     private:
         KisStorageFilterProxyModel* m_bundleManagerProxyModel;
 
     };
 
-
-
     explicit DlgBundleManager(QWidget *parent = 0);
+
+public Q_SLOTS:
+    void done(int res) override;
 
 private Q_SLOTS:
 
     void addBundle();
     void createBundle();
-    void deleteBundle();
+    void toggleBundle();
 
     void slotModelAboutToBeReset();
     void slotModelReset();
     void currentCellSelectedChanged(QModelIndex current, QModelIndex previous);
 
-
 private:
 
+    void updateToggleButton(bool active);
     void updateBundleInformation(QModelIndex current);
     void addBundleToActiveResources(QString filename);
 

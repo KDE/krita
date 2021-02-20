@@ -1,19 +1,7 @@
 /*
- * Copyright (C) Wolthera van Hovell tot Westerflier <griffinvalley@gmail.com>, (C) 2016
+ * SPDX-FileCopyrightText: 2016 Wolthera van Hovell tot Westerflier <griffinvalley@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 #ifndef KIS_COLOR_SELECTOR_CONFIGURATION_H
 #define KIS_COLOR_SELECTOR_CONFIGURATION_H
@@ -28,7 +16,7 @@ class KRITAWIDGETS_EXPORT KisColorSelectorConfiguration {
 public:
 
     enum Type {Ring, Square, Wheel, Triangle, Slider};
-    enum Parameters {H, hsvS, V, hslS, L, SL, SV, SV2, hsvSH, hslSH, VH, LH, SI, SY, hsiSH, hsySH, I, Y, IH, YH, hsiS, hsyS};
+    enum Parameters {H, hsvS, V, hslS, L, SL, SV, SV2, hsvSH, hslSH, VH, LH, SI, SY, hsiSH, hsySH, I, Y, IH, YH, hsiS, hsyS, Hluma};
 
     Type mainType;
     Type subType;
@@ -62,7 +50,8 @@ public:
         int imtp=strili.at(2).toInt();
         int istp=strili.at(3).toInt();
 
-        if(imt>Slider || ist>Slider || imtp>hsyS || istp>hsyS)//this was LH before
+        // Makes sure that Type and Parameters are within bounds.
+        if(imt>Slider || ist>Slider || imtp>Hluma || istp>Hluma)
             return;
 
         mainType = Type(imt);

@@ -1,21 +1,8 @@
 /* This file is part of the Krita project
  *
- * Copyright (C) 2014 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2014 Boudewijn Rempt <boud@valdyas.org>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #include "KisMainWindow.h" // XXX: remove
@@ -180,12 +167,8 @@ public:
     }
 
     void setIndex(int idx) override {
-        KisImageWSP image = this->image();
-        image->requestStrokeCancellation();
-        if(image->tryBarrierLock()) {
-            KUndo2Stack::setIndex(idx);
-            image->unlock();
-        }
+        m_postponedJobs.append({PostponedJob::SetIndex, idx});
+        processPostponedJobs();
     }
 
     void notifySetIndexChangedOneCommand() override {
@@ -203,6 +186,33 @@ public:
     }
 
     void undo() override {
+        m_postponedJobs.append({PostponedJob::Undo, 0});
+        processPostponedJobs();
+    }
+
+
+    void redo() override {
+        m_postponedJobs.append({PostponedJob::Redo, 0});
+        processPostponedJobs();
+    }
+
+private:
+    KisImageWSP image() {
+        KisImageWSP currentImage = m_doc->image();
+        Q_ASSERT(currentImage);
+        return currentImage;
+    }
+
+    void setIndexImpl(int idx) {
+        KisImageWSP image = this->image();
+        image->requestStrokeCancellation();
+        if(image->tryBarrierLock()) {
+            KUndo2Stack::setIndex(idx);
+            image->unlock();
+        }
+    }
+
+    void undoImpl() {
         KisImageWSP image = this->image();
         image->requestUndoDuringStroke();
 
@@ -216,7 +226,7 @@ public:
         }
     }
 
-    void redo() override {
+    void redoImpl() {
         KisImageWSP image = this->image();
         if(image->tryBarrierLock()) {
             KUndo2Stack::redo();
@@ -224,14 +234,51 @@ public:
         }
     }
 
-private:
-    KisImageWSP image() {
-        KisImageWSP currentImage = m_doc->image();
-        Q_ASSERT(currentImage);
-        return currentImage;
+    void processPostponedJobs() {
+        /**
+         * Some undo commands may call QApplication::processEvents(),
+         * see notifySetIndexChangedOneCommand(). That may cause
+         * recursive calls to the undo stack methods when used from
+         * the Undo History docker. Here we try to handle that gracefully
+         * by accumulating all the requests and executing them at the
+         * topmost level of recursion.
+         */
+        if (m_recursionCounter > 0) return;
+
+        m_recursionCounter++;
+
+        while (!m_postponedJobs.isEmpty()) {
+            PostponedJob job = m_postponedJobs.dequeue();
+            switch (job.type) {
+            case PostponedJob::SetIndex:
+                setIndexImpl(job.index);
+                break;
+            case PostponedJob::Redo:
+                redoImpl();
+                break;
+            case PostponedJob::Undo:
+                undoImpl();
+                break;
+            }
+        }
+
+        m_recursionCounter--;
     }
 
 private:
+    int m_recursionCounter = 0;
+
+    struct PostponedJob {
+        enum Type {
+            Undo = 0,
+            Redo,
+            SetIndex
+        };
+        Type type = Undo;
+        int index = 0;
+    };
+    QQueue<PostponedJob> m_postponedJobs;
+
     KisDocument *m_doc;
 };
 
@@ -332,12 +379,16 @@ public:
 
     QList<KisPaintingAssistantSP> assistants;
 
+    StoryboardItemList m_storyboardItemList;
+    QVector<StoryboardComment> m_storyboardCommentList;
+
     QColor globalAssistantsColor;
 
     KisGridConfig gridConfig;
 
     StdLockableWrapper<QMutex> savingLock;
 
+    bool imageModifiedWithoutUndo = false;
     bool modifiedWhileSaving = false;
     QScopedPointer<KisDocument> backgroundSaveDocument;
     QPointer<KoUpdater> savingUpdater;
@@ -432,6 +483,8 @@ void KisDocument::Private::copyFromImpl(const Private &rhs, KisDocument *q, KisD
         q->setMirrorAxisConfig(rhs.mirrorAxisConfig);
         q->setModified(rhs.modified);
         q->setAssistants(KisPaintingAssistant::cloneAssistantList(rhs.assistants));
+        q->setStoryboardItemList(StoryboardItem::cloneStoryboardItemList(rhs.m_storyboardItemList));
+        q->setStoryboardCommentList(rhs.m_storyboardCommentList);
         q->setGridConfig(rhs.gridConfig);
     } else {
         // in CONSTRUCT mode, we cannot use the functions of KisDocument
@@ -440,8 +493,11 @@ void KisDocument::Private::copyFromImpl(const Private &rhs, KisDocument *q, KisD
         mirrorAxisConfig = rhs.mirrorAxisConfig;
         modified = rhs.modified;
         assistants = KisPaintingAssistant::cloneAssistantList(rhs.assistants);
+        m_storyboardItemList = StoryboardItem::cloneStoryboardItemList(rhs.m_storyboardItemList);
+        m_storyboardCommentList = rhs.m_storyboardCommentList;
         gridConfig = rhs.gridConfig;
     }
+    imageModifiedWithoutUndo = rhs.imageModifiedWithoutUndo;
     m_bAutoDetectedMime = rhs.m_bAutoDetectedMime;
     m_url = rhs.m_url;
     m_file = rhs.m_file;
@@ -819,6 +875,7 @@ void KisDocument::slotCompleteSavingDocument(const KritaUtils::ExportFileJob &jo
                 if (d->undoStack->isClean()) {
                     setModified(false);
                 } else {
+                    d->imageModifiedWithoutUndo = false;
                     d->undoStack->setClean();
                 }
             }
@@ -1356,9 +1413,30 @@ QPixmap KisDocument::generatePreview(const QSize& size)
 
     if (image) {
         QRect bounds = image->bounds();
+        QSize originalSize = bounds.size();
         QSize newSize = bounds.size();
         newSize.scale(size, Qt::KeepAspectRatio);
-        QPixmap px = QPixmap::fromImage(image->convertToQImage(newSize, 0));
+
+        bool pixelArt = false;
+        // determine if the image is pixel art or not
+        if (originalSize.width() < size.width() && originalSize.height() < size.height()) {
+            // the image must be smaller than the requested preview
+            // the scale must be integer
+            if (newSize.height()%originalSize.height() == 0 && newSize.width()%originalSize.width() == 0) {
+                pixelArt = true;
+            }
+        }
+
+        QPixmap px;
+        if (pixelArt) {
+            // do not scale while converting (because it uses Bicubic)
+            QImage original = image->convertToQImage(originalSize, 0);
+            // scale using FastTransformation, which is probably Nearest neighbour, suitable for pixel art
+            QImage scaled = original.scaled(newSize, Qt::KeepAspectRatio, Qt::FastTransformation);
+            px = QPixmap::fromImage(scaled);
+        } else {
+            px = QPixmap::fromImage(image->convertToQImage(newSize, 0));
+        }
         if (px.size() == QSize(0,0)) {
             px = QPixmap(newSize);
             QPainter gc(&px);
@@ -1398,13 +1476,15 @@ QString KisDocument::generateAutoSaveFileName(const QString & path) const
         // Never saved?
 #ifdef Q_OS_WIN
         // On Windows, use the temp location (https://bugs.kde.org/show_bug.cgi?id=314921)
-        retval = QString("%1%2%7%3-%4-%5-autosave%6").arg(QDir::tempPath()).arg('/').arg("krita").arg(qApp->applicationPid()).arg(objectName()).arg(extension).arg(prefix);
+        retval = QString("%1%2%3%4-%5-%6-autosave%7").arg(QDir::tempPath()).arg('/').arg(prefix).arg("krita").arg(qApp->applicationPid()).arg(objectName()).arg(extension);
 #else
         // On Linux, use a temp file in $HOME then. Mark it with the pid so two instances don't overwrite each other's autosave file
-        retval = QString("%1%2%7%3-%4-%5-autosave%6").arg(QDir::homePath()).arg('/').arg("krita").arg(qApp->applicationPid()).arg(objectName()).arg(extension).arg(prefix);
+        retval = QString("%1%2%3%4-%5-%6-autosave%7").arg(QDir::homePath()).arg('/').arg(prefix).arg("krita").arg(qApp->applicationPid()).arg(objectName()).arg(extension);
 #endif
     } else {
-        retval = QString("%1%2%5%3-autosave%4").arg(dir).arg('/').arg(filename).arg(extension).arg(prefix);
+        // Beware: don't reorder arguments
+        //   otherwise in case of filename = '1-file.kra' it will become '.-file.kra-autosave.kra' instead of '.1-file.kra-autosave.kra'
+        retval = QString("%1%2%3%4-autosave%5").arg(dir).arg('/').arg(prefix).arg(filename).arg(extension);
     }
 
     //qDebug() << "generateAutoSaveFileName() for path" << path << ":" << retval;
@@ -1677,6 +1757,10 @@ void KisDocument::setModified(bool mod)
     d->modifiedAfterAutosave = mod;
     d->modifiedWhileSaving = mod;
 
+    if (!mod) {
+        d->imageModifiedWithoutUndo = mod;
+    }
+
     if (mod == isModified())
         return;
 
@@ -1871,7 +1955,7 @@ void KisDocument::endMacro()
 
 void KisDocument::slotUndoStackCleanChanged(bool value)
 {
-    setModified(!value);
+    setModified(!value || d->imageModifiedWithoutUndo);
 }
 
 void KisDocument::slotConfigChanged()
@@ -1949,18 +2033,44 @@ void KisDocument::setPaletteList(const QList<KoColorSetSP > &paletteList, bool e
             }
         }
         if (oldPaletteList != paletteList) {
-            KisResourceModel *resourceModel = KisResourceModelProvider::resourceModel(ResourceType::Palettes);
+            KisResourceModel resourceModel(ResourceType::Palettes);
             Q_FOREACH(KoColorSetSP palette, oldPaletteList) {
-                resourceModel->removeResource(palette);
+                resourceModel.setResourceInactive(resourceModel.indexForResource(palette));
             }
             Q_FOREACH(KoColorSetSP palette, paletteList) {
                 qDebug()<< "loading palette into document" << palette->filename();
-                resourceModel->addResource(palette, d->documentStorageID);
+                resourceModel.addResource(palette, d->documentStorageID);
             }
             if (emitSignal) {
                 emit sigPaletteListChanged(oldPaletteList, paletteList);
             }
         }
+    }
+}
+
+StoryboardItemList KisDocument::getStoryboardItemList()
+{
+    return d->m_storyboardItemList;
+}
+
+void KisDocument::setStoryboardItemList(const StoryboardItemList &storyboardItemList, bool emitSignal)
+{
+    d->m_storyboardItemList = storyboardItemList;
+    if (emitSignal) {
+        emit sigStoryboardItemListChanged();
+    }
+}
+
+QVector<StoryboardComment> KisDocument::getStoryboardCommentsList()
+{
+    return d->m_storyboardCommentList;
+}
+
+void KisDocument::setStoryboardCommentList(const QVector<StoryboardComment> &storyboardCommentList, bool emitSignal)
+{
+    d->m_storyboardCommentList = storyboardCommentList;
+    if (emitSignal) {
+        emit sigStoryboardCommentListChanged();
     }
 }
 
@@ -2129,6 +2239,7 @@ bool KisDocument::newImage(const QString& name,
     Q_CHECK_PTR(image);
 
     connect(image, SIGNAL(sigImageModified()), this, SLOT(setImageModified()), Qt::UniqueConnection);
+    connect(image, SIGNAL(sigImageModifiedWithoutUndo()), this, SLOT(setImageModifiedWithoutUndo()), Qt::UniqueConnection);
     image->setResolution(imageResolution, imageResolution);
 
     image->assignImageProfile(cs->profile());
@@ -2141,9 +2252,12 @@ bool KisDocument::newImage(const QString& name,
     cfg.defImageWidth(width);
     cfg.defImageHeight(height);
     cfg.defImageResolution(imageResolution);
-    cfg.defColorModel(image->colorSpace()->colorModelId().id());
-    cfg.setDefaultColorDepth(image->colorSpace()->colorDepthId().id());
-    cfg.defColorProfile(image->colorSpace()->profile()->name());
+    if (!cfg.useDefaultColorSpace())
+    {
+        cfg.defColorModel(image->colorSpace()->colorModelId().id());
+        cfg.setDefaultColorDepth(image->colorSpace()->colorDepthId().id());
+        cfg.defColorProfile(image->colorSpace()->profile()->name());
+    }
 
     bool autopin = cfg.autoPinLayersToTimeline();
 
@@ -2328,6 +2442,7 @@ void KisDocument::setCurrentImage(KisImageSP image, bool forceInitialUpdate)
     d->shapeController->setImage(image);
     setModified(false);
     connect(d->image, SIGNAL(sigImageModified()), this, SLOT(setImageModified()), Qt::UniqueConnection);
+    connect(d->image, SIGNAL(sigImageModifiedWithoutUndo()), this, SLOT(setImageModifiedWithoutUndo()), Qt::UniqueConnection);
     connect(d->image, SIGNAL(sigLayersChangedAsync()), this, SLOT(slotImageRootChanged()));
 
     if (forceInitialUpdate) {
@@ -2348,7 +2463,13 @@ void KisDocument::hackPreliminarySetImage(KisImageSP image)
 void KisDocument::setImageModified()
 {
     // we only set as modified if undo stack is not at clean state
-    setModified(!d->undoStack->isClean());
+    setModified(d->imageModifiedWithoutUndo || !d->undoStack->isClean());
+}
+
+void KisDocument::setImageModifiedWithoutUndo()
+{
+    d->imageModifiedWithoutUndo = true;
+    setImageModified();
 }
 
 

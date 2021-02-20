@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>VideoExportOptionsDialog</class>
  <widget class="QWidget" name="VideoExportOptionsDialog">
   <property name="geometry">
@@ -21,14 +25,14 @@
      </property>
      <widget class="QWidget" name="pgH264">
       <layout class="QFormLayout" name="formLayout">
-       <item row="0" column="0">
+       <item column="0" row="0">
         <widget class="QLabel" name="lblCRFH264">
          <property name="text">
           <string>Constant Rate Factor:</string>
          </property>
         </widget>
        </item>
-       <item row="0" column="1">
+       <item column="1" row="0">
         <widget class="KisSliderSpinBox" name="intCRFH264" native="true">
          <property name="sizePolicy">
           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
@@ -38,48 +42,48 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="0">
+       <item column="0" row="1">
         <widget class="QLabel" name="lblPresetH264">
          <property name="text">
           <string>Preset:</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="1">
+       <item column="1" row="1">
         <widget class="QComboBox" name="cmbPresetH264"/>
        </item>
-       <item row="2" column="0">
+       <item column="0" row="2">
         <widget class="QLabel" name="lblProfileH264">
          <property name="text">
           <string comment="Label of H.264 encoder profiles">Profile:</string>
          </property>
         </widget>
        </item>
-       <item row="2" column="1">
+       <item column="1" row="2">
         <widget class="QComboBox" name="cmbProfileH264"/>
        </item>
-       <item row="3" column="0">
+       <item column="0" row="3">
         <widget class="QLabel" name="lblTuneH264">
          <property name="text">
           <string>Tune:</string>
          </property>
         </widget>
        </item>
-       <item row="3" column="1">
+       <item column="1" row="3">
         <widget class="QComboBox" name="cmbTuneH264"/>
        </item>
       </layout>
      </widget>
      <widget class="QWidget" name="pgH265">
       <layout class="QFormLayout" name="formLayout_3">
-       <item row="0" column="0">
+       <item column="0" row="0">
         <widget class="QLabel" name="lblCRFH265">
          <property name="text">
           <string>Constant Rate Factor:</string>
          </property>
         </widget>
        </item>
-       <item row="0" column="1">
+       <item column="1" row="0">
         <widget class="KisSliderSpinBox" name="intCRFH265" native="true">
          <property name="sizePolicy">
           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
@@ -89,44 +93,44 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="0">
+       <item column="0" row="1">
         <widget class="QLabel" name="lblPresetH265">
          <property name="text">
           <string>Preset:</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="1">
+       <item column="1" row="1">
         <widget class="QComboBox" name="cmbPresetH265"/>
        </item>
-       <item row="2" column="0">
+       <item column="0" row="2">
         <widget class="QLabel" name="lblProfileH265">
          <property name="text">
           <string comment="Label of H.265 encoder profiles">Profile:</string>
          </property>
         </widget>
        </item>
-       <item row="2" column="1">
+       <item column="1" row="2">
         <widget class="QComboBox" name="cmbProfileH265"/>
        </item>
-       <item row="3" column="0">
+       <item column="0" row="3">
         <widget class="QLabel" name="lblTuneH265">
          <property name="text">
           <string>Tune:</string>
          </property>
         </widget>
        </item>
-       <item row="3" column="1">
+       <item column="1" row="3">
         <widget class="QComboBox" name="cmbTuneH265"/>
        </item>
-       <item row="4" column="0">
+       <item column="0" row="4">
         <widget class="QCheckBox" name="chkUseHDRMetadata">
          <property name="text">
           <string>HDR Mode</string>
          </property>
         </widget>
        </item>
-       <item row="4" column="1">
+       <item column="1" row="4">
         <widget class="QPushButton" name="btnHdrMetadata">
          <property name="text">
           <string>HDR Metadata...</string>
@@ -137,14 +141,14 @@
      </widget>
      <widget class="QWidget" name="pgTheora">
       <layout class="QFormLayout" name="formLayout_2">
-       <item row="0" column="0">
+       <item column="0" row="0">
         <widget class="QLabel" name="label_3">
          <property name="text">
           <string>Bitrate:</string>
          </property>
         </widget>
        </item>
-       <item row="0" column="1">
+       <item column="1" row="0">
         <widget class="KisSliderSpinBox" name="intBitrate" native="true">
          <property name="sizePolicy">
           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
@@ -158,21 +162,21 @@
      </widget>
      <widget class="QWidget" name="pgVP9">
       <layout class="QFormLayout" name="formLayout_3">
-       <item row="0" column="0">
+       <item column="0" row="0">
         <widget class="QLabel" name="label">
          <property name="text">
           <string>Bitrate (MBit/s)</string>
          </property>
         </widget>
        </item>
-       <item row="0" column="1">
+       <item column="1" row="0">
         <widget class="QSpinBox" name="vp9Mbits">
          <property name="value">
           <number>2</number>
          </property>
         </widget>
        </item>
-       <item row="1" column="0">
+       <item column="0" row="1">
         <widget class="QCheckBox" name="vp9Lossless">
          <property name="text">
           <string>Lossless</string>

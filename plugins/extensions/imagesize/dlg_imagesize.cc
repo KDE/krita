@@ -1,23 +1,11 @@
 /*
  *  dlg_imagesize.cc - part of KimageShop^WKrayon^WKrita
  *
- *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2009 C. Boemann <cbo@boemann.dk>
- *  Copyright (c) 2013 Juan Palacios <jpalaciosdev@gmail.com>
+ *  SPDX-FileCopyrightText: 2004 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2009 C. Boemann <cbo@boemann.dk>
+ *  SPDX-FileCopyrightText: 2013 Juan Palacios <jpalaciosdev@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "dlg_imagesize.h"
@@ -39,6 +27,7 @@
 #include "kis_document_aware_spin_box_unit_manager.h"
 
 static const int maxImagePixelSize = 100000000;
+static KisFilterStrategy *lastUsedFilter = nullptr;
 
 static const QString pixelStr(KoUnit::unitDescription(KoUnit::Pixel));
 static const QString percentStr(i18n("Percent (%)"));
@@ -59,6 +48,10 @@ DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolu
     setButtons(Ok | Cancel);
     setDefaultButton(Ok);
 
+    // Store original size.
+    m_originalSize.setWidth(width);
+    m_originalSize.setHeight(height);
+
     m_page = new WdgImageSize(this);
 
     Q_CHECK_PTR(m_page);
@@ -66,8 +59,19 @@ DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolu
     m_page->setObjectName("image_size");
 
     m_page->pixelFilterCmb->setIDList(KisFilterStrategyRegistry::instance()->listKeys());
+    m_page->pixelFilterCmb->allowAuto(true);
     m_page->pixelFilterCmb->setToolTip(KisFilterStrategyRegistry::instance()->formattedDescriptions());
-    m_page->pixelFilterCmb->setCurrent("Bicubic");
+
+    if (lastUsedFilter) { // Restore or Init..
+        m_page->pixelFilterCmb->setCurrent(lastUsedFilter->id());
+    } else {
+        m_page->pixelFilterCmb->setCurrent(KisCmbIDList::AutoOptionID);
+    }
+
+    connect(this, &DlgImageSize::sigDesiredSizeChanged, [this](qint32 width, qint32 height, double){
+        KisFilterStrategy *filterStrategy = KisFilterStrategyRegistry::instance()->autoFilterStrategy(m_originalSize, QSize(width, height));
+        m_page->pixelFilterCmb->setAutoHint(filterStrategy->name());
+    });
 
     /**
      * Initialize Pixel Width and Height fields
@@ -94,6 +98,13 @@ DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolu
     m_page->pixelHeightDouble->changeValue(height);
     m_page->pixelWidthDouble->setDisplayUnit(false);
     m_page->pixelHeightDouble->setDisplayUnit(false);
+
+    connect(m_page->pixelWidthDouble, qOverload<double>(&KisDoubleParseUnitSpinBox::valueChanged), [this](){
+        emit sigDesiredSizeChanged(desiredWidth(), desiredHeight(), desiredResolution());
+    });
+    connect(m_page->pixelHeightDouble, qOverload<double>(&KisDoubleParseUnitSpinBox::valueChanged), [this](){
+        emit sigDesiredSizeChanged(desiredWidth(), desiredHeight(), desiredResolution());
+    });
 
     /// add custom units
 
@@ -277,17 +288,17 @@ DlgImageSize::~DlgImageSize()
     delete m_page;
 }
 
-qint32 DlgImageSize::width()
+qint32 DlgImageSize::desiredWidth()
 {
     return int(m_page->pixelWidthDouble->value());
 }
 
-qint32 DlgImageSize::height()
+qint32 DlgImageSize::desiredHeight()
 {
     return int(m_page->pixelHeightDouble->value());
 }
 
-double DlgImageSize::resolution()
+double DlgImageSize::desiredResolution()
 {
     return currentResolutionPPI();
 }
@@ -295,7 +306,15 @@ double DlgImageSize::resolution()
 KisFilterStrategy *DlgImageSize::filterType()
 {
     KoID filterID = m_page->pixelFilterCmb->currentItem();
-    KisFilterStrategy *filter = KisFilterStrategyRegistry::instance()->value(filterID.id());
+
+    KisFilterStrategy *filter;
+    if (filterID == KisCmbIDList::AutoOptionID) {
+        filter = KisFilterStrategyRegistry::instance()->autoFilterStrategy(m_originalSize, QSize(desiredWidth(), desiredHeight()));
+    } else {
+        filter = KisFilterStrategyRegistry::instance()->value(filterID.id());
+        lastUsedFilter = filter;  // Save for next time!
+    }
+
     return filter;
 }
 

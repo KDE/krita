@@ -1,19 +1,7 @@
 /*
- *  Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2007 Boudewijn Rempt <boud@valdyas.org>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_base_node.h"
@@ -22,8 +10,13 @@
 #include <kis_image.h>
 #include <kis_icon.h>
 #include <KoProperties.h>
+#include <KisAnimatedOpacityProperty.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOpRegistry.h>
+
+#include <QSharedPointer>
+#include "kis_pointer_utils.h"
+
 #include "kis_paint_device.h"
 #include "kis_layer_properties_icons.h"
 #include "kis_default_bounds_node_wrapper.h"
@@ -37,7 +30,7 @@ struct Q_DECL_HIDDEN KisBaseNode::Private
     KisBaseNode::Property hack_visible; //HACK
     QUuid id;
     QMap<QString, KisKeyframeChannel*> keyframeChannels;
-    QScopedPointer<KisScalarKeyframeChannel> opacityChannel;
+    KisAnimatedOpacityProperty opacityProperty;
 
     bool collapsed {false};
     bool supportsLodMoves {false};
@@ -47,6 +40,7 @@ struct Q_DECL_HIDDEN KisBaseNode::Private
 
     Private(KisImageWSP image)
         : id(QUuid::createUuid())
+        , opacityProperty(&properties, OPACITY_OPAQUE_U8)
         , image(image)
     {
     }
@@ -54,6 +48,7 @@ struct Q_DECL_HIDDEN KisBaseNode::Private
     Private(const Private &rhs)
         : compositeOp(rhs.compositeOp),
           id(QUuid::createUuid()),
+          opacityProperty(&properties, OPACITY_OPAQUE_U8),
           collapsed(rhs.collapsed),
           supportsLodMoves(rhs.supportsLodMoves),
           animated(rhs.animated),
@@ -86,6 +81,8 @@ KisBaseNode::KisBaseNode(KisImageWSP image)
     setSupportsLodMoves(true);
 
     m_d->compositeOp = COMPOSITE_OVER;
+
+    connect(&m_d->opacityProperty, SIGNAL(changed(quint8)), this, SIGNAL(opacityChanged(quint8)));
 }
 
 
@@ -94,28 +91,12 @@ KisBaseNode::KisBaseNode(const KisBaseNode & rhs)
     , KisShared()
     , m_d(new Private(*rhs.m_d))
 {
-    if (rhs.m_d->keyframeChannels.size() > 0) {
-        Q_FOREACH(QString key, rhs.m_d->keyframeChannels.keys()) {
-            KisKeyframeChannel* channel = rhs.m_d->keyframeChannels.value(key);
-            if (!channel) {
-                continue;
-            }
-
-            if (channel->inherits("KisScalarKeyframeChannel")) {
-                KisScalarKeyframeChannel* pchannel = qobject_cast<KisScalarKeyframeChannel*>(channel);
-                KIS_ASSERT_RECOVER(pchannel) { continue; }
-
-                KisScalarKeyframeChannel* channelNew = new KisScalarKeyframeChannel(*pchannel, nullptr);
-                KIS_ASSERT(channelNew);
-                m_d->keyframeChannels.insert(channelNew->id(), channelNew);
-
-                if (KoID(key) == KisKeyframeChannel::Opacity) {
-                    m_d->opacityChannel.reset(channelNew);
-                }
-            }
-
-        }
+    if (rhs.m_d->opacityProperty.hasChannel()) {
+        m_d->opacityProperty.transferKeyframeData(rhs.m_d->opacityProperty);
+        m_d->keyframeChannels.insert(m_d->opacityProperty.channel()->id(), m_d->opacityProperty.channel());
     }
+
+    connect(&m_d->opacityProperty, SIGNAL(changed(quint8)), this, SIGNAL(opacityChanged(quint8)));
 }
 
 KisBaseNode::~KisBaseNode()
@@ -123,40 +104,19 @@ KisBaseNode::~KisBaseNode()
     delete m_d;
 }
 
-KisPaintDeviceSP KisBaseNode::colorPickSourceDevice() const
+KisPaintDeviceSP KisBaseNode::colorSampleSourceDevice() const
 {
     return projection();
 }
 
 quint8 KisBaseNode::opacity() const
 {
-    if (m_d->opacityChannel) {
-        qreal value = m_d->opacityChannel->currentValue();
-
-        if (!qIsNaN(value)) {
-            return value;
-        }
-    }
-
-    return nodeProperties().intProperty("opacity", OPACITY_OPAQUE_U8);
+    return m_d->opacityProperty.get();
 }
 
 void KisBaseNode::setOpacity(quint8 val)
 {
-    if (m_d->opacityChannel) {
-        int activeKeyframeTime = m_d->opacityChannel->activeKeyframeTime();
-        KisScalarKeyframeSP scalarKey = m_d->opacityChannel->keyframeAt<KisScalarKeyframe>(activeKeyframeTime);
-
-        if (scalarKey) {
-            scalarKey->setValue(val);
-        }
-    }
-
-    if (opacity() == val) return;
-
-    setNodeProperty("opacity", val);
-
-    baseNodeInvalidateAllFramesCallback();
+    m_d->opacityProperty.set(val);
 }
 
 quint8 KisBaseNode::percentOpacity() const
@@ -393,6 +353,11 @@ bool KisBaseNode::supportsLodMoves() const
     return m_d->supportsLodMoves;
 }
 
+bool KisBaseNode::supportsLodPainting() const
+{
+    return true;
+}
+
 void KisBaseNode::setImage(KisImageWSP image)
 {
     m_d->image = image;
@@ -476,24 +441,14 @@ void KisBaseNode::addKeyframeChannel(KisKeyframeChannel *channel)
 KisKeyframeChannel *KisBaseNode::requestKeyframeChannel(const QString &id)
 {
     if (id == KisKeyframeChannel::Opacity.id()) {
-        Q_ASSERT(m_d->opacityChannel.isNull());
+        Q_ASSERT(!m_d->opacityProperty.hasChannel());
 
         KisPaintDeviceSP device = original();
+        KisNode* node = dynamic_cast<KisNode*>(this);
 
-        if (device) {
-            KisNode* node = dynamic_cast<KisNode*>(this);
-            KisScalarKeyframeChannel * channel = new KisScalarKeyframeChannel(
-                KisKeyframeChannel::Opacity,
-                node
-            );
-
-            channel->setLimits(0, 255);
-            channel->setDefaultInterpolationMode(KisScalarKeyframe::Linear);
-            channel->setDefaultValue(255);
-
-            m_d->opacityChannel.reset(channel);
-
-            return channel;
+        if (device && node) {
+            m_d->opacityProperty.makeAnimated(node);
+            return m_d->opacityProperty.channel();
         }
     }
 

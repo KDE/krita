@@ -1,3 +1,7 @@
+<!--
+  SPDX-FileCopyrightText: none
+  SPDX-License-Identifier: CC0-1.0
+-->
 <RCC>
     <qresource prefix="/kconfig">
         <file alias="kritarc">data/kritarc</file>
@@ -17,6 +21,7 @@
         <file>pics/dark_selection-mode_mask.png</file>
         <file>pics/dark_transparency-disabled.png</file>
         <file>pics/dark_transparency-enabled.png</file>
+        <file>pics/dark_close-tab.png</file>
         <file>pics/dark_trim-to-image.png</file>
         <file>pics/dark_visible.svg</file>
         <file>pics/delete.png</file>
@@ -38,6 +43,7 @@
         <file>pics/light_selection-mode_mask.png</file>
         <file>pics/light_transparency-disabled.png</file>
         <file>pics/light_transparency-enabled.png</file>
+        <file>pics/light_close-tab.png</file>
         <file>pics/light_trim-to-image.png</file>
         <file>pics/light_visible.svg</file>
         <file>pics/linked.png</file>
@@ -71,5 +77,6 @@
         <file>pics/workspace-chooser.png</file>
         <file>pics/svg/light_diagonal-stripe.svg</file>
         <file>pics/svg/light_diagonal-stripe.png</file>
+        <file>pics/support-krita.svg</file>
     </qresource>
 </RCC>

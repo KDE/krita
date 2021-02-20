@@ -1,21 +1,8 @@
 /* This file is part of the KDE project
-   Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
-   Copyright (C) 2000-2004 David Faure <faure@kde.org>
+   SPDX-FileCopyrightText: 1998, 1999 Torben Weis <weis@kde.org>
+   SPDX-FileCopyrightText: 2000-2004 David Faure <faure@kde.org>
 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
-
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
-
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+   SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
 #ifndef KIS_MAIN_WINDOW_H
@@ -81,6 +68,9 @@ public:
      *  Destructor.
      */
     ~KisMainWindow() override;
+
+    QMenu *createPopupMenu() override;
+
 
     QUuid id() const;
 
@@ -334,6 +324,14 @@ public Q_SLOTS:
      */
     void viewFullscreen(bool fullScreen);
 
+    /**
+     * @brief checkActiveStorages checks whether there is at least one bundle available and
+     * at least one paintop preset.
+     */
+    bool checkActiveBundlesAvailable();
+    bool checkPaintOpAvailable();
+
+
 private Q_SLOTS:
     /**
      * Save the list of recent files.
@@ -405,6 +403,10 @@ private Q_SLOTS:
      */
     void slotToolbarToggled(bool toggle);
 
+    /**
+     * Toggle docker titlebars on/off.
+     */
+    void showDockerTitleBars(bool show);
 
     /**
      * File --> Import
@@ -453,6 +455,12 @@ private Q_SLOTS:
     void slotXmlGuiMakingChanges(bool finished);
 
     void orientationChanged();
+
+    void restoreWorkspace();
+
+    void openCommandBar();
+
+    void slotStoragesWarning(const QString &location = QString());
 
 protected:
 

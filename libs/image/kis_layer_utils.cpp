@@ -1,19 +1,7 @@
 /*
- *  Copyright (c) 2015 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2015 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_layer_utils.h"
@@ -45,6 +33,10 @@
 #include "kis_processing_applicator.h"
 #include "kis_image_animation_interface.h"
 #include "kis_keyframe_channel.h"
+#include "kis_raster_keyframe_channel.h"
+#include "kis_projection_leaf.h"
+#include "kis_scalar_keyframe_channel.h"
+#include "kis_time_span.h"
 #include "kis_command_utils.h"
 #include "commands_new/kis_change_projection_color_command.h"
 #include "kis_layer_properties_icons.h"
@@ -55,6 +47,9 @@
 #include <KisCroppedOriginalLayerInterface.h>
 #include "krita_utils.h"
 #include "kis_image_signal_router.h"
+#include "kis_sequential_iterator.h"
+#include "kis_transparency_mask.h"
+#include "kis_paint_device_frames_interface.h"
 
 
 namespace KisLayerUtils {
@@ -99,6 +94,38 @@ namespace KisLayerUtils {
         }
     };
 
+    struct SplitAlphaToMaskInfo {
+        SplitAlphaToMaskInfo(KisImageSP _image, KisNodeSP _node, const QString& maskName)
+            : image(_image)
+            , node(_node)
+            , storage(new SwitchFrameCommand::SharedStorage())
+        {
+            frames = fetchLayerFramesRecursive(_node);
+            mask = new KisTransparencyMask(image, maskName);
+        }
+
+        KisImageWSP image;
+        KisNodeSP node;
+        SwitchFrameCommand::SharedStorageSP storage;
+        QSet<int> frames;
+
+        KisPaintDeviceSP getMaskDevice() {
+            return mask->paintDevice();
+        }
+
+        KisMaskSP getMask() {
+            return mask;
+        }
+
+        KisLayerSP getLayer() {
+            return qobject_cast<KisLayer*>(node.data());
+        }
+
+    private:
+        KisTransparencyMaskSP mask;
+
+    };
+
     struct MergeDownInfo : public MergeDownInfoBase {
         MergeDownInfo(KisImageSP _image,
                       KisLayerSP _prevLayer,
@@ -131,6 +158,132 @@ namespace KisLayerUtils {
         }
     };
 
+    struct ConvertToPaintLayerInfo {
+        ConvertToPaintLayerInfo(KisImageSP image, KisNodeSP node)
+            : storage(new SwitchFrameCommand::SharedStorage())
+            , m_sourceNode(node)
+            , m_image(image)
+            , m_putBehind(false)
+            , m_pinnedToTimeline(false)
+        {
+            m_frames = fetchLayerFramesRecursive(node);
+
+            m_pinnedToTimeline = node->isPinnedToTimeline();
+
+            m_sourcePaintDevice =
+                    m_sourceNode->paintDevice() ? m_sourceNode->projection() : m_sourceNode->original();
+
+            m_compositeOp = m_sourceNode->projectionLeaf()->isLayer() ? m_sourceNode->compositeOpId() : COMPOSITE_OVER;
+
+            KisColorizeMask *colorizeMask = dynamic_cast<KisColorizeMask*>(m_sourceNode.data());
+            if (colorizeMask) {
+                m_sourcePaintDevice = colorizeMask->coloringProjection();
+                m_putBehind = colorizeMask->compositeOpId() == COMPOSITE_BEHIND;
+                if (m_putBehind) {
+                    m_compositeOp = COMPOSITE_OVER;
+                }
+            }
+
+            if (m_sourcePaintDevice) {
+                KisPaintDeviceSP clone;
+
+                if (*m_sourcePaintDevice->colorSpace() !=
+                        *m_sourcePaintDevice->compositionSourceColorSpace()) {
+
+                    clone = new KisPaintDevice(m_sourcePaintDevice->compositionSourceColorSpace());
+                    clone->setDefaultPixel(
+                        m_sourcePaintDevice->defaultPixel().convertedTo(
+                            m_sourcePaintDevice->compositionSourceColorSpace()));
+
+                    QRect rc(m_sourcePaintDevice->extent());
+                    KisPainter::copyAreaOptimized(rc.topLeft(), m_sourcePaintDevice, clone, rc);
+                } else {
+                    clone = new KisPaintDevice(*m_sourcePaintDevice);
+                }
+
+                m_targetNode = new KisPaintLayer(m_image,
+                                                     m_sourceNode->name(),
+                                                     m_sourceNode->opacity(),
+                                                     clone);
+
+                m_targetNode->setCompositeOpId(m_compositeOp);
+
+                if (sourceLayer() && targetLayer()) {
+                    targetLayer()->disableAlphaChannel(sourceLayer()->alphaChannelDisabled());
+                }
+
+                if (sourcePaintLayer() && targetPaintLayer()) {
+                    targetPaintLayer()->setAlphaLocked(sourcePaintLayer()->alphaLocked());
+                }
+            }
+        }
+
+        QSet<int> frames() {
+            return m_frames;
+        }
+
+        KisNodeSP sourceNode() {
+            return m_sourceNode;
+        }
+
+        KisLayerSP sourceLayer() {
+            return qobject_cast<KisLayer*>(m_sourceNode.data());
+        }
+
+        KisNodeList sourceNodes() {
+            KisNodeList list;
+            list << m_sourceNode;
+            return list;
+        }
+
+        KisPaintLayerSP sourcePaintLayer() {
+            return qobject_cast<KisPaintLayer*>(m_sourceNode.data());
+        }
+
+        bool hasTargetNode() {
+            return m_targetNode != nullptr;
+        }
+
+        KisNodeSP targetNode() {
+            return m_targetNode;
+        }
+
+        KisLayerSP targetLayer() {
+            return qobject_cast<KisLayer*>(m_targetNode.data());
+        }
+
+        KisPaintLayerSP targetPaintLayer() {
+            return qobject_cast<KisPaintLayer*>(m_targetNode.data());
+        }
+
+
+        KisImageSP image() {
+            return m_image;
+        }
+
+        KisPaintDeviceSP paintDevice() {
+            return m_sourcePaintDevice;
+        }
+
+        KisNodeList toRemove() {
+            KisNodeList lst;
+            lst << m_sourceNode;
+            return lst;
+        }
+
+        SwitchFrameCommand::SharedStorageSP storage;
+
+    private:
+        KisNodeSP m_sourceNode;
+        KisNodeSP m_targetNode;
+        KisImageWSP m_image;
+        KisPaintDeviceSP m_sourcePaintDevice;
+        QSet<int> m_frames;
+        bool m_putBehind;
+        QString m_compositeOp;
+        bool m_pinnedToTimeline;
+    };
+
     struct MergeMultipleInfo : public MergeDownInfoBase {
         MergeMultipleInfo(KisImageSP _image,
                           KisNodeList _mergedNodes)
@@ -159,6 +312,8 @@ namespace KisLayerUtils {
     typedef QSharedPointer<MergeDownInfoBase> MergeDownInfoBaseSP;
     typedef QSharedPointer<MergeDownInfo> MergeDownInfoSP;
     typedef QSharedPointer<MergeMultipleInfo> MergeMultipleInfoSP;
+    typedef QSharedPointer<SplitAlphaToMaskInfo> SplitAlphaToMaskInfoSP;
+    typedef QSharedPointer<ConvertToPaintLayerInfo> ConvertToPaintLayerInfoSP;
 
     struct FillSelectionMasks : public KUndo2Command {
         FillSelectionMasks(MergeDownInfoBaseSP info) : m_info(info) {}
@@ -293,32 +448,47 @@ namespace KisLayerUtils {
     };
 
     struct RefreshHiddenAreas : public KUndo2Command {
-        RefreshHiddenAreas(MergeDownInfoBaseSP info) : m_info(info) {}
+        RefreshHiddenAreas(MergeDownInfoBaseSP info) : m_image(info->image), m_nodes(info->allSrcNodes()) {}
+        RefreshHiddenAreas(KisImageSP image, KisNodeList nodes) : m_image(image), m_nodes(nodes) {}
+        RefreshHiddenAreas(KisImageSP image, KisNodeSP node) : m_image(image), m_nodes() {
+            m_nodes << node;
+        }
 
         void redo() override {
-            KisImageAnimationInterface *interface = m_info->image->animationInterface();
+            KisImageAnimationInterface *interface = m_image->animationInterface();
             const QRect preparedRect = !interface->externalFrameActive() ?
-                m_info->image->bounds() : QRect();
+                m_image->bounds() : QRect();
 
-            foreach (KisNodeSP node, m_info->allSrcNodes()) {
-                refreshHiddenAreaAsync(m_info->image, node, preparedRect);
+            foreach (KisNodeSP node, m_nodes) {
+                refreshHiddenAreaAsync(m_image, node, preparedRect);
             }
         }
 
     private:
-        MergeDownInfoBaseSP m_info;
+        KisImageWSP m_image;
+        KisNodeList m_nodes;
     };
 
     struct RefreshDelayedUpdateLayers : public KUndo2Command {
-        RefreshDelayedUpdateLayers(MergeDownInfoBaseSP info) : m_info(info) {}
+        RefreshDelayedUpdateLayers(MergeDownInfoBaseSP info)
+            : m_nodes(info->allSrcNodes()) {}
+
+        RefreshDelayedUpdateLayers(KisNodeList nodes){
+            m_nodes << nodes;
+        }
 
         void redo() override {
-            foreach (KisNodeSP node, m_info->allSrcNodes()) {
+            if (m_info) {
+                m_nodes << m_info->allSrcNodes();
+            }
+
+            foreach (KisNodeSP node, m_nodes) {
                 forceAllDelayedNodesUpdate(node);
             }
         }
 
     private:
+        KisNodeList m_nodes;
         MergeDownInfoBaseSP m_info;
     };
 
@@ -526,6 +696,100 @@ namespace KisLayerUtils {
         const KisMetaData::MergeStrategy *m_strategy;
     };
 
+    struct InitSplitAlphaSelectionMask : public KisCommandUtils::AggregateCommand  {
+        InitSplitAlphaSelectionMask(SplitAlphaToMaskInfoSP info)
+            : m_info(info) {}
+
+        void populateChildCommands() override {
+            m_info->getMask()->initSelection(m_info->getLayer());
+        }
+
+    private:
+        SplitAlphaToMaskInfoSP m_info;
+    };
+
+    struct SplitAlphaCommand : public KUndo2Command  {
+        SplitAlphaCommand(SplitAlphaToMaskInfoSP info)
+            : m_info(info) {
+            m_cached = new KisPaintDevice(*m_info->node->paintDevice(), KritaUtils::CopyAllFrames);
+        }
+
+        void redo() override {
+            KisPaintDeviceSP srcDevice = m_info->node->paintDevice();
+            const KoColorSpace *srcCS = srcDevice->colorSpace();
+            const QRect processRect =
+                    srcDevice->exactBounds() |
+                    srcDevice->defaultBounds()->bounds();
+
+            KisSequentialIterator srcIt(srcDevice, processRect);
+            KisSequentialIterator dstIt(m_info->getMaskDevice(), processRect);
+
+            while (srcIt.nextPixel() && dstIt.nextPixel()) {
+                quint8 *srcPtr = srcIt.rawData();
+                quint8 *alpha8Ptr = dstIt.rawData();
+
+                *alpha8Ptr = srcCS->opacityU8(srcPtr);
+                srcCS->setOpacity(srcPtr, OPACITY_OPAQUE_U8, 1);
+            }
+        }
+
+        void undo() override {
+            KisPaintDeviceSP srcDevice = m_info->node->paintDevice();
+
+            if (srcDevice->framesInterface()) { //Swap contents of all frames to reflect the pre-operation state.
+                KisPaintDeviceSP tempPD = new KisPaintDevice(*m_cached, KritaUtils::CopySnapshot);
+                Q_FOREACH(const int& frame, srcDevice->framesInterface()->frames() ) {
+                    if (m_cached->framesInterface()->frames().contains(frame)) {
+                        m_cached->framesInterface()->writeFrameToDevice(frame, tempPD);
+                        srcDevice->framesInterface()->uploadFrame(frame, tempPD);
+                    }
+                }
+            } else {
+                const QRect processRect =
+                        srcDevice->exactBounds() |
+                        srcDevice->defaultBounds()->bounds();
+
+                const KoColorSpace *srcCS = srcDevice->colorSpace();
+                KisSequentialIterator srcIt(m_cached, processRect);
+                KisSequentialIterator dstIt(srcDevice, processRect);
+
+                while (srcIt.nextPixel() && dstIt.nextPixel()) {
+                    quint8 *srcPtr = srcIt.rawData();
+                    quint8 *dstPtr = dstIt.rawData();
+                    srcCS->setOpacity(dstPtr, srcCS->opacityU8(srcPtr), 1);
+                }
+            }
+        }
+
+    private:
+        SplitAlphaToMaskInfoSP m_info;
+        KisPaintDeviceSP m_cached;
+    };
+
+    struct UploadProjectionToFrameCommand : public KisCommandUtils::AggregateCommand {
+        UploadProjectionToFrameCommand(KisNodeSP src, KisNodeSP target, int frame)
+            : m_source(src)
+            , m_target(target)
+            , m_frame(frame)
+        {}
+
+        void populateChildCommands() override {
+            KisRasterKeyframeChannel* channel = dynamic_cast<KisRasterKeyframeChannel*>(m_target->getKeyframeChannel(KisKeyframeChannel::Raster.id()));
+            if (!channel)
+                return;
+
+
+            KisPaintDeviceSP clone = new KisPaintDevice(*m_source->projection());
+            KisRasterKeyframeSP key = channel->keyframeAt<KisRasterKeyframe>(m_frame);
+            m_target->paintDevice()->framesInterface()->uploadFrame(key->frameID(), clone);
+        }
+
+    private:
+        KisNodeSP m_source;
+        KisNodeSP m_target;
+        int m_frame;
+    };
+
     KeepNodesSelectedCommand::KeepNodesSelectedCommand(const KisNodeList &selectedBefore,
                                                        const KisNodeList &selectedAfter,
                                                        KisNodeSP activeBefore,
@@ -686,9 +950,46 @@ namespace KisLayerUtils {
             addCommand(cmd);
         }
 
-    private:
         MergeDownInfoBaseSP m_info;
         KisNodeSP m_putAfter;
+    };
+
+    struct SimpleAddNode : public KisCommandUtils::AggregateCommand {
+        SimpleAddNode(KisImageSP image, KisNodeSP toAdd, KisNodeSP parent = 0, KisNodeSP putAfter = 0)
+            : m_image(image)
+            , m_toAdd(toAdd)
+            , m_parent(parent)
+            , m_putAfter(putAfter)
+        {
+            while (m_parent && !m_parent->allowAsChild(m_toAdd)) {
+                m_putAfter = m_putAfter ? m_putAfter->parent() : m_parent;
+                m_parent = m_putAfter ? m_putAfter->parent() : 0;
+            }
+
+            if (!m_parent) {
+                m_parent = m_image->root();
+            }
+        }
+
+
+        void populateChildCommands() override {
+            addCommand(new KisImageLayerAddCommand(m_image,
+                                                       m_toAdd,
+                                                       m_parent,
+                                                       m_putAfter,
+                                                       true, false));
+        }
+
+    private:
+        virtual void addCommandImpl(KUndo2Command *cmd) {
+            addCommand(cmd);
+        }
+
+        KisImageWSP m_image;
+        KisNodeSP m_toAdd;
+        KisNodeSP m_parent;
+        KisNodeSP m_putAfter;
+
     };
 
 
@@ -908,20 +1209,26 @@ namespace KisLayerUtils {
     }
 
     struct AddNewFrame : public KisCommandUtils::AggregateCommand {
-        AddNewFrame(MergeDownInfoBaseSP info, int frame) : m_info(info), m_frame(frame) {}
+        AddNewFrame(KisNodeSP node, int frame) : m_node(node), m_frame(frame) {}
+        AddNewFrame(KisNodeSP node, int frame, KisNodeList sampleNodes) : m_node(node), m_frame(frame), m_sampledNodes(sampleNodes) {}
+        AddNewFrame(KisNodeSP node, int frame, KisNodeSP source) : m_node(node), m_frame(frame) { m_sampledNodes << source; }
+        AddNewFrame(MergeDownInfoBaseSP info, int frame) : m_frame(frame), m_sampledNodes(info->allSrcNodes()), m_mergeInfo(info) {}
 
         void populateChildCommands() override {
             KUndo2Command *cmd = new KisCommandUtils::SkipFirstRedoWrapper();
-            KisKeyframeChannel *channel = m_info->dstNode->getKeyframeChannel(KisKeyframeChannel::Raster.id());
+            KisNodeSP node = m_node ? m_node : m_mergeInfo->dstNode;
+            KisKeyframeChannel *channel = node->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true);
             channel->addKeyframe(m_frame, cmd);
 
-            applyKeyframeColorLabel(channel->keyframeAt(m_frame));
+            if (m_sampledNodes.count() > 0) {
+                applyKeyframeColorLabel(channel->keyframeAt(m_frame), m_sampledNodes);
+            }
 
             addCommand(cmd);
         }
 
-        void applyKeyframeColorLabel(KisKeyframeSP dstKeyframe) {
-            Q_FOREACH(KisNodeSP srcNode, m_info->allSrcNodes()) {
+        void applyKeyframeColorLabel(KisKeyframeSP dstKeyframe, KisNodeList srcNodes) {
+            Q_FOREACH(KisNodeSP srcNode, srcNodes) {
                 Q_FOREACH(KisKeyframeChannel *channel, srcNode->keyframeChannels().values()) {
                     KisKeyframeSP keyframe = channel->keyframeAt(m_frame);
                     if (!keyframe.isNull() && keyframe->colorLabel() != 0) {
@@ -935,15 +1242,41 @@ namespace KisLayerUtils {
         }
 
     private:
-        MergeDownInfoBaseSP m_info;
+        KisNodeSP m_node;
         int m_frame;
+        KisNodeList m_sampledNodes;
+        MergeDownInfoBaseSP m_mergeInfo;
     };
 
     QSet<int> fetchLayerFrames(KisNodeSP node) {
-        KisKeyframeChannel *channel = node->getKeyframeChannel(KisKeyframeChannel::Raster.id());
-        if (!channel) return QSet<int>();
+        QSet<int> frames;
+        Q_FOREACH(KisKeyframeChannel *channel, node->keyframeChannels()) {
+            if (!channel) {
+                continue;
+            }
 
-        return channel->allKeyframeTimes();
+            KisRasterKeyframeChannel *rasterChan = dynamic_cast<KisRasterKeyframeChannel*>(channel);
+            if (rasterChan) {
+                frames.unite(channel->allKeyframeTimes());
+                continue;
+            }
+
+            KisScalarKeyframeChannel *scalarChan = dynamic_cast<KisScalarKeyframeChannel*>(channel);
+            if (scalarChan) {
+                const int initialKeyframe = scalarChan->firstKeyframeTime();
+                const int lastKeyframe = scalarChan->lastKeyframeTime();
+                KisTimeSpan currentSpan = scalarChan->identicalFrames(initialKeyframe);
+                while (!currentSpan.isInfinite() && currentSpan.isValid() && currentSpan.start() < lastKeyframe) {
+                    frames.insert(currentSpan.start());
+                    currentSpan = scalarChan->identicalFrames(currentSpan.end() + 1);
+                }
+
+                frames.insert(lastKeyframe);
+            }
+
+        }
+
+        return frames;
     }
 
     QSet<int> fetchLayerFramesRecursive(KisNodeSP rootNode) {
@@ -998,8 +1331,6 @@ namespace KisLayerUtils {
         }
 
         KisImageSignalVector emitSignals;
-        emitSignals << ModifiedSignal;
-
         KisProcessingApplicator applicator(image, 0,
                                            KisProcessingApplicator::NONE,
                                            emitSignals,
@@ -1037,7 +1368,7 @@ namespace KisLayerUtils {
                     applicator.applyCommand(new RefreshDelayedUpdateLayers(info), KisStrokeJobData::BARRIER);
                     applicator.applyCommand(new MergeLayers(info), KisStrokeJobData::BARRIER);
 
-                    applicator.applyCommand(new SwitchFrameCommand(info->image, frame, true, info->storage));
+                    applicator.applyCommand(new SwitchFrameCommand(info->image, frame, true, info->storage), KisStrokeJobData::BARRIER);
                 }
             } else {
                 applicator.applyCommand(new RefreshHiddenAreas(info));
@@ -1296,8 +1627,6 @@ namespace KisLayerUtils {
     void changeImageDefaultProjectionColor(KisImageSP image, const KoColor &color)
     {
         KisImageSignalVector emitSignals;
-        emitSignals << ModifiedSignal;
-
         KisProcessingApplicator applicator(image,
                                            image->root(),
                                            KisProcessingApplicator::RECURSIVE,
@@ -1353,7 +1682,6 @@ namespace KisLayerUtils {
             (!flattenSingleLayer && mergedNodes.size() == 1)) return;
 
         KisImageSignalVector emitSignals;
-        emitSignals << ModifiedSignal;
         emitSignals << ComplexNodeReselectionSignal(KisNodeSP(), KisNodeList(), KisNodeSP(), mergedNodes);
 
 
@@ -1364,13 +1692,6 @@ namespace KisLayerUtils {
 
         if (mergedNodes.isEmpty()) return;
 
-        /* If the putAfter node is invisible,
-         * we should instead pick one of the nodes
-         * to be merged to avoid a null putAfter.
-         */
-        if (!putAfter->visible()){
-            putAfter = mergedNodes.first();
-        }
 
         // make sure we don't add the new layer into a locked group
         KIS_SAFE_ASSERT_RECOVER_RETURN(putAfter->parent());
@@ -1395,7 +1716,21 @@ namespace KisLayerUtils {
                                            actionName);
 
 
-        if (!invisibleNodes.isEmpty()) {
+        if (!invisibleNodes.isEmpty() && cleanupNodes) {
+
+            /* If the putAfter node is invisible,
+             * we should instead pick one of the nodes
+             * to be merged to avoid a null putAfter
+             * after we remove all invisible layers from
+             * the image.
+             * (The assumption is that putAfter is among
+             * the layers to merge, so if it's invisible,
+             * it's going to be removed)
+             */
+            if (!putAfter->visible()){
+                putAfter = mergedNodes.first();
+            }
+
             applicator.applyCommand(
                 new SimpleRemoveLayers(invisibleNodes,
                                        image),
@@ -1538,7 +1873,6 @@ namespace KisLayerUtils {
         KIS_ASSERT_RECOVER(parentLayer) { return 0; }
 
         KisImageSignalVector emitSignals;
-        emitSignals << ModifiedSignal;
 
         KisProcessingApplicator applicator(image, 0,
                                            KisProcessingApplicator::NONE,
@@ -1757,4 +2091,59 @@ namespace KisLayerUtils {
 
         return numLayers == 1 || (!hasNonNormalLayers && !hasTransparentLayer);
     }
+
+    void splitAlphaToMask(KisImageSP image, KisNodeSP node, const QString& maskName)
+    {
+        SplitAlphaToMaskInfoSP info( new SplitAlphaToMaskInfo(node->image(), node, maskName) );
+
+        KisImageSignalVector emitSignals;
+        KisProcessingApplicator applicator(image, 0,
+                                           KisProcessingApplicator::NONE,
+                                           emitSignals,
+                                           kundo2_i18n("Split Alpha into a Mask"));
+
+        applicator.applyCommand(new SimpleAddNode(info->image, info->getMask(), info->node), KisStrokeJobData::BARRIER);
+        applicator.applyCommand(new InitSplitAlphaSelectionMask(info));
+        if (info->frames.count() > 0) {
+            Q_FOREACH(const int& frame, info->frames) {
+                applicator.applyCommand(new SwitchFrameCommand(info->image, frame, false, info->storage));
+                applicator.applyCommand(new AddNewFrame(info->getMask(), frame, info->node));
+                applicator.applyCommand(new SplitAlphaCommand(info), KisStrokeJobData::BARRIER);
+                applicator.applyCommand(new SwitchFrameCommand(info->image, frame, true, info->storage));
+            }
+        } else {
+            applicator.applyCommand(new SplitAlphaCommand(info), KisStrokeJobData::BARRIER);
+        }
+        applicator.end();
+    }
+
+    void convertToPaintLayer(KisImageSP image, KisNodeSP src)
+    {
+        //Initialize all operation dependencies.
+        ConvertToPaintLayerInfoSP info( new ConvertToPaintLayerInfo(image, src) );
+
+        if (!info->hasTargetNode())
+            return;
+
+        KisImageSignalVector emitSignals;
+        KisProcessingApplicator applicator(image, 0, KisProcessingApplicator::NONE, emitSignals, kundo2_i18n("Convert to a Paint Layer"));
+
+        applicator.applyCommand(new SimpleAddNode(info->image(), info->targetNode(), info->sourceNode()->parent(), info->sourceNode()), KisStrokeJobData::BARRIER);
+
+        if (info->frames().count() > 0) {
+            Q_FOREACH(const int& frame, info->frames()) {
+                applicator.applyCommand(new SwitchFrameCommand(info->image(), frame, false, info->storage));
+                applicator.applyCommand(new RefreshDelayedUpdateLayers(info->sourceNodes()), KisStrokeJobData::BARRIER);
+                applicator.applyCommand(new RefreshHiddenAreas(info->image(), info->sourceNode()), KisStrokeJobData::BARRIER);
+                applicator.applyCommand(new AddNewFrame(info->targetNode(), frame, info->sourceNode()), KisStrokeJobData::BARRIER);
+                applicator.applyCommand(new UploadProjectionToFrameCommand(info->sourceNode(), info->targetNode(), frame));
+                applicator.applyCommand(new SwitchFrameCommand(info->image(), frame, true, info->storage));
+            }
+        }
+
+        applicator.applyCommand(new SimpleRemoveLayers(info->toRemove(), info->image()));
+
+        applicator.end();
+    }
+
 }

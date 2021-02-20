@@ -1,20 +1,8 @@
 /*
- *  Copyright (c) 2013 Sven Langkamp <sven.langkamp@gmail.com>
- *  Copyright (c) 2018 Michael Zhou <simeirxh@gmail.com>
+ *  SPDX-FileCopyrightText: 2013 Sven Langkamp <sven.langkamp@gmail.com>
+ *  SPDX-FileCopyrightText: 2018 Michael Zhou <simeirxh@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include <QPointer>
@@ -59,9 +47,13 @@ KisPaletteChooser::KisPaletteChooser(QWidget *parent)
     m_ui->bnExport->setDefaultAction(m_d->actExport.data());
 
     m_ui->bnAdd->setEnabled(false);
+    m_ui->bnAdd->setAutoRaise(true);
     m_ui->bnRemove->setEnabled(false);
+    m_ui->bnRemove->setAutoRaise(true);
     m_ui->bnImport->setEnabled(false);
+    m_ui->bnImport->setAutoRaise(true);
     m_ui->bnExport->setEnabled(false);
+    m_ui->bnExport->setAutoRaise(true);
 
     connect(m_d->actAdd.data(), SIGNAL(triggered()), SLOT(slotAdd()));
     connect(m_d->actRemove.data(), SIGNAL(triggered()), SLOT(slotRemove()));
@@ -162,8 +154,8 @@ void KisPaletteChooserPrivate::Delegate::paint(QPainter *painter,
     if (!index.isValid())
         return;
 
-    QImage preview = index.data(Qt::UserRole + KisResourceModel::Thumbnail).value<QImage>();
-    QString name = index.data(Qt::UserRole + KisResourceModel::Name).toString();
+    QImage preview = index.data(Qt::UserRole + KisAbstractResourceModel::Thumbnail).value<QImage>();
+    QString name = index.data(Qt::UserRole + KisAbstractResourceModel::Name).toString();
 
     QRect previewRect(option.rect.x() + 2,
                       option.rect.y() + 2,

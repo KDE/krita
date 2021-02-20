@@ -1,19 +1,7 @@
 /*
- *  Copyright (c) 2008,2010 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  SPDX-FileCopyrightText: 2008, 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "deform_brush.h"
@@ -28,7 +16,7 @@
 
 #include <kis_types.h>
 #include <kis_iterator_ng.h>
-#include <kis_cross_device_color_picker.h>
+#include <kis_cross_device_color_sampler.h>
 
 #include <cmath>
 #include <ctime>
@@ -164,7 +152,7 @@ KisFixedPaintDeviceSP DeformBrush::paintMask(KisFixedPaintDeviceSP dab,
         QPointF pos, qreal subPixelX, qreal subPixelY, int dabX, int dabY)
 {
     KisFixedPaintDeviceSP mask = new KisFixedPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
-    KisCrossDeviceColorPicker colorPicker(layer, dab);
+    KisCrossDeviceColorSampler colorSampler(layer, dab);
 
     qreal fWidth = maskWidth(scale);
     qreal fHeight = maskHeight(scale);
@@ -216,7 +204,7 @@ KisFixedPaintDeviceSP DeformBrush::paintMask(KisFixedPaintDeviceSP dab,
             if (distance > 1.0) {
                 // leave there OPACITY TRANSPARENT pixel (default pixel)
 
-                colorPicker.pickOldColor(x + dabX, y + dabY, dabPointer);
+                colorSampler.sampleOldColor(x + dabX, y + dabY, dabPointer);
                 dabPointer += dabPixelSize;
 
                 *maskPointer = OPACITY_TRANSPARENT_U8;
@@ -245,10 +233,10 @@ KisFixedPaintDeviceSP DeformBrush::paintMask(KisFixedPaintDeviceSP dab,
             }
 
             if (m_properties->deform_use_old_data) {
-                colorPicker.pickOldColor(maskX, maskY, dabPointer);
+                colorSampler.sampleOldColor(maskX, maskY, dabPointer);
             }
             else {
-                colorPicker.pickColor(maskX, maskY, dabPointer);
+                colorSampler.sampleColor(maskX, maskY, dabPointer);
             }
 
             dabPointer += dabPixelSize;

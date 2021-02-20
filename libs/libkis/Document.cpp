@@ -1,19 +1,7 @@
 /*
- *  Copyright (c) 2016 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2016 Boudewijn Rempt <boud@valdyas.org>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
 #include "Document.h"
 #include <QPointer>
@@ -53,6 +41,8 @@
 #include <kis_coordinates_converter.h>
 #include <kis_time_span.h>
 #include <KisImportExportErrorCode.h>
+#include <kis_types.h>
+#include <kis_annotation.h>
 
 #include <KoColor.h>
 #include <KoColorSpace.h>
@@ -230,7 +220,7 @@ bool Document::setBackgroundColor(const QColor &color)
     KoColor background = KoColor(color, d->document->image()->colorSpace());
     d->document->image()->setDefaultProjectionColor(background);
 
-    d->document->image()->setModified();
+    d->document->image()->setModifiedWithoutUndo();
     d->document->image()->initialRefreshGraph();
 
     return true;
@@ -478,7 +468,9 @@ bool Document::close()
     }
 
     KisPart::instance()->removeDocument(d->document, !d->ownsDocument);
+
     if (d->ownsDocument) {
+
         delete d->document;
     }
 
@@ -1022,4 +1014,60 @@ void Document::setCurrentTime(int time)
     if (!d->document->image()) return;
 
     return d->document->image()->animationInterface()->requestTimeSwitchWithUndo(time);
+}
+
+QStringList Document::annotationTypes() const
+{
+    QStringList types;
+
+    KisImageSP image = d->document->image().toStrongRef();
+
+    vKisAnnotationSP_it beginIt = image->beginAnnotations();
+    vKisAnnotationSP_it endIt = image->endAnnotations();
+
+    vKisAnnotationSP_it it = beginIt;
+    while (it != endIt) {
+        if (!(*it) || (*it)->type().isEmpty()) {
+            qWarning() << "Warning: empty annotation";
+            it++;
+            continue;
+        }
+        types << (*it)->type();
+
+        it++;
+    }
+    return types;
+}
+
+QString Document::annotationDescription(const QString &type) const
+{
+    KisImageSP image = d->document->image().toStrongRef();
+    KisAnnotationSP annotation = image->annotation(type);
+    return annotation->description();
+}
+
+QByteArray Document::annotation(const QString &type)
+{
+    KisImageSP image = d->document->image().toStrongRef();
+    KisAnnotationSP annotation = image->annotation(type);
+    if (annotation) {
+        return annotation->annotation();
+    }
+    else {
+        return QByteArray();
+    }
+}
+
+void Document::setAnnotation(const QString &key, const QString &description, const QByteArray &annotation)
+{
+    KisAnnotation *a = new KisAnnotation(key, description, annotation);
+    KisImageSP image = d->document->image().toStrongRef();
+    image->addAnnotation(a);
+
+}
+
+void Document::removeAnnotation(const QString &type)
+{
+    KisImageSP image = d->document->image().toStrongRef();
+    image->removeAnnotation(type);
 }

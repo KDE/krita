@@ -4,6 +4,9 @@
 #  OpenJPEG_FOUND - system has OpenJPEG
 #  OpenJPEG_INCLUDE_DIRS - the OpenJPEG include directories
 #  OpenJPEG_LIBRARIES - link these to use OpenJPEG
+#
+# SPDX-License-Identifier: BSD-3-Clause
+#
 
 include(LibFindMacros)
 

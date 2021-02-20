@@ -1,19 +1,7 @@
 /*
- *  Copyright (c) 2009 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2009 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_async_merger_test.h"
@@ -489,7 +477,7 @@ void KisAsyncMergerTest::testFilterMaskOnFilterLayer()
     KIS_ASSERT(filter2);
     KisFilterConfigurationSP configuration2 = filter2->defaultConfiguration(KisGlobalResourcesInterface::instance());
     KIS_ASSERT(configuration2);
-    KisLayerSP adjLayer2 = new KisAdjustmentLayer(image, "adj2", configuration2, 0);
+    KisLayerSP adjLayer2 = new KisAdjustmentLayer(image, "adj2", configuration2->cloneWithResourcesSnapshot(), 0);
     image->addNode(adjLayer2, image->rootLayer());
 
 
@@ -499,7 +487,7 @@ void KisAsyncMergerTest::testFilterMaskOnFilterLayer()
     KIS_ASSERT(configuration3);
     KisFilterMaskSP mask3 = new KisFilterMask(image, "mask3");
     mask3->initSelection(adjLayer2);
-    mask3->setFilter(configuration3);
+    mask3->setFilter(configuration3->cloneWithResourcesSnapshot());
     image->addNode(mask3, adjLayer2);
 
     image->initialRefreshGraph();

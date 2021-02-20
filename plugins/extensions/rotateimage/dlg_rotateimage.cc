@@ -1,21 +1,9 @@
 /*
  *  dlg_rotateimage.cc - part of KimageShop^WKrayon^WKrita
  *
- *  Copyright (c) 2004 Michael Thaler <michael.thaler@physik.tu-muenchen.de>
+ *  SPDX-FileCopyrightText: 2004 Michael Thaler <michael.thaler@physik.tu-muenchen.de>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "dlg_rotateimage.h"
@@ -44,16 +32,17 @@ DlgRotateImage::DlgRotateImage(QWidget *  parent,
     setMainWidget(m_page);
     resize(m_page->sizeHint());
 
-    m_page->doubleCustom->setSuffix(QChar(Qt::Key_degree));
+    m_page->angleSelectorCustom->setIncreasingDirection(KisAngleGauge::IncreasingDirection_Clockwise);
 
     m_page->radioCCW->setIcon(KisIconUtils::loadIcon("transform_icons_liquify_rotateCCW"));
     m_page->radioCW->setIcon(KisIconUtils::loadIcon("transform_icons_liquify_rotate"));
 
     connect(this, SIGNAL(okClicked()),
             this, SLOT(okClicked()));
-    connect(m_page->doubleCustom, SIGNAL(valueChanged(double)),
+    connect(m_page->angleSelectorCustom, SIGNAL(angleChanged(double)),
             this, SLOT(slotAngleValueChanged(double)));
-
+    connect(m_page->radioCCW, SIGNAL(toggled(bool)), SLOT(slotRadioCCWToggled(bool)));
+    connect(m_page->radioCW, SIGNAL(toggled(bool)), SLOT(slotRadioCWToggled(bool)));
 }
 
 DlgRotateImage::~DlgRotateImage()
@@ -76,7 +65,7 @@ void DlgRotateImage::setAngle(quint32 angle)
         m_page->radio270->setChecked(true);
     } else {
         m_page->radioCustom->setChecked(true);
-        m_page->doubleCustom->setValue(angle);
+        m_page->angleSelectorCustom->setAngle(angle);
     }
 
     if (m_oldAngle != angle)
@@ -96,7 +85,7 @@ double DlgRotateImage::angle()
     } else if (m_page->radio270->isChecked()) {
         angle = 270;
     } else {
-        angle = m_page->doubleCustom->value();
+        angle = m_page->angleSelectorCustom->angle();
     }
     if (m_page->radioCW->isChecked()) {
         return angle;
@@ -133,3 +122,18 @@ void DlgRotateImage::resetPreview()
     // Code to update preview here.
 }
 
+void DlgRotateImage::slotRadioCCWToggled(bool toggled)
+{
+    if (!toggled) {
+        return;
+    }
+    m_page->angleSelectorCustom->setIncreasingDirection(KisAngleGauge::IncreasingDirection_CounterClockwise);
+}
+
+void DlgRotateImage::slotRadioCWToggled(bool toggled)
+{
+    if (!toggled) {
+        return;
+    }
+    m_page->angleSelectorCustom->setIncreasingDirection(KisAngleGauge::IncreasingDirection_Clockwise);
+}

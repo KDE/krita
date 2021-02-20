@@ -1,19 +1,7 @@
 /*
- * Copyright (c) 2015 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2015 Boudewijn Rempt <boud@valdyas.org>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ * SPDX-License-Identifier: LGPL-2.1-or-later
  */
 #include "KoResourcePaths.h"
 
@@ -178,6 +166,9 @@ public:
         else if (type == "locale") {
             return QStandardPaths::AppDataLocation;
         }
+        else if (type == "genericdata") {
+            return QStandardPaths::GenericDataLocation;
+        }
         else {
             return QStandardPaths::AppDataLocation;
         }
@@ -310,7 +301,7 @@ QString KoResourcePaths::findResourceInternal(const QString &type, const QString
         Q_FOREACH (const QString &alias, aliases) {
             resource = QStandardPaths::locate(d->mapTypeToQStandardPaths(type), alias + '/' + fileName, QStandardPaths::LocateFile);
             if (QFile::exists(resource)) {
-                continue;
+                break;
             }
         }
     }
@@ -319,7 +310,7 @@ QString KoResourcePaths::findResourceInternal(const QString &type, const QString
         Q_FOREACH (const QString &alias, aliases) {
             resource = approot + "/share/" + alias + '/' + fileName;
             if (QFile::exists(resource)) {
-                continue;
+                break;
             }
         }
     }
@@ -328,7 +319,7 @@ QString KoResourcePaths::findResourceInternal(const QString &type, const QString
         Q_FOREACH (const QString &alias, aliases) {
             resource = approot + "/share/krita/" + alias + '/' + fileName;
             if (QFile::exists(resource)) {
-                continue;
+                break;
             }
         }
     }
@@ -341,7 +332,7 @@ QString KoResourcePaths::findResourceInternal(const QString &type, const QString
                     resource = extraResourceDir + '/' + fileName;
                     dbgResources<< "\t4" << resource;
                     if (QFile::exists(resource)) {
-                        continue;
+                        break;
                     }
                 }
                 else {
@@ -349,7 +340,7 @@ QString KoResourcePaths::findResourceInternal(const QString &type, const QString
                         resource = extraResourceDir + '/' + alias + '/' + fileName;
                         dbgResources<< "\t4" << resource;
                         if (QFile::exists(resource)) {
-                            continue;
+                            break;
                         }
                     }
                 }
@@ -544,9 +535,15 @@ QString KoResourcePaths::saveLocationInternal(const QString &type, const QString
     }
     else {
         path = QStandardPaths::writableLocation(d->mapTypeToQStandardPaths(type));
+
+#ifndef Q_OS_ANDROID
+        // on Android almost all config locations we save to are app specific,
+        // and don't end with "krita".
         if (!path.endsWith("krita")) {
             path += "/krita";
         }
+#endif
+
         if (!suffix.isEmpty()) {
             path += "/" + suffix;
         }

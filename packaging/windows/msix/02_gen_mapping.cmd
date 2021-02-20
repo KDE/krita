@@ -1,7 +1,7 @@
 @echo off
 
 :: Please edit this to point to the extracted installer files.
-set "KRITA_DIR=D:\dev\krita\msix\unpacked\krita-x64-4.3.0-beta2-setup"
+set "KRITA_DIR=c:\dev\krita-x64-4.4.2-setup"
 
 
 

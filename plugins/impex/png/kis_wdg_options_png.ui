@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>KisWdgOptionsPNG</class>
  <widget class="QWidget" name="KisWdgOptionsPNG">
   <property name="geometry">
@@ -14,7 +18,7 @@
    <string>PNG Options</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
+   <item column="0" row="0">
     <layout class="QGridLayout">
      <property name="leftMargin">
       <number>0</number>
@@ -34,7 +38,7 @@
      <property name="verticalSpacing">
       <number>6</number>
      </property>
-     <item row="6" column="1">
+     <item column="1" row="6">
       <widget class="QCheckBox" name="chkSRGB">
        <property name="toolTip">
         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;PNG&lt;/span&gt; files have &lt;span style=&quot; font-style:italic;&quot;&gt;two&lt;/span&gt; options to save &lt;span style=&quot; font-weight:600;&quot;&gt;sRGB&lt;/span&gt; information: as a tag or as an explicit profile. For use with in websites, &lt;span style=&quot; font-style:italic;&quot;&gt;disable&lt;/span&gt; this option. For interchange with other applications, &lt;span style=&quot; font-style:italic;&quot;&gt;enable&lt;/span&gt; this option.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -44,7 +48,7 @@
        </property>
       </widget>
      </item>
-     <item row="11" column="1">
+     <item column="1" row="11">
       <widget class="KisColorButton" name="bnTransparencyFillColor">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -63,7 +67,7 @@
        </property>
       </widget>
      </item>
-     <item row="8" column="1">
+     <item column="1" row="8">
       <widget class="QCheckBox" name="alpha">
        <property name="toolTip">
         <string>Disable to get smaller files if your image has no transparency</string>
@@ -80,7 +84,7 @@ You can uncheck the box if you are not using transparency and you want to make t
        </property>
       </widget>
      </item>
-     <item row="10" column="1">
+     <item column="1" row="10">
       <widget class="QCheckBox" name="chkAuthor">
        <property name="toolTip">
         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Save author nickname and the first contact information of the author profile into the png, if possible.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -90,14 +94,14 @@ You can uncheck the box if you are not using transparency and you want to make t
        </property>
       </widget>
      </item>
-     <item row="7" column="1">
+     <item column="1" row="7">
       <widget class="QCheckBox" name="chkForceSRGB">
        <property name="text">
         <string>Force convert to sRGB</string>
        </property>
       </widget>
      </item>
-     <item row="0" column="2">
+     <item column="2" row="0">
       <widget class="QLabel" name="textLabel4_2">
        <property name="whatsThis">
         <string>&lt;p&gt;Adjust the compression time. Better compression takes longer.
@@ -111,7 +115,7 @@ You can uncheck the box if you are not using transparency and you want to make t
        </property>
       </widget>
      </item>
-     <item row="9" column="1">
+     <item column="1" row="9">
       <widget class="QCheckBox" name="chkMetaData">
        <property name="toolTip">
         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Store information like keywords, title and subject and license, if possible.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -121,7 +125,7 @@ You can uncheck the box if you are not using transparency and you want to make t
        </property>
       </widget>
      </item>
-     <item row="3" column="1">
+     <item column="1" row="3">
       <widget class="QCheckBox" name="tryToSaveAsIndexed">
        <property name="toolTip">
         <string>Indexed PNG images are smaller. If you enabled this option, your image will be analyzed to see whether it is possible to save as an indexed PNG.</string>
@@ -134,7 +138,7 @@ You can uncheck the box if you are not using transparency and you want to make t
        </property>
       </widget>
      </item>
-     <item row="1" column="0" rowspan="2">
+     <item column="0" row="1" rowspan="2">
       <widget class="QLabel" name="textLabel1">
        <property name="toolTip">
         <string>Note: the compression level does not change the quality of the result</string>
@@ -151,7 +155,7 @@ You can uncheck the box if you are not using transparency and you want to make t
        </property>
       </widget>
      </item>
-     <item row="11" column="0">
+     <item column="0" row="11">
       <widget class="QLabel" name="label_4">
        <property name="text">
         <string>Transparent color: </string>
@@ -161,7 +165,7 @@ You can uncheck the box if you are not using transparency and you want to make t
        </property>
       </widget>
      </item>
-     <item row="0" column="1">
+     <item column="1" row="0">
       <widget class="QLabel" name="textLabel3">
        <property name="whatsThis">
         <string>&lt;p&gt;Adjust the compression time. Better compression takes longer.
@@ -172,7 +176,7 @@ You can uncheck the box if you are not using transparency and you want to make t
        </property>
       </widget>
      </item>
-     <item row="1" column="1" colspan="2">
+     <item colspan="2" column="1" row="1">
       <widget class="KisDoubleSliderSpinBox" name="compressionLevel" native="true">
        <property name="toolTip">
         <string>Note: the compression level does not change the quality of the result</string>
@@ -183,7 +187,7 @@ You can uncheck the box if you are not using transparency and you want to make t
        </property>
       </widget>
      </item>
-     <item row="4" column="1">
+     <item column="1" row="4">
       <widget class="QCheckBox" name="interlacing">
        <property name="toolTip">
         <string>Use interlacing when publishing on the Internet.</string>
@@ -197,7 +201,7 @@ Enabling interlacing will cause the image to be displayed by the browser even wh
        </property>
       </widget>
      </item>
-     <item row="5" column="1">
+     <item column="1" row="5">
       <widget class="QCheckBox" name="chkSaveAsHDR">
        <property name="text">
         <string>Save as HDR image (Rec. 2020 PQ)</string>
@@ -206,7 +210,7 @@ Enabling interlacing will cause the image to be displayed by the browser even wh
      </item>
     </layout>
    </item>
-   <item row="6" column="0">
+   <item column="0" row="6">
     <spacer>
      <property name="orientation">
       <enum>Qt::Vertical</enum>

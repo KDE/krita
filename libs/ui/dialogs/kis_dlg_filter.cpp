@@ -1,21 +1,8 @@
 /*
- *  Copyright (c) 2007 Cyrille Berger <cberger@cberger.net>
- *  Copyright (c) 2008 Boudewijn Rempt <boud@valdysa.org>
+ *  SPDX-FileCopyrightText: 2007 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2008 Boudewijn Rempt <boud@valdysa.org>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_dlg_filter.h"
@@ -38,7 +25,7 @@
 #include "kis_filter_manager.h"
 #include "ui_wdgfilterdialog.h"
 #include "kis_canvas2.h"
-
+#include "kis_signal_compressor.h"
 
 struct KisDlgFilter::Private {
     Private(KisFilterManager *_filterManager, KisViewManager *_view)
@@ -47,7 +34,13 @@ struct KisDlgFilter::Private {
             , view(_view)
             , filterManager(_filterManager)
             , blockModifyingActionsGuard(new KisInputActionGroupsMaskGuard(view->canvasBase(), ViewTransformActionGroup))
+            , updateCompressor(200, KisSignalCompressor::FIRST_ACTIVE)
     {
+        updateCompressor.setDelay(
+            [this] () {
+                return filterManager->isIdle();
+            },
+            20, 200);
     }
 
     KisFilterSP currentFilter;
@@ -60,6 +53,7 @@ struct KisDlgFilter::Private {
     // a special guard object that blocks all the painting input actions while the
     // dialog is open
     QScopedPointer<KisInputActionGroupsMaskGuard> blockModifyingActionsGuard;
+    KisSignalCompressor updateCompressor;
 };
 
 KisDlgFilter::KisDlgFilter(KisViewManager *view, KisNodeSP node, KisFilterManager *filterManager, QWidget *parent) :
@@ -105,6 +99,7 @@ KisDlgFilter::KisDlgFilter(KisViewManager *view, KisNodeSP node, KisFilterManage
     d->uiFilterDialog.checkBoxPreview->setChecked(group.readEntry("showPreview", true));
 
     restoreGeometry(KisConfig(true).readEntry("filterdialog/geometry", QByteArray()));
+    connect(&d->updateCompressor, SIGNAL(timeout()), this, SLOT(updatePreview()));
 
 }
 
@@ -121,7 +116,7 @@ void KisDlgFilter::setFilter(KisFilterSP f, KisFilterConfigurationSP overrideDef
     d->uiFilterDialog.filterSelection->setFilter(f, overrideDefaultConfig);
     d->uiFilterDialog.pushButtonCreateMaskEffect->setEnabled(f->supportsAdjustmentLayers());
     d->currentFilter = f;
-    updatePreview();
+    d->updateCompressor.start();
 }
 
 void KisDlgFilter::setDialogTitle(KisFilterSP filter)
@@ -212,7 +207,7 @@ void KisDlgFilter::createMask()
 void KisDlgFilter::enablePreviewToggled(bool state)
 {
     if (state) {
-        updatePreview();
+        d->updateCompressor.start();
     } else if (d->filterManager->isStrokeRunning()) {
         d->filterManager->cancel();
     }
@@ -229,7 +224,7 @@ void KisDlgFilter::filterSelectionChanged()
     setDialogTitle(filter);
     d->currentFilter = filter;
     d->uiFilterDialog.pushButtonCreateMaskEffect->setEnabled(filter.isNull() ? false : filter->supportsAdjustmentLayers());
-    updatePreview();
+    d->updateCompressor.start();
 }
 
 

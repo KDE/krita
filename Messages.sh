@@ -1,4 +1,8 @@
 #! /bin/sh
+#
+#  SPDX-License-Identifier: GPL-3.0-or-later
+#
+
 source kundo2_aware_xgettext.sh
 
 $EXTRACTRC `find . -name \*.ui | grep -v '/tests/'` >> rc.cpp

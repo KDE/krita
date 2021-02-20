@@ -38,6 +38,9 @@ set(kritaglobal_LIB_SRCS
     KisSignalMapper.cpp
     KisRegion.cpp
     KoUnit.cpp
+    KisBezierUtils.cpp
+    KisBezierPatch.cpp
+    KisBezierMesh.cpp
 )
 
 add_library(kritaglobal SHARED ${kritaglobal_LIB_SRCS} )
@@ -52,6 +55,7 @@ target_link_libraries(kritaglobal
         Qt5::Widgets 
         Qt5::Xml 
         KF5::I18n
+        ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES}
 )
 
 set_target_properties(kritaglobal PROPERTIES

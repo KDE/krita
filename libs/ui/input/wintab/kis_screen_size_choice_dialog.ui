@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>KisScreenSizeChoiceDialog</class>
  <widget class="QDialog" name="KisScreenSizeChoiceDialog">
   <property name="geometry">
@@ -55,7 +59,7 @@
         </item>
         <item>
          <layout class="QGridLayout" name="gridLayout">
-          <item row="0" column="0" rowspan="2">
+          <item column="0" row="0" rowspan="2">
            <spacer name="horizontalSpacer">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
@@ -71,14 +75,14 @@
             </property>
            </spacer>
           </item>
-          <item row="0" column="1">
+          <item column="1" row="0">
            <widget class="QLabel" name="lblWidth">
             <property name="text">
              <string>Width:</string>
             </property>
            </widget>
           </item>
-          <item row="0" column="2">
+          <item column="2" row="0">
            <widget class="QSpinBox" name="intWidth">
             <property name="suffix">
              <string>px</string>
@@ -88,14 +92,14 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="3">
+          <item column="3" row="0">
            <widget class="QLabel" name="lblXOffset">
             <property name="text">
              <string>X offset:</string>
             </property>
            </widget>
           </item>
-          <item row="0" column="4">
+          <item column="4" row="0">
            <widget class="QSpinBox" name="intXOffset">
             <property name="suffix">
              <string>px</string>
@@ -108,14 +112,14 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="1">
+          <item column="1" row="1">
            <widget class="QLabel" name="lblHeight">
             <property name="text">
              <string>Height:</string>
             </property>
            </widget>
           </item>
-          <item row="1" column="2">
+          <item column="2" row="1">
            <widget class="QSpinBox" name="intHeight">
             <property name="suffix">
              <string>px</string>
@@ -125,14 +129,14 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="3">
+          <item column="3" row="1">
            <widget class="QLabel" name="lblYOffset">
             <property name="text">
              <string>Y offset:</string>
             </property>
            </widget>
           </item>
-          <item row="1" column="4">
+          <item column="4" row="1">
            <widget class="QSpinBox" name="intYOffset">
             <property name="suffix">
              <string>px</string>

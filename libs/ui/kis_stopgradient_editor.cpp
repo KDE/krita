@@ -1,20 +1,8 @@
 /*
- *  Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2004 Cyrille Berger <cberger@cberger.net>
  *                2016 Sven Langkamp <sven.langkamp@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_stopgradient_editor.h"
@@ -88,7 +76,7 @@ KisStopGradientEditor::KisStopGradientEditor(KoStopGradientSP gradient, QWidget 
 
 void KisStopGradientEditor::setCompactMode(bool value)
 {
-    //lblName->setVisible(!value);
+    lblName->setVisible(!value);
     buttonReverse->setVisible(!value);
     nameedit->setVisible(!value);
     foregroundRadioButton->setVisible(!value);
@@ -156,12 +144,20 @@ void KisStopGradientEditor::stopChanged(int stop)
         if (type == FOREGROUNDSTOP) {
             foregroundRadioButton->setChecked(true);
             opacitySlider->setEnabled(false);
-            color = m_canvasResourcesInterface->resource(KoCanvasResource::ForegroundColor).value<KoColor>();
+            if (m_canvasResourcesInterface) {
+                color = m_canvasResourcesInterface->resource(KoCanvasResource::ForegroundColor).value<KoColor>();
+            } else {
+                color = m_gradient->stops()[stop].color;
+            }
         }
         else if (type == BACKGROUNDSTOP) {
             backgroundRadioButton->setChecked(true);
             opacitySlider->setEnabled(false);
-            color = m_canvasResourcesInterface->resource(KoCanvasResource::BackgroundColor).value<KoColor>();;
+            if (m_canvasResourcesInterface) {
+                color = m_canvasResourcesInterface->resource(KoCanvasResource::BackgroundColor).value<KoColor>();
+            } else {
+                color = m_gradient->stops()[stop].color;
+            }
         }
         else {
             colorRadioButton->setChecked(true);
@@ -188,12 +184,15 @@ void KisStopGradientEditor::stopTypeChanged() {
     KoGradientStopType type;    
     if (foregroundRadioButton->isChecked()) {
         type = FOREGROUNDSTOP;
-        color = m_canvasResourcesInterface->resource(KoCanvasResource::ForegroundColor).value<KoColor>().convertedTo(color.colorSpace());
+        if (m_canvasResourcesInterface) {
+            color = m_canvasResourcesInterface->resource(KoCanvasResource::ForegroundColor).value<KoColor>();
+        }
         opacitySlider->setEnabled(false);
     } else if (backgroundRadioButton->isChecked()) {
         type = BACKGROUNDSTOP;
-        color = m_canvasResourcesInterface->resource(KoCanvasResource::BackgroundColor).value<KoColor>().convertedTo(color.colorSpace());
-
+        if (m_canvasResourcesInterface) {
+            color = m_canvasResourcesInterface->resource(KoCanvasResource::BackgroundColor).value<KoColor>();
+        }
         opacitySlider->setEnabled(false);
     }
     else {
@@ -217,7 +216,7 @@ void KisStopGradientEditor::colorChanged(const KoColor& color)
     int currentStop = gradientSlider->selectedStop();
     double t = stops[currentStop].position;
     
-    KoColor c(color, stops[currentStop].color.colorSpace());
+    KoColor c(color);
     c.setOpacity(stops[currentStop].color.opacityU8());
 
     KoGradientStopType type = stops[currentStop].type;

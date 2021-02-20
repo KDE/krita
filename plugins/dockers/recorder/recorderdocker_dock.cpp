@@ -1,190 +1,378 @@
 /*
- *  Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2019 Shi Yan <billconan@gmail.net>
+ *  SPDX-FileCopyrightText: 2020 Dmitrii Utkin <loentar@gmail.com>
  *
- *  This library is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2.1 of the License.
- *
- *  This library is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU Lesser General Public License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: LGPL-2.1-only
  */
 
 #include "recorderdocker_dock.h"
+#include "recorder_config.h"
+#include "recorder_writer.h"
+#include "ui_recorderdocker.h"
+#include "recorder_snapshots_manager.h"
+#include "recorder_export.h"
 
 #include <klocalizedstring.h>
-#include <QLabel>
-#include <QStatusBar>
-#include <QVBoxLayout>
-
-#include "encoder_queue.h"
-#include "kis_canvas2.h"
-#include "kis_image.h"
-#include "kis_paint_device.h"
-#include "kis_signal_compressor.h"
-#include <KisViewManager.h>
-#include <KoColorSpaceRegistry.h>
-#include <kactioncollection.h>
+#include <kis_action_registry.h>
+#include <kis_canvas2.h>
 #include <kis_icon_utils.h>
-#include <kis_zoom_manager.h>
-#include <klocalizedstring.h>
-#include <QDir>
+#include <kis_statusbar.h>
+#include <KisDocument.h>
+#include <KisViewManager.h>
+#include <KoDocumentInfo.h>
+#include <kactioncollection.h>
+#include <KisPart.h>
+
+#include <QFileInfo>
+#include <QPointer>
 #include <QFileDialog>
-#include <QRegExp>
-#include <QRegExpValidator>
-#include <QRegularExpression>
-#include <QRegularExpressionMatch>
-#include <QStringBuilder>
-#include <QtConcurrent>
+
+namespace
+{
+const QString keyActionRecordToggle = "recorder_record_toggle";
+const QString keyActionExport = "recorder_export";
+}
+
+
+class RecorderDockerDock::Private
+{
+public:
+    RecorderDockerDock *const q;
+    Ui::RecorderDocker *const ui;
+    QPointer<KisCanvas2> canvas;
+    RecorderWriter writer;
+
+    QAction *recordToggleAction = nullptr;
+    QAction *exportAction = nullptr;
+
+    QString snapshotDirectory;
+    QString prefix;
+    QString outputDirectory;
+    int captureInterval = 0;
+    int quality = 0;
+    int resolution = 0;
+    bool recordIsolateLayerMode = false;
+    bool recordAutomatically = false;
+
+    QLabel* statusBarLabel;
+    bool isColorSpaceSupported;
+
+    QMap<QString, bool> enabledIds;
+
+    Private(RecorderDockerDock *q_ptr)
+        : q(q_ptr)
+        , ui(new Ui::RecorderDocker())
+        , statusBarLabel(new QLabel())
+        , isColorSpaceSupported(false)
+    {
+        updateRecIndicator(false);
+    }
+
+    void loadSettings()
+    {
+        RecorderConfig config(true);
+        snapshotDirectory = config.snapshotDirectory();
+        captureInterval = config.captureInterval();
+        quality = config.quality();
+        resolution = config.resolution();
+        recordIsolateLayerMode = config.recordIsolateLayerMode();
+        recordAutomatically = config.recordAutomatically();
+    }
+
+
+    void updateWriterSettings()
+    {
+        outputDirectory = snapshotDirectory % QDir::separator() % prefix % QDir::separator();
+        writer.setup({ outputDirectory, quality, resolution, captureInterval, recordIsolateLayerMode });
+    }
+
+    QString getPrefix()
+    {
+        return !canvas ? ""
+               : canvas->imageView()->document()->documentInfo()->aboutInfo("creation-date").remove(QRegExp("[^0-9]"));
+    }
+
+    void updateComboResolution(quint32 width, quint32 height)
+    {
+        const QStringList titles = {
+            i18nc("Use original resolution for the frames when recording the canvas", "Original"),
+            i18nc("Use the resolution two times smaller than the original resolution for the frames when recording the canvas", "Half"),
+            i18nc("Use the resolution four times smaller than the original resolution for the frames when recording the canvas", "Quarter")
+        };
+
+        QStringList items;
+        for (int index = 0, len = titles.length(); index < len; ++index) {
+            int divider = 1 << index;
+            items += QString("%1 (%2x%3)").arg(titles[index])
+                    .arg((width / divider) & ~1)
+                    .arg((height / divider) & ~1);
+        }
+        QSignalBlocker blocker(ui->comboResolution);
+        const int currentIndex = ui->comboResolution->currentIndex();
+        ui->comboResolution->clear();
+        ui->comboResolution->addItems(items);
+        ui->comboResolution->setCurrentIndex(currentIndex);
+    }
+
+    void validateColorSpace(const KoColorSpace *colorSpace)
+    {
+        isColorSpaceSupported = colorSpace->colorModelId().id() == "RGBA" &&
+                                colorSpace->colorDepthId().id() == "U8";
+        ui->labelUnsupportedColorSpace->setVisible(!isColorSpaceSupported);
+        ui->buttonRecordToggle->setEnabled(isColorSpaceSupported);
+    }
+
+    void updateRecordStatus(bool isRecording)
+    {
+        recordToggleAction->setChecked(isRecording);
+        recordToggleAction->setEnabled(isColorSpaceSupported);
+
+        QSignalBlocker blocker(ui->buttonRecordToggle);
+        ui->buttonRecordToggle->setChecked(isRecording);
+        ui->buttonRecordToggle->setIcon(KisIconUtils::loadIcon(isRecording ? "media-playback-stop" : "media-record"));
+        ui->buttonRecordToggle->setText(isRecording ? i18nc("Stop recording the canvas", "Stop")
+                                        : i18nc("Start recording the canvas", "Record"));
+        ui->buttonRecordToggle->setEnabled(isColorSpaceSupported);
+
+        ui->widgetSettings->setEnabled(!isRecording);
+
+        statusBarLabel->setVisible(isRecording);
+
+        if (!canvas)
+            return;
+
+        KisStatusBar *statusBar = canvas->viewManager()->statusBar();
+        if (isRecording) {
+            statusBar->addExtraWidget(statusBarLabel);
+        } else {
+            statusBar->removeExtraWidget(statusBarLabel);
+        }
+    }
+
+    void updateRecIndicator(bool paused)
+    {
+        // don't remove empty <font></font> tag else label will jump a few pixels around
+        statusBarLabel->setText(QString("<font%1>●</font><font> %2</font>")
+                                .arg(paused ? "" : " color='#da4453'").arg(i18nc("Recording symbol", "REC")));
+        statusBarLabel->setToolTip(paused ? i18n("Recorder is paused") : i18n("Recorder is active"));
+    }
+};
 
 RecorderDockerDock::RecorderDockerDock()
-    : QDockWidget(i18n("Recorder"))
-    , m_canvas(nullptr)
-    , m_imageIdleWatcher(1000)
-    , m_encoderQueue(nullptr)
+    : QDockWidget(i18nc("Title of the docker", "Recorder"))
+    , d(new Private(this))
 {
     QWidget* page = new QWidget(this);
-    m_layout = new QGridLayout(page);
-    m_recordDirectoryLabel = new QLabel(this);
-    m_recordDirectoryLabel->setText("Directory:");
+    d->ui->setupUi(page);
+    d->ui->labelUnsupportedColorSpace->setVisible(false);
 
-    m_layout->addWidget(m_recordDirectoryLabel, 0, 0, 1, 2);
+    d->ui->buttonManageRecordings->setIcon(KisIconUtils::loadIcon("configure"));
+    d->ui->buttonBrowse->setIcon(KisIconUtils::loadIcon("folder"));
+    d->ui->buttonRecordToggle->setIcon(KisIconUtils::loadIcon("media-record"));
+    d->ui->buttonExport->setIcon(KisIconUtils::loadIcon("document-export"));
+    d->ui->spinQuality->setMinimum(1);
+    d->ui->spinQuality->setMaximum(100);
+    d->ui->spinQuality->setSuffix("%");
 
-    m_recordDirectoryLineEdit = new QLineEdit(this);
-    m_recordDirectoryLineEdit->setText(QDir::homePath());
-    m_recordDirectoryLineEdit->setReadOnly(true);
-    m_layout->addWidget(m_recordDirectoryLineEdit, 1, 0);
+    d->loadSettings();
 
-    m_recordDirectoryPushButton = new QPushButton(this);
-    m_recordDirectoryPushButton->setIcon(KisIconUtils::loadIcon("folder"));
-    m_recordDirectoryPushButton->setToolTip(i18n("Record Video"));
+    d->ui->editDirectory->setText(d->snapshotDirectory);
+    d->ui->spinCaptureInterval->setValue(d->captureInterval);
+    d->ui->spinQuality->setValue(d->quality);
+    d->ui->comboResolution->setCurrentIndex(d->resolution);
+    d->ui->checkBoxRecordIsolateMode->setChecked(d->recordIsolateLayerMode);
+    d->ui->checkBoxAutoRecord->setChecked(d->recordAutomatically);
 
-    m_layout->addWidget(m_recordDirectoryPushButton, 1, 1);
+    KisActionRegistry *actionRegistry = KisActionRegistry::instance();
+    d->recordToggleAction = actionRegistry->makeQAction(keyActionRecordToggle, this);
+    d->exportAction = actionRegistry->makeQAction(keyActionExport, this);
 
-    m_imageNameLabel = new QLabel(this);
-    m_imageNameLabel->setText("Video Name:");
+    connect(d->recordToggleAction, SIGNAL(toggled(bool)), d->ui->buttonRecordToggle, SLOT(setChecked(bool)));
+    connect(d->exportAction, SIGNAL(triggered()), d->ui->buttonExport, SIGNAL(clicked()));
 
-    m_layout->addWidget(m_imageNameLabel, 2, 0, 1, 2);
+    // Need to register toolbar actions before attaching canvas else it wont appear after restart.
+    // Is there any better way to do this?
+    connect(KisPart::instance(), SIGNAL(sigMainWindowIsBeingCreated(KisMainWindow *)),
+            this, SLOT(onMainWindowIsBeingCreated(KisMainWindow *)));
 
-    m_imageNameLineEdit = new QLineEdit(this);
-    m_imageNameLineEdit->setText("image");
+    connect(d->ui->buttonManageRecordings, SIGNAL(clicked()), this, SLOT(onManageRecordingsButtonClicked()));
+    connect(d->ui->buttonBrowse, SIGNAL(clicked()), this, SLOT(onSelectRecordFolderButtonClicked()));
+    connect(d->ui->spinCaptureInterval, SIGNAL(valueChanged(int)), this, SLOT(onCaptureIntervalChanged(int)));
+    connect(d->ui->spinQuality, SIGNAL(valueChanged(int)), this, SLOT(onQualityChanged(int)));
+    connect(d->ui->comboResolution, SIGNAL(currentIndexChanged(int)), this, SLOT(onResolutionChanged(int)));
+    connect(d->ui->checkBoxRecordIsolateMode, SIGNAL(toggled(bool)), this, SLOT(onRecordIsolateLayerModeToggled(bool)));
+    connect(d->ui->checkBoxAutoRecord, SIGNAL(toggled(bool)), this, SLOT(onAutoRecordToggled(bool)));
+    connect(d->ui->buttonRecordToggle, SIGNAL(toggled(bool)), this, SLOT(onRecordButtonToggled(bool)));
+    connect(d->ui->buttonExport, SIGNAL(clicked()), this, SLOT(onExportButtonClicked()));
 
-    QRegExp rx("[0-9a-zA-z_]+");
-    QValidator* validator = new QRegExpValidator(rx, this);
-    m_imageNameLineEdit->setValidator(validator);
+    connect(&d->writer, SIGNAL(started()), this, SLOT(onWriterStarted()));
+    connect(&d->writer, SIGNAL(finished()), this, SLOT(onWriterFinished()));
+    connect(&d->writer, SIGNAL(pausedChanged(bool)), this, SLOT(onWriterPausedChanged(bool)));
 
-    m_layout->addWidget(m_imageNameLineEdit, 3, 0);
-
-    m_recordToggleButton = new QPushButton(this);
-    m_recordToggleButton->setCheckable(true);
-    m_recordToggleButton->setIcon(KisIconUtils::loadIcon("media-record"));
-    m_recordToggleButton->setToolTip(i18n("Record Video"));
-    m_layout->addWidget(m_recordToggleButton, 3, 1);
-
-
-    m_spacer = new QSpacerItem(1, 1, QSizePolicy::Minimum, QSizePolicy::Expanding);
-    m_layout->addItem(m_spacer, 6, 0, 1, 2);
-    connect(m_recordDirectoryPushButton, SIGNAL(clicked()), this, SLOT(onSelectRecordFolderButtonClicked()));
-    connect(m_recordToggleButton, SIGNAL(toggled(bool)), this, SLOT(onRecordButtonToggled(bool)));
     setWidget(page);
+}
+
+RecorderDockerDock::~RecorderDockerDock()
+{
+    delete d;
 }
 
 void RecorderDockerDock::setCanvas(KoCanvasBase* canvas)
 {
-    if (m_canvas == canvas)
-        return;
-
     setEnabled(canvas != nullptr);
 
-    if (m_canvas) {
-        m_canvas->disconnectCanvasObserver(this);
-        m_canvas->image()->disconnect(this);
-    }
+    if (d->canvas == canvas)
+        return;
 
-    m_canvas = dynamic_cast<KisCanvas2*>(canvas);
+    d->canvas = dynamic_cast<KisCanvas2*>(canvas);
+    d->writer.setCanvas(d->canvas);
 
-    if (m_canvas) {
-        m_imageIdleWatcher.setTrackedImage(m_canvas->image());
+    if (!d->canvas)
+        return;
 
-        connect(&m_imageIdleWatcher, &KisIdleWatcher::startedIdleMode, this, &RecorderDockerDock::generateThumbnail);
-        connect(m_canvas->image(), SIGNAL(sigSizeChanged(QPointF, QPointF)), SLOT(startUpdateCanvasProjection()));
-    }
-}
+    KisDocument *document = d->canvas->imageView()->document();
+    if (d->recordAutomatically && !d->enabledIds.contains(document->uniqueID()))
+        onRecordButtonToggled(true);
 
-void RecorderDockerDock::startUpdateCanvasProjection()
-{
-    m_imageIdleWatcher.startCountdown();
+    d->updateComboResolution(document->image()->width(), document->image()->height());
+    d->validateColorSpace(document->image()->projection()->colorSpace());
+
+    d->prefix = d->getPrefix();
+    d->updateWriterSettings();
+
+    bool enabled = d->enabledIds.value(document->uniqueID(), false);
+    d->writer.setEnabled(enabled && d->isColorSpaceSupported);
+    d->updateRecordStatus(enabled && d->isColorSpaceSupported);
 }
 
 void RecorderDockerDock::unsetCanvas()
 {
+    d->updateRecordStatus(false);
+    d->recordToggleAction->setChecked(false);
     setEnabled(false);
-    m_canvas = nullptr;
+    d->writer.stop();
+    d->writer.setCanvas(nullptr);
+    d->canvas = nullptr;
+    d->enabledIds.clear();
 }
 
-void RecorderDockerDock::onRecordButtonToggled(bool enabled)
+void RecorderDockerDock::onMainWindowIsBeingCreated(KisMainWindow *window)
 {
-    bool enabled2 = enabled;
-    enableRecord(enabled2, m_recordDirectoryLineEdit->text() % "/" % m_imageNameLineEdit->text());
+    KActionCollection *actionCollection = window->viewManager()->actionCollection();
+    actionCollection->addAction(keyActionRecordToggle, d->recordToggleAction);
+    actionCollection->addAction(keyActionExport, d->exportAction);
+}
 
-    if (enabled && !enabled2) {
-        disconnect(m_recordToggleButton, SIGNAL(toggle(bool)), this, SLOT(onRecordButtonToggled(bool)));
-        m_recordToggleButton->setChecked(false);
+void RecorderDockerDock::onRecordButtonToggled(bool checked)
+{
+    d->recordToggleAction->setChecked(checked);
 
-        connect(m_recordToggleButton, SIGNAL(toggle(bool)), this, SLOT(onRecordButtonToggled(bool)));
+    if (!d->canvas)
+        return;
+
+    const QString &id = d->canvas->imageView()->document()->uniqueID();
+
+    bool wasEmpty = !d->enabledIds.values().contains(true);
+
+    d->enabledIds[id] = checked;
+
+    bool isEmpty = !d->enabledIds.values().contains(true);
+
+    d->writer.setEnabled(checked);
+
+    if (isEmpty == wasEmpty) {
+        d->updateRecordStatus(checked);
+        return;
+    }
+
+
+    d->ui->buttonRecordToggle->setEnabled(false);
+
+    if (checked) {
+        d->updateWriterSettings();
+        d->writer.start();
+    } else {
+        d->writer.stop();
     }
 }
+
+void RecorderDockerDock::onExportButtonClicked()
+{
+    if (!d->canvas)
+        return;
+
+    KisDocument *document = d->canvas->imageView()->document();
+
+    RecorderExport exportDialog(this);
+    exportDialog.setup({
+        QFileInfo(document->caption().trimmed()).completeBaseName(),
+        d->outputDirectory
+    });
+    exportDialog.exec();
+}
+
+void RecorderDockerDock::onManageRecordingsButtonClicked()
+{
+    RecorderSnapshotsManager snapshotsManager(this);
+    snapshotsManager.execFor(d->snapshotDirectory);
+}
+
 
 void RecorderDockerDock::onSelectRecordFolderButtonClicked()
 {
     QFileDialog dialog(this);
     dialog.setFileMode(QFileDialog::DirectoryOnly);
-    QString folder = dialog.getExistingDirectory(this, tr("Select Output Folder"), m_recordDirectoryLineEdit->text(),
-                                                 QFileDialog::ShowDirsOnly);
-    m_recordDirectoryLineEdit->setText(folder);
-}
-
-void RecorderDockerDock::enableRecord(bool& enabled, const QString& path)
-{
-    if (!m_encoderQueue)
-    {
-        m_encoderQueue = new EncoderQueue();
-    }
-
-    m_encoderQueue->setEnable(enabled,path,m_canvas);
-
-    if (enabled)
-    {
-        startUpdateCanvasProjection();
-    }
-    else
-    {
-        delete m_encoderQueue;
-        m_encoderQueue = nullptr;
+    const QString &directory = dialog.getExistingDirectory(this,
+                               i18n("Select a Directory for Recordings"),
+                               d->ui->editDirectory->text(),
+                               QFileDialog::ShowDirsOnly);
+    if (!directory.isEmpty()) {
+        d->ui->editDirectory->setText(directory);
+        RecorderConfig(false).setSnapshotDirectory(directory);
     }
 }
 
-void RecorderDockerDock::generateThumbnail()
+void RecorderDockerDock::onRecordIsolateLayerModeToggled(bool checked)
 {
-    if (m_encoderQueue && m_encoderQueue->isRecording()) {
-        if (m_canvas && (m_encoderQueue->recordingCanvas() == m_canvas)) {
-            disconnect(&m_imageIdleWatcher, &KisIdleWatcher::startedIdleMode, this,
-                       &RecorderDockerDock::generateThumbnail);
-            if (m_encoderQueue) {
-                KisImageSP image = m_canvas->image();
-                image->barrierLock();
-                KisPaintDeviceSP dev = image->projection();
-                m_encoderQueue->pushFrame(dev, image->width(), image->height());
-                image->unlock();
-            }
+    d->recordIsolateLayerMode = checked;
+    RecorderConfig(false).setRecordIsolateLayerMode(checked);
+}
 
-            connect(&m_imageIdleWatcher, &KisIdleWatcher::startedIdleMode, this,
-                    &RecorderDockerDock::generateThumbnail);
-        }
-    }
+void RecorderDockerDock::onAutoRecordToggled(bool checked)
+{
+    d->recordAutomatically = checked;
+    RecorderConfig(false).setRecordAutomatically(checked);
+}
+
+void RecorderDockerDock::onCaptureIntervalChanged(int interval)
+{
+    d->captureInterval = interval;
+    RecorderConfig(false).setCaptureInterval(interval);
+}
+
+void RecorderDockerDock::onQualityChanged(int quality)
+{
+    d->quality = quality;
+    RecorderConfig(false).setQuality(quality);
+}
+
+void RecorderDockerDock::onResolutionChanged(int resolution)
+{
+    d->resolution = resolution;
+    RecorderConfig(false).setResolution(resolution);
+}
+
+void RecorderDockerDock::onWriterStarted()
+{
+    d->updateRecordStatus(true);
+}
+
+void RecorderDockerDock::onWriterFinished()
+{
+    d->updateRecordStatus(false);
+}
+
+void RecorderDockerDock::onWriterPausedChanged(bool paused)
+{
+    d->updateRecIndicator(paused);
 }

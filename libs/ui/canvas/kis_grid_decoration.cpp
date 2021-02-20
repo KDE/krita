@@ -1,22 +1,10 @@
 /*
  * This file is part of Krita
  *
- *  Copyright (c) 2006 Cyrille Berger <cberger@cberger.net>
- *  Copyright (c) 2014 Sven Langkamp <sven.langkamp@gmail.com>
+ *  SPDX-FileCopyrightText: 2006 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2014 Sven Langkamp <sven.langkamp@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_grid_decoration.h"
@@ -136,85 +124,88 @@ void KisGridDecoration::drawDecoration(QPainter& gc, const QRectF& updateArea, c
 
     if (gridType == KisGridConfig::GRID_ISOMETRIC)  {
 
+        // get true coordinates, not just the updateArea
+        QRectF trueImageRect = converter->imageRectInImagePixels();
+        trueImageRect.getCoords(&x1, &y1, &x2, &y2);
+
         const int offset = m_d->config.offset().x();
         const int offsetY = m_d->config.offset().y();
-        const int step = scaleCoeff * m_d->config.spacing().y();
-        const int lineIndexFirst = qCeil((y1 - offset) / step);
         const int cellSpacing = m_d->config.cellSpacing();
 
         gc.setClipping(true);
         gc.setClipRect(imageRect, Qt::IntersectClip);
 
-
-
-
-
         // left angle
         {
-            int gridXAngle = m_d->config.angleLeft();
-            int counter = lineIndexFirst;
-            int bottomRightOfImageY = y2; // this should be the height of the image
-            int finalY = 0;
-
+            const qreal gridXAngle = m_d->config.angleLeft();
+            const qreal bottomRightOfImageY = y2; // this should be the height of the image
+            qreal finalY = 0.0;
 
             // figure out the spacing based off the angle. The spacing needs to be perpendicular to the angle,
             // so we need to do a bit of trig to get the correct spacing.
-            float correctedAngleSpacing = cellSpacing;
-            if (gridXAngle > 0) {
-                correctedAngleSpacing = cellSpacing / qCos( qDegreesToRadians((float)gridXAngle));
-
+            qreal correctedAngleSpacing = cellSpacing;
+            if (gridXAngle > 0.0) {
+                correctedAngleSpacing = cellSpacing / qCos(qDegreesToRadians(gridXAngle));
             }
 
+            qreal counter = qFloor((-(offset + offsetY)) / correctedAngleSpacing);
 
             while (finalY < bottomRightOfImageY) {
 
-                int w = (counter * correctedAngleSpacing) - offsetY;
+                const qreal w = (counter * correctedAngleSpacing) + offsetY + offset;
                 gc.setPen(mainPen);
 
                 // calculate where the ending point will be based off the angle
-                int startingY = w;
-                int horizontalDistance = x2;
+                const qreal startingY = w;
+                const qreal horizontalDistance = x2;
 
-                int length2 = qTan( qDegreesToRadians((float)gridXAngle)) * x2; // qTan takes radians, so convert first before sending it
+                // qTan takes radians, so convert first before sending it
+                const qreal length2 = qTan(qDegreesToRadians(gridXAngle)) * x2;
 
                 finalY = startingY - length2;
-                gc.drawLine(QPointF(x1, w),QPointF(horizontalDistance, finalY));
+                gc.drawLine(QPointF(x1, w), QPointF(horizontalDistance, finalY));
 
-                counter = counter +1;
+                counter = counter + 1.0;
             }
         }
 
-
         // right angle (almost the same thing, except starting the lines on the right side)
         {
-            int gridXAngle = m_d->config.angleRight(); // TODO: add another angle property
-            int counter = lineIndexFirst;
-            int bottomLeftOfImageY = y2;
-            int finalY = 0;
-
+            const qreal gridXAngle = m_d->config.angleRight(); // TODO: add another angle property
+            const qreal bottomLeftOfImageY = y2;
 
             // figure out the spacing based off the angle
-            float correctedAngleSpacing = cellSpacing;
-            if (gridXAngle > 0) {
-                correctedAngleSpacing = cellSpacing / qCos( qDegreesToRadians((float)gridXAngle));
+            qreal correctedAngleSpacing = cellSpacing;
+            if (gridXAngle > 0.0) {
+                correctedAngleSpacing = cellSpacing / qCos(qDegreesToRadians(gridXAngle));
             }
 
+            // distance is the same (width of the image)
+            const qreal horizontalDistance = x2;
+            // qTan takes radians, so convert first before sending it
+            const qreal length2 = qTan(qDegreesToRadians(gridXAngle)) * horizontalDistance;
+
+            // let's get x, y of the line that starts in the top right corder
+            const qreal yLower = 0.0;
+            const qreal yHigher = yLower - length2;
+
+            const qreal yLeftFirst = qCeil(yHigher / correctedAngleSpacing) * correctedAngleSpacing;
+            const qreal additionalOffset = yLeftFirst - yHigher;
+            qreal finalY = 0.0;
+            qreal counter = qFloor((-(offsetY - offset)) / correctedAngleSpacing);
 
             while (finalY < bottomLeftOfImageY) {
 
-                int w = (counter * correctedAngleSpacing) - offsetY - offset;
+                const qreal w = (counter * correctedAngleSpacing) + offsetY - offset + additionalOffset;
                 gc.setPen(mainPen);
 
                 // calculate where the ending point will be based off the angle
-                int startingY = w;
-                int horizontalDistance = x2; // distance is the same (width of the image)
-
-                int length2 = qTan( qDegreesToRadians((float)gridXAngle)) * horizontalDistance; // qTan takes radians, so convert first before sending it
+                const qreal startingY = w;
 
                 finalY = startingY - length2;
-                gc.drawLine(QPointF(x2, w),QPointF(0, finalY));
+                gc.drawLine(QPointF(x2, w), QPointF(0.0, finalY));
 
-                counter = counter +1;
+                counter = counter + 1.0;
             }
         }
 

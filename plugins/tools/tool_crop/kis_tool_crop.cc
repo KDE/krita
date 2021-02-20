@@ -1,24 +1,12 @@
 /*
  *  kis_tool_crop.cc -- part of Krita
  *
- *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2005 Michael Thaler <michael.thaler@physik.tu-muenchen.de>
- *  Copyright (c) 2006 Cyrille Berger <cberger@cberger.net>
- *  Copyright (C) 2007 Adrian Page <adrian@pagenet.plus.com>
+ *  SPDX-FileCopyrightText: 2004 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2005 Michael Thaler <michael.thaler@physik.tu-muenchen.de>
+ *  SPDX-FileCopyrightText: 2006 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2007 Adrian Page <adrian@pagenet.plus.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_tool_crop.h"
@@ -124,11 +112,21 @@ KisToolCrop::KisToolCrop(KoCanvasBase * canvas)
     // context menu options (mirrors tool options)
     m_contextMenu.reset(new QMenu());
     applyCrop = new KisAction(i18n("Crop"));
-    growToggleOption = new KisAction(i18n("Grow"));
-    growToggleOption->setCheckable(true);
 
     centerToggleOption = new KisAction(i18n("Center"));
     centerToggleOption->setCheckable(true);
+    
+    growToggleOption = new KisAction(i18n("Grow"));
+    growToggleOption->setCheckable(true);
+    
+    lockWidthToggleOption = new KisAction(i18n("Lock Width"));
+    lockWidthToggleOption->setCheckable(true);
+    
+    lockHeightToggleOption = new KisAction(i18n("Lock Height"));
+    lockHeightToggleOption->setCheckable(true);
+    
+    lockRatioToggleOption = new KisAction(i18n("Lock Ratio"));
+    lockRatioToggleOption->setCheckable(true);
 }
 
 KisToolCrop::~KisToolCrop()
@@ -220,23 +218,31 @@ void KisToolCrop::paint(QPainter &painter, const KoViewConverter &converter)
 QMenu *KisToolCrop::popupActionsMenu()
 {
     if (m_contextMenu) {
+        // Sync state of context menu toggles with state of Tool Options toggles
+        centerToggleOption->setChecked(growCenter());
+        growToggleOption->setChecked(allowGrow());
+        lockWidthToggleOption->setChecked(lockWidth());
+        lockHeightToggleOption->setChecked(lockHeight());
+        lockRatioToggleOption->setChecked(lockRatio());
+      
         m_contextMenu->clear();
 
         m_contextMenu->addSection(i18n("Crop Tool Actions"));
         m_contextMenu->addSeparator();
-
-        // keeps in sync with tool options
-        growToggleOption->setChecked(allowGrow());
-        centerToggleOption->setChecked(growCenter());
-
 
         if (m_haveCropSelection) {         // can't crop if there is no selection
             m_contextMenu->addAction(applyCrop);
             m_contextMenu->addSeparator();
         }
 
-        m_contextMenu->addAction(growToggleOption);
         m_contextMenu->addAction(centerToggleOption);
+        m_contextMenu->addAction(growToggleOption);
+        
+        m_contextMenu->addSeparator();
+        
+        m_contextMenu->addAction(lockWidthToggleOption);
+        m_contextMenu->addAction(lockHeightToggleOption);
+        m_contextMenu->addAction(lockRatioToggleOption);
     }
 
     return m_contextMenu.data();
@@ -519,9 +525,9 @@ void KisToolCrop::slotRectChanged()
     emit cropXChanged(cropX());
     emit cropYChanged(cropY());
     emit ratioChanged(ratio());
-    emit forceHeightChanged(forceHeight());
-    emit forceWidthChanged(forceWidth());
-    emit forceRatioChanged(forceRatio());
+    emit lockHeightChanged(lockHeight());
+    emit lockWidthChanged(lockWidth());
+    emit lockRatioChanged(lockRatio());
 
     emit canGrowChanged(allowGrow());
     emit isCenteredChanged(growCenter());
@@ -587,12 +593,12 @@ int KisToolCrop::cropWidth() const
     return m_finalRect.rect().width();
 }
 
-void KisToolCrop::setForceWidth(bool force)
+void KisToolCrop::setLockWidth(bool lock)
 {
-    m_finalRect.setWidthLocked(force);
+    m_finalRect.setWidthLocked(lock);
 }
 
-bool KisToolCrop::forceWidth() const
+bool KisToolCrop::lockWidth() const
 {
     return m_finalRect.widthLocked();
 }
@@ -615,12 +621,12 @@ int KisToolCrop::cropHeight() const
     return m_finalRect.rect().height();
 }
 
-void KisToolCrop::setForceHeight(bool force)
+void KisToolCrop::setLockHeight(bool lock)
 {
-    m_finalRect.setHeightLocked(force);
+    m_finalRect.setHeightLocked(lock);
 }
 
-bool KisToolCrop::forceHeight() const
+bool KisToolCrop::lockHeight() const
 {
     return m_finalRect.heightLocked();
 }
@@ -672,12 +678,12 @@ double KisToolCrop::ratio() const
     return m_finalRect.ratio();
 }
 
-void KisToolCrop::setForceRatio(bool force)
+void KisToolCrop::setLockRatio(bool lock)
 {
-    m_finalRect.setRatioLocked(force);
+    m_finalRect.setRatioLocked(lock);
 }
 
-bool KisToolCrop::forceRatio() const
+bool KisToolCrop::lockRatio() const
 {
     return m_finalRect.ratioLocked();
 }
@@ -700,22 +706,23 @@ QWidget* KisToolCrop::createOptionWidget()
     connect(optionsWidget, SIGNAL(cropXChanged(int)), this, SLOT(setCropX(int)));
     connect(optionsWidget, SIGNAL(cropYChanged(int)), this, SLOT(setCropY(int)));
     connect(optionsWidget, SIGNAL(cropHeightChanged(int)), this, SLOT(setCropHeight(int)));
-    connect(optionsWidget, SIGNAL(forceHeightChanged(bool)), this, SLOT(setForceHeight(bool)));
+    connect(optionsWidget, SIGNAL(lockHeightChanged(bool)), this, SLOT(setLockHeight(bool)));
     connect(optionsWidget, SIGNAL(cropWidthChanged(int)), this, SLOT(setCropWidth(int)));
-    connect(optionsWidget, SIGNAL(forceWidthChanged(bool)), this, SLOT(setForceWidth(bool)));
+    connect(optionsWidget, SIGNAL(lockWidthChanged(bool)), this, SLOT(setLockWidth(bool)));
     connect(optionsWidget, SIGNAL(ratioChanged(double)), this, SLOT(setRatio(double)));
-    connect(optionsWidget, SIGNAL(forceRatioChanged(bool)), this, SLOT(setForceRatio(bool)));
+    connect(optionsWidget, SIGNAL(lockRatioChanged(bool)), this, SLOT(setLockRatio(bool)));
     connect(optionsWidget, SIGNAL(decorationChanged(int)), this, SLOT(setDecoration(int)));
     connect(optionsWidget, SIGNAL(allowGrowChanged(bool)), this, SLOT(setAllowGrow(bool)));
     connect(optionsWidget, SIGNAL(growCenterChanged(bool)), this, SLOT(setGrowCenter(bool)));
 
     optionsWidget->setFixedHeight(optionsWidget->sizeHint().height());
 
-
     connect(applyCrop, SIGNAL(triggered(bool)), this, SLOT(crop()));
-    connect(growToggleOption, SIGNAL(triggered(bool)), this, SLOT(setAllowGrow(bool)));
     connect(centerToggleOption, SIGNAL(triggered(bool)), this, SLOT(setGrowCenter(bool)));
-
+    connect(growToggleOption, SIGNAL(triggered(bool)), this, SLOT(setAllowGrow(bool)));
+    connect(lockWidthToggleOption, SIGNAL(triggered(bool)), this, SLOT(setLockWidth(bool)));
+    connect(lockHeightToggleOption, SIGNAL(triggered(bool)), this, SLOT(setLockHeight(bool)));
+    connect(lockRatioToggleOption, SIGNAL(triggered(bool)), this, SLOT(setLockRatio(bool)));
 
     return optionsWidget;
 }

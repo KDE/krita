@@ -1,0 +1,290 @@
+From f972e1cff05a7ca517e91d6fdfe99c964316cee5 Mon Sep 17 00:00:00 2001
+From: "L. E. Segovia" <amy@amyspark.me>
+Date: Tue, 10 Nov 2020 02:16:25 +0000
+Subject: [PATCH 2/5] Remove shared segment infrastructure
+
+---
+ src/Host/KritaPlugin/gmicqttoolplugin.cpp |   8 +-
+ src/Host/KritaPlugin/gmicqttoolplugin.h   |   4 +-
+ src/Host/KritaPlugin/host.cpp             | 161 +++++-----------------
+ 3 files changed, 39 insertions(+), 134 deletions(-)
+
+diff --git a/src/Host/KritaPlugin/gmicqttoolplugin.cpp b/src/Host/KritaPlugin/gmicqttoolplugin.cpp
+index 1402f82..012c783 100644
+--- a/src/Host/KritaPlugin/gmicqttoolplugin.cpp
++++ b/src/Host/KritaPlugin/gmicqttoolplugin.cpp
+@@ -121,14 +121,8 @@ int KritaGmicPlugin::launch(std::shared_ptr<KisImageInterface> i,
+     r = loop.exec();
+   }
+ 
+-  Q_FOREACH (QSharedMemory *sharedMemory, sharedMemorySegments) {
+-    if (sharedMemory->isAttached()) {
+-      sharedMemory->detach();
+-    }
+-  }
+-
+-  qDeleteAll(sharedMemorySegments);
+   sharedMemorySegments.clear();
++  iface.reset();
+ 
+   return r;
+ }
+diff --git a/src/Host/KritaPlugin/gmicqttoolplugin.h b/src/Host/KritaPlugin/gmicqttoolplugin.h
+index a5d5f3f..043e362 100644
+--- a/src/Host/KritaPlugin/gmicqttoolplugin.h
++++ b/src/Host/KritaPlugin/gmicqttoolplugin.h
+@@ -34,13 +34,13 @@
+ #include "kis_image_interface.h"
+ #include "KritaGmicPluginInterface.h"
+ 
+-extern QVector<QSharedMemory *> sharedMemorySegments;
++extern QVector<KisQMicImageSP> sharedMemorySegments;
+ extern std::shared_ptr<KisImageInterface> iface;
+ 
+ class KritaGmicPlugin : public QObject, public KritaGmicPluginInterface {
+   Q_OBJECT
+ 
+-  Q_PLUGIN_METADATA(IID "org.kde.krita.KritaGmicPluginInterface")
++  Q_PLUGIN_METADATA(IID KRITA_GMIC_PLUGIN_INTERFACE_IID)
+   Q_INTERFACES(KritaGmicPluginInterface)
+ 
+ public:
+diff --git a/src/Host/KritaPlugin/host.cpp b/src/Host/KritaPlugin/host.cpp
+index e814385..ffa5283 100644
+--- a/src/Host/KritaPlugin/host.cpp
++++ b/src/Host/KritaPlugin/host.cpp
+@@ -36,28 +36,26 @@
+ #include "kis_image_interface.h"
+ 
+ /*
+- * Messages to Krita are built like this:
+- *
+- * command
+- * mode=int
+- * layer=key,imagename
+- * croprect=x,y,w,h
+- *
+- * Messages from Krita are built like this:
+- *
+- * key,imagename
+- *
+- * After a message has been received, "ack" is sent
+- *
++ * No messages are sent in the plugin version of GMic.
++ * Instead, a list of KisQMicImageSP (shared pointers to KisQMic instances)
++ * are sent. These have:
++ * 
++ * layer name
++ * shared pointer to data
++ * width
++ * height
++ * a mutex to control access.
++ * 
++ * For the sake of debuggability, the overall control flow has been maintained.
+  */
+ 
+ namespace GmicQt {
+ const QString HostApplicationName = QString("Krita");
+ const char *HostApplicationShortname = GMIC_QT_XSTRINGIFY(GMIC_HOST);
+-const bool DarkThemeIsDefault = true;
++const bool DarkThemeIsDefault = false;
+ } // namespace GmicQt
+ 
+-QVector<QSharedMemory *> sharedMemorySegments;
++QVector<KisQMicImageSP> sharedMemorySegments;
+ std::shared_ptr<KisImageInterface> iface;
+ 
+ void gmic_qt_get_layers_extent(int *width, int *height,
+@@ -86,77 +84,40 @@ void gmic_qt_get_cropped_images(gmic_list<float> &images,
+ 
+   // Create a message for Krita
+   QRectF cropRect = {x, y, width, height};
+-  QString answer = iface->gmic_qt_get_cropped_images(mode, cropRect);
++  auto imagesList = iface->gmic_qt_get_cropped_images(mode, cropRect);
+ 
+-  if (answer.isEmpty()) {
++  if (imagesList.isEmpty()) {
+     qWarning() << "\tgmic-qt: empty answer!";
+     return;
+   }
+ 
+   // qDebug() << "\tgmic-qt: " << answer;
+ 
+-  QStringList imagesList = answer.split("\n", QString::SkipEmptyParts);
+-
+   images.assign(imagesList.size());
+   imageNames.assign(imagesList.size());
+ 
+   // qDebug() << "\tgmic-qt: imagelist size" << imagesList.size();
+ 
+-  // Parse the answer -- there should be no new lines in layernames
+-  QStringList memoryKeys;
+-  QList<QSize> sizes;
+-  // Get the keys for the shared memory areas and the imageNames as prepared by
+-  // Krita in G'Mic format
++
++  // Get the layers as prepared by Krita in G'Mic format
+   for (int i = 0; i < imagesList.length(); ++i) {
+-    const QString &layer = imagesList[i];
+-    QStringList parts = layer.split(',', QString::SkipEmptyParts);
+-    if (parts.size() != 4) {
+-      qWarning() << "\tgmic-qt: Got the wrong answer!";
+-    }
+-    memoryKeys << parts[0];
+-    QByteArray ba = parts[1].toLatin1();
+-    ba = QByteArray::fromHex(ba);
++    const auto &layer = imagesList[i];
++    QByteArray ba = layer->m_layerName.toUtf8().toHex();
+     gmic_image<char>::string(ba.constData()).move_to(imageNames[i]);
+-    sizes << QSize(parts[2].toInt(), parts[3].toInt());
+-  }
+ 
+-  // qDebug() << "\tgmic-qt: keys" << memoryKeys;
++    // Fill images from the shared memory areas
+ 
+-  // Fill images from the shared memory areas
+-  for (int i = 0; i < memoryKeys.length(); ++i) {
+-    const QString &key = memoryKeys[i];
+-    QSharedMemory m(key);
++    {
++      QMutexLocker(&layer->m_mutex);
+ 
+-    if (!m.attach(QSharedMemory::ReadOnly)) {
+-      qWarning() << "\tgmic-qt: Could not attach to shared memory area."
+-                 << m.error() << m.errorString();
+-    }
+-    if (m.isAttached()) {
+-      if (!m.lock()) {
+-        qWarning() << "\tgmic-qt: Could not lock memory segment" << m.error()
+-                   << m.errorString();
+-      }
+-      // qDebug() << "Memory segment" << key << m.size() << m.constData() <<
+-      // m.data();
++      // qDebug() << "Memory segment" << (quintptr)image.data() << image->size() << (quintptr)&image->m_data << (quintptr)image->m_data.get();
+ 
+       // convert the data to the list of float
+       gmic_image<float> gimg;
+-      gimg.assign(sizes[i].width(), sizes[i].height(), 1, 4);
+-      memcpy(gimg._data, m.constData(),
+-             sizes[i].width() * sizes[i].height() * 4 * sizeof(float));
++      gimg.assign(layer->m_width, layer->m_height, 1, 4);
++      memcpy(gimg._data, layer->constData(),
++             layer->m_width * layer->m_height * 4 * sizeof(float));
+       gimg.move_to(images[i]);
+-
+-      if (!m.unlock()) {
+-        qWarning() << "\tgmic-qt: Could not unlock memory segment" << m.error()
+-                   << m.errorString();
+-      }
+-      if (!m.detach()) {
+-        qWarning() << "\tgmic-qt: Could not detach from memory segment"
+-                   << m.error() << m.errorString();
+-      }
+-    } else {
+-      qWarning() << "gmic-qt: Could not attach to shared memory area."
+-                 << m.error() << m.errorString();
+     }
+   }
+ 
+@@ -173,12 +134,6 @@ void gmic_qt_output_images(gmic_list<float> &images,
+ 
+   // qDebug() << "qmic-qt-output-images";
+ 
+-  Q_FOREACH (QSharedMemory *sharedMemory, sharedMemorySegments) {
+-    if (sharedMemory->isAttached()) {
+-      sharedMemory->detach();
+-    }
+-  }
+-  qDeleteAll(sharedMemorySegments);
+   sharedMemorySegments.clear();
+ 
+   // qDebug() << "\tqmic-qt: shared memory" << sharedMemorySegments.count();
+@@ -186,7 +141,7 @@ void gmic_qt_output_images(gmic_list<float> &images,
+   // Create qsharedmemory segments for each image
+   // Create a message for Krita based on mode, the keys of the qsharedmemory
+   // segments and the imageNames
+-  QStringList layers;
++  QVector<KisQMicImageSP> layers;
+ 
+   for (uint i = 0; i < images.size(); ++i) {
+ 
+@@ -194,29 +149,19 @@ void gmic_qt_output_images(gmic_list<float> &images,
+ 
+     gmic_image<float> gimg = images.at(i);
+ 
+-    QSharedMemory *m = new QSharedMemory(
+-        QString("key_%1").arg(QUuid::createUuid().toString()));
+-    sharedMemorySegments.append(m);
++    QString layerName((const char *)imageNames[i]);
+ 
+-    if (!m->create(gimg._width * gimg._height * gimg._spectrum *
+-                   sizeof(float))) {
+-      qWarning() << "Could not create shared memory" << m->error()
+-                 << m->errorString();
+-      return;
+-    }
++    KisQMicImageSP m = KisQMicImageSP::create(layerName, gimg._width, gimg._height, gimg._spectrum);
++    sharedMemorySegments << m;
+ 
+-    m->lock();
+-    memcpy(m->data(), gimg._data,
+-           gimg._width * gimg._height * gimg._spectrum * sizeof(float));
+-    m->unlock();
++    {
++      QMutexLocker lock(&m->m_mutex);
+ 
+-    QString layerName((const char *)imageNames[i]);
++      memcpy(m->m_data, gimg._data,
++           gimg._width * gimg._height * gimg._spectrum * sizeof(float));
++    }
+ 
+-    layers << m->key() + "," + layerName.toUtf8().toHex() + "," +
+-               QString("%1,%2,%3")
+-                   .arg(gimg._spectrum)
+-                   .arg(gimg._width)
+-                   .arg(gimg._height);
++    layers << m;
+   }
+ 
+   iface->gmic_qt_output_images(mode, layers);
+@@ -229,37 +174,3 @@ void gmic_qt_show_message(const char *) {
+ }
+ 
+ void gmic_qt_apply_color_profile(cimg_library::CImg<gmic_pixel_type> &) {}
+-#if defined Q_OS_WIN
+-#if defined DRMINGW
+-namespace {
+-void tryInitDrMingw() {
+-  wchar_t path[MAX_PATH];
+-  QString pathStr =
+-      QCoreApplication::applicationDirPath().replace(L'/', L'\\') +
+-      QStringLiteral("\\exchndl.dll");
+-  if (pathStr.size() > MAX_PATH - 1) {
+-    return;
+-  }
+-  int pathLen = pathStr.toWCharArray(path);
+-  path[pathLen] = L'\0'; // toWCharArray doesn't add NULL terminator
+-  HMODULE hMod = LoadLibraryW(path);
+-  if (!hMod) {
+-    return;
+-  }
+-  // No need to call ExcHndlInit since the crash handler is installed on DllMain
+-  auto myExcHndlSetLogFileNameA =
+-      reinterpret_cast<BOOL(APIENTRY *)(const char *)>(
+-          GetProcAddress(hMod, "ExcHndlSetLogFileNameA"));
+-  if (!myExcHndlSetLogFileNameA) {
+-    return;
+-  }
+-  // Set the log file path to %LocalAppData%\kritacrash.log
+-  QString logFile =
+-      QStandardPaths::writableLocation(QStandardPaths::DesktopLocation)
+-          .replace(L'/', L'\\') +
+-      QStringLiteral("\\gmic_krita_qt_crash.log");
+-  myExcHndlSetLogFileNameA(logFile.toLocal8Bit());
+-}
+-} // namespace
+-#endif // DRMINGW
+-#endif // Q_OS_WIN
+-- 
+2.30.0
+

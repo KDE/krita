@@ -1,0 +1,25 @@
+From f8d3e66dd26a90da655621d9612cade83f7f73e5 Mon Sep 17 00:00:00 2001
+From: "L. E. Segovia" <amy@amyspark.me>
+Date: Wed, 4 Nov 2020 13:28:15 +0000
+Subject: [PATCH 2/2] Use system libiconv in macOS
+
+---
+ cmake/modules/FindIconv.cmake | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/cmake/modules/FindIconv.cmake b/cmake/modules/FindIconv.cmake
+index ab9ad563..874a042a 100644
+--- a/cmake/modules/FindIconv.cmake
++++ b/cmake/modules/FindIconv.cmake
+@@ -19,7 +19,7 @@ ENDIF (ICONV_INCLUDE_DIR AND ICONV_LIBRARIES)
+ 
+ FIND_PATH(ICONV_INCLUDE_DIR iconv.h) 
+  
+-FIND_LIBRARY(ICONV_LIBRARIES NAMES iconv libiconv libiconv-2 c)
++FIND_LIBRARY(ICONV_LIBRARIES NO_DEFAULT_PATH PATHS ${CMAKE_INSTALL_PREFIX}/lib /usr/lib NAMES iconv libiconv libiconv-2 )
+  
+ IF(ICONV_INCLUDE_DIR AND ICONV_LIBRARIES) 
+    SET(ICONV_FOUND TRUE) 
+-- 
+2.28.0
+

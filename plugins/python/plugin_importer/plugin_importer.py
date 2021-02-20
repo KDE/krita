@@ -1,19 +1,8 @@
-# Copyright (c) 2019 Rebecca Breu <rebecca@rbreu.de>
+# SPDX-FileCopyrightText: 2019 Rebecca Breu <rebecca@rbreu.de>
 
 # This file is part of Krita.
 
-# Krita is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-
-# Krita is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-
-# You should have received a copy of the GNU General Public License
-# along with Krita.  If not, see <https://www.gnu.org/licenses/>.
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 """This module provides the actual importing logic. See
 `:class:PluginImporter` for more info.
@@ -28,7 +17,6 @@ import shutil
 import sys
 from tempfile import TemporaryDirectory
 import zipfile
-from xml.etree import ElementTree
 
 
 class PluginImportError(Exception):
@@ -140,16 +128,9 @@ class PluginImporter:
 
     def get_source_actionfile(self, name):
         for filename in self.action_filenames:
-            try:
-                root = ElementTree.fromstring(
-                    self.archive.read(filename).decode('utf-8'))
-            except ElementTree.ParseError as e:
-                raise PluginReadError(
-                    '%s: %s' % (i18n('Action file'), str(e)))
-
-            for action in root.findall('./Actions/Action'):
-                if action.get('name') == name:
-                    return filename
+            _, actionfilename = os.path.split(filename)
+            if actionfilename == '%s.action' % name:
+                return filename
 
     def read_desktop_config(self, desktop_filename):
         config = ConfigParser()

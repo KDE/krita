@@ -1,19 +1,7 @@
 /*
- * Copyright (c) 2019 boud <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2019 boud <boud@valdyas.org>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 #include "KisStorageModel.h"
 
@@ -26,16 +14,34 @@ Q_GLOBAL_STATIC(KisStorageModel, s_instance)
 
 struct KisStorageModel::Private {
     int cachedRowCount {-1};
-    QSqlQuery query;
+    QList<QString> storages;
 };
 
 KisStorageModel::KisStorageModel(QObject *parent)
     : QAbstractTableModel(parent)
     , d(new Private())
 {
-    prepareQuery();
-    connect(KisResourceLocator::instance(), SIGNAL(storageAdded()), this, SLOT(resetQuery()));
-    connect(KisResourceLocator::instance(), SIGNAL(storageRemoved()), this, SLOT(resetQuery()));
+    connect(KisResourceLocator::instance(), SIGNAL(storageAdded(const QString&)), this, SLOT(addStorage(const QString&)));
+    connect(KisResourceLocator::instance(), SIGNAL(storageRemoved(const QString&)), this, SLOT(removeStorage(const QString&)));
+
+    QSqlQuery query;
+
+    bool r = query.prepare("SELECT location\n"
+                           "FROM   storages\n"
+                           "ORDER BY id");
+    if (!r) {
+        qWarning() << "Could not prepare KisStorageModel query" << query.lastError();
+    }
+
+    r = query.exec();
+
+    if (!r) {
+        qWarning() << "Could not execute KisStorageModel query" << query.lastError();
+    }
+
+    while (query.next()) {
+        d->storages << query.value(0).toString();
+    }
 }
 
 KisStorageModel *KisStorageModel::instance()
@@ -49,16 +55,7 @@ KisStorageModel::~KisStorageModel()
 
 int KisStorageModel::rowCount(const QModelIndex & /*parent*/) const
 {
-    if (d->cachedRowCount < 0) {
-        QSqlQuery q;
-        q.prepare("SELECT count(*)\n"
-                  "FROM   storages\n");
-        q.exec();
-        q.first();
-
-        const_cast<KisStorageModel*>(this)->d->cachedRowCount = q.value(0).toInt();
-    }
-    return d->cachedRowCount;
+    return d->storages.size();
 }
 
 int KisStorageModel::columnCount(const QModelIndex &/*parent*/) const
@@ -74,28 +71,65 @@ QVariant KisStorageModel::data(const QModelIndex &index, int role) const
     if (index.row() > rowCount()) return v;
     if (index.column() > (int)MetaData) return v;
 
-    bool pos = d->query.seek(index.row());
+    QString location = d->storages.at(index.row());
 
-    if (pos) {
+    QSqlQuery query;
+
+    bool r = query.prepare("SELECT storages.id as id\n"
+                           ",      storage_types.name as storage_type\n"
+                           ",      location\n"
+                           ",      timestamp\n"
+                           ",      pre_installed\n"
+                           ",      active\n"
+                           ",      thumbnail\n"
+                           "FROM   storages\n"
+                           ",      storage_types\n"
+                           "WHERE  storages.storage_type_id = storage_types.id\n"
+                           "AND    location = :location");
+
+    if (!r) {
+        qWarning() << "Could not prepare KisStorageModel data query" << query.lastError();
+        return v;
+    }
+
+    query.bindValue(":location", location);
+
+    r = query.exec();
+
+    if (!r) {
+        qWarning() << "Could not execute KisStorageModel data query" << query.lastError() << query.boundValues();
+        return v;
+    }
+
+    if (!query.first()) {
+        qWarning() << "KisStorageModel data query did not return anything";
+        return v;
+    }
+
+    if ((role == Qt::DisplayRole || role == Qt::EditRole) && index.column() == Active) {
+        return query.value("active");
+    }
+    else
+    {
         switch(role) {
         case Qt::DisplayRole:
         {
             switch(index.column()) {
             case Id:
-                return d->query.value("id");
+                return query.value("id");
             case StorageType:
-                return d->query.value("storage_type");
+                return query.value("storage_type");
             case Location:
-                return d->query.value("location");
+                return query.value("location");
             case TimeStamp:
-               return d->query.value("timestamp");
+                return query.value("timestamp");
             case PreInstalled:
-                return d->query.value("pre_installed");
+                return query.value("pre_installed");
             case Active:
-                return d->query.value("active");
+                return query.value("active");
             case Thumbnail:
             {
-                QByteArray ba = d->query.value("thumbnail").toByteArray();
+                QByteArray ba = query.value("thumbnail").toByteArray();
                 QBuffer buf(&ba);
                 buf.open(QBuffer::ReadOnly);
                 QImage img;
@@ -104,8 +138,8 @@ QVariant KisStorageModel::data(const QModelIndex &index, int role) const
             }
             case DisplayName:
             {
-                QMap<QString, QVariant> r = KisResourceLocator::instance()->metaDataForStorage(d->query.value("location").toString());
-                QVariant name = d->query.value("location");
+                QMap<QString, QVariant> r = KisResourceLocator::instance()->metaDataForStorage(query.value("location").toString());
+                QVariant name = query.value("location");
                 if (r.contains(KisResourceStorage::s_meta_name) && !r[KisResourceStorage::s_meta_name].isNull()) {
                     name = r[KisResourceStorage::s_meta_name];
                 }
@@ -116,7 +150,7 @@ QVariant KisStorageModel::data(const QModelIndex &index, int role) const
             }
             case Qt::UserRole + MetaData:
             {
-                QMap<QString, QVariant> r = KisResourceLocator::instance()->metaDataForStorage(d->query.value("location").toString());
+                QMap<QString, QVariant> r = KisResourceLocator::instance()->metaDataForStorage(query.value("location").toString());
                 return r;
             }
             default:
@@ -124,11 +158,11 @@ QVariant KisStorageModel::data(const QModelIndex &index, int role) const
             }
         }
         case Qt::UserRole + Id:
-            return d->query.value("id");
+            return query.value("id");
         case Qt::UserRole + DisplayName:
         {
-            QMap<QString, QVariant> r = KisResourceLocator::instance()->metaDataForStorage(d->query.value("location").toString());
-            QVariant name = d->query.value("location");
+            QMap<QString, QVariant> r = KisResourceLocator::instance()->metaDataForStorage(query.value("location").toString());
+            QVariant name = query.value("location");
             if (r.contains(KisResourceStorage::s_meta_name) && !r[KisResourceStorage::s_meta_name].isNull()) {
                 name = r[KisResourceStorage::s_meta_name];
             }
@@ -138,18 +172,18 @@ QVariant KisStorageModel::data(const QModelIndex &index, int role) const
             return name;
         }
         case Qt::UserRole + StorageType:
-            return d->query.value("storage_type");
+            return query.value("storage_type");
         case Qt::UserRole + Location:
-            return d->query.value("location");
+            return query.value("location");
         case Qt::UserRole + TimeStamp:
-           return d->query.value("timestamp");
+            return query.value("timestamp");
         case Qt::UserRole + PreInstalled:
-            return d->query.value("pre_installed");
+            return query.value("pre_installed");
         case Qt::UserRole + Active:
-            return d->query.value("active");
+            return query.value("active");
         case Qt::UserRole + Thumbnail:
         {
-            QByteArray ba = d->query.value("thumbnail").toByteArray();
+            QByteArray ba = query.value("thumbnail").toByteArray();
             QBuffer buf(&ba);
             buf.open(QBuffer::ReadOnly);
             QImage img;
@@ -158,7 +192,7 @@ QVariant KisStorageModel::data(const QModelIndex &index, int role) const
         }
         case Qt::UserRole + MetaData:
         {
-            QMap<QString, QVariant> r = KisResourceLocator::instance()->metaDataForStorage(d->query.value("location").toString());
+            QMap<QString, QVariant> r = KisResourceLocator::instance()->metaDataForStorage(query.value("location").toString());
             return r;
         }
 
@@ -166,45 +200,67 @@ QVariant KisStorageModel::data(const QModelIndex &index, int role) const
             ;
         }
     }
-    return v;
 
+    return v;
 }
 
 bool KisStorageModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
     if (index.isValid()) {
+
         if (role == Qt::CheckStateRole) {
-            QSqlQuery q;
-            bool r = q.prepare("UPDATE storages\n"
-                               "SET    active = :active\n"
-                               "WHERE  id = :id\n");
-            q.bindValue(":active", value);
-            q.bindValue(":id", index.data(Qt::UserRole + Id));
+            QSqlQuery query;
+            bool r = query.prepare("UPDATE storages\n"
+                                   "SET    active = :active\n"
+                                   "WHERE  id = :id\n");
+            query.bindValue(":active", value);
+            query.bindValue(":id", index.data(Qt::UserRole + Id));
+
             if (!r) {
-                qWarning() << "Could not prepare KisStorageModel update query" << d->query.lastError();
+                qWarning() << "Could not prepare KisStorageModel update query" << query.lastError();
                 return false;
             }
-            r = q.exec();
+
+            r = query.exec();
+
             if (!r) {
-                qWarning() << "Could not execute KisStorageModel update query" << d->query.lastError();
+                qWarning() << "Could not execute KisStorageModel update query" << query.lastError();
                 return false;
             }
 
         }
+
+        emit dataChanged(index, index, {role});
+
+        if (value.toBool()) {
+            emit storageEnabled(data(index, Qt::UserRole + Location).toString());
+        }
+        else {
+            emit storageDisabled(data(index, Qt::UserRole + Location).toString());
+        }
+
     }
-    QAbstractTableModel::setData(index, value, role);
-    KisResourceModelProvider::resetAllModels();
-    return prepareQuery();
+    return true;
 }
 
 Qt::ItemFlags KisStorageModel::flags(const QModelIndex &index) const
 {
+    if (!index.isValid()) {
+        return Qt::NoItemFlags;
+    }
     return QAbstractTableModel::flags(index) | Qt::ItemIsEditable;
 }
 
 KisResourceStorageSP KisStorageModel::storageForIndex(const QModelIndex &index) const
 {
-    return KisResourceLocator::instance()->storageByLocation(KisResourceLocator::instance()->makeStorageLocationAbsolute(index.data(Qt::UserRole + Location).toString()));
+
+    if (!index.isValid()) return 0;
+    if (index.row() > rowCount()) return 0;
+    if (index.column() > (int)MetaData) return 0;
+
+    QString location = d->storages.at(index.row());
+
+    return KisResourceLocator::instance()->storageByLocation(KisResourceLocator::instance()->makeStorageLocationAbsolute(location));
 }
 
 QVariant KisStorageModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -215,30 +271,22 @@ QVariant KisStorageModel::headerData(int section, Qt::Orientation orientation, i
     }
     if (orientation == Qt::Horizontal) {
         switch(section) {
-        case 0:
-            v = i18n("Id");
-            break;
-        case 1:
-            v = i18n("Type");
-            break;
-        case 2:
-            v = i18n("Location");
-            break;
-        case 3:
-            v = i18n("Creation Date");
-            break;
-        case 4:
-            v = i18n("Preinstalled");
-            break;
-        case 5:
-            v = i18n("Active");
-            break;
-        case 6:
-            v = i18n("Thumbnail");
-            break;
-        case 7:
-            v = i18n("Name");
-            break;
+        case Id:
+            return i18n("Id");
+        case StorageType:
+            return i18n("Type");
+        case Location:
+            return i18n("Location");
+        case TimeStamp:
+            return i18n("Creation Date");
+        case PreInstalled:
+            return i18n("Preinstalled");
+        case Active:
+            return i18n("Active");
+        case Thumbnail:
+            return i18n("Thumbnail");
+        case DisplayName:
+            return i18n("Name");
         default:
             v = QString::number(section);
         }
@@ -247,45 +295,19 @@ QVariant KisStorageModel::headerData(int section, Qt::Orientation orientation, i
     return QAbstractTableModel::headerData(section, orientation, role);
 }
 
-bool KisStorageModel::resetQuery()
+void KisStorageModel::addStorage(const QString &location)
 {
-    QElapsedTimer t;
-    t.start();
-
-    beginResetModel();
-    bool r = d->query.exec();
-    if (!r) {
-        qWarning() << "Could not select storages" << d->query.lastError() << d->query.boundValues();
-    }
-    d->cachedRowCount = -1;
-
-    endResetModel();
-    qDebug() << "KisStorageModel::resetQuery took" << t.elapsed() << "ms";
-
-    return r;
+    beginInsertRows(QModelIndex(), rowCount(), rowCount());
+    d->storages.append(location);
+    endInsertRows();
 }
 
-bool KisStorageModel::prepareQuery()
+void KisStorageModel::removeStorage(const QString &location)
 {
-    beginResetModel();
-    bool r = d->query.prepare("SELECT storages.id as id\n"
-                              ",      storage_types.name as storage_type\n"
-                              ",      location\n"
-                              ",      timestamp\n"
-                              ",      pre_installed\n"
-                              ",      active\n"
-                              ",      thumbnail\n"
-                              "FROM   storages\n"
-                              ",      storage_types\n"
-                              "WHERE  storages.storage_type_id = storage_types.id\n");
-    if (!r) {
-        qWarning() << "Could not prepare KisStorageModel query" << d->query.lastError();
-    }
-    r = d->query.exec();
-    if (!r) {
-        qWarning() << "Could not execute KisStorageModel query" << d->query.lastError();
-    }
-    d->cachedRowCount = -1;
-    endResetModel();
-    return r;
+    int row = d->storages.indexOf(location);
+    beginRemoveRows(QModelIndex(), row, row);
+    d->storages.removeAt(row);
+    endRemoveRows();
 }
+
+

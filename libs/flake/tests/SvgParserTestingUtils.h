@@ -1,19 +1,7 @@
 /*
- *  Copyright (c) 2017 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2017 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #ifndef SVGPARSERTESTINGUTILS_H
@@ -124,7 +112,11 @@ struct SvgRenderTester : public SvgTester
         m_fuzzyThreshold = fuzzyThreshold;
     }
 
-    static void testRender(KoShape *shape, const QString &prefix, const QString &testName, const QSize canvasSize, int fuzzyThreshold = 0) {
+    void setCheckQImagePremultiplied(bool value) {
+        m_checkQImagePremiltiplied = value;
+    }
+
+    static void testRender(KoShape *shape, const QString &prefix, const QString &testName, const QSize canvasSize, int fuzzyThreshold = 0, bool checkQImagePremultiplied = false) {
         QImage canvas(canvasSize, QImage::Format_ARGB32);
         canvas.fill(0);
         QPainter painter(&canvas);
@@ -134,7 +126,10 @@ struct SvgRenderTester : public SvgTester
         painter.setClipRect(canvas.rect());
         p.paint(painter);
 
-        QVERIFY(TestUtil::checkQImage(canvas, "svg_render", prefix, testName, fuzzyThreshold));
+        QVERIFY(TestUtil::checkQImageImpl(false,
+                                          canvas, "svg_render", prefix, testName,
+                                          fuzzyThreshold, -1, 0,
+                                          checkQImagePremultiplied));
     }
 
     void test_standard_30px_72ppi(const QString &testName, bool verifyGeometry = true, const QSize &canvasSize = QSize(30,30)) {
@@ -209,11 +204,12 @@ struct SvgRenderTester : public SvgTester
             }
         }
 
-        testRender(shape, "load", testName, canvasSize, m_fuzzyThreshold);
+        testRender(shape, "load", testName, canvasSize, m_fuzzyThreshold, m_checkQImagePremiltiplied);
     }
 
 private:
     int m_fuzzyThreshold;
+    int m_checkQImagePremiltiplied = false;
 };
 
 

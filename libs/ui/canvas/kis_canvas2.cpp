@@ -1,22 +1,10 @@
 /* This file is part of the KDE project
  *
- * Copyright (C) 2006, 2010 Boudewijn Rempt <boud@valdyas.org>
- * Copyright (C) Lukáš Tvrdý <lukast.dev@gmail.com>, (C) 2010
- * Copyright (C) 2011 Silvio Heinrich <plassy@web.de>
+ * SPDX-FileCopyrightText: 2006, 2010 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
+ * SPDX-FileCopyrightText: 2011 Silvio Heinrich <plassy@web.de>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA..
+ *  SPDX-License-Identifier: GPL-2.0-or-later.
  */
 
 #include "kis_canvas2.h"
@@ -146,7 +134,7 @@ public:
     KisCanvasUpdatesCompressor projectionUpdatesCompressor;
     KisAnimationPlayer *animationPlayer;
     KisAnimationFrameCacheSP frameCache;
-    bool lodAllowedInImage = false;
+    bool lodPreferredInImage = false;
     bool bootstrapLodBlocked;
     QPointer<KoShapeManager> currentlyActiveShapeManager;
     KisInputActionGroupsMask inputActionGroupsMask = AllActionGroup;
@@ -160,8 +148,15 @@ public:
     QRect renderingLimit;
     int isBatchUpdateActive = 0;
 
-    bool effectiveLodAllowedInImage() {
-        return lodAllowedInImage && !bootstrapLodBlocked;
+    bool effectiveLodAllowedInImage() const {
+        return lodPreferredInImage && !bootstrapLodBlocked;
+    }
+
+    bool lodIsSupported() const {
+        return currentCanvasIsOpenGL &&
+                KisOpenGL::supportsLoD() &&
+                (openGLFilterMode == KisOpenGL::TrilinearFilterMode ||
+                 openGLFilterMode == KisOpenGL::HighQualityFiltering);
     }
 
     void setActiveShapeManager(KoShapeManager *shapeManager);
@@ -222,12 +217,12 @@ void KisCanvas2::setup()
     // a bit of duplication from slotConfigChanged()
     KisConfig cfg(true);
     m_d->vastScrolling = cfg.vastScrolling();
-    m_d->lodAllowedInImage = cfg.levelOfDetailEnabled();
+    m_d->lodPreferredInImage = cfg.levelOfDetailEnabled();
     m_d->regionOfInterestMargin = KisImageConfig(true).animationCacheRegionOfInterestMargin();
 
     createCanvas(cfg.useOpenGL());
 
-    setLodAllowedInCanvas(m_d->lodAllowedInImage);
+    setLodPreferredInCanvas(m_d->lodPreferredInImage);
     m_d->animationPlayer = new KisAnimationPlayer(this);
     connect(m_d->view->canvasController()->proxyObject, SIGNAL(moveDocumentOffset(QPoint)), SLOT(documentOffsetMoved(QPoint)));
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
@@ -606,7 +601,7 @@ void KisCanvas2::connectCurrentCanvas()
     }
 
     startResizingImage();
-    setLodAllowedInCanvas(m_d->lodAllowedInImage);
+    setLodPreferredInCanvas(m_d->lodPreferredInImage);
 
     emit sigCanvasEngineChanged();
 }
@@ -1018,18 +1013,22 @@ void KisCanvas2::slotTrySwitchShapeManager()
 
 void KisCanvas2::notifyLevelOfDetailChange()
 {
-    if (!m_d->effectiveLodAllowedInImage()) return;
+    KisImageSP image = this->image();
 
-    const qreal effectiveZoom = m_d->coordinatesConverter->effectiveZoom();
+    if (m_d->bootstrapLodBlocked || !m_d->lodIsSupported()) {
+        image->setLodPreferences(KisLodPreferences(KisLodPreferences::None, 0));
+    } else {
+        const qreal effectiveZoom = m_d->coordinatesConverter->effectiveZoom();
 
-    KisConfig cfg(true);
-    const int maxLod = cfg.numMipmapLevels();
+        KisConfig cfg(true);
+        const int maxLod = cfg.numMipmapLevels();
+        const int lod = KisLodTransform::scaleToLod(effectiveZoom, maxLod);
+        KisLodPreferences::PreferenceFlags flags = KisLodPreferences::LodSupported;
 
-    const int lod = KisLodTransform::scaleToLod(effectiveZoom, maxLod);
-
-    if (m_d->effectiveLodAllowedInImage()) {
-        KisImageSP image = this->image();
-        image->setDesiredLevelOfDetail(lod);
+        if (m_d->lodPreferredInImage) {
+            flags |= KisLodPreferences::LodPreferred;
+        }
+        image->setLodPreferences(KisLodPreferences(flags, lod));
     }
 }
 
@@ -1235,37 +1234,27 @@ void KisCanvas2::bootstrapFinished()
     if (!m_d->bootstrapLodBlocked) return;
 
     m_d->bootstrapLodBlocked = false;
-    setLodAllowedInCanvas(m_d->lodAllowedInImage);
+    setLodPreferredInCanvas(m_d->lodPreferredInImage);
 }
 
-void KisCanvas2::setLodAllowedInCanvas(bool value)
+void KisCanvas2::setLodPreferredInCanvas(bool value)
 {
     if (!KisOpenGL::supportsLoD()) {
         qWarning() << "WARNING: Level of Detail functionality is available only with openGL + GLSL 1.3 support";
     }
 
-    m_d->lodAllowedInImage =
-        value &&
-        m_d->currentCanvasIsOpenGL &&
-        KisOpenGL::supportsLoD() &&
-        (m_d->openGLFilterMode == KisOpenGL::TrilinearFilterMode ||
-         m_d->openGLFilterMode == KisOpenGL::HighQualityFiltering);
-
-    KisImageSP image = this->image();
-
-    if (m_d->effectiveLodAllowedInImage() != !image->levelOfDetailBlocked()) {
-        image->setLevelOfDetailBlocked(!m_d->effectiveLodAllowedInImage());
-    }
+    m_d->lodPreferredInImage =
+        value && m_d->lodIsSupported();
 
     notifyLevelOfDetailChange();
 
     KisConfig cfg(false);
-    cfg.setLevelOfDetailEnabled(m_d->lodAllowedInImage);
+    cfg.setLevelOfDetailEnabled(m_d->lodPreferredInImage);
 }
 
-bool KisCanvas2::lodAllowedInCanvas() const
+bool KisCanvas2::lodPreferredInCanvas() const
 {
-    return m_d->lodAllowedInImage;
+    return m_d->lodPreferredInImage;
 }
 
 void KisCanvas2::slotShowPopupPalette(const QPoint &p)

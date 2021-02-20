@@ -1,19 +1,7 @@
 /*
- *  Copyright (c) 2015 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2015 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_color_filter_combo.h"
@@ -322,7 +310,7 @@ void KisColorFilterCombo::paintColorPie(QStylePainter &painter, const QPalette& 
 
     if (selectedColors.size() == 1) {
         const int currentLabel = selectedColors.first();
-        const QColor currentColor = scm.colorLabel(currentLabel);
+        const QColor currentColor = scm.colorFromLabelIndex(currentLabel);
         const QBrush brush = QBrush(currentColor);
         painter.setBrush(brush);
         painter.setPen(QPen(shadowColor, 1));
@@ -355,7 +343,7 @@ void KisColorFilterCombo::paintColorPie(QStylePainter &painter, const QPalette& 
         painter.setRenderHint(QPainter::Antialiasing);
         painter.drawEllipse(rect);
         for (int i = 0; i < numColors; i++) {
-            QColor color = scm.colorLabel(selectedColors[i]);
+            QColor color = scm.colorFromLabelIndex(selectedColors[i]);
             QBrush brush = color.alpha() > 0 ? QBrush(color) : QBrush(Qt::black, Qt::Dense4Pattern);
             painter.setPen(Qt::NoPen);
             painter.setBrush(brush);
@@ -404,7 +392,7 @@ void KisColorFilterCombo::paintEvent(QPaintEvent *event)
                 int oneColorWidth = editRect.width()/numColors;
                 int currentWidth = 0;
                 for (int i = 0; i < numColors; i++) {
-                    QColor color = scm.colorLabel(selectedColors[i]);
+                    QColor color = scm.colorFromLabelIndex(selectedColors[i]);
                     QBrush brush = color.alpha() > 0 ? QBrush(color) : QBrush(Qt::black, Qt::Dense4Pattern);
                     painter.setPen(color);
                     painter.setBrush(brush);

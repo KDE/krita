@@ -1,4 +1,7 @@
 #!/usr/bin/env sh
+#
+#  SPDX-License-Identifier: GPL-3.0-or-later
+#
 
 # get krita disk mounted image current properties
 # creates a dummy folder to aid in setting the layout for

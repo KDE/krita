@@ -1,20 +1,7 @@
 /*
- * Copyright (C) 2014 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2014 Boudewijn Rempt <boud@valdyas.org>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #include "KisView.h"
@@ -87,6 +74,11 @@
 #include "input/kis_input_manager.h"
 #include "KisRemoteFileFetcher.h"
 #include "kis_selection_manager.h"
+#include "kis_fill_painter.h"
+#include "KisImageSignals.h"
+#include "kis_resources_snapshot.h"
+#include "kis_processing_applicator.h"
+#include "processing/fill_processing_visitor.h"
 
 //static
 QString KisView::newObjectName()
@@ -453,7 +445,9 @@ void KisView::dragEnterEvent(QDragEnterEvent *event)
     //qDebug() << "KisView::dragEnterEvent formats" << event->mimeData()->formats() << "urls" << event->mimeData()->urls() << "has images" << event->mimeData()->hasImage();
     if (event->mimeData()->hasImage()
             || event->mimeData()->hasUrls()
-            || event->mimeData()->hasFormat("application/x-krita-node")) {
+            || event->mimeData()->hasFormat("application/x-krita-node")
+            || event->mimeData()->hasFormat("krita/x-colorsetentry")
+            || event->mimeData()->hasColor()) {
         event->accept();
 
         // activate view if it should accept the drop
@@ -603,6 +597,47 @@ void KisView::dropEvent(QDropEvent *event)
                     tmp = 0;
                 }
             }
+        }
+    }
+    else if (event->mimeData()->hasColor() || event->mimeData()->hasFormat("krita/x-colorsetentry")) {
+        if (image() && d->viewManager->activeDevice()) {
+            KisProcessingApplicator applicator(image(), d->viewManager->activeNode(),
+                                               KisProcessingApplicator::NONE,
+                                               KisImageSignalVector(),
+                                               kundo2_i18n("Flood Fill Layer"));
+
+            KisResourcesSnapshotSP resources =
+                new KisResourcesSnapshot(image(), d->viewManager->activeNode(), d->viewManager->canvasResourceProvider()->resourceManager());
+
+            if (event->mimeData()->hasColor()) {
+                resources->setFGColorOverride(KoColor(event->mimeData()->colorData().value<QColor>(), image()->colorSpace()));
+            } else {
+                QByteArray byteData = event->mimeData()->data("krita/x-colorsetentry");
+                KisSwatch s = KisSwatch::fromByteArray(byteData);
+                resources->setFGColorOverride(s.color());
+            }
+
+            KisProcessingVisitorSP visitor =
+                new FillProcessingVisitor(resources->image()->projection(),
+                                          QPoint(0, 0), // start position
+                                          selection(),
+                                          resources,
+                                          false, // fast mode
+                                          false,
+                                          true, // fill only selection,
+                                          false,
+                                          0, // feathering radius
+                                          0, // sizemod
+                                          80, // threshold,
+                                          false, // use unmerged
+                                          false // use bg
+                                          );
+
+            applicator.applyVisitor(visitor,
+                                    KisStrokeJobData::SEQUENTIAL,
+                                    KisStrokeJobData::EXCLUSIVE);
+
+            applicator.end();
         }
     }
 }

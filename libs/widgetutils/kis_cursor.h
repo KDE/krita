@@ -1,22 +1,10 @@
 /*
  *  kis_cursor.h - part of KImageShop
  *
- *  Copyright (c) 1999 Matthias Elter <elter@kde.org>
- *  Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
+ *  SPDX-FileCopyrightText: 1999 Matthias Elter <elter@kde.org>
+ *  SPDX-FileCopyrightText: 2004 Adrian Page <adrian@pagenet.plus.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #ifndef __kis_cursor_h__
@@ -56,10 +44,10 @@ public:
     static QCursor zoomDiscreteCursor();
     static QCursor rotateCanvasSmoothCursor();
     static QCursor rotateCanvasDiscreteCursor();
-    static QCursor pickerImageForegroundCursor();
-    static QCursor pickerImageBackgroundCursor();
-    static QCursor pickerLayerForegroundCursor();
-    static QCursor pickerLayerBackgroundCursor();
+    static QCursor samplerImageForegroundCursor();
+    static QCursor samplerImageBackgroundCursor();
+    static QCursor samplerLayerForegroundCursor();
+    static QCursor samplerLayerBackgroundCursor();
     static QCursor changeExposureCursor();
     static QCursor changeGammaCursor();
     static QCursor triangleLeftHandedCursor();
@@ -73,9 +61,9 @@ public:
     static QCursor airbrushCursor();      // airbrush tool cursor
     static QCursor eraserCursor();        // eraser tool cursor
     static QCursor fillerCursor();        // filler tool cursor
-    static QCursor pickerCursor();        // color picker cursor
-    static QCursor pickerPlusCursor();    // color picker cursor
-    static QCursor pickerMinusCursor();   // color picker cursor
+    static QCursor samplerCursor();        // color sampler cursor
+    static QCursor samplerPlusCursor();    // color sampler cursor
+    static QCursor samplerMinusCursor();   // color sampler cursor
     static QCursor pickLayerCursor();     // pick layer cursor
     static QCursor colorChangerCursor();  // color changer tool cursor
     static QCursor selectCursor();        // select cursor
@@ -83,6 +71,9 @@ public:
     static QCursor openHandCursor();      // Pan tool cursor
     static QCursor closedHandCursor();    // Pan tool cursor
     static QCursor rotateCursor();    // Transform tool cursor
+
+    static QCursor meshCursorFree();    // Transform tool cursor
+    static QCursor meshCursorLocked();    // Transform tool cursor
 
 
     // Load a cursor from an image file. The image should have an alpha channel

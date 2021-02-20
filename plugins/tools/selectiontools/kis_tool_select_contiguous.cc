@@ -1,25 +1,13 @@
 /*
  *  kis_tool_select_contiguous - part of Krayon^WKrita
  *
- *  Copyright (c) 1999 Michael Koch <koch@kde.org>
- *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2012 José Luis Vergara <pentalis@gmail.com>
- *  Copyright (c) 2015 Michael Abrahams <miabraha@gmail.com>
+ *  SPDX-FileCopyrightText: 1999 Michael Koch <koch@kde.org>
+ *  SPDX-FileCopyrightText: 2002 Patrick Julien <freak@codepimps.org>
+ *  SPDX-FileCopyrightText: 2004 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2012 José Luis Vergara <pentalis@gmail.com>
+ *  SPDX-FileCopyrightText: 2015 Michael Abrahams <miabraha@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_tool_select_contiguous.h"
@@ -103,7 +91,7 @@ void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
 
     KisProcessingApplicator applicator(currentImage(), currentNode(),
                                        KisProcessingApplicator::NONE,
-                                       KisImageSignalVector() << ModifiedSignal,
+                                       KisImageSignalVector(),
                                        kundo2_i18n("Select Contiguous Area"));
 
     QPoint pos = convertToImagePixelCoordFloored(event);

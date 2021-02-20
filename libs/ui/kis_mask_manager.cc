@@ -1,19 +1,7 @@
 /* This file is part of the KDE project
- * Copyright (C) Boudewijn Rempt <boud@valdyas.org>, (C) 2006
+ * SPDX-FileCopyrightText: 2006 Boudewijn Rempt <boud@valdyas.org>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_mask_manager.h"
@@ -180,10 +168,7 @@ void KisMaskManager::createMaskCommon(KisMaskSP mask,
         }
     }
 
-    //counting number of KisSelectionMask
-    QList<KisNodeSP> masks = parentLayer->childNodes(QStringList(nodeType),KoProperties());
-    int number = masks.count() + 1;
-    mask->setName(nodeName + QString(" ") + QString::number(number));
+    mask->setName( createMaskNameCommon(parentLayer, nodeType, nodeName) );
 
     m_commandsAdapter->addNode(mask, parentLayer, above, updateImage, updateImage);
 
@@ -194,6 +179,13 @@ void KisMaskManager::createMaskCommon(KisMaskSP mask,
     m_commandsAdapter->endMacro();
 
     masksUpdated();
+}
+
+QString KisMaskManager::createMaskNameCommon(KisNodeSP targetNode, const QString &nodeType, const QString &desiredName)
+{
+    QList<KisNodeSP> masks = targetNode->childNodes(QStringList(nodeType),KoProperties());
+    int number = masks.count() + 1;
+    return desiredName + QString(" ") + QString::number(number);
 }
 
 KisNodeSP KisMaskManager::createSelectionMask(KisNodeSP activeNode, KisPaintDeviceSP copyFrom, bool convertActiveNode)

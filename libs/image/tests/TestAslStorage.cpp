@@ -1,20 +1,8 @@
 /*
- * Copyright (c) 2018 boud <boud@valdyas.org>
- * Copyright (c) 2019 Agata Cacko <cacko.azh@gmail.com>
+ * SPDX-FileCopyrightText: 2018 boud <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2019 Agata Cacko <cacko.azh@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "TestAslStorage.h"
@@ -63,7 +51,7 @@ void TestAslStorage::testResourceIterator()
 
     QSharedPointer<KisResourceStorage::ResourceIterator> iter(storage.resources(ResourceType::Patterns));
 
-    QVERIFY(iter->hasNext());
+    QVERIFY(iter->hasNext() || patternsCount == 0);
     int count = 0;
 
     while (iter->hasNext()) {
@@ -72,7 +60,33 @@ void TestAslStorage::testResourceIterator()
         QVERIFY(res);
         count++;
     }
-    QCOMPARE(count, patternsCount + stylesCount);
+    QCOMPARE(count, patternsCount);
+
+
+    QSharedPointer<KisResourceStorage::ResourceIterator> iter2(storage.resources(ResourceType::LayerStyles));
+
+    QVERIFY(iter2->hasNext());
+    count = 0;
+
+    while (iter2->hasNext()) {
+        iter2->next();
+        KoResourceSP res(iter2->resource());
+        QVERIFY(res);
+        count++;
+    }
+    QCOMPARE(count, stylesCount);
+
+    QSharedPointer<KisResourceStorage::ResourceIterator> iter3(storage.resources(ResourceType::Brushes));
+
+    count = 0;
+
+    while (iter3->hasNext()) {
+        iter3->next();
+        KoResourceSP res(iter3->resource());
+        QVERIFY(res);
+        count++;
+    }
+    QCOMPARE(count, 0);
 
 }
 

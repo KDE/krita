@@ -1,20 +1,9 @@
 /*
- *  Copyright (c) 2013 Dmitry Kazakov <dimula73@gmail.com>
- *  Copyright (c) 2013 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  SPDX-FileCopyrightText: 2013 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2013 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  SPDX-FileCopyrightText: 2020 L. E. Segovia <amy@amyspark.me>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 
@@ -62,6 +51,42 @@ void KisImportQmicProcessingVisitor::gmicImageToPaintDevice(gmic_image<float>& s
     else {
         KisQmicSimpleConvertor::convertFromGmicFast(srcGmicImage, dst, 255.0f);
     }
+}
+
+void KisImportQmicProcessingVisitor::applyLayerNameChanges(const gmic_image<float> &srcGmicImage, KisNode *node, KisPaintDeviceSP dst)
+{
+    dbgPlugins << "Layer name: " << srcGmicImage.name;
+
+    {
+        const QRegExp modeRe("mode\\(\\s*([^)]*)\\s*\\)");
+        if (modeRe.indexIn(srcGmicImage.name) != -1) {
+            QString modeStr = modeRe.cap(1).trimmed();
+            auto translatedMode = KisQmicSimpleConvertor::stringToBlendingMode(modeStr);
+            dbgPlugins << "Detected mode: " << modeStr << " => " << translatedMode;
+            if (!translatedMode.isNull())
+                node->setCompositeOpId(translatedMode);
+        }
+    }
+
+    {
+        const QRegExp opacityRe("opacity\\(\\s*([^)]*)\\s*\\)");
+
+        if (opacityRe.indexIn(srcGmicImage.name) != -1) {
+            const auto opacity = opacityRe.cap(1).toUInt();
+            dbgPlugins << "Detected opacity: " << opacity;
+            node->setPercentOpacity(opacity);
+        }
+    }
+
+    {
+        const QRegExp nameRe("name\\(\\s*([^)]*)\\s*\\)");
+
+        if (nameRe.indexIn(srcGmicImage.name) != -1) {
+            const auto name = nameRe.cap(1);
+            dbgPlugins << "Detected layer name: " << name;
+            node->setName(name);
+        }
+    }
 
     // Some GMic filters encode layer position into the layer name.
     // E.g. from extract foreground: "name([unnamed] [foreground]),pos(55,35)"
@@ -74,8 +99,6 @@ void KisImportQmicProcessingVisitor::gmicImageToPaintDevice(gmic_image<float>& s
     }
 }
 
-
-
 void KisImportQmicProcessingVisitor::visitNodeWithPaintDevice(KisNode *node, KisUndoAdapter *undoAdapter)
 {
     int index = m_nodes->indexOf(node);
@@ -87,9 +110,10 @@ void KisImportQmicProcessingVisitor::visitNodeWithPaintDevice(KisNode *node, Kis
 
         const KisLayer *layer = dynamic_cast<KisLayer*>(node);
         const KisSelectionSP selection = layer ? layer->selection() : m_selection;
-        
+
         KisTransaction transaction(dst);
         KisImportQmicProcessingVisitor::gmicImageToPaintDevice(*gimg, dst, selection, m_dstRect);
+        KisImportQmicProcessingVisitor::applyLayerNameChanges(*gimg, node, dst);
         if (undoAdapter) {
             transaction.commit(undoAdapter);
             node->setDirty(m_dstRect);

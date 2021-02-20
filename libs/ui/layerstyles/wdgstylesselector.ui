@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgStylesSelector</class>
  <widget class="QWidget" name="WdgStylesSelector">
   <property name="geometry">
@@ -11,16 +15,16 @@
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
+   <item column="0" row="0">
     <widget class="QGroupBox" name="grpStyleSelector">
      <property name="title">
       <string>Styles</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
-      <item row="1" column="0">
+      <item column="0" row="1">
        <widget class="QListView" name="listStyles"/>
       </item>
-      <item row="0" column="0">
+      <item column="0" row="0">
        <widget class="QComboBox" name="cmbStyleCollections"/>
       </item>
      </layout>

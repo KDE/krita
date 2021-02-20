@@ -1,20 +1,7 @@
 /*
- * Copyright (C) 2018 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2018 Boudewijn Rempt <boud@valdyas.org>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #include "KisResourceStorage.h"
@@ -28,18 +15,28 @@
 #include "KisBundleStorage.h"
 #include "KisMemoryStorage.h"
 
+#include <cmath>
+#include <QtMath>
+#include "kis_debug.h"
+
+#include <QRegularExpression>
+#include <boost/optional.hpp>
+#include <kis_pointer_utils.h>
+
 const QString KisResourceStorage::s_meta_generator("meta:generator");
 const QString KisResourceStorage::s_meta_author("dc:author");
 const QString KisResourceStorage::s_meta_title("dc:title");
 const QString KisResourceStorage::s_meta_description("dc:description");
 const QString KisResourceStorage::s_meta_initial_creator("meta:initial-creator");
 const QString KisResourceStorage::s_meta_creator("cd:creator");
-const QString KisResourceStorage::s_meta_creation_date("meta:creation-data");
+const QString KisResourceStorage::s_meta_creation_date("meta:creation-date");
 const QString KisResourceStorage::s_meta_dc_date("meta:dc-date");
 const QString KisResourceStorage::s_meta_user_defined("meta:meta-userdefined");
 const QString KisResourceStorage::s_meta_name("meta:name");
 const QString KisResourceStorage::s_meta_value("meta:value");
 const QString KisResourceStorage::s_meta_version("meta:bundle-version");
+const QString KisResourceStorage::s_meta_email("meta:email");
+const QString KisResourceStorage::s_meta_license("meta:license");
 
 Q_GLOBAL_STATIC(KisStoragePluginRegistry, s_instance);
 
@@ -67,6 +64,7 @@ public:
     bool valid {false};
     KisResourceStorage::StorageType storageType {KisResourceStorage::StorageType::Unknown};
     QSharedPointer<KisStoragePlugin> storagePlugin;
+    int storageId {-1};
 };
 
 KisResourceStorage::KisResourceStorage(const QString &location)
@@ -186,6 +184,11 @@ KoResourceSP KisResourceStorage::resource(const QString &url)
     return d->storagePlugin->resource(url);
 }
 
+QByteArray KisResourceStorage::resourceMd5(const QString &url)
+{
+    return d->storagePlugin->resourceMd5(url);
+}
+
 QSharedPointer<KisResourceStorage::ResourceIterator> KisResourceStorage::resources(const QString &resourceType) const
 {
     return d->storagePlugin->resources(resourceType);
@@ -204,6 +207,16 @@ bool KisResourceStorage::addTag(const QString &resourceType, KisTagSP tag)
 bool KisResourceStorage::addResource(KoResourceSP resource)
 {
     return d->storagePlugin->addResource(resource->resourceType().first, resource);
+}
+
+bool KisResourceStorage::supportsVersioning() const
+{
+    return d->storagePlugin->supportsVersioning();
+}
+
+bool KisResourceStorage::loadVersionedResource(KoResourceSP resource)
+{
+    return d->storagePlugin->loadVersionedResource(resource);
 }
 
 void KisResourceStorage::setMetaData(const QString &key, const QVariant &value)
@@ -226,44 +239,323 @@ QVariant KisResourceStorage::metaData(const QString &key) const
     return d->storagePlugin->metaData(key);
 }
 
-bool KisStorageVersioningHelper::addVersionedResource(const QString &filename, const QString &saveLocation, KoResourceSP resource)
+void KisResourceStorage::setStorageId(int storageId)
 {
-    // Find a new filename for the resource if it already exists: we do not rename old resources, but rename updated resources
-    if (!QFileInfo(filename).exists()) {
-        // Simply save it
-        QFile f(filename);
-        if (!f.open(QFile::WriteOnly)) {
-            qWarning() << "Could not open resource file for writing" << filename;
-            return false;
-        }
-        if (!resource->saveToDevice(&f)) {
-            qWarning() << "Could not save resource file" << filename;
-            return false;
-        }
-        f.close();
-    }
-    else {
-        QFileInfo fi(filename);
+    d->storageId = storageId;
+}
 
-        // Save the new resource
-        QString newFilename = fi.baseName() +
-                "."
-                + QString("%1").arg(resource->version() + 1, 4, 10, QChar('0'))
-                + "."
-                + fi.suffix();
-        QFile f(saveLocation + "/" + newFilename);
+int KisResourceStorage::storageId()
+{
+    return d->storageId;
+}
 
-        if (!f.open(QFile::WriteOnly)) {
-            qWarning() << "Could not open resource file for writing" << newFilename;
-            return false;
-        }
-        if (!resource->saveToDevice(&f)) {
-            qWarning() << "Could not save resource file" << newFilename;
-            return false;
-        }
-        resource->setFilename(newFilename);
-        f.close();
-    }
-    return true;
+struct VersionedFileParts
+{
+    QString basename;
+    int version = 0;
+    QString suffix;
 };
 
+boost::optional<VersionedFileParts> guessFilenameParts(const QString &filename)
+{
+    QRegularExpression exp("^(.*)\\.(\\d\\d*)\\.(.+)$");
+
+    QRegularExpressionMatch res = exp.match(filename);
+
+    if (res.hasMatch()) {
+        return VersionedFileParts({res.captured(1), res.captured(2).toInt(), res.captured(3)});
+    }
+
+    return boost::none;
+}
+
+VersionedFileParts guessFileNamePartsLazy(const QString &filename, int minVersion)
+{
+    boost::optional<VersionedFileParts> guess = guessFilenameParts(filename);
+    if (guess) {
+        guess->version = qMax(guess->version, minVersion);
+    } else {
+        QFileInfo info(filename);
+        guess = VersionedFileParts();
+        guess->basename = info.baseName();
+        guess->version = minVersion;
+        guess->suffix = info.completeSuffix();
+    }
+
+    return *guess;
+}
+
+QString KisStorageVersioningHelper::chooseUniqueName(KoResourceSP resource,
+                                                     int minVersion,
+                                                     std::function<bool(QString)> checkExists)
+{
+    int version = qMax(resource->version(), minVersion);
+
+    VersionedFileParts parts = guessFileNamePartsLazy(resource->filename(), version);
+    version = parts.version;
+
+    QString newFilename;
+
+    while (1) {
+        int numPlaceholders = 4;
+
+        if (version > 9999) {
+            numPlaceholders = qFloor(std::log10(version)) + 1;
+        }
+
+        newFilename = parts.basename +
+                "."
+                + QString("%1").arg(version, numPlaceholders, 10, QChar('0'))
+                + "."
+                + parts.suffix;
+
+        if (checkExists(newFilename)) {
+            version++;
+            if (version == std::numeric_limits<int>::max()) {
+                return QString();
+            }
+            continue;
+        }
+
+        break;
+    }
+
+    return newFilename;
+}
+
+void KisStorageVersioningHelper::detectFileVersions(QVector<VersionedResourceEntry> &allFiles)
+{
+    for (auto it = allFiles.begin(); it != allFiles.end(); ++it) {
+        VersionedFileParts parts = guessFileNamePartsLazy(it->filename, -1);
+        it->guessedKey = parts.basename + parts.suffix;
+        it->guessedVersion = parts.version;
+    }
+
+    std::sort(allFiles.begin(), allFiles.end(), VersionedResourceEntry::KeyVersionLess());
+
+    boost::optional<QString> lastResourceKey;
+    int availableVersion = 0;
+    for (auto it = allFiles.begin(); it != allFiles.end(); ++it) {
+        if (!lastResourceKey || *lastResourceKey != it->guessedKey) {
+            availableVersion = 0;
+            lastResourceKey = it->guessedKey;
+        }
+
+        if (it->guessedVersion < availableVersion) {
+            it->guessedVersion = availableVersion;
+        }
+
+        availableVersion = it->guessedVersion + 1;
+    }
+}
+
+bool KisStorageVersioningHelper::addVersionedResource(const QString &saveLocation,
+                                                      KoResourceSP resource,
+                                                      int minVersion)
+{
+    int version = qMax(resource->version(), minVersion);
+
+    VersionedFileParts parts = guessFileNamePartsLazy(resource->filename(), version);
+    version = parts.version;
+
+    QString newFilename =
+        chooseUniqueName(resource, minVersion,
+                         [saveLocation] (const QString &filename) {
+                             return QFileInfo(saveLocation + "/" + filename).exists();
+                         });
+
+    if (newFilename.isEmpty()) return false;
+
+    QFile file(saveLocation + "/" + newFilename);
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!file.exists(), false);
+
+    if (!file.open(QFile::WriteOnly)) {
+        qWarning() << "Could not open resource file for writing" << newFilename;
+        return false;
+    }
+
+    if (!resource->saveToDevice(&file)) {
+        qWarning() << "Could not save resource file" << newFilename;
+        return false;
+    }
+
+    resource->setFilename(newFilename);
+    file.close();
+
+    return true;
+}
+
+
+QSharedPointer<KisResourceStorage::ResourceIterator> KisResourceStorage::ResourceIterator::versions() const
+{
+    struct DumbIterator : public ResourceIterator
+    {
+    public:
+        DumbIterator(const ResourceIterator *parent)
+            : m_parent(parent)
+        {
+        }
+
+        bool hasNext() const {
+            return !m_isStarted;
+        }
+
+        void next() override {
+            KIS_SAFE_ASSERT_RECOVER_NOOP(!m_isStarted);
+            m_isStarted = true;
+        }
+        QString url() const override
+        {
+            return m_parent->url();
+        }
+
+        QString type() const override
+        {
+            return m_parent->type();
+        }
+
+        QDateTime lastModified() const override
+        {
+            return m_parent->lastModified();
+        }
+
+        int guessedVersion() const override
+        {
+            return m_parent->guessedVersion();
+        }
+
+        QSharedPointer<KisResourceStorage::ResourceIterator> versions() const
+        {
+            return toQShared(new DumbIterator(m_parent));
+        }
+
+    protected:
+        KoResourceSP resourceImpl() const override
+        {
+            return m_parent->resource();
+        }
+
+    private:
+        bool m_isStarted = false;
+        const ResourceIterator *m_parent;
+    };
+
+    return QSharedPointer<KisResourceStorage::ResourceIterator>(new DumbIterator(this));
+}
+
+KoResourceSP KisResourceStorage::ResourceIterator::resource() const
+{
+    if (m_cachedResource && m_cachedResourceUrl == url()) {
+        return m_cachedResource;
+    }
+
+    m_cachedResource = resourceImpl();
+    m_cachedResourceUrl = url();
+
+    return m_cachedResource;
+}
+
+KisVersionedStorageIterator::KisVersionedStorageIterator(const QVector<VersionedResourceEntry> &entries, KisStoragePlugin *_q)
+    : q(_q)
+    , m_entries(entries)
+    , m_begin(m_entries.constBegin())
+    , m_end(m_entries.constEnd())
+
+{
+    //    ENTER_FUNCTION() << ppVar(std::distance(m_begin, m_end));
+    //    for (auto it = m_begin; it != m_end; ++it) {
+    //        qDebug() << ppVar(it->filename) << ppVar(it->guessedVersion);
+    //    }
+}
+
+KisVersionedStorageIterator::KisVersionedStorageIterator(const QVector<VersionedResourceEntry> &entries,
+                                                         QVector<VersionedResourceEntry>::const_iterator begin,
+                                                         QVector<VersionedResourceEntry>::const_iterator end,
+                                                         KisStoragePlugin *_q)
+    : q(_q)
+    , m_entries(entries)
+    , m_begin(begin)
+    , m_end(end)
+{
+//    ENTER_FUNCTION() << ppVar(std::distance(m_begin, m_end));
+//    for (auto it = m_begin; it != m_end; ++it) {
+//        qDebug() << ppVar(it->filename) << ppVar(it->guessedVersion);
+//    }
+}
+
+bool KisVersionedStorageIterator::hasNext() const
+{
+    return (!m_isStarted && m_begin != m_end) ||
+            (m_isStarted && std::next(m_it) != m_end);
+}
+
+void KisVersionedStorageIterator::next()
+{
+
+    if (!m_isStarted) {
+        m_isStarted = true;
+        m_it = m_begin;
+    } else {
+        ++m_it;
+    }
+
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_it != m_end);
+
+    auto nextChunk = std::upper_bound(m_it, m_end, *m_it, VersionedResourceEntry::KeyLess());
+    m_chunkStart = m_it;
+    m_it = std::prev(nextChunk);
+}
+
+QString KisVersionedStorageIterator::url() const
+{
+    return m_it->resourceType + "/" + m_it->filename;
+}
+
+QString KisVersionedStorageIterator::type() const
+{
+    return m_it->resourceType;
+}
+
+QDateTime KisVersionedStorageIterator::lastModified() const
+{
+    return m_it->lastModified;
+}
+
+KoResourceSP KisVersionedStorageIterator::resourceImpl() const
+{
+    return q->resource(url());
+}
+
+int KisVersionedStorageIterator::guessedVersion() const
+{
+    return m_it->guessedVersion;
+}
+
+QSharedPointer<KisResourceStorage::ResourceIterator> KisVersionedStorageIterator::versions() const
+{
+    struct VersionsIterator : public KisVersionedStorageIterator
+    {
+        VersionsIterator(const QVector<VersionedResourceEntry> &entries,
+                         QVector<VersionedResourceEntry>::const_iterator begin,
+                         QVector<VersionedResourceEntry>::const_iterator end,
+                         KisStoragePlugin *_q)
+            : KisVersionedStorageIterator(entries, begin, end, _q)
+        {
+        }
+
+        void next() override {
+            if (!m_isStarted) {
+                m_isStarted = true;
+                m_it = m_begin;
+            } else {
+                ++m_it;
+            }
+        }
+
+        QSharedPointer<KisResourceStorage::ResourceIterator> versions() const override{
+            return toQShared(new VersionsIterator(m_entries, m_it, std::next(m_it), q));
+        }
+    };
+
+    return toQShared(new VersionsIterator(m_entries, m_chunkStart, std::next(m_it), q));
+}

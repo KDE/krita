@@ -1,3 +1,7 @@
+/*
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
 #include "kis_pressure_rate_option.h"
 
 KisPressureRateOption::KisPressureRateOption()

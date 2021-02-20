@@ -1,19 +1,7 @@
 /*
- *  Copyright (c) 2003 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2003 Boudewijn Rempt <boud@valdyas.org>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #ifndef KIS_TOOL_PAINT_H_
@@ -91,7 +79,7 @@ protected:
     bool isOutlineEnabled() const;
     void setOutlineEnabled(bool enabled);
 
-    bool pickColor(const QPointF &documentPixel, AlternateAction action);
+    bool sampleColor(const QPointF &documentPixel, AlternateAction action);
 
     /// Add the tool-specific layout to the default option widget layout.
     void addOptionWidgetLayout(QLayout *layout);
@@ -124,9 +112,9 @@ private Q_SLOTS:
     void increaseBrushSize();
     void decreaseBrushSize();
 
-    void activatePickColorDelayed();
+    void activateSampleColorDelayed();
 
-    void slotColorPickingFinished(KoColor color);
+    void slotColorSamplingFinished(KoColor color);
 
 protected:
     quint8 m_opacity;
@@ -147,18 +135,18 @@ private:
     QPainterPath tryFixBrushOutline(const QPainterPath &originalOutline);
     void setOpacity(qreal opacity);
 
-    void activatePickColor(AlternateAction action);
-    void deactivatePickColor(AlternateAction action);
-    void pickColorWasOverridden();
+    void activateSampleColor(AlternateAction action);
+    void deactivateSampleColor(AlternateAction action);
+    void sampleColorWasOverridden();
 
     int colorPreviewResourceId(AlternateAction action);
     std::pair<QRectF, QRectF> colorPreviewDocRect(const QPointF &outlineDocPoint);
 
-    bool isPickingAction(AlternateAction action);
+    bool isSamplingAction(AlternateAction action);
 
-    struct PickingJob {
-        PickingJob() {}
-        PickingJob(QPointF _documentPixel,
+    struct SamplingJob {
+        SamplingJob() {}
+        SamplingJob(QPointF _documentPixel,
                    AlternateAction _action)
             : documentPixel(_documentPixel),
               action(_action) {}
@@ -166,7 +154,7 @@ private:
         QPointF documentPixel;
         AlternateAction action;
     };
-    void addPickerJob(const PickingJob &pickingJob);
+    void addSamplerJob(const SamplingJob &samplingJob);
 
 private:
 
@@ -176,20 +164,20 @@ private:
     bool m_supportOutline;
 
     /**
-     * Used as a switch for pickColor
+     * Used as a switch for sampleColor
      */
 
     // used to skip some of the tablet events and don't update the colour that often
-    QTimer m_colorPickerDelayTimer;
+    QTimer m_colorSamplerDelayTimer;
     AlternateAction delayedAction {AlternateAction::NONE};
 
     bool m_isOutlineEnabled;
     std::vector<int> m_standardBrushSizes;
 
-    KisStrokeId m_pickerStrokeId;
-    int m_pickingResource {0};
-    typedef KisSignalCompressorWithParam<PickingJob> PickingCompressor;
-    QScopedPointer<PickingCompressor> m_colorPickingCompressor;
+    KisStrokeId m_samplerStrokeId;
+    int m_samplingResource {0};
+    typedef KisSignalCompressorWithParam<SamplingJob> SamplingCompressor;
+    QScopedPointer<SamplingCompressor> m_colorSamplingCompressor;
 
     qreal m_localOpacity {1.0};
     qreal m_oldOpacity {1.0};

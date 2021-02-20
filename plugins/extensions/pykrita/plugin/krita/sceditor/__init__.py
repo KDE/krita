@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-
+#
+#  SPDX-License-Identifier: GPL-3.0-or-later
+#
 
 editor_main_window = None
 

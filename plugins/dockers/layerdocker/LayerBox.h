@@ -1,24 +1,12 @@
 /*
  *  LayerBox.h - part of Krita aka Krayon aka KimageShop
  *
- *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *  Copyright (C) 2006 Gábor Lehel <illissius@gmail.com>
- *  Copyright (C) 2007 Thomas Zander <zander@kde.org>
- *  Copyright (C) 2007-2009 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2002 Patrick Julien <freak@codepimps.org>
+ *  SPDX-FileCopyrightText: 2006 Gábor Lehel <illissius@gmail.com>
+ *  SPDX-FileCopyrightText: 2007 Thomas Zander <zander@kde.org>
+ *  SPDX-FileCopyrightText: 2007-2009 Boudewijn Rempt <boud@valdyas.org>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 #ifndef KIS_LAYERBOX_H
 #define KIS_LAYERBOX_H
@@ -95,10 +83,10 @@ private Q_SLOTS:
     // From the node manager to the layerbox
     void slotSetCompositeOp(const KoCompositeOp* compositeOp);
     void slotSetOpacity(double opacity);
+    void slotUpdateOpacitySlider(quint8 value);
     void updateUI();
     void setCurrentNode(KisNodeSP node);
     void slotModelReset();
-
 
     // from the layerbox to the node manager
     void slotRmClicked();
@@ -135,9 +123,6 @@ private Q_SLOTS:
 
     void slotUpdateThumbnailIconSize();
 
-
-    // Opacity keyframing
-    void slotKeyframeChannelAdded(KisKeyframeChannel *channel);
     void slotImageTimeChanged(int time);
     void slotForgetAboutSavedNodeBeforeEditSelectionMode();
 
@@ -147,7 +132,6 @@ Q_SIGNALS:
 private:
     inline void connectActionToButton(KisViewManager* view, QAbstractButton *button, const QString &id);
     inline void addActionToMenu(QMenu *menu, const QString &id);
-    void watchOpacityChannel(KisKeyframeChannel *newChannel);
 
     KisNodeSP findNonHidableNode(KisNodeSP startNode);
 private:
@@ -179,7 +163,6 @@ private:
 
     KisNodeSP m_activeNode;
     KisNodeWSP m_savedNodeBeforeEditSelectionMode;
-    QPointer<KisKeyframeChannel> m_opacityChannel;
     bool m_blockOpacityUpdate {false};
     KisSignalAutoConnectionsStore m_activeNodeConnections;
 };

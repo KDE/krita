@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgBorderSelection</class>
  <widget class="QWidget" name="WdgBorderSelection">
   <property name="geometry">
@@ -11,7 +15,7 @@
    </rect>
   </property>
   <layout class="QGridLayout">
-   <item row="3" column="1">
+   <item column="1" row="3">
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -27,7 +31,7 @@
      </property>
     </spacer>
    </item>
-   <item row="1" column="5">
+   <item column="5" row="1">
     <spacer name="horizontalSpacer_2">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -43,7 +47,7 @@
      </property>
     </spacer>
    </item>
-   <item row="1" column="1">
+   <item column="1" row="1">
     <widget class="QLabel" name="lblWidth">
      <property name="text">
       <string>Border width:</string>
@@ -53,7 +57,7 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="0">
+   <item column="0" row="1">
     <spacer name="horizontalSpacer">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -69,7 +73,7 @@
      </property>
     </spacer>
    </item>
-   <item row="0" column="1">
+   <item column="1" row="0">
     <spacer name="verticalSpacer_2">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -85,10 +89,10 @@
      </property>
     </spacer>
    </item>
-   <item row="1" column="4">
+   <item column="4" row="1">
     <widget class="QComboBox" name="cmbUnit"/>
    </item>
-   <item row="1" column="2">
+   <item column="2" row="1">
     <widget class="KisIntParseSpinBox" name="spbWidth">
      <property name="minimum">
       <number>1</number>
@@ -101,7 +105,7 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="2">
+   <item column="2" row="1">
     <widget class="KisDoubleParseSpinBox" name="spbWidthDouble">
      <property name="decimals">
       <number>4</number>
@@ -117,7 +121,7 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="2" colspan="4">
+   <item colspan="4" column="2" row="2">
     <widget class="QCheckBox" name="chkAntialiasing">
      <property name="text">
       <string>Anti-aliasing</string>

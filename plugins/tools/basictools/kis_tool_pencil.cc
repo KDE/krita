@@ -1,20 +1,8 @@
 /*
- *  Copyright (c) 2012 Sven Langkamp <sven.langkamp@gmail.com>
- *  Copyright (c) 2010 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2012 Sven Langkamp <sven.langkamp@gmail.com>
+ *  SPDX-FileCopyrightText: 2010 Cyrille Berger <cberger@cberger.net>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_tool_pencil.h"
@@ -22,6 +10,7 @@
 #include <KoCanvasBase.h>
 #include <KoPointerEvent.h>
 #include <KoShapeStroke.h>
+#include <KisViewManager.h>
 
 #include <kis_cursor.h>
 
@@ -46,6 +35,15 @@ void KisToolPencil::updatePencilCursor(bool value)
 void KisToolPencil::mousePressEvent(KoPointerEvent *event)
 {
     if (!nodeEditable()) return;
+
+    if (nodePaintAbility() == KisToolPencil::MYPAINTBRUSH_UNPAINTABLE) {
+        KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
+        QString message = i18n("The MyPaint Brush Engine is not available for this colorspace");
+        kiscanvas->viewManager()->showFloatingMessage(message, koIcon("object-locked"));
+        event->ignore();
+        return;
+    }
+
     DelegatedPencilTool::mousePressEvent(event);
 }
 

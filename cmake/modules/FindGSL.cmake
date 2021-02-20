@@ -8,6 +8,8 @@
 #  GSL_INCLUDE_DIR
 #  GSL_VERSION
 #
+# SPDX-License-Identifier: BSD-3-Clause
+#
 
 include(UsePkgConfig)
 

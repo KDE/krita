@@ -1,20 +1,8 @@
 /*
- *  Copyright (c) 2014 Dmitry Kazakov <dimula73@gmail.com>
- *  Copyright (c) 2014 Mohit Goyal <mohit.bits2011@gmail.com>
+ *  SPDX-FileCopyrightText: 2014 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2014 Mohit Goyal <mohit.bits2011@gmail.com>
  *
- *  This library is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; either version 2.1 of the License, or
- *  (at your option) any later version.
- *
- *  This library is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU Lesser General Public License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: LGPL-2.1-or-later
  */
 /****************************************************************************
 **
@@ -131,10 +119,9 @@
     \sa ~KUndo2Command()
 */
 
-KUndo2Command::KUndo2Command(const KUndo2MagicString &text, KUndo2Command *parent):
-    m_hasParent(parent != 0),
-    m_timedID(-1),
-    m_endOfCommand(QTime::currentTime())
+KUndo2Command::KUndo2Command(const KUndo2MagicString &text, KUndo2Command *parent)
+    : m_hasParent(parent != 0)
+    , m_endOfCommand(QTime::currentTime())
 {
     d = new KUndo2CommandPrivate;
     if (parent != 0) {
@@ -154,9 +141,8 @@ KUndo2Command::KUndo2Command(const KUndo2MagicString &text, KUndo2Command *paren
     \sa ~KUndo2Command()
 */
 
-KUndo2Command::KUndo2Command(KUndo2Command *parent):
-    m_hasParent(parent != 0),
-    m_timedID(-1)
+KUndo2Command::KUndo2Command(KUndo2Command *parent)
+    : m_hasParent(parent != 0)
 {
     d = new KUndo2CommandPrivate;
     if (parent != 0)
@@ -352,6 +338,29 @@ bool KUndo2Command::timedMergeWith(KUndo2Command *other)
     else
         return false;
     return true;
+}
+/*!
+    Attempts to merge this command with \a command and checks if the two commands
+    compensate each other. If the function returns true, both commands are removed
+    from the stack.
+
+    If this function returns true, calling this command's redo() followed by
+    \p other redo() must have no effect.
+
+    The function itself shouln't do any changes to the command, because
+    after returning true, the command will be deleted as a "noop"
+
+    KUndo2QStack will only try to merge two commands if they have the same id, and
+    the id is not -1.
+
+    The default implementation returns false.
+
+    \sa id() KUndo2QStack::push()
+*/
+bool KUndo2Command::annihilateWith(const KUndo2Command *other)
+{
+    Q_UNUSED(other)
+    return false;
 }
 void KUndo2Command::setTime()
 {
@@ -837,7 +846,27 @@ void KUndo2QStack::push(KUndo2Command *cmd)
         }
         m_index = m_command_list.size();
     }
-    if (try_merge && cur->mergeWith(cmd)) {
+
+    if (try_merge && !macro && cur->annihilateWith(cmd)) {
+        delete cmd;
+        if (!macro) {
+            // this condition must be ruled out by try_merge check
+            // otherwise we would have to do cleanup for the clean state
+            Q_ASSERT(m_clean_index != m_index);
+
+            delete m_command_list.takeLast();
+            m_index--;
+
+            emit indexChanged(m_index);
+            emit canUndoChanged(canUndo());
+            emit undoTextChanged(undoText());
+            emit canRedoChanged(canRedo());
+            emit redoTextChanged(redoText());
+        } else {
+            delete m_macro_stack.takeLast();
+        }
+
+    } else if (try_merge && cur->mergeWith(cmd)) {
         delete cmd;
         if (!macro) {
             emit indexChanged(m_index);

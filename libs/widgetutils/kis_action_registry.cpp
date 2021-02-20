@@ -1,19 +1,7 @@
 /*
- *  Copyright (c) 2015 Michael Abrahams <miabraha@gmail.com>
+ *  SPDX-FileCopyrightText: 2015 Michael Abrahams <miabraha@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 
@@ -26,6 +14,7 @@
 #include <klocalizedstring.h>
 #include <KisShortcutsDialog.h>
 #include <KConfigGroup>
+#include <qdom.h>
 
 #include "kis_debug.h"
 #include "KoResourcePaths.h"
@@ -88,6 +77,33 @@ namespace {
     // Convenience macros to extract text of a child node.
     QString getChildContent(QDomElement xml, QString node) {
         return xml.firstChildElement(node).text();
+    }
+
+    QString getChildContentForOS(QDomElement xml, QString tagName, QString os = QString()) {
+        bool found = false;
+
+        QDomElement node = xml.firstChildElement(tagName);
+        QDomElement nodeElse;
+
+        while(!found && !node.isNull()) {
+            if (node.attribute("operatingSystem") == os) {
+                found = true;
+                break;
+            }
+            else if (node.hasAttribute("operatingSystemElse")) {
+                nodeElse = node;
+            }
+            else if (nodeElse.isNull()) {
+                nodeElse = node;
+            }
+
+            node = node.nextSiblingElement(tagName);
+        }
+
+        if (!found && !nodeElse.isNull()) {
+            return nodeElse.text();
+        }
+        return node.text();
     }
 
     // Use Krita debug logging categories instead of KDE's default qDebug() for
@@ -390,7 +406,11 @@ void KisActionRegistry::Private::loadActionFiles()
                         info.xmlData         = actionXml;
 
                         // Use empty list to signify no shortcut
-                        QString shortcutText = getChildContent(actionXml, "shortcut");
+#ifdef Q_OS_MACOS
+                        QString shortcutText = getChildContentForOS(actionXml, "shortcut", "macos");
+#else
+                        QString shortcutText = getChildContentForOS(actionXml, "shortcut");
+#endif
                         if (!shortcutText.isEmpty()) {
                             info.setDefaultShortcuts(QKeySequence::listFromString(shortcutText));
                         }

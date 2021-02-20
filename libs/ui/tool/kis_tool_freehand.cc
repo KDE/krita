@@ -1,24 +1,12 @@
 /*
  *  kis_tool_freehand.cc - part of Krita
  *
- *  Copyright (c) 2003-2007 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2004 Bart Coppens <kde@bartcoppens.be>
- *  Copyright (c) 2007,2008,2010 Cyrille Berger <cberger@cberger.net>
- *  Copyright (c) 2009 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  SPDX-FileCopyrightText: 2003-2007 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2004 Bart Coppens <kde@bartcoppens.be>
+ *  SPDX-FileCopyrightText: 2007, 2008, 2010 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2009 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_tool_freehand.h"
@@ -64,7 +52,7 @@ using namespace std::placeholders; // For _1 placeholder
 
 KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, const KUndo2MagicString &transactionText)
     : KisToolPaint(canvas, cursor),
-      m_paintopBasedPickingInAction(false),
+      m_paintopBasedSamplingInAction(false),
       m_brushResizeCompressor(200, std::bind(&KisToolFreehand::slotDoResizeBrush, this, _1))
 {
     m_assistant = false;
@@ -193,7 +181,7 @@ bool KisToolFreehand::primaryActionSupportsHiResEvents() const
 void KisToolFreehand::beginPrimaryAction(KoPointerEvent *event)
 {
     // FIXME: workaround for the Duplicate Op
-    tryPickByPaintOp(event, PickFgImage);
+    trySampleByPaintOp(event, SampleFgImage);
 
     requestUpdateOutline(event->point, event);
 
@@ -203,6 +191,11 @@ void KisToolFreehand::beginPrimaryAction(KoPointerEvent *event)
         if (paintability == KisToolPaint::VECTOR || paintability == KisToolPaint::CLONE){
             KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
             QString message = i18n("The brush tool cannot paint on this layer.  Please select a paint layer or mask.");
+            kiscanvas->viewManager()->showFloatingMessage(message, koIcon("object-locked"));
+        }
+        else if (paintability == MYPAINTBRUSH_UNPAINTABLE) {
+            KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
+            QString message = i18n("The MyPaint Brush Engine is not available for this colorspace");
             kiscanvas->viewManager()->showFloatingMessage(message, koIcon("object-locked"));
         }
         event->ignore();
@@ -245,7 +238,6 @@ void KisToolFreehand::endPrimaryAction(KoPointerEvent *event)
         static_cast<KisCanvas2*>(canvas())->paintingAssistantsDecoration()->endStroke();
     }
 
-    notifyModified();
     KisCanvas2 *canvas2 = dynamic_cast<KisCanvas2 *>(canvas());
     if (canvas2) {
         canvas2->viewManager()->enableControls();
@@ -254,9 +246,9 @@ void KisToolFreehand::endPrimaryAction(KoPointerEvent *event)
     setMode(KisTool::HOVER_MODE);
 }
 
-bool KisToolFreehand::tryPickByPaintOp(KoPointerEvent *event, AlternateAction action)
+bool KisToolFreehand::trySampleByPaintOp(KoPointerEvent *event, AlternateAction action)
 {
-    if (action != PickFgNode && action != PickFgImage) return false;
+    if (action != SampleFgNode && action != SampleFgImage) return false;
 
     /**
      * FIXME: we need some better way to implement modifiers
@@ -282,7 +274,7 @@ bool KisToolFreehand::tryPickByPaintOp(KoPointerEvent *event, AlternateAction ac
                                             perspective, 0, 0),
                         event->modifiers(),
                         currentNode());
-    // DuplicateOP during the picking of new source point (origin)
+    // DuplicateOP during the sampling of new source point (origin)
     // is the only paintop that returns "false" here
     return !paintOpIgnoredEvent;
 }
@@ -311,8 +303,8 @@ void KisToolFreehand::deactivateAlternateAction(AlternateAction action)
 
 void KisToolFreehand::beginAlternateAction(KoPointerEvent *event, AlternateAction action)
 {
-    if (tryPickByPaintOp(event, action)) {
-        m_paintopBasedPickingInAction = true;
+    if (trySampleByPaintOp(event, action)) {
+        m_paintopBasedSamplingInAction = true;
         return;
     }
 
@@ -331,7 +323,7 @@ void KisToolFreehand::beginAlternateAction(KoPointerEvent *event, AlternateActio
 
 void KisToolFreehand::continueAlternateAction(KoPointerEvent *event, AlternateAction action)
 {
-    if (tryPickByPaintOp(event, action) || m_paintopBasedPickingInAction) return;
+    if (trySampleByPaintOp(event, action) || m_paintopBasedSamplingInAction) return;
 
     if (action != ChangeSize && action != ChangeSizeSnap) {
         KisToolPaint::continueAlternateAction(event, action);
@@ -363,7 +355,7 @@ void KisToolFreehand::continueAlternateAction(KoPointerEvent *event, AlternateAc
         qreal newSize = m_lastPaintOpSize + sizeDiff;
 
         if (action == ChangeSizeSnap) {
-            newSize = qRound(newSize);
+            newSize = qMax(qRound(newSize), 1);
         }
 
         newSize = qBound(0.01, newSize, maxBrushSize);
@@ -380,8 +372,8 @@ void KisToolFreehand::continueAlternateAction(KoPointerEvent *event, AlternateAc
 
 void KisToolFreehand::endAlternateAction(KoPointerEvent *event, AlternateAction action)
 {
-    if (tryPickByPaintOp(event, action) || m_paintopBasedPickingInAction) {
-        m_paintopBasedPickingInAction = false;
+    if (trySampleByPaintOp(event, action) || m_paintopBasedSamplingInAction) {
+        m_paintopBasedSamplingInAction = false;
         return;
     }
 

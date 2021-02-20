@@ -1,21 +1,9 @@
 /*
- *  Copyright (c) 2006 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2006 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
-*/
+ * SPDX-License-Identifier: LGPL-2.1-or-later
+ */
 
 #include "RgbF32ColorSpace.h"
 
@@ -24,12 +12,12 @@
 #include <klocalizedstring.h>
 
 #include "compositeops/KoCompositeOps.h"
-
 #include "compositeops/RgbCompositeOps.h"
-#include <kis_dom_utils.h>
+#include "dithering/KisRgbDitherOpFactory.h"
 #include <KoColorConversions.h>
 #include <KoColorSpaceMaths.h>
 #include <KoColorSpacePreserveLightnessUtils.h>
+#include <kis_dom_utils.h>
 
 RgbF32ColorSpace::RgbF32ColorSpace(const QString &name, KoColorProfile *p) :
     LcmsColorSpace<KoRgbF32Traits>(colorSpaceId(), name, TYPE_RGBA_FLT, cmsSigRgbData, p)
@@ -47,6 +35,7 @@ RgbF32ColorSpace::RgbF32ColorSpace(const QString &name, KoColorProfile *p) :
     init();
 
     addStandardCompositeOps<KoRgbF32Traits>(this);
+    addStandardDitherOps<KoRgbF32Traits>(this);
 
     addCompositeOp(new RgbCompositeOpIn<KoRgbF32Traits>(this));
     addCompositeOp(new RgbCompositeOpOut<KoRgbF32Traits>(this));

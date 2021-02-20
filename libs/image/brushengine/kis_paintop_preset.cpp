@@ -1,21 +1,8 @@
 /* This file is part of the KDE project
- * Copyright (C) Boudewijn Rempt <boud@valdyas.org>, (C) 2008
- * Copyright (C) Sven Langkamp <sven.langkamp@gmail.com>, (C) 2009
+ * SPDX-FileCopyrightText: 2008 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2009 Sven Langkamp <sven.langkamp@gmail.com>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 #include <brushengine/kis_paintop_preset.h>
 
@@ -78,14 +65,13 @@ KisPaintOpPreset::KisPaintOpPreset(const KisPaintOpPreset &rhs)
     if (rhs.settings()) {
         setSettings(rhs.settings()); // the settings are cloned inside!
     }
-    setDirty(isDirty());
+    KIS_SAFE_ASSERT_RECOVER_NOOP(isDirty() == rhs.isDirty());
     // only valid if we could clone the settings
     setValid(rhs.settings());
 
     setPaintOp(rhs.paintOp());
     setName(rhs.name());
     setImage(rhs.image());
-    settings()->setUpdateProxy(rhs.updateProxy());
 }
 
 KoResourceSP KisPaintOpPreset::clone() const
@@ -129,7 +115,7 @@ void KisPaintOpPreset::setSettings(KisPaintOpSettingsSP settings)
     if (d->settings) {
         oldOptionsWidget = d->settings->optionsWidget();
         d->settings->setOptionsWidget(0);
-        d->settings->setUpdateProxy(updateProxy());
+        d->settings->setUpdateProxy(0);
         d->settings = 0;
     }
 
@@ -161,7 +147,6 @@ KisPaintOpSettingsSP KisPaintOpPreset::settings() const
 
 bool KisPaintOpPreset::load(KisResourcesInterfaceSP resourcesInterface)
 {
-    qDebug() << "Load preset " << filename();
     setValid(false);
 
     if (filename().isEmpty()) {
@@ -215,14 +200,12 @@ bool KisPaintOpPreset::load(KisResourcesInterfaceSP resourcesInterface)
     delete dev;
 
     setValid(res);
-    setDirty(false);
     return res;
 
 }
 
 bool KisPaintOpPreset::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface)
 {
-
     QImageReader reader(dev, "PNG");
 
     QString version = reader.text("version");
@@ -255,7 +238,6 @@ bool KisPaintOpPreset::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP re
     if (!d->settings) {
         return false;
     }
-
     setValid(true);
     setImage(img);
 
@@ -295,6 +277,10 @@ void KisPaintOpPreset::fromXML(const QDomElement& presetElt, KisResourcesInterfa
 {
     setName(presetElt.attribute("name"));
     QString paintopid = presetElt.attribute("paintopid");
+
+    if (!metadata().contains("paintopid")) {
+        addMetaData("paintopid", paintopid);
+    }
 
     if (paintopid.isEmpty()) {
         dbgImage << "No paintopid attribute";
@@ -350,8 +336,6 @@ bool KisPaintOpPreset::saveToDevice(QIODevice *dev) const
     } else {
         img = image();
     }
-
-    const_cast<KisPaintOpPreset*>(this)->setDirty(false);
 
     KoResource::saveToDevice(dev);
 

@@ -1,20 +1,8 @@
 /*
- *  Copyright (c) 2000 Matthias Elter  <elter@kde.org>
- *  Copyright (c) 2003 Patrick Julien  <freak@codepimps.org>
+ *  SPDX-FileCopyrightText: 2000 Matthias Elter <elter@kde.org>
+ *  SPDX-FileCopyrightText: 2003 Patrick Julien <freak@codepimps.org>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.g
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "widgets/kis_iconwidget.h"
@@ -52,7 +40,7 @@ QSize KisIconWidget::preferredIconSize() const
     const qint32 iconWidth = cw - (border*2);
     const qint32 iconHeight = ch - (border*2);
 
-    return QSize(iconWidth, iconHeight);
+    return QSize(iconWidth, iconHeight)*devicePixelRatioF();
 }
 
 void KisIconWidget::paintEvent(QPaintEvent *event)
@@ -82,39 +70,46 @@ void KisIconWidget::paintEvent(QPaintEvent *event)
     p.drawRect(QRect(0,0,cw,ch));
 
     if (!m_thumbnail.isNull()) {
-        QImage img = QImage(iconWidth, iconHeight, QImage::Format_ARGB32);
+        QImage img = QImage(iconWidth*devicePixelRatioF(), iconHeight*devicePixelRatioF(), QImage::Format_ARGB32);
+        img.setDevicePixelRatio(devicePixelRatioF());
         img.fill(Qt::transparent);
-        if (m_thumbnail.width() < iconWidth || m_thumbnail.height() < iconHeight) {
+        if (m_thumbnail.width() < iconWidth*devicePixelRatioF() || m_thumbnail.height() < iconHeight*devicePixelRatioF()) {
+            QImage thumb = m_thumbnail.scaled(m_thumbnail.size()*devicePixelRatioF()); // first scale up to the high DPI so the pattern is visible
+            thumb.setDevicePixelRatio(devicePixelRatioF());
             QPainter paint2;
             paint2.begin(&img);
-            for (int x = 0; x < iconWidth; x += m_thumbnail.width()) {
-                for (int y = 0; y < iconHeight; y+= m_thumbnail.height()) {
-                    paint2.drawImage(x, y, m_thumbnail);
+            for (int x = 0; x < iconWidth; x += thumb.width()/devicePixelRatioF()) {
+                for (int y = 0; y < iconHeight; y+= thumb.height()/devicePixelRatioF()) {
+                    paint2.drawImage(x, y, thumb);
                 }
             }
         } else {
-            img = m_thumbnail.scaled(iconWidth, iconHeight, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+            img = m_thumbnail.scaled(iconWidth*devicePixelRatioF(), iconHeight*devicePixelRatioF(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
         }
         p.drawImage(QRect(border, border, iconWidth, iconHeight), img);
     }
     else if (m_resource) {
-        QImage img = QImage(iconWidth, iconHeight, QImage::Format_ARGB32);
+        QImage img = QImage(iconWidth*devicePixelRatioF(), iconHeight*devicePixelRatioF(), QImage::Format_ARGB32);
         img.fill(Qt::transparent);
-        if (m_resource->image().width()<iconWidth || m_resource->image().height()<iconHeight) {
+        if (m_resource->image().width() < iconWidth*devicePixelRatioF() || m_resource->image().height() < iconHeight*devicePixelRatioF()) {
             QPainter paint2;
             paint2.begin(&img);
-            for (int x = 0; x < iconWidth; x += m_resource->image().width()) {
-                for (int y = 0; y < iconHeight; y += m_resource->image().height()) {
+            for (int x = 0; x < iconWidth; x += m_resource->image().width()/devicePixelRatioF()) {
+                for (int y = 0; y < iconHeight; y += m_resource->image().height()/devicePixelRatioF()) {
                     paint2.drawImage(x, y, m_resource->image());
                 }
             }
         } else {
-            img = m_resource->image().scaled(iconWidth, iconHeight, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+            img = m_resource->image().scaled(iconWidth*devicePixelRatioF(), iconHeight*devicePixelRatioF(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+            img.setDevicePixelRatio(devicePixelRatioF());
         }
         p.drawImage(QRect(border, border, iconWidth, iconHeight), img);
     } else if (!icon().isNull()) {
         int border2 = qRound((cw - 16) * 0.5);
-        p.drawImage(QRect(border2, border2, 16, 16), icon().pixmap(16, 16).toImage());
+        QSize size = QSize(16, 16);
+        QImage image = icon().pixmap(size*devicePixelRatioF()).toImage();
+        image.setDevicePixelRatio(devicePixelRatioF());
+        p.drawImage(QRect(border2, border2, 16, 16), image);
     }
     p.setClipping(false);
 }

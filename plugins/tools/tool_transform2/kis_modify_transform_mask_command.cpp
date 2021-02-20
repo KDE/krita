@@ -1,17 +1,5 @@
 /*
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_modify_transform_mask_command.h"
@@ -22,13 +10,13 @@
 #include "kis_transform_mask_params_interface.h"
 #include "tool_transform_args.h"
 #include "kis_scalar_keyframe_channel.h"
-#include "kis_transform_args_keyframe_channel.h"
 #include "kis_animated_transform_parameters.h"
 
-KisModifyTransformMaskCommand::KisModifyTransformMaskCommand(KisTransformMaskSP mask, KisTransformMaskParamsInterfaceSP params)
+KisModifyTransformMaskCommand::KisModifyTransformMaskCommand(KisTransformMaskSP mask, KisTransformMaskParamsInterfaceSP params, bool skipUpdate)
 : m_mask(mask),
   m_params(params),
-  m_oldParams(m_mask->transformParams())
+  m_oldParams(m_mask->transformParams()),
+  m_skipUpdate(skipUpdate)
 {
     m_wasHidden = m_oldParams->isHidden();
 
@@ -52,7 +40,9 @@ void KisModifyTransformMaskCommand::redo() {
     }
 
     m_mask->setTransformParams(params);
-    m_mask->threadSafeForceStaticImageUpdate();
+    if (!m_skipUpdate) {
+        m_mask->threadSafeForceStaticImageUpdate();
+    }
 }
 
 void KisModifyTransformMaskCommand::undo() {
@@ -64,5 +54,7 @@ void KisModifyTransformMaskCommand::undo() {
     }
 
     m_mask->setTransformParams(m_oldParams);
-    m_mask->threadSafeForceStaticImageUpdate();
+    if (!m_skipUpdate) {
+        m_mask->threadSafeForceStaticImageUpdate();
+    }
 }

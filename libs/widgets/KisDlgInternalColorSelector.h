@@ -1,19 +1,7 @@
 /*
- * Copyright (C) Wolthera van Hovell tot Westerflier <griffinvalley@gmail.com>, (C) 2016
+ * SPDX-FileCopyrightText: 2016 Wolthera van Hovell tot Westerflier <griffinvalley@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #ifndef KISDLGINTERNALCOLORSELECTOR_H
@@ -28,7 +16,7 @@
 #include <QScopedPointer>
 #include <QDialog>
 
-#include "KisScreenColorPickerBase.h"
+#include "KisScreenColorSamplerBase.h"
 
 class Ui_WdgDlgInternalColorSelector;
 class KoColorPatch;
@@ -42,28 +30,32 @@ class KRITAWIDGETS_EXPORT KisDlgInternalColorSelector : public QDialog
 {
     Q_OBJECT
 
-    static std::function<KisScreenColorPickerBase *(QWidget *)> s_screenColorPickerFactory;
+    static std::function<KisScreenColorSamplerBase *(QWidget *)> s_screenColorSamplerFactory;
 
 public:
 
-    static void setScreenColorPickerFactory(std::function<KisScreenColorPickerBase *(QWidget *)> f) {
-        s_screenColorPickerFactory = f;
+    static void setScreenColorSamplerFactory(std::function<KisScreenColorSamplerBase *(QWidget *)> f) {
+        s_screenColorSamplerFactory = f;
     }
 
     struct Config
     {
         Config() :
+#ifdef Q_OS_ANDROID
+            modal(false),
+#else
             modal(true),
+#endif
             visualColorSelector(true),
             paletteBox(true),
-            screenColorPicker(true),
+            screenColorSampler(true),
             prevNextButtons(true),
             hexInput(true),
             useAlpha(false){}
         bool modal;
         bool visualColorSelector;
         bool paletteBox;
-        bool screenColorPicker;
+        bool screenColorSampler;
         bool prevNextButtons;
         bool hexInput;
         bool useAlpha;
@@ -114,7 +106,7 @@ public:
 Q_SIGNALS:
     /**
      * @brief signalForegroundColorChosen
-     * The most important signal. This will sent out when a color has been picked from the selector.
+     * The most important signal. This will sent out when a color has been chosen from the selector.
      * There will be a small delay to make sure that the selector causes too many updates.
      *
      * Do not connect this to slotColorUpdated.

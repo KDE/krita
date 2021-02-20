@@ -1,19 +1,7 @@
 /*
- *  Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2008 Cyrille Berger <cberger@cberger.net>
  *
- *  This library is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; either version 2.1 of the License,
- *  or (at your option) any later version.
- *
- *  This library is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU Lesser General Public License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: LGPL-2.1-or-later
  */
 
 #include "KoTriangleColorSelector.h"
@@ -182,8 +170,8 @@ void KoTriangleColorSelector::paintEvent( QPaintEvent * event )
 }
 
 
-// make sure to always use get/set functions when managing HSV properties( don't call directly like d->hue)
-// these  settings get updated A LOT when the color picker is being used. You might get unexpected results
+// make sure to always use get/set functions when managing HSV properties (don't call directly like d->hue)
+// these settings get updated A LOT when the color sampler is being used. You might get unexpected results
 int KoTriangleColorSelector::hue() const
 {
     return d->hue;
@@ -287,18 +275,23 @@ void KoTriangleColorSelector::tellColorChanged()
 
 void KoTriangleColorSelector::generateTriangle()
 {
-    QImage image(d->sizeColorSelector, d->sizeColorSelector, QImage::Format_ARGB32);
+    QImage image(d->sizeColorSelector*devicePixelRatioF(), d->sizeColorSelector*devicePixelRatioF(), QImage::Format_ARGB32);
+    image.setDevicePixelRatio(devicePixelRatioF());
+
     // Length of triangle
     int hue_ = hue();
 
-    for(int y = 0; y < d->sizeColorSelector; ++y)
+    qreal triangleTop = d->triangleTop*devicePixelRatioF();
+    qreal triangleBottom = d->triangleBottom*devicePixelRatioF();
+
+    for(int y = 0; y < d->sizeColorSelector*devicePixelRatioF(); ++y)
     {
-        qreal ynormalize = ( d->triangleTop - y ) / ( d->triangleTop - d->triangleBottom );
+        qreal ynormalize = ( triangleTop - y ) / ( triangleTop - triangleBottom );
         qreal v = 255 * ynormalize;
-        qreal ls_ = (ynormalize) * d->triangleLength;
-        qreal startx_ = d->centerColorSelector - 0.5 * ls_;
+        qreal ls_ = (ynormalize) * d->triangleLength*devicePixelRatioF();
+        qreal startx_ = d->centerColorSelector*devicePixelRatioF() - 0.5 * ls_;
         uint* data = reinterpret_cast<uint*>(image.scanLine(y));
-        for(int x = 0; x < d->sizeColorSelector; ++x, ++data)
+        for(int x = 0; x < d->sizeColorSelector*devicePixelRatioF(); ++x, ++data)
         {
             qreal s = 255 * (x - startx_) / ls_;
             if(v < -1.0 || v > 256.0 || s < -1.0 || s > 256.0 )
@@ -326,20 +319,22 @@ void KoTriangleColorSelector::generateTriangle()
 
 void KoTriangleColorSelector::generateWheel()
 {
-    QImage image(d->sizeColorSelector, d->sizeColorSelector, QImage::Format_ARGB32);
-    for(int y = 0; y < d->sizeColorSelector; y++)
+    QImage image(d->sizeColorSelector*devicePixelRatioF(), d->sizeColorSelector*devicePixelRatioF(), QImage::Format_ARGB32);
+    image.setDevicePixelRatio(devicePixelRatioF());
+
+    for(int y = 0; y < d->sizeColorSelector*devicePixelRatioF(); y++)
     {
-        qreal yc = y - d->centerColorSelector;
+        qreal yc = y - d->centerColorSelector*devicePixelRatioF();
         qreal y2 = pow2( yc );
-        for(int x = 0; x < d->sizeColorSelector; x++)
+        for(int x = 0; x < d->sizeColorSelector*devicePixelRatioF(); x++)
         {
-            qreal xc = x - d->centerColorSelector;
+            qreal xc = x - d->centerColorSelector*devicePixelRatioF();
             qreal norm = sqrt(pow2( xc ) + y2);
-            if( norm <= d->wheelNormExt + 1.0 && norm >= d->wheelNormInt - 1.0 )
+            if( norm <= d->wheelNormExt*devicePixelRatioF() + 1.0 && norm >= d->wheelNormInt*devicePixelRatioF() - 1.0 )
             {
                 qreal acoef = 1.0;
-                if(norm > d->wheelNormExt ) acoef = (1.0 + d->wheelNormExt - norm);
-                else if(norm < d->wheelNormInt ) acoef = (1.0 - d->wheelNormInt + norm);
+                if(norm > d->wheelNormExt*devicePixelRatioF() ) acoef = (1.0 + d->wheelNormExt*devicePixelRatioF() - norm);
+                else if(norm < d->wheelNormInt*devicePixelRatioF() ) acoef = (1.0 - d->wheelNormInt*devicePixelRatioF() + norm);
                 qreal angle = atan2(yc, xc);
                 int h = (int)((180 * angle / M_PI) + 180) % 360;
 

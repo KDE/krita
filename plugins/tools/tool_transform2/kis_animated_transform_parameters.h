@@ -1,19 +1,9 @@
 /*
- *  Copyright (c) 2016 Jouni Pentikäinen <joupent@gmail.com>
+ *  SPDX-FileCopyrightText: 2016 Jouni Pentikäinen <joupent@gmail.com>
+ *  SPDX-FileCopyrightText: 2021 Eoin O'Neill<eoinoneill1991@gmail.com>
+ *  SPDX-FileCopyrightText: 2021 Emmet O'Neill <emmetoneill.pdx@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 
@@ -22,6 +12,7 @@
 
 #include "kis_transform_mask_adapter.h"
 #include "kritatooltransform_export.h"
+#include <qmath.h>
 
 class KisKeyframeChannel;
 
@@ -30,18 +21,22 @@ class KRITATOOLTRANSFORM_EXPORT KisAnimatedTransformMaskParameters : public KisT
 public:
     KisAnimatedTransformMaskParameters();
     KisAnimatedTransformMaskParameters(const KisTransformMaskAdapter *staticTransform);
+    KisAnimatedTransformMaskParameters(const KisAnimatedTransformMaskParameters& rhs);
     ~KisAnimatedTransformMaskParameters() override;
 
-    const ToolTransformArgs& transformArgs() const override;
+    const QSharedPointer<ToolTransformArgs> transformArgs() const override;
 
     QString id() const override;
     void toXML(QDomElement *e) const override;
-    static KisTransformMaskParamsInterfaceSP fromXML(const QDomElement &e);
-    static KisTransformMaskParamsInterfaceSP animate(KisTransformMaskParamsInterfaceSP params);
 
     void translate(const QPointF &offset) override;
 
-    KisKeyframeChannel *getKeyframeChannel(const QString &id, KisNodeSP defaultBounds) override;
+    KisKeyframeChannel *requestKeyframeChannel(const QString &id, KisNodeWSP parent) override;
+    void setKeyframeChannel(const QString &name, QSharedPointer<KisKeyframeChannel> kcsp) override;
+    KisKeyframeChannel* getKeyframeChannel(const KoID& koid) const override;
+    QList<KisKeyframeChannel*> copyChannelsFrom(const KisAnimatedTransformParamsInterface *other) override;
+
+    qreal defaultValueForScalarChannel(QString name);
 
     bool isHidden() const override;
     void setHidden(bool hidden);
@@ -50,10 +45,23 @@ public:
     bool hasChanged() const override;
     bool isAnimated() const;
 
-    static void addKeyframes(KisTransformMaskSP mask, int time, KisTransformMaskParamsInterfaceSP params, KUndo2Command *parentCommand);
+    QPointF getRotationalTranslationOffset(const ToolTransformArgs& args) const;
 
-    
+    KisTransformMaskParamsInterfaceSP clone() const override;
+
+    static KisTransformMaskParamsInterfaceSP fromXML(const QDomElement &e);
+
+    /*** Some utility methods for creating an animated transform mask and for creating keyframes using a reference
+     * set of parameters. Used by the transform mask and stroke respectively to update keyframe data. */
+    static KisTransformMaskParamsInterfaceSP makeAnimated(KisTransformMaskParamsInterfaceSP params, const KisTransformMaskSP mask);
+    static void makeScalarKeyframeOnMask(KisTransformMaskSP mask, const KoID &channelId, int time, qreal value, KUndo2Command *parentCommand);
+    static void addKeyframes(KisTransformMaskSP mask, int currentTime, KisTransformMaskParamsInterfaceSP desiredParams, KUndo2Command *parentCommand);
+    static qreal degToRad(qreal degrees) {return degrees / 180 * M_PI;}
+    static qreal radToDeg(qreal rad) {return rad * 180 / M_PI;}
+
 private:
+    quint64 generateStateHash() const;
+
     struct Private;
     const QScopedPointer<Private> m_d;
 };

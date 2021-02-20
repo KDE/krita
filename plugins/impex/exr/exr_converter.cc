@@ -1,21 +1,8 @@
 /*
- *  Copyright (c) 2005 Adrian Page <adrian@pagenet.plus.com>
- *  Copyright (c) 2010 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2005 Adrian Page <adrian@pagenet.plus.com>
+ *  SPDX-FileCopyrightText: 2010 Cyrille Berger <cberger@cberger.net>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "exr_converter.h"
@@ -566,7 +553,7 @@ bool EXRConverter::Private::checkExtraLayersInfoConsistent(const QDomDocument &d
 KisImportExportErrorCode EXRConverter::decode(const QString &filename)
 {
     try {
-        Imf::InputFile file(QFile::encodeName(filename));
+        Imf::InputFile file(filename.toUtf8());
 
         Imath::Box2i dw = file.header().dataWindow();
         Imath::Box2i displayWindow = file.header().displayWindow();
@@ -807,8 +794,12 @@ KisImportExportErrorCode EXRConverter::decode(const QString &filename)
         /**
          * EXR semi-transparent images are expected to be rendered on
          * black to ensure correctness of the light model
+         *
+         * NOTE: We cannot do that automatically, because the EXR may be imported
+         * into the image as a layer, in which case the default color will create
+         * major issues. See https://bugs.kde.org/show_bug.cgi?id=427720
          */
-        d->image->setDefaultProjectionColor(KoColor(Qt::black, colorSpace));
+        //d->image->setDefaultProjectionColor(KoColor(Qt::black, colorSpace));
 
         // Create group layers
         for (int i = 0; i < groups.size(); ++i) {
@@ -1125,7 +1116,7 @@ KisImportExportErrorCode EXRConverter::buildFile(const QString &filename, KisPai
 
     // Open file for writing
     try {
-        Imf::OutputFile file(QFile::encodeName(filename), header);
+        Imf::OutputFile file(filename.toUtf8(), header);
 
         QList<ExrPaintLayerSaveInfo> informationObjects;
         informationObjects.push_back(info);
@@ -1134,7 +1125,7 @@ KisImportExportErrorCode EXRConverter::buildFile(const QString &filename, KisPai
 
     } catch(std::exception &e) {
         dbgFile << "Exception while writing to exr file: " << e.what();
-        if (!KisImportExportAdditionalChecks::isFileWritable(QFile::encodeName(filename))) {
+        if (!KisImportExportAdditionalChecks::isFileWritable(filename)) {
             return ImportExportCodes::NoAccessToWrite;
         }
         return ImportExportCodes::ErrorWhileWriting;
@@ -1377,12 +1368,12 @@ KisImportExportErrorCode EXRConverter::buildFile(const QString &filename, KisGro
 
         // Open file for writing
         try {
-            Imf::OutputFile file(QFile::encodeName(filename), header);
+            Imf::OutputFile file(filename.toUtf8(), header);
             encodeData(file, informationObjects, width, height);
             return ImportExportCodes::OK;
         } catch(std::exception &e) {
             dbgFile << "Exception while writing to exr file: " << e.what();
-            if (!KisImportExportAdditionalChecks::isFileWritable(QFile::encodeName(filename))) {
+            if (!KisImportExportAdditionalChecks::isFileWritable(filename.toUtf8())) {
                 return ImportExportCodes::NoAccessToWrite;
             }
             return ImportExportCodes::ErrorWhileWriting;

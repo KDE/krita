@@ -1,21 +1,8 @@
 /* This file is part of the KDE project
  * Made by Tomislav Lukman (tomislav.lukman@ck.tel.hr)
- * Copyright (C) 2012 Jean-Nicolas Artaud <jeannicolasartaud@gmail.com>
+ * SPDX-FileCopyrightText: 2012 Jean-Nicolas Artaud <jeannicolasartaud@gmail.com>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #include "KoFillConfigWidget.h"
@@ -281,11 +268,11 @@ KoFillConfigWidget::KoFillConfigWidget(KoCanvasBase *canvas, KoFlake::FillVarian
 
     d->ui->btnChooseSolidColor->setDefaultAction(d->colorAction);
     d->ui->btnChooseSolidColor->setPopupMode(QToolButton::InstantPopup);
-    d->ui->btnSolidColorPick->setIcon(KisIconUtils::loadIcon("krita_tool_color_picker"));
+    d->ui->btnSolidColorSample->setIcon(KisIconUtils::loadIcon("krita_tool_color_sampler"));
 
-    // TODO: for now the color picking button is disabled!
-    d->ui->btnSolidColorPick->setEnabled(false);
-    d->ui->btnSolidColorPick->setVisible(false);
+    // TODO: for now the color sampling button is disabled!
+    d->ui->btnSolidColorSample->setEnabled(false);
+    d->ui->btnSolidColorSample->setVisible(false);
 
     connect(d->colorAction, SIGNAL(colorChanged(KoColor)), &d->colorChangedCompressor, SLOT(start()));
     connect(&d->colorChangedCompressor, SIGNAL(timeout()), SLOT(colorChanged()));
@@ -1050,7 +1037,7 @@ void KoFillConfigWidget::updateWidgetComponentVisbility()
     d->ui->repeatLabel->setVisible(false);
     d->ui->cmbGradientRepeat->setVisible(false);
     d->ui->cmbGradientType->setVisible(false);
-    d->ui->btnSolidColorPick->setVisible(false);
+    d->ui->btnSolidColorSample->setVisible(false);
     d->ui->btnSaveGradient->setVisible(false);
     d->ui->gradientTypeLine->setVisible(false);
     d->ui->soldStrokeColorLabel->setVisible(false);
@@ -1075,7 +1062,7 @@ void KoFillConfigWidget::updateWidgetComponentVisbility()
             break;
         case KoFillConfigWidget::Solid:
             d->ui->btnChooseSolidColor->setVisible(true);
-            d->ui->btnSolidColorPick->setVisible(false);
+            d->ui->btnSolidColorSample->setVisible(false);
             d->ui->soldStrokeColorLabel->setVisible(true);
             break;
         case KoFillConfigWidget::Gradient:

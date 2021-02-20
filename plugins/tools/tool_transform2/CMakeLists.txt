@@ -17,13 +17,14 @@ set(kritatooltransform_SOURCES
     kis_liquify_paint_helper.cpp
     kis_liquify_paintop.cpp
     kis_liquify_properties.cpp
+    kis_mesh_transform_strategy.cpp
     kis_free_transform_strategy.cpp
     kis_free_transform_strategy_gsl_helpers.cpp
     kis_perspective_transform_strategy.cpp
     kis_transform_utils.cpp
     kis_modify_transform_mask_command.cpp
     strokes/transform_stroke_strategy.cpp
-    kis_transform_args_keyframe_channel.cpp
+    strokes/inplace_transform_stroke_strategy.cpp
     )
 
 qt5_add_resources(kritatooltransform_SOURCES tool_transform.qrc)

@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgPaintOpSettings</class>
  <widget class="QWidget" name="WdgPaintOpSettings">
   <property name="geometry">
@@ -454,6 +458,9 @@
           <property name="text">
            <string/>
           </property>
+          <property name="autoRaise">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
        </layout>
@@ -509,6 +516,9 @@
             <height>22</height>
            </size>
           </property>
+          <property name="autoRaise">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
         <item>
@@ -525,13 +535,7 @@
          </spacer>
         </item>
         <item>
-         <widget class="QPushButton" name="bnBlacklistPreset">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
+         <widget class="QToolButton" name="bnBlacklistPreset">
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -547,11 +551,8 @@
             <height>22</height>
            </size>
           </property>
-          <property name="autoDefault">
-           <bool>false</bool>
-          </property>
-          <property name="flat">
-           <bool>false</bool>
+          <property name="autoRaise">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -856,6 +857,9 @@
           <property name="text">
            <string/>
           </property>
+          <property name="flat">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
         <item>
@@ -865,6 +869,9 @@
           </property>
           <property name="text">
            <string/>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -876,6 +883,9 @@
           <property name="text">
            <string/>
           </property>
+          <property name="flat">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
         <item>
@@ -886,6 +896,9 @@
           <property name="text">
            <string/>
           </property>
+          <property name="flat">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
         <item>
@@ -895,6 +908,9 @@
           </property>
           <property name="text">
            <string/>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
           </property>
          </widget>
         </item>

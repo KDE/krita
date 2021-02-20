@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgImagesplit</class>
  <widget class="QWidget" name="WdgImagesplit">
   <property name="geometry">
@@ -16,7 +20,7 @@
   <layout class="QHBoxLayout" name="horizontalLayout_3">
    <item>
     <layout class="QFormLayout" name="formLayout">
-     <item row="0" column="0">
+     <item column="0" row="0">
       <widget class="QLabel" name="lblHorizontalSplitLines">
        <property name="text">
         <string>Horizontal Lines</string>
@@ -26,7 +30,7 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="1">
+     <item column="1" row="0">
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
         <widget class="KisIntParseSpinBox" name="intHorizontalSplitLines"/>
@@ -40,7 +44,7 @@
        </item>
       </layout>
      </item>
-     <item row="1" column="0">
+     <item column="0" row="1">
       <widget class="QLabel" name="lblVerticalSplitLines">
        <property name="text">
         <string>Vertical Lines</string>
@@ -50,7 +54,7 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="1">
+     <item column="1" row="1">
       <layout class="QHBoxLayout" name="horizontalLayout_2">
        <item>
         <widget class="KisIntParseSpinBox" name="intVerticalSplitLines"/>
@@ -64,7 +68,7 @@
        </item>
       </layout>
      </item>
-     <item row="2" column="0" colspan="2">
+     <item colspan="2" column="0" row="2">
       <widget class="QGroupBox" name="groupBox">
        <property name="title">
         <string>Sort Direction:</string>
@@ -97,7 +101,7 @@
        </layout>
       </widget>
      </item>
-     <item row="3" column="0">
+     <item column="0" row="3">
       <widget class="QLabel" name="lblSuffix">
        <property name="text">
         <string>Prefix</string>
@@ -107,7 +111,7 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="1">
+     <item column="1" row="3">
       <widget class="QLineEdit" name="lineEdit">
        <property name="enabled">
         <bool>true</bool>
@@ -117,7 +121,7 @@
        </property>
       </widget>
      </item>
-     <item row="4" column="0">
+     <item column="0" row="4">
       <widget class="QLabel" name="lblFileType">
        <property name="text">
         <string>File Type</string>
@@ -127,7 +131,7 @@
        </property>
       </widget>
      </item>
-     <item row="4" column="1">
+     <item column="1" row="4">
       <widget class="QComboBox" name="cmbFileType">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -137,7 +141,7 @@
        </property>
       </widget>
      </item>
-     <item row="5" column="0" colspan="2">
+     <item colspan="2" column="0" row="5">
       <widget class="QCheckBox" name="chkAutoSave">
        <property name="font">
         <font>
@@ -149,7 +153,7 @@
        </property>
       </widget>
      </item>
-     <item row="6" column="0">
+     <item column="0" row="6">
       <spacer name="verticalSpacer">
        <property name="orientation">
         <enum>Qt::Vertical</enum>

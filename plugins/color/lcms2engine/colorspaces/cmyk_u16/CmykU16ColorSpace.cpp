@@ -1,21 +1,9 @@
 /*
- *  Copyright (c) 2006 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2006 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
-*/
+ * SPDX-License-Identifier: LGPL-2.1-or-later
+ */
 
 #include "CmykU16ColorSpace.h"
 
@@ -24,11 +12,12 @@
 #include <klocalizedstring.h>
 
 #include "compositeops/KoCompositeOps.h"
+#include "dithering/KisCmykDitherOpFactory.h"
 #include <KoColorConversions.h>
 #include <kis_dom_utils.h>
 
 CmykU16ColorSpace::CmykU16ColorSpace(const QString &name, KoColorProfile *p)
-    : LcmsColorSpace<CmykU16Traits>(colorSpaceId(), name,  TYPE_CMYKA_16, cmsSigCmykData, p)
+    : LcmsColorSpace<KoCmykU16Traits>(colorSpaceId(), name, TYPE_CMYKA_16, cmsSigCmykData, p)
 {
     addChannel(new KoChannelInfo(i18n("Cyan"), 0 * sizeof(quint16), 0, KoChannelInfo::COLOR, KoChannelInfo::UINT16, sizeof(quint16), Qt::cyan));
     addChannel(new KoChannelInfo(i18n("Magenta"), 1 * sizeof(quint16), 1, KoChannelInfo::COLOR, KoChannelInfo::UINT16, sizeof(quint16), Qt::magenta));
@@ -38,7 +27,8 @@ CmykU16ColorSpace::CmykU16ColorSpace(const QString &name, KoColorProfile *p)
 
     init();
 
-    addStandardCompositeOps<CmykU16Traits>(this);
+    addStandardCompositeOps<KoCmykU16Traits>(this);
+    addStandardDitherOps<KoCmykU16Traits>(this);
 }
 
 bool CmykU16ColorSpace::willDegrade(ColorSpaceIndependence independence) const
@@ -57,23 +47,23 @@ KoColorSpace *CmykU16ColorSpace::clone() const
 
 void CmykU16ColorSpace::colorToXML(const quint8 *pixel, QDomDocument &doc, QDomElement &colorElt) const
 {
-    const CmykU16Traits::Pixel *p = reinterpret_cast<const CmykU16Traits::Pixel *>(pixel);
+    const KoCmykU16Traits::Pixel *p = reinterpret_cast<const KoCmykU16Traits::Pixel *>(pixel);
     QDomElement labElt = doc.createElement("CMYK");
-    labElt.setAttribute("c", KisDomUtils::toString(KoColorSpaceMaths< CmykU16Traits::channels_type, qreal>::scaleToA(p->cyan)));
-    labElt.setAttribute("m", KisDomUtils::toString(KoColorSpaceMaths< CmykU16Traits::channels_type, qreal>::scaleToA(p->magenta)));
-    labElt.setAttribute("y", KisDomUtils::toString(KoColorSpaceMaths< CmykU16Traits::channels_type, qreal>::scaleToA(p->yellow)));
-    labElt.setAttribute("k", KisDomUtils::toString(KoColorSpaceMaths< CmykU16Traits::channels_type, qreal>::scaleToA(p->black)));
+    labElt.setAttribute("c", KisDomUtils::toString(KoColorSpaceMaths<KoCmykU16Traits::channels_type, qreal>::scaleToA(p->cyan)));
+    labElt.setAttribute("m", KisDomUtils::toString(KoColorSpaceMaths<KoCmykU16Traits::channels_type, qreal>::scaleToA(p->magenta)));
+    labElt.setAttribute("y", KisDomUtils::toString(KoColorSpaceMaths<KoCmykU16Traits::channels_type, qreal>::scaleToA(p->yellow)));
+    labElt.setAttribute("k", KisDomUtils::toString(KoColorSpaceMaths<KoCmykU16Traits::channels_type, qreal>::scaleToA(p->black)));
     labElt.setAttribute("space", profile()->name());
     colorElt.appendChild(labElt);
 }
 
 void CmykU16ColorSpace::colorFromXML(quint8 *pixel, const QDomElement &elt) const
 {
-    CmykU16Traits::Pixel *p = reinterpret_cast<CmykU16Traits::Pixel *>(pixel);
-    p->cyan = KoColorSpaceMaths< qreal, CmykU16Traits::channels_type >::scaleToA(KisDomUtils::toDouble(elt.attribute("c")));
-    p->magenta = KoColorSpaceMaths< qreal, CmykU16Traits::channels_type >::scaleToA(KisDomUtils::toDouble(elt.attribute("m")));
-    p->yellow = KoColorSpaceMaths< qreal, CmykU16Traits::channels_type >::scaleToA(KisDomUtils::toDouble(elt.attribute("y")));
-    p->black = KoColorSpaceMaths< qreal, CmykU16Traits::channels_type >::scaleToA(KisDomUtils::toDouble(elt.attribute("k")));
+    KoCmykU16Traits::Pixel *p = reinterpret_cast<KoCmykU16Traits::Pixel *>(pixel);
+    p->cyan = KoColorSpaceMaths< qreal, KoCmykU16Traits::channels_type >::scaleToA(KisDomUtils::toDouble(elt.attribute("c")));
+    p->magenta = KoColorSpaceMaths< qreal, KoCmykU16Traits::channels_type >::scaleToA(KisDomUtils::toDouble(elt.attribute("m")));
+    p->yellow = KoColorSpaceMaths< qreal, KoCmykU16Traits::channels_type >::scaleToA(KisDomUtils::toDouble(elt.attribute("y")));
+    p->black = KoColorSpaceMaths< qreal, KoCmykU16Traits::channels_type >::scaleToA(KisDomUtils::toDouble(elt.attribute("k")));
     p->alpha = KoColorSpaceMathsTraits<quint16>::max;
 }
 

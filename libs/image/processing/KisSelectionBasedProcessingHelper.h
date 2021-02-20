@@ -1,3 +1,7 @@
+/*
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
 #ifndef KISSELECTIONBASEDPROCESSINGHELPER_H
 #define KISSELECTIONBASEDPROCESSINGHELPER_H
 

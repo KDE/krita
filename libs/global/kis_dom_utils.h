@@ -1,19 +1,7 @@
 /*
- *  Copyright (c) 2014 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2014 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #ifndef __KIS_DOM_UTILS_H
@@ -32,6 +20,7 @@
 
 #include "kritaglobal_export.h"
 #include "kis_debug.h"
+#include "krita_container_utils.h"
 
 namespace KisDomUtils {
 
@@ -62,27 +51,31 @@ namespace KisDomUtils {
         return str;
     }
 
-    inline int toInt(const QString &str) {
-        bool ok = false;
+    inline int toInt(const QString &str, bool *ok=nullptr) {
+        bool ok_locale = false;
         int value = 0;
 
         QLocale c(QLocale::German);
 
-        value = str.toInt(&ok);
-        if (!ok) {
-            value = c.toInt(str, &ok);
+        value = str.toInt(&ok_locale);
+        if (!ok_locale) {
+            value = c.toInt(str, &ok_locale);
         }
 
-        if (!ok) {
+        if (!ok_locale && ok == nullptr) {
             warnKrita << "WARNING: KisDomUtils::toInt failed:" << ppVar(str);
             value = 0;
+        }
+
+        if (ok != nullptr) {
+            *ok = ok_locale;
         }
 
         return value;
     }
 
-    inline double toDouble(const QString &str) {
-        bool ok = false;
+    inline double toDouble(const QString &str, bool *ok=nullptr) {
+        bool ok_locale = false;
         double value = 0;
 
         QLocale c(QLocale::German);
@@ -97,14 +90,18 @@ namespace KisDomUtils {
          * which did local-aware conversion.
          */
 
-        value = str.toDouble(&ok);
-        if (!ok) {
-            value = c.toDouble(str, &ok);
+        value = str.toDouble(&ok_locale);
+        if (!ok_locale) {
+            value = c.toDouble(str, &ok_locale);
         }
 
-        if (!ok) {
+        if (!ok_locale && ok == nullptr) {
             warnKrita << "WARNING: KisDomUtils::toDouble failed:" << ppVar(str);
-            value = 0;
+            value = 0.0;
+        }
+
+        if (ok != nullptr) {
+            *ok = ok_locale;
         }
 
         return value;
@@ -139,11 +136,13 @@ namespace KisDomUtils {
  * \see loadValue()
  */
 void KRITAGLOBAL_EXPORT saveValue(QDomElement *parent, const QString &tag, const QRect &rc);
+void KRITAGLOBAL_EXPORT saveValue(QDomElement *parent, const QString &tag, const QRectF &rc);
 void KRITAGLOBAL_EXPORT saveValue(QDomElement *parent, const QString &tag, const QSize &size);
 void KRITAGLOBAL_EXPORT saveValue(QDomElement *parent, const QString &tag, const QPoint &pt);
 void KRITAGLOBAL_EXPORT saveValue(QDomElement *parent, const QString &tag, const QPointF &pt);
 void KRITAGLOBAL_EXPORT saveValue(QDomElement *parent, const QString &tag, const QVector3D &pt);
 void KRITAGLOBAL_EXPORT saveValue(QDomElement *parent, const QString &tag, const QTransform &t);
+void KRITAGLOBAL_EXPORT saveValue(QDomElement *parent, const QString &tag, const QColor &t);
 
 /**
  * Save a value of a scalar type into an XML tree. A child for \p parent
@@ -171,8 +170,9 @@ void saveValue(QDomElement *parent, const QString &tag, T value)
  *
  * \see loadValue()
  */
-template <template <class> class Container, typename T>
-void saveValue(QDomElement *parent, const QString &tag, const Container<T> &array)
+template <template <class...> class Container, typename T, typename ...Args>
+typename std::enable_if<KritaUtils::is_container<Container<T, Args...>>::value, void>::type
+saveValue(QDomElement *parent, const QString &tag, const Container<T, Args...> &array)
 {
     QDomDocument doc = parent->ownerDocument();
     QDomElement e = doc.createElement(tag);
@@ -207,11 +207,13 @@ bool KRITAGLOBAL_EXPORT loadValue(const QDomElement &e, float *v);
 bool KRITAGLOBAL_EXPORT loadValue(const QDomElement &e, double *v);
 bool KRITAGLOBAL_EXPORT loadValue(const QDomElement &e, QSize *size);
 bool KRITAGLOBAL_EXPORT loadValue(const QDomElement &e, QRect *rc);
+bool KRITAGLOBAL_EXPORT loadValue(const QDomElement &e, QRectF *rc);
 bool KRITAGLOBAL_EXPORT loadValue(const QDomElement &e, QPoint *pt);
 bool KRITAGLOBAL_EXPORT loadValue(const QDomElement &e, QPointF *pt);
 bool KRITAGLOBAL_EXPORT loadValue(const QDomElement &e, QVector3D *pt);
 bool KRITAGLOBAL_EXPORT loadValue(const QDomElement &e, QTransform *t);
 bool KRITAGLOBAL_EXPORT loadValue(const QDomElement &e, QString *value);
+bool KRITAGLOBAL_EXPORT loadValue(const QDomElement &e, QColor *value);
 
 
 namespace Private {
@@ -245,7 +247,7 @@ loadValue(const QDomElement &e, T *value)
 template <typename T, typename E>
     typename std::enable_if<std::is_empty<E>::value, bool>::type
 loadValue(const QDomElement &parent, T *value, const E &/*env*/) {
-    return KisDomUtils::loadValue(parent, value);
+    return loadValue(parent, value);
 }
 
 /**
@@ -256,9 +258,10 @@ loadValue(const QDomElement &parent, T *value, const E &/*env*/) {
  *
  * \see saveValue()
  */
-template <template <class> class Container, typename T, typename E = std::tuple<>>
-    bool loadValue(const QDomElement &e, Container<T> *array, const E &env = E())
 
+template <template <class ...> class Container, typename T, typename E, typename ...Args>
+typename std::enable_if<KritaUtils::is_appendable_container<Container<T, Args...>>::value, bool>::type
+loadValue(const QDomElement &e, Container<T, Args...> *array, const E &env = std::tuple<>())
 {
     if (!Private::checkType(e, "array")) return false;
 
@@ -266,15 +269,15 @@ template <template <class> class Container, typename T, typename E = std::tuple<
     while (!child.isNull()) {
         T value;
         if (!loadValue(child, &value, env)) return false;
-        *array << value;
+        array->push_back(value);
         child = child.nextSiblingElement();
     }
     return true;
 }
 
-template <template <class> class Container, typename T, typename E, typename F>
-    bool loadValue(const QDomElement &e, Container<T> *array, const E &env1, const F &env2)
-
+template <template <class ...> class Container, typename T, typename E, typename F, typename ...Args>
+typename std::enable_if<KritaUtils::is_appendable_container<Container<T, Args...>>::value, bool>::type
+loadValue(const QDomElement &e, Container<T, Args...> *array, const E &env1, const F &env2)
 {
     if (!Private::checkType(e, "array")) return false;
 
@@ -282,7 +285,7 @@ template <template <class> class Container, typename T, typename E, typename F>
     while (!child.isNull()) {
         T value;
         if (!loadValue(child, &value, env1, env2)) return false;
-        *array << value;
+        array->push_back(value);
         child = child.nextSiblingElement();
     }
     return true;

@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgOffsetImage</class>
  <widget class="QWidget" name="WdgOffsetImage">
   <property name="geometry">
@@ -14,7 +18,7 @@
    <string>Rotate Image</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
+   <item column="0" row="0">
     <widget class="QGroupBox" name="grpAngle">
      <property name="title">
       <string>Offset</string>
@@ -95,7 +99,7 @@
      </layout>
     </widget>
    </item>
-   <item row="1" column="0">
+   <item column="0" row="1">
     <widget class="QPushButton" name="middleOffsetBtn">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -108,7 +112,7 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="0">
+   <item column="0" row="2">
     <spacer name="spacer4">
      <property name="orientation">
       <enum>Qt::Vertical</enum>

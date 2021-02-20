@@ -1,21 +1,9 @@
 /*
  * KDE. Krita Project.
  *
- * Copyright (c) 2020 Deif Lou <ginoba@gmail.com>
+ * SPDX-FileCopyrightText: 2020 Deif Lou <ginoba@gmail.com>
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include <generator/kis_generator.h>
@@ -36,6 +24,7 @@ KisHalftoneConfigPageWidget::KisHalftoneConfigPageWidget(QWidget *parent, const 
     : QWidget(parent)
     , m_paintDevice(dev)
     , m_generatorWidget(nullptr)
+    , m_view(nullptr)
 {
     Q_ASSERT(m_paintDevice);
 
@@ -167,6 +156,7 @@ void KisHalftoneConfigPageWidget::setGenerator(const QString & generatorId, KisF
         KisConfigWidget *generatorWidget = generator->createConfigurationWidget(this, m_paintDevice, false);
         if (generatorWidget) {
             ui()->widgetGeneratorContainer->layout()->addWidget(generatorWidget);
+            generatorWidget->setView(m_view);
             if (config) {
                 generatorWidget->setConfiguration(config);
             } else {
@@ -177,6 +167,14 @@ void KisHalftoneConfigPageWidget::setGenerator(const QString & generatorId, KisF
             m_generatorWidget = generatorWidget;
             connect(generatorWidget, SIGNAL(sigConfigurationUpdated()), this, SIGNAL(signal_configurationUpdated()));
         }
+    }
+}
+
+void KisHalftoneConfigPageWidget::setView(KisViewManager *view)
+{
+    m_view = view;
+    if (m_generatorWidget) {
+        m_generatorWidget->setView(m_view);
     }
 }
 

@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgDlgFileLayer</class>
  <widget class="QWidget" name="WdgDlgFileLayer">
   <property name="geometry">
@@ -25,7 +29,7 @@
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <layout class="QFormLayout" name="formLayout">
-     <item row="0" column="0">
+     <item column="0" row="0">
       <widget class="QLabel" name="label">
        <property name="text">
         <string>&amp;Layer Name:</string>
@@ -38,10 +42,10 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="1">
+     <item column="1" row="0">
       <widget class="QLineEdit" name="txtLayerName"/>
      </item>
-     <item row="1" column="0">
+     <item column="0" row="1">
       <widget class="QLabel" name="label_2">
        <property name="text">
         <string>File:</string>
@@ -54,7 +58,7 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="1">
+     <item column="1" row="1">
       <widget class="KisFileNameRequester" name="wdgUrlRequester" native="true"/>
      </item>
     </layout>
@@ -108,7 +112,7 @@
       <string>Scaling Options</string>
      </property>
      <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="0">
+      <item column="0" row="0">
        <widget class="QRadioButton" name="radioDontScale">
         <property name="text">
          <string>No Scaling</string>
@@ -118,14 +122,14 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="0">
+      <item column="0" row="1">
        <widget class="QRadioButton" name="radioScaleToImageSize">
         <property name="text">
          <string>Scale to Image Size</string>
         </property>
        </widget>
       </item>
-      <item row="2" column="0">
+      <item column="0" row="2">
        <widget class="QRadioButton" name="radioScalePPI">
         <property name="text">
          <string>Adapt to Image Resolution (ppi)</string>

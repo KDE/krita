@@ -1,19 +1,7 @@
 /*
- *  Copyright (c) 2014 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2014 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_liquify_transform_worker_test.h"
@@ -40,6 +28,8 @@ void KisLiquifyTransformWorkerTest::testPoints()
 
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     dev->convertFromQImage(image, 0);
+
+    KisPaintDeviceSP srcDev = new KisPaintDevice(*dev);
 
     const int pixelPrecision = 8;
 
@@ -74,7 +64,7 @@ void KisLiquifyTransformWorkerTest::testPoints()
                             50, false, 0.2);
     }
 
-    worker.run(dev);
+    worker.run(srcDev, dev);
 
     QImage result = dev->convertToQImage(0);
     TestUtil::checkQImage(result, "liquify_transform_test", "liquify_dev", "unity");
@@ -92,6 +82,8 @@ void KisLiquifyTransformWorkerTest::testPointsQImage()
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     dev->convertFromQImage(image, 0);
 
+    KisPaintDeviceSP srcDev = new KisPaintDevice(*dev);
+
     const int pixelPrecision = 8;
 
     KisLiquifyTransformWorker worker(dev->exactBounds(),
@@ -106,7 +98,7 @@ void KisLiquifyTransformWorkerTest::testPointsQImage()
     QRect rc = dev->exactBounds();
     dev->setX(50);
     dev->setY(50);
-    worker.run(dev);
+    worker.run(srcDev, dev);
     rc |= dev->exactBounds();
 
     QImage resultDev = dev->convertToQImage(0, rc.x(), rc.y(), rc.width(), rc.height());
@@ -142,13 +134,15 @@ void KisLiquifyTransformWorkerTest::testIdentityTransform()
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     dev->fill(rc, KoColor(Qt::blue, cs));
 
+    KisPaintDeviceSP srcDev = new KisPaintDevice(*dev);
+
     const int pixelPrecision = 8;
 
     KisLiquifyTransformWorker worker(dev->exactBounds(),
                                      updater,
                                      pixelPrecision);
 
-    worker.run(dev);
+    worker.run(srcDev, dev);
 
     QImage result = dev->convertToQImage(0, rc);
     TestUtil::checkQImage(result, "liquify_transform_test", "liquify_dev", "identity");

@@ -1,19 +1,7 @@
 /*
- *  Copyright (c) 2014 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2014 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #ifndef __KIS_TRANSFORM_MASK_PARAMS_INTERFACE_H
@@ -51,6 +39,8 @@ public:
 
     virtual void clearChangedFlag() = 0;
     virtual bool hasChanged() const = 0;
+
+    virtual KisTransformMaskParamsInterfaceSP clone() const = 0;
 };
 
 class KRITAIMAGE_EXPORT KisAnimatedTransformParamsInterface
@@ -58,7 +48,10 @@ class KRITAIMAGE_EXPORT KisAnimatedTransformParamsInterface
 public:
     virtual ~KisAnimatedTransformParamsInterface();
 
-    virtual KisKeyframeChannel *getKeyframeChannel(const QString &id, KisNodeSP parent) = 0;
+    virtual KisKeyframeChannel* requestKeyframeChannel(const QString &id, KisNodeWSP parent) = 0;
+    virtual KisKeyframeChannel* getKeyframeChannel(const KoID& koid) const = 0;
+    virtual void setKeyframeChannel(const QString &name, QSharedPointer<KisKeyframeChannel> kcsp) = 0;
+    virtual QList<KisKeyframeChannel*> copyChannelsFrom(const KisAnimatedTransformParamsInterface* other) = 0;
 };
 
 class QDomElement;
@@ -94,6 +87,8 @@ public:
     KisKeyframeChannel *getKeyframeChannel(const QString &id, KisDefaultBoundsBaseSP defaultBounds);
     void clearChangedFlag() override;
     bool hasChanged() const override;
+
+    KisTransformMaskParamsInterfaceSP clone() const override;
 
 private:
     struct Private;

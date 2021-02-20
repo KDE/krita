@@ -1,20 +1,8 @@
 /*
- * Copyright (c) 2018 boud <boud@valdyas.org>
- * Copyright (c) 2019 Agata Cacko <cacko.azh@gmail.com>
+ * SPDX-FileCopyrightText: 2018 boud <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2019 Agata Cacko <cacko.azh@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "TestAbrStorage.h"
@@ -42,7 +30,8 @@ void TestAbrStorage::initTestCase()
 void TestAbrStorage::testResourceIterator()
 {
     QString filename = "brushes_by_mar_ka_d338ela.abr";
-    KisAbrStorage storage(FILES_DATA_DIR + '/' + filename);
+
+    KisAbrStorage storage(QString(FILES_DATA_DIR) + '/' + filename);
 
     QSharedPointer<KisResourceStorage::ResourceIterator> iter(storage.resources(ResourceType::Brushes));
     QVERIFY(iter->hasNext());
@@ -54,12 +43,24 @@ void TestAbrStorage::testResourceIterator()
         count++;
     }
     QVERIFY(count > 0);
+
+    QSharedPointer<KisResourceStorage::ResourceIterator> iter2(storage.resources(ResourceType::LayerStyles));
+    QVERIFY(!iter2->hasNext());
+    count = 0;
+    while (iter2->hasNext()) {
+        iter2->next();
+        KoResourceSP res(iter2->resource());
+        QVERIFY(res);
+        count++;
+    }
+    QVERIFY(count == 0);
+
 }
 
 void TestAbrStorage::testTagIterator()
 {
     QString filename = "brushes_by_mar_ka_d338ela.abr";
-    KisAbrStorage storage(FILES_DATA_DIR + '/' + filename);
+    KisAbrStorage storage(QString(FILES_DATA_DIR) + '/' + filename);
 
     QSharedPointer<KisResourceStorage::TagIterator> iter = storage.tags(ResourceType::Brushes);
     int count = 0;
@@ -75,7 +76,7 @@ void TestAbrStorage::testResourceItem()
     QString name = "brushes_by_mar_ka_d338ela";
     QString filename = name + ".abr";
     QString resourceName = name + "_2"; // "1" seem to be invalid or something; it isn't not loaded in any case.
-    KisAbrStorage storage(FILES_DATA_DIR + '/' + filename);
+    KisAbrStorage storage(QString(FILES_DATA_DIR) + '/' + filename);
 
     KisResourceStorage::ResourceItem item = storage.resourceItem(resourceName);
     QVERIFY(!item.url.isEmpty());
@@ -86,7 +87,7 @@ void TestAbrStorage::testResource()
     QString name = "brushes_by_mar_ka_d338ela";
     QString filename = name + ".abr";
     QString resourceName = name + "_2"; // "1" seem to be invalid or something; it isn't not loaded in any case.
-    KisAbrStorage storage(FILES_DATA_DIR + '/' + filename);
+    KisAbrStorage storage(QString(FILES_DATA_DIR) + '/' + filename);
     KoResourceSP res = storage.resource(resourceName);
     QVERIFY(res);
     QVERIFY(res->filename() == resourceName);

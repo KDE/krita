@@ -1,3 +1,7 @@
+/*
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
 #ifndef KOTOSCONTAINER_P_H
 #define KOTOSCONTAINER_P_H
 

@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgMultiHandTool</class>
  <widget class="QWidget" name="WdgMultiHandTool">
   <property name="geometry">
@@ -7,7 +11,7 @@
     <x>0</x>
     <y>0</y>
     <width>200</width>
-    <height>290</height>
+    <height>321</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -129,22 +133,6 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="1">
-      <widget class="KisDoubleSliderSpinBox" name="axisRotationSpinbox" native="true">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>0</width>
-         <height>15</height>
-        </size>
-       </property>
-      </widget>
-     </item>
      <item row="5" column="1">
       <widget class="QCheckBox" name="verticalCheckbox">
        <property name="text">
@@ -259,6 +247,26 @@
      <item row="0" column="1">
       <widget class="QComboBox" name="multihandTypeCombobox"/>
      </item>
+     <item row="3" column="1">
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <item>
+        <widget class="KisAngleSelector" name="axisRotationAngleSelector" native="true"/>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </item>
     </layout>
    </item>
    <item>
@@ -284,9 +292,9 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>KisDoubleSliderSpinBox</class>
+   <class>KisAngleSelector</class>
    <extends>QWidget</extends>
-   <header>kis_slider_spin_box.h</header>
+   <header location="global">KisAngleSelector.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

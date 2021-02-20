@@ -1,21 +1,8 @@
 /* This file is part of the KDE project
- * Copyright (c) 2010 Sven Langkamp <sven.langkamp@gmail.com>
- * Copyright 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
+ * SPDX-FileCopyrightText: 2010 Sven Langkamp <sven.langkamp@gmail.com>
+ * SPDX-FileCopyrightText: 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #include "kis_paintop_presets_chooser_popup.h"
@@ -93,7 +80,8 @@ KisPaintOpPresetsChooserPopup::KisPaintOpPresetsChooserPopup(QWidget * parent)
     m_d->uiWdgPaintOpPresets.wdgPresetChooser->itemChooser()->setViewModeButtonVisible(true);
     m_d->viewModeButton = m_d->uiWdgPaintOpPresets.wdgPresetChooser->itemChooser()->viewModeButton();
     m_d->viewModeButton->setMenu(menu);
-    m_d->viewModeButton->setIcon(KisIconUtils::loadIcon("configure"));
+    m_d->viewModeButton->setAutoRaise(true);
+    m_d->viewModeButton->setIconSize(QSize(10,10));
 
 
     connect(m_d->uiWdgPaintOpPresets.wdgPresetChooser, SIGNAL(resourceSelected(KoResourceSP )),
@@ -156,7 +144,8 @@ void KisPaintOpPresetsChooserPopup::canvasResourceChanged(KisPaintOpPresetSP  pr
 
 void KisPaintOpPresetsChooserPopup::slotThemeChanged()
 {
-    m_d->viewModeButton->setIcon(KisIconUtils::loadIcon("configure"));
+   m_d->viewModeButton->setIcon(KisIconUtils::loadIcon("view-choose"));
+   m_d->uiWdgPaintOpPresets.wdgPresetChooser->itemChooser()->updateView(); // updates other icons
 }
 
 void KisPaintOpPresetsChooserPopup::updateViewSettings()

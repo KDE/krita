@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgLevel</class>
  <widget class="QWidget" name="WdgLevel">
   <property name="geometry">
@@ -44,7 +48,7 @@
    <property name="bottomMargin">
     <number>0</number>
    </property>
-   <item row="0" column="0">
+   <item column="0" row="0">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QLabel" name="textLabel2">
@@ -68,7 +72,7 @@
      </item>
     </layout>
    </item>
-   <item row="1" column="0">
+   <item column="0" row="1">
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <property name="spacing">
       <number>0</number>
@@ -115,7 +119,7 @@
      </item>
     </layout>
    </item>
-   <item row="2" column="0">
+   <item column="0" row="2">
     <widget class="KisGradientSlider" name="ingradient" native="true">
      <property name="minimumSize">
       <size>
@@ -125,7 +129,7 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="0">
+   <item column="0" row="3">
     <layout class="QHBoxLayout">
      <item>
       <widget class="KisIntParseSpinBox" name="blackspin">
@@ -203,7 +207,7 @@
      </item>
     </layout>
    </item>
-   <item row="4" column="0">
+   <item column="0" row="4">
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -219,7 +223,7 @@
      </property>
     </spacer>
    </item>
-   <item row="5" column="0">
+   <item column="0" row="5">
     <widget class="QLabel" name="textLabel3">
      <property name="text">
       <string>&lt;b&gt;Output Levels&lt;/b&gt;</string>
@@ -229,7 +233,7 @@
      </property>
     </widget>
    </item>
-   <item row="6" column="0">
+   <item column="0" row="6">
     <widget class="KisGradientSlider" name="outgradient" native="true">
      <property name="minimumSize">
       <size>
@@ -239,7 +243,7 @@
      </property>
     </widget>
    </item>
-   <item row="7" column="0">
+   <item column="0" row="7">
     <layout class="QHBoxLayout">
      <item>
       <widget class="KisIntParseSpinBox" name="outblackspin">
@@ -279,7 +283,7 @@
      </item>
     </layout>
    </item>
-   <item row="8" column="0">
+   <item column="0" row="8">
     <layout class="QHBoxLayout" name="horizontalLayout_6">
      <item>
       <widget class="QPushButton" name="butauto">
@@ -310,7 +314,7 @@
      </item>
     </layout>
    </item>
-   <item row="9" column="0">
+   <item column="0" row="9">
     <spacer name="verticalSpacer_2">
      <property name="orientation">
       <enum>Qt::Vertical</enum>

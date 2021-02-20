@@ -1,20 +1,7 @@
 /* This file is part of the KDE project
-   Copyright (C) 2008 Fela Winkelmolen <fela.kde@gmail.com>
+   SPDX-FileCopyrightText: 2008 Fela Winkelmolen <fela.kde@gmail.com>
 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
-
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
-
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+   SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
 #ifndef KARBONCALLIGRAPHYOPTIONWIDGET_H
@@ -25,9 +12,9 @@
 
 class KComboBox;
 class QCheckBox;
-class QSpinBox;
 class QDoubleSpinBox;
 class QToolButton;
+class KisAngleSelector;
 
 class KarbonCalligraphyOptionWidget : public QWidget
 {
@@ -70,6 +57,8 @@ private Q_SLOTS:
     void removeProfile();
 
     void setUsePathEnabled(bool enabled);
+
+    void on_m_angleBox_angleChanged(qreal angle);
 
 private:
     // TODO: maybe make it a hash?? <QString, QVariant>
@@ -127,7 +116,7 @@ private:
     QCheckBox *m_useAngle;
     QDoubleSpinBox  *m_widthBox;
     QDoubleSpinBox  *m_thinningBox;
-    QSpinBox        *m_angleBox;
+    KisAngleSelector *m_angleBox;
     QDoubleSpinBox  *m_capsBox;
     QDoubleSpinBox  *m_fixationBox;
     QDoubleSpinBox  *m_massBox;

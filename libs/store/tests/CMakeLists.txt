@@ -1,4 +1,4 @@
-set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
+macro_add_unittest_definitions()
 
 include(ECMAddTests)
 

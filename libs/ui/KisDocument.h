@@ -1,21 +1,8 @@
 /* This file is part of the Krita project
  *
- * Copyright (C) 2014 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2014 Boudewijn Rempt <boud@valdyas.org>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #ifndef KISDOCUMENT_H
@@ -40,6 +27,7 @@
 #include <KisImportExportUtils.h>
 #include <kis_config.h>
 #include "kis_scratch_pad.h"
+#include "StoryboardItem.h"
 
 #include "kritaui_export.h"
 
@@ -368,6 +356,26 @@ public:
      */
     void setPaletteList(const QList<KoColorSetSP> &paletteList, bool emitSignal = false);
 
+    /**
+     * @brief returns the list of pointers to storyboard Items for the document
+     */
+    StoryboardItemList getStoryboardItemList();
+
+    /**
+     * @brief sets the storyboardItemList in the document, emits empty signal if emitSignal is true.
+     */
+    void setStoryboardItemList(const StoryboardItemList &storyboardItemList, bool emitSignal = false);
+
+    /**
+     * @brief returns the list of comments for the storyboard docker in the document
+     */
+    QVector<StoryboardComment> getStoryboardCommentsList();
+
+    /**
+     * @brief sets the  list of comments for the storyboard docker in the document, emits empty signal if emitSignal is true.
+     */
+    void setStoryboardCommentList(const QVector<StoryboardComment> &storyboardCommentList, bool emitSignal = false);
+
     const KisMirrorAxisConfig& mirrorAxisConfig() const;
     void setMirrorAxisConfig(const KisMirrorAxisConfig& config);
 
@@ -482,6 +490,10 @@ Q_SIGNALS:
     void sigPaletteListChanged(const QList<KoColorSetSP> &oldPaletteList, const QList<KoColorSetSP> &newPaletteList);
 
     void sigAssistantsChanged();
+
+    void sigStoryboardItemListChanged();
+
+    void sigStoryboardCommentListChanged();
 
 private Q_SLOTS:
     void finishExportInBackground();
@@ -666,6 +678,7 @@ Q_SIGNALS:
 private Q_SLOTS:
 
     void setImageModified();
+    void setImageModifiedWithoutUndo();
 
     void slotAutoSave();
 

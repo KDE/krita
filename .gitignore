@@ -32,3 +32,4 @@ BROWSE
 /po/
 build_dir
 .flatpak-builder
+.cache

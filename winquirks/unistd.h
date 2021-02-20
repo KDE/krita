@@ -1,3 +1,7 @@
+/*
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
 #ifndef QUIRK_UNISTD_H
 #define QUIRK_UNISTD_H
 
@@ -104,7 +108,7 @@ static int gethostname(char *__name, size_t __len) {
 #define	F_OK	0
 #define	R_OK	4
 #define	W_OK	2
-#define	X_OK	1 
+#define	X_OK	1
 
 #ifndef STDIN_FILENO
 #define STDIN_FILENO 0
@@ -150,21 +154,21 @@ static int readlink(const char *__path, char *__buf, int __buflen)
 {
     if (!__path) {
       errno = EINVAL;
-      return -1; 
-    }   
+      return -1;
+    }
     if ( (__buflen < 0) || ((int)strlen(__path)>(__buflen-1)) )
-    {   
+    {
       errno = ENAMETOOLONG;
-      return -1; 
-    }   
+      return -1;
+    }
     if (access(__path, R_OK) == 0) {
       /* ok, copy to buf */
       strncpy(__buf,__path,__buflen);
       errno = 0;
       return 0;
-    }   
+    }
     errno = ENOENT;
-    return -1; 
+    return -1;
 }
 
 

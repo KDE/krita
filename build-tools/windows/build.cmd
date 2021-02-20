@@ -152,6 +152,7 @@ set ARG_DEPS_BUILD_DIR=
 set ARG_DEPS_INSTALL_DIR=
 set ARG_KRITA_BUILD_DIR=
 set ARG_KRITA_INSTALL_DIR=
+set ARG_PLUGINS_BUILD_DIR=
 set ARG_CMD=
 :args_parsing_loop
 set CURRENT_MATCHED=
@@ -273,6 +274,21 @@ if not "%1" == "" (
         shift /2
         set CURRENT_MATCHED=1
     )
+    if "%1" == "--plugins-build-dir" (
+        if not "%ARG_PLUGINS_BUILD_DIR%" == "" (
+            echo ERROR: Arg --plugins-build-dir specified more than once 1>&2
+            echo.
+            goto usage_and_fail
+        )
+        if "%~f2" == "" (
+            echo ERROR: Arg --plugins-build-dir does not point to a valid path 1>&2
+            echo.
+            goto usage_and_fail
+        )
+        call :get_dir_path ARG_PLUGINS_BUILD_DIR "%~f2\"
+        shift /2
+        set CURRENT_MATCHED=1
+    )
     if "%1" == "--cmd" (
         set ARG_CMD=1
         set CURRENT_MATCHED=1
@@ -304,11 +320,10 @@ echo.
 
 if "%ARG_SKIP_DEPS%" == "1" (
     if "%ARG_SKIP_KRITA%" == "1" (
-        echo ERROR: You cannot skip both deps and Krita 1>&2
-        echo.
-        exit /b 102
+        echo Both deps and Krita will be skipped.
+    ) else (
+        echo Building of deps will be skipped.
     )
-    echo Building of deps will be skipped.
 ) else (
     if "%ARG_SKIP_KRITA%" == "1" (
         echo Building of Krita will be skipped.
@@ -592,6 +607,47 @@ if "%KRITA_BUILD_DIR%" == "" (
 )
 echo Krita build dir: %KRITA_BUILD_DIR%
 
+@REM Plugins also need the download dir
+if not "%ARG_DOWNLOAD_DIR%" == "" (
+    set "PLUGINS_DOWNLOAD_DIR=%ARG_DOWNLOAD_DIR%"
+)
+if "%PLUGINS_DOWNLOAD_DIR%" == "" (
+    set PLUGINS_DOWNLOAD_DIR=%CD%\d\
+    echo Using default deps download dir: !PLUGINS_DOWNLOAD_DIR!
+    if not "%ARG_NO_INTERACTIVE%" == "1" (
+        choice /c ny /n /m "Is this ok? [y/n] "
+        if errorlevel 3 exit 255
+        if not errorlevel 2 (
+            call :prompt_for_dir PLUGINS_DOWNLOAD_DIR "Provide path of plugins download dir"
+        )
+    )
+    if "!PLUGINS_DOWNLOAD_DIR!" == "" (
+        echo ERROR: Plugins download dir not set! 1>&2
+        exit /b 102
+    )
+)
+echo Plugins download dir: %PLUGINS_DOWNLOAD_DIR%
+
+if not "%ARG_PLUGINS_BUILD_DIR%" == "" (
+    set "PLUGINS_BUILD_DIR=%ARG_PLUGINS_BUILD_DIR%"
+)
+if "%PLUGINS_BUILD_DIR%" == "" (
+    set PLUGINS_BUILD_DIR=%CD%\b_plugins\
+    echo Using default plugins build dir: !PLUGINS_BUILD_DIR!
+    if not "%ARG_NO_INTERACTIVE%" == "1" (
+        choice /c ny /n /m "Is this ok? [y/n] "
+        if errorlevel 3 exit 255
+        if not errorlevel 2 (
+            call :prompt_for_dir PLUGINS_BUILD_DIR "Provide path of plugins build dir"
+        )
+    )
+    if "!PLUGINS_BUILD_DIR!" == "" (
+        echo ERROR: Plugins build dir not set! 1>&2
+        exit /b 102
+    )
+)
+echo Plugins build dir: %PLUGINS_BUILD_DIR%
+
 if not "%ARG_KRITA_INSTALL_DIR%" == "" (
     set "KRITA_INSTALL_DIR=%ARG_KRITA_INSTALL_DIR%"
 )
@@ -662,6 +718,20 @@ if NOT "%ARG_SKIP_KRITA%" == "1" (
             exit /b 103
         )
     )
+    mkdir %PLUGINS_DOWNLOAD_DIR%
+    if errorlevel 1 (
+        if not exist "%PLUGINS_DOWNLOAD_DIR%\" (
+            echo ERROR: Cannot create plugins download dir! 1>&2
+            exit /b 103
+        )
+    )
+    mkdir %PLUGINS_BUILD_DIR%
+    if errorlevel 1 (
+        if not exist "%PLUGINS_BUILD_DIR%\" (
+            echo ERROR: Cannot create plugins build dir! 1>&2
+            exit /b 103
+        )
+    )
     mkdir %KRITA_INSTALL_DIR%
     if errorlevel 1 (
         if not exist "%KRITA_INSTALL_DIR%\" (
@@ -680,10 +750,14 @@ set QT_ENABLE_DEBUG_INFO=OFF
 :: Paths for CMake
 set "BUILDDIR_DOWNLOAD_CMAKE=%DEPS_DOWNLOAD_DIR:\=/%"
 set "BUILDDIR_DOWNLOAD_CMAKE=%BUILDDIR_DOWNLOAD_CMAKE: =\ %"
+set "BUILDDIR_PLUGINS_DOWNLOAD_CMAKE=%PLUGINS_DOWNLOAD_DIR:\=/%"
+set "BUILDDIR_PLUGINS_DOWNLOAD_CMAKE=%BUILDDIR_PLUGINS_DOWNLOAD_CMAKE: =\ %"
 set "BUILDDIR_DEPS_INSTALL_CMAKE=%DEPS_INSTALL_DIR:\=/%"
 set "BUILDDIR_DEPS_INSTALL_CMAKE=%BUILDDIR_DEPS_INSTALL_CMAKE: =\ %"
 set "BUILDDIR_KRITA_INSTALL_CMAKE=%KRITA_INSTALL_DIR:\=/%"
 set "BUILDDIR_KRITA_INSTALL_CMAKE=%BUILDDIR_KRITA_INSTALL_CMAKE: =\ %"
+set "BUILDDIR_PLUGINS_INSTALL_CMAKE=%KRITA_INSTALL_DIR:\=/%"
+set "BUILDDIR_PLUGINS_INSTALL_CMAKE=%BUILDDIR_KRITA_INSTALL_CMAKE: =\ %"
 
 set PATH=%DEPS_INSTALL_DIR%\bin;%PATH%
 
@@ -699,7 +773,6 @@ set CMDLINE_CMAKE_DEPS="%CMAKE_EXE%" "%KRITA_SRC_DIR%\3rdparty" ^
     -DEXTERNALS_DOWNLOAD_DIR=%BUILDDIR_DOWNLOAD_CMAKE% ^
     -DINSTALL_ROOT=%BUILDDIR_DEPS_INSTALL_CMAKE% ^
     -G "MinGW Makefiles" ^
-    -DUSE_QT_TABLET_WINDOWS=ON ^
     -DCMAKE_BUILD_TYPE=%CMAKE_BUILD_TYPE%
     
 set CMDLINE_CMAKE_KRITA="%CMAKE_EXE%" "%KRITA_SRC_DIR%\." ^
@@ -715,7 +788,16 @@ set CMDLINE_CMAKE_KRITA="%CMAKE_EXE%" "%KRITA_SRC_DIR%\." ^
     -DUSE_QT_TABLET_WINDOWS=ON ^
     -DHIDE_SAFE_ASSERTS=ON ^
     -Wno-dev ^
-    -G "MinGW Makefiles"  ^
+    -G "MinGW Makefiles" ^
+    -DCMAKE_BUILD_TYPE=%CMAKE_BUILD_TYPE%
+
+set CMDLINE_CMAKE_PLUGINS="%CMAKE_EXE%" "%KRITA_SRC_DIR%\3rdparty_plugins" ^
+    -DSUBMAKE_JOBS=%PARALLEL_JOBS% ^
+    -DQT_ENABLE_DEBUG_INFO=%QT_ENABLE_DEBUG_INFO% ^
+    -DQT_ENABLE_DYNAMIC_OPENGL=%QT_ENABLE_DYNAMIC_OPENGL% ^
+    -DEXTERNALS_DOWNLOAD_DIR=%BUILDDIR_PLUGINS_DOWNLOAD_CMAKE% ^
+    -DINSTALL_ROOT=%BUILDDIR_PLUGINS_INSTALL_CMAKE% ^
+    -G "MinGW Makefiles" ^
     -DCMAKE_BUILD_TYPE=%CMAKE_BUILD_TYPE%
 
 :: Launch CMD prompt if requested
@@ -724,8 +806,9 @@ if "%ARG_CMD%" == "1" (
     doskey cmake-krita=cmd /c "pushd %KRITA_BUILD_DIR% && %CMDLINE_CMAKE_KRITA%"
     doskey make-deps=cmd /c "pushd %DEPS_BUILD_DIR% && "%CMAKE_EXE%" --build . --config %CMAKE_BUILD_TYPE% --target $*"
     doskey make-krita=cmd /c "pushd %KRITA_BUILD_DIR% && "%CMAKE_EXE%" --build . --config %CMAKE_BUILD_TYPE% --target install -- -j%PARALLEL_JOBS%"
+    doskey make-plugins=cmd /c "pushd %PLUGINS_BUILD_DIR% && "%CMAKE_EXE%" --build . --config %CMAKE_BUILD_TYPE% --target $* -- -j%PARALLEL_JOBS%"
     echo.
-    title Krita build - %KRITA_SRC_DIR% ^(deps: %DEPS_BUILD_DIR%, krita: %KRITA_BUILD_DIR%^)
+    title Krita build - %KRITA_SRC_DIR% ^(deps: %DEPS_BUILD_DIR%, krita: %KRITA_BUILD_DIR%, plugins: %PLUGINS_BUILD_DIR%^)
     echo You're now in the build environment.
     echo The following macros are available:
     echo   cmake-deps
@@ -733,6 +816,9 @@ if "%ARG_CMD%" == "1" (
     echo   make-deps ^<deps target^>
     echo     -- Run build for the specified deps target. The target name should
     echo        include the `ext_` prefix, e.g. `ext_qt`.
+    echo   make-plugins ^<deps target^>
+    echo     -- Build the specified plugin target. The target name should
+    echo        include the `ext_` prefix, e.g. `ext_gmic`.
     echo   cmake-krita
     echo     -- Run CMake for Krita.
     echo   make-krita
@@ -764,11 +850,11 @@ echo Running CMake for deps...
 echo.
 
 set EXT_TARGETS=patch png2ico zlib gettext openssl boost exiv2 fftw3 eigen3 
-set EXT_TARGETS=%EXT_TARGETS% jpeg lcms2 ocio ilmbase openexr png tiff gsl vc libraw
+set EXT_TARGETS=%EXT_TARGETS% jpeg lcms2 ocio openexr png tiff gsl vc libraw
 set EXT_TARGETS=%EXT_TARGETS% giflib qt kwindowsystem drmingw gmic freetype poppler 
 set EXT_TARGETS=%EXT_TARGETS% python sip pyqt
 set EXT_TARGETS=%EXT_TARGETS% lzma quazip openjpeg libheif
-set EXT_TARGETS=%EXT_TARGETS% seexpr 
+set EXT_TARGETS=%EXT_TARGETS% seexpr mypaint
 
 for %%a in (%EXT_TARGETS%) do (
     echo Building ext_%%a...
@@ -813,6 +899,38 @@ if errorlevel 1 (
 echo.
 
 echo ******** Built Krita ********
+popd
+
+pushd %PLUGINS_BUILD_DIR%
+if errorlevel 1 (
+    echo ERROR: Cannot enter plugins build dir! 1>&2
+    exit /b 104
+)
+
+echo Running CMake for plugins...
+
+@echo on
+%CMDLINE_CMAKE_PLUGINS%
+@if errorlevel 1 (
+    @echo ERROR: CMake configure failed! 1>&2
+    @exit /b 104
+)
+@echo off
+echo.
+
+set EXT_TARGETS=gmic
+
+for %%a in (%EXT_TARGETS%) do (
+    echo Building ext_%%a...
+    "%CMAKE_EXE%" --build . --config %CMAKE_BUILD_TYPE% --target ext_%%a
+    if errorlevel 1 (
+        echo ERROR: Building of ext_%%a failed! 1>&2
+        exit /b 105
+    )
+)
+echo.
+
+echo ******** Built plugins ********
 popd
 
 :skip_build_krita

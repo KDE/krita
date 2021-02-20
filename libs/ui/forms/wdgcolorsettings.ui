@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgColorSettings</class>
  <widget class="QWidget" name="WdgColorSettings">
   <property name="geometry">
@@ -7,7 +11,7 @@
     <x>0</x>
     <y>0</y>
     <width>568</width>
-    <height>335</height>
+    <height>358</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -27,17 +31,29 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout">
          <item>
-          <widget class="QLabel" name="textLabel1_2">
-           <property name="text">
-            <string>Default color model for new images:</string>
+          <widget class="QCheckBox" name="useDefColorSpace">
+           <property name="enabled">
+            <bool>true</bool>
            </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           <property name="text">
+            <string>Use Default color model for new images</string>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
+           </property>
+           <property name="checked">
+            <bool>false</bool>
+           </property>
+           <property name="tristate">
+            <bool>false</bool>
            </property>
           </widget>
          </item>
          <item>
           <widget class="KisCmbIDList" name="cmbWorkingColorSpace">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
              <horstretch>0</horstretch>

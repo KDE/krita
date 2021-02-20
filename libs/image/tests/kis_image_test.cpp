@@ -1,19 +1,7 @@
 /*
- *  Copyright (c) 2005 Adrian Page <adrian@pagenet.plus.com>
+ *  SPDX-FileCopyrightText: 2005 Adrian Page <adrian@pagenet.plus.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_image_test.h"
@@ -110,13 +98,29 @@ void notifyVar(bool *value) {
     *value = true;
 }
 
+void testingSetOldDesiredLevelOfDetail(KisImageSP image, int lod)
+{
+    KisLodPreferences pref(lod);
+    image->setLodPreferences(pref);
+}
+
+void testingSetOldLevelOfDetailBlocked(KisImageSP image, bool value)
+{
+    if (value) {
+        testingSetOldDesiredLevelOfDetail(image, 0);
+    } else {
+        KisLodPreferences pref(KisLodPreferences::None, 0);
+        image->setLodPreferences(pref);
+    }
+}
+
 void KisImageTest::testBlockLevelOfDetail()
 {
     TestUtil::MaskParent p;
 
     QCOMPARE(p.image->currentLevelOfDetail(), 0);
 
-    p.image->setDesiredLevelOfDetail(1);
+    testingSetOldDesiredLevelOfDetail(p.image, 1);
     p.image->waitForDone();
 
     QCOMPARE(p.image->currentLevelOfDetail(), 0);
@@ -132,7 +136,7 @@ void KisImageTest::testBlockLevelOfDetail()
         QVERIFY(lodCreated);
     }
 
-    p.image->setLevelOfDetailBlocked(true);
+    testingSetOldLevelOfDetailBlocked(p.image, true);
 
     {
         bool lodCreated = false;
@@ -145,8 +149,8 @@ void KisImageTest::testBlockLevelOfDetail()
         QVERIFY(!lodCreated);
     }
 
-    p.image->setLevelOfDetailBlocked(false);
-    p.image->setDesiredLevelOfDetail(1);
+    testingSetOldLevelOfDetailBlocked(p.image, false);
+    testingSetOldDesiredLevelOfDetail(p.image, 1);
 
     {
         bool lodCreated = false;

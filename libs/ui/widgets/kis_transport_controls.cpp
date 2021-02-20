@@ -1,20 +1,8 @@
 /*
- *  Copyright (c) 2020 Emmet O'Neill <emmetoneill.pdx@gmail.com>
- *  Copyright (c) 2020 Eoin O'Neill <eoinoneill1991@gmail.com>
+ *  SPDX-FileCopyrightText: 2020 Emmet O 'Neill <emmetoneill.pdx@gmail.com>
+ *  SPDX-FileCopyrightText: 2020 Eoin O 'Neill <eoinoneill1991@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_transport_controls.h"
@@ -35,21 +23,25 @@ KisTransportControls::KisTransportControls(QWidget* parent)
 
     buttonBack = new QPushButton(KisIconUtils::loadIcon("prevframe"), "", this);
     buttonBack->setToolTip(i18n("Back"));
+    buttonBack->setFlat(true);
     layout->addWidget(buttonBack);
     connect(buttonBack, SIGNAL(released()), this, SIGNAL(back()));
 
     buttonStop = new QPushButton(KisIconUtils::loadIcon("animation_stop"), "", this);
     buttonStop->setToolTip(i18n("Stop"));
+    buttonStop->setFlat(true);
     layout->addWidget(buttonStop);
     connect(buttonStop, SIGNAL(released()), this, SIGNAL(stop()));
 
     buttonPlayPause = new QPushButton(KisIconUtils::loadIcon("animation_play"), "", this);
     buttonPlayPause->setToolTip(i18n("Play/Pause"));
+    buttonPlayPause->setFlat(true);
     layout->addWidget(buttonPlayPause);
     connect(buttonPlayPause, SIGNAL(released()), this, SIGNAL(playPause()));
 
     buttonForward = new QPushButton(KisIconUtils::loadIcon("nextframe"), "", this);
     buttonForward->setToolTip(i18n("Forward"));
+    buttonForward->setFlat(true);
     layout->addWidget(buttonForward);
     connect(buttonForward, SIGNAL(released()), this, SIGNAL(forward()));
 }

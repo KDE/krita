@@ -1,19 +1,7 @@
 /*
- *  Copyright (c) 2019 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2019 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "KisSignalCompressorTest.h"
@@ -127,6 +115,59 @@ void KisSignalCompressorTest::testSlowHandlerAdditive()
     }
 }
 
+void testIdleChecksImpl(int compressorInterval,
+                        int timerInterval,
+                        int idleCheckInterval,
+                        int idleDelay)
+{
+    const int handlerDelay = 0;
+
+    QElapsedTimer elapsedTimer;
+    elapsedTimer.start();
+
+    CompressorTester tester(handlerDelay);
+    KisSignalCompressor compressor(compressorInterval,
+                                   KisSignalCompressor::FIRST_ACTIVE,
+                                   KisSignalCompressor::PRECISE_INTERVAL);
+
+    compressor.setDelay(
+        [idleDelay, &elapsedTimer]() {
+            return elapsedTimer.elapsed() > idleDelay;
+        },
+        idleCheckInterval,
+        compressorInterval);
+
+    QTimer timer;
+    timer.setInterval(timerInterval);
+    timer.setTimerType(Qt::PreciseTimer);
+    timer.setSingleShot(false);
+
+    QObject::connect(&timer, SIGNAL(timeout()), &compressor, SLOT(start()));
+    QObject::connect(&compressor, SIGNAL(timeout()), &tester, SLOT(start()));
+    QObject::connect(&compressor, &KisSignalCompressor::timeout,
+                     [&elapsedTimer] () { elapsedTimer.restart(); });
+
+    timer.start();
+
+    QTest::qWait(500);
+
+    timer.stop();
+    QTest::qWait(compressorInterval * 2);
+    compressor.stop();
+
+    tester.dump(QString("timer %1 compressor %2 idle check %3 idle delay %4")
+                .arg(timerInterval).arg(compressorInterval)
+                .arg(idleCheckInterval).arg(idleDelay));
+
+    QTest::qWait(compressorInterval * 10);
+}
+
+void KisSignalCompressorTest::testIdleChecks()
+{
+    for (int i = 0; i < 40; i += 3) {
+        testIdleChecksImpl(50, 5, 5, qMax(1, i));
+    }
+}
 
 QTEST_MAIN(KisSignalCompressorTest)
 

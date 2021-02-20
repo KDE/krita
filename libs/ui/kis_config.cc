@@ -1,19 +1,7 @@
 /*
- *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
+ *  SPDX-FileCopyrightText: 2002 Patrick Julien <freak@codepimps.org>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_config.h"
@@ -209,17 +197,17 @@ void KisConfig::setStackN(int N)
 
 qint32 KisConfig::defImageWidth(bool defaultValue) const
 {
-    return (defaultValue ? 1600 : m_cfg.readEntry("imageWidthDef", 1600));
+    return (defaultValue ? 2480 : m_cfg.readEntry("imageWidthDef", 2480));
 }
 
 qint32 KisConfig::defImageHeight(bool defaultValue) const
 {
-    return (defaultValue ? 1200 : m_cfg.readEntry("imageHeightDef", 1200));
+    return (defaultValue ? 3508 : m_cfg.readEntry("imageHeightDef", 3508));
 }
 
 qreal KisConfig::defImageResolution(bool defaultValue) const
 {
-    return (defaultValue ? 100.0 : m_cfg.readEntry("imageResolutionDef", 100.0)) / 72.0;
+    return (defaultValue ? 300.0 : m_cfg.readEntry("imageResolutionDef", 300.0)) / 72.0;
 }
 
 QString KisConfig::defColorModel(bool defaultValue) const
@@ -279,6 +267,16 @@ int KisConfig::preferredVectorImportResolutionPPI(bool defaultValue) const
 void KisConfig::setPreferredVectorImportResolutionPPI(int value) const
 {
     m_cfg.writeEntry("preferredVectorImportResolution", value);
+}
+
+bool KisConfig::useDefaultColorSpace(bool defaultvalue) const
+{
+    return (defaultvalue?   false:  m_cfg.readEntry("useDefaultColorSpace", false));
+}
+
+void KisConfig::setUseDefaultColorSpace(bool value) const
+{
+    m_cfg.writeEntry("useDefaultColorSpace", value);
 }
 
 void cleanOldCursorStyleKeys(KConfigGroup &cfg)
@@ -1321,6 +1319,16 @@ void KisConfig::setHideDockersFullscreen(const bool value) const
     m_cfg.writeEntry("hideDockersFullScreen", value);
 }
 
+bool KisConfig::showDockerTitleBars(bool defaultValue) const
+{
+    return (defaultValue ? true : m_cfg.readEntry("showDockerTitleBars", true));
+}
+
+void KisConfig::setShowDockerTitleBars(const bool value) const
+{
+    m_cfg.writeEntry("showDockerTitleBars", value);
+}
+
 bool KisConfig::showDockers(bool defaultValue) const
 {
     return (defaultValue ? true : m_cfg.readEntry("showDockers", true));
@@ -1942,8 +1950,6 @@ void KisConfig::setCustomColorSelectorColorSpace(const KoColorSpace *cs)
         cfg.writeEntry("customColorSpaceDepthID", cs->colorDepthId().id());
         cfg.writeEntry("customColorSpaceProfile", cs->profile()->name());
     }
-
-    KisConfigNotifier::instance()->notifyConfigChanged();
 }
 
 bool KisConfig::enableOpenGLFramerateLogging(bool defaultValue) const
@@ -2004,6 +2010,16 @@ bool KisConfig::autoPinLayersToTimeline(bool defaultValue) const
 void KisConfig::setAutoPinLayersToTimeline(bool value)
 {
     m_cfg.writeEntry("autoPinLayers", value);
+}
+
+bool KisConfig::adaptivePlaybackRange(bool defaultValue) const
+{
+    return (defaultValue ? true : m_cfg.readEntry("adaptivePlaybackRange", true));
+}
+
+void KisConfig::setAdaptivePlaybackRange(bool value)
+{
+    m_cfg.writeEntry("adaptivePlaybackRange", value);
 }
 
 qreal KisConfig::timelineZoom(bool defaultValue) const

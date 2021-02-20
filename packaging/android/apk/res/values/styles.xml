@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- TODO: use newer theme -->
+    <style name = "DefaultTheme" parent="android:Theme.Holo.Light">
+        <item name="android:windowBackground">@android:color/black</item>
+    </style>
+</resources>

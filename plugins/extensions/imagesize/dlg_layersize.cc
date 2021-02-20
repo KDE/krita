@@ -1,23 +1,11 @@
 /*
  *  dlg_layersize.cc - part of Krita
  *
- *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2005 Sven Langkamp <sven.langkamp@gmail.com>
- *  Copyright (c) 2013 Juan Palacios <jpalaciosdev@gmail.com>
+ *  SPDX-FileCopyrightText: 2004 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2005 Sven Langkamp <sven.langkamp@gmail.com>
+ *  SPDX-FileCopyrightText: 2013 Juan Palacios <jpalaciosdev@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "dlg_layersize.h"
@@ -42,6 +30,8 @@ const QString DlgLayerSize::PARAM_KEEP_PROP = DlgLayerSize::PARAM_PREFIX + "_kee
 
 static const QString pixelStr(KoUnit::unitDescription(KoUnit::Pixel));
 static const QString percentStr(i18n("Percent (%)"));
+
+static KisFilterStrategy *lastUsedFilter = nullptr;
 
 DlgLayerSize::DlgLayerSize(QWidget *  parent, const char * name,
                            int width, int height, double resolution)
@@ -85,7 +75,13 @@ DlgLayerSize::DlgLayerSize(QWidget *  parent, const char * name,
 
     m_page->filterCmb->setIDList(KisFilterStrategyRegistry::instance()->listKeys());
     m_page->filterCmb->setToolTip(KisFilterStrategyRegistry::instance()->formattedDescriptions());
-    m_page->filterCmb->setCurrent("Bicubic");
+    m_page->filterCmb->allowAuto(true);
+
+    if (lastUsedFilter) { // Restore or Init..
+        m_page->filterCmb->setCurrent(lastUsedFilter->id());
+    } else {
+        m_page->filterCmb->setCurrent(KisCmbIDList::AutoOptionID);
+    }
 
     m_page->newWidthUnit->setModel(_widthUnitManager);
     m_page->newHeightUnit->setModel(_heightUnitManager);
@@ -119,6 +115,11 @@ DlgLayerSize::DlgLayerSize(QWidget *  parent, const char * name,
     connect(m_page->newHeightUnit, SIGNAL(currentIndexChanged(int)), _heightUnitManager, SLOT(selectApparentUnitFromIndex(int)));
     connect(_widthUnitManager, SIGNAL(unitChanged(int)), m_page->newWidthUnit, SLOT(setCurrentIndex(int)));
     connect(_heightUnitManager, SIGNAL(unitChanged(int)), m_page->newHeightUnit, SLOT(setCurrentIndex(int)));
+
+    connect(this, &DlgLayerSize::sigDesiredSizeChanged, [this](qint32 width, qint32 height, double){
+        KisFilterStrategy *filterStrategy = KisFilterStrategyRegistry::instance()->autoFilterStrategy(QSize(m_originalWidth, m_originalHeight), QSize(width, height));
+        m_page->filterCmb->setAutoHint(filterStrategy->name());
+    });
 }
 
 DlgLayerSize::~DlgLayerSize()
@@ -135,12 +136,12 @@ DlgLayerSize::~DlgLayerSize()
     delete m_page;
 }
 
-qint32 DlgLayerSize::width()
+qint32 DlgLayerSize::desiredWidth()
 {
     return (qint32)m_width;
 }
 
-qint32 DlgLayerSize::height()
+qint32 DlgLayerSize::desiredHeight()
 {
     return (qint32)m_height;
 }
@@ -148,7 +149,15 @@ qint32 DlgLayerSize::height()
 KisFilterStrategy *DlgLayerSize::filterType()
 {
     KoID filterID = m_page->filterCmb->currentItem();
-    KisFilterStrategy *filter = KisFilterStrategyRegistry::instance()->value(filterID.id());
+
+    KisFilterStrategy *filter;
+    if (filterID == KisCmbIDList::AutoOptionID) {
+        filter = KisFilterStrategyRegistry::instance()->autoFilterStrategy(QSize(m_originalWidth, m_originalHeight), QSize(desiredWidth(), desiredHeight()));
+    } else {
+        filter = KisFilterStrategyRegistry::instance()->value(filterID.id());
+        lastUsedFilter = filter;  // Save for next time!
+    }
+
     return filter;
 }
 
@@ -168,6 +177,7 @@ void DlgLayerSize::slotWidthChanged(double w)
         m_page->newHeightDouble->blockSignals(false);
     }
 
+    emit sigDesiredSizeChanged(desiredWidth(), desiredHeight(), m_resolution);
 }
 
 void DlgLayerSize::slotHeightChanged(double h)
@@ -183,6 +193,8 @@ void DlgLayerSize::slotHeightChanged(double h)
         m_page->newWidthDouble->changeValue(h * m_aspectRatio);
         m_page->newWidthDouble->blockSignals(false);
     }
+
+    emit sigDesiredSizeChanged(desiredWidth(), desiredHeight(), m_resolution);
 }
 
 void DlgLayerSize::slotAspectChanged(bool keep)

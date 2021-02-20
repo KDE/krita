@@ -1,20 +1,7 @@
 /* This file is part of the KDE project
- * Copyright (C) 2008 Peter Simonsson <peter.simonsson@gmail.com>
+ * SPDX-FileCopyrightText: 2008 Peter Simonsson <peter.simonsson@gmail.com>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #include "SvgSymbolCollectionDocker.h"
@@ -173,10 +160,10 @@ SvgSymbolCollectionDocker::SvgSymbolCollectionDocker(QWidget *parent)
 
     connect(m_wdgSvgCollection->cmbCollections, SIGNAL(activated(int)), SLOT(collectionActivated(int)));
 
-    m_resourceModel = KisResourceModelProvider::resourceModel(ResourceType::Symbols);
+    m_resourceModel = new KisResourceModel(ResourceType::Symbols, this);
 
     m_wdgSvgCollection->cmbCollections->setModel(m_resourceModel);
-    m_wdgSvgCollection->cmbCollections->setModelColumn(KisResourceModel::Name);
+    m_wdgSvgCollection->cmbCollections->setModelColumn(KisAbstractResourceModel::Name);
 
     m_wdgSvgCollection->listCollection->setDragEnabled(true);
     m_wdgSvgCollection->listCollection->setDragDropMode(QAbstractItemView::DragOnly);
@@ -191,8 +178,9 @@ SvgSymbolCollectionDocker::SvgSymbolCollectionDocker(QWidget *parent)
     // thumbnail icon changer
     QMenu* configureMenu = new QMenu(this);
     configureMenu->setStyleSheet("margin: 6px");
-    m_wdgSvgCollection->vectorPresetsConfigureButton->setIcon(KisIconUtils::loadIcon("configure"));
+    m_wdgSvgCollection->vectorPresetsConfigureButton->setIcon(KisIconUtils::loadIcon("view-choose"));
     m_wdgSvgCollection->vectorPresetsConfigureButton->setPopupMode(QToolButton::InstantPopup);
+    m_wdgSvgCollection->vectorPresetsConfigureButton->setAutoRaise(true);
 
 
 
@@ -242,7 +230,7 @@ void SvgSymbolCollectionDocker::slotResourceModelAboutToBeReset()
 {
     int index = m_wdgSvgCollection->cmbCollections->currentIndex();
     QModelIndex idx = m_resourceModel->index(index, 0);
-    int id = m_resourceModel->data(idx, Qt::UserRole + KisResourceModel::Id).toInt();
+    int id = m_resourceModel->data(idx, Qt::UserRole + KisAbstractResourceModel::Id).toInt();
     m_rememberedSvgCollectionId = id;
 }
 
@@ -254,7 +242,7 @@ void SvgSymbolCollectionDocker::slotResourceModelReset()
     } else {
         for (int i = 0; i < m_resourceModel->rowCount(); i++) {
             QModelIndex idx = m_resourceModel->index(i, 0);
-            int id = m_resourceModel->data(idx, Qt::UserRole + KisResourceModel::Id).toInt();
+            int id = m_resourceModel->data(idx, Qt::UserRole + KisAbstractResourceModel::Id).toInt();
             if (id == m_rememberedSvgCollectionId) {
                 indexToSet = i;
                 break;

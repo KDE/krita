@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgGradientOverlay</class>
  <widget class="QWidget" name="WdgGradientOverlay">
   <property name="geometry">
@@ -225,6 +229,23 @@
            </item>
           </layout>
          </item>
+         <item row="7" column="0">
+          <widget class="QLabel" name="lblDither">
+           <property name="text">
+            <string>&amp;Dither:</string>
+           </property>
+           <property name="buddy">
+            <cstring>chkDither</cstring>
+           </property>
+          </widget>
+         </item>
+         <item row="7" column="1">
+          <widget class="QCheckBox" name="chkDither">
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
         </layout>
         <zorder>label_6</zorder>
         <zorder>intScale</zorder>
@@ -235,6 +256,8 @@
         <zorder>intOpacity</zorder>
         <zorder>label_13</zorder>
         <zorder>label_14</zorder>
+        <zorder>lblDither</zorder>
+        <zorder>chkDither</zorder>
        </widget>
       </item>
       <item>

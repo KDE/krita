@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgDlgInternalColorSelector</class>
  <widget class="QDialog" name="WdgDlgInternalColorSelector">
   <property name="geometry">
@@ -239,7 +243,7 @@
         </layout>
        </item>
        <item>
-        <widget class="QWidget" name="screenColorPickerWidget" native="true">
+        <widget class="QWidget" name="screenColorSamplerWidget" native="true">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
            <horstretch>0</horstretch>

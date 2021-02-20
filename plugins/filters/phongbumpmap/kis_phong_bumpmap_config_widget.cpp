@@ -1,19 +1,7 @@
 /*
- *  Copyright (c) 2010-2011 José Luis Vergara <pentalis@gmail.com>
+ *  SPDX-FileCopyrightText: 2010-2011 José Luis Vergara <pentalis@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_phong_bumpmap_config_widget.h"
@@ -37,31 +25,21 @@ KisPhongBumpmapConfigWidget::KisPhongBumpmapConfigWidget(const KisPaintDeviceSP 
     matPropLabelsGroup->addWidget(m_page->lblSpecularReflectivity);
     matPropLabelsGroup->addWidget(m_page->lblSpecularShinyExp);
 
-    // Connect widgets to each other
-    connect(m_page->azimuthDial1, SIGNAL(valueChanged(int)), m_page->azimuthSpinBox1, SLOT(setValue(int)));
-    connect(m_page->azimuthDial2, SIGNAL(valueChanged(int)), m_page->azimuthSpinBox2, SLOT(setValue(int)));
-    connect(m_page->azimuthDial3, SIGNAL(valueChanged(int)), m_page->azimuthSpinBox3, SLOT(setValue(int)));
-    connect(m_page->azimuthDial4, SIGNAL(valueChanged(int)), m_page->azimuthSpinBox4, SLOT(setValue(int)));
-    connect(m_page->azimuthSpinBox1, SIGNAL(valueChanged(int)), m_page->azimuthDial1, SLOT(setValue(int)));
-    connect(m_page->azimuthSpinBox2, SIGNAL(valueChanged(int)), m_page->azimuthDial2, SLOT(setValue(int)));
-    connect(m_page->azimuthSpinBox3, SIGNAL(valueChanged(int)), m_page->azimuthDial3, SLOT(setValue(int)));
-    connect(m_page->azimuthSpinBox4, SIGNAL(valueChanged(int)), m_page->azimuthDial4, SLOT(setValue(int)));
-
     //Let widgets warn the preview of when they are updated
-    connect(m_page->azimuthDial1, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
-    connect(m_page->azimuthDial2, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
-    connect(m_page->azimuthDial3, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
-    connect(m_page->azimuthDial4, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
+    connect(m_page->azimuthAngleSelector1, SIGNAL(angleChanged(qreal)), SIGNAL(sigConfigurationItemChanged()));
+    connect(m_page->azimuthAngleSelector2, SIGNAL(angleChanged(qreal)), SIGNAL(sigConfigurationItemChanged()));
+    connect(m_page->azimuthAngleSelector3, SIGNAL(angleChanged(qreal)), SIGNAL(sigConfigurationItemChanged()));
+    connect(m_page->azimuthAngleSelector4, SIGNAL(angleChanged(qreal)), SIGNAL(sigConfigurationItemChanged()));
         
     connect(m_page->lightKColorCombo1, SIGNAL(currentIndexChanged(int)), SIGNAL(sigConfigurationItemChanged()));
     connect(m_page->lightKColorCombo2, SIGNAL(currentIndexChanged(int)), SIGNAL(sigConfigurationItemChanged()));
     connect(m_page->lightKColorCombo3, SIGNAL(currentIndexChanged(int)), SIGNAL(sigConfigurationItemChanged()));
     connect(m_page->lightKColorCombo4, SIGNAL(currentIndexChanged(int)), SIGNAL(sigConfigurationItemChanged()));
     
-    connect(m_page->inclinationSpinBox1, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
-    connect(m_page->inclinationSpinBox2, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
-    connect(m_page->inclinationSpinBox3, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
-    connect(m_page->inclinationSpinBox4, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
+    connect(m_page->elevationAngleSelector1, SIGNAL(angleChanged(qreal)), SIGNAL(sigConfigurationItemChanged()));
+    connect(m_page->elevationAngleSelector2, SIGNAL(angleChanged(qreal)), SIGNAL(sigConfigurationItemChanged()));
+    connect(m_page->elevationAngleSelector3, SIGNAL(angleChanged(qreal)), SIGNAL(sigConfigurationItemChanged()));
+    connect(m_page->elevationAngleSelector4, SIGNAL(angleChanged(qreal)), SIGNAL(sigConfigurationItemChanged()));
 
     connect(m_page->useNormalMap, SIGNAL(toggled(bool)), SIGNAL(sigConfigurationItemChanged()));
     connect(m_page->diffuseReflectivityGroup, SIGNAL(toggled(bool)), SIGNAL(sigConfigurationItemChanged()));
@@ -125,14 +103,14 @@ void KisPhongBumpmapConfigWidget::setConfiguration(const KisPropertiesConfigurat
     m_page->lightKColorCombo3->setColor(tempcolor.value<QColor>());
     config->getProperty(PHONG_ILLUMINANT_COLOR[3], tempcolor);
     m_page->lightKColorCombo4->setColor(tempcolor.value<QColor>());
-    m_page->azimuthSpinBox1->setValue( config->getDouble(PHONG_ILLUMINANT_AZIMUTH[0]) );
-    m_page->azimuthSpinBox2->setValue( config->getDouble(PHONG_ILLUMINANT_AZIMUTH[1]) );
-    m_page->azimuthSpinBox3->setValue( config->getDouble(PHONG_ILLUMINANT_AZIMUTH[2]) );
-    m_page->azimuthSpinBox4->setValue( config->getDouble(PHONG_ILLUMINANT_AZIMUTH[3]) );
-    m_page->inclinationSpinBox1->setValue( config->getDouble(PHONG_ILLUMINANT_INCLINATION[0]) );
-    m_page->inclinationSpinBox2->setValue( config->getDouble(PHONG_ILLUMINANT_INCLINATION[1]) );
-    m_page->inclinationSpinBox3->setValue( config->getDouble(PHONG_ILLUMINANT_INCLINATION[2]) );
-    m_page->inclinationSpinBox4->setValue( config->getDouble(PHONG_ILLUMINANT_INCLINATION[3]) );
+    m_page->azimuthAngleSelector1->setAngle( config->getDouble(PHONG_ILLUMINANT_AZIMUTH[0]) );
+    m_page->azimuthAngleSelector2->setAngle( config->getDouble(PHONG_ILLUMINANT_AZIMUTH[1]) );
+    m_page->azimuthAngleSelector3->setAngle( config->getDouble(PHONG_ILLUMINANT_AZIMUTH[2]) );
+    m_page->azimuthAngleSelector4->setAngle( config->getDouble(PHONG_ILLUMINANT_AZIMUTH[3]) );
+    m_page->elevationAngleSelector1->setAngle( config->getDouble(PHONG_ILLUMINANT_INCLINATION[0]) );
+    m_page->elevationAngleSelector2->setAngle( config->getDouble(PHONG_ILLUMINANT_INCLINATION[1]) );
+    m_page->elevationAngleSelector3->setAngle( config->getDouble(PHONG_ILLUMINANT_INCLINATION[2]) );
+    m_page->elevationAngleSelector4->setAngle( config->getDouble(PHONG_ILLUMINANT_INCLINATION[3]) );
 }
 
 KisPropertiesConfigurationSP KisPhongBumpmapConfigWidget::configuration() const
@@ -157,14 +135,14 @@ KisPropertiesConfigurationSP KisPhongBumpmapConfigWidget::configuration() const
     config->setProperty(PHONG_ILLUMINANT_COLOR[1], m_page->lightKColorCombo2->color());
     config->setProperty(PHONG_ILLUMINANT_COLOR[2], m_page->lightKColorCombo3->color());
     config->setProperty(PHONG_ILLUMINANT_COLOR[3], m_page->lightKColorCombo4->color());
-    config->setProperty(PHONG_ILLUMINANT_AZIMUTH[0], m_page->azimuthSpinBox1->value());
-    config->setProperty(PHONG_ILLUMINANT_AZIMUTH[1], m_page->azimuthSpinBox2->value());
-    config->setProperty(PHONG_ILLUMINANT_AZIMUTH[2], m_page->azimuthSpinBox3->value());
-    config->setProperty(PHONG_ILLUMINANT_AZIMUTH[3], m_page->azimuthSpinBox4->value());
-    config->setProperty(PHONG_ILLUMINANT_INCLINATION[0], m_page->inclinationSpinBox1->value());
-    config->setProperty(PHONG_ILLUMINANT_INCLINATION[1], m_page->inclinationSpinBox2->value());
-    config->setProperty(PHONG_ILLUMINANT_INCLINATION[2], m_page->inclinationSpinBox3->value());
-    config->setProperty(PHONG_ILLUMINANT_INCLINATION[3], m_page->inclinationSpinBox4->value());
+    config->setProperty(PHONG_ILLUMINANT_AZIMUTH[0], m_page->azimuthAngleSelector1->angle());
+    config->setProperty(PHONG_ILLUMINANT_AZIMUTH[1], m_page->azimuthAngleSelector2->angle());
+    config->setProperty(PHONG_ILLUMINANT_AZIMUTH[2], m_page->azimuthAngleSelector3->angle());
+    config->setProperty(PHONG_ILLUMINANT_AZIMUTH[3], m_page->azimuthAngleSelector4->angle());
+    config->setProperty(PHONG_ILLUMINANT_INCLINATION[0], m_page->elevationAngleSelector1->angle());
+    config->setProperty(PHONG_ILLUMINANT_INCLINATION[1], m_page->elevationAngleSelector2->angle());
+    config->setProperty(PHONG_ILLUMINANT_INCLINATION[2], m_page->elevationAngleSelector3->angle());
+    config->setProperty(PHONG_ILLUMINANT_INCLINATION[3], m_page->elevationAngleSelector4->angle());
 
     // Read configuration
     /*

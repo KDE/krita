@@ -1,20 +1,8 @@
 /*
- *  Copyright (c) 2020 Eoin O'Neill <eoinoneill1991@gmail.com>
- *  Copyright (c) 2020 Emmet O'Neill <emmetoneill.pdx@gmail.com>
+ *  SPDX-FileCopyrightText: 2020 Eoin O 'Neill <eoinoneill1991@gmail.com>
+ *  SPDX-FileCopyrightText: 2020 Emmet O 'Neill <emmetoneill.pdx@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 #include "kis_zoom_scrollbar.h"
 
@@ -29,6 +17,7 @@ KisZoomableScrollBar::KisZoomableScrollBar(QWidget *parent)
     , accelerationAccumulator(0,0)
     , scrollSubPixelAccumulator(0.0f)
     , zoomThreshold(0.75f)
+    , wheelOverscrollSensitivity(1.0f)
     , catchTeleportCorrection(false)
 {
 }
@@ -157,48 +146,45 @@ void KisZoomableScrollBar::tabletEvent(QTabletEvent *event) {
 
 void KisZoomableScrollBar::mousePressEvent(QMouseEvent *event)
 {
-    const bool wasSliderDownBefore = isSliderDown();
     QScrollBar::mousePressEvent(event);
 
-    if( isSliderDown() && !wasSliderDownBefore ){
-        lastKnownPosition = mapToGlobal(event->pos());
-        accelerationAccumulator = QVector2D(0,0);
-        QPoint worldPosition = mapToGlobal(event->pos());
-        QPoint barPosition = this->barPosition();
-        initialPositionRelativeToBar = worldPosition - barPosition;
-        setCursor(Qt::BlankCursor);
-    }
-
+    lastKnownPosition = mapToGlobal(event->pos());
+    accelerationAccumulator = QVector2D(0,0);
+    QPoint worldPosition = mapToGlobal(event->pos());
+    QPoint barPosition = this->barPosition();
+    initialPositionRelativeToBar = worldPosition - barPosition;
+    setCursor(Qt::BlankCursor);
 }
 
 
 void KisZoomableScrollBar::mouseMoveEvent(QMouseEvent *event)
 {
-    if (isSliderDown()) {
-        QPoint globalMouseCoord = mapToGlobal(event->pos());
+    QPoint globalMouseCoord = mapToGlobal(event->pos());
 
-        QPoint accel = globalMouseCoord - lastKnownPosition;
-        accelerationAccumulator += QVector2D(accel);
+    QPoint accel = globalMouseCoord - lastKnownPosition;
+    accelerationAccumulator += QVector2D(accel);
 
-        if (catchTeleports(event)){
-            return;
-        }
-
-        if( accelerationAccumulator.length() > 5 ) {
-            accelerationAccumulator = accelerationAccumulator.normalized();
-        }
-
-        handleScroll(accel);
-        lastKnownPosition = globalMouseCoord;
-        handleWrap(accel, mapToGlobal(event->pos()));
-        event->accept();
-    } else {
-        QScrollBar::mouseMoveEvent(event);
+    if (catchTeleports(event)) {
+        return;
     }
+
+    if (accelerationAccumulator.length() > 5) {
+        accelerationAccumulator = accelerationAccumulator.normalized();
+    }
+
+    handleScroll(accel);
+    lastKnownPosition = globalMouseCoord;
+    handleWrap(accel, mapToGlobal(event->pos()));
+    event->accept();
 }
 
 void KisZoomableScrollBar::mouseReleaseEvent(QMouseEvent *event)
 {
+    //If there's nowhere for our slider to  go, we should
+    //still emit the slider release value.
+    if (maximum() == minimum()) {
+        emit sliderReleased();
+    }
     const QPoint maximumCoordinates = mapToGlobal(QPoint(width() * devicePixelRatio(), height() * devicePixelRatio()));
     const QPoint minimumCoordinates = mapToGlobal(QPoint(0,0));
     const QPoint desiredCoordinates = barPosition() + initialPositionRelativeToBar;
@@ -216,7 +202,7 @@ void KisZoomableScrollBar::wheelEvent(QWheelEvent *event) {
     const int currentPosition = sliderPosition();
 
     if (currentPosition + delta > maximum() || currentPosition + delta < minimum()){
-        overscroll(delta);
+        overscroll(delta * wheelOverscrollSensitivity);
     }
 
     QScrollBar::wheelEvent(event);
@@ -225,4 +211,9 @@ void KisZoomableScrollBar::wheelEvent(QWheelEvent *event) {
 void KisZoomableScrollBar::setZoomDeadzone(float value)
 {
     zoomThreshold = value;
+}
+
+void KisZoomableScrollBar::setWheelOverscrollSensitivity(float sensitivity)
+{
+    wheelOverscrollSensitivity = sensitivity;
 }

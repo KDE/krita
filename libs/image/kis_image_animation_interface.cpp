@@ -1,19 +1,7 @@
 /*
- *  Copyright (c) 2015 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2015 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_image_animation_interface.h"
@@ -42,6 +30,7 @@ struct KisImageAnimationInterface::Private
           cachedLastFrameValue(-1),
           audioChannelMuted(false),
           audioChannelVolume(0.5),
+          exportInitialFrameNumber(-1),
           m_currentTime(0),
           m_currentUITime(0)
     {
@@ -58,6 +47,9 @@ struct KisImageAnimationInterface::Private
           audioChannelFileName(rhs.audioChannelFileName),
           audioChannelMuted(rhs.audioChannelMuted),
           audioChannelVolume(rhs.audioChannelVolume),
+          exportSequenceFilePath(rhs.exportSequenceFilePath),
+          exportSequenceBaseName(rhs.exportSequenceBaseName),
+          exportInitialFrameNumber(rhs.exportInitialFrameNumber),
           m_currentTime(rhs.m_currentTime),
           m_currentUITime(rhs.m_currentUITime)
     {
@@ -75,6 +67,10 @@ struct KisImageAnimationInterface::Private
     bool audioChannelMuted;
     qreal audioChannelVolume;
 
+    QString exportSequenceFilePath;
+    QString exportSequenceBaseName;
+    int exportInitialFrameNumber;
+
     KisSwitchTimeStrokeStrategy::SharedTokenWSP switchToken;
 
     inline int currentTime() const {
@@ -84,6 +80,7 @@ struct KisImageAnimationInterface::Private
     inline int currentUITime() const {
         return m_currentUITime;
     }
+
     inline void setCurrentTime(int value) {
         m_currentTime = value;
     }
@@ -198,6 +195,36 @@ void KisImageAnimationInterface::setAudioChannelFileName(const QString &fileName
     emit sigAudioChannelChanged();
 }
 
+QString KisImageAnimationInterface::exportSequenceFilePath()
+{
+    return m_d->exportSequenceFilePath;
+}
+
+void KisImageAnimationInterface::setExportSequenceFilePath(const QString &filePath)
+{
+    m_d->exportSequenceFilePath = filePath;
+}
+
+QString KisImageAnimationInterface::exportSequenceBaseName()
+{
+    return m_d->exportSequenceBaseName;
+}
+
+void KisImageAnimationInterface::setExportSequenceBaseName(const QString &baseName)
+{
+    m_d->exportSequenceBaseName = baseName;
+}
+
+int KisImageAnimationInterface::exportInitialFrameNumber()
+{
+    return m_d->exportInitialFrameNumber;
+}
+
+void KisImageAnimationInterface::setExportInitialFrameNumber(const int frameNum)
+{
+    m_d->exportInitialFrameNumber = frameNum;
+}
+
 bool KisImageAnimationInterface::isAudioMuted() const
 {
     return m_d->audioChannelMuted;
@@ -222,10 +249,10 @@ void KisImageAnimationInterface::setAudioVolume(qreal value)
 
 void KisImageAnimationInterface::setFramerate(int fps)
 {
-    KIS_SAFE_ASSERT_RECOVER_RETURN(fps > 0);
-
-    m_d->framerate = fps;
-    emit sigFramerateChanged();
+    if (fps > 0) {
+        m_d->framerate = fps;
+        emit sigFramerateChanged();
+    }
 }
 
 KisImageWSP KisImageAnimationInterface::image() const

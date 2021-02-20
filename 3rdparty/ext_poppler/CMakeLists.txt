@@ -1,22 +1,25 @@
 SET(PREFIX_ext_poppler "${EXTPREFIX}" )
 
 list(APPEND _PopplerPatch_COMMAND
-        ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/no_tests.diff
+        ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-No-tests.patch
     )
 if(APPLE)
     list(APPEND _PopplerPatch_COMMAND
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/mac_popplerIconv.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0002-Use-system-libiconv-in-macOS.patch
     )
 endif(APPLE)
+list(APPEND _PopplerPatch_COMMAND
+    COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0003-poppler-qt5-also-needs-poppler_LIBS-on-MinGW.patch
+)
 ExternalProject_Add( ext_poppler
 	DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-	URL https://poppler.freedesktop.org/poppler-0.82.0.tar.xz
-	URL_MD5 4d6106c2382c5e66072e0b355acc3640
-	
+	URL https://poppler.freedesktop.org/poppler-21.02.0.tar.xz
+	URL_HASH SHA256=5c14759c99891e6e472aced6d5f0ff1dacf85d80cd9026d365c55c653edf792c
+
     PATCH_COMMAND ${_PopplerPatch_COMMAND}
 
 	INSTALL_DIR ${PREFIX_ext_poppler}
 	CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_poppler} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE} -DBUILD_GTK_TESTS=OFF -DBUILD_QT5_TESTS=FALSE -DBUILD_CPP_TESTS=FALSE  -DENABLE_UTILS=FALSE -DENABLE_GLIB=FALSE -DENABLE_LIBOPENJPEG=none -DWITH_NSS3=OFF
-	
+
     UPDATE_COMMAND ""
 )

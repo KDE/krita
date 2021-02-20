@@ -1,24 +1,13 @@
 /*
- *  Copyright (c) 2003 Patrick Julien <freak@codepimps.org>
+ *  SPDX-FileCopyrightText: 2003 Patrick Julien <freak@codepimps.org>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #ifndef KIS_UNDO_STORE_H_
 #define KIS_UNDO_STORE_H_
 
+#include <QObject>
 #include <QString>
 #include <QVector>
 
@@ -54,8 +43,9 @@ class KUndo2MagicString;
  * KisDocument::createUndoStore() is just a factory method, the document
  * doesn't store the undo store itself.
  */
-class KRITACOMMAND_EXPORT KisUndoStore
+class KRITACOMMAND_EXPORT KisUndoStore : public QObject
 {
+    Q_OBJECT
 public:
     KisUndoStore();
     virtual ~KisUndoStore();
@@ -71,6 +61,9 @@ public:
     virtual void beginMacro(const KUndo2MagicString& macroName) = 0;
     virtual void endMacro() = 0;
     virtual void purgeRedoState() = 0;
+
+Q_SIGNALS:
+    void historyStateChanged();
 
 private:
     Q_DISABLE_COPY(KisUndoStore)

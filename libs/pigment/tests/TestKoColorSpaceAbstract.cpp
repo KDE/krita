@@ -1,3 +1,7 @@
+/*
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
 #include "TestKoColorSpaceAbstract.h"
 
 #include "KoColorSpaceAbstract.h"

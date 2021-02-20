@@ -1,28 +1,17 @@
 /*
  *  kis_cmb_imagetype.h - part of KImageShop/Krayon/Krita
  *
- *  Copyright (c) 2005 Boudewijn Rempt (boud@valdyas.org)
- *  Copyright (c) 2011 Silvio Heinrich <plassy@web.de>
+ *  SPDX-FileCopyrightText: 2005 Boudewijn Rempt (boud@valdyas.org)
+ *  SPDX-FileCopyrightText: 2011 Silvio Heinrich <plassy@web.de>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #ifndef KIS_CMB_IDLIST_H_
 #define KIS_CMB_IDLIST_H_
 
 #include <QComboBox>
+#include <QString>
 #include <KoID.h>
 #include <kritaui_export.h>
 
@@ -39,8 +28,8 @@ public:
     KisCmbIDList(QWidget * parent = 0, const char * name = 0);
     ~KisCmbIDList() override;
 
+    static const KoID AutoOptionID;
 
-public:
     /**
      * @brief setIDList clears the combobox and sorts
      *    the given list by user-visible name and then adds
@@ -49,8 +38,18 @@ public:
      * @param sorted if true, the id's will be sorted by name
      */
     void setIDList(const QList<KoID> & list, bool sorted = true);
+
+    /**
+     * @brief allowAuto sets whether the combobox should keep
+     *    an extra "AUTO" option, where the use allows the
+     *    program to decide an appropriate option based on context.
+     */
+    void allowAuto(bool setAuto = true);
+
+    void setAutoHint(const QString & hint);
+
     void setCurrent(const KoID id);
-    void setCurrent(const QString & s);
+    void setCurrent(const QString & id);
 
     KoID currentItem() const;
 
@@ -59,10 +58,15 @@ Q_SIGNALS:
     void highlighted(const KoID &);
 
 private Q_SLOTS:
-    void slotIDActivated(int i);
-    void slotIDHighlighted(int i);
+    void slotIDActivated(int index);
+    void slotIDHighlighted(int index);
 
 private:
-    QList<KoID> m_list;
+    void buildItems();
+
+    QList<KoID> m_idList;
+    bool m_sorted = true;
+    bool m_autoOption = false;
+    QString m_autoHint;
 };
 #endif

@@ -1,0 +1,53 @@
+From 165c022a9ab7b6dff88f20c576b41e36991e2f99 Mon Sep 17 00:00:00 2001
+From: "L. E. Segovia" <amy@amyspark.me>
+Date: Tue, 17 Nov 2020 23:44:44 +0000
+Subject: [PATCH 4/4] cmake: Fix relative paths
+
+---
+ CMakeLists.txt | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 0da19e9..b99f289 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -66,11 +66,11 @@ target_link_libraries(mypaint ${JSONC_LIBRARIES})
+ set_property(TARGET mypaint PROPERTY C_STANDARD 11)
+ install(TARGETS mypaint
+     EXPORT libmypaintTargets
+-    RUNTIME DESTINATION bin
+-    LIBRARY DESTINATION lib
+-    ARCHIVE DESTINATION lib
++    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
++    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
++    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+ ) 
+-install(FILES ${mypaint_HEADERS} DESTINATION include)
++install(FILES ${mypaint_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/libmypaint)
+ 
+ if(JsonC_FOUND)
+     set(PKG_CONFIG_REQUIRES "json-c")
+@@ -79,16 +79,16 @@ else()
+ endif()
+ configure_file("libmypaint.pc.in" "libmypaint.pc" @ONLY)
+ install(FILES "${CMAKE_CURRENT_BINARY_DIR}/libmypaint.pc"
+-    DESTINATION lib/pkgconfig)
++    DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
+ 
+ configure_package_config_file(
+     "libmypaint-config.cmake.in" "libmypaint-config.cmake"
+-    INSTALL_DESTINATION lib/cmake/libmypaint
++    INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/libmypaint
+     PATH_VARS CMAKE_INSTALL_PREFIX CMAKE_INSTALL_LIBDIR CMAKE_INSTALL_INCLUDEDIR)
+ write_basic_package_version_file(libmypaint-config-version.cmake
+     COMPATIBILITY SameMinorVersion)
+ install(FILES "${CMAKE_CURRENT_BINARY_DIR}/libmypaint-config-version.cmake"
+     "${CMAKE_CURRENT_BINARY_DIR}/libmypaint-config.cmake"
+-    DESTINATION lib/cmake/libmypaint)
++    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/libmypaint)
+ 
+-install(EXPORT libmypaintTargets DESTINATION lib/cmake/libmypaint)
++install(EXPORT libmypaintTargets DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/libmypaint)
+-- 
+2.29.2.windows.1
+

@@ -1,18 +1,7 @@
 /*
- *  Copyright (c) 2010 Adam Celarek <kdedev at xibo dot at>
+ *  SPDX-FileCopyrightText: 2010 Adam Celarek <kdedev at xibo dot at>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_color_selector_ring.h"
@@ -65,22 +54,23 @@ bool KisColorSelectorRing::containsPointInComponentCoords(int x, int y) const
 
 void KisColorSelectorRing::paint(QPainter* painter)
 {
+    qreal devicePixelRatioF = painter->device()->devicePixelRatioF();
     if(isDirty()) {
         m_cachedColorSpace = colorSpace();
         m_cachedSize=qMin(width(), height());
         colorCache();
-        paintCache();
+        paintCache(devicePixelRatioF);
     }
 
     int size = qMin(width(), height());
     if(m_cachedSize!=size) {
         m_cachedSize=size;
-        paintCache();
+        paintCache(devicePixelRatioF);
     }
 
-    painter->drawImage(width()/2-m_pixelCache.width()/2,
-                height()/2-m_pixelCache.height()/2,
-                m_pixelCache);
+    QPoint startPoint = QPoint(width()/2 - (m_pixelCache.width()/(2*devicePixelRatioF)),
+                               height()/2 - (m_pixelCache.height()/(2*devicePixelRatioF)));
+    painter->drawImage(startPoint, m_pixelCache);
 
 
     // paint blip
@@ -117,13 +107,27 @@ KoColor KisColorSelectorRing::selectColor(int x, int y)
     m_lastHue=hue;
     emit update();
 
+    if(m_parameter == KisColorSelectorConfiguration::Hluma) {
+        return m_parent->converter()->fromHsyF(hue, 1.0, 0.55, R, G, B, Gamma);
+    }
     return m_parent->converter()->fromHsvF(hue, 1.0, 1.0);
 }
 
 void KisColorSelectorRing::setColor(const KoColor &color)
 {
     qreal h, s, v;
-    m_parent->converter()->getHsvF(color, &h, &s, &v);
+    KConfigGroup cfg = KSharedConfig::openConfig()->group("advancedColorSelector");
+    R = cfg.readEntry("lumaR", 0.2126);
+    G = cfg.readEntry("lumaG", 0.7152);
+    B = cfg.readEntry("lumaB", 0.0722);
+    Gamma = cfg.readEntry("gamma", 2.2);
+
+    if(m_parameter == KisColorSelectorConfiguration::Hluma) {
+        m_parent->converter()->getHsyF(color, &h, &s, &v, R, G, B, Gamma);
+    }
+    else {
+        m_parent->converter()->getHsvF(color, &h, &s, &v);
+    }
 
     emit paramChanged(h, -1, -1, -1, -1, -1, -1, -1, -1);
 
@@ -137,11 +141,16 @@ void KisColorSelectorRing::setColor(const KoColor &color)
     KisColorSelectorComponent::setColor(color);
 }
 
-void KisColorSelectorRing::paintCache()
+void KisColorSelectorRing::paintCache(qreal devicePixelRatioF)
 {
-    QImage cache(m_cachedSize, m_cachedSize, QImage::Format_ARGB32_Premultiplied);
+    QImage cache(m_cachedSize*devicePixelRatioF, m_cachedSize*devicePixelRatioF, QImage::Format_ARGB32_Premultiplied);
+    cache.setDevicePixelRatio(devicePixelRatioF);
 
     Eigen::Vector2i center(cache.width()/2., cache.height()/2.);
+
+    int outerRadiusHighDPI = outerRadius()*devicePixelRatioF;
+    int innerRadiusHighDPI = innerRadius()*devicePixelRatioF;
+
 
     for(int x=0; x<cache.width(); x++) {
         for(int y=0; y<cache.height(); y++) {
@@ -151,29 +160,29 @@ void KisColorSelectorRing::paintCache()
             qreal currentRadius = relativeVector.squaredNorm();
             currentRadius=sqrt(currentRadius);
 
-            if(currentRadius < outerRadius()+1
-               && currentRadius > innerRadius()-1)
+            if(currentRadius < outerRadiusHighDPI+1
+               && currentRadius > innerRadiusHighDPI-1)
             {
 
                 float angle = std::atan2((float)relativeVector.y(), (float)relativeVector.x())+((float)M_PI);
                 angle/=2*((float)M_PI);
                 angle*=359.f;
-                if(currentRadius < outerRadius()
-                   && currentRadius > innerRadius()) {
+                if(currentRadius < outerRadiusHighDPI
+                   && currentRadius > innerRadiusHighDPI) {
                     cache.setPixel(x, y, m_cachedColors.at(angle));
                 }
                 else {
                     // draw antialiased border
                     qreal coef=1.;
-                    if(currentRadius > outerRadius()) {
+                    if(currentRadius > outerRadiusHighDPI) {
                         // outer border
                         coef-=currentRadius;
-                        coef+=outerRadius();
+                        coef+=outerRadiusHighDPI;
                     }
                     else {
                         // inner border
                         coef+=currentRadius;
-                        coef-=innerRadius();
+                        coef-=innerRadiusHighDPI;
                     }
                     coef=qBound(qreal(0.), coef, qreal(1.));
                     int red=qRed(m_cachedColors.at(angle));
@@ -200,7 +209,11 @@ void KisColorSelectorRing::colorCache()
     KoColor koColor;
     QColor qColor;
     for(int i=0; i<360; i++) {
-        koColor = m_parent->converter()->fromHsvF(1.0 * i / 360.0, 1.0, 1.0);
+        if(m_parameter == KisColorSelectorConfiguration::Hluma) {
+            koColor = m_parent->converter()->fromHsyF(1.0 * i / 360.0, 1.0, 0.55, R, G, B, Gamma);
+        } else {
+            koColor = m_parent->converter()->fromHsvF(1.0 * i / 360.0, 1.0, 1.0);
+        }
         qColor = m_parent->converter()->toQColor(koColor);
         m_cachedColors.append(qColor.rgb());
     }

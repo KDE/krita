@@ -1,19 +1,7 @@
 /*
- *  Copyright (c) 2016 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2016 Boudewijn Rempt <boud@valdyas.org>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
 #ifndef LIBKIS_DOCUMENT_H
 #define LIBKIS_DOCUMENT_H
@@ -861,7 +849,40 @@ print(root.childNodes())
      */
     void setCurrentTime(int time);
 
+    /**
+     * @brief annotationTypes returns the list of annotations present in the document.
+     * Each annotation type is unique.
+     */
+    QStringList annotationTypes() const;
 
+    /**
+     * @brief annotationDescription gets the pretty description for the current annotation
+     * @param type the type of the annotation
+     * @return a string that can be presented to the user
+     */
+    QString annotationDescription(const QString &type) const;
+
+    /**
+     * @brief annotation the actual data for the annotation for this type. It's a simple
+     * QByteArray, what's in it depends on the type of the annotation
+     * @param type the type of the annotation
+     * @return a bytearray, possibly empty if this type of annotation doesn't exist
+     */
+    QByteArray annotation(const QString &type);
+
+    /**
+     * @brief setAnnotation Add the given annotation to the document
+     * @param type the unique type of the annotation
+     * @param description the user-visible description of the annotation
+     * @param annotation the annotation itself
+     */
+    void setAnnotation(const QString &type, const QString &description, const QByteArray &annotation);
+
+    /**
+     * @brief removeAnnotation remove the specified annotation from the image
+     * @param type the type defining the annotation
+     */
+    void removeAnnotation(const QString &type);
 private:
 
     friend class Krita;

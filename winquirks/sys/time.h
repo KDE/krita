@@ -1,3 +1,7 @@
+/*
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
 #ifndef QUIRK_SYS_TIME_H
 #define QUIRK_SYS_TIME_H
 
@@ -10,7 +14,7 @@
 #else
   #define DELTA_EPOCH_IN_MICROSECS  11644473600000000ULL
 #endif
- 
+
 #ifndef _TIMEZONE_DEFINED /* Matches sys/time.h and mingw32/include/time.h */
 #define _TIMEZONE_DEFINED
 struct timezone
@@ -36,7 +40,7 @@ gettimeofday(struct timeval * tv, struct timezone * tz)
 		tmpres |= ft.dwLowDateTime;
 
 		/*converting file time to unix epoch*/
-		tmpres -= DELTA_EPOCH_IN_MICROSECS; 
+		tmpres -= DELTA_EPOCH_IN_MICROSECS;
 		tmpres /= 10;  /*convert into microseconds*/
 		tv->tv_sec = (long)(tmpres / 1000000UL);
 		tv->tv_usec = (long)(tmpres % 1000000UL);

@@ -1,22 +1,9 @@
 /* This file is part of the KDE project
- * Copyright (C) 2008 Boudewijn Rempt <boud@valdyas.org>
- * Copyright (C) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
- * Copyright (C) 2011 Silvio Heinrich <plassy@web.de>
+ * SPDX-FileCopyrightText: 2008 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
+ * SPDX-FileCopyrightText: 2011 Silvio Heinrich <plassy@web.de>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #include "widgets/kis_paintop_presets_popup.h"
@@ -172,8 +159,8 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
 
     // configure the button and assign menu
     m_d->uiWdgPaintOpPresetSettings.presetChangeViewToolButton->setMenu(menu);
-
     m_d->uiWdgPaintOpPresetSettings.presetChangeViewToolButton->setPopupMode(QToolButton::InstantPopup);
+    m_d->uiWdgPaintOpPresetSettings.presetChangeViewToolButton->setAutoRaise(true);
 
 
     // loading preset from scratch option
@@ -379,29 +366,26 @@ void KisPaintOpPresetsPopup::slotSaveRenameCurrentBrush()
     if (!curPreset)
         return;
 
-    KisPaintOpPresetResourceServer * rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
+    // in case the preset is dirty, we need an id to get the actual non-dirty preset to save just the name change
+    // into the database
+    int currentPresetResourceId = curPreset->resourceId();
+
 
     QString originalPresetName = curPreset->name();
     QString renamedPresetName = m_d->uiWdgPaintOpPresetSettings.renameBrushNameTextField->text();
-    QString renamedPresetPathAndFile = renamedPresetName + curPreset->defaultFileExtension();
 
 
     // create a new brush preset with the name specified and add to resource provider
-    KisPaintOpPresetSP newPreset = curPreset->clone().dynamicCast<KisPaintOpPreset>();
-    newPreset->setFilename(renamedPresetPathAndFile); // this also contains the path
-    newPreset->setName(renamedPresetName);
-    newPreset->setImage(curPreset->image()); // use existing thumbnail (might not need to do this)
-    newPreset->setDirty(false);
-    newPreset->setValid(true);
-    rServer->addResource(newPreset);
+    KisResourceModel model(ResourceType::PaintOpPresets);
+    KoResourceSP properCleanResource = model.resourceForId(currentPresetResourceId);
+    model.renameResource(properCleanResource, renamedPresetName);
 
-    resourceSelected(newPreset); // refresh and select our freshly renamed resource
+
+
+    resourceSelected(curPreset); // refresh and select our freshly renamed resource
 
 
     // Now blacklist the original file
-    if (rServer->resourceByName(originalPresetName)) {
-        rServer->removeResourceFromServer(curPreset);
-    }
 
     m_d->favoriteResManager->updateFavoritePresets();
 
@@ -571,7 +555,10 @@ void KisPaintOpPresetsPopup::resourceSelected(KoResourceSP resource)
     m_d->uiWdgPaintOpPresetSettings.renameBrushNameTextField->setText(resource->name()); // use file name
 
     // get the preset image and pop it into the thumbnail area on the top of the brush editor
-    m_d->uiWdgPaintOpPresetSettings.presetThumbnailicon->setPixmap(QPixmap::fromImage(resource->image().scaled(55, 55, Qt::KeepAspectRatio, Qt::SmoothTransformation)));
+    QSize thumbSize = QSize(55, 55)*devicePixelRatioF();
+    QPixmap thumbnail = QPixmap::fromImage(resource->image().scaled(thumbSize, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    thumbnail.setDevicePixelRatio(devicePixelRatioF());
+    m_d->uiWdgPaintOpPresetSettings.presetThumbnailicon->setPixmap(thumbnail);
 
     toggleBrushRenameUIActive(false); // reset the UI state of renaming a brush if we are changing brush presets
     slotUpdatePresetSettings(); // check to see if the dirty preset icon needs to be shown
@@ -783,15 +770,15 @@ void KisPaintOpPresetsPopup::updateThemedIcons()
     m_d->uiWdgPaintOpPresetSettings.fillSolid->setIcon(KisIconUtils::loadIcon("krita_tool_color_fill"));
     m_d->uiWdgPaintOpPresetSettings.eraseScratchPad->setIcon(KisIconUtils::loadIcon("edit-delete"));
 
-    m_d->uiWdgPaintOpPresetSettings.newPresetEngineButton->setIcon(KisIconUtils::loadIcon("addlayer"));
+    m_d->uiWdgPaintOpPresetSettings.newPresetEngineButton->setIcon(KisIconUtils::loadIcon("list-add"));
     m_d->uiWdgPaintOpPresetSettings.bnBlacklistPreset->setIcon(KisIconUtils::loadIcon("deletelayer"));
     m_d->uiWdgPaintOpPresetSettings.reloadPresetButton->setIcon(KisIconUtils::loadIcon("updateColorize")); // refresh icon
     m_d->uiWdgPaintOpPresetSettings.renameBrushPresetButton->setIcon(KisIconUtils::loadIcon("dirty-preset")); // edit icon
     m_d->uiWdgPaintOpPresetSettings.dirtyPresetIndicatorButton->setIcon(KisIconUtils::loadIcon("warning"));
 
-    m_d->uiWdgPaintOpPresetSettings.newPresetEngineButton->setIcon(KisIconUtils::loadIcon("addlayer"));
+    m_d->uiWdgPaintOpPresetSettings.newPresetEngineButton->setIcon(KisIconUtils::loadIcon("list-add"));
     m_d->uiWdgPaintOpPresetSettings.bnBlacklistPreset->setIcon(KisIconUtils::loadIcon("deletelayer"));
-    m_d->uiWdgPaintOpPresetSettings.presetChangeViewToolButton->setIcon(KisIconUtils::loadIcon("configure"));
+    m_d->uiWdgPaintOpPresetSettings.presetChangeViewToolButton->setIcon(KisIconUtils::loadIcon("view-choose"));
 
     // if we cannot see the "Preset label", we know it is not visible
     // maybe this can also be stored in the config like the scratchpad?

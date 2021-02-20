@@ -1,20 +1,8 @@
 /*
- *  Copyright (c) 2011 Lukáš Tvrdý <lukast.dev@gmail.com>
- *  Copyright (c) 2011 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2011 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  SPDX-FileCopyrightText: 2011 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 #include "kis_tool_multihand.h"
 
@@ -437,11 +425,12 @@ QWidget* KisToolMultihand::createOptionWidget()
     slotSetTransformMode(customUI->multihandTypeCombobox->currentIndex());
 
 
-    customUI->axisRotationSpinbox->setSuffix(QChar(Qt::Key_degree));   // origin rotation
-    customUI->axisRotationSpinbox->setSingleStep(1.0);
-    customUI->axisRotationSpinbox->setRange(0.0, 90.0, 1);
-    customUI->axisRotationSpinbox->setValue(m_configGroup.readEntry("axesAngle", 0.0));
-    connect( customUI->axisRotationSpinbox, SIGNAL(valueChanged(qreal)),this, SLOT(slotSetAxesAngle(qreal)));
+    customUI->axisRotationAngleSelector->setRange(0.0, 90.0);
+    customUI->axisRotationAngleSelector->setDecimals(1);
+    customUI->axisRotationAngleSelector->setWrapping(false);
+    customUI->axisRotationAngleSelector->setFlipOptionsMode(KisAngleSelector::FlipOptionsMode_NoFlipOptions);
+    customUI->axisRotationAngleSelector->setAngle(m_configGroup.readEntry("axesAngle", 0.0));
+    connect( customUI->axisRotationAngleSelector, SIGNAL(angleChanged(qreal)),this, SLOT(slotSetAxesAngle(qreal)));
 
 
     // symmetry mode options

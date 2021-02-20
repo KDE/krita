@@ -1,18 +1,7 @@
 /*
- *  Copyright (c) 2010 Adam Celarek <kdedev at xibo dot at>
+ *  SPDX-FileCopyrightText: 2010 Adam Celarek <kdedev at xibo dot at>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_color_selector_wheel.h"
@@ -112,51 +101,54 @@ void KisColorSelectorWheel::setColor(const KoColor &color)
     m_parent->converter()->getHsiF(color, &hsiH, &hsiS, &hsiI);
     m_parent->converter()->getHsyF(color, &hsyH, &hsyS, &hsyY, R, G, B, Gamma);
 
-    //workaround, for some reason the HSI and HSY algorithms are fine, but they don't seem to update the selectors properly.
-    hsiH=hslH;
-    hsyH=hslH;
-
     qreal angle = 0.0, radius = 0.0;
-    angle = hsvH;
-    angle *= 2. * M_PI;
-    angle -= M_PI;
     switch (m_parameter) {
     case KisColorSelectorConfiguration::LH:
         emit paramChanged(hslH, -1, -1, -1, hslL, -1, -1, -1, -1);
+        angle = hslH;
         radius = hslL;
         break;
     case KisColorSelectorConfiguration::VH:
         emit paramChanged(hsvH, -1, hsvV, -1, -1, -1, -1, -1, -1);
+        angle = hsvH;
         radius = hsvV;
         break;
     case KisColorSelectorConfiguration::IH:
         emit paramChanged(hslH, -1, -1, -1, -1, -1, hsiI, -1, -1);
+        angle = hsiH;
         radius = hsiI;
         break;
     case KisColorSelectorConfiguration::YH:
-        emit paramChanged(hsvH, -1, -1, -1, -1, -1, -1, -1, hsyY);
+        emit paramChanged(hsyH, -1, -1, -1, -1, -1, -1, -1, hsyY);
+        angle = hsyH;
         radius = hsyY;
         break;
     case KisColorSelectorConfiguration::hsvSH:
         emit paramChanged(hsvH, hsvS, -1, -1, -1, -1, -1, -1, -1);
+        angle = hsvH;
         radius = hsvS;
         break;
     case KisColorSelectorConfiguration::hslSH:
         emit paramChanged(hslH, -1, -1, hslS, -1, -1, -1, -1, -1);
+        angle = hslH;
         radius = hslS;
         break;
     case KisColorSelectorConfiguration::hsiSH:
         emit paramChanged(hsiH, -1, -1, -1, -1, hsiS, -1, -1, -1);
+        angle = hsiH;
         radius = hsiS;
         break;
     case KisColorSelectorConfiguration::hsySH:
         emit paramChanged(hsyH, -1, -1, -1, -1, -1, -1, hsyS, -1);
+        angle = hsyH;
         radius = hsyS;
         break;
     default:
         Q_ASSERT(false);
         break;
     }
+    angle *= 2. * M_PI;
+    angle -= M_PI;
     radius *= 0.5;
 
     m_lastClickPos.setX(cos(angle)*radius+0.5);
@@ -183,7 +175,8 @@ void KisColorSelectorWheel::paint(QPainter* painter)
 
     if(isDirty()) {
         KisPaintDeviceSP realPixelCache;
-        Acs::PixelCacheRenderer::render(this, m_parent->converter(), QRect(0, 0, width(), height()), realPixelCache, m_pixelCache, m_pixelCacheOffset);
+        Acs::PixelCacheRenderer::render(this, m_parent->converter(), QRect(0, 0, width(), height()), realPixelCache,
+                                        m_pixelCache, m_pixelCacheOffset, painter->device()->devicePixelRatioF());
 
         //antialiasing for wheel
         QPainter tmpPainter(&m_pixelCache);
@@ -208,7 +201,8 @@ void KisColorSelectorWheel::paint(QPainter* painter)
 
     // draw gamut mask
     if (m_gamutMaskOn && m_currentGamutMask) {
-        QImage maskBuffer  = QImage(m_renderAreaSize.width(), m_renderAreaSize.height(), QImage::Format_ARGB32_Premultiplied);
+        QImage maskBuffer = QImage(m_renderAreaSize*painter->device()->devicePixelRatioF(), QImage::Format_ARGB32_Premultiplied);
+        maskBuffer.setDevicePixelRatio(painter->device()->devicePixelRatioF());
         maskBuffer.fill(0);
         QPainter maskPainter(&maskBuffer);
 
@@ -252,7 +246,7 @@ void KisColorSelectorWheel::paint(QPainter* painter)
     }
 }
 
-KoColor KisColorSelectorWheel::colorAt(int x, int y, bool forceValid)
+KoColor KisColorSelectorWheel::colorAt(float x, float y, bool forceValid)
 {
     KoColor color(Qt::transparent, m_parent->colorSpace());
 

@@ -2,19 +2,12 @@
 **
 ** This file is part of Qt Creator
 **
-** Copyright (c) 2011 Nokia Corporation and/or its subsidiary(-ies).
+** SPDX-FileCopyrightText: 2011 Nokia Corporation and /or its subsidiary(-ies).
 **
 ** Contact: Nokia Corporation (qt-info@nokia.com)
 **
 **
-** GNU Lesser General Public License Usage
-**
-** This file may be used under the terms of the GNU Lesser General Public
-** License version 2.1 as published by the Free Software Foundation and
-** appearing in the file LICENSE.LGPL included in the packaging of this file.
-** Please review the following information to ensure the GNU Lesser General
-** Public License version 2.1 requirements will be met:
-** http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
+** SPDX-License-Identifier: LGPL-2.1-only
 **
 ** In addition, as a special exception, Nokia gives you certain additional
 ** rights. These rights are described in the Nokia Qt LGPL Exception
@@ -38,6 +31,8 @@
 #include <QCoreApplication>
 #include <QLocale>
 #include <QFile>
+#include <QTextBlock>
+#include <QTextDocument>
 
 #include <QNetworkRequest>
 #include <QNetworkReply>
@@ -99,11 +94,11 @@ bool sortForPubDate(const RssItem& item1, const RssItem& item2)
 
 void MultiFeedRssModel::appendFeedData(QNetworkReply *reply)
 {
+    beginResetModel();
     KisRssReader reader;
     m_aggregatedFeed.append(reader.parse(reply));
     sortAggregatedFeed();
     setArticleCount(m_aggregatedFeed.size());
-    beginResetModel();
     endResetModel();
 
     emit feedDataChanged();
@@ -122,15 +117,20 @@ void MultiFeedRssModel::initialize()
 
 void MultiFeedRssModel::removeFeed(const QString &feed)
 {
-    QMutableListIterator<RssItem> it(m_aggregatedFeed);
-    while (it.hasNext()) {
-        RssItem item = it.next();
-        if (item.source == feed)
-            it.remove();
-    }
-    setArticleCount(m_aggregatedFeed.size());
+    bool isRemoved = m_sites.removeOne(feed);
+    if (isRemoved) {
+        beginResetModel();
+        QMutableListIterator<RssItem> it(m_aggregatedFeed);
+        while (it.hasNext()) {
+            RssItem item = it.next();
+            if (item.source == feed)
+                it.remove();
+        }
+        setArticleCount(m_aggregatedFeed.size());
+        endResetModel();
 
-    m_sites.removeOne(feed);
+        emit feedDataChanged();
+    }
 }
 
 int MultiFeedRssModel::rowCount(const QModelIndex &) const
@@ -146,9 +146,19 @@ QVariant MultiFeedRssModel::data(const QModelIndex &index, int role) const
     switch (role) {
     case Qt::DisplayRole:
     {
+        QTextDocument doc;
+        doc.setHtml(item.description);
+        // Extract the first text block, which is the `<p>` element containing
+        // the shortened post text, excluding the "This post [...] appeared
+        // first on [...]" text.
+        QString text = doc.firstBlock().text();
+        if (text.length() > 92) {
+            text.truncate(90);
+            text.append("...");
+        }
         return QString("<b><a href=\"" + item.link + "\">" + item.title + "</a></b>"
                "<br><small>(" + item.pubDate.toLocalTime().toString(Qt::DefaultLocaleShortDate) + ") "
-               + item.description.left(90).append("...") + "</small><hr>");
+               "<p style=\"margin-top: 4px\">" + text + "</p></small>");
     }
     case KisRssReader::RssRoles::TitleRole:
         return item.title;

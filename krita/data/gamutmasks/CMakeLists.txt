@@ -1,8 +1,6 @@
 ########### install files ###############
 
 install( FILES
-       GamutMaskTemplate.kra
-       empty_mask_preview.png
        Atmosphere_With_Accent.kgm
        Atmospheric_Triad.kgm
        Complementary.kgm

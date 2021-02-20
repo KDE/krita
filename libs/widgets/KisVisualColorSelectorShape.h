@@ -1,19 +1,7 @@
 /*
- * Copyright (C) Wolthera van Hovell tot Westerflier <griffinvalley@gmail.com>, (C) 2016
+ * SPDX-FileCopyrightText: 2016 Wolthera van Hovell tot Westerflier <griffinvalley@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 #ifndef KIS_VISUAL_COLOR_SELECTOR_SHAPE_H
 #define KIS_VISUAL_COLOR_SELECTOR_SHAPE_H
@@ -184,7 +172,7 @@ protected:
      * @param data points to zero-initialized memory of size width()*height()*pixelSize
      * @param pixelSize the data size to transfer from KoColor::data() to data per pixel
      * in the current color space
-     * @param channelValues the normalized channel values of the currently picked color
+     * @param channelValues the normalized channel values of the currently selected color
      */
     virtual QImage renderBackground(const QVector4D &channelValues, quint32 pixelSize) const;
     /**

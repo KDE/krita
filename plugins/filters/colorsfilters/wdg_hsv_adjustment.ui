@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgHSVAdjustment</class>
  <widget class="QWidget" name="WdgHSVAdjustment">
   <property name="geometry">
@@ -26,7 +30,7 @@
    <property name="verticalSpacing">
     <number>5</number>
    </property>
-   <item row="13" column="0" colspan="2">
+   <item colspan="2" column="0" row="13">
     <spacer>
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -39,7 +43,7 @@
      </property>
     </spacer>
    </item>
-   <item row="0" column="0">
+   <item column="0" row="0">
     <widget class="QLabel" name="lblType">
      <property name="text">
       <string>&amp;Type:</string>
@@ -52,14 +56,14 @@
      </property>
     </widget>
    </item>
-   <item row="9" column="1">
+   <item column="1" row="9">
     <widget class="QCheckBox" name="chkColorize">
      <property name="text">
       <string>&amp;Colorize</string>
      </property>
     </widget>
    </item>
-   <item row="0" column="1">
+   <item column="1" row="0">
     <widget class="QComboBox" name="cmbType">
      <property name="currentIndex">
       <number>0</number>
@@ -91,7 +95,7 @@
      </item>
     </widget>
    </item>
-   <item row="2" column="1">
+   <item column="1" row="2">
     <widget class="QSlider" name="hueSlider">
      <property name="minimum">
       <number>-180</number>
@@ -104,7 +108,7 @@
      </property>
     </widget>
    </item>
-   <item row="4" column="2">
+   <item column="2" row="4">
     <widget class="KisIntParseSpinBox" name="saturationSpinBox">
      <property name="minimum">
       <number>-100</number>
@@ -114,7 +118,7 @@
      </property>
     </widget>
    </item>
-   <item row="5" column="0">
+   <item column="0" row="5">
     <widget class="QLabel" name="label_3">
      <property name="text">
       <string>&amp;Value:</string>
@@ -127,7 +131,7 @@
      </property>
     </widget>
    </item>
-   <item row="4" column="1">
+   <item column="1" row="4">
     <widget class="QSlider" name="saturationSlider">
      <property name="minimum">
       <number>-100</number>
@@ -155,7 +159,7 @@
      </property>
     </widget>
    </item>
-   <item row="4" column="0">
+   <item column="0" row="4">
     <widget class="QLabel" name="label_2">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -177,7 +181,7 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="0">
+   <item column="0" row="2">
     <widget class="QLabel" name="label">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -196,7 +200,7 @@
      </property>
     </widget>
    </item>
-   <item row="5" column="1">
+   <item column="1" row="5">
     <widget class="QSlider" name="valueSlider">
      <property name="minimum">
       <number>-100</number>
@@ -209,7 +213,7 @@
      </property>
     </widget>
    </item>
-   <item row="5" column="2">
+   <item column="2" row="5">
     <widget class="KisIntParseSpinBox" name="valueSpinBox">
      <property name="minimum">
       <number>-100</number>
@@ -219,7 +223,7 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="2">
+   <item column="2" row="2">
     <widget class="KisIntParseSpinBox" name="hueSpinBox">
      <property name="minimum">
       <number>-180</number>
@@ -229,14 +233,14 @@
      </property>
     </widget>
    </item>
-   <item row="9" column="2">
+   <item column="2" row="9">
     <widget class="QPushButton" name="reset">
      <property name="text">
       <string>Reset</string>
      </property>
     </widget>
    </item>
-   <item row="10" column="1">
+   <item column="1" row="10">
     <widget class="QCheckBox" name="chkCompatibilityMode">
      <property name="text">
       <string>Legacy mode (before Krita 4.3)</string>

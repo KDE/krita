@@ -1,0 +1,42 @@
+From c20d100da7542d253d9496a40960075bfe3abe99 Mon Sep 17 00:00:00 2001
+From: "L. E. Segovia" <amy@amyspark.me>
+Date: Fri, 19 Feb 2021 11:27:33 +0000
+Subject: [PATCH 2/2] Quick check for SSE support
+
+---
+ src/CMakeLists.txt | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
+
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 43df937..1f26a2b 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -17,6 +17,25 @@ if(WIN32)
+     endif(MSVC)
+ endif(WIN32)
+ 
++include(CheckCXXSourceCompiles)
++check_cxx_source_compiles ("
++    #include <immintrin.h>
++    int main ()
++    {
++        __m128d a, b;
++        double vals[2] = {0};
++        a = _mm_loadu_pd (vals);
++        b = _mm_add_pd (a,a);
++        _mm_storeu_pd (vals,b);
++        return (0);
++    }"
++    HAVE_SSE2)
++
++if (NOT HAVE_SSE2)
++    message(STATUS "Disabling SSE optimizations, as the target doesn't support them")
++    add_compile_definitions(CMS_DONT_USE_SSE2=1)
++endif()
++
+ set(lcms_SRCS
+     cmscnvrt.c
+     cmserr.c
+-- 
+2.30.0
+

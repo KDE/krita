@@ -1,19 +1,7 @@
 /*
- *  Copyright (c) 2011 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2011 Cyrille Berger <cberger@cberger.net>
  *
- *  This library is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; either version 2.1 of the License, or
- *  (at your option) any later version.
- *
- *  This library is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU Lesser General Public License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: LGPL-2.1-or-later
  */
 
 #include "kis_multi_sensors_model_p.h"
@@ -52,11 +40,11 @@ QVariant KisMultiSensorsModel::data(const QModelIndex &index, int role) const
     if (!index.isValid()) return QVariant();
 
     if (role == Qt::DisplayRole) {
-        return KisDynamicSensor::sensorsIds()[index.row()].name();
+        return m_curveOption->sensorsIds()[index.row()].name();
     }
     else if (role == Qt::CheckStateRole) {
-        QString selectedSensorId = KisDynamicSensor::sensorsIds()[index.row()].id();
-        KisDynamicSensorSP sensor = m_curveOption->sensor(KisDynamicSensor::id2Type(selectedSensorId), false);
+        QString selectedSensorId = m_curveOption->sensorsIds()[index.row()].id();
+        KisDynamicSensorSP sensor = m_curveOption->sensor(m_curveOption->id2Type(KoID(selectedSensorId)), false);
         if (sensor) {
             //dbgKrita << sensor->id() << sensor->isActive();
             return QVariant(sensor->isActive() ? Qt::Checked : Qt::Unchecked);
@@ -76,10 +64,10 @@ bool KisMultiSensorsModel::setData(const QModelIndex &index, const QVariant &val
         bool checked = (value.toInt() == Qt::Checked);
 
         if (checked || m_curveOption->activeSensors().size() != 1) { // Don't uncheck the last sensor (but why not?)
-            KisDynamicSensorSP sensor = m_curveOption->sensor(KisDynamicSensor::id2Type(KisDynamicSensor::sensorsIds()[index.row()].id()), false);
+            KisDynamicSensorSP sensor = m_curveOption->sensor(m_curveOption->id2Type(m_curveOption->sensorsIds()[index.row()]), false);
 
             if (!sensor) {
-                sensor = KisDynamicSensor::id2Sensor(KisDynamicSensor::sensorsIds()[index.row()].id(), "NOT_VALID_NAME");
+                sensor = m_curveOption->id2Sensor(m_curveOption->sensorsIds()[index.row()], "NOT_VALID_NAME");
                 m_curveOption->replaceSensor(sensor);
             }
 
@@ -99,21 +87,21 @@ Qt::ItemFlags KisMultiSensorsModel::flags(const QModelIndex & /*index */) const
 KisDynamicSensorSP KisMultiSensorsModel::getSensor(const QModelIndex& index)
 {
     if (!index.isValid()) return 0;
-    QString id = KisDynamicSensor::sensorsIds()[index.row()].id();
-    return m_curveOption->sensor(KisDynamicSensor::id2Type(id), false);
+    QString id = m_curveOption->sensorsIds()[index.row()].id();
+    return m_curveOption->sensor(m_curveOption->id2Type(KoID(id)), false);
 }
 
 void KisMultiSensorsModel::setCurrentCurve(const QModelIndex& currentIndex, const KisCubicCurve& curve, bool useSameCurve)
 {
     if (!currentIndex.isValid()) return;
 
-    QString selectedSensorId =  KisDynamicSensor::sensorsIds()[currentIndex.row()].id();
-    m_curveOption->setCurve(KisDynamicSensor::id2Type(selectedSensorId), useSameCurve, curve);
+    QString selectedSensorId =  m_curveOption->sensorsIds()[currentIndex.row()].id();
+    m_curveOption->setCurve(m_curveOption->id2Type(KoID(selectedSensorId)), useSameCurve, curve);
 }
 
 QModelIndex KisMultiSensorsModel::sensorIndex(KisDynamicSensorSP arg1)
 {
-    return index(KisDynamicSensor::sensorsIds().indexOf(KoID(KisDynamicSensor::id(arg1->sensorType()))));
+    return index(m_curveOption->sensorsIds().indexOf(KoID(arg1->identifier())));
 }
 
 void KisMultiSensorsModel::resetCurveOption()

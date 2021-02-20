@@ -1,23 +1,11 @@
 /*
  *  kis_cursor.cc - part of KImageShop
  *
- *  Copyright (c) 1999 Matthias Elter <elter@kde.org>
- *  Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
- *  Copyright (c) 2013 David Revoy <info@davidrevoy.com>
+ *  SPDX-FileCopyrightText: 1999 Matthias Elter <elter@kde.org>
+ *  SPDX-FileCopyrightText: 2004 Adrian Page <adrian@pagenet.plus.com>
+ *  SPDX-FileCopyrightText: 2013 David Revoy <info@davidrevoy.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_cursor.h"
@@ -119,19 +107,19 @@ QCursor KisCursor::pointingHandCursor()
 }
 
 
-QCursor KisCursor::pickerCursor()
+QCursor KisCursor::samplerCursor()
 {
-    return pickerLayerForegroundCursor();
+    return samplerLayerForegroundCursor();
 }
 
-QCursor KisCursor::pickerPlusCursor()
+QCursor KisCursor::samplerPlusCursor()
 {
-    return KisCursorCache::instance()->pickerPlusCursor;
+    return KisCursorCache::instance()->samplerPlusCursor;
 }
 
-QCursor KisCursor::pickerMinusCursor()
+QCursor KisCursor::samplerMinusCursor()
 {
-    return KisCursorCache::instance()->pickerMinusCursor;
+    return KisCursorCache::instance()->samplerMinusCursor;
 }
 
 QCursor KisCursor::pickLayerCursor()
@@ -189,24 +177,24 @@ QCursor KisCursor::rotateCanvasDiscreteCursor()
     return load("rotate_discrete.xpm");
 }
 
-QCursor KisCursor::pickerImageForegroundCursor()
+QCursor KisCursor::samplerImageForegroundCursor()
 {
-    return load("color-picker_image_foreground.xpm", 8, 23);
+    return load("color-sampler_image_foreground.xpm", 8, 23);
 }
 
-QCursor KisCursor::pickerImageBackgroundCursor()
+QCursor KisCursor::samplerImageBackgroundCursor()
 {
-    return load("color-picker_image_background.xpm", 8, 23);
+    return load("color-sampler_image_background.xpm", 8, 23);
 }
 
-QCursor KisCursor::pickerLayerForegroundCursor()
+QCursor KisCursor::samplerLayerForegroundCursor()
 {
-    return load("color-picker_layer_foreground.xpm", 8, 23);
+    return load("color-sampler_layer_foreground.xpm", 8, 23);
 }
 
-QCursor KisCursor::pickerLayerBackgroundCursor()
+QCursor KisCursor::samplerLayerBackgroundCursor()
 {
-    return load("color-picker_layer_background.xpm", 8, 23);
+    return load("color-sampler_layer_background.xpm", 8, 23);
 }
 
 QCursor KisCursor::changeExposureCursor()
@@ -262,6 +250,16 @@ QCursor KisCursor::closedHandCursor()
 QCursor KisCursor::rotateCursor()
 {
     return load("rotate_cursor.xpm");
+}
+
+QCursor KisCursor::meshCursorFree()
+{
+    return load("mesh_cursor_free.png", 5, 5);
+}
+
+QCursor KisCursor::meshCursorLocked()
+{
+    return load("mesh_cursor_locked.png", 5, 5);
 }
 
 QCursor KisCursor::load(const QString & cursorName, int hotspotX, int hotspotY)

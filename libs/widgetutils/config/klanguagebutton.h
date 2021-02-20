@@ -2,24 +2,11 @@
  * klangbutton.h - Button with language selection drop down menu.
  *                 Derived from the KLangCombo class by Hans Petter Bieker.
  *
- * Copyright (c) 1999-2003 Hans Petter Bieker <bieker@kde.org>
- *           (c) 2001      Martijn Klingens <klingens@kde.org>
- *           (c) 2007      David Jarvie <software@astrojar.org.uk>
+ * SPDX-FileCopyrightText: 1999-2003 Hans Petter Bieker <bieker@kde.org>
+ * SPDX-FileCopyrightText: 2001 Martijn Klingens <klingens@kde.org>
+ * SPDX-FileCopyrightText: 2007 David Jarvie <software@astrojar.org.uk>
  *
- *  This library is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU Library General Public
- *  License as published by the Free Software Foundation; either
- *  version 2 of the License, or (at your option) any later version.
- *
- *  This library is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *  Library General Public License for more details.
- *
- *  You should have received a copy of the GNU Library General Public License
- *  along with this library; see the file COPYING.LIB.  If not, write to
- *  the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- *  Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #ifndef KLANGUAGEBUTTON_H

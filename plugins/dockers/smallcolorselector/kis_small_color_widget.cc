@@ -1,21 +1,8 @@
 /*
- *  Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2008 Cyrille Berger <cberger@cberger.net>
  *
- *  This library is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This library is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU Lesser General Public License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
-
 #include "kis_small_color_widget.h"
 #include <QTimer>
 #include "kis_slider_spin_box.h"
@@ -79,13 +66,13 @@ struct KisSmallColorWidget::Private {
 
         if (!result || result->colorModelId() != RGBAColorModelID) {
             result = outputColorSpace();
-        } else if (result->colorDepthId() != Float32BitsColorDepthID) {
+        } else if (result && result->colorDepthId() != Float32BitsColorDepthID) {
             result = KoColorSpaceRegistry::instance()->
                 colorSpace(RGBAColorModelID.id(), Float32BitsColorDepthID.id(), result->profile());
         }
 
         // PQ color space we deliniearize into linear one
-        if (result->colorModelId() == RGBAColorModelID &&
+        if (result && result->colorModelId() == RGBAColorModelID &&
             result->profile()->uniqueId() == KoColorSpaceRegistry::instance()->p2020PQProfile()->uniqueId()) {
 
             result = KoColorSpaceRegistry::instance()->

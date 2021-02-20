@@ -1,6 +1,3 @@
-
-set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR})
-
 ########### next target ###############
 
 set(ko_colorspaces_benchmark_SRCS KoColorSpacesBenchmark.cpp)

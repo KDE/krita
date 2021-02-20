@@ -1,26 +1,14 @@
 /*  This file is part of the KDE project
 
-    Copyright (c) 1999 Matthias Elter <elter@kde.org>
-    Copyright (c) 2003 Patrick Julien <freak@codepimps.org>
-    Copyright (c) 2005 Sven Langkamp <sven.langkamp@gmail.com>
-    Copyright (c) 2007 Jan Hambrecht <jaham@gmx.net>
-    Copyright (C) 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
-    Copyright (c) 2013 Sascha Suelzer <s.suelzer@gmail.com>
-    Copyright (c) 2003-2019 Boudewijn Rempt <boud@valdyas.org>
+    SPDX-FileCopyrightText: 1999 Matthias Elter <elter@kde.org>
+    SPDX-FileCopyrightText: 2003 Patrick Julien <freak@codepimps.org>
+    SPDX-FileCopyrightText: 2005 Sven Langkamp <sven.langkamp@gmail.com>
+    SPDX-FileCopyrightText: 2007 Jan Hambrecht <jaham@gmx.net>
+    SPDX-FileCopyrightText: 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
+    SPDX-FileCopyrightText: 2013 Sascha Suelzer <s.suelzer@gmail.com>
+    SPDX-FileCopyrightText: 2003-2019 Boudewijn Rempt <boud@valdyas.org>
 
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+    SPDX-License-Identifier: LGPL-2.1-or-later
  */
 
 #ifndef KORESOURCESERVER_H
@@ -42,9 +30,9 @@
 #include "KoResourcePaths.h"
 #include "ksharedconfig.h"
 
+#include <KisResourceLocator.h>
 #include <KisResourceModel.h>
-#include <KisResourceModelProvider.h>
-#include <KisTagModelProvider.h>
+#include <KisTagModel.h>
 #include <kis_assert.h>
 #include <kis_debug.h>
 
@@ -65,8 +53,8 @@ public:
     typedef KoResourceServerObserver<T> ObserverType;
 
     KoResourceServer(const QString& type)
-        : m_resourceModel(KisResourceModelProvider::resourceModel(type))
-        , m_tagModel(KisTagModelProvider::tagModel(type))
+        : m_resourceModel(new KisResourceModel(type))
+        , m_tagModel(new KisTagModel(type))
         , m_type(type)
     {
         KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == qApp->thread());
@@ -80,6 +68,8 @@ public:
 
     virtual ~KoResourceServer()
     {
+        delete m_resourceModel;
+        delete m_tagModel;
         Q_FOREACH (ObserverType* observer, m_observers) {
             observer->unsetResourceServer();
         }
@@ -88,7 +78,6 @@ public:
     /// @return the active resource model
     KisResourceModel *resourceModel() const
     {
-        QMutexLocker l(&m_mutex);
         KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == qApp->thread());
         if (QThread::currentThread() != qApp->thread()) {
             Q_FOREACH(const QString &s, kisBacktrace().split('\n')) {
@@ -102,7 +91,7 @@ public:
     /// Return the first resource available
     QSharedPointer<T> firstResource() const
     {
-        QMutexLocker l(&m_mutex);
+
         KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == qApp->thread());
         if (QThread::currentThread() != qApp->thread()) {
             Q_FOREACH(const QString &s, kisBacktrace().split('\n')) {
@@ -119,14 +108,14 @@ public:
     }
 
     int resourceCount() const {
-        QMutexLocker l(&m_mutex);
+
         KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == qApp->thread());
         return m_resourceModel->rowCount();
     }
 
     /// Adds an already loaded resource to the server
     bool addResource(QSharedPointer<T> resource, bool save = true) {
-        QMutexLocker l(&m_mutex);
+
         KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == qApp->thread());
         if (QThread::currentThread() != qApp->thread()) {
             Q_FOREACH(const QString &s, kisBacktrace().split('\n')) {
@@ -139,7 +128,7 @@ public:
             return false;
         }
 
-        if (m_resourceModel->addResource(resource, save ? resource->storageLocation() : "memory")) {
+        if (m_resourceModel->addResource(resource, save ? QString() : "memory")) {
             notifyResourceAdded(resource);
             return true;
         }
@@ -149,7 +138,7 @@ public:
 
     /// Remove a resource from Resource Server but not from a file
     bool removeResourceFromServer(QSharedPointer<T> resource){
-        QMutexLocker l(&m_mutex);
+
         KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == qApp->thread());
         if (QThread::currentThread() != qApp->thread()) {
             Q_FOREACH(const QString &s, kisBacktrace().split('\n')) {
@@ -157,35 +146,16 @@ public:
             }
         }
 
-        if (m_resourceModel->removeResource(resource)) {
+        if (m_resourceModel->setResourceInactive(m_resourceModel->indexForResource(resource))) {
             notifyRemovingResource(resource);
             return true;
         }
         return false;
     }
 
-    QList<QSharedPointer<T>> resources() {
-        QMutexLocker l(&m_mutex);
-        qDebug() << "KoResourceServer::resources()" << m_type;
-
-        KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == qApp->thread());
-        if (QThread::currentThread() != qApp->thread()) {
-            Q_FOREACH(const QString &s, kisBacktrace().split('\n')) {
-                qDebug() << s;
-            }
-        }
-
-        KIS_SAFE_ASSERT_RECOVER_NOOP(m_type != "paintoppresets");
-        QList<QSharedPointer<T>> resourceList;
-        for (int row = 0; row < m_resourceModel->rowCount(); ++row) {
-            resourceList << m_resourceModel->resourceForIndex(m_resourceModel->index(row, 0)).dynamicCast<T>();
-        }
-        return resourceList;
-    }
-
     /// Returns path where to save user defined and imported resources to
     QString saveLocation() {
-        return KoResourcePaths::saveLocation(m_type.toLatin1());
+        return KisResourceLocator::instance()->resourceLocationBase() + '/' + m_type;
     }
 
     /**
@@ -196,7 +166,7 @@ public:
      */
     bool importResourceFile(const QString &filename)
     {
-        QMutexLocker l(&m_mutex);
+
         KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == qApp->thread());
         if (QThread::currentThread() != qApp->thread()) {
             Q_FOREACH(const QString &s, kisBacktrace().split('\n')) {
@@ -254,8 +224,8 @@ public:
             }
         }
 
-        QMutexLocker l(&m_mutex);
-        qDebug() << "resourceByFilename" << filename;
+
+        //qDebug() << "resourceByFilename" << filename;
         if (filename.isEmpty() || filename.isNull()) {
             return 0;
         }
@@ -272,8 +242,8 @@ public:
             }
         }
 
-        QMutexLocker l(&m_mutex);
-        qDebug() << "resourceByName" << name;
+
+        //qDebug() << "resourceByName" << name;
         if (name.isEmpty() || name.isNull()) {
             return 0;
         }
@@ -290,8 +260,8 @@ public:
             }
         }
 
-        QMutexLocker l(&m_mutex);
-        qDebug() << "resourceByMD5" << md5.toHex();
+
+        //qDebug() << "resourceByMD5" << md5.toHex();
         if (md5.isEmpty() || md5.isNull()) {
             return 0;
         }
@@ -299,12 +269,12 @@ public:
     }
 
     /**
-     * Call after changing the content of a resource;
+     * Call after changing the content of a resource and saving it;
      * Notifies the connected views.
      */
     void updateResource(QSharedPointer<T> resource)
     {
-        QMutexLocker l(&m_mutex);
+
 
         KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == qApp->thread());
         if (QThread::currentThread() != qApp->thread()) {
@@ -314,6 +284,23 @@ public:
         }
         m_resourceModel->updateResource(resource);
         notifyResourceChanged(resource);
+    }
+
+    /**
+     * Reloads the resource from the persistent storage
+     */
+    bool reloadResource(QSharedPointer<T> resource)
+    {
+        KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == qApp->thread());
+        if (QThread::currentThread() != qApp->thread()) {
+            Q_FOREACH(const QString &s, kisBacktrace().split('\n')) {
+                qDebug() << s;
+            }
+        }
+        bool result = m_resourceModel->reloadResource(resource);
+        notifyResourceChanged(resource);
+
+        return result;
     }
 
     QVector<KisTagSP> assignedTagsList(KoResourceSP resource) const
@@ -353,7 +340,6 @@ private:
     KisResourceModel *m_resourceModel {0};
     KisTagModel *m_tagModel {0};
     QString m_type;
-    mutable QMutex m_mutex;
 };
 
 #endif // KORESOURCESERVER_H

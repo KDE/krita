@@ -1,16 +1,4 @@
-# This script is licensed CC 0 1.0, so that you can learn from it.
-
-# ------ CC 0 1.0 ---------------
-
-# The person who associated a work with this deed has dedicated the
-# work to the public domain by waiving all of his or her rights to the
-# work worldwide under copyright law, including all related and
-# neighboring rights, to the extent allowed by law.
-
-# You can copy, modify, distribute and perform the work, even for
-# commercial purposes, all without asking permission.
-
-# https://creativecommons.org/publicdomain/zero/1.0/legalcode
+# SPDX-License-Identifier: CC0-1.0
 
 from . import exportlayersdialog
 from PyQt5.QtCore import (Qt, QRect)
@@ -42,6 +30,7 @@ class UIExportLayers(object):
         self.exportFilterLayersCheckBox = QCheckBox(
             i18n("Export filter layers"))
         self.batchmodeCheckBox = QCheckBox(i18n("Export in batchmode"))
+        self.groupAsLayer = QCheckBox(i18n("Group as layer"))
         self.ignoreInvisibleLayersCheckBox = QCheckBox(
             i18n("Ignore invisible layers"))
         self.cropToImageBounds = QCheckBox(
@@ -89,6 +78,7 @@ class UIExportLayers(object):
 
         self.optionsLayout.addWidget(self.exportFilterLayersCheckBox)
         self.optionsLayout.addWidget(self.batchmodeCheckBox)
+        self.optionsLayout.addWidget(self.groupAsLayer)
         self.optionsLayout.addWidget(self.ignoreInvisibleLayersCheckBox)
         self.optionsLayout.addWidget(self.cropToImageBounds)
 
@@ -149,7 +139,7 @@ class UIExportLayers(object):
             self.msgBox.setText(i18n("Select the initial directory."))
         else:
             self.export(selectedDocuments[0])
-            self.msgBox.setText(i18n("All layers has been exported."))
+            self.msgBox.setText(i18n("All layers have been exported."))
         self.msgBox.exec_()
 
     def mkdir(self, directory):
@@ -182,7 +172,7 @@ class UIExportLayers(object):
 
         for node in parentNode.childNodes():
             newDir = ''
-            if node.type() == 'grouplayer':
+            if node.type() == 'grouplayer' and not self.groupAsLayer.isChecked():
                 newDir = os.path.join(parentDir, node.name())
                 self.mkdir(newDir)
             elif (not self.exportFilterLayersCheckBox.isChecked()
@@ -210,7 +200,7 @@ class UIExportLayers(object):
                 node.save(layerFileName, self.resSpinBox.value() / 72.,
                           self.resSpinBox.value() / 72., krita.InfoObject(), bounds)
 
-            if node.childNodes():
+            if node.childNodes() and not self.groupAsLayer.isChecked():
                 self._exportLayers(node, fileFormat, newDir)
 
     def _selectDir(self):

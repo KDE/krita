@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>KisWdgOptionsQImageIO</class>
  <widget class="QWidget" name="KisWdgOptionsQImageIO">
   <property name="geometry">
@@ -31,7 +35,7 @@
      <property name="spacing">
       <number>6</number>
      </property>
-     <item row="0" column="2">
+     <item column="2" row="0">
       <widget class="QLabel" name="textLabel3">
        <property name="whatsThis">
         <string>&lt;p&gt;Adjust the compression time. Better compression takes longer.
@@ -45,7 +49,7 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="1">
+     <item column="1" row="0">
       <widget class="QLabel" name="textLabel2">
        <property name="sizePolicy">
         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
@@ -62,7 +66,7 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="0">
+     <item column="0" row="1">
       <widget class="QLabel" name="textLabel1">
        <property name="toolTip">
         <string>Note:  100 uses lossless compression, everything below is lossy.</string>
@@ -78,7 +82,7 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="1" colspan="2">
+     <item colspan="2" column="1" row="1">
       <widget class="KisDoubleSliderSpinBox" name="imageQuality" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">

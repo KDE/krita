@@ -1,20 +1,8 @@
 /*
- *  Copyright (c) 2002 patrick julien <freak@codepimps.org>
- *  Copyright (c) 2006 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2002 patrick julien <freak@codepimps.org>
+ *  SPDX-FileCopyrightText: 2006 Boudewijn Rempt <boud@valdyas.org>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 #ifndef KIS_PAINT_DEVICE_IMPL_H_
 #define KIS_PAINT_DEVICE_IMPL_H_
@@ -677,13 +665,13 @@ public:
      * 2) Do *not* expect that the color spaces of the destination and
      *    the temporary device would coincide. If you need to copy a
      *    single pixel from one device to another, you can use
-     *    KisCrossDeviceColorPicker class, that will handle all the
+     *    KisCrossDeviceColorSampler class, that will handle all the
      *    necessary conversions for you.
      *
      * \see createCompositionSourceDeviceFixed()
      * \see compositionSourceColorSpace()
-     * \see KisCrossDeviceColorPicker
-     * \see KisCrossDeviceColorPickerInt
+     * \see KisCrossDeviceColorSampler
+     * \see KisCrossDeviceColorSamplerInt
      */
     KisPaintDeviceSP createCompositionSourceDevice() const;
 

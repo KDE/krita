@@ -1,3 +1,7 @@
+<!--
+  SPDX-FileCopyrightText: none
+  SPDX-License-Identifier: CC0-1.0
+-->
 <RCC>
     <qresource prefix="/">
         <file>dark_draw-eraser.svg</file>
@@ -62,6 +66,8 @@
         <file>dark_curve-preset-j.svg</file>
         <file>dark_curve-preset-arch.svg</file>
         <file>dark_snapshot-load.svg</file>
+        <file>dark_kerning.svg</file>
+        <file>dark_view-choose.svg</file>
         <file alias="dark_object-align-horizontal-right-calligra.svg">dark_ox16-action-object-align-horizontal-right-calligra.svg</file>
         <file alias="dark_object-align-horizontal-left-calligra.svg">dark_ox16-action-object-align-horizontal-left-calligra.svg</file>
     </qresource>

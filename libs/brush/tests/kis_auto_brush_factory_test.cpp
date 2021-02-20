@@ -1,3 +1,7 @@
+/*
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
 #include "kis_auto_brush_factory_test.h"
 
 #include <QTest>

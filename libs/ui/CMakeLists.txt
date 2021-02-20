@@ -159,6 +159,7 @@ set(kritaui_LIB_SRCS
     kis_stopgradient_editor.cpp
     KisWelcomePageWidget.cpp
     KisChangeCloneLayersCommand.cpp
+    KisGenericGradientEditor.cpp
 
     kisexiv2/kis_exif_io.cpp
     kisexiv2/kis_exiv2.cpp
@@ -207,7 +208,7 @@ set(kritaui_LIB_SRCS
     tool/strokes/KisStrokeEfficiencyMeasurer.cpp
     tool/strokes/kis_painter_based_stroke_strategy.cpp
     tool/strokes/kis_filter_stroke_strategy.cpp
-    tool/strokes/kis_color_picker_stroke_strategy.cpp
+    tool/strokes/kis_color_sampler_stroke_strategy.cpp
     tool/strokes/KisFreehandStrokeInfo.cpp
     tool/strokes/KisMaskedFreehandStrokePainter.cpp
     tool/strokes/KisMaskingBrushRenderer.cpp
@@ -271,7 +272,7 @@ set(kritaui_LIB_SRCS
     widgets/kis_elided_label.cpp
     widgets/kis_stopgradient_slider_widget.cpp
     widgets/kis_preset_live_preview_view.cpp
-    widgets/KisScreenColorPicker.cpp
+    widgets/KisScreenColorSampler.cpp
     widgets/KoDualColorButton.cpp
     widgets/KoStrokeConfigWidget.cpp
     widgets/KoFillConfigWidget.cpp
@@ -314,6 +315,7 @@ set(kritaui_LIB_SRCS
     input/KisQtWidgetsTweaker.cpp
     input/KisInputActionGroup.cpp
     input/kis_zoom_and_rotate_action.cpp
+    input/KisCanvasOnlyAction.cpp
 
     operations/kis_operation.cpp
     operations/kis_operation_configuration.cpp
@@ -414,9 +416,13 @@ set(kritaui_LIB_SRCS
 
     KoDocumentInfoDlg.cpp
     KoDocumentInfo.cpp
+
+    StoryboardItem.cpp
+
+    KisNodeActivationActionCreatorVisitor.cpp
 )
 
-if (SeExpr2_FOUND)
+if (KSeExpr_FOUND)
     set(kritaui_LIB_SRCS ${kritaui_LIB_SRCS}
         widgets/kis_seexpr_script_chooser.cpp
     )

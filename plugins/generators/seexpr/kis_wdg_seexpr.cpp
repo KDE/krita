@@ -1,21 +1,9 @@
 /*
  * This file is part of Krita
  *
- * Copyright (c) 2020 L. E. Segovia <amy@amyspark.me>
+ * SPDX-FileCopyrightText: 2020 L. E. Segovia <amy@amyspark.me>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include <KisDialogStateSaver.h>
@@ -23,9 +11,10 @@
 #include <KoColor.h>
 #include <KoResourceServer.h>
 #include <KoResourceServerProvider.h>
-#include <SeExpr2/UI/ErrorMessages.h>
+#include <KSeExprUI/ErrorMessages.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_icon.h>
+#include <kis_config.h>
 
 #include "SeExprExpressionContext.h"
 #include "generator.h"
@@ -92,11 +81,17 @@ KisWdgSeExpr::KisWdgSeExpr(QWidget *parent)
 
     togglePresetRenameUIActive(false); // reset the UI state of renaming a preset if we are changing presets
     slotUpdatePresetSettings();        // disable everything until a preset is selected
+
+    m_widget->splitter->restoreState(KisConfig(true).readEntry("seExpr/splitLayoutState", QByteArray())); // restore splitter state
+    m_widget->tabWidget->setCurrentIndex(KisConfig(true).readEntry("seExpr/selectedTab",  -1));               // save currently selected tab
 }
 
 KisWdgSeExpr::~KisWdgSeExpr()
 {
     KisDialogStateSaver::saveState(m_widget->txtEditor, "krita/generators/seexpr");
+    KisConfig(false).writeEntry("seExpr/splitLayoutState", m_widget->splitter->saveState()); // save splitter state
+    KisConfig(false).writeEntry("seExpr/selectedTab", m_widget->tabWidget->currentIndex()); // save currently selected tab
+
     delete m_saveDialog;
     delete m_widget;
 }
@@ -159,7 +154,10 @@ void KisWdgSeExpr::slotResourceSelected(KoResourceSP resource)
         m_widget->currentBrushNameLabel->setText(formattedBrushName);
         m_widget->renameBrushNameTextField->setText(m_currentPreset->name());
         // get the preset image and pop it into the thumbnail area on the top of the brush editor
-        m_widget->presetThumbnailicon->setPixmap(QPixmap::fromImage(m_currentPreset->image().scaled(55, 55, Qt::KeepAspectRatio, Qt::SmoothTransformation)));
+        QSize thumbSize = QSize(55, 55)*devicePixelRatioF();
+        QPixmap thumbnail = QPixmap::fromImage(m_currentPreset->image().scaled(thumbSize, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        thumbnail.setDevicePixelRatio(devicePixelRatioF());
+        m_widget->presetThumbnailicon->setPixmap(thumbnail);
 
         togglePresetRenameUIActive(false); // reset the UI state of renaming a brush if we are changing brush presets
         slotUpdatePresetSettings();        // check to see if the dirty preset icon needs to be shown
@@ -295,7 +293,7 @@ void KisWdgSeExpr::isValid()
     QString script = m_widget->txtEditor->getExpr();
     SeExprExpressionContext expression(script);
 
-    expression.setDesiredReturnType(SeExpr2::ExprType().FP(3));
+    expression.setDesiredReturnType(KSeExpr::ExprType().FP(3));
 
     expression.m_vars["u"] = new SeExprVariable();
     expression.m_vars["v"] = new SeExprVariable();

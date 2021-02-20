@@ -1,10 +1,14 @@
 <!DOCTYPE RCC>
+<!--
+  SPDX-FileCopyrightText: none
+  SPDX-License-Identifier: CC0-1.0
+-->
 <RCC version="1.0">
     <qresource>
-        <file>color-picker_image_background.xpm</file>
-        <file>color-picker_image_foreground.xpm</file>
-        <file>color-picker_layer_background.xpm</file>
-        <file>color-picker_layer_foreground.xpm</file>
+        <file>color-sampler_image_background.xpm</file>
+        <file>color-sampler_image_foreground.xpm</file>
+        <file>color-sampler_layer_background.xpm</file>
+        <file>color-sampler_layer_foreground.xpm</file>
         <file>cursor-cross.xpm</file>
         <file>cursor-pixel-white.xpm</file>
         <file>cursor-pixel-black.xpm</file>
@@ -23,6 +27,6 @@
         <file>zoom_discrete.xpm</file>
         <file>zoom_smooth.xpm</file>
         <file>tool_freehand_cursor.png</file>
-        <file>tool_color_picker_cursor.png</file>
+        <file>tool_color_sampler_cursor.png</file>
     </qresource>
 </RCC>

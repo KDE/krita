@@ -1,20 +1,7 @@
-/* This file is part of the KDE project
- * Copyright (C) 2011 Jan Hambrecht <jaham@gmx.net>
+﻿/* This file is part of the KDE project
+ * SPDX-FileCopyrightText: 2011 Jan Hambrecht <jaham@gmx.net>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #include "SvgLoadingContext.h"
@@ -177,10 +164,15 @@ QString SvgLoadingContext::relativeFilePath(const QString &href)
 
     QString result = href;
 
+    QFileInfo info(href);
+    if (info.isRelative())
+        return href;
+
+
     if (!gc->xmlBaseDir.isEmpty()) {
-        result = gc->xmlBaseDir + '/' + href;
+        result = QDir(gc->xmlBaseDir).relativeFilePath(href);
     } else if (!d->initialXmlBaseDir.isEmpty()) {
-        result = d->initialXmlBaseDir + '/' + href;
+        result = QDir(d->initialXmlBaseDir).relativeFilePath(href);
     }
 
     return QDir::cleanPath(result);
@@ -284,6 +276,11 @@ void SvgLoadingContext::parseProfile(const KoXmlElement &element)
     } else {
         debugFlake << "WARNING: couldn't load SVG profile" << ppVar(name) << ppVar(href) << ppVar(uniqueId);
     }
+}
+
+QHash<QString, const KoColorProfile *> SvgLoadingContext::profiles()
+{
+    return d->profiles;
 }
 
 bool SvgLoadingContext::isRootContext() const

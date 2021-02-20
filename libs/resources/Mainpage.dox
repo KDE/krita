@@ -5,13 +5,21 @@
   like brush presets, brush tips or gradients. The following components play an
   important role in the library:
 
-  - KisResourceModel: the public entry point to the library. This is a QAbstractItemModel
-    and can be used to represent resources in the user interface without loading the
-    actual resource until it is needed. KisResourceModel is available through KisResourceModelProvider.
+  - KisResourceModel: This model can be used to access resources without loading
+    the actual resource until it is needed.
 
-    There is only one instance of a KisResourceModel for a given resource type, and KisResourceModel
-    can only be used from the gui thread. Accessing the data() method will in general not load the
-    actual resource.
+  - KisTagResourceModel: this model represents the intersection between tags and resources and
+    can be used to tag and untag resources.
+
+  - KisTagModel: this model represents tags. It can be used create tags and activate or deactivate
+    tags.
+
+  These three models are accessed through KisResourceModelProvider. The models themselves are
+  proxy models that allow filtering by active or inactive state or the resource, tag or storage.
+
+  - KisTagFilterResourceProxyModel. This model should be used in resource choosers. Under the
+    hood it switches between KisResourceModel and KisTagResourceModel based on whether the
+    widget is filtering by tag or not.
 
   - KisResourceLocator: KisResourceLocator should not be used outside of the resources library.
     Its task is to load the resources from the resource storages: resource storages are the
@@ -25,7 +33,7 @@
     KisResourceLocator is also repsonsible for initializing the cache database.
 
   - KisResourceCacheDB: this class creates the sqlite database and handles synchronizing resources
-    with he contents of storages.
+    with the contents of storages.
 
  */
 

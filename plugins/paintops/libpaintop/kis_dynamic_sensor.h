@@ -1,20 +1,8 @@
 /*
- *  Copyright (c) 2006 Cyrille Berger <cberger@cberger.net>
- *  Copyright (c) 2011 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  SPDX-FileCopyrightText: 2006 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2011 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
- *  This library is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This library is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU Lesser General Public License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #ifndef _KIS_DYNAMIC_SENSOR_H_
@@ -85,6 +73,17 @@ enum DynamicSensorType {
     TANGENTIAL_PRESSURE,
     SENSORS_LIST,
     PRESSURE_IN,
+
+    MYPAINT_PRESSURE,
+    MYPAINT_FINE_SPEED,
+    MYPAINT_GROSS_SPEED,
+    MYPAINT_RANDOM,
+    MYPAINT_STROKE,
+    MYPAINT_DIRECTION,
+    MYPAINT_DECLINATION,
+    MYPAINT_ASCENSION,
+    MYPAINT_CUSTOM,
+
     UNKNOWN = 255
 };
 
@@ -142,30 +141,15 @@ public:
         return id2Sensor(KoID(s), parentOptionName);
     }
 
-    static DynamicSensorType id2Type(const KoID& id);
-    static DynamicSensorType id2Type(const QString& s) {
-        return id2Type(KoID(s));
-    }
-
-    /**
-     * type2Sensor creates a new sensor for the give type
-     */
-    static KisDynamicSensorSP type2Sensor(DynamicSensorType sensorType, const QString &parentOptionName);
-
-    static QString minimumLabel(DynamicSensorType sensorType);
-    static QString maximumLabel(DynamicSensorType sensorType, int max = -1);
-    static int minimumValue(DynamicSensorType sensorType);
-    static int maximumValue(DynamicSensorType sensorType, int max = -1);
-    static QString valueSuffix(DynamicSensorType sensorType);
+    virtual QString minimumLabel(DynamicSensorType sensorType);
+    virtual QString maximumLabel(DynamicSensorType sensorType, int max = -1);
+    virtual int minimumValue(DynamicSensorType sensorType);
+    virtual int maximumValue(DynamicSensorType sensorType, int max = -1);
+    virtual QString valueSuffix(DynamicSensorType sensorType);
 
     static KisDynamicSensorSP createFromXML(const QString&, const QString &parentOptionName);
     static KisDynamicSensorSP createFromXML(const QDomElement&, const QString &parentOptionName);
 
-    /**
-     * @return the list of sensors
-     */
-    static QList<KoID> sensorsIds();
-    static QList<DynamicSensorType> sensorsTypes();
 
     /**
      * @return the identifier of this sensor
@@ -198,6 +182,7 @@ public:
      * @return the currently set length or -1 if not relevant
      */
     int length() { return m_length; }
+    QString identifier();
 
 
 public:
@@ -214,15 +199,15 @@ protected:
     virtual qreal value(const KisPaintInformation& info) = 0;
 
     int m_length;
-
-private:
-
-    Q_DISABLE_COPY(KisDynamicSensor)
+    QString m_id;
 
     DynamicSensorType m_type;
     bool m_customCurve;
     KisCubicCurve m_curve;
     bool m_active;
+
+private:
+    Q_DISABLE_COPY(KisDynamicSensor)
 
 };
 

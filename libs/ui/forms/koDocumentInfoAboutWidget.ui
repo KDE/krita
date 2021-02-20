@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>KoDocumentInfoAboutWidget</class>
  <widget class="QWidget" name="KoDocumentInfoAboutWidget">
   <property name="geometry">
@@ -11,14 +15,14 @@
    </rect>
   </property>
   <layout class="QGridLayout">
-   <item row="10" column="1">
+   <item column="1" row="10">
     <widget class="QLabel" name="lblModified">
      <property name="text">
       <string/>
      </property>
     </widget>
    </item>
-   <item row="11" column="0">
+   <item column="0" row="11">
     <widget class="QLabel" name="lblLastPrintedDesc">
      <property name="text">
       <string>Last printed:</string>
@@ -28,14 +32,14 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="1" colspan="2">
+   <item colspan="2" column="1" row="0">
     <widget class="QLabel" name="filePathLabel">
      <property name="text">
       <string/>
      </property>
     </widget>
    </item>
-   <item row="10" column="0">
+   <item column="0" row="10">
     <widget class="QLabel" name="lblModifiedDesc">
      <property name="text">
       <string>Modified:</string>
@@ -45,21 +49,21 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="0" colspan="3">
+   <item colspan="3" column="0" row="1">
     <widget class="Line" name="filePathSeparatorLine">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
     </widget>
    </item>
-   <item row="7" column="0" colspan="3">
+   <item colspan="3" column="0" row="7">
     <widget class="Line" name="line_2">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
     </widget>
    </item>
-   <item row="5" column="0">
+   <item column="0" row="5">
     <widget class="QLabel" name="lblLicense">
      <property name="text">
       <string>License/Rights:</string>
@@ -69,10 +73,10 @@
      </property>
     </widget>
    </item>
-   <item row="5" column="1" colspan="2">
+   <item colspan="2" column="1" row="5">
     <widget class="QLineEdit" name="leLicense"/>
    </item>
-   <item row="8" column="0">
+   <item column="0" row="8">
     <widget class="QLabel" name="lblTypeDesc">
      <property name="text">
       <string>Type:</string>
@@ -82,7 +86,7 @@
      </property>
     </widget>
    </item>
-   <item row="4" column="0">
+   <item column="0" row="4">
     <widget class="QLabel" name="lblKeywordsDesc">
      <property name="text">
       <string>&amp;Keywords:</string>
@@ -95,7 +99,7 @@
      </property>
     </widget>
    </item>
-   <item row="13" column="0">
+   <item column="0" row="13">
     <widget class="QLabel" name="lblRevisionDesc">
      <property name="text">
       <string>Revision number:</string>
@@ -105,20 +109,20 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="1" colspan="2">
+   <item colspan="2" column="1" row="3">
     <widget class="QLineEdit" name="leSubject"/>
    </item>
-   <item row="4" column="1" colspan="2">
+   <item colspan="2" column="1" row="4">
     <widget class="QLineEdit" name="leKeywords">
      <property name="text">
       <string/>
      </property>
     </widget>
    </item>
-   <item row="2" column="1" colspan="2">
+   <item colspan="2" column="1" row="2">
     <widget class="QLineEdit" name="leTitle"/>
    </item>
-   <item row="9" column="0">
+   <item column="0" row="9">
     <widget class="QLabel" name="lblCreatedDesc">
      <property name="text">
       <string>Created:</string>
@@ -128,7 +132,7 @@
      </property>
     </widget>
    </item>
-   <item row="12" column="0">
+   <item column="0" row="12">
     <widget class="QLabel" name="lblEditingDesc">
      <property name="text">
       <string>Total editing ti&amp;me:</string>
@@ -141,7 +145,7 @@
      </property>
     </widget>
    </item>
-   <item row="6" column="0">
+   <item column="0" row="6">
     <widget class="QLabel" name="lbCommentsDesc">
      <property name="text">
       <string>Description:</string>
@@ -154,14 +158,14 @@
      </property>
     </widget>
    </item>
-   <item row="12" column="1">
+   <item column="1" row="12">
     <widget class="QLabel" name="lblEditing">
      <property name="text">
       <string/>
      </property>
     </widget>
    </item>
-   <item row="0" column="0">
+   <item column="0" row="0">
     <widget class="QLabel" name="filePathInfoLabel">
      <property name="text">
       <string>Path:</string>
@@ -171,14 +175,14 @@
      </property>
     </widget>
    </item>
-   <item row="9" column="1">
+   <item column="1" row="9">
     <widget class="QLabel" name="lblCreated">
      <property name="text">
       <string/>
      </property>
     </widget>
    </item>
-   <item row="12" column="2">
+   <item column="2" row="12">
     <widget class="QPushButton" name="pbReset">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -194,31 +198,31 @@
      </property>
     </widget>
    </item>
-   <item row="13" column="1">
+   <item column="1" row="13">
     <widget class="QLabel" name="lblRevision">
      <property name="text">
       <string/>
      </property>
     </widget>
    </item>
-   <item row="6" column="1" colspan="2">
+   <item colspan="2" column="1" row="6">
     <widget class="QTextEdit" name="meDescription"/>
    </item>
-   <item row="8" column="1">
+   <item column="1" row="8">
     <widget class="QLabel" name="lblType">
      <property name="text">
       <string/>
      </property>
     </widget>
    </item>
-   <item row="11" column="1">
+   <item column="1" row="11">
     <widget class="QLabel" name="lblLastPrinted">
      <property name="text">
       <string/>
      </property>
     </widget>
    </item>
-   <item row="2" column="0">
+   <item column="0" row="2">
     <widget class="QLabel" name="lblTitleDesc">
      <property name="text">
       <string comment="Document title">Title:</string>
@@ -231,7 +235,7 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="0">
+   <item column="0" row="3">
     <widget class="QLabel" name="lblSubjectDesc">
      <property name="text">
       <string>Sub&amp;ject:</string>

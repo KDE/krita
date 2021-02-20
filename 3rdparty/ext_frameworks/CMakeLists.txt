@@ -15,6 +15,21 @@ SET(EXTPREFIX_frameworks "${EXTPREFIX}" )
 # On Linux:
 #        KCrash
 
+if (ANDROID)
+ExternalProject_Add(
+    ext_extra_cmake_modules
+    DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+    URL https://download.kde.org/stable/frameworks/5.76/extra-cmake-modules-5.76.0.tar.xz
+    URL_MD5 a64a6393a66ea17a37f9bc9876554ac9
+    INSTALL_DIR ${EXTPREFIX_frameworks}
+    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_frameworks}
+               -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE}
+                ${GLOBAL_PROFILE}
+                -DCMAKE_SYSTEM_PREFIX_PATH=${EXTPREFIX}
+                -DBUILD_TESTING=false
+    UPDATE_COMMAND ""
+)
+else()
 ExternalProject_Add(
     ext_extra_cmake_modules
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
@@ -29,6 +44,7 @@ ExternalProject_Add(
                 -DBUILD_TESTING=false
     UPDATE_COMMAND ""
 )
+endif()
 
 ExternalProject_Add(
     ext_kconfig

@@ -8,14 +8,92 @@
                   android:name="org.krita.android.MainActivity"
                   android:label="Krita"
                   android:screenOrientation="unspecified"
-                  android:launchMode="singleTop">
+                  android:resizeableActivity="true"
+                  android:theme="@style/DefaultTheme"
+                  android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
-			</intent-filter>
+            </intent-filter>
             <intent-filter>
                 <action android:name="com.samsung.android.support.REMOTE_ACTION" />
             </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.EDIT" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:scheme="content" />
+                <data android:scheme="file" />
+
+                <data android:mimeType="application/x-xcf" />
+                <data android:mimeType="image/jpeg" />
+                <data android:mimeType="image/x-r32" />
+                <data android:mimeType="image/x-r16" />
+                <data android:mimeType="image/x-r8" />
+                <data android:mimeType="image/openraster" />
+                <data android:mimeType="image/x-xpixmap" />
+                <data android:mimeType="image/x-xbitmap" />
+                <data android:mimeType="image/webp" />
+                <data android:mimeType="image/vnd.microsoft.icon" />
+                <data android:mimeType="image/x-portable-pixmap" />
+                <data android:mimeType="image/x-portable-graymap" />
+                <data android:mimeType="image/x-portable-bitmap" />
+                <data android:mimeType="image/x-psd" />
+                <data android:mimeType="image/photoshop" />
+                <data android:mimeType="image/x-photoshop" />
+                <data android:mimeType="image/vnd.adobe.photoshop" />
+                <data android:mimeType="image/x-psb" />
+                <data android:mimeType="image/heic" />
+                <data android:mimeType="image/svg+xml" />
+                <data android:mimeType="image/jp2" />
+                <data android:mimeType="image/j2k" />
+                <data android:mimeType="image/x-exr" />
+                <data android:mimeType="image/x-tga" />
+                <data android:mimeType="image/png" />
+                <data android:mimeType="image/gif" />
+                <data android:mimeType="image/tiff" />
+                <data android:mimeType="image/x-krita-raw" />
+
+                <data android:mimeType="text/csv" />
+                <data android:mimeType="application/x-krita" />
+                <data android:mimeType="application/x-krita-archive" />
+                <data android:mimeType="application/x-extension-exr" />
+                <data android:mimeType="application/x-krita-paintoppreset" />
+                <data android:mimeType="application/pdf" />
+
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.EDIT" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:scheme="file" />
+                <data android:scheme="content" />
+                <data android:mimeType="*/*" />
+
+                <!-- NOTE: if host and scheme aren't provided path attributes are ignored  -->
+                <data android:host="*" android:pathPattern=".*\\.kra.*"/>
+                <data android:host="*" android:pathPattern=".*\\.krz.*"/>
+            </intent-filter>
+
+            <!-- without mimeType -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.EDIT" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:scheme="file" />
+                <data android:scheme="content" />
+
+                <!-- NOTE: if host and scheme aren't provided path attributes are ignored  -->
+                <data android:host="*" android:pathPattern=".*\\.kra.*"/>
+                <data android:host="*" android:pathPattern=".*\\.krz.*"/>
+            </intent-filter>
+
             <meta-data
                 android:name="com.samsung.android.support.REMOTE_ACTION"
                 android:resource="@xml/remote_action"/>

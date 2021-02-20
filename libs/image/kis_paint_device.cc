@@ -1,20 +1,8 @@
 /*
- *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2002 Patrick Julien <freak@codepimps.org>
+ *  SPDX-FileCopyrightText: 2004 Boudewijn Rempt <boud@valdyas.org>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_paint_device.h"
@@ -1110,7 +1098,7 @@ void KisPaintDevice::makeFullCopyFrom(const KisPaintDevice &rhs, KritaUtils::Dev
         KIS_ASSERT_RECOVER_RETURN(rhs.m_d->framesInterface);
         KIS_ASSERT_RECOVER_RETURN(rhs.m_d->contentChannel);
         m_d->framesInterface.reset(new KisPaintDeviceFramesInterface(this));
-        m_d->contentChannel.reset(new KisRasterKeyframeChannel(*rhs.m_d->contentChannel.data(), newParentNode, this));
+        m_d->contentChannel.reset(new KisRasterKeyframeChannel(*rhs.m_d->contentChannel.data(), this));
     }
 
     setDefaultBounds(rhs.m_d->defaultBounds);
@@ -2044,7 +2032,7 @@ KisRasterKeyframeChannel *KisPaintDevice::createKeyframeChannel(const KoID &id)
 
     Q_ASSERT(!m_d->contentChannel);
     if (m_d->parent.isValid()) {
-        m_d->contentChannel.reset(new KisRasterKeyframeChannel(id, this, m_d->parent));
+        m_d->contentChannel.reset(new KisRasterKeyframeChannel(id, this, new KisDefaultBoundsNodeWrapper(m_d->parent)));
     } else {
         //fallback when paint device is isolated / does not belong to a node.
         m_d->contentChannel.reset(new KisRasterKeyframeChannel(id, this, m_d->defaultBounds));

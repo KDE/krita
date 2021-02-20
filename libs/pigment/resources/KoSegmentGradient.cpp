@@ -1,27 +1,17 @@
 /*
-   Copyright (c) 2000 Matthias Elter <elter@kde.org>
-                 2001 John Califf
-                 2004 Boudewijn Rempt <boud@valdyas.org>
-                 2004 Adrian Page <adrian@pagenet.plus.com>
-                 2004, 2007 Sven Langkamp <sven.langkamp@gmail.com>
+    SPDX-FileCopyrightText: 2000 Matthias Elter <elter@kde.org>
+    SPDX-FileCopyrightText: 2001 John Califf
+    SPDX-FileCopyrightText: 2004 Boudewijn Rempt <boud@valdyas.org>
+    SPDX-FileCopyrightText: 2004 Adrian Page <adrian@pagenet.plus.com>
+    SPDX-FileCopyrightText: 2004, 2007 Sven Langkamp <sven.langkamp@gmail.com>
+    SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
 
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+    SPDX-License-Identifier: LGPL-2.1-or-later
  */
 
 #include <resources/KoSegmentGradient.h>
 
+#include <array>
 #include <cfloat>
 #include <cmath>
 
@@ -33,18 +23,18 @@
 #include <QDomElement>
 #include <QBuffer>
 
-#include <kis_dom_utils.h>
-
-#include "KoColorSpaceRegistry.h"
-#include "KoColorSpace.h"
-#include "KoMixColorsOp.h"
-#include <KoColorModelStandardIds.h>
-
 #include <DebugPigment.h>
-#include <klocalizedstring.h>
-
 #include <KoCanvasResourcesIds.h>
 #include <KoCanvasResourcesInterface.h>
+#include <KoColorModelStandardIds.h>
+#include <kis_dom_utils.h>
+#include <kis_global.h>
+#include <klocalizedstring.h>
+
+#include "KoColor.h"
+#include "KoColorSpace.h"
+#include "KoColorSpaceRegistry.h"
+#include "KoMixColorsOp.h"
 
 KoGradientSegment::RGBColorInterpolationStrategy *KoGradientSegment::RGBColorInterpolationStrategy::m_instance = 0;
 KoGradientSegment::HSVCWColorInterpolationStrategy *KoGradientSegment::HSVCWColorInterpolationStrategy::m_instance = 0;
@@ -124,7 +114,7 @@ bool KoSegmentGradient::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP r
 
     dbgPigment << "Number of segments = " << numSegments;
 
-    const KoColorSpace* rgbColorSpace = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *rgbColorSpace = KoColorSpaceRegistry::instance()->rgb16(KoColorSpaceRegistry::instance()->p709SRGBProfile());
 
     for (int i = 0; i < numSegments; i++) {
 
@@ -157,20 +147,20 @@ bool KoSegmentGradient::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP r
         else {
             startType = endType = COLOR_ENDPOINT;
         }
-        quint8 data[4];
-        data[2] = static_cast<quint8>(leftRed * 255 + 0.5);
-        data[1] = static_cast<quint8>(leftGreen * 255 + 0.5);
-        data[0] = static_cast<quint8>(leftBlue * 255 + 0.5);
-        data[3] = static_cast<quint8>(leftAlpha * OPACITY_OPAQUE_U8 + 0.5);
+        std::array<quint16, 4> data;
+        data[2] = static_cast<quint16>(leftRed * quint16_MAX + 0.5);
+        data[1] = static_cast<quint16>(leftGreen * quint16_MAX + 0.5);
+        data[0] = static_cast<quint16>(leftBlue * quint16_MAX + 0.5);
+        data[3] = static_cast<quint16>(leftAlpha * quint16_MAX + 0.5);
 
-        KoColor leftColor(data, rgbColorSpace);
+        KoColor leftColor(reinterpret_cast<quint8 *>(data.data()), rgbColorSpace);
 
-        data[2] = static_cast<quint8>(rightRed * 255 + 0.5);
-        data[1] = static_cast<quint8>(rightGreen * 255 + 0.5);
-        data[0] = static_cast<quint8>(rightBlue * 255 + 0.5);
-        data[3] = static_cast<quint8>(rightAlpha * OPACITY_OPAQUE_U8 + 0.5);
+        data[2] = static_cast<quint16>(rightRed * quint16_MAX + 0.5);
+        data[1] = static_cast<quint16>(rightGreen * quint16_MAX + 0.5);
+        data[0] = static_cast<quint16>(rightBlue * quint16_MAX + 0.5);
+        data[3] = static_cast<quint16>(rightAlpha * quint16_MAX + 0.5);
 
-        KoColor rightColor(data, rgbColorSpace);
+        KoColor rightColor(reinterpret_cast<quint8 *>(data.data()), rgbColorSpace);
         KoGradientSegmentEndpoint left(leftOffset, leftColor, startType);
         KoGradientSegmentEndpoint right(rightOffset, rightColor, endType);
 
@@ -214,7 +204,7 @@ bool KoSegmentGradient::saveToDevice(QIODevice *dev) const
                     << QString::number(endColor.blueF(), 'f') << " " << QString::number(endColor.alphaF(), 'f') << " ";
 
         fileContent << (int)segment->interpolation() << " " << (int)segment->colorInterpolation() << " ";
-        
+
         fileContent << (int)segment->startType() << " " << (int)segment->endType() << "\n";
 
     }
@@ -363,7 +353,7 @@ KoGradientSegment::KoGradientSegment(int interpolationType, int colorInterpolati
         m_start.offset = 0;
     } else if (m_start.offset > 1 - DBL_EPSILON) {
         m_start.offset = 1;
-    } 
+    }
 
     if (middleOffset < m_start.offset + DBL_EPSILON) {
         m_middleOffset = m_start.offset;
@@ -621,7 +611,7 @@ bool KoGradientSegment::isValid() const
 }
 
 KoGradientSegment::RGBColorInterpolationStrategy::RGBColorInterpolationStrategy()
-    : m_colorSpace(KoColorSpaceRegistry::instance()->rgb8())
+    : m_colorSpace(KoColorSpaceRegistry::instance()->rgb16(KoColorSpaceRegistry::instance()->p709SRGBProfile()))
 {
 }
 
@@ -637,51 +627,22 @@ KoGradientSegment::RGBColorInterpolationStrategy *KoGradientSegment::RGBColorInt
 
 void KoGradientSegment::RGBColorInterpolationStrategy::colorAt(KoColor& dst, qreal t, const KoColor& _start, const KoColor& _end) const
 {
+    const KoColorSpace *mixSpace = dst.colorSpace();
 
-    KoColor buffer(m_colorSpace);
-    KoColor start(m_colorSpace);
-    KoColor end(m_colorSpace);
+    KoColor startDummy(_start, mixSpace);
+    KoColor endDummy(_end, mixSpace);
 
-    KoColor startDummy, endDummy;
-    //hack to get a color space with the bitdepth of the gradients(8bit), but with the colour profile of the image//
-    const KoColorSpace* mixSpace = KoColorSpaceRegistry::instance()->rgb8(dst.colorSpace()->profile());
-    //convert to the right colorspace for the start and end if we have our mixSpace.
-    if (mixSpace){
-        startDummy = KoColor(_start, mixSpace);
-        endDummy = KoColor(_end, mixSpace);
-    } else {
-        startDummy = _start;
-        endDummy = _end;
-    }
+    const std::array<quint8*, 2> colors = {{startDummy.data(), endDummy.data()}};
 
-    start.fromKoColor(_start);
-    end.fromKoColor(_end);
+    std::array<qint16, 2> colorWeights{};
+    colorWeights[0] = std::lround((1.0 - t) * qint16_MAX);
+    colorWeights[1] = qint16_MAX - colorWeights[0];
 
-    const quint8 *colors[2];
-    colors[0] = startDummy.data();
-    colors[1] = endDummy.data();
-
-    qint16 colorWeights[2];
-    colorWeights[0] = static_cast<quint8>((1.0 - t) * 255 + 0.5);
-    colorWeights[1] = 255 - colorWeights[0];
-
-    //check if our mixspace exists, it doesn't at startup.
-    if (mixSpace){
-        if (*buffer.colorSpace() != *mixSpace) {
-            buffer = KoColor(mixSpace);
-        }
-        mixSpace->mixColorsOp()->mixColors(colors, colorWeights, 2, buffer.data());
-    }
-    else {
-        buffer = KoColor(m_colorSpace);
-        m_colorSpace->mixColorsOp()->mixColors(colors, colorWeights, 2, buffer.data());
-    }
-
-    dst.fromKoColor(buffer);
+    mixSpace->mixColorsOp()->mixColors(colors.data(), colorWeights.data(), 2, dst.data(), qint16_MAX);
 }
 
 KoGradientSegment::HSVCWColorInterpolationStrategy::HSVCWColorInterpolationStrategy()
-    : m_colorSpace(KoColorSpaceRegistry::instance()->rgb8())
+    : m_colorSpace(KoColorSpaceRegistry::instance()->rgb16(KoColorSpaceRegistry::instance()->p709SRGBProfile()))
 {
 }
 
@@ -716,17 +677,17 @@ void KoGradientSegment::HSVCWColorInterpolationStrategy::colorAt(KoColor& dst, q
             h -= 360;
         }
     }
-    // XXX: added an explicit cast. Is this correct?
-    quint8 opacity = static_cast<quint8>(sc.alpha() + t * (ec.alpha() - sc.alpha()));
+
+    qreal opacity{sc.alphaF() + t * (ec.alphaF() - sc.alphaF())};
 
     QColor result;
     result.setHsv(h, s, v);
-    result.setAlpha(opacity);
+    result.setAlphaF(opacity);
     dst.fromQColor(result);
 }
 
-KoGradientSegment::HSVCCWColorInterpolationStrategy::HSVCCWColorInterpolationStrategy() :
-    m_colorSpace(KoColorSpaceRegistry::instance()->rgb8())
+KoGradientSegment::HSVCCWColorInterpolationStrategy::HSVCCWColorInterpolationStrategy()
+    : m_colorSpace(KoColorSpaceRegistry::instance()->rgb16(KoColorSpaceRegistry::instance()->p709SRGBProfile()))
 {
 }
 
@@ -762,12 +723,12 @@ void KoGradientSegment::HSVCCWColorInterpolationStrategy::colorAt(KoColor& dst, 
             h -= 360;
         }
     }
-    // XXX: Added an explicit static cast
-    quint8 opacity = static_cast<quint8>(sc.alpha() + t * (se.alpha() - sc.alpha()));
+
+    qreal opacity = sc.alphaF() + t * (se.alphaF() - sc.alphaF());
 
     QColor result;
     result.setHsv(h, s, v);
-    result.setAlpha(opacity);
+    result.setAlphaF(opacity);
     dst.fromQColor(result);
 }
 
@@ -1063,6 +1024,35 @@ bool KoSegmentGradient::removeSegmentPossible() const
 const QList<KoGradientSegment *>& KoSegmentGradient::segments() const
 {
     return m_segments;
+}
+
+void KoSegmentGradient::setSegments(const QList<KoGradientSegment*> &segments)
+{
+    for (int i = 0; i < m_segments.count(); i++) {
+        delete m_segments[i];
+    }
+    m_segments.clear();
+    KoColor color;
+    for (const KoGradientSegment *segment : segments) {
+        KoGradientSegment *newSegment =
+            new KoGradientSegment(
+                segment->interpolation(),
+                segment->colorInterpolation(),
+                KoGradientSegmentEndpoint(
+                    segment->startOffset(),
+                    segment->startColor().convertedTo(colorSpace()),
+                    segment->startType()
+                ),
+                KoGradientSegmentEndpoint(
+                    segment->endOffset(),
+                    segment->endColor().convertedTo(colorSpace()),
+                    segment->endType()
+                ),
+                segment->middleOffset()
+            );
+        m_segments.append(newSegment);
+    }
+    updatePreview();
 }
 
 QList<int> KoSegmentGradient::requiredCanvasResources() const

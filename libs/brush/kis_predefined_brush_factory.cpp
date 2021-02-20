@@ -1,19 +1,7 @@
 /*
- *  Copyright (c) 2013 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2013 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_predefined_brush_factory.h"
@@ -42,6 +30,7 @@ KisBrushSP KisPredefinedBrushFactory::createBrush(const QDomElement& brushDefini
     const QString brushFileName = brushDefinition.attribute("filename", "");
     KisBrushSP brush = resourceSourceAdapter.resourceForFilename(brushFileName);
 
+    bool brushtipFound = true;
     //Fallback for files that still use the old format
     if (!brush) {
         QFileInfo info(brushFileName);
@@ -50,6 +39,7 @@ KisBrushSP KisPredefinedBrushFactory::createBrush(const QDomElement& brushDefini
 
     if (!brush) {
         brush = resourceSourceAdapter.fallbackResource();
+        brushtipFound = false;
     }
 
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(brush, 0);
@@ -80,12 +70,24 @@ KisBrushSP KisPredefinedBrushFactory::createBrush(const QDomElement& brushDefini
         colorfulBrush->setContrastAdjustment(brushDefinition.attribute("ContrastAdjustment").toDouble());
     }
 
-    if (brushDefinition.hasAttribute("preserveLightness")) {
+    auto legacyBrushApplication = [] (KisColorfulBrush *colorfulBrush, bool forceColorToAlpha) {
+        /**
+         * In Krita versions before 4.4 series "ColorAsMask" could
+         * be overridden to false when the brush had no **color**
+         * inside. That changed in Krita 4.4.x series, when
+         * "brushApplication" replaced all the automatic heuristics
+         */
+        return colorfulBrush && colorfulBrush->hasColorAndTransparency() && !forceColorToAlpha ? IMAGESTAMP : ALPHAMASK;
+    };
+
+
+    if (!brushtipFound) {
+        brush->setBrushApplication(ALPHAMASK);
+    } 
+    else if (brushDefinition.hasAttribute("preserveLightness")) {
         const int preserveLightness = KisDomUtils::toInt(brushDefinition.attribute("preserveLightness", "0"));
         const bool useColorAsMask = (bool)brushDefinition.attribute("ColorAsMask", "1").toInt();
-
-        brush->setBrushApplication(preserveLightness ? LIGHTNESSMAP : 
-                    colorfulBrush && colorfulBrush->hasColor() && !useColorAsMask ? IMAGESTAMP : ALPHAMASK);
+        brush->setBrushApplication(preserveLightness ? LIGHTNESSMAP : legacyBrushApplication(colorfulBrush, useColorAsMask));
     }
     else if (brushDefinition.hasAttribute("brushApplication")) {
         enumBrushApplication brushApplication = static_cast<enumBrushApplication>(KisDomUtils::toInt(brushDefinition.attribute("brushApplication", "0")));
@@ -95,9 +97,14 @@ KisBrushSP KisPredefinedBrushFactory::createBrush(const QDomElement& brushDefini
         KIS_SAFE_ASSERT_RECOVER_NOOP(colorfulBrush);
 
         const bool useColorAsMask = (bool)brushDefinition.attribute("ColorAsMask", "1").toInt();
-        brush->setBrushApplication(colorfulBrush && colorfulBrush->hasColor() && !useColorAsMask ? IMAGESTAMP : ALPHAMASK);
+        brush->setBrushApplication(legacyBrushApplication(colorfulBrush, useColorAsMask));
     } else {
-        brush->setBrushApplication(ALPHAMASK);
+        /**
+         * In Krita versions before 4.4 series we used to automatrically select
+         * the brush application depending on the presence of the color in the
+         * brush, even when there was no "ColorAsMask" field.
+         */
+        brush->setBrushApplication(legacyBrushApplication(colorfulBrush, false));
     }
 
     return brush;

@@ -1,6 +1,5 @@
 set(kritakraimport_SOURCES
     kra_import.cpp
-    kra_converter.cpp
 )
 
 add_library(kritakraimport MODULE ${kritakraimport_SOURCES})
@@ -11,7 +10,6 @@ install(TARGETS kritakraimport  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 
 set(kritakraexport_SOURCES
     kra_export.cpp
-    kra_converter.cpp
 )
 
 add_library(kritakraexport MODULE ${kritakraexport_SOURCES})

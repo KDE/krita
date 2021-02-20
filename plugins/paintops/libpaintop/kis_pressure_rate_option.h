@@ -1,3 +1,7 @@
+/*
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
 #ifndef KIS_PRESSURE_RATE_OPTION_H
 #define KIS_PRESSURE_RATE_OPTION_H
 

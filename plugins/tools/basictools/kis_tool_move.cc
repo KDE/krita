@@ -1,23 +1,11 @@
 /*
- *  Copyright (c) 1999 Matthias Elter  <me@kde.org>
- *                1999 Michael Koch    <koch@kde.org>
- *                2002 Patrick Julien <freak@codepimps.org>
- *                2004 Boudewijn Rempt <boud@valdyas.org>
- *                2016 Michael Abrahams <miabraha@gmail.com>
+ *  SPDX-FileCopyrightText: 1999 Matthias Elter <me@kde.org>
+ *  SPDX-FileCopyrightText: 1999 Michael Koch <koch@kde.org>
+ *  SPDX-FileCopyrightText: 2002 Patrick Julien <freak@codepimps.org>
+ *  SPDX-FileCopyrightText: 2004 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2016 Michael Abrahams <miabraha@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_tool_move.h"
@@ -85,10 +73,6 @@ KisToolMove::KisToolMove(KoCanvasBase *canvas)
     m_showCoordinatesAction->setChecked(m_optionsWidget->showCoordinates());
 
     m_optionsWidget->slotSetTranslate(m_handlesRect.topLeft() + currentOffset());
-
-    connect(m_optionsWidget, SIGNAL(sigSetTranslateX(int)), SLOT(moveBySpinX(int)), Qt::UniqueConnection);
-    connect(m_optionsWidget, SIGNAL(sigSetTranslateY(int)), SLOT(moveBySpinY(int)), Qt::UniqueConnection);
-    connect(m_optionsWidget, SIGNAL(sigRequestCommitOffsetChanges()), this, SLOT(commitChanges()), Qt::UniqueConnection);
 
     connect(this, SIGNAL(moveInNewPosition(QPoint)), m_optionsWidget, SLOT(slotSetTranslate(QPoint)), Qt::UniqueConnection);
 }
@@ -240,6 +224,12 @@ bool KisToolMove::startStrokeImpl(MoveToolMode mode, const QPoint *pos)
 
         strategy = moveStrategy;
         nodes = nodeSelection.selectedNodes;
+    }
+
+    {
+        KConfigGroup group = KSharedConfig::openConfig()->group(toolId());
+        const bool forceLodMode = group.readEntry("forceLodMode", true);
+        strategy->setForceLodModeIfPossible(forceLodMode);
     }
 
     // disable outline feedback until the stroke calcualtes
@@ -411,6 +401,9 @@ void KisToolMove::activate(ToolActivation toolActivation, const QSet<KoShape*> &
 
     connect(m_showCoordinatesAction, SIGNAL(triggered(bool)), m_optionsWidget, SLOT(setShowCoordinates(bool)), Qt::UniqueConnection);
     connect(m_optionsWidget, SIGNAL(showCoordinatesChanged(bool)), m_showCoordinatesAction, SLOT(setChecked(bool)), Qt::UniqueConnection);
+    connect(m_optionsWidget, SIGNAL(sigSetTranslateX(int)), SLOT(moveBySpinX(int)), Qt::UniqueConnection);
+    connect(m_optionsWidget, SIGNAL(sigSetTranslateY(int)), SLOT(moveBySpinY(int)), Qt::UniqueConnection);
+    connect(m_optionsWidget, SIGNAL(sigRequestCommitOffsetChanges()), this, SLOT(commitChanges()), Qt::UniqueConnection);
 
     connect(&m_changesTracker,
             SIGNAL(sigConfigChanged(KisToolChangesTrackerDataSP)),
@@ -486,7 +479,7 @@ void KisToolMove::endPrimaryAction(KoPointerEvent *event)
 void KisToolMove::beginAlternateAction(KoPointerEvent *event, AlternateAction action)
 {
     // Ctrl+Right click toggles between moving current layer and moving layer w/ content
-    if (action == PickFgNode || action == PickBgImage) {
+    if (action == SampleFgNode || action == SampleBgImage) {
         MoveToolMode mode = moveToolMode();
 
         if (mode == MoveSelectedLayer) {
@@ -724,14 +717,21 @@ QPoint KisToolMove::applyModifiers(Qt::KeyboardModifiers modifiers, QPoint pos)
 
 void KisToolMove::moveBySpinX(int newX)
 {
-    if (mode() == KisTool::PAINT_MODE) return;  // Don't interact with dragging
-    if (!currentNode()->isEditable()) return; // Don't move invisible nodes
+    if (mode() == KisTool::PAINT_MODE ||    // Don't interact with dragging
+            !currentNode()->isEditable() || // Don't move invisible nodes
+            m_handlesRect.isEmpty()) {
+        return;
+    }
+
+    // starting a new stroke resets m_handlesRect and it gets updated asynchronously,
+    // but in this case no change is expected
+    int handlesRectX = m_handlesRect.x();
 
     if (startStrokeImpl(MoveSelectedLayer, 0)) {
         setMode(KisTool::PAINT_MODE);
     }
 
-    m_accumulatedOffset.rx() =  newX - m_handlesRect.x();
+    m_accumulatedOffset.rx() =  newX - handlesRectX;
 
     image()->addJob(m_strokeId, new MoveStrokeStrategy::Data(m_accumulatedOffset));
 
@@ -741,14 +741,21 @@ void KisToolMove::moveBySpinX(int newX)
 
 void KisToolMove::moveBySpinY(int newY)
 {
-    if (mode() == KisTool::PAINT_MODE) return;  // Don't interact with dragging
-    if (!currentNode()->isEditable()) return; // Don't move invisible nodes
+    if (mode() == KisTool::PAINT_MODE ||    // Don't interact with dragging
+            !currentNode()->isEditable() || // Don't move invisible nodes
+            m_handlesRect.isEmpty()) {
+        return;
+    }
+
+    // starting a new stroke resets m_handlesRect and it gets updated asynchronously,
+    // but in this case no change is expected
+    int handlesRectY = m_handlesRect.y();
 
     if (startStrokeImpl(MoveSelectedLayer, 0)) {
         setMode(KisTool::PAINT_MODE);
     }
 
-    m_accumulatedOffset.ry() =  newY - m_handlesRect.y();
+    m_accumulatedOffset.ry() =  newY - handlesRectY;
 
     image()->addJob(m_strokeId, new MoveStrokeStrategy::Data(m_accumulatedOffset));
 

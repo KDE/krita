@@ -58,6 +58,7 @@ set(kritaimage_LIB_SRCS
    kis_marker_painter.cpp
    KisPrecisePaintDeviceWrapper.cpp
    kis_progress_updater.cpp
+   KisAnimatedOpacityProperty.cpp
    brushengine/kis_paint_information.cc
    brushengine/kis_random_source.cpp
    brushengine/KisPerStrokeRandomSource.cpp
@@ -322,10 +323,13 @@ set(kritaimage_LIB_SRCS
 
    kis_node_query_path.cc
 
+   KisTranslateLayerNamesVisitor.cpp
 
-    kis_asl_layer_style_serializer.cpp
-    KisAslStorage.cpp
-    kis_psd_layer_style.cpp
+   kis_asl_layer_style_serializer.cpp
+   KisAslStorage.cpp
+   kis_psd_layer_style.cpp
+   KisBezierGradientMesh.cpp
+   KisBezierTransformMesh.cpp
 )
 
 set(einspline_SRCS

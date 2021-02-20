@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgClonesArray</class>
  <widget class="QWidget" name="WdgClonesArray">
   <property name="geometry">
@@ -258,32 +262,6 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="9">
-      <widget class="KisDoubleParseSpinBox" name="columnAngle">
-       <property name="suffix">
-        <string notr="true">°</string>
-       </property>
-       <property name="minimum">
-        <double>-360.000000000000000</double>
-       </property>
-       <property name="maximum">
-        <double>360.000000000000000</double>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="9">
-      <widget class="KisDoubleParseSpinBox" name="rowAngle">
-       <property name="suffix">
-        <string notr="true">°</string>
-       </property>
-       <property name="minimum">
-        <double>-360.000000000000000</double>
-       </property>
-       <property name="maximum">
-        <double>360.000000000000000</double>
-       </property>
-      </widget>
-     </item>
      <item row="1" column="8">
       <widget class="KisDoubleParseSpinBox" name="columnDistance">
        <property name="suffix">
@@ -303,6 +281,12 @@
         <double>10000.000000000000000</double>
        </property>
       </widget>
+     </item>
+     <item row="1" column="9">
+      <widget class="KisAngleSelector" name="columnAngle" native="true"/>
+     </item>
+     <item row="2" column="9">
+      <widget class="KisAngleSelector" name="rowAngle" native="true"/>
      </item>
     </layout>
    </item>
@@ -359,6 +343,12 @@
    <extends>QDoubleSpinBox</extends>
    <header>kis_double_parse_spin_box.h</header>
   </customwidget>
+  <customwidget>
+   <class>KisAngleSelector</class>
+   <extends>QWidget</extends>
+   <header location="global">KisAngleSelector.h</header>
+   <container>1</container>
+  </customwidget>
  </customwidgets>
  <tabstops>
   <tabstop>numNegativeColumns</tabstop>
@@ -371,8 +361,6 @@
   <tabstop>rowYOffset</tabstop>
   <tabstop>columnDistance</tabstop>
   <tabstop>rowDistance</tabstop>
-  <tabstop>columnAngle</tabstop>
-  <tabstop>rowAngle</tabstop>
   <tabstop>columnPreference</tabstop>
  </tabstops>
  <resources/>

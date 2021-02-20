@@ -1,20 +1,9 @@
 /*
- *  Copyright (c) 2002 Patrick Julien  <freak@codepimps.org>
- *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2002 Patrick Julien <freak@codepimps.org>
+ *  SPDX-FileCopyrightText: 2004 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
- *  This library is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; either version 2.1 of the License, or
- *  (at your option) any later version.
- *
- *  This library is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU Lesser General Public License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: LGPL-2.1-or-later
  */
 #include "RgbU8ColorSpace.h"
 
@@ -24,13 +13,14 @@
 
 #include <klocalizedstring.h>
 
-#include <KoIntegerMaths.h>
-#include <KoColorSpaceRegistry.h>
-#include <KoColorConversions.h>
 #include "compositeops/KoCompositeOps.h"
 #include "compositeops/RgbCompositeOps.h"
-#include <kis_dom_utils.h>
+#include "dithering/KisRgbDitherOpFactory.h"
+#include <KoColorConversions.h>
 #include <KoColorSpacePreserveLightnessUtils.h>
+#include <KoColorSpaceRegistry.h>
+#include <KoIntegerMaths.h>
+#include <kis_dom_utils.h>
 
 #define downscale(quantum)  (quantum) //((unsigned char) ((quantum)/257UL))
 #define upscale(value)  (value) // ((quint8) (257UL*(value)))
@@ -46,6 +36,7 @@ RgbU8ColorSpace::RgbU8ColorSpace(const QString &name, KoColorProfile *p) :
     init();
 
     addStandardCompositeOps<KoBgrU8Traits>(this);
+    addStandardDitherOps<KoBgrU8Traits>(this);
 
     addCompositeOp(new RgbCompositeOpIn<KoBgrU8Traits>(this));
     addCompositeOp(new RgbCompositeOpOut<KoBgrU8Traits>(this));

@@ -1,20 +1,9 @@
 /*
- *  Copyright (c) 2013 Dmitry Kazakov <dimula73@gmail.com>
- *  Copyright (c) 2013 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  SPDX-FileCopyrightText: 2013 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2013 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  SPDX-FileCopyrightText: 2020-2021 L. E. Segovia <amy@amyspark.me>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #ifndef __KIS_IMPORT_GMIC_PROCESSING_VISITOR_H
@@ -41,6 +30,10 @@ public:
                                    const KisSelectionSP selection
                                   );
 
+    static void applyLayerNameChanges(const gmic_image<float> &srcGmicImage,
+                                   KisNode *node,
+                                   KisPaintDeviceSP dst
+                                   );
 
     static void gmicImageToPaintDevice(gmic_image<float>& srcGmicImage,
                                        KisPaintDeviceSP dstPaintDevice,

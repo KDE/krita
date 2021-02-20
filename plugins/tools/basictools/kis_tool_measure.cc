@@ -1,20 +1,8 @@
 /*
  *
- *  Copyright (c) 2007 Sven Langkamp <sven.langkamp@gmail.com>
+ *  SPDX-FileCopyrightText: 2007 Sven Langkamp <sven.langkamp@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_tool_measure.h"
@@ -36,7 +24,9 @@
 #include "KoCanvasBase.h"
 #include <KoViewConverter.h>
 #include "krita_utils.h"
-
+#include "kis_floating_message.h"
+#include "kis_canvas2.h"
+#include "KisViewManager.h"
 #define INNER_RADIUS 50
 
 KisToolMeasureOptionsWidget::KisToolMeasureOptionsWidget(QWidget* parent, double resolution)
@@ -134,7 +124,11 @@ void KisToolMeasure::paint(QPainter& gc, const KoViewConverter &converter)
 
     gc.setPen(old);
 }
-
+void KisToolMeasure::showDistanceAngleOnCanvas()
+{
+    KisCanvas2 *kisCanvas =dynamic_cast<KisCanvas2*>(canvas());
+    kisCanvas->viewManager()->showFloatingMessage(i18n("%1 %2\n%3°",m_optionsWidget->m_distanceLabel->text(),m_optionsWidget->m_unit.symbol(),QString::number(angle(),'f',1)),QIcon(), 2000, KisFloatingMessage::High);
+}
 void KisToolMeasure::beginPrimaryAction(KoPointerEvent *event)
 {
     setMode(KisTool::PAINT_MODE);
@@ -169,6 +163,7 @@ void KisToolMeasure::continuePrimaryAction(KoPointerEvent *event)
     canvas()->updateCanvas(convertToPt(boundingRect()));
     emit sigDistanceChanged(distance());
     emit sigAngleChanged(angle());
+    showDistanceAngleOnCanvas();
 }
 
 void KisToolMeasure::endPrimaryAction(KoPointerEvent *event)

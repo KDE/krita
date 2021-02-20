@@ -1,24 +1,12 @@
 
 /*
- *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2007 Sven Langkamp <sven.langkamp@gmail.com>
+ *  SPDX-FileCopyrightText: 2004 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2007 Sven Langkamp <sven.langkamp@gmail.com>
  *
  *  The outline algorithm uses the limn algorithm of fontutils by
  *  Karl Berry <karl@cs.umb.edu> and Kathryn Hargreaves <letters@cs.umb.edu>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_selection_manager.h"
@@ -124,6 +112,9 @@ void KisSelectionManager::setup(KisActionManager* actionManager)
 
     m_pasteAsReference = actionManager->createAction("paste_as_reference");
     connect(m_pasteAsReference, SIGNAL(triggered()), this, SLOT(pasteAsReference()));
+
+    m_pasteShapeStyle = actionManager->createAction("paste_shape_style");
+    connect(m_pasteShapeStyle, SIGNAL(triggered()), this, SLOT(pasteShapeStyle()));
 
     m_copyMerged = actionManager->createAction("copy_merged");
     connect(m_copyMerged, SIGNAL(triggered()), this, SLOT(copyMerged()));
@@ -388,6 +379,12 @@ void KisSelectionManager::pasteAsReference()
 void KisSelectionManager::pasteNew()
 {
     KisPasteNewActionFactory factory;
+    factory.run(m_view);
+}
+
+void KisSelectionManager::pasteShapeStyle()
+{
+    KisPasteShapeStyleActionFactory factory;
     factory.run(m_view);
 }
 

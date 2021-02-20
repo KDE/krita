@@ -1,20 +1,8 @@
 /*
- *  Copyright (c) 2004,2007,2009 Cyrille Berger <cberger@cberger.net>
- *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  SPDX-FileCopyrightText: 2004, 2007, 2009 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 
@@ -41,6 +29,7 @@
 #include "kis_signals_blocker.h"
 #include "kis_signal_compressor.h"
 #include "kis_aspect_ratio_locker.h"
+#include <KisAngleSelector.h>
 
 
 #define showSlider(input, step) input->setRange(input->minimum(), input->maximum(), step)
@@ -95,11 +84,8 @@ KisAutoBrushWidget::KisAutoBrushWidget(QWidget *parent, const char* name)
     inputRandomness->setBlockUpdateSignalOnDrag(true);
     connect(inputRandomness, SIGNAL(valueChanged(qreal)), m_updateCompressor.data(), SLOT(start()));
 
-    inputAngle->setRange(0, 360);
-    inputAngle->setSuffix(QChar(Qt::Key_degree));
-    inputAngle->setValue(0);
-    inputAngle->setBlockUpdateSignalOnDrag(true);
-    connect(inputAngle, SIGNAL(valueChanged(int)), m_updateCompressor.data(), SLOT(start()));
+    inputAngle->setDecimals(0);
+    connect(inputAngle, SIGNAL(angleChanged(qreal)), m_updateCompressor.data(), SLOT(start()));
 
     connect(spacingWidget, SIGNAL(sigSpacingChanged()), m_updateCompressor.data(), SLOT(start()));
 
@@ -188,7 +174,7 @@ void KisAutoBrushWidget::paramChanged()
     }
     Q_CHECK_PTR(kas);
 
-    m_autoBrush = KisBrushSP(new KisAutoBrush(kas, inputAngle->value() / 180.0 * M_PI, inputRandomness->value() / 100.0, density->value() / 100.0));
+    m_autoBrush = KisBrushSP(new KisAutoBrush(kas, inputAngle->angle() / 180.0 * M_PI, inputRandomness->value() / 100.0, density->value() / 100.0));
     m_autoBrush->setSpacing(spacingWidget->spacing());
     m_autoBrush->setAutoSpacing(spacingWidget->autoSpacingActive(), spacingWidget->autoSpacingCoeff());
     m_brush = m_autoBrush->image();
@@ -261,7 +247,7 @@ void KisAutoBrushWidget::setBrush(KisBrushSP brush)
     inputRatio->setValue(aBrush->maskGenerator()->ratio());
     inputHFade->setValue(aBrush->maskGenerator()->horizontalFade());
     inputVFade->setValue(aBrush->maskGenerator()->verticalFade());
-    inputAngle->setValue(aBrush->angle() * 180 / M_PI);
+    inputAngle->setAngle(aBrush->angle() * 180 / M_PI);
     inputSpikes->setValue(aBrush->maskGenerator()->spikes());
     spacingWidget->setSpacing(aBrush->autoSpacingActive(),
                               aBrush->autoSpacingActive() ?

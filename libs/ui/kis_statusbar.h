@@ -1,20 +1,8 @@
 /* This file is part of KimageShop^WKrayon^WKrita
  *
- *  Copyright (c) 2003-200^ Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2003-2006 Boudewijn Rempt <boud@valdyas.org>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 #ifndef KIS_STATUSBAR_H
 #define KIS_STATUSBAR_H
@@ -30,11 +18,13 @@
 class QLabel;
 class QToolButton;
 class QPushButton;
+class QBoxLayout;
 class KSqueezedTextLabel;
 class KisViewManager;
 class KisProgressWidget;
 class KoProgressUpdater;
 class KisMemoryReportButton;
+class KisAngleSelector;
 
 #include "kritaui_export.h"
 
@@ -87,6 +77,9 @@ public:
 
     KoProgressUpdater *progressUpdater();
 
+    void addExtraWidget(QWidget *widget);
+    void removeExtraWidget(QWidget *widget);
+
 public Q_SLOTS:
 
     void documentMousePositionChanged(const QPointF &p);
@@ -100,6 +93,8 @@ public Q_SLOTS:
 private Q_SLOTS:
     void updateSelectionIcon();
     void showMemoryInfoToolTip();
+    void slotCanvasAngleSelectorAngleChanged(qreal angle);
+    void slotCanvasRotationChanged();
 
 Q_SIGNALS:
     void sigCancellationRequested();
@@ -125,7 +120,9 @@ private:
     QToolButton *m_selectionStatus;
     KisMemoryReportButton *m_memoryReportBox;
     QLabel *m_pointerPositionLabel;
-    QToolButton *m_resetAngleButton;
+    QWidget *m_extraWidgetsParent;
+    QBoxLayout *m_extraWidgetsLayout;
+    KisAngleSelector *m_canvasAngleSelector;
     QToolButton *m_fullscreenToggle;
 
     KSqueezedTextLabel *m_statusBarStatusLabel;

@@ -1,19 +1,7 @@
 /*
-    Copyright (C) 2011 Silvio Heinrich <plassy@web.de>
+    SPDX-FileCopyrightText: 2011 Silvio Heinrich <plassy@web.de>
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License along
-    with this program; if not, write to the Free Software Foundation, Inc.,
-    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include <QPaintDevice>
@@ -436,10 +424,15 @@ void KisColorSelector::recalculateAreas(quint8 numLightPieces)
     m_renderArea     = QRect(x+stripThick, y, size, size);
     m_lightStripArea = QRect(0, 0, stripThick, QWidget::height());
 
-    m_renderBuffer   = QImage(size, size, QImage::Format_ARGB32_Premultiplied);
-    m_colorPreviewBuffer   = QImage(QWidget::width(), QWidget::height(), QImage::Format_ARGB32_Premultiplied);
-    m_maskBuffer   = QImage(size, size, QImage::Format_ARGB32_Premultiplied);
-    m_lightStripBuffer = QImage(stripThick, QWidget::height(), QImage::Format_ARGB32_Premultiplied);
+    m_renderBuffer   = QImage(size*devicePixelRatioF(), size*devicePixelRatioF(), QImage::Format_ARGB32_Premultiplied);
+    m_colorPreviewBuffer   = QImage(QWidget::width()*devicePixelRatioF(), QWidget::height()*devicePixelRatioF(), QImage::Format_ARGB32_Premultiplied);
+    m_maskBuffer   = QImage(size*devicePixelRatioF(), size*devicePixelRatioF(), QImage::Format_ARGB32_Premultiplied);
+    m_lightStripBuffer = QImage(stripThick*devicePixelRatioF(), QWidget::height()*devicePixelRatioF(), QImage::Format_ARGB32_Premultiplied);
+
+    m_renderBuffer.setDevicePixelRatio(devicePixelRatioF());
+    m_colorPreviewBuffer.setDevicePixelRatio(devicePixelRatioF());
+    m_maskBuffer.setDevicePixelRatio(devicePixelRatioF());
+    m_lightStripBuffer.setDevicePixelRatio(devicePixelRatioF());
 
     m_numLightPieces = numLightPieces;
 

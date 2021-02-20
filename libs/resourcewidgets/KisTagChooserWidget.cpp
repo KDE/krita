@@ -1,27 +1,14 @@
 /*
  *    This file is part of the KDE project
- *    Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *    Copyright (c) 2007 Jan Hambrecht <jaham@gmx.net>
- *    Copyright (c) 2007 Sven Langkamp <sven.langkamp@gmail.com>
- *    Copyright (C) 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
- *    Copyright (c) 2011 José Luis Vergara <pentalis@gmail.com>
- *    Copyright (c) 2013 Sascha Suelzer <s.suelzer@gmail.com>
- *    Copyright (c) 2020 Agata Cacko <cacko.azh@gmail.com>
+ *    SPDX-FileCopyrightText: 2002 Patrick Julien <freak@codepimps.org>
+ *    SPDX-FileCopyrightText: 2007 Jan Hambrecht <jaham@gmx.net>
+ *    SPDX-FileCopyrightText: 2007 Sven Langkamp <sven.langkamp@gmail.com>
+ *    SPDX-FileCopyrightText: 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
+ *    SPDX-FileCopyrightText: 2011 José Luis Vergara <pentalis@gmail.com>
+ *    SPDX-FileCopyrightText: 2013 Sascha Suelzer <s.suelzer@gmail.com>
+ *    SPDX-FileCopyrightText: 2020 Agata Cacko <cacko.azh@gmail.com>
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Library General Public
- *    License as published by the Free Software Foundation; either
- *    version 2 of the License, or (at your option) any later version.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Library General Public License for more details.
- *
- *    You should have received a copy of the GNU Library General Public License
- *    along with this library; see the file COPYING.LIB.  If not, write to
- *    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- *    Boston, MA 02110-1301, USA.
+ *    SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #include "KisTagChooserWidget.h"
@@ -39,34 +26,28 @@
 #include "KisResourceItemChooserContextMenu.h"
 #include "KisTagToolButton.h"
 #include "kis_debug.h"
-#include <KisActiveFilterTagProxyModel.h>
 
 class Q_DECL_HIDDEN KisTagChooserWidget::Private
 {
 public:
     QComboBox *comboBox;
     KisTagToolButton *tagToolButton;
-    KisTagModel* model;
-    QScopedPointer<KisActiveFilterTagProxyModel> activeFilterModel;
+    KisTagModel *model;
     KisTagSP rememberedTag;
-
-    Private(KisTagModel* model)
-        : activeFilterModel(new KisActiveFilterTagProxyModel(0))
-    {
-        activeFilterModel->setSourceModel(model);
-    }
 };
 
-KisTagChooserWidget::KisTagChooserWidget(KisTagModel* model, QWidget* parent)
+KisTagChooserWidget::KisTagChooserWidget(KisTagModel *model, QWidget* parent)
     : QWidget(parent)
-    , d(new Private(model))
+    , d(new Private)
 {
+
     d->comboBox = new QComboBox(this);
 
     d->comboBox->setToolTip(i18n("Tag"));
-    d->comboBox->setSizePolicy(QSizePolicy::MinimumExpanding , QSizePolicy::Fixed );
-
-    d->comboBox->setModel(d->activeFilterModel.data());
+    d->comboBox->setSizePolicy(QSizePolicy::MinimumExpanding , QSizePolicy::Fixed);
+    d->comboBox->setInsertPolicy(QComboBox::InsertAlphabetically);
+    model->sort(KisAllTagsModel::Name);
+    d->comboBox->setModel(model);
 
     d->model = model;
 
@@ -75,6 +56,7 @@ KisTagChooserWidget::KisTagChooserWidget(KisTagModel* model, QWidget* parent)
     comboLayout->addWidget(d->comboBox, 0, 0);
 
     d->tagToolButton = new KisTagToolButton(this);
+    d->tagToolButton->setToolTip(i18n("Tag options"));
     comboLayout->addWidget(d->tagToolButton, 0, 1);
 
     comboLayout->setSpacing(0);
@@ -88,20 +70,17 @@ KisTagChooserWidget::KisTagChooserWidget(KisTagModel* model, QWidget* parent)
     connect(d->tagToolButton, SIGNAL(popupMenuAboutToShow()),
             this, SLOT (tagToolContextMenuAboutToShow()));
 
-    connect(d->tagToolButton, SIGNAL(newTagRequested(KisTagSP)),
-            this, SLOT(tagToolCreateNewTag(KisTagSP)));
+    connect(d->tagToolButton, SIGNAL(newTagRequested(QString)),
+            this, SLOT(addTag(QString)));
 
     connect(d->tagToolButton, SIGNAL(deletionOfCurrentTagRequested()),
             this, SLOT(tagToolDeleteCurrentTag()));
 
-    connect(d->tagToolButton, SIGNAL(renamingOfCurrentTagRequested(KisTagSP)),
-            this, SLOT(tagToolRenameCurrentTag(KisTagSP)));
+    connect(d->tagToolButton, SIGNAL(renamingOfCurrentTagRequested(const QString&)),
+            this, SLOT(tagToolRenameCurrentTag(const QString&)));
+
     connect(d->tagToolButton, SIGNAL(undeletionOfTagRequested(KisTagSP)),
             this, SLOT(tagToolUndeleteLastTag(KisTagSP)));
-
-    connect(d->model, SIGNAL(modelAboutToBeReset()), this, SLOT(slotModelAboutToBeReset()));
-    connect(d->model, SIGNAL(modelReset()), this, SLOT(slotModelReset()));
-
 
 }
 
@@ -114,38 +93,46 @@ void KisTagChooserWidget::tagToolDeleteCurrentTag()
 {
     KisTagSP currentTag = currentlySelectedTag();
     if (!currentTag.isNull() && currentTag->id() >= 0) {
-        d->model->removeTag(currentTag);
+        d->model->setTagInactive(currentTag);
         setCurrentIndex(0);
         d->tagToolButton->setUndeletionCandidate(currentTag);
+        d->model->sort(KisAllTagsModel::Name);
     }
 }
 
 void KisTagChooserWidget::tagChanged(int tagIndex)
 {
     if (tagIndex >= 0) {
-        emit sigTagChosen(currentlySelectedTag());
+        KisTagSP tag = currentlySelectedTag();
+        d->tagToolButton->setCurrentTag(tag);
+        d->model->sort(KisAllTagsModel::Name);
+        emit sigTagChosen(tag);
     }
 }
 
-void KisTagChooserWidget::tagToolRenameCurrentTag(const KisTagSP newName)
+void KisTagChooserWidget::tagToolRenameCurrentTag(const QString& tagName)
 {
-    // TODO: RESOURCES: it should use QString, not KisTagSP
-    KisTagSP currentTag = currentlySelectedTag();
-    QString name = newName.isNull() ? "" : newName->name();
-    bool canRenameCurrentTag = !currentTag.isNull() && currentTag->id() < 0;
-    if (canRenameCurrentTag && !name.isEmpty()) {
-        d->model->renameTag(currentTag, newName->name());
+    KisTagSP tag = currentlySelectedTag();
+    bool canRenameCurrentTag = !tag.isNull();
+
+    if (canRenameCurrentTag && !tagName.isEmpty()) {
+        tag->setName(tagName);
+        bool result = d->model->renameTag(tag);
+        Q_ASSERT(result);
+        d->model->sort(KisAllTagsModel::Name);
     }
 }
 
-void KisTagChooserWidget::tagToolUndeleteLastTag(const KisTagSP tag)
+void KisTagChooserWidget::tagToolUndeleteLastTag(KisTagSP tag)
 {
     int previousIndex = d->comboBox->currentIndex();
-    bool success = d->model->changeTagActive(tag, true);
+
+    bool success = d->model->setTagActive(tag);
     setCurrentIndex(previousIndex);
     if (success) {
         d->tagToolButton->setUndeletionCandidate(KisTagSP());
-        setCurrentItem(tag);
+        setCurrentItem(tag->name());
+        d->model->sort(KisAllTagsModel::Name);
     }
 }
 
@@ -159,45 +146,34 @@ int KisTagChooserWidget::currentIndex() const
     return d->comboBox->currentIndex();
 }
 
-bool KisTagChooserWidget::setCurrentItem(KisTagSP tag)
+void KisTagChooserWidget::setCurrentItem(const QString &tag)
 {
     for (int i = 0; i < d->model->rowCount(); i++) {
         QModelIndex index = d->model->index(i, 0);
-        KisTagSP temp = d->model->tagForIndex(index);
-        if (!temp.isNull() && temp->url() == tag->url()) {
+        QString currentRowTag = d->model->data(index, Qt::UserRole + KisAllTagsModel::Name).toString();
+        if (currentRowTag == tag) {
             setCurrentIndex(i);
-            return true;
         }
     }
-    return false;
 }
 
-KisTagSP KisTagChooserWidget::tagToolCreateNewTag(KisTagSP tag)
+void KisTagChooserWidget::addTag(const QString &tag)
 {
-    // TODO: RESOURCES: this function should use QString, not KisTagSP
-    int previous = d->comboBox->currentIndex();
+    addTag(tag, 0);
+}
 
-    if(tag.isNull() || tag->name().isNull() || tag->name().isEmpty()) {
-        return KisTagSP();
-    }
+void KisTagChooserWidget::addTag(const QString &tagName, KoResourceSP resource)
+{
+    d->model->addTag(tagName, {resource});
+    d->model->sort(KisAllTagsModel::Name);
+    setCurrentItem(tagName);
+}
 
-    tag->setUrl(tag->name());
-    tag->setComment(tag->name());
-    tag->setActive(true);
-    tag->setValid(true);
-    bool added = d->model->addTag(tag);
-
-    if (added) {
-        bool found = setCurrentItem(tag);
-        if (found) {
-            return currentlySelectedTag();
-        } else {
-            return KisTagSP();
-        }
-    }
-
-    setCurrentIndex(previous);
-    return KisTagSP();
+void KisTagChooserWidget::addTag(KisTagSP tag, KoResourceSP resource)
+{
+    d->model->addTag(tag, {resource});
+    d->model->sort(KisAllTagsModel::Name);
+    setCurrentItem(tag->name());
 }
 
 KisTagSP KisTagChooserWidget::currentlySelectedTag()
@@ -212,26 +188,13 @@ KisTagSP KisTagChooserWidget::currentlySelectedTag()
     return tag;
 }
 
-bool KisTagChooserWidget::selectedTagIsReadOnly()
+void KisTagChooserWidget::updateIcons()
 {
-    return currentlySelectedTag()->id() < 0;
+    d->tagToolButton->loadIcon();
 }
 
 void KisTagChooserWidget::tagToolContextMenuAboutToShow()
 {
     /* only enable the save button if the selected tag set is editable */
-    d->tagToolButton->readOnlyMode(selectedTagIsReadOnly());
-}
-
-void KisTagChooserWidget::slotModelAboutToBeReset()
-{
-    d->rememberedTag = currentlySelectedTag();
-}
-
-void KisTagChooserWidget::slotModelReset()
-{
-    bool selected = setCurrentItem(d->rememberedTag);
-    if (!selected) {
-        setCurrentIndex(0); // last used tag was most probably removed
-    }
+    d->tagToolButton->readOnlyMode(currentlySelectedTag()->id() < 0);
 }

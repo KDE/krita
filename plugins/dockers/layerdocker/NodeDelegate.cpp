@@ -1,22 +1,9 @@
 /*
-  Copyright (c) 2006 Gábor Lehel <illissius@gmail.com>
-  Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
-  Copyright (c) 2011 José Luis Vergara <pentalis@gmail.com>
+  SPDX-FileCopyrightText: 2006 Gábor Lehel <illissius@gmail.com>
+  SPDX-FileCopyrightText: 2008 Cyrille Berger <cberger@cberger.net>
+  SPDX-FileCopyrightText: 2011 José Luis Vergara <pentalis@gmail.com>
 
-  This library is free software; you can redistribute it and/or
-  modify it under the terms of the GNU Library General Public
-  License as published by the Free Software Foundation; either
-  version 2 of the License, or (at your option) any later version.
-
-  This library is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-  Library General Public License for more details.
-
-  You should have received a copy of the GNU Library General Public License
-  along with this library; see the file COPYING.LIB.  If not, write to
-  the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-  Boston, MA 02110-1301, USA.
+  SPDX-License-Identifier: LGPL-2.0-or-later
 */
 #include "kis_config.h"
 #include "NodeDelegate.h"
@@ -214,7 +201,7 @@ void NodeDelegate::drawColorLabel(QPainter *p, const QStyleOptionViewItem &optio
 {
     KisNodeViewColorScheme scm;
     const int label = index.data(KisNodeModel::ColorLabelIndexRole).toInt();
-    QColor color = scm.colorLabel(label);
+    QColor color = scm.colorFromLabelIndex(label);
     if (color.alpha() <= 0) return;
 
     QColor bgColor = qApp->palette().color(QPalette::Base);
@@ -326,9 +313,13 @@ void NodeDelegate::drawThumbnail(QPainter *p, const QStyleOptionViewItem &option
     KisNodeViewColorScheme scm;
 
     const int thumbSize = scm.thumbnailSize();
+    const qreal devicePixelRatio = p->device()->devicePixelRatioF();
+    const int thumbSizeHighRes = thumbSize*devicePixelRatio;
+
     const qreal oldOpacity = p->opacity(); // remember previous opacity
 
-    QImage img = index.data(int(KisNodeModel::BeginThumbnailRole) + thumbSize).value<QImage>();
+    QImage img = index.data(int(KisNodeModel::BeginThumbnailRole) + thumbSizeHighRes).value<QImage>();
+    img.setDevicePixelRatio(devicePixelRatio);
     if (!(option.state & QStyle::State_Enabled)) {
         p->setOpacity(0.35);
     }
@@ -348,18 +339,19 @@ void NodeDelegate::drawThumbnail(QPainter *p, const QStyleOptionViewItem &option
     fitRect = kisGrowRect(fitRect, -(scm.thumbnailMargin()+scm.border()));
 
     QPoint offset;
-    offset.setX((fitRect.width() - img.width()) / 2);
-    offset.setY((fitRect.height() - img.height()) / 2);
+    offset.setX((fitRect.width() - img.width()/devicePixelRatio) / 2);
+    offset.setY((fitRect.height() - img.height()/devicePixelRatio) / 2);
     offset += fitRect.topLeft();
 
     QBrush brush(checkers);
     p->setBrushOrigin(offset);
-    p->fillRect(img.rect().translated(offset), brush);
+    QRect imageRectLowRes = QRect(img.rect().topLeft(), img.rect().size()/devicePixelRatio);
+    p->fillRect(imageRectLowRes.translated(offset), brush);
 
     p->drawImage(offset, img);
     p->setOpacity(oldOpacity); // restore old opacity
 
-    QRect borderRect = kisGrowRect(img.rect(), 1).translated(offset);
+    QRect borderRect = kisGrowRect(imageRectLowRes, 1).translated(offset);
     KritaUtils::renderExactRect(p, borderRect, scm.gridColor(option, d->view));
 }
 

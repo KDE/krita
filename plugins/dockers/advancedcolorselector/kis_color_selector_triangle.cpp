@@ -1,18 +1,7 @@
 /*
- *  Copyright (c) 2010 Adam Celarek <kdedev at xibo dot at>
+ *  SPDX-FileCopyrightText: 2010 Adam Celarek <kdedev at xibo dot at>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_color_selector_triangle.h"
@@ -36,17 +25,17 @@ KisColorSelectorTriangle::KisColorSelectorTriangle(KisColorSelector* parent) :
 
 bool KisColorSelectorTriangle::containsPointInComponentCoords(int x, int y) const
 {
-    QPoint triangleCoords = widgetToTriangleCoordinates(QPoint(x, y));
+    QPoint triangleCoords = widgetToTriangleCoordinates(QPoint(x, y))*m_cacheDevicePixelRatioF;
 
     if (!m_realPixelCache) return false;
-    KoColor pixel = Acs::pickColor(m_realPixelCache, triangleCoords);
+    KoColor pixel = Acs::sampleColor(m_realPixelCache, triangleCoords);
     return pixel.opacityU8() == OPACITY_OPAQUE_U8;
 }
 
 void KisColorSelectorTriangle::paint(QPainter* painter)
 {
     if(isDirty()) {
-        updatePixelCache();
+        updatePixelCache(painter->device()->devicePixelRatioF());
     }
 
 
@@ -63,7 +52,7 @@ void KisColorSelectorTriangle::paint(QPainter* painter)
     }
 }
 
-void KisColorSelectorTriangle::updatePixelCache()
+void KisColorSelectorTriangle::updatePixelCache(qreal devicePixelRatioF)
 {
     int width = triangleWidth() + 1;
     int height = triangleHeight();
@@ -79,7 +68,10 @@ void KisColorSelectorTriangle::updatePixelCache()
                                     QRect(0, 0, width, height),
                                     m_realPixelCache,
                                     m_renderedPixelCache,
-                                    pixelCacheOffset);
+                                    pixelCacheOffset,
+                                    devicePixelRatioF);
+
+    m_cacheDevicePixelRatioF = devicePixelRatioF; // save device pixel ratio of the cache
 
 //    if (!pixelCacheOffset.isNull()) {
 //        warnKrita << "WARNING: offset of the triangle selector is not null!";
@@ -149,9 +141,9 @@ int KisColorSelectorTriangle::triangleHeight() const
     return height()*3./4.;
 }
 
-KoColor KisColorSelectorTriangle::colorAt(int x, int y) const
+KoColor KisColorSelectorTriangle::colorAt(float x, float y) const
 {
-    Q_ASSERT(x>=0 && x<=triangleWidth());
+    Q_ASSERT(x>=0 && x<=(triangleWidth() + 1));
     Q_ASSERT(y>=0 && y<=triangleHeight());
 
     int triangleHeight = this->triangleHeight();

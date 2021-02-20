@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgOptionsJPEG</class>
  <widget class="QWidget" name="WdgOptionsJPEG">
   <property name="geometry">
@@ -11,7 +15,7 @@
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
-   <item row="0" column="0">
+   <item column="0" row="0">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
       <number>0</number>
@@ -21,26 +25,26 @@
        <string>Basic</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout">
-       <item row="1" column="0">
+       <item column="0" row="1">
         <widget class="QCheckBox" name="progressive">
          <property name="text">
           <string comment="A progressive jpeg file can be displayed while loading.">Progressive</string>
          </property>
         </widget>
        </item>
-       <item row="2" column="0">
+       <item column="0" row="2">
         <widget class="QCheckBox" name="chkForceSRGB">
          <property name="text">
           <string>Force convert to sRGB</string>
          </property>
         </widget>
        </item>
-       <item row="0" column="0">
+       <item column="0" row="0">
         <layout class="QGridLayout" name="gridLayout_4">
          <property name="bottomMargin">
           <number>20</number>
          </property>
-         <item row="0" column="1">
+         <item column="1" row="0">
           <widget class="KisDoubleSliderSpinBox" name="qualityLevel" native="true">
            <property name="sizePolicy">
             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
@@ -59,7 +63,7 @@
            </property>
           </widget>
          </item>
-         <item row="0" column="0">
+         <item column="0" row="0">
           <widget class="QLabel" name="label">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
@@ -72,7 +76,7 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="0">
+         <item column="0" row="1">
           <widget class="QLabel" name="label_4">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
@@ -88,7 +92,7 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="1">
+         <item column="1" row="1">
           <widget class="KisColorButton" name="bnTransparencyFillColor">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -109,7 +113,7 @@
          </item>
         </layout>
        </item>
-       <item row="4" column="0">
+       <item column="0" row="4">
         <spacer name="verticalSpacer_2">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -122,7 +126,7 @@
          </property>
         </spacer>
        </item>
-       <item row="3" column="0">
+       <item column="0" row="3">
         <widget class="QCheckBox" name="chkSaveProfile">
          <property name="text">
           <string>Save ICC Profile</string>
@@ -144,7 +148,7 @@
          <property name="bottomMargin">
           <number>20</number>
          </property>
-         <item row="0" column="1">
+         <item column="1" row="0">
           <widget class="KisDoubleSliderSpinBox" name="smoothLevel" native="true">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -160,7 +164,7 @@
            </property>
           </widget>
          </item>
-         <item row="0" column="0">
+         <item column="0" row="0">
           <widget class="QLabel" name="label_3">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
@@ -176,7 +180,7 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="0">
+         <item column="0" row="1">
           <widget class="QLabel" name="label_5">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
@@ -192,7 +196,7 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="1">
+         <item column="1" row="1">
           <widget class="QComboBox" name="subsampling">
            <item>
             <property name="text">
@@ -258,7 +262,7 @@
        <string>Metadata</string>
       </attribute>
       <layout class="QGridLayout">
-       <item row="0" column="0">
+       <item column="0" row="0">
         <widget class="QGroupBox" name="groupBox">
          <property name="title">
           <string>Formats:</string>
@@ -310,7 +314,7 @@
          </layout>
         </widget>
        </item>
-       <item row="4" column="0" colspan="2">
+       <item colspan="2" column="0" row="4">
         <spacer>
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -323,7 +327,7 @@
          </property>
         </spacer>
        </item>
-       <item row="1" column="0" colspan="2">
+       <item colspan="2" column="0" row="1">
         <widget class="QCheckBox" name="chkMetaData">
          <property name="toolTip">
           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Store document metadata that is in the document information. This will override any layer metadata.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -333,19 +337,19 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="1">
+       <item column="1" row="0">
         <widget class="QGroupBox" name="groupBox_2">
          <property name="title">
           <string comment="JPEG metadata filter">Filters:</string>
          </property>
          <layout class="QGridLayout">
-          <item row="0" column="0">
+          <item column="0" row="0">
            <widget class="QListView" name="metaDataFilters"/>
           </item>
          </layout>
         </widget>
        </item>
-       <item row="3" column="0" colspan="2">
+       <item colspan="2" column="0" row="3">
         <widget class="QCheckBox" name="chkAuthor">
          <property name="toolTip">
           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Add the author nickname and the first contact of the author profile. This is overridden by the anonymizer.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>

@@ -1,3 +1,7 @@
+/*
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
 #ifndef KISDELETELATERWRAPPER_H
 #define KISDELETELATERWRAPPER_H
 

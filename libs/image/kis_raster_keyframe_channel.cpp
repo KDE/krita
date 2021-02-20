@@ -1,21 +1,9 @@
 /*
- *  Copyright (c) 2015 Jouni Pentikäinen <joupent@gmail.com>
- *  Copyright (c) 2020 Emmet O'Neill <emmetoneill.pdx@gmail.com>
- *  Copyright (c) 2020 Eoin O'Neill <eoinoneill1991@gmail.com>
+ *  SPDX-FileCopyrightText: 2015 Jouni Pentikäinen <joupent@gmail.com>
+ *  SPDX-FileCopyrightText: 2020 Emmet O 'Neill <emmetoneill.pdx@gmail.com>
+ *  SPDX-FileCopyrightText: 2020 Eoin O 'Neill <eoinoneill1991@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 #include "kis_raster_keyframe_channel.h"
 #include "kis_node.h"
@@ -132,20 +120,14 @@ struct KisRasterKeyframeChannel::Private
     bool onionSkinsEnabled;
 };
 
-KisRasterKeyframeChannel::KisRasterKeyframeChannel(const KoID &id, const KisPaintDeviceWSP paintDevice, KisNodeWSP parent)
-    : KisKeyframeChannel(id, parent),
-      m_d(new Private(paintDevice, QString()))
-{
-}
-
 KisRasterKeyframeChannel::KisRasterKeyframeChannel(const KoID &id, const KisPaintDeviceWSP paintDevice, const KisDefaultBoundsBaseSP bounds)
     : KisKeyframeChannel(id, bounds),
       m_d(new Private(paintDevice, QString()))
 {
 }
 
-KisRasterKeyframeChannel::KisRasterKeyframeChannel(const KisRasterKeyframeChannel &rhs, KisNodeWSP newParent, const KisPaintDeviceWSP newPaintDevice)
-    : KisKeyframeChannel(rhs, newParent),
+KisRasterKeyframeChannel::KisRasterKeyframeChannel(const KisRasterKeyframeChannel &rhs, const KisPaintDeviceWSP newPaintDevice)
+    : KisKeyframeChannel(rhs),
       m_d(new Private(newPaintDevice, rhs.m_d->filenameSuffix))
 {
     KIS_ASSERT_RECOVER_NOOP(&rhs != this);

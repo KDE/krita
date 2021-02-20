@@ -1,7 +1,12 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="utf-8"?>
+<ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgMaskSource</class>
- <widget class="QWidget" name="WdgMaskSource" >
-  <property name="geometry" >
+ <widget class="QWidget" name="WdgMaskSource">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
@@ -9,50 +14,50 @@
     <height>171</height>
    </rect>
   </property>
-  <layout class="QGridLayout" >
-   <item row="0" column="0" >
-    <widget class="QGroupBox" name="grpMaskSource" >
-     <property name="title" >
+  <layout class="QGridLayout">
+   <item column="0" row="0">
+    <widget class="QGroupBox" name="grpMaskSource">
+     <property name="title">
       <string>Mask Source</string>
      </property>
-     <layout class="QGridLayout" >
-      <item row="0" column="0" >
-       <widget class="QRadioButton" name="radioNone" >
-        <property name="text" >
+     <layout class="QGridLayout">
+      <item column="0" row="0">
+       <widget class="QRadioButton" name="radioNone">
+        <property name="text">
          <string>&amp;None</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="0" >
-       <widget class="QRadioButton" name="radioMask" >
-        <property name="text" >
+      <item column="0" row="1">
+       <widget class="QRadioButton" name="radioMask">
+        <property name="text">
          <string>current &amp;Mask</string>
         </property>
        </widget>
       </item>
-      <item row="2" column="0" >
-       <widget class="QRadioButton" name="radioButton" >
-        <property name="text" >
+      <item column="0" row="2">
+       <widget class="QRadioButton" name="radioButton">
+        <property name="text">
          <string>&amp;Selection</string>
         </property>
-        <property name="checked" >
+        <property name="checked">
          <bool>true</bool>
         </property>
        </widget>
       </item>
-      <item row="3" column="0" >
-       <widget class="QRadioButton" name="radioButton_2" >
-        <property name="text" >
+      <item column="0" row="3">
+       <widget class="QRadioButton" name="radioButton_2">
+        <property name="text">
          <string>current &amp;Layer</string>
         </property>
        </widget>
       </item>
-      <item row="4" column="0" >
+      <item column="0" row="4">
        <spacer>
-        <property name="orientation" >
+        <property name="orientation">
          <enum>Qt::Vertical</enum>
         </property>
-        <property name="sizeHint" >
+        <property name="sizeHint">
          <size>
           <width>20</width>
           <height>40</height>

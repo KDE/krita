@@ -1,23 +1,10 @@
 /* This file is part of the KDE project
-   Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
-   Copyright (C) 2000-2006 David Faure <faure@kde.org>
-   Copyright (C) 2007, 2009 Thomas zander <zander@kde.org>
-   Copyright (C) 2010 Benjamin Port <port.benjamin@gmail.com>
+   SPDX-FileCopyrightText: 1998, 1999 Torben Weis <weis@kde.org>
+   SPDX-FileCopyrightText: 2000-2006 David Faure <faure@kde.org>
+   SPDX-FileCopyrightText: 2007, 2009 Thomas zander <zander@kde.org>
+   SPDX-FileCopyrightText: 2010 Benjamin Port <port.benjamin@gmail.com>
 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
-
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
-
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
 #include "KisMainWindow.h"
@@ -42,9 +29,6 @@
 #include <QMutex>
 #include <QMutexLocker>
 #include <QPointer>
-#include <QPrintDialog>
-#include <QPrinter>
-#include <QPrintPreviewDialog>
 #include <QToolButton>
 #include <KisSignalMapper.h>
 #include <QTabBar>
@@ -89,6 +73,7 @@
 #include <KoToolFactoryBase.h>
 #include <KoToolRegistry.h>
 #include "KoDockFactoryBase.h"
+#include "KoDockWidgetTitleBar.h"
 #include "KoDocumentInfoDlg.h"
 #include "KoDocumentInfo.h"
 #include "KoFileDialog.h"
@@ -103,11 +88,12 @@
 #include <KoColorSpaceEngine.h>
 #include <KoUpdater.h>
 #include <KisResourceModel.h>
-#include <KisResourceModelProvider.h>
 #include <KisResourceLoaderRegistry.h>
 #include <KisResourceIterator.h>
 #include <KisResourceTypes.h>
 #include <KisResourceCacheDb.h>
+#include <KisStorageModel.h>
+#include <KisStorageFilterProxyModel.h>
 
 #ifdef Q_OS_ANDROID
 #include <KisAndroidFileManager.h>
@@ -158,6 +144,8 @@
 #include <kritaversion.h>
 #include "KisCanvasWindow.h"
 #include "kis_action.h"
+#include <katecommandbar.h>
+#include "KisNodeActivationActionCreatorVisitor.h"
 
 #include <mutex>
 
@@ -214,6 +202,8 @@ public:
         mdiArea->setTabsMovable(true);
         mdiArea->setActivationOrder(QMdiArea::ActivationHistoryOrder);
         mdiArea->setDocumentMode(true);
+
+        commandBar = new KateCommandBar(parent);
     }
 
     ~Private() {
@@ -256,7 +246,7 @@ public:
     KisAction *toggleDetachCanvas {0};
     KisAction *fullScreenMode {0};
     KisAction *showSessionManager {0};
-
+    KisAction *commandBarAction {0};
     KisAction *expandingSpacers[2];
 
     KActionMenu *styleMenu;
@@ -306,6 +296,8 @@ public:
     QUuid workspaceBorrowedBy;
     KisSignalAutoConnectionsStore screenConnectionsStore;
 
+    KateCommandBar *commandBar {0};
+
 #ifdef Q_OS_ANDROID
     KisAndroidFileManager *fileManager;
 #endif
@@ -326,12 +318,28 @@ public:
     }
 };
 
+class ScopedWidgetDisabler
+{
+    QWidget *widget;
+public:
+    ScopedWidgetDisabler(QWidget *widget_)
+        : widget(widget_)
+    {
+        widget->setEnabled(false);
+    }
+
+    ~ScopedWidgetDisabler()
+    {
+        widget->setEnabled(true);
+    }
+};
+
 KisMainWindow::KisMainWindow(QUuid uuid)
     : KXmlGuiWindow()
     , d(new Private(this, uuid))
 {
-    d->workspacemodel = KisResourceModelProvider::resourceModel(ResourceType::Workspaces);
-    connect(d->workspacemodel, SIGNAL(afterResourcesLayoutReset()), this, SLOT(updateWindowMenu()));
+    d->workspacemodel = new KisResourceModel(ResourceType::Workspaces, this);
+    connect(d->workspacemodel, SIGNAL(modelReset()), this, SLOT(updateWindowMenu()));
 
     d->viewManager = new KisViewManager(this, actionCollection());
     KConfigGroup group( KSharedConfig::openConfig(), "theme");
@@ -363,7 +371,6 @@ KisMainWindow::KisMainWindow(QUuid uuid)
 
     KoToolBoxFactory toolBoxFactory;
     QDockWidget *toolbox = createDockWidget(&toolBoxFactory);
-    toolbox->setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable | QDockWidget::DockWidgetClosable);
 
     KisConfig cfg(true);
     if (cfg.toolOptionsInDocker()) {
@@ -442,10 +449,8 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     d->mdiArea->setTabPosition(QTabWidget::North);
     d->mdiArea->setTabsClosable(true);
 
-    // Tab close button override
-    // Windows just has a black X, and Ubuntu has a dark x that is hard to read
-    // just switch this icon out for all OSs so it is easier to see
-    d->mdiArea->setStyleSheet("QTabBar::close-button { image: url(:/pics/broken-preset.png) }");
+    themeChanged(); // updates icon styles
+
 
     setCentralWidget(d->widgetStack);
     d->widgetStack->setCurrentIndex(0);
@@ -597,6 +602,11 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     connect(window, SIGNAL(screenChanged(QScreen *)), this, SLOT(windowScreenChanged(QScreen *)));
 
 #ifdef Q_OS_ANDROID
+    // HACK: This prevents the mainWindow from going beyond the screen with no
+    // way to bring it back. Apparently the size doesn't matter here as long as
+    // it remains fixed?
+    setFixedSize(KisApplication::primaryScreen()->availableGeometry().size());
+
     connect(d->fileManager, SIGNAL(sigFileSelected(QUrl)), this, SLOT(slotFileSelected(QUrl)));
     connect(d->fileManager, SIGNAL(sigEmptyFilePath()), this, SLOT(slotEmptyFilePath()));
 
@@ -640,6 +650,11 @@ KisMainWindow::~KisMainWindow()
     delete d->viewManager;
     delete d;
 
+}
+
+QMenu *KisMainWindow::createPopupMenu()
+{
+    return 0;
 }
 
 QUuid KisMainWindow::id() const {
@@ -811,6 +826,24 @@ void KisMainWindow::slotThemeChanged()
             }
         }
     }
+
+    // update MDI area theme
+    // Tab close button override
+    // just switch this icon out for all OSs so it is easier to see
+    QString themeName = d->themeManager->currentThemeName();
+    bool isDarkTheme = themeName.toLower().contains("dark");
+    if(isDarkTheme) {
+        d->mdiArea->setStyleSheet("QTabBar::close-button { image: url(:/pics/light_close-tab.png) }");
+    } else {
+        d->mdiArea->setStyleSheet("QTabBar::close-button { image: url(:/pics/dark_close-tab.png) }");
+    }
+
+
+    // all global styles can be set here. Build them out line by line so it is easier to read/manage
+    QString stylesBuilder;
+    QString tableHeaderSpacing = "QHeaderView::section {padding: 7px; }";
+    stylesBuilder.append(tableHeaderSpacing);
+    qApp->setStyleSheet(stylesBuilder);
 
     emit themeChanged();
 }
@@ -997,6 +1030,9 @@ KisView *KisMainWindow::activeView() const
 
 bool KisMainWindow::openDocument(const QUrl &url, OpenFlags flags)
 {
+    ScopedWidgetDisabler disabler(d->welcomeScroller);
+    QApplication::processEvents(); // make UI more responsive
+
     if (!QFile(url.toLocalFile()).exists()) {
         if (!(flags & BatchMode)) {
             QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("The file %1 does not exist.", url.url()));
@@ -1497,12 +1533,11 @@ void KisMainWindow::saveWindowSettings()
         KConfigGroup group = d->windowStateConfig;
         saveMainWindowSettings(group);
 
-        // Save collapsible state of dock widgets
+        // Save state of dock widgets
         for (QMap<QString, QDockWidget*>::const_iterator i = d->dockWidgetsMap.constBegin();
              i != d->dockWidgetsMap.constEnd(); ++i) {
             if (i.value()->widget()) {
                 KConfigGroup dockGroup = group.group(QString("DockWidget ") + i.key());
-                dockGroup.writeEntry("Collapsed", i.value()->widget()->isHidden());
                 dockGroup.writeEntry("Locked", i.value()->property("Locked").toBool());
                 dockGroup.writeEntry("DockArea", (int) dockWidgetArea(i.value()));
                 dockGroup.writeEntry("xPosition", (int) i.value()->widget()->x());
@@ -1750,31 +1785,103 @@ void KisMainWindow::saveWindowState(bool restoreNormalState)
 bool KisMainWindow::restoreWorkspaceState(const QByteArray &state)
 {
     QByteArray oldState = saveState();
+    const bool showTitlebars = KisConfig(false).showDockerTitleBars();
 
     // needed because otherwise the layout isn't correctly restored in some situations
     Q_FOREACH (QDockWidget *dock, dockWidgets()) {
+        dock->setProperty("Locked", false); // Unlock invisible dockers
         dock->toggleViewAction()->setEnabled(true);
         dock->hide();
+        dock->titleBarWidget()->setVisible(showTitlebars);
     }
 
     bool success = KXmlGuiWindow::restoreState(state);
 
     if (!success) {
         KXmlGuiWindow::restoreState(oldState);
+        Q_FOREACH (QDockWidget *dock, dockWidgets()) {
+            if (dock->titleBarWidget()) {
+                dock->titleBarWidget()->setVisible(showTitlebars || dock->isFloating());
+            }
+        }
         return false;
     }
-
     return success;
+}
+
+void KisMainWindow::restoreWorkspace()
+{
+    int resourceId = sender()->property("resource_id").toInt();
+    restoreWorkspace(resourceId);
+}
+
+void KisMainWindow::openCommandBar()
+{
+    QList<KActionCollection *> actionCollections;
+
+    auto clients = guiFactory()->clients();
+    int actionsCount = 0;
+    for (const KXMLGUIClient *c : clients) {
+        if (!c) {
+            continue;
+        }
+        if (auto collection = c->actionCollection()) {
+            actionCollections.append(collection);
+            actionsCount += collection->count();
+        }
+    }
+
+    if (activeKisView()) {
+        KActionCollection *layerActionCollection = new KActionCollection(0, "layeractions");
+        layerActionCollection->setComponentDisplayName(i18n("Layers/Masks"));
+        KisNodeActivationActionCreatorVisitor v(layerActionCollection, viewManager()->nodeManager());
+        activeKisView()->image()->rootLayer()->accept(v);
+        actionCollections.append(layerActionCollection);
+        actionsCount += layerActionCollection->count();
+    }
+
+    d->commandBar->updateBar(actionCollections, actionsCount);
+    centralWidget()->setFocusProxy(d->commandBar);
+}
+
+void KisMainWindow::slotStoragesWarning(const QString &/*location*/)
+{
+    QString warning;
+    if (!checkActiveBundlesAvailable()) {
+        warning = i18n("You don't have any resource bundles enabled.");
+    }
+
+    if (!checkPaintOpAvailable()) {
+        warning += i18n("\nThere are no brush presets available. Please enable a bundle that has presets before continuing.\n");
+        QMessageBox::critical(this, i18nc("@title:window", "Krita"), warning);
+
+        QAction *action = actionCollection()->action("manage_bundles");
+        if (action) {
+            action->trigger();
+        }
+    }
+
+    if (!checkActiveBundlesAvailable()) {
+        QMessageBox::warning(this, i18nc("@title:window", "Krita"), warning + i18n("\nOnly your local resources are available."));
+    }
+
 }
 
 bool KisMainWindow::restoreWorkspace(int workspaceId)
 {
-
     KisWorkspaceResourceSP workspace =
-            KisResourceModelProvider::resourceModel(ResourceType::Workspaces)
-            ->resourceForId(workspaceId).dynamicCast<KisWorkspaceResource>();
+            KisResourceModel(ResourceType::Workspaces)
+                .resourceForId(workspaceId)
+                .dynamicCast<KisWorkspaceResource>();
 
     bool success = restoreWorkspaceState(workspace->dockerState());
+
+    const bool showTitlebars = KisConfig(false).showDockerTitleBars();
+    Q_FOREACH (QDockWidget *dock, dockWidgets()) {
+        if (dock->titleBarWidget()) {
+            dock->titleBarWidget()->setVisible(showTitlebars || dock->isFloating());
+        }
+    }
 
     if (activeKisView()) {
         activeKisView()->resourceProvider()->notifyLoadingWorkspace(workspace);
@@ -2020,10 +2127,21 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
             return 0;
         }
 
-        dockWidget->setFont(KoDockRegistry::dockFont());
+        KoDockWidgetTitleBar *titleBar = dynamic_cast<KoDockWidgetTitleBar*>(dockWidget->titleBarWidget());
+
+        // Check if the dock widget is supposed to be collapsible
+        if (!dockWidget->titleBarWidget() && factory->id() != "TimelineDocker") {
+            titleBar = new KoDockWidgetTitleBar(dockWidget);
+            dockWidget->setTitleBarWidget(titleBar);
+        }
+        if (titleBar) {
+            titleBar->setFont(KoDockRegistry::dockFont());
+        }
+
+
         dockWidget->setObjectName(factory->id());
         dockWidget->setParent(this);
-        if (lockAllDockers) {
+        if (lockAllDockers && factory->id() != "TimelineDocker") {
             if (dockWidget->titleBarWidget()) {
                 dockWidget->titleBarWidget()->setVisible(false);
             }
@@ -2060,6 +2178,11 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
         addDockWidget(side, dockWidget);
         if (!visible) {
             dockWidget->hide();
+        }
+
+        bool locked = group.readEntry("Locked", false);
+        if (titleBar && locked) {
+            titleBar->setLocked(true);
         }
 
         d->dockWidgetsMap.insert(factory->id(), dockWidget);
@@ -2268,16 +2391,15 @@ void KisMainWindow::updateWindowMenu()
     menu->addAction(d->workspaceMenu);
     QMenu *workspaceMenu = d->workspaceMenu->menu();
     workspaceMenu->clear();
-
-    KisResourceIterator resourceIterator(KisResourceModelProvider::resourceModel(ResourceType::Workspaces));
+    KisResourceModel resourceModel(ResourceType::Workspaces);
+    KisResourceIterator resourceIterator(&resourceModel);
     KisMainWindow *m_this = this;
 
     while (resourceIterator.hasNext()) {
         KisResourceItemSP resource = resourceIterator.next();
         QAction *action = workspaceMenu->addAction(resource->name());
-        connect(action, &QAction::triggered, this, [=]() {
-            m_this->restoreWorkspace(resource->id());
-        });
+        action->setProperty("resource_id", QVariant::fromValue<int>(resource->id()));
+        connect(action, SIGNAL(triggered()), this, SLOT(restoreWorkspace()));
     }
     workspaceMenu->addSeparator();
     connect(workspaceMenu->addAction(i18nc("@action:inmenu", "&Import Workspace...")),
@@ -2476,6 +2598,30 @@ void KisMainWindow::configChanged()
     }
 
     d->mdiArea->update();
+
+    if (KisConfig(false).readEntry<bool>("use_custom_system_font", false)) {
+        QString fontName = KisConfig(false).readEntry<QString>("custom_system_font", "");
+        int fontSize = KisConfig(false).readEntry<int>("custom_font_size", -1);
+
+        if (fontSize <= 6) {
+            fontSize = qApp->font().pointSize();
+        }
+        if (!fontName.isEmpty()) {
+            QFont f(fontName, fontSize);
+            qApp->setFont(f);
+
+            Q_FOREACH (QObject* widget, children()) {
+                if (widget->inherits("QDockWidget")) {
+                    QDockWidget* dw = static_cast<QDockWidget*>(widget);
+                    dw->setFont(KoDockRegistry::dockFont());
+                }
+            }
+
+        }
+    }
+    else {
+        qApp->setFont(QFontDatabase::systemFont(QFontDatabase::GeneralFont));
+    }
 }
 
 KisView* KisMainWindow::newView(QObject *document, QMdiSubWindow *subWindow)
@@ -2513,14 +2659,7 @@ void KisMainWindow::checkSanity()
         return;
     }
 
-    KisPaintOpPresetResourceServer * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
-    if (rserver->resourceCount() == 0) {
-        m_errorMessage = i18n("Krita cannot find any brush presets! Krita will quit now.");
-        m_dieOnError = true;
-        QTimer::singleShot(0, this, SLOT(showErrorAndDie()));
-        return;
-    }
-
+    slotStoragesWarning();
 
     // window is created signal (used in Python)
     // there must be some asynchronous things happening in the constructor, because the window cannot
@@ -2636,15 +2775,12 @@ void KisMainWindow::createActions()
     d->showDocumentInfo  = actionManager->createAction("file_documentinfo");
     connect(d->showDocumentInfo, SIGNAL(triggered(bool)), this, SLOT(slotDocumentInfo()));
 
-
     d->themeManager->setThemeMenuAction(new KActionMenu(i18nc("@action:inmenu", "&Themes"), this));
     d->themeManager->registerThemeActions(actionCollection());
     connect(d->themeManager, SIGNAL(signalThemeChanged()), this, SLOT(slotThemeChanged()));
-
-
     connect(d->themeManager, SIGNAL(signalThemeChanged()), d->welcomePage, SLOT(slotUpdateThemeColors()));
-
     d->toggleDockers = actionManager->createAction("view_toggledockers");
+
     KisConfig(true).showDockers(true);
     d->toggleDockers->setChecked(true);
     connect(d->toggleDockers, SIGNAL(toggled(bool)), SLOT(toggleDockersVisibility(bool)));
@@ -2656,6 +2792,10 @@ void KisMainWindow::createActions()
     d->toggleDetachCanvas->setChecked(false);
     connect(d->toggleDetachCanvas, SIGNAL(toggled(bool)), SLOT(setCanvasDetached(bool)));
     setCanvasDetached(false);
+
+    d->toggleDockerTitleBars = actionManager->createAction("view_toggledockertitlebars");
+    d->toggleDockerTitleBars->setChecked(KisConfig(false).showDockerTitleBars());
+    connect(d->toggleDockerTitleBars, SIGNAL(toggled(bool)), SLOT(showDockerTitleBars(bool)));
 
     actionCollection()->addAction("settings_dockers_menu", d->dockWidgetMenu);
     actionCollection()->addAction("window", d->windowMenu);
@@ -2682,6 +2822,9 @@ void KisMainWindow::createActions()
     d->showSessionManager = actionManager->createAction("file_sessions");
     connect(d->showSessionManager, SIGNAL(triggered(bool)), this, SLOT(slotShowSessionManager()));
 
+    d->commandBarAction = actionManager->createAction("command_bar_open");
+    connect(d->commandBarAction, SIGNAL(triggered(bool)), this, SLOT(openCommandBar()));
+
     actionManager->createStandardAction(KStandardAction::Preferences, this, SLOT(slotPreferences()));
 
     for (int i = 0; i < 2; i++) {
@@ -2694,13 +2837,11 @@ void KisMainWindow::createActions()
 
 void KisMainWindow::applyToolBarLayout()
 {
-    const bool isPlastiqueStyle = style()->objectName() == "plastique";
 
     Q_FOREACH (KToolBar *toolBar, toolBars()) {
         toolBar->layout()->setSpacing(4);
-        if (isPlastiqueStyle) {
-            toolBar->setContentsMargins(0, 0, 0, 2);
-        }
+        toolBar->setStyleSheet("QToolBar { border: none }"); // has a border in "Fusion" style that people don't like
+
         //Hide text for buttons with an icon in the toolbar
         Q_FOREACH (QAction *ac, toolBar->actions()){
             if (ac->icon().pixmap(QSize(1,1)).isNull() == false){
@@ -2762,6 +2903,18 @@ void KisMainWindow::windowScreenChanged(QScreen *screen)
                                             this, SIGNAL(screenChanged()));
 }
 
+void KisMainWindow::showDockerTitleBars(bool show)
+{
+    Q_FOREACH (QDockWidget *dock, dockWidgets()) {
+        if (dock->titleBarWidget()) {
+            dock->titleBarWidget()->setVisible(show || dock->isFloating());
+        }
+    }
+
+    KisConfig cfg(true);
+    cfg.setShowDockerTitleBars(show);
+}
+
 void KisMainWindow::slotXmlGuiMakingChanges(bool finished)
 {
     if (finished) {
@@ -2805,6 +2958,21 @@ void KisMainWindow::orientationChanged()
     }
 }
 
+bool KisMainWindow::checkActiveBundlesAvailable()
+{
+    KisStorageFilterProxyModel proxy;
+    proxy.setSourceModel(KisStorageModel::instance());
+    proxy.setFilter(KisStorageFilterProxyModel::ByStorageType,
+                    QStringList()
+                    << KisResourceStorage::storageTypeToUntranslatedString(KisResourceStorage::StorageType::Bundle));
 
+    return (proxy.rowCount() > 0);
+}
+
+bool KisMainWindow::checkPaintOpAvailable()
+{
+    KisPaintOpPresetResourceServer * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
+    return (rserver->resourceCount() > 0);
+}
 
 #include <moc_KisMainWindow.cpp>

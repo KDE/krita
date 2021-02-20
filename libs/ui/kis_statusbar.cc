@@ -1,20 +1,8 @@
 /* This file is part of KimageShop^WKrayon^WKrita
  *
- *  Copyright (c) 2006 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2006 Boudewijn Rempt <boud@valdyas.org>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_statusbar.h"
@@ -35,6 +23,7 @@
 #include <KoColorSpace.h>
 #include <KoToolManager.h>
 #include <KoViewConverter.h>
+#include <QHBoxLayout>
 
 #include <KisUsageLogger.h>
 
@@ -53,6 +42,9 @@
 #include "canvas/kis_canvas2.h"
 #include "kis_progress_widget.h"
 #include "kis_zoom_manager.h"
+#include <KisAngleSelector.h>
+#include <kis_canvas_controller.h>
+#include <kis_signals_blocker.h>
 
 #include "KisMainWindow.h"
 #include "kis_config.h"
@@ -126,6 +118,15 @@ void KisStatusBar::setup()
     m_progressUpdater.reset(new KisProgressUpdater(m_progress, m_progress->progressProxy()));
     m_progressUpdater->setAutoNestNames(true);
 
+    m_extraWidgetsParent = new QFrame;
+    m_extraWidgetsParent->setMinimumWidth(100);
+    m_extraWidgetsParent->setObjectName("Extra Widgets Parent");
+    m_extraWidgetsLayout = new QHBoxLayout;
+    m_extraWidgetsLayout->setContentsMargins(0, 0, 0, 0);
+    m_extraWidgetsLayout->setObjectName("Extra Widgets Layout");
+    m_extraWidgetsParent->setLayout(m_extraWidgetsLayout);
+    addStatusBarItem(m_extraWidgetsParent);
+
     m_memoryReportBox = new KisMemoryReportButton();
     m_memoryReportBox->setObjectName("memoryReportBox");
     m_memoryReportBox->setFlat(true);
@@ -148,17 +149,15 @@ void KisStatusBar::setup()
             SIGNAL(sigUpdateMemoryStatistics()),
             SLOT(imageSizeChanged()));
 
-    m_resetAngleButton = new QToolButton;
-    m_resetAngleButton->setObjectName("Reset Rotation");
-    m_resetAngleButton->setCheckable(false);
-    m_resetAngleButton->setToolTip(i18n("Reset Rotation"));
-    m_resetAngleButton->setAutoRaise(true);
-    m_resetAngleButton->setIcon(KisIconUtils::loadIcon("rotate-canvas-left"));
-    addStatusBarItem(m_resetAngleButton);
+    m_canvasAngleSelector = new KisAngleSelector;
+    m_canvasAngleSelector->setRange(-179.99, 180.0);
+    m_canvasAngleSelector->setIncreasingDirection(KisAngleGauge::IncreasingDirection_Clockwise);
+    m_canvasAngleSelector->setFlipOptionsMode(KisAngleSelector::FlipOptionsMode_ContextMenu);
+    m_canvasAngleSelector->useFlatSpinBox(true);
+    addStatusBarItem(m_canvasAngleSelector);
 
-    connect(m_resetAngleButton, SIGNAL(clicked()), m_viewManager, SLOT(slotResetRotation()));
-    m_resetAngleButton->setVisible(false);
-
+    connect(m_canvasAngleSelector, SIGNAL(angleChanged(qreal)), SLOT(slotCanvasAngleSelectorAngleChanged(qreal)));
+    m_canvasAngleSelector->setVisible(false);
 }
 
 KisStatusBar::~KisStatusBar()
@@ -167,11 +166,10 @@ KisStatusBar::~KisStatusBar()
 
 void KisStatusBar::setView(QPointer<KisView> imageView)
 {
-    if (m_imageView == imageView) {
-        return;
-    }
-
     if (m_imageView) {
+        if (m_imageView->canvasBase()) {
+            m_imageView->canvasBase()->canvasController()->proxyObject->disconnect(this);
+        }
         m_imageView->disconnect(this);
         removeStatusBarItem(m_imageView->zoomManager()->zoomActionWidget());
         m_imageView = 0;
@@ -179,18 +177,21 @@ void KisStatusBar::setView(QPointer<KisView> imageView)
 
     if (imageView) {
         m_imageView = imageView;
-        m_resetAngleButton->setVisible(true);
+        m_canvasAngleSelector->setVisible(true);
         connect(m_imageView, SIGNAL(sigColorSpaceChanged(const KoColorSpace*)),
                 this, SLOT(updateStatusBarProfileLabel()));
         connect(m_imageView, SIGNAL(sigProfileChanged(const KoColorProfile*)),
                 this, SLOT(updateStatusBarProfileLabel()));
         connect(m_imageView, SIGNAL(sigSizeChanged(QPointF,QPointF)),
                 this, SLOT(imageSizeChanged()));
+        connect(m_imageView->canvasController()->proxyObject, SIGNAL(canvasOffsetXChanged(int)),
+                this, SLOT(slotCanvasRotationChanged()));
         updateStatusBarProfileLabel();
+        slotCanvasRotationChanged();
         addStatusBarItem(m_imageView->zoomManager()->zoomActionWidget());
     }
     else {
-        m_resetAngleButton->setVisible(false);
+        m_canvasAngleSelector->setVisible(false);
     }
 
     imageSizeChanged();
@@ -360,6 +361,26 @@ void KisStatusBar::showMemoryInfoToolTip()
     QToolTip::showText(QCursor::pos(), m_memoryReportBox->toolTip(), m_memoryReportBox);
 }
 
+void KisStatusBar::slotCanvasAngleSelectorAngleChanged(qreal angle)
+{
+    KisCanvas2 *canvas = m_viewManager->canvasBase();
+    if (!canvas) return;
+
+    KisCanvasController *canvasController = dynamic_cast<KisCanvasController*>(canvas->canvasController());
+    if (canvasController) {
+        canvasController->rotateCanvas(angle - canvas->rotationAngle());
+    }
+}
+
+void KisStatusBar::slotCanvasRotationChanged()
+{
+    KisCanvas2 *canvas = m_viewManager->canvasBase();
+    if (!canvas) return;
+
+    KisSignalsBlocker l(m_canvasAngleSelector);
+    m_canvasAngleSelector->setAngle(canvas->rotationAngle());
+}
+
 void KisStatusBar::updateSelectionToolTip()
 {
     updateSelectionIcon();
@@ -422,6 +443,16 @@ void KisStatusBar::updateStatusBarProfileLabel()
 KoProgressUpdater *KisStatusBar::progressUpdater()
 {
     return m_progressUpdater.data();
+}
+
+void KisStatusBar::addExtraWidget(QWidget *widget)
+{
+    m_extraWidgetsLayout->addWidget(widget);
+}
+
+void KisStatusBar::removeExtraWidget(QWidget *widget)
+{
+    m_extraWidgetsLayout->removeWidget(widget);
 }
 
 

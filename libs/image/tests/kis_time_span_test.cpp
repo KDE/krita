@@ -1,3 +1,7 @@
+/*
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
 #include "kis_time_span_test.h"
 #include "kis_time_span.h"
 

@@ -2,20 +2,7 @@
  * Copyright 2010 (C) Boudewijn Rempt <boud@valdyas.org>
  * Copyright 2011 (C) Dmitry Kazakov <dimula73@gmail.com>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 #include "kis_scratch_pad.h"
 
@@ -106,7 +93,7 @@ KisScratchPad::KisScratchPad(QWidget *parent)
     , m_toolMode(HOVERING)
     , isModeManuallySet(false)
     , isMouseDown(false)
-    , linkCanvasZoomLevel(false)
+    , linkCanvasZoomLevel(true)
     , m_paintLayer(0)
     , m_displayProfile(0)
     , m_resourceProvider(0)
@@ -115,7 +102,7 @@ KisScratchPad::KisScratchPad(QWidget *parent)
     setMouseTracking(true);
 
     m_cursor = KisCursor::load("tool_freehand_cursor.png", 5, 5);
-    m_colorPickerCursor = KisCursor::load("tool_color_picker_cursor.png", 5, 5);
+    m_colorSamplerCursor = KisCursor::load("tool_color_sampler_cursor.png", 5, 5);
     setCursor(m_cursor);
 
 
@@ -156,7 +143,7 @@ KisScratchPad::Mode KisScratchPad::modeFromButton(Qt::MouseButton button) const
     return
         button == Qt::NoButton ? HOVERING :
         button == Qt::MidButton ? PANNING :
-        button == Qt::RightButton ? PICKING :
+        button == Qt::RightButton ? SAMPLING :
         PAINTING;
 }
 
@@ -187,8 +174,8 @@ void KisScratchPad::pointerPress(KoPointerEvent *event)
             beginPan(event);
             event->accept();
         }
-        else if (m_toolMode == PICKING) {
-            pick(event);
+        else if (m_toolMode == SAMPLING) {
+            sample(event);
             event->accept();
         }
     }
@@ -213,7 +200,7 @@ void KisScratchPad::pointerRelease(KoPointerEvent *event)
             m_toolMode = HOVERING;
             event->accept();
         }
-        else if (m_toolMode == PICKING) {
+        else if (m_toolMode == SAMPLING) {
             event->accept();
             m_toolMode = HOVERING;
         }
@@ -250,8 +237,8 @@ void KisScratchPad::pointerMove(KoPointerEvent *event)
             doPan(event);
             event->accept();
         }
-        else if (m_toolMode == PICKING) {
-            pick(event);
+        else if (m_toolMode == SAMPLING) {
+            sample(event);
             event->accept();
         }
     }
@@ -310,10 +297,10 @@ void KisScratchPad::endPan(KoPointerEvent *event)
 
 }
 
-void KisScratchPad::pick(KoPointerEvent *event)
+void KisScratchPad::sample(KoPointerEvent *event)
 {
     KoColor color;
-    if (KisToolUtils::pickColor(color, m_paintLayer->projection(), event->point.toPoint())) {
+    if (KisToolUtils::sampleColor(color, m_paintLayer->projection(), event->point.toPoint())) {
         emit colorSelected(color);
     }
 }
@@ -410,6 +397,16 @@ void KisScratchPad::paintEvent ( QPaintEvent * event ) {
     gc.end();
 }
 
+void KisScratchPad::resetState()
+{
+    if (m_helper->isRunning()) {
+        m_helper->endPaint();
+    }
+
+    m_toolMode = HOVERING;
+    setCursor(m_cursor);
+}
+
 void KisScratchPad::setupScratchPad(KisCanvasResourceProvider* resourceProvider,
                                     const QColor &defaultColor)
 {
@@ -458,9 +455,9 @@ void KisScratchPad::setModeType(QString mode)
         m_toolMode = PANNING;
         setCursor(Qt::OpenHandCursor);
     }
-    else if (mode.toLower() == "colorpicking") {
-        m_toolMode = PICKING;
-        setCursor(m_colorPickerCursor);
+    else if (mode.toLower() == "colorsampling") {
+        m_toolMode = SAMPLING;
+        setCursor(m_colorSamplerCursor);
     }
 }
 

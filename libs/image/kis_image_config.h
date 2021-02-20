@@ -1,19 +1,7 @@
 /*
- *  Copyright (c) 2010 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2010 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #ifndef KIS_IMAGE_CONFIG_H_
@@ -164,7 +152,14 @@ public:
         return m_config.readEntry(name, defaultValue);
     }
 
-
+    /* Per-File Export Configurations
+     * Export configurations can optionally be saved into the file. If no configuration exists,
+     * the user should try loading a configuration from the global system instead.
+     */
+    QString exportConfigurationXML(const QString &exportConfigId, bool defaultValue = false) const;
+    bool hasExportConfiguration(const QString& exportConfigID);
+    KisPropertiesConfigurationSP exportConfiguration(const QString &exportConfigId, bool defaultValue = false) const;
+    void setExportConfiguration(const QString &exportConfigId, KisPropertiesConfigurationSP properties);
 
     static void resetConfig();
 private:

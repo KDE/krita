@@ -1,22 +1,9 @@
 /*
- *  Copyright (c) 2005 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (C) 2007 Thomas Zander <zander@kde.org>
- *  Copyright (C) 2007 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2005 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2007 Thomas Zander <zander@kde.org>
+ *  SPDX-FileCopyrightText: 2007 Cyrille Berger <cberger@cberger.net>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.1-or-later
 */
 
 #include "KoColor.h"
@@ -24,6 +11,7 @@
 #include <QColor>
 
 #include <QDomDocument>
+#include <QRegExp>
 
 #include "DebugPigment.h"
 
@@ -361,6 +349,8 @@ KoColor KoColor::fromXML(const QDomElement& elt, const QString& channelDepthId, 
         if (!KoColorSpaceRegistry::instance()->profileByName(profileName)) {
             profileName.clear();
         }
+    } else {
+        profileName = KoColorSpaceRegistry::instance()->p709SRGBProfile()->name();
     }
     const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(modelId, channelDepthId, profileName);
     if (cs == 0) {
@@ -396,11 +386,192 @@ KoColor KoColor::fromXML(const QString &xml)
     QDomDocument doc;
     if (doc.setContent(xml)) {
         QDomElement e = doc.documentElement().firstChild().toElement();
-        QString channelDepthID = e.attribute("channeldepth", Integer16BitsColorDepthID.id());
+        QString channelDepthID = doc.documentElement().attribute("channeldepth", Integer16BitsColorDepthID.id());
         bool ok;
-        c = KoColor::fromXML(e, channelDepthID, &ok);
+        if (e.hasAttribute("space") || e.tagName().toLower() == "srgb") {
+            c = KoColor::fromXML(e, channelDepthID, &ok);
+        } else if (doc.documentElement().hasAttribute("space") || doc.documentElement().tagName().toLower() == "srgb"){
+            c = KoColor::fromXML(doc.documentElement(), channelDepthID, &ok);
+        } else {
+            qWarning() << "Cannot parse color from xml" << xml;
+        }
     }
     return c;
+}
+
+QString KoColor::toSVG11(QHash<QString, const KoColorProfile *> *profileList) const
+{
+    QStringList colorDefinitions;
+    colorDefinitions.append(toQColor().name());
+
+    QVector<float> channelValues(colorSpace()->channelCount());
+    channelValues.fill(0.0);
+    colorSpace()->normalisedChannelsValue(data(), channelValues);
+
+    bool sRGB = (colorSpace()->profile()->uniqueId() == KoColorSpaceRegistry::instance()->p709SRGBProfile()->uniqueId());
+
+    // We don't write a icc-color definition for XYZ and 8bit sRGB.
+    if (!(sRGB && colorSpace()->colorDepthId() == Integer8BitsColorDepthID) &&
+            colorSpace()->colorModelId() != XYZAColorModelID) {
+        QStringList iccColor;
+        QString csName = colorSpace()->profile()->name();
+        // remove forbidden characters
+        // https://www.w3.org/TR/SVG11/types.html#DataTypeName
+        csName.remove(QRegExp("[\\(\\),\\s]"));
+
+        //reuse existing name if possible. We're looking for the color profile, because svg doesn't care about depth.
+        csName = profileList->key(colorSpace()->profile(), csName);
+
+        if (sRGB) {
+            csName = "sRGB";
+        }
+
+        iccColor.append(csName);
+
+        if (colorSpace()->colorModelId() == LABAColorModelID) {
+            QDomDocument doc;
+            QDomElement el = doc.createElement("color");
+            toXML(doc, el);
+            QDomElement lab = el.firstChildElement();
+            iccColor.append(lab.attribute("L", "0.0"));
+            iccColor.append(lab.attribute("a", "0.0"));
+            iccColor.append(lab.attribute("b", "0.0"));
+        } else {
+            for (int i = 0; i < channelValues.size(); i++) {
+                int location = KoChannelInfo::displayPositionToChannelIndex(i, colorSpace()->channels());
+                if (i != int(colorSpace()->alphaPos())) {
+                    iccColor.append(QString::number(channelValues.at(location), 'g', 10));
+                }
+            }
+        }
+        colorDefinitions.append(QString("icc-color(%1)").arg(iccColor.join(", ")));
+        if (!profileList->contains(csName) && !sRGB) {
+            profileList->insert(csName, colorSpace()->profile());
+        }
+    }
+
+    return colorDefinitions.join(" ");
+}
+
+KoColor KoColor::fromSVG11(const QString value, QHash<QString, const KoColorProfile *> profileList, KoColor current)
+{
+    KoColor parsed(KoColorSpaceRegistry::instance()->rgb16(KoColorSpaceRegistry::instance()->p709SRGBProfile()));
+    parsed.setOpacity(1.0);
+
+    if (value.toLower() == "none") {
+        return parsed;
+    }
+
+    // add the sRGB default name.
+    profileList.insert("sRGB", KoColorSpaceRegistry::instance()->p709SRGBProfile());
+    // first, try to split at \w\d\) space.
+    // we want to split up a string like... colorcolor none rgb(0.8, 0.1, 200%) #ff0000 icc-color(blah, 0.0, 1.0, 1.0, 0.0);
+    QRegExp splitDefinitions("(#?\\w+|[\\w\\-]*\\(.+\\))\\s");
+    int pos = 0;
+    int pos2 = 0;
+    QStringList colorDefinitions;
+    QString valueAdjust = value.split(";").first();
+    valueAdjust.append(" ");
+    while ((pos2 = splitDefinitions.indexIn(valueAdjust, pos)) != -1) {
+        colorDefinitions.append(splitDefinitions.cap(1).trimmed());
+        pos = pos2 + splitDefinitions.matchedLength();
+    }
+    if (pos < value.length()) {
+        QString remainder = value.right(value.length()-pos);
+        remainder.remove(";");
+        colorDefinitions.append(remainder);
+    }
+    dbgPigment << "Color definitions found during svg11parsing" << colorDefinitions;
+
+    for (QString def : colorDefinitions) {
+        if (def.toLower() == "currentcolor") {
+            parsed = current;
+        } else if (QColor::isValidColor(def)) {
+            parsed.fromQColor(QColor(def));
+        } else if (def.toLower().startsWith("rgb")) {
+            QString parse = def.trimmed();
+            QStringList colors = parse.split(',');
+            QString r = colors[0].right((colors[0].length() - 4)).trimmed();
+            QString g = colors[1].trimmed();
+            QString b = colors[2].left((colors[2].length() - 1)).trimmed();
+
+            if (r.contains('%')) {
+                r = r.left(r.length() - 1);
+                r = QString::number(int((double(255 * r.toDouble()) / 100.0)));
+            }
+
+            if (g.contains('%')) {
+                g = g.left(g.length() - 1);
+                g = QString::number(int((double(255 * g.toDouble()) / 100.0)));
+            }
+
+            if (b.contains('%')) {
+                b = b.left(b.length() - 1);
+                b = QString::number(int((double(255 * b.toDouble()) / 100.0)));
+            }
+            parsed.fromQColor(QColor(r.toInt(), g.toInt(), b.toInt()));
+
+        } else if (def.toLower().startsWith("icc-color")) {
+            QStringList values = def.split(",");
+            QString iccprofilename = values.first().split("(").last();
+            values.removeFirst();
+
+            // svg11 docs say that searching the name should be caseinsentive.
+            QStringList entry = QStringList(profileList.keys()).filter(iccprofilename, Qt::CaseInsensitive);
+            if (entry.empty()) {
+                continue;
+            }
+            const KoColorProfile *profile = profileList.value(entry.first());
+            if (!profile) {
+                continue;
+            }
+            QString colormodel = profile->colorModelID();
+            QString depth = "F32";
+            if (colormodel == LABAColorModelID.id()) {
+                // let our xml handling deal with lab
+                QVector<float> labV(3);
+                for (int i = 0; i < values.size(); i++) {
+                    if (i<labV.size()) {
+                        QString entry = values.at(i);
+                        entry = entry.split(")").first();
+                        labV[i] = entry.toDouble();
+                    }
+                }
+                QString lab = QString("<Lab space='%1' L='%2' a='%3' b='%4' />")
+                        .arg(profile->name())
+                        .arg(labV[0])
+                        .arg(labV[1])
+                        .arg(labV[2]);
+                QDomDocument doc;
+                doc.setContent(lab);
+                parsed = KoColor::fromXML(doc.documentElement(), "U16");
+                continue;
+            } else if (colormodel == CMYKAColorModelID.id()) {
+                depth = "U16";
+            } else if (colormodel == XYZAColorModelID.id()) {
+                // Inkscape decided to have X and Z go from 0 to 2, and I can't for the live of me figure out why.
+                // So we're just not parsing XYZ.
+                continue;
+            }
+            const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace(colormodel, depth, profile);
+            if (!cs) {
+                continue;
+            }
+            parsed = KoColor(cs);
+            QVector<float> channelValues(parsed.colorSpace()->channelCount());
+            channelValues.fill(0.0);
+            channelValues[parsed.colorSpace()->alphaPos()] = 1.0;
+            for (int channel = 0; channel < values.size(); channel++) {
+                int location = KoChannelInfo::displayPositionToChannelIndex(channel, parsed.colorSpace()->channels());
+                QString entry = values.at(channel);
+                entry = entry.split(")").first();
+                channelValues[location] = entry.toFloat();
+            }
+            parsed.colorSpace()->fromNormalisedChannelsValue(parsed.data(), channelValues);
+        }
+    }
+
+    return parsed;
 }
 
 QString KoColor::toQString(const KoColor &color)

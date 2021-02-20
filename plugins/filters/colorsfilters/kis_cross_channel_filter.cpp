@@ -1,21 +1,9 @@
 /*
  * This file is part of Krita
  *
- * Copyright (c) 2018 Jouni Pentikainen <joupent@gmail.com>
+ * SPDX-FileCopyrightText: 2018 Jouni Pentikainen <joupent@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_cross_channel_filter.h"
@@ -137,6 +125,15 @@ KisCubicCurve KisCrossChannelFilterConfiguration::getDefaultCurve()
 {
     const QList<QPointF> points { QPointF(0.0f, 0.5f), QPointF(1.0f, 0.5f) };
     return KisCubicCurve(points);
+}
+
+bool KisCrossChannelFilterConfiguration::compareTo(const KisPropertiesConfiguration *rhs) const
+{
+    const KisCrossChannelFilterConfiguration *otherConfig = dynamic_cast<const KisCrossChannelFilterConfiguration *>(rhs);
+
+    return otherConfig
+        && KisMultiChannelFilterConfiguration::compareTo(rhs)
+        && m_driverChannels == otherConfig->m_driverChannels;
 }
 
 KisCrossChannelConfigWidget::KisCrossChannelConfigWidget(QWidget * parent, KisPaintDeviceSP dev, Qt::WindowFlags f)

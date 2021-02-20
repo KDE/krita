@@ -1,20 +1,7 @@
 /*
- * Copyright (C) 2017 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2017 Boudewijn Rempt <boud@valdyas.org>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #include "KisReferenceImage.h"
@@ -120,7 +107,7 @@ struct KisReferenceImage::Private : public QSharedData
             cachedImage = image;
         }
 
-        mipmap = KisQImagePyramid(cachedImage);
+        mipmap = KisQImagePyramid(cachedImage, false);
     }
 };
 
@@ -221,6 +208,7 @@ void KisReferenceImage::paint(QPainter &gc, KoShapePaintingContext &/*paintconte
     gc.save();
 
     QSizeF shapeSize = size();
+    // scale and rotation done by the user (excluding zoom)
     QTransform transform = QTransform::fromScale(shapeSize.width() / d->image.width(), shapeSize.height() / d->image.height());
 
     if (d->cachedImage.isNull()) {
@@ -229,10 +217,20 @@ void KisReferenceImage::paint(QPainter &gc, KoShapePaintingContext &/*paintconte
     }
 
     qreal scale;
-    QImage prescaled = d->mipmap.getClosest(transform * gc.transform(), &scale);
+    // scale from the highDPI display
+    QTransform devicePixelRatioFTransform = QTransform::fromScale(gc.device()->devicePixelRatioF(), gc.device()->devicePixelRatioF());
+    // all three transformations: scale and rotation done by the user, scale from highDPI display, and zoom + rotation of the view
+    // order: zoom/rotation of the view; scale to high res; scale and rotation done by the user
+    QImage prescaled = d->mipmap.getClosestWithoutWorkaroundBorder(transform * devicePixelRatioFTransform * gc.transform(), &scale);
     transform.scale(1.0 / scale, 1.0 / scale);
 
-    gc.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
+    if (scale > 1.0) {
+        // enlarging should be done without smooth transformation
+        // so the user can see pixels just as they are painted
+        gc.setRenderHints(QPainter::Antialiasing);
+    } else {
+        gc.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
+    }
     gc.setClipRect(QRectF(QPointF(), shapeSize), Qt::IntersectClip);
     gc.setTransform(transform, true);
     gc.drawImage(QPoint(), prescaled);

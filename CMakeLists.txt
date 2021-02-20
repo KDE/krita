@@ -2,12 +2,12 @@ project(krita)
 
 message(STATUS "Using CMake version: ${CMAKE_VERSION}")
 
-cmake_minimum_required(VERSION 3.0.0 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.7.0 FATAL_ERROR)
 
 set(MIN_QT_VERSION 5.9.0)
 set(MIN_FRAMEWORKS_VERSION 5.44.0)
 
-set( CMAKE_CXX_STANDARD 11 )
+set( CMAKE_CXX_STANDARD 14 )
 set( CMAKE_CXX_STANDARD_REQUIRED ON )
 
 
@@ -410,6 +410,14 @@ set_package_properties(Qt5Quick PROPERTIES
         PURPOSE "Optionally used for the touch gui for Krita")
 
 macro_bool_to_01(Qt5Quick_FOUND HAVE_QT_QUICK)
+if (Qt5Quick_FOUND)
+    get_target_property(Qt5Quick_LIBRARY Qt5::Quick "LOCATION")
+    list (APPEND ANDROID_EXTRA_LIBS ${Qt5Quick_LIBRARY})
+
+    get_target_property(Qt5Qml_LIBRARY Qt5::Qml "LOCATION")
+    list (APPEND ANDROID_EXTRA_LIBS ${Qt5Qml_LIBRARY})
+endif()
+
 
 find_package(Qt5QuickWidgets ${MIN_QT_VERSION})
 set_package_properties(Qt5QuickWidgets PROPERTIES
@@ -417,6 +425,11 @@ set_package_properties(Qt5QuickWidgets PROPERTIES
         URL "https://www.qt.io/"
         TYPE OPTIONAL
         PURPOSE "Optionally used for the touch gui for Krita")
+endif()
+
+if (Qt5QuickWidgets_FOUND)
+    get_target_property(Qt5QuickWidgets_LIBRARY Qt5::QuickWidgets "LOCATION")
+    list (APPEND ANDROID_EXTRA_LIBS ${Qt5QuickWidgets_LIBRARY})
 endif()
 
 if (NOT WIN32 AND NOT APPLE AND NOT ANDROID)
@@ -525,7 +538,11 @@ kde_enable_exceptions()
 set(KRITA_DEFAULT_TEST_DATA_DIR ${CMAKE_SOURCE_DIR}/sdk/tests/data/)
 macro(macro_add_unittest_definitions)
   add_definitions(-DFILES_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/data/")
-  add_definitions(-DFILES_OUTPUT_DIR="${CMAKE_CURRENT_BINARY_DIR}")
+  if(WIN32)
+    add_definitions(-DFILES_OUTPUT_DIR="${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
+  else()
+    add_definitions(-DFILES_OUTPUT_DIR="${CMAKE_CURRENT_BINARY_DIR}")
+  endif()
   add_definitions(-DFILES_DEFAULT_DATA_DIR="${KRITA_DEFAULT_TEST_DATA_DIR}")
   add_definitions(-DSYSTEM_RESOURCES_DATA_DIR="${CMAKE_SOURCE_DIR}/krita/data/")
 endmacro()
@@ -563,12 +580,12 @@ endif()
 
 # FIXME: Still hardcoded
 if (ANDROID)
-    set (Boost_INCLUDE_DIR          ${CMAKE_CURRENT_BINARY_DIR}/i/${ANDROID_ABI}/include/boost-1_69)
+    set (Boost_INCLUDE_DIR          ${CMAKE_CURRENT_BINARY_DIR}/i/${ANDROID_ABI}/include/boost-1_70)
     set (Boost_LIBRARY_DIR          ${CMAKE_CURRENT_BINARY_DIR}/i/${ANDROID_ABI}/lib)
-    set (KF5_LIBRARIES              ${CMAKE_CURRENT_BINARY_DIR}/kf5/kde/install/lib)
+    set (KF5_LIBRARIES              ${CMAKE_CURRENT_BINARY_DIR}/i/lib)
 endif()
 
-find_package(PNG REQUIRED)
+find_package(PNG REQUIRED "1.2.6")
 list (APPEND ANDROID_EXTRA_LIBS ${PNG_LIBRARY})
 
 if (APPLE)
@@ -600,16 +617,21 @@ endif()
 ###########################
 
 ##
-## Test for SeExpr
+## Test for KSeExpr
 ##
-find_package(SeExpr2)
-set_package_properties(SeExpr2 PROPERTIES
-    URL "https://invent.kde.org/graphics/seexpr"
+find_package(KSeExpr 4.0.0.0)
+set_package_properties(KSeExpr PROPERTIES
+    URL "https://invent.kde.org/graphics/kseexpr"
     TYPE OPTIONAL
     PURPOSE "Required by the SeExpr generator layer"
 )
-macro_bool_to_01(SeExpr2_FOUND HAVE_SEEXPR)
+macro_bool_to_01(KSeExpr_FOUND HAVE_SEEXPR)
 configure_file(config-seexpr.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-seexpr.h )
+if(KSeExpr_FOUND)
+    get_target_property(KSeExpr_LIBRARY KSeExpr::KSeExpr "LOCATION")
+    get_target_property(KSeExprUI_LIBRARY KSeExpr::KSeExprUI "LOCATION") 
+    list (APPEND ANDROID_EXTRA_LIBS ${KSeExpr_LIBRARY} ${KSeExprUI_LIBRARY})
+endif()
 
 find_package(ZLIB)
 set_package_properties(ZLIB PROPERTIES
@@ -728,13 +750,18 @@ set_package_properties(PyQt5 PROPERTIES
     PURPOSE "Required by the Krita PyQt plugin")
 macro_bool_to_01(PYQT5_FOUND HAVE_PYQT5)
 
-find_package(FFmpeg)
-set_package_properties(FFmpeg PROPERTIES
-    DESCRIPTION "FFmpeg video encoder."
-    URL "http://ffmpeg.org/"
+find_package(LibMyPaint)
+set_package_properties(LibMyPaint PROPERTIES
+    DESCRIPTION "MyPaint brush engine API for C/C++"
     TYPE OPTIONAL
-    PURPOSE "Required by the Krita recorder plugin")
-macro_bool_to_01(FFMPEG_FOUND HAVE_FFMPEG)
+    PURPOSE "Required for the mypaint brush engine")
+if(LibMyPaint_FOUND)
+    if(LibMyPaint_VERSION VERSION_LESS "1.4.0")
+        message(WARNING "Please update libmypaint to version above 1.4.0 as lower versions are known to crash")
+    endif()
+endif()
+macro_bool_to_01(LibMyPaint_FOUND HAVE_LIBMYPAINT)
+configure_file(config-mypaint.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-mypaint.h )
 
 ##
 ## Look for OpenGL
@@ -781,6 +808,12 @@ if(LCMS2_FOUND)
     endif()
     set(HAVE_REQUIRED_LCMS_VERSION TRUE)
     set(HAVE_LCMS2 TRUE)
+
+    include(CheckIncludeFileCXX)
+
+    set(CMAKE_REQUIRED_INCLUDES ${LCMS2_INCLUDE_DIR})
+    set(CMAKE_REQUIRED_LIBRARIES ${LCMS2_LIBRARIES})
+    CHECK_INCLUDE_FILE_CXX("lcms2_fast_float.h" HAVE_LCMS_FAST_FLOAT_PLUGIN)
 endif()
 list (APPEND ANDROID_EXTRA_LIBS ${LCMS2_LIBRARIES})
 
@@ -932,8 +965,25 @@ if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/po OR EXISTS ${CMAKE_CURRENT_BINARY_DIR}/p
   ki18n_install(po)
 endif()
 
-# ECM passes this to Qt, which was already capable of detecting it..
-set (ANDROID_SDK_COMPILE_API "android-28")
+if (ANDROID)
+  # ECM passes this to Qt, which was already capable of detecting it..
+  set (ANDROID_SDK_COMPILE_API "29")
+  if ((${NDK_VERSION} GREATER_EQUAL 20))
+    set (USE_LLVM ON)
+  endif()
+
+  if (NOT (CMAKE_CXX_STANDARD_LIBRARIES MATCHES "[^ ]*c\\+\\+[^ ]*\\.so"))
+    # copied regex from ECM's toolchain
+    string(REGEX REPLACE "-(clang)?([0-9].[0-9])?$" "" ECM_ANDROID_STL_ARCH ${ANDROID_TOOLCHAIN_NAME})
+
+    set (KRITA_ANDROID_STL_PATH "${ANDROID_TOOLCHAIN_ROOT}/sysroot/usr/lib/${ECM_ANDROID_STL_ARCH}/lib${ANDROID_STL}.so")
+    if (NOT EXISTS ${KRITA_ANDROID_STL_PATH})
+      message(FATAL_ERROR "STL does not exist at the right location, please use NDK r20+")
+    endif()
+
+    set (CMAKE_CXX_STANDARD_LIBRARIES "${CMAKE_CXX_STANDARD_LIBRARIES} \"${KRITA_ANDROID_STL_PATH}\"" CACHE STRING "" FORCE)
+  endif()
+endif()
 
 if(DEFINED QTANDROID_EXPORTED_TARGET AND NOT TARGET "create-apk")
     set (_CMAKE_ANDROID_DIR "${ECM_DIR}/../toolchain")

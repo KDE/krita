@@ -1,0 +1,172 @@
+From 62838fc9791a9fbe807b1cc4f90f802af91b39a5 Mon Sep 17 00:00:00 2001
+From: Boudewijn Rempt <boud@valdyas.org>
+Date: Tue, 17 Nov 2020 12:47:55 +0100
+Subject: [PATCH] Add cmake build system
+
+---
+ CMakeLists.txt           | 64 ++++++++++++++++++++++++++++++++++++++++++++++++
+ FindJsonC.cmake          | 31 +++++++++++++++++++++++
+ config.h                 |  4 +--
+ mypaint-brush-settings.c | 12 ++++-----
+ 4 files changed, 103 insertions(+), 8 deletions(-)
+ create mode 100644 CMakeLists.txt
+ create mode 100644 FindJsonC.cmake
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+new file mode 100644
+index 0000000..d93309d
+--- /dev/null
++++ b/CMakeLists.txt
+@@ -0,0 +1,64 @@
++cmake_minimum_required(VERSION 3.0.0 FATAL_ERROR)
++
++set (project libmypaint)
++
++LIST (APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}")
++
++find_package(ECM 5.22 REQUIRED NOMODULE)
++set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
++include(CMakePackageConfigHelpers)
++
++find_package(JsonC)
++
++include_directories(SYSTEM ${JSONC_INCLUDE_DIRS})
++
++set(mypaint_SOURCES
++    ${CMAKE_CURRENT_SOURCE_DIR}/mypaint.c
++    ${CMAKE_CURRENT_SOURCE_DIR}/mypaint-brush-settings.c
++    ${CMAKE_CURRENT_SOURCE_DIR}/mypaint-symmetry.c
++    ${CMAKE_CURRENT_SOURCE_DIR}/fifo.c
++    ${CMAKE_CURRENT_SOURCE_DIR}/helpers.c
++    ${CMAKE_CURRENT_SOURCE_DIR}/tilemap.c
++    ${CMAKE_CURRENT_SOURCE_DIR}/operationqueue.c
++    ${CMAKE_CURRENT_SOURCE_DIR}/mypaint-rectangle.c
++    ${CMAKE_CURRENT_SOURCE_DIR}/mypaint-fixed-tiled-surface.c
++    ${CMAKE_CURRENT_SOURCE_DIR}/mypaint-mapping.c
++    ${CMAKE_CURRENT_SOURCE_DIR}/rng-double.c
++    ${CMAKE_CURRENT_SOURCE_DIR}/mypaint-brush.c
++    ${CMAKE_CURRENT_SOURCE_DIR}/mypaint-surface.c
++    ${CMAKE_CURRENT_SOURCE_DIR}/brushmodes.c
++    ${CMAKE_CURRENT_SOURCE_DIR}/mypaint-matrix.c
++    ${CMAKE_CURRENT_SOURCE_DIR}/mypaint-tiled-surface.c
++)
++
++set(mypaint_HEADERS
++    ${CMAKE_CURRENT_SOURCE_DIR}/mypaint-brush.h
++    ${CMAKE_CURRENT_SOURCE_DIR}/tiled-surface-private.h
++    ${CMAKE_CURRENT_SOURCE_DIR}/mypaint.h
++    ${CMAKE_CURRENT_SOURCE_DIR}/fifo.h
++    ${CMAKE_CURRENT_SOURCE_DIR}/rng-double.h
++    ${CMAKE_CURRENT_SOURCE_DIR}/mypaint-rectangle.h
++    ${CMAKE_CURRENT_SOURCE_DIR}/mypaint-config.h
++    ${CMAKE_CURRENT_SOURCE_DIR}/mypaint-tiled-surface.h
++    ${CMAKE_CURRENT_SOURCE_DIR}/config.h
++    ${CMAKE_CURRENT_SOURCE_DIR}/mypaint-mapping.h
++    ${CMAKE_CURRENT_SOURCE_DIR}/brushsettings-gen.h
++    ${CMAKE_CURRENT_SOURCE_DIR}/mypaint-symmetry.h
++    ${CMAKE_CURRENT_SOURCE_DIR}/tilemap.h
++    ${CMAKE_CURRENT_SOURCE_DIR}/operationqueue.h
++    ${CMAKE_CURRENT_SOURCE_DIR}/mypaint-matrix.h
++    ${CMAKE_CURRENT_SOURCE_DIR}/helpers.h
++    ${CMAKE_CURRENT_SOURCE_DIR}/mypaint-brush-settings-gen.h
++    ${CMAKE_CURRENT_SOURCE_DIR}/mypaint-glib-compat.h
++    ${CMAKE_CURRENT_SOURCE_DIR}/brushmodes.h
++    ${CMAKE_CURRENT_SOURCE_DIR}/mypaint-fixed-tiled-surface.h
++    ${CMAKE_CURRENT_SOURCE_DIR}/mypaint-brush-settings.h
++    ${CMAKE_CURRENT_SOURCE_DIR}/mypaint-surface.h
++)
++
++
++add_library(mypaint SHARED ${mypaint_SOURCES} ${mypaint_HEADERS})
++target_link_libraries(mypaint PRIVATE ${JSONC_LIBRARIES})
++set_property(TARGET mypaint PROPERTY C_STANDARD 11)
++install(TARGETS mypaint RUNTIME DESTINATION bin LIBRARY DESTINATION lib ARCHIVE DESTINATION lib) 
++install(FILES ${mypaint_HEADERS} DESTINATION include)
+diff --git a/FindJsonC.cmake b/FindJsonC.cmake
+new file mode 100644
+index 0000000..17464df
+--- /dev/null
++++ b/FindJsonC.cmake
+@@ -0,0 +1,31 @@
++#For finding JsonC library in the system
++
++
++find_path(LIBJSONC_INCLUDE_DIR
++    NAMES json_config.h
++    /usr/include
++    /usr/local/include
++    /sw/include
++    /opt/local/include
++    ${MYPAINT_PKGCONF_INCLUDE_DIRS}
++    ${MYPAINT_PKGCONF_INCLUDEDIR}
++    PATH_SUFFIXES json-c
++)
++
++#message("XXXX" ${LIBJSONC_INCLUDE_DIR})
++
++find_library(LIBJSONC_LIBRARY
++    NAMES libjson-c json-c
++    HINTS ${JSONC_PKGCONF_LIBRARY_DIRS} ${JSONC_PKGCONF_LIBDIR}
++    DOC "Libraries to link against for json support"
++)
++
++#message("YYYY" ${LIBJSONC_LIBRARY})
++
++string(REGEX MATCH "(.*)/libjson.so" LIBJSONC_LIBRARIES ${LIBJSONC_LIBRARY})
++
++set(JSONC_LIBRARIES ${LIBJSONC_LIBRARY})
++set(JSONC_INCLUDE_DIRS ${LIBJSONC_INCLUDE_DIR})
++set(JSONC_FOUND ${JSONC_PKGCONF_FOUND})
++set(JSONC_VERSION ${JSONCl_PKGCONF_VERSION})
++
+diff --git a/config.h b/config.h
+index a44118b..c70f205 100644
+--- a/config.h
++++ b/config.h
+@@ -17,7 +17,7 @@
+ #define HAVE_DLFCN_H 1
+ 
+ /* Define if the GNU gettext() function is already present or preinstalled. */
+-#define HAVE_GETTEXT 1
++#define HAVE_GETTEXT 0
+ 
+ /* Define to 1 if you have the <inttypes.h> header file. */
+ #define HAVE_INTTYPES_H 1
+@@ -56,7 +56,7 @@
+ #define LT_OBJDIR ".libs/"
+ 
+ /* Define to 1 if glib is used */
+-#define MYPAINT_CONFIG_USE_GLIB 1
++#define MYPAINT_CONFIG_USE_GLIB 0
+ 
+ /* Define to the address where bug reports for this package should be sent. */
+ #define PACKAGE_BUGREPORT "https://github.com/mypaint/libmypaint/issues"
+diff --git a/mypaint-brush-settings.c b/mypaint-brush-settings.c
+index b352cec..2e3b1fe 100644
+--- a/mypaint-brush-settings.c
++++ b/mypaint-brush-settings.c
+@@ -21,15 +21,15 @@
+ #include <string.h>
+ #include <assert.h>
+ 
+-#ifdef HAVE_GETTEXT
+-  #include <libintl.h>
+-  #define N_(String) (String)
+-  #define  _(String) gettext (String)
+-#else
++//#ifdef HAVE_GETTEXT
++//  #include <libintl.h>
++//  #define N_(String) (String)
++//  #define  _(String) gettext (String)
++//#else
+   #define dgettext(Domain,String) (String)
+   #define N_(String) (String)
+   #define  _(String) (String)
+-#endif // HAVE_GETTEXT
++//#endif // HAVE_GETTEXT
+ 
+ #include <float.h>
+ 
+-- 
+2.13.2.windows.1
+

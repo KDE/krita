@@ -1,19 +1,7 @@
 /*
- *  Copyright (c) 2010 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2010 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_canvas_controller.h"
@@ -272,7 +260,7 @@ void KisCanvasController::slotToggleLevelOfDetailMode(bool value)
     KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(canvas());
     Q_ASSERT(kritaCanvas);
 
-    kritaCanvas->setLodAllowedInCanvas(value);
+    kritaCanvas->setLodPreferredInCanvas(value);
 
     bool result = levelOfDetailMode();
 
@@ -308,7 +296,7 @@ bool KisCanvasController::levelOfDetailMode() const
     KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(canvas());
     Q_ASSERT(kritaCanvas);
 
-    return kritaCanvas->lodAllowedInCanvas();
+    return kritaCanvas->lodPreferredInCanvas();
 }
 
 void KisCanvasController::saveCanvasState(KisPropertiesConfiguration &config) const
@@ -337,7 +325,7 @@ void KisCanvasController::restoreCanvasState(const KisPropertiesConfiguration &c
     setPreferredCenter(QPointF(panX, panY));
 
     slotToggleWrapAroundMode(config.getBool("wrapAround", false));
-    kritaCanvas->setLodAllowedInCanvas(config.getBool("enableInstantPreview", false));
+    kritaCanvas->setLodPreferredInCanvas(config.getBool("enableInstantPreview", false));
 }
 
 void KisCanvasController::resetScrollBars()

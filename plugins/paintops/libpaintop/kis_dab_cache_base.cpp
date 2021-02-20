@@ -1,19 +1,7 @@
 /*
- *  Copyright (c) 2012 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2012 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_dab_cache_base.h"
@@ -264,6 +252,7 @@ void KisDabCacheBase::fetchDabGenerationInfo(bool hasDabInCache,
     di->dstDabRect = position.rect;
     di->subPixel = position.subPixel;
 
+    const bool supportsCaching = resources->brush->supportsCaching();
     di->solidColorFill = !resources->colorSource || resources->colorSource->isUniformColor();
     di->paintColor = resources->colorSource && resources->colorSource->isUniformColor() ?
                 resources->colorSource->uniformColor() : request.color;
@@ -283,7 +272,7 @@ void KisDabCacheBase::fetchDabGenerationInfo(bool hasDabInCache,
         const int effectiveDabSize = qMin(newParams.width, newParams.height);
         precisionLevel = m_d->precisionOption->effectivePrecisionLevel(effectiveDabSize) - 1;
     }
-    *shouldUseCache = hasDabInCache && di->solidColorFill &&
+    *shouldUseCache = hasDabInCache && supportsCaching && di->solidColorFill &&
             newParams.compare(m_d->lastSavedDabParameters, precisionLevel);
 
     if (!*shouldUseCache) {

@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>PathToolOptionWidgetBase</class>
  <widget class="QWidget" name="PathToolOptionWidgetBase">
   <property name="geometry">
@@ -61,28 +65,28 @@
        <property name="spacing">
         <number>3</number>
        </property>
-       <item row="0" column="0">
+       <item column="0" row="0">
         <widget class="QToolButton" name="corner">
          <property name="text">
           <string>...</string>
          </property>
         </widget>
        </item>
-       <item row="0" column="1">
+       <item column="1" row="0">
         <widget class="QToolButton" name="smooth">
          <property name="text">
           <string>...</string>
          </property>
         </widget>
        </item>
-       <item row="0" column="2">
+       <item column="2" row="0">
         <widget class="QToolButton" name="symmetric">
          <property name="text">
           <string>...</string>
          </property>
         </widget>
        </item>
-       <item row="0" column="3">
+       <item column="3" row="0">
         <spacer>
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
@@ -95,91 +99,91 @@
          </property>
         </spacer>
        </item>
-       <item row="0" column="5">
+       <item column="5" row="0">
         <widget class="QToolButton" name="lineSegment">
          <property name="text">
           <string>...</string>
          </property>
         </widget>
        </item>
-       <item row="0" column="6">
+       <item column="6" row="0">
         <widget class="QToolButton" name="curveSegment">
          <property name="text">
           <string>...</string>
          </property>
         </widget>
        </item>
-       <item row="0" column="7">
+       <item column="7" row="0">
         <widget class="QToolButton" name="linePoint">
          <property name="text">
           <string>...</string>
          </property>
         </widget>
        </item>
-       <item row="0" column="8">
+       <item column="8" row="0">
         <widget class="QToolButton" name="curvePoint">
          <property name="text">
           <string>...</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="0">
+       <item column="0" row="1">
         <widget class="QToolButton" name="addPoint">
          <property name="text">
           <string>...</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="1">
+       <item column="1" row="1">
         <widget class="QToolButton" name="removePoint">
          <property name="text">
           <string>...</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="5">
+       <item column="5" row="1">
         <widget class="QToolButton" name="breakPoint">
          <property name="text">
           <string>...</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="6">
+       <item column="6" row="1">
         <widget class="QToolButton" name="breakSegment">
          <property name="text">
           <string>...</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="7">
+       <item column="7" row="1">
         <widget class="QToolButton" name="joinSegment">
          <property name="text">
           <string>...</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="8">
+       <item column="8" row="1">
         <widget class="QToolButton" name="mergePoints">
          <property name="text">
           <string>...</string>
          </property>
         </widget>
        </item>
-       <item row="0" column="4">
+       <item column="4" row="0">
         <widget class="Line" name="line">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
         </widget>
        </item>
-       <item row="1" column="4">
+       <item column="4" row="1">
         <widget class="Line" name="line_2">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
         </widget>
        </item>
-       <item row="2" column="5">
+       <item column="5" row="2">
         <spacer name="verticalSpacer_2">
          <property name="orientation">
           <enum>Qt::Vertical</enum>

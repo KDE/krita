@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgInkOptions</class>
  <widget class="QWidget" name="WdgInkOptions">
   <property name="geometry">
@@ -154,28 +158,28 @@
     <string>Saturation Weights</string>
    </property>
    <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0">
+    <item column="0" row="0">
      <widget class="QCheckBox" name="useWeightCHBox">
       <property name="text">
        <string>weighted saturation</string>
       </property>
      </widget>
     </item>
-    <item row="2" column="0">
+    <item column="0" row="2">
      <widget class="QLabel" name="label_2">
       <property name="text">
        <string>Bristle Ink Weight:</string>
       </property>
      </widget>
     </item>
-    <item row="1" column="0">
+    <item column="0" row="1">
      <widget class="QLabel" name="label">
       <property name="text">
        <string>Pressure Weight:</string>
       </property>
      </widget>
     </item>
-    <item row="2" column="2">
+    <item column="2" row="2">
      <widget class="KisDoubleSliderSpinBox" name="bristleInkAmountSlider" native="true">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -185,14 +189,14 @@
       </property>
      </widget>
     </item>
-    <item row="3" column="0">
+    <item column="0" row="3">
      <widget class="QLabel" name="label_3">
       <property name="text">
        <string>Bristle Length Weight:</string>
       </property>
      </widget>
     </item>
-    <item row="3" column="2">
+    <item column="2" row="3">
      <widget class="KisDoubleSliderSpinBox" name="bristleLengthSlider" native="true">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -202,7 +206,7 @@
       </property>
      </widget>
     </item>
-    <item row="1" column="2">
+    <item column="2" row="1">
      <widget class="KisDoubleSliderSpinBox" name="pressureSlider" native="true">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -212,14 +216,14 @@
       </property>
      </widget>
     </item>
-    <item row="4" column="0">
+    <item column="0" row="4">
      <widget class="QLabel" name="label_4">
       <property name="text">
        <string>Ink Depletion Curve Weight:</string>
       </property>
      </widget>
     </item>
-    <item row="4" column="2">
+    <item column="2" row="4">
      <widget class="KisDoubleSliderSpinBox" name="inkDepletionSlider" native="true">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">

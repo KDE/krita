@@ -1,20 +1,7 @@
 /*
- * Copyright (C) 2018 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2018 Boudewijn Rempt <boud@valdyas.org>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 #include "KisResourceIterator.h"
 
@@ -31,7 +18,7 @@ KisResourceItem::KisResourceItem(KisResourceModel *resourceModel, const QModelIn
 int KisResourceItem::id()
 {
     if (m_index.isValid()) {
-        return m_index.data(Qt::UserRole + KisResourceModel::Id).toInt();
+        return m_index.data(Qt::UserRole + KisAbstractResourceModel::Id).toInt();
     }
     return -1;
 }
@@ -39,7 +26,7 @@ int KisResourceItem::id()
 QString KisResourceItem::resourceType()
 {
     if (m_index.isValid()) {
-        return m_index.data(Qt::UserRole + KisResourceModel::ResourceType).toString();
+        return m_index.data(Qt::UserRole + KisAbstractResourceModel::ResourceType).toString();
     }
     return QString();
 }
@@ -47,7 +34,7 @@ QString KisResourceItem::resourceType()
 QString KisResourceItem::name()
 {
     if (m_index.isValid()) {
-        return m_index.data(Qt::UserRole + KisResourceModel::Name).toString();
+        return m_index.data(Qt::UserRole + KisAbstractResourceModel::Name).toString();
     }
     return QString();
 }
@@ -55,7 +42,7 @@ QString KisResourceItem::name()
 QString KisResourceItem::filename()
 {
     if (m_index.isValid()) {
-        return m_index.data(Qt::UserRole + KisResourceModel::Filename).toString();
+        return m_index.data(Qt::UserRole + KisAbstractResourceModel::Filename).toString();
     }
     return QString();
 }
@@ -63,7 +50,7 @@ QString KisResourceItem::filename()
 QString KisResourceItem::tooltip()
 {
     if (m_index.isValid()) {
-        return m_index.data(Qt::UserRole + KisResourceModel::Tooltip).toString();
+        return m_index.data(Qt::UserRole + KisAbstractResourceModel::Tooltip).toString();
     }
     return QString();
 }
@@ -71,7 +58,7 @@ QString KisResourceItem::tooltip()
 QImage KisResourceItem::thumbnail()
 {
     if (m_index.isValid()) {
-        return m_index.data(Qt::UserRole + KisResourceModel::Thumbnail).value<QImage>();
+        return m_index.data(Qt::UserRole + KisAbstractResourceModel::Thumbnail).value<QImage>();
     }
     return QImage();
 }

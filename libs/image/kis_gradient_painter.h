@@ -1,19 +1,8 @@
 /*
- *  Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
+ *  SPDX-FileCopyrightText: 2004 Adrian Page <adrian@pagenet.plus.com>
+ *  SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 #ifndef KIS_GRADIENT_PAINTER_H_
 #define KIS_GRADIENT_PAINTER_H_
@@ -75,7 +64,8 @@ public:
                        qint32 startx,
                        qint32 starty,
                        qint32 width,
-                       qint32 height);
+                       qint32 height,
+                       bool useDithering = false);
 
     // convenience overload
     bool paintGradient(const QPointF& gradientVectorStart,
@@ -83,7 +73,8 @@ public:
                        enumGradientRepeat repeat,
                        double antiAliasThreshold,
                        bool reverseGradient,
-                       const QRect &applyRect);
+                       const QRect &applyRect,
+                       bool useDithering = false);
 
     template <class T> 
     bool paintGradient(const QPointF& gradientVectorStart,
@@ -91,6 +82,7 @@ public:
                        enumGradientRepeat repeat,
                        double antiAliasThreshold,
                        bool reverseGradient,
+                       bool useDithering,
                        const QRect &applyRect,
                        T & paintPolicy);
 

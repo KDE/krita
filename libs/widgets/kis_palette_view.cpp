@@ -1,19 +1,7 @@
 /*
- *  Copyright (c) 2016 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2016 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_palette_view.h"
@@ -43,7 +31,7 @@
 #include "kis_color_button.h"
 #include <KisSwatch.h>
 #include <KisResourceModel.h>
-#include <KisResourceModelProvider.h>
+#include <kis_debug.h>
 
 int KisPaletteView::MININUM_ROW_HEIGHT = 10;
 
@@ -61,9 +49,9 @@ KisPaletteView::KisPaletteView(QWidget *parent)
 
     setShowGrid(true);
     setDropIndicatorShown(true);
-    setDragDropMode(QAbstractItemView::InternalMove);
+    setDragDropMode(QAbstractItemView::DragDrop);
     setSelectionMode(QAbstractItemView::SingleSelection);
-    setDragEnabled(false);
+    setDragEnabled(true);
     setAcceptDrops(false);
 
     /*
@@ -241,7 +229,6 @@ KisPaletteModel* KisPaletteView::paletteModel() const
 void KisPaletteView::setAllowModification(bool allow)
 {
     m_d->allowPaletteModification = allow;
-    setDragEnabled(allow);
     setAcceptDrops(allow);
 }
 
@@ -260,8 +247,8 @@ void KisPaletteView::resizeRows(int newSize)
 void KisPaletteView::saveModification()
 {
     qDebug() << "saving modification in palette view" << m_d->model->colorSet()->filename() << m_d->model->colorSet()->storageLocation();
-    KisResourceModel *model = KisResourceModelProvider::resourceModel(m_d->model->colorSet()->resourceType().first);
-    model->updateResource(m_d->model->colorSet());
+    KisResourceModel model(m_d->model->colorSet()->resourceType().first);
+    model.updateResource(m_d->model->colorSet());
 }
 
 void KisPaletteView::removeSelectedEntry()

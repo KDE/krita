@@ -1,20 +1,7 @@
 /* This file is part of the KDE project
  * Copyright 2008 (C) Boudewijn Rempt <boud@valdyas.org>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 #ifndef KIS_KRA_TAGS
 #define KIS_KRA_TAGS
@@ -35,12 +22,15 @@ const QString NATIVE_MIMETYPE = "application/x-kra";
 const QString SEPARATOR = "/";
 const QString SHAPE_LAYER_PATH = "/shapelayers/";
 const QString EXIF_PATH = "/annotations/exif";
+const QString ANNOTATIONS_PATH = "/annotations/";
 const QString ICC_PATH = "/annotations/icc";
 const QString ICC_PROOFING_PATH = "/annotations/proofing/icc";
 const QString LAYER_STYLES_PATH = "/annotations/layerstyles.asl";
 const QString ASSISTANTS_PATH = "/assistants/";
 const QString LAYER_PATH = "/layers/";
 const QString PALETTE_PATH = "/palettes/";
+const QString STORYBOARD_PATH = "/storyboard/";
+const QString ANIMATION_METADATA_PATH = "/animation/";
 
 const QString ADJUSTMENT_LAYER = "adjustmentlayer";
 const QString CHANNEL_FLAGS = "channelflags";
@@ -136,8 +126,10 @@ const QString CANVASPROJECTIONCOLOR = "ProjectionBackgroundColor";
 const QString COLORBYTEDATA = "ColorData";
 const QString SIMPLECOLORDATA = "SimpleColorData"; // easier 8-bit color data that works well with XML
 const QString GLOBALASSISTANTSCOLOR = "GlobalAssistantsColor";
-const QString PALETTES = ResourceType::Palettes;
+const QString PALETTES = "Palettes"; // ResourceType::Palettes is lowercase, while the tag is uppercase
 const QString MIRROR_AXIS = "MirrorAxis";
+const QString ANNOTATIONS = "Annotations";
+const QString ANNOTATION = "Annotation";
 }
 
 

@@ -5,11 +5,11 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
-   version="1.1"
-   id="svg2"
-   viewBox="0 0 32 32.000001"
+   width="32"
    height="32"
-   width="32">
+   viewBox="0 0 32 32.000001"
+   id="svg2"
+   version="1.1">
   <defs
      id="defs4" />
   <metadata
@@ -47,39 +47,39 @@
     </rdf:RDF>
   </metadata>
   <g
-     style="display:inline"
-     id="layer4">
+     id="layer4"
+     style="display:inline;fill:#373737;fill-opacity:1">
     <path
-       id="rect4883"
-       d="M 0,0 0,4 0,8 4,8 4,4 8,4 8,0 Z m 0,12 0,8 4,0 0,-8 z m 0,12 0,4 0,4 8,0 0,-4 -4,0 0,-4 z m 28,0 0,4 -4,0 0,4 8,0 0,-4 0,-4 z m -16,4 0,4 8,0 0,-4 z"
-       style="opacity:1;fill:#373737;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1" />
+       style="opacity:1;fill:#373737;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1"
+       d="M 0,0 V 4 8 H 4 V 4 H 8 V 0 Z m 0,12 v 8 h 4 v -8 z m 0,12 v 4 4 H 8 V 28 H 4 v -4 z m 28,0 v 4 h -4 v 4 h 8 v -4 -4 z m -16,4 v 4 h 8 v -4 z"
+       id="rect4883" />
   </g>
   <g
      id="layer1">
     <rect
-       transform="matrix(0.68612539,0.7274833,-0.7274833,0.68612539,0,0)"
-       y="-11.277952"
-       x="15.603848"
-       height="4.1542525"
-       width="13.435029"
+       style="opacity:1;fill:#373737;fill-opacity:1;stroke:#373737;stroke-width:1.5;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect4198"
-       style="opacity:1;fill:#323232;fill-opacity:1;stroke:#323232;stroke-width:1.5;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+       width="13.435029"
+       height="4.1542525"
+       x="15.603848"
+       y="-11.277952"
+       transform="rotate(46.675823)" />
     <rect
-       ry="0"
-       transform="matrix(0.68612539,0.7274833,-0.7274833,0.68612539,0,0)"
-       y="-18.108068"
-       x="19.311939"
-       height="7.9970379"
-       width="6.0442481"
+       style="opacity:1;fill:#373737;fill-opacity:1;stroke:#373737;stroke-width:1.5;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect4198-3"
-       style="opacity:1;fill:#323232;fill-opacity:1;stroke:#323232;stroke-width:1.5;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+       width="6.0442481"
+       height="7.9970379"
+       x="19.311939"
+       y="-18.108068"
+       transform="rotate(46.675823)"
+       ry="0" />
     <path
-       id="path4215"
+       style="fill:none;fill-rule:evenodd;stroke:#373737;stroke-width:1.70000005;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="M 18.473165,8.7322547 8.57367,18.366585 7.689786,23.493109 12.374369,22.520837 22.980971,12.886507"
-       style="fill:none;fill-rule:evenodd;stroke:#323232;stroke-width:1.70000005;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+       id="path4215" />
     <path
-       id="path4217"
+       style="fill:#373737;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 7.336233,20.134352 c 0.441942,0 7.071068,0.441942 7.071068,0.441942 l -4.331029,2.828427 -2.828427,-0.265165 z"
-       style="fill:#323232;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+       id="path4217" />
   </g>
 </svg>

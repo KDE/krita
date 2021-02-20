@@ -1,19 +1,7 @@
 /* This file is part of the KDE project
- * Copyright (C) 2012 Arjen Hiemstra <ahiemstra@heimr.nl>
+ * SPDX-FileCopyrightText: 2012 Arjen Hiemstra <ahiemstra@heimr.nl>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_alternate_invocation_action.h"
@@ -37,18 +25,18 @@ KisAlternateInvocationAction::KisAlternateInvocationAction()
     , m_d(new Private)
 {
     setName(i18n("Alternate Invocation"));
-    setDescription(i18n("The <i>Alternate Invocation</i> action performs an alternate action with the current tool. For example, using the brush tool it picks a color from the canvas."));
+    setDescription(i18n("The <i>Alternate Invocation</i> action performs an alternate action with the current tool. For example, using the brush tool it samples a color from the canvas."));
     QHash<QString, int> shortcuts;
     shortcuts.insert(i18n("Primary Mode"), PrimaryAlternateModeShortcut);
     shortcuts.insert(i18n("Secondary Mode"), SecondaryAlternateModeShortcut);
     shortcuts.insert(i18n("Tertiary Mode"), TertiaryAlternateModeShortcut);
 
 
-    shortcuts.insert(i18n("Pick Foreground Color from Current Layer"), PickColorFgLayerModeShortcut);
-    shortcuts.insert(i18n("Pick Background Color from Current Layer"), PickColorBgLayerModeShortcut);
+    shortcuts.insert(i18n("Sample Foreground Color from Current Layer"), SampleColorFgLayerModeShortcut);
+    shortcuts.insert(i18n("Sample Background Color from Current Layer"), SampleColorBgLayerModeShortcut);
 
-    shortcuts.insert(i18n("Pick Foreground Color from Merged Image"), PickColorFgImageModeShortcut);
-    shortcuts.insert(i18n("Pick Background Color from Merged Image"), PickColorBgImageModeShortcut);
+    shortcuts.insert(i18n("Sample Foreground Color from Merged Image"), SampleColorFgImageModeShortcut);
+    shortcuts.insert(i18n("Sample Background Color from Merged Image"), SampleColorBgImageModeShortcut);
 
     setShortcutIndexes(shortcuts);
 }
@@ -62,17 +50,17 @@ KisTool::ToolAction KisAlternateInvocationAction::shortcutToToolAction(int short
     KisTool::ToolAction action = KisTool::Alternate_NONE;
 
     switch ((Shortcut)shortcut) {
-    case PickColorFgLayerModeShortcut:
-        action = KisTool::AlternatePickFgNode;
+    case SampleColorFgLayerModeShortcut:
+        action = KisTool::AlternateSampleFgNode;
         break;
-    case PickColorBgLayerModeShortcut:
-        action = KisTool::AlternatePickBgNode;
+    case SampleColorBgLayerModeShortcut:
+        action = KisTool::AlternateSampleBgNode;
         break;
-    case PickColorFgImageModeShortcut:
-        action = KisTool::AlternatePickFgImage;
+    case SampleColorFgImageModeShortcut:
+        action = KisTool::AlternateSampleFgImage;
         break;
-    case PickColorBgImageModeShortcut:
-        action = KisTool::AlternatePickBgImage;
+    case SampleColorBgImageModeShortcut:
+        action = KisTool::AlternateSampleBgImage;
         break;
     case PrimaryAlternateModeShortcut:
         action = KisTool::AlternateSecondary;
@@ -125,7 +113,7 @@ void KisAlternateInvocationAction::end(QEvent *event)
     Qt::KeyboardModifiers modifiers;
 
     switch (m_d->savedAction) {
-    case KisTool::AlternatePickFgNode:
+    case KisTool::AlternateSampleFgNode:
         modifiers = Qt::ControlModifier;
         break;
     case KisTool::AlternateThird:
@@ -146,7 +134,7 @@ void KisAlternateInvocationAction::inputEvent(QEvent* event)
     if (event && ((event->type() == QEvent::MouseMove) || (event->type() == QEvent::TabletMove))) {
         Qt::KeyboardModifiers modifiers;
         switch (m_d->savedAction) {
-        case KisTool::AlternatePickFgNode:
+        case KisTool::AlternateSampleFgNode:
             modifiers =  Qt::ControlModifier;
             break;
         case KisTool::AlternateThird:

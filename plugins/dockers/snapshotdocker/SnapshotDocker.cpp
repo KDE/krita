@@ -1,19 +1,7 @@
 /*
- *  Copyright (c) 2019 Tusooa Zhu <tusooa@vista.aero>
+ *  SPDX-FileCopyrightText: 2019 Tusooa Zhu <tusooa@vista.aero>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "SnapshotDocker.h"
@@ -71,16 +59,21 @@ SnapshotDocker::SnapshotDocker()
     m_d->view->setModel(m_d->model.data());
     mainLayout->addWidget(m_d->view);
     QHBoxLayout *buttonsLayout = new QHBoxLayout(widget);
-    m_d->bnAdd->setIcon(KisIconUtils::loadIcon("addlayer"));
+    m_d->bnAdd->setIcon(KisIconUtils::loadIcon("list-add"));
     m_d->bnAdd->setToolTip(i18nc("@info:tooltip", "Create snapshot"));
+    m_d->bnAdd->setAutoRaise(true);
+
     connect(m_d->bnAdd, &QToolButton::clicked, this, &SnapshotDocker::slotBnAddClicked);
     buttonsLayout->addWidget(m_d->bnAdd);
     m_d->bnSwitchTo->setIcon(KisIconUtils::loadIcon("snapshot-load"));
     m_d->bnSwitchTo->setToolTip(i18nc("@info:tooltip", "Switch to selected snapshot"));
+    m_d->bnSwitchTo->setAutoRaise(true);
     connect(m_d->bnSwitchTo, &QToolButton::clicked, this, &SnapshotDocker::slotBnSwitchToClicked);
+
     buttonsLayout->addWidget(m_d->bnSwitchTo);
     m_d->bnRemove->setIcon(KisIconUtils::loadIcon("deletelayer"));
     m_d->bnRemove->setToolTip(i18nc("@info:tooltip", "Remove selected snapshot"));
+    m_d->bnRemove->setAutoRaise(true);
     connect(m_d->bnRemove, &QToolButton::clicked, this, &SnapshotDocker::slotBnRemoveClicked);
     buttonsLayout->addWidget(m_d->bnRemove);
     mainLayout->addLayout(buttonsLayout);

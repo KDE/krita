@@ -1,3 +1,7 @@
+#
+#  SPDX-License-Identifier: GPL-3.0-or-later
+#
+
 """
 Exception hook
 If some unexpected error occurs it can be shown in a nice looking dialog.

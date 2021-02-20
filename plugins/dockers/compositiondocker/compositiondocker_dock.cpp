@@ -1,19 +1,7 @@
 /*
- *  Copyright (c) 2012 Sven Langkamp <sven.langkamp@gmail.com>
+ *  SPDX-FileCopyrightText: 2012 Sven Langkamp <sven.langkamp@gmail.com>
  *
- *  This library is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This library is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU Lesser General Public License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #include "compositiondocker_dock.h"
@@ -209,7 +197,7 @@ void CompositionDockerDock::saveClicked()
     saveNameEdit->clear();
     updateModel();
     compositionView->setCurrentIndex(m_model->index(image->compositions().count()-1, 0));
-    image->setModified();
+    image->setModifiedWithoutUndo();
 }
 
 void CompositionDockerDock::moveCompositionUp()
@@ -414,7 +402,7 @@ void CompositionDockerDock::updateComposition()
     if (m_canvas && m_canvas->viewManager() && m_canvas->viewManager()->image() && index.isValid()) {
         KisLayerCompositionSP composition = m_model->compositionFromIndex(index);
         composition->store();
-        m_canvas->image()->setModified();
+        m_canvas->image()->setModifiedWithoutUndo();
     }
 }
 
@@ -430,7 +418,7 @@ void CompositionDockerDock::renameComposition()
                                              composition->name(), &ok);
         if (ok && !name.isEmpty()) {
             composition->setName(name);
-            m_canvas->image()->setModified();
+            m_canvas->image()->setModifiedWithoutUndo();
         }
     }
 }

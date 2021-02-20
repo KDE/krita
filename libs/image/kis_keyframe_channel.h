@@ -1,21 +1,9 @@
 /*
- *  Copyright (c) 2015 Jouni Pentikäinen <joupent@gmail.com>
- *  Copyright (c) 2020 Emmet O'Neill <emmetoneill.pdx@gmail.com>
- *  Copyright (c) 2020 Eoin O'Neill <eoinoneill1991@gmail.com>
+ *  SPDX-FileCopyrightText: 2015 Jouni Pentikäinen <joupent@gmail.com>
+ *  SPDX-FileCopyrightText: 2020 Emmet O 'Neill <emmetoneill.pdx@gmail.com>
+ *  SPDX-FileCopyrightText: 2020 Eoin O 'Neill <eoinoneill1991@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #ifndef KIS_KEYFRAME_CHANNEL_H
@@ -49,19 +37,18 @@ public:
     static const KoID Raster;
     static const KoID Opacity;
     static const KoID TransformArguments;
-    static const KoID TransformPositionX;
-    static const KoID TransformPositionY;
-    static const KoID TransformScaleX;
-    static const KoID TransformScaleY;
-    static const KoID TransformShearX;
-    static const KoID TransformShearY;
-    static const KoID TransformRotationX;
-    static const KoID TransformRotationY;
-    static const KoID TransformRotationZ;
+    static const KoID PositionX;
+    static const KoID PositionY;
+    static const KoID ScaleX;
+    static const KoID ScaleY;
+    static const KoID ShearX;
+    static const KoID ShearY;
+    static const KoID RotationX;
+    static const KoID RotationY;
+    static const KoID RotationZ;
 
-    KisKeyframeChannel(const KoID &id, KisNodeWSP parent = 0);
     KisKeyframeChannel(const KoID &id, KisDefaultBoundsBaseSP bounds);
-    KisKeyframeChannel(const KisKeyframeChannel &rhs, KisNodeWSP newParent);
+    KisKeyframeChannel(const KisKeyframeChannel &rhs);
     ~KisKeyframeChannel() override;
 
     /** @brief Add a new keyframe to the channel at the specified time. */
@@ -128,6 +115,7 @@ public:
 
     void setNode(KisNodeWSP node);
     KisNodeWSP node() const;
+    void setDefaultBounds(KisDefaultBoundsBaseSP bounds);
 
     /** @brief Calculates a pseudo-unique hash based on
      * the relevant internal state of the channel. */
@@ -165,7 +153,6 @@ protected:
     typedef QMap<int, KisKeyframeSP> TimeKeyframeMap;
     TimeKeyframeMap &keys();
     const TimeKeyframeMap &constKeys() const;
-
     int currentTime() const;
 
     /**

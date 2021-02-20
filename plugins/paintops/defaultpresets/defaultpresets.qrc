@@ -1,0 +1,27 @@
+<!--
+  SPDX-FileCopyrightText: none
+  SPDX-License-Identifier: CC0-1.0
+-->
+<RCC>
+    <qresource prefix="/presets/">
+        <file>curvebrush.kpp</file>
+        <file>duplicate.kpp</file>
+        <file>eraser.kpp</file>
+        <file>filter.kpp</file>
+        <file>hairybrush.kpp</file>
+        <file>particlebrush.kpp</file>
+        <file>smudge.kpp</file>
+        <file>spraybrush.kpp</file>
+        <file>complex.kpp</file>
+        <file>deformbrush.kpp</file>
+        <file>dynabrush.kpp</file>
+        <file>experimentbrush.kpp</file>
+        <file>gridbrush.kpp</file>
+        <file>paintbrush.kpp</file>
+        <file>colorsmudge.kpp</file>
+        <file>sketchbrush.kpp</file>
+        <file>hatchingbrush.kpp</file>
+        <file>tangentnormal.kpp</file>
+        <file>roundmarker.kpp</file>
+    </qresource>
+</RCC>

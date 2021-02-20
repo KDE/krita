@@ -1,28 +1,16 @@
 /*
  *  This file is part of KimageShop^WKrayon^WKrita
  *
- *  Copyright (c) 1999 Matthias Elter  <me@kde.org>
- *                1999 Michael Koch    <koch@kde.org>
- *                1999 Carsten Pfeiffer <pfeiffer@kde.org>
- *                2002 Patrick Julien <freak@codepimps.org>
- *                2003-2011 Boudewijn Rempt <boud@valdyas.org>
- *                2004 Clarence Dang <dang@kde.org>
- *                2011 José Luis Vergara <pentalis@gmail.com>
- *                2017 L. E. Segovia <amy@amyspark.me>
+ *  SPDX-FileCopyrightText: 1999 Matthias Elter <me@kde.org>
+ *  SPDX-FileCopyrightText: 1999 Michael Koch <koch@kde.org>
+ *  SPDX-FileCopyrightText: 1999 Carsten Pfeiffer <pfeiffer@kde.org>
+ *  SPDX-FileCopyrightText: 2002 Patrick Julien <freak@codepimps.org>
+ *  SPDX-FileCopyrightText: 2003-2011 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2004 Clarence Dang <dang@kde.org>
+ *  SPDX-FileCopyrightText: 2011 José Luis Vergara <pentalis@gmail.com>
+ *  SPDX-FileCopyrightText: 2017 L. E. Segovia <amy@amyspark.me>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include <stdio.h>
@@ -60,6 +48,7 @@
 #include <KoCanvasController.h>
 #include <KoCompositeOp.h>
 #include <KoDockRegistry.h>
+#include <KoDockWidgetTitleBar.h>
 #include <KoProperties.h>
 #include <KisResourceItemChooserSync.h>
 #include <KoSelection.h>
@@ -376,9 +365,8 @@ void KisViewManager::slotViewAdded(KisView *view)
 {
     // WARNING: this slot is called even when a view from another main windows is added!
     //          Don't expect \p view be a child of this view manager!
-    Q_UNUSED(view);
 
-    if (viewCount() == 0) {
+    if (view->viewManager() == this && viewCount() == 0) {
         d->statusBar.showAllStatusBarItems();
     }
 }
@@ -387,9 +375,8 @@ void KisViewManager::slotViewRemoved(KisView *view)
 {
     // WARNING: this slot is called even when a view from another main windows is removed!
     //          Don't expect \p view be a child of this view manager!
-    Q_UNUSED(view);
 
-    if (viewCount() == 0) {
+    if (view->viewManager() == this && viewCount() == 0) {
         d->statusBar.hideAllStatusBarItems();
     }
 
@@ -443,8 +430,8 @@ void KisViewManager::setCurrentView(KisView *view)
 
                 QModelIndex idx = resourceModel->index(i, 0);
 
-                QString resourceName = idx.data(Qt::UserRole + KisResourceModel::Name).toString().toLower();
-                QString fileName = idx.data(Qt::UserRole + KisResourceModel::Filename).toString().toLower();
+                QString resourceName = idx.data(Qt::UserRole + KisAbstractResourceModel::Name).toString().toLower();
+                QString fileName = idx.data(Qt::UserRole + KisAbstractResourceModel::Filename).toString().toLower();
 
                 if (resourceName.contains("basic_tip_default")) {
                     defaultPresetName = resourceName;
@@ -1063,7 +1050,7 @@ void KisViewManager::slotSaveIncrementalBackup()
             if (!letter.isNull()) newVersion.append(letter);
             newVersion.append(".");
             backupFileName.replace(regex, newVersion);
-            fileAlreadyExists = QFile(backupFileName).exists();
+            fileAlreadyExists = QFile(path + '/' + backupFileName).exists();
             if (fileAlreadyExists) {
                 if (!letter.isNull()) {
                     char letterCh = letter.at(0).toLatin1();
@@ -1103,7 +1090,7 @@ void KisViewManager::slotSaveIncrementalBackup()
             newVersion.prepend("~");
             newVersion.append(".");
             backupFileName.replace(regex, newVersion);
-            fileAlreadyExists = QFile(backupFileName).exists();
+            fileAlreadyExists = QFile(path + '/' + backupFileName).exists();
             if (fileAlreadyExists) {
                 // Prepare the base for new version filename, increment by 1
                 int intVersion = baseNewVersion.toInt(0);
@@ -1284,6 +1271,10 @@ void KisViewManager::updateIcons()
     if (mainWindow()) {
         QList<QDockWidget*> dockers = mainWindow()->dockWidgets();
         Q_FOREACH (QDockWidget* dock, dockers) {
+            KoDockWidgetTitleBar* titlebar = dynamic_cast<KoDockWidgetTitleBar*>(dock->titleBarWidget());
+            if (titlebar) {
+                titlebar->updateIcons();
+            }
             QObjectList objects;
             objects.append(dock);
             while (!objects.isEmpty()) {

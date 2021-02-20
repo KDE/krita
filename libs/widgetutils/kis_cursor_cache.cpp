@@ -1,19 +1,7 @@
 /*
- *  Copyright (c) 2016 Michael Abrahams <miabraha@gmail.com>
+ *  SPDX-FileCopyrightText: 2016 Michael Abrahams <miabraha@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_cursor_cache.h"
@@ -42,7 +30,7 @@ namespace {
         0x00, 0x08, 0x00, 0x00, 0x08, 0x00, 0x00, 0x08, 0x00
     };
 
-    static const unsigned char pickerplus_bits[] = {
+    static const unsigned char samplerplus_bits[] = {
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0x00, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00, 0x0d, 0x00, 0x00, 0x80, 0x1e,
         0x00, 0x00, 0x40, 0x1f, 0x00, 0x00, 0xb0, 0x1f, 0x00, 0x00, 0xe8, 0x0f,
@@ -56,7 +44,7 @@ namespace {
         0x40, 0x00, 0x00, 0x00, 0x40, 0x00, 0x00, 0x00
     };
 
-    static const unsigned char pickerminus_bits[] = {
+    static const unsigned char samplerminus_bits[] = {
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0x00, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00, 0x0d, 0x00, 0x00, 0x80, 0x1e,
         0x00, 0x00, 0x40, 0x1f, 0x00, 0x00, 0xb0, 0x1f, 0x00, 0x00, 0xe8, 0x0f,
@@ -239,8 +227,8 @@ QCursor KisCursorCache::load(const QString & cursorName, int hotspotX, int hotsp
 void KisCursorCache::init()
 {
     selectCursor       = fromBitmap(QSize(23, 23), select_bits, 11, 11);
-    pickerPlusCursor   = fromBitmap(QSize(32, 32), pickerplus_bits, 6, 25);
-    pickerMinusCursor  = fromBitmap(QSize(32, 32), pickerminus_bits, 6, 25);
+    samplerPlusCursor   = fromBitmap(QSize(32, 32), samplerplus_bits, 6, 25);
+    samplerMinusCursor  = fromBitmap(QSize(32, 32), samplerminus_bits, 6, 25);
     penCursor          = fromBitmap(QSize(24, 24), pen_bits, 1, 22);
     brushCursor        = fromBitmap(QSize(25, 23), brush_bits, 1, 21);
     airbrushCursor     = fromBitmap(QSize(24, 24), airbrush_bits, 1, 22);

@@ -1,3 +1,7 @@
+/*
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
 #ifndef KIS_COMMON_COLORS_RECALCULATION_RUNNER_H
 #define KIS_COMMON_COLORS_RECALCULATION_RUNNER_H
 

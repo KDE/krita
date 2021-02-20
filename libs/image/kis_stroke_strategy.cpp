@@ -1,19 +1,7 @@
 /*
- *  Copyright (c) 2011 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2011 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_stroke_strategy.h"
@@ -29,6 +17,7 @@ KisStrokeStrategy::KisStrokeStrategy(const QLatin1String &id, const KUndo2MagicS
       m_requestsOtherStrokesToEnd(true),
       m_canForgetAboutMe(false),
       m_needsExplicitCancel(false),
+      m_forceLodModeIfPossible(false),
       m_balancingRatioOverride(-1.0),
       m_id(id),
       m_name(name),
@@ -43,6 +32,7 @@ KisStrokeStrategy::KisStrokeStrategy(const KisStrokeStrategy &rhs)
       m_requestsOtherStrokesToEnd(rhs.m_requestsOtherStrokesToEnd),
       m_canForgetAboutMe(rhs.m_canForgetAboutMe),
       m_needsExplicitCancel(rhs.m_needsExplicitCancel),
+      m_forceLodModeIfPossible(rhs.m_forceLodModeIfPossible),
       m_balancingRatioOverride(rhs.m_balancingRatioOverride),
       m_id(rhs.m_id),
       m_name(rhs.m_name),
@@ -50,6 +40,16 @@ KisStrokeStrategy::KisStrokeStrategy(const KisStrokeStrategy &rhs)
 {
     KIS_ASSERT_RECOVER_NOOP(!rhs.m_strokeId && !m_mutatedJobsInterface &&
                             "After the stroke has been started, no copying must happen");
+}
+
+bool KisStrokeStrategy::forceLodModeIfPossible() const
+{
+    return m_forceLodModeIfPossible;
+}
+
+void KisStrokeStrategy::setForceLodModeIfPossible(bool value)
+{
+    m_forceLodModeIfPossible = value;
 }
 
 KisStrokeStrategy::~KisStrokeStrategy()
@@ -143,6 +143,12 @@ QString KisStrokeStrategy::id() const
 KUndo2MagicString KisStrokeStrategy::name() const
 {
     return m_name;
+}
+
+KisLodPreferences KisStrokeStrategy::currentLodPreferences() const
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(m_mutatedJobsInterface, KisLodPreferences());
+    return m_mutatedJobsInterface->lodPreferences();
 }
 
 void KisStrokeStrategy::setMutatedJobsInterface(KisStrokesQueueMutatedJobInterface *mutatedJobsInterface, KisStrokeId strokeId)

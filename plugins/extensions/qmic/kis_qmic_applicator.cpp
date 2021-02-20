@@ -1,19 +1,7 @@
 /*
- * Copyright (c) 2013 Lukáš Tvrdý <lukast.dev@gmail.com
+ * SPDX-FileCopyrightText: 2013 Lukáš Tvrdý <lukast.dev@gmail.com
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 #include "kis_qmic_applicator.h"
 
@@ -53,7 +41,7 @@ void KisQmicApplicator::apply()
     cancel();
 
     KisImageSignalVector emitSignals;
-    emitSignals << ComplexSizeChangedSignal() << ModifiedSignal;
+    emitSignals << ComplexSizeChangedSignal();
 
     m_applicator.reset(
         new KisProcessingApplicator(m_image, m_node,
@@ -73,14 +61,17 @@ void KisQmicApplicator::apply()
         layerSize = QRect(0, 0, m_image->width(), m_image->height());
     }
 
-   if (!selection) {
-        // synchronize Krita image size with biggest gmic layer size
+    // This is a three-stage process.
+
+    if (!selection) {
+        // 1. synchronize Krita image size with biggest gmic layer size
         m_applicator->applyCommand(new KisQmicSynchronizeImageSizeCommand(m_images, m_image));
     }
 
-    // synchronize layer count
+    // 2. synchronize layer count and convert excess GMic nodes to paint layers
     m_applicator->applyCommand(new KisQmicSynchronizeLayersCommand(m_kritaNodes, m_images, m_image, layerSize, selection), KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
 
+    // 3. visit the existing nodes and reuse them to apply the remaining changes from GMic
     KisProcessingVisitorSP  importVisitor = new KisImportQmicProcessingVisitor(m_kritaNodes, m_images, layerSize, selection);
     m_applicator->applyVisitor(importVisitor, KisStrokeJobData::SEQUENTIAL); // undo information is stored in this visitor
     m_applicator->explicitlyEmitFinalSignals();

@@ -1,21 +1,8 @@
 /* This file is part of the KDE project
- * Copyright (C) 2008 Jan Hambrecht <jaham@gmx.net>
- * Copyright (C) 2018 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2008 Jan Hambrecht <jaham@gmx.net>
+ * SPDX-FileCopyrightText: 2018 Boudewijn Rempt <boud@valdyas.org>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #include "KisResourceItemDelegate.h"
@@ -37,36 +24,41 @@ void KisResourceItemDelegate::paint(QPainter *painter, const QStyleOptionViewIte
 
     painter->save();
 
+    qreal devicePixelRatioF = painter->device()->devicePixelRatioF();
+
     if (option.state & QStyle::State_Selected) {
         painter->fillRect(option.rect, option.palette.highlight());
     }
 
     QRect innerRect = option.rect.adjusted(2, 2, -2, -2);
 
-    QImage thumbnail = index.data(Qt::UserRole + KisResourceModel::Thumbnail).value<QImage>();
+    QImage thumbnail = index.data(Qt::UserRole + KisAbstractResourceModel::Thumbnail).value<QImage>();
+    thumbnail.setDevicePixelRatio(devicePixelRatioF);
 
     QSize imageSize = thumbnail.size();
 
     painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
 
-    QString resourceType = index.data(Qt::UserRole + KisResourceModel::ResourceType).toString();
+    QString resourceType = index.data(Qt::UserRole + KisAbstractResourceModel::ResourceType).toString();
     // XXX: don't use a hardcoded string here to identify the resource type
     if (resourceType == ResourceType::Gradients) {
         m_checkerPainter.paint(*painter, innerRect, innerRect.topLeft());
-        thumbnail = thumbnail.scaled(innerRect.width(), innerRect.height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+        thumbnail = thumbnail.scaled(innerRect.size()*devicePixelRatioF, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
         painter->drawImage(innerRect.topLeft(), thumbnail);
     }
     else if (resourceType == ResourceType::Patterns) {
         painter->fillRect(innerRect, Qt::white); // no checkers, they are confusing with patterns.
         if (imageSize.height() > innerRect.height() || imageSize.width() > innerRect.width()) {
-            thumbnail = thumbnail.scaled(innerRect.width(), innerRect.height(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+            thumbnail = thumbnail.scaled(innerRect.size()*devicePixelRatioF, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         }
-        painter->fillRect(innerRect, QBrush(thumbnail));
+        QBrush patternBrush(thumbnail);
+        patternBrush.setTransform(QTransform::fromTranslate(innerRect.x(), innerRect.y()));
+        painter->fillRect(innerRect, patternBrush);
     }
     else if (resourceType == ResourceType::Workspaces || resourceType == ResourceType::WindowLayouts) {
         // TODO: thumbnails for workspaces and window layouts?
         painter->fillRect(innerRect, Qt::white);
-        QString name = index.data(Qt::UserRole + KisResourceModel::Name).toString();
+        QString name = index.data(Qt::UserRole + KisAbstractResourceModel::Name).toString();
         QPen before = painter->pen();
         painter->setPen(Qt::black);
         painter->drawText(innerRect, Qt::TextWordWrap, name.split("_").join(" "));
@@ -74,16 +66,18 @@ void KisResourceItemDelegate::paint(QPainter *painter, const QStyleOptionViewIte
     }
     else {
         painter->fillRect(innerRect, Qt::white); // no checkers, they are confusing with patterns.
-        if (imageSize.height() > innerRect.height() || imageSize.width() > innerRect.width()) {
-            thumbnail = thumbnail.scaled(innerRect.width(), innerRect.height(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        if (imageSize.height() > innerRect.height()*devicePixelRatioF || imageSize.width() > innerRect.width()*devicePixelRatioF) {
+            thumbnail = thumbnail.scaled(innerRect.size()*devicePixelRatioF, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        } else if(imageSize.height() < innerRect.height()*devicePixelRatioF || imageSize.width() < innerRect.width()*devicePixelRatioF) {
+            thumbnail = thumbnail.scaled(innerRect.size()*devicePixelRatioF, Qt::KeepAspectRatio, Qt::FastTransformation);
         }
         QPoint topleft(innerRect.topLeft());
 
-        if (thumbnail.width() < innerRect.width()) {
-            topleft.setX(topleft.x() + (innerRect.width() - thumbnail.width()) / 2);
+        if (thumbnail.width() < innerRect.width()*devicePixelRatioF) {
+            topleft.setX(topleft.x() + (innerRect.width() - thumbnail.width()/devicePixelRatioF) / 2);
         }
-        if (thumbnail.height() < innerRect.height()) {
-            topleft.setY(topleft.y() + (innerRect.height() - thumbnail.height()) / 2);
+        if (thumbnail.height() < innerRect.height()*devicePixelRatioF) {
+            topleft.setY(topleft.y() + (innerRect.height() - thumbnail.height()/devicePixelRatioF) / 2);
         }
         painter->drawImage(topleft, thumbnail);
     }

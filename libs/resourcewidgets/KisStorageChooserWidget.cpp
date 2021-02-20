@@ -1,20 +1,7 @@
 /* This file is part of the KDE project
- * Copyright (C) 2019 Wolthera van Hövell tot Westerflier<griffinvalley@gmail.com>
+ * SPDX-FileCopyrightText: 2019 Wolthera van Hövell tot Westerflier <griffinvalley@gmail.com>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #include <QAbstractItemView>
@@ -22,13 +9,16 @@
 #include <QApplication>
 #include <QStyle>
 #include <QDebug>
+#include <QMessageBox>
 
 #include <QListView>
 
+#include "KisResourceTypes.h"
+#include "KisResourceModel.h"
 #include "KisStorageChooserWidget.h"
 #include "KisStorageModel.h"
+#include "KisStorageFilterProxyModel.h"
 #include <KoIcon.h>
-
 
 KisStorageChooserDelegate::KisStorageChooserDelegate(QObject *parent)
     : QAbstractItemDelegate(parent)
@@ -47,6 +37,8 @@ void KisStorageChooserDelegate::paint(QPainter *painter, const QStyleOptionViewI
     QString storageType = index.data(Qt::UserRole + KisStorageModel::StorageType).value<QString>();
 
     QImage thumbnail = index.data(Qt::UserRole +  + KisStorageModel::Thumbnail).value<QImage>();
+
+    qreal devicePixelRatioF = painter->device()->devicePixelRatioF();
 
     if (thumbnail.isNull()) {
         //fallback on cute icons.
@@ -74,7 +66,8 @@ void KisStorageChooserDelegate::paint(QPainter *painter, const QStyleOptionViewI
         }
 
     } else {
-        thumbnail = thumbnail.scaled(option.decorationSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        thumbnail = thumbnail.scaled(option.decorationSize*devicePixelRatioF, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        thumbnail.setDevicePixelRatio(devicePixelRatioF);
     }
 
     QColor penColor(option.palette.text().color());
@@ -108,7 +101,13 @@ QSize KisStorageChooserDelegate::sizeHint(const QStyleOptionViewItem &option, co
 KisStorageChooserWidget::KisStorageChooserWidget(QWidget *parent) : KisPopupButton(parent)
 {
     QListView *view = new QListView(this);
-    view->setModel(KisStorageModel::instance());
+
+    KisStorageFilterProxyModel *proxyModel = new KisStorageFilterProxyModel(this);
+    proxyModel->setSourceModel(KisStorageModel::instance());
+    proxyModel->setFilter(KisStorageFilterProxyModel::ByStorageType,
+                          QStringList()
+                          << KisResourceStorage::storageTypeToUntranslatedString(KisResourceStorage::StorageType::Bundle));
+    view->setModel(proxyModel);
     view->setIconSize(QSize(64, 64));
     view->setItemDelegate(new KisStorageChooserDelegate(this));
     view->setSelectionMode(QAbstractItemView::SingleSelection);
@@ -122,6 +121,24 @@ void KisStorageChooserWidget::activated(const QModelIndex &index)
 
     bool active = index.data(Qt::UserRole + KisStorageModel::Active).value<bool>();
     KisStorageModel::instance()->setData(index, !active, Qt::CheckStateRole);
+
+    KisStorageFilterProxyModel proxy;
+    proxy.setSourceModel(KisStorageModel::instance());
+    proxy.setFilter(KisStorageFilterProxyModel::ByStorageType,
+                    QStringList()
+                    << KisResourceStorage::storageTypeToUntranslatedString(KisResourceStorage::StorageType::Bundle));
+
+    QString warning;
+    if (!proxy.rowCount()) {
+        warning = i18n("All bundles have been deactivated.");
+    }
+
+    KisResourceModel resourceModel(ResourceType::PaintOpPresets);
+    resourceModel.setResourceFilter(KisResourceModel::ShowActiveResources);
+    if (!resourceModel.rowCount()) {
+        warning += i18n("\nThere are no brush presets available. Please re-enable a bundle that provides brush presets.");
+        QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"), warning);
+    }
 }
 
 KisStorageChooserWidget::~KisStorageChooserWidget()

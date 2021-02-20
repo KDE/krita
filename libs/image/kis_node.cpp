@@ -1,19 +1,7 @@
 /*
- * Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2007 Boudewijn Rempt <boud@valdyas.org>
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_node.h"
@@ -196,13 +184,6 @@ KisNode::KisNode(const KisNode & rhs)
     m_d->graphListener = 0;
     moveToThread(qApp->thread());
 
-    // HACK ALERT: we create opacity channel in KisBaseNode, but we cannot
-    //             initialize its node from there! So workaround it here!
-    QMap<QString, KisKeyframeChannel*> channels = keyframeChannels();
-    for (auto it = channels.begin(); it != channels.end(); ++it) {
-        it.value()->setNode(this);
-    }
-
     // NOTE: the nodes are not supposed to be added/removed while
     // creation of another node, so we do *no* locking here!
 
@@ -273,15 +254,15 @@ KisProjectionLeafSP KisNode::projectionLeaf() const
     return m_d->projectionLeaf;
 }
 
-void KisNode::setImage(KisImageWSP image)
+void KisNode::setImage(KisImageWSP newImage)
 {
-    KisBaseNode::setImage(image);
+    KisBaseNode::setImage(newImage);
 
     KisNodeSP node = firstChild();
     while (node) {
         KisLayerUtils::recursiveApplyNodes(node,
-                                           [image] (KisNodeSP node) {
-                                               node->setImage(image);
+                                           [newImage] (KisNodeSP node) {
+                                               node->setImage(newImage);
                                            });
 
         node = node->nextSibling();
@@ -374,6 +355,10 @@ void KisNode::addKeyframeChannel(KisKeyframeChannel *channel)
 {
     channel->setNode(this);
     KisBaseNode::addKeyframeChannel(channel);
+
+    if (m_d->graphListener) {
+        m_d->graphListener->keyframeChannelHasBeenAdded(this, channel);
+    }
 }
 
 KisNodeSP KisNode::firstChild() const

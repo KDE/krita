@@ -1,19 +1,7 @@
 /* This file is part of the KDE libraries
-   Copyright (C) 1999 Daniel M. Duley <mosfet@kde.org>
+   SPDX-FileCopyrightText: 1999 Daniel M. Duley <mosfet@kde.org>
 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License version 2 as published by the Free Software Foundation.
-
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
-
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+   SPDX-License-Identifier: LGPL-2.0-only
 */
 
 #include "KoDualColorButton.h"
@@ -148,7 +136,7 @@ bool KoDualColorButton::popDialog() const
 
 QSize KoDualColorButton::sizeHint() const
 {
-    return QSize( 34, 34 );
+    return QSize(34, 34);
 }
 
 void KoDualColorButton::setForegroundColor(const KoColor &color)
@@ -162,13 +150,13 @@ void KoDualColorButton::setForegroundColor(const KoColor &color)
         KisSignalsBlocker b(d->colorSelectorDialog);
         d->colorSelectorDialog->slotColorUpdated(color);
     }
-    repaint();
+    update();
 }
 
 void KoDualColorButton::setBackgroundColor( const KoColor &color )
 {
     d->backgroundColor = color;
-    repaint();
+    update();
 }
 
 void KoDualColorButton::setDisplayRenderer(const KoColorDisplayRendererInterface *displayRenderer)
@@ -254,7 +242,7 @@ void KoDualColorButton::dropEvent( QDropEvent *event )
       emit backgroundColorChanged( color );
     }
 
-    repaint();
+    update();
   }
 */
 }
@@ -262,7 +250,7 @@ void KoDualColorButton::dropEvent( QDropEvent *event )
 void KoDualColorButton::slotSetForeGroundColorFromDialog(const KoColor color)
 {
     d->foregroundColor = color;
-    repaint();
+    update();
     emit foregroundColorChanged(d->foregroundColor);
 }
 
@@ -307,7 +295,7 @@ void KoDualColorButton::mousePressEvent( QMouseEvent *event )
 
         d->miniCtlFlag = true;
     }
-    repaint();
+    update();
 }
 
 
@@ -385,7 +373,7 @@ void KoDualColorButton::mouseReleaseEvent( QMouseEvent *event )
         }
     }
 
-    repaint();
+    update();
 }
 
 void KoDualColorButton::changeEvent(QEvent *event)

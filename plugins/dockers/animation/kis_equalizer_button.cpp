@@ -1,19 +1,7 @@
 /*
- *  Copyright (c) 2015 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2015 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_equalizer_button.h"
@@ -25,7 +13,7 @@
 #include <QApplication>
 
 
-#include "timeline_color_scheme.h"
+#include "KisAnimTimelineColors.h"
 #include "kis_global.h"
 #include "kis_debug.h"
 
@@ -98,8 +86,8 @@ void KisEqualizerButton::paintEvent(QPaintEvent *event)
     }
 
     {
-        QColor fillColor = TimelineColorScheme::instance()->onionSkinsButtonColor();
-        QColor frameColor = TimelineColorScheme::instance()-> onionSkinsSliderEnabledColor();
+        QColor fillColor = KisAnimTimelineColors::instance()->onionSkinsButtonColor();
+        QColor frameColor = KisAnimTimelineColors::instance()-> onionSkinsSliderEnabledColor();
 
         if (isChecked() || hasFocus() || m_d->isHovering) {
             p.setPen(hasFocus() || m_d->isHovering ? frameColor : Qt::transparent);

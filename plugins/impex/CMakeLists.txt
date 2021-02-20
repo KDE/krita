@@ -54,3 +54,5 @@ endif()
 if (HEIF_FOUND)
     add_subdirectory(heif)
 endif()
+
+add_subdirectory(krz)

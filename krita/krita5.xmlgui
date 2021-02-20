@@ -54,6 +54,7 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Action name="paste_at"/>
       <Action name="paste_new"/>
       <Action name="paste_as_reference"/>
+      <Action name="paste_shape_style"/>
       <Action name="clear"/>
       <Action name="fill_selection_foreground_color"/>
       <Action name="fill_selection_background_color"/>
@@ -273,7 +274,6 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Separator/>
       <Action name="merge_layer"/>
       <Action name="flatten_layer"/>
-      <Action name="rasterize_layer"/>
       <Action name="merge_all_shape_layers"/>
       <Action name="flatten_image"/>
       <Action name="merge_selected_layers"/>
@@ -405,7 +405,6 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
     <Action name="composite_actions"/>
     <Action name="brushslider1"/>
     <Action name="brushslider2"/>
-    <Separator/>
     <Action name="mirror_actions"/>
     <Action name="expanding_spacer_1"/>
     <Action name="select_layout"/>

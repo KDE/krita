@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgTabletSettings</class>
  <widget class="QWidget" name="WdgTabletSettings">
   <property name="geometry">
@@ -20,7 +24,7 @@
    <string>Color Settings</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
-   <item row="5" column="0">
+   <item column="0" row="5">
     <spacer name="verticalSpacer_2">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -33,7 +37,7 @@
      </property>
     </spacer>
    </item>
-   <item row="1" column="1">
+   <item column="1" row="1">
     <spacer name="horizontalSpacer_2">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -46,7 +50,7 @@
      </property>
     </spacer>
    </item>
-   <item row="1" column="0">
+   <item column="0" row="1">
     <layout class="QGridLayout" name="gridLayout">
      <property name="leftMargin">
       <number>10</number>
@@ -63,7 +67,7 @@
      <property name="spacing">
       <number>10</number>
      </property>
-     <item row="0" column="0">
+     <item column="0" row="0">
       <widget class="KisCurveWidget" name="pressureCurve" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
@@ -82,7 +86,7 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="0">
+     <item column="0" row="1">
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
         <widget class="QLabel" name="label_2">
@@ -125,7 +129,7 @@
        </item>
       </layout>
      </item>
-     <item row="0" column="1">
+     <item column="1" row="0">
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
         <widget class="QLabel" name="label_5">
@@ -158,21 +162,21 @@
      </item>
     </layout>
    </item>
-   <item row="4" column="0" colspan="2">
+   <item colspan="2" column="0" row="4">
     <widget class="QPushButton" name="btnTabletTest">
      <property name="text">
       <string>Open Tablet Tester...</string>
      </property>
     </widget>
    </item>
-   <item row="0" column="0">
+   <item column="0" row="0">
     <widget class="QLabel" name="label">
      <property name="text">
       <string>Input Pressure Global Curve</string>
      </property>
     </widget>
    </item>
-   <item row="2" column="0" colspan="2">
+   <item colspan="2" column="0" row="2">
     <widget class="QGroupBox" name="grpTabletApi">
      <property name="title">
       <string>Tablet Input API (changing this requires restarting Krita)</string>
@@ -219,7 +223,7 @@
      </layout>
     </widget>
    </item>
-   <item row="3" column="0">
+   <item column="0" row="3">
     <widget class="QCheckBox" name="chkUseRightMiddleClickWorkaround">
      <property name="toolTip">
       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Some tablet devices don't pass barrel-button clicks via tablet API. If you have such a device, you can try activate this workaround. Krita will try to read right- and middle-button clicks from the mouse events stream. It may or may not work on your device (depends on the tablet driver implementation).&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;After changing this option Krita should be restarted.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>

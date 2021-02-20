@@ -1,20 +1,7 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * SPDX-FileCopyrightText: 2006 Thomas Zander <zander@kde.org>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 #ifndef KO_TOOL_MANAGER_P
 #define KO_TOOL_MANAGER_P
@@ -101,8 +88,6 @@ public:
     bool layerExplicitlyDisabled;
 };
 
-class ShortcutToolAction;
-
 /// \internal
 class ToolHelper : public QObject
 {
@@ -127,7 +112,6 @@ public:
     /// wrapper around KoToolFactoryBase::priority();
     int priority() const;
     KoToolBase *createTool(KoCanvasBase *canvas) const;
-    ShortcutToolAction *createShortcutToolAction(QObject *parent);
     /// unique id, >= 0
     int uniqueId() const {
         return m_uniqueId;
@@ -141,9 +125,6 @@ public Q_SLOTS:
 Q_SIGNALS:
     /// Emitted when the tool should be activated, e.g. by pressing the tool's assigned button in the toolbox
     void toolActivated(ToolHelper *tool);
-
-private Q_SLOTS:
-    void shortcutToolActionUpdated();
 
 private:
     KoToolFactoryBase * const m_toolFactory;
@@ -169,22 +150,6 @@ Q_SIGNALS:
 
 private:
     KoShapeManager *m_shapeManager;
-};
-
-/// \internal
-/// Helper class to provide a action for tool shortcuts
-class ShortcutToolAction : public QAction
-{
-    Q_OBJECT
-public:
-    ShortcutToolAction(const QString &id, const QString &name, QObject *parent);
-    ~ShortcutToolAction() override;
-
-private Q_SLOTS:
-    void actionTriggered();
-
-private:
-    QString m_toolID;
 };
 
 #endif

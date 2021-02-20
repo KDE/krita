@@ -1,19 +1,7 @@
 /*
- * Copyright (c) 2009,2010 Lukáš Tvrdý (lukast.dev@gmail.com)
+ * SPDX-FileCopyrightText: 2009, 2010 Lukáš Tvrdý (lukast.dev@gmail.com)
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_grid_paintop.h"
@@ -30,7 +18,7 @@
 #include <kis_types.h>
 #include <brushengine/kis_paintop.h>
 #include <brushengine/kis_paint_information.h>
-#include <kis_cross_device_color_picker.h>
+#include <kis_cross_device_color_sampler.h>
 #include <kis_spacing_information.h>
 
 #include <KoColor.h>
@@ -114,9 +102,9 @@ KisSpacingInformation KisGridPaintOp::paintAt(const KisPaintInformation& info)
     QRectF tile;
     KoColor color(painter()->paintColor());
 
-    QScopedPointer<KisCrossDeviceColorPicker> colorPicker;
+    QScopedPointer<KisCrossDeviceColorSampler> colorSampler;
     if (m_node) {
-        colorPicker.reset(new KisCrossDeviceColorPicker(m_node->paintDevice(), color));
+        colorSampler.reset(new KisCrossDeviceColorSampler(m_node->paintDevice(), color));
     }
 
     qreal vertBorder = m_properties.vertBorder * additionalScale;
@@ -146,8 +134,8 @@ KisSpacingInformation KisGridPaintOp::paintAt(const KisPaintInformation& info)
 
             // do color transformation
             if (shouldColor) {
-                if (colorPicker && m_colorProperties.sampleInputColor) {
-                    colorPicker->pickOldColor(tile.center().x(), tile.center().y(), color.data());
+                if (colorSampler && m_colorProperties.sampleInputColor) {
+                    colorSampler->sampleOldColor(tile.center().x(), tile.center().y(), color.data());
                 }
 
                 // mix the color with background color

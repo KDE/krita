@@ -1,20 +1,9 @@
 """
-Copyright (c) 2017 Wolthera van Hövell tot Westerflier <griffinvalley@gmail.com>
+SPDX-FileCopyrightText: 2017 Wolthera van Hövell tot Westerflier <griffinvalley@gmail.com>
 
 This file is part of the Comics Project Management Tools(CPMT).
 
-CPMT is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-CPMT is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with the CPMT.  If not, see <http://www.gnu.org/licenses/>.
+SPDX-License-Identifier: GPL-3.0-or-later
 """
 
 """
@@ -71,8 +60,9 @@ class CPE(enum.IntEnum):
 
 class comic_page_delegate(QStyledItemDelegate):
 
-    def __init__(self, parent=None):
+    def __init__(self, devicePixelRatioF, parent=None):
         super(QStyledItemDelegate, self).__init__(parent)
+        self.devicePixelRatioF = devicePixelRatioF
 
     def paint(self, painter, option, index):
         
@@ -96,11 +86,14 @@ class comic_page_delegate(QStyledItemDelegate):
         margin = 4
         decoratonSize = QSize(option.decorationSize)
         imageSize = icon.actualSize(option.decorationSize)
+        imageSizeHighDPI = imageSize*self.devicePixelRatioF
         leftSideThumbnail = (decoratonSize.width()-imageSize.width())/2
         if (rect.width() < decoratonSize.width()):
             leftSideThumbnail = max(0, (rect.width()-imageSize.width())/2)
         topSizeThumbnail = ((rect.height()-imageSize.height())/2)+rect.top()
-        painter.drawImage(QRect(leftSideThumbnail, topSizeThumbnail, imageSize.width(), imageSize.height()), icon.pixmap(imageSize).toImage())
+        thumbImage = icon.pixmap(imageSizeHighDPI).toImage()
+        thumbImage.setDevicePixelRatio(self.devicePixelRatioF)
+        painter.drawImage(QRect(leftSideThumbnail, topSizeThumbnail, imageSize.width(), imageSize.height()), thumbImage)
         
         labelWidth = rect.width()-decoratonSize.width()-(margin*3)
         
@@ -198,7 +191,7 @@ class comics_project_manager_docker(DockWidget):
     stringName = i18n("Comics Manager")
     projecturl = None
     pagesWatcher = None
-    updateurl = str()
+    updateurls = []
 
     def __init__(self):
         super().__init__()
@@ -223,7 +216,7 @@ class comics_project_manager_docker(DockWidget):
         self.comicPageList.setDragDropMode(QAbstractItemView.InternalMove)
         self.comicPageList.setDefaultDropAction(Qt.MoveAction)
         self.comicPageList.setAcceptDrops(True)
-        self.comicPageList.setItemDelegate(comic_page_delegate())
+        self.comicPageList.setItemDelegate(comic_page_delegate(self.devicePixelRatioF()))
         self.pagesModel = QStandardItemModel()
         self.comicPageList.doubleClicked.connect(self.slot_open_page)
         self.comicPageList.setIconSize(QSize(128, 128))
@@ -389,7 +382,10 @@ class comics_project_manager_docker(DockWidget):
             if (os.path.exists(absurl)):
                 #page = Application.openDocument(absurl)
                 page = zipfile.ZipFile(absurl, "r")
-                thumbnail = QImage.fromData(page.read("preview.png"))
+                thumbnail = QImage.fromData(page.read("mergedimage.png"))
+                if thumbnail.isNull():
+                    thumbnail = QImage.fromData(page.read("preview.png"))
+                thumbnail.setDevicePixelRatio(self.devicePixelRatioF())
                 pageItem = QStandardItem()
                 dataList = self.get_description_and_title(page.read("documentinfo.xml"))
                 if (dataList[0].isspace() or len(dataList[0]) < 1):
@@ -835,40 +831,45 @@ class comics_project_manager_docker(DockWidget):
     """
 
     def slot_start_delayed_check_page_update(self, url):
-        self.updateurl = url
+        # It can happen that there are multiple signals from QFileSystemWatcher at once.
+        # Since QTimer cannot take any arguments, we need to keep a list of files to update.
+        # Otherwise only the last file would be updated and all subsequent calls
+        #   of `slot_check_for_page_update` would not know which files to update now.
+        # https://bugs.kde.org/show_bug.cgi?id=426701
+        self.updateurls.append(url)
         QTimer.singleShot(200, Qt.PreciseTimer, self.slot_check_for_page_update)
          
 
     def slot_check_for_page_update(self):
-        url = self.updateurl
-        if "pages" in self.setupDictionary.keys():
-            relUrl = os.path.relpath(url, self.projecturl)
-            if relUrl in self.setupDictionary["pages"]:
-                index = self.pagesModel.index(self.setupDictionary["pages"].index(relUrl), 0)
-                if index.isValid():
-                    if os.path.exists(url) is False:
-                        # we cannot check from here whether the file in question has been renamed or deleted.
-                        self.pagesModel.removeRow(index.row())
-                        return
-                    else:
-                        # Krita will trigger the filesystemwatcher when doing backupfiles,
-                        # so ensure the file is still watched if it exists.
-                        self.pagesWatcher.addPath(url)
-                    pageItem = self.pagesModel.itemFromIndex(index)
-                    page = zipfile.ZipFile(url, "r")
-                    dataList = self.get_description_and_title(page.read("documentinfo.xml"))
-                    if (dataList[0].isspace() or len(dataList[0]) < 1):
-                        dataList[0] = os.path.basename(url)
-                    thumbnail = QImage.fromData(page.read("preview.png"))
-                    pageItem.setIcon(QIcon(QPixmap.fromImage(thumbnail)))
-                    pageItem.setText(dataList[0])
-                    pageItem.setData(dataList[1], role = CPE.DESCRIPTION)
-                    pageItem.setData(relUrl, role = CPE.URL)
-                    pageItem.setData(dataList[2], role = CPE.KEYWORDS)
-                    pageItem.setData(dataList[3], role = CPE.LASTEDIT)
-                    pageItem.setData(dataList[4], role = CPE.EDITOR)
-                    self.pagesModel.setItem(index.row(), index.column(), pageItem)
-        self.updateurl = str()
+        url = self.updateurls.pop(0)
+        if url:
+            if "pages" in self.setupDictionary.keys():
+                relUrl = os.path.relpath(url, self.projecturl)
+                if relUrl in self.setupDictionary["pages"]:
+                    index = self.pagesModel.index(self.setupDictionary["pages"].index(relUrl), 0)
+                    if index.isValid():
+                        if os.path.exists(url) is False:
+                            # we cannot check from here whether the file in question has been renamed or deleted.
+                            self.pagesModel.removeRow(index.row())
+                            return
+                        else:
+                            # Krita will trigger the filesystemwatcher when doing backupfiles,
+                            # so ensure the file is still watched if it exists.
+                            self.pagesWatcher.addPath(url)
+                        pageItem = self.pagesModel.itemFromIndex(index)
+                        page = zipfile.ZipFile(url, "r")
+                        dataList = self.get_description_and_title(page.read("documentinfo.xml"))
+                        if (dataList[0].isspace() or len(dataList[0]) < 1):
+                            dataList[0] = os.path.basename(url)
+                        thumbnail = QImage.fromData(page.read("preview.png"))
+                        pageItem.setIcon(QIcon(QPixmap.fromImage(thumbnail)))
+                        pageItem.setText(dataList[0])
+                        pageItem.setData(dataList[1], role = CPE.DESCRIPTION)
+                        pageItem.setData(relUrl, role = CPE.URL)
+                        pageItem.setData(dataList[2], role = CPE.KEYWORDS)
+                        pageItem.setData(dataList[3], role = CPE.LASTEDIT)
+                        pageItem.setData(dataList[4], role = CPE.EDITOR)
+                        self.pagesModel.setItem(index.row(), index.column(), pageItem)
 
     """
     Resize all the pages in the pages list.

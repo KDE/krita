@@ -1,21 +1,9 @@
 /*
  *  tool_transform_args.h - part of Krita
  *
- *  Copyright (c) 2010 Marc Pegon <pe.marc@free.fr>
+ *  SPDX-FileCopyrightText: 2010 Marc Pegon <pe.marc@free.fr>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "tool_transform_args.h"
@@ -28,6 +16,7 @@
 
 #include "kis_liquify_transform_worker.h"
 #include "kis_dom_utils.h"
+#include <QMatrix4x4>
 
 
 ToolTransformArgs::ToolTransformArgs()
@@ -37,6 +26,9 @@ ToolTransformArgs::ToolTransformArgs()
     QString savedFilterId = configGroup.readEntry("filterId", "Bicubic");
     setFilterId(savedFilterId);
     m_transformAroundRotationCenter = configGroup.readEntry("transformAroundRotationCenter", "0").toInt();
+    m_meshShowHandles = configGroup.readEntry("meshShowHandles", true);
+    m_meshSymmetricalHandles = configGroup.readEntry("meshSymmetricalHandles", true);
+    m_meshScaleHandles = configGroup.readEntry("meshScaleHandles", false);
 }
 
 void ToolTransformArgs::setFilterId(const QString &id) {
@@ -87,13 +79,32 @@ void ToolTransformArgs::init(const ToolTransformArgs& args)
         m_liquifyWorker.reset(new KisLiquifyTransformWorker(*args.m_liquifyWorker.data()));
     }
 
+    m_meshTransform = args.m_meshTransform;
+    m_meshShowHandles = args.m_meshShowHandles;
+    m_meshSymmetricalHandles = args.m_meshSymmetricalHandles;
+    m_meshScaleHandles = args.m_meshScaleHandles;
+
     m_continuedTransformation.reset(args.m_continuedTransformation ? new ToolTransformArgs(*args.m_continuedTransformation) : 0);
+}
+
+bool ToolTransformArgs::meshScaleHandles() const
+{
+    return m_meshScaleHandles;
+}
+
+void ToolTransformArgs::setMeshScaleHandles(bool meshScaleHandles)
+{
+    m_meshScaleHandles = meshScaleHandles;
+
+    KConfigGroup configGroup =  KSharedConfig::openConfig()->group("KisToolTransform");
+    configGroup.writeEntry("meshScaleHandles", meshScaleHandles);
 }
 
 void ToolTransformArgs::clear()
 {
     m_origPoints.clear();
     m_transfPoints.clear();
+    m_meshTransform = KisBezierTransformMesh();
 }
 
 ToolTransformArgs::ToolTransformArgs(const ToolTransformArgs& args)
@@ -145,6 +156,7 @@ bool ToolTransformArgs::operator==(const ToolTransformArgs& other) const
         m_editTransformPoints == other.m_editTransformPoints &&
         (m_liquifyProperties == other.m_liquifyProperties ||
          *m_liquifyProperties == *other.m_liquifyProperties) &&
+        m_meshTransform == other.m_meshTransform &&
 
         // pointer types
 
@@ -199,6 +211,8 @@ bool ToolTransformArgs::isSameMode(const ToolTransformArgs& other) const
              *m_liquifyWorker == *other.m_liquifyWorker)
             || m_liquifyWorker == other.m_liquifyWorker;
 
+    } else if (m_mode == MESH) {
+        result &= m_meshTransform == other.m_meshTransform;
     } else {
         KIS_SAFE_ASSERT_RECOVER_NOOP(0 && "unknown transform mode");
     }
@@ -253,7 +267,6 @@ void ToolTransformArgs::translate(const QPointF &offset)
 {
     if (m_mode == FREE_TRANSFORM || m_mode == PERSPECTIVE_4POINT) {
         m_originalCenter += offset;
-        m_rotationCenterOffset += offset;
         m_transformedCenter += offset;
     } else if(m_mode == WARP || m_mode == CAGE) {
         for (auto &pt : m_origPoints) {
@@ -266,6 +279,8 @@ void ToolTransformArgs::translate(const QPointF &offset)
     } else if (m_mode == LIQUIFY) {
         KIS_ASSERT_RECOVER_RETURN(m_liquifyWorker);
         m_liquifyWorker->translate(offset);
+    } else if (m_mode == MESH) {
+        m_meshTransform.transformSrcAndDst(QTransform::fromTranslate(offset.x(), offset.y()));
     } else {
         KIS_ASSERT_RECOVER_NOOP(0 && "unknown transform mode");
     }
@@ -288,8 +303,9 @@ bool ToolTransformArgs::isIdentity() const
 
         return true;
     } else if (m_mode == LIQUIFY) {
-        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(m_liquifyWorker, false);
-        return m_liquifyWorker->isIdentity();
+        return !m_liquifyWorker || m_liquifyWorker->isIdentity();
+    } else if (m_mode == MESH) {
+        return m_meshTransform.isIdentity();
     } else {
         KIS_ASSERT_RECOVER_NOOP(0 && "unknown transform mode");
         return true;
@@ -362,6 +378,11 @@ void ToolTransformArgs::toXML(QDomElement *e) const
 
         m_liquifyProperties->toXML(&liqEl);
         m_liquifyWorker->toXML(&liqEl);
+    } else if (m_mode == MESH) {
+        QDomElement meshEl = doc.createElement("mesh_transform");
+        e->appendChild(meshEl);
+
+        KisDomUtils::saveValue(&meshEl, "mesh", m_meshTransform);
     } else {
         KIS_ASSERT_RECOVER_RETURN(0 && "Unknown transform mode");
     }
@@ -462,6 +483,14 @@ ToolTransformArgs ToolTransformArgs::fromXML(const QDomElement &e)
 
         *args.m_liquifyProperties = KisLiquifyProperties::fromXML(e);
         args.m_liquifyWorker.reset(KisLiquifyTransformWorker::fromXML(e));
+    } else if (args.m_mode == MESH) {
+        QDomElement meshEl;
+
+        result =
+            KisDomUtils::findOnlyElement(e, "mesh_transform", &meshEl);
+
+        result &= KisDomUtils::loadValue(meshEl, "mesh", &args.m_meshTransform);
+
     } else {
         KIS_ASSERT_RECOVER_NOOP(0 && "Unknown transform mode");
     }
@@ -491,4 +520,76 @@ void ToolTransformArgs::restoreContinuedState()
 const ToolTransformArgs* ToolTransformArgs::continuedTransform() const
 {
     return m_continuedTransformation.data();
+}
+
+const KisBezierTransformMesh *ToolTransformArgs::meshTransform() const
+{
+    return &m_meshTransform;
+}
+
+KisBezierTransformMesh *ToolTransformArgs::meshTransform()
+{
+    return &m_meshTransform;
+}
+
+bool ToolTransformArgs::meshShowHandles() const
+{
+    return m_meshShowHandles;
+}
+
+void ToolTransformArgs::setMeshShowHandles(bool value)
+{
+    m_meshShowHandles = value;
+
+    KConfigGroup configGroup =  KSharedConfig::openConfig()->group("KisToolTransform");
+    configGroup.writeEntry("meshShowHandles", value);
+}
+
+bool ToolTransformArgs::meshSymmetricalHandles() const
+{
+    return m_meshSymmetricalHandles;
+}
+
+void ToolTransformArgs::setMeshSymmetricalHandles(bool value)
+{
+    m_meshSymmetricalHandles = value;
+
+    KConfigGroup configGroup =  KSharedConfig::openConfig()->group("KisToolTransform");
+    configGroup.writeEntry("meshSymmetricalHandles", value);
+}
+
+void ToolTransformArgs::scaleSrcAndDst(qreal scale)
+{
+    const QTransform t = QTransform::fromScale(scale, scale);
+
+    if (m_mode == FREE_TRANSFORM) {
+        m_transformedCenter = t.map(m_transformedCenter);
+        m_originalCenter = t.map(m_originalCenter);
+
+        QMatrix4x4 m;
+        m.scale(scale);
+        m_cameraPos = m * m_cameraPos;
+
+    } else if (m_mode == PERSPECTIVE_4POINT) {
+        m_transformedCenter = t.map(m_transformedCenter);
+        m_originalCenter = t.map(m_originalCenter);
+
+        m_flattenedPerspectiveTransform = t.inverted() * m_flattenedPerspectiveTransform * t;
+
+
+    } else if(m_mode == WARP || m_mode == CAGE) {
+        for (auto it = m_origPoints.begin(); it != m_origPoints.end(); ++it) {
+            *it = t.map(*it);
+        }
+
+        for (auto it = m_transfPoints.begin(); it != m_transfPoints.end(); ++it) {
+            *it = t.map(*it);
+        }
+    } else if (m_mode == LIQUIFY) {
+        m_liquifyWorker->transformSrcAndDst(t);
+    } else if (m_mode == MESH) {
+        m_meshTransform.transformSrcAndDst(t);
+    } else {
+        KIS_ASSERT_RECOVER_NOOP(0 && "unknown transform mode");
+    }
 }

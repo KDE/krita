@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>KoFillConfigWidget</class>
  <widget class="QWidget" name="KoFillConfigWidget">
   <property name="geometry">
@@ -196,7 +200,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QToolButton" name="btnSolidColorPick">
+      <widget class="QToolButton" name="btnSolidColorSample">
        <property name="text">
         <string>...</string>
        </property>
@@ -212,14 +216,14 @@
    </item>
    <item>
     <layout class="QFormLayout" name="gradientLayout1">
-     <item row="0" column="0">
+     <item column="0" row="0">
       <widget class="QLabel" name="typeLabel">
        <property name="text">
         <string>Type:</string>
        </property>
       </widget>
      </item>
-     <item row="0" column="1">
+     <item column="1" row="0">
       <widget class="QComboBox" name="cmbGradientType">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -245,14 +249,14 @@
        </item>
       </widget>
      </item>
-     <item row="1" column="0">
+     <item column="0" row="1">
       <widget class="QLabel" name="repeatLabel">
        <property name="text">
         <string>Repeat:</string>
        </property>
       </widget>
      </item>
-     <item row="1" column="1">
+     <item column="1" row="1">
       <widget class="QComboBox" name="cmbGradientRepeat">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">

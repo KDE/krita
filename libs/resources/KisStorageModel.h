@@ -1,19 +1,7 @@
 /*
- * Copyright (c) 2019 boud <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2019 boud <boud@valdyas.org>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 #ifndef KISSTORAGEMODEL_H
 #define KISSTORAGEMODEL_H
@@ -50,11 +38,13 @@ public:
     KisStorageModel(QObject *parent = 0);
     ~KisStorageModel() override;
 
-
     static KisStorageModel * instance();
+
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
     QVariant data(const QModelIndex &index, int role) const override;
+
+    /// Enable and disable the storage represented by index
     bool setData(const QModelIndex &index, const QVariant &value, int role) override;
     Qt::ItemFlags flags(const QModelIndex &index) const override;
 
@@ -62,16 +52,23 @@ public:
 
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 
-public Q_SLOTS:
+Q_SIGNALS:
 
-    bool resetQuery();
+    void storageEnabled(const QString &storage);
+    void storageDisabled(const QString &storage);
+
+private Q_SLOTS:
+
+    /// Called whenever a storage is added
+    void addStorage(const QString &location);
+
+    /// This is called when a storage really is deleted both from database and anywhere else
+    void removeStorage(const QString &location);
 
 private:
 
     KisStorageModel(const KisStorageModel&);
     KisStorageModel operator=(const KisStorageModel&);
-
-    bool prepareQuery();
 
     struct Private;
     QScopedPointer<Private> d;

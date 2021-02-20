@@ -1,3 +1,7 @@
+<!--
+  SPDX-FileCopyrightText: none
+  SPDX-License-Identifier: CC0-1.0
+-->
 <RCC>
     <qresource prefix="/">
         <file>dark_transform_icons_cage.svg</file>
@@ -17,6 +21,7 @@
         <file>dark_transform_icons_mirror_y.svg</file>
         <file>dark_transform_icons_rotate_cw.svg</file>
         <file>dark_transform_icons_rotate_ccw.svg</file>
+        <file>dark_transform_icons_mesh.svg</file>
         <file>light_transform_icons_cage.svg</file>
         <file>light_transform_icons_liquify_erase.svg</file>
         <file>light_transform_icons_liquify_main.svg</file>
@@ -34,6 +39,7 @@
         <file>light_transform_icons_mirror_y.svg</file>
         <file>light_transform_icons_rotate_cw.svg</file>
         <file>light_transform_icons_rotate_ccw.svg</file>
+        <file>light_transform_icons_mesh.svg</file>
         <file>dark_transform_icons_penPressure_locked.svg</file>
         <file>light_transform_icons_penPressure_locked.svg</file>
     </qresource>

@@ -1,19 +1,7 @@
 /* This file is part of the KDE project
- * Copyright (C) 2012 Arjen Hiemstra <ahiemstra@heimr.nl>
+ * SPDX-FileCopyrightText: 2012 Arjen Hiemstra <ahiemstra@heimr.nl>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 import QtQuick 2.3
@@ -31,17 +19,17 @@ Panel {
             height: parent.height;
             width: height;
             onChooseBGChanged: {
-                if (toolManager.currentTool !== null && toolManager.currentTool.toolId() === "KritaSelected/KisToolColorPicker") {
+                if (toolManager.currentTool !== null && toolManager.currentTool.toolId() === "KritaSelected/KisToolColorSampler") {
                     toolManager.currentTool.toForeground = !swatch.chooseBG;
                 }
             }
         },
         Button {
-            id: colorPicker;
+            id: colorSampler;
             width: height;
             height: Constants.ToolbarButtonSize;
-            image: Settings.theme.icon("colorpicker");
-            onClicked: toolManager.requestToolChange("KritaSelected/KisToolColorPicker");
+            image: Settings.theme.icon("colorsampler");
+            onClicked: toolManager.requestToolChange("KritaSelected/KisToolColorSampler");
         },
         Item {
             width: base.width - Constants.DefaultMargin - (Constants.ToolbarButtonSize * 3);
@@ -59,7 +47,7 @@ Panel {
     Connections {
         target: toolManager;
         onCurrentToolChanged: {
-            if (toolManager.currentTool !== null && toolManager.currentTool.toolId() === "KritaSelected/KisToolColorPicker") {
+            if (toolManager.currentTool !== null && toolManager.currentTool.toolId() === "KritaSelected/KisToolColorSampler") {
                 toolManager.currentTool.toForeground = !swatch.chooseBG;
             }
         }

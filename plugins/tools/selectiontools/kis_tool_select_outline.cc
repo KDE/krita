@@ -1,25 +1,13 @@
 /*
  *  kis_tool_select_freehand.h - part of Krayon^WKrita
  *
- *  Copyright (c) 2000 John Califf <jcaliff@compuzone.net>
- *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2007 Sven Langkamp <sven.langkamp@gmail.com>
- *  Copyright (c) 2015 Michael Abrahams <miabraha@gmail.com>
+ *  SPDX-FileCopyrightText: 2000 John Califf <jcaliff@compuzone.net>
+ *  SPDX-FileCopyrightText: 2002 Patrick Julien <freak@codepimps.org>
+ *  SPDX-FileCopyrightText: 2004 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2007 Sven Langkamp <sven.langkamp@gmail.com>
+ *  SPDX-FileCopyrightText: 2015 Michael Abrahams <miabraha@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_tool_select_outline.h"
@@ -61,7 +49,7 @@
 KisToolSelectOutline::KisToolSelectOutline(KoCanvasBase * canvas)
     : KisToolSelect(canvas,
                     KisCursor::load("tool_outline_selection_cursor.png", 5, 5),
-                    i18n("Outline Selection")),
+                    i18n("Freehand Selection")),
       m_continuedMode(false)
 {
 }
@@ -169,7 +157,7 @@ void KisToolSelectOutline::finishSelectionAction()
     const QRectF boundingRect = KisAlgebra2D::accumulateBounds(m_points);
     const QRectF boundingViewRect = pixelToView(boundingRect);
 
-    KisSelectionToolHelper helper(kisCanvas, kundo2_i18n("Select by Outline"));
+    KisSelectionToolHelper helper(kisCanvas, kundo2_i18n("Freehand Selection"));
 
     if (helper.tryDeselectCurrentSelection(boundingViewRect, selectionAction())) {
         return;

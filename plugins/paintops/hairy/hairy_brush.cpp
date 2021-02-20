@@ -1,19 +1,7 @@
 /*
- *  Copyright (c) 2008-2010 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  SPDX-FileCopyrightText: 2008-2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "hairy_brush.h"
@@ -29,7 +17,7 @@
 
 #include <kis_types.h>
 #include <kis_random_accessor_ng.h>
-#include <kis_cross_device_color_picker.h>
+#include <kis_cross_device_color_sampler.h>
 #include <kis_fixed_paint_device.h>
 
 
@@ -431,7 +419,7 @@ double HairyBrush::computeMousePressure(double distance)
 void HairyBrush::colorifyBristles(KisPaintDeviceSP source, QPointF point)
 {
     KoColor bristleColor(m_dab->colorSpace());
-    KisCrossDeviceColorPickerInt colorPicker(source, bristleColor);
+    KisCrossDeviceColorSamplerInt colorSampler(source, bristleColor);
 
     Bristle *b = 0;
     int size = m_bristles.size();
@@ -440,7 +428,7 @@ void HairyBrush::colorifyBristles(KisPaintDeviceSP source, QPointF point)
         int x = qRound(b->x() + point.x());
         int y = qRound(b->y() + point.y());
 
-        colorPicker.pickOldColor(x, y, bristleColor.data());
+        colorSampler.sampleOldColor(x, y, bristleColor.data());
         b->setColor(bristleColor);
     }
 

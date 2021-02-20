@@ -1,4 +1,6 @@
-
+/*
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+ */
 
 #include "kis_random_generator_demo.h"
 #include "../kis_random_generator.h"

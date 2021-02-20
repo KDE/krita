@@ -1,7 +1,7 @@
 # Ported from KoDockWidgetTitleBar.cpp which is part of KOffice
-# Copyright (c) 2007 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
-# Copyright (C) 2007 Thomas Zander <zander@kde.org>
-# The code is distributed under GPL 2 or any later version
+# SPDX-FileCopyrightText: 2007 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
+# SPDX-FileCopyrightText: 2007 Thomas Zander <zander@kde.org>
+# SPDX-License-Identifier: GPL-2.0-or-later
 import os
 
 from PyQt5.QtCore import QPoint, QSize, Qt, QRect, QTimer

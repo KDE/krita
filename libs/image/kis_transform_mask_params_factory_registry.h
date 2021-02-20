@@ -1,19 +1,7 @@
 /*
- *  Copyright (c) 2014 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2014 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #ifndef __KIS_TRANSFORM_MASK_PARAMS_FACTORY_REGISTRY_H
@@ -29,10 +17,9 @@
 
 class QDomElement;
 
-
 using KisTransformMaskParamsFactory    = std::function<KisTransformMaskParamsInterfaceSP (const QDomElement &)>;
 using KisTransformMaskParamsFactoryMap = QMap<QString, KisTransformMaskParamsFactory>;
-using KisAnimatedTransformMaskParamsFactory = std::function<KisTransformMaskParamsInterfaceSP (KisTransformMaskParamsInterfaceSP)>;
+using KisAnimatedTransformMaskParamsFactory = std::function<KisTransformMaskParamsInterfaceSP (KisTransformMaskParamsInterfaceSP, const KisTransformMaskSP)>;
 using KisTransformMaskKeyframeFactory = std::function<void (KisTransformMaskSP, int, KisTransformMaskParamsInterfaceSP, KUndo2Command*)>;
 
 class KRITAIMAGE_EXPORT KisTransformMaskParamsFactoryRegistry
@@ -46,7 +33,7 @@ public:
     KisTransformMaskParamsInterfaceSP createParams(const QString &id, const QDomElement &e);
 
     void setAnimatedParamsFactory(const KisAnimatedTransformMaskParamsFactory &factory);
-    KisTransformMaskParamsInterfaceSP animateParams(KisTransformMaskParamsInterfaceSP params);
+    KisTransformMaskParamsInterfaceSP animateParams(KisTransformMaskParamsInterfaceSP params, const KisTransformMaskSP mask);
 
     void setKeyframeFactory(const KisTransformMaskKeyframeFactory &factory);
     void autoAddKeyframe(KisTransformMaskSP mask, int time, KisTransformMaskParamsInterfaceSP params, KUndo2Command *parentCommand);

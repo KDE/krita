@@ -1,21 +1,9 @@
 /*
  * This file is part of Krita
  *
- * Copyright (c) 2006 Cyrille Berger <cberger@cberger.net>
+ * SPDX-FileCopyrightText: 2006 Cyrille Berger <cberger@cberger.net>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_wdg_unsharp.h"
@@ -33,6 +21,11 @@ KisWdgUnsharp::KisWdgUnsharp(QWidget * parent) : KisConfigWidget(parent)
 {
     m_widget = new Ui_WdgUnsharp();
     m_widget->setupUi(this);
+
+    widget()->doubleHalfSize->setRange(0.0, 99.99, 2);
+    widget()->doubleHalfSize->setSingleStep(1.0);
+    widget()->doubleAmount->setRange(0.0, 99.99, 2);
+    widget()->doubleAmount->setSingleStep(0.2);
 
     connect(widget()->doubleHalfSize, SIGNAL(valueChanged(double)), SIGNAL(sigConfigurationItemChanged()));
     connect(widget()->doubleAmount, SIGNAL(valueChanged(double)), SIGNAL(sigConfigurationItemChanged()));

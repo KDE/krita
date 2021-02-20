@@ -57,6 +57,8 @@
       <Action name="svg_align_center"/>
       <Action name="svg_align_right"/>
       <!--Action name="svg_align_justified"/-->
+      <Separator/>
+      <Action name="svg_font_kerning"/>
     </Menu>
     <Menu name="settings">
       <text>Setti&amp;ngs</text>
@@ -81,7 +83,7 @@
     <Action name="svg_font_size"/>
     <Action name="svg_font_color"/>
     <Action name="svg_format_textcolor"/>
-    <Action name="svg_pick_color"/>
+    <Action name="svg_sample_color"/>
   </ToolBar>
   
   <ToolBar name="formatting" newline="true" >
@@ -92,9 +94,9 @@
     <Action name="svg_align_left"/>
     <Action name="svg_align_center"/>
     <Action name="svg_align_right"/>
-    <Action name="svg_line_height">
-    </Action>
-    <Action name="svg_letter_spacing"></Action>
+    <Action name="svg_line_height"/>
+    <Action name="svg_letter_spacing"/>
+    <Action name="svg_font_kerning"/>
   </ToolBar>
   
   

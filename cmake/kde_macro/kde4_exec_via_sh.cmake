@@ -1,13 +1,12 @@
 
-# Copyright (c) 2006, Alexander Neundorf, <neundorf@kde.org>
+# SPDX-FileCopyrightText: 2006 Alexander Neundorf <neundorf@kde.org>
 #
-# Redistribution and use is allowed according to the terms of the BSD license.
-# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
-
+# SPDX-License-Identifier: BSD-3-Clause
+#
 
 if (UNIX)
 
-file(WRITE "${_filename}" 
+file(WRITE "${_filename}"
 "#!/bin/sh
 # created by cmake, don't edit, changes will be lost
 
@@ -22,7 +21,7 @@ else (UNIX)
 
 file(TO_NATIVE_PATH "${_ld_library_path}" win_path)
 
-file(WRITE "${_filename}" 
+file(WRITE "${_filename}"
 "
 set PATH=${win_path};$ENV{PATH}
 \"${_executable}\" %*

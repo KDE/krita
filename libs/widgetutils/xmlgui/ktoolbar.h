@@ -1,25 +1,13 @@
 /* This file is part of the KDE libraries
-    Copyright (C) 2000 Reginald Stadlbauer (reggie@kde.org)
-    (C) 1997, 1998 Stephan Kulow (coolo@kde.org)
-    (C) 1997, 1998 Sven Radej (radej@kde.org)
-    (C) 1997, 1998 Mark Donohoe (donohoe@kde.org)
-    (C) 1997, 1998 Matthias Ettrich (ettrich@kde.org)
-    (C) 1999, 2000 Kurt Granroth (granroth@kde.org)
-    (C) 2005-2006 Hamish Rodda (rodda@kde.org)
+    SPDX-FileCopyrightText: 2000 Reginald Stadlbauer (reggie@kde.org)
+    SPDX-FileCopyrightText: 1997, 1998 Stephan Kulow (coolo@kde.org)
+    SPDX-FileCopyrightText: 1997, 1998 Sven Radej (radej@kde.org)
+    SPDX-FileCopyrightText: 1997, 1998 Mark Donohoe (donohoe@kde.org)
+    SPDX-FileCopyrightText: 1997, 1998 Matthias Ettrich (ettrich@kde.org)
+    SPDX-FileCopyrightText: 1999, 2000 Kurt Granroth (granroth@kde.org)
+    SPDX-FileCopyrightText: 2005-2006 Hamish Rodda (rodda@kde.org)
 
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Library General Public
-    License version 2 as published by the Free Software Foundation.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Library General Public License for more details.
-
-    You should have received a copy of the GNU Library General Public License
-    along with this library; see the file COPYING.LIB.  If not, write to
-    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-    Boston, MA 02110-1301, USA.
+    SPDX-License-Identifier: LGPL-2.0-only
     */
 
 #ifndef KTOOLBAR_H
@@ -47,17 +35,6 @@ class KXMLGUIClient;
  * KToolBar uses a global config group to load toolbar settings on
  * construction. It will reread this config group on a
  * KApplication::appearanceChanged() signal.
- *
- * KToolBar respects Kiosk settings (see the KAuthorized namespace in the
- * KConfig framework).  In particular, system administrators can prevent users
- * from moving toolbars with the "movable_toolbars" action, and from showing or
- * hiding toolbars with the "options_show_toolbar" action.  For example, to
- * disable both, add the following the application or global configuration:
- * @verbatim
-   [KDE Action Restrictions][$i]
-   movable_toolbars=false
-   options_show_toolbar=false
-   @endverbatim
  *
  * @note If you can't depend on KXmlGui but you want to integrate with KDE, you can use QToolBar with:
  *    Set ToolButtonStyle to Qt::ToolButtonFollowStyle, this will make QToolBar use the settings for "Main Toolbar"

@@ -1,24 +1,14 @@
 /*
- * Copyright (C) 2017 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2017 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2020 L. E. Segovia <amy@amyspark.me>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #ifndef GMIC_H
 #define GMIC_H
+
+#include <QString>
 
 /**
  * A sham header to make it easier to handle gmic types without
@@ -33,16 +23,17 @@ enum OutputMode {   IN_PLACE = 0,
 
 
 // this enum is also index in LAYER_MODE_STRINGS list
-enum InputLayerMode {   NONE = 0,
-                        ACTIVE_LAYER,
-                        ALL_LAYERS,
-                        ACTIVE_LAYER_BELOW_LAYER,
-                        ACTIVE_LAYER_ABOVE_LAYER,
-                        ALL_VISIBLE_LAYERS,
-                        ALL_INVISIBLE_LAYERS,
-                        ALL_VISIBLE_LAYERS_DECR,
-                        ALL_INVISIBLE_DECR,
-                        ALL_DECR
+enum InputLayerMode {
+    NONE = 0,
+    ACTIVE_LAYER,
+    ALL_LAYERS,
+    ACTIVE_LAYER_BELOW_LAYER,
+    ACTIVE_LAYER_ABOVE_LAYER,
+    ALL_VISIBLE_LAYERS,
+    ALL_INVISIBLE_LAYERS,
+    ALL_VISIBLE_LAYERS_DECR_UNUSED, /* Removed since 2.8.2 */
+    ALL_INVISIBLE_DECR_UNUSED,      /* Removed since 2.8.2 */
+    ALL_DECR_UNUSED,                /* Removed since 2.8.2 */
 };
 
 

@@ -1,3 +1,7 @@
+/*
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
 #ifndef QUIRK_NETINET_IN_H
 #define QUIRK_NETINET_IN_H
 

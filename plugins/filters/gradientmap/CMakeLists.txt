@@ -1,7 +1,15 @@
-set(kritagradientmap_SOURCES gradientmap.cpp
-krita_filter_gradient_map.cpp)
+set(kritagradientmap_SOURCES
+    KisGradientMapFilter.cpp
+    KisGradientMapFilterConfigWidget.cpp
+    KisGradientMapFilterConfiguration.cpp
+    KisGradientMapFilterPlugin.cpp
+    KisGradientMapFilterNearestCachedGradient.cpp
+    KisGradientMapFilterDitherCachedGradient.cpp
+)
 
-ki18n_wrap_ui(kritagradientmap_SOURCES wdg_gradientmap.ui)
+ki18n_wrap_ui(kritagradientmap_SOURCES
+    KisGradientMapFilterConfigWidget.ui
+)
 
 add_library(kritagradientmap MODULE ${kritagradientmap_SOURCES})
 target_link_libraries(kritagradientmap kritaui)

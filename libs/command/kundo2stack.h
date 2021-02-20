@@ -1,20 +1,8 @@
 /*
- *  Copyright (c) 2014 Dmitry Kazakov <dimula73@gmail.com>
- *  Copyright (c) 2014 Mohit Goyal <mohit.bits2011@gmail.com>
+ *  SPDX-FileCopyrightText: 2014 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2014 Mohit Goyal <mohit.bits2011@gmail.com>
  *
- *  This library is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; either version 2.1 of the License, or
- *  (at your option) any later version.
- *
- *  This library is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU Lesser General Public License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: LGPL-2.1-or-later
  */
 /****************************************************************************
 **
@@ -96,8 +84,7 @@ class KActionCollection;
  */
 class KRITACOMMAND_EXPORT KUndo2Command
 {
-    KUndo2CommandPrivate *d;
-    int timedID;
+    KUndo2CommandPrivate *d {0};
 
 public:
     explicit KUndo2Command(KUndo2Command *parent = 0);
@@ -116,6 +103,8 @@ public:
     virtual void setTimedID(int timedID);
     virtual bool mergeWith(const KUndo2Command *other);
     virtual bool timedMergeWith(KUndo2Command *other);
+
+    virtual bool annihilateWith(const KUndo2Command *other);
 
     int childCount() const;
     const KUndo2Command *child(int index) const;
@@ -150,8 +139,8 @@ private:
     friend class KUndo2QStack;
 
 
-    bool m_hasParent;
-    int m_timedID;
+    bool m_hasParent {false};
+    int m_timedID {-1};
 
     QTime m_timeOfCreation;
     QTime m_endOfCommand;

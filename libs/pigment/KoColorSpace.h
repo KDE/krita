@@ -1,26 +1,14 @@
 /*
- *  Copyright (c) 2005 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2006-2007 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2005 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2006-2007 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.1-or-later
  */
 #ifndef KOCOLORSPACE_H
 #define KOCOLORSPACE_H
 
-#include <limits.h>
+#include <climits>
 
 #include <QImage>
 #include <QHash>
@@ -32,6 +20,7 @@
 #include "KoColorConversionTransformation.h"
 #include "KoColorProofingConversionTransformation.h"
 #include "KoCompositeOp.h"
+#include "KisDitherOp.h"
 #include <KoID.h>
 #include "kritapigment_export.h"
 
@@ -96,7 +85,7 @@ protected:
 public:
 
     /// Should be called by real color spaces
-    KoColorSpace(const QString &id, const QString &name, KoMixColorsOp* mixColorsOp, KoConvolutionOp* convolutionOp);
+    KoColorSpace(const QString &id, const QString &name, KoMixColorsOp *mixColorsOp, KoConvolutionOp *convolutionOp);
 
     virtual bool operator==(const KoColorSpace& rhs) const;
 protected:
@@ -268,7 +257,6 @@ public:
      */
     virtual bool hasHighDynamicRange() const = 0;
 
-
 //========== Display profiles =============================================//
 
     /**
@@ -361,6 +349,13 @@ public:
     virtual KoColorConversionTransformation* createColorConverter(const KoColorSpace * dstColorSpace,
                                                                   KoColorConversionTransformation::Intent renderingIntent,
                                                                   KoColorConversionTransformation::ConversionFlags conversionFlags) const;
+
+    /**
+     * Retrieve the elevate-to-normalized floating point dithering op.
+     */
+    virtual const KisDitherOp *ditherOp(const QString &depth, DitherType type) const;
+
+    virtual void addDitherOp(KisDitherOp *op);
 
     /**
      * Convert a byte array of srcLen pixels *src to the specified color space

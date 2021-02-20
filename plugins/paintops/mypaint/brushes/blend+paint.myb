@@ -1,0 +1,199 @@
+{
+    "comment": "MyPaint brush file", 
+    "group": "", 
+    "parent_brush_name": "", 
+    "settings": {
+        "anti_aliasing": {
+            "base_value": 0.0, 
+            "inputs": {}
+        }, 
+        "change_color_h": {
+            "base_value": 0.0, 
+            "inputs": {}
+        }, 
+        "change_color_hsl_s": {
+            "base_value": 0.0, 
+            "inputs": {}
+        }, 
+        "change_color_hsv_s": {
+            "base_value": 0.0, 
+            "inputs": {}
+        }, 
+        "change_color_l": {
+            "base_value": 0.0, 
+            "inputs": {}
+        }, 
+        "change_color_v": {
+            "base_value": 0.0, 
+            "inputs": {}
+        }, 
+        "color_h": {
+            "base_value": 0.0, 
+            "inputs": {}
+        }, 
+        "color_s": {
+            "base_value": 0.0, 
+            "inputs": {}
+        }, 
+        "color_v": {
+            "base_value": 0.0, 
+            "inputs": {}
+        }, 
+        "colorize": {
+            "base_value": 0.0, 
+            "inputs": {}
+        }, 
+        "custom_input": {
+            "base_value": 0.0, 
+            "inputs": {}
+        }, 
+        "custom_input_slowness": {
+            "base_value": 0.0, 
+            "inputs": {}
+        }, 
+        "dabs_per_actual_radius": {
+            "base_value": 6.0, 
+            "inputs": {}
+        }, 
+        "dabs_per_basic_radius": {
+            "base_value": 0.0, 
+            "inputs": {}
+        }, 
+        "dabs_per_second": {
+            "base_value": 54.45, 
+            "inputs": {}
+        }, 
+        "direction_filter": {
+            "base_value": 2.0, 
+            "inputs": {}
+        }, 
+        "elliptical_dab_angle": {
+            "base_value": 90.0, 
+            "inputs": {}
+        }, 
+        "elliptical_dab_ratio": {
+            "base_value": 1.0, 
+            "inputs": {}
+        }, 
+        "eraser": {
+            "base_value": 0.0, 
+            "inputs": {}
+        }, 
+        "hardness": {
+            "base_value": 0.69, 
+            "inputs": {}
+        }, 
+        "lock_alpha": {
+            "base_value": 0.0, 
+            "inputs": {}
+        }, 
+        "offset_by_random": {
+            "base_value": 0.0, 
+            "inputs": {}
+        }, 
+        "offset_by_speed": {
+            "base_value": 0.0, 
+            "inputs": {}
+        }, 
+        "offset_by_speed_slowness": {
+            "base_value": 1.0, 
+            "inputs": {}
+        }, 
+        "opaque": {
+            "base_value": 0.85, 
+            "inputs": {}
+        }, 
+        "opaque_linearize": {
+            "base_value": 0.9, 
+            "inputs": {}
+        }, 
+        "opaque_multiply": {
+            "base_value": 0.0, 
+            "inputs": {
+                "pressure": [
+                    [
+                        0.0, 
+                        0.0
+                    ], 
+                    [
+                        0.222222, 
+                        0.0
+                    ], 
+                    [
+                        0.324074, 
+                        1.0
+                    ], 
+                    [
+                        1.0, 
+                        1.0
+                    ]
+                ]
+            }
+        }, 
+        "radius_by_random": {
+            "base_value": 0.0, 
+            "inputs": {}
+        }, 
+        "radius_logarithmic": {
+            "base_value": 2.6, 
+            "inputs": {}
+        }, 
+        "restore_color": {
+            "base_value": 0.0, 
+            "inputs": {}
+        }, 
+        "slow_tracking": {
+            "base_value": 0.0, 
+            "inputs": {}
+        }, 
+        "slow_tracking_per_dab": {
+            "base_value": 0.0, 
+            "inputs": {}
+        }, 
+        "smudge": {
+            "base_value": 0.9, 
+            "inputs": {}
+        }, 
+        "smudge_length": {
+            "base_value": 0.12, 
+            "inputs": {}
+        }, 
+        "smudge_radius_log": {
+            "base_value": 0.0, 
+            "inputs": {}
+        }, 
+        "speed1_gamma": {
+            "base_value": 4.0, 
+            "inputs": {}
+        }, 
+        "speed1_slowness": {
+            "base_value": 0.04, 
+            "inputs": {}
+        }, 
+        "speed2_gamma": {
+            "base_value": 4.0, 
+            "inputs": {}
+        }, 
+        "speed2_slowness": {
+            "base_value": 0.8, 
+            "inputs": {}
+        }, 
+        "stroke_duration_logarithmic": {
+            "base_value": 4.0, 
+            "inputs": {}
+        }, 
+        "stroke_holdtime": {
+            "base_value": 0.0, 
+            "inputs": {}
+        }, 
+        "stroke_threshold": {
+            "base_value": 0.0, 
+            "inputs": {}
+        }, 
+        "tracking_noise": {
+            "base_value": 0.0, 
+            "inputs": {}
+        }
+    }, 
+    "version": 3
+}

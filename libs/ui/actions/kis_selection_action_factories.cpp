@@ -1,19 +1,7 @@
 /*
- *  Copyright (c) 2012 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2012 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_selection_action_factories.h"
@@ -214,7 +202,7 @@ void KisFillActionFactory::run(const QString &fillSource, KisViewManager *view)
 
     KisProcessingApplicator applicator(view->image(), node,
                                        KisProcessingApplicator::NONE,
-                                       KisImageSignalVector() << ModifiedSignal,
+                                       KisImageSignalVector(),
                                        kundo2_i18n("Flood Fill Layer"));
 
     KisResourcesSnapshotSP resources =
@@ -526,7 +514,7 @@ void KisSelectionToShapeActionFactory::run(KisViewManager *view)
     KisProcessingApplicator::runSingleCommandStroke(view->image(), cmd);
 }
 
-void KisStrokeSelectionActionFactory::run(KisViewManager *view, StrokeSelectionOptions params)
+void KisStrokeSelectionActionFactory::run(KisViewManager *view, const StrokeSelectionOptions& params)
 {
     KisImageWSP image = view->image();
     if (!image) {
@@ -585,10 +573,9 @@ void KisStrokeSelectionActionFactory::run(KisViewManager *view, StrokeSelectionO
         KUndo2Command *cmd = view->canvasBase()->shapeController()->addShapeDirect(shape, 0);
         KisProcessingApplicator::runSingleCommandStroke(view->image(), cmd);
     }
-    image->setModified();
 }
 
-void KisStrokeBrushSelectionActionFactory::run(KisViewManager *view, StrokeSelectionOptions params)
+void KisStrokeBrushSelectionActionFactory::run(KisViewManager *view, const StrokeSelectionOptions& params)
 {
     KisImageWSP image = view->image();
     if (!image) {
@@ -623,6 +610,5 @@ void KisStrokeBrushSelectionActionFactory::run(KisViewManager *view, StrokeSelec
         helper.setFGColorOverride(color);
         helper.setSelectionOverride(0);
         helper.paintPainterPath(outline);
-        image->setModified();
     }
 }

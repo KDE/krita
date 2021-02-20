@@ -1,24 +1,13 @@
 /*
  *  kis_tool_line.h - part of Krayon
  *
- *  Copyright (c) 2000 John Califf <jcaliff@comuzone.net>
- *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
+ *  SPDX-FileCopyrightText: 2000 John Califf <jcaliff@comuzone.net>
+ *  SPDX-FileCopyrightText: 2002 Patrick Julien <freak@codepimps.org>
+ *  SPDX-FileCopyrightText: 2004 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2004 Adrian Page <adrian@pagenet.plus.com>
+ *  SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #ifndef KIS_TOOL_GRADIENT_H_
@@ -68,6 +57,7 @@ private Q_SLOTS:
     void slotSetShape(int);
     void slotSetRepeat(int);
     void slotSetReverse(bool);
+    void slotSetDither(bool);
     void slotSetAntiAliasThreshold(qreal);
     void setOpacity(qreal opacity);
 protected Q_SLOTS:
@@ -92,11 +82,13 @@ private:
     KisGradientPainter::enumGradientShape m_shape;
     KisGradientPainter::enumGradientRepeat m_repeat;
 
+    bool m_dither;
     bool m_reverse;
     double m_antiAliasThreshold;
 
     QLabel *m_lbShape;
     QLabel *m_lbRepeat;
+    QCheckBox *m_ckDither;
     QCheckBox *m_ckReverse;
     KComboBox *m_cmbShape;
     KComboBox *m_cmbRepeat;

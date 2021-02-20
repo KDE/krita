@@ -1,21 +1,9 @@
 /* This file is part of the KDE project
 
-   Copyright (c) 2017 L. E. Segovia <amy@amyspark.me>
+   SPDX-FileCopyrightText: 2017 L. E. Segovia <amy@amyspark.me>
 
 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Lesser General Public
-   License as published by the Free Software Foundation; either
-   version 2.1 of the License, or (at your option) any later version.
-
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Lesser General Public License for more details.
-
-   You should have received a copy of the GNU Lesser General Public
-   License along with this library; if not, write to the Free Software
-   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+   SPDX-License-Identifier: LGPL-2.1-or-later
  */
 #include <resources/KoSvgSymbolCollectionResource.h>
 
@@ -73,6 +61,7 @@ struct KoSvgSymbolCollectionResource::Private {
     QVector<KoSvgSymbol*> symbols;
     QString title;
     QString description;
+    QByteArray data;
 };
 
 
@@ -119,8 +108,8 @@ bool KoSvgSymbolCollectionResource::loadFromDevice(QIODevice *dev, KisResourcesI
         dev->open(QIODevice::ReadOnly);
     }
 
-    QByteArray ba = dev->readAll();
-    setMD5(KoMD5Generator::generateHash(ba));
+    d->data = dev->readAll();
+    setMD5(KoMD5Generator::generateHash(d->data));
 
     dev->seek(0);
 
@@ -168,12 +157,10 @@ bool KoSvgSymbolCollectionResource::loadFromDevice(QIODevice *dev, KisResourcesI
 
 bool KoSvgSymbolCollectionResource::saveToDevice(QIODevice *dev) const
 {
-    bool res = false;
-    // XXX
-    if (res) {
-        KoResource::saveToDevice(dev);
-    }
-    return res;
+    dev->open(QIODevice::WriteOnly);
+    dev->write(d->data);
+    dev->close();
+    return true;
 }
 
 QString KoSvgSymbolCollectionResource::defaultFileExtension() const

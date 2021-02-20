@@ -1,5 +1,8 @@
 # Version 1.0 (2013-04-12)
-# Public Domain, originally written by Lasse Kärkkäinen <tronic@zi.fi>
+# Written by Lasse Kärkkäinen <tronic@zi.fi>
+#
+# SPDX-License-Identifier: CC-PDDC
+#
 # Published at http://www.cmake.org/Wiki/CMake:How_To_Find_Libraries
 
 # If you improve the script, please modify the forementioned wiki page because

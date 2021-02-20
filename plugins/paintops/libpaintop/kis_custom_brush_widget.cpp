@@ -1,20 +1,8 @@
 /*
- *  Copyright (c) 2005 Bart Coppens <kde@bartcoppens.be>
- *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  SPDX-FileCopyrightText: 2005 Bart Coppens <kde@bartcoppens.be>
+ *  SPDX-FileCopyrightText: 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_custom_brush_widget.h"
@@ -64,6 +52,7 @@ KisCustomBrushWidget::KisCustomBrushWidget(QWidget *parent, const QString& capti
     connect(this, SIGNAL(accepted()), SLOT(slotAddPredefined()));
     connect(brushStyle, SIGNAL(activated(int)), this, SLOT(slotUpdateCurrentBrush(int)));
     connect(colorAsMask, SIGNAL(toggled(bool)), this, SLOT(slotUpdateUseColorAsMask(bool)));
+    connect(preserveAlpha, SIGNAL(toggled(bool)), this, SLOT(slotUpdateCurrentBrush()));
     connect(comboBox2, SIGNAL(currentIndexChanged(int)), this, SLOT(slotUpdateCurrentBrush(int)));
 
 
@@ -129,10 +118,7 @@ void KisCustomBrushWidget::slotSpacingChanged()
 void KisCustomBrushWidget::slotUpdateUseColorAsMask(bool useColorAsMask)
 {
     preserveAlpha->setEnabled(useColorAsMask);
-    if (m_brush) {
-        static_cast<KisGbrBrush*>(m_brush.data())->setBrushApplication(ALPHAMASK);
-        updatePreviewImage();
-    }
+    slotUpdateCurrentBrush();
 }
 
 void KisCustomBrushWidget::slotUpdateSaveButton()
@@ -169,9 +155,6 @@ void KisCustomBrushWidget::slotAddPredefined()
             KisGbrBrushSP resource = m_brush->clone().dynamicCast<KisGbrBrush>();
             resource->setName(name);
             resource->setFilename(resource->name().split(" ").join("_") + resource->defaultFileExtension());
-            if (colorAsMask->isChecked()) {
-                resource->makeMaskImage(preserveAlpha->isChecked());
-            }
             m_rServer->addResource(resource.dynamicCast<KisBrush>());
             emit sigNewPredefinedBrush(resource);
         }
@@ -179,9 +162,6 @@ void KisCustomBrushWidget::slotAddPredefined()
             KisImagePipeBrushSP resource = m_brush->clone().dynamicCast<KisImagePipeBrush>();
             resource->setName(name);
             resource->setFilename(resource->name().split(" ").join("_") + resource->defaultFileExtension());
-            if (colorAsMask->isChecked()) {
-                resource->makeMaskImage(preserveAlpha->isChecked());
-            }
             m_rServer->addResource(resource.dynamicCast<KisBrush>());
             emit sigNewPredefinedBrush(resource);
         }
@@ -260,6 +240,9 @@ void KisCustomBrushWidget::createBrush()
     }
 
     static_cast<KisGbrBrush*>(m_brush.data())->setBrushApplication(colorAsMask->isChecked() ? ALPHAMASK : IMAGESTAMP);
+    if (colorAsMask->isChecked()) {
+        static_cast<KisGbrBrush*>(m_brush.data())->makeMaskImage(preserveAlpha->isChecked());
+    }
     m_brush->setSpacing(spacingWidget->spacing());
     m_brush->setAutoSpacing(spacingWidget->autoSpacingActive(), spacingWidget->autoSpacingCoeff());
     m_brush->setFilename(TEMPORARY_FILENAME);

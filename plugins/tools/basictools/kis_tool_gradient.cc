@@ -1,23 +1,12 @@
 /*
  *  kis_tool_gradient.cc - part of Krita
  *
- *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *  Copyright (c) 2003 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2004-2007 Adrian Page <adrian@pagenet.plus.com>
+ *  SPDX-FileCopyrightText: 2002 Patrick Julien <freak@codepimps.org>
+ *  SPDX-FileCopyrightText: 2003 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2004-2007 Adrian Page <adrian@pagenet.plus.com>
+ *  SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_tool_gradient.h"
@@ -70,6 +59,7 @@ KisToolGradient::KisToolGradient(KoCanvasBase * canvas)
     m_startPos = QPointF(0, 0);
     m_endPos = QPointF(0, 0);
 
+    m_dither = false;
     m_reverse = false;
     m_shape = KisGradientPainter::GradientShapeLinear;
     m_repeat = KisGradientPainter::GradientRepeatNone;
@@ -168,17 +158,18 @@ void KisToolGradient::endPrimaryAction(KoPointerEvent *event)
         KisGradientPainter::enumGradientRepeat repeat = m_repeat;
         bool reverse = m_reverse;
         double antiAliasThreshold = m_antiAliasThreshold;
+        bool dither = m_dither;
 
         KUndo2MagicString actionName = kundo2_i18n("Gradient");
         KisProcessingApplicator applicator(image, resources->currentNode(),
                                            KisProcessingApplicator::NONE,
-                                           KisImageSignalVector() << ModifiedSignal,
+                                           KisImageSignalVector(),
                                            actionName);
 
         applicator.applyCommand(
             new KisCommandUtils::LambdaCommand(
                 [resources, startPos, endPos,
-                 shape, repeat, reverse, antiAliasThreshold] () mutable {
+                 shape, repeat, reverse, antiAliasThreshold, dither] () mutable {
 
                     KisNodeSP node = resources->currentNode();
                     KisPaintDeviceSP device = node->paintDevice();
@@ -195,7 +186,8 @@ void KisToolGradient::endPrimaryAction(KoPointerEvent *event)
                     painter.paintGradient(startPos, endPos,
                                           repeat, antiAliasThreshold,
                                           reverse, 0, 0,
-                                          bounds.width(), bounds.height());
+                                          bounds.width(), bounds.height(),
+                                          dither);
 
                     return painter.endAndTakeTransaction();
                 }));
@@ -278,11 +270,16 @@ QWidget* KisToolGradient::createOptionWidget()
     connect(m_ckReverse, SIGNAL(toggled(bool)), this, SLOT(slotSetReverse(bool)));
     addOptionWidgetOption(m_ckReverse);
 
+    m_ckDither = new QCheckBox(i18nc("the gradient will be dithered", "Dither"), widget);
+    m_ckDither->setObjectName("dither_check");
+    connect(m_ckDither, SIGNAL(toggled(bool)), this, SLOT(slotSetDither(bool)));
+    addOptionWidgetOption(m_ckDither);
 
     widget->setFixedHeight(widget->sizeHint().height());
 
 
     // load configuration settings into widget (updating UI will update internal variables from signals/slots)
+    m_ckDither->setChecked(m_configGroup.readEntry<bool>("dither", false));
     m_ckReverse->setChecked((bool)m_configGroup.readEntry("reverse", false));
     m_cmbShape->setCurrentIndex((int)m_configGroup.readEntry("shape", 0));
     m_cmbRepeat->setCurrentIndex((int)m_configGroup.readEntry("repeat", 0));
@@ -307,6 +304,12 @@ void KisToolGradient::slotSetReverse(bool state)
 {
     m_reverse = state;
     m_configGroup.writeEntry("reverse", state);
+}
+
+void KisToolGradient::slotSetDither(bool state)
+{
+    m_dither = state;
+    m_configGroup.writeEntry("dither", state);
 }
 
 void KisToolGradient::slotSetAntiAliasThreshold(qreal value)

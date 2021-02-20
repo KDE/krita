@@ -1,3 +1,7 @@
+<!--
+  SPDX-FileCopyrightText: none
+  SPDX-License-Identifier: CC0-1.0
+-->
 <RCC>
     <qresource prefix="/">
         <file>light_application-exit.svg</file>
@@ -72,7 +76,6 @@
         <file>light_tools-report-bug.svg</file>
         <file>light_tools-wizard.svg</file>
         <file>light_unlocked.svg</file>
-        <file>light_view-choose.svg</file>
         <file>light_view-filter.svg</file>
         <file>light_view-fullscreen.svg</file>
         <file>light_view-grid.svg</file>

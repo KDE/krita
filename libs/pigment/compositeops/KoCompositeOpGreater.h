@@ -1,13 +1,10 @@
 /*
- *  Copyright (c) 2014 Nicholas Guttenberg <ngutten@gmail.com>
+ *  SPDX-FileCopyrightText: 2014 Nicholas Guttenberg <ngutten@gmail.com>
  * 
  *  Based on KoCompositeOpBehind.h,
- *  Copyright (c) 2012 José Luis Vergara <pentalis@gmail.com>
+ *  SPDX-FileCopyrightText: 2012 José Luis Vergara <pentalis@gmail.com>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
+ * SPDX-License-Identifier: LGPL-2.0-or-later
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of

@@ -1,19 +1,7 @@
 /*
- *  Copyright (c) 2011 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2011 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #ifndef __SCHEDULER_UTILS_H
@@ -207,13 +195,15 @@ public:
                              bool exclusive = false,
                              bool inhibitServiceJobs = false,
                              bool forceAllowInitJob = false,
-                             bool forceAllowCancelJob = false)
+                             bool forceAllowCancelJob = false,
+                             bool isLegacyStroke = false)
         : KisStrokeStrategy(prefix, kundo2_noi18n(prefix)),
           m_prefix(prefix),
           m_inhibitServiceJobs(inhibitServiceJobs),
           m_forceAllowInitJob(forceAllowInitJob),
           m_forceAllowCancelJob(forceAllowCancelJob),
-          m_cancelSeqNo(0)
+          m_cancelSeqNo(0),
+          m_isLegacyStroke(isLegacyStroke)
     {
         setExclusive(exclusive);
     }
@@ -223,7 +213,8 @@ public:
           m_prefix(rhs.m_prefix),
           m_inhibitServiceJobs(rhs.m_inhibitServiceJobs),
           m_forceAllowInitJob(rhs.m_forceAllowInitJob),
-          m_cancelSeqNo(rhs.m_cancelSeqNo)
+          m_cancelSeqNo(rhs.m_cancelSeqNo),
+          m_isLegacyStroke(rhs.m_isLegacyStroke)
     {
         m_prefix = QString("clone%1_%2").arg(levelOfDetail).arg(m_prefix);
     }
@@ -248,7 +239,7 @@ public:
     }
 
     KisStrokeStrategy* createLodClone(int levelOfDetail) override {
-        return new KisTestingStrokeStrategy(*this, levelOfDetail);
+        return !m_isLegacyStroke ? new KisTestingStrokeStrategy(*this, levelOfDetail) : 0;
     }
 
     class CancelData : public KisStrokeJobData
@@ -265,12 +256,17 @@ public:
         return new CancelData(m_cancelSeqNo++);
     }
 
-private:
+    void setLegacyStroke(bool value) {
+        m_isLegacyStroke = value;
+    }
+
+protected:
     QString m_prefix;
     bool m_inhibitServiceJobs;
     int m_forceAllowInitJob;
     bool m_forceAllowCancelJob;
     int m_cancelSeqNo;
+    bool m_isLegacyStroke = false;
 };
 
 inline QString getJobName(KisStrokeJob *job) {

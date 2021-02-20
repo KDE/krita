@@ -1,19 +1,7 @@
 /*
- * Copyright (c) 2017 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2017 Boudewijn Rempt <boud@valdyas.org>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "dlg_buginfo.h"
@@ -81,8 +69,9 @@ void DlgBugInfo::initializeText()
     int target_height = fm.height() * info.split('\n').size() + wheight;
 
     QRect screen_rect = QGuiApplication::primaryScreen()->availableGeometry();
+    int frame_height = parentWidget()->frameGeometry().height() - parentWidget()->size().height();
 
-    resize(m_page->size().width(), target_height > screen_rect.height() ? screen_rect.height() : target_height);
+    resize(m_page->size().width(), target_height > screen_rect.height() ? screen_rect.height() - frame_height : target_height);
 }
 
 void DlgBugInfo::saveToFile()

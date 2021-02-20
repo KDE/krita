@@ -1,6 +1,6 @@
 # Locate the Vc template library. Vc can be found at http://gitorious.org/Vc/
 #
-# Copyright 2009-2012   Matthias Kretz <kretz@kde.org>
+# SPDX-FileCopyrightText: 2009-2012 Matthias Kretz <kretz@kde.org>
 #
 # This file is meant to be copied into projects that want to use Vc. It will
 # search for VcConfig.cmake, which ships with Vc and will provide up-to-date
@@ -25,6 +25,9 @@
 # to use them to skip whole compilation units.
 # Vc_SSE_INTRINSICS_BROKEN
 # Vc_AVX_INTRINSICS_BROKEN
+#
+# SPDX-License-Identifier: BSD-3-Clause
+#
 
 find_package(Vc ${Vc_FIND_VERSION} QUIET NO_MODULE PATHS $ENV{HOME} /opt/Vc /usr/lib)
 

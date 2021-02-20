@@ -9,7 +9,16 @@ project (krita-and-all-its-deps)
 # Example usage: cmake ..\kritadeposx -DEXTERNALS_DOWNLOAD_DIR=/dev2/d -DINSTALL_ROOT=/dev2/i -DWIN64_BUILD=TRUE  -DBOOST_LIBRARYDIR=/dev2/i/lib   -G "Visual Studio 11 Win64"
 
 
-cmake_minimum_required(VERSION 2.8.6)
+iF(APPLE)
+	exec_program("sysctl -n hw.optional.arm64" OUTPUT_VARIABLE APPLE_ON_ARM)
+	if(${APPLE_ON_ARM} EQUAL 1)
+		cmake_minimum_required(VERSION 3.19.3)
+	else()
+        cmake_minimum_required(VERSION 3.7.2)
+	endif()
+else(APPLE)
+	cmake_minimum_required(VERSION 2.8.6)
+endif()
 
 if(NOT SUBMAKE_JOBS)
 	set(SUBMAKE_JOBS 1)
@@ -132,7 +141,18 @@ if (APPLE)
 endif ()
 
 if (ANDROID)
-  set (GLOBAL_PROFILE ${GLOBAL_PROFILE} -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE} -DANDROID_PLATFORM=${ANDROID_PLATFORM} -DANDROID_ABI=${ANDROID_ABI})
+  # HACK: copied from ECM, this makes sure that we don't build an executable (kf5s do that), but a DSO.
+  set(CMAKE_CXX_LINK_EXECUTABLE "<CMAKE_CXX_COMPILER> <CMAKE_SHARED_LIBRARY_CXX_FLAGS> <LINK_FLAGS> <CMAKE_SHARED_LIBRARY_CREATE_CXX_FLAGS> <SONAME_FLAG><TARGET_SONAME> -o <TARGET> <OBJECTS> <LINK_LIBRARIES>")
+
+  set (GLOBAL_PROFILE ${GLOBAL_PROFILE}
+                     -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}
+                     -DANDROID_PLATFORM=${ANDROID_PLATFORM}
+                     -DANDROID_ABI=${ANDROID_ABI}
+                     -DCMAKE_FIND_ROOT_PATH=${CMAKE_FIND_ROOT_PATH}
+                     -DCMAKE_CXX_LINK_EXECUTABLE=${CMAKE_CXX_LINK_EXECUTABLE})
+
+  # see: https://github.com/android/ndk/issues/929
+  unset (CMAKE_SYSROOT)
 endif()
 
 if (UNIX AND NOT APPLE)
@@ -195,7 +215,6 @@ add_subdirectory( ext_png )
 add_subdirectory( ext_eigen3 )
 add_subdirectory( ext_expat ) # for exiv2
 add_subdirectory( ext_exiv2 )
-add_subdirectory( ext_ilmbase )
 add_subdirectory( ext_lcms2 )
 add_subdirectory( ext_openexr )
 add_subdirectory( ext_openssl )
@@ -232,7 +251,14 @@ if(UNIX)
     add_subdirectory( ext_pkgconfig )
 endif()
 
+if (ANDROID)
+  # gettext replacement
+  add_subdirectory(ext_libintl-lite)
+endif()
+
 add_subdirectory( ext_heif )
 add_subdirectory(ext_giflib)
 add_subdirectory(ext_quazip)
 add_subdirectory(ext_seexpr)
+add_subdirectory(ext_json_c)
+add_subdirectory(ext_mypaint)

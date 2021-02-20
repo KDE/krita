@@ -1,3 +1,7 @@
+/*
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
 #ifndef KIS_TIMING_INFORMATION_H
 #define KIS_TIMING_INFORMATION_H
 

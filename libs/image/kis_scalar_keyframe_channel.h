@@ -1,19 +1,7 @@
 /*
- *  Copyright (c) 2015 Jouni Pentikäinen <joupent@gmail.com>
+ *  SPDX-FileCopyrightText: 2015 Jouni Pentikäinen <joupent@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 #ifndef _KIS_SCALAR_KEYFRAME_CHANNEL_H
 #define _KIS_SCALAR_KEYFRAME_CHANNEL_H
@@ -132,9 +120,8 @@ class KRITAIMAGE_EXPORT KisScalarKeyframeChannel : public KisKeyframeChannel
 {
     Q_OBJECT
 public:
-    KisScalarKeyframeChannel(const KoID& id, KisNodeWSP node);
     KisScalarKeyframeChannel(const KoID& id, KisDefaultBoundsBaseSP bounds);
-    KisScalarKeyframeChannel(const KisScalarKeyframeChannel &rhs, KisNodeWSP newParent);
+    KisScalarKeyframeChannel(const KisScalarKeyframeChannel &rhs);
     ~KisScalarKeyframeChannel() override;
 
     /** Utility for adding keyframe with non-default value. */
@@ -149,6 +136,8 @@ public:
     /** @brief Quickly get the interpolated value at the given time. */
     qreal valueAt(int time) const;
     qreal currentValue() { return valueAt(currentTime()); }
+
+    bool isCurrentTimeAffectedBy(int keyTime);
 
     void setDefaultValue(qreal value);
     void setDefaultInterpolationMode(KisScalarKeyframe::InterpolationMode mode);

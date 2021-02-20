@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgPaletteListWidget</class>
  <widget class="QWidget" name="WdgPaletteListWidget">
   <property name="geometry">
@@ -51,7 +55,9 @@
        <widget class="QToolButton" name="bnAdd">
         <property name="icon">
          <iconset theme="add">
-          <normaloff>.</normaloff>.</iconset>
+          <normaloff>.</normaloff>
+          .
+         </iconset>
         </property>
        </widget>
       </item>
@@ -59,7 +65,9 @@
        <widget class="QToolButton" name="bnExport">
         <property name="icon">
          <iconset theme="document-export">
-          <normaloff>.</normaloff>.</iconset>
+          <normaloff>.</normaloff>
+          .
+         </iconset>
         </property>
        </widget>
       </item>
@@ -67,7 +75,9 @@
        <widget class="QToolButton" name="bnImport">
         <property name="icon">
          <iconset theme="document-open">
-          <normaloff>.</normaloff>.</iconset>
+          <normaloff>.</normaloff>
+          .
+         </iconset>
         </property>
        </widget>
       </item>
@@ -75,7 +85,9 @@
        <widget class="QToolButton" name="bnRemove">
         <property name="icon">
          <iconset theme="list-remove">
-          <normaloff>.</normaloff>.</iconset>
+          <normaloff>.</normaloff>
+          .
+         </iconset>
         </property>
        </widget>
       </item>

@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgImageSize</class>
  <widget class="QWidget" name="WdgImageSize">
   <property name="geometry">
@@ -23,7 +27,7 @@
       <bool>true</bool>
      </property>
      <layout class="QGridLayout" name="gridLayout_3">
-      <item row="1" column="2">
+      <item column="2" row="1">
        <widget class="KisDoubleParseUnitSpinBox" name="pixelHeightDouble">
         <property name="minimumSize">
          <size>
@@ -45,7 +49,7 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="0">
+      <item column="0" row="0">
        <spacer name="horizontalSpacer_2">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
@@ -61,7 +65,7 @@
         </property>
        </spacer>
       </item>
-      <item row="0" column="1">
+      <item column="1" row="0">
        <widget class="QLabel" name="lblPixelWidth">
         <property name="text">
          <string>Width:</string>
@@ -71,7 +75,7 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="1">
+      <item column="1" row="2">
        <widget class="QLabel" name="lblPixelFilter">
         <property name="text">
          <string>&amp;Filter:</string>
@@ -84,14 +88,14 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="4" rowspan="2">
+      <item column="4" row="0" rowspan="2">
        <widget class="KoAspectButton" name="pixelAspectRatioBtn" native="true">
         <property name="text" stdset="0">
          <string/>
         </property>
        </widget>
       </item>
-      <item row="1" column="1">
+      <item column="1" row="1">
        <widget class="QLabel" name="lblPixelHeight">
         <property name="text">
          <string>Height:</string>
@@ -101,7 +105,7 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="2">
+      <item column="2" row="0">
        <widget class="KisDoubleParseUnitSpinBox" name="pixelWidthDouble">
         <property name="minimumSize">
          <size>
@@ -123,7 +127,7 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="5">
+      <item column="5" row="1">
        <spacer name="horizontalSpacer_5">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
@@ -139,10 +143,10 @@
         </property>
        </spacer>
       </item>
-      <item row="2" column="2" colspan="2">
+      <item colspan="2" column="2" row="2">
        <widget class="KisCmbIDList" name="pixelFilterCmb" native="true"/>
       </item>
-      <item row="0" column="3" rowspan="2">
+      <item column="3" row="0" rowspan="2">
        <widget class="QComboBox" name="pixelSizeUnit"/>
       </item>
      </layout>
@@ -157,7 +161,7 @@
       <bool>true</bool>
      </property>
      <layout class="QGridLayout" name="gridLayout">
-      <item row="1" column="1">
+      <item column="1" row="1">
        <widget class="QLabel" name="lblPrintHeight">
         <property name="text">
          <string>Hei&amp;ght:</string>
@@ -170,7 +174,7 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="2">
+      <item column="2" row="0">
        <widget class="KisDoubleParseUnitSpinBox" name="printWidth">
         <property name="minimumSize">
          <size>
@@ -192,7 +196,7 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="1">
+      <item column="1" row="0">
        <widget class="QLabel" name="lblPrintWidth">
         <property name="text">
          <string>Wid&amp;th:</string>
@@ -205,7 +209,7 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="2">
+      <item column="2" row="1">
        <widget class="KisDoubleParseUnitSpinBox" name="printHeight">
         <property name="minimumSize">
          <size>
@@ -227,21 +231,21 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="4" rowspan="2">
+      <item column="4" row="0" rowspan="2">
        <widget class="KoAspectButton" name="printAspectRatioBtn" native="true">
         <property name="text" stdset="0">
          <string/>
         </property>
        </widget>
       </item>
-      <item row="2" column="1">
+      <item column="1" row="2">
        <widget class="QLabel" name="lblResolution">
         <property name="text">
          <string>Resolution:</string>
         </property>
        </widget>
       </item>
-      <item row="2" column="2">
+      <item column="2" row="2">
        <widget class="KisDoubleParseSpinBox" name="printResolution">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -269,10 +273,10 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="3">
+      <item column="3" row="2">
        <widget class="QComboBox" name="printResolutionUnit"/>
       </item>
-      <item row="1" column="0">
+      <item column="0" row="1">
        <spacer name="horizontalSpacer">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
@@ -288,7 +292,7 @@
         </property>
        </spacer>
       </item>
-      <item row="0" column="5">
+      <item column="5" row="0">
        <spacer name="horizontalSpacer_3">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
@@ -304,7 +308,7 @@
         </property>
        </spacer>
       </item>
-      <item row="0" column="3" rowspan="2">
+      <item column="3" row="0" rowspan="2">
        <widget class="QComboBox" name="printWidthUnit"/>
       </item>
      </layout>
@@ -378,7 +382,7 @@
   </customwidget>
   <customwidget>
    <class>KisCmbIDList</class>
-   <extends></extends>
+   <extends/>
    <header>widgets/kis_cmb_idlist.h</header>
   </customwidget>
   <customwidget>

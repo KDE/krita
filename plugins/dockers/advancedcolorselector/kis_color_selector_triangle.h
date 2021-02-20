@@ -1,18 +1,7 @@
 /*
- *  Copyright (c) 2010 Adam Celarek <kdedev at xibo dot at>
+ *  SPDX-FileCopyrightText: 2010 Adam Celarek <kdedev at xibo dot at>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #ifndef KIS_COLOR_SELECTOR_TRIANGLE_H
@@ -41,12 +30,12 @@ protected:
 
 private:
     friend class Acs::PixelCacheRenderer;
-    KoColor colorAt(int x, int y) const;
+    KoColor colorAt(float x, float y) const;
 
 private:
     int triangleWidth() const;
     int triangleHeight() const;
-    void updatePixelCache();
+    void updatePixelCache(qreal devicePixelRatioF);
     QPoint widgetToTriangleCoordinates(const QPoint& point) const;
     QPoint triangleToWidgetCoordinates(const QPoint& point) const;
 
@@ -55,6 +44,7 @@ private:
     KisPaintDeviceSP m_realPixelCache;
     QSize m_cachedSize;
     QPointF m_lastClickPos;
+    qreal m_cacheDevicePixelRatioF {1.0};
 };
 
 #endif // KIS_COLOR_SELECTOR_TRIANGLE_H

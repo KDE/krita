@@ -1,19 +1,7 @@
 /*
- *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
+ *  SPDX-FileCopyrightText: 2002 Patrick Julien <freak@codepimps.org>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 #ifndef KIS_CONFIG_H_
 #define KIS_CONFIG_H_
@@ -94,6 +82,8 @@ public:
     int preferredVectorImportResolutionPPI(bool defaultValue = false) const;
     void setPreferredVectorImportResolutionPPI(int value) const;
 
+    bool useDefaultColorSpace(bool defaultvalue = false) const;
+    void setUseDefaultColorSpace(bool value) const;
     /**
      * @return the id of the default color model used for creating new images.
      */
@@ -352,6 +342,9 @@ public:
     bool hideDockersFullscreen(bool defaultValue = false) const;
     void setHideDockersFullscreen(const bool value) const;
 
+    bool showDockerTitleBars(bool defaultValue = false) const;
+    void setShowDockerTitleBars(const bool value) const;
+
     bool showDockers(bool defaultValue = false) const;
     void setShowDockers(const bool value) const;
 
@@ -565,6 +558,9 @@ public:
 
     bool autoPinLayersToTimeline(bool defaultValue = false) const;
     void setAutoPinLayersToTimeline(bool value);
+
+    bool adaptivePlaybackRange(bool defaultValue = false) const;
+    void setAdaptivePlaybackRange(bool value);
 
     qreal timelineZoom(bool defaultValue = false) const;
     void setTimelineZoom(qreal value);

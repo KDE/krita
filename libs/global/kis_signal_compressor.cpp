@@ -1,19 +1,7 @@
 /*
- *  Copyright (c) 2013 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2013 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 /**
@@ -63,15 +51,15 @@ KisSignalCompressor::KisSignalCompressor(int delay, Mode mode, SlowHandlerMode s
     : QObject(parent),
       m_timer(new QTimer(this)),
       m_mode(mode),
-      m_slowHandlerMode(slowHandlerMode)
+      m_slowHandlerMode(slowHandlerMode),
+      m_timeout(delay)
 {
     m_timer->setSingleShot(false);
     m_timer->setInterval(delay);
     connect(m_timer, SIGNAL(timeout()), SLOT(slotTimerExpired()));
 }
 
-
-void KisSignalCompressor::setDelay(int delay)
+void KisSignalCompressor::setDelayImpl(int delay)
 {
     const bool wasActive = m_timer->isActive();
 
@@ -84,6 +72,20 @@ void KisSignalCompressor::setDelay(int delay)
     if (wasActive) {
         m_timer->start();
     }
+}
+
+void KisSignalCompressor::setDelay(int delay)
+{
+    m_timeout = delay;
+    m_idleCallback = {};
+    setDelayImpl(delay);
+}
+
+void KisSignalCompressor::setDelay(std::function<bool ()> idleCallback, int idleDelay, int timeout)
+{
+    m_timeout = timeout;
+    m_idleCallback = idleCallback;
+    setDelayImpl(idleDelay);
 }
 
 void KisSignalCompressor::start()
@@ -150,13 +152,16 @@ bool KisSignalCompressor::tryEmitOnTick(bool isFromTimer)
 
     // we have different requirements for hi-frequency events (the mean
     // of the events rate must be min(compressorRate, eventsRate)
-    const int realInterval = m_timer->interval();
+    const int realInterval = m_timeout;
     const int minInterval = realInterval < 100 ? 0.5 * realInterval : realInterval;
 
     // Enable for debugging:
-    // ENTER_FUNCTION() << ppVar(isFromTimer) << ppVar(m_signalsPending) << m_lastEmittedTimer.elapsed();
+    // ENTER_FUNCTION() << ppVar(isFromTimer) << ppVar(m_signalsPending) << m_lastEmittedTimer.elapsed() << ppVar((m_idleCallback && m_idleCallback()));
 
-    if (m_signalsPending && m_lastEmittedTimer.elapsed() >= minInterval) {
+    if (m_signalsPending &&
+            (m_lastEmittedTimer.elapsed() >= minInterval ||
+             (m_idleCallback && m_idleCallback()))) {
+
         KIS_SAFE_ASSERT_RECOVER_NOOP(!isFromTimer || !m_isEmitting);
 
         if (m_slowHandlerMode == PRECISE_INTERVAL) {
@@ -200,7 +205,7 @@ void KisSignalCompressor::slotTimerExpired()
 {
     KIS_ASSERT_RECOVER_NOOP(m_mode != UNDEFINED);
     if (!tryEmitOnTick(true)) {
-        const int calmDownInterval = 5 * m_timer->interval();
+        const int calmDownInterval = 5 * m_timeout;
 
         if (!m_lastEmittedTimer.isValid() ||
             m_lastEmittedTimer.elapsed() > calmDownInterval) {
@@ -229,5 +234,5 @@ void KisSignalCompressor::setMode(KisSignalCompressor::Mode mode)
 
 int KisSignalCompressor::delay() const
 {
-    return m_timer->interval();
+    return m_timeout;
 }

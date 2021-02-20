@@ -1,19 +1,7 @@
 /*
- *  Copyright (c) 2018 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2018 Boudewijn Rempt <boud@valdyas.org>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #ifndef KISTEST
@@ -22,6 +10,7 @@
 #include <KoConfig.h>
 #include <QApplication>
 #include <QTest>
+#include <QStandardPaths>
 #include <QLoggingCategory>
 #include <QtTest/qtestsystem.h>
 #include <set>
@@ -283,6 +272,7 @@ void registerResources()
 int main(int argc, char *argv[]) \
 { \
     qputenv("QT_LOGGING_RULES", ""); \
+    QStandardPaths::setTestModeEnabled(true); \
     qputenv("EXTRA_RESOURCE_DIRS", QByteArray(KRITA_EXTRA_RESOURCE_DIRS)); \
     QApplication app(argc, argv); \
     app.setAttribute(Qt::AA_Use96Dpi, true); \
@@ -300,6 +290,7 @@ int main(int argc, char *argv[]) \
 { \
     qputenv("QT_LOGGING_RULES", ""); \
     qputenv("EXTRA_RESOURCE_DIRS", QByteArray(KRITA_EXTRA_RESOURCE_DIRS)); \
+    QStandardPaths::setTestModeEnabled(true); \
     QApplication app(argc, argv); \
     app.setAttribute(Qt::AA_Use96Dpi, true); \
     QTEST_DISABLE_KEYPAD_NAVIGATION \

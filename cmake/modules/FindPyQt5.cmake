@@ -1,8 +1,8 @@
 # Find PyQt5
 # ~~~~~~~~~~
-# Copyright (c) 2014, Simon Edwards <simon@simonzone.com>
-# Redistribution and use is allowed according to the terms of the BSD license.
-# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+# SPDX-FileCopyrightText: 2014 Simon Edwards <simon@simonzone.com>
+#
+# SPDX-License-Identifier: BSD-3-Clause
 #
 # PyQt5 website: http://www.riverbankcomputing.co.uk/pyqt/index.php
 #

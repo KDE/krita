@@ -1,3 +1,7 @@
+/*
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
 #include "kis_animation_utils_test.h"
 
 #include <KoColor.h>
@@ -8,7 +12,7 @@
 #include "kis_paint_layer.h"
 #include "kis_keyframe_channel.h"
 #include <testutil.h>
-#include "kis_animation_utils.h"
+#include "KisAnimUtils.h"
 
 #include <tuple>
 
@@ -114,7 +118,7 @@ void KisAnimationUtilsTest::test()
 
     QVERIFY(verifyFrames(p, nodes, initialReferenceRects));
 
-    using namespace KisAnimationUtils;
+    using namespace KisAnimUtils;
 
     FrameMovePairList frameMoves;
 

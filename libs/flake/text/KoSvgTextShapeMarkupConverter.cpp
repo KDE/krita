@@ -1,19 +1,7 @@
 /*
- *  Copyright (c) 2017 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2017 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "KoSvgTextShapeMarkupConverter.h"
@@ -1037,7 +1025,6 @@ QString KoSvgTextShapeMarkupConverter::style(QTextCharFormat format,
         }
 
         if (propertyId == QTextCharFormat::FontCapitalization) {
-            QString val;
             if (format.fontCapitalization() == QFont::SmallCaps){
                 c.append("font-variant").append(":")
                         .append("small-caps");
@@ -1058,8 +1045,10 @@ QString KoSvgTextShapeMarkupConverter::style(QTextCharFormat format,
                     .append(format.properties()[propertyId].toString());
         }
         if (propertyId == QTextCharFormat::FontKerning) {
-            QString val = "normal";
-            if(!format.fontKerning()) {
+            QString val;
+            if (format.fontKerning()) {
+                val = "auto";
+            } else {
                 val = "0";
             }
             c.append("kerning").append(":")
@@ -1104,14 +1093,17 @@ QString KoSvgTextShapeMarkupConverter::style(QTextCharFormat format,
             c.append("baseline-shift").append(":").append(val);
         }
 
-        //we might need a better check than 'isn't black'
         if (propertyId == QTextCharFormat::ForegroundBrush) {
-            QString c;
-            c.append("fill").append(":")
-                    .append(format.foreground().color().name());
-            if (!c.isEmpty()) {
-                style.append(c);
+            QColor::NameFormat colorFormat;
+
+            if (format.foreground().color().alphaF() < 1.0) {
+                colorFormat = QColor::HexArgb;
+            } else {
+                colorFormat = QColor::HexRgb;
             }
+
+            c.append("fill").append(":")
+                    .append(format.foreground().color().name(colorFormat));
         }
 
         if (!c.isEmpty()) {
@@ -1163,6 +1155,12 @@ QVector<QTextFormat> KoSvgTextShapeMarkupConverter::stylesFromString(QStringList
     for (int i=0; i<styles.size(); i++) {
         if (!styles.at(i).isEmpty()){
             QStringList style = styles.at(i).split(":");
+            // ignore the property instead of crashing,
+            // if user forgets to separate property name and value with ':'.
+            if (style.size() < 2) {
+                continue;
+            }
+
             QString property = style.at(0).trimmed();
             QString value = style.at(1).trimmed();
 
@@ -1276,7 +1274,7 @@ QVector<QTextFormat> KoSvgTextShapeMarkupConverter::stylesFromString(QStringList
             }
 
             if (property == "kerning") {
-                if (value=="normal") {
+                if (value == "auto") {
                     charFormat.setFontKerning(true);
                 } else {
                     qreal val = SvgUtil::parseUnitX(context.data(), value);
@@ -1303,6 +1301,37 @@ QVector<QTextFormat> KoSvgTextShapeMarkupConverter::stylesFromString(QStringList
             if (property == "fill") {
                 QColor color;
                 color.setNamedColor(value);
+
+                // avoid assertion failure in `KoColor` later
+                if (!color.isValid()) {
+                    continue;
+                }
+
+                // default color is #ff000000, so default alpha will be 1.0
+                qreal currentAlpha = charFormat.foreground().color().alphaF();
+
+                // if alpha was already defined by `fill-opacity` prop
+                if (currentAlpha < 1.0) {
+                    // and `fill` doesn't have alpha component
+                    if (color.alphaF() < 1.0) {
+                        color.setAlphaF(currentAlpha);
+                    }
+                }
+
+                charFormat.setForeground(color);
+            }
+
+            if (property == "fill-opacity") {
+                QColor color = charFormat.foreground().color();
+                bool ok = true;
+                qreal alpha = qBound(0.0, SvgUtil::fromPercentage(value, &ok), 1.0);
+
+                // if conversion fails due to non-numeric input,
+                // it defaults to 0.0, default to current alpha instead
+                if (!ok) {
+                    alpha = color.alphaF();
+                }
+                color.setAlphaF(alpha);
                 charFormat.setForeground(color);
             }
 

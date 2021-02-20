@@ -1,20 +1,7 @@
 /* This file is part of the KDE project
- * Copyright (C) 2011 Sven Langkamp <sven.langkamp@gmail.com>
+ * SPDX-FileCopyrightText: 2011 Sven Langkamp <sven.langkamp@gmail.com>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #include "kis_workspace_chooser.h"
@@ -37,6 +24,8 @@
 #include <KoResource.h>
 #include <KisResourceModel.h>
 #include <KisResourceServerProvider.h>
+#include <KoDockWidgetTitleBar.h>
+#include <KisMainWindow.h>
 
 #include "kis_workspace_resource.h"
 #include "KisViewManager.h"
@@ -77,7 +66,7 @@ void KisWorkspaceDelegate::paint(QPainter * painter, const QStyleOptionViewItem 
         painter->fillRect(option.rect, option.palette.base());
     }
 
-    QString name = index.data(Qt::UserRole + KisResourceModel::Name).toString();
+    QString name = index.data(Qt::UserRole + KisAbstractResourceModel::Name).toString();
     painter->drawText(option.rect.x() + 5, option.rect.y() + painter->fontMetrics().ascent() + 5, name);
 }
 
@@ -155,7 +144,7 @@ void KisWorkspaceChooser::slotSaveWorkspace()
     workspace->setName(name);
     workspace->setFilename(name.split(" ").join("_")+workspace->defaultFileExtension());
 
-    KisResourceModelProvider::resourceModel(ResourceType::Workspaces)->addResource(workspace);
+    KisResourceModel(ResourceType::Workspaces).addResource(workspace);
 }
 
 void KisWorkspaceChooser::slotUpdateWorkspaceSaveButton()
@@ -210,7 +199,7 @@ void KisWorkspaceChooser::slotSaveWindowLayout()
 
     layout->setName(name);
     layout->setFilename(name.split(" ").join("_") + layout->defaultFileExtension());
-    KisResourceModelProvider::resourceModel(ResourceType::WindowLayouts)->addResource(layout);
+    KisResourceModel(ResourceType::WindowLayouts).addResource(layout);
 }
 
 void KisWorkspaceChooser::slotUpdateWindowLayoutSaveButton()

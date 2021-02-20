@@ -1,19 +1,7 @@
 /*
- *  Copyright (c) 2011 Sven Langkamp <sven.langkamp@gmail.com>
+ *  SPDX-FileCopyrightText: 2011 Sven Langkamp <sven.langkamp@gmail.com>
  *
- *  This library is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This library is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU Lesser General Public License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #include "tasksetdocker_dock.h"
@@ -69,7 +57,7 @@ void KisTasksetResourceDelegate::paint(QPainter * painter, const QStyleOptionVie
     if (! index.isValid())
         return;
 
-    QString name = index.data(Qt::UserRole + KisResourceModel::Name).toString();
+    QString name = index.data(Qt::UserRole + KisAbstractResourceModel::Name).toString();
 
     if (option.state & QStyle::State_Selected) {
         painter->setPen(QPen(option.palette.highlight(), 2.0));
@@ -83,7 +71,10 @@ void KisTasksetResourceDelegate::paint(QPainter * painter, const QStyleOptionVie
     painter->drawText(option.rect.x() + 5, option.rect.y() + painter->fontMetrics().ascent() + 5, name);
 }
 
-TasksetDockerDock::TasksetDockerDock( ) : QDockWidget(i18n("Task Sets")), m_canvas(0), m_blocked(false)
+TasksetDockerDock::TasksetDockerDock( )
+    : QDockWidget(i18n("Task Sets"))
+    , m_canvas(0)
+    , m_blocked(false)
 {
     QWidget* widget = new QWidget(this);
     setupUi(widget);
@@ -92,14 +83,19 @@ TasksetDockerDock::TasksetDockerDock( ) : QDockWidget(i18n("Task Sets")), m_canv
     tasksetView->setItemDelegate(new KisTasksetDelegate(this));
     recordButton->setIcon(KisIconUtils::loadIcon("media-record"));
     recordButton->setCheckable(true);
+    recordButton->setFlat(true);
+
     clearButton->setIcon(KisIconUtils::loadIcon("edit-delete"));
+    clearButton->setFlat(true);
+
     saveButton->setIcon(KisIconUtils::loadIcon("document-save"));
     saveButton->setEnabled(false);
+    saveButton->setFlat(true);
 
     chooserButton->setIcon(KisIconUtils::loadIcon("edit-copy"));
+    chooserButton->setFlat(true);
 
     m_rserver = new KoResourceServer<TasksetResource>(ResourceType::TaskSets);
-    KisResourceLoaderRegistry::instance()->registerLoader(new KisResourceLoader<TasksetResource>(ResourceType::TaskSets, ResourceType::TaskSets, i18n("Task sets"), QStringList() << "application/x-krita-taskset"));
     KisResourceItemChooser *itemChooser = new KisResourceItemChooser(ResourceType::TaskSets, false, this);
     itemChooser->setItemDelegate(new KisTasksetResourceDelegate(this));
     itemChooser->setFixedSize(500, 250);
@@ -239,3 +235,9 @@ void TasksetDockerDock::resourceSelected(KoResourceSP resource)
     }
 }
 
+static void addResourceLoader()
+{
+    KisResourceLoaderRegistry::instance()->registerLoader(new KisResourceLoader<TasksetResource>(ResourceType::TaskSets, ResourceType::TaskSets, i18n("Task sets"), QStringList() << "application/x-krita-taskset"));
+}
+
+Q_COREAPP_STARTUP_FUNCTION(addResourceLoader)

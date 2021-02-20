@@ -1,19 +1,7 @@
 /*
- * Copyright (C) Wolthera van Hovell tot Westerflier <griffinvalley@gmail.com>, (C) 2016
+ * SPDX-FileCopyrightText: 2016 Wolthera van Hovell tot Westerflier <griffinvalley@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 #include "KisVisualColorSelector.h"
 
@@ -105,7 +93,7 @@ void KisVisualColorSelector::slotSetColorSpace(const KoColorSpace *cs)
     if (!m_d->currentCS || *m_d->currentCS != *cs) {
         const KoColorSpace *csNew = cs;
 
-        // PQ color space is not very suitable for color picking, substitute with linear one
+        // PQ color space is not very suitable for selecting colors, substitute with linear one
         if (cs->colorModelId() == RGBAColorModelID &&
             cs->profile()->uniqueId() == KoColorSpaceRegistry::instance()->p2020PQProfile()->uniqueId()) {
 
@@ -400,6 +388,7 @@ void KisVisualColorSelector::slotRebuildSelectors()
         switch(m_d->acs_config.subTypeParameter)
         {
         case KisColorSelectorConfiguration::H:
+        case KisColorSelectorConfiguration::Hluma:
             channel1 = 0;
             break;
         case KisColorSelectorConfiguration::hsyS:

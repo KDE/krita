@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgSeExpr</class>
  <widget class="QWidget" name="WdgSeExpr">
   <property name="geometry">
@@ -32,10 +36,10 @@
    <property name="spacing">
     <number>0</number>
    </property>
-   <item row="0" column="0">
+   <item column="0" row="0">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
@@ -414,13 +418,13 @@
   <customwidget>
    <class>ExprControlCollection</class>
    <extends>QWidget</extends>
-   <header location="global">SeExpr2/UI/ExprControlCollection.h</header>
+   <header location="global">KSeExprUI/ExprControlCollection.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>ExprEditor</class>
    <extends>QWidget</extends>
-   <header location="global">SeExpr2/UI/ExprEditor.h</header>
+   <header location="global">KSeExprUI/ExprEditor.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

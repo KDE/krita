@@ -1,19 +1,7 @@
 /*
- *  Copyright (c) 2013 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2013 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_embedded_pattern_manager.h"
@@ -93,7 +81,7 @@ KoPatternSP KisEmbeddedPatternManager::tryFetchPattern(const KisPropertiesConfig
     if (pattern) return pattern;
 
     QString fileName = setting->getString("Texture/Pattern/PatternFileName");
-    pattern = resourceSourceAdapter.resourceForFilename(fileName);
+    pattern = resourceSourceAdapter.resourceForFilename(QFileInfo(fileName).fileName());
 
     return pattern;
 }
@@ -104,10 +92,7 @@ KoPatternSP KisEmbeddedPatternManager::loadEmbeddedPattern(const KisPropertiesCo
     if (pattern) return pattern;
 
     pattern = Private::tryLoadEmbeddedPattern(setting);
-    if (pattern) {
-        // TODO: implement addition of the embedded resources in KisResourceLocator::resource()
-        //KoResourceServerProvider::instance()->patternServer()->addResource(pattern, false);
-    }
+    // this resource will be added to the memory storage by KisResourceLocator
 
     return pattern;
 }

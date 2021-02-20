@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgDlgPngImport</class>
  <widget class="QWidget" name="WdgDlgPngImport">
   <property name="geometry">
@@ -11,7 +15,7 @@
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="1" column="0">
+   <item column="0" row="1">
     <widget class="QLabel" name="lblProfiles">
      <property name="text">
       <string comment="Label of ICC Color Profile in PNG import dialogue">Profile:</string>
@@ -21,7 +25,7 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="1">
+   <item column="1" row="1">
     <widget class="KisSqueezedComboBox" name="cmbProfile">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -37,14 +41,14 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="0" colspan="2">
+   <item colspan="2" column="0" row="0">
     <widget class="QLabel" name="lblFilename">
      <property name="text">
       <string/>
      </property>
     </widget>
    </item>
-   <item row="2" column="1">
+   <item column="1" row="2">
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>

@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgDesaturate</class>
  <widget class="QWidget" name="WdgDesaturate">
   <property name="geometry">
@@ -23,7 +27,7 @@
    <property name="spacing">
     <number>6</number>
    </property>
-   <item row="0" column="0">
+   <item column="0" row="0">
     <widget class="QGroupBox" name="groupType">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">

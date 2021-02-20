@@ -1,24 +1,12 @@
 /*
  *  kis_control_frame.cc - part of Krita
  *
- *  Copyright (c) 1999 Matthias Elter  <elter@kde.org>
- *  Copyright (c) 2003 Patrick Julien  <freak@codepimps.org>
- *  Copyright (c) 2004 Sven Langkamp  <sven.langkamp@gmail.com>
- *  Copyright (c) 2006 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 1999 Matthias Elter <elter@kde.org>
+ *  SPDX-FileCopyrightText: 2003 Patrick Julien <freak@codepimps.org>
+ *  SPDX-FileCopyrightText: 2004 Sven Langkamp <sven.langkamp@gmail.com>
+ *  SPDX-FileCopyrightText: 2006 Boudewijn Rempt <boud@valdyas.org>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.g
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_control_frame.h"
@@ -233,26 +221,18 @@ void KisControlFrame::createGradientsChooser(KisViewManager * view)
     m_gradientChooser = new KisGradientChooser(m_gradientChooserPopup);
     m_gradientChooser->setCanvasResourcesInterface(view->canvasResourceProvider()->resourceManager()->canvasResourcesInterface());
     m_gradientChooser->setFont(m_font);
-    m_gradientTab->addTab(m_gradientChooser, i18n("Gradients"));
+    QWidget *gradientChooserPage = new QWidget(m_gradientChooserPopup);
+    QHBoxLayout *gradientChooserPageLayout  = new QHBoxLayout(gradientChooserPage);
+    gradientChooserPageLayout->addWidget(m_gradientChooser);
+    m_gradientTab->addTab(gradientChooserPage, i18n("Gradients"));
 
     connect(m_gradientChooser, SIGNAL(resourceSelected(KoResourceSP)),
             view->canvasResourceProvider(), SLOT(slotGradientActivated(KoResourceSP)));
-
     connect (view->mainWindow(), SIGNAL(themeChanged()), m_gradientChooser, SLOT(slotUpdateIcons()));
-
-    connect(view->canvasResourceProvider(), SIGNAL(sigGradientChanged(KoAbstractGradientSP)),
-            this, SLOT(slotSetGradient(KoAbstractGradientSP)));
-
-    connect(m_gradientChooser, SIGNAL(resourceSelected(KoResourceSP)),
-            view->canvasResourceProvider(), SLOT(slotGradientActivated(KoResourceSP)));
-
-    connect (view->mainWindow(), SIGNAL(themeChanged()), m_gradientChooser, SLOT(slotUpdateIcons()));
-
     connect(view->canvasResourceProvider(), SIGNAL(sigGradientChanged(KoAbstractGradientSP)),
             this, SLOT(slotSetGradient(KoAbstractGradientSP)));
 
     m_gradientChooser->setCurrentItem(0);
-
 
     if (m_gradientChooser->currentResource() && view->canvasResourceProvider())
         view->canvasResourceProvider()->slotGradientActivated(m_gradientChooser->currentResource());

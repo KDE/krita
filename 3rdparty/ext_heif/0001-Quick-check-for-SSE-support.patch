@@ -1,0 +1,42 @@
+From 92e4e078782bdb2a375631a1c7b28cbaec31cac6 Mon Sep 17 00:00:00 2001
+From: "L. E. Segovia" <amy@amyspark.me>
+Date: Wed, 17 Feb 2021 17:33:52 +0000
+Subject: [PATCH] Quick check for SSE support
+
+---
+ libde265/CMakeLists.txt | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
+
+diff --git a/libde265/CMakeLists.txt b/libde265/CMakeLists.txt
+index 749c7fb..13aec57 100644
+--- a/libde265/CMakeLists.txt
++++ b/libde265/CMakeLists.txt
+@@ -88,6 +88,25 @@ add_definitions(-DLIBDE265_EXPORTS)
+ 
+ add_subdirectory (encoder)
+ 
++include(CheckCXXSourceCompiles)
++check_cxx_source_compiles ("
++    #include <immintrin.h>
++    int main ()
++    {
++        __m128d a, b;
++        double vals[2] = {0};
++        a = _mm_loadu_pd (vals);
++        b = _mm_add_pd (a,a);
++        _mm_storeu_pd (vals,b);
++        return (0);
++    }"
++    HAVE_SSE2)
++
++if (NOT HAVE_SSE2)
++    message(STATUS "Disabling SSE optimizations, as the target doesn't support them")
++    set(DISABLE_SSE TRUE)
++endif()
++
+ if(NOT DISABLE_SSE)
+   if (MSVC)
+     set(SUPPORTS_SSE2 1)
+-- 
+2.29.2.windows.1
+

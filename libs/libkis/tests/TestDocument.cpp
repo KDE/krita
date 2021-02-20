@@ -1,19 +1,6 @@
-/* Copyright (C) 2017 Boudewijn Rempt <boud@valdyas.org>
+/* SPDX-FileCopyrightText: 2017 Boudewijn Rempt <boud@valdyas.org>
 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
-
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
-
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   SPDX-License-Identifier: LGPL-2.0-or-later
 */
 #include "TestDocument.h"
 #include <QTest>
@@ -22,6 +9,8 @@
 #include <QColor>
 #include <QDataStream>
 #include <QDir>
+#include <QBuffer>
+#include <QTextStream>
 
 #include <Node.h>
 #include <Krita.h>
@@ -183,6 +172,49 @@ void TestDocument::testCreateFillLayer()
     KisPart::instance()->removeDocument(kisdoc.data(), false);
 }
 
+void TestDocument::testAnnotations()
+{
+    QScopedPointer<KisDocument> kisdoc(KisPart::instance()->createDocument());
+    KisImageSP image = new KisImage(0, 100, 100, KoColorSpaceRegistry::instance()->rgb8(), "test");
+    KisNodeSP layer = new KisPaintLayer(image, "test1", 255);
+    image->addNode(layer);
+    kisdoc->setCurrentImage(image);
+
+    Document d(kisdoc.data(), false);
+
+    QVERIFY(d.annotationTypes().isEmpty());
+
+    QByteArray ba;
+    QBuffer buf(&ba);
+    buf.open(QBuffer::WriteOnly);
+    QTextStream in(&buf);
+    in << "AnnotationTest";
+    buf.close();
+
+    d.setAnnotation("test", "description", ba);
+
+    QVERIFY(d.annotationTypes().size() == 1);
+    QVERIFY(d.annotationTypes().contains("test"));
+    QVERIFY(d.annotation("test").toHex() == ba.toHex());
+    QVERIFY(d.annotationDescription("test") == "description");
+
+    d.saveAs("roundtriptest.kra");
+
+    d.removeAnnotation("test");
+    QVERIFY(d.annotationTypes().isEmpty());
+
+    d.close();
+
+    Krita *krita = Krita::instance();
+    Document *d2 = krita->openDocument("roundtriptest.kra");
+
+    QVERIFY(d2->annotationTypes().size() == 1);
+    QVERIFY(d2->annotationTypes().contains("test"));
+    QVERIFY(d2->annotation("test").toHex() == ba.toHex());
+    QVERIFY(d2->annotationDescription("test") == "description");
+
+    d2->close();
+}
 
 
 KISTEST_MAIN(TestDocument)

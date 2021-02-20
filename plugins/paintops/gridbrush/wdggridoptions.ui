@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgGridOptions</class>
  <widget class="QWidget" name="WdgGridOptions">
   <property name="geometry">
@@ -32,7 +36,7 @@
     </rect>
    </property>
    <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0">
+    <item column="0" row="0">
      <widget class="QLabel" name="label">
       <property name="text">
        <string>Grid width:</string>
@@ -42,10 +46,10 @@
       </property>
      </widget>
     </item>
-    <item row="0" column="1" colspan="2">
+    <item colspan="2" column="1" row="0">
      <widget class="KisDoubleSliderSpinBox" name="gridWidthSPBox"/>
     </item>
-    <item row="1" column="0">
+    <item column="0" row="1">
      <widget class="QLabel" name="label_2">
       <property name="text">
        <string>Grid height:</string>
@@ -55,10 +59,10 @@
       </property>
      </widget>
     </item>
-    <item row="1" column="1" colspan="2">
+    <item colspan="2" column="1" row="1">
      <widget class="KisDoubleSliderSpinBox" name="gridHeightSPBox"/>
     </item>
-    <item row="2" column="0">
+    <item column="0" row="2">
      <widget class="QLabel" name="label_3">
       <property name="text">
        <string>Division level:</string>
@@ -68,17 +72,17 @@
       </property>
      </widget>
     </item>
-    <item row="2" column="1" colspan="2">
-     <widget class="KisDoubleSliderSpinBox" name="divisionLevelSPBox" />
+    <item colspan="2" column="1" row="2">
+     <widget class="KisDoubleSliderSpinBox" name="divisionLevelSPBox"/>
     </item>
-    <item row="3" column="0" colspan="3">
+    <item colspan="3" column="0" row="3">
      <widget class="QCheckBox" name="divisionPressureCHBox">
       <property name="text">
        <string>Division by pressure</string>
       </property>
      </widget>
     </item>
-    <item row="4" column="0">
+    <item column="0" row="4">
      <widget class="QLabel" name="label_6">
       <property name="text">
        <string>Scale:</string>
@@ -88,10 +92,10 @@
       </property>
      </widget>
     </item>
-    <item row="4" column="1" colspan="2">
+    <item colspan="2" column="1" row="4">
      <widget class="KisDoubleSliderSpinBox" name="scaleDSPBox"/>
     </item>
-    <item row="5" column="0" colspan="2">
+    <item colspan="2" column="0" row="5">
      <widget class="QLabel" name="label_4">
       <property name="text">
        <string>Vertical border:</string>
@@ -101,10 +105,10 @@
       </property>
      </widget>
     </item>
-    <item row="5" column="2">
-     <widget class="KisDoubleSliderSpinBox" name="vertBorderDSPBox" />
+    <item column="2" row="5">
+     <widget class="KisDoubleSliderSpinBox" name="vertBorderDSPBox"/>
     </item>
-    <item row="6" column="0" colspan="2">
+    <item colspan="2" column="0" row="6">
      <widget class="QLabel" name="label_5">
       <property name="text">
        <string>Horizontal border:</string>
@@ -114,10 +118,10 @@
       </property>
      </widget>
     </item>
-    <item row="6" column="2">
-     <widget class="KisDoubleSliderSpinBox" name="horizBorderDSPBox" />
+    <item column="2" row="6">
+     <widget class="KisDoubleSliderSpinBox" name="horizBorderDSPBox"/>
     </item>
-    <item row="7" column="0" colspan="2">
+    <item colspan="2" column="0" row="7">
      <widget class="QCheckBox" name="jitterBorderCHBox">
       <property name="text">
        <string>Jitter borders</string>

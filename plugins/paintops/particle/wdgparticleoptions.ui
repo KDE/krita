@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ui version="4.0">
+ <author>
+    SPDX-FileCopyrightText: none
+    SPDX-License-Identifier: GPL-3.0-or-later
+  </author>
  <class>WdgParticleOptions</class>
  <widget class="QWidget" name="WdgParticleOptions">
   <property name="geometry">
@@ -25,7 +29,7 @@
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <layout class="QGridLayout" name="gridLayout">
-     <item row="0" column="0">
+     <item column="0" row="0">
       <widget class="QLabel" name="particlesLbl">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -47,7 +51,7 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="1">
+     <item column="1" row="0">
       <widget class="KisDoubleSliderSpinBox" name="particleSpinBox">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -57,7 +61,7 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="0">
+     <item column="0" row="1">
       <widget class="QLabel" name="opacity">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -79,7 +83,7 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="1">
+     <item column="1" row="1">
       <widget class="KisDoubleSliderSpinBox" name="weightSPBox">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -89,16 +93,16 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="1">
+     <item column="1" row="2">
       <widget class="KisDoubleSliderSpinBox" name="dxSPBox"/>
      </item>
-     <item row="4" column="1">
+     <item column="1" row="4">
       <widget class="KisDoubleSliderSpinBox" name="gravSPBox"/>
      </item>
-     <item row="3" column="1">
+     <item column="1" row="3">
       <widget class="KisDoubleSliderSpinBox" name="dySPBox"/>
      </item>
-     <item row="5" column="0">
+     <item column="0" row="5">
       <widget class="QLabel" name="radiusLabel_5">
        <property name="text">
         <string>Iterations:</string>
@@ -108,7 +112,7 @@
        </property>
       </widget>
      </item>
-     <item row="4" column="0">
+     <item column="0" row="4">
       <widget class="QLabel" name="radiusLabel_2">
        <property name="text">
         <string>Gravity:</string>
@@ -118,10 +122,10 @@
        </property>
       </widget>
      </item>
-     <item row="5" column="1">
-      <widget class="KisDoubleSliderSpinBox" name="itersSPBox" />
+     <item column="1" row="5">
+      <widget class="KisDoubleSliderSpinBox" name="itersSPBox"/>
      </item>
-     <item row="2" column="0">
+     <item column="0" row="2">
       <widget class="QLabel" name="radiusLabel_3">
        <property name="text">
         <string>dx scale:</string>
@@ -131,7 +135,7 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="0">
+     <item column="0" row="3">
       <widget class="QLabel" name="radiusLabel_4">
        <property name="text">
         <string>dy scale:</string>

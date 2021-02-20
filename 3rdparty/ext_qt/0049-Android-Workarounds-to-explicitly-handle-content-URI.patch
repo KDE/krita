@@ -1,4 +1,4 @@
-From 84d69dcf7fd488be462efd88b81c560bc9eb2964 Mon Sep 17 00:00:00 2001
+From bcd7cd5b0a3ce8099ca8ffdeb92e4b4a854466cf Mon Sep 17 00:00:00 2001
 From: Sharaf Zaman <sharafzaz121@gmail.com>
 Date: Mon, 21 Sep 2020 12:05:19 +0000
 Subject: [PATCH] Android: Workarounds to explicitly handle content URIs
@@ -8,11 +8,11 @@ from the Uri of the path, so we need to use ContentResolver
 to handle them explicitly for such Uris
 ---
  src/corelib/io/qfileinfo.cpp                  | 25 ++++++++++++++++---
- src/corelib/io/qurl.cpp                       | 18 +++++++++++++
+ src/corelib/io/qurl.cpp                       | 22 ++++++++++++++++
  .../android/androidcontentfileengine.cpp      | 10 ++++++++
  .../android/androidcontentfileengine.h        |  1 +
  .../qandroidplatformfiledialoghelper.cpp      |  6 ++---
- 5 files changed, 53 insertions(+), 7 deletions(-)
+ 5 files changed, 57 insertions(+), 7 deletions(-)
 
 diff --git a/src/corelib/io/qfileinfo.cpp b/src/corelib/io/qfileinfo.cpp
 index 189b704b51..2c427b5d0d 100644
@@ -79,53 +79,64 @@ index 189b704b51..2c427b5d0d 100644
      return d->fileEntry.suffix();
  }
 diff --git a/src/corelib/io/qurl.cpp b/src/corelib/io/qurl.cpp
-index 6d82981fd6..5341c6db01 100644
+index 6d82981fd6..d834ffe225 100644
 --- a/src/corelib/io/qurl.cpp
 +++ b/src/corelib/io/qurl.cpp
-@@ -2641,6 +2641,9 @@ QString QUrl::path(ComponentFormattingOptions options) const
+@@ -445,6 +445,11 @@ static inline QString webDavScheme()
+     return QStringLiteral("webdavs");
+ }
+ 
++static inline QString contentScheme()
++{
++    return QStringLiteral("content");
++}
++
+ static inline QString webDavSslTag()
+ {
+     return QStringLiteral("@SSL");
+@@ -1021,6 +1026,9 @@ inline bool QUrlPrivate::setScheme(const QString &value, int len, bool doSetErro
+     if (scheme == fileScheme()
+ #ifdef Q_OS_WIN
+         || scheme == webDavScheme()
++#endif
++#ifdef Q_OS_ANDROID
++        || scheme == contentScheme()
+ #endif
+        ) {
+         flags |= IsLocalFile;
+@@ -2641,6 +2649,11 @@ QString QUrl::path(ComponentFormattingOptions options) const
  */
  QString QUrl::fileName(ComponentFormattingOptions options) const
  {
 +#ifdef Q_OS_ANDROID
-+    return QFileInfo(toString()).fileName();
++    if (scheme() == contentScheme()) {
++        return QFileInfo(toString()).fileName();
++    }
 +#endif
      const QString ourPath = path(options);
      const int slash = ourPath.lastIndexOf(QLatin1Char('/'));
      if (slash == -1)
-@@ -3842,6 +3845,11 @@ bool QUrl::isDetached() const
- */
- QUrl QUrl::fromLocalFile(const QString &localFile)
- {
+@@ -3845,6 +3858,11 @@ QUrl QUrl::fromLocalFile(const QString &localFile)
+     QUrl url;
+     if (localFile.isEmpty())
+         return url;
 +#ifdef Q_OS_ANDROID
 +    if (localFile.startsWith(QLatin1String("content://"))) {
 +        return localFile;
 +    }
 +#endif
-     QUrl url;
-     if (localFile.isEmpty())
-         return url;
-@@ -3895,6 +3903,13 @@ QString QUrl::toLocalFile() const
+     QString scheme = fileScheme();
+     QString deslashified = QDir::fromNativeSeparators(localFile);
+ 
+@@ -3895,6 +3913,10 @@ QString QUrl::toLocalFile() const
      if (!isLocalFile())
          return QString();
  
 +#ifdef Q_OS_ANDROID
-+    if (d->isLocalFile()) {
-+        return d->toLocalFile(QUrl::FullyDecoded);
-+    } else {
++    if (scheme() == contentScheme())
 +        return toString();
-+    }
 +#endif
      return d->toLocalFile(QUrl::FullyDecoded);
- }
- 
-@@ -3911,6 +3926,9 @@ QString QUrl::toLocalFile() const
- */
- bool QUrl::isLocalFile() const
- {
-+#ifdef Q_OS_ANDROID
-+    return d;
-+#endif
-     return d && d->isLocalFile();
  }
  
 diff --git a/src/plugins/platforms/android/androidcontentfileengine.cpp b/src/plugins/platforms/android/androidcontentfileengine.cpp
@@ -179,5 +190,5 @@ index 6bb3372380..05e4ccbbee 100644
      QJNIObjectPrivate contentResolver = m_activity.callObjectMethod(
              "getContentResolver", "()Landroid/content/ContentResolver;");
 -- 
-2.28.0
+2.30.0
 

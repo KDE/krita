@@ -1,21 +1,9 @@
 /*
  *  kis_warptransform_worker.h - part of Krita
  *
- *  Copyright (c) 2010 Marc Pegon <pe.marc@free.fr>
+ *  SPDX-FileCopyrightText: 2010 Marc Pegon <pe.marc@free.fr>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #ifndef KIS_WARPTRANSFORM_WORKER_H
@@ -62,10 +50,10 @@ public:
                                   QPointF *newOffset);
 
     // Prepare the transformation on dev
-    KisWarpTransformWorker(WarpType warpType, KisPaintDeviceSP dev, QVector<QPointF> origPoint, QVector<QPointF> transfPoint, qreal alpha, KoUpdater *progress);
+    KisWarpTransformWorker(WarpType warpType, QVector<QPointF> origPoint, QVector<QPointF> transfPoint, qreal alpha, KoUpdater *progress);
     ~KisWarpTransformWorker() override;
     // Perform the prepared transformation
-    void run();
+    void run(KisPaintDeviceSP srcDev, KisPaintDeviceSP dstDev);
 
     QRect approxChangeRect(const QRect &rc);
     QRect approxNeedRect(const QRect &rc, const QRect &fullBounds);
@@ -80,7 +68,6 @@ private:
     QVector<QPointF> m_origPoint;
     QVector<QPointF> m_transfPoint;
     qreal m_alpha;
-    KisPaintDeviceSP m_dev;
     KoUpdater *m_progress;
 };
 

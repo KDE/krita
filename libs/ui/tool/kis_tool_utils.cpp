@@ -1,20 +1,8 @@
 /*
- *  Copyright (c) 2009 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2018 Emmet & Eoin O'Neill <emmetoneill.pdx@gmail.com>
+ *  SPDX-FileCopyrightText: 2009 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2018 Emmet & Eoin O'Neill <emmetoneill.pdx@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include <kis_tool_utils.h>
@@ -31,7 +19,7 @@
 
 namespace KisToolUtils {
 
-    bool pickColor(KoColor &out_color, KisPaintDeviceSP dev, const QPoint &pos,
+    bool sampleColor(KoColor &out_color, KisPaintDeviceSP dev, const QPoint &pos,
                    KoColor const *const blendColor, int radius, int blend, bool pure)
     {
         KIS_ASSERT(dev);
@@ -45,16 +33,16 @@ namespace KisToolUtils {
         }
 
         const KoColorSpace *cs = dev->colorSpace();
-        KoColor pickedColor(Qt::transparent, cs);
+        KoColor sampledColor(Qt::transparent, cs);
 
         // Sampling radius.
         if (!pure && radius > 1) {
             QVector<const quint8*> pixels;
             const int effectiveRadius = radius - 1;
 
-            const QRect pickRect(pos.x() - effectiveRadius, pos.y() - effectiveRadius,
+            const QRect sampleRect(pos.x() - effectiveRadius, pos.y() - effectiveRadius,
                                  2 * effectiveRadius + 1, 2 * effectiveRadius + 1);
-            KisSequentialConstIterator it(dev, pickRect);
+            KisSequentialConstIterator it(dev, sampleRect);
 
             const int radiusSq = pow2(effectiveRadius);
 
@@ -67,9 +55,9 @@ namespace KisToolUtils {
             }
 
             const quint8 **cpixels = const_cast<const quint8**>(pixels.constData());
-            cs->mixColorsOp()->mixColors(cpixels, pixels.size(), pickedColor.data());
+            cs->mixColorsOp()->mixColors(cpixels, pixels.size(), sampledColor.data());
         } else {
-            dev->pixel(pos.x(), pos.y(), &pickedColor);
+            dev->pixel(pos.x(), pos.y(), &sampledColor);
         }
         
         // Color blending.
@@ -79,24 +67,24 @@ namespace KisToolUtils {
 
             const quint8 *colors[2];
             colors[0] = blendColor->data();
-            colors[1] = pickedColor.data();
+            colors[1] = sampledColor.data();
             qint16 weights[2];
             weights[0] = 255 - blendScaled;
             weights[1] = blendScaled;
 
             const KoMixColorsOp *mixOp = dev->colorSpace()->mixColorsOp();
-            mixOp->mixColors(colors, weights, 2, pickedColor.data());
+            mixOp->mixColors(colors, weights, 2, sampledColor.data());
         }
 
-        pickedColor.convertTo(dev->compositionSourceColorSpace());
+        sampledColor.convertTo(dev->compositionSourceColorSpace());
 
-        bool validColorPicked = pickedColor.opacityU8() != OPACITY_TRANSPARENT_U8;
+        bool validColorSampled = sampledColor.opacityU8() != OPACITY_TRANSPARENT_U8;
 
-        if (validColorPicked) {
-            out_color = pickedColor;
+        if (validColorSampled) {
+            out_color = sampledColor;
         }
 
-        return validColorPicked;
+        return validColorSampled;
     }
 
     KisNodeSP findNode(KisNodeSP node, const QPoint &point, bool wholeGroup, bool editableOnly)
@@ -162,9 +150,9 @@ namespace KisToolUtils {
         return false;
     }
 
-    const QString ColorPickerConfig::CONFIG_GROUP_NAME = "tool_color_picker";
+    const QString ColorSamplerConfig::CONFIG_GROUP_NAME = "tool_color_sampler";
 
-    ColorPickerConfig::ColorPickerConfig()
+    ColorSamplerConfig::ColorSamplerConfig()
         : toForegroundColor(true)
         , updateColor(true)
         , addColorToCurrentPalette(false)
@@ -177,10 +165,10 @@ namespace KisToolUtils {
 
     inline QString getConfigKey(bool defaultActivation) {
         return defaultActivation ?
-            "ColorPickerDefaultActivation" : "ColorPickerTemporaryActivation";
+            "ColorSamplerDefaultActivation" : "ColorSamplerTemporaryActivation";
     }
 
-    void ColorPickerConfig::save(bool defaultActivation) const
+    void ColorSamplerConfig::save(bool defaultActivation) const
     {
         KisPropertiesConfiguration props;
         props.setProperty("toForegroundColor", toForegroundColor);
@@ -196,7 +184,7 @@ namespace KisToolUtils {
         config.writeEntry(getConfigKey(defaultActivation), props.toXML());
     }
 
-    void ColorPickerConfig::load(bool defaultActivation)
+    void ColorSamplerConfig::load(bool defaultActivation)
     {
         KisPropertiesConfiguration props;
 

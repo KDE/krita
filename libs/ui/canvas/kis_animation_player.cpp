@@ -1,19 +1,7 @@
 /*
- *  Copyright (c) 2015 Jouni Pentikäinen <joupent@gmail.com>
+ *  SPDX-FileCopyrightText: 2015 Jouni Pentikäinen <joupent@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_animation_player.h"
@@ -43,6 +31,7 @@
 #include "kis_image_barrier_locker.h"
 #include "kis_layer_utils.h"
 #include "KisDecoratedNodeInterface.h"
+#include "kis_keyframe_channel.h"
 
 #include "kis_image_config.h"
 #include <limits>
@@ -117,7 +106,7 @@ public:
     int audioOffsetTolerance;
     QVector<KisNodeWSP> disabledDecoratedNodes;
 
-    void stopImpl();
+    void haltImpl();
 
     int incFrame(int frame, int inc) {
         frame += inc;
@@ -188,6 +177,20 @@ KisAnimationPlayer::KisAnimationPlayer(KisCanvas2 *canvas)
 
     connect(m_d->canvas->image()->animationInterface(), SIGNAL(sigAudioChannelChanged()), SLOT(slotAudioChannelChanged()));
     connect(m_d->canvas->image()->animationInterface(), SIGNAL(sigAudioVolumeChanged()), SLOT(slotAudioVolumeChanged()));
+
+    // Grow to new playback range when new frames added (configurable)...
+    connect(m_d->canvas->image()->animationInterface(), &KisImageAnimationInterface::sigKeyframeAdded, [this](const KisKeyframeChannel*, int time){
+        if (m_d->canvas && m_d->canvas->image()) {
+            KisImageAnimationInterface* animInterface = m_d->canvas->image()->animationInterface();
+            KisConfig cfg(true);
+            if (animInterface && cfg.adaptivePlaybackRange()) {
+                KisTimeSpan desiredPlaybackRange = animInterface->fullClipRange();
+                desiredPlaybackRange.include(time);
+                animInterface->setFullClipRange(desiredPlaybackRange);
+            }
+
+        }
+    });
 
     slotAudioChannelChanged();
 }
@@ -434,7 +437,7 @@ void KisAnimationPlayer::play()
 
 void KisAnimationPlayer::pause()
 {
-    m_d->stopImpl();
+    m_d->haltImpl();
 
     m_d->playbackState = PAUSED;
 
@@ -447,14 +450,203 @@ void KisAnimationPlayer::pause()
     emit sigPlaybackStopped();
 }
 
-void KisAnimationPlayer::stop()
+void KisAnimationPlayer::playPause()
 {
-    m_d->stopImpl();
+    if (isPlaying()) {
+        pause();
+    } else {
+        play();
+    }
+}
+
+/**
+ * @brief Halts the playback.
+ */
+void KisAnimationPlayer::halt()
+{
+    m_d->haltImpl();
 
     m_d->playbackState = STOPPED;
 
     emit sigPlaybackStateChanged(isPlaying());
     emit sigPlaybackStopped();
+}
+
+/**
+ * @brief Higher level stop behavior.
+ * When playing causes animation to halt and go to playback origin.
+ * When stopped causes player to jump back to starting frame.
+ */
+void KisAnimationPlayer::stop()
+{
+    if (!m_d->canvas) return;
+
+    if( m_d->canvas->animationPlayer()->isStopped()) {
+        m_d->canvas->animationPlayer()->goToStartFrame();
+    } else {
+        m_d->canvas->animationPlayer()->halt();
+        m_d->canvas->animationPlayer()->goToPlaybackOrigin();
+    }
+}
+
+void KisAnimationPlayer::seek(int frameIndex)
+{
+    if (!m_d->canvas || !m_d->canvas->image()) return;
+
+    KisImageAnimationInterface *animInterface = m_d->canvas->image()->animationInterface();
+
+    if (m_d->canvas->animationPlayer()->isPlaying() ||
+        frameIndex == animInterface->currentUITime()) {
+        return;
+    }
+
+    animInterface->requestTimeSwitchWithUndo(frameIndex);
+}
+
+void KisAnimationPlayer::previousFrame()
+{
+    if (!m_d->canvas) return;
+    KisImageAnimationInterface *animInterface = m_d->canvas->image()->animationInterface();
+
+    const int startFrame = animInterface->playbackRange().start();
+    const int endFrame = animInterface->playbackRange().end();
+
+    int frame = animInterface->currentUITime() - 1;
+
+    if (frame < startFrame || frame >  endFrame) {
+        frame = endFrame;
+    }
+
+    if (frame >= 0) {
+        animInterface->requestTimeSwitchWithUndo(frame);
+    }
+}
+
+void KisAnimationPlayer::nextFrame()
+{
+    if (!m_d->canvas) return;
+    KisImageAnimationInterface *animInterface = m_d->canvas->image()->animationInterface();
+
+    const int startFrame = animInterface->playbackRange().start();
+    const int endFrame = animInterface->playbackRange().end();
+
+    int frame = animInterface->currentUITime() + 1;
+
+    if (frame > endFrame || frame < startFrame ) {
+        frame = startFrame;
+    }
+
+    animInterface->requestTimeSwitchWithUndo(frame);
+}
+
+void KisAnimationPlayer::previousKeyframe()
+{
+    if (!m_d->canvas) return;
+
+    KisNodeSP node = m_d->canvas->viewManager()->activeNode();
+    if (!node) return;
+
+    KisKeyframeChannel *keyframes =
+        node->getKeyframeChannel(KisKeyframeChannel::Raster.id());
+    if (!keyframes) return;
+
+    KisImageAnimationInterface *animInterface = m_d->canvas->image()->animationInterface();
+    int currentFrame = animInterface->currentUITime();
+
+    int destinationTime = -1;
+    if (!keyframes->keyframeAt(currentFrame)) {
+        destinationTime = keyframes->activeKeyframeTime(currentFrame);
+    } else {
+        destinationTime = keyframes->previousKeyframeTime(currentFrame);
+    }
+
+    if (keyframes->keyframeAt(destinationTime)) {
+        animInterface->requestTimeSwitchWithUndo(destinationTime);
+    }
+}
+
+void KisAnimationPlayer::nextKeyframe()
+{
+    if (!m_d->canvas) return;
+
+    KisNodeSP node = m_d->canvas->viewManager()->activeNode();
+    if (!node) return;
+
+    KisKeyframeChannel *keyframes =
+        node->getKeyframeChannel(KisKeyframeChannel::Raster.id());
+    if (!keyframes) return;
+
+    KisImageAnimationInterface *animation = m_d->canvas->image()->animationInterface();
+    int currentTime = animation->currentUITime();
+
+    int destinationTime = -1;
+    if (keyframes->activeKeyframeAt(currentTime)) {
+        destinationTime = keyframes->nextKeyframeTime(currentTime);
+    }
+
+    if (keyframes->keyframeAt(destinationTime)) {
+        animation->requestTimeSwitchWithUndo(destinationTime);
+    }
+}
+
+void KisAnimationPlayer::previousMatchingKeyframe()
+{
+    if (!m_d->canvas) return;
+
+    KisNodeSP node = m_d->canvas->viewManager()->activeNode();
+    if (!node) return;
+
+    KisKeyframeChannel *keyframes =
+        node->getKeyframeChannel(KisKeyframeChannel::Raster.id());
+    if (!keyframes) return;
+
+    KisImageAnimationInterface *animInterface = m_d->canvas->image()->animationInterface();
+    int time = animInterface->currentUITime();
+
+    KisKeyframeSP currentKeyframe = keyframes->keyframeAt(time);
+    int destinationTime = keyframes->activeKeyframeTime(time);
+    const int desiredColor = currentKeyframe ? currentKeyframe->colorLabel() : keyframes->keyframeAt(destinationTime)->colorLabel();
+    while (keyframes->keyframeAt(destinationTime) &&
+           (currentKeyframe == keyframes->keyframeAt(destinationTime) || keyframes->keyframeAt(destinationTime)->colorLabel() != desiredColor)) {
+        destinationTime = keyframes->previousKeyframeTime(destinationTime);
+    }
+
+    if (keyframes->keyframeAt(destinationTime)) {
+        animInterface->requestTimeSwitchWithUndo(destinationTime);
+    }
+
+}
+
+void KisAnimationPlayer::nextMatchingKeyframe()
+{
+    if (!m_d->canvas) return;
+
+    KisNodeSP node = m_d->canvas->viewManager()->activeNode();
+    if (!node) return;
+
+    KisKeyframeChannel *keyframes =
+        node->getKeyframeChannel(KisKeyframeChannel::Raster.id());
+    if (!keyframes) return;
+
+    KisImageAnimationInterface *animation = m_d->canvas->image()->animationInterface();
+    int time = animation->currentUITime();
+
+    if (!keyframes->activeKeyframeAt(time)) {
+        return;
+    }
+
+    int destinationTime = keyframes->activeKeyframeTime(time);
+    const int desiredColor = keyframes->keyframeAt(destinationTime)->colorLabel();
+
+    while (keyframes->keyframeAt(destinationTime) &&
+                (keyframes->keyframeAt(destinationTime) == keyframes->keyframeAt(time) ||
+                 keyframes->keyframeAt(destinationTime)->colorLabel() != desiredColor)){
+        destinationTime = keyframes->nextKeyframeTime(destinationTime);
+    }
+
+    if (keyframes->keyframeAt(destinationTime)) {
+        animation->requestTimeSwitchWithUndo(destinationTime);
+    }
 }
 
 void KisAnimationPlayer::goToPlaybackOrigin()
@@ -479,10 +671,10 @@ void KisAnimationPlayer::goToStartFrame()
 
 void KisAnimationPlayer::forcedStopOnExit()
 {
-    m_d->stopImpl();
+    m_d->haltImpl();
 }
 
-void KisAnimationPlayer::Private::stopImpl()
+void KisAnimationPlayer::Private::haltImpl()
 {
     if (syncedAudio) {
         syncedAudio->stop();
@@ -654,7 +846,7 @@ qreal KisAnimationPlayer::framesDroppedPortion() const
 
 void KisAnimationPlayer::slotCancelPlayback()
 {
-    stop();
+    halt();
 }
 
 void KisAnimationPlayer::slotCancelPlaybackSafe()
@@ -671,8 +863,13 @@ void KisAnimationPlayer::slotCancelPlaybackSafe()
      */
 
     if (m_d->useFastFrameUpload) {
-        stop();
+        halt();
     }
+}
+
+void KisAnimationPlayer::setPlaybackSpeedPercent(int value) {
+    const float normalizedSpeed = value / 100.0;
+    setPlaybackSpeedNormalized(normalizedSpeed);
 }
 
 qreal KisAnimationPlayer::playbackSpeed()
@@ -680,10 +877,13 @@ qreal KisAnimationPlayer::playbackSpeed()
     return m_d->playbackSpeed;
 }
 
-void KisAnimationPlayer::slotUpdatePlaybackSpeed(double value)
+void KisAnimationPlayer::setPlaybackSpeedNormalized(double value)
 {
-    m_d->playbackSpeed = value;
-    if (isPlaying()) {
-        slotUpdatePlaybackTimer();
+    if (m_d->playbackSpeed != value) {
+        m_d->playbackSpeed = value;
+        if (isPlaying()) {
+            slotUpdatePlaybackTimer();
+        }
+        emit sigPlaybackSpeedChanged(m_d->playbackSpeed);
     }
 }

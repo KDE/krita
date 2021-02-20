@@ -1,19 +1,7 @@
 /*
- *  Copyright (c) 2011 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2011 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_undo_stores.h"
@@ -28,6 +16,7 @@
 KisSurrogateUndoStore::KisSurrogateUndoStore()
     : m_undoStack(new KUndo2Stack)
 {
+    connect(m_undoStack, SIGNAL(indexChanged(int)), this, SIGNAL(historyStateChanged()));
 }
 
 KisSurrogateUndoStore::~KisSurrogateUndoStore()
@@ -110,6 +99,8 @@ void KisDumbUndoStore::undoLastCommand()
     /**
      * Ermm.. Do we actually have one? We are dumb! ;)
      */
+
+    emit historyStateChanged();
 }
 
 void KisDumbUndoStore::addCommand(KUndo2Command *command)
@@ -119,6 +110,8 @@ void KisDumbUndoStore::addCommand(KUndo2Command *command)
      */
     command->redo();
     delete command;
+
+    emit historyStateChanged();
 }
 
 void KisDumbUndoStore::beginMacro(const KUndo2MagicString& macroName)
@@ -134,6 +127,8 @@ void KisDumbUndoStore::endMacro()
     /**
      * Roger that! :)
      */
+
+    emit historyStateChanged();
 }
 
 void KisDumbUndoStore::purgeRedoState()

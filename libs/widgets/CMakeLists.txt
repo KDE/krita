@@ -28,6 +28,10 @@ set(kritawidgets_LIB_SRCS
     KoLineStyleSelector.cpp
     KoLineStyleItemDelegate.cpp
     KoLineStyleModel.cpp
+
+    KoDockWidgetTitleBar.cpp
+    KoDockWidgetTitleBarButton.cpp
+    
     KoTitledTabWidget.cpp
 
     KoToolBoxButton.cpp
@@ -61,7 +65,7 @@ set(kritawidgets_LIB_SRCS
     KisVisualEllipticalSelectorShape.cpp
     KisVisualRectangleSelectorShape.cpp
     KisVisualTriangleSelectorShape.cpp
-    KisScreenColorPickerBase.cpp
+    KisScreenColorSamplerBase.cpp
     KisDlgInternalColorSelector.cpp
 
     KisPaletteModel.cpp
@@ -71,6 +75,9 @@ set(kritawidgets_LIB_SRCS
     KisPaletteComboBox.cpp
 
     kis_color_button.cpp
+    
+    KisAngleGauge.cpp
+    KisAngleSelector.cpp
 )
 
 ki18n_wrap_ui( kritawidgets_LIB_SRCS

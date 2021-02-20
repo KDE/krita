@@ -1,20 +1,8 @@
 /*
- *  Copyright (c) 2013 Sven Langkamp <sven.langkamp@gmail.com>
- *  Copyright (c) 2018 Michael Zhou <simeirxh@gmail.com>
+ *  SPDX-FileCopyrightText: 2013 Sven Langkamp <sven.langkamp@gmail.com>
+ *  SPDX-FileCopyrightText: 2018 Michael Zhou <simeirxh@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "KisPaletteModel.h"
@@ -31,7 +19,6 @@
 #include <resources/KoColorSet.h>
 #include <KoColorDisplayRendererInterface.h>
 #include <KisResourceModel.h>
-#include <KisResourceModelProvider.h>
 
 KisPaletteModel::KisPaletteModel(QObject* parent)
     : QAbstractTableModel(parent)
@@ -243,36 +230,13 @@ bool KisPaletteModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
         return true;
     }
 
-    QByteArray encodedData = data->data("krita/x-colorsetentry");
-    QDataStream stream(&encodedData, QIODevice::ReadOnly);
 
-    while (!stream.atEnd()) {
-        KisSwatch entry;
-
-        QString name, id;
-        bool spotColor;
+    if (data->hasFormat("krita/x-colorsetentry")) {
+        QByteArray encodedData = data->data("krita/x-colorsetentry");
         QString oldGroupName;
         int oriRow;
         int oriColumn;
-        QString colorXml;
-
-        stream >> name >> id >> spotColor
-                >> oriRow >> oriColumn
-                >> oldGroupName
-                >> colorXml;
-
-        entry.setName(name);
-        entry.setId(id);
-        entry.setSpotColor(spotColor);
-
-        QDomDocument doc;
-        doc.setContent(colorXml);
-        QDomElement e = doc.documentElement();
-        QDomElement c = e.firstChildElement();
-        if (!c.isNull()) {
-            QString colorDepthId = c.attribute("bitdepth", Integer8BitsColorDepthID.id());
-            entry.setColor(KoColor::fromXML(c, colorDepthId));
-        }
+        KisSwatch entry = KisSwatch::fromByteArray(encodedData, oldGroupName, oriRow, oriColumn);
 
         if (action == Qt::MoveAction){
             KisSwatchGroup *g = m_colorSet->getGroup(oldGroupName);
@@ -287,9 +251,11 @@ bool KisPaletteModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
             emit sigPaletteModified();
             saveModification();
         }
+
+        return true;
     }
 
-    return true;
+    return false;
 }
 
 QMimeData *KisPaletteModel::mimeData(const QModelIndexList &indexes) const
@@ -303,17 +269,11 @@ QMimeData *KisPaletteModel::mimeData(const QModelIndexList &indexes) const
         QString mimeTypeName = "krita/x-colorsetentry";
         if (qvariant_cast<bool>(index.data(IsGroupNameRole))==false) {
             KisSwatch entry = getEntry(index);
-
-            QDomDocument doc;
-            QDomElement root = doc.createElement("Color");
-            root.setAttribute("bitdepth", entry.color().colorSpace()->colorDepthId().id());
-            doc.appendChild(root);
-            entry.color().toXML(doc, root);
-
-            stream << entry.name() << entry.id() << entry.spotColor()
-                   << rowNumberInGroup(index.row()) << index.column()
-                   << qvariant_cast<QString>(index.data(GroupNameRole))
-                   << doc.toString();
+            QString groupName = qvariant_cast<QString>(index.data(KisPaletteModel::GroupNameRole));
+            entry.writeToStream(stream,
+                                groupName,
+                                rowNumberInGroup(index.row()),
+                                index.column());
         } else {
             mimeTypeName = "krita/x-colorsetgroup";
             QString groupName = qvariant_cast<QString>(index.data(GroupNameRole));
@@ -426,7 +386,7 @@ QVariant KisPaletteModel::dataForSwatch(const QModelIndex &idx, int role) const
     switch (role) {
     case Qt::ToolTipRole:
     case Qt::DisplayRole: {
-        return entryPresent ? entry.name() : i18n("Empty slot");
+        return entryPresent ? entry.name() + "\n(" + KoColor::toQString(entry.color()) + ")" : i18n("Empty slot");
     }
     case Qt::BackgroundRole: {
         QColor color(0, 0, 0, 0);
@@ -467,8 +427,8 @@ void KisPaletteModel::setDisplayRenderer(const KoColorDisplayRendererInterface *
 void KisPaletteModel::saveModification()
 {
     qDebug() << "saving modification in palette model" << m_colorSet->filename() << m_colorSet->storageLocation();
-    KisResourceModel *model = KisResourceModelProvider::resourceModel(m_colorSet->resourceType().first);
-    model->updateResource(m_colorSet);
+    KisResourceModel model(m_colorSet->resourceType().first);
+    model.updateResource(m_colorSet);
 }
 
 void KisPaletteModel::slotDisplayConfigurationChanged()

@@ -1,4 +1,7 @@
 #!/bin/bash
+#
+#  SPDX-License-Identifier: GPL-3.0-or-later
+#
 
 # Halt on errors and be verbose about what we are doing
 set -e
@@ -8,7 +11,7 @@ set -x
 export BUILD_PREFIX=$1
 export VERSION=2.4.2
 
-# qjsonparser, used to add metadata to the plugins needs to work in a en_US.UTF-8 environment. 
+# qjsonparser, used to add metadata to the plugins needs to work in a en_US.UTF-8 environment.
 # That's not always the case, so make sure it is
 export LC_ALL=en_US.UTF-8
 export LANG=en_us.UTF-8
@@ -51,4 +54,4 @@ else
   APPIMAGE_ARCHITECTURE=$ARCH
 fi
 
-mv gmic_krita_qt*$APPIMAGE_ARCHITECTURE.AppImage gmic_krita_qt-$APPIMAGE_ARCHITECTURE.appimage 
+mv gmic_krita_qt*$APPIMAGE_ARCHITECTURE.AppImage gmic_krita_qt-$APPIMAGE_ARCHITECTURE.appimage

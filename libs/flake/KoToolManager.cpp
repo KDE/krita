@@ -1,24 +1,11 @@
 /* This file is part of the KDE project
  *
- * Copyright (c) 2005-2010 Boudewijn Rempt <boud@valdyas.org>
- * Copyright (C) 2006-2008 Thomas Zander <zander@kde.org>
- * Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
- * Copyright (C) 2008 Jan Hambrecht <jaham@gmx.net>
+ * SPDX-FileCopyrightText: 2005-2010 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2006-2008 Thomas Zander <zander@kde.org>
+ * SPDX-FileCopyrightText: 2006 Thorsten Zachmann <zachmann@kde.org>
+ * SPDX-FileCopyrightText: 2008 Jan Hambrecht <jaham@gmx.net>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 // flake
 #include "KoToolManager.h"
@@ -104,21 +91,28 @@ public:
 
         QMap<QKeySequence, QStringList> shortcutMap;
 
-        //qDebug() << "................... activating tool" << activeToolId;
+//        qDebug() << "................... activating tool" << activeToolId;
 
         Q_FOREACH(QAction *action, windowActionCollection->actions()) {
 
-            //qDebug() << "Action" << action->objectName() << "shortcuts" << action->shortcuts();
             if (action->property("tool_action").isValid()) {
                 QStringList tools = action->property("tool_action").toStringList();
-                //qDebug() << "\tassociated with" << tools;
-                if (tools.contains(activeToolId)) {
-                    //qDebug() << "\t\tenabling";
+
+                if (KoToolRegistry::instance()->keys().contains(action->objectName())) {
+                    //qDebug() << "This action needs to be enabled!";
                     action->setEnabled(true);
                     toolActions << action->objectName();
                 }
                 else {
-                    action->setDisabled(true);
+                    if (tools.contains(activeToolId) || action->property("always_enabled").toBool()) {
+                        //qDebug() << "\t\tenabling";
+                        action->setEnabled(true);
+                        toolActions << action->objectName();
+                    }
+                    else {
+                        //qDebug() << "\t\tDISabling";
+                        action->setDisabled(true);
+                    }
                 }
             }
             else {
@@ -249,14 +243,14 @@ void KoToolManager::registerToolActions(KActionCollection *ac, KoCanvasControlle
         return;
     }
 
-    // Actions used to switch tools via shortcuts
-    Q_FOREACH (ToolHelper * th, d->tools) {
-        if (ac->action(th->id())) {
-            continue;
-        }
-        ShortcutToolAction* action = th->createShortcutToolAction(ac);
-        ac->addCategorizedAction(th->id(), action, "tool-shortcuts");
-    }
+//    // Actions used to switch tools via shortcuts
+//    Q_FOREACH (ToolHelper * th, d->tools) {
+//        if (ac->action(th->id())) {
+//            continue;
+//        }
+//        //ShortcutToolAction* action = th->createShortcutToolAction(ac);
+//        ac->addCategorizedAction(th->id(), action, "tool-shortcuts");
+//    }
 }
 
 void KoToolManager::addController(KoCanvasController *controller)

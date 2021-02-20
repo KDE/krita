@@ -1,4 +1,9 @@
-<!DOCTYPE RCC><RCC version="1.0">
+<!DOCTYPE RCC>
+<!--
+  SPDX-FileCopyrightText: none
+  SPDX-License-Identifier: CC0-1.0
+-->
+<RCC version="1.0">
 <qresource prefix="/icons">
     <file alias="debug.svg">icons/debug.svg</file>
     <file alias="debug_arrow.svg">icons/debug_arrow.svg</file>

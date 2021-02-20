@@ -1,21 +1,10 @@
 """
-Copyright (c) 2017 Wolthera van Hövell tot Westerflier <griffinvalley@gmail.com>
-Copyright (c) 2018 Ragnar Brynúlfsson <me@ragnarb.com>
+SPDX-FileCopyrightText: 2017 Wolthera van Hövell tot Westerflier <griffinvalley@gmail.com>
+SPDX-FileCopyrightText: 2018 Ragnar Brynúlfsson <me@ragnarb.com>
 
 This file is part of the Comics Project Management Tools(CPMT).
 
-CPMT is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-CPMT is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with the CPMT.  If not, see <http://www.gnu.org/licenses/>.
+SPDX-License-Identifier: GPL-3.0-or-later
 """
 
 """
@@ -57,11 +46,19 @@ class page_viewer(QPushButton):
 
     def paintEvent(self, event):
         painter = QPainter(self)
-        image = self.image.scaled(self.size(), Qt.KeepAspectRatio, Qt.SmoothTransformation)
+        previewSize = self.size()*self.devicePixelRatioF()
+        image = ""
+
+        if self.image.width() <= previewSize.width() or self.image.height() <= previewSize.height():
+            # pixel art
+            image = self.image.scaled(previewSize, Qt.KeepAspectRatio, Qt.FastTransformation)
+        else:
+            image = self.image.scaled(previewSize, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+        image.setDevicePixelRatio(self.devicePixelRatioF())
         if self.alignment == 'right':
-            x_offset = int(self.width() - image.width())
+            x_offset = int(self.width() - image.width()/self.devicePixelRatioF())
         elif self.alignment == 'center':
-            x_offset = int((self.width() - image.width()) / 2)
+            x_offset = int((self.width() - image.width()/self.devicePixelRatioF()) / 2)
         else:
             x_offset = 0
         painter.drawImage(x_offset, 0, image)

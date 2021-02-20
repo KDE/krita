@@ -1,19 +1,7 @@
 /*
- *  Copyright (c) 2014 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2014 Dmitry Kazakov <dimula73@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "kis_liquify_transform_strategy.h"
@@ -108,10 +96,11 @@ QPainterPath KisLiquifyTransformStrategy::getCursorOutline() const
     return m_d->helper.brushOutline(*m_d->currentArgs.liquifyProperties());
 }
 
-void KisLiquifyTransformStrategy::setTransformFunction(const QPointF &mousePos, bool perspectiveModifierActive)
+void KisLiquifyTransformStrategy::setTransformFunction(const QPointF &mousePos, bool perspectiveModifierActive, bool shiftModifierActive)
 {
     Q_UNUSED(mousePos);
     Q_UNUSED(perspectiveModifierActive);
+    Q_UNUSED(shiftModifierActive);
 }
 
 QCursor KisLiquifyTransformStrategy::getCurrentCursor() const
@@ -184,8 +173,8 @@ void KisLiquifyTransformStrategy::hoverActionCommon(KoPointerEvent *event)
 
 void KisLiquifyTransformStrategy::activateAlternateAction(KisTool::AlternateAction action)
 {
-    if (action == KisTool::PickFgNode || action == KisTool::PickBgNode ||
-        action == KisTool::PickFgImage || action == KisTool::PickBgImage) {
+    if (action == KisTool::SampleFgNode || action == KisTool::SampleBgNode ||
+        action == KisTool::SampleFgImage || action == KisTool::SampleBgImage) {
 
         KisLiquifyProperties *props = m_d->currentArgs.liquifyProperties();
         props->setReverseDirection(!props->reverseDirection());
@@ -195,8 +184,8 @@ void KisLiquifyTransformStrategy::activateAlternateAction(KisTool::AlternateActi
 
 void KisLiquifyTransformStrategy::deactivateAlternateAction(KisTool::AlternateAction action)
 {
-    if (action == KisTool::PickFgNode || action == KisTool::PickBgNode ||
-        action == KisTool::PickFgImage || action == KisTool::PickBgImage) {
+    if (action == KisTool::SampleFgNode || action == KisTool::SampleBgNode ||
+        action == KisTool::SampleFgImage || action == KisTool::SampleBgImage) {
 
         KisLiquifyProperties *props = m_d->currentArgs.liquifyProperties();
         props->setReverseDirection(!props->reverseDirection());
@@ -212,8 +201,8 @@ bool KisLiquifyTransformStrategy::beginAlternateAction(KoPointerEvent *event, Ki
         m_d->startResizeImagePos = m_d->converter->documentToImage(event->point);
         m_d->startResizeGlobalCursorPos = QCursor::pos();
         return true;
-    } else if (action == KisTool::PickFgNode || action == KisTool::PickBgNode ||
-               action == KisTool::PickFgImage || action == KisTool::PickBgImage) {
+    } else if (action == KisTool::SampleFgNode || action == KisTool::SampleBgNode ||
+               action == KisTool::SampleFgImage || action == KisTool::SampleBgImage) {
 
         return beginPrimaryAction(event);
     }
@@ -241,8 +230,8 @@ void KisLiquifyTransformStrategy::continueAlternateAction(KoPointerEvent *event,
         m_d->lastMouseWidgetPos = widgetPoint;
 
         emit requestCursorOutlineUpdate(m_d->startResizeImagePos);
-    } else if (action == KisTool::PickFgNode || action == KisTool::PickBgNode ||
-               action == KisTool::PickFgImage || action == KisTool::PickBgImage) {
+    } else if (action == KisTool::SampleFgNode || action == KisTool::SampleBgNode ||
+               action == KisTool::SampleFgImage || action == KisTool::SampleBgImage) {
 
         return continuePrimaryAction(event);
     }
@@ -255,8 +244,8 @@ bool KisLiquifyTransformStrategy::endAlternateAction(KoPointerEvent *event, KisT
     if (action == KisTool::ChangeSize || action == KisTool::ChangeSizeSnap) {
         QCursor::setPos(m_d->startResizeGlobalCursorPos);
         return true;
-    } else if (action == KisTool::PickFgNode || action == KisTool::PickBgNode ||
-               action == KisTool::PickFgImage || action == KisTool::PickBgImage) {
+    } else if (action == KisTool::SampleFgNode || action == KisTool::SampleBgNode ||
+               action == KisTool::SampleFgImage || action == KisTool::SampleBgImage) {
         return endPrimaryAction(event);
     }
 
@@ -309,5 +298,6 @@ void KisLiquifyTransformStrategy::Private::recalculateTransformations()
     }
 
     handlesTransform = scaleTransform;
+    emit q->requestImageRecalculation();
 }
 

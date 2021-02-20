@@ -1,3 +1,7 @@
+/*
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
 #include "kis_utility_title_bar.h"
 
 #include <QDockWidget>
@@ -7,6 +11,7 @@
 #include <QStyle>
 
 #include <klocalizedstring.h>
+#include <KoIcon.h>
 
 
 KisUtilityTitleBar::KisUtilityTitleBar(QWidget *parent)
@@ -49,7 +54,8 @@ KisUtilityTitleBar::KisUtilityTitleBar(QLabel *title, QWidget *parent)
         QDockWidget *dockWidget = qobject_cast<QDockWidget*>(parentWidget());
 
         {   // Float button...
-            QPushButton *button = new QPushButton(style()->standardIcon(QStyle::SP_TitleBarNormalButton), "", this);
+            QIcon floatIcon = kisIcon("docker_float");
+            QPushButton *button = new QPushButton(floatIcon, "", this);
             button->setFlat(true);
             connect(button, &QPushButton::clicked, [dockWidget](){
                 dockWidget->setFloating(!dockWidget->isFloating());
@@ -58,7 +64,8 @@ KisUtilityTitleBar::KisUtilityTitleBar(QLabel *title, QWidget *parent)
         }
 
         {   // Close button...
-            QPushButton *button = new QPushButton(style()->standardIcon(QStyle::SP_DockWidgetCloseButton), "", this);
+            QIcon closeIcon = kisIcon("docker_close");
+            QPushButton *button = new QPushButton(closeIcon, "", this);
             button->setFlat(true);
             connect(button, SIGNAL(clicked(bool)), dockWidget, SLOT(close()));
             sublayout->addWidget(button);

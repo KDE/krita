@@ -1,20 +1,7 @@
 /*
- * Copyright (C) 2018 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2018 Boudewijn Rempt <boud@valdyas.org>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #include "KisTag.h"
@@ -36,6 +23,7 @@ const QByteArray KisTag::s_group {"Desktop Entry"};
 const QByteArray KisTag::s_type {"Type"};
 const QByteArray KisTag::s_tag {"Tag"};
 const QByteArray KisTag::s_name {"Name"};
+const QByteArray KisTag::s_resourceType {"ResourceType"};
 const QByteArray KisTag::s_url {"URL"};
 const QByteArray KisTag::s_comment {"Comment"};
 const QByteArray KisTag::s_defaultResources {"Default Resources"};
@@ -47,6 +35,7 @@ public:
     QString name; // The translated tag name
     QString comment; // The translated tag comment
     QStringList defaultResources; // The list of resources as defined in the tag file
+    QString resourceType; // The resource type this tag can be applied to
     KEntryMap map;
     int id {-1};
     bool active{true};
@@ -73,6 +62,7 @@ KisTag &KisTag::operator=(const KisTag &rhs)
         d->valid = rhs.d->valid;
         d->url = rhs.d->url;
         d->name = rhs.d->name;
+        d->resourceType = rhs.d->resourceType;
         d->comment = rhs.d->comment;
         d->defaultResources = rhs.d->defaultResources;
         d->map = rhs.d->map;
@@ -133,6 +123,16 @@ void KisTag::setComment(const QString &comment)
     d->comment = comment;
 }
 
+QString KisTag::resourceType() const
+{
+    return d->resourceType;
+}
+
+void KisTag::setResourceType(const QString &resourceType)
+{
+    d->resourceType = resourceType;
+}
+
 QStringList KisTag::defaultResources() const
 {
     return d->defaultResources;
@@ -141,21 +141,6 @@ QStringList KisTag::defaultResources() const
 void KisTag::setDefaultResources(const QStringList &defaultResources)
 {
     d->defaultResources = defaultResources;
-}
-
-bool KisTag::compareNamesAndUrls(KisTagSP left, KisTagSP right)
-{
-    if (left.isNull() && !right.isNull()) {
-        return true;
-    }
-    if (right.isNull()) {
-        return false;
-    }
-    if (left->name() != right->name()) {
-        return left->name().compare(right->name()) > 0;
-    }
-
-    return left->url().compare(right->url()) > 0;
 }
 
 bool KisTag::load(QIODevice &io)
@@ -180,6 +165,7 @@ bool KisTag::load(QIODevice &io)
 
     d->url = d->map.getEntry(s_group, s_url);
     d->name = d->map.getEntry(s_group, s_name, QString(), KEntryMap::SearchLocalized);
+    d->resourceType = d->map.getEntry(s_group, s_resourceType, QString(), KEntryMap::SearchLocalized);
     d->comment = d->map.getEntry(s_group, s_comment, QString(), KEntryMap::SearchLocalized);
     d->defaultResources = d->map.getEntry(s_group, s_defaultResources, QString()).split(',', QString::SkipEmptyParts);
     d->valid = true;
@@ -193,6 +179,7 @@ bool KisTag::save(QIODevice &io)
 
     d->map.setEntry(s_group, s_url, d->url, KEntryMap::EntryDirty);
     d->map.setEntry(s_group, s_name, d->name, KEntryMap::EntryDirty);
+    d->map.setEntry(s_group, s_resourceType, d->resourceType, KEntryMap::EntryDirty);
     d->map.setEntry(s_group, s_comment, d->comment, KEntryMap::EntryDirty);
     d->map.setEntry(s_group, s_defaultResources, d->defaultResources.join(','), KEntryMap::EntryDirty);
 

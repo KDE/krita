@@ -1,23 +1,11 @@
 /*
 *  kis_tool_fill.cc - part of Krayon
 *
-*  Copyright (c) 2000 John Califf <jcaliff@compuzone.net>
-*  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
-*  Copyright (c) 2004 Bart Coppens <kde@bartcoppens.be>
+*  SPDX-FileCopyrightText: 2000 John Califf <jcaliff@compuzone.net>
+*  SPDX-FileCopyrightText: 2004 Boudewijn Rempt <boud@valdyas.org>
+*  SPDX-FileCopyrightText: 2004 Bart Coppens <kde@bartcoppens.be>
 *
-*  This program is free software; you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation; either version 2 of the License, or
-*  (at your option) any later version.
-*
-*  This program is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*  GNU General Public License for more details.
-*
-*  You should have received a copy of the GNU General Public License
-*  along with this program; if not, write to the Free Software
-*  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+*  SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "kis_tool_fill.h"
@@ -54,7 +42,7 @@
 #include "kis_resources_snapshot.h"
 #include "commands_new/KisMergeLabeledLayersCommand.h"
 #include <kis_color_filter_combo.h>
-
+#include <KisAngleSelector.h>
 
 #include <processing/fill_processing_visitor.h>
 #include <kis_processing_applicator.h>
@@ -169,7 +157,7 @@ void KisToolFill::endPrimaryAction(KoPointerEvent *event)
 
     KisProcessingApplicator applicator(currentImage(), currentNode(),
                                        KisProcessingApplicator::SUPPORTS_WRAPAROUND_MODE,
-                                       KisImageSignalVector() << ModifiedSignal,
+                                       KisImageSignalVector(),
                                        kundo2_i18n("Flood Fill"));
 
     KisResourcesSnapshotSP resources =
@@ -264,11 +252,10 @@ QWidget* KisToolFill::createOptionWidget()
     m_checkUsePattern->setToolTip(i18n("When checked do not use the foreground color, but the pattern selected to fill with"));
 
     QLabel *lbl_patternRotation = new QLabel(i18n("Rotate:"), widget);
-    m_sldPatternRotate = new KisDoubleSliderSpinBox(widget);
-    m_sldPatternRotate->setObjectName("patternrotate");
-    m_sldPatternRotate->setRange(0, 360, 2);
-    m_sldPatternRotate->setSingleStep(1.0);
-    m_sldPatternRotate->setSuffix(QChar(Qt::Key_degree));
+    m_angleSelectorPatternRotate = new KisAngleSelector(widget);
+    m_angleSelectorPatternRotate->setFlipOptionsMode(KisAngleSelector::FlipOptionsMode_MenuButton);
+    m_angleSelectorPatternRotate->setIncreasingDirection(KisAngleGauge::IncreasingDirection_Clockwise);
+    m_angleSelectorPatternRotate->setObjectName("patternrotate");
 
     QLabel *lbl_patternScale = new QLabel(i18n("Scale:"), widget);
     m_sldPatternScale = new KisDoubleSliderSpinBox(widget);
@@ -313,7 +300,7 @@ QWidget* KisToolFill::createOptionWidget()
 
     connect (m_cmbSampleLayersMode   , SIGNAL(currentIndexChanged(int)), this, SLOT(slotSetSampleLayers(int)));
     connect (m_cmbSelectedLabels          , SIGNAL(selectedColorsChanged()), this, SLOT(slotSetSelectedColorLabels()));
-    connect (m_sldPatternRotate  , SIGNAL(valueChanged(qreal)), this, SLOT(slotSetPatternRotation(qreal)));
+    connect (m_angleSelectorPatternRotate  , SIGNAL(angleChanged(qreal)), this, SLOT(slotSetPatternRotation(qreal)));
     connect (m_sldPatternScale   , SIGNAL(valueChanged(qreal)), this, SLOT(slotSetPatternScale(qreal)));
 
     addOptionWidgetOption(m_checkUseFastMode, lbl_fastMode);
@@ -327,7 +314,7 @@ QWidget* KisToolFill::createOptionWidget()
     addOptionWidgetOption(m_cmbSelectedLabels, lbl_cmbLabel);
     addOptionWidgetOption(m_checkUsePattern, lbl_usePattern);
 
-    addOptionWidgetOption(m_sldPatternRotate, lbl_patternRotation);
+    addOptionWidgetOption(m_angleSelectorPatternRotate, lbl_patternRotation);
     addOptionWidgetOption(m_sldPatternScale, lbl_patternScale);
 
     updateGUI();
@@ -354,7 +341,7 @@ QWidget* KisToolFill::createOptionWidget()
     m_checkFillSelection->setChecked(m_configGroup.readEntry("fillSelection", false));
     m_checkUseSelectionAsBoundary->setChecked(m_configGroup.readEntry("useSelectionAsBoundary", false));
 
-    m_sldPatternRotate->setValue(m_configGroup.readEntry("patternRotate", 0.0));
+    m_angleSelectorPatternRotate->setAngle(m_configGroup.readEntry("patternRotate", 0.0));
     m_sldPatternScale->setValue(m_configGroup.readEntry("patternScale", 100.0));
 
     // manually set up all variables in case there were no signals when setting value
@@ -364,7 +351,7 @@ QWidget* KisToolFill::createOptionWidget()
     m_useFastMode = m_checkUseFastMode->isChecked();
     m_fillOnlySelection = m_checkFillSelection->isChecked();
     m_useSelectionAsBoundary = m_checkUseSelectionAsBoundary->isChecked();
-    m_patternRotation = m_sldPatternRotate->value();
+    m_patternRotation = m_angleSelectorPatternRotate->angle();
     m_patternScale = m_sldPatternScale->value();
     m_usePattern = m_checkUsePattern->isChecked();
     // m_sampleLayersMode is set manually above
@@ -388,7 +375,7 @@ void KisToolFill::updateGUI()
     m_sizemodWidget->setEnabled(!selectionOnly && useAdvancedMode);
     m_featherWidget->setEnabled(!selectionOnly && useAdvancedMode);
     m_checkUsePattern->setEnabled(useAdvancedMode);
-    m_sldPatternRotate->setEnabled((m_checkUsePattern->isChecked() && useAdvancedMode));
+    m_angleSelectorPatternRotate->setEnabled((m_checkUsePattern->isChecked() && useAdvancedMode));
     m_sldPatternScale->setEnabled((m_checkUsePattern->isChecked() && useAdvancedMode));
 
     m_cmbSampleLayersMode->setEnabled(!selectionOnly && useAdvancedMode);
@@ -469,7 +456,7 @@ void KisToolFill::slotSetUsePattern(bool state)
 {
     m_usePattern = state;
     m_sldPatternScale->setEnabled(state);
-    m_sldPatternRotate->setEnabled(state);
+    m_angleSelectorPatternRotate->setEnabled(state);
     m_configGroup.writeEntry("usePattern", state);
 }
 

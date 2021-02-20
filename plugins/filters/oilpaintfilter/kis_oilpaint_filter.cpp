@@ -122,7 +122,7 @@ void KisOilPaintFilter::MostFrequentColor(KisPaintDeviceSP src, quint8* dst, con
     double Scale = Intensity / 255.0;
 
     // Alloc some arrays to be used
-    uchar *IntensityCount = new uchar[(Intensity + 1) * sizeof(uchar)];
+    uchar *IntensityCount = new uchar[(Intensity + 1)];
 
     const KoColorSpace* cs = src->colorSpace();
 
@@ -132,20 +132,32 @@ void KisOilPaintFilter::MostFrequentColor(KisPaintDeviceSP src, quint8* dst, con
     // Erase the array
     memset(IntensityCount, 0, (Intensity + 1) * sizeof(uchar));
 
-    int startx = qMax(X - Radius, bounds.left());
-    int starty = qMax(Y - Radius, bounds.top());
+    int startx = X - Radius;
+    int starty = Y - Radius;
     int width = (2 * Radius) + 1;
-    if ((startx + width - 1) > bounds.right()) width = bounds.right() - startx + 1;
-    Q_ASSERT((startx + width - 1) <= bounds.right());
     int height = (2 * Radius) + 1;
-    if ((starty + height) > bounds.bottom()) height = bounds.bottom() - starty + 1;
-    Q_ASSERT((starty + height - 1) <= bounds.bottom());
+
+    qreal middlePointAlpha = 1;
+    {
+        // if the current pixel is transparent, the result must be transparent, too.
+        KisSequentialConstIterator middlePointIt(src, QRect(X, Y, 1, 1));
+        middlePointIt.nextPixel();
+        middlePointAlpha = cs->opacityF(middlePointIt.oldRawData());
+    }
+
+
     KisSequentialConstIterator srcIt(src, QRect(startx, starty, width, height));
-    while (srcIt.nextPixel()) {
+    while (middlePointAlpha > 0 && srcIt.nextPixel()) {
 
-        cs->normalisedChannelsValue(srcIt.rawDataConst(), channel);
+        cs->normalisedChannelsValue(srcIt.oldRawData(), channel);
 
-        I = (uint)(cs->intensity8(srcIt.rawDataConst()) * Scale);
+        if (cs->opacityU8(srcIt.oldRawData()) == 0) {
+            // if the pixel is transparent, it's not going to provide any useful information
+            continue;
+        }
+
+        I = (uint)(cs->intensity8(srcIt.oldRawData()) * Scale);
+
         IntensityCount[I]++;
 
         if (IntensityCount[I] == 1) {
@@ -173,14 +185,28 @@ void KisOilPaintFilter::MostFrequentColor(KisPaintDeviceSP src, quint8* dst, con
             channel[i] /= MaxInstance;
         }
         cs->fromNormalisedChannelsValue(dst, channel);
+        cs->setOpacity(dst, OPACITY_OPAQUE_U8, middlePointAlpha);
     } else {
         memset(dst, 0, cs->pixelSize());
-        cs->setOpacity(dst, OPACITY_OPAQUE_U8, 1);
+        cs->setOpacity(dst, OPACITY_OPAQUE_U8, middlePointAlpha);
     }
 
 
     delete [] IntensityCount;        // free all the arrays
     delete [] AverageChannels;
+}
+
+QRect KisOilPaintFilter::neededRect(const QRect & rect, const KisFilterConfigurationSP _config, int lod) const
+{
+    const quint32 brushSize = _config ? _config->getInt("brushSize", 1) : 1;
+    return rect.adjusted(-brushSize * 2, -brushSize * 2, brushSize * 2, brushSize * 2);
+}
+
+QRect KisOilPaintFilter::changedRect(const QRect & rect, const KisFilterConfigurationSP _config, int lod) const
+{
+    const quint32 brushSize = _config ? _config->getInt("brushSize", 1) : 1;
+
+    return rect.adjusted( -brushSize*2, -brushSize*2, brushSize*2, brushSize*2);
 }
 
 

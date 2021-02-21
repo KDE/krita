@@ -1,0 +1,27 @@
+From f7fa9edc33426f0ae155b16702b626f320ebae46 Mon Sep 17 00:00:00 2001
+From: "L. E. Segovia" <amy@amyspark.me>
+Date: Thu, 18 Feb 2021 15:31:16 +0000
+Subject: [PATCH 2/2] Use CMake install prefix
+
+---
+ CMakeLists.txt | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 948a0a0..0e11436 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -97,8 +97,8 @@ SET(RAWSPEED_RPATH           "RawSpeed"           CACHE STRING
+ 
+ SET(RAWSPEED_PATH           "${CMAKE_CURRENT_SOURCE_DIR}/${RAWSPEED_RPATH}")
+ 
+-SET(INSTALL_CMAKE_MODULE_PATH  "share/libraw/cmake"  CACHE STRING
+-    "Path to install cmake module              (default=share/libraw/cmake)")
++SET(INSTALL_CMAKE_MODULE_PATH  "${CMAKE_INSTALL_PREFIX}/lib/cmake/libraw"  CACHE STRING
++    "Path to install cmake module              (default=CMAKE_INSTALL_PREFIX/lib/cmake/libraw)")
+ 
+ # ==================================================================================================
+ # General definitions rules
+-- 
+2.30.1.windows.1
+

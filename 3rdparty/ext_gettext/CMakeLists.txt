@@ -4,8 +4,8 @@ if (MINGW)
         ExternalProject_Add(ext_gettext_bin
         
             DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-            URL http://files.kde.org/krita/build/dependencies/gettext0.19.8.1-iconv1.15-static-64.zip
-            URL_MD5 3f8298041738b8ec1f7278d147b7cd3d
+            URL https://github.com/mlocati/gettext-iconv-windows/releases/download/v0.21-v1.16/gettext0.21-iconv1.16-static-64.zip
+            URL_HASH SHA256=721395c2e057eeed321f0c793311732e57cb4fa30d5708672a13902a69a77d43
 
             BUILD_COMMAND ${CMAKE_COMMAND} -E echo Deploying gettext 64-bit dependencies
             CONFIGURE_COMMAND ""
@@ -17,10 +17,10 @@ if (MINGW)
             ExternalProject_Add(ext_gettext_bin
         
             DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-            URL http://files.kde.org/krita/build/dependencies/gettext0.19.8.1-iconv1.15-static-32.zip
-            URL_MD5 970afaea0d433a73a996d709d5c22f6d
+            URL https://github.com/mlocati/gettext-iconv-windows/releases/download/v0.21-v1.16/gettext0.21-iconv1.16-static-32.zip
+            URL_HASH SHA256=73a1b64a15fff9e6a5dc980d0a69cf3a24bde51bd47091a1b3fef68827ef23a8
 
-            BUILD_COMMAND ${CMAKE_COMMAND} -E echo Deploying gettext 64-bit dependencies
+            BUILD_COMMAND ${CMAKE_COMMAND} -E echo Deploying gettext 32-bit dependencies
             CONFIGURE_COMMAND ""
             INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR> ${PREFIX_ext_gettext}
 
@@ -30,9 +30,13 @@ if (MINGW)
     ExternalProject_Add (
         ext_gettext_lib
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://ftp.gnu.org/gnu/gettext/gettext-0.18.tar.gz
-        URL_MD5 d52a3e061032a1ed13856d42fc86f0fd
-        PATCH_COMMAND ${PATCH_COMMAND} --binary -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/gettext-0.18-20130319.diff
+        URL https://ftpmirror.gnu.org/gettext/gettext-0.21.tar.gz
+        URL_HASH SHA256=c77d0da3102aec9c07f43671e60611ebff89a996ef159497ce8e59d075786b12
+
+        PATCH_COMMAND ${PATCH_COMMAND} --binary -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Fix-macro-definitions.patch
+            COMMAND ${PATCH_COMMAND} --binary -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0002-Fix-uwp-build.patch
+            COMMAND ${PATCH_COMMAND} --binary -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0003-Fix-win-unicode-paths.patch
+            COMMAND ${PATCH_COMMAND} --binary -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0004-vcpkg-CMake-toolchain.patch
         INSTALL_DIR ${PREFIX_ext_gettext}
         CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_gettext} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE}
         UPDATE_COMMAND ""
@@ -43,9 +47,10 @@ if (MINGW)
 else (MINGW)
 ExternalProject_Add( ext_gettext
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-   URL http://files.kde.org/krita/build/dependencies/gettext-0.19.8.tar.gz
-   URL_MD5 e4fffc004f21596becd1055cf36be31d
-    
+    URL https://ftpmirror.gnu.org/gettext/gettext-0.21.tar.gz
+    URL_HASH SHA256=c77d0da3102aec9c07f43671e60611ebff89a996ef159497ce8e59d075786b12
+    PATCH_COMMAND ${PATCH_COMMAND} --binary -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0005-Fix-libgettextpo-linking-on-macOS.patch
+
     INSTALL_DIR ${PREFIX_ext_gettext}
     CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${PREFIX_ext_gettext} --disable-java   ${GLOBAL_AUTOMAKE_PROFILE} --disable-native-java 
    BUILD_COMMAND make

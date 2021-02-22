@@ -40,12 +40,13 @@ KisColorSmudgeOp::KisColorSmudgeOp(const KisPaintOpSettingsSP settings, KisPaint
     , m_tempDev(m_precisePainterWrapper.createPreciseCompositionSourceDevice())
     , m_backgroundPainter(new KisPainter(m_tempDev))
     , m_smudgePainter(new KisPainter(m_tempDev))
+    , m_overlayPainter(new KisPainter(m_tempDev))
     , m_colorRatePainter(new KisPainter(m_tempDev))
     , m_finalPainter(new KisPainter(m_precisePainterWrapper.preciseDevice()))
     , m_smudgeRateOption()
     , m_colorRateOption("ColorRate", KisPaintOpOption::GENERAL, false)
     , m_smudgeRadiusOption()
-    , m_maskDab (new KisFixedPaintDevice(KoColorSpaceRegistry::instance()->alpha8()))
+    , m_maskDab(new KisFixedPaintDevice(KoColorSpaceRegistry::instance()->alpha8()))
     , m_origDab(new KisFixedPaintDevice(m_tempDev->colorSpace()))
 {
     Q_UNUSED(node);
@@ -187,6 +188,18 @@ inline void KisColorSmudgeOp::getTopLeftAligned(const QPointF &pos, const QPoint
     splitCoordinate(topLeft.y(), y, &yFraction);
 }
 
+KoColor KisColorSmudgeOp::getOverlayDullingFillColor(QPoint canvasLocalSamplePoint) {
+    // stored in the color space of the paintColor
+    KoColor dullingFillColor = m_paintColor;
+    // get the pixel on the canvas that lies beneath the hot spot
+    // of the dab and fill  the temporary paint device with that color
+    KisCrossDeviceColorPickerInt colorPicker(m_tempDev, dullingFillColor);
+    colorPicker.pickColor(canvasLocalSamplePoint.x(), canvasLocalSamplePoint.y(), dullingFillColor.data());
+    KIS_SAFE_ASSERT_RECOVER_NOOP(*dullingFillColor.colorSpace() == *m_tempDev->colorSpace());
+
+    return dullingFillColor;
+}
+
 KoColor KisColorSmudgeOp::getDullingFillColor(const KisPaintInformation& info, KisPrecisePaintDeviceWrapper& activeWrapper, QPoint canvasLocalSamplePoint) {
     // stored in the color space of the paintColor
     KoColor dullingFillColor = m_paintColor;
@@ -229,26 +242,36 @@ void KisColorSmudgeOp::mixSmudgePaintAt(const KisPaintInformation& info, KisPrec
     const int smudgeAlpha = qRound(smudgeLength * fpOpacity * 255.0);
     const int dullingAlpha = qRound(smudgeLength * 0.8 * fpOpacity * 255.0);
 
-    activeWrapper.readRect(m_dstDabRect); //copy the current data in the destination
+    m_precisePainterWrapper.readRect(m_dstDabRect); //copy the current data in the destination
+    m_backgroundPainter->bitBlt(QPoint(), m_precisePainterWrapper.preciseDevice(), m_dstDabRect);
 
-    m_backgroundPainter->bitBlt(QPoint(), activeWrapper.preciseDevice(), m_dstDabRect);
 
-    if (useDullingMode) {
-        KoColor dullingFillColor = getDullingFillColor(info, activeWrapper, canvasLocalSamplePoint);
-        dullingFillColor.convertTo(preciseCS); //convert to mix with background
-        m_smudgePainter->setOpacity(dullingAlpha);
-        m_smudgePainter->fill(0, 0, m_dstDabRect.width(), m_dstDabRect.height(), dullingFillColor);//composite_over dullingfillcolor on bg in tempDev
-    }
-    else {
+    activeWrapper.readRect(srcDabRect);
+    if (m_image && m_overlayModeOption.isChecked()) {
         m_smudgePainter->setOpacity(smudgeAlpha);
+        m_image->blockUpdates();
+        m_smudgePainter->bitBlt(QPoint(), m_image->projection(), srcDabRect);
+        m_image->unblockUpdates();
+        m_overlayPainter->setOpacity(smudgeAlpha);
+        m_overlayPainter->bitBlt(QPoint(), activeWrapper.preciseDevice(), srcDabRect); //necessary because image->projection doesn't update each frame
 
-        if (m_image && m_overlayModeOption.isChecked()) {
-            m_image->blockUpdates();
-            m_smudgePainter->bitBlt(QPoint(), m_image->projection(), srcDabRect);
-            m_image->unblockUpdates();
+        if (useDullingMode) {
+            KoColor dullingFillColor = m_smudgeRadiusOption.isChecked() ?
+                getDullingFillColor(info, activeWrapper, canvasLocalSamplePoint) : 
+                getOverlayDullingFillColor(canvasLocalSamplePoint - srcDabRect.topLeft());
+            dullingFillColor.convertTo(preciseCS); //convert to mix with background
+            m_smudgePainter->setOpacity(dullingAlpha);
+            m_smudgePainter->fill(0, 0, m_dstDabRect.width(), m_dstDabRect.height(), dullingFillColor);
         }
-        else { //else copy just the layer at source to m_canvasDab
-            activeWrapper.readRect(srcDabRect);
+
+    } else {
+        if (useDullingMode) {
+            KoColor dullingFillColor = getDullingFillColor(info, activeWrapper, canvasLocalSamplePoint);
+            dullingFillColor.convertTo(preciseCS); //convert to mix with background
+            m_smudgePainter->setOpacity(dullingAlpha);
+            m_smudgePainter->fill(0, 0, m_dstDabRect.width(), m_dstDabRect.height(), dullingFillColor);
+        } else {
+            m_smudgePainter->setOpacity(smudgeAlpha);
             m_smudgePainter->bitBlt(QPoint(), activeWrapper.preciseDevice(), srcDabRect);
         }
     }

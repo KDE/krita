@@ -53,6 +53,7 @@ protected:
 private:
     // Sets the m_maskDab _and m_maskDabRect
     void updateMask(const KisPaintInformation& info, const KisDabShape &shape, const QPointF &cursorPoint);
+    KoColor getOverlayDullingFillColor(QPoint canvasLocalSamplePoint);
     KoColor getDullingFillColor(const KisPaintInformation& info, KisPrecisePaintDeviceWrapper& activeWrapper, QPoint canvasLocalSamplePoint);
     void mixSmudgePaintAt(const KisPaintInformation& info, KisPrecisePaintDeviceWrapper& activeWrapper, QRect srcDabRect, QPoint canvasLocalSamplePoint, bool useDullingMode);
 
@@ -69,6 +70,7 @@ private:
     QScopedPointer<KisPrecisePaintDeviceWrapper> m_preciseImageDeviceWrapper;
     QScopedPointer<KisPainter> m_backgroundPainter;
     QScopedPointer<KisPainter> m_smudgePainter;
+    QScopedPointer<KisPainter> m_overlayPainter;
     QScopedPointer<KisPainter> m_colorRatePainter;
     QScopedPointer<KisPainter> m_finalPainter;
     KoAbstractGradientSP      m_gradient;

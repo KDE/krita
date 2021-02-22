@@ -99,6 +99,21 @@ public:
      * @return a list of profiles for the factory
      */
     QList<const KoColorProfile *>  profilesFor(const KoColorSpaceFactory * csf) const;
+    /**
+     * @brief profilesFor
+     * Retun the list of profiles for a colorspace represented by it's colorants and type.
+     * @param colorants list of at the least 2 values representing the whitePoint xyY, or 8
+     * representing whitePoint, red, green and blue x and y xyY values. If the colorant type
+     * is set, the colorants will not be used.
+     * @param colorantType the named colorantType, if 2, it's undefined and the colorants will be used.
+     * @param transferType the name transfer type, if 2 it's undefined.
+     * @param error the margin of error with which the colorants get compared.
+     * @return list of available profiles.
+     */
+    QList<const KoColorProfile *> profilesFor(QVector<float> colorants,
+                                              int colorantType,
+                                              int transferType,
+                                              double error = 0.00001);
 
 private:
     struct Private;

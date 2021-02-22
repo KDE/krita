@@ -134,3 +134,64 @@ QList<const KoColorProfile *> KoColorProfileStorage::profilesFor(const KoColorSp
     }
     return profiles;
 }
+
+QList<const KoColorProfile *> KoColorProfileStorage::profilesFor(QVector<float> colorants, int colorantType, int transferType, double error)
+{
+    QList<const KoColorProfile *>  profiles;
+
+    if (colorants.isEmpty() && colorantType == 2 && transferType == 2) {
+        return profiles;
+    }
+
+    QReadLocker l(&d->lock);
+    QHash<QString, KoColorProfile * >::ConstIterator it;
+    for (it = d->profileMap.constBegin(); it != d->profileMap.constEnd(); ++it) {
+        KoColorProfile *  profile = it.value();
+        bool colorantMatch = (colorants.isEmpty() || colorantType != 2);
+        bool colorantTypeMatch = (colorantType == 2);
+        bool transferMatch = (transferType == 2);
+        if (colorantType != 2) {
+            if (int(profile->getColorPrimaries()) == colorantType) {
+                colorantTypeMatch = true;
+            }
+        }
+        if (transferType != 2) {
+            if (int(profile->getTransferCharacteristics()) == transferType) {
+                transferMatch = true;
+            }
+        }
+
+        if (!colorants.isEmpty() && colorantType == 2) {
+            QVector<qreal> wp = profile->getWhitePointxyY();
+            if (profile->hasColorants() && colorants.size() == 8) {
+                QVector<qreal> col = profile->getColorantsxyY();
+                if (col.size() < 8 || wp.size() < 2) {
+                    //too few colorants, skip.
+                    continue;
+                }
+                QVector<double> compare = {wp[0], wp[1], col[0], col[1], col[3], col[4], col[6], col[7]};
+
+                for (int i=0; i<compare.size(); i++) {
+                    if (abs(compare[i]-colorants[i]) < error) {
+                        colorantMatch = true;
+                    }
+                }
+            } else {
+                if (wp.size() < 2 || colorants.size() < 2) {
+                    //too few colorants, skip.
+                    continue;
+                }
+                if (abs(wp[0]-colorants[0]) < error && abs(wp[1]-colorants[1]) < error) {
+                    colorantMatch = true;
+                }
+            }
+        }
+
+        if (transferMatch && colorantMatch && colorantTypeMatch) {
+            profiles.push_back(profile);
+        }
+    }
+
+
+    return profiles;
+}

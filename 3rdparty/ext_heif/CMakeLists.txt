@@ -18,8 +18,8 @@ if (WIN32)
         ExternalProject_Add(
             ext_nasm
             DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-            URL https://www.nasm.us/pub/nasm/releasebuilds/2.14.03rc2/win64/nasm-2.14.03rc2-win64.zip
-            URL_MD5 f12d14ca46cf397a1d27ac0edde548fb
+            URL https://www.nasm.us/pub/nasm/releasebuilds/2.15.05/win64/nasm-2.15.05-win64.zip
+            URL_HASH SHA256=f5c93c146f52b4f1664fa3ce6579f961a910e869ab0dae431bd871bdd2584ef2
 
             BUILD_COMMAND ${CMAKE_COMMAND} -E echo Deploying nasm 64-bit dependencies
             CONFIGURE_COMMAND ""
@@ -33,10 +33,10 @@ if (WIN32)
         ExternalProject_Add(
             ext_nasm
             DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-            URL https://www.nasm.us/pub/nasm/releasebuilds/2.14.03rc2/win32/nasm-2.14.03rc2-win32.zip
-            URL_MD5 9ec22ac06a6b9d993ef503ea2fe074ab
+            URL https://www.nasm.us/pub/nasm/releasebuilds/2.15.05/win32/nasm-2.15.05-win32.zip
+            URL_HASH SHA256=258c7d1076e435511cf2fdf94e2281eadbdb9e3003fd57f356f446e2bce3119e
 
-            BUILD_COMMAND ${CMAKE_COMMAND} -E echo Deploying nasm 64-bit dependencies
+            BUILD_COMMAND ${CMAKE_COMMAND} -E echo Deploying nasm 32-bit dependencies
             CONFIGURE_COMMAND ""
             INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>/rdoff ${EXTPREFIX_heif}/bin/rdoff
                     COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/nasm.exe ${EXTPREFIX_heif}/bin/nasm.exe
@@ -49,8 +49,8 @@ else (WIN32)
 ExternalProject_Add(
     ext_nasm
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL https://www.nasm.us/pub/nasm/releasebuilds/2.14.03rc2/nasm-2.14.03rc2.tar.gz
-    URL_MD5 4cd1fe6788cd15d08c1a8f18b6d2428e
+    URL https://www.nasm.us/pub/nasm/releasebuilds/2.15.05/nasm-2.15.05.tar.gz
+    URL_HASH SHA256=9182a118244b058651c576baa9d0366ee05983c4d4ae1d9ddd3236a9f2304997
 
     CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${EXTPREFIX_heif} ${GLOBAL_AUTOMAKE_PROFILE}
     BUILD_COMMAND make

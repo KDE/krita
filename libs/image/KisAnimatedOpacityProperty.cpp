@@ -31,7 +31,7 @@ quint8 KisAnimatedOpacityProperty::get() {
 
 void KisAnimatedOpacityProperty::set(const quint8 value) {
     quint8 to_assign;
-    if (m_channel) {
+    if (m_channel && m_channel->keyframeCount() > 0) {
         const int time = m_channel->activeKeyframeTime();
         const int translatedOldValue = m_channel->keyframeAt<KisScalarKeyframe>(time)->value() * 255 / 100;
 

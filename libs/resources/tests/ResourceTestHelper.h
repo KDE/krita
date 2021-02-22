@@ -61,7 +61,7 @@ void createDummyLoaderRegistry() {
     reg->add(new KisDummyResourceLoader(ResourceSubType::SvgBrushes, ResourceType::Brushes, i18n("Brush tips"), QStringList() << "image/svg+xml"));
     reg->add(new KisDummyResourceLoader(ResourceSubType::PngBrushes, ResourceType::Brushes, i18n("Brush tips"), QStringList() << "image/png"));
     reg->add(new KisDummyResourceLoader(ResourceSubType::SegmentedGradients, ResourceType::Gradients, i18n("Gradients"), QStringList() << "application/x-gimp-gradient"));
-    reg->add(new KisDummyResourceLoader(ResourceSubType::StopGradients, ResourceType::Gradients, i18n("Gradients"), QStringList() << "application/x-karbon-gradient" << "image/svg+xml"));
+    reg->add(new KisDummyResourceLoader(ResourceSubType::StopGradients, ResourceType::Gradients, i18n("Gradients"), QStringList() << "image/svg+xml"));
     reg->add(new KisDummyResourceLoader(ResourceType::Palettes, ResourceType::Palettes, i18n("Palettes"),
                                         QStringList() << KisMimeDatabase::mimeTypeForSuffix("kpl")
                                         << KisMimeDatabase::mimeTypeForSuffix("gpl")

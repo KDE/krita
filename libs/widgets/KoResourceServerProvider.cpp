@@ -85,7 +85,7 @@ private:
 
         KoAbstractGradientSP grad;
 
-        if(fileExtension == ".svg" || fileExtension == ".kgr") {
+        if(fileExtension == ".svg") {
             grad.reset(new KoStopGradient(filename));
         }
         else if(fileExtension == ".ggr" ) {

@@ -1,5 +1,5 @@
 /* XPM */
-static char *dummy[]={
+static const char *splash_holidays_xpm[]={
 "504 290 81914 3",
 "bYQ c #09fcfd",
 "b3C c #0bffff",

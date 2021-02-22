@@ -169,6 +169,8 @@ QStringList KisDlgAnimationRenderer::makeVideoMimeTypesList()
     QStringList supportedMimeTypes = QStringList();
     supportedMimeTypes << "video/x-matroska";
     supportedMimeTypes << "image/gif";
+    supportedMimeTypes << "image/png";    
+    supportedMimeTypes << "image/webp";       
     supportedMimeTypes << "video/ogg";
     supportedMimeTypes << "video/mp4";
     supportedMimeTypes << "video/webm";
@@ -303,7 +305,7 @@ void KisDlgAnimationRenderer::selectRenderType(int index)
 {
     const QString mimeType = m_page->cmbRenderType->itemData(index).toString();
 
-    m_page->bnRenderOptions->setEnabled(mimeType != "image/gif");
+    m_page->bnRenderOptions->setEnabled(mimeType != "image/gif" && mimeType != "image/webp" && mimeType != "image/png" );
     m_page->lblGifWarning->setVisible((mimeType == "image/gif" && m_page->intFramesPerSecond->value() > 50));
 
     QString videoFileName = defaultVideoFileName(m_doc, mimeType);

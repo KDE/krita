@@ -128,67 +128,65 @@ else()
     message(WARNING "Disabling AVIF support.")
 endif()
 
-IF ("${CMAKE_SIZEOF_VOID_P}" EQUAL "8" AND NOT CMAKE_SYSTEM_PROCESSOR MATCHES "^(aarch64.*|AARCH64.*|arm64.*|ARM64.*)")
-    ExternalProject_Add(ext_libx265_10bit
-        DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL http://ftp.videolan.org/pub/videolan/x265/x265_3.2.1.tar.gz
-        URL_MD5 94808045a34d88a857e5eaf3f68f4bca
+# Incorporate Handbrake's extensions for building x265
+# Multicoreware added detection of SSE2/3/4.1, so we can freely enable them now
+# Also ship their patch for Apple silicon
+ExternalProject_Add(ext_libx265_10bit
+    DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+    URL https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/x265-snapshot-20210203-12666.tar.gz
+    URL_HASH SHA256=a4a712c9fbe724c263f4506e19aeca74e0259b33126d2e60c813352483f5110c
 
-        SOURCE_SUBDIR source/
+    SOURCE_SUBDIR source/
 
-        CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_heif} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE} -DHIGH_BIT_DEPTH=TRUE -DEXPORT_C_API=FALSE -DENABLE_CLI=FALSE -DENABLE_SHARED=FALSE
-        INSTALL_COMMAND ${CMAKE_COMMAND} -E copy libx265.a ${EXTPREFIX_heif}/lib/libx265_main10.a
-    )
-    ExternalProject_Add(ext_libx265_12bit
-        DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL http://ftp.videolan.org/pub/videolan/x265/x265_3.2.1.tar.gz
-        URL_MD5 94808045a34d88a857e5eaf3f68f4bca
+    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/A00-darwin-Revert-Add-aarch64-support-Part-2.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/A01-darwin-neon-support-for-arm64.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/A02-threads-priority.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Silence-nasm-2.15-warnings.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0002-Fix-rc-versioning.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0003-Skip-PDB-in-MinGW.patch
 
-        SOURCE_SUBDIR source/
+    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_heif} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE} -DHIGH_BIT_DEPTH=TRUE -DEXPORT_C_API=FALSE -DENABLE_CLI=FALSE -DENABLE_SHARED=FALSE
+    INSTALL_COMMAND ${CMAKE_COMMAND} -E copy libx265.a ${EXTPREFIX_heif}/lib/libx265_main10.a
+)
+ExternalProject_Add(ext_libx265_12bit
+    DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+    URL https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/x265-snapshot-20210203-12666.tar.gz
+    URL_HASH SHA256=a4a712c9fbe724c263f4506e19aeca74e0259b33126d2e60c813352483f5110c
 
-        CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_heif} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE} 
-        -DHIGH_BIT_DEPTH=TRUE -DMAIN12=TRUE -DEXPORT_C_API=FALSE  -DENABLE_CLI=FALSE -DENABLE_SHARED=FALSE
-        INSTALL_COMMAND ${CMAKE_COMMAND} -E copy libx265.a ${EXTPREFIX_heif}/lib/libx265_main12.a
-    )
-    ExternalProject_Add(
-        ext_libx265
-        DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL http://ftp.videolan.org/pub/videolan/x265/x265_3.2.1.tar.gz
-        URL_MD5 94808045a34d88a857e5eaf3f68f4bca
+    SOURCE_SUBDIR source/
 
-        SOURCE_SUBDIR source/
+    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/A00-darwin-Revert-Add-aarch64-support-Part-2.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/A01-darwin-neon-support-for-arm64.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/A02-threads-priority.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Silence-nasm-2.15-warnings.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0002-Fix-rc-versioning.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0003-Skip-PDB-in-MinGW.patch
 
-        PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/02-skip-pdb-in-mingw.diff
+    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_heif} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE} 
+    -DHIGH_BIT_DEPTH=TRUE -DMAIN12=TRUE -DEXPORT_C_API=FALSE  -DENABLE_CLI=FALSE -DENABLE_SHARED=FALSE
+    INSTALL_COMMAND ${CMAKE_COMMAND} -E copy libx265.a ${EXTPREFIX_heif}/lib/libx265_main12.a
+)
+ExternalProject_Add(
+    ext_libx265
+    DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+    URL https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/x265-snapshot-20210203-12666.tar.gz
+    URL_HASH SHA256=a4a712c9fbe724c263f4506e19aeca74e0259b33126d2e60c813352483f5110c
 
-        CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_heif} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE} -DENABLE_SHARED=TRUE  -DENABLE_HDR10_PLUS=TRUE -DEXTRA_LIB:String=x265_main10.a$<SEMICOLON>x265_main12.a -DEXTRA_LINK_FLAGS:String=-L${EXTPREFIX_heif}/lib -DLINKED_10BIT=TRUE -DLINKED_12BIT=TRUE
+    SOURCE_SUBDIR source/
 
-        UPDATE_COMMAND ""
+    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/A00-darwin-Revert-Add-aarch64-support-Part-2.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/A01-darwin-neon-support-for-arm64.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/A02-threads-priority.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Silence-nasm-2.15-warnings.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0002-Fix-rc-versioning.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0003-Skip-PDB-in-MinGW.patch
 
-        DEPENDS ext_nasm ext_libx265_10bit ext_libx265_12bit
-    )
-else ()
-    # x265 in 32-bit platforms cannot support 10-bit and 12-bit images
-    # because they either crash on malloc or require SSE4.1+ extensions
-    # Same for aarch64, support for 10-bit and 12-bit requires NEON extensions
-    # and these are broken as of 3.4
-    ExternalProject_Add(
-        ext_libx265
-        DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL http://ftp.videolan.org/pub/videolan/x265/x265_3.2.1.tar.gz
-        URL_MD5 94808045a34d88a857e5eaf3f68f4bca
+    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_heif} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE} -DENABLE_SHARED=TRUE  -DENABLE_HDR10_PLUS=TRUE -DEXTRA_LIB:String=x265_main10.a$<SEMICOLON>x265_main12.a -DEXTRA_LINK_FLAGS:String=-L${EXTPREFIX_heif}/lib -DLINKED_10BIT=TRUE -DLINKED_12BIT=TRUE
 
-        SOURCE_SUBDIR source/
+    UPDATE_COMMAND ""
 
-        PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/02-skip-pdb-in-mingw.diff
-            COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0003-arm-asm-primitives.patch
-
-        CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_heif} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE} -DENABLE_SHARED=TRUE -DENABLE_CLI=FALSE
-
-        UPDATE_COMMAND ""
-
-        DEPENDS ext_nasm
-    )
-endif ()
+    DEPENDS ext_nasm ext_libx265_10bit ext_libx265_12bit
+)
 
 ExternalProject_Add(
     ext_libheif

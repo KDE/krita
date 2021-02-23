@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later
 */
 
+#include <cmath>
+
 #include "KoColorProfile.h"
 #include "DebugPigment.h"
 
@@ -102,7 +104,7 @@ KoColorProfile::colorPrimaries KoColorProfile::getColorPrimaries()
                 }
                 match = false;
                 for (int i=0; i<colorants.size(); i++) {
-                    match = abs(colorants[i] - compare[i]) < 0.00001;
+                    match = std::fabs(colorants[i] - compare[i]) < 0.00001;
                 }
                 if (match) {
                     primaries = check;

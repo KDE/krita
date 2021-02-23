@@ -6,6 +6,8 @@
 
 #include "KoColorProfileStorage.h"
 
+#include <cmath>
+
 #include <QHash>
 #include <QReadWriteLock>
 #include <QString>
@@ -172,7 +174,7 @@ QList<const KoColorProfile *> KoColorProfileStorage::profilesFor(QVector<double>
                 QVector<double> compare = {wp[0], wp[1], col[0], col[1], col[3], col[4], col[6], col[7]};
 
                 for (int i=0; i<compare.size(); i++) {
-                    if (abs(compare[i]-colorants[i]) < error) {
+                    if (std::fabs(compare[i]-colorants[i]) < error) {
                         colorantMatch = true;
                     }
                 }
@@ -181,7 +183,7 @@ QList<const KoColorProfile *> KoColorProfileStorage::profilesFor(QVector<double>
                     //too few colorants, skip.
                     continue;
                 }
-                if (abs(wp[0]-colorants[0]) < error && abs(wp[1]-colorants[1]) < error) {
+                if (std::fabs(wp[0]-colorants[0]) < error && std::fabs(wp[1]-colorants[1]) < error) {
                     colorantMatch = true;
                 }
             }

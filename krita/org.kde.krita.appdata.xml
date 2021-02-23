@@ -397,7 +397,7 @@
   </provides>
   <content_rating type="oars-1.1"/>
   <releases>
-    <release date="2020-09-21" version="4.4.3-alpha"/>
+    <release date="2021-02-23" version="4.4.3-beta1"/>
   </releases>
   <custom>
     <value key="KDE::windows_store">https://www.microsoft.com/store/apps/9n6x57zgrw96</value>

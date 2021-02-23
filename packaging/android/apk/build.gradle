@@ -47,7 +47,7 @@ task configure() {
 
         def libs = new File(installPrefix, 'lib')
         if (!libs.exists()) {
-            throw new GradleException('Krita libraires not found, please check if -p=krita-bin finished without errors')
+            throw new GradleException('Krita libraries not found, please check if -p=krita-bin finished without errors')
         }
     }
 }
@@ -131,7 +131,7 @@ android {
      * (including alpha and beta) release of versionMajor.versionMinor
      * branch
      */
-    def versionRelease  = 0
+    def versionRelease  = 5
 
 	defaultConfig {
         targetSdkVersion 29

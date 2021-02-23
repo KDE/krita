@@ -48,6 +48,8 @@
 #include <klocalizedstring.h>
 #include <kstandardaction.h>
 
+#include <kritaversion.h>
+
 using namespace KDEPrivate;
 
 class KHelpMenuPrivate
@@ -252,11 +254,15 @@ void KHelpMenu::aboutKDE()
 
 void KHelpMenu::reportBug()
 {
+#ifdef KRITA_STABLE
+    QDesktopServices::openUrl(QUrl("https://docs.krita.org/en/untranslatable_pages/reporting_bugs.html"));
+#else
     if (!d->mBugReport) {
         d->mBugReport = new KBugReport(d->mAboutData, d->mParent);
         connect(d->mBugReport, SIGNAL(finished(int)), this, SLOT(dialogFinished()));
     }
     d->mBugReport->show();
+#endif
 }
 
 void KHelpMenu::switchApplicationLanguage()

@@ -68,6 +68,7 @@ void KisAnimatedOpacityProperty::makeAnimated(KisNode *parentNode) {
     m_channel->setDefaultValue(100);
 
     connect(m_channel.data(), SIGNAL(sigKeyframeChanged(const KisKeyframeChannel*,int)), this, SLOT(slotKeyChanged(const KisKeyframeChannel*,int)));
+    connect(m_channel.data(), SIGNAL(sigRemovingKeyframe(const KisKeyframeChannel*,int)), this, SLOT(slotKeyRemoval(const KisKeyframeChannel*,int)));
 }
 
 void KisAnimatedOpacityProperty::transferKeyframeData(const KisAnimatedOpacityProperty &rhs){
@@ -78,12 +79,24 @@ void KisAnimatedOpacityProperty::transferKeyframeData(const KisAnimatedOpacityPr
     m_channel.reset(channelNew);
 
     connect(m_channel.data(), SIGNAL(sigKeyframeChanged(const KisKeyframeChannel*,int)), this, SLOT(slotKeyChanged(const KisKeyframeChannel*,int)));
+    connect(m_channel.data(), SIGNAL(sigRemovingKeyframe(const KisKeyframeChannel*,int)), this, SLOT(slotKeyRemoval(const KisKeyframeChannel*,int)));
 }
 
-void KisAnimatedOpacityProperty::slotKeyChanged(const KisKeyframeChannel *chan, int time) {
-    Q_UNUSED(chan);
+void KisAnimatedOpacityProperty::slotKeyChanged(const KisKeyframeChannel*, int time) {
 
     if (m_channel->isCurrentTimeAffectedBy(time)) {
+        emit changed(m_channel->currentValue() * 255 / 100);
+    }
+}
+
+void KisAnimatedOpacityProperty::slotKeyRemoval(const KisKeyframeChannel*, int )
+{
+    //Key removed is the last one, we should let everyone know that we'll be
+    //reverting to the previous opacity value.
+    //This will either be the last keyframe value or the last cached value assignment.
+    if (m_channel && m_channel->keyframeCount() == 0) {
+        emit changed(m_props->intProperty("opacity", 255));
+    } else {
         emit changed(m_channel->currentValue() * 255 / 100);
     }
 }

@@ -37,7 +37,8 @@ Q_SIGNALS:
     void changed(quint8 value);
 
 public Q_SLOTS:
-    void slotKeyChanged(const KisKeyframeChannel* chan, int time);
+    void slotKeyChanged(const KisKeyframeChannel*, int time);
+    void slotKeyRemoval(const KisKeyframeChannel*, int);
 
 private:
     KoProperties* const m_props;

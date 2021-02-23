@@ -16,23 +16,6 @@
 #include <math.h>
 
 
-
-void TestProfileGeneration::testQuantization()
-{
-    QVector<double> sRGBPrimaries = {0.6400, 0.3300, 1.0,
-                                    0.3000, 0.6000, 1.0,
-                                    0.1500, 0.0600, 1.0};
-    QVector<double> sRGBPrimariesPreQuantized = {0.639998686, 0.330010138, 1.0,
-                                                0.300003784, 0.600003357, 1.0,
-                                                0.150002046, 0.059997204, 1.0};
-    // Figure out how to prequantisize.
-}
-
-void TestProfileGeneration::testSRGBProfileGeneration()
-{
-    // Generate an sRGB profile.
-}
-
 void TestProfileGeneration::testTransferFunctions()
 {
     /*

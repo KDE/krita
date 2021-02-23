@@ -12,8 +12,6 @@ class TestProfileGeneration : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:
-    void testQuantization();
-    void testSRGBProfileGeneration();
     void testTransferFunctions();
 
 };

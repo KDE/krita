@@ -92,6 +92,7 @@ IccColorProfile::IccColorProfile(QVector<double> colorants,
     cmsCIExyY whitePoint;
 
     KoColorProfile::colorantsForType(colorPrimariesType, colorants);
+
     if (colorants.size()>=2) {
         whitePoint.x = colorants[0];
         whitePoint.y = colorants[1];
@@ -101,6 +102,9 @@ IccColorProfile::IccColorProfile(QVector<double> colorants,
     cmsToneCurve *mainCurve = LcmsColorProfileContainer::transferFunction(transferFunction);
 
     cmsCIExyYTRIPLE primaries;
+
+    // We should really prequantize these values to 16bit precision
+    // for the best results here.
     if (colorants.size()>2 && colorants.size() <= 8) {
         primaries = {{colorants[2], colorants[3], 1.0},
                      {colorants[4], colorants[5], 1.0},
@@ -124,7 +128,9 @@ IccColorProfile::IccColorProfile(QVector<double> colorants,
 
     cmsCIEXYZ media_blackpoint = {0.0, 0.0, 0.0};
     cmsWriteTag (iccProfile, cmsSigMediaBlackPointTag, &media_blackpoint);
-    //maybe also whitepoint.
+    cmsCIEXYZ media_whitepoint;
+    cmsxyY2XYZ(&media_whitepoint, &whitePoint);
+    cmsWriteTag (iccProfile, cmsSigMediaWhitePointTag, &media_whitepoint);
 
     //set the color profile info on the iccProfile;
     cmsMLU *mlu;

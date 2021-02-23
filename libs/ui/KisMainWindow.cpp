@@ -833,9 +833,9 @@ void KisMainWindow::slotThemeChanged()
     QString themeName = d->themeManager->currentThemeName();
     bool isDarkTheme = themeName.toLower().contains("dark");
     if(isDarkTheme) {
-        d->mdiArea->setStyleSheet("QTabBar::close-button { image: url(:/pics/light_close-tab.png) }");
+        d->mdiArea->setStyleSheet("QTabBar::close-button { image: url(:/pics/light_close-tab.svg) }");
     } else {
-        d->mdiArea->setStyleSheet("QTabBar::close-button { image: url(:/pics/dark_close-tab.png) }");
+        d->mdiArea->setStyleSheet("QTabBar::close-button { image: url(:/pics/dark_close-tab.svg) }");
     }
 
 

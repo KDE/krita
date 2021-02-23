@@ -21,7 +21,7 @@
         <file>pics/dark_selection-mode_mask.png</file>
         <file>pics/dark_transparency-disabled.png</file>
         <file>pics/dark_transparency-enabled.png</file>
-        <file>pics/dark_close-tab.png</file>
+        <file>pics/dark_close-tab.svg</file>
         <file>pics/dark_trim-to-image.png</file>
         <file>pics/dark_visible.svg</file>
         <file>pics/delete.png</file>
@@ -43,7 +43,7 @@
         <file>pics/light_selection-mode_mask.png</file>
         <file>pics/light_transparency-disabled.png</file>
         <file>pics/light_transparency-enabled.png</file>
-        <file>pics/light_close-tab.png</file>
+        <file>pics/light_close-tab.svg</file>
         <file>pics/light_trim-to-image.png</file>
         <file>pics/light_visible.svg</file>
         <file>pics/linked.png</file>

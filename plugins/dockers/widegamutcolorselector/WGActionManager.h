@@ -19,6 +19,7 @@ class KisVisualColorSelector;
 class WGColorPreviewToolTip;
 class WGColorSelectorDock;
 class WGConfig;
+class WGMyPaintShadeSelector;
 class WGSelectorPopup;
 class WGShadeSelector;
 
@@ -41,6 +42,7 @@ private Q_SLOTS:
     void slotPopupClosed(WGSelectorPopup *popup);
     void slotShowColorSelectorPopup();
     void slotShowShadeSelectorPopup();
+    void slotShowMyPaintSelectorPopup();
     void slotIncreaseLightness();
     void slotDecreaseLightness();
     void slotIncreaseSaturation();
@@ -59,8 +61,10 @@ private:
     WGSelectorPopup *m_currentPopup {0};
     WGSelectorPopup *m_colorSelectorPopup {0};
     WGSelectorPopup *m_shadeSelectorPopup {0};
+    WGSelectorPopup *m_myPaintSelectorPopup {0};
     KisVisualColorSelector *m_colorSelector {0};
     WGShadeSelector *m_shadeSelector {0};
+    WGMyPaintShadeSelector *m_myPaintSelector {0};
     KisVisualColorModelSP m_colorModel;
     KoColor m_lastUsedColor;
     bool m_isSynchronizing {false};

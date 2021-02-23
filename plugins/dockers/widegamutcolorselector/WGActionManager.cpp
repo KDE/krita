@@ -9,6 +9,7 @@
 #include "WGColorSelectorDock.h"
 #include "WGColorPreviewToolTip.h"
 #include "WGConfig.h"
+#include "WGMyPaintShadeSelector.h"
 #include "WGSelectorPopup.h"
 #include "WGShadeSelector.h"
 
@@ -49,6 +50,8 @@ void WGActionManager::registerActions(KisViewManager *viewManager)
     connect(action, SIGNAL(triggered()), SLOT(slotShowColorSelectorPopup()));
     action = actionManager->createAction("show_wg_shade_selector");
     connect(action, SIGNAL(triggered()), SLOT(slotShowShadeSelectorPopup()));
+    action = actionManager->createAction("show_wg_mypaint_selector");
+    connect(action, SIGNAL(triggered()), SLOT(slotShowMyPaintSelectorPopup()));
     action = actionManager->createAction("wgcs_lighten_color");
     connect(action, SIGNAL(triggered(bool)), SLOT(slotIncreaseLightness()));
     action = actionManager->createAction("wgcs_darken_color");
@@ -180,6 +183,22 @@ void WGActionManager::slotShowShadeSelectorPopup()
     }
 
     showPopup(m_shadeSelectorPopup);
+}
+
+void WGActionManager::slotShowMyPaintSelectorPopup()
+{
+    if (!m_myPaintSelectorPopup) {
+        m_myPaintSelectorPopup = new WGSelectorPopup();
+        m_myPaintSelector = new WGMyPaintShadeSelector(m_myPaintSelectorPopup, WGSelectorWidgetBase::PopupMode);
+        m_myPaintSelector->setFixedSize(300, 300);
+        m_myPaintSelectorPopup->setSelectorWidget(m_myPaintSelector);
+        m_myPaintSelector->setModel(m_colorModel);
+        connect(m_myPaintSelectorPopup, SIGNAL(sigPopupClosed(WGSelectorPopup*)),
+                SLOT(slotPopupClosed(WGSelectorPopup*)));
+        connect(m_myPaintSelector, SIGNAL(sigColorInteraction(bool)), SLOT(slotColorInteraction(bool)));
+    }
+
+    showPopup(m_myPaintSelectorPopup);
 }
 
 void WGActionManager::slotIncreaseLightness()

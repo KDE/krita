@@ -275,7 +275,7 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
 
 
                     }
-                    pixelValues.swapItemsAt(0, 2);
+                    qSwap(pixelValues.begin()[0], pixelValues.begin()[2]);
                     colorSpace->fromNormalisedChannelsValue(it->rawData(), pixelValues);
 
                     it->nextPixel();

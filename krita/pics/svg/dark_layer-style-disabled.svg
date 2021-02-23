@@ -5,15 +5,15 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
-   width="16"
-   height="16"
-   viewBox="0 0 16 16"
    version="1.1"
-   id="svg8">
+   id="svg2"
+   viewBox="0 0 16 16"
+   height="16"
+   width="16">
   <defs
-     id="defs2" />
+     id="defs4" />
   <metadata
-     id="metadata5">
+     id="metadata7">
     <rdf:RDF>
       <cc:Work
          rdf:about="">
@@ -47,8 +47,16 @@
       </cc:License>
     </rdf:RDF>
   </metadata>
-  <path
-     id="rect1133"
-     d="M 9,1 C 4,1 4,7 4,7 H 3 v 8 H 15 V 7 H 14 C 14,7 14,1 9,1 Z m 0,2 c 3,0 3,4 3,4 H 6 C 6,7 6,3 9,3 Z"
-     style="opacity:1;vector-effect:none;fill:#cacaca;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:3.20000005;stroke-opacity:1" />
+  <g
+     transform="translate(0,-1036.3622)"
+     id="layer1">
+    <path
+       id="path820-3"
+       d="m 3,1039.3622 v 11 h 2 v -5 h 2 v -2 H 5 v -2 h 4 v -2 z"
+       style="fill:#373737;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    <path
+       id="path839"
+       d="m 7.6660156,1043.3622 2.3339844,3.5 -2.3339844,3.5 h 2 l 1.3339844,-2 1.333984,2 h 2 l -2.333984,-3.5 2.333984,-3.5 h -2 l -1.333984,2 -1.3339844,-2 z"
+       style="fill:#373737;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+  </g>
 </svg>

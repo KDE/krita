@@ -10,20 +10,11 @@
         <file alias="krita5.xmlgui">krita5.xmlgui</file>
     </qresource>
     <qresource prefix="/">
-        <file>pics/broken-preset.png</file>
-        <file>pics/dark_layer-locked.png</file>
-        <file>pics/dark_layer-unlocked.png</file>
-        <file>pics/dark_novisible.svg</file>
-        <file>pics/dark_passthrough-disabled.png</file>
-        <file>pics/dark_passthrough-enabled.png</file>
         <file>pics/dark_selection-mode_ants.png</file>
         <file>pics/dark_selection-mode_invisible.png</file>
         <file>pics/dark_selection-mode_mask.png</file>
-        <file>pics/dark_transparency-disabled.png</file>
-        <file>pics/dark_transparency-enabled.png</file>
         <file>pics/dark_close-tab.svg</file>
         <file>pics/dark_trim-to-image.png</file>
-        <file>pics/dark_visible.svg</file>
         <file>pics/delete.png</file>
         <file>pics/dirty-preset.svg</file>
         <file>pics/height.png</file>
@@ -31,27 +22,14 @@
         <file>pics/hi16-add_dialog.png</file>
         <file>pics/hi16-palette_library.png</file>
         <file>pics/icon-kritasketch-256.png</file>
-        <file>pics/layer-style-disabled.png</file>
-        <file>pics/layer-style-enabled.png</file>
-        <file>pics/light_layer-locked.png</file>
-        <file>pics/light_layer-unlocked.png</file>
-        <file>pics/light_novisible.svg</file>
-        <file>pics/light_passthrough-disabled.png</file>
-        <file>pics/light_passthrough-enabled.png</file>
         <file>pics/light_selection-mode_ants.png</file>
         <file>pics/light_selection-mode_invisible.png</file>
         <file>pics/light_selection-mode_mask.png</file>
-        <file>pics/light_transparency-disabled.png</file>
-        <file>pics/light_transparency-enabled.png</file>
         <file>pics/light_close-tab.svg</file>
         <file>pics/light_trim-to-image.png</file>
-        <file>pics/light_visible.svg</file>
         <file>pics/linked.png</file>
-        <file>pics/local_selection_active.png</file>
-        <file>pics/local_selection_inactive.png</file>
         <file>pics/mirrorAxis-HorizontalMove.png</file>
         <file>pics/mirrorAxis-VerticalMove.png</file>
-        <file>pics/novisible.svg</file>
         <file>pics/offset_horizontal.png</file>
         <file>pics/offset_vertical.png</file>
         <file>pics/ratio_icon.png</file>
@@ -68,10 +46,7 @@
         <file>pics/sidebaricon.png</file>
         <file>pics/tablet.png</file>
         <file>pics/tool_screenshot.png</file>
-        <file>pics/transparency-locked.png</file>
-        <file>pics/transparency-unlocked.png</file>
         <file>pics/unlinked.png</file>
-        <file>pics/visible.svg</file>
         <file>pics/width.png</file>
         <file>pics/width_icon.png</file>
         <file>pics/workspace-chooser.png</file>

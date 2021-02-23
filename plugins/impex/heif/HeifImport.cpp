@@ -93,7 +93,9 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
         heif::Image heifimage = handle.decode_image(heif_colorspace_undefined, heif_chroma_undefined);
         heif_colorspace heifModel = heifimage.get_colorspace();
         heif_chroma heifChroma = heifimage.get_chroma_format();
-        qDebug() << "loading heif" << heifModel << heifChroma << handle.get_luma_bits_per_pixel();
+        int luma = handle.get_luma_bits_per_pixel();
+
+        qDebug() << "loading heif" << heifModel << heifChroma << luma;
 
         if (heifModel == heif_colorspace_monochrome) {
             // Grayscale image.
@@ -105,7 +107,7 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
             // RGB
             heifimage = handle.decode_image(heif_colorspace_RGB, heif_chroma_444);
             colorModel = RGBAColorModelID;
-            if (handle.get_luma_bits_per_pixel() == 8) {
+            if (luma == 8) {
                 colorDepth = Integer8BitsColorDepthID;
             } else {
                 if (handle.has_alpha_channel()) {
@@ -116,6 +118,7 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
                 heifChroma = heifimage.get_chroma_format();
                 colorDepth = Integer16BitsColorDepthID;
             }
+            luma = handle.get_luma_bits_per_pixel();
         }
 
 
@@ -194,7 +197,7 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
         KisPaintLayerSP layer = new KisPaintLayer(image, image->nextLayerName(), OPACITY_OPAQUE_U8);
 
         if (heifChroma == heif_chroma_monochrome) {
-            qDebug() << "monochrome heif file, bits:" << handle.get_luma_bits_per_pixel();
+            qDebug() << "monochrome heif file, bits:" << luma;
             int strideG, strideA;
             const uint8_t* imgG = heifimage.get_plane(heif_channel_Y, &strideG);
             const uint8_t* imgA = heifimage.get_plane(heif_channel_Alpha, &strideA);
@@ -217,7 +220,7 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
             }
 
         } else if (heifChroma == heif_chroma_444) {
-            qDebug() << "planar heif file, bits:" << handle.get_luma_bits_per_pixel();
+            qDebug() << "planar heif file, bits:" << luma;
 
             int strideR, strideG, strideB, strideA;
             const uint8_t* imgR = heifimage.get_plane(heif_channel_R, &strideR);
@@ -245,31 +248,31 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
                 }
             }
         } else if (heifChroma == heif_chroma_interleaved_RRGGBB_LE || heifChroma == heif_chroma_interleaved_RRGGBBAA_LE)  {
-            qDebug() << "interleaved heif file, bits:" << handle.get_luma_bits_per_pixel();
             int stride;
+            qDebug() << "interleaved heif file, bits:" << luma;
 
             const uint8_t* img = heifimage.get_plane(heif_channel_interleaved, &stride);
+            QVector<float> pixelValues(4);
 
             for (int y=0; y < height; y++) {
                 KisHLineIteratorSP it = layer->paintDevice()->createHLineIteratorNG(0, y, width);
 
                 for (int x=0; x < width; x++) {
 
-                    QVector<float> pixelValues(4);
                     pixelValues.fill(1.0);
 
                     int channels = hasAlpha? 4: 3;
                     for (int ch = 0; ch < channels; ch++) {
                         uint16_t source = reinterpret_cast<const uint16_t*>(img)[y * (stride/2) + (x*channels) + ch];
-                        if (handle.get_luma_bits_per_pixel() == 10) {
+                        if (luma == 10) {
 
                             pixelValues[ch] = float(0x03ff & (source)) / 1023.0;
 
-                        } else if (handle.get_luma_bits_per_pixel() == 12) {
+                        } else if (luma == 12) {
                             pixelValues[ch] = float(0x0fff & (source)) / 4095.0;
 
                         } else {
-                            qDebug() << "unknown bitdepth" << handle.get_luma_bits_per_pixel();
+                            qDebug() << "unknown bitdepth" << luma;
                             pixelValues[ch] = float(source)/65535.0;
                         }
 

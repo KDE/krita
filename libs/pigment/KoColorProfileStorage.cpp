@@ -135,7 +135,7 @@ QList<const KoColorProfile *> KoColorProfileStorage::profilesFor(const KoColorSp
     return profiles;
 }
 
-QList<const KoColorProfile *> KoColorProfileStorage::profilesFor(QVector<float> colorants, int colorantType, int transferType, double error)
+QList<const KoColorProfile *> KoColorProfileStorage::profilesFor(QVector<double> colorants, int colorantType, int transferType, double error)
 {
     QList<const KoColorProfile *>  profiles;
 

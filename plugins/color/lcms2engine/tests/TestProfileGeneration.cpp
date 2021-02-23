@@ -6,7 +6,8 @@
 
 #include "TestProfileGeneration.h"
 
-#include "colorprofiles/LcmsColorProfileContainer.h"
+#include <LcmsColorProfileContainer.h>
+#include <IccColorProfile.h>
 
 #include <QTest>
 #include "sdk/tests/testpigment.h"
@@ -38,18 +39,34 @@ void TestProfileGeneration::testTransferFunctions()
      *  Generate every possible transfer function and check their validity.
      */
 
+    cmsFloat64Number srgb_parameters[5] =
+    { 2.4, 1.0 / 1.055,  0.055 / 1.055, 1.0 / 12.92, 0.04045 };
+    cmsFloat64Number rec709_parameters[5] =
+    { 1.0 / 0.45, 1.0 / 1.099,  0.099 / 1.099,  1.0 / 4.5, 0.081 };
 
-    QVector<double> inputValues = {0};
-    for (int i = 0; i < 50; i++) {
+    cmsFloat64Number SMPTE_240M_parameters[5] =
+    { 1.0 / 0.45, 1.0 / 1.1115,  0.1115 / 1.1115,  1.0 / 4.0, 0.0913 };
+
+    cmsFloat64Number prophoto_parameters[5] =
+    { 1.8, 1.0,  0, 1.0 / 16, (16/512) };
+
+    cmsFloat64Number log_100[5] = {1.0, 10, 2.0, -2.0, 0.0};
+    cmsFloat64Number log_100_sqrt[5] = {1.0, 10, 2.5, -2.5, 0.0};
+
+
+    QVector<cmsFloat32Number> inputValues = {0};
+    QVector<double> inputValuesRaw = {0};
+    for (int i = 0; i < 60; i++) {
         //inputValues.insert(0, -.01 * (i+1) );
         inputValues.append(    .01 * (i+1) );
+        inputValuesRaw.append( .01 * (i+1) );
     }
 
     QVector<double> col;
-    cmsToneCurve *curve  = cmsBuildGamma(NULL, 1.0); //= LcmsColorProfileContainer::transferFunction(KoColorProfile::TRC_ITU_R_BT_709_5);
+    cmsToneCurve *curve  = cmsBuildParametricToneCurve(NULL, 4, rec709_parameters);
 
-    for (double value : inputValues) {
-        double cValue = value;
+    for (cmsFloat32Number value : inputValues) {
+        cmsFloat32Number cValue = value;
 
         /*
          * Rec 709
@@ -77,13 +94,14 @@ void TestProfileGeneration::testTransferFunctions()
             lValue = cValue * 1/4.5;
         }
         */
-        QVERIFY2(cmsEvalToneCurveFloat(curve, cValue) == value, "Values don't match for rec 709");
+        cmsFloat32Number lValue = cmsEvalToneCurveFloat(curve, cValue);
+        QVERIFY2(fabs(lValue - value) < 0.000001, QString("Values don't match for rec 709: %1 %2").arg(value).arg(lValue).toLatin1());
     }
 
-    //curve = LcmsColorProfileContainer::transferFunction( KoColorProfile::TRC_IEC_61966_2_1);
+    curve = cmsBuildParametricToneCurve(NULL, 4, srgb_parameters);
 
-    for (double value : inputValues) {
-        double cValue = value;
+    for (cmsFloat32Number value : inputValues) {
+        cmsFloat32Number cValue = value;
 
         /*
          * sRGB
@@ -110,13 +128,14 @@ void TestProfileGeneration::testTransferFunctions()
         }
         */
 
-        QVERIFY2(cmsEvalToneCurveFloat(curve, cValue) == value, "Values don't match for sRGB");
+        cmsFloat32Number lValue = cmsEvalToneCurveFloat(curve, cValue);
+        QVERIFY2(fabs(lValue - value) < 0.000001, QString("Values don't match for sRGB: %1 %2").arg(value).arg(lValue).toLatin1());
     }
 
-    //curve = LcmsColorProfileContainer::transferFunction(KoColorProfile::TRC_SMPTE_240M);
+    curve = cmsBuildParametricToneCurve(NULL, 4, SMPTE_240M_parameters);
 
-    for (double value : inputValues) {
-        double cValue = value;
+    for (cmsFloat32Number value : inputValues) {
+        cmsFloat32Number cValue = value;
 
         /*
          * SMPTE 240M
@@ -143,10 +162,37 @@ void TestProfileGeneration::testTransferFunctions()
         }
         */
 
-        QVERIFY2(cmsEvalToneCurveFloat(curve, cValue) == value, "Values don't match for SMPTE 240M");
+        cmsFloat32Number lValue = cmsEvalToneCurveFloat(curve, cValue);
+        QVERIFY2(fabs(lValue - value) < 0.000001, QString("Values don't match for SMPTE 240M: %1 %2").arg(value).arg(lValue).toLatin1());
     }
 
-    for (double value : inputValues) {
+    curve = cmsBuildParametricToneCurve(NULL, 4, prophoto_parameters);
+
+    for (cmsFloat32Number value : inputValues) {
+        cmsFloat32Number cValue = value;
+
+        // Prophoto RGB according to css 4 specs.
+
+        if (value > 1.0/512.0){
+            cValue = powf(value, 1/1.8) ;
+        } else if (value < 0.0228 && value > 0.0){
+            cValue = 16.0 * value;
+        }
+
+        /*
+        double lValue;
+        if (cValue > 16.0/512.0){
+            lValue = powf(cValue, 1.8);
+        } else {
+            lValue = cValue * 1/16.0;
+        }
+        */
+
+        cmsFloat32Number lValue = cmsEvalToneCurveFloat(curve, cValue);
+        QVERIFY2(fabs(lValue - value) < 0.000001, QString("Values don't match for ProPhoto: %1 %2").arg(value).arg(lValue).toLatin1());
+    }
+
+    for (double value : inputValuesRaw) {
         double cValue = value;
 
         /* IEC 61966-2-4 ...
@@ -179,11 +225,10 @@ void TestProfileGeneration::testTransferFunctions()
         }
 
         // Also not possible in iccv4.
-
-        QVERIFY(lValue==value);
+        QVERIFY2(fabs(lValue - value) < 0.001, QString("Values don't match for IEC 61966-2-4: %1 %2").arg(value).arg(lValue).toLatin1());
     }
 
-    for (double value : inputValues) {
+    for (double value : inputValuesRaw) {
         double cValue = value;
 
         /*
@@ -222,13 +267,13 @@ void TestProfileGeneration::testTransferFunctions()
         }
         // This is not possible in ICC v4.
 
-        QVERIFY(lValue == value);
+        QVERIFY2(fabs(lValue - value) < 0.001, QString("Values don't match for bt. 1361: %1 %2").arg(value).arg(lValue).toLatin1());
     }
 
-    //curve = LcmsColorProfileContainer::transferFunction(KoColorProfile::TRC_logarithmic_100);
+    curve = cmsBuildParametricToneCurve(NULL, 8, log_100);
 
-    for (double value : inputValues) {
-        double cValue = value;
+    for (cmsFloat32Number value : inputValues) {
+        cmsFloat32Number cValue = value;
 
         /*
          * Logarithmic 100
@@ -250,13 +295,17 @@ void TestProfileGeneration::testTransferFunctions()
             lValue = 0;
         }
         */
-        QVERIFY2(cmsEvalToneCurveFloat(curve, cValue) == value, "Values don't match for log 100");
+        cmsFloat32Number lValue = cmsEvalToneCurveFloat(curve, cValue);
+
+        if (value > cmsFloat32Number(0.01)) {
+            QVERIFY2(fabs(lValue - value) < 0.000001, QString("Values don't match for log 100: %1 %2").arg(value).arg(lValue).toLatin1());
+        }
     }
 
-    //curve = LcmsColorProfileContainer::transferFunction(KoColorProfile::TRC_logarithmic_100_sqrt10);
+    curve = cmsBuildParametricToneCurve(NULL, 8, log_100_sqrt);
 
-    for (double value : inputValues) {
-        double cValue = value;
+    for (cmsFloat32Number value : inputValues) {
+        cmsFloat32Number cValue = value;
 
         /*
          * logarithmic_100_sqrt10
@@ -281,12 +330,15 @@ void TestProfileGeneration::testTransferFunctions()
 
         */
 
-        QVERIFY2(cmsEvalToneCurveFloat(curve, cValue) == value, "Values don't match for log 100");
+        cmsFloat32Number lValue = cmsEvalToneCurveFloat(curve, cValue);
+        if (value > cmsFloat32Number(sqrt(10)/1000)) {
+            QVERIFY2(fabs(lValue - value) < 0.000001, QString("Values don't match for log 100 sqrt: %1 %2").arg(value).arg(lValue).toLatin1());
+        }
 
     }
 
 
-    for (double value : inputValues) {
+    for (double value : inputValuesRaw) {
         double cValue = value;
         /*
          * SMPTE_ST_428_1
@@ -301,11 +353,11 @@ void TestProfileGeneration::testTransferFunctions()
 
         //Not possible in icc v4
 
-        QVERIFY(lValue == value);
+        QVERIFY2(fabs(lValue - value) < 0.000001, QString("Values don't match for SMPTE ST 428 1: %1 %2").arg(value).arg(lValue).toLatin1());
 
     }
 
-    for (double value : inputValues) {
+    for (double value : inputValuesRaw) {
         double cValue = value;
         /*
          * HLG
@@ -325,20 +377,24 @@ void TestProfileGeneration::testTransferFunctions()
         double b = 0.28466892;
         double c = 0.55991073;
 
-        if (value> 1/12) {
+        if (value > 1.0/12.0) {
             cValue = a*log(12*value-b) + c;
         } else {
             cValue = sqrt(3) * powf(value, 0.5);
         }
 
 
-        double lValue = 52.37/48 * powf( cValue , 2.6 );
+        double lValue = (exp(((cValue - c) / a)) + b) / 12;
+        if (cValue <= 0.5) {
+            lValue = powf(cValue, 2) / 3;
+        }
 
         //Not possible in icc v4
-
-        QVERIFY(lValue == value);
+        QVERIFY2(fabs(lValue - value) < 0.000001, QString("Values don't match for HLG: %1 %2").arg(value).arg(lValue).toLatin1());
 
     }
+
+    cmsFreeToneCurve(curve);
 
 }
 

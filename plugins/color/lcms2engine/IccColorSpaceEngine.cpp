@@ -196,6 +196,31 @@ const KoColorProfile* IccColorSpaceEngine::addProfile(const QByteArray &data)
     return profile;
 }
 
+const KoColorProfile *IccColorSpaceEngine::generateAndAddProfile(QVector<double> colorants, int colorPrimaries, int transferFunction)
+{
+    KoColorSpaceRegistry *registry = KoColorSpaceRegistry::instance();
+
+    const KoColorProfile *profile = registry->profileFor(colorants, colorPrimaries, transferFunction);
+
+    if (profile) {
+        return profile;
+    }
+
+    profile = new IccColorProfile(colorants, KoColorProfile::colorPrimaries(colorPrimaries), KoColorProfile::transferCharacteristics(transferFunction));
+    Q_CHECK_PTR(profile);
+
+    if (profile->valid()) {
+        dbgPigment << "Valid profile : " << profile->fileName() << profile->name();
+        registry->addProfile(profile);
+    } else {
+        dbgPigment << "Invalid profile : " << profile->fileName() << profile->name();
+        delete profile;
+        profile = 0;
+    }
+
+    return profile;
+}
+
 void IccColorSpaceEngine::removeProfile(const QString &filename)
 {
     KoColorSpaceRegistry *registry = KoColorSpaceRegistry::instance();

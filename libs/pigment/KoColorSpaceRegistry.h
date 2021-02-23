@@ -333,6 +333,8 @@ public:
      */
     const KoColorProfile *p709SRGBProfile() const;
 
+    const KoColorProfile *profileFor(QVector<double> colorants, int colorPrimaries, int transferFunction) const;
+
     /**
      * @return the list of available color models
      */

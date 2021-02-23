@@ -34,6 +34,7 @@ public:
     const QString& name() const;
     virtual const KoColorProfile* addProfile(const QString &filename) = 0;
     virtual const KoColorProfile* addProfile(const QByteArray &data) = 0;
+    virtual const KoColorProfile* generateAndAddProfile(QVector<double> colorants, int colorPrimaries, int transferFunction) = 0;
     virtual void removeProfile(const QString &filename) = 0;
 
     /**

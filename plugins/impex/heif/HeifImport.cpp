@@ -15,6 +15,7 @@
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
+#include <KoColorSpaceEngine.h>
 #include <KoColorProfile.h>
 
 #include <kis_transaction.h>
@@ -123,6 +124,7 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
         QString profileName = KoColorSpaceRegistry::instance()->defaultProfileForColorSpace(colorSpaceId);
 
         qDebug() << "profile" << profileType;
+
         struct heif_error err;
         if (profileType == heif_color_profile_type_prof || profileType == heif_color_profile_type_rICC) {
             // rICC are 'restricted' icc profiles, and are matrix shaper profiles
@@ -155,13 +157,23 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
             if (err.code || !nclx) {
                 qDebug() << "nclx profile loading failed";
             } else {
-                if (nclx->color_primaries == heif_color_primaries_ITU_R_BT_2020_2_and_2100_0 &&
-                        nclx->transfer_characteristics == heif_transfer_characteristic_ITU_R_BT_2100_0_PQ) {
-                    profileName = KoColorSpaceRegistry::instance()->p2020PQProfile()->name();
+                KoColorSpaceEngine *engine = KoColorSpaceEngineRegistry::instance()->get("icc");
+                if (engine) {
+                    QVector<double>colorants = {nclx->color_primary_white_x, nclx->color_primary_white_y,
+                                               nclx->color_primary_red_x, nclx->color_primary_red_y,
+                                               nclx->color_primary_green_x, nclx->color_primary_green_y,
+                                               nclx->color_primary_blue_x, nclx->color_primary_blue_y};
+                    const KoColorProfile *profile = engine->generateAndAddProfile(colorants, nclx->color_primaries, nclx->transfer_characteristics);
+                    profileName = profile->name();
+                } else {
+                    if (nclx->color_primaries == heif_color_primaries_ITU_R_BT_2020_2_and_2100_0 &&
+                            nclx->transfer_characteristics == heif_transfer_characteristic_ITU_R_BT_2100_0_PQ) {
+                        profileName = KoColorSpaceRegistry::instance()->p2020PQProfile()->name();
+                    }
                 }
 
                 heif_nclx_color_profile_free(nclx);
-                qDebug() << "nclx profile found";
+                qDebug() << "nclx profile found" << profileName;
             }
         } else {
             qDebug() << "no profile found";

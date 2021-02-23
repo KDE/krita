@@ -578,8 +578,8 @@ cmsToneCurve *LcmsColorProfileContainer::transferFunction(KoColorProfile::transf
     cmsFloat64Number prophoto_parameters[5] =
     { 1.8, 1.0,  0, 1.0 / 16, (16/512) };
 
-    cmsFloat64Number log_100[6] = {0.0, 0.0, 10, 2.0, -2.0, 0.0};
-    cmsFloat64Number log_100_sqrt[6] = {0.0, 0.0, 10, 2.5, -2.5, 0.0};
+    cmsFloat64Number log_100[5] = {1.0, 10, 2.0, -2.0, 0.0};
+    cmsFloat64Number log_100_sqrt[5] = {1.0, 10, 2.5, -2.5, 0.0};
 
     switch (transferFunction) {
     case KoColorProfile::TRC_ITU_R_BT_709_5:

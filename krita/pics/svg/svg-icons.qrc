@@ -178,5 +178,6 @@
         <file>light_flip_angle_h.svg</file>
         <file>light_flip_angle_v.svg</file>
         <file>light_flip_angle_hv.svg</file>
+        <file>diagonal-stripe.svg</file>
     </qresource>
 </RCC>

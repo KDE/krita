@@ -24,8 +24,6 @@
         <file>pics/selection_replace.png</file>
         <file>pics/selection_subtract.png</file>
         <file>pics/sidebaricon.png</file>
-        <file>pics/svg/light_diagonal-stripe.svg</file>
-        <file>pics/svg/light_diagonal-stripe.png</file>
         <file>pics/support-krita.svg</file>
     </qresource>
 </RCC>

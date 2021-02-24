@@ -17,6 +17,7 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpaceEngine.h>
 #include <KoColorProfile.h>
+#include <KoColorTransferFunctions.h>
 
 #include <kis_transaction.h>
 #include <kis_paint_device.h>
@@ -128,6 +129,8 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
 
         qDebug() << "profile" << profileType;
 
+        linearizePolicy linearizePolicy = keepTheSame;
+
         struct heif_error err;
         if (profileType == heif_color_profile_type_prof || profileType == heif_color_profile_type_rICC) {
             // rICC are 'restricted' icc profiles, and are matrix shaper profiles
@@ -160,14 +163,37 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
             if (err.code || !nclx) {
                 qDebug() << "nclx profile loading failed";
             } else {
+                if (nclx->transfer_characteristics == heif_transfer_characteristic_ITU_R_BT_2100_0_PQ) {
+                    qDebug() << "linearizing from PQ";
+                    linearizePolicy = linearFromPQ;
+                }
+                if (nclx->transfer_characteristics == heif_transfer_characteristic_ITU_R_BT_2100_0_HLG) {
+                    qDebug() << "linearizing from HLG";
+                    linearizePolicy = linearFromHLG;
+                }
+                if (nclx->transfer_characteristics == heif_transfer_characteristic_SMPTE_ST_428_1) {
+                    qDebug() << "linearizing from SMPTE 428";
+                    linearizePolicy = linearFromSMPTE428;
+                }
                 KoColorSpaceEngine *engine = KoColorSpaceEngineRegistry::instance()->get("icc");
                 if (engine) {
                     QVector<double>colorants = {nclx->color_primary_white_x, nclx->color_primary_white_y,
                                                nclx->color_primary_red_x, nclx->color_primary_red_y,
                                                nclx->color_primary_green_x, nclx->color_primary_green_y,
                                                nclx->color_primary_blue_x, nclx->color_primary_blue_y};
-                    const KoColorProfile *profile = engine->generateAndAddProfile(colorants, nclx->color_primaries, nclx->transfer_characteristics);
-                    profileName = profile->name();
+                    if (linearizePolicy == keepTheSame) {
+                        const KoColorProfile *profile = engine->generateAndAddProfile(colorants,
+                                                                                      nclx->color_primaries,
+                                                                                      nclx->transfer_characteristics);
+                        profileName = profile->name();
+                    } else {
+                        const KoColorProfile *profile = engine->generateAndAddProfile(colorants,
+                                                                                      nclx->color_primaries,
+                                                                                      KoColorProfile::TRC_linear);
+                        profileName = profile->name();
+                        colorDepth = Float32BitsColorDepthID;
+                    }
+
                 } else {
                     if (nclx->color_primaries == heif_color_primaries_ITU_R_BT_2020_2_and_2100_0 &&
                             nclx->transfer_characteristics == heif_transfer_characteristic_ITU_R_BT_2100_0_PQ) {
@@ -261,24 +287,27 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
 
                     pixelValues.fill(1.0);
 
+
                     int channels = hasAlpha? 4: 3;
                     for (int ch = 0; ch < channels; ch++) {
                         uint16_t source = reinterpret_cast<const uint16_t*>(img)[y * (stride/2) + (x*channels) + ch];
                         if (luma == 10) {
 
-                            pixelValues[ch] = float(0x03ff & (source)) / 1023.0;
+                            pixelValues[ch] = linearizeValueAsNeeded(float(0x03ff & (source)) / 1023.0, linearizePolicy);
 
                         } else if (luma == 12) {
-                            pixelValues[ch] = float(0x0fff & (source)) / 4095.0;
+                            pixelValues[ch] = linearizeValueAsNeeded(float(0x0fff & (source)) / 4095.0, linearizePolicy);
 
                         } else {
                             qDebug() << "unknown bitdepth" << luma;
-                            pixelValues[ch] = float(source)/65535.0;
+                            pixelValues[ch] = linearizeValueAsNeeded(float(source)/65535.0, linearizePolicy);
                         }
 
 
                     }
-                    qSwap(pixelValues.begin()[0], pixelValues.begin()[2]);
+                    if (linearizePolicy == keepTheSame) {
+                        qSwap(pixelValues.begin()[0], pixelValues.begin()[2]);
+                    }
                     colorSpace->fromNormalisedChannelsValue(it->rawData(), pixelValues);
 
                     it->nextPixel();
@@ -342,6 +371,18 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
     catch (heif::Error err) {
         return setHeifError(document, err);
     }
+}
+
+float HeifImport::linearizeValueAsNeeded(float value, HeifImport::linearizePolicy policy)
+{
+    if ( policy == linearFromPQ) {
+        return removeSmpte2048Curve(value);
+    } else if ( policy == linearFromHLG) {
+        return removeHLGCurve(value);
+    } else if ( policy == linearFromSMPTE428) {
+        return removeSMPTE_ST_428Curve(value);
+    }
+    return value;
 }
 
 #include <HeifImport.moc>

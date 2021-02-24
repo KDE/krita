@@ -18,7 +18,18 @@ public:
     HeifImport(QObject *parent, const QVariantList &);
     ~HeifImport() override;
     bool supportsIO() const override { return true; }
+
+    // Not all embeded nclx color space definitions can be converted to icc, so we keep an enum to load those.
+    enum linearizePolicy {
+        keepTheSame,
+        linearFromPQ,
+        linearFromHLG,
+        linearFromSMPTE428
+    };
+
     KisImportExportErrorCode convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0) override;
+private:
+    float linearizeValueAsNeeded(float value, linearizePolicy policy = keepTheSame);
 };
 
 #endif

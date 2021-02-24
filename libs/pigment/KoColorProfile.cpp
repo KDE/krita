@@ -74,7 +74,7 @@ void KoColorProfile::setFileName(const QString &f)
     d->fileName = f;
 }
 
-KoColorProfile::colorPrimaries KoColorProfile::getColorPrimaries()
+KoColorProfile::colorPrimaries KoColorProfile::getColorPrimaries() const
 {
     if (d->primaries == -1) {
         colorPrimaries primaries = Primaries_Unspecified;
@@ -248,7 +248,7 @@ void KoColorProfile::colorantsForType(colorPrimaries primaries, QVector<double> 
     }
 }
 
-KoColorProfile::transferCharacteristics KoColorProfile::getTransferCharacteristics()
+KoColorProfile::transferCharacteristics KoColorProfile::getTransferCharacteristics() const
 {
     return d->characteristics;
 }

@@ -216,7 +216,7 @@ public:
      * @brief getColorPrimaries
      * @return colorprimaries, defaults to 'unspecified' if no match is possible.
      */
-    virtual colorPrimaries getColorPrimaries();
+    virtual colorPrimaries getColorPrimaries() const;
 
     /**
      * @brief getColorPrimariesName
@@ -272,7 +272,7 @@ public:
      * This function should be subclassed at some point so we can get the value from the lcms profile.
      * @return transferfunction number.
      */
-    virtual transferCharacteristics getTransferCharacteristics();
+    virtual transferCharacteristics getTransferCharacteristics() const;
 
 
     /**
@@ -302,7 +302,8 @@ protected:
 
     /**
      * @brief setCharacteristics
-     * ideally, we'd read this from the icc profile curve, but that can be tricky.
+     * ideally, we'd read this from the icc profile curve, but that can be tricky, instead
+     * we'll set it on profile creation.
      * @param curve
      */
     void setCharacteristics(colorPrimaries primaries, transferCharacteristics curve);

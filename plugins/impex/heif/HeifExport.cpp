@@ -20,6 +20,7 @@
 #include <KoColorSpaceConstants.h>
 #include <KoColorModelStandardIds.h>
 #include <KoColorProfile.h>
+#include <KoColorTransferFunctions.h>
 
 #include <KisImportExportManager.h>
 #include <KisExportCheckRegistry.h>
@@ -64,6 +65,7 @@ KisPropertiesConfigurationSP HeifExport::defaultConfiguration(const QByteArray &
     cfg->setProperty("quality", 100);
     cfg->setProperty("lossless", true);
     cfg->setProperty("chroma", "444");
+    cfg->setProperty("floatingPointConversionOption", "KeepSame");
     return cfg;
 }
 
@@ -111,17 +113,49 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
 
 
     // Convert to 8 bits rgba on saving if not rgba+8bit, rgba+16bit or graya+8bit.
+    qDebug() << cs->colorModelId().id() << cs->colorDepthId().id();
 
-    if ( (cs->colorModelId() != RGBAColorModelID || cs->colorModelId() != GrayAColorModelID)
-         || (cs->colorDepthId() != Integer8BitsColorDepthID || cs->colorDepthId() != Integer16BitsColorDepthID)) {
+    if ( (cs->colorModelId() != RGBAColorModelID && cs->colorModelId() != GrayAColorModelID)) {
         const KoColorSpace *sRgb = KoColorSpaceRegistry::instance()->rgb8();
-        image->convertImageColorSpace(sRgb, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
+        image->convertImageColorSpace(sRgb,
+                                      KoColorConversionTransformation::internalRenderingIntent(),
+                                      KoColorConversionTransformation::internalConversionFlags());
     }
 
-
+    // Should remove this later.
     if (cs->colorModelId() == GrayAColorModelID && cs->colorDepthId() != Integer8BitsColorDepthID) {
         const KoColorSpace *gray = KoColorSpaceRegistry::instance()->graya8(cs->profile()->name());
-        image->convertImageColorSpace(gray, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
+        image->convertImageColorSpace(gray,
+                                      KoColorConversionTransformation::internalRenderingIntent(),
+                                      KoColorConversionTransformation::internalConversionFlags());
+    }
+
+    conversionPolicy conversionPolicy = keepTheSame;
+    bool convertToRec2020 = false;
+    QString conversionOption = (configuration->getString("floatingPointConversionOption", "Rec2100PQ"));
+
+    if (conversionOption == "Rec2100PQ") {
+        convertToRec2020 = true;
+        conversionPolicy = applyPQ;
+    } else if (conversionOption == "Rec2100HLG") {
+        convertToRec2020 = true;
+        conversionPolicy = applyHLG;
+    } else if (conversionOption == "ApplyPQ") {
+        conversionPolicy = applyPQ;
+    } else if (conversionOption == "ApplyHLG") {
+        conversionPolicy = applyHLG;
+    }  else if (conversionOption == "ApplySMPTE248") {
+        conversionPolicy = applySMPTE428;
+    }
+
+    if (cs->hasHighDynamicRange() && convertToRec2020) {
+        const KoColorProfile *linear = KoColorSpaceRegistry::instance()->profileFor(QVector<double>(),
+                                                                                   KoColorProfile::Primaries_ITU_R_BT_2020_2_and_2100_0,
+                                                                                   KoColorProfile::TRC_linear);
+        const KoColorSpace *linearRec2020 = KoColorSpaceRegistry::instance()->colorSpace("RGBA", "F32", linear);
+        image->convertImageColorSpace(linearRec2020,
+                                      KoColorConversionTransformation::internalRenderingIntent(),
+                                      KoColorConversionTransformation::internalConversionFlags());
     }
 
     image->waitForDone();
@@ -200,7 +234,7 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
                         it->nextPixel();
                     }
                 }
-            } else {
+            } else if (cs->colorDepthId() == Integer16BitsColorDepthID) {
                 qDebug() << "saving as 12bit rgba";
                 img.create(width,height, heif_colorspace_RGB,
                            hasAlpha? heif_chroma_interleaved_RRGGBBAA_BE: heif_chroma_interleaved_RRGGBB_BE);
@@ -228,6 +262,44 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
                         int channels = hasAlpha? 4: 3;
                         for (int ch = 0; ch < channels; ch++) {
                             uint16_t v = qBound(0, int((float(pixelValues[ch]) / 65535) * 4095), 4095);
+                            ptr[2 * (x * channels) + y * stride + 0 + (ch*2)] = (uint8_t) (v >> 8);
+                            ptr[2 * (x * channels) + y * stride + 1 + (ch*2)] = (uint8_t) (v & 0xFF);
+                        }
+
+                        it->nextPixel();
+                    }
+                }
+            } else {
+                qDebug() << "saving as 12bit rgba";
+                img.create(width,height, heif_colorspace_RGB,
+                           hasAlpha? heif_chroma_interleaved_RRGGBBAA_BE: heif_chroma_interleaved_RRGGBB_BE);
+                img.add_plane(heif_channel_interleaved, width, height, 12);
+
+                uint8_t* ptr {0};
+                int stride;
+
+                ptr = img.get_plane(heif_channel_interleaved, &stride);
+
+
+                KisPaintDeviceSP pd = image->projection();
+
+                for (int y=0; y < height; y++) {
+                    KisHLineIteratorSP it = pd->createHLineIteratorNG(0, y, width);
+
+                    for (int x=0; x < width; x++) {
+
+                        QVector<float> pixelValues(4);
+                        cs->normalisedChannelsValue(it->rawData(), pixelValues);
+                        QVector<qreal> pixelValuesLinear = {pixelValues[0], pixelValues[1], pixelValues[2], pixelValues[3]};
+                        if (!convertToRec2020 && !cs->profile()->isLinear()) {
+                            QVector<qreal> pixelValuesLinear = {pixelValues[0], pixelValues[1], pixelValues[2], pixelValues[3]};
+                            cs->profile()->linearizeFloatValue(pixelValuesLinear);
+                            pixelValues = {float(pixelValuesLinear[0]), float(pixelValuesLinear[1]), float(pixelValuesLinear[2]), float(pixelValuesLinear[3])};
+                        }
+
+                        int channels = hasAlpha? 4: 3;
+                        for (int ch = 0; ch < channels; ch++) {
+                            uint16_t v = qBound(0, int(applyCurveAsNeeded(pixelValues[ch], conversionPolicy) * 4095), 4095);
                             ptr[2 * (x * channels) + y * stride + 0 + (ch*2)] = (uint8_t) (v >> 8);
                             ptr[2 * (x * channels) + y * stride + 1 + (ch*2)] = (uint8_t) (v & 0xFF);
                         }
@@ -274,9 +346,36 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
 
 
         // --- save the color profile.
-        QByteArray rawProfileBA = image->colorSpace()->profile()->rawData();
-        std::vector<uint8_t> rawProfile(rawProfileBA.begin(), rawProfileBA.end());
-        img.set_raw_color_profile(heif_color_profile_type_prof, rawProfile);
+        if (conversionPolicy == keepTheSame) {
+            QByteArray rawProfileBA = image->colorSpace()->profile()->rawData();
+            std::vector<uint8_t> rawProfile(rawProfileBA.begin(), rawProfileBA.end());
+            img.set_raw_color_profile(heif_color_profile_type_prof, rawProfile);
+        } else {
+           heif::ColorProfile_nclx nclxDescription;
+           nclxDescription.set_full_range_flag(true);
+           nclxDescription.set_matrix_coefficients(heif_matrix_coefficients_RGB_GBR);
+           if (convertToRec2020) {
+               nclxDescription.set_color_primaties(heif_color_primaries_ITU_R_BT_2020_2_and_2100_0);
+           } else {
+               KoColorProfile::colorPrimaries primaries = image->colorSpace()->profile()->getColorPrimaries();
+               qDebug() << "setting primaries" << KoColorProfile::getColorPrimariesName(primaries);
+               if (primaries >= 256) {
+                   primaries = KoColorProfile::Primaries_Unspecified;
+               }
+               nclxDescription.set_color_primaties(heif_color_primaries(primaries));
+           }
+
+           if (conversionPolicy == applyPQ) {
+               nclxDescription.set_transfer_characteristics(heif_transfer_characteristic_ITU_R_BT_2100_0_PQ);
+           } else if (conversionPolicy == applyHLG) {
+               nclxDescription.set_transfer_characteristics(heif_transfer_characteristic_ITU_R_BT_2100_0_HLG);
+           } else if (conversionPolicy == applySMPTE428) {
+               nclxDescription.set_transfer_characteristics(heif_transfer_characteristic_SMPTE_ST_428_1);
+           }
+
+           img.set_nclx_color_profile(nclxDescription);
+            
+        }
 
 
         // --- encode and write image
@@ -351,9 +450,25 @@ void HeifExport::initializeCapabilities()
     addSupportedColorModels(supportedColorModels, "HEIF");
 }
 
+float HeifExport::applyCurveAsNeeded(float value, HeifExport::conversionPolicy policy)
+{
+    if ( policy == applyPQ) {
+        return applySmpte2048Curve(value);
+    } else if ( policy == applyHLG) {
+        return applyHLGCurve(value);
+    } else if ( policy == applySMPTE428) {
+        return applySMPTE_ST_428Curve(value);
+    }
+    return value;
+}
+
 
 void KisWdgOptionsHeif::setConfiguration(const KisPropertiesConfigurationSP cfg)
 {
+    // the export manager should have prepared some info for us!
+    KIS_SAFE_ASSERT_RECOVER_NOOP(cfg->hasProperty(KisImportExportFilter::ImageContainsTransparencyTag));
+    KIS_SAFE_ASSERT_RECOVER_NOOP(cfg->hasProperty(KisImportExportFilter::ColorModelIDTag));
+
     QStringList chromaOptions;
     chromaOptions << "420" << "422" << "444";
     cmbChroma->addItems(chromaOptions);
@@ -364,6 +479,45 @@ void KisWdgOptionsHeif::setConfiguration(const KisPropertiesConfigurationSP cfg)
     sliderQuality->setValue(qreal(cfg->getInt("quality", 50)));
     cmbChroma->setCurrentIndex(chromaOptions.indexOf(cfg->getString("chroma", "444")));
     m_hasAlpha = cfg->getBool(KisImportExportFilter::ImageContainsTransparencyTag, false);
+
+    QStringList conversionOptionsList = { i18nc("Colorspace name", "Rec 2100 PQ"), i18nc("Colorspace name", "Rec 2100 HLG")};
+    QStringList toolTipList = {i18nc("@tooltip", "The image will be converted to Rec 2020 linear first, and then encoded with a perceptual quantizer curve"
+                               " (also known as SMPTE 2048 curve). Recommended for HDR images where the absolute brightness is important."),
+                              i18nc("@tooltip", "The image will be converted to Rec 2020 linear first, and then encoded with a Hybrid Log Gamma curve."
+                               " Recommended for HDR images where absolute brightness is not the primary concern.")};
+    QStringList conversionOptionName = {"Rec2100PQ", "Rec2100HLG"};
+    QString colorDepth = cfg->getString(KisImportExportFilter::ColorDepthIDTag);
+    conversionSettings->setVisible((colorDepth == Float16BitsColorDepthID.id()
+                                    || colorDepth == Float32BitsColorDepthID.id()
+                                    || colorDepth == Float64BitsColorDepthID.id()));
+    if (cfg->getString(KisImportExportFilter::ColorModelIDTag) == "RGBA") {
+        
+        conversionOptionsList << i18nc("Colorspace option plus transfer function name", "Keep colorants, encode PQ");
+        toolTipList << i18nc("@tooltip", "The image will be linearized first, and then encoded with a perceptual quantizer curve"
+                                         " (also known as SMPTE 2048 curve). Recommended for images where the absolute brightness is important.");
+        conversionOptionName << "ApplyPQ";
+        
+        conversionOptionsList << i18nc("Colorspace option plus transfer function name", "Keep colorants, encode HLG");
+        toolTipList << i18nc("@tooltip", "The image will be linearized first, and then encoded with a Hybrid Log Gamma curve."
+                                         " Recommended for images where the absolute brightness is not the primary concern.");
+        conversionOptionName << "ApplyHLG";
+        
+        conversionOptionsList << i18nc("Colorspace option plus transfer function name", "Keep colorants, encode SMPTE ST 428");
+        toolTipList << i18nc("@tooltip", "The image will be linearized first, and then encoded with SMPTE ST 428"
+                                         " Krita always opens images like these as linear floating point, this option is there to reverse that");
+        conversionOptionName << "ApplySMPTE248";
+        
+        conversionOptionsList << i18nc("Colorspace option", "No changes, clip");
+        toolTipList << i18nc("@tooltip", "The image will be converted plainly to 12bit integer, and values that are out of bounds are clipped, the icc profile will be embedded.");
+        conversionOptionName << "KeepSame";
+    }
+    cmbConversionPolicy->addItems(conversionOptionsList);
+    for (int i=0; i< toolTipList.size(); i++) {
+        cmbConversionPolicy->setItemData(i, toolTipList.at(i), Qt::ToolTipRole);
+        cmbConversionPolicy->setItemData(i, conversionOptionName.at(i), Qt::UserRole+1);
+    }
+    QString optionName = cfg->getString("floatingPointConversionOption", "Rec2100PQ");
+    cmbConversionPolicy->setCurrentIndex(conversionOptionName.indexOf(optionName));
 }
 
 KisPropertiesConfigurationSP KisWdgOptionsHeif::configuration() const
@@ -372,6 +526,7 @@ KisPropertiesConfigurationSP KisWdgOptionsHeif::configuration() const
     cfg->setProperty("lossless", chkLossless->isChecked());
     cfg->setProperty("quality", int(sliderQuality->value()));
     cfg->setProperty("chroma", cmbChroma->currentText());
+    cfg->setProperty("floatingPointConversionOption", cmbConversionPolicy->currentData(Qt::UserRole+1).toString());
     cfg->setProperty(KisImportExportFilter::ImageContainsTransparencyTag, m_hasAlpha);
     return cfg;
 }

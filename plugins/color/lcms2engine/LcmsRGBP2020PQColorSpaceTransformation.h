@@ -12,6 +12,7 @@
 #include "KoColorSpaceMaths.h"
 #include "KoColorModelStandardIdsUtils.h"
 #include "KoColorConversionTransformationFactory.h"
+#include "KoColorTransferFunctions.h"
 
 #include <colorspaces/rgb_u8/RgbU8ColorSpace.h>
 #include <colorspaces/rgb_u16/RgbU16ColorSpace.h>
@@ -23,30 +24,6 @@
 
 namespace
 {
-
-ALWAYS_INLINE float applySmpte2048Curve(float x) {
-    const float m1 = 2610.0 / 4096.0 / 4.0;
-    const float m2 = 2523.0 / 4096.0 * 128.0;
-    const float a1 = 3424.0 / 4096.0;
-    const float c2 = 2413.0 / 4096.0 * 32.0;
-    const float c3 = 2392.0 / 4096.0 * 32.0;
-    const float a4 = 1.0;
-    const float x_p = powf(0.008 * std::max(0.0f, x), m1);
-    const float res = powf((a1 + c2 * x_p) / (a4 + c3 * x_p), m2);
-    return res;
-}
-
-ALWAYS_INLINE float removeSmpte2048Curve(float x) {
-    const float m1_r = 4096.0 * 4.0 / 2610.0;
-    const float m2_r = 4096.0 / 2523.0 / 128.0;
-    const float a1 = 3424.0 / 4096.0;
-    const float c2 = 2413.0 / 4096.0 * 32.0;
-    const float c3 = 2392.0 / 4096.0 * 32.0;
-
-    const float x_p = powf(x, m2_r);
-    const float res = powf(qMax(0.0f, x_p - a1) / (c2 - c3 * x_p), m1_r);
-    return res * 125.0f;
-}
 
 template <class T>
 struct DstTraitsForSource {

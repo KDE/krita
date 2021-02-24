@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <author>
     SPDX-FileCopyrightText: none
@@ -11,7 +11,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>243</height>
+    <height>382</height>
    </rect>
   </property>
   <layout class="QFormLayout" name="formLayout_2">
@@ -40,14 +40,14 @@
       <string>Lossy Advanced Settings</string>
      </property>
      <layout class="QFormLayout" name="formLayout">
-      <item column="0" row="0">
+      <item row="0" column="0">
        <widget class="QLabel" name="qualityLabel">
         <property name="text">
          <string>Quality:</string>
         </property>
        </widget>
       </item>
-      <item column="1" row="0">
+      <item row="0" column="1">
        <widget class="KisDoubleSliderSpinBox" name="sliderQuality" native="true">
         <property name="sizePolicy">
          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
@@ -70,7 +70,7 @@
    <item row="2" column="1">
     <widget class="QComboBox" name="cmbChroma"/>
    </item>
-   <item row="5" column="0">
+   <item row="6" column="0">
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -82,6 +82,35 @@
       </size>
      </property>
     </spacer>
+   </item>
+   <item row="3" column="0" colspan="2">
+    <widget class="QGroupBox" name="conversionSettings">
+     <property name="title">
+      <string>Conversion settings</string>
+     </property>
+     <layout class="QFormLayout" name="formLayout_3">
+      <item row="1" column="0">
+       <widget class="QLabel" name="spaceLabel">
+        <property name="text">
+         <string>Space:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QComboBox" name="cmbConversionPolicy"/>
+      </item>
+      <item row="0" column="0" colspan="2">
+       <widget class="QLabel" name="explanationLabel">
+        <property name="text">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;To convert the current image to 12 bit accurately it will need to be converted. Rec 2100 PQ or Rec 2100 HLG is expected for HDR images.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+        <property name="wordWrap">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
    </item>
   </layout>
  </widget>

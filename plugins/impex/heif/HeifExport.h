@@ -49,10 +49,19 @@ public:
     // This should return true if the library can work with a QIODevice, and doesn't want to open the file by itself
     bool supportsIO() const override { return true; }
 
+    enum conversionPolicy {
+        keepTheSame,
+        applyPQ,
+        applyHLG,
+        applySMPTE428
+    };
+
     KisImportExportErrorCode convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0) override;
     KisPropertiesConfigurationSP defaultConfiguration(const QByteArray& from = "", const QByteArray& to = "") const override;
     KisConfigWidget *createConfigurationWidget(QWidget *parent, const QByteArray& from = "", const QByteArray& to = "") const override;
     void initializeCapabilities() override;
+
+    float applyCurveAsNeeded(float value, conversionPolicy policy);
 
 };
 

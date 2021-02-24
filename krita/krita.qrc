@@ -11,22 +11,11 @@
     </qresource>
     <qresource prefix="/">
         <file>pics/dark_close-tab.svg</file>
-        <file>pics/dark_trim-to-image.png</file>
-        <file>pics/delete.png</file>
         <file>pics/dirty-preset.svg</file>
-        <file>pics/height.png</file>
-        <file>pics/height_icon.png</file>
-        <file>pics/hi16-add_dialog.png</file>
         <file>pics/hi16-palette_library.png</file>
-        <file>pics/icon-kritasketch-256.png</file>
         <file>pics/light_close-tab.svg</file>
-        <file>pics/light_trim-to-image.png</file>
-        <file>pics/linked.png</file>
         <file>pics/mirrorAxis-HorizontalMove.png</file>
         <file>pics/mirrorAxis-VerticalMove.png</file>
-        <file>pics/offset_horizontal.png</file>
-        <file>pics/offset_vertical.png</file>
-        <file>pics/ratio_icon.png</file>
         <file>pics/select_pixel.png</file>
         <file>pics/select_shape.png</file>
         <file>pics/selection_add.png</file>
@@ -34,16 +23,7 @@
         <file>pics/selection_intersect.png</file>
         <file>pics/selection_replace.png</file>
         <file>pics/selection_subtract.png</file>
-        <file>pics/shade.png</file>
-        <file>pics/shear_horizontal.png</file>
-        <file>pics/shear_vertical.png</file>
         <file>pics/sidebaricon.png</file>
-        <file>pics/tablet.png</file>
-        <file>pics/tool_screenshot.png</file>
-        <file>pics/unlinked.png</file>
-        <file>pics/width.png</file>
-        <file>pics/width_icon.png</file>
-        <file>pics/workspace-chooser.png</file>
         <file>pics/svg/light_diagonal-stripe.svg</file>
         <file>pics/svg/light_diagonal-stripe.png</file>
         <file>pics/support-krita.svg</file>

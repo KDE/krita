@@ -29,6 +29,13 @@
         <file>dark_selection-mode_ants.svg</file>
         <file>dark_selection-mode_invisible.svg</file>
         <file>dark_selection-mode_mask.svg</file>
+        <file>dark_select-pixel.svg</file>
+        <file>dark_select-shape.svg</file>
+        <file>dark_selection_add.svg</file>
+        <file>dark_selection_symmetric_difference.svg</file>
+        <file>dark_selection_intersect.svg</file>
+        <file>dark_selection_replace.svg</file>
+        <file>dark_selection_subtract.svg</file>
         <file>dark_transparency-disabled.svg</file>
         <file>dark_transparency-enabled.svg</file>
         <file>dark_trim-to-image.svg</file>
@@ -58,6 +65,13 @@
         <file>light_selection-mode_ants.svg</file>
         <file>light_selection-mode_invisible.svg</file>
         <file>light_selection-mode_mask.svg</file>
+        <file>light_select-pixel.svg</file>
+        <file>light_select-shape.svg</file>
+        <file>light_selection_add.svg</file>
+        <file>light_selection_symmetric_difference.svg</file>
+        <file>light_selection_intersect.svg</file>
+        <file>light_selection_replace.svg</file>
+        <file>light_selection_subtract.svg</file>
         <file>light_transparency-disabled.svg</file>
         <file>light_transparency-enabled.svg</file>
         <file>light_trim-to-image.svg</file>

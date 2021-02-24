@@ -22,7 +22,7 @@
         <file>dark_lastframe.svg</file>
         <file>dark_prevkeyframe.svg</file>
         <file>dark_firstframe.svg</file>
-        <file>dark_pallete_librarysvg.svg</file>
+        <file>dark_palette-library.svg</file>
         <file>dark_passthrough-disabled.svg</file>
         <file>dark_passthrough-enabled.svg</file>
         <file>dark_prevframe.svg</file>
@@ -47,7 +47,7 @@
         <file>light_local-selection-active.svg</file>
         <file>light_local-selection-inactive.svg</file>
         <file>light_nextframe.svg</file>
-        <file>light_pallete_library.svg</file>
+        <file>light_palette-library.svg</file>
         <file>light_passthrough-disabled.svg</file>
         <file>light_passthrough-enabled.svg</file>
         <file>light_prevframe.svg</file>

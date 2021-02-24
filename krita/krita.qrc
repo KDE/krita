@@ -12,7 +12,6 @@
     <qresource prefix="/">
         <file>pics/dark_close-tab.svg</file>
         <file>pics/dirty-preset.svg</file>
-        <file>pics/hi16-palette_library.png</file>
         <file>pics/light_close-tab.svg</file>
         <file>pics/mirrorAxis-HorizontalMove.png</file>
         <file>pics/mirrorAxis-VerticalMove.png</file>

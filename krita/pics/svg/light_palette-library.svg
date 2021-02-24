@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   version="1.1"
+   width="16"
+   height="16"
+   id="svg6190">
+  <metadata
+     id="metadata6196">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+        <dc:date>2021</dc:date>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Timothée Giet</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs6194" />
+  <rect
+     style="opacity:1;vector-effect:none;fill:#cacaca;fill-opacity:1;stroke:none;stroke-width:3.20000005;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:3.20000005;stroke-opacity:1"
+     id="rect1290"
+     width="16"
+     height="16"
+     x="0"
+     y="0" />
+  <rect
+     style="display:inline;fill:#0e5cba;fill-opacity:1;stroke:none;stroke-width:1.15467715"
+     id="rect6829-4"
+     width="4.0000005"
+     height="4.0000005"
+     x="1"
+     y="1" />
+  <rect
+     y="1"
+     x="6"
+     height="4.0000005"
+     width="4.0000005"
+     id="rect6831-7"
+     style="display:inline;fill:#0d95bb;fill-opacity:1;stroke:none;stroke-width:1.15467715" />
+  <rect
+     style="display:inline;fill:#0dbba8;fill-opacity:1;stroke:none;stroke-width:1.15467715"
+     id="rect6833-1"
+     width="4.0000005"
+     height="4.0000005"
+     x="11"
+     y="1" />
+  <rect
+     y="6"
+     x="1"
+     height="3.999944"
+     width="4.0000005"
+     id="rect6835-3"
+     style="display:inline;fill:#bb0d0d;fill-opacity:1;stroke:none;stroke-width:1.15466905" />
+  <rect
+     style="display:inline;fill:#ba800e;fill-opacity:1;stroke:none;stroke-width:1.15467715"
+     id="rect6837-2"
+     width="4.0000005"
+     height="4.0000005"
+     x="1"
+     y="11" />
+  <rect
+     style="display:inline;fill:#ba0e53;fill-opacity:1;stroke:none;stroke-width:1.15466905"
+     id="rect6839-1"
+     width="4.0000005"
+     height="3.999944"
+     x="6"
+     y="6" />
+  <rect
+     y="6"
+     x="11"
+     height="3.999944"
+     width="4.0000005"
+     id="rect6841-6"
+     style="display:inline;fill:#980eba;fill-opacity:1;stroke:none;stroke-width:1.15466905" />
+  <rect
+     y="11"
+     x="6"
+     height="4.0000005"
+     width="4.0000005"
+     id="rect6843-3"
+     style="display:inline;fill:#99bb0d;fill-opacity:1;stroke:none;stroke-width:1.15467715" />
+  <rect
+     style="display:inline;fill:#43ba0e;fill-opacity:1;stroke:none;stroke-width:1.15467715"
+     id="rect6845-8"
+     width="4.0000005"
+     height="4.0000005"
+     x="11"
+     y="11" />
+</svg>

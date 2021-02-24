@@ -36,6 +36,7 @@
         <file>dark_selection_intersect.svg</file>
         <file>dark_selection_replace.svg</file>
         <file>dark_selection_subtract.svg</file>
+        <file>dark_sidebaricon.svg</file>
         <file>dark_transparency-disabled.svg</file>
         <file>dark_transparency-enabled.svg</file>
         <file>dark_trim-to-image.svg</file>
@@ -72,6 +73,7 @@
         <file>light_selection_intersect.svg</file>
         <file>light_selection_replace.svg</file>
         <file>light_selection_subtract.svg</file>
+        <file>light_sidebaricon.svg</file>
         <file>light_transparency-disabled.svg</file>
         <file>light_transparency-enabled.svg</file>
         <file>light_trim-to-image.svg</file>
@@ -193,7 +195,9 @@
         <file>light_flip_angle_v.svg</file>
         <file>light_flip_angle_hv.svg</file>
         <file>diagonal-stripe.svg</file>
+        <file>dirty-preset.svg</file>
         <file>mirrorAxis-HorizontalMove.svg</file>
         <file>mirrorAxis-VerticalMove.svg</file>
+        <file>support-krita.svg</file>
     </qresource>
 </RCC>

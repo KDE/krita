@@ -11,9 +11,6 @@
     </qresource>
     <qresource prefix="/">
         <file>pics/dark_close-tab.svg</file>
-        <file>pics/dirty-preset.svg</file>
         <file>pics/light_close-tab.svg</file>
-        <file>pics/sidebaricon.png</file>
-        <file>pics/support-krita.svg</file>
     </qresource>
 </RCC>

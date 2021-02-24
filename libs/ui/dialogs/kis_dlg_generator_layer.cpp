@@ -24,6 +24,7 @@
 #include <KisViewManager.h>
 #include <KisDocument.h>
 #include <KisGlobalResourcesInterface.h>
+#include <kis_icon_utils.h>
 
 #define UPDATE_DELAY 100 /*ms */
 
@@ -52,7 +53,7 @@ KisDlgGeneratorLayer::KisDlgGeneratorLayer(const QString & defaultName, KisViewM
     connect(dlgWidget.wdgGenerator, SIGNAL(previewConfiguration()), this, SLOT(previewGenerator()));
     connect(&m_compressor, SIGNAL(timeout()), this, SLOT(slotDelayedPreviewGenerator()));
 
-    dlgWidget.filterGalleryToggle->setIcon(QPixmap(":/pics/sidebaricon.png"));
+    dlgWidget.filterGalleryToggle->setIcon(KisIconUtils::loadIcon("sidebaricon"));
     dlgWidget.filterGalleryToggle->setChecked(true);
     connect(dlgWidget.filterGalleryToggle, SIGNAL(toggled(bool)), dlgWidget.wdgGenerator, SLOT(showFilterGallery(bool)));
 

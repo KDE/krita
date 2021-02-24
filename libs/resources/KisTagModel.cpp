@@ -211,6 +211,11 @@ QModelIndex KisAllTagsModel::indexForTag(KisTagSP tag) const
 {
     if (!tag) return QModelIndex();
     // For now a linear seek to find the first tag
+
+    if (tag->id() < 0) { // this must be a fake tag id
+        return index(tag->id() + s_fakeRowsCount, 0);
+    }
+
     d->query.first();
     do {
         if (tag->id() >= 0) {
@@ -221,6 +226,7 @@ QModelIndex KisAllTagsModel::indexForTag(KisTagSP tag) const
         else {
             // This is a naked tag, one that didn't come from the
             // database.
+            // But not a "fake" tag (All or AllUntagged)!
             if (d->query.value("url").toString() == tag->url()
                     && d->query.value("resource_type") == d->resourceType) {
                 return index(d->query.at() + s_fakeRowsCount, 0);

@@ -683,7 +683,7 @@ QString KisImage::nextLayerName(const QString &_baseName) const
 
     // special case if there is only root node
     if (numLayers == 1) {
-        return i18n("background");
+        return i18n("Background");
     }
 
     if (baseName.isEmpty()) {

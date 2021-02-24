@@ -179,5 +179,7 @@
         <file>light_flip_angle_v.svg</file>
         <file>light_flip_angle_hv.svg</file>
         <file>diagonal-stripe.svg</file>
+        <file>mirrorAxis-HorizontalMove.svg</file>
+        <file>mirrorAxis-VerticalMove.svg</file>
     </qresource>
 </RCC>

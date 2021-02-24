@@ -10,9 +10,6 @@
         <file alias="krita5.xmlgui">krita5.xmlgui</file>
     </qresource>
     <qresource prefix="/">
-        <file>pics/dark_selection-mode_ants.png</file>
-        <file>pics/dark_selection-mode_invisible.png</file>
-        <file>pics/dark_selection-mode_mask.png</file>
         <file>pics/dark_close-tab.svg</file>
         <file>pics/dark_trim-to-image.png</file>
         <file>pics/delete.png</file>
@@ -22,9 +19,6 @@
         <file>pics/hi16-add_dialog.png</file>
         <file>pics/hi16-palette_library.png</file>
         <file>pics/icon-kritasketch-256.png</file>
-        <file>pics/light_selection-mode_ants.png</file>
-        <file>pics/light_selection-mode_invisible.png</file>
-        <file>pics/light_selection-mode_mask.png</file>
         <file>pics/light_close-tab.svg</file>
         <file>pics/light_trim-to-image.png</file>
         <file>pics/linked.png</file>

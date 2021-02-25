@@ -19,35 +19,30 @@ public:
           unit(KoUnit(KoUnit::Point)),
           outPutSymbol(""),
           unitManager(unitManager),
-          defaultUnitManager(unitManager),
-          isDeleting(false),
-          unitHasBeenChangedFromOutSideOnce(false),
-          letUnitBeChangedFromOutsideMoreThanOnce(true),
-          displayUnit(true),
-          allowResetDecimals(true)
+          defaultUnitManager(unitManager)
     {
     }
 
-    double lowerInPoints; ///< lowest value in points
-    double upperInPoints; ///< highest value in points
-    double stepInPoints;  ///< step in points
+    double lowerInPoints {0.0}; ///< lowest value in points
+    double upperInPoints {0.0}; ///< highest value in points
+    double stepInPoints {0.0};  ///< step in points
     KoUnit unit;
 
-    double previousValueInPoint; ///< allow to store the previous value in point, useful in some cases, even if, usually, we prefer to refer to the actual value (in selected unit) and convert it, since this is not always updated.
+    double previousValueInPoint {0.0}; ///< allow to store the previous value in point, useful in some cases, even if, usually, we prefer to refer to the actual value (in selected unit) and convert it, since this is not always updated.
     QString previousSymbol;
     QString outPutSymbol;
 
-    KisSpinBoxUnitManager* unitManager; //manage more units than permitted by KoUnit.
-    KisSpinBoxUnitManager* defaultUnitManager; //the default unit manager is the one the spinbox rely on and go back to if a connected unit manager is destroyed before the spinbox.
+    KisSpinBoxUnitManager* unitManager {0}; //manage more units than permitted by KoUnit.
+    KisSpinBoxUnitManager* defaultUnitManager {0}; //the default unit manager is the one the spinbox rely on and go back to if a connected unit manager is destroyed before the spinbox.
 
-    bool isDeleting;
+    bool isDeleting {false};
 
-    bool unitHasBeenChangedFromOutSideOnce; //in some part of the code the unit is reset. We want to prevent this overriding the unit defined by the user. We use this switch to do so.
-    bool letUnitBeChangedFromOutsideMoreThanOnce;
+    bool unitHasBeenChangedFromOutSideOnce {false}; //in some part of the code the unit is reset. We want to prevent this overriding the unit defined by the user. We use this switch to do so.
+    bool letUnitBeChangedFromOutsideMoreThanOnce {true};
 
-    bool displayUnit;
+    bool displayUnit {true};
 
-    bool allowResetDecimals;
+    bool allowResetDecimals {true};
 
 };
 

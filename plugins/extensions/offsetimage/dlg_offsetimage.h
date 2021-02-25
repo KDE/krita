@@ -61,14 +61,14 @@ private Q_SLOTS:
     void slotMiddleOffset();
 
 private:
-    WdgOffsetImage * m_page;
-    int m_offsetX;
-    int m_offsetY;
-    bool m_lock;
+    WdgOffsetImage * m_page {0};
+    int m_offsetX {0};
+    int m_offsetY {0};
+    bool m_lock {false};
     QSize m_offsetSize;
 
-    KisDocumentAwareSpinBoxUnitManager* _widthUnitManager;
-    KisDocumentAwareSpinBoxUnitManager* _heightUnitManager;
+    KisDocumentAwareSpinBoxUnitManager* _widthUnitManager {0};
+    KisDocumentAwareSpinBoxUnitManager* _heightUnitManager {0};
 
 };
 

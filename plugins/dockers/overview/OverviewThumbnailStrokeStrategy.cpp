@@ -129,7 +129,7 @@ void OverviewThumbnailStrokeStrategy::finishStrokeCallback()
     qreal xscale = m_thumbnailSize.width() / (qreal)m_thumbnailOversampledSize.width();
     qreal yscale = m_thumbnailSize.height() / (qreal)m_thumbnailOversampledSize.height();
     QString algorithm = m_isPixelArt ? "Box" : "Bilinear";
-    KisTransformWorker worker(m_thumbnailDevice, yscale, xscale, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+    KisTransformWorker worker(m_thumbnailDevice, xscale, yscale, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
                               &updater, KisFilterStrategyRegistry::instance()->value(algorithm));
     worker.run();
 

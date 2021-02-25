@@ -52,7 +52,6 @@ set(krita_QRCS
     ${CMAKE_SOURCE_DIR}/krita/pics/Breeze-dark/breeze-dark-icons.qrc
     ${CMAKE_SOURCE_DIR}/krita/pics/Breeze-light/breeze-light-icons.qrc
     ${CMAKE_SOURCE_DIR}/krita/pics/layerbox/layerbox-icons.qrc
-    ${CMAKE_SOURCE_DIR}/krita/pics/layerbox/svg/layerbox-svg-icons.qrc
     ${CMAKE_SOURCE_DIR}/krita/pics/layers/layers-icons.qrc
     ${CMAKE_SOURCE_DIR}/krita/pics/misc-light/misc-light-icons.qrc
     ${CMAKE_SOURCE_DIR}/krita/pics/misc-dark/misc-dark-icons.qrc

@@ -1047,9 +1047,9 @@ void KisPainter::bltFixedWithFixedSelection(qint32 dstX, qint32 dstY,
 
     /* Trying to read outside a KisFixedPaintDevice is inherently wrong and shouldn't be done,
     so crash if someone attempts to do this. Don't resize as it would obfuscate the mistake. */
-    Q_ASSERT(srcBounds.contains(srcRect));
+    KIS_ASSERT(srcBounds.contains(srcRect));
     Q_UNUSED(srcRect); // only used in above assertion
-    Q_ASSERT(selBounds.contains(selRect));
+    KIS_ASSERT(selBounds.contains(selRect));
     Q_UNUSED(selRect); // only used in above assertion
 
     /* Create an intermediate byte array to hold information before it is written
@@ -1067,6 +1067,8 @@ void KisPainter::bltFixedWithFixedSelection(qint32 dstX, qint32 dstY,
         (srcBounds.width() * (srcY - srcBounds.top()) + (srcX - srcBounds.left())) * srcDev->pixelSize();
     const quint8 *selRowStart = selection->data() +
         (selBounds.width() * (selY - selBounds.top()) + (selX - selBounds.left())) * selection->pixelSize();
+
+    ENTER_FUNCTION() << ppVar(dstBytes);
 
     if (!d->selection) {
         /* As there's nothing selected, blit to dstBytes (intermediary bit array),

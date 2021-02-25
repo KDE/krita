@@ -87,7 +87,7 @@ private:
 
     QScopedPointer<Ui_WdgSvgCollection> m_wdgSvgCollection;
     QVector<SvgCollectionModel*> m_models;
-    QSlider* m_iconSizeSlider;
+    QSlider* m_iconSizeSlider {0};
 };
 
 #endif

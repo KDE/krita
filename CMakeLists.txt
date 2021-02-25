@@ -964,7 +964,7 @@ feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
 
 # Simple command calling the python script
 add_custom_target( get_translations
-    COMMAND python3 ${CMAKE_SOURCE_DIR}/build-tools/fetch_translations.py
+    COMMAND python ${CMAKE_SOURCE_DIR}/build-tools/fetch_translations.py
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
 )
 

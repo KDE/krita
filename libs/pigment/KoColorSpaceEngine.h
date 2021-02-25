@@ -34,7 +34,17 @@ public:
     const QString& name() const;
     virtual const KoColorProfile* addProfile(const QString &filename) = 0;
     virtual const KoColorProfile* addProfile(const QByteArray &data) = 0;
-    virtual const KoColorProfile* generateAndAddProfile(QVector<double> colorants, int colorPrimaries, int transferFunction) = 0;
+    /**
+     * @brief getProfile
+     * This tries to get a profile matching the given characteristics. If there's no such profile
+     * in the colorspace registery, a profile will be generated and added to the registery.
+     * @param colorants a double of xy (for xyY) values, this expects the first two as the white point,
+     * then the red, green and blue. If there's only a whitepoint, a grayscale profile will be returned.
+     * @param colorPrimaries the color primaries type as defined in KoColorProfile.
+     * @param transferFunction the transfer function, as defined in KoColorProfile.
+     * @return a profile that matches these characteristics.
+     */
+    virtual const KoColorProfile* getProfile(QVector<double> colorants, int colorPrimaries, int transferFunction) = 0;
     virtual void removeProfile(const QString &filename) = 0;
 
     /**

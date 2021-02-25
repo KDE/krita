@@ -196,7 +196,7 @@ const KoColorProfile* IccColorSpaceEngine::addProfile(const QByteArray &data)
     return profile;
 }
 
-const KoColorProfile *IccColorSpaceEngine::generateAndAddProfile(QVector<double> colorants, int colorPrimaries, int transferFunction)
+const KoColorProfile *IccColorSpaceEngine::getProfile(QVector<double> colorants, int colorPrimaries, int transferFunction)
 {
     KoColorSpaceRegistry *registry = KoColorSpaceRegistry::instance();
 

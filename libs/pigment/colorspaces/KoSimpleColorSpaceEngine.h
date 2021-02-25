@@ -22,7 +22,7 @@ public:
     const KoColorProfile* addProfile(const QByteArray &data) override { Q_UNUSED(data); return 0; }
     void removeProfile(const QString &profile ) override { Q_UNUSED(profile); }
 
-    const KoColorProfile * generateAndAddProfile(QVector<double> colorants, int colorPrimaries, int transferFunction) override {
+    const KoColorProfile * getProfile(QVector<double> colorants, int colorPrimaries, int transferFunction) override {
         Q_UNUSED(colorants);
         Q_UNUSED(colorPrimaries);
         Q_UNUSED(transferFunction);

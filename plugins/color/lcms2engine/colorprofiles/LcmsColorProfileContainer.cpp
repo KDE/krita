@@ -572,6 +572,10 @@ cmsToneCurve *LcmsColorProfileContainer::transferFunction(KoColorProfile::transf
     cmsFloat64Number rec709_parameters[5] =
     { 1.0 / 0.45, 1.0 / 1.099,  0.099 / 1.099,  1.0 / 4.5, 0.081 };
 
+    // The following is basically a precise version of rec709.
+    cmsFloat64Number rec202012bit_parameters[5] =
+    { 1.0 / 0.45, 1.0 / 1.0993,  0.0993 / 1.0993,  1.0 / 4.5, 0.0812 };
+
     cmsFloat64Number SMPTE_240M_parameters[5] =
     { 1.0 / 0.45, 1.0 / 1.1115,  0.1115 / 1.1115,  1.0 / 4.0, 0.0913 };
 
@@ -590,8 +594,10 @@ cmsToneCurve *LcmsColorProfileContainer::transferFunction(KoColorProfile::transf
     case KoColorProfile::TRC_ITU_R_BT_709_5:
     case KoColorProfile::TRC_ITU_R_BT_601_6:
     case KoColorProfile::TRC_ITU_R_BT_2020_2_10bit:
-    case KoColorProfile::TRC_ITU_R_BT_2020_2_12bit:
         mainCurve = cmsBuildParametricToneCurve(NULL, 4, rec709_parameters);
+        break;
+    case KoColorProfile::TRC_ITU_R_BT_2020_2_12bit:
+        mainCurve = cmsBuildParametricToneCurve(NULL, 4, rec202012bit_parameters);
         break;
     case KoColorProfile::TRC_ITU_R_BT_470_6_System_M:
         mainCurve = cmsBuildGamma(NULL, 2.2);

@@ -203,7 +203,7 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
                                                 nclx->color_primary_green_x, nclx->color_primary_green_y,
                                                 nclx->color_primary_blue_x, nclx->color_primary_blue_y};
 
-                    const KoColorProfile *profile = engine->generateAndAddProfile(colorants,
+                    const KoColorProfile *profile = engine->getProfile(colorants,
                                                                                   nclx->color_primaries,
                                                                                   transferCharacteristic);
                     profileName = profile->name();

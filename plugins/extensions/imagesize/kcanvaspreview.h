@@ -48,12 +48,12 @@ protected:
     double scalingFactor();
 
 protected:
-    qint32 m_width, m_height;
-    qint32 m_imageWidth, m_imageHeight;
-    qint32 m_xOffset, m_yOffset;
+    qint32 m_width {0}, m_height {0};
+    qint32 m_imageWidth {0}, m_imageHeight {0};
+    qint32 m_xOffset {0}, m_yOffset {0};
 
-    qint16 m_xCanvasOffset, m_yCanvasOffset;
-    bool m_dragging;
+    qint16 m_xCanvasOffset {0}, m_yCanvasOffset {0};
+    bool m_dragging {false};
 
     QImage m_image;
     QPoint m_prevDragPoint;

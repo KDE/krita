@@ -201,8 +201,6 @@ option(ENABLE_UPDATERS "Enable updaters/update notifications" ON)
 configure_file(config-updaters.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-updaters.h)
 add_feature_info("Enable updaters" ENABLE_UPDATERS "Enable updaters/update notifications.")
 
-option(FETCH_TRANSLATIONS "Fetch all translations." OFF)
-
 # Branding. Available options: default, Beta, Plus, Next. Can be set from command line
 if (NOT DEFINED BRANDING)
 	set(BRANDING "default")
@@ -951,7 +949,7 @@ configure_file(config-ocio.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-ocio.h )
 check_function_exists(powf HAVE_POWF)
 configure_file(config-powf.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-powf.h)
 
-if (WIN32)
+if(WIN32)
     include(${CMAKE_CURRENT_LIST_DIR}/packaging/windows/installer/ConfigureInstallerNsis.cmake)
 endif()
 
@@ -962,21 +960,10 @@ endforeach()
 
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
 
-# Simple command calling the python script
-add_custom_target( get_translations
-    COMMAND python3 ${CMAKE_SOURCE_DIR}/build-tools/fetch_translations.py
-    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-)
-
-if (FETCH_TRANSLATIONS AND NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/po)    
-    add_dependencies(krita get_translations)
-endif()    
-    
-if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/po)
-    find_package(KF5I18n CONFIG REQUIRED)
-    ki18n_install(po)
+if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/po OR EXISTS ${CMAKE_CURRENT_BINARY_DIR}/po )
+  find_package(KF5I18n CONFIG REQUIRED)
+  ki18n_install(po)
 endif()
-
 
 if (ANDROID)
   # ECM passes this to Qt, which was already capable of detecting it..
@@ -998,7 +985,7 @@ if (ANDROID)
   endif()
 endif()
 
-if (DEFINED QTANDROID_EXPORTED_TARGET AND NOT TARGET "create-apk")
+if(DEFINED QTANDROID_EXPORTED_TARGET AND NOT TARGET "create-apk")
     set (_CMAKE_ANDROID_DIR "${ECM_DIR}/../toolchain")
     list(LENGTH QTANDROID_EXPORTED_TARGET targetsCount)
     include(${_CMAKE_ANDROID_DIR}/ECMAndroidDeployQt.cmake)

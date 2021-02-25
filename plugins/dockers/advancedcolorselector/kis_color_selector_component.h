@@ -101,30 +101,30 @@ protected:
     // Workaround for Bug 287001
     void setLastMousePosition(int x, int y);
 
-    qreal m_hue;
-    qreal m_hsvSaturation;
-    qreal m_value;
-    qreal m_hslSaturation;
-    qreal m_lightness;
-    qreal m_hsiSaturation;
-    qreal m_intensity;
-    qreal m_hsySaturation;
-    qreal m_luma;
+    qreal m_hue {0.0};
+    qreal m_hsvSaturation {0.0};
+    qreal m_value {0.0};
+    qreal m_hslSaturation {0.0};
+    qreal m_lightness {0.0};
+    qreal m_hsiSaturation {0.0};
+    qreal m_intensity {0.0};
+    qreal m_hsySaturation {0.0};
+    qreal m_luma {0.0};
     Parameter m_parameter;
     Type m_type;
-    KisColorSelector* m_parent;
-    bool m_gamutMaskOn;
-    KoGamutMask* m_currentGamutMask;
-    bool m_maskPreviewActive;
-    qreal m_lastX;
-    qreal m_lastY;
-    int m_x;
-    int m_y;
+    KisColorSelector* m_parent {0};
+    bool m_gamutMaskOn {false};
+    KoGamutMask* m_currentGamutMask {0};
+    bool m_maskPreviewActive {false};
+    qreal m_lastX {0.0};
+    qreal m_lastY {0.0};
+    int m_x {0};
+    int m_y {0};
 private:
-    int m_width;
-    int m_height;
-    bool m_dirty;
-    const KoColorSpace* m_lastColorSpace;
+    int m_width {0};
+    int m_height {0};
+    bool m_dirty {false};
+    const KoColorSpace* m_lastColorSpace {0};
     KoColor m_lastSelectedColor;
 };
 

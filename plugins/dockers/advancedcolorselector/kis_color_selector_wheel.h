@@ -51,14 +51,14 @@ private:
     QPointF m_lastClickPos;
     QImage m_pixelCache;
     QPoint m_pixelCacheOffset;
-    qreal R;
-    qreal G;
-    qreal B;
-    qreal Gamma;
+    qreal R {0.0};
+    qreal G {0.0};
+    qreal B {0.0};
+    qreal Gamma {0.0};
 
     QSize m_renderAreaSize;
-    qreal m_renderAreaOffsetX;
-    qreal m_renderAreaOffsetY;
+    qreal m_renderAreaOffsetX {0.0};
+    qreal m_renderAreaOffsetY {0.0};
     QTransform m_toRenderArea;
 };
 

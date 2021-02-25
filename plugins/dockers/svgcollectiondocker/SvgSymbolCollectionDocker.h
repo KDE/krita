@@ -82,10 +82,10 @@ private:
 
     QScopedPointer<Ui_WdgSvgCollection> m_wdgSvgCollection;
     QMap<int, SvgCollectionModel*> m_collectionsModelsCache;
-    QSlider* m_iconSizeSlider;
+    QSlider* m_iconSizeSlider {0};
 
-    KisResourceModel* m_resourceModel;
-    int m_rememberedSvgCollectionId;
+    KisResourceModel* m_resourceModel {0};
+    int m_rememberedSvgCollectionId {-1};
 };
 
 #endif

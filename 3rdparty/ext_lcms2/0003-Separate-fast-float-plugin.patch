@@ -1,0 +1,224 @@
+From 139e236c6b458934a801cfc7920f71c9ddd90101 Mon Sep 17 00:00:00 2001
+From: "L. E. Segovia" <amy@amyspark.me>
+Date: Thu, 25 Feb 2021 00:21:50 +0000
+Subject: [PATCH 3/3] Separate fast float plugin
+
+---
+ CMakeLists.txt                    | 37 ++++++++++++++++++--
+ plugins/fast_float/CMakeLists.txt | 55 +++++++++++++++++++++++++++++
+ src/CMakeLists.txt                | 58 +++++++------------------------
+ 3 files changed, 102 insertions(+), 48 deletions(-)
+ create mode 100644 plugins/fast_float/CMakeLists.txt
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 213c808..421837b 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,4 +1,6 @@
+-project(lcms2)
++cmake_minimum_required(VERSION 3.1)
++
++project(lcms2 VERSION "2.12")
+ 
+ option(BUILD_TESTS "build the test executable" OFF)
+ option(BUILD_STATIC "build the static library" OFF)
+@@ -7,15 +9,22 @@ option(BUILD_PLUGINS "build the plugins" ON)
+ 
+ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+ 
+-cmake_minimum_required(VERSION 2.6)
+-
+ include_directories(
+ ${CMAKE_BINARY_DIR}/include 
+ ${CMAKE_SOURCE_DIR}/include
+ )
+ 
++include(CheckLibraryExists)
++CHECK_LIBRARY_EXISTS(m sqrt "" HAVE_LIBM)
++
++include(FindThreads)
++
+ add_subdirectory(src)
+ 
++if(BUILD_PLUGINS)
++    add_subdirectory(plugins/fast_float)
++endif()
++
+ if(BUILD_TESTS)
+     add_subdirectory(testbed)
+ endif(BUILD_TESTS)
+@@ -23,3 +32,25 @@ endif(BUILD_TESTS)
+ if(BUILD_UTILS)
+     add_subdirectory(utils)
+ endif(BUILD_UTILS)
++
++set(prefix ${CMAKE_INSTALL_PREFIX})
++set(exec_prefix "\${prefix}")
++set(libdir "\${prefix}/lib")
++set(includedir "\${exec_prefix}/include")
++set(PACKAGE ${PROJECT_NAME})
++set(VERSION ${lcms2_VERSION})
++if(BUILD_PLUGINS)
++    set(LIB_PLUGINS "-lfast_float_plugin")
++endif()
++if(HAVE_LIBM)
++    set(LIB_MATH "-lm")
++endif()
++if(Threads_FOUND)
++    set(LIB_THREAD ${CMAKE_THREAD_LIBS_INIT})
++endif()
++
++configure_file(${CMAKE_CURRENT_SOURCE_DIR}/lcms2.pc.in ${CMAKE_CURRENT_BINARY_DIR}/lcms2.pc @ONLY)
++install(
++    FILES ${CMAKE_CURRENT_BINARY_DIR}/lcms2.pc
++    DESTINATION lib/pkgconfig
++)
+diff --git a/plugins/fast_float/CMakeLists.txt b/plugins/fast_float/CMakeLists.txt
+new file mode 100644
+index 0000000..1c1739b
+--- /dev/null
++++ b/plugins/fast_float/CMakeLists.txt
+@@ -0,0 +1,55 @@
++
++if (BUILD_PLUGINS)
++    include(CheckCXXSourceCompiles)
++    check_cxx_source_compiles ("
++        #include <immintrin.h>
++        int main ()
++        {
++            __m128d a, b;
++            double vals[2] = {0};
++            a = _mm_loadu_pd (vals);
++            b = _mm_add_pd (a,a);
++            _mm_storeu_pd (vals,b);
++            return (0);
++        }"
++        HAVE_SSE2)
++
++    if (NOT HAVE_SSE2)
++        message(STATUS "Disabling SSE optimizations, as the target doesn't support them")
++        file(READ ${CMAKE_CURRENT_SOURCE_DIR}/include/lcms2_fast_float.h tmp)
++        string(REPLACE "//  #define CMS_DONT_USE_SSE2 1" "#define CMS_DONT_USE_SSE2 1" tmp2 "${tmp}")
++        file(WRITE ${CMAKE_CURRENT_SOURCE_DIR}/include/lcms2_fast_float.h "${tmp2}")
++    endif()
++
++    set(lcms_plugin_SRCS 
++        src/fast_16_tethra.c
++        src/fast_8_curves.c
++        src/fast_8_matsh.c
++        src/fast_8_matsh_sse.c
++        src/fast_8_tethra.c
++        src/fast_float_15bits.c
++        src/fast_float_15mats.c
++        src/fast_float_cmyk.c
++        src/fast_float_curves.c
++        src/fast_float_lab.c
++        src/fast_float_matsh.c
++        src/fast_float_separate.c
++        src/fast_float_sup.c
++        src/fast_float_tethra.c
++    )
++
++    include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
++
++    add_library(lcms2_fast_float SHARED ${lcms_plugin_SRCS})
++
++    target_link_libraries(lcms2_fast_float PUBLIC lcms)
++
++    install(TARGETS lcms2_fast_float RUNTIME DESTINATION bin
++                                    LIBRARY DESTINATION lib
++                                    ARCHIVE DESTINATION lib)
++
++    install(FILES
++        ${CMAKE_CURRENT_SOURCE_DIR}/../../include/lcms2_plugin.h
++        ${CMAKE_CURRENT_SOURCE_DIR}/include/lcms2_fast_float.h
++        DESTINATION include)
++endif()
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 9bccbc6..9103bc0 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -17,25 +17,6 @@ if(WIN32)
+     endif(MSVC)
+ endif(WIN32)
+ 
+-include(CheckCXXSourceCompiles)
+-check_cxx_source_compiles ("
+-    #include <immintrin.h>
+-    int main ()
+-    {
+-        __m128d a, b;
+-        double vals[2] = {0};
+-        a = _mm_loadu_pd (vals);
+-        b = _mm_add_pd (a,a);
+-        _mm_storeu_pd (vals,b);
+-        return (0);
+-    }"
+-    HAVE_SSE2)
+-
+-if (NOT HAVE_SSE2)
+-    message(STATUS "Disabling SSE optimizations, as the target doesn't support them")
+-    add_compile_definitions(-DCMS_DONT_USE_SSE2=1)
+-endif()
+-
+ set(lcms_SRCS
+     cmscnvrt.c
+     cmserr.c
+@@ -65,41 +46,28 @@ set(lcms_SRCS
+     cmsalpha.c
+ )
+ 
+-if (BUILD_PLUGINS)
+-    set(lcms_SRCS ${lcms_SRCS}
+-    ../plugins/fast_float/src/fast_16_tethra.c
+-    ../plugins/fast_float/src/fast_8_curves.c
+-    ../plugins/fast_float/src/fast_8_matsh.c
+-    ../plugins/fast_float/src/fast_8_matsh_sse.c
+-    ../plugins/fast_float/src/fast_8_tethra.c
+-    ../plugins/fast_float/src/fast_float_15bits.c
+-    ../plugins/fast_float/src/fast_float_15mats.c
+-    ../plugins/fast_float/src/fast_float_cmyk.c
+-    ../plugins/fast_float/src/fast_float_curves.c
+-    ../plugins/fast_float/src/fast_float_lab.c
+-    ../plugins/fast_float/src/fast_float_matsh.c
+-    ../plugins/fast_float/src/fast_float_separate.c
+-    ../plugins/fast_float/src/fast_float_sup.c
+-    ../plugins/fast_float/src/fast_float_tethra.c
+-    )
+-    include_directories(${CMAKE_BINARY_DIR} ../plugins/fast_float/include)
+-endif()
+-
+-
+ add_library(lcms SHARED ${lcms_SRCS})
+ set_target_properties(lcms PROPERTIES OUTPUT_NAME "lcms2"
++                                      VERSION ${lcms2_VERSION}
++                                      SOVERSION ${lcms2_VERSION_MAJOR}
+                                       DEFINE_SYMBOL CMS_DLL_BUILD)
+ 
++if(HAVE_LIBM)
++    target_link_libraries(lcms PRIVATE m)
++endif()
++if(Threads_FOUND)
++    target_link_libraries(lcms PRIVATE Threads::Threads)
++endif()
++
+ if(BUILD_TESTS OR BUILD_UTILS OR BUILD_STATIC)
+     add_library(lcms_static ${lcms_SRCS})
+-	set_target_properties(lcms_static PROPERTIES COMPILE_FLAGS -DCMS_STATIC)
++    set_target_properties(lcms_static PROPERTIES COMPILE_FLAGS -DCMS_STATIC)
+     set(LCMS_STATIC lcms_static)
+ endif(BUILD_TESTS OR BUILD_UTILS OR BUILD_STATIC)
+ 
+ install(TARGETS lcms ${LCMS_STATIC} RUNTIME DESTINATION bin
+                                     LIBRARY DESTINATION lib
+                                     ARCHIVE DESTINATION lib)
+-install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/../include/lcms2.h ${CMAKE_CURRENT_SOURCE_DIR}/../include/lcms2_plugin.h DESTINATION include)
+-if (BUILD_PLUGINS)
+-    install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/../plugins/fast_float/include/lcms2_fast_float.h DESTINATION include)
+-endif()
++install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/../include/lcms2.h
++    DESTINATION include
++)
+-- 
+2.30.1
+

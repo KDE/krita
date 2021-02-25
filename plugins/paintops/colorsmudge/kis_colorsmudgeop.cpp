@@ -32,6 +32,132 @@
 #include "kis_paintop_plugin_utils.h"
 
 
+struct ColorSmudgeStrategy {
+    ColorSmudgeStrategy(KisPrecisePaintDeviceWrapper &srcWrapper,
+                        KisPainter *painter,
+                        KisPaintDeviceSP dstDevice,
+                        KoColor paintColor,
+                        bool smearAlpha)
+        : m_maskDab(new KisFixedPaintDevice(KoColorSpaceRegistry::instance()->alpha8()))
+        , m_origDab(new KisFixedPaintDevice(KoColorSpaceRegistry::instance()->rgb8()))
+        , m_tempDevice(new KisFixedPaintDevice(dstDevice->colorSpace()))
+        , m_heigtmapDevice(new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8()))
+        , m_colorDevice(new KisPaintDevice(dstDevice->colorSpace()))
+        , m_srcWrapper(srcWrapper)
+        , m_smearPainter(m_colorDevice)
+        , m_colorRatePainter(m_colorDevice)
+        , m_finalPainter(dstDevice)
+        , m_paintColor(paintColor)
+    {
+        m_smearPainter.setCompositeOp(smearAlpha ? COMPOSITE_COPY : COMPOSITE_OVER);
+        m_colorRatePainter.setCompositeOp(painter->compositeOp()->id());
+        m_paintColor.convertTo(dstDevice->colorSpace());
+        m_colorDevice->makeCloneFrom(dstDevice, dstDevice->extent());
+
+        m_finalPainter.setCompositeOp(COMPOSITE_COPY);
+        m_finalPainter.setSelection(painter->selection());
+        m_finalPainter.setChannelFlags(painter->channelFlags());
+        m_finalPainter.copyMirrorInformationFrom(painter);
+    }
+
+    void updateMask(KisDabCache *dabCache,
+                    const KisPaintInformation& info,
+                    const KisDabShape &shape,
+                    const QPointF &cursorPoint,
+                    QRect *dstDabRect) {
+
+        m_origDab = dabCache->fetchImageDab(m_origDab->colorSpace(),
+            cursorPoint,
+            shape,
+            info,
+            1.0,
+            dstDabRect);
+
+        m_maskDab->setRect(m_origDab->bounds());
+        m_maskDab->lazyGrowBufferWithoutInitialization();
+        int numPixels = m_maskDab->bounds().width() * m_maskDab->bounds().height();
+        m_origDab->colorSpace()->copyOpacityU8(m_origDab->data(), m_maskDab->data(), numPixels);
+    }
+
+    void paintDab(const QRect &srcRect, const QRect &dstRect,
+                  const QPoint &canvasLocalSamplePoint,
+                  qreal opacity,
+                  qreal colorRateValue,
+                  qreal smudgeRateValue,
+                  qreal lightnessStrengthValue) {
+
+        const quint8 colorAlpha = qRound(colorRateValue * colorRateValue * opacity * 255.0);
+        const quint8 smearAlpha = qRound(smudgeRateValue * opacity * 255.0);
+        const quint8 dullingAlpha = qRound(smudgeRateValue * 0.8 * opacity * 255.0);
+
+        static int i = -1; i++;
+
+        m_tempDevice->setRect(dstRect);
+        m_tempDevice->lazyGrowBufferWithoutInitialization();
+
+        m_srcWrapper.readRect(srcRect);
+        //m_srcWrapper.preciseDevice()->readBytes(m_tempDevice->data(), srcRect);
+
+        const int nPixels = m_tempDevice->bounds().width() * m_tempDevice->bounds().height();
+
+//        m_tempDevice->convertToQImage(0).save(QString("dd_%1_00_smear.png").arg(i));
+
+
+//        m_tempDevice->colorSpace()->
+//            modulateLightnessByGrayBrush(m_tempDevice->data(),
+//                                         reinterpret_cast<const QRgb*>(m_origDab->data()),
+//                                         m_tempDevice->data(),
+//                                         lightnessStrengthValue,
+//                                         nPixels);
+//        m_tempDevice->convertToQImage(0).save(QString("dd_%1_01_mapped.png").arg(i));
+//        // m_tempDevice->modulateByLightness()
+
+        m_smearPainter.setOpacity(smearAlpha);
+       // m_smearPainter.bltFixed(dstRect.topLeft(), m_tempDevice, m_tempDevice->bounds());
+        m_smearPainter.bitBlt(dstRect.topLeft(), m_colorDevice, srcRect);
+        //m_tempDevice->fill(dstRect, m_paintColor);
+
+//        m_tempDevice->colorSpace()->
+//            modulateLightnessByGrayBrush(m_tempDevice->data(),
+//                                         reinterpret_cast<const QRgb*>(m_origDab->data()),
+//                                         m_tempDevice->data(),
+//                                         lightnessStrengthValue,
+//                                         nPixels);
+
+//        m_origDab->convertToQImage(0).save(QString("dd_%1_00_dab.png").arg(i));
+
+
+        // m_tempDevice->modulateByLightness()
+
+        m_colorRatePainter.setOpacity(colorAlpha);
+        //m_colorRatePainter.bltFixed(dstRect.topLeft(), m_tempDevice, m_tempDevice->bounds());
+        m_colorRatePainter.fill(dstRect.x(), dstRect.y(), dstRect.width(), dstRect.height(), m_paintColor);
+
+        //m_finalPainter.bitBlt(dstRect)
+
+    }
+
+    bool needsDstInitialized() const {
+        return false;
+    }
+
+    KisFixedPaintDeviceSP finalSelectionDevice() const {
+        return m_maskDab;
+    }
+
+    KisFixedPaintDeviceSP m_maskDab;
+    KisFixedPaintDeviceSP m_origDab;
+    KisFixedPaintDeviceSP m_tempDevice;
+    KisPaintDeviceSP m_heigtmapDevice;
+    KisPaintDeviceSP m_colorDevice;
+    KisPrecisePaintDeviceWrapper &m_srcWrapper;
+    KisPainter m_smearPainter;
+    KisPainter m_colorRatePainter;
+    KisPainter m_finalPainter;
+    KisPaintDeviceSP m_dstDevice;
+    KoColor m_paintColor;
+};
+
 KisColorSmudgeOp::KisColorSmudgeOp(const KisPaintOpSettingsSP settings, KisPainter* painter, KisNodeSP node, KisImageSP image)
     : KisBrushBasedPaintOp(settings, painter)
     , m_firstRun(true)
@@ -92,7 +218,7 @@ KisColorSmudgeOp::KisColorSmudgeOp(const KisPaintOpSettingsSP settings, KisPaint
         m_useNewEngine = m_smudgeRateOption.getUseNewEngine();
     }
 
-    if (m_useNewEngine){
+    if (1 || m_useNewEngine){
         m_finalPainter->setCompositeOp(COMPOSITE_COPY);
         m_smudgePainter->setCompositeOp(m_smudgeRateOption.getSmearAlpha() ? COMPOSITE_COPY : COMPOSITE_OVER);
     } else {
@@ -124,6 +250,13 @@ KisColorSmudgeOp::KisColorSmudgeOp(const KisPaintOpSettingsSP settings, KisPaint
     if (m_overlayModeOption.isChecked() && m_image && m_image->projection()){
         m_preciseImageDeviceWrapper.reset(new KisPrecisePaintDeviceWrapper(m_image->projection()));
     }
+
+
+    m_strategy.reset(new ColorSmudgeStrategy(m_precisePainterWrapper,
+                                             painter,
+                                             m_tempDev,
+                                             m_paintColor,
+                                             m_smudgeRateOption.getSmearAlpha()));
 }
 
 KisColorSmudgeOp::~KisColorSmudgeOp()
@@ -131,6 +264,7 @@ KisColorSmudgeOp::~KisColorSmudgeOp()
     qDeleteAll(m_hsvOptions);
     delete m_hsvTransform;
 }
+
 
 void KisColorSmudgeOp::updateMask(const KisPaintInformation& info, const KisDabShape &shape, const QPointF &cursorPoint)
 {
@@ -354,6 +488,119 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
                               brush->maskHeight(shape, 0, 0, info));
 
     QPointF hotSpot = brush->hotSpot(shape, info);
+
+    {
+        m_strategy->updateMask(m_dabCache, info, shape, scatteredPos, &m_dstDabRect);
+
+        QPointF newCenterPos = QRectF(m_dstDabRect).center();
+        /**
+         * Save the center of the current dab to know where to read the
+         * data during the next pass. We do not save scatteredPos here,
+         * because it may differ slightly from the real center of the
+         * brush (due to rounding effects), which will result in a
+         * really weird quality.
+         */
+        QRect srcDabRect = m_dstDabRect.translated((m_lastPaintPos - newCenterPos).toPoint());
+
+        m_lastPaintPos = newCenterPos;
+
+
+        KisSpacingInformation spacingInfo =
+            effectiveSpacing(scale, rotation,
+                             &m_airbrushOption, &m_spacingOption, info);
+
+        if (m_firstRun) {
+            m_firstRun = false;
+            return spacingInfo;
+        }
+
+        QPoint canvasLocalSamplePoint = (srcDabRect.topLeft() + hotSpot).toPoint();
+
+        const qreal colorRate = m_colorRateOption.isChecked() ? m_colorRateOption.computeSizeLikeValue(info) : 0.0;
+        const qreal smudgeLength = m_smudgeRateOption.isChecked() ? m_smudgeRateOption.computeSizeLikeValue(info) : 1.0;
+        const qreal fpOpacity = m_opacityOption.getOpacityf(info);
+        const qreal lightnessStrength = m_lightnessStrengthOption.apply(info);
+
+        m_strategy->paintDab(srcDabRect, m_dstDabRect,
+                            canvasLocalSamplePoint,
+                            fpOpacity, colorRate, smudgeLength, lightnessStrength);
+
+        const QVector<QRect> dirtyRects = m_finalPainter->takeDirtyRegion();
+        m_precisePainterWrapper.writeRects(dirtyRects);
+        painter()->addDirtyRects(dirtyRects);
+
+        return spacingInfo;
+    }
+
+    {
+        m_strategy->updateMask(m_dabCache, info, shape, scatteredPos, &m_dstDabRect);
+
+        QPointF newCenterPos = QRectF(m_dstDabRect).center();
+        /**
+         * Save the center of the current dab to know where to read the
+         * data during the next pass. We do not save scatteredPos here,
+         * because it may differ slightly from the real center of the
+         * brush (due to rounding effects), which will result in a
+         * really weird quality.
+         */
+        QRect srcDabRect = m_dstDabRect.translated((m_lastPaintPos - newCenterPos).toPoint());
+
+        m_lastPaintPos = newCenterPos;
+
+
+        KisSpacingInformation spacingInfo =
+            effectiveSpacing(scale, rotation,
+                             &m_airbrushOption, &m_spacingOption, info);
+
+        if (m_firstRun) {
+            m_firstRun = false;
+            return spacingInfo;
+        }
+
+        QPoint canvasLocalSamplePoint = (srcDabRect.topLeft() + hotSpot).toPoint();
+
+        const qreal colorRate = m_colorRateOption.isChecked() ? m_colorRateOption.computeSizeLikeValue(info) : 0.0;
+        const qreal smudgeLength = m_smudgeRateOption.isChecked() ? m_smudgeRateOption.computeSizeLikeValue(info) : 1.0;
+        const qreal fpOpacity = m_opacityOption.getOpacityf(info);
+        const qreal lightnessStrength = m_lightnessStrengthOption.apply(info);
+
+        m_precisePainterWrapper.readRects(m_finalPainter->calculateAllMirroredRects(m_dstDabRect));
+
+        const QRect dstRectAtTempDev(QPoint(), m_dstDabRect.size());
+
+        if (m_strategy->needsDstInitialized()) {
+            KisPainter::copyAreaOptimized(dstRectAtTempDev.topLeft(),
+                                          m_precisePainterWrapper.preciseDevice(),
+                                          m_tempDev,
+                                          m_dstDabRect);
+        }
+
+
+        m_strategy->paintDab(srcDabRect, dstRectAtTempDev,
+                            canvasLocalSamplePoint,
+                            fpOpacity, colorRate, smudgeLength, lightnessStrength);
+
+        KisFixedPaintDeviceSP finalSelection = m_strategy->finalSelectionDevice();
+
+        m_finalPainter->bitBltWithFixedSelection(m_dstDabRect.x(), m_dstDabRect.y(), m_tempDev, finalSelection, m_dstDabRect.width(), m_dstDabRect.height());
+        m_finalPainter->renderMirrorMaskSafe(m_dstDabRect, m_tempDev, 0, 0, m_maskDab, !m_dabCache->needSeparateOriginal());
+
+        const QVector<QRect> dirtyRects = m_finalPainter->takeDirtyRegion();
+        m_precisePainterWrapper.writeRects(dirtyRects);
+        painter()->addDirtyRects(dirtyRects);
+
+        return spacingInfo;
+    }
+
+
+
+
+
+
+
+
+
+
 
     /**
      * Update the brush mask.

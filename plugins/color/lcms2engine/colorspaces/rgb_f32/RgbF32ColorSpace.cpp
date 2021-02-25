@@ -114,3 +114,9 @@ void RgbF32ColorSpace::fillGrayBrushWithColorAndLightnessWithStrength(quint8* ds
 {
     fillGrayBrushWithColorPreserveLightnessRGB<KoRgbF32Traits>(dst, brush, brushColor, strength, nPixels);
 }
+
+void RgbF32ColorSpace::modulateLightnessByGrayBrush(quint8 *dst, const QRgb *brush, quint8 *src, qreal strength, qint32 nPixels) const
+{
+    modulateLightnessByGrayBrushRGB<KoRgbF32Traits>(dst, brush, src, strength, nPixels);
+}
+

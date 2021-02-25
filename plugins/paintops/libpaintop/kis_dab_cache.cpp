@@ -100,6 +100,22 @@ KisFixedPaintDeviceSP KisDabCache::fetchDab(const KoColorSpace *cs,
                           lightnessStrength);
 }
 
+KisFixedPaintDeviceSP KisDabCache::fetchImageDab(const KoColorSpace *cs,
+        const QPointF &cursorPoint,
+        KisDabShape const& shape,
+        const KisPaintInformation& info,
+        qreal softnessFactor,
+        QRect *dstDabRect)
+{
+    return fetchDabCommon(cs, 0, KoColor(),
+                          cursorPoint,
+                          shape,
+                          info,
+                          softnessFactor,
+                          dstDabRect,
+                          1.0);
+}
+
 inline
 KisFixedPaintDeviceSP KisDabCache::fetchFromCache(KisDabCacheUtils::DabRenderingResources *resources,
                                                   const KisPaintInformation& info,
@@ -141,7 +157,8 @@ KisFixedPaintDeviceSP KisDabCache::fetchDabCommon(const KoColorSpace *cs,
         const KisPaintInformation& info,
         qreal softnessFactor,
         QRect *dstDabRect,
-        qreal lightnessStrength)
+        qreal lightnessStrength,
+        bool forceImageStamp)
 {
     Q_ASSERT(dstDabRect);
     Q_UNUSED(lightnessStrength);
@@ -199,7 +216,7 @@ KisFixedPaintDeviceSP KisDabCache::fetchDabCommon(const KoColorSpace *cs,
 
     // 3. Generate new dab
 
-    generateDab(di, &resources, &m_d->dab);
+    generateDab(di, &resources, &m_d->dab, forceImageStamp);
 
     // 4. Do postprocessing
     if (di.needsPostprocessing) {

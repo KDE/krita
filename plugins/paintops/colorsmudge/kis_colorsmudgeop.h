@@ -38,6 +38,8 @@ class KisBrushBasedPaintOpSettings;
 class KisPainter;
 class KoColorSpace;
 
+class ColorSmudgeStrategy;
+
 class KisColorSmudgeOp: public KisBrushBasedPaintOp
 {
 public:
@@ -96,6 +98,7 @@ private:
 
     KoColorTransformation *m_hsvTransform {0};
     const KoCompositeOp *m_preciseColorRateCompositeOp {0};
+    QScopedPointer<ColorSmudgeStrategy> m_strategy;
 };
 
 #endif // _KIS_COLORSMUDGEOP_H_

@@ -98,7 +98,8 @@ PAINTOP_EXPORT QRect correctDabRectWhenFetchedFromCache(const QRect &dabRect,
 
 PAINTOP_EXPORT void generateDab(const DabGenerationInfo &di,
                                 DabRenderingResources *resources,
-                                KisFixedPaintDeviceSP *dab);
+                                KisFixedPaintDeviceSP *dab,
+                                bool forceImageStamp = false);
 
 PAINTOP_EXPORT void postProcessDab(KisFixedPaintDeviceSP dab,
                                    const QPoint &dabTopLeft,

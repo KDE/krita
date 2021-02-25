@@ -527,6 +527,7 @@ public:
     virtual void fillGrayBrushWithColorAndLightnessOverlay(quint8 *dst, const QRgb *brush, quint8 *brushColor, qint32 nPixels) const;
     //Same as above, but with contrast adjusted by strength.  Strength == 1 -> full contrast.  Allows softer lightness adjustments.
     virtual void fillGrayBrushWithColorAndLightnessWithStrength(quint8* dst, const QRgb* brush, quint8* brushColor, qreal strength, qint32 nPixels) const;
+    virtual void modulateLightnessByGrayBrush(quint8* dst, const QRgb *brush, quint8* src, qreal strength, qint32 nPixels) const;
 
     /**
      * Create an adjustment object for adjusting the brightness and contrast

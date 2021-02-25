@@ -9,6 +9,7 @@
 #include "KoAlwaysInline.h"
 #include "kritapigment_export.h"
 #include <cmath>
+#include <QVector>
 #include <QtGlobal>
 
 /**
@@ -43,6 +44,39 @@ ALWAYS_INLINE KRITAPIGMENT_EXPORT float removeSmpte2048Curve(float x) {
     const float x_p = powf(x, m2_r);
     const float res = powf(qMax(0.0f, x_p - a1) / (c2 - c3 * x_p), m1_r);
     return res * 125.0f;
+}
+
+// From ITU Bt. 2390-8 pg. 31, this calculates the gamma for the nominal peak.
+// This may differ per display regardless, but this is a good baseline.
+ALWAYS_INLINE KRITAPIGMENT_EXPORT float HLGOOTFGamma(float nominalPeak) {
+    const float k = 1.111;
+    return 1.2 * powf(k, log2f(nominalPeak/1000.0));
+}
+
+// The HLG OOTF needs to be applied to convert from 'display linear' to 'scene linear'.
+// Krita doesn't support sending tagged HLG to the display, so we have to pretend
+// we're always converting from PQ to HLG.
+ALWAYS_INLINE KRITAPIGMENT_EXPORT QVector<float> applyHLGOOTF(QVector<float>rgb, QVector<float> lumaCoefficients, float gamma = 1.2, float nominalPeak = 1000.0) {
+    const float luma = (rgb[0]*lumaCoefficients[0])+(rgb[1]*lumaCoefficients[1])+(rgb[2]*lumaCoefficients[2]);
+    const float a = nominalPeak;
+    QVector<float> output = rgb;
+    output[0] = float(a * powf(luma, gamma-1) * rgb[0]);
+    output[1] = float(a * powf(luma, gamma-1) * rgb[1]);
+    output[2] = float(a * powf(luma, gamma-1) * rgb[2]);
+    return output;
+}
+
+// The HLG OOTF needs to be removed to convert from 'scene linear' to 'display linear'.
+// Krita doesn't support sending tagged HLG to the display, so we have to pretend
+// we're always converting from HLG to PQ.
+ALWAYS_INLINE KRITAPIGMENT_EXPORT QVector<float> removeHLGOOTF(QVector<float>rgb, QVector<float> lumaCoefficients, float gamma = 1.2, float nominalPeak = 1000.0) {
+    const float luma = (rgb[0]*lumaCoefficients[0])+(rgb[1]*lumaCoefficients[1])+(rgb[2]*lumaCoefficients[2]);
+    const float multiplier = pow(luma/nominalPeak, (1.0-gamma)/gamma);
+    QVector<float> output = rgb;
+    output[0] = float(multiplier * (rgb[0] / nominalPeak));
+    output[1] = float(multiplier * (rgb[1] / nominalPeak));
+    output[2] = float(multiplier * (rgb[2] / nominalPeak));
+    return output;
 }
 
 ALWAYS_INLINE KRITAPIGMENT_EXPORT float applyHLGCurve(float x) {

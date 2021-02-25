@@ -308,6 +308,10 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
                     if (linearizePolicy == keepTheSame) {
                         qSwap(pixelValues.begin()[0], pixelValues.begin()[2]);
                     }
+                    if (linearizePolicy == linearFromHLG) {
+                        QVector<qreal> lCoef = colorSpace->lumaCoefficients();
+                        pixelValues = applyHLGOOTF(pixelValues, {float(lCoef[0]), float(lCoef[2]),float(lCoef[2])});
+                    }
                     colorSpace->fromNormalisedChannelsValue(it->rawData(), pixelValues);
 
                     it->nextPixel();

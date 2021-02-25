@@ -66,6 +66,8 @@ KisPropertiesConfigurationSP HeifExport::defaultConfiguration(const QByteArray &
     cfg->setProperty("lossless", true);
     cfg->setProperty("chroma", "444");
     cfg->setProperty("floatingPointConversionOption", "KeepSame");
+    cfg->setProperty("HLGnominalPeak", 1000.0);
+    cfg->setProperty("HLGgamma", 1.2);
     return cfg;
 }
 
@@ -297,6 +299,12 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
                             pixelValues = {float(pixelValuesLinear[0]), float(pixelValuesLinear[1]), float(pixelValuesLinear[2]), float(pixelValuesLinear[3])};
                         }
 
+                        if (conversionPolicy == applyHLG) {
+                            QVector<qreal> lCoef = cs->lumaCoefficients();
+                            pixelValues = removeHLGOOTF(pixelValues, {float(lCoef[0]), float(lCoef[2]),float(lCoef[2])},
+                                                        configuration->getDouble("HLGgamma", 1.2), configuration->getDouble("HLGnominalPeak", 1000.0));
+                        }
+
                         int channels = hasAlpha? 4: 3;
                         for (int ch = 0; ch < channels; ch++) {
                             uint16_t v = qBound(0, int(applyCurveAsNeeded(pixelValues[ch], conversionPolicy) * 4095), 4095);
@@ -484,7 +492,7 @@ void KisWdgOptionsHeif::setConfiguration(const KisPropertiesConfigurationSP cfg)
     QStringList toolTipList = {i18nc("@tooltip", "The image will be converted to Rec 2020 linear first, and then encoded with a perceptual quantizer curve"
                                " (also known as SMPTE 2048 curve). Recommended for HDR images where the absolute brightness is important."),
                               i18nc("@tooltip", "The image will be converted to Rec 2020 linear first, and then encoded with a Hybrid Log Gamma curve."
-                               " Recommended for HDR images where absolute brightness is not the primary concern.")};
+                               " Recommended for HDR images where the display may not understand HDR.")};
     QStringList conversionOptionName = {"Rec2100PQ", "Rec2100HLG"};
     QString colorDepth = cfg->getString(KisImportExportFilter::ColorDepthIDTag);
     conversionSettings->setVisible((colorDepth == Float16BitsColorDepthID.id()
@@ -499,7 +507,7 @@ void KisWdgOptionsHeif::setConfiguration(const KisPropertiesConfigurationSP cfg)
         
         conversionOptionsList << i18nc("Colorspace option plus transfer function name", "Keep colorants, encode HLG");
         toolTipList << i18nc("@tooltip", "The image will be linearized first, and then encoded with a Hybrid Log Gamma curve."
-                                         " Recommended for images where the absolute brightness is not the primary concern.");
+                                         " Recommended for images intended for screens which cannot understand PQ");
         conversionOptionName << "ApplyHLG";
         
         conversionOptionsList << i18nc("Colorspace option plus transfer function name", "Keep colorants, encode SMPTE ST 428");
@@ -518,6 +526,8 @@ void KisWdgOptionsHeif::setConfiguration(const KisPropertiesConfigurationSP cfg)
     }
     QString optionName = cfg->getString("floatingPointConversionOption", "Rec2100PQ");
     cmbConversionPolicy->setCurrentIndex(conversionOptionName.indexOf(optionName));
+    spnNits->setValue(cfg->getDouble("HLGnominalPeak", 1000.0));
+    spnGamma->setValue(cfg->getDouble("HLGgamma", 1.2));
 }
 
 KisPropertiesConfigurationSP KisWdgOptionsHeif::configuration() const
@@ -527,6 +537,8 @@ KisPropertiesConfigurationSP KisWdgOptionsHeif::configuration() const
     cfg->setProperty("quality", int(sliderQuality->value()));
     cfg->setProperty("chroma", cmbChroma->currentText());
     cfg->setProperty("floatingPointConversionOption", cmbConversionPolicy->currentData(Qt::UserRole+1).toString());
+    cfg->setProperty("HLGnominalPeak", spnNits->value());
+    cfg->setProperty("HLGgamma", spnGamma->value());
     cfg->setProperty(KisImportExportFilter::ImageContainsTransparencyTag, m_hasAlpha);
     return cfg;
 }

@@ -803,7 +803,7 @@ set_package_properties(LCMS2 PROPERTIES
     TYPE REQUIRED
     PURPOSE "Will be used for color management and is necessary for Krita")
 if(LCMS2_FOUND)
-    if(NOT ${LCMS2_VERSION} VERSION_LESS 2040 )
+    if(NOT ${LCMS2_VERSION} VERSION_LESS 2.4 )
         set(HAVE_LCMS24 TRUE)
     endif()
     set(HAVE_REQUIRED_LCMS_VERSION TRUE)
@@ -811,12 +811,12 @@ if(LCMS2_FOUND)
 
     include(CheckIncludeFileCXX)
 
-    set(CMAKE_REQUIRED_INCLUDES ${LCMS2_INCLUDE_DIR})
+    set(CMAKE_REQUIRED_INCLUDES ${LCMS2_INCLUDE_DIRS})
     set(CMAKE_REQUIRED_LIBRARIES ${LCMS2_LIBRARIES})
 
-    if(LCMS2_FAST_FLOAT_LIBRARY)
+    if(LCMS2_FAST_FLOAT_INCLUDE_DIR)
         message(STATUS "Found LittleCMS's fast float plugin")
-        set(HAVE_LCMS_FAST_FLOAT_PLUGIN LCMS2_FAST_FLOAT_PLUGIN_LIBRARY)
+        set(HAVE_LCMS_FAST_FLOAT_PLUGIN 1)
     endif()
 endif()
 list (APPEND ANDROID_EXTRA_LIBS ${LCMS2_LIBRARIES})

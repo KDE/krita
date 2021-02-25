@@ -330,6 +330,7 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
 
             const uint8_t* img = heifimage.get_plane(heif_channel_interleaved, &stride);
             QVector<float> pixelValues(4);
+            QVector<qreal> lCoef {colorSpace->lumaCoefficients()};
 
             for (int y=0; y < height; y++) {
                 KisHLineIteratorSP it = layer->paintDevice()->createHLineIteratorNG(0, y, width);
@@ -360,8 +361,7 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
                         qSwap(pixelValues.begin()[0], pixelValues.begin()[2]);
                     }
                     if (linearizePolicy == linearFromHLG && applyOOTF) {
-                        QVector<qreal> lCoef = colorSpace->lumaCoefficients();
-                        pixelValues = applyHLGOOTF(pixelValues, {float(lCoef[0]), float(lCoef[2]),float(lCoef[2])}, displayGamma, displayNits);
+                        applyHLGOOTF(pixelValues, lCoef, displayGamma, displayNits);
                     }
                     colorSpace->fromNormalisedChannelsValue(it->rawData(), pixelValues);
 

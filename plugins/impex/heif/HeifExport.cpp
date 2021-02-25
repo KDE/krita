@@ -286,6 +286,7 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
 
 
                 KisPaintDeviceSP pd = image->projection();
+                QVector<qreal> lCoef {cs->lumaCoefficients()};
 
                 for (int y=0; y < height; y++) {
                     KisHLineIteratorSP it = pd->createHLineIteratorNG(0, y, width);
@@ -302,8 +303,7 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
                         }
 
                         if (conversionPolicy == applyHLG && configuration->getBool("removeHGLOOTF", true)) {
-                            QVector<qreal> lCoef = cs->lumaCoefficients();
-                            pixelValues = removeHLGOOTF(pixelValues, {float(lCoef[0]), float(lCoef[2]),float(lCoef[2])},
+                            removeHLGOOTF(pixelValues, lCoef,
                                                         configuration->getDouble("HLGgamma", 1.2), configuration->getDouble("HLGnominalPeak", 1000.0));
                         }
 

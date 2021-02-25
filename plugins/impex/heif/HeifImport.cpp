@@ -168,9 +168,12 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
             if (err.code || !nclx) {
                 qDebug() << "nclx profile loading failed";
             } else {
+                int transferCharacteristic = nclx->transfer_characteristics;
+
                 if (nclx->transfer_characteristics == heif_transfer_characteristic_ITU_R_BT_2100_0_PQ) {
                     qDebug() << "linearizing from PQ";
                     linearizePolicy = linearFromPQ;
+                    transferCharacteristic = KoColorProfile::TRC_linear;
                 }
                 if (nclx->transfer_characteristics == heif_transfer_characteristic_ITU_R_BT_2100_0_HLG) {
                     qDebug() << "linearizing from HLG";
@@ -180,27 +183,32 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
                     displayGamma = dlg.gamma();
                     displayNits = dlg.nominalPeakBrightness();
                     linearizePolicy = linearFromHLG;
+                    transferCharacteristic = KoColorProfile::TRC_linear;
                 }
                 if (nclx->transfer_characteristics == heif_transfer_characteristic_SMPTE_ST_428_1) {
                     qDebug() << "linearizing from SMPTE 428";
                     linearizePolicy = linearFromSMPTE428;
+                    transferCharacteristic = KoColorProfile::TRC_linear;
                 }
+
+                if (nclx->transfer_characteristics == heif_transfer_characteristic_IEC_61966_2_4 ||
+                        nclx->transfer_characteristics == heif_transfer_characteristic_ITU_R_BT_1361) {
+                    transferCharacteristic = heif_transfer_characteristic_ITU_R_BT_709_5;
+                }
+
                 KoColorSpaceEngine *engine = KoColorSpaceEngineRegistry::instance()->get("icc");
                 if (engine) {
                     QVector<double>colorants = {nclx->color_primary_white_x, nclx->color_primary_white_y,
-                                               nclx->color_primary_red_x, nclx->color_primary_red_y,
-                                               nclx->color_primary_green_x, nclx->color_primary_green_y,
-                                               nclx->color_primary_blue_x, nclx->color_primary_blue_y};
-                    if (linearizePolicy == keepTheSame) {
-                        const KoColorProfile *profile = engine->generateAndAddProfile(colorants,
-                                                                                      nclx->color_primaries,
-                                                                                      nclx->transfer_characteristics);
-                        profileName = profile->name();
-                    } else {
-                        const KoColorProfile *profile = engine->generateAndAddProfile(colorants,
-                                                                                      nclx->color_primaries,
-                                                                                      KoColorProfile::TRC_linear);
-                        profileName = profile->name();
+                                                nclx->color_primary_red_x, nclx->color_primary_red_y,
+                                                nclx->color_primary_green_x, nclx->color_primary_green_y,
+                                                nclx->color_primary_blue_x, nclx->color_primary_blue_y};
+
+                    const KoColorProfile *profile = engine->generateAndAddProfile(colorants,
+                                                                                  nclx->color_primaries,
+                                                                                  transferCharacteristic);
+                    profileName = profile->name();
+
+                    if (linearizePolicy != keepTheSame) {
                         colorDepth = Float32BitsColorDepthID;
                     }
 

@@ -582,6 +582,11 @@ cmsToneCurve *LcmsColorProfileContainer::transferFunction(KoColorProfile::transf
     cmsFloat64Number log_100_sqrt[5] = {1.0, 10, 2.5, -2.5, 0.0};
 
     switch (transferFunction) {
+    case KoColorProfile::TRC_IEC_61966_2_4:
+        // Not possible in ICC due to lack of a*pow(bX+c,y) construct.
+    case KoColorProfile::TRC_ITU_R_BT_1361:
+        // This is not possible in ICC due to lack of a*pow(bX+c,y) construct.
+        qWarning() << "Neither IEC 61966 2-4 nor Bt. 1361 are supported, returning a rec 709 curve.";
     case KoColorProfile::TRC_ITU_R_BT_709_5:
     case KoColorProfile::TRC_ITU_R_BT_601_6:
     case KoColorProfile::TRC_ITU_R_BT_2020_2_10bit:
@@ -621,10 +626,6 @@ cmsToneCurve *LcmsColorProfileContainer::transferFunction(KoColorProfile::transf
         break;
     case KoColorProfile::TRC_SMPTE_ST_428_1:
         // Requires an a*X^y construction, not possible.
-    case KoColorProfile::TRC_IEC_61966_2_4:
-        // Not possible in ICC due to lack of a*pow(bX+c,y) construct.
-    case KoColorProfile::TRC_ITU_R_BT_1361:
-        // This is not possible in ICC due to lack of a*pow(bX+c,y) construct.
     case KoColorProfile::TRC_ITU_R_BT_2100_0_PQ:
         // Perceptual Quantizer
     case KoColorProfile::TRC_ITU_R_BT_2100_0_HLG:

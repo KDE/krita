@@ -37,6 +37,8 @@
 
 #include "libheif/heif_cxx.h"
 
+#include "DlgHeifImport.h"
+
 
 K_PLUGIN_FACTORY_WITH_JSON(ImportFactory, "krita_heif_import.json", registerPlugin<HeifImport>();)
 
@@ -130,6 +132,9 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
         qDebug() << "profile" << profileType;
 
         linearizePolicy linearizePolicy = keepTheSame;
+        bool applyOOTF = true;
+        float displayGamma = 1.2;
+        float displayNits = 1000.0;
 
         struct heif_error err;
         if (profileType == heif_color_profile_type_prof || profileType == heif_color_profile_type_rICC) {
@@ -169,6 +174,11 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
                 }
                 if (nclx->transfer_characteristics == heif_transfer_characteristic_ITU_R_BT_2100_0_HLG) {
                     qDebug() << "linearizing from HLG";
+                    DlgHeifImport dlg(applyOOTF, displayGamma, displayNits);
+                    dlg.exec();
+                    applyOOTF = dlg.applyOOTF();
+                    displayGamma = dlg.gamma();
+                    displayNits = dlg.nominalPeakBrightness();
                     linearizePolicy = linearFromHLG;
                 }
                 if (nclx->transfer_characteristics == heif_transfer_characteristic_SMPTE_ST_428_1) {
@@ -308,9 +318,9 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
                     if (linearizePolicy == keepTheSame) {
                         qSwap(pixelValues.begin()[0], pixelValues.begin()[2]);
                     }
-                    if (linearizePolicy == linearFromHLG) {
+                    if (linearizePolicy == linearFromHLG && applyOOTF) {
                         QVector<qreal> lCoef = colorSpace->lumaCoefficients();
-                        pixelValues = applyHLGOOTF(pixelValues, {float(lCoef[0]), float(lCoef[2]),float(lCoef[2])});
+                        pixelValues = applyHLGOOTF(pixelValues, {float(lCoef[0]), float(lCoef[2]),float(lCoef[2])}, displayGamma, displayNits);
                     }
                     colorSpace->fromNormalisedChannelsValue(it->rawData(), pixelValues);
 

@@ -23,6 +23,7 @@ public:
     {
         setupUi(this);
         connect(chkLossless, SIGNAL(toggled(bool)), SLOT(toggleQualitySlider(bool)));
+        connect(chkHLGOOTF, SIGNAL(toggled(bool)), SLOT(toggleQualitySlider(bool)));
         sliderQuality->setRange(0, 100, 0);
     }
 
@@ -32,6 +33,7 @@ public:
 private Q_SLOTS:
 
     void toggleQualitySlider(bool toggle);
+    void toggleHLGOptions(bool toggle);
 private:
 
     bool m_hasAlpha {false};

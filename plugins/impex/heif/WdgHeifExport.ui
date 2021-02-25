@@ -10,8 +10,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>401</height>
+    <width>412</width>
+    <height>454</height>
    </rect>
   </property>
   <layout class="QFormLayout" name="formLayout_2">
@@ -76,16 +76,6 @@
       <string>Conversion settings</string>
      </property>
      <layout class="QFormLayout" name="formLayout_3">
-      <item row="1" column="0">
-       <widget class="QLabel" name="spaceLabel">
-        <property name="text">
-         <string>Space:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QComboBox" name="cmbConversionPolicy"/>
-      </item>
       <item row="0" column="0" colspan="2">
        <widget class="QLabel" name="explanationLabel">
         <property name="text">
@@ -96,12 +86,15 @@
         </property>
        </widget>
       </item>
-      <item row="4" column="0">
-       <widget class="QLabel" name="label_2">
+      <item row="1" column="0">
+       <widget class="QLabel" name="spaceLabel">
         <property name="text">
-         <string>Brightness:</string>
+         <string>Space:</string>
         </property>
        </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QComboBox" name="cmbConversionPolicy"/>
       </item>
       <item row="3" column="0">
        <widget class="QLabel" name="label_3">
@@ -110,27 +103,27 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="0" colspan="2">
-       <widget class="QLabel" name="label_4">
-        <property name="text">
-         <string>Hybrid Log Gamma display qualities:</string>
-        </property>
-       </widget>
-      </item>
       <item row="3" column="1">
        <widget class="QDoubleSpinBox" name="spnGamma">
         <property name="toolTip">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Display gamma. By default this is 1.2 for converting from PQ. If you made this image with HLG in mind, use your display's estimated gamma.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Display gamma. By default this is 1.2 for converting from PQ.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
         <property name="maximum">
          <double>3.000000000000000</double>
         </property>
        </widget>
       </item>
+      <item row="4" column="0">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Brightness:</string>
+        </property>
+       </widget>
+      </item>
       <item row="4" column="1">
        <widget class="QDoubleSpinBox" name="spnNits">
         <property name="toolTip">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The display brightness in nits. By default this is set to 1000 for converting from PQ. If you made this image intended for HLG, then the current display brightness might be best.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The display brightness in nits. By default this is set to 1000 for converting from PQ.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
         <property name="suffix">
          <string> cd/m²</string>
@@ -140,6 +133,16 @@
         </property>
         <property name="value">
          <double>0.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0" colspan="2">
+       <widget class="QCheckBox" name="chkHLGOOTF">
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Hybrid Log Gamma needs an extra conversion step in between, as Krita can currently not send HLG data directly to the display. Therefore we apply the HLG opto-optical curve to convert from display to scene linear.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+        <property name="text">
+         <string>Apply reverse Hybrid Log Gamma OOTF</string>
         </property>
        </widget>
       </item>

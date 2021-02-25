@@ -68,6 +68,7 @@ KisPropertiesConfigurationSP HeifExport::defaultConfiguration(const QByteArray &
     cfg->setProperty("floatingPointConversionOption", "KeepSame");
     cfg->setProperty("HLGnominalPeak", 1000.0);
     cfg->setProperty("HLGgamma", 1.2);
+    cfg->setProperty("removeHGLOOTF", true);
     return cfg;
 }
 
@@ -299,7 +300,7 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
                             pixelValues = {float(pixelValuesLinear[0]), float(pixelValuesLinear[1]), float(pixelValuesLinear[2]), float(pixelValuesLinear[3])};
                         }
 
-                        if (conversionPolicy == applyHLG) {
+                        if (conversionPolicy == applyHLG && configuration->getBool("removeHGLOOTF", true)) {
                             QVector<qreal> lCoef = cs->lumaCoefficients();
                             pixelValues = removeHLGOOTF(pixelValues, {float(lCoef[0]), float(lCoef[2]),float(lCoef[2])},
                                                         configuration->getDouble("HLGgamma", 1.2), configuration->getDouble("HLGnominalPeak", 1000.0));
@@ -526,6 +527,7 @@ void KisWdgOptionsHeif::setConfiguration(const KisPropertiesConfigurationSP cfg)
     }
     QString optionName = cfg->getString("floatingPointConversionOption", "Rec2100PQ");
     cmbConversionPolicy->setCurrentIndex(conversionOptionName.indexOf(optionName));
+    chkHLGOOTF->setChecked(cfg->getBool("removeHGLOOTF", true));
     spnNits->setValue(cfg->getDouble("HLGnominalPeak", 1000.0));
     spnGamma->setValue(cfg->getDouble("HLGgamma", 1.2));
 }
@@ -539,6 +541,7 @@ KisPropertiesConfigurationSP KisWdgOptionsHeif::configuration() const
     cfg->setProperty("floatingPointConversionOption", cmbConversionPolicy->currentData(Qt::UserRole+1).toString());
     cfg->setProperty("HLGnominalPeak", spnNits->value());
     cfg->setProperty("HLGgamma", spnGamma->value());
+    cfg->setProperty("removeHGLOOTF", chkLossless->isChecked());
     cfg->setProperty(KisImportExportFilter::ImageContainsTransparencyTag, m_hasAlpha);
     return cfg;
 }
@@ -549,4 +552,10 @@ void KisWdgOptionsHeif::toggleQualitySlider(bool toggle)
     lossySettings->setEnabled(!toggle);
 }
 
+void KisWdgOptionsHeif::toggleHLGOptions(bool toggle)
+{
+    // Disable the quality slider if lossless is true
+    spnNits->setEnabled(toggle);
+    spnGamma->setEnabled(toggle);
+}
 #include <HeifExport.moc>

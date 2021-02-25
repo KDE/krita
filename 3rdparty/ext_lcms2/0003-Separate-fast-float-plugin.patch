@@ -5,9 +5,9 @@ Subject: [PATCH 3/3] Separate fast float plugin
 
 ---
  CMakeLists.txt                    | 37 ++++++++++++++++++--
- plugins/fast_float/CMakeLists.txt | 55 +++++++++++++++++++++++++++++
+ plugins/fast_float/CMakeLists.txt | 58 +++++++++++++++++++++++++++++++
  src/CMakeLists.txt                | 58 +++++++------------------------
- 3 files changed, 102 insertions(+), 48 deletions(-)
+ 3 files changed, 105 insertions(+), 48 deletions(-)
  create mode 100644 plugins/fast_float/CMakeLists.txt
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
@@ -78,7 +78,7 @@ new file mode 100644
 index 0000000..1c1739b
 --- /dev/null
 +++ b/plugins/fast_float/CMakeLists.txt
-@@ -0,0 +1,55 @@
+@@ -0,0 +1,58 @@
 +
 +if (BUILD_PLUGINS)
 +    include(CheckCXXSourceCompiles)
@@ -122,6 +122,9 @@ index 0000000..1c1739b
 +    include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 +
 +    add_library(lcms2_fast_float SHARED ${lcms_plugin_SRCS})
++    if(WIN32)
++       set_target_properties(lcms2_fast_float PROPERTIES DEFINE_SYMBOL CMS_DLL_BUILD)
++    endif(WIN32)
 +
 +    target_link_libraries(lcms2_fast_float PUBLIC lcms)
 +

@@ -46,7 +46,7 @@ bool PSDImageData::read(QIODevice *io, KisPaintDeviceSP dev ) {
     psdread(io, &m_compression);
     quint64 start = io->pos();
     m_channelSize = m_header->channelDepth/8;
-    m_channelDataLength = m_header->height * m_header->width * m_channelSize;
+    m_channelDataLength = quint64(m_header->height) * m_header->width * m_channelSize;
 
     dbgFile << "Reading Image Data Block: compression" << m_compression << "channelsize" << m_channelSize << "number of channels" << m_header->nChannels;
 
@@ -60,7 +60,7 @@ bool PSDImageData::read(QIODevice *io, KisPaintDeviceSP dev ) {
             channelInfo.channelId = channel;
             channelInfo.compressionType = Compression::Uncompressed;
             channelInfo.channelDataStart = start;
-            channelInfo.channelDataLength = m_header->width * m_header->height * m_channelSize;
+            channelInfo.channelDataLength = quint64(m_header->width) * m_header->height * m_channelSize;
             start += channelInfo.channelDataLength;
             m_channelInfoRecords.append(channelInfo);
 
@@ -82,7 +82,7 @@ bool PSDImageData::read(QIODevice *io, KisPaintDeviceSP dev ) {
 
         for (int channel = 0; channel < m_header->nChannels; channel++) {
             m_channelOffsets << 0;
-            quint32 sumrlelength = 0;
+            quint64 sumrlelength = 0;
             ChannelInfo channelInfo;
             channelInfo.channelId = channel;
             channelInfo.channelDataStart = start;

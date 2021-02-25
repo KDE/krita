@@ -38,10 +38,10 @@ private:
 private:
     QPointF m_lastClickPos;
     QImage m_pixelCache;
-    qreal R;
-    qreal G;
-    qreal B;
-    qreal Gamma;
+    qreal R {0.0};
+    qreal G {0.0};
+    qreal B {0.0};
+    qreal Gamma {0.0};
 };
 
 #endif

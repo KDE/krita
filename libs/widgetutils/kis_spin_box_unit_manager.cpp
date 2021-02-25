@@ -66,15 +66,7 @@ public:
             double pConv = 1.0):
         dim(pDim),
         unitSymbol(pUnitSymbol),
-        conversionFactor(pConv),
-        conversionFactorIsFixed(true),
-        conversionConstant(0),
-        conversionConstantIsFixed(true),
-        constrains(0),
-        unitListCached(false),
-        unitListWithNameCached(false),
-        hasHundredPercent(false),
-        canAccessDocument(false)
+        conversionFactor(pConv)
     {
 
     }
@@ -83,23 +75,23 @@ public:
 
     QString unitSymbol;
     mutable double conversionFactor;
-    bool conversionFactorIsFixed; //tell if it's possible to trust the conversion factor stored or if it's needed to recompute it.
-    mutable double conversionConstant;
-    bool conversionConstantIsFixed; //tell if it's possible to trust the conversion constant stored or if it's needed to recompute it.
+    bool conversionFactorIsFixed {true}; //tell if it's possible to trust the conversion factor stored or if it's needed to recompute it.
+    mutable double conversionConstant {0};
+    bool conversionConstantIsFixed {true}; //tell if it's possible to trust the conversion constant stored or if it's needed to recompute it.
 
-    KisSpinBoxUnitManager::Constrains constrains;
+    KisSpinBoxUnitManager::Constrains constrains { KisSpinBoxUnitManager::NOCONSTR };
 
     mutable QStringList unitList;
-    mutable bool unitListCached;
+    mutable bool unitListCached {false};
 
     mutable QStringList unitListWithName;
-    mutable bool unitListWithNameCached;
+    mutable bool unitListWithNameCached {false};
 
     //it's possible to store a reference for the % unit, for length.
-    bool hasHundredPercent;
-    qreal hundredPercent;
+    bool hasHundredPercent {false};
+    qreal hundredPercent {0};
 
-    bool canAccessDocument;
+    bool canAccessDocument {false};
 
     QVector<KisSpinBoxUnitManager*> connectedUnitManagers;
 };

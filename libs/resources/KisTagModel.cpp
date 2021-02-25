@@ -94,7 +94,7 @@ QVariant KisAllTagsModel::data(const QModelIndex &index, int role) const
             case Qt::UserRole + Id:
                 return QString::number(KisAllTagsModel::All);
             case Qt::UserRole + Url: {
-                return "All";
+                return urlAll();
             }
             case Qt::UserRole + ResourceType:
                 return d->resourceType;
@@ -121,7 +121,7 @@ QVariant KisAllTagsModel::data(const QModelIndex &index, int role) const
             case Qt::UserRole + Id:
                 return QString::number(KisAllTagsModel::AllUntagged);
             case Qt::UserRole + Url: {
-                return "All Untagged";
+                return urlAllUntagged();
             }
             case Qt::UserRole + ResourceType:
                 return d->resourceType;
@@ -211,7 +211,7 @@ QModelIndex KisAllTagsModel::indexForTag(KisTagSP tag) const
 {
     if (!tag) return QModelIndex();
     // For now a linear seek to find the first tag
-    if (tag->id() < 0 && (tag->url() == "All" || tag->url() == "All Untagged")) {
+    if (tag->id() < 0 && (tag->url() == urlAll() || tag->url() == urlAllUntagged())) {
         // this must be either a fake tag id, or a "naked" tag
         // TODO: do we even use "naked tags"? won't it be better to just use QStrings?
         return index(tag->id() + s_fakeRowsCount, 0);
@@ -254,7 +254,7 @@ KisTagSP KisAllTagsModel::tagForIndex(QModelIndex index) const
             tag.reset(new KisTag());
             tag->setName(i18n("All"));
             tag->setResourceType(d->resourceType);
-            tag->setUrl("All"); // XXX: make this a static string
+            tag->setUrl(urlAll());
             tag->setComment(i18n("All Resources"));
             tag->setId(KisAllTagsModel::All);
             tag->setActive(true);
@@ -264,7 +264,7 @@ KisTagSP KisAllTagsModel::tagForIndex(QModelIndex index) const
             tag.reset(new KisTag());
             tag->setName(i18n("All Untagged"));
             tag->setResourceType(d->resourceType);
-            tag->setUrl("All Untagged"); // XXX: make this a static string
+            tag->setUrl(urlAllUntagged());
             tag->setComment(i18n("All Untagged Resources"));
             tag->setId(KisAllTagsModel::AllUntagged);
             tag->setActive(true);
@@ -418,9 +418,9 @@ KisTagSP KisAllTagsModel::tagForUrl(const QString& tagUrl) const
         return KisTagSP();
     }
 
-    if (tagUrl == "All") {
+    if (tagUrl == urlAll()) {
         return tagForIndex(index(Ids::All + s_fakeRowsCount, 0));
-    } else if (tagUrl == "All Untagged") {
+    } else if (tagUrl == urlAllUntagged()) {
         return tagForIndex(index(Ids::AllUntagged + s_fakeRowsCount, 0));
     }
 

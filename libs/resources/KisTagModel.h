@@ -88,6 +88,11 @@ public:
     bool renameTag(const KisTagSP tag) override;
     bool changeTagActive(const KisTagSP tag, bool active) override;
 
+    // TODO: they can be static const variables, too, if it's better than functions
+    static QString urlAll() { return "All"; }
+    static QString urlAllUntagged() { return "All Untagged"; }
+
+
 private:
 
     friend class KisResourceModelProvider;

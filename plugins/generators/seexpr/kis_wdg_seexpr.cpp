@@ -32,7 +32,7 @@ KisWdgSeExpr::KisWdgSeExpr(QWidget *parent)
     m_widget->setupUi(this);
     m_widget->txtEditor->setControlCollectionWidget(m_widget->wdgControls);
 
-    m_widget->renameBrushPresetButton->setIcon(KisIconUtils::loadIcon("dirty-preset")); // edit icon
+    m_widget->renameBrushPresetButton->setIcon(KisIconUtils::loadIcon("document-edit"));
 
     m_widget->reloadPresetButton->setIcon(KisIconUtils::loadIcon("updateColorize"));
     m_widget->reloadPresetButton->setToolTip(i18n("Reload the preset"));

@@ -106,6 +106,10 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
             if (heifChroma == heif_chroma_monochrome) {
                 colorSpace = KoColorSpaceRegistry::instance()->graya8();
             }
+            if (luma > 8) {
+                colorDepth = Integer16BitsColorDepthID;
+                colorSpace = KoColorSpaceRegistry::instance()->graya16();
+            }
         } else {
             // RGB
             heifimage = handle.decode_image(heif_colorspace_RGB, heif_chroma_444);
@@ -226,7 +230,7 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
             qDebug() << "no profile found";
         }
 
-
+        qDebug() << colorModel.id()<< colorDepth.id()<<profileName;
         colorSpace = KoColorSpaceRegistry::instance()->colorSpace(colorModel.id(), colorDepth.id(), profileName);
 
         int width  = handle.get_width();
@@ -250,13 +254,42 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
                 KisHLineIteratorSP it = layer->paintDevice()->createHLineIteratorNG(0, y, width);
 
                 for (int x=0;x<width;x++) {
-                    KoGrayTraits<quint8>::setGray(it->rawData(), imgG[ y * strideG + x ]);
 
-                    if (hasAlpha) {
-                        colorSpace->setOpacity(it->rawData(), quint8(imgA[y*strideA+x]), 1);
-                    }
-                    else {
-                        colorSpace->setOpacity(it->rawData(), OPACITY_OPAQUE_U8, 1);
+                    if (luma == 8) {
+                        KoGrayTraits<quint8>::setGray(it->rawData(), imgG[ y * strideG + x ]);
+
+                        if (hasAlpha) {
+                            colorSpace->setOpacity(it->rawData(), quint8(imgA[y*strideA+x]), 1);
+                        }
+                        else {
+                            colorSpace->setOpacity(it->rawData(), OPACITY_OPAQUE_U8, 1);
+                        }
+                    } else {
+                        uint16_t source = reinterpret_cast<const uint16_t*>(imgG)[y * (strideG/2) + (x)];
+
+                        if (luma == 10) {
+                            KoGrayTraits<quint16>::setGray(it->rawData(),float(0x03ff & (source)) * (65535.0/ 1023.0) );
+                        } else if (luma == 12) {
+                            KoGrayTraits<quint16>::setGray(it->rawData(), float(0x0fff & (source)) * (65535.0/ 4095.0) );
+                        } else {
+                            qDebug() << "unknown bitdepth" << luma;
+                            KoGrayTraits<quint16>::setGray(it->rawData(), float(source)/65535.0 );
+                        }
+
+                        if (hasAlpha) {
+                            source = reinterpret_cast<const uint16_t*>(imgA)[y * (strideA/2) + x];
+                            if (luma == 10) {
+                                colorSpace->setOpacity(it->rawData(), float(0x0fff & (source)) / 1023.0, 1);
+                            } else if (luma == 12) {
+                                colorSpace->setOpacity(it->rawData(),  float(0x0fff & (source)) / 4095.0 , 1);
+                            } else {
+                                qDebug() << "unknown bitdepth" << luma;
+                                colorSpace->setOpacity(it->rawData(),  float(source)/65535.0, 1);
+                            }
+                        }
+                        else {
+                            colorSpace->setOpacity(it->rawData(), OPACITY_OPAQUE_U8, 1);
+                        }
                     }
 
                     it->nextPixel();

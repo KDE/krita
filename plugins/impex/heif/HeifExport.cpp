@@ -118,16 +118,15 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
     // Convert to 8 bits rgba on saving if not rgba+8bit, rgba+16bit or graya+8bit.
     qDebug() << cs->colorModelId().id() << cs->colorDepthId().id();
 
-    if ( (cs->colorModelId() != RGBAColorModelID && cs->colorModelId() != GrayAColorModelID)) {
+    if ( cs->colorModelId() != RGBAColorModelID && cs->colorModelId() != GrayAColorModelID ) {
         const KoColorSpace *sRgb = KoColorSpaceRegistry::instance()->rgb8();
         image->convertImageColorSpace(sRgb,
                                       KoColorConversionTransformation::internalRenderingIntent(),
                                       KoColorConversionTransformation::internalConversionFlags());
     }
 
-    // Should remove this later.
-    if (cs->colorModelId() == GrayAColorModelID && cs->colorDepthId() != Integer8BitsColorDepthID) {
-        const KoColorSpace *gray = KoColorSpaceRegistry::instance()->graya8(cs->profile()->name());
+    if (cs->colorModelId() == GrayAColorModelID && cs->hasHighDynamicRange()) {
+        const KoColorSpace *gray = KoColorSpaceRegistry::instance()->graya16(cs->profile()->name());
         image->convertImageColorSpace(gray,
                                       KoColorConversionTransformation::internalRenderingIntent(),
                                       KoColorConversionTransformation::internalConversionFlags());
@@ -135,20 +134,22 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
 
     conversionPolicy conversionPolicy = keepTheSame;
     bool convertToRec2020 = false;
-    QString conversionOption = (configuration->getString("floatingPointConversionOption", "Rec2100PQ"));
-
-    if (conversionOption == "Rec2100PQ") {
-        convertToRec2020 = true;
-        conversionPolicy = applyPQ;
-    } else if (conversionOption == "Rec2100HLG") {
-        convertToRec2020 = true;
-        conversionPolicy = applyHLG;
-    } else if (conversionOption == "ApplyPQ") {
-        conversionPolicy = applyPQ;
-    } else if (conversionOption == "ApplyHLG") {
-        conversionPolicy = applyHLG;
-    }  else if (conversionOption == "ApplySMPTE248") {
-        conversionPolicy = applySMPTE428;
+    
+    if (cs->hasHighDynamicRange() && cs->colorModelId() != GrayAColorModelID) {
+        QString conversionOption = (configuration->getString("floatingPointConversionOption", "Rec2100PQ"));
+        if (conversionOption == "Rec2100PQ") {
+            convertToRec2020 = true;
+            conversionPolicy = applyPQ;
+        } else if (conversionOption == "Rec2100HLG") {
+            convertToRec2020 = true;
+            conversionPolicy = applyHLG;
+        } else if (conversionOption == "ApplyPQ") {
+            conversionPolicy = applyPQ;
+        } else if (conversionOption == "ApplyHLG") {
+            conversionPolicy = applyHLG;
+        }  else if (conversionOption == "ApplySMPTE248") {
+            conversionPolicy = applySMPTE428;
+        }
     }
 
     if (cs->hasHighDynamicRange() && convertToRec2020) {
@@ -319,35 +320,73 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
             }
 
         } else {
-            qDebug() << "saving as 8bit grayscale";
-            img.create(width, height, heif_colorspace_monochrome, heif_chroma_monochrome);
+            if (cs->colorDepthId() == Integer8BitsColorDepthID) {
+                qDebug() << "saving as 8bit grayscale";
+                img.create(width, height, heif_colorspace_monochrome, heif_chroma_monochrome);
 
-            img.add_plane(heif_channel_Y, width, height, 8);
+                img.add_plane(heif_channel_Y, width, height, 8);
 
-            uint8_t* ptrG {0};
-            uint8_t* ptrA {0};
-            int strideG, strideA;
+                uint8_t* ptrG {0};
+                uint8_t* ptrA {0};
+                int strideG, strideA;
 
-            ptrG = img.get_plane(heif_channel_Y, &strideG);
+                ptrG = img.get_plane(heif_channel_Y, &strideG);
 
-            if (hasAlpha) {
-                img.add_plane(heif_channel_Alpha, width, height, 8);
-                ptrA = img.get_plane(heif_channel_Alpha, &strideA);
-            }
+                if (hasAlpha) {
+                    img.add_plane(heif_channel_Alpha, width, height, 8);
+                    ptrA = img.get_plane(heif_channel_Alpha, &strideA);
+                }
 
-            KisPaintDeviceSP pd = image->projection();
+                KisPaintDeviceSP pd = image->projection();
 
-            for (int y = 0; y < height; y++) {
-                KisHLineIteratorSP it = pd->createHLineIteratorNG(0, y, width);
+                for (int y = 0; y < height; y++) {
+                    KisHLineIteratorSP it = pd->createHLineIteratorNG(0, y, width);
 
-                for (int x = 0; x < width; x++) {
-                    ptrG[y * strideG + x] = KoGrayTraits<quint8>::gray(it->rawData());
+                    for (int x = 0; x < width; x++) {
+                        ptrG[y * strideG + x] = KoGrayTraits<quint8>::gray(it->rawData());
 
-                    if (hasAlpha) {
-                        ptrA[y * strideA + x] = cs->opacityU8(it->rawData());
+                        if (hasAlpha) {
+                            ptrA[y * strideA + x] = cs->opacityU8(it->rawData());
+                        }
+
+                        it->nextPixel();
                     }
+                }
+            } else {
+                img.create(width, height, heif_colorspace_monochrome, heif_chroma_monochrome);
 
-                    it->nextPixel();
+                img.add_plane(heif_channel_Y, width, height, 12);
+
+                uint8_t* ptrG {0};
+                uint8_t* ptrA {0};
+                int strideG, strideA;
+
+                ptrG = img.get_plane(heif_channel_Y, &strideG);
+
+                if (hasAlpha) {
+                    img.add_plane(heif_channel_Alpha, width, height, 12);
+                    ptrA = img.get_plane(heif_channel_Alpha, &strideA);
+                }
+
+                KisPaintDeviceSP pd = image->projection();
+
+                for (int y = 0; y < height; y++) {
+                    KisHLineIteratorSP it = pd->createHLineIteratorNG(0, y, width);
+
+                    for (int x = 0; x < width; x++) {
+
+                        uint16_t v = qBound(0, int(float( KoGrayTraits<quint16>::gray(it->rawData()) ) / 65535.0 * 4095.0), 4095);
+                        ptrG[(x*2) + y * strideG + 1] = (uint8_t) (v >> 8);
+                        ptrG[(x*2) + y * strideG + 0] = (uint8_t) (v & 0xFF);
+
+                        if (hasAlpha) {
+                            uint16_t v = qBound(0, int( cs->opacityF(it->rawData()) * 4095), 4095);
+                            ptrA[(x*2) + y * strideA + 1] = (uint8_t) (v >> 8);
+                            ptrA[(x*2) + y * strideA + 0] = (uint8_t) (v & 0xFF);
+                        }
+
+                        it->nextPixel();
+                    }
                 }
             }
         }
@@ -453,8 +492,8 @@ void HeifExport::initializeCapabilities()
     supportedColorModels << QPair<KoID, KoID>()
             << QPair<KoID, KoID>(RGBAColorModelID, Integer8BitsColorDepthID)
             << QPair<KoID, KoID>(GrayAColorModelID, Integer8BitsColorDepthID)
-            << QPair<KoID, KoID>(RGBAColorModelID, Integer16BitsColorDepthID)/*
-                                    << QPair<KoID, KoID>(GrayAColorModelID, Integer16BitsColorDepthID)*/
+            << QPair<KoID, KoID>(RGBAColorModelID, Integer16BitsColorDepthID)
+            << QPair<KoID, KoID>(GrayAColorModelID, Integer16BitsColorDepthID)
             ;
     addSupportedColorModels(supportedColorModels, "HEIF");
 }

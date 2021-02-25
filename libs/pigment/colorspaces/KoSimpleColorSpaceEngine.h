@@ -7,6 +7,8 @@
 #ifndef _KO_SIMPLE_COLOR_SPACE_ENGINE_H_
 #define _KO_SIMPLE_COLOR_SPACE_ENGINE_H_
 
+#include <QVector>
+
 #include <KoColorSpaceEngine.h>
 
 class KoSimpleColorSpaceEngine : public KoColorSpaceEngine

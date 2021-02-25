@@ -58,6 +58,7 @@ void KisConvertColorSpaceProcessingVisitor::visitNodeWithPaintDevice(KisNode *no
     bool alphaDisabled = false;
 
     KisLayer *layer = dynamic_cast<KisLayer*>(node);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(layer);
 
     KisPaintLayer *paintLayer = 0;
 

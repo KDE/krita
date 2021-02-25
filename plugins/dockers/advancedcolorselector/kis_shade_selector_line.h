@@ -26,7 +26,7 @@ public:
     virtual void fromString(const QString& string) = 0;
 
 protected:
-    int m_lineNumber;
+    int m_lineNumber {0};
 };
 
 class KisShadeSelectorLine : public KisShadeSelectorLineBase
@@ -56,30 +56,30 @@ public:
     void mouseReleaseEvent(QMouseEvent *) override;
 
 private:
-    qreal m_hueDelta;
-    qreal m_saturationDelta;
-    qreal m_valueDelta;
+    qreal m_hueDelta {0.0};
+    qreal m_saturationDelta {0.0};
+    qreal m_valueDelta {0.0};
 
-    qreal m_hueShift;
-    qreal m_saturationShift;
-    qreal m_valueShift;
+    qreal m_hueShift {0.0};
+    qreal m_saturationShift {0.0};
+    qreal m_valueShift {0.0};
 
     KoColor m_realColor;
     KisPaintDeviceSP m_realPixelCache;
-    const KoColorSpace *m_cachedColorSpace;
+    const KoColorSpace *m_cachedColorSpace {0};
 
-    bool m_gradient;
-    int m_patchCount;
-    int m_lineHeight;
-    bool m_displayHelpText;
-    qreal m_mouseX;
+    bool m_gradient {false};
+    int m_patchCount {0};
+    int m_lineHeight {0};
+    bool m_displayHelpText {false};
+    qreal m_mouseX {0.0};
     QPoint m_ev;
-    qreal m_width;
-    bool m_isDown;
+    qreal m_width {0.0};
+    bool m_isDown {false};
 
     friend class KisShadeSelectorLineComboBox;
 
-    KisColorSelectorBaseProxy* m_parentProxy;
+    KisColorSelectorBaseProxy* m_parentProxy {0};
 };
 
 #endif // KIS_SHADE_SELECTOR_LINE_H

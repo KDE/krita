@@ -64,12 +64,7 @@ void KisAssistantTool::activate(ToolActivation toolActivation, const QSet<KoShap
     m_canvas->paintingAssistantsDecoration()->activateAssistantsEditor();
     m_handles = m_canvas->paintingAssistantsDecoration()->handles();
 
-    m_handleDrag = 0;
     m_internalMode = MODE_CREATION;
-    m_assistantHelperYOffset = 10;
-
-
-    m_handleSize = 17;
     m_canvas->paintingAssistantsDecoration()->setHandleSize(m_handleSize);
 
 

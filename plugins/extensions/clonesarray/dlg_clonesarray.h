@@ -74,7 +74,7 @@ private:
     QPointer<KisViewManager> m_viewManager;
     KisProcessingApplicator *m_applicator;
     KisLayerSP m_baseLayer;
-    bool m_isDirty;
+    bool m_isDirty {false};
 };
 
 #endif // DLG_CLONESARRAY

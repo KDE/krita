@@ -27,7 +27,7 @@ class KisFullRefreshWalker : public KisRefreshSubtreeWalker, public KisMergeWalk
 {
 public:
     KisFullRefreshWalker(QRect cropRect)
-        : KisMergeWalker(NO_FILTHY), m_firstRun(true)
+        : KisMergeWalker(NO_FILTHY)
     {
         setCropRect(cropRect);
     }
@@ -99,8 +99,8 @@ public:
     }
 
 private:
-    UpdateType m_currentUpdateType;
-    bool m_firstRun;
+    UpdateType m_currentUpdateType { UPDATE };
+    bool m_firstRun { true };
 };
 
 #endif /* __KIS_FULL_REFRESH_WALKER_H */

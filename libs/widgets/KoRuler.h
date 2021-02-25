@@ -54,8 +54,15 @@ public:
 
     /// For paragraphs each tab definition is represented by this struct.
     struct Tab {
-        qreal position;    ///< distance in point from the start of the text-shape
-        QTextOption::TabType type;       ///< Determine which type is used.
+        qreal position { 0.0 };    ///< distance in point from the start of the text-shape
+        QTextOption::TabType type { QTextOption::LeftTab };       ///< Determine which type is used.
+
+        Tab() {}
+        Tab(qreal _position, QTextOption::TabType _type)
+        {
+            position = _position;
+            type = _type;
+        }
     };
 
     /// The ruler's unit

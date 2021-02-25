@@ -34,7 +34,7 @@ public:
     void paintEvent(QPaintEvent *) override;
 
 private:
-    QTextOption::TabType m_type;
+    QTextOption::TabType m_type { QTextOption::LeftTab };
     bool m_showTabs :1;
 };
 
@@ -93,7 +93,7 @@ public:
     QSize sizeHint() override;
 
 private:
-    qreal lengthInPixel;
+    qreal lengthInPixel {0.0};
 };
 
 class VerticalPaintingStrategy : public PaintingStrategy
@@ -108,7 +108,7 @@ public:
     QSize sizeHint() override;
 
 private:
-    qreal lengthInPixel;
+    qreal lengthInPixel {0.0};
 };
 
 class HorizontalDistancesPaintingStrategy : public HorizontalPaintingStrategy
@@ -134,33 +134,33 @@ public:
     const Qt::Orientation orientation;
     const KoViewConverter * const viewConverter;
 
-    int offset;
-    qreal rulerLength;
-    qreal activeRangeStart;
-    qreal activeRangeEnd;
-    qreal activeOverrideRangeStart;
-    qreal activeOverrideRangeEnd;
+    int offset { 0 };
+    qreal rulerLength {0.0};
+    qreal activeRangeStart {0.0};
+    qreal activeRangeEnd {0.0};
+    qreal activeOverrideRangeStart {0.0};
+    qreal activeOverrideRangeEnd {0.0};
 
-    int mouseCoordinate;
-    int showMousePosition;
+    int mouseCoordinate {0};
+    int showMousePosition {0};
 
-    bool showSelectionBorders;
-    qreal firstSelectionBorder;
-    qreal secondSelectionBorder;
+    bool showSelectionBorders {false};
+    qreal firstSelectionBorder {0.0};
+    qreal secondSelectionBorder {0.0};
 
-    bool showIndents;
-    qreal firstLineIndent;
-    qreal paragraphIndent;
-    qreal endIndent;
+    bool showIndents {false};
+    qreal firstLineIndent {0.0};
+    qreal paragraphIndent {0.0};
+    qreal endIndent {0.0};
 
-    bool showTabs;
-    bool relativeTabs;
-    bool tabMoved; // set to true on first move of a selected tab
+    bool showTabs {false};
+    bool relativeTabs {false};
+    bool tabMoved {false}; // set to true on first move of a selected tab
     QList<KoRuler::Tab> tabs;
-    int originalIndex; //index of selected tab before we started dragging it.
-    int currentIndex; //index of selected tab or selected HotSpot - only valid when selected indicates tab or hotspot
+    int originalIndex {0}; //index of selected tab before we started dragging it.
+    int currentIndex {0}; //index of selected tab or selected HotSpot - only valid when selected indicates tab or hotspot
     KoRuler::Tab deletedTab;
-    qreal tabDistance;
+    qreal tabDistance {0.0};
 
     struct HotSpotData {
         qreal position;
@@ -168,7 +168,7 @@ public:
     };
     QList<HotSpotData> hotspots;
 
-    bool rightToLeft;
+    bool rightToLeft {false};
     enum Selection {
         None,
         Tab,
@@ -177,25 +177,25 @@ public:
         EndIndent,
         HotSpot
     };
-    Selection selected;
-    int selectOffset;
+    Selection selected {None};
+    int selectOffset {0};
 
     QList<QAction*> popupActions;
 
-    RulerTabChooser *tabChooser;
+    RulerTabChooser *tabChooser {0};
 
     // Cached painting strategies
-    PaintingStrategy * normalPaintingStrategy;
-    PaintingStrategy * distancesPaintingStrategy;
+    PaintingStrategy * normalPaintingStrategy {0};
+    PaintingStrategy * distancesPaintingStrategy {0};
 
     // Current painting strategy
-    PaintingStrategy * paintingStrategy;
+    PaintingStrategy * paintingStrategy {0};
 
-    KoRuler *ruler;
+    KoRuler *ruler {0};
 
-    bool guideCreationStarted;
+    bool guideCreationStarted {false};
 
-    qreal pixelStep;
+    qreal pixelStep {0.0};
 
     qreal numberStepForUnit() const;
     /// @return The rounding of value to the nearest multiple of stepValue

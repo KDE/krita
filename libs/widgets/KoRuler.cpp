@@ -1158,9 +1158,9 @@ void KoRuler::mousePressEvent ( QMouseEvent* ev )
             tabpos = d->viewConverter->viewToDocumentX(pos.x() - d->offset)
                     - d->effectiveActiveRangeStart() - (d->relativeTabs ? d->paragraphIndent : 0);
         }
-        Tab t = {tabpos, d->tabChooser ?  d->tabChooser->type() :
+        Tab t(tabpos, d->tabChooser ?  d->tabChooser->type() :
                          d->rightToLeft ? QTextOption::RightTab :
-                                          QTextOption::LeftTab};
+                                          QTextOption::LeftTab);
         d->tabs.append(t);
         d->selectOffset = 0;
         d->selected = KoRulerPrivate::Tab;

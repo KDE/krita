@@ -211,12 +211,17 @@ QModelIndex KisAllTagsModel::indexForTag(KisTagSP tag) const
 {
     if (!tag) return QModelIndex();
     // For now a linear seek to find the first tag
-
-    if (tag->id() < 0) { // this must be a fake tag id
+    if (tag->id() < 0 && (tag->url() == "All" || tag->url() == "All Untagged")) {
+        // this must be either a fake tag id, or a "naked" tag
+        // TODO: do we even use "naked tags"? won't it be better to just use QStrings?
         return index(tag->id() + s_fakeRowsCount, 0);
     }
 
     d->query.first();
+    bool r = d->query.first();
+    if (!r) {
+        return QModelIndex();
+    }
     do {
         if (tag->id() >= 0) {
             if (d->query.value("id").toInt() == tag->id()) {

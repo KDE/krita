@@ -5,12 +5,14 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
-   id="svg6190"
-   height="18"
-   width="18"
+   width="22"
+   height="22"
+   id="svg4183"
    version="1.1">
+  <defs
+     id="defs4185" />
   <metadata
-     id="metadata6196">
+     id="metadata4188">
     <rdf:RDF>
       <cc:Work
          rdf:about="">
@@ -18,7 +20,7 @@
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
         <dc:title></dc:title>
-        <dc:date>2016</dc:date>
+        <dc:date>2021</dc:date>
         <dc:creator>
           <cc:Agent>
             <dc:title>Timothée Giet</dc:title>
@@ -44,14 +46,21 @@
       </cc:License>
     </rdf:RDF>
   </metadata>
-  <defs
-     id="defs6194" />
   <g
      id="layer1"
-     transform="translate(6.0254234,-1036.0995)">
+     transform="rotate(-90,-504.1811,526.1811)">
     <path
-       id="path1139"
-       d="m 7.9243298,1040.1497 -1.4142263,1.4143 -1.4142004,1.4142 1.4142136,1.4142 1.1172871,-1.1173 a 5,5 0 0 1 -1.1172933,5.3599 5,5 0 0 1 -5.3571675,1.1146 l -1.50536728,1.5054 a 7,7 0 0 0 8.27674828,-1.2058 7,7 0 0 0 5.8e-6,-9.8995 z m -1.6227523,-1.2057 a 7,7 0 0 0 -8.2767483,1.2058 7,7 0 0 0 -5.8e-6,9.8995 l 1.41422629,-1.4143 1.41420041,-1.4142 -1.41421357,-1.4142 -1.11728703,1.1173 a 5,5 0 0 1 1.11729321,-5.3599 5,5 0 0 1 5.35716739,-1.1146 z"
-       style="opacity:1;vector-effect:none;fill:#373737;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:3.20000005;stroke-opacity:0.55063291" />
+       style="opacity:1;vector-effect:none;fill:#cacaca;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:3.20000005;stroke-opacity:0.55063291"
+       d="M 11,2 A 9,8.9999914 0 0 0 6.3242188,3.3242188 L 7.7851562,4.7851562 A 7,7 0 0 1 11,4 a 7,7 0 0 1 7,7 7,7 0 0 1 -0.787109,3.212891 l 1.464843,1.464843 A 9,8.9999914 0 0 0 20,11 9,8.9999914 0 0 0 11,2 Z M 3.3222656,6.3222656 A 9,8.9999914 0 0 0 2,11 a 9,8.9999914 0 0 0 9,9 9,8.9999914 0 0 0 4.675781,-1.324219 L 14.214844,17.214844 A 7,7 0 0 1 11,18 7,7 0 0 1 4,11 7,7 0 0 1 4.7871094,7.7871094 Z"
+       transform="translate(0,1030.3622)"
+       id="path840" />
+    <path
+       style="fill:#cacaca;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 7.0001,1034.3622 2.9999,2.9999 1,-0.9999 -3,-3 z"
+       id="path850" />
+    <path
+       style="fill:#cacaca;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 11.0001,1046.3622 2.9999,2.9999 1,-0.9999 -3,-3 z"
+       id="path850-3" />
   </g>
 </svg>

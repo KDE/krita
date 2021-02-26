@@ -1412,7 +1412,7 @@ void KisPaintopBox::slotUpdateSelectionIcon()
     m_workspaceWidget->setIcon(KisIconUtils::loadIcon("workspace-chooser"));
 
     m_eraseAction->setIcon(KisIconUtils::loadIcon("draw-eraser"));
-    m_reloadAction->setIcon(KisIconUtils::loadIcon("view-refresh"));
+    m_reloadAction->setIcon(KisIconUtils::loadIcon("reload-preset"));
 
     if (m_disablePressureAction->isChecked()) {
         m_disablePressureAction->setIcon(KisIconUtils::loadIcon("transform_icons_penPressure"));

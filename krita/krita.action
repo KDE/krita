@@ -410,7 +410,7 @@
       <statusTip/>
     </Action>
     <Action name="reload_preset_action">
-      <icon>view-refresh</icon>
+      <icon>reload-preset</icon>
       <text>Reload Original Preset</text>
       <whatsThis/>
       <toolTip>Reload Original Preset</toolTip>

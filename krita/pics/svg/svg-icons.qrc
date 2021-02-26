@@ -41,6 +41,7 @@
         <file>dark_transparency-enabled.svg</file>
         <file>dark_trim-to-image.svg</file>
         <file>dark_warning.svg</file>
+        <file>dark_workspace-chooser.svg</file>
         <file>dark_wraparound.svg</file>
         <file>light_addblankframe.svg</file>
         <file>light_addcolor.svg</file>
@@ -78,6 +79,7 @@
         <file>light_transparency-enabled.svg</file>
         <file>light_trim-to-image.svg</file>
         <file>light_warning.svg</file>
+        <file>light_workspace-chooser.svg</file>
         <file>light_wraparound.svg</file>
         <file>paintop_presets_disabled.svgz</file>
         <file>paintop_settings_01.svgz</file>
@@ -85,7 +87,6 @@
         <file>svg-icons.qrc</file>
         <file>transparency-locked.svg</file>
         <file>transparency-unlocked.svg</file>
-        <file>workspace-chooser.svg</file>
         <file>dark_mirror-view.svg</file>
         <file>light_mirror-view.svg</file>
         <file>dark_rotation-reset.svg</file>

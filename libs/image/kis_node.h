@@ -353,6 +353,13 @@ public: // Graph methods
      */
     KisNodeSP findChildByName(const QString &name);
 
+    /**
+     * @brief nodeByUniqueID searches the node tree for a node with the given name and returns it.
+     * @param uuid the unique id of the node
+     * @return the node with the given unique id, or 0 if no node is found.
+     */
+    KisNodeSP findChildByUniqueID(const QUuid &uuid);
+
 Q_SIGNALS:
     /**
      * Don't use this signal anywhere other than KisNodeShape. It's a hack.

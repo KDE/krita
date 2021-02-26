@@ -168,6 +168,14 @@ Node *Document::nodeByName(const QString &name) const
     return Node::createNode(d->document->image(), node);
 }
 
+Node *Document::nodeByUniqueID(const QUuid &id) const
+{
+    if (!d->document) return 0;
+    KisNodeSP node = d->document->image()->rootLayer()->findChildByUniqueID(id);
+    if (node.isNull()) return 0;
+    return Node::createNode(d->document->image(), node);
+}
+
 
 QString Document::colorDepth() const
 {

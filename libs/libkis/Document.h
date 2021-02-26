@@ -121,6 +121,14 @@ public Q_SLOTS:
      */
     Node *nodeByName(const QString &name) const;
 
+
+    /**
+     * @brief nodeByUniqueID searches the node tree for a node with the given name and returns it.
+     * @param uuid the unique id of the node
+     * @return the node with the given unique id, or 0 if no node is found.
+     */
+    Node *nodeByUniqueID(const QUuid &id) const;
+
     /**
      * colorDepth A string describing the color depth of the image:
      * <ul>

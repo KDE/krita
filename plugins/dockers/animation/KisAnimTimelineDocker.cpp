@@ -128,7 +128,7 @@ KisAnimTimelineDocker::KisAnimTimelineDocker(QWidget* parent) :
 
         {   // Settings menu..
             btnSettingsMenu = new QToolButton(this);
-            btnSettingsMenu->setIcon(KisIconUtils::loadIcon("view-choose"));
+            btnSettingsMenu->setIcon(KisIconUtils::loadIcon("view-choose-22"));
             btnSettingsMenu->setToolTip(i18n("Animation settings menu"));
             btnSettingsMenu->setIconSize(QSize(22, 22));
             btnSettingsMenu->setAutoRaise(true);

@@ -51,6 +51,12 @@ public:
      */
     void adjustPosition();
 
+    /**
+     * This function allows to show or hide the arrow.
+     * @param v set to true to draw the arrow, else set to false
+     */
+    void setArrowVisible(bool v);
+
 public Q_SLOTS:
 
     void showPopupWidget();

@@ -133,6 +133,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     m_presetSelectorPopupButton->setFixedSize(buttonsize, buttonsize);
     m_presetSelectorPopupButton->setIconSize(QSize(iconsize, iconsize));
     m_presetSelectorPopupButton->setFlat(true);
+    m_presetSelectorPopupButton->setArrowVisible(false);
 
     m_eraseModeButton = new KisHighlightedToolButton(this);
     m_eraseModeButton->setFixedSize(buttonsize, buttonsize);
@@ -322,6 +323,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     m_workspaceWidget->setIconSize(QSize(iconsize, iconsize));
     m_workspaceWidget->setPopupWidget(new KisWorkspaceChooser(view));
     m_workspaceWidget->setFlat(true);
+    m_workspaceWidget->setArrowVisible(false);
 
     QHBoxLayout* baseLayout = new QHBoxLayout(this);
     m_paintopWidget = new QWidget(this);

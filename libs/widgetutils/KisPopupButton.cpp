@@ -25,6 +25,7 @@ struct KisPopupButton::Private {
     QScopedPointer<QFrame> frame;
     QPointer<QWidget> popupWidget;
     QPointer<QHBoxLayout> frameLayout;
+    bool arrowVisible = true;
 };
 
 KisPopupButton::KisPopupButton(QWidget* parent)
@@ -100,7 +101,9 @@ void KisPopupButton::hidePopupWidget()
 void KisPopupButton::paintEvent ( QPaintEvent * event  )
 {
     QPushButton::paintEvent(event);
-    paintPopupArrow();
+    if (m_d->arrowVisible) {
+        paintPopupArrow();
+    }
 }
 
 void KisPopupButton::paintPopupArrow()
@@ -129,3 +132,11 @@ void KisPopupButton::adjustPosition()
     m_d->frame->setGeometry(popupRect);
 }
 
+void KisPopupButton::setArrowVisible (bool v)
+{
+    if (v) {
+        m_d->arrowVisible = true;
+    } else {
+        m_d->arrowVisible = false;
+    }
+}

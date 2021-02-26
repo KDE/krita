@@ -40,6 +40,7 @@ private Q_SLOTS:
 
 Q_SIGNALS:
     void loadingFinished(KisPaintDeviceSP paintDevice, qreal xRes, qreal yRes, const QSize &size);
+    void loadingFailed();
 
 private:
     struct Private;

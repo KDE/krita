@@ -169,8 +169,10 @@ struct KisSafeDocumentLoader::Private
     QString path;
     QString temporaryPath;
 
-    qint64 initialFileSize = 0;
+    qint64 initialFileSize {0};
     QDateTime initialFileTimeStamp;
+
+    int failureCount {0};
 };
 
 KisSafeDocumentLoader::KisSafeDocumentLoader(const QString &path, QObject *parent)
@@ -310,7 +312,13 @@ void KisSafeDocumentLoader::delayedLoadStart()
 
     if (!successfullyLoaded) {
         // Restart the attempt
-        m_d->fileChangedSignalCompressor.start();
+        m_d->failureCount++;
+        if (m_d->failureCount >= 3) {
+            emit loadingFailed();
+        }
+        else {
+            m_d->fileChangedSignalCompressor.start();
+        }
     }
     else {
         KisPaintDeviceSP paintDevice = new KisPaintDevice(m_d->doc->image()->colorSpace());

@@ -451,7 +451,6 @@ KisMainWindow::KisMainWindow(QUuid uuid)
 
     themeChanged(); // updates icon styles
 
-
     setCentralWidget(d->widgetStack);
     d->widgetStack->setCurrentIndex(0);
 
@@ -619,6 +618,11 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     // So, we send it manually when MainWindow shows up.
     QAndroidJniObject::callStaticMethod<void>("org/qtproject/qt5/android/QtNative", "setApplicationState", "(I)V", Qt::ApplicationActive);
 #endif
+
+    QTabBar *tabBar = d->findTabBarHACK();
+    if (tabBar) {
+        tabBar->setElideMode(Qt::ElideRight);
+    }
 
 }
 

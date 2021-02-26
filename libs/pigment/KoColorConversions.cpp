@@ -859,7 +859,7 @@ void xyYToXYZ(const qreal x, const qreal y, const qreal yY, qreal *X, qreal *Y, 
     qreal yb = qBound(0.0,y,1.0);
     qreal yYb = qBound(0.0,yY,1.0);
     *X=(xb*yYb)/yb;
-    *Z=((1.0-xb-yb)/yYb)/yb;
+    *Z=((1.0-xb-yb)*yYb)/yb;
     *Y=yYb;
 }
 

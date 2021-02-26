@@ -419,6 +419,8 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     // just switch this icon out for all OSs so it is easier to see
     d->mdiArea->setStyleSheet("QTabBar::close-button { image: url(:/pics/broken-preset.png) }");
 
+    themeChanged(); // updates icon styles
+
     setCentralWidget(d->widgetStack);
     d->widgetStack->setCurrentIndex(0);
 
@@ -581,6 +583,11 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     // So, we send it manually when MainWindow shows up.
     QAndroidJniObject::callStaticMethod<void>("org/qtproject/qt5/android/QtNative", "setApplicationState", "(I)V", Qt::ApplicationActive);
 #endif
+
+    QTabBar *tabBar = d->findTabBarHACK();
+    if (tabBar) {
+        tabBar->setElideMode(Qt::ElideRight);
+    }
 
 }
 

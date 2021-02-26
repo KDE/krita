@@ -1068,8 +1068,6 @@ void KisPainter::bltFixedWithFixedSelection(qint32 dstX, qint32 dstY,
     const quint8 *selRowStart = selection->data() +
         (selBounds.width() * (selY - selBounds.top()) + (selX - selBounds.left())) * selection->pixelSize();
 
-    ENTER_FUNCTION() << ppVar(dstBytes);
-
     if (!d->selection) {
         /* As there's nothing selected, blit to dstBytes (intermediary bit array),
           ignoring d->selection (the user selection)*/

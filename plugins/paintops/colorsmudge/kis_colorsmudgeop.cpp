@@ -31,6 +31,7 @@
 #include <KoColorModelStandardIds.h>
 #include "kis_paintop_plugin_utils.h"
 
+#include "kis_paint_device_debug_utils.h"
 
 struct ColorSmudgeStrategy {
     ColorSmudgeStrategy(KisPrecisePaintDeviceWrapper &srcWrapper,
@@ -71,6 +72,7 @@ struct ColorSmudgeStrategy {
         m_finalPainter.setChannelFlags(painter->channelFlags());
         m_finalPainter.copyMirrorInformationFrom(painter);
 
+        m_heightmapPainter.setCompositeOp(COMPOSITE_ALPHA_DARKEN);
         m_heightmapPainter.setSelection(painter->selection());
 
         m_paintColor.convertTo(m_blendDevice->colorSpace());
@@ -93,9 +95,40 @@ struct ColorSmudgeStrategy {
             1.0,
             dstDabRect);
 
+        QRgb* ptr = reinterpret_cast<QRgb*>(m_origDab->data());
+        const int numPixels = m_origDab->bounds().width() * m_origDab->bounds().height();
+
+        qint64 lightnessSum = 0;
+        qint64 alphaSum = 0;
+
+        for (int i = 0; i < numPixels; ++i) {
+            lightnessSum += qRound(qRed(*ptr) * qAlpha(*ptr) / 255.0);
+            alphaSum += qAlpha(*ptr);
+            ptr++;
+        }
+#if 1
+        ptr = reinterpret_cast<QRgb*>(m_origDab->data());
+        const qreal normCoeff = 127.0 * alphaSum / lightnessSum / 255.0;
+        for (int i = 0; i < numPixels; ++i) {
+            quint8 *pixelPtr = reinterpret_cast<quint8*>(ptr);
+
+            *(pixelPtr+2) = qBound(0, qRound(normCoeff * (*(pixelPtr+2))), 255);
+            *(pixelPtr+1) = *(pixelPtr+2);
+            *(pixelPtr+0) = *(pixelPtr+2);
+
+            //*(pixelPtr + 1) = *pixelPtr;
+            //*(pixelPtr + 2) = *pixelPtr;
+
+
+
+            ptr++;
+        }
+#endif
+        //ENTER_FUNCTION() << ppVar(normCoeff) << ppVar(lightnessSum) << ppVar(numPixels) << ppVar(alphaSum);
+
+
         m_maskDab->setRect(m_origDab->bounds());
         m_maskDab->lazyGrowBufferWithoutInitialization();
-        int numPixels = m_maskDab->bounds().width() * m_maskDab->bounds().height();
         m_origDab->colorSpace()->copyOpacityU8(m_origDab->data(), m_maskDab->data(), numPixels);
     }
 
@@ -126,24 +159,24 @@ struct ColorSmudgeStrategy {
             m_tempDevice->lazyGrowBufferWithoutInitialization();
             m_colorOnlyDevice->readBytes(m_tempDevice->data(), srcRect);
 
-            m_smearOp->composite(m_tempDevice->data(), dstRect.width() * m_tempDevice->pixelSize(), // stride should be random non-zero
-                                 m_blendDevice->data(), dstRect.width() * m_tempDevice->pixelSize(),
+            m_smearOp->composite(m_blendDevice->data(), dstRect.width() * m_tempDevice->pixelSize(),
+                                 m_tempDevice->data(), dstRect.width() * m_tempDevice->pixelSize(), // stride should be random non-zero
                                  0, 0,
                                  1, numPixels,
                                  smearAlpha);
         }
 
         if (colorAlpha > 0) {
-            ENTER_FUNCTION() << ppVar(m_colorRateOp) << ppVar(m_paintColor.data());
-            m_colorRateOp->composite(m_paintColor.data(), 0,
-                                     m_blendDevice->data(), dstRect.width() * m_blendDevice->pixelSize(),
+            //ENTER_FUNCTION() << ppVar(m_colorRateOp) << ppVar(m_paintColor.data());
+            m_colorRateOp->composite(m_blendDevice->data(), dstRect.width() * m_blendDevice->pixelSize(),
+                                     m_paintColor.data(), 0,
                                      0, 0,
                                      dstRect.height(), dstRect.width(),
                                      colorAlpha);
         }
 
-        ENTER_FUNCTION() << ppVar(m_blendDevice.data()) << ppVar(m_maskDab.data());
-        ENTER_FUNCTION() << ppVar(m_blendDevice->bounds()) << ppVar(m_maskDab->bounds());
+        //ENTER_FUNCTION() << ppVar(m_blendDevice.data()) << ppVar(m_maskDab.data());
+        //ENTER_FUNCTION() << ppVar(m_blendDevice->bounds()) << ppVar(m_maskDab->bounds());
 
         m_finalPainter.bltFixedWithFixedSelection(dstRect.x(), dstRect.y(),
                                                   m_blendDevice, m_maskDab,
@@ -151,21 +184,27 @@ struct ColorSmudgeStrategy {
                                                   m_blendDevice->bounds().x(), m_blendDevice->bounds().y(),
                                                   dstRect.width(), dstRect.height());
 
-        m_heightmapPainter.bltFixed(dstRect.topLeft(), m_maskDab, m_maskDab->bounds());
+        m_heightmapPainter.bltFixed(dstRect.topLeft(), m_origDab,m_origDab->bounds());
+
+        //KIS_DUMP_DEVICE_2(m_heightmapDevice, QRect(0,0,512,512), "00_height", "dd");
+
 
         m_tempDevice->setRect(dstRect);
         m_tempDevice->lazyGrowBufferWithoutInitialization();
 
         m_colorOnlyDevice->readBytes(m_tempDevice->data(), dstRect);
+        m_heightmapDevice->readBytes(m_blendDevice->data(), dstRect);
         m_tempDevice->colorSpace()->
             modulateLightnessByGrayBrush(m_tempDevice->data(),
-                                         reinterpret_cast<const QRgb*>(m_origDab->data()),
+                                         reinterpret_cast<const QRgb*>(m_blendDevice->data()),
                                          0,
                                          lightnessStrengthValue,
                                          numPixels);
         m_projectionDevice->writeBytes(m_tempDevice->data(), m_tempDevice->bounds());
 
         m_unprecisePainter.bitBlt(dstRect.topLeft(), m_projectionDevice, dstRect);
+
+
     }
 
     QVector<QRect> takeDirtyRegion() {

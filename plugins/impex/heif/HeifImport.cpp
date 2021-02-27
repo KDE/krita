@@ -250,12 +250,10 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
             int strideG, strideA;
             const uint8_t* imgG = heifimage.get_plane(heif_channel_Y, &strideG);
             const uint8_t* imgA = heifimage.get_plane(heif_channel_Alpha, &strideA);
+            KisHLineIteratorSP it = layer->paintDevice()->createHLineIteratorNG(0, 0, width);
 
-            for (int y=0;y<height;y++) {
-                KisHLineIteratorSP it = layer->paintDevice()->createHLineIteratorNG(0, y, width);
-
-                for (int x=0;x<width;x++) {
-
+            for (int y = 0; y < height; y++) {
+                for (int x = 0; x < width; x++) {
                     if (luma == 8) {
                         KoGrayU8Traits::setGray(it->rawData(), imgG[ y * strideG + x ]);
 
@@ -295,6 +293,8 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
 
                     it->nextPixel();
                 }
+
+                it->nextRow();
             }
 
         } else if (heifChroma == heif_chroma_444) {
@@ -305,12 +305,10 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
             const uint8_t* imgG = heifimage.get_plane(heif_channel_G, &strideG);
             const uint8_t* imgB = heifimage.get_plane(heif_channel_B, &strideB);
             const uint8_t* imgA = heifimage.get_plane(heif_channel_Alpha, &strideA);
+            KisHLineIteratorSP it = layer->paintDevice()->createHLineIteratorNG(0, 0, width);
 
             for (int y=0; y < height; y++) {
-                KisHLineIteratorSP it = layer->paintDevice()->createHLineIteratorNG(0, y, width);
-
                 for (int x=0; x < width; x++) {
-
                     KoBgrU8Traits::setRed(  it->rawData(), imgR[ y * strideR + x]);
                     KoBgrU8Traits::setGreen(it->rawData(), imgG[ y * strideG + x]);
                     KoBgrU8Traits::setBlue( it->rawData(), imgB[ y * strideB + x]);
@@ -324,6 +322,8 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
 
                     it->nextPixel();
                 }
+
+                it->nextRow();
             }
         } else if (heifChroma == heif_chroma_interleaved_RRGGBB_LE || heifChroma == heif_chroma_interleaved_RRGGBBAA_LE)  {
             int stride;
@@ -332,14 +332,13 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
             const uint8_t* img = heifimage.get_plane(heif_channel_interleaved, &stride);
             QVector<float> pixelValues(4);
             QVector<qreal> lCoef {colorSpace->lumaCoefficients()};
+            KisHLineIteratorSP it = layer->paintDevice()->createHLineIteratorNG(0, 0, width);
+            int channels = hasAlpha ? 4 : 3;
 
             for (int y=0; y < height; y++) {
-                KisHLineIteratorSP it = layer->paintDevice()->createHLineIteratorNG(0, y, width);
-
                 for (int x=0; x < width; x++) {
                     pixelValues.fill(1.0);
 
-                    int channels = hasAlpha? 4: 3;
                     for (int ch = 0; ch < channels; ch++) {
                         uint16_t source = reinterpret_cast<const uint16_t*>(img)[y * (stride/2) + (x*channels) + ch];
                         if (luma == 10) {
@@ -367,7 +366,7 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
                     it->nextPixel();
                 }
 
-
+                it->nextRow();
             }
         }
 

@@ -171,7 +171,9 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
     int quality = configuration->getInt("quality", 50);
     bool lossless = configuration->getBool("lossless", false);
     bool hasAlpha = configuration->getBool(KisImportExportFilter::ImageContainsTransparencyTag, false);
-
+    float hlgGamma = configuration->getFloat("HLGgamma", 1.2f);
+    float hlgNominalPeak = configuration->getFloat("HLGnominalPeak", 1000.0f);
+    bool removeHGLOOTF = configuration->getBool("removeHGLOOTF", true);
 
     // If we want to add information from the document to the metadata,
     // we should do that here.
@@ -224,11 +226,10 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
                 }
 
                 KisPaintDeviceSP pd = image->projection();
+                KisHLineIteratorSP it = pd->createHLineIteratorNG(0, 0, width);
 
-                for (int y=0; y<height; y++) {
-                    KisHLineIteratorSP it = pd->createHLineIteratorNG(0, y, width);
-
-                    for (int x=0; x<width; x++) {
+                for (int y = 0; y < height; y++) {
+                    for (int x = 0; x < width; x++) {
                         ptrR[y*strideR+x] = KoBgrU8Traits::red(it->rawData());
                         ptrG[y*strideG+x] = KoBgrU8Traits::green(it->rawData());
                         ptrB[y*strideB+x] = KoBgrU8Traits::blue(it->rawData());
@@ -239,6 +240,8 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
 
                         it->nextPixel();
                     }
+
+                    it->nextRow();
                 }
             } else if (cs->colorDepthId() == Integer16BitsColorDepthID) {
                 qDebug() << "saving as 12bit rgba";
@@ -253,11 +256,10 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
 
                 KisPaintDeviceSP pd = image->projection();
                 QVector<quint16> pixelValues(4);
+                KisHLineIteratorSP it = pd->createHLineIteratorNG(0, 0, width);
 
-                for (int y=0; y < height; y++) {
-                    KisHLineIteratorSP it = pd->createHLineIteratorNG(0, y, width);
-
-                    for (int x=0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    for (int x = 0; x < width; x++) {
                         pixelValues[0] = KoBgrU16Traits::red(it->rawData());
                         pixelValues[1] = KoBgrU16Traits::green(it->rawData());
                         pixelValues[2] = KoBgrU16Traits::blue(it->rawData());
@@ -272,6 +274,8 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
 
                         it->nextPixel();
                     }
+
+                    it->nextRow();
                 }
             } else {
                 qDebug() << "saving as 12bit rgba";
@@ -287,20 +291,21 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
                 QVector<float> pixelValues(4);
                 QVector<qreal> pixelValuesLinear(4);
                 QVector<qreal> lCoef {cs->lumaCoefficients()};
+                KisHLineIteratorSP it = pd->createHLineIteratorNG(0, 0, width);
+                const KoColorProfile *profile = cs->profile();
+                bool isLinear = profile->isLinear();
 
-                for (int y=0; y < height; y++) {
-                    KisHLineIteratorSP it = pd->createHLineIteratorNG(0, y, width);
-
-                    for (int x=0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    for (int x = 0; x < width; x++) {
                         cs->normalisedChannelsValue(it->rawData(), pixelValues);
-                        if (!convertToRec2020 && !cs->profile()->isLinear()) {
+                        if (!convertToRec2020 && !isLinear) {
                             std::copy(pixelValues.begin(), pixelValues.end(), pixelValuesLinear.begin());
-                            cs->profile()->linearizeFloatValue(pixelValuesLinear);
+                            profile->linearizeFloatValue(pixelValuesLinear);
                             std::copy(pixelValuesLinear.begin(), pixelValuesLinear.end(), pixelValues.begin());
                         }
 
-                        if (conversionPolicy == applyHLG && configuration->getBool("removeHGLOOTF", true)) {
-                            removeHLGOOTF(pixelValues, lCoef, configuration->getFloat("HLGgamma", 1.2), configuration->getFloat("HLGnominalPeak", 1000.0));
+                        if (conversionPolicy == applyHLG && removeHGLOOTF) {
+                            removeHLGOOTF(pixelValues, lCoef, hlgGamma, hlgNominalPeak);
                         }
 
                         int channels = hasAlpha? 4: 3;
@@ -312,6 +317,8 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
 
                         it->nextPixel();
                     }
+
+                    it->nextRow();
                 }
             }
 
@@ -334,10 +341,9 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
                 }
 
                 KisPaintDeviceSP pd = image->projection();
+                KisHLineIteratorSP it = pd->createHLineIteratorNG(0, 0, width);
 
                 for (int y = 0; y < height; y++) {
-                    KisHLineIteratorSP it = pd->createHLineIteratorNG(0, y, width);
-
                     for (int x = 0; x < width; x++) {
                         ptrG[y * strideG + x] = KoGrayU8Traits::gray(it->rawData());
 
@@ -347,6 +353,8 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
 
                         it->nextPixel();
                     }
+
+                    it->nextRow();
                 }
             } else {
                 img.create(width, height, heif_colorspace_monochrome, heif_chroma_monochrome);
@@ -365,12 +373,10 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
                 }
 
                 KisPaintDeviceSP pd = image->projection();
+                KisHLineIteratorSP it = pd->createHLineIteratorNG(0, 0, width);
 
                 for (int y = 0; y < height; y++) {
-                    KisHLineIteratorSP it = pd->createHLineIteratorNG(0, y, width);
-
                     for (int x = 0; x < width; x++) {
-
                         uint16_t v = qBound(0, int(float( KoGrayU16Traits::gray(it->rawData()) ) / 65535.0 * 4095.0), 4095);
                         ptrG[(x*2) + y * strideG + 1] = (uint8_t) (v >> 8);
                         ptrG[(x*2) + y * strideG + 0] = (uint8_t) (v & 0xFF);
@@ -383,11 +389,11 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
 
                         it->nextPixel();
                     }
+
+                    it->nextRow();
                 }
             }
         }
-
-
 
         // --- save the color profile.
         if (conversionPolicy == keepTheSame) {

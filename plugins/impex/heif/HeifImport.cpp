@@ -256,7 +256,7 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
                 for (int x=0;x<width;x++) {
 
                     if (luma == 8) {
-                        KoGrayTraits<quint8>::setGray(it->rawData(), imgG[ y * strideG + x ]);
+                        KoGrayU8Traits::setGray(it->rawData(), imgG[ y * strideG + x ]);
 
                         if (hasAlpha) {
                             colorSpace->setOpacity(it->rawData(), quint8(imgA[y*strideA+x]), 1);
@@ -268,12 +268,12 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
                         uint16_t source = reinterpret_cast<const uint16_t*>(imgG)[y * (strideG/2) + (x)];
 
                         if (luma == 10) {
-                            KoGrayTraits<quint16>::setGray(it->rawData(),float(0x03ff & (source)) * (65535.0/ 1023.0) );
+                            KoGrayU16Traits::setGray(it->rawData(),float(0x03ff & (source)) * (65535.0/ 1023.0) );
                         } else if (luma == 12) {
-                            KoGrayTraits<quint16>::setGray(it->rawData(), float(0x0fff & (source)) * (65535.0/ 4095.0) );
+                            KoGrayU16Traits::setGray(it->rawData(), float(0x0fff & (source)) * (65535.0/ 4095.0) );
                         } else {
                             qDebug() << "unknown bitdepth" << luma;
-                            KoGrayTraits<quint16>::setGray(it->rawData(), float(source)/65535.0 );
+                            KoGrayU16Traits::setGray(it->rawData(), float(source)/65535.0 );
                         }
 
                         if (hasAlpha) {
@@ -310,9 +310,9 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
 
                 for (int x=0; x < width; x++) {
 
-                    KoBgrTraits<quint8>::setRed(  it->rawData(), imgR[ y * strideR + x]);
-                    KoBgrTraits<quint8>::setGreen(it->rawData(), imgG[ y * strideG + x]);
-                    KoBgrTraits<quint8>::setBlue( it->rawData(), imgB[ y * strideB + x]);
+                    KoBgrU8Traits::setRed(  it->rawData(), imgR[ y * strideR + x]);
+                    KoBgrU8Traits::setGreen(it->rawData(), imgG[ y * strideG + x]);
+                    KoBgrU8Traits::setBlue( it->rawData(), imgB[ y * strideB + x]);
 
                     if (hasAlpha) {
                         colorSpace->setOpacity(it->rawData(), quint8(imgA[y*strideA+x]), 1);

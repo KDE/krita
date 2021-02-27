@@ -227,9 +227,9 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
                     KisHLineIteratorSP it = pd->createHLineIteratorNG(0, y, width);
 
                     for (int x=0; x<width; x++) {
-                        ptrR[y*strideR+x] = KoBgrTraits<quint8>::red(it->rawData());
-                        ptrG[y*strideG+x] = KoBgrTraits<quint8>::green(it->rawData());
-                        ptrB[y*strideB+x] = KoBgrTraits<quint8>::blue(it->rawData());
+                        ptrR[y*strideR+x] = KoBgrU8Traits::red(it->rawData());
+                        ptrG[y*strideG+x] = KoBgrU8Traits::green(it->rawData());
+                        ptrB[y*strideB+x] = KoBgrU8Traits::blue(it->rawData());
 
                         if (hasAlpha) {
                             ptrA[y * strideA + x] = cs->opacityU8(it->rawData());
@@ -258,10 +258,10 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
                     for (int x=0; x < width; x++) {
 
                         QVector<quint16> pixelValues(4);
-                        pixelValues[0] = KoBgrTraits<quint16>::red(it->rawData());
-                        pixelValues[1] = KoBgrTraits<quint16>::green(it->rawData());
-                        pixelValues[2] = KoBgrTraits<quint16>::blue(it->rawData());
-                        pixelValues[3] = quint16(KoBgrTraits<quint16>::opacityF(it->rawData()) * 65535);
+                        pixelValues[0] = KoBgrU16Traits::red(it->rawData());
+                        pixelValues[1] = KoBgrU16Traits::green(it->rawData());
+                        pixelValues[2] = KoBgrU16Traits::blue(it->rawData());
+                        pixelValues[3] = quint16(KoBgrU16Traits::opacityF(it->rawData()) * 65535);
 
                         int channels = hasAlpha? 4: 3;
                         for (int ch = 0; ch < channels; ch++) {
@@ -343,7 +343,7 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
                     KisHLineIteratorSP it = pd->createHLineIteratorNG(0, y, width);
 
                     for (int x = 0; x < width; x++) {
-                        ptrG[y * strideG + x] = KoGrayTraits<quint8>::gray(it->rawData());
+                        ptrG[y * strideG + x] = KoGrayU8Traits::gray(it->rawData());
 
                         if (hasAlpha) {
                             ptrA[y * strideA + x] = cs->opacityU8(it->rawData());
@@ -375,7 +375,7 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
 
                     for (int x = 0; x < width; x++) {
 
-                        uint16_t v = qBound(0, int(float( KoGrayTraits<quint16>::gray(it->rawData()) ) / 65535.0 * 4095.0), 4095);
+                        uint16_t v = qBound(0, int(float( KoGrayU16Traits::gray(it->rawData()) ) / 65535.0 * 4095.0), 4095);
                         ptrG[(x*2) + y * strideG + 1] = (uint8_t) (v >> 8);
                         ptrG[(x*2) + y * strideG + 0] = (uint8_t) (v & 0xFF);
 

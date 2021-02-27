@@ -223,7 +223,7 @@ void KisPasteActionFactory::run(bool pasteAtCursorPosition, KisViewManager *view
 
         KisImportCatcher::adaptClipToImageColorSpace(clip, image);
         KisPaintLayerSP newLayer = new KisPaintLayer(image.data(),
-                                                     image->nextLayerName() + i18n("(pasted)"),
+                                                     image->nextLayerName() + " " + i18n("(pasted)"),
                                                      OPACITY_OPAQUE_U8);
         KisNodeSP aboveNode = view->activeLayer();
         KisNodeSP parentNode = aboveNode ? aboveNode->parent() : image->root();

@@ -172,8 +172,9 @@ QList<const KoColorProfile *> KoColorProfileStorage::profilesFor(const QVector<d
                 QVector<double> compare = {wp[0], wp[1], col[0], col[1], col[3], col[4], col[6], col[7]};
 
                 for (int i = 0; i < compare.size(); i++) {
-                    if (std::fabs(compare[i] - colorants[i]) < error) {
-                        colorantMatch = true;
+                    colorantMatch = std::fabs(compare[i] - colorants[i]) < error;
+                    if (!colorantMatch) {
+                        break;
                     }
                 }
             } else {

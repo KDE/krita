@@ -493,7 +493,7 @@ void KisAnimCurvesView::setSelection(const QRect &rect, QItemSelectionModel::Sel
         }
     }
 
-    if (!selection.contains(selectionModel()->currentIndex())) {
+    if (!selection.contains(selectionModel()->currentIndex()) && selection.size() > 0) {
         selectionModel()->setCurrentIndex(selection.first().topLeft(), flags);
     }
 

@@ -341,7 +341,7 @@ public:
      * @param transferFunction the transfer function, as defined in KoColorProfile.
      * @return a profile that matches these characteristics.
      */
-    const KoColorProfile *profileFor(QVector<double> colorants, int colorPrimaries, int transferFunction) const;
+    const KoColorProfile *profileFor(const QVector<double> &colorants, int colorPrimaries, int transferFunction) const;
 
     /**
      * @return the list of available color models

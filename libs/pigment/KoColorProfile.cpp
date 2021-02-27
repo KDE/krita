@@ -121,35 +121,35 @@ QString KoColorProfile::getColorPrimariesName(colorPrimaries primaries)
 {
     switch (primaries) {
     case Primaries_ITU_R_BT_709_5:
-        return QString("Rec. 709");
+        return QStringLiteral("Rec. 709");
     case Primaries_ITU_R_BT_470_6_System_M:
-        return QString("BT. 470 System M");
+        return QStringLiteral("BT. 470 System M");
     case Primaries_ITU_R_BT_470_6_System_B_G:
-        return QString("BT. 470 System B, G");
+        return QStringLiteral("BT. 470 System B, G");
     case Primaries_generic_film:
-        return QString("Generic Film");
+        return QStringLiteral("Generic Film");
     case Primaries_SMPTE_240M:
-        return QString("SMPTE 240 M");
+        return QStringLiteral("SMPTE 240 M");
     case Primaries_ITU_R_BT_2020_2_and_2100_0:
-        return QString("Rec. 2020");
+        return QStringLiteral("Rec. 2020");
     case Primaries_ITU_R_BT_601_6:
-        return QString("Rec. 601");
+        return QStringLiteral("Rec. 601");
     case Primaries_SMPTE_EG_432_1:
-        return QString("Display P3");
+        return QStringLiteral("Display P3");
     case Primaries_SMPTE_RP_431_2:
-        return QString("DCI P3");
+        return QStringLiteral("DCI P3");
     case Primaries_SMPTE_ST_428_1:
-        return QString("XYZ primaries");
+        return QStringLiteral("XYZ primaries");
     case Primaries_EBU_Tech_3213_E:
-        return QString("EBU Tech 3213 E");
+        return QStringLiteral("EBU Tech 3213 E");
     case Primaries_ProPhoto:
-        return QString("ProPhoto");
+        return QStringLiteral("ProPhoto");
     case Primaries_Adobe_RGB_1998:
-        return QString("A98");
+        return QStringLiteral("A98");
     case Primaries_Unspecified:
         break;
     }
-    return QString("Unknown");
+    return QStringLiteral("Unknown");
 }
 
 void KoColorProfile::colorantsForType(colorPrimaries primaries, QVector<double> &colorants)

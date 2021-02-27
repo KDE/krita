@@ -44,7 +44,7 @@ public:
      * @param transferFunction the transfer function, as defined in KoColorProfile.
      * @return a profile that matches these characteristics.
      */
-    virtual const KoColorProfile* getProfile(QVector<double> colorants, int colorPrimaries, int transferFunction) = 0;
+    virtual const KoColorProfile* getProfile(const QVector<double> &colorants, int colorPrimaries, int transferFunction) = 0;
     virtual void removeProfile(const QString &filename) = 0;
 
     /**

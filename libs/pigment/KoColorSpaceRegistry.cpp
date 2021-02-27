@@ -688,7 +688,7 @@ const KoColorProfile *KoColorSpaceRegistry::p709SRGBProfile() const
     return profileByName("sRGB-elle-V2-srgbtrc.icc");
 }
 
-const KoColorProfile *KoColorSpaceRegistry::profileFor(QVector<double> colorants, int colorPrimaries, int transferFunction) const
+const KoColorProfile *KoColorSpaceRegistry::profileFor(const QVector<double> &colorants, int colorPrimaries, int transferFunction) const
 {
     if (colorPrimaries == KoColorProfile::Primaries_ITU_R_BT_709_5) {
         if (transferFunction == KoColorProfile::TRC_IEC_61966_2_1) {

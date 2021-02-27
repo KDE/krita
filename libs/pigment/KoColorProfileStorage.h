@@ -110,7 +110,7 @@ public:
      * @param error the margin of error with which the colorants get compared.
      * @return list of available profiles.
      */
-    QList<const KoColorProfile *> profilesFor(QVector<double> colorants,
+    QList<const KoColorProfile *> profilesFor(const QVector<double>& colorants,
                                               int colorantType,
                                               int transferType,
                                               double error = 0.00001);

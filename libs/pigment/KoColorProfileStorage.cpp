@@ -137,18 +137,16 @@ QList<const KoColorProfile *> KoColorProfileStorage::profilesFor(const KoColorSp
     return profiles;
 }
 
-QList<const KoColorProfile *> KoColorProfileStorage::profilesFor(QVector<double> colorants, int colorantType, int transferType, double error)
+QList<const KoColorProfile *> KoColorProfileStorage::profilesFor(const QVector<double> &colorants, int colorantType, int transferType, double error)
 {
-    QList<const KoColorProfile *>  profiles;
+    QList<const KoColorProfile *> profiles;
 
     if (colorants.isEmpty() && colorantType == 2 && transferType == 2) {
         return profiles;
     }
 
     QReadLocker l(&d->lock);
-    QHash<QString, KoColorProfile * >::ConstIterator it;
-    for (it = d->profileMap.constBegin(); it != d->profileMap.constEnd(); ++it) {
-        KoColorProfile *  profile = it.value();
+    for (const KoColorProfile* profile : d->profileMap) {
         bool colorantMatch = (colorants.isEmpty() || colorantType != 2);
         bool colorantTypeMatch = (colorantType == 2);
         bool transferMatch = (transferType == 2);
@@ -168,22 +166,22 @@ QList<const KoColorProfile *> KoColorProfileStorage::profilesFor(QVector<double>
             if (profile->hasColorants() && colorants.size() == 8) {
                 QVector<qreal> col = profile->getColorantsxyY();
                 if (col.size() < 8 || wp.size() < 2) {
-                    //too few colorants, skip.
+                    // too few colorants, skip.
                     continue;
                 }
                 QVector<double> compare = {wp[0], wp[1], col[0], col[1], col[3], col[4], col[6], col[7]};
 
-                for (int i=0; i<compare.size(); i++) {
-                    if (std::fabs(compare[i]-colorants[i]) < error) {
+                for (int i = 0; i < compare.size(); i++) {
+                    if (std::fabs(compare[i] - colorants[i]) < error) {
                         colorantMatch = true;
                     }
                 }
             } else {
                 if (wp.size() < 2 || colorants.size() < 2) {
-                    //too few colorants, skip.
+                    // too few colorants, skip.
                     continue;
                 }
-                if (std::fabs(wp[0]-colorants[0]) < error && std::fabs(wp[1]-colorants[1]) < error) {
+                if (std::fabs(wp[0] - colorants[0]) < error && std::fabs(wp[1] - colorants[1]) < error) {
                     colorantMatch = true;
                 }
             }
@@ -193,7 +191,6 @@ QList<const KoColorProfile *> KoColorProfileStorage::profilesFor(QVector<double>
             profiles.push_back(profile);
         }
     }
-
 
     return profiles;
 }

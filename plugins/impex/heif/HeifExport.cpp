@@ -13,6 +13,7 @@
 #include <QScopedPointer>
 #include <QBuffer>
 
+#include <algorithm>
 #include <kpluginfactory.h>
 #include <QFileInfo>
 
@@ -46,6 +47,7 @@
 
 #include "libheif/heif_cxx.h"
 
+using heif::Error;
 
 class KisExternalLayer;
 
@@ -206,10 +208,10 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
                 img.add_plane(heif_channel_G, width,height, 8);
                 img.add_plane(heif_channel_B, width,height, 8);
 
-                uint8_t* ptrR {0};
-                uint8_t* ptrG {0};
-                uint8_t* ptrB {0};
-                uint8_t* ptrA {0};
+                uint8_t* ptrR {nullptr};
+                uint8_t *ptrG {nullptr};
+                uint8_t *ptrB {nullptr};
+                uint8_t *ptrA {nullptr};
                 int strideR, strideG, strideB, strideA;
 
                 ptrR = img.get_plane(heif_channel_R, &strideR);
@@ -244,20 +246,18 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
                            hasAlpha? heif_chroma_interleaved_RRGGBBAA_BE: heif_chroma_interleaved_RRGGBB_BE);
                 img.add_plane(heif_channel_interleaved, width, height, 12);
 
-                uint8_t* ptr {0};
+                uint8_t *ptr {nullptr};
                 int stride;
 
                 ptr = img.get_plane(heif_channel_interleaved, &stride);
 
-
                 KisPaintDeviceSP pd = image->projection();
+                QVector<quint16> pixelValues(4);
 
                 for (int y=0; y < height; y++) {
                     KisHLineIteratorSP it = pd->createHLineIteratorNG(0, y, width);
 
                     for (int x=0; x < width; x++) {
-
-                        QVector<quint16> pixelValues(4);
                         pixelValues[0] = KoBgrU16Traits::red(it->rawData());
                         pixelValues[1] = KoBgrU16Traits::green(it->rawData());
                         pixelValues[2] = KoBgrU16Traits::blue(it->rawData());
@@ -279,32 +279,28 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
                            hasAlpha? heif_chroma_interleaved_RRGGBBAA_BE: heif_chroma_interleaved_RRGGBB_BE);
                 img.add_plane(heif_channel_interleaved, width, height, 12);
 
-                uint8_t* ptr {0};
                 int stride;
 
-                ptr = img.get_plane(heif_channel_interleaved, &stride);
-
+                uint8_t *ptr = img.get_plane(heif_channel_interleaved, &stride);
 
                 KisPaintDeviceSP pd = image->projection();
+                QVector<float> pixelValues(4);
+                QVector<qreal> pixelValuesLinear(4);
                 QVector<qreal> lCoef {cs->lumaCoefficients()};
 
                 for (int y=0; y < height; y++) {
                     KisHLineIteratorSP it = pd->createHLineIteratorNG(0, y, width);
 
                     for (int x=0; x < width; x++) {
-
-                        QVector<float> pixelValues(4);
                         cs->normalisedChannelsValue(it->rawData(), pixelValues);
-                        QVector<qreal> pixelValuesLinear = {pixelValues[0], pixelValues[1], pixelValues[2], pixelValues[3]};
                         if (!convertToRec2020 && !cs->profile()->isLinear()) {
-                            QVector<qreal> pixelValuesLinear = {pixelValues[0], pixelValues[1], pixelValues[2], pixelValues[3]};
+                            std::copy(pixelValues.begin(), pixelValues.end(), pixelValuesLinear.begin());
                             cs->profile()->linearizeFloatValue(pixelValuesLinear);
-                            pixelValues = {float(pixelValuesLinear[0]), float(pixelValuesLinear[1]), float(pixelValuesLinear[2]), float(pixelValuesLinear[3])};
+                            std::copy(pixelValuesLinear.begin(), pixelValuesLinear.end(), pixelValues.begin());
                         }
 
                         if (conversionPolicy == applyHLG && configuration->getBool("removeHGLOOTF", true)) {
-                            removeHLGOOTF(pixelValues, lCoef,
-                                                        configuration->getDouble("HLGgamma", 1.2), configuration->getDouble("HLGnominalPeak", 1000.0));
+                            removeHLGOOTF(pixelValues, lCoef, configuration->getFloat("HLGgamma", 1.2), configuration->getFloat("HLGnominalPeak", 1000.0));
                         }
 
                         int channels = hasAlpha? 4: 3;
@@ -326,8 +322,8 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
 
                 img.add_plane(heif_channel_Y, width, height, 8);
 
-                uint8_t* ptrG {0};
-                uint8_t* ptrA {0};
+                uint8_t *ptrG {nullptr};
+                uint8_t *ptrA {nullptr};
                 int strideG, strideA;
 
                 ptrG = img.get_plane(heif_channel_Y, &strideG);
@@ -357,8 +353,8 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
 
                 img.add_plane(heif_channel_Y, width, height, 12);
 
-                uint8_t* ptrG {0};
-                uint8_t* ptrA {0};
+                uint8_t *ptrG {nullptr};
+                uint8_t *ptrA {nullptr};
                 int strideG, strideA;
 
                 ptrG = img.get_plane(heif_channel_Y, &strideG);
@@ -475,8 +471,7 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
         Writer_QIODevice writer(io);
 
         ctx.write(writer);
-    }
-    catch (heif::Error err) {
+    } catch (Error &err) {
         return setHeifError(document, err);
     }
 

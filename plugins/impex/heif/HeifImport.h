@@ -29,7 +29,7 @@ public:
 
     KisImportExportErrorCode convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0) override;
 private:
-    float linearizeValueAsNeeded(float value, linearizePolicy policy = keepTheSame);
+    inline static float linearizeValueAsNeeded(float value, linearizePolicy policy = keepTheSame);
 };
 
 #endif

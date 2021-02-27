@@ -39,6 +39,7 @@
 
 #include "DlgHeifImport.h"
 
+using heif::Error;
 
 K_PLUGIN_FACTORY_WITH_JSON(ImportFactory, "krita_heif_import.json", registerPlugin<HeifImport>();)
 
@@ -265,7 +266,7 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
                             colorSpace->setOpacity(it->rawData(), OPACITY_OPAQUE_U8, 1);
                         }
                     } else {
-                        uint16_t source = reinterpret_cast<const uint16_t*>(imgG)[y * (strideG/2) + (x)];
+                        uint16_t source = KoGrayU16Traits::nativeArray(imgG)[y * (strideG / 2) + (x)];
 
                         if (luma == 10) {
                             KoGrayU16Traits::setGray(it->rawData(),float(0x03ff & (source)) * (65535.0/ 1023.0) );
@@ -277,7 +278,7 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
                         }
 
                         if (hasAlpha) {
-                            source = reinterpret_cast<const uint16_t*>(imgA)[y * (strideA/2) + x];
+                            source = KoGrayU16Traits::nativeArray(imgA)[y * (strideA/2) + x];
                             if (luma == 10) {
                                 colorSpace->setOpacity(it->rawData(), float(0x0fff & (source)) / 1023.0, 1);
                             } else if (luma == 12) {
@@ -336,23 +337,21 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
                 KisHLineIteratorSP it = layer->paintDevice()->createHLineIteratorNG(0, y, width);
 
                 for (int x=0; x < width; x++) {
-
                     pixelValues.fill(1.0);
-
 
                     int channels = hasAlpha? 4: 3;
                     for (int ch = 0; ch < channels; ch++) {
                         uint16_t source = reinterpret_cast<const uint16_t*>(img)[y * (stride/2) + (x*channels) + ch];
                         if (luma == 10) {
 
-                            pixelValues[ch] = linearizeValueAsNeeded(float(0x03ff & (source)) / 1023.0, linearizePolicy);
+                            pixelValues[ch] = linearizeValueAsNeeded(float(0x03ff & (source)) / 1023.0f, linearizePolicy);
 
                         } else if (luma == 12) {
-                            pixelValues[ch] = linearizeValueAsNeeded(float(0x0fff & (source)) / 4095.0, linearizePolicy);
+                            pixelValues[ch] = linearizeValueAsNeeded(float(0x0fff & (source)) / 4095.0f, linearizePolicy);
 
                         } else {
                             qDebug() << "unknown bitdepth" << luma;
-                            pixelValues[ch] = linearizeValueAsNeeded(float(source)/65535.0, linearizePolicy);
+                            pixelValues[ch] = linearizeValueAsNeeded(float(source)/65535.0f, linearizePolicy);
                         }
 
 
@@ -388,14 +387,13 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
             std::vector<uint8_t> exif_data = handle.get_metadata(id);
 
             if (exif_data.size()>4) {
-              uint32_t skip = ((exif_data[0]<<24) | (exif_data[1]<<16) | (exif_data[2]<<8) | exif_data[3]) + 4;
+              size_t skip = ((exif_data[0]<<24) | (exif_data[1]<<16) | (exif_data[2]<<8) | exif_data[3]) + 4;
 
               if (exif_data.size()>skip) {
                 KisMetaData::IOBackend* exifIO = KisMetaData::IOBackendRegistry::instance()->value("exif");
 
                 // Copy the exif data into the byte array
-                QByteArray ba;
-                ba.append((char*)(exif_data.data()+skip), exif_data.size()-skip);
+                QByteArray ba(reinterpret_cast<char *>(exif_data.data()+skip), static_cast<int>(exif_data.size()-skip));
                 QBuffer buf(&ba);
                 exifIO->loadFrom(layer->metaData(), &buf);
               }
@@ -411,19 +409,15 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
             KisMetaData::IOBackend* xmpIO = KisMetaData::IOBackendRegistry::instance()->value("xmp");
 
             // Copy the xmp data into the byte array
-            QByteArray ba;
-            ba.append((char*)(xmp_data.data()), xmp_data.size());
-
+            QByteArray ba(reinterpret_cast<char *>(xmp_data.data()), static_cast<int>(xmp_data.size()));
             QBuffer buf(&ba);
             xmpIO->loadFrom(layer->metaData(), &buf);
           }
         }
 
-
         document->setCurrentImage(image);
         return ImportExportCodes::OK;
-    }
-    catch (heif::Error err) {
+    } catch (Error &err) {
         return setHeifError(document, err);
     }
 }

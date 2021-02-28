@@ -24,6 +24,7 @@
 #include <QModelIndex>
 #include <QTextDocument>
 #include <QAbstractTextDocumentLayout>
+#include <QVersionNumber>
 
 #include "kis_config.h"
 #include "KisMultiFeedRSSModel.h"
@@ -162,7 +163,6 @@ void KisNewsWidget::rssDataChanged()
        const QModelIndex &idx = m_rssModel->index(i);
 
        if (idx.isValid()) {
-
            // only use official release announcements to get version number
            if ( idx.data(RssRoles::CategoryRole).toString() !=  "Official Release") {
                continue;
@@ -197,33 +197,7 @@ void KisNewsWidget::calculateVersionUpdateStatus()
         return;
     }
 
-    QList<int> currentVersionParts;
-    Q_FOREACH (QString number, currentVersionString.split(".")) {
-        currentVersionParts.append(number.toInt());
-    }
-
-    QList<int> onlineReleaseAnnouncement;
-    Q_FOREACH (QString number, m_newVersionNumber.split(".")) {
-        onlineReleaseAnnouncement.append(number.toInt());
-    }
-
-    while (onlineReleaseAnnouncement.size() < 4) {
-        onlineReleaseAnnouncement.append(0);
-    }
-
-    while (currentVersionParts.size() < 4) {
-        currentVersionParts.append(0);
-    }
-
-    // Check versions from mayor to minor
-    // We don't assume onlineRelease version is always equal or higher.
-    bool makeUpdate = true;
-    for (int i = 0; i <= 3; i++) {
-        if (onlineReleaseAnnouncement.at(i) > currentVersionParts.at(i)) {
-            m_needsVersionUpdate = (true & makeUpdate);
-            return;
-        } else if (onlineReleaseAnnouncement.at(i) < currentVersionParts.at(i)) {
-            makeUpdate &= false;
-        }
-    }
+    QVersionNumber currentVersion = QVersionNumber::fromString(currentVersionString);
+    QVersionNumber rssVersion = QVersionNumber::fromString(m_newVersionNumber);
+    m_needsVersionUpdate = currentVersion < rssVersion;
 }

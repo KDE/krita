@@ -116,7 +116,7 @@
          inkscape:connector-curvature="0"
          id="rect4112"
          d="m 554.28572,614.6479 0,2 4,0 0,10 2,0 0,-10 4,0 0,-2 z"
-         style="opacity:1;fill:#4d4d4d;fill-opacity:1;stroke:none" />
+         style="opacity:1;fill:#373737;fill-opacity:1;stroke:none" />
       <g
          inkscape:label="Capa 1"
          id="layer1-7"
@@ -124,7 +124,7 @@
         <path
            sodipodi:nodetypes="ccssscc"
            inkscape:connector-curvature="0"
-           style="opacity:1;fill:#4d4d4d;fill-opacity:1;stroke:none"
+           style="opacity:1;fill:#373737;fill-opacity:1;stroke:none"
            d="M 16.5,3 C 16.013545,4.7025 14.8218,6.1660906 14.296875,7.3378906 14.113175,7.6862906 14,8.0773 14,8.5 14,9.885 15.115,11 16.5,11 17.885,11 19,9.885 19,8.5 19,8.0773 18.886825,7.6862906 18.703125,7.3378906 18.1782,6.1660906 16.98645,4.7025 16.5,3 Z"
            transform="translate(0,1030.3622)"
            id="rect4108" />

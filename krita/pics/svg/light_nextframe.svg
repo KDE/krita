@@ -1339,7 +1339,7 @@
        inkscape:collect="always" />
   </defs>
   <path
-     style="color:#000000;fill:#cacaca;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+     style="color:#000000;fill:#f2f2f2;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
      d="M 6,3 6,19 8,19 8,3 z m 3,0 0,16 8,-7.9883 z"
      id="path3308"
      inkscape:connector-curvature="0"

@@ -26,11 +26,11 @@
        inkscape:collect="always"
        id="linearGradient832">
       <stop
-         style="stop-color:#cacaca;stop-opacity:1"
+         style="stop-color:#f2f2f2;stop-opacity:1"
          offset="0"
          id="stop828" />
       <stop
-         style="stop-color:#cacaca;stop-opacity:0"
+         style="stop-color:#f2f2f2;stop-opacity:0"
          offset="1"
          id="stop830" />
     </linearGradient>
@@ -140,7 +140,7 @@
        cy="23"
        r="7" />
     <path
-       style="fill:#cacaca;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="fill:#f2f2f2;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 5,11 -4,4 4,4 -2,2 h 8 v -8 l -2,2 z"
        id="path815"
        inkscape:connector-curvature="0"

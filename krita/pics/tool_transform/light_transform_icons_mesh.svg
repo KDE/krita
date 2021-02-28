@@ -72,12 +72,12 @@
     </rdf:RDF>
   </metadata>
   <path
-     style="opacity:1;vector-effect:none;fill:#cacaca;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none"
+     style="opacity:1;vector-effect:none;fill:#f2f2f2;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none"
      d="M 1.5 0 A 1.5 1.5 0 0 0 0 1.5 A 1.5 1.5 0 0 0 1.5 3 A 1.5 1.5 0 0 0 3 1.5 A 1.5 1.5 0 0 0 1.5 0 z M 14.5 0 A 1.5 1.5 0 0 0 13 1.5 A 1.5 1.5 0 0 0 14.5 3 A 1.5 1.5 0 0 0 16 1.5 A 1.5 1.5 0 0 0 14.5 0 z M 1.5 13 A 1.5 1.5 0 0 0 0 14.5 A 1.5 1.5 0 0 0 1.5 16 A 1.5 1.5 0 0 0 3 14.5 A 1.5 1.5 0 0 0 1.5 13 z M 14.5 13 A 1.5 1.5 0 0 0 13 14.5 A 1.5 1.5 0 0 0 14.5 16 A 1.5 1.5 0 0 0 16 14.5 A 1.5 1.5 0 0 0 14.5 13 z "
      id="path834" />
   <path
      inkscape:connector-curvature="0"
-     style="opacity:1;vector-effect:none;fill:#cacaca;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+     style="opacity:1;vector-effect:none;fill:#f2f2f2;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
      d="M 4,1 V 2 H 6 V 1 Z M 7,1 V 2 H 9 V 1 Z m 3,0 v 1 h 2 V 1 Z M 1,4 V 6 H 2 V 4 Z m 13,0 v 2 h 1 V 4 Z M 1,7 V 9 H 2 V 7 Z m 13,0 v 2 h 1 V 7 Z M 1,10 v 2 h 1 v -2 z m 13,0 v 2 h 1 V 10 Z M 4,14 v 1 h 2 v -1 z m 3,0 v 1 h 2 v -1 z m 3,0 v 1 h 2 v -1 z"
      id="rect829" />
 </svg>

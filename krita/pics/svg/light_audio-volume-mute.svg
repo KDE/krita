@@ -78,7 +78,7 @@
        id="path6"
        class="ColorScheme-Text"
        d="m 555.55969,745.93316 -4.98828,4.99023 0,0.01 0,1 0,4 0,1 0,0.01 4.98828,4.9902 1.01172,0 0,-0.40234 0,-15.19532 0,-0.40234 -1.01172,0 z m -7.98828,5 0,1 0,4 0,1 2,0 0,-1 0,-4 0,-1 z"
-       style="fill:#cacaca;fill-opacity:1;stroke:none" />
+       style="fill:#f2f2f2;fill-opacity:1;stroke:none" />
     <path
        id="path8"
        class="ColorScheme-NegativeText"

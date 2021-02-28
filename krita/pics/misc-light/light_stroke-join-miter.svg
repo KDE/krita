@@ -207,7 +207,7 @@
        id="g4171-7"
        transform="matrix(0,-1,1,0,0,30)" />
     <path
-       style="fill:#cacaca;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1"
+       style="fill:#f2f2f2;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1"
        d="m 4,4 0,26 10,0 0,-10 -2,0 0,-8 8,0 0,2 10,0 0,-10 z m 16,14 0,2 -2,0 0,10 8,0 0,-4 4,0 0,-8 z"
        id="rect9032"
        inkscape:connector-curvature="0"
@@ -219,7 +219,7 @@
      inkscape:label="v2"
      style="display:inline">
     <path
-       style="display:inline;fill:#cacaca;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1"
+       style="display:inline;fill:#f2f2f2;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1"
        d="m 2,2 0,30 10,0 0,-14 -2,0 0,-8 8,0 0,2 14,0 0,-10 z m 16,14 0,2 -2,0 0,14 6,0 0,-10 10,0 0,-6 z"
        id="rect9032-8"
        inkscape:connector-curvature="0"

@@ -110,7 +110,7 @@
      id="layer1"
      transform="translate(-238.85715,-522.93362)">
     <path
-       style="opacity:1;fill:#cacaca;fill-opacity:1;stroke:none"
+       style="opacity:1;fill:#f2f2f2;fill-opacity:1;stroke:none"
        d="M 6 3 L 6 4 L 6 18 L 6 19 L 11 17 L 16 19 L 16 18 L 16 4 L 16 3 L 6 3 z M 7 4 L 15 4 L 15 17.599609 L 11 16 L 7 17.599609 L 7 4 z "
        transform="translate(238.85715,522.93362)"
        id="rect4136" />

@@ -81,7 +81,7 @@
       </style>
   </defs>
   <path
-     style="color:#4d4d4d;fill:#cacaca;fill-opacity:1;stroke:none"
+     style="color:#4d4d4d;fill:#f2f2f2;fill-opacity:1;stroke:none"
      d="M 6,0 3,2 6,4 V 0 m 4,0 V 4 L 13,2 10,0 M 0,5 v 7 h 3 v 4 H 4 V 12 H 7 V 5 m 2,0 v 9 h 3 v 2 h 1 v -2 h 3 V 5 M 1,6 h 5 v 5 H 1 V 6 m 9,0 h 5 v 7 H 10 V 6"
      class="ColorScheme-Text"
      id="path4"

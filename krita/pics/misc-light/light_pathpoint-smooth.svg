@@ -88,7 +88,7 @@
       </style>
   </defs>
   <path
-     style="color:#373737;fill:#cacaca;fill-opacity:1;stroke:none"
+     style="color:#373737;fill:#f2f2f2;fill-opacity:1;stroke:none"
      d="M 0,0 C 0,8 3,13 5,13 V 12 C 4,12 1,8 1,0 Z m 15,0 c 0,6 -4,12 -8,12 v 1 c 4,0 9,-6 9,-13 z M 0,12 v 3 H 3 V 14 H 4 V 13 H 3 v -1 z m 13,0 v 1 h -1 v 1 h 1 v 1 h 3 V 12 Z M 1,13 h 1 v 1 H 1 Z m 7,0 v 1 h 1 v -1 z m 2,0 v 1 h 1 v -1 z m 4,0 h 1 v 1 h -1 z"
      id="path4"
      inkscape:connector-curvature="0"

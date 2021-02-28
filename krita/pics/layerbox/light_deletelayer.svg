@@ -54,11 +54,11 @@
     <path
        id="rect833"
        d="m 4,18 v 11 c 0,1.108 0.892,2 2,2 h 10 c 1.108,0 2,-0.892 2,-2 V 18 Z"
-       style="opacity:1;vector-effect:none;fill:#cacaca;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:3.20000005;stroke-opacity:0.55063291" />
+       style="opacity:1;vector-effect:none;fill:#f2f2f2;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:3.20000005;stroke-opacity:0.55063291" />
     <path
        id="rect840"
        transform="translate(0,10)"
        d="M 9,1 C 7.338,1 6,2.338 6,4 H 2 V 6 H 20 V 4 H 16 C 16,2.338 14.662,1 13,1 Z m 0,2 h 4 c 0.554,0 1,0.446 1,1 H 8 C 8,3.446 8.446,3 9,3 Z"
-       style="opacity:1;vector-effect:none;fill:#cacaca;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:3.20000005;stroke-opacity:0.55063291" />
+       style="opacity:1;vector-effect:none;fill:#f2f2f2;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:3.20000005;stroke-opacity:0.55063291" />
   </g>
 </svg>

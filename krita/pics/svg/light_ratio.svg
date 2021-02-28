@@ -1511,11 +1511,11 @@
     <g
        aria-label="%"
        transform="scale(1.0145126,0.98569499)"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.77863503px;line-height:1.25;font-family:'Noto Color Emoji';-inkscape-font-specification:'Noto Color Emoji, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#cacaca;fill-opacity:1;stroke:none;stroke-width:1.00599837"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.77863503px;line-height:1.25;font-family:'Noto Color Emoji';-inkscape-font-specification:'Noto Color Emoji, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#f2f2f2;fill-opacity:1;stroke:none;stroke-width:1.00599837"
        id="text1158">
       <path
          d="m 7.6844458,1061.0937 q -0.7977252,0 -1.256188,0.6785 -0.4492935,0.6786 -0.4492935,1.8889 0,1.192 0.4492935,1.8797 0.4584628,0.6785 1.256188,0.6785 0.7793867,0 1.2286802,-0.6785 0.4584628,-0.6877 0.4584628,-1.8797 0,-1.2012 -0.4584628,-1.8797 -0.4492935,-0.6877 -1.2286802,-0.6877 z m 0,-1.1645 q 1.4487423,0 2.3014831,1.0086 0.8527411,1.0087 0.8527411,2.7233 0,1.7147 -0.8619104,2.7233 -0.8527407,0.9994 -2.2923138,0.9994 -1.4670809,0 -2.3198216,-0.9994 -0.8527408,-1.0086 -0.8527408,-2.7233 0,-1.7238 0.8527408,-2.7233 0.86191,-1.0086 2.3198216,-1.0086 z m -9.4626716,-5.5841 q -0.7885559,0 -1.2470187,0.6877 -0.4492935,0.6786 -0.4492935,1.8706 0,1.2103 0.4492935,1.8888 0.4492935,0.6786 1.2470187,0.6786 0.79772525,0 1.24701876,-0.6786 0.45846277,-0.6785 0.45846277,-1.8888 0,-1.1829 -0.45846277,-1.8706 -0.45846276,-0.6877 -1.24701876,-0.6877 z m 8.2798376,-1.1644 h 1.4670809 l -8.56408452,14.2031 H -2.0624727 Z m -8.2798376,0 q 1.44874238,0 2.31065239,1.0086 0.86191001,0.9994 0.86191001,2.7141 0,1.733 -0.86191001,2.7324 -0.85274075,0.9995 -2.31065239,0.9995 -1.4579116,0 -2.3106523,-0.9995 -0.8435715,-1.0086 -0.8435715,-2.7324 0,-1.7055 0.8527407,-2.7141 0.8527408,-1.0086 2.3014831,-1.0086 z"
-         style="fill:#cacaca;fill-opacity:1;stroke-width:1.00599837"
+         style="fill:#f2f2f2;fill-opacity:1;stroke-width:1.00599837"
          id="path1156" />
     </g>
   </g>

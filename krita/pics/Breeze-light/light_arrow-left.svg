@@ -239,7 +239,7 @@
      id="layer1"
      transform="translate(0,-1030.3622)">
     <path
-       style="fill:#cacaca;fill-opacity:1;stroke:none"
+       style="fill:#f2f2f2;fill-opacity:1;stroke:none"
        d="M 14.292969 3 L 8.1679688 9.125 L 6.2929688 11 L 8.1679688 12.875 L 14.292969 19 L 15 18.292969 L 8.875 12.167969 L 7.7070312 11 L 8.875 9.8320312 L 15 3.7070312 L 14.292969 3 z "
        transform="translate(-5e-7,1030.3622)"
        id="rect4176" />

@@ -104,7 +104,7 @@
        id="path4493"
        class="ColorScheme-Text"
        d="M 3.0019531,3.4960931 3,3.4980462 V 4.49414 L 3.00195,4.49609 C 6,4.5 8,12.5 8,15.5 l 1,-1 C 9,11.5 7,3.5 3.0019531,3.4960931 Z M 9,4.5 v 3 h 1 v 1 h 1 v -1 h 1 v -3 z m 9,-1 c 0,7 -4,11 -7,12 v 1 c 4,-1 8.000357,-6.000843 8,-13 z m -8,2 h 1 v 1 h -1 z m 0,4 v 1 h 1 v -1 z m 0,2 v 1 h 1 v -1 z m 6,4 v 1 h -1 v 1 h 1 v 1 h 3 v -3 z m -3,1 v 1 h 1 v -1 z m 4,0 h 1 v 1 h -1 z"
-       style="color:#373737;fill:#cacaca;fill-opacity:1;stroke:none"
+       style="color:#373737;fill:#f2f2f2;fill-opacity:1;stroke:none"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccccccccccccccccccccccccccccccccccccccccccccccccccccc" />
     <path

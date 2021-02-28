@@ -48,16 +48,16 @@
     </rdf:RDF>
   </metadata>
   <g
-     style="fill:#cacaca;fill-opacity:1"
+     style="fill:#f2f2f2;fill-opacity:1"
      transform="translate(0,-1036.3622)"
      id="layer1">
     <path
        id="path820-3"
        d="m 3,1039.3622 v 11 h 2 v -5 h 2 v -2 H 5 v -2 h 4 v -2 z"
-       style="fill:#cacaca;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+       style="fill:#f2f2f2;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
     <path
        id="path839"
        d="m 7.6660156,1043.3622 2.3339844,3.5 -2.3339844,3.5 h 2 l 1.3339844,-2 1.333984,2 h 2 l -2.333984,-3.5 2.333984,-3.5 h -2 l -1.333984,2 -1.3339844,-2 z"
-       style="fill:#cacaca;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+       style="fill:#f2f2f2;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
   </g>
 </svg>

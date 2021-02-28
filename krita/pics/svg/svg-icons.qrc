@@ -28,6 +28,7 @@
         <file>dark_passthrough-enabled.svg</file>
         <file>dark_prevframe.svg</file>
         <file>dark_reload-preset.svg</file>
+        <file>dark_reload-preset-16.svg</file>
         <file>dark_selection-mode_ants.svg</file>
         <file>dark_selection-mode_invisible.svg</file>
         <file>dark_selection-mode_mask.svg</file>
@@ -68,6 +69,7 @@
         <file>light_prevkeyframe.svg</file>
         <file>light_firstframe.svg</file>
         <file>light_reload-preset.svg</file>
+        <file>light_reload-preset-16.svg</file>
         <file>light_selection-mode_ants.svg</file>
         <file>light_selection-mode_invisible.svg</file>
         <file>light_selection-mode_mask.svg</file>

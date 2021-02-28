@@ -1258,6 +1258,11 @@ bool KToolBar::eventFilter(QObject *watched, QEvent *event)
                 }
             }
         }
+        // Set highlight color on checked buttons, same as in KisHighlightedButton
+        QPalette p = tb->palette();
+        QColor color = p.color(tb->isChecked() ? QPalette::Highlight : QPalette::Button);
+        p.setColor(QPalette::Button, color);
+        tb->setPalette(p);
     }
 
     // Redirect mouse events to the toolbar when drag + drop editing is enabled

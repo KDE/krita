@@ -283,7 +283,7 @@ namespace KisAnimUtils {
                 kundo2_i18np("Move Keyframe",
                              "Move %1 Keyframes",
                              srcDstPairs.size()) :
-                kundo2_i18ncp("Copy one or several keyframes"
+                kundo2_i18ncp("Copy one or several keyframes",
                              "Copy Keyframe",
                              "Copy %1 Keyframes",
                              srcDstPairs.size()),

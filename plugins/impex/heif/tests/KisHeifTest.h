@@ -17,6 +17,16 @@ private Q_SLOTS:
     void testImportFromWriteonly();
     void testExportToReadonly();
     void testImportIncorrectFormat();
+
+    void testSaveMonochrome(int bitDepth);
+    void testSaveRGB(int bitDepth);
+    void testLoadMonochrome(int bitDepth);
+    void testLoadRGB(int bitDepth);
+
+    void testSaveHDR();
+    void testLoadHDR();
+
+    void testImages();
 };
 
 #endif // _KIS_HEIF_TEST_H_

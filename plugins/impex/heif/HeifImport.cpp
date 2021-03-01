@@ -91,7 +91,7 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
 
         // Get the colorprofile. Default to sRGB if no profile is available.
         const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->rgb8();
-        KoID colorModel = colorSpace->colorModelId();
+        QString colorModel = colorSpace->colorModelId().id();
         KoID colorDepth = colorSpace->colorDepthId();
 
         heif::Image heifimage = handle.decode_image(heif_colorspace_undefined, heif_chroma_undefined);
@@ -103,7 +103,7 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
 
         if (heifModel == heif_colorspace_monochrome) {
             // Grayscale image.
-            colorModel = GrayAColorModelID;
+            colorModel = GrayAColorModelID.id();
             if (heifChroma == heif_chroma_monochrome) {
                 colorSpace = KoColorSpaceRegistry::instance()->graya8();
             }
@@ -114,7 +114,7 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
         } else {
             // RGB
             heifimage = handle.decode_image(heif_colorspace_RGB, heif_chroma_444);
-            colorModel = RGBAColorModelID;
+            colorModel = RGBAColorModelID.id();
             if (luma == 8) {
                 colorDepth = Integer8BitsColorDepthID;
             } else {
@@ -131,7 +131,7 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
 
 
         heif_color_profile_type profileType = heif_image_handle_get_color_profile_type(handle.get_raw_image_handle());
-        const QString colorSpaceId = KoColorSpaceRegistry::instance()->colorSpaceId(colorModel, colorDepth);
+        const QString colorSpaceId = KoColorSpaceRegistry::instance()->colorSpaceId(colorModel, colorDepth.id());
         QString profileName = KoColorSpaceRegistry::instance()->defaultProfileForColorSpace(colorSpaceId);
 
         qDebug() << "profile" << profileType;
@@ -154,9 +154,10 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
                 if (err.code) {
                     qDebug() << "icc profile loading failed";
                 } else {
-                    const KoColorProfile *profile = KoColorSpaceRegistry::instance()->createColorProfile(colorModel.id(), colorDepth.id(), ba);
+                    const KoColorProfile *profile = KoColorSpaceRegistry::instance()->createColorProfile(colorModel, colorDepth.id(), ba);
                     KoColorSpaceRegistry::instance()->addProfile(profile);
                     profileName = profile->name();
+                    colorModel = profile->colorModelID();
                     qDebug() << "icc profile found" << profileName;
                 }
             } else {
@@ -182,11 +183,14 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
                 }
                 if (nclx->transfer_characteristics == heif_transfer_characteristic_ITU_R_BT_2100_0_HLG) {
                     qDebug() << "linearizing from HLG";
-                    DlgHeifImport dlg(applyOOTF, displayGamma, displayNits);
-                    dlg.exec();
-                    applyOOTF = dlg.applyOOTF();
-                    displayGamma = dlg.gamma();
-                    displayNits = dlg.nominalPeakBrightness();
+                    qDebug() << "batchmode" << document->fileBatchMode();
+                    if (!document->fileBatchMode()) {
+                        DlgHeifImport dlg(applyOOTF, displayGamma, displayNits);
+                        dlg.exec();
+                        applyOOTF = dlg.applyOOTF();
+                        displayGamma = dlg.gamma();
+                        displayNits = dlg.nominalPeakBrightness();
+                    }
                     linearizePolicy = linearFromHLG;
                     transferCharacteristic = KoColorProfile::TRC_linear;
                 }
@@ -228,11 +232,16 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
                 qDebug() << "nclx profile found" << profileName;
             }
         } else {
-            qDebug() << "no profile found";
+            qDebug() << "no profile found" << mimeType();
         }
 
-        qDebug() << colorModel.id()<< colorDepth.id()<<profileName;
-        colorSpace = KoColorSpaceRegistry::instance()->colorSpace(colorModel.id(), colorDepth.id(), profileName);
+        qDebug() << colorModel << colorDepth.id()<<profileName;
+        if (heifChroma != heif_chroma_monochrome && colorModel == "GRAYA") {
+            // double check that the color model matches the chroma.
+            heifChroma = heif_chroma_monochrome;
+            heifimage = handle.decode_image(heif_colorspace_YCbCr, heif_chroma_monochrome);
+        }
+        colorSpace = KoColorSpaceRegistry::instance()->colorSpace(colorModel, colorDepth.id(), profileName);
 
         int width  = handle.get_width();
         int height = handle.get_height();
@@ -276,7 +285,7 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
                         }
 
                         if (hasAlpha) {
-                            source = KoGrayU16Traits::nativeArray(imgA)[y * (strideA/2) + x];
+                            source = KoGrayU16Traits::nativeArray(imgA)[y * (strideA / 2) + x];
                             if (luma == 10) {
                                 colorSpace->setOpacity(it->rawData(), float(0x0fff & (source)) / 1023.0, 1);
                             } else if (luma == 12) {

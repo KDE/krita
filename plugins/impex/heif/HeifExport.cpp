@@ -195,7 +195,9 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
             encoder.set_lossy_quality(100);
         }
         encoder.set_lossless(lossless);
+        if (cs->colorModelId() != GrayAColorModelID) {
         encoder.set_parameter("chroma", configuration->getString("chroma", "444").toStdString());
+        }
 
 
         // --- convert KisImage to HEIF image ---
@@ -386,9 +388,9 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
                         ptrG[(x*2) + y * strideG + 0] = (uint8_t) (v & 0xFF);
 
                         if (hasAlpha) {
-                            uint16_t v = qBound(0, int( cs->opacityF(it->rawData()) * 4095), 4095);
-                            ptrA[(x*2) + y * strideA + 1] = (uint8_t) (v >> 8);
-                            ptrA[(x*2) + y * strideA + 0] = (uint8_t) (v & 0xFF);
+                            uint16_t vA = qBound(0, int( cs->opacityF(it->rawData()) * 4095), 4095);
+                            ptrA[(x*2) + y * strideA + 1] = (uint8_t) (vA >> 8);
+                            ptrA[(x*2) + y * strideA + 0] = (uint8_t) (vA & 0xFF);
                         }
 
                         it->nextPixel();
@@ -428,7 +430,6 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
            }
 
            img.set_nclx_color_profile(nclxDescription);
-            
         }
 
 

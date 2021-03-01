@@ -189,6 +189,7 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
             encoder = heif::Encoder(heif_compression_AV1);
         }
 
+
         encoder.set_lossy_quality(quality);
         if (lossless) {
             //https://invent.kde.org/graphics/krita/-/merge_requests/530#note_169521
@@ -435,7 +436,10 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
 
         // --- encode and write image
 
-        heif::ImageHandle handle = ctx.encode_image(img, encoder);
+        heif::Context::EncodingOptions options;
+        options.macOS_compatibility_workaround_no_nclx_profile = false;
+
+        heif::ImageHandle handle = ctx.encode_image(img, encoder, options);
 
 
         // --- add Exif / XMP metadata

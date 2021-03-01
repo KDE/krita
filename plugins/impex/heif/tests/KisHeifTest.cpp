@@ -227,9 +227,13 @@ void KisHeifTest::testLoadHDR()
         doc_png->setFileBatchMode(true);
         QScopedPointer<KisDocument> doc_avif_pq(KisPart::instance()->createDocument());
         doc_avif_pq->setFileBatchMode(true);
+        QScopedPointer<KisDocument> doc_heif_pq(KisPart::instance()->createDocument());
+        doc_heif_pq->setFileBatchMode(true);
 
         QScopedPointer<KisDocument> doc_avif_hlg(KisPart::instance()->createDocument());
         doc_avif_hlg->setFileBatchMode(true);
+        QScopedPointer<KisDocument> doc_heif_hlg(KisPart::instance()->createDocument());
+        doc_heif_hlg->setFileBatchMode(true);
 
         KisImportExportManager manager(doc_png.data());
 
@@ -238,11 +242,15 @@ void KisHeifTest::testLoadHDR()
 
         QVERIFY(loadingStatus.isOk());
         KisImportExportManager (doc_avif_pq.data()).importDocument(QString("test_rgba_hdr_pq.avif"), QString());
+        KisImportExportManager (doc_heif_pq.data()).importDocument(QString("test_rgba_hdr_pq.heif"), QString());
         KisImportExportManager (doc_avif_hlg.data()).importDocument(QString("test_rgba_hdr_hlg.avif"), QString());
+        KisImportExportManager (doc_heif_hlg.data()).importDocument(QString("test_rgba_hdr_hlg.heif"), QString());
 
         doc_png->image()->initialRefreshGraph();
         doc_avif_pq->image()->initialRefreshGraph();
+        doc_heif_pq->image()->initialRefreshGraph();
         doc_avif_hlg->image()->initialRefreshGraph();
+        doc_heif_hlg->image()->initialRefreshGraph();
 
         const KoColorSpace * cs =
             KoColorSpaceRegistry::instance()->colorSpace(
@@ -253,15 +261,26 @@ void KisHeifTest::testLoadHDR()
         doc_png->image()->waitForDone();
 
         KoColor pngColor(cs);
+        KoColor heifColor(cs);
         KoColor avifColor(cs);
 
         for (int y = 0; y<doc_png->image()->height(); y++) {
             for (int x = 0; x<doc_png->image()->width(); x++) {
                 doc_png->image()->projection()->pixel(x, y, &pngColor);
+                doc_heif_pq->image()->projection()->pixel(x, y, &heifColor);
                 doc_avif_pq->image()->projection()->pixel(x, y, &avifColor);
 
                 QVERIFY2(cs->difference(pngColor.data(), avifColor.data()) <1, QString("Avif PQ color doesn't match PNG color, (%1, %2) %3 %4")
                          .arg(x).arg(y).arg(pngColor.toXML()).arg(avifColor.toXML()).toLatin1());
+
+                QVERIFY2(cs->difference(pngColor.data(), heifColor.data()) <1, QString("Heif PQ color doesn't match PNG color, (%1, %2) %3 %4")
+                         .arg(x).arg(y).arg(pngColor.toXML()).arg(heifColor.toXML()).toLatin1());
+
+                doc_heif_hlg->image()->projection()->pixel(x, y, &heifColor);
+                doc_avif_hlg->image()->projection()->pixel(x, y, &avifColor);
+
+                QVERIFY2(cs->difference(heifColor.data(), avifColor.data()) <1, QString("Avif HLG color doesn't match heif color, (%1, %2) %3 %4")
+                         .arg(x).arg(y).arg(heifColor.toXML()).arg(avifColor.toXML()).toLatin1());
             }
         }
     }

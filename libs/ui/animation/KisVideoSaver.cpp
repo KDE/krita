@@ -210,86 +210,77 @@ KisImportExportErrorCode KisVideoSaver::encode(const QString &savedFilesMask, co
         QString("scale=w=")
             .append(QString::number(options.width))
             .append(":h=")
-            .append(QString::number(options.height));
+            .append(QString::number(options.height))
+            .append(":flags=")
+            .append(options.scaleFilter);
             //.append(":force_original_aspect_ratio=decrease"); HOTFIX for even:odd dimension images.
 
     const QString resultFile = options.resolveAbsoluteVideoFilePath();
-    const QDir videoDir(QFileInfo(resultFile).absolutePath());
+    const QFileInfo resultFileInfo(resultFile);  
+    const QDir videoDir(resultFileInfo.absolutePath());
 
-    const QFileInfo info(resultFile);
-    const QString suffix = info.suffix().toLower();
+    const QString suffix = resultFileInfo.suffix().toLower();
     const QString palettePath = videoDir.filePath("palette.png");
-    const QStringList additionalOptionsList = options.customFFMpegOptions.split(' ', QString::SkipEmptyParts);
+    QStringList additionalOptionsList = options.customFFMpegOptions.split(' ', QString::SkipEmptyParts);
     QScopedPointer<KisFFMpegRunner> runner(new KisFFMpegRunner(options.ffmpegPath));
+    
+    {
+        
+        QStringList paletteArgs;
+        QStringList simpleFilterArgs;
+        QStringList complexFilterArgs;
+        QStringList args;
+        
+        args << "-r" << QString::number(options.frameRate)
+             << "-start_number" << QString::number(clipRange.start())
+             << "-i" << savedFilesMask;        
 
-    if ( suffix == "gif" || suffix == "webp" || suffix == "png" ) {
-        if ( suffix == "gif" ){
-            QStringList args;
-            args << "-r" << QString::number(options.frameRate)
-                 << "-start_number" << QString::number(clipRange.start())
-                 << "-i" << savedFilesMask
-                 << "-vf" << "palettegen"
-                 << "-y" << palettePath;
+        const int lavfiOptionsIndex = additionalOptionsList.indexOf("-lavfi");
+
+        if ( lavfiOptionsIndex != -1 ) {
+            complexFilterArgs << additionalOptionsList.takeAt(lavfiOptionsIndex + 1);
+
+            additionalOptionsList.removeAt( lavfiOptionsIndex );
+        }                  
+      
+        if ( suffix == "gif" ) {
+            paletteArgs << "-r" << QString::number(options.frameRate)
+                        << "-start_number" << QString::number(clipRange.start())
+                        << "-i" << savedFilesMask;
+            
+            const int paletteOptionsIndex = additionalOptionsList.indexOf("-palettegen");
+            QString pallettegenString = "palettegen";
+            
+            if ( paletteOptionsIndex != -1 ) {
+                pallettegenString = additionalOptionsList.takeAt(paletteOptionsIndex + 1);
+
+                additionalOptionsList.removeAt( paletteOptionsIndex );
+            }
+                        
+            if (m_image->width() != options.width || m_image->height() != options.height) {
+                paletteArgs << "-vf" << (exportDimensions + "," + pallettegenString );
+            } else {
+                paletteArgs << "-vf" << pallettegenString;
+            }
+                 
+            paletteArgs << "-y" << palettePath;
 
             KisImportExportErrorCode result =
-                runner->runFFMpeg(args, i18n("Fetching palette..."),
+                runner->runFFMpeg(paletteArgs, i18n("Fetching palette..."),
                                     videoDir.filePath("log_generate_palette_" + suffix + ".log"),
                                     clipRange.duration());
 
             if (!result.isOk()) {
                 return result;
             }
+            
+            if (lavfiOptionsIndex == -1) {
+                complexFilterArgs << "[0:v][1:v] paletteuse";
+            }
+            
+            args << "-i" << palettePath;
         }
-
-        {
-            QStringList args;
-            args << "-r" << QString::number(options.frameRate)
-                 << "-start_number" << QString::number(clipRange.start())
-                 << "-i" << savedFilesMask;
-
-            QStringList filterArgs;
-
-            // if we are exporting out at a different image size, we apply scaling filter
-            if (m_image->width() != options.width || m_image->height() != options.height) {
-                filterArgs << exportDimensions + ( suffix == "gif" ? "[0:v]" : "" );
-            }
-            
-            
-            if ( suffix == "webp" ) {
-                args << "-loop" << "0";
-            } else if ( suffix == "png" ) {
-                args << "-plays" << "0"
-                     << "-f" << "apng";                
-            } else {
-                args << "-i" << palettePath;
-                
-                filterArgs << "[0:v][1:v] paletteuse";
-            }
-
-            if ( filterArgs.isEmpty() == false ) { 
-                args << "-lavfi" << filterArgs.join(";");
-            }
-            
-            args << "-y" << resultFile;
-
-
-            dbgFile << "savedFilesMask" << savedFilesMask << "start" << QString::number(clipRange.start()) << "duration" << clipRange.duration();
-
-            KisImportExportErrorCode result =
-                runner->runFFMpeg(args, i18n("Encoding frames..."),
-                                    videoDir.filePath("log_encode_" + suffix + ".log"),
-                                    clipRange.duration());
-
-            if (!result.isOk()) {
-                return result;
-            }
-        }
-    } else {
-        QStringList args;
-        args << "-r" << QString::number(options.frameRate)
-             << "-start_number" << QString::number(clipRange.start())
-             << "-i" << savedFilesMask;
-
+        
         QFileInfo audioFileInfo = animation->audioChannelFileName();
         if (options.includeAudio && audioFileInfo.exists()) {
             const int msecStart = clipRange.start() * 1000 / animation->framerate();
@@ -301,24 +292,35 @@ KisImportExportErrorCode KisVideoSaver::encode(const QString &savedFilesMask, co
 
             args << "-ss" << startTime.toString(ffmpegTimeFormat);
             args << "-t" << durationTime.toString(ffmpegTimeFormat);
-
             args << "-i" << audioFileInfo.absoluteFilePath();
         }
-
+      
         // if we are exporting out at a different image size, we apply scaling filter
         // export options HAVE to go after input options, so make sure this is after the audio import
         if (m_image->width() != options.width || m_image->height() != options.height) {
-            args << "-vf" << exportDimensions;
+            simpleFilterArgs << exportDimensions;
         }
 
+        if ( !complexFilterArgs.isEmpty() ) { 
+            args << "-lavfi" << (!simpleFilterArgs.isEmpty() ? simpleFilterArgs.join(",").append("[0:v];"):"") + complexFilterArgs.join(";");
+        } else if ( !simpleFilterArgs.isEmpty() ) {
+            args << "-vf" << simpleFilterArgs.join(",");
+        }
+        
         args << additionalOptionsList;
 
         args << "-y" << resultFile;
 
+        dbgFile << "savedFilesMask" << savedFilesMask 
+                << "start" << QString::number(clipRange.start()) 
+                << "duration" << clipRange.duration();
+
         resultOuter = runner->runFFMpeg(args, i18n("Encoding frames..."),
-                                     videoDir.filePath("log_encode.log"),
-                                     clipRange.duration());
+                                          videoDir.filePath("log_encode_" + suffix + ".log"),
+                                          clipRange.duration());    
+
     }
+     
 
     return resultOuter;
 }

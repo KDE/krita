@@ -330,6 +330,10 @@ void KisMimeDatabase::fillMimeData()
         mimeType.suffixes = QStringList() << "krz";
         s_mimeDatabase << mimeType;
 
+        mimeType.mimeType = "image/apng";
+        mimeType.description = i18nc("description of a file type", "Animated PNG Image");
+        mimeType.suffixes = QStringList() << "apng";
+        s_mimeDatabase << mimeType;
 
         debugPlugin << "Filled mimedatabase with" << s_mimeDatabase.count() << "special mimetypes";
     }

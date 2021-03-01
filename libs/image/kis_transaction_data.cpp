@@ -12,6 +12,9 @@
 #include "kis_datamanager.h"
 #include "kis_image.h"
 #include "KoColor.h"
+#include "KisTransactionWrapperFactory.h"
+#include "KisInterstrokeDataTransactionWrapperFactory.h"
+
 
 //#define DEBUG_TRANSACTIONS
 
@@ -21,6 +24,13 @@
 #    define DEBUG_ACTION(action)
 #endif
 
+
+struct OptionalInterstrokeInfo
+{
+    QScopedPointer<KisTransactionWrapperFactory> factory;
+    QScopedPointer<KUndo2Command> beginTransactionCommand;
+    QScopedPointer<KUndo2Command> endTransactionCommand;
+};
 
 class Q_DECL_HIDDEN KisTransactionData::Private
 {
@@ -45,6 +55,7 @@ public:
     KisDataManagerSP savedDataManager;
 
     KUndo2Command newFrameCommand;
+    QScopedPointer<OptionalInterstrokeInfo> interstrokeInfo;
 
     void possiblySwitchCurrentTime();
     KisDataManagerSP dataManager();
@@ -54,13 +65,28 @@ public:
 };
 
 
-KisTransactionData::KisTransactionData(const KUndo2MagicString& name, KisPaintDeviceSP device, bool resetSelectionOutlineCache, KUndo2Command* parent)
+
+
+KisTransactionData::KisTransactionData(const KUndo2MagicString& name,
+                                       KisPaintDeviceSP device,
+                                       bool resetSelectionOutlineCache,
+                                       KisTransactionWrapperFactory *interstrokeDataFactory,
+                                       KUndo2Command* parent)
     : KUndo2Command(name, parent)
 
     , m_d(new Private())
 {
     m_d->resetSelectionOutlineCache = resetSelectionOutlineCache;
     setTimedID(-1);
+
+    if (!interstrokeDataFactory && device->interstrokeData()) {
+        interstrokeDataFactory = new KisInterstrokeDataTransactionWrapperFactory(0);
+    }
+
+    if (interstrokeDataFactory) {
+        m_d->interstrokeInfo.reset(new OptionalInterstrokeInfo());
+        m_d->interstrokeInfo->factory.reset(interstrokeDataFactory);
+    }
 
     possiblyFlattenSelection(device);
     init(device);
@@ -109,6 +135,13 @@ void KisTransactionData::init(KisPaintDeviceSP device)
 
     m_d->tryCreateNewFrame(m_d->device, m_d->transactionTime);
 
+    if (m_d->interstrokeInfo) {
+        m_d->interstrokeInfo->beginTransactionCommand.reset(m_d->interstrokeInfo->factory->createBeginTransactionCommand(m_d->device));
+        if (m_d->interstrokeInfo->beginTransactionCommand) {
+            m_d->interstrokeInfo->beginTransactionCommand->redo();
+        }
+    }
+
     m_d->transactionFrameId = device->framesInterface() ? device->framesInterface()->currentFrameId() : -1;
     m_d->savedDataManager = m_d->transactionFrameId >= 0 ?
         m_d->device->framesInterface()->frameDataManager(m_d->transactionFrameId) :
@@ -145,6 +178,14 @@ void KisTransactionData::endTransaction()
         m_d->savedDataManager->commit();
         m_d->newOffset = QPoint(m_d->device->x(), m_d->device->y());
         m_d->defaultPixelChanged = m_d->oldDefaultPixel != m_d->device->defaultPixel();
+
+        if (m_d->interstrokeInfo) {
+            m_d->interstrokeInfo->endTransactionCommand.reset(m_d->interstrokeInfo->factory->createEndTransactionCommand());
+            if (m_d->interstrokeInfo->endTransactionCommand) {
+                m_d->interstrokeInfo->endTransactionCommand->redo();
+            }
+            m_d->interstrokeInfo->factory.reset();
+        }
     }
 }
 
@@ -253,6 +294,8 @@ void KisTransactionData::redo()
         return;
     }
 
+
+
     doFlattenUndoRedo(false);
     restoreSelectionOutlineCache(false);
 
@@ -260,11 +303,19 @@ void KisTransactionData::redo()
 
     DEBUG_ACTION("Redo()");
 
+    if (m_d->interstrokeInfo && m_d->interstrokeInfo->beginTransactionCommand) {
+        m_d->interstrokeInfo->beginTransactionCommand->redo();
+    }
+
     Q_ASSERT(m_d->memento);
     m_d->savedDataManager->rollforward(m_d->memento);
 
     if (m_d->newOffset != m_d->oldOffset) {
         m_d->moveDevice(m_d->newOffset);
+    }
+
+    if (m_d->interstrokeInfo && m_d->interstrokeInfo->endTransactionCommand) {
+        m_d->interstrokeInfo->endTransactionCommand->redo();
     }
 
     m_d->possiblySwitchCurrentTime();
@@ -275,11 +326,20 @@ void KisTransactionData::redo()
 void KisTransactionData::undo()
 {
     DEBUG_ACTION("Undo()");
+
+    if (m_d->interstrokeInfo && m_d->interstrokeInfo->endTransactionCommand) {
+        m_d->interstrokeInfo->endTransactionCommand->undo();
+    }
+
     Q_ASSERT(m_d->memento);
     m_d->savedDataManager->rollback(m_d->memento);
 
     if (m_d->newOffset != m_d->oldOffset) {
         m_d->moveDevice(m_d->oldOffset);
+    }
+
+    if (m_d->interstrokeInfo && m_d->interstrokeInfo->beginTransactionCommand) {
+        m_d->interstrokeInfo->beginTransactionCommand->undo();
     }
 
     restoreSelectionOutlineCache(true);

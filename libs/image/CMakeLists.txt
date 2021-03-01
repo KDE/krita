@@ -269,6 +269,10 @@ set(kritaimage_LIB_SRCS
    kis_update_selection_job.cpp
    kis_serializable_configuration.cc
    kis_transaction_data.cpp
+   KisTransactionWrapperFactory.cpp
+   KisInterstrokeDataTransactionWrapperFactory.cpp
+   KisInterstrokeData.cpp
+   KisInterstrokeDataFactory.cpp
    kis_transform_worker.cc
    kis_perspectivetransform_worker.cpp
    bsplines/kis_bspline_1d.cpp

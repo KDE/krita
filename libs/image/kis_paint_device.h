@@ -41,6 +41,9 @@ class KisRasterKeyframeChannel;
 
 class KisPaintDeviceFramesInterface;
 
+class KisInterstrokeData;
+using KisInterstrokeDataSP = QSharedPointer<KisInterstrokeData>;
+
 typedef KisSharedPtr<KisDataManager> KisDataManagerSP;
 
 namespace KritaUtils {
@@ -732,6 +735,28 @@ public:
      * Return the number of channels a pixel takes
      */
     quint32 channelCount() const;
+
+    /**
+     * @return interstroke data that is atteched to the paint device.
+     *
+     * This data is managed by KisTransaction and can be used by brushes
+     * to store some data that can be shared betweet the strokes. For
+     * example, information about drying of the pigment.
+     *
+     * The interstroke data is sotred in a per-frame manner, that is,
+     * there is a separate per-stroke data for each frame.
+     */
+    KisInterstrokeDataSP interstrokeData() const;
+
+    /**
+     * @brief set interstroke data to the device
+     *
+     * Interstroke data is managed by KisTransaction, don't call this
+     * method manually unless you really know what you are doing.
+     *
+     * @see interstrokeData()
+     */
+    KUndo2Command* createChangeInterstrokeDataCommand(KisInterstrokeDataSP data);
 
     /**
      * Create a keyframe channel for the content on this device.

@@ -11,6 +11,7 @@
 #include "kis_types.h"
 #include <kritaimage_export.h>
 
+class KisTransactionWrapperFactory;
 
 /**
  * A tile based undo command.
@@ -24,7 +25,7 @@
 class KRITAIMAGE_EXPORT KisTransactionData : public KUndo2Command
 {
 public:
-    KisTransactionData(const KUndo2MagicString& name, KisPaintDeviceSP device, bool resetSelectionOutlineCache, KUndo2Command* parent);
+    KisTransactionData(const KUndo2MagicString& name, KisPaintDeviceSP device, bool resetSelectionOutlineCache, KisTransactionWrapperFactory *interstrokeDataFactory, KUndo2Command* parent);
     ~KisTransactionData() override;
 
 public:

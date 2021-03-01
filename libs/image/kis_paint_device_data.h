@@ -10,7 +10,7 @@
 #include "KoAlwaysInline.h"
 #include "kundo2command.h"
 #include "kis_command_utils.h"
-
+#include "KisInterstrokeData.h"
 
 struct DirectDataAccessPolicy {
     DirectDataAccessPolicy(KisDataManager *dataManager, KisIteratorCompleteListener *completionListener)
@@ -37,6 +37,8 @@ struct DirectDataAccessPolicy {
     KisDataManager *m_dataManager;
     KisIteratorCompleteListener *m_completionListener;
 };
+
+class KisPaintDeviceData;
 
 class KisPaintDeviceData
 {
@@ -318,6 +320,35 @@ public:
         return &m_cacheInvalidator;
     }
 
+    ALWAYS_INLINE KisInterstrokeDataSP interstrokeData() const {
+        return m_interstrokeData;
+    }
+
+    ALWAYS_INLINE KUndo2Command* createChangeInterstrokeDataCommand(KisInterstrokeDataSP value) {
+        struct SwapInterstrokeDataCommand : public KUndo2Command
+        {
+            SwapInterstrokeDataCommand(KisPaintDeviceData *q, KisInterstrokeDataSP data)
+                : m_q(q),
+                  m_data(data)
+            {
+            }
+
+            void redo() override {
+                std::swap(m_data, m_q->m_interstrokeData);
+            }
+
+            void undo() override {
+                std::swap(m_data, m_q->m_interstrokeData);
+            }
+
+        private:
+            KisPaintDeviceData *m_q;
+            KisInterstrokeDataSP m_data;
+        };
+
+        return new SwapInterstrokeDataCommand(this, value);
+    }
+
 
 private:
     struct CacheInvalidator : public KisIteratorCompleteListener {
@@ -340,6 +371,7 @@ private:
     const KoColorSpace* m_colorSpace;
     qint32 m_levelOfDetail;
     CacheInvalidator m_cacheInvalidator;
+    KisInterstrokeDataSP m_interstrokeData;
 };
 
 #endif /* __KIS_PAINT_DEVICE_DATA_H */

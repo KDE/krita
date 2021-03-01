@@ -15,6 +15,9 @@ class KisPaintDeviceWriter;
 class KisDataManager;
 typedef KisSharedPtr<KisDataManager> KisDataManagerSP;
 
+class KisInterstrokeData;
+using KisInterstrokeDataSP = QSharedPointer<KisInterstrokeData>;
+
 
 class KRITAIMAGE_EXPORT KisPaintDeviceFramesInterface
 {

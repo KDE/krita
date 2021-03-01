@@ -51,7 +51,7 @@
      id="layer1"
      transform="matrix(1.375,0,0,1.375,0,-21.875)">
     <path
-       style="fill:#f2f2f2;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="fill:#d2d2d2;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 0.727273,26.090909 v 2.181818 L 8,21.727273 15.272727,28.272727 V 26.090909 L 8,19.545455 Z"
        id="path838" />
   </g>

@@ -691,7 +691,7 @@
          offset="0"
          id="stop8668" />
       <stop
-         style="stop-color:#f2f2f2;stop-opacity:1"
+         style="stop-color:#d2d2d2;stop-opacity:1"
          offset="1"
          id="stop8670" />
     </linearGradient>
@@ -702,7 +702,7 @@
          offset="0"
          id="stop8668-6" />
       <stop
-         style="stop-color:#f2f2f2;stop-opacity:1"
+         style="stop-color:#d2d2d2;stop-opacity:1"
          offset="1"
          id="stop8670-2" />
     </linearGradient>
@@ -1487,7 +1487,7 @@
      inkscape:label="Calque 1">
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:19.63506508px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#f2f2f2;fill-opacity:1;stroke:none;stroke-width:0.49087664;stroke-opacity:1;"
+       style="font-style:normal;font-weight:normal;font-size:19.63506508px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#d2d2d2;fill-opacity:1;stroke:none;stroke-width:0.49087664;stroke-opacity:1;"
        x="-5.4938827"
        y="1164.0361"
        id="text1142"
@@ -1496,6 +1496,6 @@
          id="tspan1148"
          x="-5.4938827"
          y="1164.0361"
-         style="fill:#f2f2f2;fill-opacity:1;stroke:none;stroke-width:0.49087664;stroke-opacity:1;">∞</tspan></text>
+         style="fill:#d2d2d2;fill-opacity:1;stroke:none;stroke-width:0.49087664;stroke-opacity:1;">∞</tspan></text>
   </g>
 </svg>

@@ -661,7 +661,7 @@
          offset="0"
          id="stop8668" />
       <stop
-         style="stop-color:#f2f2f2;stop-opacity:1"
+         style="stop-color:#d2d2d2;stop-opacity:1"
          offset="1"
          id="stop8670" />
     </linearGradient>
@@ -672,7 +672,7 @@
          offset="0"
          id="stop8668-6" />
       <stop
-         style="stop-color:#f2f2f2;stop-opacity:1"
+         style="stop-color:#d2d2d2;stop-opacity:1"
          offset="1"
          id="stop8670-2" />
     </linearGradient>
@@ -1298,7 +1298,7 @@
      transform="translate(0,-1)">
     <path
        sodipodi:type="arc"
-       style="color:#000000;fill:#f2f2f2;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2.00000045;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       style="color:#000000;fill:#d2d2d2;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2.00000045;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
        id="path3282"
        sodipodi:cx="3.5"
        sodipodi:cy="19.454914"
@@ -1314,10 +1314,10 @@
        sodipodi:cy="19.454914"
        sodipodi:cx="3.5"
        id="path3284"
-       style="color:#000000;fill:#f2f2f2;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2.00000045;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       style="color:#000000;fill:#d2d2d2;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2.00000045;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
        sodipodi:type="arc" />
     <path
-       style="fill:none;stroke:#f2f2f2;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;color:#000000;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       style="fill:none;stroke:#d2d2d2;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;color:#000000;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
        d="M 5,18 C 5,11 10,6 17,6"
        id="path3286"
        inkscape:connector-curvature="0"

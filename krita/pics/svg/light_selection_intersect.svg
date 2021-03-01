@@ -51,16 +51,16 @@
   <path
      id="path827"
      d="m 0,0 v 12 h 4 v 4 H 16 V 4 H 12 V 0 Z m 1,1 h 10 v 4 h 4 V 15 H 5 V 11 H 1 Z"
-     style="fill:#f2f2f2;fill-opacity:0.39215687;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+     style="fill:#d2d2d2;fill-opacity:0.39215687;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
   <path
      id="path917"
      d="m 4,4 v 8 h 8 V 4 Z m 1,1 h 6 v 6 H 5 Z"
-     style="fill:#f2f2f2;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+     style="fill:#d2d2d2;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
   <rect
      y="5"
      x="5"
      height="6"
      width="6"
      id="rect919"
-     style="opacity:1;vector-effect:none;fill:#f2f2f2;fill-opacity:0.39215687;stroke:none;stroke-width:4;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:3.20000005;stroke-opacity:0.55063291" />
+     style="opacity:1;vector-effect:none;fill:#d2d2d2;fill-opacity:0.39215687;stroke:none;stroke-width:4;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:3.20000005;stroke-opacity:0.55063291" />
 </svg>

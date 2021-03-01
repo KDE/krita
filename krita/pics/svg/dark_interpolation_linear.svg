@@ -661,7 +661,7 @@
          offset="0"
          id="stop8668" />
       <stop
-         style="stop-color:#f2f2f2;stop-opacity:1"
+         style="stop-color:#d2d2d2;stop-opacity:1"
          offset="1"
          id="stop8670" />
     </linearGradient>
@@ -672,7 +672,7 @@
          offset="0"
          id="stop8668-6" />
       <stop
-         style="stop-color:#f2f2f2;stop-opacity:1"
+         style="stop-color:#d2d2d2;stop-opacity:1"
          offset="1"
          id="stop8670-2" />
     </linearGradient>

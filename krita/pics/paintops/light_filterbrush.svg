@@ -28,11 +28,11 @@
       <stop
          id="stop899"
          offset="0"
-         style="stop-color:#f2f2f2;stop-opacity:0" />
+         style="stop-color:#d2d2d2;stop-opacity:0" />
       <stop
          id="stop901"
          offset="1"
-         style="stop-color:#f2f2f2;stop-opacity:1" />
+         style="stop-color:#d2d2d2;stop-opacity:1" />
     </linearGradient>
     <radialGradient
        inkscape:collect="always"
@@ -142,7 +142,7 @@
        cy="21"
        r="7.5" />
     <path
-       style="opacity:1;fill:#f2f2f2;fill-opacity:1;stroke:none;stroke-width:0;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="opacity:1;fill:#d2d2d2;fill-opacity:1;stroke:none;stroke-width:0;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="M 11 2 A 9 9 0 0 0 2 11 A 9 9 0 0 0 11 20 A 9 9 0 0 0 20 11 A 9 9 0 0 0 11 2 z M 11 4 A 7 7 0 0 1 18 11 A 7 7 0 0 1 11 18 A 7 7 0 0 1 4 11 A 7 7 0 0 1 11 4 z "
        transform="translate(0,10)"
        id="path823" />

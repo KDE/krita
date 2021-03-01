@@ -51,12 +51,12 @@
   <path
      id="rect994"
      d="M 2,2 V 14 H 14 V 2 Z M 3,3 H 13 V 13 H 3 Z"
-     style="opacity:1;vector-effect:none;fill:#f2f2f2;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:3.20000005;stroke-opacity:0.55063291" />
+     style="opacity:1;vector-effect:none;fill:#d2d2d2;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:3.20000005;stroke-opacity:0.55063291" />
   <rect
      y="3"
      x="3"
      height="10"
      width="10"
      id="rect996"
-     style="opacity:1;vector-effect:none;fill:#f2f2f2;fill-opacity:0.39215686;stroke:none;stroke-width:4;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:3.20000005;stroke-opacity:0.55063291" />
+     style="opacity:1;vector-effect:none;fill:#d2d2d2;fill-opacity:0.39215686;stroke:none;stroke-width:4;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:3.20000005;stroke-opacity:0.55063291" />
 </svg>

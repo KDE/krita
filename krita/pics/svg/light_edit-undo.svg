@@ -53,10 +53,10 @@
     <path
        id="path824"
        d="m 7,1035.3622 v 2 h 4 c 2.761424,0 5,2.2386 5,5 0,2.7614 -2.238576,5 -5,5 H 9 v 2 h 2 c 3.865993,0 7,-3.134 7,-7 0,-3.866 -3.134007,-7 -7,-7 z"
-       style="opacity:1;vector-effect:none;fill:#f2f2f2;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:3.20000005;stroke-opacity:0.55063291" />
+       style="opacity:1;vector-effect:none;fill:#d2d2d2;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:3.20000005;stroke-opacity:0.55063291" />
     <path
        id="path842"
        d="m 5,1036.3622 4,4 v -8 z"
-       style="fill:#f2f2f2;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+       style="fill:#d2d2d2;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
   </g>
 </svg>

@@ -138,18 +138,18 @@
        id="layer2"
        transform="translate(-4.999998,1025.3622)">
       <path
-         style="fill:#f2f2f2;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         style="fill:#d2d2d2;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
          d="m 13.999998,7 4,-1.7e-5 V 11 h 3 l -5,6 -5,-6 h 3 z"
          id="path4523"
          inkscape:connector-curvature="0" />
       <path
-         style="fill:#f2f2f2;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         style="fill:#d2d2d2;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
          d="m 12.999998,17 h 12 l -6,5 h -12 z"
          id="path4525"
          inkscape:connector-curvature="0"
          sodipodi:nodetypes="ccccc" />
       <path
-         style="fill:#f2f2f2;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         style="fill:#d2d2d2;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
          d="M 8 15 L 2 20 L 14 20 L 20 15 L 18.541016 15 L 9.4589844 15 L 8 15 z M 8.2089844 16 L 17.291016 16 L 13.541016 19 L 4.4589844 19 L 8.2089844 16 z "
          transform="translate(4.999998,5)"
          id="path4525-5" />

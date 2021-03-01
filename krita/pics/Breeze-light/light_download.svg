@@ -109,7 +109,7 @@
      id="layer1"
      transform="translate(0,-1036.3622)">
     <path
-       style="fill:#f2f2f2;fill-opacity:1;stroke:none"
+       style="fill:#d2d2d2;fill-opacity:1;stroke:none"
        d="M 6 2 L 6 3 L 6 6 L 7 6 L 7 3 L 9 3 L 9 6 L 10 6 L 10 3 L 10 2 L 6 2 z M 3.7070312 6 L 3 6.7070312 L 6.2929688 10 L 8 11.707031 L 9.7070312 10 L 13 6.7070312 L 12.292969 6 L 9 9.2929688 L 8 10.292969 L 7 9.2929688 L 3.7070312 6 z M 2 12 L 2 14 L 3 14 L 14 14 L 14 13 L 14 12 L 13 12 L 13 13 L 3 13 L 3 12 L 2 12 z "
        transform="translate(0,1036.3622)"
        id="rect4099" />

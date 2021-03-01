@@ -50,16 +50,16 @@
      id="layer1"
      transform="rotate(-90,-504.1811,526.1811)">
     <path
-       style="opacity:1;vector-effect:none;fill:#f2f2f2;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:3.20000005;stroke-opacity:0.55063291"
+       style="opacity:1;vector-effect:none;fill:#d2d2d2;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:3.20000005;stroke-opacity:0.55063291"
        d="M 11,2 A 9,8.9999914 0 0 0 6.3242188,3.3242188 L 7.7851562,4.7851562 A 7,7 0 0 1 11,4 a 7,7 0 0 1 7,7 7,7 0 0 1 -0.787109,3.212891 l 1.464843,1.464843 A 9,8.9999914 0 0 0 20,11 9,8.9999914 0 0 0 11,2 Z M 3.3222656,6.3222656 A 9,8.9999914 0 0 0 2,11 a 9,8.9999914 0 0 0 9,9 9,8.9999914 0 0 0 4.675781,-1.324219 L 14.214844,17.214844 A 7,7 0 0 1 11,18 7,7 0 0 1 4,11 7,7 0 0 1 4.7871094,7.7871094 Z"
        transform="translate(0,1030.3622)"
        id="path840" />
     <path
-       style="fill:#f2f2f2;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="fill:#d2d2d2;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 7.0001,1034.3622 2.9999,2.9999 1,-0.9999 -3,-3 z"
        id="path850" />
     <path
-       style="fill:#f2f2f2;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="fill:#d2d2d2;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 11.0001,1046.3622 2.9999,2.9999 1,-0.9999 -3,-3 z"
        id="path850-3" />
   </g>

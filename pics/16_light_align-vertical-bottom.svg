@@ -91,7 +91,7 @@
      id="layer1"
      transform="translate(-421.71429,-531.79074)">
     <path
-       style="color:#000000;fill:#f2f2f2;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       style="color:#000000;fill:#d2d2d2;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
        d="M 9 2 L 9 12 L 14 12 L 14 2 L 9 2 z M 10 3 L 13 3 L 13 11 L 10 11 L 10 3 z M 2 7 L 2 12 L 7 12 L 7 7 L 2 7 z M 3 8 L 6 8 L 6 11 L 3 11 L 3 8 z M 2 13 L 2 14 L 14 14 L 14 13 L 2 13 z "
        transform="translate(421.71429,531.79074)"
        id="rect4006" />

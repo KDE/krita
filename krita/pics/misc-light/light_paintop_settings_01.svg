@@ -100,22 +100,22 @@
      id="g4192"
      inkscape:groupmode="layer">
     <path
-       style="display:inline;opacity:0.98999999;fill:#f2f2f2;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1"
+       style="display:inline;opacity:0.98999999;fill:#d2d2d2;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1"
        d="M 0 18 L 0 32 L 14 32 L 14 18 L 0 18 z M 8 22 L 10 22 L 10 24 L 8 24 L 8 26 L 8 28 L 4 28 L 4 26 L 4 24 L 6 24 L 8 24 L 8 22 z "
        id="path4200" />
     <path
        inkscape:connector-curvature="0"
-       style="display:inline;opacity:0.98999999;fill:#f2f2f2;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1"
+       style="display:inline;opacity:0.98999999;fill:#d2d2d2;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1"
        d="m 18,18 0,14 14,0 0,-14 -14,0 z m 8,4 2,0 0,2 -2,0 0,2 0,2 -4,0 0,-2 0,-2 2,0 2,0 0,-2 z"
        id="path4200-7" />
     <path
        inkscape:connector-curvature="0"
-       style="display:inline;opacity:0.98999999;fill:#f2f2f2;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1"
+       style="display:inline;opacity:0.98999999;fill:#d2d2d2;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1"
        d="M 18,-3.3749998e-7 18,14 32,14 32,-3.3749998e-7 l -14,0 z M 26,3.9999997 l 2,0 0,2 -2,0 0,2 0,2 -4,0 0,-2 0,-2 2,0 2,0 0,-2 z"
        id="path4200-3" />
     <path
        inkscape:connector-curvature="0"
-       style="display:inline;opacity:0.98999999;fill:#f2f2f2;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1"
+       style="display:inline;opacity:0.98999999;fill:#d2d2d2;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1"
        d="M 0,-3.3749998e-7 0,14 14,14 14,-3.3749998e-7 l -14,0 z M 8,3.9999997 l 2,0 0,2 -2,0 0,2 0,2 -4,0 0,-2 0,-2 2,0 2,0 0,-2 z"
        id="path4200-9" />
   </g>

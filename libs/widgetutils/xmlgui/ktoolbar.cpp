@@ -1332,7 +1332,7 @@ void KToolBar::actionEvent(QActionEvent *event)
                 }
             }
             // NOTE: set a fixed button size, same size as the buttonsize used in kis_paintop_box
-            if (widget->inherits("QToolButton")) {
+            if (widget->inherits("QToolButton") && event->action()->icon().isNull() == false) {
                 widget->setFixedSize(32, 32);
             }
         }

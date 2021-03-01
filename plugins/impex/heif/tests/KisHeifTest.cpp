@@ -181,10 +181,10 @@ void KisHeifTest::testSaveHDR()
                 cs->fromNormalisedChannelsValue(fillColor.data(), channelValues);
                 paintLayer0->paintDevice()->setPixel(x, height - (y+1), fillColor);
 
-                channelValues[3] = value;
-                channelValues[0] = total * 0.5;
-                channelValues[1] = total * 0.5;
-                channelValues[2] = total * 0.5;
+                channelValues[3] = value/total;
+                channelValues[0] = 0.5;
+                channelValues[1] = 0.5;
+                channelValues[2] = 0.5;
                 cs->fromNormalisedChannelsValue(fillColor.data(), channelValues);
                 paintLayer0->paintDevice()->setPixel(width - (x+1), height - (y+1), fillColor);
             }

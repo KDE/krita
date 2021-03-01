@@ -59,6 +59,7 @@
 #include "kis_selection_manager.h"
 #include "kis_icon_utils.h"
 #include <krecentfilesaction.h>
+#include "krita_utils.h"
 #include <ktoggleaction.h>
 #include <ktoolbar.h>
 #include <kmainwindow.h>
@@ -831,16 +832,80 @@ void KisMainWindow::slotThemeChanged()
         }
     }
 
+
+
     // update MDI area theme
     // Tab close button override
     // just switch this icon out for all OSs so it is easier to see
+    QString mdiTabsStyleSheet = R"(
+            QTabBar {
+                background-color: #{alternate};
+                border: none;
+                qproperty-drawBase: 1;
+                qproperty-expanding: 1;
+            }
+            QTabBar::tab {
+                border-top-left-radius: 7px;
+                border-top-right-radius: 7px;
+                padding-left: 10px;
+                padding-right: 10px;
+                margin-left: 2px;
+            }
+            QTabBar::tab:!selected {
+                background: #{alternate};
+                border-bottom: 7px solid #{alternate};
+                border-top: 7px solid #{alternate};
+                margin-top: 5px;
+                color: #{inactive_text_color};
+                border-right: 2px solid #{background};
+            }
+            QTabBar::tab:selected {
+                background: #{background};
+                border-bottom: 7px solid #{background};
+                border-top: 7px solid #{background};
+                margin-top: 5px;
+                margin-left: -2px;
+                margin-right: 0;
+            }
+           QTabBar::tab:hover {
+               color: #{active_text_color};
+           }
+
+            QTabBar::close-button:hover {
+            }
+
+            QTabBar::close-button {
+                image: url({close-button-location});
+                padding-top: 3px;
+            }
+
+           )";
+
+    // swap out variables with palette options
+    QString windowThemeColor = qApp->palette().color(QPalette::Window).name().split("#")[1];
+    QString alternateBaseThemeColor = qApp->palette().color(QPalette::AlternateBase).name().split("#")[1];
+    QString activeTextThemeColor = qApp->palette().color(QPalette::WindowText).name().split("#")[1];
+    QColor textColor = qApp->palette().color(QPalette::Text);
+    QString inactiveTextColor = KritaUtils::blendColors(textColor, qApp->palette().color(QPalette::Window), 0.5).name().split("#")[1];
+
+    mdiTabsStyleSheet = mdiTabsStyleSheet.replace("{active_text_color}", activeTextThemeColor);
+    mdiTabsStyleSheet = mdiTabsStyleSheet.replace("{alternate}", alternateBaseThemeColor);
+    mdiTabsStyleSheet = mdiTabsStyleSheet.replace("{background}", windowThemeColor);
+    mdiTabsStyleSheet = mdiTabsStyleSheet.replace("{inactive_text_color}", inactiveTextColor);
+
     QString themeName = d->themeManager->currentThemeName();
     bool isDarkTheme = themeName.toLower().contains("dark");
     if(isDarkTheme) {
-        d->mdiArea->setStyleSheet("QTabBar::close-button { image: url(:/pics/light_close-tab.svg) }");
+        mdiTabsStyleSheet = mdiTabsStyleSheet.replace("{close-button-location}", ":/pics/light_close-tab.svg");
     } else {
-        d->mdiArea->setStyleSheet("QTabBar::close-button { image: url(:/pics/dark_close-tab.svg) }");
+        mdiTabsStyleSheet = mdiTabsStyleSheet.replace("{close-button-location}", ":/pics/dark_close-tab.svg");
     }
+
+    d->mdiArea->setStyleSheet(mdiTabsStyleSheet);
+
+
+
+
 
 
     // all global styles can be set here. Build them out line by line so it is easier to read/manage

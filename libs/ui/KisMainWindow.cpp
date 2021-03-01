@@ -840,32 +840,36 @@ void KisMainWindow::slotThemeChanged()
     QString mdiTabsStyleSheet = R"(
             QTabBar {
                 background-color: #{alternate};
-                border: none;
                 qproperty-drawBase: 1;
                 qproperty-expanding: 1;
             }
             QTabBar::tab {
-                border-top-left-radius: 7px;
-                border-top-right-radius: 7px;
+                padding: 5px;
                 padding-left: 10px;
                 padding-right: 10px;
-                margin-left: 2px;
+                margin-left: 0;
+                margin-right: 0;
+                margin-top: 0;
             }
             QTabBar::tab:!selected {
                 background: #{alternate};
                 border-bottom: 7px solid #{alternate};
                 border-top: 7px solid #{alternate};
-                margin-top: 5px;
-                color: #{inactive_text_color};
                 border-right: 2px solid #{background};
+                color: #{inactive_text_color};
             }
             QTabBar::tab:selected {
                 background: #{background};
-                border-bottom: 7px solid #{background};
-                border-top: 7px solid #{background};
-                margin-top: 5px;
+                border-bottom: 5px solid #{alternate};;
+                border-top: 5px solid #{alternate};;
+
+                border-left: 5px solid #{alternate};;
+                border-right: 5px solid #{alternate};;
+
                 margin-left: -2px;
-                margin-right: 0;
+                margin-right: -2px;
+
+            margin-bottom: -5px;
             }
            QTabBar::tab:hover {
                color: #{active_text_color};
@@ -901,7 +905,7 @@ void KisMainWindow::slotThemeChanged()
         mdiTabsStyleSheet = mdiTabsStyleSheet.replace("{close-button-location}", ":/pics/dark_close-tab.svg");
     }
 
-    d->mdiArea->setStyleSheet(mdiTabsStyleSheet);
+    //d->mdiArea->setStyleSheet(mdiTabsStyleSheet);
 
 
 
@@ -909,10 +913,10 @@ void KisMainWindow::slotThemeChanged()
 
 
     // all global styles can be set here. Build them out line by line so it is easier to read/manage
-    QString stylesBuilder;
-    QString tableHeaderSpacing = "QHeaderView::section {padding: 7px; }";
-    stylesBuilder.append(tableHeaderSpacing);
-    qApp->setStyleSheet(stylesBuilder);
+   // QString stylesBuilder;
+    mdiTabsStyleSheet.append("QHeaderView::section {padding: 7px; }");
+
+    qApp->setStyleSheet(mdiTabsStyleSheet);
 
     emit themeChanged();
 }

@@ -444,7 +444,9 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
         // --- encode and write image
 
         heif::Context::EncodingOptions options;
-        options.macOS_compatibility_workaround_no_nclx_profile = false;
+        if (conversionPolicy != keepTheSame && cs->hasHighDynamicRange()) {
+            options.macOS_compatibility_workaround_no_nclx_profile = false;
+        }
 
         heif::ImageHandle handle = ctx.encode_image(img, encoder, options);
 

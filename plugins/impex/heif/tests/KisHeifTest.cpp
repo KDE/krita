@@ -46,6 +46,12 @@ void KisHeifTest::testImportIncorrectFormat()
 void KisHeifTest::testLoadMonochrome(int bitDepth)
 {
     {
+        QString file = QString("test_monochrome_%1.").arg(bitDepth);
+        int error = 2;
+        if (bitDepth == 10) {
+            file = QString(FILES_DATA_DIR) + file;
+            error = 25;
+        }
         QScopedPointer<KisDocument> doc_png(KisPart::instance()->createDocument());
         doc_png->setFileBatchMode(true);
         QScopedPointer<KisDocument> doc_heif(KisPart::instance()->createDocument());
@@ -56,11 +62,11 @@ void KisHeifTest::testLoadMonochrome(int bitDepth)
         KisImportExportManager manager(doc_png.data());
 
         KisImportExportErrorCode loadingStatus =
-            manager.importDocument(QString("test_monochrome_%1.png").arg(bitDepth), QString());
+            manager.importDocument(file+"png", QString());
 
         QVERIFY(loadingStatus.isOk());
-        KisImportExportManager (doc_heif.data()).importDocument(QString("test_monochrome_%1.heif").arg(bitDepth), QString());
-        KisImportExportManager (doc_avif.data()).importDocument(QString("test_monochrome_%1.avif").arg(bitDepth), QString());
+        KisImportExportManager (doc_heif.data()).importDocument(file+"heif", QString());
+        KisImportExportManager (doc_avif.data()).importDocument(file+"avif", QString());
 
         doc_png->image()->initialRefreshGraph();
         doc_heif->image()->initialRefreshGraph();
@@ -76,15 +82,15 @@ void KisHeifTest::testLoadMonochrome(int bitDepth)
                 doc_heif->image()->projection()->pixel(x, y, &heifColor);
                 doc_avif->image()->projection()->pixel(x, y, &avifColor);
 
-                QVERIFY2(pngColor.colorSpace()->differenceA(pngColor.data(), heifColor.data()) < 2,
-                         QString("Heif gray color doesn't match PNG color, (%1, %2) %3 %4")
+                QVERIFY2(pngColor.colorSpace()->differenceA(pngColor.data(), heifColor.data()) < error,
+                         QString("Heif %5 gray color doesn't match PNG color, (%1, %2) %3 %4")
                          .arg(x).arg(y).arg(KoColor::toQString(pngColor)).arg(KoColor::toQString(heifColor)).toLatin1());
-                QVERIFY2(pngColor.colorSpace()->differenceA(pngColor.data(), avifColor.data()) < 2,
-                         QString("Avif gray color doesn't match PNG color, (%1, %2) %3 %4")
+                QVERIFY2(pngColor.colorSpace()->differenceA(pngColor.data(), avifColor.data()) < error,
+                         QString("Avif %5 gray color doesn't match PNG color, (%1, %2) %3 %4")
                          .arg(x).arg(y).arg(pngColor.toXML()).arg(avifColor.toXML()).toLatin1());
-                QVERIFY2(avifColor.colorSpace()->differenceA(avifColor.data(), heifColor.data()) < 2,
-                         QString("Heif gray color doesn't match Avif color, (%1, %2) %3 %4")
-                         .arg(x).arg(y).arg(heifColor.toXML()).arg(heifColor.toXML()).toLatin1());
+                QVERIFY2(avifColor.colorSpace()->differenceA(avifColor.data(), heifColor.data()) < error,
+                         QString("Heif %5 gray color doesn't match Avif color, (%1, %2) %3 %4")
+                         .arg(x).arg(y).arg(heifColor.toXML()).arg(heifColor.toXML()).arg(bitDepth).toLatin1());
             }
         }
     }
@@ -93,6 +99,13 @@ void KisHeifTest::testLoadMonochrome(int bitDepth)
 void KisHeifTest::testLoadRGB(int bitDepth)
 {
     {
+        QString file = QString("test_rgba_%1.").arg(bitDepth);
+        int error = 1;
+        if (bitDepth == 10) {
+            file = QString(FILES_DATA_DIR) + file;
+            error = 25;
+        }
+        qDebug() << file;
         QScopedPointer<KisDocument> doc_png(KisPart::instance()->createDocument());
         doc_png->setFileBatchMode(true);
         QScopedPointer<KisDocument> doc_heif(KisPart::instance()->createDocument());
@@ -103,11 +116,11 @@ void KisHeifTest::testLoadRGB(int bitDepth)
         KisImportExportManager manager(doc_png.data());
 
         KisImportExportErrorCode loadingStatus =
-            manager.importDocument(QString("test_rgba_%1.png").arg(bitDepth), QString());
+            manager.importDocument(file+"png", QString());
 
         QVERIFY(loadingStatus.isOk());
-        KisImportExportManager (doc_heif.data()).importDocument(QString("test_rgba_%1.heif").arg(bitDepth), QString());
-        KisImportExportManager (doc_avif.data()).importDocument(QString("test_rgba_%1.avif").arg(bitDepth), QString());
+        KisImportExportManager (doc_heif.data()).importDocument(file+"heif", QString());
+        KisImportExportManager (doc_avif.data()).importDocument(file+"avif", QString());
 
         doc_png->image()->initialRefreshGraph();
         doc_heif->image()->initialRefreshGraph();
@@ -123,12 +136,12 @@ void KisHeifTest::testLoadRGB(int bitDepth)
                 doc_heif->image()->projection()->pixel(x, y, &heifColor);
                 doc_avif->image()->projection()->pixel(x, y, &avifColor);
 
-                QVERIFY2(pngColor.colorSpace()->difference(pngColor.data(), heifColor.data()) <1, QString("RGBA Heif color doesn't match PNG color, (%1, %2) %3 %4")
-                         .arg(x).arg(y).arg(pngColor.toXML()).arg(heifColor.toXML()).toLatin1());
-                QVERIFY2(pngColor.colorSpace()->difference(pngColor.data(), avifColor.data()) <1, QString("RGBA Avif color doesn't match PNG color, (%1, %2) %3 %4")
-                         .arg(x).arg(y).arg(pngColor.toXML()).arg(avifColor.toXML()).toLatin1());
-                QVERIFY2(avifColor.colorSpace()->difference(avifColor.data(), heifColor.data()) <1, QString("RGBA Heif color doesn't match Avif color, (%1, %2) %3 %4")
-                         .arg(x).arg(y).arg(heifColor.toXML()).arg(heifColor.toXML()).toLatin1());
+                QVERIFY2(pngColor.colorSpace()->differenceA(pngColor.data(), heifColor.data()) < error, QString("%5 RGBA Heif color doesn't match PNG color, (%1, %2) %3 %4")
+                         .arg(x).arg(y).arg(pngColor.toXML()).arg(heifColor.toXML()).arg(bitDepth).toLatin1());
+                QVERIFY2(pngColor.colorSpace()->differenceA(pngColor.data(), avifColor.data()) < error, QString("%5 RGBA Avif color doesn't match PNG color, (%1, %2) %3 %4")
+                         .arg(x).arg(y).arg(pngColor.toXML()).arg(avifColor.toXML()).arg(bitDepth).toLatin1());
+                QVERIFY2(avifColor.colorSpace()->differenceA(avifColor.data(), heifColor.data()) < error, QString("%5 RGBA Heif color doesn't match Avif color, (%1, %2) %3 %4")
+                         .arg(x).arg(y).arg(heifColor.toXML()).arg(heifColor.toXML()).arg(bitDepth).toLatin1());
             }
         }
     }
@@ -476,8 +489,10 @@ void KisHeifTest::testImages()
     testSaveRGB(8);
     testSaveRGB(12);
     testLoadRGB(8);
+    testLoadRGB(10);
     testLoadRGB(12);
     testLoadMonochrome(8);
+    testLoadMonochrome(10);
     testLoadMonochrome(12);
 
     testSaveHDR();

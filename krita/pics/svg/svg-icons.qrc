@@ -9,6 +9,8 @@
         <file>dark_addcolor.svg</file>
         <file>dark_addduplicateframe.svg</file>
         <file>dark_deletekeyframe.svg</file>
+        <file>dark_edit-redo.svg</file>
+        <file>dark_edit-undo.svg</file>
         <file>dark_novisible.svg</file>
         <file>dark_visible.svg</file>
         <file>dark_layer-locked.svg</file>
@@ -50,6 +52,8 @@
         <file>light_addcolor.svg</file>
         <file>light_addduplicateframe.svg</file>
         <file>light_deletekeyframe.svg</file>
+        <file>light_edit-redo.svg</file>
+        <file>light_edit-undo.svg</file>
         <file>light_novisible.svg</file>
         <file>light_visible.svg</file>
         <file>light_layer-locked.svg</file>

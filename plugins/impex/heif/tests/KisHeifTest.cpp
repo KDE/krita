@@ -9,6 +9,7 @@
 
 #include <QTest>
 #include <QCoreApplication>
+#include <KoColorSpaceEngine.h>
 
 #include "filestest.h"
 
@@ -357,10 +358,23 @@ void KisHeifTest::testSaveRGB(int bitDepth)
         depth = Integer16BitsColorDepthID.id();
     }
 
+    QString profileName;
+
+    KoColorSpaceEngine *engine = KoColorSpaceEngineRegistry::instance()->get("icc");
+    if (engine) {
+        QVector<double> colorants;
+        const KoColorProfile *testProfile = engine->getProfile(colorants
+                                                               , int(KoColorProfile::Primaries_SMPTE_240M)
+                                                               , int(KoColorProfile::TRC_SMPTE_240M));
+        if (testProfile) {
+        profileName = testProfile->name();
+        }
+    }
+
     const KoColorSpace * cs =
         KoColorSpaceRegistry::instance()->colorSpace(
             RGBAColorModelID.id(),
-            depth);
+            depth, profileName);
 
     KoColor fillColor(cs);
 
@@ -419,7 +433,7 @@ void KisHeifTest::testSaveRGB(int bitDepth)
 
         KisPropertiesConfigurationSP pngExportConfiguration = new KisPropertiesConfiguration();
         pngExportConfiguration->setProperty("saveAsHDR", false);
-        pngExportConfiguration->setProperty("saveSRGBProfile", false);
+        pngExportConfiguration->setProperty("saveSRGBProfile", true);
         pngExportConfiguration->setProperty("forceSRGB", false);
         doc->exportDocumentSync(QUrl::fromLocalFile(QString("test_rgba_%1.png").arg(bitDepth)), "image/png", pngExportConfiguration);
 

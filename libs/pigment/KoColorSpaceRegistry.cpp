@@ -706,7 +706,11 @@ const KoColorProfile *KoColorSpaceRegistry::profileFor(const QVector<double> &co
         }
     }
 
-    return d->profileStorage.profilesFor(colorants, colorPrimaries, transferFunction).first();
+    QList<const KoColorProfile*> list = d->profileStorage.profilesFor(colorants, colorPrimaries, transferFunction);
+    if (list.size() > 0) {
+        return list.first();
+    }
+    return 0;
 }
 
 QList<KoID> KoColorSpaceRegistry::colorModelsList(ColorSpaceListVisibility option) const

@@ -190,6 +190,10 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
         }
 
         encoder.set_lossy_quality(quality);
+        if (lossless) {
+            //https://invent.kde.org/graphics/krita/-/merge_requests/530#note_169521
+            encoder.set_lossy_quality(100);
+        }
         encoder.set_lossless(lossless);
         encoder.set_parameter("chroma", configuration->getString("chroma", "444").toStdString());
 

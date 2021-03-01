@@ -15,25 +15,6 @@
    </rect>
   </property>
   <layout class="QFormLayout" name="formLayout_2">
-   <item row="0" column="1">
-    <widget class="QCheckBox" name="chkLossless">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="toolTip">
-      <string>This option will merge all layers. It is advisable to check this option, otherwise other applications might not be able to read your file correctly.</string>
-     </property>
-     <property name="text">
-      <string>&amp;Lossless</string>
-     </property>
-     <property name="checked">
-      <bool>false</bool>
-     </property>
-    </widget>
-   </item>
    <item row="1" column="0" colspan="2">
     <widget class="QGroupBox" name="lossySettings">
      <property name="title">
@@ -78,6 +59,12 @@
      <layout class="QFormLayout" name="formLayout_3">
       <item row="0" column="0" colspan="2">
        <widget class="QLabel" name="explanationLabel">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="text">
          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;To convert the current image to 12 bit accurately it will need to be converted. Rec 2100 PQ or Rec 2100 HLG is expected for HDR images.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
@@ -147,6 +134,25 @@
        </widget>
       </item>
      </layout>
+    </widget>
+   </item>
+   <item row="0" column="0" colspan="2">
+    <widget class="QCheckBox" name="chkLossless">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="toolTip">
+      <string>This option will merge all layers. It is advisable to check this option, otherwise other applications might not be able to read your file correctly.</string>
+     </property>
+     <property name="text">
+      <string>&amp;Lossless</string>
+     </property>
+     <property name="checked">
+      <bool>false</bool>
+     </property>
     </widget>
    </item>
   </layout>

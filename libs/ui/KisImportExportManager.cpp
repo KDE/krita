@@ -458,6 +458,18 @@ void KisImportExportManager::fillStaticExportConfigurationProperties(KisProperti
             (cs->profile()->name().contains(QLatin1String("srgb"), Qt::CaseInsensitive) &&
              !cs->profile()->name().contains(QLatin1String("g10")));
     exportConfiguration->setProperty(KisImportExportFilter::sRGBTag, sRGB);
+    
+    int primaries = cs->profile()->getColorPrimaries();
+    if (primaries >= 256) {
+        primaries = KoColorProfile::Primaries_Unspecified;
+    }
+    int transferFunction = cs->profile()->getTransferCharacteristics();
+    if (transferFunction >= 256) {
+        transferFunction = KoColorProfile::TRC_Unspecified;
+    }
+    exportConfiguration->setProperty(KisImportExportFilter::CICPPrimariesTag, primaries);
+    exportConfiguration->setProperty(KisImportExportFilter::CICPTransferCharacteristicsTag, transferFunction);
+    exportConfiguration->setProperty(KisImportExportFilter::HDRTag, cs->hasHighDynamicRange());
 }
 
 

@@ -24,6 +24,7 @@ public:
         setupUi(this);
         connect(chkLossless, SIGNAL(toggled(bool)), SLOT(toggleQualitySlider(bool)));
         connect(chkHLGOOTF, SIGNAL(toggled(bool)), SLOT(toggleQualitySlider(bool)));
+        connect(cmbConversionPolicy, SIGNAL(currentIndexChanged(int)), SLOT(toggleExtraHDROptions(int)));
         sliderQuality->setRange(0, 100, 0);
     }
 
@@ -33,7 +34,10 @@ public:
 private Q_SLOTS:
 
     void toggleQualitySlider(bool toggle);
+    // Disable HLG OOTF options when the toggle is off.
     void toggleHLGOptions(bool toggle);
+    // Disable all HLG options when the index is not for an HLG option.
+    void toggleExtraHDROptions(int index);
 private:
 
     bool m_hasAlpha {false};

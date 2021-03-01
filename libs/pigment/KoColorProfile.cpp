@@ -102,9 +102,12 @@ KoColorProfile::colorPrimaries KoColorProfile::getColorPrimaries() const
                     //too few colorants, skip.
                     continue;
                 }
-                match = false;
+                match = true;
                 for (int i=0; i<colorants.size(); i++) {
                     match = std::fabs(colorants[i] - compare[i]) < 0.00001;
+                    if (!match) {
+                        break;
+                    }
                 }
                 if (match) {
                     primaries = check;
@@ -149,7 +152,7 @@ QString KoColorProfile::getColorPrimariesName(colorPrimaries primaries)
     case Primaries_Unspecified:
         break;
     }
-    return QStringLiteral("Unknown");
+    return QStringLiteral("Unspecified");
 }
 
 void KoColorProfile::colorantsForType(colorPrimaries primaries, QVector<double> &colorants)
@@ -265,8 +268,9 @@ QString KoColorProfile::getTransferCharacteristicName(transferCharacteristics cu
     case TRC_ITU_R_BT_709_5:
     case TRC_ITU_R_BT_601_6:
     case TRC_ITU_R_BT_2020_2_10bit:
-    case TRC_ITU_R_BT_2020_2_12bit:
         return QString("rec 709 trc");
+    case TRC_ITU_R_BT_2020_2_12bit:
+        return QString("rec 2020 12bit trc");
     case TRC_ITU_R_BT_470_6_System_M:
         return QString("Gamma 2.2");
     case TRC_ITU_R_BT_470_6_System_B_G:
@@ -302,7 +306,7 @@ QString KoColorProfile::getTransferCharacteristicName(transferCharacteristics cu
         break;
     }
 
-    return QString("Unknown");
+    return QString("Unspecified");
 }
 
 void KoColorProfile::setName(const QString &name)

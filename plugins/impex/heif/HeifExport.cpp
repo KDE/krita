@@ -528,6 +528,10 @@ void KisWdgOptionsHeif::setConfiguration(const KisPropertiesConfigurationSP cfg)
     sliderQuality->setValue(qreal(cfg->getInt("quality", 50)));
     cmbChroma->setCurrentIndex(chromaOptions.indexOf(cfg->getString("chroma", "444")));
     m_hasAlpha = cfg->getBool(KisImportExportFilter::ImageContainsTransparencyTag, false);
+    
+    int CicpPrimaries = cfg->getInt(KisImportExportFilter::CICPPrimariesTag, 2);
+    
+    conversionSettings->setVisible(cfg->getBool(KisImportExportFilter::HDRTag, false));
 
     QStringList conversionOptionsList = { i18nc("Colorspace name", "Rec 2100 PQ"), i18nc("Colorspace name", "Rec 2100 HLG")};
     QStringList toolTipList = {i18nc("@tooltip", "The image will be converted to Rec 2020 linear first, and then encoded with a perceptual quantizer curve"
@@ -535,26 +539,24 @@ void KisWdgOptionsHeif::setConfiguration(const KisPropertiesConfigurationSP cfg)
                               i18nc("@tooltip", "The image will be converted to Rec 2020 linear first, and then encoded with a Hybrid Log Gamma curve."
                                " Recommended for HDR images where the display may not understand HDR.")};
     QStringList conversionOptionName = {"Rec2100PQ", "Rec2100HLG"};
-    QString colorDepth = cfg->getString(KisImportExportFilter::ColorDepthIDTag);
-    conversionSettings->setVisible((colorDepth == Float16BitsColorDepthID.id()
-                                    || colorDepth == Float32BitsColorDepthID.id()
-                                    || colorDepth == Float64BitsColorDepthID.id()));
+    
     if (cfg->getString(KisImportExportFilter::ColorModelIDTag) == "RGBA") {
-        
-        conversionOptionsList << i18nc("Colorspace option plus transfer function name", "Keep colorants, encode PQ");
-        toolTipList << i18nc("@tooltip", "The image will be linearized first, and then encoded with a perceptual quantizer curve"
-                                         " (also known as SMPTE 2048 curve). Recommended for images where the absolute brightness is important.");
-        conversionOptionName << "ApplyPQ";
-        
-        conversionOptionsList << i18nc("Colorspace option plus transfer function name", "Keep colorants, encode HLG");
-        toolTipList << i18nc("@tooltip", "The image will be linearized first, and then encoded with a Hybrid Log Gamma curve."
-                                         " Recommended for images intended for screens which cannot understand PQ");
-        conversionOptionName << "ApplyHLG";
-        
-        conversionOptionsList << i18nc("Colorspace option plus transfer function name", "Keep colorants, encode SMPTE ST 428");
-        toolTipList << i18nc("@tooltip", "The image will be linearized first, and then encoded with SMPTE ST 428"
-                                         " Krita always opens images like these as linear floating point, this option is there to reverse that");
-        conversionOptionName << "ApplySMPTE248";
+        if (CicpPrimaries != KoColorProfile::Primaries_Unspecified) {
+            conversionOptionsList << i18nc("Colorspace option plus transfer function name", "Keep colorants, encode PQ");
+            toolTipList << i18nc("@tooltip", "The image will be linearized first, and then encoded with a perceptual quantizer curve"
+                                            " (also known as the SMPTE 2048 curve). Recommended for images where the absolute brightness is important.");
+            conversionOptionName << "ApplyPQ";
+            
+            conversionOptionsList << i18nc("Colorspace option plus transfer function name", "Keep colorants, encode HLG");
+            toolTipList << i18nc("@tooltip", "The image will be linearized first, and then encoded with a Hybrid Log Gamma curve."
+                                            " Recommended for images intended for screens which cannot understand PQ");
+            conversionOptionName << "ApplyHLG";
+            
+            conversionOptionsList << i18nc("Colorspace option plus transfer function name", "Keep colorants, encode SMPTE ST 428");
+            toolTipList << i18nc("@tooltip", "The image will be linearized first, and then encoded with SMPTE ST 428"
+                                            " Krita always opens images like these as linear floating point, this option is there to reverse that");
+            conversionOptionName << "ApplySMPTE248";
+        }
         
         conversionOptionsList << i18nc("Colorspace option", "No changes, clip");
         toolTipList << i18nc("@tooltip", "The image will be converted plainly to 12bit integer, and values that are out of bounds are clipped, the icc profile will be embedded.");
@@ -594,7 +596,14 @@ void KisWdgOptionsHeif::toggleQualitySlider(bool toggle)
 
 void KisWdgOptionsHeif::toggleHLGOptions(bool toggle)
 {
-    // Disable the quality slider if lossless is true
+    spnNits->setEnabled(toggle);
+    spnGamma->setEnabled(toggle);
+}
+
+void KisWdgOptionsHeif::toggleExtraHDROptions(int index) {
+    Q_UNUSED(index)
+    bool toggle = cmbConversionPolicy->currentData(Qt::UserRole+1).toString().contains("HLG");
+    chkHLGOOTF->setEnabled(toggle);
     spnNits->setEnabled(toggle);
     spnGamma->setEnabled(toggle);
 }

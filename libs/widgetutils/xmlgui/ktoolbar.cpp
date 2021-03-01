@@ -1331,6 +1331,10 @@ void KToolBar::actionEvent(QActionEvent *event)
                     layout()->itemAt(index)->setAlignment(Qt::AlignJustify);
                 }
             }
+            // NOTE: set a fixed button size, same size as the buttonsize used in kis_paintop_box
+            if (widget->inherits("QToolButton")) {
+                widget->setFixedSize(32, 32);
+            }
         }
     }
 

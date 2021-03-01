@@ -218,6 +218,10 @@ void KisHeifTest::testSaveHDR()
         heifExportConfiguration->setProperty("floatingPointConversionOption", "Rec2100HLG");
         doc->exportDocumentSync(QUrl::fromLocalFile(QString("test_rgba_hdr_hlg.heif")), "image/heic", heifExportConfiguration);
         doc->exportDocumentSync(QUrl::fromLocalFile(QString("test_rgba_hdr_hlg.avif")), "image/avif", heifExportConfiguration);
+
+        heifExportConfiguration->setProperty("floatingPointConversionOption", "ApplySMPTE248");
+        doc->exportDocumentSync(QUrl::fromLocalFile(QString("test_rgba_hdr_smpte428.heif")), "image/heic", heifExportConfiguration);
+        doc->exportDocumentSync(QUrl::fromLocalFile(QString("test_rgba_hdr_smpte428.avif")), "image/avif", heifExportConfiguration);
     }
 }
 
@@ -236,6 +240,11 @@ void KisHeifTest::testLoadHDR()
         QScopedPointer<KisDocument> doc_heif_hlg(KisPart::instance()->createDocument());
         doc_heif_hlg->setFileBatchMode(true);
 
+        QScopedPointer<KisDocument> doc_avif_smpte428(KisPart::instance()->createDocument());
+        doc_avif_smpte428->setFileBatchMode(true);
+        QScopedPointer<KisDocument> doc_heif_smpte428(KisPart::instance()->createDocument());
+        doc_heif_smpte428->setFileBatchMode(true);
+
         KisImportExportManager manager(doc_png.data());
 
         KisImportExportErrorCode loadingStatus =
@@ -244,14 +253,22 @@ void KisHeifTest::testLoadHDR()
         QVERIFY(loadingStatus.isOk());
         KisImportExportManager (doc_avif_pq.data()).importDocument(QString("test_rgba_hdr_pq.avif"), QString());
         KisImportExportManager (doc_heif_pq.data()).importDocument(QString("test_rgba_hdr_pq.heif"), QString());
+
         KisImportExportManager (doc_avif_hlg.data()).importDocument(QString("test_rgba_hdr_hlg.avif"), QString());
         KisImportExportManager (doc_heif_hlg.data()).importDocument(QString("test_rgba_hdr_hlg.heif"), QString());
+
+        KisImportExportManager (doc_avif_smpte428.data()).importDocument(QString("test_rgba_hdr_smpte428.avif"), QString());
+        KisImportExportManager (doc_heif_smpte428.data()).importDocument(QString("test_rgba_hdr_smpte428.heif"), QString());
 
         doc_png->image()->initialRefreshGraph();
         doc_avif_pq->image()->initialRefreshGraph();
         doc_heif_pq->image()->initialRefreshGraph();
+
         doc_avif_hlg->image()->initialRefreshGraph();
         doc_heif_hlg->image()->initialRefreshGraph();
+
+        doc_avif_smpte428->image()->initialRefreshGraph();
+        doc_heif_smpte428->image()->initialRefreshGraph();
 
         const KoColorSpace * cs =
             KoColorSpaceRegistry::instance()->colorSpace(
@@ -281,6 +298,12 @@ void KisHeifTest::testLoadHDR()
                 doc_avif_hlg->image()->projection()->pixel(x, y, &avifColor);
 
                 QVERIFY2(cs->difference(heifColor.data(), avifColor.data()) <1, QString("Avif HLG color doesn't match heif color, (%1, %2) %3 %4")
+                         .arg(x).arg(y).arg(heifColor.toXML()).arg(avifColor.toXML()).toLatin1());
+
+                doc_heif_smpte428->image()->projection()->pixel(x, y, &heifColor);
+                doc_avif_smpte428->image()->projection()->pixel(x, y, &avifColor);
+
+                QVERIFY2(cs->difference(heifColor.data(), avifColor.data()) <1, QString("Avif smpte428 color doesn't match heif color, (%1, %2) %3 %4")
                          .arg(x).arg(y).arg(heifColor.toXML()).arg(avifColor.toXML()).toLatin1());
             }
         }

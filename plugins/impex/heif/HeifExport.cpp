@@ -207,6 +207,15 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
 
         heif::Context ctx;
 
+        heif_chroma chroma = hasAlpha? heif_chroma_interleaved_RRGGBBAA_LE: heif_chroma_interleaved_RRGGBB_LE;
+        int endValue0 = 1;
+        int endValue1 = 0;
+        if (QSysInfo::ByteOrder == QSysInfo::BigEndian) {
+            endValue0 = 0;
+            endValue1 = 1;
+            chroma = hasAlpha? heif_chroma_interleaved_RRGGBBAA_BE: heif_chroma_interleaved_RRGGBB_BE;
+        }
+
         heif::Image img;
 
         if (cs->colorModelId() == RGBAColorModelID) {
@@ -252,8 +261,7 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
                 }
             } else if (cs->colorDepthId() == Integer16BitsColorDepthID) {
                 qDebug() << "saving as 12bit rgba";
-                img.create(width,height, heif_colorspace_RGB,
-                           hasAlpha? heif_chroma_interleaved_RRGGBBAA_BE: heif_chroma_interleaved_RRGGBB_BE);
+                img.create(width,height, heif_colorspace_RGB, chroma);
                 img.add_plane(heif_channel_interleaved, width, height, 12);
 
                 uint8_t *ptr {nullptr};
@@ -275,8 +283,8 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
                         int channels = hasAlpha? 4: 3;
                         for (int ch = 0; ch < channels; ch++) {
                             uint16_t v = qBound(0, int((float(pixelValues[ch]) / 65535) * 4095), 4095);
-                            ptr[2 * (x * channels) + y * stride + 0 + (ch*2)] = (uint8_t) (v >> 8);
-                            ptr[2 * (x * channels) + y * stride + 1 + (ch*2)] = (uint8_t) (v & 0xFF);
+                            ptr[2 * (x * channels) + y * stride + endValue0 + (ch*2)] = (uint8_t) (v >> 8);
+                            ptr[2 * (x * channels) + y * stride + endValue1 + (ch*2)] = (uint8_t) (v & 0xFF);
                         }
 
                         it->nextPixel();
@@ -286,8 +294,7 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
                 }
             } else {
                 qDebug() << "saving as 12bit rgba";
-                img.create(width,height, heif_colorspace_RGB,
-                           hasAlpha? heif_chroma_interleaved_RRGGBBAA_BE: heif_chroma_interleaved_RRGGBB_BE);
+                img.create(width,height, heif_colorspace_RGB, chroma);
                 img.add_plane(heif_channel_interleaved, width, height, 12);
 
                 int stride;
@@ -318,8 +325,8 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
                         int channels = hasAlpha? 4: 3;
                         for (int ch = 0; ch < channels; ch++) {
                             uint16_t v = qBound(0, int(applyCurveAsNeeded(pixelValues[ch], conversionPolicy) * 4095), 4095);
-                            ptr[2 * (x * channels) + y * stride + 0 + (ch*2)] = (uint8_t) (v >> 8);
-                            ptr[2 * (x * channels) + y * stride + 1 + (ch*2)] = (uint8_t) (v & 0xFF);
+                            ptr[2 * (x * channels) + y * stride + endValue0 + (ch*2)] = (uint8_t) (v >> 8);
+                            ptr[2 * (x * channels) + y * stride + endValue1 + (ch*2)] = (uint8_t) (v & 0xFF);
                         }
 
                         it->nextPixel();
@@ -385,13 +392,13 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
                 for (int y = 0; y < height; y++) {
                     for (int x = 0; x < width; x++) {
                         uint16_t v = qBound(0, int(float( KoGrayU16Traits::gray(it->rawData()) ) / 65535.0 * 4095.0), 4095);
-                        ptrG[(x*2) + y * strideG + 1] = (uint8_t) (v >> 8);
-                        ptrG[(x*2) + y * strideG + 0] = (uint8_t) (v & 0xFF);
+                        ptrG[(x*2) + y * strideG + endValue0] = (uint8_t) (v >> 8);
+                        ptrG[(x*2) + y * strideG + endValue1] = (uint8_t) (v & 0xFF);
 
                         if (hasAlpha) {
                             uint16_t vA = qBound(0, int( cs->opacityF(it->rawData()) * 4095), 4095);
-                            ptrA[(x*2) + y * strideA + 1] = (uint8_t) (vA >> 8);
-                            ptrA[(x*2) + y * strideA + 0] = (uint8_t) (vA & 0xFF);
+                            ptrA[(x*2) + y * strideA + endValue0] = (uint8_t) (vA >> 8);
+                            ptrA[(x*2) + y * strideA + endValue1] = (uint8_t) (vA & 0xFF);
                         }
 
                         it->nextPixel();

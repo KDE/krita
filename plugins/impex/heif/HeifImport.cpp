@@ -119,9 +119,17 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
                 colorDepth = Integer8BitsColorDepthID;
             } else {
                 if (handle.has_alpha_channel()) {
-                    heifimage = handle.decode_image(heif_colorspace_RGB, heif_chroma_interleaved_RRGGBBAA_LE);
+                    if (QSysInfo::ByteOrder == QSysInfo::BigEndian) {
+                        heifimage = handle.decode_image(heif_colorspace_RGB, heif_chroma_interleaved_RRGGBBAA_BE);
+                    } else {
+                        heifimage = handle.decode_image(heif_colorspace_RGB, heif_chroma_interleaved_RRGGBBAA_LE);
+                    }
                 } else {
-                    heifimage = handle.decode_image(heif_colorspace_RGB, heif_chroma_interleaved_RRGGBB_LE);
+                    if (QSysInfo::ByteOrder == QSysInfo::BigEndian) {
+                        heifimage = handle.decode_image(heif_colorspace_RGB, heif_chroma_interleaved_RRGGBB_BE);
+                    } else {
+                        heifimage = handle.decode_image(heif_colorspace_RGB, heif_chroma_interleaved_RRGGBB_LE);
+                    }
                 }
                 heifChroma = heifimage.get_chroma_format();
                 colorDepth = Integer16BitsColorDepthID;

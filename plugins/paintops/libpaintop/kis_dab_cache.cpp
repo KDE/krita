@@ -113,7 +113,8 @@ KisFixedPaintDeviceSP KisDabCache::fetchImageDab(const KoColorSpace *cs,
                           info,
                           softnessFactor,
                           dstDabRect,
-                          1.0);
+                          1.0,
+                          true);
 }
 
 inline

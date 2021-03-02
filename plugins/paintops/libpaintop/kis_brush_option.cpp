@@ -99,6 +99,18 @@ QList<KoResourceSP> KisBrushOptionProperties::prepareEmbeddedResourcesImpl(const
     return {};
 }
 
+enumBrushApplication KisBrushOptionProperties::brushApplication(const KisPropertiesConfiguration *settings, KisResourcesInterfaceSP resourcesInterface)
+{
+    QList<KoResourceSP> resources;
+
+    QDomElement element = getBrushXMLElement(settings);
+    if (element.isNull()) return ALPHAMASK;
+
+    KisBrushSP brush = KisBrush::fromXML(element, resourcesInterface);
+
+    return brush->brushApplication();
+}
+
 #ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND
 
 #include "kis_text_brush_factory.h"

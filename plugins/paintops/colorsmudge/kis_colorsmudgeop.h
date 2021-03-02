@@ -37,6 +37,7 @@ class QPointF;
 class KisBrushBasedPaintOpSettings;
 class KisPainter;
 class KoColorSpace;
+class KisInterstrokeDataFactory;
 
 class ColorSmudgeStrategy;
 
@@ -45,6 +46,8 @@ class KisColorSmudgeOp: public KisBrushBasedPaintOp
 public:
     KisColorSmudgeOp(const KisPaintOpSettingsSP settings, KisPainter* painter, KisNodeSP node, KisImageSP image);
     ~KisColorSmudgeOp() override;
+
+    static KisInterstrokeDataFactory* createInterstrokeDataFactory(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface);
 
 protected:
     KisSpacingInformation paintAt(const KisPaintInformation& info) override;

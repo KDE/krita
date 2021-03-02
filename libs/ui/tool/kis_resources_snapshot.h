@@ -19,6 +19,7 @@ class KoCompositeOp;
 class KisPainter;
 class KisPostExecutionUndoAdapter;
 class KoPattern;
+class KisInterstrokeDataFactory;
 
 /**
  * @brief The KisResourcesSnapshot class takes a snapshot of the various resources

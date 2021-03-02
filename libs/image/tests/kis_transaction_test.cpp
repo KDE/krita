@@ -431,7 +431,8 @@ struct TestInterstrokeDataFactory : public KisInterstrokeDataFactory
         return data && data->typeId == m_typeId;
     }
 
-    KisInterstrokeData * create() override {
+    KisInterstrokeData * create(KisPaintDeviceSP device) override {
+        Q_UNUSED(device);
         return new TestInterstrokeData(m_typeId, 0);
     }
 

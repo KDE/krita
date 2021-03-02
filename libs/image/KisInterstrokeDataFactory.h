@@ -8,6 +8,7 @@
 #define KISINTERSTROKEDATAFACTORY_H
 
 #include "kritaimage_export.h"
+#include "kis_types.h"
 
 class KisInterstrokeData;
 
@@ -17,7 +18,7 @@ public:
     virtual ~KisInterstrokeDataFactory();
 
     virtual bool isCompatible(KisInterstrokeData *data) = 0;
-    virtual KisInterstrokeData* create() = 0;
+    virtual KisInterstrokeData* create(KisPaintDeviceSP device) = 0;
 };
 
 #endif // KISINTERSTROKEDATAFACTORY_H

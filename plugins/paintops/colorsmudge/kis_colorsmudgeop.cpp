@@ -33,6 +33,76 @@
 
 #include "kis_paint_device_debug_utils.h"
 
+#include "KisInterstrokeData.h"
+#include "KisInterstrokeDataFactory.h"
+
+#include "kis_brush_option.h"
+#include "kis_transaction.h"
+
+
+struct ColorSmudgeInterstrokeData : public KisInterstrokeData
+{
+    KisPaintDeviceSP colorBlendDevice;
+    KisPaintDeviceSP heightmapDevice;
+    KisPaintDeviceSP projectionDevice;
+
+    ~ColorSmudgeInterstrokeData() {
+        KIS_SAFE_ASSERT_RECOVER_NOOP(!m_parentCommand);
+    }
+
+    void beginTransaction() override {
+        KIS_SAFE_ASSERT_RECOVER_RETURN(!m_parentCommand);
+
+        m_parentCommand.reset(new KUndo2Command());
+        m_colorBlendDeviceTransaction.reset(new KisTransaction(colorBlendDevice, m_parentCommand.data()));
+        m_heightmapDeviceTransaction.reset(new KisTransaction(heightmapDevice, m_parentCommand.data()));
+        m_projectionDeviceTransaction.reset(new KisTransaction(projectionDevice, m_parentCommand.data()));
+    }
+
+    KUndo2Command * endTransaction() override {
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(m_parentCommand, 0);
+
+        // the internal undo commands are owned by m_parentCommand
+        (void) m_colorBlendDeviceTransaction->endAndTake();
+        (void) m_heightmapDeviceTransaction->endAndTake();
+        (void) m_projectionDeviceTransaction->endAndTake();
+
+        return m_parentCommand.take();
+    }
+
+private:
+    QScopedPointer<KUndo2Command> m_parentCommand;
+    QScopedPointer<KisTransaction> m_colorBlendDeviceTransaction;
+    QScopedPointer<KisTransaction> m_heightmapDeviceTransaction;
+    QScopedPointer<KisTransaction> m_projectionDeviceTransaction;
+};
+
+struct ColorSmudgeInterstrokeDataFactory : public KisInterstrokeDataFactory
+{
+    bool isCompatible(KisInterstrokeData *data) override {
+        ColorSmudgeInterstrokeData *colorSmudgeData =
+            dynamic_cast<ColorSmudgeInterstrokeData*>(data);
+
+        return colorSmudgeData;
+    }
+
+    KisInterstrokeData * create(KisPaintDeviceSP device) override {
+        ColorSmudgeInterstrokeData *data = new ColorSmudgeInterstrokeData();
+
+        const KoColorSpace *cs = device->colorSpace();
+        data->projectionDevice = new KisPaintDevice(*device);
+        data->projectionDevice->convertTo(
+            KoColorSpaceRegistry::instance()->colorSpace(
+                cs->colorModelId().id(),
+                Integer16BitsColorDepthID.id(),
+                cs->profile()));
+        data->colorBlendDevice = new KisPaintDevice(*data->projectionDevice);
+        data->heightmapDevice = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
+
+        return data;
+    }
+};
+
 struct ColorSmudgeStrategy {
     ColorSmudgeStrategy(KisPrecisePaintDeviceWrapper &srcWrapper,
                         KisPainter *painter,
@@ -41,8 +111,6 @@ struct ColorSmudgeStrategy {
                         bool smearAlpha)
         : m_maskDab(new KisFixedPaintDevice(KoColorSpaceRegistry::instance()->alpha8()))
         , m_origDab(new KisFixedPaintDevice(KoColorSpaceRegistry::instance()->rgb8()))
-        , m_heightmapDevice(new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8()))
-        , m_heightmapPainter(m_heightmapDevice)
         , m_unprecisePainter(painter->device())
         , m_srcWrapper(srcWrapper)
         , m_smearPainter(dstDevice)
@@ -52,16 +120,30 @@ struct ColorSmudgeStrategy {
     {
         m_dstDevice = painter->device();
 
-        m_projectionDevice = new KisPaintDevice(*painter->device());
+        ColorSmudgeInterstrokeData *colorSmudgeData =
+            dynamic_cast<ColorSmudgeInterstrokeData*>(m_dstDevice->interstrokeData().data());
 
-        const KoColorSpace *cs = painter->device()->colorSpace();
-        m_projectionDevice->convertTo(
-            KoColorSpaceRegistry::instance()->colorSpace(
-                cs->colorModelId().id(),
-                Integer16BitsColorDepthID.id(),
-                cs->profile()));
+        if (colorSmudgeData) {
+            m_projectionDevice = colorSmudgeData->projectionDevice;
+            m_colorOnlyDevice = colorSmudgeData->colorBlendDevice;
+            m_heightmapDevice = colorSmudgeData->heightmapDevice;
+        }
 
-        m_colorOnlyDevice = new KisPaintDevice(*m_projectionDevice);
+        KIS_SAFE_ASSERT_RECOVER(colorSmudgeData) {
+            m_projectionDevice = new KisPaintDevice(*painter->device());
+
+            const KoColorSpace *cs = painter->device()->colorSpace();
+            m_projectionDevice->convertTo(
+                KoColorSpaceRegistry::instance()->colorSpace(
+                    cs->colorModelId().id(),
+                    Integer16BitsColorDepthID.id(),
+                    cs->profile()));
+
+            m_colorOnlyDevice = new KisPaintDevice(*m_projectionDevice);
+            m_heightmapDevice = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
+        }
+
+        m_heightmapPainter.begin(m_heightmapDevice);
 
         m_blendDevice = new KisFixedPaintDevice(m_colorOnlyDevice->colorSpace());
         m_tempDevice = new KisFixedPaintDevice(m_colorOnlyDevice->colorSpace());
@@ -299,7 +381,7 @@ KisColorSmudgeOp::KisColorSmudgeOp(const KisPaintOpSettingsSP settings, KisPaint
         m_useNewEngine = m_smudgeRateOption.getUseNewEngine();
     }
 
-    if (1 || m_useNewEngine){
+    if (m_useNewEngine){
         m_finalPainter->setCompositeOp(COMPOSITE_COPY);
         m_smudgePainter->setCompositeOp(m_smudgeRateOption.getSmearAlpha() ? COMPOSITE_COPY : COMPOSITE_OVER);
     } else {
@@ -332,12 +414,13 @@ KisColorSmudgeOp::KisColorSmudgeOp(const KisPaintOpSettingsSP settings, KisPaint
         m_preciseImageDeviceWrapper.reset(new KisPrecisePaintDeviceWrapper(m_image->projection()));
     }
 
-
-    m_strategy.reset(new ColorSmudgeStrategy(m_precisePainterWrapper,
-                                             painter,
-                                             m_tempDev,
-                                             m_paintColor,
-                                             m_smudgeRateOption.getSmearAlpha()));
+    if (m_useNewEngine && m_brush->brushApplication() == LIGHTNESSMAP) {
+        m_strategy.reset(new ColorSmudgeStrategy(m_precisePainterWrapper,
+                                                 painter,
+                                                 m_tempDev,
+                                                 m_paintColor,
+                                                 m_smudgeRateOption.getSmearAlpha()));
+    }
 }
 
 KisColorSmudgeOp::~KisColorSmudgeOp()
@@ -408,8 +491,8 @@ KoColor KisColorSmudgeOp::getOverlayDullingFillColor(QPoint canvasLocalSamplePoi
     KoColor dullingFillColor = m_paintColor;
     // get the pixel on the canvas that lies beneath the hot spot
     // of the dab and fill  the temporary paint device with that color
-    KisCrossDeviceColorPickerInt colorPicker(m_tempDev, dullingFillColor);
-    colorPicker.pickColor(canvasLocalSamplePoint.x(), canvasLocalSamplePoint.y(), dullingFillColor.data());
+    KisCrossDeviceColorSamplerInt colorPicker(m_tempDev, dullingFillColor);
+    colorPicker.sampleColor(canvasLocalSamplePoint.x(), canvasLocalSamplePoint.y(), dullingFillColor.data());
     KIS_SAFE_ASSERT_RECOVER_NOOP(*dullingFillColor.colorSpace() == *m_tempDev->colorSpace());
 
     return dullingFillColor;
@@ -570,7 +653,7 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
 
     QPointF hotSpot = brush->hotSpot(shape, info);
 
-    {
+    if (m_strategy) {
         m_strategy->updateMask(m_dabCache, info, shape, scatteredPos, &m_dstDabRect);
 
         QPointF newCenterPos = QRectF(m_dstDabRect).center();
@@ -611,76 +694,6 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
 
         return spacingInfo;
     }
-
-    {
-        m_strategy->updateMask(m_dabCache, info, shape, scatteredPos, &m_dstDabRect);
-
-        QPointF newCenterPos = QRectF(m_dstDabRect).center();
-        /**
-         * Save the center of the current dab to know where to read the
-         * data during the next pass. We do not save scatteredPos here,
-         * because it may differ slightly from the real center of the
-         * brush (due to rounding effects), which will result in a
-         * really weird quality.
-         */
-        QRect srcDabRect = m_dstDabRect.translated((m_lastPaintPos - newCenterPos).toPoint());
-
-        m_lastPaintPos = newCenterPos;
-
-
-        KisSpacingInformation spacingInfo =
-            effectiveSpacing(scale, rotation,
-                             &m_airbrushOption, &m_spacingOption, info);
-
-        if (m_firstRun) {
-            m_firstRun = false;
-            return spacingInfo;
-        }
-
-        QPoint canvasLocalSamplePoint = (srcDabRect.topLeft() + hotSpot).toPoint();
-
-        const qreal colorRate = m_colorRateOption.isChecked() ? m_colorRateOption.computeSizeLikeValue(info) : 0.0;
-        const qreal smudgeLength = m_smudgeRateOption.isChecked() ? m_smudgeRateOption.computeSizeLikeValue(info) : 1.0;
-        const qreal fpOpacity = m_opacityOption.getOpacityf(info);
-        const qreal lightnessStrength = m_lightnessStrengthOption.apply(info);
-
-        m_precisePainterWrapper.readRects(m_finalPainter->calculateAllMirroredRects(m_dstDabRect));
-
-        const QRect dstRectAtTempDev(QPoint(), m_dstDabRect.size());
-
-        if (m_strategy->needsDstInitialized()) {
-            KisPainter::copyAreaOptimized(dstRectAtTempDev.topLeft(),
-                                          m_precisePainterWrapper.preciseDevice(),
-                                          m_tempDev,
-                                          m_dstDabRect);
-        }
-
-
-        m_strategy->paintDab(srcDabRect, dstRectAtTempDev,
-                            canvasLocalSamplePoint,
-                            fpOpacity, colorRate, smudgeLength, lightnessStrength);
-
-        KisFixedPaintDeviceSP finalSelection = m_strategy->finalSelectionDevice();
-
-        m_finalPainter->bitBltWithFixedSelection(m_dstDabRect.x(), m_dstDabRect.y(), m_tempDev, finalSelection, m_dstDabRect.width(), m_dstDabRect.height());
-        m_finalPainter->renderMirrorMaskSafe(m_dstDabRect, m_tempDev, 0, 0, m_maskDab, !m_dabCache->needSeparateOriginal());
-
-        const QVector<QRect> dirtyRects = m_finalPainter->takeDirtyRegion();
-        m_precisePainterWrapper.writeRects(dirtyRects);
-        painter()->addDirtyRects(dirtyRects);
-
-        return spacingInfo;
-    }
-
-
-
-
-
-
-
-
-
-
 
     /**
      * Update the brush mask.
@@ -832,4 +845,18 @@ KisSpacingInformation KisColorSmudgeOp::updateSpacingImpl(const KisPaintInformat
 KisTimingInformation KisColorSmudgeOp::updateTimingImpl(const KisPaintInformation &info) const
 {
     return KisPaintOpPluginUtils::effectiveTiming(&m_airbrushOption, &m_rateOption, info);
+}
+
+KisInterstrokeDataFactory *KisColorSmudgeOp::createInterstrokeDataFactory(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface)
+{
+    bool needsInterstrokeData =
+        settings->getBool(QString("SmudgeRate") + "UseNewEngine", false);
+
+    if (!needsInterstrokeData) return 0;
+
+    KisBrushOptionProperties brushOption;
+    needsInterstrokeData &=
+        brushOption.brushApplication(settings.data(), resourcesInterface) == LIGHTNESSMAP;
+
+    return needsInterstrokeData ? new ColorSmudgeInterstrokeDataFactory() : 0;
 }

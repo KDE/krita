@@ -46,6 +46,8 @@ public:
      */
     KisPaintOp* paintOp(const KisPaintOpPresetSP preset, KisPainter * painter, KisNodeSP node, KisImageSP image) const;
 
+    KisInterstrokeDataFactory* createInterstrokeDataFactory(KisPaintOpPresetSP preset) const;
+
     /**
      * Create and return an (abstracted) configuration widget
      * for using the specified paintop with the specified input device,

@@ -715,6 +715,18 @@ void KisToolTransform::initThumbnailImage(KisPaintDeviceSP previewDevice)
     m_meshStrategy->setThumbnailImage(origImg, thumbToImageTransform);
 }
 
+void KisToolTransform::newActivationWithExternalSource(KisPaintDeviceSP externalSource)
+{
+    m_externalSourceForNextActivation = externalSource;
+    if (isActive()) {
+        QSet<KoShape*> dummy;
+        deactivate();
+        activate(ToolActivation::DefaultActivation, dummy);
+    } else {
+        KoToolManager::instance()->switchToolRequested("KisToolTransform");
+    }
+}
+
 void KisToolTransform::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
     KisTool::activate(toolActivation, shapes);
@@ -786,6 +798,9 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool f
 {
     Q_ASSERT(!m_strokeId);
 
+    KisPaintDeviceSP externalSource = m_externalSourceForNextActivation;
+    m_externalSourceForNextActivation.clear();
+
     // set up and null checks before we do anything
     KisResourcesSnapshotSP resources =
             new KisResourcesSnapshot(image(), currentNode(), this->canvas()->resourceManager());
@@ -841,7 +856,8 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool f
         selection = 0;
     }
 
-    m_currentlyUsingOverlayPreviewStyle = m_preferOverlayPreviewStyle;
+    // Overlay preview is never used when transforming an externally provided image
+    m_currentlyUsingOverlayPreviewStyle = m_preferOverlayPreviewStyle && !externalSource;
 
     KisStrokeStrategy *strategy = 0;
 
@@ -858,7 +874,7 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool f
         m_strokeStrategyCookie = transformStrategy;
 
     } else {
-        InplaceTransformStrokeStrategy *transformStrategy = new InplaceTransformStrokeStrategy(mode, m_workRecursively, m_currentArgs.filterId(), forceReset, currentNode, selection, image().data(), image().data(), image()->root(), m_forceLodMode);
+        InplaceTransformStrokeStrategy *transformStrategy = new InplaceTransformStrokeStrategy(mode, m_workRecursively, m_currentArgs.filterId(), forceReset, currentNode, selection, externalSource, image().data(), image().data(), image()->root(), m_forceLodMode);
         connect(transformStrategy, SIGNAL(sigTransactionGenerated(TransformTransactionProperties, ToolTransformArgs, void*)), SLOT(slotTransactionGenerated(TransformTransactionProperties, ToolTransformArgs, void*)));
         strategy = transformStrategy;
 
@@ -883,7 +899,7 @@ void KisToolTransform::endStroke()
 
     if (m_currentlyUsingOverlayPreviewStyle &&
         m_transaction.rootNode() &&
-        !m_currentArgs.isIdentity()) {
+        !m_currentArgs.isUnchanging()) {
 
         image()->addJob(m_strokeId,
                         new TransformStrokeStrategy::TransformAllData(m_currentArgs));

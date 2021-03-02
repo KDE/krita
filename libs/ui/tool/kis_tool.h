@@ -181,6 +181,16 @@ public:
 
     KisTool::NodePaintAbility nodePaintAbility();
 
+    /**
+     * @brief newActivationWithExternalSource
+     * Makes sure that the tool is active and starts a new stroke, which will
+     * be able to access the pixels from the specified external source.
+     *
+     * This is currently implemented by the Transform tool to paste an image
+     * into the current layer and transform it.
+     */
+    virtual void newActivationWithExternalSource(KisPaintDeviceSP externalSource);
+
 public Q_SLOTS:
     void activate(ToolActivation activation, const QSet<KoShape*> &shapes) override;
     void deactivate() override;

@@ -564,7 +564,7 @@ void TransformStrokeStrategy::finishStrokeImpl(bool applyTransform, const ToolTr
 
 void TransformStrokeStrategy::finishStrokeCallback()
 {
-    if (!m_savedTransformArgs || m_savedTransformArgs->isIdentity()) {
+    if (!m_savedTransformArgs || m_savedTransformArgs->isUnchanging()) {
         cancelStrokeCallback();
         return;
     }
@@ -574,5 +574,5 @@ void TransformStrokeStrategy::finishStrokeCallback()
 
 void TransformStrokeStrategy::cancelStrokeCallback()
 {
-    finishStrokeImpl(!m_initialTransformArgs.isIdentity(), m_initialTransformArgs);
+    finishStrokeImpl(!m_initialTransformArgs.isUnchanging(), m_initialTransformArgs);
 }

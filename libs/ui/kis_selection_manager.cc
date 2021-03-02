@@ -110,6 +110,9 @@ void KisSelectionManager::setup(KisActionManager* actionManager)
     m_pasteAt = actionManager->createAction("paste_at");
     connect(m_pasteAt, SIGNAL(triggered()), this, SLOT(pasteAt()));
 
+    m_pasteInto = actionManager->createAction("paste_into");
+    connect(m_pasteInto, SIGNAL(triggered()), this, SLOT(pasteInto()));
+
     m_pasteAsReference = actionManager->createAction("paste_as_reference");
     connect(m_pasteAsReference, SIGNAL(triggered()), this, SLOT(pasteAsReference()));
 
@@ -368,6 +371,12 @@ void KisSelectionManager::pasteAt()
 {
     KisPasteActionFactory factory;
     factory.run(true, m_view);
+}
+
+void KisSelectionManager::pasteInto()
+{
+    KisPasteIntoActionFactory factory;
+    factory.run(m_view);
 }
 
 void KisSelectionManager::pasteAsReference()

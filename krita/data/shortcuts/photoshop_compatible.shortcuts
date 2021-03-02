@@ -281,6 +281,7 @@ options_configure=none
 options_configure_toolbars=none
 paintops=none
 paste_at=none
+paste_into=none
 paste_new=none
 path-break-point=none
 path-break-segment=none

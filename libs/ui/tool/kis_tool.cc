@@ -556,6 +556,11 @@ KisTool::NodePaintAbility KisTool::nodePaintAbility()
     return NodePaintAbility::UNPAINTABLE;
 }
 
+void KisTool::newActivationWithExternalSource(KisPaintDeviceSP externalSource)
+{
+    Q_UNUSED(externalSource);
+}
+
 QWidget* KisTool::createOptionWidget()
 {
     d->optionWidget = new QLabel(i18n("No options"));

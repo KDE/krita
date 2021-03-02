@@ -343,6 +343,18 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="paste_into">
+      <icon></icon>
+      <text>Paste into Active Layer</text>
+      <whatsThis></whatsThis>
+      <toolTip>Paste into Active Layer</toolTip>
+      <iconText>Paste into Active Layer</iconText>
+      <activationFlags>100000000000</activationFlags>
+      <activationConditions>10</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
     <Action name="paste_new">
       <icon></icon>
       <text>Paste into &amp;New Image</text>

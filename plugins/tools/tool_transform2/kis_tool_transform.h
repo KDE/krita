@@ -158,6 +158,8 @@ public:
 
     void paint(QPainter& gc, const KoViewConverter &converter) override;
 
+    void newActivationWithExternalSource(KisPaintDeviceSP externalSource) override;
+
     TransformToolMode transformMode() const;
 
     double translateX() const;
@@ -251,6 +253,10 @@ private:
 
 private:
     ToolTransformArgs m_currentArgs;
+
+    // Set by newActivationWithExternalSource before starting a new stroke.
+    // The source pixels for the next transform will be read from this device.
+    KisPaintDeviceSP m_externalSourceForNextActivation;
 
     bool m_actuallyMoveWhileSelected {false}; // true <=> selection has been moved while clicked
 

@@ -125,7 +125,7 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
     showNewsAction->setCheckable(true);
 
     newsOptionsMenu->addSection(i18n("Language"));
-    QAction *newsInfoAction = newsOptionsMenu->addAction(i18n("English news are always up to date."));
+    QAction *newsInfoAction = newsOptionsMenu->addAction(i18n("English news is always up to date."));
     newsInfoAction->setEnabled(false);
 
     setupNewsLangSelection(newsOptionsMenu);

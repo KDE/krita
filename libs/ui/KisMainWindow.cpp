@@ -833,13 +833,12 @@ void KisMainWindow::slotThemeChanged()
     }
 
 
-
     // update MDI area theme
     // Tab close button override
     // just switch this icon out for all OSs so it is easier to see
-    QString mdiTabsStyleSheet = R"(
+    QString globalStyleSheet = R"(
             QTabBar {
-                background-color: #{alternate};
+                background-color: palette(alternate-base);
                 qproperty-drawBase: 1;
                 qproperty-expanding: 1;
             }
@@ -852,19 +851,19 @@ void KisMainWindow::slotThemeChanged()
                 margin-top: 0;
             }
             QTabBar::tab:!selected {
-                background: #{alternate};
-                border-bottom: 7px solid #{alternate};
-                border-top: 7px solid #{alternate};
-                border-right: 2px solid #{background};
+                background: palette(alternate-base);
+                border-bottom: 7px solid palette(alternate-base);
+                border-top: 7px solid palette(alternate-base);
+                border-right: 2px solid palette(window);
                 color: #{inactive_text_color};
             }
             QTabBar::tab:selected {
-                background: #{background};
-                border-bottom: 5px solid #{alternate};;
-                border-top: 5px solid #{alternate};;
+                background: palette(window);
+                border-bottom: 5px solid palette(alternate-base);
+                border-top: 5px solid palette(alternate-base);
 
-                border-left: 5px solid #{alternate};;
-                border-right: 5px solid #{alternate};;
+                border-left: 5px solid palette(alternate-base);
+                border-right: 5px solid palette(alternate-base);
 
                 margin-left: -2px;
                 margin-right: -2px;
@@ -872,7 +871,7 @@ void KisMainWindow::slotThemeChanged()
             margin-bottom: -5px;
             }
            QTabBar::tab:hover {
-               color: #{active_text_color};
+               color: palette(active-text);
            }
 
             QTabBar::close-button:hover {
@@ -886,37 +885,23 @@ void KisMainWindow::slotThemeChanged()
            )";
 
     // swap out variables with palette options
-    QString windowThemeColor = qApp->palette().color(QPalette::Window).name().split("#")[1];
-    QString alternateBaseThemeColor = qApp->palette().color(QPalette::AlternateBase).name().split("#")[1];
-    QString activeTextThemeColor = qApp->palette().color(QPalette::WindowText).name().split("#")[1];
-    QColor textColor = qApp->palette().color(QPalette::Text);
-    QString inactiveTextColor = KritaUtils::blendColors(textColor, qApp->palette().color(QPalette::Window), 0.5).name().split("#")[1];
-
-    mdiTabsStyleSheet = mdiTabsStyleSheet.replace("{active_text_color}", activeTextThemeColor);
-    mdiTabsStyleSheet = mdiTabsStyleSheet.replace("{alternate}", alternateBaseThemeColor);
-    mdiTabsStyleSheet = mdiTabsStyleSheet.replace("{background}", windowThemeColor);
-    mdiTabsStyleSheet = mdiTabsStyleSheet.replace("{inactive_text_color}", inactiveTextColor);
+    QString inactiveTextColor = KritaUtils::blendColors(qApp->palette().color(QPalette::Text),
+                                              qApp->palette().color(QPalette::Window), 0.5).name().split("#")[1];
+    globalStyleSheet = globalStyleSheet.replace("{inactive_text_color}", inactiveTextColor);
 
     QString themeName = d->themeManager->currentThemeName();
     bool isDarkTheme = themeName.toLower().contains("dark");
     if(isDarkTheme) {
-        mdiTabsStyleSheet = mdiTabsStyleSheet.replace("{close-button-location}", ":/pics/light_close-tab.svg");
+        globalStyleSheet = globalStyleSheet.replace("{close-button-location}", ":/pics/light_close-tab.svg");
     } else {
-        mdiTabsStyleSheet = mdiTabsStyleSheet.replace("{close-button-location}", ":/pics/dark_close-tab.svg");
+        globalStyleSheet = globalStyleSheet.replace("{close-button-location}", ":/pics/dark_close-tab.svg");
     }
-
-    //d->mdiArea->setStyleSheet(mdiTabsStyleSheet);
-
-
-
-
-
 
     // all global styles can be set here. Build them out line by line so it is easier to read/manage
    // QString stylesBuilder;
-    mdiTabsStyleSheet.append("QHeaderView::section {padding: 7px; }");
+    globalStyleSheet.append("QHeaderView::section {padding: 7px; }");
 
-    qApp->setStyleSheet(mdiTabsStyleSheet);
+    qApp->setStyleSheet(globalStyleSheet);
 
     emit themeChanged();
 }

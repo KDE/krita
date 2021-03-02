@@ -30,7 +30,8 @@ enum CommandId {
     DisableUIUpdatesCommandId,
     UpdateCommandId,
     EmitImageSignalsCommandId,
-    NodePropertyListCommandId
+    NodePropertyListCommandId,
+    ChangeStoryboardChild
 };
 
 }

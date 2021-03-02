@@ -8,6 +8,7 @@
 #define KISADDREMOVESTORYBOARDCOMMAND_H
 
 #include "kundo2command.h"
+#include "kis_command_ids.h"
 
 class StoryboardModel;
 
@@ -68,6 +69,9 @@ public:
     void redo() override;
     void undo() override;
 
+    int id() const override { return KisCommandUtils::ChangeStoryboardChild; }
+    bool mergeWith(const KUndo2Command *other) override;
+
 private:
     QVariant m_oldValue;
     QVariant m_newValue;
@@ -75,4 +79,5 @@ private:
     int m_childRow;
     StoryboardModel *m_model;
 };
+
 #endif

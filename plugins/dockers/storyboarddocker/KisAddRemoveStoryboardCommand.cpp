@@ -147,3 +147,17 @@ void KisStoryboardChildEditCommand::undo()
 {
     m_model->setData(m_model->index(m_childRow, 0, m_model->index(m_parentRow, 0)), m_oldValue);
 }
+
+bool KisStoryboardChildEditCommand::mergeWith(const KUndo2Command *other)
+{
+    const KisStoryboardChildEditCommand* storyboardChildCmd = dynamic_cast<const KisStoryboardChildEditCommand*>(other);
+
+    if (storyboardChildCmd) {
+        if (storyboardChildCmd->m_parentRow == m_parentRow && storyboardChildCmd->m_childRow == m_childRow) {
+            m_newValue = storyboardChildCmd->m_newValue;
+            return true;
+        }
+    }
+
+    return false;
+}

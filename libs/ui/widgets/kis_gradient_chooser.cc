@@ -32,6 +32,7 @@
 #include "kis_autogradient.h"
 #include "kis_canvas_resource_provider.h"
 #include "kis_stopgradient_editor.h"
+#include "KisPopupButton.h"
 
 #include <KoCanvasResourcesIds.h>
 #include <KoCanvasResourcesInterface.h>
@@ -211,11 +212,15 @@ KisGradientChooser::KisGradientChooser(QWidget *parent, const char *name, bool u
     m_d->containerSliderItemSizeCustom->setLayout(layoutContainerSliderItemSizeCustom);
     QWidgetAction *widgetActionSliderItemSizeCustom = new QWidgetAction(this);
     widgetActionSliderItemSizeCustom->setDefaultWidget(m_d->containerSliderItemSizeCustom);
-    QToolButton *toolButtonItemChooserViewMode = m_d->itemChooser->viewModeButton();
-    toolButtonItemChooserViewMode->addActions(actionGroupViewMode->actions());
-    toolButtonItemChooserViewMode->addAction(separatorViewMode1);
-    toolButtonItemChooserViewMode->addActions(actionGroupItemSize->actions());
-    toolButtonItemChooserViewMode->addAction(widgetActionSliderItemSizeCustom);
+    QMenu* menu = new QMenu(this);
+    menu->setStyleSheet("margin: 6px");
+    menu->addActions(actionGroupViewMode->actions());
+    menu->addAction(separatorViewMode1);
+    menu->addActions(actionGroupItemSize->actions());
+    menu->addAction(widgetActionSliderItemSizeCustom);
+    KisPopupButton *toolButtonItemChooserViewMode = m_d->itemChooser->viewModeButton();
+    toolButtonItemChooserViewMode->setPopupWidget(menu);
+
 
     // Edit widgets
     QHBoxLayout* layoutEditWidgets = new QHBoxLayout;

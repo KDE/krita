@@ -21,6 +21,7 @@
 
 #include <KoResource.h>
 #include <KisKineticScroller.h>
+#include "KisPopupButton.h"
 
 class QAbstractProxyModel;
 class QAbstractItemDelegate;
@@ -99,7 +100,7 @@ public:
     void setStoragePopupButtonVisible(bool visible);
     
     void setViewModeButtonVisible(bool visible);
-    QToolButton *viewModeButton() const;
+    KisPopupButton *viewModeButton() const;
 
     void setSynced(bool sync);
 

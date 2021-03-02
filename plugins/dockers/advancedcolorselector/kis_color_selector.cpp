@@ -401,7 +401,8 @@ void KisColorSelector::init()
 
     if(displaySettingsButton()) {
         m_button = new QPushButton(this);
-        m_button->setIcon(KisIconUtils::loadIcon("configure"));
+        m_button->setIcon(KisIconUtils::loadIcon("configure-22"));
+        m_button->setIconSize(QSize(22, 22));
         m_button->setFlat(true);
         connect(m_button, SIGNAL(clicked()), SIGNAL(settingsButtonClicked()));
     }

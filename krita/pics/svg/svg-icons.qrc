@@ -8,6 +8,7 @@
         <file>dark_addblankframe.svg</file>
         <file>dark_addcolor.svg</file>
         <file>dark_addduplicateframe.svg</file>
+        <file>dark_bookmarks.svg</file>
         <file>dark_configure-thicker.svg</file>
         <file>dark_deletekeyframe.svg</file>
         <file>dark_edit-redo.svg</file>
@@ -52,6 +53,7 @@
         <file>light_addblankframe.svg</file>
         <file>light_addcolor.svg</file>
         <file>light_addduplicateframe.svg</file>
+        <file>light_bookmarks.svg</file>
         <file>light_configure-thicker.svg</file>
         <file>light_deletekeyframe.svg</file>
         <file>light_edit-redo.svg</file>

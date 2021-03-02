@@ -7,7 +7,7 @@
 #ifndef _KIS_TIFF_TEST_H_
 #define _KIS_TIFF_TEST_H_
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisTiffTest : public QObject
 {

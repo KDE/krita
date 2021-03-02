@@ -5,7 +5,7 @@
  */
 #include "TestBundleStorage.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <QImageReader>
 
 #include <KoConfig.h>
@@ -121,5 +121,5 @@ void TestBundleStorage::testAddResource()
     ResourceTestHelper::testVersionedStorageIterator(storage, resourceType, resourceUrl);
 }
 
-QTEST_MAIN(TestBundleStorage)
+SIMPLE_TEST_MAIN(TestBundleStorage)
 

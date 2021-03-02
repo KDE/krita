@@ -7,7 +7,7 @@
 #ifndef _KIS_HEIGHTMAP_TEST_H_
 #define _KIS_HEIGHTMAP_TEST_H_
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisHeightmapTest : public QObject
 {

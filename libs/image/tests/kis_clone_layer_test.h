@@ -7,7 +7,7 @@
 #ifndef KIS_CLONE_LAYER_TEST_H
 #define KIS_CLONE_LAYER_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisCloneLayerTest : public QObject
 {

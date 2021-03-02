@@ -19,7 +19,7 @@
 #endif
 #endif
 
-#include <QTest>
+#include <simpletest.h>
 
 #include "kis_mask_generator_benchmark.h"
 
@@ -96,4 +96,4 @@ void KisMaskGeneratorBenchmark::benchmarkSquare()
     }
 }
 
-QTEST_MAIN(KisMaskGeneratorBenchmark)
+SIMPLE_TEST_MAIN(KisMaskGeneratorBenchmark)

@@ -8,7 +8,7 @@
 #include "TestAslStorage.h"
 
 
-#include <QTest>
+#include <simpletest.h>
 #include <QImageReader>
 
 #include <KoConfig.h>
@@ -187,5 +187,5 @@ void TestAslStorage::testResource()
 }
 
 
-QTEST_MAIN(TestAslStorage)
+SIMPLE_TEST_MAIN(TestAslStorage)
 

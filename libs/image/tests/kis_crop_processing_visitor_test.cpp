@@ -6,7 +6,7 @@
 
 #include "kis_crop_processing_visitor_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <KoColorSpaceRegistry.h>
 #include "processing/kis_crop_processing_visitor.h"
 #include "commands_new/kis_processing_command.h"
@@ -116,4 +116,4 @@ void KisCropProcessingVisitorTest::testWrappedInCommand()
     QCOMPARE(image1, image5);
 }
 
-QTEST_MAIN(KisCropProcessingVisitorTest)
+SIMPLE_TEST_MAIN(KisCropProcessingVisitorTest)

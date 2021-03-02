@@ -5,7 +5,7 @@
  */
 #include "TestTagResourceModel.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <QStandardPaths>
 #include <QDir>
 #include <QVersionNumber>

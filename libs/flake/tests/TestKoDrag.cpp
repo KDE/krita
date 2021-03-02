@@ -71,4 +71,4 @@ void TestKoDrag::test()
 }
 
 
-QTEST_MAIN(TestKoDrag)
+SIMPLE_TEST_MAIN(TestKoDrag)

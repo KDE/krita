@@ -9,7 +9,7 @@
 
 #include <MockShapes.h>
 #include <QPointF>
-#include <QTest>
+#include <simpletest.h>
 
 TestPosition::TestPosition()
         : shape1(0),

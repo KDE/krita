@@ -6,7 +6,7 @@
 
 #include "TestConvolutionOpImpl.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 #include "../KoColorSpaceAbstract.h"
 #include "../KoColorSpaceTraits.h"

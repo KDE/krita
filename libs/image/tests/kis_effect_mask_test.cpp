@@ -5,7 +5,7 @@
  */
 
 #include "kis_effect_mask_test.h"
-#include <QTest>
+#include <simpletest.h>
 
 
 void KisEffectMaskTest::testCreation()
@@ -25,6 +25,6 @@ void KisEffectMaskTest::testCaching()
 }
 
 
-QTEST_MAIN(KisEffectMaskTest)
+SIMPLE_TEST_MAIN(KisEffectMaskTest)
 
 

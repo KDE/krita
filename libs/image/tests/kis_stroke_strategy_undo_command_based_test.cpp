@@ -5,7 +5,7 @@
  */
 
 #include "kis_stroke_strategy_undo_command_based_test.h"
-#include <QTest>
+#include <simpletest.h>
 
 #include <KoColorSpaceRegistry.h>
 #include "kis_image.h"
@@ -164,4 +164,4 @@ void KisStrokeStrategyUndoCommandBasedTest::stressTestSequentialCommands()
              << "/" << NUM_CHECKS * NUM_JOBS;
 }
 
-QTEST_MAIN(KisStrokeStrategyUndoCommandBasedTest)
+SIMPLE_TEST_MAIN(KisStrokeStrategyUndoCommandBasedTest)

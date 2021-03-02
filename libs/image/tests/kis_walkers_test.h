@@ -7,7 +7,7 @@
 #ifndef KIS_WALKERS_TEST_H
 #define KIS_WALKERS_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 #include "kis_image.h"
 #include "kis_layer.h"

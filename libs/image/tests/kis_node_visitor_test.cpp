@@ -6,7 +6,7 @@
 
 #include "kis_node_visitor_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include "kis_node_visitor.h"
 
 class TestNodeVisitor : public KisNodeVisitor
@@ -77,4 +77,4 @@ void KisNodeVisitorTest::testFullImage()
 }
 
 
-QTEST_MAIN(KisNodeVisitorTest)
+SIMPLE_TEST_MAIN(KisNodeVisitorTest)

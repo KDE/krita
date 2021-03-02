@@ -8,7 +8,7 @@
 #include <QPainterPath>
 #include "KoPathShape.h"
 #include "KoSubpathRemoveCommand.h"
-#include <QTest>
+#include <simpletest.h>
 
 void TestRemoveSubpathCommand::redoUndo()
 {
@@ -88,4 +88,4 @@ void TestRemoveSubpathCommand::redoUndo()
     delete cmd1;
 }
 
-QTEST_MAIN(TestRemoveSubpathCommand)
+SIMPLE_TEST_MAIN(TestRemoveSubpathCommand)

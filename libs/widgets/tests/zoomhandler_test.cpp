@@ -6,7 +6,7 @@
 
 #include "zoomhandler_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <QCoreApplication>
 
 #include <WidgetsDebug.h>

@@ -6,7 +6,7 @@
 
 #include "kis_grid_config_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include "kis_grid_config.h"
 #include "kis_guides_config.h"
 #include <QDomDocument>
@@ -72,4 +72,4 @@ void KisGridConfigTest::testGuidesConfig()
     QVERIFY(config2.hasGuides());
 }
 
-QTEST_MAIN(KisGridConfigTest)
+SIMPLE_TEST_MAIN(KisGridConfigTest)

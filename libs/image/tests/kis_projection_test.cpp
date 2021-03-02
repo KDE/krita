@@ -5,7 +5,7 @@
  */
 
 #include "kis_projection_test.h"
-#include <QTest>
+#include <simpletest.h>
 
 
 #include <KoColor.h>
@@ -44,6 +44,6 @@ void KisProjectionTest::testDirty()
     }
 }
 
-QTEST_MAIN(KisProjectionTest)
+SIMPLE_TEST_MAIN(KisProjectionTest)
 
 

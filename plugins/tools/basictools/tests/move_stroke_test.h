@@ -7,7 +7,7 @@
 #ifndef __MOVE_STROKE_TEST_H
 #define __MOVE_STROKE_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class MoveStrokeTest : public QObject
 {

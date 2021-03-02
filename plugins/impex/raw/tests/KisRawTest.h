@@ -7,7 +7,7 @@
 #ifndef _KIS_RAW_TEST_H_
 #define _KIS_RAW_TEST_H_
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisRawTest : public QObject
 {

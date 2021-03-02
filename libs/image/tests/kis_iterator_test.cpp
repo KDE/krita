@@ -7,7 +7,7 @@
 #include "kis_iterator_test.h"
 #include <QApplication>
 
-#include <QTest>
+#include <simpletest.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>

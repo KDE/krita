@@ -7,7 +7,7 @@
 #ifndef KIS_MASK_SIMILARITY_TEST
 #define KIS_MASK_SIMILARITY_TEST
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisMaskSimilarityTest : public QObject
 {

@@ -10,7 +10,7 @@
 #include <QObject>
 #include <stroke_testing_utils.h>
 #include <qimage_based_test.h>
-#include <QTest>
+#include <simpletest.h>
 #include <QtTest/QtTest>
 
 class KisMyPaintOpTest: public QObject, public TestUtil::QImageBasedTest

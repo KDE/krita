@@ -6,7 +6,7 @@
 
 #include "kis_mask_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 
@@ -154,4 +154,4 @@ void KisMaskTest::testDeferredOffsetInitialization()
     QCOMPARE(selection->parentNode(), KisNodeWSP(mask));
 }
 
-QTEST_MAIN(KisMaskTest)
+SIMPLE_TEST_MAIN(KisMaskTest)

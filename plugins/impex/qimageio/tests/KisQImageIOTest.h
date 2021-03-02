@@ -7,7 +7,7 @@
 #ifndef _KIS_QIMAGEIO_TEST_H_
 #define _KIS_QIMAGEIO_TEST_H_
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisQImageIOTest : public QObject
 {

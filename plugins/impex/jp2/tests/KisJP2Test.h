@@ -7,7 +7,7 @@
 #ifndef _KIS_JP2_TEST_H_
 #define _KIS_JP2_TEST_H_
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisJP2Test : public QObject
 {

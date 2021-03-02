@@ -5,7 +5,7 @@
  */
 
 #include "kis_paint_layer_test.h"
-#include <QTest>
+#include <simpletest.h>
 #include <QImage>
 #include <QCoreApplication>
 
@@ -177,4 +177,4 @@ void KisPaintLayerTest::testLayerStyles()
 }
 
 
-QTEST_MAIN(KisPaintLayerTest)
+SIMPLE_TEST_MAIN(KisPaintLayerTest)

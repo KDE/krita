@@ -8,7 +8,7 @@
 #include <compositeops/KoVcMultiArchBuildSupport.h> //MSVC requires that Vc come first
 #include "kis_mask_generator_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include "kis_mask_generator.h"
 
 #include <QDomDocument>
@@ -163,4 +163,4 @@ void KisMaskGeneratorTest::testCopyCtorGaussRect()
 }
 
 
-QTEST_MAIN(KisMaskGeneratorTest)
+SIMPLE_TEST_MAIN(KisMaskGeneratorTest)

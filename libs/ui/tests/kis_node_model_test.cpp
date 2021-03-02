@@ -7,7 +7,7 @@
 
 #include "kis_node_model_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <kis_debug.h>
 
 #include "KisDocument.h"

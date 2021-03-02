@@ -9,7 +9,7 @@
 
 #include <KoConfig.h>
 #include <QApplication>
-#include <QTest>
+#include <simpletest.h>
 #include <QStandardPaths>
 #include <QLoggingCategory>
 #include <QtTest/qtestsystem.h>

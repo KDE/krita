@@ -9,7 +9,7 @@
 
 #include "KoColorModelStandardIds.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <DebugPigment.h>
 #include <string.h>
 

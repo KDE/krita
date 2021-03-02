@@ -7,7 +7,7 @@
 #ifndef _KIS_PSD_TEST_H_
 #define _KIS_PSD_TEST_H_
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisPSDTest : public QObject
 {

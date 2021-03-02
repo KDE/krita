@@ -11,7 +11,7 @@
 #include "KoPathPointData.h"
 #include "KoPathSegment.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 void TestPathShape::close()
 {
@@ -769,4 +769,4 @@ void TestPathShape::closeMerge()
     QVERIFY(path.outline() == ppath);
 }
 
-QTEST_MAIN(TestPathShape)
+SIMPLE_TEST_MAIN(TestPathShape)

@@ -7,7 +7,7 @@
 #ifndef KISSIGNALCOMPRESSORTEST_H
 #define KISSIGNALCOMPRESSORTEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 #include <QObject>
 
 class KisSignalCompressorTest : public QObject

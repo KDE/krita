@@ -7,7 +7,7 @@
 #ifndef __KIS_ASL_LAYER_STYLE_SERIALIZER_TEST_H
 #define __KIS_ASL_LAYER_STYLE_SERIALIZER_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisAslLayerStyleSerializerTest : public QObject
 {

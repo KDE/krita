@@ -169,6 +169,6 @@ void KisSignalCompressorTest::testIdleChecks()
     }
 }
 
-QTEST_MAIN(KisSignalCompressorTest)
+SIMPLE_TEST_MAIN(KisSignalCompressorTest)
 
 #include "KisSignalCompressorTest.moc"

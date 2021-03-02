@@ -7,7 +7,7 @@
 #ifndef KISANIMATIONRENDERINGBENCHMARK_H
 #define KISANIMATIONRENDERINGBENCHMARK_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisAnimationRenderingBenchmark : public QObject
 {

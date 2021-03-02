@@ -7,7 +7,7 @@
 #ifndef KIS_PATTERN_TEST_H
 #define KIS_PATTERN_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KoPatternTest : public QObject
 {

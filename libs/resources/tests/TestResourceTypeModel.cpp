@@ -5,7 +5,7 @@
  */
 #include "TestResourceTypeModel.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <QStandardPaths>
 #include <QDir>
 #include <QVersionNumber>
@@ -112,5 +112,5 @@ void TestResourceTypeModel::cleanupTestCase()
 
 
 
-QTEST_MAIN(TestResourceTypeModel)
+SIMPLE_TEST_MAIN(TestResourceTypeModel)
 

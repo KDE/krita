@@ -6,7 +6,7 @@
 
 #include "kis_fixed_point_maths_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 #include "kis_fixed_point_maths.h"
 
@@ -99,4 +99,4 @@ void KisFixedPointMathsTest::testConversionsNegative()
     QCOMPARE(fp3.toIntCeil(), -2);
 }
 
-QTEST_MAIN(KisFixedPointMathsTest)
+SIMPLE_TEST_MAIN(KisFixedPointMathsTest)

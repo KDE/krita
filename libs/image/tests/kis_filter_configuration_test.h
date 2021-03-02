@@ -7,7 +7,7 @@
 #ifndef KIS_FILTER_CONFIGURATION_TESTER_H
 #define KIS_FILTER_CONFIGURATION_TESTER_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisFilterConfigurationTest : public QObject
 {

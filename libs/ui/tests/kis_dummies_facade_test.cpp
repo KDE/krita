@@ -6,7 +6,7 @@
 
 #include "kis_dummies_facade_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include "kistest.h"
 
 #include "kis_dummies_facade.h"

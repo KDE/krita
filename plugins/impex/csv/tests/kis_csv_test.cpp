@@ -7,7 +7,7 @@
 #include "kis_csv_test.h"
 
 
-#include <QTest>
+#include <simpletest.h>
 #include <QCoreApplication>
 
 #include "filestest.h"
@@ -42,5 +42,5 @@ void KisCsvTest::testImportIncorrectFormat()
     TestUtil::testImportIncorrectFormat(QString(FILES_DATA_DIR), CsvMimetype);
 }
 
-QTEST_MAIN(KisCsvTest)
+SIMPLE_TEST_MAIN(KisCsvTest)
 

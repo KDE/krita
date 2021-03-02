@@ -5,7 +5,7 @@
  */
 
 #include "TestTag.h"
-#include <QTest>
+#include <simpletest.h>
 #include <QBuffer>
 
 #include <KisTag.h>
@@ -84,5 +84,5 @@ void TestTag::testSaveTag()
 
 }
 
-QTEST_MAIN(TestTag)
+SIMPLE_TEST_MAIN(TestTag)
 

@@ -7,7 +7,7 @@
 #ifndef KIS_FILTER_REGISTRY_TEST_H
 #define KIS_FILTER_REGISTRY_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisFilterRegistryTest : public QObject
 {

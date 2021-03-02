@@ -7,7 +7,7 @@
 #ifndef TESTSVGPARSER_H
 #define TESTSVGPARSER_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class TestSvgParser : public QObject
 {

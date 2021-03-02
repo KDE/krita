@@ -5,7 +5,7 @@
  */
 #include "TestKoShapeFactory.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <QBuffer>
 
 #include <KoShapeLoadingContext.h>

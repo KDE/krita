@@ -6,7 +6,7 @@
 
 #include "KisMultiFeedRssModelTest.h"
 
-#include <QtTest>
+#include <simpletest.h>
 #include <QSignalSpy>
 
 #include <MockNetworkAccessManager.h>
@@ -179,5 +179,5 @@ void KisMultiFeedRssModelTest::testRemoveFeed_data()
             << 10;
 }
 
-QTEST_MAIN(KisMultiFeedRssModelTest);
+SIMPLE_TEST_MAIN(KisMultiFeedRssModelTest);
 

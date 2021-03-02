@@ -5,7 +5,7 @@
  */
 #include "KisFrameCacheStoreTest.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <testutil.h>
 
 #include <KoColor.h>
@@ -178,6 +178,6 @@ void KisFrameCacheStoreTest::test()
 
 }
 
-QTEST_MAIN(KisFrameCacheStoreTest)
+SIMPLE_TEST_MAIN(KisFrameCacheStoreTest)
 
 #include "KisFrameCacheStoreTest.moc"

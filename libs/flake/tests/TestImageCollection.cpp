@@ -17,7 +17,7 @@
 #include <QUrl>
 #include <FlakeDebug.h>
 
-#include <QTest>
+#include <simpletest.h>
 
 void TestImageCollection::testGetImageImage()
 {
@@ -234,4 +234,4 @@ void TestImageCollection::testIsValid()
     QCOMPARE(data.isValid(), false);
 }
 
-QTEST_MAIN(TestImageCollection)
+SIMPLE_TEST_MAIN(TestImageCollection)

@@ -5,7 +5,7 @@
  */
 
 #include "kis_lockless_stack_test.h"
-#include <QTest>
+#include <simpletest.h>
 
 #include "kis_debug.h"
 
@@ -336,5 +336,5 @@ void KisLocklessStackTest::stressTestBulkPop()
     QCOMPARE(realSum, expectedSum);
 }
 
-QTEST_MAIN(KisLocklessStackTest)
+SIMPLE_TEST_MAIN(KisLocklessStackTest)
 

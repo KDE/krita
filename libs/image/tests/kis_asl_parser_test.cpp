@@ -6,7 +6,7 @@
 
 #include "kis_asl_parser_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 #include <testutil.h>
 #include "testimage.h"

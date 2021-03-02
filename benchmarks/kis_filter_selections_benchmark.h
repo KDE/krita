@@ -7,7 +7,7 @@
 #ifndef KIS_FILTER_SELECTIONS_BENCHMARK_H
 #define KIS_FILTER_SELECTIONS_BENCHMARK_H
 
-#include <QtTest>
+#include <simpletest.h>
 #include "kis_selection.h"
 #include "filter/kis_filter.h"
 #include "filter/kis_filter_configuration.h"

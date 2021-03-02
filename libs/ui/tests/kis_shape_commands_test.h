@@ -7,7 +7,7 @@
 #ifndef __KIS_SHAPE_COMMANDS_TEST_H
 #define __KIS_SHAPE_COMMANDS_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisShapeCommandsTest : public QObject
 {

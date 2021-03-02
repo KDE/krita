@@ -7,7 +7,7 @@
 #ifndef __KIS_EMBEDDED_PATTERN_MANAGER_TEST_H
 #define __KIS_EMBEDDED_PATTERN_MANAGER_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 #include <kis_properties_configuration.h>
 

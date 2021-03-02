@@ -6,7 +6,7 @@
 
 #include "zoomcontroller_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <QCoreApplication>
 
 #include <kactioncollection.h>
@@ -24,4 +24,4 @@ void zoomcontroller_test::testApi()
 
 }
 
-QTEST_MAIN(zoomcontroller_test)
+SIMPLE_TEST_MAIN(zoomcontroller_test)

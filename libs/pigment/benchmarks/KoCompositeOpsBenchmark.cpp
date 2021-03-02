@@ -13,7 +13,7 @@
 #include <KoColorSpaceTraits.h>
 #include <KoColorSpaceRegistry.h>
 
-#include <QTest>
+#include <simpletest.h>
 
 const int TILE_WIDTH = 64;
 const int TILE_HEIGHT = 64;

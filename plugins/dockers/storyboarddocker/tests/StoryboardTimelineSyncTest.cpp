@@ -10,7 +10,7 @@
 
 #include <kis_group_layer.h>
 
-#include <QTest>
+#include <simpletest.h>
 
 
 void StoryboardTimelineSyncTest::initTestCase()
@@ -321,4 +321,4 @@ void StoryboardTimelineSyncTest::testFpsChanged()
     }
 }
 
-QTEST_MAIN(StoryboardTimelineSyncTest)
+SIMPLE_TEST_MAIN(StoryboardTimelineSyncTest)

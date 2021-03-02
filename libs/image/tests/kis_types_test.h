@@ -7,7 +7,7 @@
 #ifndef KIS_TYPES_TEST_H
 #define KIS_TYPES_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 /**
  * Merely check that our repository of type definitions compiles

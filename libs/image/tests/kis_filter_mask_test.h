@@ -8,7 +8,7 @@
 #ifndef KIS_FILTER_MASK_TEST_H
 #define KIS_FILTER_MASK_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisFilterMaskTest : public QObject
 {

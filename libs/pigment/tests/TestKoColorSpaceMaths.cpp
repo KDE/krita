@@ -6,7 +6,7 @@
 #include "KoIntegerMaths.h"
 #include "KoColorSpaceMaths.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 void TestKoColorSpaceMaths::testColorSpaceMathsTraits()
 {

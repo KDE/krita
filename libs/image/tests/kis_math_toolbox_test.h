@@ -7,7 +7,7 @@
 #ifndef KIS_MATH_TOOLBOX_TEST_H
 #define KIS_MATH_TOOLBOX_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisMathToolboxTest : public QObject
 {

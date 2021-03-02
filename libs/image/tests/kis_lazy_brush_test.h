@@ -7,7 +7,7 @@
 #ifndef __KIS_LAZY_BRUSH_TEST_H
 #define __KIS_LAZY_BRUSH_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisLazyBrushTest : public QObject
 {

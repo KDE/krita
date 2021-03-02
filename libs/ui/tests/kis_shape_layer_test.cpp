@@ -6,7 +6,7 @@
 
 #include "kis_shape_layer_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 #include "kis_global.h"
 

@@ -6,7 +6,7 @@
 
 #include "kis_cubic_curve_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 #include "kis_cubic_curve.h"
 
@@ -172,4 +172,4 @@ void KisCubicCurveTest::testTransfer()
     }
 }
 
-QTEST_MAIN(KisCubicCurveTest)
+SIMPLE_TEST_MAIN(KisCubicCurveTest)

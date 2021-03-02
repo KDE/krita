@@ -11,7 +11,7 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>
-#include <QTest>
+#include <simpletest.h>
 #include <generator/kis_generator_registry.h>
 #include <kis_fill_painter.h>
 #include <kis_filter_configuration.h>

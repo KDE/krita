@@ -6,7 +6,7 @@
 
 #include "kis_filter_weights_applicator_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 #include <KoColor.h>
 #include <KoColorSpace.h>

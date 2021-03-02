@@ -7,7 +7,7 @@
 #ifndef KIS_CS_CONVERSION_TESTER_H
 #define KIS_CS_CONVERSION_TESTER_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisCsConversionTest : public QObject
 {

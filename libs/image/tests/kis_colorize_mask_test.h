@@ -7,7 +7,7 @@
 #ifndef __KIS_COLORIZE_MASK_TEST_H
 #define __KIS_COLORIZE_MASK_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisColorizeMaskTest : public QObject
 {

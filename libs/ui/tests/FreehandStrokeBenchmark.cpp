@@ -6,7 +6,7 @@
 
 #include "FreehandStrokeBenchmark.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <sdk/tests/testui.h>
 #include <KoCompositeOpRegistry.h>
 #include <KoColor.h>

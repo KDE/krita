@@ -3,7 +3,7 @@
  */
 
 #include "TestSqueezedComboBox.h"
-#include <QTest>
+#include <simpletest.h>
 
 #include <KisSqueezedComboBox.h>
 
@@ -28,5 +28,5 @@ void TestSqueezedComboBox::testContains()
     QVERIFY(comboBox->contains(testItemText));
 }
 
-QTEST_MAIN(TestSqueezedComboBox)
+SIMPLE_TEST_MAIN(TestSqueezedComboBox)
 

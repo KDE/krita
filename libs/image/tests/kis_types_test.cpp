@@ -6,8 +6,8 @@
 
 #include "kis_types_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include "kis_types.h"
 
 
-QTEST_MAIN(KisTypesTest)
+SIMPLE_TEST_MAIN(KisTypesTest)

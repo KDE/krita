@@ -9,7 +9,7 @@
 #include "KoPathShape.h"
 #include "KoPathControlPointMoveCommand.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 void TestControlPointMoveCommand::redoUndoControlPoint1()
 {
@@ -243,4 +243,4 @@ void TestControlPointMoveCommand::redoUndoControlPoint2Symmetric()
     QVERIFY(ppathOrg == path.outline());
 }
 
-QTEST_MAIN(TestControlPointMoveCommand)
+SIMPLE_TEST_MAIN(TestControlPointMoveCommand)

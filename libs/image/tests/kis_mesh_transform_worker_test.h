@@ -7,7 +7,7 @@
 #ifndef __KIS_MESH_TRANSFORM_WORKER_TEST_H
 #define __KIS_MESH_TRANSFORM_WORKER_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisMeshTransformWorkerTest : public QObject
 {

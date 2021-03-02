@@ -7,7 +7,7 @@
 #ifndef KIS_RANDOM_ITERATOR_BENCHMARK_H
 #define KIS_RANDOM_ITERATOR_BENCHMARK_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisPaintDevice;
 class KoColor;

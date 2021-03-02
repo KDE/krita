@@ -7,7 +7,7 @@
 #ifndef __KIS_CLONEOP_TEST_H
 #define __KIS_CLONEOP_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisCloneOpTest : public QObject
 {

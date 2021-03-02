@@ -3,7 +3,7 @@
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
-#include <QTest>
+#include <simpletest.h>
 
 #include "kis_projection_benchmark.h"
 #include "kis_benchmark_values.h"
@@ -47,4 +47,4 @@ void KisProjectionBenchmark::benchmarkLoading()
 }
 
 
-QTEST_MAIN(KisProjectionBenchmark)
+SIMPLE_TEST_MAIN(KisProjectionBenchmark)

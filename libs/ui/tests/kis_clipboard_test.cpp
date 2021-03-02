@@ -6,7 +6,7 @@
 
 #include "kis_clipboard_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 #include <KoColor.h>
 #include <KoColorSpace.h>
@@ -52,4 +52,4 @@ void KisClipboardTest::testRoundTrip()
 }
 
 
-QTEST_MAIN(KisClipboardTest)
+SIMPLE_TEST_MAIN(KisClipboardTest)

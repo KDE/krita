@@ -1,6 +1,6 @@
 include(ECMAddTests)
 include(KritaAddBrokenUnitTest)
-
+include_directories(${CMAKE_SOURCE_DIR}/sdk/tests)
 macro_add_unittest_definitions()
 
 add_definitions(-DFILES_DEST_DIR="${CMAKE_CURRENT_BINARY_DIR}/data/")

@@ -5,7 +5,7 @@
  */
 
 #include "kis_shape_selection_test.h"
-#include <QTest>
+#include <simpletest.h>
 
 #include <kis_debug.h>
 #include <QRect>

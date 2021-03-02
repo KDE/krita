@@ -6,7 +6,7 @@
 
 #include "kis_liquify_transform_worker_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 #include <KoColor.h>
 #include <KoProgressUpdater.h>
@@ -148,4 +148,4 @@ void KisLiquifyTransformWorkerTest::testIdentityTransform()
     TestUtil::checkQImage(result, "liquify_transform_test", "liquify_dev", "identity");
 }
 
-QTEST_MAIN(KisLiquifyTransformWorkerTest)
+SIMPLE_TEST_MAIN(KisLiquifyTransformWorkerTest)

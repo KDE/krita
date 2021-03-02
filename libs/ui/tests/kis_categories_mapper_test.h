@@ -7,10 +7,10 @@
 #ifndef __KIS_CATEGORIES_MAPPER_TEST_H
 #define __KIS_CATEGORIES_MAPPER_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 #include "kis_categories_mapper.h"
-#include <QTest>
+#include <simpletest.h>
 
 class KisCategoriesMapperTest : public QObject
 {

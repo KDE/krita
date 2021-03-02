@@ -8,7 +8,7 @@
 #define TESTKODRAG_H
 
 #include <QObject>
-#include <QTest>
+#include <simpletest.h>
 
 class TestKoDrag : public QObject
 {

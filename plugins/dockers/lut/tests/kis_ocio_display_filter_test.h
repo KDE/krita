@@ -7,7 +7,7 @@
 #ifndef __KIS_OCIO_DISPLAY_FILTER_TEST_H
 #define __KIS_OCIO_DISPLAY_FILTER_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisOcioDisplayFilterTest : public QObject
 {

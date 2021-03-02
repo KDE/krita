@@ -7,7 +7,7 @@
 #ifndef _KIS_CSV_TEST_H_
 #define _KIS_CSV_TEST_H_
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisCsvTest : public QObject
 {

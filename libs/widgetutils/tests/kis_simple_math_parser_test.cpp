@@ -9,7 +9,7 @@
 #include "kis_num_parser.h"
 #include <qnumeric.h> // for qIsNaN
 #include <QString>
-#include <QtTest>
+#include <simpletest.h>
 
 KisSimpleMathParserTest::KisSimpleMathParserTest() : QObject()
 {

@@ -7,7 +7,7 @@
 #ifndef KIS_COUNT_VISITOR_TESTER_H
 #define KIS_COUNT_VISITOR_TESTER_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 #include "kis_node.h"
 #include <sdk/tests/testing_nodes.h>

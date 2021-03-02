@@ -7,7 +7,7 @@
 #ifndef _KIS_PDF_TEST_H_
 #define _KIS_PDF_TEST_H_
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisPdfTest : public QObject
 {

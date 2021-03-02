@@ -6,7 +6,7 @@
 
 #include "kis_vec_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include "kis_vec.h"
 
 void KisVecTest::testCreation()
@@ -17,4 +17,4 @@ void KisVecTest::testCreation()
 }
 
 
-QTEST_MAIN(KisVecTest)
+SIMPLE_TEST_MAIN(KisVecTest)

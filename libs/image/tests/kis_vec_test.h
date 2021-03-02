@@ -7,7 +7,7 @@
 #ifndef KIS_VEC_TEST_H
 #define KIS_VEC_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisVecTest : public QObject
 {

@@ -5,7 +5,7 @@
  */
 
 #include "kis_strokes_queue_test.h"
-#include <QTest>
+#include <simpletest.h>
 
 #include "kistest.h"
 

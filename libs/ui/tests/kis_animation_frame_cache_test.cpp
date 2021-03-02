@@ -6,7 +6,7 @@
 
 #include "kis_animation_frame_cache_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <testutil.h>
 
 #include "kis_animation_frame_cache.h"

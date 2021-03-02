@@ -11,7 +11,7 @@
 #include <KoSelection.h>
 #include <FlakeDebug.h>
 
-#include <QTest>
+#include <simpletest.h>
 
 void TestSelection::testSelectedShapes()
 {

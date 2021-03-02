@@ -6,7 +6,7 @@
 
 #include "kis_transform_worker_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <KoProgressUpdater.h>
 #include <KoColor.h>
 #include <KoColorSpace.h>

@@ -6,7 +6,7 @@
 #ifndef KIS_COMPRESSION_TESTS_H
 #define KIS_COMPRESSION_TESTS_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisAbstractCompression;
 

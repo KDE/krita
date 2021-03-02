@@ -5,7 +5,7 @@
  */
 #include "TestTagModel.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <QStandardPaths>
 #include <QDir>
 #include <QVersionNumber>
@@ -328,5 +328,5 @@ void TestTagModel::cleanupTestCase()
 
 
 
-QTEST_MAIN(TestTagModel)
+SIMPLE_TEST_MAIN(TestTagModel)
 

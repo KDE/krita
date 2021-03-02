@@ -15,7 +15,7 @@ inline double drand48()
 #endif
 
 #include <QPainterPath>
-#include <QTest>
+#include <simpletest.h>
 
 #include "kis_stroke_benchmark.h"
 #include "kis_benchmark_values.h"
@@ -622,4 +622,4 @@ void KisStrokeBenchmark::becnhmarkPresetCloning()
 }
 
 
-QTEST_MAIN(KisStrokeBenchmark)
+SIMPLE_TEST_MAIN(KisStrokeBenchmark)

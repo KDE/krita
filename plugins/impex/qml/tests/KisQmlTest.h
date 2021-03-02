@@ -7,7 +7,7 @@
 #ifndef _KIS_QML_TEST_H_
 #define _KIS_QML_TEST_H_
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisQmlTest : public QObject
 {

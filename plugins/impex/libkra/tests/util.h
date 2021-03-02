@@ -6,7 +6,7 @@
 #ifndef _UTIL_H_
 #define _UTIL_H_
 
-#include <QTest>
+#include <simpletest.h>
 #include <QBitArray>
 
 #include <KisDocument.h>

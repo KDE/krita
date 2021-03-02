@@ -7,7 +7,7 @@
 #ifndef __TEST_KO_ZOOM_ACTION_H
 #define __TEST_KO_ZOOM_ACTION_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 #include <KoZoomAction.h>
 

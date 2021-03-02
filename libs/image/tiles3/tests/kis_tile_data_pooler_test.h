@@ -7,7 +7,7 @@
 #ifndef __KIS_TILE_DATA_POOLER_TEST_H
 #define __KIS_TILE_DATA_POOLER_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisTileDataPoolerTest : public QObject
 {

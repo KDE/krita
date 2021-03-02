@@ -6,7 +6,7 @@
 
 #include "kis_multinode_property_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <testutil.h>
 
 #include <KoCompositeOpRegistry.h>
@@ -149,4 +149,4 @@ void KisMultinodePropertyTest::test()
     }
 }
 
-QTEST_MAIN(KisMultinodePropertyTest)
+SIMPLE_TEST_MAIN(KisMultinodePropertyTest)

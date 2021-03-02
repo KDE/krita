@@ -8,7 +8,7 @@
 #include <KoFallBackColorTransformation.h>
 #include <KoColorSpaceRegistry.h>
 
-#include <QTest>
+#include <simpletest.h>
 
 struct KoDummyColorTransformation : public KoColorTransformation
 {

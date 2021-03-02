@@ -6,7 +6,7 @@
 
 #include "kis_marker_painter_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 #include <KoColor.h>
 #include <KoColorSpace.h>
@@ -128,4 +128,4 @@ void KisMarkerPainterTest::testFillCirclesDiff()
     QVERIFY(TestUtil::checkQImage(result, "marker_painter", "fill_stroke", ""));
 }
 
-QTEST_MAIN(KisMarkerPainterTest)
+SIMPLE_TEST_MAIN(KisMarkerPainterTest)

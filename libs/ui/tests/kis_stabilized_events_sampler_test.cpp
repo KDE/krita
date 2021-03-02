@@ -49,4 +49,4 @@ void KisStabilizedEventsSamplerTest::test()
     QVERIFY(num2 >= 3);
 }
 
-QTEST_MAIN(KisStabilizedEventsSamplerTest)
+SIMPLE_TEST_MAIN(KisStabilizedEventsSamplerTest)

@@ -6,7 +6,7 @@
 
 #include "KisWatershedWorkerTest.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 #include "kis_paint_device.h"
 #include "kis_painter.h"
@@ -182,4 +182,4 @@ void KisWatershedWorkerTest::testWorkerSmallWithAllies()
     QCOMPARE(worker.testingGroupConflicts(2, 0, 3), 0);
 }
 
-QTEST_MAIN(KisWatershedWorkerTest)
+SIMPLE_TEST_MAIN(KisWatershedWorkerTest)

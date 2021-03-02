@@ -6,7 +6,7 @@
 
 #include "kis_processings_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 #include "kis_undo_stores.h"
 #include "kis_processing_applicator.h"

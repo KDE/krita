@@ -9,7 +9,7 @@
 #ifndef KISSCREENTONEGENERATORTEST_H
 #define KISSCREENTONEGENERATORTEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisScreentoneGeneratorTest : public QObject
 {

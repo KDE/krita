@@ -6,7 +6,7 @@
 
 #include "kis_gbr_brush_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <QString>
 #include <QDir>
 #include <KoColor.h>
@@ -287,4 +287,4 @@ void KisGbrBrushTest::testQPainterTransformationBorder()
     }
 }
 
-QTEST_MAIN(KisGbrBrushTest)
+SIMPLE_TEST_MAIN(KisGbrBrushTest)

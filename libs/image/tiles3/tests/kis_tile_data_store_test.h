@@ -6,7 +6,7 @@
 #ifndef KIS_TILE_DATA_STORE_TEST_H
 #define KIS_TILE_DATA_STORE_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisTileDataStoreTest : public QObject
 {

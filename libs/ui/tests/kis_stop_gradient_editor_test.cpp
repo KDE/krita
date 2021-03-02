@@ -6,7 +6,7 @@
 
 #include "kis_stop_gradient_editor_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <QDialog>
 #include <QVBoxLayout>
 #include <QLinearGradient>
@@ -34,4 +34,4 @@ void KisStopGradientEditorTest::test()
     qWarning() << "WARNING: showing of the dialogs in the unittest is disabled!";
 }
 
-QTEST_MAIN(KisStopGradientEditorTest)
+SIMPLE_TEST_MAIN(KisStopGradientEditorTest)

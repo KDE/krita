@@ -6,7 +6,7 @@
 #ifndef KIS_MEMORY_WINDOW_TEST_H
 #define KIS_MEMORY_WINDOW_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 
 class KisMemoryWindowTest : public QObject

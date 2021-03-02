@@ -4,7 +4,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include <QTest>
+#include <simpletest.h>
 
 #include "kis_blur_benchmark.h"
 #include "kis_benchmark_values.h"
@@ -78,4 +78,4 @@ void KisBlurBenchmark::benchmarkFilter()
 
 
 
-QTEST_MAIN(KisBlurBenchmark)
+SIMPLE_TEST_MAIN(KisBlurBenchmark)

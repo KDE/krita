@@ -13,7 +13,7 @@
 #include <KoColorModelStandardIds.h>
 #include <KoColor.h>
 
-#include <QTest>
+#include <simpletest.h>
 #include <QImage>
 
 #include <kis_qmic_simple_convertor.h>
@@ -187,5 +187,5 @@ void KisQmicTests::testConvertToGmic()
 }
 
 
-QTEST_MAIN(KisQmicTests)
+SIMPLE_TEST_MAIN(KisQmicTests)
 

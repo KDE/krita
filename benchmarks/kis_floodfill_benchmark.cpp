@@ -4,7 +4,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include <QTest>
+#include <simpletest.h>
 
 #include <kundo2command.h>
 #include "kis_benchmark_values.h"
@@ -174,4 +174,4 @@ void KisFloodFillBenchmark::cleanupTestCase()
 
 }
 
-QTEST_MAIN(KisFloodFillBenchmark)
+SIMPLE_TEST_MAIN(KisFloodFillBenchmark)

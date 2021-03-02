@@ -8,7 +8,7 @@
 #include "kis_iterator_benchmark.h"
 #include <QApplication>
 
-#include <QTest>
+#include <simpletest.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>
@@ -233,4 +233,4 @@ void KisIteratorBenchmark::runBenchmark()
     randomAccessor(cs);
 }
 
-QTEST_MAIN(KisIteratorBenchmark)
+SIMPLE_TEST_MAIN(KisIteratorBenchmark)

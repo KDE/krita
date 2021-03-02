@@ -6,7 +6,7 @@
 
 #include "KisRssReaderTest.h"
 #include <KisRssReader.h>
-#include <QtTest>
+#include <simpletest.h>
 #include <testutil.h>
 #include <QFile>
 
@@ -26,4 +26,4 @@ void KisRssReaderTest::testParseData()
 
 }
 
-QTEST_MAIN(KisRssReaderTest);
+SIMPLE_TEST_MAIN(KisRssReaderTest);

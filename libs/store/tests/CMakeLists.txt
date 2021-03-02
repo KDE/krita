@@ -1,5 +1,5 @@
 macro_add_unittest_definitions()
-
+include_directories(${CMAKE_SOURCE_DIR}/sdk/tests)
 include(ECMAddTests)
 
 ecm_add_test(

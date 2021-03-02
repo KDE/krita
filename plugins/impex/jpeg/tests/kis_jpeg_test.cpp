@@ -6,7 +6,7 @@
 
 #include "kis_jpeg_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <QCoreApplication>
 
 #include "kisexiv2/kis_exiv2.h"

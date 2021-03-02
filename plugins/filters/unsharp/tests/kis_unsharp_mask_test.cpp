@@ -6,7 +6,7 @@
 
 #include "kis_unsharp_mask_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 #include "kis_transaction.h"
 #include "filter/kis_filter.h"
@@ -54,4 +54,4 @@ void KisUnsharpMaskTest::testUnsharpWithTransparency()
                                        "unsharp_with_transparency", 1, 7);
 }
 
-QTEST_MAIN(KisUnsharpMaskTest)
+SIMPLE_TEST_MAIN(KisUnsharpMaskTest)

@@ -6,7 +6,7 @@
 
 #include "TestColorConversionSystem.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 #include <DebugPigment.h>
 #include <KoColorProfile.h>

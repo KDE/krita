@@ -7,7 +7,7 @@
 #ifndef KIS_FAST_MATH_TEST_H
 #define KIS_FAST_MATH_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisFastMathTest : public QObject
 {

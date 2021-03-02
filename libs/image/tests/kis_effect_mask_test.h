@@ -7,7 +7,7 @@
 #ifndef KIS_EFFECT_MASK_TESTER_H
 #define KIS_EFFECT_MASK_TESTER_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisEffectMaskTest : public QObject
 {

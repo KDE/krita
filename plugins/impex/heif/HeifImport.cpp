@@ -208,30 +208,14 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
         }
 
         // Now, to figure out the correct chroma and color model.
-        if (heifModel == heif_colorspace_monochrome || colorModel == "GRAYA") {
+        if (heifModel == heif_colorspace_monochrome || colorModel == GrayAColorModelID.id()) {
             // Grayscale image.
-            if (heifChroma != heif_chroma_monochrome && colorModel == "GRAYA") {
+            if (heifChroma != heif_chroma_monochrome && colorModel == GrayAColorModelID.id()) {
                 heifimage = handle.decode_image(heif_colorspace_YCbCr, heif_chroma_monochrome);
             }
             colorModel = GrayAColorModelID.id();
             heifChroma = heif_chroma_monochrome;
 
-        } else {
-            // RGB
-            heifChroma = heif_chroma_444;
-            colorModel = RGBAColorModelID.id();
-            if (luma > 8) {
-                if (hasAlpha) {
-                    heifChroma = (QSysInfo::ByteOrder == QSysInfo::BigEndian)?
-                                heif_chroma_interleaved_RRGGBBAA_BE :
-                                heif_chroma_interleaved_RRGGBBAA_LE;
-                } else {
-                    heifChroma = (QSysInfo::ByteOrder == QSysInfo::BigEndian)?
-                                heif_chroma_interleaved_RRGGBB_BE :
-                                heif_chroma_interleaved_RRGGBB_LE;
-                }
-            heifimage = handle.decode_image(heif_colorspace_RGB, heifChroma);
-            }
         }
 
         // Get the default profile if we haven't found one up till now.
@@ -258,6 +242,9 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
         const double multiplier12bit = double(1.0 / 4095.0);
         const double multiplier16bit = double(1.0 / max16bit);
 
+        if (luma != 8 && luma != 10 && luma != 12) {
+            dbgFile << "unknown bitdepth" << luma;
+        }
 
         if (heifChroma == heif_chroma_monochrome) {
             dbgFile << "monochrome heif file, bits:" << luma;
@@ -269,39 +256,35 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
             for (int y = 0; y < height; y++) {
                 for (int x = 0; x < width; x++) {
                     if (luma == 8) {
-                        KoGrayU8Traits::setGray(it->rawData(), imgG[ y * strideG + x ]);
+                        KoGrayU8Traits::setGray(it->rawData(), imgG[y * strideG + x]);
 
                         if (hasAlpha) {
-                            colorSpace->setOpacity(it->rawData(), quint8(imgA[y*strideA+x]), 1);
-                        }
-                        else {
-                            colorSpace->setOpacity(it->rawData(), OPACITY_OPAQUE_U8, 1);
+                            KoGrayU8Traits::setOpacity(it->rawData(), quint8(imgA[y * strideA + x]), 1);
+                        } else {
+                            KoGrayU8Traits::setOpacity(it->rawData(), OPACITY_OPAQUE_U8, 1);
                         }
                     } else {
                         uint16_t source = KoGrayU16Traits::nativeArray(imgG)[y * (strideG / 2) + (x)];
 
                         if (luma == 10) {
-                            KoGrayU16Traits::setGray(it->rawData(),float(0x03ff & (source)) * multiplier10bit * max16bit );
+                            KoGrayU16Traits::setGray(it->rawData(), float(0x03ff & (source)) * multiplier10bit * max16bit);
                         } else if (luma == 12) {
-                            KoGrayU16Traits::setGray(it->rawData(), float(0x0fff & (source)) * multiplier12bit * max16bit );
+                            KoGrayU16Traits::setGray(it->rawData(), float(0x0fff & (source)) * multiplier12bit * max16bit);
                         } else {
-                            dbgFile << "unknown bitdepth" << luma;
-                            KoGrayU16Traits::setGray(it->rawData(), float(source) * multiplier16bit );
+                            KoGrayU16Traits::setGray(it->rawData(), float(source) * multiplier16bit);
                         }
 
                         if (hasAlpha) {
                             source = KoGrayU16Traits::nativeArray(imgA)[y * (strideA / 2) + x];
                             if (luma == 10) {
-                                colorSpace->setOpacity(it->rawData(), float(0x0fff & (source)) * multiplier10bit, 1);
+                                KoGrayU16Traits::setOpacity(it->rawData(), float(0x0fff & (source)) * multiplier10bit, 1);
                             } else if (luma == 12) {
-                                colorSpace->setOpacity(it->rawData(),  float(0x0fff & (source)) * multiplier12bit , 1);
+                                KoGrayU16Traits::setOpacity(it->rawData(), float(0x0fff & (source)) * multiplier12bit, 1);
                             } else {
-                                dbgFile << "unknown bitdepth" << luma;
-                                colorSpace->setOpacity(it->rawData(),  float(source) * multiplier16bit, 1);
+                                KoGrayU16Traits::setOpacity(it->rawData(), float(source) * multiplier16bit, 1);
                             }
-                        }
-                        else {
-                            colorSpace->setOpacity(it->rawData(), OPACITY_OPAQUE_U8, 1);
+                        } else {
+                            KoGrayU16Traits::setOpacity(it->rawData(), OPACITY_OPAQUE_U8, 1);
                         }
                     }
 
@@ -319,20 +302,46 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
             const uint8_t* imgG = heifimage.get_plane(heif_channel_G, &strideG);
             const uint8_t* imgB = heifimage.get_plane(heif_channel_B, &strideB);
             const uint8_t* imgA = heifimage.get_plane(heif_channel_Alpha, &strideA);
+            QVector<qreal> lCoef {colorSpace->lumaCoefficients()};
+            QVector<float> pixelValues(4);
             KisHLineIteratorSP it = layer->paintDevice()->createHLineIteratorNG(0, 0, width);
 
-            for (int y=0; y < height; y++) {
+            auto value =
+                [&](const uint8_t *img, int stride, int x, int y) {
+                    if (luma == 8) {
+                        return linearizeValueAsNeeded(float(img[y * (stride) + x]) / 255.0f, linearizePolicy);
+                    } else {
+                        uint16_t source = reinterpret_cast<const uint16_t *>(img)[y * (stride / 2) + x];
+                        if (luma == 10) {
+                            return linearizeValueAsNeeded(float(0x03ff & (source)) * multiplier10bit, linearizePolicy);
+                        } else if (luma == 12) {
+                            return linearizeValueAsNeeded(float(0x0fff & (source)) * multiplier12bit, linearizePolicy);
+                        } else {
+                            return linearizeValueAsNeeded(float(source) * multiplier16bit, linearizePolicy);
+                        }
+                    }
+                };
+
+            for (int y = 0; y < height; y++)
+            {
                 for (int x=0; x < width; x++) {
-                    KoBgrU8Traits::setRed(  it->rawData(), imgR[ y * strideR + x]);
-                    KoBgrU8Traits::setGreen(it->rawData(), imgG[ y * strideG + x]);
-                    KoBgrU8Traits::setBlue( it->rawData(), imgB[ y * strideB + x]);
+                    pixelValues.fill(1.0);
+
+                    pixelValues[0] = value(imgR, strideR, x, y);
+                    pixelValues[1] = value(imgG, strideG, x, y);
+                    pixelValues[2] = value(imgB, strideB, x, y);
 
                     if (hasAlpha) {
-                        colorSpace->setOpacity(it->rawData(), quint8(imgA[y*strideA+x]), 1);
+                        pixelValues[3] = value(imgA, strideA, x, y);
                     }
-                    else {
-                        colorSpace->setOpacity(it->rawData(), OPACITY_OPAQUE_U8, 1);
+
+                    if (linearizePolicy == keepTheSame) {
+                        qSwap(pixelValues.begin()[0], pixelValues.begin()[2]);
                     }
+                    if (linearizePolicy == linearFromHLG && applyOOTF) {
+                        applyHLGOOTF(pixelValues, lCoef, displayGamma, displayNits);
+                    }
+                    colorSpace->fromNormalisedChannelsValue(it->rawData(), pixelValues);
 
                     it->nextPixel();
                 }
@@ -350,26 +359,29 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
             KisHLineIteratorSP it = layer->paintDevice()->createHLineIteratorNG(0, 0, width);
             int channels = hasAlpha ? 4 : 3;
 
+            auto value = [&](const uint8_t *img, int stride, int x, int y, int ch) {
+                if (luma == 8) {
+                    return linearizeValueAsNeeded(float(img[y * (stride) + x]) / 255.0f, linearizePolicy);
+                } else {
+                    uint16_t source = reinterpret_cast<const uint16_t *>(img)[y * (stride / 2) + (x * channels) + ch];
+                    if (luma == 10) {
+                        return linearizeValueAsNeeded(float(0x03ff & (source)) * multiplier10bit, linearizePolicy);
+                    } else if (luma == 12) {
+                        return linearizeValueAsNeeded(float(0x0fff & (source)) * multiplier12bit, linearizePolicy);
+                    } else {
+                        return linearizeValueAsNeeded(float(source) * multiplier16bit, linearizePolicy);
+                    }
+                }
+            };
+
             for (int y=0; y < height; y++) {
                 for (int x=0; x < width; x++) {
                     pixelValues.fill(1.0);
 
                     for (int ch = 0; ch < channels; ch++) {
-                        uint16_t source = reinterpret_cast<const uint16_t*>(img)[y * (stride/2) + (x*channels) + ch];
-                        if (luma == 10) {
-
-                            pixelValues[ch] = linearizeValueAsNeeded(float(0x03ff & (source)) * multiplier10bit, linearizePolicy);
-
-                        } else if (luma == 12) {
-                            pixelValues[ch] = linearizeValueAsNeeded(float(0x0fff & (source)) * multiplier12bit, linearizePolicy);
-
-                        } else {
-                            dbgFile << "unknown bitdepth" << luma;
-                            pixelValues[ch] = linearizeValueAsNeeded(float(source) * multiplier16bit, linearizePolicy);
-                        }
-
-
+                        pixelValues[ch] = value(img, stride, x, y, ch);
                     }
+
                     if (linearizePolicy == keepTheSame) {
                         qSwap(pixelValues.begin()[0], pixelValues.begin()[2]);
                     }

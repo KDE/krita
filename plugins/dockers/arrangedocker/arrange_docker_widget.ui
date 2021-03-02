@@ -10,9 +10,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>303</width>
-    <height>426</height>
+    <width>222</width>
+    <height>264</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -37,10 +43,10 @@
      </layout>
     </widget>
    </item>
-   <item>
+   <item alignment="Qt::AlignLeft|Qt::AlignTop">
     <widget class="QFrame" name="buttons">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
@@ -66,8 +72,20 @@
       </property>
       <item>
        <layout class="QGridLayout" name="gridLayout" columnstretch="0,0,0,0,0,0,0">
+        <property name="sizeConstraint">
+         <enum>QLayout::SetFixedSize</enum>
+        </property>
+        <property name="spacing">
+         <number>2</number>
+        </property>
         <item row="0" column="0" colspan="7">
          <widget class="QLabel" name="label_3">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <property name="text">
            <string>Align</string>
           </property>
@@ -78,6 +96,12 @@
         </item>
         <item row="11" column="5">
          <widget class="QToolButton" name="group">
+          <property name="minimumSize">
+           <size>
+            <width>26</width>
+            <height>26</height>
+           </size>
+          </property>
           <property name="focusPolicy">
            <enum>Qt::NoFocus</enum>
           </property>
@@ -86,8 +110,8 @@
           </property>
           <property name="iconSize">
            <size>
-            <width>22</width>
-            <height>22</height>
+            <width>16</width>
+            <height>16</height>
            </size>
           </property>
           <property name="autoRaise">
@@ -97,6 +121,12 @@
         </item>
         <item row="5" column="2">
          <widget class="QToolButton" name="hDistributeRight">
+          <property name="minimumSize">
+           <size>
+            <width>26</width>
+            <height>26</height>
+           </size>
+          </property>
           <property name="focusPolicy">
            <enum>Qt::NoFocus</enum>
           </property>
@@ -105,8 +135,8 @@
           </property>
           <property name="iconSize">
            <size>
-            <width>22</width>
-            <height>22</height>
+            <width>16</width>
+            <height>16</height>
            </size>
           </property>
           <property name="autoRaise">
@@ -116,6 +146,12 @@
         </item>
         <item row="5" column="0">
          <widget class="QToolButton" name="hDistributeLeft">
+          <property name="minimumSize">
+           <size>
+            <width>26</width>
+            <height>26</height>
+           </size>
+          </property>
           <property name="focusPolicy">
            <enum>Qt::NoFocus</enum>
           </property>
@@ -124,8 +160,8 @@
           </property>
           <property name="iconSize">
            <size>
-            <width>22</width>
-            <height>22</height>
+            <width>16</width>
+            <height>16</height>
            </size>
           </property>
           <property name="autoRaise">
@@ -135,6 +171,12 @@
         </item>
         <item row="5" column="4">
          <widget class="QToolButton" name="vDistributeTop">
+          <property name="minimumSize">
+           <size>
+            <width>26</width>
+            <height>26</height>
+           </size>
+          </property>
           <property name="focusPolicy">
            <enum>Qt::NoFocus</enum>
           </property>
@@ -143,8 +185,8 @@
           </property>
           <property name="iconSize">
            <size>
-            <width>22</width>
-            <height>22</height>
+            <width>16</width>
+            <height>16</height>
            </size>
           </property>
           <property name="autoRaise">
@@ -154,6 +196,12 @@
         </item>
         <item row="5" column="1">
          <widget class="QToolButton" name="hDistributeCenter">
+          <property name="minimumSize">
+           <size>
+            <width>26</width>
+            <height>26</height>
+           </size>
+          </property>
           <property name="focusPolicy">
            <enum>Qt::NoFocus</enum>
           </property>
@@ -162,8 +210,8 @@
           </property>
           <property name="iconSize">
            <size>
-            <width>22</width>
-            <height>22</height>
+            <width>16</width>
+            <height>16</height>
            </size>
           </property>
           <property name="autoRaise">
@@ -173,6 +221,12 @@
         </item>
         <item row="10" column="0" colspan="4">
          <widget class="QLabel" name="label_5">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <property name="text">
            <string>Order</string>
           </property>
@@ -183,6 +237,12 @@
         </item>
         <item row="5" column="6">
          <widget class="QToolButton" name="vDistributeBottom">
+          <property name="minimumSize">
+           <size>
+            <width>26</width>
+            <height>26</height>
+           </size>
+          </property>
           <property name="focusPolicy">
            <enum>Qt::NoFocus</enum>
           </property>
@@ -191,8 +251,8 @@
           </property>
           <property name="iconSize">
            <size>
-            <width>22</width>
-            <height>22</height>
+            <width>16</width>
+            <height>16</height>
            </size>
           </property>
           <property name="autoRaise">
@@ -202,6 +262,12 @@
         </item>
         <item row="8" column="1">
          <widget class="QToolButton" name="vDistributeGaps">
+          <property name="minimumSize">
+           <size>
+            <width>26</width>
+            <height>26</height>
+           </size>
+          </property>
           <property name="focusPolicy">
            <enum>Qt::NoFocus</enum>
           </property>
@@ -210,8 +276,8 @@
           </property>
           <property name="iconSize">
            <size>
-            <width>22</width>
-            <height>22</height>
+            <width>16</width>
+            <height>16</height>
            </size>
           </property>
           <property name="autoRaise">
@@ -221,6 +287,12 @@
         </item>
         <item row="8" column="0">
          <widget class="QToolButton" name="hDistributeGaps">
+          <property name="minimumSize">
+           <size>
+            <width>26</width>
+            <height>26</height>
+           </size>
+          </property>
           <property name="focusPolicy">
            <enum>Qt::NoFocus</enum>
           </property>
@@ -229,8 +301,8 @@
           </property>
           <property name="iconSize">
            <size>
-            <width>22</width>
-            <height>22</height>
+            <width>16</width>
+            <height>16</height>
            </size>
           </property>
           <property name="autoRaise">
@@ -240,6 +312,12 @@
         </item>
         <item row="7" column="0" colspan="7">
          <widget class="QLabel" name="label_4">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <property name="text">
            <string>Spacing</string>
           </property>
@@ -250,6 +328,12 @@
         </item>
         <item row="10" column="5" colspan="2">
          <widget class="QLabel" name="label_6">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <property name="text">
            <string>Group</string>
           </property>
@@ -260,6 +344,12 @@
         </item>
         <item row="1" column="2">
          <widget class="QToolButton" name="rightAlign">
+          <property name="minimumSize">
+           <size>
+            <width>26</width>
+            <height>26</height>
+           </size>
+          </property>
           <property name="focusPolicy">
            <enum>Qt::NoFocus</enum>
           </property>
@@ -268,8 +358,8 @@
           </property>
           <property name="iconSize">
            <size>
-            <width>22</width>
-            <height>22</height>
+            <width>16</width>
+            <height>16</height>
            </size>
           </property>
           <property name="autoRaise">
@@ -279,6 +369,12 @@
         </item>
         <item row="11" column="1">
          <widget class="QToolButton" name="raiseLevel">
+          <property name="minimumSize">
+           <size>
+            <width>26</width>
+            <height>26</height>
+           </size>
+          </property>
           <property name="focusPolicy">
            <enum>Qt::NoFocus</enum>
           </property>
@@ -287,8 +383,8 @@
           </property>
           <property name="iconSize">
            <size>
-            <width>22</width>
-            <height>22</height>
+            <width>16</width>
+            <height>16</height>
            </size>
           </property>
           <property name="autoRaise">
@@ -298,6 +394,12 @@
         </item>
         <item row="1" column="6">
          <widget class="QToolButton" name="bottomAlign">
+          <property name="minimumSize">
+           <size>
+            <width>26</width>
+            <height>26</height>
+           </size>
+          </property>
           <property name="focusPolicy">
            <enum>Qt::NoFocus</enum>
           </property>
@@ -306,8 +408,8 @@
           </property>
           <property name="iconSize">
            <size>
-            <width>22</width>
-            <height>22</height>
+            <width>16</width>
+            <height>16</height>
            </size>
           </property>
           <property name="autoRaise">
@@ -317,6 +419,12 @@
         </item>
         <item row="5" column="5">
          <widget class="QToolButton" name="vDistributeCenter">
+          <property name="minimumSize">
+           <size>
+            <width>26</width>
+            <height>26</height>
+           </size>
+          </property>
           <property name="focusPolicy">
            <enum>Qt::NoFocus</enum>
           </property>
@@ -325,8 +433,8 @@
           </property>
           <property name="iconSize">
            <size>
-            <width>22</width>
-            <height>22</height>
+            <width>16</width>
+            <height>16</height>
            </size>
           </property>
           <property name="autoRaise">
@@ -336,6 +444,12 @@
         </item>
         <item row="1" column="5">
          <widget class="QToolButton" name="vCenterAlign">
+          <property name="minimumSize">
+           <size>
+            <width>26</width>
+            <height>26</height>
+           </size>
+          </property>
           <property name="focusPolicy">
            <enum>Qt::NoFocus</enum>
           </property>
@@ -344,8 +458,8 @@
           </property>
           <property name="iconSize">
            <size>
-            <width>22</width>
-            <height>22</height>
+            <width>16</width>
+            <height>16</height>
            </size>
           </property>
           <property name="autoRaise">
@@ -355,6 +469,12 @@
         </item>
         <item row="1" column="4">
          <widget class="QToolButton" name="topAlign">
+          <property name="minimumSize">
+           <size>
+            <width>26</width>
+            <height>26</height>
+           </size>
+          </property>
           <property name="focusPolicy">
            <enum>Qt::NoFocus</enum>
           </property>
@@ -363,8 +483,8 @@
           </property>
           <property name="iconSize">
            <size>
-            <width>22</width>
-            <height>22</height>
+            <width>16</width>
+            <height>16</height>
            </size>
           </property>
           <property name="autoRaise">
@@ -374,6 +494,12 @@
         </item>
         <item row="11" column="3">
          <widget class="QToolButton" name="sendBack">
+          <property name="minimumSize">
+           <size>
+            <width>26</width>
+            <height>26</height>
+           </size>
+          </property>
           <property name="focusPolicy">
            <enum>Qt::NoFocus</enum>
           </property>
@@ -382,8 +508,8 @@
           </property>
           <property name="iconSize">
            <size>
-            <width>22</width>
-            <height>22</height>
+            <width>16</width>
+            <height>16</height>
            </size>
           </property>
           <property name="autoRaise">
@@ -393,6 +519,12 @@
         </item>
         <item row="11" column="2">
          <widget class="QToolButton" name="lowerLevel">
+          <property name="minimumSize">
+           <size>
+            <width>26</width>
+            <height>26</height>
+           </size>
+          </property>
           <property name="focusPolicy">
            <enum>Qt::NoFocus</enum>
           </property>
@@ -401,8 +533,8 @@
           </property>
           <property name="iconSize">
            <size>
-            <width>22</width>
-            <height>22</height>
+            <width>16</width>
+            <height>16</height>
            </size>
           </property>
           <property name="autoRaise">
@@ -412,6 +544,12 @@
         </item>
         <item row="1" column="0">
          <widget class="QToolButton" name="leftAlign">
+          <property name="minimumSize">
+           <size>
+            <width>26</width>
+            <height>26</height>
+           </size>
+          </property>
           <property name="focusPolicy">
            <enum>Qt::NoFocus</enum>
           </property>
@@ -420,8 +558,8 @@
           </property>
           <property name="iconSize">
            <size>
-            <width>22</width>
-            <height>22</height>
+            <width>16</width>
+            <height>16</height>
            </size>
           </property>
           <property name="autoRaise">
@@ -431,6 +569,12 @@
         </item>
         <item row="11" column="0">
          <widget class="QToolButton" name="bringToFront">
+          <property name="minimumSize">
+           <size>
+            <width>26</width>
+            <height>26</height>
+           </size>
+          </property>
           <property name="focusPolicy">
            <enum>Qt::NoFocus</enum>
           </property>
@@ -439,8 +583,8 @@
           </property>
           <property name="iconSize">
            <size>
-            <width>22</width>
-            <height>22</height>
+            <width>16</width>
+            <height>16</height>
            </size>
           </property>
           <property name="autoRaise">
@@ -450,6 +594,12 @@
         </item>
         <item row="1" column="1">
          <widget class="QToolButton" name="hCenterAlign">
+          <property name="minimumSize">
+           <size>
+            <width>26</width>
+            <height>26</height>
+           </size>
+          </property>
           <property name="focusPolicy">
            <enum>Qt::NoFocus</enum>
           </property>
@@ -458,8 +608,8 @@
           </property>
           <property name="iconSize">
            <size>
-            <width>22</width>
-            <height>22</height>
+            <width>16</width>
+            <height>16</height>
            </size>
           </property>
           <property name="autoRaise">
@@ -469,6 +619,12 @@
         </item>
         <item row="11" column="6">
          <widget class="QToolButton" name="ungroup">
+          <property name="minimumSize">
+           <size>
+            <width>26</width>
+            <height>26</height>
+           </size>
+          </property>
           <property name="focusPolicy">
            <enum>Qt::NoFocus</enum>
           </property>
@@ -477,8 +633,8 @@
           </property>
           <property name="iconSize">
            <size>
-            <width>22</width>
-            <height>22</height>
+            <width>16</width>
+            <height>16</height>
            </size>
           </property>
           <property name="autoRaise">
@@ -488,6 +644,12 @@
         </item>
         <item row="3" column="0" colspan="7">
          <widget class="QLabel" name="label_2">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <property name="text">
            <string>Distribute</string>
           </property>
@@ -501,7 +663,7 @@
           <property name="minimumSize">
            <size>
             <width>0</width>
-            <height>15</height>
+            <height>5</height>
            </size>
           </property>
           <property name="orientation">
@@ -514,7 +676,7 @@
           <property name="minimumSize">
            <size>
             <width>0</width>
-            <height>15</height>
+            <height>5</height>
            </size>
           </property>
           <property name="orientation">
@@ -527,7 +689,7 @@
           <property name="minimumSize">
            <size>
             <width>0</width>
-            <height>15</height>
+            <height>5</height>
            </size>
           </property>
           <property name="orientation">
@@ -537,34 +699,8 @@
         </item>
        </layout>
       </item>
-      <item>
-       <spacer name="horizontalSpacer">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
      </layout>
     </widget>
-   </item>
-   <item>
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>40</height>
-      </size>
-     </property>
-    </spacer>
    </item>
   </layout>
  </widget>

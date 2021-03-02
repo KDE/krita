@@ -7,6 +7,7 @@
 #include "TestProfileGeneration.h"
 
 #include <LcmsColorProfileContainer.h>
+#include <KoColorConversions.h>
 #include <IccColorProfile.h>
 
 #include <QTest>
@@ -379,6 +380,53 @@ void TestProfileGeneration::testTransferFunctions()
 
     cmsFreeToneCurve(curve);
 
+}
+
+void TestProfileGeneration::testQuantization()
+{
+    /*
+     * Test implementation of quantization, referenced from
+     * quantizeRGBprimsS15Fixed16 in ArgyllCMS 'icc.c' file.
+     */
+    QVector<double> inputMatrix = {0.6400, 0.3300, 1.0,
+                                  0.3000, 0.6000, 1.0,
+                                  0.1500, 0.0600, 1.0};
+    QVector<double> compareMatrix = {0.639998686, 0.330010138, 1.0,
+                                    0.300003784, 0.600003357, 1.0,
+                                    0.150002046, 0.059997204, 1.0};
+    for (int i=0; i<inputMatrix.size(); i+=3) {
+        QVector<double> value (3);
+        xyYToXYZ(inputMatrix[i], inputMatrix[i+1], inputMatrix[i+2], &value[0], &value[1], &value[2]);
+
+        double sum = 0.0;
+        double largest = -1e9;
+        int largestValue = 0;
+        for (int j = 0; j<value.size(); j++) {
+            double val = value.at(j);
+            sum += val;
+            if (val>largest) {
+                largest = val;
+                largestValue = j;
+            }
+            value[j] = floor(val * 65536.0 + 0.5) / 65536.0;
+        }
+
+        for (int j = 0; j<value.size(); j++) {
+            if (j == largestValue) {
+                continue;
+            }
+            sum -= value.at(j);
+        }
+
+        value[largestValue] = floor(sum * 65536.0 + 0.5) / 65536.0;
+
+        XYZToxyY(value[0], value[1], value[2], &inputMatrix[i], &inputMatrix[i+1], &inputMatrix[i+2]);
+    }
+    for (int i=0; i<inputMatrix.size(); i++) {
+        QVERIFY2(fabs(inputMatrix[i] - compareMatrix[i]) < 0.00003,
+                 QString("Too large an error margin at %1: %2")
+                 .arg(i).arg(fabs(inputMatrix[i] - compareMatrix[i])).toLatin1());
+    }
 }
 
 KISTEST_MAIN(TestProfileGeneration)

@@ -128,6 +128,12 @@ protected:
     bool init();
     void calculateFloatUIMinMax(void);
 private:
+    /*
+     * Implementation of quantization, referenced from
+     * quantizeRGBprimsS15Fixed16 in ArgyllCMS 'icc.c' file.
+     */
+    void quantizexyYPrimariesTo16bit(QVector<double> &colorants);
+
     struct Private;
     QScopedPointer<Private> d;
 };

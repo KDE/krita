@@ -11,6 +11,8 @@
 
 #include <QFile>
 #include <QSharedPointer>
+#include <KoColorConversions.h>
+#include <math.h>
 
 #include "QDebug"
 #include "LcmsColorProfileContainer.h"
@@ -103,9 +105,12 @@ IccColorProfile::IccColorProfile(QVector<double> colorants,
 
     cmsCIExyYTRIPLE primaries;
 
-    // We should really prequantize these values to 16bit precision
-    // for the best results here.
+    // We prequantize these values to 16bit precision for the best results here.
     if (colorants.size()>2 && colorants.size() <= 8) {
+        QVector<double> colorantsQuantized = {colorants[2], colorants[3], 1.0,
+                                              colorants[4], colorants[5], 1.0,
+                                              colorants[6], colorants[7], 1.0};
+        quantizexyYPrimariesTo16bit(colorantsQuantized);
         primaries = {{colorants[2], colorants[3], 1.0},
                      {colorants[4], colorants[5], 1.0},
                      {colorants[6], colorants[7], 1.0}};
@@ -490,6 +495,38 @@ void IccColorProfile::calculateFloatUIMinMax(void)
             ret[i].minVal = 0;
             ret[i].maxVal = 1;
         }
+    }
+}
+
+void IccColorProfile::quantizexyYPrimariesTo16bit(QVector<double> &colorants)
+{
+    for (int i=0; i<colorants.size(); i+=3) {
+        QVector<double> value (3);
+        xyYToXYZ(colorants[i], colorants[i+1], colorants[i+2], &value[0], &value[1], &value[2]);
+
+        double sum = 0.0;
+        double largest = -1e9;
+        int largestValue = 0;
+        for (int j = 0; j<value.size(); j++) {
+            double val = value.at(j);
+            sum += val;
+            if (val>largest) {
+                largest = val;
+                largestValue = j;
+            }
+            value[j] = floor(val * 65536.0 + 0.5) / 65536.0;
+        }
+
+        for (int j = 0; j<value.size(); j++) {
+            if (j == largestValue) {
+                continue;
+            }
+            sum -= value.at(j);
+        }
+
+        value[largestValue] = floor(sum * 65536.0 + 0.5) / 65536.0;
+
+        XYZToxyY(value[0], value[1], value[2], &colorants[i], &colorants[i+1], &colorants[i+2]);
     }
 }
 

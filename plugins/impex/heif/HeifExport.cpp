@@ -117,9 +117,10 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
     const KoColorSpace *cs = image->colorSpace();
 
 
-    // Convert to 8 bits rgba on saving if not rgba+8bit, rgba+16bit or graya+8bit.
-    qDebug() << cs->colorModelId().id() << cs->colorDepthId().id();
 
+    dbgFile << "Starting" << mimeType() << "encoding.";
+
+    // Convert to 8 bits rgba on saving if not rgba or graya.
     if ( cs->colorModelId() != RGBAColorModelID && cs->colorModelId() != GrayAColorModelID ) {
         const KoColorSpace *sRgb = KoColorSpaceRegistry::instance()->rgb8();
         image->convertImageColorSpace(sRgb,
@@ -149,7 +150,7 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
             conversionPolicy = applyPQ;
         } else if (conversionOption == "ApplyHLG") {
             conversionPolicy = applyHLG;
-        }  else if (conversionOption == "ApplySMPTE248") {
+        }  else if (conversionOption == "ApplySMPTE428") {
             conversionPolicy = applySMPTE428;
         }
     }
@@ -166,7 +167,6 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
 
     image->waitForDone();
     cs = image->colorSpace();
-
 
     int quality = configuration->getInt("quality", 50);
     bool lossless = configuration->getBool("lossless", false);
@@ -218,9 +218,13 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
 
         heif::Image img;
 
+        const int max12bit = 4095;
+        const int max16bit = 65535;
+        const double multiplier16bit = (1.0/double(max16bit));
+
         if (cs->colorModelId() == RGBAColorModelID) {
             if (cs->colorDepthId() == Integer8BitsColorDepthID) {
-                qDebug() << "saving as 8bit rgba";
+                dbgFile << "saving as 8bit rgba";
                 img.create(width,height, heif_colorspace_RGB, heif_chroma_444);
                 img.add_plane(heif_channel_R, width,height, 8);
                 img.add_plane(heif_channel_G, width,height, 8);
@@ -260,7 +264,7 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
                     it->nextRow();
                 }
             } else if (cs->colorDepthId() == Integer16BitsColorDepthID) {
-                qDebug() << "saving as 12bit rgba";
+                dbgFile << "Saving as 12bit rgba";
                 img.create(width,height, heif_colorspace_RGB, chroma);
                 img.add_plane(heif_channel_interleaved, width, height, 12);
 
@@ -278,11 +282,11 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
                         pixelValues[0] = KoBgrU16Traits::red(it->rawData());
                         pixelValues[1] = KoBgrU16Traits::green(it->rawData());
                         pixelValues[2] = KoBgrU16Traits::blue(it->rawData());
-                        pixelValues[3] = quint16(KoBgrU16Traits::opacityF(it->rawData()) * 65535);
+                        pixelValues[3] = quint16(KoBgrU16Traits::opacityF(it->rawData()) * max16bit);
 
                         int channels = hasAlpha? 4: 3;
                         for (int ch = 0; ch < channels; ch++) {
-                            uint16_t v = qBound(0, int((float(pixelValues[ch]) / 65535) * 4095), 4095);
+                            uint16_t v = qBound(0, int(float(pixelValues[ch]) * multiplier16bit * max12bit), max12bit);
                             ptr[2 * (x * channels) + y * stride + endValue0 + (ch*2)] = (uint8_t) (v >> 8);
                             ptr[2 * (x * channels) + y * stride + endValue1 + (ch*2)] = (uint8_t) (v & 0xFF);
                         }
@@ -293,7 +297,7 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
                     it->nextRow();
                 }
             } else {
-                qDebug() << "saving as 12bit rgba";
+                dbgFile << "Saving floating point as 12bit rgba";
                 img.create(width,height, heif_colorspace_RGB, chroma);
                 img.add_plane(heif_channel_interleaved, width, height, 12);
 
@@ -324,7 +328,7 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
 
                         int channels = hasAlpha? 4: 3;
                         for (int ch = 0; ch < channels; ch++) {
-                            uint16_t v = qBound(0, int(applyCurveAsNeeded(pixelValues[ch], conversionPolicy) * 4095), 4095);
+                            uint16_t v = qBound(0, int(applyCurveAsNeeded(pixelValues[ch], conversionPolicy) * max12bit), max12bit);
                             ptr[2 * (x * channels) + y * stride + endValue0 + (ch*2)] = (uint8_t) (v >> 8);
                             ptr[2 * (x * channels) + y * stride + endValue1 + (ch*2)] = (uint8_t) (v & 0xFF);
                         }
@@ -338,7 +342,7 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
 
         } else {
             if (cs->colorDepthId() == Integer8BitsColorDepthID) {
-                qDebug() << "saving as 8bit grayscale";
+                dbgFile << "Saving as 8 bit monochrome.";
                 img.create(width, height, heif_colorspace_monochrome, heif_chroma_monochrome);
 
                 img.add_plane(heif_channel_Y, width, height, 8);
@@ -371,6 +375,7 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
                     it->nextRow();
                 }
             } else {
+                dbgFile << "Saving as 12 bit monochrome";
                 img.create(width, height, heif_colorspace_monochrome, heif_chroma_monochrome);
 
                 img.add_plane(heif_channel_Y, width, height, 12);
@@ -391,12 +396,12 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
 
                 for (int y = 0; y < height; y++) {
                     for (int x = 0; x < width; x++) {
-                        uint16_t v = qBound(0, int(float( KoGrayU16Traits::gray(it->rawData()) ) / 65535.0 * 4095.0), 4095);
+                        uint16_t v = qBound(0, int(float( KoGrayU16Traits::gray(it->rawData()) ) * multiplier16bit * max12bit), max12bit);
                         ptrG[(x*2) + y * strideG + endValue0] = (uint8_t) (v >> 8);
                         ptrG[(x*2) + y * strideG + endValue1] = (uint8_t) (v & 0xFF);
 
                         if (hasAlpha) {
-                            uint16_t vA = qBound(0, int( cs->opacityF(it->rawData()) * 4095), 4095);
+                            uint16_t vA = qBound(0, int( cs->opacityF(it->rawData()) * max12bit), max12bit);
                             ptrA[(x*2) + y * strideA + endValue0] = (uint8_t) (vA >> 8);
                             ptrA[(x*2) + y * strideA + endValue1] = (uint8_t) (vA & 0xFF);
                         }
@@ -422,7 +427,6 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
                nclxDescription.set_color_primaties(heif_color_primaries_ITU_R_BT_2020_2_and_2100_0);
            } else {
                KoColorProfile::colorPrimaries primaries = image->colorSpace()->profile()->getColorPrimaries();
-               qDebug() << "setting primaries" << KoColorProfile::getColorPrimariesName(primaries);
                if (primaries >= 256) {
                    primaries = KoColorProfile::Primaries_Unspecified;
                }
@@ -444,6 +448,9 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
         // --- encode and write image
 
         heif::Context::EncodingOptions options;
+
+        // iOS gets confused when a heif file contains an nclx.
+        // but we absolutely need it for hdr.
         if (conversionPolicy != keepTheSame && cs->hasHighDynamicRange()) {
             options.macOS_compatibility_workaround_no_nclx_profile = false;
         }
@@ -573,7 +580,7 @@ void KisWdgOptionsHeif::setConfiguration(const KisPropertiesConfigurationSP cfg)
             conversionOptionsList << i18nc("Colorspace option plus transfer function name", "Keep colorants, encode SMPTE ST 428");
             toolTipList << i18nc("@tooltip", "The image will be linearized first, and then encoded with SMPTE ST 428"
                                             " Krita always opens images like these as linear floating point, this option is there to reverse that");
-            conversionOptionName << "ApplySMPTE248";
+            conversionOptionName << "ApplySMPTE428";
         }
         
         conversionOptionsList << i18nc("Colorspace option", "No changes, clip");

@@ -1136,7 +1136,7 @@ void KisPainter::bltFixedWithFixedSelection(qint32 dstX, qint32 dstY,
                                             const KisFixedPaintDeviceSP selection,
                                             quint32 srcWidth, quint32 srcHeight)
 {
-    bltFixedWithFixedSelection(dstX, dstY, srcDev, selection, 0, 0, 0, 0, srcWidth, srcHeight);
+    bltFixedWithFixedSelection(dstX, dstY, srcDev, selection, selection->bounds().x(), selection->bounds().y(), srcDev->bounds().x(), srcDev->bounds().y(), srcWidth, srcHeight);
 }
 
 

@@ -46,7 +46,7 @@ struct ColorSmudgeInterstrokeData : public KisInterstrokeData
     KisPaintDeviceSP heightmapDevice;
     KisPaintDeviceSP projectionDevice;
 
-    ~ColorSmudgeInterstrokeData() {
+    ~ColorSmudgeInterstrokeData() override {
         KIS_SAFE_ASSERT_RECOVER_NOOP(!m_parentCommand);
     }
 
@@ -103,7 +103,29 @@ struct ColorSmudgeInterstrokeDataFactory : public KisInterstrokeDataFactory
     }
 };
 
-struct ColorSmudgeStrategy {
+struct ColorSmudgeStrategyBase
+{
+    virtual ~ColorSmudgeStrategyBase() {
+    }
+
+    virtual void updateMask(KisDabCache *dabCache,
+                            const KisPaintInformation& info,
+                            const KisDabShape &shape,
+                            const QPointF &cursorPoint,
+                            QRect *dstDabRect) = 0;
+
+    virtual void paintDab(const QRect &srcRect, const QRect &dstRect,
+                          const QPoint &canvasLocalSamplePoint,
+                          qreal opacity,
+                          qreal colorRateValue,
+                          qreal smudgeRateValue,
+                          qreal lightnessStrengthValue) = 0;
+
+    virtual QVector<QRect> takeDirtyRegion() = 0;
+};
+
+struct ColorSmudgeStrategy : public ColorSmudgeStrategyBase
+{
     ColorSmudgeStrategy(KisPrecisePaintDeviceWrapper &srcWrapper,
                         KisPainter *painter,
                         KisPaintDeviceSP dstDevice,
@@ -112,16 +134,10 @@ struct ColorSmudgeStrategy {
         : m_maskDab(new KisFixedPaintDevice(KoColorSpaceRegistry::instance()->alpha8()))
         , m_origDab(new KisFixedPaintDevice(KoColorSpaceRegistry::instance()->rgb8()))
         , m_unprecisePainter(painter->device())
-        , m_srcWrapper(srcWrapper)
-        , m_smearPainter(dstDevice)
-        , m_colorRatePainter(dstDevice)
         , m_paintColor(paintColor)
-        , m_smearAlpha(smearAlpha)
     {
-        m_dstDevice = painter->device();
-
         ColorSmudgeInterstrokeData *colorSmudgeData =
-            dynamic_cast<ColorSmudgeInterstrokeData*>(m_dstDevice->interstrokeData().data());
+            dynamic_cast<ColorSmudgeInterstrokeData*>(painter->device()->interstrokeData().data());
 
         if (colorSmudgeData) {
             m_projectionDevice = colorSmudgeData->projectionDevice;
@@ -156,19 +172,21 @@ struct ColorSmudgeStrategy {
 
         m_heightmapPainter.setCompositeOp(COMPOSITE_ALPHA_DARKEN);
         m_heightmapPainter.setSelection(painter->selection());
+        m_heightmapPainter.copyMirrorInformationFrom(painter);
 
         m_paintColor.convertTo(m_blendDevice->colorSpace());
 
-        m_smearOp = m_colorOnlyDevice->colorSpace()->compositeOp(COMPOSITE_OVER);
+        m_smearOp = m_colorOnlyDevice->colorSpace()->compositeOp(smearAlpha ? COMPOSITE_COPY : COMPOSITE_OVER);
         m_colorRateOp = m_colorOnlyDevice->colorSpace()->compositeOp(painter->compositeOp()->id());
         m_unprecisePainter.setCompositeOp(COMPOSITE_COPY);
+
     }
 
     void updateMask(KisDabCache *dabCache,
                     const KisPaintInformation& info,
                     const KisDabShape &shape,
                     const QPointF &cursorPoint,
-                    QRect *dstDabRect) {
+                    QRect *dstDabRect) override {
 
         m_origDab = dabCache->fetchImageDab(m_origDab->colorSpace(),
             cursorPoint,
@@ -206,12 +224,14 @@ struct ColorSmudgeStrategy {
             ptr++;
         }
 #endif
-        //ENTER_FUNCTION() << ppVar(normCoeff) << ppVar(lightnessSum) << ppVar(numPixels) << ppVar(alphaSum);
-
 
         m_maskDab->setRect(m_origDab->bounds());
         m_maskDab->lazyGrowBufferWithoutInitialization();
         m_origDab->colorSpace()->copyOpacityU8(m_origDab->data(), m_maskDab->data(), numPixels);
+
+        m_shouldPreserveOriginalDab = !dabCache->needSeparateOriginal();
+
+
     }
 
     void paintDab(const QRect &srcRect, const QRect &dstRect,
@@ -219,86 +239,84 @@ struct ColorSmudgeStrategy {
                   qreal opacity,
                   qreal colorRateValue,
                   qreal smudgeRateValue,
-                  qreal lightnessStrengthValue) {
+                  qreal lightnessStrengthValue) override {
 
-        const quint8 colorAlpha = qRound(colorRateValue * colorRateValue * opacity * 255.0);
-        const quint8 smearAlpha = qRound(smudgeRateValue * opacity * 255.0);
-        const quint8 dullingAlpha = qRound(smudgeRateValue * 0.8 * opacity * 255.0);
+        const quint8 colorRateOpacity = qRound(colorRateValue * colorRateValue * opacity * 255.0);
 
-        static int i = -1; i++;
+        const int numPixels = dstRect.width() * dstRect.height();
 
         m_blendDevice->setRect(dstRect);
         m_blendDevice->lazyGrowBufferWithoutInitialization();
 
-        const int numPixels = m_blendDevice->bounds().width() * m_blendDevice->bounds().height();
+        blendInBackgroundColors(m_blendDevice, srcRect, dstRect, canvasLocalSamplePoint, opacity, smudgeRateValue);
 
-        if (smearAlpha) {
-            m_colorOnlyDevice->readBytes(m_blendDevice->data(), srcRect);
-        } else {
-            m_colorOnlyDevice->readBytes(m_blendDevice->data(), dstRect);
-
-            m_tempDevice->setRect(srcRect);
-            m_tempDevice->lazyGrowBufferWithoutInitialization();
-            m_colorOnlyDevice->readBytes(m_tempDevice->data(), srcRect);
-
-            m_smearOp->composite(m_blendDevice->data(), dstRect.width() * m_tempDevice->pixelSize(),
-                                 m_tempDevice->data(), dstRect.width() * m_tempDevice->pixelSize(), // stride should be random non-zero
-                                 0, 0,
-                                 1, numPixels,
-                                 smearAlpha);
-        }
-
-        if (colorAlpha > 0) {
-            //ENTER_FUNCTION() << ppVar(m_colorRateOp) << ppVar(m_paintColor.data());
+        if (colorRateOpacity > 0) {
             m_colorRateOp->composite(m_blendDevice->data(), dstRect.width() * m_blendDevice->pixelSize(),
                                      m_paintColor.data(), 0,
                                      0, 0,
                                      dstRect.height(), dstRect.width(),
-                                     colorAlpha);
+                                     colorRateOpacity);
         }
-
-        //ENTER_FUNCTION() << ppVar(m_blendDevice.data()) << ppVar(m_maskDab.data());
-        //ENTER_FUNCTION() << ppVar(m_blendDevice->bounds()) << ppVar(m_maskDab->bounds());
 
         m_finalPainter.bltFixedWithFixedSelection(dstRect.x(), dstRect.y(),
                                                   m_blendDevice, m_maskDab,
                                                   m_maskDab->bounds().x(), m_maskDab->bounds().y(),
                                                   m_blendDevice->bounds().x(), m_blendDevice->bounds().y(),
                                                   dstRect.width(), dstRect.height());
+        m_finalPainter.renderMirrorMaskSafe(dstRect, m_blendDevice, m_maskDab, false);
 
-        m_heightmapPainter.bltFixed(dstRect.topLeft(), m_origDab,m_origDab->bounds());
+        m_heightmapPainter.bltFixed(dstRect.topLeft(), m_origDab, m_origDab->bounds());
+        m_heightmapPainter.renderMirrorMaskSafe(dstRect, m_origDab, m_shouldPreserveOriginalDab);
 
-        //KIS_DUMP_DEVICE_2(m_heightmapDevice, QRect(0,0,512,512), "00_height", "dd");
+        QVector<QRect> mirroredRects = m_finalPainter.calculateAllMirroredRects(dstRect);
 
+        Q_FOREACH (const QRect &rc, mirroredRects) {
+            m_tempDevice->setRect(rc);
+            m_tempDevice->lazyGrowBufferWithoutInitialization();
 
-        m_tempDevice->setRect(dstRect);
-        m_tempDevice->lazyGrowBufferWithoutInitialization();
+            m_colorOnlyDevice->readBytes(m_tempDevice->data(), rc);
+            m_heightmapDevice->readBytes(m_blendDevice->data(), rc);
+            m_tempDevice->colorSpace()->
+                modulateLightnessByGrayBrush(m_tempDevice->data(),
+                                             reinterpret_cast<const QRgb*>(m_blendDevice->data()),
+                                             0,
+                                             lightnessStrengthValue,
+                                             numPixels);
+            m_projectionDevice->writeBytes(m_tempDevice->data(), m_tempDevice->bounds());
 
-        m_colorOnlyDevice->readBytes(m_tempDevice->data(), dstRect);
-        m_heightmapDevice->readBytes(m_blendDevice->data(), dstRect);
-        m_tempDevice->colorSpace()->
-            modulateLightnessByGrayBrush(m_tempDevice->data(),
-                                         reinterpret_cast<const QRgb*>(m_blendDevice->data()),
-                                         0,
-                                         lightnessStrengthValue,
-                                         numPixels);
-        m_projectionDevice->writeBytes(m_tempDevice->data(), m_tempDevice->bounds());
-
-        m_unprecisePainter.bitBlt(dstRect.topLeft(), m_projectionDevice, dstRect);
-
-
+            m_unprecisePainter.bitBlt(rc.topLeft(), m_projectionDevice, rc);
+        }
     }
 
-    QVector<QRect> takeDirtyRegion() {
+    virtual void blendInBackgroundColors(KisFixedPaintDeviceSP dst,
+                                         const QRect &srcRect, const QRect &dstRect,
+                                         const QPoint &canvasLocalSamplePoint,
+                                         qreal opacity,
+                                         qreal smudgeRateValue)
+    {
+        Q_UNUSED(canvasLocalSamplePoint);
+
+        const quint8 smudgeRateOpacity = qRound(smudgeRateValue * opacity * 255.0);
+
+        if (m_smearOp->id() == COMPOSITE_COPY && smudgeRateOpacity == OPACITY_OPAQUE_U8) {
+            m_colorOnlyDevice->readBytes(dst->data(), srcRect);
+        } else {
+            m_colorOnlyDevice->readBytes(dst->data(), dstRect);
+
+            m_tempDevice->setRect(srcRect);
+            m_tempDevice->lazyGrowBufferWithoutInitialization();
+            m_colorOnlyDevice->readBytes(m_tempDevice->data(), srcRect);
+
+            m_smearOp->composite(dst->data(), dstRect.width() * dst->pixelSize(),
+                                 m_tempDevice->data(), dstRect.width() * m_tempDevice->pixelSize(), // stride should be random non-zero
+                                 0, 0,
+                                 1, dstRect.width() * dstRect.height(),
+                                 smudgeRateOpacity);
+        }
+    }
+
+    QVector<QRect> takeDirtyRegion() override {
         return m_unprecisePainter.takeDirtyRegion();
-    }
-
-    bool needsDstInitialized() const {
-        return false;
-    }
-
-    KisFixedPaintDeviceSP finalSelectionDevice() const {
-        return m_maskDab;
     }
 
     KisFixedPaintDeviceSP m_maskDab;
@@ -308,17 +326,52 @@ struct ColorSmudgeStrategy {
     KisPaintDeviceSP m_heightmapDevice;
     KisPaintDeviceSP m_colorOnlyDevice;
     KisPaintDeviceSP m_projectionDevice;
-    KisPrecisePaintDeviceWrapper &m_srcWrapper;
-    KisPainter m_smearPainter;
-    KisPainter m_colorRatePainter;
     KisPainter m_finalPainter;
     KisPainter m_heightmapPainter;
     KisPainter m_unprecisePainter;
-    KisPaintDeviceSP m_dstDevice;
     KoColor m_paintColor;
-    bool m_smearAlpha;
     const KoCompositeOp * m_smearOp;
     const KoCompositeOp * m_colorRateOp;
+    bool m_shouldPreserveOriginalDab = true;
+};
+
+struct ColorSmudgeStrategyDulling : public ColorSmudgeStrategy
+{
+    ColorSmudgeStrategyDulling(KisPrecisePaintDeviceWrapper &srcWrapper,
+                               KisPainter *painter,
+                               KisPaintDeviceSP dstDevice,
+                               KoColor paintColor,
+                               bool smearAlpha)
+        : ColorSmudgeStrategy(srcWrapper, painter, dstDevice, paintColor, smearAlpha)
+    {
+    }
+
+    void blendInBackgroundColors(KisFixedPaintDeviceSP dst,
+                                 const QRect &srcRect, const QRect &dstRect,
+                                 const QPoint &canvasLocalSamplePoint,
+                                 qreal opacity,
+                                 qreal smudgeRateValue) override
+    {
+        Q_UNUSED(srcRect);
+
+        const quint8 smudgeRateOpacity = qRound(0.8 * smudgeRateValue * opacity * 255.0);
+
+        KoColor dullingFillColor(dst->colorSpace());
+        KisCrossDeviceColorSamplerInt colorPicker(m_colorOnlyDevice, dullingFillColor);
+        colorPicker.sampleColor(canvasLocalSamplePoint.x(), canvasLocalSamplePoint.y(), dullingFillColor.data());
+
+        if (m_smearOp->id() == COMPOSITE_COPY && smudgeRateOpacity == OPACITY_OPAQUE_U8) {
+            dst->fill(m_blendDevice->bounds(), dullingFillColor);
+        } else {
+            m_colorOnlyDevice->readBytes(dst->data(), dstRect);
+            m_smearOp->composite(dst->data(), dstRect.width() * dst->pixelSize(),
+                                 dullingFillColor.data(), 0,
+                                 0, 0,
+                                 1, dstRect.width() * dstRect.height(),
+                                 smudgeRateOpacity);
+        }
+    }
+
 };
 
 KisColorSmudgeOp::KisColorSmudgeOp(const KisPaintOpSettingsSP settings, KisPainter* painter, KisNodeSP node, KisImageSP image)
@@ -415,12 +468,23 @@ KisColorSmudgeOp::KisColorSmudgeOp(const KisPaintOpSettingsSP settings, KisPaint
     }
 
     if (m_useNewEngine && m_brush->brushApplication() == LIGHTNESSMAP) {
-        m_strategy.reset(new ColorSmudgeStrategy(m_precisePainterWrapper,
-                                                 painter,
-                                                 m_tempDev,
-                                                 m_paintColor,
-                                                 m_smudgeRateOption.getSmearAlpha()));
-    }
+        const bool useDullingMode = m_smudgeRateOption.getMode() == KisSmudgeOption::DULLING_MODE;
+
+
+        if (!useDullingMode) {
+            m_strategy.reset(new ColorSmudgeStrategy(m_precisePainterWrapper,
+                                                     painter,
+                                                     m_tempDev,
+                                                     m_paintColor,
+                                                     m_smudgeRateOption.getSmearAlpha()));
+        } else {
+            m_strategy.reset(new ColorSmudgeStrategyDulling(m_precisePainterWrapper,
+                                                            painter,
+                                                            m_tempDev,
+                                                            m_paintColor,
+                                                            m_smudgeRateOption.getSmearAlpha()));
+        }
+        }
 }
 
 KisColorSmudgeOp::~KisColorSmudgeOp()
@@ -686,8 +750,10 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
         const qreal lightnessStrength = m_lightnessStrengthOption.apply(info);
 
         m_strategy->paintDab(srcDabRect, m_dstDabRect,
-                            canvasLocalSamplePoint,
-                            fpOpacity, colorRate, smudgeLength, lightnessStrength);
+                             canvasLocalSamplePoint,
+                             fpOpacity, colorRate, smudgeLength,
+                             lightnessStrength,
+                             m_smudgeRateOption.getSmearAlpha());
 
         const QVector<QRect> dirtyRects = m_strategy->takeDirtyRegion();
         painter()->addDirtyRects(dirtyRects);

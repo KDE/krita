@@ -6,7 +6,6 @@
 #include <QStandardPaths>
 
 #define SIMPLE_MAIN_IMPL(TestObject) \
-    QT_PREPEND_NAMESPACE(QTest::Internal::callInitMain)<TestObject>(); \
     QApplication app(argc, argv); \
     app.setAttribute(Qt::AA_Use96Dpi, true); \
     QTEST_DISABLE_KEYPAD_NAVIGATION \

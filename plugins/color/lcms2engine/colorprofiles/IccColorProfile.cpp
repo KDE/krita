@@ -133,9 +133,6 @@ IccColorProfile::IccColorProfile(QVector<double> colorants,
 
     cmsCIEXYZ media_blackpoint = {0.0, 0.0, 0.0};
     cmsWriteTag (iccProfile, cmsSigMediaBlackPointTag, &media_blackpoint);
-    cmsCIEXYZ media_whitepoint;
-    cmsxyY2XYZ(&media_whitepoint, &whitePoint);
-    cmsWriteTag (iccProfile, cmsSigMediaWhitePointTag, &media_whitepoint);
 
     //set the color profile info on the iccProfile;
     cmsMLU *mlu;

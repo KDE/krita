@@ -166,7 +166,7 @@ RecorderDockerDock::RecorderDockerDock()
     d->ui->setupUi(page);
     d->ui->labelUnsupportedColorSpace->setVisible(false);
 
-    d->ui->buttonManageRecordings->setIcon(KisIconUtils::loadIcon("configure"));
+    d->ui->buttonManageRecordings->setIcon(KisIconUtils::loadIcon("configure-thicker"));
     d->ui->buttonBrowse->setIcon(KisIconUtils::loadIcon("folder"));
     d->ui->buttonRecordToggle->setIcon(KisIconUtils::loadIcon("media-record"));
     d->ui->buttonExport->setIcon(KisIconUtils::loadIcon("document-export"));

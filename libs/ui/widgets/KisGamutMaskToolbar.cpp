@@ -24,7 +24,8 @@ KisGamutMaskToolbar::KisGamutMaskToolbar(QWidget* parent) : QWidget(parent)
     m_textMaskDisabled = i18n("Mask is disabled");
 
     m_ui->bnToggleMask->setChecked(false);
-    m_ui->bnToggleMask->setIcon(m_iconMaskOff);
+    m_ui->bnToggleMask->setIcon(m_iconMaskOn);
+    m_ui->bnToggleMask->setEnabled(false);
 
     m_ui->rotationAngleSelector->setDecimals(0);
     m_ui->rotationAngleSelector->setIncreasingDirection(KisAngleGauge::IncreasingDirection_Clockwise);
@@ -78,6 +79,8 @@ void KisGamutMaskToolbar::slotGamutMaskUnset()
     m_ui->rotationAngleSelector->hide();
     m_ui->labelMaskName->show();
     m_ui->labelMaskName->setText(m_textNoMask);
+    m_ui->bnToggleMask->setIcon(m_iconMaskOn);
+    m_ui->bnToggleMask->setEnabled(false);
 }
 
 void KisGamutMaskToolbar::slotGamutMaskDeactivate()
@@ -96,6 +99,7 @@ void KisGamutMaskToolbar::slotGamutMaskToggle(bool state)
     m_ui->bnToggleMask->setChecked(b);
 
     if (b == true) {
+        m_ui->bnToggleMask->setEnabled(true);
         m_ui->bnToggleMask->setIcon(m_iconMaskOn);
         m_ui->labelMaskName->hide();
         m_ui->rotationAngleSelector->show();

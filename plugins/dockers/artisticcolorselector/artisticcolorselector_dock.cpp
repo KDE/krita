@@ -89,9 +89,11 @@ ArtisticColorSelectorDock::ArtisticColorSelectorDock()
 
     m_selectorUI->bnWheelPrefs->setIcon(KisIconUtils::loadIcon("wheel-sectors"));
     m_selectorUI->bnWheelPrefs->setPopupWidget(m_wheelPrefsUI);
+    m_selectorUI->bnWheelPrefs->setArrowVisible(false);
 
     m_selectorUI->bnDockerPrefs->setPopupWidget(m_preferencesUI);
-    m_selectorUI->bnDockerPrefs->setIcon(KisIconUtils::loadIcon("configure"));
+    m_selectorUI->bnDockerPrefs->setIcon(KisIconUtils::loadIcon("configure-thicker"));
+    m_selectorUI->bnDockerPrefs->setArrowVisible(false);
 
     //preferences
     m_hsxButtons->addButton(m_preferencesUI->bnHsy, KisColor::HSY);

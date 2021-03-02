@@ -52,6 +52,7 @@ void KisHeifTest::testLoadMonochrome(int bitDepth)
             file = QString(FILES_DATA_DIR) + file;
             error = 25;
         }
+        qDebug() << "Loading test for" << file;
         QScopedPointer<KisDocument> doc_png(KisPart::instance()->createDocument());
         doc_png->setFileBatchMode(true);
         QScopedPointer<KisDocument> doc_heif(KisPart::instance()->createDocument());
@@ -105,7 +106,7 @@ void KisHeifTest::testLoadRGB(int bitDepth)
             file = QString(FILES_DATA_DIR) + file;
             error = 25;
         }
-        qDebug() << file;
+        qDebug() << "Loading test for" << file;
         QScopedPointer<KisDocument> doc_png(KisPart::instance()->createDocument());
         doc_png->setFileBatchMode(true);
         QScopedPointer<KisDocument> doc_heif(KisPart::instance()->createDocument());
@@ -264,12 +265,15 @@ void KisHeifTest::testLoadHDR()
             manager.importDocument(QString("test_rgba_hdr.png"), QString());
 
         QVERIFY(loadingStatus.isOk());
+        qDebug() << "Loading test for PQ files";
         KisImportExportManager (doc_avif_pq.data()).importDocument(QString("test_rgba_hdr_pq.avif"), QString());
         KisImportExportManager (doc_heif_pq.data()).importDocument(QString("test_rgba_hdr_pq.heif"), QString());
 
+        qDebug() << "Loading test for HLG files";
         KisImportExportManager (doc_avif_hlg.data()).importDocument(QString("test_rgba_hdr_hlg.avif"), QString());
         KisImportExportManager (doc_heif_hlg.data()).importDocument(QString("test_rgba_hdr_hlg.heif"), QString());
 
+        qDebug() << "Loading test for smpte428 files";
         KisImportExportManager (doc_avif_smpte428.data()).importDocument(QString("test_rgba_hdr_smpte428.avif"), QString());
         KisImportExportManager (doc_heif_smpte428.data()).importDocument(QString("test_rgba_hdr_smpte428.heif"), QString());
 

@@ -200,6 +200,13 @@ const KoColorProfile *IccColorSpaceEngine::getProfile(const QVector<double> &col
 {
     KoColorSpaceRegistry *registry = KoColorSpaceRegistry::instance();
 
+    if (colorPrimaries == KoColorProfile::Primaries_Unspecified && transferFunction == KoColorProfile::TRC_Unspecified
+            && colorants.isEmpty()) {
+
+        colorPrimaries = KoColorProfile::Primaries_ITU_R_BT_709_5;
+        transferFunction = KoColorProfile::TRC_IEC_61966_2_1;
+    }
+
     const KoColorProfile *profile = registry->profileFor(colorants, colorPrimaries, transferFunction);
 
     if (profile) {

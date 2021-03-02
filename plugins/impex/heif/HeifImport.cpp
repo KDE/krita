@@ -144,7 +144,7 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
                 dbgFile << "nclx profile loading failed" << err.message;
             } else {
                 int transferCharacteristic = nclx->transfer_characteristics;
-
+                int primaries = nclx->color_primaries;
                 if (nclx->transfer_characteristics == heif_transfer_characteristic_ITU_R_BT_2100_0_PQ) {
                     dbgFile << "linearizing from PQ";
                     linearizePolicy = linearFromPQ;
@@ -175,14 +175,19 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
 
                 KoColorSpaceEngine *engine = KoColorSpaceEngineRegistry::instance()->get("icc");
                 if (engine) {
+
                     QVector<double>colorants = {nclx->color_primary_white_x, nclx->color_primary_white_y,
                                                 nclx->color_primary_red_x, nclx->color_primary_red_y,
                                                 nclx->color_primary_green_x, nclx->color_primary_green_y,
                                                 nclx->color_primary_blue_x, nclx->color_primary_blue_y};
 
+                    if (primaries == KoColorProfile::Primaries_Unspecified) {
+                        colorants.clear();
+                    }
+
                     profile = engine->getProfile(colorants,
-                                                                                  nclx->color_primaries,
-                                                                                  transferCharacteristic);
+                                                 primaries,
+                                                 transferCharacteristic);
 
                     if (linearizePolicy != keepTheSame) {
                         colorDepth = Float32BitsColorDepthID;

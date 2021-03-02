@@ -177,9 +177,9 @@ void KoColorProfile::colorantsForType(colorPrimaries primaries, QVector<double> 
         break;
     case Primaries_ITU_R_BT_601_6:
         colorants = {0.3127, 0.3290};
-        colorants.append({0.63, 0.34});
+        colorants.append({0.630, 0.340});
         colorants.append({0.310, 0.595});
-        colorants.append({0.155, 0.77});
+        colorants.append({0.155, 0.070});
         break;
     case Primaries_SMPTE_240M:
         colorants = {0.3127, 0.3290};
@@ -223,7 +223,7 @@ void KoColorProfile::colorantsForType(colorPrimaries primaries, QVector<double> 
         colorants = {0.3127, 0.3290};
         colorants.append({0.63, 0.34});
         colorants.append({0.295, 0.605});
-        colorants.append({0.155, 0.77});
+        colorants.append({0.155, 0.077});
         break;
     case Primaries_ProPhoto:
         //prequantization courtesy of Elle Stone.

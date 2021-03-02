@@ -322,10 +322,9 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
                     }
                 };
 
-            for (int y = 0; y < height; y++)
-            {
-                for (int x=0; x < width; x++) {
-                    pixelValues.fill(1.0);
+            for (int y = 0; y < height; y++) {
+                for (int x = 0; x < width; x++) {
+                    std::fill(pixelValues.begin(), pixelValues.end(), 1.0f);
 
                     pixelValues[0] = value(imgR, strideR, x, y);
                     pixelValues[1] = value(imgG, strideG, x, y);
@@ -374,9 +373,9 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
                 }
             };
 
-            for (int y=0; y < height; y++) {
-                for (int x=0; x < width; x++) {
-                    pixelValues.fill(1.0);
+            for (int y = 0; y < height; y++) {
+                for (int x = 0; x < width; x++) {
+                    std::fill(pixelValues.begin(), pixelValues.end(), 1.0f);
 
                     for (int ch = 0; ch < channels; ch++) {
                         pixelValues[ch] = value(img, stride, x, y, ch);

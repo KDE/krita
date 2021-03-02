@@ -91,14 +91,7 @@ void TestResourceTypeModel::testData()
 //                 << idx.data(Qt::UserRole + KisResourceTypeModel::ResourceType)
 //                 << idx.data(Qt::UserRole + KisResourceTypeModel::Name);
 
-        QVERIFY(KisResourceLoaderRegistry::instance()->resourceTypeLoaders(idx.data(Qt::DisplayRole).toString()).size() > 0);
-
-        QVector<KisResourceLoaderBase *> loaders = KisResourceLoaderRegistry::instance()->resourceTypeLoaders(idx.data(Qt::UserRole + KisResourceTypeModel::ResourceType).toString());
-
-        QVERIFY(loaders.size() > 0);
-
-        auto loader = loaders.first();
-        QCOMPARE(loader->name(), idx.data(Qt::UserRole + KisResourceTypeModel::Name).toString());
+        QCOMPARE("brushes", idx.data(Qt::UserRole + KisResourceTypeModel::Name).toString());
     }
 }
 

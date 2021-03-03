@@ -139,7 +139,14 @@ void KoDockWidgetTitleBar::paintEvent(QPaintEvent*)
         lockButtonSize = d->lockButton->size();
     }
 
-    titleOpt.rect = QRect(QPoint(fw + mw + lockButtonSize.width(), 0),
+    // To improve the look with Fusion which has weird 13x15 button sizes
+    int fusionTextOffset = 0;
+    QRect styleTestRect = q->style()->subElementRect(QStyle::SE_DockWidgetFloatButton, &titleOpt, q);
+    if (styleTestRect.width() < 16) {
+        fusionTextOffset = d->lockButton->x();
+    }
+
+    titleOpt.rect = QRect(QPoint(fw + mw + lockButtonSize.width() + fusionTextOffset, 0),
                           QSize(geometry().width() - (fw * 2) -  mw - lockButtonSize.width(), geometry().height()));
     titleOpt.title = q->windowTitle();
     titleOpt.closable = hasFeature(q, QDockWidget::DockWidgetClosable);
@@ -161,10 +168,25 @@ void KoDockWidgetTitleBar::resizeEvent(QResizeEvent*)
     opt.floatable = hasFeature(q, QDockWidget::DockWidgetFloatable);
 
     QRect floatRect = q->style()->subElementRect(QStyle::SE_DockWidgetFloatButton, &opt, q);
+    // To improve the look with Fusion which has weird 13x15 button sizes
+    bool styleIsFusion = false;
+    QSize overrideSize = QSize(16, 16);
+    if (floatRect.width() < 16) {
+        styleIsFusion = true;
+        floatRect.setSize(overrideSize);
+        floatRect.moveLeft(floatRect.x() - 15);
+    }
+
     if (!floatRect.isNull())
         d->floatButton->setGeometry(floatRect);
 
     QRect closeRect = q->style()->subElementRect(QStyle::SE_DockWidgetCloseButton, &opt, q);
+    // To improve the look with Fusion which has weird 13x15 button sizes
+    if (styleIsFusion) {
+        closeRect.setSize(overrideSize);
+        closeRect.moveLeft(closeRect.x() - 6);
+    }
+
     if (!closeRect.isNull())
         d->closeButton->setGeometry(closeRect);
 
@@ -190,6 +212,10 @@ void KoDockWidgetTitleBar::resizeEvent(QResizeEvent*)
     }
 
     int offset = 0;
+    // To improve the look with Fusion which has weird 13x15 button sizes
+    if (styleIsFusion) {
+        offset = 3;
+    }
 
     QRect lockRect = QRect(QPoint(fw + 2 + offset, top), lockRectSize);
     d->lockButton->setGeometry(lockRect);
@@ -258,7 +284,7 @@ void KoDockWidgetTitleBar::Private::featuresChanged(QDockWidget::DockWidgetFeatu
 
 
 void KoDockWidgetTitleBar::Private::updateIcons()
-{    
+{
     lockIcon = (!locked) ? kisIcon("docker_lock_a") : kisIcon("docker_lock_b");
     lockButton->setIcon(lockIcon);
 

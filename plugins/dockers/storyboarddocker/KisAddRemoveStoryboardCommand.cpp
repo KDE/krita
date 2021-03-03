@@ -109,18 +109,14 @@ KisMoveStoryboardCommand::~KisMoveStoryboardCommand()
 
 void KisMoveStoryboardCommand::redo()
 {
-    m_model->moveRows(QModelIndex(), m_from, m_count, QModelIndex(), m_to);
+    m_model->moveRowsImpl(QModelIndex(), m_from, m_count, QModelIndex(), m_to);
 }
 
 void KisMoveStoryboardCommand::undo()
 {
-    if (m_to > m_from) {
-        m_to--;
-    }
-    else {
-        m_from++;
-    }
-    m_model->moveRows(QModelIndex(), m_to, m_count, QModelIndex(), m_from);      
+    const int to = m_to > m_from ? m_to - m_count : m_to;
+    const int from = m_to <= m_from ? m_from + m_count : m_from;
+    m_model->moveRowsImpl(QModelIndex(), to, m_count, QModelIndex(), from);
 }
 
 KisStoryboardChildEditCommand::KisStoryboardChildEditCommand(QVariant oldValue,

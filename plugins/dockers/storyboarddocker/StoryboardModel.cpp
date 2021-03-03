@@ -410,75 +410,14 @@ bool StoryboardModel::removeRows(int position, int rows, const QModelIndex &pare
     return false;
 }
 
-bool StoryboardModel::moveRows(const QModelIndex &sourceParent, int sourceRow, int count,
-                                const QModelIndex &destinationParent, int destinationChild)
+bool StoryboardModel::moveRows(const QModelIndex &sourceParent, int sourceRow, int count, const QModelIndex &destinationParent, int destinationChild)
 {
-    if (sourceParent != destinationParent) {
-        return false;
-    }
-    if (destinationChild == sourceRow || destinationChild == sourceRow + 1) {
-        return false;
-    }
-
-    if (isLocked()) {
-        return false;
-    }
-
-    if (destinationChild > sourceRow + count - 1) {
-        //we adjust for the upward shift, see qt doc for why this is needed
-        beginMoveRows(sourceParent, sourceRow, sourceRow + count - 1, destinationParent, destinationChild + count - 1);
-        destinationChild = destinationChild - count;
-    }
-    else {
-        beginMoveRows(sourceParent, sourceRow, sourceRow + count - 1, destinationParent, destinationChild);
-    }
-    //for moves within the 1st level nodes for comment nodes
-    if (sourceParent == destinationParent && sourceParent.isValid() && !sourceParent.parent().isValid()) {
-        const QModelIndex parent = sourceParent;
-        for (int row = 0; row < count; row++) {
-            if (sourceRow < StoryboardItem::Comments || sourceRow >= rowCount(parent)) {
-                return false;
-            }
-            if (destinationChild + row < StoryboardItem::Comments || destinationChild + row >= rowCount(parent)) {
-                return false;
-            }
-
-            StoryboardItemSP item = m_items.at(parent.row());
-            item->moveChild(sourceRow, destinationChild + row);
-        }
-        endMoveRows();
-
-        reorderKeyframes();
-
-        emit sigStoryboardItemListChanged();
+    KisMoveStoryboardCommand *command = new KisMoveStoryboardCommand(sourceRow, count, destinationChild, this);
+    if (moveRowsImpl(sourceParent, sourceRow, count, destinationParent, destinationChild)) {
+        pushUndoCommand(command);
         return true;
     }
-    else if (!sourceParent.isValid()) {                  //for moves of 1st level nodes
-        for (int row = 0; row < count; row++) {
-            if (sourceRow < 0 || sourceRow >= rowCount()) {
-                return false;
-            }
-            if (destinationChild + row < 0 || destinationChild + row >= rowCount()) {
-                return false;
-            }
-
-            m_items.move(sourceRow, destinationChild + row);
-        }
-        endMoveRows();
-
-        reorderKeyframes();
-
-        const int frameNumber = index(StoryboardItem::FrameNumber, 0, index(destinationChild, 0)).data().toInt();
-        if (m_image) {
-            m_image->animationInterface()->switchCurrentTimeAsync(frameNumber);
-        }
-
-        emit sigStoryboardItemListChanged();
-        return true;
-    }
-    else {
-        return false;
-    }
+    return false;
 }
 
 QStringList StoryboardModel::mimeTypes() const
@@ -534,10 +473,8 @@ bool StoryboardModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
             QModelIndex index = this->index(sourceRow, 0);
             moveRowIndexes.append(index);
         }
-        KisMoveStoryboardCommand *command = new KisMoveStoryboardCommand(moveRowIndexes.at(0).row(), moveRowIndexes.count(), row, this);
-        if (moveRows(QModelIndex(), moveRowIndexes.at(0).row(), moveRowIndexes.count(), parent, row)) {
-            pushUndoCommand(command);
-        }
+
+        moveRows(QModelIndex(), moveRowIndexes.at(0).row(), moveRowIndexes.count(), parent, row);
         //returning true deletes the source row
         return false;
     }
@@ -655,10 +592,10 @@ void StoryboardModel::setImage(KisImageWSP image)
     connect(m_image, SIGNAL(sigRemoveNodeAsync(KisNodeSP)), this, SLOT(slotNodeRemoved(KisNodeSP)));
 
     //for add, remove and move
-    //connect(m_image->animationInterface(), SIGNAL(sigKeyframeAdded(const KisKeyframeChannel*,int)),
-    //        this, SLOT(slotKeyframeAdded(const KisKeyframeChannel*,int)), Qt::UniqueConnection);
-    //connect(m_image->animationInterface(), SIGNAL(sigKeyframeRemoved(const KisKeyframeChannel*,int)),
-    //        this, SLOT(slotKeyframeRemoved(const KisKeyframeChannel*,int)), Qt::UniqueConnection);
+    connect(m_image->animationInterface(), SIGNAL(sigKeyframeAdded(const KisKeyframeChannel*,int)),
+            this, SLOT(slotKeyframeAdded(const KisKeyframeChannel*,int)), Qt::UniqueConnection);
+    connect(m_image->animationInterface(), SIGNAL(sigKeyframeRemoved(const KisKeyframeChannel*,int)),
+            this, SLOT(slotKeyframeRemoved(const KisKeyframeChannel*,int)), Qt::UniqueConnection);
 
     connect(m_image->animationInterface(), SIGNAL(sigFramerateChanged()), this, SLOT(slotFramerateChanged()), Qt::UniqueConnection);
 
@@ -1298,7 +1235,7 @@ void StoryboardModel::slotCommentRowMoved(const QModelIndex &sourceParent, int s
     int numItems = rowCount();
     for(int row = 0; row < numItems; row++) {
         QModelIndex parentIndex = index(row, 0);
-        moveRows(parentIndex, start + 4, end - start + 1, parentIndex, destinationRow + 4);
+        moveRowsImpl(parentIndex, start + 4, end - start + 1, parentIndex, destinationRow + 4);
     }
     slotCommentDataChanged();
 }
@@ -1342,6 +1279,77 @@ void StoryboardModel::insertChildRows(int position, KUndo2Command *cmd)
     const int frameToSwitch = index(StoryboardItem::FrameNumber, 0, index(position, 0)).data().toInt();
     if (m_image) {
         m_image->animationInterface()->switchCurrentTimeAsync(frameToSwitch);
+    }
+}
+
+bool StoryboardModel::moveRowsImpl(const QModelIndex &sourceParent, int sourceRow, int count,
+                                const QModelIndex &destinationParent, int destinationChild)
+{
+    if (sourceParent != destinationParent) {
+        return false;
+    }
+    if (destinationChild == sourceRow || destinationChild == sourceRow + 1) {
+        return false;
+    }
+
+    if (isLocked()) {
+        return false;
+    }
+
+    if (destinationChild > sourceRow + count - 1) {
+        //we adjust for the upward shift, see qt doc for why this is needed
+        beginMoveRows(sourceParent, sourceRow, sourceRow + count - 1, destinationParent, destinationChild + count - 1);
+        destinationChild = destinationChild - count;
+    }
+    else {
+        beginMoveRows(sourceParent, sourceRow, sourceRow + count - 1, destinationParent, destinationChild);
+    }
+    //for moves within the 1st level nodes for comment nodes
+    if (sourceParent == destinationParent && sourceParent.isValid() && !sourceParent.parent().isValid()) {
+        const QModelIndex parent = sourceParent;
+        for (int row = 0; row < count; row++) {
+            if (sourceRow < StoryboardItem::Comments || sourceRow >= rowCount(parent)) {
+                return false;
+            }
+            if (destinationChild + row < StoryboardItem::Comments || destinationChild + row >= rowCount(parent)) {
+                return false;
+            }
+
+            StoryboardItemSP item = m_items.at(parent.row());
+            item->moveChild(sourceRow, destinationChild + row);
+        }
+        endMoveRows();
+
+        reorderKeyframes();
+
+        emit sigStoryboardItemListChanged();
+        return true;
+    }
+    else if (!sourceParent.isValid()) {                  //for moves of 1st level nodes
+        for (int row = 0; row < count; row++) {
+            if (sourceRow < 0 || sourceRow >= rowCount()) {
+                return false;
+            }
+            if (destinationChild + row < 0 || destinationChild + row >= rowCount()) {
+                return false;
+            }
+
+            m_items.move(sourceRow, destinationChild + row);
+        }
+        endMoveRows();
+
+        reorderKeyframes();
+
+        const int frameNumber = index(StoryboardItem::FrameNumber, 0, index(destinationChild, 0)).data().toInt();
+        if (m_image) {
+            m_image->animationInterface()->switchCurrentTimeAsync(frameNumber);
+        }
+
+        emit sigStoryboardItemListChanged();
+        return true;
+    }
+    else {
+        return false;
     }
 }
 

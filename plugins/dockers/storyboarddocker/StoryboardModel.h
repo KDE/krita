@@ -83,7 +83,7 @@ public:
     bool insertRows(int position, int rows, const QModelIndex &index = QModelIndex()) override;
     bool removeRows(int position, int rows, const QModelIndex &index = QModelIndex())override;
     bool moveRows(const QModelIndex &sourceParent, int sourceRow, int count,
-                    const QModelIndex &destinationParent, int destinationChild) override;
+                  const QModelIndex &destinationParent, int destinationChild);
 
     //for drag and drop
     QStringList mimeTypes() const override;
@@ -235,6 +235,11 @@ public:
      * @param position Index of the first level node.
      */
     void insertChildRows(int position, StoryboardItemSP item);
+
+private:
+    friend class KisMoveStoryboardCommand;
+    bool moveRowsImpl(const QModelIndex &sourceParent, int sourceRow, int count,
+                    const QModelIndex &destinationParent, int destinationChild);
 
 private Q_SLOTS:
     /**

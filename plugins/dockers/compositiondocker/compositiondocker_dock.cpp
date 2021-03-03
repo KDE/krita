@@ -83,10 +83,10 @@ CompositionDockerDock::CompositionDockerDock( )
     connect( moveUpButton, SIGNAL(clicked(bool)), this, SLOT(moveCompositionUp()));
     connect( moveDownButton, SIGNAL(clicked(bool)), this, SLOT(moveCompositionDown()));
 
-    QAction* imageAction = new QAction(KisIconUtils::loadIcon("document-export"), i18n("Export Images"), this);
+    QAction* imageAction = new QAction(KisIconUtils::loadIcon("document-export-16"), i18n("Export Images"), this);
     connect(imageAction, SIGNAL(triggered(bool)), this, SLOT(exportImageClicked()));
 
-    QAction* animationAction = new QAction(KisIconUtils::loadIcon("addblankframe"), i18n("Export Animations"), this);
+    QAction* animationAction = new QAction(KisIconUtils::loadIcon("addblankframe-16"), i18n("Export Animations"), this);
     connect(animationAction, SIGNAL(triggered(bool)), this, SLOT(exportAnimationClicked()));
 
     exportCompositions->setDefaultAction(imageAction);

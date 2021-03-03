@@ -349,10 +349,45 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
 
                 it->nextRow();
             }
-        } else if (heifChroma == heif_chroma_interleaved_RRGGBB_LE || heifChroma == heif_chroma_interleaved_RRGGBBAA_LE ||
-                   heifChroma == heif_chroma_interleaved_RRGGBB_BE || heifChroma == heif_chroma_interleaved_RRGGBB_BE )  {
+        } else if (heifChroma == heif_chroma_interleaved_RGB || heifChroma == heif_chroma_interleaved_RGBA) {
             int stride;
-            dbgFile << "interleaved heif file, bits:" << luma;
+            dbgFile << "interleaved SDR heif file, bits:" << luma;
+
+            const uint8_t *img = heifimage.get_plane(heif_channel_interleaved, &stride);
+            QVector<float> pixelValues(4);
+            QVector<qreal> lCoef {colorSpace->lumaCoefficients()};
+            KisHLineIteratorSP it = layer->paintDevice()->createHLineIteratorNG(0, 0, width);
+            int channels = hasAlpha ? 4 : 3;
+
+            auto value = [&](const uint8_t *img, int stride, int x, int y, int ch) {
+                uint8_t source = img[(y * stride) + (x * channels) + ch];
+                return linearizeValueAsNeeded(float(source) / 255.0f, linearizePolicy);
+            };
+
+            for (int y = 0; y < height; y++) {
+                for (int x = 0; x < width; x++) {
+                    std::fill(pixelValues.begin(), pixelValues.end(), 1.0f);
+
+                    for (int ch = 0; ch < channels; ch++) {
+                        pixelValues[ch] = value(img, stride, x, y, ch);
+                    }
+
+                    if (linearizePolicy == keepTheSame) {
+                        qSwap(pixelValues.begin()[0], pixelValues.begin()[2]);
+                    }
+                    if (linearizePolicy == linearFromHLG && applyOOTF) {
+                        applyHLGOOTF(pixelValues, lCoef, displayGamma, displayNits);
+                    }
+                    colorSpace->fromNormalisedChannelsValue(it->rawData(), pixelValues);
+
+                    it->nextPixel();
+                }
+
+                it->nextRow();
+            }
+        } else if (heifChroma == heif_chroma_interleaved_RRGGBB_LE || heifChroma == heif_chroma_interleaved_RRGGBBAA_LE || heifChroma == heif_chroma_interleaved_RRGGBB_BE || heifChroma == heif_chroma_interleaved_RRGGBB_BE) {
+            int stride;
+            dbgFile << "interleaved HDR heif file, bits:" << luma;
 
             const uint8_t* img = heifimage.get_plane(heif_channel_interleaved, &stride);
             QVector<float> pixelValues(4);
@@ -361,17 +396,13 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
             int channels = hasAlpha ? 4 : 3;
 
             auto value = [&](const uint8_t *img, int stride, int x, int y, int ch) {
-                if (luma == 8) {
-                    return linearizeValueAsNeeded(float(img[y * (stride) + x]) / 255.0f, linearizePolicy);
+                uint16_t source = reinterpret_cast<const uint16_t *>(img)[y * (stride / 2) + (x * channels) + ch];
+                if (luma == 10) {
+                    return linearizeValueAsNeeded(float(0x03ff & (source)) * multiplier10bit, linearizePolicy);
+                } else if (luma == 12) {
+                    return linearizeValueAsNeeded(float(0x0fff & (source)) * multiplier12bit, linearizePolicy);
                 } else {
-                    uint16_t source = reinterpret_cast<const uint16_t *>(img)[y * (stride / 2) + (x * channels) + ch];
-                    if (luma == 10) {
-                        return linearizeValueAsNeeded(float(0x03ff & (source)) * multiplier10bit, linearizePolicy);
-                    } else if (luma == 12) {
-                        return linearizeValueAsNeeded(float(0x0fff & (source)) * multiplier12bit, linearizePolicy);
-                    } else {
-                        return linearizeValueAsNeeded(float(source) * multiplier16bit, linearizePolicy);
-                    }
+                    return linearizeValueAsNeeded(float(source) * multiplier16bit, linearizePolicy);
                 }
             };
 

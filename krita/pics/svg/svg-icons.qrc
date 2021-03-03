@@ -6,7 +6,6 @@
     <qresource prefix="/">
         <file>broken-preset.svg</file>
         <file>dark_addblankframe.svg</file>
-        <file>dark_addcolor.svg</file>
         <file>dark_addduplicateframe.svg</file>
         <file>dark_arrow-down.svg</file>
         <file>dark_arrow-downright.svg</file>
@@ -64,7 +63,6 @@
         <file>dark_workspace-chooser.svg</file>
         <file>dark_wraparound.svg</file>
         <file>light_addblankframe.svg</file>
-        <file>light_addcolor.svg</file>
         <file>light_addduplicateframe.svg</file>
         <file>light_arrow-down.svg</file>
         <file>light_arrow-downright.svg</file>

@@ -85,10 +85,10 @@ void KisHeifTest::testLoadMonochrome(int bitDepth)
 
                 QVERIFY2(pngColor.colorSpace()->differenceA(pngColor.data(), heifColor.data()) < error,
                          QString("Heif %5 gray color doesn't match PNG color, (%1, %2) %3 %4")
-                         .arg(x).arg(y).arg(KoColor::toQString(pngColor)).arg(KoColor::toQString(heifColor)).toLatin1());
+                         .arg(x).arg(y).arg(KoColor::toQString(pngColor)).arg(KoColor::toQString(heifColor)).arg(bitDepth).toLatin1());
                 QVERIFY2(pngColor.colorSpace()->differenceA(pngColor.data(), avifColor.data()) < error,
                          QString("Avif %5 gray color doesn't match PNG color, (%1, %2) %3 %4")
-                         .arg(x).arg(y).arg(pngColor.toXML()).arg(avifColor.toXML()).toLatin1());
+                         .arg(x).arg(y).arg(pngColor.toXML()).arg(avifColor.toXML()).arg(bitDepth).toLatin1());
                 QVERIFY2(avifColor.colorSpace()->differenceA(avifColor.data(), heifColor.data()) < error,
                          QString("Heif %5 gray color doesn't match Avif color, (%1, %2) %3 %4")
                          .arg(x).arg(y).arg(heifColor.toXML()).arg(heifColor.toXML()).arg(bitDepth).toLatin1());
@@ -101,7 +101,7 @@ void KisHeifTest::testLoadRGB(int bitDepth)
 {
     {
         QString file = QString("test_rgba_%1.").arg(bitDepth);
-        int error = 1;
+        int error = 2;
         if (bitDepth == 10) {
             file = QString(FILES_DATA_DIR) + file;
             error = 25;
@@ -136,6 +136,10 @@ void KisHeifTest::testLoadRGB(int bitDepth)
                 doc_png->image()->projection()->pixel(x, y, &pngColor);
                 doc_heif->image()->projection()->pixel(x, y, &heifColor);
                 doc_avif->image()->projection()->pixel(x, y, &avifColor);
+
+                QVERIFY2(pngColor.colorSpace() == heifColor.colorSpace(), QString("%1 RGBA colorspace mismatch between png and heif").toLatin1());
+                QVERIFY2(pngColor.colorSpace() == avifColor.colorSpace(), QString("%1 RGBA colorspace mismatch between png and avif").toLatin1());
+                QVERIFY2(avifColor.colorSpace() == heifColor.colorSpace(), QString("%1 RGBA colorspace mismatch between avif and heif").toLatin1());
 
                 QVERIFY2(pngColor.colorSpace()->differenceA(pngColor.data(), heifColor.data()) < error, QString("%5 RGBA Heif color doesn't match PNG color, (%1, %2) %3 %4")
                          .arg(x).arg(y).arg(pngColor.toXML()).arg(heifColor.toXML()).arg(bitDepth).toLatin1());

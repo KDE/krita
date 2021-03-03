@@ -115,6 +115,7 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
         // First, get the profile, because sometimes the image may be encoded in YCrCb and the embedded icc profile is graya.
 
         if (profileType == heif_color_profile_type_prof || profileType == heif_color_profile_type_rICC) {
+            dbgFile << "profile type is icc profile";
             // rICC are 'restricted' icc profiles, and are matrix shaper profiles
             // that are either RGB or Grayscale, and are of the input or display types.
             // They are from the JPEG2000 spec.
@@ -126,7 +127,7 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
                 if (err.code) {
                     dbgFile << "icc profile loading failed:" << err.message;
                 } else {
-                    const KoColorProfile *profile = KoColorSpaceRegistry::instance()->createColorProfile(colorModel, colorDepth.id(), ba);
+                    profile = KoColorSpaceRegistry::instance()->createColorProfile(colorModel, colorDepth.id(), ba);
                     KoColorSpaceRegistry::instance()->addProfile(profile);
                     colorModel = profile->colorModelID();
                 }
@@ -134,6 +135,7 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
                 dbgFile << "icc profile is empty";
             }
         } else if (profileType == heif_color_profile_type_nclx) {
+            dbgFile << "profile type is nclx coding independant code points";
             // NCLX parameters is a colorspace description used for videofiles.
             // We generate a color profile for most entries, except that we cannot handle
             // PQ, HLG or 428 in an icc profile, so we convert those on the fly to linear.

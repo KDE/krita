@@ -159,7 +159,7 @@ KisFixedPaintDeviceSP KisDabCache::fetchDabCommon(const KoColorSpace *cs,
         qreal softnessFactor,
         QRect *dstDabRect,
         qreal lightnessStrength,
-        bool forceImageStamp)
+        bool forceNormalizedRGBAImageStamp)
 {
     Q_ASSERT(dstDabRect);
     Q_UNUSED(lightnessStrength);
@@ -217,7 +217,7 @@ KisFixedPaintDeviceSP KisDabCache::fetchDabCommon(const KoColorSpace *cs,
 
     // 3. Generate new dab
 
-    generateDab(di, &resources, &m_d->dab, forceImageStamp);
+    generateDab(di, &resources, &m_d->dab, forceNormalizedRGBAImageStamp);
 
     // 4. Do postprocessing
     if (di.needsPostprocessing) {

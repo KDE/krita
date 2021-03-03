@@ -617,10 +617,49 @@ void KisBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
 
 }
 
+namespace {
+
+void normalalizeRGBADab(QImage &image)
+{
+    qint64 lightnessSum = 0;
+    qint64 alphaSum = 0;
+
+    for (int y = 0; y < image.height(); ++y) {
+        KoBgrU8Traits::Pixel *ptr = reinterpret_cast<KoBgrU8Traits::Pixel*>(image.scanLine(y));
+
+        for (int i = 0; i < image.width(); ++i) {
+            lightnessSum += qRound(ptr->red * ptr->alpha / 255.0);
+            alphaSum += ptr->alpha;
+            ptr++;
+        }
+    }
+
+    const qreal beforeNorm = lightnessSum * 255.0 / alphaSum;
+
+    if (qAbs(beforeNorm - 127.0) > 1.0) {
+        const qreal normCoeff = 127.0 / beforeNorm;
+
+        for (int y = 0; y < image.height(); ++y) {
+            KoBgrU8Traits::Pixel *ptr = reinterpret_cast<KoBgrU8Traits::Pixel*>(image.scanLine(y));
+
+            for (int i = 0; i < image.width(); ++i) {
+                ptr->red = qBound(0, qRound(normCoeff * (ptr->red)), 255);
+                ptr->green = ptr->red;
+                ptr->blue = ptr->red;
+
+                ptr++;
+            }
+        }
+    }
+}
+
+}
+
 KisFixedPaintDeviceSP KisBrush::paintDevice(const KoColorSpace * colorSpace,
                                             KisDabShape const& shape,
                                             const KisPaintInformation& info,
-                                            double subPixelX, double subPixelY) const
+                                            double subPixelX, double subPixelY,
+                                            bool normalizeBrush) const
 {
     Q_ASSERT(valid());
     Q_UNUSED(info);
@@ -629,6 +668,10 @@ KisFixedPaintDeviceSP KisBrush::paintDevice(const KoColorSpace * colorSpace,
 
     QImage outputImage = d->brushPyramid->pyramid(this)->createImage(
                 KisDabShape(scale, shape.ratio(), -angle), subPixelX, subPixelY);
+
+    if (normalizeBrush) {
+        normalalizeRGBADab(outputImage);
+    }
 
     KisFixedPaintDeviceSP dab = new KisFixedPaintDevice(colorSpace);
     Q_CHECK_PTR(dab);

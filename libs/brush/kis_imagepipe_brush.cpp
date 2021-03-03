@@ -394,9 +394,11 @@ QVector<KisGbrBrushSP> KisImagePipeBrush::brushes() const
 KisFixedPaintDeviceSP KisImagePipeBrush::paintDevice(
     const KoColorSpace * colorSpace,
     KisDabShape const& shape,
-    const KisPaintInformation& info, double subPixelX, double subPixelY) const
+    const KisPaintInformation& info,
+    double subPixelX, double subPixelY,
+    bool normalizeBrush) const
 {
-    return d->brushesPipe.paintDevice(colorSpace, shape, info, subPixelX, subPixelY);
+    return d->brushesPipe.paintDevice(colorSpace, shape, info, subPixelX, subPixelY, normalizeBrush);
 }
 
 QString KisImagePipeBrush::parasiteSelection()

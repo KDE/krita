@@ -195,35 +195,7 @@ struct ColorSmudgeStrategy : public ColorSmudgeStrategyBase
             1.0,
             dstDabRect);
 
-        QRgb* ptr = reinterpret_cast<QRgb*>(m_origDab->data());
         const int numPixels = m_origDab->bounds().width() * m_origDab->bounds().height();
-
-        qint64 lightnessSum = 0;
-        qint64 alphaSum = 0;
-
-        for (int i = 0; i < numPixels; ++i) {
-            lightnessSum += qRound(qRed(*ptr) * qAlpha(*ptr) / 255.0);
-            alphaSum += qAlpha(*ptr);
-            ptr++;
-        }
-#if 1
-        ptr = reinterpret_cast<QRgb*>(m_origDab->data());
-        const qreal normCoeff = 127.0 * alphaSum / lightnessSum / 255.0;
-        for (int i = 0; i < numPixels; ++i) {
-            quint8 *pixelPtr = reinterpret_cast<quint8*>(ptr);
-
-            *(pixelPtr+2) = qBound(0, qRound(normCoeff * (*(pixelPtr+2))), 255);
-            *(pixelPtr+1) = *(pixelPtr+2);
-            *(pixelPtr+0) = *(pixelPtr+2);
-
-            //*(pixelPtr + 1) = *pixelPtr;
-            //*(pixelPtr + 2) = *pixelPtr;
-
-
-
-            ptr++;
-        }
-#endif
 
         m_maskDab->setRect(m_origDab->bounds());
         m_maskDab->lazyGrowBufferWithoutInitialization();

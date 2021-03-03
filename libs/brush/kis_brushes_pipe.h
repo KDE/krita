@@ -123,12 +123,13 @@ public:
     KisFixedPaintDeviceSP paintDevice(const KoColorSpace * colorSpace,
                                       KisDabShape const& shape,
                                       const KisPaintInformation& info,
-                                      double subPixelX, double subPixelY) {
+                                      double subPixelX, double subPixelY,
+                                      bool normalizeBrush) {
 
         QSharedPointer<BrushType> brush = currentBrush(info);
         if (!brush) return 0;
 
-        KisFixedPaintDeviceSP device = brush->paintDevice(colorSpace, shape, info, subPixelX, subPixelY);
+        KisFixedPaintDeviceSP device = brush->paintDevice(colorSpace, shape, info, subPixelX, subPixelY, normalizeBrush);
         return device;
     }
 

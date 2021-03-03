@@ -32,6 +32,7 @@
         <file>dark_layer-style-disabled.svg</file>
         <file>dark_layer-style-enabled.svg</file>
         <file>dark_list-add.svg</file>
+        <file>dark_list-add-22.svg</file>
         <file>dark_local-selection-active.svg</file>
         <file>dark_local-selection-inactive.svg</file>
         <file>dark_nextframe.svg</file>
@@ -89,6 +90,7 @@
         <file>light_layer-style-disabled.svg</file>
         <file>light_layer-style-enabled.svg</file>
         <file>light_list-add.svg</file>
+        <file>light_list-add-22.svg</file>
         <file>light_local-selection-active.svg</file>
         <file>light_local-selection-inactive.svg</file>
         <file>light_nextframe.svg</file>

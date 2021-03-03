@@ -190,7 +190,7 @@ KisAnimTimelineFramesView::KisAnimTimelineFramesView(QWidget *parent)
 
     m_d->addLayersButton = new QToolButton(this);
     m_d->addLayersButton->setAutoRaise(true);
-    m_d->addLayersButton->setIcon(KisIconUtils::loadIcon("list-add"));
+    m_d->addLayersButton->setIcon(KisIconUtils::loadIcon("list-add-22"));
     m_d->addLayersButton->setIconSize(QSize(22, 22));
     m_d->addLayersButton->setPopupMode(QToolButton::InstantPopup);
     m_d->addLayersButton->setMenu(m_d->layerEditingMenu);

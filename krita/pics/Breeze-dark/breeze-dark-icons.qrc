@@ -7,14 +7,7 @@
         <file>dark_application-exit.svg</file>
         <file>dark_application-pdf.svg</file>
         <file>dark_applications-system.svg</file>
-        <file>dark_arrow-down.svg</file>
-        <file>dark_arrow-downright.svg</file>
-        <file>dark_arrow-downleft.svg</file>
-        <file>dark_arrow-topright.svg</file>
-        <file>dark_arrow-topleft.svg</file>
-        <file>dark_arrow-left.svg</file>
-        <file>dark_arrow-right.svg</file>
-        <file>dark_arrow-up.svg</file>
+
         <file alias="dark_configure-shortcuts.svg">dark_applications-system.svg</file>
         <file>dark_configure.svg</file>
         <file alias="dark_configure-toolbars.svg">dark_configure.svg</file>
@@ -44,9 +37,6 @@
         <file>dark_folder.svg</file>
         <file>dark_format-list-unordered.svg</file>
         <file>dark_go-home.svg</file>
-        <file alias="dark_go-next.svg">dark_arrow-right.svg</file>
-        <file alias="dark_go-previous.svg">dark_arrow-left.svg</file>
-        <file alias="dark_go-up.svg">dark_arrow-up.svg</file>
         <file alias="dark_help-contents.svg">dark_system-help.svg</file>
         <file>dark_im-user.svg</file>
         <file>dark_kde.svg</file>

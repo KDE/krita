@@ -8,6 +8,17 @@
         <file>dark_addblankframe.svg</file>
         <file>dark_addcolor.svg</file>
         <file>dark_addduplicateframe.svg</file>
+        <file>dark_arrow-down.svg</file>
+        <file>dark_arrow-downright.svg</file>
+        <file>dark_arrow-downleft.svg</file>
+        <file>dark_arrow-topright.svg</file>
+        <file>dark_arrow-topleft.svg</file>
+        <file>dark_arrow-left.svg</file>
+        <file>dark_arrow-right.svg</file>
+        <file>dark_arrow-up.svg</file>
+        <file alias="dark_go-next.svg">dark_arrow-right.svg</file>
+        <file alias="dark_go-previous.svg">dark_arrow-left.svg</file>
+        <file alias="dark_go-up.svg">dark_arrow-up.svg</file>
         <file>dark_bookmarks.svg</file>
         <file>dark_configure-thicker.svg</file>
         <file>dark_deletekeyframe.svg</file>
@@ -53,6 +64,17 @@
         <file>light_addblankframe.svg</file>
         <file>light_addcolor.svg</file>
         <file>light_addduplicateframe.svg</file>
+        <file>light_arrow-down.svg</file>
+        <file>light_arrow-downright.svg</file>
+        <file>light_arrow-downleft.svg</file>
+        <file>light_arrow-topright.svg</file>
+        <file>light_arrow-topleft.svg</file>
+        <file>light_arrow-left.svg</file>
+        <file>light_arrow-right.svg</file>
+        <file>light_arrow-up.svg</file>
+        <file alias="light_go-next.svg">light_arrow-right.svg</file>
+        <file alias="light_go-previous.svg">light_arrow-left.svg</file>
+        <file alias="light_go-up.svg">light_arrow-up.svg</file>
         <file>light_bookmarks.svg</file>
         <file>light_configure-thicker.svg</file>
         <file>light_deletekeyframe.svg</file>

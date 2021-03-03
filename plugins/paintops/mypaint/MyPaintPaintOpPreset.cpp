@@ -125,6 +125,10 @@ bool KisMyPaintPaintOpPreset::loadFromDevice(QIODevice *dev, KisResourcesInterfa
     s->setProperty(MYPAINT_ERASER, this->isEraser());
     s->setProperty("EraserMode", qRound(this->isEraser()));
 
+    if (!metadata().contains("paintopid")) {
+        addMetaData("paintopid", "mypaintbrush");
+    }
+
     this->setSettings(s);
     setValid(true);
 

@@ -67,9 +67,9 @@ GamutMaskDock::GamutMaskDock()
     m_dockerUI    = new GamutMaskChooserUI();
 
     m_dockerUI->bnMaskEditor->setIcon(KisIconUtils::loadIcon("document-edit"));
-    m_dockerUI->bnMaskDelete->setIcon(KisIconUtils::loadIcon("deletelayer"));
+    m_dockerUI->bnMaskDelete->setIcon(KisIconUtils::loadIcon("edit-delete"));
     m_dockerUI->bnMaskNew->setIcon(KisIconUtils::loadIcon("list-add"));
-    m_dockerUI->bnMaskDuplicate->setIcon(KisIconUtils::loadIcon("duplicatelayer"));
+    m_dockerUI->bnMaskDuplicate->setIcon(KisIconUtils::loadIcon("duplicateitem"));
 
     m_dockerUI->maskPropertiesBox->setVisible(false);
     m_dockerUI->bnSaveMask->setIcon(KisIconUtils::loadIcon("document-save"));

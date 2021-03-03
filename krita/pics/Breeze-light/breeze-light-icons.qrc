@@ -14,7 +14,6 @@
         <file alias="light_dialog-close.svg">light_window-close.svg</file>
         <file>light_dialog-ok.svg</file>
         <file>light_dialog-warning.svg</file>
-        <file>light_document-edit.svg</file>
         <file>light_document-export.svg</file>
         <file>light_document-import.svg</file>
         <file>light_document-new.svg</file>

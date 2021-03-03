@@ -453,7 +453,7 @@ void KisAnimTimelineFramesView::slotCanvasUpdate(KoCanvasBase *canvas)
 
 void KisAnimTimelineFramesView::slotUpdateIcons()
 {
-    m_d->addLayersButton->setIcon(KisIconUtils::loadIcon("list-add"));
+    m_d->addLayersButton->setIcon(KisIconUtils::loadIcon("list-add-22"));
     m_d->audioOptionsButton->setIcon(KisIconUtils::loadIcon("audio-none"));
     m_d->zoomDragButton->setIcon(KisIconUtils::loadIcon("zoom-horizontal"));
 }

@@ -19,6 +19,7 @@
 #include <kis_group_layer.h>
 #include <kis_post_execution_undo_adapter.h>
 #include "kis_time_span.h"
+#include "commands_new/kis_switch_current_time_command.h"
 #include "kis_raster_keyframe_channel.h"
 #include "KisStoryboardThumbnailRenderScheduler.h"
 #include "KisAddRemoveStoryboardCommand.h"
@@ -602,8 +603,6 @@ void StoryboardModel::setImage(KisImageWSP image)
     //for selection sync with timeline
     slotCurrentFrameChanged(m_image->animationInterface()->currentUITime());
     connect(m_image->animationInterface(), SIGNAL(sigUiTimeChanged(int)), this, SLOT(slotCurrentFrameChanged(int)), Qt::UniqueConnection);
-    connect(m_view->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
-            this, SLOT(slotChangeFrameGlobal(QItemSelection, QItemSelection)), Qt::UniqueConnection);
 }
 
 void StoryboardModel::slotSetActiveNode(KisNodeSP node)
@@ -861,10 +860,6 @@ bool StoryboardModel::changeSceneHoldLength(int newDuration, QModelIndex itemInd
         shiftKeyframes(KisTimeSpan::infinite(lastFrameOfScene + 1), durationChange);
     }
 
-    if (m_image) {
-        slotChangeFrameGlobal(m_view->selectionModel()->selection(), QItemSelection());
-    }
-
     return true;
 }
 
@@ -1001,22 +996,12 @@ StoryboardItemList StoryboardModel::getData()
 
 void StoryboardModel::pushUndoCommand(KUndo2Command* command)
 {
-    
     m_image->postExecutionUndoAdapter()->addCommand(toQShared(command));
 }
 
 void StoryboardModel::slotCurrentFrameChanged(int frameId)
 {
     m_view->setCurrentItem(frameId);
-}
-
-void StoryboardModel::slotChangeFrameGlobal(QItemSelection selected, QItemSelection deselected)
-{
-    Q_UNUSED(deselected);
-    if (!selected.indexes().isEmpty()) {
-        int frameId = data(index(0, 0, selected.indexes().at(0))).toInt();
-        m_image->animationInterface()->switchCurrentTimeAsync(frameId);
-    }
 }
 
 void StoryboardModel::slotKeyframeAdded(const KisKeyframeChannel* channel, int time)
@@ -1278,8 +1263,21 @@ void StoryboardModel::insertChildRows(int position, KUndo2Command *cmd)
 
     const int frameToSwitch = index(StoryboardItem::FrameNumber, 0, index(position, 0)).data().toInt();
     if (m_image) {
-        m_image->animationInterface()->switchCurrentTimeAsync(frameToSwitch);
+        KisSwitchCurrentTimeCommand* switchFrameCmd = new KisSwitchCurrentTimeCommand(m_image->animationInterface(), m_image->animationInterface()->currentTime(), frameToSwitch, cmd);
+        switchFrameCmd->redo();
     }
+}
+
+void StoryboardModel::visualizeScene(const QModelIndex &scene)
+{
+    if (scene.parent().isValid() || !m_image) {
+        return;
+    }
+
+    int frameTime = index(StoryboardItem::FrameNumber, 0, scene).data().toInt();
+    KisSwitchCurrentTimeCommand* cmd = new KisSwitchCurrentTimeCommand(m_image->animationInterface(), m_image->animationInterface()->currentTime(), frameTime);
+    cmd->redo();
+    pushUndoCommand(cmd);
 }
 
 bool StoryboardModel::moveRowsImpl(const QModelIndex &sourceParent, int sourceRow, int count,
@@ -1339,11 +1337,6 @@ bool StoryboardModel::moveRowsImpl(const QModelIndex &sourceParent, int sourceRo
         endMoveRows();
 
         reorderKeyframes();
-
-        const int frameNumber = index(StoryboardItem::FrameNumber, 0, index(destinationChild, 0)).data().toInt();
-        if (m_image) {
-            m_image->animationInterface()->switchCurrentTimeAsync(frameNumber);
-        }
 
         emit sigStoryboardItemListChanged();
         return true;

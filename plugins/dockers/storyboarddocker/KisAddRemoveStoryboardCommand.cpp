@@ -11,8 +11,8 @@
 #include "KisAddRemoveStoryboardCommand.h"
 
 KisAddStoryboardCommand::KisAddStoryboardCommand(int position,
-                                                StoryboardItemSP item,
-                                                StoryboardModel *model,
+                                                 StoryboardItemSP item,
+                                                 StoryboardModel *model,
                                                 KUndo2Command *parent)
     : KUndo2Command(kundo2_i18n("Add Storyboard Scene"), parent)
     , m_position(position)

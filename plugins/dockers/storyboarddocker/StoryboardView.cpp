@@ -81,6 +81,9 @@ StoryboardView::StoryboardView(QWidget *parent)
 
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)),
                 this, SLOT(slotContextMenuRequested(const QPoint &)));
+
+    connect(this, &StoryboardView::clicked,
+            this, &StoryboardView::slotItemClicked);
 }
 
 StoryboardView::~StoryboardView()
@@ -286,6 +289,15 @@ void StoryboardView::slotContextMenuRequested(const QPoint &point)
         });
     }
     contextMenu.exec(viewport()->mapToGlobal(point));
+}
+
+void StoryboardView::slotItemClicked(const QModelIndex &clicked)
+{
+    StoryboardModel* sbModel = dynamic_cast<StoryboardModel*>(model());
+
+    if(sbModel) {
+        sbModel->visualizeScene(clicked.parent().isValid() ? clicked.parent() : clicked);
+    }
 }
 
 void StoryboardView::setCurrentItem(int frame)

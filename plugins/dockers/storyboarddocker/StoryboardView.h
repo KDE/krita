@@ -70,6 +70,8 @@ public:
 private Q_SLOTS:
     void slotContextMenuRequested(const QPoint &);
 
+    void slotItemClicked(const QModelIndex &clicked);
+
 private:
     Qt::Orientation m_itemOrientation;
     bool m_commentIsVisible;

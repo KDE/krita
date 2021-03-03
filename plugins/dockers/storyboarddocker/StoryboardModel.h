@@ -38,6 +38,7 @@ public:
         TotalSceneDurationInFrames = Qt::UserRole + 1,
         TotalSceneDurationInSeconds = Qt::UserRole + 2,
     };
+
     StoryboardModel(QObject *parent);
     ~StoryboardModel() override;
 
@@ -236,8 +237,9 @@ public:
      */
     void insertChildRows(int position, StoryboardItemSP item);
 
+    void visualizeScene(const QModelIndex& index);
+
 private:
-    friend class KisMoveStoryboardCommand;
     bool moveRowsImpl(const QModelIndex &sourceParent, int sourceRow, int count,
                     const QModelIndex &destinationParent, int destinationChild);
 
@@ -247,14 +249,6 @@ private Q_SLOTS:
      * @sa KisImageAnimationInterface::sigUiTimeChanged(int)
      */
     void slotCurrentFrameChanged(int frameId);
-
-    /**
-     * @brief called when selection in storyboardView changes. Switches the current time
-     * to the frame of first item selected.
-     * @sa QItemSelectionModel::selectionChanged(QItemSelection, QItemSelection)
-     */
-    void slotChangeFrameGlobal(QItemSelection selected, QItemSelection deselected);
-
     void slotKeyframeAdded(const KisKeyframeChannel *channel, int time);
     void slotKeyframeRemoved(const KisKeyframeChannel *channel, int time);
     void slotNodeRemoved(KisNodeSP node);
@@ -304,6 +298,8 @@ Q_SIGNALS:
     void sigStoryboardItemListChanged();
 
 private:
+    friend class KisMoveStoryboardCommand;
+
     StoryboardItemList m_items;
     QVector<StoryboardComment> m_commentList;
     StoryboardCommentModel *m_commentModel;

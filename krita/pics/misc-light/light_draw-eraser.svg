@@ -149,12 +149,12 @@
      id="layer1"
      transform="translate(-551.28571,-607.64789)">
     <path
-       style="fill:#cacaca;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:1"
+       style="fill:#d2d2d2;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:1"
        d="M 13.021484 1.9082031 L 5.9492188 8.9785156 L 13.021484 16.050781 L 20.091797 8.9785156 L 13.021484 1.9082031 z M 4.5351562 10.392578 L 1 13.929688 L 6.0703125 19 L 10.072266 19 L 11.607422 17.464844 L 4.5351562 10.392578 z "
        transform="translate(551.28571,607.64789)"
        id="path4118" />
     <path
-       style="fill:#cacaca;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="fill:#d2d2d2;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 557.28571,626.6479 13,0 0,-1 -13,0 z"
        id="path4156"
        inkscape:connector-curvature="0" />

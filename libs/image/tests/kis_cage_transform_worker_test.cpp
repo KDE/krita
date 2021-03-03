@@ -6,7 +6,7 @@
 
 #include "kis_cage_transform_worker_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>

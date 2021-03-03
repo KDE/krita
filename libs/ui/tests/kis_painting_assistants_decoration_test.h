@@ -5,7 +5,7 @@
 #ifndef HG_KIS_PAINTING_ASSISTANTS_DECORATION_TEST_H
 #define HG_KIS_PAINTING_ASSISTANTS_DECORATION_TEST_H
 
-#include <QTest>
+#include <simpletest.h>
 
 class KisDocument;
 class KisMainWindow;

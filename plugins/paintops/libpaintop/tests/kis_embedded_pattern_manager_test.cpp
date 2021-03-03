@@ -6,7 +6,7 @@
 
 #include "kis_embedded_pattern_manager_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <QPainter>
 
 #include <KoResourceServerProvider.h>

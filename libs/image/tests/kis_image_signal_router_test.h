@@ -7,7 +7,7 @@
 #ifndef __KIS_IMAGE_SIGNAL_ROUTER_TEST_H
 #define __KIS_IMAGE_SIGNAL_ROUTER_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 #include <QObject>
 #include "kis_image_signal_router.h"

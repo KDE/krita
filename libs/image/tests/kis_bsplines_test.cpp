@@ -6,7 +6,7 @@
 
 #include "kis_bsplines_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 #include <cmath>
 
@@ -166,4 +166,4 @@ void KisBSplinesTest::testNU2D()
 
 }
 
-QTEST_MAIN(KisBSplinesTest)
+SIMPLE_TEST_MAIN(KisBSplinesTest)

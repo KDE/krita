@@ -7,7 +7,7 @@
 #ifndef KIS_GRADIENT_PAINTER_TEST_H
 #define KIS_GRADIENT_PAINTER_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisGradientPainterTest : public QObject
 {

@@ -5,7 +5,7 @@
  */
 
 #include "TestFolderStorage.h"
-#include <QTest>
+#include <simpletest.h>
 
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
@@ -109,5 +109,5 @@ void TestFolderStorage::cleanupTestCase()
     ResourceTestHelper::cleanDstLocation(m_dstLocation);
 }
 
-QTEST_MAIN(TestFolderStorage)
+SIMPLE_TEST_MAIN(TestFolderStorage)
 

@@ -26,7 +26,7 @@
 #endif
 
 #include "kis_composition_benchmark.h"
-#include <QTest>
+#include <simpletest.h>
 #include <QElapsedTimer>
 
 #include <KoColorSpace.h>
@@ -934,5 +934,5 @@ void KisCompositionBenchmark::benchmarkFloatIntUint()
 #endif
 }
 
-QTEST_MAIN(KisCompositionBenchmark)
+SIMPLE_TEST_MAIN(KisCompositionBenchmark)
 

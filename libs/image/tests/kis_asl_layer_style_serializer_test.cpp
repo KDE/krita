@@ -6,7 +6,7 @@
 
 #include "kis_asl_layer_style_serializer_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 #include <QDomDocument>
 

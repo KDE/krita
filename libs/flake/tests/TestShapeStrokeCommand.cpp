@@ -11,7 +11,7 @@
 #include "KoShapeStrokeCommand.h"
 #include <KoInsets.h>
 
-#include <QTest>
+#include <simpletest.h>
 
 void TestShapeStrokeCommand::refCounting()
 {
@@ -52,4 +52,4 @@ void TestShapeStrokeCommand::refCounting()
     delete shape1;
 }
 
-QTEST_MAIN(TestShapeStrokeCommand)
+SIMPLE_TEST_MAIN(TestShapeStrokeCommand)

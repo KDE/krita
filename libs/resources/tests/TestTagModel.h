@@ -23,6 +23,7 @@ private Q_SLOTS:
     void testData();
     void testIndexForTag();
     void testTagForIndex();
+    void testTagForUrl();
     void testAddEmptyTag();
     void testAddTag();
     void testSetTagActiveInactive();

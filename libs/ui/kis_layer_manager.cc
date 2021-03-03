@@ -756,7 +756,7 @@ void KisLayerManager::mergeLayer()
     if (!hasEditableLayer) {
         m_view->showFloatingMessage(
                     i18ncp("floating message in layer manager",
-                          "Layer is locked ", "Layers are locked", selectedNodes.size()),
+                          "Layer is locked", "Layers are locked", selectedNodes.size()),
                     QIcon(), 2000, KisFloatingMessage::Low);
         return;
     }
@@ -776,8 +776,8 @@ void KisLayerManager::mergeLayer()
         if (!prevLayer) return;
         if (prevLayer->userLocked()) {
             m_view->showFloatingMessage(
-                        i18nc("floating message in layer manager",
-                              "Layer is locked "),
+                        i18nc("floating message in layer manager when previous layer is locked",
+                              "Layer is locked"),
                         QIcon(), 2000, KisFloatingMessage::Low);
         }
 

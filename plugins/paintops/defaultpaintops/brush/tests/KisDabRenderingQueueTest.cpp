@@ -6,7 +6,7 @@
 
 #include "KisDabRenderingQueueTest.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 
@@ -526,4 +526,4 @@ void KisDabRenderingQueueTest::testExecutor()
 
 }
 
-QTEST_MAIN(KisDabRenderingQueueTest)
+SIMPLE_TEST_MAIN(KisDabRenderingQueueTest)

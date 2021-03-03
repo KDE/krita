@@ -6,7 +6,7 @@
 
 #include "kis_histogram_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoHistogramProducer.h>

@@ -7,7 +7,7 @@
 #include "kis_psd_test.h"
 
 
-#include <QTest>
+#include <simpletest.h>
 #include <QCoreApplication>
 
 #include  <sdk/tests/testui.h>

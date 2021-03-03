@@ -6,7 +6,7 @@
 
 #include "TestKoChannelInfo.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 #include <QDomElement>
 

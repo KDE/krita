@@ -19,7 +19,7 @@
 #include "kis_algebra_2d.h"
 #include "kis_debug.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 TestShapeGroupCommand::TestShapeGroupCommand()
         : toplevelGroup(0), sublevelGroup(0), strokeGroup(0)
@@ -644,4 +644,4 @@ void TestShapeGroupCommand::testUngrouping()
 
 }
 
-QTEST_MAIN(TestShapeGroupCommand)
+SIMPLE_TEST_MAIN(TestShapeGroupCommand)

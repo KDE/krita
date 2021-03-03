@@ -5,7 +5,7 @@
  */
 
 #include "kis_prescaled_projection_test.h"
-#include <QTest>
+#include <simpletest.h>
 #include <QCoreApplication>
 
 #include <QSize>
@@ -464,6 +464,6 @@ void KisPrescaledProjectionTest::testQtScaling()
     QCOMPARE(canvas, expectedResult);
 }
 
-QTEST_MAIN(KisPrescaledProjectionTest)
+SIMPLE_TEST_MAIN(KisPrescaledProjectionTest)
 
 

@@ -5,7 +5,7 @@
  */
 #include "TestTagResourceModel.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <QStandardPaths>
 #include <QDir>
 #include <QVersionNumber>
@@ -125,9 +125,13 @@ void TestTagResourceModel::testTagResource()
     Q_ASSERT(tag);
 
     KisAllTagResourceModel tagResourceModel(ResourceType::PaintOpPresets);
+    if (tagResourceModel.isResourceTagged(tag, resource->resourceId())) {
+        tagResourceModel.untagResource(tag, resource->resourceId());
+    }
+
     int rowCount = tagResourceModel.rowCount();
 
-    QVERIFY(tagResourceModel.tagResource(tag, resource));
+    QVERIFY(tagResourceModel.tagResource(tag, resource->resourceId()));
 
     QCOMPARE(tagResourceModel.rowCount(), rowCount + 1);
 }
@@ -143,10 +147,40 @@ void TestTagResourceModel::testUntagResource()
     QVERIFY(tag);
 
     KisAllTagResourceModel tagResourceModel(ResourceType::PaintOpPresets);
+
+    if (!tagResourceModel.isResourceTagged(tag, resource->resourceId())) {
+        tagResourceModel.tagResource(tag, resource->resourceId());
+    }
+
     int rowCount = tagResourceModel.rowCount();
-    tagResourceModel.untagResource(tag, resource);
+    tagResourceModel.untagResource(tag, resource->resourceId());
 
     QCOMPARE(tagResourceModel.rowCount(), rowCount - 1);
+}
+
+void TestTagResourceModel::testIsResourceTagged()
+{
+    KisResourceModel resourceModel(ResourceType::PaintOpPresets);
+    KoResourceSP resource = resourceModel.resourceForName("test2.kpp");
+    Q_ASSERT(resource);
+
+    KisTagModel tagModel(ResourceType::PaintOpPresets);
+    KisTagSP tag = tagModel.tagForIndex(tagModel.index(2, 0));
+    Q_ASSERT(tag);
+
+    KisAllTagResourceModel tagResourceModel(ResourceType::PaintOpPresets);
+
+    QVERIFY(tagResourceModel.tagResource(tag, resource->resourceId()));
+    QCOMPARE(tagResourceModel.isResourceTagged(tag, resource->resourceId()), true);
+
+    resource = resourceModel.resourceForName("test1.kpp");
+    QVERIFY(resource);
+
+    tag = tagModel.tagForIndex(tagModel.index(2, 0));
+    QVERIFY(tag);
+
+    tagResourceModel.untagResource(tag, resource->resourceId());
+    QCOMPARE(tagResourceModel.isResourceTagged(tag, resource->resourceId()), false);
 }
 
 void TestTagResourceModel::testFilterTagResource()
@@ -179,6 +213,6 @@ void TestTagResourceModel::cleanupTestCase()
     ResourceTestHelper::cleanDstLocation(m_dstLocation);
 }
 
-
-QTEST_MAIN(TestTagResourceModel)
+#include <sdk/tests/kistest.h>
+KISTEST_MAIN(TestTagResourceModel)
 

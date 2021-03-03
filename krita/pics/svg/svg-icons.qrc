@@ -4,65 +4,103 @@
 -->
 <RCC>
     <qresource prefix="/">
-        <file>broken-preset.svgz</file>
+        <file>broken-preset.svg</file>
         <file>dark_addblankframe.svg</file>
         <file>dark_addcolor.svg</file>
         <file>dark_addduplicateframe.svg</file>
+        <file>dark_bookmarks.svg</file>
+        <file>dark_configure-thicker.svg</file>
         <file>dark_deletekeyframe.svg</file>
+        <file>dark_edit-redo.svg</file>
+        <file>dark_edit-undo.svg</file>
+        <file>dark_novisible.svg</file>
+        <file>dark_visible.svg</file>
         <file>dark_layer-locked.svg</file>
         <file>dark_layer-unlocked.svg</file>
+        <file>dark_layer-style-disabled.svg</file>
+        <file>dark_layer-style-enabled.svg</file>
+        <file>dark_list-add.svg</file>
+        <file>dark_local-selection-active.svg</file>
+        <file>dark_local-selection-inactive.svg</file>
         <file>dark_nextframe.svg</file>
         <file>dark_nextkeyframe.svg</file>
         <file>dark_lastframe.svg</file>
         <file>dark_prevkeyframe.svg</file>
         <file>dark_firstframe.svg</file>
-        <file>dark_pallete_librarysvg.svg</file>
+        <file>dark_palette-library.svg</file>
         <file>dark_passthrough-disabled.svg</file>
         <file>dark_passthrough-enabled.svg</file>
         <file>dark_prevframe.svg</file>
+        <file>dark_reload-preset.svg</file>
+        <file>dark_reload-preset-16.svg</file>
         <file>dark_selection-mode_ants.svg</file>
         <file>dark_selection-mode_invisible.svg</file>
         <file>dark_selection-mode_mask.svg</file>
+        <file>dark_select-pixel.svg</file>
+        <file>dark_select-shape.svg</file>
+        <file>dark_selection_add.svg</file>
+        <file>dark_selection_symmetric_difference.svg</file>
+        <file>dark_selection_intersect.svg</file>
+        <file>dark_selection_replace.svg</file>
+        <file>dark_selection_subtract.svg</file>
+        <file>dark_sidebaricon.svg</file>
         <file>dark_transparency-disabled.svg</file>
         <file>dark_transparency-enabled.svg</file>
         <file>dark_trim-to-image.svg</file>
         <file>dark_warning.svg</file>
+        <file>dark_workspace-chooser.svg</file>
         <file>dark_wraparound.svg</file>
-        <file>delete.svgz</file>
-        <file>layer-style-disabled.svg</file>
-        <file>layer-style-enabled.svg</file>
         <file>light_addblankframe.svg</file>
         <file>light_addcolor.svg</file>
         <file>light_addduplicateframe.svg</file>
+        <file>light_bookmarks.svg</file>
+        <file>light_configure-thicker.svg</file>
         <file>light_deletekeyframe.svg</file>
+        <file>light_edit-redo.svg</file>
+        <file>light_edit-undo.svg</file>
+        <file>light_novisible.svg</file>
+        <file>light_visible.svg</file>
         <file>light_layer-locked.svg</file>
         <file>light_layer-unlocked.svg</file>
+        <file>light_layer-style-disabled.svg</file>
+        <file>light_layer-style-enabled.svg</file>
+        <file>light_list-add.svg</file>
+        <file>light_local-selection-active.svg</file>
+        <file>light_local-selection-inactive.svg</file>
         <file>light_nextframe.svg</file>
-        <file>light_pallete_library.svg</file>
-        <file>light_passthrough-disabled.svgz</file>
-        <file>light_passthrough-enabled.svgz</file>
+        <file>light_palette-library.svg</file>
+        <file>light_passthrough-disabled.svg</file>
+        <file>light_passthrough-enabled.svg</file>
         <file>light_prevframe.svg</file>
         <file>light_nextkeyframe.svg</file>
         <file>light_lastframe.svg</file>
         <file>light_prevkeyframe.svg</file>
         <file>light_firstframe.svg</file>
+        <file>light_reload-preset.svg</file>
+        <file>light_reload-preset-16.svg</file>
         <file>light_selection-mode_ants.svg</file>
         <file>light_selection-mode_invisible.svg</file>
         <file>light_selection-mode_mask.svg</file>
-        <file>light_timeline_keyframe.svg</file>
+        <file>light_select-pixel.svg</file>
+        <file>light_select-shape.svg</file>
+        <file>light_selection_add.svg</file>
+        <file>light_selection_symmetric_difference.svg</file>
+        <file>light_selection_intersect.svg</file>
+        <file>light_selection_replace.svg</file>
+        <file>light_selection_subtract.svg</file>
+        <file>light_sidebaricon.svg</file>
         <file>light_transparency-disabled.svg</file>
         <file>light_transparency-enabled.svg</file>
         <file>light_trim-to-image.svg</file>
         <file>light_warning.svg</file>
+        <file>light_workspace-chooser.svg</file>
         <file>light_wraparound.svg</file>
         <file>paintop_presets_disabled.svgz</file>
         <file>paintop_settings_01.svgz</file>
         <file>selection-info.svg</file>
-        <file>selection-mode_invisible.svg</file>
         <file>svg-icons.qrc</file>
         <file>transparency-locked.svg</file>
         <file>transparency-unlocked.svg</file>
-        <file>workspace-chooser.svg</file>
         <file>dark_mirror-view.svg</file>
         <file>light_mirror-view.svg</file>
         <file>dark_rotation-reset.svg</file>
@@ -171,5 +209,10 @@
         <file>light_flip_angle_h.svg</file>
         <file>light_flip_angle_v.svg</file>
         <file>light_flip_angle_hv.svg</file>
+        <file>diagonal-stripe.svg</file>
+        <file>dirty-preset.svg</file>
+        <file>mirrorAxis-HorizontalMove.svg</file>
+        <file>mirrorAxis-VerticalMove.svg</file>
+        <file>support-krita.svg</file>
     </qresource>
 </RCC>

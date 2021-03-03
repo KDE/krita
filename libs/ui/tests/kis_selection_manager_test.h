@@ -7,7 +7,7 @@
 #ifndef __KIS_SELECTION_MANAGER_TEST_H
 #define __KIS_SELECTION_MANAGER_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisSelectionManagerTest : public QObject
 {

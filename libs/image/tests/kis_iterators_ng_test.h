@@ -8,7 +8,7 @@
 #ifndef KIS_ITERATOR_NG_TEST_H
 #define KIS_ITERATOR_NG_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KoColorSpace;
 

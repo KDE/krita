@@ -7,7 +7,7 @@
 #ifndef __KIS_SCANLINE_FILL_TEST_H
 #define __KIS_SCANLINE_FILL_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class QColor;
 class KisFillInterval;

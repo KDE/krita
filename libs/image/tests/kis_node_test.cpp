@@ -5,7 +5,7 @@
  */
 
 #include "kis_node_test.h"
-#include <QTest>
+#include <simpletest.h>
 #include <limits.h>
 #include "kis_types.h"
 #include "kis_global.h"
@@ -425,6 +425,6 @@ void KisNodeTest::graphStressTest() {
     propertiesStressTestImpl<GraphKiller>();
 }
 
-QTEST_MAIN(KisNodeTest)
+SIMPLE_TEST_MAIN(KisNodeTest)
 
 

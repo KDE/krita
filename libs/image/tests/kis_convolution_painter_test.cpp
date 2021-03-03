@@ -7,7 +7,7 @@
 #include <compositeops/KoVcMultiArchBuildSupport.h> //MSVC requires that Vc come first
 #include "kis_convolution_painter_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 #include <QBitArray>
 #include <QElapsedTimer>

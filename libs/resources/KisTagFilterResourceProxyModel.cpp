@@ -34,6 +34,9 @@ struct KisTagFilterResourceProxyModel::Private
     KisTagSP currentTagFilter;
     KoResourceSP currentResourceFilter;
 
+    int storageId {-1};
+    bool useStorageIdFilter {false};
+
 };
 
 KisTagFilterResourceProxyModel::KisTagFilterResourceProxyModel(const QString &resourceType, QObject *parent)
@@ -157,6 +160,15 @@ void KisTagFilterResourceProxyModel::setTagFilter(const KisTagSP tag)
     updateTagFilter();
 }
 
+void KisTagFilterResourceProxyModel::setStorageFilter(bool useFilter, int storageId)
+{
+    d->useStorageIdFilter = useFilter;
+    if (useFilter) {
+        d->storageId = storageId;
+    }
+    invalidateFilter();
+}
+
 void KisTagFilterResourceProxyModel::updateTagFilter()
 {
     const bool ignoreTagFiltering =
@@ -168,15 +180,15 @@ void KisTagFilterResourceProxyModel::updateTagFilter()
         QVector<KisTagSP> filter;
         if (d->currentTagFilter &&
             !ignoreTagFiltering &&
-            d->currentTagFilter->url() != "All" &&
-            d->currentTagFilter->url() != "All Untagged") {
+            d->currentTagFilter->url() != KisAllTagsModel::urlAll() &&
+            d->currentTagFilter->url() != KisAllTagsModel::urlAllUntagged()) {
 
             filter << d->currentTagFilter;
         } else {
             // combination with for untagged resources in not implemented
             // in KisTagResourceModel
             KIS_SAFE_ASSERT_RECOVER_NOOP(!d->currentTagFilter ||
-                                         d->currentTagFilter->url() != "All Untagged");
+                                         d->currentTagFilter->url() != KisAllTagsModel::urlAllUntagged());
         }
         d->tagResourceModel->setTagsFilter(filter);
         d->tagResourceModel->setResourcesFilter({d->currentResourceFilter});
@@ -186,14 +198,14 @@ void KisTagFilterResourceProxyModel::updateTagFilter()
 
         if (ignoreTagFiltering ||
                 !d->currentTagFilter ||
-                d->currentTagFilter->url() == "All") {
+                d->currentTagFilter->url() == KisAllTagsModel::urlAll()) {
 
             d->tagResourceModel->setTagsFilter(QVector<KisTagSP>());
             desiredModel = d->resourceModel;
             d->resourceModel->showOnlyUntaggedResources(false);
         }
         else {
-            if (d->currentTagFilter->url() == "All Untagged") {
+            if (d->currentTagFilter->url() == KisAllTagsModel::urlAllUntagged()) {
                 desiredModel = d->resourceModel;
                 d->resourceModel->showOnlyUntaggedResources(true);
             }
@@ -229,14 +241,19 @@ void KisTagFilterResourceProxyModel::setFilterInCurrentTag(bool filterInCurrentT
     updateTagFilter();
 }
 
-bool KisTagFilterResourceProxyModel::tagResource(KisTagSP tag, KoResourceSP resource)
+bool KisTagFilterResourceProxyModel::tagResource(const KisTagSP tag, const int resourceId)
 {
-    return d->tagResourceModel->tagResource(tag, resource);
+    return d->tagResourceModel->tagResource(tag, resourceId);
 }
 
-bool KisTagFilterResourceProxyModel::untagResource(const KisTagSP tag, const KoResourceSP resource)
+bool KisTagFilterResourceProxyModel::untagResource(const KisTagSP tag, const int resourceId)
 {
-    return d->tagResourceModel->untagResource(tag, resource);
+    return d->tagResourceModel->untagResource(tag, resourceId);
+}
+
+bool KisTagFilterResourceProxyModel::isResourceTagged(const KisTagSP tag, const int resourceId)
+{
+    return d->tagResourceModel->isResourceTagged(tag, resourceId);
 }
 
 bool KisTagFilterResourceProxyModel::filterAcceptsColumn(int /*source_column*/, const QModelIndex &/*source_parent*/) const
@@ -247,7 +264,7 @@ bool KisTagFilterResourceProxyModel::filterAcceptsColumn(int /*source_column*/, 
 bool KisTagFilterResourceProxyModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
 {
     // if both filters are empty, just accept everything
-    if (d->filter->isEmpty() && d->metaDataMapFilter.isEmpty()) {
+    if (d->filter->isEmpty() && d->metaDataMapFilter.isEmpty() && !d->useStorageIdFilter) {
         return true;
     }
 
@@ -257,6 +274,14 @@ bool KisTagFilterResourceProxyModel::filterAcceptsRow(int source_row, const QMod
 
     if (!idx.isValid()) {
         return false;
+    }
+
+    // checking the storage filter
+    if (d->useStorageIdFilter) {
+        int storageId = sourceModel()->data(idx, Qt::UserRole + KisAbstractResourceModel::StorageId).toInt();
+        if (storageId != d->storageId) {
+            return false;
+        }
     }
 
     bool metaDataMatches = true;

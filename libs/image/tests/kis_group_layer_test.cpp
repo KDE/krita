@@ -5,7 +5,7 @@
  */
 
 #include "kis_group_layer_test.h"
-#include <QTest>
+#include <simpletest.h>
 
 #include <testutil.h>
 
@@ -94,6 +94,6 @@ void KisGroupLayerTest::testRemoveAndUndo()
                                   "2_undone"));
 }
 
-QTEST_MAIN(KisGroupLayerTest)
+SIMPLE_TEST_MAIN(KisGroupLayerTest)
 
 

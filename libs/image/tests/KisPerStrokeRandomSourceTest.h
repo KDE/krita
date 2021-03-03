@@ -7,7 +7,7 @@
 #ifndef KISPERSTROKERANDOMSOURCETEST_H
 #define KISPERSTROKERANDOMSOURCETEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisPerStrokeRandomSourceTest : public QObject
 {

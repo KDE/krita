@@ -59,7 +59,7 @@
          height="1"
          width="1"
          id="rect4162-5"
-         style="opacity:1;fill:#f2f2f2;fill-opacity:1;stroke:none;stroke-opacity:1" />
+         style="opacity:1;fill:#d2d2d2;fill-opacity:1;stroke:none;stroke-opacity:1" />
     </clipPath>
     <clipPath
        clipPathUnits="userSpaceOnUse"
@@ -456,7 +456,7 @@
          id="rect4176"
          transform="translate(-5e-7,1030.3622)"
          d="m 14.292969,3 -6.1250002,6.125 -1.875,1.875 1.875,1.875 L 14.292969,19 15,18.292969 8.875,12.167969 7.7070312,11 8.875,9.8320312 15,3.7070312 14.292969,3 Z"
-         style="fill:#4d4d4d;fill-opacity:1;stroke:none"
+         style="fill:#373737;fill-opacity:1;stroke:none"
          inkscape:connector-curvature="0" />
     </g>
   </g>

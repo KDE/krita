@@ -5,7 +5,7 @@
  */
 
 #include "TestMemoryStorage.h"
-#include <QTest>
+#include <simpletest.h>
 
 #include <KisMemoryStorage.h>
 #include <KisResourceLoader.h>
@@ -88,5 +88,5 @@ void TestMemoryStorage::testAddResource()
     ResourceTestHelper::testVersionedStorageIterator(memoryStorage, ResourceType::Brushes, "brushes/test1.0000.gbr");
 }
 
-QTEST_MAIN(TestMemoryStorage)
+SIMPLE_TEST_MAIN(TestMemoryStorage)
 

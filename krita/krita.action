@@ -410,7 +410,7 @@
       <statusTip/>
     </Action>
     <Action name="reload_preset_action">
-      <icon>view-refresh</icon>
+      <icon>reload-preset</icon>
       <text>Reload Original Preset</text>
       <whatsThis/>
       <toolTip>Reload Original Preset</toolTip>
@@ -3496,7 +3496,7 @@ Enable to preserve playback timing.</text>
       <statusTip/>
     </Action>
     <Action name="move_layer_up">
-      <icon>arrowupblr</icon>
+      <icon>arrowup</icon>
       <text>Move Layer or Mask Up</text>
       <whatsThis/>
       <toolTip>Move Layer or Mask Up</toolTip>

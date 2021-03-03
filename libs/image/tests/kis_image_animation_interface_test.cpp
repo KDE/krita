@@ -6,7 +6,7 @@
 
 #include "kis_image_animation_interface_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 #include <testutil.h>
 #include <KoColor.h>
@@ -294,4 +294,4 @@ void KisImageAnimationInterfaceTest::testSwitchFrameHangup()
 
 }
 
-QTEST_MAIN(KisImageAnimationInterfaceTest)
+SIMPLE_TEST_MAIN(KisImageAnimationInterfaceTest)

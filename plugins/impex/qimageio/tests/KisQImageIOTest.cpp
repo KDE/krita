@@ -7,7 +7,7 @@
 #include "KisQImageIOTest.h"
 
 
-#include <QTest>
+#include <simpletest.h>
 #include <QCoreApplication>
 
 #include "filestest.h"

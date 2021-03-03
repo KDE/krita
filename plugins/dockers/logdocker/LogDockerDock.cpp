@@ -53,7 +53,7 @@ LogDockerDock::LogDockerDock( )
     bnSave->setIcon(koIcon("document-save"));
     connect(bnSave, SIGNAL(clicked(bool)), SLOT(saveLog()));
 
-    bnSettings->setIcon(koIcon("configure"));
+    bnSettings->setIcon(koIcon("configure-thicker"));
     connect(bnSettings, SIGNAL(clicked(bool)), SLOT(settings()));
 
     qRegisterMetaType<QtMsgType>("QtMsgType");

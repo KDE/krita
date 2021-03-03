@@ -8,7 +8,7 @@
 #include <compositeops/KoVcMultiArchBuildSupport.h> //MSVC requires that Vc come first
 #include "kis_auto_brush_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <testutil.h>
 #include "../kis_auto_brush.h"
 #include "kis_mask_generator.h"
@@ -181,4 +181,4 @@ void KisAutoBrushTest::testClone()
     QCOMPARE(res1, res2);
 }
 
-QTEST_MAIN(KisAutoBrushTest)
+SIMPLE_TEST_MAIN(KisAutoBrushTest)

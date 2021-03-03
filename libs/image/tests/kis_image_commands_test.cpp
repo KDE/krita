@@ -6,7 +6,7 @@
 
 #include "kis_image_commands_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include "commands/kis_image_commands.h"
 
 void KisImageCommandsTest::testCreation()
@@ -14,4 +14,4 @@ void KisImageCommandsTest::testCreation()
 }
 
 
-QTEST_MAIN(KisImageCommandsTest)
+SIMPLE_TEST_MAIN(KisImageCommandsTest)

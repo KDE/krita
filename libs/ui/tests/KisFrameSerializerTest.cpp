@@ -11,7 +11,7 @@
 
 #include <testutil.h>
 
-#include <QTest>
+#include <simpletest.h>
 
 static const int maxTileSize = 256;
 
@@ -207,4 +207,4 @@ void KisFrameSerializerTest::testFrameArithmetics()
     }
 }
 
-QTEST_MAIN(KisFrameSerializerTest)
+SIMPLE_TEST_MAIN(KisFrameSerializerTest)

@@ -11,7 +11,7 @@
 #include "KoPathShape.h"
 #include "KoUnit.h"
 #include <QSignalSpy>
-#include <QTest>
+#include <simpletest.h>
 
 #include "kis_debug.h"
 
@@ -414,4 +414,4 @@ void TestResourceManager::testNeverChangingConverters()
 }
 
 
-QTEST_MAIN(TestResourceManager)
+SIMPLE_TEST_MAIN(TestResourceManager)

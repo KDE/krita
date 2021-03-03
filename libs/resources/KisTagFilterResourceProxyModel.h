@@ -60,6 +60,9 @@ public:
      */
     void setTagFilter(const KisTagSP tag);
 
+
+    void setStorageFilter(bool useFilter, int storageId);
+
     /**
      * @brief setResourceFilter sets the resource to filter with
      * @param resource a valid resource with a valid id, or 0 to clear the filter
@@ -70,8 +73,10 @@ public:
 
     void setFilterInCurrentTag(bool filterInCurrentTag);
 
-    bool tagResource(KisTagSP tag, KoResourceSP resource);
-    bool untagResource(const KisTagSP tag, const KoResourceSP resource);
+    bool tagResource(const KisTagSP tag, const int resourceId);
+    bool untagResource(const KisTagSP tag, const int resourceId);
+    bool isResourceTagged(const KisTagSP tag, const int resourceId);
+
 
 protected:
 

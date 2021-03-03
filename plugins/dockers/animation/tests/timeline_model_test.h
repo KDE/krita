@@ -7,7 +7,7 @@
 #ifndef __TIMELINE_MODEL_TEST_H
 #define __TIMELINE_MODEL_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 #include "empty_nodes_test.h"
 
 class KisDocument;

@@ -5,7 +5,7 @@
  */
 
 #include "kis_node_facade_test.h"
-#include <QTest>
+#include <simpletest.h>
 #include <limits.h>
 
 
@@ -350,4 +350,4 @@ void KisNodeFacadeTest::testMove()
 
 }
 
-QTEST_MAIN(KisNodeFacadeTest)
+SIMPLE_TEST_MAIN(KisNodeFacadeTest)

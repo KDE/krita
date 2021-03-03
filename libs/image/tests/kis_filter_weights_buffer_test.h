@@ -7,7 +7,7 @@
 #ifndef __KIS_FILTER_WEIGHTS_BUFFER_TEST_H
 #define __KIS_FILTER_WEIGHTS_BUFFER_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisFilterWeightsBufferTest : public QObject
 {

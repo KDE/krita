@@ -9,7 +9,7 @@
 #ifndef KIS_SEEXPR_GENERATOR_TEST_H
 #define KIS_SEEXPR_GENERATOR_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisSeExprGeneratorTest : public QObject
 {

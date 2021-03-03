@@ -15,7 +15,7 @@
 #include <KoShapeShadow.h>
 #include <KoInsets.h>
 
-#include <QTest>
+#include <simpletest.h>
 
 void TestShapeAt::test()
 {
@@ -118,4 +118,4 @@ void TestShapeAt::testShadow()
     QCOMPARE(shape.boundingRect(), bbox);
 }
 
-QTEST_MAIN(TestShapeAt)
+SIMPLE_TEST_MAIN(TestShapeAt)

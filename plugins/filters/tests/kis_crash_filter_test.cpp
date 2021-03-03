@@ -6,7 +6,7 @@
 
 #include "kis_crash_filter_test.h"
 #include <KoColorProfile.h>
-#include <QTest>
+#include <simpletest.h>
 #include "filter/kis_filter_configuration.h"
 #include "filter/kis_filter_registry.h"
 #include "kis_selection.h"

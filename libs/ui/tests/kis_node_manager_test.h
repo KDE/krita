@@ -7,7 +7,7 @@
 #ifndef __KIS_NODE_MANAGER_TEST_H
 #define __KIS_NODE_MANAGER_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisNodeManagerTest : public QObject
 {

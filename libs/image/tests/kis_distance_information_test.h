@@ -5,7 +5,7 @@
 #ifndef KIS_DISTANCE_INFORMATION_TEST_H
 #define KIS_DISTANCE_INFORMATION_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisPaintInformation;
 class KisDistanceInformation;

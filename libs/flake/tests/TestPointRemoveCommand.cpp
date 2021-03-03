@@ -11,7 +11,7 @@
 #include "KoShapeController.h"
 #include <MockShapes.h>
 #include <sdk/tests/testflake.h>
-#include <QTest>
+#include <simpletest.h>
 
 void TestPointRemoveCommand::redoUndoPointRemove()
 {

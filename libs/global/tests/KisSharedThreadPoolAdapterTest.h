@@ -7,7 +7,7 @@
 #ifndef KISSHAREDTHREADPOOLADAPTERTEST_H
 #define KISSHAREDTHREADPOOLADAPTERTEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisSharedThreadPoolAdapterTest : public QObject
 {

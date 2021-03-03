@@ -10,7 +10,7 @@
 #include "KoShapeShadowCommand.h"
 #include "KoInsets.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 void TestShapeShadowCommand::refCounting()
 {
@@ -52,4 +52,4 @@ void TestShapeShadowCommand::refCounting()
     delete shape1;
 }
 
-QTEST_MAIN(TestShapeShadowCommand)
+SIMPLE_TEST_MAIN(TestShapeShadowCommand)

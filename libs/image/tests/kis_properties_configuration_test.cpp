@@ -7,7 +7,7 @@
 #include "kis_properties_configuration_test.h"
 
 
-#include <QTest>
+#include <simpletest.h>
 #include "kis_properties_configuration.h"
 
 KisPropertiesConfigurationTest::KisPropertiesConfigurationTest() :
@@ -180,5 +180,5 @@ void KisPropertiesConfigurationTest::testLists()
     }
 }
 
-QTEST_MAIN(KisPropertiesConfigurationTest)
+SIMPLE_TEST_MAIN(KisPropertiesConfigurationTest)
 

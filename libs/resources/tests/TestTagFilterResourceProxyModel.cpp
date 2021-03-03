@@ -5,7 +5,7 @@
  */
 #include "TestTagFilterResourceProxyModel.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <QStandardPaths>
 #include <QDir>
 #include <QVersionNumber>
@@ -22,6 +22,7 @@
 #include <KisResourceLoaderRegistry.h>
 #include <KisResourceModel.h>
 #include <KisTagFilterResourceProxyModel.h>
+#include <KisStorageModel.h>
 
 #include <DummyResource.h>
 #include <ResourceTestHelper.h>
@@ -123,10 +124,10 @@ void TestTagFilterResourceProxyModel::testFilterByTag()
     proxyModel.setTagFilter(tag);
     int rowCount = proxyModel.rowCount();
 
-    proxyModel.tagResource(tag, resource);
+    proxyModel.tagResource(tag, resource->resourceId());
     QCOMPARE(proxyModel.rowCount(), rowCount + 1);
 
-    proxyModel.untagResource(tag, resource);
+    proxyModel.untagResource(tag, resource->resourceId());
     QCOMPARE(proxyModel.rowCount(), rowCount);
 }
 
@@ -171,11 +172,28 @@ void TestTagFilterResourceProxyModel::testFilterByString()
     KisTagSP tag = tagModel.tagForIndex(tagModel.index(2, 0));
     QVERIFY(tag);
 
-    proxyModel.tagResource(tag, resource);
+    proxyModel.tagResource(tag, resource->resourceId());
     proxyModel.setTagFilter(tag);
     proxyModel.setFilterInCurrentTag(true);
 
     QCOMPARE(proxyModel.rowCount(), 1);
+}
+
+void TestTagFilterResourceProxyModel::testFilterByStorage()
+{
+    KisResourceModel resourceModel(ResourceType::PaintOpPresets);
+    KisTagModel tagModel(ResourceType::PaintOpPresets);
+
+    KisTagFilterResourceProxyModel proxyModel(resourceType);
+
+    proxyModel.setFilterInCurrentTag(false);
+    proxyModel.setStorageFilter(true, 1);
+    proxyModel.setSearchText("");
+    proxyModel.setMetaDataFilter(QMap<QString, QVariant>());
+    proxyModel.setResourceFilter(0);
+
+    QCOMPARE(proxyModel.rowCount(), 3);
+
 }
 
 
@@ -219,7 +237,7 @@ void TestTagFilterResourceProxyModel::testResourceForIndex()
     tagResourceModel.setResourcesFilter(QVector<KoResourceSP>() << resource);
     for (int i = 0; i < tagResourceModel.rowCount(); ++i) {
         KisTagSP tag = tagResourceModel.index(i, 0).data(Qt::UserRole + KisAllTagResourceModel::Tag).value<KisTagSP>();
-        tagResourceModel.untagResource(tag, resource);
+        tagResourceModel.untagResource(tag, resource->resourceId());
     }
 
     KisTagSP tag = tagModel.tagForIndex(tagModel.index(3, 0));
@@ -230,7 +248,7 @@ void TestTagFilterResourceProxyModel::testResourceForIndex()
 
     QCOMPARE(rowCount, 0);
 
-    proxyModel.tagResource(tag, resource);
+    proxyModel.tagResource(tag, resource->resourceId());
 
     QCOMPARE(proxyModel.rowCount(), 1);
 
@@ -246,6 +264,6 @@ void TestTagFilterResourceProxyModel::cleanupTestCase()
     ResourceTestHelper::cleanDstLocation(m_dstLocation);
 }
 
-
-QTEST_MAIN(TestTagFilterResourceProxyModel)
+#include <sdk/tests/kistest.h>
+KISTEST_MAIN(TestTagFilterResourceProxyModel)
 

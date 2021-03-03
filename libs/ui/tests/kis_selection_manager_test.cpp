@@ -7,7 +7,7 @@
 #include "kis_selection_manager_test.h"
 #include <operations/kis_operation_configuration.h>
 
-#include <QTest>
+#include <simpletest.h>
 
 #include <sdk/tests/testutil.h>
 #include <sdk/tests/testui.h>

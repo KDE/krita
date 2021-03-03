@@ -69,4 +69,4 @@ void KisAnimatedTransformParametersTest::testTransformKeyframing()
 }
 
 
-QTEST_MAIN(KisAnimatedTransformParametersTest)
+SIMPLE_TEST_MAIN(KisAnimatedTransformParametersTest)

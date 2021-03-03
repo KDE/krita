@@ -7,7 +7,7 @@
 #ifndef __KIS_MULTINODE_PROPERTY_TEST_H
 #define __KIS_MULTINODE_PROPERTY_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisMultinodePropertyTest : public QObject
 {

@@ -5,7 +5,7 @@
  */
 
 #include "kis_update_scheduler_test.h"
-#include <QTest>
+#include <simpletest.h>
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>

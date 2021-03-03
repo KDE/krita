@@ -11,7 +11,7 @@
 #include <testutil.h>
 
 
-#include <QTest>
+#include <simpletest.h>
 
 void KisLayerStyleFilterEnvironmentTest::testRandomSelectionCaching()
 {
@@ -46,4 +46,4 @@ void KisLayerStyleFilterEnvironmentTest::benchmarkRandomSelectionGeneration()
     }
 }
 
-QTEST_MAIN(KisLayerStyleFilterEnvironmentTest)
+SIMPLE_TEST_MAIN(KisLayerStyleFilterEnvironmentTest)

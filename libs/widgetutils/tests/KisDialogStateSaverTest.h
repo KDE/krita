@@ -7,7 +7,7 @@
 #ifndef KISDIALOGSTATESAVERTEST_H
 #define KISDIALOGSTATESAVERTEST_H
 
-#include <QTest>
+#include <simpletest.h>
 #include "ui_dialogsavertestwidget.h"
 
 class KisDialogStateSaverTest : public QObject

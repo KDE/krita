@@ -23,6 +23,7 @@ private Q_SLOTS:
     void testFilterByResource();
     void testFilterByTag();
     void testFilterByString();
+    void testFilterByStorage();
     void testDataWhenSwitchingBetweenTagAllAllUntagged();
 
     void testResourceForIndex();

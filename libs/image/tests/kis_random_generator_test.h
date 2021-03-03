@@ -7,7 +7,7 @@
 #ifndef KIS_RANDOM_GENERATOR_TEST_H
 #define KIS_RANDOM_GENERATOR_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisRandomGeneratorTest : public QObject
 {

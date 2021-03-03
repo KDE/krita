@@ -7,7 +7,7 @@
 #ifndef KIS_STROKE_BENCHMARK_H
 #define KIS_STROKE_BENCHMARK_H
 
-#include <QtTest>
+#include <simpletest.h>
 #include <kis_types.h>
 #include <KoColor.h>
 #include <kis_painter.h>

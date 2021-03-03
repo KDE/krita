@@ -8,7 +8,7 @@
 #define KISRSSREADERTEST_H
 
 #include <QObject>
-#include <QtTest>
+#include <simpletest.h>
 
 class KisRssReaderTest : public QObject
 {

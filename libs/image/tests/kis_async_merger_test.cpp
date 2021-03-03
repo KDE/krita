@@ -10,7 +10,7 @@
 #include "kis_full_refresh_walker.h"
 #include "kis_async_merger.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpace.h>
 #include "kis_image.h"
@@ -497,5 +497,5 @@ void KisAsyncMergerTest::testFilterMaskOnFilterLayer()
 }
 
 
-QTEST_MAIN(KisAsyncMergerTest)
+SIMPLE_TEST_MAIN(KisAsyncMergerTest)
 

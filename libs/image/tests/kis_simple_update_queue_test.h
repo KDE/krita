@@ -7,7 +7,7 @@
 #ifndef KIS_SIMPLE_UPDATE_QUEUE_TEST_H
 #define KIS_SIMPLE_UPDATE_QUEUE_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 
 class KisSimpleUpdateQueueTest : public QObject

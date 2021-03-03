@@ -7,7 +7,7 @@
 #ifndef KIS_CRASH_FILTER_TEST_H
 #define KIS_CRASH_FILTER_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KoColorSpace;
 #include <kis_types.h>

@@ -7,7 +7,7 @@
 #ifndef __KIS_IMAGEPIPE_BRUSH_TEST_H
 #define __KIS_IMAGEPIPE_BRUSH_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 #include <kis_imagepipe_brush.h>
 

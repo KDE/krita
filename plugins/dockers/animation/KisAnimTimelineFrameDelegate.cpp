@@ -24,8 +24,8 @@ KisAnimTimelineFrameDelegate::KisAnimTimelineFrameDelegate(QObject *parent)
     labelColors = scm.allColorLabels();
 
     // Clone frame stripes SVG -> Pixmap..
-    QImage stripesImage(":/pics/svg/light_diagonal-stripe.png", "png");
-    stripesImage.save("/tmp/krita_stripes.png", "png");
+    QImage stripesImage(":diagonal-stripe.svg", "svg");
+    stripesImage.save("/tmp/krita_stripes.svg", "svg");
     stripes = QPixmap::fromImage(stripesImage);
 }
 

@@ -10,7 +10,7 @@
 #include <KoColor.h>
 
 #include <kis_types.h>
-#include <QtTest>
+#include <simpletest.h>
 #include <kis_paint_device.h>
 
 class KoColor;

@@ -7,7 +7,7 @@
 #ifndef KIS_ANIMATION_EXPORTER_TEST_H
 #define KIS_ANIMATION_EXPORTER_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisAnimationExporterTest : public QObject
 {

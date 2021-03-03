@@ -292,7 +292,7 @@ LayerBox::LayerBox()
 
     m_wdgLayerBox->configureLayerDockerToolbar->setMenu(configureMenu);
     m_wdgLayerBox->configureLayerDockerToolbar->setIcon(KisIconUtils::loadIcon("view-choose"));
-    m_wdgLayerBox->configureLayerDockerToolbar->setIconSize(QSize(15, 15));
+    m_wdgLayerBox->configureLayerDockerToolbar->setIconSize(QSize(16, 16));
     m_wdgLayerBox->configureLayerDockerToolbar->setPopupMode(QToolButton::InstantPopup);
     m_wdgLayerBox->configureLayerDockerToolbar->setAutoRaise(true);
 
@@ -1127,8 +1127,8 @@ void LayerBox::slotForgetAboutSavedNodeBeforeEditSelectionMode()
 }
 
 void LayerBox::slotUpdateIcons() {
-    m_wdgLayerBox->bnAdd->setIcon(KisIconUtils::loadIcon("list-add"));
-    m_wdgLayerBox->bnRaise->setIcon(KisIconUtils::loadIcon("arrowupblr"));
+    m_wdgLayerBox->bnAdd->setIcon(KisIconUtils::loadIcon("addlayer"));
+    m_wdgLayerBox->bnRaise->setIcon(KisIconUtils::loadIcon("arrowup"));
     m_wdgLayerBox->bnDelete->setIcon(KisIconUtils::loadIcon("deletelayer"));
     m_wdgLayerBox->bnLower->setIcon(KisIconUtils::loadIcon("arrowdown"));
     m_wdgLayerBox->bnProperties->setIcon(KisIconUtils::loadIcon("properties"));

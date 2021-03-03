@@ -90,7 +90,7 @@ KoColorSetWidget::KoColorSetWidget(QWidget *parent)
     d->paletteChooser = new KisPaletteChooser(this);
     d->paletteChooserButton = new KisPopupButton(this);
     d->paletteChooserButton->setPopupWidget(d->paletteChooser);
-    d->paletteChooserButton->setIcon(KisIconUtils::loadIcon("hi16-palette_library"));
+    d->paletteChooserButton->setIcon(KisIconUtils::loadIcon("palette-library"));
     d->paletteChooserButton->setToolTip(i18n("Choose palette"));
 
     d->colorNameCmb = new KisPaletteComboBox(this);

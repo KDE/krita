@@ -6,7 +6,7 @@
 
 #include "KisSharedThreadPoolAdapterTest.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 #include <QThreadPool>
 #include <QAtomicInt>
@@ -57,4 +57,4 @@ void KisSharedThreadPoolAdapterTest::test()
 // TODO: test waitForDone on empty queue!!!!
 
 
-QTEST_MAIN(KisSharedThreadPoolAdapterTest)
+SIMPLE_TEST_MAIN(KisSharedThreadPoolAdapterTest)

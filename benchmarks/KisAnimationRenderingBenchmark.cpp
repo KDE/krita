@@ -6,7 +6,7 @@
 
 #include "KisAnimationRenderingBenchmark.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 #include <testutil.h>
 #include "kis_time_span.h"
@@ -97,4 +97,4 @@ void KisAnimationRenderingBenchmark::testCacheRendering()
     }
 }
 
-QTEST_MAIN(KisAnimationRenderingBenchmark)
+SIMPLE_TEST_MAIN(KisAnimationRenderingBenchmark)

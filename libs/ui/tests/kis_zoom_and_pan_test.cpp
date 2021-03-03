@@ -7,7 +7,7 @@
 #include "kis_zoom_and_pan_test.h"
 
 #include <cmath>
-#include <QTest>
+#include <simpletest.h>
 
 #include <kis_filter_configuration.h>
 #include <testutil.h>

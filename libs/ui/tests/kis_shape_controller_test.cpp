@@ -6,7 +6,7 @@
 
 #include "kis_shape_controller_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 #include "KisPart.h"
 #include "KisDocument.h"

@@ -6,7 +6,7 @@
 
 #include "kis_low_memory_benchmark.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 #include "kis_benchmark_values.h"
 
@@ -218,4 +218,4 @@ void KisLowMemoryBenchmark::memory2000History100Pool500HugeBrush()
                       2000, 600, 500, 0);
 }
 
-QTEST_MAIN(KisLowMemoryBenchmark)
+SIMPLE_TEST_MAIN(KisLowMemoryBenchmark)

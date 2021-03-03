@@ -33,6 +33,7 @@
 #include <KoFileDialog.h>
 #include <KisKineticScroller.h>
 #include <KisMimeDatabase.h>
+#include "KisPopupButton.h"
 
 #include <KisResourceModel.h>
 #include <KisTagFilterResourceProxyModel.h>
@@ -65,7 +66,7 @@ public:
     KisResourceTaggingManager *tagManager {0};
     KisResourceItemListView *view {0};
     QButtonGroup *buttonGroup {0};
-    QToolButton *viewModeButton {0};
+    KisPopupButton *viewModeButton {0};
     KisStorageChooserWidget *storagePopupButton {0};
 
     QScrollArea *previewScroller {0};
@@ -170,14 +171,15 @@ KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool
     d->buttonLayout->setSpacing(0);
     d->buttonLayout->setMargin(0);
 
-    d->viewModeButton = new QToolButton(this);
-    d->viewModeButton->setPopupMode(QToolButton::InstantPopup);
+    d->viewModeButton = new KisPopupButton(this);
     d->viewModeButton->setVisible(false);
+    d->viewModeButton->setArrowVisible(false);
     d->tagManager = new KisResourceTaggingManager(resourceType, d->tagFilterProxyModel, this);
 
     d->storagePopupButton = new KisStorageChooserWidget(this);
     d->storagePopupButton->setToolTip(i18n("Storage Resources"));
     d->storagePopupButton->setFlat(true);
+    d->storagePopupButton->setArrowVisible(false);
 
     layout->addWidget(d->tagManager->tagChooserWidget(), 0, 0);
     layout->addWidget(d->viewModeButton, 0, 1);
@@ -448,7 +450,7 @@ void KisResourceItemChooser::setViewModeButtonVisible(bool visible)
     d->viewModeButton->setVisible(visible);
 }
 
-QToolButton *KisResourceItemChooser::viewModeButton() const
+KisPopupButton *KisResourceItemChooser::viewModeButton() const
 {
     return d->viewModeButton;
 }
@@ -513,7 +515,6 @@ void KisResourceItemChooser::updateView()
 
     /// helps to set icons here in case the theme is changed
     d->viewModeButton->setIcon(KisIconUtils::loadIcon("view-choose"));
-    d->viewModeButton->setAutoRaise(true);
     d->importButton->setIcon(koIcon("document-open"));
     d->deleteButton->setIcon(koIcon("trash-empty"));
     d->storagePopupButton->setIcon(koIcon("bundle_archive"));

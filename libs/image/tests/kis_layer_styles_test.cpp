@@ -6,7 +6,7 @@
 
 #include "kis_layer_styles_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 #include "kis_transaction.h"
 

@@ -8,7 +8,7 @@
 #include "kis_iterators_ng_test.h"
 #include <QApplication>
 
-#include <QTest>
+#include <simpletest.h>
 #include <KoColor.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>

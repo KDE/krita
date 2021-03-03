@@ -6,7 +6,7 @@
 
 #include "TestKoColorSpaceRegistry.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 #include <KoColorSpaceRegistry.h>
 #include <KoColorModelStandardIds.h>

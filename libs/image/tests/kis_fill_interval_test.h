@@ -7,7 +7,7 @@
 #ifndef __KIS_FILL_INTERVAL_TEST_H
 #define __KIS_FILL_INTERVAL_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisFillIntervalTest : public QObject
 {

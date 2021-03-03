@@ -5,7 +5,7 @@
  */
 
 #include "kis_updater_context_test.h"
-#include <QTest>
+#include <simpletest.h>
 
 #include "kistest.h"
 

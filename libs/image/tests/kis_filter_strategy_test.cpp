@@ -6,7 +6,7 @@
 
 #include "kis_filter_strategy_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include "kis_filter_strategy.h"
 
 void KisFilterStrategyTest::testCreation()
@@ -22,4 +22,4 @@ void KisFilterStrategyTest::testCreation()
     KisMitchellFilterStrategy  mitchell;
 }
 
-QTEST_MAIN(KisFilterStrategyTest)
+SIMPLE_TEST_MAIN(KisFilterStrategyTest)

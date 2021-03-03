@@ -5,7 +5,7 @@
  */
 
 #include "kis_shared_ptr_test.h"
-#include <QTest>
+#include <simpletest.h>
 
 
 #include "kis_shared_ptr.h"
@@ -295,6 +295,6 @@ void KisSharedPtrTest::testRestrictedPointerNoBackward()
 }
 
 
-QTEST_MAIN(KisSharedPtrTest)
+SIMPLE_TEST_MAIN(KisSharedPtrTest)
 
 

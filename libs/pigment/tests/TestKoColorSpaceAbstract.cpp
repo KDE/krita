@@ -9,7 +9,7 @@
 
 #include <cfloat>
 
-#include <QTest>
+#include <simpletest.h>
 
 template <class T>
 T mixOpExpectedAlpha(T alpha1, T alpha2, const qint16 *weights)

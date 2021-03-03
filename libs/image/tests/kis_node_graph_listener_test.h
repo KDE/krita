@@ -7,7 +7,7 @@
 #ifndef KIS_NODE_GRAPH_LISTENER_TEST_H
 #define KIS_NODE_GRAPH_LISTENER_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 #include "kis_node.h"
 #include <sdk/tests/testing_nodes.h>

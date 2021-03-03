@@ -3,9 +3,9 @@ developed on KDE's infrastructure, not Github's. Krita on
 Github is just a mirror. Do not create pull requests on
 Github.
 
-Please join our Phabricator instance to start contributing. 
+Please join our Gitlab instance to start contributing. 
 
-https://phabricator.kde.org/
+https://invent.kde.org/graphics/krita
 
 Please see the HACKING file for coding guidelines. The Krita
 API documentation is here:

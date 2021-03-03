@@ -6,7 +6,7 @@
 
 #include "kis_colorize_mask_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 #include <testutil.h>
 #include "lazybrush/kis_colorize_mask.h"

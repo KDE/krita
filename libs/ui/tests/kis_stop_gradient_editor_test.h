@@ -7,7 +7,7 @@
 #ifndef __KIS_STOP_GRADIENT_EDITOR_TEST_H
 #define __KIS_STOP_GRADIENT_EDITOR_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisStopGradientEditorTest : public QObject
 {

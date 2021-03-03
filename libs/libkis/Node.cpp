@@ -5,6 +5,7 @@
  */
 #include <QUrl>
 #include <QScopedPointer>
+#include <QUuid>
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
@@ -668,6 +669,12 @@ QImage Node::thumbnail(int w, int h)
 {
     if (!d->node) return QImage();
     return d->node->createThumbnail(w, h);
+}
+
+QUuid Node::uniqueId() const
+{
+    if (!d->node) return QUuid();
+    return d->node->uuid();
 }
 
 KisPaintDeviceSP Node::paintDevice() const

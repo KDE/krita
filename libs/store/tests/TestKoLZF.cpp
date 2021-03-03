@@ -8,7 +8,7 @@
 
 #include <KoLZF.h>
 
-#include <QTest>
+#include <simpletest.h>
 
 void TestKoLZF::testArrayCompressionEmpty_data()
 {

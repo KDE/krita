@@ -5,7 +5,7 @@
  */
 
 #include "TestResourceStorage.h"
-#include <QTest>
+#include <simpletest.h>
 
 #include <KisResourceStorage.h>
 
@@ -43,5 +43,5 @@ void TestResourceStorage ::testStorage()
 
 }
 
-QTEST_MAIN(TestResourceStorage)
+SIMPLE_TEST_MAIN(TestResourceStorage)
 

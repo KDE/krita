@@ -6,7 +6,7 @@
 
 #include "KoColorSpacesBenchmark.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpace.h>
 
@@ -134,4 +134,4 @@ void KoColorSpacesBenchmark::benchmarkSetAlpha2IndividualCall()
     END_BENCHMARK
 }
 
-QTEST_MAIN(KoColorSpacesBenchmark)
+SIMPLE_TEST_MAIN(KoColorSpacesBenchmark)

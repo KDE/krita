@@ -6,7 +6,7 @@
 
 #include "kis_image_signal_router_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 
 inline void KisImageSignalRouterTest::checkNotification(KisImageSignalType notification, const char *signal)
@@ -55,4 +55,4 @@ void KisImageSignalRouterTest::testSignalForwarding()
     checkComplexSignal(emitAboutToRemoveANode(m_layer3.data(),0), SIGNAL(sigRemoveNodeAsync(KisNodeSP)));
 }
 
-QTEST_MAIN(KisImageSignalRouterTest)
+SIMPLE_TEST_MAIN(KisImageSignalRouterTest)

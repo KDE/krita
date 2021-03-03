@@ -8,7 +8,7 @@
 #include "TestAbrStorage.h"
 
 
-#include <QTest>
+#include <simpletest.h>
 #include <QImageReader>
 
 #include <KoConfig.h>
@@ -94,5 +94,5 @@ void TestAbrStorage::testResource()
 }
 
 
-QTEST_MAIN(TestAbrStorage)
+SIMPLE_TEST_MAIN(TestAbrStorage)
 

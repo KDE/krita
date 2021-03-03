@@ -7,7 +7,7 @@
 #ifndef KIS_ASYNC_MERGER_TEST_H
 #define KIS_ASYNC_MERGER_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisAsyncMergerTest : public QObject
 {

@@ -8,7 +8,7 @@
 
 #include "dialogs/KisAsyncAnimationFramesSaveDialog.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <testutil.h>
 #include "KisPart.h"
 #include "kis_image.h"

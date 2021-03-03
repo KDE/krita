@@ -123,7 +123,7 @@
      id="layer1"
      transform="translate(-378.85714,-540.07647)">
     <path
-       style="opacity:1;fill:#f2f2f2;fill-opacity:1;stroke:none"
+       style="opacity:1;fill:#d2d2d2;fill-opacity:1;stroke:none"
        d="M 4.5 3 C 3.669002 3 3 3.669002 3 4.5 C 3 5.1542387 3.4180788 5.7021979 4 5.9082031 L 4 19 L 5 19 L 5 13 L 12 13 L 12 14 L 19 14 L 19 13 L 19 8 L 19 7 L 13 7 L 13 6 L 5 6 L 5 5.9082031 C 5.5819212 5.7021979 6 5.1542387 6 4.5 C 6 3.669002 5.330998 3 4.5 3 z M 6 7 L 12 7 L 12 8 L 12 12 L 6 12 L 6 7 z M 13 8 L 18 8 L 18 13 L 13 13 L 13 8 z "
        transform="translate(378.85714,540.07647)"
        id="rect4117" />

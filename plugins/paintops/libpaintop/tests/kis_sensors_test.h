@@ -7,7 +7,7 @@
 #ifndef KIS_SENSORS_TEST_H
 #define KIS_SENSORS_TEST_H
 
-#include <QTest>
+#include <simpletest.h>
 
 #include <brushengine/kis_paint_information.h>
 #include "kis_dynamic_sensor.h"

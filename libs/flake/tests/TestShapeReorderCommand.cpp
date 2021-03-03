@@ -9,7 +9,7 @@
 #include <KoShapeReorderCommand.h>
 #include <KoShapeManager.h>
 
-#include <QTest>
+#include <simpletest.h>
 
 TestShapeReorderCommand::TestShapeReorderCommand()
 {
@@ -590,4 +590,4 @@ void TestShapeReorderCommand::testMergeInShapeDistant()
     testMergeInShapeImpl(indexesProfile, newShapeIndex, expectedIndexes);
 }
 
-QTEST_MAIN(TestShapeReorderCommand)
+SIMPLE_TEST_MAIN(TestShapeReorderCommand)

@@ -40,7 +40,7 @@ KoShapeDeleteCommand::KoShapeDeleteCommand(KoShapeControllerBase *controller, Ko
     d->shapes.append(shape);
     d->oldParents.append(shape->parent());
 
-    setText(kundo2_i18n("Delete shape"));
+    setText(kundo2_i18nc("Delete one shape", "Delete shape"));
 }
 
 KoShapeDeleteCommand::KoShapeDeleteCommand(KoShapeControllerBase *controller, const QList<KoShape*> &shapes,

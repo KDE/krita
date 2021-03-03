@@ -11,7 +11,7 @@
 #include "KoShapePaintingContext.h"
 
 #include <QPainterPath>
-#include <QTest>
+#include <simpletest.h>
 
 void TestShapeBackgroundCommand::refCounting()
 {
@@ -55,4 +55,4 @@ void TestShapeBackgroundCommand::refCounting()
     delete shape1;
 }
 
-QTEST_MAIN(TestShapeBackgroundCommand)
+SIMPLE_TEST_MAIN(TestShapeBackgroundCommand)

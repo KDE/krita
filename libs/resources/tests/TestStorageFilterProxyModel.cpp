@@ -5,7 +5,7 @@
  */
 #include "TestStorageFilterProxyModel.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <QStandardPaths>
 #include <QDir>
 #include <QVersionNumber>
@@ -103,5 +103,5 @@ void TestStorageFilterProxyModel::cleanupTestCase()
 }
 
 
-QTEST_MAIN(TestStorageFilterProxyModel)
+SIMPLE_TEST_MAIN(TestStorageFilterProxyModel)
 

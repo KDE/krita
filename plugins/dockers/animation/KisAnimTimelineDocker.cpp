@@ -116,6 +116,7 @@ KisAnimTimelineDocker::KisAnimTimelineDocker(QWidget* parent) :
         // Onion skins menu.
         btnOnionSkinsMenu = new QPushButton(KisIconUtils::loadIcon("onion_skin_options"), "", this);
         btnOnionSkinsMenu->setToolTip(i18n("Onion skins menu"));
+        btnOnionSkinsMenu->setIconSize(QSize(22, 22));
         btnOnionSkinsMenu->setFlat(true);
         layout->addWidget(btnOnionSkinsMenu);
 
@@ -127,8 +128,9 @@ KisAnimTimelineDocker::KisAnimTimelineDocker(QWidget* parent) :
 
         {   // Settings menu..
             btnSettingsMenu = new QToolButton(this);
-            btnSettingsMenu->setIcon(KisIconUtils::loadIcon("view-choose"));
+            btnSettingsMenu->setIcon(KisIconUtils::loadIcon("view-choose-22"));
             btnSettingsMenu->setToolTip(i18n("Animation settings menu"));
+            btnSettingsMenu->setIconSize(QSize(22, 22));
             btnSettingsMenu->setAutoRaise(true);
 
             QWidget *settingsMenuWidget = new QWidget(this);
@@ -458,12 +460,15 @@ void TimelineDocker::setViewManager(KisViewManager *view)
 
     action = actionManager->actionByName("add_blank_frame");
     titleBar->btnAddKeyframe->setDefaultAction(action);
+    titleBar->btnAddKeyframe->setIconSize(QSize(22, 22));
 
     action = actionManager->actionByName("add_duplicate_frame");
     titleBar->btnDuplicateKeyframe->setDefaultAction(action);
+    titleBar->btnDuplicateKeyframe->setIconSize(QSize(22, 22));
 
     action = actionManager->actionByName("remove_frames");
     titleBar->btnRemoveKeyframe->setDefaultAction(action);
+    titleBar->btnRemoveKeyframe->setIconSize(QSize(22, 22));
 
     action = actionManager->createAction("toggle_playback");
     action->setActivationFlags(KisAction::ACTIVE_IMAGE);
@@ -531,6 +536,7 @@ void TimelineDocker::setViewManager(KisViewManager *view)
 
     action = actionManager->createAction("auto_key");
     m_d->titlebar->btnAutoKey->setDefaultAction(action);
+    m_d->titlebar->btnAutoKey->setIconSize(QSize(22, 22));
     connect(action, SIGNAL(triggered(bool)), SLOT(setAutoKey(bool)));
 
     {
@@ -546,6 +552,7 @@ void TimelineDocker::setViewManager(KisViewManager *view)
     {
         action = actionManager->createAction("drop_frames");
         m_d->titlebar->btnDropFrames->setDefaultAction(action);
+        m_d->titlebar->btnDropFrames->setIconSize(QSize(22, 22));
         connect(action, &KisAction::triggered, [this](bool dropFrames){
             KisConfig cfg(false);
             if (dropFrames != cfg.animationDropFrames()) {

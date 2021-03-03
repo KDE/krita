@@ -8,7 +8,7 @@
 #define __TESTING_CATEGORIES_MAPPER_H
 
 #include "kis_categories_mapper.h"
-#include <QTest>
+#include <simpletest.h>
 
 struct QStringConverter {
     QString operator() (const QString &entry) {

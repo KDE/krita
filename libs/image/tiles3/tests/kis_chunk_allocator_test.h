@@ -6,7 +6,7 @@
 #ifndef KIS_CHUNK_ALLOCATOR_TEST_H
 #define KIS_CHUNK_ALLOCATOR_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 
 class KisChunkAllocatorTest : public QObject

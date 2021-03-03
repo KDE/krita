@@ -275,7 +275,8 @@ void KoTriangleColorSelector::tellColorChanged()
 
 void KoTriangleColorSelector::generateTriangle()
 {
-    QImage image(d->sizeColorSelector*devicePixelRatioF(), d->sizeColorSelector*devicePixelRatioF(), QImage::Format_ARGB32);
+    QSize size = QSize(1, 1)*d->sizeColorSelector*devicePixelRatioF(); // use when int needed
+    QImage image(size, QImage::Format_ARGB32);
     image.setDevicePixelRatio(devicePixelRatioF());
 
     // Length of triangle
@@ -284,14 +285,14 @@ void KoTriangleColorSelector::generateTriangle()
     qreal triangleTop = d->triangleTop*devicePixelRatioF();
     qreal triangleBottom = d->triangleBottom*devicePixelRatioF();
 
-    for(int y = 0; y < d->sizeColorSelector*devicePixelRatioF(); ++y)
+    for(int y = 0; y < size.height(); ++y)
     {
         qreal ynormalize = ( triangleTop - y ) / ( triangleTop - triangleBottom );
         qreal v = 255 * ynormalize;
         qreal ls_ = (ynormalize) * d->triangleLength*devicePixelRatioF();
         qreal startx_ = d->centerColorSelector*devicePixelRatioF() - 0.5 * ls_;
         uint* data = reinterpret_cast<uint*>(image.scanLine(y));
-        for(int x = 0; x < d->sizeColorSelector*devicePixelRatioF(); ++x, ++data)
+        for(int x = 0; x < size.width(); ++x, ++data)
         {
             qreal s = 255 * (x - startx_) / ls_;
             if(v < -1.0 || v > 256.0 || s < -1.0 || s > 256.0 )
@@ -319,22 +320,28 @@ void KoTriangleColorSelector::generateTriangle()
 
 void KoTriangleColorSelector::generateWheel()
 {
-    QImage image(d->sizeColorSelector*devicePixelRatioF(), d->sizeColorSelector*devicePixelRatioF(), QImage::Format_ARGB32);
+    QSize size = QSize(1, 1)*d->sizeColorSelector*devicePixelRatioF(); // use only when int needed
+    QImage image(size, QImage::Format_ARGB32);
     image.setDevicePixelRatio(devicePixelRatioF());
 
-    for(int y = 0; y < d->sizeColorSelector*devicePixelRatioF(); y++)
+    qreal center = d->centerColorSelector*devicePixelRatioF();
+    qreal wheelNormExt = d->wheelNormExt*devicePixelRatioF();
+    qreal wheelNormInt = d->wheelNormInt*devicePixelRatioF();
+
+
+    for(int y = 0; y < size.height(); y++)
     {
-        qreal yc = y - d->centerColorSelector*devicePixelRatioF();
+        qreal yc = y - center;
         qreal y2 = pow2( yc );
-        for(int x = 0; x < d->sizeColorSelector*devicePixelRatioF(); x++)
+        for(int x = 0; x < size.width(); x++)
         {
-            qreal xc = x - d->centerColorSelector*devicePixelRatioF();
+            qreal xc = x - center;
             qreal norm = sqrt(pow2( xc ) + y2);
-            if( norm <= d->wheelNormExt*devicePixelRatioF() + 1.0 && norm >= d->wheelNormInt*devicePixelRatioF() - 1.0 )
+            if( norm <= wheelNormExt + 1.0 && norm >= wheelNormInt - 1.0 )
             {
                 qreal acoef = 1.0;
-                if(norm > d->wheelNormExt*devicePixelRatioF() ) acoef = (1.0 + d->wheelNormExt*devicePixelRatioF() - norm);
-                else if(norm < d->wheelNormInt*devicePixelRatioF() ) acoef = (1.0 - d->wheelNormInt*devicePixelRatioF() + norm);
+                if(norm > wheelNormExt ) acoef = (1.0 + wheelNormExt - norm);
+                else if(norm < wheelNormInt ) acoef = (1.0 - wheelNormInt + norm);
                 qreal angle = atan2(yc, xc);
                 int h = (int)((180 * angle / M_PI) + 180) % 360;
 

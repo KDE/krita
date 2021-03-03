@@ -7,7 +7,7 @@
 #ifndef KIS_PAINTER_TEST_H
 #define KIS_PAINTER_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KoColorSpace;
 

@@ -6,7 +6,7 @@
 
 #include "TestSvgText.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 #include "SvgParserTestingUtils.h"
 #include <text/KoSvgText.h>
@@ -1314,4 +1314,4 @@ void TestSvgText::testTextOutline()
 
 
 
-QTEST_MAIN(TestSvgText)
+SIMPLE_TEST_MAIN(TestSvgText)

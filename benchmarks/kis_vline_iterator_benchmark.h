@@ -7,7 +7,7 @@
 #ifndef KIS_VLINE_ITERATOR_BENCHMARK_H
 #define KIS_VLINE_ITERATOR_BENCHMARK_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisPaintDevice;
 class KoColor;

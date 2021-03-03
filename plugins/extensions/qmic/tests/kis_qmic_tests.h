@@ -7,7 +7,7 @@
 #ifndef _KIS_QMIC_TESTS_H_
 #define _KIS_QMIC_TESTS_H_
 
-#include <QtTest>
+#include <simpletest.h>
 #include <QImage>
 
 #include "../gmic.h"

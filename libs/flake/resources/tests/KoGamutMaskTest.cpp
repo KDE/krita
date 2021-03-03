@@ -5,7 +5,7 @@
  */
 
 
-#include <QTest>
+#include <simpletest.h>
 #include <resources/KoGamutMask.h>
 
 #include <testutil.h>
@@ -119,4 +119,4 @@ void KoGamutMaskTest::testLoad_data()
             << 2;
 }
 
-QTEST_MAIN(KoGamutMaskTest);
+SIMPLE_TEST_MAIN(KoGamutMaskTest);

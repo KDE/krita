@@ -22,6 +22,7 @@ private Q_SLOTS:
     void testData();
     void testTagResource();
     void testUntagResource();
+    void testIsResourceTagged();
 
     void testFilterTagResource();
 

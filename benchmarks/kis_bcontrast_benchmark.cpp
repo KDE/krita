@@ -4,7 +4,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include <QTest>
+#include <simpletest.h>
 
 #include "kis_bcontrast_benchmark.h"
 #include "kis_benchmark_values.h"
@@ -86,4 +86,4 @@ void KisBContrastBenchmark::benchmarkFilter()
 
 
 
-QTEST_MAIN(KisBContrastBenchmark)
+SIMPLE_TEST_MAIN(KisBContrastBenchmark)

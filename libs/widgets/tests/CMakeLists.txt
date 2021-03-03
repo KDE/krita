@@ -1,5 +1,5 @@
 macro_add_unittest_definitions()
-
+include_directories(${CMAKE_SOURCE_DIR}/sdk/tests)
 #add_subdirectory(filedialogtester)
 
 include(ECMAddTests)

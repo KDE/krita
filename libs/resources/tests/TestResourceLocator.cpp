@@ -6,7 +6,7 @@
 
 #include "TestResourceLocator.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <QVersionNumber>
 #include <QDirIterator>
 #include <QSqlError>
@@ -316,5 +316,5 @@ void TestResourceLocator::cleanupTestCase()
     ResourceTestHelper::cleanDstLocation(m_dstLocation);
 }
 
-QTEST_MAIN(TestResourceLocator)
+SIMPLE_TEST_MAIN(TestResourceLocator)
 

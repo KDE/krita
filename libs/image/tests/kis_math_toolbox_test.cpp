@@ -6,7 +6,7 @@
 
 #include "kis_math_toolbox_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include "kis_math_toolbox.h"
 
 void KisMathToolboxTest::testCreation()
@@ -16,4 +16,4 @@ void KisMathToolboxTest::testCreation()
 }
 
 
-QTEST_MAIN(KisMathToolboxTest)
+SIMPLE_TEST_MAIN(KisMathToolboxTest)

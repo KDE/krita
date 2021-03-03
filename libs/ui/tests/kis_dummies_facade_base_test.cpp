@@ -6,7 +6,7 @@
 
 #include "kis_dummies_facade_base_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 #include "kis_node_dummies_graph.h"
 #include "kis_dummies_facade.h"

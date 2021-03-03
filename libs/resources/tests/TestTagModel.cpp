@@ -5,7 +5,7 @@
  */
 #include "TestTagModel.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <QStandardPaths>
 #include <QDir>
 #include <QVersionNumber>
@@ -135,6 +135,23 @@ void TestTagModel::testTagForIndex()
 
     idx = tagModel.index(2, 0);
     tag = tagModel.tagForIndex(idx);
+    QCOMPARE(tag->url(), m_tag->url());
+}
+
+void TestTagModel::testTagForUrl()
+{
+    KisTagModel tagModel(resourceType);
+
+    KisTagSP tag = tagModel.tagForUrl("All");
+    QVERIFY(tag);
+    QCOMPARE(tag->url(), "All");
+
+    tag = tagModel.tagForUrl("All Untagged");
+    QVERIFY(tag);
+    QCOMPARE(tag->url(), "All Untagged");
+
+    tag = tagModel.tagForUrl(m_tag->url());
+    QVERIFY(tag);
     QCOMPARE(tag->url(), m_tag->url());
 }
 
@@ -311,5 +328,5 @@ void TestTagModel::cleanupTestCase()
 
 
 
-QTEST_MAIN(TestTagModel)
+SIMPLE_TEST_MAIN(TestTagModel)
 

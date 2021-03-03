@@ -26,6 +26,7 @@
 #include "ui_wdgfilterdialog.h"
 #include "kis_canvas2.h"
 #include "kis_signal_compressor.h"
+#include <kis_icon_utils.h>
 
 struct KisDlgFilter::Private {
     Private(KisFilterManager *_filterManager, KisViewManager *_view)
@@ -73,7 +74,7 @@ KisDlgFilter::KisDlgFilter(KisViewManager *view, KisNodeSP node, KisFilterManage
     connect(d->uiFilterDialog.pushButtonCreateMaskEffect,SIGNAL(pressed()),SLOT(close()));
 
     d->uiFilterDialog.filterGalleryToggle->setChecked(d->uiFilterDialog.filterSelection->isFilterGalleryVisible());
-    d->uiFilterDialog.filterGalleryToggle->setIcon(QPixmap(":/pics/sidebaricon.png"));
+    d->uiFilterDialog.filterGalleryToggle->setIcon(KisIconUtils::loadIcon("sidebaricon"));
     d->uiFilterDialog.filterGalleryToggle->setMaximumWidth(d->uiFilterDialog.filterGalleryToggle->height());
     connect(d->uiFilterDialog.filterSelection, SIGNAL(sigFilterGalleryToggled(bool)), d->uiFilterDialog.filterGalleryToggle, SLOT(setChecked(bool)));
     connect(d->uiFilterDialog.filterGalleryToggle, SIGNAL(toggled(bool)), d->uiFilterDialog.filterSelection, SLOT(showFilterGallery(bool)));

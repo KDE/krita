@@ -54,8 +54,8 @@ KisSelectionOptions::KisSelectionOptions(KisCanvas2 * /*canvas*/)
 
     m_page->pixel->setGroupPosition(KoGroupButton::GroupLeft);
     m_page->shape->setGroupPosition(KoGroupButton::GroupRight);
-    m_page->pixel->setIcon(KisIconUtils::loadIcon("select_pixel"));
-    m_page->shape->setIcon(KisIconUtils::loadIcon("select_shape"));
+    m_page->pixel->setIcon(KisIconUtils::loadIcon("select-pixel"));
+    m_page->shape->setIcon(KisIconUtils::loadIcon("select-shape"));
 
     m_page->add->setGroupPosition(KoGroupButton::GroupCenter);
     m_page->subtract->setGroupPosition(KoGroupButton::GroupCenter);

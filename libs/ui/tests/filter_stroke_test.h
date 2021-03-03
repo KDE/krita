@@ -7,7 +7,7 @@
 #ifndef __FILTER_STROKE_TEST_H
 #define __FILTER_STROKE_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 
 class FilterStrokeTest : public QObject

@@ -87,7 +87,7 @@ KisDlgInternalColorSelector::KisDlgInternalColorSelector(QWidget *parent, KoColo
 
     m_d->paletteChooser = new KisPaletteChooser(this);
     m_d->paletteModel = new KisPaletteModel(this);
-    m_ui->bnPaletteChooser->setIcon(KisIconUtils::loadIcon("hi16-palette_library"));
+    m_ui->bnPaletteChooser->setIcon(KisIconUtils::loadIcon("palette-library"));
     m_ui->paletteBox->setPaletteModel(m_d->paletteModel);
     m_ui->paletteBox->setDisplayRenderer(displayRenderer);
     m_ui->cmbNameList->setCompanionView(m_ui->paletteBox);

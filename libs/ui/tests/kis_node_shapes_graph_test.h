@@ -7,7 +7,7 @@
 #ifndef __KIS_NODE_SHAPES_GRAPH_TEST_H
 #define __KIS_NODE_SHAPES_GRAPH_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisNodeDummy;
 class KisNodeShapesGraph;

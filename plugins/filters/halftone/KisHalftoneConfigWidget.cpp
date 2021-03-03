@@ -21,6 +21,7 @@
 KisHalftoneConfigWidget::KisHalftoneConfigWidget(QWidget *parent,  const KisPaintDeviceSP dev)
     : KisConfigWidget(parent)
     , m_paintDevice(dev)
+    , m_intensityWidget(nullptr)
 {
     Q_ASSERT(m_paintDevice);
 

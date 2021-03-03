@@ -5,7 +5,7 @@
  */
 
 #include "kis_cs_conversion_test.h"
-#include <QTest>
+#include <simpletest.h>
 
 #include <QTime>
 

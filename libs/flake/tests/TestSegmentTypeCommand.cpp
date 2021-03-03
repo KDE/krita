@@ -7,7 +7,7 @@
 #include "TestSegmentTypeCommand.h"
 #include "KoPathSegmentTypeCommand.h"
 #include <KoPathSegment.h>
-#include <QTest>
+#include <simpletest.h>
 
 void TestSegmentTypeCommand::changeToCurve()
 {
@@ -67,4 +67,4 @@ void TestSegmentTypeCommand::changeToLine()
     QVERIFY(s.second()->activeControlPoint1());
 }
 
-QTEST_MAIN(TestSegmentTypeCommand)
+SIMPLE_TEST_MAIN(TestSegmentTypeCommand)

@@ -7,7 +7,7 @@
 #ifndef TEST_ANIMATED_TRANSFORM_PARAMETERS_H
 #define TEST_ANIMATED_TRANSFORM_PARAMETERS_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisAnimatedTransformParametersTest : public QObject
 {

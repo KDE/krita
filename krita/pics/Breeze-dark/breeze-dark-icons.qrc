@@ -15,7 +15,6 @@
         <file>dark_arrow-left.svg</file>
         <file>dark_arrow-right.svg</file>
         <file>dark_arrow-up.svg</file>
-        <file>dark_bookmarks.svg</file>
         <file alias="dark_configure-shortcuts.svg">dark_applications-system.svg</file>
         <file>dark_configure.svg</file>
         <file alias="dark_configure-toolbars.svg">dark_configure.svg</file>
@@ -40,8 +39,6 @@
         <file>dark_edit-cut.svg</file>
         <file>dark_edit-delete.svg</file>
         <file>dark_edit-paste.svg</file>
-        <file>dark_edit-redo.svg</file>
-        <file>dark_edit-undo.svg</file>
         <file>dark_folder-documents.svg</file>
         <file>dark_folder-pictures.svg</file>
         <file>dark_folder.svg</file>
@@ -55,7 +52,6 @@
         <file>dark_kde.svg</file>
         <file>dark_layer-visible-off.svg</file>
         <file>dark_link.svg</file>
-        <file>dark_list-add.svg</file>
         <file>dark_locked.svg</file>
         <file>dark_media-playback-start.svg</file>
         <file>dark_media-playback-stop.svg</file>

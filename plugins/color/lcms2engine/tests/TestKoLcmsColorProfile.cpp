@@ -9,7 +9,7 @@
 
 #include <KoColor.h>
 
-#include <QTest>
+#include <simpletest.h>
 
 #include <lcms2.h>
 #include <cmath>
@@ -104,4 +104,4 @@ void TestKoLcmsColorProfile::testProofingConversion()
     Q_ASSERT((dst[0] == alarm[0]) && (dst[1] == alarm[1]) && (dst[2] == alarm[2]));
 
 }
-QTEST_MAIN(TestKoLcmsColorProfile)
+SIMPLE_TEST_MAIN(TestKoLcmsColorProfile)

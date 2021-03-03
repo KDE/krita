@@ -6,7 +6,7 @@
 
 #include "StoryboardModelTest.h"
 
-#include <QTest>
+#include <simpletest.h>
 #include <QWidget>
 #include <StoryboardModel.h>
 #include <CommentModel.h>
@@ -162,4 +162,4 @@ void StoryboardModelTest::testCommentChanged()
     QCOMPARE(m_storyboardModel->data(commentIndex).toString(), "newComment");
 }
 
-QTEST_MAIN(StoryboardModelTest)
+SIMPLE_TEST_MAIN(StoryboardModelTest)

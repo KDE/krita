@@ -7,7 +7,7 @@
 #ifndef _KIS_ORA_TEST_H_
 #define _KIS_ORA_TEST_H_
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisOraTest : public QObject
 {

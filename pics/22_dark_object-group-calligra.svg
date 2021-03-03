@@ -96,7 +96,7 @@
      id="layer1"
      transform="translate(-544.57141,-742.93359)">
     <path
-       style="fill:#4d4d4d;fill-opacity:1;stroke:none"
+       style="fill:#373737;fill-opacity:1;stroke:none"
        d="m 547.57141,745.93359 0,16 16,0 0,-16 -16,0 z m 1,1 14,0 0,3 0,11 -14,0 0,-11 0,-3 z"
        id="rect4089"
        inkscape:connector-curvature="0" />
@@ -104,24 +104,24 @@
        r="2.5"
        cy="750.43359"
        cx="552.07141"
-       style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:#4d4d4d;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2;marker:none;enable-background:accumulate"
+       style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:#373737;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2;marker:none;enable-background:accumulate"
        id="path4310" />
     <rect
-       style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:#4d4d4d;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2;marker:none;enable-background:accumulate"
+       style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:#373737;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2;marker:none;enable-background:accumulate"
        id="rect4312"
        width="5"
        height="4.9999857"
        x="556.57141"
        y="747.93359" />
     <rect
-       style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:#4d4d4d;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2;marker:none;enable-background:accumulate"
+       style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:#373737;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2;marker:none;enable-background:accumulate"
        id="rect4314"
        width="2.9999998"
        height="5"
        x="550.57141"
        y="754.93359" />
     <path
-       style="fill:#4d4d4d;fill-opacity:1;stroke:none"
+       style="fill:#373737;fill-opacity:1;stroke:none"
        d="m 556.57143,759.93361 2.5,-5 2.5,5 z"
        id="path4316"
        inkscape:connector-curvature="0" />

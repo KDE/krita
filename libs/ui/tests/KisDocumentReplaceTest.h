@@ -7,7 +7,7 @@
 #ifndef KIS_DOCUMENT_REPLACE_TEST_H_
 #define KIS_DOCUMENT_REPLACE_TEST_H_
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisDocument;
 class KisImage;

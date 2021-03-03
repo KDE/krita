@@ -96,7 +96,7 @@
      id="layer1"
      transform="translate(-421.71429,-525.79074)">
     <path
-       style="fill:#cacaca;fill-opacity:1;stroke:none"
+       style="fill:#d2d2d2;fill-opacity:1;stroke:none"
        d="M 3 3 L 3 10 L 10 10 L 10 3 L 3 3 z M 4 4 L 9 4 L 9 9 L 4 9 L 4 4 z "
        transform="translate(421.71429,525.79074)"
        id="rect4094" />
@@ -106,31 +106,31 @@
        height="6.9999957"
        width="6.9999957"
        id="rect4098"
-       style="fill:#cacaca;fill-opacity:1;stroke:none"
+       style="fill:#d2d2d2;fill-opacity:1;stroke:none"
        transform="scale(1,-1)" />
     <rect
-       style="fill:#cacaca;fill-opacity:1;stroke:none"
+       style="fill:#d2d2d2;fill-opacity:1;stroke:none"
        id="rect4163"
        width="7"
        height="1"
        x="433.71429"
        y="529.79071" />
     <rect
-       style="fill:#cacaca;fill-opacity:1;stroke:none"
+       style="fill:#d2d2d2;fill-opacity:1;stroke:none"
        id="rect4165"
        width="3.9999976"
        height="1"
        x="433.71429"
        y="538.79071" />
     <rect
-       style="fill:#cacaca;fill-opacity:1;stroke:none"
+       style="fill:#d2d2d2;fill-opacity:1;stroke:none"
        id="rect4167"
        width="4"
        height="1"
        x="433.71429"
        y="542.79047" />
     <rect
-       style="fill:#cacaca;fill-opacity:1;stroke:none"
+       style="fill:#d2d2d2;fill-opacity:1;stroke:none"
        id="rect4169"
        width="7.0000038"
        height="1"

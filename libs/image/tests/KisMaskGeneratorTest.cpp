@@ -4,7 +4,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include <QTest>
+#include <simpletest.h>
 #include <QPointF>
 #include <KoColor.h>
 #include <QElapsedTimer>
@@ -187,4 +187,4 @@ void KisMaskGeneratorTest::testRectangularSoftVectorMask()
     }
 }
 
-QTEST_MAIN(KisMaskGeneratorTest)
+SIMPLE_TEST_MAIN(KisMaskGeneratorTest)

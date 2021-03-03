@@ -7,7 +7,7 @@
 #ifndef FREEHANDSTROKEBENCHMARK_H
 #define FREEHANDSTROKEBENCHMARK_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class FreehandStrokeBenchmark : public QObject
 {

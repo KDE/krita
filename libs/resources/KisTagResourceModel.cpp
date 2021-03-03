@@ -137,10 +137,12 @@ QVariant KisAllTagResourceModel::data(const QModelIndex &index, int role) const
     return v;
 }
 
-bool KisAllTagResourceModel::tagResource(const KisTagSP tag, const KoResourceSP resource)
+bool KisAllTagResourceModel::tagResource(const KisTagSP tag, const int resourceId)
 {
-    if (!resource || !resource->valid()) return false;
+    if (resourceId < 0) return false;
     if (!tag || !tag->valid()) return false;
+
+    if (isResourceTagged(tag, resourceId)) return true;
 
     beginInsertRows(QModelIndex(), rowCount(), rowCount());
 
@@ -152,7 +154,7 @@ bool KisAllTagResourceModel::tagResource(const KisTagSP tag, const KoResourceSP 
         return false;
     }
 
-    q.bindValue(":resource_id", resource->resourceId());
+    q.bindValue(":resource_id", resourceId);
     q.bindValue(":tag_id", tag->id());
 
     if (!q.exec()) {
@@ -167,22 +169,30 @@ bool KisAllTagResourceModel::tagResource(const KisTagSP tag, const KoResourceSP 
     return true;
 }
 
-bool KisAllTagResourceModel::untagResource(const KisTagSP tag, const KoResourceSP resource)
+bool KisAllTagResourceModel::untagResource(const KisTagSP tag, const int resourceId)
 {
-    if (!resource || !resource->valid()) return false;
+    if (resourceId < 0) return false;
     if (!tag || !tag->valid()) return false;
     if (!d->query.isSelect()) return false;
     if (rowCount() < 1) return false;
 
+    if (!isResourceTagged(tag, resourceId)) return true; // we check it later but this is qith sql, so probably faster
+
     d->query.seek(0);
+    bool found = false;
     do {
         int tagId = d->query.value("tag_id").toInt();
-        int resourceId = d->query.value("resource_id").toInt();
-        if (tagId == tag->id() && resourceId == resource->resourceId()) {
+        int existingResourceId = d->query.value("resource_id").toInt();
+        if (tagId == tag->id() && existingResourceId == resourceId) {
+            found = true;
             break;
         }
 
     } while (d->query.next());
+
+    if (!found) {
+        return true;
+    }
 
     beginRemoveRows(QModelIndex(), d->query.at(), d->query.at());
 
@@ -198,7 +208,7 @@ bool KisAllTagResourceModel::untagResource(const KisTagSP tag, const KoResourceS
         }
 
         q.bindValue(":tag_id", tag->id());
-        q.bindValue(":resource_id", resource->resourceId());
+        q.bindValue(":resource_id", resourceId);
 
         if (!q.exec()) {
             qWarning() << "Could not execute untagResource query" << q.lastError() << q.boundValues();
@@ -211,6 +221,37 @@ bool KisAllTagResourceModel::untagResource(const KisTagSP tag, const KoResourceS
     endRemoveRows();
 
     return true;
+}
+
+bool KisAllTagResourceModel::isResourceTagged(const KisTagSP tag, const int resourceId)
+{
+    QSqlQuery query;
+    bool r = query.prepare("SELECT COUNT(*)\n"
+                           "FROM   resource_tags\n"
+                           "WHERE  resource_tags.resource_id = :resource_id\n"
+                           "AND    resource_tags.tag_id = :tag_id\n");
+
+    if (!r) {
+        qWarning() << "Could not prepare bool KisAllTagResourceModel::isResourceTagged query" << query.lastError();
+        return false;
+    }
+
+    query.bindValue(":resource_id", resourceId);
+    query.bindValue(":tag_id", tag->id());
+
+    if (!query.exec()) {
+        qWarning() << "Could not execute is resource tagged with a specific tag query" << query.boundValues() << query.lastError();
+        return false;
+    }
+
+    r = query.first();
+    if (!r) {
+        qWarning() << "Could not call query.first() on SELECT COUNT query in isResourceTagged";
+        return false;
+    }
+
+    return query.value(0) > 0;
+
 }
 
 bool KisAllTagResourceModel::resetQuery()
@@ -301,15 +342,20 @@ void KisTagResourceModel::setStorageFilter(KisTagResourceModel::StorageFilter fi
     invalidateFilter();
 }
 
-bool KisTagResourceModel::tagResource(const KisTagSP tag, const KoResourceSP resource)
+bool KisTagResourceModel::tagResource(const KisTagSP tag, const int resourceId)
 {
-    bool r = d->sourceModel->tagResource(tag, resource);
+    bool r = d->sourceModel->tagResource(tag, resourceId);
     return r;
 }
 
-bool KisTagResourceModel::untagResource(const KisTagSP tag, const KoResourceSP resource)
+bool KisTagResourceModel::untagResource(const KisTagSP tag, const int resourceId)
 {
-    return d->sourceModel->untagResource(tag, resource);
+    return d->sourceModel->untagResource(tag, resourceId);
+}
+
+bool KisTagResourceModel::isResourceTagged(const KisTagSP tag, const int resourceId)
+{
+    return d->sourceModel->isResourceTagged(tag, resourceId);
 }
 
 void KisTagResourceModel::setTagsFilter(const QVector<int> tagIds)

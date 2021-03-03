@@ -89,7 +89,7 @@ struct KisFreeTransformStrategy::Private
 
     /// custom members ///
 
-    StrokeFunction function;
+    StrokeFunction function {MOVE};
 
     struct HandlePoints {
         QPointF topLeft;
@@ -111,11 +111,11 @@ struct KisFreeTransformStrategy::Private
     QCursor scaleCursors[8]; // cursors for the 8 directions
     QPixmap shearCursorPixmap;
 
-    bool imageTooBig;
+    bool imageTooBig {false};
 
     ToolTransformArgs clickArgs;
     QPointF clickPos;
-    bool isTransforming;
+    bool isTransforming {false};
 
     QCursor getScaleCursor(const QPointF &handlePt);
     QCursor getShearCursor(const QPointF &start, const QPointF &end);

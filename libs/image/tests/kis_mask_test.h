@@ -7,7 +7,7 @@
 #ifndef KIS_MASK_TEST_H
 #define KIS_MASK_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisMaskTest : public QObject
 {

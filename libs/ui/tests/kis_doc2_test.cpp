@@ -8,7 +8,7 @@
 
 #include <KisMainWindow.h>
 
-#include <QTest>
+#include <simpletest.h>
 
 #include "KisDocument.h"
 #include "kis_image.h"

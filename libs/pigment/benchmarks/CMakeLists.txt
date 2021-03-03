@@ -1,4 +1,5 @@
 ########### next target ###############
+include_directories(${CMAKE_SOURCE_DIR}/sdk/tests)
 
 set(ko_colorspaces_benchmark_SRCS KoColorSpacesBenchmark.cpp)
 krita_add_benchmark(KoColorSpacesBenchmark TESTNAME pigment-benchmarks-KoColorSpacesBenchmark ${ko_colorspaces_benchmark_SRCS})

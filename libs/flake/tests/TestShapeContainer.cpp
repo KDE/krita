@@ -16,7 +16,7 @@
 #include <KoShapeGroup.h>
 #include <KoSelection.h>
 
-#include <QTest>
+#include <simpletest.h>
 
 
 void TestShapeContainer::testModel()
@@ -210,4 +210,4 @@ void TestShapeContainer::testScaling2()
     QCOMPARE(selection->boundingRect(), group->boundingRect());
 }
 
-QTEST_MAIN(TestShapeContainer)
+SIMPLE_TEST_MAIN(TestShapeContainer)

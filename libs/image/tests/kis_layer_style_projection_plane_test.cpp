@@ -6,7 +6,7 @@
 
 #include "kis_layer_style_projection_plane_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 #include <testutil.h>
 #include <testimage.h>

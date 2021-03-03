@@ -869,4 +869,4 @@ void KisForestTest::testConversionsFromEnd()
 #undef HIDE_UB_NOISE
 }
 
-QTEST_MAIN(KisForestTest)
+SIMPLE_TEST_MAIN(KisForestTest)

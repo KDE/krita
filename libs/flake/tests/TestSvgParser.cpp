@@ -8,7 +8,7 @@
 
 
 #include <QPainterPath>
-#include <QTest>
+#include <simpletest.h>
 #include <svg/SvgUtil.h>
 #include <KoColorBackground.h>
 

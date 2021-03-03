@@ -15,7 +15,7 @@
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>
 #include <KisGlobalResourcesInterface.h>
-#include <QTest>
+#include <simpletest.h>
 #include <sdk/tests/testimage.h>
 #include <testutil.h>
 

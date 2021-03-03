@@ -5,7 +5,7 @@
  */
 
 #include "kis_tile_data_store_test.h"
-#include <QTest>
+#include <simpletest.h>
 
 #include "kis_debug.h"
 
@@ -176,5 +176,5 @@ void KisTileDataStoreTest::testSwapping()
     }
 }
 
-QTEST_MAIN(KisTileDataStoreTest)
+SIMPLE_TEST_MAIN(KisTileDataStoreTest)
 

@@ -52,7 +52,7 @@
     <path
        id="rect4165"
        d="M 4,0 C 1.784,0 0,1.784 0,4 l 4,0 z m 4,0 0,4 6,0 0,-4 z m 10,0 0,4 6,0 0,-4 z m 10,0 0,4 4,0 C 32,1.784 30.216,0 28,0 Z M 0,8 0,14 4,14 4,8 Z m 28,0 0,6 4,0 0,-6 z m -28,10 0,6 4,0 0,-6 z m 28,0 0,6 4,0 0,-6 z M 0,28 c 0,2.216 1.784,4 4,4 l 0,-4 z m 8,0 0,4 6,0 0,-4 z m 10,0 0,4 6,0 0,-4 z m 10,0 0,4 c 2.216,0 4,-1.784 4,-4 z"
-       style="opacity:1;fill:#cacaca;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1" />
+       style="opacity:1;fill:#d2d2d2;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1" />
   </g>
   <g
      style="display:inline"
@@ -60,6 +60,6 @@
     <path
        id="rect4883"
        d="M 0,0 0,4 0,8 4,8 4,4 8,4 8,0 Z m 12,0 0,4 8,0 0,-4 z m 12,0 0,4 4,0 0,4 4,0 0,-4 0,-4 z m -24,12 0,8 4,0 0,-8 z m 28,0 0,8 4,0 0,-8 z m -28,12 0,4 0,4 8,0 0,-4 -4,0 0,-4 z m 28,0 0,4 -4,0 0,4 8,0 0,-4 0,-4 z m -16,4 0,4 8,0 0,-4 z"
-       style="opacity:1;fill:#cacaca;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1" />
+       style="opacity:1;fill:#d2d2d2;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1" />
   </g>
 </svg>

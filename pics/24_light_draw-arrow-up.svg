@@ -59,7 +59,7 @@
          height="1"
          width="1"
          id="rect4162-5"
-         style="opacity:1;fill:#f2f2f2;fill-opacity:1;stroke:none;stroke-opacity:1" />
+         style="opacity:1;fill:#d2d2d2;fill-opacity:1;stroke:none;stroke-opacity:1" />
     </clipPath>
     <clipPath
        clipPathUnits="userSpaceOnUse"
@@ -456,7 +456,7 @@
          inkscape:connector-curvature="0"
          id="rect4176"
          d="m 3.7070307,1044.3622 -0.7070312,-0.707 6.125,-6.125 1.8750005,-1.875 1.875,1.875 6.125,6.125 -0.707032,0.707 -6.125,-6.125 -1.167968,-1.168 -1.1679693,1.168 -6.125,6.125 z"
-         style="fill:#f2f2f2;fill-opacity:1;stroke:none" />
+         style="fill:#d2d2d2;fill-opacity:1;stroke:none" />
     </g>
   </g>
 </svg>

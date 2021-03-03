@@ -29,11 +29,11 @@ enum DeformModes {GROW, SHRINK, SWIRL_CW, SWIRL_CCW, MOVE, LENS_IN, LENS_OUT, DE
 class DeformProperties
 {
 public:
-    int action;
-    qreal deformAmount;
-    bool useBilinear;
-    bool useCounter;
-    bool useOldData;
+    int action {0};
+    qreal deformAmount {0.0};
+    bool useBilinear {false};
+    bool useCounter {false};
+    bool useOldData {false};
 };
 
 
@@ -69,7 +69,7 @@ public:
     }
 
 private:
-    qreal m_factor;
+    qreal m_factor {0.0};
 };
 
 /// Inverse weighted rotation - swirlCW&&swirlCWW
@@ -91,7 +91,7 @@ public:
     }
 
 private:
-    qreal m_alpha;
+    qreal m_alpha {0.0};
 };
 
 /// Inverse move
@@ -112,9 +112,9 @@ public:
     }
 
 private:
-    qreal m_dx;
-    qreal m_dy;
-    qreal m_factor;
+    qreal m_dx {0.0};
+    qreal m_dy {0.0};
+    qreal m_factor {0.0};
 };
 
 /// Inverse lens distortion
@@ -157,9 +157,9 @@ public:
     }
 
 private:
-    qreal m_k1, m_k2;
-    qreal m_maxX, m_maxY;
-    bool m_out;
+    qreal m_k1 {0.0}, m_k2 {0.0};
+    qreal m_maxX {0.0}, m_maxY {0.0};
+    bool m_out {false};
 };
 
 /// Randomly disturb the pixels
@@ -181,7 +181,7 @@ public:
     }
 
 private:
-    qreal m_factor;
+    qreal m_factor {0.0};
 };
 
 
@@ -229,16 +229,16 @@ private:
 
 private:
     KisRandomSubAccessorSP m_srcAcc;
-    bool m_firstPaint;
-    qreal m_prevX, m_prevY;
-    int m_counter;
+    bool m_firstPaint {false};
+    qreal m_prevX {0.0}, m_prevY {0.0};
+    int m_counter {1}; // taken from the constructor
 
     QRectF m_maskRect;
 
-    DeformBase * m_deformAction;
+    DeformBase * m_deformAction {0};
 
-    DeformOption * m_properties;
-    KisBrushSizeOptionProperties * m_sizeProperties;
+    DeformOption * m_properties {0};
+    KisBrushSizeOptionProperties * m_sizeProperties {0};
 };
 
 

@@ -7,7 +7,7 @@
 #ifndef __STORYBOARD_MODEL_TEST_H
 #define __STORYBOARD_MODEL_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class StoryboardCommentModel;
 class StoryboardModel;

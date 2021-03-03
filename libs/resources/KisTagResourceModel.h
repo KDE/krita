@@ -21,8 +21,9 @@ class KRITARESOURCES_EXPORT KisAbstractTagResourceModel
 public:
     virtual ~KisAbstractTagResourceModel() {}
 
-    virtual bool tagResource(const KisTagSP tag, const KoResourceSP resource) = 0;
-    virtual bool untagResource(const KisTagSP tag, const KoResourceSP resource) = 0;
+    virtual bool tagResource(const KisTagSP tag, const int resourceId) = 0;
+    virtual bool untagResource(const KisTagSP tag, const int resourceId) = 0;
+    virtual bool isResourceTagged(const KisTagSP tag, const int resourceId) = 0;
 };
 
 class KRITARESOURCES_EXPORT KisAllTagResourceModel
@@ -63,8 +64,9 @@ public:
     QVariant data(const QModelIndex &index, int role) const override;
 
     // Abstract Tag API
-    bool tagResource(const KisTagSP tag, const KoResourceSP resource) override;
-    bool untagResource(const KisTagSP tag, const KoResourceSP resource) override;
+    bool tagResource(const KisTagSP tag, const int resourceId) override;
+    bool untagResource(const KisTagSP tag, const int resourceId) override;
+    bool isResourceTagged(const KisTagSP tag, const int resourceId) override;
 
 private:
 
@@ -123,8 +125,9 @@ public:
 
     // KisAbstractTagResourceModel API
 
-    bool tagResource(const KisTagSP tag, const KoResourceSP resource) override;
-    bool untagResource(const KisTagSP tag, const KoResourceSP resource) override;
+    bool tagResource(const KisTagSP tag, const int resourceId) override;
+    bool untagResource(const KisTagSP tag, const int resourceId) override;
+    bool isResourceTagged(const KisTagSP tag, const int resourceId) override;
 
     // KisAbstractResourceModel interface
 

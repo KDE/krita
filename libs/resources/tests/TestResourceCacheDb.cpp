@@ -5,7 +5,7 @@
  */
 
 #include "TestResourceCacheDb.h"
-#include <QTest>
+#include <simpletest.h>
 #include <QtSql>
 #include <QStandardPaths>
 #include <QDir>
@@ -105,5 +105,5 @@ void TestResourceCacheDb::cleanupTestCase()
     Q_ASSERT(res);
 }
 
-QTEST_MAIN(TestResourceCacheDb)
+SIMPLE_TEST_MAIN(TestResourceCacheDb)
 

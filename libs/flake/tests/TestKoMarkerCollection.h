@@ -7,7 +7,7 @@
 #ifndef TESTKOMARKERCOLLECTION_H
 #define TESTKOMARKERCOLLECTION_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class TestKoMarkerCollection  : public QObject
 {

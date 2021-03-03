@@ -8,7 +8,7 @@
 
 #include "brushengine/KisPerStrokeRandomSource.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 void KisPerStrokeRandomSourceTest::testIndependent()
 {
@@ -67,4 +67,4 @@ void KisPerStrokeRandomSourceTest::testDifferentKeys()
     QVERIFY(sourcesDiffer);
 }
 
-QTEST_MAIN(KisPerStrokeRandomSourceTest)
+SIMPLE_TEST_MAIN(KisPerStrokeRandomSourceTest)

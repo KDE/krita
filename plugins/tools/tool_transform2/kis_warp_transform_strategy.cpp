@@ -34,13 +34,6 @@ struct KisWarpTransformStrategy::Private
           converter(_converter),
           currentArgs(_currentArgs),
           transaction(_transaction),
-          lastNumPoints(0),
-          drawConnectionLines(false), // useful while developing
-          drawOrigPoints(false),
-          drawTransfPoints(true),
-          closeOnStartPointClick(false),
-          clipOriginalPointsPosition(true),
-          pointWasDragged(false),
           recalculateSignalCompressor(40, KisSignalCompressor::FIRST_ACTIVE)
     {
     }
@@ -49,7 +42,7 @@ struct KisWarpTransformStrategy::Private
 
     /// standard members ///
 
-    const KisCoordinatesConverter *converter;
+    const KisCoordinatesConverter *converter {0};
 
     //////
     ToolTransformArgs &currentArgs;
@@ -65,7 +58,7 @@ struct KisWarpTransformStrategy::Private
 
     QImage transformedImage;
 
-    int pointIndexUnderCursor;
+    int pointIndexUnderCursor {0};
 
     enum Mode {
         OVER_POINT = 0,
@@ -78,15 +71,15 @@ struct KisWarpTransformStrategy::Private
     Mode mode;
 
     QVector<int> pointsInAction;
-    int lastNumPoints;
+    int lastNumPoints {0};
 
-    bool drawConnectionLines;
-    bool drawOrigPoints;
-    bool drawTransfPoints;
-    bool closeOnStartPointClick;
-    bool clipOriginalPointsPosition;
+    bool drawConnectionLines {false}; // useful while developing
+    bool drawOrigPoints {false};
+    bool drawTransfPoints {true};
+    bool closeOnStartPointClick {false};
+    bool clipOriginalPointsPosition {true};
     QPointF pointPosOnClick;
-    bool pointWasDragged;
+    bool pointWasDragged {false};
 
     QPointF lastMousePos;
 

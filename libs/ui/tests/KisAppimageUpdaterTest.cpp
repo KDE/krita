@@ -6,7 +6,7 @@
 
 #include "KisAppimageUpdaterTest.h"
 
-#include <QtTest>
+#include <simpletest.h>
 #include <QString>
 #include <QSignalSpy>
 #include <QFile>
@@ -127,4 +127,4 @@ void KisAppimageUpdaterTest::testDoUpdate_data()
             << UpdaterStatus::StatusID::UPDATE_ERROR;
 }
 
-QTEST_MAIN(KisAppimageUpdaterTest);
+SIMPLE_TEST_MAIN(KisAppimageUpdaterTest);

@@ -6,7 +6,7 @@
 
 #include "kis_kra_saver_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 #include <QBitArray>
 

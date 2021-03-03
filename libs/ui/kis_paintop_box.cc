@@ -108,30 +108,37 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
 
 
     KConfigGroup grp =  KSharedConfig::openConfig()->group("krita").group("Toolbar BrushesAndStuff");
-    int iconsize = grp.readEntry("IconSize", 32);
+    int iconsize = grp.readEntry("IconSize", 22);
+    // NOTE: buttonsize should be the same value as the one used in ktoolbar for all QToolButton
+    int buttonsize = grp.readEntry("ButtonSize", 32);
 
     if (!cfg.toolOptionsInDocker()) {
         m_toolOptionsPopupButton = new KisPopupButton(this);
         m_toolOptionsPopupButton->setIcon(KisIconUtils::loadIcon("view-choose"));
         m_toolOptionsPopupButton->setToolTip(i18n("Tool Settings"));
-        m_toolOptionsPopupButton->setFixedSize(iconsize, iconsize);
+        m_toolOptionsPopupButton->setFixedSize(buttonsize, buttonsize);
+        m_toolOptionsPopupButton->setIconSize(QSize(iconsize, iconsize));
         m_toolOptionsPopupButton->setFlat(true);
     }
 
     m_brushEditorPopupButton = new KisIconWidget(this);
     m_brushEditorPopupButton->setIcon(KisIconUtils::loadIcon("paintop_settings_02"));
     m_brushEditorPopupButton->setToolTip(i18n("Edit brush settings"));
-    m_brushEditorPopupButton->setFixedSize(iconsize, iconsize);
+    m_brushEditorPopupButton->setFixedSize(buttonsize, buttonsize);
+    m_brushEditorPopupButton->setIconSize(QSize(iconsize, iconsize));
     m_brushEditorPopupButton->setFlat(true);
 
     m_presetSelectorPopupButton = new KisPopupButton(this);
     m_presetSelectorPopupButton->setIcon(KisIconUtils::loadIcon("paintop_settings_01"));
     m_presetSelectorPopupButton->setToolTip(i18n("Choose brush preset"));
-    m_presetSelectorPopupButton->setFixedSize(iconsize, iconsize);
+    m_presetSelectorPopupButton->setFixedSize(buttonsize, buttonsize);
+    m_presetSelectorPopupButton->setIconSize(QSize(iconsize, iconsize));
     m_presetSelectorPopupButton->setFlat(true);
+    m_presetSelectorPopupButton->setArrowVisible(false);
 
     m_eraseModeButton = new KisHighlightedToolButton(this);
-    m_eraseModeButton->setFixedSize(iconsize, iconsize);
+    m_eraseModeButton->setFixedSize(buttonsize, buttonsize);
+    m_eraseModeButton->setIconSize(QSize(iconsize, iconsize));
     m_eraseModeButton->setCheckable(true);
     m_eraseModeButton->setAutoRaise(true);
 
@@ -140,7 +147,8 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     m_eraseModeButton->setDefaultAction(m_eraseAction);
 
     m_reloadButton = new QToolButton(this);
-    m_reloadButton->setFixedSize(iconsize, iconsize);
+    m_reloadButton->setFixedSize(buttonsize, buttonsize);
+    m_reloadButton->setIconSize(QSize(iconsize, iconsize));
     m_reloadButton->setAutoRaise(true); // make button flat
 
 
@@ -148,7 +156,8 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     m_reloadButton->setDefaultAction(m_reloadAction);
 
     m_alphaLockButton = new KisHighlightedToolButton(this);
-    m_alphaLockButton->setFixedSize(iconsize, iconsize);
+    m_alphaLockButton->setFixedSize(buttonsize, buttonsize);
+    m_alphaLockButton->setIconSize(QSize(iconsize, iconsize));
     m_alphaLockButton->setCheckable(true);
     m_alphaLockButton->setAutoRaise(true);
 
@@ -188,8 +197,9 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     // create horizontal and vertical mirror buttons
 
     m_hMirrorButton = new KisHighlightedToolButton(this);
-    int menuPadding = 10;
-    m_hMirrorButton->setFixedSize(iconsize + menuPadding, iconsize);
+    int menuPadding = 20;
+    m_hMirrorButton->setFixedSize(buttonsize + menuPadding, buttonsize);
+    m_hMirrorButton->setIconSize(QSize(iconsize, iconsize));
     m_hMirrorButton->setCheckable(true);
     m_hMirrorAction = m_viewManager->actionManager()->createAction("hmirror_action");
     m_hMirrorButton->setDefaultAction(m_hMirrorAction);
@@ -198,7 +208,8 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     m_hMirrorButton->setAutoRaise(true);
 
     m_vMirrorButton = new KisHighlightedToolButton(this);
-    m_vMirrorButton->setFixedSize(iconsize + menuPadding, iconsize);
+    m_vMirrorButton->setFixedSize(buttonsize + menuPadding, buttonsize);
+    m_vMirrorButton->setIconSize(QSize(iconsize, iconsize));
     m_vMirrorButton->setCheckable(true);
     m_vMirrorAction = m_viewManager->actionManager()->createAction("vmirror_action");
     m_vMirrorButton->setDefaultAction(m_vMirrorAction);
@@ -209,7 +220,8 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     QAction *wrapAroundAction = m_viewManager->actionManager()->createAction("wrap_around_mode");
 
     m_wrapAroundButton = new KisHighlightedToolButton(this);
-    m_wrapAroundButton->setFixedSize(iconsize, iconsize);
+    m_wrapAroundButton->setFixedSize(buttonsize, buttonsize);
+    m_wrapAroundButton->setIconSize(QSize(iconsize, iconsize));
     m_wrapAroundButton->setDefaultAction(wrapAroundAction);
     m_wrapAroundButton->setCheckable(true);
     m_wrapAroundButton->setAutoRaise(true);
@@ -263,7 +275,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
         slOpacity->setSingleStep(5);
         slOpacity->setSuffix(i18n("%"));
         slOpacity->setMinimumWidth(qMax(sliderWidth, slOpacity->sizeHint().width()));
-        slOpacity->setFixedHeight(iconsize);
+        slOpacity->setFixedHeight(buttonsize);
         slOpacity->setBlockUpdateSignalOnDrag(true);
 
         slFlow->setRange(0, 100, 0);
@@ -271,7 +283,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
         slFlow->setSingleStep(5);
         slFlow->setSuffix(i18n("%"));
         slFlow->setMinimumWidth(qMax(sliderWidth, slFlow->sizeHint().width()));
-        slFlow->setFixedHeight(iconsize);
+        slFlow->setFixedHeight(buttonsize);
         slFlow->setBlockUpdateSignalOnDrag(true);
 
         slSize->setRange(0.01, cfg.readEntry("maximumBrushSize", 1000), 2);
@@ -281,7 +293,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
         slSize->setExponentRatio(3.0);
         slSize->setSuffix(i18n(" px"));
         slSize->setMinimumWidth(qMax(sliderWidth, slSize->sizeHint().width()));
-        slSize->setFixedHeight(iconsize);
+        slSize->setFixedHeight(buttonsize);
         slSize->setBlockUpdateSignalOnDrag(true);
 
         slPatternSize->setRange(0.0, 2.0, 2);
@@ -293,7 +305,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
         slPatternSize->setSingleStep(.01);
         slPatternSize->setSuffix(i18n("x"));
         slPatternSize->setMinimumWidth(qMax(sliderWidth, slPatternSize->sizeHint().width()));
-        slPatternSize->setFixedHeight(iconsize);
+        slPatternSize->setFixedHeight(buttonsize);
         slPatternSize->setBlockUpdateSignalOnDrag(true);
 
         m_sliderChooser[i]->setMinimumWidth(qMax(sliderWidth, slPatternSize->sizeHint().width()));
@@ -302,15 +314,17 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     }
 
     m_cmbCompositeOp = new KisCompositeOpComboBox();
-    m_cmbCompositeOp->setFixedHeight(iconsize);
+    m_cmbCompositeOp->setFixedHeight(buttonsize);
     m_cmbCompositeOp->connectBlendmodeActions(m_viewManager->actionManager());
 
     m_workspaceWidget = new KisPopupButton(this);
-    m_workspaceWidget->setIcon(KisIconUtils::loadIcon("configure"));
+    m_workspaceWidget->setIcon(KisIconUtils::loadIcon("workspace-chooser"));
     m_workspaceWidget->setToolTip(i18n("Choose workspace"));
-    m_workspaceWidget->setFixedSize(iconsize, iconsize);
+    m_workspaceWidget->setFixedSize(buttonsize, buttonsize);
+    m_workspaceWidget->setIconSize(QSize(iconsize, iconsize));
     m_workspaceWidget->setPopupWidget(new KisWorkspaceChooser(view));
     m_workspaceWidget->setFlat(true);
+    m_workspaceWidget->setArrowVisible(false);
 
     QHBoxLayout* baseLayout = new QHBoxLayout(this);
     m_paintopWidget = new QWidget(this);
@@ -1396,10 +1410,10 @@ void KisPaintopBox::slotUpdateSelectionIcon()
 
     m_presetSelectorPopupButton->setIcon(KisIconUtils::loadIcon("paintop_settings_01"));
     m_brushEditorPopupButton->setIcon(KisIconUtils::loadIcon("paintop_settings_02"));
-    m_workspaceWidget->setIcon(KisIconUtils::loadIcon("configure"));
+    m_workspaceWidget->setIcon(KisIconUtils::loadIcon("workspace-chooser"));
 
     m_eraseAction->setIcon(KisIconUtils::loadIcon("draw-eraser"));
-    m_reloadAction->setIcon(KisIconUtils::loadIcon("view-refresh"));
+    m_reloadAction->setIcon(KisIconUtils::loadIcon("reload-preset"));
 
     if (m_disablePressureAction->isChecked()) {
         m_disablePressureAction->setIcon(KisIconUtils::loadIcon("transform_icons_penPressure"));

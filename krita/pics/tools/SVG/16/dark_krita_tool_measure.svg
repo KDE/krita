@@ -50,18 +50,18 @@
      id="layer3"
      style="display:none">
     <rect
-       style="opacity:1;fill:#cacaca;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:0.50196078"
+       style="opacity:1;fill:#d2d2d2;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:0.50196078"
        id="rect4483"
        width="4"
        height="30"
        x="28"
        y="-5.9999996e-007" />
     <path
-       style="display:inline;opacity:1;fill:#cacaca;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:0.50196078"
+       style="display:inline;opacity:1;fill:#d2d2d2;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:0.50196078"
        d="m 0,0 0,2 2,0 0,2 2,0 0,2 2,0 0,2 2,0 0,2 2,0 0,2 2,0 0,2 2,0 0,2 2,0 0,2 2,0 0,2 2,0 0,2 2,0 0,2 2,0 0,2 2,0 0,2 2,0 0,-4 -2,0 0,-2 -2,0 0,-2 -2,0 0,-2 -2,0 0,-2 -2,0 0,-2 -2,0 0,-2 -2,0 0,-2 -2,0 L 12,8 10,8 10,6 8,6 8,4 6,4 6,2 4,2 4,0 2,0 0,0 Z"
        id="rect4485-8" />
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#cacaca;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="fill:none;fill-rule:evenodd;stroke:#d2d2d2;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="M 16.456345,15.536612 C 18.1875,10.6875 26.125,9.2499996 30.125,13.25"
        id="path4583" />
   </g>

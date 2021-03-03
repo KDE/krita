@@ -5,7 +5,7 @@
  */
 
 #include "TestNotifier.h"
-#include <QTest>
+#include <simpletest.h>
 
 #include <Notifier.h>
 #include <KisPart.h>

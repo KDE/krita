@@ -7,7 +7,7 @@
 #ifndef KISMASKGENERATORBENCHMARK_H
 #define KISMASKGENERATORBENCHMARK_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisMaskGeneratorTest : public QObject
 {

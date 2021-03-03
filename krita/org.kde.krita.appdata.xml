@@ -101,7 +101,7 @@
   <summary xml:lang="tr">Sayısal Boyama, Yaratıcı Özgürlük</summary>
   <summary xml:lang="uk">Цифрове малювання, творча свобода</summary>
   <summary xml:lang="x-test">xxDigital Painting, Creative Freedomxx</summary>
-  <summary xml:lang="zh-CN">自由挥洒数字绘画的无限创意</summary>
+  <summary xml:lang="zh-CN">自由开源的数字绘画软件</summary>
   <summary xml:lang="zh-TW">數位繪畫，創作自由</summary>
   <description>
     <p>Krita is the full-featured digital art studio.</p>
@@ -271,7 +271,7 @@
       <caption xml:lang="zh-TW">Krita 是全功能的數位繪圖工作室</caption>
       <image>https://cdn.kde.org/screenshots/krita/2018-03-17_screenshot_001.png</image>
     </screenshot>
-    <screenshot type="default">
+    <screenshot>
       <caption>The startup window now also gives you the latest news about Krita</caption>
       <caption xml:lang="ca">La finestra d'inici també ofereix les últimes notícies sobre el Krita</caption>
       <caption xml:lang="ca-valencia">La finestra d'inici també ofereix les últimes notícies sobre el Krita</caption>
@@ -324,7 +324,7 @@
       <caption xml:lang="zh-CN">它内建了超过十种功能强大的笔刷引擎。</caption>
       <image>https://cdn.kde.org/screenshots/krita/2018-03-17_screenshot_003.png</image>
     </screenshot>
-    <screenshot type="default">
+    <screenshot>
       <caption>Create and use gamut masks to give your images a coherent feel</caption>
       <caption xml:lang="ca">Creeu i useu màscares de gamma per a donar a les imatges una aparença coherent</caption>
       <caption xml:lang="ca-valencia">Creeu i useu màscares de gamma per a donar a les imatges una aparença coherent</caption>
@@ -377,7 +377,7 @@
       <caption xml:lang="zh-TW">想做動畫？Krita 提供您在傳統、手繪動畫所需的任何東西</caption>
       <image>https://cdn.kde.org/screenshots/krita/2018-03-17_screenshot_005.png</image>
     </screenshot>
-    <screenshot type="default">
+    <screenshot>
       <caption>If you're new to digital painting, there's an extensive, up-to-date manual</caption>
       <caption xml:lang="ca">Si sou nou en la pintura digital, hi ha un manual extens i actualitzat</caption>
       <caption xml:lang="ca-valencia">Si sou nou en la pintura digital, hi ha un manual extens i actualitzat</caption>

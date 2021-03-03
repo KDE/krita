@@ -8,7 +8,7 @@
 #include "filter/kis_filter_registry.h"
 #include "kis_filter_registry_test.h"
 
-#include <QTest>
+#include <simpletest.h>
 
 void KisFilterRegistryTest::testCreation()
 {
@@ -17,4 +17,4 @@ void KisFilterRegistryTest::testCreation()
 }
 
 
-QTEST_MAIN(KisFilterRegistryTest)
+SIMPLE_TEST_MAIN(KisFilterRegistryTest)

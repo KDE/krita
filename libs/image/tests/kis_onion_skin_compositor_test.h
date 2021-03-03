@@ -7,7 +7,7 @@
 #ifndef KIS_ONION_SKIN_COMPOSITOR_TEST_H
 #define KIS_ONION_SKIN_COMPOSITOR_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisOnionSkinCompositorTest : public QObject
 {

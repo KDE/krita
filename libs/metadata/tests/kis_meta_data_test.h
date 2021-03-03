@@ -7,7 +7,7 @@
 #ifndef KIS_META_DATA_TEST_H
 #define KIS_META_DATA_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 namespace KisMetaData
 {

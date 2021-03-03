@@ -5,7 +5,7 @@
 #ifndef KIS_AUTO_BRUSH_FACTORY_TEST_H
 #define KIS_AUTO_BRUSH_FACTORY_TEST_H
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisAutoBrushFactoryTest : public QObject
 {

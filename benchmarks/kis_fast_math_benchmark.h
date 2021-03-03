@@ -7,7 +7,7 @@
 #ifndef _KIS_FAST_MATH_BENCHMARK_H_
 #define _KIS_FAST_MATH_BENCHMARK_H_
 
-#include <QtTest>
+#include <simpletest.h>
 
 class KisFastMathBenchmark : public QObject {
     Q_OBJECT

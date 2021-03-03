@@ -1,5 +1,5 @@
 macro_add_unittest_definitions()
-
+include_directories(${CMAKE_SOURCE_DIR}/sdk/tests)
 include_directories( ../colorspaces/cmyk_u16
     ../colorspaces/cmyk_u8
     ../colorspaces/gray_u16

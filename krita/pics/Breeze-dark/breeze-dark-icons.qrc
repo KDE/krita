@@ -10,7 +10,6 @@
         <file alias="dark_configure-shortcuts.svg">dark_applications-system.svg</file>
         <file>dark_configure.svg</file>
         <file alias="dark_configure-toolbars.svg">dark_configure.svg</file>
-        <file>dark_dialog-cancel.svg</file>
         <file alias="dark_dialog-close.svg">dark_window-close.svg</file>
         <file>dark_dialog-ok.svg</file>
         <file>dark_dialog-warning.svg</file>

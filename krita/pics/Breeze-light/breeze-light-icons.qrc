@@ -10,7 +10,6 @@
         <file alias="light_configure-shortcuts.svg">light_applications-system.svg</file>
         <file>light_configure.svg</file>
         <file alias="light_configure-toolbars.svg">light_configure.svg</file>
-        <file>light_dialog-cancel.svg</file>
         <file alias="light_dialog-close.svg">light_window-close.svg</file>
         <file>light_dialog-ok.svg</file>
         <file>light_dialog-warning.svg</file>

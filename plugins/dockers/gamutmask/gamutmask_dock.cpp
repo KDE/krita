@@ -72,7 +72,7 @@ GamutMaskDock::GamutMaskDock()
     m_dockerUI->bnMaskDuplicate->setIcon(KisIconUtils::loadIcon("duplicateitem"));
 
     m_dockerUI->maskPropertiesBox->setVisible(false);
-    m_dockerUI->bnSaveMask->setIcon(KisIconUtils::loadIcon("document-save"));
+    m_dockerUI->bnSaveMask->setIcon(KisIconUtils::loadIcon("document-save-16"));
     m_dockerUI->bnCancelMaskEdit->setIcon(KisIconUtils::loadIcon("dialog-cancel"));
     m_dockerUI->bnPreviewMask->setIcon(KisIconUtils::loadIcon("visible"));
 

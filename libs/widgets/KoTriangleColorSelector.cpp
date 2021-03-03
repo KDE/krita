@@ -296,14 +296,14 @@ void KoTriangleColorSelector::generateTriangle()
     qreal triangleTop = d->triangleTop*devicePixelRatioF();
     qreal triangleBottom = d->triangleBottom*devicePixelRatioF();
 
-    for(int y = 0; y < d->sizeColorSelector*devicePixelRatioF(); ++y)
+    for(int y = 0; y < int(d->sizeColorSelector*devicePixelRatioF()); ++y)
     {
         qreal ynormalize = ( triangleTop - y ) / ( triangleTop - triangleBottom );
         qreal v = 255 * ynormalize;
         qreal ls_ = (ynormalize) * d->triangleLength*devicePixelRatioF();
         qreal startx_ = d->centerColorSelector*devicePixelRatioF() - 0.5 * ls_;
         uint* data = reinterpret_cast<uint*>(image.scanLine(y));
-        for(int x = 0; x < d->sizeColorSelector*devicePixelRatioF(); ++x, ++data)
+        for(int x = 0; x < int(d->sizeColorSelector*devicePixelRatioF()); ++x, ++data)
         {
             qreal s = 255 * (x - startx_) / ls_;
             if(v < -1.0 || v > 256.0 || s < -1.0 || s > 256.0 )
@@ -334,11 +334,11 @@ void KoTriangleColorSelector::generateWheel()
     QImage image(d->sizeColorSelector*devicePixelRatioF(), d->sizeColorSelector*devicePixelRatioF(), QImage::Format_ARGB32);
     image.setDevicePixelRatio(devicePixelRatioF());
 
-    for(int y = 0; y < d->sizeColorSelector*devicePixelRatioF(); y++)
+    for(int y = 0; y < int(d->sizeColorSelector*devicePixelRatioF()); y++)
     {
         qreal yc = y - d->centerColorSelector*devicePixelRatioF();
         qreal y2 = pow2( yc );
-        for(int x = 0; x < d->sizeColorSelector*devicePixelRatioF(); x++)
+        for(int x = 0; x < int(d->sizeColorSelector*devicePixelRatioF()); x++)
         {
             qreal xc = x - d->centerColorSelector*devicePixelRatioF();
             qreal norm = sqrt(pow2( xc ) + y2);

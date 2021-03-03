@@ -508,7 +508,18 @@ void StoryboardDelegate::setModelData(QWidget *editor, QAbstractItemModel *model
         {
             QTextEdit *textEdit = static_cast<QTextEdit*>(editor);
             QString value = textEdit->toPlainText();
-            model->setData(index, value, Qt::EditRole);
+
+            StoryboardModel* sbModel = dynamic_cast<StoryboardModel*>(model);
+            KisStoryboardChildEditCommand *cmd = new KisStoryboardChildEditCommand(index.data(),
+                                                                                   value,
+                                                                                   index.parent().row(),
+                                                                                   index.row(),
+                                                                                   sbModel);
+
+            if (sbModel->setData(index, value)) {
+                sbModel->pushUndoCommand(cmd);
+            }
+
             return;
         }
         }

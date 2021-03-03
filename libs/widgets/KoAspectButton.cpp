@@ -9,100 +9,20 @@
 #include <QPainter>
 #include <QMouseEvent>
 
-namespace {
-    /* XPM -- copyright The Gimp */
-    const char * const _chain_broken_24[] = {
-        /* columns rows colors chars-per-pixel */
-        "9 24 10 1",
-        "  c black",
-        ". c #020204",
-        "X c #5A5A5C",
-        "o c gray43",
-        "O c #8F8F91",
-        "+ c #9A9A98",
-        "@ c #B5B5B6",
-        "# c #D0D0D1",
-        "$ c #E8E8E9",
-        "% c None",
-        /* pixels */
-        "%%.....%%",
-        "%.o##@X.%",
-        "%.+...$.%",
-        "%.#.%.#.%",
-        "%.#.%.#.%",
-        "%.@.%.#.%",
-        "%.+...#.%",
-        "%.O.o.O.%",
-        "%%..@..%%",
-        "%%%.#.%%%",
-        "%%%%%%%%%",
-        "%%%%%%%%%",
-        "%%%%%%%%%",
-        "%%%%%%%%%",
-        "%%%.#.%%%",
-        "%%..#..%%",
-        "%.o.@.O.%",
-        "%.@...@.%",
-        "%.@.%.$.%",
-        "%.@.%.$.%",
-        "%.@.%.$.%",
-        "%.#...$.%",
-        "%.o$#$@.%",
-        "%%.....%%"
-    };
-
-    /* XPM  -- copyright The Gimp */
-    const char * const _chain_24[] = {
-        /* columns rows colors chars-per-pixel */
-        "9 24 10 1",
-        "  c black",
-        ". c #020204",
-        "X c #5A5A5C",
-        "o c gray43",
-        "O c #8F8F91",
-        "+ c #9A9A98",
-        "@ c #B5B5B6",
-        "# c #D0D0D1",
-        "$ c #E8E8E9",
-        "% c None",
-        /* pixels */
-        "%%%%%%%%%",
-        "%%%%%%%%%",
-        "%%.....%%",
-        "%.o##@X.%",
-        "%.+...$.%",
-        "%.#.%.#.%",
-        "%.#.%.#.%",
-        "%.@.%.#.%",
-        "%.+...#.%",
-        "%.O.o.O.%",
-        "%%..@..%%",
-        "%%%.#.%%%",
-        "%%%.#.%%%",
-        "%%..#..%%",
-        "%.o.@.O.%",
-        "%.@...@.%",
-        "%.@.%.$.%",
-        "%.@.%.$.%",
-        "%.@.%.$.%",
-        "%.#...$.%",
-        "%.o$#$@.%",
-        "%%.....%%",
-        "%%%%%%%%%",
-        "%%%%%%%%%"
-    };
-}
+#include <kis_icon_utils.h>
 
 class Q_DECL_HIDDEN KoAspectButton::Private
 {
 public:
     Private()
-        : chain(_chain_24),
-        brokenChain(_chain_broken_24),
-        keepAspect(true)
+        : keepAspect(true)
     {
     }
-    const QPixmap chain, brokenChain;
+    // TODO: add some slots to reload the icons on theme change
+    const QIcon chainIcon = KisIconUtils::loadIcon("chain-icon");
+    const QIcon brokenChainIcon = KisIconUtils::loadIcon("chain-broken-icon");
+    const QPixmap chain = chainIcon.pixmap(9, 24);
+    const QPixmap brokenChain = brokenChainIcon.pixmap(9, 24);
     bool keepAspect;
 };
 

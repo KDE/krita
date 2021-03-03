@@ -21,6 +21,8 @@
         <file alias="dark_go-up.svg">dark_arrow-up.svg</file>
         <file>dark_bookmarks.svg</file>
         <file>dark_configure-thicker.svg</file>
+        <file>dark_chain-broken-icon.svg</file>
+        <file>dark_chain-icon.svg</file>
         <file>dark_deletekeyframe.svg</file>
         <file>dark_dialog-cancel.svg</file>
         <file>dark_document-edit.svg</file>
@@ -84,6 +86,8 @@
         <file alias="light_go-up.svg">light_arrow-up.svg</file>
         <file>light_bookmarks.svg</file>
         <file>light_configure-thicker.svg</file>
+        <file>light_chain-broken-icon.svg</file>
+        <file>light_chain-icon.svg</file>
         <file>light_deletekeyframe.svg</file>
         <file>light_dialog-cancel.svg</file>
         <file>light_document-edit.svg</file>

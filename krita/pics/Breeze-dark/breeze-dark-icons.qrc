@@ -7,7 +7,6 @@
         <file>dark_application-exit.svg</file>
         <file>dark_application-pdf.svg</file>
         <file>dark_applications-system.svg</file>
-
         <file alias="dark_configure-shortcuts.svg">dark_applications-system.svg</file>
         <file>dark_configure.svg</file>
         <file alias="dark_configure-toolbars.svg">dark_configure.svg</file>
@@ -30,7 +29,6 @@
         <file>dark_edit-clear.svg</file>
         <file>dark_edit-copy.svg</file>
         <file>dark_edit-cut.svg</file>
-        <file>dark_edit-delete.svg</file>
         <file>dark_edit-paste.svg</file>
         <file>dark_folder-documents.svg</file>
         <file>dark_folder-pictures.svg</file>

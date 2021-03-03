@@ -516,7 +516,7 @@ void KisResourceItemChooser::updateView()
     /// helps to set icons here in case the theme is changed
     d->viewModeButton->setIcon(KisIconUtils::loadIcon("view-choose"));
     d->importButton->setIcon(koIcon("document-open"));
-    d->deleteButton->setIcon(koIcon("trash-empty"));
+    d->deleteButton->setIcon(koIcon("edit-delete"));
     d->storagePopupButton->setIcon(koIcon("bundle_archive"));
     d->tagManager->tagChooserWidget()->updateIcons();
 }

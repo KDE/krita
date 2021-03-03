@@ -22,6 +22,7 @@
         <file>dark_bookmarks.svg</file>
         <file>dark_configure-thicker.svg</file>
         <file>dark_deletekeyframe.svg</file>
+        <file>dark_edit-delete.svg</file>
         <file>dark_edit-redo.svg</file>
         <file>dark_edit-undo.svg</file>
         <file>dark_novisible.svg</file>
@@ -78,6 +79,7 @@
         <file>light_bookmarks.svg</file>
         <file>light_configure-thicker.svg</file>
         <file>light_deletekeyframe.svg</file>
+        <file>light_edit-delete.svg</file>
         <file>light_edit-redo.svg</file>
         <file>light_edit-undo.svg</file>
         <file>light_novisible.svg</file>

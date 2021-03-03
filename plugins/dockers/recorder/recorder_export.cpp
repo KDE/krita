@@ -238,7 +238,7 @@ RecorderExport::RecorderExport(QWidget *parent)
     d->ui->buttonLockRatio->setIcon(KisIconUtils::loadIcon("locked"));
     d->ui->buttonWatchIt->setIcon(KisIconUtils::loadIcon("media-playback-start"));
     d->ui->buttonShowInFolder->setIcon(KisIconUtils::loadIcon("folder"));
-    d->ui->buttonRemoveSnapshots->setIcon(KisIconUtils::loadIcon("trash-empty"));
+    d->ui->buttonRemoveSnapshots->setIcon(KisIconUtils::loadIcon("edit-delete"));
     d->ui->stackedWidget->setCurrentIndex(ExportPageIndex::PageSettings);
 
     connect(d->ui->buttonBrowseDirectory, SIGNAL(clicked()), SLOT(onButtonBrowseDirectoryClicked()));

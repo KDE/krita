@@ -76,7 +76,7 @@ public:
                                                     QAbstractItemView::DoubleClicked  );
 
         m_menuUI->btnAddField->setIcon(KisIconUtils::loadIcon("list-add"));
-        m_menuUI->btnDeleteField->setIcon(KisIconUtils::loadIcon("trash-empty"));
+        m_menuUI->btnDeleteField->setIcon(KisIconUtils::loadIcon("edit-delete"));
         m_menuUI->btnAddField->setIconSize(QSize(22, 22));
         m_menuUI->btnDeleteField->setIconSize(QSize(22, 22));
         connect(m_menuUI->btnAddField, SIGNAL(clicked()), this, SLOT(slotaddItem()));

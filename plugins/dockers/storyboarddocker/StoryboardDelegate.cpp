@@ -105,7 +105,7 @@ void StoryboardDelegate::paint(QPainter *p, const QStyleOptionViewItem &option, 
                     addIcon.paint(p, buttonsRect);
 
                     buttonsRect.moveBottomRight(option.rect.bottomRight());
-                    QIcon deleteIcon = KisIconUtils::loadIcon("trash-empty");
+                    QIcon deleteIcon = KisIconUtils::loadIcon("edit-delete");
                     p->fillRect(buttonsRect, option.palette.window());
                     deleteIcon.paint(p, buttonsRect);
                 }

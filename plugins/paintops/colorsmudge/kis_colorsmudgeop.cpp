@@ -752,8 +752,7 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
         m_strategy->paintDab(srcDabRect, m_dstDabRect,
                              canvasLocalSamplePoint,
                              fpOpacity, colorRate, smudgeLength,
-                             lightnessStrength,
-                             m_smudgeRateOption.getSmearAlpha());
+                             lightnessStrength);
 
         const QVector<QRect> dirtyRects = m_strategy->takeDirtyRegion();
         painter()->addDirtyRects(dirtyRects);

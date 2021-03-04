@@ -396,7 +396,10 @@ void TestProfileGeneration::testQuantization()
                                     0.150002046, 0.059997204, 1.0};
     for (int i=0; i<inputMatrix.size(); i+=3) {
         QVector<double> value (3);
-        xyYToXYZ(inputMatrix[i], inputMatrix[i+1], inputMatrix[i+2], &value[0], &value[1], &value[2]);
+
+        value[0] = inputMatrix[i];
+        value[1] = inputMatrix[i+1];
+        value[2] = 1.0 - value[0] - value[1];
 
         double sum = 0.0;
         double largest = -1e9;
@@ -420,10 +423,13 @@ void TestProfileGeneration::testQuantization()
 
         value[largestValue] = floor(sum * 65536.0 + 0.5) / 65536.0;
 
-        XYZToxyY(value[0], value[1], value[2], &inputMatrix[i], &inputMatrix[i+1], &inputMatrix[i+2]);
+        inputMatrix[i] = value[0];
+        inputMatrix[i+1] = value[1];
     }
+    qDebug() << inputMatrix;
+    qDebug() << compareMatrix;
     for (int i=0; i<inputMatrix.size(); i++) {
-        QVERIFY2(fabs(inputMatrix[i] - compareMatrix[i]) < 0.00003,
+        QVERIFY2(fabs(inputMatrix[i] - compareMatrix[i]) < 0.000015,
                  QString("Too large an error margin at %1: %2")
                  .arg(i).arg(fabs(inputMatrix[i] - compareMatrix[i])).toLatin1());
     }

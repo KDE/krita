@@ -834,18 +834,18 @@ void LCHToLab(const qreal L, const qreal C, const qreal H, qreal *l, qreal *a, q
 
 void XYZToxyY(const qreal X, const qreal Y, const qreal Z, qreal *x, qreal *y, qreal *yY)
 {
-    qreal Xb = qBound(0.0,X,1.0);
-    qreal Yb = qBound(0.0,Y,1.0);
-    qreal Zb = qBound(0.0,Z,1.0);
+    qreal Xb = X;
+    qreal Yb = Y;
+    qreal Zb = Z;
     *x=Xb/(Xb+Yb+Zb);
     *y=Yb/(Xb+Yb+Zb);
     *yY=Yb;
 }  
 void xyYToXYZ(const qreal x, const qreal y, const qreal yY, qreal *X, qreal *Y, qreal *Z)
 {
-    qreal xb = qBound(0.0,x,1.0);
-    qreal yb = qBound(0.0,y,1.0);
-    qreal yYb = qBound(0.0,yY,1.0);
+    qreal xb = x;
+    qreal yb = y;
+    qreal yYb = yY;
     *X=(xb*yYb)/yb;
     *Z=((1.0-xb-yb)*yYb)/yb;
     *Y=yYb;

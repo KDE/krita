@@ -499,7 +499,12 @@ void IccColorProfile::quantizexyYPrimariesTo16bit(QVector<double> &colorants)
 {
     for (int i=0; i<colorants.size(); i+=3) {
         QVector<double> value (3);
-        xyYToXYZ(colorants[i], colorants[i+1], colorants[i+2], &value[0], &value[1], &value[2]);
+
+        // We convert not to XYZ, but to xyz, that is, z is normalized.
+        // That way this code doesn't default to Y being the largest value.
+        value[0] = colorants[i];
+        value[1] = colorants[i+1];
+        value[2] = 1.0 - value[0] - value[1];
 
         double sum = 0.0;
         double largest = -1e9;
@@ -523,7 +528,8 @@ void IccColorProfile::quantizexyYPrimariesTo16bit(QVector<double> &colorants)
 
         value[largestValue] = floor(sum * 65536.0 + 0.5) / 65536.0;
 
-        XYZToxyY(value[0], value[1], value[2], &colorants[i], &colorants[i+1], &colorants[i+2]);
+        colorants[i] = value[0];
+        colorants[i+1] = value[1];
     }
 }
 

@@ -159,6 +159,9 @@ KisResourceItemChooserContextMenu::~KisResourceItemChooserContextMenu()
 
 void KisResourceItemChooserContextMenu::removeResourceExistingTag(const KisTagSP tag, KoResourceSP resource)
 {
+    if (m_tagChooserWidget->currentlySelectedTag()->url() == tag->url()) {
+        m_tagChooserWidget->setCurrentItem(KisAllTagsModel::urlAll());
+    }
     KisTagResourceModel tagResourceModel(resource->resourceType().first);
     tagResourceModel.untagResource(tag, resource->resourceId());
 }

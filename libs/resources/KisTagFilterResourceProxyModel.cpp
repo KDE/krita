@@ -218,7 +218,9 @@ void KisTagFilterResourceProxyModel::updateTagFilter()
 
     // TODO: when model changes the current selection in the
     //       view disappears. We should try to keep it somehow.
-    setSourceModel(desiredModel);
+    if (sourceModel() != desiredModel) {
+        setSourceModel(desiredModel);
+    }
 
     invalidateFilter();
 }

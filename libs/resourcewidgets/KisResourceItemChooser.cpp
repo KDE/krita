@@ -437,7 +437,9 @@ KisResourceItemListView *KisResourceItemChooser::itemView() const
 
 void KisResourceItemChooser::contextMenuRequested(const QPoint &pos)
 {
+    KoResourceSP current = currentResource();
     d->tagManager->contextMenuRequested(currentResource(), pos);
+    this->setCurrentResource(current);
 }
 
 void KisResourceItemChooser::setStoragePopupButtonVisible(bool visible)

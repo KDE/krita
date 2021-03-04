@@ -13,8 +13,6 @@
         <file alias="dark_dialog-close.svg">dark_window-close.svg</file>
         <file>dark_dialog-ok.svg</file>
         <file>dark_dialog-warning.svg</file>
-        <file>dark_document-export.svg</file>
-        <file>dark_document-import.svg</file>
         <file>dark_document-new.svg</file>
         <file>dark_document-open-recent.svg</file>
         <file>dark_document-open.svg</file>

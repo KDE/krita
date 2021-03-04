@@ -34,11 +34,11 @@ KisPaletteChooser::KisPaletteChooser(QWidget *parent)
 
     m_d->actAdd.reset(new QAction(KisIconUtils::loadIcon("list-add"),
                                   i18n("Add a new palette")));
-    m_d->actRemove.reset(new QAction(KisIconUtils::loadIcon("list-remove"),
+    m_d->actRemove.reset(new QAction(KisIconUtils::loadIcon("edit-delete"),
                                      i18n("Remove current palette")));
-    m_d->actImport.reset(new QAction(KisIconUtils::loadIcon("document-import"),
+    m_d->actImport.reset(new QAction(KisIconUtils::loadIcon("document-import-16"),
                                      i18n("Import a new palette from file")));
-    m_d->actExport.reset(new QAction(KisIconUtils::loadIcon("document-export"),
+    m_d->actExport.reset(new QAction(KisIconUtils::loadIcon("document-export-16"),
                                      i18n("Export current palette to file")));
     m_ui->setupUi(this);
     m_ui->bnAdd->setDefaultAction(m_d->actAdd.data());

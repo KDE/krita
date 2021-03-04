@@ -63,8 +63,8 @@ PaletteDockerDock::PaletteDockerDock( )
     , m_paletteEditor(new KisPaletteEditor)
     , m_actAdd(new QAction(KisIconUtils::loadIcon("list-add"), i18n("Add a color")))
     , m_actRemove(new QAction(KisIconUtils::loadIcon("edit-delete"), i18n("Delete color")))
-    , m_actModify(new QAction(KisIconUtils::loadIcon("edit-rename"), i18n("Modify this spot")))
-    , m_actEditPalette(new QAction(KisIconUtils::loadIcon("groupLayer"), i18n("Edit this palette")))
+    , m_actModify(new QAction(KisIconUtils::loadIcon("document-edit"), i18n("Modify this spot")))
+    , m_actEditPalette(new QAction(KisIconUtils::loadIcon("palette-edit"), i18n("Edit this palette")))
     , m_colorSelfUpdate(false)
 {
     QWidget *mainWidget = new QWidget(this);

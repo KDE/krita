@@ -26,7 +26,10 @@
         <file>dark_deletekeyframe.svg</file>
         <file>dark_dialog-cancel.svg</file>
         <file>dark_document-edit.svg</file>
+        <file>dark_document-export.svg</file>
+        <file>dark_document-import.svg</file>
         <file>dark_document-export-16.svg</file>
+        <file>dark_document-import-16.svg</file>
         <file>dark_document-save-16.svg</file>
         <file>dark_duplicateitem.svg</file>
         <file>dark_edit-clear-16.svg</file>
@@ -49,6 +52,7 @@
         <file>dark_lastframe.svg</file>
         <file>dark_prevkeyframe.svg</file>
         <file>dark_firstframe.svg</file>
+        <file>dark_palette-edit.svg</file>
         <file>dark_palette-library.svg</file>
         <file>dark_passthrough-disabled.svg</file>
         <file>dark_passthrough-enabled.svg</file>
@@ -94,7 +98,10 @@
         <file>light_deletekeyframe.svg</file>
         <file>light_dialog-cancel.svg</file>
         <file>light_document-edit.svg</file>
+        <file>light_document-export.svg</file>
+        <file>light_document-import.svg</file>
         <file>light_document-export-16.svg</file>
+        <file>light_document-import-16.svg</file>
         <file>light_document-save-16.svg</file>
         <file>light_duplicateitem.svg</file>
         <file>light_edit-clear-16.svg</file>
@@ -113,6 +120,7 @@
         <file>light_local-selection-inactive.svg</file>
         <file>light_mirror-view-16.svg</file>
         <file>light_nextframe.svg</file>
+        <file>light_palette-edit.svg</file>
         <file>light_palette-library.svg</file>
         <file>light_passthrough-disabled.svg</file>
         <file>light_passthrough-enabled.svg</file>

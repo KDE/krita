@@ -305,7 +305,6 @@ void StoryboardView::setCurrentItem(int frame)
 {
     const StoryboardModel* Model = dynamic_cast<const StoryboardModel*>(model());
     QModelIndex index = Model->indexFromFrame(frame);
-    ENTER_FUNCTION() << frame;
     if (index.isValid()) {
         selectionModel()->select(index, QItemSelectionModel::ClearAndSelect);
         selectionModel()->setCurrentIndex(index, QItemSelectionModel::ClearAndSelect);

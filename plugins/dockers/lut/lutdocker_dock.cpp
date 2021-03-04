@@ -218,7 +218,7 @@ void LutDockerDock::unsetCanvas()
 void LutDockerDock::slotUpdateIcons()
 {
     m_btnConvertCurrentColor->setIcon(KisIconUtils::loadIcon("krita_tool_freehand"));
-    m_btmShowBWConfiguration->setIcon(KisIconUtils::loadIcon("properties"));
+    m_btmShowBWConfiguration->setIcon(KisIconUtils::loadIcon("settings-button"));
 }
 
 void LutDockerDock::slotShowBWConfiguration()

@@ -37,6 +37,11 @@ public Q_SLOTS:
 
 private:
     KisToolCrop* m_cropTool;
+
+private Q_SLOTS:
+    void updateLockRatioIcon();
+    void updateLockWidthIcon();
+    void updateLockHeightIcon();
 };
 
 #endif // KISTOOLCROPCONFIGWIDGET_H

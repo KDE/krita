@@ -389,7 +389,6 @@ bool StoryboardDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, c
             bool addItemButtonClicked = addItemButton.isValid() && addItemButton.contains(mouseEvent->pos());
             bool deleteItemButtonClicked = deleteItemButton.isValid() && deleteItemButton.contains(mouseEvent->pos());
 
-
             StoryboardModel* sbModel = dynamic_cast<StoryboardModel*>(model);
             if (leftButton && addItemButtonClicked) {
                 sbModel->insertItem(index.parent(), true);
@@ -429,6 +428,7 @@ bool StoryboardDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, c
             m_lastDragPos = mouseEvent->pos();
         }
     }
+
     return false;
 }
 
@@ -618,4 +618,18 @@ QRect StoryboardDelegate::scrollUpButton(const QStyleOptionViewItem &option, QSt
 void StoryboardDelegate::setImageSize(QSize imageSize)
 {
     m_imageSize = imageSize;
+}
+
+bool StoryboardDelegate::isOverlappingActionIcons(const QRect &rect, const QMouseEvent *event)
+{
+    QRect addItemButton(QPoint(0, 0), QSize(22, 22));
+    addItemButton.moveBottomLeft(rect.bottomLeft());
+
+    QRect deleteItemButton(QPoint(0, 0), QSize(22, 22));
+    deleteItemButton.moveBottomRight(rect.bottomRight());
+
+    bool addItemButtonHover = addItemButton.isValid() && addItemButton.contains(event->pos());
+    bool deleteItemButtonHover = deleteItemButton.isValid() && deleteItemButton.contains(event->pos());
+
+    return addItemButtonHover || deleteItemButtonHover;
 }

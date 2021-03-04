@@ -929,6 +929,12 @@ bool StoryboardModel::insertItem(QModelIndex index, bool after)
     insertRow(desiredIndex);
     KisAddStoryboardCommand *command = new KisAddStoryboardCommand(desiredIndex, m_items.at(desiredIndex), this);
     insertChildRows(desiredIndex, command);
+    if (m_image) {
+        KisSwitchCurrentTimeCommand *switchTimeCmd = new KisSwitchCurrentTimeCommand(m_image->animationInterface(),
+                                                                                     m_image->animationInterface()->currentTime(),
+                                                                                     this->index(StoryboardItem::FrameNumber, 0, this->index(desiredIndex, 0)).data().toInt(), command);
+        switchTimeCmd->redo();
+    }
     pushUndoCommand(command);
 
     // Let's start rendering after adding new storyboard items.

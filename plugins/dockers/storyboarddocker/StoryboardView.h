@@ -21,7 +21,7 @@ class StoryboardModel;
  *
  * */
 
-class KRITASTORYBOARDDOCKER_EXPORT StoryboardView: public QListView
+class KRITASTORYBOARDDOCKER_EXPORT StoryboardView : public QListView
 {
     Q_OBJECT
 public:
@@ -66,6 +66,9 @@ public:
      * @param frame The new current frame
      */
     void setCurrentItem(int frame);
+
+
+    void mouseReleaseEvent(QMouseEvent *event) override;
 
 private Q_SLOTS:
     void slotContextMenuRequested(const QPoint &);

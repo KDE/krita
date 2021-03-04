@@ -12,6 +12,7 @@
 
 #include "StoryboardView.h"
 #include "StoryboardModel.h"
+#include "StoryboardDelegate.h"
 #include "KisAddRemoveStoryboardCommand.h"
 
 class StoryboardStyle : public QProxyStyle
@@ -304,9 +305,26 @@ void StoryboardView::setCurrentItem(int frame)
 {
     const StoryboardModel* Model = dynamic_cast<const StoryboardModel*>(model());
     QModelIndex index = Model->indexFromFrame(frame);
+    ENTER_FUNCTION() << frame;
     if (index.isValid()) {
         selectionModel()->select(index, QItemSelectionModel::ClearAndSelect);
         selectionModel()->setCurrentIndex(index, QItemSelectionModel::ClearAndSelect);
         scrollTo(index);
     }
+}
+
+void StoryboardView::mouseReleaseEvent(QMouseEvent *event) {
+    QModelIndex index = indexAt(event->pos());
+
+    // To prevent selection changes from occuring when hitting the "plus" button,
+    // we want to filter out these inputs before passing it up to QListView / QAbstractItemView
+    if (index.isValid() && index.parent().isValid() && index.row() == StoryboardItem::FrameNumber) {
+        StoryboardDelegate* sbDelegate = dynamic_cast<StoryboardDelegate*>(itemDelegate(index));
+        QRect itemRect = visualRect(index);
+        if (sbDelegate && sbDelegate->isOverlappingActionIcons(itemRect, event)) {
+            return;
+        }
+    }
+
+    QListView::mouseReleaseEvent(event);
 }

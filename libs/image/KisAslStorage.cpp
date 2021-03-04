@@ -132,7 +132,10 @@ public:
         return m_currentResource.isNull() ? QString() : m_currentType;
     }
 
-    QDateTime lastModified() const override { return QDateTime(); }
+    QDateTime lastModified() const override {
+        QFileInfo fi(m_filename);
+        return fi.lastModified();
+    }
 
 
     /// This only loads the resource when called (but not in case of asl...)

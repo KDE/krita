@@ -616,17 +616,16 @@ QModelIndex StoryboardModel::indexFromFrame(int frame) const
     while (end >= begin) {
         int row = begin + (end - begin) / 2;
         QModelIndex parentIndex = index(row, 0);
-        QModelIndex childIndex = index(0, 0, parentIndex);
+        QModelIndex childIndex = index(StoryboardItem::FrameNumber, 0, parentIndex);
         if (childIndex.data().toInt() == frame) {
             return parentIndex;
-        }
-        else if (childIndex.data().toInt() > frame) {
+        } else if (childIndex.data().toInt() > frame) {
             end = row - 1;
-        }
-        else if (childIndex.data().toInt() < frame) {
+        } else if (childIndex.data().toInt() < frame) {
             begin = row + 1;
         }
     }
+
     return QModelIndex();
 }
 
@@ -929,12 +928,19 @@ bool StoryboardModel::insertItem(QModelIndex index, bool after)
     insertRow(desiredIndex);
     KisAddStoryboardCommand *command = new KisAddStoryboardCommand(desiredIndex, m_items.at(desiredIndex), this);
     insertChildRows(desiredIndex, command);
-    if (m_image) {
+    const int currentTime = m_image->animationInterface()->currentTime();
+    const int desiredTime = this->index(StoryboardItem::FrameNumber, 0, this->index(desiredIndex, 0)).data().toInt();
+
+    if (m_image && currentTime != desiredTime) {
         KisSwitchCurrentTimeCommand *switchTimeCmd = new KisSwitchCurrentTimeCommand(m_image->animationInterface(),
-                                                                                     m_image->animationInterface()->currentTime(),
-                                                                                     this->index(StoryboardItem::FrameNumber, 0, this->index(desiredIndex, 0)).data().toInt(), command);
+                                                                                     currentTime,
+                                                                                     desiredTime,
+                                                                                     command);
         switchTimeCmd->redo();
+    } else {
+        m_view->setCurrentItem(currentTime);
     }
+
     pushUndoCommand(command);
 
     // Let's start rendering after adding new storyboard items.
@@ -948,7 +954,6 @@ bool StoryboardModel::removeItem(QModelIndex index, KUndo2Command *command)
  {
     const int row = index.row();
     const int durationDeletedScene = data(index, TotalSceneDurationInFrames).toInt();
-
 
     //remove all keyframes within the scene with command as parent
     KisNodeSP node = m_image->rootLayer();
@@ -972,6 +977,18 @@ bool StoryboardModel::removeItem(QModelIndex index, KUndo2Command *command)
         });
         }
         shiftKeyframes(KisTimeSpan::infinite(lastFrameOfScene), -durationDeletedScene, command);
+
+        //If we're viewing the scene we're about the remove, let's jump back to the last valid scene.
+        if (row > 0 && row <= rowCount()) {
+            QModelIndex currentSceneFN = this->index(StoryboardItem::FrameNumber, 0, this->index(row, 0));
+            if (m_image && m_image->animationInterface()->currentTime() == currentSceneFN.data().toInt()) {
+                KisSwitchCurrentTimeCommand* switchTimeCmd = new KisSwitchCurrentTimeCommand(m_image->animationInterface(),
+                                                                                             currentSceneFN.data().toInt(),
+                                                                                             this->index(StoryboardItem::FrameNumber, 0, this->index(row-1, 0)).data().toInt(),
+                                                                                             command);
+                switchTimeCmd->redo();
+            }
+        }
     }
 
     removeRows(row, 1);

@@ -21,6 +21,7 @@
 
 #include <kis_icon.h>
 #include <kis_image_animation_interface.h>
+#include <commands_new/kis_switch_current_time_command.h>
 #include "KisAddRemoveStoryboardCommand.h"
 
 StoryboardDelegate::StoryboardDelegate(QObject *parent)
@@ -397,6 +398,7 @@ bool StoryboardDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, c
             else if (leftButton && deleteItemButtonClicked) {
                 int row = index.parent().row();
                 KisRemoveStoryboardCommand *command = new KisRemoveStoryboardCommand(row, sbModel->getData().at(row), sbModel);
+
                 sbModel->removeItem(index.parent(), command);
                 sbModel->pushUndoCommand(command);
                 return true;

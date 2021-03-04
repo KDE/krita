@@ -169,7 +169,7 @@ RecorderDockerDock::RecorderDockerDock()
     d->ui->buttonManageRecordings->setIcon(KisIconUtils::loadIcon("configure-thicker"));
     d->ui->buttonBrowse->setIcon(KisIconUtils::loadIcon("folder"));
     d->ui->buttonRecordToggle->setIcon(KisIconUtils::loadIcon("media-record"));
-    d->ui->buttonExport->setIcon(KisIconUtils::loadIcon("document-export"));
+    d->ui->buttonExport->setIcon(KisIconUtils::loadIcon("document-export-16"));
     d->ui->spinQuality->setMinimum(1);
     d->ui->spinQuality->setMaximum(100);
     d->ui->spinQuality->setSuffix("%");

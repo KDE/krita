@@ -46,6 +46,13 @@
         <file>dark_list-add-22.svg</file>
         <file>dark_local-selection-active.svg</file>
         <file>dark_local-selection-inactive.svg</file>
+        <file>dark_locked.svg</file>
+        <file alias="dark_object-locked.svg">dark_locked.svg</file>
+        <file>light_unlocked.svg</file>
+        <file alias="dark_object-unlocked.svg">dark_unlocked.svg</file>
+        <file>dark_media-playback-start.svg</file>
+        <file>dark_media-playback-stop.svg</file>
+        <file>dark_media-record.svg</file>
         <file>dark_mirror-view-16.svg</file>
         <file>dark_nextframe.svg</file>
         <file>dark_nextkeyframe.svg</file>
@@ -73,7 +80,9 @@
         <file>dark_transparency-disabled.svg</file>
         <file>dark_transparency-enabled.svg</file>
         <file>dark_trim-to-image.svg</file>
+        <file>dark_view-list-details.svg</file>
         <file>dark_view-list-text-16.svg</file>
+        <file>dark_view-preview.svg</file>
         <file>dark_warning.svg</file>
         <file>dark_workspace-chooser.svg</file>
         <file>dark_wraparound.svg</file>
@@ -118,6 +127,13 @@
         <file>light_list-add-22.svg</file>
         <file>light_local-selection-active.svg</file>
         <file>light_local-selection-inactive.svg</file>
+        <file>light_locked.svg</file>
+        <file alias="light_object-locked.svg">light_locked.svg</file>
+        <file>light_unlocked.svg</file>
+        <file alias="light_object-unlocked.svg">light_unlocked.svg</file>
+        <file>light_media-playback-start.svg</file>
+        <file>light_media-playback-stop.svg</file>
+        <file>light_media-record.svg</file>
         <file>light_mirror-view-16.svg</file>
         <file>light_nextframe.svg</file>
         <file>light_palette-edit.svg</file>
@@ -145,7 +161,9 @@
         <file>light_transparency-disabled.svg</file>
         <file>light_transparency-enabled.svg</file>
         <file>light_trim-to-image.svg</file>
+        <file>light_view-list-details.svg</file>
         <file>light_view-list-text-16.svg</file>
+        <file>light_view-preview.svg</file>
         <file>light_warning.svg</file>
         <file>light_workspace-chooser.svg</file>
         <file>light_wraparound.svg</file>

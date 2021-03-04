@@ -37,14 +37,8 @@
         <file>light_kde.svg</file>
         <file>light_layer-visible-off.svg</file>
         <file>light_link.svg</file>
-        <file>light_locked.svg</file>
-        <file>light_media-playback-start.svg</file>
-        <file>light_media-playback-stop.svg</file>
-        <file>light_media-record.svg</file>
-        <file alias="light_object-locked.svg">light_locked.svg</file>
         <file>light_object-rotate-left.svg</file>
         <file>light_object-rotate-right.svg</file>
-        <file alias="light_object-unlocked.svg">light_unlocked.svg</file>
         <file>light_preferences-desktop-color.svg</file>
         <file>light_preferences-desktop-display.svg</file>
         <file>light_preferences-desktop-locale.svg</file>
@@ -55,13 +49,10 @@
         <file>light_tag.svg</file>
         <file>light_tools-report-bug.svg</file>
         <file>light_tools-wizard.svg</file>
-        <file>light_unlocked.svg</file>
         <file>light_view-filter.svg</file>
         <file>light_view-fullscreen.svg</file>
         <file>light_view-grid.svg</file>
-        <file>light_view-list-details.svg</file>
         <file>light_view-list-text.svg</file>
-        <file>light_view-preview.svg</file>
         <file>light_view-refresh.svg</file>
         <file>light_window-close.svg</file>
         <file>light_window-new.svg</file>

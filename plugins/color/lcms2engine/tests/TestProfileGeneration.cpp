@@ -9,6 +9,7 @@
 #include <LcmsColorProfileContainer.h>
 #include <KoColorConversions.h>
 #include <IccColorProfile.h>
+#include "ColorProfileQuantization.h"
 
 #include <QTest>
 #include "sdk/tests/testpigment.h"
@@ -391,45 +392,16 @@ void TestProfileGeneration::testQuantization()
     QVector<double> inputMatrix = {0.6400, 0.3300, 1.0,
                                   0.3000, 0.6000, 1.0,
                                   0.1500, 0.0600, 1.0};
-    QVector<double> compareMatrix = {0.639998686, 0.330010138, 1.0,
-                                    0.300003784, 0.600003357, 1.0,
-                                    0.150002046, 0.059997204, 1.0};
-    for (int i=0; i<inputMatrix.size(); i+=3) {
-        QVector<double> value (3);
+    QVector<double> compareMatrix = inputMatrix;
 
-        value[0] = inputMatrix[i];
-        value[1] = inputMatrix[i+1];
-        value[2] = 1.0 - value[0] - value[1];
-
-        double sum = 0.0;
-        double largest = -1e9;
-        int largestValue = 0;
-        for (int j = 0; j<value.size(); j++) {
-            double val = value.at(j);
-            sum += val;
-            if (val>largest) {
-                largest = val;
-                largestValue = j;
-            }
-            value[j] = floor(val * 65536.0 + 0.5) / 65536.0;
-        }
-
-        for (int j = 0; j<value.size(); j++) {
-            if (j == largestValue) {
-                continue;
-            }
-            sum -= value.at(j);
-        }
-
-        value[largestValue] = floor(sum * 65536.0 + 0.5) / 65536.0;
-
-        inputMatrix[i] = value[0];
-        inputMatrix[i+1] = value[1];
-    }
+    /*{0.639998686, 0.330010138, 1.0,
+       0.300003784, 0.600003357, 1.0,
+       0.150002046, 0.059997204, 1.0};*/
+    quantizexyYPrimariesTo16bit(inputMatrix);
     qDebug() << inputMatrix;
     qDebug() << compareMatrix;
     for (int i=0; i<inputMatrix.size(); i++) {
-        QVERIFY2(fabs(inputMatrix[i] - compareMatrix[i]) < 0.000015,
+        QVERIFY2(fabs(inputMatrix[i] - compareMatrix[i]) < 0.00001,
                  QString("Too large an error margin at %1: %2")
                  .arg(i).arg(fabs(inputMatrix[i] - compareMatrix[i])).toLatin1());
     }

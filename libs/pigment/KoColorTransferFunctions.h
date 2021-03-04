@@ -1,5 +1,5 @@
 /*
- *  SPDX-FileCopyrightText: 2020 Wolthera van Hövell tot Westerflier
+ *  SPDX-FileCopyrightText: 2020 Wolthera van Hövell tot Westerflier <griffinvalley@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

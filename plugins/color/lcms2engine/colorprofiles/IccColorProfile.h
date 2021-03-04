@@ -1,5 +1,6 @@
 /*
  *  SPDX-FileCopyrightText: 2007 Cyrille Berger <cberger@cberger.net>
+ *  PDX-FileCopyrightText: 2020 Wolthera van Hövell tot Westerflier <griffinvalley@gmail.com>
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
 */
@@ -128,12 +129,6 @@ protected:
     bool init();
     void calculateFloatUIMinMax(void);
 private:
-    /*
-     * Implementation of quantization, referenced from
-     * quantizeRGBprimsS15Fixed16 in ArgyllCMS 'icc.c' file.
-     */
-    void quantizexyYPrimariesTo16bit(QVector<double> &colorants);
-
     struct Private;
     QScopedPointer<Private> d;
 };

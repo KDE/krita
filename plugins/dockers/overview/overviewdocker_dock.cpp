@@ -96,7 +96,7 @@ void OverviewDockerDock::setCanvas(KoCanvasBase * canvas)
     if (m_canvas && m_canvas->viewManager() && m_canvas->viewManager()->zoomController() && m_canvas->viewManager()->zoomController()->zoomAction()) {
         m_zoomSlider = m_canvas->viewManager()->zoomController()->zoomAction()->createWidget(m_canvas->imageView()->KisView::statusBar());
         m_bottomLayout->addWidget(m_zoomSlider);
-        
+
         m_rotateAngleSelector = new KisAngleSelector();
         m_rotateAngleSelector->setRange(-179.99, 180.0);
         m_rotateAngleSelector->setAngle(m_canvas->rotationAngle());
@@ -112,7 +112,9 @@ void OverviewDockerDock::setCanvas(KoCanvasBase * canvas)
                 m_mirrorCanvas->setDefaultAction(action);
             }
         }
-        
+        m_mirrorCanvas->setIcon(KisIconUtils::loadIcon("mirror-view-16"));
+        connect(m_mirrorCanvas, SIGNAL(toggled(bool)), this, SLOT(mirrorUpdateIcon()));
+
         m_horizontalLayout->addWidget(m_rotateAngleSelector);
         m_horizontalLayout->addStretch();
         m_horizontalLayout->addWidget(m_mirrorCanvas);
@@ -126,6 +128,12 @@ void OverviewDockerDock::unsetCanvas()
     setEnabled(false);
     m_canvas = nullptr;
     m_overviewWidget->unsetCanvas();
+}
+
+void OverviewDockerDock::mirrorUpdateIcon()
+{
+    if(!m_mirrorCanvas) return;
+    m_mirrorCanvas->setIcon(KisIconUtils::loadIcon("mirror-view-16"));
 }
 
 void OverviewDockerDock::rotateCanvasView(qreal rotation)

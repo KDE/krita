@@ -28,6 +28,7 @@ public:
     void unsetCanvas() override;
 
 public Q_SLOTS:
+    void mirrorUpdateIcon();
     void rotateCanvasView(qreal rotation);
     void updateSlider();
 

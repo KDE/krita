@@ -43,6 +43,7 @@
         <file>dark_list-add-22.svg</file>
         <file>dark_local-selection-active.svg</file>
         <file>dark_local-selection-inactive.svg</file>
+        <file>dark_mirror-view-16.svg</file>
         <file>dark_nextframe.svg</file>
         <file>dark_nextkeyframe.svg</file>
         <file>dark_lastframe.svg</file>
@@ -110,6 +111,7 @@
         <file>light_list-add-22.svg</file>
         <file>light_local-selection-active.svg</file>
         <file>light_local-selection-inactive.svg</file>
+        <file>light_mirror-view-16.svg</file>
         <file>light_nextframe.svg</file>
         <file>light_palette-library.svg</file>
         <file>light_passthrough-disabled.svg</file>

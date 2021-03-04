@@ -188,6 +188,22 @@ KoResourceSP KisAslStorage::resource(const QString &url)
         QHash<QString, KisPSDLayerStyleSP> styles = m_aslSerializer->stylesHash();
         if (styles.contains(realUuid)) {
             return styles[realUuid];
+        } else {
+            // can be {realUuid} or {realUuid}
+            if (realUuid.startsWith("{")) {
+                realUuid = realUuid.right(realUuid.length() - 1);
+            }
+            if (realUuid.endsWith("}")) {
+                realUuid = realUuid.left(realUuid.length() - 1);
+            }
+
+            if (styles.contains(realUuid)) {
+                return styles[realUuid];
+            } else {
+                Q_FOREACH(QString ke, styles.keys()) {
+                }
+            }
+
         }
     }
     return 0;

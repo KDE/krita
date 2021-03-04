@@ -42,15 +42,15 @@ LogDockerDock::LogDockerDock( )
     setupUi(page);
     setWidget(page);
 
-    bnToggle->setIcon(koIcon("view-list-text"));
+    bnToggle->setIcon(koIcon("view-list-text-16"));
     connect(bnToggle, SIGNAL(clicked(bool)), SLOT(toggleLogging(bool)));
     bnToggle->setChecked(KisConfig(true).readEntry<bool>("logviewer_enabled", false));
     toggleLogging(KisConfig(true).readEntry<bool>("logviewer_enabled", false));
 
-    bnClear->setIcon(koIcon("edit-clear"));
+    bnClear->setIcon(koIcon("edit-clear-16"));
     connect(bnClear, SIGNAL(clicked(bool)), SLOT(clearLog()));
 
-    bnSave->setIcon(koIcon("document-save"));
+    bnSave->setIcon(koIcon("document-save-16"));
     connect(bnSave, SIGNAL(clicked(bool)), SLOT(saveLog()));
 
     bnSettings->setIcon(koIcon("configure-thicker"));

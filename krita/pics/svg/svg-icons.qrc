@@ -29,6 +29,7 @@
         <file>dark_document-export-16.svg</file>
         <file>dark_document-save-16.svg</file>
         <file>dark_duplicateitem.svg</file>
+        <file>dark_edit-clear-16.svg</file>
         <file>dark_edit-delete.svg</file>
         <file>dark_edit-redo.svg</file>
         <file>dark_edit-undo.svg</file>
@@ -67,6 +68,7 @@
         <file>dark_transparency-disabled.svg</file>
         <file>dark_transparency-enabled.svg</file>
         <file>dark_trim-to-image.svg</file>
+        <file>dark_view-list-text-16.svg</file>
         <file>dark_warning.svg</file>
         <file>dark_workspace-chooser.svg</file>
         <file>dark_wraparound.svg</file>
@@ -94,6 +96,7 @@
         <file>light_document-export-16.svg</file>
         <file>light_document-save-16.svg</file>
         <file>light_duplicateitem.svg</file>
+        <file>light_edit-clear-16.svg</file>
         <file>light_edit-delete.svg</file>
         <file>light_edit-redo.svg</file>
         <file>light_edit-undo.svg</file>
@@ -132,6 +135,7 @@
         <file>light_transparency-disabled.svg</file>
         <file>light_transparency-enabled.svg</file>
         <file>light_trim-to-image.svg</file>
+        <file>light_view-list-text-16.svg</file>
         <file>light_warning.svg</file>
         <file>light_workspace-chooser.svg</file>
         <file>light_wraparound.svg</file>

@@ -1,11 +1,11 @@
 /*
- * SPDX-FileCopyrightText: 2020 Wolthera van Hövell tot Westerflier <griffinvalley@gmail.com>
+ * SPDX-FileCopyrightText: 2021 Wolthera van Hövell tot Westerflier <griffinvalley@gmail.com>
  *
  * Code inspired by quantizeRGBprimsS15Fixed16 in ArgyllCMS 'icc.c' file:
  * SPDX-FileCopyrightText: 1997-2013 Graeme W. Gill
  *
  * SPDX-License-Identifier: MIT
-*/
+ */
 
 #ifndef COLORPROFILEQUANTIZATION_H
 #define COLORPROFILEQUANTIZATION_H

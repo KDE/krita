@@ -1,5 +1,8 @@
 /*
  *  SPDX-FileCopyrightText: 2018 Dirk Farin <farin@struktur.de>
+ *  SPDX-FileCopyrightText: 2020-2021 Wolthera van Hövell tot Westerflier <griffinvalley@gmail.com>
+ *  SPDX-FileCopyrightText: 2021 Daniel Novomesky <dnovomesky@gmail.com>
+ *  SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

@@ -77,6 +77,8 @@
         <file>dark_selection_replace.svg</file>
         <file>dark_selection_subtract.svg</file>
         <file>dark_sidebaricon.svg</file>
+        <file>dark_system-help.svg</file>
+        <file alias="dark_help-contents.svg">dark_system-help.svg</file>
         <file>dark_transparency-disabled.svg</file>
         <file>dark_transparency-enabled.svg</file>
         <file>dark_trim-to-image.svg</file>
@@ -158,6 +160,8 @@
         <file>light_selection_replace.svg</file>
         <file>light_selection_subtract.svg</file>
         <file>light_sidebaricon.svg</file>
+        <file>light_system-help.svg</file>
+        <file alias="light_help-contents.svg">light_system-help.svg</file>
         <file>light_transparency-disabled.svg</file>
         <file>light_transparency-enabled.svg</file>
         <file>light_trim-to-image.svg</file>

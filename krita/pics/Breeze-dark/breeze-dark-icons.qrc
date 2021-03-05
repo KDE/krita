@@ -31,7 +31,6 @@
         <file>dark_folder.svg</file>
         <file>dark_format-list-unordered.svg</file>
         <file>dark_go-home.svg</file>
-        <file alias="dark_help-contents.svg">dark_system-help.svg</file>
         <file>dark_im-user.svg</file>
         <file>dark_kde.svg</file>
         <file>dark_layer-visible-off.svg</file>
@@ -44,7 +43,6 @@
         <file>dark_process-stop.svg</file>
         <file>dark_select-all.svg</file>
         <file>dark_select-clear.svg</file>
-        <file>dark_system-help.svg</file>
         <file>dark_tag.svg</file>
         <file>dark_tools-report-bug.svg</file>
         <file>dark_tools-wizard.svg</file>

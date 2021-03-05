@@ -80,17 +80,81 @@ void TestTagResourceModel::testRowCount()
     QCOMPARE(tagResourceModel.rowCount(), rowCount);
 }
 
+bool testDataInColumnAndRole(KisAllTagResourceModel &tagResourceModel, int columnRole)
+{
+    QModelIndex idx = tagResourceModel.index(0, columnRole);
+    QVariant data1 = tagResourceModel.data(idx, Qt::DisplayRole);
+
+    idx = tagResourceModel.index(0, 0);
+    QVariant data2 = tagResourceModel.data(idx, Qt::UserRole + columnRole);
+    bool success = data1 == data2;
+    if (!success) {
+        qInfo() << "Column: " << columnRole << "Data from column: " << data1 << "Data from role: " << data2;
+    }
+    return success;
+}
+
+bool testDataInColumnAndRole(KisAllTagResourceModel &tagResourceModel, int columnRole, QVariant expected)
+{
+    QModelIndex idx = tagResourceModel.index(0, columnRole);
+    QVariant data = tagResourceModel.data(idx, Qt::DisplayRole);
+    bool columnSuccess = data == expected;
+    if (!columnSuccess) {
+        qInfo() << "Column: " << columnRole << "Expected: " << expected << "Actual: " << data;
+    }
+
+    idx = tagResourceModel.index(0, 0);
+    data = tagResourceModel.data(idx, Qt::UserRole + columnRole);
+    bool roleSuccess = data == expected;
+    if (!roleSuccess) {
+        qInfo() << "Column: " << columnRole << "Expected: " << expected << "Actual: " << data;
+    }
+    return columnSuccess && roleSuccess;
+
+}
+
+
+
 void TestTagResourceModel::testData()
 {
      KisAllTagResourceModel tagResourceModel(ResourceType::PaintOpPresets);
      QModelIndex idx = tagResourceModel.index(0, 0);
      QVERIFY(idx.isValid());
 
-     int tagId = tagResourceModel.data(idx, Qt::UserRole + KisAllTagResourceModel::TagId).toInt();
-     QCOMPARE(tagId, 1);
+     // *** columns from ResourceModel, via ResourceQueryMapper *** //
+    QVERIFY(testDataInColumnAndRole(tagResourceModel, KisAbstractResourceModel::Id, 3));
+    QVERIFY(testDataInColumnAndRole(tagResourceModel, KisAbstractResourceModel::StorageId, 1));
+    QVERIFY(testDataInColumnAndRole(tagResourceModel, KisAbstractResourceModel::Name, "test0.kpp"));
+    QVERIFY(testDataInColumnAndRole(tagResourceModel, KisAbstractResourceModel::Filename, "test0.kpp"));
+    QVERIFY(testDataInColumnAndRole(tagResourceModel, KisAbstractResourceModel::Tooltip, "test0.kpp"));
 
-     int resourceId = tagResourceModel.data(idx, Qt::UserRole + KisAllTagResourceModel::ResourceId).toInt();
-     QCOMPARE(resourceId, 3);
+    // Thumbnail -- without checking the value, just if both are the same
+    QVERIFY(testDataInColumnAndRole(tagResourceModel, KisAbstractResourceModel::Thumbnail));
+    // Status -- skip
+
+    QVERIFY(testDataInColumnAndRole(tagResourceModel, KisAbstractResourceModel::Location, ""));
+    QVERIFY(testDataInColumnAndRole(tagResourceModel, KisAbstractResourceModel::ResourceType, ResourceType::PaintOpPresets));
+
+    // Tags -- only in role; there is no column like that, the result in QVariant()
+    QStringList tagList = tagResourceModel.data(idx, Qt::UserRole + KisAbstractResourceModel::Tags).value<QStringList>();
+    QCOMPARE(tagList.count(), 1);
+    QCOMPARE(tagList[0], "* Favorites");
+
+    // Large Thumbnail -- without checking the value, just if both are the same
+    QVERIFY(testDataInColumnAndRole(tagResourceModel, KisAbstractResourceModel::LargeThumbnail));
+
+    QVERIFY(testDataInColumnAndRole(tagResourceModel, KisAbstractResourceModel::Dirty, false));
+
+    // MetaData -- only in role; there is no column like that, the result in QVariant()
+    QMap<QString, QVariant> metadata = tagResourceModel.data(idx, Qt::UserRole + KisAbstractResourceModel::MetaData).value<QMap<QString, QVariant>>();
+    QCOMPARE(metadata.count(), 0);
+
+    QVERIFY(testDataInColumnAndRole(tagResourceModel, KisAbstractResourceModel::ResourceActive, true));
+    QVERIFY(testDataInColumnAndRole(tagResourceModel, KisAbstractResourceModel::StorageActive, true));
+
+     // *** TagResourceModel own columns *** //
+     QVERIFY(testDataInColumnAndRole(tagResourceModel, KisAllTagResourceModel::TagId, 1));
+     QVERIFY(testDataInColumnAndRole(tagResourceModel, KisAllTagResourceModel::ResourceId, 3));
 
      KisTagSP tag = tagResourceModel.data(idx, Qt::UserRole + KisAllTagResourceModel::Tag).value<KisTagSP>();
      QVERIFY(tag);
@@ -104,14 +168,14 @@ void TestTagResourceModel::testData()
      QCOMPARE(resource->name(), "test0.kpp");
      QCOMPARE(resource->resourceId(), 3);
 
-     bool tagActive = tagResourceModel.data(idx, Qt::UserRole + KisAllTagResourceModel::TagActive).toBool();
-     QVERIFY(tagActive);
+     QVERIFY(testDataInColumnAndRole(tagResourceModel, KisAllTagResourceModel::TagActive, true));
+     QVERIFY(testDataInColumnAndRole(tagResourceModel, KisAllTagResourceModel::ResourceActive, true));
+     QVERIFY(testDataInColumnAndRole(tagResourceModel, KisAllTagResourceModel::ResourceStorageActive, true));
 
-     bool resourceActive = tagResourceModel.data(idx, Qt::UserRole + KisAllTagResourceModel::ResourceActive).toBool();
-     QVERIFY(resourceActive);
+     QVERIFY(testDataInColumnAndRole(tagResourceModel, KisAllTagResourceModel::ResourceName, "test0.kpp"));
+     QVERIFY(testDataInColumnAndRole(tagResourceModel, KisAllTagResourceModel::TagName, "* Favorites"));
 
-     bool resourceStorageActive = tagResourceModel.data(idx, Qt::UserRole + KisAllTagResourceModel::ResourceStorageActive).toBool();
-     QVERIFY(resourceStorageActive);
+
 }
 
 void TestTagResourceModel::testTagResource()

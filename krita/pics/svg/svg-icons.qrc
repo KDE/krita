@@ -34,6 +34,7 @@
         <file>dark_duplicateitem.svg</file>
         <file>dark_edit-clear-16.svg</file>
         <file>dark_edit-delete.svg</file>
+        <file>dark_edit-paste-16.svg</file>
         <file>dark_edit-redo.svg</file>
         <file>dark_edit-undo.svg</file>
         <file>dark_novisible.svg</file>
@@ -117,6 +118,7 @@
         <file>light_duplicateitem.svg</file>
         <file>light_edit-clear-16.svg</file>
         <file>light_edit-delete.svg</file>
+        <file>light_edit-paste-16.svg</file>
         <file>light_edit-redo.svg</file>
         <file>light_edit-undo.svg</file>
         <file>light_novisible.svg</file>

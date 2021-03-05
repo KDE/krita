@@ -1309,9 +1309,12 @@ void StoryboardModel::visualizeScene(const QModelIndex &scene)
     }
 
     int frameTime = index(StoryboardItem::FrameNumber, 0, scene).data().toInt();
-    KisSwitchCurrentTimeCommand* cmd = new KisSwitchCurrentTimeCommand(m_image->animationInterface(), m_image->animationInterface()->currentTime(), frameTime);
-    cmd->redo();
-    pushUndoCommand(cmd);
+
+    if (frameTime != m_image->animationInterface()->currentTime()) {
+        KisSwitchCurrentTimeCommand* cmd = new KisSwitchCurrentTimeCommand(m_image->animationInterface(), m_image->animationInterface()->currentTime(), frameTime);
+        cmd->redo();
+        pushUndoCommand(cmd);
+    }
 }
 
 bool StoryboardModel::moveRowsImpl(const QModelIndex &sourceParent, int sourceRow, int count,

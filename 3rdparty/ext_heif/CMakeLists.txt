@@ -162,8 +162,13 @@ endif ()
 ExternalProject_Add(
     ext_libheif
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL https://github.com/strukturag/libheif/releases/download/v1.11.0/libheif-1.11.0.tar.gz
-    URL_HASH SHA1=def98b8c83861b6e4f3cdf6d3b57c9aaf3408923
+    #URL https://github.com/strukturag/libheif/releases/download/v1.11.0/libheif-1.11.0.tar.gz
+    #URL_HASH SHA1=def98b8c83861b6e4f3cdf6d3b57c9aaf3408923
+
+    GIT_REPOSITORY https://github.com/strukturag/libheif.git
+    GIT_TAG master
+    GIT_SHALLOW TRUE
+    GIT_REMOTE_UPDATE_STRATEGY REBASE
 
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_heif} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} -DBUILD_EXAMPLES=OFF ${GLOBAL_PROFILE}
 

@@ -414,7 +414,18 @@ bool StoryboardModel::removeRows(int position, int rows, const QModelIndex &pare
 bool StoryboardModel::moveRows(const QModelIndex &sourceParent, int sourceRow, int count, const QModelIndex &destinationParent, int destinationChild)
 {
     KisMoveStoryboardCommand *command = new KisMoveStoryboardCommand(sourceRow, count, destinationChild, this);
+
+    const int sourceFrame = index(StoryboardItem::FrameNumber, 0, index(sourceRow, 0)).data().toInt();
+
     if (moveRowsImpl(sourceParent, sourceRow, count, destinationParent, destinationChild)) {
+        const int actualIndex = sourceRow < destinationChild ? destinationChild - 1 : destinationChild;
+        const int destinationFrame = index(StoryboardItem::FrameNumber, 0, index(actualIndex, 0)).data().toInt();
+
+        if (m_image) {
+            KisSwitchCurrentTimeCommand* switchCommand = new KisSwitchCurrentTimeCommand(m_image->animationInterface(), sourceFrame, destinationFrame, command);
+            switchCommand->redo();
+        }
+
         pushUndoCommand(command);
         return true;
     }

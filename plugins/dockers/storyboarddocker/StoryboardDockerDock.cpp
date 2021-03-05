@@ -77,8 +77,8 @@ public:
 
         m_menuUI->btnAddField->setIcon(KisIconUtils::loadIcon("list-add"));
         m_menuUI->btnDeleteField->setIcon(KisIconUtils::loadIcon("edit-delete"));
-        m_menuUI->btnAddField->setIconSize(QSize(22, 22));
-        m_menuUI->btnDeleteField->setIconSize(QSize(22, 22));
+        m_menuUI->btnAddField->setIconSize(QSize(16, 16));
+        m_menuUI->btnDeleteField->setIconSize(QSize(16, 16));
         connect(m_menuUI->btnAddField, SIGNAL(clicked()), this, SLOT(slotaddItem()));
         connect(m_menuUI->btnDeleteField, SIGNAL(clicked()), this, SLOT(slotdeleteItem()));
 
@@ -176,14 +176,14 @@ StoryboardDockerDock::StoryboardDockerDock( )
                                 i18nc("Freeze keyframe positions and ignore storyboard adjustments", "Freeze Keyframe Data"), m_ui->btnLock);
     m_lockAction->setCheckable(true);
     m_ui->btnLock->setDefaultAction(m_lockAction);
-    m_ui->btnLock->setIconSize(QSize(22, 22));
+    m_ui->btnLock->setIconSize(QSize(16, 16));
     connect(m_lockAction, SIGNAL(toggled(bool)), this, SLOT(slotLockClicked(bool)));
 
     m_ui->btnArrange->setMenu(m_arrangeMenu);
     m_ui->btnArrange->setPopupMode(QToolButton::InstantPopup);
     m_ui->btnArrange->setIcon(KisIconUtils::loadIcon("view-choose"));
     m_ui->btnArrange->setAutoRaise(true);
-    m_ui->btnArrange->setIconSize(QSize(22, 22));
+    m_ui->btnArrange->setIconSize(QSize(16, 16));
 
     m_modeGroup = m_arrangeMenu->getModeGroup();
     m_viewGroup = m_arrangeMenu->getViewGroup();

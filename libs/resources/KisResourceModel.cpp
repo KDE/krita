@@ -272,13 +272,18 @@ QModelIndex KisAllResourcesModel::indexForResource(KoResourceSP resource) const
     if (!resource || !resource->valid() || resource->resourceId() < 0) return QModelIndex();
 
     // For now a linear seek to find the first resource with the right id
+    return indexForResourceId(resource->resourceId());
+}
+
+QModelIndex KisAllResourcesModel::indexForResourceId(int resourceId) const
+{
     d->resourcesQuery.first();
     do {
-        if (d->resourcesQuery.value("id").toInt() == resource->resourceId()) {
+        if (d->resourcesQuery.value("id").toInt() == resourceId) {
             return index(d->resourcesQuery.at(), 0);
         }
     } while (d->resourcesQuery.next());
-    
+
     return QModelIndex();
 }
 
@@ -538,6 +543,15 @@ QModelIndex KisResourceModel::indexForResource(KoResourceSP resource) const
     KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
     if (source) {
         return mapFromSource(source->indexForResource(resource));
+    }
+    return QModelIndex();
+}
+
+QModelIndex KisResourceModel::indexForResourceId(int resourceId) const
+{
+    KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
+    if (source) {
+        return mapFromSource(source->indexForResourceId(resourceId));
     }
     return QModelIndex();
 }

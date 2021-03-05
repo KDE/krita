@@ -465,6 +465,19 @@ QModelIndex KisTagResourceModel::indexForResource(KoResourceSP resource) const
     return QModelIndex();
 }
 
+QModelIndex KisTagResourceModel::indexForResourceId(int resourceId) const
+{
+    if (resourceId < 0) return QModelIndex();
+    for (int i = 0; i < rowCount(); ++i)  {
+        QModelIndex idx = index(i, Qt::UserRole + KisAllTagResourceModel::ResourceId);
+        Q_ASSERT(idx.isValid());
+        if (idx.data(Qt::UserRole + KisAllTagResourceModel::ResourceId).toInt() == resourceId) {
+            return idx;
+        }
+    }
+    return QModelIndex();
+}
+
 bool KisTagResourceModel::setResourceInactive(const QModelIndex &index)
 {
     KisResourceModel resourceModel(d->resourceType);

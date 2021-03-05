@@ -38,6 +38,7 @@ public:
 
     KoResourceSP resourceForIndex(QModelIndex index = QModelIndex()) const override;
     QModelIndex indexForResource(KoResourceSP resource) const override;
+    QModelIndex indexForResourceId(int resourceId) const override;
     bool setResourceInactive(const QModelIndex &index) override;
     bool importResourceFile(const QString &filename) override;
     bool addResource(KoResourceSP resource, const QString &storageId = QString()) override;

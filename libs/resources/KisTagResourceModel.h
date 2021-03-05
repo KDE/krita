@@ -52,7 +52,8 @@ public:
         ResourceActive,
         TagActive,
         ResourceStorageActive,
-        ResourceName
+        ResourceName,
+        TagName
     };
 
     // QAbstractItemModel API

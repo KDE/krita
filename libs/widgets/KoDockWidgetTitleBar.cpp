@@ -146,8 +146,17 @@ void KoDockWidgetTitleBar::paintEvent(QPaintEvent*)
         fusionTextOffset = d->lockButton->x();
     }
 
-    titleOpt.rect = QRect(QPoint(fw + mw + lockButtonSize.width() + fusionTextOffset, 0),
-                          QSize(geometry().width() - (fw * 2) -  mw - lockButtonSize.width(), geometry().height()));
+    // To hide the title when the docker is not floating...
+    // TODO: modify this to not hide the title when the widget is docked but not tabified...
+    // It should be doable, probably using QMainWindow::tabifiedDockWidgets and check if the list is empty or not...
+    QSize titleSize;
+    if (q->isFloating()) {
+        titleSize = QSize(geometry().width() - (fw * 2) -  mw - lockButtonSize.width(), geometry().height());
+    } else {
+        titleSize = QSize(0, 0);
+    }
+
+    titleOpt.rect = QRect(QPoint(fw + mw + lockButtonSize.width() + fusionTextOffset, 0), titleSize);
     titleOpt.title = q->windowTitle();
     titleOpt.closable = hasFeature(q, QDockWidget::DockWidgetClosable);
     titleOpt.floatable = hasFeature(q, QDockWidget::DockWidgetFloatable);

@@ -66,6 +66,21 @@ QVariant KisResourceQueryMapper::variantFromResourceQuery(const QSqlQuery &query
             return query.value("location");
         case KisAbstractResourceModel::ResourceType:
             return query.value("resource_type");
+        case KisAbstractResourceModel::Dirty:
+        {
+            QString storageLocation = query.value("location").toString();
+            QString filename = query.value("filename").toString();
+
+            // An uncached resource has not been loaded, so it cannot be dirty
+            if (!KisResourceLocator::instance()->resourceCached(storageLocation, resourceType, filename)) {
+                return false;
+            }
+            else {
+                // Now we have to check the resource, but that's cheap since it's been loaded in any case
+                KoResourceSP resource = KisResourceLocator::instance()->resourceForId(query.value("id").toInt());
+                return resource->isDirty();
+            }
+        }
         case KisAbstractResourceModel::ResourceActive:
             return query.value("resource_active");
         case KisAbstractResourceModel::StorageActive:

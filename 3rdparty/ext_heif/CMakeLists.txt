@@ -60,6 +60,43 @@ ExternalProject_Add(
 )
 endif(WIN32)
 
+# Assumes an existing Meson/Ninja install
+ExternalProject_Add(
+    ext_dav1d
+    DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+    URL https://code.videolan.org/videolan/dav1d/-/archive/0.8.2/dav1d-0.8.2.tar.gz
+    URL_HASH SHA256=00438cf4abb45a56f3dff4c0ff76f4714540672118fe84eea24617d5ed2e394c
+
+    CONFIGURE_COMMAND meson <SOURCE_DIR> --default-library=static --prefix=${EXTPREFIX_heif}
+
+    BUILD_COMMAND meson compile
+
+    INSTALL_COMMAND meson install
+
+    DEPENDS ext_nasm
+)
+
+
+# Assumes an existing Rust install
+# cargo install as part of an external configure...?
+ExternalProject_Add(
+    ext_rav1e
+    DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+    URL https://github.com/xiph/rav1e/archive/v0.5.0-alpha.tar.gz
+    URL_HASH SHA256=fd884fa387d01860eaf22a0a97353525221eb32bf6b9154bbfa21b6cce5988c8
+
+    CONFIGURE_COMMAND cargo install cargo-c
+
+    BUILD_COMMAND ""
+
+    INSTALL_COMMAND cargo cinstall --release --prefix=${EXTPREFIX_heif}
+
+    BUILD_IN_SOURCE 1
+
+    DEPENDS ext_nasm
+)
+
+
 IF ("${CMAKE_SIZEOF_VOID_P}" EQUAL "8" AND NOT CMAKE_SYSTEM_PROCESSOR MATCHES "^(aarch64.*|AARCH64.*|arm64.*|ARM64.*)")
     ExternalProject_Add(ext_libx265_10bit
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
@@ -131,5 +168,5 @@ ExternalProject_Add(
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_heif} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} -DBUILD_EXAMPLES=OFF ${GLOBAL_PROFILE}
 
     UPDATE_COMMAND ""
-    DEPENDS ext_libde265 ext_libx265 ext_jpeg ext_png
+    DEPENDS ext_dav1d ext_rav1e ext_libde265 ext_libx265 ext_jpeg ext_png
 )

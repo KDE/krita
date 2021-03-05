@@ -217,7 +217,15 @@ void KoDockWidgetTitleBar::resizeEvent(QResizeEvent*)
         offset = 3;
     }
 
-    QRect lockRect = QRect(QPoint(fw + 2 + offset, top), lockRectSize);
+    // To not move the lock button up when it's locked
+    int verticalOffset = 0;
+    if (d->lockButton->isChecked()){
+        verticalOffset = 3;
+    } else {
+        verticalOffset = 0;
+    }
+
+    QRect lockRect = QRect(QPoint(fw + 2 + offset, top + verticalOffset), lockRectSize);
     d->lockButton->setGeometry(lockRect);
 }
 

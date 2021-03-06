@@ -1187,7 +1187,7 @@
   <Actions category="Select">
     <text>Select</text>
     <Action name="select_all">
-      <icon>edit-select-all</icon>
+      <icon>select-all</icon>
       <text>Select &amp;All</text>
       <whatsThis></whatsThis>
       <toolTip>Select All</toolTip>
@@ -1199,7 +1199,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="deselect">
-      <icon>edit-select-none</icon>
+      <icon>select-clear</icon>
       <text>&amp;Deselect</text>
       <whatsThis></whatsThis>
       <toolTip>Deselect</toolTip>

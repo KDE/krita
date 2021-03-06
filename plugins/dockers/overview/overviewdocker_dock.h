@@ -1,5 +1,6 @@
 /*
  *  SPDX-FileCopyrightText: 2009 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2021 Deif Lou <ginoba@gmail.com>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -9,8 +10,9 @@
 
 #include <QPointer>
 #include <QDockWidget>
-#include <KoCanvasObserverBase.h>
+#include <QVariantAnimation>
 
+#include <KoCanvasObserverBase.h>
 #include <kis_canvas2.h>
 
 class QVBoxLayout;
@@ -23,6 +25,7 @@ class OverviewDockerDock : public QDockWidget, public KoCanvasObserverBase {
     Q_OBJECT
 public:
     OverviewDockerDock();
+    ~OverviewDockerDock() override;
     QString observerName() override { return "OverviewDockerDock"; }
     void setCanvas(KoCanvasBase *canvas) override;
     void unsetCanvas() override;
@@ -31,16 +34,34 @@ public Q_SLOTS:
     void mirrorUpdateIcon();
     void rotateCanvasView(qreal rotation);
     void updateSlider();
+    void setPinControls(bool pin);
+
+protected:
+    void resizeEvent(QResizeEvent*) override;
+    void enterEvent(QEvent*) override;
+    void leaveEvent(QEvent*) override;
+    bool event(QEvent *e) override;
 
 private:
-    QVBoxLayout *m_layout;
-    QVBoxLayout *m_bottomLayout;
-    QHBoxLayout *m_horizontalLayout;
+    static constexpr double showControlsAnimationDuration{150.0};
+
+    QVBoxLayout *m_controlsLayout;
+    QHBoxLayout *m_controlsSecondRowLayout;
+    QWidget *m_page;
     OverviewWidget *m_overviewWidget;
+    QWidget *m_controlsContainer;
     QWidget *m_zoomSlider;
     KisAngleSelector *m_rotateAngleSelector;
     QToolButton *m_mirrorCanvas;
+    QToolButton *m_pinControlsButton;
     QPointer<KisCanvas2> m_canvas;
+    bool m_pinControls;
+    bool m_cursorIsHover;
+    mutable QVariantAnimation m_showControlsAnimation;
+
+    void layoutMainWidgets();
+    void showControls() const;
+    void hideControls() const;
 };
 
 

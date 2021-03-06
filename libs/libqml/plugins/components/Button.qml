@@ -71,7 +71,9 @@ Item {
 
         Image {
             id: icon;
-            anchors.fill: parent;
+            anchors.centerIn: parent
+            width: parent.width > parent.height ? parent.height * 0.9 : parent.width * 0.9;
+            height: width
             anchors.margins: 8;
             fillMode: Image.PreserveAspectFit;
             smooth: true;
@@ -79,8 +81,8 @@ Item {
             opacity: base.enabled ? 1 : 0.7;
             Behavior on opacity { NumberAnimation { duration: Constants.AnimationDuration; } }
 
-            sourceSize.width: width > height ? height : width;
-            sourceSize.height: width > height ? height : width;
+            sourceSize.width: width;
+            sourceSize.height: width;
         }
 
         Label {

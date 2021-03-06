@@ -2440,7 +2440,7 @@ Enable to preserve playback timing.</text>
   <Actions category="Layers">
     <text>Layers</text>
     <Action name="activateNextLayer">
-      <icon/>
+      <icon>activate-next-layer</icon>
       <text>Activate next layer</text>
       <whatsThis/>
       <toolTip>Activate next layer</toolTip>
@@ -2464,7 +2464,7 @@ Enable to preserve playback timing.</text>
       <statusTip/>
     </Action>
     <Action name="activatePreviousLayer">
-      <icon/>
+      <icon>activate-previous-layer</icon>
       <text>Activate previous layer</text>
       <whatsThis/>
       <toolTip>Activate previous layer</toolTip>

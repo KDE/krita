@@ -5,6 +5,8 @@
 <RCC>
     <qresource prefix="/">
         <file>broken-preset.svg</file>
+        <file>dark_activate-next-layer.svg</file>
+        <file>dark_activate-previous-layer.svg</file>
         <file>dark_addblankframe.svg</file>
         <file>dark_addblankframe-16.svg</file>
         <file>dark_addduplicateframe.svg</file>
@@ -89,6 +91,8 @@
         <file>dark_warning.svg</file>
         <file>dark_workspace-chooser.svg</file>
         <file>dark_wraparound.svg</file>
+        <file>light_activate-next-layer.svg</file>
+        <file>light_activate-previous-layer.svg</file>
         <file>light_addblankframe.svg</file>
         <file>light_addblankframe-16.svg</file>
         <file>light_addduplicateframe.svg</file>

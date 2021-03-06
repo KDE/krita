@@ -74,7 +74,6 @@ Item {
             anchors.centerIn: parent
             width: parent.width > parent.height ? parent.height * 0.9 : parent.width * 0.9;
             height: width
-            anchors.margins: 8;
             fillMode: Image.PreserveAspectFit;
             smooth: true;
             asynchronous: true;

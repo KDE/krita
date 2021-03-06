@@ -10,6 +10,7 @@
 #include <KoColorConversions.h>
 #include <IccColorProfile.h>
 #include "ColorProfileQuantization.h"
+#include "KoColorTransferFunctions.h"
 
 #include <QTest>
 #include "sdk/tests/testpigment.h"
@@ -331,10 +332,11 @@ void TestProfileGeneration::testTransferFunctions()
          *
          */
 
-        cValue = powf(48 * value/ 52.37, (1/2.6)) ;
+        //cValue = powf(48 * value/ 52.37, (1/2.6)) ;
 
+        cValue = applySMPTE_ST_428Curve(value);
 
-        double lValue = 52.37/48 * powf( cValue , 2.6 );
+        double lValue = (52.37/48.0 * powf( cValue , 2.6 ));
 
         //Not possible in icc v4
 
@@ -362,20 +364,26 @@ void TestProfileGeneration::testTransferFunctions()
         double b = 0.28466892;
         double c = 0.55991073;
 
+
         if (value > 1.0/12.0) {
             cValue = a*log(12*value-b) + c;
         } else {
             cValue = sqrt(3) * powf(value, 0.5);
         }
 
+        double cValue2 = applyHLGCurve(value);
 
-        double lValue = (exp(((cValue - c) / a)) + b) / 12;
-        if (cValue <= 0.5) {
-            lValue = powf(cValue, 2) / 3;
+
+        double lValue = (exp(((cValue2 - c) / a)) + b) / 12.0;
+        if (cValue2 <= 0.5) {
+            lValue = powf(cValue2, 2.0) / 3.0;
         }
+
+        double lValue2 = removeHLGCurve(cValue);
 
         //Not possible in icc v4
         QVERIFY2(fabs(lValue - value) < 0.000001, QString("Values don't match for HLG: %1 %2").arg(value).arg(lValue).toLatin1());
+        QVERIFY2(fabs(lValue2 - value) < 0.000001, QString("Values don't match for HLG, 2: %1 %2").arg(value).arg(lValue2).toLatin1());
 
     }
 

@@ -87,10 +87,11 @@ ALWAYS_INLINE float applyHLGCurve(float x)
     const float b = 0.28466892;
     const float c = 0.55991073;
 
-    if (x > 1.0 / 12.0) {
-        return (a * log(12.0 * x - b) + c);
+    if (x > 1.0f / 12.0f) {
+        return (a * log(12.0f * x - b) + c);
     } else {
-        return (sqrt(3.0) * powf(x, 0.5));
+        // return (sqrt(3.0) * powf(x, 0.5));
+        return (sqrt(3.0f) * sqrt(x));
     }
 }
 
@@ -99,10 +100,11 @@ ALWAYS_INLINE float removeHLGCurve(float x)
     const float a = 0.17883277;
     const float b = 0.28466892;
     const float c = 0.55991073;
-    if (x <= 0.5) {
-        return (powf(x, 2.0) / 3.0);
+    if (x <= 0.5f) {
+        //return (powf(x, 2.0) / 3.0);
+        return (x * x / 3.0f);
     } else {
-        return ((exp(((x - c) / a)) + b) / 12.0);
+        return ((exp(((x - c) / a)) + b) / 12.0f);
     }
 }
 

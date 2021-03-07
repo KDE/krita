@@ -44,6 +44,10 @@
         <file>dark_edit-paste-16.svg</file>
         <file>dark_edit-redo.svg</file>
         <file>dark_edit-undo.svg</file>
+        <file>dark_import-as-filterMask.svg</file>
+        <file>dark_import-as-paintLayer.svg</file>
+        <file>dark_import-as-selectionMask.svg</file>
+        <file>dark_import-as-transparencyMask.svg</file>
         <file>dark_novisible.svg</file>
         <file>dark_visible.svg</file>
         <file>dark_layer-locked.svg</file>
@@ -137,6 +141,10 @@
         <file>light_edit-paste-16.svg</file>
         <file>light_edit-redo.svg</file>
         <file>light_edit-undo.svg</file>
+        <file>light_import-as-filterMask.svg</file>
+        <file>light_import-as-paintLayer.svg</file>
+        <file>light_import-as-selectionMask.svg</file>
+        <file>light_import-as-transparencyMask.svg</file>
         <file>light_novisible.svg</file>
         <file>light_visible.svg</file>
         <file>light_layer-locked.svg</file>

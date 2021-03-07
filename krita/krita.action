@@ -3088,7 +3088,7 @@ Enable to preserve playback timing.</text>
       <statusTip/>
     </Action>
     <Action name="split_alpha_into_mask">
-      <icon>transparencyMask</icon>
+      <icon>alpha-into-mask</icon>
       <text>&amp;Alpha into Mask</text>
       <whatsThis/>
       <toolTip>Alpha into Mask</toolTip>

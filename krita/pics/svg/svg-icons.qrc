@@ -10,6 +10,7 @@
         <file>dark_addblankframe.svg</file>
         <file>dark_addblankframe-16.svg</file>
         <file>dark_addduplicateframe.svg</file>
+        <file>dark_alpha-into-mask.svg</file>
         <file>dark_arrow-down.svg</file>
         <file>dark_arrow-downright.svg</file>
         <file>dark_arrow-downleft.svg</file>
@@ -107,6 +108,7 @@
         <file>light_addblankframe.svg</file>
         <file>light_addblankframe-16.svg</file>
         <file>light_addduplicateframe.svg</file>
+        <file>light_alpha-into-mask.svg</file>
         <file>light_arrow-down.svg</file>
         <file>light_arrow-downright.svg</file>
         <file>light_arrow-downleft.svg</file>

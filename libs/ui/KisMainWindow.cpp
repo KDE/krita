@@ -1836,7 +1836,7 @@ void KisMainWindow::openCommandBar()
     }
 
     if (activeKisView()) {
-        KActionCollection *layerActionCollection = new KActionCollection(0, "layeractions");
+        KActionCollection *layerActionCollection = new KActionCollection(0, "layeractions (disposable)");
         layerActionCollection->setComponentDisplayName(i18n("Layers/Masks"));
         KisNodeActivationActionCreatorVisitor v(layerActionCollection, viewManager()->nodeManager());
         activeKisView()->image()->rootLayer()->accept(v);

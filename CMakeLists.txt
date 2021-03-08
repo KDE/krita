@@ -869,8 +869,6 @@ if(HAVE_VC)
 endif()
 set(CMAKE_MODULE_PATH ${OLD_CMAKE_MODULE_PATH} )
 
-add_definitions(${QT_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS})
-
 ##
 ## Test endianness
 ##

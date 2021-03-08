@@ -41,6 +41,7 @@
 #include "kis_lod_availability_widget.h"
 
 #include "kis_signal_auto_connection.h"
+#include <kis_paintop_settings.h>
 #include <kis_paintop_settings_update_proxy.h>
 
 // ones from brush engine selector
@@ -358,6 +359,8 @@ void KisPaintOpPresetsPopup::slotSaveRenameCurrentBrush()
     // if you are renaming a brush, that is different than updating the settings
     // make sure we are in a clean state before renaming. This logic might change,
     // but that is what we are going with for now
+    KisPaintOpSettingsSP prevSettings = m_d->resourceProvider->currentPreset()->settings()->clone();
+    bool isDirty = m_d->resourceProvider->currentPreset()->isDirty();
     emit reloadPresetClicked();
 
     // get a reference to the existing (and new) file name and path that we are working with
@@ -383,7 +386,10 @@ void KisPaintOpPresetsPopup::slotSaveRenameCurrentBrush()
 
 
     resourceSelected(curPreset); // refresh and select our freshly renamed resource
-
+    if (isDirty) {
+        m_d->resourceProvider->currentPreset()->setSettings(prevSettings);
+        m_d->resourceProvider->currentPreset()->setDirty(isDirty);
+    }
 
     // Now blacklist the original file
 

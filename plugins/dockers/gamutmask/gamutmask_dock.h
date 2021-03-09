@@ -16,13 +16,13 @@
 #include <KoResourceServerProvider.h>
 #include <KoResourceServerObserver.h>
 #include <resources/KoGamutMask.h>
-#include <KisDocument.h>
 #include <KisView.h>
 #include <kis_types.h>
 #include <KisResourceItemChooser.h>
 
 #include <kis_mainwindow_observer.h>
 
+class KisDocument;
 class KisCanvasResourceProvider;
 class QButtonGroup;
 class QMenu;

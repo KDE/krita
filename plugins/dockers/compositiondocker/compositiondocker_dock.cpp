@@ -282,7 +282,7 @@ void CompositionDockerDock::exportImageClicked()
 
             d->setFileBatchMode(true);
 
-            d->exportDocumentSync(QUrl::fromLocalFile(path + composition->name() + ".png"), "image/png");
+            d->exportDocumentSync(path + composition->name() + ".png", "image/png");
             d->deleteLater();
         }
 

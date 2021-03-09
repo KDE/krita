@@ -48,7 +48,7 @@ void KisExrTest::testRoundTrip()
     KisDocument *doc1 = KisPart::instance()->createDocument();
 
     doc1->setFileBatchMode(true);
-    bool r = doc1->importDocument(QUrl::fromLocalFile(inputFileName));
+    bool r = doc1->importDocument(inputFileName);
 
     QVERIFY(r);
     QVERIFY(doc1->errorMessage().isEmpty());
@@ -63,14 +63,14 @@ void KisExrTest::testRoundTrip()
     QString typeName = KisMimeDatabase::mimeTypeForFile(savedFileName, false);
     QByteArray mimeType(typeName.toLatin1());
 
-    r = doc1->exportDocumentSync(QUrl::fromLocalFile(savedFileName), mimeType);
+    r = doc1->exportDocumentSync(savedFileName, mimeType);
     QVERIFY(r);
     QVERIFY(QFileInfo(savedFileName).exists());
 
     {
         KisDocument *doc2 = KisPart::instance()->createDocument();
         doc2->setFileBatchMode(true);
-        r = doc2->importDocument(QUrl::fromLocalFile(savedFileName));
+        r = doc2->importDocument(savedFileName);
 
         QVERIFY(r);
         QVERIFY(doc2->errorMessage().isEmpty());

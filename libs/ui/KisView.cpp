@@ -578,7 +578,7 @@ void KisView::dropEvent(QDropEvent *event)
                         }
                         else if (action == openInNewDocument || action == openManyDocuments) {
                             if (mainWindow()) {
-                                mainWindow()->openDocument(url, KisMainWindow::None);
+                                mainWindow()->openDocument(url.toLocalFile(), KisMainWindow::None);
                             }
                         }
                         else if (action == insertAsReferenceImage || action == insertAsReferenceImages) {
@@ -742,7 +742,7 @@ bool KisView::queryClose()
 
     if (document()->isModified()) {
         QString name;
-        name = document()->url().fileName();
+        name = QFileInfo(document()->path()).fileName();
 
         if (name.isEmpty())
             name = i18n("Untitled");
@@ -863,7 +863,7 @@ void KisView::syncLastActiveNodeToDocument()
 
 void KisView::saveViewState(KisPropertiesConfiguration &config) const
 {
-    config.setProperty("file", d->document->url());
+    config.setProperty("file", d->document->path());
     config.setProperty("window", mainWindow()->windowStateConfig().name());
 
     if (d->subWindow) {

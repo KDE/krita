@@ -552,7 +552,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
 
                     KisDocument *doc = kisPart->createDocument();
                     doc->setFileBatchMode(d->batchRun);
-                    bool result = doc->openUrl(QUrl::fromLocalFile(fileName));
+                    bool result = doc->openPath(fileName);
 
                     if (!result) {
                         errKrita << "Could not load " << fileName << ":" << doc->errorMessage();
@@ -569,7 +569,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
                     qApp->processEvents(); // For vector layers to be updated
 
                     doc->setFileBatchMode(true);
-                    if (!doc->exportDocumentSync(QUrl::fromLocalFile(exportFileName), outputMimetype.toLatin1())) {
+                    if (!doc->exportDocumentSync(exportFileName, outputMimetype.toLatin1())) {
                         errKrita << "Could not export " << fileName << "to" << exportFileName << ":" << doc->errorMessage();
                     }
                     QTimer::singleShot(0, this, SLOT(quit()));
@@ -578,7 +578,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
                 else if (exportSequence) {
                     KisDocument *doc = kisPart->createDocument();
                     doc->setFileBatchMode(d->batchRun);
-                    doc->openUrl(QUrl::fromLocalFile(fileName));
+                    doc->openPath(fileName);
                     qApp->processEvents(); // For vector layers to be updated
                     
                     if (!doc->image()->animationInterface()->hasAnimation()) {
@@ -612,7 +612,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
                     else {
                         KisMainWindow::OpenFlags flags = d->batchRun ? KisMainWindow::BatchMode : KisMainWindow::None;
 
-                        if (d->mainWindow->openDocument(QUrl::fromLocalFile(fileName), flags)) {
+                        if (d->mainWindow->openDocument(fileName, flags)) {
                             // Normal case, success
                             numberOfOpenDocuments++;
                         }
@@ -669,7 +669,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
     if (!d->earlyFileOpenEvents.isEmpty()) {
         hideSplashScreen();
         Q_FOREACH(QString fileName, d->earlyFileOpenEvents) {
-            d->mainWindow->openDocument(QUrl::fromLocalFile(fileName), 0);
+            d->mainWindow->openDocument(fileName, 0);
         }
     }
 
@@ -745,7 +745,7 @@ void KisApplication::executeRemoteArguments(QByteArray message, KisMainWindow *m
             }
             else if (QFile(filename).exists()) {
                 KisMainWindow::OpenFlags flags = d->batchRun ? KisMainWindow::BatchMode : KisMainWindow::None;
-                documentCreated |= mainWindow->openDocument(QUrl::fromLocalFile(filename), flags);
+                documentCreated |= mainWindow->openDocument(filename, flags);
             }
         }
     }
@@ -806,7 +806,7 @@ void KisApplication::fileOpenRequested(const QString &url)
     }
 
     KisMainWindow::OpenFlags flags = d->batchRun ? KisMainWindow::BatchMode : KisMainWindow::None;
-    d->mainWindow->openDocument(QUrl::fromLocalFile(url), flags);
+    d->mainWindow->openDocument(url, flags);
 }
 
 
@@ -856,15 +856,15 @@ void KisApplication::checkAutosaveFiles()
         }
 
         if (autosaveFiles.size() > 0) {
-            QList<QUrl> autosaveUrls;
+            QList<QString> autosavePaths;
             Q_FOREACH (const QString &autoSaveFile, autosaveFiles) {
-                const QUrl url = QUrl::fromLocalFile(dir.absolutePath() + QLatin1Char('/') + autoSaveFile);
-                autosaveUrls << url;
+                const QString path = dir.absolutePath() + QLatin1Char('/') + autoSaveFile;
+                autosavePaths << path;
             }
             if (d->mainWindow) {
-                Q_FOREACH (const QUrl &url, autosaveUrls) {
+                Q_FOREACH (const QString &path, autosavePaths) {
                     KisMainWindow::OpenFlags flags = d->batchRun ? KisMainWindow::BatchMode : KisMainWindow::None;
-                    d->mainWindow->openDocument(url, flags | KisMainWindow::RecoveryFile);
+                    d->mainWindow->openDocument(path, flags | KisMainWindow::RecoveryFile);
                 }
             }
         }
@@ -878,9 +878,8 @@ bool KisApplication::createNewDocFromTemplate(const QString &fileName, KisMainWi
 {
     QString templatePath;
 
-    const QUrl templateUrl = QUrl::fromLocalFile(fileName);
     if (QFile::exists(fileName)) {
-        templatePath = templateUrl.toLocalFile();
+        templatePath = fileName;
         dbgUI << "using full path...";
     }
     else {
@@ -904,25 +903,16 @@ bool KisApplication::createNewDocFromTemplate(const QString &fileName, KisMainWi
     }
 
     if (!templatePath.isEmpty()) {
-        QUrl templateBase;
-        templateBase.setPath(templatePath);
         KDesktopFile templateInfo(templatePath);
 
-        QString templateName = templateInfo.readUrl();
-        QUrl templateURL;
-        templateURL.setPath(templateBase.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash).path() + '/' + templateName);
-        if (templateURL.scheme().isEmpty()) {
-            templateURL.setScheme("file");
-        }
-
         KisMainWindow::OpenFlags batchFlags = d->batchRun ? KisMainWindow::BatchMode : KisMainWindow::None;
-        if (mainWindow->openDocument(templateURL, KisMainWindow::Import | batchFlags)) {
+        if (mainWindow->openDocument(templatePath, KisMainWindow::Import | batchFlags)) {
             dbgUI << "Template loaded...";
             return true;
         }
         else {
             QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"),
-                                  i18n("Template %1 failed to load.", templateURL.toDisplayString()));
+                                  i18n("Template %1 failed to load.", fileName));
         }
     }
 

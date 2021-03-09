@@ -429,7 +429,7 @@ KisImportExportErrorCode CSVLoader::setLayer(CSVLayerRecord* layer, KisDocument 
         QString filename = layer->path.isNull() ? path : layer->path;
         filename.append(layer->last);
 
-        result = importDoc->openUrl(QUrl::fromLocalFile(filename),
+        result = importDoc->openPath(filename,
                                     KisDocument::DontAddToRecent);
         if (result)
             layer->channel->importFrame(layer->frame, importDoc->image()->projection(), 0);

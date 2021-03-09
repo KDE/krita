@@ -113,7 +113,7 @@ void DocumentManager::delayedNewDocument()
         KoColor bgColor(qc, cs);
 
         d->document->newImage("New Image", d->newDocWidth, d->newDocHeight, KoColorSpaceRegistry::instance()->rgb8(), bgColor, KisConfig::RASTER_LAYER, 2, "", d->newDocResolution);
-        d->document->resetURL();
+        d->document->resetPath();
     }
     else if (d->newDocOptions.contains("template")) {
         QUrl url(d->newDocOptions.value("template").toString().remove("template://"));
@@ -127,7 +127,7 @@ void DocumentManager::delayedNewDocument()
             // in case this is a open document template remove the -template from the end
             mimeType.remove( QRegExp( "-template$" ) );
             d->document->setMimeTypeAfterLoading(mimeType);
-            d->document->resetURL();
+            d->document->resetPath();
         }
     }
     else
@@ -156,7 +156,7 @@ void DocumentManager::delayedNewDocument()
         KoColor bg(background, cs);
 
         d->document->newImage(name, width, height, cs, bg, KisConfig::RASTER_LAYER, 1, "", res);
-        d->document->resetURL();
+        d->document->resetPath();
     }
 
     KisPart::instance()->addDocument(d->document);
@@ -187,9 +187,9 @@ void DocumentManager::delayedOpenDocument()
     // TODO: still needed?
     d->document->setModified(false);
     if (d->importingDocument)
-        d->document->importDocument(QUrl::fromLocalFile(d->openDocumentFilename));
+        d->document->importDocument(d->openDocumentFilename);
     else
-        d->document->openUrl(QUrl::fromLocalFile(d->openDocumentFilename));
+        d->document->openPath(d->openDocumentFilename);
     // TODO: handle fail of open/import
     d->recentFileManager->addRecent(d->openDocumentFilename);
 
@@ -225,7 +225,7 @@ void DocumentManager::closeDocument()
 {
     if (d->document) {
         emit aboutToDeleteDocument();
-        d->document->closeUrl(false);
+        d->document->closePath(false);
         //d->document->deleteLater();
         d->document = 0;
     }
@@ -256,7 +256,7 @@ void DocumentManager::saveAs(const QString &filename, const QString &mimetype)
 
 void DocumentManager::delayedSaveAs()
 {
-    //d->document->saveAs(QUrl::fromLocalFile(d->saveAsFilename));
+    //d->document->saveAs(d->saveAsFilename);
     d->settingsManager->setCurrentFile(d->saveAsFilename);
     d->recentFileManager->addRecent(d->saveAsFilename);
     emit documentSaved();
@@ -264,9 +264,9 @@ void DocumentManager::delayedSaveAs()
 
 void DocumentManager::reload()
 {
-    QUrl url = d->document->url();
+    QString path = d->document->path();
     closeDocument();
-    d->openDocumentFilename = url.toLocalFile();
+    d->openDocumentFilename = path;
     QTimer::singleShot(0, this, SLOT(delayedOpenDocument()));
 }
 

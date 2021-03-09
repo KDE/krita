@@ -332,7 +332,7 @@ QList<KisNodeSP> KisMimeData::loadNodes(const QMimeData *data,
         Q_ASSERT(url.isLocalFile());
 
         KisDocument *tempDoc = KisPart::instance()->createDocument();
-        bool result = tempDoc->openUrl(url);
+        bool result = tempDoc->openPath(url.toLocalFile());
 
         if (result) {
             KisImageSP tempImage = tempDoc->image();

@@ -255,7 +255,7 @@ void Document::setDocumentInfo(const QString &document)
 QString Document::fileName() const
 {
     if (!d->document) return QString();
-    return d->document->url().toLocalFile();
+    return d->document->path();
 }
 
 void Document::setFileName(QString value)
@@ -263,7 +263,7 @@ void Document::setFileName(QString value)
     if (!d->document) return;
     QString mimeType = KisMimeDatabase::mimeTypeForFile(value, false);
     d->document->setMimeType(mimeType.toLatin1());
-    d->document->setUrl(QUrl::fromLocalFile(value));
+    d->document->setPath(value);
 }
 
 int Document::height() const
@@ -465,7 +465,7 @@ QByteArray Document::pixelData(int x, int y, int w, int h) const
 
 bool Document::close()
 {
-    bool retval = d->document->closeUrl(false);
+    bool retval = d->document->closePath(false);
 
     Q_FOREACH(KisView *view, KisPart::instance()->views()) {
         if (view->document() == d->document) {
@@ -503,7 +503,7 @@ bool Document::exportImage(const QString &filename, const InfoObject &exportConf
     const QString outputFormatString = KisMimeDatabase::mimeTypeForFile(filename, false);
     const QByteArray outputFormat = outputFormatString.toLatin1();
 
-    return d->document->exportDocumentSync(QUrl::fromLocalFile(filename), outputFormat, exportConfiguration.configuration());
+    return d->document->exportDocumentSync(filename, outputFormat, exportConfiguration.configuration());
 }
 
 void Document::flatten()
@@ -566,7 +566,7 @@ void Document::shearImage(double angleX, double angleY)
 bool Document::save()
 {
     if (!d->document) return false;
-    if (d->document->url().isEmpty()) return false;
+    if (d->document->path().isEmpty()) return false;
 
     bool retval = d->document->save(true, 0);
     d->document->waitForSavingToComplete();
@@ -580,11 +580,11 @@ bool Document::saveAs(const QString &filename)
 
     const QString outputFormatString = KisMimeDatabase::mimeTypeForFile(filename, false);
     const QByteArray outputFormat = outputFormatString.toLatin1();
-    QUrl oldUrl = d->document->url();
-    d->document->setUrl(QUrl::fromLocalFile(filename));
-    bool retval = d->document->saveAs(QUrl::fromLocalFile(filename), outputFormat, true);
+    QString oldPath = d->document->path();
+    d->document->setPath(filename);
+    bool retval = d->document->saveAs(filename, outputFormat, true);
     d->document->waitForSavingToComplete();
-    d->document->setUrl(oldUrl);
+    d->document->setPath(oldPath);
 
     return retval;
 }

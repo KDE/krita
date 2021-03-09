@@ -32,7 +32,7 @@ void KisProjectionBenchmark::benchmarkProjection()
         KisDocument *doc = KisPart::instance()->createDocument();
         doc->loadNativeFormat(QString(FILES_DATA_DIR) + '/' + "load_test.kra");
         doc->image()->refreshGraph();
-        doc->exportDocumentSync(QUrl::fromLocalFile(QString(FILES_OUTPUT_DIR) + '/' + "save_test.kra"), doc->mimeType());
+        doc->exportDocumentSync(QString(FILES_OUTPUT_DIR) + '/' + "save_test.kra", doc->mimeType());
         delete doc;
     }
 }

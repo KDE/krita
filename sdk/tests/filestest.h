@@ -216,7 +216,7 @@ void testExportToReadonly(const QString& _dirname, QString mimetype = "")
 
     doc->setCurrentImage(p.image);
 
-    bool result = doc->exportDocumentSync(QUrl(sourceFileInfo.absoluteFilePath()), mimetype.toUtf8());
+    bool result = doc->exportDocumentSync(sourceFileInfo.absoluteFilePath(), mimetype.toUtf8());
     status = result ? ImportExportCodes::OK : ImportExportCodes::Failure;
 
     qDebug() << "export result = " << status;
@@ -296,7 +296,7 @@ void testExportToColorSpace(const QString& _dirname, QString mimetype, const KoC
     doc->image()->convertImageColorSpace(space, KoColorConversionTransformation::Intent::IntentPerceptual, KoColorConversionTransformation::ConversionFlag::Empty);
     doc->image()->waitForDone();
 
-    bool result = doc->exportDocumentSync(QUrl(QString("file:") + QString(colorspaceFilename)), mimetype.toUtf8());
+    bool result = doc->exportDocumentSync(QString(colorspaceFilename), mimetype.toUtf8());
     statusExport = result ? ImportExportCodes::OK : ImportExportCodes::Failure;
 
     statusImport = manager.importDocument(colorspaceFilename, mimetype.toUtf8());

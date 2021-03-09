@@ -332,7 +332,7 @@ void KisStatusBar::updateMemoryStatus()
 
         if (!m_memoryWarningLogged) {
             m_memoryWarningLogged = true;
-            KisUsageLogger::log(QString("WARNING: %1 is running out of memory:%2\n").arg(m_imageView->document()->url().toLocalFile()).arg(longStats));
+            KisUsageLogger::log(QString("WARNING: %1 is running out of memory:%2\n").arg(m_imageView->document()->path()).arg(longStats));
         }
 
         icon = KisIconUtils::loadIcon("warning");

@@ -162,27 +162,27 @@ KisImportExportErrorCode KraConverter::buildFile(QIODevice *io, const QString &f
     setProgress(40);
     bool result;
 
-    result = m_kraSaver->saveKeyframes(m_store, m_doc->url().toLocalFile(), true);
+    result = m_kraSaver->saveKeyframes(m_store, m_doc->path(), true);
     if (!result) {
         qWarning() << "saving key frames failed";
     }
     setProgress(60);
-    result = m_kraSaver->saveBinaryData(m_store, m_image, m_doc->url().toLocalFile(), true, addMergedImage);
+    result = m_kraSaver->saveBinaryData(m_store, m_image, m_doc->path(), true, addMergedImage);
     if (!result) {
         qWarning() << "saving binary data failed";
     }
     setProgress(70);
-    result = m_kraSaver->savePalettes(m_store, m_image, m_doc->url().toLocalFile());
+    result = m_kraSaver->savePalettes(m_store, m_image, m_doc->path());
     if (!result) {
         qWarning() << "saving palettes data failed";
     }
 
-    result = m_kraSaver->saveStoryboard(m_store, m_image, m_doc->url().toLocalFile());
+    result = m_kraSaver->saveStoryboard(m_store, m_image, m_doc->path());
     if (!result) {
         qWarning() << "Saving storyboard data failed";
     }
 
-    result = m_kraSaver->saveAnimationMetadata(m_store, m_image, m_doc->url().toLocalFile());
+    result = m_kraSaver->saveAnimationMetadata(m_store, m_image, m_doc->path());
     if (!result) {
         qWarning() << "Saving animation metadata failed";
     }
@@ -240,7 +240,7 @@ KisImportExportErrorCode KraConverter::saveRootDocuments(KoStore *store)
         return ImportExportCodes::Failure;
     }
 
-    dbgUI << "Saving done of url:" << m_doc->url().toLocalFile();
+    dbgUI << "Saving done of url:" << m_doc->path();
     return ImportExportCodes::OK;
 }
 

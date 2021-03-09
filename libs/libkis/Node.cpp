@@ -596,7 +596,7 @@ bool Node::save(const QString &filename, double xRes, double yRes, const InfoObj
     dst->cropImage(bounds);
     dst->initialRefreshGraph();
 
-    bool r = doc->exportDocumentSync(QUrl::fromLocalFile(filename), mimeType.toLatin1(), exportConfiguration.configuration());
+    bool r = doc->exportDocumentSync(filename, mimeType.toLatin1(), exportConfiguration.configuration());
     if (!r) {
         qWarning() << doc->errorMessage();
     }

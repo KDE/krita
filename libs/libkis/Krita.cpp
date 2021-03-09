@@ -350,7 +350,7 @@ Document* Krita::openDocument(const QString &filename)
     KisDocument *document = KisPart::instance()->createDocument();
     document->setFileBatchMode(this->batchmode());
     KisPart::instance()->addDocument(document);
-    document->openUrl(QUrl::fromLocalFile(filename), KisDocument::DontAddToRecent);
+    document->openPath(filename, KisDocument::DontAddToRecent);
     document->setFileBatchMode(false);
     return new Document(document, true);
 }

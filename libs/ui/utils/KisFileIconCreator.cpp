@@ -118,7 +118,7 @@ bool KisFileIconCreator::createFileIcon(QString path, QIcon &icon, qreal deviceP
             QScopedPointer<KisDocument> doc;
             doc.reset(KisPart::instance()->createTemporaryDocument());
             doc->setFileBatchMode(true);
-            bool r = doc->openUrl(QUrl::fromLocalFile(path), KisDocument::DontAddToRecent);
+            bool r = doc->openPath(path, KisDocument::DontAddToRecent);
             if (r) {
                 KisPaintDeviceSP projection = doc->image()->projection();
                 const QRect bounds = projection->exactBounds();

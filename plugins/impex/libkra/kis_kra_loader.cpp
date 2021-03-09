@@ -948,7 +948,7 @@ KisNodeSP KisKraLoader::loadFileLayer(const KoXmlElement& element, KisImageSP im
 
     QString documentPath;
     if (m_d->document) {
-        documentPath = m_d->document->url().toLocalFile();
+        documentPath = m_d->document->path();
     }
     QFileInfo info(documentPath);
     QString basePath = info.absolutePath();

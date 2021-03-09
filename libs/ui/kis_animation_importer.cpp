@@ -68,7 +68,7 @@ KisImportExportErrorCode KisAnimationImporter::import(QStringList files, int fir
 
     KisRasterKeyframeChannel *contentChannel = 0;
     Q_FOREACH(QString file, files) {
-        bool successfullyLoaded = importDoc->openUrl(QUrl::fromLocalFile(file), KisDocument::DontAddToRecent);
+        bool successfullyLoaded = importDoc->openPath(file, KisDocument::DontAddToRecent);
         if (!successfullyLoaded) {
             status = ImportExportCodes::InternalError;
             break;

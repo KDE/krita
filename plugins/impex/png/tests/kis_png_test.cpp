@@ -67,7 +67,7 @@ void roudTripHdrImage(const KoColorSpace *savingColorSpace)
         exportConfiguration->setProperty("saveAsHDR", true);
         exportConfiguration->setProperty("saveSRGBProfile", false);
         exportConfiguration->setProperty("forceSRGB", false);
-        doc->exportDocumentSync(QUrl::fromLocalFile("test.png"), "image/png", exportConfiguration);
+        doc->exportDocumentSync("test.png", "image/png", exportConfiguration);
     }
 
     {

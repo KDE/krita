@@ -79,7 +79,7 @@ void KisPSDTest::testTransparencyMask()
     doc->setMimeType("image/vnd.adobe.photoshop");
 
     QFileInfo dstFileInfo(QDir::currentPath() + '/' + "test_tmask.psd");
-    bool retval = doc->exportDocumentSync(QUrl::fromLocalFile(dstFileInfo.absoluteFilePath()), "image/vnd.adobe.photoshop");
+    bool retval = doc->exportDocumentSync(dstFileInfo.absoluteFilePath(), "image/vnd.adobe.photoshop");
     QVERIFY(retval);
 
     {
@@ -202,7 +202,7 @@ void KisPSDTest::testSaveLayerStylesWithPatternMulti()
     doc->setFileBatchMode(true);
     const QByteArray mimeType("image/vnd.adobe.photoshop");
     QFileInfo dstFileInfo(QDir::currentPath() + '/' + "test_save_styles.psd");
-    bool retval = doc->exportDocumentSync(QUrl::fromLocalFile(dstFileInfo.absoluteFilePath()), mimeType);
+    bool retval = doc->exportDocumentSync(dstFileInfo.absoluteFilePath(), mimeType);
     QVERIFY(retval);
 
     {
@@ -333,7 +333,7 @@ void KisPSDTest::testSavingAllFormats()
 
         dbgKrita << "Saving" << ppVar(dstFileInfo.fileName());
 
-        bool retval = doc->exportDocumentSync(QUrl::fromLocalFile(dstFileInfo.absoluteFilePath()), "image/vnd.adobe.photoshop");
+        bool retval = doc->exportDocumentSync(dstFileInfo.absoluteFilePath(), "image/vnd.adobe.photoshop");
         QVERIFY(retval);
 
         {

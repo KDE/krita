@@ -486,7 +486,7 @@ void KisWelcomePageWidget::dropEvent(QDropEvent *event)
                 }
             }
             else {
-                m_mainWindow->openDocument(url, KisMainWindow::None);
+                m_mainWindow->openDocument(url.toLocalFile(), KisMainWindow::None);
             }
         }
     }
@@ -650,7 +650,7 @@ void KisWelcomePageWidget::showDevVersionHighlight()
 void KisWelcomePageWidget::recentDocumentClicked(QModelIndex index)
 {
     QString fileUrl = index.data(Qt::ToolTipRole).toString();
-    m_mainWindow->openDocument(QUrl::fromLocalFile(fileUrl), KisMainWindow::None );
+    m_mainWindow->openDocument(fileUrl, KisMainWindow::None );
 }
 
 

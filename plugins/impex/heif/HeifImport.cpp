@@ -233,6 +233,7 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
         const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->colorSpace(colorModel, colorDepth.id(), profile);
 
         int width  = handle.get_width();
+
         int height = handle.get_height();
 
         // convert HEIF image to Krita KisDocument
@@ -256,6 +257,8 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
             int strideG, strideA;
             const uint8_t* imgG = heifimage.get_plane(heif_channel_Y, &strideG);
             const uint8_t* imgA = heifimage.get_plane(heif_channel_Alpha, &strideA);
+            width = heifimage.get_width(heif_channel_Y);
+            height = heifimage.get_height(heif_channel_Y);
             KisHLineIteratorSP it = layer->paintDevice()->createHLineIteratorNG(0, 0, width);
 
             for (int y = 0; y < height; y++) {
@@ -307,6 +310,8 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
             const uint8_t* imgG = heifimage.get_plane(heif_channel_G, &strideG);
             const uint8_t* imgB = heifimage.get_plane(heif_channel_B, &strideB);
             const uint8_t* imgA = heifimage.get_plane(heif_channel_Alpha, &strideA);
+            width = heifimage.get_width(heif_channel_R);
+            height = heifimage.get_height(heif_channel_R);
             QVector<qreal> lCoef {colorSpace->lumaCoefficients()};
             QVector<float> pixelValues(4);
             KisHLineIteratorSP it = layer->paintDevice()->createHLineIteratorNG(0, 0, width);
@@ -357,6 +362,8 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
             dbgFile << "interleaved SDR heif file, bits:" << luma;
 
             const uint8_t *img = heifimage.get_plane(heif_channel_interleaved, &stride);
+            width = heifimage.get_width(heif_channel_interleaved);
+            height = heifimage.get_height(heif_channel_interleaved);
             QVector<float> pixelValues(4);
             QVector<qreal> lCoef {colorSpace->lumaCoefficients()};
             KisHLineIteratorSP it = layer->paintDevice()->createHLineIteratorNG(0, 0, width);
@@ -433,6 +440,7 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
         }
 
         image->addNode(layer.data(), image->rootLayer().data());
+        image->cropImage(QRect(0, 0, width, height));
 
         // --- Iterate through all metadata blocks and extract Exif and XMP metadata ---
 

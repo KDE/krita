@@ -60,42 +60,62 @@ ExternalProject_Add(
 )
 endif(WIN32)
 
-# Assumes an existing Meson/Ninja install
-ExternalProject_Add(
-    ext_dav1d
-    DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL https://code.videolan.org/videolan/dav1d/-/archive/0.8.2/dav1d-0.8.2.tar.gz
-    URL_HASH SHA256=00438cf4abb45a56f3dff4c0ff76f4714540672118fe84eea24617d5ed2e394c
 
-    CONFIGURE_COMMAND meson <SOURCE_DIR> --default-library=static --prefix=${EXTPREFIX_heif}
+set(EXTRA_AVIF_DEPS "")
 
-    BUILD_COMMAND meson compile
+find_program(MESON_BINARY_PATH meson)
+find_program(NINJA_BINARY_PATH ninja)
+find_program(RUSTC_BINARY_PATH rustc)
 
-    INSTALL_COMMAND meson install
+if (EXISTS ${MESON_BINARY_PATH} AND EXISTS ${MESON_BINARY_PATH} AND EXISTS ${MESON_BINARY_PATH})
+    # Assumes an existing Meson/Ninja install
+    ExternalProject_Add(
+        ext_dav1d
+        DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+        URL https://code.videolan.org/videolan/dav1d/-/archive/0.8.2/dav1d-0.8.2.tar.gz
+        URL_HASH SHA256=00438cf4abb45a56f3dff4c0ff76f4714540672118fe84eea24617d5ed2e394c
 
-    DEPENDS ext_nasm
-)
+        CONFIGURE_COMMAND meson <SOURCE_DIR> --default-library=static --prefix=${EXTPREFIX_heif}
+
+        BUILD_COMMAND meson compile
+
+        INSTALL_COMMAND meson install
+
+        DEPENDS ext_nasm
+        )
 
 
-# Assumes an existing Rust install
-# cargo install as part of an external configure...?
-ExternalProject_Add(
-    ext_rav1e
-    DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL https://github.com/xiph/rav1e/archive/v0.5.0-alpha.tar.gz
-    URL_HASH SHA256=fd884fa387d01860eaf22a0a97353525221eb32bf6b9154bbfa21b6cce5988c8
+    # Assumes an existing Rust install
+    # cargo install as part of an external configure...?
+    ExternalProject_Add(
+        ext_rav1e
+        DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+        URL https://github.com/xiph/rav1e/archive/v0.5.0-alpha.tar.gz
+        URL_HASH SHA256=fd884fa387d01860eaf22a0a97353525221eb32bf6b9154bbfa21b6cce5988c8
 
-    CONFIGURE_COMMAND cargo install cargo-c
+        CONFIGURE_COMMAND cargo install cargo-c
 
-    BUILD_COMMAND ""
+        BUILD_COMMAND ""
 
-    INSTALL_COMMAND cargo cinstall --release --prefix=${EXTPREFIX_heif}
+        INSTALL_COMMAND cargo cinstall --release --prefix=${EXTPREFIX_heif}
 
-    BUILD_IN_SOURCE 1
+        BUILD_IN_SOURCE 1
 
-    DEPENDS ext_nasm
-)
+        DEPENDS ext_nasm
+        )
 
+    set(EXTRA_AVIF_DEPS ext_rav1e ext_dav1d)
+else()
+    if (NOT EXISTS ${MESON_BINARY_PATH})
+        message(WARNING "Meson Build system was not found, see https://mesonbuild.com")
+    endif()
+    if (NOT EXISTS ${NINJA_BINARY_PATH})
+        message(WARNING "Ninja Build system was not found, see https://ninja-build.org/")
+    endif()
+    if (NOT EXISTS ${RUSTC_BINARY_PATH})
+        message(WARNING "Rust compiler was not found, see https://www.rust-lang.org/")
+    endif()
+endif()
 
 IF ("${CMAKE_SIZEOF_VOID_P}" EQUAL "8" AND NOT CMAKE_SYSTEM_PROCESSOR MATCHES "^(aarch64.*|AARCH64.*|arm64.*|ARM64.*)")
     ExternalProject_Add(ext_libx265_10bit
@@ -173,5 +193,5 @@ ExternalProject_Add(
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_heif} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} -DBUILD_EXAMPLES=OFF ${GLOBAL_PROFILE}
 
     UPDATE_COMMAND ""
-    DEPENDS ext_dav1d ext_rav1e ext_libde265 ext_libx265 ext_jpeg ext_png
+    DEPENDS ${EXTRA_AVIF_DEPS} ext_libde265 ext_libx265 ext_jpeg ext_png
 )

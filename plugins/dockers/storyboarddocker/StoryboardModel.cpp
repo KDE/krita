@@ -182,7 +182,6 @@ bool StoryboardModel::setData(const QModelIndex & index, const QVariant & value,
             }
             else if (index.row() == StoryboardItem::DurationSecond ||
                      index.row() == StoryboardItem::DurationFrame) {
-                ENTER_FUNCTION() << ppVar(index) << ppVar(value);
 #if QT_VERSION >= QT_VERSION_CHECK(5,11,0)
                 QModelIndex secondIndex = index.row() == StoryboardItem::DurationSecond ? index : index.siblingAtRow(StoryboardItem::DurationSecond);
 #else

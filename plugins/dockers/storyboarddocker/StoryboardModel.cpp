@@ -182,6 +182,7 @@ bool StoryboardModel::setData(const QModelIndex & index, const QVariant & value,
             }
             else if (index.row() == StoryboardItem::DurationSecond ||
                      index.row() == StoryboardItem::DurationFrame) {
+                ENTER_FUNCTION() << ppVar(index) << ppVar(value);
 #if QT_VERSION >= QT_VERSION_CHECK(5,11,0)
                 QModelIndex secondIndex = index.row() == StoryboardItem::DurationSecond ? index : index.siblingAtRow(StoryboardItem::DurationSecond);
 #else
@@ -794,7 +795,8 @@ void StoryboardModel::reorderKeyframes()
     }
 
     //We want to temporarily lock respondance to keyframe removal / addition.
-    m_reorderingKeyframes = true;
+    //Will unlock when scope exits.
+    QScopedPointer<KeyframeReorderLock> lock(new KeyframeReorderLock(this));
 
     //Let's cancel all frame rendering for the time being.
     m_renderScheduler->cancelAllFrameRendering();
@@ -847,9 +849,6 @@ void StoryboardModel::reorderKeyframes()
     }
 
     m_renderScheduler->slotStartFrameRendering();
-
-    //Unlock keyframe add/remove respondance.
-    m_reorderingKeyframes = false;
 }
 
 bool StoryboardModel::changeSceneHoldLength(int newDuration, QModelIndex itemIndex)
@@ -881,6 +880,10 @@ void StoryboardModel::shiftKeyframes(KisTimeSpan affected, int offset, KUndo2Com
 
     if (offset == 0)
         return;
+
+    //We want to temporarily lock respondance to keyframe removal / addition.
+    //Will unlock when scope exits.
+    QScopedPointer<KeyframeReorderLock> lock(new KeyframeReorderLock(this));
 
     if (node && !m_freezeKeyframePosition) {
         KisLayerUtils::recursiveApplyNodes (node, [affected, offset, cmd] (KisNodeSP node) {

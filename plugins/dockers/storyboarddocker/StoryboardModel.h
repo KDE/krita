@@ -39,6 +39,23 @@ public:
         TotalSceneDurationInSeconds = Qt::UserRole + 2,
     };
 
+    class KeyframeReorderLock {
+    public:
+        KeyframeReorderLock(StoryboardModel* model)
+            : m_model(model)
+            , m_originalLock(!model->m_reorderingKeyframes) {
+            m_model->m_reorderingKeyframes = true;
+        }
+
+        ~KeyframeReorderLock() {
+            m_model->m_reorderingKeyframes = !m_originalLock;
+        }
+
+    private:
+        StoryboardModel* m_model;
+        bool m_originalLock = false;
+    };
+
     StoryboardModel(QObject *parent);
     ~StoryboardModel() override;
 

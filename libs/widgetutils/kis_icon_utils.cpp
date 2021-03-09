@@ -16,6 +16,7 @@
 #include <QDebug>
 
 #include <KoIcon.h>
+#include "kis_debug.h"
 
 namespace KisIconUtils
 {
@@ -167,6 +168,8 @@ void clearIconCache() {
 
 void updateIcon(QAbstractButton *button)
 {
+    KIS_SAFE_ASSERT_RECOVER_RETURN(button);
+
     QIcon icon = button->icon();
 
     if (adjustIcon(&icon)) {

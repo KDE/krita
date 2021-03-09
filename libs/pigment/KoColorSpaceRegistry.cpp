@@ -688,20 +688,20 @@ const KoColorProfile *KoColorSpaceRegistry::p709SRGBProfile() const
     return profileByName("sRGB-elle-V2-srgbtrc.icc");
 }
 
-const KoColorProfile *KoColorSpaceRegistry::profileFor(const QVector<double> &colorants, int colorPrimaries, int transferFunction) const
+const KoColorProfile *KoColorSpaceRegistry::profileFor(const QVector<double> &colorants, ColorPrimaries colorPrimaries, TransferCharacteristics transferFunction) const
 {
-    if (colorPrimaries == KoColorProfile::Primaries_ITU_R_BT_709_5) {
-        if (transferFunction == KoColorProfile::TRC_IEC_61966_2_1) {
+    if (colorPrimaries == PRIMARIES_ITU_R_BT_709_5) {
+        if (transferFunction == TRC_IEC_61966_2_1) {
             return p709SRGBProfile();
-        } else if (transferFunction == KoColorProfile::TRC_linear) {
+        } else if (transferFunction == TRC_LINEAR) {
             return p709G10Profile();
         }
     }
 
-    if (colorPrimaries == KoColorProfile::Primaries_ITU_R_BT_2020_2_and_2100_0) {
-        if (transferFunction == KoColorProfile::TRC_ITU_R_BT_2100_0_PQ) {
+    if (colorPrimaries == PRIMARIES_ITU_R_BT_2020_2_AND_2100_0) {
+        if (transferFunction == TRC_ITU_R_BT_2100_0_PQ) {
             return p2020PQProfile();
-        } else if (transferFunction == KoColorProfile::TRC_linear) {
+        } else if (transferFunction == TRC_LINEAR) {
             return p2020G10Profile();
         }
     }
@@ -710,6 +710,12 @@ const KoColorProfile *KoColorSpaceRegistry::profileFor(const QVector<double> &co
     if (list.size() > 0) {
         return list.first();
     }
+
+    KoColorSpaceEngine *engine = KoColorSpaceEngineRegistry::instance()->get("icc");
+    if (engine) {
+        return engine->getProfile(colorants, colorPrimaries, transferFunction);
+    }
+
     return 0;
 }
 

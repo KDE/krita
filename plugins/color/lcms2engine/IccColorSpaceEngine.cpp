@@ -196,24 +196,18 @@ const KoColorProfile* IccColorSpaceEngine::addProfile(const QByteArray &data)
     return profile;
 }
 
-const KoColorProfile *IccColorSpaceEngine::getProfile(const QVector<double> &colorants, int colorPrimaries, int transferFunction)
+const KoColorProfile *IccColorSpaceEngine::getProfile(const QVector<double> &colorants, ColorPrimaries colorPrimaries, TransferCharacteristics transferFunction)
 {
     KoColorSpaceRegistry *registry = KoColorSpaceRegistry::instance();
 
-    if (colorPrimaries == KoColorProfile::Primaries_Unspecified && transferFunction == KoColorProfile::TRC_Unspecified
+    if (colorPrimaries == PRIMARIES_UNSPECIFIED && transferFunction == TRC_UNSPECIFIED
             && colorants.isEmpty()) {
 
-        colorPrimaries = KoColorProfile::Primaries_ITU_R_BT_709_5;
-        transferFunction = KoColorProfile::TRC_IEC_61966_2_1;
+        colorPrimaries = PRIMARIES_ITU_R_BT_709_5;
+        transferFunction = TRC_IEC_61966_2_1;
     }
 
-    const KoColorProfile *profile = registry->profileFor(colorants, colorPrimaries, transferFunction);
-
-    if (profile) {
-        return profile;
-    }
-
-    profile = new IccColorProfile(colorants, KoColorProfile::colorPrimaries(colorPrimaries), KoColorProfile::transferCharacteristics(transferFunction));
+    const KoColorProfile *profile = new IccColorProfile(colorants, colorPrimaries, transferFunction);
     Q_CHECK_PTR(profile);
 
     if (profile->valid()) {

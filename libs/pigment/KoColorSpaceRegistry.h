@@ -17,6 +17,7 @@
 #include <KoColorSpace.h>
 #include <KoColorSpaceFactory.h>
 #include <KoConfig.h>
+#include <KoColorProfileConstants.h>
 
 class KoColorProfile;
 class KoColorConversionSystem;
@@ -334,14 +335,16 @@ public:
     const KoColorProfile *p709SRGBProfile() const;
 
     /**
-     * @brief profileFor tries to find the profile that matches these characteristics.
+     * @brief profileFor tries to find the profile that matches these characteristics, if no
+     * such profile is found, it attempts to generate one.
      * @param colorants a double of xy (for xyY) values, this expects the first two as the white point,
-     * then the red, green and blue. If there's only a whitepoint, a grayscale profile will be returned.
+     * then the red, green and blue. If there's only a whitepoint and primaries type is undefined,
+     * a grayscale profile will be returned.
      * @param colorPrimaries the color primaries type as defined in KoColorProfile.
      * @param transferFunction the transfer function, as defined in KoColorProfile.
      * @return a profile that matches these characteristics.
      */
-    const KoColorProfile *profileFor(const QVector<double> &colorants, int colorPrimaries, int transferFunction) const;
+    const KoColorProfile *profileFor(const QVector<double> &colorants, ColorPrimaries colorPrimaries, TransferCharacteristics transferFunction) const;
 
     /**
      * @return the list of available color models

@@ -413,15 +413,12 @@ void KisHeifTest::testSaveRGB(int bitDepth)
 
     QString profileName;
 
-    KoColorSpaceEngine *engine = KoColorSpaceEngineRegistry::instance()->get("icc");
-    if (engine) {
-        QVector<double> colorants;
-        const KoColorProfile *testProfile = engine->getProfile(colorants
-                                                               , int(KoColorProfile::Primaries_SMPTE_240M)
-                                                               , int(KoColorProfile::TRC_SMPTE_240M));
-        if (testProfile) {
+    QVector<double> colorants;
+    const KoColorProfile *testProfile = KoColorSpaceRegistry::instance()->profileFor(colorants
+                                                                                     , PRIMARIES_SMPTE_240M
+                                                                                     , TRC_SMPTE_240M);
+    if (testProfile) {
         profileName = testProfile->name();
-        }
     }
 
     const KoColorSpace * cs =

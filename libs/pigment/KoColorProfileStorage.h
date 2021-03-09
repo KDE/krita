@@ -8,6 +8,7 @@
 #define KOCOLORPROFILESTORAGE_H
 
 #include <QScopedPointer>
+#include "KoColorProfileConstants.h"
 
 class QByteArray;
 class QString;
@@ -111,8 +112,8 @@ public:
      * @return list of available profiles.
      */
     QList<const KoColorProfile *> profilesFor(const QVector<double>& colorants,
-                                              int colorantType,
-                                              int transferType,
+                                              ColorPrimaries colorantType,
+                                              TransferCharacteristics transferType,
                                               double error = 0.00001);
 
 private:

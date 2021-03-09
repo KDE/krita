@@ -68,9 +68,9 @@ public:
 
     explicit IccColorProfile(const QString &fileName = QString());
     explicit IccColorProfile(const QByteArray &rawData);
-    explicit IccColorProfile(QVector<double> colorants,
-                             const colorPrimaries colorPrimariesType = Primaries_Unspecified,
-                             const transferCharacteristics transferFunction = TRC_linear);
+    explicit IccColorProfile(const QVector<double> &colorants,
+                             const ColorPrimaries colorPrimariesType = PRIMARIES_UNSPECIFIED,
+                             const TransferCharacteristics transferFunction = TRC_LINEAR);
     IccColorProfile(const IccColorProfile &rhs);
     ~IccColorProfile() override;
 

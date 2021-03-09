@@ -160,8 +160,8 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
 
     if (cs->hasHighDynamicRange() && convertToRec2020) {
         const KoColorProfile *linear = KoColorSpaceRegistry::instance()->profileFor(QVector<double>(),
-                                                                                   KoColorProfile::Primaries_ITU_R_BT_2020_2_and_2100_0,
-                                                                                   KoColorProfile::TRC_linear);
+                                                                                   PRIMARIES_ITU_R_BT_2020_2_AND_2100_0,
+                                                                                   TRC_LINEAR);
         const KoColorSpace *linearRec2020 = KoColorSpaceRegistry::instance()->colorSpace("RGBA", "F32", linear);
         image->convertImageColorSpace(linearRec2020,
                                       KoColorConversionTransformation::internalRenderingIntent(),
@@ -429,9 +429,9 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
            if (convertToRec2020) {
                nclxDescription.set_color_primaties(heif_color_primaries_ITU_R_BT_2020_2_and_2100_0);
            } else {
-               KoColorProfile::colorPrimaries primaries = image->colorSpace()->profile()->getColorPrimaries();
+               ColorPrimaries primaries = image->colorSpace()->profile()->getColorPrimaries();
                if (primaries >= 256) {
-                   primaries = KoColorProfile::Primaries_Unspecified;
+                   primaries = PRIMARIES_UNSPECIFIED;
                }
                nclxDescription.set_color_primaties(heif_color_primaries(primaries));
            }
@@ -569,7 +569,7 @@ void KisWdgOptionsHeif::setConfiguration(const KisPropertiesConfigurationSP cfg)
     QStringList conversionOptionName = {"Rec2100PQ", "Rec2100HLG"};
     
     if (cfg->getString(KisImportExportFilter::ColorModelIDTag) == "RGBA") {
-        if (CicpPrimaries != KoColorProfile::Primaries_Unspecified) {
+        if (CicpPrimaries != PRIMARIES_UNSPECIFIED) {
             conversionOptionsList << i18nc("Colorspace option plus transfer function name", "Keep colorants, encode PQ");
             toolTipList << i18nc("@tooltip", "The image will be linearized first, and then encoded with a perceptual quantizer curve"
                                             " (also known as the SMPTE 2048 curve). Recommended for images where the absolute brightness is important.");

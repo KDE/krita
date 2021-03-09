@@ -461,11 +461,11 @@ void KisImportExportManager::fillStaticExportConfigurationProperties(KisProperti
     
     int primaries = cs->profile()->getColorPrimaries();
     if (primaries >= 256) {
-        primaries = KoColorProfile::Primaries_Unspecified;
+        primaries = PRIMARIES_UNSPECIFIED;
     }
     int transferFunction = cs->profile()->getTransferCharacteristics();
     if (transferFunction >= 256) {
-        transferFunction = KoColorProfile::TRC_Unspecified;
+        transferFunction = TRC_UNSPECIFIED;
     }
     exportConfiguration->setProperty(KisImportExportFilter::CICPPrimariesTag, primaries);
     exportConfiguration->setProperty(KisImportExportFilter::CICPTransferCharacteristicsTag, transferFunction);

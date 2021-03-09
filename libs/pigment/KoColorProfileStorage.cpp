@@ -137,31 +137,31 @@ QList<const KoColorProfile *> KoColorProfileStorage::profilesFor(const KoColorSp
     return profiles;
 }
 
-QList<const KoColorProfile *> KoColorProfileStorage::profilesFor(const QVector<double> &colorants, int colorantType, int transferType, double error)
+QList<const KoColorProfile *> KoColorProfileStorage::profilesFor(const QVector<double> &colorants, ColorPrimaries colorantType, TransferCharacteristics transferType, double error)
 {
     QList<const KoColorProfile *> profiles;
 
-    if (colorants.isEmpty() && colorantType == 2 && transferType == 2) {
+    if (colorants.isEmpty() && colorantType == PRIMARIES_UNSPECIFIED && transferType == TRC_UNSPECIFIED) {
         return profiles;
     }
 
     QReadLocker l(&d->lock);
     for (const KoColorProfile* profile : d->profileMap) {
-        bool colorantMatch = (colorants.isEmpty() || colorantType != 2);
-        bool colorantTypeMatch = (colorantType == 2);
+        bool colorantMatch = (colorants.isEmpty() || colorantType != PRIMARIES_UNSPECIFIED);
+        bool colorantTypeMatch = (colorantType == PRIMARIES_UNSPECIFIED);
         bool transferMatch = (transferType == 2);
-        if (colorantType != 2) {
+        if (colorantType != PRIMARIES_UNSPECIFIED) {
             if (int(profile->getColorPrimaries()) == colorantType) {
                 colorantTypeMatch = true;
             }
         }
-        if (transferType != 2) {
+        if (transferType != TRC_UNSPECIFIED) {
             if (int(profile->getTransferCharacteristics()) == transferType) {
                 transferMatch = true;
             }
         }
 
-        if (!colorants.isEmpty() && colorantType == 2) {
+        if (!colorants.isEmpty() && colorantType == PRIMARIES_UNSPECIFIED) {
             QVector<qreal> wp = profile->getWhitePointxyY();
             if (profile->hasColorants() && colorants.size() == 8) {
                 QVector<qreal> col = profile->getColorantsxyY();

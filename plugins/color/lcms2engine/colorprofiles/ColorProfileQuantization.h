@@ -25,7 +25,7 @@
  * we can reduce that error to 6 digits behind the comma.
  */
 ALWAYS_INLINE void quantizexyYPrimariesTo16bit(QVector<double> &colorants) {
-    for (int i=0; i<colorants.size(); i+=3) {
+    for (int i=0; i<colorants.size(); i += 3) {
         QVector<double> value (3);
 
         // We convert not to XYZ, but to xyz, that is, z is normalized.
@@ -39,7 +39,7 @@ ALWAYS_INLINE void quantizexyYPrimariesTo16bit(QVector<double> &colorants) {
         double largest = -1e9;
         int largestValue = 0;
 
-        for (int j = 0; j<value.size(); j++) {
+        for (int j = 0; j < value.size(); j++) {
             double val = value.at(j);
             if (val>largest) {
                 largest = val;
@@ -48,7 +48,7 @@ ALWAYS_INLINE void quantizexyYPrimariesTo16bit(QVector<double> &colorants) {
             value[j] = floor(val * 65536.0 + 0.5) / 65536.0;
         }
 
-        for (int j = 0; j<value.size(); j++) {
+        for (int j = 0; j < value.size(); j++) {
             if (j == largestValue) {
                 continue;
             }

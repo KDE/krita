@@ -562,7 +562,7 @@ QByteArray LcmsColorProfileContainer::getProfileUniqueId() const
     return d->uniqueId;
 }
 
-cmsToneCurve *LcmsColorProfileContainer::transferFunction(KoColorProfile::transferCharacteristics transferFunction)
+cmsToneCurve *LcmsColorProfileContainer::transferFunction(TransferCharacteristics transferFunction)
 {
     cmsToneCurve *mainCurve;
 
@@ -586,58 +586,58 @@ cmsToneCurve *LcmsColorProfileContainer::transferFunction(KoColorProfile::transf
     cmsFloat64Number log_100_sqrt[5] = {1.0, 10, 2.5, -2.5, 0.0};
 
     switch (transferFunction) {
-    case KoColorProfile::TRC_IEC_61966_2_4:
+    case TRC_IEC_61966_2_4:
         // Not possible in ICC due to lack of a*pow(bX+c,y) construct.
-    case KoColorProfile::TRC_ITU_R_BT_1361:
+    case TRC_ITU_R_BT_1361:
         // This is not possible in ICC due to lack of a*pow(bX+c,y) construct.
         qWarning() << "Neither IEC 61966 2-4 nor Bt. 1361 are supported, returning a rec 709 curve.";
-    case KoColorProfile::TRC_ITU_R_BT_709_5:
-    case KoColorProfile::TRC_ITU_R_BT_601_6:
-    case KoColorProfile::TRC_ITU_R_BT_2020_2_10bit:
+    case TRC_ITU_R_BT_709_5:
+    case TRC_ITU_R_BT_601_6:
+    case TRC_ITU_R_BT_2020_2_10bit:
         mainCurve = cmsBuildParametricToneCurve(NULL, 4, rec709_parameters);
         break;
-    case KoColorProfile::TRC_ITU_R_BT_2020_2_12bit:
+    case TRC_ITU_R_BT_2020_2_12bit:
         mainCurve = cmsBuildParametricToneCurve(NULL, 4, rec202012bit_parameters);
         break;
-    case KoColorProfile::TRC_ITU_R_BT_470_6_System_M:
+    case TRC_ITU_R_BT_470_6_SYSTEM_M:
         mainCurve = cmsBuildGamma(NULL, 2.2);
         break;
-    case KoColorProfile::TRC_ITU_R_BT_470_6_System_B_G:
+    case TRC_ITU_R_BT_470_6_SYSTEM_B_G:
         mainCurve = cmsBuildGamma(NULL, 2.8);
         break;
-    case KoColorProfile::TRC_SMPTE_240M:
+    case TRC_SMPTE_240M:
         mainCurve = cmsBuildParametricToneCurve(NULL, 4, SMPTE_240M_parameters);
         break;
-    case KoColorProfile::TRC_IEC_61966_2_1:
+    case TRC_IEC_61966_2_1:
         mainCurve = cmsBuildParametricToneCurve(NULL, 4, srgb_parameters);
         break;
-    case KoColorProfile::TRC_logarithmic_100:
+    case TRC_LOGARITHMIC_100:
         mainCurve = cmsBuildParametricToneCurve(NULL, 8, log_100);
         break;
-    case KoColorProfile::TRC_logarithmic_100_sqrt10:
+    case TRC_LOGARITHMIC_100_sqrt10:
         mainCurve = cmsBuildParametricToneCurve(NULL, 8, log_100_sqrt);
         break;
-    case KoColorProfile::TRC_A98:
+    case TRC_A98:
         //gamma 256/563
         mainCurve = cmsBuildGamma(NULL, 256/563);
         break;
-    case KoColorProfile::TRC_ProPhoto:
+    case TRC_PROPHOTO:
         mainCurve = cmsBuildParametricToneCurve(NULL, 4, prophoto_parameters);
         break;
-    case KoColorProfile::TRC_GAMMA_1_8:
+    case TRC_GAMMA_1_8:
         mainCurve = cmsBuildGamma(NULL, 1.8);
         break;
-    case KoColorProfile::TRC_GAMMA_2_4:
+    case TRC_GAMMA_2_4:
         mainCurve = cmsBuildGamma(NULL, 2.4);
         break;
-    case KoColorProfile::TRC_SMPTE_ST_428_1:
+    case TRC_SMPTE_ST_428_1:
         // Requires an a*X^y construction, not possible.
-    case KoColorProfile::TRC_ITU_R_BT_2100_0_PQ:
+    case TRC_ITU_R_BT_2100_0_PQ:
         // Perceptual Quantizer
-    case KoColorProfile::TRC_ITU_R_BT_2100_0_HLG:
+    case TRC_ITU_R_BT_2100_0_HLG:
         // Hybrid log gamma.
         qWarning() << "Cannot generate an icc profile with this transfer function, will generate a linear profile";
-    case KoColorProfile::TRC_linear:
+    case TRC_LINEAR:
     default:
         mainCurve = cmsBuildGamma(NULL, 1.0);
         break;

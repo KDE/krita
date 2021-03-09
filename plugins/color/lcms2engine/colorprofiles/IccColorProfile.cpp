@@ -88,18 +88,20 @@ IccColorProfile::IccColorProfile(const QByteArray &rawData)
     init();
 }
 
-IccColorProfile::IccColorProfile(QVector<double> colorants,
-                                 const colorPrimaries colorPrimariesType,
-                                 const transferCharacteristics transferFunction)
+IccColorProfile::IccColorProfile(const QVector<double> &colorants,
+                                 const ColorPrimaries colorPrimariesType,
+                                 const TransferCharacteristics transferFunction)
 : KoColorProfile(QString()), d(new Private)
 {
     cmsCIExyY whitePoint;
 
-    KoColorProfile::colorantsForType(colorPrimariesType, colorants);
+    QVector<double> modifiedColorants = colorants;
 
-    if (colorants.size()>=2) {
-        whitePoint.x = colorants[0];
-        whitePoint.y = colorants[1];
+    KoColorProfile::colorantsForType(colorPrimariesType, modifiedColorants);
+
+    if (modifiedColorants.size()>=2) {
+        whitePoint.x = modifiedColorants[0];
+        whitePoint.y = modifiedColorants[1];
         whitePoint.Y = 1.0;
     }
 
@@ -108,14 +110,14 @@ IccColorProfile::IccColorProfile(QVector<double> colorants,
     cmsCIExyYTRIPLE primaries;
 
     // We prequantize these values to 16bit precision for the best results here.
-    if (colorants.size()>2 && colorants.size() <= 8) {
-        QVector<double> colorantsQuantized = {colorants[2], colorants[3], 1.0,
-                                              colorants[4], colorants[5], 1.0,
-                                              colorants[6], colorants[7], 1.0};
+    if (modifiedColorants.size()>2 && modifiedColorants.size() <= 8) {
+        QVector<double> colorantsQuantized = {modifiedColorants[2], modifiedColorants[3], 1.0,
+                                              modifiedColorants[4], modifiedColorants[5], 1.0,
+                                              modifiedColorants[6], modifiedColorants[7], 1.0};
         quantizexyYPrimariesTo16bit(colorantsQuantized);
-        primaries = {{colorants[2], colorants[3], 1.0},
-                     {colorants[4], colorants[5], 1.0},
-                     {colorants[6], colorants[7], 1.0}};
+        primaries = {{colorantsQuantized[0], colorantsQuantized[1], 1.0},
+                     {colorantsQuantized[3], colorantsQuantized[4], 1.0},
+                     {colorantsQuantized[6], colorantsQuantized[7], 1.0}};
     }
 
     cmsHPROFILE iccProfile;

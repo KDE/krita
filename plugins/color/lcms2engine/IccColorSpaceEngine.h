@@ -16,7 +16,7 @@ public:
     ~IccColorSpaceEngine() override;
     const KoColorProfile *addProfile(const QString &filename) override;
     const KoColorProfile *addProfile(const QByteArray &data) override;
-    const KoColorProfile * getProfile(const QVector<double> &colorants, int colorPrimaries, int transferFunction) override;
+    const KoColorProfile * getProfile(const QVector<double> &colorants, ColorPrimaries colorPrimaries, TransferCharacteristics transferFunction) override;
     void removeProfile(const QString &filename) override;
     KoColorConversionTransformation *createColorTransformation(const KoColorSpace *srcColorSpace,
             const KoColorSpace *dstColorSpace,

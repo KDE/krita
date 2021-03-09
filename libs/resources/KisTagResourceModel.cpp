@@ -442,7 +442,7 @@ bool KisTagResourceModel::lessThan(const QModelIndex &source_left, const QModelI
 {
     QString nameLeft = sourceModel()->data(source_left, Qt::UserRole + KisAllTagResourceModel::ResourceName).toString();
     QString nameRight = sourceModel()->data(source_right, Qt::UserRole + KisAllTagResourceModel::ResourceName).toString();
-    return nameLeft < nameRight;
+    return nameLeft.toLower() < nameRight.toLower();
 }
 
 KoResourceSP KisTagResourceModel::resourceForIndex(QModelIndex index) const

@@ -109,6 +109,7 @@ KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool
 
     d->tagFilterProxyModel = new KisTagFilterResourceProxyModel(resourceType, this);
     d->view->setModel(d->tagFilterProxyModel);
+    d->tagFilterProxyModel->sort(Qt::DisplayRole);
 
     connect(d->view, SIGNAL(currentResourceChanged(QModelIndex)), this, SLOT(activated(QModelIndex)));
     connect(d->view, SIGNAL(currentResourceClicked(QModelIndex)), this, SLOT(clicked(QModelIndex)));

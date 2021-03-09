@@ -92,6 +92,7 @@ QVariant KisAllResourcesModel::data(const QModelIndex &index, int role) const
     if (pos) {
         v = KisResourceQueryMapper::variantFromResourceQuery(d->resourcesQuery, index.column(), role);
     }
+
     return v;
 }
 
@@ -695,7 +696,8 @@ bool KisResourceModel::lessThan(const QModelIndex &source_left, const QModelInde
 {
     QString nameLeft = sourceModel()->data(source_left, Qt::UserRole + KisAbstractResourceModel::Name).toString();
     QString nameRight = sourceModel()->data(source_right, Qt::UserRole + KisAbstractResourceModel::Name).toString();
-    return nameLeft < nameRight;
+
+    return nameLeft.toLower() < nameRight.toLower();
 }
 
 

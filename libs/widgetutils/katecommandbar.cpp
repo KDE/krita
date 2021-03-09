@@ -251,7 +251,7 @@ KateCommandBar::KateCommandBar(QWidget *parent)
 
     m_treeView = new QTreeView();
     layout->addWidget(m_treeView, 1);
-    m_treeView->setTextElideMode(Qt::ElideLeft);
+    m_treeView->setTextElideMode(Qt::ElideMiddle);
     m_treeView->setUniformRowHeights(true);
 
     m_model = new CommandModel(this);

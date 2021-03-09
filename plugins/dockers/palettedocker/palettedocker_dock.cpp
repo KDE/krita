@@ -269,7 +269,7 @@ void PaletteDockerDock::slotSetColorSet(KoColorSetSP colorSet)
     if (colorSet) {
         KisConfig cfg(true);
         cfg.setDefaultPalette(colorSet->name());
-        m_ui->lblPaletteName->setTextElideMode(Qt::ElideLeft);
+        m_ui->lblPaletteName->setTextElideMode(Qt::ElideMiddle);
         m_ui->lblPaletteName->setText(colorSet->name());
     } else {
         m_ui->lblPaletteName->setText("");

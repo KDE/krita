@@ -848,7 +848,8 @@ void KisMainWindow::slotThemeChanged()
             }
 
             QTabBar::tab:!selected {
-                background: palette(alternate-base);             
+                background: palette(alternate-base);
+                border-right: 2px solid palette(window);
                 color: #{inactive_text_color};
             }
             QTabBar::tab:selected {

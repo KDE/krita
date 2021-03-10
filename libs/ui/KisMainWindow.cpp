@@ -834,42 +834,16 @@ void KisMainWindow::slotThemeChanged()
     // Tab close button override
     // just switch this icon out for all OSs so it is easier to see
     QString globalStyleSheet = R"(
-            QTabBar {
-                background-color: palette(alternate-base);
-                qproperty-drawBase: 1;
-                qproperty-elideMode: "ElideMiddle";
-            }
-            QTabBar::tab {
-                border-right: 1px solid palette(alternate-base);
-                border-top: 1px solid palette(alternate-base);
-                border-left: 1px solid palette(alternate-base);
-                padding: 5px;
-
-            }
-
-            QTabBar::tab:!selected {
-                background: palette(alternate-base);
-                border-right: 2px solid palette(window);
-                color: #{inactive_text_color};
-            }
-            QTabBar::tab:selected {
-                background: palette(window);
-            }
-           QTabBar::tab:hover {
-               color: palette(active-text);
-           }
-
             QTabBar::close-button {
                 image: url({close-button-location});
                 padding-top: 3px;
             }
 
-           )";
+            QHeaderView::section {
+                padding: 7px;
+            }
 
-    // swap out variables with palette options
-    QString inactiveTextColor = KritaUtils::blendColors(qApp->palette().color(QPalette::Text),
-                                              qApp->palette().color(QPalette::Window), 0.5).name().split("#")[1];
-    globalStyleSheet = globalStyleSheet.replace("{inactive_text_color}", inactiveTextColor);
+           )";
 
     QString themeName = d->themeManager->currentThemeName();
     bool isDarkTheme = themeName.toLower().contains("dark");
@@ -878,10 +852,6 @@ void KisMainWindow::slotThemeChanged()
     } else {
         globalStyleSheet = globalStyleSheet.replace("{close-button-location}", ":/pics/dark_close-tab.svg");
     }
-
-    // all global styles can be set here. Build them out line by line so it is easier to read/manage
-   // QString stylesBuilder;
-    globalStyleSheet.append("QHeaderView::section {padding: 7px; }");
 
     qApp->setStyleSheet(globalStyleSheet);
 

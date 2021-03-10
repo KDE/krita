@@ -26,6 +26,8 @@
 #include "KisImageBarrierLockerWithFeedback.h"
 #include "kis_processing_applicator.h"
 
+#include "kis_config.h"
+
 StoryboardModel::StoryboardModel(QObject *parent)
         : QAbstractItemModel(parent)
         , m_freezeKeyframePosition(false)
@@ -234,6 +236,19 @@ bool StoryboardModel::setData(const QModelIndex & index, const QVariant & value,
                 QSharedPointer<StoryboardChild> durationFrames = scene->child(frameIndex.row());
                 durationSeconds->setData(QVariant::fromValue<int>(implicitSceneDuration / fps));
                 durationFrames->setData(QVariant::fromValue<int>(implicitSceneDuration % fps));
+
+                // Account for new durations with auto-adjust playback range option.
+                if (m_image.isValid()) {
+                    KisConfig cfg(true);
+                    QModelIndex lastScene = this->index(rowCount() - 1, 0);
+                    if (cfg.adaptivePlaybackRange()) {
+                        int frameNum = this->index(StoryboardItem::FrameNumber, 0, lastScene).data().toInt();
+                        int totalDuration = data(lastScene, TotalSceneDurationInFrames).toInt();
+                        KisTimeSpan playbackRange = m_image->animationInterface()->fullClipRange();
+                        playbackRange.include(frameNum+totalDuration);
+                        m_image->animationInterface()->setFullClipRange(playbackRange);
+                    }
+                }
 
             }
             else if (index.row() >= StoryboardItem::Comments && !value.canConvert<CommentBox>()) {

@@ -358,7 +358,6 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
         }
         int firstItemRow = firstIndex.row();
         int lastItemRow = lastIndex.row();
-        qDebug() << "first" <<firstItemRow <<" last "<<lastItemRow;
 
         int numItems = lastItemRow - firstItemRow + 1;
         if (numItems <= 0) {

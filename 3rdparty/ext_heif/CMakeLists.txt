@@ -93,7 +93,7 @@ if (EXISTS ${MESON_BINARY_PATH} AND EXISTS ${NINJA_BINARY_PATH} AND EXISTS ${RUS
         URL https://github.com/xiph/rav1e/archive/v0.5.0-alpha.tar.gz
         URL_HASH SHA256=fd884fa387d01860eaf22a0a97353525221eb32bf6b9154bbfa21b6cce5988c8
 
-        CONFIGURE_COMMAND cargo install cargo-c
+        CONFIGURE_COMMAND cargo install cargo-c --root=${EXTPREFIX_heif}
 
         BUILD_COMMAND ""
 

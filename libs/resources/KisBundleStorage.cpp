@@ -132,6 +132,13 @@ bool KisBundleStorage::loadVersionedResource(KoResourceSP resource)
                 qWarning() << "Could not reload resource file" << fn;
                 return false;
             }
+
+            // Check for the thumbnail
+            if ((resource->image().isNull() || resource->thumbnail().isNull()) && !resource->thumbnailPath().isNull()) {
+                QImage img(bundleSaveLocation  + "/" +  '/' + resource->thumbnailPath());
+                resource->setImage(img);
+                resource->updateThumbnail();
+            }
             f.close();
         }
     }

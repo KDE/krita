@@ -117,6 +117,11 @@ QImage KoResource::thumbnail() const
     return image();
 }
 
+QString KoResource::thumbnailPath() const
+{
+    return QString();
+}
+
 void KoResource::setImage(const QImage &image)
 {
     d->image = image;

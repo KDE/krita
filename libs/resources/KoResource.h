@@ -98,6 +98,15 @@ public:
      */
     virtual QImage thumbnail() const;
 
+    /**
+     * @brief thumbnailPath returns the path to a separate thumbnail image, outside
+     *        the actual resource file itself. If the path is relative, it is supposed
+     *        start in the same location as the resource itself. If it's absolute,
+     *        that is, it starts with "/", it is from the root of the storage.
+     * @return an empty string if the thumbnail is part of the resource
+     */
+    virtual QString thumbnailPath() const;
+
     /// @return the md5sum calculated over the contents of the resource.
     QByteArray md5() const;
 

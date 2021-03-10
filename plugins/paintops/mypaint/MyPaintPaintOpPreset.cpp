@@ -97,14 +97,6 @@ MyPaintBrush* KisMyPaintPaintOpPreset::brush() {
 
 bool KisMyPaintPaintOpPreset::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface)
 {
-    // XXX: this breaks when myb files are in bundles!
-    QString thumnailFile = KisResourceLocator::instance()->makeStorageLocationAbsolute(storageLocation()) + ResourceType::PaintOpPresets + '/' + QFileInfo(filename()).baseName() + "_prev.png";
-    if (QFileInfo(thumnailFile).exists()) {
-        d->icon.load(thumnailFile);
-    }
-
-    setImage(d->icon);
-
     QByteArray ba = dev->readAll();
     d->json = ba;
     mypaint_brush_from_string(d->brush, ba);
@@ -138,6 +130,16 @@ bool KisMyPaintPaintOpPreset::loadFromDevice(QIODevice *dev, KisResourcesInterfa
 bool KisMyPaintPaintOpPreset::save() {
 
     return false;
+}
+
+void KisMyPaintPaintOpPreset::updateThumbnail()
+{
+    d->icon = thumbnail();
+}
+
+QString KisMyPaintPaintOpPreset::thumbnailPath() const
+{
+    return QFileInfo(filename()).baseName() + "_prev.png";
 }
 
 QByteArray KisMyPaintPaintOpPreset::getJsonData() {

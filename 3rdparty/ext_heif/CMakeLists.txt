@@ -97,7 +97,7 @@ if (EXISTS ${MESON_BINARY_PATH} AND EXISTS ${NINJA_BINARY_PATH} AND EXISTS ${RUS
 
         BUILD_COMMAND ""
 
-        INSTALL_COMMAND cargo cinstall --release --prefix=${EXTPREFIX_heif}
+        INSTALL_COMMAND cargo cinstall --release --library-type=cdylib --prefix=${EXTPREFIX_heif}
 
         BUILD_IN_SOURCE 1
 

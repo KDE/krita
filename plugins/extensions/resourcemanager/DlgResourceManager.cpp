@@ -19,7 +19,8 @@
 #include <KisResourceItemDelegate.h>
 #include <QItemSelection>
 #include <wdgtagselection.h>
-
+#include <kis_paintop_factory.h>
+#include <kis_paintop_registry.h>
 
 DlgResourceManager::DlgResourceManager(KisActionManager *actionMgr, QWidget *parent)
     : KoDialog(parent)
@@ -158,11 +159,15 @@ void DlgResourceManager::slotResourcesSelectionChanged(QModelIndex index)
         pix = pix.scaled(m_ui->lblThumbnail->size()*devicePixelRatioF(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
         m_ui->lblThumbnail->setPixmap(pix);
 
+        QMap<QString, QVariant> metadata = model->data(idx, Qt::UserRole + KisAllResourcesModel::MetaData).toMap();
+
         m_ui->lblFilename->setDisabled(false);
         m_ui->lblLocation->setDisabled(false);
         m_ui->lblThumbnail->setDisabled(false);
         m_ui->lneName->setDisabled(false);
         m_ui->lblId->setDisabled(false);
+        m_ui->lblMetadata->setText(constructMetadata(metadata, getCurrentResourceType()));
+
 
     } else if (list.size() > 1) {
 
@@ -324,4 +329,36 @@ void DlgResourceManager::updateDeleteButtonState(const QModelIndexList &list)
             m_ui->btnDeleteResource->setText(i18n("Delete Resources"));
         }
     }
+}
+
+QString DlgResourceManager::constructMetadata(QMap<QString, QVariant> metadata, QString resourceType)
+{
+    QString response;
+    if (resourceType == ResourceType::PaintOpPresets) {
+        QString paintopKey = "paintopid";
+        QString paintopId = metadata.contains(paintopKey) ? metadata[paintopKey].toString() : "";
+        if (!paintopId.isEmpty()) {
+
+            KisPaintOpFactory* factory = KisPaintOpRegistry::instance()->get(paintopId);
+            if (factory) {
+                QString name = factory->name();
+                response.append(name);
+            } else {
+                response.append(i18nc("Brush engine type, in resource manager", "Engine: "));
+                response.append(paintopId);
+            }
+        }
+
+
+    } else if (resourceType == ResourceType::GamutMasks) {
+        QString descriptonKey = "description";
+        QString description = metadata.contains(descriptonKey) ? metadata[descriptonKey].toString() : "";
+        response.append(description);
+    } else {
+        Q_FOREACH(QString key, metadata.keys()) {
+            response.append(key).append(": ").append(metadata[key].toString()).append("\n");
+        }
+    }
+    return response;
+
 }

@@ -57,6 +57,7 @@ private:
     QSharedPointer<KisTag> getCurrentTag();
     void updateDeleteButtonState(const QModelIndexList &list);
 
+    QString constructMetadata(QMap<QString, QVariant> metadata, QString resourceType);
 
 private:
     QWidget *m_page;

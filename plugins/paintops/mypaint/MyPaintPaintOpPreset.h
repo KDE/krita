@@ -36,6 +36,8 @@ public:
         return QPair<QString, QString>(ResourceType::PaintOpPresets, ResourceSubType::MyPaintPaintOpPresets);
     }
 
+    void updateThumbnail() override;
+    QString thumbnailPath() const override;
 
     QByteArray getJsonData();
     float getSize();

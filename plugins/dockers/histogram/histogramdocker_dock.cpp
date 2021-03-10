@@ -55,6 +55,7 @@ void HistogramDockerDock::setCanvas(KoCanvasBase * canvas)
     if (m_canvas) {
 
         m_imageIdleWatcher->setTrackedImage(m_canvas->image());
+        connect(m_imageIdleWatcher, &KisIdleWatcher::startedIdleMode, this, &HistogramDockerDock::updateHistogram, Qt::UniqueConnection);
 
         connect(m_canvas->image(), SIGNAL(sigImageUpdated(QRect)), this, SLOT(startUpdateCanvasProjection()), Qt::UniqueConnection);
         connect(m_canvas->image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), this, SLOT(sigColorSpaceChanged(const KoColorSpace*)), Qt::UniqueConnection);

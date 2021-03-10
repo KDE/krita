@@ -7,7 +7,7 @@ include_directories(SYSTEM
     ${OCIO_INCLUDE_DIR}
 )
 
-if (ANDROID)
+if (ANDROID OR (CMAKE_SYSTEM_PROCESSOR MATCHES "^(aarch64.*|AARCH64.*|arm64.*|ARM64.*)" AND NOT APPLE))
     add_definitions(-DQT_OPENGL_ES_3)
     add_definitions(-DHAS_ONLY_OPENGL_ES)
     include_directories (${Qt5AndroidExtras_INCLUDE_DIRS})

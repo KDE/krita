@@ -19,49 +19,6 @@
 #include <TagActions.h>
 #include <kis_signal_compressor.h>
 
-struct CustomTag
-{
-    QString name;
-    QString shortName;
-    QVariant data;
-
-public:
-    CustomTag(QString _name, QVariant _data)
-    {
-
-        name = _name;
-        shortName = _name;
-        data = _data;
-    }
-
-    CustomTag(QString _name, QString _shortName, QVariant _data)
-    {
-
-        name = _name;
-        shortName = _shortName;
-        data = _data;
-    }
-
-    CustomTag()
-    {
-        name = "";
-        shortName = "";
-        data = QVariant();
-    }
-
-};
-typedef QSharedPointer<CustomTag> CustomTagSP;
-Q_DECLARE_METATYPE(QSharedPointer<CustomTag>)
-
-
-struct CustomTagsCategory
-{
-    QString categoryName;
-    // TODO: add category name/resource type, but translated
-    QList<CustomTagSP> tags;
-};
-typedef QSharedPointer<CustomTagsCategory> CustomTagsCategorySP;
-
 
 class KRITAWIDGETS_EXPORT WdgCloseableLabel : public QWidget
 {

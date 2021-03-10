@@ -227,7 +227,6 @@ void KisWdgTagSelectionControllerBundleTags::updateView()
         resourceTypePair(i18n("Gamut masks"), ResourceType::GamutMasks),
         resourceTypePair(i18n("SeExpr scripts"), ResourceType::SeExprScripts),
     };
-    QList<CustomTagsCategorySP> categoriesList;
 
     KisTagModel* model = new KisTagModel(m_resourceType);
 

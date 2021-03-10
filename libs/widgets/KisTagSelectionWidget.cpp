@@ -20,6 +20,7 @@
 #include <QPair>
 #include <QApplication>
 #include <QInputDialog>
+#include <QPainterPath>
 
 #include <KoFileDialog.h>
 #include <kis_icon.h>

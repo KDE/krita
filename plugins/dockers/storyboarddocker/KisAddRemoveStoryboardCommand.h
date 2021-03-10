@@ -9,6 +9,7 @@
 
 #include "kundo2command.h"
 #include "kis_command_ids.h"
+#include "kis_types.h"
 
 class StoryboardModel;
 
@@ -59,6 +60,22 @@ private:
     int m_count;
     int m_to;
     StoryboardModel *m_model;
+};
+
+class KisVisualizeStoryboardCommand : public KUndo2Command
+{
+public:
+    KisVisualizeStoryboardCommand(int fromTime, int toSceneIndex, StoryboardModel* model, KisImageSP image, KUndo2Command *parent = 0);
+    ~KisVisualizeStoryboardCommand();
+    void redo() override;
+    void undo() override;
+
+private:
+    int m_fromTime;
+    int m_toSceneIndex;
+    StoryboardModel *m_model;
+    KisImageSP m_image;
+
 };
 
 class KisStoryboardChildEditCommand : public KUndo2Command

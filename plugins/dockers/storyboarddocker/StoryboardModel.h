@@ -254,11 +254,11 @@ public:
      */
     void insertChildRows(int position, StoryboardItemSP item);
 
-    void visualizeScene(const QModelIndex& index);
+    void visualizeScene(const QModelIndex& index, bool useUndo = true);
 
 private:
     bool moveRowsImpl(const QModelIndex &sourceParent, int sourceRow, int count,
-                    const QModelIndex &destinationParent, int destinationChild);
+                    const QModelIndex &destinationParent, int destinationChild, KUndo2Command *parentCMD = nullptr);
 
 private Q_SLOTS:
     /**

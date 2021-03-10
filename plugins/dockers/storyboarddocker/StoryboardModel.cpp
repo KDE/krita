@@ -23,6 +23,8 @@
 #include "kis_raster_keyframe_channel.h"
 #include "KisStoryboardThumbnailRenderScheduler.h"
 #include "KisAddRemoveStoryboardCommand.h"
+#include "KisImageBarrierLockerWithFeedback.h"
+#include "kis_processing_applicator.h"
 
 StoryboardModel::StoryboardModel(QObject *parent)
         : QAbstractItemModel(parent)
@@ -415,20 +417,20 @@ bool StoryboardModel::moveRows(const QModelIndex &sourceParent, int sourceRow, i
 {
     KisMoveStoryboardCommand *command = new KisMoveStoryboardCommand(sourceRow, count, destinationChild, this);
 
-    const int sourceFrame = index(StoryboardItem::FrameNumber, 0, index(sourceRow, 0)).data().toInt();
-
-    if (moveRowsImpl(sourceParent, sourceRow, count, destinationParent, destinationChild)) {
-        const int actualIndex = sourceRow < destinationChild ? destinationChild - 1 : destinationChild;
-        const int destinationFrame = index(StoryboardItem::FrameNumber, 0, index(actualIndex, 0)).data().toInt();
-
-        if (m_image) {
-            KisSwitchCurrentTimeCommand* switchCommand = new KisSwitchCurrentTimeCommand(m_image->animationInterface(), sourceFrame, destinationFrame, command);
-            switchCommand->redo();
+    if (moveRowsImpl(sourceParent, sourceRow, count, destinationParent, destinationChild, command)) {
+        if (!sourceParent.isValid()) {
+            const int sceneIndex = sourceRow < destinationChild ? destinationChild - 1 : destinationChild;
+            new KisVisualizeStoryboardCommand(m_image->animationInterface()->currentTime(),
+                                              sceneIndex,
+                                              this,
+                                              m_image,
+                                              command);
         }
 
-        pushUndoCommand(command);
+        KisProcessingApplicator::runSingleCommandStroke(m_image, command, KisStrokeJobData::BARRIER, KisStrokeJobData::EXCLUSIVE);
         return true;
     }
+
     return false;
 }
 
@@ -770,6 +772,10 @@ void StoryboardModel::reorderKeyframes()
 {
     //Get the earliest frame number in the storyboard list
     int earliestFrame = INT_MAX;
+
+    if (!m_image) {
+        return;
+    }
 
     typedef int AssociateFrameOffset;
 
@@ -1304,7 +1310,7 @@ void StoryboardModel::insertChildRows(int position, KUndo2Command *cmd)
     }
 }
 
-void StoryboardModel::visualizeScene(const QModelIndex &scene)
+void StoryboardModel::visualizeScene(const QModelIndex &scene, bool useUndo)
 {
     if (scene.parent().isValid() || !m_image) {
         return;
@@ -1313,14 +1319,12 @@ void StoryboardModel::visualizeScene(const QModelIndex &scene)
     int frameTime = index(StoryboardItem::FrameNumber, 0, scene).data().toInt();
 
     if (frameTime != m_image->animationInterface()->currentTime()) {
-        KisSwitchCurrentTimeCommand* cmd = new KisSwitchCurrentTimeCommand(m_image->animationInterface(), m_image->animationInterface()->currentTime(), frameTime);
-        cmd->redo();
-        pushUndoCommand(cmd);
+        m_image->animationInterface()->switchCurrentTimeAsync(frameTime, useUndo);
     }
 }
 
 bool StoryboardModel::moveRowsImpl(const QModelIndex &sourceParent, int sourceRow, int count,
-                                const QModelIndex &destinationParent, int destinationChild)
+                                const QModelIndex &destinationParent, int destinationChild, KUndo2Command* parentCMD)
 {
     if (sourceParent != destinationParent) {
         return false;
@@ -1332,6 +1336,9 @@ bool StoryboardModel::moveRowsImpl(const QModelIndex &sourceParent, int sourceRo
     if (isLocked()) {
         return false;
     }
+
+    //We want to test-run an action when nullptrs are present.
+    bool dryrun = (parentCMD != nullptr);
 
     if (destinationChild > sourceRow + count - 1) {
         //we adjust for the upward shift, see qt doc for why this is needed
@@ -1353,13 +1360,18 @@ bool StoryboardModel::moveRowsImpl(const QModelIndex &sourceParent, int sourceRo
             }
 
             StoryboardItemSP item = m_items.at(parent.row());
-            item->moveChild(sourceRow, destinationChild + row);
+
+            if (!dryrun) {
+                item->moveChild(sourceRow, destinationChild + row);
+            }
         }
         endMoveRows();
 
-        reorderKeyframes();
+        if (!dryrun) {
+            reorderKeyframes();
+            emit sigStoryboardItemListChanged();
+        }
 
-        emit sigStoryboardItemListChanged();
         return true;
     }
     else if (!sourceParent.isValid()) {                  //for moves of 1st level nodes
@@ -1371,13 +1383,17 @@ bool StoryboardModel::moveRowsImpl(const QModelIndex &sourceParent, int sourceRo
                 return false;
             }
 
-            m_items.move(sourceRow, destinationChild + row);
+            if (!dryrun) {
+                m_items.move(sourceRow, destinationChild + row);
+            }
         }
         endMoveRows();
 
-        reorderKeyframes();
+        if (!dryrun) {
+            reorderKeyframes();
+            emit sigStoryboardItemListChanged();
+        }
 
-        emit sigStoryboardItemListChanged();
         return true;
     }
     else {

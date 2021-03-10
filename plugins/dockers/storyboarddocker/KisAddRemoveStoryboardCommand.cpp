@@ -9,6 +9,8 @@
 
 #include "StoryboardModel.h"
 #include "KisAddRemoveStoryboardCommand.h"
+#include "kis_image.h"
+#include "kis_image_animation_interface.h"
 
 KisAddStoryboardCommand::KisAddStoryboardCommand(int position,
                                                  StoryboardItemSP item,
@@ -110,6 +112,7 @@ KisMoveStoryboardCommand::~KisMoveStoryboardCommand()
 void KisMoveStoryboardCommand::redo()
 {
     m_model->moveRowsImpl(QModelIndex(), m_from, m_count, QModelIndex(), m_to);
+    KUndo2Command::redo();
 }
 
 void KisMoveStoryboardCommand::undo()
@@ -117,7 +120,30 @@ void KisMoveStoryboardCommand::undo()
     const int to = m_to > m_from ? m_to - m_count : m_to;
     const int from = m_to <= m_from ? m_from + m_count : m_from;
     m_model->moveRowsImpl(QModelIndex(), to, m_count, QModelIndex(), from);
+    KUndo2Command::undo();
 }
+
+KisVisualizeStoryboardCommand::KisVisualizeStoryboardCommand(int fromTime, int toSceneIndex, StoryboardModel *model, KisImageSP image, KUndo2Command *parent)
+    : KUndo2Command(parent)
+    , m_fromTime(fromTime)
+    , m_toSceneIndex(toSceneIndex)
+    , m_model(model)
+    , m_image(image)
+{}
+
+KisVisualizeStoryboardCommand::~KisVisualizeStoryboardCommand()
+{}
+
+void KisVisualizeStoryboardCommand::redo()
+{
+    m_model->visualizeScene(m_model->index(m_toSceneIndex, 0), false);
+}
+
+void KisVisualizeStoryboardCommand::undo()
+{
+    m_image->animationInterface()->requestTimeSwitchNonGUI(m_fromTime, false);
+}
+
 
 KisStoryboardChildEditCommand::KisStoryboardChildEditCommand(QVariant oldValue,
                                 QVariant newValue,
@@ -157,3 +183,4 @@ bool KisStoryboardChildEditCommand::mergeWith(const KUndo2Command *other)
 
     return false;
 }
+

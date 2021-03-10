@@ -67,7 +67,7 @@ find_program(MESON_BINARY_PATH meson)
 find_program(NINJA_BINARY_PATH ninja)
 find_program(RUSTC_BINARY_PATH rustc)
 
-if (EXISTS ${MESON_BINARY_PATH} AND EXISTS ${MESON_BINARY_PATH} AND EXISTS ${MESON_BINARY_PATH})
+if (EXISTS ${MESON_BINARY_PATH} AND EXISTS ${NINJA_BINARY_PATH} AND EXISTS ${RUSTC_BINARY_PATH})
     # Assumes an existing Meson/Ninja install
     ExternalProject_Add(
         ext_dav1d

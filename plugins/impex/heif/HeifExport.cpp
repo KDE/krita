@@ -138,23 +138,23 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
                                       KoColorConversionTransformation::internalConversionFlags());
     }
 
-    conversionPolicy conversionPolicy = keepTheSame;
+    ConversionPolicy conversionPolicy = KeepTheSame;
     bool convertToRec2020 = false;
     
     if (cs->hasHighDynamicRange() && cs->colorModelId() != GrayAColorModelID) {
         QString conversionOption = (configuration->getString("floatingPointConversionOption", "Rec2100PQ"));
         if (conversionOption == "Rec2100PQ") {
             convertToRec2020 = true;
-            conversionPolicy = applyPQ;
+            conversionPolicy = ApplyPQ;
         } else if (conversionOption == "Rec2100HLG") {
             convertToRec2020 = true;
-            conversionPolicy = applyHLG;
+            conversionPolicy = ApplyHLG;
         } else if (conversionOption == "ApplyPQ") {
-            conversionPolicy = applyPQ;
+            conversionPolicy = ApplyPQ;
         } else if (conversionOption == "ApplyHLG") {
-            conversionPolicy = applyHLG;
+            conversionPolicy = ApplyHLG;
         }  else if (conversionOption == "ApplySMPTE428") {
-            conversionPolicy = applySMPTE428;
+            conversionPolicy = ApplySMPTE428;
         }
     }
 
@@ -325,7 +325,7 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
                             std::copy(pixelValuesLinear.begin(), pixelValuesLinear.end(), pixelValues.begin());
                         }
 
-                        if (conversionPolicy == applyHLG && removeHGLOOTF) {
+                        if (conversionPolicy == ApplyHLG && removeHGLOOTF) {
                             removeHLGOOTF(pixelValues, lCoef, hlgGamma, hlgNominalPeak);
                         }
 
@@ -418,7 +418,7 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
         }
 
         // --- save the color profile.
-        if (conversionPolicy == keepTheSame) {
+        if (conversionPolicy == KeepTheSame) {
             QByteArray rawProfileBA = image->colorSpace()->profile()->rawData();
             std::vector<uint8_t> rawProfile(rawProfileBA.begin(), rawProfileBA.end());
             img.set_raw_color_profile(heif_color_profile_type_prof, rawProfile);
@@ -436,11 +436,11 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
                nclxDescription.set_color_primaties(heif_color_primaries(primaries));
            }
 
-           if (conversionPolicy == applyPQ) {
+           if (conversionPolicy == ApplyPQ) {
                nclxDescription.set_transfer_characteristics(heif_transfer_characteristic_ITU_R_BT_2100_0_PQ);
-           } else if (conversionPolicy == applyHLG) {
+           } else if (conversionPolicy == ApplyHLG) {
                nclxDescription.set_transfer_characteristics(heif_transfer_characteristic_ITU_R_BT_2100_0_HLG);
-           } else if (conversionPolicy == applySMPTE428) {
+           } else if (conversionPolicy == ApplySMPTE428) {
                nclxDescription.set_transfer_characteristics(heif_transfer_characteristic_SMPTE_ST_428_1);
            }
 
@@ -454,7 +454,7 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
 
         // iOS gets confused when a heif file contains an nclx.
         // but we absolutely need it for hdr.
-        if (conversionPolicy != keepTheSame && cs->hasHighDynamicRange()) {
+        if (conversionPolicy != KeepTheSame && cs->hasHighDynamicRange()) {
             options.macOS_compatibility_workaround_no_nclx_profile = false;
         }
 
@@ -527,13 +527,13 @@ void HeifExport::initializeCapabilities()
     addSupportedColorModels(supportedColorModels, "HEIF");
 }
 
-float HeifExport::applyCurveAsNeeded(float value, HeifExport::conversionPolicy policy)
+float HeifExport::applyCurveAsNeeded(float value, HeifExport::ConversionPolicy policy)
 {
-    if ( policy == applyPQ) {
+    if ( policy == ApplyPQ) {
         return applySmpte2048Curve(value);
-    } else if ( policy == applyHLG) {
+    } else if ( policy == ApplyHLG) {
         return applyHLGCurve(value);
-    } else if ( policy == applySMPTE428) {
+    } else if ( policy == ApplySMPTE428) {
         return applySMPTE_ST_428Curve(value);
     }
     return value;

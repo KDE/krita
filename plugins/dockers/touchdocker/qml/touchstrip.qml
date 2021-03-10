@@ -82,7 +82,7 @@ Rectangle {
                 onClicked: {
                     mainWindow.slotButtonPressed("button" + modelData)
                 }
-                image: mainWindow.imageForButton("button" + modelData);
+                image: root.width != 0 ? mainWindow.imageForButton("button" + modelData) : "";
 
             }
         }
@@ -103,7 +103,7 @@ Rectangle {
                         radius: 8;
                         anchors.fill: parent;
                         visible: modelData !== "";
-                        image: mainWindow.imageForButton(modelData);
+                        image: root.width != 0 ? mainWindow.imageForButton(modelData) : "";
                         onClicked: {
                             mainWindow.slotButtonPressed(modelData)
                             if (modelData === "reset_canvas_rotation") {
@@ -133,7 +133,7 @@ Rectangle {
                 onClicked: {
                     mainWindow.slotButtonPressed("button" + modelData)
                 }
-                image: mainWindow.imageForButton("button" + modelData);
+                image: root.width != 0 ? mainWindow.imageForButton("button" + modelData) : "";
 
             }
         }

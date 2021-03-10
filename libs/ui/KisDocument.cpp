@@ -1999,8 +1999,6 @@ void KisDocument::setGridConfig(const KisGridConfig &config)
 
 QList<KoColorSetSP > KisDocument::paletteList()
 {
-    qDebug() << "PALETTELIST storage" << d->documentResourceStorage;
-
     QList<KoColorSetSP> _paletteList;
     if (d->documentResourceStorage.isNull()) {
         qWarning() << "No documentstorage for palettes";
@@ -2020,8 +2018,6 @@ QList<KoColorSetSP > KisDocument::paletteList()
 
 void KisDocument::setPaletteList(const QList<KoColorSetSP > &paletteList, bool emitSignal)
 {
-    qDebug() << "SET PALETTE LIST" << paletteList.size() << "storage" << d->documentResourceStorage;
-
     QList<KoColorSetSP> oldPaletteList;
     if (d->documentResourceStorage) {
         QSharedPointer<KisResourceStorage::ResourceIterator> iter = d->documentResourceStorage->resources(ResourceType::Palettes);

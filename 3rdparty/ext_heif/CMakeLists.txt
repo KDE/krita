@@ -67,54 +67,65 @@ find_program(MESON_BINARY_PATH meson)
 find_program(NINJA_BINARY_PATH ninja)
 find_program(RUSTC_BINARY_PATH rustc)
 
-if (EXISTS ${MESON_BINARY_PATH} AND EXISTS ${NINJA_BINARY_PATH} AND EXISTS ${RUSTC_BINARY_PATH})
-    # Assumes an existing Meson/Ninja install
+if(MESON_BINARY_PATH AND NINJA_BINARY_PATH AND RUSTC_BINARY_PATH)
+    message(STATUS "Enabling AVIF support.")
+
     ExternalProject_Add(
         ext_dav1d
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://code.videolan.org/videolan/dav1d/-/archive/0.8.2/dav1d-0.8.2.tar.gz
-        URL_HASH SHA256=00438cf4abb45a56f3dff4c0ff76f4714540672118fe84eea24617d5ed2e394c
+        URL https://downloads.videolan.org/pub/videolan/dav1d/0.8.2/dav1d-0.8.2.tar.xz
+        URL_HASH SHA256=3dd91d96b44e9d8ba7e82ad9e730d6c579ab5e19edca0db857a60f5ae6a0eb13
 
-        CONFIGURE_COMMAND meson <SOURCE_DIR> --default-library=static --prefix=${EXTPREFIX_heif}
+        CONFIGURE_COMMAND meson <SOURCE_DIR> --prefix=${EXTPREFIX_heif}
 
-        BUILD_COMMAND meson compile
+        BUILD_COMMAND meson compile -j${SUBMAKE_JOBS}
 
         INSTALL_COMMAND meson install
 
         DEPENDS ext_nasm
-        )
+    )
 
-
-    # Assumes an existing Rust install
-    # cargo install as part of an external configure...?
     ExternalProject_Add(
         ext_rav1e
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
         URL https://github.com/xiph/rav1e/archive/v0.5.0-alpha.tar.gz
         URL_HASH SHA256=fd884fa387d01860eaf22a0a97353525221eb32bf6b9154bbfa21b6cce5988c8
 
-        CONFIGURE_COMMAND cargo install cargo-c --root=${EXTPREFIX_heif}
+        CONFIGURE_COMMAND ""
 
-        BUILD_COMMAND ""
+        BUILD_COMMAND cargo cbuild --release --prefix=${EXTPREFIX_heif} --library-type=cdylib -j${SUBMAKE_JOBS}
 
         INSTALL_COMMAND cargo cinstall --release --library-type=cdylib --prefix=${EXTPREFIX_heif}
 
         BUILD_IN_SOURCE 1
 
         DEPENDS ext_nasm
-        )
+    )
+
+    # External projects do not accept single commands.
+    ExternalProject_Add_Step(
+        ext_rav1e ext_cargo_c
+
+        COMMENT "Installing cargo-c 0.7.2 to ${EXTPREFIX_heif}"
+
+        COMMAND cargo install cargo-c --version 0.7.2 --root=${EXTPREFIX_heif} -j${SUBMAKE_JOBS}
+
+        DEPENDEES configure
+        DEPENDERS build
+    )
 
     set(EXTRA_AVIF_DEPS ext_rav1e ext_dav1d)
 else()
-    if (NOT EXISTS ${MESON_BINARY_PATH})
+    if (NOT MESON_BINARY_PATH)
         message(WARNING "Meson Build system was not found, see https://mesonbuild.com")
     endif()
-    if (NOT EXISTS ${NINJA_BINARY_PATH})
+    if (NOT NINJA_BINARY_PATH)
         message(WARNING "Ninja Build system was not found, see https://ninja-build.org/")
     endif()
-    if (NOT EXISTS ${RUSTC_BINARY_PATH})
+    if (NOT RUSTC_BINARY_PATH)
         message(WARNING "Rust compiler was not found, see https://www.rust-lang.org/")
     endif()
+    message(WARNING "Disabling AVIF support.")
 endif()
 
 IF ("${CMAKE_SIZEOF_VOID_P}" EQUAL "8" AND NOT CMAKE_SYSTEM_PROCESSOR MATCHES "^(aarch64.*|AARCH64.*|arm64.*|ARM64.*)")
@@ -182,13 +193,11 @@ endif ()
 ExternalProject_Add(
     ext_libheif
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    #URL https://github.com/strukturag/libheif/releases/download/v1.11.0/libheif-1.11.0.tar.gz
-    #URL_HASH SHA1=def98b8c83861b6e4f3cdf6d3b57c9aaf3408923
 
     GIT_REPOSITORY https://github.com/strukturag/libheif.git
-    GIT_TAG master
+    GIT_TAG f5a3d8e090674be349f5c1e24083b3e553c516bd
     GIT_SHALLOW TRUE
-    GIT_REMOTE_UPDATE_STRATEGY REBASE
+    GIT_REMOTE_UPDATE_STRATEGY CHECKOUT
 
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_heif} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} -DBUILD_EXAMPLES=OFF ${GLOBAL_PROFILE}
 

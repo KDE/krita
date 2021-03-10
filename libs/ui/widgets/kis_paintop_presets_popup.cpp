@@ -361,41 +361,40 @@ void KisPaintOpPresetsPopup::slotSaveRenameCurrentBrush()
     // but that is what we are going with for now
     KisPaintOpSettingsSP prevSettings = m_d->resourceProvider->currentPreset()->settings()->clone();
     bool isDirty = m_d->resourceProvider->currentPreset()->isDirty();
-    emit reloadPresetClicked();
+
+     // this returns the UI to its original state after saving
+    toggleBrushRenameUIActive(false);
+    slotUpdatePresetSettings(); // update visibility of dirty preset and icon
 
     // get a reference to the existing (and new) file name and path that we are working with
     KisPaintOpPresetSP curPreset = m_d->resourceProvider->currentPreset();
-
-    if (!curPreset)
-        return;
-
     // in case the preset is dirty, we need an id to get the actual non-dirty preset to save just the name change
     // into the database
     int currentPresetResourceId = curPreset->resourceId();
 
-
-    QString originalPresetName = curPreset->name();
     QString renamedPresetName = m_d->uiWdgPaintOpPresetSettings.renameBrushNameTextField->text();
 
+    // If the id < 0, this is a new preset that hasn't been added to the storage and the database yet.
+    if (!curPreset || currentPresetResourceId < 0) {
+        curPreset->setName(renamedPresetName);
+        slotUpdatePresetSettings(); // update visibility of dirty preset and icon
+        return;
+    }
+
+
+    emit reloadPresetClicked();
 
     // create a new brush preset with the name specified and add to resource provider
     KisResourceModel model(ResourceType::PaintOpPresets);
     KoResourceSP properCleanResource = model.resourceForId(currentPresetResourceId);
     model.renameResource(properCleanResource, renamedPresetName);
 
-
-
     resourceSelected(curPreset); // refresh and select our freshly renamed resource
     if (isDirty) {
         m_d->resourceProvider->currentPreset()->setSettings(prevSettings);
         m_d->resourceProvider->currentPreset()->setDirty(isDirty);
     }
-
-    // Now blacklist the original file
-
     m_d->favoriteResManager->updateFavoritePresets();
-
-    toggleBrushRenameUIActive(false); // this returns the UI to its original state after saving
 
     slotUpdatePresetSettings(); // update visibility of dirty preset and icon
 }

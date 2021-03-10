@@ -1298,7 +1298,8 @@ void KisPaintopBox::slotReloadPreset()
     KisPaintOpPresetResourceServer *rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
     QSharedPointer<KisPaintOpPreset> preset = m_resourceProvider->currentPreset();
 
-    if (preset) {
+    // Presets that just have been created cannot be reloaded.
+    if (preset && preset->resourceId() > -1) {
         const bool result = rserver->reloadResource(preset);
         KIS_SAFE_ASSERT_RECOVER_NOOP(result && "couldn't reload preset");
     }

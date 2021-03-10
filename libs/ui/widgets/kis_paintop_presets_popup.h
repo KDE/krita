@@ -15,7 +15,7 @@
 #include <brushengine/kis_paintop_factory.h>
 #include "../kis_paint_ops_model.h"
 #include <kis_action.h>
-#include <widgets/kis_paintop_presets_save.h>
+#include "widgets/kis_paintop_presets_save.h"
 #include "widgets/kis_paintop_presets_popup.h"
 #include "kis_favorite_resource_manager.h"
 

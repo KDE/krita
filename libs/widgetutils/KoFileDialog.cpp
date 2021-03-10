@@ -11,6 +11,7 @@
 #include <QApplication>
 #include <QImageReader>
 #include <QClipboard>
+#include <QInputDialog>
 
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
@@ -177,11 +178,6 @@ void KoFileDialog::createFileDialog()
     if (d->type == SaveFile) {
         d->fileDialog->setAcceptMode(QFileDialog::AcceptSave);
         d->fileDialog->setFileMode(QFileDialog::AnyFile);
-
-#ifdef Q_OS_ANDROID
-        // HACK: discovered by looking into the code
-        d->fileDialog->setWindowTitle(d->proposedFileName.isEmpty() ? "Untitled.kra" : d->proposedFileName);
-#endif
     }
     else { // open / import
 
@@ -242,6 +238,35 @@ QString KoFileDialog::filename()
 {
     QString url;
     createFileDialog();
+
+#ifdef Q_OS_ANDROID
+        {
+            QString extension = ".kra";
+            QInputDialog mimeSelector;
+            mimeSelector.setLabelText(i18n("Save As:"));
+            mimeSelector.setComboBoxItems(d->filterList);
+            // combobox as they stand, are very hard to scroll on a touch device
+            mimeSelector.setOption(QInputDialog::UseListViewForComboBoxItems);
+
+            if (mimeSelector.exec() == QDialog::Accepted) {
+                const QString selectedFilter = mimeSelector.textValue();
+                int start = selectedFilter.indexOf("*.") + 1;
+                int end = selectedFilter.indexOf(" ", start);
+                int n = end - start;
+                extension = selectedFilter.mid(start, n);
+                if (!extension.contains(".")) {
+                    extension = "." + extension;
+                }
+                d->fileDialog->selectNameFilter(selectedFilter);
+
+                // HACK: discovered by looking into the code
+                d->fileDialog->setWindowTitle(d->proposedFileName.isEmpty() ? "Untitled" + extension : d->proposedFileName);
+            } else {
+                return url;
+            }
+        }
+#endif
+
     if (d->fileDialog->exec() == QDialog::Accepted) {
         url = d->fileDialog->selectedFiles().first();
     }

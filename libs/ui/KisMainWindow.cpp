@@ -837,7 +837,7 @@ void KisMainWindow::slotThemeChanged()
             QTabBar {
                 background-color: palette(alternate-base);
                 qproperty-drawBase: 1;
-                qproperty-expanding: 1;
+                qproperty-elideMode: "ElideMiddle";
             }
             QTabBar::tab {
                 border-right: 1px solid palette(alternate-base);
@@ -846,6 +846,7 @@ void KisMainWindow::slotThemeChanged()
                 padding: 5px;
 
             }
+
             QTabBar::tab:!selected {
                 background: palette(alternate-base);             
                 color: #{inactive_text_color};

@@ -840,39 +840,22 @@ void KisMainWindow::slotThemeChanged()
                 qproperty-expanding: 1;
             }
             QTabBar::tab {
+                border-right: 1px solid palette(alternate-base);
+                border-top: 1px solid palette(alternate-base);
+                border-left: 1px solid palette(alternate-base);
                 padding: 5px;
-                padding-left: 10px;
-                padding-right: 10px;
-                margin-left: 0;
-                margin-right: 0;
-                margin-top: 0;
+
             }
             QTabBar::tab:!selected {
-                background: palette(alternate-base);
-                border-bottom: 7px solid palette(alternate-base);
-                border-top: 7px solid palette(alternate-base);
-                border-right: 2px solid palette(window);
+                background: palette(alternate-base);             
                 color: #{inactive_text_color};
             }
             QTabBar::tab:selected {
                 background: palette(window);
-                border-bottom: 5px solid palette(alternate-base);
-                border-top: 5px solid palette(alternate-base);
-
-                border-left: 5px solid palette(alternate-base);
-                border-right: 5px solid palette(alternate-base);
-
-                margin-left: -2px;
-                margin-right: -2px;
-
-            margin-bottom: -5px;
             }
            QTabBar::tab:hover {
                color: palette(active-text);
            }
-
-            QTabBar::close-button:hover {
-            }
 
             QTabBar::close-button {
                 image: url({close-button-location});

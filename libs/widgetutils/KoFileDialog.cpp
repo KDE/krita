@@ -240,31 +240,31 @@ QString KoFileDialog::filename()
     createFileDialog();
 
 #ifdef Q_OS_ANDROID
-        {
-            QString extension = ".kra";
-            QInputDialog mimeSelector;
-            mimeSelector.setLabelText(i18n("Save As:"));
-            mimeSelector.setComboBoxItems(d->filterList);
-            // combobox as they stand, are very hard to scroll on a touch device
-            mimeSelector.setOption(QInputDialog::UseListViewForComboBoxItems);
+    if (d->type == SaveFile) {
+        QString extension = ".kra";
+        QInputDialog mimeSelector;
+        mimeSelector.setLabelText(i18n("Save As:"));
+        mimeSelector.setComboBoxItems(d->filterList);
+        // combobox as they stand, are very hard to scroll on a touch device
+        mimeSelector.setOption(QInputDialog::UseListViewForComboBoxItems);
 
-            if (mimeSelector.exec() == QDialog::Accepted) {
-                const QString selectedFilter = mimeSelector.textValue();
-                int start = selectedFilter.indexOf("*.") + 1;
-                int end = selectedFilter.indexOf(" ", start);
-                int n = end - start;
-                extension = selectedFilter.mid(start, n);
-                if (!extension.contains(".")) {
-                    extension = "." + extension;
-                }
-                d->fileDialog->selectNameFilter(selectedFilter);
-
-                // HACK: discovered by looking into the code
-                d->fileDialog->setWindowTitle(d->proposedFileName.isEmpty() ? "Untitled" + extension : d->proposedFileName);
-            } else {
-                return url;
+        if (mimeSelector.exec() == QDialog::Accepted) {
+            const QString selectedFilter = mimeSelector.textValue();
+            int start = selectedFilter.indexOf("*.") + 1;
+            int end = selectedFilter.indexOf(" ", start);
+            int n = end - start;
+            extension = selectedFilter.mid(start, n);
+            if (!extension.contains(".")) {
+                extension = "." + extension;
             }
+            d->fileDialog->selectNameFilter(selectedFilter);
+
+            // HACK: discovered by looking into the code
+            d->fileDialog->setWindowTitle(d->proposedFileName.isEmpty() ? "Untitled" + extension : d->proposedFileName);
+        } else {
+            return url;
         }
+    }
 #endif
 
     if (d->fileDialog->exec() == QDialog::Accepted) {

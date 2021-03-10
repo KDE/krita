@@ -67,3 +67,8 @@ void KisColorHistory::addColorToHistory(const KoColor& color)
 
     setColors(m_colorHistory);
 }
+
+void KisColorHistory::clearColorHistory() {
+    m_colorHistory.clear();
+    setColors(m_colorHistory);
+}

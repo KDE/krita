@@ -562,7 +562,7 @@ endif()
 if (ANDROID)
     # use default ABI
     if (NOT ANDROID_ABI)
-        set (ANDROID_ABI armeabi-v7a)
+        set (ANDROID_ABI arm64-v8a)
     endif()
     set (ANDROID_SDK_ROOT $ENV{ANDROID_SDK_ROOT})
     set (KRITA_PLUGIN_INSTALL_DIR ${LIB_INSTALL_DIR})

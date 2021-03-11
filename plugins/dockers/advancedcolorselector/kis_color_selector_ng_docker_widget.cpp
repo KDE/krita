@@ -68,7 +68,7 @@ KisColorSelectorNgDockerWidget::KisColorSelectorNgDockerWidget(QWidget *parent) 
 
     //Clear color history button
     m_clearColorHistoryButton->setIcon(KisIconUtils::loadIcon("dialog-cancel"));
-    m_clearColorHistoryButton->setIconSize(QSize(22, 22));
+    m_clearColorHistoryButton->setIconSize(QSize(12, 12));
     m_clearColorHistoryButton->setAutoRaise(true);
 
     //layout

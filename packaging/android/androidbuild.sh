@@ -224,8 +224,8 @@ esac
 done
 
 if [[ -z $ANDROID_ABI ]]; then
-    echo "Warning: ANDROID_ABI not specified, using the default one: armeabi-v7a"
-    export ANDROID_ABI=armeabi-v7a
+    echo "Warning: ANDROID_ABI not specified, using the default one: arm64-v8a"
+    export ANDROID_ABI=arm64-v8a
 fi
 
 if [[ $ANDROID_ABI != "armeabi-v7a" && $ANDROID_ABI != "arm64-v8a" && \
@@ -236,8 +236,8 @@ if [[ $ANDROID_ABI != "armeabi-v7a" && $ANDROID_ABI != "arm64-v8a" && \
 fi
 
 if [[ -z $ANDROID_API_LEVEL ]]; then
-    echo "Warning: ANDROID_API_LEVEL not set, using the default one: 21"
-    export ANDROID_API_LEVEL=21
+    echo "Warning: ANDROID_API_LEVEL not set, using the default one: 23"
+    export ANDROID_API_LEVEL=23
 fi
 
 if [[ -z $BUILD_ROOT ]]; then

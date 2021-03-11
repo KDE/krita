@@ -21,15 +21,15 @@ dependencies {
 }
 
 ext {
-    abi = System.getenv('ANDROID_ABI')
+    abi = System.getenv('ANDROID_ABI') ?: project.ext.properties['abi']
     installPrefix = '../krita-android-build'
 }
 
 task configure() {
     doLast {
         if (abi == null && !project.hasProperty("abi")) {
-            logger.error('ANDROID_ABI not specified using the default one instead: armeabi-v7a')
-            abi = 'armeabi-v7a'
+            logger.error('ANDROID_ABI not specified using the default one instead: arm64-v8a')
+            abi = 'arm64-v8a'
         }
 
         // if user specified the ABI through environment then overwrite the one in gradle.properties
@@ -56,7 +56,7 @@ task configure() {
 // them to start with `lib_`
 task copyLibs(type: Copy) {
     from "$installPrefix/lib"
-    into "libs/${abi ?: 'armeabi-v7a'}"
+    into "libs/$abi"
     rename ('^krita(.*).so$', 'lib_krita$1.so')
 }
 
@@ -82,21 +82,7 @@ task removeDuplicateAssets(type: Delete) {
 copyLibs.dependsOn configure
 
 android {
-    /*******************************************************
-     * The following variables:
-     * - androidBuildToolsVersion,
-     * - androidCompileSdkVersion
-     * - qt5AndroidDir - holds the path to qt android files
-     *                   needed to build any Qt application
-     *                   on Android.
-     *
-     * are defined in gradle.properties file. This file is
-     * updated by QtCreator and androiddeployqt tools.
-     * Changing them manually might break the compilation!
-     *******************************************************/
-
     compileSdkVersion androidCompileSdkVersion.toInteger()
-
 
     sourceSets {
         main {

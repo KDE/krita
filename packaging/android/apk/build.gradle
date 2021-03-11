@@ -137,6 +137,8 @@ android {
         targetSdkVersion 29
         minSdkVersion 23
         versionCode project.ext.versionCodes[abi] * 1000000 + versionMajor * 10000 + versionMinor * 100 + versionRelease
+        versionName "4.3.0-beta"
+        archivesBaseName = "krita-$abi-$versionName"
     }
 
     preBuild.dependsOn(copyLibs)

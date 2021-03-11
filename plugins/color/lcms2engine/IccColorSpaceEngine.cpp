@@ -175,7 +175,9 @@ const KoColorProfile* IccColorSpaceEngine::addProfile(const QString &filename)
     // quite often, and we can initialize it
     if (!profile->valid()) {
         cmsHPROFILE cmsp = cmsOpenProfileFromFile(filename.toLatin1(), "r");
-        profile = LcmsColorProfileContainer::createFromLcmsProfile(cmsp);
+        if (cmsp) {
+            profile = LcmsColorProfileContainer::createFromLcmsProfile(cmsp);
+        }
     }
 
     if (profile->valid()) {

@@ -30,7 +30,6 @@ void RecorderDirectoryCleaner::stop() {
 void RecorderDirectoryCleaner::run()
 {
     for (const QString &directory : directories) {
-        qDebug() << "REMOVING " <<  directory;
         QDir(directory).removeRecursively();
     }
 }

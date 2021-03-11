@@ -719,12 +719,19 @@ if (FFTW3_FOUND)
     list (APPEND ANDROID_EXTRA_LIBS ${FFTW3_LIBRARY})
 endif()
 
-find_package(OCIO)
-set_package_properties(OCIO PROPERTIES
-    DESCRIPTION "The OpenColorIO Library"
-    URL "https://www.opencolorio.org"
-    TYPE OPTIONAL
-    PURPOSE "Required by the Krita LUT docker")
+# OpenColorIO integration causes build issues on platforms using openGLES 3.2
+find_file(_qtgui_config NAMES qtgui-config.h HINTS ${Qt5Gui_INCLUDE_DIRS}/QtGui)
+file(STRINGS ${_qtgui_config} QTGUI_USE_OPENGLES2 REGEX "#define QT_OPENGL_ES_2")
+
+if(NOT QTGUI_USE_OPENGLES2)
+    find_package(OCIO)
+    set_package_properties(OCIO PROPERTIES
+        DESCRIPTION "The OpenColorIO Library"
+        URL "https://www.opencolorio.org"
+        TYPE OPTIONAL
+        PURPOSE "Required by the Krita LUT docker")
+endif()
+
 macro_bool_to_01(OCIO_FOUND HAVE_OCIO)
 
 set_package_properties(PythonLibrary PROPERTIES

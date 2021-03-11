@@ -17,7 +17,6 @@
 
 #include "QDebug"
 #include "LcmsColorProfileContainer.h"
-#include "ColorProfileQuantization.h"
 
 #include "lcms2.h"
 
@@ -109,15 +108,10 @@ IccColorProfile::IccColorProfile(const QVector<double> &colorants,
 
     cmsCIExyYTRIPLE primaries;
 
-    // We prequantize these values to 16bit precision for the best results here.
     if (modifiedColorants.size()>2 && modifiedColorants.size() <= 8) {
-        QVector<double> colorantsQuantized = {modifiedColorants[2], modifiedColorants[3], 1.0,
-                                              modifiedColorants[4], modifiedColorants[5], 1.0,
-                                              modifiedColorants[6], modifiedColorants[7], 1.0};
-        quantizexyYPrimariesTo16bit(colorantsQuantized);
-        primaries = {{colorantsQuantized[0], colorantsQuantized[1], 1.0},
-                     {colorantsQuantized[3], colorantsQuantized[4], 1.0},
-                     {colorantsQuantized[6], colorantsQuantized[7], 1.0}};
+        primaries = {{modifiedColorants[2], modifiedColorants[3], 1.0},
+                     {modifiedColorants[4], modifiedColorants[5], 1.0},
+                     {modifiedColorants[6], modifiedColorants[7], 1.0}};
     }
 
     cmsHPROFILE iccProfile;

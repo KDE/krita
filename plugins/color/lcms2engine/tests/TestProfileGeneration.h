@@ -13,7 +13,6 @@ class TestProfileGeneration : public QObject
     Q_OBJECT
 private Q_SLOTS:
     void testTransferFunctions();
-    void testQuantization();
 
 };
 

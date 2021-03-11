@@ -9,7 +9,6 @@
 #include <LcmsColorProfileContainer.h>
 #include <KoColorConversions.h>
 #include <IccColorProfile.h>
-#include "ColorProfileQuantization.h"
 #include "KoColorTransferFunctions.h"
 
 #include <QTest>
@@ -389,28 +388,6 @@ void TestProfileGeneration::testTransferFunctions()
 
     cmsFreeToneCurve(curve);
 
-}
-
-void TestProfileGeneration::testQuantization()
-{
-    QVector<double> inputMatrix = {0.6400, 0.3300, 1.0,
-                                  0.3000, 0.6000, 1.0,
-                                  0.1500, 0.0600, 1.0};
-    QVector<double> compareMatrix = inputMatrix;
-
-    /*Prequantized values used by Elle Stone:
-     * {0.639998686, 0.330010138, 1.0,
-     *  0.300003784, 0.600003357, 1.0,
-     *  0.150002046, 0.059997204, 1.0};
-     */
-    quantizexyYPrimariesTo16bit(inputMatrix);
-    qDebug() << inputMatrix;
-    qDebug() << compareMatrix;
-    for (int i=0; i<inputMatrix.size(); i++) {
-        QVERIFY2(fabs(inputMatrix[i] - compareMatrix[i]) < 0.00001,
-                 QString("Too large an error margin at %1: %2")
-                 .arg(i).arg(fabs(inputMatrix[i] - compareMatrix[i])).toLatin1());
-    }
 }
 
 KISTEST_MAIN(TestProfileGeneration)

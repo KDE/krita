@@ -721,7 +721,7 @@ endif()
 
 # OpenColorIO integration causes build issues on platforms using openGLES 3.2
 find_file(_qtgui_config NAMES qtgui-config.h HINTS ${Qt5Gui_INCLUDE_DIRS}/QtGui)
-file(STRINGS ${_qtgui_config} QTGUI_USE_OPENGLES2 REGEX "#define QT_OPENGL_ES_2")
+file(STRINGS ${_qtgui_config} QTGUI_USE_OPENGLES2 REGEX "#define QT_OPENGL_ES_2 true")
 
 if(NOT QTGUI_USE_OPENGLES2)
     find_package(OCIO)

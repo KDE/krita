@@ -347,7 +347,9 @@ void KisToolFreehand::continueAlternateAction(KoPointerEvent *event, AlternateAc
     const qreal effectiveMaxBrushSize = qMin(maxBrushSize, effectiveMaxDragSize / scaleX);
 
     const qreal scaleCoeff = effectiveMaxBrushSize / effectiveMaxDragSize;
-    const qreal sizeDiff = scaleCoeff * offset.x() ;
+    const bool useOffsetX = qAbs(offset.x()) > qAbs(offset.y());
+    const qreal largerOffset = useOffsetX ? offset.x() : -offset.y();
+    const qreal sizeDiff = scaleCoeff * largerOffset;
 
     if (qAbs(sizeDiff) > 0.01) {
         KisPaintOpSettingsSP settings = currentPaintOpPreset()->settings();
@@ -409,7 +411,6 @@ void KisToolFreehand::slotDoResizeBrush(qreal newSize)
 
     settings->setPaintOpSize(newSize);
     requestUpdateOutline(m_initialGestureDocPoint, 0);
-
 }
 
 QPointF KisToolFreehand::adjustPosition(const QPointF& point, const QPointF& strokeBegin)

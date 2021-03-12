@@ -98,7 +98,7 @@ void KisControlFrame::setup(QWidget *parent)
                                                      m_viewManager->mainWindow(), m_viewManager->mainWindow());
     m_dual->setPopDialog(true);
     action = new QWidgetAction(this);
-    action->setText(i18n("&Color"));
+    action->setText(i18n("&Choose foreground and background colors"));
     m_viewManager->actionCollection()->addAction("dual", action);
     action->setDefaultWidget(m_dual);
     connect(m_dual, SIGNAL(foregroundColorChanged(KoColor)), m_viewManager->canvasResourceProvider(), SLOT(slotSetFGColor(KoColor)));

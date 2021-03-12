@@ -584,20 +584,20 @@
     </Action>
     <Action name="reset_fg_bg">
       <icon/>
-      <text>Reset Foreground and Background Color</text>
+      <text>Set Foreground and Background Colors to Black and White</text>
       <whatsThis/>
-      <toolTip>Reset Foreground and Background Color</toolTip>
-      <iconText>Reset Foreground and Background Color</iconText>
+      <toolTip>Set foreground and background colors to black and white</toolTip>
+      <iconText>Set Foreground and Background Colors to Black and White</iconText>
       <shortcut>D</shortcut>
       <isCheckable>false</isCheckable>
       <statusTip/>
     </Action>
     <Action name="toggle_fg_bg">
       <icon/>
-      <text>Swap Foreground and Background Color</text>
+      <text>Swap Foreground and Background Colors</text>
       <whatsThis/>
-      <toolTip>Swap Foreground and Background Color</toolTip>
-      <iconText>Swap Foreground and Background Color</iconText>
+      <toolTip>Swap foreground and background colors</toolTip>
+      <iconText>Swap Foreground and Background Colors</iconText>
       <shortcut>X</shortcut>
       <isCheckable>false</isCheckable>
       <statusTip/>

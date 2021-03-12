@@ -388,3 +388,31 @@ void KoDualColorButton::changeEvent(QEvent *event)
         break;
     }
 }
+
+bool KoDualColorButton::event(QEvent *event)
+{
+    if (event->type() == QEvent::ToolTip) {
+        QRect foregroundRect;
+        QRect backgroundRect;
+        metrics( foregroundRect, backgroundRect );
+
+        if (this->mapFromGlobal(QCursor::pos()).x() < backgroundRect.x() ) {
+            if (this->mapFromGlobal(QCursor::pos()).y() < backgroundRect.y()){
+                this->setToolTip(i18n("Foreground color selector"));
+            }
+            else{ 
+                this->setToolTip(i18n("Set foreground and background colors to black and white"));
+            }
+        }
+        else {
+            if (this->mapFromGlobal(QCursor::pos()).y() < backgroundRect.y() ) {
+                this->setToolTip(i18n("Swap foreground and background colors"));
+            }
+            else{ 
+                this->setToolTip(i18n("Background color selector"));
+            }
+        }
+    }
+    return QWidget::event(event);
+
+}

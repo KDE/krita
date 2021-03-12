@@ -20,7 +20,7 @@ class KisCanvas2;
 class KoColorSpace;
 
 
-typedef std::vector<std::vector<quint32> > HistVector; //Don't use QVector here - it's too slow for this purpose
+using HistVector = std::vector<std::vector<quint32> >; //Don't use QVector here - it's too slow for this purpose
 
 struct HistogramData
 {
@@ -30,7 +30,6 @@ struct HistogramData
     HistVector bins;
     const KoColorSpace* colorSpace;
 };
-typedef QSharedPointer<HistogramData> HistogramDataSP;
 Q_DECLARE_METATYPE(HistogramData)
 
 

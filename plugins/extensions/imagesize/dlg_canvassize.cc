@@ -115,6 +115,15 @@ DlgCanvasSize::DlgCanvasSize(QWidget *parent, int width, int height, double reso
     m_page->xOffUnit->setCurrentIndex(xUnitIndex);
     m_page->yOffUnit->setCurrentIndex(yUnitIndex);
 
+    QIcon lockedIcon = KisIconUtils::loadIcon("locked");
+    QIcon unlockedIcon = KisIconUtils::loadIcon("unlocked");
+    m_page->lockxOffset->setCheckable(true);
+    m_page->lockyOffset->setCheckable(true);
+    m_page->lockxOffset->setChecked(false);
+    m_page->lockyOffset->setChecked(false);
+    m_page->lockxOffset-> setIcon(m_page->lockxOffset->isChecked() ? lockedIcon : unlockedIcon);
+    m_page->lockyOffset-> setIcon(m_page->lockyOffset->isChecked() ? lockedIcon : unlockedIcon);
+
     m_page->canvasPreview->setImageSize(m_originalWidth, m_originalHeight);
     m_page->canvasPreview->setCanvasSize(m_originalWidth, m_originalHeight);
     m_page->canvasPreview->setImageOffset(m_xOffset, m_yOffset);
@@ -176,6 +185,11 @@ DlgCanvasSize::DlgCanvasSize(QWidget *parent, int width, int height, double reso
     connect(m_page->yOffUnit, SIGNAL(currentIndexChanged(int)), _yOffsetUnitManager, SLOT(selectApparentUnitFromIndex(int)));
     connect(_xOffsetUnitManager, SIGNAL(unitChanged(int)), m_page->xOffUnit, SLOT(setCurrentIndex(int)));
     connect(_yOffsetUnitManager, SIGNAL(unitChanged(int)), m_page->yOffUnit, SLOT(setCurrentIndex(int)));
+
+    connect(m_page->lockxOffset, SIGNAL(toggled(bool)), this, SLOT(updatexOffsetIcon(bool)));
+    connect(m_page->lockyOffset, SIGNAL(toggled(bool)), this, SLOT(updateyOffsetIcon(bool)));
+    connect(m_page->lockxOffset, SIGNAL(toggled(bool)), m_page->canvasPreview , SLOT(setxOffsetLock(bool)));
+    connect(m_page->lockyOffset, SIGNAL(toggled(bool)), m_page->canvasPreview , SLOT(setyOffsetLock(bool)));
 
     connect(m_page->constrainProportionsCkb, SIGNAL(toggled(bool)), this, SLOT(slotAspectChanged(bool)));
     connect(m_page->aspectRatioBtn, SIGNAL(keepAspectRatioChanged(bool)), this, SLOT(slotAspectChanged(bool)));
@@ -471,7 +485,28 @@ void DlgCanvasSize::updateOffset(int id)
     m_page->xOffsetDouble->changeValue(xOffset);
     m_page->yOffsetDouble->changeValue(yOffset);
 }
-
+void DlgCanvasSize::updatexOffsetIcon(bool v)
+{
+    if(v==true) {
+      m_page->xOffsetDouble->setReadOnly(true);
+      m_page->lockxOffset->setIcon(KisIconUtils::loadIcon("locked"));
+    }
+    else {
+      m_page->xOffsetDouble->setReadOnly(false);
+      m_page->lockxOffset->setIcon(KisIconUtils::loadIcon("unlocked"));
+    }
+}
+void DlgCanvasSize::updateyOffsetIcon(bool v)
+{
+    if(v==true) {
+      m_page->yOffsetDouble->setReadOnly(true);
+      m_page->lockyOffset->setIcon(KisIconUtils::loadIcon("locked"));
+    }
+    else {
+      m_page->yOffsetDouble->setReadOnly(false);
+      m_page->lockyOffset->setIcon(KisIconUtils::loadIcon("unlocked"));
+    }
+}
 void DlgCanvasSize::expectedOffset(int id, double &xOffset, double &yOffset)
 {
     const double xCoeff = (id % 3) * 0.5;

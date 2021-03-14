@@ -329,9 +329,9 @@ qreal KarbonCalligraphyTool::calculateAngle(const QPointF &oldSpeed, const QPoin
     return angle;
 }
 
-void KarbonCalligraphyTool::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
+void KarbonCalligraphyTool::activate(const QSet<KoShape*> &shapes)
 {
-    KoToolBase::activate(activation, shapes);
+    KoToolBase::activate(shapes);
 
     if (!m_widget) {
         createOptionWidgets();

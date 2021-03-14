@@ -51,13 +51,13 @@ void KisToolColorSampler::paint(QPainter &gc, const KoViewConverter &converter)
     Q_UNUSED(converter);
 }
 
-void KisToolColorSampler::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
+void KisToolColorSampler::activate(const QSet<KoShape*> &shapes)
 {
     m_isActivated = true;
     m_config->load();
     updateOptionWidget();
 
-    KisTool::activate(activation, shapes);
+    KisTool::activate(shapes);
 }
 
 void KisToolColorSampler::deactivate()

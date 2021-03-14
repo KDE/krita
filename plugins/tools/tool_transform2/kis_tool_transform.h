@@ -180,7 +180,7 @@ public:
     int warpPointDensity() const;
 
 public Q_SLOTS:
-    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+    void activate(const QSet<KoShape*> &shapes) override;
     void deactivate() override;
     // Applies the current transformation to the original paint device and commits it to the undo stack
     void applyTransform();

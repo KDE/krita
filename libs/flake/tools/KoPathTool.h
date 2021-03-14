@@ -48,7 +48,7 @@ public:
     void keyPressEvent(QKeyEvent *event) override;
     void keyReleaseEvent(QKeyEvent *event) override;
     void mouseDoubleClickEvent(KoPointerEvent *event) override;
-    void activate(ToolActivation activation, const QSet<KoShape*> &shapes) override;
+    void activate(const QSet<KoShape*> &shapes) override;
     void deactivate() override;
     void deleteSelection() override;
     KoToolSelection* selection() override;

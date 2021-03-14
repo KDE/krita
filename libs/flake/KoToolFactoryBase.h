@@ -51,8 +51,7 @@ class KRITAFLAKE_EXPORT KoToolFactoryBase : public QObject
 public:
     /**
      * Create the new factory
-     * @param id a string that will be used internally for referencing the tool, for
-     *   example for use by the KoToolBase::activateTemporary.
+     * @param id a string that will be used internally for referencing the tool
      */
     explicit KoToolFactoryBase(const QString &id);
     virtual ~KoToolFactoryBase();

@@ -29,7 +29,7 @@ public:
     void mouseMoveEvent(KoPointerEvent *event) override;
     void keyPressEvent(QKeyEvent *event) override;
     void keyReleaseEvent(QKeyEvent *event) override;
-    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+    void activate(const QSet<KoShape*> &shapes) override;
     void mouseDoubleClickEvent(KoPointerEvent *event) override;
 
     void setCanvasController(KoCanvasController *controller) {

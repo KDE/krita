@@ -63,9 +63,9 @@ SvgTextTool::~SvgTextTool()
     }
 }
 
-void SvgTextTool::activate(ToolActivation activation, const QSet<KoShape *> &shapes)
+void SvgTextTool::activate(const QSet<KoShape *> &shapes)
 {
-    KoToolBase::activate(activation, shapes);
+    KoToolBase::activate(shapes);
     useCursor(Qt::ArrowCursor);
 
     if (shapes.size() == 1) {

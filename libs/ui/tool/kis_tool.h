@@ -192,7 +192,7 @@ public:
     virtual void newActivationWithExternalSource(KisPaintDeviceSP externalSource);
 
 public Q_SLOTS:
-    void activate(ToolActivation activation, const QSet<KoShape*> &shapes) override;
+    void activate(const QSet<KoShape*> &shapes) override;
     void deactivate() override;
     void canvasResourceChanged(int key, const QVariant & res) override;
     // Implement this slot in case there are any widgets or properties which need

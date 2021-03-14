@@ -133,10 +133,10 @@ KisToolCrop::~KisToolCrop()
 {
 }
 
-void KisToolCrop::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
+void KisToolCrop::activate(const QSet<KoShape*> &shapes)
 {
 
-    KisTool::activate(toolActivation, shapes);
+    KisTool::activate(shapes);
     configGroup =  KSharedConfig::openConfig()->group(toolId()); // save settings to kritarc
 
     KisResourcesSnapshotSP resources =

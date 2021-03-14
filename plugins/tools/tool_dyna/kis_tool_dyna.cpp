@@ -66,9 +66,9 @@ void KisToolDyna::resetCursorStyle()
     overrideCursorIfNotEditable();
 }
 
-void KisToolDyna::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
+void KisToolDyna::activate(const QSet<KoShape*> &shapes)
 {
-    KisToolPaint::activate(toolActivation, shapes);
+    KisToolPaint::activate(shapes);
     m_configGroup =  KSharedConfig::openConfig()->group(toolId());
 }
 

@@ -138,9 +138,9 @@ int KisToolFreehand::flags() const
            |KisTool::FLAG_USES_CUSTOM_SIZE;
 }
 
-void KisToolFreehand::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
+void KisToolFreehand::activate(const QSet<KoShape*> &shapes)
 {
-    KisToolPaint::activate(activation, shapes);
+    KisToolPaint::activate(shapes);
 }
 
 void KisToolFreehand::deactivate()

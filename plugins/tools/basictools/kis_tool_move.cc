@@ -374,9 +374,9 @@ void KisToolMove::moveDiscrete(MoveDirection direction, bool big)
     setMode(KisTool::HOVER_MODE);
 }
 
-void KisToolMove::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
+void KisToolMove::activate(const QSet<KoShape*> &shapes)
 {
-    KisTool::activate(toolActivation, shapes);
+    KisTool::activate(shapes);
 
     m_actionConnections.addConnection(action("movetool-move-up"), SIGNAL(triggered(bool)),
                                       this, SLOT(slotMoveDiscreteUp()));

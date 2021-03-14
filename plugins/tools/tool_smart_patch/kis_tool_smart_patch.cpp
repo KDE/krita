@@ -83,9 +83,9 @@ KisToolSmartPatch::~KisToolSmartPatch()
     m_d->maskDevPainter.end();
 }
 
-void KisToolSmartPatch::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
+void KisToolSmartPatch::activate(const QSet<KoShape*> &shapes)
 {
-    KisToolPaint::activate(activation, shapes);
+    KisToolPaint::activate(shapes);
 }
 
 void KisToolSmartPatch::deactivate()

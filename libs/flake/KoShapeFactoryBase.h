@@ -78,8 +78,7 @@ public:
 
     /**
      * Create the new factory
-     * @param id a string that will be used internally for referencing the shape, for
-     *   example for use by the KoToolBase::activateTemporary.
+     * @param id a string that will be used internally for referencing the shape
      * @param name the user visible name of the shape this factory creates.
      */
     KoShapeFactoryBase(const QString &id, const QString &name, const QString &deferredPluginName = QString());

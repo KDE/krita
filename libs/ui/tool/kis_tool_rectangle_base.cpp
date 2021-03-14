@@ -74,9 +74,9 @@ void KisToolRectangleBase::paint(QPainter& gc, const KoViewConverter &converter)
     KisToolPaint::paint(gc, converter);
 }
 
-void KisToolRectangleBase::activate(KoToolBase::ToolActivation toolActivation, const QSet<KoShape *> &shapes)
+void KisToolRectangleBase::activate(const QSet<KoShape *> &shapes)
 {
-    KisToolShape::activate(toolActivation, shapes);
+    KisToolShape::activate(shapes);
 
     emit sigRequestReloadConfig();
 }

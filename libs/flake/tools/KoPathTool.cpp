@@ -885,9 +885,9 @@ KoPathTool::PathSegment* KoPathTool::segmentAtPoint(const QPointF &point)
     return segment.take();
 }
 
-void KoPathTool::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
+void KoPathTool::activate(const QSet<KoShape*> &shapes)
 {
-    KoToolBase::activate(activation, shapes);
+    KoToolBase::activate(shapes);
 
     Q_D(KoToolBase);
 

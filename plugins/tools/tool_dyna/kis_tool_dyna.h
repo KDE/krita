@@ -63,7 +63,7 @@ public:
     ~KisToolDyna() override;
 
     QWidget * createOptionWidget() override;
-    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+    void activate(const QSet<KoShape*> &shapes) override;
     void beginPrimaryAction(KoPointerEvent *event) override;
     void continuePrimaryAction(KoPointerEvent *event) override;
 

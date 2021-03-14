@@ -1419,7 +1419,7 @@ void KisViewManager::slotActivateTransformTool()
         QSet<KoShape*> dummy;
         // Start a new stroke
         tool->deactivate();
-        tool->activate(KoToolBase::DefaultActivation, dummy);
+        tool->activate(dummy);
     }
 
     KoToolManager::instance()->switchToolRequested("KisToolTransform");

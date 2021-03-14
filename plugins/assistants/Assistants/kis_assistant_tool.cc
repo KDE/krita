@@ -56,10 +56,10 @@ KisAssistantTool::~KisAssistantTool()
 {
 }
 
-void KisAssistantTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
+void KisAssistantTool::activate(const QSet<KoShape*> &shapes)
 {
 
-    KisTool::activate(toolActivation, shapes);
+    KisTool::activate(shapes);
 
     m_canvas->paintingAssistantsDecoration()->activateAssistantsEditor();
     m_handles = m_canvas->paintingAssistantsDecoration()->handles();

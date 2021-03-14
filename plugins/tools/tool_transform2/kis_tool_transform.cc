@@ -721,15 +721,15 @@ void KisToolTransform::newActivationWithExternalSource(KisPaintDeviceSP external
     if (isActive()) {
         QSet<KoShape*> dummy;
         deactivate();
-        activate(ToolActivation::DefaultActivation, dummy);
+        activate(dummy);
     } else {
         KoToolManager::instance()->switchToolRequested("KisToolTransform");
     }
 }
 
-void KisToolTransform::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
+void KisToolTransform::activate(const QSet<KoShape*> &shapes)
 {
-    KisTool::activate(toolActivation, shapes);
+    KisTool::activate(shapes);
     m_actionConnections.addConnection(action("movetool-move-up"), SIGNAL(triggered(bool)),
                                       this, SLOT(slotMoveDiscreteUp()));
     m_actionConnections.addConnection(action("movetool-move-up-more"), SIGNAL(triggered(bool)),

@@ -56,9 +56,8 @@ bool KoToolBase::isActivated() const
 }
 
 
-void KoToolBase::activate(KoToolBase::ToolActivation toolActivation, const QSet<KoShape *> &shapes)
+void KoToolBase::activate(const QSet<KoShape *> &shapes)
 {
-    Q_UNUSED(toolActivation);
     Q_UNUSED(shapes);
 
     Q_D(KoToolBase);

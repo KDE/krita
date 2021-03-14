@@ -52,7 +52,7 @@ public:
     QWidget* createOptionWidget() override;
 
 public Q_SLOTS:
-    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+    void activate(const QSet<KoShape*> &shapes) override;
 private Q_SLOTS:
     void slotSetShape(int);
     void slotSetRepeat(int);

@@ -34,7 +34,7 @@ public:
     void endPrimaryAction(KoPointerEvent *event) override;
 
     void paint(QPainter& gc, const KoViewConverter &converter) override;
-    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+    void activate(const QSet<KoShape*> &shapes) override;
     void deactivate() override;
     void listenToModifiers(bool listen) override;
     bool listeningToModifiers() override;

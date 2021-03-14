@@ -165,9 +165,9 @@ void KoPencilTool::keyPressEvent(QKeyEvent *event)
     }
 }
 
-void KoPencilTool::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
+void KoPencilTool::activate(const QSet<KoShape*> &shapes)
 {
-    KoToolBase::activate(activation, shapes);
+    KoToolBase::activate(shapes);
 
     m_points.clear();
     m_close = false;

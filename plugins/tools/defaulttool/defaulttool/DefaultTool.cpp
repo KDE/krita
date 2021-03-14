@@ -1144,9 +1144,9 @@ void DefaultTool::recalcSelectionBox(KoSelection *selection)
     }
 }
 
-void DefaultTool::activate(ToolActivation activation, const QSet<KoShape *> &shapes)
+void DefaultTool::activate(const QSet<KoShape *> &shapes)
 {
-    KoToolBase::activate(activation, shapes);
+    KoToolBase::activate(shapes);
 
     QAction *actionBringToFront = action("object_order_front");
     connect(actionBringToFront, SIGNAL(triggered()), this, SLOT(selectionBringToFront()), Qt::UniqueConnection);

@@ -31,7 +31,7 @@ public:
     void mouseReleaseEvent(KoPointerEvent *event) override;
     void keyPressEvent(QKeyEvent *event) override;
 
-    void activate(ToolActivation activation, const QSet<KoShape*> &shapes) override;
+    void activate(const QSet<KoShape*> &shapes) override;
     void deactivate() override;
 
 protected:

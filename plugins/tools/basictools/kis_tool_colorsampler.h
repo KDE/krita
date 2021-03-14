@@ -54,8 +54,8 @@ public:
         int radius;
         int blend;
 
-        void save(ToolActivation activation) const;
-        void load(ToolActivation activation);
+        void save() const;
+        void load();
     };
 
 public:
@@ -73,7 +73,7 @@ Q_SIGNALS:
     void toForegroundChanged();
 
 protected:
-    void activate(ToolActivation activation, const QSet<KoShape*> &) override;
+    void activate(const QSet<KoShape*> &) override;
     void deactivate() override;
 
 public Q_SLOTS:

@@ -52,12 +52,6 @@ class KRITAFLAKE_EXPORT KoToolBase : public QObject
 {
     Q_OBJECT
 public:
-    /// Option for activate()
-    enum ToolActivation {
-        TemporaryActivation, ///< The tool is activated temporarily and works 'in-place' of another one.
-        DefaultActivation   ///< The tool is activated normally and emitting 'done' goes to the defaultTool
-    };
-
     /**
      * Constructor, normally only called by the factory (see KoToolFactoryBase)
      * @param canvas the canvas interface this tool will work for.
@@ -336,20 +330,12 @@ public Q_SLOTS:
      * new tool allowing the tool to flush items (like a selection)
      * when it is not in use.
      *
-     * <p>There is one case where two tools are activated at the same.  This is the case
-     * where one tool delegates work to another temporarily.  For example, while shift is
-     * being held down.  The second tool will get activated with temporary=true and
-     * it should emit done() when the state that activated it is ended.
-     * <p>One of the important tasks of activate is to call useCursor()
-     *
      * @param shapes the set of shapes that are selected or suggested for editing by a
      *      selected shape for the tool to work on.  Not all shapes will be meant for this
      *      tool.
-     * @param toolActivation if TemporaryActivation, this tool is only temporarily activated
-     *                  and should emit done when it is done.
      * @see deactivate()
      */
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    virtual void activate(const QSet<KoShape*> &shapes);
 
     /**
      * This method is called whenever this tool is no longer the
@@ -393,21 +379,6 @@ Q_SIGNALS:
      * @see toolId(), KoToolFactoryBase::id()
      */
     void activateTool(const QString &id);
-
-    /**
-     * Emitted when this tool wants itself to temporarily be replaced by another tool.
-     * For instance, a paint tool could desire to be
-     * temporarily replaced by a pan tool which could be temporarily
-     * replaced by a color sampler.
-     * @param id the identification of the desired tool
-     */
-    void activateTemporary(const QString &id);
-
-    /**
-     * Emitted when the tool has been temporarily activated and wants
-     * to notify the world that it's done.
-     */
-    void done();
 
     /**
      * Emitted by useCursor() when the cursor to display on the canvas is changed.

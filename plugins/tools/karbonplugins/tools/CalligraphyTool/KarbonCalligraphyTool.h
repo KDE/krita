@@ -32,7 +32,7 @@ public:
 
     QList<QPointer<QWidget> > createOptionWidgets() override;
 
-    void activate(ToolActivation activation, const QSet<KoShape *> &shapes) override;
+    void activate(const QSet<KoShape *> &shapes) override;
     void deactivate() override;
 
 Q_SIGNALS:

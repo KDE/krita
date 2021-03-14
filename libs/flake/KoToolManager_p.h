@@ -39,9 +39,9 @@ public:
 
     void connectActiveTool();
     void disconnectActiveTool();
-    void switchTool(KoToolBase *tool, bool temporary);
-    void switchTool(const QString &id, bool temporary);
-    void postSwitchTool(bool temporary);
+    void switchTool(KoToolBase *tool);
+    void switchTool(const QString &id);
+    void postSwitchTool();
     void switchCanvasData(CanvasData *cd);
 
     bool eventFilter(QObject *object, QEvent *event);

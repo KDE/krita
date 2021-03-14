@@ -72,9 +72,9 @@ void KisToolLine::resetCursorStyle()
     overrideCursorIfNotEditable();
 }
 
-void KisToolLine::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
+void KisToolLine::activate(const QSet<KoShape*> &shapes)
 {
-   KisToolPaint::activate(activation, shapes);
+   KisToolPaint::activate(shapes);
    configGroup =  KSharedConfig::openConfig()->group(toolId());
 }
 

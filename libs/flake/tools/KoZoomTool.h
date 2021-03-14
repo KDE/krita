@@ -49,7 +49,6 @@ private:
     KoCanvasController *m_controller;
     QCursor m_inCursor;
     QCursor m_outCursor;
-    bool m_temporary;
     bool m_zoomInMode;
 };
 

@@ -49,8 +49,6 @@ public:
     void mouseMoveEvent(KoPointerEvent *event) override;
     /// reimplemented
     void mouseReleaseEvent(KoPointerEvent *event) override;
-    /// reimplemented
-    void keyPressEvent(QKeyEvent *event) override;
 
     /**
     * Returns true if path has been started

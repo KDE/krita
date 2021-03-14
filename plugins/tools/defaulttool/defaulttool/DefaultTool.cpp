@@ -1893,5 +1893,5 @@ void DefaultTool::addTransformActions(QMenu *menu) const {
 void DefaultTool::explicitUserStrokeEndRequest()
 {
     QList<KoShape *> shapes = koSelection()->selectedEditableShapesAndDelegates();
-    emit activateTemporary(KoToolManager::instance()->preferredToolForSelection(shapes));
+    KoToolManager::instance()->switchToolRequested(KoToolManager::instance()->preferredToolForSelection(shapes));
 }

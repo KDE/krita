@@ -380,15 +380,6 @@ void KoCreatePathTool::mouseReleaseEvent(KoPointerEvent *event)
     repaintDecorations();
 }
 
-void KoCreatePathTool::keyPressEvent(QKeyEvent *event)
-{
-    if (event->key() == Qt::Key_Escape) {
-        emit done();
-    } else {
-        event->ignore();
-    }
-}
-
 void KoCreatePathTool::endPath()
 {
     Q_D(KoCreatePathTool);

@@ -133,7 +133,6 @@ private:
     QAction *m_actionMergePoints;
     QAction *m_actionConvertToPath;
     QCursor m_moveCursor;
-    bool m_activatedTemporarily;
     QScopedPointer<QMenu> m_contextMenu;
     KisSignalAutoConnectionsStore m_canvasConnections;
     KoShapeFillResourceConnector m_shapeFillResourceConnector;

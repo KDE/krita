@@ -41,7 +41,7 @@ KisToolColorSampler::KisToolColorSampler(KoCanvasBase *canvas)
 KisToolColorSampler::~KisToolColorSampler()
 {
     if (m_isActivated) {
-        m_config->save(m_toolActivationSource == KisTool::DefaultActivation);
+        m_config->save();
     }
 }
 
@@ -54,8 +54,7 @@ void KisToolColorSampler::paint(QPainter &gc, const KoViewConverter &converter)
 void KisToolColorSampler::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
 {
     m_isActivated = true;
-    m_toolActivationSource = activation;
-    m_config->load(m_toolActivationSource == KisTool::DefaultActivation);
+    m_config->load();
     updateOptionWidget();
 
     KisTool::activate(activation, shapes);
@@ -63,7 +62,7 @@ void KisToolColorSampler::activate(ToolActivation activation, const QSet<KoShape
 
 void KisToolColorSampler::deactivate()
 {
-    m_config->save(m_toolActivationSource == KisTool::DefaultActivation);
+    m_config->save();
     m_isActivated = false;
     KisTool::deactivate();
 }

@@ -163,12 +163,7 @@ namespace KisToolUtils {
     {
     }
 
-    inline QString getConfigKey(bool defaultActivation) {
-        return defaultActivation ?
-            "ColorSamplerDefaultActivation" : "ColorSamplerTemporaryActivation";
-    }
-
-    void ColorSamplerConfig::save(bool defaultActivation) const
+    void ColorSamplerConfig::save() const
     {
         KisPropertiesConfiguration props;
         props.setProperty("toForegroundColor", toForegroundColor);
@@ -181,21 +176,21 @@ namespace KisToolUtils {
 
         KConfigGroup config =  KSharedConfig::openConfig()->group(CONFIG_GROUP_NAME);
 
-        config.writeEntry(getConfigKey(defaultActivation), props.toXML());
+        config.writeEntry("ColorSamplerDefaultActivation", props.toXML());
     }
 
-    void ColorSamplerConfig::load(bool defaultActivation)
+    void ColorSamplerConfig::load()
     {
         KisPropertiesConfiguration props;
 
         KConfigGroup config =  KSharedConfig::openConfig()->group(CONFIG_GROUP_NAME);
-        props.fromXML(config.readEntry(getConfigKey(defaultActivation)));
+        props.fromXML(config.readEntry("ColorSamplerDefaultActivation"));
 
         toForegroundColor = props.getBool("toForegroundColor", true);
         updateColor = props.getBool("updateColor", true);
         addColorToCurrentPalette = props.getBool("addPalette", false);
         normaliseValues = props.getBool("normaliseValues", false);
-        sampleMerged = props.getBool("sampleMerged", !defaultActivation ? false : true);
+        sampleMerged = props.getBool("sampleMerged", true);
         radius = props.getInt("radius", 1);
         blend = props.getInt("blend", 100);
     }

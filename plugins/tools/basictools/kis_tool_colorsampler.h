@@ -93,7 +93,6 @@ private:
     // Configuration
     QScopedPointer<KisToolUtils::ColorSamplerConfig> m_config;
 
-    ToolActivation m_toolActivationSource {ToolActivation::DefaultActivation};
     bool m_isActivated {false};
 
     KoColor m_sampledColor;

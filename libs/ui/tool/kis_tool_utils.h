@@ -27,8 +27,8 @@ struct KRITAUI_EXPORT ColorSamplerConfig {
     int radius;
     int blend;
 
-    void save(bool defaultActivation = true) const;
-    void load(bool defaultActivation = true);
+    void save() const;
+    void load();
 private:
     static const QString CONFIG_GROUP_NAME;
 };

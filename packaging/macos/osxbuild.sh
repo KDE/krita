@@ -44,6 +44,7 @@ if test -z $(which cmake); then
         exit
     fi
 fi
+echo "$(cmake --version | head -n 1)"
 
 # Set some global variables.
 OSXBUILD_TYPE="RelWithDebInfo"

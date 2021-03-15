@@ -487,22 +487,20 @@ void DlgCanvasSize::updateOffset(int id)
 }
 void DlgCanvasSize::updatexOffsetIcon(bool v)
 {
-    if(v==true) {
+    if (v) {
       m_page->xOffsetDouble->setReadOnly(true);
       m_page->lockxOffset->setIcon(KisIconUtils::loadIcon("locked"));
-    }
-    else {
+    } else {
       m_page->xOffsetDouble->setReadOnly(false);
       m_page->lockxOffset->setIcon(KisIconUtils::loadIcon("unlocked"));
     }
 }
 void DlgCanvasSize::updateyOffsetIcon(bool v)
 {
-    if(v==true) {
+    if (v) {
       m_page->yOffsetDouble->setReadOnly(true);
       m_page->lockyOffset->setIcon(KisIconUtils::loadIcon("locked"));
-    }
-    else {
+    } else {
       m_page->yOffsetDouble->setReadOnly(false);
       m_page->lockyOffset->setIcon(KisIconUtils::loadIcon("unlocked"));
     }

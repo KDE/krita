@@ -35,6 +35,16 @@ fi
 BUILDROOT="${BUILDROOT%/}"
 echo "BUILDROOT set to ${BUILDROOT}"
 
+# Check cmake in path.
+if test -z $(which cmake); then
+    echo "WARNING: no cmake in PATH... adding default /Applications location"
+    export PATH=/Applications/CMake.app/Contents/bin:${PATH}
+    if test -z $(which cmake); then
+        echo "ERROR: cmake not found, exiting!"
+        exit
+    fi
+fi
+
 # Set some global variables.
 OSXBUILD_TYPE="RelWithDebInfo"
 OSXBUILD_TESTING="OFF"
@@ -88,12 +98,6 @@ export QTEST_COLORED=1
 
 export OUPUT_LOG="${BUILDROOT}/osxbuild.log"
 printf "" > "${OUPUT_LOG}"
-
-# Build time variables
-if test -z $(which cmake); then
-    echo "ERROR: cmake not found, exiting!"
-    exit
-fi
 
 # configure max core for make compile
 ((MAKE_THREADS=1))

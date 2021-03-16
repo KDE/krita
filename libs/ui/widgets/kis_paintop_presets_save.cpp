@@ -155,7 +155,6 @@ void KisPresetSaveWidget::savePreset()
     }
 
     KisPaintOpPresetResourceServer * rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
-    QString saveLocation = rServer->saveLocation();
 
     // if we are saving a new brush, use what we type in for the input
     QString presetFileName = m_useNewBrushDialog ? newBrushNameTexField->text() : curPreset->name();
@@ -182,6 +181,7 @@ void KisPresetSaveWidget::savePreset()
 
         // trying to get brush preset to load after it is created
         emit resourceSelected(newPreset);
+
     }
     else { // saving a preset that is replacing an existing one
         curPreset->setName(m_useNewBrushDialog ? newBrushNameTexField->text() : curPreset->name());
@@ -198,6 +198,7 @@ void KisPresetSaveWidget::savePreset()
     //    rServer->tagCategoryMembersChanged();
 
     m_favoriteResourceManager->updateFavoritePresets();
+
 
     close(); // we are done... so close the save brush dialog
 

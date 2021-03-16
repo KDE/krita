@@ -120,14 +120,6 @@ void KisColorizeStrokeStrategy::addKeyStroke(KisPaintDeviceSP dev, const KoColor
     m_d->keyStrokes << KeyStroke(dev, convertedColor);
 }
 
-/*
- *
- * TEMP NOTE DELETE LATER:
- * Example of multi-patched stroke...
- * "it applies LoG filter in patches using `addJobConcurrent` call, then adds a `addJobSequential` job
- * to wait for all the processings to complete" - Dmitry
- *
- */
 void KisColorizeStrokeStrategy::initStrokeCallback()
 {
     using namespace KritaUtils;

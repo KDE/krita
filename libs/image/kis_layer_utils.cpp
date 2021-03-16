@@ -2151,4 +2151,48 @@ namespace KisLayerUtils {
         applicator.end();
     }
 
+    QSet<int> fetchLayerFramesMatchingID(KisNodeSP node, const int frameID) {
+        KIS_ASSERT(node);
+        KisRasterKeyframeChannel* rasterChannel = dynamic_cast<KisRasterKeyframeChannel*>(node->getKeyframeChannel(KisKeyframeChannel::Raster.id(), false));
+
+        if (!rasterChannel) {
+            return QSet<int>();
+        }
+
+        return rasterChannel->timesForFrameID(frameID);
+    }
+
+    QSet<int> fetchLayerUniqueFrameTimes(KisNodeSP node)
+    {
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(node,  QSet<int>());
+        KisPaintDeviceSP paintDevice = node->paintDevice();
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(paintDevice, QSet<int>());
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(paintDevice->framesInterface(), QSet<int>());
+
+        QSet<int> uniqueTimes;
+
+        QList<int> ids = paintDevice->framesInterface()->frames();
+        Q_FOREACH( const int& id, ids ) {
+            QSet<int> times = fetchLayerFramesMatchingID(node, id);
+            if (times.count() > 0) {
+                uniqueTimes.insert(*times.begin());
+            }
+        }
+
+        return uniqueTimes;
+    }
+
+    int fetchLayerActiveFrameTime(KisNodeSP node)
+    {
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(node,  -1);
+        KisPaintDeviceSP paintDevice = node->paintDevice();
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(paintDevice, -1);
+
+        if (!paintDevice->keyframeChannel()) {
+            return -1;
+        }
+
+        return paintDevice->keyframeChannel()->activeKeyframeTime();
+    }
+
 }

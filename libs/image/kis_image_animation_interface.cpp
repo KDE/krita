@@ -67,6 +67,8 @@ struct KisImageAnimationInterface::Private
     bool audioChannelMuted;
     qreal audioChannelVolume;
 
+    QSet<int> activeLayerSelectedTimes;
+
     QString exportSequenceFilePath;
     QString exportSequenceBaseName;
     int exportInitialFrameNumber;
@@ -245,6 +247,16 @@ void KisImageAnimationInterface::setAudioVolume(qreal value)
 {
     m_d->audioChannelVolume = value;
     emit sigAudioVolumeChanged();
+}
+
+QSet<int> KisImageAnimationInterface::activeLayerSelectedTimes()
+{
+    return m_d->activeLayerSelectedTimes;
+}
+
+void KisImageAnimationInterface::setActiveLayerSelectedTimes(const QSet<int>& times)
+{
+    m_d->activeLayerSelectedTimes = times;
 }
 
 void KisImageAnimationInterface::setFramerate(int fps)

@@ -523,7 +523,9 @@ void KisAnimTimelineFramesView::slotUpdateFrameActions()
 void KisAnimTimelineFramesView::slotSelectionChanged()
 {
     int minColumn = std::numeric_limits<int>::max();
-    int maxColumn = std::numeric_limits<int>::min();
+    int maxColumn = std::numeric_limits<int>::min();    
+
+    calculateActiveLayerSelectedTimes(selectedIndexes());
 
     foreach (const QModelIndex &idx, selectedIndexes()) {
         if (idx.column() > maxColumn) {
@@ -627,6 +629,8 @@ void KisAnimTimelineFramesView::slotHeaderDataChanged(Qt::Orientation orientatio
         if (newFps != m_d->fps) {
             setFramesPerSecond(newFps);
         }
+    } else {
+        calculateActiveLayerSelectedTimes(selectedIndexes());
     }
 }
 
@@ -882,6 +886,18 @@ void KisAnimTimelineFramesView::slotEnsureRowVisible(int row)
 
     index = m_d->model->index(row, index.column());
     scrollTo(index);
+}
+
+void KisAnimTimelineFramesView::calculateActiveLayerSelectedTimes(const QModelIndexList &selection)
+{
+    QSet<int> activeLayerSelectedTimes;
+    Q_FOREACH (const QModelIndex& index, selection) {
+        if (index.data(KisAnimTimelineFramesModel::ActiveLayerRole).toBool()) {
+            activeLayerSelectedTimes.insert(index.column());
+        }
+    }
+
+    m_d->model->setActiveLayerSelectedTimes(activeLayerSelectedTimes);
 }
 
 bool KisAnimTimelineFramesView::viewportEvent(QEvent *event)

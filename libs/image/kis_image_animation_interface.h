@@ -146,6 +146,9 @@ public:
      */
     void setAudioVolume(qreal value);
 
+    QSet<int> activeLayerSelectedTimes();
+    void setActiveLayerSelectedTimes(const QSet<int> &times);
+
     KisImageWSP image() const;
 
     int totalLength();

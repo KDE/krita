@@ -1046,3 +1046,8 @@ void KisAnimTimelineFramesModel::clearEntireCache()
 {
     m_d->image->animationInterface()->invalidateFrames(KisTimeSpan::infinite(0), m_d->image->bounds());
 }
+
+void KisAnimTimelineFramesModel::setActiveLayerSelectedTimes(const QSet<int> &times)
+{
+    m_d->image->animationInterface()->setActiveLayerSelectedTimes(times);
+}

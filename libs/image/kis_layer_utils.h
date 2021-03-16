@@ -77,7 +77,7 @@ namespace KisLayerUtils
     void updateFrameJobs(FrameJobs *jobs, KisNodeSP node);
     void updateFrameJobsRecursive(FrameJobs *jobs, KisNodeSP rootNode);
 
-    struct SwitchFrameCommand : public KisCommandUtils::FlipFlopCommand {
+    struct KRITAIMAGE_EXPORT SwitchFrameCommand : public KisCommandUtils::FlipFlopCommand {
         struct SharedStorage {
             /**
              * For some reason the absence of a destructor in the SharedStorage
@@ -226,6 +226,14 @@ namespace KisLayerUtils
             return bool(dynamic_cast<T*>(node.data()));
         }).data());
     }
+
+    /* Finds all frames matching a specific frame ID. useful to filter out duplicate frames. */
+    QSet<int> KRITAIMAGE_EXPORT fetchLayerFramesMatchingID(KisNodeSP node, const int frameID);
+
+    /* Returns a set of times associated with every potential unique frame. */
+    QSet<int> KRITAIMAGE_EXPORT fetchLayerUniqueFrameTimes(KisNodeSP node);
+
+    int KRITAIMAGE_EXPORT fetchLayerActiveFrameTime(KisNodeSP node);
 
 
     KisNodeSP KRITAIMAGE_EXPORT findRoot(KisNodeSP node);

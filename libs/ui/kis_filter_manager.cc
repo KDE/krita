@@ -26,6 +26,7 @@
 #include <kis_paint_device_frames_interface.h>
 #include <kis_image_animation_interface.h>
 #include <kis_raster_keyframe_channel.h>
+#include <kis_time_span.h>
 
 // krita/ui
 #include "KisViewManager.h"
@@ -39,6 +40,7 @@
 #include "strokes/kis_filter_stroke_strategy.h"
 #include "krita_utils.h"
 #include "kis_icon_utils.h"
+#include "kis_layer_utils.h"
 #include <KisGlobalResourcesInterface.h>
 
 
@@ -67,6 +69,8 @@ struct KisFilterManager::Private {
     QRect initialApplyRect;
     QRect lastProcessRect;
     QRect lastExtendedUpdateRect;
+
+    bool filterAllSelectedFrames = false;
 
     KisSignalMapper actionsMapper;
 
@@ -319,11 +323,9 @@ void KisFilterManager::apply(KisFilterConfigurationSP _filterConfig)
     d->currentStrokeId =
         image->startStroke(strategy);
 
-    const int NULL_FRAME = -1;
-    const int frameID = paintDevice && paintDevice->framesInterface() ? paintDevice->framesInterface()->currentFrameId() : NULL_FRAME;
 
     // Apply filter preview to active, visible frame only.
-    image->addJob(d->currentStrokeId, new KisFilterStrokeStrategy::FilterFrameData(frameID));
+    image->addJob(d->currentStrokeId, new KisFilterStrokeStrategy::FilterJobData());
 
     {
         KisFilterStrokeStrategy::IdleBarrierData *data =
@@ -349,16 +351,20 @@ void KisFilterManager::finish()
 {
     Q_ASSERT(d->currentStrokeId);
 
-    {   // Apply filter to the other non-active frames...
-        KisImageWSP image = d->view->image();
+    if (d->filterAllSelectedFrames) {   // Apply filter to the other selected frames...
+        KisImageSP image = d->view->image();
+        QSet<int> selectedTimes = image->animationInterface()->activeLayerSelectedTimes();
         KisPaintDeviceSP paintDevice = d->view->activeNode()->paintDevice();
-        const int NULL_FRAME = -1;
-        const int frameID = paintDevice && paintDevice->framesInterface() ? paintDevice->framesInterface()->currentFrameId() : NULL_FRAME;
-        QList<int> frames = paintDevice && paintDevice->framesInterface() ? paintDevice->framesInterface()->frames() : QList<int>();
 
-        frames.removeAll(frameID);
-        Q_FOREACH(const int& frame, frames) {
-            image->addJob(d->currentStrokeId, new KisFilterStrokeStrategy::FilterFrameData(frame));
+        const int currentActiveFrame = KisLayerUtils::fetchLayerActiveFrameTime(d->view->activeNode());
+        QSet<int> uniqueFrameTimes = paintDevice->framesInterface() ? KisLayerUtils::fetchLayerUniqueFrameTimes(d->view->activeNode()) : QSet<int>();
+
+        uniqueFrameTimes.remove(currentActiveFrame); // Current frame was already filtered during filter preview in `KisFilterManager::apply`.
+
+        Q_FOREACH(const int& frameTime, uniqueFrameTimes) {
+            if (selectedTimes.contains(frameTime)) {
+                image->addJob(d->currentStrokeId, new KisFilterStrokeStrategy::FilterJobData(frameTime));
+            }
         }
     }
 
@@ -404,6 +410,16 @@ bool KisFilterManager::isStrokeRunning() const
 bool KisFilterManager::isIdle() const
 {
     return !d->idleBarrierCookie;
+}
+
+void KisFilterManager::setFilterAllSelectedFrames(bool filterAllSelectedFrames)
+{
+    d->filterAllSelectedFrames = filterAllSelectedFrames;
+}
+
+bool KisFilterManager::filterAllSelectedFrames()
+{
+    return d->filterAllSelectedFrames;
 }
 
 void KisFilterManager::slotStrokeEndRequested()

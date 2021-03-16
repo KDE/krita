@@ -9,17 +9,18 @@
 #include <filter/kis_filter.h>
 #include <filter/kis_filter_configuration.h>
 #include <krita_utils.h>
+#include <kis_layer_utils.h>
+#include <kis_raster_keyframe_channel.h>
 #include <kis_transaction.h>
 #include <kis_paint_device_frames_interface.h>
 #include <KisRunnableStrokeJobUtils.h>
 #include <KisRunnableStrokeJobsInterface.h>
 #include <KoCompositeOpRegistry.h>
-
+#include "kis_painter.h"
 
 struct KisFilterStrokeStrategy::Private {
     Private()
         : updatesFacade(0),
-          secondaryTransaction(0),
           cancelSilentlyHandle(new QAtomicInt()),
           levelOfDetail(0)
     {
@@ -29,17 +30,18 @@ struct KisFilterStrokeStrategy::Private {
         : filter(rhs.filter),
           filterConfig(rhs.filterConfig),
           node(rhs.node),
+          targetDevice(rhs.targetDevice),
+          activeSelection(rhs.activeSelection),
+          image(rhs.image),
           updatesFacade(rhs.updatesFacade),
           filterDevice(),
           filterDeviceBounds(),
-          secondaryTransaction(0),
           progressHelper(),
           cancelSilentlyHandle(rhs.cancelSilentlyHandle),
           levelOfDetail(0)
     {
         KIS_ASSERT_RECOVER_RETURN(!rhs.filterDevice);
         KIS_ASSERT_RECOVER_RETURN(rhs.filterDeviceBounds.isEmpty());
-        KIS_ASSERT_RECOVER_RETURN(!rhs.secondaryTransaction);
         KIS_ASSERT_RECOVER_RETURN(!rhs.progressHelper);
         KIS_ASSERT_RECOVER_RETURN(!rhs.levelOfDetail);
     }
@@ -47,11 +49,16 @@ struct KisFilterStrokeStrategy::Private {
     KisFilterSP filter;
     KisFilterConfigurationSP filterConfig;
     KisNodeSP node;
+    KisPaintDeviceSP targetDevice;
+    KisSelectionSP activeSelection;
+    KisImageSP image;
     KisUpdatesFacade *updatesFacade;
+
+    KisTransaction* workingTransaction;
 
     KisPaintDeviceSP filterDevice;
     QRect filterDeviceBounds;
-    KisTransaction *secondaryTransaction;
+
     QScopedPointer<KisProcessingVisitor::ProgressHelper> progressHelper;
     QSharedPointer<QAtomicInt> cancelSilentlyHandle;
 
@@ -62,29 +69,31 @@ struct KisFilterStrokeStrategy::Private {
 KisFilterStrokeStrategy::KisFilterStrokeStrategy(KisFilterSP filter,
                                                  KisFilterConfigurationSP filterConfig,
                                                  KisResourcesSnapshotSP resources)
-    : KisPainterBasedStrokeStrategy(QLatin1String("FILTER_STROKE"),
-                                    kundo2_i18n("Filter \"%1\"", filter->name()),
-                                    resources,
-                                    QVector<KisFreehandStrokeInfo*>(),false),
-      m_d(new Private())
+    : KisStrokeStrategyUndoCommandBased(kundo2_i18n("Filter \"%1\"", filter->name()),
+                                        false,
+                                        resources->image().data())
+    , m_d(new Private())
 {
     m_d->filter = filter;
     m_d->filterConfig = filterConfig;
     m_d->node = resources->currentNode();
+    m_d->targetDevice = resources->currentNode()->paintDevice();
+    m_d->activeSelection = resources->activeSelection();
+    m_d->image = resources->image();
     m_d->updatesFacade = resources->image().data();
-    m_d->secondaryTransaction = 0;
     m_d->levelOfDetail = 0;
 
     setSupportsWrapAroundMode(true);
+    enableJob(KisSimpleStrokeStrategy::JOB_INIT);
     enableJob(KisSimpleStrokeStrategy::JOB_DOSTROKE);
+    enableJob(KisSimpleStrokeStrategy::JOB_CANCEL);
+    enableJob(KisSimpleStrokeStrategy::JOB_FINISH);
 }
 
 KisFilterStrokeStrategy::KisFilterStrokeStrategy(const KisFilterStrokeStrategy &rhs, int levelOfDetail)
-    : KisPainterBasedStrokeStrategy(rhs, levelOfDetail),
-      m_d(new Private(*rhs.m_d))
+    : KisStrokeStrategyUndoCommandBased(rhs)
+    , m_d(new Private(*rhs.m_d))
 {
-    // only non-started transaction are allowed
-    KIS_ASSERT_RECOVER_NOOP(!m_d->secondaryTransaction);
     m_d->levelOfDetail = levelOfDetail;
 }
 
@@ -95,25 +104,18 @@ KisFilterStrokeStrategy::~KisFilterStrokeStrategy()
 
 void KisFilterStrokeStrategy::initStrokeCallback()
 {
-    KisPainterBasedStrokeStrategy::initStrokeCallback();
+    KisStrokeStrategyUndoCommandBased::initStrokeCallback();
 
-    KisPaintDeviceSP dev = targetDevice();
-    m_d->filterDeviceBounds = dev->extent(); // Extent returns wrong value when "currentTime" doesn't have a keyframe. Should be the same as active keyframe.
+    KisPaintDeviceSP dev = m_d->targetDevice;
 
-    if (m_d->filter->needsTransparentPixels(m_d->filterConfig.data(), dev->colorSpace())) {
-        m_d->filterDeviceBounds |= dev->defaultBounds()->bounds();
-    }
-
-    // Handle selection masking...
-    if (activeSelection() ||
+    if (m_d->activeSelection ||
         (dev->colorSpace() != dev->compositionSourceColorSpace() &&
          *dev->colorSpace() != *dev->compositionSourceColorSpace())) {
 
         m_d->filterDevice = dev->createCompositionSourceDevice(dev);
-        m_d->secondaryTransaction = new KisTransaction(m_d->filterDevice);
 
-        if (activeSelection()) {
-            m_d->filterDeviceBounds &= activeSelection()->selectedRect();
+        if (m_d->activeSelection) {
+            m_d->filterDeviceBounds &= m_d->activeSelection->selectedRect();
         }
     } else {
         m_d->filterDevice = dev;
@@ -132,24 +134,37 @@ void KisFilterStrokeStrategy::initStrokeCallback()
  */
 void KisFilterStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 {
-    FilterFrameData *filterFrameData = dynamic_cast<FilterFrameData*>(data);
+    FilterJobData *filterFrameData = dynamic_cast<FilterJobData*>(data);
     KisRunnableStrokeJobData *jobData = dynamic_cast<KisRunnableStrokeJobData*>(data);
     ExtraCleanUpUpdates *cleanup = dynamic_cast<ExtraCleanUpUpdates*>(data);
 
     if (filterFrameData) { // Populate list of jobs for filter application...
+
         using namespace KritaUtils;
         QVector<KisRunnableStrokeJobData*> jobs;
 
-        const QRect applyRect = m_d->node->image()->bounds() | m_d->node->exactBounds();
+        const QRect applyRect = m_d->node->image()->bounds();
         const QRect processRect = m_d->filter->changedRect(applyRect, m_d->filterConfig.data(), 0);
-        const bool useSpecificFrameID = filterFrameData->m_frameID != -1;
-        const int frameID = filterFrameData->m_frameID;
+        const bool shouldSwitchTime = filterFrameData->frameTime != -1 && filterFrameData->frameTime != KisLayerUtils::fetchLayerActiveFrameTime(m_d->node);
+        const int frameTime = filterFrameData->frameTime;
 
-        // When using a specific frame ID, copy the contents of active frame first...
-        addJobSequential(jobs, [this, frameID, useSpecificFrameID](){
-            if (useSpecificFrameID && m_d->node->original()) {
-                m_d->filterDevice = new KisPaintDevice(*m_d->filterDevice, KritaUtils::CopySnapshot);
-                m_d->node->original()->framesInterface()->writeFrameToDevice(frameID, m_d->filterDevice);
+        KisLayerUtils::SwitchFrameCommand::SharedStorageSP storage( new KisLayerUtils::SwitchFrameCommand::SharedStorage() );
+
+        addJobSequential(jobs, [this, shouldSwitchTime, frameTime, storage](){
+            // Switch time if necessary..
+            if (shouldSwitchTime) {
+                runAndSaveCommand( toQShared( new KisLayerUtils::SwitchFrameCommand(m_d->image, frameTime, false, storage) )
+                                   , KisStrokeJobData::BARRIER, KisStrokeJobData::NORMAL);
+            }
+
+            // Copy snapshot of targetDevice for filter processing..
+            m_d->filterDevice = new KisPaintDevice(*m_d->targetDevice);
+
+            //Update all necessary rect data based on contents of frame..
+            m_d->filterDeviceBounds = m_d->filterDevice->extent();
+
+            if (m_d->filter->needsTransparentPixels(m_d->filterConfig.data(), m_d->targetDevice->colorSpace())) {
+                m_d->filterDeviceBounds |= m_d->targetDevice->defaultBounds()->bounds();
             }
         });
 
@@ -159,13 +174,18 @@ void KisFilterStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
             QVector<QRect> patches = KritaUtils::splitRectIntoPatches(processRect, size);
 
             Q_FOREACH (const QRect &patch, patches) {
+                // Filter subrect concurently
                 addJobConcurrent(jobs, [this, patch](){
-                    m_d->filter->processImpl(m_d->filterDevice, patch,
-                                             m_d->filterConfig.data(),
-                                             m_d->progressHelper->updater());
+                    if (patch.intersects(m_d->filterDeviceBounds)) {
+                        m_d->filter->processImpl(m_d->filterDevice, patch,
+                                                 m_d->filterConfig.data(),
+                                                 m_d->progressHelper->updater());
+                    }
                 });
             }
         } else {
+
+            //Filter whole paint device.
             addJobSequential(jobs, [this, processRect](){
                 m_d->filter->processImpl(m_d->filterDevice, processRect,
                                          m_d->filterConfig.data(),
@@ -173,34 +193,31 @@ void KisFilterStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
             });
         }
 
-        addJobSequential(jobs, [this, applyRect, frameID, useSpecificFrameID](){
+        addJobSequential(jobs, [this, applyRect, shouldSwitchTime](){
             if (!m_d->filterDeviceBounds.intersects(
                     m_d->filter->neededRect(applyRect, m_d->filterConfig.data(), m_d->levelOfDetail))) {
                 return;
             }
 
-            if (useSpecificFrameID) {
-                if (m_d->secondaryTransaction) {
-                    KisPaintDeviceSP target = new KisPaintDevice(*target, KritaUtils::CopySnapshot);
-                    targetDevice()->framesInterface()->writeFrameToDevice(frameID, target);
-                    KisPainter::copyAreaOptimized(applyRect.topLeft(), m_d->filterDevice, target, applyRect, activeSelection());
-                    targetDevice()->framesInterface()->uploadFrame(frameID, target);
+            // Make a transaction, change the target device, and "end" transaction.
+            // Should be useful for undoing later.
+            m_d->workingTransaction = new KisTransaction(m_d->targetDevice);
+            KisPainter::copyAreaOptimized(applyRect.topLeft(), m_d->filterDevice, m_d->targetDevice, applyRect, m_d->activeSelection);
+            runAndSaveCommand( toQShared(m_d->workingTransaction->endAndTake()), KisStrokeJobData::BARRIER, KisStrokeJobData::NORMAL );
+            delete m_d->workingTransaction;
+            m_d->workingTransaction = nullptr;
 
-                    // Free memory
-                    m_d->filterDevice->clear(applyRect);
-                } else {
-                    targetDevice()->framesInterface()->uploadFrame(frameID, m_d->filterDevice);
-                }
-            } else {
-                if (m_d->secondaryTransaction) {
-                    KisPainter::copyAreaOptimized(applyRect.topLeft(), m_d->filterDevice, targetDevice(), applyRect, activeSelection());
-
-                    // Free memory
-                    m_d->filterDevice->clear(applyRect);
-                }
+            //If we're talking about the "current" / visible frame, mark rect as dirty.
+            if (!shouldSwitchTime) {
+                m_d->node->setDirty(applyRect);
             }
+        });
 
-            m_d->node->setDirty(applyRect);
+        addJobSequential(jobs, [this, shouldSwitchTime, frameTime, storage](){
+            if (shouldSwitchTime) {
+                runAndSaveCommand( toQShared( new KisLayerUtils::SwitchFrameCommand(m_d->image, frameTime, true, storage) )
+                                   , KisStrokeJobData::BARRIER, KisStrokeJobData::NORMAL);
+            }
         });
 
         runnableJobsInterface()->addRunnableJobs(jobs);
@@ -212,13 +229,13 @@ void KisFilterStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
     } else if (jobData) {
         jobData->run();
     } else {
-        qFatal("KisFilterStrokeStrategy: job type is not known");
+        KisStrokeStrategyUndoCommandBased::doStrokeCallback(data);
+//        qFatal("KisFilterStrokeStrategy: job type is not known");
     }
 }
 
 void KisFilterStrokeStrategy::cancelStrokeCallback()
 {
-    delete m_d->secondaryTransaction;
     m_d->filterDevice = 0;
 
     const bool shouldCancelSilently = *m_d->cancelSilentlyHandle;
@@ -227,7 +244,7 @@ void KisFilterStrokeStrategy::cancelStrokeCallback()
         m_d->updatesFacade->disableDirtyRequests();
     }
 
-    KisPainterBasedStrokeStrategy::cancelStrokeCallback();
+    KisStrokeStrategyUndoCommandBased::cancelStrokeCallback();
 
     if (shouldCancelSilently) {
         m_d->updatesFacade->enableDirtyRequests();
@@ -236,13 +253,12 @@ void KisFilterStrokeStrategy::cancelStrokeCallback()
 
 void KisFilterStrokeStrategy::finishStrokeCallback()
 {
-    delete m_d->secondaryTransaction;
     m_d->filterDevice = 0;
 
     // KisPainterBasedStrokeStrategy::finishStrokeCallback() saves an undo
     // state using KisTransaction for current active keyframe, not the frameIDs that have
     // rendered in a given stroke. Meaning, we can only undo the current active frame atm...
-    KisPainterBasedStrokeStrategy::finishStrokeCallback();
+    KisStrokeStrategyUndoCommandBased::finishStrokeCallback();
 }
 
 KisStrokeStrategy* KisFilterStrokeStrategy::createLodClone(int levelOfDetail)

@@ -89,7 +89,6 @@ KisDlgFilter::KisDlgFilter(KisViewManager *view, KisNodeSP node, KisFilterManage
     connect(d->uiFilterDialog.buttonBox, SIGNAL(accepted()), SLOT(accept()));
     connect(d->uiFilterDialog.buttonBox, SIGNAL(rejected()), SLOT(reject()));
     connect(d->uiFilterDialog.checkBoxPreview, SIGNAL(toggled(bool)), SLOT(enablePreviewToggled(bool)));
-
     connect(d->uiFilterDialog.filterSelection, SIGNAL(configurationChanged()), SLOT(filterSelectionChanged()));
 
     connect(this, SIGNAL(accepted()), SLOT(slotOnAccept()));
@@ -98,6 +97,8 @@ KisDlgFilter::KisDlgFilter(KisViewManager *view, KisNodeSP node, KisFilterManage
 
     KConfigGroup group( KSharedConfig::openConfig(), "filterdialog");
     d->uiFilterDialog.checkBoxPreview->setChecked(group.readEntry("showPreview", true));
+
+    d->uiFilterDialog.chkFilterSelectedFrames->setChecked(d->filterManager->filterAllSelectedFrames());
 
     restoreGeometry(KisConfig(true).readEntry("filterdialog/geometry", QByteArray()));
     connect(&d->updateCompressor, SIGNAL(timeout()), this, SLOT(updatePreview()));
@@ -169,6 +170,7 @@ void KisDlgFilter::slotOnAccept()
         startApplyingFilter(config);
     }
 
+    d->filterManager->setFilterAllSelectedFrames(d->uiFilterDialog.chkFilterSelectedFrames->isChecked());
     d->filterManager->finish();
 
     d->uiFilterDialog.buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);

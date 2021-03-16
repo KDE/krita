@@ -188,7 +188,6 @@ KisAnimationPlayer::KisAnimationPlayer(KisCanvas2 *canvas)
                 desiredPlaybackRange.include(time);
                 animInterface->setFullClipRange(desiredPlaybackRange);
             }
-
         }
     });
 
@@ -322,7 +321,7 @@ void KisAnimationPlayer::slotUpdateAudioChunkLength()
 
 void KisAnimationPlayer::slotUpdatePlaybackTimer()
 {
-     m_d->timer->stop();
+    m_d->timer->stop();
 
     const KisImageAnimationInterface *animation = m_d->canvas->image()->animationInterface();
     const KisTimeSpan &playBackRange = animation->playbackRange();
@@ -359,10 +358,10 @@ void KisAnimationPlayer::slotUpdatePlaybackTimer()
 
 void KisAnimationPlayer::play()
 {
-    const KisImageAnimationInterface *animation = m_d->canvas->image()->animationInterface();
+    const KisImageAnimationInterface *animInterface = m_d->canvas->image()->animationInterface();
 
     {
-        const KisTimeSpan &range = animation->playbackRange();
+        const KisTimeSpan &range = animInterface->playbackRange();
         if (!range.isValid()) return;
 
         // when openGL is disabled, there is no animation cache
@@ -415,7 +414,7 @@ void KisAnimationPlayer::play()
     }
 
     if (m_d->playbackState == STOPPED) {
-        m_d->playbackOriginFrame = animation->currentUITime();
+        m_d->playbackOriginFrame = animInterface->currentUITime();
         m_d->currentFrame = m_d->playbackOriginFrame;
     }
 

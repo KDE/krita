@@ -140,9 +140,7 @@ bool Filter::startFilter(Node *node, int x, int y, int w, int h)
     QRect processRect = filter->changedRect(applyRect, filterConfig.data(), 0);
     processRect &= image->bounds();
 
-    const int frameID = paintDevice ? paintDevice->framesInterface()->currentFrameId() : -1;
-
-    image->addJob(currentStrokeId, new KisFilterStrokeStrategy::FilterFrameData(frameID));
+    image->addJob(currentStrokeId, new KisFilterStrokeStrategy::FilterJobData());
 
 
     image->endStroke(currentStrokeId);

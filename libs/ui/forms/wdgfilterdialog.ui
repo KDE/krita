@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <author>
     SPDX-FileCopyrightText: none
@@ -11,7 +11,7 @@
     <x>0</x>
     <y>0</y>
     <width>517</width>
-    <height>69</height>
+    <height>72</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -34,7 +34,7 @@
     <number>12</number>
    </property>
    <item>
-    <widget class="KisFilterSelectorWidget" name="filterSelection">
+    <widget class="KisFilterSelectorWidget" name="filterSelection" native="true">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
        <horstretch>0</horstretch>
@@ -44,7 +44,7 @@
     </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,0,0,0,0">
+    <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,0,0,0,0,0">
      <property name="spacing">
       <number>3</number>
      </property>
@@ -65,6 +65,13 @@
       <widget class="QCheckBox" name="checkBoxPreview">
        <property name="text">
         <string>Preview</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="chkFilterSelectedFrames">
+       <property name="text">
+        <string>Selected Frames</string>
        </property>
       </widget>
      </item>

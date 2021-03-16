@@ -73,7 +73,7 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
                                                KisFavoriteResourceManager* favoriteResourceManager,
                                                KisPresetSaveWidget* savePresetWidget,
                                                QWidget * parent)
-    : QWidget(parent)
+    : QWidget(parent, Qt::Dialog)
     , m_d(new Private())
 {
     setObjectName("KisPaintOpPresetsPopup");

@@ -106,7 +106,6 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
 
     m_favoriteResourceManager = new KisFavoriteResourceManager(this);
 
-
     KConfigGroup grp =  KSharedConfig::openConfig()->group("krita").group("Toolbar BrushesAndStuff");
     int iconsize = grp.readEntry("IconSize", 22);
     // NOTE: buttonsize should be the same value as the one used in ktoolbar for all QToolButton
@@ -191,8 +190,6 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
 
     moveToCenterActionY = m_viewManager->actionManager()->createAction("mirrorY-moveToCenter");
     toolbarMenuYMirror->addAction(moveToCenterActionY);
-
-
 
     // create horizontal and vertical mirror buttons
 
@@ -450,11 +447,11 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
 
     m_savePresetWidget = new KisPresetSaveWidget(this);
 
-    m_presetsPopup = new KisPaintOpPresetsPopup(m_resourceProvider, m_favoriteResourceManager, m_savePresetWidget);
-    m_brushEditorPopupButton->setPopupWidget(m_presetsPopup);
-    m_presetsPopup->parentWidget()->setWindowTitle(i18n("Brush Editor"));
+    m_presetsPopup = new KisPaintOpPresetsPopup(m_resourceProvider, m_favoriteResourceManager, m_savePresetWidget, m_brushEditorPopupButton);
+    m_presetsPopup->hide();
+    m_presetsPopup->setWindowTitle(i18n("Brush Editor"));
 
-
+    connect(m_brushEditorPopupButton, SIGNAL(clicked(bool)), m_presetsPopup, SLOT(show()));
     connect(m_presetsPopup, SIGNAL(brushEditorShown()), SLOT(slotUpdateOptionsWidgetPopup()));
     connect(m_viewManager->mainWindow(), SIGNAL(themeChanged()), m_presetsPopup, SLOT(updateThemedIcons()));
 
@@ -522,6 +519,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
 
     connect(m_resourceProvider, SIGNAL(sigFGColorChanged(KoColor)), m_favoriteResourceManager, SLOT(slotChangeFGColorSelector(KoColor)));
     connect(m_resourceProvider, SIGNAL(sigBGColorChanged(KoColor)), m_favoriteResourceManager, SLOT(slotSetBGColor(KoColor)));
+
     // cold initialization
     m_favoriteResourceManager->slotChangeFGColorSelector(m_resourceProvider->fgColor());
     m_favoriteResourceManager->slotSetBGColor(m_resourceProvider->bgColor());

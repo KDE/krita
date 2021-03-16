@@ -11,7 +11,7 @@
     <x>0</x>
     <y>0</y>
     <width>412</width>
-    <height>454</height>
+    <height>478</height>
    </rect>
   </property>
   <layout class="QFormLayout" name="formLayout_2">
@@ -51,7 +51,7 @@
    <item row="2" column="1">
     <widget class="QComboBox" name="cmbChroma"/>
    </item>
-   <item row="3" column="0" colspan="2">
+   <item row="4" column="0" colspan="2">
     <widget class="QGroupBox" name="conversionSettings">
      <property name="title">
       <string>Conversion settings</string>
@@ -152,6 +152,16 @@
      </property>
      <property name="checked">
       <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0" colspan="2">
+    <widget class="QCheckBox" name="chkMonochromesRGB">
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Not all encoders for AV1 and by extension avif support saving to monochrome and use a YCbCr fallback. Krita will be able to open these files just fine, but not all programs do. Converting to sRGB first before saving solves this at the cost of larger file size.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="text">
+      <string>Convert to sRGB for extra compatibility</string>
      </property>
     </widget>
    </item>

@@ -71,6 +71,7 @@ KisPropertiesConfigurationSP HeifExport::defaultConfiguration(const QByteArray &
     cfg->setProperty("lossless", true);
     cfg->setProperty("chroma", "444");
     cfg->setProperty("floatingPointConversionOption", "KeepSame");
+    cfg->setProperty("monochromeToSRGB", false);
     cfg->setProperty("HLGnominalPeak", 1000.0);
     cfg->setProperty("HLGgamma", 1.2);
     cfg->setProperty("removeHGLOOTF", true);
@@ -123,15 +124,17 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
 
     dbgFile << "Starting" << mimeType() << "encoding.";
 
+    bool convertToSRGB = (configuration->getBool("monochromeToSRGB") && cs->colorModelId() == GrayAColorModelID);
+
     // Convert to 8 bits rgba on saving if not rgba or graya.
-    if ( cs->colorModelId() != RGBAColorModelID && cs->colorModelId() != GrayAColorModelID ) {
+    if ( (cs->colorModelId() != RGBAColorModelID && cs->colorModelId() != GrayAColorModelID) || convertToSRGB) {
         const KoColorSpace *sRgb = KoColorSpaceRegistry::instance()->rgb8();
         image->convertImageColorSpace(sRgb,
                                       KoColorConversionTransformation::internalRenderingIntent(),
                                       KoColorConversionTransformation::internalConversionFlags());
     }
 
-    if (cs->colorModelId() == GrayAColorModelID && cs->hasHighDynamicRange()) {
+    if (cs->colorModelId() == GrayAColorModelID && cs->hasHighDynamicRange() && !convertToSRGB) {
         const KoColorSpace *gray = KoColorSpaceRegistry::instance()->graya16(cs->profile()->name());
         image->convertImageColorSpace(gray,
                                       KoColorConversionTransformation::internalRenderingIntent(),
@@ -558,6 +561,9 @@ void KisWdgOptionsHeif::setConfiguration(const KisPropertiesConfigurationSP cfg)
     m_hasAlpha = cfg->getBool(KisImportExportFilter::ImageContainsTransparencyTag, false);
     
     int CicpPrimaries = cfg->getInt(KisImportExportFilter::CICPPrimariesTag, 2);
+
+    // Rav1e doesn't support monochrome. To get around this, people may need to convert to sRGB first.
+    chkMonochromesRGB->setVisible(cfg->getString(KisImportExportFilter::ColorModelIDTag) == "GRAYA");
     
     conversionSettings->setVisible(cfg->getBool(KisImportExportFilter::HDRTag, false));
 
@@ -609,6 +615,7 @@ KisPropertiesConfigurationSP KisWdgOptionsHeif::configuration() const
     cfg->setProperty("quality", int(sliderQuality->value()));
     cfg->setProperty("chroma", cmbChroma->currentText());
     cfg->setProperty("floatingPointConversionOption", cmbConversionPolicy->currentData(Qt::UserRole+1).toString());
+    cfg->setProperty("monochromeToSRGB", chkMonochromesRGB->isChecked());
     cfg->setProperty("HLGnominalPeak", spnNits->value());
     cfg->setProperty("HLGgamma", spnGamma->value());
     cfg->setProperty("removeHGLOOTF", chkLossless->isChecked());

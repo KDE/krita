@@ -879,6 +879,7 @@ void KisMainWindow::setCanvasDetached(bool detach)
     } else {
         d->canvasWindow->hide();
     }
+    d->toggleDetachCanvas->setChecked(detach);
 }
 
 QWidget * KisMainWindow::canvasWindow() const

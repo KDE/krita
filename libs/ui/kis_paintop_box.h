@@ -199,8 +199,8 @@ private:
     KisAction*                          m_reloadAction {0};
     KisAction*                          m_disablePressureAction {0};
 
-    QString             m_currCompositeOpID;
-    KisNodeWSP          m_previousNode;
+    QString    m_currCompositeOpID;
+    KisNodeWSP m_previousNode;
 
     KisAction* m_hMirrorAction {0};
     KisAction* m_vMirrorAction {0};
@@ -245,12 +245,12 @@ private:
 
     TabletToolMap    m_tabletToolMap;
     PaintOpPresetMap m_paintOpPresetMap;
-    TabletToolID     m_currTabletToolID;
-    bool             m_presetsEnabled;
-    bool             m_blockUpdate;
-    bool             m_dirtyPresetsEnabled;
-    bool             m_eraserBrushSizeEnabled;
-    bool             m_eraserBrushOpacityEnabled;
+    TabletToolID     m_currTabletToolID {KoInputDevice::invalid()};
+    bool             m_presetsEnabled {true};
+    bool             m_blockUpdate {false};
+    bool             m_dirtyPresetsEnabled {false};
+    bool             m_eraserBrushSizeEnabled {false};
+    bool             m_eraserBrushOpacityEnabled {false};
 
     KisSignalAutoConnectionsStore m_presetConnections;
 

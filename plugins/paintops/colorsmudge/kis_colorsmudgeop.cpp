@@ -190,7 +190,7 @@ struct ColorSmudgeStrategy : public ColorSmudgeStrategyBase
                     const QPointF &cursorPoint,
                     QRect *dstDabRect) override {
 
-        m_origDab = dabCache->fetchImageDab(m_origDab->colorSpace(),
+        m_origDab = dabCache->fetchNormalizedImageDab(m_origDab->colorSpace(),
             cursorPoint,
             shape,
             info,

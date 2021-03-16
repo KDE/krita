@@ -100,12 +100,12 @@ KisFixedPaintDeviceSP KisDabCache::fetchDab(const KoColorSpace *cs,
                           lightnessStrength);
 }
 
-KisFixedPaintDeviceSP KisDabCache::fetchImageDab(const KoColorSpace *cs,
-        const QPointF &cursorPoint,
-        KisDabShape const& shape,
-        const KisPaintInformation& info,
-        qreal softnessFactor,
-        QRect *dstDabRect)
+KisFixedPaintDeviceSP KisDabCache::fetchNormalizedImageDab(const KoColorSpace *cs,
+                                                           const QPointF &cursorPoint,
+                                                           KisDabShape const& shape,
+                                                           const KisPaintInformation& info,
+                                                           qreal softnessFactor,
+                                                           QRect *dstDabRect)
 {
     return fetchDabCommon(cs, 0, KoColor(),
                           cursorPoint,

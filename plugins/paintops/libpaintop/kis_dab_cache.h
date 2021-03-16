@@ -64,12 +64,12 @@ public:
                                    QRect *dstDabRect,
                                    qreal lightnessStrength = 1.0);
 
-    KisFixedPaintDeviceSP fetchImageDab(const KoColorSpace *cs,
-            const QPointF &cursorPoint,
-            KisDabShape const& shape,
-            const KisPaintInformation& info,
-            qreal softnessFactor,
-            QRect *dstDabRect);
+    KisFixedPaintDeviceSP fetchNormalizedImageDab(const KoColorSpace *cs,
+                                                  const QPointF &cursorPoint,
+                                                  KisDabShape const& shape,
+                                                  const KisPaintInformation& info,
+                                                  qreal softnessFactor,
+                                                  QRect *dstDabRect);
 
 
     void setSharpnessPostprocessing(KisPressureSharpnessOption *option);

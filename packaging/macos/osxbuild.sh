@@ -610,7 +610,14 @@ build_x86_64 () {
 build_arm64 () {
     log "building builddeps_arm64"
 
-    ${BUILDROOT}/krita/packaging/macos/osxbuild.sh builddeps "${@:1}"
+    # force arm64 build even in x86_64 envs 
+    if [[ ${#@} > 0 ]]; then
+        for pkg in ${@:1:${#@}}; do
+            env /usr/bin/arch -arm64 /bin/zsh -c "${BUILDROOT}/krita/packaging/macos/osxbuild.sh builddeps --dirty ${pkg}"
+        done
+    else
+        env /usr/bin/arch -arm64 /bin/zsh -c "${BUILDROOT}/krita/packaging/macos/osxbuild.sh builddeps"
+    fi
 
     rsync -aq "${KIS_INSTALL_DIR}/" "${DEPBUILD_ARM64_DIR}"
 }
@@ -667,7 +674,8 @@ universal_plugin_build() {
         rsync -aq "${KIS_INSTALL_DIR}/" "${DEPBUILD_X86_64_DIR}"
 
         log "building plugins_arm64"
-        build_plugins
+        # force arm64 build even in x86_64 envs
+        env /usr/bin/arch -arm64 /bin/zsh -c "${BUILDROOT}/krita/packaging/macos/osxbuild.sh buildplugins"
         rsync -aq "${KIS_INSTALL_DIR}/" "${DEPBUILD_ARM64_DIR}"
 
         # sync files to universal install dir.

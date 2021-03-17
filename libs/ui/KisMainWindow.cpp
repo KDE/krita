@@ -69,6 +69,7 @@
 #include <kguiitem.h>
 #include <kwindowconfig.h>
 #include <kformat.h>
+#include <kacceleratormanager.h>
 
 #include <KoResourcePaths.h>
 #include <KoToolFactoryBase.h>
@@ -339,6 +340,8 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     : KXmlGuiWindow()
     , d(new Private(this, uuid))
 {
+    KAcceleratorManager::setNoAccel(this);
+
     d->workspacemodel = new KisResourceModel(ResourceType::Workspaces, this);
     connect(d->workspacemodel, SIGNAL(modelReset()), this, SLOT(updateWindowMenu()));
 
@@ -2103,6 +2106,7 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
 
     if (!d->dockWidgetsMap.contains(factory->id())) {
         dockWidget = factory->createDockWidget();
+        KAcceleratorManager::setNoAccel(dockWidget->titleBarWidget());
 
         // It is quite possible that a dock factory cannot create the dock; don't
         // do anything in that case.

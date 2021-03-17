@@ -73,7 +73,7 @@ public:
     KisToolPathFactory()
             : KoToolFactoryBase("KisToolPath") {
         setToolTip(i18n("Bezier Curve Tool: Shift-mouseclick ends the curve."));
-        setSection(TOOL_TYPE_SHAPE);
+        setSection(ToolBoxSection::Shape);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setIconName(koIconNameCStr("krita_draw_path"));
         setPriority(7);

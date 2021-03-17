@@ -752,7 +752,7 @@ void KoToolManager::Private::attachCanvas(KoCanvasController *controller)
         int highestPriority = INT_MAX;
         ToolHelper * helper = 0;
         Q_FOREACH (ToolHelper * th, tools) {
-            if (th->section() == KoToolFactoryBase::mainToolType()) {
+            if (th->section() == ToolBoxSection::Main) {
                 if (th->priority() < highestPriority) {
                     highestPriority = qMin(highestPriority, th->priority());
                     helper = th;

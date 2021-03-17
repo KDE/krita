@@ -136,7 +136,7 @@ public:
             : KisToolPaintFactoryBase("KritaShape/KisToolDyna") {
 
         setToolTip(i18n("Dynamic Brush Tool"));
-        setSection(TOOL_TYPE_SHAPE);
+        setSection(ToolBoxSection::Shape);
         setIconName(koIconNameCStr("krita_tool_dyna"));
         //setShortcut(QKeySequence(Qt::Key_F));
         setPriority(10);

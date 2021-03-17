@@ -97,7 +97,7 @@ public:
 
     KisToolMeasureFactory()
             : KoToolFactoryBase("KritaShape/KisToolMeasure") {
-        setSection(TOOL_TYPE_VIEW);
+        setSection(ToolBoxSection::View);
         setToolTip(i18n("Measure Tool"));
         setIconName(koIconNameCStr("krita_tool_measure"));
         setPriority(1);

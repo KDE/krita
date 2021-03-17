@@ -18,7 +18,7 @@ KarbonCalligraphyToolFactory::KarbonCalligraphyToolFactory()
     : KoToolFactoryBase("KarbonCalligraphyTool")
 {
     setToolTip(i18n("Calligraphy"));
-    setSection(mainToolType());
+    setSection(ToolBoxSection::Main);
     setIconName(koIconNameCStr("calligraphy"));
     setPriority(6);
     setActivationShapeId("flake/edit");

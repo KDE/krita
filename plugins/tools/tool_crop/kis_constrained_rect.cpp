@@ -221,7 +221,7 @@ void KisConstrainedRect::moveHandle(HandleType handle, const QPoint &offset, con
         m_rect &= m_cropRect;
 
         if (ratioLocked() && m_rect.height()) {
-            qreal newRatio = m_rect.width() / m_rect.height();
+            qreal newRatio = m_rect.width() / (qreal)(m_rect.height());
 
             if (newRatio > m_ratio) {
                 m_rect.setWidth(widthFromHeightUnsignedRatio(m_rect.height(), m_ratio, m_rect.width()));

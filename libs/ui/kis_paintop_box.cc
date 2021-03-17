@@ -78,9 +78,8 @@ KisPaintopBox::KisPaintopBox(KisViewManager *viewManager, QWidget *parent, const
     : QWidget(parent)
     , m_resourceProvider(viewManager->canvasResourceProvider())
     , m_viewManager(viewManager)
-    {
+{
     Q_ASSERT(viewManager != 0);
-
 
     setObjectName(name);
     KisConfig cfg(true);

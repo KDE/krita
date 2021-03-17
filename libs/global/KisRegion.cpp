@@ -275,6 +275,13 @@ void KisRegion::approximateOverlappingRects(QVector<QRect> &rects, int gridSize)
     }
 }
 
+void KisRegion::makeGridLikeRectsUnique(QVector<QRect> &rects)
+{
+    std::sort(rects.begin(), rects.end(), detail::HorizontalMergePolicy::elementIsLess);
+    auto it = std::unique(rects.begin(), rects.end());
+    rects.erase(it, rects.end());
+}
+
 KisRegion::KisRegion(const QRect &rect)
 {
     m_rects << rect;

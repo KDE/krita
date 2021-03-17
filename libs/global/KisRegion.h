@@ -51,6 +51,7 @@ public:
      */
     static void approximateOverlappingRects(QVector<QRect> &rects, int gridSize);
 
+    static void makeGridLikeRectsUnique(QVector<QRect> &rects);
 
 public:
     KisRegion() = default;

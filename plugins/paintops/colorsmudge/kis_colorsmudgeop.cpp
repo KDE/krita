@@ -38,6 +38,7 @@
 
 #include "kis_brush_option.h"
 #include "kis_transaction.h"
+#include "KisOverlayPaintDeviceWrapper.h"
 
 
 struct ColorSmudgeInterstrokeData : public KisInterstrokeData
@@ -45,6 +46,15 @@ struct ColorSmudgeInterstrokeData : public KisInterstrokeData
     KisPaintDeviceSP colorBlendDevice;
     KisPaintDeviceSP heightmapDevice;
     KisPaintDeviceSP projectionDevice;
+    KisOverlayPaintDeviceWrapper overlayDeviceWrapper;
+
+    ColorSmudgeInterstrokeData(KisPaintDeviceSP source)
+        : overlayDeviceWrapper(source, 2, true)
+    {
+        projectionDevice = overlayDeviceWrapper.overlay(0);
+        colorBlendDevice = overlayDeviceWrapper.overlay(1);
+        heightmapDevice = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
+    }
 
     ~ColorSmudgeInterstrokeData() override {
         KIS_SAFE_ASSERT_RECOVER_NOOP(!m_parentCommand);
@@ -87,17 +97,9 @@ struct ColorSmudgeInterstrokeDataFactory : public KisInterstrokeDataFactory
     }
 
     KisInterstrokeData * create(KisPaintDeviceSP device) override {
-        ColorSmudgeInterstrokeData *data = new ColorSmudgeInterstrokeData();
+        ColorSmudgeInterstrokeData *data = new ColorSmudgeInterstrokeData(device);
 
-        const KoColorSpace *cs = device->colorSpace();
-        data->projectionDevice = new KisPaintDevice(*device);
-        data->projectionDevice->convertTo(
-            KoColorSpaceRegistry::instance()->colorSpace(
-                cs->colorModelId().id(),
-                Integer16BitsColorDepthID.id(),
-                cs->profile()));
-        data->colorBlendDevice = new KisPaintDevice(*data->projectionDevice);
-        data->heightmapDevice = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
+
 
         return data;
     }
@@ -134,7 +136,6 @@ struct ColorSmudgeStrategy : public ColorSmudgeStrategyBase
                         bool useDullingMode)
         : m_maskDab(new KisFixedPaintDevice(KoColorSpaceRegistry::instance()->alpha8()))
         , m_origDab(new KisFixedPaintDevice(KoColorSpaceRegistry::instance()->rgb8()))
-        , m_unprecisePainter(painter->device())
         , m_paintColor(paintColor)
         , m_useDullingMode(useDullingMode)
     {
@@ -145,6 +146,7 @@ struct ColorSmudgeStrategy : public ColorSmudgeStrategyBase
             m_projectionDevice = colorSmudgeData->projectionDevice;
             m_colorOnlyDevice = colorSmudgeData->colorBlendDevice;
             m_heightmapDevice = colorSmudgeData->heightmapDevice;
+            m_overlayDevice = &colorSmudgeData->overlayDeviceWrapper;
         }
 
         KIS_SAFE_ASSERT_RECOVER(colorSmudgeData) {
@@ -180,8 +182,6 @@ struct ColorSmudgeStrategy : public ColorSmudgeStrategyBase
 
         m_smearOp = m_colorOnlyDevice->colorSpace()->compositeOp(smearAlpha ? COMPOSITE_COPY : COMPOSITE_OVER);
         m_colorRateOp = m_colorOnlyDevice->colorSpace()->compositeOp(painter->compositeOp()->id());
-        m_unprecisePainter.setCompositeOp(COMPOSITE_COPY);
-
     }
 
     void updateMask(KisDabCache *dabCache,
@@ -219,6 +219,11 @@ struct ColorSmudgeStrategy : public ColorSmudgeStrategyBase
 
         const int numPixels = dstRect.width() * dstRect.height();
 
+        const QVector<QRect> mirroredRects = m_finalPainter.calculateAllMirroredRects(dstRect);
+
+        m_overlayDevice->readRects(mirroredRects);
+        m_overlayDevice->readRects({srcRect, dstRect});
+
         m_blendDevice->setRect(dstRect);
         m_blendDevice->lazyGrowBufferWithoutInitialization();
 
@@ -246,8 +251,6 @@ struct ColorSmudgeStrategy : public ColorSmudgeStrategyBase
         m_heightmapPainter.bltFixed(dstRect.topLeft(), m_origDab, m_origDab->bounds());
         m_heightmapPainter.renderMirrorMaskSafe(dstRect, m_origDab, m_shouldPreserveOriginalDab);
 
-        QVector<QRect> mirroredRects = m_finalPainter.calculateAllMirroredRects(dstRect);
-
         Q_FOREACH (const QRect &rc, mirroredRects) {
             m_tempDevice->setRect(rc);
             m_tempDevice->lazyGrowBufferWithoutInitialization();
@@ -261,9 +264,9 @@ struct ColorSmudgeStrategy : public ColorSmudgeStrategyBase
                                              lightnessStrengthValue,
                                              numPixels);
             m_projectionDevice->writeBytes(m_tempDevice->data(), m_tempDevice->bounds());
-
-            m_unprecisePainter.bitBlt(rc.topLeft(), m_projectionDevice, rc);
         }
+        m_overlayDevice->writeRects(mirroredRects);
+        m_dirtyRegion = mirroredRects;
     }
 
     void blendInBackgroundWithSmearing(KisFixedPaintDeviceSP dst,
@@ -320,7 +323,9 @@ struct ColorSmudgeStrategy : public ColorSmudgeStrategyBase
     }
 
     QVector<QRect> takeDirtyRegion() override {
-        return m_unprecisePainter.takeDirtyRegion();
+        QVector<QRect> dirtyRegion;
+        std::swap(dirtyRegion, m_dirtyRegion);
+        return dirtyRegion;
     }
 
     KisFixedPaintDeviceSP m_maskDab;
@@ -330,14 +335,15 @@ struct ColorSmudgeStrategy : public ColorSmudgeStrategyBase
     KisPaintDeviceSP m_heightmapDevice;
     KisPaintDeviceSP m_colorOnlyDevice;
     KisPaintDeviceSP m_projectionDevice;
+    KisOverlayPaintDeviceWrapper *m_overlayDevice;
     KisPainter m_finalPainter;
     KisPainter m_heightmapPainter;
-    KisPainter m_unprecisePainter;
     KoColor m_paintColor;
     const KoCompositeOp * m_smearOp;
     const KoCompositeOp * m_colorRateOp;
     bool m_shouldPreserveOriginalDab = true;
     bool m_useDullingMode = true;
+    QVector<QRect> m_dirtyRegion;
 };
 
 

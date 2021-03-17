@@ -57,6 +57,7 @@ set(kritaimage_LIB_SRCS
    kis_painter_blt_multi_fixed.cpp
    kis_marker_painter.cpp
    KisPrecisePaintDeviceWrapper.cpp
+   KisOverlayPaintDeviceWrapper.cpp
    kis_progress_updater.cpp
    KisAnimatedOpacityProperty.cpp
    brushengine/kis_paint_information.cc

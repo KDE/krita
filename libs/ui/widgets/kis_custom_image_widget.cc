@@ -306,10 +306,13 @@ KisDocument* KisCustomImageWidget::createNewImage()
 
     qint32 width, height;
     double resolution ;
+    KIS_SAFE_ASSERT_RECOVER(cmbResolutionUnit->currentText() == pixelsInchStr || cmbResolutionUnit->currentText() == pixelsCentimeterStr) { resolution = 1.0; }
     if (cmbResolutionUnit->currentText() == pixelsInchStr) {
         resolution = doubleResolution->value() / 72.0;  // internal resolution is in pixels per pt
     } else if (cmbResolutionUnit->currentText() == pixelsCentimeterStr) {
         resolution = doubleResolution->value() / 28.34;
+    } else {
+        resolution = 1.0;
     }
     width = static_cast<qint32>(0.5  + KoUnit(KoUnit::Pixel, resolution).toUserValuePrecise(m_width));
     height = static_cast<qint32>(0.5 + KoUnit(KoUnit::Pixel, resolution).toUserValuePrecise(m_height));

@@ -416,7 +416,7 @@ QString SvgStyleWriter::saveSvgMeshGradient(SvgMeshGradient *gradient,
                                             const QTransform& transform,
                                             SvgSavingContext &context)
 {
-    if (!gradient && gradient->isValid())
+    if (!gradient || !gradient->isValid())
         return QString();
 
     const QString uid = context.createUID("meshgradient");

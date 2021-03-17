@@ -197,7 +197,7 @@ public:
 
     void updateVideoDuration()
     {
-        long ms = framesCount * 1000L / inputFps;
+        long ms = framesCount * 1000L / (inputFps ? inputFps : 30);
         ui->labelVideoDuration->setText(formatDuration(ms));
     }
 

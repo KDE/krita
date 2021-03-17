@@ -771,6 +771,14 @@ endif()
 macro_bool_to_01(LibMyPaint_FOUND HAVE_LIBMYPAINT)
 configure_file(config-mypaint.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-mypaint.h )
 
+
+find_package(KDDockWidgets)
+set_package_properties(KDDockWidgets PROPERTIES
+    DESCRIPTION "KDAB Dockwidgets Library"
+    TYPE REQUIRED
+    PURPOSE "Required for Krita's main window")
+macro_bool_to_01(KDDockWidgets_FOUND HAVE_KDDOCKWIDGETS)
+
 ##
 ## Look for OpenGL
 ##

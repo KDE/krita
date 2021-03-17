@@ -39,7 +39,7 @@ class KisPainter;
 class KoColorSpace;
 class KisInterstrokeDataFactory;
 
-class ColorSmudgeStrategy;
+class ColorSmudgeStrategyBase;
 
 class KisColorSmudgeOp: public KisBrushBasedPaintOp
 {
@@ -101,7 +101,7 @@ private:
 
     KoColorTransformation *m_hsvTransform {0};
     const KoCompositeOp *m_preciseColorRateCompositeOp {0};
-    QScopedPointer<ColorSmudgeStrategy> m_strategy;
+    QScopedPointer<ColorSmudgeStrategyBase> m_strategy;
 };
 
 #endif // _KIS_COLORSMUDGEOP_H_

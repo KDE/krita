@@ -36,7 +36,7 @@ QIcon createIcon(const QImage &source, const QSize &iconSize)
     QSize iconSizeSquare = QSize(maxIconSize, maxIconSize);
 
     QSize scaled = source.size().scaled(iconSize, Qt::KeepAspectRatio);
-    qreal scale = scaled.width()/source.width();
+    qreal scale = scaled.width()/(qreal)(source.width());
 
     if (scale >= 2) {
         // it can be treated like pixel art

@@ -27,7 +27,7 @@ public:
     }
 
     virtual Qt::DockWidgetArea defaultDockWidgetArea() const {
-        return DockMinimized;
+        return Qt::RightDockWidgetArea;
     }
 
     QDockWidget *createDockWidget() override {
@@ -38,7 +38,7 @@ public:
     }
 
     DockPosition defaultDockPosition() const override {
-        return DockRight;
+        return DockMinimized;
     }
 };
 

@@ -76,12 +76,14 @@ private:
 
 private:
     WarpMathFunction m_warpMathFunction;
-    WarpCalculation m_warpCalc;
+    WarpCalculation m_warpCalc {GRID};
     QVector<QPointF> m_origPoint;
     QVector<QPointF> m_transfPoint;
-    qreal m_alpha;
-    KisPaintDeviceSP m_dev;
+    
     KoUpdater *m_progress;
+    qreal m_alpha {1.0};
+    KisPaintDeviceSP m_dev;
+    KoUpdater *m_progress {0};
 };
 
 #endif

@@ -28,7 +28,7 @@ struct HistogramData
     ~HistogramData() {}
 
     HistVector bins;
-    const KoColorSpace* colorSpace;
+    const KoColorSpace* colorSpace {0};
 };
 Q_DECLARE_METATYPE(HistogramData)
 
@@ -87,8 +87,8 @@ public Q_SLOTS:
 
 private:
     HistVector m_histogramData;
-    const KoColorSpace* m_colorSpace;
-    bool m_smoothHistogram;
+    const KoColorSpace* m_colorSpace {0};
+    bool m_smoothHistogram {false};
 };
 
 #endif // HISTOGRAMDOCKERWIDGET_H

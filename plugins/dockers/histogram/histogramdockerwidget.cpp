@@ -163,7 +163,7 @@ void HistogramComputationStrokeStrategy::initiateVector(HistVector &vec, const K
 
 
 HistogramDockerWidget::HistogramDockerWidget(QWidget *parent, const char *name, Qt::WindowFlags f)
-    : QLabel(parent, f), m_colorSpace(0), m_smoothHistogram(true)
+    : QLabel(parent, f)
 {
     setObjectName(name);
     qRegisterMetaType<HistogramData>();

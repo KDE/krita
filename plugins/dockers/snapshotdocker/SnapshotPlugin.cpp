@@ -27,7 +27,7 @@ public:
     }
 
     virtual Qt::DockWidgetArea defaultDockWidgetArea() const {
-        return Qt::RightDockWidgetArea;
+        return DockMinimized;
     }
 
     QDockWidget *createDockWidget() override {

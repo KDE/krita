@@ -31,16 +31,16 @@ private:
     int outerRadius() const;
 
     QImage m_pixelCache;
-    const KoColorSpace* m_cachedColorSpace;
-    int m_cachedSize;
-    qreal m_lastHue;
+    const KoColorSpace* m_cachedColorSpace {0};
+    int m_cachedSize {0};
+    qreal m_lastHue {0.0};
     QList<QRgb> m_cachedColors;
-    qreal m_innerRingRadiusFraction;
+    qreal m_innerRingRadiusFraction {0.85};
 
-    qreal R;
-    qreal G;
-    qreal B;
-    qreal Gamma;
+    qreal R {0.0};
+    qreal G {0.0};
+    qreal B {0.0};
+    qreal Gamma {1.0};
 };
 
 #endif // KIS_COLOR_SELECTOR_RING_H

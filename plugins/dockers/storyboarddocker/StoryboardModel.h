@@ -319,16 +319,16 @@ private:
 
     StoryboardItemList m_items;
     QVector<StoryboardComment> m_commentList;
-    StoryboardCommentModel *m_commentModel;
-    bool m_freezeKeyframePosition;
-    bool m_lockBoards;
-    bool m_reorderingKeyframes;
-    int m_lastScene = 0;
+    StoryboardCommentModel *m_commentModel {0};
+    bool m_freezeKeyframePosition {false};
+    bool m_lockBoards {false};
+    bool m_reorderingKeyframes {false};
+    int m_lastScene {0};
     KisIdleWatcher m_imageIdleWatcher;
     KisImageWSP m_image;
-    StoryboardView *m_view;
+    StoryboardView *m_view {0};
     KisNodeSP m_activeNode;
-    KisStoryboardThumbnailRenderScheduler *m_renderScheduler;
+    KisStoryboardThumbnailRenderScheduler *m_renderScheduler {0};
     KisSignalCompressor m_renderSchedulingCompressor;
 };
 

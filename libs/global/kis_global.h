@@ -88,6 +88,9 @@ const double PRESSURE_THRESHOLD = 5.0 / 255.0;
 #define M_PI 3.14159265358979323846
 #endif
 
+// Name of the property in the KisApplication that contains the name
+// of the current style, even if there is a stylesheet applied
+constexpr const char *currentUnderlyingStyleNameProperty = "currentUnderlyingStyleName";
 
 // converts \p a to [0, 2 * M_PI) range
 template<typename T>

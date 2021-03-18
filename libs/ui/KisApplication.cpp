@@ -196,7 +196,8 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
         qDebug() << "Style override disabled, using" << style()->objectName();
     }
 
-
+    // store the style name
+    qApp->setProperty(currentUnderlyingStyleNameProperty, style()->objectName());
 }
 
 #if defined(Q_OS_WIN) && defined(ENV32BIT)

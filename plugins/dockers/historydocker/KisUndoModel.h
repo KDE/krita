@@ -111,9 +111,9 @@ private Q_SLOTS:
     void setStackCurrentIndex(const QModelIndex &index);
 
 private:
-    bool m_blockOutgoingHistoryChange;
-    KUndo2QStack *m_stack;
-    QItemSelectionModel *m_sel_model;
+    bool m_blockOutgoingHistoryChange {false};
+    KUndo2QStack *m_stack {0};
+    QItemSelectionModel *m_sel_model {0};
     QString m_empty_label;
     QIcon m_clean_icon;
     QPointer<KisCanvas2> m_canvas;

@@ -624,22 +624,21 @@ build_arm64 () {
 
 consolidate_universal_binaries () {
     for f in "${@}"; do
-        # Abort if file is not a Mach-O executable file
-        if [[ -z $(file ${f} | grep "Mach-O") ]]; then
-            continue
-        fi
-        # echo "${BUILDROOT}/${DEPBUILD_X86_64_DIR}/${f##*test-i/}"
-        LIPO_OUTPUT=$(lipo -info ${f} | grep Non-fat 2> /dev/null)
-        if [[ -n ${LIPO_OUTPUT} ]]; then
-            if [[ -f "${DEPBUILD_X86_64_DIR}/${f##*${DEPBUILD_FATBIN_DIR}/}" ]]; then
-                log "creating universal binary -- ${f##*${DEPBUILD_FATBIN_DIR}/}"
-                lipo -create "${f}" "${DEPBUILD_X86_64_DIR}/${f##*${DEPBUILD_FATBIN_DIR}/}" -output "${f}"
-            else
-                log "removing... ${f}"
-                rm "${f}"
+        # Only try to consolidate Mach-O and static libs
+        if [[ -n $(file ${f} | grep "Mach-O") || "${f:(-2)}" = ".a" ]]; then
+            # echo "${BUILDROOT}/${DEPBUILD_X86_64_DIR}/${f##*test-i/}"
+            LIPO_OUTPUT=$(lipo -info ${f} | grep Non-fat 2> /dev/null)
+            if [[ -n ${LIPO_OUTPUT} ]]; then
+                if [[ -f "${DEPBUILD_X86_64_DIR}/${f##*${DEPBUILD_FATBIN_DIR}/}" ]]; then
+                    log "creating universal binary -- ${f##*${DEPBUILD_FATBIN_DIR}/}"
+                    lipo -create "${f}" "${DEPBUILD_X86_64_DIR}/${f##*${DEPBUILD_FATBIN_DIR}/}" -output "${f}"
+                else
+                    log "removing... ${f}"
+                    rm "${f}"
+                fi
             fi
-        fi
             # log "ignoring ${f}"
+        fi
     done
 
 }

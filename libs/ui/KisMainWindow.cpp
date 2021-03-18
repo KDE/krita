@@ -810,8 +810,11 @@ void KisMainWindow::slotPreferences()
 
 void KisMainWindow::slotThemeChanged()
 {
+    KConfigGroup group(KSharedConfig::openConfig(), "theme");
+
+    if (group.readEntry("Theme", "") == d->themeManager->currentThemeName()) return;
+
     // save theme changes instantly
-    KConfigGroup group( KSharedConfig::openConfig(), "theme");
     group.writeEntry("Theme", d->themeManager->currentThemeName());
 
     // reload action icons!

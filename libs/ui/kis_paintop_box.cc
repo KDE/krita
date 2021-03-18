@@ -1365,8 +1365,8 @@ void KisPaintopBox::slotDirtyPresetToggled(bool value)
     m_dirtyPresetsEnabled = value;
     KisConfig cfg(false);
     cfg.setUseDirtyPresets(m_dirtyPresetsEnabled);
-
 }
+
 void KisPaintopBox::slotEraserBrushSizeToggled(bool value)
 {
     m_eraserBrushSizeEnabled = value;

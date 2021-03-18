@@ -2765,8 +2765,8 @@ void KisMainWindow::createActions()
 
     d->themeManager->setThemeMenuAction(new KActionMenu(i18nc("@action:inmenu", "&Themes"), this));
     d->themeManager->registerThemeActions(actionCollection());
-    connect(d->themeManager, SIGNAL(signalThemeChanged()), this, SLOT(slotThemeChanged()));
-    connect(d->themeManager, SIGNAL(signalThemeChanged()), d->welcomePage, SLOT(slotUpdateThemeColors()));
+    connect(d->themeManager, SIGNAL(signalThemeChanged()), this, SLOT(slotThemeChanged()), Qt::UniqueConnection);
+    connect(d->themeManager, SIGNAL(signalThemeChanged()), d->welcomePage, SLOT(slotUpdateThemeColors()), Qt::UniqueConnection);
     d->toggleDockers = actionManager->createAction("view_toggledockers");
 
     KisConfig(true).showDockers(true);

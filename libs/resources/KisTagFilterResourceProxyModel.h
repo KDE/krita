@@ -78,6 +78,10 @@ public:
     bool untagResource(const KisTagSP tag, const int resourceId);
     bool isResourceTagged(const KisTagSP tag, const int resourceId);
 
+Q_SIGNALS:
+
+    void beforeFilterChanges();
+    void afterFilterChanged();
 
 protected:
 

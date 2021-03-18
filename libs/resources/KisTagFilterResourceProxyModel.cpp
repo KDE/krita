@@ -160,27 +160,34 @@ bool KisTagFilterResourceProxyModel::setResourceMetaData(KoResourceSP resource, 
 
 void KisTagFilterResourceProxyModel::setMetaDataFilter(QMap<QString, QVariant> metaDataMap)
 {
+    emit beforeFilterChanges();
     d->metaDataMapFilter = metaDataMap;
     invalidateFilter();
+    emit afterFilterChanged();
 }
 
 void KisTagFilterResourceProxyModel::setTagFilter(const KisTagSP tag)
 {
+    emit beforeFilterChanges();;
     d->currentTagFilter = tag;
     updateTagFilter();
+    emit afterFilterChanged();
 }
 
 void KisTagFilterResourceProxyModel::setStorageFilter(bool useFilter, int storageId)
 {
+    emit beforeFilterChanges();
     d->useStorageIdFilter = useFilter;
     if (useFilter) {
         d->storageId = storageId;
     }
     invalidateFilter();
+    emit afterFilterChanged();
 }
 
 void KisTagFilterResourceProxyModel::updateTagFilter()
 {
+    emit beforeFilterChanges();
     const bool ignoreTagFiltering =
         !d->filterInCurrentTag && !d->filter->isEmpty();
 
@@ -233,6 +240,7 @@ void KisTagFilterResourceProxyModel::updateTagFilter()
     }
 
     invalidateFilter();
+    emit afterFilterChanged();
 }
 
 void KisTagFilterResourceProxyModel::setResourceFilter(const KoResourceSP resource)

@@ -87,6 +87,7 @@ public:
 
     QList<QAbstractButton*> customButtons;
 
+    KoResourceSP currentResource;
 };
 
 KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool usePreview, QWidget *parent)
@@ -110,6 +111,9 @@ KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool
     d->tagFilterProxyModel = new KisTagFilterResourceProxyModel(resourceType, this);
     d->view->setModel(d->tagFilterProxyModel);
     d->tagFilterProxyModel->sort(Qt::DisplayRole);
+
+    connect(d->tagFilterProxyModel, SIGNAL(beforeFilterChanges()), this, SLOT(beforeFilterChanges()));
+    connect(d->tagFilterProxyModel, SIGNAL(afterFilterChanged()), this, SLOT(afterFilterChanged()));
 
     connect(d->view, SIGNAL(currentResourceChanged(QModelIndex)), this, SLOT(activated(QModelIndex)));
     connect(d->view, SIGNAL(currentResourceClicked(QModelIndex)), this, SLOT(clicked(QModelIndex)));
@@ -477,6 +481,19 @@ void KisResourceItemChooser::baseLengthChanged(int length)
 {
     if (d->synced) {
         d->view->setItemSize(QSize(length, length));
+    }
+}
+
+void KisResourceItemChooser::beforeFilterChanges()
+{
+    d->currentResource = d->tagFilterProxyModel->resourceForIndex(d->view->currentIndex());
+}
+
+void KisResourceItemChooser::afterFilterChanged()
+{
+    QModelIndex idx = d->tagFilterProxyModel->indexForResource(d->currentResource);
+    if (idx.isValid()) {
+        d->view->setCurrentIndex(idx);
     }
 }
 

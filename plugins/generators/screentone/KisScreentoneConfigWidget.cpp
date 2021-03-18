@@ -37,28 +37,34 @@ KisScreentoneConfigWidget::KisScreentoneConfigWidget(QWidget* parent, const KoCo
     m_ui.sliderContrast->setSingleStep(1.0);
     m_ui.sliderContrast->setSuffix(i18n("%"));
 
-    m_ui.sliderPositionX->setRange(-1000-0, 1000.0, 2);
+    m_ui.sliderPositionX->setRange(-1000.0, 1000.0, 2);
+    m_ui.sliderPositionX->setSoftRange(-100.0, 100.0);
     m_ui.sliderPositionX->setPrefix(i18n("X: "));
     m_ui.sliderPositionX->setSuffix(i18n(" px"));
     m_ui.sliderPositionX->setSingleStep(1.0);
     m_ui.sliderPositionY->setRange(-1000.0, 1000.0, 2);
+    m_ui.sliderPositionY->setSoftRange(-100.0, 100.0);
     m_ui.sliderPositionY->setPrefix(i18n("Y: "));
     m_ui.sliderPositionY->setSuffix(i18n(" px"));
     m_ui.sliderPositionY->setSingleStep(1.0);
     m_ui.sliderSizeX->setRange(1.0, 1000.0, 2);
+    m_ui.sliderSizeX->setSoftRange(1.0, 100.0);
     m_ui.sliderSizeX->setPrefix(i18n("X: "));
     m_ui.sliderSizeX->setSuffix(i18n(" px"));
     m_ui.sliderSizeX->setSingleStep(1.0);
     m_ui.sliderSizeX->setExponentRatio(4.32);
     m_ui.sliderSizeY->setRange(1.0, 1000.0, 2);
+    m_ui.sliderSizeY->setSoftRange(1.0, 100.0);
     m_ui.sliderSizeY->setPrefix(i18n("Y: "));
     m_ui.sliderSizeY->setSuffix(i18n(" px"));
     m_ui.sliderSizeY->setSingleStep(1.0);
     m_ui.sliderSizeY->setExponentRatio(4.32);
     m_ui.sliderShearX->setRange(-10.0, 10.0, 2);
+    m_ui.sliderShearX->setSoftRange(-2.0, 2.0);
     m_ui.sliderShearX->setPrefix(i18n("X: "));
     m_ui.sliderShearX->setSingleStep(0.1);
     m_ui.sliderShearY->setRange(-10.0, 10.0, 2);
+    m_ui.sliderShearY->setSoftRange(-2.0, 2.0);
     m_ui.sliderShearY->setPrefix(i18n("Y: "));
     m_ui.sliderShearY->setSingleStep(0.1);
 

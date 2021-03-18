@@ -178,8 +178,32 @@ struct ColorSmudgeStrategyColorBased : public ColorSmudgeStrategyBase
     {
         const quint8 colorRateOpacity = this->colorRateOpacity(opacity, colorRateValue);
 
+        if (m_useDullingMode) {
+            m_blendDevice->setRect(srcRect);
+            m_blendDevice->lazyGrowBufferWithoutInitialization();
+
+            const KoColorSpace *cs = m_blendDevice->colorSpace();
+            const int numPixels = srcRect.width() * srcRect.height();
+            dstPainter->device()->readBytes(m_blendDevice->data(), srcRect);
+
+            int weightsSum = 0;
+            QVector<qint16> weights(numPixels);
+            for (int i = 0; i < numPixels; i++) {
+                const int opacity = *(maskDab->data() + i);
+                weights[i] = opacity;
+                weightsSum += opacity;
+            }
+
+            //ENTER_FUNCTION() << ppVar(numPixels) << ppVar(weightsSum);
+            cs->mixColorsOp()->mixColors(m_blendDevice->data(), weights.data(), numPixels, m_preparedDullingColor.data(), weightsSum);
+        }
+
+
         m_blendDevice->setRect(dstRect);
         m_blendDevice->lazyGrowBufferWithoutInitialization();
+
+
+
 
         if (colorRateOpacity > 0 &&
             m_useDullingMode &&
@@ -262,6 +286,8 @@ struct ColorSmudgeStrategyColorBased : public ColorSmudgeStrategyBase
         KisCrossDeviceColorSamplerInt colorPicker(src, dullingFillColor);
         colorPicker.sampleColor(canvasLocalSamplePoint.x(), canvasLocalSamplePoint.y(), dullingFillColor.data());
 
+        dullingFillColor = m_preparedDullingColor;
+
         if (m_smearOp->id() == COMPOSITE_COPY && smudgeRateOpacity == OPACITY_OPAQUE_U8) {
             dst->fill(dst->bounds(), dullingFillColor);
         } else {
@@ -309,6 +335,7 @@ private:
     const KoCompositeOp * m_smearOp;
     const KoCompositeOp * m_colorRateOp;
     bool m_useDullingMode = true;
+    KoColor m_preparedDullingColor;
 };
 
 struct ColorSmudgeStrategyLightness : public ColorSmudgeStrategyColorBased

@@ -32,10 +32,6 @@ KisSessionManagerDialog::KisSessionManagerDialog(QWidget *parent)
     lstSessions->setModel(m_model);
     lstSessions->setModelColumn(KisAbstractResourceModel::Name);
 
-
-    connect(m_model, SIGNAL(beforeResourcesLayoutReset(QModelIndex)), this, SLOT(slotModelAboutToBeReset(QModelIndex)));
-    connect(m_model, SIGNAL(afterResourcesLayoutReset()), this, SLOT(slotModelReset()));
-
     connect(lstSessions, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(slotSessionDoubleClicked(QModelIndex)));
     
     connect(lstSessions->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)), this, SLOT(slotModelSelectionChanged(QItemSelection, QItemSelection)));

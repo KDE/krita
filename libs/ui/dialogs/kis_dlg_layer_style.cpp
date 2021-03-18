@@ -554,7 +554,6 @@ StylesSelector::StylesSelector(QWidget *parent)
 
     connect(ui.cmbStyleCollections, SIGNAL(activated(QString)), this, SLOT(loadStyles(QString)));
     connect(ui.listStyles, SIGNAL(clicked(QModelIndex)), this, SLOT(selectStyle(QModelIndex)));
-    connect(m_resourceModel, SIGNAL(afterResourcesLayoutReset()), this, SLOT(slotResourceModelReset()));
 
     refillCollections();
 

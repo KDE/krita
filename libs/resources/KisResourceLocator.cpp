@@ -300,6 +300,9 @@ bool KisResourceLocator::importResourceFromFile(const QString &resourceType, con
         qWarning() << "Could not import" << fileName << ": resource doesn't load.";
         return false;
     }
+
+    resource->setVersion(0);
+
     KisResourceStorageSP storage = d->storages[makeStorageLocationAbsolute(storageLocation)];
     Q_ASSERT(storage);
     if (!storage->addResource(resource)) {

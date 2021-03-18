@@ -33,6 +33,7 @@
 #include "kis_canvas_resource_provider.h"
 #include "kis_stopgradient_editor.h"
 #include "KisPopupButton.h"
+#include <KisTagFilterResourceProxyModel.h>
 
 #include <KoCanvasResourcesIds.h>
 #include <KoCanvasResourcesInterface.h>
@@ -504,12 +505,11 @@ void KisGradientChooser::Private::addGradient(KoAbstractGradientSP gradient, boo
 
     KisCustomGradientDialog dialog(gradient, q, "KisCustomGradientDialog", canvasResourcesInterface);
 
-    bool fileOverwriteAccepted = false;
-
     QString oldname = gradient->name();
 
     bool shouldSaveResource = true;
 
+    bool fileOverwriteAccepted = false;
     while(!fileOverwriteAccepted) {
         if (dialog.exec() == KoDialog::Accepted) {
 
@@ -542,8 +542,8 @@ void KisGradientChooser::Private::addGradient(KoAbstractGradientSP gradient, boo
         gradient->setFilename(gradient->name() + gradient->defaultFileExtension());
         gradient->setValid(true);
         rserver->addResource(gradient);
-        // We added a new gradient, so it's the last item in the list
-        itemChooser->setCurrentItem(rserver->resourceCount());
+        itemChooser->tagFilterModel()->sort(Qt::DisplayRole);
+        itemChooser->setCurrentResource(gradient);
     } else {
         // TODO: revert the changes made to the resource
     }

@@ -1627,10 +1627,14 @@ const KUndo2Command* KisImage::lastExecutedCommand() const
 
 void KisImage::setUndoStore(KisUndoStore *undoStore)
 {
+    disconnect(m_d->undoStore.data(), SIGNAL(historyStateChanged()), &m_d->signalRouter, SLOT(emitImageModifiedNotification()));
 
     m_d->legacyUndoAdapter.setUndoStore(undoStore);
     m_d->postExecutionUndoAdapter.setUndoStore(undoStore);
     m_d->undoStore.reset(undoStore);
+
+    connect(m_d->undoStore.data(), SIGNAL(historyStateChanged()), &m_d->signalRouter, SLOT(emitImageModifiedNotification()));
+
 }
 
 KisUndoStore* KisImage::undoStore()

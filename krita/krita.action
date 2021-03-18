@@ -2364,7 +2364,7 @@ Enable to preserve playback timing.</text>
       <isCheckable>false</isCheckable>
       <statusTip/>
     </Action>
-    <Action name="copy_columns">
+    <Action name="copy_columns_to_clipboard">
       <icon/>
       <text>Copy Columns</text>
       <whatsThis/>
@@ -2376,7 +2376,7 @@ Enable to preserve playback timing.</text>
       <isCheckable>false</isCheckable>
       <statusTip/>
     </Action>
-    <Action name="cut_columns">
+    <Action name="cut_columns_to_clipboard">
       <icon/>
       <text>Cut Columns</text>
       <whatsThis/>

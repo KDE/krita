@@ -431,13 +431,13 @@ KisPaintopBox::KisPaintopBox(KisViewManager *viewManager, QWidget *parent, const
 
     m_savePresetWidget = new KisPresetSaveWidget(this);
 
-    m_presetsPopup = new KisPaintOpPresetsPopup(m_resourceProvider, m_favoriteResourceManager, m_savePresetWidget, m_brushEditorPopupButton);
-    m_presetsPopup->hide();
-    m_presetsPopup->setWindowTitle(i18n("Brush Editor"));
+    m_presetsEditor = new KisPaintOpPresetsEditorDialog(m_resourceProvider, m_favoriteResourceManager, m_savePresetWidget, m_viewManager->mainWindow());
+    m_presetsEditor->hide();
+    m_presetsEditor->setWindowTitle(i18n("Brush Editor"));
 
-    connect(m_brushEditorPopupButton, SIGNAL(clicked(bool)), m_presetsPopup, SLOT(show()));
-    connect(m_presetsPopup, SIGNAL(brushEditorShown()), SLOT(slotUpdateOptionsWidgetPopup()));
-    connect(m_viewManager->mainWindow(), SIGNAL(themeChanged()), m_presetsPopup, SLOT(updateThemedIcons()));
+    connect(m_brushEditorPopupButton, SIGNAL(clicked(bool)), m_presetsEditor, SLOT(show()));
+    connect(m_presetsEditor->editorWidget(), SIGNAL(brushEditorShown()), SLOT(slotUpdateOptionsWidgetPopup()));
+    connect(m_viewManager->mainWindow(), SIGNAL(themeChanged()), m_presetsEditor->editorWidget(), SLOT(updateThemedIcons()));
 
     m_presetsChooserPopup = new KisPaintOpPresetsChooserPopup();
     m_presetsChooserPopup->setMinimumHeight(550);
@@ -454,17 +454,17 @@ KisPaintopBox::KisPaintopBox(KisViewManager *viewManager, QWidget *parent, const
     Q_FOREACH (const QString & paintopId, keys) {
         factoryList.append(KisPaintOpRegistry::instance()->get(paintopId));
     }
-    m_presetsPopup->setPaintOpList(factoryList);
+    m_presetsEditor->editorWidget()->setPaintOpList(factoryList);
 
-    connect(m_presetsPopup       , SIGNAL(paintopActivated(QString))          , SLOT(slotSetPaintop(QString)));
-    connect(m_presetsPopup       , SIGNAL(defaultPresetClicked())             , SLOT(slotSetupDefaultPreset()));
-    connect(m_presetsPopup       , SIGNAL(signalResourceSelected(KoResourceSP )), SLOT(resourceSelected(KoResourceSP )));
-    connect(m_presetsPopup       , SIGNAL(reloadPresetClicked())              , SLOT(slotReloadPreset()));
-    connect(m_presetsPopup       , SIGNAL(dirtyPresetToggled(bool))           , SLOT(slotDirtyPresetToggled(bool)));
-    connect(m_presetsPopup       , SIGNAL(eraserBrushSizeToggled(bool))       , SLOT(slotEraserBrushSizeToggled(bool)));
-    connect(m_presetsPopup       , SIGNAL(eraserBrushOpacityToggled(bool))       , SLOT(slotEraserBrushOpacityToggled(bool)));
+    connect(m_presetsEditor->editorWidget()       , SIGNAL(paintopActivated(QString))          , SLOT(slotSetPaintop(QString)));
+    connect(m_presetsEditor->editorWidget()       , SIGNAL(defaultPresetClicked())             , SLOT(slotSetupDefaultPreset()));
+    connect(m_presetsEditor->editorWidget()       , SIGNAL(signalResourceSelected(KoResourceSP )), SLOT(resourceSelected(KoResourceSP )));
+    connect(m_presetsEditor->editorWidget()       , SIGNAL(reloadPresetClicked())              , SLOT(slotReloadPreset()));
+    connect(m_presetsEditor->editorWidget()       , SIGNAL(dirtyPresetToggled(bool))           , SLOT(slotDirtyPresetToggled(bool)));
+    connect(m_presetsEditor->editorWidget()       , SIGNAL(eraserBrushSizeToggled(bool))       , SLOT(slotEraserBrushSizeToggled(bool)));
+    connect(m_presetsEditor->editorWidget()       , SIGNAL(eraserBrushOpacityToggled(bool))       , SLOT(slotEraserBrushOpacityToggled(bool)));
 
-    connect(m_presetsPopup, SIGNAL(createPresetFromScratch(QString)), this, SLOT(slotCreatePresetFromScratch(QString)));
+    connect(m_presetsEditor->editorWidget(), SIGNAL(createPresetFromScratch(QString)), this, SLOT(slotCreatePresetFromScratch(QString)));
 
     connect(m_presetsChooserPopup, SIGNAL(resourceSelected(KoResourceSP ))      , SLOT(resourceSelected(KoResourceSP )));
     connect(m_presetsChooserPopup, SIGNAL(resourceClicked(KoResourceSP ))      , SLOT(resourceSelected(KoResourceSP )));
@@ -537,7 +537,7 @@ KisPaintopBox::~KisPaintopBox()
         }
     }
     // Do not delete the widget, since it is global to the application, not owned by the view
-    m_presetsPopup->setPaintOpSettingsWidget(0);
+    m_presetsEditor->editorWidget()->setPaintOpSettingsWidget(0);
     qDeleteAll(m_paintopOptionWidgets);
     delete m_favoriteResourceManager;
 
@@ -553,8 +553,8 @@ void KisPaintopBox::restoreResource(KoResourceSP resource)
     if (preset) {
         setCurrentPaintop(preset);
 
-        m_presetsPopup->setPresetImage(preset->image());
-        m_presetsPopup->resourceSelected(resource);
+        m_presetsEditor->editorWidget()->setPresetImage(preset->image());
+        m_presetsEditor->editorWidget()->resourceSelected(resource);
     }
 }
 
@@ -574,7 +574,7 @@ void KisPaintopBox::resourceSelected(KoResourceSP resource)
         return;
     }
 
-    m_presetsPopup->setCreatingBrushFromScratch(false); // show normal UI elements when we are not creating
+    m_presetsEditor->editorWidget()->setCreatingBrushFromScratch(false); // show normal UI elements when we are not creating
 
     KisPaintOpPresetSP preset = resource.dynamicCast<KisPaintOpPreset>();
 
@@ -593,8 +593,8 @@ void KisPaintopBox::resourceSelected(KoResourceSP resource)
         dbgResources << "resourceSelected: preset" << preset << (preset ? QString("%1").arg(preset->valid()) : "");
         setCurrentPaintop(preset);
 
-        m_presetsPopup->setPresetImage(preset->image());
-        m_presetsPopup->resourceSelected(resource);
+        m_presetsEditor->editorWidget()->setPresetImage(preset->image());
+        m_presetsEditor->editorWidget()->resourceSelected(resource);
     }
 }
 
@@ -642,7 +642,7 @@ void KisPaintopBox::setCurrentPaintop(KisPaintOpPresetSP preset)
     m_optionWidget->setImage(m_viewManager->image());
     m_optionWidget->setNode(m_viewManager->activeNode());
 
-    m_presetsPopup->setPaintOpSettingsWidget(m_optionWidget);
+    m_presetsEditor->editorWidget()->setPaintOpSettingsWidget(m_optionWidget);
 
     m_resourceProvider->setPaintOpPreset(preset);
 
@@ -655,7 +655,7 @@ void KisPaintopBox::setCurrentPaintop(KisPaintOpPresetSP preset)
 
     // load the current brush engine icon for the brush editor toolbar button
     m_brushEditorPopupButton->setThumbnail(preset->image());
-    m_presetsPopup->setCurrentPaintOpId(paintop.id());
+    m_presetsEditor->editorWidget()->setCurrentPaintOpId(paintop.id());
 
 
     //o() << "\tsetting the new preset for" << m_currTabletToolID.uniqueID << "to" << preset->name();
@@ -664,7 +664,7 @@ void KisPaintopBox::setCurrentPaintop(KisPaintOpPresetSP preset)
     m_tabletToolMap[m_currTabletToolID].paintOpID = preset->paintOp();
 
 
-    if (m_presetsPopup->currentPaintOpId() != paintop.id()) {
+    if (m_presetsEditor->editorWidget()->currentPaintOpId() != paintop.id()) {
         // Must change the paintop as the current one is not supported
         // by the new colorspace.
         dbgKrita << "current paintop " << paintop.name() << " was not set, not supported by colorspace";
@@ -694,8 +694,8 @@ void KisPaintopBox::slotUpdateOptionsWidgetPopup()
 
     m_optionWidget->setConfigurationSafe(preset->settings());
 
-    m_presetsPopup->resourceSelected(preset);
-    m_presetsPopup->updateViewSettings();
+    m_presetsEditor->editorWidget()->resourceSelected(preset);
+    m_presetsEditor->editorWidget()->updateViewSettings();
 
     // the m_viewManager->image() is set earlier, but the reference will be missing when the stamp button is pressed
     // need to later do some research on how and when we should be using weak shared pointers (WSP) that creates this situation
@@ -876,13 +876,13 @@ void KisPaintopBox::slotCreatePresetFromScratch(QString paintop)
     slotSetPaintop(paintop);  // change the paintop settings area and update the UI
 
     if (!preset) {
-        m_presetsPopup->setCreatingBrushFromScratch(true); // disable UI elements while creating from scratch
+        m_presetsEditor->editorWidget()->setCreatingBrushFromScratch(true); // disable UI elements while creating from scratch
         preset = m_resourceProvider->currentPreset();
     } else {
         m_resourceProvider->setPaintOpPreset(preset);
         preset->setOptionsWidget(m_optionWidget);
     }
-    m_presetsPopup->resourceSelected(preset);  // this helps update the UI on the brush editor
+    m_presetsEditor->editorWidget()->resourceSelected(preset);  // this helps update the UI on the brush editor
 }
 
 void KisPaintopBox::slotCanvasResourceChangeAttempted(int key, const QVariant &value)
@@ -910,7 +910,7 @@ void KisPaintopBox::slotCanvasResourceChanged(int key, const QVariant &value)
              * Update currently selected preset in both the popup widgets
              */
             m_presetsChooserPopup->canvasResourceChanged(preset);
-            m_presetsPopup->currentPresetChanged(preset);
+            m_presetsEditor->editorWidget()->currentPresetChanged(preset);
         }
 
         if (key == KoCanvasResource::CurrentCompositeOp) {
@@ -963,7 +963,7 @@ void KisPaintopBox::slotSetupDefaultPreset()
 
     // tell the brush editor that the resource has changed
     // so it can update everything
-    m_presetsPopup->resourceSelected(preset);
+    m_presetsEditor->editorWidget()->resourceSelected(preset);
 }
 
 void KisPaintopBox::slotNodeChanged(const KisNodeSP node)
@@ -1098,7 +1098,7 @@ void KisPaintopBox::sliderChanged(int n)
         m_resourceProvider->setOpacity(opacity);
     }
 
-    m_presetsPopup->resourceSelected(m_resourceProvider->currentPreset());
+    m_presetsEditor->editorWidget()->resourceSelected(m_resourceProvider->currentPreset());
 }
 
 void KisPaintopBox::slotSlider1Changed()
@@ -1313,7 +1313,7 @@ void KisPaintopBox::slotGuiChangedCurrentPreset() // Called only when UI is chan
     }
 
     // we should also update the preset strip to update the status of the "dirty" mark
-    m_presetsPopup->resourceSelected(m_resourceProvider->currentPreset());
+    m_presetsEditor->editorWidget()->resourceSelected(m_resourceProvider->currentPreset());
 
     // TODO!!!!!!!!
     //m_presetsPopup->updateViewSettings();
@@ -1358,8 +1358,8 @@ void KisPaintopBox::slotDirtyPresetToggled(bool value)
 {
     if (!value) {
         slotReloadPreset();
-        m_presetsPopup->resourceSelected(m_resourceProvider->currentPreset());
-        m_presetsPopup->updateViewSettings();
+        m_presetsEditor->editorWidget()->resourceSelected(m_resourceProvider->currentPreset());
+        m_presetsEditor->editorWidget()->updateViewSettings();
     }
     m_dirtyPresetsEnabled = value;
     KisConfig cfg(false);

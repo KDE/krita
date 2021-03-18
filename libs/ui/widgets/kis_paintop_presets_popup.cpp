@@ -48,7 +48,7 @@
 #include <brushengine/kis_paintop_factory.h>
 #include <kis_preset_live_preview_view.h>
 
-struct KisPaintOpPresetsPopup::Private
+struct KisPaintOpPresetsEditor::Private
 {
 
 public:
@@ -69,11 +69,11 @@ public:
     KisSignalAutoConnectionsStore widgetConnections;
 };
 
-KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resourceProvider,
+KisPaintOpPresetsEditor::KisPaintOpPresetsEditor(KisCanvasResourceProvider * resourceProvider,
                                                KisFavoriteResourceManager* favoriteResourceManager,
                                                KisPresetSaveWidget* savePresetWidget,
                                                QWidget * parent)
-    : QWidget(parent, Qt::Dialog)
+    : QWidget(parent)
     , m_d(new Private())
 {
     setObjectName("KisPaintOpPresetsPopup");
@@ -306,7 +306,7 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
 
 }
 
-void KisPaintOpPresetsPopup::slotBlackListCurrentPreset()
+void KisPaintOpPresetsEditor::slotBlackListCurrentPreset()
 {
     KisPaintOpPresetResourceServer * rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
     KisPaintOpPresetSP curPreset = m_d->resourceProvider->currentPreset();
@@ -317,17 +317,17 @@ void KisPaintOpPresetsPopup::slotBlackListCurrentPreset()
 }
 
 
-void KisPaintOpPresetsPopup::slotRenameBrushActivated()
+void KisPaintOpPresetsEditor::slotRenameBrushActivated()
 {
     toggleBrushRenameUIActive(true);
 }
 
-void KisPaintOpPresetsPopup::slotRenameBrushDeactivated()
+void KisPaintOpPresetsEditor::slotRenameBrushDeactivated()
 {
     toggleBrushRenameUIActive(false);
 }
 
-void KisPaintOpPresetsPopup::toggleBrushRenameUIActive(bool isRenaming)
+void KisPaintOpPresetsEditor::toggleBrushRenameUIActive(bool isRenaming)
 {
     // This function doesn't really do anything except get the UI in a state to rename a brush preset
     m_d->uiWdgPaintOpPresetSettings.renameBrushNameTextField->setVisible(isRenaming);
@@ -354,7 +354,7 @@ void KisPaintOpPresetsPopup::toggleBrushRenameUIActive(bool isRenaming)
 
 }
 
-void KisPaintOpPresetsPopup::slotSaveRenameCurrentBrush()
+void KisPaintOpPresetsEditor::slotSaveRenameCurrentBrush()
 {
     // if you are renaming a brush, that is different than updating the settings
     // make sure we are in a clean state before renaming. This logic might change,
@@ -399,7 +399,7 @@ void KisPaintOpPresetsPopup::slotSaveRenameCurrentBrush()
     slotUpdatePresetSettings(); // update visibility of dirty preset and icon
 }
 
-void KisPaintOpPresetsPopup::slotResourceChanged(int key, const QVariant &value)
+void KisPaintOpPresetsEditor::slotResourceChanged(int key, const QVariant &value)
 {
     if (key == KoCanvasResource::LodAvailability) {
         m_d->uiWdgPaintOpPresetSettings.wdgLodAvailability->slotUserChangedLodAvailability(value.toBool());
@@ -410,17 +410,17 @@ void KisPaintOpPresetsPopup::slotResourceChanged(int key, const QVariant &value)
     }
 }
 
-void KisPaintOpPresetsPopup::slotLodAvailabilityChanged(bool value)
+void KisPaintOpPresetsEditor::slotLodAvailabilityChanged(bool value)
 {
     m_d->resourceProvider->resourceManager()->setResource(KoCanvasResource::LodAvailability, QVariant(value));
 }
 
-void KisPaintOpPresetsPopup::slotLodThresholdChanged(qreal value)
+void KisPaintOpPresetsEditor::slotLodThresholdChanged(qreal value)
 {
     m_d->resourceProvider->resourceManager()->setResource(KoCanvasResource::LodSizeThreshold, QVariant(value));
 }
 
-KisPaintOpPresetsPopup::~KisPaintOpPresetsPopup()
+KisPaintOpPresetsEditor::~KisPaintOpPresetsEditor()
 {
     if (m_d->settingsWidget) {
         m_d->layout->removeWidget(m_d->settingsWidget);
@@ -432,7 +432,7 @@ KisPaintOpPresetsPopup::~KisPaintOpPresetsPopup()
     delete newPresetBrushEnginesMenu;
 }
 
-void KisPaintOpPresetsPopup::setPaintOpSettingsWidget(QWidget * widget)
+void KisPaintOpPresetsEditor::setPaintOpSettingsWidget(QWidget * widget)
 {
     if (m_d->settingsWidget) {
         m_d->layout->removeWidget(m_d->settingsWidget);
@@ -482,7 +482,7 @@ void KisPaintOpPresetsPopup::setPaintOpSettingsWidget(QWidget * widget)
     slotUpdateLodAvailability();
 }
 
-void KisPaintOpPresetsPopup::slotUpdateLodAvailability()
+void KisPaintOpPresetsEditor::slotUpdateLodAvailability()
 {
     if (!m_d->settingsWidget) return;
 
@@ -490,17 +490,17 @@ void KisPaintOpPresetsPopup::slotUpdateLodAvailability()
     m_d->uiWdgPaintOpPresetSettings.wdgLodAvailability->setLimitations(l);
 }
 
-QImage KisPaintOpPresetsPopup::cutOutOverlay()
+QImage KisPaintOpPresetsEditor::cutOutOverlay()
 {
     return m_d->uiWdgPaintOpPresetSettings.scratchPad->cutoutOverlay();
 }
 
-void KisPaintOpPresetsPopup::contextMenuEvent(QContextMenuEvent *e)
+void KisPaintOpPresetsEditor::contextMenuEvent(QContextMenuEvent *e)
 {
     Q_UNUSED(e);
 }
 
-void KisPaintOpPresetsPopup::switchDetached(bool show)
+void KisPaintOpPresetsEditor::switchDetached(bool show)
 {
     if (parentWidget()) {
 
@@ -524,12 +524,12 @@ void KisPaintOpPresetsPopup::switchDetached(bool show)
     }
 }
 
-void KisPaintOpPresetsPopup::setCreatingBrushFromScratch(bool enabled)
+void KisPaintOpPresetsEditor::setCreatingBrushFromScratch(bool enabled)
 {
     m_d->isCreatingBrushFromScratch = enabled;
 }
 
-void KisPaintOpPresetsPopup::resourceSelected(KoResourceSP resource)
+void KisPaintOpPresetsEditor::resourceSelected(KoResourceSP resource)
 {
     // this gets called every time the brush editor window is opened
     // TODO: this gets called multiple times whenever the preset is changed in the presets area
@@ -574,7 +574,7 @@ bool variantLessThan(const KisPaintOpInfo v1, const KisPaintOpInfo v2)
     return v1.priority < v2.priority;
 }
 
-void KisPaintOpPresetsPopup::setPaintOpList(const QList< KisPaintOpFactory* >& list)
+void KisPaintOpPresetsEditor::setPaintOpList(const QList< KisPaintOpFactory* >& list)
 {
     m_d->uiWdgPaintOpPresetSettings.brushEgineComboBox->clear(); // reset combobox list just in case
 
@@ -620,23 +620,23 @@ void KisPaintOpPresetsPopup::setPaintOpList(const QList< KisPaintOpFactory* >& l
 }
 
 
-void KisPaintOpPresetsPopup::setCurrentPaintOpId(const QString& paintOpId)
+void KisPaintOpPresetsEditor::setCurrentPaintOpId(const QString& paintOpId)
 {
     current_paintOpId = paintOpId;
 }
 
 
-QString KisPaintOpPresetsPopup::currentPaintOpId() {
+QString KisPaintOpPresetsEditor::currentPaintOpId() {
     return current_paintOpId;
 }
 
-void KisPaintOpPresetsPopup::setPresetImage(const QImage& image)
+void KisPaintOpPresetsEditor::setPresetImage(const QImage& image)
 {
     m_d->uiWdgPaintOpPresetSettings.scratchPad->setPresetImage(image);
     saveDialog->brushPresetThumbnailWidget->setPresetImage(image);
 }
 
-void KisPaintOpPresetsPopup::hideEvent(QHideEvent *event)
+void KisPaintOpPresetsEditor::hideEvent(QHideEvent *event)
 {
     if (m_d->ignoreHideEvents) {
         return;
@@ -647,7 +647,7 @@ void KisPaintOpPresetsPopup::hideEvent(QHideEvent *event)
     QWidget::hideEvent(event);
 }
 
-void KisPaintOpPresetsPopup::showEvent(QShowEvent *)
+void KisPaintOpPresetsEditor::showEvent(QShowEvent *)
 {
     if (m_d->detached) {
         window()->setGeometry(m_d->detachedGeometry);
@@ -656,7 +656,7 @@ void KisPaintOpPresetsPopup::showEvent(QShowEvent *)
     emit brushEditorShown();
 }
 
-void KisPaintOpPresetsPopup::resizeEvent(QResizeEvent* event)
+void KisPaintOpPresetsEditor::resizeEvent(QResizeEvent* event)
 {
     QWidget::resizeEvent(event);
     if (parentWidget()) {
@@ -667,12 +667,12 @@ void KisPaintOpPresetsPopup::resizeEvent(QResizeEvent* event)
     }
 }
 
-bool KisPaintOpPresetsPopup::detached() const
+bool KisPaintOpPresetsEditor::detached() const
 {
     return m_d->detached;
 }
 
-void KisPaintOpPresetsPopup::slotSwitchScratchpad(bool visible)
+void KisPaintOpPresetsEditor::slotSwitchScratchpad(bool visible)
 {
     // hide all the internal controls except the toggle button
     m_d->uiWdgPaintOpPresetSettings.scratchPad->setVisible(visible);
@@ -693,11 +693,11 @@ void KisPaintOpPresetsPopup::slotSwitchScratchpad(bool visible)
     cfg.setScratchpadVisible(visible);
 }
 
-void KisPaintOpPresetsPopup::slotSwitchShowEditor(bool visible) {
+void KisPaintOpPresetsEditor::slotSwitchShowEditor(bool visible) {
     m_d->uiWdgPaintOpPresetSettings.brushEditorSettingsControls->setVisible(visible);
 }
 
-void KisPaintOpPresetsPopup::slotSwitchShowPresets(bool visible) {
+void KisPaintOpPresetsEditor::slotSwitchShowPresets(bool visible) {
 
     m_d->uiWdgPaintOpPresetSettings.presetWidget->setVisible(visible);
     m_d->uiWdgPaintOpPresetSettings.presetChangeViewToolButton->setVisible(visible);
@@ -719,7 +719,7 @@ void KisPaintOpPresetsPopup::slotSwitchShowPresets(bool visible) {
 
 }
 
-void KisPaintOpPresetsPopup::slotUpdatePaintOpFilter() {
+void KisPaintOpPresetsEditor::slotUpdatePaintOpFilter() {
     QVariant userData = m_d->uiWdgPaintOpPresetSettings.brushEgineComboBox->currentData(); // grab paintOpID from data
     QString filterPaintOpId = userData.toString();
 
@@ -729,7 +729,7 @@ void KisPaintOpPresetsPopup::slotUpdatePaintOpFilter() {
     m_d->uiWdgPaintOpPresetSettings.presetWidget->setPresetFilter(filterPaintOpId);
 }
 
-void KisPaintOpPresetsPopup::slotSaveBrushPreset() {
+void KisPaintOpPresetsEditor::slotSaveBrushPreset() {
     // here we are assuming that people want to keep their existing preset icon. We will just update the
     // settings and save a new copy with the same name.
     // there is a dialog with save options, but we don't need to show it in this situation
@@ -742,23 +742,23 @@ void KisPaintOpPresetsPopup::slotSaveBrushPreset() {
     slotUpdatePresetSettings();
 }
 
-void KisPaintOpPresetsPopup::slotSaveNewBrushPreset() {
+void KisPaintOpPresetsEditor::slotSaveNewBrushPreset() {
     saveDialog->useNewBrushDialog(true);
     saveDialog->saveScratchPadThumbnailArea(m_d->uiWdgPaintOpPresetSettings.scratchPad->cutoutOverlay());
     saveDialog->showDialog();
 }
 
-void KisPaintOpPresetsPopup::slotCreateNewBrushPresetEngine()
+void KisPaintOpPresetsEditor::slotCreateNewBrushPresetEngine()
 {
     emit createPresetFromScratch(sender()->objectName());
 }
 
-void KisPaintOpPresetsPopup::updateViewSettings()
+void KisPaintOpPresetsEditor::updateViewSettings()
 {
     m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser->updateViewSettings();
 }
 
-void KisPaintOpPresetsPopup::currentPresetChanged(KisPaintOpPresetSP preset)
+void KisPaintOpPresetsEditor::currentPresetChanged(KisPaintOpPresetSP preset)
 {
     if (preset) {
         m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser->setCurrentResource(preset);
@@ -766,7 +766,7 @@ void KisPaintOpPresetsPopup::currentPresetChanged(KisPaintOpPresetSP preset)
     }
 }
 
-void KisPaintOpPresetsPopup::updateThemedIcons()
+void KisPaintOpPresetsEditor::updateThemedIcons()
 {
     m_d->uiWdgPaintOpPresetSettings.paintPresetIcon->setIcon(KisIconUtils::loadIcon("krita_tool_freehand"));
     m_d->uiWdgPaintOpPresetSettings.fillLayer->setIcon(KisIconUtils::loadIcon("document-new"));
@@ -804,7 +804,7 @@ void KisPaintOpPresetsPopup::updateThemedIcons()
     }
 }
 
-void KisPaintOpPresetsPopup::slotUpdatePresetSettings()
+void KisPaintOpPresetsEditor::slotUpdatePresetSettings()
 {
     if (!m_d->resourceProvider) {
         return;
@@ -836,4 +836,18 @@ void KisPaintOpPresetsPopup::slotUpdatePresetSettings()
         m_d->uiWdgPaintOpPresetSettings.liveBrushPreviewView->setCurrentPreset(m_d->resourceProvider->currentPreset());
         m_d->uiWdgPaintOpPresetSettings.liveBrushPreviewView->requestUpdateStroke();
     }
+}
+
+KisPaintOpPresetsEditorDialog::KisPaintOpPresetsEditorDialog(KisCanvasResourceProvider *resourceProvider, KisFavoriteResourceManager *favoriteResourceManager,
+                                                           KisPresetSaveWidget *savePresetWidget, QWidget *parent)
+    : KoDialog(parent)
+{
+    m_popupWidget = new KisPaintOpPresetsEditor(resourceProvider, favoriteResourceManager, savePresetWidget, 0);
+    setMainWidget(m_popupWidget);
+    setButtons(KoDialog::Close);
+}
+
+KisPaintOpPresetsEditorDialog::~KisPaintOpPresetsEditorDialog()
+{
+
 }

@@ -1026,9 +1026,13 @@ void Document::setCurrentTime(int time)
 
 QStringList Document::annotationTypes() const
 {
+    if (!d->document) return QStringList();
+
     QStringList types;
 
     KisImageSP image = d->document->image().toStrongRef();
+
+    if (!image) return QStringList();
 
     vKisAnnotationSP_it beginIt = image->beginAnnotations();
     vKisAnnotationSP_it endIt = image->endAnnotations();

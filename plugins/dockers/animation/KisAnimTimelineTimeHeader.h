@@ -70,6 +70,7 @@ Q_SIGNALS:
     void sigRemoveHoldColumnsCustom();
 
     void sigMirrorColumns();
+    void sigClearCache();
 
     void sigCutColumns();
     void sigCopyColumns();

@@ -124,6 +124,9 @@ void KisAnimTimelineTimeHeader::setActionManager(KisActionManager *actionManager
         action = actionManager->createAction("mirror_columns");
         connect(action, SIGNAL(triggered()), SIGNAL(sigMirrorColumns()));
 
+        action = actionManager->createAction("clear_animation_cache");
+        connect(action, SIGNAL(triggered()), SIGNAL(sigClearCache()));
+
         action = actionManager->createAction("copy_columns_to_clipboard");
         connect(action, SIGNAL(triggered()), SIGNAL(sigCopyColumns()));
 
@@ -510,6 +513,10 @@ void KisAnimTimelineTimeHeader::mousePressEvent(QMouseEvent *e)
                 menu.addSeparator();
                 KisActionManager::safePopulateMenu(&menu, "mirror_columns", m_d->actionMan);
             }
+
+            menu.addSeparator();
+
+            KisActionManager::safePopulateMenu(&menu, "clear_animation_cache", m_d->actionMan);
 
             menu.exec(e->globalPos());
 

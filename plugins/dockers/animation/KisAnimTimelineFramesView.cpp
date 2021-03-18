@@ -158,6 +158,7 @@ KisAnimTimelineFramesView::KisAnimTimelineFramesView(QWidget *parent)
     connect(m_d->horizontalRuler, SIGNAL(sigRemoveHoldColumnsCustom()), SLOT(slotRemoveMultipleHoldFrameColumns()));
 
     connect(m_d->horizontalRuler, SIGNAL(sigMirrorColumns()), SLOT(slotMirrorColumns()));
+    connect(m_d->horizontalRuler, SIGNAL(sigClearCache()), SLOT(slotClearCache()));
 
     connect(m_d->horizontalRuler, SIGNAL(sigCopyColumns()), SLOT(slotCopyColumns()));
     connect(m_d->horizontalRuler, SIGNAL(sigCutColumns()), SLOT(slotCutColumns()));
@@ -713,6 +714,10 @@ void KisAnimTimelineFramesView::slotMirrorFrames(bool entireColumn)
     if (!indexes.isEmpty()) {
         m_d->model->mirrorFrames(indexes);
     }
+}
+
+void KisAnimTimelineFramesView::slotClearCache() {
+    m_d->model->clearEntireCache();
 }
 
 void KisAnimTimelineFramesView::slotPasteFrames(bool entireColumn)

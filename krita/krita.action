@@ -2304,6 +2304,18 @@ Enable to preserve playback timing.</text>
       <isCheckable>false</isCheckable>
       <statusTip/>
     </Action>
+    <Action name="clear_animation_cache">
+        <icon/>
+        <text>Clear Cache</text>
+        <whatsThis/>
+        <toolTip>Clear entire animation cache. Useful for debugging.</toolTip>
+        <iconText/>
+        <activationFlags>100000</activationFlags>
+        <activationConditions>0</activationConditions>
+        <shortcut/>
+        <isCheckable>false</isCheckable>
+        <statusTip/>
+    </Action>
     <Action name="copy_frames">
       <icon/>
       <text>Copy Keyframes</text>

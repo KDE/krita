@@ -1041,3 +1041,8 @@ void KisAnimTimelineFramesModel::setFullClipRangeEnd(int column)
 {
     m_d->image->animationInterface()->setFullClipRangeEndTime(column);
 }
+
+void KisAnimTimelineFramesModel::clearEntireCache()
+{
+    m_d->image->animationInterface()->invalidateFrames(KisTimeSpan::infinite(0), m_d->image->bounds());
+}

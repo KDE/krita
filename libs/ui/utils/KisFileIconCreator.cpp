@@ -17,7 +17,7 @@
 #include <KisPreviewFileDialog.h>
 #include <QFileInfo>
 
-#include <krita_utils.h>
+#include <kis_painting_tweaks.h>
 #include <kis_debug.h>
 
 namespace
@@ -65,7 +65,7 @@ QIcon createIcon(const QImage &source, const QSize &iconSize, bool dontUpsize = 
     QPainter painter(&result);
     QColor textColor = qApp->palette().color(QPalette::Text);
     QColor backgroundColor = qApp->palette().color(QPalette::Background);
-    QColor blendedColor = KritaUtils::blendColors(textColor, backgroundColor, 0.2);
+    QColor blendedColor = KisPaintingTweaks::blendColors(textColor, backgroundColor, 0.2);
     painter.setPen(blendedColor);
     painter.drawRect(result.rect().adjusted(0, 0, -1, -1));
 

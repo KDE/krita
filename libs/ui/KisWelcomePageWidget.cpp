@@ -25,7 +25,7 @@
 #include <QMenu>
 
 #include "kis_icon_utils.h"
-#include "krita_utils.h"
+#include <kis_painting_tweaks.h>
 #include "KoStore.h"
 #include "kis_config.h"
 #include "KisDocument.h"
@@ -276,7 +276,7 @@ void KisWelcomePageWidget::showDropAreaIndicator(bool show)
     } else {
         QColor textColor = qApp->palette().color(QPalette::Text);
         QColor backgroundColor = qApp->palette().color(QPalette::Background);
-        QColor blendedColor = KritaUtils::blendColors(textColor, backgroundColor, 0.8);
+        QColor blendedColor = KisPaintingTweaks::blendColors(textColor, backgroundColor, 0.8);
 
         // QColor.name() turns it into a hex/web format
         QString dropFrameStyle = QString("QFrame#dropAreaIndicator { border: 2px dotted ").append(blendedColor.name()).append(" }") ;
@@ -291,7 +291,7 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
     backgroundColor = qApp->palette().color(QPalette::Background);
 
     // make the welcome screen labels a subtle color so it doesn't clash with the main UI elements
-    blendedColor = KritaUtils::blendColors(textColor, backgroundColor, 0.8);
+    blendedColor = KisPaintingTweaks::blendColors(textColor, backgroundColor, 0.8);
     // only apply color to the widget itself, not to the tooltip or something
     blendedStyle = "QWidget{color: " + blendedColor.name() + "}";
 
@@ -367,12 +367,12 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
     QString translationNoFeed = i18n("You can <a href=\"ignored\" style=\"color: COLOR_PLACEHOLDER; text-decoration: underline;\">enable news</a> from krita.org in various languages with the menu above");
     labelNoFeed->setText(translationNoFeed.replace("COLOR_PLACEHOLDER", blendedColor.name()));
 
-    const QColor faintTextColor = KritaUtils::blendColors(textColor, backgroundColor, 0.4);
+    const QColor faintTextColor = KisPaintingTweaks::blendColors(textColor, backgroundColor, 0.4);
     const QString &faintTextStyle = "QWidget{color: " + faintTextColor.name() + "}";
     labelNoRecentDocs->setStyleSheet(faintTextStyle);
     labelNoFeed->setStyleSheet(faintTextStyle);
 
-    const QColor frameColor = KritaUtils::blendColors(textColor, backgroundColor, 0.1);
+    const QColor frameColor = KisPaintingTweaks::blendColors(textColor, backgroundColor, 0.1);
     const QString &frameQss = "{border: 1px solid " + frameColor.name() + "}";
     recentDocsFrame->setStyleSheet("QFrame#recentDocsFrame" + frameQss);
     newsFrame->setStyleSheet("QFrame#newsFrame" + frameQss);

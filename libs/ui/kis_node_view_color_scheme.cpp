@@ -9,7 +9,7 @@
 #include <QTreeView>
 #include <QStyle>
 
-#include "krita_utils.h"
+#include <kis_painting_tweaks.h>
 #include <QApplication>
 
 #include <QGlobalStatic>
@@ -32,7 +32,7 @@ struct KisNodeViewColorScheme::Private
 
             const QColor noLabelSetColor = qApp->palette().color(QPalette::Highlight);
             for (auto it = colorLabels.begin(); it != colorLabels.end(); ++it) {
-                KritaUtils::dragColor(&(*it), noLabelSetColor, 0.35);
+                KisPaintingTweaks::dragColor(&(*it), noLabelSetColor, 0.35);
             }
         }
     }

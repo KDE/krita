@@ -851,12 +851,12 @@ void KisMainWindow::slotThemeChanged()
 
            )";
 
-    QString themeName = d->themeManager->currentThemeName();
-    bool isDarkTheme = themeName.toLower().contains("dark");
-    if(isDarkTheme) {
-        globalStyleSheet = globalStyleSheet.replace("{close-button-location}", ":/pics/light_close-tab.svg");
-    } else {
+    if (KisIconUtils::useDarkIcons()) {
         globalStyleSheet = globalStyleSheet.replace("{close-button-location}", ":/pics/dark_close-tab.svg");
+    }
+    else {
+        globalStyleSheet = globalStyleSheet.replace("{close-button-location}", ":/pics/light_close-tab.svg");
+
     }
 
     qApp->setStyleSheet(globalStyleSheet);

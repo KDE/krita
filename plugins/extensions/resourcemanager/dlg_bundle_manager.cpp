@@ -265,7 +265,6 @@ void DlgBundleManager::currentCellSelectedChanged(QModelIndex current, QModelInd
 {
     Q_UNUSED(previous);
 
-    ENTER_FUNCTION() << "Current cell changed!";
     QModelIndex idx = m_ui->listView->currentIndex();
     KIS_ASSERT(m_proxyModel);
     if (!idx.isValid()) {

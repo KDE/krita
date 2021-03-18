@@ -1688,11 +1688,13 @@ void KisImage::addAnnotation(KisAnnotationSP annotation)
     while (it != m_d->annotations.end()) {
         if ((*it)->type() == annotation->type()) {
             *it = annotation;
+            emit sigImageModified;
             return;
         }
         ++it;
     }
     m_d->annotations.push_back(annotation);
+    emit sigImageModified;
 }
 
 KisAnnotationSP KisImage::annotation(const QString& type)

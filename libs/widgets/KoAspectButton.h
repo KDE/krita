@@ -6,7 +6,7 @@
 #ifndef KOASPECTBUTTON_H
 #define KOASPECTBUTTON_H
 
-#include <QAbstractButton>
+#include <QToolButton>
 
 #include "kritawidgets_export.h"
 
@@ -14,7 +14,7 @@
  * This button gives a visual indication of weather the 'aspect ratio' is locked.
  * Typically you would use this alongside 2 spinboxes with a value like a width and height.
  */
-class KRITAWIDGETS_EXPORT KoAspectButton : public QAbstractButton {
+class KRITAWIDGETS_EXPORT KoAspectButton : public QToolButton {
     Q_OBJECT
 public:
     /// constructor
@@ -32,19 +32,15 @@ public Q_SLOTS:
      */
     void setKeepAspectRatio(bool keep);
 
+    // connect the button release
+    void buttonReleased();
+
 Q_SIGNALS:
     /**
      * This signal is emitted every time the button changes value, either by user interaction or
      *  by programetically setting it.
      */
     void keepAspectRatioChanged(bool keep);
-
-protected:
-    /// reimplemented
-    void mouseReleaseEvent(QMouseEvent *) override;
-    void paintEvent (QPaintEvent *) override;
-    QSize sizeHint () const override;
-    void keyReleaseEvent (QKeyEvent *e) override;
 
 private:
     class Private;

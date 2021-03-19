@@ -51,18 +51,18 @@
      id="layer1" />
   <path
      id="rect819"
-     d="M 3,1 C 1.892,1 1,1.892 1,3 V 7 C 1,8.108 1.892,9 3,9 H 6 C 7.108,9 8,8.108 8,7 V 3 C 8,1.892 7.108,1 6,1 Z M 3,2 H 6 C 6.554,2 7,2.446 7,3 V 7 C 7,7.554 6.554,8 6,8 H 3 C 2.446,8 2,7.554 2,7 V 3 C 2,2.446 2.446,2 3,2 Z"
+     d="M 3,0 C 1.892,0 1,0.892 1,2 V 6 C 1,7.108 1.892,8 3,8 H 6 C 7.108,8 8,7.108 8,6 V 2 C 8,0.892 7.108,0 6,0 Z M 3,1 H 6 C 6.554,1 7,1.446 7,2 V 6 C 7,6.554 6.554,7 6,7 H 3 C 2.446,7 2,6.554 2,6 V 2 C 2,1.446 2.446,1 3,1 Z"
      style="opacity:1;vector-effect:none;fill:#d2d2d2;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:3.20000005;stroke-opacity:0.55063291" />
   <path
      id="rect819-3"
-     d="m 3,15 c -1.108,0 -2,0.892 -2,2 v 4 c 0,1.108 0.892,2 2,2 h 3 c 1.108,0 2,-0.892 2,-2 V 17 C 8,15.892 7.108,15 6,15 Z m 0,1 h 3 c 0.554,0 1,0.446 1,1 v 4 c 0,0.554 -0.446,1 -1,1 H 3 C 2.446,22 2,21.554 2,21 v -4 c 0,-0.554 0.446,-1 1,-1 z"
+     d="m 3,16 c -1.108,0 -2,0.892 -2,2 v 4 c 0,1.108 0.892,2 2,2 h 3 c 1.108,0 2,-0.892 2,-2 V 18 C 8,16.892 7.108,16 6,16 Z m 0,1 h 3 c 0.554,0 1,0.446 1,1 v 4 c 0,0.554 -0.446,1 -1,1 H 3 C 2.446,23 2,22.554 2,22 v -4 c 0,-0.554 0.446,-1 1,-1 z"
      style="opacity:1;vector-effect:none;fill:#d2d2d2;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:3.20000005;stroke-opacity:0.55063291" />
   <path
      id="rect839"
-     d="m 4.5,6 c -0.554,0 -1,0.446 -1,1 v 3 h 2 V 7 C 5.5,6.446 5.054,6 4.5,6 Z"
+     d="m 4.5,5 c -0.554,0 -1,0.446 -1,1 v 3 h 2 V 6 C 5.5,5.446 5.054,5 4.5,5 Z"
      style="opacity:1;vector-effect:none;fill:#d2d2d2;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:3.20000005;stroke-opacity:0.55063291" />
   <path
      id="rect839-6"
-     d="m 3.5,14 v 3 c 0,0.554 0.446,1 1,1 0.554,0 1,-0.446 1,-1 v -3 z"
+     d="m 3.5,15 v 3 c 0,0.554 0.446,1 1,1 0.554,0 1,-0.446 1,-1 v -3 z"
      style="opacity:1;vector-effect:none;fill:#d2d2d2;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:3.20000005;stroke-opacity:0.55063291" />
 </svg>

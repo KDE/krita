@@ -59,10 +59,10 @@
      style="opacity:1;vector-effect:none;fill:#373737;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:3.20000005;stroke-opacity:0.55063291" />
   <path
      id="rect839"
-     d="M 4.5 8 C 3.946 8 3.5 8.446 3.5 9 L 3.5 12 L 5.5 12 L 5.5 9 C 5.5 8.446 5.054 8 4.5 8 z "
+     d="m 4.5,8 c -0.554,0 -1,0.446 -1,1 v 3 h 2 V 9 C 5.5,8.446 5.054,8 4.5,8 Z"
      style="opacity:1;vector-effect:none;fill:#373737;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:3.20000005;stroke-opacity:0.55063291" />
   <path
      id="rect839-6"
-     d="M 3.5 12 L 3.5 15 C 3.5 15.554 3.946 16 4.5 16 C 5.054 16 5.5 15.554 5.5 15 L 5.5 12 L 3.5 12 z "
+     d="m 3.5,12 v 3 c 0,0.554 0.446,1 1,1 0.554,0 1,-0.446 1,-1 v -3 z"
      style="opacity:1;vector-effect:none;fill:#373737;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:3.20000005;stroke-opacity:0.55063291" />
 </svg>

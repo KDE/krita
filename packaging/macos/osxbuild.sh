@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+#
+#  SPDX-License-Identifier: GPL-3.0-or-later
+#
 
 # osxbuild.sh automates building and installing of krita and krita dependencies
 # for OSX, the script only needs you to set BUILDROOT environment to work
@@ -11,11 +14,6 @@
 #     intermediate steps for creating symlinks and fixing rpath of some
 #     packages midway is also managed. Order goes from top to bottom, to add
 #     new steps just place them in the proper place.
-
-# rebuilddeps: This re-runs all make and make install of dependencies 3rdparty
-#     this was needed as deleting the entire install directory an rerunning build
-#     step for dependencies does not install if they are already built. This step
-#     forces installation. Have not tested it lately so it might not be needed anymore
 
 # build: Runs cmake build and make step for krita sources. It always run cmake step, so
 #     it might take a bit longer than a pure <make> on the source tree. The script tries
@@ -37,6 +35,17 @@ fi
 BUILDROOT="${BUILDROOT%/}"
 echo "BUILDROOT set to ${BUILDROOT}"
 
+# Check cmake in path.
+if test -z $(which cmake); then
+    echo "WARNING: no cmake in PATH... adding default /Applications location"
+    export PATH=/Applications/CMake.app/Contents/bin:${PATH}
+    if test -z $(which cmake); then
+        echo "ERROR: cmake not found, exiting!"
+        exit
+    fi
+fi
+echo "$(cmake --version | head -n 1)"
+
 # Set some global variables.
 OSXBUILD_TYPE="RelWithDebInfo"
 OSXBUILD_TESTING="OFF"
@@ -50,6 +59,8 @@ for arg in "${@}"; do
         OSXBUILD_TESTING="ON"
     elif [[ "${arg}" = --install_tarball ]]; then
         OSXBUILD_TARBALLINSTALL="TRUE"
+    elif [[ "${arg}" = --universal ]]; then
+        OSXBUILD_UNIVERSAL="TRUE"
     else
         parsed_args="${parsed_args} ${arg}"
     fi
@@ -60,6 +71,7 @@ export KIS_TBUILD_DIR=${BUILDROOT}/depbuild
 export KIS_TDEPINSTALL_DIR=${BUILDROOT}/depinstall
 export KIS_DOWN_DIR=${BUILDROOT}/down
 export KIS_BUILD_DIR=${BUILDROOT}/kisbuild
+export KIS_PLUGIN_BUILD_DIR=${BUILDROOT}/plugins_build
 export KIS_INSTALL_DIR=${BUILDROOT}/i
 
 # flags for OSX environment
@@ -88,16 +100,15 @@ export QTEST_COLORED=1
 export OUPUT_LOG="${BUILDROOT}/osxbuild.log"
 printf "" > "${OUPUT_LOG}"
 
-# Build time variables
-if test -z $(which cmake); then
-    echo "ERROR: cmake not found, exiting!"
-    exit
-fi
-
 # configure max core for make compile
 ((MAKE_THREADS=1))
-if test ${OSTYPE} == "darwin*"; then
+if [[ "${OSTYPE}" == "darwin"* ]]; then
     ((MAKE_THREADS = $(sysctl -n hw.logicalcpu)))
+fi
+
+OSXBUILD_X86_64_BUILD=$(sysctl -n hw.optional.x86_64)
+if [[ ${OSXBUILD_UNIVERSAL} ]]; then
+    OSX_ARCHITECTURES="x86_64\;arm64"
 fi
 
 # Prints stderr and stdout to log files
@@ -182,7 +193,7 @@ cmake_3rdparty () {
         fi
         print_msg "Building ${package}"
         log_cmd cmake --build . --config RelWithDebInfo --target ${package}
-        
+
         print_if_error "Failed build ${package}"
         if [[ ! ${osxbuild_error} -ne 0 ]]; then
             print_msg "Build Success! ${package}"
@@ -197,6 +208,33 @@ cmake_3rdparty () {
         elif [[ "${error}" = "true" ]]; then
             log "ERROR: ${pkg} failed a second time, time to check the logs"
             log "stoping..."
+        fi
+    done
+}
+
+cmake_3rdparty_plugins () {
+    cd ${KIS_PLUGIN_BUILD_DIR}
+
+    local build_pkgs=("${@}") # convert to array
+    local error="false"
+
+    if [[ ${2} = "1" ]]; then
+        local build_pkgs=(${build_pkgs[@]:0:1})
+    fi
+
+    for package in ${build_pkgs[@]} ; do
+        if [[ ${package:0:3} != "ext" ]]; then
+            continue
+        fi
+        print_msg "Building ${package}"
+        log_cmd cmake --build . --config RelWithDebInfo --target ${package}
+        
+        print_if_error "Failed build ${package}"
+        if [[ ! ${osxbuild_error} -ne 0 ]]; then
+            print_msg "Build Success! ${package}"
+        else
+            log "${pkg} build fail, stoping..."
+            error="true"
         fi
     done
 }
@@ -234,7 +272,11 @@ build_3rdparty_fixes(){
         log "fixing rpath on fc-cache"
         log_cmd install_name_tool -add_rpath ${KIS_INSTALL_DIR}/lib ${KIS_TBUILD_DIR}/ext_fontconfig/ext_fontconfig-prefix/src/ext_fontconfig-build/fc-cache/.libs/fc-cache
         # rerun rebuild
-        cmake_3rdparty ext_fontconfig "1"
+        if [[ ${OSXBUILD_X86_64_BUILD} -ne 1 && ${osxbuild_error} -ne 0 ]]; then
+            print_msg "Build Success! ${pkg}"
+        else
+            cmake_3rdparty ext_fontconfig "1"
+        fi
         error="false"
 
     elif [[ "${pkg}" = "ext_poppler" && "${error}" = "true" ]]; then
@@ -263,13 +305,14 @@ build_3rdparty () {
         -DCMAKE_INSTALL_PREFIX=${KIS_INSTALL_DIR} \
         -DCMAKE_PREFIX_PATH:PATH=${KIS_INSTALL_DIR} \
         -DEXTERNALS_DOWNLOAD_DIR=${KIS_DOWN_DIR} \
-        -DINSTALL_ROOT=${KIS_INSTALL_DIR}
+        -DINSTALL_ROOT=${KIS_INSTALL_DIR} \
+        -DCMAKE_OSX_ARCHITECTURES=${OSX_ARCHITECTURES}
 
         # -DCPPFLAGS=-I${KIS_INSTALL_DIR}/include \
         # -DLDFLAGS=-L${KIS_INSTALL_DIR}/lib
 
     print_msg "finished 3rdparty build setup"
-    
+
     if [[ -n ${1} ]]; then
         cmake_3rdparty "${@}"
         # log "Syncing install backup..."
@@ -280,6 +323,7 @@ build_3rdparty () {
     # build 3rdparty tools
     # The order must not be changed!
     cmake_3rdparty \
+        ext_iconv \
         ext_pkgconfig \
         ext_gettext \
         ext_openssl \
@@ -292,12 +336,12 @@ build_3rdparty () {
         ext_jpeg \
         ext_lcms2 \
         ext_ocio \
-        ext_openexr \
-        ext_openjpeg
+        ext_openexr
 
     cmake_3rdparty \
         ext_png \
         ext_tiff \
+        ext_openjpeg \
         ext_gsl \
         ext_vc \
         ext_libraw \
@@ -343,6 +387,8 @@ build_3rdparty () {
         ext_quazip
 
     cmake_3rdparty ext_seexpr
+    cmake_3rdparty ext_mypaint
+
 
     ## All builds done, creating a new install onlydeps install dir
     dir_clean "${KIS_INSTALL_DIR}.onlydeps"
@@ -351,91 +397,6 @@ build_3rdparty () {
     print_msg "Build Finished!"
 }
 
-# Recall cmake for all 3rd party packages
-# make is only on target first run
-# subsequent runs only call make install
-rebuild_3rdparty () {
-    print_msg "starting rebuild of 3rdparty packages"
-    build_install_ext() {
-        for pkg in ${@:1:${#@}}; do
-            {
-                cd ${KIS_TBUILD_DIR}/${pkg}/${pkg}-prefix/src/${pkg}-stamp
-            } || {
-                cd ${KIS_TBUILD_DIR}/ext_frameworks/${pkg}-prefix/src/${pkg}-stamp
-            } || {
-                cd ${KIS_TBUILD_DIR}/ext_heif/${pkg}-prefix/src/${pkg}-stamp
-            }
-            log "Installing ${pkg} files..."
-            rm ${pkg}-configure ${pkg}-build ${pkg}-install
-
-            cmake_3rdparty ${pkg}
-
-            cd ${KIS_TBUILD_DIR}
-        done
-    }
-    # Do not process complete list only pkgs given.
-    if ! test -z ${1}; then
-        build_install_ext ${@}
-        exit
-    fi
-
-    build_install_ext \
-        ext_pkgconfig \
-        ext_iconv \
-        ext_gettext \
-        ext_openssl \
-        ext_qt \
-        ext_zlib \
-        ext_boost \
-        ext_eigen3 \
-        ext_expat \
-        ext_exiv2 \
-        ext_fftw3 \
-        ext_jpeg \
-        ext_patch \
-        ext_lcms2 \
-        ext_ocio \
-        ext_openexr
-        #ext_openjpeg
-
-    build_install_ext \
-        ext_png \
-        ext_tiff \
-        ext_gsl \
-        ext_vc \
-        ext_libraw \
-        ext_giflib \
-        ext_fontconfig \
-        ext_freetype \
-        ext_poppler \
-        ext_python \
-        ext_sip \
-        ext_pyqt \
-
-    build_install_ext \
-        ext_nasm \
-        ext_libx265 \
-        ext_libde265 \
-        ext_libheif
-
-    # Build kde_frameworks
-    build_install_ext \
-        ext_extra_cmake_modules \
-        ext_kconfig \
-        ext_kwidgetsaddons \
-        ext_kcompletion \
-        ext_kcoreaddons \
-        ext_kguiaddons \
-        ext_ki18n \
-        ext_kitemmodels \
-        ext_kitemviews \
-        ext_kimageformats \
-        ext_kwindowsystem \
-        ext_quazip
-
-    build_install_ext \
-        ext_seexpr
-}
 
 #not tested
 set_krita_dirs() {
@@ -464,7 +425,8 @@ build_krita () {
     log_cmd check_dir_path ${KIS_BUILD_DIR}
     cd ${KIS_BUILD_DIR}
 
-    cmake ${KIS_SRC_DIR} \
+
+    CMAKE_CMD="cmake ${KIS_SRC_DIR} \
         -DFOUNDATION_BUILD=ON \
         -DBoost_INCLUDE_DIR=${KIS_INSTALL_DIR}/include \
         -DCMAKE_INSTALL_PREFIX=${KIS_INSTALL_DIR} \
@@ -476,7 +438,15 @@ build_krita () {
         -DPYQT_SIP_DIR_OVERRIDE=${KIS_INSTALL_DIR}/share/sip/ \
         -DCMAKE_BUILD_TYPE=${OSXBUILD_TYPE} \
         -DCMAKE_OSX_DEPLOYMENT_TARGET=10.12 \
-        -DPYTHON_INCLUDE_DIR=${KIS_INSTALL_DIR}/lib/Python.framework/Headers
+        -DPYTHON_INCLUDE_DIR=${KIS_INSTALL_DIR}/lib/Python.framework/Headers \
+        -DCMAKE_OSX_ARCHITECTURES=${OSX_ARCHITECTURES}"
+
+    # hack:: Jenkins runs in x86_64 env, force run cmake in arm64 env.
+    if [[ ${OSXBUILD_UNIVERSAL} ]]; then
+        env /usr/bin/arch -arm64 /bin/zsh -c "${CMAKE_CMD}"
+    else
+        ${CMAKE_CMD}
+    fi
 
     # copiling phase
     make -j${MAKE_THREADS}
@@ -548,6 +518,34 @@ install_krita () {
     fi
 }
 
+build_plugins () {
+    if [[ -z ${OSXBUILD_CLEAN} ]]; then
+        dir_clean "${KIS_PLUGIN_BUILD_DIR}"
+    fi
+
+    print_msg "building in ${KIS_PLUGIN_BUILD_DIR}"
+
+    log "$(check_dir_path ${KIS_PLUGIN_BUILD_DIR})"
+    log "$(check_dir_path ${KIS_DOWN_DIR})"
+    log "$(check_dir_path ${KIS_INSTALL_DIR})"
+
+    cd ${KIS_PLUGIN_BUILD_DIR}
+
+    log_cmd cmake ${KIS_SRC_DIR}/3rdparty_plugins/ \
+        -DCMAKE_OSX_DEPLOYMENT_TARGET=10.12 \
+        -DCMAKE_INSTALL_PREFIX=${KIS_INSTALL_DIR} \
+        -DCMAKE_PREFIX_PATH:PATH=${KIS_INSTALL_DIR} \
+        -DEXTERNALS_DOWNLOAD_DIR=${KIS_DOWN_DIR} \
+        -DINSTALL_ROOT=${KIS_INSTALL_DIR}
+
+    print_msg "finished plugins build setup"
+
+    cmake_3rdparty_plugins \
+        ext_gmic \
+
+    print_msg "Build Finished!"
+}
+
 # Runs all fixes for path and packages.
 # Historically only fixed boost @rpath
 fix_boost_rpath () {
@@ -592,12 +590,122 @@ get_directory_fromargs() {
     echo "${OSXBUILD_DIR}"
 }
 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+####      Universal ARM x86_64 build functions and paramterers    #####
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+DEPBUILD_X86_64_DIR="${BUILDROOT}/i.x86_64"
+DEPBUILD_ARM64_DIR="${BUILDROOT}/i.arm64"
+DEPBUILD_FATBIN_DIR="${BUILDROOT}/i.universal"
+
+build_x86_64 () {
+    log "building builddeps_x86"
+    # first set terminal to arch
+    if [[ ${#@} > 0 ]]; then
+        for pkg in ${@:1:${#@}}; do
+            env /usr/bin/arch -x86_64 /bin/zsh -c "${BUILDROOT}/krita/packaging/macos/osxbuild.sh builddeps --dirty ${pkg}"
+        done
+    else
+        env /usr/bin/arch -x86_64 /bin/zsh -c "${BUILDROOT}/krita/packaging/macos/osxbuild.sh builddeps"
+    fi
+
+    rsync -aq "${KIS_INSTALL_DIR}/" "${DEPBUILD_X86_64_DIR}"
+}
+
+
+build_arm64 () {
+    log "building builddeps_arm64"
+
+    # force arm64 build even in x86_64 envs 
+    if [[ ${#@} > 0 ]]; then
+        for pkg in ${@:1:${#@}}; do
+            env /usr/bin/arch -arm64 /bin/zsh -c "${BUILDROOT}/krita/packaging/macos/osxbuild.sh builddeps --dirty ${pkg}"
+        done
+    else
+        env /usr/bin/arch -arm64 /bin/zsh -c "${BUILDROOT}/krita/packaging/macos/osxbuild.sh builddeps"
+    fi
+
+    rsync -aq "${KIS_INSTALL_DIR}/" "${DEPBUILD_ARM64_DIR}"
+}
+
+consolidate_universal_binaries () {
+    for f in "${@}"; do
+        # Only try to consolidate Mach-O and static libs
+        if [[ -n $(file ${f} | grep "Mach-O") || "${f:(-2)}" = ".a" ]]; then
+            # echo "${BUILDROOT}/${DEPBUILD_X86_64_DIR}/${f##*test-i/}"
+            LIPO_OUTPUT=$(lipo -info ${f} | grep Non-fat 2> /dev/null)
+            if [[ -n ${LIPO_OUTPUT} ]]; then
+                if [[ -f "${DEPBUILD_X86_64_DIR}/${f##*${DEPBUILD_FATBIN_DIR}/}" ]]; then
+                    log "creating universal binary -- ${f##*${DEPBUILD_FATBIN_DIR}/}"
+                    lipo -create "${f}" "${DEPBUILD_X86_64_DIR}/${f##*${DEPBUILD_FATBIN_DIR}/}" -output "${f}"
+                else
+                    log "removing... ${f}"
+                    rm "${f}"
+                fi
+            fi
+            # log "ignoring ${f}"
+        fi
+    done
+
+}
+
+prebuild_cleanup() {
+    # asume if an argument is given is a package name, do not erase install dir
+    if [[ ${#@} > 0 ]]; then
+        rsync -aq "${KIS_INSTALL_DIR}/" "${BUILDROOT}/i.temp"
+    fi
+    rm -rf "${DEPBUILD_FATBIN_DIR}" "${DEPBUILD_X86_64_DIR}" "${DEPBUILD_ARM64_DIR}"
+}
+
+postbuild_cleanup() {
+    log "consolidating non-fat binaries and files"
+    rsync -rlptgoq --ignore-existing "${DEPBUILD_X86_64_DIR}/" "${DEPBUILD_FATBIN_DIR}"
+    rm -rf "${KIS_INSTALL_DIR}"
+    rsync -aq "${DEPBUILD_FATBIN_DIR}/" "${KIS_INSTALL_DIR}"
+    log "consolitating done! Build installed to ${KIS_INSTALL_DIR}"
+}
+
+universal_plugin_build() {
+    DEPBUILD_X86_64_DIR="${BUILDROOT}/i_plug.x86_64"
+    DEPBUILD_ARM64_DIR="${BUILDROOT}/i_plug.arm64"
+    # DEPBUILD_FATBIN_DIR="${BUILDROOT}/i.universal"
+
+    # asume i is universal but i.universal has to exist
+    if [[ ! -d "${DEPBUILD_FATBIN_DIR}" ]]; then
+        log "WARNING no i.universal install dir found! Make sure universal build finished properly"
+        log "If you get errors building plugins this is likely the error."
+    fi
+
+    rsync -rlptgoq --ignore-existing "${KIS_INSTALL_DIR}/" "${DEPBUILD_FATBIN_DIR}/"
+
+    log "building plugins_x86"
+    env /usr/bin/arch -x86_64 /bin/zsh -c "${BUILDROOT}/krita/packaging/macos/osxbuild.sh buildplugins"
+    rsync -aq "${KIS_INSTALL_DIR}/" "${DEPBUILD_X86_64_DIR}"
+
+    log "building plugins_arm64"
+    # force arm64 build even in x86_64 envs
+    env /usr/bin/arch -arm64 /bin/zsh -c "${BUILDROOT}/krita/packaging/macos/osxbuild.sh buildplugins"
+    rsync -aq "${KIS_INSTALL_DIR}/" "${DEPBUILD_ARM64_DIR}"
+
+    # sync files to universal install dir.
+    rsync -aq "${DEPBUILD_ARM64_DIR}/" "${DEPBUILD_FATBIN_DIR}"
+    consolidate_universal_binaries $(find "${DEPBUILD_FATBIN_DIR}" -type f)
+    postbuild_cleanup
+
+}
+
+
+# # # # # # # # # # # # # # # # # # #
+
+####     Script main routine    #####
+
+# # # # # # # # # # # # # # # # # # #
 print_usage () {
     printf "USAGE: osxbuild.sh <buildstep> [pkg|file]\n"
     printf "BUILDSTEPS:\t\t"
     printf "\n builddeps \t\t Run cmake step for 3rd party dependencies, optionally takes a [pkg] arg"
-    printf "\n rebuilddeps \t\t Rerun make and make install step for 3rd party deps, optionally takes a [pkg] arg
-    \t\t\t useful for cleaning install directory and quickly reinstall all deps."
     printf "\n fixboost \t\t Fixes broken boost \@rpath on OSX"
     printf "\n build \t\t\t Builds krita"
     printf "\n buildtarball \t\t Builds krita from provided [file] tarball"
@@ -607,7 +715,11 @@ print_usage () {
     printf "\n buildinstall \t\t Build and Installs krita, running fixboost after installing"
     printf "\n"
     printf "OPTIONS:\t\t"
-    printf "\n \t --dirty \t [build] (old default) Keep old build directories before build to start fresh"
+    printf "\n \t --dirty \t [build/install] (old default) Keep old build directories before build to start fresh"
+    printf "\n \t --debug \t [build] Build in Debug mode"
+    printf "\n \t --universal \t [build] (arm only) Build universal binary files."
+    printf "\n"
+    printf "\n \t --install_tarball \n \t\t\t [buildtarball] Install just built tarball file."
     printf "\n"
 }
 
@@ -619,16 +731,25 @@ script_run() {
     fi
 
     if [[ ${1} = "builddeps" ]]; then
-        if [[ -z ${OSXBUILD_CLEAN} ]]; then
-            dir_clean "${KIS_INSTALL_DIR}"
-            dir_clean "${KIS_TBUILD_DIR}"
-        fi
-        build_3rdparty "${@:2}"
-        exit
+        if [[ ${OSXBUILD_UNIVERSAL} ]]; then
+            prebuild_cleanup ${@:2}
+            build_x86_64 ${@:2}
 
-    elif [[ ${1} = "rebuilddeps" ]]; then
-        rebuild_3rdparty "${@:2}"
-        exit
+            build_arm64 "${@:2}"
+
+            rsync -aq ${DEPBUILD_ARM64_DIR}/ ${DEPBUILD_FATBIN_DIR}
+            consolidate_universal_binaries $(find "${DEPBUILD_FATBIN_DIR}" -type f)
+
+            postbuild_cleanup
+
+        else
+            if [[ -z ${OSXBUILD_CLEAN} ]]; then
+                dir_clean "${KIS_INSTALL_DIR}"
+                dir_clean "${KIS_TBUILD_DIR}"
+            fi
+            build_3rdparty "${@:2}"
+
+        fi
 
     elif [[ ${1} = "fixboost" ]]; then
         if [[ -d ${1} ]]; then
@@ -637,9 +758,17 @@ script_run() {
         fix_boost_rpath
 
     elif [[ ${1} = "build" ]]; then
-        OSXBUILD_DIR=$(get_directory_fromargs "${@}")
+        OSXBUILD_DIR=$(get_directory_fromargs "${@:2}")
 
         build_krita "${OSXBUILD_DIR}"
+        exit
+
+    elif [[ ${1} = "buildplugins" ]]; then
+        if [[ ${OSXBUILD_UNIVERSAL} ]]; then
+            universal_plugin_build "${@:2}"
+        else
+            build_plugins "${@:2}"
+        fi
         exit
 
     elif [[ ${1} = "buildtarball" ]]; then
@@ -663,7 +792,6 @@ osxbuild.sh install ${KIS_BUILD_DIR}"
         else
             log "File not a tarball tar.gz file"
         fi
-
         
 
     elif [[ ${1} = "clean" ]]; then
@@ -675,16 +803,30 @@ osxbuild.sh install ${KIS_BUILD_DIR}"
         exit
 
     elif [[ ${1} = "install" ]]; then
-        OSXBUILD_DIR=$(get_directory_fromargs "${@}")
+        OSXBUILD_DIR=$(get_directory_fromargs "${@:2}")
 
         install_krita "${OSXBUILD_DIR}"
+        
+        if [[ ${OSXBUILD_UNIVERSAL} ]]; then
+            universal_plugin_build "${@:2}"
+        else
+            build_plugins "${OSXBUILD_DIR}"
+        fi
+
         fix_boost_rpath
 
     elif [[ ${1} = "buildinstall" ]]; then
-        OSXBUILD_DIR=$(get_directory_fromargs "${@}")
+        OSXBUILD_DIR=$(get_directory_fromargs "${@:2}")
 
         build_krita "${OSXBUILD_DIR}"
         install_krita "${OSXBUILD_DIR}"
+
+        if [[ ${OSXBUILD_UNIVERSAL} ]]; then
+            universal_plugin_build "${@:2}"
+        else
+            build_plugins "${OSXBUILD_DIR}"
+        fi
+
         fix_boost_rpath "${OSXBUILD_DIR}"
 
     elif [[ ${1} = "test" ]]; then

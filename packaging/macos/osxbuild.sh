@@ -107,7 +107,7 @@ if [[ "${OSTYPE}" == "darwin"* ]]; then
 fi
 
 OSXBUILD_X86_64_BUILD=$(sysctl -n hw.optional.x86_64)
-if [[ -z ${OSXBUILD_X86_64_BUILD} ]]; then
+if [[ ${OSXBUILD_UNIVERSAL} ]]; then
     OSX_ARCHITECTURES="x86_64;arm64"
 fi
 
@@ -424,6 +424,7 @@ build_krita () {
     echo ${KIS_INSTALL_DIR}
     log_cmd check_dir_path ${KIS_BUILD_DIR}
     cd ${KIS_BUILD_DIR}
+
 
     CMAKE_CMD="cmake ${KIS_SRC_DIR} \
         -DFOUNDATION_BUILD=ON \

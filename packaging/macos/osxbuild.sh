@@ -425,7 +425,7 @@ build_krita () {
     log_cmd check_dir_path ${KIS_BUILD_DIR}
     cd ${KIS_BUILD_DIR}
 
-    cmake ${KIS_SRC_DIR} \
+    CMAKE_CMD="cmake ${KIS_SRC_DIR} \
         -DFOUNDATION_BUILD=ON \
         -DBoost_INCLUDE_DIR=${KIS_INSTALL_DIR}/include \
         -DCMAKE_INSTALL_PREFIX=${KIS_INSTALL_DIR} \
@@ -438,7 +438,14 @@ build_krita () {
         -DCMAKE_BUILD_TYPE=${OSXBUILD_TYPE} \
         -DCMAKE_OSX_DEPLOYMENT_TARGET=10.12 \
         -DPYTHON_INCLUDE_DIR=${KIS_INSTALL_DIR}/lib/Python.framework/Headers \
-        -DCMAKE_OSX_ARCHITECTURES=${OSX_ARCHITECTURES}
+        -DCMAKE_OSX_ARCHITECTURES=${OSX_ARCHITECTURES}"
+
+    # hack:: Jenkins runs in x86_64 env, force run cmake in arm64 env.
+    if [[ ${OSXBUILD_UNIVERSAL} ]]; then
+        env /usr/bin/arch -arm64 /bin/zsh -c "${CMAKE_CMD}"
+    else
+        ${CMAKE_CMD}
+    fi
 
     # copiling phase
     make -j${MAKE_THREADS}

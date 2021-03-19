@@ -37,6 +37,7 @@
 #include <kis_int_parse_spin_box.h>
 #include <kis_double_parse_spin_box.h>
 #include <kis_algebra_2d.h>
+#include <kis_signal_compressor_with_param.h>
 
 template <typename SpinBoxTypeTP, typename BaseSpinBoxTypeTP>
 class Q_DECL_HIDDEN KisSliderSpinBoxPrivate : public QObject
@@ -56,6 +57,7 @@ public:
     KisSliderSpinBoxPrivate(SpinBoxType *q)
         : m_q(q)
         , m_lineEdit(m_q->lineEdit())
+        , m_startEditingSignalProxy(std::bind(&KisSliderSpinBoxPrivate::startEditing, this))
     {
         m_q->installEventFilter(this);
 
@@ -713,7 +715,11 @@ public:
             // Releasing the right mouse button makes the lineedit enter
             // the edition mode if we are not editing
             if (e->button() == Qt::RightButton) {
-                startEditing();
+                // If we call startEditing() right from the eventFilter(),
+                // then the mouse release event will be somehow be passed
+                // to Qt further and generate ContextEvent on Windows.
+                // Therefore we should call it from a normal timer event.
+                QTimer::singleShot(0, &m_startEditingSignalProxy, SLOT(start()));
             // Releasing the left mouse button stops the dragging and also
             // the "enter edition mode" timer. If signals must be blocked when
             // dragging then whe set the value here and emit a signal
@@ -902,6 +908,8 @@ private:
     bool m_isSoftRangeActive{true};
     QVariantAnimation m_sliderAnimation;
     QVariantAnimation m_rangeToggleHoverAnimation;
+    SignalToFunctionProxy m_startEditingSignalProxy;
+
     enum SoftRangeViewMode
     {
         SoftRangeViewMode_AlwaysShowSoftRange,

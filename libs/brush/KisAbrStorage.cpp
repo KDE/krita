@@ -136,7 +136,7 @@ KoResourceSP KisAbrStorage::resource(const QString &url)
     if (!m_brushCollection->isLoaded()) {
         m_brushCollection->load();
     }
-    return m_brushCollection->brushByName(url);
+    return m_brushCollection->brushByName(QFileInfo(url).fileName());
 }
 
 bool KisAbrStorage::loadVersionedResource(KoResourceSP resource)

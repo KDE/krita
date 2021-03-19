@@ -46,7 +46,7 @@ KisDitherWidget::KisDitherWidget(QWidget* parent)
     spreadSpinBox->setPrefix(QString("%1  ").arg(i18n("Spread:")));
     spreadSpinBox->setRange(0.0, 1.0, 3);
     spreadSpinBox->setSingleStep(0.125);
-    QObject::connect(spreadSpinBox, &KisDoubleSliderSpinBox::valueChanged, this, &KisDitherWidget::sigConfigurationItemChanged);
+    QObject::connect(spreadSpinBox, QOverload<qreal>::of(&KisDoubleSliderSpinBox::valueChanged), this, &KisDitherWidget::sigConfigurationItemChanged);
 }
 
 void KisDitherWidget::setConfiguration(const KisFilterConfiguration &config, const QString &prefix)

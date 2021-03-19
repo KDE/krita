@@ -13,7 +13,7 @@
 #include "kis_node_view_color_scheme.h"
 #include "kis_scalar_keyframe_channel.h"
 #include "kis_signal_auto_connection.h"
-#include "krita_utils.h"
+#include <kis_painting_tweaks.h>
 #include "kis_image.h"
 #include "KisAnimUtils.h"
 
@@ -307,7 +307,7 @@ QVariant KisAnimCurvesChannelsModel::data(const QModelIndex &index, int role) co
         const QColor backgroundColor = qApp->palette().color(QPalette::Button);
         const int colorLabelIndex = item->dummy->node()->colorLabelIndex();
         const QColor nodeColor = nodeColorScheme.colorFromLabelIndex(colorLabelIndex);
-        return colorLabelIndex > 0 ? KritaUtils::blendColors(nodeColor, backgroundColor, 0.3) : backgroundColor;
+        return colorLabelIndex > 0 ? KisPaintingTweaks::blendColors(nodeColor, backgroundColor, 0.3) : backgroundColor;
     }
     default:
         break;

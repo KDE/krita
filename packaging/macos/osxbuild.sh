@@ -108,7 +108,7 @@ fi
 
 OSXBUILD_X86_64_BUILD=$(sysctl -n hw.optional.x86_64)
 if [[ ${OSXBUILD_UNIVERSAL} ]]; then
-    OSX_ARCHITECTURES="x86_64;arm64"
+    OSX_ARCHITECTURES="x86_64\;arm64"
 fi
 
 # Prints stderr and stdout to log files
@@ -678,7 +678,7 @@ universal_plugin_build() {
         log "If you get errors building plugins this is likely the error."
     fi
 
-    rsync --rlptgoq --ignore-existing "${KIS_INSTALL_DIR}/" "${DEPBUILD_FATBIN_DIR}/"
+    rsync -rlptgoq --ignore-existing "${KIS_INSTALL_DIR}/" "${DEPBUILD_FATBIN_DIR}/"
 
     log "building plugins_x86"
     env /usr/bin/arch -x86_64 /bin/zsh -c "${BUILDROOT}/krita/packaging/macos/osxbuild.sh buildplugins"

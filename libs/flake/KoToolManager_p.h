@@ -39,7 +39,6 @@ public:
 
     void connectActiveTool();
     void disconnectActiveTool();
-    void switchTool(KoToolBase *tool);
     void switchTool(const QString &id);
     void postSwitchTool();
     void switchCanvasData(CanvasData *cd);

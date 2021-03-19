@@ -104,7 +104,7 @@ void KisToolInvocationAction::activate(int shortcut)
     }
 
     if (!temporaryToolId.isEmpty()) {
-        KoToolManager::instance()->switchToolTemporaryRequested(temporaryToolId);
+        KoToolManager::instance()->switchToolRequested(temporaryToolId);
     }
 
     d->activatedToolProxy = inputManager()->toolProxy();

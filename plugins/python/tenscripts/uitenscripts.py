@@ -41,6 +41,11 @@ class UITenScripts(object):
         self.scrollArea.setWidget(self.baseArea)
 
         self.layout.addWidget(self.scrollArea)
+
+        self.layout.addWidget(
+            QLabel(i18n("Shortcuts are configurable through the <i>Keyboard Shortcuts</i> "
+                        "interface in Krita's settings.")))
+
         self.layout.addWidget(self.buttonBox)
 
         self.mainDialog.show()

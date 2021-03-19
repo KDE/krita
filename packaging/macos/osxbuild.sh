@@ -672,27 +672,27 @@ universal_plugin_build() {
     # DEPBUILD_FATBIN_DIR="${BUILDROOT}/i.universal"
 
     # asume i is universal but i.universal has to exist
-    if [[ -d "${DEPBUILD_FATBIN_DIR}" ]]; then
-        rsync --rlptgoq --ignore-existing "${KIS_INSTALL_DIR}/" "${DEPBUILD_FATBIN_DIR}/"
-
-        log "building plugins_x86"
-        env /usr/bin/arch -x86_64 /bin/zsh -c "${BUILDROOT}/krita/packaging/macos/osxbuild.sh buildplugins"
-        rsync -aq "${KIS_INSTALL_DIR}/" "${DEPBUILD_X86_64_DIR}"
-
-        log "building plugins_arm64"
-        # force arm64 build even in x86_64 envs
-        env /usr/bin/arch -arm64 /bin/zsh -c "${BUILDROOT}/krita/packaging/macos/osxbuild.sh buildplugins"
-        rsync -aq "${KIS_INSTALL_DIR}/" "${DEPBUILD_ARM64_DIR}"
-
-        # sync files to universal install dir.
-        rsync -aq "${DEPBUILD_ARM64_DIR}/" "${DEPBUILD_FATBIN_DIR}"
-        consolidate_universal_binaries $(find "${DEPBUILD_FATBIN_DIR}" -type f)
-        postbuild_cleanup
-
-    else
-        log "no universal install found! Make sure universal build finished properly"
-        log "doing nothing, and exiting!"
+    if [[ ! -d "${DEPBUILD_FATBIN_DIR}" ]]; then
+        log "WARNING no i.universal install dir found! Make sure universal build finished properly"
+        log "If you get errors building plugins this is likely the error."
     fi
+
+    rsync --rlptgoq --ignore-existing "${KIS_INSTALL_DIR}/" "${DEPBUILD_FATBIN_DIR}/"
+
+    log "building plugins_x86"
+    env /usr/bin/arch -x86_64 /bin/zsh -c "${BUILDROOT}/krita/packaging/macos/osxbuild.sh buildplugins"
+    rsync -aq "${KIS_INSTALL_DIR}/" "${DEPBUILD_X86_64_DIR}"
+
+    log "building plugins_arm64"
+    # force arm64 build even in x86_64 envs
+    env /usr/bin/arch -arm64 /bin/zsh -c "${BUILDROOT}/krita/packaging/macos/osxbuild.sh buildplugins"
+    rsync -aq "${KIS_INSTALL_DIR}/" "${DEPBUILD_ARM64_DIR}"
+
+    # sync files to universal install dir.
+    rsync -aq "${DEPBUILD_ARM64_DIR}/" "${DEPBUILD_FATBIN_DIR}"
+    consolidate_universal_binaries $(find "${DEPBUILD_FATBIN_DIR}" -type f)
+    postbuild_cleanup
+
 }
 
 

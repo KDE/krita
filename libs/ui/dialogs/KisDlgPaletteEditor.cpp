@@ -63,6 +63,9 @@ KisDlgPaletteEditor::KisDlgPaletteEditor()
 
     m_ui->storageLocation->setModel(KisStorageModel::instance());
     m_ui->storageLocation->setModelColumn(KisStorageModel::DisplayName);
+
+    // TODO: We have no concept of moving storages whatsoever, so for now, let's disable this combobox.
+    m_ui->storageLocation->setDisabled(true);
     connect(m_ui->storageLocation, SIGNAL(currentIndexChanged(int)), SLOT(slotSetGlobal()));
 
     connect(this, SIGNAL(accepted()), SLOT(slotAccepted()));

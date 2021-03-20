@@ -199,6 +199,8 @@ bool KisKraSaver::savePalettes(KoStore *store, KisImageSP image, const QString &
 
         QByteArray ba = palette->toByteArray();
 
+        qDebug() << "Storing palette inside document" << palette->colorCount();
+
         if (!ba.isEmpty()) {
             store->write(ba);
         } else {

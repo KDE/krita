@@ -25,6 +25,7 @@
 #include <KisViewManager.h>
 #include <KisDocument.h>
 #include <KoResourceServer.h>
+#include <KisStorageModel.h>
 #include <KoResourceServerProvider.h>
 #include <KisPaletteModel.h>
 #include <kis_color_button.h>
@@ -36,8 +37,7 @@ struct KisPaletteEditor::PaletteInfo {
     QString name;
     QString filename;
     int columnCount;
-    bool isReadOnly;
-    bool isGlobal;
+    QString storageLocation;
     QHash<QString, KisSwatchGroup> groups;
 };
 
@@ -140,7 +140,7 @@ void KisPaletteEditor::importPalette()
         storageLocation = m_d->view->document()->uniqueID();
     }
 
-    m_d->rServer->resourceModel()->importResourceFile(filename);
+    m_d->rServer->resourceModel()->importResourceFile(filename, storageLocation);
 }
 
 void KisPaletteEditor::removePalette(KoColorSetSP cs)
@@ -295,9 +295,9 @@ void KisPaletteEditor::changeGroupRowCount(const QString &name, int newRowCount)
     m_d->modifiedGroupNames.insert(name);
 }
 
-void KisPaletteEditor::setGlobal(bool isGlobal)
+void KisPaletteEditor::setStorageLocation(QString location)
 {
-    m_d->modified.isGlobal = isGlobal;
+   m_d->modified.storageLocation = location;
 }
 
 void KisPaletteEditor::setEntry(const KoColor &color, const QModelIndex &index)
@@ -314,8 +314,11 @@ void KisPaletteEditor::setEntry(const KoColor &color, const QModelIndex &index)
 
 void KisPaletteEditor::slotSetDocumentModified()
 {
-    // XXX: I'm not sure if we need to update the resource here // tiar
-    m_d->view->document()->setModified(true);
+    if (m_d->modified.storageLocation == m_d->view->document()->uniqueID()) {
+        updatePalette();
+        m_d->rServer->resourceModel()->updateResource(m_d->model->colorSet());
+        m_d->view->document()->setModified(true);
+    }
     m_d->isModified = true;
 }
 
@@ -434,6 +437,7 @@ bool KisPaletteEditor::isModified() const
 
 void KisPaletteEditor::updatePalette()
 {
+    qDebug() << "updating the palette model inside the palette editor object";
     Q_ASSERT(m_d->model);
     Q_ASSERT(m_d->model->colorSet());
     if (!m_d->model->colorSet()->isEditable()) { return; }
@@ -449,11 +453,10 @@ void KisPaletteEditor::updatePalette()
         m_d->rServer->resourceModel()->renameResource(palette, modified.name);
     }
     QString resourceLocation = m_d->model->colorSet()->storageLocation();
-    if (m_d->modified.isGlobal) {
-        resourceLocation = QString();
-    } else {
-        resourceLocation = m_d->view->document()->uniqueID();
+    if (resourceLocation != m_d->modified.storageLocation) {
+        // We need functionality for moving the resource to the new resource storage...
     }
+
     Q_FOREACH (const QString &groupName, palette->getGroupNames()) {
         if (!modified.groups.contains(groupName)) {
             m_d->model->removeGroup(groupName, m_d->keepColorGroups.contains(groupName));
@@ -481,9 +484,21 @@ void KisPaletteEditor::saveNewPaletteVersion()
 {
     if (!m_d->model || !m_d->model->colorSet()) { return; }
 
-    if (!m_d->modified.isGlobal) {
+    QModelIndex index = m_d->rServer->resourceModel()->indexForResource(m_d->model->colorSet());
+    bool isGlobal = false;
+    if (index.isValid()) {
+        bool ok = false;
+        int storageId = m_d->rServer->resourceModel()->data(index, Qt::UserRole + KisAllResourcesModel::StorageId).toInt(&ok);
+        if (ok) {
+            KisStorageModel storageModel;
+            KisResourceStorageSP storage = storageModel.storageForId(storageId);
+            isGlobal = storage->type() != KisResourceStorage::StorageType::Memory;
+        }
+    }
+    if (isGlobal) {
         m_d->rServer->resourceModel()->updateResource(m_d->model->colorSet());
     }
+
     m_d->isModified = false;
 }
 
@@ -499,10 +514,8 @@ void KisPaletteEditor::slotPaletteChanged()
     m_d->modifiedGroupNames.clear();
 
     m_d->modified.name = palette->name();
-    //hack alert! needs better solution.
-    m_d->modified.isGlobal = !palette->storageLocation().contains("/");
+    m_d->modified.storageLocation = palette->storageLocation();
     m_d->modified.columnCount = palette->columnCount();
-    m_d->modified.isReadOnly = !palette->isEditable();
 
     Q_FOREACH (const QString &groupName, palette->getGroupNames()) {
         KisSwatchGroup *cs = palette->getGroup(groupName);

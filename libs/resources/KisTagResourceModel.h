@@ -136,7 +136,7 @@ public:
     QModelIndex indexForResource(KoResourceSP resource) const override;
     QModelIndex indexForResourceId(int resourceId) const override;
     bool setResourceInactive(const QModelIndex &index) override;
-    bool importResourceFile(const QString &filename) override;
+    bool importResourceFile(const QString &filename, const QString &storageId = QString()) override;
     bool addResource(KoResourceSP resource, const QString &storageId) override;
     bool updateResource(KoResourceSP resource) override;
     bool reloadResource(KoResourceSP resource) override;

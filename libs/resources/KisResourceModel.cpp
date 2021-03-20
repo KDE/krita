@@ -304,11 +304,11 @@ bool KisAllResourcesModel::setResourceInactive(const QModelIndex &index)
 }
 //static int s_i6 {0};
 
-bool KisAllResourcesModel::importResourceFile(const QString &filename)
+bool KisAllResourcesModel::importResourceFile(const QString &filename, const QString &storageId)
 {
     bool r = true;
     beginInsertRows(QModelIndex(), rowCount(), rowCount());
-    if (!KisResourceLocator::instance()->importResourceFromFile(d->resourceType, filename)) {
+    if (!KisResourceLocator::instance()->importResourceFromFile(d->resourceType, filename, storageId)) {
         r = false;
         qWarning() << "Failed to import resource" << filename;
     }
@@ -566,11 +566,11 @@ bool KisResourceModel::setResourceInactive(const QModelIndex &index)
     return false;
 }
 
-bool KisResourceModel::importResourceFile(const QString &filename)
+bool KisResourceModel::importResourceFile(const QString &filename, const QString &storageId)
 {
     KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
     if (source) {
-        return source->importResourceFile(filename);
+        return source->importResourceFile(filename, storageId);
     }
     return false;
 }

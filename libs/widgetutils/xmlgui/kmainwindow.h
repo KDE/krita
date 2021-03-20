@@ -19,7 +19,7 @@
 
 #include <kritawidgetutils_export.h>
 
-#include <QMainWindow>
+#include <kddockwidgets/MainWindow.h>
 #include <QMetaClassInfo>
 
 class QMenu;
@@ -85,7 +85,7 @@ class KToolBar;
  * @author Reginald Stadlbauer (reggie@kde.org) Stephan Kulow (coolo@kde.org), Matthias Ettrich (ettrich@kde.org), Chris Schlaeger (cs@kde.org), Sven Radej (radej@kde.org). Maintained by David Faure (faure@kde.org)
  */
 
-class KRITAWIDGETUTILS_EXPORT KMainWindow : public QMainWindow
+class KRITAWIDGETUTILS_EXPORT KMainWindow : public KDDockWidgets::MainWindow
 {
     friend class KMWSessionManager;
     friend class DockResizeListener;
@@ -128,7 +128,9 @@ public:
      * for the composer windows "composer#".
      *
      */
-    explicit KMainWindow(QWidget *parent = 0, Qt::WindowFlags f = Qt::WindowFlags());
+    explicit KMainWindow(const QString &uniqueWindowName,
+                         KDDockWidgets::MainWindowOptions options = KDDockWidgets::MainWindowOption_None,
+                         QWidget *parent = 0, Qt::WindowFlags f = Qt::WindowFlags());
 
     /**
      * \brief Destructor.
@@ -479,7 +481,7 @@ protected Q_SLOTS:
     void saveAutoSaveSettings();
 
 protected:
-    KMainWindow(KMainWindowPrivate &dd, QWidget *parent, Qt::WindowFlags f);
+    KMainWindow(const QString &uniqueWindowName, KDDockWidgets::MainWindowOptions options, KMainWindowPrivate &dd, QWidget *parent, Qt::WindowFlags f);
 
     KMainWindowPrivate *const k_ptr;
 private:

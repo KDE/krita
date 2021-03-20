@@ -7,7 +7,7 @@
 #ifndef ONION_SKINS_DOCKER_H
 #define ONION_SKINS_DOCKER_H
 
-#include <QDockWidget>
+#include <kddockwidgets/DockWidget.h>
 
 #include <kis_mainwindow_observer.h>
 #include "kis_signal_compressor.h"
@@ -20,7 +20,7 @@ class OnionSkinsDocker;
 
 class KisEqualizerWidget;
 
-class KisOnionSkinsDocker : public QDockWidget, public KisMainwindowObserver
+class KisOnionSkinsDocker : public KDDockWidgets::DockWidget, public KisMainwindowObserver
 {
     Q_OBJECT
 

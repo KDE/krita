@@ -8,12 +8,12 @@
 #ifndef _RECORDER_DOCK_H_
 #define _RECORDER_DOCK_H_
 
-#include <QDockWidget>
+#include <kddockwidgets/DockWidget.h>
 #include <KoCanvasObserverBase.h>
 
 class KisMainWindow;
 
-class RecorderDockerDock : public QDockWidget, public KoCanvasObserverBase
+class RecorderDockerDock : public KDDockWidgets::DockWidget, public KoCanvasObserverBase
 {
     Q_OBJECT
 public:

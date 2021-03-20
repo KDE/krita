@@ -7,7 +7,7 @@
 #ifndef _KIS_ANIMATION_CURVE_DOCKER_H_
 #define _KIS_ANIMATION_CURVE_DOCKER_H_
 
-#include <QDockWidget>
+#include <kddockwidgets/DockWidget.h>
 #include <kis_mainwindow_observer.h>
 #include <QScopedPointer>
 #include <kis_types.h>
@@ -82,7 +82,7 @@ private:
 /** @brief Krita's Animation Curves Docker.
  * This is the GUI heart of Krita's scalar animation workflow.
  */
-class KisAnimCurvesDocker : public QDockWidget, public KisMainwindowObserver
+class KisAnimCurvesDocker : public KDDockWidgets::DockWidget, public KisMainwindowObserver
 {
     Q_OBJECT
 public:

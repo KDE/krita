@@ -232,7 +232,7 @@ struct KisAnimTimelineDocker::Private
 };
 
 KisAnimTimelineDocker::KisAnimTimelineDocker()
-    : QDockWidget(i18n("Animation Timeline"))
+    : KDDockWidgets::DockWidget(i18n("Animation Timeline"))
     , m_d(new Private(this))
 {
     setWidget(m_d->framesView);
@@ -242,7 +242,7 @@ KisAnimTimelineDocker::KisAnimTimelineDocker()
 
     connect(m_d->titlebar->btnOnionSkinsMenu, &QPushButton::released, [this](){
         if (m_d->mainWindow) {
-            QDockWidget *docker = m_d->mainWindow->dockWidget("OnionSkinsDocker");
+            KDDockWidgets::DockWidgetBase *docker = m_d->mainWindow->dockWidget("OnionSkinsDocker");
             if (docker) {
                 docker->setVisible(!docker->isVisible());
             }

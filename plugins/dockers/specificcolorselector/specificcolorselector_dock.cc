@@ -19,7 +19,7 @@
 #include "kis_specific_color_selector_widget.h"
 
 SpecificColorSelectorDock::SpecificColorSelectorDock()
-    : QDockWidget(i18n("Specific Color Selector"))
+    : KDDockWidgets::DockWidget(i18n("Specific Color Selector"))
     , m_canvas(0)
     , m_view(0)
     , m_colorSelector(new KisSpecificColorSelectorWidget(this))

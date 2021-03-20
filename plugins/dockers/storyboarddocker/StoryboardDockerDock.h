@@ -7,7 +7,7 @@
 #ifndef _STORYBOARDDOCKER_DOCK_H_
 #define _STORYBOARDDOCKER_DOCK_H_
 
-#include <QDockWidget>
+#include <kddockwidgets/DockWidget.h>
 #include <QButtonGroup>
 #include <QItemSelection>
 
@@ -26,7 +26,7 @@ class DlgExportStoryboard;
 class QPrinter;
 enum ExportFormat : unsigned int;
 
-class StoryboardDockerDock : public QDockWidget, public KisMainwindowObserver{
+class StoryboardDockerDock : public KDDockWidgets::DockWidget, public KisMainwindowObserver{
     Q_OBJECT
 public:
     StoryboardDockerDock();

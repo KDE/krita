@@ -53,7 +53,7 @@ struct GamutMaskChooserUI: public QWidget, public Ui_wdgGamutMaskChooser
 
 
 GamutMaskDock::GamutMaskDock()
-    : QDockWidget(i18n("Gamut Masks"))
+    : KDDockWidgets::DockWidget(i18n("Gamut Masks"))
     , m_resourceProvider(0)
     , m_selfClosingTemplate(false)
     , m_externalTemplateClose(false)

@@ -8,7 +8,7 @@
 #define _SMALLCOLORSELECTOR_DOCK_H_
 
 #include <QPointer>
-#include <QDockWidget>
+#include <kddockwidgets/DockWidget.h>
 
 #include <KoCanvasBase.h>
 #include <KoCanvasObserverBase.h>
@@ -16,7 +16,7 @@
 class KoColor;
 class KisSmallColorWidget;
 
-class SmallColorSelectorDock : public QDockWidget, public KoCanvasObserverBase
+class SmallColorSelectorDock : public KDDockWidgets::DockWidget, public KoCanvasObserverBase
 {
     Q_OBJECT
 public:

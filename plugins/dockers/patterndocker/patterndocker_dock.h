@@ -7,14 +7,14 @@
 #ifndef _PATTERN_DOCK_H_
 #define _PATTERN_DOCK_H_
 
-#include <QDockWidget>
+#include <kddockwidgets/DockWidget.h>
 #include <kis_mainwindow_observer.h>
 
 #include <KoPattern.h>
 
 class KisPatternChooser;
 
-class PatternDockerDock : public QDockWidget, public KisMainwindowObserver {
+class PatternDockerDock : public KDDockWidgets::DockWidget, public KisMainwindowObserver {
     Q_OBJECT
 public:
     PatternDockerDock( );

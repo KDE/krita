@@ -20,6 +20,7 @@
 #include "kxmlguibuilder.h"
 #include "kmainwindow.h"
 #include <QMetaClassInfo>
+#include <kddockwidgets/MainWindow.h>
 
 class KMenu;
 class KXMLGUIFactory;
@@ -88,7 +89,9 @@ public:
      * for the composer windows "composer#".
      *
      */
-    explicit KXmlGuiWindow(QWidget *parent = 0, Qt::WindowFlags f = Qt::WindowFlags());
+    explicit KXmlGuiWindow(const QString &uniqueWindowName,
+                           KDDockWidgets::MainWindowOptions options = KDDockWidgets::MainWindowOption_None,
+                           QWidget *parent = 0, Qt::WindowFlags f = Qt::WindowFlags());
 
     /**
      * \brief Destructor.

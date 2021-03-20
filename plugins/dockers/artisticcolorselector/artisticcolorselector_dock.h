@@ -7,7 +7,7 @@
 #ifndef H_ARTISTIC_COLOR_SELECTOR_DOCK_H
 #define H_ARTISTIC_COLOR_SELECTOR_DOCK_H
 
-#include <QDockWidget>
+#include <kddockwidgets/DockWidget.h>
 #include <QPointer>
 #include <QRegExpValidator>
 
@@ -30,7 +30,7 @@ struct ArtisticColorSelectorUI;
 struct ARCSSettingsUI;
 struct WheelPreferencesPopupUI;
 
-class ArtisticColorSelectorDock: public QDockWidget, public KisMainwindowObserver
+class ArtisticColorSelectorDock: public KDDockWidgets::DockWidget, public KisMainwindowObserver
 {
     Q_OBJECT
     

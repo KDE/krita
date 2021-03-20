@@ -229,7 +229,7 @@ void KisPart::removeDocument(KisDocument *document, bool deleteDocument)
 
 KisMainWindow *KisPart::createMainWindow(QUuid id)
 {
-    KisMainWindow *mw = new KisMainWindow(id);
+    KisMainWindow *mw = new KisMainWindow(QString("mainwindow_%1").arg(d->mainWindows.count() + 1, id);
     dbgUI <<"mainWindow" << (void*)mw << "added to view" << this;
     d->mainWindows.append(mw);
 

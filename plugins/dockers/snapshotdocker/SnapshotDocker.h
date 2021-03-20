@@ -6,7 +6,7 @@
 #ifndef SNAPSHOT_DOCKER_H_
 #define SNAPSHOT_DOCKER_H_
 
-#include <QDockWidget>
+#include <kddockwidgets/DockWidget.h>
 #include <QScopedPointer>
 
 #include <kis_mainwindow_observer.h>
@@ -15,7 +15,7 @@
 #include <KoShapeController.h>
 #include <KoCanvasBase.h>
 
-class SnapshotDocker : public QDockWidget, public KisMainwindowObserver
+class SnapshotDocker : public KDDockWidgets::DockWidget, public KisMainwindowObserver
 {
     Q_OBJECT
 public:

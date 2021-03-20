@@ -27,7 +27,7 @@
 #include <QTemporaryFile>
 #include <QApplication>
 #include <QDesktopWidget>
-#include <QDockWidget>
+#include <kddockwidgets/DockWidget.h>
 #include <QDragEnterEvent>
 #include <QDropEvent>
 #include <QImage>

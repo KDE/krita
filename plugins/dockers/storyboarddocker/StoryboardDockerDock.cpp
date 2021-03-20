@@ -144,7 +144,7 @@ private:
 };
 
 StoryboardDockerDock::StoryboardDockerDock( )
-    : QDockWidget(i18nc("Storyboard Docker", "Storyboard"))
+    : KDDockWidgets::DockWidget(i18nc("Storyboard Docker", "Storyboard"))
     , m_canvas(0)
     , m_ui(new Ui_WdgStoryboardDock())
     , m_exportMenu(new QMenu(this))

@@ -10,17 +10,17 @@
 #include <KisActionPlugin.h>
 
 #include <QVariant>
-#include <QDockWidget>
+#include <kddockwidgets/DockWidget.h>
 #include <klocalizedstring.h>
 #include <KoCanvasObserverBase.h>
 
 class Throttle;
 
-class BasicDocker : public QDockWidget, public KoCanvasObserverBase
+class BasicDocker : public KDDockWidgets::DockWidget, public KoCanvasObserverBase
 {
     Q_OBJECT
 public:
-    BasicDocker() : QDockWidget(i18n("CPU Throttle")) {}
+    BasicDocker() : KDDockWidgets::DockWidget(i18n("CPU Throttle")) {}
     ~BasicDocker() override {}
     QString observerName() override { return "ThrottleDocker"; }
     void setCanvas(KoCanvasBase *) override {}

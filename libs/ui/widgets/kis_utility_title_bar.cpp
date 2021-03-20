@@ -4,7 +4,7 @@
 
 #include "kis_utility_title_bar.h"
 
-#include <QDockWidget>
+#include <kddockwidgets/DockWidget.h>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QPushButton>
@@ -51,7 +51,7 @@ KisUtilityTitleBar::KisUtilityTitleBar(QLabel *title, QWidget *parent)
         sublayout->setSpacing(0);
         sublayout->setContentsMargins(0,0,0,0);
 
-        QDockWidget *dockWidget = qobject_cast<QDockWidget*>(parentWidget());
+        KDDockWidgets::DockWidgetBase *dockWidget = qobject_cast<KDDockWidgets::DockWidgetBase*>(parentWidget());
 
         {   // Float button...
             QIcon floatIcon = kisIcon("docker_float");

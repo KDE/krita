@@ -17,7 +17,7 @@
 #include <QVBoxLayout>
 
 SmallColorSelectorDock::SmallColorSelectorDock()
-        : QDockWidget()
+        : KDDockWidgets::DockWidget()
         , m_canvas(0)
 {
     QWidget *page = new QWidget(this);

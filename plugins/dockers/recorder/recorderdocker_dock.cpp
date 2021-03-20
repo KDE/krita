@@ -159,7 +159,7 @@ public:
 };
 
 RecorderDockerDock::RecorderDockerDock()
-    : QDockWidget(i18nc("Title of the docker", "Recorder"))
+    : KDDockWidgets::DockWidget(i18nc("Title of the docker", "Recorder"))
     , d(new Private(this))
 {
     QWidget* page = new QWidget(this);

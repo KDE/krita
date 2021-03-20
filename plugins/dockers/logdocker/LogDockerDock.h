@@ -7,7 +7,7 @@
 #ifndef _LOGDOCKER_DOCK_H_
 #define _LOGDOCKER_DOCK_H_
 
-#include <QDockWidget>
+#include <kddockwidgets/DockWidget.h>
 
 #include <kis_mainwindow_observer.h>
 
@@ -28,7 +28,7 @@ Q_SIGNALS:
 
 };
 
-class LogDockerDock : public QDockWidget, public KisMainwindowObserver, public Ui_WdgLogDocker {
+class LogDockerDock : public KDDockWidgets::DockWidget, public KisMainwindowObserver, public Ui_WdgLogDocker {
     Q_OBJECT
 public:
     LogDockerDock( );

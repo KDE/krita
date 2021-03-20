@@ -34,7 +34,7 @@ public:
         return Qt::RightDockWidgetArea;
     }
 
-    QDockWidget* createDockWidget() override
+    KDDockWidgets::DockWidgetBase *createDockWidget() override
     {
         TasksetDockerDock * dockWidget = new TasksetDockerDock();
 

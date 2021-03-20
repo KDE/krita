@@ -31,7 +31,7 @@ public:
         return Qt::RightDockWidgetArea;
     }
 
-    QDockWidget* createDockWidget() override {
+    KDDockWidgets::DockWidgetBase *createDockWidget() override {
         SmallColorSelectorDock * dockWidget = new SmallColorSelectorDock();
         dockWidget->setObjectName(id());
 

@@ -78,7 +78,7 @@ public:
 
 
 TouchDockerDock::TouchDockerDock()
-    : QDockWidget(i18n("Touch Docker"))
+    : KDDockWidgets::DockWidget(i18n("Touch Docker"))
     , d(new Private())
 {
 

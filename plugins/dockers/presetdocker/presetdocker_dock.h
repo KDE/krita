@@ -8,13 +8,13 @@
 #define _PRESETDOCKER_DOCK_H_
 
 #include <QPointer>
-#include <QDockWidget>
+#include <kddockwidgets/DockWidget.h>
 #include <KoCanvasObserverBase.h>
 #include <kis_canvas2.h>
 
 class KisPaintOpPresetsChooserPopup;
 
-class PresetDockerDock : public QDockWidget, public KoCanvasObserverBase {
+class PresetDockerDock : public KDDockWidgets::DockWidget, public KoCanvasObserverBase {
     Q_OBJECT
 public:
     PresetDockerDock( );

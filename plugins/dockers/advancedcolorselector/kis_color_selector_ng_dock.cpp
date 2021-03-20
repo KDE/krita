@@ -14,7 +14,7 @@
 
 
 KisColorSelectorNgDock::KisColorSelectorNgDock()
-    : QDockWidget()
+    : KDDockWidgets::DockWidget()
 {
     m_colorSelectorNgWidget = new KisColorSelectorNgDockerWidget(this);
 

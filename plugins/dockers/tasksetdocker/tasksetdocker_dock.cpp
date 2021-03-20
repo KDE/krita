@@ -72,7 +72,7 @@ void KisTasksetResourceDelegate::paint(QPainter * painter, const QStyleOptionVie
 }
 
 TasksetDockerDock::TasksetDockerDock( )
-    : QDockWidget(i18n("Task Sets"))
+    : KDDockWidgets::DockWidget(i18n("Task Sets"))
     , m_canvas(0)
     , m_blocked(false)
 {

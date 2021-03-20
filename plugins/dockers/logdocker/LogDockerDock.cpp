@@ -36,7 +36,7 @@ QTextCharFormat LogDockerDock::s_critical;
 QTextCharFormat LogDockerDock::s_fatal;
 
 LogDockerDock::LogDockerDock( )
-    : QDockWidget(i18n("Log Viewer"))
+    : KDDockWidgets::DockWidget(i18n("Log Viewer"))
 {
     QWidget *page = new QWidget(this);
     setupUi(page);

@@ -8,12 +8,12 @@
 #ifndef KIS_COLOR_SELECTOR_NG_DOCKER_H
 #define KIS_COLOR_SELECTOR_NG_DOCKER_H
 
-#include <QDockWidget>
+#include <kddockwidgets/DockWidget.h>
 #include <KoCanvasObserverBase.h>
 
 class KisColorSelectorNgDockerWidget;
 
-class KisColorSelectorNgDock : public QDockWidget, public KoCanvasObserverBase
+class KisColorSelectorNgDock : public KDDockWidgets::DockWidget, public KoCanvasObserverBase
 {
     Q_OBJECT
 public:

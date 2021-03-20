@@ -25,7 +25,7 @@ public:
         return Qt::RightDockWidgetArea;
     }
 
-    QDockWidget* createDockWidget() override {
+    KDDockWidgets::DockWidgetBase *createDockWidget() override {
         ArtisticColorSelectorDock* dockWidget = new ArtisticColorSelectorDock();
         dockWidget->setObjectName(id());
         return dockWidget;

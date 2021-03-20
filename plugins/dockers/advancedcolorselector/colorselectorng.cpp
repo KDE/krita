@@ -33,7 +33,7 @@ public:
         return Qt::RightDockWidgetArea;
     }
 
-    QDockWidget* createDockWidget() override {
+    KDDockWidgets::DockWidgetBase *createDockWidget() override {
         KisColorSelectorNgDock * dockWidget = new KisColorSelectorNgDock();
         dockWidget->setObjectName(id());
 

@@ -6,7 +6,7 @@
 #ifndef _HISTORY_DOCK_H_
 #define _HISTORY_DOCK_H_
 
-#include <QDockWidget>
+#include <kddockwidgets/DockWidget.h>
 #include <QToolButton>
 
 #include "KisUndoView.h"
@@ -23,7 +23,7 @@
 #include "kis_image.h"
 #include "kis_paint_device.h"
 
-class HistoryDock : public QDockWidget, public KoCanvasObserverBase
+class HistoryDock : public KDDockWidgets::DockWidget, public KoCanvasObserverBase
 {
     Q_OBJECT
 public:

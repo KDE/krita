@@ -7,7 +7,7 @@
 #define KODOCKWIDGETTITLEBAR_H_
 
 #include "kritawidgets_export.h"
-#include <QDockWidget>
+#include <kddockwidgets/DockWidget.h>
 
 /**
  * @short A custom title bar for dock widgets.

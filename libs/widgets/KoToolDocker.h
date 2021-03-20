@@ -8,7 +8,7 @@
 #ifndef KO_TOOL_DOCKER_H
 #define KO_TOOL_DOCKER_H
 
-#include <QDockWidget>
+#include <kddockwidgets/DockWidget.h>
 #include <QPointer>
 #include <KisKineticScroller.h>
 
@@ -20,7 +20,7 @@ class QWidget;
  * The tool docker shows the tool option widget associated with the
  * current tool and the current canvas.
  */
-class KRITAWIDGETS_EXPORT KoToolDocker : public QDockWidget, public KoCanvasObserverBase
+class KRITAWIDGETS_EXPORT KoToolDocker : public KDDockWidgets::DockWidget, public KoCanvasObserverBase
 {
     Q_OBJECT
 public:

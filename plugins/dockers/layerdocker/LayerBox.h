@@ -13,7 +13,7 @@
 
 #include <QFrame>
 #include <QList>
-#include <QDockWidget>
+#include <kddockwidgets/DockWidget.h>
 #include <QPointer>
 #include <QTimer>
 
@@ -56,7 +56,7 @@ class KisSelectionActionsAdapter;
  * This widget adds docking functionality and command buttons.
  *
  */
-class LayerBox : public QDockWidget, public KisMainwindowObserver
+class LayerBox : public KDDockWidgets::DockWidget, public KisMainwindowObserver
 {
 
     Q_OBJECT
@@ -177,7 +177,7 @@ public:
         return QString("KisLayerBox");
     }
 
-    QDockWidget* createDockWidget() override {
+    KDDockWidgets::DockWidgetBase *createDockWidget() override {
         LayerBox * dockWidget = new LayerBox();
 
         dockWidget->setObjectName(id());

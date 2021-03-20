@@ -133,9 +133,9 @@ public:
 
 };
 
-KoToolDocker::KoToolDocker(QWidget *parent)
-    : QDockWidget(i18n("Tool Options"), parent),
-      d(new Private(this))
+KoToolDocker::KoToolDocker(QWidget *)
+    : KDDockWidgets::DockWidget(i18n("Tool Options"))
+    , d(new Private(this))
 {
     connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(locationChanged(Qt::DockWidgetArea)));
 

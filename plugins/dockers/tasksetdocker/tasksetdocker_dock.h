@@ -7,7 +7,7 @@
 #ifndef TASKSETDOCKER_DOCK_H
 #define TASKSETDOCKER_DOCK_H
 
-#include <QDockWidget>
+#include <kddockwidgets/DockWidget.h>
 #include <QModelIndex>
 #include <QPointer>
 
@@ -21,7 +21,7 @@
 
 class TasksetModel;
 
-class TasksetDockerDock : public QDockWidget, public KoCanvasObserverBase, public Ui_WdgTasksetDocker {
+class TasksetDockerDock : public KDDockWidgets::DockWidget, public KoCanvasObserverBase, public Ui_WdgTasksetDocker {
     Q_OBJECT
 public:
     TasksetDockerDock();

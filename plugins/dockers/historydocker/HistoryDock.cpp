@@ -18,7 +18,7 @@
 #include <DlgConfigureHistoryDock.h>
 
 HistoryDock::HistoryDock()
-    : QDockWidget()
+    : KDDockWidgets::DockWidget()
     , m_historyCanvas(0)
 {
     QWidget *page = new QWidget(this);

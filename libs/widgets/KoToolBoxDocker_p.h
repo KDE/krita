@@ -11,13 +11,13 @@
 
 #include <KoCanvasObserverBase.h>
 
-#include <QDockWidget>
+#include <kddockwidgets/DockWidget.h>
 
 class KoCanvasBase;
 class KoToolBox;
 class KoToolBoxScrollArea;
 
-class KoToolBoxDocker : public QDockWidget, public KoCanvasObserverBase
+class KoToolBoxDocker : public KDDockWidgets::DockWidget, public KoCanvasObserverBase
 {
     Q_OBJECT
 public:

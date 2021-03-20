@@ -19,7 +19,7 @@
 #include "histogramdockerwidget.h"
 
 HistogramDockerDock::HistogramDockerDock()
-    : QDockWidget(i18n("Histogram")),
+    : KDDockWidgets::DockWidget(i18n("Histogram")),
       m_imageIdleWatcher(new KisIdleWatcher(250, this)),
       m_canvas(0)
 {

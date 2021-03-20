@@ -19,7 +19,7 @@
 #include <QDesktopServices>
 #include <QDesktopWidget>
 #include <QDialog>
-#include <QDockWidget>
+#include <kddockwidgets/DockWidget.h>
 #include <QIcon>
 #include <QInputDialog>
 #include <QLabel>
@@ -75,7 +75,7 @@
 #include <KoToolFactoryBase.h>
 #include <KoToolRegistry.h>
 #include "KoDockFactoryBase.h"
-#include "KoDockWidgetTitleBar.h"
+//#include "KoDockWidgetTitleBar.h"
 #include "KoDocumentInfoDlg.h"
 #include "KoDocumentInfo.h"
 #include "KoFileDialog.h"
@@ -150,6 +150,8 @@
 #include <katecommandbar.h>
 #include "KisNodeActivationActionCreatorVisitor.h"
 
+#include <kddockwidgets/private/TitleBar_p.h>
+
 #include <mutex>
 
 class ToolDockerFactory : public KoDockFactoryBase
@@ -161,7 +163,7 @@ public:
         return "sharedtooldocker";
     }
 
-    QDockWidget* createDockWidget() override {
+    KDDockWidgets::DockWidgetBase *createDockWidget() override {
         KoToolDocker* dockWidget = new KoToolDocker();
         return dockWidget;
     }
@@ -272,7 +274,7 @@ public:
 
     QString lastExportLocation;
 
-    QMap<QString, QDockWidget *> dockWidgetsMap;
+    QMap<QString, KDDockWidgets::DockWidgetBase *> dockWidgetsMap;
     QByteArray dockerStateBeforeHiding;
     KoToolDocker *toolOptionsDocker {0};
 
@@ -339,8 +341,8 @@ public:
     }
 };
 
-KisMainWindow::KisMainWindow(QUuid uuid)
-    : KXmlGuiWindow()
+KisMainWindow::KisMainWindow(const QString &uniqueStableName, QUuid uuid)
+    : KXmlGuiWindow(uniqueStableName)
     , d(new Private(this, uuid))
 {
     KAcceleratorManager::setNoAccel(this);
@@ -377,26 +379,26 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     KoPluginLoader::instance()->load("Krita/ApplicationPlugin", "Type == 'Service' and ([X-Krita-Version] == 28)", KoPluginLoader::PluginsConfig(), qApp, true);
 
     KoToolBoxFactory toolBoxFactory;
-    QDockWidget *toolbox = createDockWidget(&toolBoxFactory);
+    KDDockWidgets::DockWidgetBase *toolbox = createDockWidget(&toolBoxFactory);
 
     KisConfig cfg(true);
     if (cfg.toolOptionsInDocker()) {
         ToolDockerFactory toolDockerFactory;
         d->toolOptionsDocker = qobject_cast<KoToolDocker*>(createDockWidget(&toolDockerFactory));
-        d->toolOptionsDocker->toggleViewAction()->setEnabled(true);
+        d->toolOptionsDocker->toggleAction()->setEnabled(true);
     }
 
     QMap<QString, QAction*> dockwidgetActions;
 
-    dockwidgetActions[toolbox->toggleViewAction()->text()] = toolbox->toggleViewAction();
+    dockwidgetActions[toolbox->toggleAction()->text()] = toolbox->toggleAction();
     Q_FOREACH (const QString & docker, KoDockRegistry::instance()->keys()) {
         KoDockFactoryBase *factory = KoDockRegistry::instance()->value(docker);
-        QDockWidget *dw = createDockWidget(factory);
-        dockwidgetActions[dw->toggleViewAction()->text()] = dw->toggleViewAction();
+        KDDockWidgets::DockWidgetBase *dw = createDockWidget(factory);
+        dockwidgetActions[dw->toggleAction()->text()] = dw->toggleAction();
     }
 
     if (d->toolOptionsDocker) {
-        dockwidgetActions[d->toolOptionsDocker->toggleViewAction()->text()] = d->toolOptionsDocker->toggleViewAction();
+        dockwidgetActions[d->toolOptionsDocker->toggleAction()->text()] = d->toolOptionsDocker->toggleAction();
     }
     connect(KoToolManager::instance(), SIGNAL(toolOptionWidgetsChanged(KoCanvasController*,QList<QPointer<QWidget> >)), this, SLOT(newOptionWidgets(KoCanvasController*,QList<QPointer<QWidget> >)));
 
@@ -432,8 +434,8 @@ KisMainWindow::KisMainWindow(QUuid uuid)
 
 
 
-    Q_FOREACH (QDockWidget *wdg, dockWidgets()) {
-        if ((wdg->features() & QDockWidget::DockWidgetClosable) == 0) {
+    Q_FOREACH (KDDockWidgets::DockWidgetBase *wdg, dockWidgets()) {
+        if ((wdg->options() & KDDockWidgets::DockWidgetBase::Option_None) == 0) {
             wdg->setVisible(true);
         }
     }
@@ -884,7 +886,7 @@ void KisMainWindow::setCanvasDetached(bool detach)
     QWidget *incomingWidget = d->canvasWindow->swapMainWidget(outgoingWidget);
 
     if (incomingWidget) {
-        setCentralWidget(incomingWidget);
+        addDockWidget(incomingWidget);
     }
 
     if (detach) {
@@ -1793,20 +1795,20 @@ bool KisMainWindow::restoreWorkspaceState(const QByteArray &state)
     const bool showTitlebars = KisConfig(false).showDockerTitleBars();
 
     // needed because otherwise the layout isn't correctly restored in some situations
-    Q_FOREACH (QDockWidget *dock, dockWidgets()) {
+    Q_FOREACH (KDDockWidgets::DockWidgetBase *dock, dockWidgets()) {
         dock->setProperty("Locked", false); // Unlock invisible dockers
-        dock->toggleViewAction()->setEnabled(true);
+        dock->toggleAction()->setEnabled(true);
         dock->hide();
-        dock->titleBarWidget()->setVisible(showTitlebars);
+        dock->titleBar()->setVisible(showTitlebars);
     }
 
     bool success = KXmlGuiWindow::restoreState(state);
 
     if (!success) {
         KXmlGuiWindow::restoreState(oldState);
-        Q_FOREACH (QDockWidget *dock, dockWidgets()) {
-            if (dock->titleBarWidget()) {
-                dock->titleBarWidget()->setVisible(showTitlebars || dock->isFloating());
+        Q_FOREACH (KDDockWidgets::DockWidgetBase *dock, dockWidgets()) {
+            if (dock->titleBar()) {
+                dock->titleBar()->setVisible(showTitlebars || dock->isFloating());
             }
         }
         return false;
@@ -1886,9 +1888,9 @@ bool KisMainWindow::restoreWorkspace(KoResourceSP res)
     bool success = restoreWorkspaceState(workspace->dockerState());
 
     const bool showTitlebars = KisConfig(false).showDockerTitleBars();
-    Q_FOREACH (QDockWidget *dock, dockWidgets()) {
-        if (dock->titleBarWidget()) {
-            dock->titleBarWidget()->setVisible(showTitlebars || dock->isFloating());
+    Q_FOREACH (KDDockWidgets::DockWidgetBase *dock, dockWidgets()) {
+        if (dock->titleBar()) {
+            dock->titleBar()->setVisible(showTitlebars || dock->isFloating());
         }
     }
 
@@ -2207,14 +2209,14 @@ void KisMainWindow::setMaxRecentItems(uint _number)
     d->recentFiles->setMaxItems(_number);
 }
 
-QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
+KDDockWidgets::DockWidgetBase* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
 {
-    QDockWidget* dockWidget = 0;
+    KDDockWidgets::DockWidgetBase* dockWidget = 0;
     bool lockAllDockers = KisConfig(true).readEntry<bool>("LockAllDockerPanels", false);
 
     if (!d->dockWidgetsMap.contains(factory->id())) {
         dockWidget = factory->createDockWidget();
-        KAcceleratorManager::setNoAccel(dockWidget->titleBarWidget());
+        KAcceleratorManager::setNoAccel(dockWidget->titleBar());
 
         // It is quite possible that a dock factory cannot create the dock; don't
         // do anything in that case.
@@ -2222,11 +2224,11 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
             warnKrita << "Could not create docker for" << factory->id();
             return 0;
         }
-
-        KoDockWidgetTitleBar *titleBar = dynamic_cast<KoDockWidgetTitleBar*>(dockWidget->titleBarWidget());
+/*
+        KoDockWidgetTitleBar *titleBar = dynamic_cast<KoDockWidgetTitleBar*>(dockWidget->titleBar());
 
         // Check if the dock widget is supposed to be collapsible
-        if (!dockWidget->titleBarWidget() && factory->id() != "TimelineDocker") {
+        if (!dockWidget->titleBar() && factory->id() != "TimelineDocker") {
             titleBar = new KoDockWidgetTitleBar(dockWidget);
             dockWidget->setTitleBarWidget(titleBar);
         }
@@ -2234,14 +2236,14 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
             titleBar->setFont(KoDockRegistry::dockFont());
         }
 
-
+*/
         dockWidget->setObjectName(factory->id());
         dockWidget->setParent(this);
         if (lockAllDockers && factory->id() != "TimelineDocker") {
-            if (dockWidget->titleBarWidget()) {
-                dockWidget->titleBarWidget()->setVisible(false);
+            if (dockWidget->titleBar()) {
+                dockWidget->titleBar()->setVisible(false);
             }
-            dockWidget->setFeatures(QDockWidget::NoDockWidgetFeatures);
+            dockWidget->setOptions(KDDockWidgets::DockWidgetBase::Option_None);
         }
         if (dockWidget->widget() && dockWidget->widget()->layout())
             dockWidget->widget()->layout()->setContentsMargins(1, 1, 1, 1);
@@ -2320,12 +2322,12 @@ void KisMainWindow::slotUpdateWidgetStyle()
      }
 }
 
-QList<QDockWidget*> KisMainWindow::dockWidgets() const
+QList<KDDockWidgets::DockWidgetBase*> KisMainWindow::dockWidgets() const
 {
     return d->dockWidgetsMap.values();
 }
 
-QDockWidget* KisMainWindow::dockWidget(const QString &id)
+KDDockWidgets::DockWidgetBase* KisMainWindow::dockWidget(const QString &id)
 {
     if (!d->dockWidgetsMap.contains(id)) return 0;
     return d->dockWidgetsMap[id];
@@ -2335,7 +2337,7 @@ QList<KoCanvasObserverBase*> KisMainWindow::canvasObservers() const
 {
     QList<KoCanvasObserverBase*> observers;
 
-    Q_FOREACH (QDockWidget *docker, dockWidgets()) {
+    Q_FOREACH (KDDockWidgets::DockWidgetBase *docker, dockWidgets()) {
         KoCanvasObserverBase *observer = dynamic_cast<KoCanvasObserverBase*>(docker);
         if (observer) {
             observers << observer;
@@ -2355,7 +2357,7 @@ void KisMainWindow::toggleDockersVisibility(bool visible)
 
         Q_FOREACH (QObject* widget, children()) {
             if (widget->inherits("QDockWidget")) {
-                QDockWidget* dw = static_cast<QDockWidget*>(widget);
+                KDDockWidgets::DockWidgetBase* dw = static_cast<KDDockWidgets::DockWidgetBase*>(widget);
                 if (dw->isVisible()) {
                     dw->hide();
                 }
@@ -2599,7 +2601,7 @@ void KisMainWindow::updateWindowMenu()
     // enable/disable the toolbox docker if there are no documents open
     Q_FOREACH (QObject* widget, children()) {
         if (widget->inherits("QDockWidget")) {
-            QDockWidget* dw = static_cast<QDockWidget*>(widget);
+            KDDockWidgets::DockWidgetBase* dw = static_cast<KDDockWidgets::DockWidgetBase*>(widget);
 
             if ( dw->objectName() == "ToolBox") {
                 dw->setEnabled(showMdiArea);
@@ -2709,7 +2711,7 @@ void KisMainWindow::configChanged()
 
             Q_FOREACH (QObject* widget, children()) {
                 if (widget->inherits("QDockWidget")) {
-                    QDockWidget* dw = static_cast<QDockWidget*>(widget);
+                    KDDockWidgets::DockWidgetBase* dw = static_cast<KDDockWidgets::DockWidgetBase*>(widget);
                     dw->setFont(KoDockRegistry::dockFont());
                 }
             }
@@ -3011,9 +3013,9 @@ void KisMainWindow::windowScreenChanged(QScreen *screen)
 
 void KisMainWindow::showDockerTitleBars(bool show)
 {
-    Q_FOREACH (QDockWidget *dock, dockWidgets()) {
-        if (dock->titleBarWidget()) {
-            dock->titleBarWidget()->setVisible(show || dock->isFloating());
+    Q_FOREACH (KDDockWidgets::DockWidgetBase *dock, dockWidgets()) {
+        if (dock->titleBar()) {
+            dock->titleBar()->setVisible(show || dock->isFloating());
         }
     }
 

@@ -34,7 +34,7 @@
 #include <ksharedconfig.h>
 
 OverviewDockerDock::OverviewDockerDock()
-    : QDockWidget(i18n("Overview"))
+    : KDDockWidgets::DockWidget(i18n("Overview"))
     , m_zoomSlider(nullptr)
     , m_rotateAngleSelector(nullptr)
     , m_mirrorCanvas(nullptr)

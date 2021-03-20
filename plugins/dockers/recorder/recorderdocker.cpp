@@ -45,7 +45,7 @@ public:
         return Qt::RightDockWidgetArea;
     }
 
-    QDockWidget* createDockWidget() override
+    KDDockWidgets::DockWidgetBase *createDockWidget() override
     {
         RecorderDockerDock* dockWidget = new RecorderDockerDock();
         dockWidget->setObjectName(id());

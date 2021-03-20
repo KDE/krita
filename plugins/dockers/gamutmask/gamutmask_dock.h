@@ -7,7 +7,7 @@
 #ifndef H_GAMUT_MASK_DOCK_H
 #define H_GAMUT_MASK_DOCK_H
 
-#include <QDockWidget>
+#include <kddockwidgets/DockWidget.h>
 #include <QPointer>
 #include <QRegExpValidator>
 #include <QMessageBox>
@@ -29,7 +29,7 @@ class QMenu;
 
 struct GamutMaskChooserUI;
 
-class GamutMaskDock: public QDockWidget, public KisMainwindowObserver, public KoResourceServerObserver<KoGamutMask>
+class GamutMaskDock: public KDDockWidgets::DockWidget, public KisMainwindowObserver, public KoResourceServerObserver<KoGamutMask>
 {
     Q_OBJECT
 

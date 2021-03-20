@@ -81,7 +81,7 @@ OCIO::ConstConfigRcPtr defaultRawProfile()
 }
 
 LutDockerDock::LutDockerDock()
-    : QDockWidget(i18n("LUT Management"))
+    : KDDockWidgets::DockWidget(i18n("LUT Management"))
     , m_canvas(0)
     , m_draggingSlider(false)
 {

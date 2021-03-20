@@ -8,7 +8,7 @@
 #ifndef PALETTEDOCKER_DOCK_H
 #define PALETTEDOCKER_DOCK_H
 
-#include <QDockWidget>
+#include <kddockwidgets/DockWidget.h>
 #include <QModelIndex>
 #include <QScopedPointer>
 #include <QVector>
@@ -36,7 +36,7 @@ class KisPaletteModel;
 class KisPaletteEditor;
 class Ui_WdgPaletteDock;
 
-class PaletteDockerDock : public QDockWidget, public KisMainwindowObserver, public KoResourceServerObserver<KoColorSet>
+class PaletteDockerDock : public KDDockWidgets::DockWidget, public KisMainwindowObserver, public KoResourceServerObserver<KoColorSet>
 {
     Q_OBJECT
 public:

@@ -30,7 +30,7 @@ public:
         return Qt::RightDockWidgetArea;
     }
 
-    QDockWidget* createDockWidget() override {
+    KDDockWidgets::DockWidgetBase *createDockWidget() override {
         HistoryDock * dockWidget = new HistoryDock();
         dockWidget->setObjectName(id());
 

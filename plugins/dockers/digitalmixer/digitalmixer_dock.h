@@ -8,7 +8,7 @@
 #define _DIGITALMIXER_DOCK_H_
 
 #include <QPointer>
-#include <QDockWidget>
+#include <kddockwidgets/DockWidget.h>
 
 #include <KoColor.h>
 #include <KoCanvasObserverBase.h>
@@ -20,7 +20,7 @@ class KoColorSlider;
 class KoColorPatch;
 class KisColorButton;
 
-class DigitalMixerDock : public QDockWidget, public KoCanvasObserverBase {
+class DigitalMixerDock : public KDDockWidgets::DockWidget, public KoCanvasObserverBase {
     Q_OBJECT
 public:
     DigitalMixerDock( );

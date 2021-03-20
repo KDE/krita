@@ -34,7 +34,7 @@ public:
         return Qt::RightDockWidgetArea;
     }
 
-    QDockWidget *createDockWidget() override
+    KDDockWidgets::DockWidgetBase *createDockWidget() override
     {
         KisAnimTimelineDocker *dockWidget = new KisAnimTimelineDocker();
         dockWidget->setObjectName(id());
@@ -65,7 +65,7 @@ public:
         return Qt::RightDockWidgetArea;
     }
 
-    QDockWidget *createDockWidget() override
+    KDDockWidgets::DockWidgetBase *createDockWidget() override
     {
         KisOnionSkinsDocker *dockWidget = new KisOnionSkinsDocker();
         dockWidget->setObjectName(id());
@@ -96,7 +96,7 @@ public:
         return Qt::RightDockWidgetArea;
     }
 
-    QDockWidget *createDockWidget() override
+    KDDockWidgets::DockWidgetBase *createDockWidget() override
     {
         KisAnimCurvesDocker *dockWidget = new KisAnimCurvesDocker();
         dockWidget->setObjectName(id());

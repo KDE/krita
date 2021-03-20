@@ -142,7 +142,7 @@ inline void LayerBox::addActionToMenu(QMenu *menu, const QString &id)
 }
 
 LayerBox::LayerBox()
-    : QDockWidget(i18n("Layers"))
+    : KDDockWidgets::DockWidget(i18n("Layers"))
     , m_canvas(0)
     , m_wdgLayerBox(new Ui_WdgLayerBox)
     , m_thumbnailCompressor(500, KisSignalCompressor::FIRST_INACTIVE)

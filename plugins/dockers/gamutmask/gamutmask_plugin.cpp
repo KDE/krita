@@ -25,7 +25,7 @@ public:
         return Qt::RightDockWidgetArea;
     }
 
-    QDockWidget* createDockWidget() override {
+    KDDockWidgets::DockWidgetBase *createDockWidget() override {
         GamutMaskDock* dockWidget = new GamutMaskDock();
         dockWidget->setObjectName(id());
         return dockWidget;

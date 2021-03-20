@@ -9,7 +9,7 @@
 #define _OVERVIEW_DOCK_H_
 
 #include <QPointer>
-#include <QDockWidget>
+#include <kddockwidgets/DockWidget.h>
 #include <QVariantAnimation>
 
 #include <KoCanvasObserverBase.h>
@@ -21,7 +21,7 @@ class QToolButton;
 class OverviewWidget;
 class KisAngleSelector;
 
-class OverviewDockerDock : public QDockWidget, public KoCanvasObserverBase {
+class OverviewDockerDock : public KDDockWidgets::DockWidget, public KoCanvasObserverBase {
     Q_OBJECT
 public:
     OverviewDockerDock();

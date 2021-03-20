@@ -26,7 +26,7 @@
 #include <QPainter>
 #include <QScrollBar>
 #include <QEvent>
-#include <QDockWidget>
+#include <kddockwidgets/DockWidget.h>
 #include <QTimer>
 #include <QPointer>
 

@@ -36,7 +36,7 @@ public:
         return Qt::RightDockWidgetArea;
     }
 
-    QDockWidget* createDockWidget() override
+    KDDockWidgets::DockWidgetBase *createDockWidget() override
     {
         TouchDockerDock * dockWidget = new TouchDockerDock();
 

@@ -138,7 +138,7 @@ QString SvgSymbolCollectionDockerFactory::id() const
     return QString("SvgSymbolCollectionDocker");
 }
 
-QDockWidget *SvgSymbolCollectionDockerFactory::createDockWidget()
+KDDockWidgets::DockWidgetBase *SvgSymbolCollectionDockerFactory::createDockWidget()
 {
     SvgSymbolCollectionDocker *docker = new SvgSymbolCollectionDocker();
 
@@ -150,7 +150,7 @@ QDockWidget *SvgSymbolCollectionDockerFactory::createDockWidget()
 //
 
 SvgSymbolCollectionDocker::SvgSymbolCollectionDocker(QWidget *parent)
-    : QDockWidget(parent)
+    : KDDockWidgets::DockWidget(parent)
     , m_wdgSvgCollection(new Ui_WdgSvgCollection())
 {
     setWindowTitle(i18n("Vector Libraries"));

@@ -7,7 +7,7 @@
 #ifndef _HISTOGRAM_DOCK_H_
 #define _HISTOGRAM_DOCK_H_
 
-#include <QDockWidget>
+#include <kddockwidgets/DockWidget.h>
 #include <QPointer>
 
 #include <KoCanvasObserverBase.h>
@@ -20,7 +20,7 @@ class KisIdleWatcher;
 class KoHistogramProducer;
 class HistogramDockerWidget;
 
-class HistogramDockerDock : public QDockWidget, public KoCanvasObserverBase {
+class HistogramDockerDock : public KDDockWidgets::DockWidget, public KoCanvasObserverBase {
     Q_OBJECT
 public:
     HistogramDockerDock();

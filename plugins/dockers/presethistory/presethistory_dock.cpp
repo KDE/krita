@@ -33,7 +33,7 @@
 #define ICON_SIZE 48
 
 PresetHistoryDock::PresetHistoryDock( )
-    : QDockWidget(i18n("Brush Preset History"))
+    : KDDockWidgets::DockWidget(i18n("Brush Preset History"))
 {
     m_presetHistory = new QListWidget(this);
     m_presetHistory->setIconSize(QSize(ICON_SIZE, ICON_SIZE));

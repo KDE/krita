@@ -10,7 +10,7 @@
 #include <QWidget>
 #include <QLabel>
 #include <QPointer>
-#include <QDockWidget>
+#include <kddockwidgets/DockWidget.h>
 
 #include <KoDockFactoryBase.h>
 #include <KoCanvasObserverBase.h>
@@ -32,7 +32,7 @@ class BlackWhitePointChooser;
 #include "kis_exposure_gamma_correction_interface.h"
 
 
-class LutDockerDock : public QDockWidget, public KoCanvasObserverBase, public Ui_WdgLut, public KisExposureGammaCorrectionInterface
+class LutDockerDock : public KDDockWidgets::DockWidget, public KoCanvasObserverBase, public Ui_WdgLut, public KisExposureGammaCorrectionInterface
 {
     Q_OBJECT
 

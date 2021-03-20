@@ -28,7 +28,7 @@
 #include <QTimer>
 #include <QCloseEvent>
 #include <QDesktopWidget>
-#include <QDockWidget>
+#include <kddockwidgets/DockWidget.h>
 #include <QLayout>
 #include <QMenuBar>
 #include <QSessionManager>
@@ -156,14 +156,16 @@ bool KMWSessionManager::saveState(QSessionManager &)
 Q_GLOBAL_STATIC(KMWSessionManager, ksm)
 Q_GLOBAL_STATIC(QList<KMainWindow *>, sMemberList)
 
-KMainWindow::KMainWindow(QWidget *parent, Qt::WindowFlags f)
-    : QMainWindow(parent, f), k_ptr(new KMainWindowPrivate)
+KMainWindow::KMainWindow(const QString &uniqueWindowName, KDDockWidgets::MainWindowOptions options, QWidget *parent, Qt::WindowFlags f)
+    : KDDockWidgets::MainWindow(uniqueWindowName, options, parent, f)
+    , k_ptr(new KMainWindowPrivate)
 {
     k_ptr->init(this);
 }
 
-KMainWindow::KMainWindow(KMainWindowPrivate &dd, QWidget *parent, Qt::WindowFlags f)
-    : QMainWindow(parent, f), k_ptr(&dd)
+KMainWindow::KMainWindow(const QString &uniqueWindowName, KDDockWidgets::MainWindowOptions options, KMainWindowPrivate &dd, QWidget *parent, Qt::WindowFlags f)
+    : KDDockWidgets::MainWindow(uniqueWindowName, options, parent, f)
+    , k_ptr(&dd)
 {
     k_ptr->init(this);
 }
@@ -702,21 +704,9 @@ bool KMainWindow::event(QEvent *ev)
         break;
     case QEvent::ChildPolished: {
         QChildEvent *event = static_cast<QChildEvent *>(ev);
-        QDockWidget *dock = qobject_cast<QDockWidget *>(event->child());
         KToolBar *toolbar = qobject_cast<KToolBar *>(event->child());
         QMenuBar *menubar = qobject_cast<QMenuBar *>(event->child());
-        if (dock) {
-            connect(dock, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
-                    this, SLOT(setSettingsDirty()));
-            connect(dock, SIGNAL(visibilityChanged(bool)),
-                    this, SLOT(setSettingsDirty()), Qt::QueuedConnection);
-            connect(dock, SIGNAL(topLevelChanged(bool)),
-                    this, SLOT(setSettingsDirty()));
-
-            // there is no signal emitted if the size of the dock changes,
-            // hence install an event filter instead
-            dock->installEventFilter(k_ptr->dockResizeListener);
-        } else if (toolbar) {
+        if (toolbar) {
             // there is no signal emitted if the size of the toolbar changes,
             // hence install an event filter instead
             toolbar->installEventFilter(k_ptr->dockResizeListener);
@@ -729,18 +719,9 @@ bool KMainWindow::event(QEvent *ev)
     break;
     case QEvent::ChildRemoved: {
         QChildEvent *event = static_cast<QChildEvent *>(ev);
-        QDockWidget *dock = qobject_cast<QDockWidget *>(event->child());
         KToolBar *toolbar = qobject_cast<KToolBar *>(event->child());
         QMenuBar *menubar = qobject_cast<QMenuBar *>(event->child());
-        if (dock) {
-            disconnect(dock, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
-                       this, SLOT(setSettingsDirty()));
-            disconnect(dock, SIGNAL(visibilityChanged(bool)),
-                       this, SLOT(setSettingsDirty()));
-            disconnect(dock, SIGNAL(topLevelChanged(bool)),
-                       this, SLOT(setSettingsDirty()));
-            dock->removeEventFilter(k_ptr->dockResizeListener);
-        } else if (toolbar) {
+        if (toolbar) {
             toolbar->removeEventFilter(k_ptr->dockResizeListener);
         } else if (menubar) {
             menubar->removeEventFilter(k_ptr->dockResizeListener);

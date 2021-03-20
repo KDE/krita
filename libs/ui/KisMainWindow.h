@@ -63,7 +63,7 @@ public:
      *
      *  Initializes a Calligra main window (with its basic GUI etc.).
      */
-    explicit KisMainWindow(QUuid id = QUuid());
+    explicit KisMainWindow(const QString &uniqueStableName, QUuid id = QUuid());
 
     /**
      *  Destructor.
@@ -146,9 +146,9 @@ public:
     void setReadWrite(bool readwrite);
 
     /// Return the list of dock widgets belonging to this main window.
-    QList<QDockWidget*> dockWidgets() const;
+    QList<KDDockWidgets::DockWidgetBase *> dockWidgets() const;
 
-    QDockWidget* dockWidget(const QString &id);
+    KDDockWidgets::DockWidgetBase* dockWidget(const QString &id);
 
     QList<KoCanvasObserverBase*> canvasObservers() const override;
 
@@ -490,7 +490,7 @@ private:
      * @param factory the factory used to create the dock widget if needed
      * @return the dock widget specified by @p factory (may be 0)
      */
-    QDockWidget* createDockWidget(KoDockFactoryBase* factory);
+    KDDockWidgets::DockWidgetBase *createDockWidget(KoDockFactoryBase* factory);
 
     bool openDocumentInternal(const QString &path, KisMainWindow::OpenFlags f = KisMainWindow::OpenFlags());
 

@@ -37,7 +37,7 @@ public:
         return Qt::RightDockWidgetArea;
     }
 
-    QDockWidget* createDockWidget() override
+    KDDockWidgets::DockWidgetBase *createDockWidget() override
     {
                                         LogDockerDock * dockWidget = new LogDockerDock();
         dockWidget->setObjectName(id());

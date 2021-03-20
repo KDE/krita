@@ -51,7 +51,7 @@ SnapshotDocker::Private::~Private()
 }
 
 SnapshotDocker::SnapshotDocker()
-    : QDockWidget()
+    : KDDockWidgets::DockWidget()
     , m_d(new Private)
 {
     QWidget *widget = new QWidget(this);

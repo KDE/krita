@@ -9,7 +9,7 @@
 
 #include "kritaflake_export.h"
 
-class QDockWidget;
+#include <kddockwidgets/DockWidget.h>
 class QString;
 
 /**
@@ -40,7 +40,7 @@ public:
 
     /// Creates the dock widget
     /// @return the created dock widget
-    virtual QDockWidget* createDockWidget() = 0;
+    virtual KDDockWidgets::DockWidgetBase *createDockWidget() = 0;
 };
 
 #endif

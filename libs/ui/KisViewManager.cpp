@@ -48,7 +48,7 @@
 #include <KoCanvasController.h>
 #include <KoCompositeOp.h>
 #include <KoDockRegistry.h>
-#include <KoDockWidgetTitleBar.h>
+//#include <KoDockWidgetTitleBar.h>
 #include <KoProperties.h>
 #include <KisResourceItemChooserSync.h>
 #include <KoSelection.h>
@@ -1271,11 +1271,11 @@ void KisViewManager::updateIcons()
 {
     if (mainWindow()) {
         QList<QDockWidget*> dockers = mainWindow()->dockWidgets();
-        Q_FOREACH (QDockWidget* dock, dockers) {
-            KoDockWidgetTitleBar* titlebar = dynamic_cast<KoDockWidgetTitleBar*>(dock->titleBarWidget());
-            if (titlebar) {
-                titlebar->updateIcons();
-            }
+        Q_FOREACH (KDDockWidgets::DockWidgetBase* dock, dockers) {
+//            KoDockWidgetTitleBar* titlebar = dynamic_cast<KoDockWidgetTitleBar*>(dock->titleBar());
+//            if (titlebar) {
+//                titlebar->updateIcons();
+//            }
             QObjectList objects;
             objects.append(dock);
             while (!objects.isEmpty()) {

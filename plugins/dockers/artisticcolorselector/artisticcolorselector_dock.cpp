@@ -67,7 +67,7 @@ struct WheelPreferencesPopupUI: public QWidget, public Ui_wdgWheelPreferencesPop
 
 
 ArtisticColorSelectorDock::ArtisticColorSelectorDock()
-    : QDockWidget(i18n("Artistic Color Selector"))
+    : KDDockWidgets::DockWidget(i18n("Artistic Color Selector"))
     , m_canvas(nullptr)
     , m_resourceProvider(0)
     , m_selectedMask(nullptr)

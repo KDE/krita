@@ -17,7 +17,7 @@ struct DockWidget::Private {
 };
 
 DockWidget::DockWidget()
-    : QDockWidget()
+    : KDDockWidgets::DockWidget()
     , d(new Private)
 {
 }

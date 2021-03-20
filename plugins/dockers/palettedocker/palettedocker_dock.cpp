@@ -55,7 +55,7 @@
 #include "ui_wdgpalettedock.h"
 
 PaletteDockerDock::PaletteDockerDock( )
-    : QDockWidget(i18n("Palette"))
+    : KDDockWidgets::DockWidget(i18n("Palette"))
     , m_ui(new Ui_WdgPaletteDock())
     , m_model(new KisPaletteModel(this))
     , m_paletteChooser(new KisPaletteChooser(this))

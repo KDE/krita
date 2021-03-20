@@ -16,7 +16,7 @@
 
 
 ArrangeDockerDock::ArrangeDockerDock( )
-    : QDockWidget(i18n("Arrange"))
+    : KDDockWidgets::DockWidget(i18n("Arrange"))
     , m_canvas(0)
 {
     m_configWidget = new ArrangeDockerWidget(this);

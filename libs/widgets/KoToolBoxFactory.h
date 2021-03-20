@@ -12,7 +12,7 @@
 #include "kritawidgets_export.h"
 
 #include <QString>
-#include <QDockWidget>
+#include <kddockwidgets/DockWidget.h>
 
 
 /**
@@ -27,7 +27,7 @@ public:
 
     QString id() const override;
     KoDockFactoryBase::DockPosition defaultDockPosition() const override;
-    QDockWidget* createDockWidget() override;
+    KDDockWidgets::DockWidgetBase *createDockWidget() override;
 };
 
 #endif

@@ -251,7 +251,7 @@ struct KisAnimCurvesDocker::Private
 };
 
 KisAnimCurvesDocker::KisAnimCurvesDocker()
-    : QDockWidget(i18n("Animation Curves"))
+    : KDDockWidgets::DockWidget(i18n("Animation Curves"))
     , m_d(new Private(this))
 {
     QWidget *mainWidget = new QWidget(0);
@@ -315,7 +315,7 @@ KisAnimCurvesDocker::KisAnimCurvesDocker()
 
     connect(m_d->titlebar->btnOnionSkinsMenu, &QPushButton::released, [this](){
         if (m_d->mainWindow) {
-            QDockWidget *docker = m_d->mainWindow->dockWidget("OnionSkinsDocker");
+            KDDockWidgets::DockWidgetBase *docker = m_d->mainWindow->dockWidget("OnionSkinsDocker");
             if (docker) {
                 docker->setVisible(!docker->isVisible());
             }

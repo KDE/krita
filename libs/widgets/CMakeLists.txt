@@ -29,8 +29,8 @@ set(kritawidgets_LIB_SRCS
     KoLineStyleItemDelegate.cpp
     KoLineStyleModel.cpp
 
-    KoDockWidgetTitleBar.cpp
-    KoDockWidgetTitleBarButton.cpp
+    #KoDockWidgetTitleBar.cpp
+    #KoDockWidgetTitleBarButton.cpp
     
     KoTitledTabWidget.cpp
 

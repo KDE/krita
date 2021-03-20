@@ -71,8 +71,11 @@ public:
     KXMLGUIFactory *factory;
 };
 
-KXmlGuiWindow::KXmlGuiWindow(QWidget *parent, Qt::WindowFlags f)
-    : KMainWindow(*new KXmlGuiWindowPrivate, parent, f), KXMLGUIBuilder(this)
+KXmlGuiWindow::KXmlGuiWindow(const QString &uniqueWindowName, KDDockWidgets::MainWindowOptions options, QWidget *parent, Qt::WindowFlags f)
+    : KMainWindow(uniqueWindowName,
+                  options,
+                  *new KXmlGuiWindowPrivate, parent, f)
+    , KXMLGUIBuilder(this)
 {
     K_D(KXmlGuiWindow);
     d->showHelpMenu = true;

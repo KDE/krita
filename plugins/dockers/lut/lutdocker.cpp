@@ -47,7 +47,7 @@ public:
         return Qt::RightDockWidgetArea;
     }
 
-    QDockWidget* createDockWidget() override
+    KDDockWidgets::DockWidgetBase *createDockWidget() override
     {
         LutDockerDock * dockWidget = new LutDockerDock();
         dockWidget->setObjectName(id());

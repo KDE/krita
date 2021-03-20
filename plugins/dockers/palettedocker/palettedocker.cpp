@@ -40,7 +40,7 @@ public:
         return Qt::RightDockWidgetArea;
     }
 
-    QDockWidget* createDockWidget() override
+    KDDockWidgets::DockWidgetBase *createDockWidget() override
     {
         PaletteDockerDock * dockWidget = new PaletteDockerDock();
         

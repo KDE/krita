@@ -31,7 +31,7 @@ class DigitalMixerPatch : public KoColorPatch {
 };
 
 DigitalMixerDock::DigitalMixerDock( )
-    : QDockWidget(i18n("Digital Colors Mixer")), m_canvas(0)
+    : KDDockWidgets::DockWidget(i18n("Digital Colors Mixer")), m_canvas(0)
     , m_tellCanvas(true)
 {
     const KoColorSpace *sRGB = KoColorSpaceRegistry::instance()->rgb8();

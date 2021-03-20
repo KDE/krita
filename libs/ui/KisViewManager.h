@@ -7,7 +7,7 @@
 #ifndef KIS_GUI_CLIENT_H
 #define KIS_GUI_CLIENT_H
 
-#include <QDockWidget>
+#include <kddockwidgets/DockWidget.h>
 #include <QQueue>
 #include <QPointer>
 

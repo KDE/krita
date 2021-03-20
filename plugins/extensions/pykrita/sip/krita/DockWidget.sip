@@ -1,4 +1,4 @@
-class DockWidget : public QDockWidget /NoDefaultCtors/
+class DockWidget : public KDDockWidgets::DockWidget /NoDefaultCtors/
 {
 %TypeHeaderCode
 #include "DockWidget.h"

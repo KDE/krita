@@ -7,7 +7,7 @@
 #ifndef TOUCHDOCKER_DOCK_H
 #define TOUCHDOCKER_DOCK_H
 
-#include <QDockWidget>
+#include <kddockwidgets/DockWidget.h>
 #include <QIcon>
 #include <KoCanvasObserverBase.h>
 #include <QPointer>
@@ -17,7 +17,7 @@
 class KoDialog;
 class QQuickWidget;
 
-class TouchDockerDock : public QDockWidget, public KoCanvasObserverBase {
+class TouchDockerDock : public KDDockWidgets::DockWidget, public KoCanvasObserverBase {
     Q_OBJECT
     Q_PROPERTY(bool allowClose READ allowClose WRITE setAllowClose)
     Q_PROPERTY(QString currentSketchPage READ currentSketchPage WRITE setCurrentSketchPage NOTIFY currentSketchPageChanged)

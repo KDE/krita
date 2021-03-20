@@ -12,7 +12,7 @@
 #include "kritaimage_export.h"
 
 #include <QScopedPointer>
-#include <QDockWidget>
+#include <kddockwidgets/DockWidget.h>
 
 #include <kis_mainwindow_observer.h>
 #include <kis_utility_title_bar.h>
@@ -81,7 +81,7 @@ private:
  * the KisImageAnimationInterface. (TODO: Consider refactoring to
  * streamline this interaction towards Docker -> AnimationPlayer -> ImageAnimInterface)
  */
-class KisAnimTimelineDocker : public QDockWidget, public KisMainwindowObserver
+class KisAnimTimelineDocker : public KDDockWidgets::DockWidget, public KisMainwindowObserver
 {
     Q_OBJECT
 public:

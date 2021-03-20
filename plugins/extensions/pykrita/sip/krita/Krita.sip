@@ -16,7 +16,7 @@ public Q_SLOTS:
     QList<QAction *> actions() const;
     QAction *action(const QString & name) const;
     QList<Document *> documents() const /Factory/;
-    QList<QDockWidget *> dockers() const;
+    QList<KDDockWidgets::DockWidgetBase *> dockers() const;
 
     QStringList filters() const;
     Filter * filter(const QString &name) const /Factory/;

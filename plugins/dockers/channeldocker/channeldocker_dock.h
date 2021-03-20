@@ -8,7 +8,7 @@
 #define CHANNELDOCKER_DOCK_H
 
 #include <QPointer>
-#include <QDockWidget>
+#include <kddockwidgets/DockWidget.h>
 
 #include <KoCanvasObserverBase.h>
 #include <KisKineticScroller.h>
@@ -20,7 +20,7 @@ class QTableView;
 class KisSignalCompressor;
 class KisIdleWatcher;
 
-class ChannelDockerDock : public QDockWidget, public KoCanvasObserverBase {
+class ChannelDockerDock : public KDDockWidgets::DockWidget, public KoCanvasObserverBase {
     Q_OBJECT
 public:
     ChannelDockerDock();

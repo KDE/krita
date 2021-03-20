@@ -126,6 +126,7 @@ target_link_libraries(kritawidgetutils
         Qt5::Xml
         Qt5::Core
         KF5::ItemViews
+        KDAB::kddockwidgets
         kritaglobal
         kritaresources
     PRIVATE

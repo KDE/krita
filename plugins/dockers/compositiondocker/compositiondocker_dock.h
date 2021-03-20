@@ -7,7 +7,7 @@
 #ifndef COMPOSITIONDOCKER_DOCK_H
 #define COMPOSITIONDOCKER_DOCK_H
 
-#include <QDockWidget>
+#include <kddockwidgets/DockWidget.h>
 #include <QModelIndex>
 #include <QPointer>
 
@@ -21,7 +21,7 @@
 class CompositionModel;
 class KisAction;
 
-class CompositionDockerDock : public QDockWidget, public KoCanvasObserverBase, public Ui_WdgCompositionDocker {
+class CompositionDockerDock : public KDDockWidgets::DockWidget, public KoCanvasObserverBase, public Ui_WdgCompositionDocker {
     Q_OBJECT
 public:
     CompositionDockerDock();

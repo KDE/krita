@@ -7,7 +7,7 @@
 #ifndef _PRESETHISTORY_DOCK_H_
 #define _PRESETHISTORY_DOCK_H_
 
-#include <QDockWidget>
+#include <kddockwidgets/DockWidget.h>
 #include <QPointer>
 #include <KisKineticScroller.h>
 
@@ -20,7 +20,7 @@ class QListWidget;
 class QListWidgetItem;
 class QActionGroup;
 
-class PresetHistoryDock : public QDockWidget, public KoCanvasObserverBase {
+class PresetHistoryDock : public KDDockWidgets::DockWidget, public KoCanvasObserverBase {
     Q_OBJECT
 public:
     enum HistoryDataRole {

@@ -26,7 +26,7 @@ KoDockFactoryBase::DockPosition KoToolBoxFactory::defaultDockPosition() const
     return KoDockFactoryBase::DockLeft;
 }
 
-QDockWidget* KoToolBoxFactory::createDockWidget()
+KDDockWidgets::DockWidgetBase* KoToolBoxFactory::createDockWidget()
 {
     KoToolBox *box = new KoToolBox();
     KoToolBoxDocker *docker = new KoToolBoxDocker(box);

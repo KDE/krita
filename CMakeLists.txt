@@ -772,7 +772,7 @@ macro_bool_to_01(LibMyPaint_FOUND HAVE_LIBMYPAINT)
 configure_file(config-mypaint.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-mypaint.h )
 
 
-find_package(KDDockWidgets)
+find_package(KDDockWidgets CONFIG)
 set_package_properties(KDDockWidgets PROPERTIES
     DESCRIPTION "KDAB Dockwidgets Library"
     TYPE REQUIRED

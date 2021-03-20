@@ -50,7 +50,7 @@
 
 
 CompositionDockerDock::CompositionDockerDock( )
-    : QDockWidget(i18n("Compositions"))
+    : KDDockWidgets::DockWidget(i18n("Compositions"))
     , m_canvas(0)
 {
     QWidget* widget = new QWidget(this);

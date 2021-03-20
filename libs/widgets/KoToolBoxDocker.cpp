@@ -10,14 +10,14 @@
 #include "KoToolBox_p.h"
 #include "KoToolBoxScrollArea_p.h"
 #include "KoDockRegistry.h"
-#include <KoDockWidgetTitleBar.h>
+//#include <KoDockWidgetTitleBar.h>
 #include <klocalizedstring.h>
 #include <QLabel>
 #include <QFontMetrics>
 #include <QFrame>
 
 KoToolBoxDocker::KoToolBoxDocker(KoToolBox *toolBox)
-    : QDockWidget(i18n("Toolbox"))
+    : KDDockWidgets::DockWidget(i18n("Toolbox"))
     , m_toolBox(toolBox)
     , m_scrollArea(new KoToolBoxScrollArea(toolBox, this))
 {
@@ -29,7 +29,13 @@ KoToolBoxDocker::KoToolBoxDocker(KoToolBox *toolBox)
     w->setFrameStyle(QFrame::Panel | QFrame::Raised);
     w->setMinimumWidth(16);
     w->setFixedHeight(QFontMetrics(KoDockRegistry::dockFont()).height());
-    setTitleBarWidget(w);
+//     setTitleBarWidget(w);
+
+//    KoDockWidgetTitleBar* titleBar = new KoDockWidgetTitleBar(this);
+//    titleBar->setTextVisibilityMode(KoDockWidgetTitleBar::TextCanBeInvisible);
+//    titleBar->setToolTip(i18n("Tools"));
+//    setTitleBarWidget(titleBar);
+
 
     connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
             this, SLOT(updateToolBoxOrientation(Qt::DockWidgetArea)));
@@ -48,7 +54,7 @@ void KoToolBoxDocker::unsetCanvas()
 
 void KoToolBoxDocker::resizeEvent(QResizeEvent *event)
 {
-    QDockWidget::resizeEvent(event);
+    //QDockWidget::resizeEvent(event);
     if (isFloating()) {
         if (m_scrollArea->width() > m_scrollArea->height()) {
             m_scrollArea->setOrientation(Qt::Horizontal);

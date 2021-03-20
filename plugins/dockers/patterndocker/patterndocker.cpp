@@ -44,7 +44,7 @@ public:
         return Qt::RightDockWidgetArea;
     }
 
-    QDockWidget* createDockWidget() override
+    KDDockWidgets::DockWidgetBase *createDockWidget() override
     {
         PatternDockerDock * dockWidget = new PatternDockerDock();
         dockWidget->setObjectName(id());

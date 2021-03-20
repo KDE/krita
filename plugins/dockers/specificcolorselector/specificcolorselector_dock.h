@@ -8,7 +8,7 @@
 #ifndef _SPECIFICCOLORSELECTOR_DOCK_H_
 #define _SPECIFICCOLORSELECTOR_DOCK_H_
 
-#include <QDockWidget>
+#include <kddockwidgets/DockWidget.h>
 #include <QPointer>
 
 #include <kis_types.h>
@@ -18,7 +18,7 @@
 class KisViewManager;
 class KisSpecificColorSelectorWidget;
 
-class SpecificColorSelectorDock : public QDockWidget, public KisMainwindowObserver
+class SpecificColorSelectorDock : public KDDockWidgets::DockWidget, public KisMainwindowObserver
 {
     Q_OBJECT
 public:

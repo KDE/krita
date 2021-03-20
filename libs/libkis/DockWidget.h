@@ -6,7 +6,7 @@
 #ifndef LIBKIS_DOCKWIDGET_H
 #define LIBKIS_DOCKWIDGET_H
 
-#include <QDockWidget>
+#include <kddockwidgets/DockWidget.h>
 
 #include "kritalibkis_export.h"
 #include "libkis.h"
@@ -39,7 +39,7 @@ class KoCanvasBase;
  * switches between views/canvases, canvasChanged will be called. You can override that
  * method to reset your docker's internal state, if necessary.
  */
-class KRITALIBKIS_EXPORT DockWidget : public QDockWidget, public KoCanvasObserverBase
+class KRITALIBKIS_EXPORT DockWidget : public KDDockWidgets::DockWidget, public KoCanvasObserverBase
 {
     Q_OBJECT
     Q_DISABLE_COPY(DockWidget)

@@ -8,6 +8,7 @@
 
 #include <QBitArray>
 #include <QComboBox>
+#include <kddockwidgets/DockWidget.h>
 #include <QDockWidget>
 #include <QDoubleSpinBox>
 #include <QEvent>

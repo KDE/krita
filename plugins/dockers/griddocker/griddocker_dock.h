@@ -7,7 +7,7 @@
 #ifndef _GRID_DOCK_H_
 #define _GRID_DOCK_H_
 
-#include <QDockWidget>
+#include <kddockwidgets/DockWidget.h>
 #include <KoCanvasObserverBase.h>
 #include "kis_signal_auto_connection.h"
 
@@ -18,7 +18,7 @@ class KisSignalAutoConnection;
 class KisGridConfig;
 class KisGuidesConfig;
 
-class GridDockerDock : public QDockWidget, public KoCanvasObserverBase {
+class GridDockerDock : public KDDockWidgets::DockWidget, public KoCanvasObserverBase {
     Q_OBJECT
 public:
     GridDockerDock();

@@ -17,7 +17,7 @@
 #include <resources/KoPattern.h>
 
 PatternDockerDock::PatternDockerDock( )
-    : QDockWidget(i18n("Patterns"))
+    : KDDockWidgets::DockWidget(i18n("Patterns"))
 {
     m_patternChooser = new KisPatternChooser(this);
     m_patternChooser->setPreviewOrientation(Qt::Vertical);

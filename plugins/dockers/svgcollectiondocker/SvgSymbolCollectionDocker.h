@@ -6,7 +6,7 @@
 #ifndef SVGSYMBOLCOLLECTIONDOCKER_H
 #define SVGSYMBOLCOLLECTIONDOCKER_H
 
-#include <QDockWidget>
+#include <kddockwidgets/DockWidget.h>
 #include <QAbstractItemModel>
 #include <QModelIndex>
 #include <QMap>
@@ -45,14 +45,14 @@ public:
     SvgSymbolCollectionDockerFactory();
 
     QString id() const override;
-    QDockWidget *createDockWidget() override;
+    KDDockWidgets::DockWidgetBase *createDockWidget() override;
     DockPosition defaultDockPosition() const override
     {
         return DockRight;
     }
 };
 
-class SvgSymbolCollectionDocker : public QDockWidget, public KoCanvasObserverBase
+class SvgSymbolCollectionDocker : public KDDockWidgets::DockWidget, public KoCanvasObserverBase
 {
     Q_OBJECT
 public:

@@ -88,8 +88,7 @@ public:
      */
     QString renameGroup(const QString &oldName);
     void changeGroupRowCount(const QString &name, int newRowCount);
-    void setGlobal(bool);
-    void setReadOnly(bool);
+    void setStorageLocation(QString location);
 
     void setEntry(const KoColor &color, const QModelIndex &index);
     void removeEntry(const QModelIndex &index);

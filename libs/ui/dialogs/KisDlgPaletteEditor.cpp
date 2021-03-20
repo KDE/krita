@@ -24,6 +24,7 @@
 #include <KoColorSet.h>
 #include <kis_global.h>
 #include <KisPaletteModel.h>
+#include <KisStorageModel.h>
 
 #include "KisPaletteEditor.h"
 
@@ -36,7 +37,6 @@ KisDlgPaletteEditor::KisDlgPaletteEditor()
     , m_actAddGroup(new QAction(i18n("Add a group")))
     , m_actDelGroup(new QAction(i18n("Delete this group")))
     , m_actRenGroup(new QAction(i18n("Rename this group")))
-    , m_globalButtons(new QButtonGroup(this))
     , m_paletteEditor(new KisPaletteEditor(this))
     , m_currentGroupOriginalName(KoColorSet::GLOBAL_GROUP_NAME)
 {
@@ -60,10 +60,10 @@ KisDlgPaletteEditor::KisDlgPaletteEditor()
     connect(m_ui->spinBoxCol, SIGNAL(valueChanged(int)), SLOT(slotColCountChanged(int)));
     connect(m_ui->lineEditName, SIGNAL(editingFinished()), SLOT(slotNameChanged()));
 
-    m_globalButtons->addButton(m_ui->rb_global, 0);
-    m_globalButtons->addButton(m_ui->rb_document, 1);
-    connect(m_globalButtons.data(), SIGNAL(buttonClicked(int)), SLOT(slotSetGlobal()));
 
+    m_ui->storageLocation->setModel(KisStorageModel::instance());
+    m_ui->storageLocation->setModelColumn(KisStorageModel::DisplayName);
+    connect(m_ui->storageLocation, SIGNAL(currentIndexChanged(int)), SLOT(slotSetGlobal()));
 
     connect(this, SIGNAL(accepted()), SLOT(slotAccepted()));
 
@@ -85,19 +85,13 @@ void KisDlgPaletteEditor::setPaletteModel(KisPaletteModel *model)
     const QSignalBlocker blocker2(m_ui->lineEditName);
     const QSignalBlocker blocker3(m_ui->spinBoxCol);
     const QSignalBlocker blocker4(m_ui->spinBoxRow);
-    const QSignalBlocker blocker5(m_ui->rb_global);
-    const QSignalBlocker blocker6(m_ui->rb_document);
+    const QSignalBlocker blocker5(m_ui->storageLocation);
     const QSignalBlocker blocker7(m_ui->cbxGroup);
 
     m_ui->lineEditName->setText(m_colorSet->name());
     m_ui->spinBoxCol->setValue(m_colorSet->columnCount());
-    //Hack alert!!!
-    //TODO: replace with a storage selector.
-    if (m_colorSet->storageLocation().contains("/")) {
-        m_globalButtons->button(0)->setChecked(true);
-    } else {
-        m_globalButtons->button(1)->setChecked(true);
-    }
+
+    m_ui->storageLocation->setCurrentIndex(m_ui->storageLocation->findData(m_colorSet->storageLocation(), Qt::UserRole + KisStorageModel::Location));
 
     Q_FOREACH (const QString & groupName, m_colorSet->getGroupNames()) {
         m_ui->cbxGroup->addItem(groupName);
@@ -114,8 +108,7 @@ void KisDlgPaletteEditor::setPaletteModel(KisPaletteModel *model)
     m_ui->lineEditName->setEnabled(canWrite);
     m_ui->spinBoxCol->setEnabled(canWrite);
     m_ui->spinBoxRow->setEnabled(canWrite);
-    m_ui->rb_global->setEnabled(canWrite);
-    m_ui->rb_document->setEnabled(canWrite);
+    m_ui->storageLocation->setEnabled(canWrite);
     m_ui->bnAddGroup->setEnabled(canWrite);
 }
 
@@ -173,11 +166,7 @@ void KisDlgPaletteEditor::slotRowCountChanged(int newCount)
 
 void KisDlgPaletteEditor::slotSetGlobal()
 {
-    bool toGlobal = false;
-    if (m_ui->rb_global->isChecked()) {
-        toGlobal = true;
-    }
-    m_paletteEditor->setGlobal(toGlobal);
+    m_paletteEditor->setStorageLocation(m_ui->storageLocation->currentData(KisStorageModel::Location).toString());
 }
 
 void KisDlgPaletteEditor::slotNameChanged()

@@ -485,12 +485,12 @@ bool KisTagResourceModel::setResourceInactive(const QModelIndex &index)
     return resourceModel.setResourceInactive(idx);
 }
 
-bool KisTagResourceModel::importResourceFile(const QString &filename)
+bool KisTagResourceModel::importResourceFile(const QString &filename, const QString &storageId)
 {
     // Since we're importing the resource, there's no reason to add rows to the tags::resources table,
     // because the resource is untagged.
     KisResourceModel resourceModel(d->resourceType);
-    return resourceModel.importResourceFile(filename);
+    return resourceModel.importResourceFile(filename, storageId);
 }
 
 bool KisTagResourceModel::addResource(KoResourceSP resource, const QString &storageId)

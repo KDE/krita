@@ -67,8 +67,8 @@ PaletteDockerDock::PaletteDockerDock( )
     , m_actAdd(new QAction(KisIconUtils::loadIcon("list-add"), i18n("Add a color")))
     , m_actRemove(new QAction(KisIconUtils::loadIcon("edit-delete"), i18n("Delete color")))
     , m_actModify(new QAction(KisIconUtils::loadIcon("edit-rename"), i18n("Modify this spot")))
-    , m_actSavePalette(new QAction(KisIconUtils::loadIcon("document-save"), i18n("Save this palette")))
     , m_actEditPalette(new QAction(KisIconUtils::loadIcon("groupLayer"), i18n("Edit this palette")))
+    , m_actSavePalette(new QAction(KisIconUtils::loadIcon("document-save"), i18n("Save this palette")))
     , m_colorSelfUpdate(false)
 {
     QWidget *mainWidget = new QWidget(this);
@@ -360,6 +360,12 @@ void PaletteDockerDock::updatePaletteName()
                 KisResourceStorageSP storage = storageModel.storageForId(storageId);
                 isGlobal = storage->type() != KisResourceStorage::StorageType::Memory;
             }
+        }
+        m_actSavePalette.data()->setEnabled(isGlobal);
+        if (isGlobal) {
+            m_actSavePalette.data()->setToolTip(i18nc("@tooltip", "Save palette explicitely, will also happen automatically on exiting Krita."));
+        } else {
+            m_actSavePalette.data()->setToolTip(i18nc("@tooltip", "Saving for document palettes is done by saving the document."));
         }
         // if the palette is not global, then let's not indicate that the changes has been made
         // (it's easier than tracking whether the document has been saved or maybe exported etc.)

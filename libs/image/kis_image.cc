@@ -1698,7 +1698,7 @@ void KisImage::addAnnotation(KisAnnotationSP annotation)
         ++it;
     }
     m_d->annotations.push_back(annotation);
-    emit sigImageModified();
+    setModifiedWithoutUndo();
 }
 
 KisAnnotationSP KisImage::annotation(const QString& type)
@@ -1719,6 +1719,7 @@ void KisImage::removeAnnotation(const QString& type)
     while (it != m_d->annotations.end()) {
         if ((*it)->type() == type) {
             m_d->annotations.erase(it);
+            setModifiedWithoutUndo();
             return;
         }
         ++it;
